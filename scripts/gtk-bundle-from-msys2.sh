@@ -28,6 +28,7 @@ gtk4_dependency_pkgs=""
 
 packages="
 adwaita-icon-theme
+adwaita-icon-theme-legacy
 atk
 brotli
 bzip2
@@ -47,6 +48,7 @@ gtk-update-icon-cache
 harfbuzz
 hicolor-icon-theme
 jbigkit
+json-glib
 lerc
 libdatrie
 libdeflate
@@ -56,14 +58,18 @@ libiconv
 libjpeg-turbo
 libpng
 librsvg
+libsystre
 libthai
 libtiff
+libtre
 libwebp
 libwinpthread-git
 libxml2
+lzo2
 pango
 pcre2
 pixman
+shared-mime-info
 xz
 zlib
 zstd
