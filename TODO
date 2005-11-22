@@ -1,0 +1,30 @@
+TODO List:
+----------
+( features included in () have lower priority)
+
+
+	Geany 0.4 or later:
+
+	o window positioning and window resizing doesn't work under win32
+	o sci_cb.c: improve auto completion(include local tags)
+	o complete documentation
+	o documentation: list and explain filetype modes
+	o interface.c: reorder the 'document' menu entry, differ between
+	  document related and general settings, new submenu: View->Editor
+	o http://pan.rebelbase.com/download/releases/0.14.2/WINDOWS/
+	  gtk_for_windows/
+	o fix a really nasty bug which causes a segfault, but don't know
+	  where, is it still existent?
+	o encoding-bug in utils_convert_to_utf8()
+	o latex build menu
+	o colourize the tags in the tag list widget to show if it's a
+	  function, macro or whatever
+	o rewrite untitled.extension after "Save As" in the file header
+	o fix { and } problems at some "special" lines where indentation
+	  get broken
+	o give the rows in the open files treeview a special popup menu, to
+	  delete and some other things
+	o command line option -e
+	o (project management)
+	o (folding)
+	o (vim-like settings stored in files as comment)

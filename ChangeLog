@@ -1,0 +1,182 @@
+2005-11-21  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/keyfile.c: store the position of hpaned1(sizer between editor
+                  window and the taglist) and load it if window
+                  positions are saved and restored
+ * src/treeviews.c, src/callbacks.c: added special popup menu to the
+                                     list of open files
+
+
+2005-11-20  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * new release: Geany 0.3 "Muzzer"
+ * src/treeviews.c/h: newly created: contains functions for the taglist
+   and open files treeviews on the left side
+ * src/treeviews.c, src/callbacks.c: added an open files treeview,
+   which represents all open files
+ * src/interface.c: added a toolbar button to open the color chooser
+ * bugfix: src/sci_cb.c: there was an error at the next line after
+                         closing a multiline comment in C/C++/Java
+
+
+2005-11-18  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/document.c: make a beep if a file could not be saved
+
+
+2005-11-16  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * bugfix: src/sci_cb.c: fixed a small bug that kills the current line
+                         if a } was added and there is no newline and
+                         there are no non-space characters on the line
+                         (thanks to Frank Lanitz for reporting)
+
+
+2005-11-15  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: Save As add a recent opened file to the list, too
+
+
+2005-11-14  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c, src/callbacks.c: added shortcut for "walking" between
+                                 open documents by pressing
+                                 STRG+LEFT resp. STRG+RIGHT
+ * src/templates.h, src/templates.c, src/document.c, src/filetypes.c:
+   removed hardcoded filetype templates from filetypes.c and added them
+   to templates.h/c
+
+
+2005-11-12  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/templates.c, src/interface.c, src/callbacks.c, src/prefs.c,
+   src/keyfile.c, src/document.c, src/filetypes.c:
+   removed GPL options(in the settings dialog, in the context menu for
+   inserting comments like fileheader with GPL), now this is completly
+   done within the fileheader template and the wildcard {gpl}, added
+   also the first template for new file (filetype None)
+
+
+2005-11-11  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * bugfix: src/utils.c: fixed segfault if configuration directory could
+                        not created
+ * src/dialogs.c, src/main.c, src/callbacks.c:
+   added a error box which is shown if configuration directory could
+   not created
+ * bugfix: src/callbacks.c: fixed a bug which freezed Geany sometimes
+                            at exiting(thanks to Frank Lanitz for re-
+                            porting)
+
+
+2005-11-09  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * bugfix: src/filetypes.c: set correct filetype id for type C++, so
+                            template for new C++ file will work again
+                            (thanks to Frank Lanitz for reporting)
+
+2005-11-06  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/highlighting.c: added highlighting support for Python
+ * src/highlighting.c: extracted all hardcoded styling definitions for
+                       all filetypes, so they can be easily edited by
+                       user in %PREFIX/%DATADIR/geany, a GUI interface
+                       is planned
+ * src/main.c, src/highlighting.c: load global.tags file only if a file
+                                   was opened
+ * src/callbacks.c: added key combo: Shift+Space to explicitly suppress
+                    use of sci_cb_auto_forif()
+ * Makefile.am: added data/ to be included in tarballs and get installed
+
+
+2005-11-03  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/interface.c, src/prefs.c: added long line marker settings to
+                                 preferences dialog
+
+
+2005-10-31  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c, src/sciwrappers.c:
+   reset the line number margin width at zooming in and out (thanks to
+   Frank Lanitz for reporting)
+ * src/dialogs.c, src/callbacks.c, src/document.c, src/keyfile.c:
+   re-implemented recent files menu, this time in a useful way
+ * bugfix: auto completion is working again
+
+
+2005-10-30  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * bugfix: src/filetypes.c: fixed the function pointer of filetype
+                            Tex to get the correct styling
+                            (thanks to Frank Lanitz for reporting)
+ * src/document.c: reset the width of line number margin at saving
+ * src/document.c, sciwrapper.c, geany.h, keyfile.c:
+   added vertical line (by default at column 72) to mark long lines
+
+
+2005-10-25  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * new release: Geany 0.2 "Panaka"
+ * configure.in, src/utils.c: added check for gethostname()
+   and modified utils_get_hostname() appropriately
+ * src/dialogs.c, src/interface.c: redesigned file open dialog
+                                   to make it looks nicer
+
+
+2005-10-24  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * Makefile.am: added autogen.sh to EXTRA_DIST
+ * scintilla/*: updated Scintilla to version 1.66
+ * bugfix: configure.in: added check for fgetpos(), so compilation
+                         with gcc 4 is possible
+ * src/sci_cb.c: removed sci_cb_show_entity_list(), because it was
+                 unnecessary
+
+
+2005-10-23  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * doc/geany.docbook: added search information in section Usage
+ * src/utils.c: bugfix: check_disk_status should now work better
+ * src/callbacks.c, src/dialogs.c, src/document.c, src/sci_wrappers.c,
+   interface.c: created "Replace" dialog with Replace, Replace All and
+   Replace Selection, also improved the Find dialog a little bit
+ * src/callbacks.c, src/interface.c: added "show hidden files" checkbox
+   in file open dialog
+
+
+2005-10-22  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c, src/dialogs.c, src/document.c:
+   heavily improved find dialog
+ * src/sci_cb.c: added simple <table>-completion in HTML-mode
+ * src/callbacks.c, src/interface.c, src/main.c, src/keyfile.c:
+   added toolbar popup entries for toolbar icon size
+ * src/dialogs.c, src/images.c: removed compile icon and replaced it
+   by the GTK stock icon "convert"
+
+
+2005-10-21  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c, src/interface.c, src/document.c, src/sciwrappers.c:
+   added read-only mode (and checkbox in file open dialog)
+   added also text entry in file open dialog to enter directly filenames
+ * doc/geany.docbook: added startup information in section General
+ * src/callbacks.c, src/interface.c, src/keyfile.c:
+   added "Recent files" list to the file menu
+ * src/build.c: at linking a file(C and C++): if source is newer than
+                a existing object file, it is rebuilt
+ * bugfix: src/build.c: compiling a file without any special arguments
+                        didn't work
+
+
+2005-10-20  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/Makefile.am: EXTRA_DIST entry added, to include images.c
+   (thanks to Frank Boehme for reporting of missing file)
+
+
+2005-10-19  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * first release - Geany 0.1 "Freyborn"
+

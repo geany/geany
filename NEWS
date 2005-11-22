@@ -1,0 +1,33 @@
+Geany 0.3 (November 20 2005)
+
+        * Geany now has a mailing list, for details see
+          http://geany.uvena.de
+        * added open files list in the left treeview widget
+        * added toolbar button to open the color chooser
+        * heavily improved recent files menu
+        * added shortcut for "walking" between open documents by
+          pressing STRG+LEFT resp. STRG+RIGHT
+        * created template files for new files with specified filetype
+        * added highlighting support for Python (please give feedback)
+        * extracted all hardcoded styling definitions for all filetypes
+          so they can be easily edited
+        * added vertical line to mark long lines
+        * fixed a bug that caused a segfault if configuration directory
+          could not created
+        * fixed a bug which prevented auto-completion from working
+        * many minor bugfixes (see ChangeLog for details)
+
+
+Geany 0.2 (October 26 2005)
+
+        * improved file open dialog
+        * improved Find dialog
+        * powerful Replace dialog
+        * gcc4 compilation fix
+        * minor bugfixes
+
+
+Geany 0.1 (October 19 2005)
+
+        * first official release
+
