@@ -1,0 +1,73 @@
+Geany - A fast and lightweight IDE
+----------------------------------
+
+
+About
+-----
+Geany is a small and lightweight integrated development environment.
+It was developed to provide a small and fast IDE, which has only a
+few dependencies from other packages. Another goal was to be as independent
+as possible from a special Desktop Environment like KDE or GNOME. So it
+is using only the GTK2 toolkit and therefore you need only the
+GTK2 runtime libraries to run Geany.
+
+
+Features
+--------
+The basic features of Geany are:
+- syntax highlighting
+- code completion
+- auto completion of often used constructs like if, for and while
+- auto completion of XML and HTML tags
+- call tips
+- many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal
+- symbol lists
+
+
+Requirements
+------------
+For compiling Geany yourself, you will need the GTK (>= 2.6.0) libraries
+and header files. You will also need the Pango, Glib and ATK libraries and
+header files. All these files are available at http://www.gtk.org.
+
+Further more you need, of course, a C compiler, for the included
+Scintilla library a C++ compiler and the make tool.
+
+
+Installation
+------------
+Installing Geany is done by the following three commands:
+$ ./configure
+$ make
+$ make install
+
+For more configuration details run
+$ ./configure --help
+
+If there are any errors during compilation, check your build environment and
+try to find the error, otherwise contact the author at <enrico.troeger@uvena.de>.
+
+
+Usage
+-----
+To run Geany just type
+$ geany
+on a console or use the applications menu from your desktop environment.
+There a few command line options. See the manual page of Geany or run
+$ geany --help
+for details. Or look into the documention in the doc/ directory.
+The most important option probably is -c or --config, wherewith you can specify an alternate
+configuration directory.
+
+
+Ideas, questions, patches and bug reports
+-----------------------------------------
+See http://geany.uvena.de
+or e-mail to enrico.troeger@uvena.de
+If you add something, or fix a bug, please send a patch (in 'diff -u'
+format) to enrico.troeger@uvena.de
+
+
+--
+2005 by Enrico Troeger
+enrico.troeger@uvena.de

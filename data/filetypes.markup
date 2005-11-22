@@ -1,0 +1,75 @@
+[styling]
+# foreground;background;bold
+html_default=0x000000;0xffffff;false
+html_tag=0x990000;0xffffff;false
+html_tagunknown=0x0000ff;0xffffff;false
+html_attribute=0x007F00;0xffffff;false
+html_attributeunknown=0x0000ff;0xffffff;false
+html_number=0x800080;0xffffff;false
+html_doublestring=0x1E90FF;0xffffff;false
+html_singlestring=0x1E90FF;0xffffff;false
+html_other=0x800080;0xffffff;false
+html_comment=0x808080;0xffffff;false
+html_entity=0x800080;0xffffff;false
+html_tagend=0x800000;0xffffff;false
+# <?
+html_xmlstart=0x990000;0xf0f0f0;false
+# ?>
+html_xmlend=0x990000;0xf0f0f0;false
+# <script
+html_script=0x800000;0xf0f0f0;false
+# <% ... %>
+html_asp=0x4f4f00;0xf0f0f0;false
+# <%@ ... %>
+html_aspat=0x4f4f00;0xf0f0f0;false
+html_cdata=0x990066;0xffffff;false
+html_question=0xff0000;0xffffff;false
+html_value=0x990066;0xffffff;false
+html_xccomment=0x990066;0xffffff;false
+
+sgml_default=0x000000;0xffffff;false
+sgml_comment=0x808080;0xffffff;false
+sgml_special=0x007F00;0xffffff;false
+sgml_command=0x991111;0xffffff;true
+sgml_doublestring=0x1E90FF;0xffffff;false
+sgml_simplestring=0x004040;0xffffff;false
+sgml_1st_param=0x804040;0xffffff;false
+sgml_entity=0x101030;0xffffff;false
+sgml_block_default=0x100000;0xffffff;false
+sgml_1st_param_comment=0x906040;0xffffff;false
+sgml_error=0x0000ff;0xffffff;false
+
+php_default=0x000000;0xffffff;false
+php_simplestring=0x008000;0xffffff;false
+php_hstring=0x008000;0xffffff;false
+php_number=0x006060;0xffffff;false
+php_word=0x990000;0xffffff;false
+php_variable=0x00007F;0xffffff;false
+php_comment=0x808080;0xffffff;false
+php_commentline=0x808080;0xffffff;false
+php_operator=0x602010;0xffffff;false
+php_hstring_variable=0x601010;0xffffff;false
+php_complex_variable=0x105010;0xffffff;false
+
+jscript_start=0x808000;0xffffff;false
+jscript_default=0x000000;0xffffff;false
+jscript_comment=0x222222;0xffffff;false
+jscript_commentline=0x808080;0xffffff;false
+jscript_commentdoc=0x808080;0xffffff;false
+jscript_number=0x606000;0xffffff;false
+jscript_word=0xff0000;0xffffff;false
+jscript_keyword=0x001050;0xffffff;false
+jscript_doublestring=0x080080;0xffffff;false
+jscript_singlestring=0x080080;0xffffff;false
+jscript_symbols=0x501000;0xffffff;false
+jscript_stringeol=0x000000;0xe0c0e0;false
+
+[keywords]
+html=a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml
+javascript=break this for while null else var false void new delete typeof if in continue true function with return case super extends do const try debugger catch switch finally enum export default class throw import length concat join pop push reverse shift slice splice sort unshift Date Infinity NaN undefined escape eval isFinite isNaN Number parseFloat parseInt string unescape Math abs acos asin atan atan2 ceil cos exp floor log max min pow random round sin sqrt tan MAX_VALUE MIN_VALUE NEGATIVE_INFINITY POSITIVE_INFINITY toString valueOf String length anchor big bold charAt charCodeAt concat fixed fontcolor fontsize fromCharCode indexOf italics lastIndexOf link slice small split strike sub substr substring sup toLowerCase toUpperCase
+vbscript=and as byref byval case call const continue dim do each else elseif end error exit false for function global goto if in loop me new next not nothing on optional or private public redim rem resume select set sub then to true type while with boolean byte currency date double integer long object single string type variant
+python=and assert break class continue complex def del elif else except exec finally for from global if import in inherit is int lambda not or pass print raise return tuple try unicode while yield long float str list
+phpKeyWords=and or xor FILE exception php_user_filter LINE array as break case cfunction class const continue declare default die do echo else elseif empty enddeclare endfor endforeach endif endswitch endwhile eval exit extends for foreach function global if include include_once isset list new old_function print require require_once return static switch unset use var while FUNCTION CLASS	METHOD
+sgml=ELEMENT DOCTYPE ATTLIST ENTITY NOTATION
+
+

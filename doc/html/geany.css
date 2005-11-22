@@ -1,0 +1,97 @@
+body address
+{
+  line-height: 1.3;
+  margin: .6em 0;
+}
+
+body blockquote
+{
+  margin-top: .75em;
+  line-height: 1.5;
+  margin-bottom: .75em;
+}
+
+html body
+{
+  margin: 1em 2% 1em 2%;
+  line-height: 1.2;
+  background-color: #ffffff;
+}
+
+body pre
+{
+  margin: .75em 0;
+  line-height: 1.3;
+  color: #4f3f3f;
+  font-weight: bold;
+}
+
+body div
+{
+  margin: 0;
+}
+
+dl
+{
+  margin: .4em 0;
+  line-height: 1.2;
+}
+
+.legalnotice
+{
+  font-size: small;
+}
+
+h1,h2,h3,h4,h5,h6,
+div.example p b,
+.question,
+div.table p b,
+div.procedure p b
+{
+  color: #990000;
+}
+
+.option
+{
+  color: #0000ca;
+  font-weight: bold;
+}
+
+.parameter
+{
+  color: #007a00;
+  font-weight: bold;
+}
+
+a
+{
+  color: #000000;
+}
+
+a:hover
+{
+  color: #3c3c3c;
+  border-bottom: 1px solid #dc0000;
+}
+
+hr
+{
+  background-color: #9c9c9c;
+  border-style: none;
+  height: 1px;
+}
+
+li
+{
+  list-style-type: square;
+}
+
+.programlisting, .screen
+{
+  background-color: #F8F9FD;
+  border-color: #907777;
+  border-width: 1px;
+  border-style: solid;
+  padding: 0.5em;
+}
+

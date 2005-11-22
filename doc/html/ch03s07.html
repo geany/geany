@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Templates</title><link rel="stylesheet" href="geany.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.68.1" /><link rel="start" href="index.html" title="&#10;&#9;&#9;&#9;Geany 0.3&#10;&#9;&#9;" /><link rel="up" href="ch03.html" title="Chapter 3. Usage" /><link rel="prev" href="ch03s06.html" title="File types" /><link rel="next" href="apa.html" title="Appendix A. Geany key mapping" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Templates</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s06.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr></table><hr /></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2530701"></a>Templates</h2></div></div></div><p>
+				Geany supports several templates for file headers, multiline comments(frame comments), function
+				descriptions, a typical ChangeLog entry and a short GPL notice.
+				To use this templates, just open the edit menu or open the popup menu by right-clicking in the
+				editor widget, and choose "Insert Comments" and insert templates as you want.
+			</p><p>
+				Some templates like file header or ChangeLog entry, will always be inserted at the top of the file.
+			</p><p>
+				To insert a function description, the cursor must be inside of the function, so that the function
+				name can be determined automatically. The description will be positioned correctly one line above
+				the function, just check it out. If the cursor is not inside of a function or the function name cannot
+				be determined, you cannot insert a function description.
+			</p><p>
+				Each template can be customized to your needs. The templates are in the configuration directory, which
+				is in ~/.geany/ (see <a href="ch03s02.html" title="Commandline options">the section called “Commandline options”</a> for further information about configuration directory).
+				Just open the desired template with an editor (ideally Geany ;-) ) and edit the template as your needs.
+				There are some wildcards which will be automatically replaced by Geany at startup.
+			</p><p>
+				All wildcards must be enclosed by "{" and "}", e.g. {date}.
+			</p><p>
+				In the configuration dialog you can find a tab "Templates"(see <a href="ch03s05.html#confdialog_templ" title="Figure 3.5. Template tab in preferences dialog">Figure 3.5, “Template tab in preferences dialog”</a>).
+				You can define the default values which will be inserted in the templates. You should restart
+				Geany after made changes, because they are only read at startup.
+			</p><p>
+				Since Geany 0.3 there are also templates for creating new files. They can be found in ~/.geany/, too.
+				All template files for creating new files begin with template.filetype. followed by the filetype.
+				At creating a new file with a filetype template, the template for the fileheader is automatically prepended.
+				Please note, that the complete behaviour is still under development and will probably be changed in one of
+				the next releases. Sorry.
+			</p><p> </p><p>
+				</p><div class="table"><a id="id2530780"></a><p class="title"><b>Table 3.3. Template wildcards</b></p><table summary="Template wildcards" cellspacing="0" cellpadding="4" border="1"><colgroup><col /><col /><col /></colgroup><thead><tr><th>Wildcard</th><th>Description</th><th>Available in following templates</th></tr></thead><tbody><tr><td>developer</td><td>The name of the developer.</td><td>filetypes, file header, function description, ChangeLog entry</td></tr><tr><td>initial</td><td>The initials of the developer name, e.g. "ET" for
+									   Enrico Troeger or "JFD" for John Foobar Doe.</td><td>filetypes, file header, function description, ChangeLog entry</td></tr><tr><td>mail</td><td>The email address of the developer.</td><td>file header, function description, ChangeLog entry</td></tr><tr><td>company</td><td>The company name, the developer is working for.</td><td>filetypes, file header, function description, ChangeLog entry</td></tr><tr><td>year</td><td>The current year in the format: YYYY</td><td>filetypes, file header, function description, ChangeLog entry</td></tr><tr><td>version</td><td>The initial version of a new file.</td><td>filetypes, file header, function description, ChangeLog entry</td></tr><tr><td>date</td><td>The current date in the format: YYYY-MM-DD</td><td>filetypes, file header, function description, ChangeLog entry</td></tr><tr><td>untitled</td><td>The string "untitled" (this will be translated to your locale),
+									   used in filetype templates</td><td>filetypes, file header, function description, ChangeLog entry</td></tr><tr><td>datetime</td><td>The current date and time in the format: DD.MM.YYYY HH:mm:ss ZZZZ</td><td>file header, function description</td></tr><tr><td>filename</td><td>The filename of the current file. Only available for the file header template.</td><td>file header</td></tr><tr><td>gpl</td><td>This wildcard inserts a short GPL notice.</td><td>file header</td></tr><tr><td>functionname</td><td>The function name of the function at cursor position. This wildcard will only
+									   be replaced in the function description template.</td><td>function description</td></tr></tbody></table></div><p>
+				If you need any other wildcards or a special date/time format, please email the author <code class="email">&lt;<a href="mailto:enrico.troeger@uvena.de">enrico.troeger@uvena.de</a>&gt;</code>.
+			</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s06.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="apa.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">File types </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Appendix A. <span class="application">Geany</span> key mapping</td></tr></table></div></body></html>

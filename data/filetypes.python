@@ -1,0 +1,20 @@
+[styling]
+# foreground;background;bold
+default=0xFF0000;0xffffff;false
+commentline=0xFF0000;0xffffff;false
+number=0x800040;0xffffff;false
+string=0x008000;0xffffff;false
+character=0x008000;0xffffff;false
+word=0x800060;0xffffff;true
+triple=0x208000;0xffffff;false
+tripledouble=0x004040;0xffffff;false
+classname=0x303000;0xffffff;false
+defname=0x800000;0xffffff;false
+operator=0x800030;0xffffff;false
+identifier=0x000000;0xffffff;false
+commentblock=0x808080;0xffffff;false
+stringeol=0x000000;0xe0c0e0;false
+
+[keywords]
+# all items must be in one line
+primary=and assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while yield

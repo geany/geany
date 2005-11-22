@@ -1,0 +1,23 @@
+# List of source files containing translatable strings.
+
+src/main.c
+src/interface.c
+src/callbacks.c
+src/support.c
+src/dialogs.c
+src/document.c
+src/utils.c
+src/filetypes.c
+src/highlighting.c
+src/win32.c
+src/sci_cb.c
+src/sciwrappers.c
+src/keyfile.c
+src/images.c
+src/msgwindow.c
+src/build.c
+src/prefs.c
+src/about.c
+src/geany.h
+src/templates.c
+src/encodings.c

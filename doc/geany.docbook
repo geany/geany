@@ -1,0 +1,708 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+        "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY app "Geany">
+<!ENTITY app_small "geany">
+<!ENTITY appversion "0.3">
+<!ENTITY appurl "http://geany.uvena.de">
+<!ENTITY deburl "http://debian.uvena.de">
+<!ENTITY author_mail "enrico.troeger@uvena.de">
+<!ENTITY date "20 November 2005">
+<!ENTITY legal SYSTEM "geany_gpl.docbook">
+]>
+
+<book lang="en">
+	<bookinfo>
+		<author>
+			<firstname>Enrico</firstname>
+			<surname>Troeger</surname>
+			<address><email>&author_mail;</email></address>
+		</author>
+		<copyright>
+			<year>2005</year>
+			<!-- <holder>Enrico Troeger</holder> -->
+		</copyright>
+		<legalnotice>
+			<para>
+				This document is distributed under the terms of the GNU Public license as published by the Free
+				Software Foundation; either version 2 of the License, or (at your option) later version.
+				A copy of this license can be found in the file COPYING included with the source code of this
+				program and in the appendix of this document.
+			</para>
+		</legalnotice>
+		<title>
+			&app; &appversion;
+		</title>
+	</bookinfo>
+
+	<chapter>
+		<title>
+			Introduction
+		</title>
+		<section>
+			<title>About</title>
+			<para>
+				<application>&app;</application> is a small and lightweight integrated development environment.
+				It was developed to provide a small and fast IDE, which has only a few dependencies from other
+				packages. Another goal was to be as independent as possible from a special Desktop Environment
+				like KDE or GNOME. So it is using only the GTK2 toolkit and therefore you need only the
+				GTK2 runtime libraries to run <application>&app;</application>.
+			</para>
+			<para>
+				The basic features of <application>&app;</application> are:
+				<itemizedlist>
+					<listitem><para>syntax highlighting</para></listitem>
+					<listitem><para>code completion</para></listitem>
+					<listitem><para>auto completion of often used constructs like if, for and while</para></listitem>
+					<listitem><para>auto completion of XML and HTML tags</para></listitem>
+					<listitem><para>call tips</para></listitem>
+					<listitem><para>many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal</para></listitem>
+					<listitem><para>symbol lists</para></listitem>
+				</itemizedlist>
+			</para>
+		</section>
+		<section>
+			<title>Where to get</title>
+			<para>
+				You can obtain <application>&app;</application> from <ulink url="&appurl;">&appurl;</ulink>
+				or perhabs from your distributor.
+			</para>
+		</section>
+		<section>
+			<title>License</title>
+			<para>
+				<application>&app;</application> is distributed under the terms of the GNU Public license as published
+				by the Free	Software Foundation; either version 2 of the License, or (at your option) later version.
+				A copy of this license can be found in the file COPYING included with the source code of this
+				program and in the appendix of this document.
+			</para>
+		</section>
+	</chapter>
+
+	<chapter>
+		<title>
+			Installation
+		</title>
+		<section>
+			<title>Requirements</title>
+			<para>
+				For compiling <application>&app;</application> yourself, you will need the GTK (>= 2.6.0)
+				libraries and header files. You will also need the Pango, Glib and ATK libraries and header files.
+				All these files are available at <ulink url="http://www.gtk.org">http://www.gtk.org</ulink>.
+			</para>
+			<para>
+				Further more you need, of course, a C compiler, for the included Scintilla library a C++
+				compiler and the make tool.
+			</para>
+		</section>
+		<section>
+			<title>Source Compilation</title>
+			<para>
+				Compiling <application>&app;</application> is quite easy. The following should do it:
+				<screen>
+					<prompt>%</prompt> <userinput><command>./configure</command></userinput>
+					<prompt>%</prompt> <userinput><command>make</command></userinput>
+					<prompt>%</prompt> <userinput><command>make</command> install</userinput>
+				</screen>
+			</para>
+			<para>
+				The configure script supports several common options, for a detailed list, type
+				<screen>
+					<prompt>%</prompt> <userinput><command>./configure</command> --help</userinput>
+				</screen>
+			</para>
+			<para>
+				If there are any errors during compilation, check your build environment and try to find the error,
+				otherwise contact the author at <email>&author_mail;</email>.
+			</para>
+		</section>
+		<section>
+			<title>Binary Packages</title>
+			<section>
+				<title>Fedora</title>
+				<para>
+					There are not yet packages for Fedora available.
+				</para>
+			</section>
+			<section>
+				<title>Debian</title>
+				<para>
+					At the moment, there is only a binary package for Debian Sarge (stable). It is available at
+					<ulink url="&deburl;">&deburl;/</ulink>. You can add the following
+					line to your apt sources.list to get automatically get the latest version of
+					<application>&app;</application>:
+				</para>
+				<para>
+					<command>deb &deburl;/ ./</command>
+				</para>
+			</section>
+			<section>
+				<title>SuSE</title>
+				<para>
+					There are not yet packages for SuSE available.
+				</para>
+			</section>
+			<section>
+				<title>Fedora</title>
+				<para>
+					There are not yet packages for Fedora available.
+				</para>
+			</section>
+		</section>
+	</chapter>
+
+	<chapter>
+		<title>Usage</title>
+		<section>
+			<title>Getting Started</title>
+			<para>
+				You can start <application>&app;</application> in the following ways:
+				<itemizedlist>
+						<listitem>
+						<para>
+							From the Desktop Environment menu
+						</para>
+						<para>
+							Choose in your application menu of your used Desktop Environment:
+							<menuchoice>
+							<guisubmenu>Development</guisubmenu>
+							<guimenuitem>&app;</guimenuitem>
+							</menuchoice>.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							From the command line
+						</para>
+						<para>
+							To start <application>&app;</application> from a command line, type the following
+							and press <keycap>Return</keycap>:
+							<screen>
+								<prompt>%</prompt> <userinput><command>&app_small;</command></userinput>
+							</screen>
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+		</section>
+		<section id="clo">
+			<title>Commandline options</title>
+			<para>
+				<table frame="all">
+					<title>Commandline Options</title>
+					<tgroup cols="3">
+						<?dbhtml cellpadding="4" ?>
+						<?dbhtml cellspacing="0" ?>
+						<colspec colnum="1" colname="col1"/>
+						<colspec colnum="2" colname="col2"/>
+						<colspec colnum="3" colname="col3"/>
+						<thead>
+							<row>
+								<entry>Short option</entry>
+								<entry>Long option</entry>
+								<entry>Function</entry>
+
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry>-n</entry>
+								<entry>--no-ctags</entry>
+								<entry>Don't load auto completion and call tip data.
+									   Use this option, if you don't want to use them. For more
+									   information see <xref linkend="general"/>.</entry>
+							</row>
+							<row>
+								<entry>-c directory_name</entry>
+								<entry>--config=directory_name</entry>
+								<entry>Use an alternate configuration directory. Default
+									   configuration directory is ~/.&app_small;/ and there resides
+									   &app_small;.conf and some template files.</entry>
+							</row>
+							<row>
+								<entry>-d</entry>
+								<entry>--debug</entry>
+								<entry>Runs &app; in debug mode, which means being verbose
+									   and printing lots of information.</entry>
+							</row>
+							<row>
+								<entry>-?</entry>
+								<entry>--help</entry>
+								<entry>Show help information and exit.</entry>
+							</row>
+							<row>
+								<entry>-v</entry>
+								<entry>--version</entry>
+								<entry>Show version information and exit.</entry>
+							</row>
+							<row>
+								<entry></entry>
+								<entry>[files ...]</entry>
+								<entry>Opens all given files at startup. This option causes &app; to
+									   ignore loading stored files from the last session (if enabled).</entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</table>
+				&app; supports all generic GTK options, a list is available on the help screen.
+			</para>
+		</section>
+		<section id="general">
+			<title>General</title>
+			<para>
+				At startup, &app; loads the 15 first files from the last time, &app; was launched.
+				You can disable this feature in the settings dialog(see <xref linkend="confdialog_gen"/>).
+				If you specify some files on the commandline, only these files will be opened. But you can
+				find the files from the last session in the file menu. There is an item "Recent files". It
+				contains the last 15 recently opened files.
+			</para>
+			<para>
+				If a C file(with extension is c, cpp, h, etc.) is opened, a global tags file is
+				loaded once, which contains	many function declarations from the glibc and some other
+				libraries, like X, Bonobo, Gnome, GTK, Glib and so on. These declarations are used
+				for call tips and auto completion. These tags are only useful if you are writing
+				C or C++ source code. So if you know, that you don't need these things, you can skip
+				loading this tag file. To do so, start &app; with the argument "-n" or "--no-ctags",
+				for more information see <xref linkend="clo"/>.
+			</para>
+		</section>
+		<section>
+			<title>Search and Replace</title>
+			<para>
+				You can use regular expressions in the search dialog, just by activating the check box(see
+				the image below). Detailed information about special characters can be found in the
+				<xref linkend="regexp"/>.
+				<figure>
+				   <title>Search dialog</title>
+				   <graphic fileref="images/find_dialog.jpg"></graphic>
+				</figure>
+
+			</para>
+			<para>
+				<table frame="all" id="regexp">
+					<title>Regular expressions</title>
+					<tgroup cols="2">
+						<?dbhtml cellpadding="4" ?>
+						<?dbhtml cellspacing="0" ?>
+						<colspec colnum="1" colname="col1"/>
+						<colspec colnum="2" colname="col2"/>
+						<spanspec spanname="hspan" namest="col1" nameend="col2" align="left"/>
+						<thead>
+							<row>
+								<entry spanname="hspan">
+									In a regular expression, the following characters are interpreted:
+								</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry>.</entry>
+								<entry>Matches any character.</entry>
+							</row>
+							<row>
+								<entry>\(</entry>
+								<entry>This marks the start of a region for tagging a match.</entry>
+							</row>
+							<row>
+								<entry>\)</entry>
+								<entry>This marks the end of a tagged region.</entry>
+							</row>
+							<row>
+								<entry>\n</entry>
+								<entry>Where n is 1 through 9 refers to the first through ninth tagged region
+									   when replacing. For example, if the search string was Fred\([1-9]\)XXX
+									   and the replace string was Sam\1YYY, when applied to Fred2XXX this would
+									   generate Sam2YYY.
+								</entry>
+							</row>
+							<row>
+								<entry>\&lt;</entry>
+								<entry>This matches the start of a word.</entry>
+							</row>
+							<row>
+								<entry>\&gt;</entry>
+								<entry>This matches the end of a word.</entry>
+							</row>
+							<row>
+								<entry>\x</entry>
+								<entry>This allows you to use a character x that would otherwise have a special
+									   meaning. For example, \[ would be interpreted as [ and not as the start
+									   of a character set.
+								</entry>
+							</row>
+							<row>
+								<entry>[...]</entry>
+								<entry>This indicates a set of characters, for example, [abc] means any of the
+									   characters a, b or c. You can also use ranges, for example [a-z] for any
+									   lower case character.
+								</entry>
+							</row>
+							<row>
+								<entry>[^...]</entry>
+								<entry>The complement of the characters in the set. For example, [^A-Za-z] means
+									   any character except an alphabetic character.
+								</entry>
+							</row>
+							<row>
+								<entry>$</entry>
+								<entry>This matches the end of a line.</entry>
+							</row>
+							<row>
+								<entry>*</entry>
+								<entry>This matches 0 or more times. For example, Sa*m matches Sm, Sam, Saam, Saaam and so on.</entry>
+							</row>
+							<row>
+								<entry>+</entry>
+								<entry>This matches 1 or more times. For example, Sa+m matches Sam, Saam, Saaam and so on.</entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</table>
+			</para>
+		</section>
+		<section id="confdialog">
+			<title>Preferences</title>
+			<para>
+				should be written
+				<!-- I know that <mediaobject> is better than <graphic> but <mediaobject> does not work with PDF -->
+				<figure id="confdialog_gen">
+				   <title>General tab in preferences dialog</title>
+				   <graphic fileref="images/pref_dialog_gen.jpg"></graphic>
+				</figure>
+				<figure>
+				   <title>Editor tab in preferences dialog</title>
+				   <graphic fileref="images/pref_dialog_edit.jpg"></graphic>
+				</figure>
+				<figure>
+				   <title>Tools tab in preferences dialog</title>
+				   <graphic fileref="images/pref_dialog_tools.jpg"></graphic>
+				</figure>
+				<figure id="confdialog_templ">
+				   <title>Template tab in preferences dialog</title>
+				   <graphic fileref="images/pref_dialog_templ.jpg"></graphic>
+				</figure>
+			</para>
+		</section>
+		<section>
+			<title>File types</title>
+			<para>
+				should be written
+			</para>
+		</section>
+		<section>
+			<title>Templates</title>
+			<para>
+				&app; supports several templates for file headers, multiline comments(frame comments), function
+				descriptions, a typical ChangeLog entry and a short GPL notice.
+				To use this templates, just open the edit menu or open the popup menu by right-clicking in the
+				editor widget, and choose "Insert Comments" and insert templates as you want.
+			</para>
+			<para>
+				Some templates like file header or ChangeLog entry, will always be inserted at the top of the file.
+			</para>
+			<para>
+				To insert a function description, the cursor must be inside of the function, so that the function
+				name can be determined automatically. The description will be positioned correctly one line above
+				the function, just check it out. If the cursor is not inside of a function or the function name cannot
+				be determined, you cannot insert a function description.
+			</para>
+			<para>
+				Each template can be customized to your needs. The templates are in the configuration directory, which
+				is in ~/.&app_small;/ (see <xref linkend="clo"/> for further information about configuration directory).
+				Just open the desired template with an editor (ideally &app; ;-) ) and edit the template as your needs.
+				There are some wildcards which will be automatically replaced by &app; at startup.
+			</para>
+			<para>
+				All wildcards must be enclosed by "{" and "}", e.g. {date}.
+			</para>
+			<para>
+				In the configuration dialog you can find a tab "Templates"(see <xref linkend="confdialog_templ"/>).
+				You can define the default values which will be inserted in the templates. You should restart
+				&app; after made changes, because they are only read at startup.
+			</para>
+			<para>
+				Since &app; 0.3 there are also templates for creating new files. They can be found in ~/.&app_small;/, too.
+				All template files for creating new files begin with template.filetype. followed by the filetype.
+				At creating a new file with a filetype template, the template for the fileheader is automatically prepended.
+				Please note, that the complete behaviour is still under development and will probably be changed in one of
+				the next releases. Sorry.
+			</para>
+			<para>&nbsp;</para>
+			<para>
+				<table frame="all">
+					<title>Template wildcards</title>
+					<tgroup cols="3">
+						<?dbhtml cellpadding="4" ?>
+						<?dbhtml cellspacing="0" ?>
+						<colspec colnum="1" colname="col1"/>
+						<colspec colnum="2" colname="col2"/>
+						<colspec colnum="3" colname="col3"/>
+						<thead>
+							<row>
+								<entry>Wildcard</entry>
+								<entry>Description</entry>
+								<entry>Available in following templates</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry>developer</entry>
+								<entry>The name of the developer.</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+							</row>
+							<row>
+								<entry>initial</entry>
+								<entry>The initials of the developer name, e.g. "ET" for
+									   Enrico Troeger or "JFD" for John Foobar Doe.</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+							</row>
+							<row>
+								<entry>mail</entry>
+								<entry>The email address of the developer.</entry>
+								<entry>file header, function description, ChangeLog entry</entry>
+							</row>
+							<row>
+								<entry>company</entry>
+								<entry>The company name, the developer is working for.</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+							</row>
+							<row>
+								<entry>year</entry>
+								<entry>The current year in the format: YYYY</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+							</row>
+							<row>
+								<entry>version</entry>
+								<entry>The initial version of a new file.</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+							</row>
+							<row>
+								<entry>date</entry>
+								<entry>The current date in the format: YYYY-MM-DD</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+							</row>
+							<row>
+								<entry>untitled</entry>
+								<entry>The string "untitled" (this will be translated to your locale),
+									   used in filetype templates</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+							</row>
+							<row>
+								<entry>datetime</entry>
+								<entry>The current date and time in the format: DD.MM.YYYY HH:mm:ss ZZZZ</entry>
+								<entry>file header, function description</entry>
+							</row>
+							<row>
+								<entry>filename</entry>
+								<entry>The filename of the current file. Only available for the file header template.</entry>
+								<entry>file header</entry>
+							</row>
+							<row>
+								<entry>gpl</entry>
+								<entry>This wildcard inserts a short GPL notice.</entry>
+								<entry>file header</entry>
+							</row>
+							<row>
+								<entry>functionname</entry>
+								<entry>The function name of the function at cursor position. This wildcard will only
+									   be replaced in the function description template.</entry>
+								<entry>function description</entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</table>
+				If you need any other wildcards or a special date/time format, please email the author <email>&author_mail;</email>.
+			</para>
+		</section>
+	</chapter>
+
+	<appendix>
+		<title><application>&app;</application> key mapping</title>
+		<section>
+			<title><application>&app;</application> key mapping</title>
+			<para>
+				The following table lists several useful key codes, which you can use in
+				<application>&app;</application>.
+			</para>
+			<para>
+				<table frame="all">
+					<title>Key Table</title>
+					<tgroup cols="2">
+						<?dbhtml cellpadding="4" ?>
+						<?dbhtml cellspacing="0" ?>
+						<colspec colnum="1" colname="col1"/>
+						<colspec colnum="2" colname="col2"/>
+						<spanspec spanname="hspan" namest="col1" nameend="col2" align="center"/>
+						<thead>
+							<row>
+								<entry>Key</entry>
+								<entry>Function</entry>
+
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry align="left" spanname="hspan">File operations</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo></entry>
+								<entry>Create new file</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo></entry>
+								<entry>Open file</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>S</keycap></keycombo></entry>
+								<entry>Save current file</entry>
+							</row>
+							<row>
+								<entry>
+									<keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>S</keycap></keycombo>
+								</entry>
+								<entry>Save all open files</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>W</keycap></keycombo></entry>
+								<entry>Close current file</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Alt</keycap><keycap>D</keycap></keycombo></entry>
+								<entry>Close all open files</entry>
+							</row>
+							<row>
+								<entry align="left" spanname="hspan">Editing operations</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo></entry>
+								<entry>Cut the current selection and copy it into the clipboard</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo></entry>
+								<entry>Copy the current selection into the clipboard</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo></entry>
+								<entry>Paste the content of the clipboard at the current position</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>Z</keycap></keycombo></entry>
+								<entry>Undo the last action</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>Y</keycap></keycombo></entry>
+								<entry>Redo the last action</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>G</keycap></keycombo></entry>
+								<entry>Duplicate the current line</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo></entry>
+								<entry>Select all</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>D</keycap></keycombo></entry>
+								<entry>Comment current line or selection</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>Space</keycap></keycombo></entry>
+								<entry>Show auto completion list</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>Return</keycap></keycombo></entry>
+								<entry>Show list of available(in the workspace) macros and variables</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Alt</keycap><keycap>Space</keycap></keycombo></entry>
+								<entry>Show call tips for the current function or method</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Shift</keycap><keycap>Space</keycap></keycombo></entry>
+								<entry>Insert just a blank. Useful after typing if or while, to explicitly
+								suppress the use of construct auto completion</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>R</keycap></keycombo></entry>
+								<entry>Reload the tag/symbol list</entry>
+							</row>
+							<row>
+								<entry align="left" spanname="hspan">Finding text</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry>
+								<entry>Open find dialog</entry>
+							</row>
+							<row>
+								<entry><keycap>F3</keycap></entry>
+								<entry>Find next</entry>
+							</row>
+							<row>
+								<entry align="left" spanname="hspan">Building files</entry>
+							</row>
+							<row>
+								<entry><keycap>F8</keycap></entry>
+								<entry>Compile the current file</entry>
+							</row>
+							<row>
+								<entry><keycap>F9</keycap></entry>
+								<entry>Build the current file</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>F9</keycap></keycombo></entry>
+								<entry>Build the current file with the make tool</entry>
+							</row>
+							<row>
+								<entry><keycap>F5</keycap></entry>
+								<entry>Execute the current file in a terminal emulation</entry>
+							</row>
+							<row>
+								<entry align="left" spanname="hspan">Miscellaneous</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>LEFT</keycap></keycombo></entry>
+								<entry>Switch to the previous open document</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>RIGHT</keycap></keycombo></entry>
+								<entry>Switch to the next open document</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>+</keycap></keycombo></entry>
+								<entry>Zoom in the text</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>-</keycap></keycombo></entry>
+								<entry>Zoom out the text</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>P</keycap></keycombo></entry>
+								<entry>Open preferences dialog</entry>
+							</row>
+							<row>
+								<entry><keycap>F1</keycap></entry>
+								<entry>Show help</entry>
+							</row>
+							<row>
+								<entry><keycap>F11</keycap></entry>
+								<entry>Switch to fullscreen mode</entry>
+							</row>
+							<row>
+								<entry><keycap>F12</keycap></entry>
+								<entry>Switch to Scribble widget</entry>
+							</row>
+							<row>
+								<entry><keycombo><keycap>Ctrl</keycap><keycap>Q</keycap></keycombo></entry>
+								<entry>Quit</entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</table>
+			</para>
+		</section>
+	</appendix>
+
+	<!-- Appendix with GPL -->
+	&legal;
+
+</book>

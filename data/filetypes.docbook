@@ -1,0 +1,36 @@
+[styling]
+# foreground;background;bold
+default=0x000000;0xffffff;false
+tag=0x990000;0xffffff;false
+tagunknown=0x0000ff;0xffffff;false
+attribute=0x007F00;0xffffff;false
+attributeunknown=0x0000ff;0xffffff;false
+number=0x800080;0xffffff;false
+doublestring=0x1E90FF;0xffffff;false
+singlestring=0x1E90FF;0xffffff;false
+other=0x800080;0xffffff;false
+comment=0x808080;0xffffff;false
+entity=0x800080;0xffffff;false
+tagend=0x990000;0xffffff;false
+xmlstart=0x990000;0xffffff;false
+xmlend=0x990000;0xf0f0f0;false
+cdata=0x990066;0xffffff;false
+question=0xff0000;0xffffff;false
+value=0x990066;0xffffff;false
+xccomment=0x990066;0xffffff;false
+sgml_default=0x000000;0xffffff;false
+sgml_comment=0x808080;0xffffff;false
+sgml_special=0x007F00;0xffffff;false
+sgml_command=0x991111;0xffffff;true
+sgml_doublestring=0x1E90FF;0xffffff;false
+sgml_simplestring=0x004040;0xffffff;false
+sgml_1st_param=0x804040;0xffffff;false
+sgml_entity=0x101030;0xffffff;false
+sgml_block_default=0x100000;0xffffff;false
+sgml_1st_param_comment=0x906040;0xffffff;false
+sgml_error=0x0000ff;0xffffff;false
+
+[keywords]
+# all items must be in one line
+elements=abbrev abstract accel ackno acronym action address affiliation alt anchor answer appendix appendixinfo application area areaset areaspec arg article articleinfo artpagenums attribution audiodata audioobject author authorblurb authorgroup authorinitials beginpage bibliocoverage bibliodiv biblioentry bibliography bibliographyinfo biblioid bibliomisc bibliomixed bibliomset bibliorelation biblioset bibliosource blockinfo blockquote book bookinfo bridgehead callout calloutlist caption caution chapter chapterinfo citation citebiblioid citerefentry citetitle city classname classsynopsis classsynopsisinfo cmdsynopsis co collab  cols colnum nameend namest align spanname colname collabname colophon colspec command computeroutput confdates confgroup confnum confsponsor conftitle constant constraint constraintdef constructorsynopsis contractnum contractsponsor contrib copyright coref corpauthor corpname country database date dedication destructorsynopsis edition editor email emphasis entry entrytbl envar epigraph equation errorcode errorname errortext errortype example exceptionname fax fieldsynopsis figure filename fileref firstname firstterm footnote footnoteref foreignphrase formalpara frame funcdef funcparams funcprototype funcsynopsis funcsynopsisinfo function glossary glossaryinfo glossdef glossdiv glossentry glosslist glosssee glossseealso glossterm graphic graphicco group guibutton guiicon guilabel guimenu guimenuitem guisubmenu hardware highlights holder honorific htm imagedata imageobject imageobjectco important index indexdiv indexentry indexinfo indexterm informalequation informalexample informalfigure informaltable initializer inlineequation inlinegraphic inlinemediaobject interface interfacename invpartnumber isbn issn issuenum itemizedlist itermset jobtitle keycap keycode keycombo keysym keyword keywordset label legalnotice lhs lineage lineannotation link listitem iteral literallayout lot lotentry manvolnum markup medialabel mediaobject mediaobjectco member menuchoice methodname methodparam methodsynopsis mm modespec modifier ousebutton msg msgaud msgentry msgexplan msginfo msglevel msgmain msgorig msgrel msgset msgsub msgtext nonterminal note objectinfo olink ooclass ooexception oointerface option optional orderedlist orgdiv orgname otheraddr othercredit othername pagenums para paramdef parameter part partinfo partintro personblurb personname phone phrase pob postcode preface prefaceinfo primary primaryie printhistory procedure production productionrecap productionset productname productnumber programlisting programlistingco prompt property pubdate publisher publishername pubsnumber qandadiv qandaentry qandaset question quote refclass refdescriptor refentry refentryinfo refentrytitle reference referenceinfo refmeta refmiscinfo refname refnamediv refpurpose refsect1 refsect1info refsect2 refsect2info refsect3 refsect3info refsection refsectioninfo refsynopsisdiv refsynopsisdivinfo releaseinfo remark replaceable returnvalue revdescription revhistory revision revnumber revremark rhs row sbr screen screenco screeninfo screenshot secondary secondaryie sect1 sect1info sect2 sect2info sect3 sect3info sect4 sect4info sect5 sect5info section sectioninfo see seealso seealsoie seeie seg seglistitem segmentedlist segtitle seriesvolnums set setindex setindexinfo setinfo sgmltag shortaffil shortcut sidebar sidebarinfo simpara simplelist simplemsgentry simplesect spanspec state step street structfield structname subject subjectset subjectterm subscript substeps subtitle superscript surname sv symbol synopfragment synopfragmentref synopsis systemitem table tbody term tertiary tertiaryie textdata textobject tfoot tgroup thead tip title titleabbrev toc tocback tocchap tocentry tocfront toclevel1 toclevel2 toclevel3 toclevel4 toclevel5 tocpart token trademark type ulink userinput varargs variablelist varlistentry varname videodata videoobject void volumenum warning wordasword xref year arch condition conformance id lang os remap role revision revisionflag security userlevel url vendor xreflabel status label endterm linkend space width
+dtd=ELEMENT DOCTYPE ATTLIST ENTITY NOTATION
