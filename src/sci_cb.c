@@ -328,6 +328,7 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 	sci_get_line(sci, line, linebuf);
 
 	if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL) return FALSE;
+	if (lexer == SCLEX_HTML && style == SCE_H_DEFAULT) return FALSE;
 	if (lexer == SCLEX_CPP && (style == SCE_C_COMMENT ||
 			style == SCE_C_COMMENTLINE || style == SCE_C_COMMENTDOC)) return FALSE;
 
@@ -599,7 +600,7 @@ void sci_cb_auto_table(ScintillaObject *sci, gint pos)
 
 	sci_cb_get_indent(sci, pos, TRUE);
 	table = g_strconcat("\n", indent, indent, "<tr>\n", indent, indent, indent, "<td>\n",
-								indent, indent, indent, "</td>\n", indent, indent, "<tr>\n",
+								indent, indent, indent, "</td>\n", indent, indent, "</tr>\n",
 								indent, NULL);
 	sci_insert_text(sci, pos, table);
 	g_free(table);
