@@ -1,3 +1,10 @@
+2005-11-22  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * bugfix: src/sci_cb.c: added missing / to the closing tr-tag in HTML
+                         table auto completion
+ * src/sci_cb.c: disabled auto completion in HTML at writing pure CDATA
+
+
 2005-11-21  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/keyfile.c: store the position of hpaned1(sizer between editor

@@ -22,9 +22,9 @@ TODO List:
 	o rewrite untitled.extension after "Save As" in the file header
 	o fix { and } problems at some "special" lines where indentation
 	  get broken
-	o give the rows in the open files treeview a special popup menu, to
-	  delete and some other things
 	o command line option -e
+	o bug? start without coloring files
+	o (indent wrapped lines, but how?)
 	o (project management)
 	o (folding)
 	o (vim-like settings stored in files as comment)
