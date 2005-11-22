@@ -1626,7 +1626,7 @@ on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
 			{
 				case 0:
 				{
-					//document_remove(idx);
+					document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci)));
 					break;
 				}
 				case 1:
@@ -1636,7 +1636,7 @@ on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
 				}
 				case 2:
 				{
-					on_toolbutton23_clicked(menuitem, NULL);
+					on_toolbutton23_clicked(NULL, NULL);
 					break;
 				}
 			}
