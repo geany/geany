@@ -28,12 +28,16 @@ doc: geany.1 geany.txt html/*
 install-data-local: geany.1 geany.txt html/*
 	$(mkinstalldirs) $(DOCDIR)/html/images
 	for file in `ls $(HTML_FILES)`; do \
-	  basefile=`echo $$file | sed -e 's,^.*/,,'`; \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(DOCDIR)/html/$$basefile; \
+	  if [ -f $$file ]; then \
+	    basefile=`echo $$file | sed -e 's,^.*/,,'`; \
+	    $(INSTALL_DATA) $(srcdir)/$$file $(DOCDIR)/html/$$basefile; \
+	  fi \
 	done
 	for file in `ls $(IMAGE_FILES)`; do \
-	  basefile=`echo $$file | sed -e 's,^.*/,,'`; \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(DOCDIR)/html/images/$$basefile; \
+	  if [ -f $$file ]; then \
+	    basefile=`echo $$file | sed -e 's,^.*/,,'`; \
+	    $(INSTALL_DATA) $(srcdir)/$$file $(DOCDIR)/html/images/$$basefile; \
+	  fi \
 	done
 	$(INSTALL_DATA) geany.txt $(DOCDIR)
 
