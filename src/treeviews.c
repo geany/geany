@@ -67,7 +67,7 @@ void treeviews_prepare_openfiles(void)
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(tv.store_openfiles));
 
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(_("Symbols"), renderer, "text", 0, NULL);
+	column = gtk_tree_view_column_new_with_attributes(_("Open files"), renderer, "text", 0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tv.tree_openfiles), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
 
