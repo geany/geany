@@ -45,6 +45,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_save_win_pos");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_save_winpos);
 
+	widget = lookup_widget(app->prefs_dialog, "check_switch_pages");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->switch_msgwin_pages);
+
 	widget = lookup_widget(app->prefs_dialog, "check_ask_for_quit");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_confirm_exit);
 
@@ -149,11 +152,15 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_ask_for_quit");
 		app->pref_main_confirm_exit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = lookup_widget(app->prefs_dialog, "check_switch_pages");
+		app->switch_msgwin_pages = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
 		app->pref_main_show_search = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_tags");
 		app->pref_main_show_tags = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
 
 		// Editor settings
 		widget = lookup_widget(app->prefs_dialog, "spin_tab_width");

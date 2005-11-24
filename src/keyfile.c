@@ -77,8 +77,10 @@ void configuration_save(void)
 	//g_key_file_set_boolean(config, PACKAGE, "line_breaking", app->line_breaking);
 	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", app->show_line_endings);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", app->fullscreen);
+	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", app->switch_msgwin_pages);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->auto_complete_constructs);
+	g_key_file_set_string(config, PACKAGE, "terminal_settings", app->terminal_settings);
 	g_key_file_set_string(config, PACKAGE, "editor_font", app->editor_font);
 	g_key_file_set_string(config, PACKAGE, "tagbar_font", app->tagbar_font);
 	g_key_file_set_string(config, PACKAGE, "msgwin_font", app->msgwin_font);
@@ -181,12 +183,15 @@ gboolean configuration_load(void)
 	app->show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
 	//app->line_breaking = utils_get_setting_boolean(config, PACKAGE, "line_breaking", TRUE);
 	app->fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
+	app->switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", TRUE);
 	app->auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
 	app->auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
 	app->editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", "Courier New 9");
 	app->tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", "Cursor 8");
 	app->msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", "Cursor 8");
-	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text", _("Type here what you want, use it as a notice/scratch board"));
+	app->terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings", "");
+	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
+				_("Type here what you want, use it as a notice/scratch board"));
 
 	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", -1);
 

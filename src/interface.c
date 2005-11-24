@@ -1933,6 +1933,7 @@ create_prefs_dialog (void)
   GtkWidget *vbox4;
   GtkWidget *check_load_session;
   GtkWidget *check_save_win_pos;
+  GtkWidget *check_switch_pages;
   GtkWidget *check_ask_for_quit;
   GtkWidget *label18;
   GtkWidget *label106;
@@ -2085,10 +2086,17 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_save_win_pos, _("Saves the window position and geometry and restores it at the start"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_save_win_pos), FALSE);
 
+  check_switch_pages = gtk_check_button_new_with_mnemonic (_("Switch to status message list at new message"));
+  gtk_widget_show (check_switch_pages);
+  gtk_box_pack_start (GTK_BOX (vbox4), check_switch_pages, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_switch_pages, _("Switch to the status message tab(in the notebook window at the bottom) if a new status message arrive."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_switch_pages), FALSE);
+
   check_ask_for_quit = gtk_check_button_new_with_mnemonic (_("Confirm exit"));
   gtk_widget_show (check_ask_for_quit);
   gtk_box_pack_start (GTK_BOX (vbox4), check_ask_for_quit, FALSE, FALSE, 0);
   GTK_WIDGET_UNSET_FLAGS (check_ask_for_quit, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_ask_for_quit, _("Shows a confirmation dialog on exit."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_ask_for_quit), FALSE);
 
   label18 = gtk_label_new (_("<b>Miscellaneous</b>"));
@@ -2677,6 +2685,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox4, "vbox4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_load_session, "check_load_session");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_save_win_pos, "check_save_win_pos");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_for_quit, "check_ask_for_quit");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label18, "label18");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label106, "label106");

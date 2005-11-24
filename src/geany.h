@@ -81,7 +81,7 @@ typedef struct document
 	GtkWidget		*tab_label;
 	GtkWidget		*tabmenu_label;
 	GtkTreeIter		 iter;
-	gint 			 scid;			/* scintilla id */
+	gint 			 scid;
 	gboolean		 readonly;
 	gboolean		 changed;
 	gboolean		 do_overwrite;
@@ -115,6 +115,7 @@ typedef struct MyApp
 	gboolean			 show_line_endings;
 	gboolean			 show_markers_margin;
 	gboolean			 fullscreen;
+	gboolean			 switch_msgwin_pages;
 	gboolean			 auto_close_xml_tags;
 	gboolean			 auto_complete_constructs;
 	gboolean			 main_window_realized;
@@ -136,6 +137,7 @@ typedef struct MyApp
 	gchar				*msgwin_font;
 	gchar				*configdir;
 	gchar				*search_text;
+	gchar				*terminal_settings;
 	gchar				*build_args_inc;
 	gchar				*build_args_libs;
 	gchar				*build_args_prog;
