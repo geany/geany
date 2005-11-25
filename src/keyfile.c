@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 #include <stdlib.h>
@@ -32,6 +33,7 @@
 static gchar *scribble_text = NULL;
 static gchar *session_files[GEANY_MRU_LENGTH];
 static gint hpan_position;
+static gint vpan_position;
 
 
 void configuration_save(void)
@@ -64,9 +66,15 @@ void configuration_save(void)
 	// store basic settings
 	g_key_file_set_boolean(config, PACKAGE, "toolbar_visible", app->toolbar_visible);
 	g_key_file_set_integer(config, PACKAGE, "toolbar_icon_style", app->toolbar_icon_style);
-	if (app->pref_main_save_winpos) g_key_file_set_integer(config, PACKAGE, "treeview_position",
+	if (app->pref_main_save_winpos)
+	{
+		g_key_file_set_integer(config, PACKAGE, "treeview_position",
 				gtk_paned_get_position(GTK_PANED(lookup_widget(app->window, "hpaned1"))));
-	g_key_file_set_integer(config, PACKAGE, "long_line_column", app->long_line_color);
+		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",
+				gtk_paned_get_position(GTK_PANED(lookup_widget(app->window, "vpaned1"))));
+	}
+
+	g_key_file_set_integer(config, PACKAGE, "long_line_column", app->long_line_column);
 	g_key_file_set_integer(config, PACKAGE, "long_line_color", app->long_line_color);
 	g_key_file_set_boolean(config, PACKAGE, "treeview_nb_visible", app->treeview_nb_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", app->msgwindow_visible);
@@ -193,8 +201,6 @@ gboolean configuration_load(void)
 	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
 				_("Type here what you want, use it as a notice/scratch board"));
 
-	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", -1);
-
 	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", &geo_len, &error);
 	if (error)
 	{
@@ -209,6 +215,9 @@ gboolean configuration_load(void)
 		app->geometry[2] = geo[2];
 		app->geometry[3] = geo[3];
 	}
+	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", -1);
+	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", geo[3] - GEANY_MSGWIN_HEIGHT);
+
 
 	app->pref_editor_tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
 	app->pref_main_confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", TRUE);
@@ -342,8 +351,10 @@ gboolean configuration_open_files(void)
 
 	// set the position of the hpaned
 	if (app->pref_main_save_winpos)
+	{
 		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "hpaned1")), hpan_position);
-
+		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "vpaned1")), vpan_position);
+	}
 
 
 	return ret;
