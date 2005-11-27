@@ -58,6 +58,15 @@ PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 
+want_vte=yes
+AC_ARG_ENABLE(vte, [  --enable-vte            enable if you want virtual termninal support [[default=yes]]],
+ [want_vte="$enableval"])
+
+if test "$want_vte" = "yes"; then
+	AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])
+fi
+GTK_VERSION=`$PKG_CONFIG  gtk+-2.0 --modversion`
+
 GETTEXT_PACKAGE=geany
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
@@ -79,5 +88,8 @@ geany.spec
 ])
 
 echo "----------------------------------------"
+echo "Install Geany in                   : ${prefix}"
+echo "Using GTK version                  : $GTK_VERSION"
+echo "Use virtual terminal support       : ${want_vte}"
 echo "Configuration is done OK."
 echo ""
