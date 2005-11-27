@@ -24,6 +24,7 @@
     PhpParser, \
     PythonParser, \
     TexParser, \
+    ConfParser, \
     ShParser
 
 #endif	/* _PARSERS_H */

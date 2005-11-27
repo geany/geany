@@ -13,6 +13,7 @@ libtagmanager_a_SOURCES =\
 	sort.h\
 	vstring.h\
 	args.h\
+	conf.c\
 	ctags.h\
 	entry.h\
 	get.h\
