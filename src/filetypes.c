@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -223,6 +224,20 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_CSS]->pattern[4] = NULL;	// always have to be NULL
 	filetypes[GEANY_FILETYPES_CSS]->style_func_ptr = styleset_css;
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CSS]->title, filetypes[GEANY_FILETYPES_CSS]);
+
+	filetypes[GEANY_FILETYPES_CONF] = (filetype*)g_malloc(sizeof(filetype));
+	filetypes[GEANY_FILETYPES_CONF]->id = GEANY_FILETYPES_CONF;
+	filetypes[GEANY_FILETYPES_CONF]->name = g_strdup("Conf");
+	filetypes[GEANY_FILETYPES_CONF]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_CONF]->title = g_strdup(_("Config file"));
+	filetypes[GEANY_FILETYPES_CONF]->extension = g_strdup("conf");
+	filetypes[GEANY_FILETYPES_CONF]->pattern[0] = g_strdup("*.ini");
+	filetypes[GEANY_FILETYPES_CONF]->pattern[1] = g_strdup("*.conf");
+	filetypes[GEANY_FILETYPES_CONF]->pattern[2] = g_strdup("config");
+	filetypes[GEANY_FILETYPES_CONF]->pattern[3] = g_strdup("*rc");
+	filetypes[GEANY_FILETYPES_CONF]->pattern[4] = NULL;	// always have to be NULL
+	filetypes[GEANY_FILETYPES_CONF]->style_func_ptr = styleset_conf;
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CONF]->title, filetypes[GEANY_FILETYPES_CONF]);
 
 	filetypes[GEANY_FILETYPES_ALL] = (filetype*)g_malloc(sizeof(filetype));
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;

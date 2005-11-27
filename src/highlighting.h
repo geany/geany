@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -61,3 +62,5 @@ void styleset_docbook(ScintillaObject *sci);
 void styleset_none(ScintillaObject *sci);
 
 void styleset_css(ScintillaObject *sci);
+
+void styleset_conf(ScintillaObject *sci);
