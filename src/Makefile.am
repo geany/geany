@@ -1,4 +1,5 @@
 ## Process this file with automake to produce Makefile.in
+# $Id$
 
 INCLUDES = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
@@ -29,6 +30,7 @@ geany_SOURCES = \
 	sciwrappers.c sciwrappers.h \
 	document.c document.h \
 	utils.c utils.h \
+	vte.c vte.h \
 	support.c support.h \
 	interface.c interface.h \
 	callbacks.c callbacks.h

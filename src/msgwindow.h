@@ -36,11 +36,13 @@ enum
 	MSG_STATUS = 0,
 	MSG_COMPILER,
 	MSG_MESSAGE,
-	MSG_SCRATCH
+	MSG_SCRATCH,
+	MSG_VTE
 };
 
 
-typedef struct msgwin {
+typedef struct msgwin
+{
 	GtkListStore	*store_status;
 	GtkListStore	*store_msg;
 	GtkListStore	*store_compiler;

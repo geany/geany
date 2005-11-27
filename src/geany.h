@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 #ifdef HAVE_CONFIG_H
@@ -61,7 +62,7 @@
 #define GEANY_MAX_TAGS_COUNT			1000
 #define GEANY_WORDCHARS					"_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
-#define GEANY_MSGWIN_HEIGHT				210
+#define GEANY_MSGWIN_HEIGHT				240
 #define GEANY_STRING_UNTITLED			_("untitled")
 
 
@@ -104,6 +105,7 @@ typedef struct MyApp
 	gint				 long_line_color;
 	gint				 geometry[4];
 	gboolean			 debug_mode;
+	gboolean			 have_vte;
 	gboolean			 ignore_global_tags;
 	gboolean			 toolbar_visible;
 	gboolean			 treeview_nb_visible;

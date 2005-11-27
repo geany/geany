@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -46,6 +47,15 @@
 #ifdef GEANY_WIN32
 # include "win32.h"
 #endif
+
+// include vte.h on non-Win32 systems, else define fake vte_init
+#if defined(GEANY_WIN32) || ! defined(HAVE_VTE)
+# define vte_close() ;
+#else
+# include "vte.h"
+#endif
+
+
 
 // represents the word under the mouse pointer when right button(no. 3) is pressed
 static gchar current_word[128];
@@ -126,6 +136,7 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	if (GTK_IS_WIDGET(app->open_fontsel)) gtk_widget_destroy(app->open_fontsel);
 	if (GTK_IS_WIDGET(app->open_colorsel)) gtk_widget_destroy(app->open_colorsel);
 	gtk_widget_destroy(app->window);
+	if (app->have_vte) vte_close();
 
 	g_free(app);
 
@@ -184,7 +195,7 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 
 
 // signal handler (for SIGINT and SIGTERM)
-void signal_cb(gint sig)
+RETSIGTYPE signal_cb(gint sig)
 {
 	on_exit_clicked(NULL, NULL);
 }
@@ -827,6 +838,7 @@ on_file_save_save_button_clicked       (GtkButton       *button,
 
 	if (doc_list[idx].file_name) g_free(doc_list[idx].file_name);
 	doc_list[idx].file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app->save_filesel));
+	utils_replace_filename(idx);
 	document_save_file(idx);
 
 	utils_build_show_hide(idx);
@@ -945,8 +957,8 @@ on_window_configure_event              (GtkWidget *widget,
                                         GdkEventConfigure *event,
                                         gpointer user_data)
 {
-	GtkWidget *vpaned1 = lookup_widget(app->window, "vpaned1");
-	gtk_paned_set_position(GTK_PANED(vpaned1), event->height - GEANY_MSGWIN_HEIGHT);
+	//GtkWidget *vpaned1 = lookup_widget(app->window, "vpaned1");
+	//gtk_paned_set_position(GTK_PANED(vpaned1), event->height - GEANY_MSGWIN_HEIGHT);
 	app->geometry[0] = event->x;
 	app->geometry[1] = event->y;
 	app->geometry[2] = event->width;

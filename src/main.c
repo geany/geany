@@ -23,6 +23,7 @@
 #include <signal.h>
 #include <time.h>
 
+
 #include "geany.h"
 
 #include "interface.h"
@@ -38,10 +39,17 @@
 #include "templates.h"
 #include "encodings.h"
 #include "treeviews.h"
+// include vte.h on non-Win32 systems, else define fake vte_init
+#if defined(GEANY_WIN32) || ! defined(HAVE_VTE)
+# define vte_init() ;
+#else
+# include "vte.h"
+#endif
 
 
 static gboolean debug_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
+static gboolean no_vte = FALSE;
 static gboolean show_version = FALSE;
 static gchar *alternate_config = NULL;
 static GOptionEntry entries[] =
@@ -49,6 +57,7 @@ static GOptionEntry entries[] =
   { "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, "runs in debug mode (means being verbose)", NULL },
   { "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, "don't load auto completion data (see documentation)", NULL },
   { "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, "use an alternate configuration directory", NULL },
+  { "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, "don't load terminal support", NULL },
   { "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, "show version and exit", NULL },
   { NULL }
 };
@@ -255,6 +264,11 @@ gint main(gint argc, gchar **argv)
 	app->prefs_dialog		= NULL;
 	app->find_dialog		= NULL;
 	app->main_window_realized= FALSE;
+#ifdef HAVE_VTE
+	app->have_vte 			= ! no_vte;
+#else
+	app->have_vte 			= FALSE;
+#endif
 	app->ignore_global_tags = ignore_global_tags;
 	app->tm_workspace		= tm_get_workspace();
 	app->recent_queue		= g_queue_new();
@@ -337,6 +351,7 @@ gint main(gint argc, gchar **argv)
 	msgwindow.popup_status_menu = msgwin_create_message_popup_menu(3);
 	msgwindow.popup_msg_menu = msgwin_create_message_popup_menu(4);
 	msgwindow.popup_compiler_menu = msgwin_create_message_popup_menu(5);
+	vte_init();
 	dialogs_create_build_menu();
 	dialogs_create_recent_menu();
 	utils_create_insert_menu_items();
@@ -390,6 +405,7 @@ gint main(gint argc, gchar **argv)
 
 	app->main_window_realized = TRUE;
 
+	//g_timeout_add(0, (GSourceFunc)destroyapp, NULL); // useful for start time tests
 	gtk_main();
 	return 0;
 }
