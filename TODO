@@ -19,11 +19,12 @@ TODO List:
 	o latex build menu
 	o colourize the tags in the tag list widget to show if it's a
 	  function, macro or whatever
-	o rewrite untitled.extension after "Save As" in the file header
 	o fix { and } problems at some "special" lines where indentation
 	  get broken
-	o command line option -e
-	o bug? start without coloring files
+	o command line option -e (editor mode)
+	o fix bug in highlighting.c at style_init_c
+	o vte.c: clipboard support, add configure option --disable-vte
+	o BSD compatibility
 	o (indent wrapped lines, but how?)
 	o (project management)
 	o (folding)

@@ -1,3 +1,30 @@
+2005-11-27  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/vte.c/h: newly created: contains functions for the terminal
+                emulator widget, which is loaded if libvte.so.4 is
+                available
+ * configure.in: added option --[en|dis]able-vte to disable vte support
+
+
+2005-11-25  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * scintilla/LexOthers.cxx: edited the properties lexer to colourize
+                            key=value pairs a bit nicer
+ * tagmanager/parsers.h, tagmanager/conf.c, tagmanger/Makefile.am:
+   added conf.c(built from make.c), to create tags for config files
+ * src/utils.c, src/callbacks.c: rewrite untitled.extension after
+                                 "Save As" in the file header
+
+
+2005-11-24  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/keyfile.c, src/interface.c, src/prefs.c, src/msgwindow.c:
+   added new option "Switch to status message list"
+ * src/keyfile.c: store the position of vpaned1 too(sizer between
+                  editor window and the status message list)
+ *src/highlighting.c, src/filetypes.c: added new filetype "Conf"
+
+
 2005-11-22  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * bugfix: src/sci_cb.c: added missing / to the closing tr-tag in HTML
