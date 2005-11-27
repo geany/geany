@@ -21,3 +21,5 @@ src/about.c
 src/geany.h
 src/templates.c
 src/encodings.c
+src/treeviews.c
+src/vte.c
