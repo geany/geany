@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -189,5 +190,7 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key, const gchar *default_value);
 
 void utils_switch_document(gint direction);
+
+void utils_replace_filename(gint idx);
 
 #endif

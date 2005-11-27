@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -1853,3 +1854,21 @@ void utils_switch_document(gint direction)
 	}
 }
 
+
+void utils_replace_filename(gint idx)
+{
+	gint pos = sci_get_current_position(doc_list[idx].sci);
+	gchar *filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc_list[idx].file_type)->extension, NULL);
+	gchar *filename = g_path_get_basename(doc_list[idx].file_name);
+
+	sci_set_current_position(doc_list[idx].sci, 0);
+	sci_set_search_anchor(doc_list[idx].sci);
+	// stop if filebase was not found
+	if (sci_search_next(doc_list[idx].sci, SCFIND_MATCHCASE, filebase) == -1) return;
+
+	sci_replace_sel(doc_list[idx].sci, filename);
+	g_free(filebase);
+	g_free(filename);
+
+	sci_set_current_position(doc_list[idx].sci, pos);
+}
