@@ -595,7 +595,7 @@ static void ColourisePropsLine(
 			if ((i < lengthLine) && (lineBuffer[i] == '=')) {
 				styler.ColourTo(startLine + i - 1, SCE_PROPS_DEFAULT);
 				styler.ColourTo(startLine + i, 3);
-				styler.ColourTo(endPos, SCE_PROPS_DEFAULT);
+				styler.ColourTo(endPos, SCE_PROPS_DEFVAL);
 			} else {
 				styler.ColourTo(endPos, SCE_PROPS_DEFAULT);
 			}
@@ -871,7 +871,7 @@ static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLin
 		// CTags: \t<message>
 		// Lua 5 traceback: \t<filename>:<line>:<message>
 		bool initialTab = (lineBuffer[0] == '\t');
-		enum { stInitial, 
+		enum { stInitial,
 			stGccStart, stGccDigit, stGcc,
 			stMsStart, stMsDigit, stMsBracket, stMsVc, stMsDigitComma, stMsDotNet,
 			stCtagsStart, stCtagsStartString, stCtagsStringDollar, stCtags,
@@ -933,8 +933,8 @@ static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLin
 					for (j = i + numstep; j < lengthLine && isalpha(lineBuffer[j]) && chPos < sizeof(word) - 1; j++)
 						word[chPos++] = lineBuffer[j];
 					word[chPos] = 0;
-					if (!CompareCaseInsensitive(word, "error") || !CompareCaseInsensitive(word, "warning") || 
-						!CompareCaseInsensitive(word, "fatal") || !CompareCaseInsensitive(word, "catastrophic") || 
+					if (!CompareCaseInsensitive(word, "error") || !CompareCaseInsensitive(word, "warning") ||
+						!CompareCaseInsensitive(word, "fatal") || !CompareCaseInsensitive(word, "catastrophic") ||
 						!CompareCaseInsensitive(word, "note") || !CompareCaseInsensitive(word, "remark")) {
 						state = stMsVc;
 					} else
