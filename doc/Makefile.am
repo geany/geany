@@ -1,7 +1,7 @@
 
 DOCDIR = $(DESTDIR)/$(datadir)/doc/@PACKAGE@
-HTML_FILES = html/*
-IMAGE_FILES = images/*
+HTML_FILES = html/*.html geany.css
+IMAGE_FILES = images/*.jpg
 EXTRA_DIST = geany.css make_webable.sh geany.txt geany_gpl.docbook geany.1 geany.docbook $(HTML_FILES) $(IMAGE_FILES)
 
 geany.1:
