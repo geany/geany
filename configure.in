@@ -53,7 +53,7 @@ AC_CHECK_FUNCS([gethostname floor ftruncate fgetpos getcwd gettimeofday isascii 
 
 # autoscan end
 
-pkg_modules="gtk+-2.0 >= 2.4.0"
+pkg_modules="gtk+-2.0 >= 2.6.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
