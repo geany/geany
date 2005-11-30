@@ -400,8 +400,14 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(2));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "editor_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "font_term"),
+				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(4));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "long_line_color"),
-				"color-set", G_CALLBACK(on_prefs_color_choosed), NULL);
+				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_fore"),
+				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(2));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_back"),
+				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(3));
 		// file chooser buttons in the tools tab
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_gcc"),
 				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_c"));
@@ -964,6 +970,21 @@ on_window_configure_event              (GtkWidget *widget,
 	app->geometry[2] = event->width;
 	app->geometry[3] = event->height;
 
+	return FALSE;
+}
+
+
+gboolean
+on_window_key_press_event              (GtkWidget *widget,
+                                        GdkEventKey *event,
+                                        gpointer user_data)
+{
+	if (event->keyval == GDK_F12)
+	{
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_SCRATCH);
+		gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
+		return TRUE;
+	}
 	return FALSE;
 }
 

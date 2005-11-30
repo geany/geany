@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -610,3 +611,8 @@ on_tv_notebook_switch_page             (GtkNotebook     *notebook,
 void
 on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+gboolean
+on_window_key_press_event              (GtkWidget *widget,
+                                        GdkEventKey *event,
+                                        gpointer user_data);

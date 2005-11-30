@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -339,6 +340,7 @@ gint main(gint argc, gchar **argv)
 	// registering some basic events
 	g_signal_connect(G_OBJECT(app->window), "delete_event", G_CALLBACK(on_exit_clicked), NULL);
 	g_signal_connect(G_OBJECT(app->window), "configure-event", G_CALLBACK(on_window_configure_event), NULL);
+	g_signal_connect(G_OBJECT(app->window), "key-press-event", G_CALLBACK(on_window_key_press_event), NULL);
 	g_signal_connect(G_OBJECT(app->toolbar), "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
 	g_signal_connect(G_OBJECT(GTK_COMBO(app->tag_combo)->entry), "changed", G_CALLBACK(on_toolbar_tag_clicked), NULL);
 
