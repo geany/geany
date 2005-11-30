@@ -29,3 +29,4 @@ build-stamp
 geany.1
 geany.spec
 *.tar.*
+debian
