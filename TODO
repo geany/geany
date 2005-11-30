@@ -18,13 +18,13 @@ TODO List:
 	o encoding-bug in utils_convert_to_utf8()
 	o latex build menu
 	o colourize the tags in the tag list widget to show if it's a
-	  function, macro or whatever
+	  function, macro or whatever, build a real tree?
 	o fix { and } problems at some "special" lines where indentation
 	  get broken
 	o command line option -e (editor mode)
-	o fix bug in highlighting.c at style_init_c
-	o vte.c: clipboard support, add configure option --disable-vte
+	o fix bug in highlighting.c at style_init_c()
 	o BSD compatibility
+	o remember cursor position at pressing END key (Oleg)
 	o (indent wrapped lines, but how?)
 	o (project management)
 	o (folding)

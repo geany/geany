@@ -1,3 +1,15 @@
+2005-11-30  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/keyfile.c, src/prefs.c, src/interface.c, src/vte.c:
+   added some options for the VTE to the preferences dialog
+
+
+2005-11-28  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/vte.c: added rudimentary clipboard support by pressing
+              middle(paste) and right(copy) mouse button
+
+
 2005-11-27  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/vte.c/h: newly created: contains functions for the terminal
