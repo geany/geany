@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -95,7 +96,7 @@ on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user
 		}
 		case SCN_KEY:
 		{
-			//g_message("key notification triggered with %c", nt->ch);
+			//geany_debug("key notification triggered with %c", nt->ch);
 			break;
 		}
 		case SCN_MODIFIED:
@@ -237,9 +238,8 @@ void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 
 void sci_cb_close_block(ScintillaObject *sci, gint pos)
 {
-	// the good way
-#if 1
-	gint x = 0, cnt = 0, start_brace = utils_brace_match(sci, pos);
+	gint x = 0, cnt = 0;
+	gint start_brace = utils_brace_match(sci, pos);
 	gint line = sci_get_line_from_position(sci, pos);
 	gint line_start = sci_get_position_from_line(sci, line);
 	gint line_len = sci_get_line_length(sci, line);
@@ -257,24 +257,19 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 		if (isspace(line_buf[x])) cnt++;
 		x++;
 	}
-	//geany_debug("%d == %d (%s)", line_len - eol_char_len, cnt, line_buf);
-	if ((line_len - eol_char_len) != cnt) return;
+	//if ((line_len - eol_char_len - 1) != cnt) return; // old code, buggy
+	//geany_debug("%d == %d (%s)", line_len, cnt, line_buf);
+	if ((line_len - 2) != cnt) return;
 
 	if (start_brace >= 0) sci_cb_get_indent(sci, start_brace, TRUE);
 /*	geany_debug("pos: %d, start: %d char: %c start_line: %d", pos, start_brace,
 					sci_get_char_at(sci, pos), sci_get_line_from_position(sci, start_brace));
 */
+
 	text = g_strconcat(indent, "}", NULL);
 	sci_set_anchor(sci, line_start);
 	SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
-
 	g_free(text);
-#else
-	// the easy way, but fails if indention contains something else than tabs
-	SSM(sci, SCI_GOTOPOS, pos - 1, 0);
-	SSM(sci, SCI_BACKTAB, 0, 0);
-	SSM(sci, SCI_GOTOPOS, pos, 0);
-#endif
 }
 
 
@@ -417,7 +412,7 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint idx)
 		style == SCE_HPHP_COMMENT)) return;
 
 	// gets the indention
-	if (app->use_auto_indention)	sci_cb_get_indent(sci, pos, TRUE);
+	if (app->use_auto_indention) sci_cb_get_indent(sci, pos, TRUE);
 	eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
 	sci_get_text_range(sci, pos - 7, pos - 1, buf);
 	if (! strncmp("if", buf + 4, 2))
