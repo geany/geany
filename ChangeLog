@@ -1,7 +1,17 @@
+2005-12-01  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/document.c, src/callbacks.c: extending HOME and END key default
+                                    behaviour, to jump back to previous
+                                    cursor position if pressed again
+
+
 2005-11-30  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/keyfile.c, src/prefs.c, src/interface.c, src/vte.c:
    added some options for the VTE to the preferences dialog
+ * bugfix: src/sci_cb.h: fixed a small bug by auto closing }-brackets
+ * src/callbacks.c, src/main.c: added signal and handler for F12 key,
+                                pressed in the main widget
 
 
 2005-11-28  Enrico Troeger  <enrico.troeger@uvena.de>
