@@ -79,6 +79,16 @@ static gint search_flags_re;
 static gboolean search_backwards_re;
 
 
+// extending HOME and END default behaviour, to jump back to previous cursor position if pressed again
+static gint cursor_pos_end = -1;
+static gint cursor_pos_home = 0;
+// state of the home key, 0 means column with first non-blank char, 1 means column 0,
+// 2 means previous position
+static gint cursor_pos_home_state = 0;
+
+
+
+
 // exit function, for very early exit(quit by non-existing configuration dir)
 gint destroyapp_early(void)
 {
@@ -1136,6 +1146,40 @@ on_editor_key_press_event              (GtkWidget *widget,
 			gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
 			break;
 		}
+		case GDK_End:
+		{	// extending HOME and END default behaviour, for details look at the start of this file
+			if (cursor_pos_end == -1)
+			{
+				cursor_pos_end = sci_get_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci);
+				sci_cmd(doc_list[GPOINTER_TO_INT(user_data)].sci, SCI_LINEEND);
+			}
+			else
+			{
+				sci_set_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci, cursor_pos_end);
+				cursor_pos_end = -1;
+			}
+			break;
+		}
+		case GDK_Home:
+		{
+			if (cursor_pos_home_state == 0)
+			{
+				cursor_pos_home = sci_get_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci);
+				sci_cmd(doc_list[GPOINTER_TO_INT(user_data)].sci, SCI_VCHOME);
+				cursor_pos_home_state = 1;
+			}
+			else if (cursor_pos_home_state == 1)
+			{
+				sci_cmd(doc_list[GPOINTER_TO_INT(user_data)].sci, SCI_HOME);
+				cursor_pos_home_state = 2;
+			}
+			else
+			{
+				sci_set_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci, cursor_pos_home);
+				cursor_pos_home_state = 0;
+			}
+			break;
+		}
 	}
 	return ret;
 }
@@ -1155,8 +1199,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 	}
 #endif
 
-	if (event->type == GDK_2BUTTON_PRESS)
-		;//geany_debug("double click");
+	//if (event->type == GDK_2BUTTON_PRESS) geany_debug("double click");
 
 	if (event->button == 3)
 	{

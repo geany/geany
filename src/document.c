@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -171,8 +172,11 @@ gint document_create_new_sci(const gchar *filename)
 	sciid = utils_get_new_sci_number();
 	scintilla_set_id(sci, sciid);
 	// disable scintilla provided popup menu
+	//SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);
 	sci_use_popup(sci, FALSE);
 	sci_set_codepage(sci, 1);
+	sci_clear_cmdkey(sci, SCK_END);	// disable to act on our own in callbacks.c
+	sci_clear_cmdkey(sci, SCK_HOME);
 	sci_set_mark_long_lines(sci, app->long_line_column, app->long_line_color);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	//sci_set_lines_wrapped(sci, app->line_breaking);
