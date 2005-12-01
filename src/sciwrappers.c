@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -800,4 +801,10 @@ void sci_set_readonly(ScintillaObject *sci, gboolean readonly)
 gboolean sci_get_readonly(ScintillaObject *sci)
 {
 	return SSM(sci, SCI_GETREADONLY, 0, 0);
+}
+
+// a simple convenience function to not have SSM() in the outside of this file
+void sci_cmd(ScintillaObject * sci, gint cmd)
+{
+	SSM(sci, cmd, 0, 0);
 }

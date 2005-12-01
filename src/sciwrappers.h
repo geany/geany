@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -154,3 +155,4 @@ gint				sci_get_lexer				(ScintillaObject * sci);
 void				sci_set_readonly			(ScintillaObject * sci, gboolean readonly);
 gboolean			sci_get_readonly			(ScintillaObject * sci);
 gint				sci_get_zoom				(ScintillaObject * sci);
+void				sci_cmd						(ScintillaObject * sci, gint cmd);
