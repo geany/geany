@@ -1986,3 +1986,123 @@ void styleset_conf(ScintillaObject *sci)
 }
 
 
+
+
+void styleset_asm_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+
+	style_set_load_file(config, GEANY_DATA_DIR "/filetypes.asm", G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	types[GEANY_FILETYPES_ASM] = g_new(style_set, 1);
+	styleset_get_hex(config, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[0]);
+	styleset_get_hex(config, "styling", "comment", "0x808080", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[1]);
+	styleset_get_hex(config, "styling", "number", "0x007f00", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[2]);
+	styleset_get_hex(config, "styling", "string", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[3]);
+	styleset_get_hex(config, "styling", "operator", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[4]);
+	styleset_get_hex(config, "styling", "identifier", "0x000088", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[5]);
+	styleset_get_hex(config, "styling", "cpuinstruction", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_ASM]->styling[6]);
+	styleset_get_hex(config, "styling", "mathinstruction", "0x00007F", "0xffffff", "true", types[GEANY_FILETYPES_ASM]->styling[7]);
+	styleset_get_hex(config, "styling", "register", "0x100000", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[8]);
+	styleset_get_hex(config, "styling", "directive", "0x0F673D", "0xffffff", "true", types[GEANY_FILETYPES_ASM]->styling[9]);
+	styleset_get_hex(config, "styling", "directiveoperand", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[10]);
+	styleset_get_hex(config, "styling", "commentblock", "0x808080", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[11]);
+	styleset_get_hex(config, "styling", "character", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[12]);
+	styleset_get_hex(config, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_ASM]->styling[13]);
+	styleset_get_hex(config, "styling", "extinstruction", "0x7F7F00", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[14]);
+
+	types[GEANY_FILETYPES_ASM]->keywords = g_new(gchar*, 4);
+	types[GEANY_FILETYPES_ASM]->keywords[0] = styleset_get_string(config, "keywords", "instructions");
+	if (types[GEANY_FILETYPES_ASM]->keywords[0] == NULL)
+			types[GEANY_FILETYPES_ASM]->keywords[0] = g_strdup("HLT LAD SPI ADD SUB MUL DIV JMP JEZ JGZ JLZ SWAP JSR RET PUSHAC POPAC ADDST SUBST MULST DIVST LSA LDS PUSH POP CLI LDI INK LIA DEK LDX");
+	types[GEANY_FILETYPES_ASM]->keywords[1] = styleset_get_string(config, "keywords", "registers");
+	if (types[GEANY_FILETYPES_ASM]->keywords[1] == NULL)
+			types[GEANY_FILETYPES_ASM]->keywords[1] = g_strdup("");
+	types[GEANY_FILETYPES_ASM]->keywords[2] = styleset_get_string(config, "keywords", "directives");
+	if (types[GEANY_FILETYPES_ASM]->keywords[2] == NULL)
+			types[GEANY_FILETYPES_ASM]->keywords[2] = g_strdup("ORG LIST NOLIST PAGE EQUIVALENT WORD TEXT");
+	types[GEANY_FILETYPES_ASM]->keywords[3] = NULL;
+
+	g_key_file_free(config);
+}
+
+
+void styleset_asm(ScintillaObject *sci)
+{
+	if (types[GEANY_FILETYPES_ASM] == NULL) styleset_asm_init();
+
+	styleset_common(sci, 5);
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_ASM, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_ASM]->keywords[0]);
+	//SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) types[GEANY_FILETYPES_ASM]->keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) types[GEANY_FILETYPES_ASM]->keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) types[GEANY_FILETYPES_ASM]->keywords[2]);
+	//SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) types[GEANY_FILETYPES_ASM]->keywords[0]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_DEFAULT, types[GEANY_FILETYPES_ASM]->styling[0][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_DEFAULT, types[GEANY_FILETYPES_ASM]->styling[0][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_DEFAULT, types[GEANY_FILETYPES_ASM]->styling[0][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_COMMENT, types[GEANY_FILETYPES_ASM]->styling[1][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_COMMENT, types[GEANY_FILETYPES_ASM]->styling[1][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_COMMENT, types[GEANY_FILETYPES_ASM]->styling[1][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_NUMBER, types[GEANY_FILETYPES_ASM]->styling[2][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_NUMBER, types[GEANY_FILETYPES_ASM]->styling[2][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_NUMBER, types[GEANY_FILETYPES_ASM]->styling[2][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_STRING, types[GEANY_FILETYPES_ASM]->styling[3][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_STRING, types[GEANY_FILETYPES_ASM]->styling[3][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_STRING, types[GEANY_FILETYPES_ASM]->styling[3][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_OPERATOR, types[GEANY_FILETYPES_ASM]->styling[4][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_OPERATOR, types[GEANY_FILETYPES_ASM]->styling[4][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_OPERATOR, types[GEANY_FILETYPES_ASM]->styling[4][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_IDENTIFIER, types[GEANY_FILETYPES_ASM]->styling[5][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_IDENTIFIER, types[GEANY_FILETYPES_ASM]->styling[5][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_IDENTIFIER, types[GEANY_FILETYPES_ASM]->styling[5][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_CPUINSTRUCTION, types[GEANY_FILETYPES_ASM]->styling[6][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_CPUINSTRUCTION, types[GEANY_FILETYPES_ASM]->styling[6][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_CPUINSTRUCTION, types[GEANY_FILETYPES_ASM]->styling[6][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_MATHINSTRUCTION, types[GEANY_FILETYPES_ASM]->styling[7][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_MATHINSTRUCTION, types[GEANY_FILETYPES_ASM]->styling[7][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_MATHINSTRUCTION, types[GEANY_FILETYPES_ASM]->styling[7][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_REGISTER, types[GEANY_FILETYPES_ASM]->styling[8][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_REGISTER, types[GEANY_FILETYPES_ASM]->styling[8][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_REGISTER, types[GEANY_FILETYPES_ASM]->styling[8][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_DIRECTIVE, types[GEANY_FILETYPES_ASM]->styling[9][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_DIRECTIVE, types[GEANY_FILETYPES_ASM]->styling[9][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_DIRECTIVE, types[GEANY_FILETYPES_ASM]->styling[9][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_DIRECTIVEOPERAND, types[GEANY_FILETYPES_ASM]->styling[10][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_DIRECTIVEOPERAND, types[GEANY_FILETYPES_ASM]->styling[10][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_DIRECTIVEOPERAND, types[GEANY_FILETYPES_ASM]->styling[10][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_COMMENTBLOCK, types[GEANY_FILETYPES_ASM]->styling[11][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_COMMENTBLOCK, types[GEANY_FILETYPES_ASM]->styling[11][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_COMMENTBLOCK, types[GEANY_FILETYPES_ASM]->styling[11][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_CHARACTER, types[GEANY_FILETYPES_ASM]->styling[12][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_CHARACTER, types[GEANY_FILETYPES_ASM]->styling[12][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_CHARACTER, types[GEANY_FILETYPES_ASM]->styling[12][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_STRINGEOL, types[GEANY_FILETYPES_ASM]->styling[13][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_STRINGEOL, types[GEANY_FILETYPES_ASM]->styling[13][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_STRINGEOL, types[GEANY_FILETYPES_ASM]->styling[13][2]);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_ASM_EXTINSTRUCTION, types[GEANY_FILETYPES_ASM]->styling[14][0]);
+	SSM(sci, SCI_STYLESETBACK, SCE_ASM_EXTINSTRUCTION, types[GEANY_FILETYPES_ASM]->styling[14][1]);
+	SSM(sci, SCI_STYLESETBOLD, SCE_ASM_EXTINSTRUCTION, types[GEANY_FILETYPES_ASM]->styling[14][2]);
+}
+
+

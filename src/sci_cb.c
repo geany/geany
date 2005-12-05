@@ -747,6 +747,13 @@ void sci_cb_do_comment(gint idx)
 				if (sel[x] == '#') continue;
 				sci_insert_text(doc_list[idx].sci, line_start + x, "#");
 			}
+			// use ; for Assembler, and anything else?
+			else if (lexer == SCLEX_ASM)
+			{
+				// skip lines which are already comments
+				if (sel[x] == ';') continue;
+				sci_insert_text(doc_list[idx].sci, line_start + x, ";");
+			}
 			// use % for LaTex
 			else if (lexer == SCLEX_LATEX)
 			{

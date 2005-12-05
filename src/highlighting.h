@@ -64,3 +64,6 @@ void styleset_none(ScintillaObject *sci);
 void styleset_css(ScintillaObject *sci);
 
 void styleset_conf(ScintillaObject *sci);
+
+void styleset_asm(ScintillaObject *sci);
+

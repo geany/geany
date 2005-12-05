@@ -9,6 +9,7 @@ AM_CXXFLAGS = -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE
 #AM_CXXFLAGS = -DGTK -DGTK2 -DSCI_LEXER
 
 LEXER_SRCS= \
+LexAsm.cxx \
 LexBash.cxx \
 LexCPP.cxx \
 LexConf.cxx \

@@ -239,6 +239,20 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_CONF]->style_func_ptr = styleset_conf;
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CONF]->title, filetypes[GEANY_FILETYPES_CONF]);
 
+	filetypes[GEANY_FILETYPES_ASM] = (filetype*)g_malloc(sizeof(filetype));
+	filetypes[GEANY_FILETYPES_ASM]->id = GEANY_FILETYPES_ASM;
+	filetypes[GEANY_FILETYPES_ASM]->name = g_strdup("ASM");
+	filetypes[GEANY_FILETYPES_ASM]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_ASM]->title = g_strdup(_("Assembler source file"));
+	filetypes[GEANY_FILETYPES_ASM]->extension = g_strdup("asm");
+	filetypes[GEANY_FILETYPES_ASM]->pattern[0] = g_strdup("*.asm");
+	filetypes[GEANY_FILETYPES_ASM]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_ASM]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_ASM]->pattern[3] = NULL;
+	filetypes[GEANY_FILETYPES_ASM]->pattern[4] = NULL;	// always have to be NULL
+	filetypes[GEANY_FILETYPES_ASM]->style_func_ptr = styleset_asm;
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_ASM]->title, filetypes[GEANY_FILETYPES_ASM]);
+
 	filetypes[GEANY_FILETYPES_ALL] = (filetype*)g_malloc(sizeof(filetype));
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;
 	filetypes[GEANY_FILETYPES_ALL]->name = g_strdup("None");
