@@ -19,7 +19,9 @@ regex=0x905010;0xffffff;false
 commentlinedoc=0x0000ff;0xffffff;true
 commentdockeyword=0x0000ff;0xffffff;true
 globalclass=0xbb1111;0xffffff;true
+
 [keywords]
+# all items must be in one line
 primary=volatile default export goto sizeof typename asm enum bool union NULL FALSE TRUE typedef struct char int float double void unsigned signed long short extern static register auto const if else switch for while do break continue return class new delete inline case
 docComment=TODO FIXME
 
