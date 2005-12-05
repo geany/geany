@@ -78,14 +78,12 @@ static gboolean search_backwards;
 static gint search_flags_re;
 static gboolean search_backwards_re;
 
-
 // extending HOME and END default behaviour, to jump back to previous cursor position if pressed again
 static gint cursor_pos_end = -1;
 static gint cursor_pos_home = 0;
 // state of the home key, 0 means column with first non-blank char, 1 means column 0,
 // 2 means previous position
 static gint cursor_pos_home_state = 0;
-
 
 
 
@@ -731,6 +729,10 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 
 		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 
+		// resets the cursor position(it could be wrong, assuming line has changed)
+		cursor_pos_end = -1;
+		cursor_pos_home_state = 0;
+
 		document_set_text_changed(idx);
 		utils_build_show_hide(idx);
 		utils_update_statusbar(idx);
@@ -1006,6 +1008,8 @@ on_editor_key_press_event              (GtkWidget *widget,
 {
 	//gint idx = geany_document_get_cur_idx();
 	gboolean ret = FALSE;
+	gint idx = GPOINTER_TO_INT(user_data);
+
 
 	switch(event->keyval)
 	{
@@ -1014,7 +1018,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				sci_line_duplicate(doc_list[GPOINTER_TO_INT(user_data)].sci);
+				sci_line_duplicate(doc_list[idx].sci);
 				ret = TRUE;
 			}
 			break;
@@ -1026,17 +1030,17 @@ on_editor_key_press_event              (GtkWidget *widget,
 			{
 				sci_cb_start_auto_complete(
 						doc_list[GPOINTER_TO_INT(user_data)].sci,
-						sci_get_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci));
+						sci_get_current_position(doc_list[idx].sci));
 				ret = TRUE;
 			}
 			else if (event->state & GDK_MOD1_MASK)
 			{	// ALT+Space
-				sci_cb_show_calltip(doc_list[GPOINTER_TO_INT(user_data)].sci, -1);
+				sci_cb_show_calltip(doc_list[idx].sci, -1);
 				ret = TRUE;
 			}
 			else if (event->state & GDK_SHIFT_MASK)
 			{	// Shift+Space, catch this explicitly to suppress sci_cb_auto_forif() ;-)
-				sci_add_text(doc_list[GPOINTER_TO_INT(user_data)].sci, " ");
+				sci_add_text(doc_list[idx].sci, " ");
 				ret = TRUE;
 			}
 			break;
@@ -1046,7 +1050,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				document_update_tag_list(GPOINTER_TO_INT(user_data));
+				document_update_tag_list(idx);
 				ret = TRUE;
 			}
 			break;
@@ -1056,7 +1060,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				sci_cb_do_comment(GPOINTER_TO_INT(user_data));
+				sci_cb_do_comment(idx);
 				ret = TRUE;
 			}
 			break;
@@ -1067,8 +1071,8 @@ on_editor_key_press_event              (GtkWidget *widget,
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				sci_cb_handle_uri(
-						doc_list[GPOINTER_TO_INT(user_data)].sci,
-						sci_get_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci));
+						doc_list[idx].sci,
+						sci_get_current_position(doc_list[idx].sci));
 				ret = TRUE;
 			}
 			break;
@@ -1078,7 +1082,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				sci_zoom_in(doc_list[GPOINTER_TO_INT(user_data)].sci);
+				sci_zoom_in(doc_list[idx].sci);
 				ret = TRUE;
 			}
 			break;
@@ -1088,7 +1092,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				sci_zoom_out(doc_list[GPOINTER_TO_INT(user_data)].sci);
+				sci_zoom_out(doc_list[idx].sci);
 				ret = TRUE;
 			}
 			break;
@@ -1137,7 +1141,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		case GDK_Insert:
 		{
 			if (! (event->state & GDK_SHIFT_MASK))
-				doc_list[GPOINTER_TO_INT(user_data)].do_overwrite = (doc_list[GPOINTER_TO_INT(user_data)].do_overwrite) ? FALSE : TRUE;
+				doc_list[GPOINTER_TO_INT(user_data)].do_overwrite = (doc_list[idx].do_overwrite) ? FALSE : TRUE;
 			break;
 		}
 		case GDK_F12:
@@ -1147,15 +1151,16 @@ on_editor_key_press_event              (GtkWidget *widget,
 			break;
 		}
 		case GDK_End:
-		{	// extending HOME and END default behaviour, for details look at the start of this file
+		{	// extending HOME and END default behaviour, for details look at the start of this function
+			geany_debug("pos_end: %d", cursor_pos_end);
 			if (cursor_pos_end == -1)
 			{
-				cursor_pos_end = sci_get_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci);
-				sci_cmd(doc_list[GPOINTER_TO_INT(user_data)].sci, SCI_LINEEND);
+				cursor_pos_end = sci_get_current_position(doc_list[idx].sci);
+				sci_cmd(doc_list[idx].sci, SCI_LINEEND);
 			}
 			else
 			{
-				sci_set_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci, cursor_pos_end);
+				sci_set_current_position(doc_list[idx].sci, cursor_pos_end);
 				cursor_pos_end = -1;
 			}
 			break;
@@ -1164,18 +1169,18 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			if (cursor_pos_home_state == 0)
 			{
-				cursor_pos_home = sci_get_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci);
-				sci_cmd(doc_list[GPOINTER_TO_INT(user_data)].sci, SCI_VCHOME);
+				cursor_pos_home = sci_get_current_position(doc_list[idx].sci);
+				sci_cmd(doc_list[idx].sci, SCI_VCHOME);
 				cursor_pos_home_state = 1;
 			}
 			else if (cursor_pos_home_state == 1)
 			{
-				sci_cmd(doc_list[GPOINTER_TO_INT(user_data)].sci, SCI_HOME);
+				sci_cmd(doc_list[idx].sci, SCI_HOME);
 				cursor_pos_home_state = 2;
 			}
 			else
 			{
-				sci_set_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci, cursor_pos_home);
+				sci_set_current_position(doc_list[idx].sci, cursor_pos_home);
 				cursor_pos_home_state = 0;
 			}
 			break;
@@ -1196,6 +1201,9 @@ on_editor_button_press_event           (GtkWidget *widget,
 	if (event->button == 1)
 	{
 		utils_check_disk_status(GPOINTER_TO_INT(user_data), FALSE);
+		// resets the cursor position(it could be wrong, assuming line has changed)
+		cursor_pos_end = -1;
+		cursor_pos_home_state = 0;
 	}
 #endif
 
@@ -2164,8 +2172,11 @@ on_pref_tools_button_clicked           (GtkButton       *button,
 	if (field[0])
 	{
 		filename = g_find_program_in_path(field[0]);
-		gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog), filename);
-		g_free(filename);
+		if (filename)
+		{
+			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog), filename);
+			g_free(filename);
+		}
 	}
 
 	// run it
