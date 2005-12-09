@@ -808,3 +808,15 @@ void sci_cmd(ScintillaObject * sci, gint cmd)
 {
 	SSM(sci, cmd, 0, 0);
 }
+
+gint sci_get_current_line(ScintillaObject *sci, gint pos)
+{
+	if (pos >= 0)
+	{
+		return SSM(sci, SCI_LINEFROMPOSITION, pos, 0);
+	}
+	else
+	{
+		return SSM(sci, SCI_LINEFROMPOSITION, SSM(sci, SCI_GETCURRENTPOS, 0, 0), 0);
+	}
+}
