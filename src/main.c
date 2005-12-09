@@ -209,7 +209,7 @@ gint main(gint argc, gchar **argv)
 {
 	GError *error = NULL;
 	GOptionContext *context;
-	gint mkdir_result;
+	gint mkdir_result, idx;
 	time_t seconds = time((time_t *) 0);
 	struct tm *tm = localtime(&seconds);
 	this_year = tm->tm_year + 1900;
@@ -395,13 +395,14 @@ gint main(gint argc, gchar **argv)
 	// hide the tag combobox if tag-support is disabled
 	if (ignore_global_tags) gtk_widget_hide(app->tag_combo);
 
-	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)))
-	{
-		gint idx = document_get_cur_idx();
-		gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
-		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
-		utils_build_show_hide(idx);
-	}
+	// open a new file if no other file was opened
+	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
+		document_new_file(filetypes[GEANY_FILETYPES_ALL]);
+
+	idx = document_get_cur_idx();
+	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
+	gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
+	utils_build_show_hide(idx);
 
 	gtk_widget_show(app->window);
 
