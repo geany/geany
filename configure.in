@@ -49,7 +49,7 @@ AC_FUNC_REALLOC
 AC_TYPE_SIGNAL
 AC_FUNC_STAT
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([gethostname floor ftruncate fgetpos getcwd gettimeofday isascii mblen memmove memset munmap putenv realpath regcomp setenv strcasecmp strchr strdup strerror strrchr strspn strstr strtol])
+AC_CHECK_FUNCS([gethostname ftruncate fgetpos getcwd gettimeofday isascii mblen memmove memset munmap putenv realpath regcomp setenv strcasecmp strchr strdup strerror strrchr strspn strstr strtol])
 
 # autoscan end
 
