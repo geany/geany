@@ -995,6 +995,12 @@ on_window_key_press_event              (GtkWidget *widget,
 		gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
 		return TRUE;
 	}
+	if (event->keyval == GDK_F6 && app->have_vte)
+	{
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
+		gtk_widget_grab_focus(vc->vte);
+		return TRUE;
+	}
 	return FALSE;
 }
 
@@ -1146,6 +1152,18 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_SCRATCH);
 			gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
+			ret = TRUE;
+			break;
+		}
+		case GDK_F6:
+		{
+			if (app->have_vte)
+			{
+				gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
+				gtk_widget_grab_focus(vc->vte);
+				break;
+			}
+			ret = TRUE;
 			break;
 		}
 /* following code is unusable unless I get a signal for a line changed, don't want to do this with
