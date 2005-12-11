@@ -14,18 +14,23 @@ geany.pdf:
 geany.txt:
 	jw -b txt geany.docbook
 
-html/*:
+html/index.html:
 #	xmlto -o html/ xhtml geany.docbook
 	$(mkinstalldirs) html
-	test -f html/geany.css || cp geany.css html/
 	xsltproc --stringparam html.stylesheet geany.css -o html/ \
 	/usr/share/xml/docbook/stylesheet/nwalsh/xhtml/chunk.xsl geany.docbook
+	test -f html/geany.css || cp geany.css html/
 
-#all: geany.1 html/*
+doc: geany.1 geany.txt html/index.html
 
-doc: geany.1 geany.txt html/*
+clean:
+	rm -rf html/*.html
+	rm -f html/geany.css
+	rm -f geany.1
+	rm -f geany.txt
+	rm -f geany.pdf
 
-install-data-local: geany.1 geany.txt html/*
+install-data-local: geany.1 geany.txt html/index.html
 	$(mkinstalldirs) $(DOCDIR)/html/images
 	for file in `ls $(HTML_FILES)`; do \
 	  if [ -f $$file ]; then \
