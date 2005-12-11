@@ -37,6 +37,11 @@ void vte_register_symbols(GModule *module);
 
 void vte_close(void);
 
+gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
+
+void vte_apply_user_settings(void);
+
+void vte_get_settings(void);
 
 
 /* taken from original vte.h to make my life easier ;-) */
@@ -51,11 +56,24 @@ struct _VteTerminal
 	glong char_width, char_height;
 	glong char_ascent, char_descent;
 	glong row_count, column_count;
-	char *window_title;
-	char *icon_title;
+	gchar *window_title;
+	gchar *icon_title;
 	VteTerminalPrivate *pvt;
 };
 
+
+struct vte_conf
+{
+	GtkWidget *vte;	// small hack, to have always a reference to the widget
+	gboolean scroll_on_key;
+	gboolean scroll_on_out;
+	gint scrollback_lines;
+	gchar *emulation;
+	gchar *font;
+	GdkColor *color_fore;
+	GdkColor *color_back;
+};
+struct vte_conf *vc;
 
 
 /* store function pointers in a struct to avoid a strange segfault if they are stored directly
@@ -78,6 +96,11 @@ struct vte_funcs
 	void (*vte_terminal_set_font_from_string) (VteTerminal *terminal, const char *name);
 	void (*vte_terminal_set_scrollback_lines) (VteTerminal *terminal, glong lines);
 	gboolean (*vte_terminal_get_has_selection) (VteTerminal *terminal);
+	void (*vte_terminal_copy_clipboard) (VteTerminal *terminal);
+	void (*vte_terminal_paste_clipboard) (VteTerminal *terminal);
+	void (*vte_terminal_set_emulation) (VteTerminal *terminal, const gchar *emulation);
+	void (*vte_terminal_set_color_foreground) (VteTerminal *terminal, const GdkColor *background);
+	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
 };
 
 

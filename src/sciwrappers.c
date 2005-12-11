@@ -22,6 +22,7 @@
 
 
 #include "sciwrappers.h"
+#include "utils.h"
 
 
 // stolen from cssed (http://cssed.sf.net), thanks
@@ -47,13 +48,13 @@ sci_set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
 	}
 }
 
-void sci_set_mark_long_lines(ScintillaObject * sci, gint column, gint color)
+void sci_set_mark_long_lines(ScintillaObject * sci, gint column, const gchar *color)
 {
 	if (column > 0)
 	{
 		SSM(sci, SCI_SETEDGEMODE, EDGE_LINE, 0);
 		SSM(sci, SCI_SETEDGECOLUMN, column - 1, 0);
-		SSM(sci, SCI_SETEDGECOLOUR, color, 0);
+		SSM(sci, SCI_SETEDGECOLOUR, utils_get_int_from_hexcolor(color), 0);
 	}
 	else
 	{
@@ -615,7 +616,7 @@ gint sci_get_tab_width(ScintillaObject * sci)
 
 gchar sci_get_char_at(ScintillaObject *sci, gint pos)
 {
-	return SSM(sci, SCI_GETCHARAT, pos, 0);
+	return (gchar) SSM(sci, SCI_GETCHARAT, pos, 0);
 }
 
 

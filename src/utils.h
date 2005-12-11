@@ -193,4 +193,10 @@ void utils_switch_document(gint direction);
 
 void utils_replace_filename(gint idx);
 
+gint utils_compare_symbol(const GeanySymbol *a, const GeanySymbol *b);
+
+gchar *utils_get_hex_from_color(GdkColor *color);
+
+gint utils_get_int_from_hexcolor(const gchar *hex);
+
 #endif

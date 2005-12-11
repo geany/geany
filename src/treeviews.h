@@ -16,6 +16,8 @@
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * $Id$
  */
 
 
@@ -26,11 +28,19 @@
 
 
 typedef struct treeviews {
-	GtkListStore	*store_taglist;
+	//GtkListStore	*store_taglist;
+	GtkTreeStore	*store_taglist;
 	GtkListStore	*store_openfiles;
 	GtkWidget		*tree_taglist;
 	GtkWidget		*tree_openfiles;
 	GtkWidget		*popup_openfiles;
+	GtkTreeIter		 tag_function;
+	GtkTreeIter		 tag_macro;
+	GtkTreeIter		 tag_member;
+	GtkTreeIter		 tag_variable;
+	GtkTreeIter		 tag_namespace;
+	GtkTreeIter		 tag_struct;
+	GtkTreeIter		 tag_other;
 } treeviews;
 
 treeviews tv;
@@ -38,6 +48,10 @@ treeviews tv;
 
 
 void treeviews_prepare_taglist(void);
+
+gint treeviews_sort_tag_list(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
+
+void treeviews_init_tag_list(void);
 
 void treeviews_prepare_openfiles(void);
 

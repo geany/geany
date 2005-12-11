@@ -90,11 +90,11 @@ void apply_settings(void)
 		gtk_widget_hide(app->toolbar);
 		app->toolbar_visible = FALSE;
 	}
-	if (! app->treeview_nb_visible)
+	if (! app->treeview_symbol_visible)
 	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_symbol_window1")), FALSE);
+		//gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_symbol_window1")), FALSE);
 		gtk_widget_hide(app->treeview_notebook);
-		app->treeview_nb_visible = FALSE;
+		app->treeview_symbol_visible = FALSE;
 	}
 	if (! app->msgwindow_visible)
 	{
@@ -196,11 +196,6 @@ void apply_settings(void)
 		gtk_widget_hide(lookup_widget(app->window, "toolbutton18"));
 		gtk_widget_hide(lookup_widget(app->window, "separatortoolitem4"));
 	}
-
-	if (! app->pref_main_show_tags)
-	{
-		gtk_widget_hide(lookup_widget(app->window, "combo1"));
-	}
 }
 
 
@@ -291,10 +286,8 @@ gint main(gint argc, gchar **argv)
 	app->notebook = lookup_widget(app->window, "notebook1");
 	msgwindow.notebook = lookup_widget(app->window, "notebook_info");
 	app->statusbar = lookup_widget(app->window, "statusbar");
-	app->tag_combo = lookup_widget(app->window, "combo1");
 	app->popup_menu = create_edit_menu1();
 	app->toolbar_menu = create_toolbar_popup_menu1();
-	app->tagbar_menu = dialogs_create_tagbar_popup_menu();
 	app->compile_button = lookup_widget(app->window, "toolbutton13");
 	app->popup_goto_items[0] = lookup_widget(app->popup_menu, "goto_tag_definition1");
 	app->popup_goto_items[1] = lookup_widget(app->popup_menu, "goto_tag_declaration1");
@@ -342,7 +335,6 @@ gint main(gint argc, gchar **argv)
 	g_signal_connect(G_OBJECT(app->window), "configure-event", G_CALLBACK(on_window_configure_event), NULL);
 	g_signal_connect(G_OBJECT(app->window), "key-press-event", G_CALLBACK(on_window_key_press_event), NULL);
 	g_signal_connect(G_OBJECT(app->toolbar), "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
-	g_signal_connect(G_OBJECT(GTK_COMBO(app->tag_combo)->entry), "changed", G_CALLBACK(on_toolbar_tag_clicked), NULL);
 
 	treeviews_prepare_taglist();
 	treeviews_prepare_openfiles();
@@ -391,9 +383,6 @@ gint main(gint argc, gchar **argv)
 	gtk_widget_hide(lookup_widget(app->window, "menu_toolbar2"));
 	// this option is currently disabled, until the document menu item is reordered
 	gtk_widget_hide(lookup_widget(app->window, "set_file_readonly1"));
-
-	// hide the tag combobox if tag-support is disabled
-	if (ignore_global_tags) gtk_widget_hide(app->tag_combo);
 
 	// open a new file if no other file was opened
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)

@@ -79,6 +79,7 @@ static gint search_flags_re;
 static gboolean search_backwards_re;
 
 // extending HOME and END default behaviour, to jump back to previous cursor position if pressed again
+static gint current_line = 0;
 static gint cursor_pos_end = -1;
 static gint cursor_pos_home = 0;
 // state of the home key, 0 means column with first non-blank char, 1 means column 0,
@@ -114,6 +115,7 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	g_free(app->editor_font);
 	g_free(app->tagbar_font);
 	g_free(app->msgwin_font);
+	g_free(app->long_line_color);
 	g_free(app->pref_template_developer);
 	g_free(app->pref_template_company);
 	g_free(app->pref_template_mail);
@@ -202,7 +204,7 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 }
 
 
-// signal handler (for SIGINT and SIGTERM)
+// signal handler (for SIGTERM)
 RETSIGTYPE signal_cb(gint sig)
 {
 	on_exit_clicked(NULL, NULL);
@@ -936,16 +938,12 @@ on_color_ok_button_clicked             (GtkButton       *button,
 {
 	GdkColor color;
 	gint idx = document_get_cur_idx();
-	gchar *hex = g_malloc0(12);
+	gchar *hex;
 
 	gtk_color_selection_get_current_color(
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &color);
 
-	g_snprintf(hex, 11, "#%02X%02X%02X",
-	      (guint) (utils_scale_round(color.red / 256, 255)),
-	      (guint) (utils_scale_round(color.green / 256, 255)),
-	      (guint) (utils_scale_round(color.blue / 256, 255)));
-
+	hex = utils_get_hex_from_color(&color);
 	sci_add_text(doc_list[idx].sci, hex);
 	g_free(hex);
 	gtk_widget_hide(app->open_colorsel);
@@ -1150,15 +1148,17 @@ on_editor_key_press_event              (GtkWidget *widget,
 			gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
 			break;
 		}
+/* following code is unusable unless I get a signal for a line changed, don't want to do this with
+ * updateUI()
 		case GDK_End:
 		{	// extending HOME and END default behaviour, for details look at the start of this function
-			geany_debug("pos_end: %d", cursor_pos_end);
-			if (cursor_pos_end == -1)
+			if (cursor_pos_end == -1 || current_line != sci_get_current_line(doc_list[idx].sci, -1))
 			{
 				cursor_pos_end = sci_get_current_position(doc_list[idx].sci);
 				sci_cmd(doc_list[idx].sci, SCI_LINEEND);
+				current_line = sci_get_current_line(doc_list[idx].sci, -1);
 			}
-			else
+			else if (current_line == sci_get_current_line(doc_list[idx].sci, -1))
 			{
 				sci_set_current_position(doc_list[idx].sci, cursor_pos_end);
 				cursor_pos_end = -1;
@@ -1167,25 +1167,27 @@ on_editor_key_press_event              (GtkWidget *widget,
 		}
 		case GDK_Home:
 		{
-			if (cursor_pos_home_state == 0)
+			if (cursor_pos_home_state == 0 || current_line != sci_get_current_line(doc_list[idx].sci, -1))
 			{
 				cursor_pos_home = sci_get_current_position(doc_list[idx].sci);
 				sci_cmd(doc_list[idx].sci, SCI_VCHOME);
 				cursor_pos_home_state = 1;
+				current_line = sci_get_current_line(doc_list[idx].sci, -1);
 			}
-			else if (cursor_pos_home_state == 1)
+			else if (cursor_pos_home_state == 1 && current_line == sci_get_current_line(doc_list[idx].sci, -1))
 			{
 				sci_cmd(doc_list[idx].sci, SCI_HOME);
 				cursor_pos_home_state = 2;
+				cursor_pos_home_state = 0;
 			}
-			else
+			else// if (current_line == sci_get_current_line(doc_list[idx].sci, -1))
 			{
 				sci_set_current_position(doc_list[idx].sci, cursor_pos_home);
 				cursor_pos_home_state = 0;
 			}
 			break;
 		}
-	}
+*/	}
 	return ret;
 }
 
@@ -1283,21 +1285,6 @@ toolbar_popup_menu                     (GtkWidget *widget,
 
 
 void
-on_toolbar_tag_clicked                 (GtkEntry *entry,
-                                        gpointer user_data)
-{
-	const gchar *string;
-
-	string = gtk_entry_get_text(entry);
-	if (string && strlen (string) > 0)
-	{
-		gint idx = document_get_cur_idx();
-		utils_goto_line(idx, utils_get_local_tag(idx, string));
-	}
-}
-
-
-void
 on_taglist_tree_selection_changed      (GtkTreeSelection *selection,
                                         gpointer data)
 {
@@ -1308,12 +1295,12 @@ on_taglist_tree_selection_changed      (GtkTreeSelection *selection,
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
 		gtk_tree_model_get(model, &iter, 0, &string, -1);
-		if (string && (strlen (string) > 0))
+		if (string && (strlen(string) > 0))
 		{
 			gint idx = document_get_cur_idx();
 			utils_goto_line(idx, utils_get_local_tag(idx, string));
+			g_free(string);
 		}
-		g_free(string);
 	}
 }
 
@@ -1400,31 +1387,6 @@ on_fullscreen1_toggled                 (GtkCheckMenuItem *checkmenuitem,
 {
 	app->fullscreen = (app->fullscreen) ? FALSE : TRUE;
 	utils_set_fullscreen();
-}
-
-
-void
-on_show_symbol_window1_toggled         (GtkCheckMenuItem *checkmenuitem,
-                                        gpointer          user_data)
-{
-	if (user_data && GPOINTER_TO_INT(user_data))
-	{
-		// if user_data == 1, it is called from the symbol_window popup menu, and trigger the activate event,
-		// which triggers the toggled event ;-)
-		g_signal_emit_by_name((gpointer) lookup_widget(app->window, "menu_show_symbol_window1"), "activate", NULL);
-		return;
-	}
-
-	if (app->treeview_nb_visible)
-	{
-		gtk_widget_hide(GTK_WIDGET(app->treeview_notebook));
-	}
-	else
-	{
-		gtk_widget_show(GTK_WIDGET(app->treeview_notebook));
-		//utils_update_visible_tag_lists(document_get_cur_idx());
-	}
-	app->treeview_nb_visible = (app->treeview_nb_visible) ? FALSE : TRUE;
 }
 
 
@@ -1677,9 +1639,7 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 
 	if (event->button == 3)
 	{	// popupmenu to hide or clear the active treeview
-		if (user_data && GPOINTER_TO_INT(user_data) == 2)
-			gtk_menu_popup(GTK_MENU(app->tagbar_menu), NULL, NULL, NULL, NULL, event->button, event->time);
-		else if (user_data && GPOINTER_TO_INT(user_data) == 3)
+		if (user_data && GPOINTER_TO_INT(user_data) == 3)
 			gtk_menu_popup(GTK_MENU(msgwindow.popup_status_menu), NULL, NULL, NULL, NULL, event->button, event->time);
 		else if (user_data && GPOINTER_TO_INT(user_data) == 4)
 			gtk_menu_popup(GTK_MENU(msgwindow.popup_msg_menu), NULL, NULL, NULL, NULL, event->button, event->time);

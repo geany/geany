@@ -40,7 +40,7 @@
 
 
 void 				sci_set_line_numbers		(ScintillaObject* sci,  gboolean set, gint extra_width);
-void				sci_set_mark_long_lines		(ScintillaObject* sci,	gint column, gint color);
+void				sci_set_mark_long_lines		(ScintillaObject* sci,	gint column, const gchar *color);
 void 				sci_set_text				(ScintillaObject* sci,  const gchar* text);
 void 				sci_add_text				(ScintillaObject* sci,  const gchar* text);
 void				sci_add_text_buffer			(ScintillaObject* sci,  const gchar* text, gint	len);

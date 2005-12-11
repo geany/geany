@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -51,7 +52,7 @@ void dialogs_show_open_file ()
 			// add FileFilters(start with "All Files")
 			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
 						utils_create_file_filter(filetypes[GEANY_FILETYPES_ALL]));
-			for(i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
+			for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
 			{
 				if (filetypes[i])
 				{
@@ -379,28 +380,6 @@ gboolean dialogs_show_confirm_exit(void)
 
 	return ret;
 #endif
-}
-
-
-GtkWidget *dialogs_create_tagbar_popup_menu(void)
-{
-	GtkWidget *treeview_popup_menu;
-	GtkWidget *hide;
-	GtkWidget *image;
-
-	treeview_popup_menu = gtk_menu_new();
-
-	hide = gtk_image_menu_item_new_with_mnemonic(_("Hide"));
-	gtk_widget_show(hide);
-	gtk_container_add(GTK_CONTAINER (treeview_popup_menu), hide);
-
-	image = gtk_image_new_from_stock("gtk-cancel", GTK_ICON_SIZE_MENU);
-	gtk_widget_show(image);
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(hide), image);
-
-	g_signal_connect((gpointer) hide, "activate", G_CALLBACK(on_show_symbol_window1_toggled), GINT_TO_POINTER(1));
-
-	return treeview_popup_menu;
 }
 
 

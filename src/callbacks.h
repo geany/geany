@@ -292,10 +292,6 @@ void
 on_entry1_changed                      (GtkEditable     *editable,
                                         gpointer         user_data);
 
-void
-on_toolbar_tag_clicked                 (GtkEntry *entry,
-                                        gpointer user_data);
-
 
 void
 on_openfiles_tree_selection_changed    (GtkTreeSelection *selection,
@@ -336,10 +332,6 @@ on_show_toolbar1_toggled               (GtkCheckMenuItem *checkmenuitem,
 
 void
 on_fullscreen1_toggled                 (GtkCheckMenuItem *checkmenuitem,
-                                        gpointer         user_data);
-
-void
-on_show_symbol_window1_toggled         (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
 
 void

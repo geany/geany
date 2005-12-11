@@ -369,12 +369,16 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 	{
 		TMTag *tag;
 		guint i;
+		GeanySymbol *symbol;
 
 		if (tag_names)
 		{
 			GList *tmp;
 			for (tmp = tag_names; tmp; tmp = g_list_next(tmp))
+			{
+				g_free(((GeanySymbol*)tmp->data)->str);
 				g_free(tmp->data);
+			}
 			g_list_free(tag_names);
 			tag_names = NULL;
 		}
@@ -388,14 +392,22 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 			if (tag->type & tag_types)
 			{
 				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
-					tag_names = g_list_prepend(tag_names, g_strdup_printf("%s::%s [%ld]"
-					  , tag->atts.entry.scope, tag->name, tag->atts.entry.line));
+				{
+					symbol = g_new(GeanySymbol, 1);
+					symbol->str = g_strdup_printf("%s::%s [%ld]", tag->atts.entry.scope, tag->name, tag->atts.entry.line);
+					symbol->type = tag->type;
+					tag_names = g_list_prepend(tag_names, symbol);
+				}
 				else
-					tag_names = g_list_prepend(tag_names, g_strdup_printf("%s [%ld]"
-					  , tag->name, tag->atts.entry.line));
+				{
+					symbol = g_new(GeanySymbol, 1);
+					symbol->str = g_strdup_printf("%s [%ld]", tag->name, tag->atts.entry.line);
+					symbol->type = tag->type;
+					tag_names = g_list_prepend(tag_names, symbol);
+				}
 			}
 		}
-		tag_names = g_list_sort(tag_names, (GCompareFunc) strcmp);
+		tag_names = g_list_sort(tag_names, (GCompareFunc) utils_compare_symbol);
 		return tag_names;
 	}
 	else
@@ -649,39 +661,30 @@ void utils_update_visible_tag_lists(gint idx)
 	const GList *tags;
 
 	// make all inactive, because there is no more tab left, or something strange occured
-	if (idx == -1)
+	if (idx == -1 && app->treeview_symbol_visible)
 	{
-		if (app->treeview_nb_visible)
-		{
-			GtkTreeIter iter;
-			gtk_list_store_clear(tv.store_taglist);
-			gtk_list_store_append(tv.store_taglist, &iter);
-			gtk_list_store_set(tv.store_taglist, &iter, 0, _("No tags found"), -1);
-			gtk_widget_set_sensitive(app->tagbar, FALSE);
-		}
-		//if (app->toolbar_visible && app->tooltagbar_visible)
-		if (app->toolbar_visible)
-		{
-			gtk_widget_set_sensitive(app->tag_combo, FALSE);
-			gtk_combo_set_popdown_strings(GTK_COMBO(app->tag_combo), NULL);
-		}
+		GtkTreeIter iter;
+		gtk_tree_store_clear(tv.store_taglist);
+		gtk_tree_store_append(tv.store_taglist, &iter, NULL);
+		gtk_tree_store_set(tv.store_taglist, &iter, 0, _("No tags found"), -1);
+		gtk_widget_set_sensitive(app->tagbar, FALSE);
 		return;
 	}
 
 	if (! doc_list[idx].file_type->has_tags)
 	{
 		gtk_widget_set_sensitive(app->tagbar, FALSE);
-		gtk_widget_set_sensitive(app->tag_combo, FALSE);
 		return;
 	}
 
-	tags = utils_get_tag_list(idx, tm_tag_max_t);
-
 	// updating the tag list in the left tag window if visisble
-	if (app->treeview_nb_visible)
+	if (app->treeview_symbol_visible)
 	{
 		GtkTreeIter iter;
-		gtk_list_store_clear(tv.store_taglist);
+
+		tags = utils_get_tag_list(idx, tm_tag_max_t);
+		gtk_tree_store_clear(tv.store_taglist);
+
 		if (doc_list[idx].tm_file && tags)
 		{
 			GtkTreeModel *model;
@@ -690,37 +693,65 @@ void utils_update_visible_tag_lists(gint idx)
 			model = gtk_tree_view_get_model(GTK_TREE_VIEW(tv.tree_taglist));
 			g_object_ref(model); // Make sure the model stays with us after the tree view unrefs it
 			gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_taglist), NULL); // Detach model from view
+			treeviews_init_tag_list();
 			for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
 			{
-				gtk_list_store_append(tv.store_taglist, &iter);
-				gtk_list_store_set(tv.store_taglist, &iter, 0, tmp->data, -1);
+				switch (((GeanySymbol*)tmp->data)->type)
+				{
+					case tm_tag_prototype_t:
+					case tm_tag_function_t:
+					{
+						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_function));
+						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						break;
+					}
+					case tm_tag_macro_t:
+					case tm_tag_macro_with_arg_t:
+					{
+						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_macro));
+						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						break;
+					}
+					case tm_tag_member_t:
+					{
+						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_member));
+						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						break;
+					}
+					case tm_tag_typedef_t:
+					case tm_tag_struct_t:
+					{
+						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_struct));
+						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						break;
+					}
+					case tm_tag_variable_t:
+					{
+						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_variable));
+						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						break;
+					}
+					case tm_tag_namespace_t:
+					{
+						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_namespace));
+						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						break;
+					}
+					default:
+					{
+						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_other));
+						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+					}
+				}
 			}
 			gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_taglist), model); // Re-attach model to view
 			g_object_unref(model);
 		}
 		else
 		{
-			gtk_list_store_append(tv.store_taglist, &iter);
-			gtk_list_store_set(tv.store_taglist, &iter, 0, _("No tags found"), -1);
+			gtk_tree_store_append(tv.store_taglist, &iter, NULL);
+			gtk_tree_store_set(tv.store_taglist, &iter, 0, _("No tags found"), -1);
 			gtk_widget_set_sensitive(app->tagbar, FALSE);
-		}
-	}
-	// updating the combo box if visible
-	//if (app->toolbar_visible && app->tooltagbar_visible)
-	if (app->toolbar_visible)
-	{
-		gtk_widget_set_sensitive(app->tag_combo, (tags != NULL));
-		if (doc_list[idx].tm_file && tags)
-		{
-			g_signal_handlers_block_by_func (GTK_OBJECT (GTK_COMBO (app->tag_combo)->entry),
-								 G_CALLBACK (on_toolbar_tag_clicked), NULL);
-			gtk_combo_set_popdown_strings(GTK_COMBO(app->tag_combo), (GList *)tags);
-			g_signal_handlers_unblock_by_func (GTK_OBJECT(GTK_COMBO(app->tag_combo)->entry),
-								   G_CALLBACK (on_toolbar_tag_clicked), NULL);
-		}
-		else
-		{
-			gtk_combo_set_popdown_strings(GTK_COMBO(app->tag_combo), NULL);
 		}
 	}
 }
@@ -1080,7 +1111,8 @@ gchar *utils_btoa(gboolean sbool)
 
 gboolean utils_atob(const gchar *str)
 {
-	if (strcasecmp(str, "TRUE")) return FALSE;
+	if (str == NULL) return FALSE;
+	else if (strcasecmp(str, "TRUE")) return FALSE;
 	else return TRUE;
 }
 
@@ -1225,7 +1257,6 @@ void utils_strip_trailing_spaces(gint idx)
 gdouble utils_scale_round (gdouble val, gdouble factor)
 {
 	//val = floor(val * factor + 0.5);
-	/// check for floor
 	val = floor(val);
 	val = MAX(val, 0);
 	val = MIN(val, factor);
@@ -1864,11 +1895,121 @@ void utils_replace_filename(gint idx)
 	sci_set_current_position(doc_list[idx].sci, 0);
 	sci_set_search_anchor(doc_list[idx].sci);
 	// stop if filebase was not found
-	if (sci_search_next(doc_list[idx].sci, SCFIND_MATCHCASE, filebase) == -1) return;
+	if (sci_search_next(doc_list[idx].sci, SCFIND_MATCHCASE, filebase) == -1)
+	{
+		g_free(filebase);
+		g_free(filename);
+		return;
+	}
 
 	sci_replace_sel(doc_list[idx].sci, filename);
 	g_free(filebase);
 	g_free(filename);
 
 	sci_set_current_position(doc_list[idx].sci, pos);
+}
+
+
+/*
+GdkColor *utils_get_color_from_bint(gint icolor)
+{
+	GdkColor *gcolor = g_new(GdkColor, 1);
+	guint16 r, g, b;
+
+	r = icolor;
+	g = r >> 8;
+	b = g >> 8;
+
+	//gcolor->red = r & 255;
+	//gcolor->green = g & 255;
+	//gcolor->blue = b & 255;
+	//geany_debug("%d %d %d", gcolor->red, gcolor->green, gcolor->blue);
+
+
+	geany_debug("%d %d %d", r, g, b);
+
+	gcolor->red   = (r << 8) + r;
+	gcolor->green = (g << 8) + g;
+	gcolor->blue  = (b << 8) + b;
+
+	//gcolor->red = (r & 255) * 257;
+	//gcolor->green = (g & 255) * 257;
+	//gcolor->blue = (b & 255) * 257;
+	//geany_debug("%d %d %d %d", icolor, gcolor->red, gcolor->green, gcolor->blue);
+
+	return gcolor;
+}
+*/
+
+/* wrapper function to let strcmp work with GeanySymbol struct */
+gint utils_compare_symbol(const GeanySymbol *a, const GeanySymbol *b)
+{
+	if (a == NULL || b == NULL) return 0;
+
+	return strcmp(a->str, b->str);
+}
+
+
+gchar *utils_get_hex_from_color(GdkColor *color)
+{
+	gchar *hex = g_malloc0(9);
+
+	g_snprintf(hex, 8, "#%02X%02X%02X",
+	      (guint) (utils_scale_round(color->red / 256, 255)),
+	      (guint) (utils_scale_round(color->green / 256, 255)),
+	      (guint) (utils_scale_round(color->blue / 256, 255)));
+
+	return hex;
+}
+
+
+/* utils_is_hex() and utils_get_int_from_hexcolor() taken from pango-color.c to get red, green and
+ * blue values from a hex string like #C0C0C0 */
+gboolean utils_is_hex(const gchar *spec, gint len, guint *c)
+{
+	const gchar *end;
+	*c = 0;
+	for (end = spec + len; spec != end; spec++)
+	{
+		if (g_ascii_isxdigit(*spec)) *c = (*c << 4) | g_ascii_xdigit_value(*spec);
+		else return FALSE;
+	}
+	return TRUE;
+}
+
+
+gint utils_get_int_from_hexcolor(const gchar *hex)
+{
+#define DEFAULT_COLOR 12774338
+	if (hex[0] == '#')
+	{
+		size_t len;
+		guint r, g, b;
+
+		hex++;
+		len = strlen(hex);
+		if (len % 3 || len < 3 || len > 12) return DEFAULT_COLOR;
+
+		len /= 3;
+
+		if (! utils_is_hex(hex, len, &r) ||
+			! utils_is_hex(hex + len, len, &g) ||
+			! utils_is_hex(hex + len * 2, len, &b))
+			return FALSE;
+
+		gint bits = len * 4;
+		r <<= 8 - bits;
+		g <<= 8 - bits;
+		b <<= 8 - bits;
+		while (bits < 8)
+		{
+			r |= (r >> bits);
+			g |= (g >> bits);
+			b |= (b >> bits);
+			bits *= 2;
+		}
+		//geany_debug("%d %d %d", r, g, b);
+		return r | (g << 8) | (b << 16);
+	}
+	return DEFAULT_COLOR;
 }

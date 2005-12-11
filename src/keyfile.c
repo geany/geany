@@ -75,8 +75,9 @@ void configuration_save(void)
 	}
 
 	g_key_file_set_integer(config, PACKAGE, "long_line_column", app->long_line_column);
-	g_key_file_set_integer(config, PACKAGE, "long_line_color", app->long_line_color);
-	g_key_file_set_boolean(config, PACKAGE, "treeview_nb_visible", app->treeview_nb_visible);
+	g_key_file_set_string(config, PACKAGE, "long_line_color", app->long_line_color);
+	g_key_file_set_boolean(config, PACKAGE, "treeview_symbol_visible", app->treeview_symbol_visible);
+	g_key_file_set_boolean(config, PACKAGE, "treeview_openfiles_visible", app->treeview_openfiles_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", app->msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "use_auto_indention", app->use_auto_indention);
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", app->show_indent_guide);
@@ -99,7 +100,6 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", app->pref_main_load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", app->pref_main_save_winpos);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_show_search", app->pref_main_show_search);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_show_tags", app->pref_main_show_tags);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", app->pref_editor_new_line);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", app->pref_editor_trail_space);
 	g_key_file_set_string(config, PACKAGE, "pref_template_developer", app->pref_template_developer);
@@ -180,9 +180,10 @@ gboolean configuration_load(void)
 	app->toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "toolbar_visible", TRUE);
 	app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_style", GTK_TOOLBAR_ICONS);
 	app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_size", 2);
-	app->long_line_color = utils_get_setting_integer(config, PACKAGE, "long_line_color", 0xC2EBC2);
+	app->long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
 	app->long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
-	app->treeview_nb_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_nb_visible", TRUE);
+	app->treeview_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_symbol_visible", TRUE);
+	app->treeview_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_openfiles_visible", TRUE);
 	app->msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	app->use_auto_indention = utils_get_setting_boolean(config, PACKAGE, "use_auto_indention", TRUE);
 	app->show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
@@ -197,7 +198,6 @@ gboolean configuration_load(void)
 	app->editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", "Courier New 9");
 	app->tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", "Cursor 8");
 	app->msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", "Cursor 8");
-	app->terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings", "");
 	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
 				_("Type here what you want, use it as a notice/scratch board"));
 
@@ -216,7 +216,8 @@ gboolean configuration_load(void)
 		app->geometry[3] = geo[3];
 	}
 	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", -1);
-	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", geo[3] - GEANY_MSGWIN_HEIGHT);
+	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position",
+				(geo) ? (geo[3] - GEANY_MSGWIN_HEIGHT) : -1);
 
 
 	app->pref_editor_tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
@@ -224,9 +225,9 @@ gboolean configuration_load(void)
 	app->pref_main_load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	app->pref_main_save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
 	app->pref_main_show_search = utils_get_setting_boolean(config, PACKAGE, "pref_main_show_search", TRUE);
-	app->pref_main_show_tags = utils_get_setting_boolean(config, PACKAGE, "pref_main_show_tags", TRUE);
 	app->pref_template_developer = utils_get_setting_string(config, PACKAGE, "pref_template_developer", g_get_real_name());
 	app->pref_template_company = utils_get_setting_string(config, PACKAGE, "pref_template_company", "");
+	app->terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings", "Monospace 10;;;500;xterm;true;true");
 
 	tmp_string = utils_get_initials(app->pref_template_developer);
 	app->pref_template_initial = utils_get_setting_string(config, PACKAGE, "pref_template_initial", tmp_string);

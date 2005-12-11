@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -54,8 +55,6 @@ gboolean dialogs_show_unsaved_file(gint idx);
 void dialogs_show_open_font(void);
 
 void dialogs_show_about(void);
-
-GtkWidget *dialogs_create_tagbar_popup_menu(void);
 
 void dialogs_show_word_count(void);
 

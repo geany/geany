@@ -101,14 +101,13 @@ document doc_list[GEANY_MAX_OPEN_FILES];
 typedef struct MyApp
 {
 	gint			 	 toolbar_icon_style;
-	gint				 long_line_column;
-	gint				 long_line_color;
 	gint				 geometry[4];
 	gboolean			 debug_mode;
 	gboolean			 have_vte;
 	gboolean			 ignore_global_tags;
 	gboolean			 toolbar_visible;
-	gboolean			 treeview_nb_visible;
+	gboolean			 treeview_symbol_visible;
+	gboolean			 treeview_openfiles_visible;
 	gboolean			 msgwindow_visible;
 	gboolean			 show_white_space;
 	gboolean			 use_auto_indention;
@@ -128,7 +127,8 @@ typedef struct MyApp
 	gboolean			 pref_main_save_winpos;
 	gboolean			 pref_main_confirm_exit;
 	gboolean			 pref_main_show_search;
-	gboolean			 pref_main_show_tags;
+	gint				 long_line_column;
+	gchar				*long_line_color;
 	gchar				*pref_template_developer;
 	gchar				*pref_template_company;
 	gchar				*pref_template_mail;
@@ -159,7 +159,6 @@ typedef struct MyApp
 	GtkWidget			*toolbar;
 	GtkWidget			*compile_button;
 	GtkWidget			*compile_button_image;
-	GtkWidget			*tag_combo;
 	GtkWidget			*tagbar;
 	GtkWidget			*treeview_notebook;
 	GtkWidget			*notebook;
@@ -167,7 +166,6 @@ typedef struct MyApp
 	GtkWidget			*window;
 	GtkWidget			*popup_menu;
 	GtkWidget			*toolbar_menu;
-	GtkWidget			*tagbar_menu;
 	GtkWidget			*new_file_menu;
 	GtkWidget			*menu_insert_include_item[2];
 	GtkWidget			*popup_goto_items[3];
@@ -177,7 +175,6 @@ typedef struct MyApp
 	GtkWidget			*undo_items[2];
 	GtkWidget			*save_buttons[2];
 	GtkWidget			*sensitive_buttons[16];
-
 	GtkWidget			*open_colorsel;
 	GtkWidget			*open_fontsel;
 	GtkWidget			*open_filesel;
@@ -195,6 +192,15 @@ MyApp *app;
 gint this_year;
 gint this_month;
 gint this_day;
+
+
+// small struct to track tag name and type together
+typedef struct GeanySymbol
+{
+	gchar	*str;
+	gint	 type;
+} GeanySymbol;
+
 
 enum
 {

@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -27,16 +28,20 @@
 #include "utils.h"
 #include "msgwindow.h"
 #include "sciwrappers.h"
+#ifdef HAVE_VTE
+# include "vte.h"
+#endif
 
 
 gint old_tab_width;
 gint old_long_line_column;
-gint old_long_line_color;
+gchar *old_long_line_color;
 
 
 void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
+	GdkColor *color;
 
 	// General settings
 	widget = lookup_widget(app->prefs_dialog, "check_load_session");
@@ -54,8 +59,11 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_show_search);
 
-	widget = lookup_widget(app->prefs_dialog, "check_toolbar_tags");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_show_tags);
+	widget = lookup_widget(app->prefs_dialog, "check_list_symbol");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->treeview_symbol_visible);
+
+	widget = lookup_widget(app->prefs_dialog, "check_list_openfiles");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->treeview_openfiles_visible);
 
 	widget = lookup_widget(app->prefs_dialog, "tagbar_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), app->tagbar_font);
@@ -82,11 +90,13 @@ void prefs_init_dialog(void)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->long_line_column);
 	old_long_line_column = app->long_line_column;
 
-	old_long_line_color = app->long_line_color;
+	old_long_line_color = g_strdup(app->long_line_color);
 
-	//widget = lookup_widget(app->prefs_dialog, "long_line_color");
-	//gtk_color_button_set_color(GTK_FONT_BUTTON(widget), app->long_line_col);
-
+	color = g_new(GdkColor, 1);
+	gdk_color_parse(app->long_line_color, color);
+	widget = lookup_widget(app->prefs_dialog, "long_line_color");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), color);
+	g_free(color);
 
 	// Tools Settings
 	if (app->build_c_cmd)
@@ -129,6 +139,41 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "entry_template_version");
 	gtk_entry_set_text(GTK_ENTRY(widget), app->pref_template_version);
+
+
+#ifdef HAVE_VTE
+	// VTE settings
+	extern struct vte_conf *vc;
+
+	widget = lookup_widget(app->prefs_dialog, "font_term");
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
+
+	widget = lookup_widget(app->prefs_dialog, "color_fore");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->color_fore);
+
+	widget = lookup_widget(app->prefs_dialog, "color_back");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->color_back);
+
+	widget = lookup_widget(app->prefs_dialog, "spin_scrollback");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
+
+	widget = lookup_widget(app->prefs_dialog, "entry_emulation");
+	gtk_entry_set_text(GTK_ENTRY(widget), vc->emulation);
+
+	widget = lookup_widget(app->prefs_dialog, "check_scroll_key");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_key);
+
+	widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_out);
+
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "font_term"), TRUE);
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "color_fore"), TRUE);
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "color_back"), TRUE);
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "spin_scrollback"), TRUE);
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "entry_emulation"), TRUE);
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_scroll_key"), TRUE);
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_scroll_out"), TRUE);
+#endif
 }
 
 
@@ -158,8 +203,11 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
 		app->pref_main_show_search = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(app->prefs_dialog, "check_toolbar_tags");
-		app->pref_main_show_tags = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		widget = lookup_widget(app->prefs_dialog, "check_list_symbol");
+		app->treeview_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_list_openfiles");
+		app->treeview_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
 		// Editor settings
@@ -231,32 +279,72 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		app->pref_template_version = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 
+#ifdef HAVE_VTE
+		// VTE settings
+		extern struct vte_conf *vc;
+		gchar *hex_color_back, *hex_color_fore;
+
+		widget = lookup_widget(app->prefs_dialog, "spin_scrollback");
+		vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "entry_emulation");
+		g_free(vc->emulation);
+		vc->emulation = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		widget = lookup_widget(app->prefs_dialog, "check_scroll_key");
+		vc->scroll_on_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
+		vc->scroll_on_out = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		g_free(app->terminal_settings);
+		hex_color_fore = utils_get_hex_from_color(vc->color_fore);
+		hex_color_back = utils_get_hex_from_color(vc->color_back);
+		app->terminal_settings = g_strdup_printf("%s;%s;%s;%d;%s;%s;%s", vc->font,
+				//(vc->color_fore->red | (vc->color_fore->green << 8) | (vc->color_fore->blue << 16)),
+				//(vc->color_back->red | (vc->color_back->green << 8) | (vc->color_back->blue << 16)),
+				hex_color_back, hex_color_fore,
+				vc->scrollback_lines, vc->emulation,
+				utils_btoa(vc->scroll_on_key), utils_btoa(vc->scroll_on_out));
+
+		vte_apply_user_settings();
+		g_free(hex_color_fore);
+		g_free(hex_color_back);
+#endif
+
+
 		// apply the changes made
 		utils_widget_show_hide(lookup_widget(app->window, "entry1"), app->pref_main_show_search);
 		utils_widget_show_hide(lookup_widget(app->window, "toolbutton18"), app->pref_main_show_search);
 		utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), app->pref_main_show_search);
 
-		utils_widget_show_hide(lookup_widget(app->window, "combo1"), app->pref_main_show_tags);
+		utils_widget_show_hide(gtk_notebook_get_nth_page(
+						GTK_NOTEBOOK(app->treeview_notebook), 0), app->treeview_symbol_visible);
+		utils_widget_show_hide(gtk_notebook_get_nth_page(
+						GTK_NOTEBOOK(app->treeview_notebook), 1), app->treeview_openfiles_visible);
+		// hide complete notebook if both pages are hidden
+		if ((! app->treeview_symbol_visible) && (! app->treeview_openfiles_visible))
+			gtk_widget_hide(app->treeview_notebook);
+		else
+			gtk_widget_show(app->treeview_notebook);
 
 		gtk_widget_modify_font(lookup_widget(app->window, "treeview2"),
 				pango_font_description_from_string(app->tagbar_font));
-		gtk_widget_modify_font(GTK_COMBO(app->tag_combo)->entry, pango_font_description_from_string(app->tagbar_font));
-		gtk_widget_modify_font(lookup_widget(app->window, "entry1"),	pango_font_description_from_string(app->tagbar_font));
+		gtk_widget_modify_font(lookup_widget(app->window, "entry1"), pango_font_description_from_string(app->tagbar_font));
 		gtk_widget_modify_font(msgwindow.tree_compiler, pango_font_description_from_string(app->msgwin_font));
 		gtk_widget_modify_font(msgwindow.tree_msg, pango_font_description_from_string(app->msgwin_font));
 		gtk_widget_modify_font(msgwindow.tree_status, pango_font_description_from_string(app->msgwin_font));
 
 		utils_set_font();
 
-		// re-colorize all open documents, if tab width has changed
+		// re-colorize all open documents, if tab width or long line settings have changed
 		if ((app->pref_editor_tab_width != old_tab_width) ||
-			(app->long_line_color != old_long_line_color) ||
+			(! utils_strcmp(app->long_line_color, old_long_line_color)) ||
 			(app->long_line_column != old_long_line_column))
 		{
 			gint i;
 			for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 			{
-				//geany_debug("%d", i);
 				if (doc_list[i].sci)
 				{
 					sci_set_tab_width(doc_list[i].sci, app->pref_editor_tab_width);
@@ -265,7 +353,8 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 			}
 			old_tab_width = app->pref_editor_tab_width;
 			old_long_line_column = app->long_line_column;
-			old_long_line_color = app->long_line_color;
+			g_free(old_long_line_color);
+			old_long_line_color = g_strdup(app->long_line_color);
 		}
 
 	}
@@ -285,27 +374,64 @@ void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
 {
 	GdkColor color;
 
-	gtk_color_button_get_color(widget, &color);
-	app->long_line_color = (color.red / 256) | ((color.green / 256) << 8) | ((color.blue / 256) << 16);
+	switch (GPOINTER_TO_INT(user_data))
+	{
+		case 1:
+		{
+			gtk_color_button_get_color(widget, &color);
+			app->long_line_color = utils_get_hex_from_color(&color);
+			break;
+		}
+		case 2:
+		{
+			g_free(vc->color_fore);
+			vc->color_fore = g_new(GdkColor, 1);
+			gtk_color_button_get_color(widget, vc->color_fore);
+			break;
+		}
+		case 3:
+		{
+			g_free(vc->color_back);
+			vc->color_back = g_new(GdkColor, 1);
+			gtk_color_button_get_color(widget, vc->color_back);
+			break;
+		}
+	}
 }
 
 
 void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 {
-	if (GPOINTER_TO_INT(user_data) == 1)
+	switch (GPOINTER_TO_INT(user_data))
 	{
-		g_free(app->tagbar_font);
-		app->tagbar_font = g_strdup(gtk_font_button_get_font_name(widget));
-	}
-	else if (GPOINTER_TO_INT(user_data) == 2)
-	{
-		g_free(app->msgwin_font);
-		app->msgwin_font = g_strdup(gtk_font_button_get_font_name(widget));
-	}
-	else if (GPOINTER_TO_INT(user_data) == 3)
-	{
-		g_free(app->editor_font);
-		app->editor_font = g_strdup(gtk_font_button_get_font_name(widget));
+		case 1:
+		{
+			g_free(app->tagbar_font);
+			app->tagbar_font = g_strdup(gtk_font_button_get_font_name(widget));
+			break;
+		}
+		case 2:
+		{
+			g_free(app->msgwin_font);
+			app->msgwin_font = g_strdup(gtk_font_button_get_font_name(widget));
+			break;
+		}
+		case 3:
+		{
+			g_free(app->editor_font);
+			app->editor_font = g_strdup(gtk_font_button_get_font_name(widget));
+			break;
+		}
+		case 4:
+		{
+#ifdef HAVE_VTE
+			// VTE settings
+			extern struct vte_conf *vc;
+			g_free(vc->font);
+			vc->font = g_strdup(gtk_font_button_get_font_name(widget));
+#endif
+			break;
+		}
 	}
 }
 
