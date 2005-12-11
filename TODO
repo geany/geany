@@ -7,7 +7,6 @@ TODO List:
 
 	o window positioning and window resizing doesn't work under win32
 	o sci_cb.c: improve auto completion(include local tags)
-	o complete documentation
 	o documentation: list and explain filetype modes
 	o interface.c: reorder the 'document' menu entry, differ between
 	  document related and general settings, new submenu: View->Editor
@@ -17,8 +16,7 @@ TODO List:
 	  where, is it still existent?
 	o encoding-bug in utils_convert_to_utf8()
 	o latex build menu
-	o colourize the tags in the tag list widget to show if it's a
-	  function, macro or whatever, build a real tree?
+	o store tag list per document instead of creating it "live"
 	o command line option -e (editor mode)
 	o fix bug in highlighting.c at style_init_c()
 	o BSD compatibility

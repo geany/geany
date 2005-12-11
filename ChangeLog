@@ -1,3 +1,38 @@
+2005-12-10  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/prefs.c, src/vte.c, src/keyfile.c, src/utils.c, src/callbacks.c:
+   many changes, adding color settings for VTE
+
+
+2005-12-09  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/utils.c, src/interface.c, src/callbacks.c,
+   src/main.c, src/keyfile.c: removed symbol list combo box in the
+                              toolbar
+ * src/treeviews.c, src/utils.c: heavily improved the tag list to
+                                 categorise the tags in a tree
+
+
+2005-12-08  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/interface.c: added tooltip text for exit button
+ * src/main.c: open a new file at startup if none is open
+ * bugfix: src/keyfile.c: fixed a segfault when starting without a
+                          configuration dir
+
+
+2005-12-06  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/document.c, src/callbacks.c: diabled extended HOME and END key
+                                    default behaviour due to many
+                                    problems
+
+
+2005-12-03  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/filetypes.c, src/highlighting.c: added new filetype "Assembler"
+
+
 2005-12-01  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/document.c, src/callbacks.c: extending HOME and END key default
@@ -44,7 +79,7 @@
    added new option "Switch to status message list"
  * src/keyfile.c: store the position of vpaned1 too(sizer between
                   editor window and the status message list)
- *src/highlighting.c, src/filetypes.c: added new filetype "Conf"
+ * src/highlighting.c, src/filetypes.c: added new filetype "Conf"
 
 
 2005-11-22  Enrico Troeger  <enrico.troeger@uvena.de>
