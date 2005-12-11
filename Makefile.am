@@ -9,7 +9,7 @@ EXTRA_DIST = \
 	geany.glade \
 	geany.gladep \
 	global.tags \
-	data/
+	data/filetypes.*
 
 install-data-local:
 	@$(NORMAL_INSTALL)
