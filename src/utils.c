@@ -551,14 +551,14 @@ GtkWidget *utils_new_image_from_inline(gint img, gboolean small_img)
 }
 
 
-gboolean utils_write_file(const gchar *filename, const gchar *text)
+gint utils_write_file(const gchar *filename, const gchar *text)
 {
 	FILE *fp;
 	gint bytes_written, len;
 
 	if (filename == NULL)
 	{
-		return FALSE;
+		return ENOENT;
 	}
 
 	len = strlen(text);
@@ -571,14 +571,14 @@ gboolean utils_write_file(const gchar *filename, const gchar *text)
 
 		if (len != bytes_written)
 		{
-			return FALSE;
+			return EIO;
 		}
 	}
 	else
 	{
-		return FALSE;
+		return errno;
 	}
-	return TRUE;
+	return 0;
 }
 
 
@@ -1583,21 +1583,20 @@ gint utils_make_settings_dir(void)
 #ifdef GEANY_WIN32
 		if (mkdir(app->configdir) != 0) error_nr = errno;
 #else
-		if (mkdir(app->configdir, 0700)) error_nr = errno;
+		if (mkdir(app->configdir, 0700) != 0) error_nr = errno;
 #endif
 	}
 
-	if (! g_file_test(fileytpes_readme, G_FILE_TEST_EXISTS))
+	if (error_nr == 0 && ! g_file_test(fileytpes_readme, G_FILE_TEST_EXISTS))
 	{	// try to write template.README
-		utils_write_file(fileytpes_readme,
+		error_nr = utils_write_file(fileytpes_readme,
 "There are several template files in this directory. For these templates you can use wildcards.\n\
 For more information read the documentation (in " DOCDIR " or visit " GEANY_HOMEPAGE ").");
+		{ // check whether write test was successful, otherwise directory is not writeable
+
+		}
 	}
 	g_free(fileytpes_readme);
-	if (! g_file_test(fileytpes_readme, G_FILE_TEST_EXISTS))
-	{ // check whether write test was successful, otherwise directory is not writeable
-		error_nr = EPERM;
-	}
 
 	return error_nr;
 }

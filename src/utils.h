@@ -69,7 +69,7 @@ GdkPixbuf *utils_new_pixbuf_from_inline(gint img, gboolean small_img);
 
 GtkWidget *utils_new_image_from_inline(gint img, gboolean small_img);
 
-gboolean utils_write_file(const gchar *filename, const gchar *text);
+gint utils_write_file(const gchar *filename, const gchar *text);
 
 void utils_show_indention_guides(void);
 
