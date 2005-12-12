@@ -124,7 +124,6 @@ void vte_init(void)
 	vf->vte_terminal_set_encoding(VTE_TERMINAL(vte), "UTF-8");
 	vf->vte_terminal_set_mouse_autohide(VTE_TERMINAL(vte), TRUE);
 	vf->vte_terminal_set_word_chars(VTE_TERMINAL(vte), GEANY_WORDCHARS);
-	vte_apply_user_settings();
 
 	g_signal_connect(G_OBJECT(vte), "child-exited", G_CALLBACK(vte_start), NULL);
 	g_signal_connect(G_OBJECT(vte), "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
@@ -134,6 +133,9 @@ void vte_init(void)
 
 	gtk_widget_show_all(frame);
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
+
+	gtk_widget_realize(vte); // the vte widget has to be realized before color changes take effect
+	vte_apply_user_settings();
 }
 
 
@@ -247,13 +249,15 @@ void vte_register_symbols(GModule *mod)
 
 void vte_apply_user_settings(void)
 {
+	//vf->vte_terminal_reset(VTE_TERMINAL(vc->vte), TRUE, FALSE);
+
 	vf->vte_terminal_set_scrollback_lines(VTE_TERMINAL(vc->vte), vc->scrollback_lines);
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
 	vf->vte_terminal_set_emulation(VTE_TERMINAL(vc->vte), vc->emulation);
 	vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
-
-	vf->vte_terminal_reset(VTE_TERMINAL(vc->vte), TRUE, FALSE);
+	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->color_fore);
+	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->color_back);
 }
 
 
@@ -263,8 +267,6 @@ void vte_get_settings(void)
 
 	if (g_strv_length(values) != 7) return;
 	vc->font = g_strdup(values[0]);
-	//vc->color_fore = utils_get_color_from_bint(strtod(values[1], NULL));
-	//vc->color_back = utils_get_color_from_bint(strtod(values[2], NULL));
 	vc->color_fore = g_new(GdkColor, 1);
 	vc->color_back = g_new(GdkColor, 1);
 	gdk_color_parse(values[1], vc->color_fore);
