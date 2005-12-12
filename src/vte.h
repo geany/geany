@@ -99,7 +99,7 @@ struct vte_funcs
 	void (*vte_terminal_copy_clipboard) (VteTerminal *terminal);
 	void (*vte_terminal_paste_clipboard) (VteTerminal *terminal);
 	void (*vte_terminal_set_emulation) (VteTerminal *terminal, const gchar *emulation);
-	void (*vte_terminal_set_color_foreground) (VteTerminal *terminal, const GdkColor *background);
+	void (*vte_terminal_set_color_foreground) (VteTerminal *terminal, const GdkColor *foreground);
 	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
 };
 
