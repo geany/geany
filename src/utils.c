@@ -1588,10 +1588,16 @@ gint utils_make_settings_dir(void)
 	}
 
 	if (! g_file_test(fileytpes_readme, G_FILE_TEST_EXISTS))
+	{	// try to write template.README
 		utils_write_file(fileytpes_readme,
 "There are several template files in this directory. For these templates you can use wildcards.\n\
 For more information read the documentation (in " DOCDIR " or visit " GEANY_HOMEPAGE ").");
+	}
 	g_free(fileytpes_readme);
+	if (! g_file_test(fileytpes_readme, G_FILE_TEST_EXISTS))
+	{ // check whether write test was successful, otherwise directory is not writeable
+		error_nr = EPERM;
+	}
 
 	return error_nr;
 }
@@ -1799,9 +1805,9 @@ void utils_update_recent_menu(void)
 	GList *children = gtk_container_get_children(GTK_CONTAINER(recent_menu));
 
 	// clean the MRU list
-	if (g_list_length(children) > GEANY_RECENT_MRU_LENGTH)
+	if (g_list_length(children) > app->mru_length)
 	{
-		children = g_list_nth(children, GEANY_RECENT_MRU_LENGTH - 1);
+		children = g_list_nth(children, app->mru_length - 1);
 		while (children)
 		{
 			gtk_widget_destroy(GTK_WIDGET(children->data));
