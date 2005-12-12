@@ -1013,6 +1013,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 	//gint idx = geany_document_get_cur_idx();
 	gboolean ret = FALSE;
 	gint idx = GPOINTER_TO_INT(user_data);
+	gint pos = sci_get_current_position(doc_list[idx].sci);
 
 
 	switch(event->keyval)
@@ -1074,9 +1075,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				sci_cb_handle_uri(
-						doc_list[idx].sci,
-						sci_get_current_position(doc_list[idx].sci));
+				sci_cb_handle_uri(doc_list[idx].sci, pos);
 				ret = TRUE;
 			}
 			break;
@@ -1114,7 +1113,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		// switch to the next open notebook tab to the right
 		case GDK_Right:
 		{
-			if (event->state & GDK_CONTROL_MASK)
+			if (event->state & GDK_MOD1_MASK)
 			{
 				utils_switch_document(RIGHT);
 				ret = TRUE;
@@ -1124,7 +1123,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		// switch to the next open notebook tab to the right
 		case GDK_Left:
 		{
-			if (event->state & GDK_CONTROL_MASK)
+			if (event->state & GDK_MOD1_MASK)
 			{
 				utils_switch_document(LEFT);
 				ret = TRUE;
@@ -1136,7 +1135,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			if (event->state & GDK_CONTROL_MASK)
 			{
-				sci_cb_show_macro_list(doc_list[GPOINTER_TO_INT(user_data)].sci);
+				sci_cb_show_macro_list(doc_list[idx].sci);
 				ret = TRUE;
 			}
 			break;
@@ -1145,7 +1144,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		case GDK_Insert:
 		{
 			if (! (event->state & GDK_SHIFT_MASK))
-				doc_list[GPOINTER_TO_INT(user_data)].do_overwrite = (doc_list[idx].do_overwrite) ? FALSE : TRUE;
+				doc_list[idx].do_overwrite = (doc_list[idx].do_overwrite) ? FALSE : TRUE;
 			break;
 		}
 		case GDK_F12:
@@ -1167,16 +1166,16 @@ on_editor_key_press_event              (GtkWidget *widget,
 			break;
 		}
 /* following code is unusable unless I get a signal for a line changed, don't want to do this with
- * updateUI()
-*/		case GDK_End:
+ * updateUI(), additional problem: at line changes the column isn't kept
+		case GDK_End:
 		{	// extending HOME and END default behaviour, for details look at the start of this function
-			if (cursor_pos_end == -1 || current_line != sci_get_current_line(doc_list[idx].sci, -1))
+			if (cursor_pos_end == -1 || current_line != sci_get_current_line(doc_list[idx].sci, pos))
 			{
-				cursor_pos_end = sci_get_current_position(doc_list[idx].sci);
+				cursor_pos_end = pos;
 				sci_cmd(doc_list[idx].sci, SCI_LINEEND);
-				current_line = sci_get_current_line(doc_list[idx].sci, -1);
+				current_line = sci_get_current_line(doc_list[idx].sci, pos);
 			}
-			else if (current_line == sci_get_current_line(doc_list[idx].sci, -1))
+			else if (current_line == sci_get_current_line(doc_list[idx].sci, pos))
 			{
 				sci_set_current_position(doc_list[idx].sci, cursor_pos_end);
 				cursor_pos_end = -1;
@@ -1185,20 +1184,20 @@ on_editor_key_press_event              (GtkWidget *widget,
 		}
 /*		case GDK_Home:
 		{
-			if (cursor_pos_home_state == 0 || current_line != sci_get_current_line(doc_list[idx].sci, -1))
+			if (cursor_pos_home_state == 0 || current_line != sci_get_current_line(doc_list[idx].sci, pos))
 			{
 				cursor_pos_home = sci_get_current_position(doc_list[idx].sci);
 				sci_cmd(doc_list[idx].sci, SCI_VCHOME);
 				cursor_pos_home_state = 1;
-				current_line = sci_get_current_line(doc_list[idx].sci, -1);
+				current_line = sci_get_current_line(doc_list[idx].sci, pos);
 			}
-			else if (cursor_pos_home_state == 1 && current_line == sci_get_current_line(doc_list[idx].sci, -1))
+			else if (cursor_pos_home_state == 1 && current_line == sci_get_current_line(doc_list[idx].sci, pos))
 			{
 				sci_cmd(doc_list[idx].sci, SCI_HOME);
 				cursor_pos_home_state = 2;
 				cursor_pos_home_state = 0;
 			}
-			else// if (current_line == sci_get_current_line(doc_list[idx].sci, -1))
+			else// if (current_line == sci_get_current_line(doc_list[idx].sci, pos))
 			{
 				sci_set_current_position(doc_list[idx].sci, cursor_pos_home);
 				cursor_pos_home_state = 0;

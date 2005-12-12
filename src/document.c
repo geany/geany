@@ -175,7 +175,7 @@ gint document_create_new_sci(const gchar *filename)
 	//SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);
 	sci_use_popup(sci, FALSE);
 	sci_set_codepage(sci, 1);
-	sci_clear_cmdkey(sci, SCK_END);	// disable to act on our own in callbacks.c
+	//sci_clear_cmdkey(sci, SCK_END);	// disable to act on our own in callbacks.c
 	//sci_clear_cmdkey(sci, SCK_HOME);
 	sci_set_mark_long_lines(sci, app->long_line_column, app->long_line_color);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
