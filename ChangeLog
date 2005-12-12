@@ -1,3 +1,20 @@
+2005-12-12  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: changed key binding to switch between open
+                    documents from CTRL to ALT+Left/Right, so
+                    CTRL+Left/Right moves the cursor to word boundaries
+
+
+2005-12-11  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: added shortcut F6 to switch to the VTE widget
+ * doc/geany.docbook: described some of the compile time options in
+                      geany.h and marked filename with <filename>-tag.
+ * src/interface.c, src/prefs.c, src/utils.c, src/callbacks.c,
+   src/geany.h, src/documents.c: made length of MRU list changeable
+ * bugfix: src/highlighting.c: fixed a wrong color value
+
+
 2005-12-10  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/prefs.c, src/vte.c, src/keyfile.c, src/utils.c, src/callbacks.c:
@@ -44,7 +61,7 @@
 
  * src/keyfile.c, src/prefs.c, src/interface.c, src/vte.c:
    added some options for the VTE to the preferences dialog
- * bugfix: src/sci_cb.h: fixed a small bug by auto closing }-brackets
+ * bugfix: src/sci_cb.c: fixed a small bug by auto closing }-brackets
  * src/callbacks.c, src/main.c: added signal and handler for F12 key,
                                 pressed in the main widget
 
