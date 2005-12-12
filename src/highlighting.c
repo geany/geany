@@ -175,7 +175,7 @@ void styleset_c_init(void)
 	styleset_get_hex(config, "styling", "character", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[8]);
 	styleset_get_hex(config, "styling", "uuid", "0x804040", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[9]);
 	styleset_get_hex(config, "styling", "preprocessor", "0x7F7F00", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[10]);
-	styleset_get_hex(config, "styling", "operator", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[11]);
+	styleset_get_hex(config, "styling", "operator", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[11]);
 	styleset_get_hex(config, "styling", "identifier", "0x100000", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[12]);
 	styleset_get_hex(config, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_C]->styling[13]);
 	styleset_get_hex(config, "styling", "verbatim", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[14]);
