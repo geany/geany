@@ -31,7 +31,7 @@
 
 
 static gchar *scribble_text = NULL;
-static gchar *session_files[GEANY_MRU_LENGTH];
+static gchar *session_files[GEANY_SESSION_FILES];
 static gint hpan_position;
 static gint vpan_position;
 
@@ -44,7 +44,7 @@ void configuration_save(void)
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	gchar *entry = g_malloc(14);
 	gchar *fname = g_malloc0(256);
-	gchar *recent_files[GEANY_RECENT_MRU_LENGTH] = { NULL };
+	gchar **recent_files = g_new(gchar*, app->mru_length);
 	GtkTextBuffer *buffer;
 	GtkTextIter start, end;
 
@@ -74,6 +74,7 @@ void configuration_save(void)
 				gtk_paned_get_position(GTK_PANED(lookup_widget(app->window, "vpaned1"))));
 	}
 
+	g_key_file_set_integer(config, PACKAGE, "mru_length", app->mru_length);
 	g_key_file_set_integer(config, PACKAGE, "long_line_column", app->long_line_column);
 	g_key_file_set_string(config, PACKAGE, "long_line_color", app->long_line_color);
 	g_key_file_set_boolean(config, PACKAGE, "treeview_symbol_visible", app->treeview_symbol_visible);
@@ -89,6 +90,8 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", app->switch_msgwin_pages);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->auto_complete_constructs);
+	g_key_file_set_comment(config, PACKAGE, "terminal_settings",
+			_(" VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on keystroke;scroll on output"), NULL);
 	g_key_file_set_string(config, PACKAGE, "terminal_settings", app->terminal_settings);
 	g_key_file_set_string(config, PACKAGE, "editor_font", app->editor_font);
 	g_key_file_set_string(config, PACKAGE, "tagbar_font", app->tagbar_font);
@@ -118,19 +121,24 @@ void configuration_save(void)
 	g_key_file_set_string(config, "build", "build_term_cmd", app->build_term_cmd ? app->build_term_cmd : "");
 	g_key_file_set_string(config, "build", "build_browser_cmd", app->build_browser_cmd ? app->build_browser_cmd : "");
 
-	for (i = 0; i < GEANY_RECENT_MRU_LENGTH; i++)
+	for (i = 0; i < app->mru_length; i++)
 	{
 		if (! g_queue_is_empty(app->recent_queue))
 		{
 			recent_files[i] = g_queue_pop_head(app->recent_queue);
 		}
+		else
+		{
+			recent_files[i] = NULL;
+		}
+
 	}
 	g_key_file_set_string_list(config, "files", "recent_files",
-				(const gchar**)recent_files, GEANY_RECENT_MRU_LENGTH);
+				(const gchar**)recent_files, app->mru_length);
 
-	// store the last 10(or what ever MRU_LENGTH is set to) filenames, to reopen the next time
+	// store the last 15(or what ever GEANY_SESSION_FILES is set to) filenames, to reopen the next time
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-	for(i = 0; (i < max) && (j < GEANY_MRU_LENGTH); i++)
+	for(i = 0; (i < max) && (j < GEANY_SESSION_FILES); i++)
 	{
 		idx = document_get_n_idx(i);
 		if (idx >= 0 && doc_list[idx].file_name)
@@ -141,10 +149,10 @@ void configuration_save(void)
 			j++;
 		}
 	}
-	// if open tabs less than MRU_LENGTH, delete existing saved entries in the list
-	if (max < GEANY_MRU_LENGTH)
+	// if open tabs less than GEANY_SESSION_FILES, delete existing saved entries in the list
+	if (max < GEANY_SESSION_FILES)
 	{
-		for(i = max; i < GEANY_MRU_LENGTH; i++)
+		for(i = max; i < GEANY_SESSION_FILES; i++)
 		{
 			g_snprintf(entry, 13, "FILE_NAME_%d", i);
 			g_key_file_set_string(config, "files", entry, "");
@@ -154,7 +162,8 @@ void configuration_save(void)
 	// write the file
 	utils_write_file(configfile, g_key_file_to_data(config, NULL, NULL));
 
-	utils_free_ptr_array(recent_files, GEANY_RECENT_MRU_LENGTH);
+	utils_free_ptr_array(recent_files, app->mru_length);
+	g_free(recent_files);
 	g_key_file_free(config);
 	g_free(configfile);
 	g_free(entry);
@@ -168,7 +177,7 @@ gboolean configuration_load(void)
 	gboolean config_exists;
 	guint i, geo_len;
 	gint *geo = g_malloc(sizeof(gint) * 4);
-	gsize len;
+	gsize len = 0;
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	gchar *entry = g_malloc(14);
 	gchar *tmp_string, *tmp_string2;
@@ -178,6 +187,7 @@ gboolean configuration_load(void)
 	config_exists = g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	app->toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "toolbar_visible", TRUE);
+	app->mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", 10);
 	app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_style", GTK_TOOLBAR_ICONS);
 	app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_size", 2);
 	app->long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
@@ -227,7 +237,7 @@ gboolean configuration_load(void)
 	app->pref_main_show_search = utils_get_setting_boolean(config, PACKAGE, "pref_main_show_search", TRUE);
 	app->pref_template_developer = utils_get_setting_string(config, PACKAGE, "pref_template_developer", g_get_real_name());
 	app->pref_template_company = utils_get_setting_string(config, PACKAGE, "pref_template_company", "");
-	app->terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings", "Monospace 10;;;500;xterm;true;true");
+	app->terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings",	"");
 
 	tmp_string = utils_get_initials(app->pref_template_developer);
 	app->pref_template_initial = utils_get_setting_string(config, PACKAGE, "pref_template_initial", tmp_string);
@@ -285,13 +295,15 @@ gboolean configuration_load(void)
 	app->recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
 	if (app->recent_files != NULL)
 	{
-		for (i = 0; (i < len) && (i < GEANY_RECENT_MRU_LENGTH); i++)
+		for (i = 0; (i < len) && (i < app->mru_length); i++)
 		{
 			g_queue_push_head(app->recent_queue, app->recent_files[i]);
+			app->recent_files[i] = NULL;
 		}
 	}
+	//geany_debug("%d", g_strv_length(app->recent_files));
 
-	for(i = 0; i < GEANY_MRU_LENGTH; i++)
+	for(i = 0; i < GEANY_SESSION_FILES; i++)
 	{
 		g_snprintf(entry, 13, "FILE_NAME_%d", i);
 		session_files[i] = g_key_file_get_string(config, "files", entry, &error);
@@ -303,6 +315,7 @@ gboolean configuration_load(void)
 		}
 	}
 
+	utils_free_ptr_array(app->recent_files, len);
 	g_key_file_free(config);
 	g_free(configfile);
 	g_free(entry);
@@ -318,7 +331,7 @@ gboolean configuration_open_files(void)
 	gchar *file, spos[7];
 	gboolean ret = FALSE;
 
-	for(i = GEANY_MRU_LENGTH - 1; i >= 0 ; i--)
+	for(i = GEANY_SESSION_FILES - 1; i >= 0 ; i--)
 	{
 		if (session_files[i] && strlen(session_files[i]))
 		{

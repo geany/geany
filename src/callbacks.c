@@ -867,7 +867,7 @@ on_file_save_save_button_clicked       (GtkButton       *button,
 	if (g_queue_find_custom(app->recent_queue, doc_list[idx].file_name, (GCompareFunc) strcmp) == NULL)
 	{
 		g_queue_push_head(app->recent_queue, g_strdup(doc_list[idx].file_name));
-		if (g_queue_get_length(app->recent_queue) > GEANY_RECENT_MRU_LENGTH)
+		if (g_queue_get_length(app->recent_queue) > app->mru_length)
 		{
 			g_free(g_queue_pop_tail(app->recent_queue));
 		}
@@ -1168,7 +1168,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		}
 /* following code is unusable unless I get a signal for a line changed, don't want to do this with
  * updateUI()
-		case GDK_End:
+*/		case GDK_End:
 		{	// extending HOME and END default behaviour, for details look at the start of this function
 			if (cursor_pos_end == -1 || current_line != sci_get_current_line(doc_list[idx].sci, -1))
 			{
@@ -1183,7 +1183,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 			}
 			break;
 		}
-		case GDK_Home:
+/*		case GDK_Home:
 		{
 			if (cursor_pos_home_state == 0 || current_line != sci_get_current_line(doc_list[idx].sci, -1))
 			{

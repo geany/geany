@@ -176,7 +176,7 @@ gint document_create_new_sci(const gchar *filename)
 	sci_use_popup(sci, FALSE);
 	sci_set_codepage(sci, 1);
 	sci_clear_cmdkey(sci, SCK_END);	// disable to act on our own in callbacks.c
-	sci_clear_cmdkey(sci, SCK_HOME);
+	//sci_clear_cmdkey(sci, SCK_HOME);
 	sci_set_mark_long_lines(sci, app->long_line_column, app->long_line_color);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	//sci_set_lines_wrapped(sci, app->line_breaking);
@@ -456,7 +456,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	if (g_queue_find_custom(app->recent_queue, filename, (GCompareFunc) strcmp) == NULL)
 	{
 		g_queue_push_head(app->recent_queue, g_strdup(filename));
-		if (g_queue_get_length(app->recent_queue) > GEANY_RECENT_MRU_LENGTH)
+		if (g_queue_get_length(app->recent_queue) > app->mru_length)
 		{
 			g_free(g_queue_pop_tail(app->recent_queue));
 		}

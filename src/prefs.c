@@ -44,6 +44,9 @@ void prefs_init_dialog(void)
 	GdkColor *color;
 
 	// General settings
+	widget = lookup_widget(app->prefs_dialog, "spin_mru");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->mru_length);
+
 	widget = lookup_widget(app->prefs_dialog, "check_load_session");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_load_session);
 
@@ -188,6 +191,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		GtkWidget *widget;
 
 		// General settings
+		widget = lookup_widget(app->prefs_dialog, "spin_mru");
+		app->mru_length = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+
 		widget = lookup_widget(app->prefs_dialog, "check_load_session");
 		app->pref_main_load_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -301,9 +307,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		hex_color_fore = utils_get_hex_from_color(vc->color_fore);
 		hex_color_back = utils_get_hex_from_color(vc->color_back);
 		app->terminal_settings = g_strdup_printf("%s;%s;%s;%d;%s;%s;%s", vc->font,
-				//(vc->color_fore->red | (vc->color_fore->green << 8) | (vc->color_fore->blue << 16)),
-				//(vc->color_back->red | (vc->color_back->green << 8) | (vc->color_back->blue << 16)),
-				hex_color_back, hex_color_fore,
+				hex_color_fore, hex_color_back,
 				vc->scrollback_lines, vc->emulation,
 				utils_btoa(vc->scroll_on_key), utils_btoa(vc->scroll_on_out));
 

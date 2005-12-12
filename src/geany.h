@@ -57,8 +57,8 @@
 #define GEANY_CODENAME					"Tarkin"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_MAX_OPEN_FILES			25
-#define GEANY_MRU_LENGTH				15
-#define GEANY_RECENT_MRU_LENGTH			10
+#define GEANY_SESSION_FILES				15
+//#define GEANY_RECENT_MRU_LENGTH			10
 #define GEANY_MAX_TAGS_COUNT			1000
 #define GEANY_WORDCHARS					"_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
@@ -127,6 +127,7 @@ typedef struct MyApp
 	gboolean			 pref_main_save_winpos;
 	gboolean			 pref_main_confirm_exit;
 	gboolean			 pref_main_show_search;
+	gint				 mru_length;
 	gint				 long_line_column;
 	gchar				*long_line_color;
 	gchar				*pref_template_developer;

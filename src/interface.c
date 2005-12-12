@@ -1896,6 +1896,10 @@ create_prefs_dialog (void)
   GtkWidget *frame1;
   GtkWidget *alignment2;
   GtkWidget *vbox4;
+  GtkWidget *hbox2;
+  GtkWidget *label147;
+  GtkObject *spin_mru_adj;
+  GtkWidget *spin_mru;
   GtkWidget *check_load_session;
   GtkWidget *check_save_win_pos;
   GtkWidget *check_switch_pages;
@@ -2059,6 +2063,22 @@ create_prefs_dialog (void)
   vbox4 = gtk_vbox_new (FALSE, 0);
   gtk_widget_show (vbox4);
   gtk_container_add (GTK_CONTAINER (alignment2), vbox4);
+
+  hbox2 = gtk_hbox_new (FALSE, 19);
+  gtk_widget_show (hbox2);
+  gtk_box_pack_start (GTK_BOX (vbox4), hbox2, FALSE, FALSE, 0);
+
+  label147 = gtk_label_new (_("MRU list length"));
+  gtk_widget_show (label147);
+  gtk_box_pack_start (GTK_BOX (hbox2), label147, FALSE, FALSE, 0);
+
+  spin_mru_adj = gtk_adjustment_new (4, 1, 50, 1, 10, 10);
+  spin_mru = gtk_spin_button_new (GTK_ADJUSTMENT (spin_mru_adj), 1, 0);
+  gtk_widget_show (spin_mru);
+  gtk_box_pack_start (GTK_BOX (hbox2), spin_mru, FALSE, TRUE, 0);
+  gtk_tooltips_set_tip (tooltips, spin_mru, _("Specifies the number of files which are stored in the Recent files list."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_mru), TRUE);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_mru), TRUE);
 
   check_load_session = gtk_check_button_new_with_mnemonic (_("Load files from the last session"));
   gtk_widget_show (check_load_session);
@@ -2821,6 +2841,9 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame1, "frame1");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment2, "alignment2");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox4, "vbox4");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox2, "hbox2");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label147, "label147");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_mru, "spin_mru");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_load_session, "check_load_session");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_save_win_pos, "check_save_win_pos");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");

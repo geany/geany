@@ -551,7 +551,7 @@ void dialogs_create_recent_menu(void)
 	gint i;
 	gchar *filename;
 
-	for (i = (MIN(GEANY_RECENT_MRU_LENGTH, g_queue_get_length(app->recent_queue)) - 1); i >= 0; i--)
+	for (i = (MIN(app->mru_length, g_queue_get_length(app->recent_queue)) - 1); i >= 0; i--)
 	{
 		filename = g_queue_peek_nth(app->recent_queue, i);
 		tmp = gtk_menu_item_new_with_label(filename);
