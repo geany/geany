@@ -161,6 +161,12 @@ on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user
 					sci_cb_auto_forif(sci, idx);
 					break;
 				}
+				case '[':
+				case '{':
+				{	// Tex auto-closing
+					sci_cb_auto_close_bracket(sci, nt->ch);	// Tex auto-closing
+					break;
+				}
 				case '}':
 				{	// closing bracket handling
 					if (app->use_auto_indention) sci_cb_close_block(sci, pos - 1);
@@ -233,6 +239,21 @@ void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 		else break;
 	}
 	indent[j] = '\0';
+}
+
+
+void sci_cb_auto_close_bracket(ScintillaObject *sci, gchar c)
+{
+	if (SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_LATEX) return;
+
+	if (c == '[')
+	{
+		sci_add_text(sci, "]");
+	}
+	else if (c == '{')
+	{
+		sci_add_text(sci, "}");
+	}
 }
 
 

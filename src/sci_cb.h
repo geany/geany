@@ -56,6 +56,8 @@ void sci_cb_auto_multiline(ScintillaObject *sci, gint pos);
 
 void sci_cb_auto_table(ScintillaObject *sci, gint pos);
 
+void sci_cb_auto_close_bracket(ScintillaObject *sci, gchar c);
+
 #define sci_cb_html_entities "&nbsp; &quot; &amp; &lt; &gt;  &Uuml;&trade; &euro; &bull; &infin; &prop; &lowast;\
  &minus; &sum; &prod; &isin; &empty; &pi; &Omega; &omega; &alpha; &yuml; &yacute;\
  &divide; &oslash; &ugrave; &uacute; &ucirc; &uuml; &auml; &aring; &aelig; &ccedil;\
