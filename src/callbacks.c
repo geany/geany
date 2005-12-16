@@ -488,33 +488,6 @@ on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
 
 
 void
-on_images_and_text1_activate           (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_BOTH);
-	app->toolbar_icon_style = GTK_TOOLBAR_BOTH;
-}
-
-
-void
-on_images_only1_activate               (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_ICONS);
-	app->toolbar_icon_style = GTK_TOOLBAR_ICONS;
-}
-
-
-void
-on_text_only1_activate                 (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_TEXT);
-	app->toolbar_icon_style = GTK_TOOLBAR_TEXT;
-}
-
-
-void
 on_images_and_text2_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -1182,7 +1155,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 			}
 			break;
 		}
-/*		case GDK_Home:
+		case GDK_Home:
 		{
 			if (cursor_pos_home_state == 0 || current_line != sci_get_current_line(doc_list[idx].sci, pos))
 			{

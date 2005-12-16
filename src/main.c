@@ -103,7 +103,7 @@ void apply_settings(void)
 		app->msgwindow_visible = FALSE;
 	}
 
-	// sets the icon style of the toolbar the ugly way
+	// sets the icon style of the toolbar
 	switch (app->toolbar_icon_style)
 	{
 		case GTK_TOOLBAR_BOTH:
@@ -213,9 +213,9 @@ gint main(gint argc, gchar **argv)
 
 
 #ifdef ENABLE_NLS
-	bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
+	bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+	textdomain(GETTEXT_PACKAGE);
 #endif
 	gtk_set_locale();
 
@@ -380,7 +380,6 @@ gint main(gint argc, gchar **argv)
 	utils_close_buttons_toggle();
 	utils_save_buttons_toggle(FALSE);
 
-	gtk_widget_hide(lookup_widget(app->window, "menu_toolbar2"));
 	// this option is currently disabled, until the document menu item is reordered
 	gtk_widget_hide(lookup_widget(app->window, "set_file_readonly1"));
 

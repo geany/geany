@@ -66,18 +66,6 @@ on_toolbutton6_clicked                 (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
 
 void
-on_images_and_text1_activate           (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_images_only1_activate               (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_text_only1_activate                 (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
 on_change_font1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 

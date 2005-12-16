@@ -59,7 +59,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image450">
+			<widget class="GtkImage" id="image458">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -133,7 +133,7 @@
 		      <accelerator key="s" modifiers="GDK_CONTROL_MASK | GDK_SHIFT_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image451">
+			<widget class="GtkImage" id="image459">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -171,7 +171,7 @@
 		      <accelerator key="d" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image452">
+			<widget class="GtkImage" id="image460">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -313,7 +313,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image453">
+			<widget class="GtkImage" id="image461">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -345,7 +345,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image454">
+			<widget class="GtkImage" id="image462">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -484,7 +484,7 @@
 		      <accelerator key="F3" modifiers="0" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image455">
+			<widget class="GtkImage" id="image463">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find</property>
 			  <property name="icon_size">1</property>
@@ -505,7 +505,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image456">
+			<widget class="GtkImage" id="image464">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -555,7 +555,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image457">
+			<widget class="GtkImage" id="image465">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -577,7 +577,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image458">
+			<widget class="GtkImage" id="image466">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -636,54 +636,6 @@
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
 		      <signal name="toggled" handler="on_markers_margin1_toggled" last_modification_time="Tue, 10 May 2005 18:34:36 GMT"/>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="menu_toolbar2">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Toolbar</property>
-		      <property name="use_underline">True</property>
-
-		      <child>
-			<widget class="GtkMenu" id="menu_toolbar2_menu">
-
-			  <child>
-			    <widget class="GtkRadioMenuItem" id="images_and_text1">
-			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Show images and text in the toolbar</property>
-			      <property name="label" translatable="yes">images and text</property>
-			      <property name="use_underline">True</property>
-			      <property name="active">True</property>
-			      <signal name="activate" handler="on_images_and_text1_activate" last_modification_time="Fri, 22 Apr 2005 15:43:42 GMT"/>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkRadioMenuItem" id="images_only1">
-			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Show only the images of buttons</property>
-			      <property name="label" translatable="yes">images only</property>
-			      <property name="use_underline">True</property>
-			      <property name="active">True</property>
-			      <property name="group">images_and_text1</property>
-			      <signal name="activate" handler="on_images_only1_activate" last_modification_time="Fri, 22 Apr 2005 15:43:42 GMT"/>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkRadioMenuItem" id="text_only1">
-			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Show only the text of buttons</property>
-			      <property name="label" translatable="yes">text only</property>
-			      <property name="use_underline">True</property>
-			      <property name="active">True</property>
-			      <property name="group">images_and_text1</property>
-			      <signal name="activate" handler="on_text_only1_activate" last_modification_time="Fri, 22 Apr 2005 15:43:42 GMT"/>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
 		    </widget>
 		  </child>
 
@@ -969,7 +921,7 @@
 	<widget class="GtkToolbar" id="toolbar1">
 	  <property name="visible">True</property>
 	  <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-	  <property name="toolbar_style">GTK_TOOLBAR_ICONS</property>
+	  <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
 	  <property name="tooltips">True</property>
 	  <property name="show_arrow">True</property>
 
@@ -1113,7 +1065,7 @@
 	    <widget class="GtkToolButton" id="toolbutton24">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Open a color chooser dialog, to interactively pick colors from a palette.</property>
-	      <property name="label" translatable="yes"></property>
+	      <property name="label" translatable="yes">Color</property>
 	      <property name="use_underline">True</property>
 	      <property name="stock_id">gtk-select-color</property>
 	      <property name="visible_horizontal">True</property>
