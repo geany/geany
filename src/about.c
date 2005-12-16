@@ -31,6 +31,9 @@
 #include "support.h"
 #include "utils.h"
 
+static GtkWidget *gb_window = NULL;
+#include "gb.c"
+
 
 typedef struct _AboutPerson AboutPerson;
 struct _AboutPerson
@@ -283,6 +286,7 @@ static void about_dialog_init(AboutDialog *dialog)
 	//configure dialog
 	button = gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
+	g_signal_connect(G_OBJECT(dialog), "key-press-event", G_CALLBACK(gb_on_key_pressed), NULL);
 
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 
@@ -427,6 +431,9 @@ static void about_dialog_finalize(GObject *object)
 	g_free(priv);
 
 	G_OBJECT_CLASS(parent_class)->finalize(object);
+
+	// close gtk-bandit if open
+	if (gb_window != NULL) gb_destroyapp(gb_window, NULL);
 }
 
 
