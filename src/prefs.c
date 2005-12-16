@@ -148,8 +148,6 @@ void prefs_init_dialog(void)
 	// VTE settings
 	if (app->have_vte)
 	{
-		extern struct vte_conf *vc;
-
 		widget = lookup_widget(app->prefs_dialog, "font_term");
 		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
 
@@ -290,33 +288,35 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 #ifdef HAVE_VTE
 		// VTE settings
-		extern struct vte_conf *vc;
-		gchar *hex_color_back, *hex_color_fore;
+		if (app->have_vte)
+		{
+			gchar *hex_color_back, *hex_color_fore;
 
-		widget = lookup_widget(app->prefs_dialog, "spin_scrollback");
-		vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+			widget = lookup_widget(app->prefs_dialog, "spin_scrollback");
+			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-		widget = lookup_widget(app->prefs_dialog, "entry_emulation");
-		g_free(vc->emulation);
-		vc->emulation = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+			widget = lookup_widget(app->prefs_dialog, "entry_emulation");
+			g_free(vc->emulation);
+			vc->emulation = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(app->prefs_dialog, "check_scroll_key");
-		vc->scroll_on_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+			widget = lookup_widget(app->prefs_dialog, "check_scroll_key");
+			vc->scroll_on_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
-		vc->scroll_on_out = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+			widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
+			vc->scroll_on_out = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		g_free(app->terminal_settings);
-		hex_color_fore = utils_get_hex_from_color(vc->color_fore);
-		hex_color_back = utils_get_hex_from_color(vc->color_back);
-		app->terminal_settings = g_strdup_printf("%s;%s;%s;%d;%s;%s;%s", vc->font,
-				hex_color_fore, hex_color_back,
-				vc->scrollback_lines, vc->emulation,
-				utils_btoa(vc->scroll_on_key), utils_btoa(vc->scroll_on_out));
+			g_free(app->terminal_settings);
+			hex_color_fore = utils_get_hex_from_color(vc->color_fore);
+			hex_color_back = utils_get_hex_from_color(vc->color_back);
+			app->terminal_settings = g_strdup_printf("%s;%s;%s;%d;%s;%s;%s", vc->font,
+					hex_color_fore, hex_color_back,
+					vc->scrollback_lines, vc->emulation,
+					utils_btoa(vc->scroll_on_key), utils_btoa(vc->scroll_on_out));
 
-		vte_apply_user_settings();
-		g_free(hex_color_fore);
-		g_free(hex_color_back);
+			vte_apply_user_settings();
+			g_free(hex_color_fore);
+			g_free(hex_color_back);
+		}
 #endif
 
 
@@ -435,7 +435,6 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 		{
 #ifdef HAVE_VTE
 			// VTE settings
-			extern struct vte_conf *vc;
 			g_free(vc->font);
 			vc->font = g_strdup(gtk_font_button_get_font_name(widget));
 #endif
