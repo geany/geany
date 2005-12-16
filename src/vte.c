@@ -34,6 +34,7 @@
 #include "msgwindow.h"
 #include "support.h"
 #include "utils.h"
+#include "callbacks.h"
 
 
 extern gchar **environ;
@@ -108,6 +109,7 @@ void vte_init(void)
 
 	vte = vf->vte_terminal_new();
 	vc->vte = vte;
+	vc->menu = vte_create_popup_menu();
 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
 	GTK_WIDGET_UNSET_FLAGS(scrollbar, GTK_CAN_FOCUS);
 
@@ -120,21 +122,23 @@ void vte_init(void)
 
 	vte_get_settings();
 
-	vf->vte_terminal_set_size(VTE_TERMINAL(vte), 50, 1);
-	vf->vte_terminal_set_encoding(VTE_TERMINAL(vte), "UTF-8");
+	vf->vte_terminal_set_size(VTE_TERMINAL(vte), 30, 1);
+	//vf->vte_terminal_set_encoding(VTE_TERMINAL(vte), "UTF-8");
 	vf->vte_terminal_set_mouse_autohide(VTE_TERMINAL(vte), TRUE);
 	vf->vte_terminal_set_word_chars(VTE_TERMINAL(vte), GEANY_WORDCHARS);
 
 	g_signal_connect(G_OBJECT(vte), "child-exited", G_CALLBACK(vte_start), NULL);
 	g_signal_connect(G_OBJECT(vte), "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
 	g_signal_connect(G_OBJECT(vte), "event", G_CALLBACK(vte_keypress), NULL);
+	//g_signal_connect(G_OBJECT(vte), "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
+	//g_signal_connect(G_OBJECT(vte), "drag-drop", G_CALLBACK(vte_drag_drop), NULL);
 
 	vte_start(vte, NULL);
 
 	gtk_widget_show_all(frame);
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
 
-	gtk_widget_realize(vte); // the vte widget has to be realized before color changes take effect
+	gtk_widget_realize(vte); // the vte widget has to be realised before color changes take effect
 	vte_apply_user_settings();
 }
 
@@ -212,11 +216,7 @@ gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer u
 	}
 	else if (event->button == 3)
 	{
-		if (vf->vte_terminal_get_has_selection(VTE_TERMINAL(widget)))
-		{
-			vf->vte_terminal_copy_clipboard(VTE_TERMINAL(widget));
-			return TRUE;
-		}
+		gtk_menu_popup(GTK_MENU(vc->menu), NULL, NULL, NULL, NULL, event->button, event->time);
 	}
 
 	return FALSE;
@@ -249,8 +249,6 @@ void vte_register_symbols(GModule *mod)
 
 void vte_apply_user_settings(void)
 {
-	//vf->vte_terminal_reset(VTE_TERMINAL(vc->vte), TRUE, FALSE);
-
 	vf->vte_terminal_set_scrollback_lines(VTE_TERMINAL(vc->vte), vc->scrollback_lines);
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
@@ -265,7 +263,11 @@ void vte_get_settings(void)
 {
 	gchar **values = g_strsplit(app->terminal_settings, ";", 7);
 
-	if (g_strv_length(values) != 7) return;
+	if (g_strv_length(values) != 7)
+	{
+		app->terminal_settings = g_strdup_printf("Monospace 10;#FFFFFF;#000000;500;xterm;true;true");
+		values = g_strsplit(app->terminal_settings, ";", 7);
+	}
 	vc->font = g_strdup(values[0]);
 	vc->color_fore = g_new(GdkColor, 1);
 	vc->color_back = g_new(GdkColor, 1);
@@ -283,5 +285,94 @@ void vte_get_settings(void)
 	g_strfreev(values);
 }
 
+
+void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
+{
+	switch (GPOINTER_TO_INT(user_data))
+	{
+		case 0:
+		{
+			if (vf->vte_terminal_get_has_selection(VTE_TERMINAL(vc->vte)))
+				vf->vte_terminal_copy_clipboard(VTE_TERMINAL(vc->vte));
+			break;
+		}
+		case 1:
+		{
+			vf->vte_terminal_paste_clipboard(VTE_TERMINAL(vc->vte));
+			break;
+		}
+		case 2:
+		{
+			on_preferences1_activate(menuitem, NULL);
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(lookup_widget(app->prefs_dialog, "notebook2")), 4);
+			break;
+		}
+	}
+}
+
+
+GtkWidget *vte_create_popup_menu(void)
+{
+	GtkWidget *menu, *item;
+
+	menu = gtk_menu_new();
+
+	item = gtk_image_menu_item_new_from_stock("gtk-copy", NULL);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(0));
+
+	item = gtk_image_menu_item_new_from_stock("gtk-paste", NULL);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(1));
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	item = gtk_image_menu_item_new_from_stock("gtk-preferences", NULL);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(2));
+
+	return menu;
+}
+
+
+
+
+
+/*
+void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,
+							GtkSelectionData *data, guint info, guint time)
+{
+	geany_debug("length: %d, format: %d, action: %d", data->length, data->format, drag_context->action);
+	if ((data->length >= 0) && (data->format == 8))
+	{
+		if (drag_context->action == GDK_ACTION_ASK)
+		{
+			gint accept = TRUE;
+			// should I check the incoming data?
+			if (accept)
+				drag_context->action = GDK_ACTION_COPY;
+		}
+		gtk_drag_finish(drag_context, TRUE, FALSE, time);
+		return;
+	}
+	gtk_drag_finish(drag_context, FALSE, FALSE, time);
+}
+
+
+gboolean vte_drag_drop(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y, guint time,
+					   gpointer user_data)
+{
+
+	GdkAtom *atom;
+	gtk_drag_get_data(widget, drag_context, atom, time);
+	geany_debug("%s", GDK_ATOM_TO_POINTER(atom));
+	return TRUE;
+}
+*/
 
 #endif

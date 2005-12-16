@@ -43,6 +43,17 @@ void vte_apply_user_settings(void);
 
 void vte_get_settings(void);
 
+void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
+
+GtkWidget *vte_create_popup_menu(void);
+
+/*
+void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,
+							GtkSelectionData *data, guint info, guint time);
+
+gboolean vte_drag_drop(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y, guint time,
+					   gpointer user_data);
+*/
 
 /* taken from original vte.h to make my life easier ;-) */
 
@@ -65,6 +76,7 @@ struct _VteTerminal
 struct vte_conf
 {
 	GtkWidget *vte;	// small hack, to have always a reference to the widget
+	GtkWidget *menu;
 	gboolean scroll_on_key;
 	gboolean scroll_on_out;
 	gint scrollback_lines;
