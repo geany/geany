@@ -1,3 +1,23 @@
+2005-12-16  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c: changed "build with make" keyboard shortcut to
+                  Shift+F9 to avoid problems with window managers key
+                  bindings (thanks to Nick Treleaven for reporting)
+ * src/about.c, src/gb.c: added nice easteregg(type "geany" in the
+                          about dialog *g*)
+ * src/vte.c: added popup menu for the VTE widget
+ * bugfix: src/prefs.c: fixed crash when opening option dialog and VTE
+                        is disabled
+ * geany.glade, src/interface.c, src/main.c, src/callbacks.c:
+   removed unnecessary functions
+
+
+2005-12-13  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: added sci_cb_auto_close_bracket() to close { and [
+                 brackets in LaTex-Mode (more could be added)
+
+
 2005-12-12  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c: changed key binding to switch between open
