@@ -497,7 +497,7 @@ void dialogs_create_build_menu(void)
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the default target"), NULL);
 	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9,
-				(GdkModifierType) GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+				(GdkModifierType) GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK (on_build_make_activate), GINT_TO_POINTER(0));
 
 
