@@ -8,7 +8,7 @@ INCLUDES = \
 	-I../tagmanager/include \
 	@PACKAGE_CFLAGS@
 
-EXTRA_DIST = images.c
+EXTRA_DIST = images.c gb.c
 
 bin_PROGRAMS = geany
 
