@@ -146,36 +146,39 @@ void prefs_init_dialog(void)
 
 #ifdef HAVE_VTE
 	// VTE settings
-	extern struct vte_conf *vc;
+	if (app->have_vte)
+	{
+		extern struct vte_conf *vc;
 
-	widget = lookup_widget(app->prefs_dialog, "font_term");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
+		widget = lookup_widget(app->prefs_dialog, "font_term");
+		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
 
-	widget = lookup_widget(app->prefs_dialog, "color_fore");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->color_fore);
+		widget = lookup_widget(app->prefs_dialog, "color_fore");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->color_fore);
 
-	widget = lookup_widget(app->prefs_dialog, "color_back");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->color_back);
+		widget = lookup_widget(app->prefs_dialog, "color_back");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->color_back);
 
-	widget = lookup_widget(app->prefs_dialog, "spin_scrollback");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
+		widget = lookup_widget(app->prefs_dialog, "spin_scrollback");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
 
-	widget = lookup_widget(app->prefs_dialog, "entry_emulation");
-	gtk_entry_set_text(GTK_ENTRY(widget), vc->emulation);
+		widget = lookup_widget(app->prefs_dialog, "entry_emulation");
+		gtk_entry_set_text(GTK_ENTRY(widget), vc->emulation);
 
-	widget = lookup_widget(app->prefs_dialog, "check_scroll_key");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_key);
+		widget = lookup_widget(app->prefs_dialog, "check_scroll_key");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_key);
 
-	widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_out);
+		widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_out);
 
-	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "font_term"), TRUE);
-	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "color_fore"), TRUE);
-	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "color_back"), TRUE);
-	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "spin_scrollback"), TRUE);
-	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "entry_emulation"), TRUE);
-	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_scroll_key"), TRUE);
-	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_scroll_out"), TRUE);
+		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "font_term"), TRUE);
+		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "color_fore"), TRUE);
+		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "color_back"), TRUE);
+		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "spin_scrollback"), TRUE);
+		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "entry_emulation"), TRUE);
+		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_scroll_key"), TRUE);
+		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_scroll_out"), TRUE);
+	}
 #endif
 }
 
@@ -386,6 +389,7 @@ void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
 			app->long_line_color = utils_get_hex_from_color(&color);
 			break;
 		}
+#ifdef HAVE_VTE
 		case 2:
 		{
 			g_free(vc->color_fore);
@@ -401,6 +405,7 @@ void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
 			break;
 		}
 	}
+#endif
 }
 
 
