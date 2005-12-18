@@ -16,7 +16,6 @@ TODO List:
 	  where, is it still existent?
 	o encoding-bug in utils_convert_to_utf8()
 	o latex build menu
-	o store tag list per document instead of creating it "live"
 	o command line option -e (editor mode)
 	o BSD compatibility
 	o check for inline-usage e.g. in sciwrappers.c

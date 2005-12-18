@@ -1,3 +1,19 @@
+2005-12-18  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: changed keyboard shortcut for rebuilding the symbol
+                    list, now it is Ctrl+Shift+R, Ctrl+R is now used
+                    reload the current file
+ * src/callback.c, src/utils.c, src/document.c, src/treeviews.c,
+   src/main.c, src/geany.h:
+   made the symbol list document-oriented, so it has not to be
+   generated on every notebook switch page event
+ * src/geany.h, src/main.c, src/keyfile.c, src/callbacks.c:
+   introduced opening_session_files, to suppress notebook switch page
+   events at loading the files from the last session
+ * geany.glade, src/interface.c, src/geany.h, src/callbacks.c:
+   added new menu items: Help->Keyboard shortcuts and File->Revert
+
+
 2005-12-16  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/dialogs.c: changed "build with make" keyboard shortcut to
