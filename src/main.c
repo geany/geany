@@ -268,6 +268,7 @@ gint main(gint argc, gchar **argv)
 	app->ignore_global_tags = ignore_global_tags;
 	app->tm_workspace		= tm_get_workspace();
 	app->recent_queue		= g_queue_new();
+	app->opening_session_files	= FALSE;
 	mkdir_result = utils_make_settings_dir();
 	if (mkdir_result != 0)
 		if (! dialogs_show_mkcfgdir_error(mkdir_result)) destroyapp_early();
@@ -336,7 +337,6 @@ gint main(gint argc, gchar **argv)
 	g_signal_connect(G_OBJECT(app->window), "key-press-event", G_CALLBACK(on_window_key_press_event), NULL);
 	g_signal_connect(G_OBJECT(app->toolbar), "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
 
-	treeviews_prepare_taglist();
 	treeviews_prepare_openfiles();
 	treeviews_create_openfiles_popup_menu();
 	msgwin_prepare_status_tree_view();
@@ -354,9 +354,11 @@ gint main(gint argc, gchar **argv)
 	if (mkdir_result != 0)
 		msgwin_status_add(_("Configuration directory could not be created (%s)."), g_strerror(mkdir_result));
 
+	// apply all configuration options
 	apply_settings();
 
 	// open files from command line
+	app->opening_session_files = TRUE;
 	if (argc > 1)
 	{
 		gint i;
@@ -375,8 +377,9 @@ gint main(gint argc, gchar **argv)
 			utils_update_popup_copy_items(-1);
 			utils_update_popup_reundo_items(-1);
 		}
-
 	}
+	app->opening_session_files = FALSE;
+
 	utils_close_buttons_toggle();
 	utils_save_buttons_toggle(FALSE);
 
@@ -391,6 +394,7 @@ gint main(gint argc, gchar **argv)
 	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
 	gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 	utils_build_show_hide(idx);
+	utils_update_tag_list(idx, FALSE);
 
 	gtk_widget_show(app->window);
 

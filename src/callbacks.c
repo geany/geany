@@ -79,9 +79,9 @@ static gint search_flags_re;
 static gboolean search_backwards_re;
 
 // extending HOME and END default behaviour, to jump back to previous cursor position if pressed again
-static gint current_line = 0;
+//static gint current_line = 0;
 static gint cursor_pos_end = -1;
-static gint cursor_pos_home = 0;
+//static gint cursor_pos_home = 0;
 // state of the home key, 0 means column with first non-blank char, 1 means column 0,
 // 2 means previous position
 static gint cursor_pos_home_state = 0;
@@ -145,6 +145,11 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	if (GTK_IS_WIDGET(app->open_filesel)) gtk_widget_destroy(app->open_filesel);
 	if (GTK_IS_WIDGET(app->open_fontsel)) gtk_widget_destroy(app->open_fontsel);
 	if (GTK_IS_WIDGET(app->open_colorsel)) gtk_widget_destroy(app->open_colorsel);
+	if (GTK_IS_WIDGET(app->default_tag_tree))
+	{
+		g_object_unref(app->default_tag_tree);
+		gtk_widget_destroy(app->default_tag_tree);
+	}
 	gtk_widget_destroy(app->window);
 	if (app->have_vte) vte_close();
 
@@ -272,7 +277,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 		else
 			document_save_file(idx);
 	}
-	utils_update_visible_tag_lists(cur_idx);
+	utils_update_tag_list(cur_idx, TRUE);
 	utils_set_window_title(cur_idx);
 }
 
@@ -695,7 +700,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 	else
 		idx = document_get_n_idx(page_num);
 
-	if (idx >= 0)
+	if (idx >= 0 && app->opening_session_files == FALSE)
 	{
 		switch_notebook_page = TRUE;
 		gtk_check_menu_item_set_active(
@@ -712,7 +717,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		utils_build_show_hide(idx);
 		utils_update_statusbar(idx);
 		utils_set_window_title(idx);
-		utils_update_visible_tag_lists(idx);
+		utils_update_tag_list(idx, FALSE);
 		utils_check_disk_status(idx, FALSE);
 
 		switch_notebook_page = FALSE;
@@ -1024,11 +1029,29 @@ on_editor_key_press_event              (GtkWidget *widget,
 			break;
 		}
 		// refreshs the tag lists
-		case 'r':
+		case 'R':
 		{
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				document_update_tag_list(idx);
+				ret = TRUE;
+			}
+			break;
+		}
+		// reloads the document
+		case 'r':
+		{
+			if (event->state & GDK_CONTROL_MASK)
+			{
+				gchar *buffer = g_strdup_printf(_
+				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
+				 g_path_get_basename(doc_list[idx].file_name));
+
+				if (dialogs_show_reload_warning(buffer))
+				{
+					document_open_file(idx, NULL, 0, doc_list[idx].readonly);
+				}
+				g_free(buffer);
 				ret = TRUE;
 			}
 			break;

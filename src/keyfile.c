@@ -356,8 +356,7 @@ gboolean configuration_open_files(void)
 		}
 		g_free(session_files[i]);
 	}
-	// force update of the tag lists
-	utils_update_visible_tag_lists(document_get_cur_idx());
+
 	if (scribble_text)
 	{	// update the scribble widget, because now it's realized
 		gtk_text_buffer_set_text(
