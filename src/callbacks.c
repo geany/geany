@@ -2110,7 +2110,23 @@ on_help1_activate                      (GtkMenuItem     *menuitem,
 	gchar *uri = g_strconcat("file:///", g_path_skip_root(pwd), "/doc/index.html", NULL);
 	g_free(pwd);
 #else
-	gchar *uri = g_strconcat("file://", DOCDIR, NULL);
+	gchar *uri = g_strconcat("file://", DOCDIR, "index.html", NULL);
+#endif
+	utils_start_browser(uri);
+	g_free(uri);
+}
+
+
+void
+on_help_shortcuts1_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+#ifdef GEANY_WIN32
+	gchar *pwd = g_get_current_dir();
+	gchar *uri = g_strconcat("file:///", g_path_skip_root(pwd), "/doc/apa.html", NULL);
+	g_free(pwd);
+#else
+	gchar *uri = g_strconcat("file://", DOCDIR, "apa.html", NULL);
 #endif
 	utils_start_browser(uri);
 	g_free(uri);
@@ -2377,4 +2393,6 @@ on_file_open_selection_changed         (GtkFileChooser *chooser,
 			lookup_widget(GTK_WIDGET(chooser), "check_hidden")), is_on);
 
 }
+
+
 

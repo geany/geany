@@ -67,7 +67,7 @@
 
 
 #ifndef DOCDIR
-# define DOCDIR PACKAGE_DATA_DIR"/doc/"PACKAGE"/html/index.html"
+# define DOCDIR PACKAGE_DATA_DIR"/doc/"PACKAGE"/html/"
 #endif
 
 

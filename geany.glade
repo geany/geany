@@ -59,7 +59,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image458">
+			<widget class="GtkImage" id="image474">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -133,7 +133,7 @@
 		      <accelerator key="s" modifiers="GDK_CONTROL_MASK | GDK_SHIFT_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image459">
+			<widget class="GtkImage" id="image475">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -143,6 +143,15 @@
 			  <property name="ypad">0</property>
 			</widget>
 		      </child>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkImageMenuItem" id="revert1">
+		      <property name="visible">True</property>
+		      <property name="label">gtk-revert-to-saved</property>
+		      <property name="use_stock">True</property>
+		      <signal name="activate" handler="on_toolbutton23_clicked" last_modification_time="Sun, 18 Dec 2005 22:24:52 GMT"/>
 		    </widget>
 		  </child>
 
@@ -171,7 +180,7 @@
 		      <accelerator key="d" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image460">
+			<widget class="GtkImage" id="image476">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -313,7 +322,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image461">
+			<widget class="GtkImage" id="image477">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -345,7 +354,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image462">
+			<widget class="GtkImage" id="image478">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -484,7 +493,7 @@
 		      <accelerator key="F3" modifiers="0" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image463">
+			<widget class="GtkImage" id="image479">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find</property>
 			  <property name="icon_size">1</property>
@@ -505,7 +514,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image464">
+			<widget class="GtkImage" id="image480">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -555,7 +564,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image465">
+			<widget class="GtkImage" id="image481">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -577,7 +586,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image466">
+			<widget class="GtkImage" id="image482">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -879,6 +888,16 @@
 		      <property name="label">gtk-help</property>
 		      <property name="use_stock">True</property>
 		      <signal name="activate" handler="on_help1_activate" last_modification_time="Sun, 24 Jul 2005 15:23:11 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="keyboard_shortcuts1">
+		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Shows a list of all keyboard shortcuts for Geany.</property>
+		      <property name="label" translatable="yes">_Keyboard shortcuts</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_help_shortcuts1_activate" last_modification_time="Sun, 18 Dec 2005 22:24:52 GMT"/>
 		    </widget>
 		  </child>
 
