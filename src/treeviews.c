@@ -28,47 +28,44 @@
 #include "treeviews.h"
 
 
-/* does some preparing things to the tag list widget */
-void treeviews_prepare_taglist(void)
+/* the following two functions are document-related, but I think they fit better here than in document.c*/
+void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
-	tv.tree_taglist = lookup_widget(app->window, "treeview2");
-
-	tv.store_taglist = gtk_tree_store_new(1, G_TYPE_STRING);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Symbols"), renderer, "text", 0, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(tv.tree_taglist), column);
-	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tv.tree_taglist), FALSE);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
-	gtk_widget_modify_font(tv.tree_taglist, pango_font_description_from_string(app->tagbar_font));
-	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_taglist), GTK_TREE_MODEL(tv.store_taglist));
+	gtk_widget_modify_font(tree, pango_font_description_from_string(app->tagbar_font));
+	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 
 	// selection handling
-	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_taglist));
+	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
 	g_signal_connect(G_OBJECT(select), "changed", G_CALLBACK(on_taglist_tree_selection_changed), NULL);
 }
 
 
-void treeviews_init_tag_list(void)
+void treeviews_init_tag_list(gint idx)
 {
-	gtk_tree_store_append(tv.store_taglist, &(tv.tag_function), NULL);
-	gtk_tree_store_set(tv.store_taglist, &(tv.tag_function), 0, _("Function"), -1);
-	gtk_tree_store_append(tv.store_taglist, &(tv.tag_macro), NULL);
-	gtk_tree_store_set(tv.store_taglist, &(tv.tag_macro), 0, _("Macro"), -1);
-	gtk_tree_store_append(tv.store_taglist, &(tv.tag_member), NULL);
-	gtk_tree_store_set(tv.store_taglist, &(tv.tag_member), 0, _("Members"), -1);
-	gtk_tree_store_append(tv.store_taglist, &(tv.tag_variable), NULL);
-	gtk_tree_store_set(tv.store_taglist, &(tv.tag_variable), 0, _("Variables"), -1);
-	gtk_tree_store_append(tv.store_taglist, &(tv.tag_namespace), NULL);
-	gtk_tree_store_set(tv.store_taglist, &(tv.tag_namespace), 0, _("Namespace"), -1);
-	gtk_tree_store_append(tv.store_taglist, &(tv.tag_struct), NULL);
-	gtk_tree_store_set(tv.store_taglist, &(tv.tag_struct), 0, _("Struct / Typedef"), -1);
-	gtk_tree_store_append(tv.store_taglist, &(tv.tag_other), NULL);
-	gtk_tree_store_set(tv.store_taglist, &(tv.tag_other), 0, _("Other"), -1);
+	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
+	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Function"), -1);
+	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_macro), NULL);
+	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_macro), 0, _("Macro"), -1);
+	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_member), NULL);
+	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_member), 0, _("Members"), -1);
+	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_variable), NULL);
+	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_variable), 0, _("Variables"), -1);
+	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_namespace), NULL);
+	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Namespace"), -1);
+	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_struct), NULL);
+	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_struct), 0, _("Struct / Typedef"), -1);
+	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_other), NULL);
+	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_other), 0, _("Other"), -1);
 }
 
 

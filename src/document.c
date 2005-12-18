@@ -198,8 +198,13 @@ gint document_create_new_sci(const gchar *filename)
 	gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci), hbox, this.tabmenu_label, 0);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);
 	iter = treeviews_openfiles_add(new_idx, title);
-
 	g_free(title);
+
+	this.tag_store = NULL;
+	this.tag_tree = NULL;
+	//this.tag_tree = gtk_tree_view_new();
+	//gtk_widget_show(this.tag_tree);
+	//treeviews_prepare_taglist(this.tag_tree, this.tag_store, new_idx);
 
 	// "the" SCI signal
 	g_signal_connect((GtkWidget*) sci, "sci-notify", G_CALLBACK(on_editor_notification), GINT_TO_POINTER(new_idx));
@@ -216,7 +221,6 @@ gint document_create_new_sci(const gchar *filename)
 	this.scid = sciid;
 	this.file_name = (filename) ? g_strdup(filename) : NULL;
 	this.sci = sci;
-	//this.tab_button = but;
 	this.encoding = NULL;
 	this.tm_file = NULL;
 	this.iter = iter;
@@ -228,7 +232,7 @@ gint document_create_new_sci(const gchar *filename)
 	this.do_overwrite = FALSE;
 	this.readonly = FALSE;
 	doc_list[new_idx] = this;
-	//has_tabs = TRUE;
+
 	return new_idx;
 }
 
@@ -247,6 +251,11 @@ gboolean document_remove(gint page_num)
 		}
 		gtk_notebook_remove_page(GTK_NOTEBOOK(app->notebook), page_num);
 		treeviews_openfiles_remove(doc_list[idx].iter);
+		if (GTK_IS_WIDGET(doc_list[idx].tag_tree))
+		{
+			g_object_unref(doc_list[idx].tag_tree);
+			gtk_widget_destroy(doc_list[idx].tag_tree);
+		}
 		msgwin_status_add(_("File %s closed."),
 				(doc_list[idx].file_name) ? doc_list[idx].file_name : GEANY_STRING_UNTITLED);
 		g_free(doc_list[idx].encoding);
@@ -258,7 +267,7 @@ gboolean document_remove(gint page_num)
 		doc_list[idx].tm_file = NULL;
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
-			utils_update_visible_tag_lists(-1);
+			utils_update_tag_list(-1, FALSE);
 			//on_notebook1_switch_page(GTK_NOTEBOOK(app->notebook), NULL, 0, NULL);
 			utils_set_window_title(-1);
 			utils_save_buttons_toggle(FALSE);
@@ -285,7 +294,7 @@ void document_new_file(filetype *ft)
 		document_set_filetype(idx, (ft) ? ft : filetypes[GEANY_FILETYPES_ALL]);
 		utils_set_window_title(idx);
 		utils_build_show_hide(idx);
-		//utils_update_visible_tag_lists(idx);
+		//utils_update_tag_list(idx, FALSE);
 		doc_list[idx].mtime = time(NULL);
 		doc_list[idx].changed = FALSE;
 		document_set_text_changed(idx);
@@ -442,7 +451,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 				filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
 				(readonly) ? _(", read-only") : "");
 	}
-	//document_update_tag_list(idx);
+	//utils_update_tag_list(idx, FALSE);
 	document_set_text_changed(idx);
 
 #ifdef GEANY_WIN32
@@ -748,13 +757,13 @@ void document_update_tag_list(gint idx)
 		// parse the file after setting the filetype
 		TM_SOURCE_FILE(doc_list[idx].tm_file)->lang = getNamedLanguage((doc_list[idx].file_type)->name);
 		tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
-		utils_update_visible_tag_lists(idx);
+		utils_update_tag_list(idx, TRUE);
 	}
 	else
 	{
 		if (tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE))
 		{
-			utils_update_visible_tag_lists(idx);
+			utils_update_tag_list(idx, TRUE);
 		}
 		else
 		{

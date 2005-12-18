@@ -28,10 +28,9 @@
 
 
 typedef struct treeviews {
-	//GtkListStore	*store_taglist;
-	GtkTreeStore	*store_taglist;
+	//GtkTreeStore	*store_taglist;
 	GtkListStore	*store_openfiles;
-	GtkWidget		*tree_taglist;
+	//GtkWidget		*tree_taglist;
 	GtkWidget		*tree_openfiles;
 	GtkWidget		*popup_openfiles;
 	GtkTreeIter		 tag_function;
@@ -47,11 +46,11 @@ treeviews tv;
 
 
 
-void treeviews_prepare_taglist(void);
+void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store);
 
 gint treeviews_sort_tag_list(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
 
-void treeviews_init_tag_list(void);
+void treeviews_init_tag_list(gint idx);
 
 void treeviews_prepare_openfiles(void);
 

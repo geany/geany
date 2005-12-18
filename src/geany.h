@@ -81,6 +81,8 @@ typedef struct document
 	ScintillaObject	*sci;
 	GtkWidget		*tab_label;
 	GtkWidget		*tabmenu_label;
+	GtkWidget		*tag_tree;
+	GtkTreeStore	*tag_store;
 	GtkTreeIter		 iter;
 	gint 			 scid;
 	gboolean		 readonly;
@@ -103,6 +105,8 @@ typedef struct MyApp
 	gint			 	 toolbar_icon_style;
 	gint				 geometry[4];
 	gboolean			 debug_mode;
+	// represents the state at startup while opening session files
+	gboolean			 opening_session_files;
 	gboolean			 have_vte;
 	gboolean			 ignore_global_tags;
 	gboolean			 toolbar_visible;
@@ -184,6 +188,8 @@ typedef struct MyApp
 	GtkWidget			*find_dialog;
 	GtkWidget			*replace_dialog;
 	GtkWidget			*build_menu_item_link;
+	GtkWidget			*default_tag_tree;
+	//GtkTreeStore		*default_tag_store;
 	const TMWorkspace	*tm_workspace;
 	GQueue				*recent_queue;
 } MyApp;
@@ -226,7 +232,6 @@ enum
 	LEFT,
 	RIGHT
 };
-
 
 // prototype from tagmanager/parse.h, used in document.c, ugly but it works
 extern langType getNamedLanguage(const char *const name);

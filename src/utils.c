@@ -655,45 +655,59 @@ void utils_set_fullscreen(void)
 }
 
 
-void utils_update_visible_tag_lists(gint idx)
+void utils_update_tag_list(gint idx, gboolean update)
 {
 	GList *tmp;
 	const GList *tags;
 
+	if (gtk_bin_get_child(GTK_BIN(app->tagbar)))
+		gtk_container_remove(GTK_CONTAINER(app->tagbar), gtk_bin_get_child(GTK_BIN(app->tagbar)));
+
+	if (app->default_tag_tree == NULL)
+	{
+		GtkTreeIter iter;
+		GtkTreeStore *store = gtk_tree_store_new(1, G_TYPE_STRING);
+		app->default_tag_tree = gtk_tree_view_new();
+		treeviews_prepare_taglist(app->default_tag_tree, store);
+		gtk_tree_store_append(store, &iter, NULL);
+		gtk_tree_store_set(store, &iter, 0, _("No tags found"), -1);
+		gtk_widget_show(app->default_tag_tree);
+		g_object_ref((gpointer)app->default_tag_tree);	// to hold it after removing
+	}
+
 	// make all inactive, because there is no more tab left, or something strange occured
-	if (idx == -1 && app->treeview_symbol_visible)
-	{
-		GtkTreeIter iter;
-		gtk_tree_store_clear(tv.store_taglist);
-		gtk_tree_store_append(tv.store_taglist, &iter, NULL);
-		gtk_tree_store_set(tv.store_taglist, &iter, 0, _("No tags found"), -1);
-		gtk_widget_set_sensitive(app->tagbar, FALSE);
-		return;
-	}
-
-	if (! doc_list[idx].file_type->has_tags)
+	if (idx == -1 || ! app->treeview_symbol_visible || ! doc_list[idx].file_type->has_tags)
 	{
 		gtk_widget_set_sensitive(app->tagbar, FALSE);
+		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
 		return;
 	}
+	//geany_debug("before %d", update);
 
-	// updating the tag list in the left tag window if visisble
-	if (app->treeview_symbol_visible)
-	{
-		GtkTreeIter iter;
+	if (update)
+	{	// updating the tag list in the left tag window
+		if (doc_list[idx].tag_tree == NULL)
+		{
+			doc_list[idx].tag_store = gtk_tree_store_new(1, G_TYPE_STRING);
+			doc_list[idx].tag_tree = gtk_tree_view_new();
+			treeviews_prepare_taglist(doc_list[idx].tag_tree, doc_list[idx].tag_store);
+			gtk_widget_show(doc_list[idx].tag_tree);
+			g_object_ref((gpointer)doc_list[idx].tag_tree);	// to hold it after removing
+		}
 
 		tags = utils_get_tag_list(idx, tm_tag_max_t);
-		gtk_tree_store_clear(tv.store_taglist);
-
-		if (doc_list[idx].tm_file && tags)
+		if (doc_list[idx].tm_file != NULL && tags != NULL)
 		{
+			GtkTreeIter iter;
 			GtkTreeModel *model;
-			gtk_widget_set_sensitive(app->tagbar, TRUE);
+
+			gtk_tree_store_clear(doc_list[idx].tag_store);
 			// unref the store to speed up the filling(from TreeView Tutorial)
-			model = gtk_tree_view_get_model(GTK_TREE_VIEW(tv.tree_taglist));
+			model = gtk_tree_view_get_model(GTK_TREE_VIEW(doc_list[idx].tag_tree));
 			g_object_ref(model); // Make sure the model stays with us after the tree view unrefs it
-			gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_taglist), NULL); // Detach model from view
-			treeviews_init_tag_list();
+			gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), NULL); // Detach model from view
+
+			treeviews_init_tag_list(idx);
 			for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
 			{
 				switch (((GeanySymbol*)tmp->data)->type)
@@ -701,59 +715,70 @@ void utils_update_visible_tag_lists(gint idx)
 					case tm_tag_prototype_t:
 					case tm_tag_function_t:
 					{
-						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_function));
-						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_function));
+						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					case tm_tag_macro_t:
 					case tm_tag_macro_with_arg_t:
 					{
-						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_macro));
-						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_macro));
+						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					case tm_tag_member_t:
 					{
-						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_member));
-						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_member));
+						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					case tm_tag_typedef_t:
 					case tm_tag_struct_t:
 					{
-						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_struct));
-						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_struct));
+						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					case tm_tag_variable_t:
 					{
-						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_variable));
-						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_variable));
+						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					case tm_tag_namespace_t:
 					{
-						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_namespace));
-						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_namespace));
+						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					default:
 					{
-						gtk_tree_store_append(tv.store_taglist, &iter, &(tv.tag_other));
-						gtk_tree_store_set(tv.store_taglist, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_other));
+						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 					}
 				}
 			}
-			gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_taglist), model); // Re-attach model to view
+			gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), model); // Re-attach model to view
 			g_object_unref(model);
+			gtk_tree_view_expand_all(GTK_TREE_VIEW(doc_list[idx].tag_tree));
+
+			gtk_widget_set_sensitive(app->tagbar, TRUE);
+			gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
+			/// TODO why I have to do this here?
+			g_object_ref((gpointer)doc_list[idx].tag_tree);
 		}
 		else
-		{
-			gtk_tree_store_append(tv.store_taglist, &iter, NULL);
-			gtk_tree_store_set(tv.store_taglist, &iter, 0, _("No tags found"), -1);
+		{	// tags == NULL
 			gtk_widget_set_sensitive(app->tagbar, FALSE);
+			gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
 		}
 	}
+	else
+	{	// update == FALSE
+		gtk_widget_set_sensitive(app->tagbar, TRUE);
+		gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
+	}
+
 }
 
 
@@ -971,7 +996,7 @@ gboolean utils_check_disk_status(gint idx, const gboolean force)
 	{
 		if (force)
 		{
-			document_open_file(idx, NULL, 0, FALSE);
+			document_open_file(idx, NULL, 0, doc_list[idx].readonly);
 		}
 		else
 		{
@@ -982,7 +1007,7 @@ gboolean utils_check_disk_status(gint idx, const gboolean force)
 
 			if (dialogs_show_reload_warning(buff))
 			{
-				document_open_file(idx, NULL, 0, FALSE);
+				document_open_file(idx, NULL, 0, doc_list[idx].readonly);
 				doc_list[idx].last_check = t;
 			}
 			else

@@ -85,7 +85,7 @@ void utils_set_fullscreen(void);
 
 GtkFileFilter *utils_create_file_filter(filetype *ft);
 
-void utils_update_visible_tag_lists(gint idx);
+void utils_update_tag_list(gint idx, gboolean update);
 
 gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding);
 
