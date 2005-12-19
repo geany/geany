@@ -32,7 +32,8 @@ unsigned short iconset;
 GtkWidget *image1, *image2, *image3, *image4, *label1, *label2, *label3, *okbutton1, *textview1;
 gchar info_texts[4][50];
 gchar *help_text;
-static gint random_fd = -1;
+gint random_fd;
+gboolean is_running;
 static GdkPixbuf **icons;
 
 gint gb_destroyapp (GtkWidget *widget, gpointer gdata);
@@ -195,7 +196,7 @@ gint destroydialog(GtkWidget *widget)
 void initialize_random_numbers(void)
 {
 #ifdef __unix__
-	random_fd = open("/dev/random", O_NONBLOCK | O_RDONLY);
+	random_fd = open("/dev/urandom", O_NONBLOCK | O_RDONLY);
 #endif
     srand(time(NULL) * getpid());
 }
@@ -252,6 +253,8 @@ void on_button1_clicked(GtkButton *button, gpointer user_data)
 {
     unsigned short erg_a, erg_b, erg_c, i, l, m, n, loops;
 
+	if (is_running) return;	// Mehrfach-Klicks verhindern
+	is_running = TRUE;
 	// Button-Image wechseln
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image4), icons[IMAGE_BUTTON_DOWN]);
 
@@ -300,6 +303,7 @@ void on_button1_clicked(GtkButton *button, gpointer user_data)
 
 	// Button-Image wechseln
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image4), icons[IMAGE_BUTTON_UP]);
+	is_running = FALSE;
 
 }
 
@@ -1230,7 +1234,9 @@ void init_images(void)
 // zentrale exit-Funktion
 gint gb_destroyapp(GtkWidget *widget, gpointer gdata)
 {
+	if (is_running) return 0;
 	if (GTK_IS_WINDOW(gb_window)) gtk_widget_destroy(gb_window);
+	if (random_fd != -1) close(random_fd);
 	gb_window = NULL;
 	return (FALSE);
 }
@@ -1238,6 +1244,7 @@ gint gb_destroyapp(GtkWidget *widget, gpointer gdata)
 
 void gb_start_easteregg(void)
 {
+	random_fd = -1;
 	load_images();
 	create_window();
 	gtk_signal_connect(GTK_OBJECT(gb_window), "delete_event", GTK_SIGNAL_FUNC(gb_destroyapp), NULL);
