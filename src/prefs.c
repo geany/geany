@@ -404,8 +404,8 @@ void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
 			gtk_color_button_get_color(widget, vc->color_back);
 			break;
 		}
-	}
 #endif
+	}
 }
 
 
@@ -431,15 +431,15 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			app->editor_font = g_strdup(gtk_font_button_get_font_name(widget));
 			break;
 		}
+#ifdef HAVE_VTE
 		case 4:
 		{
-#ifdef HAVE_VTE
 			// VTE settings
 			g_free(vc->font);
 			vc->font = g_strdup(gtk_font_button_get_font_name(widget));
-#endif
 			break;
 		}
+#endif
 	}
 }
 
