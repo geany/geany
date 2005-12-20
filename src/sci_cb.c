@@ -158,13 +158,13 @@ on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user
 				}
 				case ' ':
 				{	// if and for autocompletion
-					sci_cb_auto_forif(sci, idx);
+					if (app->auto_complete_constructs) sci_cb_auto_forif(sci, idx);
 					break;
 				}
 				case '[':
 				case '{':
 				{	// Tex auto-closing
-					sci_cb_auto_close_bracket(sci, nt->ch);	// Tex auto-closing
+					sci_cb_auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
 					break;
 				}
 				case '}':
@@ -242,7 +242,7 @@ void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 }
 
 
-void sci_cb_auto_close_bracket(ScintillaObject *sci, gchar c)
+void sci_cb_auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
 {
 	if (SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_LATEX) return;
 
@@ -254,6 +254,7 @@ void sci_cb_auto_close_bracket(ScintillaObject *sci, gchar c)
 	{
 		sci_add_text(sci, "}");
 	}
+	sci_set_current_position(sci, pos);
 }
 
 
@@ -407,8 +408,6 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint idx)
 	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 	//gint line = sci_get_line_from_position(sci, pos);
 	//gint start_style = SSM(sci, SCI_GETSTYLEAT, sci_get_position_from_line(sci, line), 0);
-
-	if (! app->auto_complete_constructs) return;
 
 	// only for C, C++, Java, Perl and PHP
 	if (lexer != SCLEX_CPP &&
