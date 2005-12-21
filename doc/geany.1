@@ -11,8 +11,12 @@ features are: syntax highlighting, code completion, many filetypes, symbol lists
  
 .SH "OPTIONS" 
 .IP "\fB-n\fP           \fB\-\-no-ctags\fP         " 10 
-Don't load auto completion and call tip data at startup. Use this option, if you want geany to use 
-as an simple editor without code completion or to speed up program execution. 
+Don't load auto completion and call tip data. Use this option, if you don't want to use them. 
+For more information see documentation. 
+.IP "\fB-t\fP           \fB\-\-no-terminal\fP         " 10 
+Don't load terminal support. Use this option, if you don't want to load the virtual terminal 
+emulator widget at startup. If you don't have libvte.so.4 installed, then terminal-support is 
+automatically disabled. 
 .IP "\fB-c\fP           \fB\-\-config\fP         " 10 
 Use an alternate configuration directory. Default configuration directory is 
 ~/.geany/ and there resides geany.conf and some template files. 
@@ -37,4 +41,4 @@ later version published by the Free Software Foundation.
 On Debian systems, the complete text of the GNU General Public 
 License can be found in /usr/share/common-licenses/GPL. 
  
-.\" created by instant / docbook-to-man, Fri 14 Oct 2005, 15:43 
+.\" created by instant / docbook-to-man, Wed 21 Dec 2005, 19:35 

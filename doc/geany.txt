@@ -1,5 +1,5 @@
 
-Geany 0.3
+Geany 0.4
 
 Enrico Troeger
 
@@ -29,15 +29,22 @@ Enrico Troeger
               2.3.1. Fedora
               2.3.2. Debian
               2.3.3. SuSE
-              2.3.4. Fedora
 
    3. Usage
 
         3.1. Getting Started
         3.2. Commandline options
         3.3. General
+
+              3.3.1. Startup
+              3.3.2. Global C tags
+              3.3.3. Virtual terminal emulator widget (VTE)
+
         3.4. Search and Replace
         3.5. Preferences
+
+              3.5.1. Compile time options
+
         3.6. File types
         3.7. Templates
 
@@ -70,7 +77,8 @@ Enrico Troeger
    List of Tables
    3-1. Commandline Options
    3-2. Regular expressions
-   3-3. Template wildcards
+   3-3. Compile time options
+   3-4. Template wildcards
    A-1. Key Table
 
    List of Figures
@@ -79,6 +87,7 @@ Enrico Troeger
    3-3. Editor tab in preferences dialog
    3-4. Tools tab in preferences dialog
    3-5. Template tab in preferences dialog
+   3-6. VTE tab in preferences dialog
      _________________________________________________________
 
 Chapter 1. Introduction
@@ -146,6 +155,17 @@ Chapter 2. Installation
    detailed list, type
                                         % ./configure --help
 
+   In the case, that your system lacks dynamic linking loader
+   support, you probably want to pass the option --disable-vte to
+   the configure script. This prevents compiling Geany with
+   dynamic linking loader support to automatically load
+   libvte.so.4 if available.
+
+   Geany has been successfully compiled and tested under Debian
+   3.1 Sarge, Debian 3.2 Etch, Fedora Core 4, LinuxFromScratch
+   and FreeBSD 6.0. It also compiles under Mircosoft Windows(TM),
+   but there are lots of changes to the makefiles necessary.
+
    If there are any errors during compilation, check your build
    environment and try to find the error, otherwise contact the
    author at <enrico.troeger@uvena.de>.
@@ -155,27 +175,25 @@ Chapter 2. Installation
 
 2.3.1. Fedora
 
-   There are not yet packages for Fedora available.
+   You can find packages for Fedora Core 4 on
+   http://geany.uvena.de/ in the download section.
      _________________________________________________________
 
 2.3.2. Debian
 
-   At the moment, there is only a binary package for Debian Sarge
-   (stable). It is available at http://debian.uvena.de/. You can
-   add the following line to your apt sources.list to get
-   automatically get the latest version of Geany:
+   Binary packages for Debian are available at
+   http://debian.uvena.de/. You can add one of the following
+   lines(depending on your system) to your apt sources.list to
+   get automatically get the latest version of Geany:
 
-   deb http://debian.uvena.de/ ./
+   deb http://debian.uvena.de/ ./stable/
+
+   deb http://debian.uvena.de/ ./testing/
      _________________________________________________________
 
 2.3.3. SuSE
 
    There are not yet packages for SuSE available.
-     _________________________________________________________
-
-2.3.4. Fedora
-
-   There are not yet packages for Fedora available.
      _________________________________________________________
 
 Chapter 3. Usage
@@ -197,9 +215,13 @@ Chapter 3. Usage
 
    Table 3-1. Commandline Options
    Short option Long option Function
-   -n --no-ctags Don't load auto completion and call tip data.
-   Use this option, if you don't want to use them. For more
-   information see Section 3.3.
+   -n --no-ctags Do not load auto completion and call tip data.
+   Use this option, if you do not want to use them. For more
+   information see Section 3.3.2.
+   -t --no-terminal Do not load terminal support. Use this
+   option, if you do not want to load the virtual terminal
+   emulator widget at startup. If you do not have libvte.so.4
+   installed, then terminal-support is automatically disabled.
    -c directory_name --config=directory_name Use an alternate
    configuration directory. Default configuration directory is
    ~/.geany/ and there resides geany.conf and some template
@@ -217,13 +239,21 @@ Chapter 3. Usage
 
 3.3. General
 
+3.3.1. Startup
+
    At startup, Geany loads the 15 first files from the last time,
    Geany was launched. You can disable this feature in the
-   settings dialog(see Figure 3-2). If you specify some files on
-   the commandline, only these files will be opened. But you can
-   find the files from the last session in the file menu. There
-   is an item "Recent files". It contains the last 15 recently
-   opened files.
+   preferences dialog(see Figure 3-2). If you specify some files
+   on the commandline, only these files will be opened. But you
+   can find the files from the last session in the file menu.
+   There is an item "Recent files". It contains the last 15
+   recently opened files. It may be that Geany not exactly loads
+   15 files, this depends on the compile time option
+   GEANY_SESSION_FILES, the default is 15. For details see
+   Section 3.5.1.
+     _________________________________________________________
+
+3.3.2. Global C tags
 
    If a C file(with extension is c, cpp, h, etc.) is opened, a
    global tags file is loaded once, which contains many function
@@ -231,9 +261,46 @@ Chapter 3. Usage
    Bonobo, Gnome, GTK, Glib and so on. These declarations are
    used for call tips and auto completion. These tags are only
    useful if you are writing C or C++ source code. So if you
-   know, that you don't need these things, you can skip loading
+   know, that you do not need these things, you can skip loading
    this tag file. To do so, start Geany with the argument "-n" or
    "--no-ctags", for more information see Section 3.2.
+     _________________________________________________________
+
+3.3.3. Virtual terminal emulator widget (VTE)
+
+   If you have installed libvte.so in your system, it is loaded
+   automatically by Geany. Then you have a terminal widget in the
+   notebook at the bottom.
+
+   If Geany cannot find libvte.so at startup, the terminal widget
+   will not be loaded. So there is no need to install the package
+   containing this file in order to run Geany. Additionally, you
+   can disable the use of the terminal widget by commandline
+   option, for more information see Section 3.2.
+
+   You can use this terminal (from now on called VTE) nearly as
+   an usual terminal program like xterm. There is a basic
+   clipboard support. You can paste the content of the clipboard
+   by pressing the middle mouse button in the VTE (on 2-button
+   mice, the middle button can often be simulated by pressing
+   both mouse buttons together) or by pressing the right mouse
+   button to open the popup menu and choose Paste. To copy text
+   from the VTE, just select the desired text and then press the
+   right mouse button and choose Copy from the popup menu.
+
+   Note
+
+   Geany tries to load libvte.so. If this fails, it tries to load
+   libvte.so.4. If this fails too, you should check whether you
+   installed libvte correctly. Again, Geany runs also without
+   this library. But it could be, that the library is called
+   something else than libvte.so.4 (e.g. on FreeBSD 6.0 it is
+   called libvte.so.8). So please set a link to the correct file
+   (as root).
+# ln -s /usr/lib/libvte.so.X /usr/lib/libvte.so.4
+
+   Obviously, you have to adjust the paths and set X to the
+   number of your libvte.so.
      _________________________________________________________
 
 3.4. Search and Replace
@@ -295,6 +362,33 @@ Chapter 3. Usage
    Figure 3-5. Template tab in preferences dialog
 
    [pref_dialog_templ.jpg]
+
+   Figure 3-6. VTE tab in preferences dialog
+
+   [pref_dialog_vte.jpg]
+     _________________________________________________________
+
+3.5.1. Compile time options
+
+   There are some options which can only changed at compile time.
+   To change these options, look into src/geany.h to change these
+   settings. To find it, look for a block of lines starting with
+   "#define GEANY_*".
+
+   Table 3-3. Compile time options
+   Option Description Default
+   GEANY_MAX_OPEN_FILES The limit how many files can be open at
+   the same time. 25
+   GEANY_SESSION_FILES How many files should be reopened from the
+   last run. Obviously, the value should be smaller than
+   GEANY_MAX_OPEN_FILES. 15
+   GEANY_WORDCHARS These characters define the word boundaries.
+   (look at sourcecode)
+   GEANY_MAX_AUTOCOMPLETE_WORDS How many auto complete
+   suggestions should Geany provide. 30
+   GEANY_STRING_UNTITLED A string used as name for new files. Be
+   aware that the string can be translated, so change it only if
+   you know what you are doing. untitled
      _________________________________________________________
 
 3.6. File types
@@ -346,7 +440,7 @@ Chapter 3. Usage
    next releases. Sorry.
 
 
-   Table 3-3. Template wildcards
+   Table 3-4. Template wildcards
    Wildcard Description Available in following templates
    developer The name of the developer. filetypes, file header,
    function description, ChangeLog entry
@@ -391,6 +485,8 @@ A.1. Geany key mapping
    Ctrl-N Create new file
    Ctrl-O Open file
    Ctrl-S Save current file
+   Ctrl-R Reload the current file. All unsaved changes will be
+   lost.
    Ctrl-Shift-S Save all open files
    Ctrl-W Close current file
    Alt-D Close all open files
@@ -412,22 +508,25 @@ A.1. Geany key mapping
    Shift-Space Insert just a blank. Useful after typing if or
    while, to explicitly suppress the use of construct auto
    completion
-   Ctrl-R Reload the tag/symbol list
+   Ctrl-Shift-R Reload the tag/symbol list
    Finding text
    Ctrl-F Open find dialog
    F3 Find next
    Building files
-   F8 Compile the current file
-   F9 Build the current file
-   Ctrl-F9 Build the current file with the make tool
-   F5 Execute the current file in a terminal emulation
+   F8 Compile the current file.
+   F9 Build the current file.
+   Shift-F9 Build the current file with the make tool.
+   F5 Execute the current file in a terminal emulation.
    Miscellaneous
-   Ctrl-LEFT Switch to the previous open document
-   Ctrl-RIGHT Switch to the next open document
+   Ctrl-Left Moves the cursor to the left word boundary.
+   Ctrl-Right Moves the cursor to the next word.
+   Alt-Left Switch to the previous open document
+   Alt-Right Switch to the next open document
    Ctrl-+ Zoom in the text
    Ctrl-- Zoom out the text
    Ctrl-P Open preferences dialog
    F1 Show help
+   F6 Switch to VTE widget
    F11 Switch to fullscreen mode
    F12 Switch to Scribble widget
    Ctrl-Q Quit
