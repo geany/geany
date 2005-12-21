@@ -1,4 +1,22 @@
-Geany 0.3 (November 20 2005)
+Geany 0.4 (December 21, 2005)
+
+        * new filetype: Assembler
+        * new filetype: Conf for configuration files
+        * added a terminal emulation widget, needs only libvte.so at
+           runtime, but it also runs without it, see dokumentation
+        * made some general improvements to increase startup speed
+        * changed "build with make" keyboard shortcut to Shift+F9 to
+          avoid problems with window managers key bindings
+        * added auto-closing [ and { brackets in LaTex-Mode
+        * improved documentation, but it is not yet complete
+        * improved the symbol list to categorise the tags in a tree
+        * some new options in the preferences dialog
+        * added popup menu to the list of open files
+        * there are lots of other small changes made since last release
+        * some bugfixes (please see ChangeLog for details)
+
+
+Geany 0.3 (November 20, 2005)
 
         * Geany now has a mailing list, for details see
           http://geany.uvena.de
@@ -18,7 +36,7 @@ Geany 0.3 (November 20 2005)
         * many minor bugfixes (see ChangeLog for details)
 
 
-Geany 0.2 (October 26 2005)
+Geany 0.2 (October 26, 2005)
 
         * improved file open dialog
         * improved Find dialog
@@ -27,7 +45,7 @@ Geany 0.2 (October 26 2005)
         * minor bugfixes
 
 
-Geany 0.1 (October 19 2005)
+Geany 0.1 (October 19, 2005)
 
         * first official release
 
