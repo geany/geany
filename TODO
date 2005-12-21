@@ -17,8 +17,10 @@ TODO List:
 	o encoding-bug in utils_convert_to_utf8()
 	o latex build menu
 	o command line option -e (editor mode)
-	o BSD compatibility
 	o check for inline-usage e.g. in sciwrappers.c
+	o change GTK color and file open dialogs under win32
+	o make multiline indentation more intelligent
+	o add setting for beep after compiling, make it optional
 	o (indent wrapped lines, but how?)
 	o (project management)
 	o (folding)

@@ -1,3 +1,11 @@
+2005-12-19  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/gb.c: several improvements and bugfixes
+ * src/prefs.c, src/callbacks.c: improved HAVE_VTE handling
+ * src/sci_cb.c: set cursor position between brackets in
+                 sci_cb_auto_close_bracket()
+
+
 2005-12-18  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c: changed keyboard shortcut for rebuilding the symbol
@@ -19,7 +27,7 @@
  * src/dialogs.c: changed "build with make" keyboard shortcut to
                   Shift+F9 to avoid problems with window managers key
                   bindings (thanks to Nick Treleaven for reporting)
- * src/about.c, src/gb.c: added nice easteregg(type "geany" in the
+ * src/about.c, src/gb.c: added a nice easteregg(type "geany" in the
                           about dialog *g*)
  * src/vte.c: added popup menu for the VTE widget
  * bugfix: src/prefs.c: fixed crash when opening option dialog and VTE
