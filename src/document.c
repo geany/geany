@@ -294,7 +294,7 @@ void document_new_file(filetype *ft)
 		document_set_filetype(idx, (ft) ? ft : filetypes[GEANY_FILETYPES_ALL]);
 		utils_set_window_title(idx);
 		utils_build_show_hide(idx);
-		//utils_update_tag_list(idx, FALSE);
+		utils_update_tag_list(idx, FALSE);
 		doc_list[idx].mtime = time(NULL);
 		doc_list[idx].changed = FALSE;
 		document_set_text_changed(idx);
@@ -461,8 +461,9 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	munmap(map, st.st_size);
 #endif
 
-	// finally add current file to recent files menu
-	if (g_queue_find_custom(app->recent_queue, filename, (GCompareFunc) strcmp) == NULL)
+	// finally add current file to recent files menu, but not the files from the last session
+	if (! app->opening_session_files &&
+		g_queue_find_custom(app->recent_queue, filename, (GCompareFunc) strcmp) == NULL)
 	{
 		g_queue_push_head(app->recent_queue, g_strdup(filename));
 		if (g_queue_get_length(app->recent_queue) > app->mru_length)
