@@ -91,7 +91,9 @@ void vte_init(void)
 {
 
 	GtkWidget *vte, *scrollbar, *hbox, *frame;
-	module = g_module_open("libvte.so.4", G_MODULE_BIND_LAZY);
+	module = g_module_open("libvte.so", G_MODULE_BIND_LAZY);
+	// try to fallback to libvte.so.4, if it is installed
+	if (module == NULL) module = g_module_open("libvte.so.4", G_MODULE_BIND_LAZY);
 
 	if (module == NULL || app->have_vte == FALSE)
 	{
