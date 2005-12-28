@@ -79,7 +79,7 @@ void geany_debug(gchar const *format, ...)
 
 
 /* special things for the initial setup of the checkboxes and related stuff
- * an action on a setting is only performed if the setting is unequal to the program default
+ * an action on a setting is only performed if the setting is not equal to the program default
  * (all the following code is not perfect but it works for the moment) */
 void apply_settings(void)
 {
@@ -90,19 +90,7 @@ void apply_settings(void)
 		gtk_widget_hide(app->toolbar);
 		app->toolbar_visible = FALSE;
 	}
-	if (! app->treeview_symbol_visible)
-	{
-		//gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_symbol_window1")), FALSE);
-		gtk_widget_hide(app->treeview_notebook);
-		app->treeview_symbol_visible = FALSE;
-	}
-	if (! app->msgwindow_visible)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1")), FALSE);
-		gtk_container_remove(GTK_CONTAINER(lookup_widget(app->window, "vpaned1")), lookup_widget(app->window, "scrolledwindow1"));
-		app->msgwindow_visible = FALSE;
-	}
-
+	utils_treeviews_showhide();
 	// sets the icon style of the toolbar
 	switch (app->toolbar_icon_style)
 	{
@@ -259,6 +247,7 @@ gint main(gint argc, gchar **argv)
 	app->save_filesel		= NULL;
 	app->prefs_dialog		= NULL;
 	app->find_dialog		= NULL;
+	app->default_tag_tree	= NULL;
 	app->main_window_realized= FALSE;
 #ifdef HAVE_VTE
 	app->have_vte 			= ! no_vte;

@@ -324,17 +324,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		utils_widget_show_hide(lookup_widget(app->window, "entry1"), app->pref_main_show_search);
 		utils_widget_show_hide(lookup_widget(app->window, "toolbutton18"), app->pref_main_show_search);
 		utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), app->pref_main_show_search);
-
-		utils_widget_show_hide(gtk_notebook_get_nth_page(
-						GTK_NOTEBOOK(app->treeview_notebook), 0), app->treeview_symbol_visible);
-		utils_widget_show_hide(gtk_notebook_get_nth_page(
-						GTK_NOTEBOOK(app->treeview_notebook), 1), app->treeview_openfiles_visible);
-		// hide complete notebook if both pages are hidden
-		if ((! app->treeview_symbol_visible) && (! app->treeview_openfiles_visible))
-			gtk_widget_hide(app->treeview_notebook);
-		else
-			gtk_widget_show(app->treeview_notebook);
-
+		utils_treeviews_showhide();
 		gtk_widget_modify_font(lookup_widget(app->window, "treeview2"),
 				pango_font_description_from_string(app->tagbar_font));
 		gtk_widget_modify_font(lookup_widget(app->window, "entry1"), pango_font_description_from_string(app->tagbar_font));
