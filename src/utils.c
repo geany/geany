@@ -1627,6 +1627,9 @@ For more information read the documentation (in " DOCDIR " or visit " GEANY_HOME
 }
 
 
+/* replaces all occurrences of needle in haystack with replacement
+ * all strings have to NULL-terminated and needle and replacement have to be different,
+ * e.g. needle "%" and replacement "%%" causes an endless loop */
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement)
 {
 	gint i;
@@ -1640,7 +1643,7 @@ gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *repl
 	start = strstr(haystack, needle);
 	lt_pos = utils_strpos(haystack, needle);
 
-	if (start == NULL) return haystack;
+	if (start == NULL || lt_pos == -1) return haystack;
 
 	// substitute by copying
 	str = g_string_sized_new(strlen(haystack));
@@ -1658,7 +1661,7 @@ gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *repl
 }
 
 
-gint utils_strpos(const gchar* haystack, const gchar * needle)
+gint utils_strpos(const gchar *haystack, const gchar *needle)
 {
 	gint haystack_length = strlen(haystack);
 	gint needle_length = strlen(needle);
@@ -1672,15 +1675,14 @@ gint utils_strpos(const gchar* haystack, const gchar * needle)
 	{
 		for (i = 0; (i < haystack_length) && pos == -1; i++)
 		{
-			if (haystack[i] == needle[0])
+			if (haystack[i] == needle[0] && needle_length == 1)	return i;
+			else if (haystack[i] == needle[0])
 			{
-				//printf("aussen: i: %d, test: %c == %c pos: %d\n",i,haystack[i],needle[0], pos);
 				for (j = 1; (j < needle_length); j++)
 				{
 					if (haystack[i+j] == needle[j])
 					{
 						if (pos == -1) pos = i;
-						//printf("innen: i: %d, j: %d test: %c == %c pos: %d\n",i,j,haystack[i+j],needle[j], pos);
 					}
 					else
 					{
@@ -1704,6 +1706,7 @@ gchar *utils_get_date_time(void)
 	strftime(date, 25, "%d.%m.%Y %H:%M:%S %Z", tm);
 	return date;
 }
+
 
 gchar *utils_get_date(void)
 {
@@ -2042,4 +2045,19 @@ gint utils_get_int_from_hexcolor(const gchar *hex)
 		return r | (g << 8) | (b << 16);
 	}
 	return DEFAULT_COLOR;
+}
+
+
+void utils_treeviews_showhide(void)
+{
+	utils_widget_show_hide(gtk_notebook_get_nth_page(
+					GTK_NOTEBOOK(app->treeview_notebook), 0), app->treeview_symbol_visible);
+	utils_widget_show_hide(gtk_notebook_get_nth_page(
+					GTK_NOTEBOOK(app->treeview_notebook), 1), app->treeview_openfiles_visible);
+
+	// hide complete notebook if both pages are hidden
+	if ((! app->treeview_symbol_visible) && (! app->treeview_openfiles_visible))
+		gtk_widget_hide(app->treeview_notebook);
+	else
+		gtk_widget_show(app->treeview_notebook);
 }
