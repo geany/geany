@@ -131,18 +131,21 @@ void dialogs_show_file_open_error(void)
 gboolean dialogs_show_not_found(const gchar *text)
 {
 	GtkWidget *dialog;
-	gchar string[255];
+	gchar *string;
 	gint ret;
 
-	snprintf(string, 255, _("The match \"%s\" was not found. Wrap search around the document?"), text);
+	string = g_strdup_printf(_("The match \"%s\" was not found. Wrap search around the document?"), text);
 #ifdef GEANY_WIN32
 	dialog = NULL;
 	ret = MessageBox(NULL, string, _("Question"), MB_YESNO | MB_ICONQUESTION);
+	g_free(string);
 	if (ret == IDYES) return TRUE;
 	else return FALSE;
 #else
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, string);
+                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, NULL);
+	gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(dialog), string);
+	g_free(string);
 	ret = gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_destroy(dialog);
 	if (ret == GTK_RESPONSE_YES) return TRUE;
@@ -687,6 +690,7 @@ void dialogs_show_find(void)
 	}
 	else
 	{
+		gtk_widget_grab_focus(lookup_widget(app->find_dialog, "entry"));
 		gtk_widget_show(app->find_dialog);
 	}
 }
@@ -776,6 +780,7 @@ void dialogs_show_replace(void)
 	}
 	else
 	{
+		gtk_widget_grab_focus(lookup_widget(app->replace_dialog, "entry_find"));
 		gtk_widget_show(app->replace_dialog);
 	}
 }
