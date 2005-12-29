@@ -14,10 +14,12 @@
 #include <unistd.h>
 #include <string.h>
 #include <dirent.h>
-#include <fcntl.h>
+#ifdef HAVE_FCNTL_H
+# include <fcntl.h>
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifndef G_OS_WIN32
+#ifdef HAVE_FNMATCH_H
 # include <fnmatch.h>
 #endif
 
