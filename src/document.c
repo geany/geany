@@ -20,19 +20,40 @@
  * $Id$
  */
 
+#include "geany.h"
+
+#ifdef TIME_WITH_SYS_TIME
+# include <time.h>
+# include <sys/time.h>
+#endif
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+
+#ifdef HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+#ifdef HAVE_MMAP
+# include <sys/mman.h>
+#endif
+#ifdef HAVE_FCNTL_H
+# include <fcntl.h>
+#endif
 
 #include "document.h"
 #include "callbacks.h"
+#include "support.h"
+#include "sciwrappers.h"
+#include "sci_cb.h"
+#include "dialogs.h"
+#include "msgwindow.h"
+#include "callbacks.h"
 #include "templates.h"
 #include "treeviews.h"
-
-#include <time.h>
-#include <sys/time.h>
-
-#ifndef GEANY_WIN32
-# include <sys/mman.h>
-# include <unistd.h>
-#endif
+#include "utils.h"
 
 
 
@@ -323,12 +344,12 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	gboolean reload = (idx == -1) ? FALSE : TRUE;
 	struct stat st;
 	gchar *enc = NULL;
-#ifdef GEANY_WIN32
-	GError *err = NULL;
-	gchar *map;
-#else
+#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
 	gint fd;
 	void *map;
+#else
+	GError *err = NULL;
+	gchar *map;
 #endif
 	//struct timeval tv, tv1;
 	//struct timezone tz;
@@ -356,13 +377,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		msgwin_status_add(_("Could not stat file"));
 		return;
 	}
-#ifdef GEANY_WIN32
-	if (! g_file_get_contents (filename, &map, NULL,  &err) ){
-		msgwin_status_add(_("Could not open file %s (%s)"), filename, err->message);
-		return;
-	}
-	size = (gint)strlen(map);
-#else
+#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
 	if ((fd = open(filename, O_RDONLY)) < 0)
 	{
 		msgwin_status_add(_("Could not open file %s (%s)"), filename, g_strerror(errno));
@@ -374,6 +389,13 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		return;
 	}
 	size = (gint)st.st_size;
+#else
+	// use GLib function to load file on Win32 systems and those w/o mmap()
+	if (! g_file_get_contents (filename, &map, NULL,  &err) ){
+		msgwin_status_add(_("Could not open file %s (%s)"), filename, err->message);
+		return;
+	}
+	size = (gint)strlen(map);
 #endif
 
 	// experimental encoding stuff, always force UTF-8
@@ -399,11 +421,11 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			if (converted_text == NULL)
 			{
 				msgwin_status_add(_("The file does not look like a text file or the file encoding is not supported."));
-#ifdef GEANY_WIN32
-				g_free(map);
-#else
+#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
 				close(fd);
 				munmap(map, st.st_size);
+#else
+				g_free(map);
 #endif
 				return;
 			}
@@ -454,11 +476,11 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	//utils_update_tag_list(idx, FALSE);
 	document_set_text_changed(idx);
 
-#ifdef GEANY_WIN32
-	g_free(map);
-#else
+#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
 	close(fd);
 	munmap(map, st.st_size);
+#else
+	g_free(map);
 #endif
 
 	// finally add current file to recent files menu, but not the files from the last session
@@ -515,7 +537,7 @@ void document_save_file(gint idx)
 	}
 
 #ifdef GEANY_WIN32
-	// Hugly hack: on windows '\n' (LF) is taken as CRLF so we must covert it prior to save the doc
+	// ugly hack: on windows '\n' (LF) is taken as CRLF so we must convert it prior to save the doc
 	if (sci_get_eol_mode(doc_list[idx].sci) == SC_EOL_CRLF) sci_convert_eols(doc_list[idx].sci, SC_EOL_CRLF);
 #endif
 

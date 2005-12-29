@@ -21,11 +21,11 @@
  */
 
 
-#include <stdlib.h>
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-
 #include "geany.h"
+
+#include <stdlib.h>
+#include <string.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "callbacks.h"
 #include "interface.h"
@@ -35,6 +35,7 @@
 #include "keyfile.h"
 #include "document.h"
 #include "sciwrappers.h"
+#include "sci_cb.h"
 #include "utils.h"
 #include "dialogs.h"
 #include "msgwindow.h"

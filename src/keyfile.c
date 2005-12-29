@@ -21,6 +21,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "geany.h"
 
@@ -28,6 +29,7 @@
 #include "keyfile.h"
 #include "utils.h"
 #include "document.h"
+#include "sciwrappers.h"
 
 
 static gchar *scribble_text = NULL;

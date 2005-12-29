@@ -21,15 +21,20 @@
  */
 
 
+#include "geany.h"
+
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
 
-#include "geany.h"
-
-#ifndef GEANY_WIN32
-# include <sys/utsname.h>
+#ifdef HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
 #endif
 
 #include "support.h"
@@ -40,6 +45,8 @@
 #include "encodings.h"
 #include "templates.h"
 #include "treeviews.h"
+#include "sciwrappers.h"
+#include "dialogs.h"
 
 #include "utils.h"
 
@@ -1579,7 +1586,7 @@ void utils_glist_strings_free(GList *list)
 
 gchar *utils_get_hostname(void)
 {
-#if defined(GEANY_WIN32) || ! defined(HAVE_GETHOSTNAME)
+#ifndef HAVE_GETHOSTNAME
 	return g_strdup("localhost");
 #else
 	gchar *host = g_malloc(25);
