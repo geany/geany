@@ -15,7 +15,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <string.h>
-#ifdef __unix__
+#ifdef HAVE_GLOB_H
 # include <glob.h>
 #else
 # ifndef P_tmpdir
@@ -148,8 +148,9 @@ gboolean tm_workspace_load_global_tags(const char *tags_file)
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes
   , int includes_count, const char *tags_file)
 {
-#ifdef __unix__
+#ifdef HAVE_GLOB_H
 	glob_t globbuf;
+#endif
 	int idx_inc;
 	int idx_glob;
 	char *command;
@@ -168,7 +169,8 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		, tm_tag_attr_type_t, 0};
 	if (NULL == (fp = fopen(temp_file, "w")))
 		return FALSE;
-	
+
+#ifdef HAVE_GLOB_H
 	globbuf.gl_offs = 0;
 	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
 	{
@@ -188,6 +190,12 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		globfree(&globbuf);
 		free(clean_path);
   	}
+#else
+	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
+	{
+ 		includes_files = g_list_append(includes_files, strdup(includes[idx_inc]));
+  	}
+#endif
 
 
 	/* Checks for duplicate file entries which would case trouble */
@@ -196,7 +204,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		struct stat sub_stat;
 
 		remove_count = 0;
-		
+
 		list_len = g_list_length(includes_files);
 
 		/* We look for files with the same inode */
@@ -207,20 +215,20 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 			for(idx_sub = idx_main + 1; idx_sub < list_len; idx_sub++)
 			{
 				GList *element = NULL;
-				
+
 				stat(g_list_nth_data(includes_files, idx_sub), &sub_stat);
-				
-				
+
+
 				if(main_stat.st_ino != sub_stat.st_ino)
 					continue;
-			
+
 				/* Inodes match */
-				
+
 				element = g_list_nth(includes_files, idx_sub);
-					
-/*				printf("%s == %s\n", g_list_nth_data(includes_files, idx_main), 
+
+/*				printf("%s == %s\n", g_list_nth_data(includes_files, idx_main),
 										 g_list_nth_data(includes_files, idx_sub)); */
-					
+
 				/* We delete the duplicate entry from the list */
 				includes_files = g_list_remove_link(includes_files, element);
 				remove_count++;
@@ -228,7 +236,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 				/* Don't forget to free the mallocs (we duplicated every string earlier!) */
 				free(element->data);
 
-				idx_sub--; /* Cause the inner loop not to move; good since we removed 
+				idx_sub--; /* Cause the inner loop not to move; good since we removed
 							   an element at the current position; we don't have to worry
 							   about the outer loop because the inner loop always starts
 							   after the outer loop's index */
@@ -252,7 +260,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		free(str);
 		free(g_list_nth(includes_files, idx_main) -> data);
 	}
-	
+
 	fclose(fp);
 
 	command = g_strdup_printf("%s %s >%s", pre_process, temp_file, temp_file2);
@@ -301,7 +309,6 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	tm_source_file_free(source_file);
 	g_ptr_array_free(tags_array, TRUE);
 	return TRUE;
-#endif
 }
 
 TMWorkObject *tm_workspace_find_object(TMWorkObject *work_object, const char *file_name
@@ -371,7 +378,7 @@ gboolean tm_workspace_update(TMWorkObject *workspace, gboolean force
 {
 	guint i;
 	gboolean update_tags = force;
-	
+
 #ifdef TM_DEBUG
 	g_message("Updating workspace");
 #endif
@@ -423,7 +430,7 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	static GPtrArray *tags = NULL;
 	TMTag **matches[2], **match;
 	int i, len, tagCount[2]={0,0}, tagIter;
-	
+
 	if ((!theWorkspace) || (!name))
 		return NULL;
 	len = strlen(name);
