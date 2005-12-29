@@ -1,3 +1,30 @@
+2005-12-29  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * tagmanager/tm_tag.c: eliminated compiler (gcc4) warnings
+ * bugfix: tagmanager/tm_workspace.c:
+   replaced macro __unix__ by HAVE_GLOB_H(closes #1387828) and improved
+   handling of P_tmpdir (closes #1387839)
+
+
+2005-12-28  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * bugfix: src/dialogs.c: fixed a segfault in dialogs_show_not_found()
+ * bugfix: src/utils.c: fixed bug in utils_strpos() which returned -1
+                        if length needle is 1
+ * src/utils.c: added utils_treeviews_showhide(), to get the right
+                settings at startup for the left side treeviews
+ * src/gb.c: eliminated compiler(gcc4) warnings, replaced macro
+             __unix__ by HAVE_FCNTL_H, use /dev/urandom or /dev/random
+             (in this order) if available and rand() if not
+ * src/configure.in: added checks for /dev/urandom and /dev/random
+
+
+2005-12-25  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c: text entry field in the find and replace dialog grabs
+                  focus by default, so the cursor is always inside
+
+
 2005-12-19  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/gb.c: several improvements and bugfixes

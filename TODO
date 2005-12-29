@@ -3,7 +3,7 @@ TODO List:
 ( features included in () have lower priority)
 
 
-	Geany 0.4 or later:
+	Geany 0.5 or later:
 
 	o window positioning and window resizing doesn't work under win32
 	o sci_cb.c: improve auto completion(include local tags)
@@ -15,12 +15,12 @@ TODO List:
 	o fix a really nasty bug which causes a segfault, but don't know
 	  where, is it still existent?
 	o encoding-bug in utils_convert_to_utf8()
-	o latex build menu
+	o LaTex build menu
 	o command line option -e (editor mode)
 	o check for inline-usage e.g. in sciwrappers.c
-	o change GTK color and file open dialogs under win32
-	o make multiline indentation more intelligent
+	o make multiline comment indentation more intelligent
 	o add setting for beep after compiling, make it optional
+	o extensive use of config.h
 	o (indent wrapped lines, but how?)
 	o (project management)
 	o (folding)
