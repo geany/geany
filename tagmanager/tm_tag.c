@@ -140,7 +140,7 @@ gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_ent
 		if (NULL != tag_entry->extensionFields.arglist)
 			tag->atts.entry.arglist = g_strdup(tag_entry->extensionFields.arglist);
 		if ((NULL != tag_entry->extensionFields.scope[1]) &&
-			(isalpha(tag_entry->extensionFields.scope[1][0]) || 
+			(isalpha(tag_entry->extensionFields.scope[1][0]) ||
 			 tag_entry->extensionFields.scope[1][0] == '_'))
 			tag->atts.entry.scope = g_strdup(tag_entry->extensionFields.scope[1]);
 		if (tag_entry->extensionFields.inheritance != NULL)
@@ -207,7 +207,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 	gboolean status;
 	guchar changed_char = TA_NAME;
 
-	if ((NULL == fgets(buf, BUFSIZ, fp)) || ('\0' == *buf))
+	if ((NULL == fgets((gchar*)buf, BUFSIZ, fp)) || ('\0' == *buf))
 		return FALSE;
 	for (start = end = buf, status = TRUE; (TRUE == status); start = end, ++ end)
 	{
@@ -222,32 +222,32 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 			if (!isprint(*start))
 				return FALSE;
 			else
-				tag->name = g_strdup(start);
+				tag->name = g_strdup((gchar*)start);
 		}
 		else
 		{
 			switch (*start)
 			{
 				case TA_LINE:
-					tag->atts.entry.line = atol(start + 1);
+					tag->atts.entry.line = atol((gchar*)start + 1);
 					break;
 				case TA_LOCAL:
-					tag->atts.entry.local = atoi(start + 1);
+					tag->atts.entry.local = atoi((gchar*)start + 1);
 					break;
 				case TA_TYPE:
-					tag->type = (TMTagType) atoi(start + 1);
+					tag->type = (TMTagType) atoi((gchar*)start + 1);
 					break;
 				case TA_ARGLIST:
-					tag->atts.entry.arglist = g_strdup(start + 1);
+					tag->atts.entry.arglist = g_strdup((gchar*)start + 1);
 					break;
 				case TA_SCOPE:
-					tag->atts.entry.scope = g_strdup(start + 1);
+					tag->atts.entry.scope = g_strdup((gchar*)start + 1);
 					break;
 				case TA_VARTYPE:
-					tag->atts.entry.var_type = g_strdup(start + 1);
+					tag->atts.entry.var_type = g_strdup((gchar*)start + 1);
 					break;
 				case TA_INHERITS:
-					tag->atts.entry.inheritance = g_strdup(start + 1);
+					tag->atts.entry.inheritance = g_strdup((gchar*)start + 1);
 					break;
 				case TA_TIME:
 					if (tm_tag_file_t != tag->type)
@@ -256,7 +256,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 						return FALSE;
 					}
 					else
-						tag->atts.file.timestamp = atol(start + 1);
+						tag->atts.file.timestamp = atol((gchar*)start + 1);
 					break;
 				case TA_LANG:
 					if (tm_tag_file_t != tag->type)
@@ -265,7 +265,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 						return FALSE;
 					}
 					else
-						tag->atts.file.lang = atoi(start + 1);
+						tag->atts.file.lang = atoi((gchar*)start + 1);
 					break;
 				case TA_INACTIVE:
 					if (tm_tag_file_t != tag->type)
@@ -274,7 +274,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 						return FALSE;
 					}
 					else
-						tag->atts.file.inactive = (gboolean) atoi(start + 1);
+						tag->atts.file.inactive = (gboolean) atoi((gchar*)start + 1);
 					break;
 				case TA_ACCESS:
 					tag->atts.entry.access = *(start + 1);
@@ -373,7 +373,7 @@ void tm_tag_free(gpointer tag)
 
 int tm_tag_compare(const void *ptr1, const void *ptr2)
 {
-	int *sort_attr;
+	unsigned int *sort_attr;
 	int returnval = 0;
 	TMTag *t1 = *((TMTag **) ptr1);
 	TMTag *t2 = *((TMTag **) ptr2);
@@ -532,7 +532,7 @@ TMTag **tm_tags_find(GPtrArray *sorted_tags_array, const char *name, gboolean pa
 	static TMTag *tag = NULL;
 	TMTag **result;
 	int tagMatches=0;
-	
+
 	if ((!sorted_tags_array) || (!sorted_tags_array->len))
 		return NULL;
 
