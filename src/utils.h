@@ -199,4 +199,6 @@ gchar *utils_get_hex_from_color(GdkColor *color);
 
 gint utils_get_int_from_hexcolor(const gchar *hex);
 
+void utils_treeviews_showhide(void);
+
 #endif
