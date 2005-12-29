@@ -15,14 +15,19 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <string.h>
+#include <sys/stat.h>
 #ifdef HAVE_GLOB_H
 # include <glob.h>
-#else
-# ifndef P_tmpdir
+#endif
+// handling of P_tmpdir, should be something like /tmp, take the root directory under Win32,
+// and assume /tmp on non-Win32 systems where P_tmpdir is not set
+#ifndef P_tmpdir
+# ifdef G_OS_WIN32
 #  define P_tmpdir "\\"
+# else
+#  define P_tmpdir "/tmp"
 # endif
 #endif
-#include <sys/stat.h>
 
 #include "tm_tag.h"
 #include "tm_workspace.h"
@@ -163,8 +168,13 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	int idx_main;
 	int idx_sub;
 	int remove_count = 0;
+#ifdef G_OS_WIN32
+	char *temp_file = g_strdup_printf("%s_%d_%ld_1.cpp", P_tmpdir, getpid(), time(NULL));
+	char *temp_file2 = g_strdup_printf("%s_%d_%ld_2.cpp", P_tmpdir, getpid(), time(NULL));
+#else
 	char *temp_file = g_strdup_printf("%s/%d_%ld_1.cpp", P_tmpdir, getpid(), time(NULL));
 	char *temp_file2 = g_strdup_printf("%s/%d_%ld_2.cpp", P_tmpdir, getpid(), time(NULL));
+#endif
 	TMTagAttrType sort_attrs[] = { tm_tag_attr_name_t, tm_tag_attr_scope_t
 		, tm_tag_attr_type_t, 0};
 	if (NULL == (fp = fopen(temp_file, "w")))
