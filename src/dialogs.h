@@ -26,10 +26,6 @@
 #ifndef GEANY_DIALOGS_H
 #define GEANY_DIALOGS_H 1
 
-#include "support.h"
-#include "interface.h"
-#include "utils.h"
-
 
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file (void);

@@ -22,6 +22,7 @@
 
 
 #include <gdk/gdkkeysyms.h>
+#include <string.h>
 
 #include "dialogs.h"
 
@@ -29,7 +30,10 @@
 #include "document.h"
 #include "win32.h"
 #include "about.h"
-
+#include "sciwrappers.h"
+#include "support.h"
+#include "interface.h"
+#include "utils.h"
 
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file ()
@@ -143,8 +147,7 @@ gboolean dialogs_show_not_found(const gchar *text)
 	else return FALSE;
 #else
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, NULL);
-	gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(dialog), string);
+                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, "%s", string);
 	g_free(string);
 	ret = gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_destroy(dialog);

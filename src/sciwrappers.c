@@ -20,6 +20,9 @@
  * $Id$
  */
 
+#include <string.h>
+
+#include "geany.h"
 
 #include "sciwrappers.h"
 #include "utils.h"

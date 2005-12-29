@@ -22,8 +22,14 @@
 
 
 #include <ctype.h>
-#include "sci_cb.h"
+#include <string.h>
 
+#include "geany.h"
+
+#include "sci_cb.h"
+#include "document.h"
+#include "sciwrappers.h"
+#include "utils.h"
 
 static gint link_start, link_end, style;
 static gchar indent[100];

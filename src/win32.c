@@ -17,14 +17,20 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ *  $Id$
  */
 
 
 // special functions for the win32 platform
 
-#include "win32.h"
+#include "geany.h"
 
 #ifdef GEANY_WIN32
+
+#include "win32.h"
+
+#include "document.h"
+#include "support.h"
 
 
 //static gchar appfontname[128] = "tahoma 8"; /* fallback value */

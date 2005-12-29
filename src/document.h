@@ -17,18 +17,13 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ *  $Id$
  */
 
 
 #ifndef GEANY_DOCUMENT_H
 #define GEANY_DOCUMENT_H 1
 
-#include "geany.h"
-#include "callbacks.h"
-#include "sciwrappers.h"
-#include "sci_cb.h"
-#include "dialogs.h"
-#include "msgwindow.h"
 
 /* returns the index of the notebook page which has the given filename */
 gint document_find_by_filename(const gchar*);

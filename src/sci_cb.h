@@ -23,12 +23,6 @@
 #define GEANY_SCI_CB_H 1
 
 
-#include "geany.h"
-
-#include "document.h"
-#include "sciwrappers.h"
-#include "utils.h"
-
 // callback func called by all editors when a signals arises
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 

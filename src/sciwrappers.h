@@ -20,23 +20,10 @@
  * $Id$
  */
 
-
-#include <gtk/gtk.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <string.h>
-#include <errno.h>
-
-#ifndef WIN32
-# include <sys/mman.h>
-# include <libgen.h>
-#endif
+#ifndef GEANY_SCIWRAPPERS_H
+#define GEANY_SCIWRAPPERS_H 1
 
 #include "geany.h"
-
-#include "interface.h"
-#include "support.h"
 
 
 void 				sci_set_line_numbers		(ScintillaObject* sci,  gboolean set, gint extra_width);
@@ -44,7 +31,6 @@ void				sci_set_mark_long_lines		(ScintillaObject* sci,	gint column, const gchar
 void 				sci_set_text				(ScintillaObject* sci,  const gchar* text);
 void 				sci_add_text				(ScintillaObject* sci,  const gchar* text);
 void				sci_add_text_buffer			(ScintillaObject* sci,  const gchar* text, gint	len);
-
 gboolean			sci_can_redo				(ScintillaObject* sci);
 gboolean			sci_can_undo				(ScintillaObject* sci);
 gboolean			sci_can_copy				(ScintillaObject* sci);
@@ -157,3 +143,5 @@ gboolean			sci_get_readonly			(ScintillaObject * sci);
 gint				sci_get_zoom				(ScintillaObject * sci);
 void				sci_cmd						(ScintillaObject * sci, gint cmd);
 gint				sci_get_current_line		(ScintillaObject * sci, gint pos);
+
+#endif

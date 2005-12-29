@@ -17,16 +17,13 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ *  $Id$
  */
 
 
 
-#include "geany.h"
-
 #ifdef GEANY_WIN32
 
-#include "document.h"
-#include "support.h"
 
 /*void set_app_font(const char *fontname);
 

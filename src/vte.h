@@ -24,8 +24,6 @@
 #ifndef GEANY_VTE_H
 #define GEANY_VTE_H 1
 
-#include <stdlib.h>
-
 
 void vte_init(void);
 
