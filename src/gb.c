@@ -1,15 +1,33 @@
+/*
+ *      gb.c - this file is part of Geany, a fast and lightweight IDE
+ *
+ *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *
+ *      This program is free software; you can redistribute it and/or modify
+ *      it under the terms of the GNU General Public License as published by
+ *      the Free Software Foundation; either version 2 of the License, or
+ *      (at your option) any later version.
+ *
+ *      This program is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU General Public License for more details.
+ *
+ *      You should have received a copy of the GNU General Public License
+ *      along with this program; if not, write to the Free Software
+ *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * $Id$
+ */
 
-
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
-#ifdef __unix__
+#ifdef HAVE_FCNTL_H
 	#include <fcntl.h>
 #endif
-#include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 #define MAX_PICS 10
@@ -19,7 +37,7 @@
 #define IMAGE_BUTTON_UP		11
 #define IMAGE_BUTTON_DOWN	12
 
-#ifdef G_OS_WIN32
+#ifdef GEANY_WIN32
 # include <windows.h>
 # include <commdlg.h>
 # define GTK_BANDIT_WIN32
@@ -193,10 +211,14 @@ gint destroydialog(GtkWidget *widget)
 }
 
 
-void initialize_random_numbers(void)
+void initialise_random_numbers(void)
 {
-#ifdef __unix__
+#ifdef HAVE_FCNTL_H
+# ifdef HAVE_DEVURANDOM
 	random_fd = open("/dev/urandom", O_NONBLOCK | O_RDONLY);
+# elif HAVE_DEVRANDOM
+	random_fd = open("/dev/random", O_NONBLOCK | O_RDONLY);
+# endif
 #endif
     srand(time(NULL) * getpid());
 }
@@ -204,21 +226,20 @@ void initialize_random_numbers(void)
 
 gint random_number(gint max)
 {
-    unsigned char byte;
-
-    if ((max <= 255) && (random_fd >= 0))
+#ifdef HAVE_FCNTL_H
+    if (max <= 255)
 	{
+		unsigned char byte;
 		while (read(random_fd, &byte, 1) == 1)
 		{
 	    	if (byte < max)
 				return (byte % max);
 		}
     }
-    else
-	{
-		return (((unsigned short) rand ()) % max);
-	}
-	return 0;
+    return 0;
+#else
+	return (((unsigned short) rand ()) % max);
+#endif
 }
 
 
@@ -360,6 +381,7 @@ static const GdkPixdata pic10 = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\217\377\377\377\202333\234\377\377\377\203333\3\0\0\0""333\377\377\377"
   "\202333\227\377\377\377\1\20\0\0\205\0\0\0\3\"\"\"\21\21\21DDD\225\377"
   "\377\377\202\21\21\21\204DDD\1\21\21\21\203\0\0\0\1\21\21\21\224\377"
@@ -410,6 +432,7 @@ static const GdkPixdata pic1 = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\214\377\377\377\210\21\21\21\226\377\377\377\202\21\21\21\210\314e\0"
   "\202\21\21\21\222\377\377\377\202\21\21\21\202\314e\0\210\375\230\0\202"
   "\314e\0\202\21\21\21\217\377\377\377\1\21\21\21\202\314e\0\215\375\230"
@@ -486,6 +509,7 @@ static const GdkPixdata pic2 = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\206\377\377\377\224\0\"\0\213\377\377\377\1\0\"\0\224\0\210\0\1\0\""
   "\0\211\377\377\377\2\0\"\0\0\210\0\224\0\272\0\2\0\210\0\0\"\0\210\377"
   "\377\377\2\0\"\0\0\210\0\224\0\272\0\2\0\210\0\0\"\0\210\377\377\377"
@@ -551,6 +575,7 @@ static const GdkPixdata pic3 = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\215\377\377\377\206f2\0\231\377\377\377\1f2\0\206\377\3143\1f2\0\226"
   "\377\377\377\203\21\21\21\206\230e\0\204\21\21\21\221\377\377\377\202"
   "\21\21\21\215\0e\230\202\21\21\21\215\377\377\377\202\21\21\21\202\0"
@@ -607,6 +632,7 @@ static const GdkPixdata pic4 = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\215\377\377\377\205D\0\0\232\377\377\377\1D\0\0\205\314\0\0\1D\0\0\227"
   "\377\377\377\2\0\0\0D\0\0\207\314\0\0\1D\0\0\202\0\0\0\222\377\377\377"
   "\202\0\0\0\2\0""3fD\0\0\207\314\0\0\1D\0\0\202\0""3f\202\0\0\0\217\377"
@@ -664,6 +690,7 @@ static const GdkPixdata pic5 = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\211\377\377\377\205\21\21\21\202\377\377\377\207\21\21\21\214\377\377"
   "\377\206\21\21\21\205\252\252\252\202\21\21\21\207\252\252\252\205\21"
   "\21\21\206\377\377\377\1\21\21\21\207\252\252\252\203\377\377\377\204"
@@ -739,6 +766,7 @@ static const GdkPixdata pic6 = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\204\377\377\377\230DDD\210\377\377\377\1DDD\226\356\356\356\1DDD\210"
   "\377\377\377\1DDD\226\356\356\356\1DDD\210\377\377\377\1DDD\226\356\356"
   "\356\1DDD\210\377\377\377\1DDD\226\356\356\356\1DDD\210\377\377\377\1"
@@ -807,6 +835,7 @@ static const GdkPixdata pic7 = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\377\377\377\377\220\377\377\377\1\"\"\"\2042\0\0\1\"\"\"\202\377\377"
   "\377\1\230e\0\222\377\377\377\4\230e\0f2\0\377\377\377\"\"\"\2022\0\0"
   "\204f2\0\2022\0\0\3\"\"\"\377\376ef2\0\203\377\377\377\203\"\"\"\204"
@@ -864,6 +893,7 @@ static const GdkPixdata pic8 = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\214\377\377\377\207\21\21\21\226\377\377\377\203\21\21\21\207\314\230"
   "f\204\21\21\21\220\377\377\377\202\21\21\21\1\314\230f\203\377\313\231"
   "\1\314\230f\206\377\313\231\203fff\1\21\21\21\216\377\377\377\2\21\21"
@@ -936,6 +966,7 @@ static const GdkPixdata pic9 = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\207\377\377\377\207\0\0v\231\377\377\377\1\0\0v\20622\313\206\0\0v\224"
   "\377\377\377\1\0\0v\20622\313\5ff\314\313\231\377\230f\314e3\23122\313"
   "\207\0\0v\215\377\377\377\1\0\0v\20522\313\2""22e\314\230f\202\375\230"
@@ -995,6 +1026,7 @@ static const GdkPixdata logo = {
   32, /* width */
   32, /* height */
   /* pixel_data: */
+  (guint8*)
   "\217\377\377\377\203\0\0\0\203\377\377\377\213\0\0\0\216\377\377\377"
   "\11\0\0\0\252\252\252UUUff3\0\0\0\377\377\377\0\0\0\231\231\231\314\377"
   "\314\202\314\314\314\3\335\335\335\314\314\314\335\335\335\202\314\314"
@@ -1080,6 +1112,7 @@ static const GdkPixdata bup = {
   45, /* width */
   80, /* height */
   /* pixel_data: */
+  (guint8*)
   "\1\377\377\377\2\243\0\0\0\0\10\377\377\377\7\377\377\377\12\377\377"
   "\377\3\377\377\377\11\377\377\377\15\377\377\377'\377\377\377\33\377"
   "\377\377\11\244\0\0\0\0\202\377\377\377\10\1\377\377\377\35\202\0\0\0"
@@ -1143,6 +1176,7 @@ static const GdkPixdata bdown = {
   45, /* width */
   80, /* height */
   /* pixel_data: */
+  (guint8*)
   "\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0"
   "\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\253"
   "\0\0\0\0\1\377\377\377\7\254\0\0\0\0\1\377\377\377\5\254\0\0\0\0\1\377"
@@ -1221,7 +1255,7 @@ void init_images(void)
 {
 	gint i;
 
-	initialize_random_numbers();
+	initialise_random_numbers();
 	i = random_number(MAX_PICS) + 1;
 
 	// Startbilder festlegen
