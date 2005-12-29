@@ -5,6 +5,8 @@ INCLUDES = -Iinclude $(PACKAGE_CFLAGS)
 #	-DGDK_PIXBUF_DEPRECATED \
 #	-DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED
 
+AM_CFLAGS = -Wall
+
 noinst_LIBRARIES = libtagmanager.a
 libtagmanager_a_SOURCES =\
 	general.h\
