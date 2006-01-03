@@ -214,7 +214,7 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_CSS] = (filetype*)g_malloc(sizeof(filetype));
 	filetypes[GEANY_FILETYPES_CSS]->id = GEANY_FILETYPES_CSS;
 	filetypes[GEANY_FILETYPES_CSS]->name = g_strdup("CSS");
-	filetypes[GEANY_FILETYPES_CSS]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_CSS]->has_tags = FALSE;
 	filetypes[GEANY_FILETYPES_CSS]->title = g_strdup(_("Cascading StyleSheet"));
 	filetypes[GEANY_FILETYPES_CSS]->extension = g_strdup("css");
 	filetypes[GEANY_FILETYPES_CSS]->pattern[0] = g_strdup("*.css");
