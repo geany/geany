@@ -21,7 +21,8 @@
  */
 
 
-#include "geany.h"
+#ifndef GEANY_HIGHLIGHTING_H
+#define GEANY_HIGHLIGHTING_H 1
 
 
 typedef struct
@@ -67,3 +68,4 @@ void styleset_conf(ScintillaObject *sci);
 
 void styleset_asm(ScintillaObject *sci);
 
+#endif
