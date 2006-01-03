@@ -1268,11 +1268,11 @@ void init_images(void)
 // zentrale exit-Funktion
 gint gb_destroyapp(GtkWidget *widget, gpointer gdata)
 {
-	if (is_running) return 0;
+	if (is_running) return TRUE;
 	if (GTK_IS_WINDOW(gb_window)) gtk_widget_destroy(gb_window);
 	if (random_fd != -1) close(random_fd);
 	gb_window = NULL;
-	return (FALSE);
+	return FALSE;
 }
 
 
