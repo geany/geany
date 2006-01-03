@@ -40,11 +40,10 @@
 #include "templates.h"
 #include "encodings.h"
 #include "treeviews.h"
-// include vte.h on non-Win32 systems, else define fake vte_init
-#if defined(GEANY_WIN32) || ! defined(HAVE_VTE)
-# define vte_init() ;
-#else
+#ifdef HAVE_VTE
 # include "vte.h"
+#else
+# define vte_init() ;
 #endif
 
 
