@@ -27,10 +27,18 @@
 
 #ifdef GEANY_WIN32
 
+#include <string.h>
+#include <ctype.h>
+#include <math.h>
+#include <stdlib.h>
+
 #include "win32.h"
 
 #include "document.h"
 #include "support.h"
+#include "utils.h"
+#include "sciwrappers.h"
+#include "dialogs.h"
 
 
 //static gchar appfontname[128] = "tahoma 8"; /* fallback value */
@@ -189,7 +197,7 @@ void win32_show_file_dialog(gboolean file_open)
 	of.lpstrDefExt = "c";
 	if (file_open)
 	{
-		of.Flags = OFN_ALLOWMULTISELECT | OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER;
+		of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
 		retval = GetOpenFileName(&of);
 	}
 	else
@@ -224,7 +232,8 @@ void win32_show_file_dialog(gboolean file_open)
 			}
 			else
 			{
-				document_open_file(-1, fname, 0);
+				document_open_file(-1, fname, 0, of.Flags & OFN_READONLY);
+				dialogs_show_info("%s", utils_btoa(of.Flags & OFN_READONLY));
 			}
 		}
 		else
@@ -238,7 +247,7 @@ void win32_show_file_dialog(gboolean file_open)
 						break;
 
 					g_snprintf(file_name, 254, "%s\\%s", fname, fname + x + 1);
-					document_open_file(-1, file_name, 0);
+					document_open_file(-1, file_name, 0, of.Flags & OFN_READONLY);
 				}
 				x++;
 			}
@@ -392,5 +401,44 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	g_free(fname);
 }
 
+
+double my_strtod(const char *source, char **end)
+{
+	unsigned int i;
+	unsigned short tmp;
+	double exp, result;
+
+	// input should be 0x... or 0X...
+	if (strlen(source) < 3 || source[0] != '0' || (source[1] != 'x' && source[1] != 'X'))
+		return -1.0;
+	source += 2;
+
+	exp = 0.0;
+	result = 0;
+	for (i = (strlen(source) - 1); i >= 0; i--)
+	{
+		if (isdigit(source[i]))
+		{	// convert the char to a real digit
+			tmp = source[i] - '0';
+		}
+		else
+		{
+			if (isxdigit(source[i]))
+			{	// convert the char to a real digit
+				if (source[i] > 70)
+					tmp = source[i] - 'W';
+				else
+					tmp = source[i] - '7';
+			}
+			// stop if a non xdigit was found
+			else break;
+		}
+
+		result += pow(16.0, exp) * tmp;
+		exp++;
+	}
+
+	return result;
+}
 
 #endif
