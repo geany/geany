@@ -20,9 +20,20 @@
  * $Id$
  */
 
-#include <stdlib.h>
+#include "geany.h"
+
+#ifdef GEANY_WIN32
+# include "win32.h"
+#else
+/* my_strtod() is an simple implementation of strtod() for Win32 systems(declared in win32.h),
+ * because the Win32 API cannot handle hexadecimal numbers, my_strtod does only work for numbers
+ * like 0x..., on non-Win32 systems use the ANSI-C function strtod() */
+# include <stdlib.h>
+# define my_strtod(x, y) strtod(x, y)
+#endif
 
 #include "highlighting.h"
+
 #include "utils.h"
 
 
@@ -51,6 +62,7 @@ gchar *styleset_get_string(GKeyFile *config, const gchar *section, const gchar *
 
 	result = g_key_file_get_string(config, section, key, &error);
 	//if (error) geany_debug(error->message);
+	if (error) g_error_free(error);
 
 	return result;
 }
@@ -67,10 +79,10 @@ void styleset_get_hex(GKeyFile *config, const gchar *section, const gchar *key,
 
 	list = g_key_file_get_string_list(config, section, key, &len, &error);
 
-	if (list != NULL && list[0] != NULL) array[0] = (gint) strtod(list[0], NULL);
-	else array[0] = (gint) strtod(foreground, NULL);
-	if (list != NULL && list[1] != NULL) array[1] = (gint) strtod(list[1], NULL);
-	else array[1] = (gint) strtod(background, NULL);
+	if (list != NULL && list[0] != NULL) array[0] = (gint) my_strtod(list[0], NULL);
+	else array[0] = (gint) my_strtod(foreground, NULL);
+	if (list != NULL && list[1] != NULL) array[1] = (gint) my_strtod(list[1], NULL);
+	else array[1] = (gint) my_strtod(background, NULL);
 	if (list != NULL && list[2] != NULL) array[2] = utils_atob(list[2]);
 	else array[2] = utils_atob(bold);
 
@@ -653,7 +665,7 @@ void styleset_markup_init(void)
 			types[GEANY_FILETYPES_XML]->keywords[3] = g_strdup("and assert break class continue complex def del elif else except exec finally for from global if import in inherit is int lambda not or pass print raise return tuple try unicode while yield long float str list");
 	types[GEANY_FILETYPES_XML]->keywords[4] = styleset_get_string(config, "keywords", "php");
 	if (types[GEANY_FILETYPES_XML]->keywords[4] == NULL)
-			types[GEANY_FILETYPES_XML]->keywords[4] = g_strdup("and or xor FILE exception php_user_filter LINE array as break case cfunction class const continue declare default die do echo else elseif empty enddeclare endfor endforeach endif endswitch endwhile eval exit extends for foreach function global if include include_once isset list new old_function print require require_once return static switch unset use var while FUNCTION CLASS	METHOD");
+			types[GEANY_FILETYPES_XML]->keywords[4] = g_strdup("and or xor FILE exception LINE array as break case class const continue declare default die do echo else elseif empty  enddeclare endfor endforeach endif endswitch endwhile eval exit extends for foreach function global if include include_once  isset list new print require require_once return static switch unset use var while FUNCTION CLASS METHOD final php_user_filter interface implements extends public private protected abstract clone try catch throw cfunction old_function this");
 	types[GEANY_FILETYPES_XML]->keywords[5] = styleset_get_string(config, "keywords", "sgml");
 	if (types[GEANY_FILETYPES_XML]->keywords[5] == NULL)
 			types[GEANY_FILETYPES_XML]->keywords[5] = g_strdup("ELEMENT DOCTYPE ATTLIST ENTITY NOTATION");
