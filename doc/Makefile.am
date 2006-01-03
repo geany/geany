@@ -8,8 +8,9 @@ geany.1:
 	docbook-to-man ../debian/geany.sgml >geany.1
 #	docbook2man -o geany.1 ../debian/geany.sgml
 
-geany.pdf:
+pdf:
 	jw -b pdf geany.docbook
+	mv geany.pdf geany-$(VERSION).pdf
 
 geany.txt:
 	jw -b txt geany.docbook
@@ -23,12 +24,12 @@ html/index.html:
 
 doc: geany.1 geany.txt html/index.html
 
-clean:
+doc-clean:
 	rm -rf html/*.html
 	rm -f html/geany.css
 	rm -f geany.1
 	rm -f geany.txt
-	rm -f geany.pdf
+	rm -f *.pdf
 
 install-data-local: geany.1 geany.txt html/index.html
 	$(mkinstalldirs) $(DOCDIR)/html/images
