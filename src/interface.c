@@ -1873,6 +1873,7 @@ create_prefs_dialog (void)
   GtkWidget *spin_mru;
   GtkWidget *check_load_session;
   GtkWidget *check_save_win_pos;
+  GtkWidget *check_beep;
   GtkWidget *check_switch_pages;
   GtkWidget *check_ask_for_quit;
   GtkWidget *label18;
@@ -2064,6 +2065,12 @@ create_prefs_dialog (void)
   GTK_WIDGET_UNSET_FLAGS (check_save_win_pos, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_save_win_pos, _("Saves the window position and geometry and restores it at the start"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_save_win_pos), FALSE);
+
+  check_beep = gtk_check_button_new_with_mnemonic (_("Beep on errors or when compilation has finished"));
+  gtk_widget_show (check_beep);
+  gtk_box_pack_start (GTK_BOX (vbox4), check_beep, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_beep, _("Whether to beep if an error occured or when the compilation process has finished."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_beep), FALSE);
 
   check_switch_pages = gtk_check_button_new_with_mnemonic (_("Switch to status message list at new message"));
   gtk_widget_show (check_switch_pages);
@@ -2817,6 +2824,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_mru, "spin_mru");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_load_session, "check_load_session");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_save_win_pos, "check_save_win_pos");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_beep, "check_beep");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_for_quit, "check_ask_for_quit");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label18, "label18");

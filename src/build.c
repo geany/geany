@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
+ * $Id$
  */
 
 
@@ -456,7 +457,7 @@ void build_exit_cb (GPid child_pid, gint status, gpointer user_data)
 	}
 
 #endif
-	gdk_beep();
+	if (app->beep_on_errors) gdk_beep();
 	gtk_widget_set_sensitive(app->compile_button, TRUE);
 	g_spawn_close_pid(child_pid);
 }

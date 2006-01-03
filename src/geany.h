@@ -120,6 +120,7 @@ typedef struct MyApp
 	gboolean			 show_line_endings;
 	gboolean			 show_markers_margin;
 	gboolean			 fullscreen;
+	gboolean			 beep_on_errors;
 	gboolean			 switch_msgwin_pages;
 	gboolean			 auto_close_xml_tags;
 	gboolean			 auto_complete_constructs;

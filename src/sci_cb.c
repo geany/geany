@@ -65,7 +65,7 @@ on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user
 		}
 		case SCN_MODIFYATTEMPTRO:
 		{
-			gdk_beep();
+			if (app->beep_on_errors) gdk_beep();
 			break;
 		}
 		case SCN_MARGINCLICK:

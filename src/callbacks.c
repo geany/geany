@@ -310,7 +310,7 @@ void
 on_close1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
+	guint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
 	document_remove(cur_page);
 }
 
@@ -1550,7 +1550,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 							TM_TAG(tags->pdata[i])->atts.entry.file->work_object.file_name,
 							TM_TAG(tags->pdata[i])->atts.entry.line))
 					{
-						gdk_beep();
+						if (app->beep_on_errors) gdk_beep();
 						msgwin_status_add(_("Declaration or definition of \"%s()\" not found"), current_word);
 					}
 					return;
@@ -1559,7 +1559,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 		}
 	}
 	// if we are here, there was no match and we are beeping ;-)
-	gdk_beep();
+	if (app->beep_on_errors) gdk_beep();
 	msgwin_status_add(_("Declaration or definition of \"%s()\" not found"), current_word);
 }
 
@@ -2090,7 +2090,7 @@ on_goto_line_dialog_response         (GtkDialog *dialog,
 		}
 		else
 		{
-			gdk_beep();
+			if (app->beep_on_errors) gdk_beep();
 		}
 
 	}
