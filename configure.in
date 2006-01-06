@@ -63,6 +63,9 @@ want_vte=yes
 AC_ARG_ENABLE(vte, [  --enable-vte            enable if you want virtual termninal support [[default=yes]]],
  [want_vte="$enableval"])
 
+if test "$want_vte" = "yes"; then
+	AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])
+fi
 # if test "$want_vte" = "yes"; then
 #   PKG_CHECK_MODULES(VTE, [vte],
 #                     [AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])],
