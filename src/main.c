@@ -1,7 +1,7 @@
 /*
  *      main.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -52,14 +52,18 @@ static gboolean ignore_global_tags = FALSE;
 static gboolean no_vte = FALSE;
 static gboolean show_version = FALSE;
 static gchar *alternate_config = NULL;
+static gchar *lib_vte = NULL;
 static GOptionEntry entries[] =
 {
-  { "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, "runs in debug mode (means being verbose)", NULL },
-  { "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, "don't load auto completion data (see documentation)", NULL },
-  { "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, "use an alternate configuration directory", NULL },
-  { "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, "don't load terminal support", NULL },
-  { "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, "show version and exit", NULL },
-  { NULL }
+	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, "runs in debug mode (means being verbose)", NULL },
+	{ "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, "don't load auto completion data (see documentation)", NULL },
+	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, "use an alternate configuration directory", NULL },
+	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, "don't load terminal support", NULL },
+#ifdef HAVE_VTE
+	{ "vte-lib", 'l', 0, G_OPTION_ARG_FILENAME, &lib_vte, "filename of libvte.so", NULL },
+#endif
+	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, "show version and exit", NULL },
+	{ NULL }
 };
 
 
@@ -240,12 +244,19 @@ gint main(gint argc, gchar **argv)
 	}
 	else
 		app->configdir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
+#ifdef HAVE_VTE
+	app->lib_vte			= lib_vte;
+#endif
 	app->search_text		= NULL;
+	app->build_args_inc		= NULL;
+	app->build_args_libs	= NULL;
+	app->build_args_prog	= NULL;
 	app->open_fontsel		= NULL;
 	app->open_filesel		= NULL;
 	app->save_filesel		= NULL;
 	app->prefs_dialog		= NULL;
 	app->find_dialog		= NULL;
+	app->replace_dialog		= NULL;
 	app->default_tag_tree	= NULL;
 	app->main_window_realized= FALSE;
 #ifdef HAVE_VTE
