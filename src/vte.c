@@ -1,7 +1,7 @@
 /*
  *      vte.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -91,9 +91,16 @@ void vte_init(void)
 {
 
 	GtkWidget *vte, *scrollbar, *hbox, *frame;
-	module = g_module_open("libvte.so", G_MODULE_BIND_LAZY);
-	// try to fallback to libvte.so.4, if it is installed
-	if (module == NULL) module = g_module_open("libvte.so.4", G_MODULE_BIND_LAZY);
+	if (app->lib_vte && strlen(app->lib_vte))
+	{
+		module = g_module_open(app->lib_vte, G_MODULE_BIND_LAZY);
+	}
+	else
+	{
+		module = g_module_open("libvte.so", G_MODULE_BIND_LAZY);
+		// try to fallback to libvte.so.4, if it is installed
+		if (module == NULL) module = g_module_open("libvte.so.4", G_MODULE_BIND_LAZY);
+	}
 
 	if (module == NULL || app->have_vte == FALSE)
 	{

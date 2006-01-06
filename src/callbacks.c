@@ -1,7 +1,7 @@
 /*
  *      callbacks.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -112,6 +112,9 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	templates_free_templates();
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_free(app->configdir);
+#ifdef HAVE_VTE
+	g_free(app->lib_vte);
+#endif
 	g_free(app->search_text);
 	g_free(app->editor_font);
 	g_free(app->tagbar_font);

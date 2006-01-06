@@ -1,7 +1,7 @@
 /*
  *      geany.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -43,6 +43,9 @@
 
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
+#define INLINE inline
+//#define INLINE
+
 #ifdef G_OS_WIN32
 # include <windows.h>
 # include <commdlg.h>
@@ -58,7 +61,6 @@
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_MAX_OPEN_FILES			25
 #define GEANY_SESSION_FILES				15
-//#define GEANY_RECENT_MRU_LENGTH			10
 #define GEANY_MAX_TAGS_COUNT			1000
 #define GEANY_WORDCHARS					"_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
@@ -134,6 +136,9 @@ typedef struct MyApp
 	gboolean			 pref_main_show_search;
 	gint				 mru_length;
 	gint				 long_line_column;
+#ifdef HAVE_VTE
+	gchar				*lib_vte;
+#endif
 	gchar				*long_line_color;
 	gchar				*pref_template_developer;
 	gchar				*pref_template_company;
