@@ -35,7 +35,7 @@ geany_SOURCES = \
 	interface.c interface.h \
 	callbacks.c callbacks.h
 
-#AM_CFLAGS = -Wall
-AM_CFLAGS = -DGEANY_DEBUG -Wall
-#AM_CFLAGS = -DGEANY_DEBUG -g -Wall
+AM_CFLAGS = -Wall
+#AM_CFLAGS = -DGEANY_DEBUG -Wall
+#AM_CFLAGS = -DGEANY_DEBUG -g -Wall -Winline
 geany_LDADD = @PACKAGE_LIBS@ -lstdc++ ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a $(INTLLIBS)
