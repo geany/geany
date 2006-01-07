@@ -1,7 +1,7 @@
 /*
  *      vte.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -24,7 +24,10 @@
 #ifndef GEANY_VTE_H
 #define GEANY_VTE_H 1
 
+/* include stdlib.h AND unistd.h, because on GNU/Linux pid_t seems to be
+ * in stdlib.h, on FreeBSD in unistd.h */
 #include <stdlib.h>
+#include <unistd.h>
 
 
 void vte_init(void);
