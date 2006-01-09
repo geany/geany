@@ -35,10 +35,9 @@ static gint link_start, link_end, style;
 static gchar indent[100];
 
 
-// callback func called by all editors when a signals arises
+// callback func called by all editors when a signal arises
 
-void
-on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data)
+void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data)
 {
 	struct SCNotification *nt;
 	ScintillaObject *sci;
@@ -224,6 +223,7 @@ on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user
 		}
 	}
 }
+
 
 void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 {
@@ -767,6 +767,7 @@ void sci_cb_do_comment(gint idx)
 			else if (lexer == SCLEX_PYTHON
 				  || lexer == SCLEX_PERL
 				  || lexer == SCLEX_MAKEFILE
+				  || lexer == SCLEX_PROPERTIES
 				  || lexer == SCLEX_BASH)
 			{
 				// skip lines which are already comments
@@ -893,7 +894,7 @@ void sci_cb_auto_multiline(ScintillaObject *sci, gint pos)
 
 	if (((lexer == SCLEX_CPP && style == SCE_C_COMMENT) ||
 		(lexer == SCLEX_HTML && style == SCE_HPHP_COMMENT)))
-	{	/// FIXME is sci_get_char_at() much slower than a line buffer?
+	{
 		while (isspace(sci_get_char_at(sci, i))) i--;
 		if (sci_get_char_at(sci, i) == '/' && sci_get_char_at(sci, i - 1) == '*') return;
 
