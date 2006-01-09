@@ -129,7 +129,7 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_DOCBOOK] = (filetype*)g_malloc(sizeof(filetype));
 	filetypes[GEANY_FILETYPES_DOCBOOK]->id = GEANY_FILETYPES_DOCBOOK;
 	filetypes[GEANY_FILETYPES_DOCBOOK]->name = g_strdup("Docbook");
-	filetypes[GEANY_FILETYPES_DOCBOOK]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_DOCBOOK]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_DOCBOOK]->title = g_strdup(_("Docbook source file"));
 	filetypes[GEANY_FILETYPES_DOCBOOK]->extension = g_strdup("docbook");
 	filetypes[GEANY_FILETYPES_DOCBOOK]->pattern[0] = g_strdup("*.docbook");
@@ -157,7 +157,7 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_TEX] = (filetype*)g_malloc(sizeof(filetype));
 	filetypes[GEANY_FILETYPES_TEX]->id = GEANY_FILETYPES_TEX;
 	filetypes[GEANY_FILETYPES_TEX]->name = g_strdup("Tex");
-	filetypes[GEANY_FILETYPES_TEX]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_TEX]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_TEX]->title = g_strdup(_("LaTex source file"));
 	filetypes[GEANY_FILETYPES_TEX]->extension = g_strdup("tex");
 	filetypes[GEANY_FILETYPES_TEX]->pattern[0] = g_strdup("*.tex");
