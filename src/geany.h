@@ -57,7 +57,7 @@
 
 
 #define GEANY_HOME_DIR					g_get_home_dir()
-#define GEANY_CODENAME					"Tarkin"
+#define GEANY_CODENAME					"Rebus"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_MAX_OPEN_FILES			25
 #define GEANY_SESSION_FILES				15
@@ -76,6 +76,7 @@
 /* structure for representing an open tab with all its related stuff. */
 typedef struct document
 {
+	gboolean		 is_valid;
 	gchar 			*file_name;
 	gchar 			*encoding;
 	filetype		*file_type;
@@ -105,6 +106,7 @@ document doc_list[GEANY_MAX_OPEN_FILES];
 typedef struct MyApp
 {
 	gint			 	 toolbar_icon_style;
+	// 0:x, 1:y, 2:width, 3:height
 	gint				 geometry[4];
 	gboolean			 debug_mode;
 	// represents the state at startup while opening session files
@@ -161,6 +163,7 @@ typedef struct MyApp
 	/* I called it fpc (www.freepascal.org) to demonstrate I mean a pascal compiler,
 	 * but feel free to use the GNU one as well */
 	gchar				*build_fpc_cmd;
+	gchar				*build_tex_cmd;
 	gchar				*build_java_cmd;
 	gchar				*build_javac_cmd;
 	gchar				*build_make_cmd;
