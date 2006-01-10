@@ -1,7 +1,7 @@
 /*
  *      filetypes.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 #define GEANY_FILETYPES_H 1
 
 
-#define GEANY_MAX_PATTERNS		5	// describes the count of supported extensions per filetype
+#define GEANY_MAX_PATTERNS		10	// describes the count of supported extensions per filetype
 
 enum
 {
