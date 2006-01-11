@@ -155,6 +155,11 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 		gtk_widget_destroy(app->default_tag_tree);
 	}
 	gtk_widget_destroy(app->window);
+	// kill explicitly since only one or none menu is shown at a time
+	if (GTK_IS_WIDGET(dialogs_build_menus.menu_c)) gtk_widget_destroy(dialogs_build_menus.menu_c);
+	if (GTK_IS_WIDGET(dialogs_build_menus.menu_misc)) gtk_widget_destroy(dialogs_build_menus.menu_misc);
+	if (GTK_IS_WIDGET(dialogs_build_menus.menu_tex)) gtk_widget_destroy(dialogs_build_menus.menu_tex);
+
 	if (app->have_vte) vte_close();
 
 	g_free(app);
@@ -168,6 +173,7 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 gboolean
 on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 {
+	app->quitting = TRUE;
 	configuration_save();
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) > 0)
 	{
@@ -176,7 +182,7 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 
 		for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 		{
-			if (doc_list[i].sci && doc_list[i].changed)
+			if (doc_list[i].is_valid && doc_list[i].changed)
 			{
 				has_dirty_editors = TRUE;
 				break;
@@ -185,16 +191,19 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 		if (has_dirty_editors)
 		{
 			if (on_close_all1_activate(NULL, NULL)) destroyapp(NULL, gdata);
+			else app->quitting = FALSE;
 		}
 		else
 		{
 			if (app->pref_main_confirm_exit)
 			{
 				if (dialogs_show_confirm_exit() && on_close_all1_activate(NULL, NULL)) destroyapp(NULL, gdata);
+				else app->quitting = FALSE;
 			}
 			else
 			{
 				if (on_close_all1_activate(NULL, NULL)) destroyapp(NULL, gdata);
+				else app->quitting = FALSE;
 			}
 		}
 	}
@@ -203,6 +212,7 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 		if (app->pref_main_confirm_exit)
 		{
 			if (dialogs_show_confirm_exit()) destroyapp(NULL, gdata);
+			else app->quitting = FALSE;
 		}
 		else
 		{
@@ -436,8 +446,6 @@ on_preferences1_activate               (GtkMenuItem     *menuitem,
 				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_javac"));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_java"),
 				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_java"));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_fpc"),
-				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_pascal"));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_make"),
 				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_make"));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_term"),
@@ -1780,6 +1788,7 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
 		case GEANY_FILETYPES_CPP: child_pid = build_compile_cpp_file(idx); break;
 		case GEANY_FILETYPES_JAVA: child_pid = build_compile_java_file(idx); break;
 		case GEANY_FILETYPES_PASCAL: child_pid = build_compile_pascal_file(idx); break;
+		case GEANY_FILETYPES_TEX: child_pid = build_compile_tex_file(idx); break;
 	}
 
 	if (child_pid != (GPid) 0)
@@ -1857,7 +1866,15 @@ void
 on_build_arguments_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_includes_arguments();
+	dialogs_show_includes_arguments_gen(GPOINTER_TO_INT(user_data));
+}
+
+
+void
+on_build_tex_arguments_activate        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	dialogs_show_includes_arguments_tex();
 }
 
 
@@ -2354,6 +2371,30 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		if (app->build_args_prog) g_free(app->build_args_prog);
 		app->build_args_prog = g_strdup(gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3"))));
+	}
+	gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+
+void
+on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
+                                            gint response,
+                                            gpointer user_data)
+{
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		if (app->build_tex_dvi_cmd) g_free(app->build_tex_dvi_cmd);
+		app->build_tex_dvi_cmd = g_strdup(gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1"))));
+		if (app->build_tex_pdf_cmd) g_free(app->build_tex_pdf_cmd);
+		app->build_tex_pdf_cmd = g_strdup(gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry2"))));
+		if (app->build_tex_view_dvi_cmd) g_free(app->build_tex_view_dvi_cmd);
+		app->build_tex_view_dvi_cmd = g_strdup(gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry3"))));
+		if (app->build_tex_view_pdf_cmd) g_free(app->build_tex_view_pdf_cmd);
+		app->build_tex_view_pdf_cmd = g_strdup(gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry4"))));
 	}
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 }

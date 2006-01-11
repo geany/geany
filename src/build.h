@@ -1,7 +1,7 @@
 /*
  *      build.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@
 GPid build_make_c_file(gint idx, gboolean cust_target);
 
 GPid build_compile_c_file(gint idx);
+
+GPid build_compile_tex_file(gint idx);
 
 GPid build_link_c_file(gint idx);
 

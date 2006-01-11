@@ -1,7 +1,7 @@
 /*
  *      build.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -38,6 +38,20 @@
 #include "utils.h"
 #include "dialogs.h"
 #include "msgwindow.h"
+
+
+GPid build_compile_tex_file(gint idx)
+{
+	gchar  **argv;
+
+	argv = g_new(gchar *, 5);
+	argv[0] = g_strdup(app->build_tex_dvi_cmd);
+	argv[1] = g_path_get_basename(doc_list[idx].file_name);
+	argv[2] = g_strdup(app->build_args_inc);
+	argv[3] = NULL;
+
+	return build_spawn_cmd(idx, argv);
+}
 
 
 GPid build_make_c_file(gint idx, gboolean cust_target)

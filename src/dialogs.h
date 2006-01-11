@@ -1,7 +1,7 @@
 /*
  *      dialogs.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -25,6 +25,14 @@
 
 #ifndef GEANY_DIALOGS_H
 #define GEANY_DIALOGS_H 1
+
+typedef struct
+{
+	GtkWidget		*menu_c;
+	GtkWidget		*menu_tex;
+	GtkWidget		*menu_misc;
+} build_menus;
+build_menus dialogs_build_menus;
 
 
 /* This shows the file selection dialog to open a file. */
@@ -56,7 +64,9 @@ void dialogs_show_word_count(void);
 
 void dialogs_show_color(void);
 
-void dialogs_create_build_menu(void);
+GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute);
+
+GtkWidget *dialogs_create_build_menu_tex(void);
 
 void dialogs_show_make_target(void);
 
@@ -66,7 +76,9 @@ void dialogs_show_replace(void);
 
 void dialogs_show_goto_line(void);
 
-void dialogs_show_includes_arguments(void);
+void dialogs_show_includes_arguments_gen(gboolean link);
+
+void dialogs_show_includes_arguments_tex(void);
 
 void dialogs_create_recent_menu(void);
 

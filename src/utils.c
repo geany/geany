@@ -1,7 +1,7 @@
 /*
  *      utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -797,6 +797,7 @@ gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const
 	gsize bytes_written;
 
 	g_return_val_if_fail(buffer != NULL, NULL);
+	g_return_val_if_fail(charset != NULL, NULL);
 
 	geany_debug("Trying to convert from %s to UTF-8", charset);
 	converted_contents = g_convert(buffer, size, "UTF-8", charset, NULL,
@@ -846,15 +847,12 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 		// not using a UTF-8 locale, so try converting from that first
 		if (locale_charset != NULL)
 		{
-			if (strcmp(locale_charset, "ANSI_X3.4-1968") == 0)
-			{
-				/// TODO very dirty quick hack, if LC=C then all oes wrong
-				locale_charset = g_strdup("ISO-8859-15");
-				locale_encoding = encoding_get_from_charset(locale_charset);
-				g_free(locale_charset);
+/*			if (strcmp(locale_charset, "ANSI_X3.4-1968") == 0)
+			{	/// TODO very dirty quick hack, if LC=C then all oes wrong
+				locale_encoding = encoding_get_from_charset("ISO-8859-15");
 			}
 			else
-				locale_encoding = encoding_get_from_charset(locale_charset);
+*/				locale_encoding = encoding_get_from_charset(locale_charset);
 
 			encodings = g_list_prepend(encodings,
 						(gpointer) locale_encoding);
@@ -900,7 +898,7 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 }
 
 
-gchar *utils_convert_to_utf8_simple(const gchar *str)
+gchar *utils_convert_to_utf8_simple2(const gchar *str)
 {
 	GError *error = NULL;
 	gchar *utf8_msg_string = NULL;
@@ -915,10 +913,10 @@ gchar *utils_convert_to_utf8_simple(const gchar *str)
 	else
 	{
 		gsize rbytes, wbytes;
-		utf8_msg_string = g_locale_to_utf8 (str, -1, &rbytes, &wbytes, &error);
+		utf8_msg_string = g_locale_to_utf8(str, -1, &rbytes, &wbytes, &error);
 		geany_debug("%d\t%d", rbytes, wbytes);
 		if (error != NULL) {
-			g_warning ("g_locale_to_utf8 failed: %s\n", error->message);
+			geany_debug("g_locale_to_utf8 failed: %s\n", error->message);
 			g_error_free(error);
 			g_free(utf8_msg_string);
 			return NULL;
@@ -1297,7 +1295,7 @@ gdouble utils_scale_round (gdouble val, gdouble factor)
 }
 
 
-void utils_widget_show_hide(GtkWidget *widget, gboolean show)
+INLINE void utils_widget_show_hide(GtkWidget *widget, gboolean show)
 {
 	if (show)
 	{
@@ -1322,7 +1320,7 @@ void utils_build_show_hide(gint idx)
 		ext = strrchr(doc_list[idx].file_name, '.');
 	}
 
-	if (! ext || utils_strcmp(ext + 1, "h") || utils_strcmp(ext + 1, "hpp"))
+	if (! ext || utils_strcmp(ext + 1, "h") || utils_strcmp(ext + 1, "hpp") || utils_strcmp(ext + 1, "hxx"))
 	{
 		is_header = TRUE;
 	}
@@ -1340,30 +1338,54 @@ void utils_build_show_hide(gint idx)
 		button_is_html = FALSE;
 	}
 
+	gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")));
+
+	//geany_debug("%p %p %p", dialogs_build_menus.menu_c, dialogs_build_menus.menu_tex, dialogs_build_menus.menu_misc);
 	switch (doc_list[idx].file_type->id)
 	{
 		case GEANY_FILETYPES_C:	// intended fallthrough, C and C++ behave equal
 		case GEANY_FILETYPES_CPP:
 		{
+			if (dialogs_build_menus.menu_c == NULL)
+			{
+				dialogs_build_menus.menu_c = dialogs_create_build_menu_gen(TRUE, TRUE);
+				g_object_ref((gpointer)dialogs_build_menus.menu_c);	// to hold it after removing
+
+			}
 			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+							dialogs_build_menus.menu_c);
 			gtk_widget_set_sensitive(app->compile_button, TRUE);
-			gtk_widget_set_sensitive(app->build_menu_item_link, TRUE);
+
 			if (! is_header) break;
 		}
 		case GEANY_FILETYPES_JAVA:
 		{
+			if (dialogs_build_menus.menu_misc == NULL)
+			{
+				dialogs_build_menus.menu_misc = dialogs_create_build_menu_gen(FALSE, TRUE);
+				g_object_ref((gpointer)dialogs_build_menus.menu_misc);	// to hold it after removing
+			}
 			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+							dialogs_build_menus.menu_misc);
 			gtk_widget_set_sensitive(app->compile_button, TRUE);
-			gtk_widget_set_sensitive(app->build_menu_item_link, FALSE);
+
 			if (! is_header) break;
 		}
 		case GEANY_FILETYPES_XML:	// intended fallthrough, HTML and XML behave equal
 		case GEANY_FILETYPES_PHP:
 		{
-			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
-			gtk_widget_set_sensitive(app->compile_button, TRUE);
-			//gtk_widget_set_sensitive(app->build_menu_item_link, FALSE);
+			if (dialogs_build_menus.menu_misc == NULL)
+			{
+				dialogs_build_menus.menu_misc = dialogs_create_build_menu_gen(FALSE, TRUE);
+				g_object_ref((gpointer)dialogs_build_menus.menu_misc);	// to hold it after removing
+			}
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+							dialogs_build_menus.menu_misc);
 
+			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
+			gtk_widget_set_sensitive(app->compile_button, TRUE);
 			gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->compile_button), GTK_STOCK_FIND);
 			gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(app->compile_button), tooltips,
 									_("View the current file in a browser"), NULL);
@@ -1374,16 +1396,35 @@ void utils_build_show_hide(gint idx)
 		}
 		case GEANY_FILETYPES_PASCAL:
 		{
+			if (dialogs_build_menus.menu_misc == NULL)
+			{
+				dialogs_build_menus.menu_misc = dialogs_create_build_menu_gen(FALSE, TRUE);
+				g_object_ref((gpointer)dialogs_build_menus.menu_misc);	// to hold it after removing
+			}
+			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+							dialogs_build_menus.menu_misc);
+			gtk_widget_set_sensitive(app->compile_button, TRUE);
+
+			if (! is_header) break;
+		}
+		case GEANY_FILETYPES_TEX:
+		{
+			if (dialogs_build_menus.menu_tex == NULL)
+			{
+				dialogs_build_menus.menu_tex = dialogs_create_build_menu_tex();
+				g_object_ref((gpointer)dialogs_build_menus.menu_tex);	// to hold it after removing
+			}
+			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+							dialogs_build_menus.menu_tex);
 			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
 			gtk_widget_set_sensitive(app->compile_button, TRUE);
-			gtk_widget_set_sensitive(app->build_menu_item_link, FALSE);
 			if (! is_header) break;
 		}
 		default:
 		{
 			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
 			gtk_widget_set_sensitive(app->compile_button, FALSE);
-			gtk_widget_set_sensitive(app->build_menu_item_link, FALSE);
 			break;
 		}
 	}
@@ -1844,7 +1885,7 @@ void utils_update_recent_menu(void)
 		children = g_list_nth(children, app->mru_length - 1);
 		while (children)
 		{
-			gtk_widget_destroy(GTK_WIDGET(children->data));
+			if (GTK_IS_WIDGET(children->data)) gtk_widget_destroy(GTK_WIDGET(children->data));
 			children = g_list_next(children);
 		}
 	}

@@ -111,6 +111,8 @@ typedef struct MyApp
 	gboolean			 debug_mode;
 	// represents the state at startup while opening session files
 	gboolean			 opening_session_files;
+	// represents the state when Geany is quitting completely
+	gboolean			 quitting;
 	gboolean			 have_vte;
 	gboolean			 ignore_global_tags;
 	gboolean			 toolbar_visible;
@@ -163,7 +165,10 @@ typedef struct MyApp
 	/* I called it fpc (www.freepascal.org) to demonstrate I mean a pascal compiler,
 	 * but feel free to use the GNU one as well */
 	gchar				*build_fpc_cmd;
-	gchar				*build_tex_cmd;
+	gchar				*build_tex_dvi_cmd;
+	gchar				*build_tex_pdf_cmd;
+	gchar				*build_tex_view_dvi_cmd;
+	gchar				*build_tex_view_pdf_cmd;
 	gchar				*build_java_cmd;
 	gchar				*build_javac_cmd;
 	gchar				*build_make_cmd;

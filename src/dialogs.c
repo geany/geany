@@ -1,7 +1,7 @@
 /*
  *      dialogs.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -321,7 +321,7 @@ void dialogs_show_about(void)
 	icon = utils_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
 
 	info = about_info_new(PACKAGE, VERSION, _("A fast and lightweight IDE"),
-						  ABOUT_COPYRIGHT_TEXT("2005", "Enrico Troeger"), GEANY_HOMEPAGE, GEANY_CODENAME);
+						  ABOUT_COPYRIGHT_TEXT("2006", "Enrico Troeger"), GEANY_HOMEPAGE, GEANY_CODENAME);
 	about_info_add_credit(info, "Enrico Troeger", "enrico.troeger@uvena.de", _("Maintainer"));
 
 	for (n = 0; translators[n].name != NULL; ++n)
@@ -459,19 +459,13 @@ void dialogs_show_color(void)
 }
 
 
-void dialogs_create_build_menu(void)
+GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute)
 {
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 	menu = gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")), menu);
-
-	// add tearoff
-	//item = gtk_tearoff_menu_item_new();
-	//gtk_widget_show(item);
-	//gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), item);
 
 	// compile the code
 	item = gtk_image_menu_item_new_with_label(_("Compile"));
@@ -482,19 +476,19 @@ void dialogs_create_build_menu(void)
 	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK (on_build_compile_activate), NULL);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
 
-
-	// build the code
-	app->build_menu_item_link = gtk_menu_item_new_with_label(_("Build"));
-	gtk_widget_show(app->build_menu_item_link);
-	gtk_container_add(GTK_CONTAINER(menu), app->build_menu_item_link);
-	gtk_tooltips_set_tip(tooltips, app->build_menu_item_link,
-				_("Builds the current file (generate an executable file)"), NULL);
-	gtk_widget_add_accelerator(app->build_menu_item_link, "activate", accel_group, GDK_F9,
-				(GdkModifierType) 0, GTK_ACCEL_VISIBLE);
-	g_signal_connect((gpointer) app->build_menu_item_link, "activate", G_CALLBACK (on_build_build_activate), NULL);
-
+	if (link)
+	{	// build the code
+		app->build_menu_item_link = gtk_menu_item_new_with_label(_("Build"));
+		gtk_widget_show(app->build_menu_item_link);
+		gtk_container_add(GTK_CONTAINER(menu), app->build_menu_item_link);
+		gtk_tooltips_set_tip(tooltips, app->build_menu_item_link,
+					_("Builds the current file (generate an executable file)"), NULL);
+		gtk_widget_add_accelerator(app->build_menu_item_link, "activate", accel_group, GDK_F9,
+					(GdkModifierType) 0, GTK_ACCEL_VISIBLE);
+		g_signal_connect((gpointer) app->build_menu_item_link, "activate", G_CALLBACK(on_build_build_activate), NULL);
+	}
 
 	// build the code with make all
 	item = gtk_menu_item_new_with_label(_("Build with \"make\""));
@@ -504,8 +498,7 @@ void dialogs_create_build_menu(void)
 										   "make tool and the default target"), NULL);
 	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9,
 				(GdkModifierType) GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK (on_build_make_activate), GINT_TO_POINTER(0));
-
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
 
 	// build the code with make
 	item = gtk_menu_item_new_with_label(_("Build with make (custom target)"));
@@ -513,25 +506,24 @@ void dialogs_create_build_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the specified target"), NULL);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK (on_build_make_activate), GINT_TO_POINTER(1));
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
 
-
-	// execute the code
-	item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-	gtk_tooltips_set_tip(tooltips, item, _("Execute the current file if it was already compiled"), NULL);
-	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F5,
-				(GdkModifierType) 0, GTK_ACCEL_VISIBLE);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK (on_build_execute_activate), NULL);
-
+	if (execute)
+	{	// execute the code
+		item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+		gtk_tooltips_set_tip(tooltips, item, _("Execute the current file if it was already compiled"), NULL);
+		gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F5,
+					(GdkModifierType) 0, GTK_ACCEL_VISIBLE);
+		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_execute_activate), NULL);
+	}
 
 	// separator
 	separator = gtk_separator_menu_item_new();
 	gtk_widget_show(separator);
 	gtk_container_add(GTK_CONTAINER(menu), separator);
 	gtk_widget_set_sensitive(separator, FALSE);
-
 
 	// arguments
 	item = gtk_image_menu_item_new_with_label(_("Set Includes and Arguments"));
@@ -543,10 +535,98 @@ void dialogs_create_build_menu(void)
 	image = gtk_image_new_from_stock("gtk-preferences", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK (on_build_arguments_activate), NULL);
-
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_arguments_activate), GINT_TO_POINTER(link));
 
 	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
+
+	return menu;
+}
+
+
+GtkWidget *dialogs_create_build_menu_tex(void)
+{
+	GtkWidget *menu, *item, *image, *separator;
+	GtkAccelGroup *accel_group = gtk_accel_group_new();
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+
+	menu = gtk_menu_new();
+
+	// DVI
+	item = gtk_image_menu_item_new_with_label(_("LaTeX -> DVI"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file into a DVI file"), NULL);
+	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F8, (GdkModifierType) 0, GTK_ACCEL_VISIBLE);
+	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
+	gtk_widget_show(image);
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
+
+	// PDF
+	item = gtk_image_menu_item_new_with_label(_("LaTeX -> PDF"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file into a PDF file"), NULL);
+	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9, (GdkModifierType) 0, GTK_ACCEL_VISIBLE);
+	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
+	gtk_widget_show(image);
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
+
+	// DVI view
+	item = gtk_menu_item_new_with_label(_("View DVI file"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item, _("Compiles and view the current file"), NULL);
+	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9,
+				(GdkModifierType) GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
+
+	// PDF view
+	item = gtk_menu_item_new_with_label(_("View PDF file"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item, _("Compiles and view the current file"), NULL);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
+
+	// build the code with make all
+	item = gtk_menu_item_new_with_label(_("Build with \"make\""));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
+										   "make tool and the default target"), NULL);
+	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9,
+				(GdkModifierType) GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
+
+	// build the code with make
+	item = gtk_menu_item_new_with_label(_("Build with make (custom target)"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
+										   "make tool and the specified target"), NULL);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
+
+	// separator
+	separator = gtk_separator_menu_item_new();
+	gtk_widget_show(separator);
+	gtk_container_add(GTK_CONTAINER(menu), separator);
+	gtk_widget_set_sensitive(separator, FALSE);
+
+	// arguments
+	item = gtk_image_menu_item_new_with_label(_("Set Arguments"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER (menu), item);
+	gtk_tooltips_set_tip(tooltips, item,
+				_("Sets the program paths and arguments"), NULL);
+	image = gtk_image_new_from_stock("gtk-preferences", GTK_ICON_SIZE_MENU);
+	gtk_widget_show(image);
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_arguments_activate), NULL);
+
+	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
+
+	return menu;
 }
 
 
@@ -788,8 +868,7 @@ void dialogs_show_replace(void)
 	}
 }
 
-
-void dialogs_show_includes_arguments(void)
+void dialogs_show_includes_arguments_tex(void)
 {
 	GtkWidget *dialog, *label, *entries[3];
 
@@ -798,7 +877,89 @@ void dialogs_show_includes_arguments(void)
 										GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 
-	label = gtk_label_new(_("Sets the includes and library paths for the compiler and the program arguments for execution"));
+	label = gtk_label_new(_("Sets the includes and library paths for the compiler and the program arguments for execution\n"));
+	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+
+	// LaTeX -> DVI args
+	label = gtk_label_new(_("Enter here the (La)TeX command (for DVI creation) and some useful options."));
+	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+	entries[0] = gtk_entry_new();
+	gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
+	if (app->build_tex_dvi_cmd)
+		gtk_entry_set_text(GTK_ENTRY(entries[0]), app->build_tex_dvi_cmd);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[0]);
+
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+
+	// LaTeX -> PDF args
+	label = gtk_label_new(_("Enter here the (La)TeX command (for PDF creation) and some useful options."));
+	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+	entries[1] = gtk_entry_new();
+	gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
+	if (app->build_tex_pdf_cmd)
+		gtk_entry_set_text(GTK_ENTRY(entries[1]), app->build_tex_pdf_cmd);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[1]);
+
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+
+	// View LaTeX -> DVI args
+	label = gtk_label_new(_("Enter here the (La)TeX command (for DVI creation and preview) and some useful options."));
+	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+	entries[2] = gtk_entry_new();
+	gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
+	if (app->build_tex_view_dvi_cmd)
+		gtk_entry_set_text(GTK_ENTRY(entries[2]), app->build_tex_view_dvi_cmd);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[2]);
+
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+
+	// View LaTeX -> PDF args
+	label = gtk_label_new(_("Enter here the (La)TeX command (for PDF creation and preview) and some useful options."));
+	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+	entries[3] = gtk_entry_new();
+	gtk_entry_set_width_chars(GTK_ENTRY(entries[3]), 30);
+	if (app->build_tex_view_pdf_cmd)
+		gtk_entry_set_text(GTK_ENTRY(entries[3]), app->build_tex_view_pdf_cmd);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[3]);
+
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+
+	g_object_set_data_full(G_OBJECT(dialog), "tex_entry1",
+					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
+	g_object_set_data_full(G_OBJECT(dialog), "tex_entry2",
+					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
+	g_object_set_data_full(G_OBJECT(dialog), "tex_entry3",
+					gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
+	g_object_set_data_full(G_OBJECT(dialog), "tex_entry4",
+					gtk_widget_ref(entries[3]), (GDestroyNotify)gtk_widget_unref);
+
+
+	g_signal_connect((gpointer) dialog, "response", G_CALLBACK(on_includes_arguments_tex_dialog_response), NULL);
+
+	gtk_widget_show_all(dialog);
+}
+
+
+void dialogs_show_includes_arguments_gen(gboolean link)
+{
+	GtkWidget *dialog, *label, *entries[3];
+
+	dialog = gtk_dialog_new_with_buttons(_("Set Includes and Arguments"), GTK_WINDOW(app->window),
+										GTK_DIALOG_DESTROY_WITH_PARENT,
+										GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+
+	label = gtk_label_new(_("Sets the includes and library paths for the compiler and the program arguments for execution\n"));
 	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
@@ -845,6 +1006,8 @@ void dialogs_show_includes_arguments(void)
 		gtk_entry_set_text(GTK_ENTRY(entries[2]), app->build_args_prog);
 	}
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[2]);
+
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 
 
 	g_object_set_data_full(G_OBJECT(dialog), "includes_entry1",

@@ -259,6 +259,7 @@ gint main(gint argc, gchar **argv)
 	app->replace_dialog		= NULL;
 	app->default_tag_tree	= NULL;
 	app->main_window_realized= FALSE;
+	app->quitting			= FALSE;
 #ifdef HAVE_VTE
 	app->have_vte 			= ! no_vte;
 #else
@@ -268,12 +269,16 @@ gint main(gint argc, gchar **argv)
 	app->tm_workspace		= tm_get_workspace();
 	app->recent_queue		= g_queue_new();
 	app->opening_session_files	= FALSE;
+	dialogs_build_menus.menu_c		= NULL;
+	dialogs_build_menus.menu_tex	= NULL;
+	dialogs_build_menus.menu_misc	= NULL;
 	mkdir_result = utils_make_settings_dir();
 	if (mkdir_result != 0)
 		if (! dialogs_show_mkcfgdir_error(mkdir_result)) destroyapp_early();
 	configuration_load();
 	templates_init();
 	encodings_init();
+	document_init_doclist();
 
 	app->window = create_window1();
 	app->new_file_menu = gtk_menu_new();
@@ -345,7 +350,6 @@ gint main(gint argc, gchar **argv)
 	msgwindow.popup_msg_menu = msgwin_create_message_popup_menu(4);
 	msgwindow.popup_compiler_menu = msgwin_create_message_popup_menu(5);
 	vte_init();
-	dialogs_create_build_menu();
 	dialogs_create_recent_menu();
 	utils_create_insert_menu_items();
 
