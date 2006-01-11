@@ -5,22 +5,16 @@ TODO List:
 
 	Geany 0.5 or later:
 
-	o window positioning and window resizing doesn't work under win32
 	o sci_cb.c: improve auto completion(include local tags)
 	o documentation: list and explain filetype modes
 	o interface.c: reorder the 'document' menu entry, differ between
 	  document related and general settings, new submenu: View->Editor
-	o http://pan.rebelbase.com/download/releases/0.14.2/WINDOWS/
-	  gtk_for_windows/
 	o fix a really nasty bug which causes a segfault, but don't know
 	  where, is it still existent?
 	o encoding-bug in utils_convert_to_utf8()
-	o LaTex build menu
+	o document_save -> update things only when not quitting
 	o command line option -e (editor mode)
-	o check for inline-usage e.g. in sciwrappers.c
-	o make multiline comment indentation more intelligent
-	o add setting for beep after compiling, make it optional
-	o extensive use of config.h
+	o extend use of doc_list[].is_valid
 	o (indent wrapped lines, but how?)
 	o (project management)
 	o (folding)

@@ -1,3 +1,47 @@
+2006-01-10  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * bugfix: geany.glade, src/interface.c: added missing tooltip to
+                                         compile button
+ * src/filetypes.c: applied patch from Nick Treleaven, to add .cc, .hh
+                    and .hxx extension for filetype C++ and improve the
+                    pattern handling
+
+
+2006-01-08  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * tagmanager/docbook.c, tagmanager/parsers.h, tagmanager/Makefile.am:
+   added conf.c(built from pascal.c), to create tags for docbook files
+ * src/build.c, src/utils.c, src/main.c, src/callbacks.c:
+   made the build menu filetype specific to have different menu items
+ * bugfix: src/keyfile.c: save window geometry with
+                          gtk_window_get_position() so restoring the
+                          window works correctly under Win32, too
+
+
+2006-01-06  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/main.c, src/callbacks.c, src/vte.c, src/geany.h:
+   added commandline option to specify the path to the VTE library
+
+
+2006-01-03  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * data/filetypes.markup, src/highlighting.c:
+   added new keywords for PHP5 and replaced phpKeyWords by php
+   (thanks to Simon Stoye for reporting)
+ * geany.glade, src/interface.c, src/prefs.c, src/keyfile.c
+   src/callbacks.c, src/document.c, src/build.c, src/sci_cb.c:
+   added new option "Beep on errors" to disable beeping
+
+
+2005-12-31  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/gb.c: fixed segfault when exiting the easteregg program when it
+             is still running
+ * src/highlighting.c, src/win32.c: added my_strtod(), as replacement
+                                    for Win32 strtod()
+
+
 2005-12-29  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * tagmanager/tm_tag.c: eliminated compiler (gcc4) warnings
