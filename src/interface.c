@@ -713,6 +713,7 @@ create_window1 (void)
   toolbutton13 = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-convert");
   gtk_widget_show (toolbutton13);
   gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton13);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton13), tooltips, _("Compiles the current file"), NULL);
 
   tmp_image = gtk_image_new_from_stock ("gtk-select-color", tmp_toolbar_icon_size);
   gtk_widget_show (tmp_image);
