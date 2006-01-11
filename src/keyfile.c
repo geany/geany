@@ -102,7 +102,12 @@ void configuration_save(void)
 	g_key_file_set_string(config, PACKAGE, "tagbar_font", app->tagbar_font);
 	g_key_file_set_string(config, PACKAGE, "msgwin_font", app->msgwin_font);
 	g_key_file_set_string(config, PACKAGE, "scribble_text", scribble_text);
-	if (app->pref_main_save_winpos) g_key_file_set_integer_list(config, PACKAGE, "geometry", app->geometry, 4);
+	if (app->pref_main_save_winpos)
+	{
+		gtk_window_get_position(GTK_WINDOW(app->window), &app->geometry[0], &app->geometry[1]);
+		gtk_window_get_size(GTK_WINDOW(app->window), &app->geometry[2], &app->geometry[3]);
+		g_key_file_set_integer_list(config, PACKAGE, "geometry", app->geometry, 4);
+	}
 	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", app->pref_editor_tab_width);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", app->pref_main_confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", app->pref_main_load_session);
@@ -122,6 +127,10 @@ void configuration_save(void)
 	g_key_file_set_string(config, "build", "build_java_cmd", app->build_java_cmd ? app->build_java_cmd : "");
 	g_key_file_set_string(config, "build", "build_javac_cmd", app->build_javac_cmd ? app->build_javac_cmd : "");
 	g_key_file_set_string(config, "build", "build_fpc_cmd", app->build_fpc_cmd ? app->build_fpc_cmd : "");
+	g_key_file_set_string(config, "build", "build_tex_dvi_cmd", app->build_tex_dvi_cmd ? app->build_tex_dvi_cmd : "");
+	g_key_file_set_string(config, "build", "build_tex_pdf_cmd", app->build_tex_pdf_cmd ? app->build_tex_pdf_cmd : "");
+	g_key_file_set_string(config, "build", "build_tex_view_dvi_cmd", app->build_tex_view_dvi_cmd ? app->build_tex_view_dvi_cmd : "");
+	g_key_file_set_string(config, "build", "build_tex_view_pdf_cmd", app->build_tex_view_pdf_cmd ? app->build_tex_view_pdf_cmd : "");
 	g_key_file_set_string(config, "build", "build_make_cmd", app->build_make_cmd ? app->build_make_cmd : "");
 	g_key_file_set_string(config, "build", "build_term_cmd", app->build_term_cmd ? app->build_term_cmd : "");
 	g_key_file_set_string(config, "build", "build_browser_cmd", app->build_browser_cmd ? app->build_browser_cmd : "");
@@ -285,6 +294,22 @@ gboolean configuration_load(void)
 
 	tmp_string = g_find_program_in_path("fpc");
 	app->build_fpc_cmd = utils_get_setting_string(config, "build", "build_fpc_cmd", tmp_string);
+	g_free(tmp_string);
+
+	tmp_string = g_find_program_in_path("latex");
+	app->build_tex_dvi_cmd = utils_get_setting_string(config, "build", "build_tex_dvi_cmd", tmp_string);
+	g_free(tmp_string);
+
+	tmp_string = g_find_program_in_path("pdflatex");
+	app->build_tex_pdf_cmd = utils_get_setting_string(config, "build", "build_tex_pdf_cmd", tmp_string);
+	g_free(tmp_string);
+
+	tmp_string = g_find_program_in_path("latex");
+	app->build_tex_view_dvi_cmd = utils_get_setting_string(config, "build", "build_tex_view_dvi_cmd", tmp_string);
+	g_free(tmp_string);
+
+	tmp_string = g_find_program_in_path("pdflatex");
+	app->build_tex_view_pdf_cmd = utils_get_setting_string(config, "build", "build_tex_view_pdf_cmd", tmp_string);
 	g_free(tmp_string);
 
 	tmp_string = g_find_program_in_path("make");
