@@ -193,6 +193,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 	if (response == GTK_RESPONSE_OK)
 	{
 		GtkWidget *widget;
+		gint i;
 
 		// General settings
 		widget = lookup_widget(app->prefs_dialog, "spin_mru");
@@ -325,14 +326,18 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		}
 #endif
 
-
 		// apply the changes made
 		utils_widget_show_hide(lookup_widget(app->window, "entry1"), app->pref_main_show_search);
 		utils_widget_show_hide(lookup_widget(app->window, "toolbutton18"), app->pref_main_show_search);
 		utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), app->pref_main_show_search);
 		utils_treeviews_showhide();
-		gtk_widget_modify_font(lookup_widget(app->window, "treeview2"),
-				pango_font_description_from_string(app->tagbar_font));
+		for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+		{
+			if (doc_list[i].is_valid && GTK_IS_WIDGET(doc_list[i].tag_tree))
+				gtk_widget_modify_font(doc_list[i].tag_tree, pango_font_description_from_string(app->tagbar_font));
+		}
+		if (GTK_IS_WIDGET(app->default_tag_tree))
+		gtk_widget_modify_font(app->default_tag_tree, pango_font_description_from_string(app->tagbar_font));
 		gtk_widget_modify_font(lookup_widget(app->window, "entry1"), pango_font_description_from_string(app->tagbar_font));
 		gtk_widget_modify_font(msgwindow.tree_compiler, pango_font_description_from_string(app->msgwin_font));
 		gtk_widget_modify_font(msgwindow.tree_msg, pango_font_description_from_string(app->msgwin_font));
@@ -348,7 +353,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 			gint i;
 			for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 			{
-				if (doc_list[i].sci)
+				if (doc_list[i].is_valid)
 				{
 					sci_set_tab_width(doc_list[i].sci, app->pref_editor_tab_width);
 					sci_set_mark_long_lines(doc_list[i].sci, app->long_line_column, app->long_line_color);
