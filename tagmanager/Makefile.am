@@ -1,4 +1,6 @@
 ## Process this file with automake to produce Makefile.in
+# $Id$
+
 SUBDIRS = include
 INCLUDES = -Iinclude $(PACKAGE_CFLAGS)
 #	-DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED \
@@ -15,7 +17,6 @@ libtagmanager_a_SOURCES =\
 	sort.h\
 	vstring.h\
 	args.h\
-	conf.c\
 	ctags.h\
 	entry.h\
 	get.h\
@@ -26,6 +27,8 @@ libtagmanager_a_SOURCES =\
 	args.c\
 	args.h\
 	c.c\
+	conf.c\
+	docbook.c\
 	make.c\
 	tex.c\
 	pascal.c\

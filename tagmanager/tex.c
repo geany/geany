@@ -1,12 +1,15 @@
 /*
-*
-*   Copyright (c) 2005, Enrico Troeger
-*
-*   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
-*
-*   This module contains functions for generating tags for (la)tex files.
-*/
+ *   $Id$
+ *
+ *   Copyright (c) 2000-2001, Jérôme Plût
+ *   Copyright (c) 2006, Enrico Tröger
+ *
+ *   This source code is released for free distribution under the terms of the
+ *   GNU General Public License.
+ *
+ *   This module contains functions for generating tags for source files
+ *   for the TeX formatting system.
+ */
 
 /*
 *   INCLUDE FILES
@@ -14,6 +17,7 @@
 #include "general.h"	/* must always come first */
 
 #include <ctype.h>
+#include <string.h>
 
 #include "parse.h"
 #include "read.h"
@@ -23,80 +27,176 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_KEYWORD
-} texKind;
+     K_COMMAND,
+     K_ENVIRONMENT,
+     K_LABEL
+} TeXKind;
 
-static kindOption TexKinds [] = {
-    { TRUE, 's', "symbol", "symbols"}
+static kindOption TeXKinds[] = {
+     /* Commands - including \newcommand, \providecommand, \renewcommand,
+      * \def, \DeclareMathOperator. */
+     { TRUE, 'c', "class",      "command definitions"     },
+     /* Environment - \newenvironment, \newtheorem */
+     { TRUE, 'n', "namespace",  "environment definitions" },
+     /* Labels - \label, \bibitem. */
+     { TRUE, 't', "typedef",        "labels and bibliography" }
 };
+
+#define TEX_BRACES (1<<0)
+#define TEX_BSLASH (1<<1)
+#define TEX_LABEL  (1<<2)
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
-static boolean isIdentifier (int c)
+static int getWord (const char * ref, const unsigned char ** pointer)
 {
-    return (boolean)(isalnum (c)  ||  c == '\\');
+     const char * p = *pointer;
+
+     while ((*ref != '\0') && (*p != '\0') && (*ref == *p))
+ 	ref++, p++;
+
+     if (*ref)
+ 	return FALSE;
+
+     *pointer = p;
+     return TRUE;
 }
 
-static void findTexTags (void)
+static void createTag (int flags, TeXKind kind, const char * l)
 {
-    vString *name = vStringNew ();
+     vString *name = vStringNew ();
+
+     while ((*l == ' '))
+ 	l++;
+     if (flags & (TEX_BRACES | TEX_LABEL))
+     {
+ 	if ((*(l++)) != '{')
+ 	    goto no_tag;
+     }
+     if (flags & TEX_BSLASH)
+     {
+ 	if ((*(l++)) != '\\')
+ 	    goto no_tag;
+     }
+     if (flags & TEX_LABEL)
+     {
+ 	do
+ 	{
+ 	    vStringPut (name, (int) *l);
+ 	    ++l;
+ 	} while ((*l != '\0') && (*l != '}'));
+ 	vStringTerminate (name);
+ 	makeSimpleTag (name, TeXKinds, kind);
+     }
+     else if (isalpha ((int) *l) || *l == '@')
+     {
+ 	do
+ 	{
+ 	    vStringPut (name, (int) *l);
+ 	    ++l;
+ 	} while (isalpha ((int) *l) || *l == '@');
+ 	vStringTerminate (name);
+ 	makeSimpleTag (name, TeXKinds, kind);
+     }
+     else
+     {
+ 	vStringPut (name, (int) *l);
+ 	vStringTerminate (name);
+ 	makeSimpleTag (name, TeXKinds, kind);
+     }
+
+ no_tag:
+     vStringDelete (name);
+}
+
+static void findTeXTags (void)
+{
     const unsigned char *line;
 
     while ((line = fileReadLine ()) != NULL)
     {
-	const unsigned char* cp = line;
-	boolean possible = TRUE;
+ 	const unsigned char *cp = line;
+ 	//int escaped = 0;
 
-	while (isspace ((int) *cp))
-	    ++cp;
-	if (*cp == '#')
-	    continue;
+ 	for (; *cp != '\0'; cp++)
+ 	{
+ 	    if (*cp == '%')
+ 		break;
+ 	    if (*cp == '\\')
+ 	    {
+ 		cp++;
 
-	while (*cp != '\0')
-	{
-	    /*  We look for any sequence of identifier characters following
-	     *  either a white space or a colon and followed by either = or :=
-	     */
-	    if (possible && isIdentifier ((int) *cp))
-	    {
-		while (isIdentifier ((int) *cp))
-		{
-		    vStringPut (name, (int) *cp);
-		    ++cp;
-		}
-		vStringTerminate (name);
-		while (isspace ((int) *cp))
-		    ++cp;
-		if ( *cp == ':')
-		    ++cp;
-		if ( *cp == '=')
-		    makeSimpleTag (name, TexKinds, K_KEYWORD);
-		vStringClear (name);
-	    }
-	    else if (isspace ((int) *cp) ||  *cp == ':')
-		possible = TRUE;
-	    else
-		possible = FALSE;
-	    if (*cp != '\0')
-		++cp;
-	}
+ 		/* \newcommand{\command} */
+ 		if (getWord ("newcommand", &cp)
+ 		    || getWord ("providecommand", &cp)
+ 		    || getWord ("renewcommand", &cp)
+ 		    )
+ 		{
+ 		    createTag (TEX_BRACES|TEX_BSLASH, K_COMMAND, cp);
+ 		    continue;
+ 		}
+
+ 		/* \DeclareMathOperator{\command} */
+ 		if (getWord ("DeclareMathOperator", &cp))
+ 		{
+ 		    if (*cp == '*')
+ 			cp++;
+ 		    createTag (TEX_BRACES|TEX_BSLASH, K_COMMAND, cp);
+ 		    continue;
+ 		}
+
+ 		/* \def\command */
+ 		if (getWord ("def", &cp))
+ 		{
+ 		    createTag (TEX_BSLASH, K_COMMAND, cp);
+ 		    continue;
+ 		}
+
+ 		/* \newenvironment{name} */
+ 		if ( getWord ("newenvironment", &cp)
+ 		    || getWord ("newtheorem", &cp)
+ 		    )
+ 		{
+ 		    createTag (TEX_BRACES, K_ENVIRONMENT, cp);
+ 		    continue;
+ 		}
+
+ 		/* \bibitem[label]{key} */
+ 		if (getWord ("bibitem", &cp))
+ 		{
+ 		    while (*cp == ' ')
+ 			cp++;
+ 		    if (*(cp++) != '[')
+ 			break;
+ 		    while ((*cp != '\0') && (*cp != ']'))
+ 			cp++;
+ 		    if (*(cp++) != ']')
+ 			break;
+ 		    createTag (TEX_LABEL, K_LABEL, cp);
+ 		    continue;
+ 		}
+
+ 		/* \label{key} */
+ 		if (getWord ("label", &cp))
+ 		{
+ 		    createTag (TEX_LABEL, K_LABEL, cp);
+ 		    continue;
+ 		}
+ 	    }
+ 	}
     }
-    vStringDelete (name);
 }
 
 extern parserDefinition* TexParser (void)
 {
-    //static const char *const patterns [] = { "[Mm]akefile", NULL };
-    static const char *const extensions [] = { "tex", NULL };
-    parserDefinition* const def = parserNew ("Tex");
-    def->kinds      = TexKinds;
-    def->kindCount  = KIND_COUNT (TexKinds);
-    //def->patterns   = patterns;
-    def->extensions = extensions;
-    def->parser     = findTexTags;
-    return def;
+	static const char *const extensions [] = { "tex", "sty", "cls", NULL };
+	parserDefinition * def = parserNew ("Tex");
+	def->kinds      = TeXKinds;
+	def->kindCount  = KIND_COUNT (TeXKinds);
+	def->extensions = extensions;
+	def->parser     = findTeXTags;
+	return def;
 }
 
-/* vi:set tabstop=8 shiftwidth=4: */
