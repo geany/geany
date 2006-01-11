@@ -1,7 +1,7 @@
 /*
  *      document.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -94,9 +94,12 @@ gint document_find_by_sci(ScintillaObject *sci)
 
 
 /* returns the index of the given notebook page in the document list */
-gint document_get_n_idx(gint page_num)
+gint document_get_n_idx(guint page_num)
 {
-	ScintillaObject *sci = (ScintillaObject*)gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->notebook), page_num);
+	if (page_num < 0 || page_num >= GEANY_MAX_OPEN_FILES) return -1;
+
+	ScintillaObject *sci = (ScintillaObject*)gtk_notebook_get_nth_page(
+				GTK_NOTEBOOK(app->notebook), page_num);
 
 	return document_find_by_sci(sci);
 }
@@ -161,6 +164,26 @@ void document_set_text_changed(gint index)
 }
 
 
+/* sets in all document structs the flag is_valid to FALSE and initializes some members to NULL,
+ * to mark it uninitialized. The flag is_valid is set to TRUE in document_create_new_sci(). */
+void document_init_doclist(void)
+{
+	gint i;
+
+	for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+	{
+		doc_list[i].is_valid = FALSE;
+		doc_list[i].tag_store = NULL;
+		doc_list[i].tag_tree = NULL;
+		doc_list[i].file_name = NULL;
+		doc_list[i].file_type = NULL;
+		doc_list[i].tm_file = NULL;
+		doc_list[i].encoding = NULL;
+		doc_list[i].sci = NULL;
+	}
+}
+
+
 /* creates a new tab in the notebook and does all related stuff
  * finally it returns the index of the created document */
 gint document_create_new_sci(const gchar *filename)
@@ -206,7 +229,6 @@ gint document_create_new_sci(const gchar *filename)
 	sci_set_visible_white_spaces(sci, app->show_white_space);
 	sci_set_visible_eols(sci, app->show_line_endings);
 	//sci_set_folding_margin_visible(sci, TRUE);
-	//sci_grap_focus(sci);
 	pfd = pango_font_description_from_string(app->editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
 	document_set_font(sci, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
@@ -223,9 +245,6 @@ gint document_create_new_sci(const gchar *filename)
 
 	this.tag_store = NULL;
 	this.tag_tree = NULL;
-	//this.tag_tree = gtk_tree_view_new();
-	//gtk_widget_show(this.tag_tree);
-	//treeviews_prepare_taglist(this.tag_tree, this.tag_store, new_idx);
 
 	// "the" SCI signal
 	g_signal_connect((GtkWidget*) sci, "sci-notify", G_CALLBACK(on_editor_notification), GINT_TO_POINTER(new_idx));
@@ -252,6 +271,7 @@ gint document_create_new_sci(const gchar *filename)
 	this.last_check = time(NULL);
 	this.do_overwrite = FALSE;
 	this.readonly = FALSE;
+	this.is_valid = TRUE;
 	doc_list[new_idx] = this;
 
 	return new_idx;
@@ -260,11 +280,12 @@ gint document_create_new_sci(const gchar *filename)
 
 /* removes the given notebook tab and clears the related entry in the document
  * list */
-gboolean document_remove(gint page_num)
+gboolean document_remove(guint page_num)
 {
 	gint idx = document_get_n_idx(page_num);
 
-	if (page_num >= 0 && idx >= 0)
+	//geany_debug("page_num: %d\tidx: %d", page_num, idx);
+	if (idx >= 0 && idx <= GEANY_MAX_OPEN_FILES)
 	{
 		if (doc_list[idx].changed && ! dialogs_show_unsaved_file(idx))
 		{
@@ -282,6 +303,7 @@ gboolean document_remove(gint page_num)
 		g_free(doc_list[idx].encoding);
 		g_free(doc_list[idx].file_name);
 		tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+		doc_list[idx].is_valid = FALSE;
 		doc_list[idx].sci = NULL;
 		doc_list[idx].file_name = NULL;
 		doc_list[idx].file_type = NULL;
@@ -398,15 +420,6 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	size = (gint)strlen(map);
 #endif
 
-	// experimental encoding stuff, always force UTF-8
-	if (size > 0)
-	{
-/*		map = utils_convert_to_utf8_simple(map);
-		if (! g_utf8_validate(map, st.st_size - 1, NULL))
-			g_message("not utf8 code, argghhh");
-*/
-		//test_ecnoding(idx, map, size);
-	}
 	/* Determine character encoding and convert to utf-8*/
 	if (size > 0)
 	{
@@ -421,6 +434,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			if (converted_text == NULL)
 			{
 				msgwin_status_add(_("The file does not look like a text file or the file encoding is not supported."));
+				if (app->beep_on_errors) gdk_beep();
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
 				close(fd);
 				munmap(map, st.st_size);
@@ -462,8 +476,9 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	}
 	else
 	{
-		sci_scroll_to_line(doc_list[idx].sci, sci_get_line_from_position(doc_list[idx].sci, pos) - 10);
 		sci_goto_pos(doc_list[idx].sci, pos);
+		if (app->main_window_realized)
+			sci_scroll_to_line(doc_list[idx].sci, sci_get_line_from_position(doc_list[idx].sci, pos) - 10);
 		doc_list[idx].readonly = readonly;
 		sci_set_readonly(doc_list[idx].sci, readonly);
 
@@ -511,7 +526,7 @@ void document_save_file(gint idx)
 	if (doc_list[idx].file_name == NULL)
 	{
 		msgwin_status_add(_("Error saving file."));
-		gdk_beep();
+		if (app->beep_on_errors) gdk_beep();
 		return;
 	}
 
@@ -531,7 +546,7 @@ void document_save_file(gint idx)
 	if (fp == NULL)
 	{
 		msgwin_status_add(_("Error saving file (%s)."), strerror(errno));
-		gdk_beep();
+		if (app->beep_on_errors) gdk_beep();
 		g_free(data);
 		return;
 	}
@@ -550,24 +565,26 @@ void document_save_file(gint idx)
 	if (len != bytes_written)
 	{
 		msgwin_status_add(_("Error saving file."));
-		gdk_beep();
+		if (app->beep_on_errors) gdk_beep();
 		return;
 	}
 
-	// set line numbers again, to reset the margin width, if
-	// there are more lines than before
-	sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
-
-	sci_set_savepoint(doc_list[idx].sci);
-	doc_list[idx].mtime = time(NULL);
-	if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
-		doc_list[idx].file_type = filetypes_get_from_filename(doc_list[idx].file_name);
-	document_set_filetype(idx, doc_list[idx].file_type);
-	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
-	gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), g_path_get_basename(doc_list[idx].file_name));
-	gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), g_path_get_basename(doc_list[idx].file_name));
-	msgwin_status_add(_("File %s saved."), doc_list[idx].file_name);
-	utils_update_statusbar(idx);
+	// ignore the following things if we are quitting
+	if (app->quitting)
+	{	// set line numbers again, to reset the margin width, if
+		// there are more lines than before
+		sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
+		sci_set_savepoint(doc_list[idx].sci);
+		doc_list[idx].mtime = time(NULL);
+		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
+			doc_list[idx].file_type = filetypes_get_from_filename(doc_list[idx].file_name);
+		document_set_filetype(idx, doc_list[idx].file_type);
+		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
+		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), g_path_get_basename(doc_list[idx].file_name));
+		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), g_path_get_basename(doc_list[idx].file_name));
+		msgwin_status_add(_("File %s saved."), doc_list[idx].file_name);
+		utils_update_statusbar(idx);
+	}
 }
 
 
@@ -602,7 +619,7 @@ void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_b
 		}
 		else
 		{
-			gdk_beep();
+			if (app->beep_on_errors) gdk_beep();
 			sci_goto_pos(doc_list[idx].sci, 0);
 		}
 	}
@@ -681,7 +698,7 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 	}
 	else
 	{
-		gdk_beep();
+		if (app->beep_on_errors) gdk_beep();
 	}
 }
 
@@ -697,7 +714,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	selection_end =  sci_get_selection_end(doc_list[idx].sci);
 	if ((selection_end - selection_start) == 0)
 	{
-		gdk_beep();
+		if (app->beep_on_errors) gdk_beep();
 		return;
 	}
 
@@ -721,7 +738,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	}
 	else
 	{
-		gdk_beep();
+		if (app->beep_on_errors) gdk_beep();
 	}
 	// set selection again, because it got lost just before
 	sci_set_selection_start(doc_list[idx].sci, selection_start);
@@ -850,6 +867,7 @@ void document_set_filetype(gint idx, filetype *type)
 				}
 			}
 			sci_colourise(doc_list[idx].sci, 0, -1);
+			utils_build_show_hide(idx);
 			geany_debug("%s : %s (%s)",
 					(doc_list[idx].file_name) ? doc_list[idx].file_name : "(null)",
 					filetypes[i]->name, doc_list[idx].encoding);

@@ -1,7 +1,7 @@
 /*
  *      document.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ gint document_get_cur_idx(void);
 
 
 /* returns the index of the given notebook page in the document list */
-gint document_get_n_idx(gint);
+gint document_get_n_idx(guint);
 
 
 /* returns the next free place(i.e. index) in the document list
@@ -53,6 +53,11 @@ void document_change_tab_color(gint);
 void document_set_text_changed(gint);
 
 
+/* sets in all document structs the flag is_valid to FALSE and initializes some members to NULL,
+ * to mark it uninitialized. The flag is_valid is set to TRUE in document_create_new_sci(). */
+void document_init_doclist(void);
+
+
 /* creates a new tab in the notebook and does all related stuff
  * finally it returns the index of the created document */
 gint document_create_new_sci(const gchar*);
@@ -60,7 +65,7 @@ gint document_create_new_sci(const gchar*);
 
 /* removes the given notebook tab and clears the related entry in the document
  * list */
-gboolean document_remove(gint);
+gboolean document_remove(guint);
 
 
 /* This creates a new document, by clearing the text widget and setting the
