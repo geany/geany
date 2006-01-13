@@ -64,7 +64,8 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_CPP]->pattern[4] = g_strdup("*.hpp");
 	filetypes[GEANY_FILETYPES_CPP]->pattern[5] = g_strdup("*.hxx");
 	filetypes[GEANY_FILETYPES_CPP]->pattern[6] = g_strdup("*.hh");
-	filetypes[GEANY_FILETYPES_CPP]->pattern[7] = NULL;
+	filetypes[GEANY_FILETYPES_CPP]->pattern[7] = g_strdup("*.C");
+	filetypes[GEANY_FILETYPES_CPP]->pattern[8] = NULL;
 	filetypes[GEANY_FILETYPES_CPP]->style_func_ptr = styleset_c;
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CPP]->title, filetypes[GEANY_FILETYPES_CPP]);
 	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_CPP]->title, filetypes[GEANY_FILETYPES_CPP]);
