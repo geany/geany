@@ -1,7 +1,7 @@
 /*
  *      treeviws.h
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -28,10 +28,9 @@
 
 
 typedef struct treeviews {
-	//GtkTreeStore	*store_taglist;
 	GtkListStore	*store_openfiles;
-	//GtkWidget		*tree_taglist;
 	GtkWidget		*tree_openfiles;
+	GtkWidget		*popup_taglist;
 	GtkWidget		*popup_openfiles;
 	GtkTreeIter		 tag_function;
 	GtkTreeIter		 tag_macro;
@@ -56,9 +55,13 @@ void treeviews_prepare_openfiles(void);
 
 GtkTreeIter treeviews_openfiles_add(gint idx, const gchar *string);
 
+void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string);
+
 void treeviews_openfiles_remove(GtkTreeIter iter);
 
 void treeviews_create_openfiles_popup_menu(void);
+
+void treeviews_create_taglist_popup_menu(void);
 
 /* compares the given data (GINT_TO_PONTER(idx)) with the idx from the selected row of openfiles
  * treeview, in case of a match the row is selected and TRUE is returned

@@ -1,7 +1,7 @@
 /*
  *      treeviews.c
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "geany.h"
 #include "support.h"
 #include "callbacks.h"
+#include "utils.h"
 #include "treeviews.h"
 
 
@@ -42,6 +43,8 @@ void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 
 	gtk_widget_modify_font(tree, pango_font_description_from_string(app->tagbar_font));
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
+	g_signal_connect(G_OBJECT(tree), "button-press-event",
+						G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(7));
 
 	// selection handling
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
@@ -115,6 +118,36 @@ void treeviews_openfiles_remove(GtkTreeIter iter)
 }
 
 
+void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string)
+{
+	gtk_list_store_set(tv.store_openfiles, &iter, 0, string, -1);
+}
+
+
+void treeviews_create_taglist_popup_menu(void)
+{
+	GtkWidget *item;
+
+	tv.popup_taglist = gtk_menu_new();
+
+	item = gtk_image_menu_item_new_with_label(_("Hide"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_taglist_tree_popup_clicked), GINT_TO_POINTER(0));
+
+	item = gtk_image_menu_item_new_with_label(_("Hide sidebar"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_taglist_tree_popup_clicked), GINT_TO_POINTER(1));
+}
+
+
 void treeviews_create_openfiles_popup_menu(void)
 {
 	GtkWidget *item;
@@ -124,7 +157,8 @@ void treeviews_create_openfiles_popup_menu(void)
 	item = gtk_image_menu_item_new_from_stock("gtk-close", NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(0));
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(0));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -133,14 +167,36 @@ void treeviews_create_openfiles_popup_menu(void)
 	item = gtk_image_menu_item_new_from_stock("gtk-save", NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(1));
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(1));
 
 	item = gtk_image_menu_item_new_with_label(_("Reload"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock("gtk-revert-to-saved", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(2));
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(2));
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
+
+	item = gtk_image_menu_item_new_with_label(_("Hide"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(3));
+
+	item = gtk_image_menu_item_new_with_label(_("Hide sidebar"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(4));
 }
 
 
