@@ -42,8 +42,6 @@
 #include "treeviews.h"
 #ifdef HAVE_VTE
 # include "vte.h"
-#else
-# define vte_init() ;
 #endif
 
 
@@ -52,7 +50,9 @@ static gboolean ignore_global_tags = FALSE;
 static gboolean no_vte = FALSE;
 static gboolean show_version = FALSE;
 static gchar *alternate_config = NULL;
+#ifdef HAVE_VTE
 static gchar *lib_vte = NULL;
+#endif
 static GOptionEntry entries[] =
 {
 	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, "runs in debug mode (means being verbose)", NULL },
@@ -190,46 +190,9 @@ void apply_settings(void)
 }
 
 
-
-gint main(gint argc, gchar **argv)
+gint main_init(void)
 {
-	GError *error = NULL;
-	GOptionContext *context;
-	gint mkdir_result, idx;
-	time_t seconds = time((time_t *) 0);
-	struct tm *tm = localtime(&seconds);
-	this_year = tm->tm_year + 1900;
-	this_month = tm->tm_mon + 1;
-	this_day = tm->tm_mday;
-
-
-#ifdef ENABLE_NLS
-	bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-	textdomain(GETTEXT_PACKAGE);
-#endif
-	gtk_set_locale();
-
-	signal(SIGTERM, signal_cb);
-
-	context = g_option_context_new(_(" - A fast and lightweight IDE"));
-	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
-	g_option_context_add_group(context, gtk_get_option_group(TRUE));
-	g_option_context_parse(context, &argc, &argv, &error);
-	g_option_context_free(context);
-
-	if (show_version)
-	{
-		printf(PACKAGE " " VERSION " ");
-		printf(_("(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"),
-				__DATE__, GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
-				GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
-		printf("\n");
-
-		return (0);
-	}
-
-	gtk_init(&argc, &argv);
+	gint mkdir_result;
 
 	// inits
 	app = g_new(MyApp, 1);
@@ -265,24 +228,19 @@ gint main(gint argc, gchar **argv)
 #else
 	app->have_vte 			= FALSE;
 #endif
-	app->ignore_global_tags = ignore_global_tags;
-	app->tm_workspace		= tm_get_workspace();
-	app->recent_queue		= g_queue_new();
-	app->opening_session_files	= FALSE;
+	app->ignore_global_tags 		= ignore_global_tags;
+	app->tm_workspace				= tm_get_workspace();
+	app->recent_queue				= g_queue_new();
+	app->opening_session_files		= FALSE;
 	dialogs_build_menus.menu_c		= NULL;
 	dialogs_build_menus.menu_tex	= NULL;
 	dialogs_build_menus.menu_misc	= NULL;
 	mkdir_result = utils_make_settings_dir();
 	if (mkdir_result != 0)
 		if (! dialogs_show_mkcfgdir_error(mkdir_result)) destroyapp_early();
-	configuration_load();
-	templates_init();
-	encodings_init();
-	document_init_doclist();
 
 	app->window = create_window1();
 	app->new_file_menu = gtk_menu_new();
-	filetypes_init_types();
 
 	// store important pointers in the MyApp structure
 	app->toolbar = lookup_widget(app->window, "toolbar1");
@@ -333,6 +291,58 @@ gint main(gint argc, gchar **argv)
 	msgwindow.tree_msg = lookup_widget(app->window, "treeview4");
 	msgwindow.tree_compiler = lookup_widget(app->window, "treeview5");
 
+	return mkdir_result;
+}
+
+
+gint main(gint argc, gchar **argv)
+{
+	GError *error = NULL;
+	GOptionContext *context;
+	gint mkdir_result, idx;
+	time_t seconds = time((time_t *) 0);
+	struct tm *tm = localtime(&seconds);
+	this_year = tm->tm_year + 1900;
+	this_month = tm->tm_mon + 1;
+	this_day = tm->tm_mday;
+
+
+#ifdef ENABLE_NLS
+	bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+	textdomain(GETTEXT_PACKAGE);
+#endif
+	gtk_set_locale();
+
+	signal(SIGTERM, signal_cb);
+
+	context = g_option_context_new(_(" - A fast and lightweight IDE"));
+	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
+	g_option_context_add_group(context, gtk_get_option_group(TRUE));
+	g_option_context_parse(context, &argc, &argv, &error);
+	g_option_context_free(context);
+
+	if (show_version)
+	{
+		printf(PACKAGE " " VERSION " ");
+		printf(_("(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"),
+				__DATE__, GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
+				GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
+		printf("\n");
+
+		return (0);
+	}
+
+	gtk_init(&argc, &argv);
+
+	mkdir_result = main_init();
+	configuration_load();
+	templates_init();
+	encodings_init();
+	document_init_doclist();
+
+	filetypes_init_types();
+
 	gtk_window_set_icon(GTK_WINDOW(app->window), utils_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE));
 
 	// registering some basic events
@@ -342,6 +352,7 @@ gint main(gint argc, gchar **argv)
 	g_signal_connect(G_OBJECT(app->toolbar), "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
 
 	treeviews_prepare_openfiles();
+	treeviews_create_taglist_popup_menu();
 	treeviews_create_openfiles_popup_menu();
 	msgwin_prepare_status_tree_view();
 	msgwin_prepare_msg_tree_view();
@@ -349,7 +360,9 @@ gint main(gint argc, gchar **argv)
 	msgwindow.popup_status_menu = msgwin_create_message_popup_menu(3);
 	msgwindow.popup_msg_menu = msgwin_create_message_popup_menu(4);
 	msgwindow.popup_compiler_menu = msgwin_create_message_popup_menu(5);
+#ifdef HAVE_VTE
 	vte_init();
+#endif
 	dialogs_create_recent_menu();
 	utils_create_insert_menu_items();
 
@@ -359,6 +372,9 @@ gint main(gint argc, gchar **argv)
 
 	// apply all configuration options
 	apply_settings();
+
+	// this option is currently disabled, until the document menu item is reordered
+	gtk_widget_hide(lookup_widget(app->window, "set_file_readonly1"));
 
 	// open files from command line
 	app->opening_session_files = TRUE;
@@ -383,15 +399,12 @@ gint main(gint argc, gchar **argv)
 	}
 	app->opening_session_files = FALSE;
 
-	utils_close_buttons_toggle();
-	utils_save_buttons_toggle(FALSE);
-
-	// this option is currently disabled, until the document menu item is reordered
-	gtk_widget_hide(lookup_widget(app->window, "set_file_readonly1"));
-
 	// open a new file if no other file was opened
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		document_new_file(filetypes[GEANY_FILETYPES_ALL]);
+
+	utils_close_buttons_toggle();
+	utils_save_buttons_toggle(FALSE);
 
 	idx = document_get_cur_idx();
 	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
@@ -399,9 +412,10 @@ gint main(gint argc, gchar **argv)
 	utils_build_show_hide(idx);
 	utils_update_tag_list(idx, FALSE);
 
+	// finally realize the window to show the user what we have done
 	gtk_widget_show(app->window);
-
 	app->main_window_realized = TRUE;
+
 
 	//g_timeout_add(0, (GSourceFunc)destroyapp, NULL); // useful for start time tests
 	gtk_main();
