@@ -154,12 +154,13 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 		g_object_unref(app->default_tag_tree);
 		gtk_widget_destroy(app->default_tag_tree);
 	}
+	scintilla_release_resources();
 	gtk_widget_destroy(app->window);
 	// kill explicitly since only one or none menu is shown at a time
 	if (GTK_IS_WIDGET(dialogs_build_menus.menu_c)) gtk_widget_destroy(dialogs_build_menus.menu_c);
 	if (GTK_IS_WIDGET(dialogs_build_menus.menu_misc)) gtk_widget_destroy(dialogs_build_menus.menu_misc);
 	if (GTK_IS_WIDGET(dialogs_build_menus.menu_tex)) gtk_widget_destroy(dialogs_build_menus.menu_tex);
-
+/// TODO destroy popup menus
 	if (app->have_vte) vte_close();
 
 	g_free(app);
@@ -1676,6 +1677,8 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 			gtk_menu_popup(GTK_MENU(msgwindow.popup_compiler_menu), NULL, NULL, NULL, NULL, event->button, event->time);
 		else if (user_data && GPOINTER_TO_INT(user_data) == 6)
 			gtk_menu_popup(GTK_MENU(tv.popup_openfiles), NULL, NULL, NULL, NULL, event->button, event->time);
+		else if (user_data && GPOINTER_TO_INT(user_data) == 7)
+			gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL, event->button, event->time);
 	}
 	return FALSE;
 }
@@ -1712,7 +1715,43 @@ on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
 					on_toolbutton23_clicked(NULL, NULL);
 					break;
 				}
+				case 3:
+				{
+					app->treeview_openfiles_visible = FALSE;
+					utils_treeviews_showhide();
+					break;
+				}
+				case 4:
+				{
+					app->treeview_openfiles_visible = FALSE;
+					app->treeview_symbol_visible = FALSE;
+					utils_treeviews_showhide();
+					break;
+				}
 			}
+		}
+	}
+}
+
+
+void
+on_taglist_tree_popup_clicked          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	switch (GPOINTER_TO_INT(user_data))
+	{
+		case 0:
+		{
+			app->treeview_symbol_visible = FALSE;
+			utils_treeviews_showhide();
+			break;
+		}
+		case 1:
+		{
+			app->treeview_openfiles_visible = FALSE;
+			app->treeview_symbol_visible = FALSE;
+			utils_treeviews_showhide();
+			break;
 		}
 	}
 }

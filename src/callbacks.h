@@ -1,7 +1,7 @@
 /*
  *      callbacks.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -601,6 +601,10 @@ void
 on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
+void
+on_taglist_tree_popup_clicked          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
 gboolean
 on_window_key_press_event              (GtkWidget *widget,
                                         GdkEventKey *event,
@@ -609,3 +613,4 @@ on_window_key_press_event              (GtkWidget *widget,
 void
 on_help_shortcuts1_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
