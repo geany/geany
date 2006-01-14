@@ -45,8 +45,6 @@ void utils_save_buttons_toggle(gboolean enable);
 
 void utils_close_buttons_toggle(void);
 
-int utils_get_new_sci_number(void);
-
 /* taken from anjuta, to determine the EOL mode of the file */
 gint utils_get_line_endings(gchar* buffer, glong size);
 

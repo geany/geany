@@ -242,13 +242,6 @@ GtkFileFilter *utils_create_file_filter(filetype *ft)
 }
 
 
-int utils_get_new_sci_number(void)
-{
-	static guint count = 0;
-	return ++count;	// id 0 created on startup
-}
-
-
 /* taken from anjuta, to determine the EOL mode of the file */
 gint utils_get_line_endings(gchar* buffer, glong size)
 {
@@ -689,7 +682,6 @@ void utils_update_tag_list(gint idx, gboolean update)
 		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
 		return;
 	}
-	//geany_debug("before %d", update);
 
 	if (update)
 	{	// updating the tag list in the left tag window
@@ -708,6 +700,7 @@ void utils_update_tag_list(gint idx, gboolean update)
 			GtkTreeIter iter;
 			GtkTreeModel *model;
 
+			doc_list[idx].has_tags = TRUE;
 			gtk_tree_store_clear(doc_list[idx].tag_store);
 			// unref the store to speed up the filling(from TreeView Tutorial)
 			model = gtk_tree_view_get_model(GTK_TREE_VIEW(doc_list[idx].tag_tree));
@@ -782,8 +775,17 @@ void utils_update_tag_list(gint idx, gboolean update)
 	}
 	else
 	{	// update == FALSE
-		gtk_widget_set_sensitive(app->tagbar, TRUE);
-		gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
+		if (doc_list[idx].has_tags)
+		{
+			gtk_widget_set_sensitive(app->tagbar, TRUE);
+			gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
+		}
+		else
+		{
+			gtk_widget_set_sensitive(app->tagbar, FALSE);
+			gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
+		}
+
 	}
 
 }
