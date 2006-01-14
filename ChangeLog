@@ -1,3 +1,21 @@
+2006-01-14  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * bugfix: src/document.c, src/treeviews.c: update open file list entry
+                                            when "Saving as"
+ * bugfix: src/document.c: fixed wrong g_object_unref() which causes
+                           crashes
+ * bugfix: src/geany.h, src/document.c, src/utils.c:
+   fixed wrong symbol list in files with tag support but without
+   exisiting symbols, added new boolean has_tags in document struct
+ * src/geany.h, src/document.c, src/utils.c:
+   removed unneeded utils_get_new_sci_number() and scid from document
+   struct
+ * src/treeviews.c, src/callbacks.c:
+   added popup menu to symbol list, added "Hide" and "Hide sidebar" to
+   symbol list popup and open files list popup, to quickly hide the list
+   or the whole sidebar
+
+
 2006-01-10  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * bugfix: geany.glade, src/interface.c: added missing tooltip to

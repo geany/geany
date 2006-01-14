@@ -5,17 +5,20 @@ TODO List:
 
 	Geany 0.5 or later:
 
-	o sci_cb.c: improve auto completion(include local tags)
+	o geany.desktop: absolute icon path
+	o make keyboard shortcuts user-definable
+	o inverting highlighting by selection
+	o src/sci_cb.c: improve auto completion(include local tags)
 	o documentation: list and explain filetype modes
-	o interface.c: reorder the 'document' menu entry, differ between
+	o src/interface.c: reorder the 'document' menu entry, differ between
 	  document related and general settings, new submenu: View->Editor
 	o fix a really nasty bug which causes a segfault, but don't know
 	  where, is it still existent?
 	o encoding-bug in utils_convert_to_utf8()
-	o document_save -> update things only when not quitting
 	o command line option -e (editor mode)
 	o extend use of doc_list[].is_valid
 	o (indent wrapped lines, but how?)
 	o (project management)
 	o (folding)
+	o (folder tree in the sidebar)
 	o (vim-like settings stored in files as comment)
