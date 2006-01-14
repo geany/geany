@@ -77,6 +77,7 @@
 typedef struct document
 {
 	gboolean		 is_valid;
+	gboolean		 has_tags;
 	gchar 			*file_name;
 	gchar 			*encoding;
 	filetype		*file_type;
@@ -87,7 +88,6 @@ typedef struct document
 	GtkWidget		*tag_tree;
 	GtkTreeStore	*tag_store;
 	GtkTreeIter		 iter;
-	gint 			 scid;
 	gboolean		 readonly;
 	gboolean		 changed;
 	gboolean		 do_overwrite;
