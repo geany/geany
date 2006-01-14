@@ -86,8 +86,8 @@ gint document_find_by_sci(ScintillaObject *sci)
 
 	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 	{
-		//g_message("find it: %d", i);
-		if (doc_list[i].sci && doc_list[i].sci == sci) return i;
+		//geany_debug("find it: %d", i);
+		if (doc_list[i].is_valid && doc_list[i].sci == sci) return i;
 	}
 	return -1;
 }
@@ -173,6 +173,7 @@ void document_init_doclist(void)
 	for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 	{
 		doc_list[i].is_valid = FALSE;
+		doc_list[i].has_tags = FALSE;
 		doc_list[i].tag_store = NULL;
 		doc_list[i].tag_tree = NULL;
 		doc_list[i].file_name = NULL;
@@ -194,11 +195,11 @@ gint document_create_new_sci(const gchar *filename)
 	gchar *title, *fname;
 	document this;
 	GtkTreeIter iter;
-	gint sciid, new_idx = document_get_new_idx();
+	gint new_idx = document_get_new_idx();
 
 	title = (filename) ? g_path_get_basename(filename) : g_strdup(GEANY_STRING_UNTITLED);
 	this.tab_label = gtk_label_new(title);
-	gtk_widget_show(this.tab_label);
+	//gtk_widget_show(this.tab_label);
 
 	hbox = gtk_hbox_new(FALSE, 0);
 	but = gtk_button_new();
@@ -213,8 +214,7 @@ gint document_create_new_sci(const gchar *filename)
 
 	/* SCI - Code */
 	sci = SCINTILLA(scintilla_new());
-	sciid = utils_get_new_sci_number();
-	scintilla_set_id(sci, sciid);
+	scintilla_set_id(sci, new_idx);
 	// disable scintilla provided popup menu
 	//SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);
 	sci_use_popup(sci, FALSE);
@@ -258,7 +258,6 @@ gint document_create_new_sci(const gchar *filename)
 	utils_close_buttons_toggle();
 
 	// store important pointers in the tab list
-	this.scid = sciid;
 	this.file_name = (filename) ? g_strdup(filename) : NULL;
 	this.sci = sci;
 	this.encoding = NULL;
@@ -271,6 +270,7 @@ gint document_create_new_sci(const gchar *filename)
 	this.last_check = time(NULL);
 	this.do_overwrite = FALSE;
 	this.readonly = FALSE;
+	this.has_tags = FALSE;
 	this.is_valid = TRUE;
 	doc_list[new_idx] = this;
 
@@ -278,13 +278,11 @@ gint document_create_new_sci(const gchar *filename)
 }
 
 
-/* removes the given notebook tab and clears the related entry in the document
- * list */
+/* removes the given notebook tab and clears the related entry in the document list */
 gboolean document_remove(guint page_num)
 {
 	gint idx = document_get_n_idx(page_num);
 
-	//geany_debug("page_num: %d\tidx: %d", page_num, idx);
 	if (idx >= 0 && idx <= GEANY_MAX_OPEN_FILES)
 	{
 		if (doc_list[idx].changed && ! dialogs_show_unsaved_file(idx))
@@ -295,7 +293,7 @@ gboolean document_remove(guint page_num)
 		treeviews_openfiles_remove(doc_list[idx].iter);
 		if (GTK_IS_WIDGET(doc_list[idx].tag_tree))
 		{
-			g_object_unref(doc_list[idx].tag_tree);
+			//g_object_unref(doc_list[idx].tag_tree); // no need to unref when destroying?
 			gtk_widget_destroy(doc_list[idx].tag_tree);
 		}
 		msgwin_status_add(_("File %s closed."),
@@ -317,6 +315,8 @@ gboolean document_remove(guint page_num)
 			utils_close_buttons_toggle();
 		}
 	}
+	else geany_debug("Error: idx: %d page_num: %d", idx, page_num);
+
 	return TRUE;
 }
 
@@ -477,7 +477,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	else
 	{
 		sci_goto_pos(doc_list[idx].sci, pos);
-		if (app->main_window_realized)
+		//if (app->main_window_realized) // avoids warnings, but doesn't scroll, so accept warning
 			sci_scroll_to_line(doc_list[idx].sci, sci_get_line_from_position(doc_list[idx].sci, pos) - 10);
 		doc_list[idx].readonly = readonly;
 		sci_set_readonly(doc_list[idx].sci, readonly);
@@ -488,7 +488,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 				filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
 				(readonly) ? _(", read-only") : "");
 	}
-	//utils_update_tag_list(idx, FALSE);
+	//utils_update_tag_list(idx, TRUE);
 	document_set_text_changed(idx);
 
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
@@ -570,9 +570,11 @@ void document_save_file(gint idx)
 	}
 
 	// ignore the following things if we are quitting
-	if (app->quitting)
+	if (! app->quitting)
 	{	// set line numbers again, to reset the margin width, if
 		// there are more lines than before
+		gchar *title;
+
 		sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
 		sci_set_savepoint(doc_list[idx].sci);
 		doc_list[idx].mtime = time(NULL);
@@ -582,8 +584,12 @@ void document_save_file(gint idx)
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), g_path_get_basename(doc_list[idx].file_name));
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), g_path_get_basename(doc_list[idx].file_name));
+		treeviews_openfiles_update(doc_list[idx].iter, doc_list[idx].file_name);
 		msgwin_status_add(_("File %s saved."), doc_list[idx].file_name);
 		utils_update_statusbar(idx);
+		title = g_path_get_basename(doc_list[idx].file_name);
+		treeviews_openfiles_update(doc_list[idx].iter, title);
+		g_free(title);
 	}
 }
 
