@@ -28,5 +28,6 @@ make_deb.sh
 build-stamp
 geany.1
 geany.spec
+geany.desktop
 *.tar.*
 debian
