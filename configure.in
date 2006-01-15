@@ -90,6 +90,9 @@ dnl Add the languages which your application supports here.
 ALL_LINGUAS="de"
 AM_GLIB_GNU_GETTEXT
 
+GEANY_PIXMAPS_DIR=`eval echo ${datadir}/pixmaps`
+AC_SUBST(GEANY_PIXMAPS_DIR)
+
 AC_OUTPUT([
 Makefile
 tagmanager/Makefile
@@ -100,6 +103,7 @@ src/Makefile
 po/Makefile.in
 doc/Makefile
 geany.spec
+geany.desktop
 ])
 
 echo "----------------------------------------"

@@ -4,7 +4,7 @@ SUBDIRS = tagmanager scintilla src po doc
 
 EXTRA_DIST = \
 	autogen.sh \
-	geany.desktop \
+	geany.desktop.in \
 	geany.spec \
 	geany.glade \
 	geany.gladep \

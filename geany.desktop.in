@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Geany
+GenericName=Integrated Development Environment
+Comment=A fast and lightweight IDE using GTK2
+Comment[de]=Eine kleine und schnelle integrierte Entwicklungsumgebung
+Comment[pl]=Szybkie i lekkie IDE korzystające z GTK+2
+Exec=geany %F
+Icon=@GEANY_PIXMAPS_DIR@/geany.png
+Terminal=false
+Type=Application
+Categories=Application;GTK;Development;IDE;
+Encoding=UTF-8
+# currently false, changes perhabs in the future
+StartupNotify=false
+Version=1.1
