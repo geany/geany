@@ -27,19 +27,21 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-     K_COMMAND,
-     K_ENVIRONMENT,
-     K_LABEL
+     K_COMMAND,			// [Function]
+     K_ENVIRONMENT,		// [Macro]
+     K_SECTION,			// [Members]
+     K_SUBSECTION,		// [Namespace]
+     K_SUBSUBSECTION,	// [Typedef]
+     K_LABEL			// [Other]
 } TeXKind;
 
 static kindOption TeXKinds[] = {
-     /* Commands - including \newcommand, \providecommand, \renewcommand,
-      * \def, \DeclareMathOperator. */
-     { TRUE, 'c', "class",      "command definitions"     },
-     /* Environment - \newenvironment, \newtheorem */
-     { TRUE, 'n', "namespace",  "environment definitions" },
-     /* Labels - \label, \bibitem. */
-     { TRUE, 't', "typedef",        "labels and bibliography" }
+     { TRUE, 'f', "function",      "command definitions" },
+     { TRUE, 'c', "class",         "environment definitions" },
+     { TRUE, 'm', "member",        "labels, sections and bibliography" },
+     { TRUE, 'd', "macro",         "subsections" },
+     { TRUE, 'v', "variable",      "subsubsections" },
+     { TRUE, 's', "struct",     "labels and bibliography" }
 };
 
 #define TEX_BRACES (1<<0)
@@ -182,6 +184,24 @@ static void findTeXTags (void)
  		if (getWord ("label", &cp))
  		{
  		    createTag (TEX_LABEL, K_LABEL, cp);
+ 		    continue;
+ 		}
+ 		/* \section{key} */
+ 		if (getWord ("section", &cp))
+ 		{
+ 		    createTag (TEX_LABEL, K_SECTION, cp);
+ 		    continue;
+ 		}
+ 		/* \subsection{key}, \subsubsection{key} */
+ 		if (getWord ("subsection", &cp))
+ 		{
+ 		    createTag (TEX_LABEL, K_SUBSECTION, cp);
+ 		    continue;
+ 		}
+ 		/* \subsection{key}, \subsubsection{key} */
+ 		if (getWord ("subsubsection", &cp))
+ 		{
+ 		    createTag (TEX_LABEL, K_SUBSUBSECTION, cp);
  		    continue;
  		}
  	    }
