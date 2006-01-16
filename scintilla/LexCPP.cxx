@@ -36,10 +36,17 @@ static inline bool IsAWordStart(int ch) {
 }
 
 static inline bool IsADoxygenChar(int ch) {
-	return (islower(ch) || ch == '$' || ch == '@' ||
-	        ch == '\\' || ch == '&' || ch == '<' ||
-	        ch == '>' || ch == '#' || ch == '{' ||
-	        ch == '}' || ch == '[' || ch == ']');
+	return (ch < 0x80 && islower(ch)) || ch == '$' || ch == '@' ||
+		ch == '\\' || ch == '&' || ch == '<' ||
+		ch == '>' || ch == '#' || ch == '{' ||
+		ch == '}' || ch == '[' || ch == ']';
+}
+
+static bool IsSpaceEquiv(int state) {
+	return (state <= SCE_C_COMMENTDOC) ||
+		// including SCE_C_DEFAULT, SCE_C_COMMENT, SCE_C_COMMENTLINE
+		(state == SCE_C_COMMENTLINEDOC) || (state == SCE_C_COMMENTDOCKEYWORD) ||
+		(state == SCE_C_COMMENTDOCKEYWORDERROR);
 }
 
 static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
@@ -56,6 +63,33 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 	int visibleChars = 0;
 	bool lastWordWasUUID = false;
 	int styleBeforeDCKeyword = SCE_C_DEFAULT;
+	bool continuationLine = false;
+
+	if (initStyle == SCE_C_PREPROCESSOR) {
+		// Set continuationLine if last character of previous line is '\'
+		int lineCurrent = styler.GetLine(startPos);
+		if (lineCurrent > 0) {
+			int chBack = styler.SafeGetCharAt(startPos-1, 0);
+			int chBack2 = styler.SafeGetCharAt(startPos-2, 0);
+			int lineEndChar = '!';
+			if (chBack2 == '\r' && chBack == '\n') {
+				lineEndChar = styler.SafeGetCharAt(startPos-3, 0);
+			} else if (chBack == '\n' || chBack == '\r') {
+				lineEndChar = chBack2;
+			}
+			continuationLine = lineEndChar == '\\';
+		}
+	}
+
+	// look back to set chPrevNonWhite properly for better regex colouring
+	if (startPos > 0) {
+		int back = startPos;
+		while (--back && IsSpaceEquiv(styler.StyleAt(back)))
+			;
+		if (styler.StyleAt(back) == SCE_C_OPERATOR) {
+			chPrevNonWhite = styler.SafeGetCharAt(back);
+		}
+	}
 
 	StyleContext sc(startPos, length, initStyle, styler);
 
@@ -69,7 +103,6 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 			}
 			// Reset states to begining of colourise so no surprises
 			// if different sets of lines lexed.
-			chPrevNonWhite = ' ';
 			visibleChars = 0;
 			lastWordWasUUID = false;
 		}
@@ -81,6 +114,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				if (sc.ch == '\r' && sc.chNext == '\n') {
 					sc.Forward();
 				}
+				continuationLine = true;
 				continue;
 			}
 		}
@@ -116,7 +150,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				}
 				break;
 			case SCE_C_PREPROCESSOR:
-				if (sc.atLineStart) {
+				if (sc.atLineStart && !continuationLine) {
 					sc.SetState(SCE_C_DEFAULT);
 				} else if (stylingWithinPreprocessor) {
 					if (IsASpace(sc.ch)) {
@@ -206,7 +240,10 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				if (sc.atLineStart) {
 					sc.SetState(SCE_C_DEFAULT);
 				} else if (sc.ch == '/') {
-					sc.ForwardSetState(SCE_C_DEFAULT);
+					sc.Forward();
+					while ((sc.ch < 0x80) && islower(sc.ch))
+						sc.Forward();    // gobble regex flags
+					sc.SetState(SCE_C_DEFAULT);
 				} else if (sc.ch == '\\') {
 					// Gobble up the quoted character
 					if (sc.chNext == '\\' || sc.chNext == '/') {
@@ -287,19 +324,20 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 			}
 		}
 
-		if (!IsASpace(sc.ch)) {
+		if (!IsASpace(sc.ch) && !IsSpaceEquiv(sc.state)) {
 			chPrevNonWhite = sc.ch;
 			visibleChars++;
 		}
+		continuationLine = false;
 	}
 	sc.Complete();
 }
 
 static bool IsStreamCommentStyle(int style) {
 	return style == SCE_C_COMMENT ||
-	       style == SCE_C_COMMENTDOC ||
-	       style == SCE_C_COMMENTDOCKEYWORD ||
-	       style == SCE_C_COMMENTDOCKEYWORDERROR;
+		style == SCE_C_COMMENTDOC ||
+		style == SCE_C_COMMENTDOCKEYWORD ||
+		style == SCE_C_COMMENTDOCKEYWORDERROR;
 }
 
 // Store both the current line's fold level and the next lines in the

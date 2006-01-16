@@ -104,25 +104,39 @@ void Document::SetSavePoint() {
 int Document::AddMark(int line, int markerNum) {
 	int prev = cb.AddMark(line, markerNum);
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
+	mh.line = line;
 	NotifyModified(mh);
 	return prev;
+}
+
+void Document::AddMarkSet(int line, int valueSet) {
+	unsigned int m = valueSet;
+	for (int i = 0; m; i++, m >>= 1)
+		if (m & 1)
+			cb.AddMark(line, i);
+	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
+	mh.line = line;
+	NotifyModified(mh);
 }
 
 void Document::DeleteMark(int line, int markerNum) {
 	cb.DeleteMark(line, markerNum);
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
+	mh.line = line;
 	NotifyModified(mh);
 }
 
 void Document::DeleteMarkFromHandle(int markerHandle) {
 	cb.DeleteMarkFromHandle(markerHandle);
 	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
+	mh.line = -1;
 	NotifyModified(mh);
 }
 
 void Document::DeleteAllMarks(int markerNum) {
 	cb.DeleteAllMarks(markerNum);
 	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
+	mh.line = -1;
 	NotifyModified(mh);
 }
 
@@ -437,7 +451,7 @@ int Document::Undo() {
 									SC_MOD_BEFOREDELETE | SC_PERFORMED_UNDO, action));
 				}
 				cb.PerformUndoStep();
-				int cellPosition = action.position / 2;
+				int cellPosition = action.position;
 				ModifiedAt(cellPosition);
 				newPos = cellPosition;
 
@@ -492,8 +506,8 @@ int Document::Redo() {
 									SC_MOD_BEFOREDELETE | SC_PERFORMED_REDO, action));
 				}
 				cb.PerformRedoStep();
-				ModifiedAt(action.position / 2);
-				newPos = action.position / 2;
+				ModifiedAt(action.position);
+				newPos = action.position;
 
 				int modFlags = SC_PERFORMED_REDO;
 				if (action.at == insertAction) {
@@ -513,7 +527,7 @@ int Document::Redo() {
 						modFlags |= SC_MULTILINEUNDOREDO;
 				}
 				NotifyModified(
-					DocModification(modFlags, action.position / 2, action.lenData,
+					DocModification(modFlags, action.position, action.lenData,
 									linesAdded, action.data));
 			}
 
@@ -703,10 +717,13 @@ void Document::Indent(bool forwards, int lineBottom, int lineTop) {
 	// Dedent - suck white space off the front of the line to dedent by equivalent of a tab
 	for (int line = lineBottom; line >= lineTop; line--) {
 		int indentOfLine = GetLineIndentation(line);
-		if (forwards)
-			SetLineIndentation(line, indentOfLine + IndentSize());
-		else
+		if (forwards) {
+			if (LineStart(line) < LineEnd(line)) {
+				SetLineIndentation(line, indentOfLine + IndentSize());
+			}
+		} else {
 			SetLineIndentation(line, indentOfLine - IndentSize());
+		}
 	}
 }
 
@@ -1309,19 +1326,22 @@ bool Document::SetStyles(int length, char *styles) {
 		return false;
 	} else {
 		enteredCount++;
-		int prevEndStyled = endStyled;
 		bool didChange = false;
-		int lastChange = 0;
+		int startMod = 0;
+		int endMod = 0;
 		for (int iPos = 0; iPos < length; iPos++, endStyled++) {
 			PLATFORM_ASSERT(endStyled < Length());
 			if (cb.SetStyleAt(endStyled, styles[iPos], stylingMask)) {
+				if (!didChange) {
+					startMod = endStyled;
+				}
 				didChange = true;
-				lastChange = iPos;
+				endMod = endStyled;
 			}
 		}
 		if (didChange) {
 			DocModification mh(SC_MOD_CHANGESTYLE | SC_PERFORMED_USER,
-			                   prevEndStyled, lastChange);
+			                   startMod, endMod - startMod + 1);
 			NotifyModified(mh);
 		}
 		enteredCount--;
@@ -1518,4 +1538,56 @@ int Document::ExtendStyleRange(int pos, int delta, bool singleLine) {
 			pos++;
 	}
 	return pos;
+}
+
+static char BraceOpposite(char ch) {
+	switch (ch) {
+	case '(':
+		return ')';
+	case ')':
+		return '(';
+	case '[':
+		return ']';
+	case ']':
+		return '[';
+	case '{':
+		return '}';
+	case '}':
+		return '{';
+	case '<':
+		return '>';
+	case '>':
+		return '<';
+	default:
+		return '\0';
+	}
+}
+
+// TODO: should be able to extend styled region to find matching brace
+int Document::BraceMatch(int position, int /*maxReStyle*/) {
+	char chBrace = CharAt(position);
+	char chSeek = BraceOpposite(chBrace);
+	if (chSeek == '\0')
+		return - 1;
+	char styBrace = static_cast<char>(StyleAt(position) & stylingBitsMask);
+	int direction = -1;
+	if (chBrace == '(' || chBrace == '[' || chBrace == '{' || chBrace == '<')
+		direction = 1;
+	int depth = 1;
+	position = position + direction;
+	while ((position >= 0) && (position < Length())) {
+		position = MovePositionOutsideChar(position, direction);
+		char chAtPos = CharAt(position);
+		char styAtPos = static_cast<char>(StyleAt(position) & stylingBitsMask);
+		if ((position > GetEndStyled()) || (styAtPos == styBrace)) {
+			if (chAtPos == chBrace)
+				depth++;
+			if (chAtPos == chSeek)
+				depth--;
+			if (depth == 0)
+				return position;
+		}
+		position = position + direction;
+	}
+	return - 1;
 }

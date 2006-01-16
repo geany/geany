@@ -313,6 +313,9 @@ fun int MarkerPrevious=2048(int lineStart, int markerMask)
 # Define a marker from a pixmap.
 fun void MarkerDefinePixmap=2049(int markerNumber, string pixmap)
 
+# Add a set of markers to a line.
+fun void MarkerAddSet=2466(int line, int set)
+
 enu MarginType=SC_MARGIN_
 val SC_MARGIN_SYMBOL=0
 val SC_MARGIN_NUMBER=1
@@ -1629,6 +1632,15 @@ set void SetCaretSticky=2458(bool useCaretStickyBehaviour,)
 # Switch between sticky and non-sticky: meant to be bound to a key.
 fun void ToggleCaretSticky=2459(,)
 
+# Enable/Disable convert-on-paste for line endings
+set void SetPasteConvertEndings=2467(bool convert,)
+
+# Get convert-on-paste setting
+get bool GetPasteConvertEndings=2468(,)
+
+# Duplicate the selection. If selection empty duplicate the line containing the caret.
+fun void SelectionDuplicate=2469(,)
+
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
 
@@ -1669,6 +1681,9 @@ fun int GetPropertyExpanded=4009(string key, stringresult buf)
 # Retrieve a "property" value previously set with SetProperty,
 # interpreted as an int AFTER any "$()" variable replacement.
 get int GetPropertyInt=4010(string key,)
+
+# Retrieve the number of bits the current lexer needs for styling.
+get int GetStyleBitsNeeded=4011(,)
 
 # Notifications
 # Type of modification and the action which caused the modification.
@@ -1722,6 +1737,7 @@ val SCK_SUBTRACT=311
 val SCK_DIVIDE=312
 
 enu KeyMod=SCMOD_
+val SCMOD_NORM=0
 val SCMOD_SHIFT=1
 val SCMOD_CTRL=2
 val SCMOD_ALT=4
@@ -1823,6 +1839,8 @@ val SCE_P_OPERATOR=10
 val SCE_P_IDENTIFIER=11
 val SCE_P_COMMENTBLOCK=12
 val SCE_P_STRINGEOL=13
+val SCE_P_WORD2=14
+val SCE_P_DECORATOR=15
 # Lexical states for SCLEX_CPP
 lex Cpp=SCLEX_CPP SCE_C_
 lex Pascal=SCLEX_PASCAL SCE_C_
@@ -2690,15 +2708,16 @@ val SCE_CAML_IDENTIFIER=1
 val SCE_CAML_TAGNAME=2
 val SCE_CAML_KEYWORD=3
 val SCE_CAML_KEYWORD2=4
-val SCE_CAML_LINENUM=5
-val SCE_CAML_OPERATOR=6
-val SCE_CAML_NUMBER=7
-val SCE_CAML_CHAR=8
-val SCE_CAML_STRING=9
-val SCE_CAML_COMMENT=10
-val SCE_CAML_COMMENT1=11
-val SCE_CAML_COMMENT2=12
-val SCE_CAML_COMMENT3=13
+val SCE_CAML_KEYWORD3=5
+val SCE_CAML_LINENUM=6
+val SCE_CAML_OPERATOR=7
+val SCE_CAML_NUMBER=8
+val SCE_CAML_CHAR=9
+val SCE_CAML_STRING=11
+val SCE_CAML_COMMENT=12
+val SCE_CAML_COMMENT1=13
+val SCE_CAML_COMMENT2=14
+val SCE_CAML_COMMENT3=15
 # Lexical states for SCLEX_HASKELL
 lex Haskell=SCLEX_HASKELL SCE_HA_
 val SCE_HA_DEFAULT=0
@@ -2794,6 +2813,7 @@ val SCE_SQL_USER1=19
 val SCE_SQL_USER2=20
 val SCE_SQL_USER3=21
 val SCE_SQL_USER4=22
+val SCE_SQL_QUOTEDIDENTIFIER=23
 # Lexical states for SCLEX_SMALLTALK
 lex Smalltalk=SCLEX_SMALLTALK SCE_ST_
 val SCE_ST_DEFAULT=0

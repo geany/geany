@@ -64,6 +64,7 @@ public:
 	int edgeColumn;
 	char *chars;
 	unsigned char *styles;
+	int styleBitsSet;
 	char *indicators;
 	int *positions;
 	char bracePreviousStyles[2];
@@ -105,6 +106,7 @@ class LineLayoutCache {
 	LineLayout **cache;
 	bool allInvalidated;
 	int styleClock;
+	int useCount;
 	void Allocate(int length_);
 	void AllocateForLevel(int linesOnScreen, int linesInDoc);
 public:
@@ -312,6 +314,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int wrapVisualStartIndent;
 	int actualWrapVisualStartIndent;
 
+	bool convertPastes;
+
 	Document *pdoc;
 
 	Editor();
@@ -342,7 +346,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool AbandonPaint();
 	void RedrawRect(PRectangle rc);
 	void Redraw();
-	void RedrawSelMargin();
+	void RedrawSelMargin(int line=-1);
 	PRectangle RectangleFromRange(int start, int end);
 	void InvalidateRange(int start, int end);
 
@@ -452,7 +456,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void PageMove(int direction, selTypes sel=noSel, bool stuttered = false);
 	void ChangeCaseOfSelection(bool makeUpperCase);
 	void LineTranspose();
-	void LineDuplicate();
+	void Duplicate(bool forLine);
 	virtual void CancelModes();
 	void NewLine();
 	void CursorUpOrDown(int direction, selTypes sel=noSel);
@@ -502,8 +506,9 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	virtual bool HaveMouseCapture() = 0;
 	void SetFocusState(bool focusState);
 
+	virtual bool PaintContains(PRectangle rc);
+	bool PaintContainsMargin();
 	void CheckForChangeOutsidePaint(Range r);
-	int BraceMatch(int position, int maxReStyle);
 	void SetBraceHighlight(Position pos0, Position pos1, int matchStyle);
 
 	void SetDocPointer(Document *document);

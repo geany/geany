@@ -129,6 +129,8 @@ class ScintillaGTK : public ScintillaBase {
 	gint lastWheelMouseDirection;
 	gint wheelMouseIntensity;
 
+	GdkRegion *rgnUpdate;
+
 	// Private so ScintillaGTK objects can not be copied
 	ScintillaGTK(const ScintillaGTK &) : ScintillaBase() {}
 	ScintillaGTK &operator=(const ScintillaGTK &) { return * this; }
@@ -153,6 +155,7 @@ private:
 	virtual bool SetIdle(bool on);
 	virtual void SetMouseCapture(bool on);
 	virtual bool HaveMouseCapture();
+	virtual bool PaintContains(PRectangle rc);
 	void FullPaint();
 	virtual PRectangle GetClientRectangle();
 	void SyncPaint(PRectangle rc);
@@ -317,7 +320,8 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 #endif
 #endif
 		lastWheelMouseDirection(0),
-		wheelMouseIntensity(0) {
+		wheelMouseIntensity(0),
+		rgnUpdate(0) {
 	sci = sci_;
 	wMain = GTK_WIDGET(sci);
 
@@ -947,6 +951,22 @@ bool ScintillaGTK::HaveMouseCapture() {
 	return capturedMouse;
 }
 
+bool ScintillaGTK::PaintContains(PRectangle rc) {
+	bool contains = true;
+	if (paintState == painting) {
+		if (!rcPaint.Contains(rc)) {
+			contains = false;
+		} else if (rgnUpdate) {
+			GdkRectangle grc = {rc.left, rc.top,
+				rc.right - rc.left, rc.bottom - rc.top};
+			if (gdk_region_rect_in(rgnUpdate, &grc) != GDK_OVERLAP_RECTANGLE_IN) {
+				contains = false;
+			}
+		}
+	}
+	return contains;
+}
+
 // Redraw all of text area. This paint will not be abandoned.
 void ScintillaGTK::FullPaint() {
 #if GTK_MAJOR_VERSION < 2
@@ -1340,9 +1360,9 @@ void ScintillaGTK::CreateCallTipWindow(PRectangle rc) {
 	gtk_drawing_area_size(GTK_DRAWING_AREA(PWidget(ct.wDraw)),
 	                      rc.Width(), rc.Height());
 	ct.wDraw.Show();
-	//ct.wCallTip.Show();
-	//gtk_widget_set_usize(PWidget(ct.wCallTip), rc.Width(), rc.Height());
-	gdk_window_resize(PWidget(ct.wCallTip)->window, rc.Width(), rc.Height());
+	if (PWidget(ct.wCallTip)->window) {
+		gdk_window_resize(PWidget(ct.wCallTip)->window, rc.Width(), rc.Height());
+	}
 }
 
 void ScintillaGTK::AddToPopUp(const char *label, int cmd, bool enabled) {
@@ -2152,6 +2172,10 @@ gint ScintillaGTK::ExposeTextThis(GtkWidget * /*widget*/, GdkEventExpose *ose) {
 	rcPaint.right = ose->area.x + ose->area.width;
 	rcPaint.bottom = ose->area.y + ose->area.height;
 
+	PLATFORM_ASSERT(rgnUpdate == NULL);
+#if GTK_MAJOR_VERSION >= 2
+	rgnUpdate = gdk_region_copy(ose->region);
+#endif
 	PRectangle rcClient = GetClientRectangle();
 	paintingAllText = rcPaint.Contains(rcClient);
 	Surface *surfaceWindow = Surface::Allocate();
@@ -2166,6 +2190,12 @@ gint ScintillaGTK::ExposeTextThis(GtkWidget * /*widget*/, GdkEventExpose *ose) {
 		FullPaint();
 	}
 	paintState = notPainting;
+
+	if (rgnUpdate) {
+		g_free(rgnUpdate);
+	}
+	rgnUpdate = 0;
+
 	return FALSE;
 }
 
@@ -2538,7 +2568,7 @@ GtkWidget* scintilla_new() {
 	return GTK_WIDGET(gtk_type_new(scintilla_get_type()));
 }
 
-void scintilla_set_id(ScintillaObject *sci, int id) {
+void scintilla_set_id(ScintillaObject *sci, uptr_t id) {
 	ScintillaGTK *psci = reinterpret_cast<ScintillaGTK *>(sci->pscin);
 	psci->ctrlID = id;
 }

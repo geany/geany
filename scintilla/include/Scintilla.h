@@ -137,6 +137,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_MARKERNEXT 2047
 #define SCI_MARKERPREVIOUS 2048
 #define SCI_MARKERDEFINEPIXMAP 2049
+#define SCI_MARKERADDSET 2466
 #define SC_MARGIN_SYMBOL 0
 #define SC_MARGIN_NUMBER 1
 #define SCI_SETMARGINTYPEN 2240
@@ -603,6 +604,9 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_GETCARETSTICKY 2457
 #define SCI_SETCARETSTICKY 2458
 #define SCI_TOGGLECARETSTICKY 2459
+#define SCI_SETPASTECONVERTENDINGS 2467
+#define SCI_GETPASTECONVERTENDINGS 2468
+#define SCI_SELECTIONDUPLICATE 2469
 #define SCI_STARTRECORD 3001
 #define SCI_STOPRECORD 3002
 #define SCI_SETLEXER 4001
@@ -616,6 +620,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_GETPROPERTY 4008
 #define SCI_GETPROPERTYEXPANDED 4009
 #define SCI_GETPROPERTYINT 4010
+#define SCI_GETSTYLEBITSNEEDED 4011
 #define SC_MOD_INSERTTEXT 0x1
 #define SC_MOD_DELETETEXT 0x2
 #define SC_MOD_CHANGESTYLE 0x4
@@ -650,6 +655,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCK_ADD 310
 #define SCK_SUBTRACT 311
 #define SCK_DIVIDE 312
+#define SCMOD_NORM 0
 #define SCMOD_SHIFT 1
 #define SCMOD_CTRL 2
 #define SCMOD_ALT 4
@@ -713,11 +719,11 @@ struct RangeToFormat {
 #endif
 
 struct NotifyHeader {
-	// hwndFrom is really an environment specifc window handle or pointer
+	// Compatible with Windows NMHDR.
+	// hwndFrom is really an environment specific window handle or pointer
 	// but most clients of Scintilla.h do not have this type visible.
-	//WindowID hwndFrom;
 	void *hwndFrom;
-	unsigned int idFrom;
+	uptr_t idFrom;
 	unsigned int code;
 };
 
