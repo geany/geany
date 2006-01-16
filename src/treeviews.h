@@ -33,6 +33,7 @@ typedef struct treeviews {
 	GtkWidget		*popup_taglist;
 	GtkWidget		*popup_openfiles;
 	GtkTreeIter		 tag_function;
+	GtkTreeIter		 tag_class;
 	GtkTreeIter		 tag_macro;
 	GtkTreeIter		 tag_member;
 	GtkTreeIter		 tag_variable;

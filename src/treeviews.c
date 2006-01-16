@@ -55,20 +55,68 @@ void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 
 void treeviews_init_tag_list(gint idx)
 {
-	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
-	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Function"), -1);
-	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_macro), NULL);
-	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_macro), 0, _("Macro"), -1);
-	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_member), NULL);
-	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_member), 0, _("Members"), -1);
-	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_variable), NULL);
-	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_variable), 0, _("Variables"), -1);
-	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_namespace), NULL);
-	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Namespace"), -1);
-	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_struct), NULL);
-	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_struct), 0, _("Struct / Typedef"), -1);
-	gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_other), NULL);
-	gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_other), 0, _("Other"), -1);
+	switch (doc_list[idx].file_type->id)
+	{
+		case GEANY_FILETYPES_DOCBOOK:
+		{
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Chapter"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_class), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_class), 0, _("Section"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_member), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_member), 0, _("Sect1"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_macro), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_macro), 0, _("Sect2"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_variable), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_variable), 0, _("Sect3"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_struct), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_struct), 0, _("Appendix"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_other), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_other), 0, _("Other"), -1);
+			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_namespace), NULL);
+			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Other"), -1);
+			break;
+		}
+		case GEANY_FILETYPES_TEX:
+		{
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Command"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_class), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_class), 0, _("Environment"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_member), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_member), 0, _("Section"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_macro), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_macro), 0, _("Subsection"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_variable), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_variable), 0, _("Subsubsection"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_struct), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_struct), 0, _("Label"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_other), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_other), 0, _("Other"), -1);
+			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_namespace), NULL);
+			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Other"), -1);
+			break;
+		}
+		default:
+		{
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Function"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_class), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_class), 0, _("Class"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_member), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_member), 0, _("Members"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_macro), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_macro), 0, _("Macro"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_variable), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_variable), 0, _("Variables"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_namespace), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Namespace"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_struct), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_struct), 0, _("Struct / Typedef"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_other), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_other), 0, _("Other"), -1);
+		}
+	}
 }
 
 
