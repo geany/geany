@@ -80,7 +80,7 @@ AC_CHECK_FILE([/dev/urandom], AC_DEFINE([HAVE_DEVURANDOM], [1], [Define that you
 AC_CHECK_FILE([/dev/random], AC_DEFINE([HAVE_DEVRANDOM], [1], [Define that you found /dev/random]))
 
 
-GTK_VERSION=`$PKG_CONFIG  gtk+-2.0 --modversion`
+GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
 
 GETTEXT_PACKAGE=geany
 AC_SUBST(GETTEXT_PACKAGE)
@@ -89,6 +89,13 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
 dnl Add the languages which your application supports here.
 ALL_LINGUAS="de"
 AM_GLIB_GNU_GETTEXT
+
+# Set ${datadir}
+if test "x${datadir}" = 'x${prefix}/share'; then
+	if test "x${prefix}" = "xNONE"; then
+		prefix=${ac_default_prefix}
+	fi
+fi
 
 GEANY_PIXMAPS_DIR=`eval echo ${datadir}/pixmaps`
 AC_SUBST(GEANY_PIXMAPS_DIR)
