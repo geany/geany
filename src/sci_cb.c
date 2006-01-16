@@ -228,23 +228,39 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 {
 	// very simple indentation algorithm
-	gint i, c, prev_line, len, j = 0;
+	gint i, prev_line, len, j = 0;
+	gchar *linebuf;
+
 	prev_line = sci_get_line_from_position(sci, pos);
 
 	if (! use_this_line) prev_line--;
 	len = sci_get_line_length(sci, prev_line);
+	linebuf = g_malloc(len + 1);
+	sci_get_line(sci, prev_line, linebuf);
+	linebuf[len] = '\0';
 
-	pos = sci_get_position_from_line(sci, prev_line);
-	for (i = pos; i < (pos + len); i++)
+	for (i = 0; i < len; i++)
 	{
-		c = sci_get_char_at(sci, i);
-		if (c == ' ' || c == '\t') indent[j++] = c;
+		if (linebuf[i] == ' ' || linebuf[i] == '\t') indent[j++] = linebuf[i];
 		// "&& ! use_this_line" to auto-indent only if it is a real new line
 		// and ignore the case of sci_cb_close_block
-		else if (c == '{' && ! use_this_line) indent[j++] = '\t';
-		else break;
+		else if (linebuf[i] == '{' && ! use_this_line)
+		{
+			indent[j++] = '\t';
+			break;
+		}
+		else
+		{
+			gint k = len - 1;
+			while (isspace(linebuf[k])) k--;
+			// if last non-whitespace character is a { increase indention by a tab
+			// e.g. for (...) {
+			if (linebuf[k] == '{') indent[j++] = '\t';
+			break;
+		}
 	}
 	indent[j] = '\0';
+	g_free(linebuf);
 }
 
 
