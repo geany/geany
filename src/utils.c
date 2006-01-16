@@ -726,6 +726,12 @@ void utils_update_tag_list(gint idx, gboolean update)
 						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
+					case tm_tag_class_t:
+					{
+						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_class));
+						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+						break;
+					}
 					case tm_tag_member_t:
 					{
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_member));
@@ -733,6 +739,8 @@ void utils_update_tag_list(gint idx, gboolean update)
 						break;
 					}
 					case tm_tag_typedef_t:
+					case tm_tag_enum_t:
+					case tm_tag_union_t:
 					case tm_tag_struct_t:
 					{
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_struct));
