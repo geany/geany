@@ -5,8 +5,8 @@ TODO List:
 
 	Geany 0.5 or later:
 
-	o geany.desktop: absolute icon path
 	o make keyboard shortcuts user-definable
+	o put default filetype extensions in the config file, read them in a GList
 	o inverting highlighting by selection
 	o src/sci_cb.c: improve auto completion(include local tags)
 	o documentation: list and explain filetype modes
@@ -17,6 +17,8 @@ TODO List:
 	o encoding-bug in utils_convert_to_utf8()
 	o command line option -e (editor mode)
 	o extend use of doc_list[].is_valid
+	o filetype SQL
+	o startup notification
 	o (indent wrapped lines, but how?)
 	o (project management)
 	o (folding)

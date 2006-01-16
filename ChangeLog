@@ -1,3 +1,20 @@
+2006-01-16  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * scintilla/*: updated Scintilla to version 1.67
+ * src/treeviews.c: added category class to the symbol list, changed
+                    category names for filetype DocBook and LaTeX
+ * src/sci_cb.c: improved auto indention, now "for (...) {" works, too
+
+
+2006-01-15  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * configure.in, Makefile.am, desktop.in:
+   replaced geany.desktop by geany.desktop.in, some changes to the
+   desktop file like absolut icon path
+ * tagmanager/tex.c: added tags section, subsection and subsubsection
+ * tagmanager/docbook.c: complete rewrite, works great
+
+
 2006-01-14  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * bugfix: src/document.c, src/treeviews.c: update open file list entry
@@ -89,6 +106,7 @@
 
 2005-12-19  Enrico Troeger  <enrico.troeger@uvena.de>
 
+ * new release: Geany 0.4 "Tarkin"
  * src/gb.c: several improvements and bugfixes
  * src/prefs.c, src/callbacks.c: improved HAVE_VTE handling
  * src/sci_cb.c: set cursor position between brackets in
