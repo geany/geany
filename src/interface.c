@@ -1351,7 +1351,6 @@ create_filesavedialog1 (void)
   GtkWidget *file_save_save_button;
 
   filesavedialog1 = gtk_file_chooser_dialog_new (_("Save File"), NULL, GTK_FILE_CHOOSER_ACTION_SAVE, NULL);
-  gtk_widget_set_size_request (filesavedialog1, 520, 460);
   gtk_window_set_modal (GTK_WINDOW (filesavedialog1), TRUE);
   gtk_window_set_destroy_with_parent (GTK_WINDOW (filesavedialog1), TRUE);
   gtk_window_set_skip_taskbar_hint (GTK_WINDOW (filesavedialog1), TRUE);
