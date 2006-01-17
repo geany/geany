@@ -1,7 +1,7 @@
 /*
  *      sci_cb.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -95,11 +95,10 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 			sci_cb_highlight_braces(sci);
 
 			utils_update_statusbar(idx);
-			//g_warning("pos: %d style: %d", cur_pos, sci_get_style_at(sci, sci_get_current_position(sci)));
 
 			break;
 		}
-		case SCN_KEY:
+/*		case SCN_KEY:
 		{
 			//geany_debug("key notification triggered with %c", nt->ch);
 			break;
@@ -107,11 +106,11 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 		case SCN_MODIFIED:
 		{
 			//if (nt->modificationType == SC_MOD_INSERTTEXT)
-			//	g_message("modi: %s", nt->text);
+			//	geany_debug("modi: %s", nt->text);
 
 			break;
 		}
-		case SCN_CHARADDED:
+*/		case SCN_CHARADDED:
 		{
 			gint pos = sci_get_current_position(sci);
 
@@ -252,6 +251,7 @@ void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 		else
 		{
 			gint k = len - 1;
+			if (use_this_line) break;	// break immediately in the case of sci_cb_close_block
 			while (isspace(linebuf[k])) k--;
 			// if last non-whitespace character is a { increase indention by a tab
 			// e.g. for (...) {
@@ -287,7 +287,9 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 	gint line = sci_get_line_from_position(sci, pos);
 	gint line_start = sci_get_position_from_line(sci, line);
 	gint line_len = sci_get_line_length(sci, line);
-	gint eol_char_len = utils_get_eol_char_len(document_find_by_sci(sci));
+	// set eol_char_len to 0 if on last line, because there is no EOL char
+	gint eol_char_len = (line == (SSM(sci, SCI_GETLINECOUNT, 0, 0) - 1)) ? 0 :
+								utils_get_eol_char_len(document_find_by_sci(sci));
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	gchar *text, line_buf[255];
 
@@ -296,14 +298,12 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 	// check that the line is empty, to not kill text in the line
 	sci_get_line(sci, line, line_buf);
 	line_buf[line_len - eol_char_len] = '\0';
-	while (x < line_len)
+	while (x < (line_len - eol_char_len))
 	{
 		if (isspace(line_buf[x])) cnt++;
 		x++;
 	}
-	//if ((line_len - eol_char_len - 1) != cnt) return; // old code, buggy
-	//geany_debug("%d == %d (%s)", line_len, cnt, line_buf);
-	if ((line_len - 2) != cnt) return;
+	if ((line_len + (!eol_char_len) - 2) != cnt) return;
 
 	if (start_brace >= 0) sci_cb_get_indent(sci, start_brace, TRUE);
 /*	geany_debug("pos: %d, start: %d char: %c start_line: %d", pos, start_brace,
@@ -776,7 +776,7 @@ void sci_cb_do_comment(gint idx)
 				sci_insert_text(doc_list[idx].sci, line_start, "/* ");
 				// cares about the inluding EOL chars from SCI_LINELENGTH()
 				end_pos = line_start + line_len - strlen(utils_get_eol_char(idx)) + 3;
-				geany_debug("%d = %d + %d - %d + %d", end_pos, line_start, line_len, strlen(utils_get_eol_char(idx)), 3);
+				//geany_debug("%d = %d + %d - %d + %d", end_pos, line_start, line_len, strlen(utils_get_eol_char(idx)), 3);
 				sci_insert_text(doc_list[idx].sci, end_pos, " */");
 			}
 			// use # for Python, Perl, Shell & Makefiles
