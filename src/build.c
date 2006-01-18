@@ -40,25 +40,72 @@
 #include "msgwindow.h"
 
 
-GPid build_compile_tex_file(gint idx)
+GPid build_compile_tex_file(gint idx, gint mode)
 {
-	gchar  **argv;
+	gchar **argv;
 
-	argv = g_new(gchar *, 5);
-	argv[0] = g_strdup(app->build_tex_dvi_cmd);
+	argv = g_new(gchar*, 3);
+	argv[0] = (mode == 0) ? g_strdup(app->build_tex_dvi_cmd) : g_strdup(app->build_tex_pdf_cmd);
 	argv[1] = g_path_get_basename(doc_list[idx].file_name);
-	argv[2] = g_strdup(app->build_args_inc);
-	argv[3] = NULL;
+	argv[2] = NULL;
 
 	return build_spawn_cmd(idx, argv);
 }
 
 
+GPid build_view_tex_file(gint idx, gint mode)
+{
+	gchar **argv;
+	gchar *executable = g_malloc0(strlen(doc_list[idx].file_name));
+	gchar *view_file;
+	gchar *last_dot = strrchr(doc_list[idx].file_name, '.');
+	GError *error = NULL;
+	gint i = 0;
+	GPid child_pid;
+	struct stat st;
+
+	while ((doc_list[idx].file_name + i) != last_dot)
+	{
+		executable[i] = doc_list[idx].file_name[i];
+		i++;
+	}
+	view_file = g_strconcat(executable, (mode == 0) ? ".dvi" : ".pdf", NULL);
+	g_free(executable);
+
+	// check wether view_file exists
+	if (stat(view_file, &st) != 0)
+	{
+		msgwin_status_add(_("Failed to view %s (make sure it is already compiled)"), view_file);
+		g_free(view_file);
+		return (GPid) 1;
+	}
+
+	argv = g_new(gchar*, 3);
+	argv[0] = (mode == 0) ? g_strdup(app->build_tex_view_dvi_cmd) : g_strdup(app->build_tex_view_pdf_cmd);
+	argv[1] = view_file;
+	argv[2] = NULL;
+
+	if (! g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
+						NULL, NULL, &child_pid, NULL, NULL, NULL, &error))
+	{
+		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
+		msgwin_status_add(_("Process failed (%s)"), error->message);
+		g_strfreev(argv);
+		g_error_free(error);
+		error = NULL;
+		return (GPid) 0;
+	}
+
+	g_strfreev(argv);
+	return child_pid;
+}
+
+
 GPid build_make_c_file(gint idx, gboolean cust_target)
 {
-	gchar  **argv;
+	gchar **argv;
 
-	argv = g_new(gchar *, 3);
+	argv = g_new(gchar*, 3);
 	if (cust_target && app->build_make_custopt)
 	{
 		//cust-target
@@ -79,9 +126,9 @@ GPid build_make_c_file(gint idx, gboolean cust_target)
 
 GPid build_compile_c_file(gint idx)
 {
-	gchar  **argv;
+	gchar **argv;
 
-	argv = g_new(gchar *, 5);
+	argv = g_new(gchar*, 5);
 	argv[0] = g_strdup(app->build_c_cmd);
 	argv[1] = g_strdup("-c");
 	argv[2] = g_path_get_basename(doc_list[idx].file_name);
@@ -272,7 +319,7 @@ GPid build_spawn_cmd(gint idx, gchar **cmd)
 	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
 						NULL, NULL, &child_pid, NULL, &stdout_fd, &stderr_fd, &error))
 	{
-		g_warning("g_spawn_async_with_pipes() failed: %s", error->message);
+		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
 		g_strfreev(argv);
 		g_error_free(error);
@@ -425,7 +472,7 @@ GIOChannel *build_set_up_io_channel (gint fd, GIOCondition cond, GIOFunc func, g
 		g_io_channel_set_encoding(ioc, encoding, &error);
 		if (error)
 		{
-			g_warning("compile: %s", error->message);
+			geany_debug("compile: %s", error->message);
 			g_error_free(error);
 			return ioc;
 		}
@@ -445,12 +492,12 @@ void build_exit_cb (GPid child_pid, gint status, gpointer user_data)
 #ifdef G_OS_UNIX
 	gboolean failure = FALSE;
 
-	if (WIFEXITED (status))
+	if (WIFEXITED(status))
 	{
-		if (WEXITSTATUS (status) != EXIT_SUCCESS)
+		if (WEXITSTATUS(status) != EXIT_SUCCESS)
 			failure = TRUE;
 	}
-	else if (WIFSIGNALED (status))
+	else if (WIFSIGNALED(status))
 	{
 		// the terminating signal: WTERMSIG (status));
 		failure = TRUE;

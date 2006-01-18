@@ -296,19 +296,23 @@ gboolean configuration_load(void)
 	app->build_fpc_cmd = utils_get_setting_string(config, "build", "build_fpc_cmd", tmp_string);
 	g_free(tmp_string);
 
-	tmp_string = g_find_program_in_path("latex");
+	tmp_string2 = g_find_program_in_path("latex");
+	tmp_string = g_strconcat(tmp_string2, " -interaction=nonstopmode", NULL);
 	app->build_tex_dvi_cmd = utils_get_setting_string(config, "build", "build_tex_dvi_cmd", tmp_string);
 	g_free(tmp_string);
+	g_free(tmp_string2);
 
-	tmp_string = g_find_program_in_path("pdflatex");
+	tmp_string2 = g_find_program_in_path("pdflatex");
+	tmp_string = g_strconcat(tmp_string2, " -interaction=nonstopmode", NULL);
 	app->build_tex_pdf_cmd = utils_get_setting_string(config, "build", "build_tex_pdf_cmd", tmp_string);
 	g_free(tmp_string);
+	g_free(tmp_string2);
 
-	tmp_string = g_find_program_in_path("latex");
+	tmp_string = g_find_program_in_path("xdvi");
 	app->build_tex_view_dvi_cmd = utils_get_setting_string(config, "build", "build_tex_view_dvi_cmd", tmp_string);
 	g_free(tmp_string);
 
-	tmp_string = g_find_program_in_path("pdflatex");
+	tmp_string = g_find_program_in_path("xpdf");
 	app->build_tex_view_pdf_cmd = utils_get_setting_string(config, "build", "build_tex_view_pdf_cmd", tmp_string);
 	g_free(tmp_string);
 

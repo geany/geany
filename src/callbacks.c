@@ -1827,10 +1827,35 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
 		case GEANY_FILETYPES_CPP: child_pid = build_compile_cpp_file(idx); break;
 		case GEANY_FILETYPES_JAVA: child_pid = build_compile_java_file(idx); break;
 		case GEANY_FILETYPES_PASCAL: child_pid = build_compile_pascal_file(idx); break;
-		case GEANY_FILETYPES_TEX: child_pid = build_compile_tex_file(idx); break;
+		case GEANY_FILETYPES_TEX: child_pid = build_compile_tex_file(idx, 0); break;
 	}
 
 	if (child_pid != (GPid) 0)
+	{
+		gtk_widget_set_sensitive(app->compile_button, FALSE);
+		g_child_watch_add(child_pid, build_exit_cb, NULL);
+	}
+}
+
+
+void
+on_build_tex_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	GPid child_pid = (GPid) 0;
+
+	if (doc_list[idx].changed) document_save_file(idx);
+
+	switch (GPOINTER_TO_INT(user_data))
+	{
+		case 0: child_pid = build_compile_tex_file(idx, 0); break;
+		case 1: child_pid = build_compile_tex_file(idx, 1); break;
+		case 2: child_pid = build_view_tex_file(idx, 0); break;
+		case 3: child_pid = build_view_tex_file(idx, 1); break;
+	}
+
+	if (GPOINTER_TO_INT(user_data) <= 1 && child_pid != (GPid) 0)
 	{
 		gtk_widget_set_sensitive(app->compile_button, FALSE);
 		g_child_watch_add(child_pid, build_exit_cb, NULL);
@@ -1851,6 +1876,9 @@ on_build_build_activate                (GtkMenuItem     *menuitem,
 	{
 		case GEANY_FILETYPES_C: child_pid = build_link_c_file(idx); break;
 		case GEANY_FILETYPES_CPP: child_pid = build_link_cpp_file(idx); break;
+		/* FIXME: temporary switch to catch F5-shortcut pressed on LaTeX files, as long as
+		 * LaTeX build menu has no key accelerator */
+		case GEANY_FILETYPES_TEX: child_pid = build_compile_tex_file(idx, 1); break;
 	}
 
 	if (child_pid != (GPid) 0)
@@ -1893,9 +1921,25 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	if (build_run_cmd(idx) == (GPid) 0)
+	/* FIXME: temporary switch to catch F5-shortcut pressed on LaTeX files, as long as
+	 * LaTeX build menu has no key accelerator */
+	switch (doc_list[idx].file_type->id)
 	{
-		msgwin_status_add(_("Failed to execute the terminal program"));
+		case GEANY_FILETYPES_TEX:
+		{
+			if (build_view_tex_file(idx, 0) == (GPid) 0)
+			{
+				msgwin_status_add(_("Failed to execute the DVI view program"));
+			}
+			break;
+		}
+		default:
+		{
+			if (build_run_cmd(idx) == (GPid) 0)
+			{
+				msgwin_status_add(_("Failed to execute the terminal program"));
+			}
+		}
 	}
 	//gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
 }

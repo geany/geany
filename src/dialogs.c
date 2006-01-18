@@ -556,38 +556,22 @@ GtkWidget *dialogs_create_build_menu_tex(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file into a DVI file"), NULL);
-	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F8, (GdkModifierType) 0, GTK_ACCEL_VISIBLE);
+//	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F8, (GdkModifierType) 0, GTK_ACCEL_VISIBLE);
 	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(0));
 
 	// PDF
 	item = gtk_image_menu_item_new_with_label(_("LaTeX -> PDF"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file into a PDF file"), NULL);
-	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9, (GdkModifierType) 0, GTK_ACCEL_VISIBLE);
+//	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9, (GdkModifierType) 0, GTK_ACCEL_VISIBLE);
 	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
-
-	// DVI view
-	item = gtk_menu_item_new_with_label(_("View DVI file"));
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-	gtk_tooltips_set_tip(tooltips, item, _("Compiles and view the current file"), NULL);
-	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9,
-				(GdkModifierType) GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
-
-	// PDF view
-	item = gtk_menu_item_new_with_label(_("View PDF file"));
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-	gtk_tooltips_set_tip(tooltips, item, _("Compiles and view the current file"), NULL);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(1));
 
 	// build the code with make all
 	item = gtk_menu_item_new_with_label(_("Build with \"make\""));
@@ -595,9 +579,9 @@ GtkWidget *dialogs_create_build_menu_tex(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the default target"), NULL);
-	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9,
+/*	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9,
 				(GdkModifierType) GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
+*/	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
 
 	// build the code with make
 	item = gtk_menu_item_new_with_label(_("Build with make (custom target)"));
@@ -606,6 +590,29 @@ GtkWidget *dialogs_create_build_menu_tex(void)
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the specified target"), NULL);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
+
+	// DVI view
+	item = gtk_image_menu_item_new_with_label(_("View DVI file"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+//	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F5, (GdkModifierType) 0, GTK_ACCEL_VISIBLE);
+	gtk_tooltips_set_tip(tooltips, item, _("Compiles and view the current file"), NULL);
+	image = gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU);
+	gtk_widget_show(image);
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(2));
+
+	// PDF view
+	item = gtk_image_menu_item_new_with_label(_("View PDF file"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+/*	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F5,
+				(GdkModifierType) GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
+*/	gtk_tooltips_set_tip(tooltips, item, _("Compiles and view the current file"), NULL);
+	image = gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU);
+	gtk_widget_show(image);
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(3));
 
 	// separator
 	separator = gtk_separator_menu_item_new();
@@ -872,12 +879,12 @@ void dialogs_show_includes_arguments_tex(void)
 {
 	GtkWidget *dialog, *label, *entries[3];
 
-	dialog = gtk_dialog_new_with_buttons(_("Set Includes and Arguments"), GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(_("Set Arguments"), GTK_WINDOW(app->window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 
-	label = gtk_label_new(_("Sets the includes and library paths for the compiler and the program arguments for execution\n"));
+	label = gtk_label_new(_("Set programs and options for compilation and viewing (La)TeX files.\nThe filename is appended automatically at the end.\n"));
 	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
@@ -893,6 +900,7 @@ void dialogs_show_includes_arguments_tex(void)
 		gtk_entry_set_text(GTK_ENTRY(entries[0]), app->build_tex_dvi_cmd);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[0]);
 
+	// whitespace
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 
 	// LaTeX -> PDF args
@@ -906,10 +914,11 @@ void dialogs_show_includes_arguments_tex(void)
 		gtk_entry_set_text(GTK_ENTRY(entries[1]), app->build_tex_pdf_cmd);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[1]);
 
+	// whitespace
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 
 	// View LaTeX -> DVI args
-	label = gtk_label_new(_("Enter here the (La)TeX command (for DVI creation and preview) and some useful options."));
+	label = gtk_label_new(_("Enter here the (La)TeX command (for DVI preview) and some useful options."));
 	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
@@ -919,10 +928,11 @@ void dialogs_show_includes_arguments_tex(void)
 		gtk_entry_set_text(GTK_ENTRY(entries[2]), app->build_tex_view_dvi_cmd);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[2]);
 
+	// whitespace
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 
 	// View LaTeX -> PDF args
-	label = gtk_label_new(_("Enter here the (La)TeX command (for PDF creation and preview) and some useful options."));
+	label = gtk_label_new(_("Enter here the (La)TeX command (for PDF preview) and some useful options."));
 	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
@@ -932,6 +942,7 @@ void dialogs_show_includes_arguments_tex(void)
 		gtk_entry_set_text(GTK_ENTRY(entries[3]), app->build_tex_view_pdf_cmd);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[3]);
 
+	// whitespace
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 
 	g_object_set_data_full(G_OBJECT(dialog), "tex_entry1",

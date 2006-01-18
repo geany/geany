@@ -30,7 +30,9 @@ GPid build_make_c_file(gint idx, gboolean cust_target);
 
 GPid build_compile_c_file(gint idx);
 
-GPid build_compile_tex_file(gint idx);
+GPid build_compile_tex_file(gint idx, gint mode);
+
+GPid build_view_tex_file(gint idx, gint mode);
 
 GPid build_link_c_file(gint idx);
 

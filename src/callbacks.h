@@ -408,6 +408,10 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
+on_build_tex_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
 on_build_build_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
