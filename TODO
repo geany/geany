@@ -5,20 +5,23 @@ TODO List:
 
 	Geany 0.5 or later:
 
-	o make keyboard shortcuts user-definable
-	o put default filetype extensions in the config file, read them in a GList
-	o inverting highlighting by selection
-	o src/sci_cb.c: improve auto completion(include local tags)
+	o filetype SQL
+	o filetype (O)Caml
+	o open files in a new tab in a already running instance
+	o encoding-bug in utils_convert_to_utf8()
 	o documentation: list and explain filetype modes
 	o src/interface.c: reorder the 'document' menu entry, differ between
 	  document related and general settings, new submenu: View->Editor
-	o fix a really nasty bug which causes a segfault, but don't know
-	  where, is it still existent?
-	o encoding-bug in utils_convert_to_utf8()
-	o command line option -e (editor mode)
+	o make keyboard shortcuts user-definable
+	o inverting highlighting by selection
+	o put default filetype extensions in the config file, read them in a GList
+	o src/sci_cb.c: improve auto completion(include local tags)
+	o src/sci_cb.c: do CSS multiline auto comments like at HTML
+	o property dialog in File->Properties like
+	  http://developer.gnome.org/projects/gup/hig/2.0/images/property-window.png
 	o extend use of doc_list[].is_valid
-	o filetype SQL
-	o startup notification
+	o (command line option -e (editor mode))
+	o (startup notification)
 	o (indent wrapped lines, but how?)
 	o (project management)
 	o (folding)
