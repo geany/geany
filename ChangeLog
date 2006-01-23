@@ -1,3 +1,12 @@
+2006-01-21  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * tagmanager/tex.c, src/treeviews.c: added tag support for "\begin",
+                                      fixed gcc4 warnings
+ * tagmanager/docbook.c: fixed gcc4 warnings
+ * src/filetypes.c, src/document.c, src/keyfile.c:
+   fixed some bugs when opening files with non UTF-8 filenames
+
+
 2006-01-18  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c: it is now possible to insert a function description
