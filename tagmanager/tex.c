@@ -27,12 +27,13 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-     K_COMMAND,			// [Function]
-     K_ENVIRONMENT,		// [Macro]
-     K_SECTION,			// [Members]
-     K_SUBSECTION,		// [Namespace]
-     K_SUBSUBSECTION,	// [Typedef]
-     K_LABEL			// [Other]
+     K_COMMAND,
+     K_ENVIRONMENT,
+     K_SECTION,
+     K_SUBSECTION,
+     K_SUBSUBSECTION,
+     K_BEGIN,
+     K_LABEL
 } TeXKind;
 
 static kindOption TeXKinds[] = {
@@ -41,7 +42,8 @@ static kindOption TeXKinds[] = {
      { TRUE, 'm', "member",        "labels, sections and bibliography" },
      { TRUE, 'd', "macro",         "subsections" },
      { TRUE, 'v', "variable",      "subsubsections" },
-     { TRUE, 's', "struct",     "labels and bibliography" }
+     { TRUE, 'n', "namespace",     "begin" },
+     { TRUE, 's', "struct",        "labels and bibliography" }
 };
 
 #define TEX_BRACES (1<<0)
@@ -52,7 +54,7 @@ static kindOption TeXKinds[] = {
 *   FUNCTION DEFINITIONS
 */
 
-static int getWord (const char * ref, const unsigned char ** pointer)
+static int getWord(const char * ref, const char **pointer)
 {
      const char * p = *pointer;
 
@@ -66,14 +68,14 @@ static int getWord (const char * ref, const unsigned char ** pointer)
      return TRUE;
 }
 
-static void createTag (int flags, TeXKind kind, const char * l)
+static void createTag(int flags, TeXKind kind, const char * l)
 {
-     vString *name = vStringNew ();
+    vString *name = vStringNew ();
 
-     while ((*l == ' '))
+    while ((*l == ' '))
  	l++;
-     if (flags & (TEX_BRACES | TEX_LABEL))
-     {
+    if (flags & (TEX_BRACES | TEX_LABEL))
+    {
  	if ((*(l++)) != '{')
  	    goto no_tag;
      }
@@ -86,40 +88,40 @@ static void createTag (int flags, TeXKind kind, const char * l)
      {
  	do
  	{
- 	    vStringPut (name, (int) *l);
+ 	    vStringPut(name, (int) *l);
  	    ++l;
  	} while ((*l != '\0') && (*l != '}'));
- 	vStringTerminate (name);
- 	makeSimpleTag (name, TeXKinds, kind);
+ 	vStringTerminate(name);
+ 	makeSimpleTag(name, TeXKinds, kind);
      }
-     else if (isalpha ((int) *l) || *l == '@')
+     else if (isalpha((int) *l) || *l == '@')
      {
  	do
  	{
  	    vStringPut (name, (int) *l);
  	    ++l;
- 	} while (isalpha ((int) *l) || *l == '@');
- 	vStringTerminate (name);
- 	makeSimpleTag (name, TeXKinds, kind);
+ 	} while (isalpha((int) *l) || *l == '@');
+ 	vStringTerminate(name);
+ 	makeSimpleTag(name, TeXKinds, kind);
      }
      else
      {
- 	vStringPut (name, (int) *l);
- 	vStringTerminate (name);
- 	makeSimpleTag (name, TeXKinds, kind);
+ 	vStringPut(name, (int) *l);
+ 	vStringTerminate(name);
+ 	makeSimpleTag(name, TeXKinds, kind);
      }
 
  no_tag:
-     vStringDelete (name);
+     vStringDelete(name);
 }
 
-static void findTeXTags (void)
+static void findTeXTags(void)
 {
-    const unsigned char *line;
+    const char *line;
 
-    while ((line = fileReadLine ()) != NULL)
+    while ((line = (const char*)fileReadLine()) != NULL)
     {
- 	const unsigned char *cp = line;
+ 	const char *cp = line;
  	//int escaped = 0;
 
  	for (; *cp != '\0'; cp++)
@@ -131,9 +133,9 @@ static void findTeXTags (void)
  		cp++;
 
  		/* \newcommand{\command} */
- 		if (getWord ("newcommand", &cp)
- 		    || getWord ("providecommand", &cp)
- 		    || getWord ("renewcommand", &cp)
+ 		if (getWord("newcommand", &cp)
+ 		    || getWord("providecommand", &cp)
+ 		    || getWord("renewcommand", &cp)
  		    )
  		{
  		    createTag (TEX_BRACES|TEX_BSLASH, K_COMMAND, cp);
@@ -141,32 +143,32 @@ static void findTeXTags (void)
  		}
 
  		/* \DeclareMathOperator{\command} */
- 		if (getWord ("DeclareMathOperator", &cp))
+ 		if (getWord("DeclareMathOperator", &cp))
  		{
  		    if (*cp == '*')
  			cp++;
- 		    createTag (TEX_BRACES|TEX_BSLASH, K_COMMAND, cp);
+ 		    createTag(TEX_BRACES|TEX_BSLASH, K_COMMAND, cp);
  		    continue;
  		}
 
  		/* \def\command */
- 		if (getWord ("def", &cp))
+ 		if (getWord("def", &cp))
  		{
- 		    createTag (TEX_BSLASH, K_COMMAND, cp);
+ 		    createTag(TEX_BSLASH, K_COMMAND, cp);
  		    continue;
  		}
 
  		/* \newenvironment{name} */
- 		if ( getWord ("newenvironment", &cp)
- 		    || getWord ("newtheorem", &cp)
+ 		if ( getWord("newenvironment", &cp)
+ 		    || getWord("newtheorem", &cp)
  		    )
  		{
- 		    createTag (TEX_BRACES, K_ENVIRONMENT, cp);
+ 		    createTag(TEX_BRACES, K_ENVIRONMENT, cp);
  		    continue;
  		}
 
  		/* \bibitem[label]{key} */
- 		if (getWord ("bibitem", &cp))
+ 		if (getWord("bibitem", &cp))
  		{
  		    while (*cp == ' ')
  			cp++;
@@ -176,32 +178,38 @@ static void findTeXTags (void)
  			cp++;
  		    if (*(cp++) != ']')
  			break;
- 		    createTag (TEX_LABEL, K_LABEL, cp);
+ 		    createTag(TEX_LABEL, K_LABEL, cp);
  		    continue;
  		}
 
  		/* \label{key} */
- 		if (getWord ("label", &cp))
+ 		if (getWord("label", &cp))
  		{
- 		    createTag (TEX_LABEL, K_LABEL, cp);
+ 		    createTag(TEX_LABEL, K_LABEL, cp);
  		    continue;
  		}
  		/* \section{key} */
- 		if (getWord ("section", &cp))
+ 		if (getWord("section", &cp))
  		{
- 		    createTag (TEX_LABEL, K_SECTION, cp);
+ 		    createTag(TEX_LABEL, K_SECTION, cp);
  		    continue;
  		}
- 		/* \subsection{key}, \subsubsection{key} */
- 		if (getWord ("subsection", &cp))
+ 		/* \subsection{key} */
+ 		if (getWord("subsection", &cp))
  		{
- 		    createTag (TEX_LABEL, K_SUBSECTION, cp);
+ 		    createTag(TEX_LABEL, K_SUBSECTION, cp);
  		    continue;
  		}
- 		/* \subsection{key}, \subsubsection{key} */
- 		if (getWord ("subsubsection", &cp))
+ 		/* \subsubsection{key} */
+ 		if (getWord("subsubsection", &cp))
  		{
- 		    createTag (TEX_LABEL, K_SUBSUBSECTION, cp);
+ 		    createTag(TEX_LABEL, K_SUBSUBSECTION, cp);
+ 		    continue;
+ 		}
+ 		/* \begin{key} */
+ 		if (getWord("begin", &cp))
+ 		{
+ 		    createTag(TEX_LABEL, K_BEGIN, cp);
  		    continue;
  		}
  	    }

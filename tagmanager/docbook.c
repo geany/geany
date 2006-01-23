@@ -48,7 +48,7 @@ static kindOption DocBookKinds [] = {
 *   FUNCTION DEFINITIONS
 */
 
-static int getWord(const char *ref, const unsigned char **ptr)
+static int getWord(const char *ref, const char **ptr)
 {
      const char *p = *ptr;
 
@@ -84,11 +84,11 @@ static void createTag(docbookKind kind, const char *buf)
 
 static void findDocBookTags(void)
 {
-    const unsigned char *line;
+    const char *line;
 
-    while ((line = fileReadLine()) != NULL)
+    while ((line = (const char*)fileReadLine()) != NULL)
     {
-		const unsigned char *cp = line;
+		const char *cp = line;
 
 		for (; *cp != '\0'; cp++)
 		{
