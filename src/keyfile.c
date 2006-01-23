@@ -364,7 +364,7 @@ gboolean configuration_open_files(void)
 {
 	gint i;
 	guint x, pos;
-	gchar *file, spos[7];
+	gchar *file, *locale_filename, spos[7];
 	gboolean ret = FALSE;
 
 	for(i = GEANY_SESSION_FILES - 1; i >= 0 ; i--)
@@ -373,6 +373,10 @@ gboolean configuration_open_files(void)
 		{
 			x = 0;
 			file = strchr(session_files[i], ':') + 1;
+			// try to get the locale equivalent for the filename, fallback to filename if error
+			locale_filename = g_locale_from_utf8(file, -1, NULL, NULL, NULL);
+			if (locale_filename == NULL) locale_filename = g_strdup(file);
+
 			while (session_files[i][x] != ':')
 			{
 				spos[x] = session_files[i][x];
@@ -381,11 +385,12 @@ gboolean configuration_open_files(void)
 			spos[x] = '\0';
 			pos = atoi(spos);
 
-			if (g_file_test(file, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
+			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{
-				document_open_file(-1, file, pos, FALSE);
+				document_open_file(-1, locale_filename, pos, FALSE);
 				ret = TRUE;
 			}
+			g_free(locale_filename);
 		}
 		g_free(session_files[i]);
 	}

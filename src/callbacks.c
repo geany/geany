@@ -2310,16 +2310,17 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 	if (doc_list[idx].file_type->id != GEANY_FILETYPES_JAVA &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_ALL)
 	{
-		//cur_tag = utils_get_current_tag(idx, DOWN);
 		line = utils_get_current_tag(idx, &cur_tag);
+		// utils_get_current_tag returns -1 on failure, so sci_get_position_from_line
+		// returns the current position, soit should be safe
 		pos = sci_get_position_from_line(doc_list[idx].sci, line - 1);
 	}
 
-	// if function name is unknown, do nothing
+	// if function name is unknown, set function name to "unknown"
 	if (line == -1)
 	{
 		g_free(cur_tag);
-		return;
+		cur_tag = g_strdup(_("unknown"));
 	}
 
 	if (doc_list[idx].file_type->id == GEANY_FILETYPES_PASCAL)
@@ -2487,7 +2488,9 @@ void
 on_recent_file_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	document_open_file(-1, (gchar*) user_data, 0, FALSE);
+	gchar *locale_filename = g_locale_from_utf8((gchar*) user_data, -1, NULL, NULL, NULL);
+	document_open_file(-1, locale_filename, 0, FALSE);
+	g_free(locale_filename);
 }
 
 

@@ -43,8 +43,6 @@
 
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
-#define INLINE inline
-//#define INLINE
 
 #ifdef G_OS_WIN32
 # include <windows.h>
@@ -78,6 +76,7 @@ typedef struct document
 {
 	gboolean		 is_valid;
 	gboolean		 has_tags;
+	// the filename is encoded in UTF-8, but every GLibC function expect the locale representation
 	gchar 			*file_name;
 	gchar 			*encoding;
 	filetype		*file_type;

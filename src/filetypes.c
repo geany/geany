@@ -29,6 +29,7 @@
 #include "support.h"
 #include "callbacks.h"
 #include "templates.h"
+#include "msgwindow.h"
 
 
 /* inits the filetype array and fill it with the known filetypes
@@ -250,15 +251,25 @@ void filetypes_init_types(void)
 filetype *filetypes_get_from_filename(const gchar *filename)
 {
 	GPatternSpec *pattern;
-	gchar *base_filename;
+	gchar *base_filename, *utf8_filename;
+	GError *error = NULL;
 	gint i, j;
 
 	if (filename == NULL)
 	{
 		return filetypes[GEANY_FILETYPES_C];
 	}
+
+	// try to get the UTF-8 equivalent for the filename
+	//utf8_filename = g_filename_to_utf8(filename, -1, NULL, NULL, &error);
+	utf8_filename = g_locale_to_utf8(filename, -1, NULL, NULL, &error);
+	if (utf8_filename == NULL)
+	{
+		return filetypes[GEANY_FILETYPES_C];
+	}
+
 	// to match against the basename of the file(because of Makefile*)
-	base_filename = g_path_get_basename(g_filename_to_utf8(filename, -1, NULL, NULL, NULL));
+	base_filename = g_path_get_basename(utf8_filename);
 
 	for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{

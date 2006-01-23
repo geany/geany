@@ -366,11 +366,12 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	gboolean reload = (idx == -1) ? FALSE : TRUE;
 	struct stat st;
 	gchar *enc = NULL;
+	gchar *utf8_filename = NULL;
+	GError *err = NULL;
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
 	gint fd;
 	void *map;
 #else
-	GError *err = NULL;
 	gchar *map;
 #endif
 	//struct timeval tv, tv1;
@@ -383,8 +384,17 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	}
 	else
 	{
+		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
+		utf8_filename = g_locale_to_utf8(filename, -1, NULL, NULL, &err);
+		if (utf8_filename == NULL)
+		{
+			msgwin_status_add("Invalid filename (%s)", err->message);
+			utf8_filename = g_strdup(filename);
+			err = NULL;	// set to NULL for further usage
+		}
+
 		// if file is already open, switch to it and go
-		idx = document_find_by_filename(filename);
+		idx = document_find_by_filename(utf8_filename);
 		if (idx >= 0)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
@@ -402,19 +412,19 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
 	if ((fd = open(filename, O_RDONLY)) < 0)
 	{
-		msgwin_status_add(_("Could not open file %s (%s)"), filename, g_strerror(errno));
+		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
 		return;
 	}
 	if ((map = mmap (0, st.st_size, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED)
 	{
-		msgwin_status_add(_("Could not open file %s (%s)"), filename, g_strerror(errno));
+		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
 		return;
 	}
 	size = (gint)st.st_size;
 #else
 	// use GLib function to load file on Win32 systems and those w/o mmap()
-	if (! g_file_get_contents (filename, &map, NULL,  &err) ){
-		msgwin_status_add(_("Could not open file %s (%s)"), filename, err->message);
+	if (! g_file_get_contents(utf8_filename, &map, NULL,  &err) ){
+		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, err->message);
 		return;
 	}
 	size = (gint)strlen(map);
@@ -451,15 +461,11 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		}
 	}
 
-	if (! reload) idx = document_create_new_sci(filename);
+	if (! reload) idx = document_create_new_sci(utf8_filename);
 
 	// sets editor mode and add the text to the ScintillaObject
 	sci_add_text_buffer(doc_list[idx].sci, map, size);
 	editor_mode =  utils_get_line_endings(map, size);
-	if (editor_mode == SC_EOL_CRLF)
-	{
-		geany_debug("%s: windows eol choosed", filename);
-	}
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
 
 	sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
@@ -467,12 +473,12 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	sci_empty_undo_buffer(doc_list[idx].sci);
 	doc_list[idx].mtime = time(NULL);
 	doc_list[idx].changed = FALSE;
-	doc_list[idx].file_name = g_strdup(filename);
+	doc_list[idx].file_name = g_strdup(utf8_filename);
 	doc_list[idx].encoding = enc;
 	if (reload)
 	{
 		sci_goto_pos(doc_list[idx].sci, 0);
-		msgwin_status_add(_("File %s reloaded."), filename);
+		msgwin_status_add(_("File %s reloaded."), utf8_filename);
 	}
 	else
 	{
@@ -482,10 +488,10 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		doc_list[idx].readonly = readonly;
 		sci_set_readonly(doc_list[idx].sci, readonly);
 
-		document_set_filetype(idx, filetypes_get_from_filename(filename));
+		document_set_filetype(idx, filetypes_get_from_filename(utf8_filename));
 		utils_build_show_hide(idx);
 		msgwin_status_add(_("File %s opened(%d%s)."),
-				filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
+				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
 				(readonly) ? _(", read-only") : "");
 	}
 	//utils_update_tag_list(idx, TRUE);
@@ -500,15 +506,17 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 
 	// finally add current file to recent files menu, but not the files from the last session
 	if (! app->opening_session_files &&
-		g_queue_find_custom(app->recent_queue, filename, (GCompareFunc) strcmp) == NULL)
+		g_queue_find_custom(app->recent_queue, utf8_filename, (GCompareFunc) strcmp) == NULL)
 	{
-		g_queue_push_head(app->recent_queue, g_strdup(filename));
+		g_queue_push_head(app->recent_queue, g_strdup(utf8_filename));
 		if (g_queue_get_length(app->recent_queue) > app->mru_length)
 		{
 			g_free(g_queue_pop_tail(app->recent_queue));
 		}
 		utils_update_recent_menu();
 	}
+
+	g_free(utf8_filename);
 	//gettimeofday(&tv1, &tz);
 	//geany_debug("%s: %d", filename, (gint)(tv1.tv_usec - tv.tv_usec));
 }
@@ -798,7 +806,10 @@ void document_update_tag_list(gint idx)
 
 	if (doc_list[idx].tm_file == NULL)
 	{
-		doc_list[idx].tm_file = tm_source_file_new(doc_list[idx].file_name, FALSE);
+		gchar *locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
+		doc_list[idx].tm_file = tm_source_file_new(locale_filename, FALSE);
+		g_free(locale_filename);
+		if (! doc_list[idx].tm_file) return;
 		tm_workspace_add_object(doc_list[idx].tm_file);
 		// parse the file after setting the filetype
 		TM_SOURCE_FILE(doc_list[idx].tm_file)->lang = getNamedLanguage((doc_list[idx].file_type)->name);
