@@ -1305,7 +1305,7 @@ gdouble utils_scale_round (gdouble val, gdouble factor)
 }
 
 
-INLINE void utils_widget_show_hide(GtkWidget *widget, gboolean show)
+void utils_widget_show_hide(GtkWidget *widget, gboolean show)
 {
 	if (show)
 	{

@@ -32,8 +32,7 @@
 
 
 /* line numbers visibility */
-void
-sci_set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
+void sci_set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
 {
 	if (set)
 	{
@@ -66,8 +65,7 @@ void sci_set_mark_long_lines(ScintillaObject * sci, gint column, const gchar *co
 }
 
 
-gboolean
-sci_get_line_numbers(ScintillaObject * sci)
+gboolean sci_get_line_numbers(ScintillaObject * sci)
 {
 	gint margin_width;
 
@@ -77,8 +75,7 @@ sci_get_line_numbers(ScintillaObject * sci)
 }
 
 /* symbol margin visibility */
-void
-sci_set_symbol_margin(ScintillaObject * sci, gboolean set )
+void sci_set_symbol_margin(ScintillaObject * sci, gboolean set )
 {
 	if (set)
 	{
@@ -92,16 +89,14 @@ sci_set_symbol_margin(ScintillaObject * sci, gboolean set )
 	}
 }
 
-gboolean
-sci_get_symbol_margin(ScintillaObject * sci)
+gboolean sci_get_symbol_margin(ScintillaObject * sci)
 {
 	if (SSM(sci, SCI_GETMARGINWIDTHN, 1, 0) > 0 ) return TRUE;
 	else return FALSE;
 }
 
 /* folding margin visibility */
-void
-sci_set_folding_margin_visible (ScintillaObject * sci, gboolean set )
+void sci_set_folding_margin_visible (ScintillaObject * sci, gboolean set )
 {
 	if( set ){
 		SSM (sci, SCI_SETMARGINWIDTHN, 2, 12 );
@@ -109,8 +104,8 @@ sci_set_folding_margin_visible (ScintillaObject * sci, gboolean set )
 		SSM (sci, SCI_SETMARGINWIDTHN, 2, 0 );
 	}
 }
-gboolean
-sci_get_folding_margin_visible(ScintillaObject * sci)
+
+gboolean sci_get_folding_margin_visible(ScintillaObject * sci)
 {
 	gint margin_width;
 
@@ -118,20 +113,19 @@ sci_get_folding_margin_visible(ScintillaObject * sci)
 	if( margin_width > 0 ) return TRUE;
 	else return FALSE;
 }
+
 /* end of lines */
-void
-sci_set_visible_eols(ScintillaObject* sci, gboolean set )
+void sci_set_visible_eols(ScintillaObject* sci, gboolean set )
 {
 	SSM(sci,SCI_SETVIEWEOL,set,0);
 }
 
-gboolean
-sci_get_visible_eols(ScintillaObject* sci)
+gboolean sci_get_visible_eols(ScintillaObject* sci)
 {
 	return SSM( sci, SCI_GETVIEWEOL,0,0);
 }
-void
-sci_set_visible_white_spaces(ScintillaObject* sci, gboolean set )
+
+void sci_set_visible_white_spaces(ScintillaObject* sci, gboolean set )
 {
 	if(set){
 		SSM(sci,SCI_SETVIEWWS,SCWS_VISIBLEALWAYS,0);
@@ -139,13 +133,13 @@ sci_set_visible_white_spaces(ScintillaObject* sci, gboolean set )
 		SSM(sci,SCI_SETVIEWWS,SCWS_INVISIBLE,0);
 	}
 }
-gboolean
-sci_get_visible_white_spaces(ScintillaObject* sci)
+
+gboolean sci_get_visible_white_spaces(ScintillaObject* sci)
 {
 	return SSM( sci, SCI_GETVIEWWS,0,0);
 }
-void
-sci_set_lines_wrapped(ScintillaObject* sci, gboolean set )
+
+void sci_set_lines_wrapped(ScintillaObject* sci, gboolean set )
 {
 	if( set ){
 		SSM(sci,SCI_SETWRAPMODE,SC_WRAP_WORD,0);
@@ -154,42 +148,35 @@ sci_set_lines_wrapped(ScintillaObject* sci, gboolean set )
 		SSM(sci,SCI_SETWRAPMODE,SC_WRAP_NONE,0);
 	}
 }
-gboolean
-sci_get_lines_wrapped(ScintillaObject* sci)
+
+gboolean sci_get_lines_wrapped(ScintillaObject* sci)
 {
 	return SSM( sci, SCI_GETWRAPMODE,0,0);
 }
 
-gint
-sci_get_eol_mode( ScintillaObject* sci)
+gint sci_get_eol_mode( ScintillaObject* sci)
 {
 	return SSM( sci, SCI_GETEOLMODE, 0, 0);
 }
 
-void
-sci_set_eol_mode( ScintillaObject* sci, gint eolmode)
+void sci_set_eol_mode( ScintillaObject* sci, gint eolmode)
 {
 	SSM( sci, SCI_SETEOLMODE, eolmode, 0);
 }
 
-void
-sci_convert_eols( ScintillaObject* sci, gint eolmode)
+void sci_convert_eols( ScintillaObject* sci, gint eolmode)
 {
 	SSM( sci, SCI_CONVERTEOLS, eolmode,0);
 }
 
-
-void
-sci_add_text(ScintillaObject* sci, const gchar* text)
+void sci_add_text(ScintillaObject* sci, const gchar* text)
 {
 	if( text != NULL ){// if null text is passed to scintilla will segfault
 		SSM( sci, SCI_ADDTEXT, strlen(text), (sptr_t) text);
 	}
 }
 
-
-void
-sci_set_text(ScintillaObject* sci, const gchar* text)
+void sci_set_text(ScintillaObject* sci, const gchar* text)
 {
 	if( text != NULL ){// if null text is passed to scintilla will segfault
 		SSM( sci, SCI_SETTEXT, 0, (sptr_t) text);
@@ -197,8 +184,7 @@ sci_set_text(ScintillaObject* sci, const gchar* text)
 }
 
 
-void
-sci_add_text_buffer(ScintillaObject* sci, const gchar* text, gint len)
+void sci_add_text_buffer(ScintillaObject* sci, const gchar* text, gint len)
 {
 	if( text != NULL ){// if null text is passed to scintilla will segfault
 		SSM(sci, SCI_CLEARALL, 0, 0);
@@ -207,22 +193,19 @@ sci_add_text_buffer(ScintillaObject* sci, const gchar* text, gint len)
 }
 
 
-gboolean
-sci_can_undo( ScintillaObject* sci )
+gboolean sci_can_undo( ScintillaObject* sci )
 {
 	return SSM( sci, SCI_CANUNDO, 0, 0);
 }
 
 
-gboolean
-sci_can_redo( ScintillaObject* sci )
+gboolean sci_can_redo( ScintillaObject* sci )
 {
 	return SSM( sci, SCI_CANREDO, 0, 0);
 }
 
 
-void
-sci_undo( ScintillaObject* sci )
+void sci_undo( ScintillaObject* sci )
 {
 	if( sci_can_undo(sci) ){
 		SSM( sci, SCI_UNDO, 0, 0);
@@ -232,8 +215,7 @@ sci_undo( ScintillaObject* sci )
 }
 
 
-void
-sci_redo( ScintillaObject* sci )
+void sci_redo( ScintillaObject* sci )
 {
 	if( sci_can_redo( sci ) ){
 		SSM( sci, SCI_REDO,0,0);
@@ -243,71 +225,61 @@ sci_redo( ScintillaObject* sci )
 }
 
 
-void
-sci_start_undo_action( ScintillaObject* sci )
+void sci_start_undo_action( ScintillaObject* sci )
 {
 	SSM( sci,SCI_BEGINUNDOACTION,0,0 );
 }
 
 
-void
-sci_end_undo_action( ScintillaObject* sci )
+void sci_end_undo_action( ScintillaObject* sci )
 {
 	SSM( sci, SCI_ENDUNDOACTION,0,0);
 }
 
 
-void
-sci_set_undo_collection( ScintillaObject* sci, gboolean set )
+void sci_set_undo_collection( ScintillaObject* sci, gboolean set )
 {
 	SSM( sci, SCI_SETUNDOCOLLECTION,set,0);
 }
 
 
-gboolean
-sci_get_undo_collection( ScintillaObject* sci )
+gboolean sci_get_undo_collection( ScintillaObject* sci )
 {
 	return SSM( sci, SCI_GETUNDOCOLLECTION,0,0);
 }
 
 
-void
-sci_empty_undo_buffer( ScintillaObject* sci )
+void sci_empty_undo_buffer( ScintillaObject* sci )
 {
 	SSM( sci, SCI_EMPTYUNDOBUFFER,0,0);
 }
 
 
-void
-sci_zoom_in( ScintillaObject* sci )
+void sci_zoom_in( ScintillaObject* sci )
 {
 	SSM( sci, SCI_ZOOMIN,0,0);
 }
 
 
-void
-sci_zoom_out( ScintillaObject* sci )
+void sci_zoom_out( ScintillaObject* sci )
 {
 	SSM( sci, SCI_ZOOMOUT,0,0);
 }
 
 
-void
-sci_zoom_off( ScintillaObject* sci )
+void sci_zoom_off( ScintillaObject* sci )
 {
 	SSM( sci, SCI_SETZOOM,0,0);
 }
 
 
-gint
-sci_get_zoom( ScintillaObject* sci )
+gint sci_get_zoom( ScintillaObject* sci )
 {
 	return SSM( sci, SCI_GETZOOM,0,0);
 }
 
 
-void
-sci_set_marker_at_line( ScintillaObject* sci, gint line_number, gboolean set, gint marker )
+void sci_set_marker_at_line( ScintillaObject* sci, gint line_number, gboolean set, gint marker )
 {
 	if ( set )
 	{
@@ -320,8 +292,7 @@ sci_set_marker_at_line( ScintillaObject* sci, gint line_number, gboolean set, gi
 }
 
 
-gboolean
-sci_is_marker_set_at_line(ScintillaObject* sci, gint line, gint marker)
+gboolean sci_is_marker_set_at_line(ScintillaObject* sci, gint line, gint marker)
 {
 	gint state;
 
@@ -330,8 +301,7 @@ sci_is_marker_set_at_line(ScintillaObject* sci, gint line, gint marker)
 }
 
 
-gboolean
-sci_marker_next(ScintillaObject* sci, gint line, gint marker_mask)
+gboolean sci_marker_next(ScintillaObject* sci, gint line, gint marker_mask)
 {
 	gint marker_line;
 
@@ -346,8 +316,7 @@ sci_marker_next(ScintillaObject* sci, gint line, gint marker_mask)
 }
 
 
-gboolean
-sci_marker_prev(ScintillaObject* sci, gint line, gint marker_mask)
+gboolean sci_marker_prev(ScintillaObject* sci, gint line, gint marker_mask)
 {
 	gint marker_line;
 
@@ -362,176 +331,151 @@ sci_marker_prev(ScintillaObject* sci, gint line, gint marker_mask)
 }
 
 
-gint
-sci_get_line_from_position(ScintillaObject* sci, gint position )
+gint sci_get_line_from_position(ScintillaObject* sci, gint position )
 {
 	return SSM(sci, SCI_LINEFROMPOSITION, position, 0);
 }
 
 
-gint
-sci_get_col_from_position(ScintillaObject* sci, gint position )
+gint sci_get_col_from_position(ScintillaObject* sci, gint position )
 {
 	return SSM(sci, SCI_GETCOLUMN, position, 0);
 }
 
 
-gint
-sci_get_position_from_line(ScintillaObject* sci, gint line )
+gint sci_get_position_from_line(ScintillaObject* sci, gint line )
 {
 	return SSM(sci, SCI_POSITIONFROMLINE, line, 0);
 }
 
 
-gint
-sci_get_current_position(ScintillaObject* sci )
+gint sci_get_current_position(ScintillaObject* sci )
 {
 	return SSM(sci, SCI_GETCURRENTPOS, 0, 0);
 }
 
 
-void
-sci_set_current_position(ScintillaObject* sci, gint position )
+void sci_set_current_position(ScintillaObject* sci, gint position )
 {
 	SSM(sci, SCI_GOTOPOS, position, 0);
 }
 
 
-void
-sci_set_current_line(ScintillaObject* sci, gint line )
+void sci_set_current_line(ScintillaObject* sci, gint line )
 {
 	SSM(sci, SCI_GOTOLINE, line, 0);
 }
 
 
-gint
-sci_get_line_count( ScintillaObject* sci )
+gint sci_get_line_count( ScintillaObject* sci )
 {
 	return SSM(sci, SCI_GETLINECOUNT, 0, 0);
 }
 
 
-void
-sci_set_selection_start(ScintillaObject* sci, gint position)
+void sci_set_selection_start(ScintillaObject* sci, gint position)
 {
 	SSM(sci, SCI_SETSELECTIONSTART, position, 0);
 }
 
 
-void
-sci_set_selection_end(ScintillaObject* sci, gint position)
+void sci_set_selection_end(ScintillaObject* sci, gint position)
 {
 	SSM(sci, SCI_SETSELECTIONEND, position, 0);
 }
 
 
-gint
-sci_get_line_end_from_position(ScintillaObject* sci, gint position)
+gint sci_get_line_end_from_position(ScintillaObject* sci, gint position)
 {
 	return SSM(sci, SCI_GETLINEENDPOSITION, position, 0);
 }
 
 
-void
-sci_cut(ScintillaObject* sci)
+void sci_cut(ScintillaObject* sci)
 {
 	SSM(sci, SCI_CUT, 0, 0);
 }
 
 
-void
-sci_copy(ScintillaObject* sci)
+void sci_copy(ScintillaObject* sci)
 {
 	SSM(sci, SCI_COPY, 0, 0);
 }
 
 
-void
-sci_paste(ScintillaObject* sci)
+void sci_paste(ScintillaObject* sci)
 {
 	SSM(sci, SCI_PASTE, 0, 0);
 }
 
 
-void
-sci_clear(ScintillaObject* sci)
+void sci_clear(ScintillaObject* sci)
 {
 	SSM(sci, SCI_CLEAR, 0, 0);
 }
 
 
-gint
-sci_get_selection_start(ScintillaObject* sci)
+gint sci_get_selection_start(ScintillaObject* sci)
 {
 	return SSM(sci, SCI_GETSELECTIONSTART,0,0);
 }
 
 
-gint
-sci_get_selection_end(ScintillaObject* sci)
+gint sci_get_selection_end(ScintillaObject* sci)
 {
 	return SSM(sci, SCI_GETSELECTIONEND,0,0);
 }
 
 
-void
-sci_replace_sel(ScintillaObject* sci, gchar* text)
+void sci_replace_sel(ScintillaObject* sci, gchar* text)
 {
 	SSM(sci, SCI_REPLACESEL,0, (sptr_t) text);
 }
 
 
-gint
-sci_get_length(ScintillaObject* sci)
+gint sci_get_length(ScintillaObject* sci)
 {
 	return SSM(sci,SCI_GETLENGTH,0,0);
 }
 
 
-gint
-sci_get_lexer(ScintillaObject* sci)
+gint sci_get_lexer(ScintillaObject* sci)
 {
 	return SSM(sci,SCI_GETLEXER,0,0);
 }
 
 
-gint
-sci_get_line_length(ScintillaObject* sci,gint line)
+gint sci_get_line_length(ScintillaObject* sci,gint line)
 {
 	return SSM(sci,SCI_LINELENGTH, line,0);
 }
 
 
-void // will not be null terminated
-sci_get_line(ScintillaObject* sci, gint line, gchar* text)
+void sci_get_line(ScintillaObject* sci, gint line, gchar* text)
 {
-	SSM(sci,SCI_GETLINE,line, (sptr_t) text);
+	SSM(sci,SCI_GETLINE, line, (sptr_t) text);
+}
+
+// the last char will be null terminated
+void sci_get_text(ScintillaObject* sci, gint len, gchar* text)
+{
+	SSM( sci, SCI_GETTEXT, len, (sptr_t) text );
 }
 
 
-void // the last char will be null terminated
-sci_get_text(ScintillaObject* sci, gint len, gchar* text)
-{
-	SSM( sci, SCI_GETTEXT, len,(sptr_t) text );
-}
-
-
-void
-sci_get_selected_text(ScintillaObject* sci, gchar* text)
+void sci_get_selected_text(ScintillaObject* sci, gchar* text)
 {
 	SSM( sci, SCI_GETSELTEXT, 0, (sptr_t) text);
 }
 
 
-gint
-sci_get_selected_text_length(ScintillaObject* sci)
+gint sci_get_selected_text_length(ScintillaObject* sci)
 {
 	return SSM( sci, SCI_GETSELTEXT, 0, 0);
 }
 
 
-void
-sci_get_xy_from_position(ScintillaObject* sci,gint pos, gint* x, gint* y)
+void sci_get_xy_from_position(ScintillaObject* sci,gint pos, gint* x, gint* y)
 {
 	*x = SSM(sci, SCI_POINTXFROMPOSITION,0, (int) pos);
  	*y = SSM(sci, SCI_POINTYFROMPOSITION,0, (int) pos);
@@ -539,43 +483,37 @@ sci_get_xy_from_position(ScintillaObject* sci,gint pos, gint* x, gint* y)
 
 
 /* folding */
-gboolean
-sci_get_line_is_visible(ScintillaObject* sci, gint line)
+gboolean sci_get_line_is_visible(ScintillaObject* sci, gint line)
 {
 	return SSM(sci,SCI_GETLINEVISIBLE, line,0);
 }
 
 
-void
-sci_ensure_line_is_visible( ScintillaObject* sci, gint line)
+void sci_ensure_line_is_visible( ScintillaObject* sci, gint line)
 {
 	 SSM(sci,SCI_ENSUREVISIBLE,line,0);
 }
 
 
-gint
-sci_get_fold_level(ScintillaObject* sci, gint line)
+gint sci_get_fold_level(ScintillaObject* sci, gint line)
 {
 	return SSM(sci,SCI_GETFOLDLEVEL, line,0);
 }
 
 
-void
-sci_toggle_fold(ScintillaObject* sci, gint line)
+void sci_toggle_fold(ScintillaObject* sci, gint line)
 {
 	SSM( sci, SCI_TOGGLEFOLD, line, 1);
 }
 
 
-gboolean
-sci_get_fold_expanded(ScintillaObject* sci, gint line)
+gboolean sci_get_fold_expanded(ScintillaObject* sci, gint line)
 {
 	return SSM( sci, SCI_GETFOLDEXPANDED, line, 0);
 }
 
 
-void
-sci_colourise( ScintillaObject* sci, gint start, gint end)
+void sci_colourise( ScintillaObject* sci, gint start, gint end)
 {
 	SSM( sci, SCI_COLOURISE, start, end);
 }
@@ -769,7 +707,7 @@ void sci_target_from_selection(ScintillaObject *sci)
 }
 
 
-void sci_target_start(ScintillaObject *sci, gint start)
+ void sci_target_start(ScintillaObject *sci, gint start)
 {
 	SSM(sci, SCI_SETTARGETSTART, start, 0);
 }
@@ -808,7 +746,7 @@ gboolean sci_get_readonly(ScintillaObject *sci)
 }
 
 // a simple convenience function to not have SSM() in the outside of this file
-void sci_cmd(ScintillaObject * sci, gint cmd)
+ void sci_cmd(ScintillaObject * sci, gint cmd)
 {
 	SSM(sci, cmd, 0, 0);
 }
