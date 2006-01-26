@@ -2119,3 +2119,26 @@ void utils_treeviews_showhide(void)
 	else
 		gtk_widget_show(app->treeview_notebook);
 }
+
+
+/* Get directory from current file in the notebook.
+ * Returns dir string that should be freed or NULL, depending on whether current file is valid.
+ * (thanks to Nick Treleaven for this patch) */
+gchar *utils_get_current_file_dir()
+{
+	gint cur_idx = document_get_cur_idx();
+
+	if (cur_idx >= 0)	// if valid page found
+	{
+		// get current filename
+		const gchar *cur_fname = doc_list[cur_idx].file_name;
+
+		if (cur_fname != NULL)
+		{
+			// get folder part from current filename
+			return g_path_get_dirname(cur_fname);	// returns "." if no path
+		}
+	}
+
+	return NULL;	// no file open
+}

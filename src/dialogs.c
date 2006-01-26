@@ -70,6 +70,19 @@ void dialogs_show_open_file ()
 			g_signal_connect((gpointer)app->open_filesel, "selection-changed",
 						G_CALLBACK(on_file_open_selection_changed), NULL);
 		}
+
+		// set dialog directory to the current file's directory, if present
+		{
+			gchar *initdir = utils_get_current_file_dir();
+
+			if (initdir != NULL)
+			{
+				gtk_file_chooser_set_current_folder(
+					GTK_FILE_CHOOSER(app->open_filesel), initdir);
+				g_free(initdir);
+			}
+		}
+
 		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(app->open_filesel));
 		/* We make sure the dialog is visible. */
 		gtk_window_present(GTK_WINDOW(app->open_filesel));

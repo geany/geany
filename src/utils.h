@@ -199,4 +199,6 @@ gint utils_get_int_from_hexcolor(const gchar *hex);
 
 void utils_treeviews_showhide(void);
 
+gchar *utils_get_current_file_dir();
+
 #endif
