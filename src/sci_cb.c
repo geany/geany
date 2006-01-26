@@ -303,7 +303,8 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 		if (isspace(line_buf[x])) cnt++;
 		x++;
 	}
-	if ((line_len + (!eol_char_len) - 2) != cnt) return;
+	//geany_debug("line_len: %d eol: %d cnt: %d", line_len, eol_char_len, cnt);
+	if ((line_len - eol_char_len - 1) != cnt) return;
 
 	if (start_brace >= 0) sci_cb_get_indent(sci, start_brace, TRUE);
 /*	geany_debug("pos: %d, start: %d char: %c start_line: %d", pos, start_brace,
