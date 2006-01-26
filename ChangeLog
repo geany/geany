@@ -1,3 +1,12 @@
+2006-01-26  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c, src/dialogs.c: set the Open File dialog directory to
+                               the same directory as the current file
+                               (thanks to Nick Treleaven for this patch)
+ * src/sci_cb.h: fixed a bug with auto indention and CR/LF line endings
+                 (thanks to Tamim for reporting)
+
+
 2006-01-21  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * tagmanager/tex.c, src/treeviews.c: added tag support for "\begin",
