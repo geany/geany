@@ -858,7 +858,7 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 		if (locale_charset != NULL)
 		{
 /*			if (strcmp(locale_charset, "ANSI_X3.4-1968") == 0)
-			{	/// TODO very dirty quick hack, if LC=C then all oes wrong
+			{	/// TODO very dirty quick hack, if LC=C then all goes wrong
 				locale_encoding = encoding_get_from_charset("ISO-8859-15");
 			}
 			else
@@ -2076,6 +2076,7 @@ gint utils_get_int_from_hexcolor(const gchar *hex)
 	{
 		size_t len;
 		guint r, g, b;
+		gint bits;
 
 		hex++;
 		len = strlen(hex);
@@ -2088,7 +2089,7 @@ gint utils_get_int_from_hexcolor(const gchar *hex)
 			! utils_is_hex(hex + len * 2, len, &b))
 			return FALSE;
 
-		gint bits = len * 4;
+		bits = len * 4;
 		r <<= 8 - bits;
 		g <<= 8 - bits;
 		b <<= 8 - bits;
