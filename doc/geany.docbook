@@ -3,11 +3,11 @@
         "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!ENTITY app "Geany">
 <!ENTITY app_small "geany">
-<!ENTITY appversion "0.4">
+<!ENTITY appversion "0.5">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY deburl "http://debian.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "December 21, 2005">
+<!ENTITY date "January 27, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 ]>
 
@@ -19,7 +19,7 @@
 			<address><email>&author_mail;</email></address>
 		</author>
 		<copyright>
-			<year>2005</year>
+			<year>2006</year>
 			<!-- <holder>Enrico Troeger</holder> -->
 		</copyright>
 		<legalnotice>
@@ -229,6 +229,15 @@
 									   want to load the virtual terminal emulator widget at startup.
 									   If you do not have <filename>libvte.so.4</filename> installed,
 									   then terminal-support is automatically disabled.
+								</entry>
+							</row>
+							<row>
+								<entry>-l</entry>
+								<entry>--vte-lib</entry>
+								<entry>Specify explicitly the path including filename or only the filename
+									   to the VTE library, e.g. <filename>/usr/lib/libvte.so</filename> or
+									   <filename>libvte.so</filename>. This option is only needed, when the
+									   autodetection does not work.
 								</entry>
 							</row>
 							<row>

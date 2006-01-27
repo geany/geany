@@ -1,9 +1,9 @@
 
-Geany 0.4
+Geany 0.5
 
 Enrico Troeger
 
-   Copyright © 2005
+   Copyright © 2006
 
    This document is distributed under the terms of the GNU Public
    license as published by the Free Software Foundation; either
@@ -222,6 +222,10 @@ Chapter 3. Usage
    option, if you do not want to load the virtual terminal
    emulator widget at startup. If you do not have libvte.so.4
    installed, then terminal-support is automatically disabled.
+   -l --vte-lib Specify explicitly the path including filename or
+   only the filename to the VTE library, e.g. /usr/lib/libvte.so
+   or libvte.so. This option is only needed, when the
+   autodetection does not work.
    -c directory_name --config=directory_name Use an alternate
    configuration directory. Default configuration directory is
    ~/.geany/ and there resides geany.conf and some template

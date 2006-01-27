@@ -1,9 +1,26 @@
+Geany 0.5 (January 27, 2006)
+
+        * set the Open File dialog directory to the same directory as
+          the current file (thanks to Nick Treleaven for this patch)
+        * fixed some bugs when opening files with non UTF-8 filenames
+        * updated included Scintilla to version 1.67
+        * improved auto indention, now "for (...) {" works, too
+        * added popup menu to sidebar lists, to quickly hide them
+        * symbol list support for filetypes LaTeX and DocBook
+        * added .cc, .hh and .hxx extension for filetype C++
+        * added new keywords for PHP5
+        * added new option "Beep on errors" to disable beeping
+        * eliminated compiler (gcc4) warnings
+        * closed bug #1387828 and #1387839
+        * fixed lots of bugs (please see ChangeLog for details)
+
+
 Geany 0.4 (December 21, 2005)
 
         * new filetype: Assembler
         * new filetype: Conf for configuration files
         * added a terminal emulation widget, needs only libvte.so at
-           runtime, but it also runs without it, see dokumentation
+          runtime, but it also runs without it, see documentation
         * made some general improvements to increase startup speed
         * changed "build with make" keyboard shortcut to Shift+F9 to
           avoid problems with window managers key bindings
