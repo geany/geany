@@ -342,12 +342,13 @@ GPid build_spawn_cmd(gint idx, gchar **cmd)
 GPid build_run_cmd(gint idx)
 {
 	GPid	 child_pid;
+	GPid	 result_id;	// either child_pid or error id.
 	GError	*error = NULL;
-	gchar  **argv;
-	gchar	*working_dir;
-	gchar	*long_executable;
-	gchar	*check_executable;
-	gchar	*executable = g_malloc0(strlen(doc_list[idx].file_name));
+	gchar  **argv = NULL;
+	gchar	*working_dir = NULL;
+	gchar	*long_executable = NULL;
+	gchar	*check_executable = NULL;
+	gchar	*executable = NULL;
 	gchar	*script_name = g_strdup("./geany_run_script.sh");
 	struct stat st;
 
@@ -365,32 +366,37 @@ GPid build_run_cmd(gint idx)
 	if (stat(check_executable, &st) != 0)
 	{
 		msgwin_status_add(_("Failed to execute %s (make sure it is already built)"), check_executable);
-		g_free(check_executable);
-		g_free(long_executable);
-		return (GPid) 1;
+		result_id = (GPid) 1;
+		goto free_strings;
+	}
+
+	// check if terminal path is set (to prevent misleading error messages)
+	if (stat(app->build_term_cmd, &st) != 0)
+	{
+		msgwin_status_add(
+			_("Could not find terminal '%s' "
+				"(check path for Terminal tool setting in Preferences)"),
+			app->build_term_cmd);
+		result_id = (GPid) 1;
+		goto free_strings;
 	}
 
 	executable = g_path_get_basename(long_executable);
-	g_free(check_executable);
-	g_free(long_executable);
 
 	working_dir = g_path_get_dirname(doc_list[idx].file_name);
 	if (chdir(working_dir) != 0)
 	{
 		msgwin_status_add(_("Failed to change the working directory to %s"), working_dir);
-		g_free(working_dir);
-		g_free(executable);
-		return (GPid) 1;	// return 1, to prevent error handling of the caller
+		result_id = (GPid) 1;	// return 1, to prevent error handling of the caller
+		goto free_strings;
 	}
 
 	// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
 	if (! build_create_shellscript(idx, script_name, executable, app->build_args_prog))
 	{
 		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"), executable);
-		g_free(working_dir);
-		g_free(executable);
-		g_free(script_name);
-		return (GPid) 1;
+		result_id = (GPid) 1;
+		goto free_strings;
 	}
 
 	argv = g_new(gchar *, 4);
@@ -399,18 +405,16 @@ GPid build_run_cmd(gint idx)
 	argv[2] = g_strdup(script_name);
 	argv[3] = NULL;
 
-	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
+	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH,
 						NULL, NULL, &child_pid, NULL, NULL, NULL, &error))
 	{
 		g_warning("g_spawn_async_with_pipes() failed: %s", error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
 		unlink(script_name);
-		g_free(script_name);
-		g_free(working_dir);
-		g_strfreev(argv);
 		g_error_free(error);
 		error = NULL;
-		return (GPid) 0;
+		result_id = (GPid) 0;
+		goto free_strings;
 	}
 
 	/* check if the script is really deleted, this doesn't work because of g_spawn_ASYNC_with_pipes
@@ -421,11 +425,18 @@ GPid build_run_cmd(gint idx)
 		unlink(script_name);
 	}
 */
-	g_free(script_name);
+	result_id = child_pid; // g_spawn was successful, result is child process id
+	
+	free_strings:
+	/* free all non-NULL strings */
 	g_strfreev(argv);
 	g_free(working_dir);
+	g_free(long_executable);
+	g_free(check_executable);
+	g_free(executable);
+	g_free(script_name);
 
-	return child_pid;
+	return result_id;
 }
 
 
