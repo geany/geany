@@ -1,7 +1,7 @@
 /*
  *      templates.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -261,6 +261,7 @@ gchar *templates_replace_all(gchar *text, gchar *year, gchar *date)
 	text = utils_str_replace(text, "{mail}", app->pref_template_mail);
 	text = utils_str_replace(text, "{company}", app->pref_template_company);
 	text = utils_str_replace(text, "{untitled}", GEANY_STRING_UNTITLED);
+	text = utils_str_replace(text, "{geanyversion}", "Geany " VERSION);
 
 	return text;
 }

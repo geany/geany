@@ -1,7 +1,7 @@
 /*
  *      templates.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -174,7 +174,7 @@ static const gchar templates_filetype_php[] = "<!DOCTYPE html PUBLIC \"-//W3C//D
 <head>\n\
 	<title>{untitled}</title>\n\
 	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />\n\
-	<meta name=\"generator\" content=\"" PACKAGE " " VERSION "\" />\n\
+	<meta name=\"generator\" content=\"{geanyversion}\" />\n\
 </head>\n\
 \n\
 <body>\n\
