@@ -320,7 +320,7 @@ gboolean configuration_load(void)
 	app->build_make_cmd = utils_get_setting_string(config, "build", "build_make_cmd", tmp_string);
 	g_free(tmp_string);
 
-	tmp_string = g_find_program_in_path("term");
+	tmp_string = g_find_program_in_path("xterm");
 	app->build_term_cmd = utils_get_setting_string(config, "build", "build_term_cmd", tmp_string);
 	g_free(tmp_string);
 
