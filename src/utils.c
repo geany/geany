@@ -112,21 +112,22 @@ void utils_update_statusbar(gint idx)
 		col = sci_get_col_from_position(doc_list[idx].sci, pos);
 
 		g_snprintf(text, 150,
-			_("%c  line: % 4d column: % 3d  selection: % 4d   %s     mode: %s     cur. function: %s"),
+			_("%c  line: % 4d column: % 3d  selection: % 4d   %s     mode: %s     cur. function: %s     Encoding: %s"),
 			(doc_list[idx].changed) ? 42 : 32,
 			(line + 1), (col + 1),
 			sci_get_selected_text_length(doc_list[idx].sci) - 1,
 			doc_list[idx].do_overwrite ? _("OVR") : _("INS"),
 			document_get_eol_mode(idx),
-			cur_tag);
-		gtk_statusbar_pop(GTK_STATUSBAR (app->statusbar), 1);
-		gtk_statusbar_push(GTK_STATUSBAR (app->statusbar), 1, text);
+			cur_tag,
+			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"));
+		gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
+		gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, text);
 		g_free(cur_tag);
 	}
 	else
 	{
-		gtk_statusbar_pop(GTK_STATUSBAR (app->statusbar), 1);
-		gtk_statusbar_push(GTK_STATUSBAR (app->statusbar), 1, text);
+		gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
+		gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, text);
 	}
 
 	g_free(text);
@@ -1059,7 +1060,7 @@ gint utils_get_current_tag(gint idx, gchar **tagname)
 			fold_level = sci_get_fold_level(doc_list[idx].sci, --line);
 
 		// look first in the tag list
-		tags = utils_get_tag_list(idx, tm_tag_max_t);
+/*		tags = utils_get_tag_list(idx, tm_tag_max_t);
 		for (; tags; tags = g_list_next(tags))
 		{
 			tag_line = utils_get_local_tag(idx, tags->data);
@@ -1069,12 +1070,16 @@ gint utils_get_current_tag(gint idx, gchar **tagname)
 				return tag_line;
 			}
 		}
-
+*/
 		start = sci_get_position_from_line(doc_list[idx].sci, line + 1);
-		while (sci_get_style_at(doc_list[idx].sci, start) != SCE_C_IDENTIFIER) start++;
+		tmp = 0;
+		while (sci_get_style_at(doc_list[idx].sci, start) != SCE_C_IDENTIFIER
+			&& sci_get_style_at(doc_list[idx].sci, start) != SCE_C_GLOBALCLASS) start++;
 		end = start;
-		while (sci_get_style_at(doc_list[idx].sci, end) == SCE_C_IDENTIFIER ||
-					sci_get_char_at(doc_list[idx].sci, end) == ':')	end++;
+		// save the style from start, it is SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS
+		tmp = sci_get_style_at(doc_list[idx].sci, start);
+		while (sci_get_style_at(doc_list[idx].sci, end) == tmp
+			|| sci_get_char_at(doc_list[idx].sci, end) == ':')	end++;
 
 		*tagname = g_malloc(end - start + 1);
 		sci_get_text_range(doc_list[idx].sci, start, end, *tagname);
@@ -1320,6 +1325,11 @@ void utils_widget_show_hide(GtkWidget *widget, gboolean show)
 
 void utils_build_show_hide(gint idx)
 {
+#ifdef GEANY_WIN32
+	gtk_widget_set_sensitive(app->compile_button, FALSE);
+	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
+	return;
+#else
 	gboolean is_header = FALSE;
 	gchar *ext = NULL;
 	static gboolean button_is_html = FALSE;
@@ -1438,6 +1448,7 @@ void utils_build_show_hide(gint idx)
 			break;
 		}
 	}
+#endif
 }
 
 
@@ -2125,7 +2136,7 @@ void utils_treeviews_showhide(void)
 /* Get directory from current file in the notebook.
  * Returns dir string that should be freed or NULL, depending on whether current file is valid.
  * (thanks to Nick Treleaven for this patch) */
-gchar *utils_get_current_file_dir()
+gchar *utils_get_current_file_dir(void)
 {
 	gint cur_idx = document_get_cur_idx();
 
