@@ -7,11 +7,11 @@ TODO List:
 
 	o filetype SQL
 	o filetype (O)Caml
-	o add the file open dialog current directory support to Win32
+	o filetype OMS
+	o http://sourceforge.net/tracker/index.php?func=detail&aid=1421776&group_id=153444&atid=787791
+	o https://sourceforge.net/tracker/?func=detail&atid=102439&aid=1389486&group_id=2439
 	o fix a freeze at switching between filetypes with files in
 	  ISO-8859-x encoding (reported by Jörg Sommer)
-	o added new wildcard {geanyversion} to have recent Geany version in
-	  filetype templats
 	o fix: "attempt to put segment in horiz list twice" warning
 	o open files in a new tab in a already running instance
 	o encoding-bug in utils_convert_to_utf8()

@@ -1,3 +1,22 @@
+2006-02-01  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/build.c: applied patch from Nick Treleaven to fix memory leaks
+ * src/document.c: changed <? to <?php in new file template
+ * src/keyfile.c: changed "term" to "xterm", this was a simple typo
+ * src/utils.c: added encoding to the status bar, fixed a freeze with
+                C++ files (closes #1419473)
+
+
+2006-01-29  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/win32.c: set the Open File dialog directory to the same
+                directory as the current file
+ * src/utils.c: disabled the build menu under Win32, at least temporary
+ * src/templates.c, doc/geany.docbook:
+   added new wildcard {geanyversion} to have actual Geany version in
+   filetype templates (e.g. HTML template)
+
+
 2006-01-27  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * new release: Geany 0.5 "Rebus"
