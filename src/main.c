@@ -93,6 +93,13 @@ void apply_settings(void)
 		gtk_widget_hide(app->toolbar);
 		app->toolbar_visible = FALSE;
 	}
+	if (! app->msgwindow_visible)
+	{
+		// I know this is a bit confusing, but it works
+		app->msgwindow_visible = TRUE;
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1")), FALSE);
+		app->msgwindow_visible = FALSE;
+	}
 	utils_treeviews_showhide();
 	// sets the icon style of the toolbar
 	switch (app->toolbar_icon_style)
@@ -215,6 +222,7 @@ gint main_init(void)
 	app->build_args_libs	= NULL;
 	app->build_args_prog	= NULL;
 	app->open_fontsel		= NULL;
+	app->open_colorsel		= NULL;
 	app->open_filesel		= NULL;
 	app->save_filesel		= NULL;
 	app->prefs_dialog		= NULL;
@@ -380,12 +388,21 @@ gint main(gint argc, gchar **argv)
 	app->opening_session_files = TRUE;
 	if (argc > 1)
 	{
-		gint i;
+		gint i, opened = 0;
 		for(i = 1; i < argc; i++)
 		{
 			if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{
-				document_open_file(-1, argv[i], 0, FALSE);
+				if (opened < GEANY_MAX_OPEN_FILES)
+				{
+					document_open_file(-1, argv[i], 0, FALSE);
+					opened++;
+				}
+				else
+				{
+					dialogs_show_file_open_error();
+					break;
+				}
 			}
 		}
 	}
@@ -415,7 +432,6 @@ gint main(gint argc, gchar **argv)
 	// finally realize the window to show the user what we have done
 	gtk_widget_show(app->window);
 	app->main_window_realized = TRUE;
-
 
 	//g_timeout_add(0, (GSourceFunc)destroyapp, NULL); // useful for start time tests
 	gtk_main();
