@@ -262,7 +262,7 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
 	vf->vte_terminal_set_emulation(VTE_TERMINAL(vc->vte), vc->emulation);
-	vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
+	if (app->msgwindow_visible) vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->color_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->color_back);
 }
