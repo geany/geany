@@ -55,7 +55,7 @@
 
 
 #define GEANY_HOME_DIR					g_get_home_dir()
-#define GEANY_CODENAME					"Rebus"
+#define GEANY_CODENAME					"Nivers"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_MAX_OPEN_FILES			25
 #define GEANY_SESSION_FILES				15
