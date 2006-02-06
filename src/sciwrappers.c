@@ -1,7 +1,7 @@
 /*
  *      sciwrappers.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ void sci_set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
 		g_snprintf(tmp_str, 15, "_%d%d", len, extra_width);
 		width = SSM(sci, SCI_TEXTWIDTH, STYLE_LINENUMBER, (sptr_t) tmp_str);
 		SSM (sci, SCI_SETMARGINWIDTHN, 0, width);
-		SSM (sci, SCI_SETMARGINSENSITIVEN, 0, TRUE);
+		SSM (sci, SCI_SETMARGINSENSITIVEN, 0, FALSE); // use default behaviour
 	}
 	else
 	{
