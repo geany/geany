@@ -1,7 +1,7 @@
 /*
  *      utils.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -200,5 +200,7 @@ gint utils_get_int_from_hexcolor(const gchar *hex);
 void utils_treeviews_showhide(void);
 
 gchar *utils_get_current_file_dir();
+
+void utils_beep(void);
 
 #endif
