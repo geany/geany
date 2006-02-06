@@ -160,7 +160,17 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	if (GTK_IS_WIDGET(dialogs_build_menus.menu_c)) gtk_widget_destroy(dialogs_build_menus.menu_c);
 	if (GTK_IS_WIDGET(dialogs_build_menus.menu_misc)) gtk_widget_destroy(dialogs_build_menus.menu_misc);
 	if (GTK_IS_WIDGET(dialogs_build_menus.menu_tex)) gtk_widget_destroy(dialogs_build_menus.menu_tex);
-/// TODO destroy popup menus
+
+	/// destroy popup menus - FIXME TEST THIS CODE
+	if (GTK_IS_WIDGET(app->popup_menu)) gtk_widget_destroy(app->popup_menu);
+	if (GTK_IS_WIDGET(app->toolbar_menu)) gtk_widget_destroy(app->toolbar_menu);
+	if (GTK_IS_WIDGET(app->new_file_menu)) gtk_widget_destroy(app->new_file_menu);
+	if (GTK_IS_WIDGET(tv.popup_taglist)) gtk_widget_destroy(tv.popup_taglist);
+	if (GTK_IS_WIDGET(tv.popup_openfiles)) gtk_widget_destroy(tv.popup_openfiles);
+	if (GTK_IS_WIDGET(msgwindow.popup_status_menu)) gtk_widget_destroy(msgwindow.popup_status_menu);
+	if (GTK_IS_WIDGET(msgwindow.popup_msg_menu)) gtk_widget_destroy(msgwindow.popup_msg_menu);
+	if (GTK_IS_WIDGET(msgwindow.popup_compiler_menu)) gtk_widget_destroy(msgwindow.popup_compiler_menu);
+
 	if (app->have_vte) vte_close();
 
 	g_free(app);
@@ -643,7 +653,7 @@ on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	static gboolean done = 1;
 
-	if (doc_list[idx].sci)
+	if (doc_list[idx].is_valid)
 	{
 		if (done++ % 3 == 0) sci_set_line_numbers(doc_list[idx].sci, TRUE,
 				(sci_get_zoom(doc_list[idx].sci) / 2));
@@ -657,7 +667,7 @@ on_zoom_out1_activate                   (GtkMenuItem     *menuitem,
                                          gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (doc_list[idx].sci)
+	if (doc_list[idx].is_valid)
 	{
 		if (sci_get_zoom(doc_list[idx].sci) == 0)
 			sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
@@ -671,8 +681,11 @@ on_normal_size1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (doc_list[idx].sci) sci_zoom_off(doc_list[idx].sci);
-	sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
+	if (doc_list[idx].is_valid)
+	{
+		sci_zoom_off(doc_list[idx].sci);
+		sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
+	}
 }
 
 
@@ -707,7 +720,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 
 	if (closing_all) return;
 
-	// guint == -1 seems useless, but it is!
+	// guint == -1 seems useless, but it isn't!
 	if (page_num == -1 && page != NULL)
 		idx = document_find_by_sci(SCINTILLA(page));
 	else
@@ -723,8 +736,8 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 
 		// resets the cursor position(it could be wrong, assuming line has changed)
-		cursor_pos_end = -1;
-		cursor_pos_home_state = 0;
+		//cursor_pos_end = -1;
+		//cursor_pos_home_state = 0;
 
 		document_set_text_changed(idx);
 		utils_build_show_hide(idx);
