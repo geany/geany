@@ -12,6 +12,7 @@ LEXER_SRCS= \
 LexAsm.cxx \
 LexBash.cxx \
 LexCPP.cxx \
+LexCaml.cxx \
 LexConf.cxx \
 LexCrontab.cxx \
 LexCSS.cxx \
