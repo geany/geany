@@ -86,7 +86,6 @@ gint document_find_by_sci(ScintillaObject *sci)
 
 	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 	{
-		//geany_debug("find it: %d", i);
 		if (doc_list[i].is_valid && doc_list[i].sci == sci) return i;
 	}
 	return -1;
@@ -367,6 +366,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	struct stat st;
 	gchar *enc = NULL;
 	gchar *utf8_filename = NULL;
+	gchar *locale_filename = NULL;
 	GError *err = NULL;
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
 	gint fd;
@@ -380,16 +380,18 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 
 	if (reload)
 	{
-		filename = doc_list[idx].file_name;
+		utf8_filename = g_strdup(doc_list[idx].file_name);
+		locale_filename = g_locale_from_utf8(utf8_filename, -1, NULL, NULL, NULL);
 	}
 	else
 	{
 		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
-		utf8_filename = g_locale_to_utf8(filename, -1, NULL, NULL, &err);
+		locale_filename = g_strdup(filename);
+		utf8_filename = g_locale_to_utf8(locale_filename, -1, NULL, NULL, &err);
 		if (utf8_filename == NULL)
 		{
 			msgwin_status_add("Invalid filename (%s)", err->message);
-			utf8_filename = g_strdup(filename);
+			utf8_filename = g_strdup(locale_filename);
 			err = NULL;	// set to NULL for further usage
 		}
 
@@ -400,31 +402,41 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
 					(GtkWidget*) doc_list[idx].sci));
+			g_free(utf8_filename);
+			g_free(locale_filename);
 			return;
 		}
 	}
 
-	if (stat(filename, &st) != 0)
+	if (stat(locale_filename, &st) != 0)
 	{
 		msgwin_status_add(_("Could not stat file"));
+		g_free(utf8_filename);
+		g_free(locale_filename);
 		return;
 	}
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
-	if ((fd = open(filename, O_RDONLY)) < 0)
+	if ((fd = open(locale_filename, O_RDONLY)) < 0)
 	{
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
+		g_free(utf8_filename);
+		g_free(locale_filename);
 		return;
 	}
 	if ((map = mmap (0, st.st_size, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED)
 	{
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
+		g_free(utf8_filename);
+		g_free(locale_filename);
 		return;
 	}
 	size = (gint)st.st_size;
 #else
 	// use GLib function to load file on Win32 systems and those w/o mmap()
-	if (! g_file_get_contents(utf8_filename, &map, NULL,  &err) ){
+	if (! g_file_get_contents(utf8_filename, &map, NULL, &err) ){
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, err->message);
+		g_free(utf8_filename);
+		g_free(locale_filename);
 		return;
 	}
 	size = (gint)strlen(map);
@@ -444,13 +456,15 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			if (converted_text == NULL)
 			{
 				msgwin_status_add(_("The file does not look like a text file or the file encoding is not supported."));
-				if (app->beep_on_errors) gdk_beep();
+				utils_beep();
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
 				close(fd);
 				munmap(map, st.st_size);
 #else
 				g_free(map);
 #endif
+				g_free(utf8_filename);
+				g_free(locale_filename);
 				return;
 			}
 			else
@@ -517,6 +531,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	}
 
 	g_free(utf8_filename);
+	g_free(locale_filename);
 	//gettimeofday(&tv1, &tz);
 	//geany_debug("%s: %d", filename, (gint)(tv1.tv_usec - tv.tv_usec));
 }
@@ -919,10 +934,10 @@ gchar *document_prepare_template(filetype *ft)
 		switch (ft->id)
 		{
 			case GEANY_FILETYPES_PHP:
-			{	// PHP: include the comment in <? ?> - tags
+			{	// PHP: include the comment in <?php ?> - tags
 				gchar *tmp = templates_get_template_fileheader(
 						GEANY_TEMPLATE_FILEHEADER, ft->extension, -1);
-				gpl_notice = g_strconcat("<?\n", tmp, "?>\n\n", NULL);
+				gpl_notice = g_strconcat("<?php\n", tmp, "?>\n\n", NULL);
 				g_free(tmp);
 				break;
 			}
