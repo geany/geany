@@ -88,7 +88,7 @@ void utils_start_browser(gchar *uri)
 /* updates the status bar */
 void utils_update_statusbar(gint idx)
 {
-	gchar *text = (gchar*) g_malloc0(150);
+	gchar *text = (gchar*) g_malloc0(250);
 	gchar *cur_tag;
 	guint line, col;
 	gint pos;
@@ -111,15 +111,16 @@ void utils_update_statusbar(gint idx)
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
 		col = sci_get_col_from_position(doc_list[idx].sci, pos);
 
-		g_snprintf(text, 150,
-			_("%c  line: % 4d column: % 3d  selection: % 4d   %s     mode: %s     cur. function: %s     Encoding: %s"),
+		g_snprintf(text, 250,
+_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s      cur. function: %s      encoding: %s      filetype: %s"),
 			(doc_list[idx].changed) ? 42 : 32,
 			(line + 1), (col + 1),
 			sci_get_selected_text_length(doc_list[idx].sci) - 1,
 			doc_list[idx].do_overwrite ? _("OVR") : _("INS"),
 			document_get_eol_mode(idx),
 			cur_tag,
-			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"));
+			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
+			(doc_list[idx].file_type) ? doc_list[idx].file_type->title : _("unknown"));
 		gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
 		gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, text);
 		g_free(cur_tag);
@@ -366,7 +367,7 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 {
 	static GList *tag_names = NULL;
 
-	if (doc_list[idx].sci && doc_list[idx].tm_file && doc_list[idx].tm_file->tags_array)
+	if (doc_list[idx].is_valid && doc_list[idx].tm_file && doc_list[idx].tm_file->tags_array)
 	{
 		TMTag *tag;
 		guint i;
@@ -988,7 +989,7 @@ gboolean utils_check_disk_status(gint idx, const gboolean force)
 #ifndef GEANY_WIN32
 	struct stat st;
 	time_t t;
-	gchar *buff;
+	gchar *buff, *locale_filename;
 
 	if (idx == -1) return FALSE;
 
@@ -996,13 +997,14 @@ gboolean utils_check_disk_status(gint idx, const gboolean force)
 
 	if (doc_list[idx].last_check > (t - 30)) return TRUE;
 
-	if (stat(doc_list[idx].file_name, &st) != 0) return TRUE;
+	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
+	if (stat(locale_filename, &st) != 0) return TRUE;
 
 	if (doc_list[idx].mtime > t || st.st_mtime > t)
 	{
 		/* Something is wrong with the time stamps. They are refering to the
 		 * future or the system clock is wrong. */
-		g_warning("Something is wrong with the time stamps.");
+		geany_debug("Strange: Something is wrong with the time stamps.");
 		return TRUE;
 	}
 /*	geany_debug("check_disk: %d\t%d\t%d (%s)",
@@ -1040,13 +1042,13 @@ gboolean utils_check_disk_status(gint idx, const gboolean force)
 
 gint utils_get_current_tag(gint idx, gchar **tagname)
 {
-	gint tag_line;
+	//gint tag_line;
 	gint pos;
 	gint line;
 	gint fold_level;
 	gint start, end;
 	gint tmp;
-	const GList *tags;
+	//const GList *tags;
 
 	pos = sci_get_current_position(doc_list[idx].sci);
 	line = sci_get_line_from_position(doc_list[idx].sci, pos);
@@ -2154,3 +2156,11 @@ gchar *utils_get_current_file_dir(void)
 
 	return NULL;	// no file open
 }
+
+
+/* very simple convenience function */
+void utils_beep(void)
+{
+	if (app->beep_on_errors) gdk_beep();
+}
+
