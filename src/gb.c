@@ -335,8 +335,8 @@ void on_button4_clicked(GtkButton *button, gpointer user_data)
 	GtkWidget *dialog = create_help_dialog();
 	GtkTextBuffer *buffer;
 
-	gtk_signal_connect(GTK_OBJECT(dialog), "delete_event", GTK_SIGNAL_FUNC(destroydialog), GTK_OBJECT(dialog));
-	gtk_signal_connect_object(GTK_OBJECT(okbutton1), "clicked", GTK_SIGNAL_FUNC(destroydialog), GTK_OBJECT(dialog));
+	g_signal_connect(G_OBJECT(dialog), "delete_event", G_CALLBACK(destroydialog), G_OBJECT(dialog));
+	g_signal_connect(G_OBJECT(okbutton1), "clicked", G_CALLBACK(destroydialog), G_OBJECT(dialog));
 
 	buffer = gtk_text_buffer_new(NULL);
 	gtk_text_buffer_set_text(buffer, help_text, strlen(help_text));
@@ -1281,7 +1281,7 @@ void gb_start_easteregg(void)
 	random_fd = -1;
 	load_images();
 	create_window();
-	gtk_signal_connect(GTK_OBJECT(gb_window), "delete_event", GTK_SIGNAL_FUNC(gb_destroyapp), NULL);
+	g_signal_connect(G_OBJECT(gb_window), "delete_event", G_CALLBACK(gb_destroyapp), NULL);
 
 	points = 0;
 	lap = 0;
