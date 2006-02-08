@@ -661,6 +661,12 @@ void sci_set_codepage(ScintillaObject *sci, gint cp)
 }
 
 
+void sci_assign_cmdkey(ScintillaObject *sci, gint key, gint command)
+{
+	SSM(sci, SCI_ASSIGNCMDKEY, key, command);
+}
+
+
 void sci_clear_cmdkey(ScintillaObject *sci, gint key)
 {
 	SSM (sci, SCI_CLEARCMDKEY, key, 0);

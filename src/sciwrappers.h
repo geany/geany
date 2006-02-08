@@ -1,7 +1,7 @@
 /*
  *      sciwrappers.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -126,6 +126,7 @@ void				sci_set_symbol_margin		(ScintillaObject * sci, gboolean set);
 gboolean			sci_get_symbol_margin		(ScintillaObject * sci);
 void				sci_set_codepage			(ScintillaObject * sci, gint cp);
 void				sci_clear_cmdkey			(ScintillaObject * sci, gint key);
+void				sci_assign_cmdkey			(ScintillaObject * sci, gint key, gint command);
 void				sci_get_text_range			(ScintillaObject * sci, gint start, gint end, gchar *text);
 void				sci_line_duplicate			(ScintillaObject * sci);
 void				sci_insert_text				(ScintillaObject * sci, gint pos, const gchar *text);
