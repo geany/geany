@@ -103,10 +103,12 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_PHP]->title = g_strdup(_("PHP / HTML source file"));
 	filetypes[GEANY_FILETYPES_PHP]->extension = g_strdup("php");
 	filetypes[GEANY_FILETYPES_PHP]->pattern[0] = g_strdup("*.php");
-	filetypes[GEANY_FILETYPES_PHP]->pattern[1] = g_strdup("*.php4");
-	filetypes[GEANY_FILETYPES_PHP]->pattern[2] = g_strdup("*.html");
-	filetypes[GEANY_FILETYPES_PHP]->pattern[3] = g_strdup("*.htm");
-	filetypes[GEANY_FILETYPES_PHP]->pattern[4] = NULL;
+	filetypes[GEANY_FILETYPES_PHP]->pattern[1] = g_strdup("*.php3");
+	filetypes[GEANY_FILETYPES_PHP]->pattern[2] = g_strdup("*.php4");
+	filetypes[GEANY_FILETYPES_PHP]->pattern[3] = g_strdup("*.php5");
+	filetypes[GEANY_FILETYPES_PHP]->pattern[4] = g_strdup("*.html");
+	filetypes[GEANY_FILETYPES_PHP]->pattern[5] = g_strdup("*.htm");
+	filetypes[GEANY_FILETYPES_PHP]->pattern[6] = NULL;
 	filetypes[GEANY_FILETYPES_PHP]->style_func_ptr = styleset_php;
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_PHP]->title, filetypes[GEANY_FILETYPES_PHP]);
 	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PHP]->title, filetypes[GEANY_FILETYPES_PHP]);
@@ -233,6 +235,40 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_ASM]->style_func_ptr = styleset_asm;
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_ASM]->title, filetypes[GEANY_FILETYPES_ASM]);
 
+	filetypes[GEANY_FILETYPES_SQL] = (filetype*)g_malloc(sizeof(filetype));
+	filetypes[GEANY_FILETYPES_SQL]->id = GEANY_FILETYPES_SQL;
+	filetypes[GEANY_FILETYPES_SQL]->name = g_strdup("SQL");
+	filetypes[GEANY_FILETYPES_SQL]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_SQL]->title = g_strdup(_("SQL Dump file"));
+	filetypes[GEANY_FILETYPES_SQL]->extension = g_strdup("sql");
+	filetypes[GEANY_FILETYPES_SQL]->pattern[0] = g_strdup("*.sql");
+	filetypes[GEANY_FILETYPES_SQL]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_SQL]->style_func_ptr = styleset_sql;
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_SQL]->title, filetypes[GEANY_FILETYPES_SQL]);
+
+	filetypes[GEANY_FILETYPES_CAML] = (filetype*)g_malloc(sizeof(filetype));
+	filetypes[GEANY_FILETYPES_CAML]->id = GEANY_FILETYPES_CAML;
+	filetypes[GEANY_FILETYPES_CAML]->name = g_strdup("CAML");
+	filetypes[GEANY_FILETYPES_CAML]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_CAML]->title = g_strdup(_("(O)Caml source file"));
+	filetypes[GEANY_FILETYPES_CAML]->extension = g_strdup("ml");
+	filetypes[GEANY_FILETYPES_CAML]->pattern[0] = g_strdup("*.ml");
+	filetypes[GEANY_FILETYPES_CAML]->pattern[1] = g_strdup("*.mli");
+	filetypes[GEANY_FILETYPES_CAML]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_CAML]->style_func_ptr = styleset_caml;
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CAML]->title, filetypes[GEANY_FILETYPES_CAML]);
+
+	filetypes[GEANY_FILETYPES_OMS] = (filetype*)g_malloc(sizeof(filetype));
+	filetypes[GEANY_FILETYPES_OMS]->id = GEANY_FILETYPES_OMS;
+	filetypes[GEANY_FILETYPES_OMS]->name = g_strdup("O-Matrix");
+	filetypes[GEANY_FILETYPES_OMS]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_OMS]->title = g_strdup(_("O-Matrix source file"));
+	filetypes[GEANY_FILETYPES_OMS]->extension = g_strdup("oms");
+	filetypes[GEANY_FILETYPES_OMS]->pattern[0] = g_strdup("*.oms");
+	filetypes[GEANY_FILETYPES_OMS]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_OMS]->style_func_ptr = styleset_oms;
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_OMS]->title, filetypes[GEANY_FILETYPES_OMS]);
+
 	filetypes[GEANY_FILETYPES_ALL] = (filetype*)g_malloc(sizeof(filetype));
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;
 	filetypes[GEANY_FILETYPES_ALL]->name = g_strdup("None");
@@ -252,7 +288,6 @@ filetype *filetypes_get_from_filename(const gchar *filename)
 {
 	GPatternSpec *pattern;
 	gchar *base_filename, *utf8_filename;
-	GError *error = NULL;
 	gint i, j;
 
 	if (filename == NULL)
@@ -261,8 +296,7 @@ filetype *filetypes_get_from_filename(const gchar *filename)
 	}
 
 	// try to get the UTF-8 equivalent for the filename
-	//utf8_filename = g_filename_to_utf8(filename, -1, NULL, NULL, &error);
-	utf8_filename = g_locale_to_utf8(filename, -1, NULL, NULL, &error);
+	utf8_filename = g_locale_to_utf8(filename, -1, NULL, NULL, NULL);
 	if (utf8_filename == NULL)
 	{
 		return filetypes[GEANY_FILETYPES_C];
@@ -270,7 +304,8 @@ filetype *filetypes_get_from_filename(const gchar *filename)
 
 	// to match against the basename of the file(because of Makefile*)
 	base_filename = g_path_get_basename(utf8_filename);
-
+	g_free(utf8_filename);
+	
 	for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
 		for (j = 0; j < GEANY_MAX_PATTERNS && filetypes[i]->pattern[j]; j++)
