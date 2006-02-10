@@ -25,6 +25,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <signal.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "callbacks.h"
@@ -79,21 +80,48 @@ static gboolean search_backwards;
 static gint search_flags_re;
 static gboolean search_backwards_re;
 
-// extending HOME and END default behaviour, to jump back to previous cursor position if pressed again
-//static gint current_line = 0;
-static gint cursor_pos_end = -1;
-//static gint cursor_pos_home = 0;
-// state of the home key, 0 means column with first non-blank char, 1 means column 0,
-// 2 means previous position
-static gint cursor_pos_home_state = 0;
 
+
+void signal_cb(gint sig)
+{
+	if (sig == SIGTERM)
+	{
+		on_exit_clicked(NULL, NULL);
+	}
+	else if (sig == SIGUSR1)
+	{
+#define BUFLEN 512
+/*		gint fd;
+		gchar *buffer = g_malloc0(BUFLEN);
+
+		geany_debug("got SIGUSR1 signal, try to read from named pipe");
+
+		if ((fd = open(fifo_name, O_RDONLY | O_NONBLOCK)) == -1)
+		{
+			geany_debug("error opening named pipe (%s)", strerror(errno));
+			return;
+		}
+		usleep(10000);
+		if (read(fd, buffer, BUFLEN) != -1) geany_debug("Inhalt: %s", buffer);
+
+		close(fd);
+		g_free(buffer);
+*/	}
+}
 
 
 // exit function, for very early exit(quit by non-existing configuration dir)
 gint destroyapp_early(void)
 {
+	gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
+
+	// delete the fifo early, because we don't accept new files anymore
+	unlink(fifo);
+	g_free(fifo);
+
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_queue_free(app->recent_queue);
+
 
 	g_free(app->configdir);
 	g_free(app);
@@ -106,7 +134,13 @@ gint destroyapp_early(void)
 // real exit function
 gint destroyapp(GtkWidget *widget, gpointer gdata)
 {
+	gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
+
 	geany_debug("Quitting...");
+	// delete the fifo early, because we don't accept new files anymore
+	unlink(fifo);
+	g_free(fifo);
+
 	filetypes_free_types();
 	styleset_free_styles();
 	templates_free_templates();
@@ -231,13 +265,6 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 		}
 	}
 	return TRUE;
-}
-
-
-// signal handler (for SIGTERM)
-RETSIGTYPE signal_cb(gint sig)
-{
-	on_exit_clicked(NULL, NULL);
 }
 
 
@@ -503,14 +530,17 @@ on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	gchar *basename = g_path_get_basename(doc_list[idx].file_name);
 	gchar *buffer = g_strdup_printf(_
 				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
-				 g_path_get_basename(doc_list[idx].file_name));
+				 basename);
 
 	if (dialogs_show_reload_warning(buffer))
 	{
-		document_open_file(idx, NULL, 0, doc_list[idx].readonly);
+		document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
 	}
+
+	g_free(basename);
 	g_free(buffer);
 }
 
@@ -735,10 +765,6 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 
 		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 
-		// resets the cursor position(it could be wrong, assuming line has changed)
-		//cursor_pos_end = -1;
-		//cursor_pos_home_state = 0;
-
 		document_set_text_changed(idx);
 		utils_build_show_hide(idx);
 		utils_update_statusbar(idx);
@@ -765,79 +791,90 @@ on_tv_notebook_switch_page             (GtkNotebook     *notebook,
  * open dialog callbacks
 */
 
-// file open dialog, canceled
-void
-on_file_open_cancel_button_clicked     (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	gtk_widget_hide(app->open_filesel);
-}
-
-
 // file open dialog, opened
 void
-on_file_open_open_button_clicked       (GtkButton       *button,
-                                        gpointer         user_data)
+on_file_open_dialog_response           (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data)
 {
-	GSList *flist;
-	gboolean ro = gtk_toggle_button_get_active(
-			GTK_TOGGLE_BUTTON(lookup_widget(GTK_WIDGET(button), "check_readonly")));
 	gtk_widget_hide(app->open_filesel);
 
-	flist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(app->open_filesel));
-	while(flist != NULL)
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) < GEANY_MAX_OPEN_FILES)
+		GSList *flist;
+		gint ft_id = gtk_combo_box_get_active(GTK_COMBO_BOX(lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
+		filetype *ft = NULL;
+		gboolean ro = gtk_toggle_button_get_active(
+				GTK_TOGGLE_BUTTON(lookup_widget(GTK_WIDGET(dialog), "check_readonly")));
+
+		if (ft_id >= 0 && ft_id < GEANY_FILETYPES_ALL) ft = filetypes[ft_id];
+
+		flist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(app->open_filesel));
+		while(flist != NULL)
 		{
-			if (g_file_test((gchar*) flist->data, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
+			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) < GEANY_MAX_OPEN_FILES)
 			{
-				document_open_file(-1, (gchar*) flist->data, 0, ro);
+				if (g_file_test((gchar*) flist->data, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+				{
+					document_open_file(-1, (gchar*) flist->data, 0, ro, ft);
+				}
 			}
+			else
+			{
+				dialogs_show_file_open_error();
+				break;
+			}
+			g_free(flist->data);
+			flist = flist->next;
 		}
-		else
-		{
-			dialogs_show_file_open_error();
-			break;
-		}
-		g_free(flist->data);
-		flist = flist->next;
+		g_slist_free(flist);
 	}
-	g_slist_free(flist);
 }
 
 
-// callbacks for the text entry for typing in filename
+// callback for the text entry for typing in filename
 void
 on_file_open_entry_activate            (GtkEntry        *entry,
                                         gpointer         user_data)
 {
-	gtk_file_chooser_set_filename(
-		GTK_FILE_CHOOSER(app->open_filesel), gtk_entry_get_text(entry));
+	gchar *locale_filename = g_locale_from_utf8(gtk_entry_get_text(entry), -1, NULL, NULL, NULL);
+	if (locale_filename == NULL) locale_filename = g_strdup(gtk_entry_get_text(entry));
+
+	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	{
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
+		on_file_open_dialog_response(GTK_DIALOG(app->open_filesel), GTK_RESPONSE_ACCEPT, NULL);
+	}
+	else if (g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
+	{
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
+	}
+
+	g_free(locale_filename);
 }
 
 
 void
-on_fileopendialog1_selection_changed   (GtkFileChooser  *filechooser,
+on_file_open_selection_changed         (GtkFileChooser  *filechooser,
                                         gpointer         user_data)
 {
 	gchar *filename = gtk_file_chooser_get_filename(filechooser);
+	gboolean is_on = gtk_file_chooser_get_show_hidden(filechooser);
+
 	if (filename)
 	{
+		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
+		gchar *utf8_filename = g_locale_to_utf8(filename, -1, NULL, NULL, NULL);
+		if (utf8_filename == NULL) utf8_filename = g_strdup(filename);
+
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(
-				GTK_WIDGET(filechooser), "file_entry")), filename);
+				GTK_WIDGET(filechooser), "file_entry")), utf8_filename);
+		g_free(utf8_filename);
 		g_free(filename);
 	}
-}
 
-
-// file open dialog, closed
-gboolean
-on_fileopendialog1_delete_event        (GtkWidget       *widget,
-                                        GdkEvent        *event,
-                                        gpointer         user_data)
-{
-	gtk_widget_hide(app->open_filesel);
-	return TRUE;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
+			lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), is_on);
 }
 
 
@@ -1071,14 +1108,17 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			if (event->state & GDK_CONTROL_MASK)
 			{
+				gchar *basename = g_path_get_basename(doc_list[idx].file_name);
 				gchar *buffer = g_strdup_printf(_
 				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
-				 g_path_get_basename(doc_list[idx].file_name));
+				 basename);
 
 				if (dialogs_show_reload_warning(buffer))
 				{
-					document_open_file(idx, NULL, 0, doc_list[idx].readonly);
+					document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
 				}
+
+				g_free(basename);
 				g_free(buffer);
 				ret = TRUE;
 			}
@@ -1246,9 +1286,6 @@ on_editor_button_press_event           (GtkWidget *widget,
 	if (event->button == 1)
 	{
 		utils_check_disk_status(GPOINTER_TO_INT(user_data), FALSE);
-		// resets the cursor position(it could be wrong, assuming line has changed)
-		cursor_pos_end = -1;
-		cursor_pos_home_state = 0;
 	}
 #endif
 
@@ -1575,7 +1612,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 							TM_TAG(tags->pdata[i])->atts.entry.file->work_object.file_name,
 							TM_TAG(tags->pdata[i])->atts.entry.line))
 					{
-						if (app->beep_on_errors) gdk_beep();
+						utils_beep();
 						msgwin_status_add(_("Declaration or definition of \"%s()\" not found"), current_word);
 					}
 					return;
@@ -1584,7 +1621,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 		}
 	}
 	// if we are here, there was no match and we are beeping ;-)
-	if (app->beep_on_errors) gdk_beep();
+	utils_beep();
 	msgwin_status_add(_("Declaration or definition of \"%s()\" not found"), current_word);
 }
 
@@ -2056,9 +2093,16 @@ on_find_dialog_response                (GtkDialog *dialog,
 		search_backwards = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(app->find_dialog), "check_back")));
 
-		gtk_widget_hide(app->find_dialog);
 		g_free(app->search_text);
 		app->search_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
+		if (strlen(app->search_text) == 0)
+		{
+			utils_beep();
+			gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->find_dialog, "entry"))->child));
+			return;
+		}
+		gtk_widget_hide(app->find_dialog);
+		
 		gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), app->search_text);
 		search_flags = (fl1 ? SCFIND_MATCHCASE : 0) |
 				(fl2 ? SCFIND_WHOLEWORD : 0) |
@@ -2109,6 +2153,13 @@ on_replace_dialog_response             (GtkDialog *dialog,
 	find = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))));
 	replace = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))));
 
+	if ((! fl1) && (strcasecmp(find, replace) == 0))
+	{
+		utils_beep();
+		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->replace_dialog, "entry_find"))->child));
+		return;
+	}
+	
 	gtk_combo_box_prepend_text(GTK_COMBO_BOX(entry_find), find);
 	gtk_combo_box_prepend_text(GTK_COMBO_BOX(entry_replace), replace);
 
@@ -2158,7 +2209,7 @@ on_toolbutton_new_pressed              (GtkButton       *button,
                                         gpointer         user_data)
 {
 	button_released = FALSE;
-	gtk_timeout_add(1000, show_new_file_menu, NULL);
+	g_timeout_add(1000, show_new_file_menu, NULL);
 }
 
 
@@ -2206,7 +2257,7 @@ on_goto_line_dialog_response         (GtkDialog *dialog,
 		}
 		else
 		{
-			if (app->beep_on_errors) gdk_beep();
+			utils_beep();
 		}
 
 	}
@@ -2502,7 +2553,7 @@ on_recent_file_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gchar *locale_filename = g_locale_from_utf8((gchar*) user_data, -1, NULL, NULL, NULL);
-	document_open_file(-1, locale_filename, 0, FALSE);
+	document_open_file(-1, locale_filename, 0, FALSE, NULL);
 	g_free(locale_filename);
 }
 
@@ -2525,21 +2576,7 @@ on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
 {
 	gboolean is_on = gtk_toggle_button_get_active(togglebutton);
 
-	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(
-					lookup_widget(GTK_WIDGET(togglebutton), "fileopendialog1")), is_on);
-}
-
-
-// this is used just to change the show hidden files checkbox
-void
-on_file_open_selection_changed         (GtkFileChooser *chooser,
-                                        gpointer user_data)
-{
-	gboolean is_on = gtk_file_chooser_get_show_hidden(chooser);
-
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
-			lookup_widget(GTK_WIDGET(chooser), "check_hidden")), is_on);
-
+	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(app->open_filesel), is_on);
 }
 
 
