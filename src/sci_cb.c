@@ -64,21 +64,13 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 		}
 		case SCN_MODIFYATTEMPTRO:
 		{
-			if (app->beep_on_errors) gdk_beep();
+			utils_beep();
 			break;
 		}
 		case SCN_MARGINCLICK:
 		{
-			// left click to line number margin without CTRL selects the line
-			if (nt->margin == 0 && ! (nt->modifiers & SCMOD_CTRL))
-			{	// selection complete line by clicking the linenumber
-				gint line = sci_get_line_from_position(sci, nt->position);
-				gint len = sci_get_line_length(sci, line);
-				sci_set_selection_start(sci, nt->position);
-				sci_set_selection_end(sci, (nt->position + len));
-			}
-			// left click to line number margin with CTRL (or marker margin) marks the line
-			if (nt->margin == 1 || (nt->margin == 0 && (nt->modifiers & SCMOD_CTRL)))
+			// left click to marker margin marks the line
+			if (nt->margin == 1)
 			{
 				gint line = sci_get_line_from_position(sci, nt->position);
 				//sci_marker_delete_all(doc_list[idx].sci, 1);
@@ -739,11 +731,12 @@ void sci_cb_do_comment(gint idx)
 	gint last_line = sci_get_line_from_position(doc_list[idx].sci, sci_get_selection_end(doc_list[idx].sci));
 	gint x, i, line_start, line_len, lexer;
 	gchar sel[64];
+	gboolean break_loop = FALSE;
 
 	lexer = SSM(doc_list[idx].sci, SCI_GETLEXER, 0, 0);
 	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
 
-	for (i = first_line; i <= last_line; i++)
+	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
 		line_start = sci_get_position_from_line(doc_list[idx].sci, i);
 		line_len = sci_get_line_length(doc_list[idx].sci, i);
@@ -758,87 +751,68 @@ void sci_cb_do_comment(gint idx)
 		// to skip blank lines
 		if (x < line_len && sel[x] != '\0')
 		{
-			// use // comments for C, C++ & Java
-			if (lexer == SCLEX_CPP)
+			switch (lexer)
 			{
-				// skip lines which are already comments
-				if (sel[x] == '/' && (sel[x+1] == '/' || sel[x+1] == '*')) continue;
-				if (sci_get_style_at(doc_list[idx].sci, line_start + x) == SCE_C_COMMENT) continue;
-
-				sci_insert_text(doc_list[idx].sci, line_start + x, "//");
-			}
-			// use /* ... */ for CSS
-			else if (lexer == SCLEX_CSS)
-			{
-				gint end_pos;
-				// skip lines which are already comments
-				if (sci_get_style_at(doc_list[idx].sci, line_start + x) == SCE_CSS_COMMENT) continue;
-
-				sci_insert_text(doc_list[idx].sci, line_start, "/* ");
-				// cares about the inluding EOL chars from SCI_LINELENGTH()
-				end_pos = line_start + line_len - strlen(utils_get_eol_char(idx)) + 3;
-				//geany_debug("%d = %d + %d - %d + %d", end_pos, line_start, line_len, strlen(utils_get_eol_char(idx)), 3);
-				sci_insert_text(doc_list[idx].sci, end_pos, " */");
-			}
-			// use # for Python, Perl, Shell & Makefiles
-			else if (lexer == SCLEX_PYTHON
-				  || lexer == SCLEX_PERL
-				  || lexer == SCLEX_MAKEFILE
-				  || lexer == SCLEX_PROPERTIES
-				  || lexer == SCLEX_BASH)
-			{
-				// skip lines which are already comments
-				if (sel[x] == '#') continue;
-				sci_insert_text(doc_list[idx].sci, line_start + x, "#");
-			}
-			// use ; for Assembler, and anything else?
-			else if (lexer == SCLEX_ASM)
-			{
-				// skip lines which are already comments
-				if (sel[x] == ';') continue;
-				sci_insert_text(doc_list[idx].sci, line_start + x, ";");
-			}
-			// use % for LaTex
-			else if (lexer == SCLEX_LATEX)
-			{
-				// skip lines which are already comments
-				if (sel[x] == '%') continue;
-				sci_insert_text(doc_list[idx].sci, line_start + x, "%");
-			}
-			// use { ... } for Pascal
-			else if (lexer == SCLEX_PASCAL)
-			{
-				// skip lines which are already comments
-				gchar *eol = utils_get_eol_char(idx);
-				gchar *str_begin = g_strdup_printf("{%s", eol);
-				gchar *str_end = g_strdup_printf("}%s", eol);
-
-				if (sci_get_style_at(doc_list[idx].sci, line_start + x) == SCE_C_COMMENT) continue;
-				sci_insert_text(doc_list[idx].sci, line_start, str_begin);
-				line_len = sci_get_position_from_line(doc_list[idx].sci, last_line + 2);
-				sci_insert_text(doc_list[idx].sci, line_len, str_end);
-				g_free(str_begin);
-				g_free(str_end);
-				break;
-			}
-			// use <!-- ... --> for [HT|X]ML, // for PHP
-			else if (lexer == SCLEX_HTML || lexer == SCLEX_XML)
-			{
-				// skip lines which are already comments
-				if (sci_get_style_at(doc_list[idx].sci, line_start) >= 118 &&
-					sci_get_style_at(doc_list[idx].sci, line_start) <= 127)
-				{	// PHP mode
+				case SCLEX_CPP:
+				{ // use // comments for C, C++ & Java
+					// skip lines which are already comments
 					if (sel[x] == '/' && (sel[x+1] == '/' || sel[x+1] == '*')) continue;
+					if (sci_get_style_at(doc_list[idx].sci, line_start + x) == SCE_C_COMMENT) continue;
+
 					sci_insert_text(doc_list[idx].sci, line_start + x, "//");
+					break;
 				}
-				else
-				{	// HTML mode
+				case SCLEX_PYTHON:
+				case SCLEX_PERL:
+				case SCLEX_MAKEFILE:
+				case SCLEX_PROPERTIES:
+				case SCLEX_BASH:
+				case SCLEX_OMS:
+				{ // use # for Python, Perl, Shell & Makefiles
+					// skip lines which are already comments
+					if (sel[x] == '#') continue;
+					sci_insert_text(doc_list[idx].sci, line_start + x, "#");
+					break;
+				}
+				case SCLEX_ASM:
+				{ // use ; for Assembler, and anything else?
+					// skip lines which are already comments
+					if (sel[x] == ';') continue;
+					sci_insert_text(doc_list[idx].sci, line_start + x, ";");
+					break;
+				}
+				case SCLEX_LATEX:
+				{ // use % for LaTex
+					// skip lines which are already comments
+					if (sel[x] == '%') continue;
+					sci_insert_text(doc_list[idx].sci, line_start + x, "%");
+					break;
+				}
+				case SCLEX_PASCAL:
+				{ // use { ... } for Pascal
+					// skip lines which are already comments
 					gchar *eol = utils_get_eol_char(idx);
-					gchar *str_begin = g_strdup_printf("<!--%s", eol);
-					gchar *str_end = g_strdup_printf("-->%s", eol);
+					gchar *str_begin = g_strdup_printf("{%s", eol);
+					gchar *str_end = g_strdup_printf("}%s", eol);
+
+					if (sci_get_style_at(doc_list[idx].sci, line_start + x) == SCE_C_COMMENT) continue;
+					sci_insert_text(doc_list[idx].sci, line_start, str_begin);
+					line_len = sci_get_position_from_line(doc_list[idx].sci, last_line + 2);
+					sci_insert_text(doc_list[idx].sci, line_len, str_end);
+					g_free(str_begin);
+					g_free(str_end);
+					break_loop = TRUE;
+					break;
+				}
+				case SCLEX_CSS:
+				case SCLEX_SQL:
+				{ // use /* ... */ for CSS (same code as for HTML)
+					gchar *eol = utils_get_eol_char(idx);
+					gchar *str_begin = g_strdup_printf("/*%s", eol);
+					gchar *str_end = g_strdup_printf("*/%s", eol);
 
 					// skip lines which are already comments
-					if (sci_get_style_at(doc_list[idx].sci, line_start + x) == SCE_H_COMMENT) continue;
+					if (sci_get_style_at(doc_list[idx].sci, line_start + x) == SCE_CSS_COMMENT) continue;
 
 					sci_insert_text(doc_list[idx].sci, line_start, str_begin);
 					line_len = sci_get_position_from_line(doc_list[idx].sci, last_line + 2);
@@ -846,6 +820,54 @@ void sci_cb_do_comment(gint idx)
 					g_free(str_begin);
 					g_free(str_end);
 					// break because we are already on the last line
+					break_loop = TRUE;
+					break;
+				}
+				case SCLEX_CAML:
+				{ // use (* ... *) for Caml
+					gchar *eol = utils_get_eol_char(idx);
+					gchar *str_begin = g_strdup_printf("(*%s", eol);
+					gchar *str_end = g_strdup_printf("*)%s", eol);
+
+					// skip lines which are already comments
+					if (sci_get_style_at(doc_list[idx].sci, line_start + x) == SCE_CSS_COMMENT) continue;
+
+					sci_insert_text(doc_list[idx].sci, line_start, str_begin);
+					line_len = sci_get_position_from_line(doc_list[idx].sci, last_line + 2);
+					sci_insert_text(doc_list[idx].sci, line_len , str_end);
+					g_free(str_begin);
+					g_free(str_end);
+					// break because we are already on the last line
+					break_loop = TRUE;
+					break;
+				}
+				case SCLEX_HTML:
+				case SCLEX_XML:
+				{ // use <!-- ... --> for [HT|X]ML, // for PHP
+					// skip lines which are already comments
+					if (sci_get_style_at(doc_list[idx].sci, line_start) >= 118 &&
+						sci_get_style_at(doc_list[idx].sci, line_start) <= 127)
+					{	// PHP mode
+						if (sel[x] == '/' && (sel[x+1] == '/' || sel[x+1] == '*')) continue;
+						sci_insert_text(doc_list[idx].sci, line_start + x, "//");
+					}
+					else
+					{	// HTML mode
+						gchar *eol = utils_get_eol_char(idx);
+						gchar *str_begin = g_strdup_printf("<!--%s", eol);
+						gchar *str_end = g_strdup_printf("-->%s", eol);
+
+						// skip lines which are already comments
+						if (sci_get_style_at(doc_list[idx].sci, line_start + x) == SCE_H_COMMENT) continue;
+
+						sci_insert_text(doc_list[idx].sci, line_start, str_begin);
+						line_len = sci_get_position_from_line(doc_list[idx].sci, last_line + 2);
+						sci_insert_text(doc_list[idx].sci, line_len , str_end);
+						g_free(str_begin);
+						g_free(str_end);
+						// break because we are already on the last line
+						break_loop = TRUE;
+					}
 					break;
 				}
 			}
