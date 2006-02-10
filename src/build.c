@@ -426,7 +426,7 @@ GPid build_run_cmd(gint idx)
 	}
 */
 	result_id = child_pid; // g_spawn was successful, result is child process id
-	
+
 	free_strings:
 	/* free all non-NULL strings */
 	g_strfreev(argv);
@@ -529,7 +529,7 @@ void build_exit_cb (GPid child_pid, gint status, gpointer user_data)
 	}
 
 #endif
-	if (app->beep_on_errors) gdk_beep();
+	utils_beep();
 	gtk_widget_set_sensitive(app->compile_button, TRUE);
 	g_spawn_close_pid(child_pid);
 }
