@@ -1,7 +1,7 @@
 /*
  *      highlighting.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -67,5 +67,11 @@ void styleset_css(ScintillaObject *sci);
 void styleset_conf(ScintillaObject *sci);
 
 void styleset_asm(ScintillaObject *sci);
+
+void styleset_sql(ScintillaObject *sci);
+
+void styleset_caml(ScintillaObject *sci);
+
+void styleset_oms(ScintillaObject *sci);
 
 #endif
