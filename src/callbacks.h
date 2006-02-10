@@ -21,14 +21,14 @@
  */
 
 
+void
+signal_cb							   (gint sig);
+
 gint
 destroyapp_early                       (void);
 
 gint
 destroyapp                             (GtkWidget *widget, gpointer gdata);
-
-void
-signal_cb                              (gint sig);
 
 gboolean
 on_exit_clicked                        (GtkWidget *widget, gpointer gdata);
@@ -94,17 +94,9 @@ on_tab_close_clicked                   (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-on_file_open_cancel_button_clicked     (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-on_file_open_open_button_clicked       (GtkButton       *button,
-                                        gpointer         user_data);
-
-gboolean
-on_fileopendialog1_delete_event        (GtkWidget       *widget,
-                                        GdkEvent        *event,
-                                        gpointer         user_data);
+on_file_open_dialog_response           (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data);
 
 void
 on_notebook1_switch_page               (GtkNotebook     *notebook,
@@ -564,7 +556,7 @@ on_recent_file_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_fileopendialog1_selection_changed   (GtkFileChooser  *filechooser,
+on_file_open_selection_changed         (GtkFileChooser  *filechooser,
                                         gpointer         user_data);
 
 void
@@ -586,10 +578,6 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 void
 on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
                                         gpointer         user_data);
-
-void
-on_file_open_selection_changed         (GtkFileChooser *chooser,
-                                        gpointer user_data);
 
 void
 on_replace1_activate                   (GtkMenuItem     *menuitem,
