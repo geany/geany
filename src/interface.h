@@ -3,7 +3,6 @@
  */
 
 GtkWidget* create_window1 (void);
-GtkWidget* create_fileopendialog1 (void);
 GtkWidget* create_filesavedialog1 (void);
 GtkWidget* create_fontselectiondialog1 (void);
 GtkWidget* create_toolbar_popup_menu1 (void);

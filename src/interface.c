@@ -1282,66 +1282,6 @@ create_window1 (void)
 }
 
 GtkWidget*
-create_fileopendialog1 (void)
-{
-  GtkWidget *fileopendialog1;
-  GtkWidget *dialog_vbox1;
-  GtkWidget *dialog_action_area1;
-  GtkWidget *file_open_cancel_button;
-  GtkWidget *file_open_open_button;
-
-  fileopendialog1 = gtk_file_chooser_dialog_new (_("Open File"), NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
-  gtk_widget_set_size_request (fileopendialog1, 520, 460);
-  g_object_set (fileopendialog1,
-                "select-multiple", TRUE,
-                NULL);
-  gtk_window_set_modal (GTK_WINDOW (fileopendialog1), TRUE);
-  gtk_window_set_destroy_with_parent (GTK_WINDOW (fileopendialog1), TRUE);
-  gtk_window_set_skip_taskbar_hint (GTK_WINDOW (fileopendialog1), TRUE);
-  gtk_window_set_type_hint (GTK_WINDOW (fileopendialog1), GDK_WINDOW_TYPE_HINT_DIALOG);
-
-  dialog_vbox1 = GTK_DIALOG (fileopendialog1)->vbox;
-  gtk_widget_show (dialog_vbox1);
-
-  dialog_action_area1 = GTK_DIALOG (fileopendialog1)->action_area;
-  gtk_widget_show (dialog_action_area1);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area1), GTK_BUTTONBOX_END);
-
-  file_open_cancel_button = gtk_button_new_from_stock ("gtk-cancel");
-  gtk_widget_show (file_open_cancel_button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (fileopendialog1), file_open_cancel_button, GTK_RESPONSE_CANCEL);
-  GTK_WIDGET_SET_FLAGS (file_open_cancel_button, GTK_CAN_DEFAULT);
-
-  file_open_open_button = gtk_button_new_from_stock ("gtk-open");
-  gtk_widget_show (file_open_open_button);
-  gtk_dialog_add_action_widget (GTK_DIALOG (fileopendialog1), file_open_open_button, GTK_RESPONSE_OK);
-  GTK_WIDGET_SET_FLAGS (file_open_open_button, GTK_CAN_DEFAULT);
-
-  g_signal_connect ((gpointer) fileopendialog1, "delete_event",
-                    G_CALLBACK (on_fileopendialog1_delete_event),
-                    NULL);
-  g_signal_connect ((gpointer) fileopendialog1, "selection_changed",
-                    G_CALLBACK (on_fileopendialog1_selection_changed),
-                    NULL);
-  g_signal_connect ((gpointer) file_open_cancel_button, "clicked",
-                    G_CALLBACK (on_file_open_cancel_button_clicked),
-                    NULL);
-  g_signal_connect ((gpointer) file_open_open_button, "clicked",
-                    G_CALLBACK (on_file_open_open_button_clicked),
-                    NULL);
-
-  /* Store pointers to all widgets, for use by lookup_widget(). */
-  GLADE_HOOKUP_OBJECT_NO_REF (fileopendialog1, fileopendialog1, "fileopendialog1");
-  GLADE_HOOKUP_OBJECT_NO_REF (fileopendialog1, dialog_vbox1, "dialog_vbox1");
-  GLADE_HOOKUP_OBJECT_NO_REF (fileopendialog1, dialog_action_area1, "dialog_action_area1");
-  GLADE_HOOKUP_OBJECT (fileopendialog1, file_open_cancel_button, "file_open_cancel_button");
-  GLADE_HOOKUP_OBJECT (fileopendialog1, file_open_open_button, "file_open_open_button");
-
-  gtk_widget_grab_default (file_open_open_button);
-  return fileopendialog1;
-}
-
-GtkWidget*
 create_filesavedialog1 (void)
 {
   GtkWidget *filesavedialog1;
