@@ -1014,23 +1014,25 @@ gboolean utils_check_disk_status(gint idx, const gboolean force)
 	{
 		if (force)
 		{
-			document_open_file(idx, NULL, 0, doc_list[idx].readonly);
+			document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
 		}
 		else
 		{
+			gchar *basename = g_path_get_basename(doc_list[idx].file_name);
+
 			buff = g_strdup_printf(_
 						 ("The file '%s' on the disk is more recent than\n"
-						  "the current buffer.\nDo you want to reload it?"), g_path_get_basename(doc_list[idx].file_name));
-
+						  "the current buffer.\nDo you want to reload it?"), basename);
 
 			if (dialogs_show_reload_warning(buff))
 			{
-				document_open_file(idx, NULL, 0, doc_list[idx].readonly);
+				document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
 				doc_list[idx].last_check = t;
 			}
 			else
 				doc_list[idx].mtime = t;
 
+			g_free(basename);
 			g_free(buff);
 			return FALSE;
 		}
@@ -2163,4 +2165,3 @@ void utils_beep(void)
 {
 	if (app->beep_on_errors) gdk_beep();
 }
-
