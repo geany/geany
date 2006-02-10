@@ -5,11 +5,8 @@ TODO List:
 
 	Geany 0.6 or later:
 
-	o filetype SQL
-	o filetype (O)Caml
-	o filetype OMS
-	o http://sourceforge.net/tracker/index.php?func=detail&aid=1421776&group_id=153444&atid=787791
-	o https://sourceforge.net/tracker/?func=detail&atid=102439&aid=1389486&group_id=2439
+	O vte.c:265 !!!
+	o set filetype in file open dialog
 	o fix a freeze at switching between filetypes with files in
 	  ISO-8859-x encoding (reported by Jörg Sommer)
 	o fix: "attempt to put segment in horiz list twice" warning
@@ -22,10 +19,10 @@ TODO List:
 	o inverting highlighting by selection
 	o put default filetype extensions in the config file, read them in a GList
 	o src/sci_cb.c: improve auto completion(include local tags)
-	o src/sci_cb.c: do CSS multiline auto comments like at HTML
 	o property dialog in File->Properties like
 	  http://developer.gnome.org/projects/gup/hig/2.0/images/property-window.png
 	o extend use of doc_list[].is_valid
+	o (PHP syntax check)
 	o (command line option -e (editor mode))
 	o (startup notification)
 	o (indent wrapped lines, but how?)

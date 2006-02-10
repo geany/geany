@@ -1,3 +1,60 @@
+2006-02-10  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * scintilla/LexOMS.cxx, scintilla/keywords.cxx,
+   scintilla/include/SciLexer.h, scintilla/Makefile.am:
+   added new lexer LexOMS(based on LexBash) for OMS support
+ * src/highlighting.c: added new filetype OMS (O-Matrix)
+ * src/dialogs.c: improved the find and replace dialog, an existing
+                  selection is inserted, fixed focus settings
+ * src/callbacks.c: prevent Geany entering an endless loop, at
+                    replacing something like "YELLOW" with "yellow", if
+                    search flag "Case sensitive" is not checked
+
+
+2006-02-08  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/main.c, src/callbacks.c, src/geany.h:
+   Geany now creates a FIFO, to communicate between different instances
+
+
+2006-02-07  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c, src/callbacks.c, src/document.c: fixed a memory leaks
+ * src/document.c: improved filename handling on saving files
+ * src/callbacks.c: improved the filename entry widget in the file open
+                    dialog, it handles now directories, too
+
+
+2006-02-06  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/document.c: improved behaviour of HOME/END keys on wrapped lines
+ * src/sciwrappers.c: added sci_assign_cmdkey()
+ * geany.glade, src/interface.c, src/callbacks.c, src/dialogs.c:
+   rewrite of the file open dialog, now it enters a directory instead
+   of trying to open it in Geany (closes #1421776)
+ * src/sci_cb.c: improved sci_cb_do_comment() to handle SQL and Caml
+                 comments
+ * src/sciwrappers.c, src/sci_cb.c:
+   applied patch from Nick Treleaven to improve multiline selection
+   by selecting the lines in the line number margin, removed also the
+   right click behaviour to set a marker
+ * src/highlighting.c: added filetypes SQL and (O)Caml, heavily reduced
+                       code size
+ * src/main.c: fixed wrong handling of the visibility of the message
+               window
+ * src/vte.c: fixed a crash when preferences are set and message window
+              is hidden (thanks to Joo Martin for reporting)
+
+
+2006-02-03  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/document.c: improved filename handling in document_open_file(),
+                   fixed a crash at reloading files
+ * src/main.c: fixed a crash when opening more than 25 files from the
+               command line (closes #1422135)
+ * src/sci_cb.c: improved sci_cb_do_comment() to handle CSS comments
+
+
 2006-02-01  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/build.c: applied patch from Nick Treleaven to fix memory leaks
@@ -27,7 +84,7 @@
  * src/utils.c, src/dialogs.c: set the Open File dialog directory to
                                the same directory as the current file
                                (thanks to Nick Treleaven for this patch)
- * src/sci_cb.h: fixed a bug with auto indention and CR/LF line endings
+ * src/sci_cb.c: fixed a bug with auto indention and CR/LF line endings
                  (thanks to Tamim for reporting)
 
 
