@@ -11,6 +11,7 @@ AM_CXXFLAGS = -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE
 LEXER_SRCS= \
 LexAsm.cxx \
 LexBash.cxx \
+LexOMS.cxx \
 LexCPP.cxx \
 LexCaml.cxx \
 LexConf.cxx \
@@ -21,8 +22,7 @@ LexOthers.cxx \
 LexPascal.cxx \
 LexPerl.cxx \
 LexPython.cxx \
-LexSQL.cxx \
-LexTeX.cxx
+LexSQL.cxx
 
 SRCS= \
 CallTip.cxx \
