@@ -35,6 +35,8 @@
 #include "interface.h"
 #include "utils.h"
 
+
+
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file ()
 {
@@ -48,10 +50,25 @@ void dialogs_show_open_file ()
 	   		of all we create it if it hasn't already been created. */
 		if (app->open_filesel == NULL)
 		{
+			GtkWidget *combo;
 			gint i;
-			app->open_filesel = create_fileopendialog1();
-			/* Make sure the dialog doesn't disappear behind the main window. */
-			gtk_window_set_transient_for (GTK_WINDOW(app->open_filesel), GTK_WINDOW (app->window));
+
+			app->open_filesel = gtk_file_chooser_dialog_new(_("Open File"), NULL,
+					GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+
+			gtk_widget_set_size_request(app->open_filesel, 520, 460);
+			gtk_window_set_modal(GTK_WINDOW(app->open_filesel), TRUE);
+			gtk_window_set_destroy_with_parent(GTK_WINDOW(app->open_filesel), TRUE);
+			gtk_window_set_skip_taskbar_hint(GTK_WINDOW(app->open_filesel), TRUE);
+			gtk_window_set_type_hint(GTK_WINDOW(app->open_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
+			gtk_window_set_transient_for(GTK_WINDOW(app->open_filesel), GTK_WINDOW(app->window));
+			gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(app->open_filesel), TRUE);
+
+			// add checkboxes and filename entry
+			gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(app->open_filesel),
+						dialogs_add_file_open_extra_widget());
+			combo = lookup_widget(app->open_filesel, "filetype_combo");
 
 			// add FileFilters(start with "All Files")
 			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
@@ -60,16 +77,22 @@ void dialogs_show_open_file ()
 			{
 				if (filetypes[i])
 				{
+					gtk_combo_box_append_text(GTK_COMBO_BOX(combo), filetypes[i]->title);
 					gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
 						utils_create_file_filter(filetypes[i]));
 				}
 			}
-			// add checkboxes and filename entry
-			gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(app->open_filesel),
-						dialogs_add_file_open_extra_widget());
-			g_signal_connect((gpointer)app->open_filesel, "selection-changed",
+			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), _("Detect by file extension  "));
+			gtk_combo_box_set_active(GTK_COMBO_BOX(combo), GEANY_MAX_FILE_TYPES - 1);
+
+			g_signal_connect((gpointer) app->open_filesel, "selection-changed",
 						G_CALLBACK(on_file_open_selection_changed), NULL);
-		}
+			g_signal_connect ((gpointer) app->open_filesel, "delete_event",
+						G_CALLBACK(gtk_widget_hide), NULL);
+			g_signal_connect((gpointer) app->open_filesel, "response",
+						G_CALLBACK (on_file_open_dialog_response), NULL);
+
+ 		}
 
 		// set dialog directory to the current file's directory, if present
 		{
@@ -84,8 +107,7 @@ void dialogs_show_open_file ()
 		}
 
 		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(app->open_filesel));
-		/* We make sure the dialog is visible. */
-		gtk_window_present(GTK_WINDOW(app->open_filesel));
+		gtk_widget_show(app->open_filesel);
 #endif
 	}
 	else
@@ -725,6 +747,15 @@ void dialogs_show_goto_line(void)
 
 void dialogs_show_find(void)
 {
+	gint idx = document_get_cur_idx();
+	gchar *sel = NULL;
+
+	if (sci_can_copy(doc_list[idx].sci))
+	{
+		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
+		sci_get_selected_text(doc_list[idx].sci, sel);
+	}
+		
 	if (app->find_dialog == NULL)
 	{
 		GtkWidget *label, *entry, *checkbox1, *checkbox2, *checkbox3, *checkbox4, *checkbox5;
@@ -742,6 +773,7 @@ void dialogs_show_find(void)
 		entry = gtk_combo_box_entry_new_text();
 		gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 248);
 		gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
+		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(entry)->child), sel);
 		g_object_set_data_full(G_OBJECT(app->find_dialog), "entry",
 						gtk_widget_ref(entry), (GDestroyNotify)gtk_widget_unref);
 
@@ -793,14 +825,26 @@ void dialogs_show_find(void)
 	}
 	else
 	{
-		gtk_widget_grab_focus(lookup_widget(app->find_dialog, "entry"));
+		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(
+							lookup_widget(app->find_dialog, "entry"))->child), sel);
+		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->find_dialog, "entry"))->child));
 		gtk_widget_show(app->find_dialog);
 	}
+	g_free(sel);
 }
 
 
 void dialogs_show_replace(void)
 {
+	gint idx = document_get_cur_idx();
+	gchar *sel = NULL;
+
+	if (sci_can_copy(doc_list[idx].sci))
+	{
+		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
+		sci_get_selected_text(doc_list[idx].sci, sel);
+	}
+		
 	if (app->replace_dialog == NULL)
 	{
 		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace, *checkbox1, *checkbox2, *checkbox3, *checkbox5, *checkbox4;
@@ -824,6 +868,7 @@ void dialogs_show_replace(void)
 		entry_find = gtk_combo_box_entry_new_text();
 		gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 248);
 		gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 50);
+		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(entry_find)->child), sel);
 		g_object_set_data_full(G_OBJECT(app->replace_dialog), "entry_find",
 						gtk_widget_ref(entry_find), (GDestroyNotify)gtk_widget_unref);
 
@@ -883,9 +928,12 @@ void dialogs_show_replace(void)
 	}
 	else
 	{
-		gtk_widget_grab_focus(lookup_widget(app->replace_dialog, "entry_find"));
+		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(
+							lookup_widget(app->replace_dialog, "entry_find"))->child), sel);
+		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->replace_dialog, "entry_find"))->child));
 		gtk_widget_show(app->replace_dialog);
 	}
+	g_free(sel);
 }
 
 void dialogs_show_includes_arguments_tex(void)
@@ -1051,9 +1099,13 @@ void dialogs_show_includes_arguments_gen(gboolean link)
 GtkWidget *dialogs_add_file_open_extra_widget(void)
 {
 	GtkWidget *vbox;
+	GtkWidget *ebox;
+	GtkWidget *hbox;
 	GtkWidget *file_entry;
 	GtkWidget *check_readonly;
 	GtkWidget *check_hidden;
+	GtkWidget *filetype_label;
+	GtkWidget *filetype_combo;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 	vbox = gtk_vbox_new(FALSE, 4);
@@ -1063,7 +1115,7 @@ GtkWidget *dialogs_add_file_open_extra_widget(void)
 	gtk_box_pack_start(GTK_BOX(vbox), file_entry, FALSE, FALSE, 0);
 	gtk_entry_set_activates_default(GTK_ENTRY(file_entry), TRUE);
 
-	check_readonly = gtk_check_button_new_with_mnemonic(_("Open file read-only"));
+	check_readonly = gtk_check_button_new_with_mnemonic(_("Open file _read-only"));
 	gtk_widget_show(check_readonly);
 	gtk_box_pack_start(GTK_BOX(vbox), check_readonly, FALSE, FALSE, 0);
 	gtk_tooltips_set_tip(tooltips, check_readonly,
@@ -1074,6 +1126,19 @@ GtkWidget *dialogs_add_file_open_extra_widget(void)
 	gtk_widget_show(check_hidden);
 	gtk_box_pack_start(GTK_BOX(vbox), check_hidden, FALSE, FALSE, 0);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_hidden), FALSE);
+
+	// the ebox is for the tooltip, because gtk_combo_box doesn't show a tooltip for unknown reason
+	ebox = gtk_event_box_new();
+	hbox = gtk_hbox_new(FALSE, 4);
+	filetype_label = gtk_label_new(_("Set filetype: "));
+	filetype_combo = gtk_combo_box_new_text();
+	gtk_tooltips_set_tip(tooltips, ebox,
+		_("Explicitly defines a filetype for the file, if it would not detected by filename extension.\nNote if you choose multiple files, they will all opened with the chossed filetype."), NULL);
+	gtk_box_pack_start(GTK_BOX(hbox), filetype_label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), filetype_combo, FALSE, FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(ebox), hbox);
+	gtk_box_pack_start(GTK_BOX(vbox), ebox, FALSE, FALSE, 0);
+	gtk_widget_show_all(vbox);
 
 	g_signal_connect((gpointer) file_entry, "activate",
 				G_CALLBACK(on_file_open_entry_activate), NULL);
@@ -1086,6 +1151,8 @@ GtkWidget *dialogs_add_file_open_extra_widget(void)
 				gtk_widget_ref(check_readonly), (GDestroyNotify)gtk_widget_unref);
 	g_object_set_data_full(G_OBJECT(app->open_filesel), "check_hidden",
 				gtk_widget_ref(check_hidden), (GDestroyNotify)gtk_widget_unref);
+	g_object_set_data_full(G_OBJECT(app->open_filesel), "filetype_combo",
+				gtk_widget_ref(filetype_combo), (GDestroyNotify)gtk_widget_unref);
 
 	return vbox;
 }
