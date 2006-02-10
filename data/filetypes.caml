@@ -1,0 +1,21 @@
+[styling]
+# foreground;background;bold
+default=0x000000,0xffffff,false
+comment=0x808080,0xffffff,false
+comment1=0x808080,0xffffff,false
+comment2=0x808080,0xffffff,false
+comment3=0x808080,0xffffff,false
+number=0x007f7f,0xffffff,false
+keyword=0x7f1a00,0xffffff,true
+keyword2=0x00007f,0xffffff,true
+string=0x7f007f,0xffffff,false
+char=0x7f007f,0xffffff,false
+operator=0x000000,0xffffff,false
+identifier=0x991111,0xffffff,false
+tagname=0x000000,0xffe0ff,true
+linenum=0x000000,0xC0C0C0,false
+
+[keywords]
+# all items must be in one line
+keywords=and as assert asr begin class constraint do done downto else end exception external false for fun function functor if in include inherit initializer land lazy let lor lsl lsr lxor match method mod module mutable new object of open or private rec sig struct then to true try type val virtual when while with
+keywords_optional=option Some None ignore ref
