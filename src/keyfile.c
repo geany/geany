@@ -387,7 +387,7 @@ gboolean configuration_open_files(void)
 
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{
-				document_open_file(-1, locale_filename, pos, FALSE);
+				document_open_file(-1, locale_filename, pos, FALSE, NULL);
 				ret = TRUE;
 			}
 			g_free(locale_filename);
