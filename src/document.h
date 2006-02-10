@@ -78,7 +78,7 @@ void document_new_file(filetype *ft);
  * If idx is greater than -1, it reloads the file in the tab corresponding to
  * idx and set the cursor to position 0.
  */
-void document_open_file(gint, const gchar*, gint, gboolean);
+void document_open_file(gint, const gchar*, gint, gboolean, filetype*);
 
 
 /* This saves the file, which is in on-disk encoding (which may not

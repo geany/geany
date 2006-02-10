@@ -218,8 +218,8 @@ gint document_create_new_sci(const gchar *filename)
 	//SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);
 	sci_use_popup(sci, FALSE);
 	sci_set_codepage(sci, 1);
-	//sci_clear_cmdkey(sci, SCK_END);	// disable to act on our own in callbacks.c
-	//sci_clear_cmdkey(sci, SCK_HOME);
+	sci_assign_cmdkey(sci, SCK_HOME, SCI_VCHOMEWRAP);
+	sci_assign_cmdkey(sci, SCK_END, SCI_LINEENDWRAP);
 	sci_set_mark_long_lines(sci, app->long_line_column, app->long_line_color);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	//sci_set_lines_wrapped(sci, app->line_breaking);
@@ -359,7 +359,7 @@ void document_new_file(filetype *ft)
  * If idx is greater than -1, it reloads the file in the tab corresponding to
  * idx and set the cursor to position 0. In this case, filename should be NULL
  */
-void document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly)
+void document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly, filetype *ft)
 {
 	gint editor_mode, size;
 	gboolean reload = (idx == -1) ? FALSE : TRUE;
@@ -496,13 +496,15 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	}
 	else
 	{
+		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(utf8_filename);
 		sci_goto_pos(doc_list[idx].sci, pos);
 		//if (app->main_window_realized) // avoids warnings, but doesn't scroll, so accept warning
 			sci_scroll_to_line(doc_list[idx].sci, sci_get_line_from_position(doc_list[idx].sci, pos) - 10);
 		doc_list[idx].readonly = readonly;
 		sci_set_readonly(doc_list[idx].sci, readonly);
 
-		document_set_filetype(idx, filetypes_get_from_filename(utf8_filename));
+
+		document_set_filetype(idx, use_ft);
 		utils_build_show_hide(idx);
 		msgwin_status_add(_("File %s opened(%d%s)."),
 				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
@@ -543,13 +545,14 @@ void document_save_file(gint idx)
 	gchar *data;
 	FILE *fp;
 	gint bytes_written, len;
+	gchar *locale_filename = NULL;
 
 	if (idx == -1) return;
 
 	if (doc_list[idx].file_name == NULL)
 	{
 		msgwin_status_add(_("Error saving file."));
-		if (app->beep_on_errors) gdk_beep();
+		utils_beep();
 		return;
 	}
 
@@ -563,13 +566,13 @@ void document_save_file(gint idx)
 	len = sci_get_length(doc_list[idx].sci) + 1;
 	data = (gchar*) g_malloc(len);
 	sci_get_text(doc_list[idx].sci, len, data);
-	//geany_debug("Saved: %s", doc_list[idx].file_name);
 
-	fp = fopen(doc_list[idx].file_name, "w");
+	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
+	fp = fopen(locale_filename, "w");
 	if (fp == NULL)
 	{
 		msgwin_status_add(_("Error saving file (%s)."), strerror(errno));
-		if (app->beep_on_errors) gdk_beep();
+		utils_beep();
 		g_free(data);
 		return;
 	}
@@ -588,16 +591,17 @@ void document_save_file(gint idx)
 	if (len != bytes_written)
 	{
 		msgwin_status_add(_("Error saving file."));
-		if (app->beep_on_errors) gdk_beep();
+		utils_beep();
 		return;
 	}
 
 	// ignore the following things if we are quitting
 	if (! app->quitting)
-	{	// set line numbers again, to reset the margin width, if
-		// there are more lines than before
-		gchar *title;
+	{
+		gchar *basename = g_path_get_basename(doc_list[idx].file_name);
 
+		// set line numbers again, to reset the margin width, if
+		// there are more lines than before
 		sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
 		sci_set_savepoint(doc_list[idx].sci);
 		doc_list[idx].mtime = time(NULL);
@@ -605,14 +609,13 @@ void document_save_file(gint idx)
 			doc_list[idx].file_type = filetypes_get_from_filename(doc_list[idx].file_name);
 		document_set_filetype(idx, doc_list[idx].file_type);
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
-		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), g_path_get_basename(doc_list[idx].file_name));
-		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), g_path_get_basename(doc_list[idx].file_name));
+		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), basename);
+		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), basename);
 		treeviews_openfiles_update(doc_list[idx].iter, doc_list[idx].file_name);
 		msgwin_status_add(_("File %s saved."), doc_list[idx].file_name);
 		utils_update_statusbar(idx);
-		title = g_path_get_basename(doc_list[idx].file_name);
-		treeviews_openfiles_update(doc_list[idx].iter, title);
-		g_free(title);
+		treeviews_openfiles_update(doc_list[idx].iter, basename);
+		g_free(basename);
 	}
 }
 
@@ -648,7 +651,7 @@ void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_b
 		}
 		else
 		{
-			if (app->beep_on_errors) gdk_beep();
+			utils_beep();
 			sci_goto_pos(doc_list[idx].sci, 0);
 		}
 	}
@@ -727,7 +730,7 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 	}
 	else
 	{
-		if (app->beep_on_errors) gdk_beep();
+		utils_beep();
 	}
 }
 
@@ -743,7 +746,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	selection_end =  sci_get_selection_end(doc_list[idx].sci);
 	if ((selection_end - selection_start) == 0)
 	{
-		if (app->beep_on_errors) gdk_beep();
+		utils_beep();
 		return;
 	}
 
@@ -767,7 +770,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	}
 	else
 	{
-		if (app->beep_on_errors) gdk_beep();
+		utils_beep();
 	}
 	// set selection again, because it got lost just before
 	sci_set_selection_start(doc_list[idx].sci, selection_start);
