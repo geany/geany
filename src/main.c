@@ -23,7 +23,12 @@
 
 #include <signal.h>
 #include <time.h>
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <string.h>
 
 #include "geany.h"
 
@@ -45,6 +50,7 @@
 #endif
 
 
+static gchar fifo_name[512];
 static gboolean debug_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_vte = FALSE;
@@ -67,6 +73,8 @@ static GOptionEntry entries[] =
 };
 
 
+
+/* Geany main debug function */
 void geany_debug(gchar const *format, ...)
 {
 #ifndef GEANY_DEBUG
@@ -84,7 +92,7 @@ void geany_debug(gchar const *format, ...)
 /* special things for the initial setup of the checkboxes and related stuff
  * an action on a setting is only performed if the setting is not equal to the program default
  * (all the following code is not perfect but it works for the moment) */
-void apply_settings(void)
+static void apply_settings(void)
 {
 	// toolbar, message window and tagbar are by default visible, so don't change it if it is true
 	if (! app->toolbar_visible)
@@ -197,7 +205,7 @@ void apply_settings(void)
 }
 
 
-gint main_init(void)
+static gint main_init(void)
 {
 	gint mkdir_result;
 
@@ -217,6 +225,7 @@ gint main_init(void)
 #ifdef HAVE_VTE
 	app->lib_vte			= lib_vte;
 #endif
+	app->window				= NULL;
 	app->search_text		= NULL;
 	app->build_args_inc		= NULL;
 	app->build_args_libs	= NULL;
@@ -303,6 +312,95 @@ gint main_init(void)
 }
 
 
+static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer data)
+{
+	GIOStatus status;
+	gchar *read_data = NULL;
+	gint len = 0;
+
+	status = g_io_channel_read_to_end(source, &read_data, &len, NULL);
+	
+	// try to interpret the received data as a filename, otherwise do nothing
+	if (g_file_test(read_data, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	{
+		document_open_file(-1, read_data, 0, FALSE, NULL);
+	}
+	else 
+	{
+		geany_debug("got data from named pipe, but could not interpret it (this is nothing critical, just a notice)");
+	}
+	
+	g_free(read_data);
+
+	return TRUE;
+}
+
+
+static void write_fifo(gint argc, gchar **argv)
+{
+	GIOChannel *ioc = g_io_channel_unix_new(open(fifo_name, O_WRONLY));
+	gint i;
+	for(i = 1; i < argc; i++)
+	{
+		geany_debug(argv[i]);
+		if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
+		{
+			g_io_channel_write_chars(ioc, argv[i], -1, NULL, NULL);
+			//g_io_channel_flush(ioc, NULL);
+		}
+	}
+	g_io_channel_shutdown(ioc, TRUE, NULL);
+}
+
+
+/* creates a named pipe in GEANY_FIFO_NAME, to communicate with new instances of Geany
+ * to submit filenames and possibly other things */
+static void create_fifo(gint argc, gchar **argv)
+{
+	struct stat st;
+	gchar *tmp;
+	GIOChannel *ioc;
+
+	if (alternate_config)
+		tmp = g_strconcat(alternate_config, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
+	else
+		tmp = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
+
+	strncpy(fifo_name, tmp, MAX(strlen(tmp), sizeof(fifo_name)));
+	g_free(tmp);
+
+	if (stat(fifo_name, &st) == 0 && (! S_ISFIFO(st.st_mode)))
+	{	// the FIFO file exists, but is not a FIFO
+		unlink(fifo_name);
+	}
+	else if (stat(fifo_name, &st) == 0 && S_ISFIFO(st.st_mode))
+	{	// FIFO exists, there should be a running instance of Geany
+		if (argc > 1)
+		{
+			geany_debug("using running instance of Geany");
+			write_fifo(argc, argv);
+		}
+		else 
+		{
+			printf(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running. If Geany is not running, please delete the file %s and start Geany again.\n"), fifo_name);
+		}
+		exit(0);
+	}
+	
+	// there is no Geany running, create fifo and start as usual, so we are a kind of server
+	geany_debug("trying to create a new named pipe");
+
+	if ((mkfifo(fifo_name, S_IRUSR | S_IWUSR)) == -1)
+	{
+		if(errno != EEXIST) geany_debug("creating of a named pipe for IPC failed!");
+	}
+
+	//channel = g_io_channel_new_file(fifo_name, "r", NULL);
+	ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
+	g_io_add_watch(ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
+}
+
+
 gint main(gint argc, gchar **argv)
 {
 	GError *error = NULL;
@@ -314,15 +412,12 @@ gint main(gint argc, gchar **argv)
 	this_month = tm->tm_mon + 1;
 	this_day = tm->tm_mday;
 
-
 #ifdef ENABLE_NLS
 	bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 	textdomain(GETTEXT_PACKAGE);
 #endif
 	gtk_set_locale();
-
-	signal(SIGTERM, signal_cb);
 
 	context = g_option_context_new(_(" - A fast and lightweight IDE"));
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
@@ -340,6 +435,11 @@ gint main(gint argc, gchar **argv)
 
 		return (0);
 	}
+
+	signal(SIGTERM, signal_cb);
+	signal(SIGUSR1, signal_cb);
+
+	create_fifo(argc, argv);
 
 	gtk_init(&argc, &argv);
 
@@ -395,7 +495,7 @@ gint main(gint argc, gchar **argv)
 			{
 				if (opened < GEANY_MAX_OPEN_FILES)
 				{
-					document_open_file(-1, argv[i], 0, FALSE);
+					document_open_file(-1, argv[i], 0, FALSE, NULL);
 					opened++;
 				}
 				else
@@ -437,5 +537,7 @@ gint main(gint argc, gchar **argv)
 	gtk_main();
 	return 0;
 }
+
+
 
 
