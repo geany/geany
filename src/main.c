@@ -52,6 +52,7 @@
 
 static gchar fifo_name[512];
 static gboolean debug_mode = FALSE;
+static gboolean ignore_fifo = FALSE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_vte = FALSE;
 static gboolean show_version = FALSE;
@@ -63,6 +64,7 @@ static GOptionEntry entries[] =
 {
 	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, "runs in debug mode (means being verbose)", NULL },
 	{ "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, "don't load auto completion data (see documentation)", NULL },
+	{ "no-pipe", 'p', 0, G_OPTION_ARG_NONE, &ignore_fifo, "don't open files in a running instance, force opening a new instance", NULL },
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, "use an alternate configuration directory", NULL },
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, "don't load terminal support", NULL },
 #ifdef HAVE_VTE
@@ -140,55 +142,35 @@ static void apply_settings(void)
 	}
 	utils_update_toolbar_icons(app->toolbar_icon_size);
 
-	// fullscreen mode, indention guides, line_endings and white spaces are disabled by default, so act only if they are true
-	if (app->show_indent_guide)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_indention_guides1")), TRUE);
-		app->show_indent_guide = TRUE;
-	}
-	if (app->show_white_space)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_white_space")), TRUE);
-		app->show_white_space = TRUE;
-	}
-	if (app->show_line_endings)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_line_endings1")), TRUE);
-		app->show_line_endings = TRUE;
-	}
+	// fullscreen mode is disabled by default, so act only if it is true
 	if (app->fullscreen)
 	{
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_fullscreen1")), TRUE);
 		app->fullscreen = TRUE;
 		utils_set_fullscreen();
 	}
-	// markers margin, construct and xml tag auto completion is by default enabled
+	// line number and markers margin are by default enabled
 	if (! app->show_markers_margin)
 	{
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_markers_margin1")), FALSE);
 		app->show_markers_margin = FALSE;
 	}
-	if (! app->auto_close_xml_tags)
+	if (! app->show_linenumber_margin)
 	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_xml_tag1")), FALSE);
-		app->auto_close_xml_tags = FALSE;
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_linenumber_margin1")), FALSE);
+		app->show_linenumber_margin = FALSE;
 	}
-	if (! app->auto_complete_constructs)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_construct_completion1")), FALSE);
-		app->auto_complete_constructs = FALSE;
-	}
-	if (! app->use_auto_indention)
+	if (! app->pref_editor_use_auto_indention)
 	{
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_use_auto_indention1")), FALSE);
-		app->use_auto_indention = FALSE;
+		app->pref_editor_use_auto_indention = FALSE;
 	}
-/*	if (! app->line_breaking)
+	if (! app->pref_editor_line_breaking)
 	{
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_breaking1")), FALSE);
-		app->line_breaking = FALSE;
+		app->pref_editor_line_breaking = FALSE;
 	}
-*/
+
 	// interprets the saved window geometry
 	if (app->pref_main_save_winpos && app->geometry[0] != -1)
 	{
@@ -240,6 +222,9 @@ static gint main_init(void)
 	app->default_tag_tree	= NULL;
 	app->main_window_realized= FALSE;
 	app->quitting			= FALSE;
+#ifdef HAVE_FIFO
+	app->ignore_fifo		= ignore_fifo;
+#endif
 #ifdef HAVE_VTE
 	app->have_vte 			= ! no_vte;
 #else
@@ -314,30 +299,34 @@ static gint main_init(void)
 
 static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer data)
 {
+#ifdef HAVE_FIFO
 	GIOStatus status;
 	gchar *read_data = NULL;
-	gint len = 0;
+	gsize len = 0;
 
 	status = g_io_channel_read_to_end(source, &read_data, &len, NULL);
-	
+
 	// try to interpret the received data as a filename, otherwise do nothing
 	if (g_file_test(read_data, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
 		document_open_file(-1, read_data, 0, FALSE, NULL);
 	}
-	else 
+	else
 	{
-		geany_debug("got data from named pipe, but could not interpret it (this is nothing critical, just a notice)");
+		geany_debug("got data from named pipe, but it does not look like a filename");
 	}
-	
+	gtk_widget_grab_focus(app->window);
+
 	g_free(read_data);
 
+#endif
 	return TRUE;
 }
 
 
 static void write_fifo(gint argc, gchar **argv)
 {
+#ifdef HAVE_FIFO
 	GIOChannel *ioc = g_io_channel_unix_new(open(fifo_name, O_WRONLY));
 	gint i;
 	for(i = 1; i < argc; i++)
@@ -350,6 +339,7 @@ static void write_fifo(gint argc, gchar **argv)
 		}
 	}
 	g_io_channel_shutdown(ioc, TRUE, NULL);
+#endif
 }
 
 
@@ -357,6 +347,7 @@ static void write_fifo(gint argc, gchar **argv)
  * to submit filenames and possibly other things */
 static void create_fifo(gint argc, gchar **argv)
 {
+#ifdef HAVE_FIFO
 	struct stat st;
 	gchar *tmp;
 	GIOChannel *ioc;
@@ -380,13 +371,15 @@ static void create_fifo(gint argc, gchar **argv)
 			geany_debug("using running instance of Geany");
 			write_fifo(argc, argv);
 		}
-		else 
+		else
 		{
-			printf(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running. If Geany is not running, please delete the file %s and start Geany again.\n"), fifo_name);
+			gdk_beep();
+			printf(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running.\nIf Geany is not running, please delete the file %s and start Geany again.\n"), fifo_name);
+			dialogs_show_error(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running.\nIf Geany is not running, please delete the file %s and start Geany again.\n"), fifo_name);
 		}
 		exit(0);
 	}
-	
+
 	// there is no Geany running, create fifo and start as usual, so we are a kind of server
 	geany_debug("trying to create a new named pipe");
 
@@ -395,9 +388,9 @@ static void create_fifo(gint argc, gchar **argv)
 		if(errno != EEXIST) geany_debug("creating of a named pipe for IPC failed!");
 	}
 
-	//channel = g_io_channel_new_file(fifo_name, "r", NULL);
 	ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
 	g_io_add_watch(ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
+#endif
 }
 
 
@@ -439,7 +432,7 @@ gint main(gint argc, gchar **argv)
 	signal(SIGTERM, signal_cb);
 	signal(SIGUSR1, signal_cb);
 
-	create_fifo(argc, argv);
+	if (! ignore_fifo) create_fifo(argc, argv);
 
 	gtk_init(&argc, &argv);
 
@@ -482,7 +475,7 @@ gint main(gint argc, gchar **argv)
 	apply_settings();
 
 	// this option is currently disabled, until the document menu item is reordered
-	gtk_widget_hide(lookup_widget(app->window, "set_file_readonly1"));
+	//gtk_widget_hide(lookup_widget(app->window, "set_file_readonly1"));
 
 	// open files from command line
 	app->opening_session_files = TRUE;
