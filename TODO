@@ -5,12 +5,11 @@ TODO List:
 
 	Geany 0.6 or later:
 
-	O vte.c:265 !!!
-	o set filetype in file open dialog
+	O vte.c:265
+	o tag list reload at file reload
 	o fix a freeze at switching between filetypes with files in
 	  ISO-8859-x encoding (reported by Jörg Sommer)
 	o fix: "attempt to put segment in horiz list twice" warning
-	o open files in a new tab in a already running instance
 	o encoding-bug in utils_convert_to_utf8()
 	o documentation: list and explain filetype modes
 	o src/interface.c: reorder the 'document' menu entry, differ between

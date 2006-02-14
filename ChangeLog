@@ -1,3 +1,25 @@
+2006-02-14  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * Makefile.am, doc/Makefile.am: improved "make uninstall" of Geany
+ * configure.in: added check for mkfifo(), made it also an option
+ * src/main.c: added a message box if lost pipe was found, FIFO code
+               now depends on HAVE_FIFO
+ * src/Makefile.am: do not compile win32.c anymore, added to EXTRA_DIST
+ * src/geany.h, src/main.c, src/callbacks.c:
+   added command line option -p or --no-pipe to ignore a running
+   instance of Geany and force opening a new instance
+
+
+2006-02-13  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c: added utils_show_linenumber_margin()
+ * geany.glade, src/interface.c, src/callbacks.c, src/dialogs.c,
+   src/main.c, src/geany.h, src/keyfile.c, src/sci_cb.c:
+   removed some items from the document menu to the preferences dialog,
+   removed file save dialog from interface.c to dialogs.c, added
+   toggle for line numbers
+
+
 2006-02-10  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * scintilla/LexOMS.cxx, scintilla/keywords.cxx,
