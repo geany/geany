@@ -112,12 +112,13 @@ void utils_update_statusbar(gint idx)
 		col = sci_get_col_from_position(doc_list[idx].sci, pos);
 
 		g_snprintf(text, 250,
-_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s      cur. function: %s      encoding: %s      filetype: %s"),
+_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s      filetype: %s"),
 			(doc_list[idx].changed) ? 42 : 32,
 			(line + 1), (col + 1),
 			sci_get_selected_text_length(doc_list[idx].sci) - 1,
 			doc_list[idx].do_overwrite ? _("OVR") : _("INS"),
 			document_get_eol_mode(idx),
+			(doc_list[idx].readonly) ? ", read only" : "",
 			cur_tag,
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
 			(doc_list[idx].file_type) ? doc_list[idx].file_type->title : _("unknown"));
@@ -584,50 +585,38 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 }
 
 
-void utils_show_indention_guides(void)
+void _utils_show_indention_guides(void)
 {
 	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 
 	for(i = 0; i < max; i++)
 	{
 		idx = document_get_n_idx(i);
-		sci_set_indentionguides(doc_list[idx].sci, app->show_indent_guide);
+		sci_set_indentionguides(doc_list[idx].sci, app->pref_editor_show_indent_guide);
 	}
 }
 
 
-void utils_show_white_space(void)
+void _utils_show_white_space(void)
 {
 	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 
 	for(i = 0; i < max; i++)
 	{
 		idx = document_get_n_idx(i);
-		sci_set_visible_white_spaces(doc_list[idx].sci, app->show_white_space);
+		sci_set_visible_white_spaces(doc_list[idx].sci, app->pref_editor_show_white_space);
 	}
 }
 
 
-void utils_line_breaking(void)
+void _utils_show_line_endings(void)
 {
 	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 
 	for(i = 0; i < max; i++)
 	{
 		idx = document_get_n_idx(i);
-		//sci_set_lines_wrapped(doc_list[idx].sci, app->line_breaking);
-	}
-}
-
-
-void utils_show_line_endings(void)
-{
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-
-	for(i = 0; i < max; i++)
-	{
-		idx = document_get_n_idx(i);
-		sci_set_visible_eols(doc_list[idx].sci, app->show_line_endings);
+		sci_set_visible_eols(doc_list[idx].sci, app->pref_editor_show_line_endings);
 	}
 }
 
@@ -640,6 +629,18 @@ void utils_show_markers_margin(void)
 	{
 		idx = document_get_n_idx(i);
 		sci_set_symbol_margin(doc_list[idx].sci, app->show_markers_margin);
+	}
+}
+
+
+void utils_show_linenumber_margin(void)
+{
+	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+
+	for(i = 0; i < max; i++)
+	{
+		idx = document_get_n_idx(i);
+		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 	}
 }
 

@@ -73,7 +73,7 @@ void utils_show_indention_guides(void);
 
 void utils_show_white_space(void);
 
-void utils_line_breaking(void);
+void utils_show_linenumber_margin(void);
 
 void utils_show_markers_margin(void);
 
