@@ -11,6 +11,10 @@ EXTRA_DIST = \
 	global.tags \
 	data/filetypes.*
 
+uninstall-local:
+	rm -rf $(DESTDIR)$(pkgdatadir);
+	rm $(DESTDIR)$(datadir)/pixmaps/geany.png;
+
 install-data-local:
 	@$(NORMAL_INSTALL)
 	if test -d $(srcdir)/pixmaps; then \

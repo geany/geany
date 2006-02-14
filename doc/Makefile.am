@@ -31,6 +31,9 @@ doc-clean:
 	rm -f geany.txt
 	rm -f *.pdf
 
+uninstall-local:
+	rm -rf $(DOCDIR);
+
 install-data-local: geany.1 geany.txt html/index.html
 	$(mkinstalldirs) $(DOCDIR)/html/images
 	for file in `ls $(HTML_FILES)`; do \
@@ -45,5 +48,11 @@ install-data-local: geany.1 geany.txt html/index.html
 	    $(INSTALL_DATA) $(srcdir)/$$file $(DOCDIR)/html/images/$$basefile; \
 	  fi \
 	done
-	$(INSTALL_DATA) geany.txt $(DOCDIR)
+	$(INSTALL_DATA) geany.txt $(DOCDIR)/manual.txt
+	$(INSTALL_DATA) ../README $(DOCDIR)
+	$(INSTALL_DATA) ../ChangeLog $(DOCDIR)
+	$(INSTALL_DATA) ../NEWS $(DOCDIR)
+	$(INSTALL_DATA) ../COPYING $(DOCDIR)
+	$(INSTALL_DATA) ../AUTHORS $(DOCDIR)
+	$(INSTALL_DATA) ../TODO $(DOCDIR)
 
