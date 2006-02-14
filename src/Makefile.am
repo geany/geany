@@ -8,7 +8,7 @@ INCLUDES = \
 	-I../tagmanager/include \
 	@PACKAGE_CFLAGS@
 
-EXTRA_DIST = images.c gb.c
+EXTRA_DIST = images.c gb.c win32.c win32.h
 
 bin_PROGRAMS = geany
 
@@ -23,7 +23,6 @@ geany_SOURCES = \
 	dialogs.c dialogs.h \
 	msgwindow.c msgwindow.h \
 	build.c build.h \
-	win32.c win32.h \
 	filetypes.c filetypes.h \
 	highlighting.c highlighting.h \
 	sci_cb.c sci_cb.h \
