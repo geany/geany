@@ -105,17 +105,9 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
                                         gpointer         user_data);
 
 void
-on_file_save_cancel_button_clicked     (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-on_file_save_save_button_clicked       (GtkButton       *button,
-                                        gpointer         user_data);
-
-gboolean
-on_filesavedialog1_delete_event        (GtkWidget       *widget,
-                                        GdkEvent        *event,
-                                        gpointer         user_data);
+on_file_save_dialog_response           (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data);
 
 void
 on_color_ok_button_clicked             (GtkButton       *button,
@@ -189,14 +181,6 @@ on_cr_activate                         (GtkMenuItem     *menuitem,
 
 void
 on_replace_tabs_activate               (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_indention_guides_activate           (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_white_space_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
@@ -303,10 +287,6 @@ on_window_configure_event              (GtkWidget *widget,
                                         gpointer user_data);
 
 void
-on_markers_margin1_activate            (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
 on_show_toolbar1_toggled               (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
 
@@ -319,31 +299,11 @@ on_markers_margin1_toggled             (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
 
 void
-on_show_indention_guides1_toggled      (GtkCheckMenuItem *checkmenuitem,
-                                        gpointer         user_data);
-
-void
-on_show_white_space_toggled            (GtkCheckMenuItem *checkmenuitem,
-                                        gpointer         user_data);
-
-void
-on_fullscreen1_deselect                (GtkItem         *item,
-                                        gpointer         user_data);
-
-void
-on_fullscreen1_select                  (GtkItem         *item,
-                                        gpointer         user_data);
-
-void
 on_invisible1_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
 on_toolbutton13_clicked                (GtkToolButton   *toolbutton,
-                                        gpointer         user_data);
-
-void
-on_xml_tag1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
@@ -364,10 +324,6 @@ on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
 
 void
 on_message_treeview_clear_activate     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_show_line_endings1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
 
 void
@@ -503,10 +459,6 @@ on_goto_line_entry_activate            (GtkEntry        *entry,
 
 
 void
-on_use_auto_indention1_activate        (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
 on_help1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
@@ -606,3 +558,15 @@ void
 on_help_shortcuts1_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
+
+void
+on_file_properties_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_show_line_numbers1_toggled          (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data);
+
+void
+on_use_auto_indention1_toggled         (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data);

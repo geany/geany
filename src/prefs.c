@@ -89,6 +89,21 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_new_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_new_line);
 
+	widget = lookup_widget(app->prefs_dialog, "check_indent");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_show_indent_guide);
+
+	widget = lookup_widget(app->prefs_dialog, "check_white_space");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_show_white_space);
+
+	widget = lookup_widget(app->prefs_dialog, "check_line_end");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_show_line_endings);
+
+	widget = lookup_widget(app->prefs_dialog, "check_xmltag");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_auto_close_xml_tags);
+
+	widget = lookup_widget(app->prefs_dialog, "check_auto_complete");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_auto_complete_constructs);
+
 	widget = lookup_widget(app->prefs_dialog, "editor_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), app->editor_font);
 
@@ -346,19 +361,22 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		utils_set_font();
 
 		// re-colorize all open documents, if tab width or long line settings have changed
-		if ((app->pref_editor_tab_width != old_tab_width) ||
+/*		if ((app->pref_editor_tab_width != old_tab_width) ||
 			(! utils_strcmp(app->long_line_color, old_long_line_color)) ||
 			(app->long_line_column != old_long_line_column))
 		{
 			gint i;
-			for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+*/			for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 			{
 				if (doc_list[i].is_valid)
 				{
 					sci_set_tab_width(doc_list[i].sci, app->pref_editor_tab_width);
 					sci_set_mark_long_lines(doc_list[i].sci, app->long_line_column, app->long_line_color);
+					sci_set_visible_eols(doc_list[i].sci, app->pref_editor_show_line_endings);
+					sci_set_indentionguides(doc_list[i].sci, app->pref_editor_show_indent_guide);
+					sci_set_visible_white_spaces(doc_list[i].sci, app->pref_editor_show_white_space);
 				}
-			}
+//			}
 			old_tab_width = app->pref_editor_tab_width;
 			old_long_line_column = app->long_line_column;
 			g_free(old_long_line_color);

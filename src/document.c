@@ -173,6 +173,9 @@ void document_init_doclist(void)
 	{
 		doc_list[i].is_valid = FALSE;
 		doc_list[i].has_tags = FALSE;
+		doc_list[i].use_auto_indention = TRUE;
+		doc_list[i].line_breaking = TRUE;
+		doc_list[i].readonly = FALSE;
 		doc_list[i].tag_store = NULL;
 		doc_list[i].tag_tree = NULL;
 		doc_list[i].file_name = NULL;
@@ -222,11 +225,11 @@ gint document_create_new_sci(const gchar *filename)
 	sci_assign_cmdkey(sci, SCK_END, SCI_LINEENDWRAP);
 	sci_set_mark_long_lines(sci, app->long_line_column, app->long_line_color);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
-	//sci_set_lines_wrapped(sci, app->line_breaking);
-	sci_set_lines_wrapped(sci, TRUE);
-	sci_set_indentionguides(sci, app->show_indent_guide);
-	sci_set_visible_white_spaces(sci, app->show_white_space);
-	sci_set_visible_eols(sci, app->show_line_endings);
+	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
+	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);
+	sci_set_indentionguides(sci, app->pref_editor_show_indent_guide);
+	sci_set_visible_white_spaces(sci, app->pref_editor_show_white_space);
+	sci_set_visible_eols(sci, app->pref_editor_show_line_endings);
 	//sci_set_folding_margin_visible(sci, TRUE);
 	pfd = pango_font_description_from_string(app->editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
@@ -265,10 +268,11 @@ gint document_create_new_sci(const gchar *filename)
 	this.file_type = NULL;
 	this.mtime = 0;
 	this.changed = FALSE;
-	this.line_breaking = TRUE;
 	this.last_check = time(NULL);
 	this.do_overwrite = FALSE;
 	this.readonly = FALSE;
+	this.line_breaking = TRUE;
+	this.use_auto_indention = TRUE;
 	this.has_tags = FALSE;
 	this.is_valid = TRUE;
 	doc_list[new_idx] = this;
@@ -341,7 +345,7 @@ void document_new_file(filetype *ft)
 		doc_list[idx].changed = FALSE;
 		document_set_text_changed(idx);
 		sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
-		sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
+		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 		sci_empty_undo_buffer(doc_list[idx].sci);
 		sci_goto_pos(doc_list[idx].sci, 0);
 
@@ -482,7 +486,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	editor_mode =  utils_get_line_endings(map, size);
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
 
-	sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
+	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 	sci_set_savepoint(doc_list[idx].sci);
 	sci_empty_undo_buffer(doc_list[idx].sci);
 	doc_list[idx].mtime = time(NULL);
@@ -602,7 +606,7 @@ void document_save_file(gint idx)
 
 		// set line numbers again, to reset the margin width, if
 		// there are more lines than before
-		sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
+		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 		sci_set_savepoint(doc_list[idx].sci);
 		doc_list[idx].mtime = time(NULL);
 		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)

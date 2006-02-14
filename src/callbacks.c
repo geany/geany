@@ -134,12 +134,17 @@ gint destroyapp_early(void)
 // real exit function
 gint destroyapp(GtkWidget *widget, gpointer gdata)
 {
-	gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
-
 	geany_debug("Quitting...");
-	// delete the fifo early, because we don't accept new files anymore
-	unlink(fifo);
-	g_free(fifo);
+
+#ifdef HAVE_FIFO
+	if (! app->ignore_fifo)
+	{
+		gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
+		// delete the fifo early, because we don't accept new files anymore
+		unlink(fifo);
+		g_free(fifo);
+	}
+#endif
 
 	filetypes_free_types();
 	styleset_free_styles();
@@ -685,7 +690,7 @@ on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
 
 	if (doc_list[idx].is_valid)
 	{
-		if (done++ % 3 == 0) sci_set_line_numbers(doc_list[idx].sci, TRUE,
+		if (done++ % 3 == 0) sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin,
 				(sci_get_zoom(doc_list[idx].sci) / 2));
 		sci_zoom_in(doc_list[idx].sci);
 	}
@@ -700,7 +705,7 @@ on_zoom_out1_activate                   (GtkMenuItem     *menuitem,
 	if (doc_list[idx].is_valid)
 	{
 		if (sci_get_zoom(doc_list[idx].sci) == 0)
-			sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
+			sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 		sci_zoom_out(doc_list[idx].sci);
 	}
 }
@@ -714,7 +719,7 @@ on_normal_size1_activate               (GtkMenuItem     *menuitem,
 	if (doc_list[idx].is_valid)
 	{
 		sci_zoom_off(doc_list[idx].sci);
-		sci_set_line_numbers(doc_list[idx].sci, TRUE, 0);
+		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 	}
 }
 
@@ -882,48 +887,34 @@ on_file_open_selection_changed         (GtkFileChooser  *filechooser,
  * save dialog callbacks
  */
 void
-on_file_save_cancel_button_clicked     (GtkButton       *button,
-                                        gpointer         user_data)
+on_file_save_dialog_response           (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data)
 {
 	gtk_widget_hide(app->save_filesel);
-}
 
-
-void
-on_file_save_save_button_clicked       (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
-
-	gtk_widget_hide(app->save_filesel);
-
-	if (doc_list[idx].file_name) g_free(doc_list[idx].file_name);
-	doc_list[idx].file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app->save_filesel));
-	utils_replace_filename(idx);
-	document_save_file(idx);
-
-	utils_build_show_hide(idx);
-
-	// finally add current file to recent files menu
-	if (g_queue_find_custom(app->recent_queue, doc_list[idx].file_name, (GCompareFunc) strcmp) == NULL)
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		g_queue_push_head(app->recent_queue, g_strdup(doc_list[idx].file_name));
-		if (g_queue_get_length(app->recent_queue) > app->mru_length)
+		gint idx = document_get_cur_idx();
+
+		if (doc_list[idx].file_name) g_free(doc_list[idx].file_name);
+		doc_list[idx].file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app->save_filesel));
+		utils_replace_filename(idx);
+		document_save_file(idx);
+
+		utils_build_show_hide(idx);
+
+		// finally add current file to recent files menu
+		if (g_queue_find_custom(app->recent_queue, doc_list[idx].file_name, (GCompareFunc) strcmp) == NULL)
 		{
-			g_free(g_queue_pop_tail(app->recent_queue));
+			g_queue_push_head(app->recent_queue, g_strdup(doc_list[idx].file_name));
+			if (g_queue_get_length(app->recent_queue) > app->mru_length)
+			{
+				g_free(g_queue_pop_tail(app->recent_queue));
+			}
+			utils_update_recent_menu();
 		}
-		utils_update_recent_menu();
 	}
-}
-
-
-gboolean
-on_filesavedialog1_delete_event        (GtkWidget       *widget,
-                                        GdkEvent        *event,
-                                        gpointer         user_data)
-{
-	gtk_widget_hide(app->save_filesel);
-	return TRUE;
 }
 
 
@@ -1496,20 +1487,11 @@ on_markers_margin1_toggled             (GtkCheckMenuItem *checkmenuitem,
 
 
 void
-on_show_indention_guides1_toggled      (GtkCheckMenuItem *checkmenuitem,
+on_show_line_numbers1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	app->show_indent_guide = (app->show_indent_guide) ? FALSE : TRUE;
-	utils_show_indention_guides();
-}
-
-
-void
-on_show_white_space_toggled            (GtkCheckMenuItem *checkmenuitem,
-                                        gpointer         user_data)
-{
-	app->show_white_space = (app->show_white_space) ? FALSE : TRUE;
-	utils_show_white_space();
+	app->show_linenumber_margin = (app->show_linenumber_margin) ? FALSE : TRUE;
+	utils_show_linenumber_margin();
 }
 
 
@@ -1517,11 +1499,10 @@ void
 on_line_breaking1_toggled              (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	//app->line_breaking = (app->line_breaking) ? FALSE : TRUE;
-	//utils_line_breaking();
 	if (! switch_notebook_page)
 	{
 		gint idx = document_get_cur_idx();
+		if (idx == -1 || ! doc_list[idx].is_valid) return;
 		doc_list[idx].line_breaking = ! doc_list[idx].line_breaking;
 		sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_breaking);
 	}
@@ -1529,20 +1510,17 @@ on_line_breaking1_toggled              (GtkCheckMenuItem *checkmenuitem,
 
 
 void
-on_show_line_endings1_toggled          (GtkCheckMenuItem *checkmenuitem,
+on_use_auto_indention1_toggled         (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	app->show_line_endings = (app->show_line_endings) ? FALSE : TRUE;
-	utils_show_line_endings();
+	if (! switch_notebook_page)
+	{
+		gint idx = document_get_cur_idx();
+		if (idx == -1 || ! doc_list[idx].is_valid) return;
+		doc_list[idx].use_auto_indention = ! doc_list[idx].use_auto_indention;
+	}
 }
 
-
-void
-on_xml_tag1_activate                   (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	app->auto_close_xml_tags = (app->auto_close_xml_tags) ? FALSE : TRUE;
-}
 
 void
 on_find_usage1_activate                (GtkMenuItem     *menuitem,
@@ -1623,22 +1601,6 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 	// if we are here, there was no match and we are beeping ;-)
 	utils_beep();
 	msgwin_status_add(_("Declaration or definition of \"%s()\" not found"), current_word);
-}
-
-
-void
-on_construct_completion1_activate      (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	app->auto_complete_constructs = (app->auto_complete_constructs) ? FALSE : TRUE;
-}
-
-
-void
-on_use_auto_indention1_activate        (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	app->use_auto_indention = (app->use_auto_indention) ? FALSE : TRUE;
 }
 
 
@@ -2102,7 +2064,7 @@ on_find_dialog_response                (GtkDialog *dialog,
 			return;
 		}
 		gtk_widget_hide(app->find_dialog);
-		
+
 		gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), app->search_text);
 		search_flags = (fl1 ? SCFIND_MATCHCASE : 0) |
 				(fl2 ? SCFIND_WHOLEWORD : 0) |
@@ -2159,7 +2121,7 @@ on_replace_dialog_response             (GtkDialog *dialog,
 		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->replace_dialog, "entry_find"))->child));
 		return;
 	}
-	
+
 	gtk_combo_box_prepend_text(GTK_COMBO_BOX(entry_find), find);
 	gtk_combo_box_prepend_text(GTK_COMBO_BOX(entry_replace), replace);
 
@@ -2558,7 +2520,6 @@ on_recent_file_activate                (GtkMenuItem     *menuitem,
 }
 
 
-// this option is currently disabled, until the document menu item is reordered
 void
 on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
@@ -2567,6 +2528,7 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 
 	doc_list[idx].readonly = ! doc_list[idx].readonly;
 	sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
+	utils_update_statusbar(idx);
 }
 
 
@@ -2580,4 +2542,13 @@ on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
 }
 
 
+
+
+
+void
+on_file_properties_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+
+}
 

@@ -92,6 +92,7 @@ typedef struct document
 	gboolean		 changed;
 	gboolean		 do_overwrite;
 	gboolean		 line_breaking;
+	gboolean		 use_auto_indention;
 	time_t			 last_check;	// to remember the last disk check
 	time_t			 mtime;
 } document;
@@ -119,18 +120,22 @@ typedef struct MyApp
 	gboolean			 treeview_symbol_visible;
 	gboolean			 treeview_openfiles_visible;
 	gboolean			 msgwindow_visible;
-	gboolean			 show_white_space;
-	gboolean			 use_auto_indention;
-	gboolean			 show_indent_guide;
-	//gboolean			 line_breaking;
-	gboolean			 show_line_endings;
-	gboolean			 show_markers_margin;
 	gboolean			 fullscreen;
 	gboolean			 beep_on_errors;
 	gboolean			 switch_msgwin_pages;
-	gboolean			 auto_close_xml_tags;
-	gboolean			 auto_complete_constructs;
+	gboolean			 show_markers_margin;
+	gboolean			 show_linenumber_margin;
 	gboolean			 main_window_realized;
+	// I know, it is a bit confusing, but this line breaking is globally,
+	// to change the default value at startup, I think
+	gboolean			 pref_editor_line_breaking;
+	gboolean			 pref_editor_use_auto_indention;
+
+	gboolean			 pref_editor_show_white_space;
+	gboolean			 pref_editor_show_indent_guide;
+	gboolean			 pref_editor_show_line_endings;
+	gboolean			 pref_editor_auto_close_xml_tags;
+	gboolean			 pref_editor_auto_complete_constructs;
 	gint				 pref_editor_tab_width;
 	gboolean			 pref_editor_new_line;
 	gboolean			 pref_editor_trail_space;
@@ -140,6 +145,9 @@ typedef struct MyApp
 	gboolean			 pref_main_show_search;
 	gint				 mru_length;
 	gint				 long_line_column;
+#ifdef HAVE_FIFO
+	gboolean			 ignore_fifo;
+#endif
 #ifdef HAVE_VTE
 	gchar				*lib_vte;
 #endif

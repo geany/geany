@@ -90,7 +90,7 @@ void dialogs_show_open_file ()
 			g_signal_connect ((gpointer) app->open_filesel, "delete_event",
 						G_CALLBACK(gtk_widget_hide), NULL);
 			g_signal_connect((gpointer) app->open_filesel, "response",
-						G_CALLBACK (on_file_open_dialog_response), NULL);
+						G_CALLBACK(on_file_open_dialog_response), NULL);
 
  		}
 
@@ -127,8 +127,17 @@ void dialogs_show_save_as ()
 
 	if (app->save_filesel == NULL)
 	{
-		app->save_filesel = create_filesavedialog1();
-		/* Make sure the dialog doesn't disappear behind the main window. */
+		app->save_filesel = gtk_file_chooser_dialog_new(_("Save File"), NULL,
+					GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+		gtk_window_set_modal(GTK_WINDOW(app->save_filesel), TRUE);
+		gtk_window_set_destroy_with_parent(GTK_WINDOW(app->save_filesel), TRUE);
+		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(app->save_filesel), TRUE);
+		gtk_window_set_type_hint(GTK_WINDOW(app->save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
+
+		g_signal_connect((gpointer) app->save_filesel, "delete_event", G_CALLBACK(gtk_widget_hide), NULL);
+		g_signal_connect((gpointer) app->save_filesel, "response", G_CALLBACK(on_file_save_dialog_response), NULL);
+
 		gtk_window_set_transient_for(GTK_WINDOW(app->save_filesel), GTK_WINDOW(app->window));
 	}
 
@@ -232,7 +241,7 @@ void dialogs_show_error(const gchar *text, ...)
 #ifdef GEANY_WIN32
 	MessageBox(NULL, string, _("Error"), MB_OK | MB_ICONERROR);
 #else
-	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
                                   GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, string);
 	gtk_dialog_run (GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
@@ -755,7 +764,7 @@ void dialogs_show_find(void)
 		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
 		sci_get_selected_text(doc_list[idx].sci, sel);
 	}
-		
+
 	if (app->find_dialog == NULL)
 	{
 		GtkWidget *label, *entry, *checkbox1, *checkbox2, *checkbox3, *checkbox4, *checkbox5;
@@ -844,7 +853,7 @@ void dialogs_show_replace(void)
 		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
 		sci_get_selected_text(doc_list[idx].sci, sel);
 	}
-		
+
 	if (app->replace_dialog == NULL)
 	{
 		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace, *checkbox1, *checkbox2, *checkbox3, *checkbox5, *checkbox4;

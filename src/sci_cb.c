@@ -110,7 +110,7 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 			{
 				case '\r':
 				{	// simple indentation (only for CR format)
-					if (app->use_auto_indention && (sci_get_eol_mode(sci) == SC_EOL_CR))
+					if (doc_list[idx].use_auto_indention && (sci_get_eol_mode(sci) == SC_EOL_CR))
 					{
 						sci_cb_get_indent(sci, pos, FALSE);
 						sci_add_text(sci, indent);
@@ -124,7 +124,7 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 				}
 				case '\n':
 				{	// simple indentation (for CR/LF and LF format)
-					if (app->use_auto_indention)
+					if (doc_list[idx].use_auto_indention)
 					{
 						sci_cb_get_indent(sci, pos, FALSE);
 						sci_add_text(sci, indent);
@@ -154,7 +154,7 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 				}
 				case ' ':
 				{	// if and for autocompletion
-					if (app->auto_complete_constructs) sci_cb_auto_forif(sci, idx);
+					if (app->pref_editor_auto_complete_constructs) sci_cb_auto_forif(sci, idx);
 					break;
 				}
 				case '[':
@@ -165,7 +165,7 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 				}
 				case '}':
 				{	// closing bracket handling
-					if (app->use_auto_indention) sci_cb_close_block(sci, pos - 1);
+					if (doc_list[idx].use_auto_indention) sci_cb_close_block(sci, pos - 1);
 					break;
 				}
 				default: sci_cb_start_auto_complete(sci, pos);
@@ -446,8 +446,8 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint idx)
 		style == SCE_HPHP_COMMENTLINE ||
 		style == SCE_HPHP_COMMENT)) return;
 
-	// gets the indention
-	if (app->use_auto_indention) sci_cb_get_indent(sci, pos, TRUE);
+	// get the indention
+	if (doc_list[idx].use_auto_indention) sci_cb_get_indent(sci, pos, TRUE);
 	eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
 	sci_get_text_range(sci, pos - 7, pos - 1, buf);
 	if (! strncmp("if", buf + 4, 2))
@@ -553,7 +553,7 @@ gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch)
 
 	// If the user has turned us off, quit now.
 	// This may make sense only in certain languages
-	if (! app->auto_close_xml_tags || (lexer != SCLEX_HTML && lexer != SCLEX_XML))
+	if (! app->pref_editor_auto_close_xml_tags || (lexer != SCLEX_HTML && lexer != SCLEX_XML))
 		return FALSE;
 
 

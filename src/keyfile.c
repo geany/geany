@@ -83,16 +83,17 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "treeview_symbol_visible", app->treeview_symbol_visible);
 	g_key_file_set_boolean(config, PACKAGE, "treeview_openfiles_visible", app->treeview_openfiles_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", app->msgwindow_visible);
-	g_key_file_set_boolean(config, PACKAGE, "use_auto_indention", app->use_auto_indention);
-	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", app->show_indent_guide);
-	g_key_file_set_boolean(config, PACKAGE, "show_white_space", app->show_white_space);
+	g_key_file_set_boolean(config, PACKAGE, "use_auto_indention", app->pref_editor_use_auto_indention);
+	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", app->pref_editor_show_indent_guide);
+	g_key_file_set_boolean(config, PACKAGE, "show_white_space", app->pref_editor_show_white_space);
 	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", app->show_markers_margin);
-	//g_key_file_set_boolean(config, PACKAGE, "line_breaking", app->line_breaking);
-	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", app->show_line_endings);
+	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", app->show_linenumber_margin);
+	g_key_file_set_boolean(config, PACKAGE, "line_breaking", app->pref_editor_line_breaking);
+	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", app->pref_editor_show_line_endings);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", app->fullscreen);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", app->switch_msgwin_pages);
-	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->auto_close_xml_tags);
-	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->auto_complete_constructs);
+	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->pref_editor_auto_close_xml_tags);
+	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->pref_editor_auto_complete_constructs);
 #ifdef HAVE_VTE
 	g_key_file_set_comment(config, PACKAGE, "terminal_settings",
 			_(" VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on keystroke;scroll on output"), NULL);
@@ -210,16 +211,17 @@ gboolean configuration_load(void)
 	app->treeview_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_symbol_visible", TRUE);
 	app->treeview_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_openfiles_visible", TRUE);
 	app->msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
-	app->use_auto_indention = utils_get_setting_boolean(config, PACKAGE, "use_auto_indention", TRUE);
-	app->show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
-	app->show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
+	app->pref_editor_use_auto_indention = utils_get_setting_boolean(config, PACKAGE, "use_auto_indention", TRUE);
+	app->pref_editor_show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
+	app->pref_editor_show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
 	app->show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
-	app->show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
-	//app->line_breaking = utils_get_setting_boolean(config, PACKAGE, "line_breaking", TRUE);
+	app->show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
+	app->pref_editor_show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
+	app->pref_editor_line_breaking = utils_get_setting_boolean(config, PACKAGE, "line_breaking", TRUE);
 	app->fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	app->switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", TRUE);
-	app->auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
-	app->auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
+	app->pref_editor_auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
+	app->pref_editor_auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
 	app->editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", "Courier New 9");
 	app->tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", "Cursor 8");
 	app->msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", "Cursor 8");
@@ -414,3 +416,18 @@ gboolean configuration_open_files(void)
 	return ret;
 }
 
+
+static gboolean read_filetype_extensions(void)
+{
+	gboolean config_exists;
+	guint i, geo_len;
+	gint *geo = g_malloc(sizeof(gint) * 4);
+	gsize len = 0;
+	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "file", NULL);
+	gchar *entry = g_malloc(14);
+	gchar *tmp_string, *tmp_string2;
+	GKeyFile *config = g_key_file_new();
+	GError *error = NULL;
+
+	config_exists = g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
+}
