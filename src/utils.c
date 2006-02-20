@@ -95,7 +95,7 @@ void utils_update_statusbar(gint idx)
 
 	if (idx == -1) idx = document_get_cur_idx();
 
-	if (idx > -1 && IS_SCINTILLA(doc_list[idx].sci))
+	if (idx >= 0 && doc_list[idx].is_valid)
 	{
 		if (doc_list[idx].file_type->id == GEANY_FILETYPES_JAVA ||
 			doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
@@ -523,26 +523,18 @@ GdkPixbuf *utils_new_pixbuf_from_inline(gint img, gboolean small_img)
 
 void utils_update_toolbar_icons(GtkIconSize size)
 {
-	GtkWidget *button_image, *widget, *oldwidget;
+	GtkWidget *button_image = NULL;
+	GtkWidget *widget = NULL;
+	GtkWidget *oldwidget = NULL;
 
 	// destroy old widget
 	widget = lookup_widget(app->window, "toolbutton22");
 	oldwidget = gtk_tool_button_get_icon_widget(GTK_TOOL_BUTTON(widget));
-	if (GTK_IS_WIDGET(oldwidget)) gtk_widget_destroy(oldwidget);
+	if (oldwidget && GTK_IS_WIDGET(oldwidget)) gtk_widget_destroy(oldwidget);
 	// create new widget
 	button_image = utils_new_image_from_inline(GEANY_IMAGE_SAVE_ALL, FALSE);
 	gtk_widget_show(button_image);
 	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(widget), button_image);
-
-	// destroy old widget
-	oldwidget = NULL;
-	widget = lookup_widget(app->window, "toolbutton_new");
-	g_object_get(G_OBJECT(widget), "image", &oldwidget, NULL);
-	if (GTK_IS_WIDGET(oldwidget)) gtk_widget_destroy(oldwidget);
-	// create new widget
-	button_image = utils_new_image_from_inline(GEANY_IMAGE_NEW_ARROW, FALSE);
-	gtk_widget_show(button_image);
-	g_object_set(G_OBJECT(widget), "image", button_image, NULL);
 
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(app->toolbar), size);
 }
@@ -992,12 +984,12 @@ gboolean utils_check_disk_status(gint idx, const gboolean force)
 	time_t t;
 	gchar *buff, *locale_filename;
 
-	if (idx == -1) return FALSE;
-
+	if (idx == -1 || doc_list[idx].file_name == NULL) return FALSE;
+	
 	t = time(NULL);
 
 	if (doc_list[idx].last_check > (t - 30)) return TRUE;
-
+	
 	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
 	if (stat(locale_filename, &st) != 0) return TRUE;
 
