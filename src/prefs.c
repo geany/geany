@@ -1,7 +1,7 @@
 /*
  *      prefs.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include "utils.h"
 #include "msgwindow.h"
 #include "sciwrappers.h"
+#include "keyfile.h"
 #ifdef HAVE_VTE
 # include "vte.h"
 #endif
@@ -383,6 +384,8 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 			old_long_line_color = g_strdup(app->long_line_color);
 		}
 
+		// store all settings
+		configuration_save();
 	}
 	gtk_widget_hide(GTK_WIDGET(dialog));
 }
