@@ -372,7 +372,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	gchar *utf8_filename = NULL;
 	gchar *locale_filename = NULL;
 	GError *err = NULL;
-#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
+#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
 	gint fd;
 	void *map;
 #else
@@ -419,7 +419,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		g_free(locale_filename);
 		return;
 	}
-#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
+#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
 	if ((fd = open(locale_filename, O_RDONLY)) < 0)
 	{
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
@@ -427,7 +427,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		g_free(locale_filename);
 		return;
 	}
-	if ((map = mmap (0, st.st_size, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED)
+	if ((map = mmap(0, st.st_size, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED)
 	{
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
 		g_free(utf8_filename);
@@ -437,7 +437,8 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	size = (gint)st.st_size;
 #else
 	// use GLib function to load file on Win32 systems and those w/o mmap()
-	if (! g_file_get_contents(utf8_filename, &map, NULL, &err) ){
+	if (! g_file_get_contents(utf8_filename, &map, NULL, &err))
+	{
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, err->message);
 		g_free(utf8_filename);
 		g_free(locale_filename);
@@ -461,7 +462,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			{
 				msgwin_status_add(_("The file does not look like a text file or the file encoding is not supported."));
 				utils_beep();
-#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
+#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
 				close(fd);
 				munmap(map, st.st_size);
 #else
@@ -507,17 +508,16 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		doc_list[idx].readonly = readonly;
 		sci_set_readonly(doc_list[idx].sci, readonly);
 
-
 		document_set_filetype(idx, use_ft);
 		utils_build_show_hide(idx);
 		msgwin_status_add(_("File %s opened(%d%s)."),
 				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
 				(readonly) ? _(", read-only") : "");
 	}
-	//utils_update_tag_list(idx, TRUE);
+	utils_update_tag_list(idx, TRUE);
 	document_set_text_changed(idx);
 
-#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP)
+#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
 	close(fd);
 	munmap(map, st.st_size);
 #else
