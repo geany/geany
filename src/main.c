@@ -50,9 +50,11 @@
 #endif
 
 
+#ifdef HAVE_FIFO
 static gchar fifo_name[512];
-static gboolean debug_mode = FALSE;
 static gboolean ignore_fifo = FALSE;
+#endif
+static gboolean debug_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_vte = FALSE;
 static gboolean show_version = FALSE;
@@ -64,7 +66,9 @@ static GOptionEntry entries[] =
 {
 	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, "runs in debug mode (means being verbose)", NULL },
 	{ "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, "don't load auto completion data (see documentation)", NULL },
+#ifdef HAVE_FIFO
 	{ "no-pipe", 'p', 0, G_OPTION_ARG_NONE, &ignore_fifo, "don't open files in a running instance, force opening a new instance", NULL },
+#endif
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, "use an alternate configuration directory", NULL },
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, "don't load terminal support", NULL },
 #ifdef HAVE_VTE
@@ -160,16 +164,6 @@ static void apply_settings(void)
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_linenumber_margin1")), FALSE);
 		app->show_linenumber_margin = FALSE;
 	}
-	if (! app->pref_editor_use_auto_indention)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_use_auto_indention1")), FALSE);
-		app->pref_editor_use_auto_indention = FALSE;
-	}
-	if (! app->pref_editor_line_breaking)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_breaking1")), FALSE);
-		app->pref_editor_line_breaking = FALSE;
-	}
 
 	// interprets the saved window geometry
 	if (app->pref_main_save_winpos && app->geometry[0] != -1)
@@ -184,6 +178,14 @@ static void apply_settings(void)
 		gtk_widget_hide(lookup_widget(app->window, "toolbutton18"));
 		gtk_widget_hide(lookup_widget(app->window, "separatortoolitem4"));
 	}
+
+	g_object_set(G_OBJECT(lookup_widget(app->window, "menu_line_breaking1")), "active",
+				GINT_TO_POINTER(app->pref_editor_line_breaking), NULL);
+	g_object_set(G_OBJECT(lookup_widget(app->window, "menu_use_auto_indention1")), "active",
+				GINT_TO_POINTER(app->pref_editor_use_auto_indention), NULL);
+
+	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
+			lookup_widget(app->window, "menutoolbutton1")), app->new_file_menu);
 }
 
 
@@ -284,7 +286,22 @@ static gint main_init(void)
 	app->sensitive_buttons[12] = lookup_widget(app->window, "toolbutton23");
 	app->sensitive_buttons[13] = lookup_widget(app->window, "menu_count_words1");
 	app->sensitive_buttons[14] = lookup_widget(app->window, "menu_build1");
-	app->sensitive_buttons[15] = lookup_widget(app->window, "menu_add_changelog_entry1");
+	app->sensitive_buttons[15] = lookup_widget(app->window, "add_comments1");
+	app->sensitive_buttons[16] = lookup_widget(app->window, "find1");
+	app->sensitive_buttons[17] = lookup_widget(app->window, "find_next1");
+	app->sensitive_buttons[18] = lookup_widget(app->window, "replace1");
+	app->sensitive_buttons[19] = lookup_widget(app->window, "menu_paste1");
+	app->sensitive_buttons[20] = lookup_widget(app->window, "menu_undo2");
+	app->sensitive_buttons[21] = lookup_widget(app->window, "preferences2");
+	app->sensitive_buttons[22] = lookup_widget(app->window, "revert1");
+	app->sensitive_buttons[23] = lookup_widget(app->window, "menu_item4");
+	app->sensitive_buttons[24] = lookup_widget(app->window, "menu_markers_margin1");
+	app->sensitive_buttons[25] = lookup_widget(app->window, "menu_linenumber_margin1");
+	app->sensitive_buttons[26] = lookup_widget(app->window, "menu_choose_color1");
+	app->sensitive_buttons[27] = lookup_widget(app->window, "menu_zoom_in1");
+	app->sensitive_buttons[28] = lookup_widget(app->window, "menu_zoom_out1");
+	app->sensitive_buttons[29] = lookup_widget(app->window, "normal_size1");
+	app->sensitive_buttons[30] = lookup_widget(app->window, "toolbutton24");
 	app->redo_items[0] = lookup_widget(app->popup_menu, "redo1");
 	app->redo_items[1] = lookup_widget(app->window, "menu_redo2");
 	app->undo_items[0] = lookup_widget(app->popup_menu, "undo1");
@@ -297,9 +314,9 @@ static gint main_init(void)
 }
 
 
+#ifdef HAVE_FIFO
 static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer data)
 {
-#ifdef HAVE_FIFO
 	GIOStatus status;
 	gchar *read_data = NULL;
 	gsize len = 0;
@@ -319,19 +336,16 @@ static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer d
 
 	g_free(read_data);
 
-#endif
 	return TRUE;
 }
 
 
 static void write_fifo(gint argc, gchar **argv)
 {
-#ifdef HAVE_FIFO
 	GIOChannel *ioc = g_io_channel_unix_new(open(fifo_name, O_WRONLY));
 	gint i;
 	for(i = 1; i < argc; i++)
 	{
-		geany_debug(argv[i]);
 		if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 		{
 			g_io_channel_write_chars(ioc, argv[i], -1, NULL, NULL);
@@ -339,7 +353,6 @@ static void write_fifo(gint argc, gchar **argv)
 		}
 	}
 	g_io_channel_shutdown(ioc, TRUE, NULL);
-#endif
 }
 
 
@@ -347,7 +360,6 @@ static void write_fifo(gint argc, gchar **argv)
  * to submit filenames and possibly other things */
 static void create_fifo(gint argc, gchar **argv)
 {
-#ifdef HAVE_FIFO
 	struct stat st;
 	gchar *tmp;
 	GIOChannel *ioc;
@@ -370,14 +382,16 @@ static void create_fifo(gint argc, gchar **argv)
 		{
 			geany_debug("using running instance of Geany");
 			write_fifo(argc, argv);
+			exit(0);
 		}
 		else
 		{
-			gdk_beep();
-			printf(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running.\nIf Geany is not running, please delete the file %s and start Geany again.\n"), fifo_name);
-			dialogs_show_error(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running.\nIf Geany is not running, please delete the file %s and start Geany again.\n"), fifo_name);
+			if (dialogs_show_fifo_error(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running. If you know Geany is not running, you can delete the file and start Geany anyway.\nDelete the named pipe and start Geany?")))
+			{
+				unlink(fifo_name);
+			}
+			else exit(0);
 		}
-		exit(0);
 	}
 
 	// there is no Geany running, create fifo and start as usual, so we are a kind of server
@@ -390,8 +404,8 @@ static void create_fifo(gint argc, gchar **argv)
 
 	ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
 	g_io_add_watch(ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
-#endif
 }
+#endif
 
 
 gint main(gint argc, gchar **argv)
@@ -430,9 +444,11 @@ gint main(gint argc, gchar **argv)
 	}
 
 	signal(SIGTERM, signal_cb);
-	signal(SIGUSR1, signal_cb);
+	//signal(SIGUSR1, signal_cb);
 
+#ifdef HAVE_FIFO
 	if (! ignore_fifo) create_fifo(argc, argv);
+#endif
 
 	gtk_init(&argc, &argv);
 
