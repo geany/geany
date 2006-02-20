@@ -65,8 +65,6 @@ static gchar current_word[128];
 // represents the state while closing all tabs(used to prevent notebook switch page signals)
 static gboolean closing_all = FALSE;
 
-static gboolean button_released = TRUE;
-
 // represents the state at switching a notebook page, to update check menu items in document menu
 static gboolean switch_notebook_page = FALSE;
 
@@ -88,10 +86,10 @@ void signal_cb(gint sig)
 	{
 		on_exit_clicked(NULL, NULL);
 	}
-	else if (sig == SIGUSR1)
+/*	else if (sig == SIGUSR1)
 	{
 #define BUFLEN 512
-/*		gint fd;
+		gint fd;
 		gchar *buffer = g_malloc0(BUFLEN);
 
 		geany_debug("got SIGUSR1 signal, try to read from named pipe");
@@ -106,18 +104,23 @@ void signal_cb(gint sig)
 
 		close(fd);
 		g_free(buffer);
-*/	}
+	}
+*/
 }
 
 
 // exit function, for very early exit(quit by non-existing configuration dir)
 gint destroyapp_early(void)
 {
-	gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
-
-	// delete the fifo early, because we don't accept new files anymore
-	unlink(fifo);
-	g_free(fifo);
+#ifdef HAVE_FIFO
+	if (! app->ignore_fifo)
+	{
+		gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
+		// delete the fifo early, because we don't accept new files anymore
+		unlink(fifo);
+		g_free(fifo);
+	}
+#endif
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_queue_free(app->recent_queue);
@@ -767,6 +770,12 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		gtk_check_menu_item_set_active(
 				GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_breaking1")),
 				doc_list[idx].line_breaking);
+		gtk_check_menu_item_set_active(
+				GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_use_auto_indention1")),
+				doc_list[idx].use_auto_indention);
+		gtk_check_menu_item_set_active(
+				GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "set_file_readonly1")),
+				doc_list[idx].readonly);
 
 		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 
@@ -972,13 +981,15 @@ on_color_ok_button_clicked             (GtkButton       *button,
 	gint idx = document_get_cur_idx();
 	gchar *hex;
 
+	gtk_widget_hide(app->open_colorsel);
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	
 	gtk_color_selection_get_current_color(
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &color);
 
 	hex = utils_get_hex_from_color(&color);
 	sci_add_text(doc_list[idx].sci, hex);
 	g_free(hex);
-	gtk_widget_hide(app->open_colorsel);
 }
 
 
@@ -1305,6 +1316,7 @@ on_crlf_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_convert_eols(doc_list[idx].sci, SC_EOL_CRLF);
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
 }
@@ -1315,6 +1327,7 @@ on_lf_activate                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_convert_eols(doc_list[idx].sci, SC_EOL_LF);
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
 }
@@ -1325,6 +1338,7 @@ on_cr_activate                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_convert_eols(doc_list[idx].sci, SC_EOL_CR);
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CR);
 }
@@ -1336,6 +1350,7 @@ on_replace_tabs_activate               (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	utils_replace_tabs(idx);
 }
 
@@ -1505,6 +1520,21 @@ on_line_breaking1_toggled              (GtkCheckMenuItem *checkmenuitem,
 		if (idx == -1 || ! doc_list[idx].is_valid) return;
 		doc_list[idx].line_breaking = ! doc_list[idx].line_breaking;
 		sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_breaking);
+	}
+}
+
+
+void
+on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data)
+{
+	if (! switch_notebook_page)
+	{
+		gint idx = document_get_cur_idx();
+		if (idx == -1 || ! doc_list[idx].is_valid) return;
+		doc_list[idx].readonly = ! doc_list[idx].readonly;
+		sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
+		utils_update_statusbar(idx);
 	}
 }
 
@@ -2159,39 +2189,10 @@ on_replace_entry_activate              (GtkEntry        *entry,
 
 
 void
-on_toolbutton_new_clicked              (GtkButton       *button,
+on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
 	document_new_file(NULL);
-}
-
-
-void
-on_toolbutton_new_pressed              (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	button_released = FALSE;
-	g_timeout_add(1000, show_new_file_menu, NULL);
-}
-
-
-void
-on_toolbutton_new_released             (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	button_released = TRUE;
-}
-
-
-gint
-show_new_file_menu                     (gpointer         data)
-{
-	if (! button_released)
-	{
-		gtk_menu_popup(GTK_MENU(app->new_file_menu), NULL, NULL, NULL, NULL, 0, gtk_get_current_event_time());
-		button_released = TRUE;
-	}
-	return 0;
 }
 
 
@@ -2521,18 +2522,6 @@ on_recent_file_activate                (GtkMenuItem     *menuitem,
 
 
 void
-on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
-
-	doc_list[idx].readonly = ! doc_list[idx].readonly;
-	sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
-	utils_update_statusbar(idx);
-}
-
-
-void
 on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
                                         gpointer         user_data)
 {
@@ -2549,6 +2538,9 @@ void
 on_file_properties_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-
+	gint idx = document_get_cur_idx();
+	dialogs_show_file_properties(idx);
 }
+
+
 

@@ -420,19 +420,8 @@ on_new_with_template                   (GtkMenuItem     *menuitem,
 
 
 void
-on_toolbutton_new_clicked              (GtkButton       *button,
+on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
-
-void
-on_toolbutton_new_pressed              (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-on_toolbutton_new_released             (GtkButton       *button,
-                                        gpointer         user_data);
-gint
-show_new_file_menu                     (gpointer         data);
-
 
 void
 on_go_to_line_activate                 (GtkMenuItem     *menuitem,
@@ -570,3 +559,5 @@ on_show_line_numbers1_toggled          (GtkCheckMenuItem *checkmenuitem,
 void
 on_use_auto_indention1_toggled         (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
+
+
