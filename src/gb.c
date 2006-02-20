@@ -54,16 +54,16 @@ gint random_fd;
 gboolean is_running;
 static GdkPixbuf **icons;
 
-gint gb_destroyapp (GtkWidget *widget, gpointer gdata);
-gint destroydialog (GtkWidget *widget);
-void update_labels(GtkWidget *window, gint init, gint won);
-void on_button1_clicked(GtkButton *button, gpointer user_data);
-void on_button4_clicked(GtkButton *button, gpointer user_data);
-void on_button5_clicked(GtkButton *button, gpointer user_data);
+static gint gb_destroyapp (GtkWidget *widget, gpointer gdata);
+static gint destroydialog (GtkWidget *widget);
+static void update_labels(GtkWidget *window, gint init, gint won);
+static void on_button1_clicked(GtkButton *button, gpointer user_data);
+static void on_button4_clicked(GtkButton *button, gpointer user_data);
+static void on_button5_clicked(GtkButton *button, gpointer user_data);
 
 
 
-void create_window(void)
+static void create_window(void)
 {
 	GtkWidget *vbox1;
 	GtkWidget *hbox1;
@@ -151,7 +151,7 @@ void create_window(void)
 	gtk_widget_grab_focus(button4);
 }
 
-GtkWidget *create_help_dialog(void)
+static GtkWidget *create_help_dialog(void)
 {
 	GtkWidget *help_dialog;
 	GtkWidget *dialog_vbox1;
@@ -203,30 +203,30 @@ GtkWidget *create_help_dialog(void)
 
 
 // zentrale exit-Funktion für den Dialog
-gint destroydialog(GtkWidget *widget)
+static gint destroydialog(GtkWidget *widget)
 {
-	//g_print ("Quitting...\n");
 	gtk_widget_destroy(widget);
 	return (FALSE);
 }
 
 
-void initialise_random_numbers(void)
+static void initialise_random_numbers(void)
 {
-#ifdef HAVE_FCNTL_H
+#if defined(HAVE_FCNTL_H) && (defined(HAVE_DEVURANDOM) || defined(HAVE_DEVRANDOM))
 # ifdef HAVE_DEVURANDOM
 	random_fd = open("/dev/urandom", O_NONBLOCK | O_RDONLY);
 # elif HAVE_DEVRANDOM
 	random_fd = open("/dev/random", O_NONBLOCK | O_RDONLY);
 # endif
-#endif
+#else
     srand(time(NULL) * getpid());
+#endif
 }
 
 
-gint random_number(gint max)
+static gint random_number(gint max)
 {
-#ifdef HAVE_FCNTL_H
+#if defined(HAVE_FCNTL_H) && (defined(HAVE_DEVURANDOM) || defined(HAVE_DEVRANDOM))
     if (max <= 255)
 	{
 		unsigned char byte;
@@ -238,19 +238,18 @@ gint random_number(gint max)
     }
     return 0;
 #else
-	return (((unsigned short) rand ()) % max);
+	return (((unsigned short) rand()) % max);
 #endif
 }
 
 
-void on_button5_clicked(GtkButton *button, gpointer user_data)
+static void on_button5_clicked(GtkButton *button, gpointer user_data)
 {
     gb_destroyapp(GTK_WIDGET(button), user_data);
 }
 
 
-// große, böse Vergleichsfunktion
-gint get_points(unsigned short a, unsigned short b, unsigned short c)
+static gint get_points(unsigned short a, unsigned short b, unsigned short c)
 {
 	if (a == b && b == c)
 	{
@@ -270,7 +269,7 @@ gint get_points(unsigned short a, unsigned short b, unsigned short c)
 }
 
 
-void on_button1_clicked(GtkButton *button, gpointer user_data)
+static void on_button1_clicked(GtkButton *button, gpointer user_data)
 {
     unsigned short erg_a, erg_b, erg_c, i, l, m, n, loops;
 
@@ -330,7 +329,7 @@ void on_button1_clicked(GtkButton *button, gpointer user_data)
 
 
 // Hilfe
-void on_button4_clicked(GtkButton *button, gpointer user_data)
+static void on_button4_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkWidget *dialog = create_help_dialog();
 	GtkTextBuffer *buffer;
@@ -346,7 +345,7 @@ void on_button4_clicked(GtkButton *button, gpointer user_data)
 }
 
 
-void init_strings(void)
+static void init_strings(void)
 {
 	help_text = "GTK-Bandit - the one-armed bandit\n\nYour job in this game is to pull the arm of the bandit and then the figures begins to roll. Now hope that the rolls stop with the same figures and you will get 100 points. If you have anyhow two equal figures, you will get 50 points. Otherwise you won't get anything.\n";
 
@@ -357,7 +356,7 @@ void init_strings(void)
 }
 
 
-void update_labels(GtkWidget *window, gint init, gint won)
+static void update_labels(GtkWidget *window, gint init, gint won)
 {
 	gchar pts[50];
 
@@ -1232,7 +1231,7 @@ static const GdkPixdata bdown = {
 };
 
 
-void load_images(void)
+static void load_images(void)
 {
 	icons = g_new(GdkPixbuf*, 13);
 	icons[0] = gdk_pixbuf_from_pixdata(&pic1, FALSE, NULL);
@@ -1251,16 +1250,18 @@ void load_images(void)
 }
 
 
-void init_images(void)
+static void init_images(void)
 {
 	gint i;
 
 	initialise_random_numbers();
-	i = random_number(MAX_PICS) + 1;
 
 	// Startbilder festlegen
+	i = random_number(MAX_PICS) + 1;
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image1), icons[i]);
+	i = random_number(MAX_PICS) + 1;
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image2), icons[i]);
+	i = random_number(MAX_PICS) + 1;
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image3), icons[i]);
 }
 
