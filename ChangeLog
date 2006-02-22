@@ -1,3 +1,38 @@
+2006-02-21  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c: added utils_make_human_readable_str()
+ * src/dialogs.c: added file properties dialog
+ * geany.glade, src/interface.c, src/callbacks.c, src/dialogs.c:
+   moved font selection dialog from glade code to dialogs.c, removed
+   unnecessary callback functions for delete_event's
+
+
+2006-02-20  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: fixed bug when using color selector and no file is
+                    open, only fixed on some other actions
+ * src/geany.h, src/main.c: disable menu functions of the edit menu
+                            when no files are open
+ * src/main.c: added the possibility to delete an existing fifo in the
+               case, that Geany crashed previously
+
+
+2006-02-17  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/gb.c: fixed bug which caused always same figures under Win32,
+             some other code cleanups and changes
+ * geany.glade, src/interface.c, src/callbacks.c, src/main.c:
+   replaced the New toolbar button by a menu button, so it works also
+   under Win32
+ * src/prefs.c: all settings are now saved by pressing OK in the
+                settings dialog, up to now it was only done at exiting
+
+
+2006-02-16  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/main.c, callbacks.c, document.c: fixed some line breaking issues
+
+
 2006-02-14  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * Makefile.am, doc/Makefile.am: improved "make uninstall" of Geany

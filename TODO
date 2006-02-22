@@ -6,7 +6,10 @@ TODO List:
 	Geany 0.6 or later:
 
 	O vte.c:265
-	o tag list reload at file reload
+	o create filetype specific menus, read templates from filetypes.*,
+	  use XML instead og key-value-format
+	o template rework
+	o improve toolbar tooltips translation
 	o fix a freeze at switching between filetypes with files in
 	  ISO-8859-x encoding (reported by Jörg Sommer)
 	o fix: "attempt to put segment in horiz list twice" warning
@@ -18,8 +21,6 @@ TODO List:
 	o inverting highlighting by selection
 	o put default filetype extensions in the config file, read them in a GList
 	o src/sci_cb.c: improve auto completion(include local tags)
-	o property dialog in File->Properties like
-	  http://developer.gnome.org/projects/gup/hig/2.0/images/property-window.png
 	o extend use of doc_list[].is_valid
 	o (PHP syntax check)
 	o (command line option -e (editor mode))
