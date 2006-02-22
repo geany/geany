@@ -20,7 +20,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <accessibility>
     <atkproperty name="AtkObject::accessible_name" translatable="yes">Geany</atkproperty>
   </accessibility>
@@ -34,8 +33,6 @@
       <child>
 	<widget class="GtkMenuBar" id="menubar1">
 	  <property name="visible">True</property>
-	  <property name="pack_direction">GTK_PACK_DIRECTION_LTR</property>
-	  <property name="child_pack_direction">GTK_PACK_DIRECTION_LTR</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="menuitem1">
@@ -62,7 +59,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image562">
+			<widget class="GtkImage" id="image578">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -136,7 +133,7 @@
 		      <accelerator key="s" modifiers="GDK_CONTROL_MASK | GDK_SHIFT_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image563">
+			<widget class="GtkImage" id="image579">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -159,9 +156,15 @@
 		  </child>
 
 		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="separator21">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
 		    <widget class="GtkImageMenuItem" id="preferences2">
 		      <property name="visible">True</property>
-		      <property name="label">gtk-preferences</property>
+		      <property name="label">gtk-properties</property>
 		      <property name="use_stock">True</property>
 		      <signal name="activate" handler="on_file_properties_activate" last_modification_time="Sun, 12 Feb 2006 21:13:09 GMT"/>
 		    </widget>
@@ -192,7 +195,7 @@
 		      <accelerator key="d" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image564">
+			<widget class="GtkImage" id="image580">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -334,7 +337,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image565">
+			<widget class="GtkImage" id="image581">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -366,7 +369,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image566">
+			<widget class="GtkImage" id="image582">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -505,7 +508,7 @@
 		      <accelerator key="F3" modifiers="0" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image567">
+			<widget class="GtkImage" id="image583">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find</property>
 			  <property name="icon_size">1</property>
@@ -526,7 +529,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image568">
+			<widget class="GtkImage" id="image584">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -576,7 +579,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image569">
+			<widget class="GtkImage" id="image585">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -598,7 +601,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image570">
+			<widget class="GtkImage" id="image586">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -916,25 +919,14 @@
 	  <property name="show_arrow">True</property>
 
 	  <child>
-	    <widget class="GtkToolItem" id="toolitem12">
+	    <widget class="GtkMenuToolButton" id="menutoolbutton1">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Create a new file</property>
+	      <property name="stock_id">gtk-new</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
-
-	      <child>
-		<widget class="GtkButton" id="toolbutton_new">
-		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes"></property>
-		  <property name="use_underline">True</property>
-		  <property name="relief">GTK_RELIEF_NONE</property>
-		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_toolbutton_new_clicked" last_modification_time="Wed, 09 Nov 2005 21:42:00 GMT"/>
-		  <signal name="pressed" handler="on_toolbutton_new_pressed" last_modification_time="Wed, 09 Nov 2005 22:34:51 GMT"/>
-		  <signal name="released" handler="on_toolbutton_new_released" last_modification_time="Wed, 09 Nov 2005 22:34:55 GMT"/>
-		</widget>
-	      </child>
+	      <signal name="clicked" handler="on_toolbutton_new_clicked" last_modification_time="Fri, 17 Feb 2006 17:37:56 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -1683,71 +1675,6 @@
   </child>
 </widget>
 
-<widget class="GtkFontSelectionDialog" id="fontselectiondialog1">
-  <property name="border_width">4</property>
-  <property name="visible">True</property>
-  <property name="title" translatable="yes">Choose font</property>
-  <property name="type">GTK_WINDOW_TOPLEVEL</property>
-  <property name="window_position">GTK_WIN_POS_NONE</property>
-  <property name="modal">True</property>
-  <property name="resizable">True</property>
-  <property name="destroy_with_parent">True</property>
-  <property name="decorated">True</property>
-  <property name="skip_taskbar_hint">True</property>
-  <property name="skip_pager_hint">False</property>
-  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
-  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
-  <signal name="delete_event" handler="on_fontselectiondialog1_delete_event" last_modification_time="Mon, 25 Apr 2005 09:40:45 GMT"/>
-
-  <child internal-child="cancel_button">
-    <widget class="GtkButton" id="font_cancel_button">
-      <property name="visible">True</property>
-      <property name="can_default">True</property>
-      <property name="can_focus">True</property>
-      <property name="relief">GTK_RELIEF_NORMAL</property>
-      <property name="focus_on_click">True</property>
-      <signal name="clicked" handler="on_font_cancel_button_clicked" last_modification_time="Sun, 24 Apr 2005 20:11:59 GMT"/>
-    </widget>
-  </child>
-
-  <child internal-child="apply_button">
-    <widget class="GtkButton" id="font_apply_button">
-      <property name="visible">True</property>
-      <property name="can_default">True</property>
-      <property name="can_focus">True</property>
-      <property name="relief">GTK_RELIEF_NORMAL</property>
-      <property name="focus_on_click">True</property>
-      <signal name="clicked" handler="on_font_apply_button_clicked" last_modification_time="Sun, 24 Apr 2005 20:11:53 GMT"/>
-    </widget>
-  </child>
-
-  <child internal-child="ok_button">
-    <widget class="GtkButton" id="font_ok_button">
-      <property name="visible">True</property>
-      <property name="can_default">True</property>
-      <property name="can_focus">True</property>
-      <property name="relief">GTK_RELIEF_NORMAL</property>
-      <property name="focus_on_click">True</property>
-      <signal name="clicked" handler="on_font_ok_button_clicked" last_modification_time="Sun, 24 Apr 2005 20:11:46 GMT"/>
-    </widget>
-  </child>
-
-  <child internal-child="font_selection">
-    <widget class="GtkFontSelection" id="font_selection1">
-      <property name="border_width">4</property>
-      <property name="visible">True</property>
-      <property name="preview_text" translatable="yes">abcdefghijk ABCDEFGHIJK</property>
-    </widget>
-    <packing>
-      <property name="padding">0</property>
-      <property name="expand">True</property>
-      <property name="fill">True</property>
-    </packing>
-  </child>
-</widget>
-
 <widget class="GtkMenu" id="toolbar_popup_menu1">
 
   <child>
@@ -2168,7 +2095,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
