@@ -117,9 +117,8 @@ void
 on_color_cancel_button_clicked         (GtkButton       *button,
                                         gpointer         user_data);
 
-gboolean
-on_color_delete_event                  (GtkWidget       *widget,
-                                        GdkEvent        *event,
+void
+on_font_cancel_button_clicked         (GtkButton       *button,
                                         gpointer         user_data);
 
 void
@@ -135,16 +134,7 @@ on_font_ok_button_clicked              (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-on_font_cancel_button_clicked          (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
 on_font_apply_button_clicked           (GtkButton       *button,
-                                        gpointer         user_data);
-
-gboolean
-on_fontselectiondialog1_delete_event   (GtkWidget       *widget,
-                                        GdkEvent        *event,
                                         gpointer         user_data);
 
 gboolean

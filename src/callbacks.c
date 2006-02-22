@@ -941,14 +941,6 @@ on_font_ok_button_clicked              (GtkButton       *button,
 
 
 void
-on_font_cancel_button_clicked          (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	gtk_widget_hide(app->open_fontsel);
-}
-
-
-void
 on_font_apply_button_clicked           (GtkButton       *button,
                                         gpointer         user_data)
 {
@@ -960,19 +952,25 @@ on_font_apply_button_clicked           (GtkButton       *button,
 }
 
 
-gboolean
-on_fontselectiondialog1_delete_event   (GtkWidget       *widget,
-                                        GdkEvent        *event,
+void
+on_font_cancel_button_clicked         (GtkButton       *button,
                                         gpointer         user_data)
 {
 	gtk_widget_hide(app->open_fontsel);
-	return TRUE;
 }
 
 
 /*
  * color dialog callbacks
  */
+void
+on_color_cancel_button_clicked         (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	gtk_widget_hide(app->open_colorsel);
+}
+
+
 void
 on_color_ok_button_clicked             (GtkButton       *button,
                                         gpointer         user_data)
@@ -990,24 +988,6 @@ on_color_ok_button_clicked             (GtkButton       *button,
 	hex = utils_get_hex_from_color(&color);
 	sci_add_text(doc_list[idx].sci, hex);
 	g_free(hex);
-}
-
-
-void
-on_color_cancel_button_clicked         (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	gtk_widget_hide(app->open_colorsel);
-}
-
-
-gboolean
-on_color_delete_event                  (GtkWidget       *widget,
-                                        GdkEvent        *event,
-                                        gpointer         user_data)
-{
-	gtk_widget_hide(app->open_colorsel);
-	return TRUE;
 }
 
 
