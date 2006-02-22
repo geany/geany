@@ -203,4 +203,7 @@ gchar *utils_get_current_file_dir();
 
 void utils_beep(void);
 
+gchar *utils_make_human_readable_str(unsigned long long size, unsigned long block_size,
+									 unsigned long display_unit);
+
 #endif

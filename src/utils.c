@@ -2158,3 +2158,50 @@ void utils_beep(void)
 {
 	if (app->beep_on_errors) gdk_beep();
 }
+
+/* taken from busybox, thanks */
+gchar *utils_make_human_readable_str(unsigned long long size, unsigned long block_size,
+									 unsigned long display_unit)
+{
+	/* The code will adjust for additional (appended) units. */
+	static const char zero_and_units[] = { '0', 0, 'K', 'M', 'G', 'T' };
+	static const char fmt[] = "%Lu %c%c";
+	static const char fmt_tenths[] = "%Lu.%d %c%c";
+
+	unsigned long long val;
+	int frac;
+	const char *u;
+	const char *f;
+
+	u = zero_and_units;
+	f = fmt;
+	frac = 0;
+
+	val = size * block_size;
+	if (val == 0) return g_strdup(u);
+
+	if (display_unit)
+	{
+		val += display_unit/2;	/* Deal with rounding. */
+		val /= display_unit;	/* Don't combine with the line above!!! */
+	}
+	else
+	{
+		++u;
+		while ((val >= KILOBYTE) && (u < zero_and_units + sizeof(zero_and_units) - 1))
+		{
+			f = fmt_tenths;
+			++u;
+			frac = ((((int)(val % KILOBYTE)) * 10) + (KILOBYTE/2)) / KILOBYTE;
+			val /= KILOBYTE;
+		}
+		if (frac >= 10)
+		{		/* We need to round up here. */
+			++val;
+			frac = 0;
+		}
+	}
+
+	/* If f==fmt then 'frac' and 'u' are ignored. */
+	return g_strdup_printf(f, val, frac, *u, 'b');
+}
