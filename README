@@ -22,6 +22,7 @@ The basic features of Geany are:
 - call tips
 - many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal
 - symbol lists
+- embedded terminal emulation
 
 
 Requirements
@@ -60,6 +61,17 @@ The most important option probably is -c or --config, wherewith you can specify 
 configuration directory.
 
 
+Windows
+-------
+Geany runs also under Windows. To download the binary with all necessary files,
+visit Geany's homepage. But you should know, that the Windows version is not yet
+well tested and there are some features missing:
+- complete build support (perhaps will be added later)
+- notification if file on disk has changed (perhaps will be added later)
+- embedded terminal emulation (VTE)
+- support for detecting a running instance
+
+
 Ideas, questions, patches and bug reports
 -----------------------------------------
 See http://geany.uvena.de
@@ -69,5 +81,5 @@ format) to enrico.troeger@uvena.de
 
 
 --
-2005 by Enrico Troeger
+2006 by Enrico Troeger
 enrico.troeger@uvena.de
