@@ -255,6 +255,12 @@ enum
 	RIGHT
 };
 
+enum {
+	KILOBYTE = 1024,
+	MEGABYTE = (KILOBYTE*1024),
+	GIGABYTE = (MEGABYTE*1024)
+};
+
 // prototype from tagmanager/parse.h, used in document.c, ugly but it works
 extern langType getNamedLanguage(const char *const name);
 
