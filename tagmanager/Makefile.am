@@ -30,9 +30,11 @@ libtagmanager_a_SOURCES =\
 	conf.c\
 	docbook.c\
 	make.c\
+	asm.c\
 	tex.c\
 	pascal.c\
 	perl.c\
+	sql.c\
 	php.c\
 	python.c\
 	regex.c\

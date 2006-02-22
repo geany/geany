@@ -24,7 +24,9 @@
     PhpParser, \
     PythonParser, \
     TexParser, \
+    AsmParser, \
     ConfParser, \
+    SqlParser, \
     DocBookParser, \
     ShParser
 
