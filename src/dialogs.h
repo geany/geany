@@ -49,6 +49,8 @@ void dialogs_show_info(const gchar *text, ...);
 
 void dialogs_show_error(const gchar *text, ...);
 
+gboolean dialogs_show_fifo_error(const gchar *text, ...);
+
 gboolean dialogs_show_reload_warning(const gchar *text);
 
 gboolean dialogs_show_confirm_exit(void);
@@ -85,5 +87,7 @@ void dialogs_create_recent_menu(void);
 GtkWidget *dialogs_add_file_open_extra_widget(void);
 
 gboolean dialogs_show_mkcfgdir_error(gint error_nr);
+
+void dialogs_show_file_properties(gint idx);
 
 #endif
