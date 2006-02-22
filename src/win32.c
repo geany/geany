@@ -1,7 +1,7 @@
 /*
  *      win32.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -132,7 +132,7 @@ void try_to_get_windows_font (void)
 }
 */
 
-gchar *win32_get_filters(gboolean exe)
+static gchar *win32_get_filters(gboolean exe)
 {
 	gchar *string = "";
 	gint i, len;
@@ -171,6 +171,7 @@ void win32_show_file_dialog(gboolean file_open)
 	OPENFILENAME of;
 	gint retval;
 	gchar *fname = g_malloc(2048);
+	gchar *current_dir = utils_get_current_file_dir();
 
 	fname[0] = '\0';
 
@@ -187,12 +188,11 @@ void win32_show_file_dialog(gboolean file_open)
 	of.lpstrFilter = filters;
 
 	of.lpstrCustomFilter = NULL;
-	of.nFilterIndex = 1;
+	of.nFilterIndex = GEANY_FILETYPES_ALL + 1;
 	of.lpstrFile = fname;
+	of.lpstrInitialDir  = current_dir;
 	of.nMaxFile = 2048;
 	of.lpstrFileTitle = NULL;
-	//of.lpstrInitialDir = g_get_home_dir();
-	of.lpstrInitialDir = NULL;
 	of.lpstrTitle = NULL;
 	of.lpstrDefExt = "c";
 	if (file_open)
@@ -205,6 +205,8 @@ void win32_show_file_dialog(gboolean file_open)
 		of.Flags = OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
 		retval = GetSaveFileName(&of);
 	}
+
+	g_free(current_dir);
 
 	if (!retval)
 	{
@@ -232,8 +234,7 @@ void win32_show_file_dialog(gboolean file_open)
 			}
 			else
 			{
-				document_open_file(-1, fname, 0, of.Flags & OFN_READONLY);
-				dialogs_show_info("%s", utils_btoa(of.Flags & OFN_READONLY));
+				document_open_file(-1, fname, 0, of.Flags & OFN_READONLY, NULL);
 			}
 		}
 		else
@@ -247,7 +248,7 @@ void win32_show_file_dialog(gboolean file_open)
 						break;
 
 					g_snprintf(file_name, 254, "%s\\%s", fname, fname + x + 1);
-					document_open_file(-1, file_name, 0, of.Flags & OFN_READONLY);
+					document_open_file(-1, file_name, 0, of.Flags & OFN_READONLY, NULL);
 				}
 				x++;
 			}
@@ -255,7 +256,6 @@ void win32_show_file_dialog(gboolean file_open)
 	}
 	else
 	{
-		//dialogs_show_info(fname);
 		gint idx = document_get_cur_idx();
 		doc_list[idx].file_name = g_strdup(fname);
 		document_save_file(idx);
@@ -386,7 +386,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	{
 		tmp = g_strdup(fname);
 		if (g_strv_length(field) > 1)
-			// haha, pfad- und dateinamen miz leerzeichen??
+			// haha, pfad- und dateinamen mit leerzeichen??
 			filename = g_strconcat(tmp, " ", field[1], NULL);
 		else
 		{
