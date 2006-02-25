@@ -25,8 +25,6 @@
 #define GEANY_FILETYPES_H 1
 
 
-#define GEANY_MAX_PATTERNS		10	// describes the count of supported extensions per filetype
-
 enum
 {
 	GEANY_FILETYPES_C = 0,
@@ -59,7 +57,7 @@ typedef struct filetype
 	gboolean has_tags;		// indicates whether there is a tag parser for it or not
 	gchar	*title;			// will be shown in the file open dialog
 	gchar	*extension;
-	gchar	*pattern[GEANY_MAX_PATTERNS];
+	gchar	**pattern;
 	void	(*style_func_ptr) (ScintillaObject*);
 } filetype;
 
