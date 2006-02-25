@@ -209,7 +209,6 @@ typedef struct MyApp
 	GtkWidget			*prefs_dialog;
 	GtkWidget			*find_dialog;
 	GtkWidget			*replace_dialog;
-	GtkWidget			*build_menu_item_link;
 	GtkWidget			*default_tag_tree;
 	//GtkTreeStore		*default_tag_store;
 	const TMWorkspace	*tm_workspace;
