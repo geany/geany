@@ -5,9 +5,9 @@ TODO List:
 
 	Geany 0.6 or later:
 
-	O vte.c:265
+	o test filetype extension loading
 	o create filetype specific menus, read templates from filetypes.*,
-	  use XML instead og key-value-format
+	  use XML instead of key-value-format
 	o template rework
 	o improve toolbar tooltips translation
 	o fix a freeze at switching between filetypes with files in
@@ -15,11 +15,8 @@ TODO List:
 	o fix: "attempt to put segment in horiz list twice" warning
 	o encoding-bug in utils_convert_to_utf8()
 	o documentation: list and explain filetype modes
-	o src/interface.c: reorder the 'document' menu entry, differ between
-	  document related and general settings, new submenu: View->Editor
 	o make keyboard shortcuts user-definable
 	o inverting highlighting by selection
-	o put default filetype extensions in the config file, read them in a GList
 	o src/sci_cb.c: improve auto completion(include local tags)
 	o extend use of doc_list[].is_valid
 	o (PHP syntax check)
@@ -29,4 +26,3 @@ TODO List:
 	o (project management)
 	o (folding)
 	o (folder tree in the sidebar)
-	o (vim-like settings stored in files as comment)

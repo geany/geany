@@ -1,3 +1,21 @@
+2006-02-25  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/keyfile.c: fixed memory leak, load filetype extensions from a
+                  file in the configuration directory, the filetype of
+                  a document is now also stored at loading and saving
+                  session files
+ * src/filetypes.c: removed unneeded constant GEANY_MAX_PATTERNS
+
+
+2006-02-24  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c, src/callbacks.c, src/dialogs.c, src/main.c:
+   made "make" build menu items sensitive for C header files
+ * bugfix: src/vte.c: hopefully fixed a crash when closing the
+                      preferences dialog and message window was hidden
+                      and shown before
+
+
 2006-02-21  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/utils.c: added utils_make_human_readable_str()
