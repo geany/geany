@@ -258,6 +258,7 @@ void vte_register_symbols(GModule *mod)
 
 void vte_apply_user_settings(void)
 {
+	gtk_widget_realize(vc->vte);
 	vf->vte_terminal_set_scrollback_lines(VTE_TERMINAL(vc->vte), vc->scrollback_lines);
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
