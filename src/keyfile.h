@@ -30,4 +30,6 @@ gboolean configuration_load(void);
 
 gboolean configuration_open_files(void);
 
+void configuration_read_filetype_extensions(void);
+
 #endif

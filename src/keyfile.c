@@ -44,6 +44,7 @@ void configuration_save(void)
 	gboolean config_exists;
 	GKeyFile *config = g_key_file_new();
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	gchar *data;
 	gchar *entry = g_malloc(14);
 	gchar *fname = g_malloc0(256);
 	gchar **recent_files = g_new(gchar*, app->mru_length);
@@ -159,7 +160,7 @@ void configuration_save(void)
 		if (idx >= 0 && doc_list[idx].file_name)
 		{
 			g_snprintf(entry, 13, "FILE_NAME_%d", j);
-			g_snprintf(fname, 255, "%d:%s", sci_get_current_position(doc_list[idx].sci), doc_list[idx].file_name);
+			g_snprintf(fname, 255, "%d:%d:%s", sci_get_current_position(doc_list[idx].sci), doc_list[idx].file_type->id, doc_list[idx].file_name);
 			g_key_file_set_string(config, "files", entry, fname);
 			j++;
 		}
@@ -175,7 +176,9 @@ void configuration_save(void)
 	}
 
 	// write the file
-	utils_write_file(configfile, g_key_file_to_data(config, NULL, NULL));
+	data = g_key_file_to_data(config, NULL, NULL);
+	utils_write_file(configfile, data);
+	g_free(data);
 
 	utils_free_ptr_array(recent_files, app->mru_length);
 	g_free(recent_files);
@@ -365,8 +368,8 @@ gboolean configuration_load(void)
 gboolean configuration_open_files(void)
 {
 	gint i;
-	guint x, pos;
-	gchar *file, *locale_filename, spos[7];
+	guint x, pos, ft_id, y;
+	gchar *file, *locale_filename, spos[7], stype[4];
 	gboolean ret = FALSE;
 
 	for(i = GEANY_SESSION_FILES - 1; i >= 0 ; i--)
@@ -374,11 +377,13 @@ gboolean configuration_open_files(void)
 		if (session_files[i] && strlen(session_files[i]))
 		{
 			x = 0;
-			file = strchr(session_files[i], ':') + 1;
+			y = 0;
+			file = strrchr(session_files[i], ':') + 1;
 			// try to get the locale equivalent for the filename, fallback to filename if error
 			locale_filename = g_locale_from_utf8(file, -1, NULL, NULL, NULL);
 			if (locale_filename == NULL) locale_filename = g_strdup(file);
 
+			// read position
 			while (session_files[i][x] != ':')
 			{
 				spos[x] = session_files[i][x];
@@ -386,10 +391,20 @@ gboolean configuration_open_files(void)
 			}
 			spos[x] = '\0';
 			pos = atoi(spos);
+			x++;
+			// read filetype
+			while (session_files[i][x] != ':')
+			{
+				stype[y] = session_files[i][x];
+				x++;
+				y++;
+			}
+			stype[y] = '\0';
+			ft_id = atoi(stype);
 
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{
-				document_open_file(-1, locale_filename, pos, FALSE, NULL);
+				document_open_file(-1, locale_filename, pos, FALSE, filetypes[ft_id]);
 				ret = TRUE;
 			}
 			g_free(locale_filename);
@@ -417,17 +432,54 @@ gboolean configuration_open_files(void)
 }
 
 
-static gboolean read_filetype_extensions(void)
+void configuration_read_filetype_extensions(void)
 {
-	gboolean config_exists;
-	guint i, geo_len;
-	gint *geo = g_malloc(sizeof(gint) * 4);
+	gboolean file_changed = FALSE;
+	guint i;
 	gsize len = 0;
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "file", NULL);
-	gchar *entry = g_malloc(14);
-	gchar *tmp_string, *tmp_string2;
+	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "filetype_extensions.conf", NULL);
+	gchar **list, *data, *comment;
 	GKeyFile *config = g_key_file_new();
-	GError *error = NULL;
 
-	config_exists = g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	// add missing keys
+	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	{
+		if (! g_key_file_has_key(config, "Extensions", filetypes[i]->name, NULL))
+		{
+			g_key_file_set_string_list(config, "Extensions", filetypes[i]->name,
+						(const gchar**) filetypes[i]->pattern, g_strv_length(filetypes[i]->pattern));
+			file_changed = TRUE;
+		}
+	}
+	// add comment, if it doesn't exist
+	comment = g_key_file_get_comment(config, "Extensions", NULL, NULL);
+	if (!comment || strlen(comment) == 0)
+	{
+		g_key_file_set_comment(config, "Extensions", NULL, "Filetype extension configuration file for Geany\nInsert as many items as you want, seperate them with a \";\".\nIf you want to get the default for a key, just delete it and\nthen it will be appended next time you start Geany.", NULL);
+		file_changed = TRUE;
+	}
+	g_free(comment);
+
+	// write the file if there one or more keys are missing
+	if (file_changed)
+	{
+		data = g_key_file_to_data(config, NULL, NULL);
+		utils_write_file(configfile, data);
+		g_free(data);
+	}
+
+	// finally read the keys
+	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	{
+		list = g_key_file_get_string_list(config, "Extensions", filetypes[i]->name, &len, NULL);
+		if (list && len > 0)
+		{
+			g_strfreev(filetypes[i]->pattern);
+			filetypes[i]->pattern = list;
+		}
+	}
+
+	g_key_file_free(config);
 }
