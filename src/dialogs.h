@@ -28,9 +28,18 @@
 
 typedef struct
 {
-	GtkWidget		*menu_c;
-	GtkWidget		*menu_tex;
-	GtkWidget		*menu_misc;
+	GtkWidget		*menu;
+	GtkWidget		*item_compile;
+	GtkWidget		*item_link;
+	GtkWidget		*item_exec;
+} build_menus_items;
+build_menus_items dialogs_build_menus_items;
+
+typedef struct
+{
+	build_menus_items	menu_c;
+	build_menus_items	menu_tex;
+	build_menus_items	menu_misc;
 } build_menus;
 build_menus dialogs_build_menus;
 
@@ -66,9 +75,9 @@ void dialogs_show_word_count(void);
 
 void dialogs_show_color(void);
 
-GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute);
+GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute, build_menus_items *type);
 
-GtkWidget *dialogs_create_build_menu_tex(void);
+GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type);
 
 void dialogs_show_make_target(void);
 

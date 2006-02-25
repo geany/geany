@@ -199,9 +199,9 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	scintilla_release_resources();
 	gtk_widget_destroy(app->window);
 	// kill explicitly since only one or none menu is shown at a time
-	if (GTK_IS_WIDGET(dialogs_build_menus.menu_c)) gtk_widget_destroy(dialogs_build_menus.menu_c);
-	if (GTK_IS_WIDGET(dialogs_build_menus.menu_misc)) gtk_widget_destroy(dialogs_build_menus.menu_misc);
-	if (GTK_IS_WIDGET(dialogs_build_menus.menu_tex)) gtk_widget_destroy(dialogs_build_menus.menu_tex);
+	if (GTK_IS_WIDGET(dialogs_build_menus.menu_c.menu)) gtk_widget_destroy(dialogs_build_menus.menu_c.menu);
+	if (GTK_IS_WIDGET(dialogs_build_menus.menu_misc.menu)) gtk_widget_destroy(dialogs_build_menus.menu_misc.menu);
+	if (GTK_IS_WIDGET(dialogs_build_menus.menu_tex.menu)) gtk_widget_destroy(dialogs_build_menus.menu_tex.menu);
 
 	/// destroy popup menus - FIXME TEST THIS CODE
 	if (GTK_IS_WIDGET(app->popup_menu)) gtk_widget_destroy(app->popup_menu);
@@ -981,7 +981,7 @@ on_color_ok_button_clicked             (GtkButton       *button,
 
 	gtk_widget_hide(app->open_colorsel);
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	
+
 	gtk_color_selection_get_current_color(
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &color);
 

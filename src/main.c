@@ -232,13 +232,22 @@ static gint main_init(void)
 #else
 	app->have_vte 			= FALSE;
 #endif
-	app->ignore_global_tags 		= ignore_global_tags;
-	app->tm_workspace				= tm_get_workspace();
-	app->recent_queue				= g_queue_new();
-	app->opening_session_files		= FALSE;
-	dialogs_build_menus.menu_c		= NULL;
-	dialogs_build_menus.menu_tex	= NULL;
-	dialogs_build_menus.menu_misc	= NULL;
+	app->ignore_global_tags 					= ignore_global_tags;
+	app->tm_workspace							= tm_get_workspace();
+	app->recent_queue							= g_queue_new();
+	app->opening_session_files					= FALSE;
+	dialogs_build_menus.menu_c.menu				= NULL;
+	dialogs_build_menus.menu_c.item_compile		= NULL;
+	dialogs_build_menus.menu_c.item_exec		= NULL;
+	dialogs_build_menus.menu_c.item_link		= NULL;
+	dialogs_build_menus.menu_tex.menu			= NULL;
+	dialogs_build_menus.menu_tex.item_compile	= NULL;
+	dialogs_build_menus.menu_tex.item_exec		= NULL;
+	dialogs_build_menus.menu_tex.item_link		= NULL;
+	dialogs_build_menus.menu_misc.menu			= NULL;
+	dialogs_build_menus.menu_misc.item_compile	= NULL;
+	dialogs_build_menus.menu_misc.item_exec		= NULL;
+	dialogs_build_menus.menu_misc.item_link		= NULL;
 	mkdir_result = utils_make_settings_dir();
 	if (mkdir_result != 0)
 		if (! dialogs_show_mkcfgdir_error(mkdir_result)) destroyapp_early();
@@ -459,6 +468,7 @@ gint main(gint argc, gchar **argv)
 	document_init_doclist();
 
 	filetypes_init_types();
+	configuration_read_filetype_extensions();
 
 	gtk_window_set_icon(GTK_WINDOW(app->window), utils_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE));
 

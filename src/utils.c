@@ -236,7 +236,8 @@ GtkFileFilter *utils_create_file_filter(filetype *ft)
 	gtk_file_filter_set_name(new_filter, ft->title);
 
 	// (GEANY_FILETYPES_MAX_PATTERNS - 1) because the last field in pattern is NULL
-	for (i = 0; i < (GEANY_MAX_PATTERNS - 1) && ft->pattern[i]; i++)
+	//for (i = 0; i < (GEANY_MAX_PATTERNS - 1) && ft->pattern[i]; i++)
+	for (i = 0; ft->pattern[i]; i++)
 	{
 		gtk_file_filter_add_pattern(new_filter, ft->pattern[i]);
 	}
@@ -985,11 +986,11 @@ gboolean utils_check_disk_status(gint idx, const gboolean force)
 	gchar *buff, *locale_filename;
 
 	if (idx == -1 || doc_list[idx].file_name == NULL) return FALSE;
-	
+
 	t = time(NULL);
 
 	if (doc_list[idx].last_check > (t - 30)) return TRUE;
-	
+
 	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
 	if (stat(locale_filename, &st) != 0) return TRUE;
 
@@ -1332,7 +1333,7 @@ void utils_build_show_hide(gint idx)
 	static gboolean button_is_html = FALSE;
 	static GtkTooltips *tooltips = NULL;
 
-	if (doc_list[idx].file_name)
+	if (idx >= 0 && doc_list[idx].file_name)
 	{
 		ext = strrchr(doc_list[idx].file_name, '.');
 	}
@@ -1363,43 +1364,57 @@ void utils_build_show_hide(gint idx)
 		case GEANY_FILETYPES_C:	// intended fallthrough, C and C++ behave equal
 		case GEANY_FILETYPES_CPP:
 		{
-			if (dialogs_build_menus.menu_c == NULL)
+			if (dialogs_build_menus.menu_c.menu == NULL)
 			{
-				dialogs_build_menus.menu_c = dialogs_create_build_menu_gen(TRUE, TRUE);
-				g_object_ref((gpointer)dialogs_build_menus.menu_c);	// to hold it after removing
+				dialogs_build_menus.menu_c.menu = dialogs_create_build_menu_gen(TRUE, TRUE, &dialogs_build_menus.menu_c);
+				g_object_ref((gpointer)dialogs_build_menus.menu_c.menu);	// to hold it after removing
 
 			}
 			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-							dialogs_build_menus.menu_c);
-			gtk_widget_set_sensitive(app->compile_button, TRUE);
+								dialogs_build_menus.menu_c.menu);
 
-			if (! is_header) break;
+			if (is_header)
+			{
+				gtk_widget_set_sensitive(app->compile_button, FALSE);
+				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_compile, FALSE);
+				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_link, FALSE);
+				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_exec, FALSE);
+			}
+			else
+			{
+				gtk_widget_set_sensitive(app->compile_button, TRUE);
+				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_compile, TRUE);
+				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_link, TRUE);
+				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_exec, TRUE);
+			}
+
+			break;
 		}
 		case GEANY_FILETYPES_JAVA:
 		{
-			if (dialogs_build_menus.menu_misc == NULL)
+			if (dialogs_build_menus.menu_misc.menu == NULL)
 			{
-				dialogs_build_menus.menu_misc = dialogs_create_build_menu_gen(FALSE, TRUE);
-				g_object_ref((gpointer)dialogs_build_menus.menu_misc);	// to hold it after removing
+				dialogs_build_menus.menu_misc.menu = dialogs_create_build_menu_gen(FALSE, TRUE, &dialogs_build_menus.menu_misc);
+				g_object_ref((gpointer)dialogs_build_menus.menu_misc.menu);	// to hold it after removing
 			}
 			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-							dialogs_build_menus.menu_misc);
+							dialogs_build_menus.menu_misc.menu);
 			gtk_widget_set_sensitive(app->compile_button, TRUE);
 
-			if (! is_header) break;
+			break;
 		}
 		case GEANY_FILETYPES_XML:	// intended fallthrough, HTML and XML behave equal
 		case GEANY_FILETYPES_PHP:
 		{
-			if (dialogs_build_menus.menu_misc == NULL)
+			if (dialogs_build_menus.menu_misc.menu == NULL)
 			{
-				dialogs_build_menus.menu_misc = dialogs_create_build_menu_gen(FALSE, TRUE);
-				g_object_ref((gpointer)dialogs_build_menus.menu_misc);	// to hold it after removing
+				dialogs_build_menus.menu_misc.menu = dialogs_create_build_menu_gen(FALSE, TRUE, &dialogs_build_menus.menu_misc);
+				g_object_ref((gpointer)dialogs_build_menus.menu_misc.menu);	// to hold it after removing
 			}
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-							dialogs_build_menus.menu_misc);
+							dialogs_build_menus.menu_misc.menu);
 
 			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
 			gtk_widget_set_sensitive(app->compile_button, TRUE);
@@ -1409,40 +1424,40 @@ void utils_build_show_hide(gint idx)
 
 			button_is_html = TRUE;
 
-			if (! is_header) break;
+			break;
 		}
 		case GEANY_FILETYPES_PASCAL:
 		{
-			if (dialogs_build_menus.menu_misc == NULL)
+			if (dialogs_build_menus.menu_misc.menu == NULL)
 			{
-				dialogs_build_menus.menu_misc = dialogs_create_build_menu_gen(FALSE, TRUE);
-				g_object_ref((gpointer)dialogs_build_menus.menu_misc);	// to hold it after removing
+				dialogs_build_menus.menu_misc.menu = dialogs_create_build_menu_gen(FALSE, TRUE, &dialogs_build_menus.menu_misc);
+				g_object_ref((gpointer)dialogs_build_menus.menu_misc.menu);	// to hold it after removing
 			}
 			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-							dialogs_build_menus.menu_misc);
+							dialogs_build_menus.menu_misc.menu);
 			gtk_widget_set_sensitive(app->compile_button, TRUE);
 
-			if (! is_header) break;
+			break;
 		}
 		case GEANY_FILETYPES_TEX:
 		{
-			if (dialogs_build_menus.menu_tex == NULL)
+			if (dialogs_build_menus.menu_tex.menu == NULL)
 			{
-				dialogs_build_menus.menu_tex = dialogs_create_build_menu_tex();
-				g_object_ref((gpointer)dialogs_build_menus.menu_tex);	// to hold it after removing
+				dialogs_build_menus.menu_tex.menu = dialogs_create_build_menu_tex(&dialogs_build_menus.menu_tex);
+				g_object_ref((gpointer)dialogs_build_menus.menu_tex.menu);	// to hold it after removing
 			}
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-							dialogs_build_menus.menu_tex);
+							dialogs_build_menus.menu_tex.menu);
 			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
 			gtk_widget_set_sensitive(app->compile_button, TRUE);
-			if (! is_header) break;
+
+			break;
 		}
 		default:
 		{
 			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
 			gtk_widget_set_sensitive(app->compile_button, FALSE);
-			break;
 		}
 	}
 #endif
@@ -2137,7 +2152,7 @@ gchar *utils_get_current_file_dir(void)
 {
 	gint cur_idx = document_get_cur_idx();
 
-	if (cur_idx >= 0)	// if valid page found
+	if (cur_idx >= 0 && doc_list[cur_idx].is_valid) // if valid page found
 	{
 		// get current filename
 		const gchar *cur_fname = doc_list[cur_idx].file_name;
@@ -2145,11 +2160,11 @@ gchar *utils_get_current_file_dir(void)
 		if (cur_fname != NULL)
 		{
 			// get folder part from current filename
-			return g_path_get_dirname(cur_fname);	// returns "." if no path
+			return g_path_get_dirname(cur_fname); // returns "." if no path
 		}
 	}
 
-	return NULL;	// no file open
+	return NULL; // no file open
 }
 
 
@@ -2158,6 +2173,7 @@ void utils_beep(void)
 {
 	if (app->beep_on_errors) gdk_beep();
 }
+
 
 /* taken from busybox, thanks */
 gchar *utils_make_human_readable_str(unsigned long long size, unsigned long block_size,

@@ -252,7 +252,7 @@ gboolean dialogs_show_fifo_error(const gchar *text, ...)
 										  GTK_MESSAGE_ERROR, GTK_BUTTONS_YES_NO, string);
 	ret = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
-	
+
 	if (ret == GTK_RESPONSE_YES) return TRUE;
 	else return FALSE;
 }
@@ -375,7 +375,7 @@ void dialogs_show_open_font(void)
 		gtk_window_set_destroy_with_parent(GTK_WINDOW(app->open_fontsel), TRUE);
 		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(app->open_fontsel), TRUE);
 		gtk_window_set_type_hint(GTK_WINDOW(app->open_fontsel), GDK_WINDOW_TYPE_HINT_DIALOG);
-		
+
 		gtk_widget_show(GTK_FONT_SELECTION_DIALOG(app->open_fontsel)->apply_button);
 
 		g_signal_connect((gpointer) app->open_fontsel,
@@ -552,7 +552,7 @@ void dialogs_show_color(void)
 }
 
 
-GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute)
+GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute, build_menus_items *type)
 {
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
@@ -570,17 +570,19 @@ GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute)
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
+	type->item_compile = item;
 
 	if (link)
 	{	// build the code
-		app->build_menu_item_link = gtk_menu_item_new_with_label(_("Build"));
-		gtk_widget_show(app->build_menu_item_link);
-		gtk_container_add(GTK_CONTAINER(menu), app->build_menu_item_link);
-		gtk_tooltips_set_tip(tooltips, app->build_menu_item_link,
+		item = gtk_menu_item_new_with_label(_("Build"));
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+		gtk_tooltips_set_tip(tooltips, item,
 					_("Builds the current file (generate an executable file)"), NULL);
-		gtk_widget_add_accelerator(app->build_menu_item_link, "activate", accel_group, GDK_F9,
+		gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9,
 					(GdkModifierType) 0, GTK_ACCEL_VISIBLE);
-		g_signal_connect((gpointer) app->build_menu_item_link, "activate", G_CALLBACK(on_build_build_activate), NULL);
+		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_build_activate), NULL);
+		type->item_link = item;
 	}
 
 	// build the code with make all
@@ -610,6 +612,7 @@ GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute)
 		gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F5,
 					(GdkModifierType) 0, GTK_ACCEL_VISIBLE);
 		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_execute_activate), NULL);
+		type->item_exec = item;
 	}
 
 	// separator
@@ -636,7 +639,7 @@ GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute)
 }
 
 
-GtkWidget *dialogs_create_build_menu_tex(void)
+GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type)
 {
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
@@ -1247,7 +1250,7 @@ void dialogs_show_file_properties(gint idx)
 	GtkRequisition *size;
 #if defined(HAVE_SYS_STAT_H) && defined(HAVE_SYS_TYPES_H)
 	struct stat st;
-	off_t filesize;	
+	off_t filesize;
 	mode_t mode;
 #else
 	gint filesize = 0;
@@ -1267,11 +1270,13 @@ void dialogs_show_file_properties(gint idx)
 		filesize = st.st_size;
 		mode = st.st_mode;
 	}
-	else 
+	else
 	{
 		time_changed  = g_strdup(_("unknown"));
 		time_modified = g_strdup(_("unknown"));
 		time_accessed = g_strdup(_("unknown"));
+		filesize = (off_t) 0;
+		mode = (mode_t) 0;
 	}
 	g_free(locale_filename);
 #else
@@ -1393,7 +1398,7 @@ void dialogs_show_file_properties(gint idx)
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-	
+
 	perm_table = gtk_table_new(4, 4, FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(perm_table), 5);
 	gtk_table_set_col_spacings(GTK_TABLE(perm_table), 5);
@@ -1496,7 +1501,7 @@ void dialogs_show_file_properties(gint idx)
 
 	check = gtk_check_button_new();
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IROTH); 
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IROTH);
 	gtk_table_attach(GTK_TABLE(perm_table), check, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -1521,7 +1526,7 @@ void dialogs_show_file_properties(gint idx)
 
 
 
-	
+
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), perm_table);
 
 	// resize the dialog
