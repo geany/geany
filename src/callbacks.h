@@ -25,9 +25,6 @@ void
 signal_cb							   (gint sig);
 
 gint
-destroyapp_early                       (void);
-
-gint
 destroyapp                             (GtkWidget *widget, gpointer gdata);
 
 gboolean
@@ -551,3 +548,19 @@ on_use_auto_indention1_toggled         (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
 
 
+
+void
+on_menu_fold_all1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_entry_goto_line_activate            (GtkEntry        *entry,
+                                        gpointer         user_data);
+
+void
+on_toolbutton_goto_clicked             (GtkToolButton   *toolbutton,
+                                        gpointer         user_data);

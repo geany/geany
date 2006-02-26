@@ -109,31 +109,6 @@ void signal_cb(gint sig)
 }
 
 
-// exit function, for very early exit(quit by non-existing configuration dir)
-gint destroyapp_early(void)
-{
-#ifdef HAVE_FIFO
-	if (! app->ignore_fifo)
-	{
-		gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
-		// delete the fifo early, because we don't accept new files anymore
-		unlink(fifo);
-		g_free(fifo);
-	}
-#endif
-
-	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
-	g_queue_free(app->recent_queue);
-
-
-	g_free(app->configdir);
-	g_free(app);
-
-	exit(0);
-	return (FALSE);
-}
-
-
 // real exit function
 gint destroyapp(GtkWidget *widget, gpointer gdata)
 {
@@ -184,14 +159,14 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	}
 	g_queue_free(app->recent_queue);
 
-	if (GTK_IS_WIDGET(app->prefs_dialog)) gtk_widget_destroy(app->prefs_dialog);
-	if (GTK_IS_WIDGET(app->find_dialog)) gtk_widget_destroy(app->find_dialog);
-	if (GTK_IS_WIDGET(app->replace_dialog)) gtk_widget_destroy(app->replace_dialog);
-	if (GTK_IS_WIDGET(app->save_filesel)) gtk_widget_destroy(app->save_filesel);
-	if (GTK_IS_WIDGET(app->open_filesel)) gtk_widget_destroy(app->open_filesel);
-	if (GTK_IS_WIDGET(app->open_fontsel)) gtk_widget_destroy(app->open_fontsel);
-	if (GTK_IS_WIDGET(app->open_colorsel)) gtk_widget_destroy(app->open_colorsel);
-	if (GTK_IS_WIDGET(app->default_tag_tree))
+	if (app->prefs_dialog && GTK_IS_WIDGET(app->prefs_dialog)) gtk_widget_destroy(app->prefs_dialog);
+	if (app->find_dialog && GTK_IS_WIDGET(app->find_dialog)) gtk_widget_destroy(app->find_dialog);
+	if (app->replace_dialog && GTK_IS_WIDGET(app->replace_dialog)) gtk_widget_destroy(app->replace_dialog);
+	if (app->save_filesel && GTK_IS_WIDGET(app->save_filesel)) gtk_widget_destroy(app->save_filesel);
+	if (app->open_filesel && GTK_IS_WIDGET(app->open_filesel)) gtk_widget_destroy(app->open_filesel);
+	if (app->open_fontsel && GTK_IS_WIDGET(app->open_fontsel)) gtk_widget_destroy(app->open_fontsel);
+	if (app->open_colorsel && GTK_IS_WIDGET(app->open_colorsel)) gtk_widget_destroy(app->open_colorsel);
+	if (app->default_tag_tree && GTK_IS_WIDGET(app->default_tag_tree))
 	{
 		g_object_unref(app->default_tag_tree);
 		gtk_widget_destroy(app->default_tag_tree);
@@ -199,19 +174,28 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	scintilla_release_resources();
 	gtk_widget_destroy(app->window);
 	// kill explicitly since only one or none menu is shown at a time
-	if (GTK_IS_WIDGET(dialogs_build_menus.menu_c.menu)) gtk_widget_destroy(dialogs_build_menus.menu_c.menu);
-	if (GTK_IS_WIDGET(dialogs_build_menus.menu_misc.menu)) gtk_widget_destroy(dialogs_build_menus.menu_misc.menu);
-	if (GTK_IS_WIDGET(dialogs_build_menus.menu_tex.menu)) gtk_widget_destroy(dialogs_build_menus.menu_tex.menu);
+	if (dialogs_build_menus.menu_c.menu && GTK_IS_WIDGET(dialogs_build_menus.menu_c.menu))
+					gtk_widget_destroy(dialogs_build_menus.menu_c.menu);
+	if (dialogs_build_menus.menu_misc.menu && GTK_IS_WIDGET(dialogs_build_menus.menu_misc.menu))
+					gtk_widget_destroy(dialogs_build_menus.menu_misc.menu);
+	if (dialogs_build_menus.menu_tex.menu && GTK_IS_WIDGET(dialogs_build_menus.menu_tex.menu))
+					gtk_widget_destroy(dialogs_build_menus.menu_tex.menu);
 
 	/// destroy popup menus - FIXME TEST THIS CODE
-	if (GTK_IS_WIDGET(app->popup_menu)) gtk_widget_destroy(app->popup_menu);
-	if (GTK_IS_WIDGET(app->toolbar_menu)) gtk_widget_destroy(app->toolbar_menu);
-	if (GTK_IS_WIDGET(app->new_file_menu)) gtk_widget_destroy(app->new_file_menu);
-	if (GTK_IS_WIDGET(tv.popup_taglist)) gtk_widget_destroy(tv.popup_taglist);
-	if (GTK_IS_WIDGET(tv.popup_openfiles)) gtk_widget_destroy(tv.popup_openfiles);
-	if (GTK_IS_WIDGET(msgwindow.popup_status_menu)) gtk_widget_destroy(msgwindow.popup_status_menu);
-	if (GTK_IS_WIDGET(msgwindow.popup_msg_menu)) gtk_widget_destroy(msgwindow.popup_msg_menu);
-	if (GTK_IS_WIDGET(msgwindow.popup_compiler_menu)) gtk_widget_destroy(msgwindow.popup_compiler_menu);
+	if (app->popup_menu && GTK_IS_WIDGET(app->popup_menu))
+					gtk_widget_destroy(app->popup_menu);
+	if (app->toolbar_menu && GTK_IS_WIDGET(app->toolbar_menu))
+					gtk_widget_destroy(app->toolbar_menu);
+	if (tv.popup_taglist && GTK_IS_WIDGET(tv.popup_taglist))
+					gtk_widget_destroy(tv.popup_taglist);
+	if (tv.popup_openfiles && GTK_IS_WIDGET(tv.popup_openfiles))
+					gtk_widget_destroy(tv.popup_openfiles);
+	if (msgwindow.popup_status_menu && GTK_IS_WIDGET(msgwindow.popup_status_menu))
+					gtk_widget_destroy(msgwindow.popup_status_menu);
+	if (msgwindow.popup_msg_menu && GTK_IS_WIDGET(msgwindow.popup_msg_menu))
+					gtk_widget_destroy(msgwindow.popup_msg_menu);
+	if (msgwindow.popup_compiler_menu && GTK_IS_WIDGET(msgwindow.popup_compiler_menu))
+					gtk_widget_destroy(msgwindow.popup_compiler_menu);
 
 	if (app->have_vte) vte_close();
 
@@ -2204,7 +2188,7 @@ on_goto_line_dialog_response         (GtkDialog *dialog,
 		}
 
 	}
-	gtk_widget_destroy(GTK_WIDGET(dialog));
+	if (dialog) gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
 
@@ -2213,6 +2197,23 @@ on_goto_line_entry_activate          (GtkEntry        *entry,
                                       gpointer         user_data)
 {
 	on_goto_line_dialog_response(GTK_DIALOG(user_data), GTK_RESPONSE_ACCEPT, entry);
+}
+
+
+void
+on_entry_goto_line_activate            (GtkEntry        *entry,
+                                        gpointer         user_data)
+{
+	on_goto_line_dialog_response(NULL, GTK_RESPONSE_ACCEPT, entry);
+}
+
+
+void
+on_toolbutton_goto_clicked             (GtkToolButton   *toolbutton,
+                                        gpointer         user_data)
+{
+	on_goto_line_dialog_response(NULL, GTK_RESPONSE_ACCEPT,
+			lookup_widget(app->window, "entry_goto_line"));
 }
 
 
@@ -2395,7 +2396,7 @@ on_comments_changelog_activate         (GtkMenuItem     *menuitem,
 	sci_insert_text(doc_list[idx].sci, 0, text);
 	// sets the cursor to the right position to type the changelog text,
 	// the template has 21 chars + length of name and email
-	sci_goto_pos(doc_list[idx].sci, 21 + strlen(app->pref_template_developer) + strlen(app->pref_template_mail));
+	sci_goto_pos(doc_list[idx].sci, 21 + strlen(app->pref_template_developer) + strlen(app->pref_template_mail), TRUE);
 
 	g_free(text);
 }
@@ -2419,7 +2420,7 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 		text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER, NULL, idx);
 	}
 	sci_insert_text(doc_list[idx].sci, 0, text);
-	sci_goto_pos(doc_list[idx].sci, 0);
+	sci_goto_pos(doc_list[idx].sci, 0, FALSE);
 	g_free(text);
 }
 
@@ -2522,5 +2523,26 @@ on_file_properties_activate            (GtkMenuItem     *menuitem,
 	dialogs_show_file_properties(idx);
 }
 
+
+
+
+void
+on_menu_fold_all1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	document_fold_all(idx);
+}
+
+
+void
+on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	document_unfold_all(idx);
+}
 
 
