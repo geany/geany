@@ -1,3 +1,13 @@
+2006-02-26  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: removed unneeded destroyapp_early()
+ * src/main.c, src/utils.c: improved configuration directory creation
+ * src/sci_cb.c, src/highlighting.c, src/document.c, geany.glade,
+   src/geany.h, src/interface.c, src/prefs.c, src/callbacks.c:
+   implemented first version of rudimentary folding support, added
+   goto line entry in the toolbar and made it hideable
+
+
 2006-02-25  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/keyfile.c: fixed memory leak, load filetype extensions from a

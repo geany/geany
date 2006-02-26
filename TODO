@@ -9,7 +9,6 @@ TODO List:
 	o create filetype specific menus, read templates from filetypes.*,
 	  use XML instead of key-value-format
 	o template rework
-	o improve toolbar tooltips translation
 	o fix a freeze at switching between filetypes with files in
 	  ISO-8859-x encoding (reported by Jörg Sommer)
 	o fix: "attempt to put segment in horiz list twice" warning
@@ -24,5 +23,4 @@ TODO List:
 	o (startup notification)
 	o (indent wrapped lines, but how?)
 	o (project management)
-	o (folding)
 	o (folder tree in the sidebar)
