@@ -151,6 +151,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 
 	// a darker grey for the line number margin
 	SSM(sci, SCI_STYLESETBACK, STYLE_LINENUMBER, 0xD0D0D0);
+	//SSM(sci, SCI_STYLESETBACK, STYLE_LINENUMBER, 0xD0D0D0);
 
 	// define marker symbols
 	// 0 -> line marker
@@ -163,19 +164,46 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_MARKERSETFORE, 1, 0x000000);
 	SSM(sci, SCI_MARKERSETBACK, 1, 0xB8F4B8);
 
+    // 2 -> folding marker, other folding settings
+	SSM(sci, SCI_SETMARGINTYPEN, 2, SC_MARGIN_SYMBOL);
+	SSM(sci, SCI_SETMARGINMASKN, 2, SC_MASK_FOLDERS);
+	SSM(sci, SCI_SETFOLDFLAGS, 0, 0);
+
+    SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS);
+	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPEN, 0xffffff);
+	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPEN, 0x000000);
+    SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS);
+	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDER, 0xffffff);
+	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDER, 0x000000);
+    SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE);
+	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERSUB, 0xffffff);
+	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERSUB, 0x000000);
+    SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER);
+	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERTAIL, 0xffffff);
+	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERTAIL, 0x000000);
+    SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEREND, SC_MARK_BOXPLUSCONNECTED);
+	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEREND, 0xffffff);
+	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEREND, 0x000000);
+    SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPENMID, SC_MARK_BOXMINUSCONNECTED);
+	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPENMID, 0xffffff);
+	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPENMID, 0x000000);
+    SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNER);
+	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERMIDTAIL, 0xffffff);
+	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL, 0x000000);
+
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.compact", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.comment", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.preprocessor", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.at.else", (sptr_t) "1");
+
+
 	SSM(sci, SCI_SETSELFORE, 1, types[GEANY_FILETYPES_ALL]->styling[1][0]);
 	SSM(sci, SCI_SETSELBACK, 1, types[GEANY_FILETYPES_ALL]->styling[1][1]);
 
 	SSM (sci, SCI_SETSTYLEBITS, style_bits, 0);
 
-	//SSM(sci, SCI_STYLESETFORE, STYLE_BRACELIGHT, types[GEANY_FILETYPES_ALL]->styling[2][0]);
-	//SSM(sci, SCI_STYLESETBACK, STYLE_BRACELIGHT, types[GEANY_FILETYPES_ALL]->styling[2][1]);
-	//SSM(sci, SCI_STYLESETBOLD, STYLE_BRACELIGHT, types[GEANY_FILETYPES_ALL]->styling[2][2]);
 	styleset_set_style(sci, STYLE_BRACELIGHT, GEANY_FILETYPES_ALL, 2);
-
-	//SSM(sci, SCI_STYLESETFORE, STYLE_BRACEBAD, types[GEANY_FILETYPES_ALL]->styling[3][0]);
-	//SSM(sci, SCI_STYLESETBACK, STYLE_BRACEBAD, types[GEANY_FILETYPES_ALL]->styling[3][1]);
-	//SSM(sci, SCI_STYLESETBOLD, STYLE_BRACEBAD, types[GEANY_FILETYPES_ALL]->styling[3][2]);
 	styleset_set_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_ALL, 2);
 }
 
@@ -294,22 +322,12 @@ void styleset_c(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
 
-	// I dont like/need folding
-	//SSM (sci, SCI_SETPROPERTY, (sptr_t) "fold.preprocessor", (sptr_t) "1");
-	//SSM (sci, SCI_SETPROPERTY, (sptr_t) "fold.at.else", (sptr_t) "1");
-
-	// enable folding for retrieval of current function (utils_get_current_tag)
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "file.patterns.cpp", (sptr_t) "*.cpp;*.cxx;*.cc");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
-
-	//SSM(sci, SCI_SETPROPERTY, (sptr_t) "statement.indent.$(file.patterns.cpp)", (sptr_t) "5 case catch class default do else for if private protected public struct try union while switch");
-	//SSM(sci, SCI_SETPROPERTY, (sptr_t) "statement.indent.$(file.patterns.header)", (sptr_t) "5 case catch class default do else for if private protected public struct try union while switch");
-	//SSM(sci, SCI_SETPROPERTY, (sptr_t) "statement.indent.$(file.patterns.c)", (sptr_t) "5 case do else for if struct union while switch");
 }
 
 
@@ -348,9 +366,6 @@ void styleset_pascal(ScintillaObject *sci)
 	if (types[GEANY_FILETYPES_PASCAL] == NULL) styleset_pascal_init();
 
 	styleset_common(sci, 5);
-
-	// enable folding for retrieval of current function (utils_get_current_tag)
-	SSM (sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
 
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
 	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
@@ -461,9 +476,6 @@ void styleset_tex(ScintillaObject *sci)
 void styleset_php(ScintillaObject *sci)
 {
 	styleset_common(sci, 7);
-
-	// enable folding for retrieval of current function (utils_get_current_tag)
-	SSM (sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
 
 	SSM (sci, SCI_SETPROPERTY, (sptr_t) "phpscript.mode", (sptr_t) "1");
 	SSM (sci, SCI_SETLEXER, SCLEX_HTML, 0);
@@ -845,9 +857,6 @@ void styleset_java(ScintillaObject *sci)
 	styleset_common(sci, 5);
 	SSM (sci, SCI_SETLEXER, SCLEX_CPP, 0);
 
-	// enable folding for retrieval of current function (utils_get_current_tag)
-	SSM (sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
-
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
 	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
@@ -958,8 +967,6 @@ void styleset_perl(ScintillaObject *sci)
 	styleset_common(sci, 5);
 	SSM (sci, SCI_SETLEXER, SCLEX_PERL, 0);
 
-	// enable folding for retrieval of current function (utils_get_current_tag)
-	SSM (sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
 
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
@@ -1027,9 +1034,6 @@ void styleset_python(ScintillaObject *sci)
 
 	styleset_common(sci, 5);
 	SSM (sci, SCI_SETLEXER, SCLEX_PYTHON, 0);
-
-	// enable folding for retrieval of current function (utils_get_current_tag)
-	SSM (sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_PYTHON]->keywords[0]);
 

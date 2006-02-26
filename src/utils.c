@@ -473,9 +473,9 @@ gboolean utils_goto_line(gint idx, gint line)
 	}
 
 	// mark the tag and ensure that we have arround 5 lines visible around the mark
-	sci_goto_line(doc_list[idx].sci, line - 5);
-	sci_goto_line(doc_list[idx].sci, line + 5);
-	sci_goto_line(doc_list[idx].sci, line);
+	sci_goto_line(doc_list[idx].sci, line - 5, FALSE);
+	sci_goto_line(doc_list[idx].sci, line + 5, FALSE);
+	sci_goto_line(doc_list[idx].sci, line, TRUE);
 	sci_marker_delete_all(doc_list[idx].sci, 0);
 	sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
 
@@ -575,42 +575,6 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 		return errno;
 	}
 	return 0;
-}
-
-
-void _utils_show_indention_guides(void)
-{
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-
-	for(i = 0; i < max; i++)
-	{
-		idx = document_get_n_idx(i);
-		sci_set_indentionguides(doc_list[idx].sci, app->pref_editor_show_indent_guide);
-	}
-}
-
-
-void _utils_show_white_space(void)
-{
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-
-	for(i = 0; i < max; i++)
-	{
-		idx = document_get_n_idx(i);
-		sci_set_visible_white_spaces(doc_list[idx].sci, app->pref_editor_show_white_space);
-	}
-}
-
-
-void _utils_show_line_endings(void)
-{
-	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-
-	for(i = 0; i < max; i++)
-	{
-		idx = document_get_n_idx(i);
-		sci_set_visible_eols(doc_list[idx].sci, app->pref_editor_show_line_endings);
-	}
 }
 
 
@@ -1042,7 +1006,7 @@ gint utils_get_current_tag(gint idx, gchar **tagname)
 	gint pos;
 	gint line;
 	gint fold_level;
-	gint start, end;
+	gint start, end, last_pos;
 	gint tmp;
 	//const GList *tags;
 
@@ -1070,14 +1034,17 @@ gint utils_get_current_tag(gint idx, gchar **tagname)
 		}
 */
 		start = sci_get_position_from_line(doc_list[idx].sci, line + 1);
+		last_pos = sci_get_length(doc_list[idx].sci);
 		tmp = 0;
 		while (sci_get_style_at(doc_list[idx].sci, start) != SCE_C_IDENTIFIER
-			&& sci_get_style_at(doc_list[idx].sci, start) != SCE_C_GLOBALCLASS) start++;
+			&& sci_get_style_at(doc_list[idx].sci, start) != SCE_C_GLOBALCLASS
+			&& start < last_pos) start++;
 		end = start;
 		// save the style from start, it is SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS
 		tmp = sci_get_style_at(doc_list[idx].sci, start);
-		while (sci_get_style_at(doc_list[idx].sci, end) == tmp
-			|| sci_get_char_at(doc_list[idx].sci, end) == ':')	end++;
+		while ((sci_get_style_at(doc_list[idx].sci, end) == tmp
+			 || sci_get_char_at(doc_list[idx].sci, end) == ':')
+			 && end < last_pos) end++;
 
 		*tagname = g_malloc(end - start + 1);
 		sci_get_text_range(doc_list[idx].sci, start, end, *tagname);
@@ -1677,19 +1644,19 @@ gchar *utils_get_hostname(void)
 }
 
 
-gint utils_make_settings_dir(void)
+gint utils_make_settings_dir(const gchar *dir)
 {
 	gint error_nr = 0;
 	gchar *fileytpes_readme = g_strconcat(
-					app->configdir, G_DIR_SEPARATOR_S, "template.README", NULL);
+					dir, G_DIR_SEPARATOR_S, "template.README", NULL);
 
-	if (! g_file_test(app->configdir, G_FILE_TEST_EXISTS))
+	if (! g_file_test(dir, G_FILE_TEST_EXISTS))
 	{
-		geany_debug("creating config directory %s", app->configdir);
+		geany_debug("creating config directory %s", dir);
 #ifdef GEANY_WIN32
-		if (mkdir(app->configdir) != 0) error_nr = errno;
+		if (mkdir(dir) != 0) error_nr = errno;
 #else
-		if (mkdir(app->configdir, 0700) != 0) error_nr = errno;
+		if (mkdir(dir, 0700) != 0) error_nr = errno;
 #endif
 	}
 
@@ -1698,10 +1665,10 @@ gint utils_make_settings_dir(void)
 		error_nr = utils_write_file(fileytpes_readme,
 "There are several template files in this directory. For these templates you can use wildcards.\n\
 For more information read the documentation (in " DOCDIR " or visit " GEANY_HOMEPAGE ").");
-		{ // check whether write test was successful, otherwise directory is not writeable
-
+/*		{ // check whether write test was successful, otherwise directory is not writeable
+			/// FIXME write the code
 		}
-	}
+*/	}
 	g_free(fileytpes_readme);
 
 	return error_nr;
@@ -1902,6 +1869,13 @@ void utils_free_ptr_array(gchar *array[], gint len)
 	{
 		g_free(array[i]);
 	}
+}
+
+
+void utils_update_fold_items(void)
+{
+	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_fold_all1"), app->pref_editor_folding);
+	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_unfold_all1"), app->pref_editor_folding);
 }
 
 
@@ -2221,3 +2195,4 @@ gchar *utils_make_human_readable_str(unsigned long long size, unsigned long bloc
 	/* If f==fmt then 'frac' and 'u' are ignored. */
 	return g_strdup_printf(f, val, frac, *u, 'b');
 }
+

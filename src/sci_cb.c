@@ -76,6 +76,10 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 				//sci_marker_delete_all(doc_list[idx].sci, 1);
 				sci_set_marker_at_line(sci, line, sci_is_marker_set_at_line(sci, line, 1), 1);
 			}
+			else if (nt->margin == 2 && app->pref_editor_folding)
+			{
+				SSM(sci, SCI_TOGGLEFOLD, SSM(sci, SCI_LINEFROMPOSITION, nt->position, 0), 0);
+			}
 			break;
 		}
 		case SCN_UPDATEUI:
@@ -203,14 +207,15 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 			SSM(sci, SCI_STARTSTYLING, end_of_styling, 31);
 */			break;
 		}
-		case SCN_STYLENEEDED:
+/*		case SCN_STYLENEEDED:
 		{
 			geany_debug("style");
 			break;
 		}
-		case SCN_URIDROPPED:
+*/		case SCN_URIDROPPED:
 		{
 			geany_debug(nt->text);
+			break;
 		}
 	}
 }
@@ -455,7 +460,7 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint idx)
 		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		SSM(sci, SCI_GOTOPOS, pos + 1, 0);
+		sci_goto_pos(sci, pos + 1, TRUE);
 		g_free(construct);
 	}
 	else if (! strncmp("else", buf + 2, 4))
@@ -463,7 +468,7 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint idx)
 		construct = g_strdup_printf("%s{%s\t%s}%s", eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		SSM(sci, SCI_GOTOPOS, pos + 4 + (2 * strlen(indent)), 0);
+		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
 		g_free(construct);
 	}
 	else if (! strncmp("for", buf + 3, 3))
@@ -483,7 +488,7 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint idx)
 		construct = g_strdup_printf("(%s = 0; %s < ; %s++)%s{%s\t%s}%s", var, var, var, eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		SSM(sci, SCI_GOTOPOS, pos + contruct_len, 0);
+		sci_goto_pos(sci, pos + contruct_len, TRUE);
 		g_free(var);
 		g_free(construct);
 	}
@@ -492,7 +497,7 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint idx)
 		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		SSM(sci, SCI_GOTOPOS, pos + 1, 0);
+		sci_goto_pos(sci, pos + 1, TRUE);
 		g_free(construct);
 	}
 	else if (! strncmp("switch", buf, 5))
@@ -500,7 +505,7 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint idx)
 		construct = g_strdup_printf("()%s{%s\tcase : break;%s\tdefault: %s}%s", eol, eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		SSM(sci, SCI_GOTOPOS, pos + 1, 0);
+		sci_goto_pos(sci, pos + 1, TRUE);
 		g_free(construct);
 	}
 	g_free(eol);

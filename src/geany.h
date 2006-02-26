@@ -136,6 +136,7 @@ typedef struct MyApp
 	gboolean			 pref_editor_show_line_endings;
 	gboolean			 pref_editor_auto_close_xml_tags;
 	gboolean			 pref_editor_auto_complete_constructs;
+	gboolean			 pref_editor_folding;
 	gint				 pref_editor_tab_width;
 	gboolean			 pref_editor_new_line;
 	gboolean			 pref_editor_trail_space;
@@ -143,6 +144,7 @@ typedef struct MyApp
 	gboolean			 pref_main_save_winpos;
 	gboolean			 pref_main_confirm_exit;
 	gboolean			 pref_main_show_search;
+	gboolean			 pref_main_show_goto;
 	gint				 mru_length;
 	gint				 long_line_column;
 #ifdef HAVE_FIFO

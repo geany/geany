@@ -217,20 +217,24 @@ gint document_create_new_sci(const gchar *filename)
 	/* SCI - Code */
 	sci = SCINTILLA(scintilla_new());
 	scintilla_set_id(sci, new_idx);
-	// disable scintilla provided popup menu
+#ifdef GEANY_WIN32
+		sci_set_codepage(sci, 0);
+#else
+		sci_set_codepage(sci, SC_CP_UTF8);
+#endif
 	//SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);
+	// disable scintilla provided popup menu
 	sci_use_popup(sci, FALSE);
-	sci_set_codepage(sci, 1);
 	sci_assign_cmdkey(sci, SCK_HOME, SCI_VCHOMEWRAP);
-	sci_assign_cmdkey(sci, SCK_END, SCI_LINEENDWRAP);
+	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
 	sci_set_mark_long_lines(sci, app->long_line_column, app->long_line_color);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
+	sci_set_folding_margin_visible(sci, app->pref_editor_folding);
 	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);
 	sci_set_indentionguides(sci, app->pref_editor_show_indent_guide);
 	sci_set_visible_white_spaces(sci, app->pref_editor_show_white_space);
 	sci_set_visible_eols(sci, app->pref_editor_show_line_endings);
-	//sci_set_folding_margin_visible(sci, TRUE);
 	pfd = pango_font_description_from_string(app->editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
 	document_set_font(sci, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
@@ -347,7 +351,7 @@ void document_new_file(filetype *ft)
 		sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
 		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 		sci_empty_undo_buffer(doc_list[idx].sci);
-		sci_goto_pos(doc_list[idx].sci, 0);
+		sci_goto_pos(doc_list[idx].sci, 0, TRUE);
 
 		msgwin_status_add(_("New file opened."));
 	}
@@ -496,13 +500,13 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	doc_list[idx].encoding = enc;
 	if (reload)
 	{
-		sci_goto_pos(doc_list[idx].sci, 0);
+		sci_goto_pos(doc_list[idx].sci, 0, FALSE);
 		msgwin_status_add(_("File %s reloaded."), utf8_filename);
 	}
 	else
 	{
 		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(utf8_filename);
-		sci_goto_pos(doc_list[idx].sci, pos);
+		sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 		//if (app->main_window_realized) // avoids warnings, but doesn't scroll, so accept warning
 			sci_scroll_to_line(doc_list[idx].sci, sci_get_line_from_position(doc_list[idx].sci, pos) - 10);
 		doc_list[idx].readonly = readonly;
@@ -634,7 +638,7 @@ void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_b
 	selection_end =  sci_get_selection_end(doc_list[idx].sci);
 	if (!inc && sci_can_copy(doc_list[idx].sci))
 	{ // there's a selection so go to the end
-		sci_goto_pos(doc_list[idx].sci, selection_end + 1);
+		sci_goto_pos(doc_list[idx].sci, selection_end + 1, TRUE);
 	}
 
 	sci_set_search_anchor(doc_list[idx].sci);
@@ -649,14 +653,14 @@ void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_b
 		{
 			if (dialogs_show_not_found(text))
 			{
-				sci_goto_pos(doc_list[idx].sci, 0);
+				sci_goto_pos(doc_list[idx].sci, 0, FALSE);
 				document_find_next(idx, text, flags, TRUE, inc);
 			}
 		}
 		else
 		{
 			utils_beep();
-			sci_goto_pos(doc_list[idx].sci, 0);
+			sci_goto_pos(doc_list[idx].sci, 0, FALSE);
 		}
 	}
 }
@@ -674,9 +678,9 @@ void document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 	if ((selection_end - selection_start) > 0)
 	{ // there's a selection so go to the end
 		if (search_backwards)
-			sci_goto_pos(doc_list[idx].sci, selection_start - 1);
+			sci_goto_pos(doc_list[idx].sci, selection_start - 1, TRUE);
 		else
-			sci_goto_pos(doc_list[idx].sci, selection_end + 1);
+			sci_goto_pos(doc_list[idx].sci, selection_end + 1, TRUE);
 	}
 
 	sci_set_search_anchor(doc_list[idx].sci);
@@ -693,7 +697,7 @@ void document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 	{
 		if (dialogs_show_not_found(text))
 		{
-			sci_goto_pos(doc_list[idx].sci, (search_backwards) ? sci_get_length(doc_list[idx].sci) : 0);
+			sci_goto_pos(doc_list[idx].sci, (search_backwards) ? sci_get_length(doc_list[idx].sci) : 0, TRUE);
 			document_find_text(idx, text, flags, search_backwards);
 		}
 	}
@@ -712,9 +716,9 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 	if ((selection_end - selection_start) > 0)
 	{ // there's a selection so go to the end
 		if (search_backwards)
-			sci_goto_pos(doc_list[idx].sci, selection_start - 1);
+			sci_goto_pos(doc_list[idx].sci, selection_start - 1, TRUE);
 		else
-			sci_goto_pos(doc_list[idx].sci, selection_end + 1);
+			sci_goto_pos(doc_list[idx].sci, selection_end + 1, TRUE);
 	}
 
 	sci_set_search_anchor(doc_list[idx].sci);
@@ -755,9 +759,9 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	}
 
 	if (search_backwards)
-		sci_goto_pos(doc_list[idx].sci, selection_end);
+		sci_goto_pos(doc_list[idx].sci, selection_end, TRUE);
 	else
-		sci_goto_pos(doc_list[idx].sci, selection_start);
+		sci_goto_pos(doc_list[idx].sci, selection_start, TRUE);
 
 	sci_set_search_anchor(doc_list[idx].sci);
 	if (search_backwards)
@@ -789,7 +793,7 @@ void document_replace_all(gint idx, const gchar *find_text, const gchar *replace
 
 	if (idx == -1 || ! find_text_len) return;
 
-	sci_goto_pos(doc_list[idx].sci, 0);
+	sci_goto_pos(doc_list[idx].sci, 0, FALSE);
 	sci_set_search_anchor(doc_list[idx].sci);
 
 	search_pos = sci_search_next(doc_list[idx].sci, flags, find_text);
@@ -969,5 +973,42 @@ gchar *document_prepare_template(filetype *ft)
 	else
 	{	// new file w/o template
 		return templates_get_template_fileheader(GEANY_TEMPLATE_FILETYPE_NONE, NULL, -1);
+	}
+}
+
+
+void document_unfold_all(gint idx)
+{
+	gint lines, pos, i;
+
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	lines = sci_get_line_count(doc_list[idx].sci);
+	pos = sci_get_current_position(doc_list[idx].sci);
+
+	for (i = 0; i < lines; i++)
+	{
+		sci_ensure_line_is_visible(doc_list[idx].sci, i);
+	}
+}
+
+
+void document_fold_all(gint idx)
+{
+	gint lines, pos, i;
+
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	lines = sci_get_line_count(doc_list[idx].sci);
+	pos = sci_get_current_position(doc_list[idx].sci);
+
+	for (i = 0; i < lines; i++)
+	{
+		gint level = sci_get_fold_level(doc_list[idx].sci, i);
+		if (level & SC_FOLDLEVELHEADERFLAG)
+		{
+			if (sci_get_fold_expanded(doc_list[idx].sci, i))
+					sci_toggle_fold(doc_list[idx].sci, i);
+		}
 	}
 }

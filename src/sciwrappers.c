@@ -89,19 +89,24 @@ void sci_set_symbol_margin(ScintillaObject * sci, gboolean set )
 	}
 }
 
-gboolean sci_get_symbol_margin(ScintillaObject * sci)
+gboolean sci_get_symbol_margin(ScintillaObject *sci)
 {
 	if (SSM(sci, SCI_GETMARGINWIDTHN, 1, 0) > 0 ) return TRUE;
 	else return FALSE;
 }
 
 /* folding margin visibility */
-void sci_set_folding_margin_visible (ScintillaObject * sci, gboolean set )
+void sci_set_folding_margin_visible(ScintillaObject *sci, gboolean set)
 {
-	if( set ){
-		SSM (sci, SCI_SETMARGINWIDTHN, 2, 12 );
-	}else{
-		SSM (sci, SCI_SETMARGINWIDTHN, 2, 0 );
+	if (set)
+	{
+		SSM(sci, SCI_SETMARGINWIDTHN, 2, 12);
+		SSM(sci, SCI_SETMARGINSENSITIVEN, 2, TRUE);
+	}
+	else
+	{
+		SSM(sci, SCI_SETMARGINSENSITIVEN, 2, FALSE);
+		SSM(sci, SCI_SETMARGINWIDTHN, 2, 0);
 	}
 }
 
@@ -589,8 +594,9 @@ gboolean sci_can_copy(ScintillaObject *sci)
 }
 
 
-void sci_goto_pos(ScintillaObject *sci, gint pos)
+void sci_goto_pos(ScintillaObject *sci, gint pos, gboolean ensure_visibility)
 {
+	if (ensure_visibility) SSM(sci,SCI_ENSUREVISIBLE,SSM(sci, SCI_LINEFROMPOSITION, pos, 0),0);
 	SSM(sci, SCI_GOTOPOS, pos, 0);
 }
 
@@ -638,8 +644,9 @@ void sci_set_font(ScintillaObject *sci, gint style, const gchar* font, gint size
 }
 
 
-void sci_goto_line(ScintillaObject *sci, gint line)
+void sci_goto_line(ScintillaObject *sci, gint line, gboolean ensure_visibility)
 {
+	if (ensure_visibility) SSM(sci,SCI_ENSUREVISIBLE,line,0);
 	SSM(sci, SCI_GOTOLINE, line, 0);
 }
 

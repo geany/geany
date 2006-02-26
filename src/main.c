@@ -100,6 +100,8 @@ void geany_debug(gchar const *format, ...)
  * (all the following code is not perfect but it works for the moment) */
 static void apply_settings(void)
 {
+	utils_update_fold_items();
+
 	// toolbar, message window and tagbar are by default visible, so don't change it if it is true
 	if (! app->toolbar_visible)
 	{
@@ -172,6 +174,13 @@ static void apply_settings(void)
 		gtk_window_set_default_size(GTK_WINDOW(app->window), app->geometry[2], app->geometry[3]);
 	}
 
+	if (! app->pref_main_show_goto)
+	{
+		gtk_widget_hide(lookup_widget(app->window, "entry_goto_line"));
+		gtk_widget_hide(lookup_widget(app->window, "toolbutton25"));
+		gtk_widget_hide(lookup_widget(app->window, "separatortoolitem5"));
+	}
+
 	if (! app->pref_main_show_search)
 	{
 		gtk_widget_hide(lookup_widget(app->window, "entry1"));
@@ -189,10 +198,8 @@ static void apply_settings(void)
 }
 
 
-static gint main_init(void)
+static void main_init(void)
 {
-	gint mkdir_result;
-
 	// inits
 	app = g_new(MyApp, 1);
 #ifdef GEANY_DEBUG
@@ -248,9 +255,6 @@ static gint main_init(void)
 	dialogs_build_menus.menu_misc.item_compile	= NULL;
 	dialogs_build_menus.menu_misc.item_exec		= NULL;
 	dialogs_build_menus.menu_misc.item_link		= NULL;
-	mkdir_result = utils_make_settings_dir();
-	if (mkdir_result != 0)
-		if (! dialogs_show_mkcfgdir_error(mkdir_result)) destroyapp_early();
 
 	app->window = create_window1();
 	app->new_file_menu = gtk_menu_new();
@@ -318,8 +322,6 @@ static gint main_init(void)
 	msgwindow.tree_status = lookup_widget(app->window, "treeview3");
 	msgwindow.tree_msg = lookup_widget(app->window, "treeview4");
 	msgwindow.tree_compiler = lookup_widget(app->window, "treeview5");
-
-	return mkdir_result;
 }
 
 
@@ -367,17 +369,13 @@ static void write_fifo(gint argc, gchar **argv)
 
 /* creates a named pipe in GEANY_FIFO_NAME, to communicate with new instances of Geany
  * to submit filenames and possibly other things */
-static void create_fifo(gint argc, gchar **argv)
+static void create_fifo(gint argc, gchar **argv, const gchar *config_dir)
 {
 	struct stat st;
 	gchar *tmp;
 	GIOChannel *ioc;
 
-	if (alternate_config)
-		tmp = g_strconcat(alternate_config, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
-	else
-		tmp = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
-
+	tmp = g_strconcat(config_dir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
 	strncpy(fifo_name, tmp, MAX(strlen(tmp), sizeof(fifo_name)));
 	g_free(tmp);
 
@@ -408,7 +406,8 @@ static void create_fifo(gint argc, gchar **argv)
 
 	if ((mkfifo(fifo_name, S_IRUSR | S_IWUSR)) == -1)
 	{
-		if(errno != EEXIST) geany_debug("creating of a named pipe for IPC failed!");
+		if (errno != EEXIST) geany_debug("creating of a named pipe for IPC failed! (%s)", g_strerror(errno));
+		return;
 	}
 
 	ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
@@ -421,12 +420,14 @@ gint main(gint argc, gchar **argv)
 {
 	GError *error = NULL;
 	GOptionContext *context;
-	gint mkdir_result, idx;
+	gint mkdir_result = 0;
+	gint idx;
 	time_t seconds = time((time_t *) 0);
 	struct tm *tm = localtime(&seconds);
 	this_year = tm->tm_year + 1900;
 	this_month = tm->tm_mon + 1;
 	this_day = tm->tm_mday;
+	gchar *config_dir;
 
 #ifdef ENABLE_NLS
 	bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
@@ -453,15 +454,25 @@ gint main(gint argc, gchar **argv)
 	}
 
 	signal(SIGTERM, signal_cb);
-	//signal(SIGUSR1, signal_cb);
+
+	if (alternate_config) config_dir = g_strdup(alternate_config);
+	else config_dir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
+
+	mkdir_result = utils_make_settings_dir(config_dir);
+	if (mkdir_result != 0 && ! dialogs_show_mkcfgdir_error(mkdir_result))
+	{
+		g_free(config_dir);
+		return (0);
+	}
 
 #ifdef HAVE_FIFO
-	if (! ignore_fifo) create_fifo(argc, argv);
+	if (! ignore_fifo) create_fifo(argc, argv, config_dir);
 #endif
+	g_free(config_dir);
 
 	gtk_init(&argc, &argv);
 
-	mkdir_result = main_init();
+	main_init();
 	configuration_load();
 	templates_init();
 	encodings_init();
@@ -499,9 +510,6 @@ gint main(gint argc, gchar **argv)
 
 	// apply all configuration options
 	apply_settings();
-
-	// this option is currently disabled, until the document menu item is reordered
-	//gtk_widget_hide(lookup_widget(app->window, "set_file_readonly1"));
 
 	// open files from command line
 	app->opening_session_files = TRUE;

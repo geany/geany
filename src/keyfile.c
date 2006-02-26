@@ -84,6 +84,7 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "treeview_symbol_visible", app->treeview_symbol_visible);
 	g_key_file_set_boolean(config, PACKAGE, "treeview_openfiles_visible", app->treeview_openfiles_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", app->msgwindow_visible);
+	g_key_file_set_boolean(config, PACKAGE, "use_folding", app->pref_editor_folding);
 	g_key_file_set_boolean(config, PACKAGE, "use_auto_indention", app->pref_editor_use_auto_indention);
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", app->pref_editor_show_indent_guide);
 	g_key_file_set_boolean(config, PACKAGE, "show_white_space", app->pref_editor_show_white_space);
@@ -115,6 +116,7 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", app->pref_main_load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", app->pref_main_save_winpos);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_show_search", app->pref_main_show_search);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_show_goto", app->pref_main_show_goto);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", app->pref_editor_new_line);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", app->pref_editor_trail_space);
 	g_key_file_set_string(config, PACKAGE, "pref_template_developer", app->pref_template_developer);
@@ -214,6 +216,7 @@ gboolean configuration_load(void)
 	app->treeview_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_symbol_visible", TRUE);
 	app->treeview_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_openfiles_visible", TRUE);
 	app->msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
+	app->pref_editor_folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
 	app->pref_editor_use_auto_indention = utils_get_setting_boolean(config, PACKAGE, "use_auto_indention", TRUE);
 	app->pref_editor_show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
 	app->pref_editor_show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
@@ -255,6 +258,7 @@ gboolean configuration_load(void)
 	app->pref_main_load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	app->pref_main_save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
 	app->pref_main_show_search = utils_get_setting_boolean(config, PACKAGE, "pref_main_show_search", TRUE);
+	app->pref_main_show_goto = utils_get_setting_boolean(config, PACKAGE, "pref_main_show_goto", TRUE);
 	app->pref_template_developer = utils_get_setting_string(config, PACKAGE, "pref_template_developer", g_get_real_name());
 	app->pref_template_company = utils_get_setting_string(config, PACKAGE, "pref_template_company", "");
 #ifdef HAVE_VTE

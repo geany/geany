@@ -161,7 +161,7 @@ void utils_glist_strings_free(GList * list);
 
 gchar *utils_get_hostname(void);
 
-gint utils_make_settings_dir(void);
+gint utils_make_settings_dir(const gchar *dir);
 
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement);
 
@@ -205,5 +205,7 @@ void utils_beep(void);
 
 gchar *utils_make_human_readable_str(unsigned long long size, unsigned long block_size,
 									 unsigned long display_unit);
+
+void utils_update_fold_items(void);
 
 #endif

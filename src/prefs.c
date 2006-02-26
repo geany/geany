@@ -28,6 +28,7 @@
 #include "utils.h"
 #include "msgwindow.h"
 #include "sciwrappers.h"
+#include "document.h"
 #include "keyfile.h"
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -65,6 +66,9 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_show_search);
+
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_goto");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_show_goto);
 
 	widget = lookup_widget(app->prefs_dialog, "check_list_symbol");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->treeview_symbol_visible);
@@ -104,6 +108,9 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "check_auto_complete");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_auto_complete_constructs);
+
+	widget = lookup_widget(app->prefs_dialog, "check_folding");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_folding);
 
 	widget = lookup_widget(app->prefs_dialog, "editor_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), app->editor_font);
@@ -233,6 +240,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
 		app->pref_main_show_search = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_goto");
+		app->pref_main_show_goto = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
 		widget = lookup_widget(app->prefs_dialog, "check_list_symbol");
 		app->treeview_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -252,6 +262,25 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "spin_long_line");
 		app->long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_folding");
+		app->pref_editor_folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		utils_update_fold_items();
+
+		widget = lookup_widget(app->prefs_dialog, "check_indent");
+		app->pref_editor_show_indent_guide = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_white_space");
+		app->pref_editor_show_white_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_line_end");
+		app->pref_editor_show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_xmltag");
+		app->pref_editor_auto_close_xml_tags = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_auto_complete");
+		app->pref_editor_auto_complete_constructs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
 		// Tools Settings
@@ -346,6 +375,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		utils_widget_show_hide(lookup_widget(app->window, "entry1"), app->pref_main_show_search);
 		utils_widget_show_hide(lookup_widget(app->window, "toolbutton18"), app->pref_main_show_search);
 		utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), app->pref_main_show_search);
+		utils_widget_show_hide(lookup_widget(app->window, "entry_goto_line"), app->pref_main_show_goto);
+		utils_widget_show_hide(lookup_widget(app->window, "toolbutton25"), app->pref_main_show_goto);
+		utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem5"), app->pref_main_show_goto);
 		utils_treeviews_showhide();
 		for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 		{
@@ -353,7 +385,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 				gtk_widget_modify_font(doc_list[i].tag_tree, pango_font_description_from_string(app->tagbar_font));
 		}
 		if (GTK_IS_WIDGET(app->default_tag_tree))
-		gtk_widget_modify_font(app->default_tag_tree, pango_font_description_from_string(app->tagbar_font));
+			gtk_widget_modify_font(app->default_tag_tree, pango_font_description_from_string(app->tagbar_font));
 		gtk_widget_modify_font(lookup_widget(app->window, "entry1"), pango_font_description_from_string(app->tagbar_font));
 		gtk_widget_modify_font(msgwindow.tree_compiler, pango_font_description_from_string(app->msgwin_font));
 		gtk_widget_modify_font(msgwindow.tree_msg, pango_font_description_from_string(app->msgwin_font));
@@ -376,6 +408,8 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 					sci_set_visible_eols(doc_list[i].sci, app->pref_editor_show_line_endings);
 					sci_set_indentionguides(doc_list[i].sci, app->pref_editor_show_indent_guide);
 					sci_set_visible_white_spaces(doc_list[i].sci, app->pref_editor_show_white_space);
+					sci_set_folding_margin_visible(doc_list[i].sci, app->pref_editor_folding);
+					if (! app->pref_editor_folding) document_unfold_all(i);
 				}
 //			}
 			old_tab_width = app->pref_editor_tab_width;

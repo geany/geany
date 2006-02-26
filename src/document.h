@@ -109,4 +109,8 @@ gchar *document_get_eol_mode(gint);
 
 gchar *document_prepare_template(filetype *ft);
 
+void document_fold_all(gint idx);
+
+void document_unfold_all(gint idx);
+
 #endif
