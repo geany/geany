@@ -378,13 +378,14 @@ gboolean configuration_open_files(void)
 		{
 			x = 0;
 			y = 0;
+			ft_id = GEANY_MAX_FILE_TYPES;
 			file = strrchr(session_files[i], ':') + 1;
 			// try to get the locale equivalent for the filename, fallback to filename if error
 			locale_filename = g_locale_from_utf8(file, -1, NULL, NULL, NULL);
 			if (locale_filename == NULL) locale_filename = g_strdup(file);
 
 			// read position
-			while (session_files[i][x] != ':')
+			while (session_files[i][x] != ':' && session_files[i][x] != '\0')
 			{
 				spos[x] = session_files[i][x];
 				x++;
@@ -392,19 +393,25 @@ gboolean configuration_open_files(void)
 			spos[x] = '\0';
 			pos = atoi(spos);
 			x++;
+
 			// read filetype
-			while (session_files[i][x] != ':')
+			// (this is a bit tricky, but otherwise we crash with old config file format)
+			if (*file != session_files[i][x])
 			{
-				stype[y] = session_files[i][x];
-				x++;
-				y++;
+				while (session_files[i][x] != ':' && session_files[i][x] != '\0')
+				{
+					stype[y] = session_files[i][x];
+					x++;
+					y++;
+				}
+				stype[y] = '\0';
+				ft_id = atoi(stype);
 			}
-			stype[y] = '\0';
-			ft_id = atoi(stype);
 
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{
-				document_open_file(-1, locale_filename, pos, FALSE, filetypes[ft_id]);
+				document_open_file(-1, locale_filename, pos, FALSE,
+					(ft_id == GEANY_MAX_FILE_TYPES) ? NULL : filetypes[ft_id]);
 				ret = TRUE;
 			}
 			g_free(locale_filename);
