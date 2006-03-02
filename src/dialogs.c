@@ -811,7 +811,8 @@ void dialogs_show_find(void)
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
 
-	if (sci_can_copy(doc_list[idx].sci))
+	/// TODO add here if entry->text == NULL
+	if (sci_can_copy(doc_list[idx].sci) && 1)
 	{
 		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
 		sci_get_selected_text(doc_list[idx].sci, sel);
@@ -842,6 +843,8 @@ void dialogs_show_find(void)
 				G_CALLBACK(on_find_entry_activate), NULL);
 		g_signal_connect((gpointer) app->find_dialog, "response",
 				G_CALLBACK(on_find_dialog_response), entry);
+		g_signal_connect((gpointer) app->find_dialog, "delete_event",
+				G_CALLBACK(gtk_widget_hide), NULL);
 
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), label);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), entry);
@@ -943,6 +946,8 @@ void dialogs_show_replace(void)
 				G_CALLBACK(on_replace_entry_activate), NULL);
 		g_signal_connect((gpointer) app->replace_dialog, "response",
 				G_CALLBACK(on_replace_dialog_response), entry_replace);
+		g_signal_connect((gpointer) app->replace_dialog, "delete_event",
+				G_CALLBACK(gtk_widget_hide), NULL);
 
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), label_find);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), entry_find);
@@ -1292,7 +1297,8 @@ void dialogs_show_file_properties(gint idx)
 										 GTK_STOCK_CLOSE, GTK_RESPONSE_NONE, NULL);
 	g_free(title);
 
-	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
+	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
+	g_signal_connect(dialog, "delete_event", G_CALLBACK(gtk_widget_destroy), NULL);
 
 	title = g_strdup_printf("<b>%s\n</b>", base_name);
 	label = gtk_label_new(title);
