@@ -303,6 +303,7 @@ GPid build_spawn_cmd(gint idx, gchar **cmd)
 	gint     stdout_fd;
 	gint     stderr_fd;
 
+	app->cur_idx = idx;
 	cmd_string = g_strjoinv(" ", cmd);
 
 	argv = g_new(gchar *, 4);
@@ -323,6 +324,7 @@ GPid build_spawn_cmd(gint idx, gchar **cmd)
 		msgwin_status_add(_("Process failed (%s)"), error->message);
 		g_strfreev(argv);
 		g_error_free(error);
+		g_free(working_dir);
 		error = NULL;
 		return (GPid) 0;
 	}
@@ -469,7 +471,7 @@ gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 }
 
 
-GIOChannel *build_set_up_io_channel (gint fd, GIOCondition cond, GIOFunc func, gpointer data)
+GIOChannel *build_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gpointer data)
 {
 	GIOChannel *ioc;
 	GError *error = NULL;
@@ -498,7 +500,7 @@ GIOChannel *build_set_up_io_channel (gint fd, GIOCondition cond, GIOFunc func, g
 }
 
 
-void build_exit_cb (GPid child_pid, gint status, gpointer user_data)
+void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
 #ifdef G_OS_UNIX
 	gboolean failure = FALSE;

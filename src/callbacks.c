@@ -1657,15 +1657,19 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 				if (gdk_color_equal(&red, color))
 				{
 					gchar **array = g_strsplit(string, ":", 3);
-					gint idx = document_get_cur_idx();
-					gchar *file = g_path_get_basename(doc_list[idx].file_name);
 					gint line = strtol(array[1], NULL, 10);
+					gint idx = document_get_cur_idx();
 
-					if (line && utils_strcmp(array[0], file))
+					if (line)
 					{
-						utils_goto_line(idx, line);
+						if (idx != app->cur_idx)
+						{
+							gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
+										gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+														GTK_WIDGET(doc_list[app->cur_idx].sci)));
+						}
+						utils_goto_line(app->cur_idx, line);
 					}
-					g_free(file);
 					g_strfreev(array);
 				}
 				g_free(string);
