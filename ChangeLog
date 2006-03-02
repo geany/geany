@@ -1,3 +1,15 @@
+2006-03-02  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c: fixed crash when closing find or replace dialog twice
+                  by pressing escape (triggering the delete_event),
+                  closes #1441359
+
+
+2006-02-27  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: added auto completion in LaTeX mode for \begin
+
+
 2006-02-26  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c: removed unneeded destroyapp_early()
