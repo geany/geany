@@ -494,7 +494,8 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 	sci_set_savepoint(doc_list[idx].sci);
 	sci_empty_undo_buffer(doc_list[idx].sci);
-	doc_list[idx].mtime = time(NULL);
+	// get the modification time from file and keep it
+	doc_list[idx].mtime = st.st_mtime;
 	doc_list[idx].changed = FALSE;
 	doc_list[idx].file_name = g_strdup(utf8_filename);
 	doc_list[idx].encoding = enc;
@@ -747,6 +748,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 {
 	gint selection_end, selection_start, search_pos;
 	gint find_text_len = strlen(find_text);
+	gint replace_text_len = strlen(replace_text);
 
 	if (idx == -1 || ! find_text_len) return;
 
@@ -775,6 +777,16 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 		sci_target_end(doc_list[idx].sci, search_pos + find_text_len);
 		sci_target_replace(doc_list[idx].sci, replace_text);
 		sci_scroll_caret(doc_list[idx].sci);
+		// update selection points, avoiding rematching:
+		if (search_backwards)
+		{
+			selection_end = search_pos;
+		}
+		else
+		{
+			selection_start = search_pos + replace_text_len;
+			selection_end += replace_text_len - find_text_len;
+		}
 	}
 	else
 	{
@@ -790,6 +802,7 @@ void document_replace_all(gint idx, const gchar *find_text, const gchar *replace
 {
 	gint search_pos;
 	gint find_text_len = strlen(find_text);
+	gint replace_text_len = strlen(replace_text);
 
 	if (idx == -1 || ! find_text_len) return;
 
@@ -802,9 +815,12 @@ void document_replace_all(gint idx, const gchar *find_text, const gchar *replace
 		sci_target_start(doc_list[idx].sci, search_pos);
 		sci_target_end(doc_list[idx].sci, search_pos + find_text_len);
 		sci_target_replace(doc_list[idx].sci, replace_text);
-		sci_scroll_caret(doc_list[idx].sci);
+		// next search starts after replaced text (avoids rematching):
+		sci_goto_pos(doc_list[idx].sci, search_pos + replace_text_len, TRUE);
+		sci_set_search_anchor(doc_list[idx].sci);
 		search_pos = sci_search_next(doc_list[idx].sci, flags, find_text);
 	}
+	sci_scroll_caret(doc_list[idx].sci);
 	gtk_widget_hide(app->replace_dialog);
 }
 
