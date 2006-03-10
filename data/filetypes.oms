@@ -1,16 +1,16 @@
 [styling]
-# foreground;background;bold
-default=0x000000", "0xffffff,false
-commentline=0x909090,0xffffff,false
-number=0x007f00,0xffffff,false
-word=0x111199,0xffffff,false
-string=0x1e90ff,0xffffff,false
-character=0x004040,0xffffff,false
-operator=0x000000,0xffffff,false
-identifier=0x000000,0xffffff,false
-backticks=0x000000,0xe0c0e0,false
-param=0x111199,0x0000ff,false
-scalar=0xff0000,0xffffff,false
+# foreground;background;bold;italic
+default=0x000000", "0xffffff,false;false
+commentline=0x909090,0xffffff,false;false
+number=0x007f00,0xffffff,false;false
+word=0x111199,0xffffff,false;false
+string=0x1e90ff,0xffffff,false;false
+character=0x004040,0xffffff,false;false
+operator=0x000000,0xffffff,false;false
+identifier=0x000000,0xffffff,false;false
+backticks=0x000000,0xe0c0e0,false;false
+param=0x111199,0x0000ff,false;false
+scalar=0xff0000,0xffffff,false;false
 
 [keywords]
 # all items must be in one line

@@ -1,7 +1,9 @@
 [styling]
-# foreground;background;bold
-default=0x000000;0xffffff;false
+# foreground;background;bold;italic
+default=0x000000;0xffffff;false;false
 # bold for selection is useless, so say false
-selection=0xc0c0c0;0x00007F;false
-brace_good=0xff0000;0xFFFFFF;true
-brace_bad=0x0000ff;0xFFFFFF;true
+selection=0xc0c0c0;0x00007F;false;false
+brace_good=0xff0000;0xFFFFFF;true;false
+brace_bad=0x0000ff;0xFFFFFF;true;false
+# background colour of the current line, only the second argument is interpreted
+current_line=0x0;0xE5E5E5;false;false

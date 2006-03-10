@@ -1,19 +1,19 @@
 [styling]
-# foreground;background;bold
-default=0x000000,0xffffff,false
-comment=0x808080,0xffffff,false
-comment1=0x808080,0xffffff,false
-comment2=0x808080,0xffffff,false
-comment3=0x808080,0xffffff,false
-number=0x007f7f,0xffffff,false
-keyword=0x7f1a00,0xffffff,true
-keyword2=0x00007f,0xffffff,true
-string=0x7f007f,0xffffff,false
-char=0x7f007f,0xffffff,false
-operator=0x000000,0xffffff,false
-identifier=0x991111,0xffffff,false
-tagname=0x000000,0xffe0ff,true
-linenum=0x000000,0xC0C0C0,false
+# foreground;background;bold;italic
+default=0x000000;0xffffff;false;false
+comment=0x808080;0xffffff;false;false
+comment1=0x808080;0xffffff;false;false
+comment2=0x808080;0xffffff;false;false
+comment3=0x808080;0xffffff;false;false
+number=0x007f7f;0xffffff;false;false
+keyword=0x7f1a00;0xffffff;true;false
+keyword2=0x00007f;0xffffff;true;false
+string=0x7f007f;0xffffff;false;false
+char=0x7f007f;0xffffff;false;false
+operator=0x000000;0xffffff;false;false
+identifier=0x991111;0xffffff;false;false
+tagname=0x000000;0xffe0ff;true;false
+linenum=0x000000;0xC0C0C0;false;false
 
 [keywords]
 # all items must be in one line

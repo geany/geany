@@ -1,19 +1,19 @@
 [styling]
-# foreground;background;bold
-default=0xFF0000;0xffffff;false
-commentline=0xFF0000;0xffffff;false
-number=0x800040;0xffffff;false
-string=0x008000;0xffffff;false
-character=0x008000;0xffffff;false
-word=0x800060;0xffffff;true
-triple=0x208000;0xffffff;false
-tripledouble=0x004040;0xffffff;false
-classname=0x303000;0xffffff;false
-defname=0x800000;0xffffff;false
-operator=0x800030;0xffffff;false
-identifier=0x000000;0xffffff;false
-commentblock=0x808080;0xffffff;false
-stringeol=0x000000;0xe0c0e0;false
+# foreground;background;bold;italic
+default=0xFF0000;0xffffff;false;false
+commentline=0xFF0000;0xffffff;false;false
+number=0x800040;0xffffff;false;false
+string=0x008000;0xffffff;false;false
+character=0x008000;0xffffff;false;false
+word=0x800060;0xffffff;true;false
+triple=0x208000;0xffffff;false;false
+tripledouble=0x004040;0xffffff;false;false
+classname=0x303000;0xffffff;false;false
+defname=0x800000;0xffffff;false;false
+operator=0x800030;0xffffff;false;false
+identifier=0x000000;0xffffff;false;false
+commentblock=0x808080;0xffffff;false;false
+stringeol=0x000000;0xe0c0e0;false;false
 
 [keywords]
 # all items must be in one line

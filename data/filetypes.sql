@@ -1,20 +1,20 @@
 [styling]
-# foreground;background;bold
-default=0x000000,0xffffff,false
-comment=0x808080,0xffffff,false
-commentline=0x808080,0xffffff,false
-commentdoc=0x808080,0xffffff,false
-number=0x007F7F,0xffffff,false
-word=0x7F1A00,0xffffff,true
-word2=0x00007F,0xffffff,true
-string=0x7F007F,0xffffff,false
-character=0x000000,0xffffff,false
-operator=0x000000,0xffffff,true
-identifier=0x991111,0xffffff,false
-sqlplus=0x000000,0xffffff,false
-sqlplus_prompt=0x000000,0xffffff,false
-sqlplus_comment=0x000000,0xffffff,false
-quotedidentifier=0x991111,0xffffff,false
+# foreground;background;bold;italic
+default=0x000000;0xffffff;false;false
+comment=0x808080;0xffffff;false;false
+commentline=0x808080;0xffffff;false;false
+commentdoc=0x808080;0xffffff;false;false
+number=0x007F7F;0xffffff;false;false
+word=0x7F1A00;0xffffff;true;false
+word2=0x00007F;0xffffff;true;false
+string=0x7F007F;0xffffff;false;false
+character=0x000000;0xffffff;false;false
+operator=0x000000;0xffffff;true;false
+identifier=0x991111;0xffffff;false;false
+sqlplus=0x000000;0xffffff;false;false
+sqlplus_prompt=0x000000;0xffffff;false;false
+sqlplus_comment=0x000000;0xffffff;false;false
+quotedidentifier=0x991111;0xffffff;false;false
 
 [keywords]
 # all items must be in one line

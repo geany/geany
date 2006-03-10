@@ -1,68 +1,68 @@
 [styling]
-# foreground;background;bold
-html_default=0x000000;0xffffff;false
-html_tag=0x990000;0xffffff;false
-html_tagunknown=0x0000ff;0xffffff;false
-html_attribute=0x007F00;0xffffff;false
-html_attributeunknown=0x0000ff;0xffffff;false
-html_number=0x800080;0xffffff;false
-html_doublestring=0x1E90FF;0xffffff;false
-html_singlestring=0x1E90FF;0xffffff;false
-html_other=0x800080;0xffffff;false
-html_comment=0x808080;0xffffff;false
-html_entity=0x800080;0xffffff;false
-html_tagend=0x800000;0xffffff;false
+# foreground;background;bold;italic
+html_default=0x000000;0xffffff;false;false
+html_tag=0x990000;0xffffff;false;false
+html_tagunknown=0x0000ff;0xffffff;false;false
+html_attribute=0x007F00;0xffffff;false;false
+html_attributeunknown=0x0000ff;0xffffff;false;false
+html_number=0x800080;0xffffff;false;false
+html_doublestring=0x1E90FF;0xffffff;false;false
+html_singlestring=0x1E90FF;0xffffff;false;false
+html_other=0x800080;0xffffff;false;false
+html_comment=0x808080;0xffffff;false;false
+html_entity=0x800080;0xffffff;false;false
+html_tagend=0x800000;0xffffff;false;false
 # <?
-html_xmlstart=0x990000;0xf0f0f0;false
+html_xmlstart=0x990000;0xf0f0f0;false;false
 # ?>
-html_xmlend=0x990000;0xf0f0f0;false
+html_xmlend=0x990000;0xf0f0f0;false;false
 # <script
-html_script=0x800000;0xf0f0f0;false
+html_script=0x800000;0xf0f0f0;false;false
 # <% ... %>
-html_asp=0x4f4f00;0xf0f0f0;false
+html_asp=0x4f4f00;0xf0f0f0;false;false
 # <%@ ... %>
-html_aspat=0x4f4f00;0xf0f0f0;false
-html_cdata=0x990066;0xffffff;false
-html_question=0xff0000;0xffffff;false
-html_value=0x990066;0xffffff;false
-html_xccomment=0x990066;0xffffff;false
+html_aspat=0x4f4f00;0xf0f0f0;false;false
+html_cdata=0x990066;0xffffff;false;false
+html_question=0xff0000;0xffffff;false;false
+html_value=0x990066;0xffffff;false;false
+html_xccomment=0x990066;0xffffff;false;false
 
-sgml_default=0x000000;0xffffff;false
-sgml_comment=0x808080;0xffffff;false
-sgml_special=0x007F00;0xffffff;false
-sgml_command=0x991111;0xffffff;true
-sgml_doublestring=0x1E90FF;0xffffff;false
-sgml_simplestring=0x004040;0xffffff;false
-sgml_1st_param=0x804040;0xffffff;false
-sgml_entity=0x101030;0xffffff;false
-sgml_block_default=0x100000;0xffffff;false
-sgml_1st_param_comment=0x906040;0xffffff;false
-sgml_error=0x0000ff;0xffffff;false
+sgml_default=0x000000;0xffffff;false;false
+sgml_comment=0x808080;0xffffff;false;false
+sgml_special=0x007F00;0xffffff;false;false
+sgml_command=0x991111;0xffffff;true;false
+sgml_doublestring=0x1E90FF;0xffffff;false;false
+sgml_simplestring=0x004040;0xffffff;false;false
+sgml_1st_param=0x804040;0xffffff;false;false
+sgml_entity=0x101030;0xffffff;false;false
+sgml_block_default=0x100000;0xffffff;false;false
+sgml_1st_param_comment=0x906040;0xffffff;false;false
+sgml_error=0x0000ff;0xffffff;false;false
 
-php_default=0x000000;0xffffff;false
-php_simplestring=0x008000;0xffffff;false
-php_hstring=0x008000;0xffffff;false
-php_number=0x006060;0xffffff;false
-php_word=0x990000;0xffffff;false
-php_variable=0x00007F;0xffffff;false
-php_comment=0x808080;0xffffff;false
-php_commentline=0x808080;0xffffff;false
-php_operator=0x602010;0xffffff;false
-php_hstring_variable=0x601010;0xffffff;false
-php_complex_variable=0x105010;0xffffff;false
+php_default=0x000000;0xffffff;false;false
+php_simplestring=0x008000;0xffffff;false;false
+php_hstring=0x008000;0xffffff;false;false
+php_number=0x006060;0xffffff;false;false
+php_word=0x990000;0xffffff;false;false
+php_variable=0x00007F;0xffffff;false;false
+php_comment=0x808080;0xffffff;false;false
+php_commentline=0x808080;0xffffff;false;false
+php_operator=0x602010;0xffffff;false;false
+php_hstring_variable=0x601010;0xffffff;false;false
+php_complex_variable=0x105010;0xffffff;false;false
 
-jscript_start=0x808000;0xffffff;false
-jscript_default=0x000000;0xffffff;false
-jscript_comment=0x222222;0xffffff;false
-jscript_commentline=0x808080;0xffffff;false
-jscript_commentdoc=0x808080;0xffffff;false
-jscript_number=0x606000;0xffffff;false
-jscript_word=0xff0000;0xffffff;false
-jscript_keyword=0x001050;0xffffff;false
-jscript_doublestring=0x080080;0xffffff;false
-jscript_singlestring=0x080080;0xffffff;false
-jscript_symbols=0x501000;0xffffff;false
-jscript_stringeol=0x000000;0xe0c0e0;false
+jscript_start=0x808000;0xffffff;false;false
+jscript_default=0x000000;0xffffff;false;false
+jscript_comment=0x222222;0xffffff;false;false
+jscript_commentline=0x808080;0xffffff;false;false
+jscript_commentdoc=0x808080;0xffffff;false;false
+jscript_number=0x606000;0xffffff;false;false
+jscript_word=0xff0000;0xffffff;false;false
+jscript_keyword=0x001050;0xffffff;false;false
+jscript_doublestring=0x080080;0xffffff;false;false
+jscript_singlestring=0x080080;0xffffff;false;false
+jscript_symbols=0x501000;0xffffff;false;false
+jscript_stringeol=0x000000;0xe0c0e0;false;false
 
 [keywords]
 html=a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml
