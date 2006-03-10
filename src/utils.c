@@ -942,61 +942,50 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 }
 
 
-gboolean utils_check_disk_status(gint idx, const gboolean force)
+void utils_check_disk_status(gint idx)
 {
 #ifndef GEANY_WIN32
 	struct stat st;
 	time_t t;
 	gchar *buff, *locale_filename;
 
-	if (idx == -1 || doc_list[idx].file_name == NULL) return FALSE;
+	if (idx == -1 || doc_list[idx].file_name == NULL) return;
 
 	t = time(NULL);
 
-	if (doc_list[idx].last_check > (t - 30)) return TRUE;
+	if (doc_list[idx].last_check > (t - GEANY_CHECK_FILE_DELAY)) return;
 
 	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
-	if (stat(locale_filename, &st) != 0) return TRUE;
+	if (stat(locale_filename, &st) != 0) return;
 
 	if (doc_list[idx].mtime > t || st.st_mtime > t)
 	{
-		/* Something is wrong with the time stamps. They are refering to the
-		 * future or the system clock is wrong. */
 		geany_debug("Strange: Something is wrong with the time stamps.");
-		return TRUE;
+		return;
 	}
-/*	geany_debug("check_disk: %d\t%d\t%d (%s)",
-		(int)doc_list[idx].mtime, (int)st.st_mtime, (int)st.st_mtime - (int)doc_list[idx].mtime, doc_list[idx].file_name);
-*/
+
 	if (doc_list[idx].mtime < st.st_mtime)
 	{
-		if (force)
+		gchar *basename = g_path_get_basename(doc_list[idx].file_name);
+
+		buff = g_strdup_printf(_
+					 ("The file '%s' on the disk is more recent than\n"
+					  "the current buffer.\nDo you want to reload it?"), basename);
+
+		if (dialogs_show_reload_warning(buff))
 		{
 			document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
+			doc_list[idx].last_check = t;
 		}
 		else
-		{
-			gchar *basename = g_path_get_basename(doc_list[idx].file_name);
+			doc_list[idx].mtime = st.st_mtime;
 
-			buff = g_strdup_printf(_
-						 ("The file '%s' on the disk is more recent than\n"
-						  "the current buffer.\nDo you want to reload it?"), basename);
-
-			if (dialogs_show_reload_warning(buff))
-			{
-				document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
-				doc_list[idx].last_check = t;
-			}
-			else
-				doc_list[idx].mtime = t;
-
-			g_free(basename);
-			g_free(buff);
-			return FALSE;
-		}
+		g_free(basename);
+		g_free(buff);
+		return;
 	}
 #endif
-	return TRUE;
+	return;
 }
 
 

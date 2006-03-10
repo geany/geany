@@ -98,7 +98,7 @@ gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const
  */
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag);
 
-gboolean utils_check_disk_status(gint idx, const gboolean bForce);
+void utils_check_disk_status(gint idx);
 
 //gchar *utils_get_current_tag(gint idx, gint direction);
 gint utils_get_current_tag(gint idx, gchar **tagname);
