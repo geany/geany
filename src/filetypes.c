@@ -177,9 +177,13 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_PASCAL]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_PASCAL]->title = g_strdup(_("Pascal source file"));
 	filetypes[GEANY_FILETYPES_PASCAL]->extension = g_strdup("pas");
-	filetypes[GEANY_FILETYPES_PASCAL]->pattern = g_new(gchar*, 2);
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern = g_new(gchar*, 6);
 	filetypes[GEANY_FILETYPES_PASCAL]->pattern[0] = g_strdup("*.pas");
-	filetypes[GEANY_FILETYPES_PASCAL]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[1] = g_strdup("*.pp");
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[2] = g_strdup("*.inc");
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[3] = g_strdup("*.dpr");
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[4] = g_strdup("*.dpk");
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[5] = NULL;
 	filetypes[GEANY_FILETYPES_PASCAL]->style_func_ptr = styleset_pascal;
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_PASCAL]->title, filetypes[GEANY_FILETYPES_PASCAL]);
 	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PASCAL]->title, filetypes[GEANY_FILETYPES_PASCAL]);
