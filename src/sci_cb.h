@@ -32,7 +32,9 @@ void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
 
 void sci_cb_close_block(ScintillaObject *sci, gint pos);
 
-void sci_cb_auto_forif(ScintillaObject *sci, gint idx);
+void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx);
+
+void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx);
 
 void sci_cb_show_macro_list(ScintillaObject *sci);
 

@@ -123,6 +123,7 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 					if (sci_get_eol_mode(sci) == SC_EOL_CR)
 					{
 						sci_cb_auto_multiline(sci, pos);
+						if (app->pref_editor_auto_complete_constructs) sci_cb_auto_latex(sci, pos, idx);
 					}
 					break;
 				}
@@ -135,6 +136,7 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 					}
 					// " * " auto completion in multiline C/C++ comments
 					sci_cb_auto_multiline(sci, pos);
+					if (app->pref_editor_auto_complete_constructs) sci_cb_auto_latex(sci, pos, idx);
 					break;
 				}
 				case '>':
@@ -158,7 +160,7 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 				}
 				case ' ':
 				{	// if and for autocompletion
-					if (app->pref_editor_auto_complete_constructs) sci_cb_auto_forif(sci, idx);
+					if (app->pref_editor_auto_complete_constructs) sci_cb_auto_forif(sci, pos, idx);
 					break;
 				}
 				case '[':
@@ -418,12 +420,72 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 }
 
 
-void sci_cb_auto_forif(ScintillaObject *sci, gint idx)
+void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx)
+{
+	// currently disabled
+	return;
+	if (sci_get_char_at(sci, pos - 2) == '}')
+	{
+		gchar *eol, *buf, *construct;
+		gchar env[30]; /// FIXME are 30 chars enough?
+		gint line = sci_get_line_from_position(sci, pos - 2);
+		gint line_len = sci_get_line_length(sci, line);
+		gint i, start;
+
+		// get the line
+		buf = g_malloc0(line_len + 1);
+		sci_get_line(sci, line, buf);
+
+		// get to the first non-blank char (some kind of ltrim())
+		i = start = 0;
+		while (isspace(buf[i++])) start++;
+
+		// check for begin
+		if (strncmp(buf + start, "\\begin", 6) == 0)
+		{
+			// goto through the line and get the environment, begin at first non-blank char (= start)
+			for (i = start; i < line_len; i++)
+			{
+				if (buf[i] == '{')
+				{
+					gint j = 0;
+					i++;
+					while (buf[i] != '}')
+					{	// this could be done in a shorter way, but so it resists readable ;-)
+						env[j] = buf[i];
+						j++;
+						i++;
+					}
+					env[j] = '\0';
+					break;
+				}
+			}
+
+			// get the indention
+			if (doc_list[idx].use_auto_indention) sci_cb_get_indent(sci, pos, TRUE);
+			eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
+
+			construct = g_strdup_printf("%s\\end{%s}", eol, env);
+
+			SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
+			sci_goto_pos(sci, pos + 1, TRUE);
+			g_free(construct);
+			g_free(buf);
+			g_free(eol);
+		}
+		else
+		{	// later there could be some else ifs for other keywords
+			return;
+		}
+	}
+}
+
+
+void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 {
 	static gchar buf[7];
 	gchar *eol;
 	gchar *construct;
-	gint pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 	//gint line = sci_get_line_from_position(sci, pos);
