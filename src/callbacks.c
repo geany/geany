@@ -768,7 +768,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		utils_update_statusbar(idx);
 		utils_set_window_title(idx);
 		utils_update_tag_list(idx, FALSE);
-		utils_check_disk_status(idx, FALSE);
+		utils_check_disk_status(idx);
 
 		switch_notebook_page = FALSE;
 	}
@@ -1251,7 +1251,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 #ifndef GEANY_WIN32
 	if (event->button == 1)
 	{
-		utils_check_disk_status(GPOINTER_TO_INT(user_data), FALSE);
+		utils_check_disk_status(GPOINTER_TO_INT(user_data));
 	}
 #endif
 
