@@ -811,8 +811,7 @@ void dialogs_show_find(void)
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
 
-	/// TODO add here if entry->text == NULL
-	if (sci_can_copy(doc_list[idx].sci) && 1)
+	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
 	{
 		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
 		sci_get_selected_text(doc_list[idx].sci, sel);
@@ -903,7 +902,7 @@ void dialogs_show_replace(void)
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
 
-	if (sci_can_copy(doc_list[idx].sci))
+	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
 	{
 		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
 		sci_get_selected_text(doc_list[idx].sci, sel);

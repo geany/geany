@@ -775,3 +775,15 @@ gint sci_get_current_line(ScintillaObject *sci, gint pos)
 		return SSM(sci, SCI_LINEFROMPOSITION, SSM(sci, SCI_GETCURRENTPOS, 0, 0), 0);
 	}
 }
+
+// get number of lines partially or fully selected
+gint sci_get_lines_selected(ScintillaObject *sci)
+{
+	gint start = SSM(sci, SCI_GETSELECTIONSTART, 0, 0);
+	gint end = SSM(sci, SCI_GETSELECTIONEND, 0, 0);
+	
+	if (start == end)
+		return 0; // no selection
+	
+	return SSM(sci, SCI_LINEFROMPOSITION, end, 0) - SSM(sci, SCI_LINEFROMPOSITION, start, 0) + 1;
+}
