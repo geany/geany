@@ -27,7 +27,7 @@
 
 typedef struct
 {
-	gint styling[55][3];
+	gint styling[55][4];
 	gchar **keywords;
 } style_set;
 

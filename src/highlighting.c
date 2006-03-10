@@ -86,6 +86,8 @@ static void styleset_get_hex(GKeyFile *config, const gchar *section, const gchar
 	else array[1] = (gint) my_strtod(background, NULL);
 	if (list != NULL && list[2] != NULL) array[2] = utils_atob(list[2]);
 	else array[2] = utils_atob(bold);
+	if (list != NULL && list[3] != NULL) array[3] = utils_atob(list[3]);
+	else array[3] = utils_atob(bold);
 
 	g_strfreev(list);
 }
@@ -96,6 +98,7 @@ static void styleset_set_style(ScintillaObject *sci, gint style, gint filetype, 
 	SSM(sci, SCI_STYLESETFORE, style, types[filetype]->styling[styling_index][0]);
 	SSM(sci, SCI_STYLESETBACK, style, types[filetype]->styling[styling_index][1]);
 	SSM(sci, SCI_STYLESETBOLD, style, types[filetype]->styling[styling_index][2]);
+	SSM(sci, SCI_STYLESETITALIC, style, types[filetype]->styling[styling_index][3]);
 }
 
 
@@ -125,6 +128,7 @@ static void styleset_common_init(void)
 	styleset_get_hex(config, "styling", "selection", "0xc0c0c0", "0x00007f", "false", types[GEANY_FILETYPES_ALL]->styling[1]);
 	styleset_get_hex(config, "styling", "brace_good", "0xff0000", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[2]);
 	styleset_get_hex(config, "styling", "brace_bad", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[3]);
+	styleset_get_hex(config, "styling", "current_line", "0x000000", "0xE5E5E5", "false", types[GEANY_FILETYPES_ALL]->styling[4]);
 
 	types[GEANY_FILETYPES_ALL]->keywords = NULL;
 
@@ -146,7 +150,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETTABWIDTH, app->pref_editor_tab_width, 0);
 
 	// colourize the current line
-	SSM(sci, SCI_SETCARETLINEBACK, 0xE5E5E5, 0);
+	SSM(sci, SCI_SETCARETLINEBACK, types[GEANY_FILETYPES_ALL]->styling[4][1], 0);
 	SSM(sci, SCI_SETCARETLINEVISIBLE, 1, 0);
 
 	// a darker grey for the line number margin
@@ -309,7 +313,6 @@ void styleset_c(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_ALL, 13);
 	styleset_set_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_C, 14);
 	styleset_set_style(sci, SCE_C_REGEX, GEANY_FILETYPES_C, 15);
-	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTLINEDOC, TRUE);
 	styleset_set_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_C, 16);
 	styleset_set_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_C, 17);
 
@@ -472,7 +475,6 @@ void styleset_tex(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_L_COMMAND, GEANY_FILETYPES_TEX, 1);
 	styleset_set_style(sci, SCE_L_TAG, GEANY_FILETYPES_TEX, 2);
 	styleset_set_style(sci, SCE_L_MATH, GEANY_FILETYPES_TEX, 3);
-	SSM(sci, SCI_STYLESETITALIC, SCE_L_COMMENT, TRUE);
 	styleset_set_style(sci, SCE_L_COMMENT, GEANY_FILETYPES_TEX, 4);
 }
 
@@ -887,9 +889,7 @@ void styleset_java(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_JAVA, 13);
 	styleset_set_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_JAVA, 14);
 	styleset_set_style(sci, SCE_C_REGEX, GEANY_FILETYPES_JAVA, 15);
-	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTLINEDOC, TRUE);
 	styleset_set_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_JAVA, 16);
-	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORD, TRUE);
 	styleset_set_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_JAVA, 17);
 
 	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, 0x0000ff);
@@ -1362,7 +1362,6 @@ void styleset_css(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_CSS_COMMENT, GEANY_FILETYPES_CSS, 1);
 	styleset_set_style(sci, SCE_CSS_TAG, GEANY_FILETYPES_CSS, 2);
 	styleset_set_style(sci, SCE_CSS_CLASS, GEANY_FILETYPES_CSS, 3);
-	SSM(sci, SCI_STYLESETITALIC, SCE_CSS_PSEUDOCLASS, TRUE);
 	styleset_set_style(sci, SCE_CSS_PSEUDOCLASS, GEANY_FILETYPES_CSS, 4);
 	styleset_set_style(sci, SCE_CSS_UNKNOWN_PSEUDOCLASS, GEANY_FILETYPES_CSS, 5);
 	styleset_set_style(sci, SCE_CSS_UNKNOWN_IDENTIFIER, GEANY_FILETYPES_CSS, 6);
