@@ -1384,8 +1384,9 @@ static void styleset_conf_init(void)
 	styleset_get_hex(config, "styling", "default", "0x00007f", "0xffffff", "false", types[GEANY_FILETYPES_CONF]->styling[0]);
 	styleset_get_hex(config, "styling", "comment", "0x808080", "0xffffff", "false", types[GEANY_FILETYPES_CONF]->styling[1]);
 	styleset_get_hex(config, "styling", "section", "0x900000", "0xffffff", "true", types[GEANY_FILETYPES_CONF]->styling[2]);
-	styleset_get_hex(config, "styling", "assignment", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_CONF]->styling[3]);
-	styleset_get_hex(config, "styling", "defval", "0x7f0000", "0xffffff", "false", types[GEANY_FILETYPES_CONF]->styling[4]);
+	styleset_get_hex(config, "styling", "key", "0x7f0000", "0xffffff", "false", types[GEANY_FILETYPES_CONF]->styling[3]);
+	styleset_get_hex(config, "styling", "assignment", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_CONF]->styling[4]);
+	styleset_get_hex(config, "styling", "defval", "0x7f0000", "0xffffff", "false", types[GEANY_FILETYPES_CONF]->styling[5]);
 
 	types[GEANY_FILETYPES_CONF]->keywords = NULL;
 
@@ -1408,8 +1409,9 @@ void styleset_conf(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_PROPS_DEFAULT, GEANY_FILETYPES_CONF, 0);
 	styleset_set_style(sci, SCE_PROPS_COMMENT, GEANY_FILETYPES_CONF, 1);
 	styleset_set_style(sci, SCE_PROPS_SECTION, GEANY_FILETYPES_CONF, 2);
-	styleset_set_style(sci, SCE_PROPS_ASSIGNMENT, GEANY_FILETYPES_CONF, 3);
-	styleset_set_style(sci, SCE_PROPS_DEFVAL, GEANY_FILETYPES_CONF, 4);
+	styleset_set_style(sci, SCE_PROPS_KEY, GEANY_FILETYPES_CONF, 3);
+	styleset_set_style(sci, SCE_PROPS_ASSIGNMENT, GEANY_FILETYPES_CONF, 4);
+	styleset_set_style(sci, SCE_PROPS_DEFVAL, GEANY_FILETYPES_CONF, 5);
 }
 
 
