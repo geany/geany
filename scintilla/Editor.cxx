@@ -26,6 +26,7 @@
 #include "LineMarker.h"
 #include "Style.h"
 #include "ViewStyle.h"
+#include "CharClassify.h"
 #include "Document.h"
 #include "Editor.h"
 
@@ -809,6 +810,9 @@ int Editor::PositionFromLocationClose(Point pt) {
 				        IsEOLChar(ll->chars[i])) {
 					return pdoc->MovePositionOutsideChar(i + posLineStart, 1);
 				}
+			}
+			if (pt.x < (ll->positions[lineEnd] - subLineStart)) {
+				return pdoc->MovePositionOutsideChar(lineEnd + posLineStart, 1);
 			}
 		}
 	}
@@ -1673,6 +1677,7 @@ void Editor::LinesSplit(int pixelWidth) {
 					targetEnd += static_cast<int>(strlen(eol));
 				}
 			}
+			lineEnd = pdoc->LineFromPosition(targetEnd);
 		}
 		pdoc->EndUndoAction();
 	}
@@ -2290,7 +2295,7 @@ void Editor::DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int lineVis
 	// the color for the highest numbered one is used.
 	bool overrideBackground = false;
 	ColourAllocated background;
-	if (caret.active && vsDraw.showCaretLineBackground && ll->containsCaret) {
+	if (caret.active && vsDraw.showCaretLineBackground && (vsDraw.caretLineAlpha == SC_ALPHA_NOALPHA) && ll->containsCaret) {
 		overrideBackground = true;
 		background = vsDraw.caretLineBackground.allocated;
 	}
@@ -2648,6 +2653,13 @@ void Editor::DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int lineVis
 		rcSegment.right = rcSegment.left + 1;
 		surface->FillRectangle(rcSegment, vsDraw.edgecolour.allocated);
 	}
+
+	if (caret.active && vsDraw.showCaretLineBackground && (vsDraw.caretLineAlpha != SC_ALPHA_NOALPHA) && ll->containsCaret) {
+		rcSegment.left = xStart;
+		rcSegment.right = rcLine.right - 1;
+		surface->AlphaRectangle(rcSegment, 0, vsDraw.caretLineBackground.allocated, vsDraw.caretLineAlpha, 
+			vsDraw.caretLineBackground.allocated, vsDraw.caretLineAlpha, 0);
+	}
 }
 
 void Editor::RefreshPixMaps(Surface *surfaceWindow) {
@@ -2721,7 +2733,6 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 	//	paintingAllText, rcArea.left, rcArea.top, rcArea.right, rcArea.bottom);
 
 	RefreshStyleData();
-
 	RefreshPixMaps(surfaceWindow);
 
 	PRectangle rcClient = GetClientRectangle();
@@ -2752,6 +2763,8 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 	if (needUpdateUI) {
 		NotifyUpdateUI();
 		needUpdateUI = false;
+		RefreshStyleData();
+		RefreshPixMaps(surfaceWindow);
 	}
 
 	// Call priority lines wrap on a window of lines which are likely
@@ -4849,7 +4862,7 @@ void Editor::CopyRangeToClipboard(int start, int end) {
 
 void Editor::CopyText(int length, const char *text) {
 	SelectionText selectedText;
-	selectedText.Copy(text, length,
+	selectedText.Copy(text, length + 1,
 		pdoc->dbcsCodePage, vs.styles[STYLE_DEFAULT].characterSet, false);
 	CopyToClipboard(selectedText);
 }
@@ -6038,14 +6051,14 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			pdoc->SetDefaultCharClasses(false);
 			if (lParam == 0)
 				return 0;
-			pdoc->SetCharClasses(reinterpret_cast<unsigned char *>(lParam), Document::ccWord);
+			pdoc->SetCharClasses(reinterpret_cast<unsigned char *>(lParam), CharClassify::ccWord);
 		}
 		break;
 
 	case SCI_SETWHITESPACECHARS: {
 			if (lParam == 0)
 				return 0;
-			pdoc->SetCharClasses(reinterpret_cast<unsigned char *>(lParam), Document::ccSpace);
+			pdoc->SetCharClasses(reinterpret_cast<unsigned char *>(lParam), CharClassify::ccSpace);
 		}
 		break;
 
@@ -6715,6 +6728,12 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		return vs.caretLineBackground.desired.AsLong();
 	case SCI_SETCARETLINEBACK:
 		vs.caretLineBackground.desired = wParam;
+		InvalidateStyleRedraw();
+		break;
+	case SCI_GETCARETLINEBACKALPHA:
+		return vs.caretLineAlpha;
+	case SCI_SETCARETLINEBACKALPHA:
+		vs.caretLineAlpha = wParam;
 		InvalidateStyleRedraw();
 		break;
 

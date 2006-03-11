@@ -109,6 +109,7 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 	}
 
 	WordList &keywords = *keywordlists[0];
+	WordList &keywords2 = *keywordlists[1];
 
 	const int whingeLevel = styler.GetPropertyInt("tab.timmy.whinge.level");
 
@@ -186,6 +187,8 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 					style = SCE_P_CLASSNAME;
 				} else if (kwLast == kwDef) {
 					style = SCE_P_DEFNAME;
+				} else if (keywords2.InList(s)) {
+					style = SCE_P_WORD2;
 				}
 				sc.ChangeState(style);
 				sc.SetState(SCE_P_DEFAULT);
@@ -198,15 +201,19 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 						kwLast = kwImport;
 					else
 						kwLast = kwOther;
-				} else if (style == SCE_P_CLASSNAME) {
-					kwLast = kwOther;
-				} else if (style == SCE_P_DEFNAME) {
+				} else {
 					kwLast = kwOther;
 				}
 			}
 		} else if ((sc.state == SCE_P_COMMENTLINE) || (sc.state == SCE_P_COMMENTBLOCK)) {
 			if (sc.ch == '\r' || sc.ch == '\n') {
 				sc.SetState(SCE_P_DEFAULT);
+			}
+		} else if (sc.state == SCE_P_DECORATOR) {
+			if (sc.ch == '\r' || sc.ch == '\n') {
+				sc.SetState(SCE_P_DEFAULT);
+			} else if (sc.ch == '#') {
+				sc.SetState((sc.chNext == '#') ? SCE_P_COMMENTBLOCK  :  SCE_P_COMMENTLINE);
 			}
 		} else if ((sc.state == SCE_P_STRING) || (sc.state == SCE_P_CHARACTER)) {
 			if (sc.ch == '\\') {
@@ -262,6 +269,8 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 				sc.SetState(SCE_P_OPERATOR);
 			} else if (sc.ch == '#') {
 				sc.SetState(sc.chNext == '#' ? SCE_P_COMMENTBLOCK : SCE_P_COMMENTLINE);
+			} else if (sc.ch == '@') {
+				sc.SetState(SCE_P_DECORATOR);
 			} else if (IsPyStringStart(sc.ch, sc.chNext, sc.GetRelative(2))) {
 				unsigned int nextIndex = 0;
 				sc.SetState(GetPyStringState(styler, sc.currentPos, &nextIndex));
@@ -432,6 +441,7 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 
 static const char * const pythonWordListDesc[] = {
 	"Keywords",
+	"Highlighted identifiers",
 	0
 };
 

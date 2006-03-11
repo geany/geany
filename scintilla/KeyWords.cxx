@@ -160,7 +160,6 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmCss);
 	LINK_LEXER(lmCPP);
 	LINK_LEXER(lmCPPNoCase);
-	LINK_LEXER(lmTCL);
 	LINK_LEXER(lmPerl);
 	LINK_LEXER(lmSQL);
 

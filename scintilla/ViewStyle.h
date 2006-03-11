@@ -85,6 +85,7 @@ public:
 	ColourPair caretcolour;
 	bool showCaretLineBackground;
 	ColourPair caretLineBackground;
+	int caretLineAlpha;
 	ColourPair edgecolour;
 	int edgeState;
 	int caretWidth;

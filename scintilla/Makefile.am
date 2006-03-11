@@ -27,6 +27,7 @@ LexSQL.cxx
 SRCS= \
 CallTip.cxx \
 CellBuffer.cxx \
+CharClassify.cxx \
 ContractionState.cxx \
 DocumentAccessor.cxx \
 Document.cxx \

@@ -95,6 +95,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	caretcolour.desired = source.caretcolour.desired;
 	showCaretLineBackground = source.showCaretLineBackground;
 	caretLineBackground.desired = source.caretLineBackground.desired;
+	caretLineAlpha = source.caretLineAlpha;
 	edgecolour.desired = source.edgecolour.desired;
 	edgeState = source.edgeState;
 	caretWidth = source.caretWidth;
@@ -157,6 +158,7 @@ void ViewStyle::Init() {
 	caretcolour.desired = ColourDesired(0, 0, 0);
 	showCaretLineBackground = false;
 	caretLineBackground.desired = ColourDesired(0xff, 0xff, 0);
+	caretLineAlpha = SC_ALPHA_NOALPHA;
 	edgecolour.desired = ColourDesired(0xc0, 0xc0, 0xc0);
 	edgeState = EDGE_NONE;
 	caretWidth = 1;
@@ -278,6 +280,10 @@ void ViewStyle::ClearStyles() {
 		}
 	}
 	styles[STYLE_LINENUMBER].back.desired = Platform::Chrome();
+
+	// Set call tip fore/back to match the values previously set for call tips
+	styles[STYLE_CALLTIP].back.desired = ColourDesired(0xff, 0xff, 0xff);
+	styles[STYLE_CALLTIP].fore.desired = ColourDesired(0x80, 0x80, 0x80);
 }
 
 void ViewStyle::SetStyleFontName(int styleIndex, const char *name) {

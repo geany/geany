@@ -154,6 +154,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define STYLE_BRACEBAD 35
 #define STYLE_CONTROLCHAR 36
 #define STYLE_INDENTGUIDE 37
+#define STYLE_CALLTIP 38
 #define STYLE_LASTPREDEFINED 39
 #define STYLE_MAX 127
 #define SC_CHARSET_ANSI 0
@@ -214,6 +215,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define INDIC_STRIKE 4
 #define INDIC_HIDDEN 5
 #define INDIC_BOX 6
+#define INDIC_ROUNDBOX 7
 #define INDIC0_MASK 0x20
 #define INDIC1_MASK 0x40
 #define INDIC2_MASK 0x80
@@ -358,6 +360,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_CALLTIPSETBACK 2205
 #define SCI_CALLTIPSETFORE 2206
 #define SCI_CALLTIPSETFOREHLT 2207
+#define SCI_CALLTIPUSESTYLE 2212
 #define SCI_VISIBLEFROMDOCLINE 2220
 #define SCI_DOCLINEFROMVISIBLE 2221
 #define SCI_WRAPCOUNT 2235
@@ -607,6 +610,11 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_SETPASTECONVERTENDINGS 2467
 #define SCI_GETPASTECONVERTENDINGS 2468
 #define SCI_SELECTIONDUPLICATE 2469
+#define SC_ALPHA_TRANSPARENT 0
+#define SC_ALPHA_OPAQUE 255
+#define SC_ALPHA_NOALPHA 256
+#define SCI_SETCARETLINEBACKALPHA 2470
+#define SCI_GETCARETLINEBACKALPHA 2471
 #define SCI_STARTRECORD 3001
 #define SCI_STOPRECORD 3002
 #define SCI_SETLEXER 4001

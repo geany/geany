@@ -192,10 +192,14 @@ Palette::Palette() {
 	allowRealization = false;
 	allocatedPalette = 0;
 	allocatedLen = 0;
+	size = 100;
+	entries = new ColourPair[size];
 }
 
 Palette::~Palette() {
 	Release();
+	delete []entries;
+	entries = 0;
 }
 
 void Palette::Release() {
@@ -203,6 +207,9 @@ void Palette::Release() {
 	delete [](reinterpret_cast<GdkColor *>(allocatedPalette));
 	allocatedPalette = 0;
 	allocatedLen = 0;
+	delete []entries;
+	size = 100;
+	entries = new ColourPair[size];
 }
 
 // This method either adds a colour to the list of wanted colours (want==true)
@@ -210,18 +217,27 @@ void Palette::Release() {
 // This is one method to make it easier to keep the code for wanting and retrieving in sync.
 void Palette::WantFind(ColourPair &cp, bool want) {
 	if (want) {
-		for (int i = 0; i < used; i++) {
+		for (int i=0; i < used; i++) {
 			if (entries[i].desired == cp.desired)
 				return;
 		}
 
-		if (used < numEntries) {
-			entries[used].desired = cp.desired;
-			entries[used].allocated.Set(cp.desired.AsLong());
-			used++;
+		if (used >= size) {
+			int sizeNew = size * 2;
+			ColourPair *entriesNew = new ColourPair[sizeNew];
+			for (int j=0; j<size; j++) {
+				entriesNew[j] = entries[j];
+			}
+			delete []entries;
+			entries = entriesNew;
+			size = sizeNew;
 		}
+
+		entries[used].desired = cp.desired;
+		entries[used].allocated.Set(cp.desired.AsLong());
+		used++;
 	} else {
-		for (int i = 0; i < used; i++) {
+		for (int i=0; i < used; i++) {
 			if (entries[i].desired == cp.desired) {
 				cp.allocated = entries[i].allocated;
 				return;
@@ -697,6 +713,8 @@ public:
 	void FillRectangle(PRectangle rc, ColourAllocated back);
 	void FillRectangle(PRectangle rc, Surface &surfacePattern);
 	void RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAllocated back);
+	void AlphaRectangle(PRectangle rc, int cornerSize, ColourAllocated fill, int alphaFill,
+		ColourAllocated outline, int alphaOutline, int flags);
 	void Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back);
 	void Copy(PRectangle rc, Point from, Surface &surfaceSource);
 
@@ -997,6 +1015,88 @@ void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAl
 		RectangleDraw(rc, fore, back);
 	}
 }
+
+// Plot a point into a guint32 buffer symetrically to all 4 qudrants
+static void AllFour(guint32 *pixels, int stride, int width, int height, int x, int y, guint32 val) {
+	pixels[y*stride+x] = val;
+	pixels[y*stride+width-1-x] = val;
+	pixels[(height-1-y)*stride+x] = val;
+	pixels[(height-1-y)*stride+width-1-x] = val;
+}
+
+static unsigned int GetRValue(unsigned int co) {
+	return (co >> 16) & 0xff;
+}
+
+static unsigned int GetGValue(unsigned int co) {
+	return (co >> 8) & 0xff;
+}
+
+static unsigned int GetBValue(unsigned int co) {
+	return co & 0xff;
+}
+
+#if GTK_MAJOR_VERSION < 2
+void SurfaceImpl::AlphaRectangle(PRectangle rc, int , ColourAllocated , int , ColourAllocated outline, int , int ) {
+	if (gc && drawable) {
+		// Can't use GdkPixbuf on GTK+ 1.x, so draw an outline rather than use alpha.
+		PenColour(outline);
+		gdk_draw_rectangle(drawable, gc, 0,
+		                   rc.left, rc.top,
+		                   rc.right - rc.left - 1, rc.bottom - rc.top - 1);
+	}
+}
+#else
+void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize, ColourAllocated fill, int alphaFill,
+		ColourAllocated outline, int alphaOutline, int flags) {
+	if (gc && drawable) {
+		int width = rc.Width();
+		int height = rc.Height();
+		// Ensure not distorted too much by corners when small
+		cornerSize = Platform::Minimum(cornerSize, (Platform::Minimum(width, height) / 2) - 2);
+		// Make a 32 bit deep pixbuf with alpha
+		GdkPixbuf *pixalpha = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, height);
+
+		guint8 pixVal[4] = {0};
+		guint32 valEmpty = *(reinterpret_cast<guint32 *>(pixVal));
+		pixVal[0] = GetRValue(fill.AsLong());
+		pixVal[1] = GetGValue(fill.AsLong());
+		pixVal[2] = GetBValue(fill.AsLong());
+		pixVal[3] = alphaFill;
+		guint32 valFill = *(reinterpret_cast<guint32 *>(pixVal));
+		pixVal[0] = GetRValue(outline.AsLong());
+		pixVal[1] = GetGValue(outline.AsLong());
+		pixVal[2] = GetBValue(outline.AsLong());
+		pixVal[3] = alphaOutline;
+		guint32 valOutline = *(reinterpret_cast<guint32 *>(pixVal));
+		guint32 *pixels = reinterpret_cast<guint32 *>(gdk_pixbuf_get_pixels(pixalpha));
+		int stride = gdk_pixbuf_get_rowstride(pixalpha) / 4;
+		for (int y=0; y<height; y++) {
+			for (int x=0; x<width; x++) {
+				if ((x==0) || (x==width-1) || (y == 0) || (y == height-1)) {
+					pixels[y*stride+x] = valOutline;
+				} else {
+					pixels[y*stride+x] = valFill;
+				}
+			}
+		}
+		for (int c=0;c<cornerSize; c++) {
+			for (int x=0;x<c+1; x++) {
+				AllFour(pixels, stride, width, height, x, c-x, valEmpty);
+			}
+		}
+		for (int x=1;x<cornerSize; x++) {
+			AllFour(pixels, stride, width, height, x, cornerSize-x, valOutline);
+		}
+
+		// Draw with alpha
+		gdk_draw_pixbuf(drawable, gc, pixalpha,
+			0,0, rc.left,rc.top, width,height, GDK_RGB_DITHER_NORMAL, 0, 0);
+
+		g_object_unref(pixalpha);
+	}
+}
+#endif
 
 void SurfaceImpl::Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
 	PenColour(back);
@@ -2367,7 +2467,7 @@ void Menu::Show(Point pt, Window &) {
 		pt.y = screenHeight - requisition.height;
 	}
 #if GTK_MAJOR_VERSION >= 2
-	gtk_item_factory_popup(factory, pt.x - 4, pt.y - 4, 3, 
+	gtk_item_factory_popup(factory, pt.x - 4, pt.y - 4, 3,
 		gtk_get_current_event_time());
 #else
 	gtk_item_factory_popup(factory, pt.x - 4, pt.y - 4, 3, 0);

@@ -37,6 +37,7 @@
 #include "Style.h"
 #include "AutoComplete.h"
 #include "ViewStyle.h"
+#include "CharClassify.h"
 #include "Document.h"
 #include "Editor.h"
 #include "SString.h"
@@ -1664,31 +1665,29 @@ void ScintillaGTK::Resize(int width, int height) {
 		verticalScrollBarHeight = 0;
 
 	GtkAllocation alloc;
-	alloc.x = 0;
 	if (showSBHorizontal) {
+		gtk_widget_show(GTK_WIDGET(PWidget(scrollbarh)));
+		alloc.x = 0;
 		alloc.y = height - scrollBarHeight;
 		alloc.width = Platform::Maximum(1, width - scrollBarWidth) + 1;
 		alloc.height = horizontalScrollBarHeight;
+		gtk_widget_size_allocate(GTK_WIDGET(PWidget(scrollbarh)), &alloc);
 	} else {
-		alloc.y = -scrollBarHeight;
-		alloc.width = 0;
-		alloc.height = 0;
+		gtk_widget_hide(GTK_WIDGET(PWidget(scrollbarh)));
 	}
-	gtk_widget_size_allocate(GTK_WIDGET(PWidget(scrollbarh)), &alloc);
 
-	alloc.y = 0;
 	if (verticalScrollBarVisible) {
+		gtk_widget_show(GTK_WIDGET(PWidget(scrollbarv)));
 		alloc.x = width - scrollBarWidth;
+		alloc.y = 0;
 		alloc.width = scrollBarWidth;
 		alloc.height = Platform::Maximum(1, height - scrollBarHeight) + 1;
 		if (!showSBHorizontal)
 			alloc.height += scrollBarWidth-1;
+		gtk_widget_size_allocate(GTK_WIDGET(PWidget(scrollbarv)), &alloc);
 	} else {
-		alloc.x = -scrollBarWidth;
-		alloc.width = 0;
-		alloc.height = 0;
+		gtk_widget_hide(GTK_WIDGET(PWidget(scrollbarv)));
 	}
-	gtk_widget_size_allocate(GTK_WIDGET(PWidget(scrollbarv)), &alloc);
 	if (GTK_WIDGET_MAPPED(PWidget(wMain))) {
 		ChangeSize();
 	}
@@ -1698,7 +1697,9 @@ void ScintillaGTK::Resize(int width, int height) {
 	alloc.width = Platform::Maximum(1, width - scrollBarWidth);
 	alloc.height = Platform::Maximum(1, height - scrollBarHeight);
 	if (!showSBHorizontal)
-		alloc.height += scrollBarWidth;
+		alloc.height += scrollBarHeight;
+	if (!verticalScrollBarVisible)
+		alloc.width += scrollBarWidth;
 	gtk_widget_size_allocate(GTK_WIDGET(PWidget(wText)), &alloc);
 }
 

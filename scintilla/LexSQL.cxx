@@ -1,8 +1,8 @@
 // Scintilla source code edit control
 /** @file LexSQL.cxx
- ** Lexer for SQL.
+ ** Lexer for SQL, including PL/SQL and SQL*Plus.
  **/
-// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2005 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -15,293 +15,218 @@
 
 #include "PropSet.h"
 #include "Accessor.h"
+#include "StyleContext.h"
 #include "KeyWords.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-
-static inline bool IsASpace(unsigned int ch) {
-    return (ch == ' ') || ((ch >= 0x09) && (ch <= 0x0d));
+static inline bool IsAWordChar(int ch) {
+	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
 }
 
-static bool MatchIgnoreCaseSubstring(const char *s, Accessor &styler, unsigned int startPos) {
-	char ch = styler.SafeGetCharAt(startPos);
-	bool isSubword = false;
-	if (tolower(ch) != *s)
-		return false;
-	s++;
-	if (*s == '~')
-	{
-		isSubword = true;
-		s++;
-	}
-	int n;
-	for (n = 1; *s; n++) {
-		if (*s == '~')
-		{
-			isSubword = true;
-			s++;
-		}
-		if (isSubword && IsASpace(styler.SafeGetCharAt(startPos + n)))
-			return true;
-		if (*s != tolower((styler.SafeGetCharAt(startPos + n))))
-			return false;
-		s++;
-	}
-	return (IsASpace(styler.SafeGetCharAt(startPos + n)) 
-		|| styler.SafeGetCharAt(startPos + n) == ';');
+static inline bool IsAWordStart(int ch) {
+	return (ch < 0x80) && (isalpha(ch) || ch == '_');
 }
 
-static void getCurrent(unsigned int start,
-		unsigned int end,
-		Accessor &styler,
-		char *s,
-		unsigned int len) {
-	for (unsigned int i = 0; i < end - start + 1 && i < len; i++) {
-		s[i] = static_cast<char>(tolower(styler[start + i]));
-		s[i + 1] = '\0';
-	}
+static inline bool IsADoxygenChar(int ch) {
+	return (islower(ch) || ch == '$' || ch == '@' ||
+	        ch == '\\' || ch == '&' || ch == '<' ||
+	        ch == '>' || ch == '#' || ch == '{' ||
+	        ch == '}' || ch == '[' || ch == ']');
 }
 
-static void classifyWordSQL(unsigned int start, unsigned int end, WordList *keywordlists[], Accessor &styler) {
-	char s[100];
-	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
-	for (unsigned int i = 0; i < end - start + 1 && i < 80; i++) {
-		s[i] = static_cast<char>(tolower(styler[start + i]));
-		s[i + 1] = '\0';
-	}
-
-	WordList &keywords1  = *keywordlists[0];
-	WordList &keywords2  = *keywordlists[1];
-//	WordList &kw_pldoc   = *keywordlists[2];
-	WordList &kw_sqlplus = *keywordlists[3];
-	WordList &kw_user1   = *keywordlists[4];
-	WordList &kw_user2   = *keywordlists[5];
-	WordList &kw_user3   = *keywordlists[6];
-	WordList &kw_user4   = *keywordlists[7];
-
-	char chAttr = SCE_SQL_IDENTIFIER;
-	if (wordIsNumber)
-		chAttr = SCE_SQL_NUMBER;
-	else if (keywords1.InList(s))
-			chAttr = SCE_SQL_WORD;
-	else if (keywords2.InList(s)) 
-			chAttr = SCE_SQL_WORD2;
-	else if (kw_sqlplus.InListAbbreviated(s, '~'))
-		chAttr = SCE_SQL_SQLPLUS;
-	else if (kw_user1.InList(s))
-		chAttr = SCE_SQL_USER1;
-	else if (kw_user2.InList(s))
-		chAttr = SCE_SQL_USER2;
-	else if (kw_user3.InList(s))
-		chAttr = SCE_SQL_USER3;
-	else if (kw_user4.InList(s))
-		chAttr = SCE_SQL_USER4;
-
-	styler.ColourTo(end, chAttr);
+static inline bool IsANumberChar(int ch) {
+	// Not exactly following number definition (several dots are seen as OK, etc.)
+	// but probably enough in most cases.
+	return (ch < 0x80) &&
+	        (isdigit(ch) || toupper(ch) == 'E' ||
+             ch == '.' || ch == '-' || ch == '+');
 }
 
-static void ColouriseSQLDoc(unsigned int startPos, int length,
-                            int initStyle, WordList *keywordlists[], Accessor &styler) {
+static void ColouriseSQLDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
+                            Accessor &styler) {
 
+	WordList &keywords1 = *keywordlists[0];
+	WordList &keywords2 = *keywordlists[1];
 	WordList &kw_pldoc = *keywordlists[2];
-	styler.StartAt(startPos);
+	WordList &kw_sqlplus = *keywordlists[3];
+	WordList &kw_user1 = *keywordlists[4];
+	WordList &kw_user2 = *keywordlists[5];
+	WordList &kw_user3 = *keywordlists[6];
+	WordList &kw_user4 = *keywordlists[7];
 
-	bool fold = styler.GetPropertyInt("fold") != 0;
+	StyleContext sc(startPos, length, initStyle, styler);
+
 	bool sqlBackslashEscapes = styler.GetPropertyInt("sql.backslash.escapes", 0) != 0;
+	bool sqlBackticksIdentifier = styler.GetPropertyInt("lexer.sql.backticks.identifier", 0) != 0;
+	int styleBeforeDCKeyword = SCE_SQL_DEFAULT;
+	bool fold = styler.GetPropertyInt("fold") != 0;
 	int lineCurrent = styler.GetLine(startPos);
-	int spaceFlags = 0;
 
-	int state = initStyle;
-	char chPrev = ' ';
-	char chNext = styler[startPos];
-	styler.StartSegment(startPos);
-	unsigned int lengthDoc = startPos + length;
-	for (unsigned int i = startPos; i < lengthDoc; i++) {
-		char ch = chNext;
-		chNext = styler.SafeGetCharAt(i + 1);
-
-		if ((ch == '\r' && chNext != '\n') || (ch == '\n')) {
+	for (; sc.More(); sc.Forward()) {
+		// Fold based on indentation
+		if (sc.atLineStart) {
+			int spaceFlags = 0;
 			int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags);
-			int lev = indentCurrent;
+			int level = indentCurrent;
 			if (!(indentCurrent & SC_FOLDLEVELWHITEFLAG)) {
 				// Only non whitespace lines can be headers
 				int indentNext = styler.IndentAmount(lineCurrent + 1, &spaceFlags);
 				if (indentCurrent < (indentNext & ~SC_FOLDLEVELWHITEFLAG)) {
-					lev |= SC_FOLDLEVELHEADERFLAG;
+					level |= SC_FOLDLEVELHEADERFLAG;
 				}
 			}
 			if (fold) {
-				styler.SetLevel(lineCurrent, lev);
+				styler.SetLevel(lineCurrent, level);
 			}
 		}
 
-		if (styler.IsLeadByte(ch)) {
-			chNext = styler.SafeGetCharAt(i + 2);
-			chPrev = ' ';
-			i += 1;
-			continue;
-		}
-
-		if (state == SCE_SQL_DEFAULT) {
-			if (MatchIgnoreCaseSubstring("rem~ark", styler, i)) {
-				styler.ColourTo(i - 1, state);
-				state = SCE_SQL_SQLPLUS_COMMENT;
-			} else if (MatchIgnoreCaseSubstring("pro~mpt", styler, i)) {
-				styler.ColourTo(i - 1, state);
-				state = SCE_SQL_SQLPLUS_PROMPT;
-			} else if (iswordstart(ch)) {
-				styler.ColourTo(i - 1, state);
-				state = SCE_SQL_WORD;
-			} else if (ch == '/' && chNext == '*') {
-				styler.ColourTo(i - 1, state);
-				if ((styler.SafeGetCharAt(i + 2)) == '*') {	// Support of Doxygen doc. style
-					state = SCE_SQL_COMMENTDOC;
+		// Determine if the current state should terminate.
+		switch (sc.state) {
+		case SCE_SQL_OPERATOR:
+			sc.SetState(SCE_SQL_DEFAULT);
+			break;
+		case SCE_SQL_NUMBER:
+			// We stop the number definition on non-numerical non-dot non-eE non-sign char
+			if (!IsANumberChar(sc.ch)) {
+				sc.SetState(SCE_SQL_DEFAULT);
+			}
+			break;
+		case SCE_SQL_IDENTIFIER:
+			if (!IsAWordChar(sc.ch)) {
+				int nextState = SCE_SQL_DEFAULT;
+				char s[1000];
+				sc.GetCurrentLowered(s, sizeof(s));
+				if (keywords1.InList(s)) {
+					sc.ChangeState(SCE_SQL_WORD);
+				} else if (keywords2.InList(s)) {
+					sc.ChangeState(SCE_SQL_WORD2);
+				} else if (kw_sqlplus.InListAbbreviated(s, '~')) {
+					sc.ChangeState(SCE_SQL_SQLPLUS);
+					if (strncmp(s, "rem", 3) == 0) {
+						nextState = SCE_SQL_SQLPLUS_COMMENT;
+					} else if (strncmp(s, "pro", 3) == 0) {
+						nextState = SCE_SQL_SQLPLUS_PROMPT;
+					}
+				} else if (kw_user1.InList(s)) {
+					sc.ChangeState(SCE_SQL_USER1);
+				} else if (kw_user2.InList(s)) {
+					sc.ChangeState(SCE_SQL_USER2);
+				} else if (kw_user3.InList(s)) {
+					sc.ChangeState(SCE_SQL_USER3);
+				} else if (kw_user4.InList(s)) {
+					sc.ChangeState(SCE_SQL_USER4);
+				}
+				sc.SetState(nextState);
+			}
+			break;
+		case SCE_SQL_QUOTEDIDENTIFIER:
+			if (sc.ch == 0x60) {
+				if (sc.chNext == 0x60) {
+					sc.Forward();	// Ignore it
 				} else {
-					state = SCE_SQL_COMMENT;
-				}
-			} else if (ch == '-' && chNext == '-') {
-				styler.ColourTo(i - 1, state);
-				state = SCE_SQL_COMMENTLINE;
-			} else if (ch == '#') {
-				styler.ColourTo(i - 1, state);
-				state = SCE_SQL_COMMENTLINEDOC;
-			} else if (ch == '\'') {
-				styler.ColourTo(i - 1, state);
-				state = SCE_SQL_CHARACTER;
-			} else if (ch == '"') {
-				styler.ColourTo(i - 1, state);
-				state = SCE_SQL_STRING;
-			} else if (isoperator(ch)) {
-				styler.ColourTo(i - 1, state);
-				styler.ColourTo(i, SCE_SQL_OPERATOR);
-			}
-		} else if (state == SCE_SQL_WORD) {
-			if (!iswordchar(ch)) {
-				classifyWordSQL(styler.GetStartSegment(), i - 1, keywordlists, styler);
-				state = SCE_SQL_DEFAULT;
-				if (ch == '/' && chNext == '*') {
-					if ((styler.SafeGetCharAt(i + 2)) == '*') {	// Support of Doxygen doc. style
-						state = SCE_SQL_COMMENTDOC;
-					} else {
-						state = SCE_SQL_COMMENT;
-					}
-				} else if (ch == '-' && chNext == '-') {
-					state = SCE_SQL_COMMENTLINE;
-				} else if (ch == '#') {
-					state = SCE_SQL_COMMENTLINEDOC;
-				} else if (ch == '\'') {
-					state = SCE_SQL_CHARACTER;
-				} else if (ch == '"') {
-					state = SCE_SQL_STRING;
-				} else if (isoperator(ch)) {
-					styler.ColourTo(i, SCE_SQL_OPERATOR);
+					sc.ForwardSetState(SCE_SQL_DEFAULT);
 				}
 			}
-		} else {
-			if (state == SCE_SQL_COMMENT) {
-				if (ch == '/' && chPrev == '*') {
-					if (((i > (styler.GetStartSegment() + 2)) || ((initStyle == SCE_C_COMMENT) &&
-					    (styler.GetStartSegment() == startPos)))) {
-						styler.ColourTo(i, state);
-						state = SCE_SQL_DEFAULT;
-					}
-				}
-			} else if (state == SCE_SQL_COMMENTDOC) {
-				if (ch == '/' && chPrev == '*') {
-					if (((i > (styler.GetStartSegment() + 2)) || ((initStyle == SCE_SQL_COMMENTDOC) &&
-					    (styler.GetStartSegment() == startPos)))) {
-						styler.ColourTo(i, state);
-						state = SCE_SQL_DEFAULT;
-					}
-				} else if (ch == '@') {
-					// Verify that we have the conditions to mark a comment-doc-keyword
-					if ((IsASpace(chPrev) || chPrev == '*') && (!IsASpace(chNext))) {
-						styler.ColourTo(i - 1, state);
-						state = SCE_SQL_COMMENTDOCKEYWORD;
-					}
-				}
-			} else if (state == SCE_SQL_COMMENTLINE || state == SCE_SQL_COMMENTLINEDOC || state == SCE_SQL_SQLPLUS_COMMENT) {
-				if (ch == '\r' || ch == '\n') {
-					styler.ColourTo(i - 1, state);
-					state = SCE_SQL_DEFAULT;
-				}
-			} else if (state == SCE_SQL_COMMENTDOCKEYWORD) {
-				if (ch == '/' && chPrev == '*') {
-					styler.ColourTo(i - 1, SCE_SQL_COMMENTDOCKEYWORDERROR);
-					state = SCE_SQL_DEFAULT;
-				} else if (!iswordchar(ch)) {
-					char s[100];
-					getCurrent(styler.GetStartSegment(), i - 1, styler, s, 30);
-					if (!kw_pldoc.InList(s + 1)) {
-						state = SCE_SQL_COMMENTDOCKEYWORDERROR;
-					}
-					styler.ColourTo(i - 1, state);
-					state = SCE_SQL_COMMENTDOC;
-				}
-			} else if (state == SCE_SQL_SQLPLUS_PROMPT) {
-				if (ch == '\r' || ch == '\n') {
-					styler.ColourTo(i - 1, state);
-					state = SCE_SQL_DEFAULT;
-				}
-			} else if (state == SCE_SQL_CHARACTER) {
-				if (sqlBackslashEscapes && ch == '\\') {
-					i++;
-					ch = chNext;
-					chNext = styler.SafeGetCharAt(i + 1);
-				} else if (ch == '\'') {
-					if (chNext == '\'') {
-						i++;
-					} else {
-						styler.ColourTo(i, state);
-						state = SCE_SQL_DEFAULT;
-						i++;
-					}
-					ch = chNext;
-					chNext = styler.SafeGetCharAt(i + 1);
-				}
-			} else if (state == SCE_SQL_STRING) {
-				if (ch == '"') {
-					if (chNext == '"') {
-						i++;
-					} else {
-						styler.ColourTo(i, state);
-						state = SCE_SQL_DEFAULT;
-						i++;
-					}
-					ch = chNext;
-					chNext = styler.SafeGetCharAt(i + 1);
+			break;
+		case SCE_SQL_COMMENT:
+			if (sc.Match('*', '/')) {
+				sc.Forward();
+				sc.ForwardSetState(SCE_SQL_DEFAULT);
+			}
+			break;
+		case SCE_SQL_COMMENTDOC:
+			if (sc.Match('*', '/')) {
+				sc.Forward();
+				sc.ForwardSetState(SCE_SQL_DEFAULT);
+			} else if (sc.ch == '@' || sc.ch == '\\') { // Doxygen support
+				// Verify that we have the conditions to mark a comment-doc-keyword
+				if ((IsASpace(sc.chPrev) || sc.chPrev == '*') && (!IsASpace(sc.chNext))) {
+					styleBeforeDCKeyword = SCE_SQL_COMMENTDOC;
+					sc.SetState(SCE_SQL_COMMENTDOCKEYWORD);
 				}
 			}
-			if (state == SCE_SQL_DEFAULT) {    // One of the above succeeded
-				if (ch == '/' && chNext == '*') {
-					if ((styler.SafeGetCharAt(i + 2)) == '*') {	// Support of Doxygen doc. style
-						state = SCE_SQL_COMMENTDOC;
-					} else {
-						state = SCE_SQL_COMMENT;
-					}
-				} else if (ch == '-' && chNext == '-') {
-					state = SCE_SQL_COMMENTLINE;
-				} else if (ch == '#') {
-					state = SCE_SQL_COMMENTLINEDOC;
-				} else if (MatchIgnoreCaseSubstring("rem~ark", styler, i)) {
-					state = SCE_SQL_SQLPLUS_COMMENT;
-				} else if (MatchIgnoreCaseSubstring("pro~mpt", styler, i)) {
-					state = SCE_SQL_SQLPLUS_PROMPT;
-				} else if (ch == '\'') {
-					state = SCE_SQL_CHARACTER;
-				} else if (ch == '"') {
-					state = SCE_SQL_STRING;
-				} else if (iswordstart(ch)) {
-					state = SCE_SQL_WORD;
-				} else if (isoperator(ch)) {
-					styler.ColourTo(i, SCE_SQL_OPERATOR);
+			break;
+		case SCE_SQL_COMMENTLINE:
+		case SCE_SQL_COMMENTLINEDOC:
+		case SCE_SQL_SQLPLUS_COMMENT:
+		case SCE_SQL_SQLPLUS_PROMPT:
+			if (sc.atLineStart) {
+				sc.SetState(SCE_SQL_DEFAULT);
+			}
+			break;
+		case SCE_SQL_COMMENTDOCKEYWORD:
+			if ((styleBeforeDCKeyword == SCE_SQL_COMMENTDOC) && sc.Match('*', '/')) {
+				sc.ChangeState(SCE_SQL_COMMENTDOCKEYWORDERROR);
+				sc.Forward();
+				sc.ForwardSetState(SCE_SQL_DEFAULT);
+			} else if (!IsADoxygenChar(sc.ch)) {
+				char s[100];
+				sc.GetCurrentLowered(s, sizeof(s));
+				if (!isspace(sc.ch) || !kw_pldoc.InList(s + 1)) {
+					sc.ChangeState(SCE_SQL_COMMENTDOCKEYWORDERROR);
 				}
+				sc.SetState(styleBeforeDCKeyword);
+			}
+			break;
+		case SCE_SQL_CHARACTER:
+			if (sqlBackslashEscapes && sc.ch == '\\') {
+				sc.Forward();
+			} else if (sc.ch == '\'') {
+				if (sc.chNext == '\"') {
+					sc.Forward();
+				} else {
+					sc.ForwardSetState(SCE_SQL_DEFAULT);
+				}
+			}
+			break;
+		case SCE_SQL_STRING:
+			if (sc.ch == '\\') {
+				// Escape sequence
+				sc.Forward();
+			} else if (sc.ch == '\"') {
+				if (sc.chNext == '\"') {
+					sc.Forward();
+				} else {
+					sc.ForwardSetState(SCE_SQL_DEFAULT);
+				}
+			}
+			break;
+		}
+
+		// Determine if a new state should be entered.
+		if (sc.state == SCE_SQL_DEFAULT) {
+			if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
+				sc.SetState(SCE_SQL_NUMBER);
+			} else if (IsAWordStart(sc.ch)) {
+				sc.SetState(SCE_SQL_IDENTIFIER);
+			} else if (sc.ch == 0x60 && sqlBackticksIdentifier) {
+				sc.SetState(SCE_SQL_QUOTEDIDENTIFIER);
+			} else if (sc.Match('/', '*')) {
+				if (sc.Match("/**") || sc.Match("/*!")) {	// Support of Doxygen doc. style
+					sc.SetState(SCE_SQL_COMMENTDOC);
+				} else {
+					sc.SetState(SCE_SQL_COMMENT);
+				}
+				sc.Forward();	// Eat the * so it isn't used for the end of the comment
+			} else if (sc.Match('-', '-')) {
+				// MySQL requires a space or control char after --
+				// http://dev.mysql.com/doc/mysql/en/ansi-diff-comments.html
+				// Perhaps we should enforce that with proper property:
+//~ 			} else if (sc.Match("-- ")) {
+				sc.SetState(SCE_SQL_COMMENTLINE);
+			} else if (sc.ch == '#') {
+				sc.SetState(SCE_SQL_COMMENTLINEDOC);
+			} else if (sc.ch == '\'') {
+				sc.SetState(SCE_SQL_CHARACTER);
+			} else if (sc.ch == '\"') {
+				sc.SetState(SCE_SQL_STRING);
+			} else if (isoperator(static_cast<char>(sc.ch))) {
+				sc.SetState(SCE_SQL_OPERATOR);
 			}
 		}
-		chPrev = ch;
 	}
-	styler.ColourTo(lengthDoc - 1, state);
+	sc.Complete();
 }
 
 static bool IsStreamCommentStyle(int style) {
@@ -312,18 +237,18 @@ static bool IsStreamCommentStyle(int style) {
 }
 
 // Store both the current line's fold level and the next lines in the
-// level store to make it easy to pick up with each increment
-// and to make it possible to fiddle the current level for "} else {".
+// level store to make it easy to pick up with each increment.
 static void FoldSQLDoc(unsigned int startPos, int length, int initStyle,
-                       WordList *[], Accessor &styler) {
+                            WordList *[], Accessor &styler) {
 	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	unsigned int endPos = startPos + length;
 	int visibleChars = 0;
 	int lineCurrent = styler.GetLine(startPos);
 	int levelCurrent = SC_FOLDLEVELBASE;
-	if (lineCurrent > 0)
-		levelCurrent = styler.LevelAt(lineCurrent-1) >> 16;
+	if (lineCurrent > 0) {
+		levelCurrent = styler.LevelAt(lineCurrent - 1) >> 16;
+	}
 	int levelNext = levelCurrent;
 	char chNext = styler[startPos];
 	int styleNext = styler.StyleAt(startPos);
@@ -345,34 +270,58 @@ static void FoldSQLDoc(unsigned int startPos, int length, int initStyle,
 			}
 		}
 		if (foldComment && (style == SCE_SQL_COMMENTLINE)) {
+			// MySQL needs -- comments to be followed by space or control char
 			if ((ch == '-') && (chNext == '-')) {
 				char chNext2 = styler.SafeGetCharAt(i + 2);
-				if (chNext2 == '{') {
+				char chNext3 = styler.SafeGetCharAt(i + 3);
+				if (chNext2 == '{' || chNext3 == '{') {
 					levelNext++;
-				} else if (chNext2 == '}') {
+				} else if (chNext2 == '}' || chNext3 == '}') {
 					levelNext--;
 				}
 			}
 		}
-		if (style == SCE_SQL_WORD) {
-			if (MatchIgnoreCaseSubstring("elsif", styler, i)) {
-				// ignore elsif
-				i += 4;
-			} else if (MatchIgnoreCaseSubstring("if", styler, i)
-				|| MatchIgnoreCaseSubstring("loop", styler, i)){
-					if (endFound){
-						// ignore
-						endFound = false;
-					} else {
-						levelNext++;
-					}
-			} else if (MatchIgnoreCaseSubstring("begin", styler, i)){
+		if (style == SCE_SQL_OPERATOR) {
+			if (ch == '(') {
 				levelNext++;
-			} else if (MatchIgnoreCaseSubstring("end", styler, i)) {
+			} else if (ch == ')') {
+				levelNext--;
+			}
+		}
+		// If new keyword (cannot trigger on elseif or nullif, does less tests)
+		if (style == SCE_SQL_WORD && stylePrev != SCE_SQL_WORD) {
+			const int MAX_KW_LEN = 6;	// Maximum length of folding keywords
+			char s[MAX_KW_LEN + 2];
+			unsigned int j = 0;
+			for (; j < MAX_KW_LEN + 1; j++) {
+				if (!iswordchar(styler[i + j])) {
+					break;
+				}
+				s[j] = static_cast<char>(tolower(styler[i + j]));
+			}
+			if (j == MAX_KW_LEN + 1) {
+				// Keyword too long, don't test it
+				s[0] = '\0';
+			} else {
+				s[j] = '\0';
+			}
+			if (strcmp(s, "if") == 0 || strcmp(s, "loop") == 0) {
+				if (endFound) {
+					// ignore
+					endFound = false;
+				} else {
+					levelNext++;
+				}
+			} else if (strcmp(s, "begin") == 0) {
+				levelNext++;
+			} else if (strcmp(s, "end") == 0 ||
+						// DROP TABLE IF EXISTS or CREATE TABLE IF NOT EXISTS
+						strcmp(s, "exists") == 0) {
 				endFound = true;
 				levelNext--;
-				if (levelNext < SC_FOLDLEVELBASE)
+				if (levelNext < SC_FOLDLEVELBASE) {
 					levelNext = SC_FOLDLEVELBASE;
+				}
 			}
 		}
 		if (atEOL) {
@@ -390,8 +339,9 @@ static void FoldSQLDoc(unsigned int startPos, int length, int initStyle,
 			visibleChars = 0;
 			endFound = false;
 		}
-		if (!isspacechar(ch))
+		if (!isspacechar(ch)) {
 			visibleChars++;
+		}
 	}
 }
 
