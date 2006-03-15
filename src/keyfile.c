@@ -248,9 +248,10 @@ gboolean configuration_load(void)
 		app->geometry[2] = geo[2];
 		app->geometry[3] = geo[3];
 	}
-	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", -1);
-	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position",
-				(geo) ? (geo[3] - GEANY_MSGWIN_HEIGHT) : -1);
+	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
+	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ? 
+				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) : 
+				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
 
 
 	app->pref_editor_tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
@@ -465,7 +466,7 @@ void configuration_read_filetype_extensions(void)
 		}
 	}
 	// add comment, if it doesn't exist
-	comment = g_key_file_get_comment(config, "Extensions", NULL, NULL);
+	comment = g_key_file_get_comment(config, NULL, NULL, NULL);
 	if (!comment || strlen(comment) == 0)
 	{
 		g_key_file_set_comment(config, "Extensions", NULL, "Filetype extension configuration file for Geany\nInsert as many items as you want, seperate them with a \";\".\nIf you want to get the default for a key, just delete it and\nthen it will be appended next time you start Geany.", NULL);

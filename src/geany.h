@@ -54,6 +54,8 @@
 #endif
 
 
+// for detailed description look in the documentation, things are not
+// listed in the documentation should not be changed ;-)
 #define GEANY_HOME_DIR					g_get_home_dir()
 #define GEANY_FIFO_NAME					"geany_fifo.0"
 #define GEANY_CODENAME					"Nivers"
@@ -64,9 +66,12 @@
 #define GEANY_CHECK_FILE_DELAY			30
 #define GEANY_WORDCHARS					"_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
-#define GEANY_MSGWIN_HEIGHT				240
 #define GEANY_STRING_UNTITLED			_("untitled")
-
+#define GEANY_MSGWIN_HEIGHT				208
+#define GEANY_WINDOW_MINIMAL_WIDTH		620
+#define GEANY_WINDOW_MINIMAL_HEIGHT		440
+#define GEANY_WINDOW_DEFAULT_WIDTH		900
+#define GEANY_WINDOW_DEFAULT_HEIGHT		600
 
 #ifndef DOCDIR
 # define DOCDIR PACKAGE_DATA_DIR"/doc/"PACKAGE"/html/"

@@ -56,6 +56,7 @@ static gboolean ignore_fifo = FALSE;
 #endif
 static gboolean debug_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
+static gboolean no_msgwin = FALSE;
 static gboolean no_vte = FALSE;
 static gboolean show_version = FALSE;
 static gchar *alternate_config = NULL;
@@ -70,6 +71,7 @@ static GOptionEntry entries[] =
 	{ "no-pipe", 'p', 0, G_OPTION_ARG_NONE, &ignore_fifo, "don't open files in a running instance, force opening a new instance", NULL },
 #endif
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, "use an alternate configuration directory", NULL },
+	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, "don't show message window at startup", NULL },
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, "don't load terminal support", NULL },
 #ifdef HAVE_VTE
 	{ "vte-lib", 'l', 0, G_OPTION_ARG_FILENAME, &lib_vte, "filename of libvte.so", NULL },
@@ -109,7 +111,7 @@ static void apply_settings(void)
 		gtk_widget_hide(app->toolbar);
 		app->toolbar_visible = FALSE;
 	}
-	if (! app->msgwindow_visible)
+	if (! app->msgwindow_visible || no_msgwin)
 	{
 		// I know this is a bit confusing, but it works
 		app->msgwindow_visible = TRUE;
@@ -473,6 +475,8 @@ gint main(gint argc, gchar **argv)
 	gtk_init(&argc, &argv);
 
 	main_init();
+	gtk_widget_set_size_request(app->window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
+	gtk_window_set_default_size(GTK_WINDOW(app->window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 	configuration_load();
 	templates_init();
 	encodings_init();

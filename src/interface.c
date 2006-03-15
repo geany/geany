@@ -201,7 +201,6 @@ create_window1 (void)
   accel_group = gtk_accel_group_new ();
 
   window1 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_widget_set_size_request (window1, 900, 600);
   gtk_window_set_title (GTK_WINDOW (window1), _("Geany"));
 
   vbox1 = gtk_vbox_new (FALSE, 0);
