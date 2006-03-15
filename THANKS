@@ -4,14 +4,16 @@ This file lists all external people that have contributed to this project.
 
 
 
-Testers (sorted by name):
+Testers and contributors:
 --------------------------
 These people have contributed to Geany by testing the software,
-reporting problems and making useful suggestions.
+reporting problems, sending patches and making useful suggestions.
 Frank Lanitz <frank@partysoke.de>
 Christoph Berg <Christoph.Berg@kpm-sport.de>
+Nick Treleaven <nick.treleaven@btinternet.com> - many patches
+Saleem Abdulrasool <compnerd@gentoo.org> - vte autoconf patch
 Nick Treleaven <nick.treleaven@btinternet.com>
-Marko Peric <cragwolf@telpacific.com.au>
+Marko Peric <cragwolf@gmail.com>
 S Jagannathan <poojyum@gmail.com>
 Colossus <colossus73@gmail.com>
 Kristoffer A. Tjernås <kt@nupi.no>
@@ -19,13 +21,7 @@ Tamim <amitamim@gmail.com>
 Kevin Ellwood <kellwood@ameritech.net>
 
 
-Translators (sorted by language):
+Translators:
 ----------------------------------
 These people have translated Geany to foreign languages.
 
-
-
-Other contributors (sorted by name):
-------------------------------------
-Nick Treleaven <nick.treleaven@btinternet.com> - many patches
-Saleem Abdulrasool <compnerd@gentoo.org> - vte autoconf patch
