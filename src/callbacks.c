@@ -2239,6 +2239,13 @@ on_help1_activate                      (GtkMenuItem     *menuitem,
 #else
 	gchar *uri = g_strconcat("file://", DOCDIR, "index.html", NULL);
 #endif
+
+	if (! g_file_test(uri + 7, G_FILE_TEST_IS_REGULAR))
+	{
+		g_free(uri);
+		uri = g_strconcat(GEANY_HOMEPAGE, "manual/index.html", NULL);
+	}
+
 	utils_start_browser(uri);
 	g_free(uri);
 }
@@ -2255,6 +2262,13 @@ on_help_shortcuts1_activate            (GtkMenuItem     *menuitem,
 #else
 	gchar *uri = g_strconcat("file://", DOCDIR, "apa.html", NULL);
 #endif
+
+	if (! g_file_test(uri + 7, G_FILE_TEST_IS_REGULAR))
+	{
+		g_free(uri);
+		uri = g_strconcat(GEANY_HOMEPAGE, "manual/apa.html", NULL);
+	}
+
 	utils_start_browser(uri);
 	g_free(uri);
 }
