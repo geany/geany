@@ -290,11 +290,12 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 	gint eol_char_len = (line == (SSM(sci, SCI_GETLINECOUNT, 0, 0) - 1)) ? 0 :
 								utils_get_eol_char_len(document_find_by_sci(sci));
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	gchar *text, line_buf[255];
+	gchar *text, *line_buf;
 
 	if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL) return;
 
 	// check that the line is empty, to not kill text in the line
+	line_buf = g_malloc(line_len + 1);
 	sci_get_line(sci, line, line_buf);
 	line_buf[line_len - eol_char_len] = '\0';
 	while (x < (line_len - eol_char_len))
@@ -302,6 +303,8 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 		if (isspace(line_buf[x])) cnt++;
 		x++;
 	}
+	g_free(line_buf);
+	
 	//geany_debug("line_len: %d eol: %d cnt: %d", line_len, eol_char_len, cnt);
 	if ((line_len - eol_char_len - 1) != cnt) return;
 
