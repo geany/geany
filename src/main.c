@@ -29,6 +29,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "geany.h"
 
@@ -330,42 +331,50 @@ static void main_init(void)
 #ifdef HAVE_FIFO
 static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer data)
 {
-	GIOStatus status;
-	gchar *read_data = NULL;
+	GIOStatus status = G_IO_STATUS_NORMAL;
+	gchar *buffer = NULL;
 	gsize len = 0;
 
-	status = g_io_channel_read_to_end(source, &read_data, &len, NULL);
+	//status = g_io_channel_read_to_end(source, &buffer, &len, NULL);
+	status = g_io_channel_read_line(source, &buffer, &len, NULL, NULL);
 
 	// try to interpret the received data as a filename, otherwise do nothing
-	if (g_file_test(read_data, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	if (g_file_test(buffer, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
-		document_open_file(-1, read_data, 0, FALSE, NULL);
+		document_open_file(-1, buffer, 0, FALSE, NULL);
 	}
 	else
 	{
 		geany_debug("got data from named pipe, but it does not look like a filename");
 	}
-	gtk_widget_grab_focus(app->window);
+	g_free(buffer);
 
-	g_free(read_data);
-
-	return TRUE;
+	if (status != G_IO_STATUS_NORMAL)
+		return TRUE;
+	else 
+	{
+		GIOChannel *ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
+		g_io_add_watch(ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
+		return FALSE;
+	}		
 }
 
 
 static void write_fifo(gint argc, gchar **argv)
 {
-	GIOChannel *ioc = g_io_channel_unix_new(open(fifo_name, O_WRONLY));
 	gint i;
+	GIOChannel *ioc;
+	
 	for(i = 1; i < argc; i++)
 	{
 		if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 		{
+			ioc = g_io_channel_unix_new(open(fifo_name, O_WRONLY));
 			g_io_channel_write_chars(ioc, argv[i], -1, NULL, NULL);
-			//g_io_channel_flush(ioc, NULL);
+			g_io_channel_flush(ioc, NULL);
+			g_io_channel_shutdown(ioc, TRUE, NULL);
 		}
 	}
-	g_io_channel_shutdown(ioc, TRUE, NULL);
 }
 
 
