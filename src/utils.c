@@ -567,11 +567,14 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 
 		if (len != bytes_written)
 		{
+			geany_debug("utils_write_file(): written only %d bytes, had to write %d bytes to %s", 
+								bytes_written, len, filename);
 			return EIO;
 		}
 	}
 	else
 	{
+		geany_debug("utils_write_file(): could not write to file %s", filename);
 		return errno;
 	}
 	return 0;
