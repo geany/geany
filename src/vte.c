@@ -91,6 +91,13 @@ void vte_init(void)
 {
 
 	GtkWidget *vte, *scrollbar, *hbox, *frame;
+
+	if (app->have_vte == FALSE)
+	{	// app->have_vte can be false, even if VTE is compiled in, think of command line option
+		geany_debug("Disabling terminal support");
+		return;
+	}
+	
 	if (app->lib_vte && strlen(app->lib_vte))
 	{
 		module = g_module_open(app->lib_vte, G_MODULE_BIND_LAZY);
@@ -102,10 +109,10 @@ void vte_init(void)
 		if (module == NULL) module = g_module_open("libvte.so.4", G_MODULE_BIND_LAZY);
 	}
 
-	if (module == NULL || app->have_vte == FALSE)
+	if (module == NULL)
 	{
 		app->have_vte = FALSE;
-		geany_debug("Could(or should) not load libvte.so.4, terminal support disabled");
+		geany_debug("Could not load libvte.so.4, terminal support disabled");
 		return;
 	}
 	else
@@ -147,20 +154,25 @@ void vte_init(void)
 	gtk_widget_show_all(frame);
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
 
-	gtk_widget_realize(vte); // the vte widget has to be realised before color changes take effect
-	vte_apply_user_settings();
+	// the vte widget has to be realised before color changes take effect
+	g_signal_connect_swapped(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
 }
 
 
 void vte_close(void)
 {
-	g_module_close(module);
 	g_free(vf);
+	/* free (unref) the vte widget by removing it, before unloading vte module
+	 * this prevents a segfault on X close window if the message window is hidden
+	 * (patch from Nick Treleaven, thanks) */
+	if (GTK_IS_CONTAINER(vc->vte->parent))
+		gtk_container_remove(GTK_CONTAINER(vc->vte->parent), vc->vte);
 	g_free(vc->font);
 	g_free(vc->emulation);
 	g_free(vc->color_back);
 	g_free(vc->color_fore);
 	g_free(vc);
+	g_module_close(module);
 }
 
 
@@ -258,7 +270,7 @@ void vte_register_symbols(GModule *mod)
 
 void vte_apply_user_settings(void)
 {
-	gtk_widget_realize(vc->vte);
+	gtk_widget_queue_draw(vc->vte); //update vte widget
 	vf->vte_terminal_set_scrollback_lines(VTE_TERMINAL(vc->vte), vc->scrollback_lines);
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
