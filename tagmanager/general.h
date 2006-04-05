@@ -20,6 +20,9 @@
 # include "mac.h"
 #endif
 
+// include unistd.h preventively becuase at least under MacOSX it is needed for off_t
+#include <unistd.h>
+
 /*
 *   MACROS
 */
