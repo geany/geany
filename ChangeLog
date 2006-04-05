@@ -1,7 +1,69 @@
+2006-04-04  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * bugfix: src/callbacks.c: fixed potentially segfault when opening a
+                            file from the recent file menu
+
+
+2006-04-03  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/vte.c: applied three patches from Nick Treleaven to improve
+              usage of the VTE component
+
+
+2006-04-01  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * tagmanager/general.h: added inclusion of unistd.h to avoid compile
+                         errors on MacOSX
+ * src/document.c: fixed memory allocation while opening files, so that
+                   empty files (size = 0 byte) can also be opened
+
+
+2006-03-29  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/interface.c: let the editor widget also be resized,
+                                 so resizing the main window is nicer
+ * src/keyfile.c, src/main.c:
+   moved some code from configuration_open_files to
+   configuration_apply_settings, because configuration_open_files is
+   not called every time
+
+
+2006-03-28  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c, src/sci_cb.c, src/callbacks.c:
+   applied patch from Nick Treleaven to avoid segmentation faults on
+   long words(>120 characters)
+ * src/main.c, src/sci_cb.c: applied patch from Nick Treleaven to fix a
+                             possible segmentation fault
+
+
+2006-03-22  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c: added error messages to utils_write_file()
+ * src/keyfile.c: rewrote the code for reading the session files
+
+
+2006-03-19  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/highlighting.c, src/sci_cb.c, data/filetypes.*:
+   added definable comment characters to all filetypes
+
+
+2006-03-18  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/highlighting.c, data/filetypes.*:
+   added wordchars key to all filetypes
+ * src/main.c: improved reading and writing of the named pipe, so Geany
+               does not go into in an endless loop after opening a file
+
+
 2006-03-17  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * bugfix: src/sci_cb.c: typing } on lines longer than 256 chars caused
                          a crash (segfault)
+ * src/dialogs.c, src/callbacks.c, src/interface.c, geany.glade:
+   moved VTE settings tab code in the preferences dialog to dialogs.c,
+   so this code will not be compiled if HAVE_VTE is unset
 
 
 2006-03-15  Enrico Troeger  <enrico.troeger@uvena.de>
@@ -32,9 +94,9 @@
                     reclicking of taglist treeview item
  * src/keyfile.c: fixed small error which adds every time a new comment
                   in the filetype extensions configuration file
- * src/data/*, src/highlighting.c: added italic flag to all styles,
-                                   added background colour for current
-                                   line
+ * data/filetypes.*, src/highlighting.c:
+   added italic flag to all styles, added background colour for current
+   line
  * src/dialogs.c, src/sciwrappers.c:
    applied patch from Nick Treleaven which improved inserting of
    current selection in the find and replace dialogs
