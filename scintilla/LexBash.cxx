@@ -258,7 +258,8 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 
 		if (state == SCE_SH_DEFAULT) {
 			if (ch == '\\') {	// escaped character
-				i++;
+				if (i < lengthDoc - 1)
+ 					i++;
 				ch = chNext;
 				chNext = chNext2;
 				styler.ColourTo(i, SCE_SH_IDENTIFIER);
