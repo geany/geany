@@ -1967,6 +1967,31 @@ static gboolean ButtonPress(GtkWidget *, GdkEventButton* ev, gpointer p) {
 	return FALSE;
 }
 
+#if GTK_MAJOR_VERSION >= 2
+/* Change the active color to the selected color so the listbox uses the color
+scheme that it would use if it had the focus. */
+static void StyleSet(GtkWidget *w, GtkStyle*, void*) {
+	GtkStyle* style;
+	
+	g_return_if_fail(w != NULL);
+	
+	/* Copy the selected color to active.  Note that the modify calls will cause
+	recursive calls to this function after the value is updated and w->style to
+	be set to a new object */	
+	style = gtk_widget_get_style(w);
+	if (style == NULL)
+		return;
+	if (!gdk_color_equal(&style->base[GTK_STATE_SELECTED], &style->base[GTK_STATE_ACTIVE]))
+		gtk_widget_modify_base(w, GTK_STATE_ACTIVE, &style->base[GTK_STATE_SELECTED]);
+
+	style = gtk_widget_get_style(w);
+	if (style == NULL)
+		return;
+	if (!gdk_color_equal(&style->text[GTK_STATE_SELECTED], &style->text[GTK_STATE_ACTIVE]))
+		gtk_widget_modify_text(w, GTK_STATE_ACTIVE, &style->text[GTK_STATE_SELECTED]);
+}
+#endif
+
 void ListBoxX::Create(Window &, int, Point, int, bool) {
 	id = gtk_window_new(GTK_WINDOW_POPUP);
 
@@ -2002,6 +2027,8 @@ void ListBoxX::Create(Window &, int, Point, int, bool) {
 		gtk_list_store_new(N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING);
 
 	list = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
+	g_signal_connect(G_OBJECT(list), "style-set", G_CALLBACK(StyleSet), NULL);
+
 	GtkTreeSelection *selection =
 		gtk_tree_view_get_selection(GTK_TREE_VIEW(list));
 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
@@ -2010,7 +2037,7 @@ void ListBoxX::Create(Window &, int, Point, int, bool) {
 
 	/* Columns */
 	GtkTreeViewColumn *column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+	gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_FIXED);
 	gtk_tree_view_column_set_title(column, "Autocomplete");
 
 	GtkCellRenderer *renderer = gtk_cell_renderer_pixbuf_new();
@@ -2019,11 +2046,14 @@ void ListBoxX::Create(Window &, int, Point, int, bool) {
 										"pixbuf", PIXBUF_COLUMN);
 
 	renderer = gtk_cell_renderer_text_new();
+	gtk_cell_renderer_text_set_fixed_height_from_font(GTK_CELL_RENDERER_TEXT(renderer), 1);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	gtk_tree_view_column_add_attribute(column, renderer,
 										"text", TEXT_COLUMN);
 
 	gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+	if (g_object_class_find_property(G_OBJECT_GET_CLASS(list), "fixed-height-mode"))
+		g_object_set(G_OBJECT(list), "fixed-height-mode", TRUE, NULL);
 	gtk_container_add(GTK_CONTAINER(PWidget(scroller)), PWidget(list));
 	gtk_widget_show(PWidget(list));
 
@@ -2046,7 +2076,7 @@ void ListBoxX::SetFont(Font &scint_font) {
 	}
 #else
 	// Only do for Pango font as there have been crashes for GDK fonts
-	if (PFont(scint_font)->pfd) {
+	if (Created() && PFont(scint_font)->pfd) {
 		// Current font is Pango font
 		gtk_widget_modify_font(PWidget(list), PFont(scint_font)->pfd);
 	}

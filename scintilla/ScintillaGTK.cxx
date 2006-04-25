@@ -527,6 +527,7 @@ void ScintillaGTK::Map(GtkWidget *widget) {
 void ScintillaGTK::UnMapThis() {
 	//Platform::DebugPrintf("ScintillaGTK::unmap this\n");
 	GTK_WIDGET_UNSET_FLAGS(PWidget(wMain), GTK_MAPPED);
+	DropGraphics();
 	gdk_window_hide(PWidget(wMain)->window);
 	gtk_widget_unmap(PWidget(wText));
 	gtk_widget_unmap(PWidget(scrollbarh));
@@ -1187,24 +1188,16 @@ const char *ScintillaGTK::CharacterSetID() const {
 	((x) >= 0 && (x) <= 128)
 
 #define IS_ACC_OR_CHAR(x) \
-	(IS_CHAR(x)) || (IS_ACC(x))
-
-#define IS_ACC(x) \
-	((x) >= 65103 && (x) <= 65111)
-#define IS_CHAR(x) \
-	((x) >= 0 && (x) <= 128)
-
-#define IS_ACC_OR_CHAR(x) \
-	(IS_CHAR(x)) || (IS_ACC(x))
+	(IS_CHAR(x) || IS_ACC(x))
 
 static int MakeAccent(int key, int acc) {
 	const char *conv[] = {
 		"aeiounc AEIOUNC",
-		"ãeiõuñc~ÃEIÕUÑC",
-		"áéíóúnç'ÁÉÍÓÚNÇ",
-		"àèìòùnc`ÀÈÌÒÙNC",
-		"âêîôûnc^ÂÊÎÔÛNC",
-		"äëïöünc¨ÄËÏÖÜNC"
+		"Ã£eiÃµuÃ±c~ÃƒEIÃ•UÃ‘C",
+		"Ã¡Ã©Ã­Ã³ÃºnÃ§'ÃÃ‰ÃÃ“ÃšNÃ‡",
+		"Ã Ã¨Ã¬Ã²Ã¹nc`Ã€ÃˆÃŒÃ’Ã™NC",
+		"Ã¢ÃªÃ®Ã´Ã»nc^Ã‚ÃŠÃŽÃ”Ã›NC",
+		"Ã¤Ã«Ã¯Ã¶Ã¼ncÅ¡Ã„Ã‹ÃÃ–ÃœNC"
 	};
 	int idx;
 	for (idx = 0; idx < 15; ++idx) {
@@ -1399,7 +1392,7 @@ bool ScintillaGTK::OwnPrimarySelection() {
 void ScintillaGTK::ClaimSelection() {
 	// X Windows has a 'primary selection' as well as the clipboard.
 	// Whenever the user selects some text, we become the primary selection
-	if (currentPos != anchor) {
+	if (currentPos != anchor && GTK_WIDGET_REALIZED(GTK_WIDGET(PWidget(wMain)))) {
 		primarySelection = true;
 		gtk_selection_owner_set(GTK_WIDGET(PWidget(wMain)),
 		                        GDK_SELECTION_PRIMARY, GDK_CURRENT_TIME);
@@ -1491,6 +1484,7 @@ void ScintillaGTK::ReceivedSelection(GtkSelectionData *selection_data) {
 				SetEmptySelection(currentPos + selText.len);
 			}
 			pdoc->EndUndoAction();
+			EnsureCaretVisible();			
 		}
 	}
 //	else fprintf(stderr, "Target non string %d %d\n", (int)(selection_data->type),
@@ -1506,9 +1500,12 @@ void ScintillaGTK::ReceivedDrop(GtkSelectionData *selection_data) {
 			GetGtkSelectionText(selection_data, selText);
 			DropAt(posDrop, selText.s, false, selText.rectangular);
 		}
-	} else {
-		char *ptr = reinterpret_cast<char *>(selection_data->data);
-		NotifyURIDropped(ptr);
+	} else if (selection_data->length > 0) {
+		char *ptr = new char[selection_data->length + 1];
+		ptr[selection_data->length] = '\0';
+		memcpy(ptr, selection_data->data, selection_data->length);
+ 		NotifyURIDropped(ptr);
+		delete []ptr;
 	}
 	Redraw();
 }
@@ -2193,7 +2190,7 @@ gint ScintillaGTK::ExposeTextThis(GtkWidget * /*widget*/, GdkEventExpose *ose) {
 	paintState = notPainting;
 
 	if (rgnUpdate) {
-		g_free(rgnUpdate);
+		gdk_region_destroy(rgnUpdate);
 	}
 	rgnUpdate = 0;
 
