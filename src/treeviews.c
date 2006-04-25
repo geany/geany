@@ -77,7 +77,7 @@ void treeviews_init_tag_list(gint idx)
 			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Other"), -1);
 			break;
 		}
-		case GEANY_FILETYPES_TEX:
+		case GEANY_FILETYPES_LATEX:
 		{
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Command"), -1);
