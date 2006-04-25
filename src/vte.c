@@ -50,26 +50,26 @@ static struct vte_funcs *vf;
 /* taken from anjuta, thanks */
 gchar **vte_get_child_environment(GtkWidget *term)
 {
-	/* code from gnome-terminal, sort of. */
+	// code from gnome-terminal, sort of.
 	gchar **p;
 	gint i;
 	gchar **retval;
 #define EXTRA_ENV_VARS 5
 
-	/* count env vars that are set */
+	// count env vars that are set
 	for (p = environ; *p; p++);
 
 	i = p - environ;
-	retval = g_new(gchar *, i + 1 + EXTRA_ENV_VARS);
+	retval = g_new0(gchar *, i + 1 + EXTRA_ENV_VARS);
 
 	for (i = 0, p = environ; *p; p++)
 	{
-		/* Strip all these out, we'll replace some of them */
+		// Strip all these out, we'll replace some of them
 		if ((strncmp(*p, "COLUMNS=", 8) == 0) ||
 		    (strncmp(*p, "LINES=", 6) == 0)   ||
 		    (strncmp(*p, "TERM=", 5) == 0))
 		{
-			/* nothing: do not copy */
+			// nothing: do not copy
 		}
 		else
 		{
@@ -78,7 +78,7 @@ gchar **vte_get_child_environment(GtkWidget *term)
 		}
 	}
 
-	retval[i] = g_strdup ("TERM=xterm");
+	retval[i] = g_strdup("TERM=xterm");
 	++i;
 
 	retval[i] = NULL;
@@ -118,8 +118,8 @@ void vte_init(void)
 	else
 	{
 		app->have_vte = TRUE;
-		vf = g_new(struct vte_funcs, 1);
-		vc = g_new(struct vte_conf, 1);
+		vf = g_new0(struct vte_funcs, 1);
+		vc = g_new0(struct vte_conf, 1);
 		vte_register_symbols(module);
 	}
 
@@ -291,8 +291,8 @@ void vte_get_settings(void)
 		values = g_strsplit(app->terminal_settings, ";", 7);
 	}
 	vc->font = g_strdup(values[0]);
-	vc->color_fore = g_new(GdkColor, 1);
-	vc->color_back = g_new(GdkColor, 1);
+	vc->color_fore = g_new0(GdkColor, 1);
+	vc->color_back = g_new0(GdkColor, 1);
 	gdk_color_parse(values[1], vc->color_fore);
 	gdk_color_parse(values[2], vc->color_back);
 
