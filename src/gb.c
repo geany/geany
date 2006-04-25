@@ -1,7 +1,7 @@
 /*
  *      gb.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 #define MAX_PICS 10
-#define LOOP_DELAY 200000	// Microsekunden
+#define LOOP_DELAY 200000	// micro seconds
 
 #define IMAGE_LOGO			10
 #define IMAGE_BUTTON_UP		11
@@ -55,7 +55,7 @@ gboolean is_running;
 static GdkPixbuf **icons;
 
 static gint gb_destroyapp (GtkWidget *widget, gpointer gdata);
-static gint destroydialog (GtkWidget *widget);
+static gint destroydialog (GtkWidget *widget, gpointer data);
 static void update_labels(GtkWidget *window, gint init, gint won);
 static void on_button1_clicked(GtkButton *button, gpointer user_data);
 static void on_button4_clicked(GtkButton *button, gpointer user_data);
@@ -73,7 +73,7 @@ static void create_window(void)
 	GtkWidget *button5;
 
 	gb_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(gb_window), "GTK-Bandit");
+	gtk_window_set_title(GTK_WINDOW(gb_window), "Happy Eastern!");
 	gtk_window_set_resizable(GTK_WINDOW(gb_window), FALSE);
 	gtk_window_set_position(GTK_WINDOW(gb_window), GTK_WIN_POS_CENTER);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(gb_window), TRUE);
@@ -202,10 +202,9 @@ static GtkWidget *create_help_dialog(void)
 }
 
 
-// zentrale exit-Funktion für den Dialog
-static gint destroydialog(GtkWidget *widget)
+static gint destroydialog(GtkWidget *widget, gpointer data)
 {
-	gtk_widget_destroy(widget);
+	gtk_widget_destroy(GTK_WIDGET(data));
 	return (FALSE);
 }
 
@@ -273,9 +272,9 @@ static void on_button1_clicked(GtkButton *button, gpointer user_data)
 {
     unsigned short erg_a, erg_b, erg_c, i, l, m, n, loops;
 
-	if (is_running) return;	// Mehrfach-Klicks verhindern
+	if (is_running) return;	// prevent multiple clicks
 	is_running = TRUE;
-	// Button-Image wechseln
+	// change button-image
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image4), icons[IMAGE_BUTTON_DOWN]);
 
 	lap++;
@@ -289,14 +288,14 @@ static void on_button1_clicked(GtkButton *button, gpointer user_data)
 	erg_c = random_number(MAX_PICS);
 	//printf("Ani: %d, %d, %d\tErg: %d, %d, %d\n\n", l, m, n, erg_a, erg_b, erg_c);
 
-	// Icons zuweisen
+	// assign icons
 	loops = 30;
 	for(i = 0; i < loops; i++)
 	{
 		if (l > 9) l = 0;
 		if (m > 9) m = 0;
 		if (n > 9) n = 0;
-		// zum Simulieren, dass der erste und zweite Slot schon vor dem Ende stehen bleibt
+		// simulate stopping of first and second slot
 		if (i < (loops - 10))
 			gtk_image_set_from_pixbuf(GTK_IMAGE(image1), icons[l]);
 		else
@@ -310,7 +309,7 @@ static void on_button1_clicked(GtkButton *button, gpointer user_data)
 		l++;
 		m++;
 		n++;
-		// refresh()-Ersatz
+		// refresh()-replacement
 		while (g_main_context_iteration(NULL, FALSE));
 		g_usleep(LOOP_DELAY);
 	}
@@ -321,14 +320,13 @@ static void on_button1_clicked(GtkButton *button, gpointer user_data)
 
 	update_labels(gb_window, FALSE, i);
 
-	// Button-Image wechseln
+	// change button image
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image4), icons[IMAGE_BUTTON_UP]);
 	is_running = FALSE;
 
 }
 
 
-// Hilfe
 static void on_button4_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkWidget *dialog = create_help_dialog();
@@ -1256,7 +1254,7 @@ static void init_images(void)
 
 	initialise_random_numbers();
 
-	// Startbilder festlegen
+	// define start images
 	i = random_number(MAX_PICS) + 1;
 	gtk_image_set_from_pixbuf(GTK_IMAGE(image1), icons[i]);
 	i = random_number(MAX_PICS) + 1;
@@ -1266,7 +1264,7 @@ static void init_images(void)
 }
 
 
-// zentrale exit-Funktion
+// main exit function
 gint gb_destroyapp(GtkWidget *widget, gpointer gdata)
 {
 	if (is_running) return TRUE;
