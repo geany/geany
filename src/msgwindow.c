@@ -1,7 +1,7 @@
 /*
  *      msgwindow.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -107,6 +107,7 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, .
 {
 	GtkTreeIter iter;
 	GdkColor *color;
+	GtkTreePath *path;
 	static GdkColor red = {0, 65535, 0, 0};
 	static GdkColor blue = {0, 0, 0, 65535};
 	static GdkColor black = {0, 0, 0, 0};
@@ -129,15 +130,14 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, .
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
 	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, string, -1);
 
+	path = gtk_tree_model_get_path(gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_compiler)), &iter);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(msgwindow.tree_compiler), path, NULL, TRUE, 0.5, 0.5);
+
 	if (scroll)
 	{
-		GtkTreePath *path = gtk_tree_model_get_path(gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_compiler)), &iter);
-
-		//gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(msgwindow.tree_compiler), path, NULL, FALSE, 0.0, 0.0);
-		gtk_tree_view_set_cursor(GTK_TREE_VIEW(msgwindow.tree_compiler), path,
-					gtk_tree_view_get_column(GTK_TREE_VIEW(msgwindow.tree_compiler), 2), FALSE);
-		gtk_tree_path_free(path);
+		gtk_tree_view_set_cursor(GTK_TREE_VIEW(msgwindow.tree_compiler), path, NULL, FALSE);
 	}
+	gtk_tree_path_free(path);
 }
 
 
