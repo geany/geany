@@ -78,7 +78,7 @@ static GOptionEntry entries[] =
 	{ "vte-lib", 'l', 0, G_OPTION_ARG_FILENAME, &lib_vte, "filename of libvte.so", NULL },
 #endif
 	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, "show version and exit", NULL },
-	{ NULL }
+	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
 
 
@@ -96,7 +96,6 @@ void geany_debug(gchar const *format, ...)
 		va_end(args);
 	}
 }
-
 
 /* special things for the initial setup of the checkboxes and related stuff
  * an action on a setting is only performed if the setting is not equal to the program default
@@ -204,7 +203,7 @@ static void apply_settings(void)
 static void main_init(void)
 {
 	// inits
-	app = g_new(MyApp, 1);
+	app = g_new0(MyApp, 1);
 #ifdef GEANY_DEBUG
 	geany_debug("debug mode built in (can't be disabled)");
 #endif
@@ -221,9 +220,6 @@ static void main_init(void)
 #endif
 	app->window				= NULL;
 	app->search_text		= NULL;
-	app->build_args_inc		= NULL;
-	app->build_args_libs	= NULL;
-	app->build_args_prog	= NULL;
 	app->open_fontsel		= NULL;
 	app->open_colorsel		= NULL;
 	app->open_filesel		= NULL;
@@ -233,6 +229,7 @@ static void main_init(void)
 	app->replace_dialog		= NULL;
 	app->default_tag_tree	= NULL;
 	app->main_window_realized= FALSE;
+	app->tab_order_ltr		= FALSE;
 	app->quitting			= FALSE;
 #ifdef HAVE_FIFO
 	app->ignore_fifo		= ignore_fifo;
@@ -246,18 +243,6 @@ static void main_init(void)
 	app->tm_workspace							= tm_get_workspace();
 	app->recent_queue							= g_queue_new();
 	app->opening_session_files					= FALSE;
-	dialogs_build_menus.menu_c.menu				= NULL;
-	dialogs_build_menus.menu_c.item_compile		= NULL;
-	dialogs_build_menus.menu_c.item_exec		= NULL;
-	dialogs_build_menus.menu_c.item_link		= NULL;
-	dialogs_build_menus.menu_tex.menu			= NULL;
-	dialogs_build_menus.menu_tex.item_compile	= NULL;
-	dialogs_build_menus.menu_tex.item_exec		= NULL;
-	dialogs_build_menus.menu_tex.item_link		= NULL;
-	dialogs_build_menus.menu_misc.menu			= NULL;
-	dialogs_build_menus.menu_misc.item_compile	= NULL;
-	dialogs_build_menus.menu_misc.item_exec		= NULL;
-	dialogs_build_menus.menu_misc.item_link		= NULL;
 
 	app->window = create_window1();
 	app->new_file_menu = gtk_menu_new();
@@ -272,6 +257,7 @@ static void main_init(void)
 	app->popup_menu = create_edit_menu1();
 	app->toolbar_menu = create_toolbar_popup_menu1();
 	app->compile_button = lookup_widget(app->window, "toolbutton13");
+	app->run_button = lookup_widget(app->window, "toolbutton26");
 	app->popup_goto_items[0] = lookup_widget(app->popup_menu, "goto_tag_definition1");
 	app->popup_goto_items[1] = lookup_widget(app->popup_menu, "goto_tag_declaration1");
 	app->popup_goto_items[2] = lookup_widget(app->popup_menu, "find_usage1");
@@ -387,7 +373,7 @@ static void create_fifo(gint argc, gchar **argv, const gchar *config_dir)
 	GIOChannel *ioc;
 
 	tmp = g_strconcat(config_dir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
-	strncpy(fifo_name, tmp, MAX(strlen(tmp), sizeof(fifo_name)));
+	g_strlcpy(fifo_name, tmp, sizeof(fifo_name));
 	g_free(tmp);
 
 	if (stat(fifo_name, &st) == 0 && (! S_ISFIFO(st.st_mode)))
@@ -433,21 +419,9 @@ gint main(gint argc, gchar **argv)
 	GOptionContext *context;
 	gint mkdir_result = 0;
 	gint idx;
-	time_t seconds = time((time_t *) 0);
-	struct tm *tm = localtime(&seconds);
-	this_year = tm->tm_year + 1900;
-	this_month = tm->tm_mon + 1;
-	this_day = tm->tm_mday;
 	gchar *config_dir;
 
-#ifdef ENABLE_NLS
-	bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-	textdomain(GETTEXT_PACKAGE);
-#endif
-	gtk_set_locale();
-
-	context = g_option_context_new(_(" - A fast and lightweight IDE"));
+	context = g_option_context_new(" - A fast and lightweight IDE");
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
 	g_option_context_add_group(context, gtk_get_option_group(TRUE));
 	g_option_context_parse(context, &argc, &argv, &error);
@@ -463,6 +437,13 @@ gint main(gint argc, gchar **argv)
 
 		return (0);
 	}
+
+#ifdef ENABLE_NLS
+	bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+	textdomain(GETTEXT_PACKAGE);
+#endif
+	gtk_set_locale();
 
 	signal(SIGTERM, signal_cb);
 
@@ -483,6 +464,7 @@ gint main(gint argc, gchar **argv)
 
 	gtk_init(&argc, &argv);
 
+	// inits
 	main_init();
 	gtk_widget_set_size_request(app->window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
 	gtk_window_set_default_size(GTK_WINDOW(app->window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
@@ -569,9 +551,19 @@ gint main(gint argc, gchar **argv)
 	utils_build_show_hide(idx);
 	utils_update_tag_list(idx, FALSE);
 
+#ifdef GEANY_WIN32
+	// hide "Build" menu item, at least until it is available for Windows
+	gtk_widget_hide(lookup_widget(app->window, "menu_build1"));
+	gtk_widget_hide(app->compile_button);
+	gtk_widget_hide(app->run_button);
+	gtk_widget_hide(lookup_widget(app->window, "separatortoolitem6"));
+#endif
+
 	// finally realize the window to show the user what we have done
 	gtk_widget_show(app->window);
 	app->main_window_realized = TRUE;
+
+	configuration_apply_settings();
 
 	//g_timeout_add(0, (GSourceFunc)destroyapp, NULL); // useful for start time tests
 	gtk_main();
