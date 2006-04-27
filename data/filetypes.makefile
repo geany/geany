@@ -1,3 +1,4 @@
+# For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
 default=0xFF0000;0xffffff;false;false
@@ -9,3 +10,20 @@ target=0xff0000;0xffffff;false;false
 ideol=0x008000;0xffffff;false;false
 
 # there are no keywords available otherwise mail me
+
+
+[settings]
+# the following characters are these which a "word" can contains, see documentation
+wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# if only single comment char is supported like # in this file, leave comment_close blank
+comment_open=#
+comment_close=
+
+# set to false if a comment character/string should start a column 0 of a line, true uses any
+# indention of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true

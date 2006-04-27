@@ -1,3 +1,4 @@
+# For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false;false
@@ -18,3 +19,20 @@ value=x7F7F00;0xffffff;false;false
 primary=color background-color background-image background-repeat background-attachment background-position background font-family font-style font-variant font-weight font-size font word-spacing letter-spacing text-decoration vertical-align text-transform text-align text-indent line-height margin-top margin-right margin-bottom margin-left margin padding-top padding-right padding-bottom padding-left padding border-top-width border-right-width border-bottom-width border-left-width border-width border-top border-right border-bottom border-left border border-color border-style width height float clear display white-space list-style-type list-style-image list-style-position list-style
 secondary=border-top-color border-right-color border-bottom-color border-left-color border-color border-top-style border-right-style border-bottom-style border-left-style border-style top right bottom left position z-index direction unicode-bidi min-width max-width min-height max-height overflow clip visibility content quotes counter-reset counter-increment marker-offset size marks page-break-before page-break-after page-break-inside page orphans widows font-stretch font-size-adjust unicode-range units-per-em src panose-1 stemv stemh slope cap-height x-height ascent descent widths bbox definition-src baseline centerline mathline topline text-shadow caption-side table-layout border-collapse border-spacing empty-cells speak-header cursor outline outline-width outline-style outline-color volume speak pause-before pause-after pause cue-before cue-after cue play-during azimuth elevation speech-rate voice-family pitch pitch-range stress richness speak-punctuation speak-numeral
 pseudoclasses=first-letter first-line link active visited lang first-child focus hover before after left right first
+
+
+[settings]
+# the following characters are these which a "word" can contains, see documentation
+wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# if only single comment char is supported like # in this file, leave comment_close blank
+comment_open=/*
+comment_close=*/
+
+# set to false if a comment character/string should start a column 0 of a line, true uses any
+# indention of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true

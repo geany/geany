@@ -1,3 +1,4 @@
+# For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false;false
@@ -7,3 +8,7 @@ brace_good=0xff0000;0xFFFFFF;true;false
 brace_bad=0x0000ff;0xFFFFFF;true;false
 # background colour of the current line, only the second argument is interpreted
 current_line=0x0;0xE5E5E5;false;false
+# style of folding icons, only first and second arguments are used, valid values are:
+# first argument:  1 for boxes, 2 for circles
+# second argument: 1 for straight lines, 2 for curved lines
+#folding_style=1;1;false;false

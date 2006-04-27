@@ -1,3 +1,4 @@
+# For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false;false
@@ -24,4 +25,33 @@ globalclass=0xbb1111;0xffffff;true;false
 # all items must be in one line
 primary=volatile default export goto sizeof typename asm enum bool union NULL FALSE TRUE typedef struct char int float double void unsigned signed long short extern static register auto const if else switch for while do break continue return class new delete inline case
 docComment=TODO FIXME
+
+[settings]
+# the following characters are these which a "word" can contains, see documentation
+wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# if only single comment char is supported like # in this file, leave comment_close blank
+comment_open=/*
+comment_close=*/
+# this is an alternative way, so multiline comments are used
+#comment_open=/*
+#comment_close=*/
+
+# set to false if a comment character/string should start a column 0 of a line, true uses any
+# indention of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true
+
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+compiler=gcc -Wall -c %f
+# the -o option is automatically added by Geany
+linker=gcc -Wall %f
+run_cmd=./%e
+
 

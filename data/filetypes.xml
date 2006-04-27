@@ -1,3 +1,4 @@
+# For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
 html_default=0x000000;0xffffff;false;false
@@ -72,4 +73,20 @@ python=and assert break class continue complex def del elif else except exec fin
 php=and or xor FILE exception LINE array as break case class const continue declare default die do echo else elseif empty  enddeclare endfor endforeach endif endswitch endwhile eval exit extends for foreach function global if include include_once  isset list new print require require_once return static switch unset use var while FUNCTION CLASS METHOD final php_user_filter interface implements extends public private protected abstract clone try catch throw cfunction old_function this
 sgml=ELEMENT DOCTYPE ATTLIST ENTITY NOTATION
 
+
+[settings]
+# the following characters are these which a "word" can contains, see documentation
+wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# if only single comment char is supported like # in this file, leave comment_close blank
+comment_open=<!--
+comment_close=-->
+
+# set to false if a comment character/string should start a column 0 of a line, true uses any
+# indention of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true
 
