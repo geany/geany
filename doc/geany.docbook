@@ -3,11 +3,11 @@
         "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!ENTITY app "Geany">
 <!ENTITY app_small "geany">
-<!ENTITY appversion "0.5">
+<!ENTITY appversion "0.6">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY deburl "http://debian.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "January 27, 2006">
+<!ENTITY date "April 28, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 ]>
 
@@ -35,12 +35,12 @@
 		</title>
 	</bookinfo>
 
-	<chapter>
+	<chapter id="intro">
 		<title>
 			Introduction
 		</title>
 		<section>
-			<title>About</title>
+			<title>About Geany</title>
 			<para>
 				<application>&app;</application> is a small and lightweight integrated development environment.
 				It was developed to provide a small and fast IDE, which has only a few dependencies from other
@@ -62,6 +62,13 @@
 			</para>
 		</section>
 		<section>
+			<title>About this document</title>
+			<para>
+				This documentation is available in various formats like HTML, text and PDF. The latest version is
+				always available at <ulink url="&appurl;">&appurl;</ulink>.
+			</para>
+		</section>
+		<section>
 			<title>Where to get</title>
 			<para>
 				You can obtain <application>&app;</application> from <ulink url="&appurl;">&appurl;</ulink>
@@ -79,7 +86,7 @@
 		</section>
 	</chapter>
 
-	<chapter>
+	<chapter id="installation">
 		<title>
 			Installation
 		</title>
@@ -132,8 +139,8 @@
 			<section>
 				<title>Fedora</title>
 				<para>
-					You can find packages for Fedora Core 4 on <ulink url="&appurl;">&appurl;/</ulink>
-					in the download section.
+					You can use the Fedora Core 4 repository from
+					<ulink url="http://naturidentisch.de/packages/fc4/">http://naturidentisch.de/packages/fc4/</ulink>.
 				</para>
 			</section>
 			<section>
@@ -157,10 +164,16 @@
 					There are not yet packages for SuSE available.
 				</para>
 			</section>
+			<section>
+				<title>Gentoo</title>
+				<para>
+					An ebuild for Gentoo can be found on <ulink url="http://www.gentoo.de/">http://www.gentoo.de</ulink>.
+				</para>
+			</section>
 		</section>
 	</chapter>
 
-	<chapter>
+	<chapter id="usage">
 		<title>Usage</title>
 		<section>
 			<title>Getting Started</title>
@@ -219,7 +232,20 @@
 								<entry>--no-ctags</entry>
 								<entry>Do not load auto completion and call tip data.
 									   Use this option, if you do not want to use them. For more
-									   information see <xref linkend="ctags"/>.
+									   information see <xref linkend="general_ctags"/>.
+								</entry>
+							</row>
+							<row>
+								<entry>-m</entry>
+								<entry>--no-msgwin</entry>
+								<entry>Do not show the message window. Use this option if you do not
+									   need compiler messages or VTE support.
+								</entry>
+							</row>
+							<row>
+								<entry>-p</entry>
+								<entry>--no-pipe</entry>
+								<entry>Do not open files in a running instance, force opening a new instance.
 								</entry>
 							</row>
 							<row>
@@ -281,7 +307,7 @@
 		</section>
 		<section id="general">
 			<title>General</title>
-			<section>
+			<section id="general_startup">
 				<title>Startup</title>
 				<para>
 					At startup, &app; loads the 15 first files from the last time,
@@ -294,7 +320,22 @@
 					<xref linkend="cto"/>.
 				</para>
 			</section>
-			<section id="ctags">
+			<section id="general_fifo">
+				<title>Detection of a running instance</title>
+				<para>
+					&app; detects an already running instance of it and open new files in the running one.
+					So, you can use &app; like an editor to view and edit files by opening them from other
+					programs. If you do not like this for some reason, you can it disable with the appropriate
+					commandline option.
+				</para>
+				<para>
+					In the case that &app; crashed, you will get a message dialog at the next start,
+					which asks you whether to delete an existing named pipe. If you are sure that there is
+					no other instance of &app; running, you can say Yes and &app; will start as usual.
+					Otherwise click No and Geany will not start.
+				</para>
+			</section>
+			<section id="general_ctags">
 				<title>Global C tags</title>
 				<para>
 					If a C file(with extension is c, cpp, h, etc.) is opened, a global tags file is
@@ -306,7 +347,7 @@
 					argument "-n" or "--no-ctags", for more information see <xref linkend="clo"/>.
 				</para>
 			</section>
-			<section id="vte">
+			<section id="general_vte">
 				<title>Virtual terminal emulator widget (VTE)</title>
 				<para>
 					If you have installed <filename>libvte.so</filename> in your system, it is loaded
@@ -483,6 +524,7 @@
 					There are some options which can only changed at compile time. To change these
 					options, look into <filename>src/geany.h</filename> to change these settings.
 					To find it, look for a block of lines starting with <quote>#define GEANY_*</quote>.
+					All definitions which are not listed here, should not be changed.
 					<table frame="all">
 						<title>Compile time options</title>
 						<tgroup cols="3">
@@ -525,6 +567,31 @@
 									<entry>A string used as name for new files. Be aware that the string can be translated,
 										   so change it only if you know what you are doing.</entry>
 									<entry>untitled</entry>
+								</row>
+								<row>
+									<entry>GEANY_CHECK_FILE_DELAY</entry>
+									<entry>Time in seconds between a file is checked for changes.</entry>
+									<entry>30</entry>
+								</row>
+								<row>
+									<entry>GEANY_WINDOW_MINIMAL_WIDTH</entry>
+									<entry>The minimal width of the main window.</entry>
+									<entry>620</entry>
+								</row>
+								<row>
+									<entry>GEANY_WINDOW_MINIMAL_HEIGHT</entry>
+									<entry>The minimal height of the main window.</entry>
+									<entry>440</entry>
+								</row>
+								<row>
+									<entry>GEANY_WINDOW_DEFAULT_WIDTH</entry>
+									<entry>The default width of the main window at the first start.</entry>
+									<entry>900</entry>
+								</row>
+								<row>
+									<entry>GEANY_WINDOW_DEFAULT_HEIGHT</entry>
+									<entry>The default height of the main window at the first start.</entry>
+									<entry>600</entry>
 								</row>
 							</tbody>
 						</tgroup>
@@ -640,6 +707,11 @@
 								<entry>filetypes, file header, function description, ChangeLog entry</entry>
 							</row>
 							<row>
+								<entry>geanyversion</entry>
+								<entry>The actual Geany version, e.g. "&app; &appversion;"</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+							</row>
+							<row>
 								<entry>datetime</entry>
 								<entry>The current date and time in the format: DD.MM.YYYY HH:mm:ss ZZZZ</entry>
 								<entry>file header, function description</entry>
@@ -668,7 +740,7 @@
 		</section>
 	</chapter>
 
-	<appendix>
+	<appendix id="shortcuts">
 		<title><application>&app;</application> key mapping</title>
 		<section>
 			<title><application>&app;</application> key mapping</title>

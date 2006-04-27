@@ -1,5 +1,5 @@
 
-Geany 0.5
+Geany 0.6
 
 Enrico Troeger
 
@@ -16,9 +16,10 @@ Enrico Troeger
    Table of Contents
    1. Introduction
 
-        1.1. About
-        1.2. Where to get
-        1.3. License
+        1.1. About Geany
+        1.2. About this document
+        1.3. Where to get
+        1.4. License
 
    2. Installation
 
@@ -29,6 +30,7 @@ Enrico Troeger
               2.3.1. Fedora
               2.3.2. Debian
               2.3.3. SuSE
+              2.3.4. Gentoo
 
    3. Usage
 
@@ -37,8 +39,9 @@ Enrico Troeger
         3.3. General
 
               3.3.1. Startup
-              3.3.2. Global C tags
-              3.3.3. Virtual terminal emulator widget (VTE)
+              3.3.2. Detection of a running instance
+              3.3.3. Global C tags
+              3.3.4. Virtual terminal emulator widget (VTE)
 
         3.4. Search and Replace
         3.5. Preferences
@@ -92,7 +95,7 @@ Enrico Troeger
 
 Chapter 1. Introduction
 
-1.1. About
+1.1. About Geany
 
    Geany is a small and lightweight integrated development
    environment. It was developed to provide a small and fast IDE,
@@ -115,13 +118,20 @@ Chapter 1. Introduction
      * symbol lists
      _________________________________________________________
 
-1.2. Where to get
+1.2. About this document
+
+   This documentation is available in various formats like HTML,
+   text and PDF. The latest version is always available at
+   http://geany.uvena.de.
+     _________________________________________________________
+
+1.3. Where to get
 
    You can obtain Geany from http://geany.uvena.de or perhabs
    from your distributor.
      _________________________________________________________
 
-1.3. License
+1.4. License
 
    Geany is distributed under the terms of the GNU Public license
    as published by the Free Software Foundation; either version 2
@@ -175,8 +185,8 @@ Chapter 2. Installation
 
 2.3.1. Fedora
 
-   You can find packages for Fedora Core 4 on
-   http://geany.uvena.de/ in the download section.
+   You can use the Fedora Core 4 repository from
+   http://naturidentisch.de/packages/fc4/.
      _________________________________________________________
 
 2.3.2. Debian
@@ -194,6 +204,11 @@ Chapter 2. Installation
 2.3.3. SuSE
 
    There are not yet packages for SuSE available.
+     _________________________________________________________
+
+2.3.4. Gentoo
+
+   An ebuild for Gentoo can be found on http://www.gentoo.de.
      _________________________________________________________
 
 Chapter 3. Usage
@@ -217,7 +232,11 @@ Chapter 3. Usage
    Short option Long option Function
    -n --no-ctags Do not load auto completion and call tip data.
    Use this option, if you do not want to use them. For more
-   information see Section 3.3.2.
+   information see Section 3.3.3.
+   -m --no-msgwin Do not show the message window. Use this option
+   if you do not need compiler messages or VTE support.
+   -p --no-pipe Do not open files in a running instance, force
+   opening a new instance.
    -t --no-terminal Do not load terminal support. Use this
    option, if you do not want to load the virtual terminal
    emulator widget at startup. If you do not have libvte.so.4
@@ -257,7 +276,22 @@ Chapter 3. Usage
    Section 3.5.1.
      _________________________________________________________
 
-3.3.2. Global C tags
+3.3.2. Detection of a running instance
+
+   Geany detects an already running instance of it and open new
+   files in the running one. So, you can use Geany like an editor
+   to view and edit files by opening them from other programs. If
+   you do not like this for some reason, you can it disable with
+   the appropriate commandline option.
+
+   In the case that Geany crashed, you will get a message dialog
+   at the next start, which asks you whether to delete an
+   existing named pipe. If you are sure that there is no other
+   instance of Geany running, you can say Yes and Geany will
+   start as usual. Otherwise click No and Geany will not start.
+     _________________________________________________________
+
+3.3.3. Global C tags
 
    If a C file(with extension is c, cpp, h, etc.) is opened, a
    global tags file is loaded once, which contains many function
@@ -270,7 +304,7 @@ Chapter 3. Usage
    "--no-ctags", for more information see Section 3.2.
      _________________________________________________________
 
-3.3.3. Virtual terminal emulator widget (VTE)
+3.3.4. Virtual terminal emulator widget (VTE)
 
    If you have installed libvte.so in your system, it is loaded
    automatically by Geany. Then you have a terminal widget in the
@@ -377,7 +411,8 @@ Chapter 3. Usage
    There are some options which can only changed at compile time.
    To change these options, look into src/geany.h to change these
    settings. To find it, look for a block of lines starting with
-   "#define GEANY_*".
+   "#define GEANY_*". All definitions which are not listed here,
+   should not be changed.
 
    Table 3-3. Compile time options
    Option Description Default
@@ -393,6 +428,16 @@ Chapter 3. Usage
    GEANY_STRING_UNTITLED A string used as name for new files. Be
    aware that the string can be translated, so change it only if
    you know what you are doing. untitled
+   GEANY_CHECK_FILE_DELAY Time in seconds between a file is
+   checked for changes. 30
+   GEANY_WINDOW_MINIMAL_WIDTH The minimal width of the main
+   window. 620
+   GEANY_WINDOW_MINIMAL_HEIGHT The minimal height of the main
+   window. 440
+   GEANY_WINDOW_DEFAULT_WIDTH The default width of the main
+   window at the first start. 900
+   GEANY_WINDOW_DEFAULT_HEIGHT The default height of the main
+   window at the first start. 600
      _________________________________________________________
 
 3.6. File types
@@ -464,6 +509,8 @@ Chapter 3. Usage
    untitled The string "untitled" (this will be translated to
    your locale), used in filetype templates filetypes, file
    header, function description, ChangeLog entry
+   geanyversion The actual Geany version, e.g. "Geany 0.6"
+   filetypes, file header, function description, ChangeLog entry
    datetime The current date and time in the format: DD.MM.YYYY
    HH:mm:ss ZZZZ file header, function description
    filename The filename of the current file. Only available for
