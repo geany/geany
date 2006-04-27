@@ -150,19 +150,21 @@ create_window1 (void)
   GtkWidget *separatortoolitem2;
   GtkWidget *toolbutton13;
   GtkWidget *tmp_image;
+  GtkWidget *toolbutton26;
+  GtkWidget *separatortoolitem6;
   GtkWidget *toolbutton24;
   GtkWidget *separatortoolitem3;
   GtkWidget *toolbutton20;
   GtkWidget *toolbutton21;
   GtkWidget *separatortoolitem4;
-  GtkWidget *toolitem11;
+  GtkWidget *toolitem18;
   GtkWidget *entry1;
   GtkWidget *toolbutton18;
   GtkWidget *separatortoolitem5;
-  GtkWidget *toolitem15;
+  GtkWidget *toolitem17;
   GtkWidget *entry_goto_line;
   GtkWidget *toolbutton25;
-  GtkWidget *toolitem14;
+  GtkWidget *toolitem16;
   GtkWidget *alignment1;
   GtkWidget *label1;
   GtkWidget *toolbutton19;
@@ -721,6 +723,17 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton13);
   gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton13), tooltips, _("Compile the current file"), NULL);
 
+  tmp_image = gtk_image_new_from_stock ("gtk-media-play", tmp_toolbar_icon_size);
+  gtk_widget_show (tmp_image);
+  toolbutton26 = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Run"));
+  gtk_widget_show (toolbutton26);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton26);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton26), tooltips, _("Run or view the current file"), NULL);
+
+  separatortoolitem6 = (GtkWidget*) gtk_separator_tool_item_new ();
+  gtk_widget_show (separatortoolitem6);
+  gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem6);
+
   tmp_image = gtk_image_new_from_stock ("gtk-select-color", tmp_toolbar_icon_size);
   gtk_widget_show (tmp_image);
   toolbutton24 = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Color"));
@@ -746,13 +759,13 @@ create_window1 (void)
   gtk_widget_show (separatortoolitem4);
   gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem4);
 
-  toolitem11 = (GtkWidget*) gtk_tool_item_new ();
-  gtk_widget_show (toolitem11);
-  gtk_container_add (GTK_CONTAINER (toolbar1), toolitem11);
+  toolitem18 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_show (toolitem18);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolitem18);
 
   entry1 = gtk_entry_new ();
   gtk_widget_show (entry1);
-  gtk_container_add (GTK_CONTAINER (toolitem11), entry1);
+  gtk_container_add (GTK_CONTAINER (toolitem18), entry1);
   gtk_tooltips_set_tip (tooltips, entry1, _("Find the entered text in the current file"), NULL);
 
   toolbutton18 = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-find");
@@ -764,13 +777,13 @@ create_window1 (void)
   gtk_widget_show (separatortoolitem5);
   gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem5);
 
-  toolitem15 = (GtkWidget*) gtk_tool_item_new ();
-  gtk_widget_show (toolitem15);
-  gtk_container_add (GTK_CONTAINER (toolbar1), toolitem15);
+  toolitem17 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_show (toolitem17);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolitem17);
 
   entry_goto_line = gtk_entry_new ();
   gtk_widget_show (entry_goto_line);
-  gtk_container_add (GTK_CONTAINER (toolitem15), entry_goto_line);
+  gtk_container_add (GTK_CONTAINER (toolitem17), entry_goto_line);
   gtk_tooltips_set_tip (tooltips, entry_goto_line, _("Enter a line number and jump to it."), NULL);
   gtk_entry_set_max_length (GTK_ENTRY (entry_goto_line), 5);
   gtk_entry_set_width_chars (GTK_ENTRY (entry_goto_line), 8);
@@ -780,13 +793,13 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton25);
   gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton25), tooltips, _("Jump to the entered line number."), NULL);
 
-  toolitem14 = (GtkWidget*) gtk_tool_item_new ();
-  gtk_widget_show (toolitem14);
-  gtk_container_add (GTK_CONTAINER (toolbar1), toolitem14);
+  toolitem16 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_show (toolitem16);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolitem16);
 
   alignment1 = gtk_alignment_new (0.5, 0.5, 1, 1);
   gtk_widget_show (alignment1);
-  gtk_container_add (GTK_CONTAINER (toolitem14), alignment1);
+  gtk_container_add (GTK_CONTAINER (toolitem16), alignment1);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment1), 0, 0, 10, 10);
 
   label1 = gtk_label_new ("");
@@ -805,7 +818,7 @@ create_window1 (void)
 
   hpaned1 = gtk_hpaned_new ();
   gtk_widget_show (hpaned1);
-  gtk_paned_pack1 (GTK_PANED (vpaned1), hpaned1, FALSE, TRUE);
+  gtk_paned_pack1 (GTK_PANED (vpaned1), hpaned1, TRUE, TRUE);
   gtk_paned_set_position (GTK_PANED (hpaned1), 167);
 
   notebook3 = gtk_notebook_new ();
@@ -1101,6 +1114,9 @@ create_window1 (void)
   g_signal_connect ((gpointer) toolbutton13, "clicked",
                     G_CALLBACK (on_compile_button_clicked),
                     NULL);
+  g_signal_connect ((gpointer) toolbutton26, "clicked",
+                    G_CALLBACK (on_run_button_clicked),
+                    NULL);
   g_signal_connect ((gpointer) toolbutton24, "clicked",
                     G_CALLBACK (on_show_color_chooser1_activate),
                     NULL);
@@ -1258,19 +1274,21 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, toolbutton15, "toolbutton15");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem2, "separatortoolitem2");
   GLADE_HOOKUP_OBJECT (window1, toolbutton13, "toolbutton13");
+  GLADE_HOOKUP_OBJECT (window1, toolbutton26, "toolbutton26");
+  GLADE_HOOKUP_OBJECT (window1, separatortoolitem6, "separatortoolitem6");
   GLADE_HOOKUP_OBJECT (window1, toolbutton24, "toolbutton24");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem3, "separatortoolitem3");
   GLADE_HOOKUP_OBJECT (window1, toolbutton20, "toolbutton20");
   GLADE_HOOKUP_OBJECT (window1, toolbutton21, "toolbutton21");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem4, "separatortoolitem4");
-  GLADE_HOOKUP_OBJECT (window1, toolitem11, "toolitem11");
+  GLADE_HOOKUP_OBJECT (window1, toolitem18, "toolitem18");
   GLADE_HOOKUP_OBJECT (window1, entry1, "entry1");
   GLADE_HOOKUP_OBJECT (window1, toolbutton18, "toolbutton18");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem5, "separatortoolitem5");
-  GLADE_HOOKUP_OBJECT (window1, toolitem15, "toolitem15");
+  GLADE_HOOKUP_OBJECT (window1, toolitem17, "toolitem17");
   GLADE_HOOKUP_OBJECT (window1, entry_goto_line, "entry_goto_line");
   GLADE_HOOKUP_OBJECT (window1, toolbutton25, "toolbutton25");
-  GLADE_HOOKUP_OBJECT (window1, toolitem14, "toolitem14");
+  GLADE_HOOKUP_OBJECT (window1, toolitem16, "toolitem16");
   GLADE_HOOKUP_OBJECT (window1, alignment1, "alignment1");
   GLADE_HOOKUP_OBJECT (window1, label1, "label1");
   GLADE_HOOKUP_OBJECT (window1, toolbutton19, "toolbutton19");
@@ -1735,6 +1753,12 @@ create_prefs_dialog (void)
   GtkWidget *check_beep;
   GtkWidget *check_switch_pages;
   GtkWidget *check_ask_for_quit;
+  GtkWidget *hbox3;
+  GtkWidget *label150;
+  GtkWidget *radio_tab_left;
+  GSList *radio_tab_left_group = NULL;
+  GtkWidget *label149;
+  GtkWidget *radio_tab_right;
   GtkWidget *label18;
   GtkWidget *label106;
   GtkWidget *frame3;
@@ -1846,24 +1870,6 @@ create_prefs_dialog (void)
   GtkWidget *entry_template_developer;
   GtkWidget *label132;
   GtkWidget *label119;
-  GtkWidget *vbox10;
-  GtkWidget *label139;
-  GtkWidget *alignment8;
-  GtkWidget *table7;
-  GtkWidget *label140;
-  GtkWidget *font_term;
-  GtkWidget *label142;
-  GtkWidget *label143;
-  GtkWidget *color_fore;
-  GtkWidget *color_back;
-  GtkWidget *label144;
-  GtkObject *spin_scrollback_adj;
-  GtkWidget *spin_scrollback;
-  GtkWidget *label145;
-  GtkWidget *entry_emulation;
-  GtkWidget *check_scroll_key;
-  GtkWidget *check_scroll_out;
-  GtkWidget *label137;
   GtkWidget *dialog_action_area3;
   GtkWidget *cancelbutton1;
   GtkWidget *okbutton1;
@@ -1908,7 +1914,7 @@ create_prefs_dialog (void)
   gtk_widget_show (hbox2);
   gtk_box_pack_start (GTK_BOX (vbox4), hbox2, FALSE, FALSE, 0);
 
-  label147 = gtk_label_new (_("MRU list length"));
+  label147 = gtk_label_new (_("MRU list length:"));
   gtk_widget_show (label147);
   gtk_box_pack_start (GTK_BOX (hbox2), label147, FALSE, FALSE, 0);
 
@@ -1952,6 +1958,33 @@ create_prefs_dialog (void)
   GTK_WIDGET_UNSET_FLAGS (check_ask_for_quit, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_ask_for_quit, _("Shows a confirmation dialog on exit."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_ask_for_quit), FALSE);
+
+  hbox3 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_show (hbox3);
+  gtk_box_pack_start (GTK_BOX (vbox4), hbox3, FALSE, FALSE, 0);
+
+  label150 = gtk_label_new (_("Placement of new file tabs: "));
+  gtk_widget_show (label150);
+  gtk_box_pack_start (GTK_BOX (hbox3), label150, FALSE, FALSE, 0);
+
+  radio_tab_left = gtk_radio_button_new_with_mnemonic (NULL, _("Left"));
+  gtk_widget_show (radio_tab_left);
+  gtk_box_pack_start (GTK_BOX (hbox3), radio_tab_left, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radio_tab_left, _("New file tabs will be placed to the left of the tab list"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_tab_left), radio_tab_left_group);
+  radio_tab_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_tab_left));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_tab_left), TRUE);
+
+  label149 = gtk_label_new ("   ");
+  gtk_widget_show (label149);
+  gtk_box_pack_start (GTK_BOX (hbox3), label149, FALSE, FALSE, 0);
+
+  radio_tab_right = gtk_radio_button_new_with_mnemonic (NULL, _("Right"));
+  gtk_widget_show (radio_tab_right);
+  gtk_box_pack_start (GTK_BOX (hbox3), radio_tab_right, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radio_tab_right, _("New file tabs will be placed to the right of the tab list"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_tab_right), radio_tab_left_group);
+  radio_tab_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_tab_right));
 
   label18 = gtk_label_new (_("<b>Miscellaneous</b>"));
   gtk_widget_show (label18);
@@ -2027,7 +2060,7 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_list_openfiles, _("Toggle the symbol list on and off"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_list_openfiles), FALSE);
 
-  label146 = gtk_label_new (_("<b>Left window</b>"));
+  label146 = gtk_label_new (_("<b>Sidebar</b>"));
   gtk_widget_show (label146);
   gtk_frame_set_label_widget (GTK_FRAME (frame7), label146);
   gtk_label_set_use_markup (GTK_LABEL (label146), TRUE);
@@ -2222,7 +2255,7 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_folding, _("Whether to enable folding the code"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_folding), FALSE);
 
-  label148 = gtk_label_new (_(" "));
+  label148 = gtk_label_new ("");
   gtk_widget_show (label148);
   gtk_box_pack_start (GTK_BOX (vbox12), label148, FALSE, FALSE, 0);
 
@@ -2303,42 +2336,36 @@ create_prefs_dialog (void)
   gtk_table_set_col_spacings (GTK_TABLE (table1), 5);
 
   entry_com_c = gtk_entry_new ();
-  gtk_widget_show (entry_com_c);
   gtk_table_attach (GTK_TABLE (table1), entry_com_c, 1, 2, 0, 1,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, entry_com_c, _("Path and options for the C compiler"), NULL);
 
   label12 = gtk_label_new (_("C Compiler"));
-  gtk_widget_show (label12);
   gtk_table_attach (GTK_TABLE (table1), label12, 0, 1, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label12), 0, 0.5);
 
   label13 = gtk_label_new (_("C++ Compiler"));
-  gtk_widget_show (label13);
   gtk_table_attach (GTK_TABLE (table1), label13, 0, 1, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label13), 0, 0.5);
 
   label114 = gtk_label_new (_("Java Compiler"));
-  gtk_widget_show (label114);
   gtk_table_attach (GTK_TABLE (table1), label114, 0, 1, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label114), 0, 0.5);
 
   entry_com_javac = gtk_entry_new ();
-  gtk_widget_show (entry_com_javac);
   gtk_table_attach (GTK_TABLE (table1), entry_com_javac, 1, 2, 2, 3,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, entry_com_javac, _("Path and options for the Java compiler"), NULL);
 
   entry_com_cpp = gtk_entry_new ();
-  gtk_widget_show (entry_com_cpp);
   gtk_table_attach (GTK_TABLE (table1), entry_com_cpp, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
@@ -2366,7 +2393,6 @@ create_prefs_dialog (void)
   gtk_misc_set_alignment (GTK_MISC (label11), 0, 0.5);
 
   label113 = gtk_label_new (_("Pascal Compiler"));
-  gtk_widget_show (label113);
   gtk_table_attach (GTK_TABLE (table1), label113, 0, 1, 4, 5,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
@@ -2380,21 +2406,18 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, entry_com_make, _("Path and options for the make tool"), NULL);
 
   entry_com_pascal = gtk_entry_new ();
-  gtk_widget_show (entry_com_pascal);
   gtk_table_attach (GTK_TABLE (table1), entry_com_pascal, 1, 2, 4, 5,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, entry_com_pascal, _("Path and options for the Pascal compiler"), NULL);
 
   label115 = gtk_label_new (_("Java executable"));
-  gtk_widget_show (label115);
   gtk_table_attach (GTK_TABLE (table1), label115, 0, 1, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label115), 0, 0.5);
 
   entry_com_java = gtk_entry_new ();
-  gtk_widget_show (entry_com_java);
   gtk_table_attach (GTK_TABLE (table1), entry_com_java, 1, 2, 3, 4,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
@@ -2415,7 +2438,6 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, entry_browser, _("Path (and possibly additional arguments) to your favorite browser"), NULL);
 
   button_gcc = gtk_button_new ();
-  gtk_widget_show (button_gcc);
   gtk_table_attach (GTK_TABLE (table1), button_gcc, 2, 3, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
@@ -2425,7 +2447,6 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (button_gcc), image280);
 
   button_gpp = gtk_button_new ();
-  gtk_widget_show (button_gpp);
   gtk_table_attach (GTK_TABLE (table1), button_gpp, 2, 3, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
@@ -2435,7 +2456,6 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (button_gpp), bu);
 
   button_java = gtk_button_new ();
-  gtk_widget_show (button_java);
   gtk_table_attach (GTK_TABLE (table1), button_java, 2, 3, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
@@ -2445,7 +2465,6 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (button_java), image283);
 
   button_fpc = gtk_button_new ();
-  gtk_widget_show (button_fpc);
   gtk_table_attach (GTK_TABLE (table1), button_fpc, 2, 3, 4, 5,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
@@ -2485,7 +2504,6 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (button_browser), image287);
 
   button_javac = gtk_button_new ();
-  gtk_widget_show (button_javac);
   gtk_table_attach (GTK_TABLE (table1), button_javac, 2, 3, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
@@ -2591,131 +2609,6 @@ create_prefs_dialog (void)
   gtk_widget_show (label119);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 3), label119);
 
-  vbox10 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_show (vbox10);
-  gtk_container_add (GTK_CONTAINER (notebook2), vbox10);
-
-  label139 = gtk_label_new (_("These are settings for the virtual terminal emulator widget (VTE). They only apply, if the VTE library could be loaded."));
-  gtk_widget_show (label139);
-  gtk_box_pack_start (GTK_BOX (vbox10), label139, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (label139), GTK_JUSTIFY_FILL);
-  gtk_label_set_line_wrap (GTK_LABEL (label139), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label139), 0.14, 0.19);
-  gtk_misc_set_padding (GTK_MISC (label139), 0, 8);
-
-  alignment8 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment8);
-  gtk_box_pack_start (GTK_BOX (vbox10), alignment8, FALSE, FALSE, 0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment8), 0, 0, 12, 6);
-
-  table7 = gtk_table_new (7, 2, FALSE);
-  gtk_widget_show (table7);
-  gtk_container_add (GTK_CONTAINER (alignment8), table7);
-  gtk_table_set_row_spacings (GTK_TABLE (table7), 3);
-  gtk_table_set_col_spacings (GTK_TABLE (table7), 25);
-
-  label140 = gtk_label_new (_("Terminal font"));
-  gtk_widget_show (label140);
-  gtk_table_attach (GTK_TABLE (table7), label140, 0, 1, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label140), 0, 0.5);
-
-  font_term = gtk_font_button_new ();
-  gtk_widget_show (font_term);
-  gtk_table_attach (GTK_TABLE (table7), font_term, 1, 2, 0, 1,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_sensitive (font_term, FALSE);
-  gtk_tooltips_set_tip (tooltips, font_term, _("Sets the font for the terminal widget."), NULL);
-
-  label142 = gtk_label_new (_("Foreground color"));
-  gtk_widget_show (label142);
-  gtk_table_attach (GTK_TABLE (table7), label142, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label142), 0, 0.5);
-
-  label143 = gtk_label_new (_("Background color"));
-  gtk_widget_show (label143);
-  gtk_table_attach (GTK_TABLE (table7), label143, 0, 1, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label143), 0, 0.5);
-
-  color_fore = gtk_color_button_new ();
-  gtk_widget_show (color_fore);
-  gtk_table_attach (GTK_TABLE (table7), color_fore, 1, 2, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_sensitive (color_fore, FALSE);
-  gtk_tooltips_set_tip (tooltips, color_fore, _("Sets the foreground color of the text in the terminal widget."), NULL);
-  gtk_color_button_set_title (GTK_COLOR_BUTTON (color_fore), _("Color Chooser"));
-
-  color_back = gtk_color_button_new ();
-  gtk_widget_show (color_back);
-  gtk_table_attach (GTK_TABLE (table7), color_back, 1, 2, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_sensitive (color_back, FALSE);
-  gtk_tooltips_set_tip (tooltips, color_back, _("Sets the background color of the text in the terminal widget."), NULL);
-  gtk_color_button_set_title (GTK_COLOR_BUTTON (color_back), _("Color Chooser"));
-
-  label144 = gtk_label_new (_("Scrollback lines"));
-  gtk_widget_show (label144);
-  gtk_table_attach (GTK_TABLE (table7), label144, 0, 1, 3, 4,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label144), 0, 0.5);
-
-  spin_scrollback_adj = gtk_adjustment_new (500, 0, 5000, 1, 10, 10);
-  spin_scrollback = gtk_spin_button_new (GTK_ADJUSTMENT (spin_scrollback_adj), 1, 0);
-  gtk_widget_show (spin_scrollback);
-  gtk_table_attach (GTK_TABLE (table7), spin_scrollback, 1, 2, 3, 4,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_sensitive (spin_scrollback, FALSE);
-  gtk_tooltips_set_tip (tooltips, spin_scrollback, _("Specifies the history in lines, which you can scroll back in the terminal widget."), NULL);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_scrollback), TRUE);
-  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_scrollback), TRUE);
-
-  label145 = gtk_label_new (_("Terminal emulation"));
-  gtk_widget_show (label145);
-  gtk_table_attach (GTK_TABLE (table7), label145, 0, 1, 4, 5,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label145), 0, 0.5);
-
-  entry_emulation = gtk_entry_new ();
-  gtk_widget_show (entry_emulation);
-  gtk_table_attach (GTK_TABLE (table7), entry_emulation, 1, 2, 4, 5,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_sensitive (entry_emulation, FALSE);
-  gtk_tooltips_set_tip (tooltips, entry_emulation, _("Controls how the terminal emulator should behave. xterm is a good start."), NULL);
-
-  check_scroll_key = gtk_check_button_new_with_mnemonic (_("Scroll on keystroke"));
-  gtk_widget_show (check_scroll_key);
-  gtk_table_attach (GTK_TABLE (table7), check_scroll_key, 1, 2, 5, 6,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_sensitive (check_scroll_key, FALSE);
-  gtk_tooltips_set_tip (tooltips, check_scroll_key, _("Whether to scroll to the bottom if a key was pressed."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_scroll_key), FALSE);
-
-  check_scroll_out = gtk_check_button_new_with_mnemonic (_("Scroll on output"));
-  gtk_widget_show (check_scroll_out);
-  gtk_table_attach (GTK_TABLE (table7), check_scroll_out, 1, 2, 6, 7,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_widget_set_sensitive (check_scroll_out, FALSE);
-  gtk_tooltips_set_tip (tooltips, check_scroll_out, _("Whether to scroll to the bottom if an output was generated."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_scroll_out), FALSE);
-
-  label137 = gtk_label_new (_("Terminal"));
-  gtk_widget_show (label137);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 4), label137);
-
   dialog_action_area3 = GTK_DIALOG (prefs_dialog)->action_area;
   gtk_widget_show (dialog_action_area3);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area3), GTK_BUTTONBOX_END);
@@ -2746,6 +2639,11 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_beep, "check_beep");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_for_quit, "check_ask_for_quit");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox3, "hbox3");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label150, "label150");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_left, "radio_tab_left");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label149, "label149");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_right, "radio_tab_right");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label18, "label18");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label106, "label106");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame3, "frame3");
@@ -2855,23 +2753,6 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_template_developer, "entry_template_developer");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label132, "label132");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label119, "label119");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox10, "vbox10");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label139, "label139");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment8, "alignment8");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, table7, "table7");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label140, "label140");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, font_term, "font_term");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label142, "label142");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label143, "label143");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, color_fore, "color_fore");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, color_back, "color_back");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label144, "label144");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_scrollback, "spin_scrollback");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label145, "label145");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_emulation, "entry_emulation");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_scroll_key, "check_scroll_key");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_scroll_out, "check_scroll_out");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label137, "label137");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, dialog_action_area3, "dialog_action_area3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, cancelbutton1, "cancelbutton1");
   GLADE_HOOKUP_OBJECT (prefs_dialog, okbutton1, "okbutton1");
