@@ -1,7 +1,7 @@
 /*
  *      keyfile.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -31,5 +31,9 @@ gboolean configuration_load(void);
 gboolean configuration_open_files(void);
 
 void configuration_read_filetype_extensions(void);
+
+/* set some settings which are already read from the config file, but need other things, like the
+ * realisation of the main window */
+void configuration_apply_settings(void);
 
 #endif

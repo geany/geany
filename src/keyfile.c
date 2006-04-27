@@ -47,7 +47,7 @@ void configuration_save(void)
 	gchar *data;
 	gchar *entry = g_malloc(14);
 	gchar *fname = g_malloc0(256);
-	gchar **recent_files = g_new(gchar*, app->mru_length);
+	gchar **recent_files = g_new0(gchar*, app->mru_length);
 	GtkTextBuffer *buffer;
 	GtkTextIter start, end;
 
@@ -93,6 +93,8 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "line_breaking", app->pref_editor_line_breaking);
 	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", app->pref_editor_show_line_endings);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", app->fullscreen);
+	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", app->tab_order_ltr);
+	g_key_file_set_boolean(config, PACKAGE, "brace_match_ltgt", app->brace_match_ltgt);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", app->switch_msgwin_pages);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->pref_editor_auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->pref_editor_auto_complete_constructs);
@@ -126,15 +128,13 @@ void configuration_save(void)
 	g_key_file_set_string(config, PACKAGE, "pref_template_version", app->pref_template_version);
 
 	// store build settings
-	g_key_file_set_string(config, "build", "build_c_cmd", app->build_c_cmd ? app->build_c_cmd : "");
-	g_key_file_set_string(config, "build", "build_cpp_cmd", app->build_cpp_cmd ? app->build_cpp_cmd : "");
-	g_key_file_set_string(config, "build", "build_java_cmd", app->build_java_cmd ? app->build_java_cmd : "");
-	g_key_file_set_string(config, "build", "build_javac_cmd", app->build_javac_cmd ? app->build_javac_cmd : "");
-	g_key_file_set_string(config, "build", "build_fpc_cmd", app->build_fpc_cmd ? app->build_fpc_cmd : "");
-	g_key_file_set_string(config, "build", "build_tex_dvi_cmd", app->build_tex_dvi_cmd ? app->build_tex_dvi_cmd : "");
-	g_key_file_set_string(config, "build", "build_tex_pdf_cmd", app->build_tex_pdf_cmd ? app->build_tex_pdf_cmd : "");
-	g_key_file_set_string(config, "build", "build_tex_view_dvi_cmd", app->build_tex_view_dvi_cmd ? app->build_tex_view_dvi_cmd : "");
-	g_key_file_set_string(config, "build", "build_tex_view_pdf_cmd", app->build_tex_view_pdf_cmd ? app->build_tex_view_pdf_cmd : "");
+	//g_key_file_set_string(config, "build", "build_java_cmd", app->build_java_cmd ? app->build_java_cmd : "");
+	//g_key_file_set_string(config, "build", "build_javac_cmd", app->build_javac_cmd ? app->build_javac_cmd : "");
+	//g_key_file_set_string(config, "build", "build_fpc_cmd", app->build_fpc_cmd ? app->build_fpc_cmd : "");
+	//g_key_file_set_string(config, "build", "build_tex_dvi_cmd", app->build_tex_dvi_cmd ? app->build_tex_dvi_cmd : "");
+	//g_key_file_set_string(config, "build", "build_tex_pdf_cmd", app->build_tex_pdf_cmd ? app->build_tex_pdf_cmd : "");
+	//g_key_file_set_string(config, "build", "build_tex_view_dvi_cmd", app->build_tex_view_dvi_cmd ? app->build_tex_view_dvi_cmd : "");
+	//g_key_file_set_string(config, "build", "build_tex_view_pdf_cmd", app->build_tex_view_pdf_cmd ? app->build_tex_view_pdf_cmd : "");
 	g_key_file_set_string(config, "build", "build_make_cmd", app->build_make_cmd ? app->build_make_cmd : "");
 	g_key_file_set_string(config, "build", "build_term_cmd", app->build_term_cmd ? app->build_term_cmd : "");
 	g_key_file_set_string(config, "build", "build_browser_cmd", app->build_browser_cmd ? app->build_browser_cmd : "");
@@ -225,6 +225,8 @@ gboolean configuration_load(void)
 	app->pref_editor_show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
 	app->pref_editor_line_breaking = utils_get_setting_boolean(config, PACKAGE, "line_breaking", TRUE);
 	app->fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
+	app->tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", FALSE);
+	app->brace_match_ltgt = utils_get_setting_boolean(config, PACKAGE, "brace_match_ltgt", FALSE);
 	app->switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", TRUE);
 	app->pref_editor_auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
 	app->pref_editor_auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
@@ -280,18 +282,7 @@ gboolean configuration_load(void)
 	app->pref_editor_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
 	app->pref_editor_trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", TRUE);
 
-	tmp_string2 = g_find_program_in_path("gcc");
-	tmp_string = g_strconcat(tmp_string2, " -Wall", NULL);
-	app->build_c_cmd = utils_get_setting_string(config, "build", "build_c_cmd", tmp_string);
-	g_free(tmp_string);
-	g_free(tmp_string2);
-
-	tmp_string2 = g_find_program_in_path("g++");
-	tmp_string = g_strconcat(tmp_string2, " -Wall", NULL);
-	app->build_cpp_cmd = utils_get_setting_string(config, "build", "build_cpp_cmd", tmp_string);
-	g_free(tmp_string);
-	g_free(tmp_string2);
-
+/*
 	tmp_string = g_find_program_in_path("java");
 	app->build_java_cmd = utils_get_setting_string(config, "build", "build_java_cmd", tmp_string);
 	g_free(tmp_string);
@@ -325,7 +316,7 @@ gboolean configuration_load(void)
 	tmp_string = g_find_program_in_path("xpdf");
 	app->build_tex_view_pdf_cmd = utils_get_setting_string(config, "build", "build_tex_view_pdf_cmd", tmp_string);
 	g_free(tmp_string);
-
+*/
 	tmp_string = g_find_program_in_path("make");
 	app->build_make_cmd = utils_get_setting_string(config, "build", "build_make_cmd", tmp_string);
 	g_free(tmp_string);
@@ -373,8 +364,8 @@ gboolean configuration_load(void)
 gboolean configuration_open_files(void)
 {
 	gint i;
-	guint x, pos, ft_id, y;
-	gchar *file, *locale_filename, spos[7], stype[4];
+	guint x, pos, ft_id, y, len;
+	gchar *file, *locale_filename, **array;
 	gboolean ret = FALSE;
 
 	for(i = GEANY_SESSION_FILES - 1; i >= 0 ; i--)
@@ -384,34 +375,27 @@ gboolean configuration_open_files(void)
 			x = 0;
 			y = 0;
 			ft_id = GEANY_MAX_FILE_TYPES;
-			file = strrchr(session_files[i], ':') + 1;
+			
+			// yes it is :, it should be a ;, but now it is too late to change it
+			array = g_strsplit(session_files[i], ":", 3);
+			len = g_strv_length(array);
+			
+			// read position
+			if (len > 0 && array[0]) pos = atoi(array[0]);
+			else pos = 0;
+
+			// read filetype (only if there are more than two fields, otherwise we have the old format)
+			if (len > 2 && array[1])
+			{
+				ft_id = atoi(array[1]);
+				file = array[2];
+			}
+			else file = array[1];
+			
 			// try to get the locale equivalent for the filename, fallback to filename if error
 			locale_filename = g_locale_from_utf8(file, -1, NULL, NULL, NULL);
 			if (locale_filename == NULL) locale_filename = g_strdup(file);
 
-			// read position
-			while (session_files[i][x] != ':' && session_files[i][x] != '\0')
-			{
-				spos[x] = session_files[i][x];
-				x++;
-			}
-			spos[x] = '\0';
-			pos = atoi(spos);
-			x++;
-
-			// read filetype
-			// (this is a bit tricky, but otherwise we crash with old config file format)
-			if (*file != session_files[i][x])
-			{
-				while (session_files[i][x] != ':' && session_files[i][x] != '\0')
-				{
-					stype[y] = session_files[i][x];
-					x++;
-					y++;
-				}
-				stype[y] = '\0';
-				ft_id = atoi(stype);
-			}
 
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{
@@ -424,6 +408,14 @@ gboolean configuration_open_files(void)
 		g_free(session_files[i]);
 	}
 
+	return ret;
+}
+
+
+/* set some settings which are already read from the config file, but need other things, like the
+ * realisation of the main window */
+void configuration_apply_settings(void)
+{
 	if (scribble_text)
 	{	// update the scribble widget, because now it's realized
 		gtk_text_buffer_set_text(
@@ -432,15 +424,12 @@ gboolean configuration_open_files(void)
 	}
 	g_free(scribble_text);
 
-	// set the position of the hpaned
+	// set the position of the hpaned and vpaned
 	if (app->pref_main_save_winpos)
 	{
 		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "hpaned1")), hpan_position);
 		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "vpaned1")), vpan_position);
 	}
-
-
-	return ret;
 }
 
 
