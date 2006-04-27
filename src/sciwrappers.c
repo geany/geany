@@ -193,7 +193,7 @@ void sci_add_text_buffer(ScintillaObject* sci, const gchar* text, gint len)
 {
 	if( text != NULL ){// if null text is passed to scintilla will segfault
 		SSM(sci, SCI_CLEARALL, 0, 0);
-		SSM( sci, SCI_ADDTEXT, strlen(text) , (sptr_t) text);
+		SSM(sci, SCI_ADDTEXT, len, (sptr_t) text);
 	}
 }
 
@@ -664,7 +664,8 @@ gint sci_get_style_at(ScintillaObject *sci, gint position)
 
 void sci_set_codepage(ScintillaObject *sci, gint cp)
 {
-	SSM (sci, SCI_SETCODEPAGE, SC_CP_UTF8, 0);
+	g_return_if_fail(cp == 0 || cp == SC_CP_UTF8);
+	SSM(sci, SCI_SETCODEPAGE, cp, 0);
 }
 
 
