@@ -82,6 +82,12 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "msgwin_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), app->msgwin_font);
 
+	if (app->tab_order_ltr)
+		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
+	else
+		widget = lookup_widget(app->prefs_dialog, "radio_tab_left");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+
 
 	// Editor settings
 	widget = lookup_widget(app->prefs_dialog, "spin_tab_width");
@@ -121,14 +127,14 @@ void prefs_init_dialog(void)
 
 	old_long_line_color = g_strdup(app->long_line_color);
 
-	color = g_new(GdkColor, 1);
+	color = g_new0(GdkColor, 1);
 	gdk_color_parse(app->long_line_color, color);
 	widget = lookup_widget(app->prefs_dialog, "long_line_color");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), color);
 	g_free(color);
 
 	// Tools Settings
-	if (app->build_c_cmd)
+/*	if (app->build_c_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_c")), app->build_c_cmd);
 
 	if (app->build_cpp_cmd)
@@ -142,7 +148,7 @@ void prefs_init_dialog(void)
 
 	if (app->build_fpc_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_pascal")), app->build_fpc_cmd);
-
+*/
 	if (app->build_make_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_make")), app->build_make_cmd);
 
@@ -249,6 +255,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_list_openfiles");
 		app->treeview_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
+		app->tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+ 
 
 		// Editor settings
 		widget = lookup_widget(app->prefs_dialog, "spin_tab_width");
@@ -284,7 +293,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 
 		// Tools Settings
-		widget = lookup_widget(app->prefs_dialog, "entry_com_c");
+/*		widget = lookup_widget(app->prefs_dialog, "entry_com_c");
 		g_free(app->build_c_cmd);
 		app->build_c_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
@@ -303,7 +312,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "entry_com_pascal");
 		g_free(app->build_fpc_cmd);
 		app->build_fpc_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-
+*/
 		widget = lookup_widget(app->prefs_dialog, "entry_com_make");
 		g_free(app->build_make_cmd);
 		app->build_make_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
@@ -449,14 +458,14 @@ void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
 		case 2:
 		{
 			g_free(vc->color_fore);
-			vc->color_fore = g_new(GdkColor, 1);
+			vc->color_fore = g_new0(GdkColor, 1);
 			gtk_color_button_get_color(widget, vc->color_fore);
 			break;
 		}
 		case 3:
 		{
 			g_free(vc->color_back);
-			vc->color_back = g_new(GdkColor, 1);
+			vc->color_back = g_new0(GdkColor, 1);
 			gtk_color_button_get_color(widget, vc->color_back);
 			break;
 		}
