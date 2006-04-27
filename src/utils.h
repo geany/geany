@@ -27,7 +27,7 @@
 
 void utils_start_browser(gchar *uri);
 
-void utils_update_statusbar(gint idx);
+void utils_update_statusbar(gint idx, gint pos);
 
 void utils_set_buttons_state(gboolean enable);
 
@@ -103,7 +103,7 @@ void utils_check_disk_status(gint idx);
 //gchar *utils_get_current_tag(gint idx, gint direction);
 gint utils_get_current_tag(gint idx, gchar **tagname);
 
-void utils_find_current_word(ScintillaObject *sci, gint pos, gchar *word);
+void utils_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen);
 
 /* returns the end-of-line character(s) length of the specified editor */
 gint utils_get_eol_char_len(gint idx);
@@ -115,10 +115,6 @@ gchar *utils_get_eol_char(gint idx);
 gchar *utils_btoa(gboolean sbool);
 
 gboolean utils_atob(const gchar *str);
-
-/* replaces all occurrences of c in source with d,
- * source must be null-terminated */
-void utils_replace_c(gchar*, gchar, gchar);
 
 void utils_wordcount(gchar *text, guint *chars, guint *lines, guint *words);
 

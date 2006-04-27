@@ -86,12 +86,11 @@ void utils_start_browser(gchar *uri)
 
 
 /* updates the status bar */
-void utils_update_statusbar(gint idx)
+void utils_update_statusbar(gint idx, gint pos)
 {
 	gchar *text = (gchar*) g_malloc0(250);
 	gchar *cur_tag;
 	guint line, col;
-	gint pos;
 
 	if (idx == -1) idx = document_get_cur_idx();
 
@@ -107,7 +106,7 @@ void utils_update_statusbar(gint idx)
 			utils_get_current_tag(idx, &cur_tag);
 		}
 
-		pos = sci_get_current_position(doc_list[idx].sci);
+		if (pos == -1) pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
 		col = sci_get_col_from_position(doc_list[idx].sci, pos);
 
@@ -304,18 +303,29 @@ gint utils_get_line_endings(gchar* buffer, glong size)
 
 gboolean utils_isbrace(gchar c)
 {
-	switch (c)
+	// match < and > only if desired, because I don't like it, but some people do
+	if (app->brace_match_ltgt)
 	{
-		case '(':
-		case ')':
-		case '{':
-		case '}':
-		case '[':
-		case ']':	return TRUE;
-		//case '<':
-		//case '>':	return TRUE;
-		default:	return FALSE;
+		switch (c)
+		{
+			case '<':
+			case '>':	return TRUE;
+		}
 	}
+	else 
+	{
+		switch (c)
+		{
+			case '(':
+			case ')':
+			case '{':
+			case '}':
+			case '[':
+			case ']':	return TRUE;
+			default:	return FALSE;
+		}
+	}
+	return FALSE;
 }
 
 
@@ -397,14 +407,14 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 			{
 				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
 				{
-					symbol = g_new(GeanySymbol, 1);
+					symbol = g_new0(GeanySymbol, 1);
 					symbol->str = g_strdup_printf("%s::%s [%ld]", tag->atts.entry.scope, tag->name, tag->atts.entry.line);
 					symbol->type = tag->type;
 					tag_names = g_list_prepend(tag_names, symbol);
 				}
 				else
 				{
-					symbol = g_new(GeanySymbol, 1);
+					symbol = g_new0(GeanySymbol, 1);
 					symbol->str = g_strdup_printf("%s [%ld]", tag->name, tag->atts.entry.line);
 					symbol->type = tag->type;
 					tag_names = g_list_prepend(tag_names, symbol);
@@ -776,25 +786,22 @@ gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const
 	converted_contents = g_convert(buffer, size, "UTF-8", charset, NULL,
 									&bytes_written, &conv_error);
 
-	if ((conv_error != NULL) ||
-	    !g_utf8_validate(converted_contents, bytes_written, NULL))
+	if (conv_error != NULL)
 	{
-		geany_debug("Couldn't convert from %s to UTF-8.", charset);
-		if (converted_contents != NULL) g_free(converted_contents);
+		geany_debug("Couldn't convert from %s to UTF-8 (%s).", charset, conv_error->message);
 
-		if (conv_error != NULL)
-		{
-			g_error_free(conv_error);
-			conv_error = NULL;
-		}
+		g_error_free(conv_error);
+		conv_error = NULL;
 
 		utf8_content = NULL;
+		if (converted_contents != NULL) g_free(converted_contents);
 	}
 	else
 	{
 		geany_debug("Converted from %s to UTF-8.", charset);
 		utf8_content = converted_contents;
 	}
+
 	return utf8_content;
 }
 
@@ -805,9 +812,6 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 	GList *start;
 	gchar *locale_charset;
 	GList *encoding_strings;
-
-	g_return_val_if_fail(!g_utf8_validate(buffer, size, NULL),
-			g_strndup(buffer, size < 0 ? strlen(buffer) : size));
 
 	encoding_strings = utils_glist_from_string("UTF-8 ISO-8859-1 ISO-8859-15");
 	encodings = encoding_get_encodings(encoding_strings);
@@ -842,11 +846,10 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 		const gchar *charset;
 		gchar *utf8_content;
 
-		enc = (GeanyEncoding *)encodings->data;
+		enc = (GeanyEncoding*)encodings->data;
 
 		charset = encoding_get_charset(enc);
 		geany_debug("Trying to convert %d bytes of data into UTF-8.", size);
-		fflush(stdout);
 		utf8_content = utils_convert_to_utf8_from_charset(buffer, size, charset);
 
 		if (utf8_content != NULL)
@@ -950,7 +953,7 @@ void utils_check_disk_status(gint idx)
 #ifndef GEANY_WIN32
 	struct stat st;
 	time_t t;
-	gchar *buff, *locale_filename;
+	gchar *locale_filename;
 
 	if (idx == -1 || doc_list[idx].file_name == NULL) return;
 
@@ -971,11 +974,9 @@ void utils_check_disk_status(gint idx)
 	{
 		gchar *basename = g_path_get_basename(doc_list[idx].file_name);
 
-		buff = g_strdup_printf(_
+		if (dialogs_show_question(_
 					 ("The file '%s' on the disk is more recent than\n"
-					  "the current buffer.\nDo you want to reload it?"), basename);
-
-		if (dialogs_show_reload_warning(buff))
+					  "the current buffer.\nDo you want to reload it?"), basename))
 		{
 			document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
 			doc_list[idx].last_check = t;
@@ -984,7 +985,6 @@ void utils_check_disk_status(gint idx)
 			doc_list[idx].mtime = st.st_mtime;
 
 		g_free(basename);
-		g_free(buff);
 		return;
 	}
 #endif
@@ -1032,9 +1032,9 @@ gint utils_get_current_tag(gint idx, gchar **tagname)
 			&& sci_get_style_at(doc_list[idx].sci, start) != SCE_C_GLOBALCLASS
 			&& start < last_pos) start++;
 		end = start;
-		// save the style from start, it is SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS
-		tmp = sci_get_style_at(doc_list[idx].sci, start);
-		while ((sci_get_style_at(doc_list[idx].sci, end) == tmp
+		// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
+		while (((tmp = sci_get_style_at(doc_list[idx].sci, end)) == SCE_C_IDENTIFIER
+			 || tmp == SCE_C_GLOBALCLASS
 			 || sci_get_char_at(doc_list[idx].sci, end) == ':')
 			 && end < last_pos) end++;
 
@@ -1050,7 +1050,7 @@ gint utils_get_current_tag(gint idx, gchar **tagname)
 }
 
 
-void utils_find_current_word(ScintillaObject *sci, gint pos, gchar *word)
+void utils_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen)
 {
 	gint line = sci_get_line_from_position(sci, pos);
 	gint line_start = sci_get_position_from_line(sci, line);
@@ -1071,7 +1071,7 @@ void utils_find_current_word(ScintillaObject *sci, gint pos, gchar *word)
 
 	chunk[endword] = '\0';
 
-	strncpy(word, chunk + startword, MAX(endword - startword + 1, sizeof word));
+	strncpy(word, chunk + startword, MIN(endword - startword + 1, wordlen));
 	g_free(chunk);
 }
 
@@ -1116,21 +1116,6 @@ gboolean utils_atob(const gchar *str)
 	if (str == NULL) return FALSE;
 	else if (strcasecmp(str, "TRUE")) return FALSE;
 	else return TRUE;
-}
-
-
-/* replaces all occurrences of c in source with d,
- * source must be null-terminated */
-void utils_replace_c(gchar *source, gchar c, gchar d)
-{
-	gint i, len = strlen(source);
-	for (i = 0; i < len; i++)
-	{
-		if (source[i] == c)
-		{
-			source[i] = d;
-		}
-	}
 }
 
 
@@ -1282,15 +1267,10 @@ void utils_widget_show_hide(GtkWidget *widget, gboolean show)
 
 void utils_build_show_hide(gint idx)
 {
-#ifdef GEANY_WIN32
-	gtk_widget_set_sensitive(app->compile_button, FALSE);
-	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
-	return;
-#else
+#ifndef GEANY_WIN32
 	gboolean is_header = FALSE;
 	gchar *ext = NULL;
-	static gboolean button_is_html = FALSE;
-	static GtkTooltips *tooltips = NULL;
+	filetype *ft = doc_list[idx].file_type;
 
 	if (idx >= 0 && doc_list[idx].file_name)
 	{
@@ -1302,121 +1282,103 @@ void utils_build_show_hide(gint idx)
 		is_header = TRUE;
 	}
 
-	if (tooltips == NULL)
-	{
-		tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-	}
-
-	if (button_is_html)
-	{
-		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->compile_button), GTK_STOCK_CONVERT);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(app->compile_button), tooltips,
-										_("Compile the current file"), NULL);
-		button_is_html = FALSE;
-	}
-
 	gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")));
 
-	//geany_debug("%p %p %p", dialogs_build_menus.menu_c, dialogs_build_menus.menu_tex, dialogs_build_menus.menu_misc);
-	switch (doc_list[idx].file_type->id)
+	switch (ft->id)
 	{
 		case GEANY_FILETYPES_C:	// intended fallthrough, C and C++ behave equal
 		case GEANY_FILETYPES_CPP:
 		{
-			if (dialogs_build_menus.menu_c.menu == NULL)
+			if (ft->menu_items->menu == NULL)
 			{
-				dialogs_build_menus.menu_c.menu = dialogs_create_build_menu_gen(TRUE, TRUE, &dialogs_build_menus.menu_c);
-				g_object_ref((gpointer)dialogs_build_menus.menu_c.menu);	// to hold it after removing
+				ft->menu_items->menu = dialogs_create_build_menu_gen(idx);
+				g_object_ref((gpointer)ft->menu_items->menu);	// to hold it after removing
 
 			}
-			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-								dialogs_build_menus.menu_c.menu);
+								ft->menu_items->menu);
 
 			if (is_header)
 			{
 				gtk_widget_set_sensitive(app->compile_button, FALSE);
-				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_compile, FALSE);
-				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_link, FALSE);
-				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_exec, FALSE);
+				gtk_widget_set_sensitive(app->run_button, FALSE);
+				if (ft->menu_items->can_compile)
+					gtk_widget_set_sensitive(ft->menu_items->item_compile, FALSE);
+				if (ft->menu_items->can_link)
+					gtk_widget_set_sensitive(ft->menu_items->item_link, FALSE);
+				if (ft->menu_items->can_exec)
+					gtk_widget_set_sensitive(ft->menu_items->item_exec, FALSE);
 			}
 			else
 			{
 				gtk_widget_set_sensitive(app->compile_button, TRUE);
-				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_compile, TRUE);
-				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_link, TRUE);
-				gtk_widget_set_sensitive(dialogs_build_menus.menu_c.item_exec, TRUE);
+				gtk_widget_set_sensitive(app->run_button, TRUE);
+				if (ft->menu_items->can_compile)
+					gtk_widget_set_sensitive(ft->menu_items->item_compile, TRUE);
+				if (ft->menu_items->can_link)
+					gtk_widget_set_sensitive(ft->menu_items->item_link, TRUE);
+				if (ft->menu_items->can_exec)
+					gtk_widget_set_sensitive(ft->menu_items->item_exec, TRUE);
 			}
 
 			break;
 		}
-		case GEANY_FILETYPES_JAVA:
+		case GEANY_FILETYPES_LATEX:
 		{
-			if (dialogs_build_menus.menu_misc.menu == NULL)
+			if (ft->menu_items->menu == NULL)
 			{
-				dialogs_build_menus.menu_misc.menu = dialogs_create_build_menu_gen(FALSE, TRUE, &dialogs_build_menus.menu_misc);
-				g_object_ref((gpointer)dialogs_build_menus.menu_misc.menu);	// to hold it after removing
+				ft->menu_items->menu = dialogs_create_build_menu_tex(idx);
+				g_object_ref((gpointer)ft->menu_items->menu);	// to hold it after removing
 			}
-			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-							dialogs_build_menus.menu_misc.menu);
-			gtk_widget_set_sensitive(app->compile_button, TRUE);
-
-			break;
+			if (doc_list[idx].file_name == NULL)
+			{
+				gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+								ft->menu_items->menu);
+				gtk_widget_set_sensitive(app->compile_button, FALSE);
+				gtk_widget_set_sensitive(app->run_button, FALSE);
 		}
-		case GEANY_FILETYPES_XML:	// intended fallthrough, HTML and XML behave equal
-		case GEANY_FILETYPES_PHP:
-		{
-			if (dialogs_build_menus.menu_misc.menu == NULL)
+			else
 			{
-				dialogs_build_menus.menu_misc.menu = dialogs_create_build_menu_gen(FALSE, TRUE, &dialogs_build_menus.menu_misc);
-				g_object_ref((gpointer)dialogs_build_menus.menu_misc.menu);	// to hold it after removing
+				gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+								ft->menu_items->menu);
+				gtk_widget_set_sensitive(app->compile_button, ft->menu_items->can_compile);
+				gtk_widget_set_sensitive(app->run_button, ft->menu_items->can_exec);
 			}
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-							dialogs_build_menus.menu_misc.menu);
-
-			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
-			gtk_widget_set_sensitive(app->compile_button, TRUE);
-			gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->compile_button), GTK_STOCK_FIND);
-			gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(app->compile_button), tooltips,
-									_("View the current file in a browser"), NULL);
-
-			button_is_html = TRUE;
-
-			break;
-		}
-		case GEANY_FILETYPES_PASCAL:
-		{
-			if (dialogs_build_menus.menu_misc.menu == NULL)
-			{
-				dialogs_build_menus.menu_misc.menu = dialogs_create_build_menu_gen(FALSE, TRUE, &dialogs_build_menus.menu_misc);
-				g_object_ref((gpointer)dialogs_build_menus.menu_misc.menu);	// to hold it after removing
-			}
-			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-							dialogs_build_menus.menu_misc.menu);
-			gtk_widget_set_sensitive(app->compile_button, TRUE);
-
-			break;
-		}
-		case GEANY_FILETYPES_TEX:
-		{
-			if (dialogs_build_menus.menu_tex.menu == NULL)
-			{
-				dialogs_build_menus.menu_tex.menu = dialogs_create_build_menu_tex(&dialogs_build_menus.menu_tex);
-				g_object_ref((gpointer)dialogs_build_menus.menu_tex.menu);	// to hold it after removing
-			}
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-							dialogs_build_menus.menu_tex.menu);
-			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
-			gtk_widget_set_sensitive(app->compile_button, TRUE);
 
 			break;
 		}
 		default:
 		{
-			gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
-			gtk_widget_set_sensitive(app->compile_button, FALSE);
+			if (ft->menu_items->menu == NULL)
+			{
+				ft->menu_items->menu = dialogs_create_build_menu_gen(idx);
+				g_object_ref((gpointer)ft->menu_items->menu);	// to hold it after removing
+			}
+			if (doc_list[idx].file_name == NULL)
+			{
+				gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+								ft->menu_items->menu);
+				gtk_widget_set_sensitive(app->compile_button, FALSE);
+				gtk_widget_set_sensitive(app->run_button, FALSE);
+				if (ft->menu_items->can_compile)
+					gtk_widget_set_sensitive(ft->menu_items->item_compile, FALSE);
+				if (ft->menu_items->can_link)
+					gtk_widget_set_sensitive(ft->menu_items->item_link, FALSE);
+				if (ft->menu_items->can_exec) gtk_widget_set_sensitive(ft->menu_items->item_exec, FALSE);
+			}
+			else
+			{
+				gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+								ft->menu_items->menu);
+				gtk_widget_set_sensitive(app->compile_button, ft->menu_items->can_compile);
+				gtk_widget_set_sensitive(app->run_button, ft->menu_items->can_exec);
+				if (ft->menu_items->can_compile)
+					gtk_widget_set_sensitive(ft->menu_items->item_compile, TRUE);
+				if (ft->menu_items->can_link)
+					gtk_widget_set_sensitive(ft->menu_items->item_link, TRUE);
+				if (ft->menu_items->can_exec)
+					gtk_widget_set_sensitive(ft->menu_items->item_exec, TRUE);
+			}
 		}
 	}
 #endif
@@ -1448,6 +1410,8 @@ gchar *utils_remove_ext_from_filename(const gchar *filename)
 	gchar *last_dot = strrchr(filename, '.');
 	gint i = 0;
 
+	if (filename == NULL) return NULL;
+	
 	if (! last_dot) return g_strdup(filename);
 
 	while ((filename + i) != last_dot)
@@ -2032,14 +1996,14 @@ gint utils_compare_symbol(const GeanySymbol *a, const GeanySymbol *b)
 
 gchar *utils_get_hex_from_color(GdkColor *color)
 {
-	gchar *hex = g_malloc0(9);
+	gchar *buffer = g_malloc0(9);
 
-	g_snprintf(hex, 8, "#%02X%02X%02X",
+	g_snprintf(buffer, 8, "#%02X%02X%02X",
 	      (guint) (utils_scale_round(color->red / 256, 255)),
 	      (guint) (utils_scale_round(color->green / 256, 255)),
 	      (guint) (utils_scale_round(color->blue / 256, 255)));
-
-	return hex;
+	
+	return buffer;
 }
 
 
@@ -2146,14 +2110,14 @@ gchar *utils_make_human_readable_str(unsigned long long size, unsigned long bloc
 									 unsigned long display_unit)
 {
 	/* The code will adjust for additional (appended) units. */
-	static const char zero_and_units[] = { '0', 0, 'K', 'M', 'G', 'T' };
-	static const char fmt[] = "%Lu %c%c";
-	static const char fmt_tenths[] = "%Lu.%d %c%c";
+	static const gchar zero_and_units[] = { '0', 0, 'K', 'M', 'G', 'T' };
+	static const gchar fmt[] = "%Lu %c%c";
+	static const gchar fmt_tenths[] = "%Lu.%d %c%c";
 
 	unsigned long long val;
-	int frac;
-	const char *u;
-	const char *f;
+	gint frac;
+	const gchar *u;
+	const gchar *f;
 
 	u = zero_and_units;
 	f = fmt;
@@ -2174,7 +2138,7 @@ gchar *utils_make_human_readable_str(unsigned long long size, unsigned long bloc
 		{
 			f = fmt_tenths;
 			++u;
-			frac = ((((int)(val % KILOBYTE)) * 10) + (KILOBYTE/2)) / KILOBYTE;
+			frac = ((((gint)(val % KILOBYTE)) * 10) + (KILOBYTE/2)) / KILOBYTE;
 			val /= KILOBYTE;
 		}
 		if (frac >= 10)
