@@ -45,6 +45,7 @@
 #include "support.h"
 #include "interface.h"
 #include "utils.h"
+#include "prefs.h"
 
 
 
@@ -62,11 +63,23 @@ void dialogs_show_open_file ()
 		if (app->open_filesel == NULL)
 		{
 			GtkWidget *combo;
+			GtkWidget *viewbtn;
+			GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 			gint i;
 
 			app->open_filesel = gtk_file_chooser_dialog_new(_("Open File"), NULL,
-					GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+					GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
+
+			viewbtn = gtk_button_new_with_mnemonic(_("_View"));
+			gtk_tooltips_set_tip(tooltips, viewbtn,
+				_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."), NULL);
+			gtk_widget_show(viewbtn);
+			gtk_dialog_add_action_widget(GTK_DIALOG(app->open_filesel),
+				viewbtn, GTK_RESPONSE_APPLY);
+
+			gtk_dialog_add_buttons(GTK_DIALOG(app->open_filesel),
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 
 			gtk_widget_set_size_request(app->open_filesel, 520, 460);
 			gtk_window_set_modal(GTK_WINDOW(app->open_filesel), TRUE);
@@ -111,9 +124,16 @@ void dialogs_show_open_file ()
 
 			if (initdir != NULL)
 			{
+				gchar *locale_filename;
+				
+				locale_filename = g_locale_from_utf8(initdir, -1, NULL, NULL, NULL);
+				if (locale_filename == NULL) locale_filename = g_strdup(initdir);
+				
 				gtk_file_chooser_set_current_folder(
-					GTK_FILE_CHOOSER(app->open_filesel), initdir);
+					GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
+
 				g_free(initdir);
+				g_free(locale_filename);
 			}
 		}
 
@@ -145,6 +165,7 @@ void dialogs_show_save_as ()
 		gtk_window_set_destroy_with_parent(GTK_WINDOW(app->save_filesel), TRUE);
 		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(app->save_filesel), TRUE);
 		gtk_window_set_type_hint(GTK_WINDOW(app->save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
+		gtk_dialog_set_default_response(GTK_DIALOG(app->save_filesel), GTK_RESPONSE_ACCEPT);
 
 		g_signal_connect((gpointer) app->save_filesel, "delete_event", G_CALLBACK(gtk_widget_hide), NULL);
 		g_signal_connect((gpointer) app->save_filesel, "response", G_CALLBACK(on_file_save_dialog_response), NULL);
@@ -152,16 +173,32 @@ void dialogs_show_save_as ()
 		gtk_window_set_transient_for(GTK_WINDOW(app->save_filesel), GTK_WINDOW(app->window));
 	}
 
-	/* If the current document has a filename we use that as the default. */
-	if (doc_list[idx].file_name)
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->save_filesel), doc_list[idx].file_name);
+	// If the current document has a filename we use that as the default.
+	if (doc_list[idx].file_name != NULL)
+	{
+		gchar *locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
+		if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
+		
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->save_filesel), locale_filename);
+		g_free(locale_filename);
+	}
 	else
 	{
+		gchar *fname = NULL;
+		
+		if (doc_list[idx].file_type != NULL && doc_list[idx].file_type->id != GEANY_FILETYPES_ALL &&
+			doc_list[idx].file_type->extension != NULL)
+			fname = g_strconcat(GEANY_STRING_UNTITLED, ".",
+								doc_list[idx].file_type->extension, NULL);
+		else 
+			fname = g_strdup(GEANY_STRING_UNTITLED);
+
 		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(app->save_filesel));
-		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(app->save_filesel), GEANY_STRING_UNTITLED);
+		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(app->save_filesel), fname);
+		g_free(fname);
 	}
 
-	/* We make sure the dialog is visible. */
+	// We make sure the dialog is visible.
 	gtk_window_present(GTK_WINDOW(app->save_filesel));
 #endif
 }
@@ -196,7 +233,7 @@ gboolean dialogs_show_not_found(const gchar *text)
 	string = g_strdup_printf(_("The match \"%s\" was not found. Wrap search around the document?"), text);
 #ifdef GEANY_WIN32
 	dialog = NULL;
-	ret = MessageBox(NULL, string, _("Question"), MB_YESNO | MB_ICONQUESTION);
+	ret = MessageBox(NULL, string, _("Question"), MB_YESNO | MB_ICONWARNING);
 	g_free(string);
 	if (ret == IDYES) return TRUE;
 	else return FALSE;
@@ -407,7 +444,7 @@ void dialogs_show_about(void)
 	static const struct { gchar *name, *email, *language; } translators[] =
 	{
 		//{ "Dwayne Bailey", "dwayne@translate.org.za", "en_GB" },
-		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL }
 	};
 
 	icon = utils_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
@@ -428,56 +465,6 @@ void dialogs_show_about(void)
 	gtk_widget_destroy(dialog);
 
 	about_info_free(info);
-}
-
-
-gboolean dialogs_show_reload_warning(const gchar *text)
-{
-#ifdef GEANY_WIN32
-	if (MessageBox(NULL, text, _("Question"), MB_YESNO | MB_ICONWARNING) == IDYES) return TRUE;
-	else return FALSE;
-#else
-	gboolean ret = FALSE;
-	GtkWidget *dlg;
-
-	dlg = gtk_message_dialog_new(GTK_WINDOW(app->window),
-										  GTK_DIALOG_DESTROY_WITH_PARENT,
-										  GTK_MESSAGE_WARNING,
-										  GTK_BUTTONS_YES_NO, text);
-	if (gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_YES)
-	{
-		ret = TRUE;
-	}
-	gtk_widget_destroy(dlg);
-
-	return ret;
-#endif
-}
-
-
-gboolean dialogs_show_confirm_exit(void)
-{
-	gchar *text = _("Do you really want to quit?");
-
-#ifdef GEANY_WIN32
-	if (MessageBox(NULL, text, _("Question"), MB_YESNO | MB_ICONWARNING) == IDYES) return TRUE;
-	else return FALSE;
-#else
-	gboolean ret = FALSE;
-	GtkWidget *dlg;
-
-	dlg = gtk_message_dialog_new(GTK_WINDOW(app->window),
-										  GTK_DIALOG_DESTROY_WITH_PARENT,
-										  GTK_MESSAGE_QUESTION,
-										  GTK_BUTTONS_YES_NO, text);
-	if (gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_YES)
-	{
-		ret = TRUE;
-	}
-	gtk_widget_destroy(dlg);
-
-	return ret;
-#endif
 }
 
 
@@ -517,6 +504,7 @@ void dialogs_show_word_count(void)
 	g_free(string);
 
 	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
+	g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_destroy), dialog);
 
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
 	gtk_widget_size_request(label, size);
@@ -532,7 +520,7 @@ void dialogs_show_color(void)
 {
 #ifdef GEANY_WIN32
 	win32_show_color_dialog();
-#else /* X11, not win32: use GTK_COLOR_CHOOSER */
+#else
 
 	if (app->open_colorsel == NULL)
 	{
@@ -546,35 +534,40 @@ void dialogs_show_color(void)
 		g_signal_connect(app->open_colorsel, "delete_event",
 						G_CALLBACK(gtk_widget_hide), NULL);
 	}
-	/* We make sure the dialog is visible. */
+	// We make sure the dialog is visible.
 	gtk_window_present (GTK_WINDOW(app->open_colorsel));
 #endif
 }
 
 
-GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute, build_menus_items *type)
+GtkWidget *dialogs_create_build_menu_gen(gint idx)
 {
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	filetype *ft = doc_list[idx].file_type;
 
 	menu = gtk_menu_new();
 
-	// compile the code
-	item = gtk_image_menu_item_new_with_label(_("Compile"));
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file"), NULL);
-	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F8, (GdkModifierType) 0, GTK_ACCEL_VISIBLE);
-	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
-	gtk_widget_show(image);
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
-	type->item_compile = item;
+	if (ft->menu_items->can_compile)
+	{
+		// compile the code
+		item = gtk_image_menu_item_new_with_mnemonic(_("Compile"));
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+		gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file"), NULL);
+/*		gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F8,
+					(GdkModifierType) 0, GTK_ACCEL_VISIBLE);
+*/		image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
+		gtk_widget_show(image);
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
+		ft->menu_items->item_compile = item;
+	}
 
-	if (link)
+	if (ft->menu_items->can_link)
 	{	// build the code
-		item = gtk_menu_item_new_with_label(_("Build"));
+		item = gtk_image_menu_item_new_with_mnemonic(_("Build"));
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
 		gtk_tooltips_set_tip(tooltips, item,
@@ -582,11 +575,11 @@ GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute, build_
 		gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F9,
 					(GdkModifierType) 0, GTK_ACCEL_VISIBLE);
 		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_build_activate), NULL);
-		type->item_link = item;
+		ft->menu_items->item_link = item;
 	}
 
 	// build the code with make all
-	item = gtk_menu_item_new_with_label(_("Build with \"make\""));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Build with \"make\""));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
@@ -596,50 +589,54 @@ GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute, build_
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
 
 	// build the code with make
-	item = gtk_menu_item_new_with_label(_("Build with make (custom target)"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Build with make (custom target)"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the specified target"), NULL);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
 
-	if (execute)
+	if (ft->menu_items->can_exec)
 	{	// execute the code
 		item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
-		gtk_tooltips_set_tip(tooltips, item, _("Execute the current file if it was already compiled"), NULL);
+		gtk_tooltips_set_tip(tooltips, item, _("Run or view the current file"), NULL);
 		gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F5,
 					(GdkModifierType) 0, GTK_ACCEL_VISIBLE);
 		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_execute_activate), NULL);
-		type->item_exec = item;
+		ft->menu_items->item_exec = item;
 	}
 
-	// separator
-	separator = gtk_separator_menu_item_new();
-	gtk_widget_show(separator);
-	gtk_container_add(GTK_CONTAINER(menu), separator);
-	gtk_widget_set_sensitive(separator, FALSE);
-
 	// arguments
-	item = gtk_image_menu_item_new_with_label(_("Set Includes and Arguments"));
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER (menu), item);
-	gtk_tooltips_set_tip(tooltips, item,
-				_("Sets the includes and library paths for the compiler and "
-				  "the program arguments for execution"), NULL);
-	image = gtk_image_new_from_stock("gtk-preferences", GTK_ICON_SIZE_MENU);
-	gtk_widget_show(image);
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_arguments_activate), GINT_TO_POINTER(link));
+	if (ft->menu_items->can_compile || ft->menu_items->can_link || ft->menu_items->can_exec)
+	{
+		// separator
+		separator = gtk_separator_menu_item_new();
+		gtk_widget_show(separator);
+		gtk_container_add(GTK_CONTAINER(menu), separator);
+		gtk_widget_set_sensitive(separator, FALSE);
 
-	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
+		item = gtk_image_menu_item_new_with_mnemonic(_("Set Includes and Arguments"));
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER (menu), item);
+		gtk_tooltips_set_tip(tooltips, item,
+					_("Sets the includes and library paths for the compiler and "
+					  "the program arguments for execution"), NULL);
+		image = gtk_image_new_from_stock("gtk-preferences", GTK_ICON_SIZE_MENU);
+		gtk_widget_show(image);
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_arguments_activate), NULL);
+	}
+		
+	// temporarily moved to on_editor_key_press_event() until new keyboard shortcut management is available
+	//gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
 
 	return menu;
 }
 
 
-GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type)
+GtkWidget *dialogs_create_build_menu_tex(gint idx)
 {
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
@@ -648,7 +645,7 @@ GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type)
 	menu = gtk_menu_new();
 
 	// DVI
-	item = gtk_image_menu_item_new_with_label(_("LaTeX -> DVI"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> DVI"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file into a DVI file"), NULL);
@@ -659,7 +656,7 @@ GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type)
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(0));
 
 	// PDF
-	item = gtk_image_menu_item_new_with_label(_("LaTeX -> PDF"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> PDF"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file into a PDF file"), NULL);
@@ -670,7 +667,7 @@ GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type)
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(1));
 
 	// build the code with make all
-	item = gtk_menu_item_new_with_label(_("Build with \"make\""));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Build with \"make\""));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
@@ -680,7 +677,7 @@ GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type)
 */	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
 
 	// build the code with make
-	item = gtk_menu_item_new_with_label(_("Build with make (custom target)"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Build with make (custom target)"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
@@ -688,7 +685,7 @@ GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type)
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
 
 	// DVI view
-	item = gtk_image_menu_item_new_with_label(_("View DVI file"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("View DVI file"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 //	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F5, (GdkModifierType) 0, GTK_ACCEL_VISIBLE);
@@ -699,7 +696,7 @@ GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type)
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(2));
 
 	// PDF view
-	item = gtk_image_menu_item_new_with_label(_("View PDF file"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("View PDF file"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 /*	gtk_widget_add_accelerator(item, "activate", accel_group, GDK_F5,
@@ -717,7 +714,7 @@ GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type)
 	gtk_widget_set_sensitive(separator, FALSE);
 
 	// arguments
-	item = gtk_image_menu_item_new_with_label(_("Set Arguments"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Set Arguments"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER (menu), item);
 	gtk_tooltips_set_tip(tooltips, item,
@@ -1003,7 +1000,9 @@ void dialogs_show_replace(void)
 
 void dialogs_show_includes_arguments_tex(void)
 {
-	GtkWidget *dialog, *label, *entries[3];
+	GtkWidget *dialog, *label, *entries[4];
+	gint idx = document_get_cur_idx();
+	filetype *ft = doc_list[idx].file_type;
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Arguments"), GTK_WINDOW(app->window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1016,81 +1015,102 @@ void dialogs_show_includes_arguments_tex(void)
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
 
 	// LaTeX -> DVI args
-	label = gtk_label_new(_("Enter here the (La)TeX command (for DVI creation) and some useful options."));
-	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-	entries[0] = gtk_entry_new();
-	gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
-	if (app->build_tex_dvi_cmd)
-		gtk_entry_set_text(GTK_ENTRY(entries[0]), app->build_tex_dvi_cmd);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[0]);
+	if (ft->programs->compiler != NULL)
+	{
+		label = gtk_label_new(_("Enter here the (La)TeX command (for DVI creation) and some useful options."));
+		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		entries[0] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
+		if (ft->programs->compiler)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[0]), ft->programs->compiler);
+		}
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[0]);
 
-	// whitespace
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		// whitespace
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		g_object_set_data_full(G_OBJECT(dialog), "tex_entry1",
+					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
+	}
 
 	// LaTeX -> PDF args
-	label = gtk_label_new(_("Enter here the (La)TeX command (for PDF creation) and some useful options."));
-	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-	entries[1] = gtk_entry_new();
-	gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
-	if (app->build_tex_pdf_cmd)
-		gtk_entry_set_text(GTK_ENTRY(entries[1]), app->build_tex_pdf_cmd);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[1]);
+	if (ft->programs->linker != NULL)
+	{
+		label = gtk_label_new(_("Enter here the (La)TeX command (for PDF creation) and some useful options."));
+		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		entries[1] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
+		if (ft->programs->linker)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[1]), ft->programs->linker);
+		}
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[1]);
 
-	// whitespace
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		// whitespace
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		g_object_set_data_full(G_OBJECT(dialog), "tex_entry2",
+					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
+	}
 
 	// View LaTeX -> DVI args
-	label = gtk_label_new(_("Enter here the (La)TeX command (for DVI preview) and some useful options."));
-	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-	entries[2] = gtk_entry_new();
-	gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
-	if (app->build_tex_view_dvi_cmd)
-		gtk_entry_set_text(GTK_ENTRY(entries[2]), app->build_tex_view_dvi_cmd);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[2]);
+	if (ft->programs->run_cmd != NULL)
+	{
+		label = gtk_label_new(_("Enter here the (La)TeX command (for DVI preview) and some useful options."));
+		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		entries[2] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
+		if (ft->programs->run_cmd)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[2]), ft->programs->run_cmd);
+		}
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[2]);
 
-	// whitespace
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		// whitespace
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		g_object_set_data_full(G_OBJECT(dialog), "tex_entry3",
+					gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
+	}
 
 	// View LaTeX -> PDF args
-	label = gtk_label_new(_("Enter here the (La)TeX command (for PDF preview) and some useful options."));
-	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-	entries[3] = gtk_entry_new();
-	gtk_entry_set_width_chars(GTK_ENTRY(entries[3]), 30);
-	if (app->build_tex_view_pdf_cmd)
-		gtk_entry_set_text(GTK_ENTRY(entries[3]), app->build_tex_view_pdf_cmd);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[3]);
+	if (ft->programs->run_cmd2 != NULL)
+	{
+		label = gtk_label_new(_("Enter here the (La)TeX command (for PDF preview) and some useful options."));
+		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		entries[3] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[3]), 30);
+		if (ft->programs->run_cmd2)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[3]), ft->programs->run_cmd2);
+		}
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[3]);
 
-	// whitespace
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
-
-	g_object_set_data_full(G_OBJECT(dialog), "tex_entry1",
-					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
-	g_object_set_data_full(G_OBJECT(dialog), "tex_entry2",
-					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
-	g_object_set_data_full(G_OBJECT(dialog), "tex_entry3",
-					gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
-	g_object_set_data_full(G_OBJECT(dialog), "tex_entry4",
+		// whitespace
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		g_object_set_data_full(G_OBJECT(dialog), "tex_entry4",
 					gtk_widget_ref(entries[3]), (GDestroyNotify)gtk_widget_unref);
+	}
 
-
-	g_signal_connect((gpointer) dialog, "response", G_CALLBACK(on_includes_arguments_tex_dialog_response), NULL);
+	g_signal_connect((gpointer) dialog, "response",
+				G_CALLBACK(on_includes_arguments_tex_dialog_response), GINT_TO_POINTER(idx));
 
 	gtk_widget_show_all(dialog);
 }
 
 
-void dialogs_show_includes_arguments_gen(gboolean link)
+void dialogs_show_includes_arguments_gen(void)
 {
 	GtkWidget *dialog, *label, *entries[3];
-
+	gint idx = document_get_cur_idx();
+	filetype *ft = doc_list[idx].file_type;
+	GtkTooltips *tooltips;
 	dialog = gtk_dialog_new_with_buttons(_("Set Includes and Arguments"), GTK_WINDOW(app->window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
@@ -1100,62 +1120,80 @@ void dialogs_show_includes_arguments_gen(gboolean link)
 	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+	tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 	// include-args
-	label = gtk_label_new(_("Enter here arguments to your compiler."));
-	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-	entries[0] = gtk_entry_new();
-	gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
-	if (app->build_args_inc)
+	if (ft->menu_items->can_compile)
 	{
-		gtk_entry_set_text(GTK_ENTRY(entries[0]), app->build_args_inc);
-	}
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[0]);
+		label = gtk_label_new(_("Enter here arguments to your compiler."));
+		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		entries[0] = gtk_entry_new();
+		gtk_tooltips_set_tip(tooltips, entries[0],
+_("%f will be replaced by the complete filename\n%e will be replaced by filename without extension"
+  "\nExample: test_file.c\n%f -> test_file.c\n%e -> test_file"), NULL);
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
+		if (ft->programs->compiler)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[0]), ft->programs->compiler);
+		}
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[0]);
 
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		g_object_set_data_full(G_OBJECT(dialog), "includes_entry1",
+					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
+	}
+	
+	// lib-args
+	if (ft->menu_items->can_link)
+	{
+		label = gtk_label_new(_("Enter here arguments to your linker."));
+		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		entries[1] = gtk_entry_new();
+		gtk_tooltips_set_tip(tooltips, entries[1],
+_("%f will be replaced by the complete filename\n%e will be replaced by filename without extension"
+  "\nExample: test_file.c\n%f -> test_file.c\n%e -> test_file"), NULL);
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
+		if (ft->programs->linker)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[1]), ft->programs->linker);
+		}
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[1]);
+
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		g_object_set_data_full(G_OBJECT(dialog), "includes_entry2",
+					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
+	}
 
 	// lib-args
-	label = gtk_label_new(_("Enter here arguments to your linker."));
-	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-	entries[1] = gtk_entry_new();
-	gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
-	if (app->build_args_libs)
+	if (ft->menu_items->can_exec)
 	{
-		gtk_entry_set_text(GTK_ENTRY(entries[1]), app->build_args_libs);
+		// program-args
+		label = gtk_label_new(_("Enter here arguments to your program."));
+		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		entries[2] = gtk_entry_new();
+		gtk_tooltips_set_tip(tooltips, entries[2],
+_("%f will be replaced by the complete filename\n%e will be replaced by filename without extension"
+  "\nExample: test_file.c\n%f -> test_file.c\n%e -> test_file"), NULL);
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
+		if (ft->programs->run_cmd)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[2]), ft->programs->run_cmd);
+		}
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[2]);
+
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
+		g_object_set_data_full(G_OBJECT(dialog), "includes_entry3",
+						gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
 	}
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[1]);
 
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
-
-	// program-args
-	label = gtk_label_new(_("Enter here arguments to your program."));
-	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-	entries[2] = gtk_entry_new();
-	gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
-	if (app->build_args_prog)
-	{
-		gtk_entry_set_text(GTK_ENTRY(entries[2]), app->build_args_prog);
-	}
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[2]);
-
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
-
-
-	g_object_set_data_full(G_OBJECT(dialog), "includes_entry1",
-					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
-	g_object_set_data_full(G_OBJECT(dialog), "includes_entry2",
-					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
-	g_object_set_data_full(G_OBJECT(dialog), "includes_entry3",
-					gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
-
-
-	g_signal_connect((gpointer) dialog, "response", G_CALLBACK(on_includes_arguments_dialog_response), NULL);
+	g_signal_connect((gpointer) dialog, "response",
+				G_CALLBACK(on_includes_arguments_dialog_response), GINT_TO_POINTER(idx));
 
 	gtk_widget_show_all(dialog);
 }
@@ -1164,45 +1202,48 @@ void dialogs_show_includes_arguments_gen(gboolean link)
 GtkWidget *dialogs_add_file_open_extra_widget(void)
 {
 	GtkWidget *vbox;
+	GtkWidget *lbox;
 	GtkWidget *ebox;
 	GtkWidget *hbox;
 	GtkWidget *file_entry;
-	GtkWidget *check_readonly;
+	GtkSizeGroup *sizegroup;
+	GtkWidget *align;
 	GtkWidget *check_hidden;
 	GtkWidget *filetype_label;
 	GtkWidget *filetype_combo;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
-	vbox = gtk_vbox_new(FALSE, 4);
+	vbox = gtk_vbox_new(FALSE, 6);
+	sizegroup = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 
+	align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
+	check_hidden = gtk_check_button_new_with_mnemonic(_("Show _hidden files"));
+	gtk_widget_show(check_hidden);
+	gtk_size_group_add_widget(GTK_SIZE_GROUP(sizegroup), check_hidden);
+	gtk_container_add(GTK_CONTAINER(align), check_hidden);
+	gtk_box_pack_start(GTK_BOX(vbox), align, FALSE, FALSE, 0);
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_hidden), FALSE);
+
+	lbox = gtk_hbox_new(FALSE, 12);
 	file_entry = gtk_entry_new();
 	gtk_widget_show(file_entry);
-	gtk_box_pack_start(GTK_BOX(vbox), file_entry, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(lbox), file_entry, TRUE, TRUE, 0);
+	//gtk_editable_set_editable(GTK_EDITABLE(file_entry), FALSE);
 	gtk_entry_set_activates_default(GTK_ENTRY(file_entry), TRUE);
-
-	check_readonly = gtk_check_button_new_with_mnemonic(_("Open file _read-only"));
-	gtk_widget_show(check_readonly);
-	gtk_box_pack_start(GTK_BOX(vbox), check_readonly, FALSE, FALSE, 0);
-	gtk_tooltips_set_tip(tooltips, check_readonly,
-		_("Opens the file in read-only mode. If you choose more than one file to open, all files will opened read-only."), NULL);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check_readonly), FALSE);
-
-	check_hidden = gtk_check_button_new_with_mnemonic(_("Show hidden files"));
-	gtk_widget_show(check_hidden);
-	gtk_box_pack_start(GTK_BOX(vbox), check_hidden, FALSE, FALSE, 0);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check_hidden), FALSE);
 
 	// the ebox is for the tooltip, because gtk_combo_box doesn't show a tooltip for unknown reason
 	ebox = gtk_event_box_new();
-	hbox = gtk_hbox_new(FALSE, 4);
-	filetype_label = gtk_label_new(_("Set filetype: "));
+	hbox = gtk_hbox_new(FALSE, 6);
+	filetype_label = gtk_label_new(_("Set filetype:"));
 	filetype_combo = gtk_combo_box_new_text();
 	gtk_tooltips_set_tip(tooltips, ebox,
-		_("Explicitly defines a filetype for the file, if it would not detected by filename extension.\nNote if you choose multiple files, they will all opened with the chossed filetype."), NULL);
+		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."), NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), filetype_label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), filetype_combo, FALSE, FALSE, 0);
+	gtk_size_group_add_widget(GTK_SIZE_GROUP(sizegroup), filetype_combo);
 	gtk_container_add(GTK_CONTAINER(ebox), hbox);
-	gtk_box_pack_start(GTK_BOX(vbox), ebox, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(lbox), ebox, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), lbox, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
 
 	g_signal_connect((gpointer) file_entry, "activate",
@@ -1212,8 +1253,6 @@ GtkWidget *dialogs_add_file_open_extra_widget(void)
 
 	g_object_set_data_full(G_OBJECT(app->open_filesel), "file_entry",
 				gtk_widget_ref(file_entry), (GDestroyNotify)gtk_widget_unref);
-	g_object_set_data_full(G_OBJECT(app->open_filesel), "check_readonly",
-				gtk_widget_ref(check_readonly), (GDestroyNotify)gtk_widget_unref);
 	g_object_set_data_full(G_OBJECT(app->open_filesel), "check_hidden",
 				gtk_widget_ref(check_hidden), (GDestroyNotify)gtk_widget_unref);
 	g_object_set_data_full(G_OBJECT(app->open_filesel), "filetype_combo",
@@ -1250,27 +1289,34 @@ gboolean dialogs_show_mkcfgdir_error(gint error_nr)
 void dialogs_show_file_properties(gint idx)
 {
 	GtkWidget *dialog, *label, *table, *hbox, *image, *perm_table, *check;
-	gchar *file_size, *title, *base_name, *locale_filename, *time_changed, *time_modified, *time_accessed;
-	GtkRequisition *size;
+	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed;
 #if defined(HAVE_SYS_STAT_H) && defined(HAVE_SYS_TYPES_H)
 	struct stat st;
 	off_t filesize;
 	mode_t mode;
+	gchar *locale_filename;
 #else
 	gint filesize = 0;
 	gint mode = 0;
 #endif
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL)
+	{
+		dialogs_show_error(_("An error occurred or file information could not be retrieved(e.g. from a new file)."));
+		return;
+	}
+	
 
 #if defined(HAVE_SYS_STAT_H) && defined(TIME_WITH_SYS_TIME) && defined(HAVE_SYS_TYPES_H)
 	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
 	if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
 	if (stat(locale_filename, &st) == 0)
 	{
-		time_changed  = g_strdup(ctime(&st.st_ctime));
-		time_modified = g_strdup(ctime(&st.st_mtime));
-		time_accessed = g_strdup(ctime(&st.st_atime));
+		// first copy the returned string and the trim it, to not modify the static glibc string
+		// g_strchomp() is used to remove trailing EOL chars, which are there for whatever reason
+		time_changed  = g_strchomp(g_strdup(ctime(&st.st_ctime)));
+		time_modified = g_strchomp(g_strdup(ctime(&st.st_mtime)));
+		time_accessed = g_strchomp(g_strdup(ctime(&st.st_atime)));
 		filesize = st.st_size;
 		mode = st.st_mode;
 	}
@@ -1299,21 +1345,24 @@ void dialogs_show_file_properties(gint idx)
 	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
 	g_signal_connect(dialog, "delete_event", G_CALLBACK(gtk_widget_destroy), NULL);
 
-	title = g_strdup_printf("<b>%s\n</b>", base_name);
+	gtk_window_set_default_size(GTK_WINDOW(dialog), 300, -1);
+
+	title = g_strdup_printf("<b>%s\n</b>\n", base_name);
 	label = gtk_label_new(title);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 1.0);
 	image = gtk_image_new_from_stock("gtk-file", GTK_ICON_SIZE_BUTTON);
-	gtk_misc_set_alignment(GTK_MISC(image), 0.8, 0);
-	hbox = gtk_hbox_new(FALSE, 0);
+	gtk_misc_set_alignment(GTK_MISC(image), 1.0, 0.0);
+	hbox = gtk_hbox_new(FALSE, 10);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_container_add(GTK_CONTAINER(hbox), image);
 	gtk_container_add(GTK_CONTAINER(hbox), label);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
 	g_free(title);
-	/// add doc_list members
-	table = gtk_table_new(6, 2, FALSE);
+
+	table = gtk_table_new(8, 2, FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 10);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 5);
+	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
 	label = gtk_label_new(_("<b>Type:</b>"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
@@ -1336,7 +1385,6 @@ void dialogs_show_file_properties(gint idx)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	file_size = utils_make_human_readable_str(filesize, 1, 0);
-	//file_size = utils_make_human_readable_str(1048576/1024, 1, 0);
 	label = gtk_label_new(file_size);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
@@ -1355,48 +1403,80 @@ void dialogs_show_file_properties(gint idx)
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
 
-	label = gtk_label_new(_("<b>Modified:</b>"));
+	label = gtk_label_new(_("<b>Read-only:</b>"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
-	label = gtk_label_new(time_modified);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 3, 4,
+	check = gtk_check_button_new_with_label(_("(only inside Geany)"));
+	gtk_widget_set_sensitive(check, FALSE);
+	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), doc_list[idx].readonly);
+	gtk_table_attach(GTK_TABLE(table), check, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_button_set_alignment(GTK_BUTTON(check), 0.0, 0);
 
-	label = gtk_label_new(_("<b>Changed:</b>"));
+	label = gtk_label_new(_("<b>Encoding:</b>"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
-	label = gtk_label_new(time_changed);
+	label = gtk_label_new(doc_list[idx].encoding);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 4, 5,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
 
-	label = gtk_label_new(_("<b>Accessed:</b>"));
+	label = gtk_label_new(_("<b>Modified:</b>"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
-	label = gtk_label_new(time_accessed);
+	label = gtk_label_new(time_modified);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 5, 6,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+
+	label = gtk_label_new(_("<b>Changed:</b>"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 6, 7,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	label = gtk_label_new(time_changed);
+	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 6, 7,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+
+	label = gtk_label_new(_("<b>Accessed:</b>"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 7, 8,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	label = gtk_label_new(time_accessed);
+	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 7, 8,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	// add table
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), table);
+	
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 
 	// create permission label and then table with the permissions
 	label = gtk_label_new("<b>Permissions:</b>");
@@ -1404,142 +1484,141 @@ void dialogs_show_file_properties(gint idx)
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
 
-	perm_table = gtk_table_new(4, 4, FALSE);
+	perm_table = gtk_table_new(4, 4, TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(perm_table), 5);
 	gtk_table_set_col_spacings(GTK_TABLE(perm_table), 5);
 
 	// Header
-	label = gtk_label_new(_("<b>Read:</b>"));
+	label = gtk_label_new(_("Read:"));
 	gtk_table_attach(GTK_TABLE(perm_table), label, 1, 2, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
 
-	label = gtk_label_new(_("<b>Write:</b>"));
+	label = gtk_label_new(_("Write:"));
 	gtk_table_attach(GTK_TABLE(perm_table), label, 2, 3, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
 
-	label = gtk_label_new(_("<b>Execute:</b>"));
+	label = gtk_label_new(_("Execute:"));
 	gtk_table_attach(GTK_TABLE(perm_table), label, 3, 4, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0);
 
 	// Owner
-	label = gtk_label_new(_("<b>Owner:</b>"));
+	label = gtk_label_new(_("Owner:"));
 	gtk_table_attach(GTK_TABLE(perm_table), label, 0, 1, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0);
 
 	check = gtk_check_button_new();
+	gtk_widget_set_sensitive(check, FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IRUSR);
 	gtk_table_attach(GTK_TABLE(perm_table), check, 1, 2, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
 	check = gtk_check_button_new();
+	gtk_widget_set_sensitive(check, FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IWUSR);
 	gtk_table_attach(GTK_TABLE(perm_table), check, 2, 3, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
 	check = gtk_check_button_new();
+	gtk_widget_set_sensitive(check, FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IXUSR);
 	gtk_table_attach(GTK_TABLE(perm_table), check, 3, 4, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
 
 	// Group
-	label = gtk_label_new(_("<b>Group:</b>"));
+	label = gtk_label_new(_("Group:"));
 	gtk_table_attach(GTK_TABLE(perm_table), label, 0, 1, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0);
 
 	check = gtk_check_button_new();
+	gtk_widget_set_sensitive(check, FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IRGRP);
 	gtk_table_attach(GTK_TABLE(perm_table), check, 1, 2, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
 	check = gtk_check_button_new();
+	gtk_widget_set_sensitive(check, FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IWGRP);
 	gtk_table_attach(GTK_TABLE(perm_table), check, 2, 3, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
 	check = gtk_check_button_new();
+	gtk_widget_set_sensitive(check, FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IXGRP);
 	gtk_table_attach(GTK_TABLE(perm_table), check, 3, 4, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
 
 	// Other
-	label = gtk_label_new(_("<b>Other:</b>"));
+	label = gtk_label_new(_("Other:"));
 	gtk_table_attach(GTK_TABLE(perm_table), label, 0, 1, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.5, 0);
 
 	check = gtk_check_button_new();
+	gtk_widget_set_sensitive(check, FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IROTH);
 	gtk_table_attach(GTK_TABLE(perm_table), check, 1, 2, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
 	check = gtk_check_button_new();
+	gtk_widget_set_sensitive(check, FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IWOTH);
 	gtk_table_attach(GTK_TABLE(perm_table), check, 2, 3, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
 	check = gtk_check_button_new();
+	gtk_widget_set_sensitive(check, FALSE);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), mode & S_IXOTH);
 	gtk_table_attach(GTK_TABLE(perm_table), check, 3, 4, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 	gtk_button_set_alignment(GTK_BUTTON(check), 0.5, 0);
 
-
-
-
-
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), perm_table);
 
-	// resize the dialog
-	/// FIXME do we really need this?
-	size = g_new(GtkRequisition, 1);
-	gtk_widget_size_request(GTK_DIALOG(dialog)->vbox, size);
-	//gtk_widget_set_size_request(dialog, size->width + 20, size->height + 50);
-	g_free(size);
 	g_free(base_name);
 	g_free(time_changed);
 	g_free(time_modified);
@@ -1547,3 +1626,215 @@ void dialogs_show_file_properties(gint idx)
 
 	gtk_widget_show_all(dialog);
 }
+
+
+void dialogs_show_prefs_dialog(void)
+{
+	if (app->prefs_dialog == NULL)
+	{
+#ifdef HAVE_VTE
+		GtkWidget *notebook, *vbox, *label, *alignment, *table;
+		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback, *entry_emulation;
+		GtkWidget *check_scroll_key, *check_scroll_out;
+		GtkTooltips *tooltips;
+		GtkObject *spin_scrollback_adj;
+#endif
+
+		app->prefs_dialog = create_prefs_dialog();
+
+#ifdef HAVE_VTE
+		tooltips = GTK_TOOLTIPS(lookup_widget(app->prefs_dialog, "tooltips"));
+		notebook = lookup_widget(app->prefs_dialog, "notebook2");
+		vbox = gtk_vbox_new(FALSE, 0);
+		gtk_container_add(GTK_CONTAINER(notebook), vbox);
+
+		label = gtk_label_new(_("These are settings for the virtual terminal emulator widget (VTE). They only apply, if the VTE library could be loaded."));
+		gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+		gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_FILL);
+		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+		gtk_misc_set_alignment(GTK_MISC(label), 0.14, 0.19);
+		gtk_misc_set_padding(GTK_MISC(label), 0, 8);
+
+		alignment = gtk_alignment_new(0.5, 0.5, 1, 1);
+		gtk_box_pack_start(GTK_BOX(vbox), alignment, FALSE, FALSE, 0);
+		gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 12, 6);
+
+		table = gtk_table_new(7, 2, FALSE);
+		gtk_container_add(GTK_CONTAINER(alignment), table);
+		gtk_table_set_row_spacings(GTK_TABLE(table), 3);
+		gtk_table_set_col_spacings(GTK_TABLE(table), 25);
+
+		label = gtk_label_new(_("Terminal font"));
+		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+		font_term = gtk_font_button_new();
+		gtk_table_attach(GTK_TABLE(table), font_term, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_widget_set_sensitive(font_term, FALSE);
+		gtk_tooltips_set_tip(tooltips, font_term, _("Sets the font for the terminal widget."), NULL);
+
+		label = gtk_label_new(_("Foreground color"));
+		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+		label = gtk_label_new(_("Background color"));
+		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+		color_fore = gtk_color_button_new();
+		gtk_table_attach(GTK_TABLE(table), color_fore, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_widget_set_sensitive(color_fore, FALSE);
+		gtk_tooltips_set_tip(tooltips, color_fore, _("Sets the foreground color of the text in the terminal widget."), NULL);
+		gtk_color_button_set_title(GTK_COLOR_BUTTON(color_fore), _("Color Chooser"));
+
+		color_back = gtk_color_button_new();
+		gtk_table_attach(GTK_TABLE(table), color_back, 1, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_widget_set_sensitive(color_back, FALSE);
+		gtk_tooltips_set_tip(tooltips, color_back, _("Sets the background color of the text in the terminal widget."), NULL);
+		gtk_color_button_set_title(GTK_COLOR_BUTTON(color_back), _("Color Chooser"));
+
+		label = gtk_label_new(_("Scrollback lines"));
+		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+		spin_scrollback_adj = gtk_adjustment_new(500, 0, 5000, 1, 10, 10);
+		spin_scrollback = gtk_spin_button_new(GTK_ADJUSTMENT(spin_scrollback_adj), 1, 0);
+		gtk_table_attach(GTK_TABLE(table), spin_scrollback, 1, 2, 3, 4,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_widget_set_sensitive(spin_scrollback, FALSE);
+		gtk_tooltips_set_tip(tooltips, spin_scrollback, _("Specifies the history in lines, which you can scroll back in the terminal widget."), NULL);
+		gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
+		gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
+
+		label = gtk_label_new(_("Terminal emulation"));
+		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+		entry_emulation = gtk_entry_new();
+		gtk_table_attach(GTK_TABLE(table), entry_emulation, 1, 2, 4, 5,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_widget_set_sensitive(entry_emulation, FALSE);
+		gtk_tooltips_set_tip(tooltips, entry_emulation, _("Controls how the terminal emulator should behave. xterm is a good start."), NULL);
+
+		check_scroll_key = gtk_check_button_new_with_mnemonic(_("Scroll on keystroke"));
+		gtk_table_attach(GTK_TABLE(table), check_scroll_key, 1, 2, 5, 6,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_widget_set_sensitive(check_scroll_key, FALSE);
+		gtk_tooltips_set_tip(tooltips, check_scroll_key, _("Whether to scroll to the bottom if a key was pressed."), NULL);
+		gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_key), FALSE);
+
+		check_scroll_out = gtk_check_button_new_with_mnemonic(_("Scroll on output"));
+		gtk_table_attach(GTK_TABLE(table), check_scroll_out, 1, 2, 6, 7,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+		gtk_widget_set_sensitive(check_scroll_out, FALSE);
+		gtk_tooltips_set_tip(tooltips, check_scroll_out, _("Whether to scroll to the bottom if an output was generated."), NULL);
+		gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_out), FALSE);
+
+		label = gtk_label_new(_("Terminal"));
+		gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), gtk_notebook_get_nth_page(
+					GTK_NOTEBOOK(notebook), 4), label);
+
+		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "font_term",
+				gtk_widget_ref(font_term),	(GDestroyNotify) gtk_widget_unref);
+		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "color_fore",
+				gtk_widget_ref(color_fore),	(GDestroyNotify) gtk_widget_unref);
+		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "color_back",
+				gtk_widget_ref(color_back),	(GDestroyNotify) gtk_widget_unref);
+		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "spin_scrollback",
+				gtk_widget_ref(spin_scrollback),	(GDestroyNotify) gtk_widget_unref);
+		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "entry_emulation",
+				gtk_widget_ref(entry_emulation),	(GDestroyNotify) gtk_widget_unref);
+		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_key",
+				gtk_widget_ref(check_scroll_key),	(GDestroyNotify) gtk_widget_unref);
+		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_out",
+				gtk_widget_ref(check_scroll_out),	(GDestroyNotify) gtk_widget_unref);
+
+		gtk_widget_show_all(vbox);
+
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "font_term"),
+				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(4));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_fore"),
+				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(2));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_back"),
+				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(3));
+#endif
+		g_signal_connect((gpointer) app->prefs_dialog, "response", G_CALLBACK(on_prefs_button_clicked), NULL);
+		g_signal_connect((gpointer) app->prefs_dialog, "delete_event", G_CALLBACK(on_prefs_delete_event), NULL);
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "tagbar_font"),
+				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "msgwin_font"),
+				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(2));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "editor_font"),
+				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "long_line_color"),
+				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
+		// file chooser buttons in the tools tab
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_gcc"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_c"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_gpp"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_cpp"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_javac"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_javac"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_java"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_java"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_make"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_make"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_term"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_term"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_browser"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_browser"));
+
+	}
+
+	prefs_init_dialog();
+	gtk_widget_show(app->prefs_dialog);
+}
+
+
+gboolean dialogs_show_question(const gchar *text, ...)
+{
+#ifndef GEANY_WIN32
+	GtkWidget *dialog;
+#endif
+	gchar *string = g_malloc(512);
+	gboolean ret = FALSE;
+	va_list args;
+
+	va_start(args, text);
+	g_vsnprintf(string, 511, text, args);
+	va_end(args);
+
+#ifdef GEANY_WIN32
+	if (MessageBox(NULL, string, _("Question"), MB_YESNO | MB_ICONWARNING) == IDYES) return TRUE;
+	else return FALSE;
+#else
+	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, string);
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES)	ret = TRUE;
+	gtk_widget_destroy(dialog);
+#endif
+	g_free(string);
+	
+	return ret;
+}
+

@@ -564,3 +564,7 @@ on_entry_goto_line_activate            (GtkEntry        *entry,
 void
 on_toolbutton_goto_clicked             (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
+
+void
+on_run_button_clicked                  (GtkToolButton   *toolbutton,
+                                        gpointer         user_data);

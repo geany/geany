@@ -26,29 +26,13 @@
 #ifndef GEANY_DIALOGS_H
 #define GEANY_DIALOGS_H 1
 
-typedef struct
-{
-	GtkWidget		*menu;
-	GtkWidget		*item_compile;
-	GtkWidget		*item_link;
-	GtkWidget		*item_exec;
-} build_menus_items;
-build_menus_items dialogs_build_menus_items;
-
-typedef struct
-{
-	build_menus_items	menu_c;
-	build_menus_items	menu_tex;
-	build_menus_items	menu_misc;
-} build_menus;
-build_menus dialogs_build_menus;
 
 
 /* This shows the file selection dialog to open a file. */
-void dialogs_show_open_file (void);
+void dialogs_show_open_file(void);
 
 /* This shows the file selection dialog to save a file. */
-void dialogs_show_save_as ();
+void dialogs_show_save_as();
 
 void dialogs_show_file_open_error(void);
 
@@ -59,10 +43,6 @@ void dialogs_show_info(const gchar *text, ...);
 void dialogs_show_error(const gchar *text, ...);
 
 gboolean dialogs_show_fifo_error(const gchar *text, ...);
-
-gboolean dialogs_show_reload_warning(const gchar *text);
-
-gboolean dialogs_show_confirm_exit(void);
 
 gboolean dialogs_show_unsaved_file(gint idx);
 
@@ -75,9 +55,9 @@ void dialogs_show_word_count(void);
 
 void dialogs_show_color(void);
 
-GtkWidget *dialogs_create_build_menu_gen(gboolean link, gboolean execute, build_menus_items *type);
+GtkWidget *dialogs_create_build_menu_gen(gint idx);
 
-GtkWidget *dialogs_create_build_menu_tex(build_menus_items *type);
+GtkWidget *dialogs_create_build_menu_tex(gint idx);
 
 void dialogs_show_make_target(void);
 
@@ -87,7 +67,7 @@ void dialogs_show_replace(void);
 
 void dialogs_show_goto_line(void);
 
-void dialogs_show_includes_arguments_gen(gboolean link);
+void dialogs_show_includes_arguments_gen(void);
 
 void dialogs_show_includes_arguments_tex(void);
 
@@ -98,5 +78,9 @@ GtkWidget *dialogs_add_file_open_extra_widget(void);
 gboolean dialogs_show_mkcfgdir_error(gint error_nr);
 
 void dialogs_show_file_properties(gint idx);
+
+void dialogs_show_prefs_dialog(void);
+
+gboolean dialogs_show_question(const gchar *text, ...);
 
 #endif

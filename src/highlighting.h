@@ -27,8 +27,9 @@
 
 typedef struct
 {
-	gint styling[55][4];
-	gchar **keywords;
+	gint		  styling[55][4];
+	gchar		**keywords;
+	gchar		 *wordchars;
 } style_set;
 
 
@@ -38,9 +39,11 @@ void styleset_common(ScintillaObject *sci, gint style_bits);
 
 void styleset_c(ScintillaObject *sci);
 
+void styleset_cpp(ScintillaObject *sci);
+
 void styleset_makefile(ScintillaObject *sci);
 
-void styleset_tex(ScintillaObject *sci);
+void styleset_latex(ScintillaObject *sci);
 
 void styleset_php(ScintillaObject *sci);
 

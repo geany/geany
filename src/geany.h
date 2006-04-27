@@ -61,7 +61,7 @@
 #define GEANY_CODENAME					"Nivers"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_MAX_OPEN_FILES			25
-#define GEANY_SESSION_FILES				15
+#define GEANY_SESSION_FILES				25
 #define GEANY_MAX_TAGS_COUNT			1000
 #define GEANY_CHECK_FILE_DELAY			30
 #define GEANY_WORDCHARS					"_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -129,8 +129,10 @@ typedef struct MyApp
 	gboolean			 fullscreen;
 	gboolean			 beep_on_errors;
 	gboolean			 switch_msgwin_pages;
+	gboolean			 tab_order_ltr;
 	gboolean			 show_markers_margin;
 	gboolean			 show_linenumber_margin;
+	gboolean			 brace_match_ltgt;
 	gboolean			 main_window_realized;
 	// I know, it is a bit confusing, but this line breaking is globally,
 	// to change the default value at startup, I think
@@ -151,7 +153,7 @@ typedef struct MyApp
 	gboolean			 pref_main_confirm_exit;
 	gboolean			 pref_main_show_search;
 	gboolean			 pref_main_show_goto;
-	gint				 cur_idx;	// currently only used by he build system (build_spawn_cmd)
+	gint				 cur_idx;	// currently only used by the build system (build_spawn_cmd)
 	gint				 mru_length;
 	gint				 long_line_column;
 #ifdef HAVE_FIFO
@@ -172,27 +174,14 @@ typedef struct MyApp
 	gchar				*configdir;
 	gchar				*search_text;
 	gchar				*terminal_settings;
-	gchar				*build_args_inc;
-	gchar				*build_args_libs;
-	gchar				*build_args_prog;
 	gchar				 build_make_custopt[256];
 	gchar				*build_browser_cmd;
-	gchar				*build_c_cmd;
-	gchar				*build_cpp_cmd;
-	/* I called it fpc (www.freepascal.org) to demonstrate I mean a pascal compiler,
-	 * but feel free to use the GNU one as well */
-	gchar				*build_fpc_cmd;
-	gchar				*build_tex_dvi_cmd;
-	gchar				*build_tex_pdf_cmd;
-	gchar				*build_tex_view_dvi_cmd;
-	gchar				*build_tex_view_pdf_cmd;
-	gchar				*build_java_cmd;
-	gchar				*build_javac_cmd;
 	gchar				*build_make_cmd;
 	gchar				*build_term_cmd;
 	gchar			   **recent_files;
 	GtkIconSize			 toolbar_icon_size;
 	GtkWidget			*toolbar;
+	GtkWidget			*run_button;
 	GtkWidget			*compile_button;
 	GtkWidget			*compile_button_image;
 	GtkWidget			*tagbar;
@@ -219,16 +208,13 @@ typedef struct MyApp
 	GtkWidget			*find_dialog;
 	GtkWidget			*replace_dialog;
 	GtkWidget			*default_tag_tree;
-	//GtkTreeStore		*default_tag_store;
 	const TMWorkspace	*tm_workspace;
 	GQueue				*recent_queue;
 } MyApp;
 
 MyApp *app;
 
-gint this_year;
-gint this_month;
-gint this_day;
+
 
 
 // small struct to track tag name and type together
@@ -274,5 +260,6 @@ extern langType getNamedLanguage(const char *const name);
 
 // implementation in main.c
 void geany_debug(gchar const *format, ...);
+
 
 #endif

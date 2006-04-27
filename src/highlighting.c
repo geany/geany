@@ -39,10 +39,13 @@
 
 
 static style_set *types[GEANY_MAX_FILE_TYPES] = { NULL };
+static gboolean global_c_tags_loaded = FALSE;
+
 
 
 /* simple wrapper function to print file errors in DEBUG mode */
-static void style_set_load_file(GKeyFile *key_file, const gchar *file, GKeyFileFlags flags, GError **just_for_compatibility)
+static void style_set_load_file(GKeyFile *key_file, const gchar *file, GKeyFileFlags flags,
+								GError **just_for_compatibility)
 {
 	GError *error = NULL;
 	gboolean done = g_key_file_load_from_file(key_file, file, flags, &error);
@@ -54,18 +57,46 @@ static void style_set_load_file(GKeyFile *key_file, const gchar *file, GKeyFileF
 }
 
 
-static gchar *styleset_get_string(GKeyFile *config, const gchar *section, const gchar *key)
+static void styleset_get_keywords(GKeyFile *config, const gchar *section, const gchar *key,
+								  gint index, gint pos, const gchar *default_value)
 {
-	GError *error = NULL;
 	gchar *result;
 
-	if (config == NULL || section == NULL) return NULL;
+	if (config == NULL || section == NULL)
+	{
+		types[index]->keywords[pos] = g_strdup(default_value);
+		return;
+	}
 
-	result = g_key_file_get_string(config, section, key, &error);
-	//if (error) geany_debug(error->message);
-	if (error) g_error_free(error);
+	result = g_key_file_get_string(config, section, key, NULL);
 
-	return result;
+	if (result == NULL)
+	{
+		types[index]->keywords[pos] = g_strdup(default_value);
+	}
+	else 
+		types[index]->keywords[pos] = result;
+}
+
+
+static void styleset_get_wordchars(GKeyFile *config, gint index, const gchar *default_value)
+{
+	gchar *result;
+
+	if (config == NULL)
+	{
+		types[index]->wordchars = g_strdup(default_value);
+		return;
+	}
+
+	result = g_key_file_get_string(config, "settings", "wordchars", NULL);
+
+	if (result == NULL)
+	{
+		types[index]->wordchars = g_strdup(default_value);
+	}
+	else 
+		types[index]->wordchars = result;
 }
 
 
@@ -93,6 +124,30 @@ static void styleset_get_hex(GKeyFile *config, const gchar *section, const gchar
 }
 
 
+static void styleset_get_int(GKeyFile *config, const gchar *section, const gchar *key,
+							 gint fdefault_val, gint sdefault_val, gint array[])
+{
+	GError *error = NULL;
+	gchar **list;
+	gsize len;
+
+	if (config == NULL || section == NULL) return;
+
+	list = g_key_file_get_string_list(config, section, key, &len, &error);
+
+	if (list != NULL && list[0] != NULL) array[0] = atoi(list[0]);
+	else array[0] = fdefault_val;
+	if (list != NULL && list[1] != NULL) array[1] = atoi(list[1]);
+	else array[1] = sdefault_val;
+
+	// if there was an error, atoi() returns 0, so then we use default_val
+	if (array[0] == 0) array[0] = fdefault_val;
+	if (array[1] == 0) array[1] = sdefault_val;
+	
+	g_strfreev(list);
+}
+
+
 static void styleset_set_style(ScintillaObject *sci, gint style, gint filetype, gint styling_index)
 {
 	SSM(sci, SCI_STYLESETFORE, style, types[filetype]->styling[styling_index][0]);
@@ -111,6 +166,7 @@ void styleset_free_styles()
 		if (types[i] != NULL)
 		{
 			g_strfreev(types[i]->keywords);
+			g_free(types[i]->wordchars);
 			g_free(types[i]);
 		}
 	}
@@ -129,8 +185,11 @@ static void styleset_common_init(void)
 	styleset_get_hex(config, "styling", "brace_good", "0xff0000", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[2]);
 	styleset_get_hex(config, "styling", "brace_bad", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[3]);
 	styleset_get_hex(config, "styling", "current_line", "0x000000", "0xE5E5E5", "false", types[GEANY_FILETYPES_ALL]->styling[4]);
+	styleset_get_int(config, "styling", "folding_style", 1, 1, types[GEANY_FILETYPES_ALL]->styling[5]);
 
 	types[GEANY_FILETYPES_ALL]->keywords = NULL;
+	styleset_get_wordchars(config, GEANY_FILETYPES_ALL, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_ALL);
 
 	g_key_file_free(config);
 }
@@ -173,25 +232,58 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETMARGINMASKN, 2, SC_MASK_FOLDERS);
 	SSM(sci, SCI_SETFOLDFLAGS, 0, 0);
 
-	SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS);
+	// choose the folding style - boxes or circles, I prefer boxes, so it is default ;-)
+	switch (types[GEANY_FILETYPES_ALL]->styling[5][0])
+	{
+		case 2:
+		{
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPEN, SC_MARK_CIRCLEMINUS);
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDER, SC_MARK_CIRCLEPLUS);
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEREND, SC_MARK_CIRCLEPLUSCONNECTED);
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPENMID, SC_MARK_CIRCLEMINUSCONNECTED);
+			break;
+		}
+		default: 
+		{
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS);
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS);
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEREND, SC_MARK_BOXPLUSCONNECTED);
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPENMID, SC_MARK_BOXMINUSCONNECTED);
+			break;
+		}
+	}
+
+	// choose the folding style - straight or curved, I prefer straight, so it is default ;-)
+	switch (types[GEANY_FILETYPES_ALL]->styling[5][1])
+	{
+		case 2:
+		{
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNERCURVE);
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNERCURVE);
+			break;
+		}
+		default:
+		{
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNER);
+			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER);
+			break;
+		}
+	}
+
+	SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE);
+
 	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPEN, 0xffffff);
 	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPEN, 0x000000);
-	SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS);
 	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDER, 0xffffff);
 	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDER, 0x000000);
-	SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE);
 	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERSUB, 0xffffff);
 	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERSUB, 0x000000);
-	SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER);
 	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERTAIL, 0xffffff);
 	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERTAIL, 0x000000);
-	SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEREND, SC_MARK_BOXPLUSCONNECTED);
 	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEREND, 0xffffff);
 	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEREND, 0x000000);
-	SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPENMID, SC_MARK_BOXMINUSCONNECTED);
 	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPENMID, 0xffffff);
 	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPENMID, 0x000000);
-	SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNER);
 	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERMIDTAIL, 0xffffff);
 	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL, 0x000000);
 
@@ -240,18 +332,21 @@ static void styleset_c_init(void)
 	styleset_get_hex(config, "styling", "globalclass", "0xbb1111", "0xffffff", "true", types[GEANY_FILETYPES_C]->styling[18]);
 
 	types[GEANY_FILETYPES_C]->keywords = g_new(gchar*, 3);
-	types[GEANY_FILETYPES_C]->keywords[0] = styleset_get_string(config, "keywords", "primary");
-	if (types[GEANY_FILETYPES_C]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_C]->keywords[0] = g_strdup("if const struct char int float double void long for while do case switch return");
-	types[GEANY_FILETYPES_C]->keywords[1] = styleset_get_string(config, "keywords", "docComment");
-	if (types[GEANY_FILETYPES_C]->keywords[1] == NULL)
-			types[GEANY_FILETYPES_C]->keywords[1] = g_strdup("TODO FIXME");
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_C, 0, "if const struct char int float double void long for while do case switch return");
+	styleset_get_keywords(config, "keywords", "docComment", GEANY_FILETYPES_C, 1, "TODO FIXME");
 	types[GEANY_FILETYPES_C]->keywords[2] = NULL;
 
+	styleset_get_wordchars(config, GEANY_FILETYPES_C, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_C);
+	
 	g_key_file_free(config);
 
 	// load global tags file for C autocompletion
-	if (! app->ignore_global_tags)	tm_workspace_load_global_tags(GEANY_DATA_DIR "/global.tags");
+	if (! app->ignore_global_tags && ! global_c_tags_loaded)
+	{
+		tm_workspace_load_global_tags(GEANY_DATA_DIR "/global.tags");
+		global_c_tags_loaded = TRUE;
+	}
 }
 
 
@@ -285,12 +380,12 @@ void styleset_c(ScintillaObject *sci)
 		g_ptr_array_free(g_typedefs, TRUE);
 	}
 
-	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
-	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_C]->wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
-	SSM (sci, SCI_SETLEXER, SCLEX_CPP, 0);
+	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
 
-	//SSM (sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
+	//SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_C]->keywords[0]);
 	//SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) secondaryKeyWords);
@@ -310,7 +405,7 @@ void styleset_c(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_C_PREPROCESSOR, GEANY_FILETYPES_C, 10);
 	styleset_set_style(sci, SCE_C_OPERATOR, GEANY_FILETYPES_C, 11);
 	styleset_set_style(sci, SCE_C_IDENTIFIER, GEANY_FILETYPES_C, 12);
-	styleset_set_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_ALL, 13);
+	styleset_set_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_C, 13);
 	styleset_set_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_C, 14);
 	styleset_set_style(sci, SCE_C_REGEX, GEANY_FILETYPES_C, 15);
 	styleset_set_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_C, 16);
@@ -326,7 +421,128 @@ void styleset_c(ScintillaObject *sci)
 	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
 
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "file.patterns.cpp", (sptr_t) "*.cpp;*.cxx;*.cc");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.end.$(file.patterns.cpp)", (sptr_t) "endif");
+}
+
+
+static void styleset_cpp_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+
+	style_set_load_file(config, GEANY_DATA_DIR "/filetypes.cpp", G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	types[GEANY_FILETYPES_CPP] = g_new(style_set, 1);
+	styleset_get_hex(config, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[0]);
+	styleset_get_hex(config, "styling", "comment", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[1]);
+	styleset_get_hex(config, "styling", "commentline", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[2]);
+	styleset_get_hex(config, "styling", "commentdoc", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[3]);
+	styleset_get_hex(config, "styling", "number", "0x007f00", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[4]);
+	styleset_get_hex(config, "styling", "word", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_CPP]->styling[5]);
+	styleset_get_hex(config, "styling", "word2", "0x00007F", "0xffffff", "true", types[GEANY_FILETYPES_CPP]->styling[6]);
+	styleset_get_hex(config, "styling", "string", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[7]);
+	styleset_get_hex(config, "styling", "character", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[8]);
+	styleset_get_hex(config, "styling", "uuid", "0x804040", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[9]);
+	styleset_get_hex(config, "styling", "preprocessor", "0x7F7F00", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[10]);
+	styleset_get_hex(config, "styling", "operator", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[11]);
+	styleset_get_hex(config, "styling", "identifier", "0x100000", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[12]);
+	styleset_get_hex(config, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_CPP]->styling[13]);
+	styleset_get_hex(config, "styling", "verbatim", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[14]);
+	styleset_get_hex(config, "styling", "regex", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_CPP]->styling[15]);
+	styleset_get_hex(config, "styling", "commentlinedoc", "0x0000ff", "0xffffff", "true", types[GEANY_FILETYPES_CPP]->styling[16]);
+	styleset_get_hex(config, "styling", "commentdockeyword", "0x0000ff", "0xffffff", "true", types[GEANY_FILETYPES_CPP]->styling[17]);
+	styleset_get_hex(config, "styling", "globalclass", "0xbb1111", "0xffffff", "true", types[GEANY_FILETYPES_CPP]->styling[18]);
+
+	types[GEANY_FILETYPES_CPP]->keywords = g_new(gchar*, 3);
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_CPP, 0, "this private public protected if const struct char int float double void long for while do case switch return");
+	styleset_get_keywords(config, "keywords", "docComment", GEANY_FILETYPES_CPP, 1, "TODO FIXME");
+	types[GEANY_FILETYPES_CPP]->keywords[2] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_CPP, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_CPP);
+	
+	g_key_file_free(config);
+
+	// load global tags file for C autocompletion
+	if (! app->ignore_global_tags && ! global_c_tags_loaded)
+	{
+		tm_workspace_load_global_tags(GEANY_DATA_DIR "/global.tags");
+		global_c_tags_loaded = TRUE;
+	}
+}
+
+
+void styleset_cpp(ScintillaObject *sci)
+{
+
+	if (types[GEANY_FILETYPES_CPP] == NULL) styleset_cpp_init();
+
+	styleset_common(sci, 5);
+
+
+	/* Assign global keywords */
+	if ((app->tm_workspace) && (app->tm_workspace->global_tags))
+	{
+		guint j;
+		GPtrArray *g_typedefs = tm_tags_extract(app->tm_workspace->global_tags, tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
+		if ((g_typedefs) && (g_typedefs->len > 0))
+		{
+			GString *s = g_string_sized_new(g_typedefs->len * 10);
+			for (j = 0; j < g_typedefs->len; ++j)
+			{
+				if (!(TM_TAG(g_typedefs->pdata[j])->atts.entry.scope))
+				{
+					g_string_append(s, TM_TAG(g_typedefs->pdata[j])->name);
+					g_string_append_c(s, ' ');
+				}
+			}
+			SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
+			g_string_free(s, TRUE);
+		}
+		g_ptr_array_free(g_typedefs, TRUE);
+	}
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_CPP]->wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
+
+	//SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_CPP]->keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) types[GEANY_FILETYPES_CPP]->keywords[1]);
+
+	styleset_set_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_CPP, 0);
+	styleset_set_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_CPP, 1);
+	styleset_set_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_CPP, 2);
+	styleset_set_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_CPP, 3);
+	styleset_set_style(sci, SCE_C_NUMBER, GEANY_FILETYPES_CPP, 4);
+	styleset_set_style(sci, SCE_C_WORD, GEANY_FILETYPES_CPP, 5);
+	styleset_set_style(sci, SCE_C_WORD2, GEANY_FILETYPES_CPP, 6);
+	styleset_set_style(sci, SCE_C_STRING, GEANY_FILETYPES_CPP, 7);
+	styleset_set_style(sci, SCE_C_CHARACTER, GEANY_FILETYPES_CPP, 8);
+	styleset_set_style(sci, SCE_C_UUID, GEANY_FILETYPES_CPP, 9);
+	styleset_set_style(sci, SCE_C_PREPROCESSOR, GEANY_FILETYPES_CPP, 10);
+	styleset_set_style(sci, SCE_C_OPERATOR, GEANY_FILETYPES_CPP, 11);
+	styleset_set_style(sci, SCE_C_IDENTIFIER, GEANY_FILETYPES_CPP, 12);
+	styleset_set_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_CPP, 13);
+	styleset_set_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_CPP, 14);
+	styleset_set_style(sci, SCE_C_REGEX, GEANY_FILETYPES_CPP, 15);
+	styleset_set_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_CPP, 16);
+	styleset_set_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_CPP, 17);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, 0x0000ff);
+	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, 0xFFFFFF);
+	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
+
+	// is used for local structs and typedefs
+	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_CPP, 18);
+
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
@@ -355,12 +571,13 @@ static void styleset_pascal_init(void)
 	styleset_get_hex(config, "styling", "commentdoc", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_PASCAL]->styling[11]);
 
 	types[GEANY_FILETYPES_PASCAL]->keywords = g_new(gchar*, 2);
-	types[GEANY_FILETYPES_PASCAL]->keywords[0] = styleset_get_string(config, "keywords", "primary");
-	if (types[GEANY_FILETYPES_PASCAL]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_PASCAL]->keywords[0] = g_strdup("word integer char string byte real \
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_PASCAL, 0, "word integer char string byte real \
 									for to do until repeat program if uses then else case var begin end \
 									asm unit interface implementation procedure function object try class");
 	types[GEANY_FILETYPES_PASCAL]->keywords[1] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_PASCAL, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_PASCAL);
 
 	g_key_file_free(config);
 }
@@ -372,7 +589,7 @@ void styleset_pascal(ScintillaObject *sci)
 
 	styleset_common(sci, 5);
 
-	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
+	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_PASCAL]->wordchars);
 	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	SSM (sci, SCI_SETLEXER, SCLEX_PASCAL, 0);
@@ -416,6 +633,9 @@ static void styleset_makefile_init(void)
 
 	types[GEANY_FILETYPES_MAKE]->keywords = NULL;
 
+	styleset_get_wordchars(config, GEANY_FILETYPES_MAKE, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_MAKE);
+
 	g_key_file_free(config);
 }
 
@@ -427,7 +647,8 @@ void styleset_makefile(ScintillaObject *sci)
 	styleset_common(sci, 5);
 
 	SSM (sci, SCI_SETLEXER, SCLEX_MAKEFILE, 0);
-
+	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_MAKE]->wordchars);
+	
 	styleset_set_style(sci, SCE_MAKE_DEFAULT, GEANY_FILETYPES_MAKE, 0);
 	styleset_set_style(sci, SCE_MAKE_COMMENT, GEANY_FILETYPES_MAKE, 1);
 	styleset_set_style(sci, SCE_MAKE_PREPROCESSOR, GEANY_FILETYPES_MAKE, 2);
@@ -438,60 +659,81 @@ void styleset_makefile(ScintillaObject *sci)
 }
 
 
-static void styleset_tex_init(void)
+static void styleset_latex_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 
-	style_set_load_file(config, GEANY_DATA_DIR "/filetypes.tex", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	style_set_load_file(config, GEANY_DATA_DIR "/filetypes.latex", G_KEY_FILE_KEEP_COMMENTS, NULL);
 
-	types[GEANY_FILETYPES_TEX] = g_new(style_set, 1);
-	styleset_get_hex(config, "styling", "default", "0xFF0000", "0xffffff", "false", types[GEANY_FILETYPES_TEX]->styling[0]);
-	styleset_get_hex(config, "styling", "command", "0x0000ff", "0xffffff", "true", types[GEANY_FILETYPES_TEX]->styling[1]);
-	styleset_get_hex(config, "styling", "tag", "0x7F7F00", "0xffffff", "true", types[GEANY_FILETYPES_TEX]->styling[2]);
-	styleset_get_hex(config, "styling", "math", "0x007F00", "0xffffff", "false", types[GEANY_FILETYPES_TEX]->styling[3]);
-	styleset_get_hex(config, "styling", "comment", "0x007F00", "0xffffff", "false", types[GEANY_FILETYPES_TEX]->styling[4]);
+	types[GEANY_FILETYPES_LATEX] = g_new(style_set, 1);
+	styleset_get_hex(config, "styling", "default", "0xFF0000", "0xffffff", "false", types[GEANY_FILETYPES_LATEX]->styling[0]);
+	styleset_get_hex(config, "styling", "command", "0x0000ff", "0xffffff", "true", types[GEANY_FILETYPES_LATEX]->styling[1]);
+	styleset_get_hex(config, "styling", "tag", "0x7F7F00", "0xffffff", "true", types[GEANY_FILETYPES_LATEX]->styling[2]);
+	styleset_get_hex(config, "styling", "math", "0x007F00", "0xffffff", "false", types[GEANY_FILETYPES_LATEX]->styling[3]);
+	styleset_get_hex(config, "styling", "comment", "0x007F00", "0xffffff", "false", types[GEANY_FILETYPES_LATEX]->styling[4]);
 
-	types[GEANY_FILETYPES_TEX]->keywords = g_new(gchar*, 2);
-	types[GEANY_FILETYPES_TEX]->keywords[0] = styleset_get_string(config, "keywords", "primary");
-	if (types[GEANY_FILETYPES_TEX]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_TEX]->keywords[0] = g_strdup("section subsection begin item");
-	types[GEANY_FILETYPES_TEX]->keywords[1] = NULL;
+	types[GEANY_FILETYPES_LATEX]->keywords = g_new(gchar*, 2);
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_LATEX, 0, "section subsection begin item");
+	types[GEANY_FILETYPES_LATEX]->keywords[1] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_LATEX, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_LATEX);
 
 	g_key_file_free(config);
 }
 
 
-void styleset_tex(ScintillaObject *sci)
+void styleset_latex(ScintillaObject *sci)
 {
-	if (types[GEANY_FILETYPES_TEX] == NULL) styleset_tex_init();
+	if (types[GEANY_FILETYPES_LATEX] == NULL) styleset_latex_init();
 
 	styleset_common(sci, 5);
 
 	SSM (sci, SCI_SETLEXER, SCLEX_LATEX, 0);
 
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_TEX]->keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_LATEX]->keywords[0]);
+	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_LATEX]->wordchars);
 
-	styleset_set_style(sci, SCE_L_DEFAULT, GEANY_FILETYPES_TEX, 0);
-	styleset_set_style(sci, SCE_L_COMMAND, GEANY_FILETYPES_TEX, 1);
-	styleset_set_style(sci, SCE_L_TAG, GEANY_FILETYPES_TEX, 2);
-	styleset_set_style(sci, SCE_L_MATH, GEANY_FILETYPES_TEX, 3);
-	styleset_set_style(sci, SCE_L_COMMENT, GEANY_FILETYPES_TEX, 4);
+	styleset_set_style(sci, SCE_L_DEFAULT, GEANY_FILETYPES_LATEX, 0);
+	styleset_set_style(sci, SCE_L_COMMAND, GEANY_FILETYPES_LATEX, 1);
+	styleset_set_style(sci, SCE_L_TAG, GEANY_FILETYPES_LATEX, 2);
+	styleset_set_style(sci, SCE_L_MATH, GEANY_FILETYPES_LATEX, 3);
+	styleset_set_style(sci, SCE_L_COMMENT, GEANY_FILETYPES_LATEX, 4);
+}
+
+
+static void styleset_php_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+
+	style_set_load_file(config, GEANY_DATA_DIR "/filetypes.php", G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	types[GEANY_FILETYPES_PHP] = g_new(style_set, 1);
+	types[GEANY_FILETYPES_PHP]->keywords = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_PHP, GEANY_WORDCHARS"$");
+	filetypes_get_config(config, GEANY_FILETYPES_PHP);
+
+	g_key_file_free(config);
 }
 
 
 void styleset_php(ScintillaObject *sci)
 {
+	if (types[GEANY_FILETYPES_PHP] == NULL) styleset_php_init();
+
 	styleset_common(sci, 7);
 
 	SSM (sci, SCI_SETPROPERTY, (sptr_t) "phpscript.mode", (sptr_t) "1");
 	SSM (sci, SCI_SETLEXER, SCLEX_HTML, 0);
 
 	// DWELL notification for URL highlighting
-	SSM(sci, SCI_SETMOUSEDWELLTIME, 500, 0);
+	//SSM(sci, SCI_SETMOUSEDWELLTIME, 500, 0);
 
 	// use the same colouring for HTML; XML and so on
 	styleset_markup(sci);
 
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_PHP]->wordchars);
 }
 
 
@@ -499,7 +741,7 @@ static void styleset_markup_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 
-	style_set_load_file(config, GEANY_DATA_DIR "/filetypes.markup", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	style_set_load_file(config, GEANY_DATA_DIR "/filetypes.xml", G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_XML] = g_new(style_set, 1);
 	styleset_get_hex(config, "styling", "html_default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_XML]->styling[0]);
@@ -562,25 +804,16 @@ static void styleset_markup_init(void)
 	styleset_get_hex(config, "styling", "jscript_stringeol", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_XML]->styling[54]);
 
 	types[GEANY_FILETYPES_XML]->keywords = g_new(gchar*, 7);
-	types[GEANY_FILETYPES_XML]->keywords[0] = styleset_get_string(config, "keywords", "html");
-	if (types[GEANY_FILETYPES_XML]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_XML]->keywords[0] = g_strdup("a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml");
-	types[GEANY_FILETYPES_XML]->keywords[1] = styleset_get_string(config, "keywords", "javascript");
-	if (types[GEANY_FILETYPES_XML]->keywords[1] == NULL)
-			types[GEANY_FILETYPES_XML]->keywords[1] = g_strdup("break this for while null else var false void new delete typeof if in continue true function with return case super extends do const try debugger catch switch finally enum export default class throw import length concat join pop push reverse shift slice splice sort unshift Date Infinity NaN undefined escape eval isFinite isNaN Number parseFloat parseInt string unescape Math abs acos asin atan atan2 ceil cos exp floor log max min pow random round sin sqrt tan MAX_VALUE MIN_VALUE NEGATIVE_INFINITY POSITIVE_INFINITY toString valueOf String length anchor big bold charAt charCodeAt concat fixed fontcolor fontsize fromCharCode indexOf italics lastIndexOf link slice small split strike sub substr substring sup toLowerCase toUpperCase");
-	types[GEANY_FILETYPES_XML]->keywords[2] = styleset_get_string(config, "keywords", "vbscript");
-	if (types[GEANY_FILETYPES_XML]->keywords[2] == NULL)
-			types[GEANY_FILETYPES_XML]->keywords[2] = g_strdup("and as byref byval case call const continue dim do each else elseif end error exit false for function global goto if in loop me new next not nothing on optional or private public redim rem resume select set sub then to true type while with boolean byte currency date double integer long object single string type variant");
-	types[GEANY_FILETYPES_XML]->keywords[3] = styleset_get_string(config, "keywords", "python");
-	if (types[GEANY_FILETYPES_XML]->keywords[3] == NULL)
-			types[GEANY_FILETYPES_XML]->keywords[3] = g_strdup("and assert break class continue complex def del elif else except exec finally for from global if import in inherit is int lambda not or pass print raise return tuple try unicode while yield long float str list");
-	types[GEANY_FILETYPES_XML]->keywords[4] = styleset_get_string(config, "keywords", "php");
-	if (types[GEANY_FILETYPES_XML]->keywords[4] == NULL)
-			types[GEANY_FILETYPES_XML]->keywords[4] = g_strdup("and or xor FILE exception LINE array as break case class const continue declare default die do echo else elseif empty  enddeclare endfor endforeach endif endswitch endwhile eval exit extends for foreach function global if include include_once  isset list new print require require_once return static switch unset use var while FUNCTION CLASS METHOD final php_user_filter interface implements extends public private protected abstract clone try catch throw cfunction old_function this");
-	types[GEANY_FILETYPES_XML]->keywords[5] = styleset_get_string(config, "keywords", "sgml");
-	if (types[GEANY_FILETYPES_XML]->keywords[5] == NULL)
-			types[GEANY_FILETYPES_XML]->keywords[5] = g_strdup("ELEMENT DOCTYPE ATTLIST ENTITY NOTATION");
+	styleset_get_keywords(config, "keywords", "html", GEANY_FILETYPES_XML, 0, "a abbr acronym address applet area b base basefont bdo big blockquote body br button caption center cite code col colgroup dd del dfn dir div dl dt em embed fieldset font form frame frameset h1 h2 h3 h4 h5 h6 head hr html i iframe img input ins isindex kbd label legend li link map menu meta noframes noscript object ol optgroup option p param pre q quality s samp script select small span strike strong style sub sup table tbody td textarea tfoot th thead title tr tt u ul var xmlns leftmargin topmargin abbr accept-charset accept accesskey action align alink alt archive axis background bgcolor border cellpadding cellspacing char charoff charset checked cite class classid clear codebase codetype color cols colspan compact content coords data datafld dataformatas datapagesize datasrc datetime declare defer dir disabled enctype face for frame frameborder selected headers height href hreflang hspace http-equiv id ismap label lang language link longdesc marginwidth marginheight maxlength media framespacing method multiple name nohref noresize noshade nowrap object onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseover onmouseout onmouseup onreset onselect onsubmit onunload profile prompt pluginspage readonly rel rev rows rowspan rules scheme scope scrolling shape size span src standby start style summary tabindex target text title type usemap valign value valuetype version vlink vspace width text password checkbox radio submit reset file hidden image public doctype xml");
+	styleset_get_keywords(config, "keywords", "javascript", GEANY_FILETYPES_XML, 1, "break this for while null else var false void new delete typeof if in continue true function with return case super extends do const try debugger catch switch finally enum export default class throw import length concat join pop push reverse shift slice splice sort unshift Date Infinity NaN undefined escape eval isFinite isNaN Number parseFloat parseInt string unescape Math abs acos asin atan atan2 ceil cos exp floor log max min pow random round sin sqrt tan MAX_VALUE MIN_VALUE NEGATIVE_INFINITY POSITIVE_INFINITY toString valueOf String length anchor big bold charAt charCodeAt concat fixed fontcolor fontsize fromCharCode indexOf italics lastIndexOf link slice small split strike sub substr substring sup toLowerCase toUpperCase");
+	styleset_get_keywords(config, "keywords", "vbscript", GEANY_FILETYPES_XML, 2, "and as byref byval case call const continue dim do each else elseif end error exit false for function global goto if in loop me new next not nothing on optional or private public redim rem resume select set sub then to true type while with boolean byte currency date double integer long object single string type variant");
+	styleset_get_keywords(config, "keywords", "python", GEANY_FILETYPES_XML, 3, "and assert break class continue complex def del elif else except exec finally for from global if import in inherit is int lambda not or pass print raise return tuple try unicode while yield long float str list");
+	styleset_get_keywords(config, "keywords", "php", GEANY_FILETYPES_XML, 4, "and or xor FILE exception LINE array as break case class const continue declare default die do echo else elseif empty  enddeclare endfor endforeach endif endswitch endwhile eval exit extends for foreach function global if include include_once  isset list new print require require_once return static switch unset use var while FUNCTION CLASS METHOD final php_user_filter interface implements extends public private protected abstract clone try catch throw cfunction old_function this");
+	styleset_get_keywords(config, "keywords", "sgml", GEANY_FILETYPES_XML, 5, "ELEMENT DOCTYPE ATTLIST ENTITY NOTATION");
 	types[GEANY_FILETYPES_XML]->keywords[6] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_XML, GEANY_WORDCHARS"$");
+	filetypes_get_config(config, GEANY_FILETYPES_XML);
 
 	g_key_file_free(config);
 }
@@ -605,7 +838,6 @@ void styleset_markup(ScintillaObject *sci)
 	SSM(sci, SCI_SETHOTSPOTACTIVEUNDERLINE, 1, 0);
 	SSM(sci, SCI_SETHOTSPOTSINGLELINE, 1, 0);
 	SSM(sci, SCI_STYLESETHOTSPOT, SCE_H_QUESTION, 1);
-
 
 	styleset_set_style(sci, SCE_H_DEFAULT, GEANY_FILETYPES_XML, 0);
 	styleset_set_style(sci, SCE_H_TAG, GEANY_FILETYPES_XML, 1);
@@ -833,24 +1065,20 @@ static void styleset_java_init(void)
 	styleset_get_hex(config, "styling", "globalclass", "0x109040", "0xffffff", "true", types[GEANY_FILETYPES_JAVA]->styling[18]);
 
 	types[GEANY_FILETYPES_JAVA]->keywords = g_new(gchar*, 5);
-	types[GEANY_FILETYPES_JAVA]->keywords[0] = styleset_get_string(config, "keywords", "primary");
-	if (types[GEANY_FILETYPES_JAVA]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_JAVA]->keywords[0] = g_strdup("	abstract assert break case catch class \
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_JAVA, 0, "\
+										abstract assert break case catch class \
 										const continue default do else extends final finally for future \
 										generic goto if implements import inner instanceof interface \
 										native new outer package private protected public rest \
 										return static super switch synchronized this throw throws \
 										transient try var volatile while");
-	types[GEANY_FILETYPES_JAVA]->keywords[1] = styleset_get_string(config, "keywords", "secondary");
-	if (types[GEANY_FILETYPES_JAVA]->keywords[1] == NULL)
-			types[GEANY_FILETYPES_JAVA]->keywords[1] = g_strdup("boolean byte char double float int long null short void NULL");
-	types[GEANY_FILETYPES_JAVA]->keywords[2] = styleset_get_string(config, "keywords", "doccomment");
-	if (types[GEANY_FILETYPES_JAVA]->keywords[2] == NULL)
-			types[GEANY_FILETYPES_JAVA]->keywords[2] = g_strdup("return param author");
-	types[GEANY_FILETYPES_JAVA]->keywords[3] = styleset_get_string(config, "keywords", "typedefs");
-	if (types[GEANY_FILETYPES_JAVA]->keywords[3] == NULL)
-			types[GEANY_FILETYPES_JAVA]->keywords[3] = g_strdup("");
+	styleset_get_keywords(config, "keywords", "secondary", GEANY_FILETYPES_JAVA, 1, "boolean byte char double float int long null short void NULL");
+	styleset_get_keywords(config, "keywords", "doccomment", GEANY_FILETYPES_JAVA, 2, "return param author");
+	styleset_get_keywords(config, "keywords", "typedefs", GEANY_FILETYPES_JAVA, 3, "");
 	types[GEANY_FILETYPES_JAVA]->keywords[4] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_JAVA, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_JAVA);
 
 	g_key_file_free(config);
 }
@@ -863,7 +1091,7 @@ void styleset_java(ScintillaObject *sci)
 	styleset_common(sci, 5);
 	SSM (sci, SCI_SETLEXER, SCLEX_CPP, 0);
 
-	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
+	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_JAVA]->wordchars);
 	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	SSM (sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
@@ -928,10 +1156,8 @@ static void styleset_perl_init(void)
 	styleset_get_hex(config, "styling", "backticks", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_PERL]->styling[16]);
 
 	types[GEANY_FILETYPES_PERL]->keywords = g_new(gchar*, 2);
-	types[GEANY_FILETYPES_PERL]->keywords[0] = styleset_get_string(config, "keywords", "primary");
-	if (types[GEANY_FILETYPES_PERL]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_PERL]->keywords[0] = g_strdup(
-									"NULL __FILE__ __LINE__ __PACKAGE__ __DATA__ __END__ AUTOLOAD \
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_PERL, 0, "\
+									NULL __FILE__ __LINE__ __PACKAGE__ __DATA__ __END__ AUTOLOAD \
 									BEGIN CORE DESTROY END EQ GE GT INIT LE LT NE CHECK abs accept \
 									alarm and atan2 bind binmode bless caller chdir chmod chomp chop \
 									chown chr chroot close closedir cmp connect continue cos crypt \
@@ -960,6 +1186,9 @@ static void styleset_perl_init(void)
 									x xor y");
 	types[GEANY_FILETYPES_PERL]->keywords[1] = NULL;
 
+	styleset_get_wordchars(config, GEANY_FILETYPES_PERL, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_PERL);
+
 	g_key_file_free(config);
 }
 
@@ -973,8 +1202,8 @@ void styleset_perl(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
 
-	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
-	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_PERL]->wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_PERL]->keywords[0]);
 
@@ -1023,10 +1252,11 @@ static void styleset_python_init(void)
 	styleset_get_hex(config, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_PYTHON]->styling[13]);
 
 	types[GEANY_FILETYPES_PYTHON]->keywords = g_new(gchar*, 2);
-	types[GEANY_FILETYPES_PYTHON]->keywords[0] = styleset_get_string(config, "keywords", "primary");
-	if (types[GEANY_FILETYPES_PYTHON]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_PYTHON]->keywords[0] = g_strdup("and assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while yield");
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_PYTHON, 0, "and assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while yield");
 	types[GEANY_FILETYPES_PYTHON]->keywords[1] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_PYTHON, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_PYTHON);
 
 	g_key_file_free(config);
 }
@@ -1078,10 +1308,11 @@ static void styleset_sh_init(void)
 	styleset_get_hex(config, "styling", "scalar", "0x905010", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[10]);
 
 	types[GEANY_FILETYPES_SH]->keywords = g_new(gchar*, 2);
-	types[GEANY_FILETYPES_SH]->keywords[0] = styleset_get_string(config, "keywords", "primary");
-	if (types[GEANY_FILETYPES_SH]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_SH]->keywords[0] = g_strdup("break case continue do done else esac eval exit export fi for goto if in integer return set shift then while");
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_SH, 0, "break case continue do done else esac eval exit export fi for goto if in integer return set shift then while");
 	types[GEANY_FILETYPES_SH]->keywords[1] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_SH, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_SH);
 
 	g_key_file_free(config);
 }
@@ -1094,7 +1325,7 @@ void styleset_sh(ScintillaObject *sci)
 	styleset_common(sci, 5);
 	SSM (sci, SCI_SETLEXER, SCLEX_BASH, 0);
 
-	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
+	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_SH]->wordchars);
 	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	SSM (sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
@@ -1125,6 +1356,8 @@ void styleset_xml(ScintillaObject *sci)
 
 	// use the same colouring for HTML; XML and so on
 	styleset_markup(sci);
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_XML]->wordchars);
 }
 
 
@@ -1165,11 +1398,9 @@ static void styleset_docbook_init(void)
 	styleset_get_hex(config, "styling", "sgml_1st_param_comment", "0x906040", "0xffffff", "false", types[GEANY_FILETYPES_DOCBOOK]->styling[27]);
 	styleset_get_hex(config, "styling", "sgml_error", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_DOCBOOK]->styling[28]);
 
-	types[GEANY_FILETYPES_DOCBOOK]->keywords = g_new(gchar*, 2);
-	types[GEANY_FILETYPES_DOCBOOK]->keywords[0] = styleset_get_string(config, "keywords", "elements");
-	if (types[GEANY_FILETYPES_DOCBOOK]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_DOCBOOK]->keywords[0] = g_strdup("\
-			abbrev abstract accel ackno acronym action address affiliation alt anchor \
+	types[GEANY_FILETYPES_DOCBOOK]->keywords = g_new(gchar*, 3);
+	styleset_get_keywords(config, "keywords", "elements", GEANY_FILETYPES_DOCBOOK, 0, 
+		   "abbrev abstract accel ackno acronym action address affiliation alt anchor \
 			answer appendix appendixinfo application area areaset areaspec arg article \
 			articleinfo artpagenums attribution audiodata audioobject author authorblurb \
 			authorgroup authorinitials beginpage bibliocoverage bibliodiv biblioentry \
@@ -1224,10 +1455,11 @@ static void styleset_docbook_init(void)
 			videoobject void volumenum warning wordasword xref year cols colnum align spanname\
 			arch condition conformance id lang os remap role revision revisionflag security \
 			userlevel url vendor xreflabel status label endterm linkend space width");
-	types[GEANY_FILETYPES_DOCBOOK]->keywords[1] = styleset_get_string(config, "keywords", "dtd");
-	if (types[GEANY_FILETYPES_DOCBOOK]->keywords[1] == NULL)
-			types[GEANY_FILETYPES_DOCBOOK]->keywords[1] = g_strdup("ELEMENT DOCTYPE ATTLIST ENTITY NOTATION");
+	styleset_get_keywords(config, "keywords", "dtd", GEANY_FILETYPES_DOCBOOK, 1, "ELEMENT DOCTYPE ATTLIST ENTITY NOTATION");
 	types[GEANY_FILETYPES_DOCBOOK]->keywords[2] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_DOCBOOK, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_DOCBOOK);
 
 	g_key_file_free(config);
 }
@@ -1243,8 +1475,8 @@ void styleset_docbook(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_DOCBOOK]->keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) types[GEANY_FILETYPES_DOCBOOK]->keywords[1]);
 
-	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
-	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_DOCBOOK]->wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	// Unknown tags and attributes are highlighed in red.
 	// If a tag is actually OK, it should be added in lower case to the htmlKeyWords string.
@@ -1286,6 +1518,8 @@ void styleset_none(ScintillaObject *sci)
 {
 	styleset_common(sci, 5);
 	SSM (sci, SCI_SETLEXER, SCLEX_NULL, 0);
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_ALL]->wordchars);
 }
 
 
@@ -1311,9 +1545,8 @@ static void styleset_css_init(void)
 	styleset_get_hex(config, "styling", "value", "0x7F7F00", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[12]);
 
 	types[GEANY_FILETYPES_CSS]->keywords = g_new(gchar*, 4);
-	types[GEANY_FILETYPES_CSS]->keywords[0] = styleset_get_string(config, "keywords", "primary");
-	if (types[GEANY_FILETYPES_CSS]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_CSS]->keywords[0] = g_strdup("color background-color background-image background-repeat background-attachment background-position background \
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_CSS, 0,
+								"color background-color background-image background-repeat background-attachment background-position background \
 								font-family font-style font-variant font-weight font-size font \
 								word-spacing letter-spacing text-decoration vertical-align text-transform text-align text-indent line-height \
 								margin-top margin-right margin-bottom margin-left margin \
@@ -1322,9 +1555,8 @@ static void styleset_css_init(void)
 								border-top border-right border-bottom border-left border \
 								border-color border-style width height float clear \
 								display white-space list-style-type list-style-image list-style-position list-style");
-	types[GEANY_FILETYPES_CSS]->keywords[1] = styleset_get_string(config, "keywords", "secondary");
-	if (types[GEANY_FILETYPES_CSS]->keywords[1] == NULL)
-			types[GEANY_FILETYPES_CSS]->keywords[1] = g_strdup("border-top-color border-right-color border-bottom-color border-left-color border-color \
+	styleset_get_keywords(config, "keywords", "secondary", GEANY_FILETYPES_CSS, 1,
+								"border-top-color border-right-color border-bottom-color border-left-color border-color \
 								border-top-style border-right-style border-bottom-style border-left-style border-style \
 								top right bottom left position z-index direction unicode-bidi \
 								min-width max-width min-height max-height overflow clip visibility content quotes \
@@ -1338,10 +1570,11 @@ static void styleset_css_init(void)
 								volume speak pause-before pause-after pause cue-before cue-after cue \
 								play-during azimuth elevation speech-rate voice-family pitch pitch-range stress richness \
 								speak-punctuation speak-numeral");
-	types[GEANY_FILETYPES_CSS]->keywords[2] = styleset_get_string(config, "keywords", "pseudoclasses");
-	if (types[GEANY_FILETYPES_CSS]->keywords[2] == NULL)
-			types[GEANY_FILETYPES_CSS]->keywords[2] = g_strdup("first-letter first-line link active visited lang first-child focus hover before after left right first");
+	styleset_get_keywords(config, "keywords", "pseudoclasses", GEANY_FILETYPES_CSS, 2, "first-letter first-line link active visited lang first-child focus hover before after left right first");
 	types[GEANY_FILETYPES_CSS]->keywords[3] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_CSS, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_CSS);
 
 	g_key_file_free(config);
 }
@@ -1353,7 +1586,7 @@ void styleset_css(ScintillaObject *sci)
 
 	styleset_common(sci, 5);
 
-	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_CSS]->wordchars);
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_CSS, 0);
@@ -1390,6 +1623,9 @@ static void styleset_conf_init(void)
 
 	types[GEANY_FILETYPES_CONF]->keywords = NULL;
 
+	styleset_get_wordchars(config, GEANY_FILETYPES_CONF, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_CONF);
+
 	g_key_file_free(config);
 }
 
@@ -1401,7 +1637,7 @@ void styleset_conf(ScintillaObject *sci)
 	styleset_common(sci, 5);
 	SSM (sci, SCI_SETLEXER, SCLEX_PROPERTIES, 0);
 
-	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
+	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_CONF]->wordchars);
 	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	SSM (sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
@@ -1439,16 +1675,13 @@ static void styleset_asm_init(void)
 	styleset_get_hex(config, "styling", "extinstruction", "0x7F7F00", "0xffffff", "false", types[GEANY_FILETYPES_ASM]->styling[14]);
 
 	types[GEANY_FILETYPES_ASM]->keywords = g_new(gchar*, 4);
-	types[GEANY_FILETYPES_ASM]->keywords[0] = styleset_get_string(config, "keywords", "instructions");
-	if (types[GEANY_FILETYPES_ASM]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_ASM]->keywords[0] = g_strdup("HLT LAD SPI ADD SUB MUL DIV JMP JEZ JGZ JLZ SWAP JSR RET PUSHAC POPAC ADDST SUBST MULST DIVST LSA LDS PUSH POP CLI LDI INK LIA DEK LDX");
-	types[GEANY_FILETYPES_ASM]->keywords[1] = styleset_get_string(config, "keywords", "registers");
-	if (types[GEANY_FILETYPES_ASM]->keywords[1] == NULL)
-			types[GEANY_FILETYPES_ASM]->keywords[1] = g_strdup("");
-	types[GEANY_FILETYPES_ASM]->keywords[2] = styleset_get_string(config, "keywords", "directives");
-	if (types[GEANY_FILETYPES_ASM]->keywords[2] == NULL)
-			types[GEANY_FILETYPES_ASM]->keywords[2] = g_strdup("ORG LIST NOLIST PAGE EQUIVALENT WORD TEXT");
+	styleset_get_keywords(config, "keywords", "instructions", GEANY_FILETYPES_ASM, 0, "HLT LAD SPI ADD SUB MUL DIV JMP JEZ JGZ JLZ SWAP JSR RET PUSHAC POPAC ADDST SUBST MULST DIVST LSA LDS PUSH POP CLI LDI INK LIA DEK LDX");
+	styleset_get_keywords(config, "keywords", "registers", GEANY_FILETYPES_ASM, 1, "");
+	styleset_get_keywords(config, "keywords", "directives", GEANY_FILETYPES_ASM, 2, "ORG LIST NOLIST PAGE EQUIVALENT WORD TEXT");
 	types[GEANY_FILETYPES_ASM]->keywords[3] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_ASM, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_ASM);
 
 	g_key_file_free(config);
 }
@@ -1460,7 +1693,7 @@ void styleset_asm(ScintillaObject *sci)
 
 	styleset_common(sci, 5);
 
-	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_ASM]->wordchars);
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_ASM, 0);
@@ -1513,9 +1746,8 @@ static void styleset_sql_init(void)
 	styleset_get_hex(config, "styling", "quotedidentifier", "0x991111", "0xffffff", "false", types[GEANY_FILETYPES_SQL]->styling[14]);
 
 	types[GEANY_FILETYPES_SQL]->keywords = g_new(gchar*, 2);
-	types[GEANY_FILETYPES_SQL]->keywords[0] = styleset_get_string(config, "keywords", "keywords");
-	if (types[GEANY_FILETYPES_SQL]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_SQL]->keywords[0] = g_strdup("absolute action add admin after aggregate \
+	styleset_get_keywords(config, "keywords", "keywords", GEANY_FILETYPES_SQL, 0,
+						"absolute action add admin after aggregate \
 						alias all allocate alter and any are array as asc \
 						assertion at authorization before begin binary bit blob boolean both breadth by \
 						call cascade cascaded case cast catalog char character check class clob close collate \
@@ -1544,6 +1776,9 @@ static void styleset_sql_init(void)
 						value values varchar variable varying view when whenever where with without work write");
 	types[GEANY_FILETYPES_SQL]->keywords[1] = NULL;
 
+	styleset_get_wordchars(config, GEANY_FILETYPES_SQL, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_SQL);
+
 	g_key_file_free(config);
 }
 
@@ -1554,7 +1789,7 @@ void styleset_sql(ScintillaObject *sci)
 
 	styleset_common(sci, 5);
 
-	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_SQL]->wordchars);
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_SQL, 0);
@@ -1603,16 +1838,16 @@ static void styleset_caml_init(void)
 	styleset_get_hex(config, "styling", "linenum", "0x000000", "0xC0C0C0", "false", types[GEANY_FILETYPES_CAML]->styling[13]);
 
 	types[GEANY_FILETYPES_CAML]->keywords = g_new(gchar*, 3);
-	types[GEANY_FILETYPES_CAML]->keywords[0] = styleset_get_string(config, "keywords", "keywords");
-	if (types[GEANY_FILETYPES_CAML]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_CAML]->keywords[0] = g_strdup("and as assert asr begin class constraint do \
+	styleset_get_keywords(config, "keywords", "keywords", GEANY_FILETYPES_CAML, 0,
+			"and as assert asr begin class constraint do \
 			done downto else end exception external false for fun function functor if in include inherit \
 			initializer land lazy let lor lsl lsr lxor match method mod module mutable new object of open \
 			or private rec sig struct then to true try type val virtual when while with");
-	types[GEANY_FILETYPES_CAML]->keywords[1] = styleset_get_string(config, "keywords", "keywords_optional");
-	if (types[GEANY_FILETYPES_CAML]->keywords[1] == NULL)
-			types[GEANY_FILETYPES_CAML]->keywords[1] = g_strdup("option Some None ignore ref");
+	styleset_get_keywords(config, "keywords", "keywords_optional", GEANY_FILETYPES_CAML, 1, "option Some None ignore ref");
 	types[GEANY_FILETYPES_CAML]->keywords[2] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_CAML, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_CAML);
 
 	g_key_file_free(config);
 }
@@ -1624,7 +1859,7 @@ void styleset_caml(ScintillaObject *sci)
 
 	styleset_common(sci, 5);
 
-	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_CAML]->wordchars);
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_CAML, 0);
@@ -1669,14 +1904,15 @@ static void styleset_oms_init(void)
 	styleset_get_hex(config, "styling", "scalar", "0xff0000", "0xffffff", "false", types[GEANY_FILETYPES_OMS]->styling[10]);
 
 	types[GEANY_FILETYPES_OMS]->keywords = g_new(gchar*, 2);
-	types[GEANY_FILETYPES_OMS]->keywords[0] = styleset_get_string(config, "keywords", "primary");
-	if (types[GEANY_FILETYPES_OMS]->keywords[0] == NULL)
-			types[GEANY_FILETYPES_OMS]->keywords[0] = g_strdup("clear seq fillcols fillrowsgaspect gaddview \
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_OMS, 0, "clear seq fillcols fillrowsgaspect gaddview \
 			gtitle gxaxis gyaxis max contour gcolor gplot gaddview gxaxis gyaxis gcolor fill coldim gplot \
 			gtitle clear arcov dpss fspec cos gxaxis gyaxis gtitle gplot gupdate rowdim fill print for to begin \
 			end write cocreate coinvoke codispsave cocreate codispset copropput colsum sqrt adddialog \
 			addcontrol addcontrol delwin fillrows function gaspect conjdir");
 	types[GEANY_FILETYPES_OMS]->keywords[1] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_OMS, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_OMS);
 
 	g_key_file_free(config);
 }
@@ -1689,7 +1925,7 @@ void styleset_oms(ScintillaObject *sci)
 	styleset_common(sci, 5);
 	SSM (sci, SCI_SETLEXER, SCLEX_OMS, 0);
 
-	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) GEANY_WORDCHARS);
+	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_OMS]->wordchars);
 	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
 
 	SSM (sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);

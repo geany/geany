@@ -27,38 +27,61 @@
 
 enum
 {
-	GEANY_FILETYPES_C = 0,
-	GEANY_FILETYPES_CPP,
-	GEANY_FILETYPES_JAVA,
-	GEANY_FILETYPES_PERL,
-	GEANY_FILETYPES_PHP,
-	GEANY_FILETYPES_XML,
-	GEANY_FILETYPES_DOCBOOK,
-	GEANY_FILETYPES_PYTHON,
-	GEANY_FILETYPES_TEX,
-	GEANY_FILETYPES_PASCAL,
-	GEANY_FILETYPES_SH,
-	GEANY_FILETYPES_MAKE,
-	GEANY_FILETYPES_CSS,
-	GEANY_FILETYPES_CONF,
-	GEANY_FILETYPES_ASM,
-	GEANY_FILETYPES_SQL,
-	GEANY_FILETYPES_CAML,
-	GEANY_FILETYPES_OMS,
-	GEANY_FILETYPES_ALL,
-	GEANY_MAX_FILE_TYPES
+	GEANY_FILETYPES_C = 0,		// 0
+	GEANY_FILETYPES_CPP,		// 1
+	GEANY_FILETYPES_JAVA,		// 2
+	GEANY_FILETYPES_PERL,		// 3
+	GEANY_FILETYPES_PHP,		// 4
+	GEANY_FILETYPES_XML,		// 5
+	GEANY_FILETYPES_DOCBOOK,	// 6
+	GEANY_FILETYPES_PYTHON,		// 7
+	GEANY_FILETYPES_LATEX,		// 8
+	GEANY_FILETYPES_PASCAL,		// 9
+	GEANY_FILETYPES_SH,			// 10
+	GEANY_FILETYPES_MAKE,		// 11
+	GEANY_FILETYPES_CSS,		// 12
+	GEANY_FILETYPES_CONF,		// 13
+	GEANY_FILETYPES_ASM,		// 14
+	GEANY_FILETYPES_SQL,		// 15
+	GEANY_FILETYPES_CAML,		// 16
+	GEANY_FILETYPES_OMS,		// 17
+	GEANY_FILETYPES_ALL,		// 18
+	GEANY_MAX_FILE_TYPES		// 19
 };
 
+struct build_menu_items
+{
+	GtkWidget		*menu;
+	GtkWidget		*item_compile;
+	GtkWidget		*item_link;
+	GtkWidget		*item_exec;
+	gboolean		 can_compile;
+	gboolean		 can_link;
+	gboolean		 can_exec;
+};
+
+struct build_programs
+{
+	gchar *compiler;
+	gchar *linker;
+	gchar *run_cmd;
+	gchar *run_cmd2;
+};
 
 typedef struct filetype
 {
-	guint	 id;
-	gchar	*name;			// will be used as name for tagmanager
-	gboolean has_tags;		// indicates whether there is a tag parser for it or not
-	gchar	*title;			// will be shown in the file open dialog
-	gchar	*extension;
-	gchar	**pattern;
-	void	(*style_func_ptr) (ScintillaObject*);
+	guint	 		  id;
+	gchar	 		 *name;				// will be used as name for tagmanager
+	gboolean 		  has_tags;			// indicates whether there is a tag parser for it or not
+	gchar	 		 *title;			// will be shown in the file open dialog
+	gchar	 		 *extension;
+	gchar			**pattern;
+	gchar	 		 *comment_open;
+	gchar	 		 *comment_close;
+	gboolean  		  comment_use_indent;
+	struct build_programs *programs;
+	struct build_menu_items *menu_items;
+	void (*style_func_ptr) (ScintillaObject*);
 } filetype;
 
 filetype *filetypes[GEANY_MAX_FILE_TYPES];
@@ -72,15 +95,11 @@ void filetypes_init_types(void);
 /* simple filetype selection based on the filename extension */
 filetype *filetypes_get_from_filename(const gchar *filename);
 
-
-void filetypes_create_menu_item(GtkWidget *menu, gchar *label, filetype *ftype);
-
-void filetypes_create_newmenu_item(GtkWidget *menu, gchar *label, filetype *ftype);
-
 /* frees the array and all related pointers */
 void filetypes_free_types(void);
 
 gchar *filetypes_get_template(filetype *ft);
 
+void filetypes_get_config(GKeyFile *config, gint ft);
 
 #endif

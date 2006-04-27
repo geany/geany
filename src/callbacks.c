@@ -24,6 +24,7 @@
 #include "geany.h"
 
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <signal.h>
 #include <gdk/gdkkeysyms.h>
@@ -86,26 +87,6 @@ void signal_cb(gint sig)
 	{
 		on_exit_clicked(NULL, NULL);
 	}
-/*	else if (sig == SIGUSR1)
-	{
-#define BUFLEN 512
-		gint fd;
-		gchar *buffer = g_malloc0(BUFLEN);
-
-		geany_debug("got SIGUSR1 signal, try to read from named pipe");
-
-		if ((fd = open(fifo_name, O_RDONLY | O_NONBLOCK)) == -1)
-		{
-			geany_debug("error opening named pipe (%s)", strerror(errno));
-			return;
-		}
-		usleep(10000);
-		if (read(fd, buffer, BUFLEN) != -1) geany_debug("Inhalt: %s", buffer);
-
-		close(fd);
-		g_free(buffer);
-	}
-*/
 }
 
 
@@ -142,17 +123,9 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	g_free(app->pref_template_mail);
 	g_free(app->pref_template_initial);
 	g_free(app->pref_template_version);
-	g_free(app->build_c_cmd);
-	g_free(app->build_cpp_cmd);
-	g_free(app->build_java_cmd);
-	g_free(app->build_javac_cmd);
-	g_free(app->build_fpc_cmd);
 	g_free(app->build_make_cmd);
 	g_free(app->build_term_cmd);
 	g_free(app->build_browser_cmd);
-	g_free(app->build_args_inc);
-	g_free(app->build_args_libs);
-	g_free(app->build_args_prog);
 	while (! g_queue_is_empty(app->recent_queue))
 	{
 		g_free(g_queue_pop_tail(app->recent_queue));
@@ -174,14 +147,8 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	scintilla_release_resources();
 	gtk_widget_destroy(app->window);
 	// kill explicitly since only one or none menu is shown at a time
-	if (dialogs_build_menus.menu_c.menu && GTK_IS_WIDGET(dialogs_build_menus.menu_c.menu))
-					gtk_widget_destroy(dialogs_build_menus.menu_c.menu);
-	if (dialogs_build_menus.menu_misc.menu && GTK_IS_WIDGET(dialogs_build_menus.menu_misc.menu))
-					gtk_widget_destroy(dialogs_build_menus.menu_misc.menu);
-	if (dialogs_build_menus.menu_tex.menu && GTK_IS_WIDGET(dialogs_build_menus.menu_tex.menu))
-					gtk_widget_destroy(dialogs_build_menus.menu_tex.menu);
 
-	/// destroy popup menus - FIXME TEST THIS CODE
+	// destroy popup menus
 	if (app->popup_menu && GTK_IS_WIDGET(app->popup_menu))
 					gtk_widget_destroy(app->popup_menu);
 	if (app->toolbar_menu && GTK_IS_WIDGET(app->toolbar_menu))
@@ -234,7 +201,8 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 		{
 			if (app->pref_main_confirm_exit)
 			{
-				if (dialogs_show_confirm_exit() && on_close_all1_activate(NULL, NULL)) destroyapp(NULL, gdata);
+				if (dialogs_show_question(_("Do you really want to quit?")) &&
+					on_close_all1_activate(NULL, NULL)) destroyapp(NULL, gdata);
 				else app->quitting = FALSE;
 			}
 			else
@@ -248,7 +216,7 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 	{
 		if (app->pref_main_confirm_exit)
 		{
-			if (dialogs_show_confirm_exit()) destroyapp(NULL, gdata);
+			if (dialogs_show_question(_("Do you really want to quit?"))) destroyapp(NULL, gdata);
 			else app->quitting = FALSE;
 		}
 		else
@@ -443,49 +411,7 @@ void
 on_preferences1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	if (app->prefs_dialog)
-	{
-		prefs_init_dialog();
-		gtk_widget_show(app->prefs_dialog);
-	}
-	else
-	{
-		app->prefs_dialog = create_prefs_dialog();
-		g_signal_connect((gpointer) app->prefs_dialog, "response", G_CALLBACK(on_prefs_button_clicked), NULL);
-		g_signal_connect((gpointer) app->prefs_dialog, "delete_event", G_CALLBACK(on_prefs_delete_event), NULL);
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "tagbar_font"),
-				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "msgwin_font"),
-				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(2));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "editor_font"),
-				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "font_term"),
-				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(4));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "long_line_color"),
-				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_fore"),
-				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(2));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_back"),
-				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(3));
-		// file chooser buttons in the tools tab
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_gcc"),
-				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_c"));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_gpp"),
-				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_cpp"));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_javac"),
-				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_javac"));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_java"),
-				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_java"));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_make"),
-				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_make"));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_term"),
-				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_term"));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_browser"),
-				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_browser"));
-
-		prefs_init_dialog();
-		gtk_widget_show(app->prefs_dialog);
-	}
+	dialogs_show_prefs_dialog();
 }
 
 
@@ -523,17 +449,15 @@ on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
 {
 	gint idx = document_get_cur_idx();
 	gchar *basename = g_path_get_basename(doc_list[idx].file_name);
-	gchar *buffer = g_strdup_printf(_
-				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
-				 basename);
 
-	if (dialogs_show_reload_warning(buffer))
+	if (dialogs_show_question(_
+				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
+				 basename))
 	{
 		document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
 	}
 
 	g_free(basename);
-	g_free(buffer);
 }
 
 
@@ -765,7 +689,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 
 		document_set_text_changed(idx);
 		utils_build_show_hide(idx);
-		utils_update_statusbar(idx);
+		utils_update_statusbar(idx, -1);
 		utils_set_window_title(idx);
 		utils_update_tag_list(idx, FALSE);
 		utils_check_disk_status(idx);
@@ -797,17 +721,18 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 {
 	gtk_widget_hide(app->open_filesel);
 
-	if (response == GTK_RESPONSE_ACCEPT)
+	if (response == GTK_RESPONSE_ACCEPT || response == GTK_RESPONSE_APPLY)
 	{
+		GSList *filelist;
 		GSList *flist;
 		gint ft_id = gtk_combo_box_get_active(GTK_COMBO_BOX(lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
 		filetype *ft = NULL;
-		gboolean ro = gtk_toggle_button_get_active(
-				GTK_TOGGLE_BUTTON(lookup_widget(GTK_WIDGET(dialog), "check_readonly")));
+		gboolean ro = (response == GTK_RESPONSE_APPLY);	// View clicked
 
 		if (ft_id >= 0 && ft_id < GEANY_FILETYPES_ALL) ft = filetypes[ft_id];
 
-		flist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(app->open_filesel));
+		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(app->open_filesel));
+		flist = filelist;
 		while(flist != NULL)
 		{
 			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) < GEANY_MAX_OPEN_FILES)
@@ -820,12 +745,13 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 			else
 			{
 				dialogs_show_file_open_error();
+				g_slist_foreach(flist, (GFunc)g_free, NULL);
 				break;
 			}
 			g_free(flist->data);
 			flist = flist->next;
 		}
-		g_slist_free(flist);
+		g_slist_free(filelist);
 	}
 }
 
@@ -838,14 +764,14 @@ on_file_open_entry_activate            (GtkEntry        *entry,
 	gchar *locale_filename = g_locale_from_utf8(gtk_entry_get_text(entry), -1, NULL, NULL, NULL);
 	if (locale_filename == NULL) locale_filename = g_strdup(gtk_entry_get_text(entry));
 
-	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	if (g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
+	{
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
+	}
+	else if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
 		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
 		on_file_open_dialog_response(GTK_DIALOG(app->open_filesel), GTK_RESPONSE_ACCEPT, NULL);
-	}
-	else if (g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
-	{
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
 	}
 
 	g_free(locale_filename);
@@ -884,14 +810,23 @@ on_file_save_dialog_response           (GtkDialog *dialog,
                                         gint response,
                                         gpointer user_data)
 {
-	gtk_widget_hide(app->save_filesel);
-
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		gint idx = document_get_cur_idx();
+		gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app->save_filesel));
+
+		// check if file exists and ask whether to overwrite or not
+		if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
+		{
+			if (dialogs_show_question(
+						_("The file '%s' already exists. Do you want to overwrite it?"),
+						new_filename) == FALSE) return;
+		}
+		gtk_widget_hide(app->save_filesel);
 
 		if (doc_list[idx].file_name) g_free(doc_list[idx].file_name);
-		doc_list[idx].file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app->save_filesel));
+		doc_list[idx].file_name = new_filename;
+		
 		utils_replace_filename(idx);
 		document_save_file(idx);
 
@@ -908,6 +843,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 			utils_update_recent_menu();
 		}
 	}
+	else gtk_widget_hide(app->save_filesel);
 }
 
 
@@ -1019,8 +955,7 @@ on_editor_key_press_event              (GtkWidget *widget,
                                         GdkEventKey *event,
                                         gpointer user_data)
 {
-	//gint idx = geany_document_get_cur_idx();
-	gboolean ret = FALSE;
+	gboolean ret = TRUE;
 	gint idx = GPOINTER_TO_INT(user_data);
 	gint pos = sci_get_current_position(doc_list[idx].sci);
 
@@ -1033,8 +968,9 @@ on_editor_key_press_event              (GtkWidget *widget,
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				sci_line_duplicate(doc_list[idx].sci);
-				ret = TRUE;
 			}
+			else
+				ret = FALSE;
 			break;
 		}
 		// show userlist with macros and variables on strg+space
@@ -1045,28 +981,26 @@ on_editor_key_press_event              (GtkWidget *widget,
 				sci_cb_start_auto_complete(
 						doc_list[GPOINTER_TO_INT(user_data)].sci,
 						sci_get_current_position(doc_list[idx].sci));
-				ret = TRUE;
 			}
 			else if (event->state & GDK_MOD1_MASK)
 			{	// ALT+Space
 				sci_cb_show_calltip(doc_list[idx].sci, -1);
-				ret = TRUE;
 			}
 			else if (event->state & GDK_SHIFT_MASK)
 			{	// Shift+Space, catch this explicitly to suppress sci_cb_auto_forif() ;-)
 				sci_add_text(doc_list[idx].sci, " ");
-				ret = TRUE;
 			}
+			else
+				ret = FALSE;
 			break;
 		}
 		// refreshs the tag lists
 		case 'R':
 		{
 			if (event->state & GDK_CONTROL_MASK)
-			{
 				document_update_tag_list(idx);
-				ret = TRUE;
-			}
+			else
+				ret = FALSE;
 			break;
 		}
 		// reloads the document
@@ -1075,79 +1009,73 @@ on_editor_key_press_event              (GtkWidget *widget,
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				gchar *basename = g_path_get_basename(doc_list[idx].file_name);
-				gchar *buffer = g_strdup_printf(_
-				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
-				 basename);
 
-				if (dialogs_show_reload_warning(buffer))
+				if (dialogs_show_question(_
+				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
+						basename))
 				{
 					document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
 				}
 
 				g_free(basename);
-				g_free(buffer);
-				ret = TRUE;
 			}
+			else
+				ret = FALSE;
 			break;
 		}
 		// comment the current line or selected lines
 		case 'd':
 		{
 			if (event->state & GDK_CONTROL_MASK)
-			{
 				sci_cb_do_comment(idx);
-				ret = TRUE;
-			}
+			else
+				ret = FALSE;
 			break;
 		}
 		// uri handling testing
 		case '^':
 		{
 			if (event->state & GDK_CONTROL_MASK)
-			{
 				sci_cb_handle_uri(doc_list[idx].sci, pos);
-				ret = TRUE;
-			}
+			else
+				ret = FALSE;
 			break;
 		}
 		// zoom in the text
 		case '+':
 		{
 			if (event->state & GDK_CONTROL_MASK)
-			{
 				sci_zoom_in(doc_list[idx].sci);
-				ret = TRUE;
-			}
+			else
+				ret = FALSE;
 			break;
 		}
 		// zoom out the text
 		case '-':
 		{
 			if (event->state & GDK_CONTROL_MASK)
-			{
 				sci_zoom_out(doc_list[idx].sci);
-				ret = TRUE;
-			}
+			else 
+				ret = FALSE;
+
 			break;
 		}
 		// open the preferences dialog
 		case 'p':
 		{
 			if (event->state & GDK_CONTROL_MASK)
-			{
 				on_preferences1_activate(NULL, NULL);
-				ret = TRUE;
-			}
+			else
+				ret = FALSE;
 			break;
 		}
 		// switch to the next open notebook tab to the right
 		case GDK_Right:
 		{
 			if (event->state & GDK_MOD1_MASK)
-			{
 				utils_switch_document(RIGHT);
-				ret = TRUE;
-			}
+			else
+				ret = FALSE;
 			break;
 		}
 		// switch to the next open notebook tab to the right
@@ -1156,8 +1084,9 @@ on_editor_key_press_event              (GtkWidget *widget,
 			if (event->state & GDK_MOD1_MASK)
 			{
 				utils_switch_document(LEFT);
-				ret = TRUE;
 			}
+			else
+				ret = FALSE;
 			break;
 		}
 		// show macro list
@@ -1166,22 +1095,23 @@ on_editor_key_press_event              (GtkWidget *widget,
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				sci_cb_show_macro_list(doc_list[idx].sci);
-				ret = TRUE;
 			}
+			else
+				ret = FALSE;
 			break;
 		}
-
 		case GDK_Insert:
 		{
 			if (! (event->state & GDK_SHIFT_MASK))
 				doc_list[idx].do_overwrite = (doc_list[idx].do_overwrite) ? FALSE : TRUE;
+			else
+				ret = FALSE;
 			break;
 		}
 		case GDK_F12:
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_SCRATCH);
 			gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
-			ret = TRUE;
 			break;
 		}
 #ifdef HAVE_VTE
@@ -1193,10 +1123,44 @@ on_editor_key_press_event              (GtkWidget *widget,
 				gtk_widget_grab_focus(vc->vte);
 				break;
 			}
-			ret = TRUE;
 			break;
 		}
 #endif
+		// build menu shortcuts temporarily defined here, until new keyboard shortcuts management is
+		// implemented, hope this fixes at least for the moment the shortcut problem
+		case GDK_F8:
+		{
+			if (doc_list[idx].file_type->menu_items->can_compile &&
+				doc_list[idx].file_name != NULL)
+			{
+				on_build_compile_activate(NULL, NULL);
+			}
+			break;
+		}
+		case GDK_F9:
+		{
+			if (event->state & GDK_SHIFT_MASK)
+			{
+				if (doc_list[idx].file_name != NULL) on_build_make_activate(NULL, NULL);
+			}
+			else if (doc_list[idx].file_type->menu_items->can_link &&
+					doc_list[idx].file_name != NULL)
+			{
+					on_build_build_activate(NULL, NULL);
+			}
+			break;
+		}
+		case GDK_F5:
+		{
+			if (doc_list[idx].file_type->menu_items->can_exec &&
+				doc_list[idx].file_name != NULL)
+			{
+				on_build_execute_activate(NULL, NULL);
+			}
+			break;
+		}
+		default: ret = FALSE;
+
 /* following code is unusable unless I get a signal for a line changed, don't want to do this with
  * updateUI(), additional problem: at line changes the column isn't kept
 		case GDK_End:
@@ -1259,10 +1223,12 @@ on_editor_button_press_event           (GtkWidget *widget,
 
 	if (event->button == 3)
 	{
-		/// TODO pos should possibly be the position of the mouse pointer instead of the current sci position
+		/// TODO pos should possibly be the position of the mouse pointer instead of the
+		/// current sci position
 		gint pos = sci_get_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci);
 
-		utils_find_current_word(doc_list[GPOINTER_TO_INT(user_data)].sci, pos, current_word);
+		utils_find_current_word(doc_list[GPOINTER_TO_INT(user_data)].sci, pos, 
+					current_word, sizeof current_word);
 
 		utils_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
 		utils_update_popup_copy_items(GPOINTER_TO_INT(user_data));
@@ -1498,7 +1464,7 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 		if (idx == -1 || ! doc_list[idx].is_valid) return;
 		doc_list[idx].readonly = ! doc_list[idx].readonly;
 		sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
-		utils_update_statusbar(idx);
+		utils_update_statusbar(idx, -1);
 	}
 }
 
@@ -1563,7 +1529,8 @@ void
 on_goto_tag_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint i, j, type;
+	gint type;
+	guint i, j;
 	const GPtrArray *tags;
 
 	if (utils_strcmp(_("Goto tag definition"), gtk_label_get_text(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))))))
@@ -1796,7 +1763,6 @@ on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
 		gtk_tree_model_get(model, &iter, 1, &string, -1);
 		if (string || strlen (string) > 0)
 		{
-			//gtk_clipboard_set_text(gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)), strrchr(string, ':') + 2, -1);
 			gtk_clipboard_set_text(gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)), string, -1);
 		}
 		g_free(string);
@@ -1809,23 +1775,7 @@ void
 on_compile_button_clicked              (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-
-	if (sci_get_lexer(doc_list[idx].sci) == SCLEX_HTML ||
-		sci_get_lexer(doc_list[idx].sci) == SCLEX_XML)
-	{
-#ifdef GEANY_WIN32
-		gchar *uri = g_strconcat("file:///", g_path_skip_root(doc_list[idx].file_name), NULL);
-#else
-		gchar *uri = g_strconcat("file://", doc_list[idx].file_name, NULL);
-#endif
-		utils_start_browser(uri);
-		g_free(uri);
-	}
-	else
-	{
-		on_build_compile_activate(NULL, NULL);
-	}
+	on_build_compile_activate(NULL, NULL);
 }
 
 
@@ -1838,15 +1788,11 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
 
 	if (doc_list[idx].changed) document_save_file(idx);
 
-	switch (doc_list[idx].file_type->id)
-	{
-		case GEANY_FILETYPES_C: child_pid = build_compile_c_file(idx); break;
-		case GEANY_FILETYPES_CPP: child_pid = build_compile_cpp_file(idx); break;
-		case GEANY_FILETYPES_JAVA: child_pid = build_compile_java_file(idx); break;
-		case GEANY_FILETYPES_PASCAL: child_pid = build_compile_pascal_file(idx); break;
-		case GEANY_FILETYPES_TEX: child_pid = build_compile_tex_file(idx, 0); break;
-	}
-
+	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
+		child_pid = build_compile_tex_file(idx, 0);
+	else
+		child_pid = build_compile_file(idx);
+		
 	if (child_pid != (GPid) 0)
 	{
 		gtk_widget_set_sensitive(app->compile_button, FALSE);
@@ -1889,14 +1835,10 @@ on_build_build_activate                (GtkMenuItem     *menuitem,
 
 	if (doc_list[idx].changed) document_save_file(idx);
 
-	switch (doc_list[idx].file_type->id)
-	{
-		case GEANY_FILETYPES_C: child_pid = build_link_c_file(idx); break;
-		case GEANY_FILETYPES_CPP: child_pid = build_link_cpp_file(idx); break;
-		/* FIXME: temporary switch to catch F5-shortcut pressed on LaTeX files, as long as
-		 * LaTeX build menu has no key accelerator */
-		case GEANY_FILETYPES_TEX: child_pid = build_compile_tex_file(idx, 1); break;
-	}
+	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
+		child_pid = build_compile_tex_file(idx, 1);	
+	else
+		child_pid = build_link_file(idx);
 
 	if (child_pid != (GPid) 0)
 	{
@@ -1922,7 +1864,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 
 		if (doc_list[idx].changed) document_save_file(idx);
 
-		child_pid = build_make_c_file(idx, FALSE);
+		child_pid = build_make_file(idx, FALSE);
 		if (child_pid != (GPid) 0)
 		{
 			gtk_widget_set_sensitive(app->compile_button, FALSE);
@@ -1938,24 +1880,18 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	/* FIXME: temporary switch to catch F5-shortcut pressed on LaTeX files, as long as
-	 * LaTeX build menu has no key accelerator */
-	switch (doc_list[idx].file_type->id)
+	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
 	{
-		case GEANY_FILETYPES_TEX:
+		if (build_view_tex_file(idx, 0) == (GPid) 0)
 		{
-			if (build_view_tex_file(idx, 0) == (GPid) 0)
-			{
-				msgwin_status_add(_("Failed to execute the DVI view program"));
-			}
-			break;
+			msgwin_status_add(_("Failed to execute the view program"));
 		}
-		default:
+	}
+	else 
+	{
+		if (build_run_cmd(idx) == (GPid) 0)
 		{
-			if (build_run_cmd(idx) == (GPid) 0)
-			{
-				msgwin_status_add(_("Failed to execute the terminal program"));
-			}
+			msgwin_status_add(_("Failed to execute the terminal program"));
 		}
 	}
 	//gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
@@ -1966,7 +1902,7 @@ void
 on_build_arguments_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_includes_arguments_gen(GPOINTER_TO_INT(user_data));
+	dialogs_show_includes_arguments_gen();
 }
 
 
@@ -1992,7 +1928,7 @@ on_make_target_dialog_response         (GtkDialog *dialog,
 
 		strncpy(app->build_make_custopt, gtk_entry_get_text(GTK_ENTRY(user_data)), 255);
 
-		child_pid = build_make_c_file(idx, TRUE);
+		child_pid = build_make_file(idx, TRUE);
 		if (child_pid != (GPid) 0)
 		{
 			gtk_widget_set_sensitive(app->compile_button, FALSE);
@@ -2479,15 +2415,26 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		if (app->build_args_inc) g_free(app->build_args_inc);
-		app->build_args_inc = g_strdup(gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry1"))));
-		if (app->build_args_libs) g_free(app->build_args_libs);
-		app->build_args_libs = g_strdup(gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry2"))));
-		if (app->build_args_prog) g_free(app->build_args_prog);
-		app->build_args_prog = g_strdup(gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3"))));
+		filetype *ft = doc_list[GPOINTER_TO_INT(user_data)].file_type;
+		
+		if (ft->menu_items->can_compile)
+		{
+			if (ft->programs->compiler) g_free(ft->programs->compiler);
+			ft->programs->compiler = g_strdup(gtk_entry_get_text(
+					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry1"))));
+		}
+		if (ft->menu_items->can_link)
+		{
+			if (ft->programs->linker) g_free(ft->programs->linker);
+			ft->programs->linker = g_strdup(gtk_entry_get_text(
+					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry2"))));
+		}
+		if (ft->menu_items->can_exec)
+		{
+			if (ft->programs->run_cmd) g_free(ft->programs->run_cmd);
+			ft->programs->run_cmd = g_strdup(gtk_entry_get_text(
+					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3"))));
+		}
 	}
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
@@ -2500,17 +2447,19 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		if (app->build_tex_dvi_cmd) g_free(app->build_tex_dvi_cmd);
-		app->build_tex_dvi_cmd = g_strdup(gtk_entry_get_text(
+		filetype *ft = doc_list[GPOINTER_TO_INT(user_data)].file_type;
+		
+		if (ft->programs->compiler) g_free(ft->programs->compiler);
+		ft->programs->compiler = g_strdup(gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1"))));
-		if (app->build_tex_pdf_cmd) g_free(app->build_tex_pdf_cmd);
-		app->build_tex_pdf_cmd = g_strdup(gtk_entry_get_text(
+		if (ft->programs->linker) g_free(ft->programs->linker);
+		ft->programs->linker = g_strdup(gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry2"))));
-		if (app->build_tex_view_dvi_cmd) g_free(app->build_tex_view_dvi_cmd);
-		app->build_tex_view_dvi_cmd = g_strdup(gtk_entry_get_text(
+		if (ft->programs->run_cmd) g_free(ft->programs->run_cmd);
+		ft->programs->run_cmd = g_strdup(gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry3"))));
-		if (app->build_tex_view_pdf_cmd) g_free(app->build_tex_view_pdf_cmd);
-		app->build_tex_view_pdf_cmd = g_strdup(gtk_entry_get_text(
+		if (ft->programs->run_cmd2) g_free(ft->programs->run_cmd2);
+		ft->programs->run_cmd2 = g_strdup(gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry4"))));
 	}
 	gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -2522,7 +2471,11 @@ on_recent_file_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gchar *locale_filename = g_locale_from_utf8((gchar*) user_data, -1, NULL, NULL, NULL);
+	
+	if (locale_filename == NULL) locale_filename = g_strdup((gchar*) user_data);
+	
 	document_open_file(-1, locale_filename, 0, FALSE, NULL);
+	
 	g_free(locale_filename);
 }
 
@@ -2570,4 +2523,11 @@ on_menu_unfold_all1_activate           (GtkMenuItem     *menuitem,
 	document_unfold_all(idx);
 }
 
+
+void
+on_run_button_clicked                  (GtkToolButton   *toolbutton,
+                                        gpointer         user_data)
+{
+	on_build_execute_activate(NULL, NULL);
+}
 

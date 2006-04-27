@@ -26,34 +26,18 @@
 
 #include "geany.h"
 
-GPid build_make_c_file(gint idx, gboolean cust_target);
+GPid build_make_file(gint idx, gboolean cust_target);
 
-GPid build_compile_c_file(gint idx);
+GPid build_compile_file(gint idx);
+
+GPid build_link_file(gint idx);
 
 GPid build_compile_tex_file(gint idx, gint mode);
 
 GPid build_view_tex_file(gint idx, gint mode);
 
-GPid build_link_c_file(gint idx);
-
-GPid build_compile_cpp_file(gint idx);
-
-GPid build_link_cpp_file(gint idx);
-
-GPid build_compile_java_file(gint idx);
-
-GPid build_compile_pascal_file(gint idx);
-
-GPid build_spawn_cmd(gint idx, gchar **cmd);
-
 GPid build_run_cmd(gint idx);
 
 void build_exit_cb (GPid child_pid, gint status, gpointer user_data);
-
-GIOChannel *build_set_up_io_channel (gint fd, GIOCondition cond, GIOFunc func, gpointer data);
-
-gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
-
-gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *exec, const gchar *args);
 
 #endif

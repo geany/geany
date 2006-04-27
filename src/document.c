@@ -95,7 +95,7 @@ gint document_find_by_sci(ScintillaObject *sci)
 /* returns the index of the given notebook page in the document list */
 gint document_get_n_idx(guint page_num)
 {
-	if (page_num < 0 || page_num >= GEANY_MAX_OPEN_FILES) return -1;
+	if (page_num >= GEANY_MAX_OPEN_FILES) return -1;
 
 	ScintillaObject *sci = (ScintillaObject*)gtk_notebook_get_nth_page(
 				GTK_NOTEBOOK(app->notebook), page_num);
@@ -193,6 +193,7 @@ gint document_create_new_sci(const gchar *filename)
 {
 	ScintillaObject	*sci;
 	GtkWidget *hbox, *but;
+	GtkWidget *align;
 	PangoFontDescription *pfd;
 	gchar *title, *fname;
 	document this;
@@ -209,18 +210,21 @@ gint document_create_new_sci(const gchar *filename)
 	gtk_container_set_border_width(GTK_CONTAINER(but), 0);
 	gtk_widget_set_size_request(but, 17, 15);
 
+	align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
+	gtk_container_add(GTK_CONTAINER(align), but);
+
 	gtk_button_set_relief(GTK_BUTTON(but), GTK_RELIEF_NONE);
 	gtk_box_pack_start(GTK_BOX(hbox), this.tab_label, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), but, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
 	gtk_widget_show_all(hbox);
 
 	/* SCI - Code */
 	sci = SCINTILLA(scintilla_new());
 	scintilla_set_id(sci, new_idx);
 #ifdef GEANY_WIN32
-		sci_set_codepage(sci, 0);
+	sci_set_codepage(sci, 0);
 #else
-		sci_set_codepage(sci, SC_CP_UTF8);
+	sci_set_codepage(sci, SC_CP_UTF8);
 #endif
 	//SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);
 	// disable scintilla provided popup menu
@@ -244,8 +248,19 @@ gint document_create_new_sci(const gchar *filename)
 	gtk_widget_show(GTK_WIDGET(sci));
 
 	this.tabmenu_label = gtk_label_new(title);
-	gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci), hbox, this.tabmenu_label, 0);
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);
+	if (app->tab_order_ltr)
+	{
+		gint npage;
+		npage = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci), 
+																	hbox, this.tabmenu_label);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), npage);
+	}
+	else 
+	{
+		gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci), hbox,
+																		this.tabmenu_label, 0);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);
+	}
 	iter = treeviews_openfiles_add(new_idx, title);
 	g_free(title);
 
@@ -253,11 +268,14 @@ gint document_create_new_sci(const gchar *filename)
 	this.tag_tree = NULL;
 
 	// "the" SCI signal
-	g_signal_connect((GtkWidget*) sci, "sci-notify", G_CALLBACK(on_editor_notification), GINT_TO_POINTER(new_idx));
+	g_signal_connect((GtkWidget*) sci, "sci-notify",
+					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(new_idx));
 	// signal for insert-key(works without too, but to update the right status bar)
-	g_signal_connect((GtkWidget*) sci, "key-press-event", G_CALLBACK(on_editor_key_press_event), GINT_TO_POINTER(new_idx));
+	g_signal_connect((GtkWidget*) sci, "key-press-event",
+					G_CALLBACK(on_editor_key_press_event), GINT_TO_POINTER(new_idx));
 	// signal for the popup menu
-	g_signal_connect((GtkWidget*) sci, "button-press-event", G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
+	g_signal_connect((GtkWidget*) sci, "button-press-event",
+					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
 	// signal for clicking the tab-close button
 	g_signal_connect(G_OBJECT(but), "clicked", G_CALLBACK(on_tab_close_clicked), sci);
 
@@ -312,6 +330,7 @@ gboolean document_remove(guint page_num)
 		doc_list[idx].sci = NULL;
 		doc_list[idx].file_name = NULL;
 		doc_list[idx].file_type = NULL;
+		doc_list[idx].encoding = NULL;
 		doc_list[idx].tm_file = NULL;
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
@@ -341,6 +360,7 @@ void document_new_file(filetype *ft)
 		sci_set_text(doc_list[idx].sci, template);
 		g_free(template);
 
+		doc_list[idx].encoding = g_strdup("UTF-8");
 		document_set_filetype(idx, (ft) ? ft : filetypes[GEANY_FILETYPES_ALL]);
 		utils_set_window_title(idx);
 		utils_build_show_hide(idx);
@@ -378,9 +398,9 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	GError *err = NULL;
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
 	gint fd;
-	void *map;
+	void *map = NULL;
 #else
-	gchar *map;
+	gchar *map = NULL;
 #endif
 	//struct timeval tv, tv1;
 	//struct timezone tz;
@@ -393,13 +413,22 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	}
 	else
 	{
+		// filename must not be NULL when it is a new file
+		if (filename == NULL)
+		{
+			msgwin_status_add(_("Invalid filename"));
+			return;
+		}
+		
 		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
 		locale_filename = g_strdup(filename);
 		utf8_filename = g_locale_to_utf8(locale_filename, -1, NULL, NULL, &err);
 		if (utf8_filename == NULL)
 		{
-			msgwin_status_add("Invalid filename (%s)", err->message);
+			if (err != NULL) msgwin_status_add("%s (%s)", _("Invalid filename"), err->message);
+			else msgwin_status_add(_("Invalid filename"));
 			utf8_filename = g_strdup(locale_filename);
+			g_error_free(err);
 			err = NULL;	// set to NULL for further usage
 		}
 
@@ -431,7 +460,8 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		g_free(locale_filename);
 		return;
 	}
-	if ((map = mmap(0, st.st_size, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED)
+	/// EXPERIMENTAL map is NULL if size is 0, I hope this works in all cases
+	if ((st.st_size > 0) && ((map = mmap(0, st.st_size, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED))
 	{
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
 		g_free(utf8_filename);
@@ -444,6 +474,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	if (! g_file_get_contents(utf8_filename, &map, NULL, &err))
 	{
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, err->message);
+		g_error_free(err);
 		g_free(utf8_filename);
 		g_free(locale_filename);
 		return;
@@ -478,17 +509,21 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			}
 			else
 			{
-				map = converted_text;
+				map = (void*)converted_text;
 				size = strlen(converted_text);
 			}
 		}
 	}
-
+	else 
+	{
+		enc = g_strdup("UTF-8");
+	}
+	
 	if (! reload) idx = document_create_new_sci(utf8_filename);
 
 	// sets editor mode and add the text to the ScintillaObject
 	sci_add_text_buffer(doc_list[idx].sci, map, size);
-	editor_mode =  utils_get_line_endings(map, size);
+	editor_mode = utils_get_line_endings(map, size);
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
 
 	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
@@ -507,6 +542,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	else
 	{
 		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(utf8_filename);
+		
 		sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 		//if (app->main_window_realized) // avoids warnings, but doesn't scroll, so accept warning
 			sci_scroll_to_line(doc_list[idx].sci, sci_get_line_from_position(doc_list[idx].sci, pos) - 10);
@@ -519,7 +555,8 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
 				(readonly) ? _(", read-only") : "");
 	}
-	utils_update_tag_list(idx, TRUE);
+	//utils_update_tag_list(idx, TRUE);
+	document_update_tag_list(idx);
 	document_set_text_changed(idx);
 
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
@@ -622,7 +659,7 @@ void document_save_file(gint idx)
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), basename);
 		treeviews_openfiles_update(doc_list[idx].iter, doc_list[idx].file_name);
 		msgwin_status_add(_("File %s saved."), doc_list[idx].file_name);
-		utils_update_statusbar(idx);
+		utils_update_statusbar(idx, -1);
 		treeviews_openfiles_update(doc_list[idx].iter, basename);
 		g_free(basename);
 	}
@@ -875,64 +912,55 @@ void document_update_tag_list(gint idx)
 /* sets the filetype of the the document (sets syntax highlighting and tagging) */
 void document_set_filetype(gint idx, filetype *type)
 {
-	gint i;
-
 	if (! type || idx < 0) return;
+	if (type->id > GEANY_MAX_FILE_TYPES) return;
 
-	for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	doc_list[idx].file_type = type;
+	document_update_tag_list(idx);
+	type->style_func_ptr(doc_list[idx].sci);
+
+	// For C/C++/Java files, get list of typedefs for colourising
+	if (sci_get_lexer(doc_list[idx].sci) == SCLEX_CPP)
 	{
-		if (filetypes[i] && type == filetypes[i])
+		guint j, n;
+
+		// assign project keywords
+		if ((app->tm_workspace) && (app->tm_workspace->work_object.tags_array))
 		{
-			doc_list[idx].file_type = filetypes[i];
-			document_update_tag_list(idx);
-			filetypes[i]->style_func_ptr(doc_list[idx].sci);
-
-			/* For C/C++/Java files, get list of typedefs for colorizing */
-			if (sci_get_lexer(doc_list[idx].sci) == SCLEX_CPP)
-			{
-				guint j, n;
-
-				/* assign project keywords */
-				if ((app->tm_workspace) && (app->tm_workspace->work_object.tags_array))
-				{
-					GPtrArray *typedefs = tm_tags_extract(app->tm_workspace->work_object.tags_array,
+			GPtrArray *typedefs = tm_tags_extract(app->tm_workspace->work_object.tags_array,
 									tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
-					if ((typedefs) && (typedefs->len > 0))
+			if ((typedefs) && (typedefs->len > 0))
+			{
+				GString *s = g_string_sized_new(typedefs->len * 10);
+				for (j = 0; j < typedefs->len; ++j)
+				{
+					if (!(TM_TAG(typedefs->pdata[j])->atts.entry.scope))
 					{
-						GString *s = g_string_sized_new(typedefs->len * 10);
-						for (j = 0; j < typedefs->len; ++j)
+						if (TM_TAG(typedefs->pdata[j])->name)
 						{
-							if (!(TM_TAG(typedefs->pdata[j])->atts.entry.scope))
-							{
-								if (TM_TAG(typedefs->pdata[j])->name)
-								{
-									g_string_append(s, TM_TAG(typedefs->pdata[j])->name);
-									g_string_append_c(s, ' ');
-								}
-							}
+							g_string_append(s, TM_TAG(typedefs->pdata[j])->name);
+							g_string_append_c(s, ' ');
 						}
-						for (n = 0; n < GEANY_MAX_OPEN_FILES; n++)
-						{
-							if (doc_list[n].sci)
-							{
-								sci_set_keywords(doc_list[n].sci, 3, s->str);
-								sci_colourise(doc_list[n].sci, 0, -1);
-							}
-						}
-						//SSM(doc_list[idx].sci, SCI_SETKEYWORDS, 3, (sptr_t) s->str);
-						g_string_free(s, TRUE);
 					}
-					g_ptr_array_free(typedefs, TRUE);
 				}
+				for (n = 0; n < GEANY_MAX_OPEN_FILES; n++)
+				{
+					if (doc_list[n].sci)
+					{
+						sci_set_keywords(doc_list[n].sci, 3, s->str);
+						sci_colourise(doc_list[n].sci, 0, -1);
+					}
+				}
+				//SSM(doc_list[idx].sci, SCI_SETKEYWORDS, 3, (sptr_t) s->str);
+				g_string_free(s, TRUE);
 			}
-			sci_colourise(doc_list[idx].sci, 0, -1);
-			utils_build_show_hide(idx);
-			geany_debug("%s : %s (%s)",
-					(doc_list[idx].file_name) ? doc_list[idx].file_name : "(null)",
-					filetypes[i]->name, doc_list[idx].encoding);
-			break;
+			g_ptr_array_free(typedefs, TRUE);
 		}
 	}
+	sci_colourise(doc_list[idx].sci, 0, -1);
+	utils_build_show_hide(idx);
+	geany_debug("%s : %s (%s)",	(doc_list[idx].file_name) ? doc_list[idx].file_name : "(null)",
+								type->name, doc_list[idx].encoding);
 }
 
 
