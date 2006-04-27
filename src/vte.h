@@ -34,8 +34,6 @@ void vte_init(void);
 
 gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
 
-void vte_start(GtkWidget *widget, gpointer data);
-
 void vte_register_symbols(GModule *module);
 
 void vte_close(void);

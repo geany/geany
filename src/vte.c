@@ -46,9 +46,11 @@ static struct vte_funcs *vf;
 #define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
 
+static void vte_start(GtkWidget *widget);
+
 
 /* taken from anjuta, thanks */
-gchar **vte_get_child_environment(GtkWidget *term)
+static gchar **vte_get_child_environment(void)
 {
 	// code from gnome-terminal, sort of.
 	gchar **p;
@@ -149,7 +151,7 @@ void vte_init(void)
 	//g_signal_connect(G_OBJECT(vte), "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 	//g_signal_connect(G_OBJECT(vte), "drag-drop", G_CALLBACK(vte_drag_drop), NULL);
 
-	vte_start(vte, NULL);
+	vte_start(vte);
 
 	gtk_widget_show_all(frame);
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
@@ -191,7 +193,7 @@ gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		{
 			kill(pid, SIGINT);
 			pid = 0;
-			vte_start(widget, NULL);
+			vte_start(widget);
 			return TRUE;
 		}
 	}
@@ -199,7 +201,7 @@ gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 }
 
 
-void vte_start(GtkWidget *widget, gpointer data)
+static void vte_start(GtkWidget *widget)
 {
 	VteTerminal *vte = VTE_TERMINAL(widget);
 	struct passwd *pw;
@@ -219,7 +221,7 @@ void vte_start(GtkWidget *widget, gpointer data)
 		dir = "/";
 	}
 
-	env = vte_get_child_environment(app->window);
+	env = vte_get_child_environment();
 	pid = vf->vte_terminal_fork_command(VTE_TERMINAL(vte), shell, NULL, env, dir, TRUE, TRUE, TRUE);
 	g_strfreev(env);
 }
