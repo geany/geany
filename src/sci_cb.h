@@ -1,7 +1,7 @@
 /*
  *      sci_cb.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos);
 
 void sci_cb_do_comment(gint idx);
 
-void sci_cb_highlight_braces(ScintillaObject *sci);
+void sci_cb_highlight_braces(ScintillaObject *sci, gint cur_pos);
 
 void sci_cb_auto_multiline(ScintillaObject *sci, gint pos);
 
