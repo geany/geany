@@ -1,25 +1,23 @@
 TODO List:
 ----------
-( features included in () have lower priority)
+(features included in () have lower priority)
 
 
-	Geany 0.6 or later:
+	Geany 0.7 or later:
 
-	o test filetype extension loading
-	o create filetype specific menus, read templates from filetypes.*,
-	  use XML instead of key-value-format
-	o template rework
+	o test help file location and confirm exit dialog under Win32
 	o fix a freeze at switching between filetypes with files in
 	  ISO-8859-x encoding (reported by Jörg Sommer)
-	o fix: "attempt to put segment in horiz list twice" warning
 	o encoding-bug in utils_convert_to_utf8()
 	o documentation: list and explain filetype modes
 	o make keyboard shortcuts user-definable
 	o inverting highlighting by selection
 	o src/sci_cb.c: improve auto completion(include local tags)
-	o extend use of doc_list[].is_valid
+	o create filetype specific menus, read templates from filetypes.*
+	o template rework
+	o use of GTK 2.8's gtk_file_chooser_set_do_overwrite_confirmation()
 	o (PHP syntax check)
-	o (command line option -e (editor mode))
+	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines, but how?)
 	o (project management)

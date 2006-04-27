@@ -1,3 +1,108 @@
+2006-04-27  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: improved key press handling to avoid that cursor
+                    rans out of editor widget when pressing F8
+ * src/sciwrappers.c: applied two little patches from Nick Treleaven
+
+
+2006-04-26  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/document.c: applied patch from Nick Treleaven to right-align the
+                   close buttons on each tab, reload the symbol list at
+                   reloading a file
+ * src/dialogs.c, src/callbacks.c:
+   applied patch from Nick Treleaven which improves the file open
+   dialog, make it more compact, replaced read-only checkbox by a
+   button, fixed memory leak
+ * src/sci_cb.c: applied patch from Nick Treleaven to fix a small bug
+                 in auto commenting lines with CTRL+D
+ * src/document.c: applied patch from Nick Treleaven to switch to the
+                   new opened tab if placement of new file tabs is set
+                   to Right
+ * src/utils.c: applied patch from Nick Treleaven to fix a bug in
+                utils_get_current_tag() with C++ methods
+
+
+2006-04-25  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: added support for complete do while loops
+ * src/highlighting.c, data/filetypes.cpp: added keywords this, public,
+                                           private and protected
+ * scintilla/ScintillaGTK.cxx, scintilla/PlatGTK.cxx:
+   applied patches from John Ehresmann (posted on the Scintilla ML)
+ * src/dialogs.c: improved the file properties dialog
+ * src/gb.c: translated comments into English and fixed some bugs
+
+
+2006-04-24  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/main.c, src/geany.h: removed unneeded time variables
+
+
+2006-04-23  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * scintilla/LexBash.cxx: fixed crash when typing "\" as last character
+                          in a bash file (patch from Scintilla ML)
+                          
+
+2006-04-20  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/keyfile.c, src/document.c, src/interface.c
+   src/prefs.c, src/geany.h: added option to place new file tabs to the
+                             right or left of the tab list
+ * src/utils.c, src/keyfile.c, src/prefs.c, src/build.c, src/vte.c,
+   src/filetypes.c: replaced lots of g_new() by g_new0()
+ * src/dialogs.c: at saving a new file, the extension of the file is
+                  guessed based on the default extension in filetypes.c
+ * src/build.c, src/msgwindow.c: improved scrolling of compiler
+                                 messages at building
+ * src/build.c, src/dialogs.c, src/callbacks.c:
+   rewrote most of the building code, get compiler settings from
+   filetype definition files, handle non-UTF8 filenames better and much
+   more things
+
+
+2006-04-18  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/geany.h, src/keyfile.c, src/utils.c:
+   added option to match < and > to, but disabled by default
+
+
+2006-04-09  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: added handler for dragged file URIs in the editor
+                 widget, so they will get opened
+
+
+2006-04-07  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c: now the file save dialog returns when pressing Enter,
+                  too, also fixed a bug if path of current file
+                  contains non-UTF8 characters, added question dialog,
+                  to ask for various things, so removed
+                  dialogs_show_confirm_exit()
+ * src/callbacks.c: added a check for overwriting files when using file
+                    save dialog
+ * src/document.c: default charset encoding for new files is set to UTF-8
+ * src/highlighting.c, data/filestypes.common:
+   added setting folding_style to define the style of the folding icons
+
+
+2006-04-06  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/build.c: fixed some errors with non-UTF8 filenames and paths
+ * bugfix: src/dialogs.c: fixed an error when changing the current
+                          directory in the file open dialog and the
+                          path contains non-UTF8 characters
+ * src/document.c: removed useless for loop in document_set_filetype
+
+
+2006-04-05  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * bugfix: src/document.c: fixed a segfault when opening a file and
+                           filename is NULL
+
+
 2006-04-04  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * bugfix: src/callbacks.c: fixed potentially segfault when opening a
