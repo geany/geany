@@ -219,8 +219,8 @@ static void findTeXTags(void)
 
 extern parserDefinition* TexParser (void)
 {
-	static const char *const extensions [] = { "tex", "sty", "cls", NULL };
-	parserDefinition * def = parserNew ("Tex");
+	static const char *const extensions [] = { "tex", "sty", "idx", NULL };
+	parserDefinition * def = parserNew ("LaTeX");
 	def->kinds      = TeXKinds;
 	def->kindCount  = KIND_COUNT (TeXKinds);
 	def->extensions = extensions;
