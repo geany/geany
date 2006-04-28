@@ -44,6 +44,8 @@ void msgwin_prepare_status_tree_view(void)
 	column = gtk_tree_view_column_new_with_attributes(_("Status messages"), renderer, "background-gdk", 0, "text", 1, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_status), column);
 
+	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_status), FALSE);
+
 	gtk_widget_modify_font(msgwindow.tree_status, pango_font_description_from_string(app->msgwin_font));
 	g_signal_connect(G_OBJECT(msgwindow.tree_status), "button-press-event",
 				G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(3));
@@ -65,6 +67,8 @@ void msgwin_prepare_msg_tree_view(void)
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer, "background-gdk", 2, "text", 3, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
+
+	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
 
 	gtk_widget_modify_font(msgwindow.tree_msg, pango_font_description_from_string(app->msgwin_font));
 	g_signal_connect(G_OBJECT(msgwindow.tree_msg), "button-press-event",
@@ -90,6 +94,8 @@ void msgwin_prepare_compiler_tree_view(void)
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer, "foreground-gdk", 0, "text", 1, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_compiler), column);
+
+	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
 
 	gtk_widget_modify_font(msgwindow.tree_compiler, pango_font_description_from_string(app->msgwin_font));
 	g_signal_connect(G_OBJECT(msgwindow.tree_compiler), "button-press-event",

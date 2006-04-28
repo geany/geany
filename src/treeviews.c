@@ -46,6 +46,8 @@ void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	g_signal_connect(G_OBJECT(tree), "button-press-event",
 						G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(7));
 
+	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), FALSE);
+
 	// selection handling
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
@@ -136,6 +138,8 @@ void treeviews_prepare_openfiles(void)
 	column = gtk_tree_view_column_new_with_attributes(_("Open files"), renderer, "text", 0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tv.tree_openfiles), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
+
+	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
 
 	gtk_widget_modify_font(tv.tree_openfiles, pango_font_description_from_string(app->tagbar_font));
 	g_signal_connect(G_OBJECT(tv.tree_openfiles), "button-press-event",
