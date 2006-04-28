@@ -96,7 +96,8 @@ void utils_update_statusbar(gint idx, gint pos)
 
 	if (idx >= 0 && doc_list[idx].is_valid)
 	{
-		if (doc_list[idx].file_type->id == GEANY_FILETYPES_JAVA ||
+		if (doc_list[idx].file_type == NULL ||
+			doc_list[idx].file_type->id == GEANY_FILETYPES_JAVA ||
 			doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
 		{
 			cur_tag = g_strdup(_("unknown"));
