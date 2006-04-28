@@ -546,9 +546,23 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 		//if (app->main_window_realized) // avoids warnings, but doesn't scroll, so accept warning
 			sci_scroll_to_line(doc_list[idx].sci, sci_get_line_from_position(doc_list[idx].sci, pos) - 10);
-		doc_list[idx].readonly = readonly;
-		sci_set_readonly(doc_list[idx].sci, readonly);
-
+		
+		if (readonly) gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
+							lookup_widget(app->window, "set_file_readonly1")), TRUE);
+		/* This is so ugly, but the checkbox in the file menu can be still checked from a previous
+		 * read only file, a won't be checked out since notebook-switch-signal is ignored
+		 * so we need to check it out by hand and this emits the toggled-signal and therefore
+		 * we must set the file to read only and the toggle-callback will set it again to not
+		 * read only. It's ugly. Any ideas are welcome. */
+		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(
+								lookup_widget(app->window, "set_file_readonly1"))))
+		{
+			doc_list[idx].readonly = TRUE;
+			sci_set_readonly(doc_list[idx].sci, TRUE);
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
+							lookup_widget(app->window, "set_file_readonly1")), FALSE);
+		}
+		
 		document_set_filetype(idx, use_ft);
 		utils_build_show_hide(idx);
 		msgwin_status_add(_("File %s opened(%d%s)."),
