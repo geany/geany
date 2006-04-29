@@ -1,8 +1,29 @@
+2006-04-29  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/keyfile.c, src/callbacks.c:
+   applied two patches from Nick Treleaven to fix invalid memory read
+   and improve the ordering of file tabs while loading session files
+ * src/vte.c: applied patch from Nick Treleaven to improve removing the
+              vte widget, fixed also a bug with disappearing scrollbars
+
+
+2006-04-28  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/treeviews.c, src/msgwindow.c:
+   disabled interactive search function since it never worked and is
+   unnecessary and confusing
+ * src/utils.c: added small check for NULL pointer
+ * src/document.c: fixed some inconsistency with the read only check
+                   box in the file menu
+
+
 2006-04-27  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c: improved key press handling to avoid that cursor
                     rans out of editor widget when pressing F8
  * src/sciwrappers.c: applied two little patches from Nick Treleaven
+ * tagmanager/tex.c: fixed naming of the parser to get recognised again
+                     for parsing LaTeX files
 
 
 2006-04-26  Enrico Troeger  <enrico.troeger@uvena.de>
