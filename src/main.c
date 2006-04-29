@@ -87,7 +87,7 @@ static GOptionEntry entries[] =
 void geany_debug(gchar const *format, ...)
 {
 #ifndef GEANY_DEBUG
-	if (app->debug_mode)
+	if (app != NULL && app->debug_mode)
 #endif
 	{
 		va_list args;
@@ -337,12 +337,12 @@ static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer d
 
 	if (status != G_IO_STATUS_NORMAL)
 		return TRUE;
-	else 
+	else
 	{
 		GIOChannel *ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
 		g_io_add_watch(ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
 		return FALSE;
-	}		
+	}
 }
 
 
@@ -350,7 +350,7 @@ static void write_fifo(gint argc, gchar **argv)
 {
 	gint i;
 	GIOChannel *ioc;
-	
+
 	for(i = 1; i < argc; i++)
 	{
 		if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
