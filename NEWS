@@ -1,3 +1,28 @@
+Geany 0.6 (April 30, 2006)
+
+        * added option to place new file tabs to the right or left of
+          the tab list
+        * improved file open dialog
+        * improved scrolling of the compiler output window
+        * rewrote most of the code for compiling files, now all
+          settings are read from filetype definition files
+        * now, you can drag files from a file manager into Geany and
+          they will be opened
+        * improved handling of filenames which contain non-UTF8 chars
+        * added user-definable comment characters to all filetype
+          definition files
+        * implemented folding
+        * added file properties dialog
+        * improved search and find dialogs
+        * Geany now creates a FIFO, to communicate between different
+          instances for opening files in an already running instance
+        * added filetypes SQL and (O)Caml
+        * many small improvements
+        * fixed lots of bugs, including #1419473, #1422135, #1421776
+          and #1441359
+        * for more details read the ChangeLog
+
+
 Geany 0.5 (January 27, 2006)
 
         * set the Open File dialog directory to the same directory as
