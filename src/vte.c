@@ -157,18 +157,22 @@ void vte_init(void)
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
 
 	// the vte widget has to be realised before color changes take effect
-	g_signal_connect_swapped(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
+	//g_signal_connect_swapped(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
+	
+	// at least temporarily call gtk_widget_realize() otherwise the scrollbars won't be shown
+	gtk_widget_realize(vte);
+	vte_apply_user_settings();
 }
 
 
 void vte_close(void)
 {
 	g_free(vf);
-	/* free (unref) the vte widget by removing it, before unloading vte module
+	/* free the vte widget before unloading vte module
 	 * this prevents a segfault on X close window if the message window is hidden
 	 * (patch from Nick Treleaven, thanks) */
-	if (GTK_IS_CONTAINER(vc->vte->parent))
-		gtk_container_remove(GTK_CONTAINER(vc->vte->parent), vc->vte);
+	gtk_widget_destroy(vc->vte);
+	gtk_widget_destroy(vc->menu);
 	g_free(vc->font);
 	g_free(vc->emulation);
 	g_free(vc->color_back);
