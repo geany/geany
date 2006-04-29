@@ -47,7 +47,7 @@ void configuration_save(void)
 	gchar *data;
 	gchar *entry = g_malloc(14);
 	gchar *fname = g_malloc0(256);
-	gchar **recent_files = g_new0(gchar*, app->mru_length);
+	gchar **recent_files = g_new0(gchar*, app->mru_length + 1);
 	GtkTextBuffer *buffer;
 	GtkTextIter start, end;
 
@@ -149,8 +149,9 @@ void configuration_save(void)
 		{
 			recent_files[i] = NULL;
 		}
-
 	}
+	// There is a bug in GTK2.6 g_key_file_set_string_list, we must NULL terminate.
+	recent_files[app->mru_length] = NULL;
 	g_key_file_set_string_list(config, "files", "recent_files",
 				(const gchar**)recent_files, app->mru_length);
 
@@ -368,7 +369,8 @@ gboolean configuration_open_files(void)
 	gchar *file, *locale_filename, **array;
 	gboolean ret = FALSE;
 
-	for(i = GEANY_SESSION_FILES - 1; i >= 0 ; i--)
+	i = app->tab_order_ltr ? 0 : GEANY_SESSION_FILES - 1;
+	while(TRUE)
 	{
 		if (session_files[i] && strlen(session_files[i]))
 		{
@@ -396,7 +398,6 @@ gboolean configuration_open_files(void)
 			locale_filename = g_locale_from_utf8(file, -1, NULL, NULL, NULL);
 			if (locale_filename == NULL) locale_filename = g_strdup(file);
 
-
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{
 				document_open_file(-1, locale_filename, pos, FALSE,
@@ -406,6 +407,17 @@ gboolean configuration_open_files(void)
 			g_free(locale_filename);
 		}
 		g_free(session_files[i]);
+
+		if (app->tab_order_ltr)
+		{
+			i++;
+			if (i >= GEANY_SESSION_FILES) break;
+		}
+		else 
+		{
+			i--;
+			if (i < 0) break;
+		}
 	}
 
 	return ret;

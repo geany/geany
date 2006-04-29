@@ -145,8 +145,8 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 		gtk_widget_destroy(app->default_tag_tree);
 	}
 	scintilla_release_resources();
+	if (app->have_vte) vte_close();
 	gtk_widget_destroy(app->window);
-	// kill explicitly since only one or none menu is shown at a time
 
 	// destroy popup menus
 	if (app->popup_menu && GTK_IS_WIDGET(app->popup_menu))
@@ -163,8 +163,6 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 					gtk_widget_destroy(msgwindow.popup_msg_menu);
 	if (msgwindow.popup_compiler_menu && GTK_IS_WIDGET(msgwindow.popup_compiler_menu))
 					gtk_widget_destroy(msgwindow.popup_compiler_menu);
-
-	if (app->have_vte) vte_close();
 
 	g_free(app);
 
