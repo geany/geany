@@ -20,6 +20,7 @@ The basic features of Geany are:
 - auto completion of often used constructs like if, for and while
 - auto completion of XML and HTML tags
 - call tips
+- folding
 - many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal
 - symbol lists
 - embedded terminal emulation
