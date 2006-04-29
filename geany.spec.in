@@ -32,6 +32,7 @@ Some features:
 - syntax highlighting
 - code completion
 - call tips
+- folding
 - many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal
 - symbol lists
 
