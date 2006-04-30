@@ -1,3 +1,10 @@
+2006-04-30  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/main.c: fixed a crash when starting Geany without debug messages
+ * sci_cb.c: fixed a small issue when dragging files to Geany
+ * new release: Geany 0.6 "Nivers"
+
+
 2006-04-29  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/keyfile.c, src/callbacks.c:
@@ -64,7 +71,7 @@
 
  * scintilla/LexBash.cxx: fixed crash when typing "\" as last character
                           in a bash file (patch from Scintilla ML)
-                          
+
 
 2006-04-20  Enrico Troeger  <enrico.troeger@uvena.de>
 
