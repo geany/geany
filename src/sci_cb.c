@@ -103,10 +103,10 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				SSM(sci, SCI_STYLESETFORE, STYLE_DEFAULT, 0);
 				SSM(sci, SCI_STYLESETBACK, STYLE_DEFAULT, 0);
 			}
-	
+
 			sci_get_style_at(sci, pos);
 			}
-#endif			
+#endif
 			break;
 		}
 /*		case SCN_KEY:
@@ -235,8 +235,16 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			{
 				gint i;
 				gchar *filename;
-				gchar **list = g_strsplit(nt->text, "\n", 0);
-				
+				gchar **list;
+
+				switch (utils_get_line_endings((gchar*) nt->text, strlen(nt->text)))
+				{
+					case SC_EOL_CR: list = g_strsplit(nt->text, "\r", 0); break;
+					case SC_EOL_CRLF: list = g_strsplit(nt->text, "\r\n", 0); break;
+					case SC_EOL_LF: list = g_strsplit(nt->text, "\n", 0); break;
+					default: list = g_strsplit(nt->text, "\n", 0);
+				}				
+
 				for (i = 0; ; i++)
 				{
 					if (list[i] == NULL) break;
@@ -245,7 +253,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 					document_open_file(-1, filename, 0, FALSE, NULL);
 					g_free(filename);
 				}
-				
+
 				g_strfreev(list);
 			}
 			break;
@@ -336,7 +344,7 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 		x++;
 	}
 	g_free(line_buf);
-	
+
 	//geany_debug("line_len: %d eol: %d cnt: %d", line_len, eol_char_len, cnt);
 	if ((line_len - eol_char_len - 1) != cnt) return;
 
@@ -859,11 +867,11 @@ void sci_cb_do_comment(gint idx)
 	line_start = sci_get_position_from_line(doc_list[idx].sci, first_line);
 	if (ft->id == GEANY_FILETYPES_PHP)
 	{
-		if (sci_get_style_at(doc_list[idx].sci, line_start) < 118 || 
+		if (sci_get_style_at(doc_list[idx].sci, line_start) < 118 ||
 			sci_get_style_at(doc_list[idx].sci, line_start) > 127)
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
-	
+
 	co = ft->comment_open;
 	cc = ft->comment_close;
 
@@ -895,7 +903,7 @@ void sci_cb_do_comment(gint idx)
 					default: return;
 				}
 				if (do_continue) continue;
-				
+
 				if (ft->comment_use_indent)
 					sci_insert_text(doc_list[idx].sci, line_start + x, co);
 				else
@@ -935,10 +943,10 @@ void sci_cb_do_comment(gint idx)
 				sci_insert_text(doc_list[idx].sci, line_start, str_begin);
 				line_len = sci_get_position_from_line(doc_list[idx].sci, last_line + 2);
 				sci_insert_text(doc_list[idx].sci, line_len, str_end);
-				
+
 				g_free(str_begin);
 				g_free(str_end);
-				
+
 				// break because we are already on the last line
 				break_loop = TRUE;
 				break;
