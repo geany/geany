@@ -58,6 +58,7 @@ void utils_start_browser(gchar *uri)
 #ifdef GEANY_WIN32
 	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
 #else
+	/// TODO  Initialisierungs-Element ist zur Lade-Zeit nicht berechenbar
 	gchar *argv[] = { app->build_browser_cmd, uri, NULL };
 
 	if (! g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
@@ -1483,6 +1484,7 @@ void utils_replace_tabs(gint idx)
 {
 	gint i, len, j = 0, tabs_amount = 0;
 	gint tab_w = sci_get_tab_width(doc_list[idx].sci);
+	/// TODO Warnung: ISO-C90 verbietet Feld »replacement« variabler Größe
 	gchar *data, replacement[tab_w + 1];
 	gchar *text;
 
@@ -2153,3 +2155,44 @@ gchar *utils_make_human_readable_str(unsigned long long size, unsigned long bloc
 	return g_strdup_printf(f, val, frac, *u, 'b');
 }
 
+
+/* utils_strtod() is an simple implementation of strtod(), because strtod() does not understand
+ * hex colour values before ANSI-C99, utils_strtod does only work for numbers like 0x... */
+double utils_strtod(const char *source, char **end)
+{
+	unsigned int i;
+	unsigned short tmp;
+	double exp, result;
+
+	// input should be 0x... or 0X...
+	if (strlen(source) < 3 || source[0] != '0' || (source[1] != 'x' && source[1] != 'X'))
+		return -1.0;
+	source += 2;
+
+	exp = 0.0;
+	result = 0;
+	for (i = (strlen(source) - 1); i >= 0; i--)
+	{
+		if (isdigit(source[i]))
+		{	// convert the char to a real digit
+			tmp = source[i] - '0';
+		}
+		else
+		{
+			if (isxdigit(source[i]))
+			{	// convert the char to a real digit
+				if (source[i] > 70)
+					tmp = source[i] - 'W';
+				else
+					tmp = source[i] - '7';
+			}
+			// stop if a non xdigit was found
+			else break;
+		}
+
+		result += pow(16.0, exp) * tmp;
+		exp++;
+	}
+
+	return result;
+}

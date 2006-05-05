@@ -204,4 +204,8 @@ gchar *utils_make_human_readable_str(unsigned long long size, unsigned long bloc
 
 void utils_update_fold_items(void);
 
+/* utils_strtod() is an simple implementation of strtod(), because strtod() does not understand
+ * hex colour values before ANSI-C99, utils_strtod does only work for numbers like 0x... */
+double utils_strtod(const char *source, char **end);
+
 #endif

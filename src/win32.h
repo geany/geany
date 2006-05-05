@@ -41,6 +41,4 @@ void win32_show_font_dialog(void);
 
 void win32_show_color_dialog(void);
 
-double my_strtod(const char *source, char **end);
-
 #endif
