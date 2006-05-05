@@ -1300,6 +1300,21 @@ void dialogs_show_file_properties(gint idx)
 	gint mode = 0;
 #endif
 
+// define this ones, to avoid later trouble
+#ifndef S_IRUSR
+# define S_IRUSR 0
+# define S_IWUSR 0
+# define S_IXUSR 0
+#endif
+#ifndef S_IRGRP
+# define S_IRGRP 0
+# define S_IWGRP 0
+# define S_IXGRP 0
+# define S_IROTH 0
+# define S_IWOTH 0
+# define S_IXOTH 0
+#endif
+
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL)
 	{
 		dialogs_show_error(_("An error occurred or file information could not be retrieved(e.g. from a new file)."));
