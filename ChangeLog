@@ -1,3 +1,22 @@
+2006-05-05  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: fix a crash when clicking in the compiler output
+
+
+2006-05-03  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/win.c, src/utils.c, src/highlighting.c:
+   moved my_strtod() from win32.c to utils.c, use it always, not only
+   on Win32 systems
+
+
+2006-05-01  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * data/filetypes.perl: added two compiler commands
+ * data/filetypes.cpp, src/highlighting.c: added some C++ keywords
+ * src/sci_cb.c: added try-catch-auto completion
+
+
 2006-04-30  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/main.c: fixed a crash when starting Geany without debug messages

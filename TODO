@@ -5,7 +5,6 @@ TODO List:
 
 	Geany 0.7 or later:
 
-	o test help file location and confirm exit dialog under Win32
 	o fix a freeze at switching between filetypes with files in
 	  ISO-8859-x encoding (reported by Jörg Sommer)
 	o encoding-bug in utils_convert_to_utf8()
@@ -16,6 +15,7 @@ TODO List:
 	o create filetype specific menus, read templates from filetypes.*
 	o template rework
 	o use of GTK 2.8's gtk_file_chooser_set_do_overwrite_confirmation()
+	o user-definable auto completion structs
 	o (PHP syntax check)
 	o (DBUS)
 	o (startup notification)
