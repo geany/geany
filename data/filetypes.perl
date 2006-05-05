@@ -43,4 +43,11 @@ comment_use_indent=true
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
+
+# B - The Perl Bytecode Compiler (requires Perl 5.8 or higher)
+compiler=perl -MO=Bytecode,-H,-o%fc %f
+
+# alternatively use perlcc
+#compiler=perlcc -o %e %f
+
 run_cmd=perl %f
