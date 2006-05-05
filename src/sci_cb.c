@@ -592,8 +592,13 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 			var = g_strdup("i");
 			contruct_len = 12;
 		}
-		construct = g_strdup_printf("(%s = 0; %s < ; %s++)%s{%s\t%s}%s", var, var, var, eol, eol, eol, eol);
+		construct = g_strdup_printf("(%s%s = 0; %s < ; %s++)%s{%s\t%s}%s", 
+						(doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? "int " : "",
+						var, var, var, eol, eol, eol, eol);
 
+		// add 4 characters because of "int " in C++ mode
+		contruct_len += (doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? 4 : 0;
+		
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + contruct_len, TRUE);
 		g_free(var);
@@ -610,6 +615,15 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	else if (! strncmp("do", buf + 4, 2))
 	{
 		construct = g_strdup_printf("%s{%s\t%s}%swhile ();%s", eol, eol, eol, eol, eol);
+
+		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
+		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
+		g_free(construct);
+	}
+	else if (! strncmp("try", buf + 3, 3))
+	{
+		construct = g_strdup_printf("%s{%s\t%s}%scatch ()%s{%s\t%s}%s",
+							eol, eol, eol, eol, eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
