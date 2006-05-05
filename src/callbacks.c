@@ -1356,9 +1356,10 @@ on_to_lower_case1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	gchar *text;
 	if (idx < 0) return;
 
-	gchar *text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
+	text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
 	sci_get_selected_text(doc_list[idx].sci, text);
 	sci_replace_sel(doc_list[idx].sci, g_ascii_strdown(text, -1));
 	g_free(text);
@@ -1370,9 +1371,10 @@ on_to_upper_case1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	gchar *text;
 	if (idx < 0) return;
 
-	gchar *text = malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
+	text = malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
 	sci_get_selected_text(doc_list[idx].sci, text);
 	sci_replace_sel(doc_list[idx].sci, g_ascii_strup(text, -1));
 	g_free(text);
@@ -1622,10 +1624,12 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 				if (gdk_color_equal(&red, color))
 				{
 					gchar **array = g_strsplit(string, ":", 3);
-					gint line = strtol(array[1], NULL, 10);
+					gint line = -1;
 					gint idx = document_get_cur_idx();
+					
+					if (array != NULL && array[1] != NULL) line = strtol(array[1], NULL, 10);
 
-					if (line)
+					if (line != -1)
 					{
 						if (idx != app->cur_idx)
 						{
