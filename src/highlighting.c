@@ -20,18 +20,9 @@
  * $Id$
  */
 
-#include "geany.h"
+#include <stdlib.h>
 
-#ifdef GEANY_WIN32
-# include "win32.h"
-#else
-/* my_strtod() is an simple implementation of strtod() for Win32 systems(declared in win32.h),
- * because the Win32 API cannot handle hexadecimal numbers(*grrr* it is an ANSI-C function),
- * my_strtod does only work for numbers like 0x..., on non-Win32 systems use the ANSI-C
- * function strtod() */
-# include <stdlib.h>
-# define my_strtod(x, y) strtod(x, y)
-#endif
+#include "geany.h"
 
 #include "highlighting.h"
 
@@ -111,10 +102,10 @@ static void styleset_get_hex(GKeyFile *config, const gchar *section, const gchar
 
 	list = g_key_file_get_string_list(config, section, key, &len, &error);
 
-	if (list != NULL && list[0] != NULL) array[0] = (gint) my_strtod(list[0], NULL);
-	else array[0] = (gint) my_strtod(foreground, NULL);
-	if (list != NULL && list[1] != NULL) array[1] = (gint) my_strtod(list[1], NULL);
-	else array[1] = (gint) my_strtod(background, NULL);
+	if (list != NULL && list[0] != NULL) array[0] = (gint) utils_strtod(list[0], NULL);
+	else array[0] = (gint) utils_strtod(foreground, NULL);
+	if (list != NULL && list[1] != NULL) array[1] = (gint) utils_strtod(list[1], NULL);
+	else array[1] = (gint) utils_strtod(background, NULL);
 	if (list != NULL && list[2] != NULL) array[2] = utils_atob(list[2]);
 	else array[2] = utils_atob(bold);
 	if (list != NULL && list[3] != NULL) array[3] = utils_atob(list[3]);
@@ -456,7 +447,7 @@ static void styleset_cpp_init(void)
 	styleset_get_hex(config, "styling", "globalclass", "0xbb1111", "0xffffff", "true", types[GEANY_FILETYPES_CPP]->styling[18]);
 
 	types[GEANY_FILETYPES_CPP]->keywords = g_new(gchar*, 3);
-	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_CPP, 0, "this private public protected if const struct char int float double void long for while do case switch return");
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_CPP, 0, "and and_eq asm auto bitand bitor bool break case catch char class compl const const_cast continue default delete do double dynamic_cast else enum explicit export extern false float for friend goto if inline int long mutable namespace new not not_eq operator or or_eq private protected public register reinterpret_cast return short signed sizeof static static_cast struct switch template this throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq");
 	styleset_get_keywords(config, "keywords", "docComment", GEANY_FILETYPES_CPP, 1, "TODO FIXME");
 	types[GEANY_FILETYPES_CPP]->keywords[2] = NULL;
 
