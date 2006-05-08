@@ -824,7 +824,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 
 		if (doc_list[idx].file_name) g_free(doc_list[idx].file_name);
 		doc_list[idx].file_name = new_filename;
-		
+
 		utils_replace_filename(idx);
 		document_save_file(idx);
 
@@ -1053,7 +1053,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		{
 			if (event->state & GDK_CONTROL_MASK)
 				sci_zoom_out(doc_list[idx].sci);
-			else 
+			else
 				ret = FALSE;
 
 			break;
@@ -1225,7 +1225,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 		/// current sci position
 		gint pos = sci_get_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci);
 
-		utils_find_current_word(doc_list[GPOINTER_TO_INT(user_data)].sci, pos, 
+		utils_find_current_word(doc_list[GPOINTER_TO_INT(user_data)].sci, pos,
 					current_word, sizeof current_word);
 
 		utils_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
@@ -1626,7 +1626,7 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 					gchar **array = g_strsplit(string, ":", 3);
 					gint line = -1;
 					gint idx = document_get_cur_idx();
-					
+
 					if (array != NULL && array[1] != NULL) line = strtol(array[1], NULL, 10);
 
 					if (line != -1)
@@ -1794,7 +1794,7 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
 		child_pid = build_compile_tex_file(idx, 0);
 	else
 		child_pid = build_compile_file(idx);
-		
+
 	if (child_pid != (GPid) 0)
 	{
 		gtk_widget_set_sensitive(app->compile_button, FALSE);
@@ -1838,7 +1838,7 @@ on_build_build_activate                (GtkMenuItem     *menuitem,
 	if (doc_list[idx].changed) document_save_file(idx);
 
 	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
-		child_pid = build_compile_tex_file(idx, 1);	
+		child_pid = build_compile_tex_file(idx, 1);
 	else
 		child_pid = build_link_file(idx);
 
@@ -1889,8 +1889,9 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 			msgwin_status_add(_("Failed to execute the view program"));
 		}
 	}
-	else 
+	else
 	{
+		if (doc_list[idx].changed) document_save_file(idx);
 		if (build_run_cmd(idx) == (GPid) 0)
 		{
 			msgwin_status_add(_("Failed to execute the terminal program"));
@@ -2418,7 +2419,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		filetype *ft = doc_list[GPOINTER_TO_INT(user_data)].file_type;
-		
+
 		if (ft->menu_items->can_compile)
 		{
 			if (ft->programs->compiler) g_free(ft->programs->compiler);
@@ -2450,7 +2451,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		filetype *ft = doc_list[GPOINTER_TO_INT(user_data)].file_type;
-		
+
 		if (ft->programs->compiler) g_free(ft->programs->compiler);
 		ft->programs->compiler = g_strdup(gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1"))));
@@ -2473,11 +2474,11 @@ on_recent_file_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gchar *locale_filename = g_locale_from_utf8((gchar*) user_data, -1, NULL, NULL, NULL);
-	
+
 	if (locale_filename == NULL) locale_filename = g_strdup((gchar*) user_data);
-	
+
 	document_open_file(-1, locale_filename, 0, FALSE, NULL);
-	
+
 	g_free(locale_filename);
 }
 
