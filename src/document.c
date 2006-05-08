@@ -95,9 +95,10 @@ gint document_find_by_sci(ScintillaObject *sci)
 /* returns the index of the given notebook page in the document list */
 gint document_get_n_idx(guint page_num)
 {
+	ScintillaObject *sci;
 	if (page_num >= GEANY_MAX_OPEN_FILES) return -1;
 
-	ScintillaObject *sci = (ScintillaObject*)gtk_notebook_get_nth_page(
+	sci = (ScintillaObject*)gtk_notebook_get_nth_page(
 				GTK_NOTEBOOK(app->notebook), page_num);
 
 	return document_find_by_sci(sci);
@@ -234,7 +235,6 @@ gint document_create_new_sci(const gchar *filename)
 	sci_set_mark_long_lines(sci, app->long_line_column, app->long_line_color);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	sci_set_folding_margin_visible(sci, app->pref_editor_folding);
-	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);
 	sci_set_indentionguides(sci, app->pref_editor_show_indent_guide);
 	sci_set_visible_white_spaces(sci, app->pref_editor_show_white_space);
@@ -246,16 +246,17 @@ gint document_create_new_sci(const gchar *filename)
 	g_free(fname);
 
 	gtk_widget_show(GTK_WIDGET(sci));
+	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 
 	this.tabmenu_label = gtk_label_new(title);
 	if (app->tab_order_ltr)
 	{
 		gint npage;
-		npage = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci), 
+		npage = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci),
 																	hbox, this.tabmenu_label);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), npage);
 	}
-	else 
+	else
 	{
 		gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci), hbox,
 																		this.tabmenu_label, 0);
@@ -419,7 +420,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			msgwin_status_add(_("Invalid filename"));
 			return;
 		}
-		
+
 		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
 		locale_filename = g_strdup(filename);
 		utf8_filename = g_locale_to_utf8(locale_filename, -1, NULL, NULL, &err);
@@ -514,11 +515,11 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			}
 		}
 	}
-	else 
+	else
 	{
 		enc = g_strdup("UTF-8");
 	}
-	
+
 	if (! reload) idx = document_create_new_sci(utf8_filename);
 
 	// sets editor mode and add the text to the ScintillaObject
@@ -542,11 +543,11 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	else
 	{
 		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(utf8_filename);
-		
+
 		sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 		//if (app->main_window_realized) // avoids warnings, but doesn't scroll, so accept warning
 			sci_scroll_to_line(doc_list[idx].sci, sci_get_line_from_position(doc_list[idx].sci, pos) - 10);
-		
+
 		if (readonly) gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
 							lookup_widget(app->window, "set_file_readonly1")), TRUE);
 		/* This is so ugly, but the checkbox in the file menu can be still checked from a previous
@@ -562,7 +563,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
 							lookup_widget(app->window, "set_file_readonly1")), FALSE);
 		}
-		
+
 		document_set_filetype(idx, use_ft);
 		utils_build_show_hide(idx);
 		msgwin_status_add(_("File %s opened(%d%s)."),
