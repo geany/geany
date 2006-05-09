@@ -1,24 +1,29 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
-commentline=0xFF0000;0xffffff;false;false
+default=0x000000;0xffffff;false
+commentline=0x0000ff;0xffffff;false;false
 number=0x800040;0xffffff;false;false
 string=0x008000;0xffffff;false;false
 character=0x008000;0xffffff;false;false
-word=0x800060;0xffffff;true;false
-triple=0x208000;0xffffff;false;false
-tripledouble=0x004040;0xffffff;false;false
-classname=0x303000;0xffffff;false;false
-defname=0x800000;0xffffff;false;false
-operator=0x800030;0xffffff;false;false
+word=0x991111;0xffffff;true;false
+global=0x991111;0xffffff;false;false
+symbol=0x208000;0xffffff;false;false
+classname=0x00007f;0xffffff;true;false
+defname=0x00007f;0xffffff;false;false
+operator=0x000000;0xffffff;false;false
 identifier=0x000000;0xffffff;false;false
-commentblock=0xff00ff;0xffffff;false;false
-stringeol=0x000000;0xe0c0e0;false;false
+modulename=0x991111;0xffffff;true;false
+backticks=0x000000;0xe0c0e0;false;false
+instancevar=0x000000;0xffffff;false;true
+classvar=0x000000;0xffffff;true;true
+datasection=0x000000;0xffffff;false;false
+heredelim=0x000000;0xffffff;false;false
+worddemoted=0x991111;0xffffff;false;false
 
 [keywords]
 # all items must be in one line
-primary=and assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while yield
+primary=__FILE__ and def end in or self unless __LINE__ begin defined? ensure module redo super until BEGIN break do false next rescue then when END case else for nil require retry true while alias class elsif if not return undef yield
 
 
 [settings]
@@ -41,4 +46,4 @@ comment_use_indent=true
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-run_cmd=python %f
+run_cmd=ruby %f
