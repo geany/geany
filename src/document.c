@@ -219,9 +219,13 @@ gint document_create_new_sci(const gchar *filename)
 	gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
 	gtk_widget_show_all(hbox);
 
+
 	/* SCI - Code */
 	sci = SCINTILLA(scintilla_new());
 	scintilla_set_id(sci, new_idx);
+
+	gtk_widget_show(GTK_WIDGET(sci));
+
 #ifdef GEANY_WIN32
 	sci_set_codepage(sci, 0);
 #else
@@ -235,6 +239,7 @@ gint document_create_new_sci(const gchar *filename)
 	sci_set_mark_long_lines(sci, app->long_line_column, app->long_line_color);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	sci_set_folding_margin_visible(sci, app->pref_editor_folding);
+	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);
 	sci_set_indentionguides(sci, app->pref_editor_show_indent_guide);
 	sci_set_visible_white_spaces(sci, app->pref_editor_show_white_space);
@@ -245,8 +250,6 @@ gint document_create_new_sci(const gchar *filename)
 	pango_font_description_free(pfd);
 	g_free(fname);
 
-	gtk_widget_show(GTK_WIDGET(sci));
-	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 
 	this.tabmenu_label = gtk_label_new(title);
 	if (app->tab_order_ltr)
