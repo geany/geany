@@ -1193,11 +1193,11 @@ const char *ScintillaGTK::CharacterSetID() const {
 static int MakeAccent(int key, int acc) {
 	const char *conv[] = {
 		"aeiounc AEIOUNC",
-		"Ã£eiÃµuÃ±c~ÃƒEIÃ•UÃ‘C",
-		"Ã¡Ã©Ã­Ã³ÃºnÃ§'ÃÃ‰ÃÃ“ÃšNÃ‡",
-		"Ã Ã¨Ã¬Ã²Ã¹nc`Ã€ÃˆÃŒÃ’Ã™NC",
-		"Ã¢ÃªÃ®Ã´Ã»nc^Ã‚ÃŠÃÃ”Ã›NC",
-		"Ã¤Ã«Ã¯Ã¶Ã¼ncÅ¡Ã„Ã‹ÃÃ–ÃœNC"
+		"ãeiõuñc~ÃEIÕUÑC",
+		"áéíóúnç'ÁÉÍÓÚNÇ",
+		"àèìòùnc`ÀÈÌÒÙNC",
+		"âêîôûnc^ÂÊÎÔÛNC",
+		"äëïöünc¨ÄËÏÖÜNC"
 	};
 	int idx;
 	for (idx = 0; idx < 15; ++idx) {
@@ -2190,7 +2190,7 @@ gint ScintillaGTK::ExposeTextThis(GtkWidget * /*widget*/, GdkEventExpose *ose) {
 	paintState = notPainting;
 
 	if (rgnUpdate) {
-		gdk_region_destroy(rgnUpdate);
+		g_free(rgnUpdate);
 	}
 	rgnUpdate = 0;
 
