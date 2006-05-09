@@ -28,12 +28,14 @@ libtagmanager_a_SOURCES =\
 	args.h\
 	c.c\
 	conf.c\
+	css.c\
 	docbook.c\
 	make.c\
 	asm.c\
 	tex.c\
 	pascal.c\
 	perl.c\
+	ruby.c\
 	sql.c\
 	php.c\
 	python.c\

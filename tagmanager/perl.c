@@ -29,7 +29,7 @@ typedef enum {
 
 static kindOption PerlKinds [] = {
     { TRUE, 'f', "function", "functions" },
-    { TRUE, 'p', "package", "packages" }
+    { TRUE, 'c', "class", "packages" }
 };
 
 /*

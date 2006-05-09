@@ -28,6 +28,8 @@
     ConfParser, \
     SqlParser, \
     DocBookParser, \
+    CssParser, \
+    RubyParser, \
     ShParser
 
 #endif	/* _PARSERS_H */
