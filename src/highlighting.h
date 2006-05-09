@@ -55,6 +55,8 @@ void styleset_perl(ScintillaObject *sci);
 
 void styleset_python(ScintillaObject *sci);
 
+void styleset_ruby(ScintillaObject *sci);
+
 void styleset_sh(ScintillaObject *sci);
 
 void styleset_xml(ScintillaObject *sci);

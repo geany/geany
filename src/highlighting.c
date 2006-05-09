@@ -65,7 +65,7 @@ static void styleset_get_keywords(GKeyFile *config, const gchar *section, const 
 	{
 		types[index]->keywords[pos] = g_strdup(default_value);
 	}
-	else 
+	else
 		types[index]->keywords[pos] = result;
 }
 
@@ -86,7 +86,7 @@ static void styleset_get_wordchars(GKeyFile *config, gint index, const gchar *de
 	{
 		types[index]->wordchars = g_strdup(default_value);
 	}
-	else 
+	else
 		types[index]->wordchars = result;
 }
 
@@ -109,7 +109,7 @@ static void styleset_get_hex(GKeyFile *config, const gchar *section, const gchar
 	if (list != NULL && list[2] != NULL) array[2] = utils_atob(list[2]);
 	else array[2] = utils_atob(bold);
 	if (list != NULL && list[3] != NULL) array[3] = utils_atob(list[3]);
-	else array[3] = utils_atob(bold);
+	else array[3] = FALSE;
 
 	g_strfreev(list);
 }
@@ -134,7 +134,7 @@ static void styleset_get_int(GKeyFile *config, const gchar *section, const gchar
 	// if there was an error, atoi() returns 0, so then we use default_val
 	if (array[0] == 0) array[0] = fdefault_val;
 	if (array[1] == 0) array[1] = sdefault_val;
-	
+
 	g_strfreev(list);
 }
 
@@ -234,7 +234,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPENMID, SC_MARK_CIRCLEMINUSCONNECTED);
 			break;
 		}
-		default: 
+		default:
 		{
 			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS);
 			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS);
@@ -329,7 +329,7 @@ static void styleset_c_init(void)
 
 	styleset_get_wordchars(config, GEANY_FILETYPES_C, GEANY_WORDCHARS);
 	filetypes_get_config(config, GEANY_FILETYPES_C);
-	
+
 	g_key_file_free(config);
 
 	// load global tags file for C autocompletion
@@ -453,7 +453,7 @@ static void styleset_cpp_init(void)
 
 	styleset_get_wordchars(config, GEANY_FILETYPES_CPP, GEANY_WORDCHARS);
 	filetypes_get_config(config, GEANY_FILETYPES_CPP);
-	
+
 	g_key_file_free(config);
 
 	// load global tags file for C autocompletion
@@ -639,7 +639,7 @@ void styleset_makefile(ScintillaObject *sci)
 
 	SSM (sci, SCI_SETLEXER, SCLEX_MAKEFILE, 0);
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_MAKE]->wordchars);
-	
+
 	styleset_set_style(sci, SCE_MAKE_DEFAULT, GEANY_FILETYPES_MAKE, 0);
 	styleset_set_style(sci, SCE_MAKE_COMMENT, GEANY_FILETYPES_MAKE, 1);
 	styleset_set_style(sci, SCE_MAKE_PREPROCESSOR, GEANY_FILETYPES_MAKE, 2);
@@ -1208,7 +1208,7 @@ void styleset_perl(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_PL_PREPROCESSOR, GEANY_FILETYPES_PERL, 7);
 	styleset_set_style(sci, SCE_PL_OPERATOR, GEANY_FILETYPES_PERL, 8);
 	styleset_set_style(sci, SCE_PL_IDENTIFIER, GEANY_FILETYPES_PERL, 9);
-	styleset_set_style(sci, SCE_P_DEFAULT, GEANY_FILETYPES_PERL, 10);
+	styleset_set_style(sci, SCE_PL_SCALAR, GEANY_FILETYPES_PERL, 10);
 	styleset_set_style(sci, SCE_PL_POD, GEANY_FILETYPES_PERL, 11);
 	styleset_set_style(sci, SCE_PL_REGEX, GEANY_FILETYPES_PERL, 12);
 	styleset_set_style(sci, SCE_PL_ARRAY, GEANY_FILETYPES_PERL, 13);
@@ -1227,7 +1227,7 @@ static void styleset_python_init(void)
 	style_set_load_file(config, GEANY_DATA_DIR "/filetypes.python", G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_PYTHON] = g_new(style_set, 1);
-	styleset_get_hex(config, "styling", "default", "0xFF0000", "0xffffff", "false", types[GEANY_FILETYPES_PYTHON]->styling[0]);
+	styleset_get_hex(config, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_PYTHON]->styling[0]);
 	styleset_get_hex(config, "styling", "commentline", "0xFF0000", "0xffffff", "false", types[GEANY_FILETYPES_PYTHON]->styling[1]);
 	styleset_get_hex(config, "styling", "number", "0x800040", "0xffffff", "false", types[GEANY_FILETYPES_PYTHON]->styling[2]);
 	styleset_get_hex(config, "styling", "string", "0x008000", "0xffffff", "false", types[GEANY_FILETYPES_PYTHON]->styling[3]);
@@ -1276,6 +1276,77 @@ void styleset_python(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_P_IDENTIFIER, GEANY_FILETYPES_PYTHON, 11);
 	styleset_set_style(sci, SCE_P_COMMENTBLOCK, GEANY_FILETYPES_PYTHON, 12);
 	styleset_set_style(sci, SCE_P_STRINGEOL, GEANY_FILETYPES_PYTHON, 13);
+
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.comment.python", (sptr_t) "1");
+}
+
+
+static void styleset_ruby_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+
+	style_set_load_file(config, GEANY_DATA_DIR "/filetypes.ruby", G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	types[GEANY_FILETYPES_RUBY] = g_new(style_set, 1);
+	styleset_get_hex(config, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[0]);
+	styleset_get_hex(config, "styling", "commentline", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[1]);
+	styleset_get_hex(config, "styling", "number", "0x800040", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[2]);
+	styleset_get_hex(config, "styling", "string", "0x008000", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[3]);
+	styleset_get_hex(config, "styling", "character", "0x008000", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[4]);
+	styleset_get_hex(config, "styling", "word", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_RUBY]->styling[5]);
+	styleset_get_hex(config, "styling", "global", "0x991111", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[6]);
+	styleset_get_hex(config, "styling", "symbol", "0x208000", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[7]);
+	styleset_get_hex(config, "styling", "classname", "0x00007f", "0xffffff", "true", types[GEANY_FILETYPES_RUBY]->styling[8]);
+	styleset_get_hex(config, "styling", "defname", "0x00007f", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[9]);
+	styleset_get_hex(config, "styling", "operator", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[10]);
+	styleset_get_hex(config, "styling", "identifier", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[11]);
+	styleset_get_hex(config, "styling", "modulename", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_RUBY]->styling[12]);
+	styleset_get_hex(config, "styling", "backticks", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_RUBY]->styling[13]);
+	styleset_get_hex(config, "styling", "instancevar", "0x000000", "0xffffff", "true", types[GEANY_FILETYPES_RUBY]->styling[14]);
+	styleset_get_hex(config, "styling", "classvar", "0x000000", "0xffffff", "true", types[GEANY_FILETYPES_RUBY]->styling[15]);
+	styleset_get_hex(config, "styling", "datasection", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[16]);
+	styleset_get_hex(config, "styling", "heredelim", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[17]);
+	styleset_get_hex(config, "styling", "worddemoted", "0x991111", "0xffffff", "false", types[GEANY_FILETYPES_RUBY]->styling[18]);
+
+	types[GEANY_FILETYPES_RUBY]->keywords = g_new(gchar*, 2);
+	styleset_get_keywords(config, "keywords", "primary", GEANY_FILETYPES_RUBY, 0, "__FILE__ and def end in or self unless __LINE__ begin defined? ensure module redo super until BEGIN break do false next rescue then when END case else for nil require retry true while alias class elsif if not return undef yield");
+	types[GEANY_FILETYPES_RUBY]->keywords[1] = NULL;
+
+	styleset_get_wordchars(config, GEANY_FILETYPES_RUBY, GEANY_WORDCHARS);
+	filetypes_get_config(config, GEANY_FILETYPES_RUBY);
+
+	g_key_file_free(config);
+}
+
+
+void styleset_ruby(ScintillaObject *sci)
+{
+	if (types[GEANY_FILETYPES_RUBY] == NULL) styleset_ruby_init();
+
+	styleset_common(sci, 5);
+	SSM (sci, SCI_SETLEXER, SCLEX_RUBY, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_RUBY]->keywords[0]);
+
+	styleset_set_style(sci, SCE_RB_DEFAULT, GEANY_FILETYPES_RUBY, 0);
+	styleset_set_style(sci, SCE_RB_COMMENTLINE, GEANY_FILETYPES_RUBY, 1);
+	styleset_set_style(sci, SCE_RB_NUMBER, GEANY_FILETYPES_RUBY, 2);
+	styleset_set_style(sci, SCE_RB_STRING, GEANY_FILETYPES_RUBY, 3);
+	styleset_set_style(sci, SCE_RB_CHARACTER, GEANY_FILETYPES_RUBY, 4);
+	styleset_set_style(sci, SCE_RB_WORD, GEANY_FILETYPES_RUBY, 5);
+	styleset_set_style(sci, SCE_RB_GLOBAL, GEANY_FILETYPES_RUBY, 6);
+	styleset_set_style(sci, SCE_RB_SYMBOL, GEANY_FILETYPES_RUBY, 7);
+	styleset_set_style(sci, SCE_RB_CLASSNAME, GEANY_FILETYPES_RUBY, 8);
+	styleset_set_style(sci, SCE_RB_DEFNAME, GEANY_FILETYPES_RUBY, 9);
+	styleset_set_style(sci, SCE_RB_OPERATOR, GEANY_FILETYPES_RUBY, 10);
+	styleset_set_style(sci, SCE_RB_IDENTIFIER, GEANY_FILETYPES_RUBY, 11);
+	styleset_set_style(sci, SCE_RB_MODULE_NAME, GEANY_FILETYPES_RUBY, 12);
+	styleset_set_style(sci, SCE_RB_BACKTICKS, GEANY_FILETYPES_RUBY, 13);
+	styleset_set_style(sci, SCE_RB_INSTANCE_VAR, GEANY_FILETYPES_RUBY, 14);
+	styleset_set_style(sci, SCE_RB_CLASS_VAR, GEANY_FILETYPES_RUBY, 15);
+	styleset_set_style(sci, SCE_RB_DATASECTION, GEANY_FILETYPES_RUBY, 16);
+	styleset_set_style(sci, SCE_RB_HERE_DELIM, GEANY_FILETYPES_RUBY, 17);
+	styleset_set_style(sci, SCE_RB_WORD_DEMOTED, GEANY_FILETYPES_RUBY, 18);
 }
 
 
@@ -1390,7 +1461,7 @@ static void styleset_docbook_init(void)
 	styleset_get_hex(config, "styling", "sgml_error", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_DOCBOOK]->styling[28]);
 
 	types[GEANY_FILETYPES_DOCBOOK]->keywords = g_new(gchar*, 3);
-	styleset_get_keywords(config, "keywords", "elements", GEANY_FILETYPES_DOCBOOK, 0, 
+	styleset_get_keywords(config, "keywords", "elements", GEANY_FILETYPES_DOCBOOK, 0,
 		   "abbrev abstract accel ackno acronym action address affiliation alt anchor \
 			answer appendix appendixinfo application area areaset areaspec arg article \
 			articleinfo artpagenums attribution audiodata audioobject author authorblurb \

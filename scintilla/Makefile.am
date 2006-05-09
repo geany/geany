@@ -22,6 +22,7 @@ LexOthers.cxx \
 LexPascal.cxx \
 LexPerl.cxx \
 LexPython.cxx \
+LexRuby.cxx \
 LexSQL.cxx
 
 SRCS= \
