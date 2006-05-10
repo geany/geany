@@ -104,9 +104,11 @@ static void findPerlTags (void)
 	    vStringClear (name);
 
 	}
-	if (strncmp((const char*) cp, "our", (size_t) 3) == 0)
+	else if (strncmp((const char*) cp, "our", (size_t) 3) == 0)
 	{
 		cp += 3;
+		while (isspace (*cp)) cp++;
+
 
 	    // skip something like my ($bla)
 	    if (*(const char*) cp != '$' && ! isalpha(*(const char*) cp)) continue;
@@ -125,9 +127,11 @@ static void findPerlTags (void)
 		makeSimpleTag (name, PerlKinds, K_OUR);
 	    vStringClear (name);
 	}
-	if (strncmp((const char*) cp, "local", (size_t) 5) == 0)
+	else if (strncmp((const char*) cp, "local", (size_t) 5) == 0)
 	{
 		cp += 5;
+		while (isspace (*cp)) cp++;
+
 
 	    // skip something like my($bla)
 	    if (*(const char*) cp != '$' && ! isalpha(*(const char*) cp)) continue;
