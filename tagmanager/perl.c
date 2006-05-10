@@ -24,17 +24,24 @@
 */
 typedef enum {
     K_SUBROUTINE,
-    K_PACKAGE
+    K_PACKAGE,
+    K_LOCAL,
+    K_MY,
+    K_OUR
 } perlKind;
 
 static kindOption PerlKinds [] = {
     { TRUE, 'f', "function", "functions" },
-    { TRUE, 'c', "class", "packages" }
+    { TRUE, 'c', "class", "packages" },
+    { TRUE, 'l', "macro", "local variables" },
+    { TRUE, 'm', "member", "my variables" },
+    { TRUE, 'v', "variable", "our variables" }
 };
 
 /*
 *   FUNCTION DEFINITIONS
 */
+
 
 /* Algorithm adapted from from GNU etags.
  * Perl support by Bart Robinson <lomew@cs.utah.edu>
@@ -73,8 +80,74 @@ static void findPerlTags (void)
 	while (isspace (*cp))
 	    cp++;
 
-	if (strncmp((const char*) cp, "sub", (size_t) 3) == 0 ||
-	    strncmp((const char*) cp, "package", (size_t) 7) == 0)
+	if (strncmp((const char*) cp, "my", (size_t) 2) == 0)
+	{
+		cp += 2;
+		while (isspace (*cp)) cp++;
+
+	    // skip something like my($bla)
+	    if (*(const char*) cp != '$' && ! isalpha(*(const char*) cp)) continue;
+
+		cp++; // to skip the $ sign
+
+	    if (! isalpha(*(const char*) cp)) continue;
+
+	    while (! isspace ((int) *cp) && *cp != '\0' && *cp != '=' && *cp != ';')
+	    {
+		vStringPut (name, (int) *cp);
+		cp++;
+	    }
+
+	    vStringTerminate (name);
+	    if (vStringLength (name) > 0)
+		makeSimpleTag (name, PerlKinds, K_MY);
+	    vStringClear (name);
+
+	}
+	if (strncmp((const char*) cp, "our", (size_t) 3) == 0)
+	{
+		cp += 3;
+
+	    // skip something like my ($bla)
+	    if (*(const char*) cp != '$' && ! isalpha(*(const char*) cp)) continue;
+
+		cp++; // to skip the $ sign
+
+	    if (! isalpha(*(const char*) cp)) continue;
+
+	    while (! isspace ((int) *cp) && *cp != '\0' && *cp != '=' && *cp != ';')
+	    {
+		vStringPut (name, (int) *cp);
+		cp++;
+	    }
+	    vStringTerminate (name);
+	    if (vStringLength (name) > 0)
+		makeSimpleTag (name, PerlKinds, K_OUR);
+	    vStringClear (name);
+	}
+	if (strncmp((const char*) cp, "local", (size_t) 5) == 0)
+	{
+		cp += 5;
+
+	    // skip something like my($bla)
+	    if (*(const char*) cp != '$' && ! isalpha(*(const char*) cp)) continue;
+
+		cp++; // to skip the $ sign
+
+	    if (! isalpha(*(const char*) cp)) continue;
+
+	    while (! isspace ((int) *cp) && *cp != '\0' && *cp != '=' && *cp != ';')
+	    {
+		vStringPut (name, (int) *cp);
+		cp++;
+	    }
+	    vStringTerminate (name);
+	    if (vStringLength (name) > 0)
+		makeSimpleTag (name, PerlKinds, K_LOCAL);
+	    vStringClear (name);
+	}
+	else if (strncmp((const char*) cp, "sub", (size_t) 3) == 0 ||
+			 strncmp((const char*) cp, "package", (size_t) 7) == 0)
 	{
 	    if (strncmp((const char*) cp, "sub", (size_t) 3) == 0)
 	    {
@@ -89,7 +162,7 @@ static void findPerlTags (void)
 
 	    while (isspace (*cp))
 		cp++;
-	    while (! isspace ((int) *cp) && *cp != '\0' && *cp != '{' && *cp != '(')
+	    while (! isspace ((int) *cp) && *cp != '\0' && *cp != '{' && *cp != '(' && *cp != ';')
 	    {
 		vStringPut (name, (int) *cp);
 		cp++;

@@ -79,7 +79,7 @@ static void findRubyTags (void)
 		{
 		    while (isspace ((int) *cp))
 			++cp;
-		    while (isalnum ((int) *cp)  ||  *cp == '_')
+		    while (isalnum ((int) *cp)  ||  *cp == '_'  ||  *cp == ':')
 		    {
 			vStringPut (name, (int) *cp);
 			++cp;
@@ -94,7 +94,7 @@ static void findRubyTags (void)
 		cp += 3;
 		if (isspace ((int) *cp))
 		{
-		    while (isspace ((int) *cp))
+		    while (isalnum ((int) *cp) ||  *cp == ':')
 			++cp;
 
 		    /* Put the valid characters allowed in a variable name
@@ -134,5 +134,5 @@ extern parserDefinition* RubyParser (void)
     def->kindCount  = KIND_COUNT (RubyKinds);
     def->extensions = extensions;
     def->parser     = findRubyTags;
-    return def;  
+    return def;
 }
