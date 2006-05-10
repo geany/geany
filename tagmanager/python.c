@@ -24,12 +24,13 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_CLASS, K_FUNCTION
+    K_CLASS, K_FUNCTION, K_METHOD
 } pythonKind;
 
 static kindOption PythonKinds [] = {
     { TRUE, 'c', "class",    "classes" },
-    { TRUE, 'f', "function", "functions" }
+    { TRUE, 'f', "function", "functions" },
+    { TRUE, 'm', "member", "methods" }
 };
 
 /*
@@ -39,6 +40,7 @@ static kindOption PythonKinds [] = {
 static void findPythonTags (void)
 {
     vString *name = vStringNew ();
+    vString *lastClass = vStringNew();
     const unsigned char *line;
     boolean inMultilineString = FALSE;
 
@@ -54,7 +56,7 @@ static void findPythonTags (void)
 		inMultilineString = (boolean) !inMultilineString;
 		cp += 3;
 	    }
-	    else if (*cp=='\'' &&
+	    if (*cp=='\'' &&
 		strncmp ((const char*) cp, "'''", (size_t) 3) == 0)
 	    {
 		inMultilineString = (boolean) !inMultilineString;
@@ -78,6 +80,7 @@ static void findPythonTags (void)
 		    }
 		    vStringTerminate (name);
 		    makeSimpleTag (name, PythonKinds, K_CLASS);
+		    vStringCopy (lastClass, name);
 		    vStringClear (name);
 		}
 	    }
@@ -94,7 +97,12 @@ static void findPythonTags (void)
 			++cp;
 		    }
 		    vStringTerminate (name);
-		    makeSimpleTag (name, PythonKinds, K_FUNCTION);
+		    if (!isspace(*line) || vStringSize(lastClass) <= 0)
+			makeSimpleTag (name, PythonKinds, K_FUNCTION);
+		    else
+			makeSimpleScopedTag (name, PythonKinds, K_METHOD,
+					     PythonKinds[K_CLASS].name,
+					     vStringValue(lastClass), "public");
 		    vStringClear (name);
 		}
 	    }
@@ -107,6 +115,7 @@ static void findPythonTags (void)
 	}
     }
     vStringDelete (name);
+    vStringDelete (lastClass);
 }
 
 extern parserDefinition* PythonParser (void)

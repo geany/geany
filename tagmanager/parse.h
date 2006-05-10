@@ -89,6 +89,8 @@ extern void processLegacyKindOption (const char *const parameter);
 
 /* Language processing and parsing */
 extern void makeSimpleTag (const vString* const name, kindOption* const kinds, const int kind);
+extern void makeSimpleScopedTag (const vString* const name, kindOption* const kinds, const int kind, const char* scope, const char* scope2, const char *access);
+
 extern parserDefinition* parserNew (const char* name);
 extern const char *getLanguageName (const langType language);
 extern langType getNamedLanguage (const char *const name);
