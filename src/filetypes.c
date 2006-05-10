@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -275,7 +275,7 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_CSS] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_CSS]->id = GEANY_FILETYPES_CSS;
 	filetypes[GEANY_FILETYPES_CSS]->name = g_strdup("CSS");
-	filetypes[GEANY_FILETYPES_CSS]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_CSS]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_CSS]->title = g_strdup(_("Cascading StyleSheet"));
 	filetypes[GEANY_FILETYPES_CSS]->extension = g_strdup("css");
 	filetypes[GEANY_FILETYPES_CSS]->pattern = g_new0(gchar*, 2);
@@ -371,6 +371,24 @@ void filetypes_init_types(void)
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_OMS]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_OMS]->title, filetypes[GEANY_FILETYPES_OMS]);
 
+#define RUBY
+	filetypes[GEANY_FILETYPES_RUBY] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_RUBY]->id = GEANY_FILETYPES_RUBY;
+	filetypes[GEANY_FILETYPES_RUBY]->name = g_strdup("Ruby");
+	filetypes[GEANY_FILETYPES_RUBY]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_RUBY]->title = g_strdup(_("Ruby source file"));
+	filetypes[GEANY_FILETYPES_RUBY]->extension = g_strdup("rb");
+	filetypes[GEANY_FILETYPES_RUBY]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_RUBY]->pattern[0] = g_strdup("*.rb");
+	filetypes[GEANY_FILETYPES_RUBY]->pattern[1] = g_strdup("*.rhtml");
+	filetypes[GEANY_FILETYPES_RUBY]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_RUBY]->style_func_ptr = styleset_ruby;
+	filetypes[GEANY_FILETYPES_RUBY]->comment_open = g_strdup("#");
+	filetypes[GEANY_FILETYPES_RUBY]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_RUBY]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_RUBY]->title, filetypes[GEANY_FILETYPES_RUBY]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_RUBY]->title, filetypes[GEANY_FILETYPES_RUBY]);
+
 #define ALL
 	filetypes[GEANY_FILETYPES_ALL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;
@@ -394,7 +412,7 @@ void filetypes_init_types(void)
 static void filetypes_init_build_programs(filetype *ftype)
 {
 	ftype->programs = g_new0(struct build_programs, 1);
-	
+
 	ftype->menu_items = g_new0(struct build_menu_items, 1);
 }
 
@@ -523,6 +541,8 @@ gchar *filetypes_get_template(filetype *ft)
 			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_JAVA); break;
 		case GEANY_FILETYPES_PASCAL:
 			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_PASCAL); break;
+		case GEANY_FILETYPES_RUBY:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_RUBY); break;
 		default: return NULL;
 	}
 }
@@ -542,7 +562,7 @@ void filetypes_get_config(GKeyFile *config, gint ft)
 	{
 		g_free(filetypes[ft]->comment_open);
 		filetypes[ft]->comment_open = result;
-	}	
+	}
 
 	result = g_key_file_get_string(config, "settings", "comment_close", NULL);
 	if (result != NULL)
@@ -554,33 +574,33 @@ void filetypes_get_config(GKeyFile *config, gint ft)
 	tmp = g_key_file_get_boolean(config, "settings", "comment_use_indent", &error);
 	if (error) g_error_free(error);
 	else filetypes[ft]->comment_use_indent = tmp;
-	
+
 	// read build settings
 	result = g_key_file_get_string(config, "build_settings", "compiler", NULL);
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->compiler = result;
 		filetypes[ft]->menu_items->can_compile = TRUE;
-	}	
+	}
 
 	result = g_key_file_get_string(config, "build_settings", "linker", NULL);
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->linker = result;
 		filetypes[ft]->menu_items->can_link = TRUE;
-	}	
+	}
 
 	result = g_key_file_get_string(config, "build_settings", "run_cmd", NULL);
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->run_cmd = result;
 		filetypes[ft]->menu_items->can_exec = TRUE;
-	}	
+	}
 
 	result = g_key_file_get_string(config, "build_settings", "run_cmd2", NULL);
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->run_cmd2 = result;
 		filetypes[ft]->menu_items->can_exec = TRUE;
-	}	
+	}
 }

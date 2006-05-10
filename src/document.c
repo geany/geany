@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -908,14 +908,21 @@ void document_update_tag_list(gint idx)
 		g_free(locale_filename);
 		if (! doc_list[idx].tm_file) return;
 		tm_workspace_add_object(doc_list[idx].tm_file);
+		/// TODO seems to be useless, but I'm not sure
 		// parse the file after setting the filetype
-		TM_SOURCE_FILE(doc_list[idx].tm_file)->lang = getNamedLanguage((doc_list[idx].file_type)->name);
-		tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
+		//TM_SOURCE_FILE(doc_list[idx].tm_file)->lang = getNamedLanguage((doc_list[idx].file_type)->name);
+		//tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
 		utils_update_tag_list(idx, TRUE);
 	}
 	else
 	{
+		gint len = sci_get_length(doc_list[idx].sci) + 1;
+		gchar *buf = (gchar*) g_malloc(len);
+
+		sci_get_text(doc_list[idx].sci, len, buf);
+
 		if (tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE))
+		//if (tm_source_file_buffer_update(doc_list[idx].tm_file, buf, len, TRUE))
 		{
 			utils_update_tag_list(idx, TRUE);
 		}
@@ -999,8 +1006,8 @@ gchar *document_get_eol_mode(gint idx)
 gchar *document_prepare_template(filetype *ft)
 {
 	gchar *gpl_notice = NULL;
-	gchar *template;
-	gchar *ft_template;
+	gchar *template = NULL;
+	gchar *ft_template = NULL;
 
 	if (ft != NULL)
 	{
@@ -1018,6 +1025,16 @@ gchar *document_prepare_template(filetype *ft)
 			{	// Pascal: comments are in { } brackets
 				gpl_notice = templates_get_template_fileheader(
 						GEANY_TEMPLATE_FILEHEADER_PASCAL, ft->extension, -1);
+				break;
+			}
+			case GEANY_FILETYPES_PYTHON:
+			case GEANY_FILETYPES_RUBY:
+			case GEANY_FILETYPES_SH:
+			case GEANY_FILETYPES_MAKE:
+			case GEANY_FILETYPES_PERL:
+			{
+				gpl_notice = templates_get_template_fileheader(
+						GEANY_TEMPLATE_FILEHEADER_ROUTE, ft->extension, -1);
 				break;
 			}
 			default:

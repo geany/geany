@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -2284,7 +2284,7 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 	{
 		line = utils_get_current_tag(idx, &cur_tag);
 		// utils_get_current_tag returns -1 on failure, so sci_get_position_from_line
-		// returns the current position, soit should be safe
+		// returns the current position, so it should be safe
 		pos = sci_get_position_from_line(doc_list[idx].sci, line - 1);
 	}
 
@@ -2295,14 +2295,28 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 		cur_tag = g_strdup(_("unknown"));
 	}
 
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_PASCAL)
+	switch (doc_list[idx].file_type->id)
 	{
-		text = templates_get_template_function(GEANY_TEMPLATE_FUNCTION_PASCAL, cur_tag);
+		case GEANY_FILETYPES_PASCAL:
+		{
+			text = templates_get_template_function(GEANY_TEMPLATE_FUNCTION_PASCAL, cur_tag);
+			break;
+		}
+		case GEANY_FILETYPES_PYTHON:
+		case GEANY_FILETYPES_RUBY:
+		case GEANY_FILETYPES_SH:
+		case GEANY_FILETYPES_MAKE:
+		case GEANY_FILETYPES_PERL:
+		{
+			text = templates_get_template_function(GEANY_TEMPLATE_FUNCTION_ROUTE, cur_tag);
+			break;
+		}
+		default:
+		{
+			text = templates_get_template_function(GEANY_TEMPLATE_FUNCTION, cur_tag);
+		}
 	}
-	else
-	{
-		text = templates_get_template_function(GEANY_TEMPLATE_FUNCTION, cur_tag);
-	}
+
 	sci_insert_text(doc_list[idx].sci, pos, text);
 	g_free(cur_tag);
 	g_free(text);
@@ -2316,14 +2330,28 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	gchar *text;
 
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_PASCAL)
+	switch (doc_list[idx].file_type->id)
 	{
-		text = templates_get_template_generic(GEANY_TEMPLATE_MULTILINE_PASCAL);
+		case GEANY_FILETYPES_PASCAL:
+		{
+			text = templates_get_template_generic(GEANY_TEMPLATE_MULTILINE_PASCAL);
+			break;
+		}
+		case GEANY_FILETYPES_PYTHON:
+		case GEANY_FILETYPES_RUBY:
+		case GEANY_FILETYPES_SH:
+		case GEANY_FILETYPES_MAKE:
+		case GEANY_FILETYPES_PERL:
+		{
+			text = templates_get_template_generic(GEANY_TEMPLATE_MULTILINE_ROUTE);
+			break;
+		}
+		default:
+		{
+			text = templates_get_template_generic(GEANY_TEMPLATE_MULTILINE);
+		}
 	}
-	else
-	{
-		text = templates_get_template_generic(GEANY_TEMPLATE_MULTILINE);
-	}
+
 	sci_insert_text(doc_list[idx].sci, -1, text);
 	g_free(text);
 }
@@ -2336,14 +2364,28 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	gchar *text;
 
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_PASCAL)
+	switch (doc_list[idx].file_type->id)
 	{
-		text = templates_get_template_gpl(GEANY_TEMPLATE_GPL_PASCAL);
+		case GEANY_FILETYPES_PASCAL:
+		{
+			text = templates_get_template_gpl(GEANY_TEMPLATE_GPL_PASCAL);
+			break;
+		}
+		case GEANY_FILETYPES_PYTHON:
+		case GEANY_FILETYPES_RUBY:
+		case GEANY_FILETYPES_SH:
+		case GEANY_FILETYPES_MAKE:
+		case GEANY_FILETYPES_PERL:
+		{
+			text = templates_get_template_gpl(GEANY_TEMPLATE_GPL_ROUTE);
+			break;
+		}
+		default:
+		{
+			text = templates_get_template_gpl(GEANY_TEMPLATE_GPL);
+		}
 	}
-	else
-	{
-		text = templates_get_template_gpl(GEANY_TEMPLATE_GPL);
-	}
+
 	sci_insert_text(doc_list[idx].sci, -1, text);
 	g_free(text);
 }
@@ -2375,14 +2417,28 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	gchar *text;
 
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_PASCAL)
+	switch (doc_list[idx].file_type->id)
 	{
-		text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER_PASCAL, NULL, idx);
+		case GEANY_FILETYPES_PASCAL:
+		{
+			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER_PASCAL, NULL, idx);
+			break;
+		}
+		case GEANY_FILETYPES_PYTHON:
+		case GEANY_FILETYPES_RUBY:
+		case GEANY_FILETYPES_SH:
+		case GEANY_FILETYPES_MAKE:
+		case GEANY_FILETYPES_PERL:
+		{
+			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER_ROUTE, NULL, idx);
+			break;
+		}
+		default:
+		{
+			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER, NULL, idx);
+		}
 	}
-	else
-	{
-		text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER, NULL, idx);
-	}
+
 	sci_insert_text(doc_list[idx].sci, 0, text);
 	sci_goto_pos(doc_list[idx].sci, 0, FALSE);
 	g_free(text);

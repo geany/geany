@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -42,14 +42,18 @@ void templates_free_templates(void);
 enum
 {
 	GEANY_TEMPLATE_GPL_PASCAL = 0,
+	GEANY_TEMPLATE_GPL_ROUTE,
 	GEANY_TEMPLATE_GPL,
 	GEANY_TEMPLATE_FILEHEADER_PASCAL,
+	GEANY_TEMPLATE_FILEHEADER_ROUTE,
 	GEANY_TEMPLATE_FILEHEADER,
 	GEANY_TEMPLATE_CHANGELOG,
 	GEANY_TEMPLATE_FUNCTION,
 	GEANY_TEMPLATE_FUNCTION_PASCAL,
+	GEANY_TEMPLATE_FUNCTION_ROUTE,
 	GEANY_TEMPLATE_MULTILINE,
 	GEANY_TEMPLATE_MULTILINE_PASCAL,
+	GEANY_TEMPLATE_MULTILINE_ROUTE,
 
 	GEANY_TEMPLATE_FILETYPE_NONE,
 	GEANY_TEMPLATE_FILETYPE_C,
@@ -57,7 +61,7 @@ enum
 	GEANY_TEMPLATE_FILETYPE_JAVA,
 	GEANY_TEMPLATE_FILETYPE_PHP,
 	GEANY_TEMPLATE_FILETYPE_PASCAL,
-	GEANY_TEMPLATE_FILETYPE_LATEX,
+	GEANY_TEMPLATE_FILETYPE_RUBY,
 
 	GEANY_MAX_TEMPLATES
 };
@@ -79,7 +83,7 @@ static const gchar templates_gpl_notice[] = "\
  *\n\
  *      You should have received a copy of the GNU General Public License\n\
  *      along with this program; if not, write to the Free Software\n\
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.\n\
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
 ";
 
 static const gchar templates_gpl_notice_pascal[] = "\
@@ -95,7 +99,23 @@ static const gchar templates_gpl_notice_pascal[] = "\
 \n\
       You should have received a copy of the GNU General Public License\n\
       along with this program; if not, write to the Free Software\n\
-      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.\n\
+      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
+";
+
+static const gchar templates_gpl_notice_route[] = "\
+#      This program is free software; you can redistribute it and/or modify\n\
+#      it under the terms of the GNU General Public License as published by\n\
+#      the Free Software Foundation; either version 2 of the License, or\n\
+#      (at your option) any later version.\n\
+#\n\
+#      This program is distributed in the hope that it will be useful,\n\
+#      but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+#      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+#      GNU General Public License for more details.\n\
+#\n\
+#      You should have received a copy of the GNU General Public License\n\
+#      along with this program; if not, write to the Free Software\n\
+#      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
 ";
 
 static const gchar templates_function_description[] = "\
@@ -112,6 +132,13 @@ static const gchar templates_function_description_pascal[] = "\
  @return\n\
 }\n";
 
+static const gchar templates_function_description_route[] = "\
+#\n\
+# name: {functionname}\n\
+# @param\n\
+# @return\n\
+";
+
 static const gchar templates_multiline[] = "\
 /* \n\
  * \n\
@@ -121,6 +148,10 @@ static const gchar templates_multiline_pascal[] = "\
 {\n\
  \n\
 }";
+
+static const gchar templates_multiline_route[] = "\
+#\n\
+#";
 
 static const gchar templates_fileheader[] = "\
 /*\n\
@@ -139,6 +170,15 @@ static const gchar templates_fileheader_pascal[] = "\
 \n\
 {gpl}\
 }\n\n";
+
+static const gchar templates_fileheader_route[] = "\
+#\n\
+#      {filename}\n\
+#\n\
+#      Copyright {year} {developer} <{mail}>\n\
+#\n\
+{gpl}\
+#\n\n";
 
 static const gchar templates_changelog[] = "\
 {date}  {developer}  <{mail}>\n\
@@ -205,6 +245,15 @@ public class {untitled} {\n\
 }\n\
 ";
 
-static const gchar templates_filetype_latex[] = "";
+static const gchar templates_filetype_ruby[] = "\n\
+\n\
+class StdClass\n\
+	def initialize\n\
+		\n\
+	end\n\
+end\n\
+\n\
+x = StdClass.new\\n\
+";
 
 #endif
