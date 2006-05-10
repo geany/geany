@@ -1,6 +1,40 @@
+2006-05-10  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/document.c, src/filetypes.c, src/templates.c, src/callbacks.c:
+   added template support for filetypes with comment character #,
+   updated GPL to the current address of the FSF
+ * tagmanager/python.c: fixed wrong identification of keyword class in
+                        ''' comments
+ * tagmanager/parse.c, tagmanager/python.c:
+   added code from anjuta to parse methods and functions separately
+
+
+2006-05-09  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * scintilla/ScintillaGTK.cxx: fixed encoding problem which causes many
+                               problems with non-Ascii characters
+ * src/document.c: fixed a strange segfault at creating new file tabs
+
+
+2006-05-08  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: save current file if it is executed
+                    (e.g. shell scripts)
+ * src/highlighting.c: fixed a typo which prevented highlighting of
+                       variables in Perl
+ * src/filetypes.c, tagmanager/Makefile.am, tagmanager/parsers.h,
+   tagmanager/css.c: added parser for CSS filetype
+ * tagmanager/ruby.c, tagmanager/Makefile.am, tagmanager/parsers.h,
+   scintilla/LexRuby.cxx, scintilla/Makefile.am, scintilla/KeyWords.cxx
+   src/filetypes.c, src/highlighting.c: added new filetype Ruby
+
+
+
 2006-05-05  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c: fix a crash when clicking in the compiler output
+ * src/dialogs.c: improved file permission display if they cannot be
+                  read (e.g. on Windows)
 
 
 2006-05-03  Enrico Troeger  <enrico.troeger@uvena.de>
