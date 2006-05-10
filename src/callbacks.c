@@ -996,7 +996,7 @@ on_editor_key_press_event              (GtkWidget *widget,
 		case 'R':
 		{
 			if (event->state & GDK_CONTROL_MASK)
-				document_update_tag_list(idx);
+				document_update_tag_list(idx, TRUE);
 			else
 				ret = FALSE;
 			break;

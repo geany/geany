@@ -574,7 +574,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 				(readonly) ? _(", read-only") : "");
 	}
 	//utils_update_tag_list(idx, TRUE);
-	document_update_tag_list(idx);
+	document_update_tag_list(idx, FALSE);
 	document_set_text_changed(idx);
 
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
@@ -896,7 +896,7 @@ void document_set_font(ScintillaObject *sci, const gchar *font_name, gint size)
 }
 
 
-void document_update_tag_list(gint idx)
+void document_update_tag_list(gint idx, gboolean update)
 {
 	// if the filetype doesn't has a tag parser or it is a new file, leave
 	if (idx == -1 || ! doc_list[idx].file_type->has_tags || ! doc_list[idx].file_name) return;
@@ -908,10 +908,13 @@ void document_update_tag_list(gint idx)
 		g_free(locale_filename);
 		if (! doc_list[idx].tm_file) return;
 		tm_workspace_add_object(doc_list[idx].tm_file);
-		/// TODO seems to be useless, but I'm not sure
-		// parse the file after setting the filetype
-		//TM_SOURCE_FILE(doc_list[idx].tm_file)->lang = getNamedLanguage((doc_list[idx].file_type)->name);
-		//tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
+		if (update)
+		{
+			// parse the file after setting the filetype
+			// this is necessary to switch between filetypes
+			TM_SOURCE_FILE(doc_list[idx].tm_file)->lang = getNamedLanguage((doc_list[idx].file_type)->name);
+			tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
+		}
 		utils_update_tag_list(idx, TRUE);
 	}
 	else
@@ -941,7 +944,7 @@ void document_set_filetype(gint idx, filetype *type)
 	if (type->id > GEANY_MAX_FILE_TYPES) return;
 
 	doc_list[idx].file_type = type;
-	document_update_tag_list(idx);
+	document_update_tag_list(idx, TRUE);
 	type->style_func_ptr(doc_list[idx].sci);
 
 	// For C/C++/Java files, get list of typedefs for colourising
