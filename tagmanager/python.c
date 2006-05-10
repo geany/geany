@@ -54,6 +54,12 @@ static void findPythonTags (void)
 		inMultilineString = (boolean) !inMultilineString;
 		cp += 3;
 	    }
+	    else if (*cp=='\'' &&
+		strncmp ((const char*) cp, "'''", (size_t) 3) == 0)
+	    {
+		inMultilineString = (boolean) !inMultilineString;
+		cp += 3;
+	    }
 	    if (inMultilineString  ||  isspace ((int) *cp))
 		++cp;
 	    else if (*cp == '#')
