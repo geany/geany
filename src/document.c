@@ -250,6 +250,12 @@ gint document_create_new_sci(const gchar *filename)
 	pango_font_description_free(pfd);
 	g_free(fname);
 
+	// this is only for testing, should be tested seriously, could speed up scrolling
+	if (alternative_scrolling)
+	{
+		SSM(sci, SCI_SETBUFFEREDDRAW, 0, 0);
+		SSM(sci, SCI_SETTWOPHASEDRAW, 0, 0);
+	}
 
 	this.tabmenu_label = gtk_label_new(title);
 	if (app->tab_order_ltr)
@@ -573,8 +579,6 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
 				(readonly) ? _(", read-only") : "");
 	}
-	//utils_update_tag_list(idx, TRUE);
-	document_update_tag_list(idx, FALSE);
 	document_set_text_changed(idx);
 
 #if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)

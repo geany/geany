@@ -215,7 +215,7 @@ typedef struct MyApp
 MyApp *app;
 
 
-
+gboolean alternative_scrolling;
 
 // small struct to track tag name and type together
 typedef struct GeanySymbol
