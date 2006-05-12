@@ -120,6 +120,27 @@ void treeviews_init_tag_list(gint idx)
 */
 			break;
 		}
+		case GEANY_FILETYPES_RUBY:
+		{
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Methods"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_class), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_class), 0, _("Class"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_member), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_member), 0, _("Singleton"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_macro), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_macro), 0, _("Mixin"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_variable), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_variable), 0, _("Variables"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_struct), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_struct), 0, _("Members"), -1);
+/*			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_namespace), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Begin"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_other), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_other), 0, _("Other"), -1);
+*/
+			break;
+		}
 		default:
 		{
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
