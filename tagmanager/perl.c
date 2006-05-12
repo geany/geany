@@ -42,6 +42,26 @@ static kindOption PerlKinds [] = {
 *   FUNCTION DEFINITIONS
 */
 
+static const unsigned char *createTagString(const unsigned char *str, int type)
+{
+    vString *n = vStringNew();
+    while (! isspace ((int) *str) && *str != '\0' && *str != '=' && *str != ';' &&
+			*str != ',' && *str != ')' && *str != '$')
+    {
+		vStringPut (n, (int) *str);
+		str++;
+    }
+
+    vStringTerminate (n);
+    if (vStringLength (n) > 0)
+	makeSimpleTag (n, PerlKinds, type);
+    vStringDelete (n);
+
+/*    if ((*(const char*)str) == ')')
+		return str-1;
+	else
+*/		return str;
+}
 
 /* Algorithm adapted from from GNU etags.
  * Perl support by Bart Robinson <lomew@cs.utah.edu>
@@ -85,70 +105,87 @@ static void findPerlTags (void)
 		cp += 2;
 		while (isspace (*cp)) cp++;
 
-	    // skip something like my($bla)
-	    if (*(const char*) cp != '$' && ! isalpha(*(const char*) cp)) continue;
-
-		cp++; // to skip the $ sign
-
-	    if (! isalpha(*(const char*) cp)) continue;
-
-	    while (! isspace ((int) *cp) && *cp != '\0' && *cp != '=' && *cp != ';')
+	    // parse something like my($bla)
+	    if (*(const char*) cp == '(')
 	    {
-		vStringPut (name, (int) *cp);
-		cp++;
+			cp++;
+			while (*(const char*) cp != ')')
+			{
+				while (isspace (*(const char*) cp)) cp++;
+				if (*(const char*) cp == ',') cp++;  // to skip ','
+				while (isspace (*(const char*) cp)) cp++;
+				cp++; // to skip $ sign
+				cp = createTagString(cp, K_MY);
+				while (isspace (*(const char*) cp)) cp++;
+			}
 	    }
+		// parse my $bla
+		else
+		{
+			cp++; // to skip the $ sign
 
-	    vStringTerminate (name);
-	    if (vStringLength (name) > 0)
-		makeSimpleTag (name, PerlKinds, K_MY);
-	    vStringClear (name);
+			if (! isalpha (*(const char*) cp)) continue;
 
+			createTagString (cp, K_MY);
+		}
 	}
 	else if (strncmp((const char*) cp, "our", (size_t) 3) == 0)
 	{
 		cp += 3;
 		while (isspace (*cp)) cp++;
 
-
-	    // skip something like my ($bla)
-	    if (*(const char*) cp != '$' && ! isalpha(*(const char*) cp)) continue;
-
-		cp++; // to skip the $ sign
-
-	    if (! isalpha(*(const char*) cp)) continue;
-
-	    while (! isspace ((int) *cp) && *cp != '\0' && *cp != '=' && *cp != ';')
+	    // parse something like my($bla)
+	    if (*(const char*) cp == '(')
 	    {
-		vStringPut (name, (int) *cp);
-		cp++;
+			cp++;
+			while (*(const char*) cp != ')')
+			{
+				while (isspace (*(const char*) cp)) cp++;
+				if (*(const char*) cp == ',') cp++;  // to skip ','
+				while (isspace (*(const char*) cp)) cp++;
+				cp++; // to skip $ sign
+				cp = createTagString(cp, K_OUR);
+				while (isspace (*(const char*) cp)) cp++;
+			}
 	    }
-	    vStringTerminate (name);
-	    if (vStringLength (name) > 0)
-		makeSimpleTag (name, PerlKinds, K_OUR);
-	    vStringClear (name);
+		// parse my $bla
+		else
+		{
+			cp++; // to skip the $ sign
+
+			if (! isalpha (*(const char*) cp)) continue;
+
+			createTagString (cp, K_OUR);
+		}
 	}
 	else if (strncmp((const char*) cp, "local", (size_t) 5) == 0)
 	{
 		cp += 5;
 		while (isspace (*cp)) cp++;
 
-
-	    // skip something like my($bla)
-	    if (*(const char*) cp != '$' && ! isalpha(*(const char*) cp)) continue;
-
-		cp++; // to skip the $ sign
-
-	    if (! isalpha(*(const char*) cp)) continue;
-
-	    while (! isspace ((int) *cp) && *cp != '\0' && *cp != '=' && *cp != ';')
+	    // parse something like my($bla)
+	    if (*(const char*) cp == '(')
 	    {
-		vStringPut (name, (int) *cp);
-		cp++;
+			cp++;
+			while (*(const char*) cp != ')')
+			{
+				while (isspace (*(const char*) cp)) cp++;
+				if (*(const char*) cp == ',') cp++;  // to skip ','
+				while (isspace (*(const char*) cp)) cp++;
+				cp++; // to skip $ sign
+				cp = createTagString(cp, K_LOCAL);
+				while (isspace (*(const char*) cp)) cp++;
+			}
 	    }
-	    vStringTerminate (name);
-	    if (vStringLength (name) > 0)
-		makeSimpleTag (name, PerlKinds, K_LOCAL);
-	    vStringClear (name);
+		// parse my $bla
+		else
+		{
+			cp++; // to skip the $ sign
+
+			if (! isalpha (*(const char*) cp)) continue;
+
+			createTagString (cp, K_LOCAL);
+		}
 	}
 	else if (strncmp((const char*) cp, "sub", (size_t) 3) == 0 ||
 			 strncmp((const char*) cp, "package", (size_t) 7) == 0)
