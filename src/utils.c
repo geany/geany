@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -314,7 +314,7 @@ gboolean utils_isbrace(gchar c)
 			case '>':	return TRUE;
 		}
 	}
-	else 
+	else
 	{
 		switch (c)
 		{
@@ -579,7 +579,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 
 		if (len != bytes_written)
 		{
-			geany_debug("utils_write_file(): written only %d bytes, had to write %d bytes to %s", 
+			geany_debug("utils_write_file(): written only %d bytes, had to write %d bytes to %s",
 								bytes_written, len, filename);
 			return EIO;
 		}
@@ -1413,7 +1413,7 @@ gchar *utils_remove_ext_from_filename(const gchar *filename)
 	gint i = 0;
 
 	if (filename == NULL) return NULL;
-	
+
 	if (! last_dot) return g_strdup(filename);
 
 	while ((filename + i) != last_dot)
@@ -1624,10 +1624,11 @@ gint utils_make_settings_dir(const gchar *dir)
 		error_nr = utils_write_file(fileytpes_readme,
 "There are several template files in this directory. For these templates you can use wildcards.\n\
 For more information read the documentation (in " DOCDIR " or visit " GEANY_HOMEPAGE ").");
-/*		{ // check whether write test was successful, otherwise directory is not writeable
-			/// FIXME write the code
+		{ // check whether write test was successful, otherwise directory is not writable
+			geany_debug("The chosen configuration directory is not writable.");
+			return EPERM;
 		}
-*/	}
+	}
 	g_free(fileytpes_readme);
 
 	return error_nr;
@@ -2005,7 +2006,7 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 	      (guint) (utils_scale_round(color->red / 256, 255)),
 	      (guint) (utils_scale_round(color->green / 256, 255)),
 	      (guint) (utils_scale_round(color->blue / 256, 255)));
-	
+
 	return buffer;
 }
 
@@ -2195,4 +2196,81 @@ double utils_strtod(const char *source, char **end)
 	}
 
 	return result;
+}
+
+
+/* try to parse the file and line number where the error occured described in string
+ * and when something useful is found, it jumps to file and scrolls to the line  */
+void utils_parse_compiler_error_line(const gchar *string)
+{
+	gint idx = document_get_cur_idx();
+	gint line = -1;
+
+	if (string == NULL) return;
+
+	// first get the line
+	switch (doc_list[app->cur_idx].file_type->id)
+	{
+		case GEANY_FILETYPES_C:
+		case GEANY_FILETYPES_CPP:
+		{
+#if 0	// old code, works, but should be slower than the new one
+			gchar **array = g_strsplit(string, ":", 3);
+
+			if (array != NULL && array[1] != NULL) line = strtol(array[1], NULL, 10);
+
+			g_strfreev(array);
+#else	// new code
+			gchar *colon = strchr(string, ':');
+			gchar *end = NULL;
+
+			// skip the colon, but only if it was found
+			if (colon != NULL) colon++;
+			else return;
+
+			line = strtol(colon, &end, 10);
+
+			// if the line could not be read, line is 0 and an error occurred, so we leave
+			if (colon == end)
+				return;
+#endif
+			break;
+		}
+		case GEANY_FILETYPES_PYTHON:
+		{	// File "HyperArch.py", line 37, in ?
+			gchar *space = strchr(string, ' ');
+
+			while (space != NULL && strncmp(space, " line ", 6) != 0)
+			{
+				space = strchr(space+1, ' ');
+			}
+			if (space == NULL) return;
+
+			// this comparison may be unnecessary, but I think it is safer
+			if (strncmp(space, " line ", 6) == 0)
+			{
+				gchar *end = NULL;
+				space += 6;
+
+				line = strtol(space, &end, 10);
+
+				// if the line could not be read, line is 0 and an error occurred, so we leave
+				if (space == end)
+					return;
+			}
+			break;
+		}
+	}
+
+	// finally jump to the line (and file)
+	if (line != -1)
+	{
+		if (idx != app->cur_idx)
+		{
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
+									gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+									GTK_WIDGET(doc_list[app->cur_idx].sci)));
+		}
+		utils_goto_line(app->cur_idx, line);
+	}
 }

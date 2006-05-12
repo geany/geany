@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -207,5 +207,9 @@ void utils_update_fold_items(void);
 /* utils_strtod() is an simple implementation of strtod(), because strtod() does not understand
  * hex colour values before ANSI-C99, utils_strtod does only work for numbers like 0x... */
 double utils_strtod(const char *source, char **end);
+
+/* try to parse the file and line number where the error occured described in line
+ * and when something useful is found, it jumps to file and scrolls to the line  */
+void utils_parse_compiler_error_line(const gchar *line);
 
 #endif

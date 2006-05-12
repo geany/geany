@@ -1621,25 +1621,9 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 			if (gtk_tree_selection_get_selected(selection, &model, &iter))
 			{
 				gtk_tree_model_get(model, &iter, 0, &color, 1, &string, -1);
-				if (gdk_color_equal(&red, color))
+				if (string && gdk_color_equal(&red, color))
 				{
-					gchar **array = g_strsplit(string, ":", 3);
-					gint line = -1;
-					gint idx = document_get_cur_idx();
-
-					if (array != NULL && array[1] != NULL) line = strtol(array[1], NULL, 10);
-
-					if (line != -1)
-					{
-						if (idx != app->cur_idx)
-						{
-							gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
-										gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
-														GTK_WIDGET(doc_list[app->cur_idx].sci)));
-						}
-						utils_goto_line(app->cur_idx, line);
-					}
-					g_strfreev(array);
+					utils_parse_compiler_error_line(string);
 				}
 				g_free(string);
 			}
