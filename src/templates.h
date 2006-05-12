@@ -253,7 +253,7 @@ class StdClass\n\
 	end\n\
 end\n\
 \n\
-x = StdClass.new\\n\
+x = StdClass.new\n\
 ";
 
 #endif
