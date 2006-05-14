@@ -5,7 +5,6 @@ AC_INIT(configure.in)
 AM_INIT_AUTOMAKE(geany, 0.7)
 
 AM_CONFIG_HEADER(config.h)
-dnl AM_MAINTAINER_MODE
 
 AC_ISC_POSIX
 AC_PROG_CC
@@ -61,9 +60,8 @@ AC_SUBST(PACKAGE_LIBS)
 
 # fifo support
 AC_CHECK_FUNC([mkfifo], [have_mkfifo="1"])
-want_pipe=yes
-AC_ARG_ENABLE(pipe, [  --enable-pipe            enable if you want to detect a running instance [[default=yes]]],
- [want_pipe="$enableval"])
+AC_ARG_ENABLE(pipe, AC_HELP_STRING([--enable-pipe],[enable if you want to detect a running instance [[default=yes]]]),
+ [want_pipe="$enableval"], [want_pipe="yes"])
 
 if test "x$want_pipe" = "xyes"; then
 	if test "x$have_mkfifo" = "x1"; then
@@ -74,9 +72,8 @@ if test "x$want_pipe" = "xyes"; then
 fi
 
 # VTE support
-want_vte=yes
-AC_ARG_ENABLE(vte, [  --enable-vte            enable if you want virtual termninal support [[default=yes]]],
- [want_vte="$enableval"])
+AC_ARG_ENABLE(vte, AC_HELP_STRING([--enable-vte],[enable if you want virtual termninal support [[default=yes]]]),
+ [want_vte="$enableval"], [want_vte="yes"])
 
 if test "x$want_vte" = "xyes"; then
 	AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])
@@ -95,16 +92,28 @@ fi
 AC_CHECK_FILE([/dev/urandom], AC_DEFINE([HAVE_DEVURANDOM], [1], [Define that you found /dev/urandom]))
 AC_CHECK_FILE([/dev/random], AC_DEFINE([HAVE_DEVRANDOM], [1], [Define that you found /dev/random]))
 
-
 GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
 
+# just for a laugh (it has absolutely no effect)
+AC_ARG_ENABLE(the-force, AC_HELP_STRING([--enable-the-force],
+     [enable if you are Luke Skywalker and the force is with you [[default=no]]]), [be_luke="$enableval"], [be_luke="no"])
+AC_MSG_CHECKING([whether the force is with you])
+if test "x$be_luke" = "xyes"; then
+	AC_MSG_RESULT([yes])
+else
+	AC_MSG_RESULT([no])
+fi
+
+# i18n
 GETTEXT_PACKAGE=geany
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
 
 # Add the languages which your application supports here.
-ALL_LINGUAS="de"
+ALL_LINGUAS="ca de"
+
 AM_GLIB_GNU_GETTEXT
+
 
 # Set ${datadir}
 if test "x${datadir}" = 'x${prefix}/share'; then

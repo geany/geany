@@ -125,10 +125,10 @@ void dialogs_show_open_file ()
 			if (initdir != NULL)
 			{
 				gchar *locale_filename;
-				
+
 				locale_filename = g_locale_from_utf8(initdir, -1, NULL, NULL, NULL);
 				if (locale_filename == NULL) locale_filename = g_strdup(initdir);
-				
+
 				gtk_file_chooser_set_current_folder(
 					GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
 
@@ -178,19 +178,19 @@ void dialogs_show_save_as ()
 	{
 		gchar *locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
 		if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
-		
+
 		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->save_filesel), locale_filename);
 		g_free(locale_filename);
 	}
 	else
 	{
 		gchar *fname = NULL;
-		
+
 		if (doc_list[idx].file_type != NULL && doc_list[idx].file_type->id != GEANY_FILETYPES_ALL &&
 			doc_list[idx].file_type->extension != NULL)
 			fname = g_strconcat(GEANY_STRING_UNTITLED, ".",
 								doc_list[idx].file_type->extension, NULL);
-		else 
+		else
 			fname = g_strdup(GEANY_STRING_UNTITLED);
 
 		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(app->save_filesel));
@@ -443,7 +443,7 @@ void dialogs_show_about(void)
 
 	static const struct { gchar *name, *email, *language; } translators[] =
 	{
-		//{ "Dwayne Bailey", "dwayne@translate.org.za", "en_GB" },
+		{ "Topi", "topi@phreaker.net", "ca_ES" },
 		{ NULL, NULL, NULL }
 	};
 
@@ -452,6 +452,7 @@ void dialogs_show_about(void)
 	info = about_info_new(PACKAGE, VERSION, _("A fast and lightweight IDE"),
 						  ABOUT_COPYRIGHT_TEXT("2006", "Enrico Troeger"), GEANY_HOMEPAGE, GEANY_CODENAME);
 	about_info_add_credit(info, "Enrico Troeger", "enrico.troeger@uvena.de", _("Maintainer"));
+	about_info_add_credit(info, "Nick Treleaven", "nick.treleaven@btinternet.com", _("Contributor"));
 
 	for (n = 0; translators[n].name != NULL; ++n)
 	{
@@ -628,7 +629,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_arguments_activate), NULL);
 	}
-		
+
 	// temporarily moved to on_editor_key_press_event() until new keyboard shortcut management is available
 	//gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
 
@@ -1144,7 +1145,7 @@ _("%f will be replaced by the complete filename\n%e will be replaced by filename
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry1",
 					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
 	}
-	
+
 	// lib-args
 	if (ft->menu_items->can_link)
 	{
@@ -1320,7 +1321,7 @@ void dialogs_show_file_properties(gint idx)
 		dialogs_show_error(_("An error occurred or file information could not be retrieved(e.g. from a new file)."));
 		return;
 	}
-	
+
 
 #if defined(HAVE_SYS_STAT_H) && defined(TIME_WITH_SYS_TIME) && defined(HAVE_SYS_TYPES_H)
 	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
@@ -1490,7 +1491,7 @@ void dialogs_show_file_properties(gint idx)
 
 	// add table
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), table);
-	
+
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 
 	// create permission label and then table with the permissions
@@ -1849,7 +1850,7 @@ gboolean dialogs_show_question(const gchar *text, ...)
 	gtk_widget_destroy(dialog);
 #endif
 	g_free(string);
-	
+
 	return ret;
 }
 
