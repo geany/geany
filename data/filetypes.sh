@@ -14,7 +14,7 @@ param=0xF38A12;0x0000ff;false;false
 scalar=0x905010;0xffffff;false;false
 
 [keywords]
-primary=break case continue do done else esac eval exit export fi for goto if in integer return set shift then while
+primary=break case continue do done elif else esac eval exit export fi for goto if in integer return set shift then while
 
 
 [settings]
