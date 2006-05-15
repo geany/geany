@@ -326,7 +326,7 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_SQL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_SQL]->id = GEANY_FILETYPES_SQL;
 	filetypes[GEANY_FILETYPES_SQL]->name = g_strdup("SQL");
-	filetypes[GEANY_FILETYPES_SQL]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_SQL]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_SQL]->title = g_strdup(_("SQL Dump file"));
 	filetypes[GEANY_FILETYPES_SQL]->extension = g_strdup("sql");
 	filetypes[GEANY_FILETYPES_SQL]->pattern = g_new0(gchar*, 2);
@@ -548,56 +548,69 @@ gchar *filetypes_get_template(filetype *ft)
 }
 
 
-void filetypes_get_config(GKeyFile *config, gint ft)
+void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 {
 	gchar *result;
 	GError *error = NULL;
 	gboolean tmp;
 
-	if (config == NULL || ft < 0 || ft >= GEANY_MAX_FILE_TYPES) return;
+	if (config == NULL || configh == NULL || ft < 0 || ft >= GEANY_MAX_FILE_TYPES) return;
 
 	// read comment notes
-	result = g_key_file_get_string(config, "settings", "comment_open", NULL);
+	result = g_key_file_get_string(configh, "settings", "comment_open", NULL);
+	if (result == NULL) result = g_key_file_get_string(config, "settings", "comment_open", NULL);
 	if (result != NULL)
 	{
 		g_free(filetypes[ft]->comment_open);
 		filetypes[ft]->comment_open = result;
 	}
 
-	result = g_key_file_get_string(config, "settings", "comment_close", NULL);
+	result = g_key_file_get_string(configh, "settings", "comment_close", NULL);
+	if (result == NULL) result = g_key_file_get_string(config, "settings", "comment_close", NULL);
 	if (result != NULL)
 	{
 		g_free(filetypes[ft]->comment_close);
 		filetypes[ft]->comment_close = result;
 	}
 
-	tmp = g_key_file_get_boolean(config, "settings", "comment_use_indent", &error);
-	if (error) g_error_free(error);
+	tmp = g_key_file_get_boolean(configh, "settings", "comment_use_indent", &error);
+	if (error)
+	{
+		g_error_free(error);
+		error = NULL;
+		tmp = g_key_file_get_boolean(config, "settings", "comment_use_indent", &error);
+		if (error) g_error_free(error);
+		else filetypes[ft]->comment_use_indent = tmp;
+	}
 	else filetypes[ft]->comment_use_indent = tmp;
 
 	// read build settings
-	result = g_key_file_get_string(config, "build_settings", "compiler", NULL);
+	result = g_key_file_get_string(configh, "build_settings", "compiler", NULL);
+	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "compiler", NULL);
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->compiler = result;
 		filetypes[ft]->menu_items->can_compile = TRUE;
 	}
 
-	result = g_key_file_get_string(config, "build_settings", "linker", NULL);
+	result = g_key_file_get_string(configh, "build_settings", "linker", NULL);
+	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "linker", NULL);
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->linker = result;
 		filetypes[ft]->menu_items->can_link = TRUE;
 	}
 
-	result = g_key_file_get_string(config, "build_settings", "run_cmd", NULL);
+	result = g_key_file_get_string(configh, "build_settings", "run_cmd", NULL);
+	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "run_cmd", NULL);
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->run_cmd = result;
 		filetypes[ft]->menu_items->can_exec = TRUE;
 	}
 
-	result = g_key_file_get_string(config, "build_settings", "run_cmd2", NULL);
+	result = g_key_file_get_string(configh, "build_settings", "run_cmd2", NULL);
+	if (result == NULL) result = g_key_file_get_string(config, "build_settings", "run_cmd2", NULL);
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->run_cmd2 = result;

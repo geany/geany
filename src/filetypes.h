@@ -101,6 +101,6 @@ void filetypes_free_types(void);
 
 gchar *filetypes_get_template(filetype *ft);
 
-void filetypes_get_config(GKeyFile *config, gint ft);
+void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft);
 
 #endif
