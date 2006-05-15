@@ -12,7 +12,7 @@ preprocessor=0x7F7F00;0xffffff;false;false
 operator=0x101030;0xffffff;false;false
 identifier=0x110000;0xffffff;false;false
 scalar=0x00007F;0xffffff;true;false
-pod=0x000000;0xe0c0e0;false;false
+pod=0x0356500;0xffffff;false;true
 regex=0x905010;0xffffff;false;false
 array=0x905010;0xffffff;false;false
 hash=0x905010;0xffffff;false;false
@@ -49,5 +49,8 @@ compiler=perl -MO=Bytecode,-H,-o%fc %f
 
 # alternatively use perlcc
 #compiler=perlcc -o %e %f
+
+# instead of actual compiling, just run a nice syntax check
+#compiler=perl -c %f
 
 run_cmd=perl %f

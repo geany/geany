@@ -23,7 +23,7 @@ worddemoted=0x991111;0xffffff;false;false
 
 [keywords]
 # all items must be in one line
-primary=__FILE__ and def end in or self unless __LINE__ begin defined? ensure module redo super until BEGIN break do false next rescue then when END case else for nil require retry true while alias class elsif if not return undef yield
+primary=__FILE__ load define_method attr_accessor attr_writer attr_reader and def end in or self unless __LINE__ begin defined? ensure module redo super until BEGIN break do false next rescue then when END case else for nil include require retry true while alias class elsif if not return undef yield
 
 
 [settings]
@@ -46,4 +46,5 @@ comment_use_indent=true
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
+compiler=ruby -c %f
 run_cmd=ruby %f

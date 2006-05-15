@@ -24,6 +24,9 @@ comment_use_indent=true
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
+# Geany expects that compilers put there error messages on stderr, php -l put the messages on stdout,
+# so to get it working, we push them to stderr
+compiler=php -l %f 1>&2
 run_cmd=php %f
 
 # use can also use something like this, to view your PHP or HTML files through a browser and webserver

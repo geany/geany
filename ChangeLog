@@ -1,3 +1,40 @@
+2006-05-15  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c, src/callbacks.c:
+   added previously code to prevent opening of non-text files, fixed
+   detection of C++-destructors and other improvements in
+   utils_get_current_tag()
+
+
+2006-05-14  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * configure.in, po/ca.po, THANKS, src/dialogs.c:
+   added catalan translation contributed by Topi
+ * data/filetypes.php, data/filetypes.perl, data/filetypes.ruby,
+   data/filetypes.pascal, src/utils.c:
+   added compiler commands to run a syntax check and parse the output,
+   so it is clickable in compiler message window
+
+
+2006-05-12  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c. src/callbacks.c: added code for parsing python error
+                                 messages when clicked in compiler
+                                 message window
+ * tagmanager/ruby.c, src/treeviews.c: improved parser to detect
+                                       variables and members
+ * src/highlighting.c, data/filetypes.ruby: added missing keywords
+
+
+2006-05-11  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c: show appropriate error code when use(i.e. write access)
+                of configuration directory fails
+ * src/highlighting.c, src/filetypes.c:
+   read the filetype definitions first from the configuration directory
+   and then from the datadir (%prefix/share/geany)
+
+
 2006-05-10  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/document.c, src/filetypes.c, src/templates.c, src/callbacks.c:
@@ -7,6 +44,12 @@
                         ''' comments
  * tagmanager/parse.c, tagmanager/python.c:
    added code from anjuta to parse methods and functions separately
+ * tagmanager/ruby.c: applied patch from ctags Sourceforge site to
+                      recognise things like Foo::Bar (ctags #1213512)
+ * tagmanager/perl.c, src/treeviews.c:
+   improved symbol list for filetype Perl, improved parser
+ * src/document.c, src/callbacks.c: improved tag list updating, should
+                                    be a bit faster on opening files
 
 
 2006-05-09  Enrico Troeger  <enrico.troeger@uvena.de>

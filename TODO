@@ -5,9 +5,7 @@ TODO List:
 
 	Geany 0.7 or later:
 
-	o test CSS parser
 	o improve scrolling
-	o expand tagmanager's perl parser to variable detection
 	o fix a freeze at switching between filetypes with files in
 	  ISO-8859-x encoding (reported by Jörg Sommer)
 	o encoding-bug in utils_convert_to_utf8()
@@ -18,7 +16,6 @@ TODO List:
 	o create filetype specific menus, read templates from filetypes.*
 	o template rework
 	o user-definable auto completion structs
-	o (PHP syntax check)
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines, but how?)
