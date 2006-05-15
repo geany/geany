@@ -87,8 +87,6 @@ void utils_update_tag_list(gint idx, gboolean update);
 
 gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding);
 
-gchar *utils_convert_to_utf8_simple(const gchar *str);
-
 gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const gchar *charset);
 
 /**
