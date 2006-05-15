@@ -2272,13 +2272,6 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 		pos = sci_get_position_from_line(doc_list[idx].sci, line - 1);
 	}
 
-	// if function name is unknown, set function name to "unknown"
-	if (line == -1)
-	{
-		g_free(cur_tag);
-		cur_tag = g_strdup(_("unknown"));
-	}
-
 	switch (doc_list[idx].file_type->id)
 	{
 		case GEANY_FILETYPES_PASCAL:

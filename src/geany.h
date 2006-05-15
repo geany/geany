@@ -222,6 +222,7 @@ typedef struct GeanySymbol
 {
 	gchar	*str;
 	gint	 type;
+	gint	 line;
 } GeanySymbol;
 
 

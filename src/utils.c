@@ -53,30 +53,33 @@
 #include "images.c"
 
 
-void utils_start_browser(gchar *uri)
+void utils_start_browser(const gchar *uri)
 {
 #ifdef GEANY_WIN32
 	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
 #else
-	/// TODO  Initialisierungs-Element ist zur Lade-Zeit nicht berechenbar
-	gchar *argv[] = { app->build_browser_cmd, uri, NULL };
+	const gchar *argv[3];
 
-	if (! g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
+	argv[0] = app->build_browser_cmd;
+	argv[1] = uri;
+	argv[2] = NULL;
+
+	if (! g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
 	{
 		argv[0] = "firefox";
-		if (! g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
+		if (! g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
 		{
 			argv[0] = "mozilla";
-			if (! g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
+			if (! g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
 			{
 				argv[0] = "opera";
-				if (! g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
+				if (! g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
 				{
 					argv[0] = "konqueror";
-					if (! g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
+					if (! g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL))
 					{
 						argv[0] = "netscape";
-						g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL);
+						g_spawn_async(NULL, (gchar**)argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL);
 					}
 				}
 			}
@@ -412,6 +415,7 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 					symbol = g_new0(GeanySymbol, 1);
 					symbol->str = g_strdup_printf("%s::%s [%ld]", tag->atts.entry.scope, tag->name, tag->atts.entry.line);
 					symbol->type = tag->type;
+					symbol->line = tag->atts.entry.line;
 					tag_names = g_list_prepend(tag_names, symbol);
 				}
 				else
@@ -419,6 +423,7 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 					symbol = g_new0(GeanySymbol, 1);
 					symbol->str = g_strdup_printf("%s [%ld]", tag->name, tag->atts.entry.line);
 					symbol->type = tag->type;
+					symbol->line = tag->atts.entry.line;
 					tag_names = g_list_prepend(tag_names, symbol);
 				}
 			}
@@ -435,23 +440,16 @@ gint utils_get_local_tag(gint idx, const gchar *qual_name)
 {
 	guint line;
 	gchar *spos;
-	gchar *epos;
 
 	g_return_val_if_fail((doc_list[idx].sci && qual_name), -1);
 
 	spos = strchr(qual_name, '[');
-	if (spos)
+	if (spos && strchr(spos+1, ']'))
 	{
-		epos = strchr(spos+1, ']');
-		if (epos)
+		line = atol(spos + 1);
+		if (line > 0)
 		{
-			*epos = '\0';
-			line = atol(spos + 1);
-			*epos = ']';
-			if (line > 0)
-			{
-				return line;
-			}
+			return line;
 		}
 	}
 	return -1;
@@ -788,12 +786,16 @@ gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const
 	converted_contents = g_convert(buffer, size, "UTF-8", charset, NULL,
 									&bytes_written, &conv_error);
 
-	if (conv_error != NULL)
+	if (conv_error != NULL || ! g_utf8_validate(converted_contents, bytes_written, NULL))
 	{
-		geany_debug("Couldn't convert from %s to UTF-8 (%s).", charset, conv_error->message);
-
-		g_error_free(conv_error);
-		conv_error = NULL;
+		if (conv_error != NULL)
+		{
+			geany_debug("Couldn't convert from %s to UTF-8 (%s).", charset, conv_error->message);
+			g_error_free(conv_error);
+			conv_error = NULL;
+		}
+		else
+			geany_debug("Couldn't convert from %s to UTF-8.", charset);
 
 		utf8_content = NULL;
 		if (converted_contents != NULL) g_free(converted_contents);
@@ -812,7 +814,7 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 {
 	GList *encodings = NULL;
 	GList *start;
-	gchar *locale_charset;
+	gchar *locale_charset = NULL;
 	GList *encoding_strings;
 
 	encoding_strings = utils_glist_from_string("UTF-8 ISO-8859-1 ISO-8859-15");
@@ -823,15 +825,10 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 	{
 		const GeanyEncoding *locale_encoding;
 
-		// not using a UTF-8 locale, so try converting from that first
+		// not using an UTF-8 locale, so try converting from that first
 		if (locale_charset != NULL)
 		{
-/*			if (strcmp(locale_charset, "ANSI_X3.4-1968") == 0)
-			{	/// TODO very dirty quick hack, if LC=C then all goes wrong
-				locale_encoding = encoding_get_from_charset("ISO-8859-15");
-			}
-			else
-*/				locale_encoding = encoding_get_from_charset(locale_charset);
+			locale_encoding = encoding_get_from_charset(locale_charset);
 
 			encodings = g_list_prepend(encodings,
 						(gpointer) locale_encoding);
@@ -873,34 +870,6 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 	g_list_free(start);
 
 	return NULL;
-}
-
-
-gchar *utils_convert_to_utf8_simple2(const gchar *str)
-{
-	GError *error = NULL;
-	gchar *utf8_msg_string = NULL;
-
-	g_return_val_if_fail(str != NULL, NULL);
-	g_return_val_if_fail(strlen(str) > 0, NULL);
-
-	if (g_utf8_validate(str, -1, NULL))
-	{
-		utf8_msg_string = g_strdup(str);
-	}
-	else
-	{
-		gsize rbytes, wbytes;
-		utf8_msg_string = g_locale_to_utf8(str, -1, &rbytes, &wbytes, &error);
-		geany_debug("%d\t%d", rbytes, wbytes);
-		if (error != NULL) {
-			geany_debug("g_locale_to_utf8 failed: %s\n", error->message);
-			g_error_free(error);
-			g_free(utf8_msg_string);
-			return NULL;
-		}
-	}
-	return utf8_msg_string;
 }
 
 
@@ -996,38 +965,38 @@ void utils_check_disk_status(gint idx)
 
 gint utils_get_current_tag(gint idx, gchar **tagname)
 {
-	//gint tag_line;
+	gint tag_line;
 	gint pos;
 	gint line;
 	gint fold_level;
 	gint start, end, last_pos;
 	gint tmp;
-	//const GList *tags;
+	const GList *tags;
 
 	pos = sci_get_current_position(doc_list[idx].sci);
 	line = sci_get_line_from_position(doc_list[idx].sci, pos);
 
-	tmp = line + 1;
-
 	fold_level = sci_get_fold_level(doc_list[idx].sci, line);
 	if ((fold_level & 0xFF) != 0)
 	{
-		while((fold_level & 0x10FF) != 0x1000 && line >= 0)
+		while((fold_level & SC_FOLDLEVELNUMBERMASK) != SC_FOLDLEVELBASE && line >= 0)
+		{
 			fold_level = sci_get_fold_level(doc_list[idx].sci, --line);
+		}
 
 		// look first in the tag list
-/*		tags = utils_get_tag_list(idx, tm_tag_max_t);
+		tags = utils_get_tag_list(idx, tm_tag_max_t);
 		for (; tags; tags = g_list_next(tags))
 		{
-			tag_line = utils_get_local_tag(idx, tags->data);
-			if (line == (tag_line - 2))
+			tag_line = ((GeanySymbol*)tags->data)->line;
+			if (line == tag_line)
 			{
-				*tagname = g_strdup(strtok(tags->data, " "));
+				*tagname = g_strdup(strtok(((GeanySymbol*)tags->data)->str, " "));
 				return tag_line;
 			}
 		}
-*/
-		start = sci_get_position_from_line(doc_list[idx].sci, line + 1);
+
+		start = sci_get_position_from_line(doc_list[idx].sci, line - 2);
 		last_pos = sci_get_length(doc_list[idx].sci);
 		tmp = 0;
 		while (sci_get_style_at(doc_list[idx].sci, start) != SCE_C_IDENTIFIER
@@ -1035,16 +1004,24 @@ gint utils_get_current_tag(gint idx, gchar **tagname)
 			&& start < last_pos) start++;
 		end = start;
 		// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
+		// this fails on C++ code like 'Vek3 Vek3::mul(double s)' this code returns
+		// "Vek3" because the return type of the prototype is also a GLOBALCLASS,
+		// no idea how to fix at the moment
+		// fails also in C with code like
+		// typedef void viod;
+		// viod do_nothing() {}  -> return viod instead of do_nothing
+		// perhaps: get the first colon, read forward the second colon and then method
+		// name, then go from the first colon backwards and read class name until space
 		while (((tmp = sci_get_style_at(doc_list[idx].sci, end)) == SCE_C_IDENTIFIER
 			 || tmp == SCE_C_GLOBALCLASS
+			 || sci_get_char_at(doc_list[idx].sci, end) == '~'
 			 || sci_get_char_at(doc_list[idx].sci, end) == ':')
 			 && end < last_pos) end++;
 
 		*tagname = g_malloc(end - start + 1);
 		sci_get_text_range(doc_list[idx].sci, start, end, *tagname);
 
-		// stimmt die 2 IMMER?
-		return line + 2;
+		return line;
 	}
 
 	*tagname = g_strdup(_("unknown"));
@@ -2213,6 +2190,7 @@ void utils_parse_compiler_error_line(const gchar *string)
 	{
 		case GEANY_FILETYPES_C:
 		case GEANY_FILETYPES_CPP:
+		case GEANY_FILETYPES_RUBY:
 		{
 #if 0	// old code, works, but should be slower than the new one
 			gchar **array = g_strsplit(string, ":", 3);
@@ -2236,6 +2214,9 @@ void utils_parse_compiler_error_line(const gchar *string)
 #endif
 			break;
 		}
+		// the error output of python, perl and php -l on errors euals in "line xx", so they are "compatible"
+		case GEANY_FILETYPES_PHP:
+		case GEANY_FILETYPES_PERL:
 		case GEANY_FILETYPES_PYTHON:
 		{	// File "HyperArch.py", line 37, in ?
 			gchar *space = strchr(string, ' ');
@@ -2258,6 +2239,22 @@ void utils_parse_compiler_error_line(const gchar *string)
 				if (space == end)
 					return;
 			}
+			break;
+		}
+		case GEANY_FILETYPES_PASCAL:
+		{	// bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
+			gchar *space = strchr(string, '(');
+			gchar *end = NULL;
+
+			if (space == NULL) return;
+			space++;
+
+			line = strtol(space, &end, 10);
+
+			// if the line could not be read, line is 0 and an error occurred, so we leave
+			if (space == end)
+				return;
+
 			break;
 		}
 	}

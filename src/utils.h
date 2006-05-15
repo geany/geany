@@ -25,7 +25,7 @@
 #define GEANY_UTILS_H 1
 
 
-void utils_start_browser(gchar *uri);
+void utils_start_browser(const gchar *uri);
 
 void utils_update_statusbar(gint idx, gint pos);
 
