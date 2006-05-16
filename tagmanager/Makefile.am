@@ -32,7 +32,7 @@ libtagmanager_a_SOURCES =\
 	docbook.c\
 	make.c\
 	asm.c\
-	tex.c\
+	latex.c\
 	pascal.c\
 	perl.c\
 	ruby.c\
@@ -40,6 +40,7 @@ libtagmanager_a_SOURCES =\
 	php.c\
 	python.c\
 	regex.c\
+	tcl.c\
 	sh.c\
 	ctags.c\
 	entry.c\

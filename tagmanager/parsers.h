@@ -23,13 +23,14 @@
     PerlParser, \
     PhpParser, \
     PythonParser, \
-    TexParser, \
+    LaTeXParser, \
     AsmParser, \
     ConfParser, \
     SqlParser, \
     DocBookParser, \
     CssParser, \
     RubyParser, \
+    TclParser, \
     ShParser
 
 #endif	/* _PARSERS_H */

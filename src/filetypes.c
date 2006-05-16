@@ -389,6 +389,24 @@ void filetypes_init_types(void)
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_RUBY]->title, filetypes[GEANY_FILETYPES_RUBY]);
 	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_RUBY]->title, filetypes[GEANY_FILETYPES_RUBY]);
 
+#define TCL
+	filetypes[GEANY_FILETYPES_TCL] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_TCL]->id = GEANY_FILETYPES_TCL;
+	filetypes[GEANY_FILETYPES_TCL]->name = g_strdup("Tcl");
+	filetypes[GEANY_FILETYPES_TCL]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_TCL]->title = g_strdup(_("Tcl source file"));
+	filetypes[GEANY_FILETYPES_TCL]->extension = g_strdup("tcl");
+	filetypes[GEANY_FILETYPES_TCL]->pattern = g_new0(gchar*, 4);
+	filetypes[GEANY_FILETYPES_TCL]->pattern[0] = g_strdup("*.tcl");
+	filetypes[GEANY_FILETYPES_TCL]->pattern[1] = g_strdup("*.tk");
+	filetypes[GEANY_FILETYPES_TCL]->pattern[2] = g_strdup("*.wish");
+	filetypes[GEANY_FILETYPES_TCL]->pattern[3] = NULL;
+	filetypes[GEANY_FILETYPES_TCL]->style_func_ptr = styleset_tcl;
+	filetypes[GEANY_FILETYPES_TCL]->comment_open = g_strdup("#");
+	filetypes[GEANY_FILETYPES_TCL]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_TCL]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_TCL]->title, filetypes[GEANY_FILETYPES_TCL]);
+
 #define ALL
 	filetypes[GEANY_FILETYPES_ALL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;

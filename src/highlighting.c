@@ -1337,6 +1337,7 @@ void styleset_python(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_P_STRINGEOL, GEANY_FILETYPES_PYTHON, 13);
 
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.comment.python", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.quotes.python", (sptr_t) "1");
 }
 
 
@@ -2113,6 +2114,89 @@ void styleset_oms(ScintillaObject *sci)
 	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
 }
 
+
+static void styleset_tcl_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S SUBDIR G_DIR_SEPARATOR_S, "filetypes.tcl", NULL);
+
+	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.tcl", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	types[GEANY_FILETYPES_TCL] = g_new(style_set, 1);
+	styleset_get_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[0]);
+	styleset_get_hex(config, config_home, "styling", "comment", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[1]);
+	styleset_get_hex(config, config_home, "styling", "commentline", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[2]);
+	styleset_get_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[3]);
+	styleset_get_hex(config, config_home, "styling", "operator", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[4]);
+	styleset_get_hex(config, config_home, "styling", "identifier", "0x0000a2", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[5]);
+	styleset_get_hex(config, config_home, "styling", "wordinquote", "0x7f007f", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[6]);
+	styleset_get_hex(config, config_home, "styling", "inquote", "0x7f007f", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[7]);
+	styleset_get_hex(config, config_home, "styling", "substitution", "0x991111", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[8]);
+	styleset_get_hex(config, config_home, "styling", "modifier", "0x7f007f", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[9]);
+	styleset_get_hex(config, config_home, "styling", "expand", "0x100000", "0xffffff", "false", types[GEANY_FILETYPES_TCL]->styling[10]);
+	styleset_get_hex(config, config_home, "styling", "wordtcl", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_TCL]->styling[11]);
+	styleset_get_hex(config, config_home, "styling", "wordtk", "0x00007f", "0xffffff", "true", types[GEANY_FILETYPES_TCL]->styling[12]);
+	styleset_get_hex(config, config_home, "styling", "worditcl", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_TCL]->styling[13]);
+	styleset_get_hex(config, config_home, "styling", "wordtkcmds", "0x00007f", "0xffffff", "true", types[GEANY_FILETYPES_TCL]->styling[14]);
+	styleset_get_hex(config, config_home, "styling", "wordexpand", "0x00007f", "0xffffff", "true", types[GEANY_FILETYPES_TCL]->styling[15]);
+
+	types[GEANY_FILETYPES_TCL]->keywords = g_new(gchar*, 6);
+	styleset_get_keywords(config, config_home, "keywords", "tcl", GEANY_FILETYPES_TCL, 0, "");
+	styleset_get_keywords(config, config_home, "keywords", "tk", GEANY_FILETYPES_TCL, 1, "");
+	styleset_get_keywords(config, config_home, "keywords", "itcl", GEANY_FILETYPES_TCL, 2, "");
+	styleset_get_keywords(config, config_home, "keywords", "tkcommands", GEANY_FILETYPES_TCL, 3, "");
+	styleset_get_keywords(config, config_home, "keywords", "expand", GEANY_FILETYPES_TCL, 4, "");
+	types[GEANY_FILETYPES_TCL]->keywords[5] = NULL;
+
+	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_TCL, GEANY_WORDCHARS);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_TCL);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+	g_free(f);
+}
+
+
+void styleset_tcl(ScintillaObject *sci)
+{
+
+	if (types[GEANY_FILETYPES_TCL] == NULL) styleset_tcl_init();
+
+	styleset_common(sci, 5);
+
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_TCL]->wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_TCL, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_TCL]->keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) types[GEANY_FILETYPES_TCL]->keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) types[GEANY_FILETYPES_TCL]->keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) types[GEANY_FILETYPES_TCL]->keywords[3]);
+	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) types[GEANY_FILETYPES_TCL]->keywords[4]);
+
+	styleset_set_style(sci, SCE_TCL_DEFAULT, GEANY_FILETYPES_TCL, 0);
+	styleset_set_style(sci, SCE_TCL_COMMENT, GEANY_FILETYPES_TCL, 1);
+	styleset_set_style(sci, SCE_TCL_COMMENTLINE, GEANY_FILETYPES_TCL, 2);
+	styleset_set_style(sci, SCE_TCL_NUMBER, GEANY_FILETYPES_TCL, 3);
+	styleset_set_style(sci, SCE_TCL_OPERATOR, GEANY_FILETYPES_TCL, 4);
+	styleset_set_style(sci, SCE_TCL_IDENTIFIER, GEANY_FILETYPES_TCL, 5);
+	styleset_set_style(sci, SCE_TCL_WORD_IN_QUOTE, GEANY_FILETYPES_TCL, 6);
+	styleset_set_style(sci, SCE_TCL_IN_QUOTE, GEANY_FILETYPES_TCL, 7);
+	styleset_set_style(sci, SCE_TCL_SUBSTITUTION, GEANY_FILETYPES_TCL, 8);
+	styleset_set_style(sci, SCE_TCL_MODIFIER, GEANY_FILETYPES_TCL, 9);
+	styleset_set_style(sci, SCE_TCL_EXPAND, GEANY_FILETYPES_TCL, 10);
+	styleset_set_style(sci, SCE_TCL_WORD, GEANY_FILETYPES_TCL, 11);
+	styleset_set_style(sci, SCE_TCL_WORD2, GEANY_FILETYPES_TCL, 12);
+	styleset_set_style(sci, SCE_TCL_WORD3, GEANY_FILETYPES_TCL, 13);
+	styleset_set_style(sci, SCE_TCL_WORD4, GEANY_FILETYPES_TCL, 14);
+	styleset_set_style(sci, SCE_TCL_WORD5, GEANY_FILETYPES_TCL, 15);
+
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+}
 
 
 

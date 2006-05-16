@@ -2217,6 +2217,7 @@ void utils_parse_compiler_error_line(const gchar *string)
 		// the error output of python, perl and php -l on errors euals in "line xx", so they are "compatible"
 		case GEANY_FILETYPES_PHP:
 		case GEANY_FILETYPES_PERL:
+		case GEANY_FILETYPES_TCL:
 		case GEANY_FILETYPES_PYTHON:
 		{	// File "HyperArch.py", line 37, in ?
 			gchar *space = strchr(string, ' ');

@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -46,8 +46,9 @@ enum
 	GEANY_FILETYPES_CAML,		// 16
 	GEANY_FILETYPES_OMS,		// 17
 	GEANY_FILETYPES_RUBY,		// 18
-	GEANY_FILETYPES_ALL,		// 19
-	GEANY_MAX_FILE_TYPES		// 20
+	GEANY_FILETYPES_TCL,		// 19
+	GEANY_FILETYPES_ALL,		// 20
+	GEANY_MAX_FILE_TYPES		// 21
 };
 
 struct build_menu_items

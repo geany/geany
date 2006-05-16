@@ -6,7 +6,6 @@ noinst_LIBRARIES=libscintilla.a
 CC=g++
 
 AM_CXXFLAGS = -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE
-#AM_CXXFLAGS = -DGTK -DGTK2 -DSCI_LEXER
 
 LEXER_SRCS= \
 LexAsm.cxx \
@@ -23,7 +22,8 @@ LexPascal.cxx \
 LexPerl.cxx \
 LexPython.cxx \
 LexRuby.cxx \
-LexSQL.cxx
+LexSQL.cxx \
+LexTCL.cxx
 
 SRCS= \
 CallTip.cxx \
