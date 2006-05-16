@@ -49,8 +49,8 @@ comment_use_indent=true
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=g++ -Wall -c %f
+compiler=g++ -Wall -c "%f"
 # the -o option is automatically added by Geany
-linker=g++ -Wall %f
-run_cmd=./%e
+linker=g++ -Wall "%f"
+run_cmd="./%e"
 

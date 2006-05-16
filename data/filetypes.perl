@@ -51,6 +51,6 @@ compiler=perl -MO=Bytecode,-H,-o%fc %f
 #compiler=perlcc -o %e %f
 
 # instead of actual compiling, just run a nice syntax check
-#compiler=perl -c %f
+#compiler=perl -c "%f"
 
-run_cmd=perl %f
+run_cmd=perl "%f"

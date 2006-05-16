@@ -37,4 +37,4 @@ comment_use_indent=true
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-run_cmd=./%f
+run_cmd="./%f"

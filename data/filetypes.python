@@ -41,5 +41,5 @@ comment_use_indent=true
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=python %f
-run_cmd=python %f
+compiler=python "%f"
+run_cmd=python "%f"
