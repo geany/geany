@@ -406,12 +406,8 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	gchar *utf8_filename = NULL;
 	gchar *locale_filename = NULL;
 	GError *err = NULL;
-#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
-	gint fd;
-	void *map = NULL;
-#else
-	gchar *map = NULL;
-#endif
+	gchar *data = NULL;
+
 	//struct timeval tv, tv1;
 	//struct timezone tz;
 	//gettimeofday(&tv, &tz);
@@ -457,69 +453,50 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 
 	if (stat(locale_filename, &st) != 0)
 	{
-		msgwin_status_add(_("Could not stat file"));
-		g_free(utf8_filename);
-		g_free(locale_filename);
-		return;
-	}
-#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
-	if ((fd = open(locale_filename, O_RDONLY)) < 0)
-	{
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
 		g_free(utf8_filename);
 		g_free(locale_filename);
 		return;
 	}
-	/// EXPERIMENTAL map is NULL if size is 0, I hope this works in all cases
-	if ((st.st_size > 0) && ((map = mmap(0, st.st_size, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED))
-	{
-		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
-		g_free(utf8_filename);
-		g_free(locale_filename);
-		return;
-	}
-	size = (gint)st.st_size;
+
+#ifdef GEANY_WIN32
+	if (! g_file_get_contents(utf8_filename, &data, &size, &err))
 #else
-	// use GLib function to load file on Win32 systems and those w/o mmap()
-	if (! g_file_get_contents(utf8_filename, &map, NULL, &err))
+	if (! g_file_get_contents(locale_filename, &data, &size, &err))
+#endif
 	{
-		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, err->message);
+		//msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(err->code));
+		msgwin_status_add(err->message);
 		g_error_free(err);
 		g_free(utf8_filename);
 		g_free(locale_filename);
 		return;
 	}
-	size = (gint)strlen(map);
-#endif
 
 	/* Determine character encoding and convert to utf-8*/
 	if (size > 0)
 	{
-		if (g_utf8_validate(map, size, NULL))
+		if (g_utf8_validate(data, size, NULL))
 		{
 			enc = g_strdup("UTF-8");
 		}
 		else
 		{
-			gchar *converted_text = utils_convert_to_utf8(map, size, &enc);
+			gchar *converted_text = utils_convert_to_utf8(data, size, &enc);
 
 			if (converted_text == NULL)
 			{
 				msgwin_status_add(_("The file does not look like a text file or the file encoding is not supported."));
 				utils_beep();
-#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
-				close(fd);
-				munmap(map, st.st_size);
-#else
-				g_free(map);
-#endif
+				g_free(data);
 				g_free(utf8_filename);
 				g_free(locale_filename);
 				return;
 			}
 			else
 			{
-				map = (void*)converted_text;
+				g_free(data);
+				data = (void*)converted_text;
 				size = strlen(converted_text);
 			}
 		}
@@ -532,8 +509,8 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	if (! reload) idx = document_create_new_sci(utf8_filename);
 
 	// sets editor mode and add the text to the ScintillaObject
-	sci_add_text_buffer(doc_list[idx].sci, map, size);
-	editor_mode = utils_get_line_endings(map, size);
+	sci_add_text_buffer(doc_list[idx].sci, data, size);
+	editor_mode = utils_get_line_endings(data, size);
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
 
 	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
@@ -581,12 +558,8 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	}
 	document_set_text_changed(idx);
 
-#if defined(HAVE_MMAP) && defined(HAVE_MUNMAP) && defined(HAVE_FCNTL_H)
-	close(fd);
-	munmap(map, st.st_size);
-#else
-	g_free(map);
-#endif
+	g_free(data);
+
 
 	// finally add current file to recent files menu, but not the files from the last session
 	if (! app->opening_session_files &&

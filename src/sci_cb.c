@@ -243,7 +243,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 					case SC_EOL_CRLF: list = g_strsplit(nt->text, "\r\n", 0); break;
 					case SC_EOL_LF: list = g_strsplit(nt->text, "\n", 0); break;
 					default: list = g_strsplit(nt->text, "\n", 0);
-				}				
+				}
 
 				for (i = 0; ; i++)
 				{
@@ -409,7 +409,7 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 
 	sci_get_line(sci, line, linebuf);
 
-	if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL) return FALSE;
+	//if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL) return FALSE;
 	if (lexer == SCLEX_HTML && style == SCE_H_DEFAULT) return FALSE;
 	if (lexer == SCLEX_CPP && (style == SCE_C_COMMENT ||
 			style == SCE_C_COMMENTLINE || style == SCE_C_COMMENTDOC)) return FALSE;
@@ -592,13 +592,13 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 			var = g_strdup("i");
 			contruct_len = 12;
 		}
-		construct = g_strdup_printf("(%s%s = 0; %s < ; %s++)%s{%s\t%s}%s", 
+		construct = g_strdup_printf("(%s%s = 0; %s < ; %s++)%s{%s\t%s}%s",
 						(doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? "int " : "",
 						var, var, var, eol, eol, eol, eol);
 
 		// add 4 characters because of "int " in C++ mode
 		contruct_len += (doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? 4 : 0;
-		
+
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + contruct_len, TRUE);
 		g_free(var);

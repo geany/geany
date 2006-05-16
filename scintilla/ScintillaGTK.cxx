@@ -106,6 +106,7 @@ class ScintillaGTK : public ScintillaBase {
 	static GdkAtom atomClipboard;
 	static GdkAtom atomUTF8;
 	static GdkAtom atomString;
+	static GdkAtom atomUriList;
 	GdkAtom atomSought;
 
 #if PLAT_GTK_WIN32
@@ -282,19 +283,19 @@ enum {
     TARGET_STRING,
     TARGET_TEXT,
     TARGET_COMPOUND_TEXT,
-    TARGET_UTF8_STRING
+    TARGET_UTF8_STRING,
+    TARGET_URI
 };
 
 GdkAtom ScintillaGTK::atomClipboard = 0;
 GdkAtom ScintillaGTK::atomUTF8 = 0;
 GdkAtom ScintillaGTK::atomString = 0;
+GdkAtom ScintillaGTK::atomUriList = 0;
 
 static const GtkTargetEntry clipboardTargets[] = {
+	{ "text/uri-list", 0, TARGET_URI },
 	{ "UTF8_STRING", 0, TARGET_UTF8_STRING },
 	{ "STRING", 0, TARGET_STRING },
-//	    { "TEXT", 0, TARGET_TEXT },
-//	    { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
-	{ "text/uri-list", 0, 0 },
 };
 static const gint nClipboardTargets = sizeof(clipboardTargets) / sizeof(clipboardTargets[0]);
 
@@ -1494,18 +1495,20 @@ void ScintillaGTK::ReceivedSelection(GtkSelectionData *selection_data) {
 
 void ScintillaGTK::ReceivedDrop(GtkSelectionData *selection_data) {
 	dragWasDropped = true;
-	if ((selection_data->type == GDK_TARGET_STRING) || (selection_data->type == atomUTF8)) {
+	if (selection_data->type == atomUriList) {
+		char *ptr = new char[selection_data->length + 1];
+		ptr[selection_data->length] = '\0';
+		memcpy(ptr, selection_data->data, selection_data->length);
+ 		NotifyURIDropped(ptr);
+		delete []ptr;
+	} else if ((selection_data->type == GDK_TARGET_STRING) || (selection_data->type == atomUTF8)) {
 		if (selection_data->length > 0) {
 			SelectionText selText;
 			GetGtkSelectionText(selection_data, selText);
 			DropAt(posDrop, selText.s, false, selText.rectangular);
 		}
 	} else if (selection_data->length > 0) {
-		char *ptr = new char[selection_data->length + 1];
-		ptr[selection_data->length] = '\0';
-		memcpy(ptr, selection_data->data, selection_data->length);
- 		NotifyURIDropped(ptr);
-		delete []ptr;
+	    fprintf(stderr, "ReceivedDrop other %p\n", static_cast<void *>(selection_data->type));
 	}
 	Redraw();
 }
@@ -2466,9 +2469,10 @@ GtkType scintilla_get_type() {
 }
 
 void ScintillaGTK::ClassInit(GtkObjectClass* object_class, GtkWidgetClass *widget_class, GtkContainerClass *container_class) {
-    atomClipboard = gdk_atom_intern("CLIPBOARD", FALSE);
-    atomUTF8 = gdk_atom_intern("UTF8_STRING", FALSE);
-    atomString = GDK_SELECTION_TYPE_STRING;
+	atomClipboard = gdk_atom_intern("CLIPBOARD", FALSE);
+	atomUTF8 = gdk_atom_intern("UTF8_STRING", FALSE);
+	atomString = GDK_SELECTION_TYPE_STRING;
+	atomUriList = gdk_atom_intern("text/uri-list", FALSE);
 
 	// Define default signal handlers for the class:  Could move more
 	// of the signal handlers here (those that currently attached to wDraw
