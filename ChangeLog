@@ -1,3 +1,18 @@
+2006-05-16  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * tagmanager/Makefile.am, tagmanager/tcl.c, tagmanager/parsers.h,
+   scintilla/Makefile.am, scintilla/LexTCL.cxx, scintilla/KeyWords.cxx,
+   src/filetypes.c, src/highlighting.c, data/filetypes.tcl:
+   new filetype Tcl/Tk
+ * src/sci_cb.c: enabled autocompletion for all filetypes (fine tuning
+                 still needed)
+ * src/document.c: removed mmap()-code, use at the moment only
+                   g_file_get_contents, fixed memory leak
+ * scintilla/ScintillaGTK.cxx: updated to CVS version
+ * data/filetypes.*: quoted filename wildcards for filenames with
+                     whitespace
+
+
 2006-05-15  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/utils.c, src/callbacks.c:
