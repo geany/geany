@@ -627,7 +627,7 @@ static void FoldBashDoc(unsigned int startPos, int length, int, WordList *[],
                      && !IsCommentLine(lineCurrent+1, styler))
                 levelCurrent--;
         }
-		if (style == SCE_C_OPERATOR) {
+		if (style == SCE_SH_OPERATOR) {
 			if (ch == '{') {
 				levelCurrent++;
 			} else if (ch == '}') {
