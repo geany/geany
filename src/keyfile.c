@@ -1,7 +1,7 @@
 /*
  *      keyfile.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -128,13 +128,6 @@ void configuration_save(void)
 	g_key_file_set_string(config, PACKAGE, "pref_template_version", app->pref_template_version);
 
 	// store build settings
-	//g_key_file_set_string(config, "build", "build_java_cmd", app->build_java_cmd ? app->build_java_cmd : "");
-	//g_key_file_set_string(config, "build", "build_javac_cmd", app->build_javac_cmd ? app->build_javac_cmd : "");
-	//g_key_file_set_string(config, "build", "build_fpc_cmd", app->build_fpc_cmd ? app->build_fpc_cmd : "");
-	//g_key_file_set_string(config, "build", "build_tex_dvi_cmd", app->build_tex_dvi_cmd ? app->build_tex_dvi_cmd : "");
-	//g_key_file_set_string(config, "build", "build_tex_pdf_cmd", app->build_tex_pdf_cmd ? app->build_tex_pdf_cmd : "");
-	//g_key_file_set_string(config, "build", "build_tex_view_dvi_cmd", app->build_tex_view_dvi_cmd ? app->build_tex_view_dvi_cmd : "");
-	//g_key_file_set_string(config, "build", "build_tex_view_pdf_cmd", app->build_tex_view_pdf_cmd ? app->build_tex_view_pdf_cmd : "");
 	g_key_file_set_string(config, "build", "build_make_cmd", app->build_make_cmd ? app->build_make_cmd : "");
 	g_key_file_set_string(config, "build", "build_term_cmd", app->build_term_cmd ? app->build_term_cmd : "");
 	g_key_file_set_string(config, "build", "build_browser_cmd", app->build_browser_cmd ? app->build_browser_cmd : "");
@@ -252,8 +245,8 @@ gboolean configuration_load(void)
 		app->geometry[3] = geo[3];
 	}
 	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
-	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ? 
-				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) : 
+	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
+				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) :
 				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
 
 
@@ -283,41 +276,6 @@ gboolean configuration_load(void)
 	app->pref_editor_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
 	app->pref_editor_trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", TRUE);
 
-/*
-	tmp_string = g_find_program_in_path("java");
-	app->build_java_cmd = utils_get_setting_string(config, "build", "build_java_cmd", tmp_string);
-	g_free(tmp_string);
-
-	tmp_string2 = g_find_program_in_path("javac");
-	tmp_string = g_strconcat(tmp_string2, " -verbose", NULL);
-	app->build_javac_cmd = utils_get_setting_string(config, "build", "build_javac_cmd", tmp_string);
-	g_free(tmp_string);
-	g_free(tmp_string2);
-
-	tmp_string = g_find_program_in_path("fpc");
-	app->build_fpc_cmd = utils_get_setting_string(config, "build", "build_fpc_cmd", tmp_string);
-	g_free(tmp_string);
-
-	tmp_string2 = g_find_program_in_path("latex");
-	tmp_string = g_strconcat(tmp_string2, " -interaction=nonstopmode", NULL);
-	app->build_tex_dvi_cmd = utils_get_setting_string(config, "build", "build_tex_dvi_cmd", tmp_string);
-	g_free(tmp_string);
-	g_free(tmp_string2);
-
-	tmp_string2 = g_find_program_in_path("pdflatex");
-	tmp_string = g_strconcat(tmp_string2, " -interaction=nonstopmode", NULL);
-	app->build_tex_pdf_cmd = utils_get_setting_string(config, "build", "build_tex_pdf_cmd", tmp_string);
-	g_free(tmp_string);
-	g_free(tmp_string2);
-
-	tmp_string = g_find_program_in_path("xdvi");
-	app->build_tex_view_dvi_cmd = utils_get_setting_string(config, "build", "build_tex_view_dvi_cmd", tmp_string);
-	g_free(tmp_string);
-
-	tmp_string = g_find_program_in_path("xpdf");
-	app->build_tex_view_pdf_cmd = utils_get_setting_string(config, "build", "build_tex_view_pdf_cmd", tmp_string);
-	g_free(tmp_string);
-*/
 	tmp_string = g_find_program_in_path("make");
 	app->build_make_cmd = utils_get_setting_string(config, "build", "build_make_cmd", tmp_string);
 	g_free(tmp_string);
@@ -339,7 +297,6 @@ gboolean configuration_load(void)
 			app->recent_files[i] = NULL;
 		}
 	}
-	//geany_debug("%d", g_strv_length(app->recent_files));
 
 	for(i = 0; i < GEANY_SESSION_FILES; i++)
 	{
@@ -377,11 +334,11 @@ gboolean configuration_open_files(void)
 			x = 0;
 			y = 0;
 			ft_id = GEANY_MAX_FILE_TYPES;
-			
+
 			// yes it is :, it should be a ;, but now it is too late to change it
 			array = g_strsplit(session_files[i], ":", 3);
 			len = g_strv_length(array);
-			
+
 			// read position
 			if (len > 0 && array[0]) pos = atoi(array[0]);
 			else pos = 0;
@@ -393,7 +350,7 @@ gboolean configuration_open_files(void)
 				file = array[2];
 			}
 			else file = array[1];
-			
+
 			// try to get the locale equivalent for the filename, fallback to filename if error
 			locale_filename = g_locale_from_utf8(file, -1, NULL, NULL, NULL);
 			if (locale_filename == NULL) locale_filename = g_strdup(file);
@@ -413,7 +370,7 @@ gboolean configuration_open_files(void)
 			i++;
 			if (i >= GEANY_SESSION_FILES) break;
 		}
-		else 
+		else
 		{
 			i--;
 			if (i < 0) break;

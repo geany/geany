@@ -258,6 +258,7 @@ gint document_create_new_sci(const gchar *filename)
 	}
 
 	this.tabmenu_label = gtk_label_new(title);
+	gtk_misc_set_alignment(GTK_MISC(this.tabmenu_label), 0.0, 0);
 	if (app->tab_order_ltr)
 	{
 		gint npage;
@@ -399,7 +400,8 @@ void document_new_file(filetype *ft)
  */
 void document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly, filetype *ft)
 {
-	gint editor_mode, size;
+	gint editor_mode;
+	gsize size;
 	gboolean reload = (idx == -1) ? FALSE : TRUE;
 	struct stat st;
 	gchar *enc = NULL;
