@@ -38,12 +38,26 @@
 gint old_tab_width;
 gint old_long_line_column;
 gchar *old_long_line_color;
+gchar *dialog_key_name;
+static GtkListStore *store = NULL;
+static GtkTreeView *tree = NULL;
+GtkWidget *dialog_label;
+static gboolean edited = FALSE;
+
+static gboolean on_prefs_tree_view_button_press_event(
+						GtkWidget *widget, GdkEventButton *event, gpointer user_data);
+static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
+static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
+static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data);
 
 
 void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
 	GdkColor *color;
+	GtkTreeIter iter;
+	guint i;
+	gchar *key_string;
 
 	// General settings
 	widget = lookup_widget(app->prefs_dialog, "spin_mru");
@@ -134,21 +148,6 @@ void prefs_init_dialog(void)
 	g_free(color);
 
 	// Tools Settings
-/*	if (app->build_c_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_c")), app->build_c_cmd);
-
-	if (app->build_cpp_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_cpp")), app->build_cpp_cmd);
-
-	if (app->build_java_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_java")), app->build_java_cmd);
-
-	if (app->build_javac_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_javac")), app->build_javac_cmd);
-
-	if (app->build_fpc_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_pascal")), app->build_fpc_cmd);
-*/
 	if (app->build_make_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_make")), app->build_make_cmd);
 
@@ -174,6 +173,43 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "entry_template_version");
 	gtk_entry_set_text(GTK_ENTRY(widget), app->pref_template_version);
+
+
+	// Keybindings
+	if (store == NULL)
+	{
+		GtkCellRenderer *renderer;
+		GtkTreeViewColumn *column;
+
+		tree = GTK_TREE_VIEW(lookup_widget(app->prefs_dialog, "treeview7"));
+		//g_object_set(tree, "vertical-separator", 6, NULL);
+
+		store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+		gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
+
+		renderer = gtk_cell_renderer_text_new();
+		column = gtk_tree_view_column_new_with_attributes(_("Action"), renderer, "text", 0, NULL);
+		gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+
+		renderer = gtk_cell_renderer_text_new();
+		g_object_set(renderer, "editable", TRUE, NULL);
+		column = gtk_tree_view_column_new_with_attributes(_("Shortcut"), renderer, "text", 1, NULL);
+		gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+
+		g_signal_connect(G_OBJECT(renderer), "edited", G_CALLBACK(on_cell_edited), NULL);
+		g_signal_connect(G_OBJECT(tree), "button-press-event",
+					G_CALLBACK(on_prefs_tree_view_button_press_event), NULL);
+		g_signal_connect(G_OBJECT(lookup_widget(app->prefs_dialog, "button2")), "button-press-event",
+					G_CALLBACK(on_prefs_tree_view_button_press_event), NULL);
+	}
+
+	for (i = 0; i < GEANY_MAX_KEYS; i++)
+	{
+		key_string = gtk_accelerator_name(keys[i]->key, keys[i]->mods);
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter, 0, keys[i]->name, 1, key_string, -1);
+		g_free(key_string);
+	}
 
 
 #ifdef HAVE_VTE
@@ -257,7 +293,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
 		app->tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
- 
+
 
 		// Editor settings
 		widget = lookup_widget(app->prefs_dialog, "spin_tab_width");
@@ -293,26 +329,6 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 
 		// Tools Settings
-/*		widget = lookup_widget(app->prefs_dialog, "entry_com_c");
-		g_free(app->build_c_cmd);
-		app->build_c_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-
-		widget = lookup_widget(app->prefs_dialog, "entry_com_cpp");
-		g_free(app->build_cpp_cmd);
-		app->build_cpp_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-
-		widget = lookup_widget(app->prefs_dialog, "entry_com_java");
-		g_free(app->build_java_cmd);
-		app->build_java_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-
-		widget = lookup_widget(app->prefs_dialog, "entry_com_javac");
-		g_free(app->build_javac_cmd);
-		app->build_javac_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-
-		widget = lookup_widget(app->prefs_dialog, "entry_com_pascal");
-		g_free(app->build_fpc_cmd);
-		app->build_fpc_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-*/
 		widget = lookup_widget(app->prefs_dialog, "entry_com_make");
 		g_free(app->build_make_cmd);
 		app->build_make_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
@@ -346,6 +362,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		g_free(app->pref_template_version);
 		app->pref_template_version = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
+
+		// Keybindings
+		if (edited) keybindings_write_to_file();
 
 #ifdef HAVE_VTE
 		// VTE settings
@@ -430,6 +449,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		// store all settings
 		configuration_save();
 	}
+	gtk_list_store_clear(store);
 	gtk_widget_hide(GTK_WIDGET(dialog));
 }
 
@@ -508,3 +528,119 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 	}
 }
 
+
+
+static gboolean on_prefs_tree_view_button_press_event(
+						GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	GtkTreeSelection *selection;
+	gchar *name;
+
+	// discard click events in the tree unless it is a double click
+	if (widget == (GtkWidget*)tree && event->type != GDK_2BUTTON_PRESS) return FALSE;
+
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	{
+		gtk_tree_model_get(model, &iter, 0, &name, -1);
+		if (name != NULL)
+		{
+			GtkWidget *dialog;
+			GtkWidget *label;
+			gchar *str;
+
+			dialog = gtk_dialog_new_with_buttons(_("Grab key"), GTK_WINDOW(app->prefs_dialog),
+					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+
+			str = g_strdup_printf(_("Type the combination of the keys you want to use for \"%s\""), name);
+			label = gtk_label_new(str);
+			gtk_misc_set_padding(GTK_MISC(label), 5, 10);
+			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+
+			dialog_label = gtk_label_new("");
+			gtk_misc_set_padding(GTK_MISC(dialog_label), 5, 10);
+			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), dialog_label);
+
+			g_signal_connect(G_OBJECT(dialog), "key-press-event", G_CALLBACK(on_keytype_dialog_response), NULL);
+			g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(on_dialog_response), NULL);
+			g_signal_connect(G_OBJECT(dialog), "close", G_CALLBACK(gtk_widget_destroy), NULL);
+
+			// copy name to global variable to hold it, will be freed in on_dialog_response()
+			dialog_key_name = g_strdup(name);
+
+			gtk_widget_show_all(dialog);
+			g_free(str);
+			g_free(name);
+		}
+	}
+	return TRUE;
+}
+
+
+static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data)
+{
+	if (path != NULL && new_text != NULL)
+	{
+		guint idx;
+		gchar *test;
+		GtkTreeIter iter;
+
+		// get the index of the shortcut
+		idx = strtol(path, &test, 10);
+		if (test == path) return;
+
+		gtk_accelerator_parse(new_text, &(keys[idx]->key), &(keys[idx]->mods));
+
+		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
+		gtk_list_store_set(store, &iter, 1, new_text, -1);
+
+		edited = TRUE;
+	}
+}
+
+
+
+static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data)
+{
+	gchar *str;
+
+	// ignore numlock key, not necessary but nice
+	if (event->state & GDK_MOD2_MASK) event->state -= GDK_MOD2_MASK;
+
+	str = gtk_accelerator_name(event->keyval, event->state);
+
+	gtk_label_set_text(GTK_LABEL(dialog_label), str);
+	g_free(str);
+
+	return TRUE;
+}
+
+
+static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data)
+{
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		GtkTreeIter iter;
+		guint idx;
+		gchar path[3];
+
+		for (idx = 0; idx < GEANY_MAX_KEYS; idx++)
+		{
+			if (utils_strcmp(dialog_key_name, keys[idx]->name)) break;
+		}
+
+		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &(keys[idx]->key), &(keys[idx]->mods));
+
+		// generate the path, it is exactly the index
+		g_snprintf(path, 3, "%d", idx);
+		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
+		gtk_list_store_set(store, &iter, 1, gtk_label_get_text(GTK_LABEL(dialog_label)), -1);
+		g_free(dialog_key_name);
+
+		edited = TRUE;
+	}
+	gtk_widget_destroy(dialog);
+}

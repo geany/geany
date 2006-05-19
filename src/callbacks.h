@@ -115,7 +115,7 @@ on_color_cancel_button_clicked         (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-on_font_cancel_button_clicked         (GtkButton       *button,
+on_font_cancel_button_clicked          (GtkButton       *button,
                                         gpointer         user_data);
 
 void
@@ -135,14 +135,8 @@ on_font_apply_button_clicked           (GtkButton       *button,
                                         gpointer         user_data);
 
 gboolean
-on_close_all1_activate           (GtkMenuItem     *menuitem,
+on_close_all1_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
-
-gboolean
-on_editor_key_press_event              (GtkWidget *widget,
-                                        GdkEventKey *event,
-                                        gpointer user_data);
-
 
 gboolean
 on_editor_button_press_event           (GtkWidget *widget,
@@ -179,7 +173,7 @@ on_entry1_activate                     (GtkEntry        *entry,
                                         gpointer         user_data);
 
 gboolean
-toolbar_popup_menu                    (GtkWidget *widget,
+toolbar_popup_menu                     (GtkWidget *widget,
                                         GdkEventButton *event,
                                         gpointer user_data);
 

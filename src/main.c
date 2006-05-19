@@ -470,6 +470,7 @@ gint main(gint argc, gchar **argv)
 	gtk_widget_set_size_request(app->window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
 	gtk_window_set_default_size(GTK_WINDOW(app->window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 	configuration_load();
+	keybindings_init();
 	templates_init();
 	encodings_init();
 	document_init_doclist();
@@ -500,7 +501,7 @@ gint main(gint argc, gchar **argv)
 	dialogs_create_recent_menu();
 	utils_create_insert_menu_items();
 
-	msgwin_status_add(_("This is %s %s by Enrico Troeger."), PACKAGE, VERSION);
+	msgwin_status_add(_("This is Geany %s."), VERSION);
 	if (mkdir_result != 0)
 		msgwin_status_add(_("Configuration directory could not be created (%s)."), g_strerror(mkdir_result));
 

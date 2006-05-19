@@ -14,6 +14,7 @@ bin_PROGRAMS = geany
 
 geany_SOURCES = \
 	main.c geany.h \
+	keybindings.c keybindings.h \
 	templates.c templates.h \
 	treeviews.c treeviews.h \
 	about.c about.h \
@@ -35,6 +36,6 @@ geany_SOURCES = \
 	callbacks.c callbacks.h
 
 #AM_CFLAGS = -Wall -pipe
-AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe
-#AM_CFLAGS = -DGEANY_DEBUG -g -Wall -pipe
+#AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe
+AM_CFLAGS = -DGEANY_DEBUG -g -Wall -pipe
 geany_LDADD = @PACKAGE_LIBS@ -lstdc++ ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a $(INTLLIBS)

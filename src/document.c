@@ -36,9 +36,6 @@
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
-#ifdef HAVE_MMAP
-# include <sys/mman.h>
-#endif
 #ifdef HAVE_FCNTL_H
 # include <fcntl.h>
 #endif
@@ -282,9 +279,9 @@ gint document_create_new_sci(const gchar *filename)
 	g_signal_connect((GtkWidget*) sci, "sci-notify",
 					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(new_idx));
 	// signal for insert-key(works without too, but to update the right status bar)
-	g_signal_connect((GtkWidget*) sci, "key-press-event",
-					G_CALLBACK(on_editor_key_press_event), GINT_TO_POINTER(new_idx));
-	// signal for the popup menu
+/*	g_signal_connect((GtkWidget*) sci, "key-press-event",
+					G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));
+*/	// signal for the popup menu
 	g_signal_connect((GtkWidget*) sci, "button-press-event",
 					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
 	// signal for clicking the tab-close button
