@@ -1583,8 +1583,12 @@ gchar *utils_get_hostname(void)
 gint utils_make_settings_dir(const gchar *dir)
 {
 	gint error_nr = 0;
-	gchar *fileytpes_readme = g_strconcat(
+	gchar *filetypes_readme = g_strconcat(
 					dir, G_DIR_SEPARATOR_S, "template.README", NULL);
+	gchar *filedefs_dir = g_strconcat(dir, G_DIR_SEPARATOR_S,
+					GEANY_FILEDEFS_SUBDIR, G_DIR_SEPARATOR_S, NULL);
+	gchar *filedefs_readme = g_strconcat(dir, G_DIR_SEPARATOR_S, GEANY_FILEDEFS_SUBDIR,
+					G_DIR_SEPARATOR_S, "filetypes.README", NULL);
 
 	if (! g_file_test(dir, G_FILE_TEST_EXISTS))
 	{
@@ -1596,17 +1600,38 @@ gint utils_make_settings_dir(const gchar *dir)
 #endif
 	}
 
-	if (error_nr == 0 && ! g_file_test(fileytpes_readme, G_FILE_TEST_EXISTS))
+	if (error_nr == 0 && ! g_file_test(filetypes_readme, G_FILE_TEST_EXISTS))
 	{	// try to write template.README
-		error_nr = utils_write_file(fileytpes_readme,
+		error_nr = utils_write_file(filetypes_readme,
 "There are several template files in this directory. For these templates you can use wildcards.\n\
 For more information read the documentation (in " DOCDIR " or visit " GEANY_HOMEPAGE ").");
+		if (error_nr == 0 && ! g_file_test(filetypes_readme, G_FILE_TEST_EXISTS))
 		{ // check whether write test was successful, otherwise directory is not writable
 			geany_debug("The chosen configuration directory is not writable.");
-			return EPERM;
+			errno = EPERM;
 		}
 	}
-	g_free(fileytpes_readme);
+
+	// make subdir for filetype definitions
+	if (error_nr == 0)
+	{
+		if (! g_file_test(filedefs_dir, G_FILE_TEST_EXISTS))
+		{
+#ifdef GEANY_WIN32
+			if (mkdir(filedefs_dir) != 0) error_nr = errno;
+#else
+			if (mkdir(filedefs_dir, 0700) != 0) error_nr = errno;
+#endif
+		}
+		if (error_nr == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
+			utils_write_file(filedefs_readme,
+"Copy files from " PACKAGE_DATA_DIR "/ to this directory to overwrite them. To use the defaults, just delete the file in this directory.\n\
+For more information read the documentation (in " DOCDIR " or visit " GEANY_HOMEPAGE ").");
+	}
+
+	g_free(filetypes_readme);
+	g_free(filedefs_dir);
+	g_free(filedefs_readme);
 
 	return error_nr;
 }
