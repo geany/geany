@@ -1,3 +1,19 @@
+2006-05-19  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: fix a small bug in sci_cb_show_calltip() to prevent an
+                 endless loop
+ * src/keybindings.c, src/dialogs.c, src/callbacks.c, src/main.c,
+   src/Makefile.am, src/geany.h, src/prefs.c, geany.glade:
+   make keyboard shortcuts user-definable
+
+
+2006-05-17  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c: added code for creation of filedefs subdirectory
+ * src/document.c: fixed compiler warning
+ * src/keyfile.c: removed obsolete and commented code
+
+
 2006-05-16  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * tagmanager/Makefile.am, tagmanager/tcl.c, tagmanager/parsers.h,
