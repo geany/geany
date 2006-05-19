@@ -1249,9 +1249,19 @@ void utils_build_show_hide(gint idx)
 #ifndef GEANY_WIN32
 	gboolean is_header = FALSE;
 	gchar *ext = NULL;
-	filetype *ft = doc_list[idx].file_type;
+	filetype *ft;
 
-	if (idx >= 0 && doc_list[idx].file_name)
+	if (idx == -1)
+	{
+		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
+		gtk_widget_set_sensitive(app->compile_button, FALSE);
+		gtk_widget_set_sensitive(app->run_button, FALSE);
+		return;
+	}
+
+	ft = doc_list[idx].file_type;
+
+	if (doc_list[idx].file_name)
 	{
 		ext = strrchr(doc_list[idx].file_name, '.');
 	}

@@ -347,6 +347,7 @@ gboolean document_remove(guint page_num)
 			utils_set_window_title(-1);
 			utils_save_buttons_toggle(FALSE);
 			utils_close_buttons_toggle();
+			utils_build_show_hide(-1);
 		}
 	}
 	else geany_debug("Error: idx: %d page_num: %d", idx, page_num);
