@@ -371,7 +371,7 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos)
 	if (pos == -1)
 	{	// position of '(' is unknown, so go backwards to find it
 		pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
-		while (SSM(sci, SCI_GETCHARAT, pos, 0) != '(') pos--;
+		while (pos >= 0 && SSM(sci, SCI_GETCHARAT, pos, 0) != '(') pos--;
 	}
 
 	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
