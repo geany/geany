@@ -4,6 +4,8 @@
                   the open file dialog
  * src/sci_cb.c: fix a segfault when commenting out lines with ctrl-d
                  when no filetype is set
+ * src/utils.c: fix a segfault clicking on a compile error if the
+                compiled file has been closed
 
 
 2006-05-19  Enrico Troeger  <enrico.troeger@uvena.de>

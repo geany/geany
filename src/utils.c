@@ -2218,7 +2218,7 @@ void utils_parse_compiler_error_line(const gchar *string)
 	gint idx = document_get_cur_idx();
 	gint line = -1;
 
-	if (string == NULL) return;
+	if (string == NULL || !doc_list[app->cur_idx].is_valid) return;
 
 	// first get the line
 	switch (doc_list[app->cur_idx].file_type->id)
