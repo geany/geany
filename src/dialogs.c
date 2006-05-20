@@ -76,10 +76,12 @@ void dialogs_show_open_file ()
 			gtk_widget_show(viewbtn);
 			gtk_dialog_add_action_widget(GTK_DIALOG(app->open_filesel),
 				viewbtn, GTK_RESPONSE_APPLY);
-
 			gtk_dialog_add_buttons(GTK_DIALOG(app->open_filesel),
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+			// set default Open, so pressing enter can open multiple files
+			gtk_dialog_set_default_response(GTK_DIALOG(app->open_filesel),
+				GTK_RESPONSE_ACCEPT);
 
 			gtk_widget_set_size_request(app->open_filesel, 520, 460);
 			gtk_window_set_modal(GTK_WINDOW(app->open_filesel), TRUE);

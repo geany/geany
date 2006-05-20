@@ -1,3 +1,9 @@
+2006-05-20  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/dialogs.c: fix pressing enter to open more than one file in
+                  the open file dialog
+
+
 2006-05-19  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: fix a small bug in sci_cb_show_calltip() to prevent an
