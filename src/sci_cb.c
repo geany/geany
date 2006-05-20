@@ -875,8 +875,6 @@ void sci_cb_do_comment(gint idx)
 		sci_get_selection_end(doc_list[idx].sci) - 1);
 	last_line = MAX(first_line, last_line);
 
-	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
-
 	// hack for detection of HTML vs PHP code, if non-PHP set filetype to XML
 	line_start = sci_get_position_from_line(doc_list[idx].sci, first_line);
 	if (ft->id == GEANY_FILETYPES_PHP)
@@ -888,6 +886,9 @@ void sci_cb_do_comment(gint idx)
 
 	co = ft->comment_open;
 	cc = ft->comment_close;
+	if (co == NULL) return;
+
+	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
 
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{

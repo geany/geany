@@ -2,6 +2,8 @@
 
  * src/dialogs.c: fix pressing enter to open more than one file in
                   the open file dialog
+ * src/sci_cb.c: fix a segfault when commenting out lines with ctrl-d
+                 when no filetype is set
 
 
 2006-05-19  Enrico Troeger  <enrico.troeger@uvena.de>
