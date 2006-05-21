@@ -2,6 +2,8 @@
 
  * src/keybindings.c: added menu_messagewindow and toggle_sidebar
                       shortcuts
+ * src/highlighting.c, data/filetypes.c, data/filetypes.cpp:
+   added option to disable styling within preprocessor directives
 
 
 2006-05-20  Nick Treleaven  <nick.treleaven@btinternet.com>

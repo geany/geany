@@ -122,6 +122,7 @@ static void styleset_get_int(GKeyFile *config, GKeyFile *configh, const gchar *s
 							 const gchar *key, gint fdefault_val, gint sdefault_val, gint array[])
 {
 	gchar **list;
+	gchar *end1, *end2;
 	gsize len;
 
 	if (config == NULL || section == NULL) return;
@@ -129,14 +130,14 @@ static void styleset_get_int(GKeyFile *config, GKeyFile *configh, const gchar *s
 	list = g_key_file_get_string_list(configh, section, key, &len, NULL);
 	if (list == NULL) list = g_key_file_get_string_list(config, section, key, &len, NULL);
 
-	if (list != NULL && list[0] != NULL) array[0] = atoi(list[0]);
+	if (list != NULL && list[0] != NULL) array[0] = strtol(list[0], &end1, 10);
 	else array[0] = fdefault_val;
-	if (list != NULL && list[1] != NULL) array[1] = atoi(list[1]);
+	if (list != NULL && list[1] != NULL) array[1] = strtol(list[1], &end2, 10);
 	else array[1] = sdefault_val;
 
-	// if there was an error, atoi() returns 0, so then we use default_val
-	if (array[0] == 0) array[0] = fdefault_val;
-	if (array[1] == 0) array[1] = sdefault_val;
+	// if there was an error, strtol() returns 0 and end is list[x], so then we use default_val
+	if (list[0] == end1) array[0] = fdefault_val;
+	if (list[1] == end2) array[1] = sdefault_val;
 
 	g_strfreev(list);
 }
@@ -332,6 +333,7 @@ static void styleset_c_init(void)
 	styleset_get_hex(config, config_home, "styling", "commentlinedoc", "0x0000ff", "0xffffff", "true", types[GEANY_FILETYPES_C]->styling[16]);
 	styleset_get_hex(config, config_home, "styling", "commentdockeyword", "0x0000ff", "0xffffff", "true", types[GEANY_FILETYPES_C]->styling[17]);
 	styleset_get_hex(config, config_home, "styling", "globalclass", "0xbb1111", "0xffffff", "true", types[GEANY_FILETYPES_C]->styling[18]);
+	styleset_get_int(config, config_home, "styling", "styling_within_preprocessor", 1, 0, types[GEANY_FILETYPES_C]->styling[19]);
 
 	types[GEANY_FILETYPES_C]->keywords = g_new(gchar*, 3);
 	styleset_get_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_C, 0, "if const struct char int float double void long for while do case switch return");
@@ -356,7 +358,6 @@ static void styleset_c_init(void)
 
 void styleset_c(ScintillaObject *sci)
 {
-
 	if (types[GEANY_FILETYPES_C] == NULL) styleset_c_init();
 
 	styleset_common(sci, 5);
@@ -424,7 +425,8 @@ void styleset_c(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	if (types[GEANY_FILETYPES_C]->styling[19][0] == 1)
+		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
@@ -461,6 +463,7 @@ static void styleset_cpp_init(void)
 	styleset_get_hex(config, config_home, "styling", "commentlinedoc", "0x0000ff", "0xffffff", "true", types[GEANY_FILETYPES_CPP]->styling[16]);
 	styleset_get_hex(config, config_home, "styling", "commentdockeyword", "0x0000ff", "0xffffff", "true", types[GEANY_FILETYPES_CPP]->styling[17]);
 	styleset_get_hex(config, config_home, "styling", "globalclass", "0xbb1111", "0xffffff", "true", types[GEANY_FILETYPES_CPP]->styling[18]);
+	styleset_get_int(config, config_home, "styling", "styling_within_preprocessor", 1, 0, types[GEANY_FILETYPES_CPP]->styling[19]);
 
 	types[GEANY_FILETYPES_CPP]->keywords = g_new(gchar*, 3);
 	styleset_get_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CPP, 0, "and and_eq asm auto bitand bitor bool break case catch char class compl const const_cast continue default delete do double dynamic_cast else enum explicit export extern false float for friend goto if inline int long mutable namespace new not not_eq operator or or_eq private protected public register reinterpret_cast return short signed sizeof static static_cast struct switch template this throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq");
@@ -485,7 +488,6 @@ static void styleset_cpp_init(void)
 
 void styleset_cpp(ScintillaObject *sci)
 {
-
 	if (types[GEANY_FILETYPES_CPP] == NULL) styleset_cpp_init();
 
 	styleset_common(sci, 5);
@@ -551,7 +553,8 @@ void styleset_cpp(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
 
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
+	if (types[GEANY_FILETYPES_CPP]->styling[19][0] == 1)
+		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.symbol.$(file.patterns.cpp)", (sptr_t) "#");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.start.$(file.patterns.cpp)", (sptr_t) "if ifdef ifndef");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "preprocessor.middle.$(file.patterns.cpp)", (sptr_t) "else elif");
@@ -1426,14 +1429,14 @@ static void styleset_sh_init(void)
 	types[GEANY_FILETYPES_SH] = g_new(style_set, 1);
 	styleset_get_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[0]);
 	styleset_get_hex(config, config_home, "styling", "commentline", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[1]);
-	styleset_get_hex(config, config_home, "styling", "number", "0x007F00", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[2]);
+	styleset_get_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[2]);
 	styleset_get_hex(config, config_home, "styling", "word", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_SH]->styling[3]);
-	styleset_get_hex(config, config_home, "styling", "string", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[4]);
+	styleset_get_hex(config, config_home, "styling", "string", "0x1e90ff", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[4]);
 	styleset_get_hex(config, config_home, "styling", "character", "0x004040", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[5]);
 	styleset_get_hex(config, config_home, "styling", "operator", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[6]);
 	styleset_get_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[7]);
 	styleset_get_hex(config, config_home, "styling", "backticks", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_SH]->styling[8]);
-	styleset_get_hex(config, config_home, "styling", "param", "0xF38A12", "0x0000ff", "false", types[GEANY_FILETYPES_SH]->styling[9]);
+	styleset_get_hex(config, config_home, "styling", "param", "0x00009f", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[9]);
 	styleset_get_hex(config, config_home, "styling", "scalar", "0x905010", "0xffffff", "false", types[GEANY_FILETYPES_SH]->styling[10]);
 
 	types[GEANY_FILETYPES_SH]->keywords = g_new(gchar*, 2);

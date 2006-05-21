@@ -20,6 +20,9 @@ regex=0x905010;0xffffff;false;false
 commentlinedoc=0x0000ff;0xffffff;true;false
 commentdockeyword=0x0000ff;0xffffff;true;true
 globalclass=0xbb1111;0xffffff;true;false
+# whether arguments of preprocessor commands should be styled (only first argument is used)
+# 1 to enable, 0 to disable
+styling_within_preprocessor=1;0;false;false
 
 [keywords]
 # all items must be in one line
