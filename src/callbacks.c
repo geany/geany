@@ -419,7 +419,7 @@ void
 on_info1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_about();
+	about_dialog_show();
 }
 
 

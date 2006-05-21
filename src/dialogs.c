@@ -437,42 +437,6 @@ void dialogs_show_open_font(void)
 }
 
 
-void dialogs_show_about(void)
-{
-	AboutInfo *info;
-	GtkWidget *dialog;
-	GdkPixbuf *icon;
-	gchar *s;
-	guint n;
-
-	static const struct { gchar *name, *email, *language; } translators[] =
-	{
-		{ "Topi", "topi@phreaker.net", "ca_ES" },
-		{ NULL, NULL, NULL }
-	};
-
-	icon = utils_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
-
-	info = about_info_new(PACKAGE, VERSION, _("A fast and lightweight IDE"),
-						  ABOUT_COPYRIGHT_TEXT("2006", "Enrico Troeger"), GEANY_HOMEPAGE, GEANY_CODENAME);
-	about_info_add_credit(info, "Enrico Troeger", "enrico.troeger@uvena.de", _("Maintainer"));
-	about_info_add_credit(info, "Nick Treleaven", "nick.treleaven@btinternet.com", _("Developer"));
-
-	for (n = 0; translators[n].name != NULL; ++n)
-	{
-		s = g_strdup_printf(_("Translator (%s)"), translators[n].language);
-		about_info_add_credit(info, translators[n].name, translators[n].email, s);
-		g_free(s);
-	}
-
-	dialog = about_dialog_new(GTK_WINDOW(app->window), info, icon);
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-
-	about_info_free(info);
-}
-
-
 void dialogs_show_word_count(void)
 {
 	GtkWidget *dialog, *label;

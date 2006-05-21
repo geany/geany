@@ -44,15 +44,28 @@ AC_FUNC_LSTAT
 AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 AC_FUNC_MALLOC
 AC_FUNC_MEMCMP
-AC_FUNC_MMAP
 AC_FUNC_REALLOC
 AC_TYPE_SIGNAL
 AC_FUNC_STAT
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([gethostname ftruncate fgetpos getcwd gettimeofday isascii mblen memset munmap putenv realpath regcomp setenv strcasecmp strchr strdup strerror strrchr strspn strstr strtol])
+AC_CHECK_FUNCS([gethostname ftruncate fgetpos getcwd gettimeofday isascii mblen memset putenv realpath regcomp setenv strcasecmp strchr strdup strerror strrchr strspn strstr strtol])
 
 # autoscan end
 
+
+# get svn revision
+SVN=`which svn`
+case "x$SVN" in
+	x|xno)
+		REVISION="-1"
+		;;
+	*)
+		REVISION=r`$SVN info|grep 'Last Changed Rev'|cut -d' ' -f4`
+		;;
+esac
+AC_DEFINE_UNQUOTED([REVISION], "$REVISION", [subversion revision number])
+
+# GTK checks
 pkg_modules="gtk+-2.0 >= 2.6.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)

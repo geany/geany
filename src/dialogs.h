@@ -49,8 +49,6 @@ gboolean dialogs_show_unsaved_file(gint idx);
 /* This shows the font selection dialog to choose a font. */
 void dialogs_show_open_font(void);
 
-void dialogs_show_about(void);
-
 void dialogs_show_word_count(void);
 
 void dialogs_show_color(void);

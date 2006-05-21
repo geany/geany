@@ -52,7 +52,7 @@ static void styleset_get_keywords(GKeyFile *config, GKeyFile *configh, const gch
 {
 	gchar *result;
 
-	if (config == NULL || section == NULL)
+	if (config == NULL || configh == NULL || section == NULL)
 	{
 		types[index]->keywords[pos] = g_strdup(default_value);
 		return;
@@ -76,7 +76,7 @@ static void styleset_get_wordchars(GKeyFile *config, GKeyFile *configh, gint ind
 {
 	gchar *result;
 
-	if (config == NULL)
+	if (config == NULL || configh == NULL)
 	{
 		types[index]->wordchars = g_strdup(default_value);
 		return;
@@ -125,7 +125,7 @@ static void styleset_get_int(GKeyFile *config, GKeyFile *configh, const gchar *s
 	gchar *end1, *end2;
 	gsize len;
 
-	if (config == NULL || section == NULL) return;
+	if (config == NULL || configh == NULL || section == NULL) return;
 
 	list = g_key_file_get_string_list(configh, section, key, &len, NULL);
 	if (list == NULL) list = g_key_file_get_string_list(config, section, key, &len, NULL);
@@ -136,8 +136,8 @@ static void styleset_get_int(GKeyFile *config, GKeyFile *configh, const gchar *s
 	else array[1] = sdefault_val;
 
 	// if there was an error, strtol() returns 0 and end is list[x], so then we use default_val
-	if (list[0] == end1) array[0] = fdefault_val;
-	if (list[1] == end2) array[1] = sdefault_val;
+	if (list == NULL || list[0] == end1) array[0] = fdefault_val;
+	if (list == NULL || list[1] == end2) array[1] = sdefault_val;
 
 	g_strfreev(list);
 }

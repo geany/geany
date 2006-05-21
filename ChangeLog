@@ -4,6 +4,8 @@
                       shortcuts
  * src/highlighting.c, data/filetypes.c, data/filetypes.cpp:
    added option to disable styling within preprocessor directives
+ * src/dialogs.c, src/about.c, src/callbacks.c, configure.in:
+   rewrote about dialog to reduce code size, added subversion revision
 
 
 2006-05-20  Nick Treleaven  <nick.treleaven@btinternet.com>
