@@ -56,6 +56,7 @@ static void cb_func_menu_replace(void);
 static void cb_func_menu_preferences(void);
 static void cb_func_menu_opencolorchooser(void);
 static void cb_func_menu_fullscreen(void);
+static void cb_func_menu_messagewindow(void);
 static void cb_func_menu_zoomin(void);
 static void cb_func_menu_zoomout(void);
 static void cb_func_menu_foldall(void);
@@ -73,6 +74,7 @@ static void cb_func_switch_scribble(void);
 static void cb_func_switch_vte(void);
 static void cb_func_switch_tableft(void);
 static void cb_func_switch_tabright(void);
+static void cb_func_toggle_sidebar(void);
 static void cb_func_edit_duplicateline(void);
 static void cb_func_edit_commentline(void);
 static void cb_func_edit_autocomplete(void);
@@ -92,19 +94,20 @@ void keybindings_init(void)
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 
 	// init all fields of keys with default values
-	keys[GEANY_KEYS_MENU_NEW] = fill(cb_func_menu_new, 0, 0, "menu_new");
-	keys[GEANY_KEYS_MENU_OPEN] = fill(cb_func_menu_open, 0, 0, "menu_open");
-	keys[GEANY_KEYS_MENU_SAVE] = fill(cb_func_menu_save, 0, 0, "menu_save");
+	keys[GEANY_KEYS_MENU_NEW] = fill(cb_func_menu_new, GDK_n, GDK_CONTROL_MASK, "menu_new");
+	keys[GEANY_KEYS_MENU_OPEN] = fill(cb_func_menu_open, GDK_o, GDK_CONTROL_MASK, "menu_open");
+	keys[GEANY_KEYS_MENU_SAVE] = fill(cb_func_menu_save, GDK_s, GDK_CONTROL_MASK, "menu_save");
 	keys[GEANY_KEYS_MENU_SAVEALL] = fill(cb_func_menu_saveall, GDK_S, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall");
 	keys[GEANY_KEYS_MENU_CLOSEALL] = fill(cb_func_menu_closeall, GDK_d, GDK_MOD1_MASK, "menu_closeall");
 	keys[GEANY_KEYS_MENU_RELOADFILE] = fill(cb_func_menu_reloadfile, GDK_r, GDK_CONTROL_MASK, "menu_reloadfile");
 	keys[GEANY_KEYS_MENU_UNDO] = fill(cb_func_menu_undo, GDK_z, GDK_CONTROL_MASK, "menu_undo");
 	keys[GEANY_KEYS_MENU_REDO] = fill(cb_func_menu_redo, GDK_y, GDK_CONTROL_MASK, "menu_redo");
 	keys[GEANY_KEYS_MENU_FIND_NEXT] = fill(cb_func_menu_findnext, GDK_F3, 0, "menu_findnext");
-	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace, 0, 0, "menu_replace");
+	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace, GDK_F3, GDK_CONTROL_MASK, "menu_replace");
 	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences, GDK_p, GDK_CONTROL_MASK, "menu_preferences");
 	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser, 0, 0, "menu_opencolorchooser");
 	keys[GEANY_KEYS_MENU_FULLSCREEN] = fill(cb_func_menu_fullscreen, GDK_F11, 0, "menu_fullscreen");
+	keys[GEANY_KEYS_MENU_MESSAGEWINDOW] = fill(cb_func_menu_messagewindow, 0, 0, "menu_messagewindow");
 	keys[GEANY_KEYS_MENU_ZOOMIN] = fill(cb_func_menu_zoomin, GDK_plus, GDK_CONTROL_MASK, "menu_zoomin");
 	keys[GEANY_KEYS_MENU_ZOOMOUT] = fill(cb_func_menu_zoomout, GDK_minus, GDK_CONTROL_MASK, "menu_zoomout");
 	keys[GEANY_KEYS_MENU_FOLDALL] = fill(cb_func_menu_foldall, 0, 0, "menu_foldall");
@@ -122,6 +125,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_SWITCH_VTE] = fill(cb_func_switch_vte, GDK_F4, 0, "switch_vte");
 	keys[GEANY_KEYS_SWITCH_TABLEFT] = fill(cb_func_switch_tableft, 0, 0, "switch_tableft");
 	keys[GEANY_KEYS_SWITCH_TABRIGHT] = fill(cb_func_switch_tabright, 0, 0, "switch_tabright");
+	keys[GEANY_KEYS_TOOGLE_SIDEBAR] = fill(cb_func_toggle_sidebar, 0, 0, "toggle_sidebar");
 	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit_duplicateline, GDK_g, GDK_CONTROL_MASK, "edit_duplicateline");
 	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit_commentline, GDK_d, GDK_CONTROL_MASK, "edit_commentline");
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete, GDK_space, GDK_CONTROL_MASK, "edit_autocomplete");
@@ -170,6 +174,10 @@ void keybindings_init(void)
 	if (keys[GEANY_KEYS_MENU_FULLSCREEN]->key != 0)
 		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_fullscreen1"), "activate", accel_group,
 		keys[GEANY_KEYS_MENU_FULLSCREEN]->key, keys[GEANY_KEYS_MENU_FULLSCREEN]->mods, GTK_ACCEL_VISIBLE);
+
+	if (keys[GEANY_KEYS_MENU_MESSAGEWINDOW]->key != 0)
+		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_show_messages_window1"), "activate", accel_group,
+		keys[GEANY_KEYS_MENU_MESSAGEWINDOW]->key, keys[GEANY_KEYS_MENU_MESSAGEWINDOW]->mods, GTK_ACCEL_VISIBLE);
 
 	if (keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER]->key != 0)
 		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_choose_color1"), "activate", accel_group,
@@ -357,6 +365,13 @@ static void cb_func_menu_fullscreen(void)
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
 
+static void cb_func_menu_messagewindow(void)
+{
+	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1"));
+
+	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
+}
+
 static void cb_func_menu_zoomin(void)
 {
 	on_zoom_in1_activate(NULL, NULL);
@@ -465,6 +480,14 @@ static void cb_func_switch_tableft(void)
 static void cb_func_switch_tabright(void)
 {
 	utils_switch_document(RIGHT);
+}
+
+static void cb_func_toggle_sidebar(void)
+{
+	app->treeview_symbol_visible = ! app->treeview_symbol_visible;
+	app->treeview_openfiles_visible = ! app->treeview_openfiles_visible;
+
+	utils_treeviews_showhide();;
 }
 
 static void cb_func_edit_duplicateline(void)

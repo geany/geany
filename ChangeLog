@@ -1,3 +1,9 @@
+2006-05-21  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/keybindings.c: added menu_messagewindow and toggle_sidebar
+                      shortcuts
+
+
 2006-05-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/dialogs.c: fix pressing enter to open more than one file in
@@ -15,6 +21,8 @@
  * src/keybindings.c, src/dialogs.c, src/callbacks.c, src/main.c,
    src/Makefile.am, src/geany.h, src/prefs.c, geany.glade:
    make keyboard shortcuts user-definable
+ * src/document.c, src/utils.c: fixed a crash when clicking on the run
+                                button and no file is opened
 
 
 2006-05-17  Enrico Troeger  <enrico.troeger@uvena.de>
