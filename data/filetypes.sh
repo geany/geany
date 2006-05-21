@@ -9,8 +9,8 @@ string=0x1E90FF;0xffffff;false;false
 character=0x004040;0xffffff;false;false
 operator=0x101030;0xffffff;false;false
 identifier=0x000000;0xffffff;false;false
-backticks=0x000000;0xe0c0e0;false;false
-param=0xF38A12;0x0000ff;false;false
+backticks=0x000000;0xd0d0d0;false;false
+param=0x00009f;0xffffff;false;false
 scalar=0x905010;0xffffff;false;false
 
 [keywords]
