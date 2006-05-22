@@ -104,11 +104,10 @@ static void styleset_get_hex(GKeyFile *config, GKeyFile *configh, const gchar *s
 
 	list = g_key_file_get_string_list(configh, section, key, &len, NULL);
 	if (list == NULL) list = g_key_file_get_string_list(config, section, key, &len, NULL);
-
 	if (list != NULL && list[0] != NULL) array[0] = (gint) utils_strtod(list[0], NULL);
-	else array[0] = (gint) utils_strtod(foreground, NULL);
-	if (list != NULL && list[1] != NULL) array[1] = (gint) utils_strtod(list[1], NULL);
-	else array[1] = (gint) utils_strtod(background, NULL);
+	else if (foreground) array[0] = (gint) utils_strtod(foreground, NULL);
+	if (list && list != NULL && list[1] != NULL) array[1] = (gint) utils_strtod(list[1], NULL);
+	else if (background) array[1] = (gint) utils_strtod(background, NULL);
 	if (list != NULL && list[2] != NULL) array[2] = utils_atob(list[2]);
 	else array[2] = utils_atob(bold);
 	if (list != NULL && list[3] != NULL) array[3] = utils_atob(list[3]);

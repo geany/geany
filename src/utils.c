@@ -2171,33 +2171,41 @@ gchar *utils_make_human_readable_str(unsigned long long size, unsigned long bloc
 
 /* utils_strtod() is an simple implementation of strtod(), because strtod() does not understand
  * hex colour values before ANSI-C99, utils_strtod does only work for numbers like 0x... */
-double utils_strtod(const char *source, char **end)
+gdouble utils_strtod(const gchar *source, gchar **end)
 {
-	unsigned int i;
-	unsigned short tmp;
-	double exp, result;
+	guint source_len;
+	gushort tmp;
+	gdouble exp, result;
+	const gchar *str, *start = source;
+
+	if (!source)
+		return (gdouble) -1.0f;
+
+	source_len = strlen(source);
 
 	// input should be 0x... or 0X...
-	if (strlen(source) < 3 || source[0] != '0' || (source[1] != 'x' && source[1] != 'X'))
-		return -1.0;
-	source += 2;
+	if (source_len < 3 || start[0] != '0' || (start[1] != 'x' && start[1] != 'X'))
+		return (gdouble) -1.0f;
+
+	str = start + source_len - 1;
+	start += 2;
 
 	exp = 0.0;
 	result = 0;
-	for (i = (strlen(source) - 1); i >= 0; i--)
+	while (str >= start)
 	{
-		if (isdigit(source[i]))
+		if (isdigit(*str))
 		{	// convert the char to a real digit
-			tmp = source[i] - '0';
+			tmp = *str - '0';
 		}
 		else
 		{
-			if (isxdigit(source[i]))
+			if (isxdigit(*str))
 			{	// convert the char to a real digit
-				if (source[i] > 70)
-					tmp = source[i] - 'W';
+				if (*str > 70)
+					tmp = *str - 'W';
 				else
-					tmp = source[i] - '7';
+					tmp = *str - '7';
 			}
 			// stop if a non xdigit was found
 			else break;
@@ -2205,10 +2213,43 @@ double utils_strtod(const char *source, char **end)
 
 		result += pow(16.0, exp) * tmp;
 		exp++;
+		str--;
 	}
-
 	return result;
 }
+
+/*
+ * this is the new code for correct parsing hex colour values, but it requires many changes
+ * in the colour values of each filetype, so it is disabled for the moment, until I'll have
+ * time to change it
+static guint utils_get_value_of_hex(const gchar ch)
+{
+	if (ch >= '0' && ch <= '9')
+		return ch - '0';
+	else if (ch >= 'A' && ch <= 'F')
+		return ch - 'A' + 10;
+	else if (ch >= 'a' && ch <= 'f')
+		return ch - 'a' + 10;
+	else
+		return 0;
+}
+
+
+gdouble utils_strtod(const gchar *source, gchar **end)
+{
+	guint red, green, blue;
+
+	if  (source == NULL || strlen(source) != 8 || source[0] != '0' ||
+		(source[1] != 'x' && source[1] != 'X'))
+		return (double) -1.0f;
+
+	red = utils_get_value_of_hex(source[2]) * 16 + utils_get_value_of_hex(source[3]);
+	green = utils_get_value_of_hex(source[4]) * 16 + utils_get_value_of_hex(source[5]);
+	blue = utils_get_value_of_hex(source[5]) * 16 + utils_get_value_of_hex(source[7]);
+
+	return (gdouble)(red | (green << 8) | (blue << 16));
+}
+*/
 
 
 /* try to parse the file and line number where the error occured described in string
@@ -2227,13 +2268,6 @@ void utils_parse_compiler_error_line(const gchar *string)
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_RUBY:
 		{
-#if 0	// old code, works, but should be slower than the new one
-			gchar **array = g_strsplit(string, ":", 3);
-
-			if (array != NULL && array[1] != NULL) line = strtol(array[1], NULL, 10);
-
-			g_strfreev(array);
-#else	// new code
 			gchar *colon = strchr(string, ':');
 			gchar *end = NULL;
 
@@ -2246,7 +2280,7 @@ void utils_parse_compiler_error_line(const gchar *string)
 			// if the line could not be read, line is 0 and an error occurred, so we leave
 			if (colon == end)
 				return;
-#endif
+
 			break;
 		}
 		// the error output of python, perl and php -l on errors euals in "line xx", so they are "compatible"
