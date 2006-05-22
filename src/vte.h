@@ -32,21 +32,9 @@
 
 void vte_init(void);
 
-gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
-
-void vte_register_symbols(GModule *module);
-
 void vte_close(void);
 
-gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
-
 void vte_apply_user_settings(void);
-
-void vte_get_settings(void);
-
-void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
-
-GtkWidget *vte_create_popup_menu(void);
 
 /*
 void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,

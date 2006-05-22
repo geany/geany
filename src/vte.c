@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -47,6 +47,12 @@ static struct vte_funcs *vf;
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
 
 static void vte_start(GtkWidget *widget);
+static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
+static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
+static void vte_register_symbols(GModule *module);
+static void vte_get_settings(void);
+static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
+static GtkWidget *vte_create_popup_menu(void);
 
 
 /* taken from anjuta, thanks */
@@ -99,7 +105,7 @@ void vte_init(void)
 		geany_debug("Disabling terminal support");
 		return;
 	}
-	
+
 	if (app->lib_vte && strlen(app->lib_vte))
 	{
 		module = g_module_open(app->lib_vte, G_MODULE_BIND_LAZY);
@@ -157,10 +163,9 @@ void vte_init(void)
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
 
 	// the vte widget has to be realised before color changes take effect
-	//g_signal_connect_swapped(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
-	
-	// at least temporarily call gtk_widget_realize() otherwise the scrollbars won't be shown
-	gtk_widget_realize(vte);
+	//g_signal_connect(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
+
+	//gtk_widget_realize(vte);
 	vte_apply_user_settings();
 }
 
@@ -182,24 +187,21 @@ void vte_close(void)
 }
 
 
-gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
+static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	/// FIXME: GDK_KEY_PRESS doesn't seem to be called for our keys
 	if (event->type != GDK_KEY_RELEASE)
 		return FALSE;
 
-	if (event->keyval == GDK_c ||
+	if ((event->keyval == GDK_c ||
 		event->keyval == GDK_d ||
 		event->keyval == GDK_C ||
-		event->keyval == GDK_D)
+		event->keyval == GDK_D) &&
+		event->state & GDK_CONTROL_MASK)
 	{
-		if (event->state & GDK_CONTROL_MASK)
-		{
-			kill(pid, SIGINT);
-			pid = 0;
-			vte_start(widget);
-			return TRUE;
-		}
+		kill(pid, SIGINT);
+		pid = 0;
+		vte_start(widget);
+		return TRUE;
 	}
 	return FALSE;
 }
@@ -210,7 +212,7 @@ static void vte_start(GtkWidget *widget)
 	VteTerminal *vte = VTE_TERMINAL(widget);
 	struct passwd *pw;
 	const gchar *shell;
-	const gchar *dir;
+	const gchar *dir = NULL;
 	gchar **env;
 
 	pw = getpwuid(getuid());
@@ -231,7 +233,7 @@ static void vte_start(GtkWidget *widget)
 }
 
 
-gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	if (event->button == 2)
 	{
@@ -250,7 +252,7 @@ gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer u
 }
 
 
-void vte_register_symbols(GModule *mod)
+static void vte_register_symbols(GModule *mod)
 {
 	g_module_symbol(mod, "vte_terminal_new", (void*)&vf->vte_terminal_new);
 	g_module_symbol(mod, "vte_terminal_set_size", (void*)&vf->vte_terminal_set_size);
@@ -276,18 +278,19 @@ void vte_register_symbols(GModule *mod)
 
 void vte_apply_user_settings(void)
 {
-	gtk_widget_queue_draw(vc->vte); //update vte widget
+	if (! app->msgwindow_visible) return;
+	//if (! GTK_WIDGET_REALIZED(vc->vte)) gtk_widget_realize(vc->vte);
 	vf->vte_terminal_set_scrollback_lines(VTE_TERMINAL(vc->vte), vc->scrollback_lines);
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
 	vf->vte_terminal_set_emulation(VTE_TERMINAL(vc->vte), vc->emulation);
-	if (app->msgwindow_visible) vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
+	vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->color_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->color_back);
 }
 
 
-void vte_get_settings(void)
+static void vte_get_settings(void)
 {
 	gchar **values = g_strsplit(app->terminal_settings, ";", 7);
 
@@ -314,7 +317,7 @@ void vte_get_settings(void)
 }
 
 
-void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
+static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 {
 	switch (GPOINTER_TO_INT(user_data))
 	{
@@ -339,7 +342,7 @@ void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-GtkWidget *vte_create_popup_menu(void)
+static GtkWidget *vte_create_popup_menu(void)
 {
 	GtkWidget *menu, *item;
 
