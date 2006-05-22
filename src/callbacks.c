@@ -2126,12 +2126,16 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	gchar *text;
+	gchar *ext = NULL;
+
+	if (doc_list[idx].file_name == NULL)
+		ext = doc_list[idx].file_type->extension;
 
 	switch (doc_list[idx].file_type->id)
 	{
 		case GEANY_FILETYPES_PASCAL:
 		{
-			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER_PASCAL, NULL, idx);
+			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER_PASCAL, ext, idx);
 			break;
 		}
 		case GEANY_FILETYPES_PYTHON:
@@ -2140,12 +2144,12 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 		case GEANY_FILETYPES_MAKE:
 		case GEANY_FILETYPES_PERL:
 		{
-			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER_ROUTE, NULL, idx);
+			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER_ROUTE, ext, idx);
 			break;
 		}
 		default:
 		{
-			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER, NULL, idx);
+			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER, ext, idx);
 		}
 	}
 

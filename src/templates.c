@@ -190,7 +190,7 @@ gchar *templates_get_template_fileheader(gint template, const gchar *extension, 
 	gchar *filename;
 	gchar *date = utils_get_date_time();
 
-	if (idx == -1)
+	if (idx == -1 || doc_list[idx].file_name == NULL)
 	{
 		if (extension != NULL)
 			filename = g_strconcat(GEANY_STRING_UNTITLED, ".", extension, NULL);

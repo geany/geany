@@ -1,3 +1,10 @@
+2006-05-22  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/callbacks.c, src/templates.c:
+   insert the file type extension and fix a warning when inserting a
+   fileheader in a new document
+
+
 2006-05-22  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/keybindings.c, src/utils.c: improved toggle visibility of
