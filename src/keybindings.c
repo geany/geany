@@ -484,10 +484,28 @@ static void cb_func_switch_tabright(void)
 
 static void cb_func_toggle_sidebar(void)
 {
-	app->treeview_symbol_visible = ! app->treeview_symbol_visible;
-	app->treeview_openfiles_visible = ! app->treeview_openfiles_visible;
+	static gboolean symbol = FALSE;
+	static gboolean openfiles = FALSE;
+	static gboolean is_visible = FALSE;
 
-	utils_treeviews_showhide();;
+	/* this code is a bit confusing, but I want to keep the settings in the preferences dialog
+	 * synchronous with the real status of the sidebar, so we have to store the previous state when
+	 * hiding the sidebar to restore it correctly */
+	is_visible = (app->treeview_symbol_visible || app->treeview_openfiles_visible) ? TRUE : FALSE;
+	if (is_visible)
+	{
+		symbol = app->treeview_symbol_visible;
+		openfiles = app->treeview_openfiles_visible;
+		app->treeview_symbol_visible = FALSE;
+		app->treeview_openfiles_visible = FALSE;
+	}
+	else
+	{
+		app->treeview_symbol_visible = symbol;
+		app->treeview_openfiles_visible = openfiles;
+	}
+
+	utils_treeviews_showhide();
 }
 
 static void cb_func_edit_duplicateline(void)

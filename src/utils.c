@@ -649,7 +649,7 @@ void utils_update_tag_list(gint idx, gboolean update)
 	}
 
 	// make all inactive, because there is no more tab left, or something strange occured
-	if (idx == -1 || ! app->treeview_symbol_visible || ! doc_list[idx].file_type->has_tags)
+	if (idx == -1 || ! doc_list[idx].file_type->has_tags)
 	{
 		gtk_widget_set_sensitive(app->tagbar, FALSE);
 		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);

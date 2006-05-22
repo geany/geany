@@ -1,3 +1,9 @@
+2006-05-22  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/keybindings.c, src/utils.c: improved toggle visibility of
+                                   sidebar when toggled by keyboard
+
+
 2006-05-21  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/keybindings.c: added menu_messagewindow and toggle_sidebar
