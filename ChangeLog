@@ -6,6 +6,14 @@
    added option to disable styling within preprocessor directives
  * src/dialogs.c, src/about.c, src/callbacks.c, configure.in:
    rewrote about dialog to reduce code size, added subversion revision
+ * src/vte.c: declared some functions static
+ * src/dialogs.c: do not create VTE settings in the preferences dialog
+                  if VTE is disabled at runtime
+ * geany.glade, src/interface.c, src/callbacks.c, src/keyfile.c,
+   src/main.c, src/prefs.c:
+   added option to disable load of VTE at startup
+ * src/highlighting.c, src/utils.c: applied sanity check patch from
+                                    Pierre(posted on mailing list)
 
 
 2006-05-20  Nick Treleaven  <nick.treleaven@btinternet.com>

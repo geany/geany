@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -58,10 +58,10 @@ static gboolean ignore_fifo = FALSE;
 static gboolean debug_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_msgwin = FALSE;
-static gboolean no_vte = FALSE;
 static gboolean show_version = FALSE;
 static gchar *alternate_config = NULL;
 #ifdef HAVE_VTE
+static gboolean no_vte = FALSE;
 static gchar *lib_vte = NULL;
 #endif
 static GOptionEntry entries[] =
@@ -73,8 +73,8 @@ static GOptionEntry entries[] =
 #endif
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, "use an alternate configuration directory", NULL },
 	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, "don't show message window at startup", NULL },
-	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, "don't load terminal support", NULL },
 #ifdef HAVE_VTE
+	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, "don't load terminal support", NULL },
 	{ "vte-lib", 'l', 0, G_OPTION_ARG_FILENAME, &lib_vte, "filename of libvte.so", NULL },
 #endif
 	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, "show version and exit", NULL },
@@ -216,9 +216,6 @@ static void main_init(void)
 	}
 	else
 		app->configdir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
-#ifdef HAVE_VTE
-	app->lib_vte			= lib_vte;
-#endif
 	app->window				= NULL;
 	app->search_text		= NULL;
 	app->open_fontsel		= NULL;
@@ -236,9 +233,7 @@ static void main_init(void)
 	app->ignore_fifo		= ignore_fifo;
 #endif
 #ifdef HAVE_VTE
-	app->have_vte 			= ! no_vte;
-#else
-	app->have_vte 			= FALSE;
+	app->lib_vte			= lib_vte;
 #endif
 	app->ignore_global_tags 					= ignore_global_tags;
 	app->tm_workspace							= tm_get_workspace();
@@ -474,6 +469,11 @@ gint main(gint argc, gchar **argv)
 	templates_init();
 	encodings_init();
 	document_init_doclist();
+	// do this here to let cmdline options overwrite configuration settings
+#ifdef HAVE_VTE
+	app->have_vte = app->load_vte;
+	if (no_vte) app->have_vte = FALSE;
+#endif
 
 	filetypes_init_types();
 	configuration_read_filetype_extensions();

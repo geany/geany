@@ -99,6 +99,7 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->pref_editor_auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->pref_editor_auto_complete_constructs);
 #ifdef HAVE_VTE
+	g_key_file_set_boolean(config, PACKAGE, "load_vte", app->load_vte);
 	g_key_file_set_comment(config, PACKAGE, "terminal_settings",
 			_(" VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on keystroke;scroll on output"), NULL);
 	g_key_file_set_string(config, PACKAGE, "terminal_settings", app->terminal_settings);
@@ -256,11 +257,12 @@ gboolean configuration_load(void)
 	app->pref_main_save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
 	app->pref_main_show_search = utils_get_setting_boolean(config, PACKAGE, "pref_main_show_search", TRUE);
 	app->pref_main_show_goto = utils_get_setting_boolean(config, PACKAGE, "pref_main_show_goto", TRUE);
-	app->pref_template_developer = utils_get_setting_string(config, PACKAGE, "pref_template_developer", g_get_real_name());
-	app->pref_template_company = utils_get_setting_string(config, PACKAGE, "pref_template_company", "");
 #ifdef HAVE_VTE
+	app->load_vte = utils_get_setting_boolean(config, PACKAGE, "load_vte", TRUE);
 	app->terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings",	"");
 #endif
+	app->pref_template_developer = utils_get_setting_string(config, PACKAGE, "pref_template_developer", g_get_real_name());
+	app->pref_template_company = utils_get_setting_string(config, PACKAGE, "pref_template_company", "");
 	tmp_string = utils_get_initials(app->pref_template_developer);
 	app->pref_template_initial = utils_get_setting_string(config, PACKAGE, "pref_template_initial", tmp_string);
 	g_free(tmp_string);

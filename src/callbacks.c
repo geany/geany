@@ -40,6 +40,7 @@
 #include "sci_cb.h"
 #include "utils.h"
 #include "dialogs.h"
+#include "about.h"
 #include "msgwindow.h"
 #include "build.h"
 #include "prefs.h"
@@ -111,9 +112,6 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	templates_free_templates();
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_free(app->configdir);
-#ifdef HAVE_VTE
-	g_free(app->lib_vte);
-#endif
 	g_free(app->search_text);
 	g_free(app->editor_font);
 	g_free(app->tagbar_font);
@@ -146,7 +144,10 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 		gtk_widget_destroy(app->default_tag_tree);
 	}
 	scintilla_release_resources();
+#ifdef HAVE_VTE
 	if (app->have_vte) vte_close();
+	g_free(app->lib_vte);
+#endif
 	gtk_widget_destroy(app->window);
 
 	// destroy popup menus

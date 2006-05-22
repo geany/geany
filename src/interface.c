@@ -1740,6 +1740,7 @@ create_prefs_dialog (void)
   GtkWidget *check_save_win_pos;
   GtkWidget *check_beep;
   GtkWidget *check_switch_pages;
+  GtkWidget *check_vte;
   GtkWidget *check_ask_for_quit;
   GtkWidget *hbox3;
   GtkWidget *label150;
@@ -1927,6 +1928,11 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_switch_pages, _("Switch to the status message tab(in the notebook window at the bottom) if a new status message arrive."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_switch_pages), FALSE);
 
+  check_vte = gtk_check_button_new_with_mnemonic (_("Load virtual terminal emulation at startup"));
+  gtk_box_pack_start (GTK_BOX (vbox4), check_vte, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_vte, _("Whether the virtual terminal emulation(VTE) should be loaded at startup. Disable it if you do not need it."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_vte), FALSE);
+
   check_ask_for_quit = gtk_check_button_new_with_mnemonic (_("Confirm exit"));
   gtk_widget_show (check_ask_for_quit);
   gtk_box_pack_start (GTK_BOX (vbox4), check_ask_for_quit, FALSE, FALSE, 0);
@@ -1936,7 +1942,7 @@ create_prefs_dialog (void)
 
   hbox3 = gtk_hbox_new (FALSE, 0);
   gtk_widget_show (hbox3);
-  gtk_box_pack_start (GTK_BOX (vbox4), hbox3, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox4), hbox3, TRUE, TRUE, 0);
 
   label150 = gtk_label_new (_("Placement of new file tabs: "));
   gtk_widget_show (label150);
@@ -2543,6 +2549,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_save_win_pos, "check_save_win_pos");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_beep, "check_beep");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_vte, "check_vte");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_for_quit, "check_ask_for_quit");
   GLADE_HOOKUP_OBJECT (prefs_dialog, hbox3, "hbox3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label150, "label150");

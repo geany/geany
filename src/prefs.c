@@ -21,6 +21,8 @@
  */
 
 
+#include <stdlib.h>
+
 #include "geany.h"
 
 #include "prefs.h"
@@ -213,6 +215,11 @@ void prefs_init_dialog(void)
 
 
 #ifdef HAVE_VTE
+	// make VTE switch visible only when VTE is compiled in, it is hidden by default
+	widget = lookup_widget(app->prefs_dialog, "check_vte");
+	gtk_widget_show(widget);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->load_vte);
+
 	// VTE settings
 	if (app->have_vte)
 	{
@@ -236,14 +243,6 @@ void prefs_init_dialog(void)
 
 		widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_out);
-
-		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "font_term"), TRUE);
-		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "color_fore"), TRUE);
-		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "color_back"), TRUE);
-		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "spin_scrollback"), TRUE);
-		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "entry_emulation"), TRUE);
-		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_scroll_key"), TRUE);
-		gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_scroll_out"), TRUE);
 	}
 #endif
 }
@@ -367,6 +366,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		if (edited) keybindings_write_to_file();
 
 #ifdef HAVE_VTE
+		widget = lookup_widget(app->prefs_dialog, "check_vte");
+		app->load_vte = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
 		// VTE settings
 		if (app->have_vte)
 		{

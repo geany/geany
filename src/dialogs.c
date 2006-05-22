@@ -40,7 +40,6 @@
 #include "callbacks.h"
 #include "document.h"
 #include "win32.h"
-#include "about.h"
 #include "sciwrappers.h"
 #include "support.h"
 #include "interface.h"
@@ -1649,140 +1648,136 @@ void dialogs_show_prefs_dialog(void)
 		app->prefs_dialog = create_prefs_dialog();
 
 #ifdef HAVE_VTE
-		tooltips = GTK_TOOLTIPS(lookup_widget(app->prefs_dialog, "tooltips"));
-		notebook = lookup_widget(app->prefs_dialog, "notebook2");
-		vbox = gtk_vbox_new(FALSE, 0);
-		gtk_container_add(GTK_CONTAINER(notebook), vbox);
+		if (app->have_vte)
+		{
+			tooltips = GTK_TOOLTIPS(lookup_widget(app->prefs_dialog, "tooltips"));
+			notebook = lookup_widget(app->prefs_dialog, "notebook2");
+			vbox = gtk_vbox_new(FALSE, 0);
+			gtk_container_add(GTK_CONTAINER(notebook), vbox);
 
-		label = gtk_label_new(_("These are settings for the virtual terminal emulator widget (VTE). They only apply, if the VTE library could be loaded."));
-		gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
-		gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_FILL);
-		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-		gtk_misc_set_alignment(GTK_MISC(label), 0.14, 0.19);
-		gtk_misc_set_padding(GTK_MISC(label), 0, 8);
+			label = gtk_label_new(_("These are settings for the virtual terminal emulator widget (VTE). They only apply, if the VTE library could be loaded."));
+			gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+			gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_FILL);
+			gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+			gtk_misc_set_alignment(GTK_MISC(label), 0.14, 0.19);
+			gtk_misc_set_padding(GTK_MISC(label), 0, 8);
 
-		alignment = gtk_alignment_new(0.5, 0.5, 1, 1);
-		gtk_box_pack_start(GTK_BOX(vbox), alignment, FALSE, FALSE, 0);
-		gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 12, 6);
+			alignment = gtk_alignment_new(0.5, 0.5, 1, 1);
+			gtk_box_pack_start(GTK_BOX(vbox), alignment, FALSE, FALSE, 0);
+			gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 12, 6);
 
-		table = gtk_table_new(7, 2, FALSE);
-		gtk_container_add(GTK_CONTAINER(alignment), table);
-		gtk_table_set_row_spacings(GTK_TABLE(table), 3);
-		gtk_table_set_col_spacings(GTK_TABLE(table), 25);
+			table = gtk_table_new(7, 2, FALSE);
+			gtk_container_add(GTK_CONTAINER(alignment), table);
+			gtk_table_set_row_spacings(GTK_TABLE(table), 3);
+			gtk_table_set_col_spacings(GTK_TABLE(table), 25);
 
-		label = gtk_label_new(_("Terminal font"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+			label = gtk_label_new(_("Terminal font"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
-		font_term = gtk_font_button_new();
-		gtk_table_attach(GTK_TABLE(table), font_term, 1, 2, 0, 1,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_sensitive(font_term, FALSE);
-		gtk_tooltips_set_tip(tooltips, font_term, _("Sets the font for the terminal widget."), NULL);
+			font_term = gtk_font_button_new();
+			gtk_table_attach(GTK_TABLE(table), font_term, 1, 2, 0, 1,
+						(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, font_term, _("Sets the font for the terminal widget."), NULL);
 
-		label = gtk_label_new(_("Foreground color"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+			label = gtk_label_new(_("Foreground color"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
-		label = gtk_label_new(_("Background color"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+			label = gtk_label_new(_("Background color"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
-		color_fore = gtk_color_button_new();
-		gtk_table_attach(GTK_TABLE(table), color_fore, 1, 2, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_sensitive(color_fore, FALSE);
-		gtk_tooltips_set_tip(tooltips, color_fore, _("Sets the foreground color of the text in the terminal widget."), NULL);
-		gtk_color_button_set_title(GTK_COLOR_BUTTON(color_fore), _("Color Chooser"));
+			color_fore = gtk_color_button_new();
+			gtk_table_attach(GTK_TABLE(table), color_fore, 1, 2, 1, 2,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, color_fore, _("Sets the foreground color of the text in the terminal widget."), NULL);
+			gtk_color_button_set_title(GTK_COLOR_BUTTON(color_fore), _("Color Chooser"));
 
-		color_back = gtk_color_button_new();
-		gtk_table_attach(GTK_TABLE(table), color_back, 1, 2, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_sensitive(color_back, FALSE);
-		gtk_tooltips_set_tip(tooltips, color_back, _("Sets the background color of the text in the terminal widget."), NULL);
-		gtk_color_button_set_title(GTK_COLOR_BUTTON(color_back), _("Color Chooser"));
+			color_back = gtk_color_button_new();
+			gtk_table_attach(GTK_TABLE(table), color_back, 1, 2, 2, 3,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, color_back, _("Sets the background color of the text in the terminal widget."), NULL);
+			gtk_color_button_set_title(GTK_COLOR_BUTTON(color_back), _("Color Chooser"));
 
-		label = gtk_label_new(_("Scrollback lines"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+			label = gtk_label_new(_("Scrollback lines"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
-		spin_scrollback_adj = gtk_adjustment_new(500, 0, 5000, 1, 10, 10);
-		spin_scrollback = gtk_spin_button_new(GTK_ADJUSTMENT(spin_scrollback_adj), 1, 0);
-		gtk_table_attach(GTK_TABLE(table), spin_scrollback, 1, 2, 3, 4,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_sensitive(spin_scrollback, FALSE);
-		gtk_tooltips_set_tip(tooltips, spin_scrollback, _("Specifies the history in lines, which you can scroll back in the terminal widget."), NULL);
-		gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
-		gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
+			spin_scrollback_adj = gtk_adjustment_new(500, 0, 5000, 1, 10, 10);
+			spin_scrollback = gtk_spin_button_new(GTK_ADJUSTMENT(spin_scrollback_adj), 1, 0);
+			gtk_table_attach(GTK_TABLE(table), spin_scrollback, 1, 2, 3, 4,
+						(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, spin_scrollback, _("Specifies the history in lines, which you can scroll back in the terminal widget."), NULL);
+			gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
+			gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
 
-		label = gtk_label_new(_("Terminal emulation"));
-		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+			label = gtk_label_new(_("Terminal emulation"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
-		entry_emulation = gtk_entry_new();
-		gtk_table_attach(GTK_TABLE(table), entry_emulation, 1, 2, 4, 5,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_sensitive(entry_emulation, FALSE);
-		gtk_tooltips_set_tip(tooltips, entry_emulation, _("Controls how the terminal emulator should behave. xterm is a good start."), NULL);
+			entry_emulation = gtk_entry_new();
+			gtk_table_attach(GTK_TABLE(table), entry_emulation, 1, 2, 4, 5,
+						(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, entry_emulation, _("Controls how the terminal emulator should behave. xterm is a good start."), NULL);
 
-		check_scroll_key = gtk_check_button_new_with_mnemonic(_("Scroll on keystroke"));
-		gtk_table_attach(GTK_TABLE(table), check_scroll_key, 1, 2, 5, 6,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_sensitive(check_scroll_key, FALSE);
-		gtk_tooltips_set_tip(tooltips, check_scroll_key, _("Whether to scroll to the bottom if a key was pressed."), NULL);
-		gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_key), FALSE);
+			check_scroll_key = gtk_check_button_new_with_mnemonic(_("Scroll on keystroke"));
+			gtk_table_attach(GTK_TABLE(table), check_scroll_key, 1, 2, 5, 6,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, check_scroll_key, _("Whether to scroll to the bottom if a key was pressed."), NULL);
+			gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_key), FALSE);
 
-		check_scroll_out = gtk_check_button_new_with_mnemonic(_("Scroll on output"));
-		gtk_table_attach(GTK_TABLE(table), check_scroll_out, 1, 2, 6, 7,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-		gtk_widget_set_sensitive(check_scroll_out, FALSE);
-		gtk_tooltips_set_tip(tooltips, check_scroll_out, _("Whether to scroll to the bottom if an output was generated."), NULL);
-		gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_out), FALSE);
+			check_scroll_out = gtk_check_button_new_with_mnemonic(_("Scroll on output"));
+			gtk_table_attach(GTK_TABLE(table), check_scroll_out, 1, 2, 6, 7,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, check_scroll_out, _("Whether to scroll to the bottom if an output was generated."), NULL);
+			gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_out), FALSE);
 
-		label = gtk_label_new(_("Terminal"));
-		gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(notebook), 5), label);
+			label = gtk_label_new(_("Terminal"));
+			gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), gtk_notebook_get_nth_page(
+						GTK_NOTEBOOK(notebook), 5), label);
 
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "font_term",
-				gtk_widget_ref(font_term),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "color_fore",
-				gtk_widget_ref(color_fore),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "color_back",
-				gtk_widget_ref(color_back),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "spin_scrollback",
-				gtk_widget_ref(spin_scrollback),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "entry_emulation",
-				gtk_widget_ref(entry_emulation),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_key",
-				gtk_widget_ref(check_scroll_key),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_out",
-				gtk_widget_ref(check_scroll_out),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "font_term",
+					gtk_widget_ref(font_term),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "color_fore",
+					gtk_widget_ref(color_fore),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "color_back",
+					gtk_widget_ref(color_back),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "spin_scrollback",
+					gtk_widget_ref(spin_scrollback),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "entry_emulation",
+					gtk_widget_ref(entry_emulation),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_key",
+					gtk_widget_ref(check_scroll_key),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_out",
+					gtk_widget_ref(check_scroll_out),	(GDestroyNotify) gtk_widget_unref);
 
-		gtk_widget_show_all(vbox);
+			gtk_widget_show_all(vbox);
 
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "font_term"),
-				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(4));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_fore"),
-				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(2));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_back"),
-				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(3));
+			g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "font_term"),
+					"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(4));
+			g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_fore"),
+					"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(2));
+			g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_back"),
+					"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(3));
+		}
 #endif
 		g_signal_connect((gpointer) app->prefs_dialog, "response", G_CALLBACK(on_prefs_button_clicked), NULL);
 		g_signal_connect((gpointer) app->prefs_dialog, "delete_event", G_CALLBACK(on_prefs_delete_event), NULL);

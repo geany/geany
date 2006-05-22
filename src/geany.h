@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -122,7 +122,6 @@ typedef struct MyApp
 	gboolean			 opening_session_files;
 	// represents the state when Geany is quitting completely
 	gboolean			 quitting;
-	gboolean			 have_vte;
 	gboolean			 ignore_global_tags;
 	gboolean			 toolbar_visible;
 	gboolean			 treeview_symbol_visible;
@@ -162,6 +161,8 @@ typedef struct MyApp
 	gboolean			 ignore_fifo;
 #endif
 #ifdef HAVE_VTE
+	gboolean			 load_vte;
+	gboolean			 have_vte;
 	gchar				*lib_vte;
 #endif
 	gchar				*long_line_color;
