@@ -2304,3 +2304,26 @@ on_run_button_clicked                  (GtkToolButton   *toolbutton,
 	on_build_execute_activate(NULL, NULL);
 }
 
+
+void
+on_find_previous1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	if (app->search_text)
+	{
+		document_find_text(idx, app->search_text, search_flags,
+			!search_backwards);
+	}
+}
+
+
+void
+on_go_to_line1_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	// this is search menu cb; call popup menu goto cb
+	on_go_to_line_activate(menuitem, user_data);
+}
+

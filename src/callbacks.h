@@ -562,3 +562,11 @@ on_toolbutton_goto_clicked             (GtkToolButton   *toolbutton,
 void
 on_run_button_clicked                  (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
+
+void
+on_find_previous1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_go_to_line1_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
