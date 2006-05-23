@@ -4,7 +4,9 @@
                 utils_goto_workspace_tag
  * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
    created Search menubar item with Find items from Edit menu, added
-   Find Previous and Go to line commands.
+   Find Previous and Go to line commands
+ * src/vte.c: remove vte middle click override to allow X paste and
+              update popup preferences item for Terminal tab number
 
 
 2006-05-22  Nick Treleaven  <nick.treleaven@btinternet.com>

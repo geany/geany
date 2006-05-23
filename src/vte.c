@@ -235,15 +235,7 @@ static void vte_start(GtkWidget *widget)
 
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-	if (event->button == 2)
-	{
-		/* this behaviour(pasting at mouse button 2) seems to be default, but don't know
-		 * if it is always the same, so I implement it by myself to be sure and
-		 * return TRUE to prevent the default behaviour */
-		vf->vte_terminal_paste_clipboard(VTE_TERMINAL(widget));
-		return TRUE;
-	}
-	else if (event->button == 3)
+	if (event->button == 3)
 	{
 		gtk_menu_popup(GTK_MENU(vc->menu), NULL, NULL, NULL, NULL, event->button, event->time);
 	}
@@ -335,7 +327,7 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		case 2:
 		{
 			on_preferences1_activate(menuitem, NULL);
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(lookup_widget(app->prefs_dialog, "notebook2")), 4);
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(lookup_widget(app->prefs_dialog, "notebook2")), 5);
 			break;
 		}
 	}
