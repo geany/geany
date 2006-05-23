@@ -462,6 +462,8 @@ gboolean utils_goto_workspace_tag(const gchar *file, gint line)
 	gint file_idx = document_find_by_filename(file);
 	gboolean ret;
 
+	if (file_idx < 0) return FALSE;
+
 	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[file_idx].sci));
 
 	ret = utils_goto_line(file_idx, line);

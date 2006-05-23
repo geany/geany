@@ -1,3 +1,9 @@
+2006-05-23  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c: check if file has been closed in
+                utils_goto_workspace_tag
+
+
 2006-05-22  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c, src/templates.c:
