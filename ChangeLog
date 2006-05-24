@@ -2,6 +2,8 @@
 
  * src/keybindings.c, src/keybindings.h:
    Add shortcuts for Find Previous, Go to line
+ * src/keybindings.c:
+   Set shortcut for Replace and split keybindings_init code
 
 
 2006-05-23  Nick Treleaven  <nick.treleaven@btinternet.com>

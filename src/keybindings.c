@@ -84,13 +84,8 @@ static void cb_func_edit_calltip(void);
 static void cb_func_edit_macrolist(void);
 static void cb_func_edit_suppresscompletion(void);
 
+void keybindings_add_accels();
 
-#define GEANY_ADD_ACCEL(gkey, wid) \
-	if (keys[(gkey)]->key != 0) \
-		gtk_widget_add_accelerator( \
-			lookup_widget(app->window, G_STRINGIFY(wid)), \
-			"activate", accel_group, keys[(gkey)]->key, keys[(gkey)]->mods, \
-			GTK_ACCEL_VISIBLE);
 
 void keybindings_init(void)
 {
@@ -100,7 +95,6 @@ void keybindings_init(void)
 	guint key;
 	GdkModifierType mods;
 	GKeyFile *config = g_key_file_new();
-	GtkAccelGroup *accel_group = gtk_accel_group_new();
 
 	// init all fields of keys with default values
 	keys[GEANY_KEYS_MENU_NEW] = fill(cb_func_menu_new, GDK_n, GDK_CONTROL_MASK, "menu_new");
@@ -160,6 +154,23 @@ void keybindings_init(void)
 		}
 	}
 
+	g_free(configfile);
+	g_key_file_free(config);
+
+	keybindings_add_accels();
+}
+
+
+#define GEANY_ADD_ACCEL(gkey, wid) \
+	if (keys[(gkey)]->key != 0) \
+		gtk_widget_add_accelerator( \
+			lookup_widget(app->window, G_STRINGIFY(wid)), \
+			"activate", accel_group, keys[(gkey)]->key, keys[(gkey)]->mods, \
+			GTK_ACCEL_VISIBLE);
+
+void keybindings_add_accels()
+{
+	GtkAccelGroup *accel_group = gtk_accel_group_new();
 
 	// apply the settings
 	if (keys[GEANY_KEYS_MENU_SAVEALL]->key != 0)
@@ -183,6 +194,7 @@ void keybindings_init(void)
 		keys[GEANY_KEYS_MENU_FIND_NEXT]->key, keys[GEANY_KEYS_MENU_FIND_NEXT]->mods, GTK_ACCEL_VISIBLE);
 
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1)
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACE, replace1)
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line1)
 
 	if (keys[GEANY_KEYS_MENU_FULLSCREEN]->key != 0)
@@ -216,9 +228,6 @@ void keybindings_init(void)
 	// the build menu items are set if the build menus are created
 
 	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
-
-	g_free(configfile);
-	g_key_file_free(config);
 }
 
 
