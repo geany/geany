@@ -1,3 +1,9 @@
+2006-05-24  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c, src/keybindings.h:
+   Add shortcuts for Find Previous, Go to line
+
+
 2006-05-23  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c: check if file has been closed in

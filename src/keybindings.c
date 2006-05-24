@@ -51,9 +51,11 @@ static void cb_func_menu_closeall(void);
 static void cb_func_menu_reloadfile(void);
 static void cb_func_menu_undo(void);
 static void cb_func_menu_redo(void);
-static void cb_func_menu_findnext(void);
-static void cb_func_menu_replace(void);
 static void cb_func_menu_preferences(void);
+static void cb_func_menu_findnext(void);
+static void cb_func_menu_findprevious(void);
+static void cb_func_menu_replace(void);
+static void cb_func_menu_gotoline(void);
 static void cb_func_menu_opencolorchooser(void);
 static void cb_func_menu_fullscreen(void);
 static void cb_func_menu_messagewindow(void);
@@ -83,6 +85,13 @@ static void cb_func_edit_macrolist(void);
 static void cb_func_edit_suppresscompletion(void);
 
 
+#define GEANY_ADD_ACCEL(gkey, wid) \
+	if (keys[(gkey)]->key != 0) \
+		gtk_widget_add_accelerator( \
+			lookup_widget(app->window, G_STRINGIFY(wid)), \
+			"activate", accel_group, keys[(gkey)]->key, keys[(gkey)]->mods, \
+			GTK_ACCEL_VISIBLE);
+
 void keybindings_init(void)
 {
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "keybindings.conf", NULL);
@@ -102,9 +111,11 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_RELOADFILE] = fill(cb_func_menu_reloadfile, GDK_r, GDK_CONTROL_MASK, "menu_reloadfile");
 	keys[GEANY_KEYS_MENU_UNDO] = fill(cb_func_menu_undo, GDK_z, GDK_CONTROL_MASK, "menu_undo");
 	keys[GEANY_KEYS_MENU_REDO] = fill(cb_func_menu_redo, GDK_y, GDK_CONTROL_MASK, "menu_redo");
-	keys[GEANY_KEYS_MENU_FIND_NEXT] = fill(cb_func_menu_findnext, GDK_F3, 0, "menu_findnext");
-	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace, GDK_F3, GDK_CONTROL_MASK, "menu_replace");
 	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences, GDK_p, GDK_CONTROL_MASK, "menu_preferences");
+	keys[GEANY_KEYS_MENU_FIND_NEXT] = fill(cb_func_menu_findnext, GDK_F3, 0, "menu_findnext");
+	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious, GDK_F3, GDK_SHIFT_MASK, "menu_findprevious");
+	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace, GDK_F3, GDK_CONTROL_MASK, "menu_replace");
+	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline, GDK_l, GDK_CONTROL_MASK, "menu_gotoline");
 	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser, 0, 0, "menu_opencolorchooser");
 	keys[GEANY_KEYS_MENU_FULLSCREEN] = fill(cb_func_menu_fullscreen, GDK_F11, 0, "menu_fullscreen");
 	keys[GEANY_KEYS_MENU_MESSAGEWINDOW] = fill(cb_func_menu_messagewindow, 0, 0, "menu_messagewindow");
@@ -170,6 +181,9 @@ void keybindings_init(void)
 	if (keys[GEANY_KEYS_MENU_FIND_NEXT]->key != 0)
 		gtk_widget_add_accelerator(lookup_widget(app->window, "find_next1"), "activate", accel_group,
 		keys[GEANY_KEYS_MENU_FIND_NEXT]->key, keys[GEANY_KEYS_MENU_FIND_NEXT]->mods, GTK_ACCEL_VISIBLE);
+
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1)
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line1)
 
 	if (keys[GEANY_KEYS_MENU_FULLSCREEN]->key != 0)
 		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_fullscreen1"), "activate", accel_group,
@@ -338,9 +352,19 @@ static void cb_func_menu_redo(void)
 	on_redo1_activate(NULL, NULL);
 }
 
+static void cb_func_menu_preferences(void)
+{
+	dialogs_show_prefs_dialog();
+}
+
 static void cb_func_menu_findnext(void)
 {
 	on_find_next1_activate(NULL, NULL);
+}
+
+static void cb_func_menu_findprevious(void)
+{
+	on_find_previous1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_replace(void)
@@ -348,9 +372,9 @@ static void cb_func_menu_replace(void)
 	dialogs_show_replace();
 }
 
-static void cb_func_menu_preferences(void)
+static void cb_func_menu_gotoline(void)
 {
-	dialogs_show_prefs_dialog();
+	on_go_to_line1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_opencolorchooser(void)
