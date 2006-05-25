@@ -2,6 +2,9 @@
 
  * src/document.c: On loading use SCI_SETTEXT instead of SCI_ADDTEXT
                    to avoid Scintilla text changed signal.
+ * src/callbacks.c, src/document.c, src/document.h:
+   Make Replace in selection non-incremental and use single Undo
+   blocks for this and for Replace All.
 
 
 2006-05-24  Nick Treleaven  <nick.treleaven@btinternet.com>

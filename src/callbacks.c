@@ -1804,7 +1804,7 @@ on_replace_dialog_response             (GtkDialog *dialog,
 		}
 		case GEANY_RESPONSE_REPLACE_SEL:
 		{
-			document_replace_sel(idx, find, replace, search_flags_re, search_backwards_re);
+			document_replace_sel(idx, find, replace, search_flags_re);
 			break;
 		}
 	}

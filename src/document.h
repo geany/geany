@@ -92,7 +92,7 @@ void document_replace_text(gint, const gchar*, const gchar*, gint, gboolean);
 
 void document_replace_all(gint, const gchar*, const gchar*, gint);
 
-void document_replace_sel(gint, const gchar*, const gchar*, gint, gboolean);
+void document_replace_sel(gint, const gchar*, const gchar*, gint);
 
 void document_find_next(gint, const gchar*, gint, gboolean, gboolean);
 
