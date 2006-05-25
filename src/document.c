@@ -508,8 +508,8 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 
 	if (! reload) idx = document_create_new_sci(utf8_filename);
 
-	// sets editor mode and add the text to the ScintillaObject
-	sci_add_text_buffer(doc_list[idx].sci, data, size);
+	// set editor mode and add the text to the ScintillaObject
+	sci_set_text(doc_list[idx].sci, data); // NULL terminated data; avoids Unsaved
 	editor_mode = utils_get_line_endings(data, size);
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
 

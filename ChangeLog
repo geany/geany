@@ -1,3 +1,9 @@
+2006-05-25  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/document.c: On loading use SCI_SETTEXT instead of SCI_ADDTEXT
+                   to avoid Scintilla text changed signal.
+
+
 2006-05-24  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c, src/keybindings.h:
