@@ -905,7 +905,7 @@ void dialogs_show_replace(void)
 		app->replace_dialog = gtk_dialog_new_with_buttons(_("Replace"), GTK_WINDOW(app->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
-		button = gtk_button_new_with_mnemonic(_("_In selection"));
+		button = gtk_button_new_with_mnemonic(_("_In Selection"));
 		gtk_tooltips_set_tip(tooltips, button,
 			_("Replace all matches found in the currently selected text"), NULL);
 		gtk_widget_show(button);
@@ -918,6 +918,8 @@ void dialogs_show_replace(void)
 		button = gtk_button_new_with_mnemonic(_("_Replace"));
 		gtk_widget_show(button);
 		gtk_dialog_add_action_widget(GTK_DIALOG(app->replace_dialog), button,
+			GEANY_RESPONSE_REPLACE);
+		gtk_dialog_set_default_response(GTK_DIALOG(app->replace_dialog),
 			GEANY_RESPONSE_REPLACE);
 
 		label_find = gtk_label_new(_("Enter the search text here"));
