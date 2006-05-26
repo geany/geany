@@ -3,6 +3,7 @@
  * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
    Fixed nasty hang when closing a tab and both the next tab and the
    first tab files have been externally modified.
+ * src/dialogs.c: Add mnemonics to Replace dialog buttons, reorder.
 
 
 2006-05-25  Nick Treleaven  <nick.treleaven@btinternet.com>

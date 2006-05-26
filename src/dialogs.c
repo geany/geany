@@ -857,7 +857,7 @@ void dialogs_show_find(void)
 						gtk_widget_ref(checkbox4), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox4), FALSE);
 
-		checkbox5 = gtk_check_button_new_with_mnemonic(_("Match only word _start"));
+		checkbox5 = gtk_check_button_new_with_mnemonic(_("Match only word s_tart"));
 		g_object_set_data_full(G_OBJECT(app->find_dialog), "check_wordstart",
 						gtk_widget_ref(checkbox5), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox5), FALSE);
@@ -897,15 +897,28 @@ void dialogs_show_replace(void)
 
 	if (app->replace_dialog == NULL)
 	{
-		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace, *checkbox1, *checkbox2, *checkbox3, *checkbox5, *checkbox4;
+		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace;
+		GtkWidget *checkbox1, *checkbox2, *checkbox3, *checkbox5, *checkbox4;
+		GtkWidget *button;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 		app->replace_dialog = gtk_dialog_new_with_buttons(_("Replace"), GTK_WINDOW(app->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
-		gtk_dialog_add_button(GTK_DIALOG(app->replace_dialog), _("Replace"), GEANY_RESPONSE_REPLACE);
-		gtk_dialog_add_button(GTK_DIALOG(app->replace_dialog), _("Replace All"), GEANY_RESPONSE_REPLACE_ALL);
-		gtk_dialog_add_button(GTK_DIALOG(app->replace_dialog), _("Replace in selection"), GEANY_RESPONSE_REPLACE_SEL);
+		button = gtk_button_new_with_mnemonic(_("_In selection"));
+		gtk_tooltips_set_tip(tooltips, button,
+			_("Replace all matches found in the currently selected text"), NULL);
+		gtk_widget_show(button);
+		gtk_dialog_add_action_widget(GTK_DIALOG(app->replace_dialog), button,
+			GEANY_RESPONSE_REPLACE_SEL);
+		button = gtk_button_new_with_mnemonic(_("Replace _All"));
+		gtk_widget_show(button);
+		gtk_dialog_add_action_widget(GTK_DIALOG(app->replace_dialog), button,
+			GEANY_RESPONSE_REPLACE_ALL);
+		button = gtk_button_new_with_mnemonic(_("_Replace"));
+		gtk_widget_show(button);
+		gtk_dialog_add_action_widget(GTK_DIALOG(app->replace_dialog), button,
+			GEANY_RESPONSE_REPLACE);
 
 		label_find = gtk_label_new(_("Enter the search text here"));
 		gtk_misc_set_padding(GTK_MISC(label_find), 0, 6);
@@ -962,7 +975,7 @@ void dialogs_show_replace(void)
 						gtk_widget_ref(checkbox4), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox4), FALSE);
 
-		checkbox5 = gtk_check_button_new_with_mnemonic(_("Match only word _start"));
+		checkbox5 = gtk_check_button_new_with_mnemonic(_("Match only word s_tart"));
 		g_object_set_data_full(G_OBJECT(app->replace_dialog), "check_wordstart",
 						gtk_widget_ref(checkbox5), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox5), FALSE);
