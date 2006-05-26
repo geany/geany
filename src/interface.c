@@ -1163,6 +1163,9 @@ create_window1 (void)
   g_signal_connect ((gpointer) notebook1, "switch_page",
                     G_CALLBACK (on_notebook1_switch_page),
                     NULL);
+  g_signal_connect_after ((gpointer) notebook1, "switch_page",
+                          G_CALLBACK (on_notebook1_switch_page_after),
+                          NULL);
 
   atko = gtk_widget_get_accessible (window1);
   atk_object_set_name (atko, _("Geany"));

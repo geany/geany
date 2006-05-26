@@ -1520,6 +1520,7 @@
 		  <property name="scrollable">True</property>
 		  <property name="enable_popup">True</property>
 		  <signal name="switch_page" handler="on_notebook1_switch_page" last_modification_time="Sat, 23 Apr 2005 15:17:51 GMT"/>
+		  <signal name="switch_page" handler="on_notebook1_switch_page_after" after="yes" last_modification_time="Fri, 26 May 2006 11:47:25 GMT"/>
 		</widget>
 		<packing>
 		  <property name="shrink">True</property>

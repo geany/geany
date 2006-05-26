@@ -1,3 +1,10 @@
+2006-05-26  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
+   Fixed nasty hang when closing a tab and both the next tab and the
+   first tab files have been externally modified.
+
+
 2006-05-25  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/document.c: On loading use SCI_SETTEXT instead of SCI_ADDTEXT

@@ -692,9 +692,31 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		utils_update_statusbar(idx, -1);
 		utils_set_window_title(idx);
 		utils_update_tag_list(idx, FALSE);
-		utils_check_disk_status(idx);
 
 		switch_notebook_page = FALSE;
+	}
+}
+
+
+void
+on_notebook1_switch_page_after         (GtkNotebook     *notebook,
+                                        GtkNotebookPage *page,
+                                        guint            page_num,
+                                        gpointer         user_data)
+{
+	gint idx;
+
+	if (closing_all) return;
+
+	// guint == -1 seems useless, but it isn't!
+	if (page_num == -1 && page != NULL)
+		idx = document_find_by_sci(SCINTILLA(page));
+	else
+		idx = document_get_n_idx(page_num);
+
+	if (idx >= 0 && app->opening_session_files == FALSE)
+	{
+		utils_check_disk_status(idx);
 	}
 }
 
