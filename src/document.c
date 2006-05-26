@@ -671,7 +671,7 @@ void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_b
 	selection_end =  sci_get_selection_end(doc_list[idx].sci);
 	if (!inc && sci_can_copy(doc_list[idx].sci))
 	{ // there's a selection so go to the end
-		sci_goto_pos(doc_list[idx].sci, selection_end + 1, TRUE);
+		sci_goto_pos(doc_list[idx].sci, selection_end, TRUE);
 	}
 
 	sci_set_search_anchor(doc_list[idx].sci);
@@ -711,9 +711,9 @@ void document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 	if ((selection_end - selection_start) > 0)
 	{ // there's a selection so go to the end
 		if (search_backwards)
-			sci_goto_pos(doc_list[idx].sci, selection_start - 1, TRUE);
+			sci_goto_pos(doc_list[idx].sci, selection_start, TRUE);
 		else
-			sci_goto_pos(doc_list[idx].sci, selection_end + 1, TRUE);
+			sci_goto_pos(doc_list[idx].sci, selection_end, TRUE);
 	}
 
 	sci_set_search_anchor(doc_list[idx].sci);
@@ -749,9 +749,9 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 	if ((selection_end - selection_start) > 0)
 	{ // there's a selection so go to the end
 		if (search_backwards)
-			sci_goto_pos(doc_list[idx].sci, selection_start - 1, TRUE);
+			sci_goto_pos(doc_list[idx].sci, selection_start, TRUE);
 		else
-			sci_goto_pos(doc_list[idx].sci, selection_end + 1, TRUE);
+			sci_goto_pos(doc_list[idx].sci, selection_end, TRUE);
 	}
 
 	sci_set_search_anchor(doc_list[idx].sci);
