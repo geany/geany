@@ -919,8 +919,6 @@ void dialogs_show_replace(void)
 		gtk_widget_show(button);
 		gtk_dialog_add_action_widget(GTK_DIALOG(app->replace_dialog), button,
 			GEANY_RESPONSE_REPLACE);
-		gtk_dialog_set_default_response(GTK_DIALOG(app->replace_dialog),
-			GEANY_RESPONSE_REPLACE);
 
 		label_find = gtk_label_new(_("Enter the search text here"));
 		gtk_misc_set_padding(GTK_MISC(label_find), 0, 6);
