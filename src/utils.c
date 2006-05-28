@@ -1856,9 +1856,20 @@ void utils_update_fold_items(void)
 void utils_update_recent_menu(void)
 {
 	GtkWidget *recent_menu = lookup_widget(app->window, "recent_files1_menu");
+	GtkWidget *recent_files_item = lookup_widget(app->window, "recent_files1");
 	GtkWidget *tmp;
 	gchar *filename;
 	GList *children = gtk_container_get_children(GTK_CONTAINER(recent_menu));
+
+	if (g_queue_get_length(app->recent_queue) == 0)
+	{
+		gtk_widget_set_sensitive(recent_files_item, FALSE);
+		return;
+	}
+	else if (! GTK_WIDGET_SENSITIVE(recent_files_item))
+	{
+		gtk_widget_set_sensitive(recent_files_item, TRUE);
+	}
 
 	// clean the MRU list
 	if (g_list_length(children) > app->mru_length)

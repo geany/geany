@@ -1,3 +1,11 @@
+2006-05-28  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * configure.in, po/po.po: added Polish translation contributed by
+                           Jacek Wolszczak
+ * src/dialogs.c, src/utils.c: made recent files menu item insensitive
+                               when the list is empty
+
+
 2006-05-26  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
