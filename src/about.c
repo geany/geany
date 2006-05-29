@@ -39,10 +39,16 @@ static GtkWidget *gb_window = NULL;
 Enrico Tröger - %s\n\t\
 &lt;enrico.troeger@uvena.de&gt;\n\n\t\
 Nick Treleaven - %s\n\t\
-&lt;nick.treleaven@btinternet.com&gt;\n\n\
+&lt;nick.treleaven@btinternet.com&gt;\n\n\t\
+Frank Lanitz - %s\n\t\
+&lt;frank@frank.uvena.de&gt;\n\n\t\
 \n<span size=\"larger\" weight=\"bold\">%s</span>\n\t\
 Topi - %s ca_ES\n\t\
-&lt;topi@phreaker.net&gt;"
+&lt;topi@phreaker.net&gt;\n\n\t\
+Frank Lanitz - %s de_DE\n\t\
+&lt;frank@frank.uvena.de&gt;\n\n\t\
+Jacek Wolszczak - %s pl_PL\n\t\
+&lt;shutdownrunner@o2.pl&gt;"
 
 
 static void header_eventbox_style_set(GtkWidget *widget);
@@ -192,7 +198,8 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_selectable(GTK_LABEL(credits_label), TRUE);
 	gtk_label_set_use_markup(GTK_LABEL(credits_label), TRUE);
 	g_snprintf(buffer, sizeof(buffer), CREDITS, _("Developers"), _("Maintainer"), _("developer"),
-												_("Translators"), _("language"));
+												_("translation maintainer"), _("Translators"),
+												_("language"), _("language"), _("language"));
 	gtk_label_set_markup(GTK_LABEL(credits_label), buffer);
 	gtk_misc_set_alignment(GTK_MISC(credits_label), 0.0, 0.0);
 	gtk_widget_show(credits_label);

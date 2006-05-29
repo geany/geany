@@ -1,3 +1,8 @@
+2006-05-29  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/about.c: added Jacek Wolszczak and Frank Lanitz to the credits
+
+
 2006-05-28  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * configure.in, po/po.po: added Polish translation contributed by
