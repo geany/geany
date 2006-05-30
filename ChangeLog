@@ -1,3 +1,10 @@
+2006-05-30  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keyfile.c, src/sciwrappers.c, src/sciwrappers.h, src/document.c:
+   Scroll session files in view after all resizing of the Scintilla
+   widget and rename sci_scroll_to_line.
+
+
 2006-05-30  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/dialogs.c, src/main.c:

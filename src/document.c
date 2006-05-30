@@ -531,8 +531,6 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(utf8_filename);
 
 		sci_goto_pos(doc_list[idx].sci, pos, TRUE);
-		//if (app->main_window_realized) // avoids warnings, but doesn't scroll, so accept warning
-			sci_scroll_to_line(doc_list[idx].sci, sci_get_line_from_position(doc_list[idx].sci, pos) - 10);
 
 		if (readonly) gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
 							lookup_widget(app->window, "set_file_readonly1")), TRUE);

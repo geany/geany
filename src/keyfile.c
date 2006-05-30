@@ -401,6 +401,21 @@ void configuration_apply_settings(void)
 		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "hpaned1")), hpan_position);
 		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "vpaned1")), vpan_position);
 	}
+
+	// now the scintilla widget pages may need scrolling in view
+	if (app->pref_main_load_session)
+	{
+		gint idx;
+		guint tabnum = 0;
+
+		while (tabnum < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)))
+		{
+			idx = document_get_n_idx(tabnum);
+			if (idx < 0) break;
+			sci_scroll_caret(doc_list[idx].sci);
+			tabnum++;
+		}
+	}
 }
 
 

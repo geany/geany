@@ -744,9 +744,9 @@ void sci_set_keywords(ScintillaObject *sci, gint k, gchar *text)
 	SSM(sci, SCI_SETKEYWORDS, k, (sptr_t) text);
 }
 
-void sci_scroll_to_line(ScintillaObject *sci, gint line)
+void sci_scroll_lines(ScintillaObject *sci, gint lines)
 {
-	SSM(sci, SCI_LINESCROLL, 0, line);
+	SSM(sci, SCI_LINESCROLL, 0, lines);
 }
 
 void sci_set_readonly(ScintillaObject *sci, gboolean readonly)
