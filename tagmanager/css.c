@@ -195,6 +195,7 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 				return state;
 			break;
 		}
+		if (line == NULL) return P_STATE_AT_END;
 		line++;
 	}
 	return state;

@@ -15,6 +15,7 @@
  * src/keybindings.c: Added shortcut for Replace Tabs by Space,
                       extend usage of GEANY_ADD_ACCEL macro.
  * src/prefs.c: Detect duplicate shortcuts and prevent saving them.
+ * tagmanager/css.c: Fixed a crash when opening malformed CSS files.
 
 
 2006-05-29  Enrico Troeger  <enrico.troeger@uvena.de>
