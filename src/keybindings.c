@@ -61,6 +61,7 @@ static void cb_func_menu_fullscreen(void);
 static void cb_func_menu_messagewindow(void);
 static void cb_func_menu_zoomin(void);
 static void cb_func_menu_zoomout(void);
+static void cb_func_menu_replacetabs(void);
 static void cb_func_menu_foldall(void);
 static void cb_func_menu_unfoldall(void);
 static void cb_func_build_compile(void);
@@ -115,6 +116,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_MESSAGEWINDOW] = fill(cb_func_menu_messagewindow, 0, 0, "menu_messagewindow");
 	keys[GEANY_KEYS_MENU_ZOOMIN] = fill(cb_func_menu_zoomin, GDK_plus, GDK_CONTROL_MASK, "menu_zoomin");
 	keys[GEANY_KEYS_MENU_ZOOMOUT] = fill(cb_func_menu_zoomout, GDK_minus, GDK_CONTROL_MASK, "menu_zoomout");
+	keys[GEANY_KEYS_MENU_REPLACETABS] = fill(cb_func_menu_replacetabs, 0, 0, "menu_replacetabs");
 	keys[GEANY_KEYS_MENU_FOLDALL] = fill(cb_func_menu_foldall, 0, 0, "menu_foldall");
 	keys[GEANY_KEYS_MENU_UNFOLDALL] = fill(cb_func_menu_unfoldall, 0, 0, "menu_unfoldall");
 	keys[GEANY_KEYS_BUILD_COMPILE] = fill(cb_func_build_compile, GDK_F8, 0, "build_compile");
@@ -166,64 +168,29 @@ void keybindings_init(void)
 		gtk_widget_add_accelerator( \
 			lookup_widget(app->window, G_STRINGIFY(wid)), \
 			"activate", accel_group, keys[(gkey)]->key, keys[(gkey)]->mods, \
-			GTK_ACCEL_VISIBLE);
+			GTK_ACCEL_VISIBLE)
 
 void keybindings_add_accels()
 {
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 
 	// apply the settings
-	if (keys[GEANY_KEYS_MENU_SAVEALL]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_save_all1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_SAVEALL]->key, keys[GEANY_KEYS_MENU_SAVEALL]->mods, GTK_ACCEL_VISIBLE);
-
-	if (keys[GEANY_KEYS_MENU_CLOSEALL]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_close_all1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_CLOSEALL]->key, keys[GEANY_KEYS_MENU_CLOSEALL]->mods, GTK_ACCEL_VISIBLE);
-
-	if (keys[GEANY_KEYS_MENU_RELOADFILE]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "revert1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_RELOADFILE]->key, keys[GEANY_KEYS_MENU_RELOADFILE]->mods, GTK_ACCEL_VISIBLE);
-
-	if (keys[GEANY_KEYS_MENU_PREFERENCES]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "preferences1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_PREFERENCES]->key, keys[GEANY_KEYS_MENU_PREFERENCES]->mods, GTK_ACCEL_VISIBLE);
-
-	if (keys[GEANY_KEYS_MENU_FIND_NEXT]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "find_next1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_FIND_NEXT]->key, keys[GEANY_KEYS_MENU_FIND_NEXT]->mods, GTK_ACCEL_VISIBLE);
-
-	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1)
-	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACE, replace1)
-	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line1)
-
-	if (keys[GEANY_KEYS_MENU_FULLSCREEN]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_fullscreen1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_FULLSCREEN]->key, keys[GEANY_KEYS_MENU_FULLSCREEN]->mods, GTK_ACCEL_VISIBLE);
-
-	if (keys[GEANY_KEYS_MENU_MESSAGEWINDOW]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_show_messages_window1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_MESSAGEWINDOW]->key, keys[GEANY_KEYS_MENU_MESSAGEWINDOW]->mods, GTK_ACCEL_VISIBLE);
-
-	if (keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_choose_color1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER]->key, keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER]->mods, GTK_ACCEL_VISIBLE);
-
-	if (keys[GEANY_KEYS_MENU_ZOOMIN]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_zoom_in1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_ZOOMIN]->key, keys[GEANY_KEYS_MENU_ZOOMIN]->mods, GTK_ACCEL_VISIBLE);
-
-	if (keys[GEANY_KEYS_MENU_ZOOMOUT]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_zoom_out1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_ZOOMOUT]->key, keys[GEANY_KEYS_MENU_ZOOMOUT]->mods, GTK_ACCEL_VISIBLE);
-
-	if (keys[GEANY_KEYS_MENU_FOLDALL]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_fold_all1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_FOLDALL]->key, keys[GEANY_KEYS_MENU_FOLDALL]->mods, GTK_ACCEL_VISIBLE);
-
-	if (keys[GEANY_KEYS_MENU_UNFOLDALL]->key != 0)
-		gtk_widget_add_accelerator(lookup_widget(app->window, "menu_unfold_all1"), "activate", accel_group,
-		keys[GEANY_KEYS_MENU_UNFOLDALL]->key, keys[GEANY_KEYS_MENU_UNFOLDALL]->mods, GTK_ACCEL_VISIBLE);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEALL, menu_save_all1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_CLOSEALL, menu_close_all1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_RELOADFILE, revert1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PREFERENCES, preferences1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FIND_NEXT, find_next1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACE, replace1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FULLSCREEN, menu_fullscreen1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_MESSAGEWINDOW, menu_show_messages_window1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPENCOLORCHOOSER, menu_choose_color1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_ZOOMIN, menu_zoom_in1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_ZOOMOUT, menu_zoom_out1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACETABS, menu_replace_tabs);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FOLDALL, menu_fold_all1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNFOLDALL, menu_unfold_all1);
 
 	// the build menu items are set if the build menus are created
 
@@ -577,3 +544,7 @@ static void cb_func_edit_suppresscompletion(void)
 	sci_add_text(doc_list[idx].sci, " ");
 }
 
+static void cb_func_menu_replacetabs(void)
+{
+	on_replace_tabs_activate(NULL, NULL);
+}
