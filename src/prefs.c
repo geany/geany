@@ -27,6 +27,7 @@
 
 #include "prefs.h"
 #include "support.h"
+#include "dialogs.h"
 #include "utils.h"
 #include "msgwindow.h"
 #include "sciwrappers.h"
@@ -51,6 +52,7 @@ static gboolean on_prefs_tree_view_button_press_event(
 static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
 static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
 static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data);
+static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const gchar *action);
 
 
 void prefs_init_dialog(void)
@@ -197,6 +199,12 @@ void prefs_init_dialog(void)
 		g_object_set(renderer, "editable", TRUE, NULL);
 		column = gtk_tree_view_column_new_with_attributes(_("Shortcut"), renderer, "text", 1, NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+
+		// set policy settings for the scollwedwindow around the treeview again, because glade
+		// doesn't keep the settings
+		gtk_scrolled_window_set_policy(
+				GTK_SCROLLED_WINDOW(lookup_widget(app->prefs_dialog, "scrolledwindow8")),
+				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 		g_signal_connect(G_OBJECT(renderer), "edited", G_CALLBACK(on_cell_edited), NULL);
 		g_signal_connect(G_OBJECT(tree), "button-press-event",
@@ -587,6 +595,8 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 	if (path != NULL && new_text != NULL)
 	{
 		guint idx;
+		guint lkey;
+		GdkModifierType lmods;
 		gchar *test;
 		GtkTreeIter iter;
 
@@ -594,7 +604,14 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 		idx = strtol(path, &test, 10);
 		if (test == path) return;
 
-		gtk_accelerator_parse(new_text, &(keys[idx]->key), &(keys[idx]->mods));
+		gtk_accelerator_parse(new_text, &lkey, &lmods);
+
+		if (find_duplicate(idx, lkey, lmods, new_text)) return;
+
+		// set the values here, because of the above check, setting it in gtk_accelerator_parse would
+		// return a wrong key combination if it is duplicate
+		keys[idx]->key = lkey;
+		keys[idx]->mods = lmods;
 
 		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
 		gtk_list_store_set(store, &iter, 1, new_text, -1);
@@ -602,7 +619,6 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 		edited = TRUE;
 	}
 }
-
 
 
 static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data)
@@ -627,6 +643,8 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 	{
 		GtkTreeIter iter;
 		guint idx;
+		guint lkey;
+		GdkModifierType lmods;
 		gchar path[3];
 
 		for (idx = 0; idx < GEANY_MAX_KEYS; idx++)
@@ -634,15 +652,49 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 			if (utils_strcmp(dialog_key_name, keys[idx]->name)) break;
 		}
 
-		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &(keys[idx]->key), &(keys[idx]->mods));
+		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);
+
+		if (find_duplicate(idx, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label)))) return;
+
+		// set the values here, because of the above check, setting it in gtk_accelerator_parse would
+		// return a wrong key combination if it is duplicate
+		keys[idx]->key = lkey;
+		keys[idx]->mods = lmods;
 
 		// generate the path, it is exactly the index
 		g_snprintf(path, 3, "%d", idx);
 		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
 		gtk_list_store_set(store, &iter, 1, gtk_label_get_text(GTK_LABEL(dialog_label)), -1);
 		g_free(dialog_key_name);
+		dialog_key_name = NULL;
 
 		edited = TRUE;
 	}
 	gtk_widget_destroy(dialog);
 }
+
+
+// test if the entered key combination is already used
+static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const gchar *action)
+{
+	guint i;
+
+	// allow duplicate if there is no key combination
+	if (key == 0 && mods == 0) return FALSE;
+
+	for (i = 0; i < GEANY_MAX_KEYS; i++)
+	{
+		// search another item with the same key, but take not the key we are searching for(-> idx)
+		if (keys[i]->key == key && keys[i]->mods == mods
+			&& ! (keys[i]->key == keys[idx]->key && keys[i]->mods == keys[idx]->mods))
+		{
+			dialogs_show_error(
+				_("The combination '%s' is already used for \"%s\". Please choose another one."),
+				action, keys[i]->name);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+

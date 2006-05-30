@@ -14,6 +14,7 @@
                 improved utils_replace_tabs().
  * src/keybindings.c: Added shortcut for Replace Tabs by Space,
                       extend usage of GEANY_ADD_ACCEL macro.
+ * src/prefs.c: Detect duplicate shortcuts and prevent saving them.
 
 
 2006-05-29  Enrico Troeger  <enrico.troeger@uvena.de>
