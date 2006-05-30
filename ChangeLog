@@ -1,14 +1,25 @@
+2006-05-30  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c, src/main.c:
+   Removed unneeded function dialogs_show_fifo_error(), fixed small
+   memory leak in dialogs_show_question()
+ * src/utils.c: Fixed a wrong(non ISO-C) array size allocation,
+                improved utils_replace_tabs().
+ * src/keybindings.c: Added shortcut for Replace Tabs by Space,
+                      extend usage of GEANY_ADD_ACCEL macro.
+
+
 2006-05-29  Enrico Troeger  <enrico.troeger@uvena.de>
 
- * src/about.c: added Jacek Wolszczak and Frank Lanitz to the credits
+ * src/about.c: Added Jacek Wolszczak and Frank Lanitz to the credits.
 
 
 2006-05-28  Enrico Troeger  <enrico.troeger@uvena.de>
 
- * configure.in, po/po.po: added Polish translation contributed by
-                           Jacek Wolszczak
- * src/dialogs.c, src/utils.c: made recent files menu item insensitive
-                               when the list is empty
+ * configure.in, po/pl.po: Added Polish translation contributed by
+                           Jacek Wolszczak.
+ * src/dialogs.c, src/utils.c: Made recent files menu item insensitive
+                               when the list is empty.
 
 
 2006-05-26  Nick Treleaven  <nick.treleaven@btinternet.com>

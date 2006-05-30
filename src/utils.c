@@ -92,6 +92,7 @@ void utils_start_browser(const gchar *uri)
 /* updates the status bar */
 void utils_update_statusbar(gint idx, gint pos)
 {
+	// currently text need in German and C locale about 150 chars
 	gchar *text = (gchar*) g_malloc0(250);
 	gchar *cur_tag;
 	guint line, col;
@@ -1473,9 +1474,10 @@ void utils_replace_tabs(gint idx)
 {
 	gint i, len, j = 0, tabs_amount = 0;
 	gint tab_w = sci_get_tab_width(doc_list[idx].sci);
-	/// TODO Warnung: ISO-C90 verbietet Feld »replacement« variabler Größe
-	gchar *data, replacement[tab_w + 1];
+	gchar *data, *replacement;
 	gchar *text;
+
+	replacement = g_malloc(tab_w + 1);
 
 	// get the text
 	len = sci_get_length(doc_list[idx].sci) + 1;
@@ -1483,10 +1485,18 @@ void utils_replace_tabs(gint idx)
 	sci_get_text(doc_list[idx].sci, len, data);
 
 	// prepare the spaces with the width of a tab
-	for (i = 0; i < tab_w; i++) replacement[i] = 32;
-	replacement[tab_w] = 0;
+	for (i = 0; i < tab_w; i++) replacement[i] = ' ';
+	replacement[tab_w] = '\0';
 
 	for (i = 0; i < len; i++) if (data[i] == 9) tabs_amount++;
+
+	// if there are no tabs, just return and leave the content untouched
+	if (tabs_amount == 0)
+	{
+		g_free(data);
+		g_free(replacement);
+		return;
+	}
 
 	text = g_malloc(len + (tabs_amount * (tab_w - 1)));
 
@@ -1509,6 +1519,7 @@ void utils_replace_tabs(gint idx)
 
 	g_free(data);
 	g_free(text);
+	g_free(replacement);
 }
 
 /* GList of strings operations */
