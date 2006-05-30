@@ -225,7 +225,7 @@ void dialogs_show_file_open_error(void)
 }
 
 
-/// TODO is there a difference to dialogs_show_question? if not, remove this one
+/// TODO replace by dialogs_show_question
 gboolean dialogs_show_not_found(const gchar *text)
 {
 	GtkWidget *dialog;
@@ -273,28 +273,6 @@ void dialogs_show_info(const gchar *text, ...)
 	gtk_widget_destroy (dialog);
 #endif
 	g_free(string);
-}
-
-
-/// TODO is there a difference to dialogs_show_question? if not, remove this one
-gboolean dialogs_show_fifo_error(const gchar *text, ...)
-{
-	GtkWidget *dialog;
-	gchar string[300];
-	gint ret;
-	va_list args;
-
-	va_start(args, text);
-	g_vsnprintf(string, 299, text, args);
-	va_end(args);
-
-	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-										  GTK_MESSAGE_ERROR, GTK_BUTTONS_YES_NO, string);
-	ret = gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-
-	if (ret == GTK_RESPONSE_YES) return TRUE;
-	else return FALSE;
 }
 
 
@@ -1271,6 +1249,7 @@ GtkWidget *dialogs_add_file_open_extra_widget(void)
 }
 
 
+/// TODO remove this function and use dialogs_show_question instead
 gboolean dialogs_show_mkcfgdir_error(gint error_nr)
 {
 	GtkWidget *dialog;
@@ -1837,12 +1816,13 @@ gboolean dialogs_show_question(const gchar *text, ...)
 	va_end(args);
 
 #ifdef GEANY_WIN32
-	if (MessageBox(NULL, string, _("Question"), MB_YESNO | MB_ICONWARNING) == IDYES) return TRUE;
-	else return FALSE;
+	if (MessageBox(NULL, string, _("Question"), MB_YESNO | MB_ICONWARNING) == IDYES)
+		ret = TRUE;
 #else
 	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
                                   GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, string);
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES)	ret = TRUE;
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES)
+		ret = TRUE;
 	gtk_widget_destroy(dialog);
 #endif
 	g_free(string);

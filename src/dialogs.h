@@ -42,8 +42,6 @@ void dialogs_show_info(const gchar *text, ...);
 
 void dialogs_show_error(const gchar *text, ...);
 
-gboolean dialogs_show_fifo_error(const gchar *text, ...);
-
 gboolean dialogs_show_unsaved_file(gint idx);
 
 /* This shows the font selection dialog to choose a font. */

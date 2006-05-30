@@ -386,7 +386,7 @@ static void create_fifo(gint argc, gchar **argv, const gchar *config_dir)
 		}
 		else
 		{
-			if (dialogs_show_fifo_error(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running. If you know Geany is not running, you can delete the file and start Geany anyway.\nDelete the named pipe and start Geany?")))
+			if (dialogs_show_question(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running. If you know Geany is not running, you can delete the file and start Geany anyway.\nDelete the named pipe and start Geany?")))
 			{
 				unlink(fifo_name);
 			}
