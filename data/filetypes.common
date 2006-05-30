@@ -11,4 +11,4 @@ current_line=0x0;0xE5E5E5;false;false
 # style of folding icons, only first and second arguments are used, valid values are:
 # first argument:  1 for boxes, 2 for circles
 # second argument: 1 for straight lines, 2 for curved lines
-#folding_style=1;1;false;false
+folding_style=1;1;false;false
