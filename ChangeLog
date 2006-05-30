@@ -3,6 +3,7 @@
  * src/keyfile.c, src/sciwrappers.c, src/sciwrappers.h, src/document.c:
    Scroll session files in view after all resizing of the Scintilla
    widget and rename sci_scroll_to_line.
+ * data/filetypes.pascal: Updated identifier styling as highlighting.c.
 
 
 2006-05-30  Enrico Troeger  <enrico.troeger@uvena.de>
