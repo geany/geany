@@ -1,3 +1,9 @@
+2006-05-31  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * scintilla/PlatGTK.cxx:
+   Backport a Scintilla fix for crashes with recent GTK+ font issue.
+
+
 2006-05-30  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keyfile.c, src/sciwrappers.c, src/sciwrappers.h, src/document.c:

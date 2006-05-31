@@ -2574,7 +2574,7 @@ const char *Platform::DefaultFont() {
 	return "Lucida Console";
 #else
 
-	return "lucidatypewriter";
+	return "!Sans"; //fix for GTK2.8 until updating to sci 1.69
 #endif
 }
 
