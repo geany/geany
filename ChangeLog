@@ -2,6 +2,7 @@
 
  * scintilla/PlatGTK.cxx:
    Backport a Scintilla fix for crashes with recent GTK+ font issue.
+ * src/keyfile.c: Discard old session files also for unsaved documents.
 
 
 2006-05-30  Nick Treleaven  <nick.treleaven@btinternet.com>

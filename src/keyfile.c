@@ -162,14 +162,11 @@ void configuration_save(void)
 			j++;
 		}
 	}
-	// if open tabs less than GEANY_SESSION_FILES, delete existing saved entries in the list
-	if (max < GEANY_SESSION_FILES)
+	// if open filenames less than GEANY_SESSION_FILES, delete existing saved entries in the list
+	for(i = j; i < GEANY_SESSION_FILES; i++)
 	{
-		for(i = max; i < GEANY_SESSION_FILES; i++)
-		{
-			g_snprintf(entry, 13, "FILE_NAME_%d", i);
-			g_key_file_set_string(config, "files", entry, "");
-		}
+		g_snprintf(entry, 13, "FILE_NAME_%d", i);
+		g_key_file_set_string(config, "files", entry, "");
 	}
 
 	// write the file
