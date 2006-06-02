@@ -969,20 +969,15 @@ void utils_check_disk_status(gint idx)
 gint utils_get_current_tag(gint idx, gchar **tagname)
 {
 	gint tag_line;
+	gint pos;
 	gint line;
-	static gint old_line = -1;
 	gint fold_level;
 	gint start, end, last_pos;
 	gint tmp;
 	const GList *tags;
 
-	line = sci_get_current_line(doc_list[idx].sci, -1);
-	if (line == old_line)
-	{
-		*tagname = g_strdup("same"); //temp
-		return -2;
-	}
-	old_line = line; //record current line for efficiency
+	pos = sci_get_current_position(doc_list[idx].sci);
+	line = sci_get_line_from_position(doc_list[idx].sci, pos);
 
 	fold_level = sci_get_fold_level(doc_list[idx].sci, line);
 	if ((fold_level & 0xFF) != 0)

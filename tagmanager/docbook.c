@@ -68,7 +68,6 @@ static void createTag(docbookKind kind, const char *buf)
 	if (*buf == '>') return;
 
 	buf = strstr(buf, "id=\"");
-	if (buf == NULL) return;
 	buf += 4;
 	if (*buf == '"') return;
 	name = vStringNew();

@@ -19,9 +19,7 @@ html/index.html:
 #	xmlto -o html/ xhtml geany.docbook
 	$(mkinstalldirs) html
 	xsltproc --stringparam html.stylesheet geany.css -o html/ \
-	/usr/share/sgml/docbook/xsl-stylesheets/xhtml/chunk.xsl geany.docbook
-#	/usr/share/sgml/docbook/xsl-stylesheets-1.65.1-2/xhtml/chunk.xsl
-#	/usr/share/xml/docbook/stylesheet/nwalsh/xhtml/chunk.xsl geany.docbook
+	/usr/share/xml/docbook/stylesheet/nwalsh/xhtml/chunk.xsl geany.docbook
 	test -f html/geany.css || cp geany.css html/
 
 doc: geany.1 geany.txt html/index.html

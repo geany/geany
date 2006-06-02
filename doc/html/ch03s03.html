@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>General</title><link rel="stylesheet" href="geany.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.65.1" /><link rel="home" href="index.html" title="&#10;&#9;&#9;&#9;Geany 0.7&#10;&#9;&#9;" /><link rel="up" href="ch03.html" title="Chapter 3. Usage" /><link rel="previous" href="ch03s02.html" title="Commandline options" /><link rel="next" href="ch03s04.html" title="Search and Replace" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">General</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr /></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="general"></a>General</h2></div></div><div></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="general_startup"></a>Startup</h3></div></div><div></div></div><p>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>General</title><link rel="stylesheet" href="geany.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.68.1" /><link rel="start" href="index.html" title="&#10;&#9;&#9;&#9;Geany 0.6&#10;&#9;&#9;" /><link rel="up" href="ch03.html" title="Chapter 3. Usage" /><link rel="prev" href="ch03s02.html" title="Commandline options" /><link rel="next" href="ch03s04.html" title="Search and Replace" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">General</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr /></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="general"></a>General</h2></div></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="general_startup"></a>Startup</h3></div></div></div><p>
 					At startup, Geany loads the 15 first files from the last time,
 					<span class="application">Geany</span> was launched. You can disable this feature in the
 					preferences dialog(see <a href="ch03s05.html#confdialog_gen" title="Figure 3.2. General tab in preferences dialog">Figure 3.2, “General tab in preferences dialog”</a>). If you specify some files on
@@ -9,7 +9,7 @@
 					15 recently opened files. It may be that Geany not exactly loads 15 files, this depends
 					on the compile time option GEANY_SESSION_FILES, the default is 15. For details see
 					<a href="ch03s05.html#cto" title="Compile time options">the section called “Compile time options”</a>.
-				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="general_fifo"></a>Detection of a running instance</h3></div></div><div></div></div><p>
+				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="general_fifo"></a>Detection of a running instance</h3></div></div></div><p>
 					Geany detects an already running instance of it and open new files in the running one.
 					So, you can use Geany like an editor to view and edit files by opening them from other
 					programs. If you do not like this for some reason, you can it disable with the appropriate
@@ -19,7 +19,7 @@
 					which asks you whether to delete an existing named pipe. If you are sure that there is
 					no other instance of Geany running, you can say Yes and Geany will start as usual.
 					Otherwise click No and Geany will not start.
-				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="general_ctags"></a>Global C tags</h3></div></div><div></div></div><p>
+				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="general_ctags"></a>Global C tags</h3></div></div></div><p>
 					If a C file(with extension is c, cpp, h, etc.) is opened, a global tags file is
 					loaded once, which contains	many function declarations from the glibc and some other
 					libraries, like X, Bonobo, Gnome, GTK, Glib and so on. These declarations are used
@@ -27,12 +27,12 @@
 					C or C++ source code. So if you know, that you do not need these things, you can skip
 					loading this tag file. To do so, start <span class="application">Geany</span> with the
 					argument "-n" or "--no-ctags", for more information see <a href="ch03s02.html" title="Commandline options">the section called “Commandline options”</a>.
-				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="general_vte"></a>Virtual terminal emulator widget (VTE)</h3></div></div><div></div></div><p>
-					If you have installed <tt class="filename">libvte.so</tt> in your system, it is loaded
+				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="general_vte"></a>Virtual terminal emulator widget (VTE)</h3></div></div></div><p>
+					If you have installed <code class="filename">libvte.so</code> in your system, it is loaded
 					automatically by <span class="application">Geany</span>. Then you have a terminal widget
 					in the notebook	at the bottom.
 				</p><p>
-					If <span class="application">Geany</span> cannot find <tt class="filename">libvte.so</tt> at
+					If <span class="application">Geany</span> cannot find <code class="filename">libvte.so</code> at
 					startup, the terminal widget will not be loaded. So there is no need to install the
 					package containing this	file in order to run <span class="application">Geany</span>.
 					Additionally, you can disable the use of the terminal widget by commandline option,
@@ -45,13 +45,13 @@
 					 pressing the right mouse button to open the popup menu and choose Paste.
 					 To copy text from the VTE, just select the desired text and then press the
 					 right mouse button and choose Copy from the popup menu.
-				</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Geany tries to load <tt class="filename">libvte.so</tt>. If this fails, it tries to
-						  load <tt class="filename">libvte.so.4</tt>. If this fails too, you should check whether
+				</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Geany tries to load <code class="filename">libvte.so</code>. If this fails, it tries to
+						  load <code class="filename">libvte.so.4</code>. If this fails too, you should check whether
 						  you installed libvte correctly. Again, Geany runs also without this library.
 						  But it could be, that the library is called something else than
-						  <tt class="filename">libvte.so.4</tt> (e.g. on FreeBSD 6.0 it is called
-						  <tt class="filename">libvte.so.8</tt>). So please set a link to the correct file (as root).
-						  </p><pre class="screen"><tt class="prompt">#</tt> <b class="userinput"><tt><span><b class="command">ln -s /usr/lib/libvte.so.X /usr/lib/libvte.so.4</b></span></tt></b></pre><p>
+						  <code class="filename">libvte.so.4</code> (e.g. on FreeBSD 6.0 it is called
+						  <code class="filename">libvte.so.8</code>). So please set a link to the correct file (as root).
+						  </p><pre class="screen"><code class="prompt">#</code> <strong class="userinput"><code><span><strong class="command">ln -s /usr/lib/libvte.so.X /usr/lib/libvte.so.4</strong></span></code></strong></pre><p>
 						  Obviously, you have to adjust the paths and set X to the number of your
-						  <tt class="filename">libvte.so</tt>.
+						  <code class="filename">libvte.so</code>.
 					</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Commandline options </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Search and Replace</td></tr></table></div></body></html>
