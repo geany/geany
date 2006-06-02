@@ -5,12 +5,10 @@ TODO List:
 
 	Geany 0.7 or later:
 
-	o improve scrolling
 	o fix a freeze at switching between filetypes with files in
 	  ISO-8859-x encoding (reported by Jörg Sommer)
 	o encoding-bug in utils_convert_to_utf8()
 	o documentation: list and explain filetype modes
-	o make keyboard shortcuts user-definable
 	o inverting highlighting by selection
 	o src/sci_cb.c: improve auto completion(include local tags)
 	o create filetype specific menus, read templates from filetypes.*
