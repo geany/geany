@@ -3,9 +3,10 @@
  * src/highlighting.c, data/filetypes.css: improved colouring
 
 
-2006-06-01  Nick Treleaven  <nick.treleaven@btinternet.com>
+2006-06-02  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/dialogs.c: Fix dialog path warnings for command-line files.
+ * src/callbacks.c: Fix Go to tag declaration/definition.
 
 
 2006-05-31  Nick Treleaven  <nick.treleaven@btinternet.com>

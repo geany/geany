@@ -1288,7 +1288,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 	guint i, j;
 	const GPtrArray *tags;
 
-	if (utils_strcmp(_("Goto tag definition"), gtk_label_get_text(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))))))
+	if (menuitem == GTK_MENU_ITEM(lookup_widget(app->popup_menu, "goto_tag_definition1")))
 		type = tm_tag_function_t;
 	else
 		type = tm_tag_prototype_t;
