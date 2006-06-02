@@ -1671,19 +1671,19 @@ static void styleset_css_init(void)
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_CSS] = g_new(style_set, 1);
-	styleset_get_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[0]);
+	styleset_get_hex(config, config_home, "styling", "default", "0x993300", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[0]);
 	styleset_get_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[1]);
-	styleset_get_hex(config, config_home, "styling", "tag", "0x00007F", "0xffffff", "true", types[GEANY_FILETYPES_CSS]->styling[2]);
-	styleset_get_hex(config, config_home, "styling", "class", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_CSS]->styling[3]);
-	styleset_get_hex(config, config_home, "styling", "pseudoclass", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_CSS]->styling[4]);
-	styleset_get_hex(config, config_home, "styling", "unknown_pseudoclass", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[5]);
-	styleset_get_hex(config, config_home, "styling", "unknown_identifier", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[6]);
+	styleset_get_hex(config, config_home, "styling", "tag", "0xa46621", "0xffffff", "true", types[GEANY_FILETYPES_CSS]->styling[2]);
+	styleset_get_hex(config, config_home, "styling", "class", "0x007f00", "0xffffff", "true", types[GEANY_FILETYPES_CSS]->styling[3]);
+	styleset_get_hex(config, config_home, "styling", "pseudoclass", "0x100066", "0xffffff", "true", types[GEANY_FILETYPES_CSS]->styling[4]);
+	styleset_get_hex(config, config_home, "styling", "unknown_pseudoclass", "0x990000", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[5]);
+	styleset_get_hex(config, config_home, "styling", "unknown_identifier", "0x990000", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[6]);
 	styleset_get_hex(config, config_home, "styling", "operator", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[7]);
-	styleset_get_hex(config, config_home, "styling", "identifier", "0x100000", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[8]);
-	styleset_get_hex(config, config_home, "styling", "doublestring", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[9]);
-	styleset_get_hex(config, config_home, "styling", "singlestring", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[10]);
+	styleset_get_hex(config, config_home, "styling", "identifier", "0x990000", "0xffffff", "true", types[GEANY_FILETYPES_CSS]->styling[8]);
+	styleset_get_hex(config, config_home, "styling", "doublestring", "0x660033", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[9]);
+	styleset_get_hex(config, config_home, "styling", "singlestring", "0x660033", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[10]);
 	styleset_get_hex(config, config_home, "styling", "attribute", "0x007F00", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[11]);
-	styleset_get_hex(config, config_home, "styling", "value", "0x7F7F00", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[12]);
+	styleset_get_hex(config, config_home, "styling", "value", "0x303030", "0xffffff", "false", types[GEANY_FILETYPES_CSS]->styling[12]);
 
 	types[GEANY_FILETYPES_CSS]->keywords = g_new(gchar*, 4);
 	styleset_get_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CSS, 0,

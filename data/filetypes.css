@@ -1,19 +1,19 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
 # foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
+default=0x993300;0xffffff;false;false
 comment=0x808080;0xffffff;false;false
-tag=0x00007F;0xffffff;true;false
-class=0x991111;0xffffff;true;false
-pseudoclass=0x991111;0xffffff;true;true
-unknown_pseudoclass=0x0000ff;0xffffff;false;false
-unknown_identifier=0x0000ff;0xffffff;false;false
+tag=0xa46621;0xffffff;true;false
+class=0x007f00;0xffffff;true;false
+pseudoclass=0x100066;0xffffff;true;true
+unknown_pseudoclass=0x990000;0xffffff;false;false
+unknown_identifier=0x990000;0xffffff;false;false
 operator=0x101030;0xffffff;false;false
-identifier=0x100000;0xffffff;false;false
-doublestring=0x1E90FF;0xffffff;false;false
-singlestring=0x1E90FF;0xffffff;false;false
+identifier=0x990000;0xffffff;true;false
+doublestring=0x660033;0xffffff;false;false
+singlestring=0x660033;0xffffff;false;false
 attribute=0x007F00;0xffffff;false;false
-value=x7F7F00;0xffffff;false;false
+value=0x303030;0xffffff;false;false
 
 [keywords]
 primary=color background-color background-image background-repeat background-attachment background-position background font-family font-style font-variant font-weight font-size font word-spacing letter-spacing text-decoration vertical-align text-transform text-align text-indent line-height margin-top margin-right margin-bottom margin-left margin padding-top padding-right padding-bottom padding-left padding border-top-width border-right-width border-bottom-width border-left-width border-width border-top border-right border-bottom border-left border border-color border-style width height float clear display white-space list-style-type list-style-image list-style-position list-style
