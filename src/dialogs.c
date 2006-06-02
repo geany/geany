@@ -130,8 +130,9 @@ void dialogs_show_open_file ()
 				locale_filename = g_locale_from_utf8(initdir, -1, NULL, NULL, NULL);
 				if (locale_filename == NULL) locale_filename = g_strdup(initdir);
 
-				gtk_file_chooser_set_current_folder(
-					GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
+				if (g_path_is_absolute(locale_filename))
+					gtk_file_chooser_set_current_folder(
+						GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
 
 				g_free(initdir);
 				g_free(locale_filename);
@@ -180,7 +181,10 @@ void dialogs_show_save_as ()
 		gchar *locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
 		if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
 
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->save_filesel), locale_filename);
+		if (g_path_is_absolute(locale_filename))
+			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->save_filesel), locale_filename);
+		else
+			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(app->save_filesel), locale_filename);
 		g_free(locale_filename);
 	}
 	else
