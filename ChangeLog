@@ -10,6 +10,7 @@
  * src/dialogs.c: Fix dialog path warnings for command-line files.
  * src/callbacks.c: Fix Go to tag declaration/definition.
  * tagmanager/docbook.c: Fix a segfault with missing id in element.
+ * doc/geany.docbook: Minor changes to chapter 1.
 
 
 2006-05-31  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -33,8 +33,8 @@
 		</copyright>
 		<legalnotice>
 			<para>
-				This document is distributed under the terms of the GNU Public license as published by the Free
-				Software Foundation; either version 2 of the License, or (at your option) later version.
+				This document is distributed under the terms of the GNU General Public License as published by the Free
+				Software Foundation; either version 2 of the License, or (at your option) any later version.
 				A copy of this license can be found in the file COPYING included with the source code of this
 				program and in the appendix of this document.
 			</para>
@@ -51,7 +51,7 @@
 		<section>
 			<title>About Geany</title>
 			<para>
-				<application>&app;</application> is a small and lightweight integrated development environment.
+				<application>&app;</application> is a small and lightweight Integrated Development Environment.
 				It was developed to provide a small and fast IDE, which has only a few dependencies from other
 				packages. Another goal was to be as independent as possible from a special Desktop Environment
 				like KDE or GNOME. So it is using only the GTK2 toolkit and therefore you need only the
@@ -60,13 +60,13 @@
 			<para>
 				The basic features of <application>&app;</application> are:
 				<itemizedlist>
-					<listitem><para>syntax highlighting</para></listitem>
-					<listitem><para>code completion</para></listitem>
-					<listitem><para>auto completion of often used constructs like if, for and while</para></listitem>
-					<listitem><para>auto completion of XML and HTML tags</para></listitem>
-					<listitem><para>call tips</para></listitem>
-					<listitem><para>many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal</para></listitem>
-					<listitem><para>symbol lists</para></listitem>
+					<listitem><para>Syntax highlighting</para></listitem>
+					<listitem><para>Code completion</para></listitem>
+					<listitem><para>Auto completion of often used constructs like if, for and while</para></listitem>
+					<listitem><para>Auto completion of XML and HTML tags</para></listitem>
+					<listitem><para>Call tips</para></listitem>
+					<listitem><para>Many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal</para></listitem>
+					<listitem><para>Symbol lists</para></listitem>
 				</itemizedlist>
 			</para>
 		</section>
@@ -78,17 +78,17 @@
 			</para>
 		</section>
 		<section>
-			<title>Where to get</title>
+			<title>Where to get it</title>
 			<para>
 				You can obtain <application>&app;</application> from <ulink url="&appurl;">&appurl;</ulink>
-				or perhabs from your distributor.
+				or perhaps from your distributor.
 			</para>
 		</section>
 		<section>
 			<title>License</title>
 			<para>
-				<application>&app;</application> is distributed under the terms of the GNU Public license as published
-				by the Free	Software Foundation; either version 2 of the License, or (at your option) later version.
+				<application>&app;</application> is distributed under the terms of the GNU General Public License as published
+				by the Free	Software Foundation; either version 2 of the License, or (at your option) any later version.
 				A copy of this license can be found in the file COPYING included with the source code of this
 				program and in the appendix of this document.
 			</para>
