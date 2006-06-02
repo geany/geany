@@ -3,11 +3,11 @@
         "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!ENTITY app "Geany">
 <!ENTITY app_small "geany">
-<!ENTITY appversion "0.6">
+<!ENTITY appversion "0.7">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY deburl "http://debian.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "April 28, 2006">
+<!ENTITY date "June 2, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 ]>
 
@@ -18,9 +18,18 @@
 			<surname>Troeger</surname>
 			<address><email>&author_mail;</email></address>
 		</author>
+		<author>
+			<firstname>Nick</firstname>
+			<surname>Treleaven</surname>
+			<address><email>nick.treleaven@btinternet.com</email></address>
+		</author>
+		<author>
+			<firstname>Frank</firstname>
+			<surname>Lanitz</surname>
+			<address><email>frank@frank.uvena.de</email></address>
+		</author>
 		<copyright>
-			<year>2006</year>
-			<!-- <holder>Enrico Troeger</holder> -->
+			<year>2005-2006</year>
 		</copyright>
 		<legalnotice>
 			<para>
@@ -513,6 +522,13 @@
 				   <title>Template tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_templ.jpg"></graphic>
 				</figure>
+				<figure id="confdialog_keys">
+				   <title>Keybinding tab in preferences dialog</title>
+				   <graphic fileref="images/pref_dialog_keys.jpg"></graphic>
+				</figure>
+			   <note>
+					<para>For more information see <xref linkend="keybindings"/>.</para>
+			   </note>
 				<figure id="confdialog_vte">
 				   <title>VTE tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_vte.jpg"></graphic>
@@ -599,6 +615,228 @@
 
 				</para>
 			</section>
+		</section>
+		<section id="keybindings">
+			<title>Keybindings</title>
+			<para>
+				For all listed actions you can define own keybindings. Open the preferences dialog
+				and selected the desired action and click on change. In the opening dialog you can
+				press any key combination you want and it will be saved when you press OK.
+				You can define only one key combination for one action.
+			</para>
+			<para>
+				Some of the default key combinations cannot be changed, e.g. menu_new or menu_open.
+				These are set by GTK and should be kept. But you can add a key combination for these
+				actions, so for example to execute menu_open by default
+				<keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo> is set and you can
+				define <keycombo><keycap>Alt</keycap><keycap>O</keycap></keycombo> so, the file open
+				dialog is shown by pressing
+				<keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo> or
+				<keycombo><keycap>Alt</keycap><keycap>O</keycap></keycombo>.
+			</para>
+			<para>
+				The following table lists all available actions for keyboard shortcuts.
+			</para>
+			<para>
+				<table frame="all">
+					<title>Keybindings action table</title>
+					<tgroup cols="2">
+						<?dbhtml cellpadding="4" ?>
+						<?dbhtml cellspacing="0" ?>
+						<colspec colnum="1" colname="col1"/>
+						<colspec colnum="2" colname="col2"/>
+						<spanspec spanname="hspan" namest="col1" nameend="col2" align="center"/>
+						<thead>
+							<row>
+								<entry>Action</entry>
+								<entry>Description</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry align="left" spanname="hspan">Menu items</entry>
+							</row>
+							<row>
+								<entry>menu_new</entry>
+								<entry>Creates a new file.</entry>
+							</row>
+							<row>
+								<entry>menu_open</entry>
+								<entry>Opens a file.</entry>
+							</row>
+							<row>
+								<entry>menu_save</entry>
+								<entry>Saves the current file.</entry>
+							</row>
+							<row>
+								<entry>menu_saveall</entry>
+								<entry>Saves all open files.</entry>
+							</row>
+							<row>
+								<entry>menu_closeall</entry>
+								<entry>Closes all open files.</entry>
+							</row>
+							<row>
+								<entry>menu_reloadfile</entry>
+								<entry>Reloads the current file. All unsaved changes will be lost.</entry>
+							</row>
+							<row>
+								<entry>menu_undo</entry>
+								<entry>Undos the last action.</entry>
+							</row>
+							<row>
+								<entry>menu_redo</entry>
+								<entry>Redos the last action.</entry>
+							</row>
+							<row>
+								<entry>menu_preferences</entry>
+								<entry>Opens preferences dialog.</entry>
+							</row>
+							<row>
+								<entry>menu_findnext</entry>
+								<entry>Finds next result.</entry>
+							</row>
+							<row>
+								<entry>menu_findprevious</entry>
+								<entry>Finds previous result.</entry>
+							</row>
+							<row>
+								<entry>menu_replace</entry>
+								<entry>Opens the replace dialog.</entry>
+							</row>
+							<row>
+								<entry>menu_gotoline</entry>
+								<entry>Opens the Go To Line dialog.</entry>
+							</row>
+							<row>
+								<entry>menu_opencolorchooser</entry>
+								<entry>Opens the colour chooser dialog.</entry>
+							</row>
+							<row>
+								<entry>menu_fullscreen</entry>
+								<entry>Switches to fullscreen mode.</entry>
+							</row>
+							<row>
+								<entry>menu_messagewindow</entry>
+								<entry>Toggles the message window(status and compiler messages) on and off.</entry>
+							</row>
+							<row>
+								<entry>menu_zoomin</entry>
+								<entry>Zooms in the text</entry>
+							</row>
+							<row>
+								<entry>menu_zoomout</entry>
+								<entry>Zooms out the text</entry>
+							</row>
+							<row>
+								<entry>menu_replacetabs</entry>
+								<entry>Replaces all tabulators with the right amount of spaces.</entry>
+							</row>
+							<row>
+								<entry>menu_foldall</entry>
+								<entry>Folds all contractible code blocks.</entry>
+							</row>
+							<row>
+								<entry>menu_unfoldall</entry>
+								<entry>Unfolds all contracted code blocks.</entry>
+							</row>
+							<row>
+								<entry align="left" spanname="hspan">Build options</entry>
+							</row>
+							<row>
+								<entry>build_compile</entry>
+								<entry>Compiles the current file.</entry>
+							</row>
+							<row>
+								<entry>build_link</entry>
+								<entry>Builds(compiles if ncessary and links) the current file.</entry>
+							</row>
+							<row>
+								<entry>build_make</entry>
+								<entry>Builds the current file with the make tool.</entry>
+							</row>
+							<row>
+								<entry>build_makeowntarget</entry>
+								<entry>Builds the current file with the make tool and a given target.</entry>
+							</row>
+							<row>
+								<entry>build_run</entry>
+								<entry>Executes the current file in a terminal emulation.</entry>
+							</row>
+							<row>
+								<entry>build_run2</entry>
+								<entry>Executes the current file in a terminal emulation.</entry>
+							</row>
+							<row>
+								<entry>build_options</entry>
+								<entry>Opens the build options dialog.</entry>
+							</row>
+							<row>
+								<entry align="left" spanname="hspan">Miscellaneous</entry>
+							</row>
+							<row>
+								<entry>reloadtaglist</entry>
+								<entry>Reloads the tag/symbol list.</entry>
+							</row>
+							<row>
+								<entry>switch_editor</entry>
+								<entry>Switches to editor widget.</entry>
+							</row>
+							<row>
+								<entry>switch_scribble</entry>
+								<entry>Switches to scribble widget.</entry>
+							</row>
+							<row>
+								<entry>switch_vte</entry>
+								<entry>Switches to VTE widget.</entry>
+							</row>
+							<row>
+								<entry>switch_tableft</entry>
+								<entry>Switches to the previous open document.</entry>
+							</row>
+							<row>
+								<entry>switch_tabright</entry>
+								<entry>Switches to the next open document.</entry>
+							</row>
+							<row>
+								<entry>toggle_sidebar</entry>
+								<entry>Shows or hides the sidebar.</entry>
+							</row>
+							<row>
+								<entry align="left" spanname="hspan">Editing operations</entry>
+							</row>
+							<row>
+								<entry>edit_duplicateline</entry>
+								<entry>Duplicates the current line.</entry>
+							</row>
+							<row>
+								<entry>edit_commentline</entry>
+								<entry>Comments current line or selection.</entry>
+							</row>
+							<row>
+								<entry>edit_autocomplete</entry>
+								<entry>Shows auto completion list.</entry>
+							</row>
+							<row>
+								<entry>edit_calltip</entry>
+								<entry>Shows call tips for the current function or method.</entry>
+							</row>
+							<row>
+								<entry>edit_macrolist</entry>
+								<entry>Shows a list of (in the workspace) available macros and
+									   variables.
+								</entry>
+							</row>
+							<row>
+								<entry>edit_suppresscompletion</entry>
+								<entry>If you type something like if or for and press this key, it
+									   will not be auto completed.
+								</entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</table>
+			</para>
 		</section>
 		<section>
 			<title>File types</title>
@@ -745,206 +983,13 @@
 		<section>
 			<title><application>&app;</application> key mapping</title>
 			<para>
-				The following table lists several useful key codes, which you can use in
-				<application>&app;</application>.
-			</para>
-			<para>
-				<table frame="all">
-					<title>Key Table</title>
-					<tgroup cols="2">
-						<?dbhtml cellpadding="4" ?>
-						<?dbhtml cellspacing="0" ?>
-						<colspec colnum="1" colname="col1"/>
-						<colspec colnum="2" colname="col2"/>
-						<spanspec spanname="hspan" namest="col1" nameend="col2" align="center"/>
-						<thead>
-							<row>
-								<entry>Key</entry>
-								<entry>Function</entry>
-
-							</row>
-						</thead>
-						<tbody>
-							<row>
-								<entry align="left" spanname="hspan">File operations</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo></entry>
-								<entry>Create new file</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo></entry>
-								<entry>Open file</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>S</keycap></keycombo></entry>
-								<entry>Save current file</entry>
-							</row>
-							<row>
-								<entry>
-									<keycombo><keycap>Ctrl</keycap><keycap>R</keycap></keycombo>
-								</entry>
-								<entry>Reload the current file. All unsaved changes will be lost.</entry>
-							</row>
-							<row>
-								<entry>
-									<keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>S</keycap></keycombo>
-								</entry>
-								<entry>Save all open files</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>W</keycap></keycombo></entry>
-								<entry>Close current file</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Alt</keycap><keycap>D</keycap></keycombo></entry>
-								<entry>Close all open files</entry>
-							</row>
-							<row>
-								<entry align="left" spanname="hspan">Editing operations</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo></entry>
-								<entry>Cut the current selection and copy it into the clipboard</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo></entry>
-								<entry>Copy the current selection into the clipboard</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo></entry>
-								<entry>Paste the content of the clipboard at the current position</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>Z</keycap></keycombo></entry>
-								<entry>Undo the last action</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>Y</keycap></keycombo></entry>
-								<entry>Redo the last action</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>G</keycap></keycombo></entry>
-								<entry>Duplicate the current line</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo></entry>
-								<entry>Select all</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>D</keycap></keycombo></entry>
-								<entry>Comment current line or selection</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>Space</keycap></keycombo></entry>
-								<entry>Show auto completion list</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>Return</keycap></keycombo></entry>
-								<entry>Show list of available(in the workspace) macros and variables</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Alt</keycap><keycap>Space</keycap></keycombo></entry>
-								<entry>Show call tips for the current function or method</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Shift</keycap><keycap>Space</keycap></keycombo></entry>
-								<entry>Insert just a blank. Useful after typing if or while, to explicitly
-								suppress the use of construct auto completion</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>R</keycap></keycombo></entry>
-								<entry>Reload the tag/symbol list</entry>
-							</row>
-							<row>
-								<entry align="left" spanname="hspan">Finding text</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry>
-								<entry>Open find dialog</entry>
-							</row>
-							<row>
-								<entry><keycap>F3</keycap></entry>
-								<entry>Find next</entry>
-							</row>
-							<row>
-								<entry align="left" spanname="hspan">Building files</entry>
-							</row>
-							<row>
-								<entry><keycap>F8</keycap></entry>
-								<entry>Compile the current file.</entry>
-							</row>
-							<row>
-								<entry><keycap>F9</keycap></entry>
-								<entry>Build the current file.</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Shift</keycap><keycap>F9</keycap></keycombo></entry>
-								<entry>Build the current file with the make tool.</entry>
-							</row>
-							<row>
-								<entry><keycap>F5</keycap></entry>
-								<entry>Execute the current file in a terminal emulation.</entry>
-							</row>
-							<row>
-								<entry align="left" spanname="hspan">Miscellaneous</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>Left</keycap></keycombo></entry>
-								<entry>Moves the cursor to the left word boundary.</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>Right</keycap></keycombo></entry>
-								<entry>Moves the cursor to the next word.</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Alt</keycap><keycap>Left</keycap></keycombo></entry>
-								<entry>Switch to the previous open document</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Alt</keycap><keycap>Right</keycap></keycombo></entry>
-								<entry>Switch to the next open document</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>+</keycap></keycombo></entry>
-								<entry>Zoom in the text</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>-</keycap></keycombo></entry>
-								<entry>Zoom out the text</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>P</keycap></keycombo></entry>
-								<entry>Open preferences dialog</entry>
-							</row>
-							<row>
-								<entry><keycap>F1</keycap></entry>
-								<entry>Show help</entry>
-							</row>
-							<row>
-								<entry><keycap>F6</keycap></entry>
-								<entry>Switch to VTE widget</entry>
-							</row>
-							<row>
-								<entry><keycap>F11</keycap></entry>
-								<entry>Switch to fullscreen mode</entry>
-							</row>
-							<row>
-								<entry><keycap>F12</keycap></entry>
-								<entry>Switch to Scribble widget</entry>
-							</row>
-							<row>
-								<entry><keycombo><keycap>Ctrl</keycap><keycap>Q</keycap></keycombo></entry>
-								<entry>Quit</entry>
-							</row>
-						</tbody>
-					</tgroup>
-				</table>
+				Since <application>&app;</application> 0.7, most of the keybindings are definable
+				in the preferences dialog. See <xref linkend="keybindings"/>.
 			</para>
 		</section>
 	</appendix>
 
-	<!-- Appendix with GPL -->
+	<!-- GPL appendix -->
 	&legal;
 
 </book>
