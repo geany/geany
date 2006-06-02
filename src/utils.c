@@ -197,7 +197,7 @@ void utils_update_insert_include_item(gint idx, gint item)
 {
 	gboolean enable = FALSE;
 
-	if (idx == -1) enable = FALSE;
+	if (idx == -1 || doc_list[idx].file_type == NULL) enable = FALSE;
 	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_C ||
 			 doc_list[idx].file_type->id == GEANY_FILETYPES_CPP)
 	{
@@ -652,7 +652,7 @@ void utils_update_tag_list(gint idx, gboolean update)
 	}
 
 	// make all inactive, because there is no more tab left, or something strange occured
-	if (idx == -1 || ! doc_list[idx].file_type->has_tags)
+	if (idx == -1 || doc_list[idx].file_type == NULL || ! doc_list[idx].file_type->has_tags)
 	{
 		gtk_widget_set_sensitive(app->tagbar, FALSE);
 		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
@@ -1254,7 +1254,7 @@ void utils_build_show_hide(gint idx)
 	gchar *ext = NULL;
 	filetype *ft;
 
-	if (idx == -1)
+	if (idx == -1 || doc_list[idx].file_type == NULL)
 	{
 		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
 		gtk_widget_set_sensitive(app->compile_button, FALSE);
@@ -1972,9 +1972,15 @@ void utils_switch_document(gint direction)
 
 void utils_replace_filename(gint idx)
 {
-	gint pos = sci_get_current_position(doc_list[idx].sci);
-	gchar *filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc_list[idx].file_type)->extension, NULL);
-	gchar *filename = g_path_get_basename(doc_list[idx].file_name);
+	gint pos;
+	gchar *filebase;
+	gchar *filename;
+
+	if (idx == -1 || doc_list[idx].file_type == NULL) return;
+
+	pos = sci_get_current_position(doc_list[idx].sci);
+	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc_list[idx].file_type)->extension, NULL);
+	filename = g_path_get_basename(doc_list[idx].file_name);
 
 	sci_set_current_position(doc_list[idx].sci, 0);
 	sci_set_search_anchor(doc_list[idx].sci);
@@ -2283,7 +2289,9 @@ void utils_parse_compiler_error_line(const gchar *string)
 	gint idx = document_get_cur_idx();
 	gint line = -1;
 
-	if (string == NULL || !doc_list[app->cur_idx].is_valid) return;
+	if (string == NULL || ! doc_list[app->cur_idx].is_valid ||
+		doc_list[app->cur_idx].file_type == NULL)
+		return;
 
 	// first get the line
 	switch (doc_list[app->cur_idx].file_type->id)
