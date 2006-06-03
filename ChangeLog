@@ -1,6 +1,8 @@
 2006-06-03  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Fixed bug in auto completion of constructs.
+ * doc/geany.docbook: Added documentation for filetype definition files
+                      and definable keyboard shortcuts.
 
 
 2006-06-03  Nick Treleaven  <nick.treleaven@btinternet.com>

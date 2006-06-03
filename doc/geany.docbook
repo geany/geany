@@ -845,11 +845,291 @@
 				</table>
 			</para>
 		</section>
-		<section>
-			<title>File types</title>
+		<section id="filetypes">
+			<title>Filetype definition files</title>
 			<para>
-				should be written
+				All colour definitions and other filetype specific settings are stored in the
+				filetype definition files. Those settings are colours for syntax highlighting,
+				general settings like comment characters or word delimiter characters as well as
+				compiler and linker settings.
 			</para>
+			<para>
+				The files can be found in <filename>$prefix/share/geany</filename> and are called
+				<filename>filetypes.$ext</filename>. Where $prefix is the path where
+				<application>&app;</application> is	installed, commonly
+				<filename>/usr/local</filename>filename>, and $ext is the name of the filetype.
+				There is for every filetype a corresponding defintion file. There is one exception:
+				<filename>filetypes.common</filename> - in this file are general settings, which
+				are specific to a certain filetype. It is not recommend to edit this files, because
+				while updating Geany the will be overridden.
+			</para>
+			<para>
+				To change the settings, copy a file from <filename>$prefix/share/geany</filename>
+				to the subdirectory <filename>filedefs</filename> in your configuration directory
+				(usually <filename>~/.geany/</filename>).
+			</para>
+			<para>
+				 For example:
+				 <screen><prompt>%</prompt> <userinput><command>cp /usr/local/share/geany/filetypes.c /home/username/.geany/filedefs/</command></userinput></screen>
+				 Then you can edit the file and the changes are also available after an update of
+				 <application>&app;</application> because they reside in your configuration
+				 directory. Alternatively, you can create a file
+				 <filename>~/.geany/filedefs/filetypes.X</filename> and add only these settings you
+				 want to change. All missing settings will be read from the corresponding global
+				 defintion file in <filename>$prefix/share/geany</filename>.
+			</para>
+			<section id="filetypes_format">
+				<title>Format</title>
+				<section>
+					<title>Section [styling]</title>
+					<para>
+						In this section the colours for syntax highlighting are defined.
+						The format is always:
+						<constant>key=forground_colour;background_colour;bold;italic</constant>
+					</para>
+					<para>
+						Colours have to be specified as RGB hex values introduced by 0x. For
+						example red is 0xff0000, blue is 0x0000ff. The values are case-insensitive,
+						but it is a good idea to use small letters. Bold and italic are flags and
+						should only be "true" or "false". If their value is something other than
+						"true" or "false", "false" is assumed.
+					</para>
+				</section>
+				<section>
+					<title>Section [keywords]</title>
+					<para>
+						This section contains keys for different keyword lists specific	to the
+						filetype. Some filetypes do not support keywords, so adding a new key will
+						not work. You only could add or remove keywords to/from the list.
+						<important><para>The keywords list must be in one line without line ending
+						characters.</para></important>
+					</para>
+				</section>
+				<section>
+					<title>Section [settings]</title>
+					<para>
+						<table frame="all">
+							<title>General settings</title>
+							<tgroup cols="3">
+								<?dbhtml cellpadding="4" ?>
+								<?dbhtml cellspacing="0" ?>
+								<thead>
+									<row>
+										<entry>Key</entry>
+										<entry>Description</entry>
+										<entry>Example</entry>
+									</row>
+								</thead>
+								<tbody>
+									<row>
+										<entry>wordchars</entry>
+										<entry>Word delimiting characters. These characters define
+											   word boundaries.
+										</entry>
+										<entry>(look at sourcecode)</entry>
+									</row>
+									<row>
+										<entry>comment_open</entry>
+										<entry>A character or string which is used to comment code.
+											   If you want to use multiline comments, set also
+											   comment_close, otherwise leave it empty.
+										</entry>
+										<entry>comment_open=/*</entry>
+									</row>
+									<row>
+										<entry>comment_close</entry>
+										<entry>If multiline comments are used, this is the character
+											   or string to close the comment.
+										</entry>
+										<entry>comment_close=*/</entry>
+									</row>
+									<row>
+										<entry>comment_use_indent</entry>
+										<entry>Set this to false if a comment character or string
+											   should start at column 0 of a line. If set to true
+											   it uses any indention of the line.
+											   <para><example><title>Comment indention</title>
+											   <para>
+											   comment_use_indent=true would generate this if a line
+											   if commented(e.g. with
+											   <keycombo><keycap>Ctrl</keycap><keycap>D</keycap></keycombo>)
+											   <programlisting>	#command_example();</programlisting>
+											   comment_use_indent=false would generate this if a line
+											   if commented(e.g. with
+											   <keycombo><keycap>Ctrl</keycap><keycap>D</keycap></keycombo>)
+											   <programlisting>#command_example();</programlisting>
+											   </para></example></para>
+											   <note><para>
+													This setting works only for single line comments.
+											   </para></note>
+										</entry>
+										<entry>comment_use_indent=true</entry>
+									</row>
+								</tbody>
+							</tgroup>
+						</table>
+					</para>
+				</section>
+				<section>
+					<title>Section [build_settings]</title>
+					<para>
+						<table frame="all">
+							<title>Build settings</title>
+							<tgroup cols="3">
+								<?dbhtml cellpadding="4" ?>
+								<?dbhtml cellspacing="0" ?>
+								<thead>
+									<row>
+										<entry>Key</entry>
+										<entry>Description</entry>
+										<entry>Example</entry>
+									</row>
+								</thead>
+								<tbody>
+									<row>
+										<entry>compiler</entry>
+										<entry>
+											   This item specifies the command to compile source code
+											   files. But it is also possible to use it with
+											   interpreted languages like Perl or Python. With these
+											   filetypes you can use this option as a kind of syntax
+											   parser, which does his output in the compiler message
+											   window.
+											<para>You should quote the filename to support also
+											   filenames with spaces. The following wildcards for
+											   filenames are available:
+											</para>
+											<para>
+											   <itemizedlist>
+												<listitem><para>
+													%f - complete filename without path
+												</para></listitem>
+												<listitem><para>
+													%e - filename without path and without extension
+												</para></listitem>
+											   </itemizedlist>
+											</para>
+										</entry>
+										<entry>compiler=gcc -Wall -c "%f"</entry>
+									</row>
+									<row>
+										<entry>linker</entry>
+										<entry>This item specifies the command to link the file.
+											   If the file is not already compiled, it will be
+											   compiled while linking. The -o option is
+											   automatically added by
+											   <application>&app;</application>. This item works
+											   well with the gcc, but may be problemtic with other
+											   compilers(resp. linker).
+										</entry>
+										<entry>linker=gcc -Wall "%f"</entry>
+									</row>
+									<row>
+										<entry>run_cmd</entry>
+										<entry>Use this item to execute your file. It has to been
+											   built. Use the %e wildcard to have only the name of
+											   the executable(i.e. without extension) or use the %f
+											   wildcard if you need the complete filename, e.g.
+											   for shell scripts.
+										</entry>
+										<entry>run_cmd="./%e"</entry>
+									</row>
+								</tbody>
+							</tgroup>
+						</table>
+					</para>
+				</section>
+			</section>
+			<section id="filetypes_common">
+				<title>Special file filetypes.common</title>
+				<para>There is a special filetype definition file called
+					  <filename>filetypes.common</filename>. In this file are some general none
+					  filetype-specific settings defined.
+				</para>
+				<para>
+					<table frame="all">
+						<title>General settings</title>
+						<tgroup cols="3">
+							<?dbhtml cellpadding="4" ?>
+							<?dbhtml cellspacing="0" ?>
+							<thead>
+								<row>
+									<entry>Key</entry>
+									<entry>Description</entry>
+									<entry>Example</entry>
+								</row>
+							</thead>
+							<tbody>
+								<row>
+									<entry>default</entry>
+									<entry>The default style for text(e.g. for files without
+										   filetype). For the detailed format, please see above
+										   "Section [styling]".
+									</entry>
+									<entry>default=0x000000;0xffffff;false;false</entry>
+								</row>
+								<row>
+									<entry>selection</entry>
+									<entry>The style for colouring selections. Only foreground and
+										   background colour are interpreted.
+									</entry>
+									<entry>selection=0xc0c0c0;0x00007F;false;false</entry>
+								</row>
+								<row>
+									<entry>brace_good</entry>
+									<entry>The style for brace highlighting. It is used if a
+										   matching brace was found.
+									</entry>
+									<entry>brace_good=0xff0000;0xFFFFFF;true;false</entry>
+								</row>
+								<row>
+									<entry>brace_bad</entry>
+									<entry>The style for brace highlighting. It is used if no
+										   matching brace was found.
+									</entry>
+									<entry>brace_bad=0x0000ff;0xFFFFFF;true;false</entry>
+								</row>
+								<row>
+									<entry>current_line</entry>
+									<entry>The style for colouring the background of the current
+										   line. Only the second argument is interpreted.
+									</entry>
+									<entry>current_line=0x0;0xE5E5E5;false;false</entry>
+								</row>
+								<row>
+									<entry>folding_style</entry>
+									<entry>The style of folding icons. Only first and second
+										   arguments are used.
+										   <para>
+											Valid values for the first argument areare:
+											<itemizedlist>
+												<listitem><para>
+													1 - for boxes
+												</para></listitem>
+												<listitem><para>
+													2 - for circles
+												</para></listitem>
+											</itemizedlist>
+										   </para>
+										   <para>
+											Valid values for the second argument areare:
+											<itemizedlist>
+												<listitem><para>
+													1 - for straight lines
+												</para></listitem>
+												<listitem><para>
+													2 - for curved lines
+												</para></listitem>
+											</itemizedlist>
+										   </para>
+									</entry>
+									<entry>folding_style=1;1;false;false</entry>
+								</row>
+							</tbody>
+						</tgroup>
+					</table>
+				</para>
+			</section>
 		</section>
 		<section>
 			<title>Templates</title>
