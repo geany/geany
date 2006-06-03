@@ -54,8 +54,8 @@
 				<application>&app;</application> is a small and lightweight Integrated Development Environment.
 				It was developed to provide a small and fast IDE, which has only a few dependencies from other
 				packages. Another goal was to be as independent as possible from a special Desktop Environment
-				like KDE or GNOME. So it is using only the GTK2 toolkit and therefore you need only the
-				GTK2 runtime libraries to run <application>&app;</application>.
+				like KDE or GNOME, so <application>&app;</application> only requires the GTK2 toolkit
+				and therefore you only need the GTK2 runtime libraries installed to run it.
 			</para>
 			<para>
 				The basic features of <application>&app;</application> are:
@@ -66,7 +66,7 @@
 					<listitem><para>Auto completion of XML and HTML tags</para></listitem>
 					<listitem><para>Call tips</para></listitem>
 					<listitem><para>Many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal</para></listitem>
-					<listitem><para>Symbol lists</para></listitem>
+					<listitem><para>Tag/Symbol lists</para></listitem>
 				</itemizedlist>
 			</para>
 		</section>
@@ -107,8 +107,9 @@
 				All these files are available at <ulink url="http://www.gtk.org">http://www.gtk.org</ulink>.
 			</para>
 			<para>
-				Further more you need, of course, a C compiler, for the included Scintilla library a C++
-				compiler and the make tool.
+				Furthermore you need, of course, a C compiler and the Make tool; a C++ compiler is
+				also required for the included Scintilla library. The GNU versions of these tools are
+				recommended.
 			</para>
 		</section>
 		<section>
@@ -128,14 +129,14 @@
 				</screen>
 			</para>
 			<para>
-				In the case, that your system lacks dynamic linking loader support, you probably want
+				In the case that your system lacks dynamic linking loader support, you probably want
 				to pass the option --disable-vte to the configure script. This prevents compiling
 				&app; with dynamic linking loader support to automatically load
 				<filename>libvte.so.4</filename> if available.
 			</para>
 			<para>&app; has been successfully compiled and tested under Debian 3.1 Sarge, Debian 3.2 Etch,
 				  Fedora Core 4, LinuxFromScratch and FreeBSD 6.0. It also compiles under
-				  <trademark class="trade">Mircosoft Windows</trademark>, but there are lots of changes
+				  <trademark class="trade">Microsoft Windows</trademark>, but there are lots of changes
 				  to the makefiles necessary.
 			</para>
 			<para>
@@ -157,7 +158,7 @@
 				<para>
 					Binary packages for Debian are available at <ulink url="&deburl;">&deburl;/</ulink>.
 					You can add one of the following lines(depending on your system) to your apt
-					<filename>sources.list</filename> to get automatically get the latest version of
+					<filename>sources.list</filename> to automatically get the latest version of
 					<application>&app;</application>:
 				</para>
 				<para>
@@ -170,7 +171,7 @@
 			<section>
 				<title>SuSE</title>
 				<para>
-					There are not yet packages for SuSE available.
+					Packages for SuSE are not yet available.
 				</para>
 			</section>
 			<section>
@@ -217,10 +218,10 @@
 			</para>
 		</section>
 		<section id="clo">
-			<title>Commandline options</title>
+			<title>Command line options</title>
 			<para>
 				<table frame="all">
-					<title>Commandline Options</title>
+					<title>Command line Options</title>
 					<tgroup cols="3">
 						<?dbhtml cellpadding="4" ?>
 						<?dbhtml cellspacing="0" ?>
@@ -240,7 +241,7 @@
 								<entry>-n</entry>
 								<entry>--no-ctags</entry>
 								<entry>Do not load auto completion and call tip data.
-									   Use this option, if you do not want to use them. For more
+									   Use this option if you do not want to use them. For more
 									   information see <xref linkend="general_ctags"/>.
 								</entry>
 							</row>
@@ -260,7 +261,7 @@
 							<row>
 								<entry>-t</entry>
 								<entry>--no-terminal</entry>
-								<entry>Do not load terminal support. Use this option, if you do not
+								<entry>Do not load terminal support. Use this option if you do not
 									   want to load the virtual terminal emulator widget at startup.
 									   If you do not have <filename>libvte.so.4</filename> installed,
 									   then terminal-support is automatically disabled.
@@ -271,7 +272,7 @@
 								<entry>--vte-lib</entry>
 								<entry>Specify explicitly the path including filename or only the filename
 									   to the VTE library, e.g. <filename>/usr/lib/libvte.so</filename> or
-									   <filename>libvte.so</filename>. This option is only needed, when the
+									   <filename>libvte.so</filename>. This option is only needed when the
 									   autodetection does not work.
 								</entry>
 							</row>
@@ -280,14 +281,14 @@
 								<entry>--config=directory_name</entry>
 								<entry>Use an alternate configuration directory. Default
 									   configuration directory is <filename>~/.&app_small;/</filename>
-									   and there resides <filename>&app_small;.conf</filename> and some
-									   template files.
+									   and there resides <filename>&app_small;.conf</filename> and
+									   other configuration files.
 								</entry>
 							</row>
 							<row>
 								<entry>-d</entry>
 								<entry>--debug</entry>
-								<entry>Runs &app; in debug mode, which means being verbose
+								<entry>Run &app; in debug mode, which means being verbose
 									   and printing lots of information.
 								</entry>
 							</row>
@@ -304,7 +305,7 @@
 							<row>
 								<entry></entry>
 								<entry>[files ...]</entry>
-								<entry>Opens all given files at startup. This option causes &app; to
+								<entry>Open all given files at startup. This option causes &app; to
 									   ignore loading stored files from the last session (if enabled).
 								</entry>
 							</row>
@@ -319,39 +320,39 @@
 			<section id="general_startup">
 				<title>Startup</title>
 				<para>
-					At startup, &app; loads the 15 first files from the last time,
+					At startup, &app; loads the first 15 files from the last time
 					<application>&app;</application> was launched. You can disable this feature in the
 					preferences dialog(see <xref linkend="confdialog_gen"/>). If you specify some files on
-					the commandline, only these files will be opened. But you can find the files from the
-					last session in the file menu. There is an item "Recent files". It contains the last
-					15 recently opened files. It may be that &app; not exactly loads 15 files, this depends
-					on the compile time option GEANY_SESSION_FILES, the default is 15. For details see
+					the command line, only these files will be opened, but you can find the files from the
+					last session in the file menu under the "Recent files" item. This contains the last
+					15 recently opened files. It may be that &app; loads not exactly 15 session files, this depends
+					on the compile time option GEANY_SESSION_FILES; the default is 15. For details see
 					<xref linkend="cto"/>.
 				</para>
 			</section>
 			<section id="general_fifo">
 				<title>Detection of a running instance</title>
 				<para>
-					&app; detects an already running instance of it and open new files in the running one.
+					&app; detects an already running instance of itself and opens new files in the already running one.
 					So, you can use &app; like an editor to view and edit files by opening them from other
-					programs. If you do not like this for some reason, you can it disable with the appropriate
-					commandline option.
+					programs. If you do not like this for some reason, you can disable it with the appropriate
+					command line option.
 				</para>
 				<para>
 					In the case that &app; crashed, you will get a message dialog at the next start,
 					which asks you whether to delete an existing named pipe. If you are sure that there is
-					no other instance of &app; running, you can say Yes and &app; will start as usual.
+					no other instance of &app; is running, you can say Yes and &app; will start as usual.
 					Otherwise click No and Geany will not start.
 				</para>
 			</section>
 			<section id="general_ctags">
 				<title>Global C tags</title>
 				<para>
-					If a C file(with extension is c, cpp, h, etc.) is opened, a global tags file is
-					loaded once, which contains	many function declarations from the glibc and some other
+					If a C file (with extension .c, .cpp, .h, etc.) is opened, a global tags file is
+					loaded once, which contains	many function declarations from glibc and some other
 					libraries, like X, Bonobo, Gnome, GTK, Glib and so on. These declarations are used
 					for call tips and auto completion. These tags are only useful if you are writing
-					C or C++ source code. So if you know, that you do not need these things, you can skip
+					C or C++ source code, so if you know that you do not need these things, you can skip
 					loading this tag file. To do so, start <application>&app;</application> with the
 					argument "-n" or "--no-ctags", for more information see <xref linkend="clo"/>.
 				</para>
@@ -360,30 +361,34 @@
 				<title>Virtual terminal emulator widget (VTE)</title>
 				<para>
 					If you have installed <filename>libvte.so</filename> in your system, it is loaded
-					automatically by <application>&app;</application>. Then you have a terminal widget
+					automatically by <application>&app;</application>, and you will have a terminal widget
 					in the notebook	at the bottom.
 				</para>
 				<para>
 					If <application>&app;</application> cannot find <filename>libvte.so</filename> at
 					startup, the terminal widget will not be loaded. So there is no need to install the
 					package containing this	file in order to run <application>&app;</application>.
-					Additionally, you can disable the use of the terminal widget by commandline option,
+					Additionally, you can disable the use of the terminal widget by command line option,
 					for more information see <xref linkend="clo"/>.
 				</para>
 				<para>
 					 You can use this terminal (from now on called VTE) nearly as an usual terminal program
-					 like xterm. There is a basic clipboard support. You can paste the content
-					 of the clipboard by pressing the middle mouse button in the VTE (on 2-button mice,
-					 the middle button can often be simulated by pressing both mouse buttons together) or by
-					 pressing the right mouse button to open the popup menu and choose Paste.
+					 like xterm. There is basic clipboard support. You can paste the contents
+					 of the clipboard by pressing the right mouse button to open the popup menu and
+					 choosing Paste.
 					 To copy text from the VTE, just select the desired text and then press the
 					 right mouse button and choose Copy from the popup menu.
+					 On systems running the X Window System you can paste the last selected text by
+					 pressing the middle mouse button in the VTE (on 2-button mice,
+					 the middle button can often be simulated by pressing both mouse buttons together).
 				</para>
 				<note>
 					<para>&app; tries to load <filename>libvte.so</filename>. If this fails, it tries to
 						  load <filename>libvte.so.4</filename>. If this fails too, you should check whether
-						  you installed libvte correctly. Again, &app; runs also without this library.
-						  But it could be, that the library is called something else than
+						  you installed libvte correctly. Again, &app; also runs without this library.
+					</para>
+					<para>
+						  It could be, that the library is called something else than
 						  <filename>libvte.so.4</filename> (e.g. on FreeBSD 6.0 it is called
 						  <filename>libvte.so.8</filename>). So please set a link to the correct file (as root).
 						  <screen><prompt>#</prompt> <userinput><command>ln -s /usr/lib/libvte.so.X /usr/lib/libvte.so.4</command></userinput></screen>
@@ -410,7 +415,7 @@
 		<section>
 			<title>Search and Replace</title>
 			<para>
-				You can use regular expressions in the search dialog, just by activating the check box(see
+				You can use regular expressions in the search dialog, just by activating the check box (see
 				the image below). Detailed information about special characters can be found in the
 				<xref linkend="regexp"/>.
 				<figure>
@@ -537,10 +542,10 @@
 			<section id="cto">
 				<title>Compile time options</title>
 				<para>
-					There are some options which can only changed at compile time. To change these
-					options, look into <filename>src/geany.h</filename> to change these settings.
-					To find it, look for a block of lines starting with <quote>#define GEANY_*</quote>.
-					All definitions which are not listed here, should not be changed.
+					There are some options which can only be changed at compile time. To change these
+					options, edit the file <filename>src/geany.h</filename>.
+					Look for a block of lines starting with <quote>#define GEANY_*</quote>.
+					Any definitions which are not listed here should not be changed.
 					<table frame="all">
 						<title>Compile time options</title>
 						<tgroup cols="3">
@@ -559,7 +564,7 @@
 							<tbody>
 								<row>
 									<entry>GEANY_MAX_OPEN_FILES</entry>
-									<entry>The limit how many files can be open at the same time.</entry>
+									<entry>The limit to how many files can be open at the same time.</entry>
 									<entry>25</entry>
 								</row>
 								<row>
@@ -570,23 +575,25 @@
 								</row>
 								<row>
 									<entry>GEANY_WORDCHARS</entry>
-									<entry>These characters define the word boundaries.</entry>
+									<entry>These characters define word boundaries.</entry>
 									<entry>(look at sourcecode)</entry>
 								</row>
 								<row>
 									<entry>GEANY_MAX_AUTOCOMPLETE_WORDS</entry>
-									<entry>How many auto complete suggestions should &app; provide.</entry>
+									<entry>How many auto completion suggestions should &app; provide.</entry>
 									<entry>30</entry>
 								</row>
 								<row>
 									<entry>GEANY_STRING_UNTITLED</entry>
-									<entry>A string used as name for new files. Be aware that the string can be translated,
+									<entry>A string used as the default name for new files. Be aware
+										   that the string can be translated,
 										   so change it only if you know what you are doing.</entry>
 									<entry>untitled</entry>
 								</row>
 								<row>
 									<entry>GEANY_CHECK_FILE_DELAY</entry>
-									<entry>Time in seconds between a file is checked for changes.</entry>
+									<entry>Time in seconds between checking a file for external
+										   changes.</entry>
 									<entry>30</entry>
 								</row>
 								<row>
@@ -619,18 +626,18 @@
 		<section id="keybindings">
 			<title>Keybindings</title>
 			<para>
-				For all listed actions you can define own keybindings. Open the preferences dialog
-				and selected the desired action and click on change. In the opening dialog you can
+				For all listed actions you can define your own keybindings. Open the preferences
+				dialog, select the desired action and click on change. In the opening dialog you can
 				press any key combination you want and it will be saved when you press OK.
 				You can define only one key combination for one action.
 			</para>
 			<para>
 				Some of the default key combinations cannot be changed, e.g. menu_new or menu_open.
-				These are set by GTK and should be kept. But you can add a key combination for these
-				actions, so for example to execute menu_open by default
-				<keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo> is set and you can
-				define <keycombo><keycap>Alt</keycap><keycap>O</keycap></keycombo> so, the file open
-				dialog is shown by pressing
+				These are set by GTK and should be kept, but you can still add other key
+				combinations for these actions. For example to execute menu_open by default
+				<keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo> is set, but you can
+				also define <keycombo><keycap>Alt</keycap><keycap>O</keycap></keycombo>, so that the
+				file open dialog is shown by pressing either
 				<keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo> or
 				<keycombo><keycap>Alt</keycap><keycap>O</keycap></keycombo>.
 			</para>
@@ -682,11 +689,11 @@
 							</row>
 							<row>
 								<entry>menu_undo</entry>
-								<entry>Undos the last action.</entry>
+								<entry>Undoes the last action.</entry>
 							</row>
 							<row>
 								<entry>menu_redo</entry>
-								<entry>Redos the last action.</entry>
+								<entry>Redoes the last action.</entry>
 							</row>
 							<row>
 								<entry>menu_preferences</entry>
@@ -718,7 +725,7 @@
 							</row>
 							<row>
 								<entry>menu_messagewindow</entry>
-								<entry>Toggles the message window(status and compiler messages) on and off.</entry>
+								<entry>Toggles the message window (status and compiler messages) on and off.</entry>
 							</row>
 							<row>
 								<entry>menu_zoomin</entry>
@@ -730,7 +737,7 @@
 							</row>
 							<row>
 								<entry>menu_replacetabs</entry>
-								<entry>Replaces all tabulators with the right amount of spaces.</entry>
+								<entry>Replaces all tabs with the right amount of spaces.</entry>
 							</row>
 							<row>
 								<entry>menu_foldall</entry>
@@ -749,15 +756,15 @@
 							</row>
 							<row>
 								<entry>build_link</entry>
-								<entry>Builds(compiles if ncessary and links) the current file.</entry>
+								<entry>Builds (compiles if necessary and links) the current file.</entry>
 							</row>
 							<row>
 								<entry>build_make</entry>
-								<entry>Builds the current file with the make tool.</entry>
+								<entry>Builds the current file with the Make tool.</entry>
 							</row>
 							<row>
 								<entry>build_makeowntarget</entry>
-								<entry>Builds the current file with the make tool and a given target.</entry>
+								<entry>Builds the current file with the Make tool and a given target.</entry>
 							</row>
 							<row>
 								<entry>build_run</entry>
@@ -823,8 +830,8 @@
 							</row>
 							<row>
 								<entry>edit_macrolist</entry>
-								<entry>Shows a list of (in the workspace) available macros and
-									   variables.
+								<entry>Shows a list of available macros and
+									   variables in the workspace.
 								</entry>
 							</row>
 							<row>
@@ -848,12 +855,12 @@
 			<title>Templates</title>
 			<para>
 				<application>&app;</application> supports several templates for file headers, multiline
-				comments(frame comments), function descriptions, a typical ChangeLog entry and a short GPL notice.
-				To use this templates, just open the edit menu or open the popup menu by right-clicking in the
+				comments (frame comments), function descriptions, a typical ChangeLog entry and a short GPL notice.
+				To use these templates, just open the Edit menu or open the popup menu by right-clicking in the
 				editor widget, and choose "Insert Comments" and insert templates as you want.
 			</para>
 			<para>
-				Some templates like file header or ChangeLog entry, will always be inserted at the top of the file.
+				Some templates (like file header or ChangeLog entry) will always be inserted at the top of the file.
 			</para>
 			<para>
 				To insert a function description, the cursor must be inside of the function, so that the function
@@ -863,7 +870,7 @@
 			</para>
 			<para>
 				Each template can be customized to your needs. The templates are in the configuration directory, which
-				is in <filename>~/.&app_small;/</filename> (see <xref linkend="clo"/> for further information about
+				is in <filename>~/.&app_small;/</filename> (see <xref linkend="clo"/> for further information about the
 				configuration directory). Just open the desired template with an editor (ideally &app; ;-) ) and edit
 				the template as your needs.	There are some wildcards which will be automatically replaced by
 				<application>&app;</application> at startup.
@@ -872,16 +879,17 @@
 				All wildcards must be enclosed by "{" and "}", e.g. {date}.
 			</para>
 			<para>
-				In the configuration dialog you can find a tab "Templates"(see <xref linkend="confdialog_templ"/>).
+				In the configuration dialog you can find a tab "Templates" (see <xref linkend="confdialog_templ"/>).
 				You can define the default values which will be inserted in the templates. You should restart
-				<application>&app;</application> after made changes, because they are only read at startup.
+				<application>&app;</application> after making changes, because they are only read at startup.
 			</para>
 			<para>
 				Since <application>&app;</application> 0.3 there are also templates for creating new files.
 				They can be found in <filename>~/.&app_small;/</filename>, too.
-				All template files for creating new files begin with template.filetype. followed by the filetype.
+				All template files for creating new files begin with
+				<filename>template.filetype.</filename> followed by the filetype.
 				At creating a new file with a filetype template, the template for the fileheader is automatically prepended.
-				Please note, that the complete behaviour is still under development and will probably be changed in one of
+				Please note that the complete behaviour is still under development and will probably be changed in one of
 				the next releases. Sorry.
 			</para>
 			<para>&nbsp;</para>
@@ -909,7 +917,7 @@
 							</row>
 							<row>
 								<entry>initial</entry>
-								<entry>The initials of the developer name, e.g. "ET" for
+								<entry>The developer's initials, e.g. "ET" for
 									   Enrico Troeger or "JFD" for John Foobar Doe.</entry>
 								<entry>filetypes, file header, function description, ChangeLog entry</entry>
 							</row>
@@ -920,7 +928,7 @@
 							</row>
 							<row>
 								<entry>company</entry>
-								<entry>The company name, the developer is working for.</entry>
+								<entry>The company the developer is working for.</entry>
 								<entry>filetypes, file header, function description, ChangeLog entry</entry>
 							</row>
 							<row>
@@ -966,8 +974,9 @@
 							</row>
 							<row>
 								<entry>functionname</entry>
-								<entry>The function name of the function at cursor position. This wildcard will only
-									   be replaced in the function description template.</entry>
+								<entry>The function name of the function at the cursor position.
+									   This wildcard will only be replaced in the function
+									   description template.</entry>
 								<entry>function description</entry>
 							</row>
 						</tbody>
