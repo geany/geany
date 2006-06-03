@@ -564,6 +564,8 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	// "pattern", buf + x, y -> x + y = 6, because buf is (pos - 7)...(pos - 1) = 6
 	if (! strncmp("if", buf + 4, 2))
 	{
+		if (! isspace(*(buf + 3))) goto free_and_return;
+
 		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
@@ -572,6 +574,8 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	}
 	else if (! strncmp("else", buf + 2, 4))
 	{
+		if (! isspace(*(buf + 1))) goto free_and_return;
+
 		construct = g_strdup_printf("%s{%s\t%s}%s", eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
@@ -582,6 +586,9 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	{
 		gchar *var;
 		gint contruct_len;
+
+		if (! isspace(*(buf + 2))) goto free_and_return;
+
 		if (doc_list[idx].file_type->id == GEANY_FILETYPES_PHP)
 		{
 			var = g_strdup("$i");
@@ -606,6 +613,8 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	}
 	else if (! strncmp("while", buf + 1, 5))
 	{
+		if (! isspace(*buf)) goto free_and_return;
+
 		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
@@ -614,6 +623,8 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	}
 	else if (! strncmp("do", buf + 4, 2))
 	{
+		if (! isspace(*(buf + 3))) goto free_and_return;
+
 		construct = g_strdup_printf("%s{%s\t%s}%swhile ();%s", eol, eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
@@ -622,6 +633,8 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	}
 	else if (! strncmp("try", buf + 3, 3))
 	{
+		if (! isspace(*(buf + 2))) goto free_and_return;
+
 		construct = g_strdup_printf("%s{%s\t%s}%scatch ()%s{%s\t%s}%s",
 							eol, eol, eol, eol, eol, eol, eol, eol);
 
@@ -631,12 +644,16 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	}
 	else if (! strncmp("switch", buf, 5))
 	{
+		if (! isspace(*(buf + 4))) goto free_and_return;
+
 		construct = g_strdup_printf("()%s{%s\tcase : break;%s\tdefault: %s}%s", eol, eol, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 1, TRUE);
 		g_free(construct);
 	}
+
+	free_and_return:
 	g_free(eol);
 }
 

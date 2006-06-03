@@ -1,3 +1,8 @@
+2006-06-03  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: Fixed bug in auto completion of constructs.
+
+
 2006-06-03  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * doc/geany.docbook: More minor corrections/rewording.
@@ -6,8 +11,8 @@
 2006-06-02  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/highlighting.c, data/filetypes.css: improved colouring
- * src/utils.c: added some sanity checks if filetype is NULL
- * src/utils.c: corrected readme text for filedefs/filetypes.README
+ * src/utils.c: Added some sanity checks if filetype is NULL.
+ * src/utils.c: Corrected readme text for filedefs/filetypes.README.
 
 
 2006-06-02  Nick Treleaven  <nick.treleaven@btinternet.com>
