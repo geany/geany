@@ -1,5 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>File types</title><link rel="stylesheet" href="geany.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.68.1" /><link rel="start" href="index.html" title="&#10;&#9;&#9;&#9;Geany 0.6&#10;&#9;&#9;" /><link rel="up" href="ch03.html" title="Chapter 3. Usage" /><link rel="prev" href="ch03s05.html" title="Preferences" /><link rel="next" href="ch03s07.html" title="Templates" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">File types</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s05.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s07.html">Next</a></td></tr></table><hr /></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id2531473"></a>File types</h2></div></div></div><p>
-				should be written
-			</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s05.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Preferences </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Templates</td></tr></table></div></body></html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Build System</title><link rel="stylesheet" href="geany.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.68.1" /><link rel="start" href="index.html" title="&#10;&#9;&#9;&#9;Geany 0.7&#10;&#9;&#9;" /><link rel="up" href="ch03.html" title="Chapter 3. Usage" /><link rel="prev" href="ch03s05.html" title="Preferences" /><link rel="next" href="ch03s07.html" title="Keybindings" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Build System</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s05.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s07.html">Next</a></td></tr></table><hr /></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="buildsystem"></a>Build System</h2></div></div></div><p>
+				<span class="application">Geany</span> has an integrated build system. When you compile,
+				link, syntax check or otherwise process a source file, the output will be captured
+				in the Compiler notebook tab of the messages window (assuming you have it visible).
+				If there are any warnings or errors with line numbers shown in the Compiler output tab,
+				you can double click on them and <span class="application">Geany</span> will switch to
+				the relevant source file (if it is open) and mark the line number so the problem
+				can be corrected.
+			</p><p>
+				Depending on the current file's filetype, the Build menu will contain the following
+				items:
+				</p><div class="itemizedlist"><ul type="disc"><li><p>Compile</p></li><li><p>Build</p></li><li><p>Build with "make"</p></li><li><p>Build with make (custom target)</p></li><li><p>Execute</p></li><li><p>Set Includes and Arguments</p></li></ul></div><p>
+			</p><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2531475"></a>Compile</h3></div></div></div><p>
+					By default, the Compile command is setup to build binary object files for
+					compilable languages such as C and C++.
+				</p><p>
+					Java will be compiled to
+					class file bytecode. Interpreted languages such as Perl, Python, Ruby will
+					compile to bytecode if the language supports it, or will run a syntax check,
+					or failing that will run the file in the language interpreter.
+				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2531495"></a>Build</h3></div></div></div><p>
+					For compilable languages such as C and C++, the Build command will link the
+					current source file's equivalent object file into an executable. If the object
+					file does not exist, the source will be compiled and linked in one step,
+					producing just the executable binary.
+				</p><p>
+					Interpreted languages do not use the Build command.
+				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2531514"></a>Build with "make"</h3></div></div></div><p>
+					This effectively runs "make all" in the same directory as the current file.
+					The Make tool path must be correctly set in the Tools tab of the Preferences
+					dialog.
+				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2531527"></a>Build with make (custom target)</h3></div></div></div><p>
+					This is identical to running 'Build with "make"' but you will be prompted
+					for the make target name to be passed to the Make tool. For example,
+					typing 'clean' in the dialog prompt will run "make clean" (but using the
+					full path to the Make tool set in Preferences).
+				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2531542"></a>Execute</h3></div></div></div><p>
+					Execute will run the corresponding executable file, shell script or interpreted
+					script in a terminal window. Note that the Terminal tool path must be correctly
+					set in the Tools tab of the Preferences dialog - you can use any terminal
+					program that runs a Bourne compatible shell.
+					After your program or script has finished executing, you will be prompted to
+					press the return key. This allows you to review any text output from the program.
+				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2531560"></a>Set Includes and Arguments</h3></div></div></div><p>
+					By default the Compile and Build commands invoke the compiler and linker with
+					only the basic arguments needed by all programs.
+					Using Set Includes and Arguments you can add any include
+					paths and compile flags for the compiler, any library names and paths for the
+					linker, and any arguments you want to use when running Execute. Note that if
+					you are using the Build command to compile and link in one step, you will need
+					to set both the compiler arguments and the linker arguments in the linker
+					command setting.
+				</p><p>
+					These settings are not saved when <span class="application">Geany</span> is shut
+					down. See below for how to set permanent arguments.
+				</p><p>
+					If you need complex settings for your build system, or several different
+					settings, then writing a Makefile and using 'Build with "make"' is recommended.
+				</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2531597"></a>File type configuration settings</h3></div></div></div><p>
+					You can set the commands to run for compiling, building or executing
+					by opening the relevant <code class="filename">filetypes.*</code> configuration file,
+					and checking the build_settings section. See <a href="ch03s08.html" title="Filetype definition files">the section called “Filetype definition files”</a> for more
+					information.
+				</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s05.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Preferences </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Keybindings</td></tr></table></div></body></html>

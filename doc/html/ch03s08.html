@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Filetype definition files</title><link rel="stylesheet" href="geany.css" type="text/css" /><meta name="generator" content="DocBook XSL Stylesheets V1.68.1" /><link rel="start" href="index.html" title="&#10;&#9;&#9;&#9;Geany 0.7&#10;&#9;&#9;" /><link rel="up" href="ch03.html" title="Chapter 3. Usage" /><link rel="prev" href="ch03s07.html" title="Keybindings" /><link rel="next" href="ch03s09.html" title="Templates" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Filetype definition files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s07.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s09.html">Next</a></td></tr></table><hr /></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="filetypes"></a>Filetype definition files</h2></div></div></div><p>
+				All colour definitions and other filetype specific settings are stored in the
+				filetype definition files. Those settings are colours for syntax highlighting,
+				general settings like comment characters or word delimiter characters as well as
+				compiler and linker settings.
+			</p><p>
+				The system-wide configuration files can be found in
+				<code class="filename">$prefix/share/geany</code> and are called
+				<code class="filename">filetypes.$ext</code>, where $prefix is the path where
+				<span class="application">Geany</span> is	installed (commonly
+				<code class="filename">/usr/local</code>) and $ext is the name of the filetype.
+				For every filetype there is a corresponding definition file. There is one exception:
+				<code class="filename">filetypes.common</code> - this file is for general settings, which
+				are not specific to a certain filetype. It is not recommended to edit the
+				system-wide files, because they will be overridden when Geany is updated.
+			</p><p>
+				To change the settings, copy a file from <code class="filename">$prefix/share/geany</code>
+				to the subdirectory <code class="filename">filedefs</code> in your configuration directory
+				(usually <code class="filename">~/.geany/</code>).
+			</p><p>
+				 For example:
+				 </p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code><span><strong class="command">cp /usr/local/share/geany/filetypes.c /home/username/.geany/filedefs/</strong></span></code></strong></pre><p>
+				 Then you can edit the file and the changes are also available after an update of
+				 <span class="application">Geany</span> because they reside in your configuration
+				 directory. Alternatively, you can create a file
+				 <code class="filename">~/.geany/filedefs/filetypes.X</code> and add only these settings you
+				 want to change. All missing settings will be read from the corresponding global
+				 definition file in <code class="filename">$prefix/share/geany</code>.
+			</p><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="filetypes_format"></a>Format</h3></div></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2532396"></a>[styling] Section</h4></div></div></div><p>
+						In this section the colours for syntax highlighting are defined.
+						The format is always:
+						<code class="constant">key=forground_colour;background_colour;bold;italic</code>
+					</p><p>
+						Colours have to be specified as RGB hex values prefixed by 0x. For
+						example red is 0xff0000, blue is 0x0000ff. The values are case-insensitive,
+						but it is a good idea to use small letters. Bold and italic are flags and
+						should only be "true" or "false". If their value is something other than
+						"true" or "false", "false" is assumed.
+					</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2532421"></a>[keywords] Section</h4></div></div></div><p>
+						This section contains keys for different keyword lists specific	to the
+						filetype. Some filetypes do not support keywords, so adding a new key will
+						not work. You can only add or remove keywords to/from an existing list.
+						</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Important</h3><p>The keywords list must be in one line without line ending
+						characters.</p></div><p>
+					</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2532441"></a>[settings] Section</h4></div></div></div><p>
+						</p><div class="table"><a id="id2532449"></a><p class="title"><b>Table 3.5. General settings</b></p><table summary="General settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col /><col /><col /></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>wordchars</td><td>Word delimiting characters. These characters define
+											   word boundaries.
+										</td><td>(look at sourcecode)</td></tr><tr><td>comment_open</td><td>A character or string which is used to comment code.
+											   If you want to use multiline comments, also set
+											   comment_close, otherwise leave it empty.
+										</td><td>comment_open=/*</td></tr><tr><td>comment_close</td><td>If multiline comments are used, this is the character
+											   or string to close the comment.
+										</td><td>comment_close=*/</td></tr><tr><td>comment_use_indent</td><td>Set this to false if a comment character or string
+											   should start at column 0 of a line. If set to true
+											   it uses any indentation of the line.
+											   <div class="example"><a id="id2532547"></a><p class="title"><b>Example 3.1. Comment indentation</b></p><p>
+											   comment_use_indent=true would generate this if a line
+											   is commented (e.g. with
+											   <span><strong class="keycap">Ctrl</strong></span>-<span><strong class="keycap">D</strong></span>)
+											   </p><pre class="programlisting">	#command_example();</pre><p>
+											   comment_use_indent=false would generate this if a line
+											   is commented (e.g. with
+											   <span><strong class="keycap">Ctrl</strong></span>-<span><strong class="keycap">D</strong></span>)
+											   </p><pre class="programlisting">#command_example();</pre><p>
+											   </p></div>
+											   <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+													This setting only works for single line comments.
+											   </p></div>
+										</td><td>comment_use_indent=true</td></tr></tbody></table></div><p>
+					</p></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id2532616"></a>[build_settings] Section</h4></div></div></div><p>
+						</p><div class="table"><a id="id2532624"></a><p class="title"><b>Table 3.6. Build settings</b></p><table summary="Build settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col /><col /><col /></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>compiler</td><td>
+											   This item specifies the command to compile source code
+											   files. But it is also possible to use it with
+											   interpreted languages like Perl or Python. With these
+											   filetypes you can use this option as a kind of syntax
+											   parser, which sends output to the compiler message
+											   window.
+											<p>You should quote the filename to also support
+											   filenames with spaces. The following wildcards for
+											   filenames are available:
+											</p>
+											<p>
+											   </p><div class="itemizedlist"><ul type="disc"><li><p>
+													%f - complete filename without path
+												</p></li><li><p>
+													%e - filename without path and without extension
+												</p></li></ul></div><p>
+											</p>
+										</td><td>compiler=gcc -Wall -c "%f"</td></tr><tr><td>linker</td><td>This item specifies the command to link the file.
+											   If the file is not already compiled, it will be
+											   compiled while linking. The -o option is
+											   automatically added by
+											   <span class="application">Geany</span>. This item works
+											   well with GNU gcc, but may be problematic with other
+											   compilers (esp. with the linker).
+										</td><td>linker=gcc -Wall "%f"</td></tr><tr><td>run_cmd</td><td>Use this item to execute your file. It has to have been
+											   built already.
+											   Use the %e wildcard to have only the name of
+											   the executable (i.e. without extension) or use the %f
+											   wildcard if you need the complete filename, e.g.
+											   for shell scripts.
+										</td><td>run_cmd="./%e"</td></tr></tbody></table></div><p>
+					</p></div></div><div class="section" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="filetypes_common"></a>Special file filetypes.common</h3></div></div></div><p>There is a special filetype definition file called
+					  <code class="filename">filetypes.common</code>. This file defines some general
+					  non-filetype-specific settings.
+				</p><p>
+					</p><div class="table"><a id="id2532778"></a><p class="title"><b>Table 3.7. General settings</b></p><table summary="General settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col /><col /><col /></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>default</td><td>The default style for text (e.g. for files without
+										   filetype). For the detailed format, please see the above
+										   "[styling] Section".
+									</td><td>default=0x000000;0xffffff;false;false</td></tr><tr><td>selection</td><td>The style for colouring selections. Only foreground and
+										   background colour are interpreted.
+									</td><td>selection=0xc0c0c0;0x00007F;false;false</td></tr><tr><td>brace_good</td><td>The style for brace highlighting when a
+										   matching brace was found.
+									</td><td>brace_good=0xff0000;0xFFFFFF;true;false</td></tr><tr><td>brace_bad</td><td>The style for brace highlighting when no
+										   matching brace was found.
+									</td><td>brace_bad=0x0000ff;0xFFFFFF;true;false</td></tr><tr><td>current_line</td><td>The style for colouring the background of the current
+										   line. Only the second argument is interpreted.
+									</td><td>current_line=0x0;0xE5E5E5;false;false</td></tr><tr><td>folding_style</td><td>The style of folding icons. Only first and second
+										   arguments are used.
+										   <p>
+											Valid values for the first argument are:
+											</p><div class="itemizedlist"><ul type="disc"><li><p>
+													1 - for boxes
+												</p></li><li><p>
+													2 - for circles
+												</p></li></ul></div><p>
+										   </p>
+										   <p>
+											Valid values for the second argument are:
+											</p><div class="itemizedlist"><ul type="disc"><li><p>
+													1 - for straight lines
+												</p></li><li><p>
+													2 - for curved lines
+												</p></li></ul></div><p>
+										   </p>
+									</td><td>folding_style=1;1;false;false</td></tr></tbody></table></div><p>
+				</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s07.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s09.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Keybindings </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Templates</td></tr></table></div></body></html>

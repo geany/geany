@@ -32,8 +32,9 @@ For compiling Geany yourself, you will need the GTK (>= 2.6.0) libraries
 and header files. You will also need the Pango, Glib and ATK libraries and
 header files. All these files are available at http://www.gtk.org.
 
-Further more you need, of course, a C compiler, for the included
-Scintilla library a C++ compiler and the make tool.
+Furthermore you need, of course, a C compiler and the Make tool; a C++ compiler
+is also required for the included Scintilla library. The GNU versions of these
+tools are recommended.
 
 
 Installation
@@ -76,11 +77,10 @@ well tested and there are some features missing:
 Ideas, questions, patches and bug reports
 -----------------------------------------
 See http://geany.uvena.de
-or e-mail to enrico.troeger@uvena.de
 If you add something, or fix a bug, please send a patch (in 'diff -u'
-format) to enrico.troeger@uvena.de
+format) to the mailing list, enrico.troeger@uvena.de or nick.treleaven@btinternet.com.
 
 
 --
-2006 by Enrico Troeger
+2005-2006 by Enrico Troeger
 enrico.troeger@uvena.de

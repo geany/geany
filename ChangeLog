@@ -1,3 +1,10 @@
+2006-06-04  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * README, NEWS: updated for Geany 0.7
+ * src/keybindings.c: changed default keybinding for menu_replace to
+                      Ctrl+E
+
+
 2006-06-03  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Fixed bug in auto completion of constructs.

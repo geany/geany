@@ -1,3 +1,22 @@
+Geany 0.7 (June 04, 2006)
+
+        * user-definable keyboard shortcuts
+        * filetype definition files can be overridden in Geany's
+          configuration directory (please see documentation)
+        * added filetypes Ruby and Tcl/Tk
+        * improved build system (for Perl, Python, Ruby and others)
+        * loading of Virtual Terminal Emulation can be disabled in the
+          preferences dialog
+        * new menu item "Search" with Find items from Edit menu and new
+          item "Find Previous"
+        * fixed the bug which let Geany crash with newer GTK versions
+        * improved documentation: added documentation for keyboard
+          shortcuts, the build system and filetype definition files
+        * new translations: Catalan and Polish
+        * many small improvements
+        * fixed lots of bugs (please see ChangeLog for details)
+
+
 Geany 0.6 (April 30, 2006)
 
         * added option to place new file tabs to the right or left of

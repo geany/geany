@@ -7,7 +7,7 @@
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY deburl "http://debian.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "June 2, 2006">
+<!ENTITY date "June 4, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 ]>
 

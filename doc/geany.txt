@@ -1,16 +1,20 @@
 
-Geany 0.6
+Geany 0.7
 
 Enrico Troeger
 
-   Copyright © 2006
+Nick Treleaven
 
-   This document is distributed under the terms of the GNU Public
-   license as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) later version. A
-   copy of this license can be found in the file COPYING included
-   with the source code of this program and in the appendix of
-   this document.
+Frank Lanitz
+
+   Copyright © 2005-2006
+
+   This document is distributed under the terms of the GNU
+   General Public License as published by the Free Software
+   Foundation; either version 2 of the License, or (at your
+   option) any later version. A copy of this license can be found
+   in the file COPYING included with the source code of this
+   program and in the appendix of this document.
      _________________________________________________________
 
    Table of Contents
@@ -18,7 +22,7 @@ Enrico Troeger
 
         1.1. About Geany
         1.2. About this document
-        1.3. Where to get
+        1.3. Where to get it
         1.4. License
 
    2. Installation
@@ -35,7 +39,7 @@ Enrico Troeger
    3. Usage
 
         3.1. Getting Started
-        3.2. Commandline options
+        3.2. Command line options
         3.3. General
 
               3.3.1. Startup
@@ -48,8 +52,23 @@ Enrico Troeger
 
               3.5.1. Compile time options
 
-        3.6. File types
-        3.7. Templates
+        3.6. Build System
+
+              3.6.1. Compile
+              3.6.2. Build
+              3.6.3. Build with "make"
+              3.6.4. Build with make (custom target)
+              3.6.5. Execute
+              3.6.6. Set Includes and Arguments
+              3.6.7. File type configuration settings
+
+        3.7. Keybindings
+        3.8. Filetype definition files
+
+              3.8.1. Format
+              3.8.2. Special file filetypes.common
+
+        3.9. Templates
 
    A. Geany key mapping
 
@@ -78,11 +97,14 @@ Enrico Troeger
         B.3. How to Apply These Terms to Your New Programs
 
    List of Tables
-   3-1. Commandline Options
+   3-1. Command line Options
    3-2. Regular expressions
    3-3. Compile time options
-   3-4. Template wildcards
-   A-1. Key Table
+   3-4. Keybindings action table
+   3-5. General settings
+   3-6. Build settings
+   3-7. General settings
+   3-8. Template wildcards
 
    List of Figures
    3-1. Search dialog
@@ -90,32 +112,36 @@ Enrico Troeger
    3-3. Editor tab in preferences dialog
    3-4. Tools tab in preferences dialog
    3-5. Template tab in preferences dialog
-   3-6. VTE tab in preferences dialog
+   3-6. Keybinding tab in preferences dialog
+   3-7. VTE tab in preferences dialog
+
+   List of Examples
+   3-1. Comment indentation
      _________________________________________________________
 
 Chapter 1. Introduction
 
 1.1. About Geany
 
-   Geany is a small and lightweight integrated development
-   environment. It was developed to provide a small and fast IDE,
+   Geany is a small and lightweight Integrated Development
+   Environment. It was developed to provide a small and fast IDE,
    which has only a few dependencies from other packages. Another
    goal was to be as independent as possible from a special
-   Desktop Environment like KDE or GNOME. So it is using only the
-   GTK2 toolkit and therefore you need only the GTK2 runtime
-   libraries to run Geany.
+   Desktop Environment like KDE or GNOME, so Geany only requires
+   the GTK2 toolkit and therefore you only need the GTK2 runtime
+   libraries installed to run it.
 
    The basic features of Geany are:
 
-     * syntax highlighting
-     * code completion
-     * auto completion of often used constructs like if, for and
+     * Syntax highlighting
+     * Code completion
+     * Auto completion of often used constructs like if, for and
        while
-     * auto completion of XML and HTML tags
-     * call tips
-     * many supported filetypes like C, Java, PHP, HTML, Python,
+     * Auto completion of XML and HTML tags
+     * Call tips
+     * Many supported filetypes like C, Java, PHP, HTML, Python,
        Perl, Pascal
-     * symbol lists
+     * Tag/Symbol lists
      _________________________________________________________
 
 1.2. About this document
@@ -125,20 +151,20 @@ Chapter 1. Introduction
    http://geany.uvena.de.
      _________________________________________________________
 
-1.3. Where to get
+1.3. Where to get it
 
-   You can obtain Geany from http://geany.uvena.de or perhabs
+   You can obtain Geany from http://geany.uvena.de or perhaps
    from your distributor.
      _________________________________________________________
 
 1.4. License
 
-   Geany is distributed under the terms of the GNU Public license
-   as published by the Free Software Foundation; either version 2
-   of the License, or (at your option) later version. A copy of
-   this license can be found in the file COPYING included with
-   the source code of this program and in the appendix of this
-   document.
+   Geany is distributed under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later
+   version. A copy of this license can be found in the file
+   COPYING included with the source code of this program and in
+   the appendix of this document.
      _________________________________________________________
 
 Chapter 2. Installation
@@ -150,8 +176,10 @@ Chapter 2. Installation
    and ATK libraries and header files. All these files are
    available at http://www.gtk.org.
 
-   Further more you need, of course, a C compiler, for the
-   included Scintilla library a C++ compiler and the make tool.
+   Furthermore you need, of course, a C compiler and the Make
+   tool; a C++ compiler is also required for the included
+   Scintilla library. The GNU versions of these tools are
+   recommended.
      _________________________________________________________
 
 2.2. Source Compilation
@@ -165,7 +193,7 @@ Chapter 2. Installation
    detailed list, type
                                         % ./configure --help
 
-   In the case, that your system lacks dynamic linking loader
+   In the case that your system lacks dynamic linking loader
    support, you probably want to pass the option --disable-vte to
    the configure script. This prevents compiling Geany with
    dynamic linking loader support to automatically load
@@ -173,7 +201,7 @@ Chapter 2. Installation
 
    Geany has been successfully compiled and tested under Debian
    3.1 Sarge, Debian 3.2 Etch, Fedora Core 4, LinuxFromScratch
-   and FreeBSD 6.0. It also compiles under Mircosoft Windows(TM),
+   and FreeBSD 6.0. It also compiles under Microsoft Windows(TM),
    but there are lots of changes to the makefiles necessary.
 
    If there are any errors during compilation, check your build
@@ -194,7 +222,7 @@ Chapter 2. Installation
    Binary packages for Debian are available at
    http://debian.uvena.de/. You can add one of the following
    lines(depending on your system) to your apt sources.list to
-   get automatically get the latest version of Geany:
+   automatically get the latest version of Geany:
 
    deb http://debian.uvena.de/ ./stable/
 
@@ -203,7 +231,7 @@ Chapter 2. Installation
 
 2.3.3. SuSE
 
-   There are not yet packages for SuSE available.
+   Packages for SuSE are not yet available.
      _________________________________________________________
 
 2.3.4. Gentoo
@@ -226,34 +254,34 @@ Chapter 3. Usage
                                                                 % geany
      _________________________________________________________
 
-3.2. Commandline options
+3.2. Command line options
 
-   Table 3-1. Commandline Options
+   Table 3-1. Command line Options
    Short option Long option Function
    -n --no-ctags Do not load auto completion and call tip data.
-   Use this option, if you do not want to use them. For more
+   Use this option if you do not want to use them. For more
    information see Section 3.3.3.
    -m --no-msgwin Do not show the message window. Use this option
    if you do not need compiler messages or VTE support.
    -p --no-pipe Do not open files in a running instance, force
    opening a new instance.
-   -t --no-terminal Do not load terminal support. Use this
-   option, if you do not want to load the virtual terminal
-   emulator widget at startup. If you do not have libvte.so.4
-   installed, then terminal-support is automatically disabled.
+   -t --no-terminal Do not load terminal support. Use this option
+   if you do not want to load the virtual terminal emulator
+   widget at startup. If you do not have libvte.so.4 installed,
+   then terminal-support is automatically disabled.
    -l --vte-lib Specify explicitly the path including filename or
    only the filename to the VTE library, e.g. /usr/lib/libvte.so
-   or libvte.so. This option is only needed, when the
+   or libvte.so. This option is only needed when the
    autodetection does not work.
    -c directory_name --config=directory_name Use an alternate
    configuration directory. Default configuration directory is
-   ~/.geany/ and there resides geany.conf and some template
+   ~/.geany/ and there resides geany.conf and other configuration
    files.
-   -d --debug Runs Geany in debug mode, which means being verbose
+   -d --debug Run Geany in debug mode, which means being verbose
    and printing lots of information.
    -? --help Show help information and exit.
    -v --version Show version information and exit.
-     [files ...] Opens all given files at startup. This option
+     [files ...] Open all given files at startup. This option
    causes Geany to ignore loading stored files from the last
    session (if enabled).
    Geany supports all generic GTK options, a list is available on
@@ -264,77 +292,80 @@ Chapter 3. Usage
 
 3.3.1. Startup
 
-   At startup, Geany loads the 15 first files from the last time,
+   At startup, Geany loads the first 15 files from the last time
    Geany was launched. You can disable this feature in the
    preferences dialog(see Figure 3-2). If you specify some files
-   on the commandline, only these files will be opened. But you
-   can find the files from the last session in the file menu.
-   There is an item "Recent files". It contains the last 15
-   recently opened files. It may be that Geany not exactly loads
-   15 files, this depends on the compile time option
-   GEANY_SESSION_FILES, the default is 15. For details see
+   on the command line, only these files will be opened, but you
+   can find the files from the last session in the file menu
+   under the "Recent files" item. This contains the last 15
+   recently opened files. It may be that Geany loads not exactly
+   15 session files, this depends on the compile time option
+   GEANY_SESSION_FILES; the default is 15. For details see
    Section 3.5.1.
      _________________________________________________________
 
 3.3.2. Detection of a running instance
 
-   Geany detects an already running instance of it and open new
-   files in the running one. So, you can use Geany like an editor
-   to view and edit files by opening them from other programs. If
-   you do not like this for some reason, you can it disable with
-   the appropriate commandline option.
+   Geany detects an already running instance of itself and opens
+   new files in the already running one. So, you can use Geany
+   like an editor to view and edit files by opening them from
+   other programs. If you do not like this for some reason, you
+   can disable it with the appropriate command line option.
 
    In the case that Geany crashed, you will get a message dialog
    at the next start, which asks you whether to delete an
    existing named pipe. If you are sure that there is no other
-   instance of Geany running, you can say Yes and Geany will
+   instance of Geany is running, you can say Yes and Geany will
    start as usual. Otherwise click No and Geany will not start.
      _________________________________________________________
 
 3.3.3. Global C tags
 
-   If a C file(with extension is c, cpp, h, etc.) is opened, a
+   If a C file (with extension .c, .cpp, .h, etc.) is opened, a
    global tags file is loaded once, which contains many function
-   declarations from the glibc and some other libraries, like X,
+   declarations from glibc and some other libraries, like X,
    Bonobo, Gnome, GTK, Glib and so on. These declarations are
    used for call tips and auto completion. These tags are only
-   useful if you are writing C or C++ source code. So if you
-   know, that you do not need these things, you can skip loading
-   this tag file. To do so, start Geany with the argument "-n" or
+   useful if you are writing C or C++ source code, so if you know
+   that you do not need these things, you can skip loading this
+   tag file. To do so, start Geany with the argument "-n" or
    "--no-ctags", for more information see Section 3.2.
      _________________________________________________________
 
 3.3.4. Virtual terminal emulator widget (VTE)
 
    If you have installed libvte.so in your system, it is loaded
-   automatically by Geany. Then you have a terminal widget in the
-   notebook at the bottom.
+   automatically by Geany, and you will have a terminal widget in
+   the notebook at the bottom.
 
    If Geany cannot find libvte.so at startup, the terminal widget
    will not be loaded. So there is no need to install the package
    containing this file in order to run Geany. Additionally, you
-   can disable the use of the terminal widget by commandline
+   can disable the use of the terminal widget by command line
    option, for more information see Section 3.2.
 
    You can use this terminal (from now on called VTE) nearly as
-   an usual terminal program like xterm. There is a basic
-   clipboard support. You can paste the content of the clipboard
-   by pressing the middle mouse button in the VTE (on 2-button
-   mice, the middle button can often be simulated by pressing
-   both mouse buttons together) or by pressing the right mouse
-   button to open the popup menu and choose Paste. To copy text
-   from the VTE, just select the desired text and then press the
-   right mouse button and choose Copy from the popup menu.
+   an usual terminal program like xterm. There is basic clipboard
+   support. You can paste the contents of the clipboard by
+   pressing the right mouse button to open the popup menu and
+   choosing Paste. To copy text from the VTE, just select the
+   desired text and then press the right mouse button and choose
+   Copy from the popup menu. On systems running the X Window
+   System you can paste the last selected text by pressing the
+   middle mouse button in the VTE (on 2-button mice, the middle
+   button can often be simulated by pressing both mouse buttons
+   together).
 
    Note
 
    Geany tries to load libvte.so. If this fails, it tries to load
    libvte.so.4. If this fails too, you should check whether you
-   installed libvte correctly. Again, Geany runs also without
-   this library. But it could be, that the library is called
-   something else than libvte.so.4 (e.g. on FreeBSD 6.0 it is
-   called libvte.so.8). So please set a link to the correct file
-   (as root).
+   installed libvte correctly. Again, Geany also runs without
+   this library.
+
+   It could be, that the library is called something else than
+   libvte.so.4 (e.g. on FreeBSD 6.0 it is called libvte.so.8). So
+   please set a link to the correct file (as root).
 # ln -s /usr/lib/libvte.so.X /usr/lib/libvte.so.4
 
    Obviously, you have to adjust the paths and set X to the
@@ -344,7 +375,7 @@ Chapter 3. Usage
 3.4. Search and Replace
 
    You can use regular expressions in the search dialog, just by
-   activating the check box(see the image below). Detailed
+   activating the check box (see the image below). Detailed
    information about special characters can be found in the Table
    3-2.
 
@@ -401,35 +432,42 @@ Chapter 3. Usage
 
    [pref_dialog_templ.jpg]
 
-   Figure 3-6. VTE tab in preferences dialog
+   Figure 3-6. Keybinding tab in preferences dialog
+
+   [pref_dialog_keys.jpg]
+
+   Note
+
+   For more information see Section 3.7.
+
+   Figure 3-7. VTE tab in preferences dialog
 
    [pref_dialog_vte.jpg]
      _________________________________________________________
 
 3.5.1. Compile time options
 
-   There are some options which can only changed at compile time.
-   To change these options, look into src/geany.h to change these
-   settings. To find it, look for a block of lines starting with
-   "#define GEANY_*". All definitions which are not listed here,
-   should not be changed.
+   There are some options which can only be changed at compile
+   time. To change these options, edit the file src/geany.h. Look
+   for a block of lines starting with "#define GEANY_*". Any
+   definitions which are not listed here should not be changed.
 
    Table 3-3. Compile time options
    Option Description Default
-   GEANY_MAX_OPEN_FILES The limit how many files can be open at
-   the same time. 25
+   GEANY_MAX_OPEN_FILES The limit to how many files can be open
+   at the same time. 25
    GEANY_SESSION_FILES How many files should be reopened from the
    last run. Obviously, the value should be smaller than
    GEANY_MAX_OPEN_FILES. 15
-   GEANY_WORDCHARS These characters define the word boundaries.
-   (look at sourcecode)
-   GEANY_MAX_AUTOCOMPLETE_WORDS How many auto complete
+   GEANY_WORDCHARS These characters define word boundaries. (look
+   at sourcecode)
+   GEANY_MAX_AUTOCOMPLETE_WORDS How many auto completion
    suggestions should Geany provide. 30
-   GEANY_STRING_UNTITLED A string used as name for new files. Be
-   aware that the string can be translated, so change it only if
-   you know what you are doing. untitled
-   GEANY_CHECK_FILE_DELAY Time in seconds between a file is
-   checked for changes. 30
+   GEANY_STRING_UNTITLED A string used as the default name for
+   new files. Be aware that the string can be translated, so
+   change it only if you know what you are doing. untitled
+   GEANY_CHECK_FILE_DELAY Time in seconds between checking a file
+   for external changes. 30
    GEANY_WINDOW_MINIMAL_WIDTH The minimal width of the main
    window. 620
    GEANY_WINDOW_MINIMAL_HEIGHT The minimal height of the main
@@ -440,21 +478,350 @@ Chapter 3. Usage
    window at the first start. 600
      _________________________________________________________
 
-3.6. File types
+3.6. Build System
 
-   should be written
+   Geany has an integrated build system. When you compile, link,
+   syntax check or otherwise process a source file, the output
+   will be captured in the Compiler notebook tab of the messages
+   window (assuming you have it visible). If there are any
+   warnings or errors with line numbers shown in the Compiler
+   output tab, you can double click on them and Geany will switch
+   to the relevant source file (if it is open) and mark the line
+   number so the problem can be corrected.
+
+   Depending on the current file's filetype, the Build menu will
+   contain the following items:
+
+     * Compile
+     * Build
+     * Build with "make"
+     * Build with make (custom target)
+     * Execute
+     * Set Includes and Arguments
      _________________________________________________________
 
-3.7. Templates
+3.6.1. Compile
+
+   By default, the Compile command is setup to build binary
+   object files for compilable languages such as C and C++.
+
+   Java will be compiled to class file bytecode. Interpreted
+   languages such as Perl, Python, Ruby will compile to bytecode
+   if the language supports it, or will run a syntax check, or
+   failing that will run the file in the language interpreter.
+     _________________________________________________________
+
+3.6.2. Build
+
+   For compilable languages such as C and C++, the Build command
+   will link the current source file's equivalent object file
+   into an executable. If the object file does not exist, the
+   source will be compiled and linked in one step, producing just
+   the executable binary.
+
+   Interpreted languages do not use the Build command.
+     _________________________________________________________
+
+3.6.3. Build with "make"
+
+   This effectively runs "make all" in the same directory as the
+   current file. The Make tool path must be correctly set in the
+   Tools tab of the Preferences dialog.
+     _________________________________________________________
+
+3.6.4. Build with make (custom target)
+
+   This is identical to running 'Build with "make"' but you will
+   be prompted for the make target name to be passed to the Make
+   tool. For example, typing 'clean' in the dialog prompt will
+   run "make clean" (but using the full path to the Make tool set
+   in Preferences).
+     _________________________________________________________
+
+3.6.5. Execute
+
+   Execute will run the corresponding executable file, shell
+   script or interpreted script in a terminal window. Note that
+   the Terminal tool path must be correctly set in the Tools tab
+   of the Preferences dialog - you can use any terminal program
+   that runs a Bourne compatible shell. After your program or
+   script has finished executing, you will be prompted to press
+   the return key. This allows you to review any text output from
+   the program.
+     _________________________________________________________
+
+3.6.6. Set Includes and Arguments
+
+   By default the Compile and Build commands invoke the compiler
+   and linker with only the basic arguments needed by all
+   programs. Using Set Includes and Arguments you can add any
+   include paths and compile flags for the compiler, any library
+   names and paths for the linker, and any arguments you want to
+   use when running Execute. Note that if you are using the Build
+   command to compile and link in one step, you will need to set
+   both the compiler arguments and the linker arguments in the
+   linker command setting.
+
+   These settings are not saved when Geany is shut down. See
+   below for how to set permanent arguments.
+
+   If you need complex settings for your build system, or several
+   different settings, then writing a Makefile and using 'Build
+   with "make"' is recommended.
+     _________________________________________________________
+
+3.6.7. File type configuration settings
+
+   You can set the commands to run for compiling, building or
+   executing by opening the relevant filetypes.* configuration
+   file, and checking the build_settings section. See Section 3.8
+   for more information.
+     _________________________________________________________
+
+3.7. Keybindings
+
+   For all listed actions you can define your own keybindings.
+   Open the preferences dialog, select the desired action and
+   click on change. In the opening dialog you can press any key
+   combination you want and it will be saved when you press OK.
+   You can define only one key combination for one action.
+
+   Some of the default key combinations cannot be changed, e.g.
+   menu_new or menu_open. These are set by GTK and should be
+   kept, but you can still add other key combinations for these
+   actions. For example to execute menu_open by default Ctrl-O is
+   set, but you can also define Alt-O, so that the file open
+   dialog is shown by pressing either Ctrl-O or Alt-O.
+
+   The following table lists all available actions for keyboard
+   shortcuts.
+
+   Table 3-4. Keybindings action table
+   Action Description
+   Menu items
+   menu_new Creates a new file.
+   menu_open Opens a file.
+   menu_save Saves the current file.
+   menu_saveall Saves all open files.
+   menu_closeall Closes all open files.
+   menu_reloadfile Reloads the current file. All unsaved changes
+   will be lost.
+   menu_undo Undoes the last action.
+   menu_redo Redoes the last action.
+   menu_preferences Opens preferences dialog.
+   menu_findnext Finds next result.
+   menu_findprevious Finds previous result.
+   menu_replace Opens the replace dialog.
+   menu_gotoline Opens the Go To Line dialog.
+   menu_opencolorchooser Opens the colour chooser dialog.
+   menu_fullscreen Switches to fullscreen mode.
+   menu_messagewindow Toggles the message window (status and
+   compiler messages) on and off.
+   menu_zoomin Zooms in the text
+   menu_zoomout Zooms out the text
+   menu_replacetabs Replaces all tabs with the right amount of
+   spaces.
+   menu_foldall Folds all contractible code blocks.
+   menu_unfoldall Unfolds all contracted code blocks.
+   Build options
+   build_compile Compiles the current file.
+   build_link Builds (compiles if necessary and links) the
+   current file.
+   build_make Builds the current file with the Make tool.
+   build_makeowntarget Builds the current file with the Make tool
+   and a given target.
+   build_run Executes the current file in a terminal emulation.
+   build_run2 Executes the current file in a terminal emulation.
+   build_options Opens the build options dialog.
+   Miscellaneous
+   reloadtaglist Reloads the tag/symbol list.
+   switch_editor Switches to editor widget.
+   switch_scribble Switches to scribble widget.
+   switch_vte Switches to VTE widget.
+   switch_tableft Switches to the previous open document.
+   switch_tabright Switches to the next open document.
+   toggle_sidebar Shows or hides the sidebar.
+   Editing operations
+   edit_duplicateline Duplicates the current line.
+   edit_commentline Comments current line or selection.
+   edit_autocomplete Shows auto completion list.
+   edit_calltip Shows call tips for the current function or
+   method.
+   edit_macrolist Shows a list of available macros and variables
+   in the workspace.
+   edit_suppresscompletion If you type something like if or for
+   and press this key, it will not be auto completed.
+     _________________________________________________________
+
+3.8. Filetype definition files
+
+   All colour definitions and other filetype specific settings
+   are stored in the filetype definition files. Those settings
+   are colours for syntax highlighting, general settings like
+   comment characters or word delimiter characters as well as
+   compiler and linker settings.
+
+   The system-wide configuration files can be found in
+   $prefix/share/geany and are called filetypes.$ext, where
+   $prefix is the path where Geany is installed (commonly
+   /usr/local) and $ext is the name of the filetype. For every
+   filetype there is a corresponding definition file. There is
+   one exception: filetypes.common - this file is for general
+   settings, which are not specific to a certain filetype. It is
+   not recommended to edit the system-wide files, because they
+   will be overridden when Geany is updated.
+
+   To change the settings, copy a file from $prefix/share/geany
+   to the subdirectory filedefs in your configuration directory
+   (usually ~/.geany/).
+
+   For example:
+% cp /usr/local/share/geany/filetypes.c /home/username/.geany/filedefs/
+
+   Then you can edit the file and the changes are also available
+   after an update of Geany because they reside in your
+   configuration directory. Alternatively, you can create a file
+   ~/.geany/filedefs/filetypes.X and add only these settings you
+   want to change. All missing settings will be read from the
+   corresponding global definition file in $prefix/share/geany.
+     _________________________________________________________
+
+3.8.1. Format
+
+3.8.1.1. [styling] Section
+
+   In this section the colours for syntax highlighting are
+   defined. The format is always:
+   key=forground_colour;background_colour;bold;italic
+
+   Colours have to be specified as RGB hex values prefixed by 0x.
+   For example red is 0xff0000, blue is 0x0000ff. The values are
+   case-insensitive, but it is a good idea to use small letters.
+   Bold and italic are flags and should only be "true" or
+   "false". If their value is something other than "true" or
+   "false", "false" is assumed.
+     _________________________________________________________
+
+3.8.1.2. [keywords] Section
+
+   This section contains keys for different keyword lists
+   specific to the filetype. Some filetypes do not support
+   keywords, so adding a new key will not work. You can only add
+   or remove keywords to/from an existing list.
+
+   Important
+
+   The keywords list must be in one line without line ending
+   characters.
+     _________________________________________________________
+
+3.8.1.3. [settings] Section
+
+   Table 3-5. General settings
+   Key Description Example
+   wordchars Word delimiting characters. These characters define
+   word boundaries. (look at sourcecode)
+   comment_open A character or string which is used to comment
+   code. If you want to use multiline comments, also set
+   comment_close, otherwise leave it empty. comment_open=/*
+   comment_close If multiline comments are used, this is the
+   character or string to close the comment. comment_close=*/
+   comment_use_indent Set this to false if a comment character or
+   string should start at column 0 of a line. If set to true it
+   uses any indentation of the line.
+
+   Example 3-1. Comment indentation
+
+   comment_use_indent=true would generate this if a line is
+   commented (e.g. with Ctrl-D)
+        #command_example();
+
+   comment_use_indent=false would generate this if a line is
+   commented (e.g. with Ctrl-D)
+#command_example();
+
+   Note
+
+   This setting only works for single line comments.
+   comment_use_indent=true
+     _________________________________________________________
+
+3.8.1.4. [build_settings] Section
+
+   Table 3-6. Build settings
+   Key Description Example
+   compiler This item specifies the command to compile source
+   code files. But it is also possible to use it with interpreted
+   languages like Perl or Python. With these filetypes you can
+   use this option as a kind of syntax parser, which sends output
+   to the compiler message window.
+
+   You should quote the filename to also support filenames with
+   spaces. The following wildcards for filenames are available:
+
+     * %f - complete filename without path
+     * %e - filename without path and without extension
+
+   compiler=gcc -Wall -c "%f"
+   linker This item specifies the command to link the file. If
+   the file is not already compiled, it will be compiled while
+   linking. The -o option is automatically added by Geany. This
+   item works well with GNU gcc, but may be problematic with
+   other compilers (esp. with the linker). linker=gcc -Wall "%f"
+   run_cmd Use this item to execute your file. It has to have
+   been built already. Use the %e wildcard to have only the name
+   of the executable (i.e. without extension) or use the %f
+   wildcard if you need the complete filename, e.g. for shell
+   scripts. run_cmd="./%e"
+     _________________________________________________________
+
+3.8.2. Special file filetypes.common
+
+   There is a special filetype definition file called
+   filetypes.common. This file defines some general
+   non-filetype-specific settings.
+
+   Table 3-7. General settings
+   Key Description Example
+   default The default style for text (e.g. for files without
+   filetype). For the detailed format, please see the above
+   "[styling] Section". default=0x000000;0xffffff;false;false
+   selection The style for colouring selections. Only foreground
+   and background colour are interpreted.
+   selection=0xc0c0c0;0x00007F;false;false
+   brace_good The style for brace highlighting when a matching
+   brace was found. brace_good=0xff0000;0xFFFFFF;true;false
+   brace_bad The style for brace highlighting when no matching
+   brace was found. brace_bad=0x0000ff;0xFFFFFF;true;false
+   current_line The style for colouring the background of the
+   current line. Only the second argument is interpreted.
+   current_line=0x0;0xE5E5E5;false;false
+   folding_style The style of folding icons. Only first and
+   second arguments are used.
+
+   Valid values for the first argument are:
+
+     * 1 - for boxes
+     * 2 - for circles
+
+   Valid values for the second argument are:
+
+     * 1 - for straight lines
+     * 2 - for curved lines
+
+   folding_style=1;1;false;false
+     _________________________________________________________
+
+3.9. Templates
 
    Geany supports several templates for file headers, multiline
-   comments(frame comments), function descriptions, a typical
-   ChangeLog entry and a short GPL notice. To use this templates,
-   just open the edit menu or open the popup menu by
+   comments (frame comments), function descriptions, a typical
+   ChangeLog entry and a short GPL notice. To use these
+   templates, just open the Edit menu or open the popup menu by
    right-clicking in the editor widget, and choose "Insert
    Comments" and insert templates as you want.
 
-   Some templates like file header or ChangeLog entry, will
+   Some templates (like file header or ChangeLog entry) will
    always be inserted at the top of the file.
 
    To insert a function description, the cursor must be inside of
@@ -466,7 +833,7 @@ Chapter 3. Usage
 
    Each template can be customized to your needs. The templates
    are in the configuration directory, which is in ~/.geany/ (see
-   Section 3.2 for further information about configuration
+   Section 3.2 for further information about the configuration
    directory). Just open the desired template with an editor
    (ideally Geany ;-) ) and edit the template as your needs.
    There are some wildcards which will be automatically replaced
@@ -474,32 +841,32 @@ Chapter 3. Usage
 
    All wildcards must be enclosed by "{" and "}", e.g. {date}.
 
-   In the configuration dialog you can find a tab "Templates"(see
-   Figure 3-5). You can define the default values which will be
-   inserted in the templates. You should restart Geany after made
-   changes, because they are only read at startup.
+   In the configuration dialog you can find a tab "Templates"
+   (see Figure 3-5). You can define the default values which will
+   be inserted in the templates. You should restart Geany after
+   making changes, because they are only read at startup.
 
    Since Geany 0.3 there are also templates for creating new
    files. They can be found in ~/.geany/, too. All template files
    for creating new files begin with template.filetype. followed
    by the filetype. At creating a new file with a filetype
    template, the template for the fileheader is automatically
-   prepended. Please note, that the complete behaviour is still
+   prepended. Please note that the complete behaviour is still
    under development and will probably be changed in one of the
    next releases. Sorry.
 
 
-   Table 3-4. Template wildcards
+   Table 3-8. Template wildcards
    Wildcard Description Available in following templates
    developer The name of the developer. filetypes, file header,
    function description, ChangeLog entry
-   initial The initials of the developer name, e.g. "ET" for
-   Enrico Troeger or "JFD" for John Foobar Doe. filetypes, file
-   header, function description, ChangeLog entry
+   initial The developer's initials, e.g. "ET" for Enrico Troeger
+   or "JFD" for John Foobar Doe. filetypes, file header, function
+   description, ChangeLog entry
    mail The email address of the developer. file header, function
    description, ChangeLog entry
-   company The company name, the developer is working for.
-   filetypes, file header, function description, ChangeLog entry
+   company The company the developer is working for. filetypes,
+   file header, function description, ChangeLog entry
    year The current year in the format: YYYY filetypes, file
    header, function description, ChangeLog entry
    version The initial version of a new file. filetypes, file
@@ -509,14 +876,14 @@ Chapter 3. Usage
    untitled The string "untitled" (this will be translated to
    your locale), used in filetype templates filetypes, file
    header, function description, ChangeLog entry
-   geanyversion The actual Geany version, e.g. "Geany 0.6"
+   geanyversion The actual Geany version, e.g. "Geany 0.7"
    filetypes, file header, function description, ChangeLog entry
    datetime The current date and time in the format: DD.MM.YYYY
    HH:mm:ss ZZZZ file header, function description
    filename The filename of the current file. Only available for
    the file header template. file header
    gpl This wildcard inserts a short GPL notice. file header
-   functionname The function name of the function at cursor
+   functionname The function name of the function at the cursor
    position. This wildcard will only be replaced in the function
    description template. function description
    If you need any other wildcards or a special date/time format,
@@ -527,60 +894,8 @@ Appendix A. Geany key mapping
 
 A.1. Geany key mapping
 
-   The following table lists several useful key codes, which you
-   can use in Geany.
-
-   Table A-1. Key Table
-   Key Function
-   File operations
-   Ctrl-N Create new file
-   Ctrl-O Open file
-   Ctrl-S Save current file
-   Ctrl-R Reload the current file. All unsaved changes will be
-   lost.
-   Ctrl-Shift-S Save all open files
-   Ctrl-W Close current file
-   Alt-D Close all open files
-   Editing operations
-   Ctrl-X Cut the current selection and copy it into the
-   clipboard
-   Ctrl-C Copy the current selection into the clipboard
-   Ctrl-V Paste the content of the clipboard at the current
-   position
-   Ctrl-Z Undo the last action
-   Ctrl-Y Redo the last action
-   Ctrl-G Duplicate the current line
-   Ctrl-A Select all
-   Ctrl-D Comment current line or selection
-   Ctrl-Space Show auto completion list
-   Ctrl-Return Show list of available(in the workspace) macros
-   and variables
-   Alt-Space Show call tips for the current function or method
-   Shift-Space Insert just a blank. Useful after typing if or
-   while, to explicitly suppress the use of construct auto
-   completion
-   Ctrl-Shift-R Reload the tag/symbol list
-   Finding text
-   Ctrl-F Open find dialog
-   F3 Find next
-   Building files
-   F8 Compile the current file.
-   F9 Build the current file.
-   Shift-F9 Build the current file with the make tool.
-   F5 Execute the current file in a terminal emulation.
-   Miscellaneous
-   Ctrl-Left Moves the cursor to the left word boundary.
-   Ctrl-Right Moves the cursor to the next word.
-   Alt-Left Switch to the previous open document
-   Alt-Right Switch to the next open document
-   Ctrl-+ Zoom in the text
-   Ctrl-- Zoom out the text
-   Ctrl-P Open preferences dialog
-   F1 Show help
-   F6 Switch to VTE widget
-   F11 Switch to fullscreen mode
-   F12 Switch to Scribble widget
-   Ctrl-Q Quit
+   Since Geany 0.7, most of the keybindings are definable in the
+   preferences dialog. See Section 3.7.
      _________________________________________________________
 
 Appendix B. GNU General Public License
