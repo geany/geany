@@ -3,6 +3,8 @@
  * README, NEWS: updated for Geany 0.7
  * src/keybindings.c: changed default keybinding for menu_replace to
                       Ctrl+E
+ * new release: Geany 0.7 "Ravik"
+ * configure.in: fixed svn detection code, changed version to 0.8
 
 
 2006-06-03  Enrico Troeger  <enrico.troeger@uvena.de>

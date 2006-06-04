@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 dnl $Id$
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(geany, 0.7)
+AM_INIT_AUTOMAKE(geany, 0.8)
 
 AM_CONFIG_HEADER(config.h)
 
@@ -55,14 +55,12 @@ AC_CHECK_FUNCS([gethostname ftruncate fgetpos getcwd gettimeofday isascii mblen 
 
 # get svn revision
 SVN=`which svn`
-case "x$SVN" in
-	x|xno)
-		REVISION="-1"
-		;;
-	*)
-		REVISION=r`$SVN info|grep 'Last Changed Rev'|cut -d' ' -f4`
-		;;
-esac
+if test -d ".svn" -a -x "${SVN}"
+then
+	REVISION=r`$SVN info|grep 'Last Changed Rev'|cut -d' ' -f4`
+else
+	REVISION="-1"
+fi
 AC_DEFINE_UNQUOTED([REVISION], "$REVISION", [subversion revision number])
 
 # GTK checks
@@ -156,6 +154,10 @@ echo "Install Geany in                   : ${prefix}"
 echo "Using GTK version                  : ${GTK_VERSION}"
 echo "Use virtual terminal support       : ${want_vte}"
 echo "Use named pipe support             : ${want_pipe}"
+if test "${REVISION}" != "-1"
+then
+	echo "Compiling Subversion revision      : ${REVISION}"
+fi
 echo ""
 echo "Configuration is done OK."
 echo ""
