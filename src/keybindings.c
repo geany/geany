@@ -109,7 +109,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences, GDK_p, GDK_CONTROL_MASK, "menu_preferences");
 	keys[GEANY_KEYS_MENU_FIND_NEXT] = fill(cb_func_menu_findnext, GDK_F3, 0, "menu_findnext");
 	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious, GDK_F3, GDK_SHIFT_MASK, "menu_findprevious");
-	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace, GDK_F3, GDK_CONTROL_MASK, "menu_replace");
+	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace, GDK_e, GDK_CONTROL_MASK, "menu_replace");
 	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline, GDK_l, GDK_CONTROL_MASK, "menu_gotoline");
 	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser, 0, 0, "menu_opencolorchooser");
 	keys[GEANY_KEYS_MENU_FULLSCREEN] = fill(cb_func_menu_fullscreen, GDK_F11, 0, "menu_fullscreen");
