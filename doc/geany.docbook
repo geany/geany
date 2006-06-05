@@ -626,8 +626,13 @@
 		<section id="buildsystem">
 			<title>Build System</title>
 			<para>
-				<application>&app;</application> has an integrated build system. When you compile,
-				link, syntax check or otherwise process a source file, the output will be captured
+				<application>&app;</application> has an integrated build system.
+				Firstly this means that the current source file will be saved before
+				it is processed. This is for convenience so that you don't need to keep saving
+				small changes to the current file before building.
+			</para>
+			<para>
+				Secondly the output for Compile, Build and Make actions will be captured
 				in the Compiler notebook tab of the messages window (assuming you have it visible).
 				If there are any warnings or errors with line numbers shown in the Compiler output tab,
 				you can double click on them and <application>&app;</application> will switch to
@@ -649,14 +654,17 @@
 			<section>
 				<title>Compile</title>
 				<para>
-					By default, the Compile command is setup to build binary object files for
-					compilable languages such as C and C++.
+					The Compile command has different uses for different kinds of files.
 				</para>
 				<para>
-					Java will be compiled to
-					class file bytecode. Interpreted languages such as Perl, Python, Ruby will
+					For compilable languages such as C and C++, the Compile command is setup
+					to compile the current source file into a binary object file.
+				</para>
+				<para>
+					Java source files will be compiled to class file bytecode.
+					Interpreted languages such as Perl, Python, Ruby will
 					compile to bytecode if the language supports it, or will run a syntax check,
-					or failing that will run the file in the language interpreter.
+					or failing that will run the file in its language interpreter.
 				</para>
 			</section>
 			<section>
@@ -682,10 +690,10 @@
 			<section>
 				<title>Build with make (custom target)</title>
 				<para>
-					This is identical to running 'Build with "make"' but you will be prompted
+					This is similar to running Build with "make" but you will be prompted
 					for the make target name to be passed to the Make tool. For example,
-					typing 'clean' in the dialog prompt will run "make clean" (but using the
-					full path to the Make tool set in Preferences).
+					typing 'clean' in the dialog prompt will run "make clean" (again using
+					the full path to the Make tool).
 				</para>
 			</section>
 			<section>
@@ -695,8 +703,11 @@
 					script in a terminal window. Note that the Terminal tool path must be correctly
 					set in the Tools tab of the Preferences dialog - you can use any terminal
 					program that runs a Bourne compatible shell.
+				</para>
+				<para>
 					After your program or script has finished executing, you will be prompted to
-					press the return key. This allows you to review any text output from the program.
+					press the return key. This allows you to review any text output from the program
+					before the terminal window is closed.
 				</para>
 			</section>
 			<section>
@@ -706,18 +717,20 @@
 					only the basic arguments needed by all programs.
 					Using Set Includes and Arguments you can add any include
 					paths and compile flags for the compiler, any library names and paths for the
-					linker, and any arguments you want to use when running Execute. Note that if
-					you are using the Build command to compile and link in one step, you will need
+					linker, and any arguments you want to use when running Execute.
+				</para>
+				<note><para>
+					If you are using the Build command to compile and link in one step, you will need
 					to set both the compiler arguments and the linker arguments in the linker
 					command setting.
-				</para>
+				</para></note>
 				<para>
 					These settings are not saved when <application>&app;</application> is shut
 					down. See below for how to set permanent arguments.
 				</para>
 				<para>
 					If you need complex settings for your build system, or several different
-					settings, then writing a Makefile and using 'Build with "make"' is recommended.
+					settings, then writing a Makefile and using Build with "make" is recommended.
 				</para>
 			</section>
 			<section>
@@ -725,7 +738,7 @@
 				<para>
 					You can set the commands to run for compiling, building or executing
 					by opening the relevant <filename>filetypes.*</filename> configuration file,
-					and checking the build_settings section. See <xref linkend="filetypes"/> for more
+					and checking the [build_settings] section. See <xref linkend="filetypes"/> for more
 					information.
 				</para>
 			</section>

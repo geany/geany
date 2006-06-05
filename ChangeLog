@@ -1,3 +1,8 @@
+2006-06-05  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * doc/geany.docbook: Added save current file behaviour when building.
+
+
 2006-06-05  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/dialog.c, src/callbacks.c: Added dialog to show defined keyboard
