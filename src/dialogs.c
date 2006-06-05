@@ -1834,3 +1834,56 @@ gboolean dialogs_show_question(const gchar *text, ...)
 	return ret;
 }
 
+
+void dialogs_show_keyboard_shortcuts(void)
+{
+	GtkWidget *dialog, *hbox, *label1, *label2, *label3;
+	GString *text_names = g_string_sized_new(600);
+	GString *text_keys = g_string_sized_new(600);
+	gchar *shortcut;
+	guint i;
+
+	dialog = gtk_dialog_new_with_buttons(_("Keyboard shortcuts"), GTK_WINDOW(app->window),
+						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
+
+	label3 = gtk_label_new(_("The following keyboard shortcuts are defined:"));
+	gtk_misc_set_padding(GTK_MISC(label3), 0, 6);
+	gtk_misc_set_alignment(GTK_MISC(label3), 0, 0);
+
+	hbox = gtk_hbox_new(FALSE, 5);
+
+	label1 = gtk_label_new(NULL);
+	gtk_misc_set_padding(GTK_MISC(label1), 15, 0);
+
+	label2 = gtk_label_new(NULL);
+	gtk_misc_set_padding(GTK_MISC(label2), 15, 0);
+
+	for (i = 0; i < GEANY_MAX_KEYS; i++)
+	{
+		shortcut = gtk_accelerator_get_label(keys[i]->key, keys[i]->mods);
+		g_string_append(text_names, keys[i]->name);
+		g_string_append(text_names, "\n");
+		g_string_append(text_keys, shortcut);
+		g_string_append(text_keys, "\n");
+		g_free(shortcut);
+	}
+
+	gtk_label_set_text(GTK_LABEL(label1), text_names->str);
+	gtk_label_set_text(GTK_LABEL(label2), text_keys->str);
+
+	gtk_container_add(GTK_CONTAINER(hbox), label1);
+	gtk_container_add(GTK_CONTAINER(hbox), label2);
+
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label3);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
+
+	g_signal_connect((gpointer) dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
+
+	gtk_widget_show_all(dialog);
+
+	g_string_free(text_names, TRUE);
+	g_string_free(text_keys, TRUE);
+}
+

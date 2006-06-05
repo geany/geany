@@ -79,4 +79,6 @@ void dialogs_show_prefs_dialog(void);
 
 gboolean dialogs_show_question(const gchar *text, ...);
 
+void dialogs_show_keyboard_shortcuts(void);
+
 #endif

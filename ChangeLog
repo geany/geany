@@ -1,10 +1,19 @@
+2006-06-05  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/dialog.c, src/callbacks.c: Added dialog to show defined keyboard
+                                  shortcuts, this replaces the previous
+                                  link to the documentation.
+ * src/main.c, src/document.c: Fixed wrong setting of filetype when
+                               using "All files" as filetype.
+
+
 2006-06-04  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * README, NEWS: updated for Geany 0.7
- * src/keybindings.c: changed default keybinding for menu_replace to
-                      Ctrl+E
+ * src/keybindings.c: Changed default keybinding for menu_replace to
+                      Ctrl+E.
  * new release: Geany 0.7 "Ravik"
- * configure.in: fixed svn detection code, changed version to 0.8
+ * configure.in: Fixed svn detection code, changed version to 0.8.
 
 
 2006-06-03  Enrico Troeger  <enrico.troeger@uvena.de>
