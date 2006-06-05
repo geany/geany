@@ -66,8 +66,8 @@ void dialogs_show_open_file ()
 			GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 			gint i;
 
-			app->open_filesel = gtk_file_chooser_dialog_new(_("Open File"), NULL,
-					GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
+			app->open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->window),
+					GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
 
 			viewbtn = gtk_button_new_with_mnemonic(_("_View"));
 			gtk_tooltips_set_tip(tooltips, viewbtn,
@@ -160,7 +160,7 @@ void dialogs_show_save_as ()
 
 	if (app->save_filesel == NULL)
 	{
-		app->save_filesel = gtk_file_chooser_dialog_new(_("Save File"), NULL,
+		app->save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(app->window),
 					GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 		gtk_window_set_modal(GTK_WINDOW(app->save_filesel), TRUE);

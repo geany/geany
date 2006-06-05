@@ -5,6 +5,8 @@
                                   link to the documentation.
  * src/main.c, src/document.c: Fixed wrong setting of filetype when
                                using "All files" as filetype.
+ * src/dialogs.c: fixed compiler warning "not enough variable arguments
+                  to fit a sentinel"
 
 
 2006-06-04  Enrico Troeger  <enrico.troeger@uvena.de>
