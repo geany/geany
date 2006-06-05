@@ -370,7 +370,7 @@ void document_new_file(filetype *ft)
 		g_free(template);
 
 		doc_list[idx].encoding = g_strdup("UTF-8");
-		document_set_filetype(idx, (ft) ? ft : filetypes[GEANY_FILETYPES_ALL]);
+		document_set_filetype(idx, ft);
 		utils_set_window_title(idx);
 		utils_build_show_hide(idx);
 		utils_update_tag_list(idx, FALSE);

@@ -541,8 +541,7 @@ gint main(gint argc, gchar **argv)
 	app->opening_session_files = FALSE;
 
 	// open a new file if no other file was opened
-	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
-		document_new_file(filetypes[GEANY_FILETYPES_ALL]);
+	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)	document_new_file(NULL);
 
 	utils_close_buttons_toggle();
 	utils_save_buttons_toggle(FALSE);
