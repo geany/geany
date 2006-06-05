@@ -398,7 +398,6 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 	gint line_start = sci_get_position_from_line(sci, line);
 	gint line_len = sci_get_line_length(sci, line);
 	gint line_pos = pos - line_start - 1;
-	gint i = 0;
 	gint current = pos - line_start;
 	gint rootlen;
 	gint startword = current, lexer = SSM(sci, SCI_GETLEXER, 0, 0);
@@ -407,14 +406,15 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 	gchar *root;
 	const GPtrArray *tags;
 
-	sci_get_line(sci, line, linebuf);
-
 	//if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL) return FALSE;
 	if (lexer == SCLEX_HTML && style == SCE_H_DEFAULT) return FALSE;
 	if (lexer == SCLEX_CPP && (style == SCE_C_COMMENT ||
 			style == SCE_C_COMMENTLINE || style == SCE_C_COMMENTDOC)) return FALSE;
 
-	while ((startword > 0) && (strchr(GEANY_WORDCHARS, linebuf[startword - 1]) || strchr(GEANY_WORDCHARS, linebuf[startword - 1])))
+	sci_get_line(sci, line, linebuf);
+
+	// find the start of the current word
+	while ((startword > 0) && (strchr(GEANY_WORDCHARS, linebuf[startword - 1])))
 		startword--;
 	linebuf[current] = '\0';
 	root = linebuf + startword;
@@ -440,11 +440,13 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 	}
 	else
 	{	// C and C++ tag autocompletion
-		while (! g_ascii_isspace(linebuf[line_pos - i])) i++;
+		gint i = 0;
+
+		while ((line_pos - i >= 0) && ! g_ascii_isspace(linebuf[line_pos - i])) i++;
 		if (i < 4) return FALSE;	// go home if typed less than 4 chars
 
 		tags = tm_workspace_find(root, tm_tag_max_t, NULL, TRUE);
-		if (NULL != tags)
+		if (NULL != tags && tags->len > 0)
 		{
 			GString *words = g_string_sized_new(150);
 			TMTag *tag;

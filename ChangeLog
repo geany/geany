@@ -1,6 +1,8 @@
 2006-06-05  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * doc/geany.docbook: Added save current file behaviour when building.
+ * src/sci_cb.c: Fix empty white box glitch with tag autocompletion,
+				 also improves typing response efficiency.
 
 
 2006-06-05  Enrico Troeger  <enrico.troeger@uvena.de>
