@@ -2,6 +2,7 @@
 
  * src/highlighting.c: enabled folding for markup filetypes
                        (HTML, XML, PHP, DocBook)
+ * src/treeviews.c: replaced "Members" by "Methods" to make it clearer
 
 
 2006-06-05  Nick Treleaven  <nick.treleaven@btinternet.com>
