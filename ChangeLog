@@ -1,3 +1,9 @@
+2006-06-06  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/highlighting.c: enabled folding for markup filetypes
+                       (HTML, XML, PHP, DocBook)
+
+
 2006-06-05  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * doc/geany.docbook: Added save current file behaviour when building.

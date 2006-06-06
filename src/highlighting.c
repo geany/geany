@@ -1070,6 +1070,9 @@ void styleset_markup(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_HPHP_OPERATOR, GEANY_FILETYPES_XML, 40);
 	styleset_set_style(sci, SCE_HPHP_HSTRING_VARIABLE, GEANY_FILETYPES_XML, 41);
 	styleset_set_style(sci, SCE_HPHP_COMPLEX_VARIABLE, GEANY_FILETYPES_XML, 42);
+
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html.preprocessor", (sptr_t) "1");
 }
 
 
@@ -1649,6 +1652,9 @@ void styleset_docbook(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_H_SGML_BLOCK_DEFAULT, GEANY_FILETYPES_DOCBOOK, 26);
 	styleset_set_style(sci, SCE_H_SGML_1ST_PARAM_COMMENT, GEANY_FILETYPES_DOCBOOK, 27);
 	styleset_set_style(sci, SCE_H_SGML_ERROR, GEANY_FILETYPES_DOCBOOK, 28);
+
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.html.preprocessor", (sptr_t) "1");
 }
 
 
