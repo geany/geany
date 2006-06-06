@@ -972,7 +972,24 @@ on_editor_button_press_event           (GtkWidget *widget,
 	}
 #endif
 
-	//if (event->type == GDK_2BUTTON_PRESS) geany_debug("double click");
+	// experimental code to simulate pasting by middle mouse button
+	if (event->button == 2)
+	{
+		GtkClipboard *cp = gtk_clipboard_get(gdk_atom_intern("PRIMARY", FALSE));
+
+		if (gtk_clipboard_wait_is_text_available(cp))
+		{
+			gint idx = document_get_cur_idx();
+			gchar *text = gtk_clipboard_wait_for_text(cp);
+
+			if (idx >= 0 && text != NULL)
+			{
+				sci_add_text(doc_list[idx].sci, text);
+				g_free(text);
+				return TRUE;
+			}
+		}
+	}
 
 	if (event->button == 3)
 	{
