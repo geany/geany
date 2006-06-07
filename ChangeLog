@@ -2,6 +2,9 @@
 
  * src/callbacks.c: Fixed segfault when inserting comments and no
                     filetype is set.
+ * src/callbacks.c, src/sciwrappers.c, src/sciwrappers.h:
+   Use the character position under the mouse click for Go to
+   definition/declaration and for overridden middle click text paste.
 
 
 2006-06-06  Enrico Troeger  <enrico.troeger@uvena.de>

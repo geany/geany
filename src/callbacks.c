@@ -964,11 +964,13 @@ on_editor_button_press_event           (GtkWidget *widget,
                                         GdkEventButton *event,
                                         gpointer user_data)
 {
+	gint idx = GPOINTER_TO_INT(user_data);
+	gint clickpos = sci_get_position_from_xy(doc_list[idx].sci, event->x, event->y, FALSE);
 
 #ifndef GEANY_WIN32
 	if (event->button == 1)
 	{
-		utils_check_disk_status(GPOINTER_TO_INT(user_data));
+		utils_check_disk_status(idx);
 	}
 #endif
 
@@ -979,12 +981,11 @@ on_editor_button_press_event           (GtkWidget *widget,
 
 		if (gtk_clipboard_wait_is_text_available(cp))
 		{
-			gint idx = document_get_cur_idx();
 			gchar *text = gtk_clipboard_wait_for_text(cp);
 
-			if (idx >= 0 && text != NULL)
+			if (text != NULL)
 			{
-				sci_add_text(doc_list[idx].sci, text);
+				sci_insert_text(doc_list[idx].sci, clickpos, text);
 				g_free(text);
 				return TRUE;
 			}
@@ -993,16 +994,12 @@ on_editor_button_press_event           (GtkWidget *widget,
 
 	if (event->button == 3)
 	{
-		/// TODO pos should possibly be the position of the mouse pointer instead of the
-		/// current sci position
-		gint pos = sci_get_current_position(doc_list[GPOINTER_TO_INT(user_data)].sci);
-
-		utils_find_current_word(doc_list[GPOINTER_TO_INT(user_data)].sci, pos,
-					current_word, sizeof current_word);
+		utils_find_current_word(doc_list[idx].sci, clickpos,
+			current_word, sizeof current_word);
 
 		utils_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
-		utils_update_popup_copy_items(GPOINTER_TO_INT(user_data));
-			utils_update_insert_include_item(GPOINTER_TO_INT(user_data), 0);
+		utils_update_popup_copy_items(idx);
+		utils_update_insert_include_item(idx, 0);
 		gtk_menu_popup(GTK_MENU(app->popup_menu), NULL, NULL, NULL, NULL, event->button, event->time);
 
 		return TRUE;

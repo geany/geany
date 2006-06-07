@@ -480,6 +480,13 @@ gint sci_get_selected_text_length(ScintillaObject* sci)
 }
 
 
+gint sci_get_position_from_xy(ScintillaObject* sci, gint x, gint y, gboolean nearby)
+{
+	// for nearby return -1 if there is no character near to the x,y point.
+	return SSM(sci, (nearby) ? SCI_POSITIONFROMPOINTCLOSE : SCI_POSITIONFROMPOINT, x, y);
+}
+
+
 void sci_get_xy_from_position(ScintillaObject* sci,gint pos, gint* x, gint* y)
 {
 	*x = SSM(sci, SCI_POINTXFROMPOSITION,0, (int) pos);

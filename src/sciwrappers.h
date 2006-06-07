@@ -81,6 +81,7 @@ void				sci_get_line				(ScintillaObject* sci, gint line, gchar* text);
 gint 				sci_get_line_length			(ScintillaObject* sci, gint line);
 gint				sci_get_line_count			( ScintillaObject* sci );
 void 				sci_get_xy_from_position	(ScintillaObject* sci,gint pos, gint* x, gint* y);
+gint				sci_get_position_from_xy	(ScintillaObject* sci, gint x, gint y, gboolean nearby);
 
 void 				sci_set_undo_collection		(ScintillaObject* sci, gboolean set);
 gboolean			sci_get_undo_collection		(ScintillaObject* sci);
