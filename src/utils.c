@@ -457,10 +457,10 @@ gint utils_get_local_tag(gint idx, const gchar *qual_name)
 }
 
 
-gboolean utils_goto_workspace_tag(const gchar *file, gint line)
+gboolean utils_goto_workspace_tag(const gchar *file, gboolean is_tm_filename, gint line)
 {
 	gint page_num;
-	gint file_idx = document_find_by_filename(file);
+	gint file_idx = document_find_by_filename(file, is_tm_filename);
 	gboolean ret;
 
 	if (file_idx < 0) return FALSE;

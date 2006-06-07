@@ -54,8 +54,10 @@
 
 
 
-/* returns the index of the notebook page which has the given filename */
-gint document_find_by_filename(const gchar *filename)
+/* returns the index of the notebook page which has the given filename
+ * is_tm_filename is needed when passing TagManager filenames because they are
+ * dereferenced, and would not match the link filename. */
+gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
 {
 	guint i;
 
@@ -63,11 +65,13 @@ gint document_find_by_filename(const gchar *filename)
 
 	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 	{
+		gchar *dl_fname = (is_tm_filename) ? doc_list[i].tm_file->file_name :
+			doc_list[i].file_name;
 #ifdef GEANY_WIN32
 		// ignore the case of filenames and paths under WIN32, causes errors if not
-		if (doc_list[i].file_name && ! strcasecmp(doc_list[i].file_name, filename)) return i;
+		if (dl_fname && ! strcasecmp(dl_fname, filename)) return i;
 #else
-		if (doc_list[i].file_name && utils_strcmp(doc_list[i].file_name, filename)) return i;
+		if (dl_fname && utils_strcmp(dl_fname, filename)) return i;
 #endif
 	}
 	return -1;
@@ -439,7 +443,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		}
 
 		// if file is already open, switch to it and go
-		idx = document_find_by_filename(utf8_filename);
+		idx = document_find_by_filename(utf8_filename, FALSE);
 		if (idx >= 0)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),

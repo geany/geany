@@ -26,7 +26,7 @@
 
 
 /* returns the index of the notebook page which has the given filename */
-gint document_find_by_filename(const gchar*);
+gint document_find_by_filename(const gchar*, gboolean is_tm_filename);
 
 
 /* returns the index of the notebook page which has sci */

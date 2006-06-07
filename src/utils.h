@@ -59,7 +59,7 @@ const GList *utils_get_tag_list(gint idx, guint tag_types);
 
 gint utils_get_local_tag(gint idx, const gchar *qual_name);
 
-gboolean utils_goto_workspace_tag(const gchar *file, gint line);
+gboolean utils_goto_workspace_tag(const gchar *file, gboolean is_tm_filename, gint line);
 
 gboolean utils_goto_line(gint idx, gint line);
 

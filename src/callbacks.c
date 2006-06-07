@@ -1318,6 +1318,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 				{
 					if (! utils_goto_workspace_tag(
 							TM_TAG(tags->pdata[i])->atts.entry.file->work_object.file_name,
+							TRUE,
 							TM_TAG(tags->pdata[i])->atts.entry.line))
 					{
 						utils_beep();
@@ -1372,7 +1373,7 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 				gtk_tree_model_get(model, &iter, 0, &line, 1, &file, -1);
 				if (file && strlen (file) > 0)
 				{
-					utils_goto_workspace_tag(file, line);
+					utils_goto_workspace_tag(file, FALSE, line);
 				}
 				g_free(file);
 			}
