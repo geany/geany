@@ -2020,6 +2020,12 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 	gchar *cur_tag = NULL;
 	gint line = -1, pos = 0;
 
+	if (doc_list[idx].file_type == NULL)
+	{
+		msgwin_status_add(_("Please set the filetype for the current file before using this function."));
+		return;
+	}
+
 	if (doc_list[idx].file_type->id != GEANY_FILETYPES_JAVA &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_ALL)
 	{
@@ -2064,6 +2070,12 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	gchar *text;
 
+	if (doc_list[idx].file_type == NULL)
+	{
+		msgwin_status_add(_("Please set the filetype for the current file before using this function."));
+		return;
+	}
+
 	switch (doc_list[idx].file_type->id)
 	{
 		case GEANY_FILETYPES_PASCAL:
@@ -2097,6 +2109,12 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	gchar *text;
+
+	if (doc_list[idx].file_type == NULL)
+	{
+		msgwin_status_add(_("Please set the filetype for the current file before using this function."));
+		return;
+	}
 
 	switch (doc_list[idx].file_type->id)
 	{
@@ -2151,6 +2169,12 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	gchar *text;
 	gchar *ext = NULL;
+
+	if (doc_list[idx].file_type == NULL)
+	{
+		msgwin_status_add(_("Please set the filetype for the current file before using this function."));
+		return;
+	}
 
 	if (doc_list[idx].file_name == NULL)
 		ext = doc_list[idx].file_type->extension;

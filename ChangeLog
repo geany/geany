@@ -1,3 +1,9 @@
+2006-06-07  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/callbacks.c: Fixed segfault when inserting comments and no
+                    filetype is set.
+
+
 2006-06-06  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/highlighting.c: enabled folding for markup filetypes
@@ -9,7 +15,7 @@
 
  * doc/geany.docbook: Added save current file behaviour when building.
  * src/sci_cb.c: Fix empty white box glitch with tag autocompletion,
-				 also improves typing response efficiency.
+                 also improves typing response efficiency.
 
 
 2006-06-05  Enrico Troeger  <enrico.troeger@uvena.de>
