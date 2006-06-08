@@ -1,0 +1,51 @@
+.TH "GEANY" "1" "June 08, 2006" "@PACKAGE@ @VERSION@" ""
+.SH "NAME"
+Geany \(em a small and lightweight IDE
+.SH "SYNOPSIS"
+.PP
+\fBgeany\fR [\fBoption\fP]  [\fBfiles ...\fP]
+.SH "DESCRIPTION"
+.PP
+Geany is a small and fast editor with basic features of an integrated development environment.
+.PP
+Some of its features: syntax highlighting, code completion, code folding, symbol/tag lists and
+many supported filetypes like C(++), Java, PHP, HTML, DocBook, Perl and more.
+.PP
+Homepage: http://geany.uvena.de
+
+.SH "OPTIONS"
+.IP "\fB-n\fP           \fB\-\-no-ctags\fP         " 10
+Don't load auto completion and call tip data. Use this option, if you don't want to use them.
+For more information see documentation.
+.IP "\fB-m\fP           \fB\-\-no-msgwin\fP         " 10
+Do not show the message window. Use this option if you do not need compiler messages
+or VTE support.
+.IP "\fB-t\fP           \fB\-\-no-terminal\fP         " 10
+Don't load terminal support. Use this option, if you don't want to load the virtual terminal
+emulator widget at startup. If you don't have libvte.so.4 installed, then terminal-support is
+automatically disabled.
+.IP "\fB-l\fP           \fB\-\-vte-lib\fP         " 10
+Specify explicitly the path including filename or only the filename to the VTE library, e.g.
+/usr/lib/libvte.so or libvte.so. This option is only needed, when the autodetection does not
+work.
+.IP "\fB-c\fP           \fB\-\-config\fP         " 10
+Use an alternate configuration directory. Default configuration directory is
+~/.geany/ and there resides geany.conf and some template files.
+.IP "\fB-d\fP           \fB\-\-debug\fP         " 10
+Runs geany in debug mode, which means being verbose and printing lots of information.
+.IP "\fB-?\fP           \fB\-\-help\fP         " 10
+Show help information and exit.
+.IP "\fB-v\fP           \fB\-\-version\fP         " 10
+Show version information and exit.
+.PP
+geany supports all generic GTK options, a list is available on the help screen.
+
+.SH "AUTHOR"
+.PP
+This manual page was written by Enrico Troeger <enrico.troeger@uvena.de>. Permission is
+granted to copy, distribute and/or modify this document under
+the terms of the GNU General Public License, Version 2 any
+later version published by the Free Software Foundation.
+.PP
+The complete text of the GNU General Public License can be found in @GEANY_DATA_DIR@/GPL-2.
+
