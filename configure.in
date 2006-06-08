@@ -135,6 +135,8 @@ fi
 
 GEANY_PIXMAPS_DIR=`eval echo ${datadir}/pixmaps`
 AC_SUBST(GEANY_PIXMAPS_DIR)
+GEANY_DATA_DIR=`eval echo ${datadir}/geany`
+AC_SUBST(GEANY_DATA_DIR)
 
 AC_OUTPUT([
 Makefile
@@ -145,6 +147,7 @@ scintilla/include/Makefile
 src/Makefile
 po/Makefile.in
 doc/Makefile
+doc/geany.1
 geany.spec
 geany.desktop
 ])
