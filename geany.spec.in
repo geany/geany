@@ -1,74 +1,49 @@
-%define nam	@PACKAGE@
-%define ver	@VERSION@
-%define rel	1
-
-
-Summary:	A fast and lightweight IDE using GTK2
-Name:		%nam
-Version:	%ver
-Release:	%rel
-License:	GPL2
-Group:		Development/Tools
-Vendor:		Enrico Troeger  <enrico.troeger@uvena.de>
-Source:		http://geany.uvena.de/files/%{nam}-%{ver}.tar.gz
-URL:		http://geany.uvena.de/
-BuildRoot:	/var/tmp/%{nam}-%{ver}-root
-
-Requires: 	glib2 >= @GLIB_REQUIRED@
-Requires: 	gtk2 >= @GTK_REQUIRED@
-Requires: 	pango >= @PANGO_REQUIRED@
-
-BuildRequires: 	glib2-devel >= @GLIB_REQUIRED@
-BuildRequires: 	gtk2-devel >= @GTK_REQUIRED@
-BuildRequires: 	pango-devel >= @PANGO_REQUIRED@
-
-Distribution:	Any
-Packager:	Enrico Troeger  <enrico.troeger@uvena.de>
-
+Summary:       A fast and lightweight IDE using GTK2
+Name:          geany
+Version:       @VERSION@
+Release:       1
+License:       GPL2
+Group:         Development/Tools
+Vendor:        Enrico Tröger <enrico.troeger@uvena.de>
+Packager:      Enrico Tröger <enrico.troeger@uvena.de>
+Source:        http://files.uvena.de/geany/%{name}-%{version}.tar.bz2
+URL:           http://geany.uvena.de/
+BuildRoot:     %{_tmpdir}/%{name}-%{version}-%{release}-root
+Requires:      glib2, gtk2, pango
+BuildRequires: glib2-devel, gtk2-devel, pango-devel
 
 %description
-geany is a text editor using GTK2 with basic features of an integrated development environment.
+Geany is a small and fast editor with basic features of an integrated development environment.
+
 Some features:
 - syntax highlighting
 - code completion
+- code folding
 - call tips
 - folding
 - many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal
 - symbol lists
 
-
-%changelog
-* Wed Nov 09 2005 Enrico Troeger <enrico.troeger@uvena.de>
-	- Updated paths, hope that works but I have no chance to test
-
-* Tue Jun 14 2005 Enrico Troeger <enrico.troeger@uvena.de>
-	- First version of the spec file. It seems to work.
-
 %prep
 %setup -q
 
 %build
-if [ ! -f configure ]; then
-  ./autogen.sh --prefix=%{_prefix} --sysconfdir=%{_sysconfdir} --localstatedir=/var/lib
-else
-  %configure --prefix=%{_prefix}
-fi
-
-make
+%configure
+%__make
 
 %install
-rm -rf $RPM_BUILD_ROOT
+%__rm -Rf $RPM_BUILD_ROOT
 %makeinstall
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+%__rm -Rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO THANKS
-%{_bindir}/%{nam}
-%{_datadir}/%{nam}
-%{_datadir}/applications/%{nam}.desktop
-%{_datadir}/locale/*/LC_MESSAGES/%{nam}.mo
-%{_datadir}/pixmaps/%{nam}.png
-%{_datadir}/doc/%{nam}/
+%{_bindir}/%{name}
+%{_datadir}/%{name}
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/locale/*/LC_MESSAGES/%{name}.mo
+%{_datadir}/pixmaps/%{name}.png
+%{_datadir}/doc/%{name}/
