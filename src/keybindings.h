@@ -29,7 +29,10 @@ typedef struct binding
 {
 	guint key;
 	GdkModifierType mods;
+	// at the moment only needed as keys for the configuration file because indices or tranlatable
+	// strings as keys are not very useful
 	const gchar *name;
+	const gchar *label;
 	// function pointer to a callback function, just to keep the code in keypress event
 	// callback function clear
 	void (*cb_func) (void);

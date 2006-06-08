@@ -41,7 +41,7 @@
 
 
 /* simple convenience function to allocate and fill the struct */
-static binding *fill(void (*func) (void), guint key, GdkModifierType mod, const gchar *name);
+static binding *fill(void (*func) (void), guint key, GdkModifierType mod, const gchar *name, const gchar *label);
 
 static void cb_func_menu_new(void);
 static void cb_func_menu_open(void);
@@ -98,47 +98,47 @@ void keybindings_init(void)
 	GKeyFile *config = g_key_file_new();
 
 	// init all fields of keys with default values
-	keys[GEANY_KEYS_MENU_NEW] = fill(cb_func_menu_new, GDK_n, GDK_CONTROL_MASK, "menu_new");
-	keys[GEANY_KEYS_MENU_OPEN] = fill(cb_func_menu_open, GDK_o, GDK_CONTROL_MASK, "menu_open");
-	keys[GEANY_KEYS_MENU_SAVE] = fill(cb_func_menu_save, GDK_s, GDK_CONTROL_MASK, "menu_save");
-	keys[GEANY_KEYS_MENU_SAVEALL] = fill(cb_func_menu_saveall, GDK_S, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall");
-	keys[GEANY_KEYS_MENU_CLOSEALL] = fill(cb_func_menu_closeall, GDK_d, GDK_MOD1_MASK, "menu_closeall");
-	keys[GEANY_KEYS_MENU_RELOADFILE] = fill(cb_func_menu_reloadfile, GDK_r, GDK_CONTROL_MASK, "menu_reloadfile");
-	keys[GEANY_KEYS_MENU_UNDO] = fill(cb_func_menu_undo, GDK_z, GDK_CONTROL_MASK, "menu_undo");
-	keys[GEANY_KEYS_MENU_REDO] = fill(cb_func_menu_redo, GDK_y, GDK_CONTROL_MASK, "menu_redo");
-	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences, GDK_p, GDK_CONTROL_MASK, "menu_preferences");
-	keys[GEANY_KEYS_MENU_FIND_NEXT] = fill(cb_func_menu_findnext, GDK_F3, 0, "menu_findnext");
-	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious, GDK_F3, GDK_SHIFT_MASK, "menu_findprevious");
-	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace, GDK_e, GDK_CONTROL_MASK, "menu_replace");
-	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline, GDK_l, GDK_CONTROL_MASK, "menu_gotoline");
-	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser, 0, 0, "menu_opencolorchooser");
-	keys[GEANY_KEYS_MENU_FULLSCREEN] = fill(cb_func_menu_fullscreen, GDK_F11, 0, "menu_fullscreen");
-	keys[GEANY_KEYS_MENU_MESSAGEWINDOW] = fill(cb_func_menu_messagewindow, 0, 0, "menu_messagewindow");
-	keys[GEANY_KEYS_MENU_ZOOMIN] = fill(cb_func_menu_zoomin, GDK_plus, GDK_CONTROL_MASK, "menu_zoomin");
-	keys[GEANY_KEYS_MENU_ZOOMOUT] = fill(cb_func_menu_zoomout, GDK_minus, GDK_CONTROL_MASK, "menu_zoomout");
-	keys[GEANY_KEYS_MENU_REPLACETABS] = fill(cb_func_menu_replacetabs, 0, 0, "menu_replacetabs");
-	keys[GEANY_KEYS_MENU_FOLDALL] = fill(cb_func_menu_foldall, 0, 0, "menu_foldall");
-	keys[GEANY_KEYS_MENU_UNFOLDALL] = fill(cb_func_menu_unfoldall, 0, 0, "menu_unfoldall");
-	keys[GEANY_KEYS_BUILD_COMPILE] = fill(cb_func_build_compile, GDK_F8, 0, "build_compile");
-	keys[GEANY_KEYS_BUILD_LINK] = fill(cb_func_build_link, GDK_F9, 0, "build_link");
-	keys[GEANY_KEYS_BUILD_MAKE] = fill(cb_func_build_make, GDK_F9, GDK_SHIFT_MASK, "build_make");
-	keys[GEANY_KEYS_BUILD_MAKEOWNTARGET] = fill(cb_func_build_makeowntarget, GDK_F9, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "build_makeowntarget");
-	keys[GEANY_KEYS_BUILD_RUN] = fill(cb_func_build_run, GDK_F5, 0, "build_run");
-	keys[GEANY_KEYS_BUILD_RUN2] = fill(cb_func_build_run2, 0, 0, "build_run2");
-	keys[GEANY_KEYS_BUILD_OPTIONS] = fill(cb_func_build_options, 0, 0, "build_options");
-	keys[GEANY_KEYS_RELOADTAGLIST] = fill(cb_func_reloadtaglist, GDK_r, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "reloadtaglist");
-	keys[GEANY_KEYS_SWITCH_EDITOR] = fill(cb_func_switch_editor, GDK_F2, 0, "switch_editor");
-	keys[GEANY_KEYS_SWITCH_SCRIBBLE] = fill(cb_func_switch_scribble, GDK_F6, 0, "switch_scribble");
-	keys[GEANY_KEYS_SWITCH_VTE] = fill(cb_func_switch_vte, GDK_F4, 0, "switch_vte");
-	keys[GEANY_KEYS_SWITCH_TABLEFT] = fill(cb_func_switch_tableft, 0, 0, "switch_tableft");
-	keys[GEANY_KEYS_SWITCH_TABRIGHT] = fill(cb_func_switch_tabright, 0, 0, "switch_tabright");
-	keys[GEANY_KEYS_TOOGLE_SIDEBAR] = fill(cb_func_toggle_sidebar, 0, 0, "toggle_sidebar");
-	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit_duplicateline, GDK_g, GDK_CONTROL_MASK, "edit_duplicateline");
-	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit_commentline, GDK_d, GDK_CONTROL_MASK, "edit_commentline");
-	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete, GDK_space, GDK_CONTROL_MASK, "edit_autocomplete");
-	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit_calltip, GDK_space, GDK_MOD1_MASK, "edit_calltip");
-	keys[GEANY_KEYS_EDIT_MACROLIST] = fill(cb_func_edit_macrolist, GDK_Return, GDK_CONTROL_MASK, "edit_macrolist");
-	keys[GEANY_KEYS_EDIT_SUPPRESSCOMPLETION] = fill(cb_func_edit_suppresscompletion, GDK_space, GDK_SHIFT_MASK, "edit_suppresscompletion");
+	keys[GEANY_KEYS_MENU_NEW] = fill(cb_func_menu_new, GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"));
+	keys[GEANY_KEYS_MENU_OPEN] = fill(cb_func_menu_open, GDK_o, GDK_CONTROL_MASK, "menu_open", _("Open"));
+	keys[GEANY_KEYS_MENU_SAVE] = fill(cb_func_menu_save, GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"));
+	keys[GEANY_KEYS_MENU_SAVEALL] = fill(cb_func_menu_saveall, GDK_S, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall", _("Save all"));
+	keys[GEANY_KEYS_MENU_CLOSEALL] = fill(cb_func_menu_closeall, GDK_d, GDK_MOD1_MASK, "menu_closeall", _("Close all"));
+	keys[GEANY_KEYS_MENU_RELOADFILE] = fill(cb_func_menu_reloadfile, GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"));
+	keys[GEANY_KEYS_MENU_UNDO] = fill(cb_func_menu_undo, GDK_z, GDK_CONTROL_MASK, "menu_undo", _("Undo"));
+	keys[GEANY_KEYS_MENU_REDO] = fill(cb_func_menu_redo, GDK_y, GDK_CONTROL_MASK, "menu_redo", _("Redo"));
+	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences, GDK_p, GDK_CONTROL_MASK, "menu_preferences", _("Preferences"));
+	keys[GEANY_KEYS_MENU_FIND_NEXT] = fill(cb_func_menu_findnext, GDK_F3, 0, "menu_findnext", _("Find Next"));
+	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious, GDK_F3, GDK_SHIFT_MASK, "menu_findprevious", _("Find Previous"));
+	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace, GDK_e, GDK_CONTROL_MASK, "menu_replace", _("Replace"));
+	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline, GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
+	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser, 0, 0, "menu_opencolorchooser", _("Show Colour Chooser"));
+	keys[GEANY_KEYS_MENU_FULLSCREEN] = fill(cb_func_menu_fullscreen, GDK_F11, 0, "menu_fullscreen", _("Fullscreen"));
+	keys[GEANY_KEYS_MENU_MESSAGEWINDOW] = fill(cb_func_menu_messagewindow, 0, 0, "menu_messagewindow", _("Toggle Messages Window"));
+	keys[GEANY_KEYS_MENU_ZOOMIN] = fill(cb_func_menu_zoomin, GDK_plus, GDK_CONTROL_MASK, "menu_zoomin", _("Zoom In"));
+	keys[GEANY_KEYS_MENU_ZOOMOUT] = fill(cb_func_menu_zoomout, GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"));
+	keys[GEANY_KEYS_MENU_REPLACETABS] = fill(cb_func_menu_replacetabs, 0, 0, "menu_replacetabs", _("Replace tabs by space"));
+	keys[GEANY_KEYS_MENU_FOLDALL] = fill(cb_func_menu_foldall, 0, 0, "menu_foldall", _("Fold all"));
+	keys[GEANY_KEYS_MENU_UNFOLDALL] = fill(cb_func_menu_unfoldall, 0, 0, "menu_unfoldall", _("Unfold all"));
+	keys[GEANY_KEYS_BUILD_COMPILE] = fill(cb_func_build_compile, GDK_F8, 0, "build_compile", _("Compile"));
+	keys[GEANY_KEYS_BUILD_LINK] = fill(cb_func_build_link, GDK_F9, 0, "build_link", _("Build"));
+	keys[GEANY_KEYS_BUILD_MAKE] = fill(cb_func_build_make, GDK_F9, GDK_SHIFT_MASK, "build_make", _("Build with \"make\""));
+	keys[GEANY_KEYS_BUILD_MAKEOWNTARGET] = fill(cb_func_build_makeowntarget, GDK_F9, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "build_makeowntarget", _("Build with \"make\" (custom target)"));
+	keys[GEANY_KEYS_BUILD_RUN] = fill(cb_func_build_run, GDK_F5, 0, "build_run", _("Run"));
+	keys[GEANY_KEYS_BUILD_RUN2] = fill(cb_func_build_run2, 0, 0, "build_run2", _("Run (alternative command)"));
+	keys[GEANY_KEYS_BUILD_OPTIONS] = fill(cb_func_build_options, 0, 0, "build_options", _("Build options"));
+	keys[GEANY_KEYS_RELOADTAGLIST] = fill(cb_func_reloadtaglist, GDK_r, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "reloadtaglist", _("Reload symbol list"));
+	keys[GEANY_KEYS_SWITCH_EDITOR] = fill(cb_func_switch_editor, GDK_F2, 0, "switch_editor", _("Switch to Editor"));
+	keys[GEANY_KEYS_SWITCH_SCRIBBLE] = fill(cb_func_switch_scribble, GDK_F6, 0, "switch_scribble", _("Switch to Scribble"));
+	keys[GEANY_KEYS_SWITCH_VTE] = fill(cb_func_switch_vte, GDK_F4, 0, "switch_vte", _("Switch to VTE"));
+	keys[GEANY_KEYS_SWITCH_TABLEFT] = fill(cb_func_switch_tableft, 0, 0, "switch_tableft", _("Switch to left document"));
+	keys[GEANY_KEYS_SWITCH_TABRIGHT] = fill(cb_func_switch_tabright, 0, 0, "switch_tabright", _("Switch to right document"));
+	keys[GEANY_KEYS_TOOGLE_SIDEBAR] = fill(cb_func_toggle_sidebar, 0, 0, "toggle_sidebar", _("Toggle sidebar"));
+	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit_duplicateline, GDK_g, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line"));
+	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit_commentline, GDK_d, GDK_CONTROL_MASK, "edit_commentline", _("Comment line"));
+	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete, GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
+	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit_calltip, GDK_space, GDK_MOD1_MASK, "edit_calltip", _("Show calltip"));
+	keys[GEANY_KEYS_EDIT_MACROLIST] = fill(cb_func_edit_macrolist, GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"));
+	keys[GEANY_KEYS_EDIT_SUPPRESSCOMPLETION] = fill(cb_func_edit_suppresscompletion, GDK_space, GDK_SHIFT_MASK, "edit_suppresscompletion", _("Suppress auto completion"));
 
 	// now load user defined keys
 	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
@@ -273,12 +273,13 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 
 
 /* simple convenience function to allocate and fill the struct */
-static binding *fill(void (*func) (void), guint key, GdkModifierType mod, const gchar *name)
+static binding *fill(void (*func) (void), guint key, GdkModifierType mod, const gchar *name, const gchar *label)
 {
 	binding *result;
 
 	result = g_new0(binding, 1);
 	result->name = name;
+	result->label = label;
 	result->key = key;
 	result->mods = mod;
 	result->cb_func = func;

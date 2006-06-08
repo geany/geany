@@ -1,3 +1,21 @@
+2006-06-08  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/keybindings.c, src/prefs.c, src/dialogs.c:
+   Added labels for each defined shortcut to have a nicer
+   representation in the dialogs.
+ * geany.desktop.in: Removed duplicate entry for Encoding, now
+                     desktop-file-validate processes with no errors.
+ * configure.in, doc/geany.1.in:
+   Renamed geany.1 to geany.1.in to let it be processed by configure.
+   Added GEANY_DATA_DIR to configure.in.
+ * doc/Makefile.am, doc/geany.xsl:
+   Removed unneeded code for generating geany.1. Added man_MANS to get
+   installed the manpage. Changed build command for HTML documentation.
+   Added new file doc/geany.xsl.
+ * geany.spec.in: Some improvements, corrected download URL.
+ * src/prefs.c: Hide make and terminal settings under Windows.
+
+
 2006-06-07  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c: Fixed segfault when inserting comments and no
@@ -12,9 +30,9 @@
 
 2006-06-06  Enrico Troeger  <enrico.troeger@uvena.de>
 
- * src/highlighting.c: enabled folding for markup filetypes
-                       (HTML, XML, PHP, DocBook)
- * src/treeviews.c: replaced "Members" by "Methods" to make it clearer
+ * src/highlighting.c: Enabled folding for markup filetypes
+                       (HTML, XML, PHP, DocBook).
+ * src/treeviews.c: Replaced "Members" by "Methods" to make it clearer.
 
 
 2006-06-05  Nick Treleaven  <nick.treleaven@btinternet.com>

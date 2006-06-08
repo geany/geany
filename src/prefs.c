@@ -15,13 +15,14 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
 
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "geany.h"
 
@@ -152,12 +153,23 @@ void prefs_init_dialog(void)
 	g_free(color);
 
 	// Tools Settings
-	if (app->build_make_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_make")), app->build_make_cmd);
+#ifdef GEANY_WIN32
+        // hide related Terminal path setting
+        gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "label11"), FALSE);
+        gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "entry_com_make"), FALSE);
+        gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "button_make"), FALSE);
 
-	if (app->build_term_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_term")), app->build_term_cmd);
+        // hide related Terminal path setting
+        gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "label97"), FALSE);
+        gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "entry_com_term"), FALSE);
+        gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "button_term"), FALSE);
+#else
+        if (app->build_make_cmd)
+                gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_make")), app->build_make_cmd);
 
+        if (app->build_term_cmd)
+                gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_term")), app->build_term_cmd);
+#endif
 	if (app->build_browser_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_browser")), app->build_browser_cmd);
 
@@ -204,7 +216,7 @@ void prefs_init_dialog(void)
 		// doesn't keep the settings
 		gtk_scrolled_window_set_policy(
 				GTK_SCROLLED_WINDOW(lookup_widget(app->prefs_dialog, "scrolledwindow8")),
-				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+				GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
 		g_signal_connect(G_OBJECT(renderer), "edited", G_CALLBACK(on_cell_edited), NULL);
 		g_signal_connect(G_OBJECT(tree), "button-press-event",
@@ -217,7 +229,7 @@ void prefs_init_dialog(void)
 	{
 		key_string = gtk_accelerator_name(keys[i]->key, keys[i]->mods);
 		gtk_list_store_append(store, &iter);
-		gtk_list_store_set(store, &iter, 0, keys[i]->name, 1, key_string, -1);
+		gtk_list_store_set(store, &iter, 0, keys[i]->label, 1, key_string, -1);
 		g_free(key_string);
 	}
 
@@ -649,7 +661,7 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 
 		for (idx = 0; idx < GEANY_MAX_KEYS; idx++)
 		{
-			if (utils_strcmp(dialog_key_name, keys[idx]->name)) break;
+			if (utils_strcmp(dialog_key_name, keys[idx]->label)) break;
 		}
 
 		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);
@@ -690,7 +702,7 @@ static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const
 		{
 			dialogs_show_error(
 				_("The combination '%s' is already used for \"%s\". Please choose another one."),
-				action, keys[i]->name);
+				action, keys[i]->label);
 			return TRUE;
 		}
 	}

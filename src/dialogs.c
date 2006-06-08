@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -502,7 +502,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 	if (ft->menu_items->can_compile)
 	{
 		// compile the code
-		item = gtk_image_menu_item_new_with_mnemonic(_("Compile"));
+		item = gtk_image_menu_item_new_with_mnemonic(_("_Compile"));
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
 		gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file"), NULL);
@@ -518,7 +518,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 
 	if (ft->menu_items->can_link)
 	{	// build the code
-		item = gtk_image_menu_item_new_with_mnemonic(_("Build"));
+		item = gtk_image_menu_item_new_with_mnemonic(_("_Build"));
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
 		gtk_tooltips_set_tip(tooltips, item,
@@ -542,7 +542,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
 
 	// build the code with make
-	item = gtk_image_menu_item_new_with_mnemonic(_("Build with make (custom target)"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Build with \"_make\" (custom _target)"));
 	gtk_widget_show(item);
 	if (keys[GEANY_KEYS_BUILD_MAKEOWNTARGET]->key)
 		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_MAKEOWNTARGET]->key,
@@ -1863,7 +1863,7 @@ void dialogs_show_keyboard_shortcuts(void)
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
 	{
 		shortcut = gtk_accelerator_get_label(keys[i]->key, keys[i]->mods);
-		g_string_append(text_names, keys[i]->name);
+		g_string_append(text_names, keys[i]->label);
 		g_string_append(text_names, "\n");
 		g_string_append(text_keys, shortcut);
 		g_string_append(text_keys, "\n");
