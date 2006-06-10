@@ -3,7 +3,8 @@
  * src/main.c: Made command line options translatable, hide compiler
                message treeview under Win32.
  * src/filetypes.c: Added additional patterns to detect configure
-                    scripts as Shell scripts
+                    scripts as Shell scripts.
+ * src/dialogs.c: Made preferences dialog transient for the main window
 
 
 2006-06-08  Enrico Troeger  <enrico.troeger@uvena.de>

@@ -1648,6 +1648,7 @@ void dialogs_show_prefs_dialog(void)
 #endif
 
 		app->prefs_dialog = create_prefs_dialog();
+		gtk_window_set_transient_for(GTK_WINDOW(app->prefs_dialog), GTK_WINDOW(app->window));
 
 #ifdef HAVE_VTE
 		if (app->have_vte)
