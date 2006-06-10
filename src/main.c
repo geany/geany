@@ -66,18 +66,18 @@ static gchar *lib_vte = NULL;
 #endif
 static GOptionEntry entries[] =
 {
-	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, "runs in debug mode (means being verbose)", NULL },
-	{ "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, "don't load auto completion data (see documentation)", NULL },
+	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, N_("runs in debug mode (means being verbose)"), NULL },
+	{ "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, N_("don't load auto completion data (see documentation)"), NULL },
 #ifdef HAVE_FIFO
-	{ "no-pipe", 'p', 0, G_OPTION_ARG_NONE, &ignore_fifo, "don't open files in a running instance, force opening a new instance", NULL },
+	{ "no-pipe", 'p', 0, G_OPTION_ARG_NONE, &ignore_fifo, N_("don't open files in a running instance, force opening a new instance"), NULL },
 #endif
-	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, "use an alternate configuration directory", NULL },
-	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, "don't show message window at startup", NULL },
+	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("use an alternate configuration directory"), NULL },
+	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, N_("don't show message window at startup"), NULL },
 #ifdef HAVE_VTE
-	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, "don't load terminal support", NULL },
-	{ "vte-lib", 'l', 0, G_OPTION_ARG_FILENAME, &lib_vte, "filename of libvte.so", NULL },
+	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, N_("don't load terminal support"), NULL },
+	{ "vte-lib", 'l', 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("filename of libvte.so"), NULL },
 #endif
-	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, "show version and exit", NULL },
+	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("show version and exit"), NULL },
 	{ "alt-scroll", 's', 0, G_OPTION_ARG_NONE, &alternative_scrolling, "use alternative scrolling, only for testing purposes", NULL },
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
@@ -558,6 +558,7 @@ gint main(gint argc, gchar **argv)
 	gtk_widget_hide(app->compile_button);
 	gtk_widget_hide(app->run_button);
 	gtk_widget_hide(lookup_widget(app->window, "separatortoolitem6"));
+	gtk_notebook_remove_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
 #endif
 
 	// finally realize the window to show the user what we have done

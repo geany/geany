@@ -1,3 +1,11 @@
+2006-06-10  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/main.c: Made command line options translatable, hide compiler
+               message treeview under Win32.
+ * src/filetypes.c: Added additional patterns to detect configure
+                    scripts as Shell scripts
+
+
 2006-06-08  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/keybindings.c, src/prefs.c, src/dialogs.c:
