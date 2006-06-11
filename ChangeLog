@@ -5,6 +5,9 @@
  * src/utils.c: Fixed an issue, which let the build menu item
                 insensitive once a new file w/o template was opened.
  * src/document.c: Fixed a segfault in document_find_by_filename().
+ * src/geany.h, src/callbacks.c, src/main.c:
+   Improved the handling of GIOChannels(for named pipes), ensure they
+   are closed in a proper way.
 
 
 2006-06-10  Enrico Troeger  <enrico.troeger@uvena.de>
