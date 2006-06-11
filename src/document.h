@@ -76,9 +76,10 @@ void document_new_file(filetype *ft);
 /* If idx is set to -1, it creates a new tab, opens the file from filename and
  * set the cursor to pos.
  * If idx is greater than -1, it reloads the file in the tab corresponding to
- * idx and set the cursor to position 0.
+ * idx and set the cursor to position 0. In this case, filename should be NULL
+ * It returns the idx of the opened file or -1 if an error occurred.
  */
-void document_open_file(gint, const gchar*, gint, gboolean, filetype*);
+int document_open_file(gint, const gchar*, gint, gboolean, filetype*);
 
 
 /* This saves the file, which is in on-disk encoding (which may not

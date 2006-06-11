@@ -2289,7 +2289,9 @@ gdouble utils_strtod(const gchar *source, gchar **end)
  * and when something useful is found, it jumps to file and scrolls to the line  */
 void utils_parse_compiler_error_line(const gchar *string)
 {
+	/// TODO remove the assignment
 	gint idx = document_get_cur_idx();
+	gint idx_of_error_file = document_get_cur_idx();
 	gint line = -1;
 
 	if (string == NULL || ! doc_list[app->cur_idx].is_valid ||
@@ -2302,23 +2304,53 @@ void utils_parse_compiler_error_line(const gchar *string)
 		case GEANY_FILETYPES_C:
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_RUBY:
+		case GEANY_FILETYPES_JAVA:
 		{
-			gchar *colon = strchr(string, ':');
+			// empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
+			// empty.c:21: error: conflicting types for `foo'
+			gchar **fields = g_strsplit(string, ":", 3);
 			gchar *end = NULL;
+			gchar *path;
+			gchar *filename;
 
-			// skip the colon, but only if it was found
-			if (colon != NULL) colon++;
-			else return;
+			// parse the line
+			if (g_strv_length(fields) < 3 || fields[0] == NULL || fields[1] == NULL)
+			{
+				g_strfreev(fields);
+				return;
+			}
 
-			line = strtol(colon, &end, 10);
+			/// FIXME this is C99
+			line = strtol(fields[1], &end, 10);
 
 			// if the line could not be read, line is 0 and an error occurred, so we leave
-			if (colon == end)
+			if (fields[1] == end)
+			{
+				g_strfreev(fields);
 				return;
+			}
+
+			// get the basename of the built file to get the path to look for other files
+			path = g_path_get_dirname(doc_list[app->cur_idx].file_name);
+			filename = g_strconcat(path, G_DIR_SEPARATOR_S, fields[0], NULL);
+
+			// use document_open_file to find an already opened file, or to open it in place
+			idx_of_error_file = document_open_file(-1, filename, 0, FALSE, NULL);
+
+			g_free(path);
+			g_free(filename);
+
+			if (idx_of_error_file == -1 || ! doc_list[idx_of_error_file].is_valid)
+			{
+				g_strfreev(fields);
+				return;
+			}
 
 			break;
 		}
-		// the error output of python, perl and php -l on errors euals in "line xx", so they are "compatible"
+		/// TODO parse also the file where the error occurred like above
+		// the error output of python, perl and php -l on errors equals in "line xx", so they
+		// are "compatible"
 		case GEANY_FILETYPES_PHP:
 		case GEANY_FILETYPES_PERL:
 		case GEANY_FILETYPES_TCL:
@@ -2344,21 +2376,48 @@ void utils_parse_compiler_error_line(const gchar *string)
 				if (space == end)
 					return;
 			}
+			idx_of_error_file = app->cur_idx;
 			break;
 		}
 		case GEANY_FILETYPES_PASCAL:
 		{	// bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
-			gchar *space = strchr(string, '(');
+			// still untested with other files than the opened
+			gchar **fields = g_strsplit(string, "(", 2);
 			gchar *end = NULL;
+			gchar *path;
+			gchar *filename;
 
-			if (space == NULL) return;
-			space++;
+			// parse the line
+			if (g_strv_length(fields) < 2 || fields[0] == NULL || fields[1] == NULL)
+			{
+				g_strfreev(fields);
+				return;
+			}
 
-			line = strtol(space, &end, 10);
+			line = strtol(fields[1], &end, 10);
 
 			// if the line could not be read, line is 0 and an error occurred, so we leave
-			if (space == end)
+			if (fields[1] == end)
+			{
+				g_strfreev(fields);
 				return;
+			}
+
+			// get the basename of the built file to get the path to look for other files
+			path = g_path_get_dirname(doc_list[app->cur_idx].file_name);
+			filename = g_strconcat(path, G_DIR_SEPARATOR_S, fields[0], NULL);
+
+			// use document_open_file to find an already opened file, or to open it in place
+			idx_of_error_file = document_open_file(-1, filename, 0, FALSE, NULL);
+
+			g_free(path);
+			g_free(filename);
+
+			if (idx_of_error_file == -1 || ! doc_list[idx_of_error_file].is_valid)
+			{
+				g_strfreev(fields);
+				return;
+			}
 
 			break;
 		}
@@ -2367,12 +2426,12 @@ void utils_parse_compiler_error_line(const gchar *string)
 	// finally jump to the line (and file)
 	if (line != -1)
 	{
-		if (idx != app->cur_idx)
+		if (idx != idx_of_error_file)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 									gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
-									GTK_WIDGET(doc_list[app->cur_idx].sci)));
+									GTK_WIDGET(doc_list[idx_of_error_file].sci)));
 		}
-		utils_goto_line(app->cur_idx, line);
+		utils_goto_line(idx_of_error_file, line);
 	}
 }

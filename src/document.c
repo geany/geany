@@ -399,8 +399,9 @@ void document_new_file(filetype *ft)
  * set the cursor to pos.
  * If idx is greater than -1, it reloads the file in the tab corresponding to
  * idx and set the cursor to position 0. In this case, filename should be NULL
+ * It returns the idx of the opened file or -1 if an error occurred.
  */
-void document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly, filetype *ft)
+int document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly, filetype *ft)
 {
 	gint editor_mode;
 	gsize size;
@@ -427,7 +428,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		if (filename == NULL)
 		{
 			msgwin_status_add(_("Invalid filename"));
-			return;
+			return -1;
 		}
 
 		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
@@ -449,9 +450,10 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
 					(GtkWidget*) doc_list[idx].sci));
+			sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 			g_free(utf8_filename);
 			g_free(locale_filename);
-			return;
+			return idx;
 		}
 	}
 
@@ -460,7 +462,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
 		g_free(utf8_filename);
 		g_free(locale_filename);
-		return;
+		return -1;
 	}
 
 #ifdef GEANY_WIN32
@@ -474,7 +476,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		g_error_free(err);
 		g_free(utf8_filename);
 		g_free(locale_filename);
-		return;
+		return -1;
 	}
 
 	/* Determine character encoding and convert to utf-8*/
@@ -495,7 +497,7 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 				g_free(data);
 				g_free(utf8_filename);
 				g_free(locale_filename);
-				return;
+				return -1;
 			}
 			else
 			{
@@ -579,6 +581,8 @@ void document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	g_free(locale_filename);
 	//gettimeofday(&tv1, &tz);
 	//geany_debug("%s: %d", filename, (gint)(tv1.tv_usec - tv.tv_usec));
+
+	return idx;
 }
 
 

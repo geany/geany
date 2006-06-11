@@ -8,6 +8,11 @@
  * src/geany.h, src/callbacks.c, src/main.c:
    Improved the handling of GIOChannels(for named pipes), ensure they
    are closed in a proper way.
+ * src/document.c: document_open_file() returns the index of the opened
+                   file.
+ * src/utils.c: Open or switch to files when clicking on compiler error
+                messages and the error message mentions another file
+                than the opened one.
 
 
 2006-06-10  Enrico Troeger  <enrico.troeger@uvena.de>
