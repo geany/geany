@@ -335,8 +335,10 @@ static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer d
 		return TRUE;
 	else
 	{
-		GIOChannel *ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
-		g_io_add_watch(ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
+		g_io_channel_unref(app->fifo_ioc);
+		g_io_channel_shutdown(app->fifo_ioc, FALSE, NULL);
+		app->fifo_ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
+		g_io_add_watch(app->fifo_ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
 		return FALSE;
 	}
 }
@@ -362,7 +364,7 @@ static void write_fifo(gint argc, gchar **argv)
 
 /* creates a named pipe in GEANY_FIFO_NAME, to communicate with new instances of Geany
  * to submit filenames and possibly other things */
-static void create_fifo(gint argc, gchar **argv, const gchar *config_dir)
+static GIOChannel *create_fifo(gint argc, gchar **argv, const gchar *config_dir)
 {
 	struct stat st;
 	gchar *tmp;
@@ -400,11 +402,13 @@ static void create_fifo(gint argc, gchar **argv, const gchar *config_dir)
 	if ((mkfifo(fifo_name, S_IRUSR | S_IWUSR)) == -1)
 	{
 		if (errno != EEXIST) geany_debug("creating of a named pipe for IPC failed! (%s)", g_strerror(errno));
-		return;
+		return NULL;
 	}
 
 	ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
 	g_io_add_watch(ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
+
+	return ioc;
 }
 #endif
 
@@ -413,6 +417,9 @@ gint main(gint argc, gchar **argv)
 {
 	GError *error = NULL;
 	GOptionContext *context;
+#ifdef HAVE_FIFO
+	GIOChannel *ioc = NULL;
+#endif
 	gint mkdir_result = 0;
 	gint idx;
 	gchar *config_dir;
@@ -454,7 +461,7 @@ gint main(gint argc, gchar **argv)
 	}
 
 #ifdef HAVE_FIFO
-	if (! ignore_fifo) create_fifo(argc, argv, config_dir);
+	if (! ignore_fifo) ioc = create_fifo(argc, argv, config_dir);
 #endif
 	g_free(config_dir);
 
@@ -474,7 +481,9 @@ gint main(gint argc, gchar **argv)
 	app->have_vte = app->load_vte;
 	if (no_vte) app->have_vte = FALSE;
 #endif
-
+#ifdef HAVE_FIFO
+	app->fifo_ioc = ioc;
+#endif
 	filetypes_init_types();
 	configuration_read_filetype_extensions();
 

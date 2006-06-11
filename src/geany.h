@@ -60,7 +60,7 @@
 #define GEANY_HOME_DIR					g_get_home_dir()
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_FIFO_NAME					"geany_fifo.0"
-#define GEANY_CODENAME					"Ravik"
+#define GEANY_CODENAME					"Kadir"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_MAX_OPEN_FILES			25
 #define GEANY_SESSION_FILES				25
@@ -159,6 +159,7 @@ typedef struct MyApp
 	gint				 long_line_column;
 #ifdef HAVE_FIFO
 	gboolean			 ignore_fifo;
+	GIOChannel			*fifo_ioc;
 #endif
 #ifdef HAVE_VTE
 	gboolean			 load_vte;

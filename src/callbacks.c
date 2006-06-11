@@ -101,6 +101,11 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	{
 		gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
 		// delete the fifo early, because we don't accept new files anymore
+		if (app->fifo_ioc != NULL)
+		{
+			g_io_channel_unref(app->fifo_ioc);
+			g_io_channel_shutdown(app->fifo_ioc, FALSE, NULL);
+		}
 		unlink(fifo);
 		g_free(fifo);
 	}
