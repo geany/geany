@@ -349,7 +349,7 @@ static void styleset_c_init(void)
 	// load global tags file for C autocompletion
 	if (! app->ignore_global_tags && ! global_c_tags_loaded)
 	{
-		tm_workspace_load_global_tags(GEANY_DATA_DIR "/global.tags");
+		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags");
 		global_c_tags_loaded = TRUE;
 	}
 }
@@ -479,7 +479,7 @@ static void styleset_cpp_init(void)
 	// load global tags file for C autocompletion
 	if (! app->ignore_global_tags && ! global_c_tags_loaded)
 	{
-		tm_workspace_load_global_tags(GEANY_DATA_DIR "/global.tags");
+		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags");
 		global_c_tags_loaded = TRUE;
 	}
 }

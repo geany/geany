@@ -1257,10 +1257,13 @@ void utils_build_show_hide(gint idx)
 	if (idx == -1 || doc_list[idx].file_type == NULL)
 	{
 		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
+		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")));
 		gtk_widget_set_sensitive(app->compile_button, FALSE);
 		gtk_widget_set_sensitive(app->run_button, FALSE);
 		return;
 	}
+	else
+		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
 
 	ft = doc_list[idx].file_type;
 
