@@ -4,6 +4,7 @@
  * src/highlighting.c: Replaced "/" by G_DIR_SEPARATOR_S.
  * src/utils.c: Fixed an issue, which let the build menu item
                 insensitive once a new file w/o template was opened.
+ * src/document.c: Fixed a segfault in document_find_by_filename().
 
 
 2006-06-10  Enrico Troeger  <enrico.troeger@uvena.de>

@@ -65,8 +65,8 @@ gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
 
 	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 	{
-		gchar *dl_fname = (is_tm_filename) ? doc_list[i].tm_file->file_name :
-			doc_list[i].file_name;
+		gchar *dl_fname = (is_tm_filename && doc_list[i].tm_file) ?
+							doc_list[i].tm_file->file_name : doc_list[i].file_name;
 #ifdef GEANY_WIN32
 		// ignore the case of filenames and paths under WIN32, causes errors if not
 		if (dl_fname && ! strcasecmp(dl_fname, filename)) return i;
