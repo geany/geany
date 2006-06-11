@@ -1,3 +1,11 @@
+2006-06-11  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/interface.c: Added some mnemonics in the file menu.
+ * src/highlighting.c: Replaced "/" by G_DIR_SEPARATOR_S.
+ * src/utils.c: Fixed an issue, which let the build menu item
+                insensitive once a new file w/o template was opened.
+
+
 2006-06-10  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/main.c: Made command line options translatable, hide compiler
