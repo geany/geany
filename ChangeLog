@@ -3,7 +3,8 @@
  * THANKS, src/about.c: Added translator credits.
  * src/main.c: Defined N_() again, so command line args are really
                translatable.
-
+ * geany.glade, src/interface.c: Added missing mnemonic to build menu
+                                 item.
 
 2006-06-12  Frank Lanitz  <frank@frank.uvena.de>
 
