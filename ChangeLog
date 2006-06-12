@@ -1,7 +1,15 @@
+2006-06-12  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * THANKS, src/about.c: Added translator credits.
+ * src/main.c: Defined N_() again, so command line args are really
+               translatable.
+
+
 2006-06-12  Frank Lanitz  <frank@frank.uvena.de>
 
  * configure.in: Added Belarusian and Russian language support.
 				 More Information at po/ChangeLog
+
 
 2006-06-11  Enrico Troeger  <enrico.troeger@uvena.de>
 

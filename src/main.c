@@ -50,6 +50,7 @@
 # include "vte.h"
 #endif
 
+#define N_(String) (String)
 
 #ifdef HAVE_FIFO
 static gchar fifo_name[512];
@@ -78,7 +79,9 @@ static GOptionEntry entries[] =
 	{ "vte-lib", 'l', 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("filename of libvte.so"), NULL },
 #endif
 	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("show version and exit"), NULL },
+#ifndef GEANY_DEBUG
 	{ "alt-scroll", 's', 0, G_OPTION_ARG_NONE, &alternative_scrolling, "use alternative scrolling, only for testing purposes", NULL },
+#endif
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
 
@@ -424,8 +427,15 @@ gint main(gint argc, gchar **argv)
 	gint idx;
 	gchar *config_dir;
 
-	context = g_option_context_new(" - A fast and lightweight IDE");
+#ifdef ENABLE_NLS
+	bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+	textdomain(GETTEXT_PACKAGE);
+#endif
+
+	context = g_option_context_new(_(" - A fast and lightweight IDE"));
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
+	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
 	g_option_context_add_group(context, gtk_get_option_group(TRUE));
 	g_option_context_parse(context, &argc, &argv, &error);
 	g_option_context_free(context);
@@ -441,11 +451,6 @@ gint main(gint argc, gchar **argv)
 		return (0);
 	}
 
-#ifdef ENABLE_NLS
-	bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-	textdomain(GETTEXT_PACKAGE);
-#endif
 	gtk_set_locale();
 
 	signal(SIGTERM, signal_cb);

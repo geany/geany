@@ -43,13 +43,17 @@ Nick Treleaven - %s\n\t\
 Frank Lanitz - %s\n\t\
 &lt;frank@frank.uvena.de&gt;\n\n\t\
 \n<span size=\"larger\" weight=\"bold\">%s</span>\n\t\
-Topi - %s ca_ES\n\t\
+\
+Yura Semashko - <language> be_BY\n\t\
+&lt;yurand2@gmail.com&gt;\n\n\t\
+Topi - <language> ca_ES\n\t\
 &lt;topi@phreaker.net&gt;\n\n\t\
-Frank Lanitz - %s de_DE\n\t\
+Frank Lanitz - <language> de_DE\n\t\
 &lt;frank@frank.uvena.de&gt;\n\n\t\
-Jacek Wolszczak - %s pl_PL\n\t\
-&lt;shutdownrunner@o2.pl&gt;"
-
+Jacek Wolszczak - <language> pl_PL\n\t\
+&lt;shutdownrunner@o2.pl&gt;\n\n\t\
+brahmann_ - <language> ru_RU\n\t\
+&lt;brahmann@mthr.net.ru&gt;"
 
 static void header_eventbox_style_set(GtkWidget *widget);
 static void header_label_style_set(GtkWidget *widget);
@@ -81,6 +85,7 @@ static GtkWidget *create_dialog(void)
 	GtkTextBuffer* tb;
 	gchar *license_text = NULL;
 	gchar buffer[512];
+	gchar *credits;
 
 	dialog = gtk_dialog_new();
 
@@ -197,10 +202,10 @@ static GtkWidget *create_dialog(void)
 	credits_label = gtk_label_new(NULL);
 	gtk_label_set_selectable(GTK_LABEL(credits_label), TRUE);
 	gtk_label_set_use_markup(GTK_LABEL(credits_label), TRUE);
-	g_snprintf(buffer, sizeof(buffer), CREDITS, _("Developers"), _("Maintainer"), _("developer"),
-												_("translation maintainer"), _("Translators"),
-												_("language"), _("language"), _("language"));
-	gtk_label_set_markup(GTK_LABEL(credits_label), buffer);
+	credits = g_strdup_printf(CREDITS, _("Developers"), _("Maintainer"), _("developer"),
+							 _("translation maintainer"), _("Translators"));
+	credits = utils_str_replace(credits, "<language>", _("language"));
+	gtk_label_set_markup(GTK_LABEL(credits_label), credits);
 	gtk_misc_set_alignment(GTK_MISC(credits_label), 0.0, 0.0);
 	gtk_widget_show(credits_label);
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(credits_scrollwin), credits_label);
@@ -229,6 +234,7 @@ static GtkWidget *create_dialog(void)
 	tb = gtk_text_view_get_buffer(GTK_TEXT_VIEW(license_textview));
 	gtk_text_buffer_set_text(tb, license_text, strlen(license_text));
 
+	g_free(credits);
 	g_free(license_text);
 
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), license_scrollwin, label);
