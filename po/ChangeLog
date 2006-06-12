@@ -1,4 +1,14 @@
+2006-06-12  Frank Lanitz  <frank@frank.uvena.de>
+
+ * be.po: Added Belarusian language support contributed by
+		  Yura Semashko <yurand2@gmail.com>
+ * ru.po: Added Russian language support contributed by
+          brahmann <brahmann@lifelogs.org.ru>
+ * de.po: Minor update of new strings
+ * geany.pot: Update of catalog
+
 2006-06-06  Frank Lanitz  <frank@frank.uvena.de>
+
  * de.po: Minor update
  * geany.pot: Minor update of strings
 
@@ -10,5 +20,5 @@
 
 2006-05-29  Frank Lanitz  <frank@frank.uvena.de>
 
- * pl.po: Added Polish langugage support contributed by
+ * pl.po: Added Polish language support contributed by
           Jacek Wolszczak

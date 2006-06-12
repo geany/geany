@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: geany 0.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-06 17:58+0200\n"
-"PO-Revision-Date: 2006-06-06 18:01+0100\n"
+"PO-Revision-Date: 2006-06-12 13:52+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <frank@frank.uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -1848,7 +1848,4 @@ msgstr "Sidebar verbergen"
 #: src/treeviews.c:267
 msgid "Reload"
 msgstr "Neu laden"
-
-#~ msgid "Goto tag definition"
-#~ msgstr "Gehe zu Tag Definition"
 

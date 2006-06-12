@@ -1,0 +1,1848 @@
+# Belarusian translation of geany.
+# Copyright (C) 2006 THE geany'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the geany package.
+# Yura Semashko <yurand2@gmail.com>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: geany 0.8\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-06-06 17:58+0200\n"
+"PO-Revision-Date: 2006-06-01 10:55+0200\n"
+"Last-Translator: Yura Semashko <yurand2@gmail.com>\n"
+"Language-Team: Belarusian <yurand2@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Belarusian\n"
+"X-Poedit-Country: BELARUS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: src/main.c:389
+msgid ""
+"Geany is exiting because a named pipe was found. Mostly this means, Geany is "
+"already running. If you know Geany is not running, you can delete the file "
+"and start Geany anyway.\n"
+"Delete the named pipe and start Geany?"
+msgstr ""
+"Geany спыніў працу таму што named pipe быў знойдзены. Верагодней за ўсе "
+"Geany ужо працуе. Калі вы ведаеце, што Geany не працуе, вы можаце выдаліць "
+"named pipe і запусьціць Geany усё роўна.\n"
+"Выдаліць named pipe?"
+
+#: src/main.c:429
+#, c-format
+msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
+msgstr "(збудаваны на %s з GTK %d.%d.%d, GLib %d.%d.%d)"
+
+#: src/main.c:504
+#, c-format
+msgid "This is Geany %s."
+msgstr "Geany %s."
+
+#: src/main.c:506
+#, c-format
+msgid "Configuration directory could not be created (%s)."
+msgstr "Немагчыма зрабіць наладкавую дырэкторыю (%s)."
+
+#: src/interface.c:210 src/interface.c:1171
+msgid "Geany"
+msgstr "Geany"
+
+#: src/interface.c:220
+msgid "_File"
+msgstr "_Файл"
+
+#: src/interface.c:231
+msgid "New (with template)"
+msgstr "Новы (з шаблёнам)"
+
+#: src/interface.c:242 src/interface.c:319 src/interface.c:384
+#: src/interface.c:607 src/interface.c:1556
+msgid "invisible"
+msgstr "нябачна"
+
+#: src/interface.c:267 src/interface.c:709
+msgid "Save all"
+msgstr "Захаваць усе"
+
+#: src/interface.c:270
+msgid "Saves all open files"
+msgstr "Захаваць усе адчыненыя файлы"
+
+#: src/interface.c:298
+msgid "Close all"
+msgstr "Зачыніць усе"
+
+#: src/interface.c:301
+msgid "Closes all open files"
+msgstr "Зачыніць усе адкрытыя файлы"
+
+#: src/interface.c:312
+msgid "Recent files"
+msgstr "Нядаўнія файлы"
+
+#: src/interface.c:330 src/interface.c:819
+msgid "Quit Geany"
+msgstr "Выхад"
+
+#: src/interface.c:332
+msgid "_Edit"
+msgstr "_Змена"
+
+#: src/interface.c:373 src/interface.c:1545
+msgid "Insert \"include <...>\""
+msgstr "Уставіць \"include <...>\""
+
+#: src/interface.c:387 src/interface.c:1559
+msgid "Insert Comments"
+msgstr "Уставіць камэнтарый"
+
+#: src/interface.c:398 src/interface.c:1570
+msgid "Insert ChangeLog entry"
+msgstr "Уставіць радок ChangeLog"
+
+#: src/interface.c:401
+msgid "Inserts a typical ChangeLog entry in the current file"
+msgstr "Уставіць тыпічны радок ChangeLog у цякучы файл"
+
+#: src/interface.c:403 src/interface.c:1575
+msgid "Insert file header"
+msgstr "Уставіць загаловак файла"
+
+#: src/interface.c:406 src/interface.c:1578
+msgid "Inserts a few information at the beginning of the file"
+msgstr "Уставіць інфармацыю ў пачатку файла"
+
+#: src/interface.c:408 src/interface.c:1580
+msgid "Insert function description"
+msgstr "Уставіць апісаньне функцыі"
+
+#: src/interface.c:411 src/interface.c:1583
+msgid "Inserts a description before the current function"
+msgstr "Уставіць апісаньне перад цякучай функцыяй"
+
+#: src/interface.c:413 src/interface.c:1585
+msgid "Insert multiline comment"
+msgstr "Уставіць шматрадковы камэнтарый"
+
+#: src/interface.c:416 src/interface.c:1588
+msgid "Inserts a multiline comment"
+msgstr "Уставіць шматрадковы камэнтарый"
+
+#: src/interface.c:418 src/interface.c:1590
+msgid "Insert GPL notice"
+msgstr "Уставіць GPL паведамленьне"
+
+#: src/interface.c:421 src/interface.c:1593
+msgid "Inserts a GPL notice (should be done at the beginning of the file)"
+msgstr "Уставіць GPL паведамленьне (павінна быць зроблена ў пачатку файла)"
+
+#: src/interface.c:428 src/interface.c:1600
+msgid "Change Selection"
+msgstr "Змянiць вылучэньне"
+
+#: src/interface.c:435 src/interface.c:1607
+msgid "To lower-case"
+msgstr "У маленькі рэгістар"
+
+#: src/interface.c:439 src/interface.c:1611
+msgid "To upper-case"
+msgstr "У вялікі рэгістар"
+
+#: src/interface.c:443
+msgid "_Count words"
+msgstr "_Лічыць слава"
+
+#: src/interface.c:446
+msgid ""
+"Counts the words and characters in the current selection or the whole "
+"document"
+msgstr "Лічыць слава і літары ў вылучаным тэксту альбо ва ўсім дакумэнце"
+
+#: src/interface.c:457
+msgid "_Search"
+msgstr "Шук_аць"
+
+#: src/interface.c:468
+msgid "Find _Next"
+msgstr "Шукаць наступны"
+
+#: src/interface.c:472
+msgid "Find _Previous"
+msgstr "Шукаць былы"
+
+#: src/interface.c:476 src/dialogs.c:906
+msgid "_Replace"
+msgstr "_Замяніць"
+
+#: src/interface.c:489
+msgid "_Go to line"
+msgstr "_Ісьці да радка"
+
+#: src/interface.c:497 src/dialogs.c:72
+msgid "_View"
+msgstr "_Выгляд"
+
+#: src/interface.c:504
+msgid "Change Font"
+msgstr "Зьмяніць шрыфт"
+
+#: src/interface.c:507
+msgid "Change the default font"
+msgstr "Зьмяніць дэфолтны шрыфт"
+
+#: src/interface.c:513
+msgid "Show Color Chooser"
+msgstr "Вылучыць колер"
+
+#: src/interface.c:516 src/interface.c:749
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette."
+msgstr "Адчыніць дыялёг, для вылучэньня колеру з палітры."
+
+#: src/interface.c:527
+msgid "Fullscreen"
+msgstr "Увесь экран"
+
+#: src/interface.c:531
+msgid "Show messages window"
+msgstr "Паказаць акно паведамленьняў"
+
+#: src/interface.c:534
+msgid "Toggle the window with status and compiler messages on and off"
+msgstr "Паказаць/Схаваць акно з паведамленьнямі і статусам кампілятара"
+
+#: src/interface.c:537
+msgid "Show Toolbar"
+msgstr "Паказаць панэль прыладаў"
+
+#: src/interface.c:540
+msgid "Toggle the toolbar on and off"
+msgstr "Паказаць/Схаваць акно прыладаў"
+
+#: src/interface.c:543
+msgid "Show Markers Margin"
+msgstr "Show Markers Margin"
+
+#: src/interface.c:546
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines."
+msgstr ""
+"Паказаць/Схаваць маленькі margin, які выкарыстоўваецца для вылучэньня "
+"радкоў, справа ад нумару радка."
+
+#: src/interface.c:549
+msgid "Show Line Numbers"
+msgstr "Паказваць нумар радка"
+
+#: src/interface.c:552
+msgid "Shows or hides the Line Number margin."
+msgstr "Паказаць/Схаваць нумар радка."
+
+#: src/interface.c:572
+msgid "_Document"
+msgstr "_Дакумент"
+
+#: src/interface.c:579
+msgid "Line breaking"
+msgstr "Разлучыцель радкоў"
+
+#: src/interface.c:582
+msgid "Break the line at the window border and continue it on the next line"
+msgstr "Разлучыць радкі на рысе вакна і працягваць з наступнага радка"
+
+#: src/interface.c:585
+msgid "Use auto indention"
+msgstr "Выкарыстоўваць аўтаматычнае фарматаванне"
+
+#: src/interface.c:590
+msgid "Read _only"
+msgstr "Талькі _чытаць"
+
+#: src/interface.c:593
+msgid "Treat this file as read-only. No changes can be made."
+msgstr "Лічыць файл толькі для чытаньня. Зьмяненьні немагчыма зрабіць."
+
+#: src/interface.c:600
+msgid "Set filetype"
+msgstr "Усталяваць тып файла"
+
+#: src/interface.c:610
+msgid "Line endings"
+msgstr "Канчаткі радкоў"
+
+#: src/interface.c:617
+msgid "Convert and set to CR/LF (Win)"
+msgstr "Зьмяніць на CR/LF (Win)"
+
+#: src/interface.c:621
+msgid "Convert and set to LF (Unix)"
+msgstr "Зьмяніць на LF (Unix)"
+
+#: src/interface.c:625
+msgid "Convert and set to CR (Mac)"
+msgstr "Зьмяніць на CR (Mac)"
+
+#: src/interface.c:634
+msgid "Replace tabs by space"
+msgstr "Зьмяніць табуляцыю на прабелы"
+
+#: src/interface.c:637
+msgid "Replaces all tabs in document by spaces."
+msgstr "Зьмяніць усе табуляцыі ў дакумэнце на прабелы."
+
+#: src/interface.c:644
+msgid "Fold all"
+msgstr "Зьвярнуць усе"
+
+#: src/interface.c:647
+msgid "Folds all contractible code blocks"
+msgstr "Зьвярнуць усе блёкі кода"
+
+#: src/interface.c:649
+msgid "Unfold all"
+msgstr "Разьвярнуць усе"
+
+#: src/interface.c:652
+msgid "Unfolds all contracted code blocks"
+msgstr "Разьвярнуць усе блёкі кода"
+
+#. build the code
+#: src/interface.c:654 src/dialogs.c:521
+msgid "Build"
+msgstr "Пабудаваць"
+
+#: src/interface.c:658
+msgid "_Help"
+msgstr "_Дапамога"
+
+#: src/interface.c:669
+msgid "_Keyboard shortcuts"
+msgstr "_Клявішы"
+
+#: src/interface.c:672
+msgid "Shows a list of all keyboard shortcuts for Geany."
+msgstr "Паказаць сьпіс усіх выкарыстоўваемых клявіш."
+
+#: src/interface.c:674
+msgid "_Website"
+msgstr "Інтэрнэт _старонка"
+
+#: src/interface.c:697
+msgid "Create a new file"
+msgstr "Зрабiць новы файл"
+
+#: src/interface.c:702
+msgid "Open an existing file"
+msgstr "Адчыніць існуючы файл"
+
+#: src/interface.c:707
+msgid "Save the current file"
+msgstr "Захаваць цякучы файл"
+
+#: src/interface.c:712
+msgid "Save all open files"
+msgstr "Захаваць усе адчыненныя файлы"
+
+#: src/interface.c:717
+msgid "Reload the current file from disk"
+msgstr "Загрузіць тякучы файл з дыска"
+
+#: src/interface.c:722
+msgid "Close the current file"
+msgstr "Зачыніць цякучы файл"
+
+#: src/interface.c:731
+msgid "Compile the current file"
+msgstr "Адкампіліраваць тякучы файл"
+
+#: src/interface.c:735
+msgid "Run"
+msgstr "Запусціць"
+
+#: src/interface.c:738 src/dialogs.c:560
+msgid "Run or view the current file"
+msgstr "Выканаць альбо глядзець тякучы файл"
+
+#: src/interface.c:746
+msgid "Color"
+msgstr "Колер"
+
+#: src/interface.c:758
+msgid "Zoom in the text"
+msgstr "Amplia"
+
+#: src/interface.c:763
+msgid "Zoom out the text"
+msgstr "Павялічыць/Зменшыць тэкст"
+
+#: src/interface.c:776 src/interface.c:781
+msgid "Find the entered text in the current file"
+msgstr "Знайсці уведзены тэкст у цякучым файле"
+
+#: src/interface.c:794
+msgid "Enter a line number and jump to it."
+msgstr "Увядзі нумар радка да перахода."
+
+#: src/interface.c:801
+msgid "Jump to the entered line number."
+msgstr "Перайсць да ўведзеннага радка."
+
+#: src/interface.c:846 src/treeviews.c:40
+msgid "Symbols"
+msgstr "Сімвалы"
+
+#: src/interface.c:859 src/treeviews.c:180
+msgid "Open files"
+msgstr "Адчыніць файлы"
+
+#: src/interface.c:894
+msgid "Status"
+msgstr "Састаянне"
+
+#: src/interface.c:908
+msgid "Compiler"
+msgstr "Кампілятар"
+
+#: src/interface.c:922
+msgid "Messages"
+msgstr "Паведамленні"
+
+#: src/interface.c:935
+msgid "Scribble"
+msgstr "Падпісацца"
+
+#: src/interface.c:1366
+msgid "Images and text"
+msgstr "Малюнкі і тэкст"
+
+#: src/interface.c:1372
+msgid "Images only"
+msgstr "Толькі малюнкі"
+
+#: src/interface.c:1378
+msgid "Text only"
+msgstr "Толькі тэкст"
+
+#: src/interface.c:1389
+msgid "Large icons"
+msgstr "Павялічаныя іконкі"
+
+#: src/interface.c:1393
+msgid "Small icons"
+msgstr "Паменшаныя іконкі"
+
+#: src/interface.c:1402
+msgid "Hide toolbar"
+msgstr "Схаваць панэль прыладаў"
+
+#: src/interface.c:1573
+msgid "Inserts a typical ChangeLog entry in the current "
+msgstr "Уставіць тыпічны радок ChangeLog у цякучы файл"
+
+#: src/interface.c:1620
+msgid "Find usage"
+msgstr "Знайсці выкарыстоўванне"
+
+#: src/interface.c:1628
+msgid "Go to tag declaration"
+msgstr "Ісці да аб'явы"
+
+#: src/interface.c:1632
+msgid "Go to tag definition"
+msgstr "Перайcці да рэалізацыі"
+
+#: src/interface.c:1641 src/dialogs.c:763
+msgid "Go to line"
+msgstr "Перайcці да радка"
+
+#: src/interface.c:1644
+msgid "Goto to the entered line"
+msgstr "Перайсці да ўведзеннага радка"
+
+#: src/interface.c:1889
+msgid "Preferences"
+msgstr "Уласцівасці"
+
+#: src/interface.c:1925
+msgid "MRU list length:"
+msgstr "MRU list length:"
+
+#: src/interface.c:1933
+msgid ""
+"Specifies the number of files which are stored in the Recent files list."
+msgstr "Указаць колькі файлаў трэба паказваць у спісе нядаўніх файлаў."
+
+#: src/interface.c:1937
+msgid "Load files from the last session"
+msgstr "Загрузіць файлы з апошняга сеансу"
+
+#: src/interface.c:1941
+msgid "Opens at startup the files from the last session"
+msgstr "Адчыняць файлы з апошняга сеансу пры старце"
+
+#: src/interface.c:1944
+msgid "Save window position and geometry"
+msgstr "Захаваць пазіцыю вокан і геаметрыю"
+
+#: src/interface.c:1948
+msgid "Saves the window position and geometry and restores it at the start"
+msgstr "Захаваць пазіцыю вокан і геаметрыю, і аднаўляць яе пры старце"
+
+#: src/interface.c:1951
+msgid "Beep on errors or when compilation has finished"
+msgstr "Гудак пры памылках, ці на завяршэнне кампіляцыі"
+
+#: src/interface.c:1954
+msgid ""
+"Whether to beep if an error occured or when the compilation process has "
+"finished."
+msgstr "Ці трэба гуддець пры памылкі, ці на завяршэнне кампіляцыі."
+
+#: src/interface.c:1957
+msgid "Switch to status message list at new message"
+msgstr "Пералючацца ў вакно паведамленняў, пры з'яўленні новага"
+
+#: src/interface.c:1960
+msgid ""
+"Switch to the status message tab(in the notebook window at the bottom) if a "
+"new status message arrive."
+msgstr "Пералючацца ў вакно паведамленняў, пры з'яўленні новага."
+
+#: src/interface.c:1963
+msgid "Load virtual terminal emulation at startup"
+msgstr "Загружаць эмулятар тэрмінала пры старце"
+
+#: src/interface.c:1965
+msgid ""
+"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
+"Disable it if you do not need it."
+msgstr ""
+"Ці трэба Загружаць эмулятар тэрмінала пры старце. Забараніце, калі ён не "
+"патрэбен. "
+
+#: src/interface.c:1968
+msgid "Confirm exit"
+msgstr "Падтвярждаць выхад"
+
+#: src/interface.c:1972
+msgid "Shows a confirmation dialog on exit."
+msgstr "Паказваць падцвярджаючы дыялог пры выхадзе."
+
+#: src/interface.c:1979
+msgid "Placement of new file tabs: "
+msgstr "Пазіцыя новых файлаў ў закладцы файлаў"
+
+#: src/interface.c:1983
+msgid "Left"
+msgstr "Слева"
+
+#: src/interface.c:1986
+msgid "New file tabs will be placed to the left of the tab list"
+msgstr "Новыя файлы будуць памешчаны злева у закладцы файлаў"
+
+#: src/interface.c:1995
+msgid "Right"
+msgstr "Справа"
+
+#: src/interface.c:1998
+msgid "New file tabs will be placed to the right of the tab list"
+msgstr "Новыя файлы будуць памешчаны справа у закладцы файлаў"
+
+#: src/interface.c:2002 src/interface.c:2327
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>Мелачы</b>"
+
+#: src/interface.c:2026
+msgid "Show search field"
+msgstr "Паказваць поле шукаць"
+
+#: src/interface.c:2030
+msgid "Display the search field and button in the toolbar"
+msgstr "Паказваць поле шукаць і кнопку на панэлі прылад"
+
+#: src/interface.c:2033
+msgid "Show goto line field"
+msgstr "Паказваць поле перайсці да радка"
+
+#: src/interface.c:2037
+msgid "Display the line number field and button in the toolbar"
+msgstr "Паказваць поле перайсці да радка і кнопку на панэлі прылад"
+
+#: src/interface.c:2040
+msgid "<b>Toolbar</b>"
+msgstr "<b>Панэль прылад</b>"
+
+#: src/interface.c:2064
+msgid "Show symbol list"
+msgstr "Паказваць спіс сімвалаў"
+
+#: src/interface.c:2067 src/interface.c:2073
+msgid "Toggle the symbol list on and off"
+msgstr "Паказаць/Схаваць спіс сімвалаў"
+
+#: src/interface.c:2070
+msgid "Show open files list"
+msgstr "Паказаць спіс адчыненных файлаў"
+
+#: src/interface.c:2076
+msgid "<b>Sidebar</b>"
+msgstr "<b>Sidebar</b>"
+
+#: src/interface.c:2102
+msgid "Symbol list font"
+msgstr "Шрыфт спіса сімвалаў"
+
+#: src/interface.c:2109
+msgid "Message window font"
+msgstr "Шрыфт спіса паведамленняў"
+
+#: src/interface.c:2121
+msgid "Sets the font for the message window"
+msgstr "Усталяваць шрыфт для вакна паведамленняў"
+
+#: src/interface.c:2129
+msgid "Sets the font for symbol list window"
+msgstr "Усталяваць шрыфт для вакна сімвалаў"
+
+#: src/interface.c:2132
+msgid "<b>Fonts</b>"
+msgstr "<b>Шрыфты</b>"
+
+#: src/interface.c:2137
+msgid "General"
+msgstr "Агульны"
+
+#: src/interface.c:2165
+msgid "Tab Width"
+msgstr "Шырына зкладкі"
+
+#: src/interface.c:2178
+msgid "The width in chars, which one tab character will take"
+msgstr "Шырына адной зкладкі ў пікселях"
+
+#: src/interface.c:2183
+msgid "<b>New files</b>"
+msgstr "<b>Новыя файлы</b>"
+
+#: src/interface.c:2202
+msgid "Strip trailing spaces"
+msgstr "Выдаляць завяршаючыя прабелы"
+
+#: src/interface.c:2206
+msgid "Removes trailing spaces and tabs and the end of lines"
+msgstr "Выдаляць завяршаючыя прабелы на канцах радкоў"
+
+#: src/interface.c:2209
+msgid "Ensure new line at file end"
+msgstr "Забяспечыць пусты радок у канцы файла"
+
+#: src/interface.c:2213
+msgid "Ensures that at the end of the file is a new line"
+msgstr "Забяспечыць пусты радок у канцы файла"
+
+#: src/interface.c:2216
+msgid "<b>Saving files</b>"
+msgstr "<b>Захаваць файлы</b>"
+
+#: src/interface.c:2235
+msgid "Show indention guides"
+msgstr "Паказаць рукаводства фарматыравання"
+
+#: src/interface.c:2238
+msgid "Shows small dotted lines to help you to use the right indention."
+msgstr "Паказваць маленькія лініі з кропкамі дапамагаючыя фарматыраванню."
+
+#: src/interface.c:2241
+msgid "Show white space"
+msgstr "Паказваць прабелы"
+
+#: src/interface.c:2244
+msgid "Marks spaces with dots and tabs with arrows."
+msgstr "Паказваць прабелы кропкамі, табуляцыі стрэлкамі."
+
+#: src/interface.c:2247
+msgid "Show line endings"
+msgstr "Паказваць завяршэнне радка"
+
+#: src/interface.c:2250
+msgid "Show the line ending character"
+msgstr "Паказваць сімвал завяршэнне радка (EOL)"
+
+#: src/interface.c:2253
+msgid "XML tag auto completion"
+msgstr "XML таг аўта дапаўненне"
+
+#: src/interface.c:2256
+msgid "Automatic completion of open XML tags(includes HTML tags)"
+msgstr "Аўтаматычна закрываць адчыненныя XML тагі (таксама для HTML)"
+
+#: src/interface.c:2259
+msgid "Construct auto completion"
+msgstr "Саздаць аўта дапаўненне"
+
+#: src/interface.c:2262
+msgid "Automatic completion of often used constructs like if and for"
+msgstr ""
+"Аўтаматычнае дапаўненне часта выкарыстоўваемых канструкцый 'if' альбо 'for'"
+
+#: src/interface.c:2265
+msgid "Enable folding"
+msgstr "Дазвольць фолдінг"
+
+#: src/interface.c:2268
+msgid "Whether to enable folding the code"
+msgstr "Ці дазваляць фолдінг кода"
+
+#: src/interface.c:2281
+msgid "Editor font"
+msgstr "Шрыфт рэдактара"
+
+#: src/interface.c:2288
+msgid "Long line marker"
+msgstr "Маркер доўгага радка"
+
+#: src/interface.c:2295
+msgid "Long line marker color"
+msgstr "Колер маркера доўгага радка"
+
+#: src/interface.c:2307
+msgid "Sets the font for the editors windows"
+msgstr "Усталяваць шрыфт для рэдактара"
+
+#: src/interface.c:2315
+msgid ""
+"The long line marker is a thin vertical line in the editor. It helps to mark "
+"long lines, or as a hint to break the line. To disable set the value to 0, "
+"or greater than 0 to specify the column where it should appear."
+msgstr ""
+"Маркер доўгага радка - тонкая вертыкальная рыса ў рэдактары. Яна дапамагае "
+"вылучыць доўгія радкі. Каб забараніць пастаўце 0, ці ўкажыце праз колькі "
+"літар яна павінна паявіцца"
+
+#: src/interface.c:2324
+msgid "Sets the color of the long line marker"
+msgstr "Усталяваць колер маркера доўгага радка"
+
+#: src/interface.c:2325 src/dialogs.c:477 src/dialogs.c:1705
+#: src/dialogs.c:1712
+msgid "Color Chooser"
+msgstr "Выбар колера"
+
+#: src/interface.c:2332
+msgid "Editor"
+msgstr "Рэдактар"
+
+#: src/interface.c:2340
+msgid ""
+"Enter here the paths to the make tool and the compiler\n"
+"(tools you do not need can be let blank)"
+msgstr ""
+"Увядзіце пуць да прылады make і да кампілятара\n"
+"(прылады якія вам не патрэбны можаце аставіць пустымі)"
+
+#: src/interface.c:2351
+msgid "Make"
+msgstr "Зрабіць"
+
+#: src/interface.c:2358 src/dialogs.c:1755 src/vte.c:163
+msgid "Terminal"
+msgstr "Тэрмінал"
+
+#: src/interface.c:2365
+msgid "Browser"
+msgstr "Браўзер"
+
+#: src/interface.c:2377
+msgid "Path and options for the make tool"
+msgstr "Пуць і наладкі для прылады make"
+
+#: src/interface.c:2384
+msgid ""
+"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
+"-e argument)"
+msgstr ""
+"Тэрмінал эмулятар як xterm, gnome-terminal o konsole (павінен прымаць -е "
+"аргумент)"
+
+#: src/interface.c:2391
+msgid "Path (and possibly additional arguments) to your favorite browser"
+msgstr "Пуць і (магчыма) дадатковыя аргументы да браўзера"
+
+#: src/interface.c:2423
+msgid "Tools"
+msgstr "Прылады"
+
+#: src/interface.c:2431
+msgid ""
+"Specify here information you want to use in templates.\n"
+"See documentation if you don't know, how templates work."
+msgstr ""
+"Укажы інфармацыю якую жадаеш выкарыстоўваць у шаблонах.\n"
+"Глядзі дакументацыю калі не ведаеш як працуюць шаблоны."
+
+#: src/interface.c:2447
+msgid "email address of the developer"
+msgstr "email адрас распрацоўшчыка"
+
+#: src/interface.c:2454
+msgid "Initials of the developer name"
+msgstr "Ініцыялы распрацоўшчыка"
+
+#: src/interface.c:2456
+msgid "Initial Version"
+msgstr "Ізначальная версія"
+
+#: src/interface.c:2468
+msgid "Version number, which a new file initially has"
+msgstr "Нумар версіі, які файл мае ізначальна."
+
+#: src/interface.c:2475
+msgid "Company name"
+msgstr "Імя кампаніі"
+
+#: src/interface.c:2477
+msgid "Developer"
+msgstr "Распрацоўшчык"
+
+#: src/interface.c:2484
+msgid "Company"
+msgstr "Кампанія"
+
+#: src/interface.c:2491
+msgid "Mail address"
+msgstr "Паштовы адрас"
+
+#: src/interface.c:2498
+msgid "Initials"
+msgstr "Ініцыалы"
+
+#: src/interface.c:2510
+msgid "The name of the developer"
+msgstr "імя распрацоўшчыка"
+
+#: src/interface.c:2512
+msgid ""
+"Notice: For all changes you make here,\n"
+"you need to restart Geany to take effect."
+msgstr ""
+"Заўвага: Усе змяненні тут патрабуюць перазапуск Geany, каб уступіць у сілу."
+
+#: src/interface.c:2516
+msgid "Templates"
+msgstr "Шаблоны"
+
+#: src/interface.c:2524
+msgid ""
+"Here you can change keyboard shortcuts for various actions. Just double "
+"click on a action or select one and press the Change button to enter a new "
+"shortcut. You can also edit the string representation of the shortcut "
+"directly."
+msgstr ""
+"Тут можна змяніць клавішы для розных спраў. Зрабі даблклік на справе. Ці "
+"націсні кнопку Змяніць. Вы можаце таксама змяняць строкавае адлюстраванне."
+
+#: src/interface.c:2547
+msgid "Change"
+msgstr "Змяніць"
+
+#: src/interface.c:2551
+msgid "Keybindings"
+msgstr "Пывязкі клавіш"
+
+#: src/callbacks.c:204 src/callbacks.c:219
+msgid "Do you really want to quit?"
+msgstr "Вы ўпэнены што жадаеце выйсці?"
+
+#: src/callbacks.c:454
+#, c-format
+msgid ""
+"Are you sure you want to reload '%s'?\n"
+"Any unsaved changes will be lost."
+msgstr ""
+"Вы упэўнены што жадаеце загрузіць зноў '%s?'\n"
+"Усе незахаваныя змяненні зьнікнут."
+
+#: src/callbacks.c:844
+#, c-format
+msgid "The file '%s' already exists. Do you want to overwrite it?"
+msgstr "Файл '%s' ужо існуе. Замяніць яго?"
+
+#: src/callbacks.c:1310 src/callbacks.c:1319
+#, c-format
+msgid "Declaration or definition of \"%s()\" not found"
+msgstr "Аб'яуленне ці рэалізацыя \"%s() не знойдзена\""
+
+#: src/callbacks.c:1628
+msgid "Failed to execute the view program"
+msgstr "Немагчыма запусьціць праграму прагляду"
+
+#: src/callbacks.c:1636
+msgid "Failed to execute the terminal program"
+msgstr "Немагчыма запусьціць тэрмінальную праграму"
+
+#. initialize the dialog
+#: src/callbacks.c:1959 src/dialogs.c:69
+msgid "Open File"
+msgstr "Адчыніць файл"
+
+#: src/support.c:90 src/support.c:114
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr "Нельга знайсьці pixmap: %s"
+
+#: src/dialogs.c:74
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+"Адчыніць файл у рэжыме толькі-чытаньне. Калі выбрана больш за адзін файл, "
+"усе будуць адчынены ў рэжыме талькі-чытаньне."
+
+#: src/dialogs.c:110
+msgid "Detect by file extension  "
+msgstr "Вызначыць па расшырэньню  "
+
+#: src/dialogs.c:163
+msgid "Save File"
+msgstr "Захаваць файл"
+
+#: src/dialogs.c:215
+#, c-format
+msgid "There is a limit of %d concurrent open tabs."
+msgstr "Ёсьць абмежаваньне %d на колькасьць адчыненых табаў."
+
+#: src/dialogs.c:216
+msgid "error: too many open files"
+msgstr "памылка: зашмат адчыненых файлаў"
+
+#: src/dialogs.c:239
+#, c-format
+msgid "The match \"%s\" was not found. Wrap search around the document?"
+msgstr "\"%s\" не знойдзены. Шукаць вакол дакумэнта?"
+
+#: src/dialogs.c:242 src/dialogs.c:1823
+msgid "Question"
+msgstr "Пытаньне"
+
+#: src/dialogs.c:271
+msgid "Information"
+msgstr "Інфармацыя"
+
+#: src/dialogs.c:296 src/dialogs.c:328 src/dialogs.c:1267 src/win32.c:217
+#: src/win32.c:378
+msgid "Error"
+msgstr "Памылка"
+
+#: src/dialogs.c:320
+#, c-format
+msgid ""
+"The file '%s' is not saved.\n"
+"Do you want to save it before closing?"
+msgstr ""
+"Файл '%s' не захаваны.\n"
+"Жадаеш захаваць перад зачыненьнем?"
+
+#: src/dialogs.c:325
+msgid ""
+"The file is not saved.\n"
+"Do you want to save it before closing?"
+msgstr ""
+"Файл не захаваны.\n"
+"Жадаеш захаваць перад зачыненьнем?"
+
+#: src/dialogs.c:342
+msgid "Don't save"
+msgstr "Не захоўваць"
+
+#: src/dialogs.c:394
+msgid "Choose font"
+msgstr "Выбраць шрыфт"
+
+#: src/dialogs.c:433
+msgid "Word Count"
+msgstr "Лічыць слава"
+
+#: src/dialogs.c:442
+msgid "selection"
+msgstr "вылучэньне"
+
+#: src/dialogs.c:450
+msgid "whole document"
+msgstr "увесь дакумэнт"
+
+#: src/dialogs.c:452
+#, c-format
+msgid ""
+"Range:\t\t%s\n"
+"\n"
+"Lines:\t\t%d\n"
+"Words:\t\t%d\n"
+"Characters:\t%d\n"
+msgstr ""
+"Даліна:\t\t%s\n"
+"\n"
+"Радкоў:\t\t%d\n"
+"Слоў:\t\t%d\n"
+"Літар:\t%d\n"
+
+#. compile the code
+#: src/dialogs.c:505
+msgid "Compile"
+msgstr "Кампіліраваць"
+
+#: src/dialogs.c:508
+msgid "Compiles the current file"
+msgstr "Адкампіліраваць цякучы файл"
+
+#: src/dialogs.c:525
+msgid "Builds the current file (generate an executable file)"
+msgstr "Будаваць цякучы файл (стварыць запускаемы)"
+
+#. build the code with make all
+#: src/dialogs.c:534 src/dialogs.c:631
+msgid "Build with \"make\""
+msgstr "Будаваць з \"make\""
+
+#: src/dialogs.c:537 src/dialogs.c:634
+msgid "Builds the current file with the make tool and the default target"
+msgstr "Збудаваць цякучы файл выкарыстоўваючы прыладу make."
+
+#. build the code with make
+#: src/dialogs.c:545 src/dialogs.c:642
+msgid "Build with make (custom target)"
+msgstr "Будаваць з make (свая цэль)"
+
+#: src/dialogs.c:551 src/dialogs.c:648
+msgid "Builds the current file with the make tool and the specified target"
+msgstr "Збудаваць цякучы файл выкарыстоўваючы прыладу make i указаную цэль"
+
+#: src/dialogs.c:577 src/dialogs.c:1105
+msgid "Set Includes and Arguments"
+msgstr "Усталяваць Includes і аргумэнты"
+
+#: src/dialogs.c:584
+msgid ""
+"Sets the includes and library paths for the compiler and the program "
+"arguments for execution"
+msgstr "Усталяваць includes і library пуці для кампілятара і аргумэнты праграм"
+
+#. DVI
+#: src/dialogs.c:605
+msgid "LaTeX -> DVI"
+msgstr "LaTeX -> DVI"
+
+#: src/dialogs.c:608
+msgid "Compiles the current file into a DVI file"
+msgstr "Адкампіліраваць цякучы файл у DVI"
+
+#. PDF
+#: src/dialogs.c:618
+msgid "LaTeX -> PDF"
+msgstr "LaTeX -> PDF"
+
+#: src/dialogs.c:621
+msgid "Compiles the current file into a PDF file"
+msgstr "Адкампіліраваць цякучы файл у PDF"
+
+#. DVI view
+#: src/dialogs.c:653
+msgid "View DVI file"
+msgstr "Глядзець DVI"
+
+#: src/dialogs.c:659 src/dialogs.c:672
+msgid "Compiles and view the current file"
+msgstr "Адкампіліраваць і глядзець цякучы файл"
+
+#. PDF view
+#: src/dialogs.c:666
+msgid "View PDF file"
+msgstr "Глядзець PDF"
+
+#. arguments
+#: src/dialogs.c:685 src/dialogs.c:998
+msgid "Set Arguments"
+msgstr "Усталяваць аргумэнты"
+
+#: src/dialogs.c:692
+msgid "Sets the program paths and arguments"
+msgstr "Усталяваць пуці праграм і аргумэнты"
+
+#: src/dialogs.c:733
+msgid "Enter custom options for the make tool"
+msgstr "Увядзі свае опцыі тут, тэкст будзе перадан make."
+
+#: src/dialogs.c:738
+msgid ""
+"Enter custom options here, all entered text is passed to the make command."
+msgstr "Увядзі свае опцыі тут, тэкст будзе перадан make."
+
+#: src/dialogs.c:768
+msgid "Enter the line you want to go to"
+msgstr "Увядзі лінію да пераходу"
+
+#: src/dialogs.c:800
+msgid "Find"
+msgstr "Знайсьці"
+
+#: src/dialogs.c:805 src/dialogs.c:911
+msgid "Enter the search text here"
+msgstr "Знайсьці тэкст"
+
+#: src/dialogs.c:826 src/dialogs.c:944
+msgid "_Case sensitive"
+msgstr "З улікам рэгістру"
+
+#: src/dialogs.c:831 src/dialogs.c:949
+msgid "Match only a _whole word"
+msgstr "Падыходзіць толькі поўнае слова"
+
+#: src/dialogs.c:836 src/dialogs.c:954
+msgid "_Use regular expressions"
+msgstr "_Сталы выраз"
+
+#: src/dialogs.c:841 src/dialogs.c:959
+msgid ""
+"For detailed information about using regular expressions, please read the "
+"documentation."
+msgstr "Для дэталёвай інфармацыі па сталым выразам глядзі дакумэнтацыю."
+
+#: src/dialogs.c:843 src/dialogs.c:961
+msgid "_Search backwards"
+msgstr "Пошук у адваротным кірунку"
+
+#: src/dialogs.c:848 src/dialogs.c:966
+msgid "Match only word s_tart"
+msgstr "Падыходзіць толькі пачатак слоў"
+
+#: src/dialogs.c:893
+msgid "Replace"
+msgstr "Замяніць"
+
+#: src/dialogs.c:896
+msgid "_In Selection"
+msgstr "У _вылучэньні"
+
+#: src/dialogs.c:898
+msgid "Replace all matches found in the currently selected text"
+msgstr "Замяніць ўсе знойдзеныя выпадкі ў вылучаным тэксьце"
+
+#: src/dialogs.c:902
+msgid "Replace _All"
+msgstr "Замяніць _усё"
+
+#: src/dialogs.c:915
+msgid "Enter the replace text here"
+msgstr "Увядзі тэкст замены тут"
+
+#: src/dialogs.c:1003
+msgid ""
+"Set programs and options for compilation and viewing (La)TeX files.\n"
+"The filename is appended automatically at the end.\n"
+msgstr ""
+"Усталяваць праграмы і наладкі дзеля кампіляцыі і прагляду (La)TeX файлаў.\n"
+"Імя файла аўтаматычна дадаецца ў канцы\n"
+
+#: src/dialogs.c:1011
+msgid ""
+"Enter here the (La)TeX command (for DVI creation) and some useful options."
+msgstr "Увядзі (La)TeX каманду (для стварэньня DVI) і карысныя опцыі."
+
+#: src/dialogs.c:1032
+msgid ""
+"Enter here the (La)TeX command (for PDF creation) and some useful options."
+msgstr "Увядзі (La)TeX каманду (для стварэньня PDF) і карысныя опцыі."
+
+#: src/dialogs.c:1053
+msgid ""
+"Enter here the (La)TeX command (for DVI preview) and some useful options."
+msgstr "Увядзі (La)TeX каманду (для прагляду DVI) і карысныя опцыі."
+
+#: src/dialogs.c:1074
+msgid ""
+"Enter here the (La)TeX command (for PDF preview) and some useful options."
+msgstr "Увядзі (La)TeX каманду (для прагляду PDF) і карысныя опцыі "
+
+#: src/dialogs.c:1110
+msgid ""
+"Sets the includes and library paths for the compiler and the program "
+"arguments for execution\n"
+msgstr ""
+"Усталяваць 'includes', пуці да бібліятэк, і аргумэнты да запускаемага файла\n"
+
+#: src/dialogs.c:1119
+msgid "Enter here arguments to your compiler."
+msgstr "Увядзі аргумэнты да кампілятара тут."
+
+#: src/dialogs.c:1125 src/dialogs.c:1148 src/dialogs.c:1172
+#, c-format
+msgid ""
+"%f will be replaced by the complete filename\n"
+"%e will be replaced by filename without extension\n"
+"Example: test_file.c\n"
+"%f -> test_file.c\n"
+"%e -> test_file"
+msgstr ""
+"%f будзе заменены на поўнае імя\n"
+"%e будзе заменены на імя файла без расшырэньня\n"
+"Прыклад: test_file.c\n"
+"%f -> test_file.c\n"
+"%e -> test_file"
+
+#: src/dialogs.c:1142
+msgid "Enter here arguments to your linker."
+msgstr "Увядзі аргумэнты да лінкера."
+
+#. program-args
+#: src/dialogs.c:1166
+msgid "Enter here arguments to your program."
+msgstr "Увядзі аргумэнты тваёй праграмы."
+
+#: src/dialogs.c:1211
+msgid "Show _hidden files"
+msgstr "Паказваць _схаваныя файлы"
+
+#: src/dialogs.c:1228
+msgid "Set filetype:"
+msgstr "Усталюй тып файла:"
+
+#: src/dialogs.c:1231
+msgid ""
+"Explicitly defines a filetype for the file, if it would not be detected by "
+"filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"filetype."
+msgstr ""
+"Уласна ўкажы тып файла калі ён не адзначыўся па расшырэньню.\n"
+"Заўвага: Калі ты вы-бярэш некалькі файлаў усе яны адчыняцца з наданым тыпам."
+
+#: src/dialogs.c:1263
+#, c-format
+msgid ""
+"Configuration directory could not be created (%s).\n"
+"There could be some problems using %s without a configuration directory.\n"
+"Start %s anyway?"
+msgstr ""
+"Немагчыма стварыць дырэкторыю наладак (%s).\n"
+"Праблемы з выкарыстоўваннем %s як дырэкторыі наладак.\n"
+"Запусьціць %s усё роўна?"
+
+#: src/dialogs.c:1312
+msgid ""
+"An error occurred or file information could not be retrieved(e.g. from a new "
+"file)."
+msgstr ""
+"Адбылася памылка, ці немагчыма атрымаць інфармацыю (г.з. з новага файла)."
+
+#: src/dialogs.c:1332 src/dialogs.c:1333 src/dialogs.c:1334 src/dialogs.c:1340
+#: src/dialogs.c:1341 src/dialogs.c:1342 src/utils.c:108 src/utils.c:128
+#: src/utils.c:129 src/utils.c:1030
+msgid "unknown"
+msgstr "невядомы"
+
+#: src/dialogs.c:1346
+msgid "Properties"
+msgstr "Уласьцівасьці"
+
+#: src/dialogs.c:1374
+msgid "<b>Type:</b>"
+msgstr "<b>Тып:</b>"
+
+#: src/dialogs.c:1387
+msgid "<b>Size:</b>"
+msgstr "<b>Памер:</b>"
+
+#: src/dialogs.c:1402
+msgid "<b>Location:</b>"
+msgstr "<b>Месца:</b>"
+
+#: src/dialogs.c:1415
+msgid "<b>Read-only:</b>"
+msgstr "<b>Толькі чытаць:</b>"
+
+#: src/dialogs.c:1422
+msgid "(only inside Geany)"
+msgstr "(толькі ў Geany)"
+
+#: src/dialogs.c:1431
+msgid "<b>Encoding:</b>"
+msgstr "<b>Знаканабор:</b>"
+
+#: src/dialogs.c:1444
+msgid "<b>Modified:</b>"
+msgstr "<b>Зьменены:</b>"
+
+#: src/dialogs.c:1457
+msgid "<b>Changed:</b>"
+msgstr "<b>Зьменены:</b>"
+
+#: src/dialogs.c:1470
+msgid "<b>Accessed:</b>"
+msgstr "<b>Даступаўся:</b>"
+
+#. Header
+#: src/dialogs.c:1499
+msgid "Read:"
+msgstr "Чытаць:"
+
+#: src/dialogs.c:1506
+msgid "Write:"
+msgstr "Пісаць:"
+
+#: src/dialogs.c:1513
+msgid "Execute:"
+msgstr "Выканаць:"
+
+#. Owner
+#: src/dialogs.c:1521
+msgid "Owner:"
+msgstr "Уладальнік:"
+
+#. Group
+#: src/dialogs.c:1557
+msgid "Group:"
+msgstr "Група:"
+
+#. Other
+#: src/dialogs.c:1593
+msgid "Other:"
+msgstr "Другі:"
+
+#: src/dialogs.c:1660
+msgid ""
+"These are settings for the virtual terminal emulator widget (VTE). They only "
+"apply, if the VTE library could be loaded."
+msgstr ""
+"Гэтыя наладкі дзеля віртуальнага тэрмінал эмулятара (VTE). Яны нешта "
+"вызначаюць толькі калі VTE бібліятэкаўсталёвана."
+
+#: src/dialogs.c:1676
+msgid "Terminal font"
+msgstr "Шрыфт тэрмінала"
+
+#: src/dialogs.c:1686
+msgid "Sets the font for the terminal widget."
+msgstr "Усталяваць шрыфт тэрмінальнага віджэта."
+
+#: src/dialogs.c:1688
+msgid "Foreground color"
+msgstr "Foreground колер"
+
+#: src/dialogs.c:1694
+msgid "Background color"
+msgstr "Background колер"
+
+#: src/dialogs.c:1704
+msgid "Sets the foreground color of the text in the terminal widget."
+msgstr "Усталяваць колер тэксту для тэрмінальнага віджэта."
+
+#: src/dialogs.c:1711
+msgid "Sets the background color of the text in the terminal widget."
+msgstr "Усталяваць колер паперы для тэрмінальнага віджэта."
+
+#: src/dialogs.c:1714
+msgid "Scrollback lines"
+msgstr "Пра лістаць назад радкі"
+
+#: src/dialogs.c:1725
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget."
+msgstr ""
+"Указаць колькі радкоў гісторыі можна пра лістаць у тэрмінале тэрмінале."
+
+#: src/dialogs.c:1729
+msgid "Terminal emulation"
+msgstr "Эмуляцыя тэрмінала"
+
+#: src/dialogs.c:1739
+msgid ""
+"Controls how the terminal emulator should behave. xterm is a good start."
+msgstr ""
+"Кантраляваць як тэрмінал эмулятар павінен паводзіць, xterm добры пачатак."
+
+#: src/dialogs.c:1741
+msgid "Scroll on keystroke"
+msgstr "Пра лістаць уніз пры нажацці клявішы."
+
+#: src/dialogs.c:1745
+msgid "Whether to scroll to the bottom if a key was pressed."
+msgstr "Пра лістаць уніз калі нажаць клявішу."
+
+#: src/dialogs.c:1748
+msgid "Scroll on output"
+msgstr "Пра лістаць вывад"
+
+#: src/dialogs.c:1752
+msgid "Whether to scroll to the bottom if an output was generated."
+msgstr "Пракручваць у канец."
+
+#: src/dialogs.c:1846
+msgid "Keyboard shortcuts"
+msgstr "Наладка клявіш"
+
+#: src/dialogs.c:1851
+msgid "The following keyboard shortcuts are defined:"
+msgstr "Вызначаны наступныя клявішы."
+
+#: src/document.c:332
+#, c-format
+msgid "File %s closed."
+msgstr "Файл %s зачынен."
+
+#: src/document.c:385
+msgid "New file opened."
+msgstr "Адчынены новы файл."
+
+#: src/document.c:425 src/document.c:434 src/document.c:435
+msgid "Invalid filename"
+msgstr "Благі файл"
+
+#: src/document.c:456
+#, c-format
+msgid "Could not open file %s (%s)"
+msgstr "Немагчыма адчыніць файл %s (%s)"
+
+#: src/document.c:489
+msgid ""
+"The file does not look like a text file or the file encoding is not "
+"supported."
+msgstr "Файл не выглядае як тэкст, альбо непадтрымліваемы знаканабор."
+
+#: src/document.c:527
+#, c-format
+msgid "File %s reloaded."
+msgstr "Файл %s загружаны зноў."
+
+#: src/document.c:553
+#, c-format
+msgid "File %s opened(%d%s)."
+msgstr "Файл %s адчынены (%d%s)."
+
+#: src/document.c:555
+msgid ", read-only"
+msgstr ", толькі чытаць"
+
+#: src/document.c:593 src/document.c:632
+msgid "Error saving file."
+msgstr "Памылка пры захаваньні файла."
+
+#: src/document.c:613
+#, c-format
+msgid "Error saving file (%s)."
+msgstr "Памылка пры захаваньні файла (%s)."
+
+#: src/document.c:654
+#, c-format
+msgid "File %s saved."
+msgstr "Файл %s захаваны."
+
+#: src/document.c:905
+msgid "tag list updating failed"
+msgstr "Немагчыма аднавіць tag ліст"
+
+#: src/document.c:972
+msgid "Win (CRLF)"
+msgstr "Win (CRLF)"
+
+#: src/document.c:973
+msgid "Max (CR)"
+msgstr "Max (CR)"
+
+#: src/document.c:975
+msgid "Unix (LF)"
+msgstr "Unix (LF)"
+
+#: src/utils.c:120
+#, c-format
+msgid ""
+"%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. "
+"function: %s      encoding: %s      filetype: %s"
+msgstr ""
+"%c  радок: % 4d калёнка: % 3d  вылучэньне: % 4d   %s      рэжым: %s%s      "
+"cur. функцыя: %s      знаканабор: %s      тып файла: %s"
+
+#: src/utils.c:124
+msgid "OVR"
+msgstr "OVR"
+
+#: src/utils.c:124
+msgid "INS"
+msgstr "INS"
+
+#: src/utils.c:360
+#, c-format
+msgid "Font updated (%s)."
+msgstr "Шрыфт адноўлены (%s)."
+
+#: src/utils.c:374 src/geany.h:72
+msgid "untitled"
+msgstr "без назвы"
+
+#: src/utils.c:375
+msgid "(Unsaved)"
+msgstr "(Незахаваны)"
+
+#: src/utils.c:649
+msgid "No tags found"
+msgstr "tags ня знойдзены"
+
+#: src/utils.c:952
+#, c-format
+msgid ""
+"The file '%s' on the disk is more recent than\n"
+"the current buffer.\n"
+"Do you want to reload it?"
+msgstr ""
+"Файл '%s' больш новы за\n"
+"цякучы буфэр.\n"
+"Жадаеш загрузіць яго зноў?"
+
+#: src/filetypes.c:53
+msgid "C source file"
+msgstr "C"
+
+#: src/filetypes.c:71
+msgid "C++ source file"
+msgstr "C++"
+
+#: src/filetypes.c:97
+msgid "Java source file"
+msgstr "Java"
+
+#: src/filetypes.c:114
+msgid "Perl source file"
+msgstr "Perl"
+
+#: src/filetypes.c:132
+msgid "PHP / HTML source file"
+msgstr "PHP / HTML"
+
+#: src/filetypes.c:154
+msgid "XML source file"
+msgstr "XML"
+
+#: src/filetypes.c:171
+msgid "Docbook source file"
+msgstr "Docbook"
+
+#: src/filetypes.c:187
+msgid "Python source file"
+msgstr "Python"
+
+#: src/filetypes.c:204
+msgid "LaTeX source file"
+msgstr "LaTeX"
+
+#: src/filetypes.c:222
+msgid "Pascal source file"
+msgstr "Pascal"
+
+#: src/filetypes.c:243
+msgid "Shell script file"
+msgstr "файл абалонкі"
+
+#: src/filetypes.c:262
+msgid "Makefile"
+msgstr "Makefile"
+
+#: src/filetypes.c:279
+msgid "Cascading StyleSheet"
+msgstr "CSS"
+
+#: src/filetypes.c:295
+msgid "Config file"
+msgstr "наладкі"
+
+#: src/filetypes.c:314
+msgid "Assembler source file"
+msgstr "Асэмблер"
+
+#: src/filetypes.c:330
+msgid "SQL Dump file"
+msgstr "SQL"
+
+#: src/filetypes.c:346
+msgid "(O)Caml source file"
+msgstr "(O)Caml"
+
+#: src/filetypes.c:363
+msgid "O-Matrix source file"
+msgstr "O-Matrix"
+
+#: src/filetypes.c:379
+msgid "Ruby source file"
+msgstr "Ruby"
+
+#: src/filetypes.c:397
+msgid "Tcl source file"
+msgstr "Tcl"
+
+#: src/filetypes.c:415
+msgid "All files"
+msgstr "Усе файлы"
+
+#: src/filetypes.c:424
+msgid "None"
+msgstr "Нічога"
+
+#: src/win32.c:143
+msgid "Executables"
+msgstr "Executables"
+
+#: src/keyfile.c:59
+#, c-format
+msgid "%s configuration file, edit as you need"
+msgstr "Файл наладкі %s, зьмяняй як трэба"
+
+#: src/keyfile.c:104
+msgid ""
+" VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on "
+"keystroke;scroll on output"
+msgstr ""
+" Наладкі VTE: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on keystroke;"
+"scroll on output"
+
+#: src/keyfile.c:229
+msgid "Type here what you want, use it as a notice/scratch board"
+msgstr "Пішы тут што жадаеш, выкарыстоўвай для заметак."
+
+#: src/msgwindow.c:44
+msgid "Status messages"
+msgstr "Статус паведамленьні"
+
+#: src/build.c:89
+#, c-format
+msgid "Failed to view %s (make sure it is already compiled)"
+msgstr "Немагчыма глядзець %s (пераканайся што адкампіліравана)"
+
+#: src/build.c:116 src/build.c:277 src/build.c:414
+#, c-format
+msgid "Process failed (%s)"
+msgstr "Працэс скончыўся непасьпяхова (%s)"
+
+#: src/build.c:270
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s (у дырэкторыі: %s)"
+
+#: src/build.c:350
+#, c-format
+msgid "Failed to execute %s (make sure it is already built)"
+msgstr "Немагчыма запусьціць %s (пераканайся што файл існуе)"
+
+#: src/build.c:362
+#, c-format
+msgid ""
+"Could not find terminal '%s' (check path for Terminal tool setting in "
+"Preferences)"
+msgstr ""
+"Нельга знайсьці тэрмінал '%s' (правер пуць да тэрмінала ў Уласьцівасьцях)"
+
+#: src/build.c:377
+#, c-format
+msgid "Failed to change the working directory to %s"
+msgstr "Немагчыма замяніць працоўную дырэкторыю %s"
+
+#: src/build.c:395
+#, c-format
+msgid "Failed to execute %s (start-script could not be created)"
+msgstr "Немагчыма запусьціць %s (нельга стварыць start-script)"
+
+#: src/build.c:521
+msgid "compilation finished unsuccessful"
+msgstr "кампіляцыя скончылася дрэнна"
+
+#: src/build.c:525
+msgid "compilation finished successful"
+msgstr "кампіляцыя скончылася пасьпяхова"
+
+#: src/prefs.c:195
+msgid "Action"
+msgstr "Справа"
+
+#: src/prefs.c:200
+msgid "Shortcut"
+msgstr "Ярлык"
+
+#: src/prefs.c:564
+msgid "Grab key"
+msgstr "Захапіць клявішу"
+
+#: src/prefs.c:568
+#, c-format
+msgid "Type the combination of the keys you want to use for \"%s\""
+msgstr "Цісні камбінацыю клявіш, якія ты жадаеш выкарыстоўваць для \"%s\""
+
+#: src/prefs.c:692
+#, c-format
+msgid ""
+"The combination '%s' is already used for \"%s\". Please choose another one."
+msgstr "Камбінацыя '%s' ужо выкарыстана для \"%s\" Калiласкавыбяры іншую."
+
+#: src/about.c:91
+msgid "About Geany"
+msgstr "Пра Geany"
+
+#: src/about.c:138
+msgid "A fast and lightweight IDE"
+msgstr "Хуткае лёгкае IDE"
+
+#. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
+#: src/about.c:188
+msgid "Info"
+msgstr "Інфармацыя"
+
+#: src/about.c:200
+msgid "Developers"
+msgstr "Распрацоўшчыкі"
+
+#: src/about.c:200
+msgid "Maintainer"
+msgstr "Падтрымка"
+
+#: src/about.c:200
+msgid "developer"
+msgstr "распрацоўшчык"
+
+#: src/about.c:201
+msgid "translation maintainer"
+msgstr "падтрымка перакладу"
+
+#: src/about.c:201
+msgid "Translators"
+msgstr "Перакладчыкі"
+
+#: src/about.c:202
+msgid "language"
+msgstr "мова"
+
+#: src/about.c:208
+msgid "Credits"
+msgstr "Аўтары"
+
+#: src/about.c:221
+msgid "License"
+msgstr "Ліцэнзія"
+
+#: src/treeviews.c:65
+msgid "Chapter"
+msgstr "Глава"
+
+#: src/treeviews.c:67 src/treeviews.c:89
+msgid "Section"
+msgstr "Сэкцыя"
+
+#: src/treeviews.c:69
+msgid "Sect1"
+msgstr "Sect1"
+
+#: src/treeviews.c:71
+msgid "Sect2"
+msgstr "Sect2"
+
+#: src/treeviews.c:73
+msgid "Sect3"
+msgstr "Sect3"
+
+#: src/treeviews.c:75
+msgid "Appendix"
+msgstr "Апендыкс"
+
+#: src/treeviews.c:77 src/treeviews.c:99 src/treeviews.c:161
+msgid "Other"
+msgstr "Іншы"
+
+#: src/treeviews.c:85
+msgid "Command"
+msgstr "Каманда"
+
+#: src/treeviews.c:87
+msgid "Environment"
+msgstr "Акружэньне"
+
+#: src/treeviews.c:91
+msgid "Subsection"
+msgstr "Падсэкцыя"
+
+#: src/treeviews.c:93
+msgid "Subsubsection"
+msgstr "Пад-падсэкцыя"
+
+#: src/treeviews.c:95
+msgid "Label"
+msgstr "Метка"
+
+#: src/treeviews.c:97
+msgid "Begin"
+msgstr "Пачатак"
+
+#: src/treeviews.c:105 src/treeviews.c:147
+msgid "Function"
+msgstr "Функцыя"
+
+#: src/treeviews.c:107
+msgid "Package"
+msgstr "Пакет"
+
+#: src/treeviews.c:109
+msgid "My"
+msgstr "Мой"
+
+#: src/treeviews.c:111
+msgid "Local"
+msgstr "Месны"
+
+#: src/treeviews.c:113
+msgid "Our"
+msgstr "Наш"
+
+#: src/treeviews.c:126
+msgid "Methods"
+msgstr "Метады"
+
+#: src/treeviews.c:128 src/treeviews.c:149
+msgid "Class"
+msgstr "Класс"
+
+#: src/treeviews.c:130
+msgid "Singleton"
+msgstr "Сінглтон"
+
+#: src/treeviews.c:132
+msgid "Mixin"
+msgstr "Mixin"
+
+#: src/treeviews.c:134 src/treeviews.c:155
+msgid "Variables"
+msgstr "Variables"
+
+#: src/treeviews.c:136 src/treeviews.c:151
+msgid "Members"
+msgstr "Membres"
+
+#: src/treeviews.c:153
+msgid "Macro"
+msgstr "Macro"
+
+#: src/treeviews.c:157
+msgid "Namespace"
+msgstr "Namespace"
+
+#: src/treeviews.c:159
+msgid "Struct / Typedef"
+msgstr "Struct / Typedef"
+
+#: src/treeviews.c:227 src/treeviews.c:279
+msgid "Hide"
+msgstr "Схаваць"
+
+#: src/treeviews.c:235 src/treeviews.c:287
+msgid "Hide sidebar"
+msgstr "Схаваць сайд-бар"
+
+#: src/treeviews.c:267
+msgid "Reload"
+msgstr "Загрузіць зноў"
