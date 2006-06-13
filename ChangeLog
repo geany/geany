@@ -4,6 +4,8 @@
                     geany.xsl to EXTRA_DIST.
  * doc/geany.docbook: Removed appendix for keybindings, updated section
                       keybindings to new action identifiers.
+ * src/utils.c: Improved and finished switching between files when
+                clicking on compiler error messages.
 
 
 2006-06-12  Enrico Troeger  <enrico.troeger@uvena.de>

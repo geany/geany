@@ -2289,18 +2289,26 @@ gdouble utils_strtod(const gchar *source, gchar **end)
  * and when something useful is found, it jumps to file and scrolls to the line  */
 void utils_parse_compiler_error_line(const gchar *string)
 {
-	/// TODO remove the assignment
 	gint idx = document_get_cur_idx();
-	gint idx_of_error_file = document_get_cur_idx();
+	gint idx_of_error_file;
 	gint line = -1;
-
+	gchar *end = NULL;
+	gchar *path;
+	gchar *filename;
+	gchar **fields;
+	gchar *pattern;			// pattern to split the error message into some fields
+	guint field_min_len;	// used to detect errors after parsing
+	guint field_idx_line;	// idx of the field where the line is
+	guint field_idx_file;	// idx of the field where the filename is
+	
+	
 	if (string == NULL || ! doc_list[app->cur_idx].is_valid ||
 		doc_list[app->cur_idx].file_type == NULL)
 		return;
 
-	// first get the line
 	switch (doc_list[app->cur_idx].file_type->id)
 	{
+		// only gcc is supported, I don't know any other C(++) compilers and their error messages
 		case GEANY_FILETYPES_C:
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_RUBY:
@@ -2308,130 +2316,95 @@ void utils_parse_compiler_error_line(const gchar *string)
 		{
 			// empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
 			// empty.c:21: error: conflicting types for `foo'
-			gchar **fields = g_strsplit(string, ":", 3);
-			gchar *end = NULL;
-			gchar *path;
-			gchar *filename;
-
-			// parse the line
-			if (g_strv_length(fields) < 3 || fields[0] == NULL || fields[1] == NULL)
-			{
-				g_strfreev(fields);
-				return;
-			}
-
-			/// FIXME this is C99
-			line = strtol(fields[1], &end, 10);
-
-			// if the line could not be read, line is 0 and an error occurred, so we leave
-			if (fields[1] == end)
-			{
-				g_strfreev(fields);
-				return;
-			}
-
-			// get the basename of the built file to get the path to look for other files
-			path = g_path_get_dirname(doc_list[app->cur_idx].file_name);
-			filename = g_strconcat(path, G_DIR_SEPARATOR_S, fields[0], NULL);
-
-			// use document_open_file to find an already opened file, or to open it in place
-			idx_of_error_file = document_open_file(-1, filename, 0, FALSE, NULL);
-
-			g_free(path);
-			g_free(filename);
-
-			if (idx_of_error_file == -1 || ! doc_list[idx_of_error_file].is_valid)
-			{
-				g_strfreev(fields);
-				return;
-			}
-
+			pattern = ":";
+			field_min_len = 3;
+			field_idx_line = 1;
+			field_idx_file = 0;
 			break;
 		}
-		/// TODO parse also the file where the error occurred like above
-		// the error output of python, perl and php -l on errors equals in "line xx", so they
-		// are "compatible"
 		case GEANY_FILETYPES_PHP:
+		{
+			// Parse error: parse error, unexpected T_CASE in brace_bug.php on line 3
+			pattern = " ";
+			field_min_len = 11;
+			field_idx_line = 10;
+			field_idx_file = 7;
+			break;
+		}
 		case GEANY_FILETYPES_PERL:
+		{
+			// syntax error at test.pl line 7, near "{
+			pattern = " ";
+			field_min_len = 6;
+			field_idx_line = 5;
+			field_idx_file = 3;
+			break;
+		}
+		// the error output of python and tcl equals
 		case GEANY_FILETYPES_TCL:
 		case GEANY_FILETYPES_PYTHON:
-		{	// File "HyperArch.py", line 37, in ?
-			gchar *space = strchr(string, ' ');
-
-			while (space != NULL && strncmp(space, " line ", 6) != 0)
-			{
-				space = strchr(space+1, ' ');
-			}
-			if (space == NULL) return;
-
-			// this comparison may be unnecessary, but I think it is safer
-			if (strncmp(space, " line ", 6) == 0)
-			{
-				gchar *end = NULL;
-				space += 6;
-
-				line = strtol(space, &end, 10);
-
-				// if the line could not be read, line is 0 and an error occurred, so we leave
-				if (space == end)
-					return;
-			}
-			idx_of_error_file = app->cur_idx;
+		{	
+			// File "HyperArch.py", line 37, in ?
+			// (file "clrdial.tcl" line 12)
+			pattern = " \"";
+			field_min_len = 6;
+			field_idx_line = 5;
+			field_idx_file = 2;
 			break;
 		}
 		case GEANY_FILETYPES_PASCAL:
-		{	// bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
+		{	
+			// bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
 			// still untested with other files than the opened
-			gchar **fields = g_strsplit(string, "(", 2);
-			gchar *end = NULL;
-			gchar *path;
-			gchar *filename;
-
-			// parse the line
-			if (g_strv_length(fields) < 2 || fields[0] == NULL || fields[1] == NULL)
-			{
-				g_strfreev(fields);
-				return;
-			}
-
-			line = strtol(fields[1], &end, 10);
-
-			// if the line could not be read, line is 0 and an error occurred, so we leave
-			if (fields[1] == end)
-			{
-				g_strfreev(fields);
-				return;
-			}
-
-			// get the basename of the built file to get the path to look for other files
-			path = g_path_get_dirname(doc_list[app->cur_idx].file_name);
-			filename = g_strconcat(path, G_DIR_SEPARATOR_S, fields[0], NULL);
-
-			// use document_open_file to find an already opened file, or to open it in place
-			idx_of_error_file = document_open_file(-1, filename, 0, FALSE, NULL);
-
-			g_free(path);
-			g_free(filename);
-
-			if (idx_of_error_file == -1 || ! doc_list[idx_of_error_file].is_valid)
-			{
-				g_strfreev(fields);
-				return;
-			}
-
+			pattern = "(";
+			field_min_len = 2;
+			field_idx_line = 1;
+			field_idx_file = 0;
 			break;
 		}
+		default: return;
+	}
+
+	fields = g_strsplit_set(string, pattern, field_min_len);
+	
+	// parse the line
+	if (g_strv_length(fields) < field_min_len)
+	{
+		g_strfreev(fields);
+		return;
+	}
+
+	line = strtol(fields[field_idx_line], &end, 10);
+
+	// if the line could not be read, line is 0 and an error occurred, so we leave
+	if (fields[field_idx_line] == end)
+	{
+		g_strfreev(fields);
+		return;
+	}
+
+	// get the basename of the built file to get the path to look for other files
+	path = g_path_get_dirname(doc_list[app->cur_idx].file_name);
+	filename = g_strconcat(path, G_DIR_SEPARATOR_S, fields[field_idx_file], NULL);
+
+	// use document_open_file to find an already opened file, or to open it in place
+	idx_of_error_file = document_open_file(-1, filename, 0, FALSE, NULL);
+
+	g_free(path);
+	g_free(filename);
+	g_strfreev(fields);
+
+	if (idx_of_error_file == -1 || ! doc_list[idx_of_error_file].is_valid || line == -1)
+	{
+		return;
 	}
 
 	// finally jump to the line (and file)
-	if (line != -1)
+	if (idx != idx_of_error_file)
 	{
-		if (idx != idx_of_error_file)
-		{
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
-									gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
-									GTK_WIDGET(doc_list[idx_of_error_file].sci)));
-		}
-		utils_goto_line(idx_of_error_file, line);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
+								gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+								GTK_WIDGET(doc_list[idx_of_error_file].sci)));
 	}
+	utils_goto_line(idx_of_error_file, line);
 }
