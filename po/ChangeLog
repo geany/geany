@@ -1,8 +1,10 @@
 2006-06-13  Frank Lanitz  <frank@frank.uvena.de>
 
- * ru.po: Minor update
+ * be.po: Updated fuzzy entries, fixed a lot of errors, added
+          missing translations by Yura Semashko <yurand2@gmail.com>
  * de.po: Update, mostly Strings for shortcuts
  * geany.pot: Update of catalog
+ * ru.po: Minor update
 
 2006-06-12  Frank Lanitz  <frank@frank.uvena.de>
 
