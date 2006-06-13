@@ -139,7 +139,7 @@ typedef struct MyApp
 	// to change the default value at startup, I think
 	gboolean			 pref_editor_line_breaking;
 	gboolean			 pref_editor_use_auto_indention;
-
+	gboolean			 pref_editor_use_indicators;
 	gboolean			 pref_editor_show_white_space;
 	gboolean			 pref_editor_show_indent_guide;
 	gboolean			 pref_editor_show_line_endings;

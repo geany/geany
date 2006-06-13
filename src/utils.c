@@ -352,7 +352,7 @@ void utils_set_font(void)
 	{
 		if (doc_list[i].sci)
 		{
-			document_set_font(doc_list[i].sci, fname, size);
+			document_set_font(i, fname, size);
 		}
 	}
 	pango_font_description_free(font_desc);
@@ -2285,13 +2285,12 @@ gdouble utils_strtod(const gchar *source, gchar **end)
 */
 
 
-/* try to parse the file and line number where the error occured described in string
- * and when something useful is found, it jumps to file and scrolls to the line  */
-void utils_parse_compiler_error_line(const gchar *string)
+/* try to parse the file and line number where the error occured described in line
+ * and when something useful is found, it stores the line number in *line and the index of
+ * the file in *idx_of_error_file. */
+void utils_parse_compiler_error_line(const gchar *string, gint *idx_of_error_file, gint *line)
 {
 	gint idx = document_get_cur_idx();
-	gint idx_of_error_file;
-	gint line = -1;
 	gchar *end = NULL;
 	gchar *path;
 	gchar *filename;
@@ -2301,7 +2300,9 @@ void utils_parse_compiler_error_line(const gchar *string)
 	guint field_idx_line;	// idx of the field where the line is
 	guint field_idx_file;	// idx of the field where the filename is
 	
-	
+	*line = -1;
+	*idx_of_error_file = -1;
+
 	if (string == NULL || ! doc_list[app->cur_idx].is_valid ||
 		doc_list[app->cur_idx].file_type == NULL)
 		return;
@@ -2374,7 +2375,7 @@ void utils_parse_compiler_error_line(const gchar *string)
 		return;
 	}
 
-	line = strtol(fields[field_idx_line], &end, 10);
+	*line = strtol(fields[field_idx_line], &end, 10);
 
 	// if the line could not be read, line is 0 and an error occurred, so we leave
 	if (fields[field_idx_line] == end)
@@ -2388,23 +2389,17 @@ void utils_parse_compiler_error_line(const gchar *string)
 	filename = g_strconcat(path, G_DIR_SEPARATOR_S, fields[field_idx_file], NULL);
 
 	// use document_open_file to find an already opened file, or to open it in place
-	idx_of_error_file = document_open_file(-1, filename, 0, FALSE, NULL);
+	*idx_of_error_file = document_open_file(-1, filename, 0, FALSE, NULL);
 
 	g_free(path);
 	g_free(filename);
-	g_strfreev(fields);
 
-	if (idx_of_error_file == -1 || ! doc_list[idx_of_error_file].is_valid || line == -1)
-	{
-		return;
-	}
-
-	// finally jump to the line (and file)
-	if (idx != idx_of_error_file)
+	if (*idx_of_error_file != -1 && doc_list[*idx_of_error_file].is_valid &&
+		*line == -1 && idx != *idx_of_error_file)
 	{
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
-								gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
-								GTK_WIDGET(doc_list[idx_of_error_file].sci)));
+							gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+							GTK_WIDGET(doc_list[*idx_of_error_file].sci)));
 	}
-	utils_goto_line(idx_of_error_file, line);
+	g_strfreev(fields);
 }

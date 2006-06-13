@@ -137,6 +137,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_folding");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_folding);
 
+	widget = lookup_widget(app->prefs_dialog, "check_indicators");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_use_indicators);
+
 	widget = lookup_widget(app->prefs_dialog, "editor_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), app->editor_font);
 
@@ -345,6 +348,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "check_auto_complete");
 		app->pref_editor_auto_complete_constructs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_indicators");
+		app->pref_editor_use_indicators = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
 		// Tools Settings

@@ -39,6 +39,7 @@
 #ifdef HAVE_FCNTL_H
 # include <fcntl.h>
 #endif
+#include <ctype.h>
 
 #include "document.h"
 #include "callbacks.h"
@@ -198,13 +199,12 @@ gint document_create_new_sci(const gchar *filename)
 	GtkWidget *align;
 	PangoFontDescription *pfd;
 	gchar *title, *fname;
-	document this;
 	GtkTreeIter iter;
 	gint new_idx = document_get_new_idx();
-
+	document *this = &(doc_list[new_idx]);
+	
 	title = (filename) ? g_path_get_basename(filename) : g_strdup(GEANY_STRING_UNTITLED);
-	this.tab_label = gtk_label_new(title);
-	//gtk_widget_show(this.tab_label);
+	this->tab_label = gtk_label_new(title);
 
 	hbox = gtk_hbox_new(FALSE, 0);
 	but = gtk_button_new();
@@ -216,7 +216,7 @@ gint document_create_new_sci(const gchar *filename)
 	gtk_container_add(GTK_CONTAINER(align), but);
 
 	gtk_button_set_relief(GTK_BUTTON(but), GTK_RELIEF_NONE);
-	gtk_box_pack_start(GTK_BOX(hbox), this.tab_label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), this->tab_label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
 	gtk_widget_show_all(hbox);
 
@@ -224,6 +224,7 @@ gint document_create_new_sci(const gchar *filename)
 	/* SCI - Code */
 	sci = SCINTILLA(scintilla_new());
 	scintilla_set_id(sci, new_idx);
+	this->sci = sci;
 
 	gtk_widget_show(GTK_WIDGET(sci));
 
@@ -247,7 +248,7 @@ gint document_create_new_sci(const gchar *filename)
 	sci_set_visible_eols(sci, app->pref_editor_show_line_endings);
 	pfd = pango_font_description_from_string(app->editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
-	document_set_font(sci, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
+	document_set_font(new_idx, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
 	pango_font_description_free(pfd);
 	g_free(fname);
 
@@ -258,26 +259,26 @@ gint document_create_new_sci(const gchar *filename)
 		SSM(sci, SCI_SETTWOPHASEDRAW, 0, 0);
 	}
 
-	this.tabmenu_label = gtk_label_new(title);
-	gtk_misc_set_alignment(GTK_MISC(this.tabmenu_label), 0.0, 0);
+	this->tabmenu_label = gtk_label_new(title);
+	gtk_misc_set_alignment(GTK_MISC(this->tabmenu_label), 0.0, 0);
 	if (app->tab_order_ltr)
 	{
 		gint npage;
 		npage = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci),
-																	hbox, this.tabmenu_label);
+																	hbox, this->tabmenu_label);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), npage);
 	}
 	else
 	{
 		gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci), hbox,
-																		this.tabmenu_label, 0);
+																		this->tabmenu_label, 0);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);
 	}
 	iter = treeviews_openfiles_add(new_idx, title);
 	g_free(title);
 
-	this.tag_store = NULL;
-	this.tag_tree = NULL;
+	this->tag_store = NULL;
+	this->tag_tree = NULL;
 
 	// "the" SCI signal
 	g_signal_connect((GtkWidget*) sci, "sci-notify",
@@ -294,22 +295,20 @@ gint document_create_new_sci(const gchar *filename)
 	utils_close_buttons_toggle();
 
 	// store important pointers in the tab list
-	this.file_name = (filename) ? g_strdup(filename) : NULL;
-	this.sci = sci;
-	this.encoding = NULL;
-	this.tm_file = NULL;
-	this.iter = iter;
-	this.file_type = NULL;
-	this.mtime = 0;
-	this.changed = FALSE;
-	this.last_check = time(NULL);
-	this.do_overwrite = FALSE;
-	this.readonly = FALSE;
-	this.line_breaking = TRUE;
-	this.use_auto_indention = TRUE;
-	this.has_tags = FALSE;
-	this.is_valid = TRUE;
-	doc_list[new_idx] = this;
+	this->file_name = (filename) ? g_strdup(filename) : NULL;
+	this->encoding = NULL;
+	this->tm_file = NULL;
+	this->iter = iter;
+	this->file_type = NULL;
+	this->mtime = 0;
+	this->changed = FALSE;
+	this->last_check = time(NULL);
+	this->do_overwrite = FALSE;
+	this->readonly = FALSE;
+	this->line_breaking = TRUE;
+	this->use_auto_indention = TRUE;
+	this->has_tags = FALSE;
+	this->is_valid = TRUE;
 
 	return new_idx;
 }
@@ -859,19 +858,18 @@ void document_replace_all(gint idx, const gchar *find_text, const gchar *replace
 }
 
 
-void document_set_font(ScintillaObject *sci, const gchar *font_name, gint size)
+void document_set_font(gint idx, const gchar *font_name, gint size)
 {
 	gint style;
 
 	for (style = 0; style <= 127; style++)
-		sci_set_font(sci, style, font_name, size);
+		sci_set_font(doc_list[idx].sci, style, font_name, size);
 	// line number and braces
-	sci_set_font(sci, STYLE_LINENUMBER, font_name, size);
-	sci_set_font(sci, STYLE_BRACELIGHT, font_name, size);
-	sci_set_font(sci, STYLE_BRACEBAD, font_name, size);
+	sci_set_font(doc_list[idx].sci, STYLE_LINENUMBER, font_name, size);
+	sci_set_font(doc_list[idx].sci, STYLE_BRACELIGHT, font_name, size);
+	sci_set_font(doc_list[idx].sci, STYLE_BRACEBAD, font_name, size);
 	// zoom to 100% to prevent confusion
-	sci_zoom_off(sci);
-	//sci_colourise(sci, 0, sci_get_length(sci));
+	sci_zoom_off(doc_list[idx].sci);
 }
 
 
@@ -985,6 +983,7 @@ gchar *document_get_eol_mode(gint idx)
 }
 
 
+/// TODO move me to filetypes.c
 gchar *document_prepare_template(filetype *ft)
 {
 	gchar *gpl_notice = NULL;
@@ -1072,4 +1071,48 @@ void document_fold_all(gint idx)
 					sci_toggle_fold(doc_list[idx].sci, i);
 		}
 	}
+}
+
+
+void document_clear_indicators(gint idx)
+{
+	glong last_pos = sci_get_length(doc_list[idx].sci);
+	if (last_pos > 0)
+	{
+		sci_start_styling(doc_list[idx].sci, 0, INDIC2_MASK);
+		sci_set_styling(doc_list[idx].sci, last_pos, 0);
+	}
+}
+
+
+void document_set_indicator(gint idx, gint line)
+{
+	gint start, end, current_mask;
+	guint i = 0, len;
+	gchar *linebuf;
+
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	
+	start = sci_get_position_from_line(doc_list[idx].sci, line);
+	end = sci_get_position_from_line(doc_list[idx].sci, line + 1);
+	
+	// skip blank lines
+	if ((start + 1) == end) return;
+
+	len = end - start;
+	linebuf = g_malloc(len);
+
+	// don't set the indicator on whitespace
+	sci_get_line(doc_list[idx].sci, line, linebuf);
+	if (linebuf == NULL) return;
+
+	while (isspace(linebuf[i])) i++;
+	while (isspace(linebuf[len-1])) len--;
+	g_free(linebuf);
+			
+	current_mask = sci_get_style_at(doc_list[idx].sci, start);
+	current_mask &= INDICS_MASK;
+	current_mask |= INDIC2_MASK;
+	sci_start_styling(doc_list[idx].sci, start + i, INDIC2_MASK);
+	sci_set_styling(doc_list[idx].sci, len - i, current_mask);
 }

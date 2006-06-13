@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -794,4 +794,14 @@ gint sci_get_lines_selected(ScintillaObject *sci)
 		return 0; // no selection
 	
 	return SSM(sci, SCI_LINEFROMPOSITION, end, 0) - SSM(sci, SCI_LINEFROMPOSITION, start, 0) + 1;
+}
+
+void sci_set_styling(ScintillaObject *sci, gint len, gint style)
+{
+	SSM(sci, SCI_SETSTYLING, len, style);
+}
+
+void sci_start_styling(ScintillaObject *sci, gint pos, gint mask)
+{
+	SSM(sci, SCI_STARTSTYLING, pos, mask);
 }

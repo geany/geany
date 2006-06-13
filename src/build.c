@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -38,6 +38,7 @@
 #include "utils.h"
 #include "dialogs.h"
 #include "msgwindow.h"
+#include "document.h"
 
 
 static GIOChannel *build_set_up_io_channel (gint fd, GIOCondition cond, GIOFunc func, gpointer data);
@@ -446,12 +447,20 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 		//GIOStatus s;
 		gchar *msg;
 		guint x = 1;
+		gint line, idx;
 
 		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg)
 		{
 			//if (s != G_IO_STATUS_NORMAL && s != G_IO_STATUS_EOF) break;
 			if (GPOINTER_TO_INT(data))
+			{
 				msgwin_compiler_add(COLOR_RED, FALSE, g_strstrip(msg));
+				if (app->pref_editor_use_indicators)
+				{
+					utils_parse_compiler_error_line(g_strstrip(msg), &idx, &line);
+					if (line != -1) document_set_indicator(idx, line - 1);				
+				}
+			}
 			else
 				msgwin_compiler_add(COLOR_BLACK, FALSE, g_strstrip(msg));
 

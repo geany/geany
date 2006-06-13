@@ -86,6 +86,7 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", app->msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", app->pref_editor_folding);
 	g_key_file_set_boolean(config, PACKAGE, "use_auto_indention", app->pref_editor_use_auto_indention);
+	g_key_file_set_boolean(config, PACKAGE, "use_indicators", app->pref_editor_use_indicators);
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", app->pref_editor_show_indent_guide);
 	g_key_file_set_boolean(config, PACKAGE, "show_white_space", app->pref_editor_show_white_space);
 	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", app->show_markers_margin);
@@ -209,6 +210,7 @@ gboolean configuration_load(void)
 	app->treeview_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_openfiles_visible", TRUE);
 	app->msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	app->pref_editor_folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
+	app->pref_editor_use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
 	app->pref_editor_use_auto_indention = utils_get_setting_boolean(config, PACKAGE, "use_auto_indention", TRUE);
 	app->pref_editor_show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
 	app->pref_editor_show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);

@@ -98,7 +98,7 @@ void document_replace_sel(gint, const gchar*, const gchar*, gint);
 void document_find_next(gint, const gchar*, gint, gboolean, gboolean);
 
 
-void document_set_font(ScintillaObject*, const gchar*, gint);
+void document_set_font(gint, const gchar*, gint);
 
 
 void document_update_tag_list(gint, gboolean);
@@ -113,5 +113,9 @@ gchar *document_prepare_template(filetype *ft);
 void document_fold_all(gint idx);
 
 void document_unfold_all(gint idx);
+
+void document_set_indicator(gint idx, gint line);
+
+void document_clear_indicators(gint idx);
 
 #endif

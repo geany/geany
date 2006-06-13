@@ -211,9 +211,14 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETCARETLINEBACK, types[GEANY_FILETYPES_ALL]->styling[4][1], 0);
 	SSM(sci, SCI_SETCARETLINEVISIBLE, 1, 0);
 
+	// indicator settings
+	SSM(sci, SCI_INDICSETSTYLE, 2, INDIC_SQUIGGLE);
+	// why? if I let this out, the indicator remains green with PHP
+	SSM(sci, SCI_INDICSETFORE, 0, 0x0000ff);
+	SSM(sci, SCI_INDICSETFORE, 2, 0x0000ff);
+	
 	// a darker grey for the line number margin
 	SSM(sci, SCI_STYLESETBACK, STYLE_LINENUMBER, 0xD0D0D0);
-	//SSM(sci, SCI_STYLESETBACK, STYLE_LINENUMBER, 0xD0D0D0);
 
 	// define marker symbols
 	// 0 -> line marker

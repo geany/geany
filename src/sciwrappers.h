@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -146,5 +146,8 @@ gint				sci_get_zoom				(ScintillaObject * sci);
 void				sci_cmd						(ScintillaObject * sci, gint cmd);
 gint				sci_get_current_line		(ScintillaObject * sci, gint pos);
 gint				sci_get_lines_selected		(ScintillaObject * sci);
+void				sci_set_styling				(ScintillaObject * sci, gint len, gint style);
+void				sci_start_styling			(ScintillaObject * sci, gint pos, gint mask);
+
 
 #endif

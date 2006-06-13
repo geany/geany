@@ -6,6 +6,10 @@
                       keybindings to new action identifiers.
  * src/utils.c: Improved and finished switching between files when
                 clicking on compiler error messages.
+ * src/sciwrappers.c, src/document.c, src/highlighting.c, src/build.c,
+   src/keyfile.c, src/prefs.c, src/interface.c, geany.glade,
+   src/geany.h:
+   Implemented code for setting indicators while compiling.
 
 
 2006-06-12  Enrico Troeger  <enrico.troeger@uvena.de>
