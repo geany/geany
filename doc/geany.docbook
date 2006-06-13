@@ -3,11 +3,11 @@
         "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!ENTITY app "Geany">
 <!ENTITY app_small "geany">
-<!ENTITY appversion "0.7">
+<!ENTITY appversion "0.8">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY deburl "http://debian.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "June 4, 2006">
+<!ENTITY date "June 13, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 ]>
 
@@ -784,178 +784,178 @@
 								<entry align="left" spanname="hspan">Menu items</entry>
 							</row>
 							<row>
-								<entry>menu_new</entry>
+								<entry>New</entry>
 								<entry>Creates a new file.</entry>
 							</row>
 							<row>
-								<entry>menu_open</entry>
+								<entry>Open</entry>
 								<entry>Opens a file.</entry>
 							</row>
 							<row>
-								<entry>menu_save</entry>
+								<entry>Save</entry>
 								<entry>Saves the current file.</entry>
 							</row>
 							<row>
-								<entry>menu_saveall</entry>
+								<entry>Save all</entry>
 								<entry>Saves all open files.</entry>
 							</row>
 							<row>
-								<entry>menu_closeall</entry>
+								<entry>Close all</entry>
 								<entry>Closes all open files.</entry>
 							</row>
 							<row>
-								<entry>menu_reloadfile</entry>
+								<entry>Reload file</entry>
 								<entry>Reloads the current file. All unsaved changes will be lost.</entry>
 							</row>
 							<row>
-								<entry>menu_undo</entry>
+								<entry>Undo</entry>
 								<entry>Undoes the last action.</entry>
 							</row>
 							<row>
-								<entry>menu_redo</entry>
+								<entry>Redo</entry>
 								<entry>Redoes the last action.</entry>
 							</row>
 							<row>
-								<entry>menu_preferences</entry>
+								<entry>Preferences</entry>
 								<entry>Opens preferences dialog.</entry>
 							</row>
 							<row>
-								<entry>menu_findnext</entry>
+								<entry>Find Next</entry>
 								<entry>Finds next result.</entry>
 							</row>
 							<row>
-								<entry>menu_findprevious</entry>
+								<entry>Find Previous</entry>
 								<entry>Finds previous result.</entry>
 							</row>
 							<row>
-								<entry>menu_replace</entry>
+								<entry>Replace</entry>
 								<entry>Opens the replace dialog.</entry>
 							</row>
 							<row>
-								<entry>menu_gotoline</entry>
+								<entry>Go to line</entry>
 								<entry>Opens the Go To Line dialog.</entry>
 							</row>
 							<row>
-								<entry>menu_opencolorchooser</entry>
+								<entry>Show Colour Chooser</entry>
 								<entry>Opens the colour chooser dialog.</entry>
 							</row>
 							<row>
-								<entry>menu_fullscreen</entry>
+								<entry>Fullscreen</entry>
 								<entry>Switches to fullscreen mode.</entry>
 							</row>
 							<row>
-								<entry>menu_messagewindow</entry>
+								<entry>Toggle Messages Window</entry>
 								<entry>Toggles the message window (status and compiler messages) on and off.</entry>
 							</row>
 							<row>
-								<entry>menu_zoomin</entry>
+								<entry>Zoom In</entry>
 								<entry>Zooms in the text</entry>
 							</row>
 							<row>
-								<entry>menu_zoomout</entry>
+								<entry>Zoom Out</entry>
 								<entry>Zooms out the text</entry>
 							</row>
 							<row>
-								<entry>menu_replacetabs</entry>
+								<entry>Replace tabs by space</entry>
 								<entry>Replaces all tabs with the right amount of spaces.</entry>
 							</row>
 							<row>
-								<entry>menu_foldall</entry>
+								<entry>Fold all</entry>
 								<entry>Folds all contractible code blocks.</entry>
 							</row>
 							<row>
-								<entry>menu_unfoldall</entry>
+								<entry>Unfold all</entry>
 								<entry>Unfolds all contracted code blocks.</entry>
 							</row>
 							<row>
 								<entry align="left" spanname="hspan">Build options</entry>
 							</row>
 							<row>
-								<entry>build_compile</entry>
+								<entry>Compile</entry>
 								<entry>Compiles the current file.</entry>
 							</row>
 							<row>
-								<entry>build_link</entry>
+								<entry>Build</entry>
 								<entry>Builds (compiles if necessary and links) the current file.</entry>
 							</row>
 							<row>
-								<entry>build_make</entry>
+								<entry>Build with "make"</entry>
 								<entry>Builds the current file with the Make tool.</entry>
 							</row>
 							<row>
-								<entry>build_makeowntarget</entry>
+								<entry>Build with "make" (custom target)</entry>
 								<entry>Builds the current file with the Make tool and a given target.</entry>
 							</row>
 							<row>
-								<entry>build_run</entry>
+								<entry>Run</entry>
 								<entry>Executes the current file in a terminal emulation.</entry>
 							</row>
 							<row>
-								<entry>build_run2</entry>
+								<entry>Run (alternative command)</entry>
 								<entry>Executes the current file in a terminal emulation.</entry>
 							</row>
 							<row>
-								<entry>build_options</entry>
+								<entry>Build options</entry>
 								<entry>Opens the build options dialog.</entry>
 							</row>
 							<row>
 								<entry align="left" spanname="hspan">Miscellaneous</entry>
 							</row>
 							<row>
-								<entry>reloadtaglist</entry>
+								<entry>Reload symbol list</entry>
 								<entry>Reloads the tag/symbol list.</entry>
 							</row>
 							<row>
-								<entry>switch_editor</entry>
+								<entry>Switch to Editor</entry>
 								<entry>Switches to editor widget.</entry>
 							</row>
 							<row>
-								<entry>switch_scribble</entry>
+								<entry>Switch to Scribble</entry>
 								<entry>Switches to scribble widget.</entry>
 							</row>
 							<row>
-								<entry>switch_vte</entry>
+								<entry>Switch to VTE</entry>
 								<entry>Switches to VTE widget.</entry>
 							</row>
 							<row>
-								<entry>switch_tableft</entry>
+								<entry>Switch to left document</entry>
 								<entry>Switches to the previous open document.</entry>
 							</row>
 							<row>
-								<entry>switch_tabright</entry>
+								<entry>Switch to right document</entry>
 								<entry>Switches to the next open document.</entry>
 							</row>
 							<row>
-								<entry>toggle_sidebar</entry>
+								<entry>Toggle sidebar</entry>
 								<entry>Shows or hides the sidebar.</entry>
 							</row>
 							<row>
 								<entry align="left" spanname="hspan">Editing operations</entry>
 							</row>
 							<row>
-								<entry>edit_duplicateline</entry>
+								<entry>Duplicate line</entry>
 								<entry>Duplicates the current line.</entry>
 							</row>
 							<row>
-								<entry>edit_commentline</entry>
+								<entry>Comment line</entry>
 								<entry>Comments current line or selection.</entry>
 							</row>
 							<row>
-								<entry>edit_autocomplete</entry>
+								<entry>Complete word</entry>
 								<entry>Shows auto completion list.</entry>
 							</row>
 							<row>
-								<entry>edit_calltip</entry>
+								<entry>Show calltip</entry>
 								<entry>Shows call tips for the current function or method.</entry>
 							</row>
 							<row>
-								<entry>edit_macrolist</entry>
+								<entry>Show macro list</entry>
 								<entry>Shows a list of available macros and
 									   variables in the workspace.
 								</entry>
 							</row>
 							<row>
-								<entry>edit_suppresscompletion</entry>
+								<entry>Suppress auto completion</entry>
 								<entry>If you type something like if or for and press this key, it
 									   will not be auto completed.
 								</entry>
@@ -1388,17 +1388,6 @@
 			</para>
 		</section>
 	</chapter>
-
-	<appendix id="shortcuts">
-		<title><application>&app;</application> key mapping</title>
-		<section>
-			<title><application>&app;</application> key mapping</title>
-			<para>
-				Since <application>&app;</application> 0.7, most of the keybindings are definable
-				in the preferences dialog. See <xref linkend="keybindings"/>.
-			</para>
-		</section>
-	</appendix>
 
 	<!-- GPL appendix -->
 	&legal;

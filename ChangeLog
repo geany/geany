@@ -1,3 +1,11 @@
+2006-06-13  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * doc/Makefile.am: Renamed target html/index.html in htmldoc, added
+                    geany.xsl to EXTRA_DIST.
+ * doc/geany.docbook: Removed appendix for keybindings, updated section
+                      keybindings to new action identifiers.
+
+
 2006-06-12  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * THANKS, src/about.c: Added translator credits.
