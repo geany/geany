@@ -207,7 +207,8 @@ void utils_update_fold_items(void);
 double utils_strtod(const char *source, char **end);
 
 /* try to parse the file and line number where the error occured described in line
- * and when something useful is found, it jumps to file and scrolls to the line  */
-void utils_parse_compiler_error_line(const gchar *line);
+ * and when something useful is found, it stores the line number in *line and the index of
+ * the file in *idx_of_error_file. */
+void utils_parse_compiler_error_line(const gchar *string, gint *idx_of_error_file, gint *line);
 
 #endif

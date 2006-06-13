@@ -979,24 +979,6 @@ on_editor_button_press_event           (GtkWidget *widget,
 	}
 #endif
 
-	// experimental code to simulate pasting by middle mouse button
-	if (event->button == 2)
-	{
-		GtkClipboard *cp = gtk_clipboard_get(gdk_atom_intern("PRIMARY", FALSE));
-
-		if (gtk_clipboard_wait_is_text_available(cp))
-		{
-			gchar *text = gtk_clipboard_wait_for_text(cp);
-
-			if (text != NULL)
-			{
-				sci_insert_text(doc_list[idx].sci, clickpos, text);
-				g_free(text);
-				return TRUE;
-			}
-		}
-	}
-
 	if (event->button == 3)
 	{
 		utils_find_current_word(doc_list[idx].sci, clickpos,
@@ -1398,7 +1380,10 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 				gtk_tree_model_get(model, &iter, 0, &color, 1, &string, -1);
 				if (string && gdk_color_equal(&red, color))
 				{
-					utils_parse_compiler_error_line(string);
+					gint line;
+					gint idx;
+					utils_parse_compiler_error_line(string, &idx, &line);
+					if (idx != -1 && line != -1) utils_goto_line(idx, line);
 				}
 				g_free(string);
 			}
@@ -2376,5 +2361,14 @@ on_go_to_line1_activate                (GtkMenuItem     *menuitem,
 {
 	// this is search menu cb; call popup menu goto cb
 	on_go_to_line_activate(menuitem, user_data);
+}
+
+
+void
+on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	document_clear_indicators(idx);
 }
 
