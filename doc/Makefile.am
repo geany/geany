@@ -13,11 +13,11 @@ geany.txt:
 	jw -b txt geany.docbook
 
 htmldoc:
-	$(mkinstalldirs) html
-	xmlto -x geany.xsl -o html/ xhtml geany.docbook
-#	xsltproc --stringparam html.stylesheet geany.css -o html/ \
-#	/usr/share/xml/docbook/stylesheet/nwalsh/xhtml/chunk.xsl geany.docbook
-	test -f html/geany.css || cp geany.css html/
+	if [ ! -f "./html/index.html" ]; then \
+		$(mkinstalldirs) html; \
+		xmlto -x geany.xsl -o html/ xhtml geany.docbook; \
+		test -f html/geany.css || cp geany.css html/; \
+	fi
 
 doc: geany.txt htmldoc
 

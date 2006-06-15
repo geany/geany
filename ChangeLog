@@ -1,7 +1,9 @@
-2006-06-15  Enrico Troeger  <enrico@endor>
+2006-06-15  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/utils.c: Fixed a bug at opening files when clicking on compiler
                 error messages(thanks Yura Semashko).
+ * doc/Makefile.am: Fixed a bug which breaks "make install" when xmlto
+                    is not installed.
 
 
 2006-06-13  Enrico Troeger  <enrico.troeger@uvena.de>
