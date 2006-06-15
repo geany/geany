@@ -2318,7 +2318,7 @@ void utils_parse_compiler_error_line(const gchar *string, gint *idx_of_error_fil
 			// empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
 			// empty.c:21: error: conflicting types for `foo'
 			pattern = ":";
-			field_min_len = 3;
+			field_min_len = 4;
 			field_idx_line = 1;
 			field_idx_file = 0;
 			break;

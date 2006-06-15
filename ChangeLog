@@ -1,3 +1,9 @@
+2006-06-15  Enrico Troeger  <enrico@endor>
+
+ * src/utils.c: Fixed a bug at opening files when clicking on compiler
+                error messages(thanks Yura Semashko).
+
+
 2006-06-13  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * doc/Makefile.am: Renamed target html/index.html in htmldoc, added
