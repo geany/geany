@@ -40,7 +40,6 @@
 #include "tm_tagmanager.h"
 
 #include "filetypes.h"
-#include "keybindings.h"
 
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 

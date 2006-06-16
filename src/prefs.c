@@ -34,6 +34,8 @@
 #include "sciwrappers.h"
 #include "document.h"
 #include "keyfile.h"
+#include "keybindings.h"
+
 #ifdef HAVE_VTE
 # include "vte.h"
 #endif

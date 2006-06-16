@@ -47,6 +47,8 @@
 #include "encodings.h"
 #include "treeviews.h"
 #include "notebook.h"
+#include "keybindings.h"
+
 #ifdef HAVE_VTE
 # include "vte.h"
 #endif

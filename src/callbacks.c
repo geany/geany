@@ -46,6 +46,7 @@
 #include "prefs.h"
 #include "templates.h"
 #include "treeviews.h"
+#include "keybindings.h"
 
 
 #ifdef GEANY_WIN32

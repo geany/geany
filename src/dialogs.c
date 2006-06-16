@@ -45,6 +45,7 @@
 #include "interface.h"
 #include "utils.h"
 #include "prefs.h"
+#include "keybindings.h"
 
 
 

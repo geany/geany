@@ -14,6 +14,8 @@
  * src/templates.c, src/templates.h, src/utils.c, src/utils.h,
    src/callbacks.c: Cache the current function name for efficiency in
                     utils_get_current_function, other related fixes.
+ * src/geany.h, src/callbacks.c, src/prefs.c, src/dialogs.c:
+   src/main.c: Don't include keybindings.h in geany.h.
 
 
 2006-06-15  Enrico Troeger  <enrico.troeger@uvena.de>
