@@ -2,6 +2,7 @@
 
  * src/notebook.c, src/notebook.h, src/main.c, src/Makefile.am:
    Added currently disabled drag reordering of notebook tabs.
+ * src/callbacks.c: Execute: only save file if the run command uses it.
 
 
 2006-06-15  Enrico Troeger  <enrico.troeger@uvena.de>

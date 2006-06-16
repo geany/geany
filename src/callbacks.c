@@ -1635,7 +1635,10 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 	}
 	else
 	{
-		if (doc_list[idx].changed) document_save_file(idx);
+		// save the file only if the run command uses it
+		if (doc_list[idx].changed &&
+			strstr(doc_list[idx].file_type->programs->run_cmd, "%f") != NULL)
+				document_save_file(idx);
 		if (build_run_cmd(idx) == (GPid) 0)
 		{
 			msgwin_status_add(_("Failed to execute the terminal program"));
