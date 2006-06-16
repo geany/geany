@@ -46,6 +46,7 @@
 #include "templates.h"
 #include "encodings.h"
 #include "treeviews.h"
+#include "notebook.h"
 #ifdef HAVE_VTE
 # include "vte.h"
 #endif
@@ -478,6 +479,7 @@ gint main(gint argc, gchar **argv)
 	gtk_window_set_default_size(GTK_WINDOW(app->window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 	configuration_load();
 	keybindings_init();
+	notebook_init();
 	templates_init();
 	encodings_init();
 	document_init_doclist();

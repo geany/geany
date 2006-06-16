@@ -14,6 +14,7 @@ bin_PROGRAMS = geany
 
 geany_SOURCES = \
 	main.c geany.h \
+	notebook.c notebook.h \
 	keybindings.c keybindings.h \
 	templates.c templates.h \
 	treeviews.c treeviews.h \
