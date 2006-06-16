@@ -239,6 +239,8 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	gint     stderr_fd;
 
 	app->cur_idx = idx;
+	document_clear_indicators(idx);
+	
 	cmd_string = g_strjoinv(" ", cmd);
 	g_strfreev(cmd);
 

@@ -31,7 +31,6 @@ static style_set *types[GEANY_MAX_FILE_TYPES] = { NULL };
 static gboolean global_c_tags_loaded = FALSE;
 
 
-
 /* simple wrapper function to print file errors in DEBUG mode */
 static void styleset_load_file(GKeyFile *key_file, const gchar *file, GKeyFileFlags flags,
 								GError **just_for_compatibility)
@@ -141,11 +140,25 @@ static void styleset_get_int(GKeyFile *config, GKeyFile *configh, const gchar *s
 	g_strfreev(list);
 }
 
+static guint invert(guint icolour)
+{
+	if (types[GEANY_FILETYPES_ALL]->styling[8][0])
+	{
+		guint r, g, b;
+
+		r = 0xffffff - icolour;
+		g = 0xffffff - (icolour >> 8);
+		b = 0xffffff - (icolour >> 16);
+		return (r | (g << 8) | (b << 16));
+	}
+	return icolour;
+}
+
 
 static void styleset_set_style(ScintillaObject *sci, gint style, gint filetype, gint styling_index)
 {
-	SSM(sci, SCI_STYLESETFORE, style, types[filetype]->styling[styling_index][0]);
-	SSM(sci, SCI_STYLESETBACK, style, types[filetype]->styling[styling_index][1]);
+	SSM(sci, SCI_STYLESETFORE, style, invert(types[filetype]->styling[styling_index][0]));
+	SSM(sci, SCI_STYLESETBACK, style, invert(types[filetype]->styling[styling_index][1]));
 	SSM(sci, SCI_STYLESETBOLD, style, types[filetype]->styling[styling_index][2]);
 	SSM(sci, SCI_STYLESETITALIC, style, types[filetype]->styling[styling_index][3]);
 }
@@ -181,8 +194,11 @@ static void styleset_common_init(void)
 	styleset_get_hex(config, config_home, "styling", "selection", "0xc0c0c0", "0x00007f", "false", types[GEANY_FILETYPES_ALL]->styling[1]);
 	styleset_get_hex(config, config_home, "styling", "brace_good", "0xff0000", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[2]);
 	styleset_get_hex(config, config_home, "styling", "brace_bad", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[3]);
-	styleset_get_hex(config, config_home, "styling", "current_line", "0x000000", "0xE5E5E5", "false", types[GEANY_FILETYPES_ALL]->styling[4]);
-	styleset_get_int(config, config_home, "styling", "folding_style", 1, 1, types[GEANY_FILETYPES_ALL]->styling[5]);
+	styleset_get_hex(config, config_home, "styling", "margin_linenumber", "0x000000", "0xd0d0d0", "false", types[GEANY_FILETYPES_ALL]->styling[4]);
+	styleset_get_hex(config, config_home, "styling", "margin_folding", "0x000000", "0xdfdfdf", "false", types[GEANY_FILETYPES_ALL]->styling[5]);
+	styleset_get_hex(config, config_home, "styling", "current_line", "0x000000", "0xE5E5E5", "false", types[GEANY_FILETYPES_ALL]->styling[6]);
+	styleset_get_int(config, config_home, "styling", "folding_style", 1, 1, types[GEANY_FILETYPES_ALL]->styling[7]);
+	styleset_get_int(config, config_home, "styling", "invert_all", 0, 0, types[GEANY_FILETYPES_ALL]->styling[8]);
 
 	types[GEANY_FILETYPES_ALL]->keywords = NULL;
 	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_ALL, GEANY_WORDCHARS);
@@ -198,9 +214,9 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 {
 	if (types[GEANY_FILETYPES_ALL] == NULL) styleset_common_init();
 
-	SSM(sci, SCI_STYLESETFORE, STYLE_DEFAULT, types[GEANY_FILETYPES_ALL]->styling[0][0]);
-	SSM(sci, SCI_STYLESETBACK, STYLE_DEFAULT, types[GEANY_FILETYPES_ALL]->styling[0][1]);
-	SSM(sci, SCI_STYLESETBOLD, STYLE_DEFAULT, types[GEANY_FILETYPES_ALL]->styling[0][2]);
+	SSM(sci, SCI_STYLESETFORE, STYLE_DEFAULT, invert(types[GEANY_FILETYPES_ALL]->styling[0][0]));
+	SSM(sci, SCI_STYLESETBACK, STYLE_DEFAULT, invert(types[GEANY_FILETYPES_ALL]->styling[0][1]));
+	SSM(sci, SCI_STYLESETBOLD, STYLE_DEFAULT, invert(types[GEANY_FILETYPES_ALL]->styling[0][2]));
 
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
@@ -208,28 +224,25 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETTABWIDTH, app->pref_editor_tab_width, 0);
 
 	// colourize the current line
-	SSM(sci, SCI_SETCARETLINEBACK, types[GEANY_FILETYPES_ALL]->styling[4][1], 0);
+	SSM(sci, SCI_SETCARETLINEBACK, invert(types[GEANY_FILETYPES_ALL]->styling[6][1]), 0);
 	SSM(sci, SCI_SETCARETLINEVISIBLE, 1, 0);
 
 	// indicator settings
 	SSM(sci, SCI_INDICSETSTYLE, 2, INDIC_SQUIGGLE);
 	// why? if I let this out, the indicator remains green with PHP
-	SSM(sci, SCI_INDICSETFORE, 0, 0x0000ff);
-	SSM(sci, SCI_INDICSETFORE, 2, 0x0000ff);
+	SSM(sci, SCI_INDICSETFORE, 0, invert(0x0000ff));
+	SSM(sci, SCI_INDICSETFORE, 2, invert(0x0000ff));
 	
-	// a darker grey for the line number margin
-	SSM(sci, SCI_STYLESETBACK, STYLE_LINENUMBER, 0xD0D0D0);
-
 	// define marker symbols
 	// 0 -> line marker
 	SSM(sci, SCI_MARKERDEFINE, 0, SC_MARK_SHORTARROW);
-	SSM(sci, SCI_MARKERSETFORE, 0, 0x00007f);
-	SSM(sci, SCI_MARKERSETBACK, 0, 0x00ffff);
+	SSM(sci, SCI_MARKERSETFORE, 0, invert(0x00007f));
+	SSM(sci, SCI_MARKERSETBACK, 0, invert(0x00ffff));
 
 	// 1 -> user marker
 	SSM(sci, SCI_MARKERDEFINE, 1, SC_MARK_PLUS);
-	SSM(sci, SCI_MARKERSETFORE, 1, 0x000000);
-	SSM(sci, SCI_MARKERSETBACK, 1, 0xB8F4B8);
+	SSM(sci, SCI_MARKERSETFORE, 1, invert(0x000000));
+	SSM(sci, SCI_MARKERSETBACK, 1, invert(0xB8F4B8));
 
 	// 2 -> folding marker, other folding settings
 	SSM(sci, SCI_SETMARGINTYPEN, 2, SC_MARGIN_SYMBOL);
@@ -237,7 +250,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETFOLDFLAGS, 0, 0);
 
 	// choose the folding style - boxes or circles, I prefer boxes, so it is default ;-)
-	switch (types[GEANY_FILETYPES_ALL]->styling[5][0])
+	switch (types[GEANY_FILETYPES_ALL]->styling[7][0])
 	{
 		case 2:
 		{
@@ -258,7 +271,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	}
 
 	// choose the folding style - straight or curved, I prefer straight, so it is default ;-)
-	switch (types[GEANY_FILETYPES_ALL]->styling[5][1])
+	switch (types[GEANY_FILETYPES_ALL]->styling[7][1])
 	{
 		case 2:
 		{
@@ -274,22 +287,22 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 		}
 	}
 
-	SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE);
+	SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE);
 
-	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPEN, 0xffffff);
-	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPEN, 0x000000);
-	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDER, 0xffffff);
-	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDER, 0x000000);
-	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERSUB, 0xffffff);
-	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERSUB, 0x000000);
-	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERTAIL, 0xffffff);
-	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERTAIL, 0x000000);
-	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEREND, 0xffffff);
-	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEREND, 0x000000);
-	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPENMID, 0xffffff);
-	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPENMID, 0x000000);
-	SSM (sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERMIDTAIL, 0xffffff);
-	SSM (sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL, 0x000000);
+	SSM(sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPEN, 0xffffff);
+	SSM(sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPEN, 0x000000);
+	SSM(sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDER, 0xffffff);
+	SSM(sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDER, 0x000000);
+	SSM(sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERSUB, 0xffffff);
+	SSM(sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERSUB, 0x000000);
+	SSM(sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERTAIL, 0xffffff);
+	SSM(sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERTAIL, 0x000000);
+	SSM(sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEREND, 0xffffff);
+	SSM(sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEREND, 0x000000);
+	SSM(sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDEROPENMID, 0xffffff);
+	SSM(sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDEROPENMID, 0x000000);
+	SSM(sci,SCI_MARKERSETFORE, SC_MARKNUM_FOLDERMIDTAIL, 0xffffff);
+	SSM(sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL, 0x000000);
 
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.compact", (sptr_t) "1");
@@ -298,11 +311,15 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.at.else", (sptr_t) "1");
 
 
-	SSM(sci, SCI_SETSELFORE, 1, types[GEANY_FILETYPES_ALL]->styling[1][0]);
-	SSM(sci, SCI_SETSELBACK, 1, types[GEANY_FILETYPES_ALL]->styling[1][1]);
+	SSM(sci, SCI_SETSELFORE, 1, invert(types[GEANY_FILETYPES_ALL]->styling[1][0]));
+	SSM(sci, SCI_SETSELBACK, 1, invert(types[GEANY_FILETYPES_ALL]->styling[1][1]));
 
 	SSM (sci, SCI_SETSTYLEBITS, style_bits, 0);
 
+
+	SSM(sci, SCI_SETFOLDMARGINCOLOUR, 1, invert(types[GEANY_FILETYPES_ALL]->styling[5][1]));
+	//SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(types[GEANY_FILETYPES_ALL]->styling[5][1]));
+	styleset_set_style(sci, STYLE_LINENUMBER, GEANY_FILETYPES_ALL, 4);
 	styleset_set_style(sci, STYLE_BRACELIGHT, GEANY_FILETYPES_ALL, 2);
 	styleset_set_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_ALL, 2);
 }
@@ -420,14 +437,14 @@ void styleset_c(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_C, 16);
 	styleset_set_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_C, 17);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, 0x0000ff);
-	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, 0xFFFFFF);
+	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, invert(0x0000ff));
+	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, invert(0xFFFFFF));
 	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
 
 	// is used for local structs and typedefs
 	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_C, 18);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 
 	if (types[GEANY_FILETYPES_C]->styling[19][0] == 1)
 		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
@@ -548,14 +565,14 @@ void styleset_cpp(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_CPP, 16);
 	styleset_set_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_CPP, 17);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, 0x0000ff);
-	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, 0xFFFFFF);
+	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, invert(0x0000ff));
+	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, invert(0xffffff));
 	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
 
 	// is used for local structs and typedefs
 	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_CPP, 18);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 
 	if (types[GEANY_FILETYPES_CPP]->styling[19][0] == 1)
 		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
@@ -630,7 +647,7 @@ void styleset_pascal(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_PASCAL, 10);
 	styleset_set_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_PASCAL, 11);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 
 	//SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
 
@@ -872,10 +889,10 @@ void styleset_markup(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) types[GEANY_FILETYPES_XML]->keywords[4]);
 	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) types[GEANY_FILETYPES_XML]->keywords[5]);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 
 	// hotspotting, nice thing
-	SSM(sci, SCI_SETHOTSPOTACTIVEFORE, 1, 0xff0000);
+	SSM(sci, SCI_SETHOTSPOTACTIVEFORE, 1, invert(0xff0000));
 	SSM(sci, SCI_SETHOTSPOTACTIVEUNDERLINE, 1, 0);
 	SSM(sci, SCI_SETHOTSPOTSINGLELINE, 1, 0);
 	SSM(sci, SCI_STYLESETHOTSPOT, SCE_H_QUESTION, 1);
@@ -917,24 +934,24 @@ void styleset_markup(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_H_SGML_1ST_PARAM_COMMENT, GEANY_FILETYPES_XML, 30);
 	styleset_set_style(sci, SCE_H_SGML_ERROR, GEANY_FILETYPES_XML, 31);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_DEFAULT, 0x000000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_DEFAULT, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HB_DEFAULT, invert(0x000000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HB_DEFAULT, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_COMMENTLINE, 0x808080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_COMMENTLINE, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HB_COMMENTLINE, invert(0x808080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HB_COMMENTLINE, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_NUMBER, 0x008080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_NUMBER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HB_NUMBER, invert(0x008080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HB_NUMBER, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_WORD, 0x008080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_WORD, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HB_WORD, invert(0x008080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HB_WORD, invert(0xffffff));
 	SSM(sci, SCI_STYLESETBOLD, SCE_HB_WORD, 1);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_STRING, 0x008000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_STRING, 0x008000);
+	SSM(sci, SCI_STYLESETFORE, SCE_HB_STRING, invert(0x008000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HB_STRING, invert(0x008000));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HB_IDENTIFIER, 0x103000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HB_IDENTIFIER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HB_IDENTIFIER, invert(0x103000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HB_IDENTIFIER, invert(0xffffff));
 //~ #define SCE_HB_START 70
 
 	// Show the whole section of VBScript
@@ -944,26 +961,26 @@ void styleset_markup(ScintillaObject *sci)
 		SSM(sci, SCI_STYLESETEOLFILLED, bstyle, 1);
 	}
 */
-	SSM(sci,SCI_STYLESETBACK, SCE_HB_STRINGEOL, 0x7F7FFF);
+	SSM(sci,SCI_STYLESETBACK, SCE_HB_STRINGEOL, invert(0x7F7FFF));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_DEFAULT, 0x000000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_DEFAULT, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HBA_DEFAULT, invert(0x000000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HBA_DEFAULT, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_COMMENTLINE, 0x808080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_COMMENTLINE, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HBA_COMMENTLINE, invert(0x808080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HBA_COMMENTLINE, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_NUMBER, 0x008080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_NUMBER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HBA_NUMBER, invert(0x008080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HBA_NUMBER, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_WORD, 0x008080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_WORD, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HBA_WORD, invert(0x008080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HBA_WORD, invert(0xffffff));
 	SSM(sci, SCI_STYLESETBOLD, SCE_HBA_WORD, 1);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_STRING, 0x008000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_STRING, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HBA_STRING, invert(0x008000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HBA_STRING, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HBA_IDENTIFIER, 0x103000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HBA_IDENTIFIER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HBA_IDENTIFIER, invert(0x103000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HBA_IDENTIFIER, invert(0xffffff));
 
 	styleset_set_style(sci, SCE_HJ_START, GEANY_FILETYPES_XML, 43);
 	styleset_set_style(sci, SCE_HJ_DEFAULT, GEANY_FILETYPES_XML, 44);
@@ -979,90 +996,90 @@ void styleset_markup(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_HJ_STRINGEOL, GEANY_FILETYPES_XML, 54);
 
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_START, 0x808000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_START, 0xf0f0f0);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_START, invert(0x808000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_START, invert(0xf0f0f0));
 	SSM(sci, SCI_STYLESETEOLFILLED, SCE_HP_START, 1);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_DEFAULT, 0x000000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_DEFAULT, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_DEFAULT, invert(0x000000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_DEFAULT, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_COMMENTLINE, 0x808080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_COMMENTLINE, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_COMMENTLINE, invert(0x808080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_COMMENTLINE, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_NUMBER, 0x008080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_NUMBER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_NUMBER, invert(0x008080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_NUMBER, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_WORD, 0x990000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_WORD, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_WORD, invert(0x990000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_WORD, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_STRING, 0x008000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_STRING, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_STRING, invert(0x008000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_STRING, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_CHARACTER, 0x006060);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_CHARACTER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_CHARACTER, invert(0x006060));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_CHARACTER, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_TRIPLE, 0x002060);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_TRIPLE, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_TRIPLE, invert(0x002060));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_TRIPLE, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_TRIPLEDOUBLE, 0x002060);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_TRIPLEDOUBLE, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_TRIPLEDOUBLE, invert(0x002060));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_TRIPLEDOUBLE, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_CLASSNAME, 0x202010);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_CLASSNAME, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_CLASSNAME, invert(0x202010));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_CLASSNAME, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_CLASSNAME, 0x102020);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_CLASSNAME, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_CLASSNAME, invert(0x102020));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_CLASSNAME, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_OPERATOR, 0x602020);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_OPERATOR, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_OPERATOR, invert(0x602020));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_OPERATOR, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_IDENTIFIER, 0x001060);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_IDENTIFIER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_IDENTIFIER, invert(0x001060));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_IDENTIFIER, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_START, 0x808000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_START, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_START, invert(0x808000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_START, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_DEFAULT, 0x000000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_DEFAULT, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_DEFAULT, invert(0x000000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_DEFAULT, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_COMMENTLINE, 0x808080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_COMMENTLINE, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_COMMENTLINE, invert(0x808080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_COMMENTLINE, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_NUMBER, 0x408000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_NUMBER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_NUMBER, invert(0x408000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_NUMBER, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_STRING, 0x008080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_STRING, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_STRING, invert(0x008080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_STRING, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_CHARACTER, 0x505080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_CHARACTER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_CHARACTER, invert(0x505080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_CHARACTER, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_WORD, 0x990000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_WORD, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_WORD, invert(0x990000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_WORD, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_TRIPLE, 0x002060);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_TRIPLE, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_TRIPLE, invert(0x002060));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_TRIPLE, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_TRIPLEDOUBLE, 0x002060);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_TRIPLEDOUBLE, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_TRIPLEDOUBLE, invert(0x002060));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_TRIPLEDOUBLE, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_CLASSNAME, 0x202010);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_CLASSNAME, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_CLASSNAME, invert(0x202010));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_CLASSNAME, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_DEFNAME, 0x102020);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_DEFNAME, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_DEFNAME, invert(0x102020));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_DEFNAME, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_OPERATOR, 0x601010);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_OPERATOR, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_OPERATOR, invert(0x601010));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_OPERATOR, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HPA_IDENTIFIER, 0x105010);
-	SSM(sci, SCI_STYLESETBACK, SCE_HPA_IDENTIFIER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HPA_IDENTIFIER, invert(0x105010));
+	SSM(sci, SCI_STYLESETBACK, SCE_HPA_IDENTIFIER, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_COMMENTLINE, 0x808080);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_COMMENTLINE, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_COMMENTLINE, invert(0x808080));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_COMMENTLINE, invert(0xffffff));
 
-	SSM(sci, SCI_STYLESETFORE, SCE_HP_NUMBER, 0x408000);
-	SSM(sci, SCI_STYLESETBACK, SCE_HP_NUMBER, 0xffffff);
+	SSM(sci, SCI_STYLESETFORE, SCE_HP_NUMBER, invert(0x408000));
+	SSM(sci, SCI_STYLESETBACK, SCE_HP_NUMBER, invert(0xffffff));
 
 	styleset_set_style(sci, SCE_HPHP_DEFAULT, GEANY_FILETYPES_XML, 32);
 	styleset_set_style(sci, SCE_HPHP_SIMPLESTRING, GEANY_FILETYPES_XML, 33);
@@ -1169,13 +1186,13 @@ void styleset_java(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_JAVA, 16);
 	styleset_set_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_JAVA, 17);
 
-	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, 0x0000ff);
-	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, 0xFFFFFF);
+	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, invert(0x0000ff));
+	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, invert(0xffffff));
 	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
 
 	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_JAVA, 18);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
 
@@ -1279,7 +1296,7 @@ void styleset_perl(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_PL_HASH, GEANY_FILETYPES_PERL, 15);
 	styleset_set_style(sci, SCE_PL_SYMBOLTABLE, GEANY_FILETYPES_PERL, 16);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
 
@@ -1485,7 +1502,7 @@ void styleset_sh(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_SH_PARAM, GEANY_FILETYPES_SH, 9);
 	styleset_set_style(sci, SCE_SH_SCALAR, GEANY_FILETYPES_SH, 10);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
 
@@ -2123,7 +2140,7 @@ void styleset_oms(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_SH_PARAM, GEANY_FILETYPES_OMS, 9);
 	styleset_set_style(sci, SCE_SH_SCALAR, GEANY_FILETYPES_OMS, 10);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
 
@@ -2207,7 +2224,7 @@ void styleset_tcl(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_TCL_WORD4, GEANY_FILETYPES_TCL, 14);
 	styleset_set_style(sci, SCE_TCL_WORD5, GEANY_FILETYPES_TCL, 15);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, 0xc0c0c0);
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
 

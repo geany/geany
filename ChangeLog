@@ -1,3 +1,11 @@
+2006-06-16  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/build.c: Delete all indicators when starting a new compilation.
+ * src/highlighting.c, data/filetypes.common:
+   Added keys for linenumber and folding margin, added key for
+   inverting all colours(if you like dark background).
+
+
 2006-06-16  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/notebook.c, src/notebook.h, src/main.c, src/Makefile.am:
