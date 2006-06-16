@@ -32,7 +32,7 @@ gchar *templates_get_template_changelog(void);
 
 gchar *templates_get_template_generic(gint template);
 
-gchar *templates_get_template_function(gint template, gchar *func_name);
+gchar *templates_get_template_function(gint template, const gchar *func_name);
 
 gchar *templates_get_template_gpl(gint template);
 

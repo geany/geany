@@ -2008,7 +2008,7 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	gchar *text;
-	gchar *cur_tag = NULL;
+	const gchar *cur_tag = NULL;
 	gint line = -1, pos = 0;
 
 	if (doc_list[idx].file_type == NULL)
@@ -2017,14 +2017,10 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	if (doc_list[idx].file_type->id != GEANY_FILETYPES_JAVA &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_ALL)
-	{
-		line = utils_get_current_tag(idx, &cur_tag);
-		// utils_get_current_tag returns -1 on failure, so sci_get_position_from_line
-		// returns the current position, so it should be safe
-		pos = sci_get_position_from_line(doc_list[idx].sci, line - 1);
-	}
+	// utils_get_current_function returns -1 on failure, so sci_get_position_from_line
+	// returns the current position, so it should be safe
+	line = utils_get_current_function(idx, &cur_tag);
+	pos = sci_get_position_from_line(doc_list[idx].sci, line - 1);
 
 	switch (doc_list[idx].file_type->id)
 	{
@@ -2049,7 +2045,6 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 	}
 
 	sci_insert_text(doc_list[idx].sci, pos, text);
-	g_free(cur_tag);
 	g_free(text);
 }
 

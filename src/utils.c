@@ -94,23 +94,14 @@ void utils_update_statusbar(gint idx, gint pos)
 {
 	// currently text need in German and C locale about 150 chars
 	gchar *text = (gchar*) g_malloc0(250);
-	gchar *cur_tag;
+	const gchar *cur_tag;
 	guint line, col;
 
 	if (idx == -1) idx = document_get_cur_idx();
 
 	if (idx >= 0 && doc_list[idx].is_valid)
 	{
-		if (doc_list[idx].file_type == NULL ||
-			doc_list[idx].file_type->id == GEANY_FILETYPES_JAVA ||
-			doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
-		{
-			cur_tag = g_strdup(_("unknown"));
-		}
-		else
-		{
-			utils_get_current_tag(idx, &cur_tag);
-		}
+		utils_get_current_function(idx, &cur_tag);
 
 		if (pos == -1) pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
@@ -129,7 +120,6 @@ _("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. f
 			(doc_list[idx].file_type) ? doc_list[idx].file_type->title : _("unknown"));
 		gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
 		gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, text);
-		g_free(cur_tag);
 	}
 	else
 	{
@@ -966,69 +956,92 @@ void utils_check_disk_status(gint idx)
 }
 
 
-gint utils_get_current_tag(gint idx, gchar **tagname)
+gint utils_get_current_function(gint idx, const gchar **tagname)
 {
-	gint tag_line;
-	gint pos;
+	static gint tag_line = -1;
 	gint line;
+	static gint old_line = -1;
+	static gint old_idx = -1;
+	static gchar *cur_tag = NULL;
 	gint fold_level;
 	gint start, end, last_pos;
 	gint tmp;
 	const GList *tags;
 
-	pos = sci_get_current_position(doc_list[idx].sci);
-	line = sci_get_line_from_position(doc_list[idx].sci, pos);
-
-	fold_level = sci_get_fold_level(doc_list[idx].sci, line);
-	if ((fold_level & 0xFF) != 0)
+	line = sci_get_current_line(doc_list[idx].sci, -1);
+	// check if the cached line and file index have changed since last time:
+	if (line == old_line && idx == old_idx)
 	{
-		while((fold_level & SC_FOLDLEVELNUMBERMASK) != SC_FOLDLEVELBASE && line >= 0)
+		// we can assume same current function as before
+		*tagname = cur_tag;
+		return tag_line;
+	}
+	g_free(cur_tag); // free the old tag, it will be replaced.
+	//record current line and file index for next time
+	old_line = line;
+	old_idx = idx;
+
+	// look first in the tag list
+	tags = utils_get_tag_list(idx, tm_tag_max_t);
+	for (; tags; tags = g_list_next(tags))
+	{
+		tag_line = ((GeanySymbol*)tags->data)->line;
+		if (line + 1 == tag_line)
 		{
-			fold_level = sci_get_fold_level(doc_list[idx].sci, --line);
+			cur_tag = g_strdup(strtok(((GeanySymbol*)tags->data)->str, " "));
+			*tagname = cur_tag;
+			return tag_line;
 		}
-
-		// look first in the tag list
-		tags = utils_get_tag_list(idx, tm_tag_max_t);
-		for (; tags; tags = g_list_next(tags))
-		{
-			tag_line = ((GeanySymbol*)tags->data)->line;
-			if (line == tag_line)
-			{
-				*tagname = g_strdup(strtok(((GeanySymbol*)tags->data)->str, " "));
-				return tag_line;
-			}
-		}
-
-		start = sci_get_position_from_line(doc_list[idx].sci, line - 2);
-		last_pos = sci_get_length(doc_list[idx].sci);
-		tmp = 0;
-		while (sci_get_style_at(doc_list[idx].sci, start) != SCE_C_IDENTIFIER
-			&& sci_get_style_at(doc_list[idx].sci, start) != SCE_C_GLOBALCLASS
-			&& start < last_pos) start++;
-		end = start;
-		// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
-		// this fails on C++ code like 'Vek3 Vek3::mul(double s)' this code returns
-		// "Vek3" because the return type of the prototype is also a GLOBALCLASS,
-		// no idea how to fix at the moment
-		// fails also in C with code like
-		// typedef void viod;
-		// viod do_nothing() {}  -> return viod instead of do_nothing
-		// perhaps: get the first colon, read forward the second colon and then method
-		// name, then go from the first colon backwards and read class name until space
-		while (((tmp = sci_get_style_at(doc_list[idx].sci, end)) == SCE_C_IDENTIFIER
-			 || tmp == SCE_C_GLOBALCLASS
-			 || sci_get_char_at(doc_list[idx].sci, end) == '~'
-			 || sci_get_char_at(doc_list[idx].sci, end) == ':')
-			 && end < last_pos) end++;
-
-		*tagname = g_malloc(end - start + 1);
-		sci_get_text_range(doc_list[idx].sci, start, end, *tagname);
-
-		return line;
 	}
 
-	*tagname = g_strdup(_("unknown"));
-	return -1;
+	if (doc_list[idx].file_type != NULL &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_JAVA &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_ALL)
+	{
+		fold_level = sci_get_fold_level(doc_list[idx].sci, line);
+
+		if ((fold_level & 0xFF) != 0)
+		{
+			tag_line = line;
+			while((fold_level & SC_FOLDLEVELNUMBERMASK) != SC_FOLDLEVELBASE && tag_line >= 0)
+			{
+				fold_level = sci_get_fold_level(doc_list[idx].sci, --tag_line);
+			}
+
+			start = sci_get_position_from_line(doc_list[idx].sci, tag_line - 2);
+			last_pos = sci_get_length(doc_list[idx].sci);
+			tmp = 0;
+			while (sci_get_style_at(doc_list[idx].sci, start) != SCE_C_IDENTIFIER
+				&& sci_get_style_at(doc_list[idx].sci, start) != SCE_C_GLOBALCLASS
+				&& start < last_pos) start++;
+			end = start;
+			// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
+			// this fails on C++ code like 'Vek3 Vek3::mul(double s)' this code returns
+			// "Vek3" because the return type of the prototype is also a GLOBALCLASS,
+			// no idea how to fix at the moment
+			// fails also in C with code like
+			// typedef void viod;
+			// viod do_nothing() {}  -> return viod instead of do_nothing
+			// perhaps: get the first colon, read forward the second colon and then method
+			// name, then go from the first colon backwards and read class name until space
+			while (((tmp = sci_get_style_at(doc_list[idx].sci, end)) == SCE_C_IDENTIFIER
+				 || tmp == SCE_C_GLOBALCLASS
+				 || sci_get_char_at(doc_list[idx].sci, end) == '~'
+				 || sci_get_char_at(doc_list[idx].sci, end) == ':')
+				 && end < last_pos) end++;
+
+			cur_tag = g_malloc(end - start + 1);
+			sci_get_text_range(doc_list[idx].sci, start, end, cur_tag);
+			*tagname = cur_tag;
+
+			return tag_line;
+		}
+	}
+
+	cur_tag = g_strdup(_("unknown"));
+	*tagname = cur_tag;
+	tag_line = -1;
+	return tag_line;
 }
 
 

@@ -229,7 +229,7 @@ gchar *templates_get_template_generic(gint template)
 }
 
 
-gchar *templates_get_template_function(gint template, gchar *func_name)
+gchar *templates_get_template_function(gint template, const gchar *func_name)
 {
 	gchar *result = g_strdup(templates[template]);
 	gchar *date = utils_get_date();

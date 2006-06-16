@@ -99,7 +99,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 void utils_check_disk_status(gint idx);
 
 //gchar *utils_get_current_tag(gint idx, gint direction);
-gint utils_get_current_tag(gint idx, gchar **tagname);
+gint utils_get_current_function(gint idx, const gchar **tagname);
 
 void utils_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen);
 
