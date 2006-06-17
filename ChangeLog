@@ -3,6 +3,7 @@
  * src/keybindings.c, src/sciwrappers.c, src/sciwrappers.h,
    doc/geany.docbook: Made Duplicate Line command duplicate selection
                       if present.
+ * src/highlighting.c: Fixed styling for unmatched braces.
 
 
 2006-06-16  Enrico Troeger  <enrico.troeger@uvena.de>

@@ -321,7 +321,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	//SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(types[GEANY_FILETYPES_ALL]->styling[5][1]));
 	styleset_set_style(sci, STYLE_LINENUMBER, GEANY_FILETYPES_ALL, 4);
 	styleset_set_style(sci, STYLE_BRACELIGHT, GEANY_FILETYPES_ALL, 2);
-	styleset_set_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_ALL, 2);
+	styleset_set_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_ALL, 3);
 }
 
 
