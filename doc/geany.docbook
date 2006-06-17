@@ -848,6 +848,10 @@
 								<entry>Toggles the message window (status and compiler messages) on and off.</entry>
 							</row>
 							<row>
+								<entry>Toggle Sidebar</entry>
+								<entry>Shows or hides the sidebar.</entry>
+							</row>
+							<row>
 								<entry>Zoom In</entry>
 								<entry>Zooms in the text</entry>
 							</row>
@@ -924,10 +928,6 @@
 							<row>
 								<entry>Switch to right document</entry>
 								<entry>Switches to the next open document.</entry>
-							</row>
-							<row>
-								<entry>Toggle sidebar</entry>
-								<entry>Shows or hides the sidebar.</entry>
 							</row>
 							<row>
 								<entry align="left" spanname="hspan">Editing operations</entry>

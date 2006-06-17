@@ -4,6 +4,9 @@
    doc/geany.docbook: Made Duplicate Line command duplicate selection
                       if present.
  * src/highlighting.c: Fixed styling for unmatched braces.
+ * src/keybindings.c, src/keybindings.h, doc/geany.docbook:
+   Set default keybindings for switch page left/right; also group
+   toggle sidebar keybinding with toggle messages.
 
 
 2006-06-16  Enrico Troeger  <enrico.troeger@uvena.de>

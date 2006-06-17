@@ -114,6 +114,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser, 0, 0, "menu_opencolorchooser", _("Show Colour Chooser"));
 	keys[GEANY_KEYS_MENU_FULLSCREEN] = fill(cb_func_menu_fullscreen, GDK_F11, 0, "menu_fullscreen", _("Fullscreen"));
 	keys[GEANY_KEYS_MENU_MESSAGEWINDOW] = fill(cb_func_menu_messagewindow, 0, 0, "menu_messagewindow", _("Toggle Messages Window"));
+	keys[GEANY_KEYS_MENU_SIDEBAR] = fill(cb_func_toggle_sidebar, 0, 0, "toggle_sidebar", _("Toggle Sidebar"));
 	keys[GEANY_KEYS_MENU_ZOOMIN] = fill(cb_func_menu_zoomin, GDK_plus, GDK_CONTROL_MASK, "menu_zoomin", _("Zoom In"));
 	keys[GEANY_KEYS_MENU_ZOOMOUT] = fill(cb_func_menu_zoomout, GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"));
 	keys[GEANY_KEYS_MENU_REPLACETABS] = fill(cb_func_menu_replacetabs, 0, 0, "menu_replacetabs", _("Replace tabs by space"));
@@ -130,9 +131,8 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_SWITCH_EDITOR] = fill(cb_func_switch_editor, GDK_F2, 0, "switch_editor", _("Switch to Editor"));
 	keys[GEANY_KEYS_SWITCH_SCRIBBLE] = fill(cb_func_switch_scribble, GDK_F6, 0, "switch_scribble", _("Switch to Scribble"));
 	keys[GEANY_KEYS_SWITCH_VTE] = fill(cb_func_switch_vte, GDK_F4, 0, "switch_vte", _("Switch to VTE"));
-	keys[GEANY_KEYS_SWITCH_TABLEFT] = fill(cb_func_switch_tableft, 0, 0, "switch_tableft", _("Switch to left document"));
-	keys[GEANY_KEYS_SWITCH_TABRIGHT] = fill(cb_func_switch_tabright, 0, 0, "switch_tabright", _("Switch to right document"));
-	keys[GEANY_KEYS_TOOGLE_SIDEBAR] = fill(cb_func_toggle_sidebar, 0, 0, "toggle_sidebar", _("Toggle sidebar"));
+	keys[GEANY_KEYS_SWITCH_TABLEFT] = fill(cb_func_switch_tableft, GDK_Page_Up, GDK_CONTROL_MASK, "switch_tableft", _("Switch to left document"));
+	keys[GEANY_KEYS_SWITCH_TABRIGHT] = fill(cb_func_switch_tabright, GDK_Page_Down, GDK_CONTROL_MASK, "switch_tabright", _("Switch to right document"));
 	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit_duplicateline, GDK_g, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit_commentline, GDK_d, GDK_CONTROL_MASK, "edit_commentline", _("Comment line"));
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete, GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
