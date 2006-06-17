@@ -84,7 +84,11 @@ static void cb_func_edit_autocomplete(void);
 static void cb_func_edit_calltip(void);
 static void cb_func_edit_macrolist(void);
 static void cb_func_edit_suppresscompletion(void);
+static void cb_func_popup_findusage(void);
+static void cb_func_popup_gototagdefinition(void);
+static void cb_func_popup_gototagdeclaration(void);
 
+void keybindings_call_popup_item(int menuitemkey);
 void keybindings_add_accels();
 
 
@@ -139,6 +143,12 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit_calltip, GDK_space, GDK_MOD1_MASK, "edit_calltip", _("Show calltip"));
 	keys[GEANY_KEYS_EDIT_MACROLIST] = fill(cb_func_edit_macrolist, GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"));
 	keys[GEANY_KEYS_EDIT_SUPPRESSCOMPLETION] = fill(cb_func_edit_suppresscompletion, GDK_space, GDK_SHIFT_MASK, "edit_suppresscompletion", _("Suppress auto completion"));
+	keys[GEANY_KEYS_POPUP_FINDUSAGE] = fill(cb_func_popup_findusage,
+		0, 0, "popup_findusage", _("Find Usage"));
+	keys[GEANY_KEYS_POPUP_GOTOTAGDEFINITION] = fill(cb_func_popup_gototagdefinition,
+		0, 0, "popup_gototagdefinition", _("Go to tag definition"));
+	keys[GEANY_KEYS_POPUP_GOTOTAGDECLARATION] = fill(cb_func_popup_gototagdeclaration,
+		0, 0, "popup_gototagdeclaration", _("Go to tag declaration"));
 
 	// now load user defined keys
 	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
@@ -170,6 +180,13 @@ void keybindings_init(void)
 			"activate", accel_group, keys[(gkey)]->key, keys[(gkey)]->mods, \
 			GTK_ACCEL_VISIBLE)
 
+#define GEANY_ADD_POPUP_ACCEL(gkey, wid) \
+	if (keys[(gkey)]->key != 0) \
+		gtk_widget_add_accelerator( \
+			lookup_widget(app->popup_menu, G_STRINGIFY(wid)), \
+			"activate", accel_group, keys[(gkey)]->key, keys[(gkey)]->mods, \
+			GTK_ACCEL_VISIBLE)
+
 void keybindings_add_accels()
 {
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
@@ -191,6 +208,10 @@ void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACETABS, menu_replace_tabs);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FOLDALL, menu_fold_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNFOLDALL, menu_unfold_all1);
+
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_FINDUSAGE, find_usage1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDEFINITION, goto_tag_definition1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDECLARATION, goto_tag_declaration1);
 
 	// the build menu items are set if the build menus are created
 
@@ -452,6 +473,54 @@ static void cb_func_reloadtaglist(void)
 	gint idx = document_get_cur_idx();
 	document_update_tag_list(idx, TRUE);
 }
+
+
+static void cb_func_popup_findusage(void)
+{
+	keybindings_call_popup_item(GEANY_KEYS_POPUP_FINDUSAGE);
+}
+
+
+static void cb_func_popup_gototagdefinition(void)
+{
+	keybindings_call_popup_item(GEANY_KEYS_POPUP_GOTOTAGDEFINITION);
+}
+
+
+static void cb_func_popup_gototagdeclaration(void)
+{
+	keybindings_call_popup_item(GEANY_KEYS_POPUP_GOTOTAGDECLARATION);
+}
+
+
+void keybindings_call_popup_item(int menuitemkey)
+{
+	gint idx = document_get_cur_idx();
+	gint pos = sci_get_current_position(doc_list[idx].sci);
+	gchar current_word[128];
+
+	utils_find_current_word(doc_list[idx].sci, pos,
+		current_word, sizeof current_word);
+
+	if (*current_word == 0)
+		utils_beep();
+	else
+		switch (menuitemkey)
+		{
+			case GEANY_KEYS_POPUP_FINDUSAGE:
+			on_find_usage1_activate(NULL, NULL);
+			break;
+			case GEANY_KEYS_POPUP_GOTOTAGDEFINITION:
+			on_goto_tag_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
+				"goto_tag_definition1")), NULL);
+			break;
+			case GEANY_KEYS_POPUP_GOTOTAGDECLARATION:
+			on_goto_tag_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
+				"goto_tag_declaration1")), NULL);
+			break;
+		}
+}
+
 
 static void cb_func_switch_editor(void)
 {

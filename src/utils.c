@@ -1066,7 +1066,7 @@ void utils_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t
 
 	chunk[endword] = '\0';
 
-	strncpy(word, chunk + startword, MIN(endword - startword + 1, wordlen));
+	g_strlcpy(word, chunk + startword, wordlen); //ensure null terminated
 	g_free(chunk);
 }
 
