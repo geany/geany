@@ -129,6 +129,7 @@ void				sci_set_codepage			(ScintillaObject * sci, gint cp);
 void				sci_clear_cmdkey			(ScintillaObject * sci, gint key);
 void				sci_assign_cmdkey			(ScintillaObject * sci, gint key, gint command);
 void				sci_get_text_range			(ScintillaObject * sci, gint start, gint end, gchar *text);
+void				sci_selection_duplicate		(ScintillaObject * sci);
 void				sci_line_duplicate			(ScintillaObject * sci);
 void				sci_insert_text				(ScintillaObject * sci, gint pos, const gchar *text);
 void				sci_grap_focus				(ScintillaObject * sci);

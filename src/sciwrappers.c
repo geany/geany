@@ -704,6 +704,12 @@ void sci_line_duplicate(ScintillaObject *sci)
 }
 
 
+void sci_selection_duplicate(ScintillaObject *sci)
+{
+	SSM(sci, SCI_SELECTIONDUPLICATE, 0, 0);
+}
+
+
 void sci_insert_text(ScintillaObject *sci, gint pos, const gchar *text)
 {
 	SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) text);

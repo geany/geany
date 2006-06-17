@@ -133,7 +133,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_SWITCH_TABLEFT] = fill(cb_func_switch_tableft, 0, 0, "switch_tableft", _("Switch to left document"));
 	keys[GEANY_KEYS_SWITCH_TABRIGHT] = fill(cb_func_switch_tabright, 0, 0, "switch_tabright", _("Switch to right document"));
 	keys[GEANY_KEYS_TOOGLE_SIDEBAR] = fill(cb_func_toggle_sidebar, 0, 0, "toggle_sidebar", _("Toggle sidebar"));
-	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit_duplicateline, GDK_g, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line"));
+	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit_duplicateline, GDK_g, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit_commentline, GDK_d, GDK_CONTROL_MASK, "edit_commentline", _("Comment line"));
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete, GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
 	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit_calltip, GDK_space, GDK_MOD1_MASK, "edit_calltip", _("Show calltip"));
@@ -512,7 +512,10 @@ static void cb_func_toggle_sidebar(void)
 static void cb_func_edit_duplicateline(void)
 {
 	gint idx = document_get_cur_idx();
-	sci_line_duplicate(doc_list[idx].sci);
+	if (sci_can_copy(doc_list[idx].sci))
+		sci_selection_duplicate(doc_list[idx].sci);
+	else
+		sci_line_duplicate(doc_list[idx].sci);
 }
 
 static void cb_func_edit_commentline(void)

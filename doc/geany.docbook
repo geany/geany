@@ -933,8 +933,8 @@
 								<entry align="left" spanname="hspan">Editing operations</entry>
 							</row>
 							<row>
-								<entry>Duplicate line</entry>
-								<entry>Duplicates the current line.</entry>
+								<entry>Duplicate line or selection</entry>
+								<entry>Duplicates the current line or selection.</entry>
 							</row>
 							<row>
 								<entry>Comment line</entry>
