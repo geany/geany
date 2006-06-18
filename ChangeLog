@@ -8,6 +8,7 @@
    Move recent files menu up to Open item.
    In prefs use 'Recent files' instead of 'MRU'.
    Correct indentation spelling.
+ * src/keybindings.c: Show shortcut keys for Undo/Redo and popup items.
 
 
 2006-06-17  Nick Treleaven  <nick.treleaven@btinternet.com>
