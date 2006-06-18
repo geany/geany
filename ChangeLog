@@ -1,3 +1,8 @@
+2006-06-18  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/dialogs.c: Make Keyboard shortcuts dialog scrollable.
+
+
 2006-06-17  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c, src/sciwrappers.c, src/sciwrappers.h,

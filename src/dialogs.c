@@ -1839,22 +1839,25 @@ gboolean dialogs_show_question(const gchar *text, ...)
 
 void dialogs_show_keyboard_shortcuts(void)
 {
-	GtkWidget *dialog, *hbox, *label1, *label2, *label3;
+	GtkWidget *dialog, *hbox, *label1, *label2, *label3, *swin;
 	GString *text_names = g_string_sized_new(600);
 	GString *text_keys = g_string_sized_new(600);
 	gchar *shortcut;
 	guint i;
+	gint height;
 
 	dialog = gtk_dialog_new_with_buttons(_("Keyboard shortcuts"), GTK_WINDOW(app->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
 
+	height = GEANY_WINDOW_MINIMAL_HEIGHT;
+	gtk_window_set_default_size(GTK_WINDOW(dialog), height * 0.8, height);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 
 	label3 = gtk_label_new(_("The following keyboard shortcuts are defined:"));
 	gtk_misc_set_padding(GTK_MISC(label3), 0, 6);
 	gtk_misc_set_alignment(GTK_MISC(label3), 0, 0);
 
-	hbox = gtk_hbox_new(FALSE, 5);
+	hbox = gtk_hbox_new(FALSE, 6);
 
 	label1 = gtk_label_new(NULL);
 	gtk_misc_set_padding(GTK_MISC(label1), 15, 0);
@@ -1878,8 +1881,13 @@ void dialogs_show_keyboard_shortcuts(void)
 	gtk_container_add(GTK_CONTAINER(hbox), label1);
 	gtk_container_add(GTK_CONTAINER(hbox), label2);
 
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label3);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
+	swin = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin), GTK_POLICY_AUTOMATIC,
+		GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), hbox);
+
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), label3, FALSE, FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), swin, TRUE, TRUE, 0);
 
 	g_signal_connect((gpointer) dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
 
