@@ -1860,10 +1860,8 @@ void dialogs_show_keyboard_shortcuts(void)
 	hbox = gtk_hbox_new(FALSE, 6);
 
 	label1 = gtk_label_new(NULL);
-	gtk_misc_set_padding(GTK_MISC(label1), 15, 0);
 
 	label2 = gtk_label_new(NULL);
-	gtk_misc_set_padding(GTK_MISC(label2), 15, 0);
 
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
 	{

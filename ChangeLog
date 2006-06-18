@@ -1,3 +1,10 @@
+2006-06-18  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/keybindings.c: Fixed a segfault when pressing shortcut for
+                      "Find Usage" and there is no open file.
+ * src/dialogs.c: Removed unneeded label padding.
+
+
 2006-06-18  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/dialogs.c: Make Keyboard shortcuts dialog scrollable.
