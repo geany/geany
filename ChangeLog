@@ -16,6 +16,9 @@
    In prefs use 'Recent files' instead of 'MRU'.
    Correct indentation spelling.
  * src/keybindings.c: Show shortcut keys for Undo/Redo and popup items.
+ * src/keybindings.c, src/geany.h, src/callbacks.c, src/sci_cb.c,
+   src/callbacks.h: Use correct current_word buffer for popup menu item
+                    keybindings; also use GEANY_MAX_WORD_LENGTH.
 
 
 2006-06-17  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -63,7 +63,7 @@
 
 
 // represents the word under the mouse pointer when right button(no. 3) is pressed
-static gchar current_word[128];
+gchar current_word[GEANY_MAX_WORD_LENGTH];
 
 // represents the state while closing all tabs(used to prevent notebook switch page signals)
 static gboolean closing_all = FALSE;

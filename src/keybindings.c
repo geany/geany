@@ -545,14 +545,13 @@ static void keybindings_call_popup_item(int menuitemkey)
 {
 	gint idx = document_get_cur_idx();
 	gint pos;
-	gchar current_word[128];
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	
 	pos = sci_get_current_position(doc_list[idx].sci);
 
 	utils_find_current_word(doc_list[idx].sci, pos,
-		current_word, sizeof current_word);
+		current_word, GEANY_MAX_WORD_LENGTH);
 
 	if (*current_word == 0)
 		utils_beep();

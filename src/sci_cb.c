@@ -364,7 +364,7 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos)
 {
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	gint style;
-	gchar word[128];
+	gchar word[GEANY_MAX_WORD_LENGTH];
 	const GPtrArray *tags;
 
 	word[0] = '\0';
