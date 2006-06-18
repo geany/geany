@@ -1,6 +1,13 @@
 2006-06-18  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/dialogs.c: Make Keyboard shortcuts dialog scrollable.
+ * src/interface.c, geany.glade:
+   Set toolbar button Compile text, Execute icon and insert separators
+   before Quit and before Revert, Close.
+   Move popup item Goto definition above declaration (used more often).
+   Move recent files menu up to Open item.
+   In prefs use 'Recent files' instead of 'MRU'.
+   Correct indentation spelling.
 
 
 2006-06-17  Nick Treleaven  <nick.treleaven@btinternet.com>

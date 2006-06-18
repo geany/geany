@@ -57,7 +57,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image674">
+			<widget class="GtkImage" id="image722">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -98,6 +98,26 @@
 		  </child>
 
 		  <child>
+		    <widget class="GtkMenuItem" id="recent_files1">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Recent _files</property>
+		      <property name="use_underline">True</property>
+
+		      <child>
+			<widget class="GtkMenu" id="recent_files1_menu">
+
+			  <child>
+			    <widget class="GtkMenuItem" id="invisible5">
+			      <property name="label" translatable="yes">invisible</property>
+			      <property name="use_underline">True</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+
+		  <child>
 		    <widget class="GtkSeparatorMenuItem" id="separator13">
 		      <property name="visible">True</property>
 		    </widget>
@@ -130,7 +150,7 @@
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image675">
+			<widget class="GtkImage" id="image723">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -191,7 +211,7 @@
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image676">
+			<widget class="GtkImage" id="image724">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -206,32 +226,6 @@
 
 		  <child>
 		    <widget class="GtkSeparatorMenuItem" id="menu_separatormenuitem1">
-		      <property name="visible">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="recent_files1">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Recent _files</property>
-		      <property name="use_underline">True</property>
-
-		      <child>
-			<widget class="GtkMenu" id="recent_files1_menu">
-
-			  <child>
-			    <widget class="GtkMenuItem" id="invisible5">
-			      <property name="label" translatable="yes">invisible</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkSeparatorMenuItem" id="separator19">
 		      <property name="visible">True</property>
 		    </widget>
 		  </child>
@@ -333,7 +327,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image677">
+			<widget class="GtkImage" id="image725">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -365,7 +359,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image678">
+			<widget class="GtkImage" id="image726">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -543,7 +537,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image679">
+			<widget class="GtkImage" id="image727">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -570,7 +564,7 @@
 		      <signal name="activate" handler="on_go_to_line1_activate" last_modification_time="Tue, 23 May 2006 17:10:49 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image680">
+			<widget class="GtkImage" id="image728">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -605,7 +599,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image681">
+			<widget class="GtkImage" id="image729">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -627,7 +621,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image682">
+			<widget class="GtkImage" id="image730">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -760,7 +754,7 @@
 		  <child>
 		    <widget class="GtkCheckMenuItem" id="menu_use_auto_indention1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Use auto indention</property>
+		      <property name="label" translatable="yes">_Use auto indentation</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
 		      <signal name="toggled" handler="on_use_auto_indention1_toggled" last_modification_time="Mon, 13 Feb 2006 21:27:30 GMT"/>
@@ -1051,6 +1045,19 @@
 	  </child>
 
 	  <child>
+	    <widget class="GtkSeparatorToolItem" id="separatortoolitem7">
+	      <property name="visible">True</property>
+	      <property name="draw">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
 	    <widget class="GtkToolButton" id="toolbutton23">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Reload the current file from disk</property>
@@ -1099,6 +1106,8 @@
 	    <widget class="GtkToolButton" id="toolbutton13">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Compile the current file</property>
+	      <property name="label" translatable="yes">Compile</property>
+	      <property name="use_underline">True</property>
 	      <property name="stock_id">gtk-convert</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
@@ -1117,7 +1126,7 @@
 	      <property name="tooltip" translatable="yes">Run or view the current file</property>
 	      <property name="label" translatable="yes">Run</property>
 	      <property name="use_underline">True</property>
-	      <property name="stock_id">gtk-media-play</property>
+	      <property name="stock_id">gtk-execute</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -1324,45 +1333,11 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolItem" id="toolitem16">
+	    <widget class="GtkSeparatorToolItem" id="separatortoolitem8">
 	      <property name="visible">True</property>
+	      <property name="draw">True</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
-	      <property name="is_important">False</property>
-
-	      <child>
-		<widget class="GtkAlignment" id="alignment1">
-		  <property name="visible">True</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xscale">1</property>
-		  <property name="yscale">1</property>
-		  <property name="top_padding">0</property>
-		  <property name="bottom_padding">0</property>
-		  <property name="left_padding">10</property>
-		  <property name="right_padding">10</property>
-
-		  <child>
-		    <widget class="GtkLabel" id="label1">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes"></property>
-		      <property name="use_underline">False</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -2028,7 +2003,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image446">
+	<widget class="GtkImage" id="image686">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2060,7 +2035,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image447">
+	<widget class="GtkImage" id="image687">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2179,7 +2154,7 @@
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image448">
+	<widget class="GtkImage" id="image688">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2193,18 +2168,18 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="goto_tag_declaration1">
+    <widget class="GtkMenuItem" id="goto_tag_definition1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Go to tag declaration</property>
+      <property name="label" translatable="yes">Go to tag definition</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_goto_tag_activate" last_modification_time="Sun, 29 May 2005 22:08:28 GMT"/>
     </widget>
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="goto_tag_definition1">
+    <widget class="GtkMenuItem" id="goto_tag_declaration1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Go to tag definition</property>
+      <property name="label" translatable="yes">Go to tag declaration</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_goto_tag_activate" last_modification_time="Sun, 29 May 2005 22:08:28 GMT"/>
     </widget>
@@ -2225,7 +2200,7 @@
       <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 16 Jul 2005 11:20:32 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image449">
+	<widget class="GtkImage" id="image689">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -2350,7 +2325,7 @@
 			      <child>
 				<widget class="GtkLabel" id="label147">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">MRU list length:</property>
+				  <property name="label" translatable="yes">Recent files list length:</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3377,9 +3352,9 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_indent">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Shows small dotted lines to help you to use the right indention.</property>
+			      <property name="tooltip" translatable="yes">Shows small dotted lines to help you to use the right indentation.</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Show indention guides</property>
+			      <property name="label" translatable="yes">Show indentation guides</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>
