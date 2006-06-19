@@ -50,6 +50,8 @@ Topi - <language> ca_ES\n\t\
 &lt;topi@phreaker.net&gt;\n\n\t\
 Frank Lanitz - <language> de_DE\n\t\
 &lt;frank@frank.uvena.de&gt;\n\n\t\
+Damián Viano - <language> es\n\t\
+&lt;debian@damianv.com.ar&gt;\n\n\t\
 Jacek Wolszczak - <language> pl_PL\n\t\
 &lt;shutdownrunner@o2.pl&gt;\n\n\t\
 brahmann_ - <language> ru_RU\n\t\
