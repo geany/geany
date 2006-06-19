@@ -1,9 +1,13 @@
+2006-06-19  Frank Lanitz  <frank@frank.uvena.de>
+
+ * configure.in: Added Spanish translation. More info at
+                 po/ChangeLog
+
 2006-06-19  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/utils.c, src/utils.h, src/callbacks.c:
    Don't open files or go to errors automatically whilst compiling.
    Rename utils_goto_workspace_tag to utils_goto_file_line.
-
 
 2006-06-18  Enrico Troeger  <enrico.troeger@uvena.de>
 
