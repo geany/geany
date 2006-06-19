@@ -449,7 +449,6 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 		//GIOStatus s;
 		gchar *msg;
 		guint x = 1;
-		gint line, idx;
 
 		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg)
 		{
@@ -459,8 +458,16 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 				msgwin_compiler_add(COLOR_RED, FALSE, g_strstrip(msg));
 				if (app->pref_editor_use_indicators)
 				{
-					utils_parse_compiler_error_line(g_strstrip(msg), &idx, &line);
-					if (line != -1) document_set_indicator(idx, line - 1);				
+					gchar *filename;
+					gint line;
+					utils_parse_compiler_error_line(g_strstrip(msg), &filename, &line);
+					if (line != -1)
+					{
+						gint idx = document_find_by_filename(filename, FALSE);
+						// document_set_indicator will check valid idx
+						document_set_indicator(idx, line - 1);
+					}
+					g_free(filename);
 				}
 			}
 			else

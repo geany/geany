@@ -447,7 +447,7 @@ gint utils_get_local_tag(gint idx, const gchar *qual_name)
 }
 
 
-gboolean utils_goto_workspace_tag(const gchar *file, gboolean is_tm_filename, gint line)
+gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line)
 {
 	gint page_num;
 	gint file_idx = document_find_by_filename(file, is_tm_filename);
@@ -2299,22 +2299,22 @@ gdouble utils_strtod(const gchar *source, gchar **end)
 
 
 /* try to parse the file and line number where the error occured described in line
- * and when something useful is found, it stores the line number in *line and the index of
- * the file in *idx_of_error_file. */
-void utils_parse_compiler_error_line(const gchar *string, gint *idx_of_error_file, gint *line)
+ * and when something useful is found, it stores the line number in *line and the
+ * relevant file with the error in *filename.
+ * *line will be -1 if no error was found in string.
+ * *filename must be freed unless it is NULL. */
+void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint *line)
 {
-	gint idx = document_get_cur_idx();
 	gchar *end = NULL;
 	gchar *path;
-	gchar *filename;
 	gchar **fields;
 	gchar *pattern;			// pattern to split the error message into some fields
 	guint field_min_len;	// used to detect errors after parsing
 	guint field_idx_line;	// idx of the field where the line is
 	guint field_idx_file;	// idx of the field where the filename is
 	
+	*filename = NULL;
 	*line = -1;
-	*idx_of_error_file = -1;
 
 	if (string == NULL || ! doc_list[app->cur_idx].is_valid ||
 		doc_list[app->cur_idx].file_type == NULL)
@@ -2399,20 +2399,8 @@ void utils_parse_compiler_error_line(const gchar *string, gint *idx_of_error_fil
 
 	// get the basename of the built file to get the path to look for other files
 	path = g_path_get_dirname(doc_list[app->cur_idx].file_name);
-	filename = g_strconcat(path, G_DIR_SEPARATOR_S, fields[field_idx_file], NULL);
-
-	// use document_open_file to find an already opened file, or to open it in place
-	*idx_of_error_file = document_open_file(-1, filename, 0, FALSE, NULL);
-
+	*filename = g_strconcat(path, G_DIR_SEPARATOR_S, fields[field_idx_file], NULL);
 	g_free(path);
-	g_free(filename);
 
-	if (*idx_of_error_file != -1 && doc_list[*idx_of_error_file].is_valid &&
-		*line == -1 && idx != *idx_of_error_file)
-	{
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
-							gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
-							GTK_WIDGET(doc_list[*idx_of_error_file].sci)));
-	}
 	g_strfreev(fields);
 }

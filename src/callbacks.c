@@ -1304,7 +1304,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 			{
 				if (utils_strcmp(TM_TAG(tags->pdata[i])->name, current_word))
 				{
-					if (! utils_goto_workspace_tag(
+					if (! utils_goto_file_line(
 							TM_TAG(tags->pdata[i])->atts.entry.file->work_object.file_name,
 							TRUE,
 							TM_TAG(tags->pdata[i])->atts.entry.line))
@@ -1361,7 +1361,7 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 				gtk_tree_model_get(model, &iter, 0, &line, 1, &file, -1);
 				if (file && strlen (file) > 0)
 				{
-					utils_goto_workspace_tag(file, FALSE, line);
+					utils_goto_file_line(file, FALSE, line);
 				}
 				g_free(file);
 			}
@@ -1383,8 +1383,18 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 				{
 					gint line;
 					gint idx;
-					utils_parse_compiler_error_line(string, &idx, &line);
-					if (idx != -1 && line != -1) utils_goto_line(idx, line);
+					gchar *filename;
+					utils_parse_compiler_error_line(string, &filename, &line);
+					if (filename != NULL && line > -1)
+					{
+						// use document_open_file to find an already open file, or open it in place
+						idx = document_open_file(-1, filename, 0, FALSE, NULL);
+						// document_set_indicator will check valid idx
+						document_set_indicator(idx, line - 1);
+						// utils_goto_file_line will check valid filename.
+						utils_goto_file_line(filename, FALSE, line);
+					}
+					g_free(filename);
 				}
 				g_free(string);
 			}

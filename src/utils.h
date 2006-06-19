@@ -59,7 +59,7 @@ const GList *utils_get_tag_list(gint idx, guint tag_types);
 
 gint utils_get_local_tag(gint idx, const gchar *qual_name);
 
-gboolean utils_goto_workspace_tag(const gchar *file, gboolean is_tm_filename, gint line);
+gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line);
 
 gboolean utils_goto_line(gint idx, gint line);
 
@@ -207,8 +207,10 @@ void utils_update_fold_items(void);
 double utils_strtod(const char *source, char **end);
 
 /* try to parse the file and line number where the error occured described in line
- * and when something useful is found, it stores the line number in *line and the index of
- * the file in *idx_of_error_file. */
-void utils_parse_compiler_error_line(const gchar *string, gint *idx_of_error_file, gint *line);
+ * and when something useful is found, it stores the line number in *line and the
+ * relevant file with the error in filename.
+ * *line will be -1 if no error was found in string.
+ * filename must be freed unless it is NULL. */
+void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint *line);
 
 #endif
