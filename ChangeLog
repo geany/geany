@@ -1,6 +1,9 @@
 2006-06-19  Enrico Troeger  <enrico.troeger@uvena.de>
 
   * THANKS, src/about.c: Added translator credits.
+  * src/callbacks.c, src/encodings.c, src/utils.c, src/document.c,
+    geany.glade, src/interface.c:
+    Implemented encoding support to switch between different encodings.
 
 
 2006-06-19  Frank Lanitz  <frank@frank.uvena.de>

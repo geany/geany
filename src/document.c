@@ -613,6 +613,29 @@ void document_save_file(gint idx)
 	data = (gchar*) g_malloc(len);
 	sci_get_text(doc_list[idx].sci, len, data);
 
+	// save in original encoding
+	if (doc_list[idx].encoding != NULL)
+	{
+		GError *conv_error = NULL;
+		gchar* conv_file_contents = NULL;
+	
+		// try to convert it from UTF-8 to original encoding
+		conv_file_contents = g_convert(data, -1, doc_list[idx].encoding, "UTF-8",
+													NULL, NULL, &conv_error); 
+	
+		if (conv_error != NULL)
+		{
+			g_error_free(conv_error);
+			geany_debug("error while converting the file to its orinial encoding");
+		}
+		else
+		{
+			g_free(data);
+			data = conv_file_contents;
+			len = strlen(conv_file_contents);
+		}
+	}
+
 	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
 	fp = fopen(locale_filename, "w");
 	if (fp == NULL)

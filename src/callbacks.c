@@ -47,19 +47,16 @@
 #include "templates.h"
 #include "treeviews.h"
 #include "keybindings.h"
+#include "encodings.h"
 
 
 #ifdef GEANY_WIN32
 # include "win32.h"
 #endif
 
-// include vte.h on non-Win32 systems, else define fake vte_init
-#if defined(GEANY_WIN32) || ! defined(HAVE_VTE)
-# define vte_close() ;
-#else
+#ifdef HAVE_VTE
 # include "vte.h"
 #endif
-
 
 
 // represents the word under the mouse pointer when right button(no. 3) is pressed
@@ -2380,4 +2377,22 @@ on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	document_clear_indicators(idx);
 }
+
+
+void
+on_encoding_change                     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	guint i = GPOINTER_TO_INT(user_data);
+	
+	if (idx < 0 || encodings[i].charset == NULL) return;
+
+	g_free(doc_list[idx].encoding);
+	doc_list[idx].encoding = g_strdup(encodings[i].charset);
+	doc_list[idx].changed = TRUE;
+	document_set_text_changed(idx);
+	utils_update_statusbar(idx, -1);
+}
+
 

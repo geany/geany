@@ -810,10 +810,10 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 	gchar *locale_charset = NULL;
 	GList *encoding_strings;
 
-	encoding_strings = utils_glist_from_string("UTF-8 ISO-8859-1 ISO-8859-15");
-	encodings = encoding_get_encodings(encoding_strings);
+	encoding_strings = utils_glist_from_string("UTF-8");
+	encodings = encodings_get_encodings(encoding_strings);
 	utils_glist_strings_free(encoding_strings);
-
+	
 	if (g_get_charset((const gchar**)&locale_charset) == FALSE)
 	{
 		const GeanyEncoding *locale_encoding;
@@ -821,12 +821,11 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 		// not using an UTF-8 locale, so try converting from that first
 		if (locale_charset != NULL)
 		{
-			locale_encoding = encoding_get_from_charset(locale_charset);
+			locale_encoding = encodings_get_from_charset(locale_charset);
 
 			encodings = g_list_prepend(encodings,
 						(gpointer) locale_encoding);
 			geany_debug("Current charset = %s", locale_charset);
-			//geany_debug("Current encoding = %s", locale_encoding->name);
 		}
 	}
 
@@ -840,7 +839,7 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 
 		enc = (GeanyEncoding*)encodings->data;
 
-		charset = encoding_get_charset(enc);
+		charset = encodings_get_charset(enc);
 		geany_debug("Trying to convert %d bytes of data into UTF-8.", size);
 		utf8_content = utils_convert_to_utf8_from_charset(buffer, size, charset);
 
