@@ -81,6 +81,8 @@ void document_new_file(filetype *ft);
  */
 int document_open_file(gint, const gchar*, gint, gboolean, filetype*);
 
+int document_reload_file(gint idx);
+
 
 /* This saves the file, which is in on-disk encoding (which may not
    be UTF-8). */

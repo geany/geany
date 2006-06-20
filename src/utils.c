@@ -911,26 +911,26 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 }
 
 
-void utils_check_disk_status(gint idx)
+gboolean utils_check_disk_status(gint idx)
 {
 #ifndef GEANY_WIN32
 	struct stat st;
 	time_t t;
 	gchar *locale_filename;
 
-	if (idx == -1 || doc_list[idx].file_name == NULL) return;
+	if (idx == -1 || doc_list[idx].file_name == NULL) return FALSE;
 
 	t = time(NULL);
 
-	if (doc_list[idx].last_check > (t - GEANY_CHECK_FILE_DELAY)) return;
+	if (doc_list[idx].last_check > (t - GEANY_CHECK_FILE_DELAY)) return FALSE;
 
 	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
-	if (stat(locale_filename, &st) != 0) return;
+	if (stat(locale_filename, &st) != 0) return FALSE;
 
 	if (doc_list[idx].mtime > t || st.st_mtime > t)
 	{
 		geany_debug("Strange: Something is wrong with the time stamps.");
-		return;
+		return FALSE;
 	}
 
 	if (doc_list[idx].mtime < st.st_mtime)
@@ -941,17 +941,17 @@ void utils_check_disk_status(gint idx)
 					 ("The file '%s' on the disk is more recent than\n"
 					  "the current buffer.\nDo you want to reload it?"), basename))
 		{
-			document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
+			document_reload_file(idx);
 			doc_list[idx].last_check = t;
 		}
 		else
 			doc_list[idx].mtime = st.st_mtime;
 
 		g_free(basename);
-		return;
+		return TRUE; //file has changed
 	}
 #endif
-	return;
+	return FALSE;
 }
 
 

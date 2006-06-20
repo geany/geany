@@ -526,16 +526,16 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	doc_list[idx].changed = FALSE;
 	doc_list[idx].file_name = g_strdup(utf8_filename);
 	doc_list[idx].encoding = enc;
+
+	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
+
 	if (reload)
 	{
-		sci_goto_pos(doc_list[idx].sci, 0, FALSE);
 		msgwin_status_add(_("File %s reloaded."), utf8_filename);
 	}
 	else
 	{
 		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(utf8_filename);
-
-		sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 
 		if (readonly) gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
 							lookup_widget(app->window, "set_file_readonly1")), TRUE);
@@ -582,6 +582,19 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	//geany_debug("%s: %d", filename, (gint)(tv1.tv_usec - tv.tv_usec));
 
 	return idx;
+}
+
+
+int document_reload_file(gint idx)
+{
+	gint pos = 0;
+	if (idx < 0 || ! doc_list[idx].is_valid)
+		return -1;
+
+	// try to set the cursor to the position before reloading
+	pos = sci_get_current_position(doc_list[idx].sci);
+	return document_open_file(idx, NULL, pos, doc_list[idx].readonly,
+		doc_list[idx].file_type);
 }
 
 

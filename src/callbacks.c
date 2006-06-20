@@ -457,7 +457,7 @@ on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
 				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
 				 basename))
 	{
-		document_open_file(idx, NULL, 0, doc_list[idx].readonly, doc_list[idx].file_type);
+		document_reload_file(idx);
 	}
 
 	g_free(basename);
@@ -973,7 +973,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 #ifndef GEANY_WIN32
 	if (event->button == 1)
 	{
-		utils_check_disk_status(idx);
+		return utils_check_disk_status(idx);
 	}
 #endif
 

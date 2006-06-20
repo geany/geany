@@ -1,3 +1,11 @@
+2006-06-20  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/utils.h, src/callbacks.c, src/document.c,
+   src/document.h: Go back to the same line when reloading.
+                   Fix start selection bug when clicking in the
+                   current file if it has changed.
+
+
 2006-06-19  Enrico Troeger  <enrico.troeger@uvena.de>
 
   * THANKS, src/about.c: Added translator credits.
