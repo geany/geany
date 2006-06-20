@@ -529,11 +529,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 
-	if (reload)
-	{
-		msgwin_status_add(_("File %s reloaded."), utf8_filename);
-	}
-	else
+	if (! reload)
 	{
 		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(utf8_filename);
 
@@ -555,10 +551,18 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 		document_set_filetype(idx, use_ft);
 		utils_build_show_hide(idx);
+	}
+
+	// update sci to send SCN_UPDATEUI before we set status messages
+	while (gtk_events_pending())
+		gtk_main_iteration();
+	if (reload)
+		msgwin_status_add(_("File %s reloaded."), utf8_filename);
+	else
 		msgwin_status_add(_("File %s opened(%d%s)."),
 				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
 				(readonly) ? _(", read-only") : "");
-	}
+
 	document_set_text_changed(idx);
 
 	g_free(data);

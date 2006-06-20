@@ -4,6 +4,8 @@
    src/document.h: Go back to the same line when reloading.
                    Fix start selection bug when clicking in the
                    current file if it has changed.
+ * src/msgwindow.c, src/document.c:
+   Also show status messages on the status bar.
 
 
 2006-06-19  Enrico Troeger  <enrico.troeger@uvena.de>

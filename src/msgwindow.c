@@ -174,6 +174,10 @@ void msgwin_status_add(gchar const *format, ...)
 	g_vsnprintf(string, 511, format, args);
 	va_end(args);
 
+	// display status message in status bar
+	gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
+	gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, string);
+
 	gtk_list_store_append(msgwindow.store_status, &iter);
 	//gtk_list_store_insert(msgwindow.store_status, &iter, 0);
 	//gtk_list_store_set(msgwindow.store_status, &iter, 0, (state > 0) ? &white : &dark, 1, string, -1);
