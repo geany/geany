@@ -794,7 +794,7 @@ const char *CharacterSetID(int characterSet) {
 void SurfaceImpl::SetConverter(int characterSet_) {
 	if (characterSet != characterSet_) {
 		characterSet = characterSet_;
-		conv.Open("UTF-8", CharacterSetID(characterSet));
+		conv.Open("UTF-8", CharacterSetID(characterSet), false);
 	}
 }
 #endif
@@ -1016,6 +1016,8 @@ void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourAllocated fore, ColourAl
 	}
 }
 
+#if GTK_MAJOR_VERSION >= 2
+
 // Plot a point into a guint32 buffer symetrically to all 4 qudrants
 static void AllFour(guint32 *pixels, int stride, int width, int height, int x, int y, guint32 val) {
 	pixels[y*stride+x] = val;
@@ -1035,6 +1037,8 @@ static unsigned int GetGValue(unsigned int co) {
 static unsigned int GetBValue(unsigned int co) {
 	return co & 0xff;
 }
+
+#endif
 
 #if GTK_MAJOR_VERSION < 2
 void SurfaceImpl::AlphaRectangle(PRectangle rc, int , ColourAllocated , int , ColourAllocated outline, int , int ) {
@@ -1290,7 +1294,7 @@ void SurfaceImpl::DrawTextBase(PRectangle rc, Font &font_, int ybase, const char
 			int wclen;
 			if (et == UTF8) {
 				wclen = UCS2FromUTF8(s, len,
-					reinterpret_cast<wchar_t *>(wctext), maxLengthTextRun - 1);
+					static_cast<wchar_t *>(static_cast<void *>(wctext)), maxLengthTextRun - 1);
 			} else {	// dbcs, so convert using current locale
 				char sMeasure[maxLengthTextRun];
 				memcpy(sMeasure, s, len);
@@ -1396,7 +1400,7 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, int *positi
 						// Convert to UTF-8 so can ask Pango for widths, then
 						// Loop through UTF-8 and DBCS forms, taking account of different
 						// character byte lengths.
-						Converter convMeasure("UCS-2", CharacterSetID(characterSet));
+						Converter convMeasure("UCS-2", CharacterSetID(characterSet), false);
 						pango_layout_set_text(layout, utfForm, strlen(utfForm));
 						int i = 0;
 						int utfIndex = 0;
@@ -1465,7 +1469,7 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, int *positi
 			int wclen;
 			if (et == UTF8) {
 				wclen = UCS2FromUTF8(s, len,
-					reinterpret_cast<wchar_t *>(wctext), maxLengthTextRun - 1);
+					static_cast<wchar_t *>(static_cast<void *>(wctext)), maxLengthTextRun - 1);
 			} else {	// dbcsMode, so convert using current locale
 				char sDraw[maxLengthTextRun];
 				memcpy(sDraw, s, len);
@@ -1550,7 +1554,8 @@ int SurfaceImpl::WidthText(Font &font_, const char *s, int len) {
 #endif
 		if (et == UTF8) {
 			GdkWChar wctext[maxLengthTextRun];
-			size_t wclen = UCS2FromUTF8(s, len, (wchar_t *)wctext, sizeof(wctext) / sizeof(GdkWChar) - 1);
+			size_t wclen = UCS2FromUTF8(s, len, static_cast<wchar_t *>(static_cast<void *>(wctext)),
+				sizeof(wctext) / sizeof(GdkWChar) - 1);
 			wctext[wclen] = L'\0';
 			return gdk_text_width_wc(PFont(font_)->pfont, wctext, wclen);
 		} else {
@@ -1972,12 +1977,12 @@ static gboolean ButtonPress(GtkWidget *, GdkEventButton* ev, gpointer p) {
 scheme that it would use if it had the focus. */
 static void StyleSet(GtkWidget *w, GtkStyle*, void*) {
 	GtkStyle* style;
-	
+
 	g_return_if_fail(w != NULL);
-	
+
 	/* Copy the selected color to active.  Note that the modify calls will cause
 	recursive calls to this function after the value is updated and w->style to
-	be set to a new object */	
+	be set to a new object */
 	style = gtk_widget_get_style(w);
 	if (style == NULL)
 		return;
@@ -2010,17 +2015,18 @@ void ListBoxX::Create(Window &, int, Point, int, bool) {
 
 #if GTK_MAJOR_VERSION < 2
 	list = gtk_clist_new(1);
-	gtk_widget_show(PWidget(list));
-	gtk_container_add(GTK_CONTAINER(PWidget(scroller)), PWidget(list));
-	gtk_clist_set_column_auto_resize(GTK_CLIST(PWidget(list)), 0, TRUE);
-	gtk_clist_set_selection_mode(GTK_CLIST(PWidget(list)), GTK_SELECTION_BROWSE);
-	gtk_signal_connect(GTK_OBJECT(PWidget(list)), "unselect_row",
+	GtkWidget *wid = PWidget(list);	// No code inside the GTK_OBJECT macro
+	gtk_widget_show(wid);
+	gtk_container_add(GTK_CONTAINER(PWidget(scroller)), wid);
+	gtk_clist_set_column_auto_resize(GTK_CLIST(wid), 0, TRUE);
+	gtk_clist_set_selection_mode(GTK_CLIST(wid), GTK_SELECTION_BROWSE);
+	gtk_signal_connect(GTK_OBJECT(wid), "unselect_row",
 	                   GTK_SIGNAL_FUNC(UnselectionAC), &current);
-	gtk_signal_connect(GTK_OBJECT(PWidget(list)), "select_row",
+	gtk_signal_connect(GTK_OBJECT(wid), "select_row",
 	                   GTK_SIGNAL_FUNC(SelectionAC), &current);
-	gtk_signal_connect(GTK_OBJECT(PWidget(list)), "button_press_event",
+	gtk_signal_connect(GTK_OBJECT(wid), "button_press_event",
 	                   GTK_SIGNAL_FUNC(ButtonPress), this);
-	gtk_clist_set_shadow_type(GTK_CLIST(PWidget(list)), GTK_SHADOW_NONE);
+	gtk_clist_set_shadow_type(GTK_CLIST(wid), GTK_SHADOW_NONE);
 #else
 	/* Tree and its model */
 	GtkListStore *store =
@@ -2054,11 +2060,12 @@ void ListBoxX::Create(Window &, int, Point, int, bool) {
 	gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
 	if (g_object_class_find_property(G_OBJECT_GET_CLASS(list), "fixed-height-mode"))
 		g_object_set(G_OBJECT(list), "fixed-height-mode", TRUE, NULL);
-	gtk_container_add(GTK_CONTAINER(PWidget(scroller)), PWidget(list));
-	gtk_widget_show(PWidget(list));
 
-	gtk_signal_connect(GTK_OBJECT(PWidget(list)), "button_press_event",
-	                   GTK_SIGNAL_FUNC(ButtonPress), this);
+	GtkWidget *wid = PWidget(list);	// No code inside the G_OBJECT macro
+	gtk_container_add(GTK_CONTAINER(PWidget(scroller)), wid);
+	gtk_widget_show(wid);
+	g_signal_connect(G_OBJECT(wid), "button_press_event",
+	                   G_CALLBACK(ButtonPress), this);
 #endif
 	gtk_widget_realize(PWidget(id));
 }
@@ -2478,7 +2485,11 @@ void Menu::CreatePopUp() {
 
 void Menu::Destroy() {
 	if (id)
+#if GTK_MAJOR_VERSION < 2
 		gtk_object_unref(GTK_OBJECT(id));
+#else
+		g_object_unref(G_OBJECT(id));
+#endif
 	id = 0;
 }
 
@@ -2573,8 +2584,11 @@ const char *Platform::DefaultFont() {
 #ifdef G_OS_WIN32
 	return "Lucida Console";
 #else
-
-	return "!Sans"; //fix for GTK2.8 until updating to sci 1.69
+#ifdef USE_PANGO
+	return "!Sans";
+#else
+	return "lucidatypewriter";
+#endif
 #endif
 }
 
@@ -2582,7 +2596,6 @@ int Platform::DefaultFontSize() {
 #ifdef G_OS_WIN32
 	return 10;
 #else
-
 	return 12;
 #endif
 }
@@ -2619,7 +2632,6 @@ bool Platform::IsDBCSLeadByte(int /* codePage */, char /* ch */) {
 	return false;
 }
 
-#if GTK_MAJOR_VERSION < 2
 int Platform::DBCSCharLength(int, const char *s) {
 	int bytes = mblen(s, MB_CUR_MAX);
 	if (bytes >= 1)
@@ -2627,24 +2639,6 @@ int Platform::DBCSCharLength(int, const char *s) {
 	else
 		return 1;
 }
-#else
-int Platform::DBCSCharLength(int codePage, const char *s) {
-	if (codePage == 999932) {
-		// Experimental and disabled code - change 999932 to 932 above to
-		// enable locale avoiding but expensive character length determination.
-		// Avoid locale with explicit use of iconv
-		Converter convMeasure("UCS-2", CharacterSetID(SC_CHARSET_SHIFTJIS));
-		size_t lenChar = MultiByteLenFromIconv(convMeasure, s, strlen(s));
-		return lenChar;
-	} else {
-		int bytes = mblen(s, MB_CUR_MAX);
-		if (bytes >= 1)
-			return bytes;
-		else
-			return 1;
-	}
-}
-#endif
 
 int Platform::DBCSCharMaxLength() {
 	return MB_CUR_MAX;

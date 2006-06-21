@@ -6,6 +6,7 @@
    Added option in the preferences dialog to replace tabs by spaces
    when saving a file.
    Added option for default encoding for new files.
+ * scintilla/*: Updated Scintilla to version 1.70.
 
 
 2006-06-20  Nick Treleaven  <nick.treleaven@btinternet.com>

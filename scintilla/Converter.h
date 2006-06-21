@@ -27,9 +27,9 @@ public:
 	Converter() {
 		iconvh = iconvhBad;
 	}
-	Converter(const char *charSetDestination, const char *charSetSource) {
+	Converter(const char *charSetDestination, const char *charSetSource, bool transliterations) {
 		iconvh = iconvhBad;
-	    	Open(charSetDestination, charSetSource);
+	    	Open(charSetDestination, charSetSource, transliterations);
 	}
 	~Converter() {
 		Close();
@@ -37,13 +37,18 @@ public:
 	operator bool() const {
 		return iconvh != iconvhBad;
 	}
-	void Open(const char *charSetDestination, const char *charSetSource) {
+	void Open(const char *charSetDestination, const char *charSetSource, bool transliterations=true) {
 		Close();
 		if (*charSetSource) {
+			char fullDest[200];
+			strcpy(fullDest, charSetDestination);
+			if (transliterations) {
+				strcat(fullDest, "//TRANSLIT");
+			}
 #if GTK_MAJOR_VERSION >= 2
-			iconvh = g_iconv_open(charSetDestination, charSetSource);
+			iconvh = g_iconv_open(fullDest, charSetSource);
 #else
-			iconvh = iconv_open(charSetDestination, charSetSource);
+			iconvh = iconv_open(fullDest, charSetSource);
 #endif
 		}
 	}

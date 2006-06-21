@@ -469,7 +469,7 @@ void ScintillaBase::Colourise(int start, int end) {
 
 		int styleStart = 0;
 		if (start > 0)
-			styleStart = styler.StyleAt(start - 1);
+			styleStart = styler.StyleAt(start - 1) & pdoc->stylingBitsMask;
 		styler.SetCodePage(pdoc->dbcsCodePage);
 
 		if (lexCurrent && (len > 0)) {	// Should always succeed as null lexer should always be available

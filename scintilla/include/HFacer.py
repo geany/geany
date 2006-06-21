@@ -67,6 +67,10 @@ def Regenerate(filename, genfn, definition):
 		os.rename(tempname, filename)
 
 f = Face.Face()
-f.ReadFromFile("Scintilla.iface")
-Regenerate("Scintilla.h", printHFile, f)
-Regenerate("SciLexer.h", printLexHFile, f)
+try:
+	f.ReadFromFile("Scintilla.iface")
+	Regenerate("Scintilla.h", printHFile, f)
+	Regenerate("SciLexer.h", printLexHFile, f)
+	print "Maximum ID is", max(x for x in f.values if int(x) < 3000)
+except:
+	raise
