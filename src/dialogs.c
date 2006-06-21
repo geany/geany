@@ -46,6 +46,7 @@
 #include "utils.h"
 #include "prefs.h"
 #include "keybindings.h"
+#include "encodings.h"
 
 
 
@@ -1647,10 +1648,23 @@ void dialogs_show_prefs_dialog(void)
 		GtkTooltips *tooltips;
 		GtkObject *spin_scrollback_adj;
 #endif
+		GtkWidget *combo;
+		guint i;
+		gchar *encoding_string;
 
 		app->prefs_dialog = create_prefs_dialog();
 		gtk_window_set_transient_for(GTK_WINDOW(app->prefs_dialog), GTK_WINDOW(app->window));
 
+		// init the default file encoding combo box
+		combo = lookup_widget(app->prefs_dialog, "combo_encoding");
+		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
+		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
+		{
+			encoding_string = encodings_to_string(&encodings[i]);
+			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), encoding_string);
+			g_free(encoding_string);
+		}
+		
 #ifdef HAVE_VTE
 		if (app->have_vte)
 		{

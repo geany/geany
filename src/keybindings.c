@@ -47,6 +47,7 @@ static void cb_func_menu_new(void);
 static void cb_func_menu_open(void);
 static void cb_func_menu_save(void);
 static void cb_func_menu_saveall(void);
+static void cb_func_menu_close(void);
 static void cb_func_menu_closeall(void);
 static void cb_func_menu_reloadfile(void);
 static void cb_func_menu_undo(void);
@@ -110,6 +111,8 @@ void keybindings_init(void)
 		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"));
 	keys[GEANY_KEYS_MENU_SAVEALL] = fill(cb_func_menu_saveall,
 		GDK_S, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall", _("Save all"));
+	keys[GEANY_KEYS_MENU_CLOSE] = fill(cb_func_menu_close,
+		GDK_w, GDK_CONTROL_MASK, "menu_close", _("Close"));
 	keys[GEANY_KEYS_MENU_CLOSEALL] = fill(cb_func_menu_closeall,
 		GDK_d, GDK_MOD1_MASK, "menu_closeall", _("Close all"));
 	keys[GEANY_KEYS_MENU_RELOADFILE] = fill(cb_func_menu_reloadfile,
@@ -234,6 +237,7 @@ static void keybindings_add_accels()
 
 	// apply the settings
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEALL, menu_save_all1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_CLOSE, menu_close1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_CLOSEALL, menu_close_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_RELOADFILE, revert1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNDO, menu_undo2);
@@ -376,6 +380,11 @@ static void cb_func_menu_save(void)
 static void cb_func_menu_saveall(void)
 {
 	on_save_all1_activate(NULL, NULL);
+}
+
+static void cb_func_menu_close(void)
+{
+	on_close1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_closeall(void)

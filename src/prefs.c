@@ -115,11 +115,18 @@ void prefs_init_dialog(void)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->pref_editor_tab_width);
 	old_tab_width = app->pref_editor_tab_width;
 
+	widget = lookup_widget(app->prefs_dialog, "combo_encoding");
+	// luckily the index of the combo box items match the index of the encodings array
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), app->pref_editor_default_encoding);
+
 	widget = lookup_widget(app->prefs_dialog, "check_trailing_spaces");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_trail_space);
 
 	widget = lookup_widget(app->prefs_dialog, "check_new_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_new_line);
+
+	widget = lookup_widget(app->prefs_dialog, "check_replace_tabs");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_replace_tabs);
 
 	widget = lookup_widget(app->prefs_dialog, "check_indent");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_show_indent_guide);
@@ -323,11 +330,17 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "spin_tab_width");
 		app->pref_editor_tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
+		widget = lookup_widget(app->prefs_dialog, "combo_encoding");
+		app->pref_editor_default_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+
 		widget = lookup_widget(app->prefs_dialog, "check_trailing_spaces");
 		app->pref_editor_trail_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_new_line");
 		app->pref_editor_new_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_replace_tabs");
+		app->pref_editor_replace_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "spin_long_line");
 		app->long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));

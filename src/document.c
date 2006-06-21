@@ -52,6 +52,7 @@
 #include "templates.h"
 #include "treeviews.h"
 #include "utils.h"
+#include "encodings.h"
 
 
 
@@ -372,7 +373,8 @@ void document_new_file(filetype *ft)
 		sci_set_text(doc_list[idx].sci, template);
 		g_free(template);
 
-		doc_list[idx].encoding = g_strdup("UTF-8");
+		doc_list[idx].encoding = g_strdup(
+						encodings_get_charset(&encodings[app->pref_editor_default_encoding]));
 		document_set_filetype(idx, ft);
 		utils_set_window_title(idx);
 		utils_build_show_hide(idx);
@@ -619,6 +621,8 @@ void document_save_file(gint idx)
 		return;
 	}
 
+	// replaces tabs by spaces
+	if (app->pref_editor_replace_tabs) utils_replace_tabs(idx);
 	// strip trailing spaces
 	if (app->pref_editor_trail_space) utils_strip_trailing_spaces(idx);
 	// ensure the file has a newline at the end
@@ -642,8 +646,13 @@ void document_save_file(gint idx)
 	
 		if (conv_error != NULL)
 		{
-			g_error_free(conv_error);
 			geany_debug("error while converting the file to its orinial encoding");
+			geany_debug("encoding: %s error message: %s)",
+						doc_list[idx].encoding, conv_error->message);
+			g_free(doc_list[idx].encoding);
+			doc_list[idx].encoding = g_strdup("UTF-8");
+			msgwin_status_add(_("Error while converting file (%s)."), conv_error->message);
+			g_error_free(conv_error);
 		}
 		else
 		{

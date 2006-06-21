@@ -1,3 +1,13 @@
+2006-06-21  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/keybindings.c: Added missing shortcut for "Close".
+ * geany.glade, src/interface.c, src/prefs.c, src/keyfile.c,
+   src/document.c, src/dialogs.c, src/encodings.h:
+   Added option in the preferences dialog to replace tabs by spaces
+   when saving a file.
+   Added option for default encoding for new files.
+
+
 2006-06-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c, src/utils.h, src/callbacks.c, src/document.c,

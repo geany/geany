@@ -1830,6 +1830,10 @@ create_prefs_dialog (void)
   GtkWidget *frame6;
   GtkWidget *alignment7;
   GtkWidget *vbox8;
+  GtkWidget *hbox4;
+  GtkWidget *label153;
+  GtkWidget *eventbox1;
+  GtkWidget *combo_encoding;
   GtkWidget *table5;
   GtkWidget *label116;
   GtkObject *spin_tab_width_adj;
@@ -1840,6 +1844,7 @@ create_prefs_dialog (void)
   GtkWidget *vbox6;
   GtkWidget *check_trailing_spaces;
   GtkWidget *check_new_line;
+  GtkWidget *check_replace_tabs;
   GtkWidget *label19;
   GtkWidget *frame5;
   GtkWidget *alignment6;
@@ -2174,13 +2179,30 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (frame6), alignment7);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment7), 0, 0, 12, 0);
 
-  vbox8 = gtk_vbox_new (FALSE, 0);
+  vbox8 = gtk_vbox_new (FALSE, 3);
   gtk_widget_show (vbox8);
   gtk_container_add (GTK_CONTAINER (alignment7), vbox8);
 
+  hbox4 = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox4);
+  gtk_box_pack_start (GTK_BOX (vbox8), hbox4, FALSE, TRUE, 0);
+
+  label153 = gtk_label_new (_("Default encoding:"));
+  gtk_widget_show (label153);
+  gtk_box_pack_start (GTK_BOX (hbox4), label153, FALSE, FALSE, 0);
+
+  eventbox1 = gtk_event_box_new ();
+  gtk_widget_show (eventbox1);
+  gtk_box_pack_start (GTK_BOX (hbox4), eventbox1, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, eventbox1, _("Sets the default encoding for newly created files."), NULL);
+
+  combo_encoding = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_encoding);
+  gtk_container_add (GTK_CONTAINER (eventbox1), combo_encoding);
+
   table5 = gtk_table_new (1, 2, FALSE);
   gtk_widget_show (table5);
-  gtk_box_pack_start (GTK_BOX (vbox8), table5, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox8), table5, TRUE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table5), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table5), 25);
 
@@ -2234,6 +2256,13 @@ create_prefs_dialog (void)
   GTK_WIDGET_UNSET_FLAGS (check_new_line, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_new_line, _("Ensures that at the end of the file is a new line"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_new_line), FALSE);
+
+  check_replace_tabs = gtk_check_button_new_with_mnemonic (_("Replace tabs by space"));
+  gtk_widget_show (check_replace_tabs);
+  gtk_box_pack_start (GTK_BOX (vbox6), check_replace_tabs, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_replace_tabs, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_replace_tabs, _("Replaces all tabs in document by spaces."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_replace_tabs), FALSE);
 
   label19 = gtk_label_new (_("<b>Saving files</b>"));
   gtk_widget_show (label19);
@@ -2645,6 +2674,10 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame6, "frame6");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment7, "alignment7");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox8, "vbox8");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox4, "hbox4");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label153, "label153");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox1, "eventbox1");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_encoding, "combo_encoding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table5, "table5");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label116, "label116");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_tab_width, "spin_tab_width");
@@ -2654,6 +2687,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox6, "vbox6");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_trailing_spaces, "check_trailing_spaces");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_new_line, "check_new_line");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_replace_tabs, "check_replace_tabs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label19, "label19");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame5, "frame5");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment6, "alignment6");

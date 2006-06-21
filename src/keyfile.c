@@ -116,12 +116,14 @@ void configuration_save(void)
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", app->geometry, 4);
 	}
 	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", app->pref_editor_tab_width);
+	g_key_file_set_integer(config, PACKAGE, "pref_editor_default_encoding", app->pref_editor_default_encoding);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", app->pref_main_confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", app->pref_main_load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", app->pref_main_save_winpos);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_show_search", app->pref_main_show_search);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_show_goto", app->pref_main_show_goto);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", app->pref_editor_new_line);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", app->pref_editor_replace_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", app->pref_editor_trail_space);
 	g_key_file_set_string(config, PACKAGE, "pref_template_developer", app->pref_template_developer);
 	g_key_file_set_string(config, PACKAGE, "pref_template_company", app->pref_template_company);
@@ -221,7 +223,7 @@ gboolean configuration_load(void)
 	app->fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	app->tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", FALSE);
 	app->brace_match_ltgt = utils_get_setting_boolean(config, PACKAGE, "brace_match_ltgt", FALSE);
-	app->switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", TRUE);
+	app->switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	app->pref_editor_auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
 	app->pref_editor_auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
 	app->editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", "Courier New 9");
@@ -251,6 +253,8 @@ gboolean configuration_load(void)
 
 
 	app->pref_editor_tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
+	// set default encoding to UTF8 (Unicode) - index 15
+	app->pref_editor_default_encoding = utils_get_setting_integer(config, PACKAGE, "pref_editor_default_encoding", 15);
 	app->pref_main_confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", TRUE);
 	app->pref_main_load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	app->pref_main_save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
@@ -274,6 +278,7 @@ gboolean configuration_load(void)
 	g_free(tmp_string);
 	g_free(tmp_string2);
 
+	app->pref_editor_replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
 	app->pref_editor_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
 	app->pref_editor_trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", TRUE);
 

@@ -147,7 +147,9 @@ typedef struct MyApp
 	gboolean			 pref_editor_auto_complete_constructs;
 	gboolean			 pref_editor_folding;
 	gint				 pref_editor_tab_width;
+	gint				 pref_editor_default_encoding;
 	gboolean			 pref_editor_new_line;
+	gboolean			 pref_editor_replace_tabs;
 	gboolean			 pref_editor_trail_space;
 	gboolean			 pref_main_load_session;
 	gboolean			 pref_main_save_winpos;

@@ -57,7 +57,6 @@ static void init_encodings(void)
 	fill(GEANY_ENCODING_ISO_8859_15, "ISO-8859-15", "Western");
 	fill(GEANY_ENCODING_ISO_8859_16, "ISO-8859-16", "Romanian");
 
-	fill(GEANY_ENCODING_UTF_7, "UTF-7", "Unicode");
 	fill(GEANY_ENCODING_UTF_8, "UTF-8", "Unicode");
 	fill(GEANY_ENCODING_UTF_16, "UTF-16", "Unicode");
 	fill(GEANY_ENCODING_UCS_2, "UCS-2", "Unicode");
@@ -118,10 +117,10 @@ static void encodings_lazy_init(void)
 	if (initialized)
 		return;
 
-	g_return_if_fail(G_N_ELEMENTS(encodings) == GEANY_ENCODING_LAST);
+	g_return_if_fail(G_N_ELEMENTS(encodings) == GEANY_ENCODINGS_MAX);
 
 	i = 0;
-	while (i < GEANY_ENCODING_LAST)
+	while (i < GEANY_ENCODINGS_MAX)
 	{
 		g_return_if_fail(encodings[i].idx == i);
 
@@ -142,7 +141,7 @@ const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 	encodings_lazy_init ();
 
 	i = 0;
-	while (i < GEANY_ENCODING_LAST)
+	while (i < GEANY_ENCODINGS_MAX)
 	{
 		if (strcmp(charset, encodings[i].charset) == 0)
 			return &encodings[i];
@@ -158,7 +157,7 @@ const GeanyEncoding *encodings_get_from_index(gint index)
 {
 	g_return_val_if_fail(index >= 0, NULL);
 
-	if (index >= GEANY_ENCODING_LAST)
+	if (index >= GEANY_ENCODINGS_MAX)
 		return NULL;
 
 	encodings_lazy_init();
@@ -236,7 +235,7 @@ void encodings_init(void)
 
 	// create encodings submenu in document menu
 	menu = lookup_widget(app->window, "set_encoding1_menu");
-	while (i < GEANY_ENCODING_LAST)
+	while (i < GEANY_ENCODINGS_MAX)
 	{
 		if (encodings[i].idx != i) break;
 
