@@ -1,3 +1,10 @@
+2006-06-22  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c: Reorganised C include file items, added C++ headers.
+ * src/callbacks.c: Insert include statements and comment templates at
+                    mouse pointer position instead of cursor position.
+
+
 2006-06-21  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/keybindings.c: Added missing shortcut for "Close".

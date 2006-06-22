@@ -78,6 +78,9 @@ static gboolean search_backwards;
 static gint search_flags_re;
 static gboolean search_backwards_re;
 
+// holds the current position where the mouse pointer is when the popup menu for the scintilla
+// scintilla widget is shown
+static gint clickpos;
 
 
 void signal_cb(gint sig)
@@ -968,7 +971,7 @@ on_editor_button_press_event           (GtkWidget *widget,
                                         gpointer user_data)
 {
 	gint idx = GPOINTER_TO_INT(user_data);
-	gint clickpos = sci_get_position_from_xy(doc_list[idx].sci, event->x, event->y, FALSE);
+	clickpos = sci_get_position_from_xy(doc_list[idx].sci, event->x, event->y, FALSE);
 
 #ifndef GEANY_WIN32
 	if (event->button == 1)
@@ -2092,7 +2095,7 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 		}
 	}
 
-	sci_insert_text(doc_list[idx].sci, -1, text);
+	sci_insert_text(doc_list[idx].sci, clickpos, text);
 	g_free(text);
 }
 
@@ -2132,7 +2135,7 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 		}
 	}
 
-	sci_insert_text(doc_list[idx].sci, -1, text);
+	sci_insert_text(doc_list[idx].sci, clickpos, text);
 	g_free(text);
 }
 
@@ -2152,8 +2155,6 @@ on_comments_changelog_activate         (GtkMenuItem     *menuitem,
 
 	g_free(text);
 }
-
-
 
 
 void
@@ -2206,10 +2207,9 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	gint pos = sci_get_current_position(doc_list[idx].sci);
 	gchar *text;
 
-	if (utils_strcmp(user_data, "(blank)"))
+	if (utils_strcmp(user_data, "blank"))
 	{
 		text = g_strdup("#include \"\"\n");
 	}
@@ -2218,7 +2218,7 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 		text = g_strconcat("#include <", user_data, ">\n", NULL);
 	}
 
-	sci_insert_text(doc_list[idx].sci, pos, text);
+	sci_insert_text(doc_list[idx].sci, clickpos, text);
 	g_free(text);
 }
 
@@ -2305,9 +2305,6 @@ on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
 }
 
 
-
-
-
 void
 on_file_properties_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -2315,8 +2312,6 @@ on_file_properties_activate            (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	dialogs_show_file_properties(idx);
 }
-
-
 
 
 void

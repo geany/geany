@@ -1485,6 +1485,7 @@ gchar utils_brace_opposite(gchar ch)
 }
 
 
+/// TODO move me to document.c
 void utils_replace_tabs(gint idx)
 {
 	gint i, len, j = 0, tabs_amount = 0;
@@ -1767,79 +1768,80 @@ gchar *utils_get_date(void)
 }
 
 
+static void insert_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gchar *label)
+{
+	guint i = 0;
+	GtkWidget *tmp_menu;
+	GtkWidget *tmp_popup;
+	GtkWidget *edit_menu, *edit_menu_item;
+	GtkWidget *popup_menu, *popup_menu_item;
+
+	edit_menu = gtk_menu_new();
+	popup_menu = gtk_menu_new();
+	edit_menu_item = gtk_menu_item_new_with_label(label);
+	popup_menu_item = gtk_menu_item_new_with_label(label);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(edit_menu_item), edit_menu);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(popup_menu_item), popup_menu);
+
+	while (includes[i] != NULL)
+	{
+		tmp_menu = gtk_menu_item_new_with_label(includes[i]);
+		tmp_popup = gtk_menu_item_new_with_label(includes[i]);
+		gtk_container_add(GTK_CONTAINER(edit_menu), tmp_menu);
+		gtk_container_add(GTK_CONTAINER(popup_menu), tmp_popup);
+		g_signal_connect((gpointer) tmp_menu, "activate", G_CALLBACK(on_insert_include_activate),
+																	(gpointer) includes[i]);
+		g_signal_connect((gpointer) tmp_popup, "activate", G_CALLBACK(on_insert_include_activate),
+																	 (gpointer) includes[i]);
+		i++;
+	}
+	gtk_widget_show_all(edit_menu_item);
+	gtk_widget_show_all(popup_menu_item);
+	gtk_container_add(GTK_CONTAINER(me), edit_menu_item);
+	gtk_container_add(GTK_CONTAINER(mp), popup_menu_item);
+}
+
+
 void utils_create_insert_menu_items(void)
 {
 	GtkMenu *menu_edit = GTK_MENU(lookup_widget(app->window, "insert_include2_menu"));
 	GtkMenu *menu_popup = GTK_MENU(lookup_widget(app->popup_menu, "insert_include1_menu"));
-	gint i, include_files_len = 29;
-	const gchar *c_include_files[] = {
-		NULL,
-		"<span weight=\"ultrabold\">Std.Lib</span>",
-		"(blank)",
-		"assert.h",
-		"ctype.h",
-		"errno.h",
-		"float.h",
-		"limits.h",
-		"locale.h",
-		"math.h",
-		"setjmp.h",
-		"signal.h",
-		"stdarg.h",
-		"stddef.h",
-		"stdio.h",
-		"stdlib.h",
-		"string.h",
-		"time.h",
-		NULL,
-		"<span weight=\"ultrabold\">C99</span>",
-		"complex.h",
-		"fenv.h",
-		"inttypes.h",
-		"iso646.h",
-		"stdbool.h",
-		"stdint.h",
-		"tgmath.h",
-		"wchar.h",
-		"wctype.h"
+	GtkWidget *blank;
+	const gchar *c_includes_stdlib[] = {
+		"assert.h", "ctype.h", "errno.h", "float.h", "limits.h", "locale.h", "math.h", "setjmp.h",
+		"signal.h", "stdarg.h", "stddef.h", "stdio.h", "stdlib.h", "string.h", "time.h", NULL
 	};
-
-	for (i = 0; i < include_files_len; i++)
-	{
-		if (c_include_files[i] == NULL)
-		{
-			GtkWidget *tmp_menu = gtk_menu_item_new_with_label("");
-			GtkWidget *tmp_popup = gtk_menu_item_new_with_label("");
-			i++;
-			gtk_widget_set_sensitive(tmp_menu, FALSE);
-			gtk_widget_set_sensitive(tmp_popup, FALSE);
-			gtk_label_set_markup (GTK_LABEL(gtk_bin_get_child(GTK_BIN(tmp_menu))), c_include_files[i]);
-			gtk_label_set_markup (GTK_LABEL(gtk_bin_get_child(GTK_BIN(tmp_popup))), c_include_files[i]);
-			gtk_widget_show(tmp_menu);
-			gtk_widget_show(tmp_popup);
-			gtk_container_add(GTK_CONTAINER(menu_edit), tmp_menu);
-			gtk_container_add(GTK_CONTAINER(menu_popup), tmp_popup);
-			tmp_menu = gtk_separator_menu_item_new();
-			tmp_popup = gtk_separator_menu_item_new();
-			gtk_widget_show(tmp_menu);
-			gtk_widget_show(tmp_popup);
-			gtk_container_add(GTK_CONTAINER(menu_edit), tmp_menu);
-			gtk_container_add(GTK_CONTAINER(menu_popup), tmp_popup);
-		}
-		else
-		{
-			GtkWidget *tmp_menu = gtk_menu_item_new_with_label(c_include_files[i]);
-			GtkWidget *tmp_popup = gtk_menu_item_new_with_label(c_include_files[i]);
-			gtk_widget_show(tmp_menu);
-			gtk_widget_show(tmp_popup);
-			gtk_container_add(GTK_CONTAINER(menu_edit), tmp_menu);
-			gtk_container_add(GTK_CONTAINER(menu_popup), tmp_popup);
-			g_signal_connect((gpointer) tmp_menu, "activate", G_CALLBACK(on_insert_include_activate), (gpointer) c_include_files[i]);
-			g_signal_connect((gpointer) tmp_popup, "activate", G_CALLBACK(on_insert_include_activate), (gpointer) c_include_files[i]);
-		}
-
-	}
-
+	const gchar *c_includes_c99[] = {
+		"complex.h", "fenv.h", "inttypes.h", "iso646.h", "stdbool.h", "stdint.h",
+		"tgmath.h", "wchar.h", "wctype.h", NULL
+	};
+	const gchar *c_includes_cpp[] = {
+		"cstdio", "cstring", "cctype", "cmath", "ctime", "cstdlib", "cstdarg", NULL
+	};
+	const gchar *c_includes_cppstdlib[] = {
+		"iostream", "fstream", "iomanip", "sstream", "exception", "stdexcept",
+		"memory", "locale", NULL
+	};
+	const gchar *c_includes_stl[] = {
+		"bitset", "dequev", "list", "map", "set", "queue", "stack", "vector", "algorithm",
+		"iterator", "functional", "string", "complex", "valarray", NULL
+	};
+	
+	blank = gtk_menu_item_new_with_label(_("(blank)"));
+	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
+	gtk_widget_show(blank);
+	g_signal_connect((gpointer) blank, "activate", G_CALLBACK(on_insert_include_activate),
+																	(gpointer) "blank");
+	blank = gtk_menu_item_new_with_label(_("(blank)"));
+	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
+	gtk_widget_show(blank);
+	g_signal_connect((gpointer) blank, "activate", G_CALLBACK(on_insert_include_activate),
+																	(gpointer) "blank");
+	insert_items(menu_edit, menu_popup, (gchar**) c_includes_stdlib, _("C Standard Library"));
+	insert_items(menu_edit, menu_popup, (gchar**) c_includes_c99, _("ISO C99"));
+	insert_items(menu_edit, menu_popup, (gchar**) c_includes_cpp, _("C++ (C Standard Library)"));
+	insert_items(menu_edit, menu_popup, (gchar**) c_includes_cppstdlib, _("C++ Standard Library"));
+	insert_items(menu_edit, menu_popup, (gchar**) c_includes_stl, _("C++ STL"));
 }
 
 
