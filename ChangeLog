@@ -1,3 +1,9 @@
+2006-06-23  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/msgwindow.c: Add a timestamp to messages in the Status window
+                    (closes request #1509908).
+
+
 2006-06-22  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/utils.c: Reorganised C include file items, added C++ headers.

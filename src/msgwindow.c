@@ -21,6 +21,8 @@
  */
 
 
+#include <time.h>
+
 #include "geany.h"
 
 #include "support.h"
@@ -181,7 +183,25 @@ void msgwin_status_add(gchar const *format, ...)
 	gtk_list_store_append(msgwindow.store_status, &iter);
 	//gtk_list_store_insert(msgwindow.store_status, &iter, 0);
 	//gtk_list_store_set(msgwindow.store_status, &iter, 0, (state > 0) ? &white : &dark, 1, string, -1);
-	gtk_list_store_set(msgwindow.store_status, &iter, 0, ((state++ % 2) == 0) ? &white : &dark, 1, string, -1);
+	{
+		GTimeVal cur_time;
+		gchar *date_str, *statusmsg;
+		gchar **strv;
+
+		g_get_current_time(&cur_time);
+		date_str = ctime(&cur_time.tv_sec); //uses internal string buffer
+		strv = g_strsplit(date_str, " ", 5);
+		if (strv[3] != NULL)
+			statusmsg = g_strconcat(strv[3], ": ", string, NULL);
+		else
+			statusmsg = g_strdup(string);
+
+		gtk_list_store_set(msgwindow.store_status, &iter, 0,
+			((state++ % 2) == 0) ? &white : &dark, 1, statusmsg, -1);
+
+		g_free(statusmsg);
+		g_strfreev(strv);
+	}
 
 	if (app->main_window_realized)
 	{
