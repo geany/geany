@@ -31,7 +31,6 @@
 #include "sciwrappers.h"
 #include "utils.h"
 
-static gint link_start, link_end, style;
 static gchar indent[100];
 
 
@@ -212,19 +211,6 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			}
 			break;
 		}
-		case SCN_DWELLSTART:
-		{
-			//sci_cb_handle_uri(sci, nt->position);
-			break;
-		}
-		case SCN_DWELLEND:
-		{
-/*			gint end_of_styling = SSM(sci, SCI_GETENDSTYLED, 0, 0);
-			SSM(sci, SCI_STARTSTYLING, link_start, 31);
-			SSM(sci, SCI_SETSTYLING, (link_end - link_start) + 1, style);
-			SSM(sci, SCI_STARTSTYLING, end_of_styling, 31);
-*/			break;
-		}
 /*		case SCN_STYLENEEDED:
 		{
 			geany_debug("style");
@@ -363,11 +349,16 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 
 gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos)
 {
-	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	gint lexer;
 	gint style;
 	gchar word[GEANY_MAX_WORD_LENGTH];
-	gint idx = document_find_by_sci(sci);
+	gint idx;
 	const GPtrArray *tags;
+
+	if (sci == NULL) return FALSE;
+	
+	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	idx = document_find_by_sci(sci);
 
 	word[0] = '\0';
 	if (pos == -1)
@@ -408,6 +399,16 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 	gchar linebuf[line_len + 1];
 	gchar *root;
 	const GPtrArray *tags;
+
+	if (sci == NULL) return FALSE;
+
+	line = sci_get_line_from_position(sci, pos);
+	line_start = sci_get_position_from_line(sci, line);
+	line_len = sci_get_line_length(sci, line);
+	line_pos = pos - line_start - 1;
+	current = pos - line_start;
+	startword = current, lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
 
 	//if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL) return FALSE;
 	if (lexer == SCLEX_HTML && style == SCE_H_DEFAULT) return FALSE;
@@ -669,8 +670,13 @@ void sci_cb_show_macro_list(ScintillaObject *sci)
 {
 	guint j, i;
 	const GPtrArray *tags;
-	GPtrArray *ftags = g_ptr_array_sized_new(50);
-	GString *words = g_string_sized_new(200);
+	GPtrArray *ftags;
+	GString *words;
+
+	if (sci == NULL) return;
+	
+	ftags = g_ptr_array_sized_new(50);
+	words = g_string_sized_new(200);
 
 	for (j = 0; j < app->tm_workspace->work_objects->len; j++)
 	{
@@ -795,94 +801,6 @@ void sci_cb_auto_table(ScintillaObject *sci, gint pos)
 }
 
 
-/**
- * This routine will find an uri like http://www.example.com or file:///tmp/test.c
- * @parm pos The position where to start looking for an URI
- * @return the position where the URI starts, or -1 if no URI was found
- */
-gint sci_cb_handle_uri(ScintillaObject *sci, gint pos)
-{
-	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	gint min, sel_start, sel_end, end_of_text, end_of_styling;
-	gint line = sci_get_line_from_position(sci, pos);
-	gint line_start = sci_get_position_from_line(sci, line);
-	gint line_end = line_start + sci_get_line_length(sci, line) - 1;
-	gchar sel[300], *begin, *cur, *uri;
-
-	// This may make sense only in certain languages
-	if ((lexer != SCLEX_HTML && lexer != SCLEX_XML))
-		return -1;
-
-	if (pos < 0) return -1;
-
-	if (SSM(sci, SCI_GETSTYLEAT, pos, 0) == SCE_H_VALUE || SSM(sci, SCI_GETSTYLEAT, pos, 0) == SCE_H_CDATA)
-		return -1;
-
-	// Grab some characters around pos
-	min = pos - 149;
-	if (min < 0) min = 0;
-	end_of_text = pos + 149;
-	if (end_of_text > sci_get_length(sci)) end_of_text = sci_get_length(sci);
-
-	sci_get_text_range(sci, min, end_of_text, sel);
-	sel[sizeof(sel) - 1] = '\0';
-
-	begin = &sel[0];
-	cur = &sel[149];
-
-	sel_start = pos;
-	while (cur > begin)
-	{
-		if (*cur == '>') break;
-		else if (*cur == ' ') break;
-		else if (*cur == '"') break;
-		else if (*cur == '=') break;
-		--cur;
-		--sel_start;
-	}
-	// stay in the current line
-	if (sel_start < line_start) sel_start = line_start - 1;
-	sel_end = sel_start++;
-
-	cur++;
-	while(cur > begin)
-	{
-		if (*cur == '\0') break;
-		else if (*cur == ' ') break;
-		else if (*cur == '"') break;
-		else if (*cur == '<') break;
-		else if (*cur == '>') break;
-		sel_end++;
-		cur++;
-	}
-	// stay in the current line
-	if (sel_end > line_end) sel_end = line_end - 1;
-
-	// check wether uri contains ://, otherwise give up
-	uri = g_malloc0(sel_end - sel_start + 1);
-	sci_get_text_range(sci, sel_start, sel_end, uri);
-	if (strstr(uri, "://") == NULL)
-	{
-		g_free(uri);
-		return -1;
-	}
-	g_free(uri);
-
-	end_of_styling = SSM(sci, SCI_GETENDSTYLED, 0, 0);
-	SSM(sci, SCI_STARTSTYLING, sel_start, 31);
-	SSM(sci, SCI_SETSTYLING, (sel_end - sel_start) + 1, SCE_H_QUESTION);
-	SSM(sci, SCI_STARTSTYLING, end_of_styling, 31);
-
-	link_start = sel_start;
-	link_end = sel_end + 1;
-	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
-
-	//geany_debug("pos: %d start: %d end: %d length: %d", pos, sel_start, sel_end, sel_end - sel_start);
-
-	return -1;
-}
-
-
 void sci_cb_do_comment(gint idx)
 {
 	gint first_line;
@@ -890,7 +808,11 @@ void sci_cb_do_comment(gint idx)
 	gint x, i, line_start, line_len;
 	gchar sel[64], *co, *cc;
 	gboolean break_loop = FALSE;
-	filetype *ft = doc_list[idx].file_type;
+	filetype *ft;
+
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	ft = doc_list[idx].file_type;
 
 	first_line = sci_get_line_from_position(doc_list[idx].sci,
 		sci_get_selection_start(doc_list[idx].sci));

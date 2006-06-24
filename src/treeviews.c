@@ -176,6 +176,12 @@ void treeviews_prepare_openfiles(void)
 	tv.store_openfiles = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_INT);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(tv.store_openfiles));
 
+	// set policy settings for the scolledwindow around the treeview again, because glade
+	// doesn't keep the settings
+	gtk_scrolled_window_set_policy(
+			GTK_SCROLLED_WINDOW(lookup_widget(app->window, "scrolledwindow7")),
+			GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Open files"), renderer, "text", 0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tv.tree_openfiles), column);

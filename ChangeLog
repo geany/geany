@@ -10,7 +10,13 @@
    tagmanager/tm_tag.c, tagmanager/tm_project, tagmanager/parsers.h,
    tagmanager/tm_file_entry.c, tagmanager/entry.c, src/highlighting.c,
    data/latex.tags, data/php.tags, Makefile.am:
-   Added global auto completion tags for PHP and LaTeX.   
+   Added global auto completion tags for PHP and LaTeX.
+ * src/keybindings.c, src/callbacks.c, src/sci_cb.c, src/main.c,
+   src/geany.h, src/dialogs.c:
+   Added some sanity checks to prevent crashes.
+ * src/sci_cb.c, src/highlighting.c:
+   Removed URL highlighting code(useless feature, never was enabled).
+ * src/treeviews.c: Set policy settings for the scolledwindow.
 
 
 2006-06-23  Nick Treleaven  <nick.treleaven@btinternet.com>

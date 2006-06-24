@@ -801,9 +801,6 @@ void styleset_php(ScintillaObject *sci)
 	SSM (sci, SCI_SETPROPERTY, (sptr_t) "phpscript.mode", (sptr_t) "1");
 	SSM (sci, SCI_SETLEXER, SCLEX_HTML, 0);
 
-	// DWELL notification for URL highlighting
-	//SSM(sci, SCI_SETMOUSEDWELLTIME, 500, 0);
-
 	// use the same colouring for HTML; XML and so on
 	styleset_markup(sci);
 
