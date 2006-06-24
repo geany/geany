@@ -52,4 +52,5 @@ install-data-local: geany.txt htmldoc
 	$(INSTALL_DATA) ../COPYING $(DOCDIR)
 	$(INSTALL_DATA) ../AUTHORS $(DOCDIR)
 	$(INSTALL_DATA) ../TODO $(DOCDIR)
+	$(INSTALL_DATA) ../scintilla/License.txt $(DOCDIR)/ScintillaLicense.txt
 

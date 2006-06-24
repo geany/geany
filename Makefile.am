@@ -9,7 +9,7 @@ EXTRA_DIST = \
 	geany.glade \
 	geany.gladep \
 	data/global.tags \
-	data/global.tags \
+	data/php.tags \
 	data/latex.tags \
 	data/filetypes.*
 

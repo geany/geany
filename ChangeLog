@@ -17,6 +17,8 @@
  * src/sci_cb.c, src/highlighting.c:
    Removed URL highlighting code(useless feature, never was enabled).
  * src/treeviews.c: Set policy settings for the scolledwindow.
+ * scintilla/License.txt, scintilla/Makefile.am, doc/Makefile.am:
+   Added Scintilla license file.
 
 
 2006-06-23  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -67,4 +67,4 @@ marshallers: scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal scintilla-marshal.list --header > scintilla-marshal.h
 	glib-genmarshal --prefix scintilla_marshal scintilla-marshal.list --body > scintilla-marshal.c
 
-EXTRA_DIST=scintilla-marshal.list scintilla-marshal.c scintilla-marshal.h
+EXTRA_DIST=scintilla-marshal.list scintilla-marshal.c scintilla-marshal.h License.txt
