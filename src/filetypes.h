@@ -73,6 +73,8 @@ struct build_programs
 typedef struct filetype
 {
 	guint	 		  id;
+	langType 		  lang;				// represents the langType of tagmanager(see the table
+										// in tagmanager/parsers.h), -1 represents all, -2 none
 	gchar	 		 *name;				// will be used as name for tagmanager
 	gboolean 		  has_tags;			// indicates whether there is a tag parser for it or not
 	gchar	 		 *title;			// will be shown in the file open dialog

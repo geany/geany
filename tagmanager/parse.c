@@ -239,9 +239,6 @@ extern void installLanguageMapDefault (const langType language)
 	LanguageTable [language]->currentExtensions =
 	    stringListNewFromArgv (LanguageTable [language]->extensions);
     }
-    if (Option.verbose)
-	printLanguageMap (language);
-    verbose ("\n");
 }
 
 extern void installLanguageMapDefaults (void)
@@ -249,7 +246,6 @@ extern void installLanguageMapDefaults (void)
     unsigned int i;
     for (i = 0  ;  i < LanguageCount  ;  ++i)
     {
-	//verbose ("    %s: ", getLanguageName (i));
 	installLanguageMapDefault (i);
     }
 }
@@ -307,7 +303,6 @@ extern void initializeParsing (void)
     builtInCount = sizeof (BuiltInParsers) / sizeof (BuiltInParsers [0]);
     LanguageTable = xMalloc (builtInCount, parserDefinition*);
 
-    verbose ("Installing parsers: ");
     for (i = 0  ;  i < builtInCount  ;  ++i)
     {
 	parserDefinition* const def = (*BuiltInParsers [i]) ();
@@ -331,13 +326,11 @@ extern void initializeParsing (void)
 		accepted = TRUE;
 	    if (accepted)
 	    {
-		verbose ("%s%s", i > 0 ? ", " : "", def->name);
 		def->id = LanguageCount++;
 		LanguageTable [def->id] = def;
 	    }
 	}
     }
-    verbose ("\n");
     enableLanguages (TRUE);
     initializeParsers ();
 }
@@ -603,8 +596,6 @@ static boolean createTagsForFile (const char *const fileName,
 
     if (fileOpen (fileName, language))
     {
-	if (Option.etags)
-	    beginEtagsFile ();
 
 	makeFileTag (fileName);
 
@@ -613,8 +604,6 @@ static boolean createTagsForFile (const char *const fileName,
 	else if (LanguageTable [language]->parser2 != NULL)
 	    retried = LanguageTable [language]->parser2 (passCount);
 
-	if (Option.etags)
-	    endEtagsFile (getSourceFileTagPath ());
 
 	fileClose ();
     }
@@ -649,23 +638,13 @@ extern boolean parseFile (const char *const fileName)
     if (Option.language == LANG_AUTO)
 	language = getFileLanguage (fileName);
     Assert (language != LANG_AUTO);
-    if (language == LANG_IGNORE)
-	verbose ("ignoring %s (unknown language)\n", fileName);
-    else if (! LanguageTable [language]->enabled)
-	verbose ("ignoring %s (language disabled)\n", fileName);
-    else
-    {
 	if (Option.filter)
 	    openTagFile ();
 
 	tagFileResized = createTagsWithFallback (fileName, language);
 
-	if (Option.filter)
-	    closeTagFile (tagFileResized);
 	addTotals (1, 0L, 0L);
 
-	return tagFileResized;
-    }
     return tagFileResized;
 }
 

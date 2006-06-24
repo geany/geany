@@ -308,19 +308,18 @@ gboolean utils_isbrace(gchar c)
 			case '>':	return TRUE;
 		}
 	}
-	else
+
+	switch (c)
 	{
-		switch (c)
-		{
-			case '(':
-			case ')':
-			case '{':
-			case '}':
-			case '[':
-			case ']':	return TRUE;
-			default:	return FALSE;
-		}
+		case '(':
+		case ')':
+		case '{':
+		case '}':
+		case '[':
+		case ']':	return TRUE;
+		default:	return FALSE;
 	}
+
 	return FALSE;
 }
 
@@ -1827,16 +1826,24 @@ void utils_create_insert_menu_items(void)
 		"iterator", "functional", "string", "complex", "valarray", NULL
 	};
 	
-	blank = gtk_menu_item_new_with_label(_("(blank)"));
+	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
 	g_signal_connect((gpointer) blank, "activate", G_CALLBACK(on_insert_include_activate),
 																	(gpointer) "blank");
-	blank = gtk_menu_item_new_with_label(_("(blank)"));
+	blank = gtk_separator_menu_item_new ();
+	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
+	gtk_widget_show(blank);
+
+	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);
 	g_signal_connect((gpointer) blank, "activate", G_CALLBACK(on_insert_include_activate),
 																	(gpointer) "blank");
+	blank = gtk_separator_menu_item_new ();
+	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
+	gtk_widget_show(blank);
+
 	insert_items(menu_edit, menu_popup, (gchar**) c_includes_stdlib, _("C Standard Library"));
 	insert_items(menu_edit, menu_popup, (gchar**) c_includes_c99, _("ISO C99"));
 	insert_items(menu_edit, menu_popup, (gchar**) c_includes_cpp, _("C++ (C Standard Library)"));

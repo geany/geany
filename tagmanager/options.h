@@ -32,19 +32,6 @@
 *   DATA DECLARATIONS
 */
 
-typedef enum { OPTION_NONE, OPTION_SHORT, OPTION_LONG } optionType;
-
-typedef struct sCookedArgs {
-/* private */
-    Arguments* args;
-    char *shortOptions;
-    char simple[2];
-    boolean isOption;
-    boolean longOption;
-    const char* parameter;
-/* public */
-    char* item;
-} cookedArgs;
 
 /*  This stores the command line options.
  */
@@ -71,7 +58,6 @@ typedef struct sOptionValues {
     stringList* ignore;	    /* -I  name of file containing tokens to ignore */
     boolean append;	    /* -a  append to "tags" file */
     boolean backward;	    /* -B  regexp patterns search backwards */
-    boolean etags;	    /* -e  output Emacs style tags file */
     enum eLocate {
 	EX_MIX,		    /* line numbers for defines, patterns otherwise */
 	EX_LINENUM,	    /* -n  only line numbers in tag file */
@@ -97,10 +83,6 @@ typedef struct sOptionValues {
     boolean printTotals;    /* --totals  print cumulative statistics */
     boolean lineDirectives; /* --linedirectives  process #line directives */
 	boolean nestFunction; /* --nest Nest inside function blocks for tags */
-#ifdef TM_DEBUG
-    long debugLevel;	    /* -D  debugging output */
-    unsigned long breakLine;/* -b  source line at which to call lineBreak() */
-#endif
 } optionValues;
 
 /*
@@ -114,25 +96,10 @@ extern CONST_OPTION optionValues	Option;
 extern void verbose (const char *const format, ...) __printf__ (1, 2);
 extern void freeList (stringList** const pString);
 extern void setDefaultTagFileName (void);
-extern void checkOptions (void);
-extern void testEtagsInvocation (void);
-
-extern cookedArgs* cArgNewFromString (const char* string);
-extern cookedArgs* cArgNewFromArgv (char* const* const argv);
-extern cookedArgs* cArgNewFromFile (FILE* const fp);
-extern cookedArgs* cArgNewFromLineFile (FILE* const fp);
-extern void cArgDelete (cookedArgs* const current);
-extern boolean cArgOff (cookedArgs* const current);
-extern boolean cArgIsOption (cookedArgs* const current);
-extern const char* cArgItem (cookedArgs* const current);
-extern void cArgForth (cookedArgs* const current);
 
 extern const char *fileExtension (const char *const fileName);
 extern boolean isIncludeFile (const char *const fileName);
 extern boolean isIgnoreToken (const char *const name, boolean *const pIgnoreParens, const char **const replacement);
-extern void parseOption (cookedArgs* const cargs);
-extern void parseOptions (cookedArgs* const cargs);
-extern void previewFirstOption (cookedArgs* const cargs);
 extern void readOptionConfiguration (void);
 extern void initOptions (void);
 extern void freeOptionResources (void);

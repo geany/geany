@@ -930,17 +930,13 @@ void document_update_tag_list(gint idx, gboolean update)
 	if (doc_list[idx].tm_file == NULL)
 	{
 		gchar *locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
-		doc_list[idx].tm_file = tm_source_file_new(locale_filename, FALSE);
+		doc_list[idx].tm_file = tm_source_file_new(locale_filename, FALSE,
+												   doc_list[idx].file_type->name);
 		g_free(locale_filename);
 		if (! doc_list[idx].tm_file) return;
 		tm_workspace_add_object(doc_list[idx].tm_file);
 		if (update)
-		{
-			// parse the file after setting the filetype
-			// this is necessary to switch between filetypes
-			TM_SOURCE_FILE(doc_list[idx].tm_file)->lang = getNamedLanguage((doc_list[idx].file_type)->name);
 			tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
-		}
 		utils_update_tag_list(idx, TRUE);
 	}
 	else

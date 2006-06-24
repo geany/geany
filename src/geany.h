@@ -65,7 +65,7 @@
 #define GEANY_SESSION_FILES				25
 #define GEANY_MAX_TAGS_COUNT			1000
 #define GEANY_CHECK_FILE_DELAY			30
-#define GEANY_WORDCHARS					"_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+#define GEANY_WORDCHARS					"_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\\"
 #define GEANY_MAX_WORD_LENGTH			192
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
 #define GEANY_STRING_UNTITLED			_("untitled")
@@ -262,9 +262,6 @@ enum {
 	MEGABYTE = (KILOBYTE*1024),
 	GIGABYTE = (MEGABYTE*1024)
 };
-
-// prototype from tagmanager/parse.h, used in document.c, ugly but it works
-extern langType getNamedLanguage(const char *const name);
 
 // implementation in main.c
 void geany_debug(gchar const *format, ...);

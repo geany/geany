@@ -1,3 +1,18 @@
+2006-06-24  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/utils.c: Replaced 'blank' by 'include "..."'. Fixed a bug in
+                utils_brace_match() which prevents correctly matching.
+ * src/document.c, src/sci_cb.c, src/filetypes.c:
+   Made auto completion work only for the current filetype
+   (i.e. it hides symbols from other filetypes).
+ * tagmanager/options.c, tagmanager/parse.c: Removed unneeded code.
+ * tagmanager/tm_workspace.c, tagmanager/tm_source_file
+   tagmanager/tm_tag.c, tagmanager/tm_project, tagmanager/parsers.h,
+   tagmanager/tm_file_entry.c, tagmanager/entry.c, src/highlighting.c,
+   data/latex.tags, data/php.tags, Makefile.am:
+   Added global auto completion tags for PHP and LaTeX.   
+
+
 2006-06-23  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/msgwindow.c: Add a timestamp to messages in the Status window

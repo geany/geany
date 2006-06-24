@@ -182,6 +182,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				case '{':
 				{	// Tex auto-closing
 					sci_cb_auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
+					sci_cb_show_calltip(sci, pos);
 					break;
 				}
 				case '}':
@@ -365,24 +366,26 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos)
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	gint style;
 	gchar word[GEANY_MAX_WORD_LENGTH];
+	gint idx = document_find_by_sci(sci);
 	const GPtrArray *tags;
 
 	word[0] = '\0';
 	if (pos == -1)
 	{	// position of '(' is unknown, so go backwards to find it
 		pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
-		while (pos >= 0 && SSM(sci, SCI_GETCHARAT, pos, 0) != '(') pos--;
+		// I'm not sure if utils_isbrace() is a good idea, but it is the simplest way, but we need
+		// something more intelligent than only check for '(' because e.g. LaTeX uses {, [ or (
+		while (pos >= 0 && ! utils_isbrace(SSM(sci, SCI_GETCHARAT, pos, 0))) pos--;
 	}
 
 	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
-	if (lexer != SCLEX_CPP) return FALSE;
 	if (lexer == SCLEX_CPP && (style == SCE_C_COMMENT ||
 			style == SCE_C_COMMENTLINE || style == SCE_C_COMMENTDOC)) return FALSE;
 
 	utils_find_current_word(sci, pos - 1, word, sizeof word);
 	if (word[0] == '\0') return FALSE;
 
-	tags = tm_workspace_find(word, tm_tag_max_t, NULL, FALSE);
+	tags = tm_workspace_find(word, tm_tag_max_t, NULL, FALSE, doc_list[idx].file_type->lang);
 	if (tags->len == 1 && TM_TAG(tags->pdata[0])->atts.entry.arglist)
 	{
 		SSM(sci, SCI_CALLTIPSHOW, pos, (sptr_t) TM_TAG(tags->pdata[0])->atts.entry.arglist);
@@ -439,25 +442,27 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 		g_strfreev(ents);
 	}
 	else
-	{	// C and C++ tag autocompletion
+	{	// PHP, LaTeX, C and C++ tag autocompletion
 		gint i = 0;
+		gint idx = document_find_by_sci(sci);
+		TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 
 		while ((line_pos - i >= 0) && ! g_ascii_isspace(linebuf[line_pos - i])) i++;
 		if (i < 4) return FALSE;	// go home if typed less than 4 chars
 
-		tags = tm_workspace_find(root, tm_tag_max_t, NULL, TRUE);
+		tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc_list[idx].file_type->lang);
 		if (NULL != tags && tags->len > 0)
 		{
 			GString *words = g_string_sized_new(150);
-			TMTag *tag;
 			guint j;
+
 			for (j = 0; ((j < tags->len) && (j < GEANY_MAX_AUTOCOMPLETE_WORDS)); ++j)
 			{
-				tag = (TMTag *) tags->pdata[j];
 				if (j > 0) g_string_append_c(words, ' ');
-				g_string_append(words, tag->name);
+				g_string_append(words, ((TMTag *) tags->pdata[j])->name);
 			}
 			SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words->str);
+			//geany_debug("string size: %d", words->len);
 			g_string_free(words, TRUE);
 		}
 	}
