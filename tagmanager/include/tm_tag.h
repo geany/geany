@@ -174,9 +174,11 @@ gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_ent
  \param tag The TMTag structure to populate
  \param file The TMSourceFile struct (assigned to the file member)
  \param fp FILE pointer from where the tag line is read
+ \param mode langType - if set to greater than 0, the alternative parser is used and mode represents
+             the langType to use for the tags
  \return TRUE on success, FALSE on FAILURE
 */
-gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp);
+gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, gint mode);
 
 /*!
  Creates a new tag structure from a tagEntryInfo pointer and a TMSOurceFile pointer
@@ -190,7 +192,7 @@ TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry);
 /*!
  Same as tm_tag_new() except that the tag attributes are read from file
 */
-TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp);
+TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode);
 
 /*!
  Writes tag information to the given FILE *.

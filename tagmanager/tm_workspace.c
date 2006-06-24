@@ -133,10 +133,11 @@ gboolean tm_workspace_remove_object(TMWorkObject *w, gboolean free)
 	return FALSE;
 }
 
-gboolean tm_workspace_load_global_tags(const char *tags_file)
+gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 {
 	FILE *fp;
 	TMTag *tag;
+	TMTagAttrType attr[] = { tm_tag_attr_name_t, 0 };
 
 	if (NULL == (fp = fopen(tags_file, "r")))
 		return FALSE;
@@ -144,9 +145,14 @@ gboolean tm_workspace_load_global_tags(const char *tags_file)
 		tm_create_workspace();
 	if (NULL == theWorkspace->global_tags)
 		theWorkspace->global_tags = g_ptr_array_new();
-	while (NULL != (tag = tm_tag_new_from_file(NULL, fp)))
+	while (NULL != (tag = tm_tag_new_from_file(NULL, fp, mode)))
 		g_ptr_array_add(theWorkspace->global_tags, tag);
 	fclose(fp);
+
+	// resort the whole array, because tm_tags_find expects a sorted array and it is not sorted
+	// when global.tags, php.tags and latex.tags are loaded at the same time
+	tm_tags_sort(theWorkspace->global_tags, attr, TRUE);
+	
 	return TRUE;
 }
 
@@ -278,7 +284,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	g_free(command);
 	unlink(temp_file);
 	g_free(temp_file);
-	source_file = tm_source_file_new(temp_file2, TRUE);
+	source_file = tm_source_file_new(temp_file2, TRUE, NULL);
 	if (NULL == source_file)
 	{
 		unlink(temp_file2);
@@ -435,7 +441,7 @@ void tm_workspace_dump(void)
 }
 
 const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs
- , gboolean partial)
+ , gboolean partial, langType lang)
 {
 	static GPtrArray *tags = NULL;
 	TMTag **matches[2], **match;
@@ -460,7 +466,7 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 		{
 			for (tagIter=0;tagIter<tagCount[i];++tagIter)
 			{
-				if (type & (*match)->type)
+				if ((type & (*match)->type) && (lang == -1 || (*match)->atts.file.lang == lang))
 					g_ptr_array_add(tags, *match);
 				if (partial)
 				{
@@ -498,7 +504,7 @@ const GPtrArray *tm_workspace_get_parents(const gchar *name)
 		parents = g_ptr_array_new();
 	else
 		g_ptr_array_set_size(parents, 0);
-	matches = tm_workspace_find(name, tm_tag_class_t, type, FALSE);
+	matches = tm_workspace_find(name, tm_tag_class_t, type, FALSE, -1);
 	if ((NULL == matches) || (0 == matches->len))
 		return NULL;
 	g_ptr_array_add(parents, matches->pdata[0]);
@@ -517,7 +523,7 @@ const GPtrArray *tm_workspace_get_parents(const gchar *name)
 				}
 				if (parents->len == j)
 				{
-					matches = tm_workspace_find(*klass, tm_tag_class_t, type, FALSE);
+					matches = tm_workspace_find(*klass, tm_tag_class_t, type, FALSE, -1);
 					if ((NULL != matches) && (0 < matches->len))
 						g_ptr_array_add(parents, matches->pdata[0]);
 				}

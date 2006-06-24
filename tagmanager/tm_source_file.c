@@ -26,7 +26,7 @@ guint source_file_class_id = 0;
 static TMSourceFile *current_source_file = NULL;
 
 gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
-  , gboolean update)
+  , gboolean update, const char* name)
 {
 	if (0 == source_file_class_id)
 		source_file_class_id = tm_work_object_register(tm_source_file_free
@@ -39,7 +39,10 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
 	if (FALSE == tm_work_object_init(&(source_file->work_object),
 		  source_file_class_id, file_name, FALSE))
 		return FALSE;
-	source_file->lang = LANG_AUTO;
+	if (name == NULL) 
+		source_file->lang = LANG_AUTO;
+	else
+		source_file->lang = getNamedLanguage(name);
 	source_file->inactive = FALSE;
 	if (NULL == LanguageTable)
 	{
@@ -54,10 +57,10 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
 	return TRUE;
 }
 
-TMWorkObject *tm_source_file_new(const char *file_name, gboolean update)
+TMWorkObject *tm_source_file_new(const char *file_name, gboolean update, const char *name)
 {
 	TMSourceFile *source_file = g_new(TMSourceFile, 1);
-	if (TRUE != tm_source_file_init(source_file, file_name, update))
+	if (TRUE != tm_source_file_init(source_file, file_name, update, name))
 	{
 		g_free(source_file);
 		return NULL;
@@ -92,6 +95,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 {
 	const char *file_name;
 	gboolean status = TRUE;
+	int passCount = 0;
 
 	if ((NULL == source_file) || (NULL == source_file->work_object.file_name))
 	{
@@ -99,9 +103,6 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 		return FALSE;
 	}
 
-#ifdef TM_DEBUG
-	g_message("Parsing %s", source_file->work_object.file_name);
-#endif
 	file_name = source_file->work_object.file_name;
 	if (NULL == LanguageTable)
 	{
@@ -111,43 +112,31 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 			TagEntryFunction = tm_source_file_tags;
 	}
 	current_source_file = source_file;
+	
 	if (LANG_AUTO == source_file->lang)
 		source_file->lang = getFileLanguage (file_name);
-	if (source_file->lang == LANG_IGNORE)
+
+	if (source_file->lang < 0 || ! LanguageTable [source_file->lang]->enabled)
+		return status;
+	
+	while ((TRUE == status) && (passCount < 3))
 	{
-#ifdef TM_DEBUG
-		g_warning("ignoring %s (unknown language)\n", file_name);
-#endif
-	}
-	else if (! LanguageTable [source_file->lang]->enabled)
-	{
-#ifdef TM_DEBUG
-		g_warning("ignoring %s (language disabled)\n", file_name);
-#endif
-	}
-	else
-	{
-		int passCount = 0;
-		while ((TRUE == status) && (passCount < 3))
+		if (source_file->work_object.tags_array)
+			tm_tags_array_free(source_file->work_object.tags_array, FALSE);
+		if (fileOpen (file_name, source_file->lang))
 		{
-			if (source_file->work_object.tags_array)
-				tm_tags_array_free(source_file->work_object.tags_array, FALSE);
-			if (fileOpen (file_name, source_file->lang))
-			{
-				if (LanguageTable [source_file->lang]->parser != NULL)
-					LanguageTable [source_file->lang]->parser ();
-				else if (LanguageTable [source_file->lang]->parser2 != NULL)
-					status = LanguageTable [source_file->lang]->parser2 (passCount);
-				fileClose ();
-			}
-			else
-			{
-				g_warning("Unable to open %s", file_name);
-				return FALSE;
-			}
-			++ passCount;
+			if (LanguageTable [source_file->lang]->parser != NULL)
+				LanguageTable [source_file->lang]->parser ();
+			else if (LanguageTable [source_file->lang]->parser2 != NULL)
+				status = LanguageTable [source_file->lang]->parser2 (passCount);
+			fileClose ();
 		}
-		return TRUE;
+		else
+		{
+			g_warning("Unable to open %s", file_name);
+			return FALSE;
+		}
+		++ passCount;
 	}
 	return status;
 }

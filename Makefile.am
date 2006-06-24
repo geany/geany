@@ -8,7 +8,9 @@ EXTRA_DIST = \
 	geany.spec \
 	geany.glade \
 	geany.gladep \
-	global.tags \
+	data/global.tags \
+	data/global.tags \
+	data/latex.tags \
 	data/filetypes.*
 
 uninstall-local:
@@ -26,7 +28,9 @@ install-data-local:
 	  done \
 	fi
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) global.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) data/global.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) data/php.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) data/latex.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) COPYING $(DESTDIR)$(pkgdatadir)/GPL-2; \
 	for file in $(srcdir)/data/*; do \
 	  if test -f $$file; then \

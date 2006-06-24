@@ -243,69 +243,7 @@ static long unsigned int updatePseudoTags (FILE *const fp)
  *  Tag file management
  */
 
-static boolean isValidTagAddress (const char *const excmd)
-{
-    boolean isValid = FALSE;
 
-    if (strchr ("/?", excmd [0]) != NULL)
-	isValid = TRUE;
-    else
-    {
-	char *address = xMalloc (strlen (excmd) + 1, char);
-	if (sscanf (excmd, "%[^;\n]", address) == 1  &&
-	    strspn (address,"0123456789") == strlen (address))
-		isValid = TRUE;
-	eFree (address);
-    }
-    return isValid;
-}
-
-static boolean isCtagsLine (const char *const line)
-{
-    enum fieldList { TAG, TAB1, SRC_FILE, TAB2, EXCMD, NUM_FIELDS };
-    boolean ok = FALSE;			/* we assume not unless confirmed */
-    const size_t fieldLength = strlen (line) + 1;
-    char *const fields = xMalloc (NUM_FIELDS * fieldLength, char);
-
-    if (fields == NULL)
-	error (FATAL, "Cannot analyze tag file");
-    else
-    {
-#define field(x)	(fields + ((size_t) (x) * fieldLength))
-
-	const int numFields = sscanf (line, "%[^\t]%[\t]%[^\t]%[\t]%[^\r\n]",
-				     field (TAG), field (TAB1), field (SRC_FILE),
-				     field (TAB2), field (EXCMD));
-
-	/*  There must be exactly five fields: two tab fields containing
-	 *  exactly one tab each, the tag must not begin with "#", and the
-	 *  file name should not end with ";", and the excmd must be
-	 *  accceptable.
-	 *
-	 *  These conditions will reject tag-looking lines like:
-	 *      int	a;	<C-comment>
-	 *      #define	LABEL	<C-comment>
-	 */
-	if (numFields == NUM_FIELDS   &&
-	    strlen (field (TAB1)) == 1  &&
-	    strlen (field (TAB2)) == 1  &&
-	    field (TAG) [0] != '#'      &&
-	    field (SRC_FILE) [strlen (field (SRC_FILE)) - 1] != ';'  &&
-	    isValidTagAddress (field (EXCMD)))
-		ok = TRUE;
-
-	eFree (fields);
-    }
-    return ok;
-}
-
-static boolean isEtagsLine (const char *const line)
-{
-    boolean result = FALSE;
-    if (line [0] == '\f')
-	result = (boolean) (line [1] == '\n'  ||  line [1] == '\r');
-    return result;
-}
 
 static boolean isTagFile (const char *const filename)
 {
@@ -320,8 +258,6 @@ static boolean isTagFile (const char *const filename)
 
 	if (line == NULL)
 	    ok = TRUE;
-	else
-	    ok = (boolean) (isCtagsLine (line) || isEtagsLine (line));
 	fclose (fp);
     }
     return ok;
@@ -389,32 +325,23 @@ extern void openTagFile (void)
 	      "\"%s\" doesn't look like a tag file; I refuse to overwrite it.",
 		  TagFile.name);
 
-	if (Option.etags)
+    if (Option.append  &&  fileExists)
+    {
+	TagFile.fp = fopen (TagFile.name, "r+");
+	if (TagFile.fp != NULL)
 	{
-	    if (Option.append  &&  fileExists)
-		TagFile.fp = fopen (TagFile.name, "a+b");
-	    else
-		TagFile.fp = fopen (TagFile.name, "w+b");
+	    TagFile.numTags.prev = updatePseudoTags (TagFile.fp);
+	    fclose (TagFile.fp);
+	    TagFile.fp = fopen (TagFile.name, "a+");
 	}
-	else
-	{
-	    if (Option.append  &&  fileExists)
-	    {
-		TagFile.fp = fopen (TagFile.name, "r+");
-		if (TagFile.fp != NULL)
-		{
-		    TagFile.numTags.prev = updatePseudoTags (TagFile.fp);
-		    fclose (TagFile.fp);
-		    TagFile.fp = fopen (TagFile.name, "a+");
-		}
-	    }
-	    else
-	    {
-		TagFile.fp = fopen (TagFile.name, "w");
-		if (TagFile.fp != NULL)
-		    addPseudoTags ();
-	    }
-	}
+    }
+    else
+    {
+	TagFile.fp = fopen (TagFile.name, "w");
+	if (TagFile.fp != NULL)
+	    addPseudoTags ();
+    }
+
 	if (TagFile.fp == NULL)
 	{
 	    error (FATAL | PERROR, "cannot open tag file");
@@ -446,338 +373,11 @@ static int replacementTruncate (const char *const name, const long size)
 
 #endif
 
-static void sortTagFile (void)
-{
-    if (TagFile.numTags.added > 0L)
-    {
-	if (Option.sorted)
-	{
-	    verbose ("sorting tag file\n");
-#ifdef EXTERNAL_SORT
-	    externalSortTags (TagsToStdout);
-#else
-	    internalSortTags (TagsToStdout);
-#endif
-	}
-	else if (TagsToStdout)
-	    catFile (tagFileName ());
-    }
-    if (TagsToStdout)
-	remove (tagFileName ());		/* remove temporary file */
-}
-
-static void resizeTagFile (const long newSize)
-{
-    int result;
-
-#ifdef USE_REPLACEMENT_TRUNCATE
-    result = replacementTruncate (TagFile.name, newSize);
-#else
-# ifdef HAVE_TRUNCATE
-    result = truncate (TagFile.name, (off_t) newSize);
-# else
-    const int fd = open (TagFile.name, O_RDWR);
-
-    if (fd == -1)
-	result = -1;
-    else
-    {
-#  ifdef HAVE_FTRUNCATE
-	result = ftruncate (fd, (off_t) newSize);
-#  else
-#   ifdef HAVE_CHSIZE
-	result = chsize (fd, newSize);
-#   endif
-#  endif
-	close (fd);
-    }
-# endif
-#endif
-    if (result == -1)
-	fprintf (errout, "Cannot shorten tag file: errno = %d\n", errno);
-}
-
-static void writeEtagsIncludes (FILE *const fp)
-{
-    if (Option.etagsInclude)
-    {
-	unsigned int i;
-	for (i = 0  ;  i < stringListCount (Option.etagsInclude)  ;  ++i)
-	{
-	    vString *item = stringListItem (Option.etagsInclude, i);
-	    fprintf (fp, "\f\n%s,include\n", vStringValue (item));
-	}
-    }
-}
-
-extern void closeTagFile (const boolean resize)
-{
-    long desiredSize, size;
-
-    if (Option.etags)
-	writeEtagsIncludes (TagFile.fp);
-    desiredSize = ftell (TagFile.fp);
-    fseek (TagFile.fp, 0L, SEEK_END);
-    size = ftell (TagFile.fp);
-    fclose (TagFile.fp);
-    if (resize  &&  desiredSize < size)
-    {
-	DebugStatement (
-	    debugPrintf (DEBUG_STATUS, "shrinking %s from %ld to %ld bytes\n",
-			TagFile.name, size, desiredSize); )
-	resizeTagFile (desiredSize);
-    }
-    sortTagFile ();
-    eFree (TagFile.name);
-    TagFile.name = NULL;
-}
-
-extern void beginEtagsFile (void)
-{
-    TagFile.etags.fp = tempFile ("w+b", &TagFile.etags.name);
-    TagFile.etags.byteCount = 0;
-}
-
-extern void endEtagsFile (const char *const name)
-{
-    const char *line;
-
-    fprintf (TagFile.fp, "\f\n%s,%ld\n", name, (long) TagFile.etags.byteCount);
-    if (TagFile.etags.fp != NULL)
-    {
-	rewind (TagFile.etags.fp);
-	while ((line = readLine (TagFile.vLine, TagFile.etags.fp)) != NULL)
-	    fputs (line, TagFile.fp);
-	fclose (TagFile.etags.fp);
-	remove (TagFile.etags.name);
-	eFree (TagFile.etags.name);
-	TagFile.etags.fp = NULL;
-	TagFile.etags.name = NULL;
-    }
-}
 
 /*
  *  Tag entry management
  */
 
-/*  This function copies the current line out to a specified file. It has no
- *  effect on the fileGetc () function.  During copying, any '\' characters
- *  are doubled and a leading '^' or trailing '$' is also quoted. End of line
- *  characters (line feed or carriage return) are dropped.
- */
-static size_t writeSourceLine (FILE *const fp, const char *const line)
-{
-    size_t length = 0;
-    const char *p;
-
-    /*	Write everything up to, but not including, a line end character.
-     */
-    for (p = line  ;  *p != '\0'  ;  ++p)
-    {
-	const int next = *(p + 1);
-	const int c = *p;
-
-	if (c == CRETURN  ||  c == NEWLINE)
-	    break;
-
-	/*  If character is '\', or a terminal '$', then quote it.
-	 */
-	if (c == BACKSLASH  ||  c == (Option.backward ? '?' : '/')  ||
-	    (c == '$'  &&  (next == NEWLINE  ||  next == CRETURN)))
-	{
-	    putc (BACKSLASH, fp);
-	    ++length;
-	}
-	putc (c, fp);
-	++length;
-    }
-    return length;
-}
-
-/*  Writes "line", stripping leading and duplicate white space.
- */
-static size_t writeCompactSourceLine (FILE *const fp, const char *const line)
-{
-    boolean lineStarted = FALSE;
-    size_t  length = 0;
-    const char *p;
-    int c;
-
-    /*	Write everything up to, but not including, the newline.
-     */
-    for (p = line, c = *p  ;  c != NEWLINE  &&  c != '\0'  ;  c = *++p)
-    {
-	if (lineStarted  || ! isspace (c))	/* ignore leading spaces */
-	{
-	    lineStarted = TRUE;
-	    if (isspace (c))
-	    {
-		int next;
-
-		/*  Consume repeating white space.
-		 */
-		while (next = *(p+1) , isspace (next)  &&  next != NEWLINE)
-		    ++p;
-		c = ' ';	/* force space character for any white space */
-	    }
-	    if (c != CRETURN  ||  *(p + 1) != NEWLINE)
-	    {
-		putc (c, fp);
-		++length;
-	    }
-	}
-    }
-    return length;
-}
-
-static int writeXrefEntry (const tagEntryInfo *const tag)
-{
-    const char *const line =
-			readSourceLine (TagFile.vLine, tag->filePosition, NULL);
-    int length = fprintf (TagFile.fp, "%-20s %-10s %4lu  %-14s ", tag->name,
-			 tag->kindName, tag->lineNumber, tag->sourceFileName);
-
-    length += writeCompactSourceLine (TagFile.fp, line);
-    putc (NEWLINE, TagFile.fp);
-    ++length;
-
-    return length;
-}
-
-/*  Truncates the text line containing the tag at the character following the
- *  tag, providing a character which designates the end of the tag.
- */
-static void truncateTagLine (char *const line, const char *const token,
-			     const boolean discardNewline)
-{
-    char *p = strstr (line, token);
-
-    if (p != NULL)
-    {
-	p += strlen (token);
-	if (*p != '\0'  &&  ! (*p == '\n'  &&  discardNewline))
-	    ++p;		/* skip past character terminating character */
-	*p = '\0';
-    }
-}
-
-static int writeEtagsEntry (const tagEntryInfo *const tag)
-{
-    int length;
-
-    if (tag->isFileEntry)
-	length = fprintf (TagFile.etags.fp, "\177%s\001%lu,0\n",
-			 tag->name, tag->lineNumber);
-    else
-    {
-	long seekValue;
-	char *const line =
-		readSourceLine (TagFile.vLine, tag->filePosition, &seekValue);
-
-	if (tag->truncateLine)
-	    truncateTagLine (line, tag->name, TRUE);
-	else
-	    line [strlen (line) - 1] = '\0';
-
-	length = fprintf (TagFile.etags.fp, "%s\177%s\001%lu,%ld\n", line,
-			 tag->name, tag->lineNumber, seekValue);
-    }
-    TagFile.etags.byteCount += length;
-
-    return length;
-}
-
-static int addExtensionFields (const tagEntryInfo *const tag)
-{
-    const char* const kindKey = Option.extensionFields.kindKey ? "kind:" : "";
-    int length = fprintf (TagFile.fp, ";\"");
-
-    if (tag->kindName != NULL && (
-	 Option.extensionFields.kindLong  ||  tag->kind == '\0'))
-	length += fprintf (TagFile.fp, "\t%s%s", kindKey, tag->kindName);
-    else if (tag->kind != '\0'  && (
-	 ! Option.extensionFields.kindLong  ||  tag->kindName == NULL))
-	length += fprintf (TagFile.fp, "\t%s%c", kindKey, tag->kind);
-
-    if (Option.extensionFields.lineNumber)
-	length += fprintf (TagFile.fp, "\tline:%ld", tag->lineNumber);
-
-    if (Option.extensionFields.language  &&  tag->language != NULL)
-	length += fprintf (TagFile.fp, "\tlanguage:%s", tag->language);
-
-    if (Option.extensionFields.scope  &&
-	    tag->extensionFields.scope [0] != NULL  &&
-	    tag->extensionFields.scope [1] != NULL)
-	length += fprintf (TagFile.fp, "\t%s:%s",
-			   tag->extensionFields.scope [0],
-			   tag->extensionFields.scope [1]);
-
-    if (Option.extensionFields.fileScope  &&  tag->isFileScope)
-	length += fprintf (TagFile.fp, "\tfile:");
-
-    if (Option.extensionFields.inheritance  &&
-	    tag->extensionFields.inheritance != NULL)
-	length += fprintf (TagFile.fp, "\tinherits:%s",
-			   tag->extensionFields.inheritance);
-
-    if (Option.extensionFields.access  &&  tag->extensionFields.access != NULL)
-	length += fprintf (TagFile.fp, "\taccess:%s",
-			   tag->extensionFields.access);
-
-    if (Option.extensionFields.implementation  &&
-	    tag->extensionFields.implementation != NULL)
-	length += fprintf (TagFile.fp, "\timplementation:%s",
-			   tag->extensionFields.implementation);
-	
-	if ((Option.extensionFields.argList) &&
-		(tag->extensionFields.arglist != NULL))
-		length += fprintf(TagFile.fp, "\targlist:%s", tag->extensionFields.arglist);
-
-    return length;
-}
-
-static int writePatternEntry (const tagEntryInfo *const tag)
-{
-    char *const line = readSourceLine (TagFile.vLine, tag->filePosition, NULL);
-    const int searchChar = Option.backward ? '?' : '/';
-    boolean newlineTerminated;
-    int length = 0;
-
-    if (tag->truncateLine)
-	truncateTagLine (line, tag->name, FALSE);
-    newlineTerminated = (boolean) (line [strlen (line) - 1] == '\n');
-
-    length += fprintf (TagFile.fp, "%c^", searchChar);
-    length += writeSourceLine (TagFile.fp, line);
-    length += fprintf (TagFile.fp, "%s%c", newlineTerminated ? "$":"",
-		      searchChar);
-
-    return length;
-}
-
-
-static int writeLineNumberEntry (const tagEntryInfo *const tag)
-{
-    return fprintf (TagFile.fp, "%lu", tag->lineNumber);
-}
-
-static int writeCtagsEntry (const tagEntryInfo *const tag)
-{
-    int length = fprintf (TagFile.fp, "%s\t%s\t",
-			  tag->name, tag->sourceFileName);
-
-    if (tag->lineNumberEntry)
-	length += writeLineNumberEntry (tag);
-    else
-	length += writePatternEntry (tag);
-
-    if (includeExtensionFlags ())
-	length += addExtensionFields (tag);
-
-    length += fprintf (TagFile.fp, "\n");
-
-    return length;
-}
 
 extern void makeTagEntry (const tagEntryInfo *const tag)
 {
@@ -788,18 +388,8 @@ extern void makeTagEntry (const tagEntryInfo *const tag)
     {
 	int length = 0;
 
-	DebugStatement ( debugEntry (tag); )
 	if (NULL != TagEntryFunction)
 		length = TagEntryFunction(tag);
-	else if (Option.xref)
-	{
-	    if (! tag->isFileEntry)
-		length = writeXrefEntry (tag);
-	}
-	else if (Option.etags)
-	    length = writeEtagsEntry (tag);
-	else
-	    length = writeCtagsEntry (tag);
 
 	++TagFile.numTags.added;
 	rememberMaxLengths (strlen (tag->name), (size_t) length);

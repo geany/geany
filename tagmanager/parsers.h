@@ -33,6 +33,26 @@
     TclParser, \
     ShParser
 
+/*
+langType of each parser
+ 0	CParser
+ 1	CppParser
+ 2	JavaParser
+ 3	MakefileParser
+ 4	PascalParser
+ 5	PerlParser
+ 6	PhpParser
+ 7	PythonParser
+ 8	LaTeXParser
+ 9	AsmParser
+10	ConfParser
+11	SqlParser
+12	DocBookParser
+13	CssParser
+14	RubyParser
+15	TclParser
+16	ShParser
+*/
 #endif	/* _PARSERS_H */
 
 /* vi:set tabstop=8 shiftwidth=4: */

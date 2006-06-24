@@ -29,6 +29,8 @@
 
 static style_set *types[GEANY_MAX_FILE_TYPES] = { NULL };
 static gboolean global_c_tags_loaded = FALSE;
+static gboolean global_php_tags_loaded = FALSE;
+static gboolean global_latex_tags_loaded = FALSE;
 
 
 /* simple wrapper function to print file errors in DEBUG mode */
@@ -371,7 +373,8 @@ static void styleset_c_init(void)
 	// load global tags file for C autocompletion
 	if (! app->ignore_global_tags && ! global_c_tags_loaded)
 	{
-		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags");
+		// 0 is the langType used in TagManager (see the table in tagmanager/parsers.h)
+		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags", 0);
 		global_c_tags_loaded = TRUE;
 	}
 }
@@ -501,7 +504,9 @@ static void styleset_cpp_init(void)
 	// load global tags file for C autocompletion
 	if (! app->ignore_global_tags && ! global_c_tags_loaded)
 	{
-		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags");
+		// 0 is the langType used in TagManager (see the table in tagmanager/parsers.h)
+		// C++ is a special case, here we use 0 to have C global tags in C++, too
+		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags", 0);
 		global_c_tags_loaded = TRUE;
 	}
 }
@@ -725,6 +730,14 @@ static void styleset_latex_init(void)
 	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_LATEX, GEANY_WORDCHARS);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_LATEX);
 
+	// load global tags file for LaTeX autocompletion
+	if (! app->ignore_global_tags && ! global_latex_tags_loaded)
+	{
+		// 8 is the langType used in TagManager (see the table in tagmanager/parsers.h)
+		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "latex.tags", 8);
+		global_latex_tags_loaded = TRUE;
+	}
+
 	g_key_file_free(config);
 	g_key_file_free(config_home);
 	g_free(f);
@@ -764,6 +777,14 @@ static void styleset_php_init(void)
 
 	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_PHP, GEANY_WORDCHARS"$");
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PHP);
+
+	// load global tags file for PHP autocompletion
+	if (! app->ignore_global_tags && ! global_php_tags_loaded)
+	{
+		// 6 is the langType used in TagManager (see the table in tagmanager/parsers.h)
+		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "php.tags", 6);
+		global_php_tags_loaded = TRUE;
+	}
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);

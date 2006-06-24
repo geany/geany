@@ -186,7 +186,7 @@ gboolean tm_project_add_file(TMProject *project, const char *file_name
 		}
 	if (NULL == source_file)
 	{
-	if (NULL == (source_file = tm_source_file_new(file_name, TRUE)))
+	if (NULL == (source_file = tm_source_file_new(file_name, TRUE, NULL)))
 	{
 		g_warning("Unable to create source file for file %s", file_name);
 		g_free(path);
@@ -375,12 +375,12 @@ gboolean tm_project_open(TMProject *project, gboolean force)
 	tm_project_set_ignorelist(project);
 	if (NULL == (fp = fopen(project->work_object.file_name, "r")))
 		return FALSE;
-	while (NULL != (tag = tm_tag_new_from_file(source_file, fp)))
+	while (NULL != (tag = tm_tag_new_from_file(source_file, fp, 0)))
 	{
 		if (tm_tag_file_t == tag->type)
 		{
 			if (!(source_file = TM_SOURCE_FILE(
-			  tm_source_file_new(tag->name, FALSE))))
+			  tm_source_file_new(tag->name, FALSE, NULL))))
 			{
 #ifdef TM_DEBUG
 				g_warning("Unable to create source file %s", tag->name);

@@ -60,10 +60,11 @@ typedef struct _TMSourceFile
 } TMSourceFile;
 
 /*! Initializes a TMSourceFile structure from a file name. */
-gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name, gboolean update);
+gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name,
+							 gboolean update, const char *name);
 
 /*! Initializes a TMSourceFile structure and returns a pointer to it. */
-TMWorkObject *tm_source_file_new(const char *file_name, gboolean update);
+TMWorkObject *tm_source_file_new(const char *file_name, gboolean update, const char *name);
 
 /*! Destroys the contents of the source file. Note that the tags are owned by the
  source file and are also destroyed when the source file is destroyed. If pointers

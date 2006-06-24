@@ -21,7 +21,7 @@
  workspace, though, to use tag manager, unless you need things like global tags
  and a place to store all current open projects and individual files. TMWorkspace
  is derived from TMWorkObject.
- 
+
  The following example demonstrates the use of workspace functions to create global tags.
  \include tm_global_tags.c
 */
@@ -89,7 +89,8 @@ gboolean tm_workspace_remove_object(TMWorkObject *work_object, gboolean free);
  \return TRUE on success, FALSE on failure.
  \sa tm_workspace_create_global_tags()
 */
-gboolean tm_workspace_load_global_tags(const char *tags_file);
+gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
+//gboolean tm_workspace_load_global_tags(const char *tags_file);
 
 /*! Creates a list of global tags. Ideally, this should be created once during
  installations so that all users can use the same file. Thsi is because a full
@@ -130,10 +131,12 @@ void tm_workspace_dump(void);
  \param type The tag types to return (TMTagType). Can be a bitmask.
  \param attrs The attributes to sort and dedup on (0 terminated integer array).
  \param partial Whether partial match is allowed.
+ \param lang Specifies the language(see the table in parsers.h) of the tags to be found,
+             -1 for all
  \return Array of matching tags. Do not free() it since it is a static member.
 */
 const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs
- , gboolean partial);
+ , gboolean partial, langType lang);
 
 /*! Returns a list of parent classes for the given class name
  \param name Name of the class
