@@ -40,8 +40,6 @@ void sci_cb_show_macro_list(ScintillaObject *sci);
 
 gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch);
 
-gboolean sci_cb_handle_uri(ScintillaObject *sci, gint pos);
-
 gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos);
 
 void sci_cb_do_comment(gint idx);

@@ -487,7 +487,7 @@ void dialogs_show_color(void)
 						G_CALLBACK(gtk_widget_hide), NULL);
 	}
 	// We make sure the dialog is visible.
-	gtk_window_present (GTK_WINDOW(app->open_colorsel));
+	gtk_window_present(GTK_WINDOW(app->open_colorsel));
 #endif
 }
 
@@ -879,6 +879,8 @@ void dialogs_show_replace(void)
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
 
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	
 	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
 	{
 		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));

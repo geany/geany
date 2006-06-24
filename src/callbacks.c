@@ -356,6 +356,7 @@ on_undo1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (sci_can_undo(doc_list[idx].sci)) sci_undo(doc_list[idx].sci);
 }
 
@@ -365,6 +366,7 @@ on_redo1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (sci_can_redo(doc_list[idx].sci)) sci_redo(doc_list[idx].sci);
 }
 
@@ -454,8 +456,11 @@ on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	gchar *basename = g_path_get_basename(doc_list[idx].file_name);
+	gchar *basename;
 
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL) return;
+	
+	basename = g_path_get_basename(doc_list[idx].file_name);
 	if (dialogs_show_question(_
 				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
 				 basename))
@@ -605,7 +610,7 @@ on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	static gboolean done = 1;
 
-	if (doc_list[idx].is_valid)
+	if (idx >= 0 && doc_list[idx].is_valid)
 	{
 		if (done++ % 3 == 0) sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin,
 				(sci_get_zoom(doc_list[idx].sci) / 2));
@@ -619,7 +624,7 @@ on_zoom_out1_activate                   (GtkMenuItem     *menuitem,
                                          gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (doc_list[idx].is_valid)
+	if (idx >= 0 && doc_list[idx].is_valid)
 	{
 		if (sci_get_zoom(doc_list[idx].sci) == 0)
 			sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
@@ -633,7 +638,7 @@ on_normal_size1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (doc_list[idx].is_valid)
+	if (idx >= 0 && doc_list[idx].is_valid)
 	{
 		sci_zoom_off(doc_list[idx].sci);
 		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
@@ -2389,5 +2394,4 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	document_set_text_changed(idx);
 	utils_update_statusbar(idx, -1);
 }
-
 

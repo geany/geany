@@ -340,7 +340,6 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 			return TRUE;
 		}
 	}
-
 	return FALSE;
 }
 
@@ -464,18 +463,21 @@ static void cb_func_menu_zoomout(void)
 static void cb_func_menu_foldall(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	document_fold_all(idx);
 }
 
 static void cb_func_menu_unfoldall(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	document_unfold_all(idx);
 }
 
 static void cb_func_build_compile(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	if (doc_list[idx].file_type->menu_items->can_compile && doc_list[idx].file_name != NULL)
 		on_build_compile_activate(NULL, NULL);
 }
@@ -483,6 +485,7 @@ static void cb_func_build_compile(void)
 static void cb_func_build_link(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	if (doc_list[idx].file_type->menu_items->can_link && doc_list[idx].file_name != NULL)
 		on_build_build_activate(NULL, NULL);
 }
@@ -490,6 +493,7 @@ static void cb_func_build_link(void)
 static void cb_func_build_make(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	if (doc_list[idx].file_name != NULL)
 		on_build_make_activate(NULL, GINT_TO_POINTER(0));
 }
@@ -497,6 +501,7 @@ static void cb_func_build_make(void)
 static void cb_func_build_makeowntarget(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	if (doc_list[idx].file_name != NULL)
 		on_build_make_activate(NULL, GINT_TO_POINTER(1));
 }
@@ -504,6 +509,7 @@ static void cb_func_build_makeowntarget(void)
 static void cb_func_build_run(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	if (doc_list[idx].file_type->menu_items->can_exec && doc_list[idx].file_name != NULL)
 		on_build_execute_activate(NULL, GINT_TO_POINTER(0));
 }
@@ -511,6 +517,7 @@ static void cb_func_build_run(void)
 static void cb_func_build_run2(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	if (doc_list[idx].file_type->menu_items->can_exec && doc_list[idx].file_name != NULL)
 		on_build_execute_activate(NULL, GINT_TO_POINTER(1));
 }
@@ -518,6 +525,7 @@ static void cb_func_build_run2(void)
 static void cb_func_build_options(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	if ((doc_list[idx].file_type->menu_items->can_compile ||
 		doc_list[idx].file_type->menu_items->can_link ||
 		doc_list[idx].file_type->menu_items->can_exec) &&
@@ -528,6 +536,7 @@ static void cb_func_build_options(void)
 static void cb_func_reloadtaglist(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	document_update_tag_list(idx, TRUE);
 }
 
@@ -585,6 +594,7 @@ static void keybindings_call_popup_item(int menuitemkey)
 static void cb_func_switch_editor(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
 }
 
@@ -641,6 +651,7 @@ static void cb_func_toggle_sidebar(void)
 static void cb_func_edit_duplicateline(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	if (sci_can_copy(doc_list[idx].sci))
 		sci_selection_duplicate(doc_list[idx].sci);
 	else
@@ -650,30 +661,35 @@ static void cb_func_edit_duplicateline(void)
 static void cb_func_edit_commentline(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	sci_cb_do_comment(idx);
 }
 
 static void cb_func_edit_autocomplete(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	sci_cb_start_auto_complete(doc_list[idx].sci, sci_get_current_position(doc_list[idx].sci));
 }
 
 static void cb_func_edit_calltip(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	sci_cb_show_calltip(doc_list[idx].sci, -1);
 }
 
 static void cb_func_edit_macrolist(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	sci_cb_show_macro_list(doc_list[idx].sci);
 }
 
 static void cb_func_edit_suppresscompletion(void)
 {
 	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;	
 	sci_add_text(doc_list[idx].sci, " ");
 }
 
