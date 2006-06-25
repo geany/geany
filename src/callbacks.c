@@ -376,8 +376,12 @@ on_cut1_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
 
-	if (idx >= 0)
+	if (GTK_IS_EDITABLE(focusw))
+		gtk_editable_cut_clipboard(GTK_EDITABLE(focusw));
+	else
+	if (IS_SCINTILLA(focusw) && idx >= 0)
 		sci_cut(doc_list[idx].sci);
 }
 
@@ -387,8 +391,12 @@ on_copy1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
 
-	if (idx >= 0)
+	if (GTK_IS_EDITABLE(focusw))
+		gtk_editable_copy_clipboard(GTK_EDITABLE(focusw));
+	else
+	if (IS_SCINTILLA(focusw) && idx >= 0)
 		sci_copy(doc_list[idx].sci);
 }
 
@@ -398,8 +406,12 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
 
-	if (idx >= 0)
+	if (GTK_IS_EDITABLE(focusw))
+		gtk_editable_paste_clipboard(GTK_EDITABLE(focusw));
+	else
+	if (IS_SCINTILLA(focusw) && idx >= 0)
 		sci_paste(doc_list[idx].sci);
 }
 
@@ -409,8 +421,12 @@ on_delete1_activate                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
 
-	if (idx >= 0)
+	if (GTK_IS_EDITABLE(focusw))
+		gtk_editable_delete_selection(GTK_EDITABLE(focusw));
+	else
+	if (IS_SCINTILLA(focusw) && idx >= 0)
 		sci_clear(doc_list[idx].sci);
 }
 

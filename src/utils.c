@@ -172,11 +172,15 @@ void utils_update_popup_copy_items(gint index)
 
 void utils_update_menu_copy_items(gint idx)
 {
-	gboolean enable;
+	gboolean enable = FALSE;
 	guint i;
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
 
-	if (idx == -1) enable = FALSE;
-	else enable = sci_can_copy(doc_list[idx].sci);
+	if (IS_SCINTILLA(focusw))
+		enable = (idx == -1) ? FALSE : sci_can_copy(doc_list[idx].sci);
+	else
+	if (GTK_IS_EDITABLE(focusw))
+		enable = gtk_editable_get_selection_bounds(GTK_EDITABLE(focusw), NULL, NULL);
 
 	for(i = 0; i < (sizeof(app->menu_copy_items)/sizeof(GtkWidget*)); i++)
 		gtk_widget_set_sensitive(app->menu_copy_items[i], enable);

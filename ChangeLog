@@ -17,6 +17,8 @@
    Add notebook_new_tab and update document_create_new_sci to use it;
    also remove on_tab_close_clicked.
  * src/notebook.c: Fix close tab button bug introduced in last commit.
+ * src/callbacks.c, src/utils.c:
+   Add clipboard functionality for find and go to line widgets.
 
 
 2006-06-24  Enrico Troeger  <enrico.troeger@uvena.de>
