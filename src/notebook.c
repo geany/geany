@@ -44,6 +44,9 @@ notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
 static gint
 notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y);
 
+static void
+notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
+
 
 /* There is a bug with drag reordering notebook tabs.
  * Clicking (not dragging) on a notebook tab, then making a selection in the
@@ -231,8 +234,8 @@ gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
 			GTK_WIDGET(page), hbox, this->tabmenu_label, 0);
 
 	// signal for clicking the tab-close button
-	g_signal_connect_swapped(G_OBJECT(but), "clicked",
-		G_CALLBACK(document_remove), GINT_TO_POINTER(tabnum));
+	g_signal_connect(G_OBJECT(but), "clicked",
+		G_CALLBACK(notebook_tab_close_clicked_cb), page);
 	// motion notify for GTK+2.6 (workaround child widgets don't pass on signal)
 	// doesn't seem to work
 	//g_signal_connect(G_OBJECT(this->tab_label), "motion-notify-event",
@@ -240,3 +243,11 @@ gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
 	return tabnum;
 }
 
+
+static void
+notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data)
+{
+	gint cur_page = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+		GTK_WIDGET(user_data));
+	document_remove(cur_page);
+}
