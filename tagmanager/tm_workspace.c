@@ -446,6 +446,7 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	static GPtrArray *tags = NULL;
 	TMTag **matches[2], **match;
 	int i, len, tagCount[2]={0,0}, tagIter;
+	gint tags_lang;
 
 	if ((!theWorkspace) || (!name))
 		return NULL;
@@ -464,9 +465,18 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 		match = matches[i];
 		if (match && *match)
 		{
+			// for global tags: tag->atts.file.lang contains the language and
+			// tags->atts.entry.file->lang is NULL
+			// for "usual" tags: tag->atts.file.lang contains the line of the tag and
+			// tags->atts.entry.file->lang contains the language
+			if ((*match)->atts.entry.file != NULL)
+				tags_lang = (*match)->atts.entry.file->lang;
+			else 
+				tags_lang = (*match)->atts.file.lang;
+				
 			for (tagIter=0;tagIter<tagCount[i];++tagIter)
 			{
-				if ((type & (*match)->type) && (lang == -1 || (*match)->atts.file.lang == lang))
+				if ((type & (*match)->type) && (lang == -1 || tags_lang == lang))
 					g_ptr_array_add(tags, *match);
 				if (partial)
 				{

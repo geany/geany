@@ -197,8 +197,7 @@ TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry)
 		TAG_FREE(tag);
 		return NULL;
 	}
-	// if I don't do the following, tag->atts.file.lang has an undefined value, which is quite bad
-	tag->atts.file.lang = file->lang;
+
 	return tag;
 }
 

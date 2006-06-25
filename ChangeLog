@@ -4,6 +4,8 @@
  * src/callbacks.c, src/keybindings.c:
    Remember the active page when toggling the sidebar. Simplified code
    for toggling messages window.
+ * tagmanager/tm_tag.c, tagmanager/tm_workspace.c:
+   Fixed wrong line numbers for found tags.
 
 
 2006-06-25  Nick Treleaven  <nick.treleaven@btinternet.com>
