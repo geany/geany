@@ -627,6 +627,7 @@ static void cb_func_toggle_sidebar(void)
 	static gboolean symbol = FALSE;
 	static gboolean openfiles = FALSE;
 	static gboolean is_visible = FALSE;
+	static gint active_page = -1; 
 
 	/* this code is a bit confusing, but I want to keep the settings in the preferences dialog
 	 * synchronous with the real status of the sidebar, so we have to store the previous state when
@@ -638,6 +639,9 @@ static void cb_func_toggle_sidebar(void)
 		openfiles = app->treeview_openfiles_visible;
 		app->treeview_symbol_visible = FALSE;
 		app->treeview_openfiles_visible = FALSE;
+		// to remember the active page because GTK (e.g. 2.8.18) doesn't do it and shows always
+		// the last page (for unknown reason, with GTK 2.6.4 it works)
+		active_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->treeview_notebook));
 	}
 	else
 	{
@@ -646,6 +650,7 @@ static void cb_func_toggle_sidebar(void)
 	}
 
 	utils_treeviews_showhide();
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->treeview_notebook), active_page);
 }
 
 static void cb_func_edit_duplicateline(void)

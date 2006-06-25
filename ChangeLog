@@ -1,6 +1,9 @@
 2006-06-25  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * README, doc/geany.docbook: Added license notice Scintilla.
+ * src/callbacks.c, src/keybindings.c:
+   Remember the active page when toggling the sidebar. Simplified code
+   for toggling messages window.
 
 
 2006-06-25  Nick Treleaven  <nick.treleaven@btinternet.com>

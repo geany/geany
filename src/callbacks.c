@@ -939,8 +939,6 @@ on_window_configure_event              (GtkWidget *widget,
                                         GdkEventConfigure *event,
                                         gpointer user_data)
 {
-	//GtkWidget *vpaned1 = lookup_widget(app->window, "vpaned1");
-	//gtk_paned_set_position(GTK_PANED(vpaned1), event->height - GEANY_MSGWIN_HEIGHT);
 	app->geometry[0] = event->x;
 	app->geometry[1] = event->y;
 	app->geometry[2] = event->width;
@@ -1163,13 +1161,9 @@ on_show_messages_window1_toggled       (GtkCheckMenuItem *checkmenuitem,
                                         gpointer          user_data)
 {
 	if (app->msgwindow_visible)
-	{
-		gtk_container_remove(GTK_CONTAINER(lookup_widget(app->window, "vpaned1")), lookup_widget(app->window, "scrolledwindow1"));
-	}
+		gtk_widget_hide(lookup_widget(app->window, "scrolledwindow1"));
 	else
-	{
-		gtk_container_add(GTK_CONTAINER(lookup_widget(app->window, "vpaned1")), lookup_widget(app->window, "scrolledwindow1"));
-	}
+		gtk_widget_show(lookup_widget(app->window, "scrolledwindow1"));
 	app->msgwindow_visible = (app->msgwindow_visible) ? FALSE : TRUE;
 }
 
