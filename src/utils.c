@@ -181,6 +181,13 @@ void utils_update_menu_copy_items(gint idx)
 	else
 	if (GTK_IS_EDITABLE(focusw))
 		enable = gtk_editable_get_selection_bounds(GTK_EDITABLE(focusw), NULL, NULL);
+	else
+	if (GTK_IS_TEXT_VIEW(focusw))
+	{
+		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
+			GTK_TEXT_VIEW(focusw));
+		enable = gtk_text_buffer_get_selection_bounds(buffer, NULL, NULL);
+	}
 
 	for(i = 0; i < (sizeof(app->menu_copy_items)/sizeof(GtkWidget*)); i++)
 		gtk_widget_set_sensitive(app->menu_copy_items[i], enable);

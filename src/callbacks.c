@@ -383,6 +383,13 @@ on_cut1_activate                       (GtkMenuItem     *menuitem,
 	else
 	if (IS_SCINTILLA(focusw) && idx >= 0)
 		sci_cut(doc_list[idx].sci);
+	else
+	if (GTK_IS_TEXT_VIEW(focusw))
+	{
+		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
+			GTK_TEXT_VIEW(focusw));
+		gtk_text_buffer_cut_clipboard(buffer, gtk_clipboard_get(GDK_NONE), TRUE);
+	}
 }
 
 
@@ -398,6 +405,13 @@ on_copy1_activate                      (GtkMenuItem     *menuitem,
 	else
 	if (IS_SCINTILLA(focusw) && idx >= 0)
 		sci_copy(doc_list[idx].sci);
+	else
+	if (GTK_IS_TEXT_VIEW(focusw))
+	{
+		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
+			GTK_TEXT_VIEW(focusw));
+		gtk_text_buffer_copy_clipboard(buffer, gtk_clipboard_get(GDK_NONE));
+	}
 }
 
 
@@ -413,6 +427,14 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 	else
 	if (IS_SCINTILLA(focusw) && idx >= 0)
 		sci_paste(doc_list[idx].sci);
+	else
+	if (GTK_IS_TEXT_VIEW(focusw))
+	{
+		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
+			GTK_TEXT_VIEW(focusw));
+		gtk_text_buffer_paste_clipboard(buffer, gtk_clipboard_get(GDK_NONE), NULL,
+			TRUE);
+	}
 }
 
 
@@ -428,6 +450,13 @@ on_delete1_activate                    (GtkMenuItem     *menuitem,
 	else
 	if (IS_SCINTILLA(focusw) && idx >= 0)
 		sci_clear(doc_list[idx].sci);
+	else
+	if (GTK_IS_TEXT_VIEW(focusw))
+	{
+		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
+			GTK_TEXT_VIEW(focusw));
+		gtk_text_buffer_delete_selection(buffer, TRUE, TRUE);
+	}
 }
 
 
