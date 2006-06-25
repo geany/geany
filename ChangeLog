@@ -1,3 +1,8 @@
+2006-06-25  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * README, doc/geany.docbook: Added license notice Scintilla.
+
+
 2006-06-25  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/notebook.c, src/notebook.h, src/document.c, src/callbacks.c,

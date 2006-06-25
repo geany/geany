@@ -90,7 +90,11 @@
 				<application>&app;</application> is distributed under the terms of the GNU General Public License as published
 				by the Free	Software Foundation; either version 2 of the License, or (at your option) any later version.
 				A copy of this license can be found in the file COPYING included with the source code of this
-				program and in the appendix of this document.
+				program and in the appendix A of this document.
+			</para>
+			<para>
+				The included Scintilla library (found in the subdirectory scintilla/) has its own
+				license, which can be found in the appendix(see <xref linkend="scintilla-license"/>).
 			</para>
 		</section>
 	</chapter>
@@ -1391,5 +1395,23 @@
 
 	<!-- GPL appendix -->
 	&legal;
+
+	<appendix id="scintilla-license">
+		<title>License for Scintilla and SciTE</title>
+		<para>Copyright 1998-2003 by Neil Hodgson &lt;neilh@scintilla.org&gt;</para>
+		<para>All Rights Reserved</para>
+		<para>Permission to use, copy, modify, and distribute this software and its
+			  documentation for any purpose and without fee is hereby granted, provided that
+			  the above copyright notice appear in all copies and that both that copyright
+			  notice and this permission notice appear in supporting documentation. 
+		</para>
+		<para>NEIL HODGSON DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL
+			  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL NEIL HODGSON
+			  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+			  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
+			  CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
+			  WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
+		</para>
+  </appendix>
 
 </book>

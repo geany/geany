@@ -74,6 +74,17 @@ well tested and there are some features missing:
 - support for detecting a running instance
 
 
+License
+-------
+Geany is distributed under the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option) any later version.
+A copy of this license can be found in the file COPYING included with the source code of this
+program.
+The included Scintilla library (found in the subdirectory scintilla/) has its own license, which
+can be found in the file scintilla/License.txt included with the source code of this
+program.
+
+
 Ideas, questions, patches and bug reports
 -----------------------------------------
 See http://geany.uvena.de
