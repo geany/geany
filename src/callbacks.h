@@ -89,10 +89,6 @@ on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
 
 void
-on_tab_close_clicked                   (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
 on_file_open_dialog_response           (GtkDialog *dialog,
                                         gint response,
                                         gpointer user_data);

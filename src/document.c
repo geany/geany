@@ -53,6 +53,7 @@
 #include "treeviews.h"
 #include "utils.h"
 #include "encodings.h"
+#include "notebook.h"
 
 
 
@@ -196,31 +197,12 @@ void document_init_doclist(void)
 gint document_create_new_sci(const gchar *filename)
 {
 	ScintillaObject	*sci;
-	GtkWidget *hbox, *but;
-	GtkWidget *align;
 	PangoFontDescription *pfd;
 	gchar *title, *fname;
 	GtkTreeIter iter;
 	gint new_idx = document_get_new_idx();
 	document *this = &(doc_list[new_idx]);
-	
-	title = (filename) ? g_path_get_basename(filename) : g_strdup(GEANY_STRING_UNTITLED);
-	this->tab_label = gtk_label_new(title);
-
-	hbox = gtk_hbox_new(FALSE, 0);
-	but = gtk_button_new();
-	gtk_container_add(GTK_CONTAINER(but), utils_new_image_from_inline(GEANY_IMAGE_SMALL_CROSS, FALSE));
-	gtk_container_set_border_width(GTK_CONTAINER(but), 0);
-	gtk_widget_set_size_request(but, 17, 15);
-
-	align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
-	gtk_container_add(GTK_CONTAINER(align), but);
-
-	gtk_button_set_relief(GTK_BUTTON(but), GTK_RELIEF_NONE);
-	gtk_box_pack_start(GTK_BOX(hbox), this->tab_label, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
-	gtk_widget_show_all(hbox);
-
+	gint tabnum;
 
 	/* SCI - Code */
 	sci = SCINTILLA(scintilla_new());
@@ -260,21 +242,11 @@ gint document_create_new_sci(const gchar *filename)
 		SSM(sci, SCI_SETTWOPHASEDRAW, 0, 0);
 	}
 
-	this->tabmenu_label = gtk_label_new(title);
-	gtk_misc_set_alignment(GTK_MISC(this->tabmenu_label), 0.0, 0);
-	if (app->tab_order_ltr)
-	{
-		gint npage;
-		npage = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci),
-																	hbox, this->tabmenu_label);
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), npage);
-	}
-	else
-	{
-		gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(sci), hbox,
-																		this->tabmenu_label, 0);
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);
-	}
+	title = (filename) ? g_path_get_basename(filename) : g_strdup(GEANY_STRING_UNTITLED);
+
+	tabnum = notebook_new_tab(new_idx, title, GTK_WIDGET(sci));
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), tabnum);
+
 	iter = treeviews_openfiles_add(new_idx, title);
 	g_free(title);
 
@@ -290,8 +262,6 @@ gint document_create_new_sci(const gchar *filename)
 */	// signal for the popup menu
 	g_signal_connect((GtkWidget*) sci, "button-press-event",
 					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
-	// signal for clicking the tab-close button
-	g_signal_connect(G_OBJECT(but), "clicked", G_CALLBACK(on_tab_close_clicked), sci);
 
 	utils_close_buttons_toggle();
 

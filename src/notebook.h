@@ -25,6 +25,7 @@
 
 void notebook_init();
 
-gint notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y);
+/* Returns index of notebook page, or -1 on error */
+gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page);
 
 #endif

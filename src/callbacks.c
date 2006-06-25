@@ -656,16 +656,6 @@ on_toolbutton15_clicked                (GtkToolButton   *toolbutton,
 }
 
 
-// close tab
-void
-on_tab_close_clicked                (GtkButton   *button,
-                                     gpointer     user_data)
-{
-	gint cur_page = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(user_data));
-	document_remove(cur_page);
-}
-
-
 // changes window-title on switching tabs and lots of other things
 void
 on_notebook1_switch_page               (GtkNotebook     *notebook,

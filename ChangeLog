@@ -1,3 +1,13 @@
+2006-06-25  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/notebook.c, src/notebook.h, src/document.c, src/callbacks.c,
+   src/callbacks.h:
+   Enable drag reordering of tabs for GTK+2.8, and a temporary
+   workaround for GTK+2.6.
+   Add notebook_new_tab and update document_create_new_sci to use it;
+   also remove on_tab_close_clicked.
+
+
 2006-06-24  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/utils.c: Replaced 'blank' by 'include "..."'. Fixed a bug in

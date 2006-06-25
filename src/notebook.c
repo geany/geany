@@ -22,6 +22,8 @@
 
 #include "geany.h"
 #include "notebook.h"
+#include "document.h"
+#include "utils.h"
 
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
 
@@ -31,41 +33,81 @@ static const GtkTargetEntry drag_targets[] =
 };
 
 
-gboolean
-notebook_drag_motion_cb(GtkWidget *notebook, GdkDragContext *dc,
+static gboolean
+notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 	gint x, gint y, guint time, gpointer user_data);
 
+static gboolean
+notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
+	gpointer user_data);
 
+static gint
+notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y);
+
+
+/* There is a bug with drag reordering notebook tabs.
+ * Clicking (not dragging) on a notebook tab, then making a selection in the
+ * Scintilla widget will cause a strange selection bug.
+ * It seems there is a conflict; the drag cursor is shown,
+ * and the selection is blocked; however, when releasing the
+ * mouse button, the selection continues.
+ * Bug present with gtk+2.6.8, not gtk+2.8.? - ntrel */
 void notebook_init()
 {
 	GtkWidget *notebook = app->notebook;
 
+	// don't allow focusing tab labels, focus sci instead
 	g_object_set(G_OBJECT(notebook), "can-focus", FALSE, NULL);
-
-	/* There is a bug with drag reordering notebook tabs.
-	 * Clicking on a notebook tab, then making a selection in the
-	 * Scintilla widget will cause a strange selection bug.
-	 * It seems there is a conflict; the drag cursor is shown,
-	 * and the selection is blocked; however, when releasing the
-	 * mouse button, the selection continues.
-	 * Maybe a bug in Scintilla 1.68? - ntrel */
-#ifndef TEST_TAB_DND
-	return;
-#endif
 
 	// Set up drag movement callback
 	g_signal_connect(G_OBJECT(notebook), "drag-motion",
 		G_CALLBACK(notebook_drag_motion_cb), NULL);
 
+#if ! GTK_CHECK_VERSION(2, 8, 0)
+	// workaround GTK+2.6 drag start bug when over sci widget:
+	g_signal_connect(G_OBJECT(notebook), "motion-notify-event",
+		G_CALLBACK(notebook_motion_notify_event_cb), NULL);
+#endif
+
 	// set up drag motion for moving notebook pages
-	gtk_drag_source_set(notebook, GDK_BUTTON1_MASK,
-		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
 	gtk_drag_dest_set(notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
+	// set drag source, but for GTK+2.6 it's changed in motion-notify-event handler
+	gtk_drag_source_set(notebook, GDK_BUTTON1_MASK,
 		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
 }
 
 
-gboolean
+/* N.B. With GTK+2.6, we don't get notebook motion-notify-event for tab child
+ * widgets. */
+static gboolean
+notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
+	gpointer user_data)
+{
+	static gboolean drag_enabled = TRUE; //stores current state
+	GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->notebook),
+			gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook)));
+
+	//g_print("%g, %g; %p (%p)\n", event->x, event->y, event->window, page->window);
+	if (page == NULL || event->x < 0 || event->y < 0) return FALSE;
+
+	if (event->window == page->window) //cursor over sci widget
+	{
+		if (drag_enabled) gtk_drag_source_unset(widget); //disable
+		drag_enabled = FALSE;
+	}
+	else //assume cursor over notebook tab
+	{
+		if (! drag_enabled)
+			gtk_drag_source_set(widget, GDK_BUTTON1_MASK,
+				drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
+		drag_enabled = TRUE;
+	}
+	return FALSE; //propagate event
+}
+
+
+static gboolean
 notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 	gint x, gint y, guint time, gpointer user_data)
 {
@@ -101,10 +143,13 @@ notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 }
 
 
-/* x,y are co-ordinates local to the notebook, not including border padding
- * adapted from Epiphany absolute version in ephy-notebook.c, thanks
- * notebook tab label widgets must not be NULL */
-gint notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
+/* Adapted from Epiphany absolute version in ephy-notebook.c, thanks.
+ * x,y are co-ordinates local to the notebook (not including border padding)
+ * notebook tab label widgets must not be NULL.
+ * N.B. This only checks the dimension that the tabs are in,
+ * e.g. for GTK_POS_TOP it does not check the y coordinate. */
+static gint
+notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 {
 	GtkPositionType tab_pos;
 	int page_num = 0;
@@ -146,3 +191,52 @@ gint notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 	}
 	return -1;
 }
+
+
+/* Returns index of notebook page, or -1 on error */
+gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
+{
+	GtkWidget *hbox, *but;
+	GtkWidget *align;
+	gint tabnum;
+	document *this = &(doc_list[doc_idx]);
+
+	g_return_val_if_fail(doc_idx >= 0 && this != NULL, -1);
+
+	this->tab_label = gtk_label_new(title);
+
+	hbox = gtk_hbox_new(FALSE, 0);
+	but = gtk_button_new();
+	gtk_container_add(GTK_CONTAINER(but),
+		utils_new_image_from_inline(GEANY_IMAGE_SMALL_CROSS, FALSE));
+	gtk_container_set_border_width(GTK_CONTAINER(but), 0);
+	gtk_widget_set_size_request(but, 17, 15);
+
+	align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
+	gtk_container_add(GTK_CONTAINER(align), but);
+
+	gtk_button_set_relief(GTK_BUTTON(but), GTK_RELIEF_NONE);
+	gtk_box_pack_start(GTK_BOX(hbox), this->tab_label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
+	gtk_widget_show_all(hbox);
+
+	this->tabmenu_label = gtk_label_new(title);
+	gtk_misc_set_alignment(GTK_MISC(this->tabmenu_label), 0.0, 0);
+
+	if (app->tab_order_ltr)
+		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook),
+			GTK_WIDGET(page), hbox, this->tabmenu_label);
+	else
+		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook),
+			GTK_WIDGET(page), hbox, this->tabmenu_label, 0);
+
+	// signal for clicking the tab-close button
+	g_signal_connect_swapped(G_OBJECT(but), "clicked",
+		G_CALLBACK(document_remove), GINT_TO_POINTER(tabnum));
+	// motion notify for GTK+2.6 (workaround child widgets don't pass on signal)
+	// doesn't seem to work
+	//g_signal_connect(G_OBJECT(this->tab_label), "motion-notify-event",
+		//G_CALLBACK(notebook_motion_notify_event_cb), NULL);
+	return tabnum;
+}
+
