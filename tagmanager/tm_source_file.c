@@ -39,10 +39,7 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
 	if (FALSE == tm_work_object_init(&(source_file->work_object),
 		  source_file_class_id, file_name, FALSE))
 		return FALSE;
-	if (name == NULL) 
-		source_file->lang = LANG_AUTO;
-	else
-		source_file->lang = getNamedLanguage(name);
+
 	source_file->inactive = FALSE;
 	if (NULL == LanguageTable)
 	{
@@ -51,6 +48,11 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
 		if (NULL == TagEntryFunction)
 			TagEntryFunction = tm_source_file_tags;
 	}
+
+	if (name == NULL) 
+		source_file->lang = LANG_AUTO;
+	else
+		source_file->lang = getNamedLanguage(name);
 
 	if (update)
 		tm_source_file_update(TM_WORK_OBJECT(source_file), FALSE, FALSE, FALSE);

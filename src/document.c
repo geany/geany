@@ -915,19 +915,13 @@ void document_update_tag_list(gint idx, gboolean update)
 	}
 	else
 	{
-		gint len = sci_get_length(doc_list[idx].sci) + 1;
-		gchar *buf = (gchar*) g_malloc(len);
-
-		sci_get_text(doc_list[idx].sci, len, buf);
-
 		if (tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE))
-		//if (tm_source_file_buffer_update(doc_list[idx].tm_file, buf, len, TRUE))
 		{
 			utils_update_tag_list(idx, TRUE);
 		}
 		else
 		{
-			geany_debug(_("tag list updating failed"));
+			geany_debug("tag list updating failed");
 		}
 	}
 }

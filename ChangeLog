@@ -5,6 +5,9 @@
  * src/treeviews.c: Changed some titles to plural. Added own
                     definitions for filetype Python.
  * src/filetypes.c, tagmanager/make.c: Add mk pattern for Makefile.
+ * tagmanager/tm_source_file.c: Fixed bug which prevented tag creation
+                                for the first opened file.
+ * src/document.c, src/callbacks.c: Removed unused code.
 
 
 2006-06-26  Nick Treleaven  <nick.treleaven@btinternet.com>

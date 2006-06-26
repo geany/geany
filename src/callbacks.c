@@ -1140,9 +1140,6 @@ on_filetype_change                     (GtkMenuItem     *menuitem,
 	if (idx < 0) return;
 
 	document_set_filetype(idx, (filetype*)user_data);
-
-	//sci_colourise(doc_list[idx].sci, 0, -1);
-	//document_update_tag_list(idx);
 }
 
 
