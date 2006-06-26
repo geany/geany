@@ -524,7 +524,11 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		document_set_filetype(idx, use_ft);
 		utils_build_show_hide(idx);
 	}
-
+	else 
+	{
+		document_update_tag_list(idx, TRUE);
+	}
+	
 	document_set_text_changed(idx);
 
 	g_free(data);
@@ -894,7 +898,8 @@ void document_set_font(gint idx, const gchar *font_name, gint size)
 void document_update_tag_list(gint idx, gboolean update)
 {
 	// if the filetype doesn't has a tag parser or it is a new file, leave
-	if (idx == -1 || ! doc_list[idx].file_type->has_tags || ! doc_list[idx].file_name) return;
+	if (idx == -1 || doc_list[idx].file_type == NULL ||
+		! doc_list[idx].file_type->has_tags || ! doc_list[idx].file_name) return;
 
 	if (doc_list[idx].tm_file == NULL)
 	{
@@ -978,8 +983,7 @@ void document_set_filetype(gint idx, filetype *type)
 	}
 	sci_colourise(doc_list[idx].sci, 0, -1);
 	utils_build_show_hide(idx);
-	geany_debug("%s : %s (%s)",	(doc_list[idx].file_name) ? doc_list[idx].file_name : "(null)",
-								type->name, doc_list[idx].encoding);
+	geany_debug("%s : %s (%s)",	doc_list[idx].file_name, type->name, doc_list[idx].encoding);
 }
 
 

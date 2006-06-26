@@ -1,6 +1,9 @@
 2006-06-26  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Fixed broken auto completion for switch().
+ * src/document.c: Reload also the symbol list when reloading a file.
+ * src/treeviews.c: Changed some titles to plural. Added own
+                    definitions for filetype Python.
 
 
 2006-06-26  Nick Treleaven  <nick.treleaven@btinternet.com>
