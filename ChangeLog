@@ -1,3 +1,9 @@
+2006-06-26  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/document.c: Fix a possible segfault on quitting caused by
+                   processing GTK messages before status messages.
+
+
 2006-06-25  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * README, doc/geany.docbook: Added license notice Scintilla.
