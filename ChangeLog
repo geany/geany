@@ -8,6 +8,10 @@
  * tagmanager/tm_source_file.c: Fixed bug which prevented tag creation
                                 for the first opened file.
  * src/document.c, src/callbacks.c: Removed unused code.
+ * tagmanager/sh.c: Fixed missing tags beginning with underscore.
+ * tagmanager/get.c: Fixed problem in preprocessor directive handling.
+ * tagmanager/c.c: Fixed identification of prototypes of functions
+                   returning wchar_t * without the extern keyword.
 
 
 2006-06-26  Nick Treleaven  <nick.treleaven@btinternet.com>

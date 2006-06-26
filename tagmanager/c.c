@@ -1671,7 +1671,8 @@ static boolean skipPostArgumentStuff (statementInfo *const st,
 		case KEYWORD_THROW:	skipParens ();	break;
 		case KEYWORD_CONST:			break;
 		case KEYWORD_TRY:			break;
-		case KEYWORD_VOLATILE:			break;
+		case KEYWORD_VOLATILE:		break;
+		case KEYWORD_WCHAR_T:		st->declaration = DECL_BASE; break;
 
 		case KEYWORD_CATCH:	case KEYWORD_CLASS:
 		case KEYWORD_EXPLICIT:	case KEYWORD_EXTERN:
