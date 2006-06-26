@@ -4,6 +4,7 @@
  * src/document.c: Reload also the symbol list when reloading a file.
  * src/treeviews.c: Changed some titles to plural. Added own
                     definitions for filetype Python.
+ * src/filetypes.c, tagmanager/make.c: Add mk pattern for Makefile.
 
 
 2006-06-26  Nick Treleaven  <nick.treleaven@btinternet.com>

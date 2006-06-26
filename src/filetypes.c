@@ -277,10 +277,11 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_MAKE]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_MAKE]->title = g_strdup(_("Makefile"));
 	filetypes[GEANY_FILETYPES_MAKE]->extension = g_strdup("mak");
-	filetypes[GEANY_FILETYPES_MAKE]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_MAKE]->pattern = g_new0(gchar*, 4);
 	filetypes[GEANY_FILETYPES_MAKE]->pattern[0] = g_strdup("*.mak");
-	filetypes[GEANY_FILETYPES_MAKE]->pattern[1] = g_strdup("Makefile*");
-	filetypes[GEANY_FILETYPES_MAKE]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_MAKE]->pattern[1] = g_strdup("*.mk");
+	filetypes[GEANY_FILETYPES_MAKE]->pattern[2] = g_strdup("Makefile*");
+	filetypes[GEANY_FILETYPES_MAKE]->pattern[3] = NULL;
 	filetypes[GEANY_FILETYPES_MAKE]->style_func_ptr = styleset_makefile;
 	filetypes[GEANY_FILETYPES_MAKE]->comment_open = g_strdup("#");
 	filetypes[GEANY_FILETYPES_MAKE]->comment_close = NULL;
