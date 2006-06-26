@@ -1,3 +1,8 @@
+2006-06-26  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: Fixed broken auto completion for switch().
+
+
 2006-06-26  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/document.c: Fix a possible segfault on quitting caused by
