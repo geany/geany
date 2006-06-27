@@ -1,3 +1,15 @@
+2006-06-27  Frank Lanitz  <frank@frank.uvena.de>
+
+ * ChangeLog: Correction of format
+ * de.po: Minor update and a few small corrections
+ * geany.pot: Update of catalog
+
+
+2006-06-27  Frank Lanitz  <frank@frank.uvena.de>
+
+ * ru.po: Minor update, Thanks brahmann for it
+
+
 2006-06-19  Frank Lanitz  <frank@frank.uvena.de>
 
  * geany.pot: Update of catalog
@@ -7,6 +19,7 @@
  * ru.po: Update of Russian translation by brahmann
           <brahmann@lifelogs.org.ru>
 
+
 2006-06-13  Frank Lanitz  <frank@frank.uvena.de>
 
  * be.po: Updated fuzzy entries, fixed a lot of errors, added
@@ -14,6 +27,7 @@
  * de.po: Update, mostly Strings for shortcuts
  * geany.pot: Update of catalog
  * ru.po: Minor update
+
 
 2006-06-12  Frank Lanitz  <frank@frank.uvena.de>
 
@@ -24,16 +38,19 @@
  * de.po: Minor update of new strings
  * geany.pot: Update of catalog
 
+
 2006-06-06  Frank Lanitz  <frank@frank.uvena.de>
 
  * de.po: Minor update
  * geany.pot: Minor update of strings
+
 
 2006-06-01  Frank Lanitz  <frank@frank.uvena.de>
 
  * de.po: Update for final release of geany 0.7
  * ca.po: Update for final release of geany 0.7 contributed by
 		  topi <topi@phreaker.net>
+
 
 2006-05-29  Frank Lanitz  <frank@frank.uvena.de>
 

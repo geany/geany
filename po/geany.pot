@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-25 22:28+0200\n"
+"POT-Creation-Date: 2006-06-27 23:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -438,7 +438,7 @@ msgstr ""
 msgid "Symbols"
 msgstr ""
 
-#: src/interface.c:874 src/treeviews.c:186
+#: src/interface.c:874 src/treeviews.c:207
 msgid "Open files"
 msgstr ""
 
@@ -919,26 +919,26 @@ msgstr ""
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr ""
 
-#: src/callbacks.c:1347 src/callbacks.c:1356
+#: src/callbacks.c:1344 src/callbacks.c:1353
 #, c-format
 msgid "Declaration or definition of \"%s()\" not found"
 msgstr ""
 
-#: src/callbacks.c:1678
+#: src/callbacks.c:1673
 msgid "Failed to execute the view program"
 msgstr ""
 
-#: src/callbacks.c:1689
+#: src/callbacks.c:1684
 msgid "Failed to execute the terminal program"
 msgstr ""
 
 #. initialize the dialog
-#: src/callbacks.c:2012 src/dialogs.c:71
+#: src/callbacks.c:2007 src/dialogs.c:71
 msgid "Open File"
 msgstr ""
 
-#: src/callbacks.c:2061 src/callbacks.c:2106 src/callbacks.c:2146
-#: src/callbacks.c:2204
+#: src/callbacks.c:2056 src/callbacks.c:2101 src/callbacks.c:2141
+#: src/callbacks.c:2199
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
@@ -1272,8 +1272,8 @@ msgid ""
 msgstr ""
 
 #: src/dialogs.c:1336 src/dialogs.c:1337 src/dialogs.c:1338 src/dialogs.c:1344
-#: src/dialogs.c:1345 src/dialogs.c:1346 src/utils.c:119 src/utils.c:120
-#: src/utils.c:1050
+#: src/dialogs.c:1345 src/dialogs.c:1346 src/utils.c:143 src/utils.c:144
+#: src/utils.c:1069
 msgid "unknown"
 msgstr ""
 
@@ -1442,88 +1442,85 @@ msgid ""
 "supported."
 msgstr ""
 
-#: src/document.c:532
+#: src/document.c:552
 #, c-format
 msgid "File %s reloaded."
 msgstr ""
 
-#: src/document.c:534
+#: src/document.c:554
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr ""
 
-#: src/document.c:536
+#: src/document.c:556
 msgid ", read-only"
 msgstr ""
 
-#: src/document.c:589 src/document.c:658
+#: src/document.c:592 src/document.c:661
 msgid "Error saving file."
 msgstr ""
 
-#: src/document.c:624
+#: src/document.c:627
 #, c-format
 msgid "Error while converting file (%s)."
 msgstr ""
 
-#: src/document.c:639
+#: src/document.c:642
 #, c-format
 msgid "Error saving file (%s)."
 msgstr ""
 
-#: src/document.c:680
+#: src/document.c:683
 #, c-format
 msgid "File %s saved."
 msgstr ""
 
-#: src/document.c:926
-msgid "tag list updating failed"
-msgstr ""
-
-#: src/document.c:993
+#: src/document.c:990
 msgid "Win (CRLF)"
 msgstr ""
 
-#: src/document.c:994
+#: src/document.c:991
 msgid "Max (CR)"
 msgstr ""
 
-#: src/document.c:996
+#: src/document.c:993
 msgid "Unix (LF)"
 msgstr ""
 
-#: src/utils.c:111
+#. currently text need in German and C locale about 150 chars
+#: src/utils.c:135
 #, c-format
 msgid ""
 "%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. "
 "function: %s      encoding: %s      filetype: %s"
 msgstr ""
 
-#: src/utils.c:115
+#: src/utils.c:139
 msgid "OVR"
 msgstr ""
 
-#: src/utils.c:115
+#: src/utils.c:139
 msgid "INS"
 msgstr ""
 
-#: src/utils.c:360
+#: src/utils.c:380
 #, c-format
 msgid "Font updated (%s)."
 msgstr ""
 
-#: src/utils.c:374 src/geany.h:71
+#: src/utils.c:394 src/geany.h:71
 msgid "untitled"
 msgstr ""
 
-#: src/utils.c:375
+#: src/utils.c:395
 msgid "(Unsaved)"
 msgstr ""
 
-#: src/utils.c:649
+#: src/utils.c:670
 msgid "No tags found"
 msgstr ""
 
-#: src/utils.c:951
+#: src/utils.c:970
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -1531,23 +1528,23 @@ msgid ""
 "Do you want to reload it?"
 msgstr ""
 
-#: src/utils.c:1858
+#: src/utils.c:1877
 msgid "C Standard Library"
 msgstr ""
 
-#: src/utils.c:1859
+#: src/utils.c:1878
 msgid "ISO C99"
 msgstr ""
 
-#: src/utils.c:1860
+#: src/utils.c:1879
 msgid "C++ (C Standard Library)"
 msgstr ""
 
-#: src/utils.c:1861
+#: src/utils.c:1880
 msgid "C++ Standard Library"
 msgstr ""
 
-#: src/utils.c:1862
+#: src/utils.c:1881
 msgid "C++ STL"
 msgstr ""
 
@@ -1599,43 +1596,43 @@ msgstr ""
 msgid "Makefile"
 msgstr ""
 
-#: src/filetypes.c:296
+#: src/filetypes.c:297
 msgid "Cascading StyleSheet"
 msgstr ""
 
-#: src/filetypes.c:313
+#: src/filetypes.c:314
 msgid "Config file"
 msgstr ""
 
-#: src/filetypes.c:333
+#: src/filetypes.c:334
 msgid "Assembler source file"
 msgstr ""
 
-#: src/filetypes.c:350
+#: src/filetypes.c:351
 msgid "SQL Dump file"
 msgstr ""
 
-#: src/filetypes.c:367
+#: src/filetypes.c:368
 msgid "(O)Caml source file"
 msgstr ""
 
-#: src/filetypes.c:385
+#: src/filetypes.c:386
 msgid "O-Matrix source file"
 msgstr ""
 
-#: src/filetypes.c:402
+#: src/filetypes.c:403
 msgid "Ruby source file"
 msgstr ""
 
-#: src/filetypes.c:421
+#: src/filetypes.c:422
 msgid "Tcl source file"
 msgstr ""
 
-#: src/filetypes.c:440
+#: src/filetypes.c:441
 msgid "All files"
 msgstr ""
 
-#: src/filetypes.c:449
+#: src/filetypes.c:450
 msgid "None"
 msgstr ""
 
@@ -1658,7 +1655,7 @@ msgstr ""
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 
-#: src/msgwindow.c:46
+#: src/msgwindow.c:47
 msgid "Status messages"
 msgstr ""
 
@@ -1699,11 +1696,11 @@ msgstr ""
 msgid "Failed to execute %s (start-script could not be created)"
 msgstr ""
 
-#: src/build.c:539
+#: src/build.c:538
 msgid "compilation finished unsuccessful"
 msgstr ""
 
-#: src/build.c:543
+#: src/build.c:542
 msgid "compilation finished successful"
 msgstr ""
 
@@ -1799,7 +1796,7 @@ msgstr ""
 msgid "Appendix"
 msgstr ""
 
-#: src/treeviews.c:77 src/treeviews.c:99 src/treeviews.c:161
+#: src/treeviews.c:77 src/treeviews.c:99 src/treeviews.c:182
 msgid "Other"
 msgstr ""
 
@@ -1827,7 +1824,7 @@ msgstr ""
 msgid "Begin"
 msgstr ""
 
-#: src/treeviews.c:105 src/treeviews.c:147
+#: src/treeviews.c:105
 msgid "Function"
 msgstr ""
 
@@ -1851,47 +1848,51 @@ msgstr ""
 msgid "Methods"
 msgstr ""
 
-#: src/treeviews.c:128 src/treeviews.c:149
-msgid "Class"
+#: src/treeviews.c:128 src/treeviews.c:149 src/treeviews.c:170
+msgid "Classes"
 msgstr ""
 
 #: src/treeviews.c:130
-msgid "Singleton"
+msgid "Singletons"
 msgstr ""
 
 #: src/treeviews.c:132
-msgid "Mixin"
+msgid "Mixins"
 msgstr ""
 
-#: src/treeviews.c:134 src/treeviews.c:155
+#: src/treeviews.c:134 src/treeviews.c:176
 msgid "Variables"
 msgstr ""
 
-#: src/treeviews.c:136
+#: src/treeviews.c:136 src/treeviews.c:172
 msgid "Members"
 msgstr ""
 
-#: src/treeviews.c:153
-msgid "Macro"
+#: src/treeviews.c:147 src/treeviews.c:168
+msgid "Functions"
 msgstr ""
 
-#: src/treeviews.c:157
-msgid "Namespace"
+#: src/treeviews.c:174
+msgid "Macros"
 msgstr ""
 
-#: src/treeviews.c:159
-msgid "Struct / Typedef"
+#: src/treeviews.c:178
+msgid "Namespaces"
 msgstr ""
 
-#: src/treeviews.c:233 src/treeviews.c:285
+#: src/treeviews.c:180
+msgid "Structs / Typedefs"
+msgstr ""
+
+#: src/treeviews.c:254 src/treeviews.c:306
 msgid "Hide"
 msgstr ""
 
-#: src/treeviews.c:241 src/treeviews.c:293
+#: src/treeviews.c:262 src/treeviews.c:314
 msgid "Hide sidebar"
 msgstr ""
 
-#: src/treeviews.c:273
+#: src/treeviews.c:294
 msgid "Reload"
 msgstr ""
 
