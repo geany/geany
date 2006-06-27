@@ -385,7 +385,8 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 {
 	static GList *tag_names = NULL;
 
-	if (doc_list[idx].is_valid && doc_list[idx].tm_file && doc_list[idx].tm_file->tags_array)
+	if (idx >= 0 && doc_list[idx].is_valid && doc_list[idx].tm_file &&
+		doc_list[idx].tm_file->tags_array)
 	{
 		TMTag *tag;
 		guint i;
@@ -769,9 +770,7 @@ void utils_update_tag_list(gint idx, gboolean update)
 			gtk_widget_set_sensitive(app->tagbar, FALSE);
 			gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
 		}
-
 	}
-
 }
 
 
@@ -1881,17 +1880,6 @@ gchar *utils_get_initials(gchar *name)
 }
 
 
-void utils_free_ptr_array(gchar *array[], gint len)
-{
-	gint i;
-
-	for (i = 0; i < len; i++)
-	{
-		g_free(array[i]);
-	}
-}
-
-
 void utils_update_fold_items(void)
 {
 	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_fold_all1"), app->pref_editor_folding);
@@ -2327,10 +2315,11 @@ void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint
 	gchar *end = NULL;
 	gchar *path;
 	gchar **fields;
-	gchar *pattern;			// pattern to split the error message into some fields
-	guint field_min_len;	// used to detect errors after parsing
-	guint field_idx_line;	// idx of the field where the line is
-	guint field_idx_file;	// idx of the field where the filename is
+	gchar *pattern;				// pattern to split the error message into some fields
+	guint field_min_len;		// used to detect errors after parsing
+	guint field_idx_line;		// idx of the field where the line is
+	guint field_idx_file;		// idx of the field where the filename is
+	guint skip_dot_slash = 0;	// number of characters to skip at the beginning of the filename
 	
 	*filename = NULL;
 	*line = -1;
@@ -2351,6 +2340,15 @@ void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint
 			// empty.c:21: error: conflicting types for `foo'
 			pattern = ":";
 			field_min_len = 4;
+			field_idx_line = 1;
+			field_idx_file = 0;
+			break;
+		}
+		case GEANY_FILETYPES_LATEX:
+		{
+			// ./kommtechnik_2b.tex:18: Emergency stop.
+			pattern = ":";
+			field_min_len = 3;
 			field_idx_line = 1;
 			field_idx_file = 0;
 			break;
@@ -2416,9 +2414,13 @@ void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint
 		return;
 	}
 
+	// skip some characters at the beginning of the filename, at the moment only "./"
+	// can be extended if other "trash" is known
+	if (strncmp(fields[field_idx_file], "./", 2) == 0) skip_dot_slash = 2;
+
 	// get the basename of the built file to get the path to look for other files
 	path = g_path_get_dirname(doc_list[app->cur_idx].file_name);
-	*filename = g_strconcat(path, G_DIR_SEPARATOR_S, fields[field_idx_file], NULL);
+	*filename = g_strconcat(path, G_DIR_SEPARATOR_S, fields[field_idx_file] + skip_dot_slash, NULL);
 	g_free(path);
 
 	g_strfreev(fields);

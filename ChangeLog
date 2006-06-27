@@ -2,6 +2,10 @@
 
  * data/filetypes.php, data/filetypes.pascal, src/callbacks.c,
    src/build.c: Parse stdout of compiler output too.
+ * src/utils.c, data/filetypes.latex:
+   Add support for parsing compiler output for LaTeX with latex's
+   --file-line-error-style command line argument.
+   Removed unneeded function utils_free_ptr_array().
 
 
 2006-06-27  Nick Treleaven  <nick.treleaven@btinternet.com>
