@@ -151,6 +151,7 @@ void configuration_save(void)
 	recent_files[app->mru_length] = NULL;
 	g_key_file_set_string_list(config, "files", "recent_files",
 				(const gchar**)recent_files, app->mru_length);
+	g_strfreev(recent_files);
 
 	// store the last 15(or what ever GEANY_SESSION_FILES is set to) filenames, to reopen the next time
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
@@ -177,8 +178,6 @@ void configuration_save(void)
 	utils_write_file(configfile, data);
 	g_free(data);
 
-	utils_free_ptr_array(recent_files, app->mru_length);
-	g_free(recent_files);
 	g_key_file_free(config);
 	g_free(configfile);
 	g_free(entry);
@@ -198,6 +197,7 @@ gboolean configuration_load(void)
 	gchar *tmp_string, *tmp_string2;
 	GKeyFile *config = g_key_file_new();
 	GError *error = NULL;
+	gchar **recent_files;
 
 	config_exists = g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
@@ -294,15 +294,16 @@ gboolean configuration_load(void)
 	app->build_browser_cmd = utils_get_setting_string(config, "build", "build_browser_cmd", tmp_string);
 	g_free(tmp_string);
 
-	app->recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
-	if (app->recent_files != NULL)
+	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
+	if (recent_files != NULL)
 	{
 		for (i = 0; (i < len) && (i < app->mru_length); i++)
 		{
-			g_queue_push_head(app->recent_queue, app->recent_files[i]);
-			app->recent_files[i] = NULL;
+			gchar *filename = g_strdup(recent_files[i]);
+			g_queue_push_tail(app->recent_queue, filename);
 		}
 	}
+	g_strfreev(recent_files);
 
 	for(i = 0; i < GEANY_SESSION_FILES; i++)
 	{
@@ -316,7 +317,6 @@ gboolean configuration_load(void)
 		}
 	}
 
-	utils_free_ptr_array(app->recent_files, len);
 	g_key_file_free(config);
 	g_free(configfile);
 	g_free(entry);

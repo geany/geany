@@ -184,7 +184,6 @@ typedef struct MyApp
 	gchar				*build_browser_cmd;
 	gchar				*build_make_cmd;
 	gchar				*build_term_cmd;
-	gchar			   **recent_files;
 	GtkIconSize			 toolbar_icon_size;
 	GtkWidget			*toolbar;
 	GtkWidget			*run_button;

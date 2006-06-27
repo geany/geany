@@ -1,3 +1,10 @@
+2006-06-27  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/geany.h, src/keyfile.c:
+   Add recent files items in the same order as they were saved.
+   Remove app->recent_files and use g_strfreev in keyfile.c.
+
+
 2006-06-26  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Fixed broken auto completion for switch().
