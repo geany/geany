@@ -6,6 +6,8 @@
    Add support for parsing compiler output for LaTeX with latex's
    --file-line-error-style command line argument.
    Removed unneeded function utils_free_ptr_array().
+ * src/sci_cb.c: Fixed a crash when auto completion or call tips are
+                 used if no filetype was set. Added some sanity checks.
 
 
 2006-06-27  Nick Treleaven  <nick.treleaven@btinternet.com>

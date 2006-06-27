@@ -359,7 +359,8 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos)
 	
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	idx = document_find_by_sci(sci);
-
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return FALSE;
+	
 	word[0] = '\0';
 	if (pos == -1)
 	{	// position of '(' is unknown, so go backwards to find it
@@ -388,16 +389,8 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos)
 
 gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 {
-	gint line = sci_get_line_from_position(sci, pos);
-	gint line_start = sci_get_position_from_line(sci, line);
-	gint line_len = sci_get_line_length(sci, line);
-	gint line_pos = pos - line_start - 1;
-	gint current = pos - line_start;
-	gint rootlen;
-	gint startword = current, lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	gint style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
-	gchar linebuf[line_len + 1];
-	gchar *root;
+	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style;
+	gchar *linebuf, *root;
 	const GPtrArray *tags;
 
 	if (sci == NULL) return FALSE;
@@ -407,7 +400,8 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 	line_len = sci_get_line_length(sci, line);
 	line_pos = pos - line_start - 1;
 	current = pos - line_start;
-	startword = current, lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	startword = current;
+	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
 
 	//if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL) return FALSE;
@@ -415,6 +409,7 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 	if (lexer == SCLEX_CPP && (style == SCE_C_COMMENT ||
 			style == SCE_C_COMMENTLINE || style == SCE_C_COMMENTDOC)) return FALSE;
 
+	linebuf = g_malloc(line_len + 1);
 	sci_get_line(sci, line, linebuf);
 
 	// find the start of the current word
@@ -448,8 +443,18 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 		gint idx = document_find_by_sci(sci);
 		TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 
+		if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL)
+		{	// go home if typed less than 4 chars
+			g_free(linebuf);
+			return FALSE;
+		}
+
 		while ((line_pos - i >= 0) && ! g_ascii_isspace(linebuf[line_pos - i])) i++;
-		if (i < 4) return FALSE;	// go home if typed less than 4 chars
+		if (i < 4)
+		{	// go home if typed less than 4 chars
+			g_free(linebuf);
+			return FALSE;
+		}
 
 		tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc_list[idx].file_type->lang);
 		if (NULL != tags && tags->len > 0)
@@ -467,6 +472,7 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 			g_string_free(words, TRUE);
 		}
 	}
+	g_free(linebuf);
 	return TRUE;
 }
 
