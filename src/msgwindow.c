@@ -28,6 +28,7 @@
 #include "support.h"
 #include "callbacks.h"
 #include "msgwindow.h"
+#include "utils.h"
 
 static GdkColor dark = {0, 58832, 58832, 58832};
 static GdkColor white = {0, 65535, 65535, 65535};
@@ -177,8 +178,7 @@ void msgwin_status_add(gchar const *format, ...)
 	va_end(args);
 
 	// display status message in status bar
-	gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
-	gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, string);
+	utils_set_statusbar(string, FALSE);
 
 	gtk_list_store_append(msgwindow.store_status, &iter);
 	//gtk_list_store_insert(msgwindow.store_status, &iter, 0);

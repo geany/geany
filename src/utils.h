@@ -27,6 +27,10 @@
 
 void utils_start_browser(const gchar *uri);
 
+/* allow_override is TRUE if text can be ignored when another message has been set
+ * that didn't use allow_override and has not timed out. */
+void utils_set_statusbar(const gchar *text, gboolean allow_override);
+
 void utils_update_statusbar(gint idx, gint pos);
 
 void utils_set_buttons_state(gboolean enable);

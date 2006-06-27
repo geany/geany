@@ -89,11 +89,35 @@ void utils_start_browser(const gchar *uri)
 }
 
 
+/* allow_override is TRUE if text can be ignored when another message has been set
+ * that didn't use allow_override and has not timed out. */
+void utils_set_statusbar(const gchar *text, gboolean allow_override)
+{
+	static glong last_time = 0;
+	GTimeVal timeval;
+	const gint GEANY_STATUS_TIMEOUT = 1;
+
+	g_get_current_time(&timeval);
+
+	if (! allow_override)
+	{
+		gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
+		gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, text);
+		last_time = timeval.tv_sec;
+	}
+	else
+	if (timeval.tv_sec > last_time + GEANY_STATUS_TIMEOUT)
+	{
+		gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
+		gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, text);
+	}
+}
+
+
 /* updates the status bar */
 void utils_update_statusbar(gint idx, gint pos)
 {
-	// currently text need in German and C locale about 150 chars
-	gchar *text = (gchar*) g_malloc0(250);
+	gchar *text;
 	const gchar *cur_tag;
 	guint line, col;
 
@@ -107,8 +131,8 @@ void utils_update_statusbar(gint idx, gint pos)
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
 		col = sci_get_col_from_position(doc_list[idx].sci, pos);
 
-		g_snprintf(text, 250,
-_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s      filetype: %s"),
+		// currently text need in German and C locale about 150 chars
+		text = g_strdup_printf(_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s      filetype: %s"),
 			(doc_list[idx].changed) ? 42 : 32,
 			(line + 1), (col + 1),
 			sci_get_selected_text_length(doc_list[idx].sci) - 1,
@@ -118,18 +142,14 @@ _("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. f
 			cur_tag,
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
 			(doc_list[idx].file_type) ? doc_list[idx].file_type->title : _("unknown"));
-		gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
-		gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, text);
+		utils_set_statusbar(text, TRUE); //can be overridden by status messages
+		g_free(text);
 	}
 	else
 	{
-		gtk_statusbar_pop(GTK_STATUSBAR(app->statusbar), 1);
-		gtk_statusbar_push(GTK_STATUSBAR(app->statusbar), 1, text);
+		utils_set_statusbar("", TRUE); //can be overridden by status messages
 	}
-
-	g_free(text);
 }
-
 
 
 void utils_update_popup_reundo_items(gint index)

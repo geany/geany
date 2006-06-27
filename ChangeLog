@@ -13,6 +13,9 @@
  * src/geany.h, src/keyfile.c:
    Add recent files items in the same order as they were saved.
    Remove app->recent_files and use g_strfreev in keyfile.c.
+ * src/utils.c, src/utils.h, src/msgwindow.c:
+   Make Status messages override the document statistics using
+   utils_set_statusbar; don't use a fixed buffer for statistics.
 
 
 2006-06-26  Enrico Troeger  <enrico.troeger@uvena.de>
