@@ -1403,14 +1403,12 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 			GtkTreeModel *model;
 			GtkTreeSelection *selection;
 			gchar *string;
-			static GdkColor red = {0, 65535, 0, 0};
-			GdkColor *color;
 
 			selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
 			if (gtk_tree_selection_get_selected(selection, &model, &iter))
 			{
-				gtk_tree_model_get(model, &iter, 0, &color, 1, &string, -1);
-				if (string && gdk_color_equal(&red, color))
+				gtk_tree_model_get(model, &iter, 1, &string, -1);
+				if (string != NULL)
 				{
 					gint line;
 					gint idx;

@@ -454,24 +454,23 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 		{
 			//if (s != G_IO_STATUS_NORMAL && s != G_IO_STATUS_EOF) break;
 			if (GPOINTER_TO_INT(data))
-			{
 				msgwin_compiler_add(COLOR_RED, FALSE, g_strstrip(msg));
-				if (app->pref_editor_use_indicators)
-				{
-					gchar *filename;
-					gint line;
-					utils_parse_compiler_error_line(g_strstrip(msg), &filename, &line);
-					if (line != -1)
-					{
-						gint idx = document_find_by_filename(filename, FALSE);
-						// document_set_indicator will check valid idx
-						document_set_indicator(idx, line - 1);
-					}
-					g_free(filename);
-				}
-			}
 			else
 				msgwin_compiler_add(COLOR_BLACK, FALSE, g_strstrip(msg));
+
+			if (app->pref_editor_use_indicators)
+			{
+				gchar *filename;
+				gint line;
+				utils_parse_compiler_error_line(g_strstrip(msg), &filename, &line);
+				if (line != -1)
+				{
+					gint idx = document_find_by_filename(filename, FALSE);
+					// document_set_indicator will check valid idx
+					document_set_indicator(idx, line - 1);
+				}
+				g_free(filename);
+			}
 
 			x++;
 			g_free(msg);

@@ -1,3 +1,9 @@
+2006-06-27  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * data/filetypes.php, data/filetypes.pascal, src/callbacks.c,
+   src/build.c: Parse stdout of compiler output too.
+
+
 2006-06-27  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/geany.h, src/keyfile.c:
