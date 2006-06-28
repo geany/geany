@@ -55,8 +55,7 @@ void configuration_save(void)
 
 	if (!config_exists)
 	{
-		gchar *start_comm = g_malloc(100);
-		g_snprintf(start_comm, 100, _("%s configuration file, edit as you need"), PACKAGE);
+		gchar *start_comm = g_strdup_printf(_("%s configuration file, edit as you need"), PACKAGE);
 		g_key_file_set_comment(config, NULL, NULL, start_comm, NULL);
 		g_free(start_comm);
 	}
@@ -140,11 +139,14 @@ void configuration_save(void)
 	{
 		if (! g_queue_is_empty(app->recent_queue))
 		{
-			recent_files[i] = g_queue_pop_head(app->recent_queue);
+			// copy the values, this is necessary when this function is called from the
+			// preferences dialog or when quitting is canceled to keep the queue intact
+			recent_files[i] = g_strdup(g_queue_peek_nth(app->recent_queue, i));
 		}
 		else
 		{
 			recent_files[i] = NULL;
+			break;
 		}
 	}
 	// There is a bug in GTK2.6 g_key_file_set_string_list, we must NULL terminate.

@@ -131,7 +131,6 @@ void utils_update_statusbar(gint idx, gint pos)
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
 		col = sci_get_col_from_position(doc_list[idx].sci, pos);
 
-		// currently text need in German and C locale about 150 chars
 		text = g_strdup_printf(_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s      filetype: %s"),
 			(doc_list[idx].changed) ? 42 : 32,
 			(line + 1), (col + 1),
@@ -1929,7 +1928,7 @@ void utils_update_recent_menu(void)
 	if (g_list_length(children) > app->mru_length)
 	{
 		children = g_list_nth(children, app->mru_length - 1);
-		while (children)
+		while (children != NULL)
 		{
 			if (GTK_IS_WIDGET(children->data)) gtk_widget_destroy(GTK_WIDGET(children->data));
 			children = g_list_next(children);
@@ -1939,7 +1938,8 @@ void utils_update_recent_menu(void)
 	filename = g_queue_peek_head(app->recent_queue);
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
-	gtk_menu_shell_insert(GTK_MENU_SHELL(recent_menu), tmp, 0);
+	//gtk_menu_shell_insert(GTK_MENU_SHELL(recent_menu), tmp, 0);
+	gtk_container_add(GTK_CONTAINER(recent_menu), tmp);
 	g_signal_connect((gpointer) tmp, "activate",
 				G_CALLBACK(on_recent_file_activate), (gpointer) filename);
 }
