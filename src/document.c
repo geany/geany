@@ -607,25 +607,26 @@ void document_save_file(gint idx)
 	data = (gchar*) g_malloc(len);
 	sci_get_text(doc_list[idx].sci, len, data);
 
-	// save in original encoding
-	if (doc_list[idx].encoding != NULL)
+	// save in original encoding , skip when it is already UTF-8)
+	if (doc_list[idx].encoding != NULL && ! utils_strcmp(doc_list[idx].encoding, "UTF-8"))
 	{
 		GError *conv_error = NULL;
 		gchar* conv_file_contents = NULL;
-	
+
 		// try to convert it from UTF-8 to original encoding
 		conv_file_contents = g_convert(data, -1, doc_list[idx].encoding, "UTF-8",
 													NULL, NULL, &conv_error); 
 	
 		if (conv_error != NULL)
 		{
-			geany_debug("error while converting the file to its orinial encoding");
-			geany_debug("encoding: %s error message: %s)",
-						doc_list[idx].encoding, conv_error->message);
-			g_free(doc_list[idx].encoding);
-			doc_list[idx].encoding = g_strdup("UTF-8");
-			msgwin_status_add(_("Error while converting file (%s)."), conv_error->message);
+			dialogs_show_error(
+			_("An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."
+			  "\nError message: %s\n"),
+			doc_list[idx].encoding, conv_error->message);
+			geany_debug("encoding error: %s)", conv_error->message);
 			g_error_free(conv_error);
+			g_free(data);
+			return;
 		}
 		else
 		{
@@ -988,7 +989,7 @@ gchar *document_get_eol_mode(gint idx)
 	switch (sci_get_eol_mode(doc_list[idx].sci))
 	{
 		case SC_EOL_CRLF: return _("Win (CRLF)"); break;
-		case SC_EOL_CR: return _("Max (CR)"); break;
+		case SC_EOL_CR: return _("Mac (CR)"); break;
 		case SC_EOL_LF:
 		default: return _("Unix (LF)"); break;
 	}

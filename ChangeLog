@@ -2,6 +2,11 @@
 
  * src/utils.c, src/keyfile.c: Fixed weird behaviour of the recent
                                files list.
+ * src/document.c:
+   Fixed a small typo.
+   Skip converting from UTF-8 in UTF-8 when saving.
+   Show an error messages dialog if the conversion into an encoding
+   failed.
 
 
 2006-06-27  Enrico Troeger  <enrico.troeger@uvena.de>
