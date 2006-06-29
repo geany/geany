@@ -1,3 +1,11 @@
+2006-06-30  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/vte.c, src/callbacks.c:
+   Change the path in the VTE widget when switching between files
+   according to the path of the current file.
+   Process the switch_page callback only once.
+
+
 2006-06-29  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c, src/utils.h, src/win32.c, src/callbacks.c,

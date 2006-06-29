@@ -709,6 +709,13 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
                                         gpointer         user_data)
 {
 	gint idx;
+	static gboolean state = FALSE;
+
+	// this function is called two times when switching notebook pages, I really don't know why
+	// so, skip one call (workaround)
+	state= ! state;
+	if (state) return;
+
 
 	if (closing_all) return;
 
@@ -751,6 +758,12 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
                                         gpointer         user_data)
 {
 	gint idx;
+	static gboolean state = FALSE;
+
+	// this function is called two times when switching notebook pages, I really don't know why
+	// so, skip one call (workaround)
+	state= ! state;
+	if (state) return;
 
 	if (closing_all) return;
 
@@ -764,6 +777,21 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 	{
 		utils_check_disk_status(idx);
 	}
+
+#ifdef HAVE_VTE
+		gchar *path;
+		gchar *cmd;
+
+		if (doc_list[idx].file_name != NULL)
+		{
+			path = g_path_get_dirname(doc_list[idx].file_name);
+			cmd = g_strconcat("cd ", path, "\n", "clear\n", NULL);
+			vte_send_cmd(cmd);
+			g_free(path);
+			g_free(cmd);
+		}
+#endif
+
 }
 
 

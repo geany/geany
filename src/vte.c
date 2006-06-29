@@ -200,9 +200,11 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 	{
 		kill(pid, SIGINT);
 		pid = 0;
+		vf->vte_terminal_reset(VTE_TERMINAL(widget), TRUE, TRUE);
 		vte_start(widget);
 		return TRUE;
 	}
+
 	return FALSE;
 }
 
@@ -265,6 +267,7 @@ static void vte_register_symbols(GModule *mod)
 	g_module_symbol(mod, "vte_terminal_set_emulation", (void*)&vf->vte_terminal_set_emulation);
 	g_module_symbol(mod, "vte_terminal_set_color_foreground", (void*)&vf->vte_terminal_set_color_foreground);
 	g_module_symbol(mod, "vte_terminal_set_color_background", (void*)&vf->vte_terminal_set_color_background);
+	g_module_symbol(mod, "vte_terminal_feed_child", (void*)&vf->vte_terminal_feed_child);
 }
 
 
@@ -363,7 +366,10 @@ static GtkWidget *vte_create_popup_menu(void)
 }
 
 
-
+void vte_send_cmd(const gchar *cmd)
+{
+	vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), cmd, strlen(cmd));
+}
 
 
 /*

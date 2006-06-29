@@ -36,6 +36,8 @@ void vte_close(void);
 
 void vte_apply_user_settings(void);
 
+void vte_send_cmd(const gchar *cmd);
+
 /*
 void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,
 							GtkSelectionData *data, guint info, guint time);
@@ -102,6 +104,7 @@ struct vte_funcs
 	void (*vte_terminal_set_emulation) (VteTerminal *terminal, const gchar *emulation);
 	void (*vte_terminal_set_color_foreground) (VteTerminal *terminal, const GdkColor *foreground);
 	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
+	void (*vte_terminal_feed_child) (VteTerminal *terminal, const char *data, glong length);
 };
 
 
