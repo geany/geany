@@ -128,9 +128,9 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	g_free(app->pref_template_mail);
 	g_free(app->pref_template_initial);
 	g_free(app->pref_template_version);
-	g_free(app->build_make_cmd);
-	g_free(app->build_term_cmd);
-	g_free(app->build_browser_cmd);
+	g_free(app->tools_make_cmd);
+	g_free(app->tools_term_cmd);
+	g_free(app->tools_browser_cmd);
 	while (! g_queue_is_empty(app->recent_queue))
 	{
 		g_free(g_queue_pop_tail(app->recent_queue));
@@ -504,7 +504,7 @@ on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
 	gchar *basename;
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL) return;
-	
+
 	basename = g_path_get_basename(doc_list[idx].file_name);
 	if (dialogs_show_question(_
 				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
@@ -2409,7 +2409,7 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	guint i = GPOINTER_TO_INT(user_data);
-	
+
 	if (idx < 0 || encodings[i].charset == NULL) return;
 
 	g_free(doc_list[idx].encoding);

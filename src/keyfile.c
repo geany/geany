@@ -130,10 +130,10 @@ void configuration_save(void)
 	g_key_file_set_string(config, PACKAGE, "pref_template_initial", app->pref_template_initial);
 	g_key_file_set_string(config, PACKAGE, "pref_template_version", app->pref_template_version);
 
-	// store build settings
-	g_key_file_set_string(config, "build", "build_make_cmd", app->build_make_cmd ? app->build_make_cmd : "");
-	g_key_file_set_string(config, "build", "build_term_cmd", app->build_term_cmd ? app->build_term_cmd : "");
-	g_key_file_set_string(config, "build", "build_browser_cmd", app->build_browser_cmd ? app->build_browser_cmd : "");
+	// store tools settings
+	g_key_file_set_string(config, "tools", "make_cmd", app->tools_make_cmd ? app->tools_make_cmd : "");
+	g_key_file_set_string(config, "tools", "terminal_cmd", app->tools_term_cmd ? app->tools_term_cmd : "");
+	g_key_file_set_string(config, "tools", "browser_cmd", app->tools_browser_cmd ? app->tools_browser_cmd : "");
 
 	for (i = 0; i < app->mru_length; i++)
 	{
@@ -285,15 +285,15 @@ gboolean configuration_load(void)
 	app->pref_editor_trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", TRUE);
 
 	tmp_string = g_find_program_in_path("make");
-	app->build_make_cmd = utils_get_setting_string(config, "build", "build_make_cmd", tmp_string);
+	app->tools_make_cmd = utils_get_setting_string(config, "tools", "tools_make_cmd", tmp_string);
 	g_free(tmp_string);
 
 	tmp_string = g_find_program_in_path("xterm");
-	app->build_term_cmd = utils_get_setting_string(config, "build", "build_term_cmd", tmp_string);
+	app->tools_term_cmd = utils_get_setting_string(config, "tools", "tools_term_cmd", tmp_string);
 	g_free(tmp_string);
 
 	tmp_string = g_find_program_in_path("mozilla");
-	app->build_browser_cmd = utils_get_setting_string(config, "build", "build_browser_cmd", tmp_string);
+	app->tools_browser_cmd = utils_get_setting_string(config, "tools", "tools_browser_cmd", tmp_string);
 	g_free(tmp_string);
 
 	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);

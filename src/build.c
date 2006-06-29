@@ -53,9 +53,9 @@ GPid build_compile_tex_file(gint idx, gint mode)
 	gchar **argv;
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
-	
+
 	argv = g_new0(gchar*, 2);
-	argv[0] = (mode == 0) ? g_strdup(doc_list[idx].file_type->programs->compiler) : 
+	argv[0] = (mode == 0) ? g_strdup(doc_list[idx].file_type->programs->compiler) :
 							g_strdup(doc_list[idx].file_type->programs->linker);
 	argv[1] = NULL;
 
@@ -95,11 +95,11 @@ GPid build_view_tex_file(gint idx, gint mode)
 	}
 
 	// replace %f and %e in the run_cmd string
-	cmd_string = g_strdup((mode == 0) ?	g_strdup(doc_list[idx].file_type->programs->run_cmd) : 
+	cmd_string = g_strdup((mode == 0) ?	g_strdup(doc_list[idx].file_type->programs->run_cmd) :
 										g_strdup(doc_list[idx].file_type->programs->run_cmd2));
 	cmd_string = utils_str_replace(cmd_string, "%f", view_file);
 	cmd_string = utils_str_replace(cmd_string, "%e", executable);
-	
+
 	// try convert in locale
 	locale_cmd_string = g_locale_from_utf8(cmd_string, -1, NULL, NULL, NULL);
 	if (locale_cmd_string == NULL) locale_cmd_string = g_strdup(view_file);
@@ -141,17 +141,17 @@ GPid build_make_file(gint idx, gboolean cust_target)
 	gchar **argv;
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
-	
+
 	argv = g_new0(gchar*, 3);
 	if (cust_target && app->build_make_custopt)
 	{	//cust-target
-		argv[0] = g_strdup(app->build_make_cmd);
+		argv[0] = g_strdup(app->tools_make_cmd);
 		argv[1] = g_strdup(app->build_make_custopt);
 		argv[2] = NULL;
 	}
 	else
 	{
-		argv[0] = g_strdup(app->build_make_cmd);
+		argv[0] = g_strdup(app->tools_make_cmd);
 		argv[1] = g_strdup("all");
 		argv[2] = NULL;
 	}
@@ -240,7 +240,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 
 	app->cur_idx = idx;
 	document_clear_indicators(idx);
-	
+
 	cmd_string = g_strjoinv(" ", cmd);
 	g_strfreev(cmd);
 
@@ -248,7 +248,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
 
 	executable = utils_remove_ext_from_filename(locale_filename);
-	
+
 	// replace %f and %e in the command string
 	tmp = g_path_get_basename(locale_filename);
 	cmd_string = utils_str_replace(cmd_string, "%f", tmp);
@@ -257,7 +257,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	cmd_string = utils_str_replace(cmd_string, "%e", tmp);
 	g_free(tmp);
 	g_free(executable);
-	
+
 	utf8_cmd_string = g_locale_to_utf8(cmd_string, -1, NULL, NULL, NULL);
 	if (utf8_cmd_string == NULL) utf8_cmd_string = g_strdup(cmd_string);
 
@@ -323,18 +323,18 @@ GPid build_run_cmd(gint idx)
 	struct stat st;
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
-	
+
 	script_name = g_strdup("./geany_run_script.sh");
 
 	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
 	if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
 
-	locale_term_cmd = g_locale_from_utf8(app->build_term_cmd, -1, NULL, NULL, NULL);
-	if (locale_term_cmd == NULL) locale_term_cmd = g_strdup(app->build_term_cmd);
+	locale_term_cmd = g_locale_from_utf8(app->tools_term_cmd, -1, NULL, NULL, NULL);
+	if (locale_term_cmd == NULL) locale_term_cmd = g_strdup(app->tools_term_cmd);
 	// split the term_cmd, so arguments will work too
 	term_argv = g_strsplit(locale_term_cmd, " ", -1);
 	term_argv_len = g_strv_length(term_argv);
-	
+
 	long_executable = utils_remove_ext_from_filename(locale_filename);
 
 	// only check for existing executable, if executable is required by %e
@@ -345,7 +345,7 @@ GPid build_run_cmd(gint idx)
 			check_executable = g_strconcat(long_executable, ".class", NULL);
 		else
 			check_executable = g_strdup(long_executable);
-			
+
 		// check whether executable exists
 		if (stat(check_executable, &st) != 0)
 		{
@@ -356,14 +356,14 @@ GPid build_run_cmd(gint idx)
 			goto free_strings;
 		}
 	}
-	
+
 
 	// check if terminal path is set (to prevent misleading error messages)
 	if (stat(term_argv[0], &st) != 0)
 	{
 		msgwin_status_add(
 			_("Could not find terminal '%s' "
-				"(check path for Terminal tool setting in Preferences)"), app->build_term_cmd);
+				"(check path for Terminal tool setting in Preferences)"), app->tools_term_cmd);
 		result_id = (GPid) 1;
 		goto free_strings;
 	}
@@ -376,13 +376,13 @@ GPid build_run_cmd(gint idx)
 		gchar *utf8_working_dir = NULL;
 		utf8_working_dir = g_locale_to_utf8(working_dir, -1, NULL, NULL, NULL);
 		if (utf8_working_dir == NULL) utf8_working_dir = g_strdup(working_dir);
-		
+
 		msgwin_status_add(_("Failed to change the working directory to %s"), working_dir);
 		result_id = (GPid) 1;	// return 1, to prevent error handling of the caller
 		g_free(utf8_working_dir);
 		goto free_strings;
 	}
-	
+
 	// replace %f and %e in the run_cmd string
 	cmd = g_strdup(doc_list[idx].file_type->programs->run_cmd);
 	tmp = g_path_get_basename(locale_filename);

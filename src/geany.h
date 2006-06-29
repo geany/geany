@@ -181,9 +181,10 @@ typedef struct MyApp
 	gchar				*search_text;
 	gchar				*terminal_settings;
 	gchar				 build_make_custopt[256];
-	gchar				*build_browser_cmd;
-	gchar				*build_make_cmd;
-	gchar				*build_term_cmd;
+	gchar				*tools_browser_cmd;
+	gchar				*tools_make_cmd;
+	gchar				*tools_term_cmd;
+	gchar				*tools_print_cmd;
 	GtkIconSize			 toolbar_icon_size;
 	GtkWidget			*toolbar;
 	GtkWidget			*run_button;

@@ -176,14 +176,14 @@ void prefs_init_dialog(void)
         gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "entry_com_term"), FALSE);
         gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "button_term"), FALSE);
 #else
-        if (app->build_make_cmd)
-                gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_make")), app->build_make_cmd);
+        if (app->tools_make_cmd)
+                gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_make")), app->tools_make_cmd);
 
-        if (app->build_term_cmd)
-                gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_term")), app->build_term_cmd);
+        if (app->tools_term_cmd)
+                gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_term")), app->tools_term_cmd);
 #endif
-	if (app->build_browser_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_browser")), app->build_browser_cmd);
+	if (app->tools_browser_cmd)
+		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_browser")), app->tools_browser_cmd);
 
 
 	// Template settings
@@ -370,16 +370,16 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		// Tools Settings
 		widget = lookup_widget(app->prefs_dialog, "entry_com_make");
-		g_free(app->build_make_cmd);
-		app->build_make_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+		g_free(app->tools_make_cmd);
+		app->tools_make_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		widget = lookup_widget(app->prefs_dialog, "entry_com_term");
-		g_free(app->build_term_cmd);
-		app->build_term_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+		g_free(app->tools_term_cmd);
+		app->tools_term_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		widget = lookup_widget(app->prefs_dialog, "entry_browser");
-		g_free(app->build_browser_cmd);
-		app->build_browser_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+		g_free(app->tools_browser_cmd);
+		app->tools_browser_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		// Template settings
 		widget = lookup_widget(app->prefs_dialog, "entry_template_developer");

@@ -60,7 +60,7 @@ void utils_start_browser(const gchar *uri)
 #else
 	const gchar *argv[3];
 
-	argv[0] = app->build_browser_cmd;
+	argv[0] = app->tools_browser_cmd;
 	argv[1] = uri;
 	argv[2] = NULL;
 
@@ -841,7 +841,7 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 	encoding_strings = utils_glist_from_string("UTF-8");
 	encodings = encodings_get_encodings(encoding_strings);
 	utils_glist_strings_free(encoding_strings);
-	
+
 	if (g_get_charset((const gchar**)&locale_charset) == FALSE)
 	{
 		const GeanyEncoding *locale_encoding;
@@ -1854,7 +1854,7 @@ void utils_create_insert_menu_items(void)
 		"bitset", "dequev", "list", "map", "set", "queue", "stack", "vector", "algorithm",
 		"iterator", "functional", "string", "complex", "valarray", NULL
 	};
-	
+
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
@@ -2340,7 +2340,7 @@ void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint
 	guint field_idx_line;		// idx of the field where the line is
 	guint field_idx_file;		// idx of the field where the filename is
 	guint skip_dot_slash = 0;	// number of characters to skip at the beginning of the filename
-	
+
 	*filename = NULL;
 	*line = -1;
 
@@ -2394,7 +2394,7 @@ void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint
 		// the error output of python and tcl equals
 		case GEANY_FILETYPES_TCL:
 		case GEANY_FILETYPES_PYTHON:
-		{	
+		{
 			// File "HyperArch.py", line 37, in ?
 			// (file "clrdial.tcl" line 12)
 			pattern = " \"";
@@ -2404,7 +2404,7 @@ void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint
 			break;
 		}
 		case GEANY_FILETYPES_PASCAL:
-		{	
+		{
 			// bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
 			// still untested with other files than the opened
 			pattern = "(";
@@ -2417,7 +2417,7 @@ void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint
 	}
 
 	fields = g_strsplit_set(string, pattern, field_min_len);
-	
+
 	// parse the line
 	if (g_strv_length(fields) < field_min_len)
 	{
