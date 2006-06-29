@@ -892,7 +892,12 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		}
 		gtk_widget_hide(app->save_filesel);
 
-		if (doc_list[idx].file_name) g_free(doc_list[idx].file_name);
+		if (doc_list[idx].file_name)
+		{	// create a new tm_source_file object otherwise tagmanager won't work correctly
+			tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+			doc_list[idx].tm_file = NULL;
+			g_free(doc_list[idx].file_name);
+		}
 		doc_list[idx].file_name = new_filename;
 
 		utils_replace_filename(idx);

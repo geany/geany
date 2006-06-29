@@ -20,6 +20,9 @@
  * src/utils.c: Added function is_opening_brace().
  * src/sci_cb.c:
    Use is_opening_brace() for better handling of calltips.
+ * src/callbacks.c:
+   Create a new tm_source_file object if a file is renamed, otherwise
+   tagmanager won't work correctly.
 
 
 2006-06-28  Enrico Tröger  <enrico.troeger@uvena.de>
