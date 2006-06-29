@@ -57,7 +57,7 @@ gboolean utils_isbrace(gchar c);
 /* This sets the window title according to the current filename. */
 void utils_set_window_title(gint index);
 
-void utils_set_font(void);
+void utils_set_editor_font(const gchar *font_name);
 
 const GList *utils_get_tag_list(gint idx, guint tag_types);
 

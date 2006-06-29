@@ -932,11 +932,12 @@ void
 on_font_apply_button_clicked           (GtkButton       *button,
                                         gpointer         user_data)
 {
-	g_free(app->editor_font);
-	app->editor_font = g_strdup(
-				gtk_font_selection_dialog_get_font_name(GTK_FONT_SELECTION_DIALOG(app->open_fontsel)));
+	gchar *fontname;
 
-	utils_set_font();
+	fontname = gtk_font_selection_dialog_get_font_name(
+		GTK_FONT_SELECTION_DIALOG(app->open_fontsel));
+	utils_set_editor_font(fontname);
+	g_free(fontname);
 }
 
 

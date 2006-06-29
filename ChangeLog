@@ -1,3 +1,11 @@
+2006-06-29  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/utils.h, src/win32.c, src/callbacks.c,
+   src/document.c, src/prefs.c:
+   Apply fonts in Preferences when they are set and only if they have
+   changed. Rename utils_set_font to utils_set_editor_font.
+
+
 2006-06-29  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/geany.h, src/build.c, src/callbacks.c, src/keyfile.c,

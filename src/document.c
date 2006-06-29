@@ -546,8 +546,6 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		utils_update_recent_menu();
 	}
 
-	// currently status messages are overridden by update sci SCN_UPDATEUI message
-	// processing gtk messages first causes a segfault on closing & reloading utils.c
 	if (reload)
 		msgwin_status_add(_("File %s reloaded."), utf8_filename);
 	else

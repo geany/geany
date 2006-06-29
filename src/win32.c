@@ -290,9 +290,10 @@ void win32_show_font_dialog(void)
 	}
 	else
 	{
-			g_free(app->editor_font);
-			app->editor_font = g_strdup_printf("%s %d", lf.lfFaceName, (cf.iPointSize / 10));
-			utils_set_font();
+			gchar *editorfont = g_strdup_printf("%s %d", lf.lfFaceName,
+				(cf.iPointSize / 10));
+			utils_set_editor_font(editorfont);
+			g_free(editorfont);
 	}
 }
 

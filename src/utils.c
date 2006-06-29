@@ -355,11 +355,19 @@ gboolean utils_isbrace(gchar c)
 
 
 
-void utils_set_font(void)
+void utils_set_editor_font(const gchar *font_name)
 {
 	gint i, size;
 	gchar *fname;
 	PangoFontDescription *font_desc;
+
+	g_return_if_fail(font_name != NULL);
+	// do nothing if font has not changed
+	if (app->editor_font != NULL)
+		if (strcmp(font_name, app->editor_font) == 0) return;
+
+	g_free(app->editor_font);
+	app->editor_font = g_strdup(font_name);
 
 	font_desc = pango_font_description_from_string(app->editor_font);
 

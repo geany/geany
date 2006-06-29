@@ -450,19 +450,6 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		utils_widget_show_hide(lookup_widget(app->window, "toolbutton25"), app->pref_main_show_goto);
 		utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem5"), app->pref_main_show_goto);
 		utils_treeviews_showhide();
-		for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
-		{
-			if (doc_list[i].is_valid && GTK_IS_WIDGET(doc_list[i].tag_tree))
-				gtk_widget_modify_font(doc_list[i].tag_tree, pango_font_description_from_string(app->tagbar_font));
-		}
-		if (GTK_IS_WIDGET(app->default_tag_tree))
-			gtk_widget_modify_font(app->default_tag_tree, pango_font_description_from_string(app->tagbar_font));
-		gtk_widget_modify_font(lookup_widget(app->window, "entry1"), pango_font_description_from_string(app->tagbar_font));
-		gtk_widget_modify_font(msgwindow.tree_compiler, pango_font_description_from_string(app->msgwin_font));
-		gtk_widget_modify_font(msgwindow.tree_msg, pango_font_description_from_string(app->msgwin_font));
-		gtk_widget_modify_font(msgwindow.tree_status, pango_font_description_from_string(app->msgwin_font));
-
-		utils_set_font();
 
 		// re-colorize all open documents, if tab width or long line settings have changed
 /*		if ((app->pref_editor_tab_width != old_tab_width) ||
@@ -539,32 +526,55 @@ void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
 
 void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 {
+	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
+	gint i;
+
 	switch (GPOINTER_TO_INT(user_data))
 	{
 		case 1:
 		{
+			if (strcmp(fontbtn, app->tagbar_font) == 0) break;
 			g_free(app->tagbar_font);
-			app->tagbar_font = g_strdup(gtk_font_button_get_font_name(widget));
+			app->tagbar_font = g_strdup(fontbtn);
+			for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+			{
+				if (doc_list[i].is_valid && GTK_IS_WIDGET(doc_list[i].tag_tree))
+					gtk_widget_modify_font(doc_list[i].tag_tree,
+						pango_font_description_from_string(app->tagbar_font));
+			}
+			if (GTK_IS_WIDGET(app->default_tag_tree))
+				gtk_widget_modify_font(app->default_tag_tree,
+					pango_font_description_from_string(app->tagbar_font));
+			gtk_widget_modify_font(lookup_widget(app->window, "entry1"),
+				pango_font_description_from_string(app->tagbar_font));
 			break;
 		}
 		case 2:
 		{
+			if (strcmp(fontbtn, app->msgwin_font) == 0) break;
 			g_free(app->msgwin_font);
-			app->msgwin_font = g_strdup(gtk_font_button_get_font_name(widget));
+			app->msgwin_font = g_strdup(fontbtn);
+			gtk_widget_modify_font(msgwindow.tree_compiler,
+				pango_font_description_from_string(app->msgwin_font));
+			gtk_widget_modify_font(msgwindow.tree_msg,
+				pango_font_description_from_string(app->msgwin_font));
+			gtk_widget_modify_font(msgwindow.tree_status,
+				pango_font_description_from_string(app->msgwin_font));
 			break;
 		}
 		case 3:
 		{
-			g_free(app->editor_font);
-			app->editor_font = g_strdup(gtk_font_button_get_font_name(widget));
+			utils_set_editor_font(fontbtn);
 			break;
 		}
 #ifdef HAVE_VTE
 		case 4:
 		{
 			// VTE settings
+			if (strcmp(fontbtn, vc->font) == 0) break;
 			g_free(vc->font);
 			vc->font = g_strdup(gtk_font_button_get_font_name(widget));
+			vte_apply_user_settings();
 			break;
 		}
 #endif
