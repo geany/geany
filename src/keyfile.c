@@ -134,6 +134,7 @@ void configuration_save(void)
 	g_key_file_set_string(config, "tools", "make_cmd", app->tools_make_cmd ? app->tools_make_cmd : "");
 	g_key_file_set_string(config, "tools", "terminal_cmd", app->tools_term_cmd ? app->tools_term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", app->tools_browser_cmd ? app->tools_browser_cmd : "");
+	g_key_file_set_string(config, "tools", "print_cmd", app->tools_print_cmd ? app->tools_print_cmd : "");
 
 	for (i = 0; i < app->mru_length; i++)
 	{
@@ -285,16 +286,22 @@ gboolean configuration_load(void)
 	app->pref_editor_trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", TRUE);
 
 	tmp_string = g_find_program_in_path("make");
-	app->tools_make_cmd = utils_get_setting_string(config, "tools", "tools_make_cmd", tmp_string);
+	app->tools_make_cmd = utils_get_setting_string(config, "tools", "make_cmd", tmp_string);
 	g_free(tmp_string);
 
 	tmp_string = g_find_program_in_path("xterm");
-	app->tools_term_cmd = utils_get_setting_string(config, "tools", "tools_term_cmd", tmp_string);
+	app->tools_term_cmd = utils_get_setting_string(config, "tools", "term_cmd", tmp_string);
 	g_free(tmp_string);
 
 	tmp_string = g_find_program_in_path("mozilla");
-	app->tools_browser_cmd = utils_get_setting_string(config, "tools", "tools_browser_cmd", tmp_string);
+	app->tools_browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", tmp_string);
 	g_free(tmp_string);
+
+	tmp_string2 = g_find_program_in_path("lpr");
+	tmp_string = g_strconcat(tmp_string2, " %f", NULL);
+	app->tools_print_cmd = utils_get_setting_string(config, "tools", "print_cmd", tmp_string);
+	g_free(tmp_string);
+	g_free(tmp_string2);
 
 	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
 	if (recent_files != NULL)

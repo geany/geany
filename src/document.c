@@ -40,6 +40,7 @@
 # include <fcntl.h>
 #endif
 #include <ctype.h>
+#include <stdlib.h>
 
 #include "document.h"
 #include "callbacks.h"
@@ -524,11 +525,11 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		document_set_filetype(idx, use_ft);
 		utils_build_show_hide(idx);
 	}
-	else 
+	else
 	{
 		document_update_tag_list(idx, TRUE);
 	}
-	
+
 	document_set_text_changed(idx);
 
 	g_free(data);
@@ -613,8 +614,8 @@ void document_save_file(gint idx)
 
 		// try to convert it from UTF-8 to original encoding
 		conv_file_contents = g_convert(data, -1, doc_list[idx].encoding, "UTF-8",
-													NULL, NULL, &conv_error); 
-	
+													NULL, NULL, &conv_error);
+
 		if (conv_error != NULL)
 		{
 			dialogs_show_error(
@@ -1103,10 +1104,10 @@ void document_set_indicator(gint idx, gint line)
 	gchar *linebuf;
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	
+
 	start = sci_get_position_from_line(doc_list[idx].sci, line);
 	end = sci_get_position_from_line(doc_list[idx].sci, line + 1);
-	
+
 	// skip blank lines
 	if ((start + 1) == end) return;
 
@@ -1120,10 +1121,42 @@ void document_set_indicator(gint idx, gint line)
 	while (isspace(linebuf[i])) i++;
 	while (isspace(linebuf[len-1])) len--;
 	g_free(linebuf);
-			
+
 	current_mask = sci_get_style_at(doc_list[idx].sci, start);
 	current_mask &= INDICS_MASK;
 	current_mask |= INDIC2_MASK;
 	sci_start_styling(doc_list[idx].sci, start + i, INDIC2_MASK);
 	sci_set_styling(doc_list[idx].sci, len - i, current_mask);
+}
+
+
+/* simple file print */
+void document_print(gint idx)
+{
+	/// TODO test under Win32
+	gchar *cmdline;
+
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL) return;
+
+	cmdline = g_strdup(app->tools_print_cmd);
+	cmdline = utils_str_replace(cmdline, "%f", doc_list[idx].file_name);
+
+	if (dialogs_show_question(_("The file \"%s\" will be printed with the following command:\n\n%s"),
+								doc_list[idx].file_name, cmdline))
+	{
+		gint rc;
+		// system() is not the best way, but the only one I found to get the following working:
+		// a2ps -1 --medium=A4 -o - %f | xfprint4
+		rc = system(cmdline);
+		if (rc != 0)
+		{
+			dialogs_show_error(_("Printing of \"%s\" failed(return code: %d)."),
+								doc_list[idx].file_name, rc);
+		}
+		else
+		{
+			msgwin_status_add(_("File %s printed."), doc_list[idx].file_name);
+		}
+	}
+	g_free(cmdline);
 }

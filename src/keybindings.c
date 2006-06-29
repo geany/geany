@@ -47,6 +47,7 @@ static void cb_func_menu_new(void);
 static void cb_func_menu_open(void);
 static void cb_func_menu_save(void);
 static void cb_func_menu_saveall(void);
+static void cb_func_menu_print(void);
 static void cb_func_menu_close(void);
 static void cb_func_menu_closeall(void);
 static void cb_func_menu_reloadfile(void);
@@ -111,6 +112,8 @@ void keybindings_init(void)
 		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"));
 	keys[GEANY_KEYS_MENU_SAVEALL] = fill(cb_func_menu_saveall,
 		GDK_S, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall", _("Save all"));
+	keys[GEANY_KEYS_MENU_PRINT] = fill(cb_func_menu_print,
+		GDK_p, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_print", _("Print"));
 	keys[GEANY_KEYS_MENU_CLOSE] = fill(cb_func_menu_close,
 		GDK_w, GDK_CONTROL_MASK, "menu_close", _("Close"));
 	keys[GEANY_KEYS_MENU_CLOSEALL] = fill(cb_func_menu_closeall,
@@ -237,6 +240,7 @@ static void keybindings_add_accels()
 
 	// apply the settings
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEALL, menu_save_all1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PRINT, print1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_CLOSE, menu_close1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_CLOSEALL, menu_close_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_RELOADFILE, revert1);
@@ -463,21 +467,21 @@ static void cb_func_menu_zoomout(void)
 static void cb_func_menu_foldall(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	document_fold_all(idx);
 }
 
 static void cb_func_menu_unfoldall(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	document_unfold_all(idx);
 }
 
 static void cb_func_build_compile(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (doc_list[idx].file_type->menu_items->can_compile && doc_list[idx].file_name != NULL)
 		on_build_compile_activate(NULL, NULL);
 }
@@ -485,7 +489,7 @@ static void cb_func_build_compile(void)
 static void cb_func_build_link(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (doc_list[idx].file_type->menu_items->can_link && doc_list[idx].file_name != NULL)
 		on_build_build_activate(NULL, NULL);
 }
@@ -493,7 +497,7 @@ static void cb_func_build_link(void)
 static void cb_func_build_make(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (doc_list[idx].file_name != NULL)
 		on_build_make_activate(NULL, GINT_TO_POINTER(0));
 }
@@ -501,7 +505,7 @@ static void cb_func_build_make(void)
 static void cb_func_build_makeowntarget(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (doc_list[idx].file_name != NULL)
 		on_build_make_activate(NULL, GINT_TO_POINTER(1));
 }
@@ -509,7 +513,7 @@ static void cb_func_build_makeowntarget(void)
 static void cb_func_build_run(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (doc_list[idx].file_type->menu_items->can_exec && doc_list[idx].file_name != NULL)
 		on_build_execute_activate(NULL, GINT_TO_POINTER(0));
 }
@@ -517,7 +521,7 @@ static void cb_func_build_run(void)
 static void cb_func_build_run2(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (doc_list[idx].file_type->menu_items->can_exec && doc_list[idx].file_name != NULL)
 		on_build_execute_activate(NULL, GINT_TO_POINTER(1));
 }
@@ -525,7 +529,7 @@ static void cb_func_build_run2(void)
 static void cb_func_build_options(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if ((doc_list[idx].file_type->menu_items->can_compile ||
 		doc_list[idx].file_type->menu_items->can_link ||
 		doc_list[idx].file_type->menu_items->can_exec) &&
@@ -536,7 +540,7 @@ static void cb_func_build_options(void)
 static void cb_func_reloadtaglist(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	document_update_tag_list(idx, TRUE);
 }
 
@@ -565,7 +569,7 @@ static void keybindings_call_popup_item(int menuitemkey)
 	gint pos;
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	
+
 	pos = sci_get_current_position(doc_list[idx].sci);
 
 	utils_find_current_word(doc_list[idx].sci, pos,
@@ -594,7 +598,7 @@ static void keybindings_call_popup_item(int menuitemkey)
 static void cb_func_switch_editor(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
 }
 
@@ -627,7 +631,7 @@ static void cb_func_toggle_sidebar(void)
 	static gboolean symbol = FALSE;
 	static gboolean openfiles = FALSE;
 	static gboolean is_visible = FALSE;
-	static gint active_page = -1; 
+	static gint active_page = -1;
 
 	/* this code is a bit confusing, but I want to keep the settings in the preferences dialog
 	 * synchronous with the real status of the sidebar, so we have to store the previous state when
@@ -656,7 +660,7 @@ static void cb_func_toggle_sidebar(void)
 static void cb_func_edit_duplicateline(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (sci_can_copy(doc_list[idx].sci))
 		sci_selection_duplicate(doc_list[idx].sci);
 	else
@@ -666,39 +670,46 @@ static void cb_func_edit_duplicateline(void)
 static void cb_func_edit_commentline(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_cb_do_comment(idx);
 }
 
 static void cb_func_edit_autocomplete(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_cb_start_auto_complete(doc_list[idx].sci, sci_get_current_position(doc_list[idx].sci));
 }
 
 static void cb_func_edit_calltip(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_cb_show_calltip(doc_list[idx].sci, -1);
 }
 
 static void cb_func_edit_macrolist(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_cb_show_macro_list(doc_list[idx].sci);
 }
 
 static void cb_func_edit_suppresscompletion(void)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;	
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_add_text(doc_list[idx].sci, " ");
 }
 
 static void cb_func_menu_replacetabs(void)
 {
 	on_replace_tabs_activate(NULL, NULL);
+}
+
+static void cb_func_menu_print(void)
+{
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	document_print(idx);
 }

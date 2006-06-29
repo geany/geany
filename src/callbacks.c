@@ -2420,3 +2420,12 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	utils_update_statusbar(idx, -1);
 }
 
+
+void
+on_print1_activate                     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	document_print(idx);
+}

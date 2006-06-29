@@ -13,6 +13,10 @@
    Renamed tools settings from build_* in tools_*.
  * src/main.c:
    Ignore SIGPIPE to prevent crashes when running external programs.
+ * src/geany.h, src/dialogs.c, src/callbacks.c, src/keyfile.c,
+   src/utils.c, src/prefs.c, geany.glade, src/interface.c,
+   src/keybindings.c, src/document.c:
+   Implemented simple printing support.
 
 
 2006-06-28  Enrico Tröger  <enrico.troeger@uvena.de>

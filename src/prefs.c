@@ -185,6 +185,9 @@ void prefs_init_dialog(void)
 	if (app->tools_browser_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_browser")), app->tools_browser_cmd);
 
+	if (app->tools_browser_cmd)
+		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_print")), app->tools_print_cmd);
+
 
 	// Template settings
 	widget = lookup_widget(app->prefs_dialog, "entry_template_developer");
@@ -380,6 +383,10 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "entry_browser");
 		g_free(app->tools_browser_cmd);
 		app->tools_browser_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		widget = lookup_widget(app->prefs_dialog, "entry_print");
+		g_free(app->tools_print_cmd);
+		app->tools_print_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		// Template settings
 		widget = lookup_widget(app->prefs_dialog, "entry_template_developer");

@@ -880,7 +880,7 @@ void dialogs_show_replace(void)
 	gchar *sel = NULL;
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	
+
 	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
 	{
 		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
@@ -1666,7 +1666,7 @@ void dialogs_show_prefs_dialog(void)
 			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), encoding_string);
 			g_free(encoding_string);
 		}
-		
+
 #ifdef HAVE_VTE
 		if (app->have_vte)
 		{
@@ -1816,6 +1816,8 @@ void dialogs_show_prefs_dialog(void)
 				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_term"));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_browser"),
 				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_browser"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_print"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_print"));
 
 	}
 

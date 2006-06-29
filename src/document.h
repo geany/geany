@@ -88,7 +88,6 @@ int document_reload_file(gint idx);
    be UTF-8). */
 void document_save_file (gint);
 
-
 void document_find_text(gint, const gchar*, gint, gboolean);
 
 void document_replace_text(gint, const gchar*, const gchar*, gint, gboolean);
@@ -99,12 +98,9 @@ void document_replace_sel(gint, const gchar*, const gchar*, gint);
 
 void document_find_next(gint, const gchar*, gint, gboolean, gboolean);
 
-
 void document_set_font(gint, const gchar*, gint);
 
-
 void document_update_tag_list(gint, gboolean);
-
 
 void document_set_filetype(gint, filetype*);
 
@@ -119,5 +115,8 @@ void document_unfold_all(gint idx);
 void document_set_indicator(gint idx, gint line);
 
 void document_clear_indicators(gint idx);
+
+/* simple file print */
+void document_print(gint idx);
 
 #endif

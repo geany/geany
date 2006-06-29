@@ -582,3 +582,7 @@ on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
 void
 on_encoding_change                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_print1_activate                     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
