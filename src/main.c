@@ -307,6 +307,7 @@ static void main_init(void)
 	app->sensitive_buttons[29] = lookup_widget(app->window, "toolbutton25");
 	app->sensitive_buttons[30] = lookup_widget(app->window, "entry_goto_line");
 	app->sensitive_buttons[31] = lookup_widget(app->window, "treeview6");
+	app->sensitive_buttons[32] = lookup_widget(app->window, "print1");
 	app->redo_items[0] = lookup_widget(app->popup_menu, "redo1");
 	app->redo_items[1] = lookup_widget(app->window, "menu_redo2");
 	app->undo_items[0] = lookup_widget(app->popup_menu, "undo1");
@@ -458,6 +459,10 @@ gint main(gint argc, gchar **argv)
 	gtk_set_locale();
 
 	signal(SIGTERM, signal_cb);
+#ifdef G_OS_UNIX
+	/* ignore SIGPIPE signal for preventing sudden death of program */
+	signal(SIGPIPE, SIG_IGN);
+#endif
 
 	if (alternate_config) config_dir = g_strdup(alternate_config);
 	else config_dir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
