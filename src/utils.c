@@ -335,7 +335,7 @@ gboolean utils_isbrace(gchar c)
 		switch (c)
 		{
 			case '<':
-			case '>':	return TRUE;
+			case '>': return TRUE;
 		}
 	}
 
@@ -346,13 +346,35 @@ gboolean utils_isbrace(gchar c)
 		case '{':
 		case '}':
 		case '[':
-		case ']':	return TRUE;
-		default:	return FALSE;
+		case ']': return TRUE;
+		default:  return FALSE;
 	}
 
 	return FALSE;
 }
 
+
+gboolean utils_is_opening_brace(gchar c)
+{
+	// match < only if desired, because I don't like it, but some people do
+	if (app->brace_match_ltgt)
+	{
+		switch (c)
+		{
+			case '<': return TRUE;
+		}
+	}
+
+	switch (c)
+	{
+		case '(':
+		case '{':
+		case '[':  return TRUE;
+		default:  return FALSE;
+	}
+
+	return FALSE;
+}
 
 
 void utils_set_editor_font(const gchar *font_name)

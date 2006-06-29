@@ -17,6 +17,9 @@
    src/utils.c, src/prefs.c, geany.glade, src/interface.c,
    src/keybindings.c, src/document.c:
    Implemented simple printing support.
+ * src/utils.c: Added function is_opening_brace().
+ * src/sci_cb.c:
+   Use is_opening_brace() for better handling of calltips.
 
 
 2006-06-28  Enrico Tröger  <enrico.troeger@uvena.de>

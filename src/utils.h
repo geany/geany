@@ -54,6 +54,8 @@ gint utils_get_line_endings(gchar* buffer, glong size);
 
 gboolean utils_isbrace(gchar c);
 
+gboolean utils_is_opening_brace(gchar c);
+
 /* This sets the window title according to the current filename. */
 void utils_set_window_title(gint index);
 

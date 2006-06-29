@@ -356,18 +356,26 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos)
 	const GPtrArray *tags;
 
 	if (sci == NULL) return FALSE;
-	
+
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	idx = document_find_by_sci(sci);
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return FALSE;
-	
+
 	word[0] = '\0';
 	if (pos == -1)
-	{	// position of '(' is unknown, so go backwards to find it
+	{
+		gchar c;
+		// position of '(' is unknown, so go backwards to find it
 		pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
-		// I'm not sure if utils_isbrace() is a good idea, but it is the simplest way, but we need
-		// something more intelligent than only check for '(' because e.g. LaTeX uses {, [ or (
-		while (pos >= 0 && ! utils_isbrace(SSM(sci, SCI_GETCHARAT, pos, 0))) pos--;
+		// I'm not sure if utils_is_opening_brace() is a good idea, but it is the simplest way,
+		// but we need something more intelligent than only check for '(' because e.g. LaTeX
+		// uses {, [ or (
+		c = SSM(sci, SCI_GETCHARAT, pos, 0);
+		while (pos > 0 && ! utils_is_opening_brace(c) && c != ';')
+		{
+			c = SSM(sci, SCI_GETCHARAT, pos, 0);
+			pos--;
+		}
 	}
 
 	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
@@ -680,7 +688,7 @@ void sci_cb_show_macro_list(ScintillaObject *sci)
 	GString *words;
 
 	if (sci == NULL) return;
-	
+
 	ftags = g_ptr_array_sized_new(50);
 	words = g_string_sized_new(200);
 
