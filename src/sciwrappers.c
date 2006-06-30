@@ -50,18 +50,29 @@ void sci_set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
 	}
 }
 
-void sci_set_mark_long_lines(ScintillaObject * sci, gint column, const gchar *color)
+void sci_set_mark_long_lines(ScintillaObject * sci, gint type, gint column, const gchar *color)
 {
-	if (column > 0)
+	if (column == 0) type = 2;
+	switch (type)
 	{
-		SSM(sci, SCI_SETEDGEMODE, EDGE_LINE, 0);
-		SSM(sci, SCI_SETEDGECOLUMN, column - 1, 0);
-		SSM(sci, SCI_SETEDGECOLOUR, utils_get_int_from_hexcolor(color), 0);
+		case 0:
+		{
+			SSM(sci, SCI_SETEDGEMODE, EDGE_LINE, 0);
+			break;
+		}
+		case 1:
+		{
+			SSM(sci, SCI_SETEDGEMODE, EDGE_BACKGROUND, 0);
+			break;
+		}
+		case 2:
+		{
+			SSM(sci, SCI_SETEDGEMODE, EDGE_NONE, 0);
+			return;
+		}
 	}
-	else
-	{
-		SSM(sci, SCI_SETEDGEMODE, EDGE_NONE, 0);
-	}
+	SSM(sci, SCI_SETEDGECOLUMN, column - 1, 0);
+	SSM(sci, SCI_SETEDGECOLOUR, utils_get_int_from_hexcolor(color), 0);
 }
 
 

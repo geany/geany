@@ -222,7 +222,7 @@ gint document_create_new_sci(const gchar *filename)
 	sci_use_popup(sci, FALSE);
 	sci_assign_cmdkey(sci, SCK_HOME, SCI_VCHOMEWRAP);
 	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
-	sci_set_mark_long_lines(sci, app->long_line_column, app->long_line_color);
+	sci_set_mark_long_lines(sci, app->long_line_type, app->long_line_column, app->long_line_color);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	sci_set_folding_margin_visible(sci, app->pref_editor_folding);
 	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);

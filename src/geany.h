@@ -158,6 +158,7 @@ typedef struct MyApp
 	gboolean			 pref_main_show_goto;
 	gint				 cur_idx;	// currently only used by the build system (build_spawn_cmd)
 	gint				 mru_length;
+	gint				 long_line_type;
 	gint				 long_line_column;
 #ifdef HAVE_FIFO
 	gboolean			 ignore_fifo;

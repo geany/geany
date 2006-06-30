@@ -8,6 +8,10 @@
                     callback.
  * geany.glade, src/interface.c, src/callbacks.c, src/sci_wrappers.c:
    Added "Select All" menu item.
+ * geany.glade, src/interface.c, src/document.c, src/sci_wrappers.c,
+   srcprefs.c, src/geany.h:
+   Improved settings for the long line marker, it can now be easily
+   disabled or set to highlight the background of too long lines.
 
 
 2006-06-29  Nick Treleaven  <nick.treleaven@btinternet.com>
