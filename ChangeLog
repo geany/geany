@@ -4,6 +4,8 @@
    Change the path in the VTE widget when switching between files
    according to the path of the current file.
    Process the switch_page callback only once.
+ * src/callbacks.c: Finally fixed the second call of the switch_page
+                    callback.
 
 
 2006-06-29  Nick Treleaven  <nick.treleaven@btinternet.com>

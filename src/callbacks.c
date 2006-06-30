@@ -709,13 +709,6 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
                                         gpointer         user_data)
 {
 	gint idx;
-	static gboolean state = FALSE;
-
-	// this function is called two times when switching notebook pages, I really don't know why
-	// so, skip one call (workaround)
-	state= ! state;
-	if (state) return;
-
 
 	if (closing_all) return;
 
@@ -758,12 +751,6 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
                                         gpointer         user_data)
 {
 	gint idx;
-	static gboolean state = FALSE;
-
-	// this function is called two times when switching notebook pages, I really don't know why
-	// so, skip one call (workaround)
-	state= ! state;
-	if (state) return;
 
 	if (closing_all) return;
 
@@ -1156,7 +1143,8 @@ on_openfiles_tree_selection_changed    (GtkTreeSelection *selection,
 	GtkTreeModel *model;
 	gint idx = 0;
 
-	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	// use switch_notebook_page to ignore changing the notebook page because it is already done
+	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! switch_notebook_page)
 	{
 		gtk_tree_model_get(model, &iter, 1, &idx, -1);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
