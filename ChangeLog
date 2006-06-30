@@ -6,6 +6,8 @@
    Process the switch_page callback only once.
  * src/callbacks.c: Finally fixed the second call of the switch_page
                     callback.
+ * geany.glade, src/interface.c, src/callbacks.c, src/sci_wrappers.c:
+   Added "Select All" menu item.
 
 
 2006-06-29  Nick Treleaven  <nick.treleaven@btinternet.com>

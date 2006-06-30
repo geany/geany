@@ -2450,3 +2450,16 @@ on_print1_activate                     (GtkMenuItem     *menuitem,
 
 	document_print(idx);
 }
+
+
+void
+on_menu_select_all1_activate           (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	if (idx < 0 || ! doc_list[idx].is_valid) return;
+
+	sci_select_all(doc_list[idx].sci);
+}
+

@@ -149,6 +149,7 @@ gint				sci_get_current_line		(ScintillaObject * sci, gint pos);
 gint				sci_get_lines_selected		(ScintillaObject * sci);
 void				sci_set_styling				(ScintillaObject * sci, gint len, gint style);
 void				sci_start_styling			(ScintillaObject * sci, gint pos, gint mask);
+void				sci_select_all				(ScintillaObject * sci);
 
 
 #endif

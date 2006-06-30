@@ -795,10 +795,10 @@ gint sci_get_lines_selected(ScintillaObject *sci)
 {
 	gint start = SSM(sci, SCI_GETSELECTIONSTART, 0, 0);
 	gint end = SSM(sci, SCI_GETSELECTIONEND, 0, 0);
-	
+
 	if (start == end)
 		return 0; // no selection
-	
+
 	return SSM(sci, SCI_LINEFROMPOSITION, end, 0) - SSM(sci, SCI_LINEFROMPOSITION, start, 0) + 1;
 }
 
@@ -811,3 +811,9 @@ void sci_start_styling(ScintillaObject *sci, gint pos, gint mask)
 {
 	SSM(sci, SCI_STARTSTYLING, pos, mask);
 }
+
+void sci_select_all(ScintillaObject *sci)
+{
+	SSM(sci, SCI_SELECTALL, 0, 0);
+}
+
