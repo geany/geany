@@ -1,5 +1,5 @@
 
-Geany 0.7
+Geany 0.8
 
 Enrico Troeger
 
@@ -60,41 +60,41 @@ Frank Lanitz
               3.6.4. Build with make (custom target)
               3.6.5. Execute
               3.6.6. Set Includes and Arguments
-              3.6.7. File type configuration settings
+              3.6.7. Indicators
+              3.6.8. File type configuration settings
 
-        3.7. Keybindings
-        3.8. Filetype definition files
+        3.7. Printing support
+        3.8. Keybindings
+        3.9. Filetype definition files
 
-              3.8.1. Format
-              3.8.2. Special file filetypes.common
+              3.9.1. Format
+              3.9.2. Special file filetypes.common
 
-        3.9. Templates
+        3.10. Templates
 
-   A. Geany key mapping
+   A. GNU General Public License
 
-        A.1. Geany key mapping
-
-   B. GNU General Public License
-
-        B.1. Preamble
-        B.2. TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND
+        A.1. Preamble
+        A.2. TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND
                 MODIFICATION
 
-              B.2.1. Section 0
-              B.2.2. Section 1
-              B.2.3. Section 2
-              B.2.4. Section 3
-              B.2.5. Section 4
-              B.2.6. Section 5
-              B.2.7. Section 6
-              B.2.8. Section 7
-              B.2.9. Section 8
-              B.2.10. Section 9
-              B.2.11. Section 10
-              B.2.12. Section 11 NO WARRANTY
-              B.2.13. Section 12
+              A.2.1. Section 0
+              A.2.2. Section 1
+              A.2.3. Section 2
+              A.2.4. Section 3
+              A.2.5. Section 4
+              A.2.6. Section 5
+              A.2.7. Section 6
+              A.2.8. Section 7
+              A.2.9. Section 8
+              A.2.10. Section 9
+              A.2.11. Section 10
+              A.2.12. Section 11 NO WARRANTY
+              A.2.13. Section 12
 
-        B.3. How to Apply These Terms to Your New Programs
+        A.3. How to Apply These Terms to Your New Programs
+
+   B. License for Scintilla and SciTE
 
    List of Tables
    3-1. Command line Options
@@ -164,7 +164,11 @@ Chapter 1. Introduction
    version 2 of the License, or (at your option) any later
    version. A copy of this license can be found in the file
    COPYING included with the source code of this program and in
-   the appendix of this document.
+   the appendix A of this document.
+
+   The included Scintilla library (found in the subdirectory
+   scintilla/) has its own license, which can be found in the
+   appendix(see Appendix B).
      _________________________________________________________
 
 Chapter 2. Installation
@@ -438,7 +442,7 @@ Chapter 3. Usage
 
    Note
 
-   For more information see Section 3.7.
+   For more information see Section 3.8.
 
    Figure 3-7. VTE tab in preferences dialog
 
@@ -476,13 +480,36 @@ Chapter 3. Usage
    window at the first start. 900
    GEANY_WINDOW_DEFAULT_HEIGHT The default height of the main
    window at the first start. 600
+   Default values
+   GEANY_DEFAULT_TOOLS_MAKE The make tool. This can also include
+   a path. "make"
+   GEANY_DEFAULT_TOOLS_TERMINAL A terminal emulator. It has to
+   accept the command line option "-e". This can also include a
+   path. "xterm"
+   GEANY_DEFAULT_TOOLS_BROWSER A web browser. This can also
+   include a path. "mozilla"
+   GEANY_DEFAULT_TOOLS_PRINTCMD A printing tool. It should be
+   able to accept and process plain text files. This can also
+   include a path. "lpr"
+   GEANY_DEFAULT_MRU_LENGHTH The length of the "Recent files"
+   list. "10"
+   GEANY_DEFAULT_FONT_SYMBOL_LIST The font used in sidebar to
+   show symbols and open files. "Cursor 8"
+   GEANY_DEFAULT_FONT_MSG_WINDOW The font used in the messages
+   window. "Cursor 8"
+   GEANY_DEFAULT_FONT_EDITOR The font used in the editor window.
+   "Courier New 9"
      _________________________________________________________
 
 3.6. Build System
 
-   Geany has an integrated build system. When you compile, link,
-   syntax check or otherwise process a source file, the output
-   will be captured in the Compiler notebook tab of the messages
+   Geany has an integrated build system. Firstly this means that
+   the current source file will be saved before it is processed.
+   This is for convenience so that you don't need to keep saving
+   small changes to the current file before building.
+
+   Secondly the output for Compile, Build and Make actions will
+   be captured in the Compiler notebook tab of the messages
    window (assuming you have it visible). If there are any
    warnings or errors with line numbers shown in the Compiler
    output tab, you can double click on them and Geany will switch
@@ -502,13 +529,18 @@ Chapter 3. Usage
 
 3.6.1. Compile
 
-   By default, the Compile command is setup to build binary
-   object files for compilable languages such as C and C++.
+   The Compile command has different uses for different kinds of
+   files.
 
-   Java will be compiled to class file bytecode. Interpreted
-   languages such as Perl, Python, Ruby will compile to bytecode
-   if the language supports it, or will run a syntax check, or
-   failing that will run the file in the language interpreter.
+   For compilable languages such as C and C++, the Compile
+   command is setup to compile the current source file into a
+   binary object file.
+
+   Java source files will be compiled to class file bytecode.
+   Interpreted languages such as Perl, Python, Ruby will compile
+   to bytecode if the language supports it, or will run a syntax
+   check, or failing that will run the file in its language
+   interpreter.
      _________________________________________________________
 
 3.6.2. Build
@@ -531,11 +563,10 @@ Chapter 3. Usage
 
 3.6.4. Build with make (custom target)
 
-   This is identical to running 'Build with "make"' but you will
-   be prompted for the make target name to be passed to the Make
+   This is similar to running Build with "make" but you will be
+   prompted for the make target name to be passed to the Make
    tool. For example, typing 'clean' in the dialog prompt will
-   run "make clean" (but using the full path to the Make tool set
-   in Preferences).
+   run "make clean" (again using the full path to the Make tool).
      _________________________________________________________
 
 3.6.5. Execute
@@ -544,10 +575,12 @@ Chapter 3. Usage
    script or interpreted script in a terminal window. Note that
    the Terminal tool path must be correctly set in the Tools tab
    of the Preferences dialog - you can use any terminal program
-   that runs a Bourne compatible shell. After your program or
-   script has finished executing, you will be prompted to press
-   the return key. This allows you to review any text output from
-   the program.
+   that runs a Bourne compatible shell.
+
+   After your program or script has finished executing, you will
+   be prompted to press the return key. This allows you to review
+   any text output from the program before the terminal window is
+   closed.
      _________________________________________________________
 
 3.6.6. Set Includes and Arguments
@@ -557,28 +590,71 @@ Chapter 3. Usage
    programs. Using Set Includes and Arguments you can add any
    include paths and compile flags for the compiler, any library
    names and paths for the linker, and any arguments you want to
-   use when running Execute. Note that if you are using the Build
-   command to compile and link in one step, you will need to set
-   both the compiler arguments and the linker arguments in the
-   linker command setting.
+   use when running Execute.
+
+   Note
+
+   If you are using the Build command to compile and link in one
+   step, you will need to set both the compiler arguments and the
+   linker arguments in the linker command setting.
 
    These settings are not saved when Geany is shut down. See
    below for how to set permanent arguments.
 
    If you need complex settings for your build system, or several
-   different settings, then writing a Makefile and using 'Build
-   with "make"' is recommended.
+   different settings, then writing a Makefile and using Build
+   with "make" is recommended.
      _________________________________________________________
 
-3.6.7. File type configuration settings
+3.6.7. Indicators
+
+   Indicators are red squiggly underlines which are used to
+   highlight errors which occured while compiling the current
+   file. So you can easily see where your code failed to compile.
+   To remove the indicators, just click on "Remove all
+   indicators" in the document file menu.
+
+   If you do not like this feature, you can disable it in the
+   preferences dialog.
+     _________________________________________________________
+
+3.6.8. File type configuration settings
 
    You can set the commands to run for compiling, building or
    executing by opening the relevant filetypes.* configuration
-   file, and checking the build_settings section. See Section 3.8
-   for more information.
+   file, and checking the [build_settings] section. See Section
+   3.9 for more information.
      _________________________________________________________
 
-3.7. Keybindings
+3.7. Printing support
+
+   Geany has basic printing support. This means you can print
+   file by passing the filename of the current file to a command
+   which actually prints the file. However, the printed document
+   contains no syntax highlighting. You can adjust the command to
+   which the filename is passed in the preferences dialog. The
+   default command is:
+% lpr %f
+
+   %f will be substituted by the filename of the current file.
+   Geany will not show errors from the command itself, so you
+   should make sure that it works before(e.g. by trying to
+   execute it from the command line).
+
+   A nicer example, which I prefer is:
+% a2ps -1 --medium=A4 -o - %f | xfprint4
+
+   But this depends on a2ps and xfprint4. As a replacement for
+   xfprint4, gtklp or similar programs can be used.
+
+   Note
+
+   The printing support of Geany will be improved in the future.
+   With GTK 2.10, better printing (including syntax highlighting)
+   will be possible.
+     _________________________________________________________
+
+3.8. Keybindings
 
    For all listed actions you can define your own keybindings.
    Open the preferences dialog, select the desired action and
@@ -599,61 +675,78 @@ Chapter 3. Usage
    Table 3-4. Keybindings action table
    Action Description
    Menu items
-   menu_new Creates a new file.
-   menu_open Opens a file.
-   menu_save Saves the current file.
-   menu_saveall Saves all open files.
-   menu_closeall Closes all open files.
-   menu_reloadfile Reloads the current file. All unsaved changes
-   will be lost.
-   menu_undo Undoes the last action.
-   menu_redo Redoes the last action.
-   menu_preferences Opens preferences dialog.
-   menu_findnext Finds next result.
-   menu_findprevious Finds previous result.
-   menu_replace Opens the replace dialog.
-   menu_gotoline Opens the Go To Line dialog.
-   menu_opencolorchooser Opens the colour chooser dialog.
-   menu_fullscreen Switches to fullscreen mode.
-   menu_messagewindow Toggles the message window (status and
+   New Creates a new file.
+   Open Opens a file.
+   Save Saves the current file.
+   Save all Saves all open files.
+   Close all Closes all open files.
+   Close Closes the current file.
+   Reload file Reloads the current file. All unsaved changes will
+   be lost.
+   Print Prints the current file.
+   Undo Undoes the last action.
+   Redo Redoes the last action.
+   Select all Makes a selection of all text in the current
+   document.
+   Preferences Opens preferences dialog.
+   Find Next Finds next result.
+   Find Previous Finds previous result.
+   Replace Opens the replace dialog.
+   Go to line Opens the Go To Line dialog.
+   Show Colour Chooser Opens the colour chooser dialog.
+   Fullscreen Switches to fullscreen mode.
+   Toggle Messages Window Toggles the message window (status and
    compiler messages) on and off.
-   menu_zoomin Zooms in the text
-   menu_zoomout Zooms out the text
-   menu_replacetabs Replaces all tabs with the right amount of
-   spaces.
-   menu_foldall Folds all contractible code blocks.
-   menu_unfoldall Unfolds all contracted code blocks.
+   Toggle Sidebar Shows or hides the sidebar.
+   Zoom In Zooms in the text
+   Zoom Out Zooms out the text
+   Replace tabs by space Replaces all tabs with the right amount
+   of spaces.
+   Fold all Folds all contractible code blocks.
+   Unfold all Unfolds all contracted code blocks.
    Build options
-   build_compile Compiles the current file.
-   build_link Builds (compiles if necessary and links) the
-   current file.
-   build_make Builds the current file with the Make tool.
-   build_makeowntarget Builds the current file with the Make tool
-   and a given target.
-   build_run Executes the current file in a terminal emulation.
-   build_run2 Executes the current file in a terminal emulation.
-   build_options Opens the build options dialog.
+   Compile Compiles the current file.
+   Build Builds (compiles if necessary and links) the current
+   file.
+   Build with "make" Builds the current file with the Make tool.
+   Build with "make" (custom target) Builds the current file with
+   the Make tool and a given target.
+   Run Executes the current file in a terminal emulation.
+   Run (alternative command) Executes the current file in a
+   terminal emulation.
+   Build options Opens the build options dialog.
    Miscellaneous
-   reloadtaglist Reloads the tag/symbol list.
-   switch_editor Switches to editor widget.
-   switch_scribble Switches to scribble widget.
-   switch_vte Switches to VTE widget.
-   switch_tableft Switches to the previous open document.
-   switch_tabright Switches to the next open document.
-   toggle_sidebar Shows or hides the sidebar.
+   Reload symbol list Reloads the tag/symbol list.
+   Switch to Editor Switches to editor widget.
+   Switch to Scribble Switches to scribble widget.
+   Switch to VTE Switches to VTE widget.
+   Switch to left document Switches to the previous open
+   document.
+   Switch to right document Switches to the next open document.
    Editing operations
-   edit_duplicateline Duplicates the current line.
-   edit_commentline Comments current line or selection.
-   edit_autocomplete Shows auto completion list.
-   edit_calltip Shows call tips for the current function or
+   Duplicate line or selection Duplicates the current line or
+   selection.
+   Comment line Comments current line or selection.
+   Complete word Shows auto completion list.
+   Show calltip Shows call tips for the current function or
    method.
-   edit_macrolist Shows a list of available macros and variables
+   Show macro list Shows a list of available macros and variables
    in the workspace.
-   edit_suppresscompletion If you type something like if or for
+   Suppress auto completion If you type something like if or for
    and press this key, it will not be auto completed.
+   Find Usage Finds all occurrences of the current word under the
+   mouse pointer and displays them in the messages window.
+   Go to tag definition Jump to the defintion of the current
+   function under the mouse pointer. If the defintion cannot be
+   found(e.g. the file where it is, is not open) Geany will beep
+   and do nothing.
+   Go to tag declaration Jump to the declaration of the current
+   function under the mouse pointer. If the defintion cannot be
+   found(e.g. the file where it is, is not open) Geany will beep
+   and do nothing.
      _________________________________________________________
 
-3.8. Filetype definition files
+3.9. Filetype definition files
 
    All colour definitions and other filetype specific settings
    are stored in the filetype definition files. Those settings
@@ -686,9 +779,9 @@ Chapter 3. Usage
    corresponding global definition file in $prefix/share/geany.
      _________________________________________________________
 
-3.8.1. Format
+3.9.1. Format
 
-3.8.1.1. [styling] Section
+3.9.1.1. [styling] Section
 
    In this section the colours for syntax highlighting are
    defined. The format is always:
@@ -702,7 +795,7 @@ Chapter 3. Usage
    "false", "false" is assumed.
      _________________________________________________________
 
-3.8.1.2. [keywords] Section
+3.9.1.2. [keywords] Section
 
    This section contains keys for different keyword lists
    specific to the filetype. Some filetypes do not support
@@ -715,7 +808,7 @@ Chapter 3. Usage
    characters.
      _________________________________________________________
 
-3.8.1.3. [settings] Section
+3.9.1.3. [settings] Section
 
    Table 3-5. General settings
    Key Description Example
@@ -746,7 +839,7 @@ Chapter 3. Usage
    comment_use_indent=true
      _________________________________________________________
 
-3.8.1.4. [build_settings] Section
+3.9.1.4. [build_settings] Section
 
    Table 3-6. Build settings
    Key Description Example
@@ -775,7 +868,7 @@ Chapter 3. Usage
    scripts. run_cmd="./%e"
      _________________________________________________________
 
-3.8.2. Special file filetypes.common
+3.9.2. Special file filetypes.common
 
    There is a special filetype definition file called
    filetypes.common. This file defines some general
@@ -810,9 +903,17 @@ Chapter 3. Usage
      * 2 - for curved lines
 
    folding_style=1;1;false;false
+   invert_all Whether to invert all defined colours. This is
+   useful if you like a dark background colour(e.g. black) and do
+   not want to change every single line. Please note, at time of
+   writing this was only tested with the C syntax highlighting.
+
+   Only first argument is interpreted. Set it to 1 to invert all
+   colours.
+   invert_all=0;0;false;false
      _________________________________________________________
 
-3.9. Templates
+3.10. Templates
 
    Geany supports several templates for file headers, multiline
    comments (frame comments), function descriptions, a typical
@@ -876,7 +977,7 @@ Chapter 3. Usage
    untitled The string "untitled" (this will be translated to
    your locale), used in filetype templates filetypes, file
    header, function description, ChangeLog entry
-   geanyversion The actual Geany version, e.g. "Geany 0.7"
+   geanyversion The actual Geany version, e.g. "Geany 0.8"
    filetypes, file header, function description, ChangeLog entry
    datetime The current date and time in the format: DD.MM.YYYY
    HH:mm:ss ZZZZ file header, function description
@@ -890,17 +991,9 @@ Chapter 3. Usage
    please email the author <enrico.troeger@uvena.de>.
      _________________________________________________________
 
-Appendix A. Geany key mapping
+Appendix A. GNU General Public License
 
-A.1. Geany key mapping
-
-   Since Geany 0.7, most of the keybindings are definable in the
-   preferences dialog. See Section 3.7.
-     _________________________________________________________
-
-Appendix B. GNU General Public License
-
-B.1. Preamble
+A.1. Preamble
 
    The licenses for most software are designed to take away your
    freedom to share and change it. By contrast, the GNU General
@@ -958,9 +1051,9 @@ B.1. Preamble
    modification follow.
      _________________________________________________________
 
-B.2. TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+A.2. TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
-B.2.1. Section 0
+A.2.1. Section 0
 
    This License applies to any program or other work which
    contains a notice placed by the copyright holder saying it may
@@ -983,7 +1076,7 @@ B.2.1. Section 0
    depends on what the Program does.
      _________________________________________________________
 
-B.2.2. Section 1
+A.2.2. Section 1
 
    You may copy and distribute verbatim copies of the Program's
    source code as you receive it, in any medium, provided that
@@ -998,7 +1091,7 @@ B.2.2. Section 1
    exchange for a fee.
      _________________________________________________________
 
-B.2.3. Section 2
+A.2.3. Section 2
 
    You may modify your copy or copies of the Program or any
    portion of it, thus forming a work based on the Program, and
@@ -1055,7 +1148,7 @@ B.2.3. Section 2
    the other work under the scope of this License.
      _________________________________________________________
 
-B.2.4. Section 3
+A.2.4. Section 3
 
    You may copy and distribute the Program (or a work based on
    it, under Section 2 in object code or executable form under
@@ -1100,7 +1193,7 @@ B.2.4. Section 3
    object code.
      _________________________________________________________
 
-B.2.5. Section 4
+A.2.5. Section 4
 
    You may not copy, modify, sublicense, or distribute the
    Program except as expressly provided under this License. Any
@@ -1112,7 +1205,7 @@ B.2.5. Section 4
    full compliance.
      _________________________________________________________
 
-B.2.6. Section 5
+A.2.6. Section 5
 
    You are not required to accept this License, since you have
    not signed it. However, nothing else grants you permission to
@@ -1125,7 +1218,7 @@ B.2.6. Section 5
    or works based on it.
      _________________________________________________________
 
-B.2.7. Section 6
+A.2.7. Section 6
 
    Each time you redistribute the Program (or any work based on
    the Program), the recipient automatically receives a license
@@ -1136,7 +1229,7 @@ B.2.7. Section 6
    enforcing compliance by third parties to this License.
      _________________________________________________________
 
-B.2.8. Section 7
+A.2.8. Section 7
 
    If, as a consequence of a court judgment or allegation of
    patent infringement or for any other reason (not limited to
@@ -1174,7 +1267,7 @@ B.2.8. Section 7
    believed to be a consequence of the rest of this License.
      _________________________________________________________
 
-B.2.9. Section 8
+A.2.9. Section 8
 
    If the distribution and/or use of the Program is restricted in
    certain countries either by patents or by copyrighted
@@ -1186,7 +1279,7 @@ B.2.9. Section 8
    limitation as if written in the body of this License.
      _________________________________________________________
 
-B.2.10. Section 9
+A.2.10. Section 9
 
    The Free Software Foundation may publish revised and/or new
    versions of the General Public License from time to time. Such
@@ -1203,7 +1296,7 @@ B.2.10. Section 9
    the Free Software Foundation.
      _________________________________________________________
 
-B.2.11. Section 10
+A.2.11. Section 10
 
    If you wish to incorporate parts of the Program into other
    free programs whose distribution conditions are different,
@@ -1216,7 +1309,7 @@ B.2.11. Section 10
    generally.
      _________________________________________________________
 
-B.2.12. Section 11 NO WARRANTY
+A.2.12. Section 11 NO WARRANTY
 
    BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO
    WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
@@ -1230,7 +1323,7 @@ B.2.12. Section 11 NO WARRANTY
    THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
      _________________________________________________________
 
-B.2.13. Section 12
+A.2.13. Section 12
 
    IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN
    WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY
@@ -1247,7 +1340,7 @@ B.2.13. Section 12
    END OF TERMS AND CONDITIONS
      _________________________________________________________
 
-B.3. How to Apply These Terms to Your New Programs
+A.3. How to Apply These Terms to Your New Programs
 
    If you develop a new program, and you want it to be of the
    greatest possible use to the public, the best way to achieve
@@ -1314,3 +1407,25 @@ B.3. How to Apply These Terms to Your New Programs
    linking proprietary applications with the library. If this is
    what you want to do, use the GNU Library General Public
    License instead of this License.
+     _________________________________________________________
+
+Appendix B. License for Scintilla and SciTE
+
+   Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
+
+   All Rights Reserved
+
+   Permission to use, copy, modify, and distribute this software
+   and its documentation for any purpose and without fee is
+   hereby granted, provided that the above copyright notice
+   appear in all copies and that both that copyright notice and
+   this permission notice appear in supporting documentation.
+
+   NEIL HODGSON DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
+   SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+   AND FITNESS, IN NO EVENT SHALL NEIL HODGSON BE LIABLE FOR ANY
+   SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+   WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+   WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
+   ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+   PERFORMANCE OF THIS SOFTWARE.

@@ -4,6 +4,9 @@
  * src/main.c: Deiconify the main window when a new file is opened from
                the named pipe.
  * src/geany.h, src/keyfile.c: Moved some default values to geany.h.
+ * doc/geany.docbook.c, doc/html/*:
+   Added documentation for indicators and printing support.
+   Updated keybindings actions and compile time options.
 
 
 2006-07-01  Nick Treleaven  <nick.treleaven@btinternet.com>

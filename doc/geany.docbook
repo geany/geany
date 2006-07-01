@@ -7,7 +7,7 @@
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY deburl "http://debian.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "June 13, 2006">
+<!ENTITY date "July 01, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 ]>
 
@@ -123,14 +123,12 @@
 				<screen>
 					<prompt>%</prompt> <userinput><command>./configure</command></userinput>
 					<prompt>%</prompt> <userinput><command>make</command></userinput>
-					<prompt>%</prompt> <userinput><command>make</command> install</userinput>
-				</screen>
+					<prompt>%</prompt> <userinput><command>make</command> install</userinput></screen>
 			</para>
 			<para>
 				The configure script supports several common options, for a detailed list, type
 				<screen>
-					<prompt>%</prompt> <userinput><command>./configure</command> --help</userinput>
-				</screen>
+					<prompt>%</prompt> <userinput><command>./configure</command> --help</userinput></screen>
 			</para>
 			<para>
 				In the case that your system lacks dynamic linking loader support, you probably want
@@ -214,8 +212,7 @@
 							To start <application>&app;</application> from a command line, type the following
 							and press <keycap>Return</keycap>:
 							<screen>
-								<prompt>%</prompt> <userinput><command>&app_small;</command></userinput>
-							</screen>
+								<prompt>%</prompt> <userinput><command>&app_small;</command></userinput></screen>
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -558,6 +555,7 @@
 							<colspec colnum="1" colname="col1"/>
 							<colspec colnum="2" colname="col2"/>
 							<colspec colnum="3" colname="col3"/>
+							<spanspec spanname="hspan" namest="col1" nameend="col3" align="left"/>
 							<thead>
 								<row>
 									<entry>Option</entry>
@@ -619,6 +617,52 @@
 									<entry>GEANY_WINDOW_DEFAULT_HEIGHT</entry>
 									<entry>The default height of the main window at the first start.</entry>
 									<entry>600</entry>
+								</row>
+								<row>
+									<entry align="left" spanname="hspan">Default values</entry>
+								</row>
+								<row>
+									<entry>GEANY_DEFAULT_TOOLS_MAKE</entry>
+									<entry>The make tool. This can also include a path.</entry>
+									<entry>"make"</entry>
+								</row>
+								<row>
+									<entry>GEANY_DEFAULT_TOOLS_TERMINAL</entry>
+									<entry>A terminal emulator. It has to accept the command line
+										   option "-e". This can also include a path.</entry>
+									<entry>"xterm"</entry>
+								</row>
+								<row>
+									<entry>GEANY_DEFAULT_TOOLS_BROWSER</entry>
+									<entry>A web browser. This can also include a path.</entry>
+									<entry>"mozilla"</entry>
+								</row>
+								<row>
+									<entry>GEANY_DEFAULT_TOOLS_PRINTCMD</entry>
+									<entry>A printing tool. It should be able to accept and process
+										   plain text files. This can also include a path.</entry>
+									<entry>"lpr"</entry>
+								</row>
+								<row>
+									<entry>GEANY_DEFAULT_MRU_LENGHTH</entry>
+									<entry>The length of the "Recent files" list.</entry>
+									<entry>"10"</entry>
+								</row>
+								<row>
+									<entry>GEANY_DEFAULT_FONT_SYMBOL_LIST</entry>
+									<entry>The font used in sidebar to show symbols and open files.
+									</entry>
+									<entry>"Cursor 8"</entry>
+								</row>
+								<row>
+									<entry>GEANY_DEFAULT_FONT_MSG_WINDOW</entry>
+									<entry>The font used in the messages window.</entry>
+									<entry>"Cursor 8"</entry>
+								</row>
+								<row>
+									<entry>GEANY_DEFAULT_FONT_EDITOR</entry>
+									<entry>The font used in the editor window.</entry>
+									<entry>"Courier New 9"</entry>
 								</row>
 							</tbody>
 						</tgroup>
@@ -738,6 +782,18 @@
 				</para>
 			</section>
 			<section>
+				<title>Indicators</title>
+				<para>
+					Indicators are red squiggly underlines which are used to highlight errors which
+					occured while compiling the current file. So you can easily see where your code
+					failed to compile. To remove the indicators, just click on
+					"Remove all indicators" in the document file menu.
+				</para>
+				<para>
+					If you do not like this feature, you can disable it in the preferences dialog.
+				</para>
+			</section>
+			<section>
 				<title>File type configuration settings</title>
 				<para>
 					You can set the commands to run for compiling, building or executing
@@ -746,6 +802,32 @@
 					information.
 				</para>
 			</section>
+		</section>
+		<section id="printing">
+			<title>Printing support</title>
+			<para>
+				Geany has basic printing support. This means you can print file by passing the
+				filename of the current file to a command which actually prints the file. However,
+				the printed document contains no syntax highlighting. You can adjust the command
+				to which the filename is passed in the preferences dialog. The default command is:
+				<screen><prompt>%</prompt> <userinput><command>lpr</command> %f</userinput></screen>
+				%f will be substituted by the filename of the current file.
+				<application>&app;</application> will not show errors from the command itself, so
+				you should make sure that it works before(e.g. by trying to execute it from the
+				command line).
+			</para>
+			<para>
+				A nicer example, which I prefer is:
+				<screen><prompt>%</prompt> <userinput><command>a2ps</command> -1 --medium=A4 -o - %f | xfprint4</userinput></screen>
+				But this depends on a2ps and xfprint4. As a replacement for xfprint4, gtklp or similar
+				programs can be used.
+			</para>
+			<note>
+				<para>
+				The printing support of Geany will be improved in the future. With GTK 2.10, better
+				printing (including syntax highlighting) will be possible.
+				</para>
+			</note>
 		</section>
 		<section id="keybindings">
 			<title>Keybindings</title>
@@ -808,8 +890,17 @@
 								<entry>Closes all open files.</entry>
 							</row>
 							<row>
+								<entry>Close</entry>
+								<entry>Closes the current file.</entry>
+							</row>
+							<row>
 								<entry>Reload file</entry>
-								<entry>Reloads the current file. All unsaved changes will be lost.</entry>
+								<entry>Reloads the current file. All unsaved changes will be lost.
+								</entry>
+							</row>
+							<row>
+								<entry>Print</entry>
+								<entry>Prints the current file.</entry>
 							</row>
 							<row>
 								<entry>Undo</entry>
@@ -818,6 +909,11 @@
 							<row>
 								<entry>Redo</entry>
 								<entry>Redoes the last action.</entry>
+							</row>
+							<row>
+								<entry>Select all</entry>
+								<entry>Makes a selection of all text in the current document.
+								</entry>
 							</row>
 							<row>
 								<entry>Preferences</entry>
@@ -849,7 +945,9 @@
 							</row>
 							<row>
 								<entry>Toggle Messages Window</entry>
-								<entry>Toggles the message window (status and compiler messages) on and off.</entry>
+								<entry>Toggles the message window (status and compiler messages)
+									   on and off.
+								</entry>
 							</row>
 							<row>
 								<entry>Toggle Sidebar</entry>
@@ -884,7 +982,8 @@
 							</row>
 							<row>
 								<entry>Build</entry>
-								<entry>Builds (compiles if necessary and links) the current file.</entry>
+								<entry>Builds (compiles if necessary and links) the current file.
+								</entry>
 							</row>
 							<row>
 								<entry>Build with "make"</entry>
@@ -892,7 +991,8 @@
 							</row>
 							<row>
 								<entry>Build with "make" (custom target)</entry>
-								<entry>Builds the current file with the Make tool and a given target.</entry>
+								<entry>Builds the current file with the Make tool and a given target.
+								</entry>
 							</row>
 							<row>
 								<entry>Run</entry>
@@ -962,6 +1062,28 @@
 								<entry>Suppress auto completion</entry>
 								<entry>If you type something like if or for and press this key, it
 									   will not be auto completed.
+								</entry>
+							</row>
+							<row>
+								<entry>Find Usage</entry>
+								<entry>Finds all occurrences of the current word under the mouse
+									   pointer and displays them in the messages window.
+								</entry>
+							</row>
+							<row>
+								<entry>Go to tag definition</entry>
+								<entry>Jump to the defintion of the current function under the
+									   mouse pointer. If the defintion cannot be found(e.g. the
+									   file where it is, is not open) <application>&app;</application>
+									   will beep and do nothing.
+								</entry>
+							</row>
+							<row>
+								<entry>Go to tag declaration</entry>
+								<entry>Jump to the declaration of the current function under the
+									   mouse pointer. If the defintion cannot be found(e.g. the
+									   file where it is, is not open) <application>&app;</application>
+									   will beep and do nothing.
 								</entry>
 							</row>
 						</tbody>
@@ -1251,6 +1373,19 @@
 									</entry>
 									<entry>folding_style=1;1;false;false</entry>
 								</row>
+								<row>
+									<entry>invert_all</entry>
+									<entry>Whether to invert all defined colours. This is useful
+										   if you like a dark background colour(e.g. black) and do
+										   not want to change every single line. Please note, at
+										   time of writing this was only tested with the C syntax
+										   highlighting.
+										   <para>Only first argument is interpreted. Set it to 1 to
+												 invert all colours.
+										   </para>
+									</entry>
+									<entry>invert_all=0;0;false;false</entry>
+								</row>
 							</tbody>
 						</tgroup>
 					</table>
@@ -1403,14 +1538,14 @@
 		<para>Permission to use, copy, modify, and distribute this software and its
 			  documentation for any purpose and without fee is hereby granted, provided that
 			  the above copyright notice appear in all copies and that both that copyright
-			  notice and this permission notice appear in supporting documentation. 
+			  notice and this permission notice appear in supporting documentation.
 		</para>
 		<para>NEIL HODGSON DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL
 			  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL NEIL HODGSON
 			  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 			  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 			  CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
-			  WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. 
+			  WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 		</para>
   </appendix>
 
