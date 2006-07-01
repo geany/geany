@@ -68,6 +68,7 @@ void configuration_save(void)
 	// store basic settings
 	g_key_file_set_boolean(config, PACKAGE, "toolbar_visible", app->toolbar_visible);
 	g_key_file_set_integer(config, PACKAGE, "toolbar_icon_style", app->toolbar_icon_style);
+	g_key_file_set_integer(config, PACKAGE, "toolbar_icon_size", app->toolbar_icon_size);
 	if (app->pref_main_save_winpos)
 	{
 		g_key_file_set_integer(config, PACKAGE, "treeview_position",
@@ -209,7 +210,7 @@ gboolean configuration_load(void)
 	app->beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	app->mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGHTH);
 	app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_style", GTK_TOOLBAR_ICONS);
-	app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_size", 2);
+	app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_size", GTK_ICON_SIZE_LARGE_TOOLBAR);
 	app->long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
 	app->long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
 	app->long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);

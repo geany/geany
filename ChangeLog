@@ -16,6 +16,8 @@
  * src/utils.c, src/utils.h, src/callbacks.c:
    Fix a segfault on Go to tag defn/decl if no files have tags.
    Add utils_find_tm_tag.
+ * src/keyfile.c: Save the toolbar icon size when quitting.
+                  Set large toolbar icons by default.
 
 
 2006-06-30  Enrico Tröger  <enrico.troeger@uvena.de>
