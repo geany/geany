@@ -217,4 +217,7 @@ double utils_strtod(const char *source, char **end);
  * filename must be freed unless it is NULL. */
 void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint *line);
 
+// returned string must be freed.
+gchar *utils_get_current_time_string();
+
 #endif

@@ -2475,3 +2475,24 @@ void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint
 
 	g_strfreev(fields);
 }
+
+
+// returned string must be freed.
+gchar *utils_get_current_time_string()
+{
+	GTimeVal cur_time;
+	gchar *date_str, *time_str, *result;
+	gchar **strv;
+
+	g_get_current_time(&cur_time);
+	date_str = ctime(&cur_time.tv_sec); //uses internal string buffer
+	strv = g_strsplit(date_str, " ", 6);
+
+	// if single digit day then strv[2] will be empty
+	time_str = (*strv[2] == 0) ? strv[4] : strv[3];
+	result = g_strdup(time_str);
+	g_strfreev(strv);
+	return result;
+}
+
+
