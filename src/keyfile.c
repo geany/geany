@@ -77,6 +77,7 @@ void configuration_save(void)
 	}
 
 	g_key_file_set_integer(config, PACKAGE, "mru_length", app->mru_length);
+	g_key_file_set_integer(config, PACKAGE, "long_line_type", app->long_line_type);
 	g_key_file_set_integer(config, PACKAGE, "long_line_column", app->long_line_column);
 	g_key_file_set_string(config, PACKAGE, "long_line_color", app->long_line_color);
 	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", app->beep_on_errors);
@@ -209,6 +210,7 @@ gboolean configuration_load(void)
 	app->mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", 10);
 	app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_style", GTK_TOOLBAR_ICONS);
 	app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_size", 2);
+	app->long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
 	app->long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
 	app->long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
 	app->treeview_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_symbol_visible", TRUE);
