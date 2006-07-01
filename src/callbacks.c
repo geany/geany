@@ -769,7 +769,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 		gchar *path;
 		gchar *cmd;
 
-		if (doc_list[idx].file_name != NULL)
+		if (app->have_vte && doc_list[idx].file_name != NULL)
 		{
 			path = g_path_get_dirname(doc_list[idx].file_name);
 			cmd = g_strconcat("cd ", path, "\n", "clear\n", NULL);

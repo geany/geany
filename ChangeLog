@@ -2,6 +2,7 @@
 
  * src/notebook.c: Don't prevent notebook tab focus because this
                    disables the notebook arrows.
+ * src/callbacks.c: Prevent a segfault if the VTE has not been loaded.
 
 
 2006-06-30  Enrico Tröger  <enrico.troeger@uvena.de>
