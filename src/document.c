@@ -222,6 +222,8 @@ gint document_create_new_sci(const gchar *filename)
 	sci_use_popup(sci, FALSE);
 	sci_assign_cmdkey(sci, SCK_HOME, SCI_VCHOMEWRAP);
 	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
+	// disable select all to be able to redefine it
+	sci_clear_cmdkey(sci, 'A' | (SCMOD_CTRL << 16));
 	sci_set_mark_long_lines(sci, app->long_line_type, app->long_line_column, app->long_line_color);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	sci_set_folding_margin_visible(sci, app->pref_editor_folding);
