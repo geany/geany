@@ -60,7 +60,8 @@ void notebook_init()
 	GtkWidget *notebook = app->notebook;
 
 	// don't allow focusing tab labels, focus sci instead
-	g_object_set(G_OBJECT(notebook), "can-focus", FALSE, NULL);
+	// This disables the notebook arrows!
+	//g_object_set(G_OBJECT(notebook), "can-focus", FALSE, NULL);
 
 	// Set up drag movement callback
 	g_signal_connect(G_OBJECT(notebook), "drag-motion",
