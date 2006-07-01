@@ -21,6 +21,7 @@
    Add utils_find_tm_tag.
  * src/keyfile.c: Save the toolbar icon size when quitting.
                   Set large toolbar icons by default.
+ * src/keyfile.c: Use the user settings for toolbar icon size & style.
 
 
 2006-06-30  Enrico Tröger  <enrico.troeger@uvena.de>

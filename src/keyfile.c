@@ -191,6 +191,14 @@ void configuration_save(void)
 }
 
 
+#define GEANY_GET_SETTING(propertyname, value, default_value) \
+	if (g_object_class_find_property( \
+		G_OBJECT_GET_CLASS(G_OBJECT(gtk_settings_get_default())), propertyname)) \
+			g_object_get(G_OBJECT(gtk_settings_get_default()), propertyname, &value, \
+				NULL); \
+	else \
+		value = default_value;
+
 gboolean configuration_load(void)
 {
 	gboolean config_exists;
@@ -207,10 +215,17 @@ gboolean configuration_load(void)
 	config_exists = g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	app->toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "toolbar_visible", TRUE);
+	{
+		GtkIconSize tb_iconsize;
+		GtkToolbarStyle tb_style;
+		GEANY_GET_SETTING("gtk-toolbar-style", tb_style, GTK_TOOLBAR_ICONS);
+		GEANY_GET_SETTING("gtk-toolbar-icon-size", tb_iconsize,
+			GTK_ICON_SIZE_LARGE_TOOLBAR);
+		app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_style", tb_style);
+		app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_size", tb_iconsize);
+	}
 	app->beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	app->mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGHTH);
-	app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_style", GTK_TOOLBAR_ICONS);
-	app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_size", GTK_ICON_SIZE_LARGE_TOOLBAR);
 	app->long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
 	app->long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
 	app->long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
