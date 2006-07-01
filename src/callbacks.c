@@ -1340,39 +1340,40 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint type;
-	guint i, j;
+	guint j;
 	const GPtrArray *tags;
+	TMTag *tmtag;
 
 	if (menuitem == GTK_MENU_ITEM(lookup_widget(app->popup_menu, "goto_tag_definition1")))
 		type = tm_tag_function_t;
 	else
 		type = tm_tag_prototype_t;
 
-	for (j = 0; j < app->tm_workspace->work_objects->len; j++)
+	if (app->tm_workspace->work_objects != NULL)
 	{
-		tags = tm_tags_extract(TM_WORK_OBJECT(app->tm_workspace->work_objects->pdata[j])->tags_array, type);
-		if (tags)
+		for (j = 0; j < app->tm_workspace->work_objects->len; j++)
 		{
-			for (i = 0; i < tags->len; ++i)
+			tags = tm_tags_extract(
+				TM_WORK_OBJECT(app->tm_workspace->work_objects->pdata[j])->tags_array,
+				type);
+			if (tags == NULL) continue;
+
+			tmtag = utils_find_tm_tag(tags, current_word);
+			if (tmtag != NULL)
 			{
-				if (utils_strcmp(TM_TAG(tags->pdata[i])->name, current_word))
-				{
-					if (! utils_goto_file_line(
-							TM_TAG(tags->pdata[i])->atts.entry.file->work_object.file_name,
-							TRUE,
-							TM_TAG(tags->pdata[i])->atts.entry.line))
-					{
-						utils_beep();
-						msgwin_status_add(_("Declaration or definition of \"%s()\" not found"), current_word);
-					}
-					return;
-				}
+				if (! utils_goto_file_line(
+					tmtag->atts.entry.file->work_object.file_name,
+					TRUE, tmtag->atts.entry.line)) break;
+				return;
 			}
 		}
 	}
 	// if we are here, there was no match and we are beeping ;-)
 	utils_beep();
-	msgwin_status_add(_("Declaration or definition of \"%s()\" not found"), current_word);
+	if (type == tm_tag_prototype_t)
+		msgwin_status_add(_("Declaration of \"%s()\" not found"), current_word);
+	else
+		msgwin_status_add(_("Definition of \"%s()\" not found"), current_word);
 }
 
 

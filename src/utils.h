@@ -220,4 +220,6 @@ void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint
 // returned string must be freed.
 gchar *utils_get_current_time_string();
 
+TMTag *utils_find_tm_tag(const GPtrArray *tags, const gchar *tag_name);
+
 #endif

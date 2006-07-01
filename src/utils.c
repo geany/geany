@@ -2496,3 +2496,17 @@ gchar *utils_get_current_time_string()
 }
 
 
+TMTag *utils_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
+{
+	guint i;
+	g_return_val_if_fail(tags != NULL, NULL);
+
+	for (i = 0; i < tags->len; ++i)
+	{
+		if (utils_strcmp(TM_TAG(tags->pdata[i])->name, tag_name))
+			return TM_TAG(tags->pdata[i]);
+	}
+	return NULL;
+}
+
+
