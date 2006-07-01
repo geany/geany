@@ -332,6 +332,7 @@ static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer d
 	if (g_file_test(buffer, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
 		document_open_file(-1, buffer, 0, FALSE, NULL);
+		gtk_window_deiconify(GTK_WINDOW(app->window));
 	}
 	else
 	{
