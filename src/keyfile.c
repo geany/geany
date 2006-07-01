@@ -207,7 +207,7 @@ gboolean configuration_load(void)
 
 	app->toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "toolbar_visible", TRUE);
 	app->beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
-	app->mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", 10);
+	app->mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGHTH);
 	app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_style", GTK_TOOLBAR_ICONS);
 	app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_size", 2);
 	app->long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
@@ -231,9 +231,9 @@ gboolean configuration_load(void)
 	app->switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	app->pref_editor_auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
 	app->pref_editor_auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
-	app->editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", "Courier New 9");
-	app->tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", "Cursor 8");
-	app->msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", "Cursor 8");
+	app->editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
+	app->tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
+	app->msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
 	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
 				_("Type here what you want, use it as a notice/scratch board"));
 
@@ -287,19 +287,19 @@ gboolean configuration_load(void)
 	app->pref_editor_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
 	app->pref_editor_trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", TRUE);
 
-	tmp_string = g_find_program_in_path("make");
+	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_MAKE);
 	app->tools_make_cmd = utils_get_setting_string(config, "tools", "make_cmd", tmp_string);
 	g_free(tmp_string);
 
-	tmp_string = g_find_program_in_path("xterm");
+	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_TERMINAL);
 	app->tools_term_cmd = utils_get_setting_string(config, "tools", "term_cmd", tmp_string);
 	g_free(tmp_string);
 
-	tmp_string = g_find_program_in_path("mozilla");
+	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_BROWSER);
 	app->tools_browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", tmp_string);
 	g_free(tmp_string);
 
-	tmp_string2 = g_find_program_in_path("lpr");
+	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
 	tmp_string = g_strconcat(tmp_string2, " %f", NULL);
 	app->tools_print_cmd = utils_get_setting_string(config, "tools", "print_cmd", tmp_string);
 	g_free(tmp_string);

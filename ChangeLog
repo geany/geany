@@ -3,6 +3,7 @@
  * src/document.c, src/keybindings.c: Added shortcut for Select All.
  * src/main.c: Deiconify the main window when a new file is opened from
                the named pipe.
+ * src/geany.h, src/keyfile.c: Moved some default values to geany.h.
 
 
 2006-07-01  Nick Treleaven  <nick.treleaven@btinternet.com>

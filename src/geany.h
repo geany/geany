@@ -74,6 +74,15 @@
 #define GEANY_WINDOW_MINIMAL_HEIGHT		440
 #define GEANY_WINDOW_DEFAULT_WIDTH		900
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
+// some default settings which are used at the very first start of Geany to fill configuration file
+#define GEANY_DEFAULT_TOOLS_MAKE		"make"
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm"
+#define GEANY_DEFAULT_TOOLS_BROWSER		"mozilla"
+#define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
+#define GEANY_DEFAULT_MRU_LENGHTH		10
+#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Cursor 8"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Cursor 8"
+#define GEANY_DEFAULT_FONT_EDITOR		"Courier New 9"
 
 #ifndef DOCDIR
 # define DOCDIR PACKAGE_DATA_DIR"/doc/"PACKAGE"/html/"
