@@ -10,6 +10,7 @@
  * doc/Makefile.am: Minor improvements.
  * src/keyfile.c, src/geany.h, src/prefs.c, src/vte.c, src/callbacks.c,
    src/dialogs.c: Added option to disable the VTE follows path feature.
+ * THANKS, configure.in, src/about.c: Added new Portuguese translation.
 
 
 2006-07-02  Nick Treleaven  <nick.treleaven@btinternet.com>

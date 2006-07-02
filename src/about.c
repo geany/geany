@@ -54,6 +54,8 @@ Damián Viano - <language> es\n\t\
 &lt;debian@damianv.com.ar&gt;\n\n\t\
 Jacek Wolszczak - <language> pl_PL\n\t\
 &lt;shutdownrunner@o2.pl&gt;\n\n\t\
+Alexandre Moreira - <language> pt_BR\n\t\
+&lt;alexandream@gmail.com&gt;\n\n\t\
 brahmann_ - <language> ru_RU\n\t\
 &lt;brahmann@mthr.net.ru&gt;"
 
