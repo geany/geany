@@ -64,7 +64,7 @@ void msgwin_prepare_msg_tree_view(void)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
 
-	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_COLOR, G_TYPE_STRING);
+	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_INT, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
 
 	renderer = gtk_cell_renderer_text_new();
@@ -151,7 +151,7 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, .
 
 
 // adds string to the msg treeview
-void msgwin_msg_add(gint line, gchar *file, gchar *string)
+void msgwin_msg_add(gint line, gint idx, gchar *string)
 {
 	GtkTreeIter iter;
 	static gint state = 0;
@@ -159,7 +159,7 @@ void msgwin_msg_add(gint line, gchar *file, gchar *string)
 	if (! app->msgwindow_visible) return;
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
-	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, file, 2, ((state++ % 2) == 0) ? &white : &dark, 3, string, -1);
+	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2, ((state++ % 2) == 0) ? &white : &dark, 3, string, -1);
 }
 
 

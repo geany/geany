@@ -1,3 +1,10 @@
+2006-07-02  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c, src/msgwindow.c, src/utils.c:
+   Improved "Find usage", so it displays not "null" for unsaved files
+   in the results, and unsaved file are also clickable.
+
+
 2006-07-02  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c: For Find Usage, ignore unnamed files.

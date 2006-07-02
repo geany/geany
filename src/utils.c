@@ -509,31 +509,22 @@ gint utils_get_local_tag(gint idx, const gchar *qual_name)
 
 gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line)
 {
-	gint page_num;
 	gint file_idx = document_find_by_filename(file, is_tm_filename);
-	gboolean ret;
 
 	if (file_idx < 0) return FALSE;
 
-	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[file_idx].sci));
-
-	ret = utils_goto_line(file_idx, line);
-
-	// finally switch to the page
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page_num);
-
-	return ret;
+	return utils_goto_line(file_idx, line);
 }
 
 
 gboolean utils_goto_line(gint idx, gint line)
 {
+	gint page_num;
+
 	line--;	// the User counts lines from 1, we begin at 0 so bring the User line to our one
 
-	if (idx == -1 || line < 0)
-	{
+	if (idx == -1 || ! doc_list[idx].is_valid || line < 0)
 		return FALSE;
-	}
 
 	// mark the tag and ensure that we have arround 5 lines visible around the mark
 	sci_goto_line(doc_list[idx].sci, line - 5, FALSE);
@@ -541,6 +532,10 @@ gboolean utils_goto_line(gint idx, gint line)
 	sci_goto_line(doc_list[idx].sci, line, TRUE);
 	sci_marker_delete_all(doc_list[idx].sci, 0);
 	sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
+
+	// finally switch to the page
+	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci));
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page_num);
 
 	return TRUE;
 }

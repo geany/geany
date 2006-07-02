@@ -1305,7 +1305,7 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 	gtk_list_store_clear(msgwindow.store_msg);
 	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 	{
-		if (doc_list[i].sci && doc_list[i].file_name)
+		if (doc_list[i].is_valid)
 		{
 			ttf.chrg.cpMin = 0;
 			ttf.chrg.cpMax = sci_get_length(doc_list[i].sci);
@@ -1320,9 +1320,12 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 				buffer = g_malloc0(sci_get_line_length(doc_list[i].sci, line) + 1);
 				sci_get_line(doc_list[i].sci, line, buffer);
 
-				short_file_name = g_path_get_basename(doc_list[i].file_name);
+				if (doc_list[i].file_name == NULL)
+					short_file_name = g_strdup(GEANY_STRING_UNTITLED);
+				else
+					short_file_name = g_path_get_basename(doc_list[i].file_name);
 				string = g_strdup_printf("%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
-				msgwin_msg_add(line + 1, doc_list[i].file_name, string);
+				msgwin_msg_add(line + 1, i, string);
 
 				g_free(buffer);
 				g_free(short_file_name);
@@ -1408,18 +1411,17 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 			GtkTreeIter iter;
 			GtkTreeModel *model;
 			GtkTreeSelection *selection;
-			gchar *file;
+			gint idx;
 			gint line;
 
 			selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
 			if (gtk_tree_selection_get_selected(selection, &model, &iter))
 			{
-				gtk_tree_model_get(model, &iter, 0, &line, 1, &file, -1);
-				if (file && strlen (file) > 0)
+				gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, -1);
+				if (idx >= 0 && doc_list[idx].is_valid)
 				{
-					utils_goto_file_line(file, FALSE, line);
+					utils_goto_line(idx, line);
 				}
-				g_free(file);
 			}
 		}
 		else if (GPOINTER_TO_INT(user_data) == 5)
