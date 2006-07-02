@@ -70,6 +70,7 @@ struct vte_conf
 	GtkWidget *menu;
 	gboolean scroll_on_key;
 	gboolean scroll_on_out;
+	gboolean follow_path;
 	gint scrollback_lines;
 	gchar *emulation;
 	gchar *font;

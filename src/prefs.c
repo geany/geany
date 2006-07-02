@@ -298,6 +298,9 @@ void prefs_init_dialog(void)
 
 		widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_out);
+
+		widget = lookup_widget(app->prefs_dialog, "check_follow_path");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->follow_path);
 	}
 #endif
 }
@@ -479,6 +482,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 			widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
 			vc->scroll_on_out = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+			widget = lookup_widget(app->prefs_dialog, "check_follow_path");
+			vc->follow_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 			g_free(app->terminal_settings);
 			hex_color_fore = utils_get_hex_from_color(vc->color_fore);

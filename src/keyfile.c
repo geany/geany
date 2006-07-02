@@ -106,7 +106,7 @@ void configuration_save(void)
 #ifdef HAVE_VTE
 	g_key_file_set_boolean(config, PACKAGE, "load_vte", app->load_vte);
 	g_key_file_set_comment(config, PACKAGE, "terminal_settings",
-			_(" VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on keystroke;scroll on output"), NULL);
+			_(" VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on keystroke;scroll on output;follow path of file"), NULL);
 	g_key_file_set_string(config, PACKAGE, "terminal_settings", app->terminal_settings);
 #endif
 	g_key_file_set_string(config, PACKAGE, "editor_font", app->editor_font);

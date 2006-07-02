@@ -180,6 +180,7 @@ typedef struct MyApp
 	gboolean			 load_vte;
 	gboolean			 have_vte;
 	gchar				*lib_vte;
+	gchar				*terminal_settings;
 #endif
 	gchar				*long_line_color;
 	gchar				*pref_template_developer;
@@ -192,7 +193,6 @@ typedef struct MyApp
 	gchar				*msgwin_font;
 	gchar				*configdir;
 	gchar				*search_text;
-	gchar				*terminal_settings;
 	gchar				 build_make_custopt[256];
 	gchar				*tools_browser_cmd;
 	gchar				*tools_make_cmd;

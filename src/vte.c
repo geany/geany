@@ -287,12 +287,12 @@ void vte_apply_user_settings(void)
 
 static void vte_get_settings(void)
 {
-	gchar **values = g_strsplit(app->terminal_settings, ";", 7);
+	gchar **values = g_strsplit(app->terminal_settings, ";", 8);
 
-	if (g_strv_length(values) != 7)
+	if (g_strv_length(values) != 8)
 	{
-		app->terminal_settings = g_strdup_printf("Monospace 10;#FFFFFF;#000000;500;xterm;true;true");
-		values = g_strsplit(app->terminal_settings, ";", 7);
+		app->terminal_settings = g_strdup_printf("Monospace 10;#FFFFFF;#000000;500;xterm;true;true;false");
+		values = g_strsplit(app->terminal_settings, ";", 8);
 	}
 	vc->font = g_strdup(values[0]);
 	vc->color_fore = g_new0(GdkColor, 1);
@@ -307,6 +307,7 @@ static void vte_get_settings(void)
 
 	vc->scroll_on_key = utils_atob(values[5]);
 	vc->scroll_on_out = utils_atob(values[6]);
+	vc->follow_path = utils_atob(values[7]);
 
 	g_strfreev(values);
 }
@@ -330,7 +331,7 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		case 2:
 		{
 			on_preferences1_activate(menuitem, NULL);
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(lookup_widget(app->prefs_dialog, "notebook2")), 5);
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(lookup_widget(app->prefs_dialog, "notebook2")), 6);
 			break;
 		}
 	}

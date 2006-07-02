@@ -766,19 +766,18 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 	}
 
 #ifdef HAVE_VTE
+	if (app->have_vte && vc->follow_path && doc_list[idx].file_name != NULL)
+	{
 		gchar *path;
 		gchar *cmd;
 
-		if (app->have_vte && doc_list[idx].file_name != NULL)
-		{
-			path = g_path_get_dirname(doc_list[idx].file_name);
-			cmd = g_strconcat("cd ", path, "\n", "clear\n", NULL);
-			vte_send_cmd(cmd);
-			g_free(path);
-			g_free(cmd);
-		}
+		path = g_path_get_dirname(doc_list[idx].file_name);
+		cmd = g_strconcat("cd ", path, "\n", NULL);
+		vte_send_cmd(cmd);
+		g_free(path);
+		g_free(cmd);
+	}
 #endif
-
 }
 
 

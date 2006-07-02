@@ -1646,7 +1646,7 @@ void dialogs_show_prefs_dialog(void)
 #ifdef HAVE_VTE
 		GtkWidget *notebook, *vbox, *label, *alignment, *table;
 		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback, *entry_emulation;
-		GtkWidget *check_scroll_key, *check_scroll_out;
+		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path;
 		GtkTooltips *tooltips;
 		GtkObject *spin_scrollback_adj;
 #endif
@@ -1686,7 +1686,7 @@ void dialogs_show_prefs_dialog(void)
 			gtk_box_pack_start(GTK_BOX(vbox), alignment, FALSE, FALSE, 0);
 			gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 12, 6);
 
-			table = gtk_table_new(7, 2, FALSE);
+			table = gtk_table_new(8, 2, FALSE);
 			gtk_container_add(GTK_CONTAINER(alignment), table);
 			gtk_table_set_row_spacings(GTK_TABLE(table), 3);
 			gtk_table_set_col_spacings(GTK_TABLE(table), 25);
@@ -1770,6 +1770,13 @@ void dialogs_show_prefs_dialog(void)
 			gtk_tooltips_set_tip(tooltips, check_scroll_out, _("Whether to scroll to the bottom if an output was generated."), NULL);
 			gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_out), FALSE);
 
+			check_follow_path = gtk_check_button_new_with_mnemonic(_("Follow the path of the current file"));
+			gtk_table_attach(GTK_TABLE(table), check_follow_path, 1, 2, 7, 8,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, check_follow_path, _("Whether to execute \"cd $path\" when you switch between opened files."), NULL);
+			gtk_button_set_focus_on_click(GTK_BUTTON(check_follow_path), FALSE);
+
 			label = gtk_label_new(_("Terminal"));
 			gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), gtk_notebook_get_nth_page(
 						GTK_NOTEBOOK(notebook), 6), label);
@@ -1788,6 +1795,8 @@ void dialogs_show_prefs_dialog(void)
 					gtk_widget_ref(check_scroll_key),	(GDestroyNotify) gtk_widget_unref);
 			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_out",
 					gtk_widget_ref(check_scroll_out),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_follow_path",
+					gtk_widget_ref(check_follow_path),	(GDestroyNotify) gtk_widget_unref);
 
 			gtk_widget_show_all(vbox);
 
