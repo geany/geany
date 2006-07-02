@@ -7,6 +7,7 @@
    src/prefs.c, src/dialogs.c, src/main.c:
    Little redesign of the preferences dialog.
    New options for setting the placement of notebook tabs.
+ * doc/Makefile.am: Minor improvements.
 
 
 2006-07-02  Nick Treleaven  <nick.treleaven@btinternet.com>

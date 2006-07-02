@@ -12,10 +12,15 @@ pdf:
 geany.txt:
 	jw -b txt geany.docbook
 
-htmldoc:
-	if [ ! -f "./html/index.html" ]; then \
+htmldoc: geany.docbook
+	if [ geany.docbook -nt "./html/index.html" ]; then \
 		$(mkinstalldirs) html; \
-		xmlto -x geany.xsl -o html/ xhtml geany.docbook; \
+		# hack for my local system to generate documentation in UTF-8 charset \
+		if [ `hostname` = "ukio" ]; then \
+			LC_CTYPE=de_DE.utf8@euro xmlto -x geany.xsl -o html/ xhtml geany.docbook; \
+		else \
+			xmlto -x geany.xsl -o html/ xhtml geany.docbook; \
+		fi; \
 		test -f html/geany.css || cp geany.css html/; \
 	fi
 
