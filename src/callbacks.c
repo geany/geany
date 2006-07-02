@@ -1296,7 +1296,7 @@ void
 on_find_usage1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint i, pos, line;
+	gint i, pos, line = -1;
 	gint flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
 	struct TextToFind ttf;
 	gchar *buffer, *short_file_name, *string;
@@ -1305,7 +1305,7 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 	gtk_list_store_clear(msgwindow.store_msg);
 	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 	{
-		if (doc_list[i].sci)
+		if (doc_list[i].sci && doc_list[i].file_name)
 		{
 			ttf.chrg.cpMin = 0;
 			ttf.chrg.cpMax = sci_get_length(doc_list[i].sci);
@@ -1332,6 +1332,8 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 			g_free(ttf.lpstrText);
 		}
 	}
+	if (line == -1) // no matches were found (searching from unnamed file)
+		msgwin_status_add(_("No matches found for '%s'."), current_word);
 }
 
 

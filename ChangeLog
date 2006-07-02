@@ -1,3 +1,8 @@
+2006-07-02  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/callbacks.c: For Find Usage, ignore unnamed files.
+
+
 2006-07-01  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c, src/keybindings.c: Added shortcut for Select All.
