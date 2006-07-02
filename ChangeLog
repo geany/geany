@@ -3,6 +3,10 @@
  * src/callbacks.c, src/msgwindow.c, src/utils.c:
    Improved "Find usage", so it displays not "null" for unsaved files
    in the results, and unsaved file are also clickable.
+ * geany.glade, src/interface.c, src/geany.h, src/keyfile.c,
+   src/prefs.c, src/dialogs.c, src/main.c:
+   Little redesign of the preferences dialog.
+   New options for setting the placement of notebook tabs.
 
 
 2006-07-02  Nick Treleaven  <nick.treleaven@btinternet.com>

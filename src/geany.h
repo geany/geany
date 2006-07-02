@@ -165,6 +165,9 @@ typedef struct MyApp
 	gboolean			 pref_main_confirm_exit;
 	gboolean			 pref_main_show_search;
 	gboolean			 pref_main_show_goto;
+	gint				 tab_pos_editor;
+	gint				 tab_pos_msgwin;
+	gint				 tab_pos_sidebar;
 	gint				 cur_idx;	// currently only used by the build system (build_spawn_cmd)
 	gint				 mru_length;
 	gint				 long_line_type;

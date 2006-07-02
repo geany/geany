@@ -85,6 +85,14 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_ask_for_quit");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_confirm_exit);
 
+	if (app->tab_order_ltr)
+		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
+	else
+		widget = lookup_widget(app->prefs_dialog, "radio_tab_left");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+
+
+	// Interface settings
 	widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_show_search);
 
@@ -103,11 +111,37 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "msgwin_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), app->msgwin_font);
 
-	if (app->tab_order_ltr)
-		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
-	else
-		widget = lookup_widget(app->prefs_dialog, "radio_tab_left");
+	widget = lookup_widget(app->prefs_dialog, "editor_font");
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), app->editor_font);
+
+	widget = lookup_widget(app->prefs_dialog, "spin_long_line");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->long_line_column);
+	old_long_line_column = app->long_line_column;
+
+	switch (app->long_line_type)
+	{
+		case 0: widget = lookup_widget(app->prefs_dialog, "radio_long_line_line"); break;
+		case 1: widget = lookup_widget(app->prefs_dialog, "radio_long_line_background"); break;
+		default: widget = lookup_widget(app->prefs_dialog, "radio_long_line_disabled"); break;
+	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+
+	old_long_line_color = g_strdup(app->long_line_color);
+
+	color = g_new0(GdkColor, 1);
+	gdk_color_parse(app->long_line_color, color);
+	widget = lookup_widget(app->prefs_dialog, "long_line_color");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), color);
+	g_free(color);
+
+	widget = lookup_widget(app->prefs_dialog, "combo_tab_editor");
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), app->tab_pos_editor);
+
+	widget = lookup_widget(app->prefs_dialog, "combo_tab_msgwin");
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), app->tab_pos_msgwin);
+
+	widget = lookup_widget(app->prefs_dialog, "combo_tab_sidebar");
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), app->tab_pos_sidebar);
 
 
 	// Editor settings
@@ -149,28 +183,6 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_indicators");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_use_indicators);
 
-	widget = lookup_widget(app->prefs_dialog, "editor_font");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), app->editor_font);
-
-	widget = lookup_widget(app->prefs_dialog, "spin_long_line");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->long_line_column);
-	old_long_line_column = app->long_line_column;
-
-	switch (app->long_line_type)
-	{
-		case 0: widget = lookup_widget(app->prefs_dialog, "radio_long_line_line"); break;
-		case 1: widget = lookup_widget(app->prefs_dialog, "radio_long_line_background"); break;
-		default: widget = lookup_widget(app->prefs_dialog, "radio_long_line_disabled"); break;
-	}
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
-
-	old_long_line_color = g_strdup(app->long_line_color);
-
-	color = g_new0(GdkColor, 1);
-	gdk_color_parse(app->long_line_color, color);
-	widget = lookup_widget(app->prefs_dialog, "long_line_color");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), color);
-	g_free(color);
 
 	// Tools Settings
 #ifdef GEANY_WIN32
@@ -290,7 +302,7 @@ void prefs_init_dialog(void)
 #endif
 }
 
-
+//gtk_notebook_set_tab_pos
 
 /*
  * callbacks
@@ -321,6 +333,11 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_switch_pages");
 		app->switch_msgwin_pages = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
+		app->tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+
+		// Interface settings
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
 		app->pref_main_show_search = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -333,8 +350,27 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_list_openfiles");
 		app->treeview_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
-		app->tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		widget = lookup_widget(app->prefs_dialog, "radio_long_line_line");
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) app->long_line_type = 0;
+		else
+		{
+			widget = lookup_widget(app->prefs_dialog, "radio_long_line_background");
+			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) app->long_line_type = 1;
+			else
+			{	// now only the disabled radio remains, so disable it
+				app->long_line_type = 2;
+			}
+		}
+		if (app->long_line_column == 0) app->long_line_type = 2;
+
+		widget = lookup_widget(app->prefs_dialog, "combo_tab_editor");
+		app->tab_pos_editor = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "combo_tab_msgwin");
+		app->tab_pos_msgwin = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "combo_tab_sidebar");
+		app->tab_pos_sidebar = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 
 		// Editor settings
@@ -378,18 +414,6 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_indicators");
 		app->pref_editor_use_indicators = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(app->prefs_dialog, "radio_long_line_line");
-		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) app->long_line_type = 0;
-		else
-		{
-			widget = lookup_widget(app->prefs_dialog, "radio_long_line_background");
-			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) app->long_line_type = 1;
-			else
-			{	// now only the disabled radio remains, so disable it
-				app->long_line_type = 2;
-			}
-		}
-		if (app->long_line_column == 0) app->long_line_type = 2;
 
 		// Tools Settings
 		widget = lookup_widget(app->prefs_dialog, "entry_com_make");
@@ -407,6 +431,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "entry_print");
 		g_free(app->tools_print_cmd);
 		app->tools_print_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
 
 		// Template settings
 		widget = lookup_widget(app->prefs_dialog, "entry_template_developer");
@@ -477,6 +502,10 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		utils_widget_show_hide(lookup_widget(app->window, "toolbutton25"), app->pref_main_show_goto);
 		utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem5"), app->pref_main_show_goto);
 		utils_treeviews_showhide();
+
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), app->tab_pos_editor);
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), app->tab_pos_msgwin);
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), app->tab_pos_sidebar);
 
 		// re-colourise all open documents, if tab width or long line settings have changed
 		for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)

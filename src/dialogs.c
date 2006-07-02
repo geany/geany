@@ -1772,7 +1772,7 @@ void dialogs_show_prefs_dialog(void)
 
 			label = gtk_label_new(_("Terminal"));
 			gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), gtk_notebook_get_nth_page(
-						GTK_NOTEBOOK(notebook), 5), label);
+						GTK_NOTEBOOK(notebook), 6), label);
 
 			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "font_term",
 					gtk_widget_ref(font_term),	(GDestroyNotify) gtk_widget_unref);
