@@ -716,12 +716,13 @@ void dialogs_create_recent_menu(void)
 		return;
 	}
 
-	for (i = (MIN(app->mru_length, g_queue_get_length(app->recent_queue)) - 1); i >= 0; i--)
+	for (i = 0; i < MIN(app->mru_length, g_queue_get_length(app->recent_queue));
+		i++)
 	{
 		filename = g_queue_peek_nth(app->recent_queue, i);
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);
-		gtk_container_add(GTK_CONTAINER(recent_menu), tmp);
+		gtk_menu_shell_append(GTK_MENU_SHELL(recent_menu), tmp);
 		g_signal_connect((gpointer) tmp, "activate",
 					G_CALLBACK(on_recent_file_activate), (gpointer) filename);
 	}

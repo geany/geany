@@ -1937,7 +1937,7 @@ void utils_update_recent_menu(void)
 	GtkWidget *recent_files_item = lookup_widget(app->window, "recent_files1");
 	GtkWidget *tmp;
 	gchar *filename;
-	GList *children = gtk_container_get_children(GTK_CONTAINER(recent_menu));
+	GList *children;
 
 	if (g_queue_get_length(app->recent_queue) == 0)
 	{
@@ -1949,8 +1949,9 @@ void utils_update_recent_menu(void)
 		gtk_widget_set_sensitive(recent_files_item, TRUE);
 	}
 
-	// clean the MRU list
-	if (g_list_length(children) > app->mru_length)
+	// clean the MRU list before adding an item
+	children = gtk_container_get_children(GTK_CONTAINER(recent_menu));
+	if (g_list_length(children) > app->mru_length - 1)
 	{
 		children = g_list_nth(children, app->mru_length - 1);
 		while (children != NULL)
@@ -1963,8 +1964,7 @@ void utils_update_recent_menu(void)
 	filename = g_queue_peek_head(app->recent_queue);
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
-	//gtk_menu_shell_insert(GTK_MENU_SHELL(recent_menu), tmp, 0);
-	gtk_container_add(GTK_CONTAINER(recent_menu), tmp);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(recent_menu), tmp);
 	g_signal_connect((gpointer) tmp, "activate",
 				G_CALLBACK(on_recent_file_activate), (gpointer) filename);
 }
