@@ -2,6 +2,8 @@
 
  * src/utils.c, src/dialogs.c:
    Fix a problem with the recent files menu.
+ * src/utils.c, src/sciwrappers.c, src/sciwrappers.h:
+   Scroll to 1/4 of visible lines when going to a line number.
 
 
 2006-07-03  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -669,6 +669,17 @@ void sci_goto_line(ScintillaObject *sci, gint line, gboolean ensure_visibility)
 }
 
 
+void sci_goto_line_scroll(ScintillaObject *sci, gint line, gdouble percent_of_view)
+{
+	gint vis1, los;
+	SSM(sci, SCI_GOTOLINE, line, 0);
+
+	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
+	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
+	sci_scroll_lines(sci, (line - los * percent_of_view) - vis1);
+}
+
+
 void sci_marker_delete_all(ScintillaObject *sci, gint marker)
 {
 	SSM(sci, SCI_MARKERDELETEALL, marker, 0);
