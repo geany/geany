@@ -36,7 +36,7 @@ doc-clean:
 uninstall-local:
 	rm -rf $(DOCDIR);
 
-install-data-local: geany.txt htmldoc
+install-data-local:
 	$(mkinstalldirs) $(DOCDIR)/html/images
 	for file in `ls $(HTML_FILES)`; do \
 	  if [ -f $$file ]; then \
