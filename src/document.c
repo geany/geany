@@ -20,6 +20,7 @@
  * $Id$
  */
 
+#include "SciLexer.h"
 #include "geany.h"
 
 #ifdef TIME_WITH_SYS_TIME

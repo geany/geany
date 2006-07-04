@@ -34,7 +34,6 @@
 #define GEANY_H
 
 #include "Scintilla.h"
-#include "SciLexer.h"
 #include "ScintillaWidget.h"
 
 #include "tm_tagmanager.h"

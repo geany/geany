@@ -21,6 +21,7 @@
  */
 
 
+#include "SciLexer.h"
 #include "geany.h"
 
 #include <stdlib.h>

@@ -24,6 +24,7 @@
 #include <ctype.h>
 #include <string.h>
 
+#include "SciLexer.h"
 #include "geany.h"
 
 #include "sci_cb.h"

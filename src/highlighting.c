@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 
+#include "SciLexer.h"
 #include "geany.h"
 #include "highlighting.h"
 #include "utils.h"
