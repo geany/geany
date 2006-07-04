@@ -14,6 +14,12 @@ TODO List:
 	o create filetype specific menus, read templates from filetypes.*
 	o template rework
 	o user-definable auto completion structs
+	o 'make object' build command
+	o dialogs to use descriptive buttons and 12px border
+	o documentation: preferences
+	o save build includes & arguments
+	o separate filetype for HTML
+	o don't override Scintilla keybindings by default
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines, but how?)
