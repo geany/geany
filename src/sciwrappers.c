@@ -512,9 +512,9 @@ gboolean sci_get_line_is_visible(ScintillaObject* sci, gint line)
 }
 
 
-void sci_ensure_line_is_visible( ScintillaObject* sci, gint line)
+void sci_ensure_line_is_visible(ScintillaObject* sci, gint line)
 {
-	 SSM(sci,SCI_ENSUREVISIBLE,line,0);
+	SSM(sci,SCI_ENSUREVISIBLE,line,0);
 }
 
 
@@ -671,12 +671,16 @@ void sci_goto_line(ScintillaObject *sci, gint line, gboolean ensure_visibility)
 
 void sci_goto_line_scroll(ScintillaObject *sci, gint line, gdouble percent_of_view)
 {
-	gint vis1, los;
-	SSM(sci, SCI_GOTOLINE, line, 0);
+	gint vis1, los, delta;
 
+	sci_goto_line(sci, line, TRUE);
+	// sci 'visible line' != file line number
 	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
+	vis1 = SSM(sci, SCI_DOCLINEFROMVISIBLE, vis1, 0);
 	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
-	sci_scroll_lines(sci, (line - los * percent_of_view) - vis1);
+	delta = (line - vis1) - los * percent_of_view;
+	sci_scroll_lines(sci, delta);
+	sci_scroll_caret(sci); //ensure visible, in case of excessive folding/wrapping
 }
 
 
