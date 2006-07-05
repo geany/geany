@@ -2,6 +2,9 @@
 
  * src/sciwrappers.c: Make sci_goto_line_scroll work better with
                       line wrapping and folding.
+ * src/callbacks.c, src/dialogs.c:
+   Add Make object command to compile the current file.
+   Added some separators and renamed Build with make items.
 
 
 2006-07-03  Nick Treleaven  <nick.treleaven@btinternet.com>

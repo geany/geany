@@ -1665,22 +1665,49 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	gboolean make_object = FALSE;
 
-	if (GPOINTER_TO_INT(user_data) == 1)
+	switch (GPOINTER_TO_INT(user_data))
 	{
+		case 1: //custom target
 		dialogs_show_make_target();
-	}
-	else
-	{
-		GPid child_pid;
+		break;
 
-		if (doc_list[idx].changed) document_save_file(idx);
-
-		child_pid = build_make_file(idx, FALSE);
-		if (child_pid != (GPid) 0)
+		case 2: //make object
 		{
-			gtk_widget_set_sensitive(app->compile_button, FALSE);
-			g_child_watch_add(child_pid, build_exit_cb, NULL);
+			gchar *locale_filename, *short_file, *noext, *object_file; //temp
+			locale_filename = g_locale_from_utf8(doc_list[idx].file_name,
+				-1, NULL, NULL, NULL);
+			if (locale_filename == NULL)
+				locale_filename = g_strdup(doc_list[idx].file_name);
+
+			short_file = g_path_get_basename(locale_filename);
+			g_free(locale_filename);
+
+			noext = utils_remove_ext_from_filename(short_file);
+			g_free(short_file);
+
+			object_file = g_strdup_printf("%s.o", noext);
+			g_free(noext);
+
+			g_strlcpy(app->build_make_custopt, object_file, 255);
+			g_free(object_file);
+			make_object = TRUE;
+		}
+		// fall through
+
+		case 0: //make all
+		{
+			GPid child_pid;
+
+			if (doc_list[idx].changed) document_save_file(idx);
+
+			child_pid = build_make_file(idx, make_object);
+			if (child_pid != (GPid) 0)
+			{
+				gtk_widget_set_sensitive(app->compile_button, FALSE);
+				g_child_watch_add(child_pid, build_exit_cb, NULL);
+			}
 		}
 	}
 }

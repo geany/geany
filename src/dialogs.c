@@ -494,7 +494,7 @@ void dialogs_show_color(void)
 
 GtkWidget *dialogs_create_build_menu_gen(gint idx)
 {
-	GtkWidget *menu, *item, *image, *separator;
+	GtkWidget *menu, *item = NULL, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 	filetype *ft = doc_list[idx].file_type;
@@ -532,8 +532,15 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 		ft->menu_items->item_link = item;
 	}
 
+	if (item != NULL)
+	{
+		item = gtk_separator_menu_item_new();
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+	}
+
 	// build the code with make all
-	item = gtk_image_menu_item_new_with_mnemonic(_("Build with \"make\""));
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Make all"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
@@ -544,7 +551,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
 
 	// build the code with make
-	item = gtk_image_menu_item_new_with_mnemonic(_("Build with \"_make\" (custom _target)"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Make custom _target"));
 	gtk_widget_show(item);
 	if (keys[GEANY_KEYS_BUILD_MAKEOWNTARGET]->key)
 		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_MAKEOWNTARGET]->key,
@@ -554,8 +561,20 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 										   "make tool and the specified target"), NULL);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
 
+	// build the code with make object
+	item = gtk_image_menu_item_new_with_mnemonic(_("Make _object"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file using the "
+										   "make tool"), NULL);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(2));
+
 	if (ft->menu_items->can_exec)
 	{	// execute the code
+		item = gtk_separator_menu_item_new();
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+
 		item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
@@ -576,7 +595,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 		gtk_container_add(GTK_CONTAINER(menu), separator);
 		gtk_widget_set_sensitive(separator, FALSE);
 
-		item = gtk_image_menu_item_new_with_mnemonic(_("Set Includes and Arguments"));
+		item = gtk_image_menu_item_new_with_mnemonic(_("_Set Includes and Arguments"));
 		gtk_widget_show(item);
 		if (keys[GEANY_KEYS_BUILD_OPTIONS]->key)
 			gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_OPTIONS]->key,
