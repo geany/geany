@@ -489,10 +489,11 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 			g_free(app->terminal_settings);
 			hex_color_fore = utils_get_hex_from_color(vc->color_fore);
 			hex_color_back = utils_get_hex_from_color(vc->color_back);
-			app->terminal_settings = g_strdup_printf("%s;%s;%s;%d;%s;%s;%s", vc->font,
+			app->terminal_settings = g_strdup_printf("%s;%s;%s;%d;%s;%s;%s;%s", vc->font,
 					hex_color_fore, hex_color_back,
 					vc->scrollback_lines, vc->emulation,
-					utils_btoa(vc->scroll_on_key), utils_btoa(vc->scroll_on_out));
+					utils_btoa(vc->scroll_on_key), utils_btoa(vc->scroll_on_out),
+					utils_btoa(vc->follow_path));
 
 			vte_apply_user_settings();
 			g_free(hex_color_fore);

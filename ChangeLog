@@ -1,3 +1,8 @@
+2006-07-07  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/prefs.c: Fixed bug when saving VTE settings.
+
+
 2006-07-06  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c, src/keybindings.h, src/dialogs.c:
