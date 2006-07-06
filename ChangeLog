@@ -1,3 +1,9 @@
+2006-07-06  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c, src/keybindings.h, src/dialogs.c:
+   Add keybinding for Make object, update Make descriptions.
+
+
 2006-07-05  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sciwrappers.c: Make sci_goto_line_scroll work better with

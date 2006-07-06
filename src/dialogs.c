@@ -492,6 +492,11 @@ void dialogs_show_color(void)
 }
 
 
+#define GEANY_ADD_WIDGET_ACCEL(gkey, menuitem) \
+	if (keys[(gkey)]->key != 0) \
+		gtk_widget_add_accelerator(menuitem, "activate", accel_group, \
+			keys[(gkey)]->key, keys[(gkey)]->mods, GTK_ACCEL_VISIBLE)
+
 GtkWidget *dialogs_create_build_menu_gen(gint idx)
 {
 	GtkWidget *menu, *item = NULL, *image, *separator;
@@ -508,9 +513,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
 		gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file"), NULL);
-		if (keys[GEANY_KEYS_BUILD_COMPILE]->key)
-			gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_COMPILE]->key,
-					keys[GEANY_KEYS_BUILD_COMPILE]->mods, GTK_ACCEL_VISIBLE);
+		GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_COMPILE, item);
 		image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
 		gtk_widget_show(image);
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
@@ -525,9 +528,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 		gtk_container_add(GTK_CONTAINER(menu), item);
 		gtk_tooltips_set_tip(tooltips, item,
 					_("Builds the current file (generate an executable file)"), NULL);
-		if (keys[GEANY_KEYS_BUILD_LINK]->key)
-			gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_LINK]->key,
-					keys[GEANY_KEYS_BUILD_LINK]->mods, GTK_ACCEL_VISIBLE);
+		GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_LINK, item);
 		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_build_activate), NULL);
 		ft->menu_items->item_link = item;
 	}
@@ -545,17 +546,13 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the default target"), NULL);
-	if (keys[GEANY_KEYS_BUILD_MAKE]->key)
-		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_MAKE]->key,
-				keys[GEANY_KEYS_BUILD_MAKE]->mods, GTK_ACCEL_VISIBLE);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKE, item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
 
 	// build the code with make
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make custom _target"));
 	gtk_widget_show(item);
-	if (keys[GEANY_KEYS_BUILD_MAKEOWNTARGET]->key)
-		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_MAKEOWNTARGET]->key,
-				keys[GEANY_KEYS_BUILD_MAKEOWNTARGET]->mods, GTK_ACCEL_VISIBLE);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOWNTARGET, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the specified target"), NULL);
@@ -564,6 +561,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 	// build the code with make object
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make _object"));
 	gtk_widget_show(item);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOBJECT, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file using the "
 										   "make tool"), NULL);
@@ -579,9 +577,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
 		gtk_tooltips_set_tip(tooltips, item, _("Run or view the current file"), NULL);
-		if (keys[GEANY_KEYS_BUILD_RUN]->key)
-			gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_RUN]->key,
-					keys[GEANY_KEYS_BUILD_RUN]->mods, GTK_ACCEL_VISIBLE);
+		GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_RUN, item);
 		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_execute_activate), NULL);
 		ft->menu_items->item_exec = item;
 	}
@@ -597,9 +593,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 
 		item = gtk_image_menu_item_new_with_mnemonic(_("_Set Includes and Arguments"));
 		gtk_widget_show(item);
-		if (keys[GEANY_KEYS_BUILD_OPTIONS]->key)
-			gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_OPTIONS]->key,
-					keys[GEANY_KEYS_BUILD_OPTIONS]->mods, GTK_ACCEL_VISIBLE);
+		GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_OPTIONS, item);
 		gtk_container_add(GTK_CONTAINER (menu), item);
 		gtk_tooltips_set_tip(tooltips, item,
 					_("Sets the includes and library paths for the compiler and "

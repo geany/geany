@@ -71,6 +71,7 @@ static void cb_func_build_compile(void);
 static void cb_func_build_link(void);
 static void cb_func_build_make(void);
 static void cb_func_build_makeowntarget(void);
+static void cb_func_build_makeobject(void);
 static void cb_func_build_run(void);
 static void cb_func_build_run2(void);
 static void cb_func_build_options(void);
@@ -160,9 +161,12 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_BUILD_LINK] = fill(cb_func_build_link,
 		GDK_F9, 0, "build_link", _("Build"));
 	keys[GEANY_KEYS_BUILD_MAKE] = fill(cb_func_build_make,
-		GDK_F9, GDK_SHIFT_MASK, "build_make", _("Build with \"make\""));
+		GDK_F9, GDK_SHIFT_MASK, "build_make", _("Make all"));
 	keys[GEANY_KEYS_BUILD_MAKEOWNTARGET] = fill(cb_func_build_makeowntarget,
-		GDK_F9, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "build_makeowntarget", _("Build with \"make\" (custom target)"));
+		GDK_F9, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "build_makeowntarget",
+		_("Make custom target"));
+	keys[GEANY_KEYS_BUILD_MAKEOBJECT] = fill(cb_func_build_makeobject,
+		0, 0, "build_makeobject", _("Make object"));
 	keys[GEANY_KEYS_BUILD_RUN] = fill(cb_func_build_run,
 		GDK_F5, 0, "build_run", _("Run"));
 	keys[GEANY_KEYS_BUILD_RUN2] = fill(cb_func_build_run2,
@@ -518,6 +522,14 @@ static void cb_func_build_makeowntarget(void)
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (doc_list[idx].file_name != NULL)
 		on_build_make_activate(NULL, GINT_TO_POINTER(1));
+}
+
+static void cb_func_build_makeobject(void)
+{
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (doc_list[idx].file_name != NULL)
+		on_build_make_activate(NULL, GINT_TO_POINTER(2));
 }
 
 static void cb_func_build_run(void)
