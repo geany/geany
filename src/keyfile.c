@@ -85,8 +85,9 @@ void configuration_save(void)
 	g_key_file_set_integer(config, PACKAGE, "long_line_column", app->long_line_column);
 	g_key_file_set_string(config, PACKAGE, "long_line_color", app->long_line_color);
 	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", app->beep_on_errors);
-	g_key_file_set_boolean(config, PACKAGE, "treeview_symbol_visible", app->treeview_symbol_visible);
-	g_key_file_set_boolean(config, PACKAGE, "treeview_openfiles_visible", app->treeview_openfiles_visible);
+	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", app->sidebar_symbol_visible);
+	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", app->sidebar_openfiles_visible);
+	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", app->sidebar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", app->msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", app->pref_editor_folding);
 	g_key_file_set_boolean(config, PACKAGE, "use_auto_indention", app->pref_editor_use_auto_indention);
@@ -235,8 +236,9 @@ gboolean configuration_load(void)
 	app->tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
 	app->tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
 	app->tab_pos_sidebar = utils_get_setting_integer(config, PACKAGE, "tab_pos_sidebar", GTK_POS_TOP);
-	app->treeview_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_symbol_visible", TRUE);
-	app->treeview_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "treeview_openfiles_visible", TRUE);
+	app->sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
+	app->sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
+	app->sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	app->msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	app->pref_editor_folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
 	app->pref_editor_use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);

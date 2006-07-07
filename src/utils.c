@@ -2176,16 +2176,21 @@ gint utils_get_int_from_hexcolor(const gchar *hex)
 
 void utils_treeviews_showhide(void)
 {
-	utils_widget_show_hide(gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(app->treeview_notebook), 0), app->treeview_symbol_visible);
-	utils_widget_show_hide(gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(app->treeview_notebook), 1), app->treeview_openfiles_visible);
-
-	// hide complete notebook if both pages are hidden
-	if ((! app->treeview_symbol_visible) && (! app->treeview_openfiles_visible))
+	// hide complete notebook
+	if (! app->sidebar_visible || (! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible))
+	{
+		if (app->sidebar_visible) app->sidebar_visible = FALSE;
 		gtk_widget_hide(app->treeview_notebook);
+	}
 	else
+	{
 		gtk_widget_show(app->treeview_notebook);
+
+		utils_widget_show_hide(gtk_notebook_get_nth_page(
+					GTK_NOTEBOOK(app->treeview_notebook), 0), app->sidebar_symbol_visible);
+		utils_widget_show_hide(gtk_notebook_get_nth_page(
+					GTK_NOTEBOOK(app->treeview_notebook), 1), app->sidebar_openfiles_visible);
+	}
 }
 
 

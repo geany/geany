@@ -650,29 +650,21 @@ static void cb_func_switch_tabright(void)
 
 static void cb_func_toggle_sidebar(void)
 {
-	static gboolean symbol = FALSE;
-	static gboolean openfiles = FALSE;
-	static gboolean is_visible = FALSE;
 	static gint active_page = -1;
 
-	/* this code is a bit confusing, but I want to keep the settings in the preferences dialog
-	 * synchronous with the real status of the sidebar, so we have to store the previous state when
-	 * hiding the sidebar to restore it correctly */
-	is_visible = (app->treeview_symbol_visible || app->treeview_openfiles_visible) ? TRUE : FALSE;
-	if (is_visible)
+	if (app->sidebar_visible)
 	{
-		symbol = app->treeview_symbol_visible;
-		openfiles = app->treeview_openfiles_visible;
-		app->treeview_symbol_visible = FALSE;
-		app->treeview_openfiles_visible = FALSE;
 		// to remember the active page because GTK (e.g. 2.8.18) doesn't do it and shows always
 		// the last page (for unknown reason, with GTK 2.6.4 it works)
 		active_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->treeview_notebook));
 	}
-	else
+
+	app->sidebar_visible = ! app->sidebar_visible;
+
+	if ((! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible))
 	{
-		app->treeview_symbol_visible = symbol;
-		app->treeview_openfiles_visible = openfiles;
+		app->sidebar_openfiles_visible = TRUE;
+		app->sidebar_symbol_visible = TRUE;
 	}
 
 	utils_treeviews_showhide();

@@ -1513,14 +1513,13 @@ on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
 				}
 				case 3:
 				{
-					app->treeview_openfiles_visible = FALSE;
+					app->sidebar_openfiles_visible = FALSE;
 					utils_treeviews_showhide();
 					break;
 				}
 				case 4:
 				{
-					app->treeview_openfiles_visible = FALSE;
-					app->treeview_symbol_visible = FALSE;
+					app->sidebar_visible = FALSE;
 					utils_treeviews_showhide();
 					break;
 				}
@@ -1538,14 +1537,13 @@ on_taglist_tree_popup_clicked          (GtkMenuItem     *menuitem,
 	{
 		case 0:
 		{
-			app->treeview_symbol_visible = FALSE;
+			app->sidebar_symbol_visible = FALSE;
 			utils_treeviews_showhide();
 			break;
 		}
 		case 1:
 		{
-			app->treeview_openfiles_visible = FALSE;
-			app->treeview_symbol_visible = FALSE;
+			app->sidebar_visible = FALSE;
 			utils_treeviews_showhide();
 			break;
 		}

@@ -100,10 +100,10 @@ void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_show_goto);
 
 	widget = lookup_widget(app->prefs_dialog, "check_list_symbol");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->treeview_symbol_visible);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->sidebar_symbol_visible);
 
 	widget = lookup_widget(app->prefs_dialog, "check_list_openfiles");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->treeview_openfiles_visible);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->sidebar_openfiles_visible);
 
 	widget = lookup_widget(app->prefs_dialog, "tagbar_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), app->tagbar_font);
@@ -348,10 +348,10 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		app->pref_main_show_goto = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_list_symbol");
-		app->treeview_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		app->sidebar_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_list_openfiles");
-		app->treeview_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		app->sidebar_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "radio_long_line_line");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) app->long_line_type = 0;

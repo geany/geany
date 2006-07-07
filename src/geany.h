@@ -132,8 +132,9 @@ typedef struct MyApp
 	gboolean			 quitting;
 	gboolean			 ignore_global_tags;
 	gboolean			 toolbar_visible;
-	gboolean			 treeview_symbol_visible;
-	gboolean			 treeview_openfiles_visible;
+	gboolean			 sidebar_symbol_visible;
+	gboolean			 sidebar_openfiles_visible;
+	gboolean			 sidebar_visible;
 	gboolean			 msgwindow_visible;
 	gboolean			 fullscreen;
 	gboolean			 beep_on_errors;

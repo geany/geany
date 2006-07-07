@@ -1,6 +1,10 @@
 2006-07-07  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/prefs.c: Fixed bug when saving VTE settings.
+ * src/keybindings.c, src/utils.c, src/callbacks.c, src/geany.h,
+   src/prefs.c, src/keyfile.c:
+   Improved behaviour of toggle sidebar after a restart.
+   Introduced new flag sidebar_visible, renamed configuration keys.
 
 
 2006-07-06  Nick Treleaven  <nick.treleaven@btinternet.com>
