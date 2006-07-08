@@ -1,3 +1,11 @@
+2006-07-08  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.pot: Update of catalog
+ * de.po: Update of German translation
+ * ru.po: Update of Russian translation by brahmann
+          <brahmann@lifelogs.org.ru>
+
+
 2006-07-02  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * pt_BR.po: Added new translation for pt_BR (thanks Alexandre Moreira)
