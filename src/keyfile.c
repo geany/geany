@@ -138,7 +138,7 @@ void configuration_save(void)
 
 	// store tools settings
 	g_key_file_set_string(config, "tools", "make_cmd", app->tools_make_cmd ? app->tools_make_cmd : "");
-	g_key_file_set_string(config, "tools", "terminal_cmd", app->tools_term_cmd ? app->tools_term_cmd : "");
+	g_key_file_set_string(config, "tools", "term_cmd", app->tools_term_cmd ? app->tools_term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", app->tools_browser_cmd ? app->tools_browser_cmd : "");
 	g_key_file_set_string(config, "tools", "print_cmd", app->tools_print_cmd ? app->tools_print_cmd : "");
 
