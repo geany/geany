@@ -27,7 +27,7 @@
 
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
 
-static const GtkTargetEntry drag_targets[] = 
+static const GtkTargetEntry drag_targets[] =
 {
 	{GEANY_DND_NOTEBOOK_TAB_TYPE, GTK_TARGET_SAME_APP | GTK_TARGET_SAME_WIDGET, 0}
 };
@@ -82,6 +82,7 @@ void notebook_init()
 }
 
 
+#if ! GTK_CHECK_VERSION(2, 8, 0)
 /* N.B. With GTK+2.6, we don't get notebook motion-notify-event for tab child
  * widgets. */
 static gboolean
@@ -109,6 +110,7 @@ notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
 	}
 	return FALSE; //propagate event
 }
+#endif
 
 
 static gboolean

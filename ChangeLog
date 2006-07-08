@@ -8,6 +8,8 @@
 2006-07-08  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/encodings.c: Made encoding descriptions translatable.
+ * src/notebook.c:
+   Compile notebook_motion_notify_event_cb() only with GTK 2.6.
 
 
 2006-07-07  Enrico Tröger  <enrico.troeger@uvena.de>
