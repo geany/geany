@@ -157,13 +157,6 @@ static void apply_settings(void)
 	}
 	utils_update_toolbar_icons(app->toolbar_icon_size);
 
-	// fullscreen mode is disabled by default, so act only if it is true
-	if (app->fullscreen)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_fullscreen1")), TRUE);
-		app->fullscreen = TRUE;
-		utils_set_fullscreen();
-	}
 	// line number and markers margin are by default enabled
 	if (! app->show_markers_margin)
 	{

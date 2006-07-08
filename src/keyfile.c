@@ -114,7 +114,7 @@ void configuration_save(void)
 	g_key_file_set_string(config, PACKAGE, "tagbar_font", app->tagbar_font);
 	g_key_file_set_string(config, PACKAGE, "msgwin_font", app->msgwin_font);
 	g_key_file_set_string(config, PACKAGE, "scribble_text", scribble_text);
-	if (app->pref_main_save_winpos)
+	if (app->pref_main_save_winpos && ! app->fullscreen)
 	{
 		gtk_window_get_position(GTK_WINDOW(app->window), &app->geometry[0], &app->geometry[1]);
 		gtk_window_get_size(GTK_WINDOW(app->window), &app->geometry[2], &app->geometry[3]);
@@ -454,6 +454,15 @@ void configuration_apply_settings(void)
 			sci_scroll_caret(doc_list[idx].sci);
 			tabnum++;
 		}
+	}
+
+	// set fullscreen after initial draw so that returning to normal view is the right size.
+	// fullscreen mode is disabled by default, so act only if it is true
+	if (app->fullscreen)
+	{
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_fullscreen1")), TRUE);
+		app->fullscreen = TRUE;
+		utils_set_fullscreen();
 	}
 }
 

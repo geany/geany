@@ -1,6 +1,8 @@
 2006-07-08  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keyfile.c: Fix saving the terminal tool on quitting.
+ * src/keyfile.c, src/main.c:
+   Improve switching out of fullscreen after startup.
 
 
 2006-07-08  Enrico Tröger  <enrico.troeger@uvena.de>
