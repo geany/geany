@@ -2246,5 +2246,125 @@ void styleset_tcl(ScintillaObject *sci)
 	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
+static void styleset_d_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.d", NULL);
 
+	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.d", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	types[GEANY_FILETYPES_D] = g_new(style_set, 1);
+	styleset_get_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[0]);
+	styleset_get_hex(config, config_home, "styling", "comment", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[1]);
+	styleset_get_hex(config, config_home, "styling", "commentline", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[2]);
+	styleset_get_hex(config, config_home, "styling", "commentdoc", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[3]);
+	styleset_get_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[4]);
+	styleset_get_hex(config, config_home, "styling", "word", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_D]->styling[5]);
+	styleset_get_hex(config, config_home, "styling", "word2", "0x00007F", "0xffffff", "true", types[GEANY_FILETYPES_D]->styling[6]);
+	styleset_get_hex(config, config_home, "styling", "string", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[7]);
+	styleset_get_hex(config, config_home, "styling", "character", "0x1E90FF", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[8]);
+	styleset_get_hex(config, config_home, "styling", "uuid", "0x804040", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[9]);
+	styleset_get_hex(config, config_home, "styling", "preprocessor", "0x7F7F00", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[10]);
+	styleset_get_hex(config, config_home, "styling", "operator", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[11]);
+	styleset_get_hex(config, config_home, "styling", "identifier", "0x100000", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[12]);
+	styleset_get_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_D]->styling[13]);
+	styleset_get_hex(config, config_home, "styling", "verbatim", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[14]);
+	styleset_get_hex(config, config_home, "styling", "regex", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_D]->styling[15]);
+	styleset_get_hex(config, config_home, "styling", "commentlinedoc", "0x0000ff", "0xffffff", "true", types[GEANY_FILETYPES_D]->styling[16]);
+	styleset_get_hex(config, config_home, "styling", "commentdockeyword", "0x0000ff", "0xffffff", "true", types[GEANY_FILETYPES_D]->styling[17]);
+	styleset_get_hex(config, config_home, "styling", "globalclass", "0xbb1111", "0xffffff", "true", types[GEANY_FILETYPES_D]->styling[18]);
+	styleset_get_int(config, config_home, "styling", "styling_within_preprocessor", 1, 0, types[GEANY_FILETYPES_D]->styling[19]);
+
+	types[GEANY_FILETYPES_D]->keywords = g_new(gchar*, 3);
+	styleset_get_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_D, 0, "__FILE__ __LINE__ __DATA__ __TIME__ __TIMESTAMP__ abstract alias align asm assert auto body bool break byte case cast catch cdouble cent cfloat char class const continue creal dchar debug default delegate delete deprecated do double else enum export extern false final finally float for foreach function goto idouble if ifloat import in inout int interface invariant ireal is long mixin module new null out override package pragma private protected public real return scope short static struct super switch synchronized template this throw true try typedef typeof ubyte ucent uint ulong union unittest ushort version void volatile wchar while with");
+	styleset_get_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_D, 1, "TODO FIXME");
+	types[GEANY_FILETYPES_D]->keywords[2] = NULL;
+
+	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_D, GEANY_WORDCHARS);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_D);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+	g_free(f);
+
+	// load global tags file for C autocompletion
+	if (! app->ignore_global_tags && ! global_c_tags_loaded)
+	{
+		// 0 is the langType used in TagManager (see the table in tagmanager/parsers.h)
+		// C++ is a special case, here we use 0 to have C global tags in C++, too
+		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags", 0);
+		global_c_tags_loaded = TRUE;
+	}
+}
+
+
+void styleset_d(ScintillaObject *sci)
+{
+	if (types[GEANY_FILETYPES_D] == NULL) styleset_d_init();
+
+	styleset_common(sci, 5);
+
+
+	/* Assign global keywords */
+	if ((app->tm_workspace) && (app->tm_workspace->global_tags))
+	{
+		guint j;
+		GPtrArray *g_typedefs = tm_tags_extract(app->tm_workspace->global_tags, tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
+		if ((g_typedefs) && (g_typedefs->len > 0))
+		{
+			GString *s = g_string_sized_new(g_typedefs->len * 10);
+			for (j = 0; j < g_typedefs->len; ++j)
+			{
+				if (!(TM_TAG(g_typedefs->pdata[j])->atts.entry.scope))
+				{
+					g_string_append(s, TM_TAG(g_typedefs->pdata[j])->name);
+					g_string_append_c(s, ' ');
+				}
+			}
+			SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
+			g_string_free(s, TRUE);
+		}
+		g_ptr_array_free(g_typedefs, TRUE);
+	}
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_D]->wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
+
+	//SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_D]->keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) types[GEANY_FILETYPES_D]->keywords[1]);
+
+	styleset_set_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_D, 0);
+	styleset_set_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_D, 1);
+	styleset_set_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_D, 2);
+	styleset_set_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_D, 3);
+	styleset_set_style(sci, SCE_C_NUMBER, GEANY_FILETYPES_D, 4);
+	styleset_set_style(sci, SCE_C_WORD, GEANY_FILETYPES_D, 5);
+	styleset_set_style(sci, SCE_C_WORD2, GEANY_FILETYPES_D, 6);
+	styleset_set_style(sci, SCE_C_STRING, GEANY_FILETYPES_D, 7);
+	styleset_set_style(sci, SCE_C_CHARACTER, GEANY_FILETYPES_D, 8);
+	styleset_set_style(sci, SCE_C_UUID, GEANY_FILETYPES_D, 9);
+	styleset_set_style(sci, SCE_C_PREPROCESSOR, GEANY_FILETYPES_D, 10);
+	styleset_set_style(sci, SCE_C_OPERATOR, GEANY_FILETYPES_D, 11);
+	styleset_set_style(sci, SCE_C_IDENTIFIER, GEANY_FILETYPES_D, 12);
+	styleset_set_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_D, 13);
+	styleset_set_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_D, 14);
+	styleset_set_style(sci, SCE_C_REGEX, GEANY_FILETYPES_D, 15);
+	styleset_set_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_D, 16);
+	styleset_set_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_D, 17);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, invert(0x0000ff));
+	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, invert(0xffffff));
+	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
+
+	// is used for local structs and typedefs
+	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_D, 18);
+
+	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
+}
 

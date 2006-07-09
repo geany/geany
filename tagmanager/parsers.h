@@ -31,7 +31,8 @@
     CssParser, \
     RubyParser, \
     TclParser, \
-    ShParser
+    ShParser, \
+    DParser
 
 /*
 langType of each parser
@@ -52,6 +53,7 @@ langType of each parser
 14	RubyParser
 15	TclParser
 16	ShParser
+17	DParser
 */
 #endif	/* _PARSERS_H */
 

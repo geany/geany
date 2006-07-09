@@ -2436,11 +2436,19 @@ void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint
 		case GEANY_FILETYPES_PASCAL:
 		{
 			// bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
-			// still untested with other files than the opened
 			pattern = "(";
 			field_min_len = 2;
 			field_idx_line = 1;
 			field_idx_file = 0;
+			break;
+		}
+		case GEANY_FILETYPES_D:
+		{
+			// warning - pi.d(118): implicit conversion of expression (digit) of type int ...
+			pattern = " (";
+			field_min_len = 4;
+			field_idx_line = 3;
+			field_idx_file = 2;
 			break;
 		}
 		default: return;

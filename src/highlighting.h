@@ -81,4 +81,6 @@ void styleset_oms(ScintillaObject *sci);
 
 void styleset_tcl(ScintillaObject *sci);
 
+void styleset_d(ScintillaObject *sci);
+
 #endif

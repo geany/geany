@@ -62,6 +62,7 @@ enum
 	GEANY_TEMPLATE_FILETYPE_PHP,
 	GEANY_TEMPLATE_FILETYPE_PASCAL,
 	GEANY_TEMPLATE_FILETYPE_RUBY,
+	GEANY_TEMPLATE_FILETYPE_D,
 
 	GEANY_MAX_TEMPLATES
 };
@@ -203,6 +204,16 @@ static const gchar templates_filetype_cpp[] = "\n\
 int main(int argc, char** argv)\n\
 {\n\
 	\n\
+	return 0;\n\
+}\n\
+";
+
+static const gchar templates_filetype_d[] = "\n\
+import std.stdio;\n\
+\n\
+int main(char[][] args)\n\
+{\n\
+\n\
 	return 0;\n\
 }\n\
 ";

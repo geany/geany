@@ -209,11 +209,25 @@ GPid build_link_file(gint idx)
 		}
 	}
 
-	argv = g_new0(gchar *, 4);
-	argv[0] = g_strdup(doc_list[idx].file_type->programs->linker);
-	argv[1] = g_strdup("-o");
-	argv[2] = g_path_get_basename(executable);
-	argv[3] = NULL;
+	if (doc_list[idx].file_type->id == GEANY_FILETYPES_D)
+	{	// the dmd compiler needs -of instead of -o and it accepts no whitespace after -of
+		gchar *tmp = g_path_get_basename(executable);
+
+		argv = g_new0(gchar *, 3);
+		argv[0] = g_strdup(doc_list[idx].file_type->programs->linker);
+		argv[1] = g_strconcat("-of", tmp, NULL);
+		argv[2] = NULL;
+
+		g_free(tmp);
+	}
+	else
+	{
+		argv = g_new0(gchar *, 4);
+		argv[0] = g_strdup(doc_list[idx].file_type->programs->linker);
+		argv[1] = g_strdup("-o");
+		argv[2] = g_path_get_basename(executable);
+		argv[3] = NULL;
+	}
 
 	g_free(executable);
 	g_free(object_file);

@@ -1,3 +1,11 @@
+2006-07-09  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * tagmanager/d.c, tagmanager/Makefile.am, tagmanager/parsers.h,
+   src/filetypes.c, src/highlighting.c, src/utils.c, src/build.c,
+   src/templates.c, data/filetypes.d:
+   Added new filetype D(patch by Christop Berg, thanks).
+
+
 2006-07-08  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keyfile.c: Fix saving the terminal tool on quitting.

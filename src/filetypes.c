@@ -432,6 +432,25 @@ void filetypes_init_types(void)
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_TCL]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_TCL]->title, filetypes[GEANY_FILETYPES_TCL]);
 
+#define D
+	filetypes[GEANY_FILETYPES_D] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_D]->id = GEANY_FILETYPES_D;
+	filetypes[GEANY_FILETYPES_D]->lang = 17;
+	filetypes[GEANY_FILETYPES_D]->name = g_strdup("D");
+	filetypes[GEANY_FILETYPES_D]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_D]->title = g_strdup(_("D source file"));
+	filetypes[GEANY_FILETYPES_D]->extension = g_strdup("d");
+	filetypes[GEANY_FILETYPES_D]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_D]->pattern[0] = g_strdup("*.d");
+	filetypes[GEANY_FILETYPES_D]->pattern[1] = g_strdup("*.di");
+	filetypes[GEANY_FILETYPES_D]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_D]->comment_open = g_strdup("//");
+	filetypes[GEANY_FILETYPES_D]->comment_close = NULL;
+	filetypes[GEANY_FILETYPES_D]->style_func_ptr = styleset_d;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_D]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_D]->title, filetypes[GEANY_FILETYPES_D]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_D]->title, filetypes[GEANY_FILETYPES_D]);
+
 #define ALL
 	filetypes[GEANY_FILETYPES_ALL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;
@@ -587,6 +606,8 @@ gchar *filetypes_get_template(filetype *ft)
 			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_PASCAL); break;
 		case GEANY_FILETYPES_RUBY:
 			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_RUBY); break;
+		case GEANY_FILETYPES_D:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_D); break;
 		default: return NULL;
 	}
 }

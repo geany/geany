@@ -58,6 +58,7 @@ void templates_init(void)
 	gchar *template_filename_filetype_none = templates_get_filename("template.filetype.none");
 	gchar *template_filename_filetype_c = templates_get_filename("template.filetype.c");
 	gchar *template_filename_filetype_cpp = templates_get_filename("template.filetype.cpp");
+	gchar *template_filename_filetype_d = templates_get_filename("template.filetype.d");
 	gchar *template_filename_filetype_java = templates_get_filename("template.filetype.java");
 	gchar *template_filename_filetype_pascal = templates_get_filename("template.filetype.pascal");
 	gchar *template_filename_filetype_php = templates_get_filename("template.filetype.php");
@@ -86,6 +87,7 @@ void templates_init(void)
 	templates_create_file(template_filename_filetype_none, templates_filetype_none);
 	templates_create_file(template_filename_filetype_c, templates_filetype_c);
 	templates_create_file(template_filename_filetype_cpp, templates_filetype_cpp);
+	templates_create_file(template_filename_filetype_d, templates_filetype_d);
 	templates_create_file(template_filename_filetype_java, templates_filetype_java);
 	templates_create_file(template_filename_filetype_pascal, templates_filetype_pascal);
 	templates_create_file(template_filename_filetype_php, templates_filetype_php);
@@ -138,6 +140,9 @@ void templates_init(void)
 	templates_read_file(template_filename_filetype_c, &templates[GEANY_TEMPLATE_FILETYPE_C]);
 	templates[GEANY_TEMPLATE_FILETYPE_C] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_C], year, date);
 
+	templates_read_file(template_filename_filetype_d, &templates[GEANY_TEMPLATE_FILETYPE_D]);
+	templates[GEANY_TEMPLATE_FILETYPE_D] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_D], year, date);
+
 	templates_read_file(template_filename_filetype_cpp, &templates[GEANY_TEMPLATE_FILETYPE_CPP]);
 	templates[GEANY_TEMPLATE_FILETYPE_CPP] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_CPP], year, date);
 
@@ -173,6 +178,7 @@ void templates_init(void)
 	g_free(template_filename_filetype_none);
 	g_free(template_filename_filetype_c);
 	g_free(template_filename_filetype_cpp);
+	g_free(template_filename_filetype_d);
 	g_free(template_filename_filetype_java);
 	g_free(template_filename_filetype_php);
 	g_free(template_filename_filetype_pascal);
