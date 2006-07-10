@@ -77,6 +77,7 @@ static gint search_flags;
 static gboolean search_backwards;
 static gint search_flags_re;
 static gboolean search_backwards_re;
+static gboolean search_in_all_buffers_re;
 
 // holds the current position where the mouse pointer is when the popup menu for the scintilla
 // scintilla widget is shown
@@ -1894,6 +1895,8 @@ on_replace_dialog_response             (GtkDialog *dialog,
 				lookup_widget(GTK_WIDGET(app->replace_dialog), "check_wordstart")));
 	search_backwards_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 				lookup_widget(GTK_WIDGET(app->replace_dialog), "check_back")));
+	search_in_all_buffers_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+				lookup_widget(GTK_WIDGET(app->replace_dialog), "check_all_buffers")));
 	find = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))));
 	replace = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))));
 
@@ -1911,22 +1914,36 @@ on_replace_dialog_response             (GtkDialog *dialog,
 					  (fl2 ? SCFIND_WHOLEWORD : 0) |
 					  (fl3 ? SCFIND_REGEXP : 0) |
 					  (fl4 ? SCFIND_WORDSTART : 0);
-	switch (response)
+
+	if (search_in_all_buffers_re && response == GEANY_RESPONSE_REPLACE_ALL)
 	{
-		case GEANY_RESPONSE_REPLACE:
+		gint i;
+		for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 		{
-			document_replace_text(idx, find, replace, search_flags_re, search_backwards_re);
-			break;
+			if (! doc_list[i].is_valid) continue;
+
+			document_replace_all(i, find, replace, search_flags_re);
 		}
-		case GEANY_RESPONSE_REPLACE_ALL:
+	}
+	else
+	{
+		switch (response)
 		{
-			document_replace_all(idx, find, replace, search_flags_re);
-			break;
-		}
-		case GEANY_RESPONSE_REPLACE_SEL:
-		{
-			document_replace_sel(idx, find, replace, search_flags_re);
-			break;
+			case GEANY_RESPONSE_REPLACE:
+			{
+				document_replace_text(idx, find, replace, search_flags_re, search_backwards_re);
+				break;
+			}
+			case GEANY_RESPONSE_REPLACE_ALL:
+			{
+				document_replace_all(idx, find, replace, search_flags_re);
+				break;
+			}
+			case GEANY_RESPONSE_REPLACE_SEL:
+			{
+				document_replace_sel(idx, find, replace, search_flags_re);
+				break;
+			}
 		}
 	}
 }

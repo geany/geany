@@ -1,6 +1,8 @@
 2006-07-10  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Autocompletion only works on blank lines.
+ * src/callbacks.c, src/dialogs.c:
+   Added "Replace in all open files" option in the replace dialog.
 
 
 2006-07-09  Enrico Tröger  <enrico.troeger@uvena.de>

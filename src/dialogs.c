@@ -904,7 +904,7 @@ void dialogs_show_replace(void)
 	if (app->replace_dialog == NULL)
 	{
 		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace;
-		GtkWidget *checkbox1, *checkbox2, *checkbox3, *checkbox5, *checkbox4;
+		GtkWidget *checkbox1, *checkbox2, *checkbox3, *checkbox4, *checkbox5, *checkbox6;
 		GtkWidget *button;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
@@ -986,11 +986,19 @@ void dialogs_show_replace(void)
 						gtk_widget_ref(checkbox5), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox5), FALSE);
 
+		checkbox6 = gtk_check_button_new_with_mnemonic(_("Replace in all open files"));
+		g_object_set_data_full(G_OBJECT(app->replace_dialog), "check_all_buffers",
+						gtk_widget_ref(checkbox6), (GDestroyNotify)gtk_widget_unref);
+		gtk_tooltips_set_tip(tooltips, checkbox6,
+			_("Replaces the search text in all opened files. This option is only useful(and used) if you click on \"Replace All\"."), NULL);
+		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox6), FALSE);
+
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox1);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox2);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox5);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox3);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox4);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox6);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), gtk_label_new(""));
 
 		gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(app->replace_dialog)->vbox), 3);
