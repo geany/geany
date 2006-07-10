@@ -1,3 +1,8 @@
+2006-07-10  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: Autocompletion only works on blank lines.
+
+
 2006-07-09  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * tagmanager/d.c, tagmanager/Makefile.am, tagmanager/parsers.h,

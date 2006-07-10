@@ -550,13 +550,16 @@ void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx)
 
 void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 {
-	static gchar buf[8];
+	static gchar buf[16];
 	gchar *eol;
 	gchar *construct;
-	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
-	//gint line = sci_get_line_from_position(sci, pos);
-	//gint start_style = SSM(sci, SCI_GETSTYLEAT, sci_get_position_from_line(sci, line), 0);
+	gint lexer, style;
+	gint i;
+
+	if (sci == NULL || idx == -1 || ! doc_list[idx].is_valid) return;
+
+	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
 	// only for C, C++, Java, Perl and PHP
 	if (lexer != SCLEX_CPP &&
@@ -571,6 +574,7 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	    style == SCE_C_COMMENTDOC ||
 	    style == SCE_C_COMMENTLINEDOC ||
 		style == SCE_C_STRING ||
+		style == SCE_C_CHARACTER ||
 		style == SCE_C_PREPROCESSOR)) return;
 	if (lexer == SCLEX_HTML && ! (style >= 118 && style <= 127)) return;
 
@@ -583,11 +587,20 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	// get the indention
 	if (doc_list[idx].use_auto_indention) sci_cb_get_indent(sci, pos, TRUE);
 	eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
-	sci_get_text_range(sci, pos - 8, pos - 1, buf);
-	// "pattern", buf + x, y -> x + y = 7, because buf is (pos - 8)...(pos - 1) = 7
-	if (! strncmp("if", buf + 5, 2))
+	sci_get_text_range(sci, pos - 16, pos - 1, buf);
+	// check the first 8 characters of buf for whitespace, but only in this line
+	i = 14;
+	while (isalpha(buf[i])) i--;	// find pos before keyword
+	while (i >= 0 && buf[i] != '\n' && buf[i] != '\r')	// we want to keep in this line('\n' check)
 	{
-		if (! isspace(*(buf + 4))) goto free_and_return;
+		if (! isspace(buf[i])) goto free_and_return;
+		i--;
+	}
+
+	// "pattern", buf + x, y -> x + y = 15, because buf is (pos - 16)...(pos - 1) = 15
+	if (! strncmp("if", buf + 13, 2))
+	{
+		if (! isspace(*(buf + 12))) goto free_and_return;
 
 		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
 
@@ -595,9 +608,9 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 		sci_goto_pos(sci, pos + 1, TRUE);
 		g_free(construct);
 	}
-	else if (! strncmp("else", buf + 3, 4))
+	else if (! strncmp("else", buf + 11, 4))
 	{
-		if (! isspace(*(buf + 2))) goto free_and_return;
+		if (! isspace(*(buf + 10))) goto free_and_return;
 
 		construct = g_strdup_printf("%s{%s\t%s}%s", eol, eol, eol, eol);
 
@@ -605,12 +618,12 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
 		g_free(construct);
 	}
-	else if (! strncmp("for", buf + 4, 3))
+	else if (! strncmp("for", buf + 12, 3))
 	{
 		gchar *var;
 		gint contruct_len;
 
-		if (! isspace(*(buf + 3))) goto free_and_return;
+		if (! isspace(*(buf + 11))) goto free_and_return;
 
 		if (doc_list[idx].file_type->id == GEANY_FILETYPES_PHP)
 		{
@@ -634,9 +647,9 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 		g_free(var);
 		g_free(construct);
 	}
-	else if (! strncmp("while", buf + 2, 5))
+	else if (! strncmp("while", buf + 10, 5))
 	{
-		if (! isspace(*buf + 1)) goto free_and_return;
+		if (! isspace(*buf + 9)) goto free_and_return;
 
 		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
 
@@ -644,9 +657,9 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 		sci_goto_pos(sci, pos + 1, TRUE);
 		g_free(construct);
 	}
-	else if (! strncmp("do", buf + 5, 2))
+	else if (! strncmp("do", buf + 13, 2))
 	{
-		if (! isspace(*(buf + 4))) goto free_and_return;
+		if (! isspace(*(buf + 12))) goto free_and_return;
 
 		construct = g_strdup_printf("%s{%s\t%s}%swhile ();%s", eol, eol, eol, eol, eol);
 
@@ -654,9 +667,9 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
 		g_free(construct);
 	}
-	else if (! strncmp("try", buf + 4, 3))
+	else if (! strncmp("try", buf + 12, 3))
 	{
-		if (! isspace(*(buf + 3))) goto free_and_return;
+		if (! isspace(*(buf + 11))) goto free_and_return;
 
 		construct = g_strdup_printf("%s{%s\t%s}%scatch ()%s{%s\t%s}%s",
 							eol, eol, eol, eol, eol, eol, eol, eol);
@@ -665,9 +678,9 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
 		g_free(construct);
 	}
-	else if (! strncmp("switch", buf + 1, 6))
+	else if (! strncmp("switch", buf + 9, 6))
 	{
-		if (! isspace(*buf)) goto free_and_return;
+		if (! isspace(*buf + 8)) goto free_and_return;
 
 		construct = g_strdup_printf("()%s{%s\tcase : break;%s\tdefault: %s}%s", eol, eol, eol, eol, eol);
 
