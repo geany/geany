@@ -8,6 +8,8 @@
    Added new preferences tab for toolbar settings, several toolbar
    buttons can be hidden.
    Added Undo and Redo toolbar buttons (closes request #1519261).
+ * src/sci_cb.c, src/keybindings.c:
+   Added return value and tag name to the calltip.
 
 
 2006-07-11  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -162,7 +162,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				}
 				case '(':
 				{	// show calltips
-					sci_cb_show_calltip(sci, pos);
+					sci_cb_show_calltip(sci, pos, idx);
 					break;
 				}
 				case ')':
@@ -182,7 +182,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				case '{':
 				{	// Tex auto-closing
 					sci_cb_auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
-					sci_cb_show_calltip(sci, pos);
+					sci_cb_show_calltip(sci, pos, idx);
 					break;
 				}
 				case '}':
@@ -190,7 +190,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 					if (doc_list[idx].use_auto_indention) sci_cb_close_block(sci, pos - 1);
 					break;
 				}
-				default: sci_cb_start_auto_complete(sci, pos);
+				default: sci_cb_start_auto_complete(sci, pos, idx);
 			}
 			break;
 		}
@@ -348,18 +348,17 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 }
 
 
-gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos)
+gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx)
 {
 	gint lexer;
 	gint style;
 	gchar word[GEANY_MAX_WORD_LENGTH];
-	gint idx;
+	TMTag *tag;
 	const GPtrArray *tags;
 
 	if (sci == NULL) return FALSE;
 
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	idx = document_find_by_sci(sci);
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return FALSE;
 
 	word[0] = '\0';
@@ -389,14 +388,23 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos)
 	tags = tm_workspace_find(word, tm_tag_max_t, NULL, FALSE, doc_list[idx].file_type->lang);
 	if (tags->len == 1 && TM_TAG(tags->pdata[0])->atts.entry.arglist)
 	{
-		SSM(sci, SCI_CALLTIPSHOW, pos, (sptr_t) TM_TAG(tags->pdata[0])->atts.entry.arglist);
+		tag = TM_TAG(tags->pdata[0]);
+		gchar *calltip;
+		if (tag->atts.entry.var_type)
+			calltip = g_strconcat(tag->atts.entry.var_type, " ", tag->name,
+										 " ", tag->atts.entry.arglist, NULL);
+		else
+			calltip = g_strconcat(tag->name, " ", tag->atts.entry.arglist, NULL);
+
+		SSM(sci, SCI_CALLTIPSHOW, pos, (sptr_t) calltip);
+		g_free(calltip);
 	}
 
 	return TRUE;
 }
 
 
-gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
+gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos, gint idx)
 {
 	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style;
 	gchar *linebuf, *root;
@@ -449,7 +457,6 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos)
 	else
 	{	// PHP, LaTeX, C and C++ tag autocompletion
 		gint i = 0;
-		gint idx = document_find_by_sci(sci);
 		TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 
 		if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL)

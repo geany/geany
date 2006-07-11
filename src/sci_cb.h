@@ -26,7 +26,7 @@
 // callback func called by all editors when a signals arises
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
-gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos);
+gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos, gint idx);
 
 void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
 
@@ -40,7 +40,7 @@ void sci_cb_show_macro_list(ScintillaObject *sci);
 
 gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch);
 
-gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos);
+gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx);
 
 void sci_cb_do_comment(gint idx);
 
