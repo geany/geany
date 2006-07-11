@@ -316,6 +316,26 @@ static void main_init(void)
 }
 
 
+/* get the full file path of a command-line argument
+ * N.B. the result should be freed and may contain '/../' or '/./ ' */
+gchar *get_argv_filename(const gchar *filename)
+{
+	gchar *result;
+
+	if (g_path_is_absolute(filename))
+		result = g_strdup(filename);
+	else
+	{
+		//use current dir
+		gchar *cur_dir = g_get_current_dir();
+		result = g_strjoin(
+			G_DIR_SEPARATOR_S, cur_dir, filename, NULL);
+		g_free(cur_dir);
+	}
+	return result;
+}
+
+
 #ifdef HAVE_FIFO
 static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer data)
 {
@@ -356,15 +376,18 @@ static void write_fifo(gint argc, gchar **argv)
 	gint i;
 	GIOChannel *ioc;
 
-	for(i = 1; i < argc; i++)
+	for(i = 1; i < argc && argv[i] != NULL; i++)
 	{
-		if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
+		gchar *filename = get_argv_filename(argv[i]);
+
+		if (filename && g_file_test(filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 		{
 			ioc = g_io_channel_unix_new(open(fifo_name, O_WRONLY));
-			g_io_channel_write_chars(ioc, argv[i], -1, NULL, NULL);
+			g_io_channel_write_chars(ioc, filename, -1, NULL, NULL);
 			g_io_channel_flush(ioc, NULL);
 			g_io_channel_shutdown(ioc, TRUE, NULL);
 		}
+		g_free(filename);
 	}
 }
 
@@ -542,7 +565,9 @@ gint main(gint argc, gchar **argv)
 			{
 				if (opened < GEANY_MAX_OPEN_FILES)
 				{
-					document_open_file(-1, argv[i], 0, FALSE, NULL);
+					gchar *filename = get_argv_filename(argv[i]);
+					document_open_file(-1, filename, 0, FALSE, NULL);
+					g_free(filename);
 					opened++;
 				}
 				else
