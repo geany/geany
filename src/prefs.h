@@ -33,4 +33,8 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data);
 
 void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data);
 
+void on_pref_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+
+void dialogs_show_prefs_dialog(void);
+
 #endif

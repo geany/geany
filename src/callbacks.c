@@ -68,6 +68,10 @@ static gboolean closing_all = FALSE;
 // represents the state at switching a notebook page, to update check menu items in document menu
 static gboolean switch_notebook_page = FALSE;
 
+// flag to indicate the explicit change of a toggle button of the toolbar menu and so the
+// toggled callback should ignore the change since it is not triggered by the user
+static gboolean ignore_toolbar_toggle = FALSE;
+
 // represents the state at switching a notebook page(in the left treeviews widget), to not emit
 // the selection-changed signal from tv.tree_openfiles
 //static gboolean switch_tv_notebook_page = FALSE;
@@ -522,6 +526,8 @@ void
 on_images_and_text2_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
+	if (ignore_toolbar_toggle) return;
+
 	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_BOTH);
 	app->toolbar_icon_style = GTK_TOOLBAR_BOTH;
 }
@@ -531,6 +537,8 @@ void
 on_images_only2_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
+	if (ignore_toolbar_toggle) return;
+
 	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_ICONS);
 	app->toolbar_icon_style = GTK_TOOLBAR_ICONS;
 }
@@ -540,6 +548,8 @@ void
 on_text_only2_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
+	if (ignore_toolbar_toggle) return;
+
 	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_TEXT);
 	app->toolbar_icon_style = GTK_TOOLBAR_TEXT;
 }
@@ -624,6 +634,8 @@ void
 on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
+	if (ignore_toolbar_toggle) return;
+
 	app->toolbar_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 	utils_update_toolbar_icons(GTK_ICON_SIZE_LARGE_TOOLBAR);
 }
@@ -633,6 +645,8 @@ void
 on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
+	if (ignore_toolbar_toggle) return;
+
 	app->toolbar_icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
 	utils_update_toolbar_icons(GTK_ICON_SIZE_SMALL_TOOLBAR);
 }
@@ -1106,6 +1120,28 @@ toolbar_popup_menu                     (GtkWidget *widget,
 {
 	if (event->button == 3)
 	{
+		GtkWidget *widget;
+
+		ignore_toolbar_toggle = TRUE;
+
+		switch (app->toolbar_icon_style)
+		{
+			case 0: widget = lookup_widget(app->toolbar_menu, "images_only2"); break;
+			case 1: widget = lookup_widget(app->toolbar_menu, "text_only2"); break;
+			default: widget = lookup_widget(app->toolbar_menu, "images_and_text2"); break;
+		}
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
+
+		switch (app->toolbar_icon_size)
+		{
+			case GTK_ICON_SIZE_LARGE_TOOLBAR:
+					widget = lookup_widget(app->toolbar_menu, "large_icons1"); break;
+			default: widget = lookup_widget(app->toolbar_menu, "small_icons1"); break;
+		}
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
+
+		ignore_toolbar_toggle = FALSE;
+
 		gtk_menu_popup(GTK_MENU(app->toolbar_menu), NULL, NULL, NULL, NULL, event->button, event->time);
 
 		return TRUE;
@@ -1199,15 +1235,8 @@ void
 on_show_toolbar1_toggled               (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	if (app->toolbar_visible)
-	{
-		gtk_widget_hide(GTK_WIDGET(app->toolbar));
-	}
-	else
-	{
-		gtk_widget_show(GTK_WIDGET(app->toolbar));
-	}
 	app->toolbar_visible = (app->toolbar_visible) ? FALSE : TRUE;;
+	utils_widget_show_hide(GTK_WIDGET(app->toolbar), app->toolbar_visible);
 }
 
 
@@ -2508,4 +2537,5 @@ on_menu_select_all1_activate           (GtkMenuItem     *menuitem,
 
 	sci_select_all(doc_list[idx].sci);
 }
+
 

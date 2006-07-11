@@ -176,20 +176,6 @@ static void apply_settings(void)
 		gtk_window_set_default_size(GTK_WINDOW(app->window), app->geometry[2], app->geometry[3]);
 	}
 
-	if (! app->pref_main_show_goto)
-	{
-		gtk_widget_hide(lookup_widget(app->window, "entry_goto_line"));
-		gtk_widget_hide(lookup_widget(app->window, "toolbutton25"));
-		gtk_widget_hide(lookup_widget(app->window, "separatortoolitem5"));
-	}
-
-	if (! app->pref_main_show_search)
-	{
-		gtk_widget_hide(lookup_widget(app->window, "entry1"));
-		gtk_widget_hide(lookup_widget(app->window, "toolbutton18"));
-		gtk_widget_hide(lookup_widget(app->window, "separatortoolitem4"));
-	}
-
 	g_object_set(G_OBJECT(lookup_widget(app->window, "menu_line_breaking1")), "active",
 				GINT_TO_POINTER(app->pref_editor_line_breaking), NULL);
 	g_object_set(G_OBJECT(lookup_widget(app->window, "menu_use_auto_indention1")), "active",
@@ -202,6 +188,8 @@ static void apply_settings(void)
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), app->tab_pos_editor);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), app->tab_pos_msgwin);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), app->tab_pos_sidebar);
+
+	utils_update_toolbar_items();
 }
 
 
@@ -308,8 +296,10 @@ static void main_init(void)
 	app->sensitive_buttons[32] = lookup_widget(app->window, "print1");
 	app->redo_items[0] = lookup_widget(app->popup_menu, "redo1");
 	app->redo_items[1] = lookup_widget(app->window, "menu_redo2");
+	app->redo_items[2] = lookup_widget(app->window, "toolbutton_redo");
 	app->undo_items[0] = lookup_widget(app->popup_menu, "undo1");
 	app->undo_items[1] = lookup_widget(app->window, "menu_undo2");
+	app->undo_items[2] = lookup_widget(app->window, "toolbutton_undo");
 	msgwindow.tree_status = lookup_widget(app->window, "treeview3");
 	msgwindow.tree_msg = lookup_widget(app->window, "treeview4");
 	msgwindow.tree_compiler = lookup_widget(app->window, "treeview5");

@@ -1,3 +1,14 @@
+2006-07-11  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c: Moved dialogs_show_prefs_dialog() to src/prefs.c.
+ * geany.glade, src/interface.c, src/vte.c, src/prefs.c, src/dialogs.c,
+   src/geany.h, src/main.c, src/callbacks.c, src/keybindings.c,
+   src/keyfile.c, src/utils.c:
+   Improved toolbar popup menu.
+   Added new preferences tab for toolbar settings, several toolbar
+   buttons can be hidden.
+
+
 2006-07-11  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/main.c: Prefix command-line opened files with the current

@@ -222,4 +222,6 @@ gchar *utils_get_current_time_string();
 
 TMTag *utils_find_tm_tag(const GPtrArray *tags, const gchar *tag_name);
 
+void utils_update_toolbar_items(void);
+
 #endif

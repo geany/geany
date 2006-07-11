@@ -171,9 +171,11 @@ void utils_update_popup_reundo_items(gint index)
 	// index 0 is the popup menu, 1 is the menubar
 	gtk_widget_set_sensitive(app->undo_items[0], enable_undo);
 	gtk_widget_set_sensitive(app->undo_items[1], enable_undo);
+	gtk_widget_set_sensitive(app->undo_items[2], enable_undo);
 
 	gtk_widget_set_sensitive(app->redo_items[0], enable_redo);
 	gtk_widget_set_sensitive(app->redo_items[1], enable_redo);
+	gtk_widget_set_sensitive(app->redo_items[2], enable_redo);
 }
 
 
@@ -2517,4 +2519,44 @@ TMTag *utils_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
 	return NULL;
 }
 
+
+void utils_update_toolbar_items(void)
+{
+	// show toolbar
+	GtkWidget *widget = lookup_widget(app->window, "menu_show_toolbar1");
+	if (app->toolbar_visible && ! gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
+	{
+		app->toolbar_visible = ! app->toolbar_visible;	// will be changed by the toggled callback
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
+	}
+	else if (! app->toolbar_visible && gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
+	{
+		app->toolbar_visible = ! app->toolbar_visible;	// will be changed by the toggled callback
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), FALSE);
+	}
+
+	// search
+	utils_widget_show_hide(lookup_widget(app->window, "entry1"), app->pref_toolbar_show_search);
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton18"), app->pref_toolbar_show_search);
+	utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem5"), app->pref_toolbar_show_search);
+	// goto line
+	utils_widget_show_hide(lookup_widget(app->window, "entry_goto_line"), app->pref_toolbar_show_goto);
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton25"), app->pref_toolbar_show_goto);
+	utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem8"), app->pref_toolbar_show_goto);
+	// compile
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton13"), app->pref_toolbar_show_compile);
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton26"), app->pref_toolbar_show_compile);
+	utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem6"), app->pref_toolbar_show_compile);
+	// colour
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton24"), app->pref_toolbar_show_colour);
+	utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem3"), app->pref_toolbar_show_colour);
+	// zoom
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton20"), app->pref_toolbar_show_zoom);
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton21"), app->pref_toolbar_show_zoom);
+	utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), app->pref_toolbar_show_zoom);
+	// undo
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton_undo"), app->pref_toolbar_show_undo);
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton_redo"), app->pref_toolbar_show_undo);
+	utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem9"), app->pref_toolbar_show_undo);
+}
 

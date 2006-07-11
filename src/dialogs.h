@@ -75,8 +75,6 @@ gboolean dialogs_show_mkcfgdir_error(gint error_nr);
 
 void dialogs_show_file_properties(gint idx);
 
-void dialogs_show_prefs_dialog(void);
-
 gboolean dialogs_show_question(const gchar *text, ...);
 
 void dialogs_show_keyboard_shortcuts(void);

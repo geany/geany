@@ -30,6 +30,7 @@
 #include "document.h"
 #include "callbacks.h"
 #include "dialogs.h"
+#include "prefs.h"
 #include "msgwindow.h"
 #include "sci_cb.h"
 #include "sciwrappers.h"

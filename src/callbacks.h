@@ -590,3 +590,4 @@ on_print1_activate                     (GtkMenuItem     *menuitem,
 void
 on_menu_select_all1_activate           (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+

@@ -35,6 +35,9 @@
 #include "document.h"
 #include "keyfile.h"
 #include "keybindings.h"
+#include "interface.h"
+#include "encodings.h"
+#include "callbacks.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -93,12 +96,6 @@ void prefs_init_dialog(void)
 
 
 	// Interface settings
-	widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_show_search);
-
-	widget = lookup_widget(app->prefs_dialog, "check_toolbar_goto");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_show_goto);
-
 	widget = lookup_widget(app->prefs_dialog, "check_list_symbol");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->sidebar_symbol_visible);
 
@@ -142,6 +139,50 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "combo_tab_sidebar");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), app->tab_pos_sidebar);
+
+
+	// Toolbar settings
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_show");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->toolbar_visible);
+
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_search);
+
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_goto");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_goto);
+
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_compile");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_compile);
+
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_zoom");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_zoom);
+
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_undo");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_undo);
+
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_colour");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_colour);
+
+
+	switch (app->toolbar_icon_style)
+	{
+		case 0: widget = lookup_widget(app->prefs_dialog, "radio_toolbar_image"); break;
+		case 1: widget = lookup_widget(app->prefs_dialog, "radio_toolbar_text"); break;
+		default: widget = lookup_widget(app->prefs_dialog, "radio_toolbar_imagetext"); break;
+	}
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+
+
+	switch (app->toolbar_icon_size)
+	{
+		case GTK_ICON_SIZE_LARGE_TOOLBAR:
+				widget = lookup_widget(app->prefs_dialog, "radio_toolbar_large"); break;
+		default: widget = lookup_widget(app->prefs_dialog, "radio_toolbar_small"); break;
+	}
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+	// disable elements if toolbar is hidden
+	on_pref_toolbar_show_toggled(GTK_TOGGLE_BUTTON(
+					lookup_widget(app->prefs_dialog, "check_toolbar_show")), NULL);
 
 
 	// Editor settings
@@ -341,12 +382,6 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 
 		// Interface settings
-		widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
-		app->pref_main_show_search = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(app->prefs_dialog, "check_toolbar_goto");
-		app->pref_main_show_goto = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
 		widget = lookup_widget(app->prefs_dialog, "check_list_symbol");
 		app->sidebar_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -374,6 +409,48 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "combo_tab_sidebar");
 		app->tab_pos_sidebar = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+
+
+		// Toolbar settings
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_show");
+		app->toolbar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_search");
+		app->pref_toolbar_show_search = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_goto");
+		app->pref_toolbar_show_goto = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_zoom");
+		app->pref_toolbar_show_zoom = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_undo");
+		app->pref_toolbar_show_undo = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_compile");
+		app->pref_toolbar_show_compile = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_colour");
+		app->pref_toolbar_show_colour = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "radio_toolbar_imagetext");
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) app->toolbar_icon_style = 2;
+		else
+		{
+			widget = lookup_widget(app->prefs_dialog, "radio_toolbar_image");
+			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+				app->toolbar_icon_style = 0;
+			else
+				// now only the text only radio remains, so set text only
+				app->toolbar_icon_style = 1;
+		}
+
+
+		widget = lookup_widget(app->prefs_dialog, "radio_toolbar_large");
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+			app->toolbar_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
+		else
+			app->toolbar_icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
 
 
 		// Editor settings
@@ -502,12 +579,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 #endif
 
 		// apply the changes made
-		utils_widget_show_hide(lookup_widget(app->window, "entry1"), app->pref_main_show_search);
-		utils_widget_show_hide(lookup_widget(app->window, "toolbutton18"), app->pref_main_show_search);
-		utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), app->pref_main_show_search);
-		utils_widget_show_hide(lookup_widget(app->window, "entry_goto_line"), app->pref_main_show_goto);
-		utils_widget_show_hide(lookup_widget(app->window, "toolbutton25"), app->pref_main_show_goto);
-		utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem5"), app->pref_main_show_goto);
+		utils_update_toolbar_items();
+		utils_update_toolbar_icons(app->toolbar_icon_size);
+		gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), app->toolbar_icon_style);
 		utils_treeviews_showhide();
 
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), app->tab_pos_editor);
@@ -799,3 +873,209 @@ static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const
 }
 
 
+void on_pref_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gboolean sens = gtk_toggle_button_get_active(togglebutton);
+
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "frame11"), sens);
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "frame13"), sens);
+}
+
+
+void dialogs_show_prefs_dialog(void)
+{
+	if (app->prefs_dialog == NULL)
+	{
+#ifdef HAVE_VTE
+		GtkWidget *notebook, *vbox, *label, *alignment, *table;
+		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback, *entry_emulation;
+		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path;
+		GtkTooltips *tooltips;
+		GtkObject *spin_scrollback_adj;
+#endif
+		GtkWidget *combo;
+		guint i;
+		gchar *encoding_string;
+
+		app->prefs_dialog = create_prefs_dialog();
+		gtk_window_set_transient_for(GTK_WINDOW(app->prefs_dialog), GTK_WINDOW(app->window));
+
+		// init the default file encoding combo box
+		combo = lookup_widget(app->prefs_dialog, "combo_encoding");
+		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
+		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
+		{
+			encoding_string = encodings_to_string(&encodings[i]);
+			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), encoding_string);
+			g_free(encoding_string);
+		}
+
+#ifdef HAVE_VTE
+		if (app->have_vte)
+		{
+			tooltips = GTK_TOOLTIPS(lookup_widget(app->prefs_dialog, "tooltips"));
+			notebook = lookup_widget(app->prefs_dialog, "notebook2");
+			vbox = gtk_vbox_new(FALSE, 0);
+			gtk_container_add(GTK_CONTAINER(notebook), vbox);
+
+			label = gtk_label_new(_("These are settings for the virtual terminal emulator widget (VTE). They only apply, if the VTE library could be loaded."));
+			gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
+			gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_FILL);
+			gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+			gtk_misc_set_alignment(GTK_MISC(label), 0.14, 0.19);
+			gtk_misc_set_padding(GTK_MISC(label), 0, 8);
+
+			alignment = gtk_alignment_new(0.5, 0.5, 1, 1);
+			gtk_box_pack_start(GTK_BOX(vbox), alignment, FALSE, FALSE, 0);
+			gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 12, 6);
+
+			table = gtk_table_new(8, 2, FALSE);
+			gtk_container_add(GTK_CONTAINER(alignment), table);
+			gtk_table_set_row_spacings(GTK_TABLE(table), 3);
+			gtk_table_set_col_spacings(GTK_TABLE(table), 25);
+
+			label = gtk_label_new(_("Terminal font"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+			font_term = gtk_font_button_new();
+			gtk_table_attach(GTK_TABLE(table), font_term, 1, 2, 0, 1,
+						(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, font_term, _("Sets the font for the terminal widget."), NULL);
+
+			label = gtk_label_new(_("Foreground color"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+			label = gtk_label_new(_("Background color"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+			color_fore = gtk_color_button_new();
+			gtk_table_attach(GTK_TABLE(table), color_fore, 1, 2, 1, 2,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, color_fore, _("Sets the foreground color of the text in the terminal widget."), NULL);
+			gtk_color_button_set_title(GTK_COLOR_BUTTON(color_fore), _("Color Chooser"));
+
+			color_back = gtk_color_button_new();
+			gtk_table_attach(GTK_TABLE(table), color_back, 1, 2, 2, 3,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, color_back, _("Sets the background color of the text in the terminal widget."), NULL);
+			gtk_color_button_set_title(GTK_COLOR_BUTTON(color_back), _("Color Chooser"));
+
+			label = gtk_label_new(_("Scrollback lines"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+			spin_scrollback_adj = gtk_adjustment_new(500, 0, 5000, 1, 10, 10);
+			spin_scrollback = gtk_spin_button_new(GTK_ADJUSTMENT(spin_scrollback_adj), 1, 0);
+			gtk_table_attach(GTK_TABLE(table), spin_scrollback, 1, 2, 3, 4,
+						(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, spin_scrollback, _("Specifies the history in lines, which you can scroll back in the terminal widget."), NULL);
+			gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
+			gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(spin_scrollback), TRUE);
+
+			label = gtk_label_new(_("Terminal emulation"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+			entry_emulation = gtk_entry_new();
+			gtk_table_attach(GTK_TABLE(table), entry_emulation, 1, 2, 4, 5,
+						(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, entry_emulation, _("Controls how the terminal emulator should behave. xterm is a good start."), NULL);
+
+			check_scroll_key = gtk_check_button_new_with_mnemonic(_("Scroll on keystroke"));
+			gtk_table_attach(GTK_TABLE(table), check_scroll_key, 1, 2, 5, 6,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, check_scroll_key, _("Whether to scroll to the bottom if a key was pressed."), NULL);
+			gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_key), FALSE);
+
+			check_scroll_out = gtk_check_button_new_with_mnemonic(_("Scroll on output"));
+			gtk_table_attach(GTK_TABLE(table), check_scroll_out, 1, 2, 6, 7,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, check_scroll_out, _("Whether to scroll to the bottom if an output was generated."), NULL);
+			gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_out), FALSE);
+
+			check_follow_path = gtk_check_button_new_with_mnemonic(_("Follow the path of the current file"));
+			gtk_table_attach(GTK_TABLE(table), check_follow_path, 1, 2, 7, 8,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, check_follow_path, _("Whether to execute \"cd $path\" when you switch between opened files."), NULL);
+			gtk_button_set_focus_on_click(GTK_BUTTON(check_follow_path), FALSE);
+
+			label = gtk_label_new(_("Terminal"));
+			gtk_notebook_set_tab_label(GTK_NOTEBOOK(notebook), gtk_notebook_get_nth_page(
+						GTK_NOTEBOOK(notebook), 7), label);
+
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "font_term",
+					gtk_widget_ref(font_term),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "color_fore",
+					gtk_widget_ref(color_fore),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "color_back",
+					gtk_widget_ref(color_back),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "spin_scrollback",
+					gtk_widget_ref(spin_scrollback),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "entry_emulation",
+					gtk_widget_ref(entry_emulation),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_key",
+					gtk_widget_ref(check_scroll_key),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_out",
+					gtk_widget_ref(check_scroll_out),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_follow_path",
+					gtk_widget_ref(check_follow_path),	(GDestroyNotify) gtk_widget_unref);
+
+			gtk_widget_show_all(vbox);
+
+			g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "font_term"),
+					"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(4));
+			g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_fore"),
+					"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(2));
+			g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_back"),
+					"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(3));
+		}
+#endif
+		g_signal_connect((gpointer) app->prefs_dialog, "response", G_CALLBACK(on_prefs_button_clicked), NULL);
+		g_signal_connect((gpointer) app->prefs_dialog, "delete_event", G_CALLBACK(on_prefs_delete_event), NULL);
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "tagbar_font"),
+				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "msgwin_font"),
+				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(2));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "editor_font"),
+				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "long_line_color"),
+				"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(1));
+		// file chooser buttons in the tools tab
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_make"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_make"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_term"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_term"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_browser"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_browser"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_print"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_print"));
+
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_toolbar_show"),
+				"toggled", G_CALLBACK(on_pref_toolbar_show_toggled), NULL);
+
+	}
+
+	prefs_init_dialog();
+	gtk_widget_show(app->prefs_dialog);
+}

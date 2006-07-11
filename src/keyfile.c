@@ -66,9 +66,6 @@ void configuration_save(void)
 	scribble_text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 
 	// store basic settings
-	g_key_file_set_boolean(config, PACKAGE, "toolbar_visible", app->toolbar_visible);
-	g_key_file_set_integer(config, PACKAGE, "toolbar_icon_style", app->toolbar_icon_style);
-	g_key_file_set_integer(config, PACKAGE, "toolbar_icon_size", app->toolbar_icon_size);
 	if (app->pref_main_save_winpos)
 	{
 		g_key_file_set_integer(config, PACKAGE, "treeview_position",
@@ -125,8 +122,15 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", app->pref_main_confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", app->pref_main_load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", app->pref_main_save_winpos);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_show_search", app->pref_main_show_search);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_show_goto", app->pref_main_show_goto);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", app->toolbar_visible);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_search", app->pref_toolbar_show_search);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_goto", app->pref_toolbar_show_goto);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_zoom", app->pref_toolbar_show_zoom);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_undo", app->pref_toolbar_show_undo);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", app->pref_toolbar_show_compile);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", app->pref_toolbar_show_colour);
+	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", app->toolbar_icon_style);
+	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", app->toolbar_icon_size);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", app->pref_editor_new_line);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", app->pref_editor_replace_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", app->pref_editor_trail_space);
@@ -218,15 +222,15 @@ gboolean configuration_load(void)
 
 	config_exists = g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
-	app->toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "toolbar_visible", TRUE);
+	app->toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
 	{
 		GtkIconSize tb_iconsize;
 		GtkToolbarStyle tb_style;
 		GEANY_GET_SETTING("gtk-toolbar-style", tb_style, GTK_TOOLBAR_ICONS);
 		GEANY_GET_SETTING("gtk-toolbar-icon-size", tb_iconsize,
 			GTK_ICON_SIZE_LARGE_TOOLBAR);
-		app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_style", tb_style);
-		app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "toolbar_icon_size", tb_iconsize);
+		app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_style", tb_style);
+		app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_size", tb_iconsize);
 	}
 	app->beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	app->mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGHTH);
@@ -287,8 +291,12 @@ gboolean configuration_load(void)
 	app->pref_main_confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", TRUE);
 	app->pref_main_load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	app->pref_main_save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
-	app->pref_main_show_search = utils_get_setting_boolean(config, PACKAGE, "pref_main_show_search", TRUE);
-	app->pref_main_show_goto = utils_get_setting_boolean(config, PACKAGE, "pref_main_show_goto", TRUE);
+	app->pref_toolbar_show_search = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_search", TRUE);
+	app->pref_toolbar_show_goto = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_goto", TRUE);
+	app->pref_toolbar_show_zoom = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_zoom", FALSE);
+	app->pref_toolbar_show_compile = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_compile", TRUE);
+	app->pref_toolbar_show_undo = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_undo", FALSE);
+	app->pref_toolbar_show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
 #ifdef HAVE_VTE
 	app->load_vte = utils_get_setting_boolean(config, PACKAGE, "load_vte", TRUE);
 	app->terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings",	"");

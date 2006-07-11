@@ -163,8 +163,12 @@ typedef struct MyApp
 	gboolean			 pref_main_load_session;
 	gboolean			 pref_main_save_winpos;
 	gboolean			 pref_main_confirm_exit;
-	gboolean			 pref_main_show_search;
-	gboolean			 pref_main_show_goto;
+	gboolean			 pref_toolbar_show_search;
+	gboolean			 pref_toolbar_show_goto;
+	gboolean			 pref_toolbar_show_undo;
+	gboolean			 pref_toolbar_show_compile;
+	gboolean			 pref_toolbar_show_zoom;
+	gboolean			 pref_toolbar_show_colour;
 	gint				 tab_pos_editor;
 	gint				 tab_pos_msgwin;
 	gint				 tab_pos_sidebar;
@@ -215,8 +219,8 @@ typedef struct MyApp
 	GtkWidget			*popup_goto_items[3];
 	GtkWidget			*popup_items[4];
 	GtkWidget			*menu_copy_items[4];
-	GtkWidget			*redo_items[2];
-	GtkWidget			*undo_items[2];
+	GtkWidget			*redo_items[3];
+	GtkWidget			*undo_items[3];
 	GtkWidget			*save_buttons[2];
 	GtkWidget			*sensitive_buttons[33];
 	GtkWidget			*open_colorsel;
