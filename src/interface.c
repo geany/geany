@@ -228,7 +228,6 @@ create_window1 (void)
   menubar1 = gtk_menu_bar_new ();
   gtk_widget_show (menubar1);
   gtk_box_pack_start (GTK_BOX (vbox1), menubar1, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, menubar1, _("Undo the last modification"), NULL);
 
   menuitem1 = gtk_menu_item_new_with_mnemonic (_("_File"));
   gtk_widget_show (menuitem1);

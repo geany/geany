@@ -31,7 +31,6 @@
       <child>
 	<widget class="GtkMenuBar" id="menubar1">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">Undo the last modification</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="menuitem1">
