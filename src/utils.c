@@ -2520,6 +2520,35 @@ TMTag *utils_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
 }
 
 
+GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gpointer data)
+{
+	GIOChannel *ioc;
+	GError *error = NULL;
+	const gchar *encoding;
+
+	ioc = g_io_channel_unix_new(fd);
+
+	g_io_channel_set_flags(ioc, G_IO_FLAG_NONBLOCK, NULL);
+	if (! g_get_charset(&encoding))
+	{	// hope this works reliably
+		g_io_channel_set_encoding(ioc, encoding, &error);
+		if (error)
+		{
+			geany_debug("%s: %s", __func__, error->message);
+			g_error_free(error);
+			return ioc;
+		}
+	}
+	// "auto-close" ;-)
+	g_io_channel_set_close_on_unref(ioc, TRUE);
+
+	g_io_add_watch(ioc, cond, func, data);
+	g_io_channel_unref(ioc);
+
+	return ioc;
+}
+
+
 void utils_update_toolbar_items(void)
 {
 	// show toolbar

@@ -41,7 +41,6 @@
 #include "document.h"
 
 
-static GIOChannel *build_set_up_io_channel (gint fd, GIOCondition cond, GIOFunc func, gpointer data);
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd);
 static GPid build_spawn_cmd(gint idx, gchar **cmd);
@@ -303,8 +302,10 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	}
 
 	// use GIOChannels to monitor stdout and stderr
-	build_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL, build_iofunc, GINT_TO_POINTER(0));
-	build_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL, build_iofunc, GINT_TO_POINTER(1));
+	utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
+		build_iofunc, GINT_TO_POINTER(0));
+	utils_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
+		build_iofunc, GINT_TO_POINTER(1));
 
 	g_strfreev(argv);
 	g_free(utf8_working_dir);
@@ -494,35 +495,6 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 		return FALSE;
 
 	return TRUE;
-}
-
-
-static GIOChannel *build_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gpointer data)
-{
-	GIOChannel *ioc;
-	GError *error = NULL;
-	const gchar *encoding;
-
-	ioc = g_io_channel_unix_new(fd);
-
-	g_io_channel_set_flags(ioc, G_IO_FLAG_NONBLOCK, NULL);
-	if (! g_get_charset(&encoding))
-	{	// hope this works reliably
-		g_io_channel_set_encoding(ioc, encoding, &error);
-		if (error)
-		{
-			geany_debug("compile: %s", error->message);
-			g_error_free(error);
-			return ioc;
-		}
-	}
-	// "auto-close" ;-)
-	g_io_channel_set_close_on_unref(ioc, TRUE);
-
-	g_io_add_watch(ioc, cond, func, data);
-	g_io_channel_unref(ioc);
-
-	return ioc;
 }
 
 

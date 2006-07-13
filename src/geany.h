@@ -78,6 +78,7 @@
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm"
 #define GEANY_DEFAULT_TOOLS_BROWSER		"mozilla"
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
+#define GEANY_DEFAULT_TOOLS_GREP		"grep"
 #define GEANY_DEFAULT_MRU_LENGHTH		10
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Cursor 8"
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Cursor 8"
@@ -202,6 +203,7 @@ typedef struct MyApp
 	gchar				*tools_make_cmd;
 	gchar				*tools_term_cmd;
 	gchar				*tools_print_cmd;
+	gchar				*tools_grep_cmd;
 	GtkIconSize			 toolbar_icon_size;
 	GtkWidget			*toolbar;
 	GtkWidget			*run_button;
@@ -230,6 +232,7 @@ typedef struct MyApp
 	GtkWidget			*prefs_dialog;
 	GtkWidget			*find_dialog;
 	GtkWidget			*replace_dialog;
+	GtkWidget			*find_in_files_dialog;
 	GtkWidget			*default_tag_tree;
 	const TMWorkspace	*tm_workspace;
 	GQueue				*recent_queue;

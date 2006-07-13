@@ -29,9 +29,17 @@
 #include "callbacks.h"
 #include "msgwindow.h"
 #include "utils.h"
+#include "search.h"
+#include "document.h"
+
+#include <string.h>
+#include <stdlib.h>
+
 
 static GdkColor dark = {0, 58832, 58832, 58832};
 static GdkColor white = {0, 65535, 65535, 65535};
+
+static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line);
 
 
 /* does some preparing things to the status message list widget */
@@ -234,4 +242,140 @@ GtkWidget *msgwin_create_message_popup_menu(gint type)
 
 	return message_popup_menu;
 }
+
+
+gboolean msgwin_goto_compiler_file_line()
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	GtkTreeSelection *selection;
+	gchar *string;
+	gboolean ret = FALSE;
+
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	{
+		gtk_tree_model_get(model, &iter, 1, &string, -1);
+		if (string != NULL)
+		{
+			gint line;
+			gint idx;
+			gchar *filename;
+			utils_parse_compiler_error_line(string, &filename, &line);
+			if (filename != NULL && line > -1)
+			{
+				// use document_open_file to find an already open file, or open it in place
+				idx = document_open_file(-1, filename, 0, FALSE, NULL);
+				// document_set_indicator will check valid idx
+				document_set_indicator(idx, line - 1);
+				// utils_goto_file_line will check valid filename.
+				ret = utils_goto_file_line(filename, FALSE, line);
+			}
+			g_free(filename);
+		}
+		g_free(string);
+	}
+	return ret;
+}
+
+
+gboolean msgwin_goto_messages_file_line()
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	GtkTreeSelection *selection;
+	gboolean ret = FALSE;
+
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	{
+		gint idx, line;
+		gchar *string;
+
+		gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, 3, &string, -1);
+		if (line >= 0 && idx >= 0)
+			utils_goto_line(idx, line); //checks valid idx
+		else if (line < 0 && string != NULL)
+		{
+			gchar *filename;
+			msgwin_parse_grep_line(string, &filename, &line);
+			if (filename != NULL && line > -1)
+			{
+				// use document_open_file to find an already open file, or open it in place
+				idx = document_open_file(-1, filename, 0, FALSE, NULL);
+				// utils_goto_file_line will check valid filename.
+				ret = utils_goto_file_line(filename, FALSE, line);
+			}
+			g_free(filename);
+		}
+		g_free(string);
+	}
+	return ret;
+}
+
+
+// Taken from utils_parse_compiler_error_line, could refactor both (keep get_cur_idx).
+/* Try to parse the file and line number for string and when something useful is
+ * found, store the line number in *line and the relevant file with the error in
+ * *filename.
+ * *line will be -1 if no error was found in string. 
+ * *filename must be freed unless NULL. */
+static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line)
+{
+	gchar *end = NULL;
+	gchar *path;
+	gchar **fields;
+	gchar *pattern;				// pattern to split the error message into some fields
+	guint field_min_len;		// used to detect errors after parsing
+	guint field_idx_line;		// idx of the field where the line is
+	guint field_idx_file;		// idx of the field where the filename is
+	guint skip_dot_slash = 0;	// number of characters to skip at the beginning of the filename
+	gint cur_idx;
+
+	*filename = NULL;
+	*line = -1;
+
+	if (string == NULL) return;
+
+	// conflict:3:conflicting types for `foo'
+	pattern = ":";
+	field_min_len = 3;
+	field_idx_line = 1;
+	field_idx_file = 0;
+
+	fields = g_strsplit_set(string, pattern, field_min_len);
+
+	// parse the line
+	if (g_strv_length(fields) < field_min_len)
+	{
+		g_strfreev(fields);
+		return;
+	}
+
+	*line = strtol(fields[field_idx_line], &end, 10);
+
+	// if the line could not be read, line is 0 and an error occurred, so we leave
+	if (fields[field_idx_line] == end)
+	{
+		g_strfreev(fields);
+		return;
+	}
+
+	// skip some characters at the beginning of the filename, at the moment only "./"
+	// can be extended if other "trash" is known
+	if (strncmp(fields[field_idx_file], "./", 2) == 0) skip_dot_slash = 2;
+
+	// get the basename of the built file to get the path to look for other files
+	cur_idx = document_get_cur_idx();
+	if (cur_idx >= 0 && doc_list[cur_idx].is_valid)
+	{
+		path = g_path_get_dirname(doc_list[cur_idx].file_name);
+		*filename = g_strconcat(path, G_DIR_SEPARATOR_S,
+			fields[field_idx_file] + skip_dot_slash, NULL);
+		g_free(path);
+	}
+
+	g_strfreev(fields);
+}
+
 

@@ -394,9 +394,17 @@ on_replace_entry_activate                 (GtkEntry        *entry,
                                         gpointer         user_data);
 
 void
-on_new_with_template                   (GtkMenuItem     *menuitem,
+on_find_in_files1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
+void
+on_find_in_files_dialog_response       (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data);
+
+void
+on_new_with_template                   (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
 
 void
 on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,

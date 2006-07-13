@@ -801,6 +801,8 @@ void dialogs_show_find(void)
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
 
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
 	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
 	{
 		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
@@ -817,7 +819,7 @@ void dialogs_show_find(void)
 
 		gtk_dialog_add_button(GTK_DIALOG(app->find_dialog), "gtk-find", GTK_RESPONSE_ACCEPT);
 
-		label = gtk_label_new(_("Enter the search text here"));
+		label = gtk_label_new(_("Enter the search text here:"));
 		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
@@ -925,11 +927,11 @@ void dialogs_show_replace(void)
 		gtk_dialog_add_action_widget(GTK_DIALOG(app->replace_dialog), button,
 			GEANY_RESPONSE_REPLACE);
 
-		label_find = gtk_label_new(_("Enter the search text here"));
+		label_find = gtk_label_new(_("Enter the search text here:"));
 		gtk_misc_set_padding(GTK_MISC(label_find), 0, 6);
 		gtk_misc_set_alignment(GTK_MISC(label_find), 0, 0);
 
-		label_replace = gtk_label_new(_("Enter the replace text here"));
+		label_replace = gtk_label_new(_("Enter the replace text here:"));
 		gtk_misc_set_padding(GTK_MISC(label_replace), 0, 6);
 		gtk_misc_set_alignment(GTK_MISC(label_replace), 0, 0);
 
@@ -1013,6 +1015,81 @@ void dialogs_show_replace(void)
 	}
 	g_free(sel);
 }
+
+
+void dialogs_show_find_in_files(void)
+{
+	static GtkWidget *dirlabel = NULL, *combo = NULL;
+	GtkWidget *entry; //the child GtkEntry of combo
+	gint idx = document_get_cur_idx();
+	gchar *sel = NULL;
+	gchar *cur_dir, *dirtext;
+
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	if (app->find_in_files_dialog == NULL)
+	{
+		GtkWidget *label;
+
+		app->find_in_files_dialog = gtk_dialog_new_with_buttons(
+			_("Find in files"), GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+
+		gtk_dialog_add_button(GTK_DIALOG(app->find_in_files_dialog), "gtk-find", GTK_RESPONSE_ACCEPT);
+		gtk_dialog_set_default_response(GTK_DIALOG(app->find_in_files_dialog),
+			GTK_RESPONSE_ACCEPT);
+
+		dirlabel = gtk_label_new("");
+		gtk_misc_set_alignment(GTK_MISC(dirlabel), 0, 0);
+
+		label = gtk_label_new(_("Enter the search text here:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+
+		combo = gtk_combo_box_entry_new_text();
+		entry = gtk_bin_get_child(GTK_BIN(combo));
+		gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
+		gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
+		gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
+
+		g_signal_connect((gpointer) app->find_in_files_dialog, "response",
+				G_CALLBACK(on_find_in_files_dialog_response), combo);
+		g_signal_connect((gpointer) app->find_in_files_dialog, "delete_event",
+				G_CALLBACK(gtk_widget_hide), NULL);
+
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(app->find_in_files_dialog)->vbox),
+			dirlabel, TRUE, TRUE, 6);
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(app->find_in_files_dialog)->vbox),
+			label, TRUE, TRUE, 0);
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(app->find_in_files_dialog)->vbox),
+			combo, TRUE, TRUE, 0);
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(app->find_in_files_dialog)->vbox),
+			gtk_label_new(""), TRUE, TRUE, 0);
+
+		gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(app->find_in_files_dialog)->vbox), 6);
+
+		gtk_widget_show_all(app->find_in_files_dialog);
+	}
+
+	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
+	{
+		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
+		sci_get_selected_text(doc_list[idx].sci, sel);
+	}
+
+	entry = GTK_BIN(combo)->child;
+	if (sel) gtk_entry_set_text(GTK_ENTRY(entry), sel);
+	g_free(sel);
+	gtk_widget_grab_focus(entry);
+
+	cur_dir = utils_get_current_file_dir();
+	dirtext = g_strdup_printf(_("Current directory: %s"), cur_dir);
+	g_free(cur_dir);
+	gtk_label_set_text(GTK_LABEL(dirlabel), dirtext);
+	g_free(dirtext);
+
+	gtk_widget_show(app->find_in_files_dialog);
+}
+
 
 void dialogs_show_includes_arguments_tex(void)
 {

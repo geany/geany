@@ -48,6 +48,7 @@
 #include "treeviews.h"
 #include "keybindings.h"
 #include "encodings.h"
+#include "search.h"
 
 
 #ifdef GEANY_WIN32
@@ -1437,52 +1438,11 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 	{
 		if (GPOINTER_TO_INT(user_data) == 4)
 		{	// double click in the message treeview (results of 'Find usage')
-			GtkTreeIter iter;
-			GtkTreeModel *model;
-			GtkTreeSelection *selection;
-			gint idx;
-			gint line;
-
-			selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
-			if (gtk_tree_selection_get_selected(selection, &model, &iter))
-			{
-				gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, -1);
-				if (idx >= 0 && doc_list[idx].is_valid)
-				{
-					utils_goto_line(idx, line);
-				}
-			}
+			msgwin_goto_messages_file_line();
 		}
 		else if (GPOINTER_TO_INT(user_data) == 5)
 		{	// double click in the compiler treeview
-			GtkTreeIter iter;
-			GtkTreeModel *model;
-			GtkTreeSelection *selection;
-			gchar *string;
-
-			selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
-			if (gtk_tree_selection_get_selected(selection, &model, &iter))
-			{
-				gtk_tree_model_get(model, &iter, 1, &string, -1);
-				if (string != NULL)
-				{
-					gint line;
-					gint idx;
-					gchar *filename;
-					utils_parse_compiler_error_line(string, &filename, &line);
-					if (filename != NULL && line > -1)
-					{
-						// use document_open_file to find an already open file, or open it in place
-						idx = document_open_file(-1, filename, 0, FALSE, NULL);
-						// document_set_indicator will check valid idx
-						document_set_indicator(idx, line - 1);
-						// utils_goto_file_line will check valid filename.
-						utils_goto_file_line(filename, FALSE, line);
-					}
-					g_free(filename);
-				}
-				g_free(string);
-			}
+			msgwin_goto_compiler_file_line();
 		}
 	}
 
@@ -1983,6 +1943,43 @@ on_replace_entry_activate              (GtkEntry        *entry,
                                         gpointer         user_data)
 {
 	on_replace_dialog_response(NULL, GEANY_RESPONSE_REPLACE, NULL);
+}
+
+
+void
+on_find_in_files1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	dialogs_show_find_in_files();
+}
+
+
+void
+on_find_in_files_dialog_response       (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data)
+{
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		const gchar *entry_text =
+			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data))));
+		gchar *search_text = g_strstrip(g_strdup(entry_text));
+
+		if (search_text && *search_text)
+		{
+			gchar *cur_dir = utils_get_current_file_dir();
+			if (cur_dir)
+				search_find_in_files(search_text, cur_dir);
+			else
+				msgwin_status_add(_("Invalid directory for find in files."));
+			g_free(cur_dir);
+		}
+		else
+			msgwin_status_add(_("No text to find."));
+
+		g_free(search_text);
+	}
+	gtk_widget_hide(app->find_in_files_dialog);
 }
 
 

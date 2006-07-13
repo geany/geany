@@ -217,6 +217,7 @@ static void main_init(void)
 	app->prefs_dialog		= NULL;
 	app->find_dialog		= NULL;
 	app->replace_dialog		= NULL;
+	app->find_in_files_dialog = NULL;
 	app->default_tag_tree	= NULL;
 	app->main_window_realized= FALSE;
 	app->tab_order_ltr		= FALSE;

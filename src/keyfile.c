@@ -145,6 +145,7 @@ void configuration_save(void)
 	g_key_file_set_string(config, "tools", "term_cmd", app->tools_term_cmd ? app->tools_term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", app->tools_browser_cmd ? app->tools_browser_cmd : "");
 	g_key_file_set_string(config, "tools", "print_cmd", app->tools_print_cmd ? app->tools_print_cmd : "");
+	g_key_file_set_string(config, "tools", "grep_cmd", app->tools_grep_cmd? app->tools_grep_cmd: "");
 
 	for (i = 0; i < app->mru_length; i++)
 	{
@@ -336,6 +337,10 @@ gboolean configuration_load(void)
 	app->tools_print_cmd = utils_get_setting_string(config, "tools", "print_cmd", tmp_string);
 	g_free(tmp_string);
 	g_free(tmp_string2);
+
+	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_GREP);
+	app->tools_grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", tmp_string);
+	g_free(tmp_string);
 
 	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
 	if (recent_files != NULL)

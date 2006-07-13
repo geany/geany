@@ -61,6 +61,8 @@ void dialogs_show_find(void);
 
 void dialogs_show_replace(void);
 
+void dialogs_show_find_in_files(void);
+
 void dialogs_show_goto_line(void);
 
 void dialogs_show_includes_arguments_gen(void);

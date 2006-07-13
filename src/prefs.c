@@ -227,7 +227,7 @@ void prefs_init_dialog(void)
 
 	// Tools Settings
 #ifdef GEANY_WIN32
-        // hide related Terminal path setting
+        // hide related Make path setting
         gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "label11"), FALSE);
         gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "entry_com_make"), FALSE);
         gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "button_make"), FALSE);
@@ -246,8 +246,11 @@ void prefs_init_dialog(void)
 	if (app->tools_browser_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_browser")), app->tools_browser_cmd);
 
-	if (app->tools_browser_cmd)
+	if (app->tools_print_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_print")), app->tools_print_cmd);
+
+	if (app->tools_grep_cmd)
+		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_grep")), app->tools_grep_cmd);
 
 
 	// Template settings
@@ -511,6 +514,10 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "entry_print");
 		g_free(app->tools_print_cmd);
 		app->tools_print_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		widget = lookup_widget(app->prefs_dialog, "entry_grep");
+		g_free(app->tools_grep_cmd);
+		app->tools_grep_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 
 		// Template settings
@@ -1070,6 +1077,8 @@ void dialogs_show_prefs_dialog(void)
 				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_browser"));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_print"),
 				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_print"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_grep"),
+				"clicked", G_CALLBACK(on_pref_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_grep"));
 
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_toolbar_show"),
 				"toggled", G_CALLBACK(on_pref_toolbar_show_toggled), NULL);

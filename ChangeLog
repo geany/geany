@@ -1,3 +1,12 @@
+2006-07-13  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c, src/interface.c, src/utils.c, src/utils.h, src/geany.h,
+   src/msgwindow.c, src/msgwindow.h, src/callbacks.c, src/callbacks.h,
+   src/keyfile.c, src/search.c, src/search.h, src/prefs.c,
+   src/dialogs.c, src/main.c, src/dialogs.h, src/Makefile.am,
+   geany.glade: Added basic Find in files search functionality.
+
+
 2006-07-11  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/dialogs.c: Moved dialogs_show_prefs_dialog() to src/prefs.c.

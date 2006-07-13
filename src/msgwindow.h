@@ -73,4 +73,8 @@ void msgwin_status_add(gchar const *format, ...);
 
 GtkWidget *msgwin_create_message_popup_menu(gint type);
 
+gboolean msgwin_goto_compiler_file_line();
+
+gboolean msgwin_goto_messages_file_line();
+
 #endif

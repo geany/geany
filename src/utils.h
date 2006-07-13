@@ -222,6 +222,8 @@ gchar *utils_get_current_time_string();
 
 TMTag *utils_find_tm_tag(const GPtrArray *tags, const gchar *tag_name);
 
+GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gpointer data);
+
 void utils_update_toolbar_items(void);
 
 #endif
