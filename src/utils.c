@@ -863,11 +863,8 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 	GList *encodings = NULL;
 	GList *start;
 	gchar *locale_charset = NULL;
-	GList *encoding_strings;
 
-	encoding_strings = utils_glist_from_string("UTF-8");
-	encodings = encodings_get_encodings(encoding_strings);
-	utils_glist_strings_free(encoding_strings);
+	encodings = encodings_get_encodings();
 
 	if (g_get_charset((const gchar**)&locale_charset) == FALSE)
 	{
@@ -1591,67 +1588,6 @@ void utils_replace_tabs(gint idx)
 	g_free(data);
 	g_free(text);
 	g_free(replacement);
-}
-
-/* GList of strings operations */
-GList *utils_glist_from_string(const gchar *string)
-{
-	gchar *str, *temp, buff[256];
-	GList *list;
-	gchar *word_start, *word_end;
-	gboolean the_end;
-
-	list = NULL;
-	the_end = FALSE;
-	temp = g_strdup(string);
-	str = temp;
-	if (!str)
-		return NULL;
-
-	while (1)
-	{
-		gint i;
-		gchar *ptr;
-
-		/* Remove leading spaces */
-		while (isspace (*str) && *str != '\0')
-			str++;
-		if (*str == '\0')
-			break;
-
-		/* Find start and end of word */
-		word_start = str;
-		while (!isspace (*str) && *str != '\0')
-			str++;
-		word_end = str;
-
-		/* Copy the word into the buffer */
-		for (ptr = word_start, i = 0; ptr < word_end; ptr++, i++)
-			buff[i] = *ptr;
-		buff[i] = '\0';
-		if (strlen (buff))
-			list = g_list_append(list, g_strdup (buff));
-		if (*str == '\0')
-			break;
-	}
-	if (temp)
-		g_free(temp);
-	return list;
-}
-
-
-/* Free the strings and GList */
-void utils_glist_strings_free(GList *list)
-{
-	GList *node;
-	node = list;
-	while (node)
-	{
-		if (node->data)
-			g_free(node->data);
-		node = g_list_next(node);
-	}
-	g_list_free(list);
 }
 
 

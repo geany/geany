@@ -155,10 +155,6 @@ gchar utils_brace_opposite(gchar ch);
 
 void utils_replace_tabs(gint idx);
 
-GList *utils_glist_from_string(const gchar *string);
-
-void utils_glist_strings_free(GList * list);
-
 gchar *utils_get_hostname(void);
 
 gint utils_make_settings_dir(const gchar *dir);

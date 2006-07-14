@@ -35,9 +35,9 @@
 
 typedef struct
 {
-  gint   idx;
-  gchar *charset;
-  gchar *name;
+	gint   idx;
+	gchar *charset;
+	gchar *name;
 } GeanyEncoding;
 
 
@@ -48,7 +48,7 @@ const GeanyEncoding* encodings_get_from_index(gint index);
 gchar* encodings_to_string(const GeanyEncoding* enc);
 const gchar* encodings_get_charset(const GeanyEncoding* enc);
 
-GList* encodings_get_encodings(GList *encoding_strings);
+GList* encodings_get_encodings(void);
 
 void encodings_init(void);
 

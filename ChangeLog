@@ -2,6 +2,10 @@
 
  * src/filetypes.c, src/highlighting.c, tagmanager/tm_tag.c,
    tagmanager/tm_workspace.c: Fixed autocompletion for filetype C++.
+ * src/utils.c: Removed unneeded functions:
+   utils_glist_strings_free() and utils_glist_from_string().
+ * src/encodings.c: Fixed wrong charset detection on UTF-8
+                    (and maybe other) systems.
 
 
 2006-07-13  Nick Treleaven  <nick.treleaven@btinternet.com>

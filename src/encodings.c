@@ -192,33 +192,17 @@ const gchar *encodings_get_charset(const GeanyEncoding* enc)
 
 
 /* Encodings */
-GList *encodings_get_encodings(GList *encoding_strings)
+GList *encodings_get_encodings(void)
 {
 	GList *res = NULL;
+	gint i;
 
-	if (encoding_strings != NULL)
+	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
-		GList *tmp;
-		const GeanyEncoding *enc;
-
-		tmp = encoding_strings;
-
-		while (tmp)
-		{
-		      const char *charset = tmp->data;
-
-		      if (strcmp(charset, "current") == 0)
-			      g_get_charset(&charset);
-
-		      g_return_val_if_fail(charset != NULL, NULL);
-		      enc = encodings_get_from_charset(charset);
-
-		      if (enc != NULL)
-				res = g_list_append(res, (gpointer)enc);
-
-		      tmp = g_list_next(tmp);
-		}
+		if (&encodings[i] != NULL)
+			res = g_list_append(res, (gpointer)&encodings[i]);
 	}
+
 	return res;
 }
 
