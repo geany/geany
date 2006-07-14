@@ -152,7 +152,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 	// resort the whole array, because tm_tags_find expects a sorted array and it is not sorted
 	// when global.tags, php.tags and latex.tags are loaded at the same time
 	tm_tags_sort(theWorkspace->global_tags, attr, TRUE);
-	
+
 	return TRUE;
 }
 
@@ -444,8 +444,8 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
  , gboolean partial, langType lang)
 {
 	static GPtrArray *tags = NULL;
-	TMTag **matches[2], **match;
-	int i, len, tagCount[2]={0,0}, tagIter;
+	TMTag **matches[2];
+	int len, tagCount[2]={0,0}, tagIter;
 	gint tags_lang;
 
 	if ((!theWorkspace) || (!name))
@@ -460,38 +460,67 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 
 	matches[0] = tm_tags_find(theWorkspace->work_object.tags_array, name, partial, &tagCount[0]);
 	matches[1] = tm_tags_find(theWorkspace->global_tags, name, partial, &tagCount[1]);
-	for (i = 0; i < 2; ++i)
+
+	// file tags
+	if (matches[0] && *matches[0])
 	{
-		match = matches[i];
-		if (match && *match)
+		// tag->atts.file.lang contains the line of the tag and
+		// tags->atts.entry.file->lang contains the language
+		tags_lang = (*matches[0])->atts.entry.file->lang;
+
+		for (tagIter=0;tagIter<tagCount[0];++tagIter)
 		{
-			// for global tags: tag->atts.file.lang contains the language and
-			// tags->atts.entry.file->lang is NULL
-			// for "usual" tags: tag->atts.file.lang contains the line of the tag and
-			// tags->atts.entry.file->lang contains the language
-			if ((*match)->atts.entry.file != NULL)
-				tags_lang = (*match)->atts.entry.file->lang;
-			else 
-				tags_lang = (*match)->atts.file.lang;
-				
-			for (tagIter=0;tagIter<tagCount[i];++tagIter)
+			if ((type & (*matches[0])->type) && (lang == -1 || tags_lang == lang))
+				g_ptr_array_add(tags, *matches[0]);
+			if (partial)
 			{
-				if ((type & (*match)->type) && (lang == -1 || tags_lang == lang))
-					g_ptr_array_add(tags, *match);
-				if (partial)
-				{
-					if (0 != strncmp((*match)->name, name, len))
-						break;
-				}
-				else
-				{
-					if (0 != strcmp((*match)->name, name))
-						break;
-				}
-				++ match;
+				if (0 != strncmp((*matches[0])->name, name, len))
+					break;
 			}
+			else
+			{
+				if (0 != strcmp((*matches[0])->name, name))
+					break;
+			}
+			++ matches[0];
 		}
 	}
+
+	// global tags
+	if (matches[1] && *matches[1])
+	{
+		int tags_lang_alt = 0;
+		// tag->atts.file.lang contains the language and
+		// tags->atts.entry.file is NULL
+		tags_lang = (*matches[1])->atts.file.lang;
+		// tags_lang_alt is used to load C global tags only once for C and C++
+		// lang = 1 is C++, lang = 0 is C
+		// if we have lang 0, than accept also lang 1 for C++
+		if (tags_lang == 0)	// C or C++
+			tags_lang_alt = 1;
+		else
+			tags_lang_alt = tags_lang; // otherwise just ignore it
+
+		for (tagIter=0;tagIter<tagCount[1];++tagIter)
+		{
+			if ((type & (*matches[1])->type) && (lang == -1 ||
+				tags_lang == lang || tags_lang_alt == lang))
+				g_ptr_array_add(tags, *matches[1]);
+
+			if (partial)
+			{
+				if (0 != strncmp((*matches[1])->name, name, len))
+					break;
+			}
+			else
+			{
+				if (0 != strcmp((*matches[1])->name, name))
+					break;
+			}
+			++ matches[1];
+		}
+	}
+
 	tm_tags_sort(tags, attrs, TRUE);
 	return tags;
 }

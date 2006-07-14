@@ -210,7 +210,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, gint mo
 
 	if ((NULL == fgets((gchar*)buf, BUFSIZ, fp)) || ('\0' == *buf))
 		return FALSE;
-	if (mode == 0)
+	if (mode == 0 || mode == 1)
 	{
 		for (start = end = buf, status = TRUE; (TRUE == status); start = end, ++ end)
 		{
@@ -291,11 +291,12 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, gint mo
 	#endif
 						break;
 				}
+				tag->atts.file.lang = mode;
 			}
 			*end = changed_char;
 		}
 	}
-	else 
+	else
 	{
 		// alternative parser for PHP and LaTeX global tags files with the following format
 		// tagname|return value|arglist|description\n
@@ -314,7 +315,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, gint mo
 
 			fields = g_strsplit((gchar*)start, "|", -1);
 			field_len = g_strv_length(fields);
-			
+
 			if (field_len >= 1) tag->name = g_strdup(fields[0]);
 			else tag->name = NULL;
 			if (field_len >= 2 && fields[1] != NULL) tag->atts.entry.var_type = g_strdup(fields[1]);
@@ -324,7 +325,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, gint mo
 			g_strfreev(fields);
 		}
 	}
-	
+
 	if (NULL == tag->name)
 		return FALSE;
 	if (tm_tag_file_t != tag->type)

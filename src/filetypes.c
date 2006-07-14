@@ -67,8 +67,7 @@ void filetypes_init_types(void)
 #define CPP
 	filetypes[GEANY_FILETYPES_CPP] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_CPP]->id = GEANY_FILETYPES_CPP;
-	// C++ has langType 1, but to get the global tags for C, too, we use the langType of C
-	filetypes[GEANY_FILETYPES_CPP]->lang = 0;
+	filetypes[GEANY_FILETYPES_CPP]->lang = 1;
 	filetypes[GEANY_FILETYPES_CPP]->name = g_strdup("C++");
 	filetypes[GEANY_FILETYPES_CPP]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_CPP]->title = g_strdup(_("C++ source file"));

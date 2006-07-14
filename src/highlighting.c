@@ -235,7 +235,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	// why? if I let this out, the indicator remains green with PHP
 	SSM(sci, SCI_INDICSETFORE, 0, invert(0x0000ff));
 	SSM(sci, SCI_INDICSETFORE, 2, invert(0x0000ff));
-	
+
 	// define marker symbols
 	// 0 -> line marker
 	SSM(sci, SCI_MARKERDEFINE, 0, SC_MARK_SHORTARROW);
@@ -506,8 +506,7 @@ static void styleset_cpp_init(void)
 	if (! app->ignore_global_tags && ! global_c_tags_loaded)
 	{
 		// 0 is the langType used in TagManager (see the table in tagmanager/parsers.h)
-		// C++ is a special case, here we use 0 to have C global tags in C++, too
-		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags", 0);
+		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags", 1);
 		global_c_tags_loaded = TRUE;
 	}
 }

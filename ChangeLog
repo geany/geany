@@ -1,3 +1,9 @@
+2006-07-14  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/filetypes.c, src/highlighting.c, tagmanager/tm_tag.c,
+   tagmanager/tm_workspace.c: Fixed autocompletion for filetype C++.
+
+
 2006-07-13  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/interface.c, src/utils.c, src/utils.h, src/geany.h,
