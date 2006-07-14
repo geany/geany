@@ -1961,25 +1961,31 @@ on_find_in_files_dialog_response       (GtkDialog *dialog,
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		const gchar *entry_text =
+		const gchar *search_text =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data))));
-		gchar *search_text = g_strstrip(g_strdup(entry_text));
+		gchar *utf8_dir = utils_get_current_file_dir();
 
-		if (search_text && *search_text)
+		if (utf8_dir == NULL)
+			msgwin_status_add(_("Invalid directory for find in files."));
+		else if (search_text && *search_text)
 		{
-			gchar *cur_dir = utils_get_current_file_dir();
-			if (cur_dir)
-				search_find_in_files(search_text, cur_dir);
-			else
-				msgwin_status_add(_("Invalid directory for find in files."));
-			g_free(cur_dir);
+			gchar *locale_dir;
+
+			locale_dir = g_locale_from_utf8(utf8_dir, -1, NULL, NULL, NULL);
+			if (locale_dir == NULL) locale_dir = g_strdup(utf8_dir);
+
+			gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), search_text);
+			search_find_in_files(search_text, locale_dir);
+			g_free(locale_dir);
+			gtk_widget_hide(app->find_in_files_dialog);
 		}
 		else
 			msgwin_status_add(_("No text to find."));
 
-		g_free(search_text);
+		g_free(utf8_dir);
 	}
-	gtk_widget_hide(app->find_in_files_dialog);
+	else
+		gtk_widget_hide(app->find_in_files_dialog);
 }
 
 
