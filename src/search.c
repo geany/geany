@@ -27,7 +27,6 @@
 #include "msgwindow.h"
 
 #include <unistd.h>
-#include <stdlib.h>
 
 #ifdef G_OS_UNIX
 # include <sys/types.h>
