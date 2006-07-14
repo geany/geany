@@ -533,7 +533,7 @@ void tm_project_dump(const TMProject *p)
 		tm_work_object_dump(TM_WORK_OBJECT(p));
 		if (p->file_list)
 		{
-			int i;
+			guint i;
 			for (i=0; i < p->file_list->len; ++i)
 			{
 				fprintf(stderr, "->\t");

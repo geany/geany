@@ -163,16 +163,16 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	glob_t globbuf;
 #endif
 	int idx_inc;
-	int idx_glob;
+	size_t idx_glob;
 	char *command;
 	guint i;
 	FILE *fp;
 	TMWorkObject *source_file;
 	GPtrArray *tags_array;
 	GList *includes_files = NULL;
-	int list_len;
-	int idx_main;
-	int idx_sub;
+	guint list_len;
+	guint idx_main;
+	guint idx_sub;
 	int remove_count = 0;
 #ifdef G_OS_WIN32
 	char *temp_file = g_strdup_printf("%s_%d_%ld_1.cpp", P_tmpdir, getpid(), time(NULL));
@@ -428,7 +428,7 @@ void tm_workspace_dump(void)
 		tm_work_object_dump(TM_WORK_OBJECT(theWorkspace));
 		if (theWorkspace->work_objects)
 		{
-			int i;
+			guint i;
 			for (i=0; i < theWorkspace->work_objects->len; ++i)
 			{
 				if (IS_TM_PROJECT(TM_WORK_OBJECT(theWorkspace->work_objects->pdata[i])))
