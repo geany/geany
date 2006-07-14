@@ -1,3 +1,8 @@
+2006-07-14  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/search.c: Give accurate message on finishing finding in files.
+
+
 2006-07-14  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/filetypes.c, src/highlighting.c, tagmanager/tm_tag.c,

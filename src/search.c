@@ -188,24 +188,19 @@ static gboolean search_read_io              (GIOChannel *source,
 static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 {
 #ifdef G_OS_UNIX
-	gboolean failure = FALSE;
+	gchar *msg = _("Search failed.");
 
 	if (WIFEXITED(status))
 	{
-		if (WEXITSTATUS(status) != EXIT_SUCCESS)
-			failure = TRUE;
-	}
-	else if (WIFSIGNALED(status))
-	{
-		// the terminating signal: WTERMSIG (status));
-		failure = TRUE;
-	}
-	else
-	{	// any other failure occured
-		failure = TRUE;
+		switch (WEXITSTATUS(status))
+		{
+			case 0: msg = _("Search completed."); break;
+			case 1: msg = _("No matches found."); break;
+			default: break;
+		}
 	}
 
-	msgwin_msg_add(-1, -1, (failure) ? _("Search failed.") : _("Search completed."));
+	msgwin_msg_add(-1, -1, msg);
 #endif
 	utils_beep();
 	g_spawn_close_pid(child_pid);
