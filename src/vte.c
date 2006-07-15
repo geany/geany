@@ -53,6 +53,8 @@ static void vte_register_symbols(GModule *module);
 static void vte_get_settings(void);
 static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *vte_create_popup_menu(void);
+static void vte_char_size_changed(VteTerminal *vteterminal, guint arg1, guint arg2,
+	gpointer user_data);
 
 
 /* taken from anjuta, thanks */
@@ -142,7 +144,7 @@ void vte_init(void)
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(frame), hbox);
 	gtk_box_pack_start(GTK_BOX(hbox), vte, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), scrollbar, FALSE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), scrollbar, FALSE, FALSE, 0);
 
 	vte_get_settings();
 
@@ -154,6 +156,8 @@ void vte_init(void)
 	g_signal_connect(G_OBJECT(vte), "child-exited", G_CALLBACK(vte_start), NULL);
 	g_signal_connect(G_OBJECT(vte), "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
 	g_signal_connect(G_OBJECT(vte), "event", G_CALLBACK(vte_keypress), NULL);
+	g_signal_connect(G_OBJECT(vte), "char-size-changed",
+		G_CALLBACK(vte_char_size_changed), NULL);
 	//g_signal_connect(G_OBJECT(vte), "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 	//g_signal_connect(G_OBJECT(vte), "drag-drop", G_CALLBACK(vte_drag_drop), NULL);
 
@@ -163,10 +167,10 @@ void vte_init(void)
 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
 
 	// the vte widget has to be realised before color changes take effect
-	//g_signal_connect(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
+	g_signal_connect(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
 
 	//gtk_widget_realize(vte);
-	vte_apply_user_settings();
+	//vte_apply_user_settings();
 }
 
 
@@ -243,6 +247,17 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 	}
 
 	return FALSE;
+}
+
+
+static void vte_char_size_changed(VteTerminal *vteterminal, guint arg1, guint arg2,
+	gpointer user_data)
+{
+	/* Now the font may have changed, we must limit the width, otherwise the
+	 * vertical scroll bar will disappear e.g. for Monospace > 10.
+	 * We don't want to set height, but there's no way to set just width, so say 5.
+	 * The VTE will be safely enlarged by GTK, above 30, 5 after this callback. */
+	vf->vte_terminal_set_size(VTE_TERMINAL(vc->vte), 30, 5);
 }
 
 

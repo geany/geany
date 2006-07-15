@@ -11,6 +11,8 @@
 
  * keybindings.c, keybindings.h: Add keybinding for Find in files.
  * doc/geany.docbook: Updated Make command names and keybindings.
+ * src/vte.c: Fix applying vte settings on startup and prevent the
+              message window vertical scrollbar being hidden.
 
 
 2006-07-14  Nick Treleaven  <nick.treleaven@btinternet.com>
