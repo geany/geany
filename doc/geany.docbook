@@ -685,7 +685,8 @@
 				If there are any warnings or errors with line numbers shown in the Compiler output tab,
 				you can double click on them and <application>&app;</application> will switch to
 				the relevant source file (if it is open) and mark the line number so the problem
-				can be corrected.
+				can be corrected. <application>&app;</application> will also set indicators for
+				warnings or errors with line numbers.
 			</para>
 			<para>
 				Depending on the current file's filetype, the Build menu will contain the following
@@ -693,8 +694,9 @@
 				<itemizedlist>
 					<listitem><para>Compile</para></listitem>
 					<listitem><para>Build</para></listitem>
-					<listitem><para>Build with "make"</para></listitem>
-					<listitem><para>Build with make (custom target)</para></listitem>
+					<listitem><para>Make all</para></listitem>
+					<listitem><para>Make custom target</para></listitem>
+					<listitem><para>Make object</para></listitem>
 					<listitem><para>Execute</para></listitem>
 					<listitem><para>Set Includes and Arguments</para></listitem>
 				</itemizedlist>
@@ -728,20 +730,29 @@
 				</para>
 			</section>
 			<section>
-				<title>Build with "make"</title>
+				<title>Make all</title>
 				<para>
 					This effectively runs "make all" in the same directory as the current file.
-					The Make tool path must be correctly set in the Tools tab of the Preferences
-					dialog.
+					<note><para>
+						For each of the Make commands, The Make tool path must be correctly set
+						in the Tools tab of the Preferences dialog.
+					</para></note>
 				</para>
 			</section>
 			<section>
-				<title>Build with make (custom target)</title>
+				<title>Make custom target</title>
 				<para>
-					This is similar to running Build with "make" but you will be prompted
+					This is similar to running 'Make all' but you will be prompted
 					for the make target name to be passed to the Make tool. For example,
-					typing 'clean' in the dialog prompt will run "make clean" (again using
-					the full path to the Make tool).
+					typing 'clean' in the dialog prompt will run "make clean".
+				</para>
+			</section>
+			<section>
+				<title>Make object</title>
+				<para>
+					Make object will run "make current_file.o" in the same directory as the current
+					file, using its prefix for 'current_file'. It is useful for compiling just the
+					current file without building the whole project.
 				</para>
 			</section>
 			<section>
@@ -778,7 +789,7 @@
 				</para>
 				<para>
 					If you need complex settings for your build system, or several different
-					settings, then writing a Makefile and using Build with "make" is recommended.
+					settings, then writing a Makefile and using the Make commands is recommended.
 				</para>
 			</section>
 			<section>
@@ -806,7 +817,7 @@
 		<section id="printing">
 			<title>Printing support</title>
 			<para>
-				Geany has basic printing support. This means you can print file by passing the
+				Geany has basic printing support. This means you can print a file by passing the
 				filename of the current file to a command which actually prints the file. However,
 				the printed document contains no syntax highlighting. You can adjust the command
 				to which the filename is passed in the preferences dialog. The default command is:
@@ -929,15 +940,19 @@
 							</row>
 							<row>
 								<entry>Replace</entry>
-								<entry>Opens the replace dialog.</entry>
+								<entry>Opens the Replace dialog.</entry>
+							</row>
+							<row>
+								<entry>Find in files</entry>
+								<entry>Opens the Find in files dialog.</entry>
 							</row>
 							<row>
 								<entry>Go to line</entry>
-								<entry>Opens the Go To Line dialog.</entry>
+								<entry>Opens the Go to line dialog.</entry>
 							</row>
 							<row>
 								<entry>Show Colour Chooser</entry>
-								<entry>Opens the colour chooser dialog.</entry>
+								<entry>Opens the Colour Chooser dialog.</entry>
 							</row>
 							<row>
 								<entry>Fullscreen</entry>
@@ -986,12 +1001,17 @@
 								</entry>
 							</row>
 							<row>
-								<entry>Build with "make"</entry>
+								<entry>Make all</entry>
 								<entry>Builds the current file with the Make tool.</entry>
 							</row>
 							<row>
-								<entry>Build with "make" (custom target)</entry>
+								<entry>Make custom target</entry>
 								<entry>Builds the current file with the Make tool and a given target.
+								</entry>
+							</row>
+							<row>
+								<entry>Make object</entry>
+								<entry>Compiles the current file with the Make tool.
 								</entry>
 							</row>
 							<row>
@@ -1066,24 +1086,24 @@
 							</row>
 							<row>
 								<entry>Find Usage</entry>
-								<entry>Finds all occurrences of the current word under the mouse
-									   pointer and displays them in the messages window.
+								<entry>Finds all occurrences of the current word (near the
+									   keyboard cursor) and displays them in the messages window.
 								</entry>
 							</row>
 							<row>
 								<entry>Go to tag definition</entry>
-								<entry>Jump to the defintion of the current function under the
-									   mouse pointer. If the defintion cannot be found(e.g. the
-									   file where it is, is not open) <application>&app;</application>
-									   will beep and do nothing.
+								<entry>Jump to the definition of the current word (near the
+									   keyboard cursor). If the definition cannot be found (e.g. the
+									   relevant file is not open) <application>&app;</application>
+									   will beep and do nothing. Used for function definitions.
 								</entry>
 							</row>
 							<row>
 								<entry>Go to tag declaration</entry>
-								<entry>Jump to the declaration of the current function under the
-									   mouse pointer. If the defintion cannot be found(e.g. the
-									   file where it is, is not open) <application>&app;</application>
-									   will beep and do nothing.
+								<entry>Jump to the declaration of the current word (near the
+									   keyboard cursor). If the declaration cannot be found (e.g. the
+									   relevant file is not open) <application>&app;</application>
+									   will beep and do nothing. Used for function prototypes.
 								</entry>
 							</row>
 						</tbody>

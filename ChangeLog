@@ -1,6 +1,7 @@
 2006-07-15  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * keybindings.c, keybindings.h: Add keybinding for Find in files.
+ * doc/geany.docbook: Updated Make command names and keybindings.
 
 
 2006-07-14  Nick Treleaven  <nick.treleaven@btinternet.com>
