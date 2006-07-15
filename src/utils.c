@@ -2500,6 +2500,15 @@ void utils_update_toolbar_items(void)
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), FALSE);
 	}
 
+	// fileops
+	utils_widget_show_hide(lookup_widget(app->window, "menutoolbutton1"), app->pref_toolbar_show_fileops);
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton9"), app->pref_toolbar_show_fileops);
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton10"), app->pref_toolbar_show_fileops);
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton22"), app->pref_toolbar_show_fileops);
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton23"), app->pref_toolbar_show_fileops);
+	utils_widget_show_hide(lookup_widget(app->window, "toolbutton15"), app->pref_toolbar_show_fileops);
+	utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem7"), app->pref_toolbar_show_fileops);
+	utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem2"), app->pref_toolbar_show_fileops);
 	// search
 	utils_widget_show_hide(lookup_widget(app->window, "entry1"), app->pref_toolbar_show_search);
 	utils_widget_show_hide(lookup_widget(app->window, "toolbutton18"), app->pref_toolbar_show_search);

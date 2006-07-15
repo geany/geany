@@ -163,6 +163,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_toolbar_colour");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_colour);
 
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_fileops");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_fileops);
+
 
 	switch (app->toolbar_icon_style)
 	{
@@ -435,6 +438,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_colour");
 		app->pref_toolbar_show_colour = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_fileops");
+		app->pref_toolbar_show_fileops = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "radio_toolbar_imagetext");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) app->toolbar_icon_style = 2;

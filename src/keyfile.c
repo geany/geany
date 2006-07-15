@@ -129,6 +129,7 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_undo", app->pref_toolbar_show_undo);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", app->pref_toolbar_show_compile);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", app->pref_toolbar_show_colour);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_fileops", app->pref_toolbar_show_fileops);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", app->toolbar_icon_style);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", app->toolbar_icon_size);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", app->pref_editor_new_line);
@@ -298,6 +299,7 @@ gboolean configuration_load(void)
 	app->pref_toolbar_show_compile = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_compile", TRUE);
 	app->pref_toolbar_show_undo = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_undo", FALSE);
 	app->pref_toolbar_show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
+	app->pref_toolbar_show_fileops = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_fileops", TRUE);
 #ifdef HAVE_VTE
 	app->load_vte = utils_get_setting_boolean(config, PACKAGE, "load_vte", TRUE);
 	app->terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings",	"");

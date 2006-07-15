@@ -170,6 +170,7 @@ typedef struct MyApp
 	gboolean			 pref_toolbar_show_compile;
 	gboolean			 pref_toolbar_show_zoom;
 	gboolean			 pref_toolbar_show_colour;
+	gboolean			 pref_toolbar_show_fileops;
 	gint				 tab_pos_editor;
 	gint				 tab_pos_msgwin;
 	gint				 tab_pos_sidebar;

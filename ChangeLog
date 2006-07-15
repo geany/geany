@@ -2,6 +2,9 @@
 
  * src/keybindings.c, src/sci_cb.c:
    Show auto completion list immediately when called by a keybinding.
+ * geany.glade, src/interface.c, src/prefs.c, src/geany.h,
+   src/keyfile.c, src/utils.c:
+   Toolbar items for file operations can also be hidden.
 
 
 2006-07-15  Nick Treleaven  <nick.treleaven@btinternet.com>

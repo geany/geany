@@ -1948,6 +1948,7 @@ create_prefs_dialog (void)
   GtkWidget *frame11;
   GtkWidget *alignment14;
   GtkWidget *vbox16;
+  GtkWidget *check_toolbar_fileops;
   GtkWidget *check_toolbar_compile;
   GtkWidget *check_toolbar_colour;
   GtkWidget *check_toolbar_zoom;
@@ -2479,6 +2480,13 @@ create_prefs_dialog (void)
   vbox16 = gtk_vbox_new (FALSE, 0);
   gtk_widget_show (vbox16);
   gtk_container_add (GTK_CONTAINER (alignment14), vbox16);
+
+  check_toolbar_fileops = gtk_check_button_new_with_mnemonic (_("Show file operation buttons"));
+  gtk_widget_show (check_toolbar_fileops);
+  gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_fileops, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_toolbar_fileops, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_toolbar_fileops, _("Display the New, Open, Close, Save and Reload buttons in the toolbar"), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_fileops), FALSE);
 
   check_toolbar_compile = gtk_check_button_new_with_mnemonic (_("Show Compile and Run"));
   gtk_widget_show (check_toolbar_compile);
@@ -3132,6 +3140,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame11, "frame11");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment14, "alignment14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox16, "vbox16");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_fileops, "check_toolbar_fileops");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_compile, "check_toolbar_compile");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_colour, "check_toolbar_colour");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_zoom, "check_toolbar_zoom");
