@@ -190,7 +190,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 					if (doc_list[idx].use_auto_indention) sci_cb_close_block(sci, pos - 1);
 					break;
 				}
-				default: sci_cb_start_auto_complete(sci, pos, idx);
+				default: sci_cb_start_auto_complete(sci, pos, idx, FALSE);
 			}
 			break;
 		}
@@ -404,7 +404,7 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx)
 }
 
 
-gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos, gint idx)
+gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos, gint idx, gboolean force)
 {
 	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style;
 	gchar *linebuf, *root;
@@ -460,16 +460,19 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos, gint idx)
 		TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 
 		if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL)
-		{	// go home if typed less than 4 chars
+		{
 			g_free(linebuf);
 			return FALSE;
 		}
 
-		while ((line_pos - i >= 0) && ! g_ascii_isspace(linebuf[line_pos - i])) i++;
-		if (i < 4)
-		{	// go home if typed less than 4 chars
-			g_free(linebuf);
-			return FALSE;
+		if (! force)
+		{	// force is set when called by keyboard shortcut, otherwise start after at third char
+			while ((line_pos - i >= 0) && ! g_ascii_isspace(linebuf[line_pos - i])) i++;
+			if (i < 4)
+			{	// go home if typed less than 4 chars
+				g_free(linebuf);
+				return FALSE;
+			}
 		}
 
 		tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc_list[idx].file_type->lang);
