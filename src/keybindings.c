@@ -59,6 +59,7 @@ static void cb_func_menu_preferences(void);
 static void cb_func_menu_findnext(void);
 static void cb_func_menu_findprevious(void);
 static void cb_func_menu_replace(void);
+static void cb_func_menu_findinfiles(void);
 static void cb_func_menu_gotoline(void);
 static void cb_func_menu_opencolorchooser(void);
 static void cb_func_menu_fullscreen(void);
@@ -131,12 +132,14 @@ void keybindings_init(void)
 		GDK_a, GDK_CONTROL_MASK, "menu_selectall", _("Select All"));
 	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences,
 		GDK_p, GDK_CONTROL_MASK, "menu_preferences", _("Preferences"));
-	keys[GEANY_KEYS_MENU_FIND_NEXT] = fill(cb_func_menu_findnext,
+	keys[GEANY_KEYS_MENU_FINDNEXT] = fill(cb_func_menu_findnext,
 		GDK_F3, 0, "menu_findnext", _("Find Next"));
 	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious,
 		GDK_F3, GDK_SHIFT_MASK, "menu_findprevious", _("Find Previous"));
 	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace,
 		GDK_e, GDK_CONTROL_MASK, "menu_replace", _("Replace"));
+	keys[GEANY_KEYS_MENU_FINDINFILES] = fill(cb_func_menu_findinfiles, GDK_f,
+		GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findinfiles", _("Find in files"));
 	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline,
 		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
 	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser,
@@ -256,9 +259,10 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REDO, menu_redo2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SELECTALL, menu_select_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PREFERENCES, preferences1);
-	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FIND_NEXT, find_next1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDNEXT, find_next1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACE, replace1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDINFILES, find_in_files1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FULLSCREEN, menu_fullscreen1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_MESSAGEWINDOW, menu_show_messages_window1);
@@ -443,6 +447,11 @@ static void cb_func_menu_findprevious(void)
 static void cb_func_menu_replace(void)
 {
 	dialogs_show_replace();
+}
+
+static void cb_func_menu_findinfiles(void)
+{
+	dialogs_show_find_in_files();
 }
 
 static void cb_func_menu_gotoline(void)
