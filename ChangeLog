@@ -2,6 +2,7 @@
 
  * src/encodings.c:
    Reordered encodings in the file menu, divided into subregions.
+ * geany.glade, src/interface.c: Added missing mnemonics to file menu.
 
 
 2006-07-16  Nick Treleaven  <nick.treleaven@btinternet.com>

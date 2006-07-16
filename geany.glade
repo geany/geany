@@ -57,7 +57,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image799">
+			<widget class="GtkImage" id="image833">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -150,7 +150,7 @@
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image800">
+			<widget class="GtkImage" id="image834">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -227,7 +227,7 @@
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image801">
+			<widget class="GtkImage" id="image835">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -354,11 +354,11 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="insert_include2">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Insert &quot;include &lt;...&gt;&quot;</property>
+		      <property name="label" translatable="yes">_Insert &quot;include &lt;...&gt;&quot;</property>
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image802">
+			<widget class="GtkImage" id="image836">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -386,11 +386,11 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="add_comments1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Insert Comments</property>
+		      <property name="label" translatable="yes">I_nsert Comments</property>
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image803">
+			<widget class="GtkImage" id="image837">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -467,7 +467,7 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="menu_change_selection2">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Change Selection</property>
+		      <property name="label" translatable="yes">Change _Selection</property>
 		      <property name="use_underline">True</property>
 
 		      <child>
@@ -499,7 +499,7 @@
 		    <widget class="GtkMenuItem" id="menu_count_words1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Counts the words and characters in the current selection or the whole document</property>
-		      <property name="label" translatable="yes">_Count words</property>
+		      <property name="label" translatable="yes">Count _words</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_count_words1_activate" last_modification_time="Mon, 06 Jun 2005 11:49:24 GMT"/>
 		    </widget>
@@ -568,7 +568,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image804">
+			<widget class="GtkImage" id="image838">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -610,7 +610,7 @@
 		      <signal name="activate" handler="on_go_to_line1_activate" last_modification_time="Tue, 23 May 2006 17:10:49 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image805">
+			<widget class="GtkImage" id="image839">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -645,7 +645,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image806">
+			<widget class="GtkImage" id="image840">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -667,7 +667,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image807">
+			<widget class="GtkImage" id="image841">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -827,7 +827,7 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="set_filetype1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Set filetype</property>
+		      <property name="label" translatable="yes">Set file_type</property>
 		      <property name="use_underline">True</property>
 
 		      <child>
@@ -847,7 +847,7 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="set_encoding1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Set encoding</property>
+		      <property name="label" translatable="yes">Set _encoding</property>
 		      <property name="use_underline">True</property>
 
 		      <child>
@@ -867,7 +867,7 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="menu_line_endings1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Line endings</property>
+		      <property name="label" translatable="yes">Set line e_ndings</property>
 		      <property name="use_underline">True</property>
 
 		      <child>
@@ -876,7 +876,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="crlf">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Convert and set to CR/LF (Win)</property>
+			      <property name="label" translatable="yes">Convert and set to _CR/LF (Win)</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_crlf_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
@@ -885,7 +885,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="lf">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Convert and set to LF (Unix)</property>
+			      <property name="label" translatable="yes">Convert and set to _LF (Unix)</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_lf_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
@@ -894,7 +894,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="cr">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Convert and set to CR (Mac)</property>
+			      <property name="label" translatable="yes">Convert and set to CR (_Mac)</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_cr_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
