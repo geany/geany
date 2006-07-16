@@ -8,6 +8,9 @@
  * src/utils.c: Simplified locale detection and little speed up.
  * src/main.c, src/document.c, src/geany.h:
    Removed code for alternative scrolling(it was not better).
+ * src/sci_cb.c, src/callbacks.c, src/utils.c, src/highlighting.c,
+   src/main.c, data/html_entities.tags, Makefile.am:
+   Moved HTML entities from sci_cb.h to data/html_entities.tags.
 
 
 2006-07-16  Nick Treleaven  <nick.treleaven@btinternet.com>

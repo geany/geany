@@ -25,12 +25,14 @@
 #include "SciLexer.h"
 #include "geany.h"
 #include "highlighting.h"
+#include "sci_cb.h"
 #include "utils.h"
 
 
 static style_set *types[GEANY_MAX_FILE_TYPES] = { NULL };
 static gboolean global_c_tags_loaded = FALSE;
 static gboolean global_php_tags_loaded = FALSE;
+static gboolean global_html_tags_loaded = FALSE;
 static gboolean global_latex_tags_loaded = FALSE;
 
 
@@ -784,6 +786,12 @@ static void styleset_php_init(void)
 		// 6 is the langType used in TagManager (see the table in tagmanager/parsers.h)
 		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "php.tags", 6);
 		global_php_tags_loaded = TRUE;
+	}
+	// load global tags file for HTML entities autocompletion
+	if (! app->ignore_global_tags && ! global_html_tags_loaded)
+	{
+		html_entities = utils_read_file_in_array(GEANY_DATA_DIR G_DIR_SEPARATOR_S "html_entities.tags");
+		global_html_tags_loaded = TRUE;
 	}
 
 	g_key_file_free(config);

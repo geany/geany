@@ -23,6 +23,9 @@
 #define GEANY_SCI_CB_H 1
 
 
+gchar **html_entities;
+
+
 // callback func called by all editors when a signals arises
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
@@ -51,15 +54,5 @@ void sci_cb_auto_multiline(ScintillaObject *sci, gint pos);
 void sci_cb_auto_table(ScintillaObject *sci, gint pos);
 
 void sci_cb_auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
-
-#define sci_cb_html_entities "&nbsp; &quot; &amp; &lt; &gt;  &Uuml;&trade; &euro; &bull; &infin; &prop; &lowast;\
- &minus; &sum; &prod; &isin; &empty; &pi; &Omega; &omega; &alpha; &yuml; &yacute;\
- &divide; &oslash; &ugrave; &uacute; &ucirc; &uuml; &auml; &aring; &aelig; &ccedil;\
- &egrave; &ecirc; &euml; &igrave; &icirc; &iuml; &ntilde; &ograve; &oacute; &ocirc;\
- &otilde; &ouml; &cent; &pound; &curren; &yen; &sect; &uml; &copy; &ordf; &reg; &deg;\
- &plusmn; &sup2; &sup3; &frac34; &Agrave; &Aacute; &Acirc; &Atilde; &Auml; &Aring;\
- &AElig; &Ccedil; &Egrave; &Eacute; &Ecirc; &frac12; &frac14; &ordm; &sup1; &para;\
- &micro; &Euml; &Igrave; &Iacute; &Icirc; &Iuml; &Ntilde; &Ograve; &Oacute; &Ocirc;\
- &Otilde; &Ouml; &times; &Oslash; &Ugrave; &Uacute; &Ucirc;"
 
 #endif

@@ -48,6 +48,7 @@
 #include "treeviews.h"
 #include "notebook.h"
 #include "keybindings.h"
+#include "sci_cb.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -225,10 +226,11 @@ static void main_init(void)
 #ifdef HAVE_VTE
 	app->lib_vte			= lib_vte;
 #endif
-	app->ignore_global_tags 					= ignore_global_tags;
-	app->tm_workspace							= tm_get_workspace();
-	app->recent_queue							= g_queue_new();
-	app->opening_session_files					= FALSE;
+	app->ignore_global_tags 		= ignore_global_tags;
+	app->tm_workspace				= tm_get_workspace();
+	app->recent_queue				= g_queue_new();
+	app->opening_session_files		= FALSE;
+	html_entities					= NULL;
 
 	app->window = create_window1();
 	app->new_file_menu = gtk_menu_new();

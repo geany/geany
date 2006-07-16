@@ -2517,3 +2517,21 @@ void utils_update_toolbar_items(void)
 	utils_widget_show_hide(lookup_widget(app->window, "separatortoolitem9"), app->pref_toolbar_show_undo);
 }
 
+
+gchar **utils_read_file_in_array(const gchar *filename)
+{
+	gchar **result = NULL;
+	gchar *data;
+
+	if (filename == NULL) return NULL;
+
+	g_file_get_contents(filename, &data, NULL, NULL);
+
+	if (data != NULL)
+	{
+		result = g_strsplit_set(data, "\r\n", -1);
+	}
+
+	return result;
+}
+

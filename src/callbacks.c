@@ -123,6 +123,7 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	styleset_free_styles();
 	templates_free_templates();
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
+	g_strfreev(html_entities);
 	g_free(app->configdir);
 	g_free(app->search_text);
 	g_free(app->editor_font);

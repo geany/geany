@@ -438,21 +438,25 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos, gint idx, gb
 
 	if (*root == '&' && lexer == SCLEX_HTML)
 	{	// HTML entities auto completion
-		gchar **ents = g_strsplit(sci_cb_html_entities, " ", 0);
-		guint i, j = 0, ents_len = g_strv_length(ents);
-		GString *words = g_string_sized_new(60);
+		guint i, j = 0;
+		GString *words;
 
-		for (i = 0; i < ents_len; i++)
+		if (html_entities == NULL) return FALSE;
+
+		words = g_string_sized_new(500);
+		for (i = 0; ; i++)
 		{
-			if (! strncmp(ents[i], root, rootlen))
+			if (html_entities[i] == NULL) break;
+			else if (html_entities[i][0] == '#') continue;
+
+			if (! strncmp(html_entities[i], root, rootlen))
 			{
 				if (j++ > 0) g_string_append_c(words, ' ');
-				g_string_append(words, ents[i]);
+				g_string_append(words, html_entities[i]);
 			}
 		}
-		SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words->str);
+		if (words->len > 0) SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words->str);
 		g_string_free(words, TRUE);
-		g_strfreev(ents);
 	}
 	else
 	{	// PHP, LaTeX, C and C++ tag autocompletion
