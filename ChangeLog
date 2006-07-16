@@ -1,3 +1,10 @@
+2006-07-16  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * doc/scikeybinding.docbook, doc/geany.docbook:
+   Added Scintilla keyboard commands appendix taken from the SciTE
+   documentation section 'Keyboard Commands'.
+
+
 2006-07-15  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/keybindings.c, src/sci_cb.c:

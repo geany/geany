@@ -1,0 +1,185 @@
+<appendix id="scikeybinding">
+  <appendixinfo>
+    <title>Scintilla keyboard commands</title>
+    <pubdate>20 June 2006</pubdate>
+    <copyright>
+      <year>1998, 2006</year>
+      <holder>Neil Hodgson &lt;neilh@scintilla.org&gt;</holder>
+    </copyright>
+		<legalnotice>
+			<para>
+				This appendix is distributed under the terms of the Scintilla License.
+				A copy of this license can be found in the file scintilla/License.txt
+				included with the source code of this
+				program and in the appendix of this document.
+				See <xref linkend="scintilla-license"/>.
+			</para>
+		</legalnotice>
+  </appendixinfo>
+  <title>Scintilla keyboard commands</title>
+  <sect1>
+    <title>
+       Keyboard commands
+    </title>
+    <para>
+       <!-- Scintilla release 1.70, 20 June 2006 -->
+       Keyboard commands for Scintilla mostly follow common Windows and GTK+ conventions.
+       All move keys (arrows, page up/down, home and end)
+       allows to extend or reduce the stream selection when holding the Shift key,
+       and the rectangular selection when holding the Shift and Alt keys.
+       Some keys may not be available with some national keyboards or because
+       they are taken by the system such as by a window manager on GTK+.
+       Keyboard equivalents of menu commands are listed in the menus.
+       Some less common commands with no menu equivalent are:
+    </para>
+    <para>
+	<table frame="all">
+		<title>Scintilla keyboard commands</title>
+		<tgroup cols="2">
+			<?dbhtml cellpadding="4" ?>
+			<?dbhtml cellspacing="0" ?>
+			<colspec colnum="1" colname="col1"/>
+			<colspec colnum="2" colname="col2"/>
+			<spanspec spanname="hspan" namest="col1" nameend="col2" align="center"/>
+			<thead>
+				<row>
+					<entry>Action</entry>
+					<entry>Shortcut key</entry>
+				</row>
+			</thead>
+			<tbody>
+				<row>
+					<entry>Magnify text size.</entry><entry>Ctrl+Keypad+</entry>
+				</row>
+				<row>
+					<entry>Reduce text size.</entry><entry>Ctrl+Keypad-</entry>
+				</row>
+				<row>
+					<entry>Restore text size to normal.</entry><entry>Ctrl+Keypad/</entry>
+				</row>
+				<!--
+				<row>
+					<entry>Cycle through recent files.</entry><entry>Ctrl+Tab</entry>
+				</row>
+				-->
+				<row>
+					<entry>Indent block.</entry><entry>Tab</entry>
+				</row>
+				<row>
+					<entry>Dedent block.</entry><entry>Shift+Tab</entry>
+				</row>
+				<row>
+					<entry>Delete to start of word.</entry><entry>Ctrl+BackSpace</entry>
+				</row>
+				<row>
+					<entry>Delete to end of word.</entry><entry>Ctrl+Delete</entry>
+				</row>
+				<row>
+					<entry>Delete to start of line.</entry><entry>Ctrl+Shift+BackSpace</entry>
+				</row>
+				<row>
+					<entry>Delete to end of line.</entry><entry>Ctrl+Shift+Delete</entry>
+				</row>
+				<row>
+					<entry>Go to start of document.</entry><entry>Ctrl+Home</entry>
+				</row>
+				<row>
+					<entry>Extend selection to start of document.</entry><entry>Ctrl+Shift+Home</entry>
+				</row>
+				<row>
+					<entry>Go to start of display line.</entry><entry>Alt+Home</entry>
+				</row>
+				<row>
+					<entry>Extend selection to start of display line.</entry><entry>Alt+Shift+Home</entry>
+				</row>
+				<row>
+					<entry>Go to end of document.</entry><entry>Ctrl+End</entry>
+				</row>
+				<row>
+					<entry>Extend selection to end of document.</entry><entry>Ctrl+Shift+End</entry>
+				</row>
+				<row>
+					<entry>Go to end of display line.</entry><entry>Alt+End</entry>
+				</row>
+				<row>
+					<entry>Extend selection to end of display line.</entry><entry>Alt+Shift+End</entry>
+				</row>
+				<!--
+				<row>
+					<entry>Expand or contract a fold point.</entry><entry>Ctrl+Keypad*</entry>
+				</row>
+				<row>
+					<entry>Create or delete a bookmark.</entry><entry>Ctrl+F2</entry>
+				</row>
+				<row>
+					<entry>Go to next bookmark.</entry><entry>F2</entry>
+				</row>
+				<row>
+					<entry>Select to next bookmark.</entry><entry>Alt+F2</entry>
+				</row>
+				-->
+				<row>
+					<entry>Find selection.</entry><entry>Ctrl+F3</entry>
+				</row>
+				<row>
+					<entry>Find selection backwards.</entry><entry>Ctrl+Shift+F3</entry>
+				</row>
+				<row>
+					<entry>Scroll up.</entry><entry>Ctrl+Up</entry>
+				</row>
+				<row>
+					<entry>Scroll down.</entry><entry>Ctrl+Down</entry>
+				</row>
+				<row>
+					<entry>Line cut.</entry><entry>Ctrl+L</entry>
+				</row>
+				<row>
+					<entry>Line copy.</entry><entry>Ctrl+Shift+T</entry>
+				</row>
+				<row>
+					<entry>Line delete.</entry><entry>Ctrl+Shift+L</entry>
+				</row>
+				<row>
+					<entry>Line transpose with previous.</entry><entry>Ctrl+T</entry>
+				</row>
+				<row>
+					<entry>Selection duplicate.</entry><entry>Ctrl+D</entry>
+				</row>
+				<!--
+				<row>
+					<entry>Find matching preprocessor conditional, skipping nested ones.</entry><entry>Ctrl+K</entry>
+				</row>
+				<row>
+					<entry>Select to matching preprocessor conditional.</entry><entry>Ctrl+Shift+K</entry>
+				</row>
+				<row>
+					<entry>Find matching preprocessor conditional backwards, skipping nested ones.</entry><entry>Ctrl+J</entry>
+				</row>
+				<row>
+					<entry>Select to matching preprocessor conditional backwards.</entry><entry>Ctrl+Shift+J</entry>
+				</row>
+				-->
+				<row>
+					<entry>Previous paragraph. Shift extends selection.</entry><entry>Ctrl+[</entry>
+				</row>
+				<row>
+					<entry>Next paragraph. Shift extends selection.</entry><entry>Ctrl+]</entry>
+				</row>
+				<row>
+					<entry>Previous word. Shift extends selection.</entry><entry>Ctrl+Left</entry>
+				</row>
+				<row>
+					<entry>Next word. Shift extends selection.</entry><entry>Ctrl+Right</entry>
+				</row>
+				<row>
+					<entry>Previous word part. Shift extends selection</entry><entry>Ctrl+/</entry>
+				</row>
+				<row>
+					<entry>Next word part. Shift extends selection.</entry><entry>Ctrl+\</entry>
+				</row>
+			</tbody>
+		</tgroup>
+    </table>
+    </para>
+  </sect1>
+</appendix>

@@ -9,6 +9,7 @@
 <!ENTITY author_mail "enrico.troeger@uvena.de">
 <!ENTITY date "July 01, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
+<!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
 
 <book lang="en">
@@ -94,7 +95,7 @@
 			</para>
 			<para>
 				The included Scintilla library (found in the subdirectory scintilla/) has its own
-				license, which can be found in the appendix(see <xref linkend="scintilla-license"/>).
+				license, which can be found in the appendix (see <xref linkend="scintilla-license"/>).
 			</para>
 		</section>
 	</chapter>
@@ -843,7 +844,13 @@
 		<section id="keybindings">
 			<title>Keybindings</title>
 			<para>
-				For all listed actions you can define your own keybindings. Open the preferences
+				<application>&app;</application> supports the default keyboard shortcuts for the
+				Scintilla editing widget. For a list of these commands, see
+				<xref linkend="scikeybinding"/>. The Scintilla keyboard shortcuts will be
+				overridden by any custom keybindings with the same keyboard shortcut.
+			</para>
+			<para>
+				For all actions listed below you can define your own keybindings. Open the Preferences
 				dialog, select the desired action and click on change. In the opening dialog you can
 				press any key combination you want and it will be saved when you press OK.
 				You can define only one key combination for one action.
@@ -859,7 +866,7 @@
 				<keycombo><keycap>Alt</keycap><keycap>O</keycap></keycombo>.
 			</para>
 			<para>
-				The following table lists all available actions for keyboard shortcuts.
+				The following table lists all customizable keyboard shortcuts.
 			</para>
 			<para>
 				<table frame="all">
@@ -1547,6 +1554,9 @@
 			</para>
 		</section>
 	</chapter>
+
+	<!-- Sci default keys appendix -->
+	&scikeybinding;
 
 	<!-- GPL appendix -->
 	&legal;
