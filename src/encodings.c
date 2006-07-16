@@ -17,6 +17,7 @@
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
+ *  $Id$
  */
 
 
@@ -190,22 +191,6 @@ const gchar *encodings_get_charset(const GeanyEncoding* enc)
 	encodings_lazy_init();
 
 	return enc->charset;
-}
-
-
-/* Encodings */
-GList *encodings_get_encodings(void)
-{
-	GList *res = NULL;
-	gint i;
-
-	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
-	{
-		if (&encodings[i] != NULL)
-			res = g_list_append(res, (gpointer)&encodings[i]);
-	}
-
-	return res;
 }
 
 

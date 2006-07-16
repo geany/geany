@@ -467,7 +467,9 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 			if (converted_text == NULL)
 			{
-				msgwin_status_add(_("The file does not look like a text file or the file encoding is not supported."));
+				msgwin_status_add(
+	_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
+									utf8_filename);
 				utils_beep();
 				g_free(data);
 				g_free(utf8_filename);

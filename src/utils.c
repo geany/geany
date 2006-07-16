@@ -830,7 +830,6 @@ gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const
 	g_return_val_if_fail(buffer != NULL, NULL);
 	g_return_val_if_fail(charset != NULL, NULL);
 
-	geany_debug("Trying to convert from %s to UTF-8", charset);
 	converted_contents = g_convert(buffer, size, "UTF-8", charset, NULL,
 									&bytes_written, &conv_error);
 
@@ -860,39 +859,26 @@ gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const
 
 gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding)
 {
-	GList *encodings = NULL;
-	GList *start;
 	gchar *locale_charset = NULL;
-
-	encodings = encodings_get_encodings();
+	gchar *utf8_content;
+	gchar *charset;
+	gboolean check_current = FALSE;
+	guint i;
 
 	if (g_get_charset((const gchar**)&locale_charset) == FALSE)
-	{
-		const GeanyEncoding *locale_encoding;
+		check_current = TRUE;	// current locale is not UTF-8, we have to check this charset
 
-		// not using an UTF-8 locale, so try converting from that first
-		if (locale_charset != NULL)
+	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
+	{
+		if (check_current)
 		{
-			locale_encoding = encodings_get_from_charset(locale_charset);
-
-			encodings = g_list_prepend(encodings,
-						(gpointer) locale_encoding);
-			geany_debug("Current charset = %s", locale_charset);
+			charset = locale_charset;
+			i = -1;
 		}
-	}
+		else
+			charset = encodings[i].charset;
 
-	start = encodings;
-
-	while (encodings != NULL)
-	{
-		GeanyEncoding *enc;
-		const gchar *charset;
-		gchar *utf8_content;
-
-		enc = (GeanyEncoding*)encodings->data;
-
-		charset = encodings_get_charset(enc);
-		geany_debug("Trying to convert %d bytes of data into UTF-8.", size);
+		geany_debug("Trying to convert %d bytes of data from %s into UTF-8.", size, charset);
 		utf8_content = utils_convert_to_utf8_from_charset(buffer, size, charset);
 
 		if (utf8_content != NULL)
@@ -908,10 +894,7 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 			}
 			return utf8_content;
 		}
-		encodings = encodings->next;
 	}
-
-	g_list_free(start);
 
 	return NULL;
 }

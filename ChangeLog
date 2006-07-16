@@ -3,6 +3,9 @@
  * src/encodings.c:
    Reordered encodings in the file menu, divided into subregions.
  * geany.glade, src/interface.c: Added missing mnemonics to file menu.
+ * src/document.c: Added filename to an error message.
+ * src/encodings.c: Removed function encodings_get_encodings().
+ * src/utils.c: Simplified locale detection and little speed up.
 
 
 2006-07-16  Nick Treleaven  <nick.treleaven@btinternet.com>
