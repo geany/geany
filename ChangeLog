@@ -1,3 +1,9 @@
+2006-07-16  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/encodings.c:
+   Reordered encodings in the file menu, divided into subregions.
+
+
 2006-07-16  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * doc/scikeybinding.docbook, doc/geany.docbook:
