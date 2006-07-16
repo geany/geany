@@ -82,9 +82,6 @@ static GOptionEntry entries[] =
 	{ "vte-lib", 'l', 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("filename of libvte.so"), NULL },
 #endif
 	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("show version and exit"), NULL },
-#ifndef GEANY_DEBUG
-	{ "alt-scroll", 's', 0, G_OPTION_ARG_NONE, &alternative_scrolling, "use alternative scrolling, only for testing purposes", NULL },
-#endif
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
 

@@ -6,6 +6,8 @@
  * src/document.c: Added filename to an error message.
  * src/encodings.c: Removed function encodings_get_encodings().
  * src/utils.c: Simplified locale detection and little speed up.
+ * src/main.c, src/document.c, src/geany.h:
+   Removed code for alternative scrolling(it was not better).
 
 
 2006-07-16  Nick Treleaven  <nick.treleaven@btinternet.com>

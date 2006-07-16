@@ -239,13 +239,6 @@ gint document_create_new_sci(const gchar *filename)
 	pango_font_description_free(pfd);
 	g_free(fname);
 
-	// this is only for testing, should be tested seriously, could speed up scrolling
-	if (alternative_scrolling)
-	{
-		SSM(sci, SCI_SETBUFFEREDDRAW, 0, 0);
-		SSM(sci, SCI_SETTWOPHASEDRAW, 0, 0);
-	}
-
 	title = (filename) ? g_path_get_basename(filename) : g_strdup(GEANY_STRING_UNTITLED);
 
 	tabnum = notebook_new_tab(new_idx, title, GTK_WIDGET(sci));
