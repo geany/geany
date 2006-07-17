@@ -1,3 +1,9 @@
+2006-07-17  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * doc/scikeybinding.docbook, doc/geany.docbook, doc/geany_gpl.docbook:
+   Moved external appendix elements to geany.docbook to validate ok.
+
+
 2006-07-17  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/utils.c, src/document.c, src/callbacks.c:

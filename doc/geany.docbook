@@ -1557,10 +1557,14 @@
 	</chapter>
 
 	<!-- Sci default keys appendix -->
+	<appendix id="scikeybinding">
 	&scikeybinding;
+	</appendix>
 
 	<!-- GPL appendix -->
+	<appendix id="geany-gpl">
 	&legal;
+	</appendix>
 
 	<appendix id="scintilla-license">
 		<title>License for Scintilla and SciTE</title>

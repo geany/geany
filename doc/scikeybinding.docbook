@@ -1,4 +1,3 @@
-<appendix id="scikeybinding">
   <appendixinfo>
     <title>Scintilla keyboard commands</title>
     <pubdate>20 June 2006</pubdate>
@@ -12,9 +11,9 @@
 				Scintilla and SciTE.
 				A copy of this license can be found in the file scintilla/License.txt
 				included with the source code of this
-				program and in the "License for Scintilla and SciTE"
+				program and in the
 				appendix of this document.
-				<!-- See <xref linkend="scintilla-license"/>. (outside this doc!) -->
+				See <xref linkend="scintilla-license"/>.
 			</para>
 		</legalnotice>
   </appendixinfo>
@@ -184,4 +183,3 @@
     </table>
     </para>
   </sect1>
-</appendix>

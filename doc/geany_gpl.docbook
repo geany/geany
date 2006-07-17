@@ -1,4 +1,3 @@
-<appendix id="geany-gpl">
   <appendixinfo>
     <title>GNU General Public License</title>
     <pubdate>Version 2, June 1991</pubdate>
@@ -416,4 +415,3 @@
       Public License instead of this License.
     </para>
   </sect1>
-  </appendix>
