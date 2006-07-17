@@ -611,7 +611,7 @@ void document_save_file(gint idx)
 		gchar* conv_file_contents = NULL;
 
 		// try to convert it from UTF-8 to original encoding
-		conv_file_contents = g_convert(data, -1, doc_list[idx].encoding, "UTF-8",
+		conv_file_contents = g_convert(data, len-1, doc_list[idx].encoding, "UTF-8",
 													NULL, NULL, &conv_error);
 
 		if (conv_error != NULL)
