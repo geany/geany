@@ -3,6 +3,9 @@
  * src/utils.c, src/document.c, src/callbacks.c:
    Moved document related functions from utils.c to document.c.
    Keep cursor position when replacing tabs by spaces.
+ * doc/geany.xsl: Added UTF-8 as default encoding.
+ * doc/Makefile.am: Replaced xmlto command by xsltproc.
+ * doc/geany.docbook: Added reference for the GPL appendix.
 
 
 2006-07-16  Enrico Tröger  <enrico.troeger@uvena.de>

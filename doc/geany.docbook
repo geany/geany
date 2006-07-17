@@ -7,7 +7,7 @@
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY deburl "http://debian.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "July 01, 2006">
+<!ENTITY date "July 17, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -16,7 +16,7 @@
 	<bookinfo>
 		<author>
 			<firstname>Enrico</firstname>
-			<surname>Troeger</surname>
+			<surname>Tröger</surname>
 			<address><email>&author_mail;</email></address>
 		</author>
 		<author>
@@ -37,7 +37,7 @@
 				This document is distributed under the terms of the GNU General Public License as published by the Free
 				Software Foundation; either version 2 of the License, or (at your option) any later version.
 				A copy of this license can be found in the file COPYING included with the source code of this
-				program and in the appendix of this document.
+				program and see <xref linkend="geany-gpl"/>.
 			</para>
 		</legalnotice>
 		<title>
@@ -91,7 +91,7 @@
 				<application>&app;</application> is distributed under the terms of the GNU General Public License as published
 				by the Free	Software Foundation; either version 2 of the License, or (at your option) any later version.
 				A copy of this license can be found in the file COPYING included with the source code of this
-				program and in the appendix A of this document.
+				program or see <xref linkend="geany-gpl"/>.
 			</para>
 			<para>
 				The included Scintilla library (found in the subdirectory scintilla/) has its own
@@ -846,10 +846,9 @@
 			<para>
 				<application>&app;</application> supports the default keyboard shortcuts for the
 				Scintilla editing widget. For a list of these commands, see
-				<!-- <xref linkend="scikeybinding"/> (outside this doc!) -->
-				the "Scintilla keyboard commands" appendix.
-				The Scintilla keyboard shortcuts will be
-				overridden by any custom keybindings with the same keyboard shortcut.
+				<xref linkend="scikeybinding"/>.
+				The Scintilla keyboard shortcuts will be overridden by any custom keybindings
+				with the same keyboard shortcut.
 			</para>
 			<para>
 				For all actions listed below you can define your own keybindings. Open the Preferences
@@ -1488,7 +1487,7 @@
 							<row>
 								<entry>initial</entry>
 								<entry>The developer's initials, e.g. "ET" for
-									   Enrico Troeger or "JFD" for John Foobar Doe.</entry>
+									   Enrico Tröger or "JFD" for John Foobar Doe.</entry>
 								<entry>filetypes, file header, function description, ChangeLog entry</entry>
 							</row>
 							<row>

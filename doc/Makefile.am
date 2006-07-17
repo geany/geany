@@ -15,12 +15,7 @@ geany.txt:
 htmldoc: geany.docbook
 	if [ geany.docbook -nt "./html/index.html" ]; then \
 		$(mkinstalldirs) html; \
-		# hack for my local system to generate documentation in UTF-8 charset \
-		if [ `hostname` = "ukio" ]; then \
-			LC_CTYPE=de_DE.utf8@euro xmlto -x geany.xsl -o html/ xhtml geany.docbook; \
-		else \
-			xmlto -x geany.xsl -o html/ xhtml geany.docbook; \
-		fi; \
+		xsltproc --nonet --xinclude -o html/ geany.xsl geany.docbook; \
 		test -f html/geany.css || cp geany.css html/; \
 	fi
 
