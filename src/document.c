@@ -592,11 +592,11 @@ void document_save_file(gint idx)
 	}
 
 	// replaces tabs by spaces
-	if (app->pref_editor_replace_tabs) utils_replace_tabs(idx);
+	if (app->pref_editor_replace_tabs) document_replace_tabs(idx);
 	// strip trailing spaces
-	if (app->pref_editor_trail_space) utils_strip_trailing_spaces(idx);
+	if (app->pref_editor_trail_space) document_strip_trailing_spaces(idx);
 	// ensure the file has a newline at the end
-	if (app->pref_editor_new_line) utils_ensure_final_newline(idx);
+	if (app->pref_editor_new_line) document_ensure_final_newline(idx);
 	// ensure there a really the same EOL chars
 	sci_convert_eols(doc_list[idx].sci, sci_get_eol_mode(doc_list[idx].sci));
 
@@ -1158,3 +1158,118 @@ void document_print(gint idx)
 	}
 	g_free(cmdline);
 }
+
+
+void document_replace_tabs(gint idx)
+{
+	gint i, len, j = 0, tabs_amount = 0, tab_w, pos;
+	gchar *data, *replacement, *text;
+
+	if (idx < 0 || ! doc_list[idx].is_valid) return;
+
+	pos = sci_get_current_position(doc_list[idx].sci);
+	tab_w = sci_get_tab_width(doc_list[idx].sci);
+	replacement = g_malloc(tab_w + 1);
+
+	// get the text
+	len = sci_get_length(doc_list[idx].sci) + 1;
+	data = g_malloc(len);
+	sci_get_text(doc_list[idx].sci, len, data);
+
+	// prepare the spaces with the width of a tab
+	for (i = 0; i < tab_w; i++) replacement[i] = ' ';
+	replacement[tab_w] = '\0';
+
+	for (i = 0; i < len; i++) if (data[i] == 9) tabs_amount++;
+
+	// if there are no tabs, just return and leave the content untouched
+	if (tabs_amount == 0)
+	{
+		g_free(data);
+		g_free(replacement);
+		return;
+	}
+
+	text = g_malloc(len + (tabs_amount * (tab_w - 1)));
+
+	for (i = 0; i < len; i++)
+	{
+		if (data[i] == 9)
+		{
+			// increase cursor position to keep it at same position
+			if (pos > i) pos += 3;
+
+			text[j++] = 32;
+			text[j++] = 32;
+			text[j++] = 32;
+			text[j++] = 32;
+		}
+		else
+		{
+			text[j++] = data[i];
+		}
+	}
+	geany_debug("tabs_amount: %d, len: %d, %d == %d", tabs_amount, len, len + (tabs_amount * (tab_w - 1)), j);
+	sci_set_text(doc_list[idx].sci, text);
+	sci_set_current_position(doc_list[idx].sci, pos);
+
+	g_free(data);
+	g_free(text);
+	g_free(replacement);
+}
+
+
+void document_strip_trailing_spaces(gint idx)
+{
+	gint max_lines = sci_get_line_count(doc_list[idx].sci);
+	gint line;
+
+	for (line = 0; line < max_lines; line++)
+	{
+		gint line_start = sci_get_position_from_line(doc_list[idx].sci, line);
+		gint line_end = sci_get_line_end_from_position(doc_list[idx].sci, line);
+		gint i = line_end - 1;
+		gchar ch = sci_get_char_at(doc_list[idx].sci, i);
+
+		while ((i >= line_start) && ((ch == ' ') || (ch == '\t')))
+		{
+			i--;
+			ch = sci_get_char_at(doc_list[idx].sci, i);
+		}
+		if (i < (line_end-1))
+		{
+			sci_target_start(doc_list[idx].sci, i + 1);
+			sci_target_end(doc_list[idx].sci, line_end);
+			sci_target_replace(doc_list[idx].sci, "");
+		}
+	}
+}
+
+
+void document_ensure_final_newline(gint idx)
+{
+	gint max_lines = sci_get_line_count(doc_list[idx].sci);
+	gboolean append_newline = (max_lines == 1);
+	gint end_document = sci_get_position_from_line(doc_list[idx].sci, max_lines);
+
+	if (max_lines > 1)
+	{
+		append_newline = end_document > sci_get_position_from_line(doc_list[idx].sci, max_lines - 1);
+	}
+	if (append_newline)
+	{
+		const gchar *eol = "\n";
+		switch (sci_get_eol_mode(doc_list[idx].sci))
+		{
+			case SC_EOL_CRLF:
+				eol = "\r\n";
+				break;
+			case SC_EOL_CR:
+				eol = "\r";
+				break;
+		}
+		sci_insert_text(doc_list[idx].sci, end_document, eol);
+	}
+}
+
+

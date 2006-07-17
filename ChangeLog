@@ -1,3 +1,10 @@
+2006-07-17  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/utils.c, src/document.c, src/callbacks.c:
+   Moved document related functions from utils.c to document.c.
+   Keep cursor position when replacing tabs by spaces.
+
+
 2006-07-16  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/encodings.c:

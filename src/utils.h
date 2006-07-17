@@ -124,10 +124,6 @@ void utils_wordcount(gchar *text, guint *chars, guint *lines, guint *words);
 
 gboolean utils_is_absolute_path(const gchar *path);
 
-void utils_ensure_final_newline(gint idx);
-
-void utils_strip_trailing_spaces(gint idx);
-
 gdouble utils_scale_round(gdouble val, gdouble factor);
 
 void utils_widget_show_hide(GtkWidget *widget, gboolean show);
@@ -152,8 +148,6 @@ gint utils_brace_match(ScintillaObject *sci, gint pos);
 
 
 gchar utils_brace_opposite(gchar ch);
-
-void utils_replace_tabs(gint idx);
 
 gchar *utils_get_hostname(void);
 
@@ -221,5 +215,7 @@ TMTag *utils_find_tm_tag(const GPtrArray *tags, const gchar *tag_name);
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gpointer data);
 
 void utils_update_toolbar_items(void);
+
+gchar **utils_read_file_in_array(const gchar *filename);
 
 #endif

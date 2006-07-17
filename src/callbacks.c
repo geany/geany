@@ -1110,8 +1110,7 @@ on_replace_tabs_activate               (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	utils_replace_tabs(idx);
+	document_replace_tabs(idx);
 }
 
 

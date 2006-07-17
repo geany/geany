@@ -119,4 +119,10 @@ void document_clear_indicators(gint idx);
 /* simple file print */
 void document_print(gint idx);
 
+void document_replace_tabs(gint idx);
+
+void document_strip_trailing_spaces(gint idx);
+
+void document_ensure_final_newline(gint idx);
+
 #endif
