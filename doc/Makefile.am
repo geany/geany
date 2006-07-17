@@ -3,7 +3,7 @@ DOCDIR = $(DESTDIR)/$(datadir)/doc/@PACKAGE@
 HTML_FILES = html/*.html geany.css
 IMAGE_FILES = images/*.jpg
 EXTRA_DIST = geany.css geany.xsl make_webable.sh geany.txt geany_gpl.docbook geany.1 \
-			 geany.docbook $(HTML_FILES) $(IMAGE_FILES)
+			 scikeybinding.docbook geany.docbook $(HTML_FILES) $(IMAGE_FILES)
 
 pdf:
 	jw -b pdf geany.docbook

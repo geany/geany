@@ -846,7 +846,9 @@
 			<para>
 				<application>&app;</application> supports the default keyboard shortcuts for the
 				Scintilla editing widget. For a list of these commands, see
-				<xref linkend="scikeybinding"/>. The Scintilla keyboard shortcuts will be
+				<!-- <xref linkend="scikeybinding"/> (outside this doc!) -->
+				the "Scintilla keyboard commands" appendix.
+				The Scintilla keyboard shortcuts will be
 				overridden by any custom keybindings with the same keyboard shortcut.
 			</para>
 			<para>

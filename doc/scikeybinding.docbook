@@ -8,11 +8,13 @@
     </copyright>
 		<legalnotice>
 			<para>
-				This appendix is distributed under the terms of the Scintilla License.
+				This appendix is distributed under the terms of the License for
+				Scintilla and SciTE.
 				A copy of this license can be found in the file scintilla/License.txt
 				included with the source code of this
-				program and in the appendix of this document.
-				See <xref linkend="scintilla-license"/>.
+				program and in the "License for Scintilla and SciTE"
+				appendix of this document.
+				<!-- See <xref linkend="scintilla-license"/>. (outside this doc!) -->
 			</para>
 		</legalnotice>
   </appendixinfo>
