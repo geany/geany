@@ -865,13 +865,14 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 	gboolean check_current = FALSE;
 	guint i;
 
-	if (g_get_charset((const gchar**)&locale_charset) == FALSE)
-		check_current = TRUE;	// current locale is not UTF-8, we have to check this charset
+	// current locale is not UTF-8, we have to check this charset
+	check_current = ! g_get_charset((const gchar**)&locale_charset);
 
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
 		if (check_current)
 		{
+			check_current = FALSE;
 			charset = locale_charset;
 			i = -1;
 		}
