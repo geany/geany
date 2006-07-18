@@ -811,7 +811,8 @@ void dialogs_show_find(void)
 
 	if (app->find_dialog == NULL)
 	{
-		GtkWidget *label, *entry, *checkbox1, *checkbox2, *checkbox3, *checkbox4, *checkbox5;
+		GtkWidget *label, *entry, *checkbox1, *checkbox2, *checkbox3, *checkbox4, *checkbox5,
+				  *checkbox6;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 		app->find_dialog = gtk_dialog_new_with_buttons(_("Find"), GTK_WINDOW(app->window),
@@ -857,6 +858,13 @@ void dialogs_show_find(void)
 		gtk_tooltips_set_tip(tooltips, checkbox3,
 			_("For detailed information about using regular expressions, please read the documentation."), NULL);
 
+		checkbox6 = gtk_check_button_new_with_mnemonic(_("_Replace control characters"));
+		g_object_set_data_full(G_OBJECT(app->find_dialog), "check_escape",
+						gtk_widget_ref(checkbox6), (GDestroyNotify)gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox6), FALSE);
+		gtk_tooltips_set_tip(tooltips, checkbox6,
+			_("Replace \\t, \\n and \\r with the corresponding control characters."), NULL);
+
 		checkbox4 = gtk_check_button_new_with_mnemonic(_("_Search backwards"));
 		g_object_set_data_full(G_OBJECT(app->find_dialog), "check_back",
 						gtk_widget_ref(checkbox4), (GDestroyNotify)gtk_widget_unref);
@@ -871,6 +879,7 @@ void dialogs_show_find(void)
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), checkbox2);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), checkbox5);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), checkbox3);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), checkbox6);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), checkbox4);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), gtk_label_new(""));
 
@@ -905,7 +914,8 @@ void dialogs_show_replace(void)
 	if (app->replace_dialog == NULL)
 	{
 		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace;
-		GtkWidget *checkbox1, *checkbox2, *checkbox3, *checkbox4, *checkbox5, *checkbox6;
+		GtkWidget *checkbox1, *checkbox2, *checkbox3, *checkbox4, *checkbox5, *checkbox6,
+				  *checkbox7;
 		GtkWidget *button;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
@@ -977,6 +987,13 @@ void dialogs_show_replace(void)
 		gtk_tooltips_set_tip(tooltips, checkbox3,
 			_("For detailed information about using regular expressions, please read the documentation."), NULL);
 
+		checkbox7 = gtk_check_button_new_with_mnemonic(_("_Replace control characters"));
+		g_object_set_data_full(G_OBJECT(app->replace_dialog), "check_escape",
+						gtk_widget_ref(checkbox7), (GDestroyNotify)gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
+		gtk_tooltips_set_tip(tooltips, checkbox7,
+			_("Replace \\t, \\n and \\r with the corresponding control characters."), NULL);
+
 		checkbox4 = gtk_check_button_new_with_mnemonic(_("_Search backwards"));
 		g_object_set_data_full(G_OBJECT(app->replace_dialog), "check_back",
 						gtk_widget_ref(checkbox4), (GDestroyNotify)gtk_widget_unref);
@@ -998,6 +1015,7 @@ void dialogs_show_replace(void)
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox2);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox5);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox3);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox7);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox4);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox6);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), gtk_label_new(""));

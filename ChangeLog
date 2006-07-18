@@ -1,3 +1,9 @@
+2006-07-18  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c, src/callbacks.c:
+   Added option to replace escape sequences in Find and Replace dialog.
+
+
 2006-07-17  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * doc/scikeybinding.docbook, doc/geany.docbook, doc/geany_gpl.docbook:
