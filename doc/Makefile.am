@@ -15,7 +15,7 @@ geany.txt:
 htmldoc: geany.docbook
 	if [ geany.docbook -nt "./html/index.html" ]; then \
 		$(mkinstalldirs) html; \
-		xsltproc --nonet --xinclude -o html/ geany.xsl geany.docbook; \
+		xmlto -m geany.xsl -o html/ xhtml geany.docbook; \
 		test -f html/geany.css || cp geany.css html/; \
 	fi
 
