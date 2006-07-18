@@ -138,7 +138,7 @@ void				sci_set_cursor				(ScintillaObject * sci, gint cursor);
 void				sci_target_from_selection	(ScintillaObject * sci);
 void				sci_target_start			(ScintillaObject * sci, gint start);
 void				sci_target_end				(ScintillaObject * sci, gint end);
-void				sci_target_replace			(ScintillaObject * sci, const gchar *text);
+gint				sci_target_replace			(ScintillaObject *sci, const gchar *text, gboolean regex);
 void				sci_set_keywords			(ScintillaObject * sci, gint k, gchar *text);
 void				sci_scroll_lines			(ScintillaObject * sci, gint lines);
 gint				sci_get_lexer				(ScintillaObject * sci);

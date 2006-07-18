@@ -1,3 +1,12 @@
+2006-07-18  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sciwrappers.c, src/sciwrappers.h, src/document.c:
+   Fix replacing the right length of text matched from a regex.
+   Add support for back references when replacing with regex.
+   Improve the speed of replace all/replace in selection.
+   Don't lose the selection range after replacing in selection.
+
+
 2006-07-18  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/dialogs.c, src/callbacks.c:

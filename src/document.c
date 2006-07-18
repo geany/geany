@@ -58,6 +58,12 @@
 #include "notebook.h"
 
 
+/* Returns -1 if no text found or the new range endpoint after replacing.
+ * show_last is whether to select and scroll the last replacement in view. */
+static gint
+document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text, gint flags,
+	gint start, gint end, gboolean show_last);
+
 
 /* returns the index of the notebook page which has the given filename
  * is_tm_filename is needed when passing TagManager filenames because they are
@@ -765,9 +771,9 @@ void document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 void document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text, gint flags, gboolean search_backwards)
 {
 	gint selection_end, selection_start, search_pos;
-	gint find_text_len = strlen(find_text);
 
-	if (idx == -1 || ! find_text_len) return;
+	g_return_if_fail(find_text != NULL && replace_text != NULL);
+	if (idx == -1 || ! *find_text) return;
 
 	selection_start =  sci_get_selection_start(doc_list[idx].sci);
 	selection_end =  sci_get_selection_end(doc_list[idx].sci);
@@ -787,12 +793,14 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 
 	if (search_pos != -1)
 	{
-		sci_target_start(doc_list[idx].sci, search_pos);
-		sci_target_end(doc_list[idx].sci, search_pos + find_text_len);
-		sci_target_replace(doc_list[idx].sci, replace_text);
-		sci_scroll_caret(doc_list[idx].sci);
+		gint replace_len;
+		// search next/prev will select matching text, which we use to set the replace target
+		sci_target_from_selection(doc_list[idx].sci);
+		replace_len = sci_target_replace(doc_list[idx].sci, replace_text, flags & SCFIND_REGEXP);
+		// select the replacement and scroll in view
 		sci_set_selection_start(doc_list[idx].sci, search_pos);
-		sci_set_selection_end(doc_list[idx].sci, search_pos + strlen(replace_text));
+		sci_set_selection_end(doc_list[idx].sci, search_pos + replace_len);
+		sci_scroll_caret(doc_list[idx].sci);
 	}
 	else
 	{
@@ -801,14 +809,68 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 }
 
 
+/* Returns -1 if no text found or the new range endpoint after replacing.
+ * show_last is whether to select and scroll the last replacement in view. */
+static gint
+document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text, gint flags,
+	gint start, gint end, gboolean show_last)
+{
+	gint search_pos;
+	gint find_len = 0, replace_len = 0;
+	gboolean match_found = FALSE;
+	struct TextToFind ttf;
+
+	g_return_val_if_fail(find_text != NULL && replace_text != NULL, FALSE);
+	if (idx == -1 || ! *find_text) return FALSE;
+
+	sci_start_undo_action(doc_list[idx].sci);
+	ttf.chrg.cpMin = start;
+	ttf.chrg.cpMax = end;
+	ttf.lpstrText = (gchar*)find_text;
+
+	while (TRUE)
+	{
+		search_pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
+		if (search_pos == -1) break;
+		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
+
+		if (search_pos + find_len > end)
+			break; //found text is partly out of range
+		else
+		{
+			match_found = TRUE;
+			sci_target_start(doc_list[idx].sci, search_pos);
+			sci_target_end(doc_list[idx].sci, search_pos + find_len);
+			replace_len = sci_target_replace(doc_list[idx].sci, replace_text,
+				flags & SCFIND_REGEXP);
+			ttf.chrg.cpMin = search_pos + replace_len; //next search starts after replacement
+			end += replace_len - find_len; //update end of range now text has changed
+			ttf.chrg.cpMax = end;
+		}
+	}
+	sci_end_undo_action(doc_list[idx].sci);
+
+	if (match_found && show_last)
+	{
+		// select the last replacement
+		gint sel_start = ttf.chrg.cpMin - replace_len;
+		sci_set_selection_start(doc_list[idx].sci, sel_start);
+		sci_set_selection_end(doc_list[idx].sci, sel_start + replace_len);
+		sci_scroll_caret(doc_list[idx].sci);
+	}
+	if (match_found)
+		return end;
+	else
+		return -1; //no text was found
+}
+
+
 void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace_text, gint flags)
 {
-	gint selection_end, selection_start, search_pos;
-	gint anchor_pos;
-	gint find_text_len = strlen(find_text);
-	gint replace_text_len = strlen(replace_text);
+	gint selection_end, selection_start;
 
-	if (idx == -1 || ! find_text_len) return;
+	g_return_if_fail(find_text != NULL && replace_text != NULL);
+	if (idx == -1 || ! *find_text) return;
 
 	selection_start = sci_get_selection_start(doc_list[idx].sci);
 	selection_end = sci_get_selection_end(doc_list[idx].sci);
@@ -818,62 +880,31 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 		return;
 	}
 
-	sci_start_undo_action(doc_list[idx].sci);
-	anchor_pos = selection_start;
-	while (TRUE)
+	selection_end = document_replace_range(idx, find_text, replace_text, flags,
+		selection_start, selection_end, FALSE);
+	if (selection_end == -1)
+		utils_beep();
+	else
 	{
-		sci_goto_pos(doc_list[idx].sci, anchor_pos, TRUE);
-		sci_set_search_anchor(doc_list[idx].sci);
-		search_pos = sci_search_next(doc_list[idx].sci, flags, find_text);
-
-		if (search_pos == -1 ||
-			search_pos < selection_start ||
-			search_pos + find_text_len > selection_end) break;
-		else
-		{
-			sci_target_start(doc_list[idx].sci, search_pos);
-			sci_target_end(doc_list[idx].sci, search_pos + find_text_len);
-			sci_target_replace(doc_list[idx].sci, replace_text);
-			anchor_pos = search_pos + replace_text_len; //avoid rematch
-			// update selection end point for each replacement
-			selection_end += replace_text_len - find_text_len;
-		}
+		//update the selection for the new endpoint
+		sci_set_selection_start(doc_list[idx].sci, selection_start);
+		sci_set_selection_end(doc_list[idx].sci, selection_end);
 	}
-	sci_end_undo_action(doc_list[idx].sci);
-	// set selection again, because it got lost and end may be moved
-	sci_set_selection_start(doc_list[idx].sci, selection_start);
-	sci_set_selection_end(doc_list[idx].sci, selection_end);
 
-	sci_scroll_caret(doc_list[idx].sci);
 	gtk_widget_hide(app->replace_dialog);
 }
 
 
 void document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text, gint flags)
 {
-	gint search_pos;
-	gint find_text_len = strlen(find_text);
-	gint replace_text_len = strlen(replace_text);
+	gint len;
+	g_return_if_fail(find_text != NULL && replace_text != NULL);
+	if (idx == -1 || ! *find_text) return;
 
-	if (idx == -1 || ! find_text_len) return;
+	len = sci_get_length(doc_list[idx].sci);
+	if (document_replace_range(idx, find_text, replace_text, flags, 0, len, TRUE) == -1)
+		utils_beep();
 
-	sci_start_undo_action(doc_list[idx].sci);
-	sci_goto_pos(doc_list[idx].sci, 0, FALSE);
-	sci_set_search_anchor(doc_list[idx].sci);
-
-	search_pos = sci_search_next(doc_list[idx].sci, flags, find_text);
-	while (search_pos != -1)
-	{
-		sci_target_start(doc_list[idx].sci, search_pos);
-		sci_target_end(doc_list[idx].sci, search_pos + find_text_len);
-		sci_target_replace(doc_list[idx].sci, replace_text);
-		// next search starts after replaced text (avoids rematching):
-		sci_goto_pos(doc_list[idx].sci, search_pos + replace_text_len, TRUE);
-		sci_set_search_anchor(doc_list[idx].sci);
-		search_pos = sci_search_next(doc_list[idx].sci, flags, find_text);
-	}
-	sci_end_undo_action(doc_list[idx].sci);
-	sci_scroll_caret(doc_list[idx].sci);
 	gtk_widget_hide(app->replace_dialog);
 }
 
@@ -1240,7 +1271,7 @@ void document_strip_trailing_spaces(gint idx)
 		{
 			sci_target_start(doc_list[idx].sci, i + 1);
 			sci_target_end(doc_list[idx].sci, line_end);
-			sci_target_replace(doc_list[idx].sci, "");
+			sci_target_replace(doc_list[idx].sci, "", FALSE);
 		}
 	}
 }
