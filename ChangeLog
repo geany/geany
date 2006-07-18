@@ -5,6 +5,12 @@
    Add support for back references when replacing with regex.
    Improve the speed of replace all/replace in selection.
    Don't lose the selection range after replacing in selection.
+ * src/callbacks.c, src/callbacks.h, src/document.c, src/dialogs.c,
+   doc/geany.docbook:
+   Use more POSIX-like syntax for regular expression bracket matching.
+   Prevent searching backwards with a regex (unsupported).
+   Scroll in view after the last replacement for replace all/selection.
+   
 
 
 2006-07-18  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -1810,6 +1810,37 @@ on_find_next1_activate                 (GtkMenuItem     *menuitem,
 
 
 void
+on_find_previous1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	if (app->search_text == NULL) return;
+
+	if (search_flags & SCFIND_REGEXP)
+		utils_beep(); //Can't reverse search order for a regex (find next ignores search backwards)
+	else
+	{
+		document_find_text(idx, app->search_text, search_flags,
+			!search_backwards);
+	}
+}
+
+
+void on_find_checkbutton_toggled (GtkToggleButton *togglebutton,
+                                  gpointer user_data)
+{
+	GtkToggleButton *chk_regexp = GTK_TOGGLE_BUTTON(
+		lookup_widget(GTK_WIDGET(app->find_dialog), "check_regexp"));
+	GtkWidget *chk_back =
+		lookup_widget(GTK_WIDGET(app->find_dialog), "check_back");
+
+	if (togglebutton == chk_regexp)
+		gtk_widget_set_sensitive(chk_back, ! gtk_toggle_button_get_active(chk_regexp));
+}
+
+
+void
 on_find_dialog_response                (GtkDialog *dialog,
                                         gint response,
                                         gpointer user_data)
@@ -1850,7 +1881,7 @@ on_find_dialog_response                (GtkDialog *dialog,
 		gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), app->search_text);
 		search_flags = (fl1 ? SCFIND_MATCHCASE : 0) |
 				(fl2 ? SCFIND_WHOLEWORD : 0) |
-				(fl3 ? SCFIND_REGEXP : 0) |
+				(fl3 ? SCFIND_REGEXP | SCFIND_POSIX: 0) |
 				(fl4 ? SCFIND_WORDSTART : 0);
 		document_find_text(idx, app->search_text, search_flags, search_backwards);
 	}
@@ -1864,6 +1895,19 @@ on_find_entry_activate                 (GtkEntry        *entry,
 {
 	on_find_dialog_response(NULL, GTK_RESPONSE_ACCEPT,
 				lookup_widget(GTK_WIDGET(entry), "entry"));
+}
+
+
+void on_replace_checkbutton_toggled (GtkToggleButton *togglebutton,
+                                     gpointer user_data)
+{
+	GtkToggleButton *chk_regexp = GTK_TOGGLE_BUTTON(
+		lookup_widget(GTK_WIDGET(app->replace_dialog), "check_regexp"));
+	GtkWidget *chk_back =
+		lookup_widget(GTK_WIDGET(app->replace_dialog), "check_back");
+
+	if (togglebutton == chk_regexp)
+		gtk_widget_set_sensitive(chk_back, ! gtk_toggle_button_get_active(chk_regexp));
 }
 
 
@@ -1924,7 +1968,7 @@ on_replace_dialog_response             (GtkDialog *dialog,
 
 	search_flags_re = (fl1 ? SCFIND_MATCHCASE : 0) |
 					  (fl2 ? SCFIND_WHOLEWORD : 0) |
-					  (fl3 ? SCFIND_REGEXP : 0) |
+					  (fl3 ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
 					  (fl4 ? SCFIND_WORDSTART : 0);
 
 	if (search_in_all_buffers_re && response == GEANY_RESPONSE_REPLACE_ALL)
@@ -1936,6 +1980,7 @@ on_replace_dialog_response             (GtkDialog *dialog,
 
 			document_replace_all(i, find, replace, search_flags_re);
 		}
+		gtk_widget_hide(app->replace_dialog);
 	}
 	else
 	{
@@ -1943,17 +1988,20 @@ on_replace_dialog_response             (GtkDialog *dialog,
 		{
 			case GEANY_RESPONSE_REPLACE:
 			{
-				document_replace_text(idx, find, replace, search_flags_re, search_backwards_re);
+				document_replace_text(idx, find, replace, search_flags_re,
+					search_backwards_re);
 				break;
 			}
 			case GEANY_RESPONSE_REPLACE_ALL:
 			{
 				document_replace_all(idx, find, replace, search_flags_re);
+				gtk_widget_hide(app->replace_dialog);
 				break;
 			}
 			case GEANY_RESPONSE_REPLACE_SEL:
 			{
 				document_replace_sel(idx, find, replace, search_flags_re);
+				gtk_widget_hide(app->replace_dialog);
 				break;
 			}
 		}
@@ -2493,20 +2541,6 @@ on_run_button_clicked                  (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
 	on_build_execute_activate(NULL, NULL);
-}
-
-
-void
-on_find_previous1_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
-
-	if (app->search_text)
-	{
-		document_find_text(idx, app->search_text, search_flags,
-			!search_backwards);
-	}
 }
 
 

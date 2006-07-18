@@ -855,8 +855,10 @@ void dialogs_show_find(void)
 		g_object_set_data_full(G_OBJECT(app->find_dialog), "check_regexp",
 						gtk_widget_ref(checkbox3), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox3), FALSE);
-		gtk_tooltips_set_tip(tooltips, checkbox3,
-			_("For detailed information about using regular expressions, please read the documentation."), NULL);
+		gtk_tooltips_set_tip(tooltips, checkbox3, _("Use POSIX-like regular expressions. "
+			"For detailed information about using regular expressions, please read the documentation."), NULL);
+		g_signal_connect(G_OBJECT(checkbox3), "toggled",
+			G_CALLBACK(on_find_checkbutton_toggled), NULL);
 
 		checkbox6 = gtk_check_button_new_with_mnemonic(_("_Replace control characters"));
 		g_object_set_data_full(G_OBJECT(app->find_dialog), "check_escape",
@@ -984,8 +986,10 @@ void dialogs_show_replace(void)
 		g_object_set_data_full(G_OBJECT(app->replace_dialog), "check_regexp",
 						gtk_widget_ref(checkbox3), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox3), FALSE);
-		gtk_tooltips_set_tip(tooltips, checkbox3,
-			_("For detailed information about using regular expressions, please read the documentation."), NULL);
+		gtk_tooltips_set_tip(tooltips, checkbox3, _("Use POSIX-like regular expressions. "
+			"For detailed information about using regular expressions, please read the documentation."), NULL);
+		g_signal_connect(G_OBJECT(checkbox3), "toggled",
+			G_CALLBACK(on_replace_checkbutton_toggled), NULL);
 
 		checkbox7 = gtk_check_button_new_with_mnemonic(_("_Replace control characters"));
 		g_object_set_data_full(G_OBJECT(app->replace_dialog), "check_escape",

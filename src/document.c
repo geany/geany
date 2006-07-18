@@ -58,11 +58,10 @@
 #include "notebook.h"
 
 
-/* Returns -1 if no text found or the new range endpoint after replacing.
- * show_last is whether to select and scroll the last replacement in view. */
+/* Returns -1 if no text found or the new range endpoint after replacing. */
 static gint
-document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text, gint flags,
-	gint start, gint end, gboolean show_last);
+document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
+	gint flags, gint start, gint end);
 
 
 /* returns the index of the notebook page which has the given filename
@@ -697,7 +696,8 @@ void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_b
 {
 	gint selection_end, search_pos;
 
-	if (idx == -1 || ! strlen(text)) return;
+	g_return_if_fail(text != NULL);
+	if (idx == -1 || ! *text) return;
 
 	selection_end =  sci_get_selection_end(doc_list[idx].sci);
 	if (!inc && sci_can_copy(doc_list[idx].sci))
@@ -735,7 +735,10 @@ void document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 {
 	gint selection_end, selection_start, search_pos;
 
-	if (idx == -1 || ! strlen(text)) return;
+	g_return_if_fail(text != NULL);
+	if (idx == -1 || ! *text) return;
+	// Sci doesn't support searching backwards with a regex
+	if (flags & SCFIND_REGEXP) search_backwards = FALSE;
 
 	selection_start =  sci_get_selection_start(doc_list[idx].sci);
 	selection_end =  sci_get_selection_end(doc_list[idx].sci);
@@ -768,12 +771,15 @@ void document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 }
 
 
-void document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text, gint flags, gboolean search_backwards)
+void document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text,
+	gint flags, gboolean search_backwards)
 {
 	gint selection_end, selection_start, search_pos;
 
 	g_return_if_fail(find_text != NULL && replace_text != NULL);
 	if (idx == -1 || ! *find_text) return;
+	// Sci doesn't support searching backwards with a regex
+	if (flags & SCFIND_REGEXP) search_backwards = FALSE;
 
 	selection_start =  sci_get_selection_start(doc_list[idx].sci);
 	selection_end =  sci_get_selection_end(doc_list[idx].sci);
@@ -809,11 +815,10 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 }
 
 
-/* Returns -1 if no text found or the new range endpoint after replacing.
- * show_last is whether to select and scroll the last replacement in view. */
+/* Returns -1 if no text found or the new range endpoint after replacing. */
 static gint
-document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text, gint flags,
-	gint start, gint end, gboolean show_last)
+document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
+	gint flags, gint start, gint end)
 {
 	gint search_pos;
 	gint find_len = 0, replace_len = 0;
@@ -850,16 +855,12 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	}
 	sci_end_undo_action(doc_list[idx].sci);
 
-	if (match_found && show_last)
-	{
-		// select the last replacement
-		gint sel_start = ttf.chrg.cpMin - replace_len;
-		sci_set_selection_start(doc_list[idx].sci, sel_start);
-		sci_set_selection_end(doc_list[idx].sci, sel_start + replace_len);
-		sci_scroll_caret(doc_list[idx].sci);
-	}
 	if (match_found)
+	{
+		// scroll last match in view.
+		sci_goto_pos(doc_list[idx].sci, ttf.chrg.cpMin, TRUE);
 		return end;
+	}
 	else
 		return -1; //no text was found
 }
@@ -881,7 +882,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	}
 
 	selection_end = document_replace_range(idx, find_text, replace_text, flags,
-		selection_start, selection_end, FALSE);
+		selection_start, selection_end);
 	if (selection_end == -1)
 		utils_beep();
 	else
@@ -890,22 +891,19 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 		sci_set_selection_start(doc_list[idx].sci, selection_start);
 		sci_set_selection_end(doc_list[idx].sci, selection_end);
 	}
-
-	gtk_widget_hide(app->replace_dialog);
 }
 
 
-void document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text, gint flags)
+void document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text,
+	gint flags)
 {
 	gint len;
 	g_return_if_fail(find_text != NULL && replace_text != NULL);
 	if (idx == -1 || ! *find_text) return;
 
 	len = sci_get_length(doc_list[idx].sci);
-	if (document_replace_range(idx, find_text, replace_text, flags, 0, len, TRUE) == -1)
+	if (document_replace_range(idx, find_text, replace_text, flags, 0, len) == -1)
 		utils_beep();
-
-	gtk_widget_hide(app->replace_dialog);
 }
 
 

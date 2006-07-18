@@ -414,12 +414,15 @@
 			</para>
 		</section>
 -->
-		<section>
+		<section id="searchreplace">
 			<title>Search and Replace</title>
 			<para>
-				You can use regular expressions in the search dialog, just by activating the check box (see
-				the image below). Detailed information about special characters can be found in the
-				<xref linkend="regexp"/>.
+				You can use regular expressions in the search and replace dialogs, just by
+				activating the check box (see the image below).
+				The syntax is POSIX-like, as described in <xref linkend="regexp"/>.
+				<note><para>
+					Searching backwards with regular expressions is not supported.
+				</para></note>
 				<figure>
 				   <title>Search dialog</title>
 				   <graphic fileref="images/find_dialog.jpg"></graphic>
@@ -448,17 +451,17 @@
 								<entry>Matches any character.</entry>
 							</row>
 							<row>
-								<entry>\(</entry>
+								<entry>(</entry>
 								<entry>This marks the start of a region for tagging a match.</entry>
 							</row>
 							<row>
-								<entry>\)</entry>
+								<entry>)</entry>
 								<entry>This marks the end of a tagged region.</entry>
 							</row>
 							<row>
 								<entry>\n</entry>
 								<entry>Where n is 1 through 9 refers to the first through ninth tagged region
-									   when replacing. For example, if the search string was Fred\([1-9]\)XXX
+									   when replacing. For example, if the search string was Fred([1-9])XXX
 									   and the replace string was Sam\1YYY, when applied to Fred2XXX this would
 									   generate Sam2YYY.
 								</entry>
@@ -475,7 +478,7 @@
 								<entry>\x</entry>
 								<entry>This allows you to use a character x that would otherwise have a special
 									   meaning. For example, \[ would be interpreted as [ and not as the start
-									   of a character set.
+									   of a character set. Use \\ for a literal backslash.
 								</entry>
 							</row>
 							<row>
@@ -490,6 +493,10 @@
 								<entry>The complement of the characters in the set. For example, [^A-Za-z] means
 									   any character except an alphabetic character.
 								</entry>
+							</row>
+							<row>
+								<entry>^</entry>
+								<entry>This matches the start of a line (unless used inside a set, see above).</entry>
 							</row>
 							<row>
 								<entry>$</entry>
