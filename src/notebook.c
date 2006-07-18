@@ -37,9 +37,11 @@ static gboolean
 notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 	gint x, gint y, guint time, gpointer user_data);
 
+#if ! GTK_CHECK_VERSION(2, 8, 0)
 static gboolean
 notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
 	gpointer user_data);
+#endif
 
 static gint
 notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y);

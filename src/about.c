@@ -32,7 +32,7 @@ static GtkWidget *gb_window = NULL;
 #define HEADER "<span size=\"larger\" weight=\"bold\">Geany " VERSION "%s</span>"
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
-#define BUILDDATE "<span size=\"smaller\">(built on " __DATE__ ")</span>"
+#define BUILDDATE "<span size=\"smaller\">%s</span>"
 #define COPYRIGHT "Copyright (c)  2005-2006 \n Enrico Tröger \nAll rights reserved."
 #define CREDITS \
 "<span size=\"larger\" weight=\"bold\">%s</span>\n\t\
@@ -89,6 +89,7 @@ static GtkWidget *create_dialog(void)
 	GtkTextBuffer* tb;
 	gchar *license_text = NULL;
 	gchar buffer[512];
+	gchar buffer2[128];
 	gchar *credits;
 
 	dialog = gtk_dialog_new();
@@ -165,7 +166,9 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_justify(GTK_LABEL(builddate_label), GTK_JUSTIFY_CENTER);
 	gtk_label_set_selectable(GTK_LABEL(builddate_label), TRUE);
 	gtk_label_set_use_markup(GTK_LABEL(builddate_label), TRUE);
-	gtk_label_set_markup(GTK_LABEL(builddate_label), BUILDDATE);
+	g_snprintf(buffer2, sizeof(buffer2), _("(built on %s)"), __DATE__);
+	g_snprintf(buffer, sizeof(buffer), BUILDDATE, buffer2);
+	gtk_label_set_markup(GTK_LABEL(builddate_label), buffer);
 	gtk_misc_set_padding(GTK_MISC(builddate_label), 2, 2);
 	gtk_widget_show(builddate_label);
 	gtk_box_pack_start(GTK_BOX(info_box), builddate_label, FALSE, FALSE, 0);

@@ -1,3 +1,10 @@
+2006-07-18  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/notebook.c:
+   Compile notebook_motion_notify_event_cb() only with GTK 2.6 (again).
+ * src/about.c: Made "built on" string translatable.
+
+
 2006-07-18  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sciwrappers.c, src/sciwrappers.h, src/document.c:
