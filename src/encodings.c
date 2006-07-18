@@ -39,109 +39,83 @@
 
 
 
-#define fill(w, x, y, z) \
+#define fill(v, w, x, y, z) \
 		encodings[x].idx = x; \
+		encodings[x].order = v; \
 		encodings[x].group = w; \
 		encodings[x].charset = y; \
 		encodings[x].name = z;
 
 static void init_encodings(void)
 {
-	fill(WESTEUROPEAN, GEANY_ENCODING_ISO_8859_14, "ISO-8859-14", _("Celtic"));
-	fill(WESTEUROPEAN, GEANY_ENCODING_ISO_8859_7, "ISO-8859-7", _("Greek"));
-	fill(WESTEUROPEAN, GEANY_ENCODING_WINDOWS_1253, "WINDOWS-1253", _("Greek"));
-	fill(WESTEUROPEAN, GEANY_ENCODING_ISO_8859_10, "ISO-8859-10", _("Nordic"));
-	fill(WESTEUROPEAN, GEANY_ENCODING_ISO_8859_3, "ISO-8859-3", _("South European"));
-	fill(WESTEUROPEAN, GEANY_ENCODING_IBM_850, "IBM850", _("Western"));
-	fill(WESTEUROPEAN, GEANY_ENCODING_ISO_8859_1, "ISO-8859-1", _("Western"));
-	fill(WESTEUROPEAN, GEANY_ENCODING_ISO_8859_15, "ISO-8859-15", _("Western"));
-	fill(WESTEUROPEAN, GEANY_ENCODING_WINDOWS_1252, "WINDOWS-1252", _("Western"));
+	fill(0, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_14, "ISO-8859-14", _("Celtic"));
+	fill(1, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_7, "ISO-8859-7", _("Greek"));
+	fill(2, WESTEUROPEAN, GEANY_ENCODING_WINDOWS_1253, "WINDOWS-1253", _("Greek"));
+	fill(3, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_10, "ISO-8859-10", _("Nordic"));
+	fill(4, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_3, "ISO-8859-3", _("South European"));
+	fill(5, WESTEUROPEAN, GEANY_ENCODING_IBM_850, "IBM850", _("Western"));
+	fill(6, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_1, "ISO-8859-1", _("Western"));
+	fill(7, WESTEUROPEAN, GEANY_ENCODING_ISO_8859_15, "ISO-8859-15", _("Western"));
+	fill(8, WESTEUROPEAN, GEANY_ENCODING_WINDOWS_1252, "WINDOWS-1252", _("Western"));
 
-	fill(EASTEUROPEAN, GEANY_ENCODING_ISO_8859_4, "ISO-8859-4", _("Baltic"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_ISO_8859_13, "ISO-8859-13", _("Baltic"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1257, "WINDOWS-1257", _("Baltic"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_IBM_852, "IBM852", _("Central European"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_ISO_8859_2, "ISO-8859-2", _("Central European"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1250, "WINDOWS-1250", _("Central European"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_IBM_855, "IBM855", _("Cyrillic"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_ISO_8859_5, "ISO-8859-5", _("Cyrillic"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_ISO_IR_111, "ISO-IR-111", _("Cyrillic"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_KOI8_R, "KOI8R", _("Cyrillic"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1251, "WINDOWS-1251", _("Cyrillic"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_CP_866, "CP866", _("Cyrillic/Russian"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_KOI8_U, "KOI8U", _("Cyrillic/Ukrainian"));
-	fill(EASTEUROPEAN, GEANY_ENCODING_ISO_8859_16, "ISO-8859-16", _("Romanian"));
+	fill(0, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_4, "ISO-8859-4", _("Baltic"));
+	fill(1, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_13, "ISO-8859-13", _("Baltic"));
+	fill(2, EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1257, "WINDOWS-1257", _("Baltic"));
+	fill(3, EASTEUROPEAN, GEANY_ENCODING_IBM_852, "IBM852", _("Central European"));
+	fill(4, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_2, "ISO-8859-2", _("Central European"));
+	fill(5, EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1250, "WINDOWS-1250", _("Central European"));
+	fill(6, EASTEUROPEAN, GEANY_ENCODING_IBM_855, "IBM855", _("Cyrillic"));
+	fill(7, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_5, "ISO-8859-5", _("Cyrillic"));
+	fill(8, EASTEUROPEAN, GEANY_ENCODING_ISO_IR_111, "ISO-IR-111", _("Cyrillic"));
+	fill(9, EASTEUROPEAN, GEANY_ENCODING_KOI8_R, "KOI8R", _("Cyrillic"));
+	fill(10, EASTEUROPEAN, GEANY_ENCODING_WINDOWS_1251, "WINDOWS-1251", _("Cyrillic"));
+	fill(11, EASTEUROPEAN, GEANY_ENCODING_CP_866, "CP866", _("Cyrillic/Russian"));
+	fill(12, EASTEUROPEAN, GEANY_ENCODING_KOI8_U, "KOI8U", _("Cyrillic/Ukrainian"));
+	fill(13, EASTEUROPEAN, GEANY_ENCODING_ISO_8859_16, "ISO-8859-16", _("Romanian"));
 
-	fill(MIDDLEEASTERN, GEANY_ENCODING_IBM_864, "IBM864", _("Arabic"));
-	fill(MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_6, "ISO-8859-6", _("Arabic"));
-	fill(MIDDLEEASTERN, GEANY_ENCODING_WINDOWS_1256, "WINDOWS-1256", _("Arabic"));
-	fill(MIDDLEEASTERN, GEANY_ENCODING_IBM_862, "IBM862", _("Hebrew"));
-	fill(MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_8_I, "ISO-8859-8-I", _("Hebrew"));
-	fill(MIDDLEEASTERN, GEANY_ENCODING_WINDOWS_1255, "WINDOWS-1255", _("Hebrew"));
-	fill(MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_8, "ISO-8859-8", _("Hebrew Visual"));
+	fill(0, MIDDLEEASTERN, GEANY_ENCODING_IBM_864, "IBM864", _("Arabic"));
+	fill(1, MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_6, "ISO-8859-6", _("Arabic"));
+	fill(2, MIDDLEEASTERN, GEANY_ENCODING_WINDOWS_1256, "WINDOWS-1256", _("Arabic"));
+	fill(3, MIDDLEEASTERN, GEANY_ENCODING_IBM_862, "IBM862", _("Hebrew"));
+	fill(4, MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_8_I, "ISO-8859-8-I", _("Hebrew"));
+	fill(5, MIDDLEEASTERN, GEANY_ENCODING_WINDOWS_1255, "WINDOWS-1255", _("Hebrew"));
+	fill(6, MIDDLEEASTERN, GEANY_ENCODING_ISO_8859_8, "ISO-8859-8", _("Hebrew Visual"));
 
-	fill(ASIAN, GEANY_ENCODING_ARMSCII_8, "ARMSCII-8", _("Armenian"));
-	fill(ASIAN, GEANY_ENCODING_GEOSTD8, "GEORGIAN-ACADEMY", _("Georgian"));
-	fill(ASIAN, GEANY_ENCODING_TIS_620, "TIS-620", _("Thai"));
-	fill(ASIAN, GEANY_ENCODING_IBM_857, "IBM857", _("Turkish"));
-	fill(ASIAN, GEANY_ENCODING_WINDOWS_1254, "WINDOWS-1254", _("Turkish"));
-	fill(ASIAN, GEANY_ENCODING_ISO_8859_9, "ISO-8859-9", _("Turkish"));
-	fill(ASIAN, GEANY_ENCODING_TCVN, "TCVN", _("Vietnamese"));
-	fill(ASIAN, GEANY_ENCODING_VISCII, "VISCII", _("Vietnamese"));
-	fill(ASIAN, GEANY_ENCODING_WINDOWS_1258, "WINDOWS-1258", _("Vietnamese"));
+	fill(0, ASIAN, GEANY_ENCODING_ARMSCII_8, "ARMSCII-8", _("Armenian"));
+	fill(1, ASIAN, GEANY_ENCODING_GEOSTD8, "GEORGIAN-ACADEMY", _("Georgian"));
+	fill(2, ASIAN, GEANY_ENCODING_TIS_620, "TIS-620", _("Thai"));
+	fill(3, ASIAN, GEANY_ENCODING_IBM_857, "IBM857", _("Turkish"));
+	fill(4, ASIAN, GEANY_ENCODING_WINDOWS_1254, "WINDOWS-1254", _("Turkish"));
+	fill(5, ASIAN, GEANY_ENCODING_ISO_8859_9, "ISO-8859-9", _("Turkish"));
+	fill(6, ASIAN, GEANY_ENCODING_TCVN, "TCVN", _("Vietnamese"));
+	fill(7, ASIAN, GEANY_ENCODING_VISCII, "VISCII", _("Vietnamese"));
+	fill(8, ASIAN, GEANY_ENCODING_WINDOWS_1258, "WINDOWS-1258", _("Vietnamese"));
 
-	fill(UNICODE, GEANY_ENCODING_UTF_8, "UTF-8", _("Unicode"));
-	fill(UNICODE, GEANY_ENCODING_UTF_16, "UTF-16", _("Unicode"));
-	fill(UNICODE, GEANY_ENCODING_UCS_2, "UCS-2", _("Unicode"));
-	fill(UNICODE, GEANY_ENCODING_UCS_4, "UCS-4", _("Unicode"));
+	fill(0, UNICODE, GEANY_ENCODING_UTF_8, "UTF-8", _("Unicode"));
+	fill(1, UNICODE, GEANY_ENCODING_UTF_16, "UTF-16", _("Unicode"));
+	fill(2, UNICODE, GEANY_ENCODING_UCS_2, "UCS-2", _("Unicode"));
+	fill(3, UNICODE, GEANY_ENCODING_UCS_4, "UCS-4", _("Unicode"));
 
-	fill(EASTASIAN, GEANY_ENCODING_GB18030, "GB18030", _("Chinese Simplified"));
-	fill(EASTASIAN, GEANY_ENCODING_GB2312, "GB2312", _("Chinese Simplified"));
-	fill(EASTASIAN, GEANY_ENCODING_GBK, "GBK", _("Chinese Simplified"));
-	fill(EASTASIAN, GEANY_ENCODING_HZ, "HZ", _("Chinese Simplified"));
-	fill(EASTASIAN, GEANY_ENCODING_BIG5, "BIG5", _("Chinese Traditional"));
-	fill(EASTASIAN, GEANY_ENCODING_BIG5_HKSCS, "BIG5-HKSCS", _("Chinese Traditional"));
-	fill(EASTASIAN, GEANY_ENCODING_EUC_TW, "EUC-TW", _("Chinese Traditional"));
-	fill(EASTASIAN, GEANY_ENCODING_EUC_JP, "EUC-JP", _("Japanese"));
-	fill(EASTASIAN, GEANY_ENCODING_ISO_2022_JP, "ISO-2022-JP", _("Japanese"));
-	fill(EASTASIAN, GEANY_ENCODING_SHIFT_JIS, "SHIFT_JIS", _("Japanese"));
-	fill(EASTASIAN, GEANY_ENCODING_EUC_KR, "EUC-KR", _("Korean"));
-	fill(EASTASIAN, GEANY_ENCODING_ISO_2022_KR, "ISO-2022-KR", _("Korean"));
-	fill(EASTASIAN, GEANY_ENCODING_JOHAB, "JOHAB", _("Korean"));
-	fill(EASTASIAN, GEANY_ENCODING_UHC, "UHC", _("Korean"));
-}
-
-
-static void encodings_lazy_init(void)
-{
-	static gboolean initialized = FALSE;
-	gint i;
-
-	if (initialized)
-		return;
-
-	g_return_if_fail(G_N_ELEMENTS(encodings) == GEANY_ENCODINGS_MAX);
-
-	i = 0;
-	while (i < GEANY_ENCODINGS_MAX)
-	{
-		g_return_if_fail(encodings[i].idx == i);
-
-		/* Translate the names */
-		encodings[i].name = _(encodings[i].name);
-
-		++i;
-    }
-
-	initialized = TRUE;
+	fill(0, EASTASIAN, GEANY_ENCODING_GB18030, "GB18030", _("Chinese Simplified"));
+	fill(1, EASTASIAN, GEANY_ENCODING_GB2312, "GB2312", _("Chinese Simplified"));
+	fill(2, EASTASIAN, GEANY_ENCODING_GBK, "GBK", _("Chinese Simplified"));
+	fill(3, EASTASIAN, GEANY_ENCODING_HZ, "HZ", _("Chinese Simplified"));
+	fill(4, EASTASIAN, GEANY_ENCODING_BIG5, "BIG5", _("Chinese Traditional"));
+	fill(5, EASTASIAN, GEANY_ENCODING_BIG5_HKSCS, "BIG5-HKSCS", _("Chinese Traditional"));
+	fill(6, EASTASIAN, GEANY_ENCODING_EUC_TW, "EUC-TW", _("Chinese Traditional"));
+	fill(7, EASTASIAN, GEANY_ENCODING_EUC_JP, "EUC-JP", _("Japanese"));
+	fill(8, EASTASIAN, GEANY_ENCODING_ISO_2022_JP, "ISO-2022-JP", _("Japanese"));
+	fill(9, EASTASIAN, GEANY_ENCODING_SHIFT_JIS, "SHIFT_JIS", _("Japanese"));
+	fill(10, EASTASIAN, GEANY_ENCODING_EUC_KR, "EUC-KR", _("Korean"));
+	fill(11, EASTASIAN, GEANY_ENCODING_ISO_2022_KR, "ISO-2022-KR", _("Korean"));
+	fill(12, EASTASIAN, GEANY_ENCODING_JOHAB, "JOHAB", _("Korean"));
+	fill(13, EASTASIAN, GEANY_ENCODING_UHC, "UHC", _("Korean"));
 }
 
 
 const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 {
 	gint i;
-
-	encodings_lazy_init ();
 
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
@@ -159,11 +133,7 @@ const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 const GeanyEncoding *encodings_get_from_index(gint index)
 {
 	g_return_val_if_fail(index >= 0, NULL);
-
-	if (index >= GEANY_ENCODINGS_MAX)
-		return NULL;
-
-	encodings_lazy_init();
+	g_return_val_if_fail(index < GEANY_ENCODINGS_MAX, NULL);
 
 	return &encodings[index];
 }
@@ -175,20 +145,14 @@ gchar *encodings_to_string(const GeanyEncoding* enc)
 	g_return_val_if_fail(enc->name != NULL, NULL);
 	g_return_val_if_fail(enc->charset != NULL, NULL);
 
-	encodings_lazy_init();
-
     return g_strdup_printf("%s (%s)", enc->name, enc->charset);
 }
 
 
 const gchar *encodings_get_charset(const GeanyEncoding* enc)
 {
-/*	g_return_val_if_fail(enc != NULL, NULL);
+	g_return_val_if_fail(enc != NULL, NULL);
 	g_return_val_if_fail(enc->charset != NULL, NULL);
-*/
-	if (enc == NULL) return NULL;
-
-	encodings_lazy_init();
 
 	return enc->charset;
 }
@@ -200,10 +164,9 @@ void encodings_init(void)
 			  *menu_utf8, *menu_middleeast, *item_westeuro, *item_easteuro, *item_eastasian,
 			  *item_asian, *item_utf8, *item_middleeast;
 	gchar *label;
-	guint i = 0;
+	guint i, j, order, group_size;
 
 	init_encodings();
-	encodings_lazy_init();
 
 	// create encodings submenu in document menu
 	menu = lookup_widget(app->window, "set_encoding1_menu");
@@ -244,30 +207,38 @@ void encodings_init(void)
 	gtk_container_add(GTK_CONTAINER(menu), item_utf8);
 	gtk_widget_show_all(item_utf8);
 
-
-	while (i < GEANY_ENCODINGS_MAX)
+	/// TODO can it be optimized? ATM 1583 runs at line 233
+	for (i = 0; i < GEANY_ENCODING_GROUPS_MAX - 1; i++)
 	{
-		if (encodings[i].idx != i) break;
-
-		switch (encodings[i].group)
+		order = 0;
+		switch (i)
 		{
-			case WESTEUROPEAN: submenu = menu_westeuro; break;
-			case EASTEUROPEAN: submenu = menu_easteuro; break;
-			case EASTASIAN: submenu = menu_eastasian; break;
-			case ASIAN: submenu = menu_asian; break;
-			case MIDDLEEASTERN: submenu = menu_middleeast; break;
-			case UNICODE: submenu = menu_utf8; break;
-			default: submenu = menu;
+			case WESTEUROPEAN: submenu = menu_westeuro; group_size = 9; break;
+			case EASTEUROPEAN: submenu = menu_easteuro; group_size = 14; break;
+			case EASTASIAN: submenu = menu_eastasian; group_size = 14; break;
+			case ASIAN: submenu = menu_asian; group_size = 9; break;
+			case MIDDLEEASTERN: submenu = menu_middleeast; group_size = 7; break;
+			case UNICODE: submenu = menu_utf8; group_size = 4; break;
+			default: submenu = menu; group_size = 0;
 		}
 
-		label = encodings_to_string(&encodings[i]);
-		item = gtk_menu_item_new_with_label(label);
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(submenu), item);
-		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_encoding_change),
-													GINT_TO_POINTER(encodings[i].idx));
-		g_free(label);
-		i++;
-    }
-
+		while (order < group_size)	// the biggest group has 13 elements
+		{
+			for (j = 0; j < GEANY_ENCODINGS_MAX; j++)
+			{
+				if (encodings[j].group == i && encodings[j].order == order)
+				{
+					label = encodings_to_string(&encodings[j]);
+					item = gtk_menu_item_new_with_label(label);
+					gtk_widget_show(item);
+					gtk_container_add(GTK_CONTAINER(submenu), item);
+					g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_encoding_change),
+															GINT_TO_POINTER(encodings[j].idx));
+					g_free(label);
+					break;
+				}
+			}
+			order++;
+		}
+	}
 }

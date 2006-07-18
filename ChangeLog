@@ -2,6 +2,9 @@
 
  * src/dialogs.c, src/callbacks.c:
    Added option to replace escape sequences in Find and Replace dialog.
+ * doc/Makefile.am: Reverted last change, we want to use xmlto.
+ * src/encodings.c: Restored original order of the encodings, kept the
+                    sorted order in the document menu.
 
 
 2006-07-17  Nick Treleaven  <nick.treleaven@btinternet.com>
