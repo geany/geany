@@ -201,7 +201,7 @@ static void styleset_common_init(void)
 	styleset_get_hex(config, config_home, "styling", "brace_bad", "0x0000ff", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[3]);
 	styleset_get_hex(config, config_home, "styling", "margin_linenumber", "0x000000", "0xd0d0d0", "false", types[GEANY_FILETYPES_ALL]->styling[4]);
 	styleset_get_hex(config, config_home, "styling", "margin_folding", "0x000000", "0xdfdfdf", "false", types[GEANY_FILETYPES_ALL]->styling[5]);
-	styleset_get_hex(config, config_home, "styling", "current_line", "0x000000", "0xE5E5E5", "false", types[GEANY_FILETYPES_ALL]->styling[6]);
+	styleset_get_hex(config, config_home, "styling", "current_line", "0x000000", "0xe5e5e5", "true", types[GEANY_FILETYPES_ALL]->styling[6]);
 	styleset_get_int(config, config_home, "styling", "folding_style", 1, 1, types[GEANY_FILETYPES_ALL]->styling[7]);
 	styleset_get_int(config, config_home, "styling", "invert_all", 0, 0, types[GEANY_FILETYPES_ALL]->styling[8]);
 
@@ -230,7 +230,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 
 	// colourize the current line
 	SSM(sci, SCI_SETCARETLINEBACK, invert(types[GEANY_FILETYPES_ALL]->styling[6][1]), 0);
-	SSM(sci, SCI_SETCARETLINEVISIBLE, 1, 0);
+	SSM(sci, SCI_SETCARETLINEVISIBLE, types[GEANY_FILETYPES_ALL]->styling[6][2], 0);
 
 	// indicator settings
 	SSM(sci, SCI_INDICSETSTYLE, 2, INDIC_SQUIGGLE);
