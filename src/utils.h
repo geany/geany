@@ -218,4 +218,8 @@ void utils_update_toolbar_items(void);
 
 gchar **utils_read_file_in_array(const gchar *filename);
 
+/* Contributed by Stefan Oltmanns, thanks.
+ * Replaces \\, \r, \n, \t and \uXXX by their real counterparts */
+gboolean utils_str_replace_escape(gchar *string);
+
 #endif

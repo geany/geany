@@ -3,6 +3,9 @@
  * src/highlighting.c, data/filetypes.common:
    Highlighting of current line can be disabled.
  * geany.glade, src/interface.c: Fixed typo.
+ * src/utils.c, src/callbacks.c, src/dialogs.c:
+   Improved replacing escape sequences in Find and Replace dialog
+   (thanks to Stefan Oltmanns).
 
 
 2006-07-18  Nick Treleaven  <nick.treleaven@btinternet.com>

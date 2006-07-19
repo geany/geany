@@ -2428,3 +2428,134 @@ gchar **utils_read_file_in_array(const gchar *filename)
 	return result;
 }
 
+
+/* Contributed by Stefan Oltmanns, thanks.
+ * Replaces \\, \r, \n, \t and \uXXX by their real counterparts */
+gboolean utils_str_replace_escape(gchar *string)
+{
+	gint i, j;
+	guint unicodechar;
+
+	j = 0;
+	for (i = 0; i < strlen(string); i++)
+	{
+		if (string[i]=='\\')
+		{
+			if (i++ >= strlen(string))
+			{
+				return FALSE;
+			}
+			switch (string[i])
+			{
+				case '\\':
+					string[j] = '\\';
+					break;
+				case 'n':
+					string[j] = '\n';
+					break;
+				case 'r':
+					string[j] = '\r';
+					break;
+				case 't':
+					string[j] = '\t';
+					break;
+#if 0
+				case 'x': // Warning: May produce illegal utf-8 string!
+					i += 2;
+					if (i >= strlen(string))
+					{
+						return FALSE;
+					}
+					if (isdigit(string[i-1])) string[j] = string[i-1]-48;
+					else if (isxdigit(string[i-1])) string[j] = tolower(string[i-1])-87;
+					else return FALSE;
+					string[j] <<= 4;
+					if (isdigit(string[i])) string[j] |= string[i]-48;
+					else if (isxdigit(string[i])) string[j] |= tolower(string[i])-87;
+					else return FALSE;
+					break;
+#endif
+				case 'u':
+					i += 2;
+					if (i >= strlen(string))
+					{
+						return FALSE;
+					}
+					if (isdigit(string[i-1])) unicodechar = string[i-1]-48;
+					else if (isxdigit(string[i-1])) unicodechar = tolower(string[i-1])-87;
+					else return FALSE;
+					unicodechar <<= 4;
+					if (isdigit(string[i])) unicodechar |= string[i]-48;
+					else if (isxdigit(string[i])) unicodechar |= tolower(string[i])-87;
+					else return FALSE;
+					if (((i+2) < strlen(string)) && (isdigit(string[i+1]) || isxdigit(string[i+1]))
+						&& (isdigit(string[i+2]) || isxdigit(string[i+2])))
+					{
+						i += 2;
+						unicodechar <<= 8;
+						if (isdigit(string[i-1])) unicodechar |= ((string[i-1]-48)<<4);
+						else unicodechar |= ((tolower(string[i-1])-87) << 4);
+						if (isdigit(string[i])) unicodechar |= string[i]-48;
+						else unicodechar |= tolower(string[i])-87;
+					}
+					if (((i+2) < strlen(string)) && (isdigit(string[i+1]) || isxdigit(string[i+1]))
+						&& (isdigit(string[i+2]) || isxdigit(string[i+2])))
+					{
+						i += 2;
+						unicodechar <<= 8;
+						if (isdigit(string[i-1])) unicodechar |= ((string[i-1]-48) << 4);
+						else unicodechar |= ((tolower(string[i-1])-87) << 4);
+						if (isdigit(string[i])) unicodechar |= string[i]-48;
+						else unicodechar |= tolower(string[i])-87;
+					}
+					if(unicodechar < 0x80)
+					{
+						string[j] = unicodechar;
+					}
+					else if (unicodechar < 0x800)
+					{
+						string[j] = (unsigned char) ((unicodechar >> 6)| 0xC0);
+						j++;
+						string[j] = (unsigned char) ((unicodechar & 0x3F)| 0x80);
+					}
+					else if (unicodechar < 0x10000)
+					{
+						string[j] = (unsigned char) ((unicodechar >> 12) | 0xE0);
+						j++;
+						string[j] = (unsigned char) (((unicodechar >> 6) & 0x3F) | 0x80);
+						j++;
+						string[j] = (unsigned char) ((unicodechar & 0x3F) | 0x80);
+					}
+					else if (unicodechar < 0x110000) // more chars are not allowed in unicode
+					{
+						string[j] = (unsigned char) ((unicodechar >> 18) | 0xF0);
+						j++;
+						string[j] = (unsigned char) (((unicodechar >> 12) & 0x3F) | 0x80);
+						j++;
+						string[j] = (unsigned char) (((unicodechar >> 6) & 0x3F) | 0x80);
+						j++;
+						string[j] = (unsigned char) ((unicodechar & 0x3F) | 0x80);
+					}
+					else
+					{
+						return FALSE;
+					}
+					break;
+				default:
+					return FALSE;
+			}
+		}
+		else
+		{
+			string[j] = string[i];
+		}
+		j++;
+	}
+	while (j < i)
+	{
+		string[j] = 0;
+		j++;
+	}
+	return TRUE;
+}
+

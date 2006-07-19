@@ -1864,17 +1864,12 @@ on_find_dialog_response                (GtkDialog *dialog,
 
 		g_free(app->search_text);
 		app->search_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
-		if (strlen(app->search_text) == 0)
+		if (strlen(app->search_text) == 0 ||
+			(search_replace_escape && ! utils_str_replace_escape(app->search_text)))
 		{
 			utils_beep();
 			gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->find_dialog, "entry"))->child));
 			return;
-		}
-		else if (search_replace_escape)
-		{
-			app->search_text = utils_str_replace(app->search_text, "\\n", "\n");
-			app->search_text = utils_str_replace(app->search_text, "\\r", "\r");
-			app->search_text = utils_str_replace(app->search_text, "\\t", "\t");
 		}
 		gtk_widget_hide(app->find_dialog);
 
@@ -1952,18 +1947,15 @@ on_replace_dialog_response             (GtkDialog *dialog,
 		return;
 	}
 
-
 	gtk_combo_box_prepend_text(GTK_COMBO_BOX(entry_find), find);
 	gtk_combo_box_prepend_text(GTK_COMBO_BOX(entry_replace), replace);
 
-	if (search_replace_escape_re)
+	if (search_replace_escape_re &&
+		(! utils_str_replace_escape(find) || ! utils_str_replace_escape(replace)))
 	{
-		find = utils_str_replace(find, "\\n", "\n");
-		find = utils_str_replace(find, "\\r", "\r");
-		find = utils_str_replace(find, "\\t", "\t");
-		replace = utils_str_replace(replace, "\\n", "\n");
-		replace = utils_str_replace(replace, "\\r", "\r");
-		replace = utils_str_replace(replace, "\\t", "\t");
+		utils_beep();
+		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->replace_dialog, "entry_find"))->child));
+		return;
 	}
 
 	search_flags_re = (fl1 ? SCFIND_MATCHCASE : 0) |

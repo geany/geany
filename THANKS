@@ -7,8 +7,8 @@ Testers and contributors:
 --------------------------
 These people have contributed to Geany by testing the software,
 reporting problems, sending patches and making useful suggestions.
-Frank Lanitz <frank@partysoke.de>
-Christoph Berg <Christoph.Berg@kpm-sport.de>
+Frank Lanitz <frank@partysoke.de> - heavy testing
+Christoph Berg <Christoph.Berg@kpm-sport.de> - testing and patch for filetype D
 Nick Treleaven <nick.treleaven@btinternet.com> - many patches
 Saleem Abdulrasool <compnerd@gentoo.org> - vte autoconf patch
 Marko Peric <cragwolf@gmail.com>
@@ -17,7 +17,7 @@ Colossus <colossus73@gmail.com>
 Kristoffer A. Tjernås <kt@nupi.no>
 Tamim <amitamim@gmail.com>
 Kevin Ellwood <kellwood@ameritech.net>
-
+Stefan Oltmanns <stefan.oltmanns@abi2006.gymnasium-achim.de> - escape sequences patch
 
 Translators:
 ----------------------------------

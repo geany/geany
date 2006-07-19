@@ -865,7 +865,8 @@ void dialogs_show_find(void)
 						gtk_widget_ref(checkbox6), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox6), FALSE);
 		gtk_tooltips_set_tip(tooltips, checkbox6,
-			_("Replace \\t, \\n and \\r with the corresponding control characters."), NULL);
+			_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+			  "corresponding control characters."), NULL);
 
 		checkbox4 = gtk_check_button_new_with_mnemonic(_("_Search backwards"));
 		g_object_set_data_full(G_OBJECT(app->find_dialog), "check_back",
@@ -996,7 +997,8 @@ void dialogs_show_replace(void)
 						gtk_widget_ref(checkbox7), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
 		gtk_tooltips_set_tip(tooltips, checkbox7,
-			_("Replace \\t, \\n and \\r with the corresponding control characters."), NULL);
+			_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+			  "corresponding control characters."), NULL);
 
 		checkbox4 = gtk_check_button_new_with_mnemonic(_("_Search backwards"));
 		g_object_set_data_full(G_OBJECT(app->replace_dialog), "check_back",
