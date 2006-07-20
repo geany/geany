@@ -20,8 +20,11 @@ TODO List:
 	o separate filetype for HTML
 	o don't override Scintilla keybindings by default
 	o allow use of custom global tags files
+	o common default highlighting all in one config file
+	o show checked items for document->set menuitems
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines, but how?)
 	o (project management)
 	o (folder tree in the sidebar)
+	o (improved Windows support)
