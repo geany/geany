@@ -310,7 +310,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci,SCI_MARKERSETBACK, SC_MARKNUM_FOLDERMIDTAIL, 0x000000);
 
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold", (sptr_t) "1");
-	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.compact", (sptr_t) "1");
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.compact", (sptr_t) "0");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.comment", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.preprocessor", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.at.else", (sptr_t) "1");
