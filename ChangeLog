@@ -1,3 +1,9 @@
+2006-07-20  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * TODO: Added 3 more items discussed on the ML.
+ * doc/scikeybinding.docbook: Commented out some keys not working.
+
+
 2006-07-19  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/highlighting.c, data/filetypes.common:

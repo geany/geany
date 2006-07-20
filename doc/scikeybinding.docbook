@@ -118,13 +118,13 @@
 				<row>
 					<entry>Select to next bookmark.</entry><entry>Alt+F2</entry>
 				</row>
-				-->
 				<row>
 					<entry>Find selection.</entry><entry>Ctrl+F3</entry>
 				</row>
 				<row>
 					<entry>Find selection backwards.</entry><entry>Ctrl+Shift+F3</entry>
 				</row>
+				-->
 				<row>
 					<entry>Scroll up.</entry><entry>Ctrl+Up</entry>
 				</row>
