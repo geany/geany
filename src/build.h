@@ -24,8 +24,6 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
-#include "geany.h"
-
 GPid build_make_file(gint idx, gboolean cust_target);
 
 GPid build_compile_file(gint idx);

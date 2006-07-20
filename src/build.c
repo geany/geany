@@ -21,6 +21,7 @@
  */
 
 
+#include "geany.h"
 #include "build.h"
 
 #include <stdlib.h>

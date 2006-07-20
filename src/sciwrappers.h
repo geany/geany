@@ -23,7 +23,8 @@
 #ifndef GEANY_SCIWRAPPERS_H
 #define GEANY_SCIWRAPPERS_H 1
 
-#include "geany.h"
+#include "Scintilla.h"
+#include "ScintillaWidget.h"
 
 
 void 				sci_set_line_numbers		(ScintillaObject* sci,  gboolean set, gint extra_width);
