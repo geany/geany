@@ -3,16 +3,13 @@ TODO List:
 (features included in () have lower priority)
 
 
-	Geany 0.7 or later:
+	Geany 0.8 or later:
 
-	o fix a freeze at switching between filetypes with files in
-	  ISO-8859-x encoding (reported by Jörg Sommer)
-	o encoding-bug in utils_convert_to_utf8()
+	o configurable "date/time"
+	o Go to xxx - definable command
 	o documentation: list and explain filetype modes
 	o inverting highlighting by selection
 	o src/sci_cb.c: improve auto completion(include local tags)
-	o create filetype specific menus, read templates from filetypes.*
-	o template rework
 	o user-definable auto completion structs
 	o dialogs to use descriptive buttons and 12px border
 	o documentation: preferences
