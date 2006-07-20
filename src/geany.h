@@ -20,6 +20,9 @@
  * $Id$
  */
 
+#ifndef GEANY_H
+#define GEANY_H
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
@@ -29,9 +32,6 @@
 #ifndef PLAT_GTK
 #   define PLAT_GTK 1
 #endif
-
-#ifndef GEANY_H
-#define GEANY_H
 
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
@@ -259,13 +259,6 @@ enum
 	GEANY_IMAGE_SAVE_ALL,
 	GEANY_IMAGE_NEW_ARROW
 };
-
-enum {
-	GEANY_RESPONSE_REPLACE = 1,
-	GEANY_RESPONSE_REPLACE_ALL = 2,
-	GEANY_RESPONSE_REPLACE_SEL = 3
-};
-
 
 enum
 {

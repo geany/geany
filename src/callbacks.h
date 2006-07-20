@@ -20,6 +20,13 @@
  * $Id$
  */
 
+enum {
+	GEANY_RESPONSE_REPLACE = 1,
+	GEANY_RESPONSE_REPLACE_ALL,
+	GEANY_RESPONSE_REPLACE_SEL,
+	GEANY_RESPONSE_FIND
+};
+
 
 extern gchar current_word[]; //needed for popup menu keybindings access
 
