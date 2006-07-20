@@ -2,6 +2,7 @@
 
  * TODO: Added 3 more items discussed on the ML.
  * doc/scikeybinding.docbook: Commented out some keys not working.
+ * src/dialogs.c: Share find/replace common checkbox setup code.
 
 
 2006-07-19  Enrico Tröger  <enrico.troeger@uvena.de>
