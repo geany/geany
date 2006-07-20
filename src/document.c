@@ -50,7 +50,6 @@
 #include "sci_cb.h"
 #include "dialogs.h"
 #include "msgwindow.h"
-#include "callbacks.h"
 #include "templates.h"
 #include "treeviews.h"
 #include "utils.h"
@@ -730,18 +729,20 @@ void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_b
 }
 
 
-/* general search function, used from the find dialog */
-void document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards)
+/* General search function, used from the find dialog.
+ * Returns -1 on failure or the start position of the matching text.
+ * Will skip past any selection, ignoring it. */
+gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards)
 {
 	gint selection_end, selection_start, search_pos;
 
-	g_return_if_fail(text != NULL);
-	if (idx == -1 || ! *text) return;
+	g_return_val_if_fail(text != NULL, -1);
+	if (idx == -1 || ! *text) return -1;
 	// Sci doesn't support searching backwards with a regex
 	if (flags & SCFIND_REGEXP) search_backwards = FALSE;
 
-	selection_start =  sci_get_selection_start(doc_list[idx].sci);
-	selection_end =  sci_get_selection_end(doc_list[idx].sci);
+	selection_start = sci_get_selection_start(doc_list[idx].sci);
+	selection_end = sci_get_selection_end(doc_list[idx].sci);
 	if ((selection_end - selection_start) > 0)
 	{ // there's a selection so go to the end
 		if (search_backwards)
@@ -765,12 +766,14 @@ void document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 		if (dialogs_show_not_found(text))
 		{
 			sci_goto_pos(doc_list[idx].sci, (search_backwards) ? sci_get_length(doc_list[idx].sci) : 0, TRUE);
-			document_find_text(idx, text, flags, search_backwards);
+			return document_find_text(idx, text, flags, search_backwards);
 		}
 	}
+	return search_pos;
 }
 
 
+/* Replaces the selection if it matches, otherwise just finds the next match */
 void document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text,
 	gint flags, gboolean search_backwards)
 {
@@ -783,19 +786,22 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 
 	selection_start =  sci_get_selection_start(doc_list[idx].sci);
 	selection_end =  sci_get_selection_end(doc_list[idx].sci);
-	if ((selection_end - selection_start) > 0)
-	{ // there's a selection so go to the end
-		if (search_backwards)
-			sci_goto_pos(doc_list[idx].sci, selection_start, TRUE);
-		else
-			sci_goto_pos(doc_list[idx].sci, selection_end, TRUE);
+	if (selection_end == selection_start)
+	{
+		// no selection so just find the next match
+		document_find_text(idx, find_text, flags, search_backwards);
+		return;
 	}
-
-	sci_set_search_anchor(doc_list[idx].sci);
+	// there's a selection so go to the start before finding to search through it
+	// this ensures there is a match
 	if (search_backwards)
-		search_pos = sci_search_prev(doc_list[idx].sci, flags, find_text);
+		sci_goto_pos(doc_list[idx].sci, selection_end, TRUE);
 	else
-		search_pos = sci_search_next(doc_list[idx].sci, flags, find_text);
+		sci_goto_pos(doc_list[idx].sci, selection_start, TRUE);
+
+	search_pos = document_find_text(idx, find_text, flags, search_backwards);	
+	// return if the original selected text did not match (at the start of the selection)
+	if (search_pos != selection_start) return;
 
 	if (search_pos != -1)
 	{
@@ -803,13 +809,14 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 		// search next/prev will select matching text, which we use to set the replace target
 		sci_target_from_selection(doc_list[idx].sci);
 		replace_len = sci_target_replace(doc_list[idx].sci, replace_text, flags & SCFIND_REGEXP);
-		// select the replacement and scroll in view
+		// select the replacement - find text will skip past the selected text
 		sci_set_selection_start(doc_list[idx].sci, search_pos);
 		sci_set_selection_end(doc_list[idx].sci, search_pos + replace_len);
-		sci_scroll_caret(doc_list[idx].sci);
+		document_find_text(idx, find_text, flags, search_backwards);
 	}
 	else
 	{
+		// no match in the selection
 		utils_beep();
 	}
 }

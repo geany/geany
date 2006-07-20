@@ -8,6 +8,13 @@
  * TODO: Added 3 more items discussed on the ML.
  * doc/scikeybinding.docbook: Commented out some keys not working.
  * src/dialogs.c: Share find/replace common checkbox setup code.
+ * src/build.c, src/build.h, src/sciwrappers.h, src/dialogs.c,
+   src/dialogs.h: Don't include geany.h.
+ * src/geany.h, src/callbacks.h: Moved GEANY_RESPONSE_* to callbacks.h.
+ * src/callbacks.c, src/document.c, src/document.h, src/dialogs.c:
+   Added Find button to Replace dialog to skip a match.
+   Change Replace button to find first & use current selection.
+   Ask whether to wraparound when replacing and no next match is found.
 
 
 2006-07-19  Enrico Tröger  <enrico.troeger@uvena.de>

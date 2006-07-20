@@ -21,12 +21,8 @@
  */
 
 
-#include "geany.h"
-
 #ifndef GEANY_DIALOGS_H
 #define GEANY_DIALOGS_H 1
-
-
 
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file(void);

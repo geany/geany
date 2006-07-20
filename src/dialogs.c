@@ -948,6 +948,10 @@ void dialogs_show_replace(void)
 		gtk_widget_show(button);
 		gtk_dialog_add_action_widget(GTK_DIALOG(app->replace_dialog), button,
 			GEANY_RESPONSE_REPLACE_ALL);
+		button = gtk_button_new_from_stock("gtk-find");
+		gtk_widget_show(button);
+		gtk_dialog_add_action_widget(GTK_DIALOG(app->replace_dialog), button,
+			GEANY_RESPONSE_FIND);
 		button = gtk_button_new_with_mnemonic(_("_Replace"));
 		gtk_widget_show(button);
 		gtk_dialog_add_action_widget(GTK_DIALOG(app->replace_dialog), button,
@@ -993,7 +997,7 @@ void dialogs_show_replace(void)
 		g_signal_connect(G_OBJECT(check_regexp), "toggled",
 			G_CALLBACK(on_replace_checkbutton_toggled), NULL);
 
-		checkbox6 = gtk_check_button_new_with_mnemonic(_("Replace in all open files"));
+		checkbox6 = gtk_check_button_new_with_mnemonic(_("Replace in all _open files"));
 		g_object_set_data_full(G_OBJECT(app->replace_dialog), "check_all_buffers",
 						gtk_widget_ref(checkbox6), (GDestroyNotify)gtk_widget_unref);
 		gtk_tooltips_set_tip(tooltips, checkbox6,

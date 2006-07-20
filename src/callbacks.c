@@ -1984,6 +1984,11 @@ on_replace_dialog_response             (GtkDialog *dialog,
 					search_backwards_re);
 				break;
 			}
+			case GEANY_RESPONSE_FIND:
+			{
+				document_find_text(idx, find, search_flags_re, search_backwards_re);
+				break;
+			}
 			case GEANY_RESPONSE_REPLACE_ALL:
 			{
 				document_replace_all(idx, find, replace, search_flags_re);
