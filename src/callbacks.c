@@ -1238,6 +1238,8 @@ void
 on_show_toolbar1_toggled               (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
+	if (app->ignore_callback) return;
+
 	app->toolbar_visible = (app->toolbar_visible) ? FALSE : TRUE;;
 	utils_widget_show_hide(GTK_WIDGET(app->toolbar), app->toolbar_visible);
 }
@@ -1256,11 +1258,10 @@ void
 on_show_messages_window1_toggled       (GtkCheckMenuItem *checkmenuitem,
                                         gpointer          user_data)
 {
-	if (app->msgwindow_visible)
-		gtk_widget_hide(lookup_widget(app->window, "scrolledwindow1"));
-	else
-		gtk_widget_show(lookup_widget(app->window, "scrolledwindow1"));
+	if (app->ignore_callback) return;
+
 	app->msgwindow_visible = (app->msgwindow_visible) ? FALSE : TRUE;
+	utils_widget_show_hide(lookup_widget(app->window, "scrolledwindow1"), app->msgwindow_visible);
 }
 
 
@@ -1506,13 +1507,13 @@ on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
 				case 3:
 				{
 					app->sidebar_openfiles_visible = FALSE;
-					utils_treeviews_showhide();
+					utils_treeviews_showhide(FALSE);
 					break;
 				}
 				case 4:
 				{
 					app->sidebar_visible = FALSE;
-					utils_treeviews_showhide();
+					utils_treeviews_showhide(FALSE);
 					break;
 				}
 			}
@@ -1530,13 +1531,13 @@ on_taglist_tree_popup_clicked          (GtkMenuItem     *menuitem,
 		case 0:
 		{
 			app->sidebar_symbol_visible = FALSE;
-			utils_treeviews_showhide();
+			utils_treeviews_showhide(FALSE);
 			break;
 		}
 		case 1:
 		{
 			app->sidebar_visible = FALSE;
-			utils_treeviews_showhide();
+			utils_treeviews_showhide(FALSE);
 			break;
 		}
 	}
@@ -2595,6 +2596,17 @@ on_menu_select_all1_activate           (GtkMenuItem     *menuitem,
 	if (idx < 0 || ! doc_list[idx].is_valid) return;
 
 	sci_select_all(doc_list[idx].sci);
+}
+
+
+void
+on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data)
+{
+	if (app->ignore_callback) return;
+
+	app->sidebar_visible = ! app->sidebar_visible;
+	utils_treeviews_showhide(TRUE);
 }
 
 

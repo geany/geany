@@ -595,7 +595,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		utils_update_toolbar_items();
 		utils_update_toolbar_icons(app->toolbar_icon_size);
 		gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), app->toolbar_icon_style);
-		utils_treeviews_showhide();
+		utils_treeviews_showhide(FALSE);
 
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), app->tab_pos_editor);
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), app->tab_pos_msgwin);

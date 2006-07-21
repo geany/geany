@@ -131,6 +131,7 @@ typedef struct MyApp
 	gboolean			 opening_session_files;
 	// represents the state when Geany is quitting completely
 	gboolean			 quitting;
+	gboolean			 ignore_callback;
 	gboolean			 ignore_global_tags;
 	gboolean			 toolbar_visible;
 	gboolean			 sidebar_symbol_visible;

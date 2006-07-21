@@ -109,21 +109,28 @@ static void apply_settings(void)
 {
 	utils_update_fold_items();
 
-	// toolbar, message window and tagbar are by default visible, so don't change it if it is true
+	// toolbar, message window and sidebar are by default visible, so don't change it if it is true
 	if (! app->toolbar_visible)
 	{
+		app->ignore_callback = TRUE;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_toolbar1")), FALSE);
 		gtk_widget_hide(app->toolbar);
-		app->toolbar_visible = FALSE;
+		app->ignore_callback = FALSE;
 	}
 	if (! app->msgwindow_visible || no_msgwin)
 	{
-		// I know this is a bit confusing, but it works
-		app->msgwindow_visible = TRUE;
+		app->ignore_callback = TRUE;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1")), FALSE);
-		app->msgwindow_visible = FALSE;
+		gtk_widget_hide(lookup_widget(app->window, "scrolledwindow1"));
+		app->ignore_callback = FALSE;
 	}
-	utils_treeviews_showhide();
+	if (! app->sidebar_visible)
+	{
+		app->ignore_callback = TRUE;
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_sidebar1")), FALSE);
+		app->ignore_callback = FALSE;
+	}
+	utils_treeviews_showhide(TRUE);
 	// sets the icon style of the toolbar
 	switch (app->toolbar_icon_style)
 	{

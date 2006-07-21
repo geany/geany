@@ -1988,23 +1988,34 @@ gint utils_get_int_from_hexcolor(const gchar *hex)
 }
 
 
-void utils_treeviews_showhide(void)
+void utils_treeviews_showhide(gboolean force)
 {
-	// hide complete notebook
-	if (! app->sidebar_visible || (! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible))
-	{
-		if (app->sidebar_visible) app->sidebar_visible = FALSE;
-		gtk_widget_hide(app->treeview_notebook);
-	}
-	else
-	{
-		gtk_widget_show(app->treeview_notebook);
+	GtkWidget *widget;
 
-		utils_widget_show_hide(gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(app->treeview_notebook), 0), app->sidebar_symbol_visible);
-		utils_widget_show_hide(gtk_notebook_get_nth_page(
-					GTK_NOTEBOOK(app->treeview_notebook), 1), app->sidebar_openfiles_visible);
+	if (! force && ! app->sidebar_visible && (app->sidebar_openfiles_visible ||
+		app->sidebar_symbol_visible))
+	{
+		app->sidebar_visible = TRUE;
 	}
+	else if (! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible)
+	{
+		app->sidebar_visible = FALSE;
+	}
+
+	widget = lookup_widget(app->window, "menu_show_sidebar1");
+	if (app->sidebar_visible != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
+	{
+		app->ignore_callback = TRUE;
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), app->sidebar_visible);
+		app->ignore_callback = FALSE;
+	}
+
+	utils_widget_show_hide(app->treeview_notebook, app->sidebar_visible);
+
+	utils_widget_show_hide(gtk_notebook_get_nth_page(
+					GTK_NOTEBOOK(app->treeview_notebook), 0), app->sidebar_symbol_visible);
+	utils_widget_show_hide(gtk_notebook_get_nth_page(
+					GTK_NOTEBOOK(app->treeview_notebook), 1), app->sidebar_openfiles_visible);
 }
 
 

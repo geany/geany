@@ -1,3 +1,13 @@
+2006-07-21  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/geany.h, src/main.c, src/callbacks.c:
+   Introduced app->ignore_callback to ignore callback actions when
+   changing the state of GUI elements(as a workaround).
+ * geany.glade, src/interface.c, src/main.c, src/callbacks.c,
+   src/utils.c, src/prefs.c, src/keybindings.c:
+   Added menu item View->Show Sidebar and improved code around it.
+
+
 2006-07-20  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/highlighting.c: Unset fold.compact setting.

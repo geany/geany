@@ -677,7 +677,7 @@ static void cb_func_toggle_sidebar(void)
 		app->sidebar_symbol_visible = TRUE;
 	}
 
-	utils_treeviews_showhide();
+	utils_treeviews_showhide(TRUE);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->treeview_notebook), active_page);
 }
 
