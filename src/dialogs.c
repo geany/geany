@@ -1032,6 +1032,13 @@ void dialogs_show_find_in_files(void)
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
+	cur_dir = utils_get_current_file_dir();
+	if (cur_dir == NULL)
+	{
+		utils_set_statusbar(_("Invalid directory for find in files."), FALSE);
+		return;
+	}
+
 	if (app->find_in_files_dialog == NULL)
 	{
 		GtkWidget *label;
@@ -1086,10 +1093,9 @@ void dialogs_show_find_in_files(void)
 	g_free(sel);
 	gtk_widget_grab_focus(entry);
 
-	cur_dir = utils_get_current_file_dir();
 	dirtext = g_strdup_printf(_("Current directory: %s"), cur_dir);
-	g_free(cur_dir);
 	gtk_label_set_text(GTK_LABEL(dirlabel), dirtext);
+	g_free(cur_dir);
 	g_free(dirtext);
 
 	gtk_widget_show(app->find_in_files_dialog);
