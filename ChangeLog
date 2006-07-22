@@ -7,6 +7,7 @@
    Added "Reload as" menu item to force opening a file with a specified
    encoding(both were patches from Stefan Oltmanns).
  * src/callbacks.c: Fixed two issues when showing / hiding the sidebar.
+ * src/filetypes.c: Added *.cfg as extension for config files.
 
 
 2006-07-21  Nick Treleaven  <nick.treleaven@btinternet.com>

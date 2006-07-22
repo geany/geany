@@ -223,7 +223,7 @@ void filetypes_init_types(void)
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_LATEX]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_LATEX]->title, filetypes[GEANY_FILETYPES_LATEX]);
 
-#define PASCAL
+#define PAS // to avoid warnings when building under Windows, the symbol PASCAL is there defined
 	filetypes[GEANY_FILETYPES_PASCAL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_PASCAL]->id = GEANY_FILETYPES_PASCAL;
 	filetypes[GEANY_FILETYPES_PASCAL]->lang = 4;
@@ -312,12 +312,13 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_CONF]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_CONF]->title = g_strdup(_("Config file"));
 	filetypes[GEANY_FILETYPES_CONF]->extension = g_strdup("conf");
-	filetypes[GEANY_FILETYPES_CONF]->pattern = g_new0(gchar*, 5);
+	filetypes[GEANY_FILETYPES_CONF]->pattern = g_new0(gchar*, 6);
 	filetypes[GEANY_FILETYPES_CONF]->pattern[0] = g_strdup("*.conf");
 	filetypes[GEANY_FILETYPES_CONF]->pattern[1] = g_strdup("*.ini");
 	filetypes[GEANY_FILETYPES_CONF]->pattern[2] = g_strdup("config");
 	filetypes[GEANY_FILETYPES_CONF]->pattern[3] = g_strdup("*rc");
-	filetypes[GEANY_FILETYPES_CONF]->pattern[4] = NULL;
+	filetypes[GEANY_FILETYPES_CONF]->pattern[4] = g_strdup("*.cfg");
+	filetypes[GEANY_FILETYPES_CONF]->pattern[5] = NULL;
 	filetypes[GEANY_FILETYPES_CONF]->style_func_ptr = styleset_conf;
 	filetypes[GEANY_FILETYPES_CONF]->comment_open = g_strdup("#");
 	filetypes[GEANY_FILETYPES_CONF]->comment_close = NULL;
@@ -488,14 +489,14 @@ filetype *filetypes_get_from_filename(const gchar *filename)
 
 	if (filename == NULL)
 	{
-		return filetypes[GEANY_FILETYPES_C];
+		return filetypes[GEANY_FILETYPES_ALL];
 	}
 
 	// try to get the UTF-8 equivalent for the filename
 	utf8_filename = g_locale_to_utf8(filename, -1, NULL, NULL, NULL);
 	if (utf8_filename == NULL)
 	{
-		return filetypes[GEANY_FILETYPES_C];
+		return filetypes[GEANY_FILETYPES_ALL];
 	}
 
 	// to match against the basename of the file(because of Makefile*)
@@ -504,7 +505,7 @@ filetype *filetypes_get_from_filename(const gchar *filename)
 
 	for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
-		for (j = 0; filetypes[i]->pattern[j]; j++)
+		for (j = 0; filetypes[i]->pattern[j] != NULL; j++)
 		{
 			pattern = g_pattern_spec_new(filetypes[i]->pattern[j]);
 			if (g_pattern_match_string(pattern, base_filename))
