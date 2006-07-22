@@ -801,7 +801,7 @@ void dialogs_show_goto_line(void)
 static void dialogs_add_find_checkboxes(GtkDialog *dialog)
 {
 	GtkWidget *checkbox1, *checkbox2, *checkbox3, *checkbox4, *checkbox5,
-			  *checkbox7;
+			  *checkbox7, *hbox, *lbox, *rbox;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 	checkbox1 = gtk_check_button_new_with_mnemonic(_("_Case sensitive"));
@@ -813,6 +813,16 @@ static void dialogs_add_find_checkboxes(GtkDialog *dialog)
 	g_object_set_data_full(G_OBJECT(dialog), "check_word",
 					gtk_widget_ref(checkbox2), (GDestroyNotify)gtk_widget_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox2), FALSE);
+
+	checkbox5 = gtk_check_button_new_with_mnemonic(_("Match only word s_tart"));
+	g_object_set_data_full(G_OBJECT(dialog), "check_wordstart",
+					gtk_widget_ref(checkbox5), (GDestroyNotify)gtk_widget_unref);
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox5), FALSE);
+
+	lbox = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(lbox), checkbox1);
+	gtk_container_add(GTK_CONTAINER(lbox), checkbox2);
+	gtk_container_add(GTK_CONTAINER(lbox), checkbox5);
 
 	checkbox3 = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_regexp",
@@ -826,11 +836,6 @@ static void dialogs_add_find_checkboxes(GtkDialog *dialog)
 					gtk_widget_ref(checkbox4), (GDestroyNotify)gtk_widget_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox4), FALSE);
 
-	checkbox5 = gtk_check_button_new_with_mnemonic(_("Match only word s_tart"));
-	g_object_set_data_full(G_OBJECT(dialog), "check_wordstart",
-					gtk_widget_ref(checkbox5), (GDestroyNotify)gtk_widget_unref);
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox5), FALSE);
-
 	checkbox7 = gtk_check_button_new_with_mnemonic(_("_Replace control characters"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_escape",
 					gtk_widget_ref(checkbox7), (GDestroyNotify)gtk_widget_unref);
@@ -839,12 +844,15 @@ static void dialogs_add_find_checkboxes(GtkDialog *dialog)
 		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 		  "corresponding control characters."), NULL);
 
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), checkbox1);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), checkbox2);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), checkbox5);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), checkbox3);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), checkbox7);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), checkbox4);
+	rbox = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(rbox), checkbox3);
+	gtk_container_add(GTK_CONTAINER(rbox), checkbox7);
+	gtk_container_add(GTK_CONTAINER(rbox), checkbox4);
+
+	hbox = gtk_hbox_new(FALSE, 6);
+	gtk_container_add(GTK_CONTAINER(hbox), lbox);
+	gtk_container_add(GTK_CONTAINER(hbox), rbox);
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 6);
 }
 
 
@@ -863,7 +871,7 @@ void dialogs_show_find(void)
 
 	if (app->find_dialog == NULL)
 	{
-		GtkWidget *label, *entry, *check_regexp;
+		GtkWidget *label, *entry, *check_regexp, *vbox;
 
 		app->find_dialog = gtk_dialog_new_with_buttons(_("Find"), GTK_WINDOW(app->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
@@ -888,8 +896,10 @@ void dialogs_show_find(void)
 		g_signal_connect((gpointer) app->find_dialog, "delete_event",
 				G_CALLBACK(gtk_widget_hide), NULL);
 
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), label);
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), entry);
+		vbox = gtk_vbox_new(FALSE, 0);
+		gtk_container_add(GTK_CONTAINER(vbox), label);
+		gtk_container_add(GTK_CONTAINER(vbox), entry);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), vbox);
 
 		dialogs_add_find_checkboxes(GTK_DIALOG(app->find_dialog));
 
@@ -897,8 +907,6 @@ void dialogs_show_find(void)
 			lookup_widget(GTK_WIDGET(app->find_dialog), "check_regexp");
 		g_signal_connect(G_OBJECT(check_regexp), "toggled",
 			G_CALLBACK(on_find_checkbutton_toggled), NULL);
-
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->find_dialog)->vbox), gtk_label_new(""));
 
 		gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(app->find_dialog)->vbox), 3);
 
@@ -931,8 +939,8 @@ void dialogs_show_replace(void)
 	if (app->replace_dialog == NULL)
 	{
 		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace,
-			*checkbox6, *check_regexp;
-		GtkWidget *button;
+			*checkbox6, *check_regexp, *button, *align, *rbox, *fbox;
+		GtkSizeGroup *size_group;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 		app->replace_dialog = gtk_dialog_new_with_buttons(_("Replace"), GTK_WINDOW(app->window),
@@ -958,11 +966,9 @@ void dialogs_show_replace(void)
 			GEANY_RESPONSE_REPLACE);
 
 		label_find = gtk_label_new(_("Enter the search text here:"));
-		gtk_misc_set_padding(GTK_MISC(label_find), 0, 6);
 		gtk_misc_set_alignment(GTK_MISC(label_find), 0, 0);
 
 		label_replace = gtk_label_new(_("Enter the replace text here:"));
-		gtk_misc_set_padding(GTK_MISC(label_replace), 0, 6);
 		gtk_misc_set_alignment(GTK_MISC(label_replace), 0, 0);
 
 		entry_find = gtk_combo_box_entry_new_text();
@@ -985,10 +991,21 @@ void dialogs_show_replace(void)
 		g_signal_connect((gpointer) app->replace_dialog, "delete_event",
 				G_CALLBACK(gtk_widget_hide), NULL);
 
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), label_find);
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), entry_find);
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), label_replace);
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), entry_replace);
+		fbox = gtk_hbox_new(FALSE, 6);
+		gtk_container_add(GTK_CONTAINER(fbox), label_find);
+		gtk_container_add(GTK_CONTAINER(fbox), entry_find);
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(app->replace_dialog)->vbox), fbox,
+			FALSE, FALSE, 6);
+
+		rbox = gtk_hbox_new(FALSE, 6);
+		gtk_container_add(GTK_CONTAINER(rbox), label_replace);
+		gtk_container_add(GTK_CONTAINER(rbox), entry_replace);
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(app->replace_dialog)->vbox), rbox,
+			FALSE, FALSE, 3);
+
+		size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+		gtk_size_group_add_widget(size_group, label_find);
+		gtk_size_group_add_widget(size_group, label_replace);
 
 		dialogs_add_find_checkboxes(GTK_DIALOG(app->replace_dialog));
 
@@ -1004,10 +1021,10 @@ void dialogs_show_replace(void)
 			_("Replaces the search text in all opened files. This option is only useful(and used) if you click on \"Replace All\"."), NULL);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox6), FALSE);
 
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), checkbox6);
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), gtk_label_new(""));
-
-		gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(app->replace_dialog)->vbox), 3);
+		align = gtk_alignment_new(0, 0, 1, 1);
+		gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 9, 0, 0);
+		gtk_container_add(GTK_CONTAINER(align), checkbox6);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(app->replace_dialog)->vbox), align);
 
 		gtk_widget_show_all(app->replace_dialog);
 	}
