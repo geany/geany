@@ -1513,7 +1513,7 @@ on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
 				case 4:
 				{
 					app->sidebar_visible = FALSE;
-					utils_treeviews_showhide(FALSE);
+					utils_treeviews_showhide(TRUE);
 					break;
 				}
 			}
@@ -1537,7 +1537,7 @@ on_taglist_tree_popup_clicked          (GtkMenuItem     *menuitem,
 		case 1:
 		{
 			app->sidebar_visible = FALSE;
-			utils_treeviews_showhide(FALSE);
+			utils_treeviews_showhide(TRUE);
 			break;
 		}
 	}
@@ -2629,5 +2629,10 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 	if (app->ignore_callback) return;
 
 	app->sidebar_visible = ! app->sidebar_visible;
+	if (! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible)
+	{
+		app->sidebar_symbol_visible = TRUE;
+		app->sidebar_openfiles_visible = TRUE;
+	}
 	utils_treeviews_showhide(TRUE);
 }
