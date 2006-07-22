@@ -265,7 +265,7 @@ gboolean msgwin_goto_compiler_file_line()
 			if (filename != NULL && line > -1)
 			{
 				// use document_open_file to find an already open file, or open it in place
-				idx = document_open_file(-1, filename, 0, FALSE, NULL);
+				idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
 				// document_set_indicator will check valid idx
 				document_set_indicator(idx, line - 1);
 				// utils_goto_file_line will check valid filename.
@@ -302,7 +302,7 @@ gboolean msgwin_goto_messages_file_line()
 			if (filename != NULL && line > -1)
 			{
 				// use document_open_file to find an already open file, or open it in place
-				idx = document_open_file(-1, filename, 0, FALSE, NULL);
+				idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
 				// utils_goto_file_line will check valid filename.
 				ret = utils_goto_file_line(filename, FALSE, line);
 			}
@@ -318,7 +318,7 @@ gboolean msgwin_goto_messages_file_line()
 /* Try to parse the file and line number for string and when something useful is
  * found, store the line number in *line and the relevant file with the error in
  * *filename.
- * *line will be -1 if no error was found in string. 
+ * *line will be -1 if no error was found in string.
  * *filename must be freed unless NULL. */
 static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line)
 {
