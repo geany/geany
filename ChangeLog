@@ -1,6 +1,7 @@
 2006-07-22  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/dialogs.c: Make Find and Replace dialogs more compact.
+ * src/treeviews.c: Fix a warning when updating open files treeview.
 
 
 2006-07-22  Enrico Tröger  <enrico.troeger@uvena.de>

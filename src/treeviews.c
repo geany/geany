@@ -250,7 +250,7 @@ void treeviews_openfiles_update_all(void)
 {
 	guint i;
 	gint idx;
-	gchar *basename;
+	gchar *shortname;
 
 	gtk_list_store_clear(tv.store_openfiles);
 	for (i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
@@ -258,9 +258,13 @@ void treeviews_openfiles_update_all(void)
 		idx = document_get_n_idx(i);
 		if (! doc_list[idx].is_valid) continue;
 
-		basename = g_path_get_basename(doc_list[idx].file_name);
-		doc_list[idx].iter = treeviews_openfiles_add(idx, basename);
-		g_free(basename);
+		if (doc_list[idx].file_name == NULL)
+			shortname = g_strdup(GEANY_STRING_UNTITLED);
+		else
+			shortname = g_path_get_basename(doc_list[idx].file_name);
+
+		doc_list[idx].iter = treeviews_openfiles_add(idx, shortname);
+		g_free(shortname);
 	}
 
 }
