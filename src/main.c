@@ -288,7 +288,7 @@ static void main_init(void)
 	app->sensitive_buttons[17] = lookup_widget(app->window, "menu_paste1");
 	app->sensitive_buttons[18] = lookup_widget(app->window, "menu_undo2");
 	app->sensitive_buttons[19] = lookup_widget(app->window, "preferences2");
-	app->sensitive_buttons[20] = lookup_widget(app->window, "revert1");
+	app->sensitive_buttons[20] = lookup_widget(app->window, "menu_reload1");
 	app->sensitive_buttons[21] = lookup_widget(app->window, "menu_item4");
 	app->sensitive_buttons[22] = lookup_widget(app->window, "menu_markers_margin1");
 	app->sensitive_buttons[23] = lookup_widget(app->window, "menu_linenumber_margin1");
@@ -301,6 +301,7 @@ static void main_init(void)
 	app->sensitive_buttons[30] = lookup_widget(app->window, "entry_goto_line");
 	app->sensitive_buttons[31] = lookup_widget(app->window, "treeview6");
 	app->sensitive_buttons[32] = lookup_widget(app->window, "print1");
+	app->sensitive_buttons[33] = lookup_widget(app->window, "menu_reload_as1");
 	app->redo_items[0] = lookup_widget(app->popup_menu, "redo1");
 	app->redo_items[1] = lookup_widget(app->window, "menu_redo2");
 	app->redo_items[2] = lookup_widget(app->window, "toolbutton_redo");
@@ -346,7 +347,7 @@ static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer d
 	// try to interpret the received data as a filename, otherwise do nothing
 	if (g_file_test(buffer, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
-		document_open_file(-1, buffer, 0, FALSE, NULL);
+		document_open_file(-1, buffer, 0, FALSE, NULL, NULL);
 		gtk_window_deiconify(GTK_WINDOW(app->window));
 	}
 	else
@@ -563,7 +564,7 @@ gint main(gint argc, gchar **argv)
 				if (opened < GEANY_MAX_OPEN_FILES)
 				{
 					gchar *filename = get_argv_filename(argv[i]);
-					document_open_file(-1, filename, 0, FALSE, NULL);
+					document_open_file(-1, filename, 0, FALSE, NULL, NULL);
 					g_free(filename);
 					opened++;
 				}
@@ -611,6 +612,12 @@ gint main(gint argc, gchar **argv)
 	app->main_window_realized = TRUE;
 
 	configuration_apply_settings();
+
+	dialogs_show_info(
+	"Please use this SVN version not for production use!\nWe added recently some experimental features which"
+	" can really damage your files when saving or make cofusing things with your file when opening.\n"
+	"Read the mailing list for more information. I'm very sorry, please be patient.\n\n"
+	"(to disable this message, edit src/main.c at line 616).");
 
 	//g_timeout_add(0, (GSourceFunc)destroyapp, NULL); // useful for start time tests
 	gtk_main();

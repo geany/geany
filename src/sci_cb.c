@@ -238,7 +238,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 					if (list[i] == NULL) break;
 					filename = g_filename_from_uri(list[i], NULL, NULL);
 					if (filename == NULL) continue;
-					document_open_file(-1, filename, 0, FALSE, NULL);
+					document_open_file(-1, filename, 0, FALSE, NULL, NULL);
 					g_free(filename);
 				}
 
@@ -471,6 +471,7 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos, gint idx, gb
 
 		if (! force)
 		{	// force is set when called by keyboard shortcut, otherwise start after at third char
+			/// TODO g_ascii_isspace is not the best choise because it allows öprin...
 			while ((line_pos - i >= 0) && ! g_ascii_isspace(linebuf[line_pos - i])) i++;
 			if (i < 4)
 			{	// go home if typed less than 4 chars

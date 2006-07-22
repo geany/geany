@@ -91,10 +91,14 @@ static void init_encodings(void)
 	fill(7, ASIAN, GEANY_ENCODING_VISCII, "VISCII", _("Vietnamese"));
 	fill(8, ASIAN, GEANY_ENCODING_WINDOWS_1258, "WINDOWS-1258", _("Vietnamese"));
 
-	fill(0, UNICODE, GEANY_ENCODING_UTF_8, "UTF-8", _("Unicode"));
-	fill(1, UNICODE, GEANY_ENCODING_UTF_16, "UTF-16", _("Unicode"));
-	fill(2, UNICODE, GEANY_ENCODING_UCS_2, "UCS-2", _("Unicode"));
-	fill(3, UNICODE, GEANY_ENCODING_UCS_4, "UCS-4", _("Unicode"));
+	fill(0, UNICODE, GEANY_ENCODING_UTF_7, "UTF-7", _("Unicode"));
+	fill(1, UNICODE, GEANY_ENCODING_UTF_8, "UTF-8", _("Unicode"));
+	fill(2, UNICODE, GEANY_ENCODING_UTF_16LE, "UTF-16LE", _("Unicode"));
+	fill(3, UNICODE, GEANY_ENCODING_UTF_16BE, "UTF-16BE", _("Unicode"));
+	fill(4, UNICODE, GEANY_ENCODING_UCS_2LE, "UCS-2LE", _("Unicode"));
+	fill(5, UNICODE, GEANY_ENCODING_UCS_2BE, "UCS-2BE", _("Unicode"));
+	fill(6, UNICODE, GEANY_ENCODING_UTF_32LE, "UTF-32LE", _("Unicode"));
+	fill(7, UNICODE, GEANY_ENCODING_UTF_32BE, "UTF-32BE", _("Unicode"));
 
 	fill(0, EASTASIAN, GEANY_ENCODING_GB18030, "GB18030", _("Chinese Simplified"));
 	fill(1, EASTASIAN, GEANY_ENCODING_GB2312, "GB2312", _("Chinese Simplified"));
@@ -160,85 +164,92 @@ const gchar *encodings_get_charset(const GeanyEncoding* enc)
 
 void encodings_init(void)
 {
-	GtkWidget *item, *menu, *submenu, *menu_westeuro, *menu_easteuro, *menu_eastasian, *menu_asian,
+	GtkWidget *item, *menu[2], *submenu, *menu_westeuro, *menu_easteuro, *menu_eastasian, *menu_asian,
 			  *menu_utf8, *menu_middleeast, *item_westeuro, *item_easteuro, *item_eastasian,
 			  *item_asian, *item_utf8, *item_middleeast;
+	GCallback cb_func[2];
 	gchar *label;
-	guint i, j, order, group_size;
+	guint i, j, k, order, group_size;
 
 	init_encodings();
 
 	// create encodings submenu in document menu
-	menu = lookup_widget(app->window, "set_encoding1_menu");
+	menu[0] = lookup_widget(app->window, "set_encoding1_menu");
+	menu[1] = lookup_widget(app->window, "menu_reload_as1_menu");
+	cb_func[0] = G_CALLBACK(on_encoding_change);
+	cb_func[1] = G_CALLBACK(on_reload_as_activate);
 
-	menu_westeuro = gtk_menu_new();
-	item_westeuro = gtk_menu_item_new_with_mnemonic(_("_West European"));
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_westeuro), menu_westeuro);
-	gtk_container_add(GTK_CONTAINER(menu), item_westeuro);
-	gtk_widget_show_all(item_westeuro);
-
-	menu_easteuro = gtk_menu_new();
-	item_easteuro = gtk_menu_item_new_with_mnemonic(_("_East European"));
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_easteuro), menu_easteuro);
-	gtk_container_add(GTK_CONTAINER(menu), item_easteuro);
-	gtk_widget_show_all(item_easteuro);
-
-	menu_eastasian = gtk_menu_new();
-	item_eastasian = gtk_menu_item_new_with_mnemonic(_("East _Asian"));
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_eastasian), menu_eastasian);
-	gtk_container_add(GTK_CONTAINER(menu), item_eastasian);
-	gtk_widget_show_all(item_eastasian);
-
-	menu_asian = gtk_menu_new();
-	item_asian = gtk_menu_item_new_with_mnemonic(_("_SE & SW Asian"));
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_asian), menu_asian);
-	gtk_container_add(GTK_CONTAINER(menu), item_asian);
-	gtk_widget_show_all(item_asian);
-
-	menu_middleeast = gtk_menu_new();
-	item_middleeast = gtk_menu_item_new_with_mnemonic(_("_Middle Eastern"));
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_middleeast), menu_middleeast);
-	gtk_container_add(GTK_CONTAINER(menu), item_middleeast);
-	gtk_widget_show_all(item_middleeast);
-
-	menu_utf8 = gtk_menu_new();
-	item_utf8 = gtk_menu_item_new_with_mnemonic(_("_Unicode"));
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_utf8), menu_utf8);
-	gtk_container_add(GTK_CONTAINER(menu), item_utf8);
-	gtk_widget_show_all(item_utf8);
-
-	/// TODO can it be optimized? ATM 1583 runs at line 233
-	for (i = 0; i < GEANY_ENCODING_GROUPS_MAX - 1; i++)
+	for (k = 0; k < 2; k++)
 	{
-		order = 0;
-		switch (i)
-		{
-			case WESTEUROPEAN: submenu = menu_westeuro; group_size = 9; break;
-			case EASTEUROPEAN: submenu = menu_easteuro; group_size = 14; break;
-			case EASTASIAN: submenu = menu_eastasian; group_size = 14; break;
-			case ASIAN: submenu = menu_asian; group_size = 9; break;
-			case MIDDLEEASTERN: submenu = menu_middleeast; group_size = 7; break;
-			case UNICODE: submenu = menu_utf8; group_size = 4; break;
-			default: submenu = menu; group_size = 0;
-		}
+		menu_westeuro = gtk_menu_new();
+		item_westeuro = gtk_menu_item_new_with_mnemonic(_("_West European"));
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_westeuro), menu_westeuro);
+		gtk_container_add(GTK_CONTAINER(menu[k]), item_westeuro);
+		gtk_widget_show_all(item_westeuro);
 
-		while (order < group_size)	// the biggest group has 13 elements
+		menu_easteuro = gtk_menu_new();
+		item_easteuro = gtk_menu_item_new_with_mnemonic(_("_East European"));
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_easteuro), menu_easteuro);
+		gtk_container_add(GTK_CONTAINER(menu[k]), item_easteuro);
+		gtk_widget_show_all(item_easteuro);
+
+		menu_eastasian = gtk_menu_new();
+		item_eastasian = gtk_menu_item_new_with_mnemonic(_("East _Asian"));
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_eastasian), menu_eastasian);
+		gtk_container_add(GTK_CONTAINER(menu[k]), item_eastasian);
+		gtk_widget_show_all(item_eastasian);
+
+		menu_asian = gtk_menu_new();
+		item_asian = gtk_menu_item_new_with_mnemonic(_("_SE & SW Asian"));
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_asian), menu_asian);
+		gtk_container_add(GTK_CONTAINER(menu[k]), item_asian);
+		gtk_widget_show_all(item_asian);
+
+		menu_middleeast = gtk_menu_new();
+		item_middleeast = gtk_menu_item_new_with_mnemonic(_("_Middle Eastern"));
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_middleeast), menu_middleeast);
+		gtk_container_add(GTK_CONTAINER(menu[k]), item_middleeast);
+		gtk_widget_show_all(item_middleeast);
+
+		menu_utf8 = gtk_menu_new();
+		item_utf8 = gtk_menu_item_new_with_mnemonic(_("_Unicode"));
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_utf8), menu_utf8);
+		gtk_container_add(GTK_CONTAINER(menu[k]), item_utf8);
+		gtk_widget_show_all(item_utf8);
+
+		/// TODO can it be optimized? ATM 3782 runs at line 239
+		for (i = 0; i < GEANY_ENCODING_GROUPS_MAX; i++)
 		{
-			for (j = 0; j < GEANY_ENCODINGS_MAX; j++)
+			order = 0;
+			switch (i)
 			{
-				if (encodings[j].group == i && encodings[j].order == order)
-				{
-					label = encodings_to_string(&encodings[j]);
-					item = gtk_menu_item_new_with_label(label);
-					gtk_widget_show(item);
-					gtk_container_add(GTK_CONTAINER(submenu), item);
-					g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_encoding_change),
-															GINT_TO_POINTER(encodings[j].idx));
-					g_free(label);
-					break;
-				}
+				case WESTEUROPEAN: submenu = menu_westeuro; group_size = 9; break;
+				case EASTEUROPEAN: submenu = menu_easteuro; group_size = 14; break;
+				case EASTASIAN: submenu = menu_eastasian; group_size = 14; break;
+				case ASIAN: submenu = menu_asian; group_size = 9; break;
+				case MIDDLEEASTERN: submenu = menu_middleeast; group_size = 7; break;
+				case UNICODE: submenu = menu_utf8; group_size = 8; break;
+				default: submenu = menu[k]; group_size = 0;
 			}
-			order++;
+
+			while (order < group_size)	// the biggest group has 13 elements
+			{
+				for (j = 0; j < GEANY_ENCODINGS_MAX; j++)
+				{
+					if (encodings[j].group == i && encodings[j].order == order)
+					{
+						label = encodings_to_string(&encodings[j]);
+						item = gtk_menu_item_new_with_label(label);
+						gtk_widget_show(item);
+						gtk_container_add(GTK_CONTAINER(submenu), item);
+						g_signal_connect((gpointer) item, "activate",
+										cb_func[k], GINT_TO_POINTER(encodings[j].idx));
+						g_free(label);
+						break;
+					}
+				}
+				order++;
+			}
 		}
 	}
 }

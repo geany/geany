@@ -519,7 +519,7 @@ on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
 				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
 				 basename))
 	{
-		document_reload_file(idx);
+		document_reload_file(idx, NULL);
 	}
 
 	g_free(basename);
@@ -840,7 +840,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 			{
 				if (g_file_test((gchar*) flist->data, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 				{
-					document_open_file(-1, (gchar*) flist->data, 0, ro, ft);
+					document_open_file(-1, (gchar*) flist->data, 0, ro, ft, NULL);
 				}
 			}
 			else
@@ -2489,7 +2489,7 @@ on_recent_file_activate                (GtkMenuItem     *menuitem,
 
 	if (locale_filename == NULL) locale_filename = g_strdup((gchar*) user_data);
 
-	document_open_file(-1, locale_filename, 0, FALSE, NULL);
+	document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL);
 
 	g_free(locale_filename);
 }
@@ -2578,6 +2578,29 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 
 
 void
+on_reload_as_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	gchar *basename;
+	guint i = GPOINTER_TO_INT(user_data);
+
+	if (idx < 0 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL ||
+		i < 0 || i >= GEANY_ENCODINGS_MAX || encodings[i].charset == NULL)
+		return;
+
+	basename = g_path_get_basename(doc_list[idx].file_name);
+	if (dialogs_show_question(_
+				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
+				 basename))
+	{
+		document_reload_file(idx, encodings[i].charset);
+		utils_update_statusbar(idx, -1);
+	}
+	g_free(basename);
+}
+
+void
 on_print1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -2608,5 +2631,3 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 	app->sidebar_visible = ! app->sidebar_visible;
 	utils_treeviews_showhide(TRUE);
 }
-
-

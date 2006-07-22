@@ -1394,7 +1394,7 @@ gboolean dialogs_show_mkcfgdir_error(gint error_nr)
 void dialogs_show_file_properties(gint idx)
 {
 	GtkWidget *dialog, *label, *table, *hbox, *image, *perm_table, *check;
-	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed;
+	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed, *enctext;
 #if defined(HAVE_SYS_STAT_H) && defined(HAVE_SYS_TYPES_H)
 	struct stat st;
 	off_t filesize;
@@ -1548,7 +1548,13 @@ void dialogs_show_file_properties(gint idx)
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
-	label = gtk_label_new(doc_list[idx].encoding);
+	enctext = g_strdup_printf("%s %s",
+	doc_list[idx].encoding,
+	(utils_is_unicode_charset(doc_list[idx].encoding)) ? ((doc_list[idx].unicode_bom) ? _("(with BOM)") : _("(without BOM)")) : "");
+
+	label = gtk_label_new(enctext);
+	g_free(enctext);
+
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 4, 5,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);

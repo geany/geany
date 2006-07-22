@@ -97,6 +97,7 @@ typedef struct document
 	// the filename is encoded in UTF-8, but every GLibC function expect the locale representation
 	gchar 			*file_name;
 	gchar 			*encoding;
+	gboolean		 unicode_bom;
 	filetype		*file_type;
 	TMWorkObject	*tm_file;
 	ScintillaObject	*sci;
@@ -226,7 +227,7 @@ typedef struct MyApp
 	GtkWidget			*redo_items[3];
 	GtkWidget			*undo_items[3];
 	GtkWidget			*save_buttons[2];
-	GtkWidget			*sensitive_buttons[33];
+	GtkWidget			*sensitive_buttons[34];
 	GtkWidget			*open_colorsel;
 	GtkWidget			*open_fontsel;
 	GtkWidget			*open_filesel;

@@ -288,8 +288,8 @@ gboolean configuration_load(void)
 
 
 	app->pref_editor_tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
-	// set default encoding to UTF8 (Unicode) - index 15
-	app->pref_editor_default_encoding = utils_get_setting_integer(config, PACKAGE, "pref_editor_default_encoding", 15);
+	// set default encoding to UTF8 (Unicode) - index 16
+	app->pref_editor_default_encoding = utils_get_setting_integer(config, PACKAGE, "pref_editor_default_encoding", 16);
 	app->pref_main_confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", TRUE);
 	app->pref_main_load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	app->pref_main_save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
@@ -414,7 +414,7 @@ gboolean configuration_open_files(void)
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{
 				document_open_file(-1, locale_filename, pos, FALSE,
-					(ft_id == GEANY_MAX_FILE_TYPES) ? NULL : filetypes[ft_id]);
+					(ft_id == GEANY_MAX_FILE_TYPES) ? NULL : filetypes[ft_id], NULL);
 				ret = TRUE;
 			}
 			g_free(locale_filename);

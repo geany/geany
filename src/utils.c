@@ -132,7 +132,7 @@ void utils_update_statusbar(gint idx, gint pos)
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
 		col = sci_get_col_from_position(doc_list[idx].sci, pos);
 
-		text = g_strdup_printf(_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s      filetype: %s"),
+		text = g_strdup_printf(_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s %s     filetype: %s"),
 			(doc_list[idx].changed) ? 42 : 32,
 			(line + 1), (col + 1),
 			sci_get_selected_text_length(doc_list[idx].sci) - 1,
@@ -141,6 +141,7 @@ void utils_update_statusbar(gint idx, gint pos)
 			(doc_list[idx].readonly) ? ", read only" : "",
 			cur_tag,
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
+			(utils_is_unicode_charset(doc_list[idx].encoding)) ? ((doc_list[idx].unicode_bom) ? _("(with BOM)") : _("(without BOM)")) : "",
 			(doc_list[idx].file_type) ? doc_list[idx].file_type->title : _("unknown"));
 		utils_set_statusbar(text, TRUE); //can be overridden by status messages
 		g_free(text);
@@ -977,7 +978,7 @@ gboolean utils_check_disk_status(gint idx)
 					 ("The file '%s' on the disk is more recent than\n"
 					  "the current buffer.\nDo you want to reload it?"), basename))
 		{
-			document_reload_file(idx);
+			document_reload_file(idx, NULL);
 			doc_list[idx].last_check = t;
 		}
 		else
@@ -2570,3 +2571,46 @@ gboolean utils_str_replace_escape(gchar *string)
 	return TRUE;
 }
 
+
+gchar *utils_scan_unicode_bom(gchar *string)
+{
+	if ((unsigned char)string[0] == 0xef && (unsigned char)string[1] == 0xbb &&
+		(unsigned char)string[2] == 0xbf)
+	{
+		return g_strdup("UTF-8");
+	}
+	else if ((unsigned char)string[0] == 0x00 && (unsigned char)string[1] == 0x00 &&
+			 (unsigned char)string[2] == 0xfe && (unsigned char)string[3] == 0xff)
+	{
+		return g_strdup("UTF-32BE"); // Big endian
+	}
+	else if ((unsigned char)string[0] == 0xff && (unsigned char)string[1] == 0xfe &&
+			 (unsigned char)string[2] == 0x00 && (unsigned char)string[3] == 0x00)
+	{
+		return g_strdup("UTF-32LE"); // Little endian
+	}
+	else if ((unsigned char)string[0]==0xfe && (unsigned char)string[1] == 0xff)
+	{
+		return g_strdup("UTF-16BE"); // Big endian
+	}
+	else if ((unsigned char)string[0] == 0xff && (unsigned char)string[1] == 0xfe)
+	{
+		return g_strdup("UTF-16LE"); // Little endian
+	}
+	else if ((string[0] == 0x2b && string[1] == 0x2f && string[2] == 0x76) &&
+			 (string[3] == 0x38 || string[3] == 0x39 || string[3] == 0x2b || string[3] == 0x2f))
+	{
+		 return g_strdup("UTF-7");
+	}
+	return NULL;
+}
+
+
+gboolean utils_is_unicode_charset(gchar *string)
+{
+	if (string != NULL && (strncmp(string, "UTF", 3) == 0 || strncmp(string, "UCS", 3) == 0))
+	{
+		return TRUE;
+	}
+	return FALSE;
+}

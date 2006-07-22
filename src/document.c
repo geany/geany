@@ -193,6 +193,7 @@ void document_init_doclist(void)
 		doc_list[i].file_type = NULL;
 		doc_list[i].tm_file = NULL;
 		doc_list[i].encoding = NULL;
+		doc_list[i].unicode_bom = FALSE;
 		doc_list[i].sci = NULL;
 	}
 }
@@ -207,8 +208,12 @@ gint document_create_new_sci(const gchar *filename)
 	gchar *title, *fname;
 	GtkTreeIter iter;
 	gint new_idx = document_get_new_idx();
-	document *this = &(doc_list[new_idx]);
+	document *this;
 	gint tabnum;
+
+	if (new_idx == -1) return -1;
+
+	this = &(doc_list[new_idx]);
 
 	/* SCI - Code */
 	sci = SCINTILLA(scintilla_new());
@@ -314,6 +319,7 @@ gboolean document_remove(guint page_num)
 		doc_list[idx].file_name = NULL;
 		doc_list[idx].file_type = NULL;
 		doc_list[idx].encoding = NULL;
+		doc_list[idx].unicode_bom = FALSE;
 		doc_list[idx].tm_file = NULL;
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
@@ -339,6 +345,12 @@ void document_new_file(filetype *ft)
 	{
 		gint idx = document_create_new_sci(NULL);
 		gchar *template = document_prepare_template(ft);
+
+		if (idx == -1)
+		{
+			dialogs_show_file_open_error();
+			return;
+		}
 
 		sci_clear_all(doc_list[idx].sci);
 		sci_set_text(doc_list[idx].sci, template);
@@ -373,12 +385,14 @@ void document_new_file(filetype *ft)
  * idx and set the cursor to position 0. In this case, filename should be NULL
  * It returns the idx of the opened file or -1 if an error occurred.
  */
-int document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly, filetype *ft)
+int document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly, filetype *ft,
+					   const gchar *forced_enc)
 {
 	gint editor_mode;
 	gsize size;
 	gboolean reload = (idx == -1) ? FALSE : TRUE;
 	struct stat st;
+	gboolean bom = FALSE;
 	gchar *enc = NULL;
 	gchar *utf8_filename = NULL;
 	gchar *locale_filename = NULL;
@@ -452,21 +466,30 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	}
 
 	/* Determine character encoding and convert to utf-8*/
-	if (size > 0)
-	{
-		if (g_utf8_validate(data, size, NULL))
+	if (reload && forced_enc != NULL)
+	{	// reload file with specified encoding
+		if (utils_strcmp(forced_enc, "UTF-8"))
 		{
-			enc = g_strdup("UTF-8");
+			if (! g_utf8_validate(data, size, NULL))
+			{
+				msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, "UTF-8");
+				utils_beep();
+				g_free(data);
+				g_free(utf8_filename);
+				g_free(locale_filename);
+				return -1;
+			}
+			else
+			{
+				bom = utils_strcmp(utils_scan_unicode_bom(data), "UTF-8");
+			}
 		}
 		else
 		{
-			gchar *converted_text = utils_convert_to_utf8(data, size, &enc);
-
+			gchar *converted_text = utils_convert_to_utf8_from_charset(data, size, forced_enc);
 			if (converted_text == NULL)
 			{
-				msgwin_status_add(
-	_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
-									utf8_filename);
+				msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
 				utils_beep();
 				g_free(data);
 				g_free(utf8_filename);
@@ -478,6 +501,64 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 				g_free(data);
 				data = (void*)converted_text;
 				size = strlen(converted_text);
+				/// TODO should it not be UTF-* ?
+				bom = utils_strcmp(utils_scan_unicode_bom(data), "UTF-8");
+			}
+		}
+	}
+	else if (size > 0)
+	{	// the usual way to detect encoding and convert to UTF-8
+		if (size >= 4)
+		{
+			enc = utils_scan_unicode_bom(data);
+		}
+		if (enc != NULL)
+		{
+			bom = TRUE;
+			if (enc[4] != '8') // the BOM indicated something else than UTF-8
+			{
+				gchar *converted_text = utils_convert_to_utf8_from_charset(data, size, enc);
+				if (converted_text == NULL)
+				{
+					g_free(enc);
+					enc = NULL;
+					bom = FALSE;
+				}
+				else
+				{
+					g_free(data);
+					data = (void*)converted_text;
+					size = strlen(converted_text);
+				}
+			}
+		}
+		else
+		{
+			if (g_utf8_validate(data, size, NULL))
+			{
+				enc = g_strdup("UTF-8");
+			}
+			else
+			{
+				gchar *converted_text = utils_convert_to_utf8(data, size, &enc);
+
+				if (converted_text == NULL)
+				{
+					msgwin_status_add(
+		_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
+										utf8_filename);
+					utils_beep();
+					g_free(data);
+					g_free(utf8_filename);
+					g_free(locale_filename);
+					return -1;
+				}
+				else
+				{
+					g_free(data);
+					data = (void*)converted_text;
+					size = strlen(converted_text);
+				}
 			}
 		}
 	}
@@ -486,7 +567,16 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		enc = g_strdup("UTF-8");
 	}
 
+	if (bom)
+	{
+		gchar *data_without_bom;
+		data_without_bom = g_strdup(data + 3);
+		g_free(data);
+		data = data_without_bom;
+	}
+
 	if (! reload) idx = document_create_new_sci(utf8_filename);
+	if (idx == -1) return -1;	// really should not happen
 
 	// set editor mode and add the text to the ScintillaObject
 	sci_set_text(doc_list[idx].sci, data); // NULL terminated data; avoids Unsaved
@@ -500,7 +590,8 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	doc_list[idx].mtime = st.st_mtime;
 	doc_list[idx].changed = FALSE;
 	doc_list[idx].file_name = g_strdup(utf8_filename);
-	doc_list[idx].encoding = enc;
+	doc_list[idx].encoding = g_strdup(enc);
+	doc_list[idx].unicode_bom = bom;
 
 	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 
@@ -565,16 +656,17 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 }
 
 
-int document_reload_file(gint idx)
+gint document_reload_file(gint idx, const gchar *forced_enc)
 {
 	gint pos = 0;
+
 	if (idx < 0 || ! doc_list[idx].is_valid)
 		return -1;
 
 	// try to set the cursor to the position before reloading
 	pos = sci_get_current_position(doc_list[idx].sci);
 	return document_open_file(idx, NULL, pos, doc_list[idx].readonly,
-		doc_list[idx].file_type);
+					doc_list[idx].file_type, forced_enc);
 }
 
 
@@ -586,7 +678,7 @@ void document_save_file(gint idx)
 	gint bytes_written, len;
 	gchar *locale_filename = NULL;
 
-	if (idx == -1) return;
+	if (idx == -1 || ! doc_list[idx].changed) return;
 
 	if (doc_list[idx].file_name == NULL)
 	{
@@ -605,24 +697,37 @@ void document_save_file(gint idx)
 	sci_convert_eols(doc_list[idx].sci, sci_get_eol_mode(doc_list[idx].sci));
 
 	len = sci_get_length(doc_list[idx].sci) + 1;
-	data = (gchar*) g_malloc(len);
-	sci_get_text(doc_list[idx].sci, len, data);
+	if (doc_list[idx].unicode_bom && utils_is_unicode_charset(doc_list[idx].encoding))
+	{
+		data = (gchar*) g_malloc(len + 4);	// 3 chars for BOM, 1 for \0
+		data[0] = 0xef;
+		data[1] = 0xbb;
+		data[2] = 0xbf;
+		sci_get_text(doc_list[idx].sci, len, data + 3);
+		len += 3;
+	}
+	else
+	{
+		data = (gchar*) g_malloc(len + 1);
+		sci_get_text(doc_list[idx].sci, len, data);
+	}
 
-	// save in original encoding , skip when it is already UTF-8)
+	// save in original encoding, skip when it is already UTF-8
 	if (doc_list[idx].encoding != NULL && ! utils_strcmp(doc_list[idx].encoding, "UTF-8"))
 	{
 		GError *conv_error = NULL;
 		gchar* conv_file_contents = NULL;
+		gsize conv_len;
 
 		// try to convert it from UTF-8 to original encoding
-		conv_file_contents = g_convert(data, len-1, doc_list[idx].encoding, "UTF-8",
-													NULL, NULL, &conv_error);
+		conv_file_contents = g_convert(data, len, doc_list[idx].encoding, "UTF-8",
+													NULL, &conv_len, &conv_error);
 
 		if (conv_error != NULL)
 		{
 			dialogs_show_error(
-			_("An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."
-			  "\nError message: %s\n"),
+	_("An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."
+	  "\nError message: %s\n"),
 			doc_list[idx].encoding, conv_error->message);
 			geany_debug("encoding error: %s)", conv_error->message);
 			g_error_free(conv_error);
@@ -633,9 +738,12 @@ void document_save_file(gint idx)
 		{
 			g_free(data);
 			data = conv_file_contents;
-			len = strlen(conv_file_contents);
+			len = conv_len;
 		}
 	}
+
+	// len is too long and so 0x00 is written at the end which is not good w/o BOM
+	len--;
 
 	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
 	fp = fopen(locale_filename, "w");
@@ -652,7 +760,6 @@ void document_save_file(gint idx)
 	if (sci_get_eol_mode(doc_list[idx].sci) == SC_EOL_CRLF) sci_convert_eols(doc_list[idx].sci, SC_EOL_CRLF);
 #endif
 
-	len = strlen(data);
 	bytes_written = fwrite(data, sizeof (gchar), len, fp);
 	fclose (fp);
 
@@ -799,7 +906,7 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 	else
 		sci_goto_pos(doc_list[idx].sci, selection_start, TRUE);
 
-	search_pos = document_find_text(idx, find_text, flags, search_backwards);	
+	search_pos = document_find_text(idx, find_text, flags, search_backwards);
 	// return if the original selected text did not match (at the start of the selection)
 	if (search_pos != selection_start) return;
 
