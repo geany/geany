@@ -58,6 +58,8 @@ GtkTreeIter treeviews_openfiles_add(gint idx, const gchar *string);
 
 void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string);
 
+void treeviews_openfiles_update_all(void);
+
 void treeviews_openfiles_remove(GtkTreeIter iter);
 
 void treeviews_create_openfiles_popup_menu(void);

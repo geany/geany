@@ -24,6 +24,7 @@
 #include "notebook.h"
 #include "document.h"
 #include "utils.h"
+#include "treeviews.h"
 
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
 
@@ -142,8 +143,12 @@ notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 		break;
 		}
 
-		if (ok) gtk_notebook_reorder_child(notebook,
-			gtk_notebook_get_nth_page(notebook, ncurr), ndest);
+		if (ok)
+		{
+			gtk_notebook_reorder_child(notebook,
+							gtk_notebook_get_nth_page(notebook, ncurr), ndest);
+			treeviews_openfiles_update_all();
+		}
 	}
 
 	oldx = x; oldy = y;

@@ -27,6 +27,7 @@
 #include "callbacks.h"
 #include "utils.h"
 #include "treeviews.h"
+#include "document.h"
 
 
 /* the following two functions are document-related, but I think they fit better here than in document.c*/
@@ -242,6 +243,26 @@ void treeviews_openfiles_remove(GtkTreeIter iter)
 void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string)
 {
 	gtk_list_store_set(tv.store_openfiles, &iter, 0, string, -1);
+}
+
+
+void treeviews_openfiles_update_all(void)
+{
+	guint i;
+	gint idx;
+	gchar *basename;
+
+	gtk_list_store_clear(tv.store_openfiles);
+	for (i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
+	{
+		idx = document_get_n_idx(i);
+		if (! doc_list[idx].is_valid) continue;
+
+		basename = g_path_get_basename(doc_list[idx].file_name);
+		doc_list[idx].iter = treeviews_openfiles_add(idx, basename);
+		g_free(basename);
+	}
+
 }
 
 

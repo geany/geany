@@ -8,6 +8,8 @@
    encoding(both were patches from Stefan Oltmanns).
  * src/callbacks.c: Fixed two issues when showing / hiding the sidebar.
  * src/filetypes.c: Added *.cfg as extension for config files.
+ * src/treeviews.c, src/notebook.c:
+   Keep the list of open files in sync when reordering notebook tabs.
 
 
 2006-07-21  Nick Treleaven  <nick.treleaven@btinternet.com>
