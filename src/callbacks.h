@@ -605,6 +605,10 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
+on_reload_as_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
 on_print1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 

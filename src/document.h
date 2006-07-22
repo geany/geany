@@ -79,9 +79,9 @@ void document_new_file(filetype *ft);
  * idx and set the cursor to position 0. In this case, filename should be NULL
  * It returns the idx of the opened file or -1 if an error occurred.
  */
-int document_open_file(gint, const gchar*, gint, gboolean, filetype*);
+int document_open_file(gint, const gchar*, gint, gboolean, filetype*, const gchar*);
 
-int document_reload_file(gint idx);
+int document_reload_file(gint idx, const gchar *forced_enc);
 
 
 /* This saves the file, which is in on-disk encoding (which may not
