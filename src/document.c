@@ -482,6 +482,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 			else
 			{
 				bom = utils_strcmp(utils_scan_unicode_bom(data), "UTF-8");
+				enc = g_strdup(forced_enc);
 			}
 		}
 		else
@@ -501,8 +502,8 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 				g_free(data);
 				data = (void*)converted_text;
 				size = strlen(converted_text);
-				/// TODO should it not be UTF-* ?
 				bom = utils_strcmp(utils_scan_unicode_bom(data), "UTF-8");
+				enc = g_strdup(forced_enc);
 			}
 		}
 	}
@@ -532,7 +533,8 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 				}
 			}
 		}
-		else
+		// this if is important, else doesn't work because enc can be altered in the above block
+		if (enc == NULL)
 		{
 			if (g_utf8_validate(data, size, NULL))
 			{
@@ -590,7 +592,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	doc_list[idx].mtime = st.st_mtime;
 	doc_list[idx].changed = FALSE;
 	doc_list[idx].file_name = g_strdup(utf8_filename);
-	doc_list[idx].encoding = g_strdup(enc);
+	doc_list[idx].encoding = enc;
 	doc_list[idx].unicode_bom = bom;
 
 	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
@@ -699,7 +701,7 @@ void document_save_file(gint idx)
 	len = sci_get_length(doc_list[idx].sci) + 1;
 	if (doc_list[idx].unicode_bom && utils_is_unicode_charset(doc_list[idx].encoding))
 	{
-		data = (gchar*) g_malloc(len + 4);	// 3 chars for BOM, 1 for \0
+		data = (gchar*) g_malloc(len + 3);	// 3 chars for BOM
 		data[0] = 0xef;
 		data[1] = 0xbb;
 		data[2] = 0xbf;
@@ -708,7 +710,7 @@ void document_save_file(gint idx)
 	}
 	else
 	{
-		data = (gchar*) g_malloc(len + 1);
+		data = (gchar*) g_malloc(len);
 		sci_get_text(doc_list[idx].sci, len, data);
 	}
 
@@ -720,7 +722,7 @@ void document_save_file(gint idx)
 		gsize conv_len;
 
 		// try to convert it from UTF-8 to original encoding
-		conv_file_contents = g_convert(data, len, doc_list[idx].encoding, "UTF-8",
+		conv_file_contents = g_convert(data, len-1, doc_list[idx].encoding, "UTF-8",
 													NULL, &conv_len, &conv_error);
 
 		if (conv_error != NULL)
@@ -741,12 +743,12 @@ void document_save_file(gint idx)
 			len = conv_len;
 		}
 	}
-
-	// len is too long and so 0x00 is written at the end which is not good w/o BOM
-	len--;
-
+	else
+	{
+		len = strlen(data);
+	}
 	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
-	fp = fopen(locale_filename, "w");
+	fp = fopen(locale_filename, "wb"); // this should fix the windows \n problem
 	if (fp == NULL)
 	{
 		msgwin_status_add(_("Error saving file (%s)."), strerror(errno));
@@ -754,12 +756,6 @@ void document_save_file(gint idx)
 		g_free(data);
 		return;
 	}
-
-#ifdef GEANY_WIN32
-	// ugly hack: on windows '\n' (LF) is taken as CRLF so we must convert it prior to save the doc
-	if (sci_get_eol_mode(doc_list[idx].sci) == SC_EOL_CRLF) sci_convert_eols(doc_list[idx].sci, SC_EOL_CRLF);
-#endif
-
 	bytes_written = fwrite(data, sizeof (gchar), len, fp);
 	fclose (fp);
 

@@ -1,6 +1,7 @@
 2006-07-23  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/build.c: Search terminal program in PATH (closes #1527203).
+ * src/documents.c: Fixed some mistakes from last commit.
 
 
 2006-07-22  Nick Treleaven  <nick.treleaven@btinternet.com>
