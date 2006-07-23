@@ -11,6 +11,6 @@ Terminal=false
 Type=Application
 Categories=Application;GTK;Development;IDE;
 Encoding=UTF-8
-# currently false, changes perhabs in the future
+# currently false, changes perhaps in the future
 StartupNotify=false
 Version=1.1
