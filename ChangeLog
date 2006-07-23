@@ -4,6 +4,8 @@
  * src/documents.c: Fixed some mistakes from last commit.
  * src/dialogs.c, src/utils.c, src/document.c, src/geany.h:
    Renamed document element unicode_bom in has_bom.
+ * src/callbacks.c:
+   Let Find usage search for the current selection if there is one.
 
 
 2006-07-22  Nick Treleaven  <nick.treleaven@btinternet.com>

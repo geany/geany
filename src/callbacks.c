@@ -1331,19 +1331,30 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 {
 	gint i, pos, line = -1;
 	gint flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
+	gint idx;
 	struct TextToFind ttf;
-	gchar *buffer, *short_file_name, *string;
+	gchar *buffer, *short_file_name, *string, *search_text;
 
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
 	gtk_list_store_clear(msgwindow.store_msg);
+
+	idx = document_get_cur_idx();
+	if (sci_can_copy(doc_list[idx].sci))
+	{	// take selected text if there is a selection
+		search_text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
+		sci_get_selected_text(doc_list[idx].sci, search_text);
+	}
+	else
+		search_text = g_strdup(current_word);
+
 	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 	{
 		if (doc_list[i].is_valid)
 		{
 			ttf.chrg.cpMin = 0;
 			ttf.chrg.cpMax = sci_get_length(doc_list[i].sci);
-			ttf.lpstrText = g_malloc(sizeof current_word);
-			strncpy(ttf.lpstrText, current_word, sizeof current_word);
+			ttf.lpstrText = g_malloc(sizeof search_text);
+			strncpy(ttf.lpstrText, search_text, sizeof search_text);
 			while (1)
 			{
 				pos = sci_find_text(doc_list[i].sci, flags, &ttf);
@@ -1369,7 +1380,9 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 		}
 	}
 	if (line == -1) // no matches were found (searching from unnamed file)
-		msgwin_status_add(_("No matches found for '%s'."), current_word);
+		msgwin_status_add(_("No matches found for '%s'."), search_text);
+
+	g_free(search_text);
 }
 
 
