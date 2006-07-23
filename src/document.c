@@ -193,7 +193,7 @@ void document_init_doclist(void)
 		doc_list[i].file_type = NULL;
 		doc_list[i].tm_file = NULL;
 		doc_list[i].encoding = NULL;
-		doc_list[i].unicode_bom = FALSE;
+		doc_list[i].has_bom = FALSE;
 		doc_list[i].sci = NULL;
 	}
 }
@@ -319,7 +319,7 @@ gboolean document_remove(guint page_num)
 		doc_list[idx].file_name = NULL;
 		doc_list[idx].file_type = NULL;
 		doc_list[idx].encoding = NULL;
-		doc_list[idx].unicode_bom = FALSE;
+		doc_list[idx].has_bom = FALSE;
 		doc_list[idx].tm_file = NULL;
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
@@ -593,7 +593,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	doc_list[idx].changed = FALSE;
 	doc_list[idx].file_name = g_strdup(utf8_filename);
 	doc_list[idx].encoding = enc;
-	doc_list[idx].unicode_bom = bom;
+	doc_list[idx].has_bom = bom;
 
 	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 
@@ -699,7 +699,7 @@ void document_save_file(gint idx)
 	sci_convert_eols(doc_list[idx].sci, sci_get_eol_mode(doc_list[idx].sci));
 
 	len = sci_get_length(doc_list[idx].sci) + 1;
-	if (doc_list[idx].unicode_bom && utils_is_unicode_charset(doc_list[idx].encoding))
+	if (doc_list[idx].has_bom && utils_is_unicode_charset(doc_list[idx].encoding))
 	{
 		data = (gchar*) g_malloc(len + 3);	// 3 chars for BOM
 		data[0] = 0xef;

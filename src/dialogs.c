@@ -1567,7 +1567,7 @@ void dialogs_show_file_properties(gint idx)
 
 	enctext = g_strdup_printf("%s %s",
 	doc_list[idx].encoding,
-	(utils_is_unicode_charset(doc_list[idx].encoding)) ? ((doc_list[idx].unicode_bom) ? _("(with BOM)") : _("(without BOM)")) : "");
+	(utils_is_unicode_charset(doc_list[idx].encoding)) ? ((doc_list[idx].has_bom) ? _("(with BOM)") : _("(without BOM)")) : "");
 
 	label = gtk_label_new(enctext);
 	g_free(enctext);

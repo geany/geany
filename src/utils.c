@@ -141,7 +141,7 @@ void utils_update_statusbar(gint idx, gint pos)
 			(doc_list[idx].readonly) ? ", read only" : "",
 			cur_tag,
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
-			(utils_is_unicode_charset(doc_list[idx].encoding)) ? ((doc_list[idx].unicode_bom) ? _("(with BOM)") : _("(without BOM)")) : "",
+			(utils_is_unicode_charset(doc_list[idx].encoding)) ? ((doc_list[idx].has_bom) ? _("(with BOM)") : _("(without BOM)")) : "",
 			(doc_list[idx].file_type) ? doc_list[idx].file_type->title : _("unknown"));
 		utils_set_statusbar(text, TRUE); //can be overridden by status messages
 		g_free(text);
@@ -1993,6 +1993,10 @@ void utils_treeviews_showhide(gboolean force)
 {
 	GtkWidget *widget;
 
+/*	geany_debug("\nSidebar: %s\nSymbol: %s\nFiles: %s", utils_btoa(app->sidebar_visible),
+					utils_btoa(app->sidebar_symbol_visible), utils_btoa(app->sidebar_openfiles_visible));
+*/
+
 	if (! force && ! app->sidebar_visible && (app->sidebar_openfiles_visible ||
 		app->sidebar_symbol_visible))
 	{
@@ -2572,7 +2576,7 @@ gboolean utils_str_replace_escape(gchar *string)
 }
 
 
-gchar *utils_scan_unicode_bom(gchar *string)
+gchar *utils_scan_unicode_bom(const gchar *string)
 {
 	if ((unsigned char)string[0] == 0xef && (unsigned char)string[1] == 0xbb &&
 		(unsigned char)string[2] == 0xbf)
@@ -2606,7 +2610,7 @@ gchar *utils_scan_unicode_bom(gchar *string)
 }
 
 
-gboolean utils_is_unicode_charset(gchar *string)
+gboolean utils_is_unicode_charset(const gchar *string)
 {
 	if (string != NULL && (strncmp(string, "UTF", 3) == 0 || strncmp(string, "UCS", 3) == 0))
 	{

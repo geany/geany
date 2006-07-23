@@ -222,8 +222,8 @@ gchar **utils_read_file_in_array(const gchar *filename);
  * Replaces \\, \r, \n, \t and \uXXX by their real counterparts */
 gboolean utils_str_replace_escape(gchar *string);
 
-gchar *utils_scan_unicode_bom(gchar *string);
+gchar *utils_scan_unicode_bom(const gchar *string);
 
-gboolean utils_is_unicode_charset(gchar *string);
+gboolean utils_is_unicode_charset(const gchar *string);
 
 #endif

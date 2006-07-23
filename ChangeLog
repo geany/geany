@@ -2,6 +2,8 @@
 
  * src/build.c: Search terminal program in PATH (closes #1527203).
  * src/documents.c: Fixed some mistakes from last commit.
+ * src/dialogs.c, src/utils.c, src/document.c, src/geany.h:
+   Renamed document element unicode_bom in has_bom.
 
 
 2006-07-22  Nick Treleaven  <nick.treleaven@btinternet.com>

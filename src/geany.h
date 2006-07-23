@@ -97,7 +97,7 @@ typedef struct document
 	// the filename is encoded in UTF-8, but every GLibC function expect the locale representation
 	gchar 			*file_name;
 	gchar 			*encoding;
-	gboolean		 unicode_bom;
+	gboolean		 has_bom;
 	filetype		*file_type;
 	TMWorkObject	*tm_file;
 	ScintillaObject	*sci;
