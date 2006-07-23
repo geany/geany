@@ -375,6 +375,9 @@ GPid build_run_cmd(gint idx)
 
 
 	// check if terminal path is set (to prevent misleading error messages)
+	tmp = term_argv[0];
+	term_argv[0] = g_find_program_in_path(tmp);
+	g_free(tmp);
 	if (stat(term_argv[0], &st) != 0)
 	{
 		msgwin_status_add(
@@ -426,7 +429,7 @@ GPid build_run_cmd(gint idx)
 	argv[term_argv_len + 1] = g_strdup(script_name);
 	argv[term_argv_len + 2] = NULL;
 
-	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH,
+	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, 0,
 						NULL, NULL, &child_pid, NULL, NULL, NULL, &error))
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
