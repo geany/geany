@@ -1,6 +1,7 @@
 2006-07-24  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/geany.h: Use generic font names & increase the default size.
+ * src/notebook.c: Use tab reorder workaround only if GTK runtime <2.8.
 
 
 2006-07-23  Enrico Tröger  <enrico.troeger@uvena.de>

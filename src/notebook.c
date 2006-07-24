@@ -71,9 +71,13 @@ void notebook_init()
 		G_CALLBACK(notebook_drag_motion_cb), NULL);
 
 #if ! GTK_CHECK_VERSION(2, 8, 0)
-	// workaround GTK+2.6 drag start bug when over sci widget:
-	g_signal_connect(G_OBJECT(notebook), "motion-notify-event",
-		G_CALLBACK(notebook_motion_notify_event_cb), NULL);
+	// handle higher gtk+ runtime than build environment
+	if (gtk_check_version(2, 8, 0) != NULL) //null means version ok
+	{
+		// workaround GTK+2.6 drag start bug when over sci widget:
+		g_signal_connect(G_OBJECT(notebook), "motion-notify-event",
+			G_CALLBACK(notebook_motion_notify_event_cb), NULL);
+	}
 #endif
 
 	// set up drag motion for moving notebook pages
@@ -96,7 +100,6 @@ notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
 	GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->notebook),
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook)));
 
-	//g_print("%g, %g; %p (%p)\n", event->x, event->y, event->window, page->window);
 	if (page == NULL || event->x < 0 || event->y < 0) return FALSE;
 
 	if (event->window == page->window) //cursor over sci widget
