@@ -206,8 +206,8 @@ void dialogs_show_save_as ()
 		g_free(fname);
 	}
 
-	// We make sure the dialog is visible.
-	gtk_window_present(GTK_WINDOW(app->save_filesel));
+	// Run the dialog synchronously, pausing this function call
+	gtk_dialog_run(GTK_DIALOG(app->save_filesel));
 #endif
 }
 

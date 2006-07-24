@@ -12,6 +12,7 @@
  * src/geany.h: Use generic font names & increase the default size.
  * src/notebook.c: Use tab reorder workaround only if GTK runtime <2.8.
  * src/utils.c, src/about.c: Change 2 paths to use G_DIR_SEPARATOR_S.
+ * src/dialogs.c: Wait for Save as dialog to run before closing tab.
 
 
 2006-07-23  Enrico Tröger  <enrico.troeger@uvena.de>
