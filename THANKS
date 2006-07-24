@@ -7,25 +7,25 @@ Testers and contributors:
 --------------------------
 These people have contributed to Geany by testing the software,
 reporting problems, sending patches and making useful suggestions.
-Frank Lanitz <frank@partysoke.de> - heavy testing
-Christoph Berg <Christoph.Berg@kpm-sport.de> - testing and patch for filetype D
-Nick Treleaven <nick.treleaven@btinternet.com> - many patches
-Saleem Abdulrasool <compnerd@gentoo.org> - vte autoconf patch
-Marko Peric <cragwolf@gmail.com>
-S Jagannathan <poojyum@gmail.com>
-Colossus <colossus73@gmail.com>
-Kristoffer A. Tjernås <kt@nupi.no>
-Tamim <amitamim@gmail.com>
-Kevin Ellwood <kellwood@ameritech.net>
-Stefan Oltmanns <stefan.oltmanns@abi2006.gymnasium-achim.de> - escape sequences patch
+Frank Lanitz <frank(at)frank(dot)uvena(dot)de> - heavy testing
+Christoph Berg <Christoph(dot)Berg(at)kpm-sport(dot)de> - testing and patch for filetype D
+Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com> - many patches
+Saleem Abdulrasool <compnerd(at)gentoo(dot)org> - vte autoconf patch
+Marko Peric <cragwolf(at)gmail(dot)com>
+S Jagannathan <poojyum(at)gmail(dot)com>
+Colossus <colossus73(at)gmail(dot)com>
+Kristoffer A. Tjernås <kt(at)nupi(dot)no>
+Tamim <amitamim(at)gmail(dot)com>
+Kevin Ellwood <kellwood(at)ameritech(dot)net>
+Stefan Oltmanns <stefan(dot)oltmanns(at)abi2006(dot)gymnasium-achim(dot)de> - escape sequences patch
 
 Translators:
 ----------------------------------
 These people have translated Geany to foreign languages.
-Yura Semashko <yurand2@gmail.com> - be_BY
-Topi <topi@phreaker.net> - ca_ES
-Frank Lanitz <frank@frank.uvena.de> - de_DE
-Damián Viano <debian@damianv.com.ar> - es
-Jacek Wolszczak <shutdownrunner@o2.pl> - pl_PL
-Alexandre Moreira <alexandream@gmail.com> - pt_BR
-brahmann_ <brahmann@mthr.net.ru> - ru_RU
+Yura Semashko <yurand2(at)gmail(dot)com> - be_BY
+Topi <topi(at)phreaker(dot)net> - ca_ES
+Frank Lanitz <frank(at)frank(dot)uvena(dot)de> - de_DE
+Damián Viano <debian(at)damianv(dot)com(dot)ar> - es
+Jacek Wolszczak <shutdownrunner(at)o2(dot)pl> - pl_PL
+Alexandre Moreira <alexandream(at)gmail(dot)com> - pt_BR
+brahmann_ <brahmann(at)mthr(dot)net(dot)ru> - ru_RU
