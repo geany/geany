@@ -234,7 +234,7 @@ void win32_show_file_dialog(gboolean file_open)
 			}
 			else
 			{
-				document_open_file(-1, fname, 0, of.Flags & OFN_READONLY, NULL);
+				document_open_file(-1, fname, 0, of.Flags & OFN_READONLY, NULL, NULL);
 			}
 		}
 		else
@@ -248,7 +248,7 @@ void win32_show_file_dialog(gboolean file_open)
 						break;
 
 					g_snprintf(file_name, 254, "%s\\%s", fname, fname + x + 1);
-					document_open_file(-1, file_name, 0, of.Flags & OFN_READONLY, NULL);
+					document_open_file(-1, file_name, 0, of.Flags & OFN_READONLY, NULL, NULL);
 				}
 				x++;
 			}
