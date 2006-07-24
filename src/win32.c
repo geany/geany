@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  *  $Id$
  */
@@ -41,96 +41,9 @@
 #include "dialogs.h"
 
 
-//static gchar appfontname[128] = "tahoma 8"; /* fallback value */
 static gchar *filters;
 static gchar *exe_filters;
 
-/*
-void set_app_font (const char *fontname)
-{
-    GtkSettings *settings;
-
-    if (fontname != NULL && *fontname == 0) return;
-
-    settings = gtk_settings_get_default();
-
-    if (fontname == NULL)
-	{
-		g_object_set(G_OBJECT(settings), "gtk-font-name", appfontname, NULL);
-    }
-	else
-	{
-		GtkWidget *w;
-		PangoFontDescription *pfd;
-		PangoContext *pc;
-		PangoFont *pfont;
-
-		w = gtk_label_new(NULL);
-		pfd = pango_font_description_from_string(fontname);
-		pc = gtk_widget_get_pango_context(w);
-		pfont = pango_context_load_font(pc, pfd);
-
-		if (pfont != NULL)
-		{
-			strcpy(appfontname, fontname);
-			g_object_set(G_OBJECT(settings), "gtk-font-name", appfontname, NULL);
-		}
-
-		gtk_widget_destroy(w);
-		pango_font_description_free(pfd);
-    }
-}
-
-char *default_windows_menu_fontspec (void)
-{
-    gchar *fontspec = NULL;
-    NONCLIENTMETRICS ncm;
-
-    memset(&ncm, 0, sizeof ncm);
-    ncm.cbSize = sizeof ncm;
-
-    if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, ncm.cbSize, &ncm, 0))
-	{
-		HDC screen = GetDC(0);
-		double y_scale = 72.0 / GetDeviceCaps(screen, LOGPIXELSY);
-		int point_size = (int) (ncm.lfMenuFont.lfHeight * y_scale);
-
-		if (point_size < 0) point_size = -point_size;
-		fontspec = g_strdup_printf("%s %d", ncm.lfMenuFont.lfFaceName, point_size);
-		ReleaseDC(0, screen);
-    }
-
-    return fontspec;
-}
-
-void try_to_get_windows_font (void)
-{
-    gchar *fontspec = default_windows_menu_fontspec();
-
-    if (fontspec != NULL)
-	{
-		int match = 0;
-		PangoFontDescription *pfd;
-		PangoFont *pfont;
-		PangoContext *pc;
-		GtkWidget *w;
-
-		pfd = pango_font_description_from_string(fontspec);
-
-		w = gtk_label_new(NULL);
-		pc = gtk_widget_get_pango_context(w);
-		pfont = pango_context_load_font(pc, pfd);
-		match = (pfont != NULL);
-
-		pango_font_description_free(pfd);
-		g_object_unref(G_OBJECT(pc));
-		gtk_widget_destroy(w);
-
-		if (match) set_app_font(fontspec);
-		g_free(fontspec);
-    }
-}
-*/
 
 static gchar *win32_get_filters(gboolean exe)
 {
@@ -213,8 +126,8 @@ void win32_show_file_dialog(gboolean file_open)
 		if (CommDlgExtendedError())
 		{
 			gchar error[100];
-			snprintf(error, 255, "File dialog box error (%x)", (int)CommDlgExtendedError());
-			MessageBox(NULL, error, _("Error"), MB_OK | MB_ICONERROR);
+			snprintf(error, sizeof error, "File dialog box error (%x)", (int)CommDlgExtendedError());
+			win32_message_dialog(GTK_MESSAGE_ERROR, _("Error"), error);
 		}
 		g_free(fname);
 		return;
@@ -375,8 +288,8 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 		if (CommDlgExtendedError())
 		{
 			gchar error[100];
-			snprintf(error, 255, "File dialog box error (%x)", (int)CommDlgExtendedError());
-			MessageBox(NULL, error, _("Error"), MB_OK | MB_ICONERROR);
+			snprintf(error, sizeof error, "File dialog box error (%x)", (int)CommDlgExtendedError());
+			win32_message_dialog(GTK_MESSAGE_ERROR, _("Error"), error);
 		}
 		g_strfreev(field);
 		g_free(fname);
@@ -400,6 +313,63 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	}
 	g_strfreev(field);
 	g_free(fname);
+}
+
+
+/* Creates a native Windows message box of the given type and returns always TRUE
+ * or FALSE representing th pressed Yes or No button.
+ * If type is not GTK_MESSAGE_QUESTION, it returns always TRUE. */
+gboolean win32_message_dialog(GtkMessageType type, const gchar *title, const gchar *msg)
+{
+	gboolean ret = TRUE;
+	gint rc;
+	guint t;
+	static wchar_t w_msg[512];
+	static wchar_t w_title[512];
+
+	switch (type)
+	{
+		case GTK_MESSAGE_ERROR:		t = MB_OK | MB_ICONERROR; break;
+		case GTK_MESSAGE_QUESTION:	t = MB_YESNO | MB_ICONQUESTION; break;
+		default:					t = MB_OK | MB_ICONINFORMATION; break;
+	}
+
+	// convert the Unicode chars to wide chars
+	/// TODO test if LANG == C then possibly skip conversion
+	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0])); 	
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
+
+	// display the message box
+	rc = MessageBoxW(NULL, w_msg, w_title, t);
+	
+	if (type == GTK_MESSAGE_QUESTION && rc != IDYES)
+		ret = FALSE;
+	
+	return ret;
+}
+
+
+/* Special dialog to ask for an action when closing an unsaved file */
+gint win32_message_dialog_unsaved(const gchar *title, const gchar *msg)
+{
+	static wchar_t w_msg[512];
+	static wchar_t w_title[512];
+	gint ret;
+
+	// convert the Unicode chars to wide chars
+	/// TODO test if LANG == C then possibly skip conversion
+	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0])); 	
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
+
+	ret = MessageBoxW(NULL, w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
+	switch(ret)
+	{
+		case IDYES: ret = GTK_RESPONSE_YES; break;
+		case IDNO: ret = GTK_RESPONSE_NO; break;
+		case IDCANCEL: ret = GTK_RESPONSE_CANCEL; break;
+	}
+
+	return ret;
 }
 
 #endif

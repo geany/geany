@@ -5,6 +5,8 @@
    tagmanager/tm_workspace.c: Fixed some cross compiling/Win32 issues.
  * geany.glade, src/callbacks.c, src/document.c, src/interface.c,
    src/main.c: Added menu item to the document menu to add/remove BOM.
+ * src/win32.c, src/dialogs.c:
+   Convert Unicode strings to wide characters to avoid weird display.
 
 
 2006-07-24  Nick Treleaven  <nick.treleaven@btinternet.com>

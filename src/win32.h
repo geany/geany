@@ -1,7 +1,7 @@
 /*
  *      win32.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2005 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  *  $Id$
  */
@@ -40,5 +40,13 @@ void win32_show_file_dialog(gboolean file_open);
 void win32_show_font_dialog(void);
 
 void win32_show_color_dialog(void);
+
+/* Creates a native Windows message box of the given type and returns always TRUE
+ * or FALSE representing th pressed Yes or No button.
+ * If type is not GTK_MESSAGE_QUESTION, it returns always TRUE. */
+gboolean win32_message_dialog(GtkMessageType type, const gchar *title, const gchar *msg);
+
+/* Special dialog to ask for an action when closing an unsaved file */
+gint win32_message_dialog_unsaved(const gchar *title, const gchar *msg);
 
 #endif
