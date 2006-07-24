@@ -45,7 +45,7 @@
 
 #include <stdarg.h>
 
-#define HAVE_MKSTEMP 1
+
 
 /*  To declare "struct stat" and stat ().
  */
@@ -214,7 +214,9 @@ static const char PathDelimiters [] = ":]>";
 #endif
 
 char *CurrentDirectory = NULL;
+#ifdef HAVE_MKSTEMP
 static const char *ExecutableProgram = NULL;
+#endif
 static const char *ExecutableName = NULL;
 static stringList* Excluded = NULL;
 

@@ -14,7 +14,7 @@
 #include "general.h"	/* must always come first */
 
 #include <string.h>
-#ifndef G_OS_WIN32
+#ifdef HAVE_FNMATCH_H
 # include <fnmatch.h>
 #endif
 

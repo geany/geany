@@ -15,7 +15,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#ifndef G_OS_WIN32
+#ifdef HAVE_FNMATCH_H
 # include <fnmatch.h>
 #endif
 

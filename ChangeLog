@@ -1,3 +1,10 @@
+2006-07-24  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/geany.h, tagmanager/strlist.c, tagmanager/tm_project.c,
+   tagmanager/parse.c, tagmanager/general.h, tagmanager/ctags.c,
+   tagmanager/tm_workspace.c: Fixed some cross compiling/Win32 issues.
+
+
 2006-07-24  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/geany.h: Use generic font names & increase the default size.

@@ -87,6 +87,13 @@
 #  define FA_DIREC _A_SUBDIR
 #  define ff_name name
 # endif
+// provide the prototype for cross-compiling/Windows
+char *lrealpath(const char *filename);
+#endif
+
+#ifndef HAVE_FNMATCH_H
+// provide the prototype for cross-compiling/Windows
+int fnmatch(const char *pattern, const char *string, int flags);
 #endif
 
 #ifdef DJGPP

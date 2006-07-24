@@ -15,9 +15,6 @@
 #include "general.h"	/* must always come first */
 
 #include <string.h>
-#ifndef G_OS_WIN32
-# include <fnmatch.h>
-#endif
 
 
 #include "entry.h"

@@ -161,9 +161,9 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 {
 #ifdef HAVE_GLOB_H
 	glob_t globbuf;
+	size_t idx_glob;
 #endif
 	int idx_inc;
-	size_t idx_glob;
 	char *command;
 	guint i;
 	FILE *fp;

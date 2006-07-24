@@ -43,7 +43,7 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
-#ifdef G_OS_WIN32
+#if defined(G_OS_WIN32) || defined(WIN32)
 # include <windows.h>
 # include <commdlg.h>
 # define GEANY_WIN32
