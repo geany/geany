@@ -1532,7 +1532,7 @@ For more information read the documentation (in " DOCDIR " or visit " GEANY_HOME
 		}
 		if (error_nr == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
 			utils_write_file(filedefs_readme,
-"Copy files from " PACKAGE_DATA_DIR "/" PACKAGE " to this directory to overwrite them. To use the defaults, just delete the file in this directory.\n\
+"Copy files from " PACKAGE_DATA_DIR G_DIR_SEPARATOR_S PACKAGE " to this directory to overwrite them. To use the defaults, just delete the file in this directory.\n\
 For more information read the documentation (in " DOCDIR " or visit " GEANY_HOMEPAGE ").");
 	}
 
