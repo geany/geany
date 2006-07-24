@@ -3,6 +3,8 @@
  * src/geany.h, tagmanager/strlist.c, tagmanager/tm_project.c,
    tagmanager/parse.c, tagmanager/general.h, tagmanager/ctags.c,
    tagmanager/tm_workspace.c: Fixed some cross compiling/Win32 issues.
+ * geany.glade, src/callbacks.c, src/document.c, src/interface.c,
+   src/main.c: Added menu item to the document menu to add/remove BOM.
 
 
 2006-07-24  Nick Treleaven  <nick.treleaven@btinternet.com>

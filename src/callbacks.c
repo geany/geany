@@ -66,9 +66,6 @@ gchar current_word[GEANY_MAX_WORD_LENGTH];
 // represents the state while closing all tabs(used to prevent notebook switch page signals)
 static gboolean closing_all = FALSE;
 
-// represents the state at switching a notebook page, to update check menu items in document menu
-static gboolean switch_notebook_page = FALSE;
-
 // flag to indicate the explicit change of a toggle button of the toolbar menu and so the
 // toggled callback should ignore the change since it is not triggered by the user
 static gboolean ignore_toolbar_toggle = FALSE;
@@ -739,7 +736,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 
 	if (idx >= 0 && app->opening_session_files == FALSE)
 	{
-		switch_notebook_page = TRUE;
+		app->ignore_callback = TRUE;
 		gtk_check_menu_item_set_active(
 				GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_breaking1")),
 				doc_list[idx].line_breaking);
@@ -749,6 +746,12 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		gtk_check_menu_item_set_active(
 				GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "set_file_readonly1")),
 				doc_list[idx].readonly);
+		gtk_check_menu_item_set_active(
+				GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_write_unicode_bom1")),
+				doc_list[idx].has_bom);
+
+		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
+				utils_is_unicode_charset(doc_list[idx].encoding));
 
 		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 
@@ -758,7 +761,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		utils_set_window_title(idx);
 		utils_update_tag_list(idx, FALSE);
 
-		switch_notebook_page = FALSE;
+		app->ignore_callback = FALSE;
 	}
 }
 
@@ -1183,7 +1186,7 @@ on_openfiles_tree_selection_changed    (GtkTreeSelection *selection,
 	gint idx = 0;
 
 	// use switch_notebook_page to ignore changing the notebook page because it is already done
-	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! switch_notebook_page)
+	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! app->ignore_callback)
 	{
 		gtk_tree_model_get(model, &iter, 1, &idx, -1);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
@@ -1287,7 +1290,7 @@ void
 on_line_breaking1_toggled              (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	if (! switch_notebook_page)
+	if (! app->ignore_callback)
 	{
 		gint idx = document_get_cur_idx();
 		if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -1301,7 +1304,7 @@ void
 on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	if (! switch_notebook_page)
+	if (! app->ignore_callback)
 	{
 		gint idx = document_get_cur_idx();
 		if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -1316,7 +1319,7 @@ void
 on_use_auto_indention1_toggled         (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	if (! switch_notebook_page)
+	if (! app->ignore_callback)
 	{
 		gint idx = document_get_cur_idx();
 		if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -2587,6 +2590,8 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	doc_list[idx].changed = TRUE;
 	document_set_text_changed(idx);
 	utils_update_statusbar(idx, -1);
+	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
+			utils_is_unicode_charset(doc_list[idx].encoding));
 }
 
 
@@ -2649,3 +2654,23 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 	}
 	utils_treeviews_showhide(TRUE);
 }
+
+
+void
+on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
+                                        gpointer         user_data)
+{
+	if (! app->ignore_callback)
+	{
+		gint idx = document_get_cur_idx();
+
+		if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+		doc_list[idx].has_bom = ! doc_list[idx].has_bom;
+
+		doc_list[idx].changed = TRUE;
+		document_set_text_changed(idx);
+		utils_update_statusbar(idx, -1);
+	}
+}
+

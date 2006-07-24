@@ -181,10 +181,12 @@ static void apply_settings(void)
 		gtk_window_set_default_size(GTK_WINDOW(app->window), app->geometry[2], app->geometry[3]);
 	}
 
-	g_object_set(G_OBJECT(lookup_widget(app->window, "menu_line_breaking1")), "active",
-				GINT_TO_POINTER(app->pref_editor_line_breaking), NULL);
-	g_object_set(G_OBJECT(lookup_widget(app->window, "menu_use_auto_indention1")), "active",
-				GINT_TO_POINTER(app->pref_editor_use_auto_indention), NULL);
+	app->ignore_callback = TRUE;
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
+				lookup_widget(app->window, "menu_line_breaking1")), app->pref_editor_line_breaking);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
+				lookup_widget(app->window, "menu_use_auto_indention1")), app->pref_editor_use_auto_indention);
+	app->ignore_callback = FALSE;
 
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
 			lookup_widget(app->window, "menutoolbutton1")), app->new_file_menu);
@@ -227,6 +229,7 @@ static void main_init(void)
 	app->main_window_realized= FALSE;
 	app->tab_order_ltr		= FALSE;
 	app->quitting			= FALSE;
+	app->ignore_callback	= FALSE;
 #ifdef HAVE_FIFO
 	app->ignore_fifo		= ignore_fifo;
 #endif
@@ -613,11 +616,11 @@ gint main(gint argc, gchar **argv)
 
 	configuration_apply_settings();
 
-	dialogs_show_info(
+	dialogs_show_info(	// will be removed soon
 	"Please use this SVN version not for production use!\nWe added recently some experimental features which"
 	" can really damage your files when saving or make cofusing things with your file when opening.\n"
-	"Read the mailing list for more information. I'm very sorry, please be patient.\n\n"
-	"(to disable this message, edit src/main.c at line 616).");
+	"Read the mailing list for more information. I'm very sorry, please be patient.\nThis dialog "
+	"will be removed soon.\n\n(to disable this message, edit src/main.c at line %d).", __LINE__ - 4);
 
 	//g_timeout_add(0, (GSourceFunc)destroyapp, NULL); // useful for start time tests
 	gtk_main();

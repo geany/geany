@@ -597,25 +597,28 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 
+	app->ignore_callback = TRUE;
+
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
+				lookup_widget(app->window, "menu_write_unicode_bom1")), doc_list[idx].has_bom);
+	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
+			utils_is_unicode_charset(doc_list[idx].encoding));
+
+	app->ignore_callback = FALSE;
+
 	if (! reload)
 	{
 		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(utf8_filename);
 
-		if (readonly) gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
-							lookup_widget(app->window, "set_file_readonly1")), TRUE);
-		/* This is so ugly, but the checkbox in the file menu can be still checked from a previous
-		 * read only file, a won't be checked out since notebook-switch-signal is ignored
-		 * so we need to check it out by hand and this emits the toggled-signal and therefore
-		 * we must set the file to read only and the toggle-callback will set it again to not
-		 * read only. It's ugly. Any ideas are welcome. */
-		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(
-								lookup_widget(app->window, "set_file_readonly1"))))
-		{
-			doc_list[idx].readonly = TRUE;
-			sci_set_readonly(doc_list[idx].sci, TRUE);
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
-							lookup_widget(app->window, "set_file_readonly1")), FALSE);
-		}
+		app->ignore_callback = TRUE;
+
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "set_file_readonly1")),
+				readonly);
+
+		app->ignore_callback = FALSE;
+
+		doc_list[idx].readonly = readonly;
+		sci_set_readonly(doc_list[idx].sci, readonly);
 
 		document_set_filetype(idx, use_ft);
 		utils_build_show_hide(idx);
