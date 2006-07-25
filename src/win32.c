@@ -27,6 +27,9 @@
 
 #ifdef GEANY_WIN32
 
+#include <windows.h>
+#include <commdlg.h>
+
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
@@ -336,15 +339,15 @@ gboolean win32_message_dialog(GtkMessageType type, const gchar *title, const gch
 
 	// convert the Unicode chars to wide chars
 	/// TODO test if LANG == C then possibly skip conversion
-	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0])); 	
+	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0]));
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
 
 	// display the message box
 	rc = MessageBoxW(NULL, w_msg, w_title, t);
-	
+
 	if (type == GTK_MESSAGE_QUESTION && rc != IDYES)
 		ret = FALSE;
-	
+
 	return ret;
 }
 
@@ -358,7 +361,7 @@ gint win32_message_dialog_unsaved(const gchar *title, const gchar *msg)
 
 	// convert the Unicode chars to wide chars
 	/// TODO test if LANG == C then possibly skip conversion
-	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0])); 	
+	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0]));
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
 
 	ret = MessageBoxW(NULL, w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);

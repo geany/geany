@@ -44,8 +44,6 @@
 
 
 #if defined(G_OS_WIN32) || defined(WIN32)
-# include <windows.h>
-# include <commdlg.h>
 # define GEANY_WIN32
 # define GEANY_DATA_DIR PACKAGE_DATA_DIR
 #else
