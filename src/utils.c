@@ -48,6 +48,7 @@
 #include "treeviews.h"
 #include "sciwrappers.h"
 #include "dialogs.h"
+#include "win32.h"
 
 #include "utils.h"
 
@@ -57,7 +58,7 @@
 void utils_start_browser(const gchar *uri)
 {
 #ifdef GEANY_WIN32
-	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
+	win32_open_browser(uri);
 #else
 	const gchar *argv[3];
 

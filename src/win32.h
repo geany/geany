@@ -21,17 +21,8 @@
  */
 
 
-
 #ifdef GEANY_WIN32
 
-
-/*void set_app_font(const char *fontname);
-
-char *default_windows_menu_fontspec(void);
-
-void try_to_get_windows_font(void);
-*/
-//gchar *win32_get_filters(void);
 
 void win32_show_pref_file_dialog(GtkEntry *item);
 
@@ -44,9 +35,12 @@ void win32_show_color_dialog(void);
 /* Creates a native Windows message box of the given type and returns always TRUE
  * or FALSE representing th pressed Yes or No button.
  * If type is not GTK_MESSAGE_QUESTION, it returns always TRUE. */
-gboolean win32_message_dialog(GtkMessageType type, const gchar *title, const gchar *msg);
+gboolean win32_message_dialog(GtkMessageType type, const gchar *msg);
 
 /* Special dialog to ask for an action when closing an unsaved file */
-gint win32_message_dialog_unsaved(const gchar *title, const gchar *msg);
+gint win32_message_dialog_unsaved(const gchar *msg);
+
+/* Just a simple wrapper function to open a browser window */
+void win32_open_browser(const gchar *uri);
 
 #endif

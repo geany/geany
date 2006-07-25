@@ -130,7 +130,7 @@ void win32_show_file_dialog(gboolean file_open)
 		{
 			gchar error[100];
 			snprintf(error, sizeof error, "File dialog box error (%x)", (int)CommDlgExtendedError());
-			win32_message_dialog(GTK_MESSAGE_ERROR, _("Error"), error);
+			win32_message_dialog(GTK_MESSAGE_ERROR, error);
 		}
 		g_free(fname);
 		return;
@@ -146,7 +146,9 @@ void win32_show_file_dialog(gboolean file_open)
 		{	// open a single file
 			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) >= GEANY_MAX_OPEN_FILES)
 			{
-				dialogs_show_file_open_error();
+				dialogs_show_error(
+			_("You have opened too many files. There is a limit of %d concurrent open files."),
+			GEANY_MAX_OPEN_FILES);
 			}
 			else
 			{
@@ -292,7 +294,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 		{
 			gchar error[100];
 			snprintf(error, sizeof error, "File dialog box error (%x)", (int)CommDlgExtendedError());
-			win32_message_dialog(GTK_MESSAGE_ERROR, _("Error"), error);
+			win32_message_dialog(GTK_MESSAGE_ERROR, error);
 		}
 		g_strfreev(field);
 		g_free(fname);
@@ -322,19 +324,35 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 /* Creates a native Windows message box of the given type and returns always TRUE
  * or FALSE representing th pressed Yes or No button.
  * If type is not GTK_MESSAGE_QUESTION, it returns always TRUE. */
-gboolean win32_message_dialog(GtkMessageType type, const gchar *title, const gchar *msg)
+gboolean win32_message_dialog(GtkMessageType type, const gchar *msg)
 {
 	gboolean ret = TRUE;
 	gint rc;
 	guint t;
+	const gchar *title;
 	static wchar_t w_msg[512];
 	static wchar_t w_title[512];
 
 	switch (type)
 	{
-		case GTK_MESSAGE_ERROR:		t = MB_OK | MB_ICONERROR; break;
-		case GTK_MESSAGE_QUESTION:	t = MB_YESNO | MB_ICONQUESTION; break;
-		default:					t = MB_OK | MB_ICONINFORMATION; break;
+		case GTK_MESSAGE_ERROR:
+		{
+			t = MB_OK | MB_ICONERROR;
+			title = _("Error");
+			break;
+		}
+		case GTK_MESSAGE_QUESTION:
+		{
+			t = MB_YESNO | MB_ICONQUESTION;
+			title = _("Question");
+			break;
+		}
+		default:
+		{
+			t = MB_OK | MB_ICONINFORMATION;
+			title = _("Information");
+			break;
+		}
 	}
 
 	// convert the Unicode chars to wide chars
@@ -353,16 +371,15 @@ gboolean win32_message_dialog(GtkMessageType type, const gchar *title, const gch
 
 
 /* Special dialog to ask for an action when closing an unsaved file */
-gint win32_message_dialog_unsaved(const gchar *title, const gchar *msg)
+gint win32_message_dialog_unsaved(const gchar *msg)
 {
 	static wchar_t w_msg[512];
 	static wchar_t w_title[512];
 	gint ret;
 
 	// convert the Unicode chars to wide chars
-	/// TODO test if LANG == C then possibly skip conversion
 	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0]));
-	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
+	MultiByteToWideChar(CP_UTF8, 0, _("Question"), -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
 
 	ret = MessageBoxW(NULL, w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
 	switch(ret)
@@ -373,6 +390,12 @@ gint win32_message_dialog_unsaved(const gchar *title, const gchar *msg)
 	}
 
 	return ret;
+}
+
+/* Just a simple wrapper function to open a browser window */
+void win32_open_browser(const gchar *uri)
+{
+	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
 }
 
 #endif
