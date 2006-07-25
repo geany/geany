@@ -1358,8 +1358,7 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 		{
 			ttf.chrg.cpMin = 0;
 			ttf.chrg.cpMax = sci_get_length(doc_list[i].sci);
-			ttf.lpstrText = g_malloc(sizeof search_text);
-			strncpy(ttf.lpstrText, search_text, sizeof search_text);
+			ttf.lpstrText = search_text;
 			while (1)
 			{
 				pos = sci_find_text(doc_list[i].sci, flags, &ttf);
@@ -1381,11 +1380,15 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 				g_free(string);
 				ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
 			}
-			g_free(ttf.lpstrText);
 		}
 	}
 	if (line == -1) // no matches were found (searching from unnamed file)
-		msgwin_status_add(_("No matches found for '%s'."), search_text);
+	{
+		gchar *text = g_strdup_printf(_("No matches found for '%s'."), search_text);
+		msgwin_status_add(text);
+		msgwin_msg_add(-1, -1, text);
+		g_free(text);
+	}
 
 	g_free(search_text);
 }

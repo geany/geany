@@ -9,6 +9,9 @@
    Added simple wrapper function win32_open_browser().
  * src/dialogs.c, src/main.c, src/document.c, src/callbacks.c:
    Removed some unneeded functions to avoid duplicate code.
+ * src/callbacks.c:
+   Fixed broken Find usage.
+   Put "No matches" message also in the message window.
 
 
 2006-07-24  Enrico Tröger  <enrico.troeger@uvena.de>
