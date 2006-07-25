@@ -1,10 +1,18 @@
+2006-07-25  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/encodings.c, src/document.c, src/keyfile.c, src/main.c:
+   Save default encoding for new files as charset string.
+
+
 2006-07-24  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/geany.h, tagmanager/strlist.c, tagmanager/tm_project.c,
    tagmanager/parse.c, tagmanager/general.h, tagmanager/ctags.c,
    tagmanager/tm_workspace.c: Fixed some cross compiling/Win32 issues.
  * geany.glade, src/callbacks.c, src/document.c, src/interface.c,
-   src/main.c: Added menu item to the document menu to add/remove BOM.
+   src/main.c:
+   Added menu item to the document menu to add/remove BOM.
+   Replaced switch_notebook_page by ignore_callback flag.
  * src/win32.c, src/dialogs.c:
    Convert Unicode strings to wide characters to avoid weird display.
  * src/document.c: Set CR/LF as EOL mode on new files on Windows.

@@ -356,8 +356,7 @@ void document_new_file(filetype *ft)
 		sci_set_text(doc_list[idx].sci, template);
 		g_free(template);
 
-		doc_list[idx].encoding = g_strdup(
-						encodings_get_charset(&encodings[app->pref_editor_default_encoding]));
+		doc_list[idx].encoding = g_strdup(encodings[app->pref_editor_default_encoding].charset);
 		document_set_filetype(idx, ft);
 		utils_set_window_title(idx);
 		utils_build_show_hide(idx);

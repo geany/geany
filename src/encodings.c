@@ -121,6 +121,8 @@ const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 {
 	gint i;
 
+	if (charset == NULL) return &encodings[GEANY_ENCODING_UTF_8];
+
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
 	{

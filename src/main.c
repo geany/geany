@@ -508,11 +508,11 @@ gint main(gint argc, gchar **argv)
 	main_init();
 	gtk_widget_set_size_request(app->window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
 	gtk_window_set_default_size(GTK_WINDOW(app->window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
+	encodings_init();
 	configuration_load();
 	keybindings_init();
 	notebook_init();
 	templates_init();
-	encodings_init();
 	document_init_doclist();
 	// do this here to let cmdline options overwrite configuration settings
 #ifdef HAVE_VTE

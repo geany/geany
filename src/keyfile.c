@@ -30,6 +30,7 @@
 #include "utils.h"
 #include "document.h"
 #include "sciwrappers.h"
+#include "encodings.h"
 
 
 static gchar *scribble_text = NULL;
@@ -118,7 +119,6 @@ void configuration_save(void)
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", app->geometry, 4);
 	}
 	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", app->pref_editor_tab_width);
-	g_key_file_set_integer(config, PACKAGE, "pref_editor_default_encoding", app->pref_editor_default_encoding);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", app->pref_main_confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", app->pref_main_load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", app->pref_main_save_winpos);
@@ -135,6 +135,7 @@ void configuration_save(void)
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", app->pref_editor_new_line);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", app->pref_editor_replace_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", app->pref_editor_trail_space);
+	g_key_file_set_string(config, PACKAGE, "pref_editor_default_encoding", encodings[app->pref_editor_default_encoding].charset);
 	g_key_file_set_string(config, PACKAGE, "pref_template_developer", app->pref_template_developer);
 	g_key_file_set_string(config, PACKAGE, "pref_template_company", app->pref_template_company);
 	g_key_file_set_string(config, PACKAGE, "pref_template_mail", app->pref_template_mail);
@@ -288,8 +289,18 @@ gboolean configuration_load(void)
 
 
 	app->pref_editor_tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
-	// set default encoding to UTF8 (Unicode) - index 16
-	app->pref_editor_default_encoding = utils_get_setting_integer(config, PACKAGE, "pref_editor_default_encoding", 16);
+	tmp_string = utils_get_setting_string(config, PACKAGE, "pref_editor_default_encoding",
+											encodings[GEANY_ENCODING_UTF_8].charset);
+	if (tmp_string)
+	{
+		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);
+		if (enc != NULL)
+			app->pref_editor_default_encoding = enc->idx;
+		else
+			app->pref_editor_default_encoding = GEANY_ENCODING_UTF_8;
+
+		g_free(tmp_string);
+	}
 	app->pref_main_confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", TRUE);
 	app->pref_main_load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	app->pref_main_save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
