@@ -848,7 +848,9 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 			}
 			else
 			{
-				dialogs_show_file_open_error();
+				dialogs_show_error(
+		_("You have opened too many files. There is a limit of %d concurrent open files."),
+		GEANY_MAX_OPEN_FILES);
 				g_slist_foreach(flist, (GFunc)g_free, NULL);
 				break;
 			}

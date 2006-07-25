@@ -348,7 +348,9 @@ void document_new_file(filetype *ft)
 
 		if (idx == -1)
 		{
-			dialogs_show_file_open_error();
+			dialogs_show_error(
+			_("You have opened too many files. There is a limit of %d concurrent open files."),
+			GEANY_MAX_OPEN_FILES);
 			return;
 		}
 
@@ -377,7 +379,9 @@ void document_new_file(filetype *ft)
 	}
 	else
 	{
-		dialogs_show_file_open_error();
+		dialogs_show_error(
+		_("You have opened too many files. There is a limit of %d concurrent open files."),
+		GEANY_MAX_OPEN_FILES);
 	}
 }
 
@@ -799,6 +803,8 @@ void document_save_file(gint idx)
 }
 
 
+#define SEARCH_NOT_FOUND_TXT _("The match \"%s\" was not found. Wrap search around the document?")
+
 /* special search function, used from the find entry in the toolbar */
 void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_button, gboolean inc)
 {
@@ -823,7 +829,7 @@ void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_b
 	{
 		if (find_button)
 		{
-			if (dialogs_show_not_found(text))
+			if (dialogs_show_question(SEARCH_NOT_FOUND_TXT, text))
 			{
 				sci_goto_pos(doc_list[idx].sci, 0, FALSE);
 				document_find_next(idx, text, flags, TRUE, inc);
@@ -872,7 +878,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 	}
 	else
 	{
-		if (dialogs_show_not_found(text))
+		if (dialogs_show_question(SEARCH_NOT_FOUND_TXT, text))
 		{
 			sci_goto_pos(doc_list[idx].sci, (search_backwards) ? sci_get_length(doc_list[idx].sci) : 0, TRUE);
 			return document_find_text(idx, text, flags, search_backwards);

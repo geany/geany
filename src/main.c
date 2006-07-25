@@ -491,10 +491,16 @@ gint main(gint argc, gchar **argv)
 	else config_dir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
 
 	mkdir_result = utils_make_settings_dir(config_dir);
-	if (mkdir_result != 0 && ! dialogs_show_mkcfgdir_error(mkdir_result))
+	if (mkdir_result != 0)
 	{
-		g_free(config_dir);
-		return (0);
+		if (! dialogs_show_question(
+			_("Configuration directory could not be created (%s).\nThere could be some problems "
+			  "using %s without a configuration directory.\nStart %s anyway?"),
+			  g_strerror(mkdir_result), PACKAGE, PACKAGE))
+		{
+			g_free(config_dir);
+			return (0);
+		}
 	}
 
 #ifdef HAVE_FIFO
@@ -573,7 +579,9 @@ gint main(gint argc, gchar **argv)
 				}
 				else
 				{
-					dialogs_show_file_open_error();
+					dialogs_show_error(
+			_("You have opened too many files. There is a limit of %d concurrent open files."),
+			GEANY_MAX_OPEN_FILES);
 					break;
 				}
 			}

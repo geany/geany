@@ -42,9 +42,7 @@
 #include "win32.h"
 #include "sciwrappers.h"
 #include "support.h"
-//#include "interface.h"
 #include "utils.h"
-#include "prefs.h"
 #include "keybindings.h"
 
 
@@ -148,7 +146,9 @@ void dialogs_show_open_file ()
 	}
 	else
 	{
-		dialogs_show_file_open_error();
+		dialogs_show_error(
+		_("You have opened too many files. There is a limit of %d concurrent open files."),
+		GEANY_MAX_OPEN_FILES);
 	}
 }
 
@@ -157,7 +157,7 @@ void dialogs_show_open_file ()
 void dialogs_show_save_as ()
 {
 #ifdef GEANY_WIN32
-		win32_show_file_dialog(FALSE);
+	win32_show_file_dialog(FALSE);
 #else
 	gint idx = document_get_cur_idx();
 
@@ -212,53 +212,6 @@ void dialogs_show_save_as ()
 }
 
 
-
-void dialogs_show_file_open_error(void)
-{
-	/// TODO rewrite the messages
-	gchar *pri = g_strdup_printf(_("There is a limit of %d concurrent open tabs."), GEANY_MAX_OPEN_FILES);
-	gchar *sec = _("error: too many open files");
-#ifdef GEANY_WIN32
-	win32_message_dialog(GTK_MESSAGE_INFO, sec, pri);	
-#else
-	GtkWidget *dialog;
-
-	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, sec);
-	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), pri);
-	gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
-#endif
-	g_free(pri);
-}
-
-
-/// TODO replace by dialogs_show_question
-gboolean dialogs_show_not_found(const gchar *text)
-{
-	GtkWidget *dialog;
-	gchar *string;
-	gint ret;
-
-	string = g_strdup_printf(_("The match \"%s\" was not found. Wrap search around the document?"), text);
-#ifdef GEANY_WIN32
-	dialog = NULL;
-	ret = MessageBox(NULL, string, _("Question"), MB_YESNO | MB_ICONWARNING);
-	g_free(string);
-	if (ret == IDYES) return TRUE;
-	else return FALSE;
-#else
-	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, "%s", string);
-	g_free(string);
-	ret = gtk_dialog_run(GTK_DIALOG (dialog));
-	gtk_widget_destroy(dialog);
-	if (ret == GTK_RESPONSE_YES) return TRUE;
-	else return FALSE;
-#endif
-}
-
-
 void dialogs_show_info(const gchar *text, ...)
 {
 #ifndef GEANY_WIN32
@@ -272,11 +225,11 @@ void dialogs_show_info(const gchar *text, ...)
 	va_end(args);
 
 #ifdef GEANY_WIN32
-	win32_message_dialog(GTK_MESSAGE_INFO,  _("Information"), string);	
+	win32_message_dialog(GTK_MESSAGE_INFO,  string);
 #else
 
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_INFO, GTK_BUTTONS_OK, string);
+                                  GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", string);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 #endif
@@ -297,10 +250,10 @@ void dialogs_show_error(const gchar *text, ...)
 	va_end(args);
 
 #ifdef GEANY_WIN32
-	win32_message_dialog(GTK_MESSAGE_ERROR, _("Error"), string);
+	win32_message_dialog(GTK_MESSAGE_ERROR, string);
 #else
 	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, string);
+                                  GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "%s", string);
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 #endif
@@ -329,10 +282,10 @@ gboolean dialogs_show_unsaved_file(gint idx)
 		msg  = g_strdup(_("The file is not saved.\nDo you want to save it before closing?"));
 	}
 #ifdef GEANY_WIN32
-	ret = win32_message_dialog_unsaved(_("Error"), msg);
+	ret = win32_message_dialog_unsaved(msg);
 #else
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, msg);
+                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", msg);
 
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
@@ -1378,30 +1331,6 @@ GtkWidget *dialogs_add_file_open_extra_widget(void)
 }
 
 
-/// TODO remove this function and use dialogs_show_question instead
-gboolean dialogs_show_mkcfgdir_error(gint error_nr)
-{
-#ifndef GEANY_WIN32
-	GtkWidget *dialog;
-#endif
-	gchar string[255];
-	gint ret;
-
-	snprintf(string, 255, _("Configuration directory could not be created (%s).\nThere could be some problems using %s without a configuration directory.\nStart %s anyway?"),
-									g_strerror(error_nr), PACKAGE, PACKAGE);
-#ifdef GEANY_WIN32
-	ret = win32_message_dialog(GTK_MESSAGE_ERROR, _("Error"), string);
-#else
-	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_ERROR, GTK_BUTTONS_YES_NO, string);
-	ret = gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-	if (ret == GTK_RESPONSE_YES) return TRUE;
-	else return FALSE;
-#endif
-}
-
-
 void dialogs_show_file_properties(gint idx)
 {
 	GtkWidget *dialog, *label, *table, *hbox, *image, *perm_table, *check;
@@ -1779,10 +1708,10 @@ gboolean dialogs_show_question(const gchar *text, ...)
 	va_end(args);
 
 #ifdef GEANY_WIN32
-	ret = win32_message_dialog(GTK_MESSAGE_QUESTION, _("Question"), string);
+	ret = win32_message_dialog(GTK_MESSAGE_QUESTION, string);
 #else
 	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, string);
+                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, "%s", string);
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES)
 		ret = TRUE;
 	gtk_widget_destroy(dialog);

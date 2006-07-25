@@ -3,6 +3,12 @@
  * src/encodings.c, src/document.c, src/keyfile.c, src/main.c:
    Save default encoding for new files as charset string.
  * src/filetypes.c: Reordered the filetypes (just a cosmetic change).
+ * src/win32.c, src/utils.c:
+   Removed title argument from win32_message_dialog because it is
+   defined by the dialog type.
+   Added simple wrapper function win32_open_browser().
+ * src/dialogs.c, src/main.c, src/document.c, src/callbacks.c:
+   Removed some unneeded functions to avoid duplicate code.
 
 
 2006-07-24  Enrico Tröger  <enrico.troeger@uvena.de>

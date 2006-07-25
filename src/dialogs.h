@@ -15,7 +15,7 @@
  *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
  */
@@ -29,10 +29,6 @@ void dialogs_show_open_file(void);
 
 /* This shows the file selection dialog to save a file. */
 void dialogs_show_save_as();
-
-void dialogs_show_file_open_error(void);
-
-gboolean dialogs_show_not_found(const gchar *text);
 
 void dialogs_show_info(const gchar *text, ...);
 
@@ -68,8 +64,6 @@ void dialogs_show_includes_arguments_tex(void);
 void dialogs_create_recent_menu(void);
 
 GtkWidget *dialogs_add_file_open_extra_widget(void);
-
-gboolean dialogs_show_mkcfgdir_error(gint error_nr);
 
 void dialogs_show_file_properties(gint idx);
 
