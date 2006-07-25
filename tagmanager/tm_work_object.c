@@ -7,6 +7,8 @@
 *
 */
 
+#include "general.h"	/* must always come first */
+
 #include <stdio.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -25,7 +27,7 @@ gchar *tm_get_real_path(const gchar *file_name)
 		gchar path[PATH_MAX+1];
 		memset(path, '\0', PATH_MAX+1);
 #ifdef G_OS_WIN32
-		return lrealpath(file_name, path);
+		return lrealpath(file_name);
 #else
 		realpath(file_name, path);
 #endif

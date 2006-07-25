@@ -7,6 +7,8 @@ EXTRA_DIST = \
 	geany.desktop.in \
 	geany.spec \
 	geany.glade \
+	geany_windres.rc \
+	geany_windres.h \
 	geany.gladep \
 	data/global.tags \
 	data/php.tags \
@@ -40,7 +42,6 @@ install-data-local:
 	  fi \
 	done
 
-
 dist-hook:
 	if test -d pixmaps; then \
 	  mkdir $(distdir)/pixmaps; \
@@ -50,6 +51,19 @@ dist-hook:
 	    fi \
 	  done \
 	fi
+
+if MINGW
+install-win32:
+	GEANY_INSTALL_DIR=geany; \
+	mkdir $(GEANY_INSTALL_DIR); \
+	cp ChangeLog $(GEANY_INSTALL_DIR)/ChangeLog.txt; \
+	cp TODO $(GEANY_INSTALL_DIR)/ToDo.txt; \
+	cp COPYING $(GEANY_INSTALL_DIR)/ChangeLog.txt; \
+	cp AUTHORS $(GEANY_INSTALL_DIR)/Authors.txt; \
+	cp README $(GEANY_INSTALL_DIR)/ReadMe.txt; \
+	cp THANKS $(GEANY_INSTALL_DIR)/Thanks.txt; \
+	@# to be finished
+endif
 
 BZIP2_ENV =--best
 

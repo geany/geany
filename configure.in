@@ -3,6 +3,9 @@ dnl $Id$
 
 AC_INIT(configure.in)
 AM_INIT_AUTOMAKE(geany, 0.8)
+MAJOR_VERSION="0"
+MINOR_VERSION="8"
+
 
 AM_CONFIG_HEADER(config.h)
 
@@ -39,7 +42,7 @@ AC_C_VOLATILE
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_ERROR_AT_LINE
-AC_REPLACE_FNMATCH
+#AC_REPLACE_FNMATCH
 AC_FUNC_LSTAT
 AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 AC_FUNC_MALLOC
@@ -48,7 +51,7 @@ AC_FUNC_REALLOC
 AC_TYPE_SIGNAL
 AC_FUNC_STAT
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([gethostname ftruncate fgetpos getcwd gettimeofday isascii mblen memset putenv realpath regcomp setenv strcasecmp strchr strdup strerror strrchr strspn strstr strtol])
+AC_CHECK_FUNCS([gethostname ftruncate fgetpos getcwd gettimeofday isascii mblen memset mkstemp putenv realpath regcomp setenv strcasecmp strchr strdup strerror strrchr strspn strstr strtol])
 
 # autoscan end
 
@@ -58,8 +61,10 @@ SVN=`which svn`
 if test -d ".svn" -a -x "${SVN}"
 then
 	REVISION=r`$SVN info|grep 'Last Changed Rev'|cut -d' ' -f4`
+	VERSION_STRING="$VERSION ($REVISION)"
 else
 	REVISION="-1"
+	VERSION_STRING="$VERSION"
 fi
 AC_DEFINE_UNQUOTED([REVISION], "$REVISION", [subversion revision number])
 
@@ -86,10 +91,6 @@ fi
 AC_ARG_ENABLE(vte, AC_HELP_STRING([--enable-vte],[enable if you want virtual termninal support [[default=yes]]]),
  [want_vte="$enableval"], [want_vte="yes"])
 
-if test "x$want_vte" = "xyes"; then
-	AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])
-fi
-
 # if test "$want_vte" = "yes"; then
 #   PKG_CHECK_MODULES(VTE, [vte],
 #                     [AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])],
@@ -99,9 +100,19 @@ fi
 #					[AC_MSG_ERROR([VTE support enabled, but VTE not found])], [])
 # fi
 
-# Check for random number paths
-AC_CHECK_FILE([/dev/urandom], AC_DEFINE([HAVE_DEVURANDOM], [1], [Define that you found /dev/urandom]))
-AC_CHECK_FILE([/dev/random], AC_DEFINE([HAVE_DEVRANDOM], [1], [Define that you found /dev/random]))
+# Check for random number paths (skip when cross compiling)
+if test "x$build" = "x$target"; then
+	AC_CHECK_FILE([/dev/urandom], AC_DEFINE([HAVE_DEVURANDOM], [1], [Define that you found /dev/urandom]))
+	AC_CHECK_FILE([/dev/random], AC_DEFINE([HAVE_DEVRANDOM], [1], [Define that you found /dev/random]))
+fi
+
+if test "x$target" = "xi386-mingw32msvc"; then
+	AC_DEFINE_UNQUOTED([WIN32], 1, [we are cross compiling for WIN32])
+	want_vte="no"
+	AC_EXEEXT
+fi
+AM_CONDITIONAL(MINGW, test "x$target" = "xi386-mingw32msvc")
+
 
 GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
 
@@ -133,10 +144,18 @@ if test "x${datadir}" = 'x${prefix}/share'; then
 	fi
 fi
 
+if test "x$want_vte" = "xyes"; then
+	AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])
+fi
+
 GEANY_PIXMAPS_DIR=`eval echo ${datadir}/pixmaps`
 AC_SUBST(GEANY_PIXMAPS_DIR)
 GEANY_DATA_DIR=`eval echo ${datadir}/geany`
 AC_SUBST(GEANY_DATA_DIR)
+
+AC_SUBST([MINOR_VERSION])
+AC_SUBST([MAJOR_VERSION])
+AC_SUBST([VERSION_STRING])
 
 AC_OUTPUT([
 Makefile
@@ -150,10 +169,16 @@ doc/Makefile
 doc/geany.1
 geany.spec
 geany.desktop
+geany_windres.rc
 ])
 
 echo "----------------------------------------"
 echo "Install Geany in                   : ${prefix}"
+if test "x${build}" != "x" -a "x${target}" != "x"
+then
+	echo "Building Geany on                  : ${build}"
+	echo "Building Geany for                 : ${target}"
+fi
 echo "Using GTK version                  : ${GTK_VERSION}"
 echo "Use virtual terminal support       : ${want_vte}"
 echo "Use named pipe support             : ${want_pipe}"

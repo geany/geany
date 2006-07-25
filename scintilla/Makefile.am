@@ -55,8 +55,11 @@ $(LEXER_SRCS)
 
 libscintilla_a_SOURCES = $(SRCS)
 
-INCLUDES=-I$(top_srcdir) -Iinclude \
-@PACKAGE_CFLAGS@
+if MINGW
+INCLUDES=-I$(top_srcdir) -Iinclude -I/usr/local/cross-tools/include @PACKAGE_CFLAGS@
+else
+INCLUDES=-I$(top_srcdir) -Iinclude @PACKAGE_CFLAGS@
+endif
 
 libscintilla_a_LIBADD = scintilla-marshal.o
 

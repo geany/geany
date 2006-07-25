@@ -13,6 +13,7 @@
 *   INCLUDE FILES
 */
 #include "general.h"	/* must always come first */
+#include <glib.h>
 
 #include <string.h>
 
@@ -637,7 +638,7 @@ extern char *getArglistFromPos(fpos_t startPosition, const char *tokenName)
 	pos1 = ftell(File.fp);
 	if (pos2 > pos1)
 	{
-		result = (char *) malloc(sizeof(char ) * (pos2 - pos1 + 2));
+		result = (char *) g_malloc(sizeof(char ) * (pos2 - pos1 + 2));
 		if (result != NULL)
 		{
 			fread(result, sizeof(char), pos2 - pos1 + 1, File.fp);
@@ -664,7 +665,7 @@ static void stripCodeBuffer(char *buf)
 {
 	int i = 0, pos = 0;
 	ParseState state = st_none_t, prev_state = st_none_t;
-	
+
 	while (buf[i] != '\0')
 	{
 		switch(buf[i])

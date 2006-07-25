@@ -20,6 +20,7 @@
 *   INCLUDE FILES
 */
 #include "general.h"	/* must always come first */
+#include <glib.h>
 
 #ifdef HAVE_STDLIB_H
 # include <stdlib.h>		/* to declare malloc (), realloc () */
@@ -341,7 +342,7 @@ extern char* eStrdup (const char* str)
 
 extern void *eMalloc (const size_t size)
 {
-    void *buffer = malloc (size);
+    void *buffer = g_malloc (size);
 
     if (buffer == NULL)
 	error (FATAL, "out of memory");
@@ -366,7 +367,7 @@ extern void *eRealloc (void *const ptr, const size_t size)
 	buffer = eMalloc (size);
     else
     {
-	buffer = realloc (ptr, size);
+	buffer = g_realloc (ptr, size);
 	if (buffer == NULL)
 	    error (FATAL, "out of memory");
     }

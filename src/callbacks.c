@@ -1232,7 +1232,7 @@ on_to_upper_case1_activate             (GtkMenuItem     *menuitem,
 	gchar *text;
 	if (idx < 0) return;
 
-	text = malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
+	text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
 	sci_get_selected_text(doc_list[idx].sci, text);
 	sci_replace_sel(doc_list[idx].sci, g_ascii_strup(text, -1));
 	g_free(text);

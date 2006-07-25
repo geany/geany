@@ -1,18 +1,12 @@
 ## Process this file with automake to produce Makefile.in
 # $Id$
 
-INCLUDES = \
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
-	-I../scintilla/include \
-	-I../tagmanager/include \
-	@PACKAGE_CFLAGS@
 
-EXTRA_DIST = images.c gb.c win32.c win32.h
+EXTRA_DIST = images.c gb.c
 
 bin_PROGRAMS = geany
 
-geany_SOURCES = \
+SRCS = \
 	main.c geany.h \
 	search.c search.h \
 	notebook.c notebook.h \
@@ -32,12 +26,42 @@ geany_SOURCES = \
 	sciwrappers.c sciwrappers.h \
 	document.c document.h \
 	utils.c utils.h \
-	vte.c vte.h \
 	support.c support.h \
 	interface.c interface.h \
 	callbacks.c callbacks.h
 
-#AM_CFLAGS = -Wall -pipe
-#AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe
-AM_CFLAGS = -DGEANY_DEBUG -g -Wall -pipe
+
+
+if MINGW
+# build Geany for Windows
+WINDRES = /usr/local/cross-tools/bin/i386-mingw32msvc-windres
+
+geany_SOURCES = $(SRCS) win32.c win32.h
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a -lstdc++ @PACKAGE_LIBS@ \
+			$(INTLLIBS) -lgdi32 -limm32 -lshell32 -lole32 -luuid -liberty -lcomdlg32 -lcomctl32 \
+			geany_windres.res
+AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -mms-bitfields
+#AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -mms-bitfields -g -O0
+geany_LDFLAGS =	-mwindows
+
+INCLUDES = \
+	-DPACKAGE_DATA_DIR=\"data\" -DPACKAGE_LOCALE_DIR=\"data\" -I../scintilla/include \
+	-I../tagmanager/include @PACKAGE_CFLAGS@
+
+geany_windres.res:
+	$(WINDRES) -i ../geany_windres.rc --input-format=rc -o geany_windres.res -O coff;
+
+else
+# build Geany for all other platforms
+AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe
+geany_SOURCES = $(SRCS) vte.c vte.h
 geany_LDADD = @PACKAGE_LIBS@ -lstdc++ ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a $(INTLLIBS)
+
+INCLUDES = \
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\" -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
+	-I../scintilla/include -I../tagmanager/include @PACKAGE_CFLAGS@
+
+endif
+
+#geany_SOURCES = $(SRCS)
+#geany_LDADD = @PACKAGE_LIBS@ -lstdc++ ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a $(INTLLIBS)
