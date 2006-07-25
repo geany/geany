@@ -365,7 +365,11 @@ void document_new_file(filetype *ft)
 		doc_list[idx].mtime = time(NULL);
 		doc_list[idx].changed = FALSE;
 		document_set_text_changed(idx);
+#ifdef GEANY_WIN32
+		sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
+#else
 		sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
+#endif
 		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 		sci_empty_undo_buffer(doc_list[idx].sci);
 		sci_goto_pos(doc_list[idx].sci, 0, TRUE);

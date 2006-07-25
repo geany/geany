@@ -7,6 +7,7 @@
    src/main.c: Added menu item to the document menu to add/remove BOM.
  * src/win32.c, src/dialogs.c:
    Convert Unicode strings to wide characters to avoid weird display.
+ * src/document.c: Set CR/LF as EOL mode on new files on Windows.
 
 
 2006-07-24  Nick Treleaven  <nick.treleaven@btinternet.com>
