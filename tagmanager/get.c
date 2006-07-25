@@ -331,12 +331,9 @@ static void directiveDefine (const int c)
 
 static boolean directiveIf (const int c)
 {
-    DebugStatement ( const boolean ignore0 = isIgnore (); )
     const boolean ignore = pushConditional ((boolean) (c != '0'));
 
     Cpp.directive.state = DRCTV_NONE;
-    DebugStatement ( debugCppNest (TRUE, Cpp.directive.nestLevel);
-		    if (ignore != ignore0) debugCppIgnore (ignore); )
 
     return ignore;
 }

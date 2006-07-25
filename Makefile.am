@@ -8,7 +8,6 @@ EXTRA_DIST = \
 	geany.spec \
 	geany.glade \
 	geany_windres.rc \
-	geany_windres.h \
 	geany.gladep \
 	data/global.tags \
 	data/php.tags \

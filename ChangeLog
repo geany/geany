@@ -12,6 +12,12 @@
  * src/callbacks.c:
    Fixed broken Find usage.
    Put "No matches" message also in the message window.
+ * Makefile.am, geany_windres.rc, configure.in, src/Makefile.am,
+   scintilla/Makefile.am, src/callbacks.c, tagmanager/tm_work_object.c,
+   tagmanager/ctags.c, tagmanager/get.c:
+   Small changes to get cross compiling using mingw32 suite working.
+ * tagmanager/get.c: Applied patch to fix building with gcc 2.95
+                     (closes #1528516, thanks).
 
 
 2006-07-24  Enrico Tröger  <enrico.troeger@uvena.de>
