@@ -91,6 +91,25 @@ void filetypes_init_types(void)
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CPP]->title, filetypes[GEANY_FILETYPES_CPP]);
 	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_CPP]->title, filetypes[GEANY_FILETYPES_CPP]);
 
+#define D
+	filetypes[GEANY_FILETYPES_D] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_D]->id = GEANY_FILETYPES_D;
+	filetypes[GEANY_FILETYPES_D]->lang = 17;
+	filetypes[GEANY_FILETYPES_D]->name = g_strdup("D");
+	filetypes[GEANY_FILETYPES_D]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_D]->title = g_strdup(_("D source file"));
+	filetypes[GEANY_FILETYPES_D]->extension = g_strdup("d");
+	filetypes[GEANY_FILETYPES_D]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_D]->pattern[0] = g_strdup("*.d");
+	filetypes[GEANY_FILETYPES_D]->pattern[1] = g_strdup("*.di");
+	filetypes[GEANY_FILETYPES_D]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_D]->comment_open = g_strdup("//");
+	filetypes[GEANY_FILETYPES_D]->comment_close = NULL;
+	filetypes[GEANY_FILETYPES_D]->style_func_ptr = styleset_d;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_D]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_D]->title, filetypes[GEANY_FILETYPES_D]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_D]->title, filetypes[GEANY_FILETYPES_D]);
+
 #define JAVA
 	filetypes[GEANY_FILETYPES_JAVA] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_JAVA]->id = GEANY_FILETYPES_JAVA;
@@ -108,6 +127,63 @@ void filetypes_init_types(void)
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_JAVA]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_JAVA]->title, filetypes[GEANY_FILETYPES_JAVA]);
 	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_JAVA]->title, filetypes[GEANY_FILETYPES_JAVA]);
+
+#define PAS // to avoid warnings when building under Windows, the symbol PASCAL is there defined
+	filetypes[GEANY_FILETYPES_PASCAL] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_PASCAL]->id = GEANY_FILETYPES_PASCAL;
+	filetypes[GEANY_FILETYPES_PASCAL]->lang = 4;
+	filetypes[GEANY_FILETYPES_PASCAL]->name = g_strdup("Pascal");
+	filetypes[GEANY_FILETYPES_PASCAL]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_PASCAL]->title = g_strdup(_("Pascal source file"));
+	filetypes[GEANY_FILETYPES_PASCAL]->extension = g_strdup("pas");
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern = g_new0(gchar*, 6);
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[0] = g_strdup("*.pas");
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[1] = g_strdup("*.pp");
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[2] = g_strdup("*.inc");
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[3] = g_strdup("*.dpr");
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[4] = g_strdup("*.dpk");
+	filetypes[GEANY_FILETYPES_PASCAL]->pattern[5] = NULL;
+	filetypes[GEANY_FILETYPES_PASCAL]->style_func_ptr = styleset_pascal;
+	filetypes[GEANY_FILETYPES_PASCAL]->comment_open = g_strdup("{");
+	filetypes[GEANY_FILETYPES_PASCAL]->comment_close = g_strdup("}");
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_PASCAL]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_PASCAL]->title, filetypes[GEANY_FILETYPES_PASCAL]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PASCAL]->title, filetypes[GEANY_FILETYPES_PASCAL]);
+
+#define ASM
+	filetypes[GEANY_FILETYPES_ASM] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_ASM]->id = GEANY_FILETYPES_ASM;
+	filetypes[GEANY_FILETYPES_ASM]->lang = 9;
+	filetypes[GEANY_FILETYPES_ASM]->name = g_strdup("ASM");
+	filetypes[GEANY_FILETYPES_ASM]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_ASM]->title = g_strdup(_("Assembler source file"));
+	filetypes[GEANY_FILETYPES_ASM]->extension = g_strdup("asm");
+	filetypes[GEANY_FILETYPES_ASM]->pattern = g_new0(gchar*, 2);
+	filetypes[GEANY_FILETYPES_ASM]->pattern[0] = g_strdup("*.asm");
+	filetypes[GEANY_FILETYPES_ASM]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_ASM]->style_func_ptr = styleset_asm;
+	filetypes[GEANY_FILETYPES_ASM]->comment_open = g_strdup(";");
+	filetypes[GEANY_FILETYPES_ASM]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_ASM]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_ASM]->title, filetypes[GEANY_FILETYPES_ASM]);
+
+#define CAML
+	filetypes[GEANY_FILETYPES_CAML] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_CAML]->id = GEANY_FILETYPES_CAML;
+	filetypes[GEANY_FILETYPES_CAML]->lang = -2;
+	filetypes[GEANY_FILETYPES_CAML]->name = g_strdup("CAML");
+	filetypes[GEANY_FILETYPES_CAML]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_CAML]->title = g_strdup(_("(O)Caml source file"));
+	filetypes[GEANY_FILETYPES_CAML]->extension = g_strdup("ml");
+	filetypes[GEANY_FILETYPES_CAML]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_CAML]->pattern[0] = g_strdup("*.ml");
+	filetypes[GEANY_FILETYPES_CAML]->pattern[1] = g_strdup("*.mli");
+	filetypes[GEANY_FILETYPES_CAML]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_CAML]->style_func_ptr = styleset_caml;
+	filetypes[GEANY_FILETYPES_CAML]->comment_open = g_strdup("(*");
+	filetypes[GEANY_FILETYPES_CAML]->comment_close = g_strdup("*)");
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_CAML]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CAML]->title, filetypes[GEANY_FILETYPES_CAML]);
 
 #define PERL
 	filetypes[GEANY_FILETYPES_PERL] = g_new0(filetype, 1);
@@ -151,41 +227,6 @@ void filetypes_init_types(void)
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_PHP]->title, filetypes[GEANY_FILETYPES_PHP]);
 	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PHP]->title, filetypes[GEANY_FILETYPES_PHP]);
 
-#define XML
-	filetypes[GEANY_FILETYPES_XML] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_XML]->id = GEANY_FILETYPES_XML;
-	filetypes[GEANY_FILETYPES_XML]->lang = -2;
-	filetypes[GEANY_FILETYPES_XML]->name = g_strdup("XML");
-	filetypes[GEANY_FILETYPES_XML]->has_tags = FALSE;
-	filetypes[GEANY_FILETYPES_XML]->title = g_strdup(_("XML source file"));
-	filetypes[GEANY_FILETYPES_XML]->extension = g_strdup("xml");
-	filetypes[GEANY_FILETYPES_XML]->pattern = g_new0(gchar*, 3);
-	filetypes[GEANY_FILETYPES_XML]->pattern[0] = g_strdup("*.xml");
-	filetypes[GEANY_FILETYPES_XML]->pattern[1] = g_strdup("*.sgml");
-	filetypes[GEANY_FILETYPES_XML]->pattern[2] = NULL;
-	filetypes[GEANY_FILETYPES_XML]->style_func_ptr = styleset_xml;
-	filetypes[GEANY_FILETYPES_XML]->comment_open = g_strdup("<!--");
-	filetypes[GEANY_FILETYPES_XML]->comment_close = g_strdup("-->");
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_XML]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_XML]->title, filetypes[GEANY_FILETYPES_XML]);
-
-#define DOCBOOK
-	filetypes[GEANY_FILETYPES_DOCBOOK] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_DOCBOOK]->id = GEANY_FILETYPES_DOCBOOK;
-	filetypes[GEANY_FILETYPES_DOCBOOK]->lang = 12;
-	filetypes[GEANY_FILETYPES_DOCBOOK]->name = g_strdup("Docbook");
-	filetypes[GEANY_FILETYPES_DOCBOOK]->has_tags = TRUE;
-	filetypes[GEANY_FILETYPES_DOCBOOK]->title = g_strdup(_("Docbook source file"));
-	filetypes[GEANY_FILETYPES_DOCBOOK]->extension = g_strdup("docbook");
-	filetypes[GEANY_FILETYPES_DOCBOOK]->pattern = g_new0(gchar*, 2);
-	filetypes[GEANY_FILETYPES_DOCBOOK]->pattern[0] = g_strdup("*.docbook");
-	filetypes[GEANY_FILETYPES_DOCBOOK]->pattern[1] = NULL;
-	filetypes[GEANY_FILETYPES_DOCBOOK]->style_func_ptr = styleset_docbook;
-	filetypes[GEANY_FILETYPES_DOCBOOK]->comment_open = g_strdup("<!--");
-	filetypes[GEANY_FILETYPES_DOCBOOK]->comment_close = g_strdup("-->");
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_DOCBOOK]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_DOCBOOK]->title, filetypes[GEANY_FILETYPES_DOCBOOK]);
-
 #define PYTHON
 	filetypes[GEANY_FILETYPES_PYTHON] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_PYTHON]->id = GEANY_FILETYPES_PYTHON;
@@ -204,46 +245,43 @@ void filetypes_init_types(void)
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_PYTHON]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_PYTHON]->title, filetypes[GEANY_FILETYPES_PYTHON]);
 
-#define LATEX
-	filetypes[GEANY_FILETYPES_LATEX] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_LATEX]->id = GEANY_FILETYPES_LATEX;
-	filetypes[GEANY_FILETYPES_LATEX]->lang = 8;
-	filetypes[GEANY_FILETYPES_LATEX]->name = g_strdup("LaTeX");
-	filetypes[GEANY_FILETYPES_LATEX]->has_tags = TRUE;
-	filetypes[GEANY_FILETYPES_LATEX]->title = g_strdup(_("LaTeX source file"));
-	filetypes[GEANY_FILETYPES_LATEX]->extension = g_strdup("tex");
-	filetypes[GEANY_FILETYPES_LATEX]->pattern = g_new0(gchar*, 4);
-	filetypes[GEANY_FILETYPES_LATEX]->pattern[0] = g_strdup("*.tex");
-	filetypes[GEANY_FILETYPES_LATEX]->pattern[1] = g_strdup("*.sty");
-	filetypes[GEANY_FILETYPES_LATEX]->pattern[2] = g_strdup("*.idx");
-	filetypes[GEANY_FILETYPES_LATEX]->pattern[3] = NULL;
-	filetypes[GEANY_FILETYPES_LATEX]->style_func_ptr = styleset_latex;
-	filetypes[GEANY_FILETYPES_LATEX]->comment_open = g_strdup("%");
-	filetypes[GEANY_FILETYPES_LATEX]->comment_close = NULL;
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_LATEX]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_LATEX]->title, filetypes[GEANY_FILETYPES_LATEX]);
+#define RUBY
+	filetypes[GEANY_FILETYPES_RUBY] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_RUBY]->id = GEANY_FILETYPES_RUBY;
+	filetypes[GEANY_FILETYPES_RUBY]->lang = 14;
+	filetypes[GEANY_FILETYPES_RUBY]->name = g_strdup("Ruby");
+	filetypes[GEANY_FILETYPES_RUBY]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_RUBY]->title = g_strdup(_("Ruby source file"));
+	filetypes[GEANY_FILETYPES_RUBY]->extension = g_strdup("rb");
+	filetypes[GEANY_FILETYPES_RUBY]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_RUBY]->pattern[0] = g_strdup("*.rb");
+	filetypes[GEANY_FILETYPES_RUBY]->pattern[1] = g_strdup("*.rhtml");
+	filetypes[GEANY_FILETYPES_RUBY]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_RUBY]->style_func_ptr = styleset_ruby;
+	filetypes[GEANY_FILETYPES_RUBY]->comment_open = g_strdup("#");
+	filetypes[GEANY_FILETYPES_RUBY]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_RUBY]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_RUBY]->title, filetypes[GEANY_FILETYPES_RUBY]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_RUBY]->title, filetypes[GEANY_FILETYPES_RUBY]);
 
-#define PAS // to avoid warnings when building under Windows, the symbol PASCAL is there defined
-	filetypes[GEANY_FILETYPES_PASCAL] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_PASCAL]->id = GEANY_FILETYPES_PASCAL;
-	filetypes[GEANY_FILETYPES_PASCAL]->lang = 4;
-	filetypes[GEANY_FILETYPES_PASCAL]->name = g_strdup("Pascal");
-	filetypes[GEANY_FILETYPES_PASCAL]->has_tags = TRUE;
-	filetypes[GEANY_FILETYPES_PASCAL]->title = g_strdup(_("Pascal source file"));
-	filetypes[GEANY_FILETYPES_PASCAL]->extension = g_strdup("pas");
-	filetypes[GEANY_FILETYPES_PASCAL]->pattern = g_new0(gchar*, 6);
-	filetypes[GEANY_FILETYPES_PASCAL]->pattern[0] = g_strdup("*.pas");
-	filetypes[GEANY_FILETYPES_PASCAL]->pattern[1] = g_strdup("*.pp");
-	filetypes[GEANY_FILETYPES_PASCAL]->pattern[2] = g_strdup("*.inc");
-	filetypes[GEANY_FILETYPES_PASCAL]->pattern[3] = g_strdup("*.dpr");
-	filetypes[GEANY_FILETYPES_PASCAL]->pattern[4] = g_strdup("*.dpk");
-	filetypes[GEANY_FILETYPES_PASCAL]->pattern[5] = NULL;
-	filetypes[GEANY_FILETYPES_PASCAL]->style_func_ptr = styleset_pascal;
-	filetypes[GEANY_FILETYPES_PASCAL]->comment_open = g_strdup("{");
-	filetypes[GEANY_FILETYPES_PASCAL]->comment_close = g_strdup("}");
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_PASCAL]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_PASCAL]->title, filetypes[GEANY_FILETYPES_PASCAL]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PASCAL]->title, filetypes[GEANY_FILETYPES_PASCAL]);
+#define TCL
+	filetypes[GEANY_FILETYPES_TCL] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_TCL]->id = GEANY_FILETYPES_TCL;
+	filetypes[GEANY_FILETYPES_TCL]->lang = 15;
+	filetypes[GEANY_FILETYPES_TCL]->name = g_strdup("Tcl");
+	filetypes[GEANY_FILETYPES_TCL]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_TCL]->title = g_strdup(_("Tcl source file"));
+	filetypes[GEANY_FILETYPES_TCL]->extension = g_strdup("tcl");
+	filetypes[GEANY_FILETYPES_TCL]->pattern = g_new0(gchar*, 4);
+	filetypes[GEANY_FILETYPES_TCL]->pattern[0] = g_strdup("*.tcl");
+	filetypes[GEANY_FILETYPES_TCL]->pattern[1] = g_strdup("*.tk");
+	filetypes[GEANY_FILETYPES_TCL]->pattern[2] = g_strdup("*.wish");
+	filetypes[GEANY_FILETYPES_TCL]->pattern[3] = NULL;
+	filetypes[GEANY_FILETYPES_TCL]->style_func_ptr = styleset_tcl;
+	filetypes[GEANY_FILETYPES_TCL]->comment_open = g_strdup("#");
+	filetypes[GEANY_FILETYPES_TCL]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_TCL]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_TCL]->title, filetypes[GEANY_FILETYPES_TCL]);
 
 #define SH
 	filetypes[GEANY_FILETYPES_SH] = g_new0(filetype, 1);
@@ -287,6 +325,41 @@ void filetypes_init_types(void)
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_MAKE]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_MAKE]->title, filetypes[GEANY_FILETYPES_MAKE]);
 
+#define XML
+	filetypes[GEANY_FILETYPES_XML] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_XML]->id = GEANY_FILETYPES_XML;
+	filetypes[GEANY_FILETYPES_XML]->lang = -2;
+	filetypes[GEANY_FILETYPES_XML]->name = g_strdup("XML");
+	filetypes[GEANY_FILETYPES_XML]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_XML]->title = g_strdup(_("XML source file"));
+	filetypes[GEANY_FILETYPES_XML]->extension = g_strdup("xml");
+	filetypes[GEANY_FILETYPES_XML]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_XML]->pattern[0] = g_strdup("*.xml");
+	filetypes[GEANY_FILETYPES_XML]->pattern[1] = g_strdup("*.sgml");
+	filetypes[GEANY_FILETYPES_XML]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_XML]->style_func_ptr = styleset_xml;
+	filetypes[GEANY_FILETYPES_XML]->comment_open = g_strdup("<!--");
+	filetypes[GEANY_FILETYPES_XML]->comment_close = g_strdup("-->");
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_XML]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_XML]->title, filetypes[GEANY_FILETYPES_XML]);
+
+#define DOCBOOK
+	filetypes[GEANY_FILETYPES_DOCBOOK] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_DOCBOOK]->id = GEANY_FILETYPES_DOCBOOK;
+	filetypes[GEANY_FILETYPES_DOCBOOK]->lang = 12;
+	filetypes[GEANY_FILETYPES_DOCBOOK]->name = g_strdup("Docbook");
+	filetypes[GEANY_FILETYPES_DOCBOOK]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_DOCBOOK]->title = g_strdup(_("Docbook source file"));
+	filetypes[GEANY_FILETYPES_DOCBOOK]->extension = g_strdup("docbook");
+	filetypes[GEANY_FILETYPES_DOCBOOK]->pattern = g_new0(gchar*, 2);
+	filetypes[GEANY_FILETYPES_DOCBOOK]->pattern[0] = g_strdup("*.docbook");
+	filetypes[GEANY_FILETYPES_DOCBOOK]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_DOCBOOK]->style_func_ptr = styleset_docbook;
+	filetypes[GEANY_FILETYPES_DOCBOOK]->comment_open = g_strdup("<!--");
+	filetypes[GEANY_FILETYPES_DOCBOOK]->comment_close = g_strdup("-->");
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_DOCBOOK]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_DOCBOOK]->title, filetypes[GEANY_FILETYPES_DOCBOOK]);
+
 #define CSS
 	filetypes[GEANY_FILETYPES_CSS] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_CSS]->id = GEANY_FILETYPES_CSS;
@@ -303,6 +376,59 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_CSS]->comment_close = g_strdup("*/");
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_CSS]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CSS]->title, filetypes[GEANY_FILETYPES_CSS]);
+
+#define SQL
+	filetypes[GEANY_FILETYPES_SQL] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_SQL]->id = GEANY_FILETYPES_SQL;
+	filetypes[GEANY_FILETYPES_SQL]->lang = 11;
+	filetypes[GEANY_FILETYPES_SQL]->name = g_strdup("SQL");
+	filetypes[GEANY_FILETYPES_SQL]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_SQL]->title = g_strdup(_("SQL Dump file"));
+	filetypes[GEANY_FILETYPES_SQL]->extension = g_strdup("sql");
+	filetypes[GEANY_FILETYPES_SQL]->pattern = g_new0(gchar*, 2);
+	filetypes[GEANY_FILETYPES_SQL]->pattern[0] = g_strdup("*.sql");
+	filetypes[GEANY_FILETYPES_SQL]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_SQL]->style_func_ptr = styleset_sql;
+	filetypes[GEANY_FILETYPES_SQL]->comment_open = g_strdup("/*");
+	filetypes[GEANY_FILETYPES_SQL]->comment_close = g_strdup("*/");
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_SQL]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_SQL]->title, filetypes[GEANY_FILETYPES_SQL]);
+
+#define LATEX
+	filetypes[GEANY_FILETYPES_LATEX] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_LATEX]->id = GEANY_FILETYPES_LATEX;
+	filetypes[GEANY_FILETYPES_LATEX]->lang = 8;
+	filetypes[GEANY_FILETYPES_LATEX]->name = g_strdup("LaTeX");
+	filetypes[GEANY_FILETYPES_LATEX]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_LATEX]->title = g_strdup(_("LaTeX source file"));
+	filetypes[GEANY_FILETYPES_LATEX]->extension = g_strdup("tex");
+	filetypes[GEANY_FILETYPES_LATEX]->pattern = g_new0(gchar*, 4);
+	filetypes[GEANY_FILETYPES_LATEX]->pattern[0] = g_strdup("*.tex");
+	filetypes[GEANY_FILETYPES_LATEX]->pattern[1] = g_strdup("*.sty");
+	filetypes[GEANY_FILETYPES_LATEX]->pattern[2] = g_strdup("*.idx");
+	filetypes[GEANY_FILETYPES_LATEX]->pattern[3] = NULL;
+	filetypes[GEANY_FILETYPES_LATEX]->style_func_ptr = styleset_latex;
+	filetypes[GEANY_FILETYPES_LATEX]->comment_open = g_strdup("%");
+	filetypes[GEANY_FILETYPES_LATEX]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_LATEX]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_LATEX]->title, filetypes[GEANY_FILETYPES_LATEX]);
+
+#define OMS
+	filetypes[GEANY_FILETYPES_OMS] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_OMS]->id = GEANY_FILETYPES_OMS;
+	filetypes[GEANY_FILETYPES_OMS]->lang = -2;
+	filetypes[GEANY_FILETYPES_OMS]->name = g_strdup("O-Matrix");
+	filetypes[GEANY_FILETYPES_OMS]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_OMS]->title = g_strdup(_("O-Matrix source file"));
+	filetypes[GEANY_FILETYPES_OMS]->extension = g_strdup("oms");
+	filetypes[GEANY_FILETYPES_OMS]->pattern = g_new0(gchar*, 2);
+	filetypes[GEANY_FILETYPES_OMS]->pattern[0] = g_strdup("*.oms");
+	filetypes[GEANY_FILETYPES_OMS]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_OMS]->style_func_ptr = styleset_oms;
+	filetypes[GEANY_FILETYPES_OMS]->comment_open = g_strdup("#");
+	filetypes[GEANY_FILETYPES_OMS]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_OMS]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_OMS]->title, filetypes[GEANY_FILETYPES_OMS]);
 
 #define CONF
 	filetypes[GEANY_FILETYPES_CONF] = g_new0(filetype, 1);
@@ -325,132 +451,6 @@ void filetypes_init_types(void)
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_CONF]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CONF]->title, filetypes[GEANY_FILETYPES_CONF]);
 
-#define ASM
-	filetypes[GEANY_FILETYPES_ASM] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_ASM]->id = GEANY_FILETYPES_ASM;
-	filetypes[GEANY_FILETYPES_ASM]->lang = 9;
-	filetypes[GEANY_FILETYPES_ASM]->name = g_strdup("ASM");
-	filetypes[GEANY_FILETYPES_ASM]->has_tags = TRUE;
-	filetypes[GEANY_FILETYPES_ASM]->title = g_strdup(_("Assembler source file"));
-	filetypes[GEANY_FILETYPES_ASM]->extension = g_strdup("asm");
-	filetypes[GEANY_FILETYPES_ASM]->pattern = g_new0(gchar*, 2);
-	filetypes[GEANY_FILETYPES_ASM]->pattern[0] = g_strdup("*.asm");
-	filetypes[GEANY_FILETYPES_ASM]->pattern[1] = NULL;
-	filetypes[GEANY_FILETYPES_ASM]->style_func_ptr = styleset_asm;
-	filetypes[GEANY_FILETYPES_ASM]->comment_open = g_strdup(";");
-	filetypes[GEANY_FILETYPES_ASM]->comment_close = NULL;
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_ASM]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_ASM]->title, filetypes[GEANY_FILETYPES_ASM]);
-
-#define SQL
-	filetypes[GEANY_FILETYPES_SQL] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_SQL]->id = GEANY_FILETYPES_SQL;
-	filetypes[GEANY_FILETYPES_SQL]->lang = 11;
-	filetypes[GEANY_FILETYPES_SQL]->name = g_strdup("SQL");
-	filetypes[GEANY_FILETYPES_SQL]->has_tags = TRUE;
-	filetypes[GEANY_FILETYPES_SQL]->title = g_strdup(_("SQL Dump file"));
-	filetypes[GEANY_FILETYPES_SQL]->extension = g_strdup("sql");
-	filetypes[GEANY_FILETYPES_SQL]->pattern = g_new0(gchar*, 2);
-	filetypes[GEANY_FILETYPES_SQL]->pattern[0] = g_strdup("*.sql");
-	filetypes[GEANY_FILETYPES_SQL]->pattern[1] = NULL;
-	filetypes[GEANY_FILETYPES_SQL]->style_func_ptr = styleset_sql;
-	filetypes[GEANY_FILETYPES_SQL]->comment_open = g_strdup("/*");
-	filetypes[GEANY_FILETYPES_SQL]->comment_close = g_strdup("*/");
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_SQL]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_SQL]->title, filetypes[GEANY_FILETYPES_SQL]);
-
-#define CAML
-	filetypes[GEANY_FILETYPES_CAML] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_CAML]->id = GEANY_FILETYPES_CAML;
-	filetypes[GEANY_FILETYPES_CAML]->lang = -2;
-	filetypes[GEANY_FILETYPES_CAML]->name = g_strdup("CAML");
-	filetypes[GEANY_FILETYPES_CAML]->has_tags = FALSE;
-	filetypes[GEANY_FILETYPES_CAML]->title = g_strdup(_("(O)Caml source file"));
-	filetypes[GEANY_FILETYPES_CAML]->extension = g_strdup("ml");
-	filetypes[GEANY_FILETYPES_CAML]->pattern = g_new0(gchar*, 3);
-	filetypes[GEANY_FILETYPES_CAML]->pattern[0] = g_strdup("*.ml");
-	filetypes[GEANY_FILETYPES_CAML]->pattern[1] = g_strdup("*.mli");
-	filetypes[GEANY_FILETYPES_CAML]->pattern[2] = NULL;
-	filetypes[GEANY_FILETYPES_CAML]->style_func_ptr = styleset_caml;
-	filetypes[GEANY_FILETYPES_CAML]->comment_open = g_strdup("(*");
-	filetypes[GEANY_FILETYPES_CAML]->comment_close = g_strdup("*)");
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_CAML]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CAML]->title, filetypes[GEANY_FILETYPES_CAML]);
-
-#define OMS
-	filetypes[GEANY_FILETYPES_OMS] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_OMS]->id = GEANY_FILETYPES_OMS;
-	filetypes[GEANY_FILETYPES_OMS]->lang = -2;
-	filetypes[GEANY_FILETYPES_OMS]->name = g_strdup("O-Matrix");
-	filetypes[GEANY_FILETYPES_OMS]->has_tags = FALSE;
-	filetypes[GEANY_FILETYPES_OMS]->title = g_strdup(_("O-Matrix source file"));
-	filetypes[GEANY_FILETYPES_OMS]->extension = g_strdup("oms");
-	filetypes[GEANY_FILETYPES_OMS]->pattern = g_new0(gchar*, 2);
-	filetypes[GEANY_FILETYPES_OMS]->pattern[0] = g_strdup("*.oms");
-	filetypes[GEANY_FILETYPES_OMS]->pattern[1] = NULL;
-	filetypes[GEANY_FILETYPES_OMS]->style_func_ptr = styleset_oms;
-	filetypes[GEANY_FILETYPES_OMS]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_OMS]->comment_close = NULL;
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_OMS]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_OMS]->title, filetypes[GEANY_FILETYPES_OMS]);
-
-#define RUBY
-	filetypes[GEANY_FILETYPES_RUBY] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_RUBY]->id = GEANY_FILETYPES_RUBY;
-	filetypes[GEANY_FILETYPES_RUBY]->lang = 14;
-	filetypes[GEANY_FILETYPES_RUBY]->name = g_strdup("Ruby");
-	filetypes[GEANY_FILETYPES_RUBY]->has_tags = TRUE;
-	filetypes[GEANY_FILETYPES_RUBY]->title = g_strdup(_("Ruby source file"));
-	filetypes[GEANY_FILETYPES_RUBY]->extension = g_strdup("rb");
-	filetypes[GEANY_FILETYPES_RUBY]->pattern = g_new0(gchar*, 3);
-	filetypes[GEANY_FILETYPES_RUBY]->pattern[0] = g_strdup("*.rb");
-	filetypes[GEANY_FILETYPES_RUBY]->pattern[1] = g_strdup("*.rhtml");
-	filetypes[GEANY_FILETYPES_RUBY]->pattern[2] = NULL;
-	filetypes[GEANY_FILETYPES_RUBY]->style_func_ptr = styleset_ruby;
-	filetypes[GEANY_FILETYPES_RUBY]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_RUBY]->comment_close = NULL;
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_RUBY]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_RUBY]->title, filetypes[GEANY_FILETYPES_RUBY]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_RUBY]->title, filetypes[GEANY_FILETYPES_RUBY]);
-
-#define TCL
-	filetypes[GEANY_FILETYPES_TCL] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_TCL]->id = GEANY_FILETYPES_TCL;
-	filetypes[GEANY_FILETYPES_TCL]->lang = 15;
-	filetypes[GEANY_FILETYPES_TCL]->name = g_strdup("Tcl");
-	filetypes[GEANY_FILETYPES_TCL]->has_tags = TRUE;
-	filetypes[GEANY_FILETYPES_TCL]->title = g_strdup(_("Tcl source file"));
-	filetypes[GEANY_FILETYPES_TCL]->extension = g_strdup("tcl");
-	filetypes[GEANY_FILETYPES_TCL]->pattern = g_new0(gchar*, 4);
-	filetypes[GEANY_FILETYPES_TCL]->pattern[0] = g_strdup("*.tcl");
-	filetypes[GEANY_FILETYPES_TCL]->pattern[1] = g_strdup("*.tk");
-	filetypes[GEANY_FILETYPES_TCL]->pattern[2] = g_strdup("*.wish");
-	filetypes[GEANY_FILETYPES_TCL]->pattern[3] = NULL;
-	filetypes[GEANY_FILETYPES_TCL]->style_func_ptr = styleset_tcl;
-	filetypes[GEANY_FILETYPES_TCL]->comment_open = g_strdup("#");
-	filetypes[GEANY_FILETYPES_TCL]->comment_close = NULL;
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_TCL]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_TCL]->title, filetypes[GEANY_FILETYPES_TCL]);
-
-#define D
-	filetypes[GEANY_FILETYPES_D] = g_new0(filetype, 1);
-	filetypes[GEANY_FILETYPES_D]->id = GEANY_FILETYPES_D;
-	filetypes[GEANY_FILETYPES_D]->lang = 17;
-	filetypes[GEANY_FILETYPES_D]->name = g_strdup("D");
-	filetypes[GEANY_FILETYPES_D]->has_tags = TRUE;
-	filetypes[GEANY_FILETYPES_D]->title = g_strdup(_("D source file"));
-	filetypes[GEANY_FILETYPES_D]->extension = g_strdup("d");
-	filetypes[GEANY_FILETYPES_D]->pattern = g_new0(gchar*, 3);
-	filetypes[GEANY_FILETYPES_D]->pattern[0] = g_strdup("*.d");
-	filetypes[GEANY_FILETYPES_D]->pattern[1] = g_strdup("*.di");
-	filetypes[GEANY_FILETYPES_D]->pattern[2] = NULL;
-	filetypes[GEANY_FILETYPES_D]->comment_open = g_strdup("//");
-	filetypes[GEANY_FILETYPES_D]->comment_close = NULL;
-	filetypes[GEANY_FILETYPES_D]->style_func_ptr = styleset_d;
-	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_D]);
-	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_D]->title, filetypes[GEANY_FILETYPES_D]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_D]->title, filetypes[GEANY_FILETYPES_D]);
-
 #define ALL
 	filetypes[GEANY_FILETYPES_ALL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;
@@ -467,7 +467,6 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_ALL]->comment_close = NULL;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_ALL]);
 	filetypes_create_menu_item(filetype_menu, _("None"), filetypes[GEANY_FILETYPES_ALL]);
-
 }
 
 

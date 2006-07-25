@@ -2,6 +2,7 @@
 
  * src/encodings.c, src/document.c, src/keyfile.c, src/main.c:
    Save default encoding for new files as charset string.
+ * src/filetypes.c: Reordered the filetypes (just a cosmetic change).
 
 
 2006-07-24  Enrico Tröger  <enrico.troeger@uvena.de>

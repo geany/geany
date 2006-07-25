@@ -29,28 +29,32 @@ enum
 {
 	GEANY_FILETYPES_C = 0,		// 0
 	GEANY_FILETYPES_CPP,		// 1
-	GEANY_FILETYPES_JAVA,		// 2
-	GEANY_FILETYPES_PERL,		// 3
-	GEANY_FILETYPES_PHP,		// 4
-	GEANY_FILETYPES_XML,		// 5
-	GEANY_FILETYPES_DOCBOOK,	// 6
-	GEANY_FILETYPES_PYTHON,		// 7
-	GEANY_FILETYPES_LATEX,		// 8
-	GEANY_FILETYPES_PASCAL,		// 9
-	GEANY_FILETYPES_SH,			// 10
-	GEANY_FILETYPES_MAKE,		// 11
-	GEANY_FILETYPES_CSS,		// 12
-	GEANY_FILETYPES_CONF,		// 13
-	GEANY_FILETYPES_ASM,		// 14
-	GEANY_FILETYPES_SQL,		// 15
-	GEANY_FILETYPES_CAML,		// 16
-	GEANY_FILETYPES_OMS,		// 17
-	GEANY_FILETYPES_RUBY,		// 18
-	GEANY_FILETYPES_TCL,		// 19
-	GEANY_FILETYPES_D,			// 20
-	GEANY_FILETYPES_ALL,		// 21
-	GEANY_MAX_FILE_TYPES		// 22
+	GEANY_FILETYPES_D,			// 2
+	GEANY_FILETYPES_JAVA,		// 3
+	GEANY_FILETYPES_PASCAL,		// 4
+	GEANY_FILETYPES_ASM,		// 5
+	GEANY_FILETYPES_CAML,		// 6
+	GEANY_FILETYPES_PERL,		// 7
+	GEANY_FILETYPES_PHP,		// 8
+	GEANY_FILETYPES_PYTHON,		// 9
+	GEANY_FILETYPES_RUBY,		// 10
+	GEANY_FILETYPES_TCL,		// 11
+	GEANY_FILETYPES_SH,			// 12
+	GEANY_FILETYPES_MAKE,		// 13
+ 	GEANY_FILETYPES_XML,		// 14
+	GEANY_FILETYPES_DOCBOOK,	// 15
+/*
+	GEANY_FILETYPES_HTML,		// 16
+*/
+	GEANY_FILETYPES_CSS,		// 17
+	GEANY_FILETYPES_SQL,		// 18
+	GEANY_FILETYPES_LATEX,		// 19
+	GEANY_FILETYPES_OMS,		// 20
+	GEANY_FILETYPES_CONF,		// 21
+	GEANY_FILETYPES_ALL,		// 22
+	GEANY_MAX_FILE_TYPES		// 23
 };
+
 
 struct build_menu_items
 {
@@ -74,6 +78,7 @@ struct build_programs
 typedef struct filetype
 {
 	guint	 		  id;
+	guint	 		  uid;				// unique id as reference for saved filetype in config file
 	langType 		  lang;				// represents the langType of tagmanager(see the table
 										// in tagmanager/parsers.h), -1 represents all, -2 none
 	gchar	 		 *name;				// will be used as name for tagmanager
