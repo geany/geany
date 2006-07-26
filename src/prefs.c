@@ -434,7 +434,11 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		app->pref_toolbar_show_undo = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_compile");
+#ifdef GEANY_WIN32
+		app->pref_toolbar_show_compile = FALSE;
+#else
 		app->pref_toolbar_show_compile = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+#endif
 
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_colour");
 		app->pref_toolbar_show_colour = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -912,6 +916,10 @@ void dialogs_show_prefs_dialog(void)
 
 		app->prefs_dialog = create_prefs_dialog();
 		gtk_window_set_transient_for(GTK_WINDOW(app->prefs_dialog), GTK_WINDOW(app->window));
+
+#ifdef GEANY_WIN32
+		gtk_widget_hide(lookup_widget(app->prefs_dialog, "check_toolbar_compile"));
+#endif
 
 		// init the default file encoding combo box
 		combo = lookup_widget(app->prefs_dialog, "combo_encoding");
