@@ -25,7 +25,7 @@
 
 #include "geany.h"
 
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 
 #include <windows.h>
 #include <commdlg.h>
@@ -356,7 +356,7 @@ gboolean win32_message_dialog(GtkMessageType type, const gchar *msg)
 	}
 
 	// convert the Unicode chars to wide chars
-	/// TODO test if LANG == C then possibly skip conversion
+	/// TODO test if LANG == C then possibly skip conversion => g_win32_getlocale()
 	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0]));
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
 

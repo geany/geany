@@ -233,7 +233,9 @@ static GtkWidget *create_dialog(void)
 	label = gtk_label_new(_("License"));
 	gtk_widget_show(label);
 
-	g_file_get_contents(GEANY_DATA_DIR G_DIR_SEPARATOR_S "GPL-2", &license_text, NULL, NULL);
+	g_snprintf(buffer, sizeof(buffer), "%s" G_DIR_SEPARATOR_S "GPL-2", app->datadir);
+
+	g_file_get_contents(buffer, &license_text, NULL, NULL);
 	if (license_text == NULL)
 	{
 		license_text = g_strdup("License text could not be found, please google for GPLv2");

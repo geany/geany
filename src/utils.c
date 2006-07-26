@@ -57,7 +57,7 @@
 
 void utils_start_browser(const gchar *uri)
 {
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	win32_open_browser(uri);
 #else
 	const gchar *argv[3];
@@ -951,7 +951,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 
 gboolean utils_check_disk_status(gint idx)
 {
-#ifndef GEANY_WIN32
+#ifndef G_OS_WIN32
 	struct stat st;
 	time_t t;
 	gchar *locale_filename;
@@ -1207,7 +1207,7 @@ gboolean utils_is_absolute_path(const gchar *path)
 {
 	if (! path || *path == '\0')
 		return FALSE;
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	if (path[0] == '\\' || path[1] == ':')
 		return TRUE;
 #else
@@ -1245,7 +1245,7 @@ void utils_widget_show_hide(GtkWidget *widget, gboolean show)
 
 void utils_build_show_hide(gint idx)
 {
-#ifndef GEANY_WIN32
+#ifndef G_OS_WIN32
 	gboolean is_header = FALSE;
 	gchar *ext = NULL;
 	filetype *ft;
@@ -1488,7 +1488,7 @@ gchar *utils_get_hostname(void)
 }
 
 
-gint utils_make_settings_dir(const gchar *dir)
+gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gchar *doc_dir)
 {
 	gint error_nr = 0;
 	gchar *filetypes_readme = g_strconcat(
@@ -1501,7 +1501,7 @@ gint utils_make_settings_dir(const gchar *dir)
 	if (! g_file_test(dir, G_FILE_TEST_EXISTS))
 	{
 		geany_debug("creating config directory %s", dir);
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 		if (mkdir(dir) != 0) error_nr = errno;
 #else
 		if (mkdir(dir, 0700) != 0) error_nr = errno;
@@ -1510,10 +1510,15 @@ gint utils_make_settings_dir(const gchar *dir)
 
 	if (error_nr == 0 && ! g_file_test(filetypes_readme, G_FILE_TEST_EXISTS))
 	{	// try to write template.README
-		error_nr = utils_write_file(filetypes_readme,
+		gchar *text;
+		text = g_strconcat(
 "There are several template files in this directory. For these templates you can use wildcards.\n\
-For more information read the documentation (in " DOCDIR " or visit " GEANY_HOMEPAGE ").");
-		if (error_nr == 0 && ! g_file_test(filetypes_readme, G_FILE_TEST_EXISTS))
+For more information read the documentation (in ", doc_dir, "index.html or visit " GEANY_HOMEPAGE ").",
+					NULL);
+		error_nr = utils_write_file(filetypes_readme, text);
+		g_free(text);
+
+ 		if (error_nr == 0 && ! g_file_test(filetypes_readme, G_FILE_TEST_EXISTS))
 		{ // check whether write test was successful, otherwise directory is not writable
 			geany_debug("The chosen configuration directory is not writable.");
 			errno = EPERM;
@@ -1525,16 +1530,21 @@ For more information read the documentation (in " DOCDIR " or visit " GEANY_HOME
 	{
 		if (! g_file_test(filedefs_dir, G_FILE_TEST_EXISTS))
 		{
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 			if (mkdir(filedefs_dir) != 0) error_nr = errno;
 #else
 			if (mkdir(filedefs_dir, 0700) != 0) error_nr = errno;
 #endif
 		}
 		if (error_nr == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
-			utils_write_file(filedefs_readme,
-"Copy files from " PACKAGE_DATA_DIR G_DIR_SEPARATOR_S PACKAGE " to this directory to overwrite them. To use the defaults, just delete the file in this directory.\n\
-For more information read the documentation (in " DOCDIR " or visit " GEANY_HOMEPAGE ").");
+		{
+			gchar *text = g_strconcat(
+"Copy files from ", data_dir, " to this directory to overwrite "
+"them. To use the defaults, just delete the file in this directory.\nFor more information read "
+"the documentation (in ", doc_dir, "index.html or visit " GEANY_HOMEPAGE ").", NULL);
+			utils_write_file(filedefs_readme, text);
+			g_free(text);
+		}
 	}
 
 	g_free(filetypes_readme);

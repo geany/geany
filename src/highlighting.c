@@ -189,9 +189,10 @@ static void styleset_common_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.common", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.common", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.common", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.common", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_ALL] = g_new(style_set, 1);
@@ -211,6 +212,7 @@ static void styleset_common_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -334,9 +336,10 @@ static void styleset_c_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.c", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.c", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.c", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.c", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_C] = g_new(style_set, 1);
@@ -371,14 +374,17 @@ static void styleset_c_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 
 	// load global tags file for C autocompletion
 	if (! app->ignore_global_tags && ! global_c_tags_loaded)
 	{
+		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "global.tags", NULL);
 		// 0 is the langType used in TagManager (see the table in tagmanager/parsers.h)
-		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags", 0);
+		tm_workspace_load_global_tags(file, 0);
 		global_c_tags_loaded = TRUE;
+		g_free(file);
 	}
 }
 
@@ -465,9 +471,10 @@ static void styleset_cpp_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.cpp", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.cpp", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.cpp", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.cpp", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_CPP] = g_new(style_set, 1);
@@ -502,14 +509,17 @@ static void styleset_cpp_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 
 	// load global tags file for C autocompletion
 	if (! app->ignore_global_tags && ! global_c_tags_loaded)
 	{
-		// 0 is the langType used in TagManager (see the table in tagmanager/parsers.h)
-		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags", 1);
+		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "global.tags", NULL);
+		// 1 is the langType used in TagManager (see the table in tagmanager/parsers.h)
+		tm_workspace_load_global_tags(file, 1);
 		global_c_tags_loaded = TRUE;
+		g_free(file);
 	}
 }
 
@@ -594,9 +604,10 @@ static void styleset_pascal_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.pascal", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.pascal", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.pascal", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.pascal", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_PASCAL] = g_new(style_set, 1);
@@ -624,6 +635,7 @@ static void styleset_pascal_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -665,9 +677,10 @@ static void styleset_makefile_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.makefile", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.makefile", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.makefile", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.makefile", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_MAKE] = g_new(style_set, 1);
@@ -686,6 +699,7 @@ static void styleset_makefile_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -713,9 +727,10 @@ static void styleset_latex_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.latex", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.latex", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.latex", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.latex", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_LATEX] = g_new(style_set, 1);
@@ -735,13 +750,16 @@ static void styleset_latex_init(void)
 	// load global tags file for LaTeX autocompletion
 	if (! app->ignore_global_tags && ! global_latex_tags_loaded)
 	{
+		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "latex.tags", NULL);
 		// 8 is the langType used in TagManager (see the table in tagmanager/parsers.h)
-		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "latex.tags", 8);
+		tm_workspace_load_global_tags(file, 8);
 		global_latex_tags_loaded = TRUE;
+		g_free(file);
 	}
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -769,9 +787,10 @@ static void styleset_php_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.php", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.php", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.php", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.php", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_PHP] = g_new(style_set, 1);
@@ -783,19 +802,24 @@ static void styleset_php_init(void)
 	// load global tags file for PHP autocompletion
 	if (! app->ignore_global_tags && ! global_php_tags_loaded)
 	{
+		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "php.tags", NULL);
 		// 6 is the langType used in TagManager (see the table in tagmanager/parsers.h)
-		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "php.tags", 6);
+		tm_workspace_load_global_tags(file, 6);
 		global_php_tags_loaded = TRUE;
+		g_free(file);
 	}
 	// load global tags file for HTML entities autocompletion
 	if (! app->ignore_global_tags && ! global_html_tags_loaded)
 	{
-		html_entities = utils_read_file_in_array(GEANY_DATA_DIR G_DIR_SEPARATOR_S "html_entities.tags");
+		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "html_entities.tags", NULL);
+		html_entities = utils_read_file_in_array(file);
 		global_html_tags_loaded = TRUE;
+		g_free(file);
 	}
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -820,9 +844,10 @@ static void styleset_markup_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.xml", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.xml", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.xml", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.xml", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_XML] = g_new(style_set, 1);
@@ -899,6 +924,7 @@ static void styleset_markup_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -1128,9 +1154,10 @@ static void styleset_java_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.java", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.java", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.java", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.java", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config,  f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_JAVA] = g_new(style_set, 1);
@@ -1172,6 +1199,7 @@ static void styleset_java_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -1226,9 +1254,10 @@ static void styleset_perl_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.perl", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.perl", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.perl", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.perl", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_PERL] = g_new(style_set, 1);
@@ -1286,6 +1315,7 @@ static void styleset_perl_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -1330,9 +1360,10 @@ static void styleset_python_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.python", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.python", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.python", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.python", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_PYTHON] = g_new(style_set, 1);
@@ -1360,6 +1391,7 @@ static void styleset_python_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -1397,9 +1429,10 @@ static void styleset_ruby_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.ruby", NULL);
+	gchar *f0 = g_strconcat(app->datadir,  G_DIR_SEPARATOR_S "filetypes.ruby", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.ruby", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.ruby", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_RUBY] = g_new(style_set, 1);
@@ -1432,6 +1465,7 @@ static void styleset_ruby_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -1471,9 +1505,10 @@ static void styleset_sh_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.sh", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.sh", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.sh", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.sh", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_SH] = g_new(style_set, 1);
@@ -1498,6 +1533,7 @@ static void styleset_sh_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -1549,9 +1585,10 @@ static void styleset_docbook_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.docbook", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.docbook", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.docbook", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.docbook", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_DOCBOOK] = g_new(style_set, 1);
@@ -1650,6 +1687,7 @@ static void styleset_docbook_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -1719,9 +1757,10 @@ static void styleset_css_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.css", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.css", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.css", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.css", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_CSS] = g_new(style_set, 1);
@@ -1773,6 +1812,7 @@ static void styleset_css_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -1808,9 +1848,10 @@ static void styleset_conf_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.conf", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.conf", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.conf", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.conf", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_CONF] = g_new(style_set, 1);
@@ -1828,6 +1869,7 @@ static void styleset_conf_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -1857,9 +1899,10 @@ static void styleset_asm_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.asm", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.asm", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.asm", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.asm", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_ASM] = g_new(style_set, 1);
@@ -1890,6 +1933,7 @@ static void styleset_asm_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -1933,9 +1977,10 @@ static void styleset_sql_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.sql", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.sql", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.sql", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.sql", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_SQL] = g_new(style_set, 1);
@@ -1991,6 +2036,7 @@ static void styleset_sql_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -2030,9 +2076,10 @@ static void styleset_caml_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.caml", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.caml", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.caml", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.caml", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_CAML] = g_new(style_set, 1);
@@ -2066,6 +2113,7 @@ static void styleset_caml_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -2105,9 +2153,10 @@ static void styleset_oms_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.oms", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.oms", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.oms", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.oms", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_OMS] = g_new(style_set, 1);
@@ -2136,6 +2185,7 @@ static void styleset_oms_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -2174,9 +2224,10 @@ static void styleset_tcl_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.tcl", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.tcl", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.tcl", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.tcl", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_TCL] = g_new(style_set, 1);
@@ -2210,6 +2261,7 @@ static void styleset_tcl_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 }
 
@@ -2257,9 +2309,10 @@ static void styleset_d_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
-	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, "filetypes.d", NULL);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.d", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.d", NULL);
 
-	styleset_load_file(config, GEANY_DATA_DIR G_DIR_SEPARATOR_S "filetypes.d", G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_D] = g_new(style_set, 1);
@@ -2294,15 +2347,18 @@ static void styleset_d_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
+	g_free(f0);
 	g_free(f);
 
 	// load global tags file for C autocompletion
 	if (! app->ignore_global_tags && ! global_c_tags_loaded)
 	{
+		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "global.tags", NULL);
 		// 0 is the langType used in TagManager (see the table in tagmanager/parsers.h)
 		// C++ is a special case, here we use 0 to have C global tags in C++, too
-		tm_workspace_load_global_tags(GEANY_DATA_DIR G_DIR_SEPARATOR_S "global.tags", 0);
+		tm_workspace_load_global_tags(file, 0);
 		global_c_tags_loaded = TRUE;
+		g_free(file);
 	}
 }
 
@@ -2312,7 +2368,6 @@ void styleset_d(ScintillaObject *sci)
 	if (types[GEANY_FILETYPES_D] == NULL) styleset_d_init();
 
 	styleset_common(sci, 5);
-
 
 	/* Assign global keywords */
 	if ((app->tm_workspace) && (app->tm_workspace->global_tags))

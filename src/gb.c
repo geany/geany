@@ -37,12 +37,6 @@
 #define IMAGE_BUTTON_UP		11
 #define IMAGE_BUTTON_DOWN	12
 
-#ifdef GEANY_WIN32
-# include <windows.h>
-# include <commdlg.h>
-# define GTK_BANDIT_WIN32
-#endif
-
 
 unsigned short lap;
 gint points;

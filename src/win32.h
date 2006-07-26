@@ -21,7 +21,7 @@
  */
 
 
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 
 
 void win32_show_pref_file_dialog(GtkEntry *item);

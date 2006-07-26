@@ -151,7 +151,7 @@ gchar utils_brace_opposite(gchar ch);
 
 gchar *utils_get_hostname(void);
 
-gint utils_make_settings_dir(const gchar *dir);
+gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gchar *doc_dir);
 
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement);
 

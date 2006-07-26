@@ -43,14 +43,6 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
-#if defined(G_OS_WIN32) || defined(WIN32)
-# define GEANY_WIN32
-# define GEANY_DATA_DIR PACKAGE_DATA_DIR
-#else
-# define GEANY_DATA_DIR PACKAGE_DATA_DIR "/" PACKAGE
-#endif
-
-
 // for detailed description look in the documentation, things are not
 // listed in the documentation should not be changed ;-)
 #define GEANY_HOME_DIR					g_get_home_dir()
@@ -82,9 +74,6 @@
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Sans 9"
 #define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
 
-#ifndef DOCDIR
-# define DOCDIR PACKAGE_DATA_DIR"/doc/"PACKAGE"/html/"
-#endif
 
 
 /* structure for representing an open tab with all its related stuff. */
@@ -198,6 +187,8 @@ typedef struct MyApp
 	gchar				*tagbar_font;
 	gchar				*msgwin_font;
 	gchar				*configdir;
+	gchar				*datadir;
+	gchar				*docdir;
 	gchar				*search_text;
 	gchar				 build_make_custopt[256];
 	gchar				*tools_browser_cmd;

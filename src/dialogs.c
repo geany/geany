@@ -54,7 +54,7 @@ void dialogs_show_open_file ()
 {
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) < GEANY_MAX_OPEN_FILES)
 	{
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 		win32_show_file_dialog(TRUE);
 #else /* X11, not win32: use GTK_FILE_CHOOSER */
 
@@ -156,7 +156,7 @@ void dialogs_show_open_file ()
 /* This shows the file selection dialog to save a file. */
 void dialogs_show_save_as ()
 {
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	win32_show_file_dialog(FALSE);
 #else
 	gint idx = document_get_cur_idx();
@@ -214,7 +214,7 @@ void dialogs_show_save_as ()
 
 void dialogs_show_info(const gchar *text, ...)
 {
-#ifndef GEANY_WIN32
+#ifndef G_OS_WIN32
 	GtkWidget *dialog;
 #endif
 	gchar *string = g_malloc(512);
@@ -224,14 +224,14 @@ void dialogs_show_info(const gchar *text, ...)
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
 
-#ifdef GEANY_WIN32
-	win32_message_dialog(GTK_MESSAGE_INFO,  string);
+#ifdef G_OS_WIN32
+	win32_message_dialog(GTK_MESSAGE_INFO, string);
 #else
 
-	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
                                   GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", string);
-	gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
 #endif
 	g_free(string);
 }
@@ -239,7 +239,7 @@ void dialogs_show_info(const gchar *text, ...)
 
 void dialogs_show_error(const gchar *text, ...)
 {
-#ifndef GEANY_WIN32
+#ifndef G_OS_WIN32
 	GtkWidget *dialog;
 #endif
 	gchar *string = g_malloc(512);
@@ -249,7 +249,7 @@ void dialogs_show_error(const gchar *text, ...)
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
 
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	win32_message_dialog(GTK_MESSAGE_ERROR, string);
 #else
 	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -263,7 +263,7 @@ void dialogs_show_error(const gchar *text, ...)
 
 gboolean dialogs_show_unsaved_file(gint idx)
 {
-#ifndef GEANY_WIN32
+#ifndef G_OS_WIN32
 	GtkWidget *dialog, *button, *label, *image, *hbox, *align;
 #endif
 	gchar *msg;
@@ -281,7 +281,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 	{
 		msg  = g_strdup(_("The file is not saved.\nDo you want to save it before closing?"));
 	}
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	ret = win32_message_dialog_unsaved(msg);
 #else
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -336,7 +336,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 /* This shows the font selection dialog to choose a font. */
 void dialogs_show_open_font(void)
 {
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	win32_show_font_dialog();
 #else
 
@@ -419,7 +419,7 @@ void dialogs_show_word_count(void)
 /* This shows the color selection dialog to choose a color. */
 void dialogs_show_color(void)
 {
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	win32_show_color_dialog();
 #else
 
@@ -1696,7 +1696,7 @@ void dialogs_show_file_properties(gint idx)
 
 gboolean dialogs_show_question(const gchar *text, ...)
 {
-#ifndef GEANY_WIN32
+#ifndef G_OS_WIN32
 	GtkWidget *dialog;
 #endif
 	gchar *string = g_malloc(512);
@@ -1707,7 +1707,7 @@ gboolean dialogs_show_question(const gchar *text, ...)
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
 
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	ret = win32_message_dialog(GTK_MESSAGE_QUESTION, string);
 #else
 	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,

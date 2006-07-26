@@ -76,7 +76,7 @@ gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
 	{
 		gchar *dl_fname = (is_tm_filename && doc_list[i].tm_file) ?
 							doc_list[i].tm_file->file_name : doc_list[i].file_name;
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 		// ignore the case of filenames and paths under WIN32, causes errors if not
 		if (dl_fname && ! strcasecmp(dl_fname, filename)) return i;
 #else
@@ -222,7 +222,7 @@ gint document_create_new_sci(const gchar *filename)
 
 	gtk_widget_show(GTK_WIDGET(sci));
 
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	sci_set_codepage(sci, 0);
 #else
 	sci_set_codepage(sci, SC_CP_UTF8);
@@ -366,7 +366,7 @@ void document_new_file(filetype *ft)
 		doc_list[idx].mtime = time(NULL);
 		doc_list[idx].changed = FALSE;
 		document_set_text_changed(idx);
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 		sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
 #else
 		sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
@@ -458,7 +458,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		return -1;
 	}
 
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	if (! g_file_get_contents(utf8_filename, &data, &size, &err))
 #else
 	if (! g_file_get_contents(locale_filename, &data, &size, &err))

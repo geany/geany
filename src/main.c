@@ -454,12 +454,33 @@ gint main(gint argc, gchar **argv)
 	gint mkdir_result = 0;
 	gint idx;
 	gchar *config_dir;
+	gchar *data_dir;
+	gchar *doc_dir;
+	gchar *locale_dir;
+
+	// set paths
+#ifdef G_OS_WIN32
+	// take the installation directory(the one where geany.exe is located) as the base for the
+	// language catalogs, documentation and data files
+	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+
+	data_dir = g_strconcat(install_dir, "\\data", NULL); // e.g. C:\Program Files\geany\data
+	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
+	locale_dir = g_strdup(data_dir);
+
+	g_free(install_dir);
+#else
+	data_dir = g_strdup(PACKAGE_DATA_DIR "/" PACKAGE "/"); // e.g. /usr/share/geany
+	doc_dir = g_strdup(PACKAGE_DATA_DIR "/doc/" PACKAGE "/html/");
+	locale_dir = g_strdup(PACKAGE_LOCALE_DIR);
+#endif
 
 #ifdef ENABLE_NLS
-	bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 	textdomain(GETTEXT_PACKAGE);
 #endif
+	g_free(locale_dir);
 
 	context = g_option_context_new(_(" - A fast and lightweight IDE"));
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
@@ -490,13 +511,13 @@ gint main(gint argc, gchar **argv)
 	if (alternate_config) config_dir = g_strdup(alternate_config);
 	else config_dir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
 
-	mkdir_result = utils_make_settings_dir(config_dir);
+	mkdir_result = utils_make_settings_dir(config_dir, data_dir, doc_dir);
 	if (mkdir_result != 0)
 	{
 		if (! dialogs_show_question(
 			_("Configuration directory could not be created (%s).\nThere could be some problems "
-			  "using %s without a configuration directory.\nStart %s anyway?"),
-			  g_strerror(mkdir_result), PACKAGE, PACKAGE))
+			  "using Geany without a configuration directory.\nStart Geany anyway?"),
+			  g_strerror(mkdir_result)))
 		{
 			g_free(config_dir);
 			return (0);
@@ -512,6 +533,8 @@ gint main(gint argc, gchar **argv)
 
 	// inits
 	main_init();
+	app->datadir = data_dir;
+	app->docdir = doc_dir;
 	gtk_widget_set_size_request(app->window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
 	gtk_window_set_default_size(GTK_WINDOW(app->window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 	encodings_init();
@@ -609,7 +632,7 @@ gint main(gint argc, gchar **argv)
 	utils_build_show_hide(idx);
 	utils_update_tag_list(idx, FALSE);
 
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	// hide "Build" menu item, at least until it is available for Windows
 	gtk_widget_hide(lookup_widget(app->window, "menu_build1"));
 	gtk_widget_hide(app->compile_button);

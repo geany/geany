@@ -44,22 +44,27 @@ AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -mms-bitfields
 #AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -mms-bitfields -g -O0
 geany_LDFLAGS =	-mwindows
 
-INCLUDES = \
-	-DPACKAGE_DATA_DIR=\"data\" -DPACKAGE_LOCALE_DIR=\"data\" -I../scintilla/include \
-	-I../tagmanager/include -DENABLE_NLS -I/usr/local/cross-tools/include @PACKAGE_CFLAGS@
+INCLUDES = -I../scintilla/include -I../tagmanager/include -DENABLE_NLS \
+           -I/usr/local/cross-tools/include @PACKAGE_CFLAGS@
 
 geany_windres.res:
 	$(WINDRES) -i ../geany_windres.rc --input-format=rc -o geany_windres.res -O coff;
 
+clean-local:
+	rm -f windres.res
+
 else
 # build Geany for all other platforms
 AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe
+#AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -g -O0
 geany_SOURCES = $(SRCS) vte.c vte.h
 geany_LDADD = @PACKAGE_LIBS@ -lstdc++ ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a $(INTLLIBS)
 
 INCLUDES = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-I../scintilla/include -I../tagmanager/include @PACKAGE_CFLAGS@
+
+clean-local:
 
 endif
 

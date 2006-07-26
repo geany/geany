@@ -1,3 +1,15 @@
+2006-07-26  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/Makefile.am: Added target to remove geany_res.res when cleaning.
+ * src/geany.h, src/main.c, src/callbacks.c, src/highlighting.c,
+   src/document.c, src/dialogs.c, src/prefs.c, src/utils.c,
+   src/win32.c, src/keybindings.c, src/gb.c, src/about.c:
+   Removed macro GEANY_WIN32, use G_OS_WIN32 instead.
+   Introduced global variables for PACKAGE_DATA_DIR and
+   PACKAGE_LOCALE_DIR, removed macro DOCDIR
+   (these changes are important for the Windows port).
+
+
 2006-07-26  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/win32.c: Don't add .c extension for All files filter.

@@ -195,7 +195,7 @@ void keybindings_init(void)
 		GDK_d, GDK_CONTROL_MASK, "edit_commentline", _("Comment line"));
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	// on windows alt-space is taken by the window manager
 	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit_calltip,
 		GDK_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_calltip", _("Show calltip"));

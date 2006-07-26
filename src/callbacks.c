@@ -51,7 +51,7 @@
 #include "search.h"
 
 
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 # include "win32.h"
 #endif
 
@@ -124,6 +124,8 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_strfreev(html_entities);
 	g_free(app->configdir);
+	g_free(app->datadir);
+	g_free(app->docdir);
 	g_free(app->search_text);
 	g_free(app->editor_font);
 	g_free(app->tagbar_font);
@@ -1055,7 +1057,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 	gint idx = GPOINTER_TO_INT(user_data);
 	clickpos = sci_get_position_from_xy(doc_list[idx].sci, event->x, event->y, FALSE);
 
-#ifndef GEANY_WIN32
+#ifndef G_OS_WIN32
 	if (event->button == 1)
 	{
 		return utils_check_disk_status(idx);
@@ -2150,16 +2152,14 @@ void
 on_help1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-#ifdef GEANY_WIN32
-	gchar *pwd = g_get_current_dir();
-	gchar *uri = g_strconcat("file:///", g_path_skip_root(pwd), "/doc/index.html", NULL);
-	g_free(pwd);
+#ifdef G_OS_WIN32
+	gchar *uri = g_strconcat("file:///", g_path_skip_root(app->docdir), "/index.html", NULL);
 #else
-	gchar *uri = g_strconcat("file://", DOCDIR, "index.html", NULL);
+	gchar *uri = g_strconcat("file://", app->docdir, "index.html", NULL);
 #endif
 
 	if (! g_file_test(uri + 7, G_FILE_TEST_IS_REGULAR))
-	{
+	{	// fall back to online documentation if it is not found on the hard disk
 		g_free(uri);
 		uri = g_strconcat(GEANY_HOMEPAGE, "manual/index.html", NULL);
 	}
@@ -2189,7 +2189,7 @@ void
 on_pref_tools_button_clicked           (GtkButton       *button,
                                         gpointer         item)
 {
-#ifdef GEANY_WIN32
+#ifdef G_OS_WIN32
 	win32_show_pref_file_dialog(item);
 #else
 	GtkWidget *dialog;
