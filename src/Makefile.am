@@ -46,7 +46,7 @@ geany_LDFLAGS =	-mwindows
 
 INCLUDES = \
 	-DPACKAGE_DATA_DIR=\"data\" -DPACKAGE_LOCALE_DIR=\"data\" -I../scintilla/include \
-	-I../tagmanager/include @PACKAGE_CFLAGS@
+	-I../tagmanager/include -DENABLE_NLS -I/usr/local/cross-tools/include @PACKAGE_CFLAGS@
 
 geany_windres.res:
 	$(WINDRES) -i ../geany_windres.rc --input-format=rc -o geany_windres.res -O coff;
