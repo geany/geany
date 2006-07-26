@@ -110,7 +110,7 @@ void win32_show_file_dialog(gboolean file_open)
 	of.nMaxFile = 2048;
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = NULL;
-	of.lpstrDefExt = "c";
+	of.lpstrDefExt = "";
 	if (file_open)
 	{
 		of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
@@ -258,7 +258,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 
 	// cut the options from the command line
 	field = g_strsplit(gtk_entry_get_text(GTK_ENTRY(item)), " ", 2);
-	if (field[0])
+	if (field[0] && g_file_test(field[0], G_FILE_TEST_EXISTS))
 	{
 		filename = g_find_program_in_path(field[0]);
 		strcpy(fname, filename);
