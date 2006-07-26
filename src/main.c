@@ -615,7 +615,12 @@ gint main(gint argc, gchar **argv)
 	gtk_widget_hide(app->compile_button);
 	gtk_widget_hide(app->run_button);
 	gtk_widget_hide(lookup_widget(app->window, "separatortoolitem6"));
-	gtk_notebook_remove_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
+	{
+		GtkWidget *compiler_tab;
+		compiler_tab = gtk_notebook_get_tab_label(GTK_NOTEBOOK(msgwindow.notebook),
+			gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER));
+		gtk_widget_set_sensitive(compiler_tab, FALSE);
+	}
 #endif
 
 	// finally realize the window to show the user what we have done

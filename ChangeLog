@@ -1,3 +1,14 @@
+2006-07-26  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/win32.c: Don't add .c extension for All files filter.
+                Only set open tool dialog path if it exists.
+ * src/keybindings.c: Use CTRL-SHIFT-space for Windows show calltips.
+ * src/prefs.c: Never show compile & run toolbuttons on Windows and
+                hide the prefs option to show them.
+ * src/main.c: Disable the Compiler tab instead of hiding it so that
+               messages window tabs have the right index on switching.
+
+
 2006-07-25  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/encodings.c, src/document.c, src/keyfile.c, src/main.c:
