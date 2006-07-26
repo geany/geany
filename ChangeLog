@@ -19,6 +19,7 @@
                 hide the prefs option to show them.
  * src/main.c: Disable the Compiler tab instead of hiding it so that
                messages window tabs have the right index on switching.
+ * src/utils.c: Only replace untitled.x within the first 2 lines.
 
 
 2006-07-25  Enrico Tröger  <enrico.troeger@uvena.de>

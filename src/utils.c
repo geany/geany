@@ -1866,31 +1866,29 @@ void utils_switch_document(gint direction)
 
 void utils_replace_filename(gint idx)
 {
-	gint pos;
 	gchar *filebase;
 	gchar *filename;
+	struct TextToFind ttf;
 
 	if (idx == -1 || doc_list[idx].file_type == NULL) return;
 
-	pos = sci_get_current_position(doc_list[idx].sci);
 	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc_list[idx].file_type)->extension, NULL);
 	filename = g_path_get_basename(doc_list[idx].file_name);
 
-	sci_set_current_position(doc_list[idx].sci, 0);
-	sci_set_search_anchor(doc_list[idx].sci);
-	// stop if filebase was not found
-	if (sci_search_next(doc_list[idx].sci, SCFIND_MATCHCASE, filebase) == -1)
+	// only search the first 2 lines
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = sci_get_position_from_line(doc_list[idx].sci, 2);
+	ttf.lpstrText = (gchar*)filebase;
+
+	if (sci_find_text(doc_list[idx].sci, SCFIND_MATCHCASE, &ttf) != -1)
 	{
-		g_free(filebase);
-		g_free(filename);
-		return;
+		sci_target_start(doc_list[idx].sci, ttf.chrgText.cpMin);
+		sci_target_end(doc_list[idx].sci, ttf.chrgText.cpMax);
+		sci_target_replace(doc_list[idx].sci, filename, FALSE);
 	}
 
-	sci_replace_sel(doc_list[idx].sci, filename);
 	g_free(filebase);
 	g_free(filename);
-
-	sci_set_current_position(doc_list[idx].sci, pos);
 }
 
 
