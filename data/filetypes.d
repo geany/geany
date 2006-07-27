@@ -2,24 +2,24 @@
 [styling]
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false;false
-comment=0x0000ff;0xffffff;false;false
-commentline=0x0000ff;0xffffff;false;false
-commentdoc=0x0000ff;0xffffff;false;false
+comment=0xff0000;0xffffff;false;false
+commentline=0xff0000;0xffffff;false;false
+commentdoc=0xff0000;0xffffff;false;false
 number=0x007f00;0xffffff;false;false
-word=0x991111;0xffffff;true;false
-word2=0x00007F;0xffffff;true;false
-string=0x1E90FF;0xffffff;false;false
-character=0x1E90FF;0xffffff;false;false
-uuid=0x804040;0xffffff;false;false
+word=0x111199;0xffffff;true;false
+word2=0x7f0000;0xffffff;true;false
+string=0xff901e;0xffffff;false;false
+character=0xff901e;0xffffff;false;false
+uuid=0x404080;0xffffff;false;false
 preprocessor=0x7F7F00;0xffffff;false;false
-operator=0x101030;0xffffff;false;false
-identifier=0x100000;0xffffff;false;false
+operator=0x301010;0xffffff;false;false
+identifier=0x000000;0xffffff;false;false
 stringeol=0x000000;0xe0c0e0;false;false
-verbatim=0x101030;0xffffff;false;false
-regex=0x905010;0xffffff;false;false
-commentlinedoc=0x0000ff;0xffffff;true;false
-commentdockeyword=0x0000ff;0xffffff;true;true
-globalclass=0xbb1111;0xffffff;true;false
+verbatim=0x301010;0xffffff;false;false
+regex=0x105090;0xffffff;false;false
+commentlinedoc=0xff0000;0xffffff;true;false
+commentdockeyword=0xff0000;0xffffff;true;true
+globalclass=0x1111bb;0xffffff;true;false
 # whether arguments of preprocessor commands should be styled (only first argument is used)
 # 1 to enable, 0 to disable
 styling_within_preprocessor=1;0;false;false
@@ -43,7 +43,7 @@ comment_close=
 #comment_open=/+
 #comment_close=+/
 
-# set to false if a comment character/string should start a column 0 of a line, true uses any
+# set to false if a comment character/string should start at column 0 of a line, true uses any
 # indention of the line, e.g. setting to true causes the following on pressing CTRL+d
 	#command_example();
 # setting to false would generate this

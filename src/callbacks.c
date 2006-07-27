@@ -1450,7 +1450,12 @@ void
 on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_color();
+	static gchar colour[9];
+	gint idx = document_get_cur_idx();
+	gint pos = sci_get_current_position(doc_list[idx].sci);
+
+	utils_find_current_word(doc_list[idx].sci, pos, colour, sizeof colour);
+	dialogs_show_color(colour);
 }
 
 

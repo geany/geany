@@ -4,18 +4,18 @@
 default=0x000000;0xffffff;false;false
 comment=0x808080;0xffffff;false;false
 number=0x007f00;0xffffff;false;false
-string=0x1e90ff;0xffffff;false;false
+string=0xff901e;0xffffff;false;false
 operator=0x000000;0xffffff;false;false
-identifier=0x000088;0xffffff;false;false
-cpuinstruction=0x991111;0xffffff;true;false
-mathinstruction=0x00007f;0xffffff;true;false
+identifier=0x880000;0xffffff;false;false
+cpuinstruction=0x111199;0xffffff;true;false
+mathinstruction=0x7f0000;0xffffff;true;false
 register=0x000000;0xffffff;true;false
-directive=0x0F673D;0xffffff;true;false
-directiveoperand=0x1e90ff;0xffffff;false;false
+directive=0x3d670f;0xffffff;true;false
+directiveoperand=0xff901e;0xffffff;false;false
 commentblock=0x808080;0xffffff;false;false
-character=0x1e90ff;0xffffff;false;false
+character=0xff901e;0xffffff;false;false
 stringeol=0x000000;0xe0c0e0;false;false
-extinstruction=0x7f7f00;0xffffff;false;false
+extinstruction=0x007f7f;0xffffff;false;false
 
 [keywords]
 # all items must be in one line
@@ -33,7 +33,7 @@ wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 comment_open=;
 comment_close=
 
-# set to false if a comment character/string should start a column 0 of a line, true uses any
+# set to false if a comment character/string should start at column 0 of a line, true uses any
 # indention of the line, e.g. setting to true causes the following on pressing CTRL+d
 	#command_example();
 # setting to false would generate this

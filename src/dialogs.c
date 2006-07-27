@@ -417,9 +417,10 @@ void dialogs_show_word_count(void)
 
 
 /* This shows the color selection dialog to choose a color. */
-void dialogs_show_color(void)
+void dialogs_show_color(gchar *colour)
 {
 #ifdef G_OS_WIN32
+	/// TODO pass colour to the windows dialog
 	win32_show_color_dialog();
 #else
 
@@ -435,6 +436,21 @@ void dialogs_show_color(void)
 		g_signal_connect(app->open_colorsel, "delete_event",
 						G_CALLBACK(gtk_widget_hide), NULL);
 	}
+	// if colour is non-NULL set it in the dialog as preselected colour
+	if (colour != NULL && (colour[0] == '0' || colour[0] == '#'))
+	{
+		GdkColor gc;
+
+		if (colour[0] == '0' && colour[1] == 'x')
+		{	// we have a string of the format "0x00ff00" and we need it to "#00ff00"
+			colour[1] = '#';
+			colour++;
+		}
+		gdk_color_parse(colour, &gc);
+		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(
+							GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &gc);
+	}
+
 	// We make sure the dialog is visible.
 	gtk_window_present(GTK_WINDOW(app->open_colorsel));
 #endif

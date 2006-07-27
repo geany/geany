@@ -5,17 +5,17 @@ default=0x000000;0xffffff;false;false
 comment=0x808080;0xffffff;false;false
 commentline=0x808080;0xffffff;false;false
 commentdoc=0x808080;0xffffff;false;false
-number=0x007F7F;0xffffff;false;false
-word=0x7F1A00;0xffffff;true;false
-word2=0x00007F;0xffffff;true;false
-string=0x7F007F;0xffffff;false;false
+number=0x7f7f00;0xffffff;false;false
+word=0x001a7f;0xffffff;true;false
+word2=0x7f0000;0xffffff;true;false
+string=0x7f007f;0xffffff;false;false
 character=0x000000;0xffffff;false;false
 operator=0x000000;0xffffff;true;false
-identifier=0x991111;0xffffff;false;false
+identifier=0x111199;0xffffff;false;false
 sqlplus=0x000000;0xffffff;false;false
 sqlplus_prompt=0x000000;0xffffff;false;false
 sqlplus_comment=0x000000;0xffffff;false;false
-quotedidentifier=0x991111;0xffffff;false;false
+quotedidentifier=0x111199;0xffffff;false;false
 
 [keywords]
 # all items must be in one line
@@ -30,7 +30,7 @@ wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 comment_open=/*
 comment_close=*/
 
-# set to false if a comment character/string should start a column 0 of a line, true uses any
+# set to false if a comment character/string should start at column 0 of a line, true uses any
 # indention of the line, e.g. setting to true causes the following on pressing CTRL+d
 	#command_example();
 # setting to false would generate this

@@ -2,19 +2,19 @@
 [styling]
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false;false
-commentline=0x0000ff;0xffffff;false;false
-number=0x007F00;0xffffff;false;false
-word=0x991111;0xffffff;true;false
-string=0x1E90FF;0xffffff;false;false
-character=0x004040;0xffffff;false;false
-operator=0x101030;0xffffff;false;false
+commentline=0xff0000;0xffffff;false;false
+number=0x007f00;0xffffff;false;false
+word=0x111199;0xffffff;true;false
+string=0xff901e;0xffffff;false;false
+character=0x404000;0xffffff;false;false
+operator=0x301010;0xffffff;false;false
 identifier=0x000000;0xffffff;false;false
 backticks=0x000000;0xd0d0d0;false;false
-param=0x00009f;0xffffff;false;false
-scalar=0x905010;0xffffff;false;false
+param=0x009f00;0xffffff;false;false
+scalar=0x105090;0xffffff;false;false
 
 [keywords]
-primary=break case continue do done elif else esac eval exit export fi for goto if in integer return set shift then while
+primary=break case continue do done elif else esac eval exit export fi for function goto if in integer return set shift then while
 
 
 [settings]

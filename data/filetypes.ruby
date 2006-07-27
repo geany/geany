@@ -2,24 +2,24 @@
 [styling]
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false
-commentline=0x0000ff;0xffffff;false;false
-number=0x800040;0xffffff;false;false
+commentline=0xff0000;0xffffff;false;false
+number=0x400080;0xffffff;false;false
 string=0x008000;0xffffff;false;false
 character=0x008000;0xffffff;false;false
-word=0x991111;0xffffff;true;false
-global=0x991111;0xffffff;false;false
-symbol=0x208000;0xffffff;false;false
-classname=0x00007f;0xffffff;true;false
-defname=0x00007f;0xffffff;false;false
+word=0x111199;0xffffff;true;false
+global=0x111199;0xffffff;false;false
+symbol=0x008020;0xffffff;false;false
+classname=0x7f0000;0xffffff;true;false
+defname=0x7f0000;0xffffff;false;false
 operator=0x000000;0xffffff;false;false
 identifier=0x000000;0xffffff;false;false
-modulename=0x991111;0xffffff;true;false
+modulename=0x111199;0xffffff;true;false
 backticks=0x000000;0xe0c0e0;false;false
 instancevar=0x000000;0xffffff;false;true
 classvar=0x000000;0xffffff;true;true
 datasection=0x000000;0xffffff;false;false
 heredelim=0x000000;0xffffff;false;false
-worddemoted=0x991111;0xffffff;false;false
+worddemoted=0x111199;0xffffff;false;false
 
 [keywords]
 # all items must be in one line
@@ -34,7 +34,7 @@ wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 comment_open=#
 comment_close=
 
-# set to false if a comment character/string should start a column 0 of a line, true uses any
+# set to false if a comment character/string should start at column 0 of a line, true uses any
 # indention of the line, e.g. setting to true causes the following on pressing CTRL+d
 	#command_example();
 # setting to false would generate this

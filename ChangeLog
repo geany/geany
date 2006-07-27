@@ -1,3 +1,15 @@
+2006-07-27  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/sciwrappers.c, src/callbacks.c, src/utils.c, src/dialogs.c,
+   src/keybindings.c:
+   Removed unused colour parsing functions.
+   Let the colour chooser pick the colour under the cursor.
+ * data/filetypes.*, src/highlighting.c, src/utils.c:
+   Fixed bug in parsing strings containing hex values, modified the
+   styles to keep the syntax highlighting consistent.
+ * src/main.c: Removed startup warning.
+
+
 2006-07-26  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/Makefile.am: Added target to remove geany_res.res when cleaning.

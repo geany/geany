@@ -2,21 +2,21 @@
 [styling]
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false;false
-comment=0x0000ff;0xffffff;false;false
-commentline=0x0000ff;0xffffff;false;false
+comment=0xff0000;0xffffff;false;false
+commentline=0xff0000;0xffffff;false;false
 number=0x007f00;0xffffff;false;false
-operator=0x101030;0xffffff;false;false
-identifier=0x0000a2;0xffffff;false;false
+operator=0x301010;0xffffff;false;false
+identifier=0xa20000;0xffffff;false;false
 wordinquote=0x7f007f;0xffffff;false;false
 inquote=0x7f007f;0xffffff;false;false
-substitution=0x991111;0xffffff;false;false
+substitution=0x111199;0xffffff;false;false
 modifier=0x7f007f;0xffffff;false;false
-expand=0x100000;0xffffff;false;false
-wordtcl=0x991111;0xffffff;true;false
-wordtk=0x00007f;0xffffff;true;false
-worditcl=0x991111;0xffffff;true;false
-wordtkcmds=0x00007f;0xffffff;true;false
-wordexpand=0x00007f;0xffffff;true;false
+expand=0x000000;0xffffff;false;false
+wordtcl=0x111199;0xffffff;true;false
+wordtk=0x7f0000;0xffffff;true;false
+worditcl=0x111199;0xffffff;true;false
+wordtkcmds=0x7f0000;0xffffff;true;false
+wordexpand=0x7f0000;0xffffff;true;false
 
 
 [keywords]
@@ -36,7 +36,7 @@ wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 comment_open=#
 comment_close=
 
-# set to false if a comment character/string should start a column 0 of a line, true uses any
+# set to false if a comment character/string should start at column 0 of a line, true uses any
 # indention of the line, e.g. setting to true causes the following on pressing CTRL+d
 	#command_example();
 # setting to false would generate this

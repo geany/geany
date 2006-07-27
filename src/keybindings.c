@@ -467,7 +467,7 @@ static void cb_func_menu_gotoline(void)
 
 static void cb_func_menu_opencolorchooser(void)
 {
-	dialogs_show_color();
+	on_show_color_chooser1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_fullscreen(void)

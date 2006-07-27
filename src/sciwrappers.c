@@ -50,7 +50,7 @@ void sci_set_line_numbers(ScintillaObject * sci, gboolean set, gint extra_width)
 	}
 }
 
-void sci_set_mark_long_lines(ScintillaObject * sci, gint type, gint column, const gchar *color)
+void sci_set_mark_long_lines(ScintillaObject * sci, gint type, gint column, const gchar *colour)
 {
 	if (column == 0) type = 2;
 	switch (type)
@@ -72,7 +72,7 @@ void sci_set_mark_long_lines(ScintillaObject * sci, gint type, gint column, cons
 		}
 	}
 	SSM(sci, SCI_SETEDGECOLUMN, column - 1, 0);
-	SSM(sci, SCI_SETEDGECOLOUR, utils_get_int_from_hexcolor(color), 0);
+	SSM(sci, SCI_SETEDGECOLOUR, utils_strtod(colour, NULL, TRUE), 0);
 }
 
 

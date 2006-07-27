@@ -652,12 +652,6 @@ gint main(gint argc, gchar **argv)
 
 	configuration_apply_settings();
 
-	dialogs_show_info(	// will be removed soon
-	"Please use this SVN version not for production use!\nWe added recently some experimental features which"
-	" can really damage your files when saving or make cofusing things with your file when opening.\n"
-	"Read the mailing list for more information. I'm very sorry, please be patient.\nThis dialog "
-	"will be removed soon.\n\n(to disable this message, edit src/main.c at line %d).", __LINE__ - 4);
-
 	//g_timeout_add(0, (GSourceFunc)destroyapp, NULL); // useful for start time tests
 	gtk_main();
 	return 0;

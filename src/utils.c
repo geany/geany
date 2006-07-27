@@ -1892,37 +1892,6 @@ void utils_replace_filename(gint idx)
 }
 
 
-/*
-GdkColor *utils_get_color_from_bint(gint icolor)
-{
-	GdkColor *gcolor = g_new(GdkColor, 1);
-	guint16 r, g, b;
-
-	r = icolor;
-	g = r >> 8;
-	b = g >> 8;
-
-	//gcolor->red = r & 255;
-	//gcolor->green = g & 255;
-	//gcolor->blue = b & 255;
-	//geany_debug("%d %d %d", gcolor->red, gcolor->green, gcolor->blue);
-
-
-	geany_debug("%d %d %d", r, g, b);
-
-	gcolor->red   = (r << 8) + r;
-	gcolor->green = (g << 8) + g;
-	gcolor->blue  = (b << 8) + b;
-
-	//gcolor->red = (r & 255) * 257;
-	//gcolor->green = (g & 255) * 257;
-	//gcolor->blue = (b & 255) * 257;
-	//geany_debug("%d %d %d %d", icolor, gcolor->red, gcolor->green, gcolor->blue);
-
-	return gcolor;
-}
-*/
-
 /* wrapper function to let strcmp work with GeanySymbol struct */
 gint utils_compare_symbol(const GeanySymbol *a, const GeanySymbol *b)
 {
@@ -1942,59 +1911,6 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 	      (guint) (utils_scale_round(color->blue / 256, 255)));
 
 	return buffer;
-}
-
-
-/* utils_is_hex() and utils_get_int_from_hexcolor() taken from pango-color.c to get red, green and
- * blue values from a hex string like #C0C0C0 */
-gboolean utils_is_hex(const gchar *spec, gint len, guint *c)
-{
-	const gchar *end;
-	*c = 0;
-	for (end = spec + len; spec != end; spec++)
-	{
-		if (g_ascii_isxdigit(*spec)) *c = (*c << 4) | g_ascii_xdigit_value(*spec);
-		else return FALSE;
-	}
-	return TRUE;
-}
-
-
-gint utils_get_int_from_hexcolor(const gchar *hex)
-{
-#define DEFAULT_COLOR 12774338
-	if (hex[0] == '#')
-	{
-		size_t len;
-		guint r, g, b;
-		gint bits;
-
-		hex++;
-		len = strlen(hex);
-		if (len % 3 || len < 3 || len > 12) return DEFAULT_COLOR;
-
-		len /= 3;
-
-		if (! utils_is_hex(hex, len, &r) ||
-			! utils_is_hex(hex + len, len, &g) ||
-			! utils_is_hex(hex + len * 2, len, &b))
-			return FALSE;
-
-		bits = len * 4;
-		r <<= 8 - bits;
-		g <<= 8 - bits;
-		b <<= 8 - bits;
-		while (bits < 8)
-		{
-			r |= (r >> bits);
-			g |= (g >> bits);
-			b |= (b >> bits);
-			bits *= 2;
-		}
-		//geany_debug("%d %d %d", r, g, b);
-		return r | (g << 8) | (b << 16);
-	}
-	return DEFAULT_COLOR;
 }
 
 
@@ -2111,60 +2027,7 @@ gchar *utils_make_human_readable_str(unsigned long long size, unsigned long bloc
 }
 
 
-/* utils_strtod() is an simple implementation of strtod(), because strtod() does not understand
- * hex colour values before ANSI-C99, utils_strtod does only work for numbers like 0x... */
-gdouble utils_strtod(const gchar *source, gchar **end)
-{
-	guint source_len;
-	gushort tmp;
-	gdouble exp, result;
-	const gchar *str, *start = source;
-
-	if (!source)
-		return (gdouble) -1.0f;
-
-	source_len = strlen(source);
-
-	// input should be 0x... or 0X...
-	if (source_len < 3 || start[0] != '0' || (start[1] != 'x' && start[1] != 'X'))
-		return (gdouble) -1.0f;
-
-	str = start + source_len - 1;
-	start += 2;
-
-	exp = 0.0;
-	result = 0;
-	while (str >= start)
-	{
-		if (isdigit(*str))
-		{	// convert the char to a real digit
-			tmp = *str - '0';
-		}
-		else
-		{
-			if (isxdigit(*str))
-			{	// convert the char to a real digit
-				if (*str > 70)
-					tmp = *str - 'W';
-				else
-					tmp = *str - '7';
-			}
-			// stop if a non xdigit was found
-			else break;
-		}
-
-		result += pow(16.0, exp) * tmp;
-		exp++;
-		str--;
-	}
-	return result;
-}
-
-/*
- * this is the new code for correct parsing hex colour values, but it requires many changes
- * in the colour values of each filetype, so it is disabled for the moment, until I'll have
- * time to change it
-static guint utils_get_value_of_hex(const gchar ch)
+ guint utils_get_value_of_hex(const gchar ch)
 {
 	if (ch >= '0' && ch <= '9')
 		return ch - '0';
@@ -2177,21 +2040,37 @@ static guint utils_get_value_of_hex(const gchar ch)
 }
 
 
-gdouble utils_strtod(const gchar *source, gchar **end)
+/* utils_strtod() converts a string containing a hex colour ("0x00ff00") into an integer.
+ * Basically, it is the same as strtod() would do, but it does not understand hex colour values,
+ * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00". */
+gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
 {
-	guint red, green, blue;
+	guint red, green, blue, offset = 0;
 
-	if  (source == NULL || strlen(source) != 8 || source[0] != '0' ||
-		(source[1] != 'x' && source[1] != 'X'))
-		return (double) -1.0f;
+	if (source == NULL)
+		return -1;
+	else if (with_route && (strlen(source) != 7 || source[0] != '#'))
+		return -1;
+	else if (! with_route && (strlen(source) != 8 || source[0] != '0' ||
+		(source[1] != 'x' && source[1] != 'X')))
+	{
+		return -1;
+	}
 
-	red = utils_get_value_of_hex(source[2]) * 16 + utils_get_value_of_hex(source[3]);
-	green = utils_get_value_of_hex(source[4]) * 16 + utils_get_value_of_hex(source[5]);
-	blue = utils_get_value_of_hex(source[5]) * 16 + utils_get_value_of_hex(source[7]);
+	// offset is set to 1 when the string starts with 0x, otherwise it starts with #
+	// and we don't need to increase the index
+	if (! with_route)
+		offset = 1;
 
-	return (gdouble)(red | (green << 8) | (blue << 16));
+	red = utils_get_value_of_hex(
+					source[1 + offset]) * 16 + utils_get_value_of_hex(source[2 + offset]);
+	green = utils_get_value_of_hex(
+					source[3 + offset]) * 16 + utils_get_value_of_hex(source[4 + offset]);
+	blue = utils_get_value_of_hex(
+					source[5 + offset]) * 16 + utils_get_value_of_hex(source[6 + offset]);
+
+	return (red | (green << 8) | (blue << 16));
 }
-*/
 
 
 /* try to parse the file and line number where the error occured described in line

@@ -2,67 +2,67 @@
 [styling]
 # foreground;background;bold;italic
 html_default=0x000000;0xffffff;false;false
-html_tag=0x990000;0xffffff;false;false
-html_tagunknown=0x0000ff;0xffffff;false;false
-html_attribute=0x007F00;0xffffff;false;false
-html_attributeunknown=0x0000ff;0xffffff;false;false
+html_tag=0x000099;0xffffff;false;false
+html_tagunknown=0xff0000;0xffffff;false;false
+html_attribute=0x007f00;0xffffff;false;false
+html_attributeunknown=0xff0000;0xffffff;false;false
 html_number=0x800080;0xffffff;false;false
-html_doublestring=0x1E90FF;0xffffff;false;false
-html_singlestring=0x1E90FF;0xffffff;false;false
+html_doublestring=0xff901e;0xffffff;false;false
+html_singlestring=0xff901e;0xffffff;false;false
 html_other=0x800080;0xffffff;false;false
 html_comment=0x808080;0xffffff;false;false
 html_entity=0x800080;0xffffff;false;false
-html_tagend=0x800000;0xffffff;false;false
+html_tagend=0x000080;0xffffff;false;false
 # <?
-html_xmlstart=0x990000;0xf0f0f0;false;false
+html_xmlstart=0x000099;0xf0f0f0;false;false
 # ?>
-html_xmlend=0x990000;0xf0f0f0;false;false
+html_xmlend=0x000099;0xf0f0f0;false;false
 # <script
-html_script=0x800000;0xf0f0f0;false;false
+html_script=0x000080;0xf0f0f0;false;false
 # <% ... %>
-html_asp=0x4f4f00;0xf0f0f0;false;false
+html_asp=0x004f4f;0xf0f0f0;false;false
 # <%@ ... %>
-html_aspat=0x4f4f00;0xf0f0f0;false;false
-html_cdata=0x990066;0xffffff;false;false
-html_question=0xff0000;0xffffff;false;false
-html_value=0x990066;0xffffff;false;false
-html_xccomment=0x990066;0xffffff;false;false
+html_aspat=0x004f4f;0xf0f0f0;false;false
+html_cdata=0x660099;0xffffff;false;false
+html_question=0x0000ff;0xffffff;false;false
+html_value=0x660099;0xffffff;false;false
+html_xccomment=0x660099;0xffffff;false;false
 
 sgml_default=0x000000;0xffffff;false;false
 sgml_comment=0x808080;0xffffff;false;false
-sgml_special=0x007F00;0xffffff;false;false
-sgml_command=0x991111;0xffffff;true;false
-sgml_doublestring=0x1E90FF;0xffffff;false;false
-sgml_simplestring=0x004040;0xffffff;false;false
-sgml_1st_param=0x804040;0xffffff;false;false
-sgml_entity=0x101030;0xffffff;false;false
-sgml_block_default=0x100000;0xffffff;false;false
-sgml_1st_param_comment=0x906040;0xffffff;false;false
-sgml_error=0x0000ff;0xffffff;false;false
+sgml_special=0x007f00;0xffffff;false;false
+sgml_command=0x111199;0xffffff;true;false
+sgml_doublestring=0xff901e;0xffffff;false;false
+sgml_simplestring=0xff901e;0xffffff;false;false
+sgml_1st_param=0x404080;0xffffff;false;false
+sgml_entity=0x301010;0xffffff;false;false
+sgml_block_default=0x000000;0xffffff;false;false
+sgml_1st_param_comment=0x406090;0xffffff;false;false
+sgml_error=0xff0000;0xffffff;false;false
 
 php_default=0x000000;0xffffff;false;false
-php_simplestring=0x008000;0xffffff;false;false
+php_simplestring=0xff901e;0xffffff;false;false
 php_hstring=0x008000;0xffffff;false;false
-php_number=0x006060;0xffffff;false;false
-php_word=0x990000;0xffffff;false;false
-php_variable=0x00007F;0xffffff;false;false
+php_number=0x606000;0xffffff;false;false
+php_word=0x000099;0xffffff;false;false
+php_variable=0x7f0000;0xffffff;false;false
 php_comment=0x808080;0xffffff;false;false
 php_commentline=0x808080;0xffffff;false;false
-php_operator=0x602010;0xffffff;false;false
-php_hstring_variable=0x601010;0xffffff;false;false
+php_operator=0x102060;0xffffff;false;false
+php_hstring_variable=0x101060;0xffffff;false;false
 php_complex_variable=0x105010;0xffffff;false;false
 
-jscript_start=0x808000;0xffffff;false;false
+jscript_start=0x008080;0xffffff;false;false
 jscript_default=0x000000;0xffffff;false;false
 jscript_comment=0x222222;0xffffff;false;false
 jscript_commentline=0x808080;0xffffff;false;false
 jscript_commentdoc=0x808080;0xffffff;false;false
-jscript_number=0x606000;0xffffff;false;false
-jscript_word=0xff0000;0xffffff;false;false
-jscript_keyword=0x001050;0xffffff;false;false
-jscript_doublestring=0x080080;0xffffff;false;false
-jscript_singlestring=0x080080;0xffffff;false;false
-jscript_symbols=0x501000;0xffffff;false;false
+jscript_number=0x006060;0xffffff;false;false
+jscript_word=0x0000ff;0xffffff;false;false
+jscript_keyword=0x501000;0xffffff;false;false
+jscript_doublestring=0xff901e;0xffffff;false;false
+jscript_singlestring=0xff901e;0xffffff;false;false
+jscript_symbols=0x001050;0xffffff;false;false
 jscript_stringeol=0x000000;0xe0c0e0;false;false
 
 [keywords]
@@ -82,7 +82,7 @@ wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 comment_open=<!--
 comment_close=-->
 
-# set to false if a comment character/string should start a column 0 of a line, true uses any
+# set to false if a comment character/string should start at column 0 of a line, true uses any
 # indention of the line, e.g. setting to true causes the following on pressing CTRL+d
 	#command_example();
 # setting to false would generate this

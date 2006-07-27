@@ -3,15 +3,15 @@
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false;false
 # bold for selection is useless, so say false
-selection=0xc0c0c0;0x00007F;false;false
-brace_good=0xff0000;0xFFFFFF;true;false
-brace_bad=0x0000ff;0xFFFFFF;true;false
+selection=0xc0c0c0;0x7f0000;false;false
+brace_good=0x0000ff;0xFFFFFF;true;false
+brace_bad=0xff0000;0xFFFFFF;true;false
 # the following settings define the colours of the margins on the left side
 margin_linenumber=0x000000;0xd0d0d0;false;false
 margin_folding=0x000000;0xdfdfdf;false;false
 # background colour of the current line, only the second and third argument is interpreted
 # use the third argument to enable or disable the highlighting of the current line (has to be true/false)
-current_line=0x0;0xe5e5e5;true;false
+current_line=0;0xe5e5e5;true;false
 # style of folding icons, only first and second arguments are used, valid values are:
 # first argument:  1 for boxes, 2 for circles
 # second argument: 1 for straight lines, 2 for curved lines

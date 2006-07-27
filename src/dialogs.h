@@ -41,7 +41,7 @@ void dialogs_show_open_font(void);
 
 void dialogs_show_word_count(void);
 
-void dialogs_show_color(void);
+void dialogs_show_color(gchar *colour);
 
 GtkWidget *dialogs_create_build_menu_gen(gint idx);
 
