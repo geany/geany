@@ -8,6 +8,7 @@
    Fixed bug in parsing strings containing hex values, modified the
    styles to keep the syntax highlighting consistent.
  * src/main.c: Removed startup warning.
+ * src/geany.h, src/main.c: Added Select All item to sensitive buttons.
 
 
 2006-07-26  Enrico Tröger  <enrico.troeger@uvena.de>

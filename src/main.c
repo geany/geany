@@ -305,6 +305,7 @@ static void main_init(void)
 	app->sensitive_buttons[31] = lookup_widget(app->window, "treeview6");
 	app->sensitive_buttons[32] = lookup_widget(app->window, "print1");
 	app->sensitive_buttons[33] = lookup_widget(app->window, "menu_reload_as1");
+	app->sensitive_buttons[34] = lookup_widget(app->window, "menu_select_all1");
 	app->redo_items[0] = lookup_widget(app->popup_menu, "redo1");
 	app->redo_items[1] = lookup_widget(app->window, "menu_redo2");
 	app->redo_items[2] = lookup_widget(app->window, "toolbutton_redo");
