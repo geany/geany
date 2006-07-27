@@ -420,8 +420,7 @@ void dialogs_show_word_count(void)
 void dialogs_show_color(gchar *colour)
 {
 #ifdef G_OS_WIN32
-	/// TODO pass colour to the windows dialog
-	win32_show_color_dialog();
+	win32_show_color_dialog(colour);
 #else
 
 	if (app->open_colorsel == NULL)

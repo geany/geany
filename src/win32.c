@@ -216,7 +216,7 @@ void win32_show_font_dialog(void)
 }
 
 
-void win32_show_color_dialog(void)
+void win32_show_color_dialog(const gchar *colour)
 {
 	CHOOSECOLOR cc;
 	static COLORREF acr_cust_clr[16];
@@ -229,7 +229,7 @@ void win32_show_color_dialog(void)
 	cc.lStructSize = sizeof(cc);
 	cc.hwndOwner = NULL;
 	cc.lpCustColors = (LPDWORD) acr_cust_clr;
-	cc.rgbResult = rgb_current;
+	cc.rgbResult = (colour != NULL) ? utils_strtod(colour, NULL, colour[0] == '#') : 0;
 	cc.Flags = CC_FULLOPEN | CC_RGBINIT;
 
 	if (ChooseColor(&cc))

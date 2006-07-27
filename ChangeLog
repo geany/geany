@@ -9,6 +9,9 @@
    styles to keep the syntax highlighting consistent.
  * src/main.c: Removed startup warning.
  * src/geany.h, src/main.c: Added Select All item to sensitive buttons.
+ * src/win32.c, src/dialogs.c, src/callbacks.c: 
+   Let the colour chooser pick the colour under the cursor(Win32 code).
+   Added some sanity checks.
 
 
 2006-07-26  Enrico Tröger  <enrico.troeger@uvena.de>

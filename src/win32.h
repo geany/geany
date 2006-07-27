@@ -30,7 +30,7 @@ void win32_show_file_dialog(gboolean file_open);
 
 void win32_show_font_dialog(void);
 
-void win32_show_color_dialog(void);
+void win32_show_color_dialog(const gchar *colour);
 
 /* Creates a native Windows message box of the given type and returns always TRUE
  * or FALSE representing th pressed Yes or No button.
