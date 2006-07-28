@@ -1,3 +1,12 @@
+2006-07-28  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sciwrappers.h: Set PLAT_GTK before including ScintillaWidget.h.
+ * src/Makefile.am, geany_windres.rc.in: Correct a typo.
+ * scintilla/makefile.win32, src/makefile.win32, makefile.win32,
+   tagmanager/makefile.win32, win32-config.h, geany_private.rc:
+   Add makefiles for building on win32.
+
+
 2006-07-27  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/sciwrappers.c, src/callbacks.c, src/utils.c, src/dialogs.c,

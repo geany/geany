@@ -1,0 +1,84 @@
+# per hand geschrieben, nicht hauen!
+# Note: PACKAGE_DATA_DIR and PACKAGE_LOCALE_DIR are no longer used on Windows.
+
+DEFINES = -DPACKAGE_DATA_DIR=\"data\" \
+	  -DHAVE_CONFIG_H \
+	  -DPACKAGE_LOCALE_DIR=\"data\" \
+	  -DENABLE_NLS
+
+.SUFFIXES: .c .o .h .a
+WINDRES = windres.exe
+CC = gcc
+CXX = g++
+RES  = ../geany_private.res
+TARGET = ../geany.exe
+EXECDIR = c:\distrib
+PREFIX = C:\libs
+RM = del
+-include ../localwin32.mk
+
+GTK_INCLUDES= \
+	-I$(PREFIX)/include/gtk-2.0 \
+	-I$(PREFIX)/lib/gtk-2.0/include \
+	-I$(PREFIX)/include/atk-1.0 \
+	-I$(PREFIX)/include/pango-1.0 \
+	-I$(PREFIX)/include/cairo \
+	-I$(PREFIX)/include/glib-2.0 \
+	-I$(PREFIX)/lib/glib-2.0/include \
+	-I$(PREFIX)/include/gettext \
+	-I$(PREFIX)/include
+
+INCLUDEDIRS=  -I.. \
+              -I../scintilla/include \
+              -I../tagmanager/include \
+              $(GTK_INCLUDES)
+
+ALL_GTK_LIBS= \
+	-L"$(PREFIX)/lib" \
+	-lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 \
+	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -liconv
+	# these things are for GTK >= 2.8
+	# (should be same as with MSYS: pkg-config --libs gtk+-2.0 gthread-2.0)
+	#"$(PREFIX)/lib/libcairo.dll.a" \
+	#"$(PREFIX)/lib/asprintf.lib" \
+	#"$(PREFIX)/lib/charset.lib" \
+
+CCFLAGS=-Wall -O2 -g -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
+
+OBJS = treeviews.o templates.o encodings.o about.o prefs.o win32.o build.o msgwindow.o dialogs.o \
+	filetypes.o interface.o main.o support.o callbacks.o utils.o \
+	highlighting.o sci_cb.o document.o sciwrappers.o keyfile.o keybindings.o search.o notebook.o
+
+.c.o:
+	$(CC) $(CCFLAGS) -c $<
+
+# all: binclean $(TARGET) #exec
+all: $(TARGET)
+
+$(RES): ../geany_private.rc ../pixmaps/geany.ico
+	$(WINDRES) -i $< --input-format=rc -o $@ -O coff
+
+# this calls parent clean-local target because del ../file won't work
+clean:
+	$(RM) deps.mak *.o
+	cd .. && make -f makefile.win32 clean-local && cd src
+
+exec:
+	$(EXECDIR)\geany.exe
+
+binclean:
+	$(RM) $(TARGET)
+
+$(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/tagmanager.a
+	$(CXX) $(OBJS) $(RES) -o $(TARGET) \
+	../scintilla/scintilla.a ../tagmanager/tagmanager.a $(ALL_GTK_LIBS) \
+	 -mwindows -limm32 -lshell32 -lole32 -luuid -lcomdlg32 -lcomctl32 -liberty
+
+deps.mak:
+	$(CC) -MM  $(CCFLAGS) *.c >deps.mak
+
+# Generate header dependencies with "make deps.mak"
+include deps.mak
+
+..\localwin32.mk:
+	echo # Set local variables here >$@

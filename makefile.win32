@@ -1,0 +1,47 @@
+# Running make creates config.h then calls the sub makefiles.
+#
+# Other targets are:
+#	deps: delete the dependencies so they are regenerated on next make
+#	clean: clean all generated files
+#
+# localwin32.mk is an optional file to override make variables.
+# Use localwin32.mk instead of editing variables as it is included in sub
+# makefiles.
+# localwin32.mk to set PREFIX instead of the default C:\libs
+# For MSYS use localwin32.mk to set CP and RM.
+# By default this will work in a Windows command prompt.
+
+WINDRES = windres.exe
+CC = gcc
+CXX = g++
+CP = copy
+RM = del
+-include localwin32.mk
+
+# Note: && is needed after cd because each line is executed in a different
+# shell. (cd .. is just for clarity).
+all: check-tools config.h
+	cd tagmanager && make -f makefile.win32 && cd ..
+	cd scintilla && make -f makefile.win32 && cd ..
+	cd src && make -f makefile.win32 && cd ..
+
+# first check the required tools are installed
+check-tools:
+	$(WINDRES) --version
+	$(CC) --version
+	$(CXX) --version
+
+config.h: win32-config.h
+	$(CP) $< $@
+
+deps:
+	$(RM) tagmanager\deps.mak scintilla\deps.mak src\deps.mak
+
+# used by src/makefile.win32 to avoid del ../file which is an error
+clean-local:
+	$(RM) geany_private.res geany.exe
+
+clean:
+	cd tagmanager && make -f makefile.win32 clean && cd ..
+	cd scintilla && make -f makefile.win32 clean && cd ..
+	cd src && make -f makefile.win32 clean && cd ..
