@@ -15,7 +15,7 @@ FILETYPE VFT_APP
 		 {
 			 VALUE "CompanyName", ""
 			 VALUE "FileVersion", "@VERSION_STRING@"
-			 VALUE "FileDescription", "Small and lighweight IDE (built using mingw gcc)"
+			 VALUE "FileDescription", "Small and lightweight IDE (built using mingw gcc)"
 			 VALUE "InternalName", "geany"
 			 VALUE "LegalCopyright", "Copyright 2005-2006 by Enrico Troeger"
 			 VALUE "LegalTrademarks", ""

@@ -51,7 +51,7 @@ geany_windres.res:
 	$(WINDRES) -i ../geany_windres.rc --input-format=rc -o geany_windres.res -O coff;
 
 clean-local:
-	rm -f windres.res
+	rm -f geany_windres.res
 
 else
 # build Geany for all other platforms
