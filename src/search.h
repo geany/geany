@@ -21,5 +21,13 @@
  */
 
 
-gboolean search_find_in_files(const gchar *search_text, const gchar *dir);
+typedef enum
+{
+	FIF_CASE_SENSITIVE 	= 1 << 0,
+	FIF_USE_EREGEXP		= 1 << 1,
+	FIF_INVERT_MATCH	= 1 << 2
+} fif_options;
+
+
+gboolean search_find_in_files(const gchar *search_text, const gchar *dir, fif_options opts);
 

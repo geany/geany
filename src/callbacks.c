@@ -2065,26 +2065,35 @@ on_find_in_files_dialog_response       (GtkDialog *dialog,
 	{
 		const gchar *search_text =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data))));
-		gchar *utf8_dir = utils_get_current_file_dir();
+		const gchar *utf8_dir =
+			gtk_entry_get_text(GTK_ENTRY(lookup_widget(app->find_in_files_dialog, "entry_dir")));
 
-		if (utf8_dir == NULL)
+		if (utf8_dir == NULL || utils_strcmp(utf8_dir, ""))
 			msgwin_status_add(_("Invalid directory for find in files."));
 		else if (search_text && *search_text)
 		{
 			gchar *locale_dir;
+			gboolean eregexp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+							lookup_widget(app->find_in_files_dialog, "check_eregexp")));
+			gboolean invert = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+							lookup_widget(app->find_in_files_dialog, "check_invert")));
+			gboolean case_sens = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+							lookup_widget(app->find_in_files_dialog, "check_case")));
+			gint opts = (eregexp ? FIF_USE_EREGEXP : 0) |
+						(invert ? FIF_INVERT_MATCH : 0) |
+						(case_sens ? FIF_CASE_SENSITIVE : 0);
 
 			locale_dir = g_locale_from_utf8(utf8_dir, -1, NULL, NULL, NULL);
 			if (locale_dir == NULL) locale_dir = g_strdup(utf8_dir);
 
 			gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), search_text);
-			search_find_in_files(search_text, locale_dir);
+			search_find_in_files(search_text, locale_dir, opts);
 			g_free(locale_dir);
 			gtk_widget_hide(app->find_in_files_dialog);
 		}
 		else
 			msgwin_status_add(_("No text to find."));
 
-		g_free(utf8_dir);
 	}
 	else
 		gtk_widget_hide(app->find_in_files_dialog);

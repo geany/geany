@@ -45,27 +45,57 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir);
 static GSList *search_get_file_list(const gchar *path, gint *length);
 
 
-gboolean search_find_in_files(const gchar *search_text, const gchar *dir)
+gboolean search_find_in_files(const gchar *search_text, const gchar *dir, fif_options opts)
 {
-	const gchar *argv_prefix[] = {app->tools_grep_cmd, "-nHI", "--", search_text, NULL};
+	gchar **argv_prefix;
+	gchar **grep_cmd_argv;
 	gchar **argv;
+	gchar grep_opts[] = "-nHI   ";
 	GPid child_pid;
-	gint stdout_fd, stdin_fd;
+	gint stdout_fd, stdin_fd, grep_cmd_argv_len, i, grep_opts_len = 4;
 	GError *error = NULL;
 	gboolean ret = FALSE;
 
 	if (! search_text || ! *search_text || ! dir) return TRUE;
-	if (! g_file_test(app->tools_grep_cmd, G_FILE_TEST_IS_EXECUTABLE))
+
+	// first process the grep command (need to split it in a argv because it can be "grep -I")
+	grep_cmd_argv = g_strsplit(app->tools_grep_cmd, " ", -1);
+	grep_cmd_argv_len = g_strv_length(grep_cmd_argv);
+
+	if (! g_file_test(grep_cmd_argv[0], G_FILE_TEST_IS_EXECUTABLE))
 	{
 		msgwin_status_add(_("Cannot execute grep tool '%s';"
-			" check the path setting in Preferences."), argv_prefix[0]);
+			" check the path setting in Preferences."), app->tools_grep_cmd);
 		return FALSE;
 	}
 
 	gtk_list_store_clear(msgwindow.store_msg);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
 
-	argv = search_get_argv(argv_prefix, dir);
+	if (! (opts & FIF_CASE_SENSITIVE))
+		grep_opts[grep_opts_len++] = 'i';
+	if (opts & FIF_USE_EREGEXP)
+		grep_opts[grep_opts_len++] = 'E';
+	if (opts & FIF_INVERT_MATCH)
+		grep_opts[grep_opts_len++] = 'v';
+	grep_opts[grep_opts_len] = '\0';
+
+	// set grep command and options
+	argv_prefix = g_new0(gchar*, grep_cmd_argv_len + 4);
+	for (i = 0; i < grep_cmd_argv_len; i++)
+	{
+		argv_prefix[i] = g_strdup(grep_cmd_argv[i]);
+	}
+	argv_prefix[grep_cmd_argv_len   ] = g_strdup(grep_opts);
+	argv_prefix[grep_cmd_argv_len + 1] = g_strdup("--");
+	argv_prefix[grep_cmd_argv_len + 2] = g_strdup(search_text);
+	argv_prefix[grep_cmd_argv_len + 3] = NULL;
+	g_strfreev(grep_cmd_argv);
+
+	// finally add the arguments(files to be searched)
+	argv = search_get_argv((const gchar**)argv_prefix, dir);
+	g_strfreev(argv_prefix);
+	//geany_debug(g_strjoinv(" ", argv));
 	if (argv == NULL) return FALSE;
 
 	if (! g_spawn_async_with_pipes(dir, (gchar**)argv, NULL,
@@ -80,9 +110,9 @@ gboolean search_find_in_files(const gchar *search_text, const gchar *dir)
 	}
 	else
 	{
-		g_child_watch_add(child_pid, search_close_pid, NULL);
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
 			search_read_io, NULL);
+		g_child_watch_add(child_pid, search_close_pid, NULL);
 		ret = TRUE;
 	}
 	g_strfreev(argv);

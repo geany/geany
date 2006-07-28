@@ -1004,24 +1004,21 @@ void dialogs_show_replace(void)
 
 void dialogs_show_find_in_files(void)
 {
-	static GtkWidget *dirlabel = NULL, *combo = NULL;
-	GtkWidget *entry; //the child GtkEntry of combo
+	static GtkWidget *combo = NULL;
+	static GtkWidget *entry1;
+	GtkWidget *entry2; // the child GtkEntry of combo
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
-	gchar *cur_dir, *dirtext;
+	gchar *cur_dir;
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
 	cur_dir = utils_get_current_file_dir();
-	if (cur_dir == NULL)
-	{
-		utils_set_statusbar(_("Invalid directory for find in files."), FALSE);
-		return;
-	}
 
 	if (app->find_in_files_dialog == NULL)
 	{
-		GtkWidget *label;
+		GtkWidget *label, *label1, *checkbox1, *checkbox2, *checkbox3, *vbox2, *vbox1;
+		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 		app->find_in_files_dialog = gtk_dialog_new_with_buttons(
 			_("Find in files"), GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1031,17 +1028,51 @@ void dialogs_show_find_in_files(void)
 		gtk_dialog_set_default_response(GTK_DIALOG(app->find_in_files_dialog),
 			GTK_RESPONSE_ACCEPT);
 
-		dirlabel = gtk_label_new("");
-		gtk_misc_set_alignment(GTK_MISC(dirlabel), 0, 0);
+		label1 = gtk_label_new("Directory to be searched:");
+		gtk_misc_set_alignment(GTK_MISC(label1), 0, 0);
+
+		entry1 = gtk_entry_new();
+		gtk_entry_set_max_length(GTK_ENTRY(entry1), 248);
+		gtk_entry_set_width_chars(GTK_ENTRY(entry1), 50);
+		g_object_set_data_full(G_OBJECT(app->find_in_files_dialog), "entry_dir",
+						gtk_widget_ref(entry1), (GDestroyNotify)gtk_widget_unref);
+
+		vbox1 = gtk_vbox_new(FALSE, 5);
+		gtk_box_pack_start(GTK_BOX(vbox1), label1, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(vbox1), entry1, FALSE, FALSE, 0);
 
 		label = gtk_label_new(_("Enter the search text here:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 		combo = gtk_combo_box_entry_new_text();
-		entry = gtk_bin_get_child(GTK_BIN(combo));
-		gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
-		gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
-		gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
+		entry2 = gtk_bin_get_child(GTK_BIN(combo));
+		gtk_entry_set_max_length(GTK_ENTRY(entry2), 248);
+		gtk_entry_set_width_chars(GTK_ENTRY(entry2), 50);
+		gtk_entry_set_activates_default(GTK_ENTRY(entry2), TRUE);
+
+		checkbox1 = gtk_check_button_new_with_mnemonic(_("_Case sensitive"));
+		g_object_set_data_full(G_OBJECT(app->find_in_files_dialog), "check_case",
+						gtk_widget_ref(checkbox1), (GDestroyNotify)gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox1), FALSE);
+
+		checkbox2 = gtk_check_button_new_with_mnemonic(_("Invert search results"));
+		g_object_set_data_full(G_OBJECT(app->find_in_files_dialog), "check_invert",
+						gtk_widget_ref(checkbox2), (GDestroyNotify)gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox2), FALSE);
+		gtk_tooltips_set_tip(tooltips, checkbox2,
+				_("Invert the sense of matching, to select non-matching lines."), NULL);
+
+		checkbox3 = gtk_check_button_new_with_mnemonic(_("_Use extended regular expressions"));
+		g_object_set_data_full(G_OBJECT(app->find_in_files_dialog), "check_eregexp",
+						gtk_widget_ref(checkbox3), (GDestroyNotify)gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox3), FALSE);
+		gtk_tooltips_set_tip(tooltips, checkbox3,
+							_("See grep's manual page for more information."), NULL);
+
+		vbox2 = gtk_vbox_new(FALSE, 0);
+		gtk_container_add(GTK_CONTAINER(vbox2), checkbox1);
+		gtk_container_add(GTK_CONTAINER(vbox2), checkbox2);
+		gtk_container_add(GTK_CONTAINER(vbox2), checkbox3);
 
 		g_signal_connect((gpointer) app->find_in_files_dialog, "response",
 				G_CALLBACK(on_find_in_files_dialog_response), combo);
@@ -1049,13 +1080,13 @@ void dialogs_show_find_in_files(void)
 				G_CALLBACK(gtk_widget_hide), NULL);
 
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(app->find_in_files_dialog)->vbox),
-			dirlabel, TRUE, TRUE, 6);
+			vbox1, TRUE, TRUE, 6);
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(app->find_in_files_dialog)->vbox),
 			label, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(app->find_in_files_dialog)->vbox),
 			combo, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(app->find_in_files_dialog)->vbox),
-			gtk_label_new(""), TRUE, TRUE, 0);
+			vbox2, TRUE, TRUE, 6);
 
 		gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(app->find_in_files_dialog)->vbox), 6);
 
@@ -1068,15 +1099,18 @@ void dialogs_show_find_in_files(void)
 		sci_get_selected_text(doc_list[idx].sci, sel);
 	}
 
-	entry = GTK_BIN(combo)->child;
-	if (sel) gtk_entry_set_text(GTK_ENTRY(entry), sel);
+	entry2 = GTK_BIN(combo)->child;
+	if (sel) gtk_entry_set_text(GTK_ENTRY(entry2), sel);
 	g_free(sel);
-	gtk_widget_grab_focus(entry);
 
-	dirtext = g_strdup_printf(_("Current directory: %s"), cur_dir);
-	gtk_label_set_text(GTK_LABEL(dirlabel), dirtext);
+	if (cur_dir) gtk_entry_set_text(GTK_ENTRY(entry1), cur_dir);
 	g_free(cur_dir);
-	g_free(dirtext);
+
+	// put the focus to the directory entry if it is empty
+	if (utils_strcmp(gtk_entry_get_text(GTK_ENTRY(entry1)), ""))
+		gtk_widget_grab_focus(entry1);
+	else
+		gtk_widget_grab_focus(entry2);
 
 	gtk_widget_show(app->find_in_files_dialog);
 }
