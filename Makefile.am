@@ -2,18 +2,26 @@
 
 SUBDIRS = tagmanager scintilla src po doc
 
+WIN32_BUILD_FILES = \
+	geany_private.rc \
+    win32-config.h \
+	makefile.win32 \
+    scintilla/makefile.win32 \
+    tagmanager/makefile.win32 \
+    src/makefile.win32
+
 EXTRA_DIST = \
 	autogen.sh \
 	geany.desktop.in \
 	geany.spec \
 	geany.glade \
-	geany_private.rc \
 	geany.gladep \
 	data/global.tags \
 	data/php.tags \
 	data/latex.tags \
 	data/html_entities.tags \
-	data/filetypes.*
+	data/filetypes.* \
+	$(WIN32_BUILD_FILES)
 
 uninstall-local:
 	rm -rf $(DESTDIR)$(pkgdatadir);

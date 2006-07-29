@@ -2,6 +2,7 @@
 
  * src/msgwindow.c, src/msgwindow.h, src/callbacks.c, src/search.c:
    Remember Find in files directory for opening grep results.
+ * Makefile.am: Add win32 build files to EXTRA_DIST.
 
 
 2006-07-28  Enrico Tröger  <enrico.troeger@uvena.de>
