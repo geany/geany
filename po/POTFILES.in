@@ -24,3 +24,5 @@ src/encodings.c
 src/treeviews.c
 src/vte.c
 src/keybindings.c
+src/search.c
+src/notebook.c
