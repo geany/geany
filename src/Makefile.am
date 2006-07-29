@@ -39,7 +39,7 @@ WINDRES = /usr/local/cross-tools/bin/i386-mingw32msvc-windres
 geany_SOURCES = $(SRCS) win32.c win32.h
 geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a -lstdc++ @PACKAGE_LIBS@ \
 			$(INTLLIBS) -lgdi32 -limm32 -lshell32 -lole32 -luuid -liberty -lcomdlg32 -lcomctl32 \
-			geany_windres.res
+			geany_private.res
 AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -mms-bitfields
 #AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -mms-bitfields -g -O0
 geany_LDFLAGS =	-mwindows
@@ -48,10 +48,10 @@ INCLUDES = -I../scintilla/include -I../tagmanager/include -DENABLE_NLS \
            -I/usr/local/cross-tools/include @PACKAGE_CFLAGS@
 
 geany_windres.res:
-	$(WINDRES) -i ../geany_windres.rc --input-format=rc -o geany_windres.res -O coff;
+	$(WINDRES) -i ../geany_private.rc --input-format=rc -o geany_private.res -O coff;
 
 clean-local:
-	rm -f geany_windres.res
+	rm -f geany_private.res
 
 else
 # build Geany for all other platforms

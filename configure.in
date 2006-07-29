@@ -169,7 +169,6 @@ doc/Makefile
 doc/geany.1
 geany.spec
 geany.desktop
-geany_windres.rc
 ])
 
 echo "----------------------------------------"
