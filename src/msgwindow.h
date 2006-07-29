@@ -58,6 +58,8 @@ typedef struct msgwin
 
 msgwin msgwindow;
 
+extern gchar *find_in_files_dir;
+
 
 void msgwin_prepare_msg_tree_view(void);
 

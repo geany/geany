@@ -110,6 +110,8 @@ gboolean search_find_in_files(const gchar *search_text, const gchar *dir, fif_op
 	}
 	else
 	{
+		g_free(find_in_files_dir);
+		find_in_files_dir = g_strdup(dir);
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
 			search_read_io, NULL);
 		g_child_watch_add(child_pid, search_close_pid, NULL);
@@ -167,7 +169,7 @@ static GSList *search_get_file_list(const gchar *path, gint *length)
 	dir = g_dir_open(path, 0, &error);
 	if (error)
 	{
-		geany_debug("Could not open directory (%s)", error->message);
+		msgwin_status_add(_("Could not open directory (%s)"), error->message);
 		g_error_free(error);
 		*length = 0;
 		return NULL;
@@ -197,12 +199,10 @@ static gboolean search_read_io              (GIOChannel *source,
 {
 	if (condition & (G_IO_IN | G_IO_PRI))
 	{
-		//GIOStatus s;
 		gchar *msg;
 
 		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
 		{
-			//if (s != G_IO_STATUS_NORMAL && s != G_IO_STATUS_EOF) break;
 			msgwin_msg_add(-1, -1, g_strstrip(msg));
 			g_free(msg);
 		}

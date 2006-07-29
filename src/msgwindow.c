@@ -29,7 +29,6 @@
 #include "callbacks.h"
 #include "msgwindow.h"
 #include "utils.h"
-#include "search.h"
 #include "document.h"
 
 #include <string.h>
@@ -38,6 +37,9 @@
 
 static GdkColor dark = {0, 58832, 58832, 58832};
 static GdkColor white = {0, 65535, 65535, 65535};
+
+gchar *find_in_files_dir = NULL;
+
 
 static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line);
 
@@ -323,7 +325,6 @@ gboolean msgwin_goto_messages_file_line()
 static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line)
 {
 	gchar *end = NULL;
-	gchar *path;
 	gchar **fields;
 	gchar *pattern;				// pattern to split the error message into some fields
 	guint field_min_len;		// used to detect errors after parsing
@@ -369,10 +370,8 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 	cur_idx = document_get_cur_idx();
 	if (cur_idx >= 0 && doc_list[cur_idx].is_valid)
 	{
-		path = g_path_get_dirname(doc_list[cur_idx].file_name);
-		*filename = g_strconcat(path, G_DIR_SEPARATOR_S,
+		*filename = g_strconcat(find_in_files_dir, G_DIR_SEPARATOR_S,
 			fields[field_idx_file] + skip_dot_slash, NULL);
-		g_free(path);
 	}
 
 	g_strfreev(fields);
