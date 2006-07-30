@@ -147,7 +147,7 @@ static void styleset_get_int(GKeyFile *config, GKeyFile *configh, const gchar *s
 
 static guint invert(guint icolour)
 {
-	if (types[GEANY_FILETYPES_ALL]->styling[8][0])
+	if (types[GEANY_FILETYPES_ALL]->styling[9][0])
 	{
 		guint r, g, b;
 
@@ -203,8 +203,9 @@ static void styleset_common_init(void)
 	styleset_get_hex(config, config_home, "styling", "margin_linenumber", "0x000000", "0xd0d0d0", "false", types[GEANY_FILETYPES_ALL]->styling[4]);
 	styleset_get_hex(config, config_home, "styling", "margin_folding", "0x000000", "0xdfdfdf", "false", types[GEANY_FILETYPES_ALL]->styling[5]);
 	styleset_get_hex(config, config_home, "styling", "current_line", "0x000000", "0xe5e5e5", "true", types[GEANY_FILETYPES_ALL]->styling[6]);
-	styleset_get_int(config, config_home, "styling", "folding_style", 1, 1, types[GEANY_FILETYPES_ALL]->styling[7]);
-	styleset_get_int(config, config_home, "styling", "invert_all", 0, 0, types[GEANY_FILETYPES_ALL]->styling[8]);
+	styleset_get_hex(config, config_home, "styling", "caret", "0x000000", "0x000000", "false", types[GEANY_FILETYPES_ALL]->styling[7]);
+	styleset_get_int(config, config_home, "styling", "folding_style", 1, 1, types[GEANY_FILETYPES_ALL]->styling[8]);
+	styleset_get_int(config, config_home, "styling", "invert_all", 0, 0, types[GEANY_FILETYPES_ALL]->styling[9]);
 
 	types[GEANY_FILETYPES_ALL]->keywords = NULL;
 	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_ALL, GEANY_WORDCHARS);
@@ -229,6 +230,9 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 
 	SSM(sci, SCI_SETUSETABS, TRUE, 0);
 	SSM(sci, SCI_SETTABWIDTH, app->pref_editor_tab_width, 0);
+
+	// caret colour
+	SSM(sci, SCI_SETCARETFORE, invert(types[GEANY_FILETYPES_ALL]->styling[7][0]), 0);
 
 	// colourize the current line
 	SSM(sci, SCI_SETCARETLINEBACK, invert(types[GEANY_FILETYPES_ALL]->styling[6][1]), 0);
@@ -257,7 +261,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETFOLDFLAGS, 0, 0);
 
 	// choose the folding style - boxes or circles, I prefer boxes, so it is default ;-)
-	switch (types[GEANY_FILETYPES_ALL]->styling[7][0])
+	switch (types[GEANY_FILETYPES_ALL]->styling[8][0])
 	{
 		case 2:
 		{
@@ -278,7 +282,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	}
 
 	// choose the folding style - straight or curved, I prefer straight, so it is default ;-)
-	switch (types[GEANY_FILETYPES_ALL]->styling[7][1])
+	switch (types[GEANY_FILETYPES_ALL]->styling[8][1])
 	{
 		case 2:
 		{
