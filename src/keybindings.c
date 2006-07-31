@@ -86,6 +86,7 @@ static void cb_func_switch_tabright(void);
 static void cb_func_toggle_sidebar(void);
 static void cb_func_edit_duplicateline(void);
 static void cb_func_edit_commentline(void);
+static void cb_func_edit_uncommentline(void);
 static void cb_func_edit_autocomplete(void);
 static void cb_func_edit_calltip(void);
 static void cb_func_edit_macrolist(void);
@@ -193,6 +194,8 @@ void keybindings_init(void)
 		GDK_g, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit_commentline,
 		GDK_d, GDK_CONTROL_MASK, "edit_commentline", _("Comment line"));
+	keys[GEANY_KEYS_EDIT_UNCOMMENTLINE] = fill(cb_func_edit_uncommentline,
+		GDK_d, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_uncommentline", _("Uncomment line"));
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
 #ifdef G_OS_WIN32
@@ -702,6 +705,13 @@ static void cb_func_edit_commentline(void)
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_cb_do_comment(idx);
+}
+
+static void cb_func_edit_uncommentline(void)
+{
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	sci_cb_do_uncomment(idx);
 }
 
 static void cb_func_edit_autocomplete(void)

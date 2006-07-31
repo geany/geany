@@ -320,7 +320,8 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	gchar *text, *line_buf;
 
-	if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL) return;
+	if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL && lexer != SCLEX_BASH)
+			return;
 
 	// check that the line is empty, to not kill text in the line
 	line_buf = g_malloc(line_len + 1);
@@ -841,6 +842,147 @@ void sci_cb_auto_table(ScintillaObject *sci, gint pos)
 								indent, NULL);
 	sci_insert_text(sci, pos, table);
 	g_free(table);
+}
+
+
+void sci_cb_do_uncomment(gint idx)
+{
+	gint first_line;
+	gint last_line;
+	gint x, i, line_start, line_len;
+	gchar sel[64], *co, *cc;
+	gboolean break_loop = FALSE;
+	filetype *ft;
+
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	ft = doc_list[idx].file_type;
+
+	first_line = sci_get_line_from_position(doc_list[idx].sci,
+		sci_get_selection_start(doc_list[idx].sci));
+	// Find the last line with chars selected (not EOL char)
+	last_line = sci_get_line_from_position(doc_list[idx].sci,
+		sci_get_selection_end(doc_list[idx].sci) - 1);
+	last_line = MAX(first_line, last_line);
+
+	// hack for detection of HTML vs PHP code, if non-PHP set filetype to XML
+	line_start = sci_get_position_from_line(doc_list[idx].sci, first_line);
+	if (ft->id == GEANY_FILETYPES_PHP)
+	{
+		if (sci_get_style_at(doc_list[idx].sci, line_start) < 118 ||
+			sci_get_style_at(doc_list[idx].sci, line_start) > 127)
+			ft = filetypes[GEANY_FILETYPES_XML];
+	}
+
+	co = ft->comment_open;
+	cc = ft->comment_close;
+	if (co == NULL) return;
+
+	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
+
+	for (i = first_line; (i <= last_line) && (! break_loop); i++)
+	{
+		line_start = sci_get_position_from_line(doc_list[idx].sci, i);
+		line_len = sci_get_line_length(doc_list[idx].sci, i);
+		x = 0;
+
+		//geany_debug("line: %d line_start: %d len: %d (%d)", i, line_start, MIN(63, (line_len - 1)), line_len);
+		sci_get_text_range(doc_list[idx].sci, line_start, MIN((line_start + 63), (line_start + line_len - 1)), sel);
+		sel[MIN(63, (line_len - 1))] = '\0';
+
+		while (isspace(sel[x])) x++;
+
+		// to skip blank lines
+		if (x < line_len && sel[x] != '\0')
+		{
+			// use single line comment
+			if (cc == NULL || strlen(cc) == 0)
+			{
+				guint i;
+				guint len = strlen(co);
+
+				switch (len)
+				{
+					case 1: if (sel[x] != co[0]) continue; break;
+					case 2: if (sel[x] != co[0] || sel[x+1] != co[1]) continue; break;
+					case 3: if (sel[x] != co[0] || sel[x+1] != co[1] || sel[x+2] != co[2])
+								continue; break;
+					default: continue;
+				}
+
+				SSM(doc_list[idx].sci, SCI_GOTOPOS, line_start + x + len, 0);
+				for (i = 0; i < len; i++) SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
+			}
+			// use multi line comment
+			else
+			{
+				gint style_comment;
+				gint lexer = SSM(doc_list[idx].sci, SCI_GETLEXER, 0, 0);
+
+				// process only lines which are already comments
+				switch (lexer)
+				{	// I will list only those lexers which support multi line comments
+					case SCLEX_XML:
+					case SCLEX_HTML:
+					{
+						if (sci_get_style_at(doc_list[idx].sci, line_start) >= 118 &&
+							sci_get_style_at(doc_list[idx].sci, line_start) <= 127)
+							style_comment = SCE_HPHP_COMMENT;
+						else style_comment = SCE_H_COMMENT;
+						break;
+					}
+					case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
+					case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
+					case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
+					case SCLEX_CPP:
+					case SCLEX_PASCAL:
+					default: style_comment = SCE_C_COMMENT;
+				}
+				if (sci_get_style_at(doc_list[idx].sci, line_start + x) == style_comment)
+				{
+					// find the beginning of the multi line comment
+					gint pos, line, len, x;
+					gchar *linebuf;
+
+					// remove comment open chars
+					pos = document_find_text(idx, co, 0, TRUE);
+					SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
+
+					// check whether the line is empty and can be deleted
+					line = sci_get_line_from_position(doc_list[idx].sci, pos);
+					len = sci_get_line_length(doc_list[idx].sci, line);
+					linebuf = g_malloc(len + 1);
+					sci_get_line(doc_list[idx].sci, line, linebuf);
+					linebuf[len] = '\0';
+					x = 0;
+					while (linebuf[x] != '\0' && isspace(linebuf[x])) x++;
+					if (x == len) SSM(doc_list[idx].sci, SCI_LINEDELETE, 0, 0);
+					g_free(linebuf);
+
+					// remove comment close chars
+					pos = document_find_text(idx, cc, 0, FALSE);
+					SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
+
+					// check whether the line is empty and can be deleted
+					line = sci_get_line_from_position(doc_list[idx].sci, pos);
+					len = sci_get_line_length(doc_list[idx].sci, line);
+					linebuf = g_malloc(len + 1);
+					sci_get_line(doc_list[idx].sci, line, linebuf);
+					geany_debug("%d", line);
+					linebuf[len] = '\0';
+					x = 0;
+					while (linebuf[x] != '\0' && isspace(linebuf[x])) x++;
+					if (x == len) SSM(doc_list[idx].sci, SCI_LINEDELETE, 0, 0);
+					g_free(linebuf);
+				}
+
+				// break because we are already on the last line
+				break_loop = TRUE;
+				break;
+			}
+		}
+	}
+	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
 }
 
 

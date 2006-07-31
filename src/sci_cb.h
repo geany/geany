@@ -47,6 +47,8 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx);
 
 void sci_cb_do_comment(gint idx);
 
+void sci_cb_do_uncomment(gint idx);
+
 void sci_cb_highlight_braces(ScintillaObject *sci, gint cur_pos);
 
 void sci_cb_auto_multiline(ScintillaObject *sci, gint pos);

@@ -1,3 +1,10 @@
+2006-07-31  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/keybindings.c, src/sci_cb.c:
+   Added functionality to uncomment code and added keyboard shortcut
+   Ctrl+Shift+D for this (closes #1521714).
+
+
 2006-07-30  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook, data/filetypes.common, src/.c:
