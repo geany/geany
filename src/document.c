@@ -184,8 +184,8 @@ void document_init_doclist(void)
 	{
 		doc_list[i].is_valid = FALSE;
 		doc_list[i].has_tags = FALSE;
-		doc_list[i].use_auto_indention = TRUE;
-		doc_list[i].line_breaking = TRUE;
+		doc_list[i].use_auto_indention = app->pref_editor_use_auto_indention;
+		doc_list[i].line_breaking = app->pref_editor_line_breaking;
 		doc_list[i].readonly = FALSE;
 		doc_list[i].tag_store = NULL;
 		doc_list[i].tag_tree = NULL;
@@ -282,8 +282,8 @@ gint document_create_new_sci(const gchar *filename)
 	this->last_check = time(NULL);
 	this->do_overwrite = FALSE;
 	this->readonly = FALSE;
-	this->line_breaking = TRUE;
-	this->use_auto_indention = TRUE;
+	this->line_breaking = app->pref_editor_line_breaking;
+	this->use_auto_indention = app->pref_editor_use_auto_indention;
 	this->has_tags = FALSE;
 	this->is_valid = TRUE;
 
@@ -366,6 +366,7 @@ void document_new_file(filetype *ft)
 		doc_list[idx].mtime = time(NULL);
 		doc_list[idx].changed = FALSE;
 		document_set_text_changed(idx);
+		utils_document_show_hide(idx); //update the document menu
 #ifdef G_OS_WIN32
 		sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
 #else
@@ -604,25 +605,9 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 
-	app->ignore_callback = TRUE;
-
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
-				lookup_widget(app->window, "menu_write_unicode_bom1")), doc_list[idx].has_bom);
-	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
-			utils_is_unicode_charset(doc_list[idx].encoding));
-
-	app->ignore_callback = FALSE;
-
 	if (! reload)
 	{
 		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(utf8_filename);
-
-		app->ignore_callback = TRUE;
-
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "set_file_readonly1")),
-				readonly);
-
-		app->ignore_callback = FALSE;
 
 		doc_list[idx].readonly = readonly;
 		sci_set_readonly(doc_list[idx].sci, readonly);
@@ -636,6 +621,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	}
 
 	document_set_text_changed(idx);
+	utils_document_show_hide(idx); //update the document menu
 
 	g_free(data);
 

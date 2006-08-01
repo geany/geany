@@ -738,32 +738,14 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 
 	if (idx >= 0 && app->opening_session_files == FALSE)
 	{
-		app->ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(
-				GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_breaking1")),
-				doc_list[idx].line_breaking);
-		gtk_check_menu_item_set_active(
-				GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_use_auto_indention1")),
-				doc_list[idx].use_auto_indention);
-		gtk_check_menu_item_set_active(
-				GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "set_file_readonly1")),
-				doc_list[idx].readonly);
-		gtk_check_menu_item_set_active(
-				GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_write_unicode_bom1")),
-				doc_list[idx].has_bom);
-
-		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
-				utils_is_unicode_charset(doc_list[idx].encoding));
-
 		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 
 		document_set_text_changed(idx);
+		utils_document_show_hide(idx); //update the document menu
 		utils_build_show_hide(idx);
 		utils_update_statusbar(idx, -1);
 		utils_set_window_title(idx);
 		utils_update_tag_list(idx, FALSE);
-
-		app->ignore_callback = FALSE;
 	}
 }
 

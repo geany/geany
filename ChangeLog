@@ -1,3 +1,12 @@
+2006-08-01  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/interface.c, src/utils.c, src/utils.h, src/callbacks.c,
+   src/keyfile.c, src/document.c, src/prefs.c, geany.glade:
+   Added Auto indentation and Line wrapping options to Preferences
+   dialog. Split up Miscellaneous items into Display and Features.
+   Renamed Change Selection and Run toolbutton.
+
+
 2006-07-31  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/keybindings.c, src/sci_cb.c:

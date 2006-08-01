@@ -215,11 +215,17 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_line_end");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_show_line_endings);
 
-	widget = lookup_widget(app->prefs_dialog, "check_xmltag");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_auto_close_xml_tags);
+	widget = lookup_widget(app->prefs_dialog, "check_auto_indent");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_use_auto_indention);
+
+	widget = lookup_widget(app->prefs_dialog, "check_line_wrapping");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_line_breaking);
 
 	widget = lookup_widget(app->prefs_dialog, "check_auto_complete");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_auto_complete_constructs);
+
+	widget = lookup_widget(app->prefs_dialog, "check_xmltag");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_auto_close_xml_tags);
 
 	widget = lookup_widget(app->prefs_dialog, "check_folding");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_folding);
@@ -498,11 +504,17 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_line_end");
 		app->pref_editor_show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(app->prefs_dialog, "check_xmltag");
-		app->pref_editor_auto_close_xml_tags = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		widget = lookup_widget(app->prefs_dialog, "check_auto_indent");
+		app->pref_editor_use_auto_indention = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_line_wrapping");
+		app->pref_editor_line_breaking = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_auto_complete");
 		app->pref_editor_auto_complete_constructs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_xmltag");
+		app->pref_editor_auto_close_xml_tags = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_indicators");
 		app->pref_editor_use_indicators = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

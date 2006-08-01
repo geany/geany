@@ -225,4 +225,6 @@ gchar *utils_scan_unicode_bom(const gchar *string);
 
 gboolean utils_is_unicode_charset(const gchar *string);
 
+void utils_document_show_hide(gint idx);
+
 #endif

@@ -2506,3 +2506,29 @@ gboolean utils_is_unicode_charset(const gchar *string)
 	}
 	return FALSE;
 }
+
+
+void utils_document_show_hide(gint idx)
+{
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	app->ignore_callback = TRUE;
+
+	gtk_check_menu_item_set_active(
+			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_breaking1")),
+			doc_list[idx].line_breaking);
+	gtk_check_menu_item_set_active(
+			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_use_auto_indention1")),
+			doc_list[idx].use_auto_indention);
+	gtk_check_menu_item_set_active(
+			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "set_file_readonly1")),
+			doc_list[idx].readonly);
+	gtk_check_menu_item_set_active(
+			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_write_unicode_bom1")),
+			doc_list[idx].has_bom);
+
+	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
+			utils_is_unicode_charset(doc_list[idx].encoding));
+
+	app->ignore_callback = FALSE;
+
+}
