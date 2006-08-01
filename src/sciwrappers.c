@@ -843,3 +843,7 @@ void sci_select_all(ScintillaObject *sci)
 	SSM(sci, SCI_SELECTALL, 0, 0);
 }
 
+gint sci_get_line_indent_position(ScintillaObject *sci, gint line)
+{
+	return SSM(sci, SCI_GETLINEINDENTPOSITION, line, 0);
+}

@@ -87,6 +87,8 @@ static void cb_func_toggle_sidebar(void);
 static void cb_func_edit_duplicateline(void);
 static void cb_func_edit_commentline(void);
 static void cb_func_edit_uncommentline(void);
+static void cb_func_edit_increaseindent(void);
+static void cb_func_edit_decreaseindent(void);
 static void cb_func_edit_autocomplete(void);
 static void cb_func_edit_calltip(void);
 static void cb_func_edit_macrolist(void);
@@ -196,6 +198,10 @@ void keybindings_init(void)
 		GDK_d, GDK_CONTROL_MASK, "edit_commentline", _("Comment line"));
 	keys[GEANY_KEYS_EDIT_UNCOMMENTLINE] = fill(cb_func_edit_uncommentline,
 		GDK_d, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_uncommentline", _("Uncomment line"));
+	keys[GEANY_KEYS_EDIT_INCREASEINDENT] = fill(cb_func_edit_increaseindent,
+		GDK_i, GDK_CONTROL_MASK, "edit_increaseindent", _("Increase indent"));
+	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit_decreaseindent,
+		GDK_i, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_decreaseindent", _("Decrease indent"));
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
 #ifdef G_OS_WIN32
@@ -281,6 +287,11 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACETABS, menu_replace_tabs);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FOLDALL, menu_fold_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNFOLDALL, menu_unfold_all1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_UNCOMMENTLINE, menu_uncomment_line1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_DUPLICATELINE, menu_duplicate_line1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_INCREASEINDENT, menu_increase_indent1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_DECREASEINDENT, menu_decrease_indent1);
 
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_UNDO, undo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_REDO, redo1);
@@ -291,6 +302,11 @@ static void keybindings_add_accels()
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDEFINITION, goto_tag_definition1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDECLARATION, goto_tag_declaration1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_UNCOMMENTLINE, menu_uncomment_line2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_DUPLICATELINE, menu_duplicate_line2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_INCREASEINDENT, menu_increase_indent2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_DECREASEINDENT, menu_decrease_indent2);
 
 	// the build menu items are set if the build menus are created
 
@@ -692,26 +708,17 @@ static void cb_func_toggle_sidebar(void)
 
 static void cb_func_edit_duplicateline(void)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (sci_can_copy(doc_list[idx].sci))
-		sci_selection_duplicate(doc_list[idx].sci);
-	else
-		sci_line_duplicate(doc_list[idx].sci);
+	on_menu_duplicate_line1_activate(NULL, NULL);
 }
 
 static void cb_func_edit_commentline(void)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_do_comment(idx);
+	on_menu_comment_line1_activate(NULL, NULL);
 }
 
 static void cb_func_edit_uncommentline(void)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_do_uncomment(idx);
+	on_menu_uncomment_line1_activate(NULL, NULL);
 }
 
 static void cb_func_edit_autocomplete(void)
@@ -753,4 +760,14 @@ static void cb_func_menu_print(void)
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	document_print(idx);
+}
+
+static void cb_func_edit_increaseindent(void)
+{
+	on_menu_increase_indent1_activate(NULL, NULL);
+}
+
+static void cb_func_edit_decreaseindent(void)
+{
+	on_menu_decrease_indent1_activate(NULL, NULL);
 }

@@ -1,3 +1,12 @@
+2006-08-01  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/interface.c, src/callbacks.c, src/keybindings.c,
+   src/main.c, src/sciwrappers.c:
+   Added some menu items to the edit menu for editing tasks.
+   Added keyboard shortcuts for increase/decrease of line indentation
+   (closes #1521717).
+
+
 2006-08-01  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/interface.c, src/utils.c, src/utils.h, src/callbacks.c,

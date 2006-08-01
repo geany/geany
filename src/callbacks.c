@@ -2679,3 +2679,68 @@ on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
 	}
 }
 
+
+void
+on_menu_comment_line1_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	sci_cb_do_comment(idx);
+}
+
+
+void
+on_menu_uncomment_line1_activate       (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	sci_cb_do_uncomment(idx);
+}
+
+
+void
+on_menu_duplicate_line1_activate       (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (sci_can_copy(doc_list[idx].sci))
+		sci_selection_duplicate(doc_list[idx].sci);
+	else
+		sci_line_duplicate(doc_list[idx].sci);
+}
+
+
+void
+on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	gint line, pos;
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	line = sci_get_current_line(doc_list[idx].sci, -1);
+	pos = sci_get_line_indent_position(doc_list[idx].sci, line);
+
+	sci_set_current_position(doc_list[idx].sci, pos);
+	sci_cmd(doc_list[idx].sci, SCI_TAB);
+}
+
+
+void
+on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	gint line, pos;
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	line = sci_get_current_line(doc_list[idx].sci, -1);
+	pos = sci_get_line_indent_position(doc_list[idx].sci, line);
+
+	sci_set_current_position(doc_list[idx].sci, pos);
+	sci_cmd(doc_list[idx].sci, SCI_BACKTAB);
+}
+

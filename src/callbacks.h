@@ -623,3 +623,23 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 void
 on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
+
+void
+on_menu_comment_line1_activate         (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_uncomment_line1_activate       (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_duplicate_line1_activate       (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

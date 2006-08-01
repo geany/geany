@@ -57,7 +57,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image959">
+			<widget class="GtkImage" id="image987">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -150,7 +150,7 @@
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image960">
+			<widget class="GtkImage" id="image988">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -171,7 +171,7 @@
 		      <signal name="activate" handler="on_toolbutton23_clicked" last_modification_time="Mon, 24 Jul 2006 19:26:04 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image961">
+			<widget class="GtkImage" id="image989">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -191,7 +191,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image962">
+			<widget class="GtkImage" id="image990">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -271,7 +271,7 @@
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image963">
+			<widget class="GtkImage" id="image991">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -402,7 +402,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image964">
+			<widget class="GtkImage" id="image992">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -434,7 +434,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image965">
+			<widget class="GtkImage" id="image993">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -509,19 +509,19 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkMenuItem" id="menu_change_selection2">
+		    <widget class="GtkMenuItem" id="menu_format1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Convert the case of the current selection</property>
-		      <property name="label" translatable="yes">C_onvert case</property>
+		      <property name="label" translatable="yes">_Format</property>
 		      <property name="use_underline">True</property>
 
 		      <child>
-			<widget class="GtkMenu" id="menu_change_selection2_menu">
+			<widget class="GtkMenu" id="menu_format1_menu">
 
 			  <child>
 			    <widget class="GtkMenuItem" id="menu_to_lower-case2">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">To lower-case</property>
+			      <property name="label" translatable="yes">Convert Selection to _lower-case</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_to_lower-case1_activate" last_modification_time="Fri, 06 May 2005 18:21:23 GMT"/>
 			    </widget>
@@ -530,9 +530,66 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="menu_to_upper-case2">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">To upper-case</property>
+			      <property name="label" translatable="yes">Convert Selection to _upper-case</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_to_upper-case1_activate" last_modification_time="Fri, 06 May 2005 18:21:23 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSeparatorMenuItem" id="separator28">
+			      <property name="visible">True</property>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkMenuItem" id="menu_comment_line1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_Comment Line</property>
+			      <property name="use_underline">True</property>
+			      <signal name="activate" handler="on_menu_comment_line1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkMenuItem" id="menu_uncomment_line1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_Uncomment Line</property>
+			      <property name="use_underline">True</property>
+			      <signal name="activate" handler="on_menu_uncomment_line1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkMenuItem" id="menu_duplicate_line1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">D_uplicate Line</property>
+			      <property name="use_underline">True</property>
+			      <signal name="activate" handler="on_menu_duplicate_line1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSeparatorMenuItem" id="separator29">
+			      <property name="visible">True</property>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkMenuItem" id="menu_increase_indent1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_Increase Indent</property>
+			      <property name="use_underline">True</property>
+			      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkMenuItem" id="menu_decrease_indent1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_Decrease Indent</property>
+			      <property name="use_underline">True</property>
+			      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 			    </widget>
 			  </child>
 			</widget>
@@ -613,7 +670,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image966">
+			<widget class="GtkImage" id="image994">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -655,7 +712,7 @@
 		      <signal name="activate" handler="on_go_to_line1_activate" last_modification_time="Tue, 23 May 2006 17:10:49 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image967">
+			<widget class="GtkImage" id="image995">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -690,7 +747,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image968">
+			<widget class="GtkImage" id="image996">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -712,7 +769,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image969">
+			<widget class="GtkImage" id="image997">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -2195,7 +2252,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image787">
+	<widget class="GtkImage" id="image983">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2227,7 +2284,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image788">
+	<widget class="GtkImage" id="image984">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2302,18 +2359,18 @@
   </child>
 
   <child>
-    <widget class="GtkMenuItem" id="change_selection1">
+    <widget class="GtkMenuItem" id="menu_format2">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Convert case</property>
+      <property name="label" translatable="yes">_Format</property>
       <property name="use_underline">True</property>
 
       <child>
-	<widget class="GtkMenu" id="change_selection1_menu">
+	<widget class="GtkMenu" id="menu_format2_menu">
 
 	  <child>
 	    <widget class="GtkMenuItem" id="to_lower-case1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">To lower-case</property>
+	      <property name="label" translatable="yes">Convert Selection to _lower-case</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_to_lower-case1_activate" last_modification_time="Thu, 05 May 2005 08:29:19 GMT"/>
 	    </widget>
@@ -2322,9 +2379,66 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="to_upper-case1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">To upper-case</property>
+	      <property name="label" translatable="yes">Convert Selection to _upper-case</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_to_upper-case1_activate" last_modification_time="Thu, 05 May 2005 08:29:19 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorMenuItem" id="separator30">
+	      <property name="visible">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="menu_comment_line2">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Comment Line</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_menu_comment_line1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="menu_uncomment_line2">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Uncomment Line</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_menu_uncomment_line1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="menu_duplicate_line2">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">D_uplicate Line</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_menu_duplicate_line1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorMenuItem" id="separator31">
+	      <property name="visible">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="menu_increase_indent2">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Increase Indent</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="menu_decrease_indent2">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Decrease Indent</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -2346,7 +2460,7 @@
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image789">
+	<widget class="GtkImage" id="image985">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2392,7 +2506,7 @@
       <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 16 Jul 2005 11:20:32 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image790">
+	<widget class="GtkImage" id="image986">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -5246,7 +5360,7 @@ Bottom
 		      <child>
 			<widget class="GtkImage" id="image808">
 			  <property name="visible">True</property>
-			  <property name="stock">gtk-directory</property>
+			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">4</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
