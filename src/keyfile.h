@@ -24,16 +24,19 @@
 #define GEANY_KEYFILE_H 1
 
 
-void configuration_save(void);
+void configuration_save();
 
-gboolean configuration_load(void);
+gboolean configuration_load();
 
-gboolean configuration_open_files(void);
+gboolean configuration_open_files();
 
-void configuration_read_filetype_extensions(void);
+void configuration_read_filetype_extensions();
 
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */
-void configuration_apply_settings(void);
+void configuration_apply_settings();
+
+/* Generate the config files in "data/" from defaults */
+void configuration_generate_data_files();
 
 #endif

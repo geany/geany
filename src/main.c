@@ -69,6 +69,8 @@ static gchar *alternate_config = NULL;
 static gboolean no_vte = FALSE;
 static gchar *lib_vte = NULL;
 #endif
+static gboolean generate_datafiles = FALSE;
+
 static GOptionEntry entries[] =
 {
 	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, N_("runs in debug mode (means being verbose)"), NULL },
@@ -83,6 +85,7 @@ static GOptionEntry entries[] =
 	{ "vte-lib", 'l', 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("filename of libvte.so"), NULL },
 #endif
 	{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, N_("show version and exit"), NULL },
+	{ "generate-data-files", 'g', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, "", NULL },
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
 
@@ -555,6 +558,11 @@ gint main(gint argc, gchar **argv)
 	app->fifo_ioc = ioc;
 #endif
 	filetypes_init_types();
+	if (generate_datafiles)
+	{
+		configuration_generate_data_files();
+		exit(0);
+	}
 	configuration_read_filetype_extensions();
 
 	gtk_window_set_icon(GTK_WINDOW(app->window), utils_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE));

@@ -39,7 +39,10 @@ static gint hpan_position;
 static gint vpan_position;
 
 
-void configuration_save(void)
+static void generate_filetype_extensions(const gchar *output_dir);
+
+
+void configuration_save()
 {
 	gint i = 0, j = 0, idx, max;
 	gboolean config_exists;
@@ -210,7 +213,7 @@ void configuration_save(void)
 	else \
 		value = default_value;
 
-gboolean configuration_load(void)
+gboolean configuration_load()
 {
 	gboolean config_exists;
 	guint i, geo_len;
@@ -386,7 +389,7 @@ gboolean configuration_load(void)
 }
 
 
-gboolean configuration_open_files(void)
+gboolean configuration_open_files()
 {
 	gint i;
 	guint x, pos, ft_id, y, len;
@@ -450,7 +453,7 @@ gboolean configuration_open_files(void)
 
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */
-void configuration_apply_settings(void)
+void configuration_apply_settings()
 {
 	if (scribble_text)
 	{	// update the scribble widget, because now it's realized
@@ -493,46 +496,64 @@ void configuration_apply_settings(void)
 }
 
 
-#if 0
+/* Generate the config files in "data/" from defaults */
+void configuration_generate_data_files()
+{
+	gchar *cur_dir, *gen_dir;
+
+	cur_dir = g_get_current_dir();
+	gen_dir = g_strconcat(cur_dir, G_DIR_SEPARATOR_S, "data", NULL);
+	g_free(cur_dir);
+
+	if (! g_file_test(gen_dir, G_FILE_TEST_IS_DIR))
+	{
+		g_print("%s does not exist!\n", gen_dir);
+		return;
+	}
+	g_print("Generating system files in %s:\n", gen_dir);
+	generate_filetype_extensions(gen_dir);
+	g_free(gen_dir);
+}
+
+
 /* This will write the default settings for the system filetype_extensions.conf */
 static void generate_filetype_extensions(const gchar *output_dir)
 {
 	guint i;
-	gsize len = 0;
 	gchar *configfile = g_strconcat(output_dir, G_DIR_SEPARATOR_S, "filetype_extensions.conf", NULL);
-	gchar *data, *comment;
+	gchar *data, *basename;
+	GKeyFile *config;
 
 	config = g_key_file_new();
-	// add missing keys
+	// add filetype keys
 	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
-		if (! g_key_file_has_key(config, "Extensions", filetypes[i]->name, NULL))
-		{
-			g_key_file_set_string_list(config, "Extensions", filetypes[i]->name,
-						(const gchar**) filetypes[i]->pattern, g_strv_length(filetypes[i]->pattern));
-		}
+		g_key_file_set_string_list(config, "Extensions", filetypes[i]->name,
+			(const gchar**) filetypes[i]->pattern, g_strv_length(filetypes[i]->pattern));
 	}
-	// add comment, if it doesn't exist
-	comment = g_key_file_get_comment(config, NULL, NULL, NULL);
-	if (!comment || strlen(comment) == 0)
-	{
-		g_key_file_set_comment(config, "Extensions", NULL,
-			"Filetype extension configuration file for Geany\n"
-			"Insert as many items as you want, seperate them with a \";\".\n"
-			"See Geany's main documentation for details.", NULL);
-	}
-	g_free(comment);
+	// add comment
+	g_key_file_set_comment(config, "Extensions", NULL,
+		"Filetype extension configuration file for Geany\n"
+		"Insert as many items as you want, seperate them with a \";\".\n"
+		"See Geany's main documentation for details.", NULL);
 
 	// write the file
+	g_print("%s: ", __func__);
 	data = g_key_file_to_data(config, NULL, NULL);
-	utils_write_file(configfile, data);
+	basename = g_path_get_basename(configfile);
+
+	if (utils_write_file(configfile, data) == 0)
+		g_print("wrote file %s.\n", basename);
+	else
+		g_print("*** ERROR: error writing file %s\n", basename);
+	g_free(basename);
+
 	g_free(data);
 	g_key_file_free(config);
 }
-#endif
 
 
-void configuration_read_filetype_extensions(void)
+void configuration_read_filetype_extensions()
 {
 	guint i;
 	gsize len = 0;

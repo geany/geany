@@ -23,6 +23,8 @@
    Install a system filetype_extensions.conf which can be overridden.
  * src/filetypes.c data/filetype_extensions.conf:
    Add Make pattern to recognise makefile*.
+ * src/keyfile.c, src/keyfile.h, src/main.c:
+   Add hidden option -g to generate filetype_extensions.conf.
 
 
 2006-07-31  Enrico Tröger  <enrico.troeger@uvena.de>
