@@ -77,11 +77,6 @@ static gboolean ignore_toolbar_toggle = FALSE;
 // the flags given in the search dialog(stored statically for "find next" and "replace")
 static gint search_flags;
 static gboolean search_backwards;
-static gboolean search_replace_escape;
-static gint search_flags_re;
-static gboolean search_backwards_re;
-static gboolean search_replace_escape_re;
-static gboolean search_in_all_buffers_re;
 
 // holds the current position where the mouse pointer is when the popup menu for the scintilla
 // scintilla widget is shown
@@ -592,6 +587,16 @@ on_toolbutton10_clicked                (GtkToolButton   *toolbutton,
 }
 
 
+static void setup_find_next(GtkEditable *editable)
+{
+	g_free(app->search_text);
+	app->search_text = g_strdup(gtk_editable_get_chars(editable, 0, -1));
+	// clear search flags so can later use Search->Find Next/Previous
+	search_flags = 0;
+	search_backwards = FALSE;
+}
+
+
 // search text
 void
 on_entry1_activate                     (GtkEntry        *entry,
@@ -599,8 +604,7 @@ on_entry1_activate                     (GtkEntry        *entry,
 {
 	gint idx = document_get_cur_idx();
 
-	g_free(app->search_text);
-	app->search_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
+	setup_find_next(GTK_EDITABLE(entry));
 	document_find_next(idx, app->search_text, 0, FALSE, FALSE);
 }
 
@@ -612,8 +616,7 @@ on_entry1_changed                      (GtkEditable     *editable,
 {
 	gint idx = document_get_cur_idx();
 
-	g_free(app->search_text);
-	app->search_text = g_strdup(gtk_editable_get_chars(editable, 0, -1));
+	setup_find_next(editable);
 	document_find_next(idx, app->search_text, 0, FALSE, TRUE);
 }
 
@@ -627,8 +630,7 @@ on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
 	gint idx = document_get_cur_idx();
 	GtkWidget *entry = lookup_widget(GTK_WIDGET(app->window), "entry1");
 
-	g_free(app->search_text);
-	app->search_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
+	setup_find_next(GTK_EDITABLE(entry));
 	document_find_next(idx, app->search_text, 0, TRUE, FALSE);
 }
 
@@ -1862,6 +1864,7 @@ on_find_dialog_response                (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		gint idx = document_get_cur_idx();
+		gboolean search_replace_escape;
 		gboolean
 			fl1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(app->find_dialog), "check_case"))),
@@ -1928,6 +1931,8 @@ on_replace_dialog_response             (GtkDialog *dialog,
 	gint idx = document_get_cur_idx();
 	GtkWidget *entry_find = lookup_widget(GTK_WIDGET(app->replace_dialog), "entry_find");
 	GtkWidget *entry_replace = lookup_widget(GTK_WIDGET(app->replace_dialog), "entry_replace");
+	gint search_flags_re;
+	gboolean search_backwards_re, search_replace_escape_re, search_in_all_buffers_re;
 	gboolean fl1, fl2, fl3, fl4;
 	gchar *find, *replace;
 
