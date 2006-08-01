@@ -58,6 +58,10 @@ void document_set_text_changed(gint);
 void document_init_doclist(void);
 
 
+// Apply just the prefs that can change in the Preferences dialog
+void document_apply_update_prefs(ScintillaObject *sci);
+
+
 /* creates a new tab in the notebook and does all related stuff
  * finally it returns the index of the created document */
 gint document_create_new_sci(const gchar*);

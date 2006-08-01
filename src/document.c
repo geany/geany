@@ -199,6 +199,21 @@ void document_init_doclist(void)
 }
 
 
+// Apply just the prefs that can change in the Preferences dialog
+void document_apply_update_prefs(ScintillaObject *sci)
+{
+	sci_set_mark_long_lines(sci, app->long_line_type, app->long_line_column, app->long_line_color);
+
+	sci_set_tab_width(sci, app->pref_editor_tab_width);
+
+	sci_set_indentionguides(sci, app->pref_editor_show_indent_guide);
+	sci_set_visible_white_spaces(sci, app->pref_editor_show_white_space);
+	sci_set_visible_eols(sci, app->pref_editor_show_line_endings);
+
+	sci_set_folding_margin_visible(sci, app->pref_editor_folding);
+}
+
+
 /* creates a new tab in the notebook and does all related stuff
  * finally it returns the index of the created document */
 gint document_create_new_sci(const gchar *filename)
@@ -234,14 +249,12 @@ gint document_create_new_sci(const gchar *filename)
 	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
 	// disable select all to be able to redefine it
 	sci_clear_cmdkey(sci, 'A' | (SCMOD_CTRL << 16));
-	sci_set_mark_long_lines(sci, app->long_line_type, app->long_line_column, app->long_line_color);
+
+	document_apply_update_prefs(sci);
+
 	sci_set_symbol_margin(sci, app->show_markers_margin);
-	sci_set_folding_margin_visible(sci, app->pref_editor_folding);
 	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);
-	sci_set_indentionguides(sci, app->pref_editor_show_indent_guide);
-	sci_set_visible_white_spaces(sci, app->pref_editor_show_white_space);
-	sci_set_visible_eols(sci, app->pref_editor_show_line_endings);
 	pfd = pango_font_description_from_string(app->editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
 	document_set_font(new_idx, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);

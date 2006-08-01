@@ -622,13 +622,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		{
 			if (doc_list[i].is_valid)
 			{
-				sci_set_tab_width(doc_list[i].sci, app->pref_editor_tab_width);
-				sci_set_mark_long_lines(doc_list[i].sci, app->long_line_type,
-										app->long_line_column, app->long_line_color);
-				sci_set_visible_eols(doc_list[i].sci, app->pref_editor_show_line_endings);
-				sci_set_indentionguides(doc_list[i].sci, app->pref_editor_show_indent_guide);
-				sci_set_visible_white_spaces(doc_list[i].sci, app->pref_editor_show_white_space);
-				sci_set_folding_margin_visible(doc_list[i].sci, app->pref_editor_folding);
+				document_apply_update_prefs(doc_list[i].sci);
 				if (! app->pref_editor_folding) document_unfold_all(i);
 			}
 		}
