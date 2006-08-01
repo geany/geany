@@ -331,7 +331,7 @@ gboolean configuration_load(void)
 
 	app->pref_editor_replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
 	app->pref_editor_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
-	app->pref_editor_trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", TRUE);
+	app->pref_editor_trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
 
 	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_MAKE);
 	app->tools_make_cmd = utils_get_setting_string(config, "tools", "make_cmd", tmp_string);
