@@ -19,6 +19,8 @@
                     Removed some unnecessary static variables.
  * document.c, document.h, prefs.c:
    Apply the tab width setting for new documents.
+ * src/keyfile.c, data/filetype_extensions.conf, Makefile.am:
+   Install a system filetype_extensions.conf which can be overridden.
 
 
 2006-07-31  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -493,17 +493,16 @@ void configuration_apply_settings(void)
 }
 
 
-void configuration_read_filetype_extensions(void)
+#if 0
+/* This will write the default settings for the system filetype_extensions.conf */
+static void generate_filetype_extensions(const gchar *output_dir)
 {
-	gboolean file_changed = FALSE;
 	guint i;
 	gsize len = 0;
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "filetype_extensions.conf", NULL);
-	gchar **list, *data, *comment;
-	GKeyFile *config = g_key_file_new();
+	gchar *configfile = g_strconcat(output_dir, G_DIR_SEPARATOR_S, "filetype_extensions.conf", NULL);
+	gchar *data, *comment;
 
-	g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
-
+	config = g_key_file_new();
 	// add missing keys
 	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
@@ -511,36 +510,58 @@ void configuration_read_filetype_extensions(void)
 		{
 			g_key_file_set_string_list(config, "Extensions", filetypes[i]->name,
 						(const gchar**) filetypes[i]->pattern, g_strv_length(filetypes[i]->pattern));
-			file_changed = TRUE;
 		}
 	}
 	// add comment, if it doesn't exist
 	comment = g_key_file_get_comment(config, NULL, NULL, NULL);
 	if (!comment || strlen(comment) == 0)
 	{
-		g_key_file_set_comment(config, "Extensions", NULL, "Filetype extension configuration file for Geany\nInsert as many items as you want, seperate them with a \";\".\nIf you want to get the default for a key, just delete it and\nthen it will be appended next time you start Geany.", NULL);
-		file_changed = TRUE;
+		g_key_file_set_comment(config, "Extensions", NULL,
+			"Filetype extension configuration file for Geany\n"
+			"Insert as many items as you want, seperate them with a \";\".\n"
+			"See Geany's main documentation for details.", NULL);
 	}
 	g_free(comment);
 
-	// write the file if there one or more keys are missing
-	if (file_changed)
-	{
-		data = g_key_file_to_data(config, NULL, NULL);
-		utils_write_file(configfile, data);
-		g_free(data);
-	}
+	// write the file
+	data = g_key_file_to_data(config, NULL, NULL);
+	utils_write_file(configfile, data);
+	g_free(data);
+	g_key_file_free(config);
+}
+#endif
 
-	// finally read the keys
+
+void configuration_read_filetype_extensions(void)
+{
+	guint i;
+	gsize len = 0;
+	gchar *sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S,
+		"filetype_extensions.conf", NULL);
+	gchar *userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
+		"filetype_extensions.conf", NULL);
+	gchar **list;
+	GKeyFile *sysconfig = g_key_file_new();
+	GKeyFile *userconfig = g_key_file_new();
+
+	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
+
+	// read the keys
 	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
-		list = g_key_file_get_string_list(config, "Extensions", filetypes[i]->name, &len, NULL);
+		gboolean userset =
+			g_key_file_has_key(userconfig, "Extensions", filetypes[i]->name, NULL);
+		list = g_key_file_get_string_list(
+			(userset) ? userconfig : sysconfig, "Extensions", filetypes[i]->name, &len, NULL);
 		if (list && len > 0)
 		{
 			g_strfreev(filetypes[i]->pattern);
 			filetypes[i]->pattern = list;
 		}
+		else g_strfreev(list);
 	}
 
-	g_key_file_free(config);
+	g_key_file_free(sysconfig);
+	g_key_file_free(userconfig);
 }

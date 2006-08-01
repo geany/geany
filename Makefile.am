@@ -10,17 +10,21 @@ WIN32_BUILD_FILES = \
     tagmanager/makefile.win32 \
     src/makefile.win32
 
+SYS_DATA_FILES = \
+	data/global.tags \
+	data/php.tags \
+	data/latex.tags \
+	data/html_entities.tags \
+	data/filetypes.* \
+	data/filetype_extensions.conf
+
 EXTRA_DIST = \
 	autogen.sh \
 	geany.desktop.in \
 	geany.spec \
 	geany.glade \
 	geany.gladep \
-	data/global.tags \
-	data/php.tags \
-	data/latex.tags \
-	data/html_entities.tags \
-	data/filetypes.* \
+	$(SYS_DATA_FILES) \
 	$(WIN32_BUILD_FILES)
 
 uninstall-local:
