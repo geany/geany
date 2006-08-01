@@ -21,6 +21,8 @@
    Apply the tab width setting for new documents.
  * src/keyfile.c, data/filetype_extensions.conf, Makefile.am:
    Install a system filetype_extensions.conf which can be overridden.
+ * src/filetypes.c data/filetype_extensions.conf:
+   Add Make pattern to recognise makefile*.
 
 
 2006-07-31  Enrico Tröger  <enrico.troeger@uvena.de>
