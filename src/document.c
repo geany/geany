@@ -255,7 +255,6 @@ gint document_create_new_sci(const gchar *filename)
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);
-	SSM(sci, SCI_SETLAYOUTCACHE, SC_CACHE_PAGE, 0);
 
 	pfd = pango_font_description_from_string(app->editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
