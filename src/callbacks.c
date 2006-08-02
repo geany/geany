@@ -270,7 +270,7 @@ on_save1_activate                      (GtkMenuItem     *menuitem,
 		if (doc_list[idx].file_name == NULL)
 			dialogs_show_save_as();
 		else
-			document_save_file(idx);
+			document_save_file(idx, FALSE);
 	}
 }
 
@@ -296,7 +296,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 		if (doc_list[idx].file_name == NULL)
 			dialogs_show_save_as();
 		else
-			document_save_file(idx);
+			document_save_file(idx, FALSE);
 	}
 	utils_update_tag_list(cur_idx, TRUE);
 	utils_set_window_title(cur_idx);
@@ -925,7 +925,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		doc_list[idx].file_name = new_filename;
 
 		utils_replace_filename(idx);
-		document_save_file(idx);
+		document_save_file(idx, TRUE);
 
 		utils_build_show_hide(idx);
 
@@ -1511,7 +1511,7 @@ on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
 				}
 				case 1:
 				{
-					if (doc_list[idx].changed) document_save_file(idx);
+					if (doc_list[idx].changed) document_save_file(idx, FALSE);
 					break;
 				}
 				case 2:
@@ -1604,7 +1604,7 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	GPid child_pid = (GPid) 0;
 
-	if (doc_list[idx].changed) document_save_file(idx);
+	if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
 	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
 		child_pid = build_compile_tex_file(idx, 0);
@@ -1626,7 +1626,7 @@ on_build_tex_activate                  (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	GPid child_pid = (GPid) 0;
 
-	if (doc_list[idx].changed) document_save_file(idx);
+	if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
 	switch (GPOINTER_TO_INT(user_data))
 	{
@@ -1651,7 +1651,7 @@ on_build_build_activate                (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	GPid child_pid = (GPid) 0;
 
-	if (doc_list[idx].changed) document_save_file(idx);
+	if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
 	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
 		child_pid = build_compile_tex_file(idx, 1);
@@ -1706,7 +1706,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 		{
 			GPid child_pid;
 
-			if (doc_list[idx].changed) document_save_file(idx);
+			if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
 			child_pid = build_make_file(idx, make_object);
 			if (child_pid != (GPid) 0)
@@ -1737,7 +1737,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 		// save the file only if the run command uses it
 		if (doc_list[idx].changed &&
 			strstr(doc_list[idx].file_type->programs->run_cmd, "%f") != NULL)
-				document_save_file(idx);
+				document_save_file(idx, FALSE);
 		if (build_run_cmd(idx) == (GPid) 0)
 		{
 			msgwin_status_add(_("Failed to execute the terminal program"));
@@ -1773,7 +1773,7 @@ on_make_target_dialog_response         (GtkDialog *dialog,
 		gint idx = document_get_cur_idx();
 		GPid child_pid;
 
-		if (doc_list[idx].changed) document_save_file(idx);
+		if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
 		strncpy(app->build_make_custopt, gtk_entry_get_text(GTK_ENTRY(user_data)), 255);
 
@@ -2593,7 +2593,8 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	guint i = GPOINTER_TO_INT(user_data);
 
-	if (idx < 0 || encodings[i].charset == NULL) return;
+	if (idx < 0 || encodings[i].charset == NULL ||
+		utils_strcmp(encodings[i].charset, doc_list[idx].encoding)) return;
 
 	g_free(doc_list[idx].encoding);
 	doc_list[idx].encoding = g_strdup(encodings[i].charset);

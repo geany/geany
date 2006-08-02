@@ -255,6 +255,8 @@ gint document_create_new_sci(const gchar *filename)
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);
+	SSM(sci, SCI_SETLAYOUTCACHE, SC_CACHE_PAGE, 0);
+
 	pfd = pango_font_description_from_string(app->editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
 	document_set_font(new_idx, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
@@ -372,6 +374,7 @@ void document_new_file(filetype *ft)
 		g_free(template);
 
 		doc_list[idx].encoding = g_strdup(encodings[app->pref_editor_default_encoding].charset);
+		//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
 		document_set_filetype(idx, ft);
 		utils_set_window_title(idx);
 		utils_build_show_hide(idx);
@@ -681,15 +684,17 @@ gint document_reload_file(gint idx, const gchar *forced_enc)
 }
 
 
-/* This saves the file */
-void document_save_file(gint idx)
+/* This saves the file.
+ * When force is set then it is always saved, even if it is unchanged(useful when using Save As) */
+void document_save_file(gint idx, gboolean force)
 {
 	gchar *data;
 	FILE *fp;
 	gint bytes_written, len;
 	gchar *locale_filename = NULL;
 
-	if (idx == -1 || ! doc_list[idx].changed) return;
+	if (idx == -1) return;
+	if (! force && ! doc_list[idx].changed) return;
 
 	if (doc_list[idx].file_name == NULL)
 	{

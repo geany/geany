@@ -1,3 +1,11 @@
+2006-08-02  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c:
+   Don't set file as changed when changing encoding to the same one.
+ * src/document.c, src/callbacks.c, dialogs.c:
+   Fixed wrong behaviour of Save As on unchanged files.
+
+
 2006-08-01  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.glade, src/interface.c, src/callbacks.c, src/keybindings.c,

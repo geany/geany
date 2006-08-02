@@ -154,7 +154,7 @@ void dialogs_show_open_file ()
 
 
 /* This shows the file selection dialog to save a file. */
-void dialogs_show_save_as ()
+void dialogs_show_save_as()
 {
 #ifdef G_OS_WIN32
 	win32_show_file_dialog(FALSE);
@@ -320,7 +320,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 			if (doc_list[idx].file_name == NULL)
 				dialogs_show_save_as();
 			else
-				document_save_file(idx);
+				document_save_file(idx, FALSE);
 			ret = TRUE;
 			break;
 		}
@@ -361,7 +361,7 @@ void dialogs_show_open_font(void)
 					"clicked", G_CALLBACK(on_font_apply_button_clicked), NULL);
 
 		gtk_font_selection_dialog_set_font_name(GTK_FONT_SELECTION_DIALOG(app->open_fontsel), app->editor_font);
-		gtk_window_set_transient_for(GTK_WINDOW (app->open_fontsel), GTK_WINDOW(app->window));
+		gtk_window_set_transient_for(GTK_WINDOW(app->open_fontsel), GTK_WINDOW(app->window));
 	}
 	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(app->open_fontsel));
@@ -558,7 +558,7 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx)
 		item = gtk_image_menu_item_new_with_mnemonic(_("_Set Includes and Arguments"));
 		gtk_widget_show(item);
 		GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_OPTIONS, item);
-		gtk_container_add(GTK_CONTAINER (menu), item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
 		gtk_tooltips_set_tip(tooltips, item,
 					_("Sets the includes and library paths for the compiler and "
 					  "the program arguments for execution"), NULL);
@@ -666,7 +666,7 @@ GtkWidget *dialogs_create_build_menu_tex(gint idx)
 	if (keys[GEANY_KEYS_BUILD_OPTIONS]->key)
 		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_OPTIONS]->key,
 			keys[GEANY_KEYS_BUILD_OPTIONS]->mods, GTK_ACCEL_VISIBLE);
-	gtk_container_add(GTK_CONTAINER (menu), item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item,
 				_("Sets the program paths and arguments"), NULL);
 	image = gtk_image_new_from_stock("gtk-preferences", GTK_ICON_SIZE_MENU);
@@ -726,8 +726,8 @@ void dialogs_show_make_target(void)
 	gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
 
-	g_signal_connect((gpointer) entry, "activate", G_CALLBACK (on_make_target_entry_activate), dialog);
-	g_signal_connect((gpointer) dialog, "response", G_CALLBACK (on_make_target_dialog_response), entry);
+	g_signal_connect((gpointer) entry, "activate", G_CALLBACK(on_make_target_entry_activate), dialog);
+	g_signal_connect((gpointer) dialog, "response", G_CALLBACK(on_make_target_dialog_response), entry);
 	g_signal_connect((gpointer) dialog, "delete_event", G_CALLBACK(gtk_widget_destroy), NULL);
 
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);

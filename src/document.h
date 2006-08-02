@@ -88,9 +88,9 @@ int document_open_file(gint, const gchar*, gint, gboolean, filetype*, const gcha
 int document_reload_file(gint idx, const gchar *forced_enc);
 
 
-/* This saves the file, which is in on-disk encoding (which may not
-   be UTF-8). */
-void document_save_file (gint);
+/* This saves the file.
+ * When force is set then it is always saved, even if it is unchanged(useful when using Save As) */
+void document_save_file(gint, gboolean force);
 
 /* special search function, used from the find entry in the toolbar */
 void document_find_next(gint, const gchar*, gint, gboolean, gboolean);
