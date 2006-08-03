@@ -1,3 +1,11 @@
+2006-08-03  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/callbacks.c, src/filetypes.c, src/filetypes.h,
+   src/encodings.c, src/encodings.h, src/interface.c, src/utils.c:
+   Made document related submenus(filetype, encoding, line endings)
+   radio buttons for better usability.
+
+
 2006-08-03  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c, src/utils.h, src/sci_cb.c:

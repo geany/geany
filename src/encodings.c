@@ -163,6 +163,26 @@ const gchar *encodings_get_charset(const GeanyEncoding* enc)
 	return enc->charset;
 }
 
+static GtkWidget *radio_items[GEANY_ENCODINGS_MAX];
+
+
+void encodings_select_radio_item(const gchar *charset)
+{
+	gint i;
+	g_return_if_fail(charset != NULL);
+
+	i = 0;
+	while (i < GEANY_ENCODINGS_MAX)
+	{
+		if (utils_strcmp(charset, encodings[i].charset)) break;
+		i++;
+	}
+	if (i == GEANY_ENCODINGS_MAX) i = GEANY_ENCODING_UTF_8; // fallback to UTF-8
+
+	// app->ignore_callback has to be set by the caller
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(radio_items[i]), TRUE);
+}
+
 
 void encodings_init(void)
 {
@@ -170,6 +190,7 @@ void encodings_init(void)
 			  *menu_utf8, *menu_middleeast, *item_westeuro, *item_easteuro, *item_eastasian,
 			  *item_asian, *item_utf8, *item_middleeast;
 	GCallback cb_func[2];
+	GSList *group = NULL;
 	gchar *label;
 	guint i, j, k, order, group_size;
 
@@ -219,7 +240,7 @@ void encodings_init(void)
 		gtk_container_add(GTK_CONTAINER(menu[k]), item_utf8);
 		gtk_widget_show_all(item_utf8);
 
-		/// TODO can it be optimized? ATM 3782 runs at line 239
+		/// TODO can it be optimized? ATM 3782 runs at line "if (encodings[j].group ...)"
 		for (i = 0; i < GEANY_ENCODING_GROUPS_MAX; i++)
 		{
 			order = 0;
@@ -241,7 +262,14 @@ void encodings_init(void)
 					if (encodings[j].group == i && encodings[j].order == order)
 					{
 						label = encodings_to_string(&encodings[j]);
-						item = gtk_menu_item_new_with_label(label);
+						if (k == 0)
+						{
+							item = gtk_radio_menu_item_new_with_label(group, label);
+							group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
+							radio_items[j] = item;
+						}
+						else
+							item = gtk_menu_item_new_with_label(label);
 						gtk_widget_show(item);
 						gtk_container_add(GTK_CONTAINER(submenu), item);
 						g_signal_connect((gpointer) item, "activate",

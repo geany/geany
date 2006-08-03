@@ -743,7 +743,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 
 		document_set_text_changed(idx);
-		utils_document_show_hide(idx); //update the document menu
+		utils_document_show_hide(idx); // update the document menu
 		utils_build_show_hide(idx);
 		utils_update_statusbar(idx, -1);
 		utils_set_window_title(idx);
@@ -1069,7 +1069,7 @@ on_crlf_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (app->ignore_callback || idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_convert_eols(doc_list[idx].sci, SC_EOL_CRLF);
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
 }
@@ -1080,7 +1080,7 @@ on_lf_activate                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (app->ignore_callback || idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_convert_eols(doc_list[idx].sci, SC_EOL_LF);
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
 }
@@ -1091,7 +1091,7 @@ on_cr_activate                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (app->ignore_callback || idx == -1 || ! doc_list[idx].is_valid) return;
 	sci_convert_eols(doc_list[idx].sci, SC_EOL_CR);
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CR);
 }
@@ -1189,7 +1189,7 @@ on_filetype_change                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (idx < 0) return;
+	if (app->ignore_callback || idx < 0 || ! doc_list[idx].is_valid) return;
 
 	document_set_filetype(idx, (filetype*)user_data);
 }
@@ -2593,7 +2593,7 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	guint i = GPOINTER_TO_INT(user_data);
 
-	if (idx < 0 || encodings[i].charset == NULL ||
+	if (app->ignore_callback || idx < 0 || encodings[i].charset == NULL ||
 		utils_strcmp(encodings[i].charset, doc_list[idx].encoding)) return;
 
 	g_free(doc_list[idx].encoding);

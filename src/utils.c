@@ -2510,6 +2510,8 @@ gboolean utils_is_unicode_charset(const gchar *string)
 
 void utils_document_show_hide(gint idx)
 {
+	gchar *widget_name;
+
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	app->ignore_callback = TRUE;
 
@@ -2526,8 +2528,20 @@ void utils_document_show_hide(gint idx)
 			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_write_unicode_bom1")),
 			doc_list[idx].has_bom);
 
+	switch (sci_get_eol_mode(doc_list[idx].sci))
+	{
+		case SC_EOL_CR: widget_name = "cr"; break;
+		case SC_EOL_LF: widget_name = "lf"; break;
+		default: widget_name = "crlf"; break;
+	}
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, widget_name)),
+																					TRUE);
+
 	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
 			utils_is_unicode_charset(doc_list[idx].encoding));
+
+	encodings_select_radio_item(doc_list[idx].encoding);
+	filetypes_select_radio_item(doc_list[idx].file_type);
 
 	app->ignore_callback = FALSE;
 

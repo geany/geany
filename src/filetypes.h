@@ -79,6 +79,7 @@ typedef struct filetype
 {
 	guint	 		  id;
 	guint	 		  uid;				// unique id as reference for saved filetype in config file
+	GtkWidget		 *item;				// holds a pointer to the menu item for this filetypes
 	langType 		  lang;				// represents the langType of tagmanager(see the table
 										// in tagmanager/parsers.h), -1 represents all, -2 none
 	gchar	 		 *name;				// will be used as name for tagmanager
@@ -111,5 +112,7 @@ void filetypes_free_types(void);
 gchar *filetypes_get_template(filetype *ft);
 
 void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft);
+
+void filetypes_select_radio_item(const filetype *ft);
 
 #endif
