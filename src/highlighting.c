@@ -229,7 +229,6 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
 	SSM(sci, SCI_SETUSETABS, TRUE, 0);
-	SSM(sci, SCI_SETTABWIDTH, app->pref_editor_tab_width, 0);
 
 	// caret colour
 	SSM(sci, SCI_SETCARETFORE, invert(types[GEANY_FILETYPES_ALL]->styling[7][0]), 0);
