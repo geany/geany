@@ -351,6 +351,7 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 
 gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx)
 {
+	gint orig_pos = pos; //the position for the calltip
 	gint lexer;
 	gint style;
 	gchar word[GEANY_MAX_WORD_LENGTH];
@@ -368,6 +369,7 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx)
 		gchar c;
 		// position of '(' is unknown, so go backwards to find it
 		pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
+		orig_pos = pos;
 		// I'm not sure if utils_is_opening_brace() is a good idea, but it is the simplest way,
 		// but we need something more intelligent than only check for '(' because e.g. LaTeX
 		// uses {, [ or (
@@ -397,7 +399,8 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx)
 		else
 			calltip = g_strconcat(tag->name, " ", tag->atts.entry.arglist, NULL);
 
-		SSM(sci, SCI_CALLTIPSHOW, pos, (sptr_t) calltip);
+		utils_wrap_string(calltip, -1);
+		SSM(sci, SCI_CALLTIPSHOW, orig_pos, (sptr_t) calltip);
 		g_free(calltip);
 	}
 

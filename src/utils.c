@@ -2532,3 +2532,25 @@ void utils_document_show_hide(gint idx)
 	app->ignore_callback = FALSE;
 
 }
+
+
+/* Wraps a string in place, replacing a space with a newline character.
+ * wrapstart is the minimum position to start wrapping or -1 for default */
+gboolean utils_wrap_string(gchar *string, gint wrapstart)
+{
+	gchar *pos, *linestart;
+	gboolean ret = FALSE;
+
+	if (wrapstart < 0) wrapstart = 80;
+
+	for (pos = linestart = string; *pos != '\0'; pos++)
+	{
+		if (pos - linestart >= wrapstart && *pos == ' ')
+		{
+			*pos = '\n';
+			linestart = pos;
+			ret = TRUE;
+		}
+	}
+	return ret;
+}

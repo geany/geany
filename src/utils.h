@@ -227,4 +227,8 @@ gboolean utils_is_unicode_charset(const gchar *string);
 
 void utils_document_show_hide(gint idx);
 
+/* Wraps a string in place, replacing a space with a newline character.
+ * wrapstart is the minimum position to start wrapping or -1 for default */
+gboolean utils_wrap_string(gchar *string, gint wrapstart);
+
 #endif

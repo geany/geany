@@ -1,3 +1,9 @@
+2006-08-03  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/utils.h, src/sci_cb.c:
+   Wrap calltip and prevent it obscuring the current line.
+
+
 2006-08-02  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c:
