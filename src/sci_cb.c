@@ -35,8 +35,10 @@
 static gchar indent[100];
 
 
-// callback func called by all editors when a signal arises
+static void on_new_line_added(ScintillaObject *sci, gint idx);
 
+
+// callback func called by all editors when a signal arises
 void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer user_data)
 {
 	struct SCNotification *nt;
@@ -129,29 +131,13 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			{
 				case '\r':
 				{	// simple indentation (only for CR format)
-					if (doc_list[idx].use_auto_indention && (sci_get_eol_mode(sci) == SC_EOL_CR))
-					{
-						sci_cb_get_indent(sci, pos, FALSE);
-						sci_add_text(sci, indent);
-					}
-					// " * " auto completion in multiline C/C++ comments
 					if (sci_get_eol_mode(sci) == SC_EOL_CR)
-					{
-						sci_cb_auto_multiline(sci, pos);
-						if (app->pref_editor_auto_complete_constructs) sci_cb_auto_latex(sci, pos, idx);
-					}
+						on_new_line_added(sci, idx);
 					break;
 				}
 				case '\n':
 				{	// simple indentation (for CR/LF and LF format)
-					if (doc_list[idx].use_auto_indention)
-					{
-						sci_cb_get_indent(sci, pos, FALSE);
-						sci_add_text(sci, indent);
-					}
-					// " * " auto completion in multiline C/C++ comments
-					sci_cb_auto_multiline(sci, pos);
-					if (app->pref_editor_auto_complete_constructs) sci_cb_auto_latex(sci, pos, idx);
+					on_new_line_added(sci, idx);
 					break;
 				}
 				case '>':
@@ -247,6 +233,22 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			break;
 		}
 	}
+}
+
+
+static void on_new_line_added(ScintillaObject *sci, gint idx)
+{
+	gint pos = sci_get_current_position(sci);
+
+	// simple indentation
+	if (doc_list[idx].use_auto_indention)
+	{
+		sci_cb_get_indent(sci, pos, FALSE);
+		sci_add_text(sci, indent);
+	}
+	// " * " auto completion in multiline C/C++ comments
+	sci_cb_auto_multiline(sci, pos);
+	if (app->pref_editor_auto_complete_constructs) sci_cb_auto_latex(sci, pos, idx);
 }
 
 
