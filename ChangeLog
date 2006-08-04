@@ -1,8 +1,9 @@
 2006-08-04  Nick Treleaven  <nick.treleaven@btinternet.com>
 
- * src/callbacks.c, src/callbacks.h, src/dialogs.c
+ * src/callbacks.c, src/callbacks.h, src/dialogs.c:
    Disable word and word start matching when regexes are enabled.
    Don't hide the Find dialog after searching; use Close button.
+ * src/filetypes.c: Set radio item None for new files.
 
 
 2006-08-03  Enrico Tröger  <enrico.troeger@uvena.de>

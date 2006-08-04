@@ -568,10 +568,12 @@ filetype *filetypes_get_from_filename(const gchar *filename)
 
 void filetypes_select_radio_item(const filetype *ft)
 {
-	g_return_if_fail(ft != NULL);
-
 	// app->ignore_callback has to be set by the caller
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(radio_items[ft->id]), TRUE);
+	if (ft == NULL)
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
+			radio_items[filetypes[GEANY_FILETYPES_ALL]->id]), TRUE);
+	else
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(radio_items[ft->id]), TRUE);
 }
 
 
