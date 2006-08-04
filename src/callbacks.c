@@ -1843,16 +1843,24 @@ on_find_previous1_activate             (GtkMenuItem     *menuitem,
 }
 
 
-void on_find_checkbutton_toggled (GtkToggleButton *togglebutton,
-                                  gpointer user_data)
+void on_find_replace_checkbutton_toggled (GtkToggleButton *togglebutton,
+										  gpointer user_data)
 {
+	GtkWidget *dialog = GTK_WIDGET(user_data);
 	GtkToggleButton *chk_regexp = GTK_TOGGLE_BUTTON(
-		lookup_widget(GTK_WIDGET(app->find_dialog), "check_regexp"));
-	GtkWidget *chk_back =
-		lookup_widget(GTK_WIDGET(app->find_dialog), "check_back");
+		lookup_widget(dialog, "check_regexp"));
 
 	if (togglebutton == chk_regexp)
-		gtk_widget_set_sensitive(chk_back, ! gtk_toggle_button_get_active(chk_regexp));
+	{
+		gboolean regex_set = gtk_toggle_button_get_active(chk_regexp);
+		GtkWidget *check_back = lookup_widget(dialog, "check_back");
+		GtkWidget *check_word = lookup_widget(dialog, "check_word");
+		GtkWidget *check_wordstart = lookup_widget(dialog, "check_wordstart");
+
+		gtk_widget_set_sensitive(check_back, ! regex_set);
+		gtk_widget_set_sensitive(check_word, ! regex_set);
+		gtk_widget_set_sensitive(check_wordstart, ! regex_set);
+	}
 }
 
 
@@ -1888,7 +1896,6 @@ on_find_dialog_response                (GtkDialog *dialog,
 			gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->find_dialog, "entry"))->child));
 			return;
 		}
-		gtk_widget_hide(app->find_dialog);
 
 		gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), app->search_text);
 		search_flags = (fl1 ? SCFIND_MATCHCASE : 0) |
@@ -1907,19 +1914,6 @@ on_find_entry_activate                 (GtkEntry        *entry,
 {
 	on_find_dialog_response(NULL, GTK_RESPONSE_ACCEPT,
 				lookup_widget(GTK_WIDGET(entry), "entry"));
-}
-
-
-void on_replace_checkbutton_toggled (GtkToggleButton *togglebutton,
-                                     gpointer user_data)
-{
-	GtkToggleButton *chk_regexp = GTK_TOGGLE_BUTTON(
-		lookup_widget(GTK_WIDGET(app->replace_dialog), "check_regexp"));
-	GtkWidget *chk_back =
-		lookup_widget(GTK_WIDGET(app->replace_dialog), "check_back");
-
-	if (togglebutton == chk_regexp)
-		gtk_widget_set_sensitive(chk_back, ! gtk_toggle_button_get_active(chk_regexp));
 }
 
 

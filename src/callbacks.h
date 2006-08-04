@@ -386,8 +386,8 @@ void
 on_find_previous1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
-void on_find_checkbutton_toggled (GtkToggleButton *togglebutton,
-                                  gpointer user_data);
+void on_find_replace_checkbutton_toggled (GtkToggleButton *togglebutton,
+										  gpointer user_data);
 
 void
 on_find_dialog_response                (GtkDialog *dialog,
@@ -397,9 +397,6 @@ on_find_dialog_response                (GtkDialog *dialog,
 void
 on_find_entry_activate                 (GtkEntry        *entry,
                                         gpointer         user_data);
-
-void on_replace_checkbutton_toggled (GtkToggleButton *togglebutton,
-                                     gpointer user_data);
 
 void
 on_replace_dialog_response                (GtkDialog *dialog,
