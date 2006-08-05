@@ -98,10 +98,12 @@ typedef struct filetype
 filetype *filetypes[GEANY_MAX_FILE_TYPES];
 
 
+// If uid is valid, return corresponding filetype, otherwise NULL.
+filetype *filetypes_get_from_uid(gint uid);
+
 /* inits the filetype array and fill it with the known filetypes
  * and create the filetype menu*/
 void filetypes_init_types(void);
-
 
 /* simple filetype selection based on the filename extension */
 filetype *filetypes_get_from_filename(const gchar *filename);

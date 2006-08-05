@@ -180,7 +180,8 @@ void configuration_save()
 		if (idx >= 0 && doc_list[idx].file_name)
 		{
 			g_snprintf(entry, 13, "FILE_NAME_%d", j);
-			g_snprintf(fname, 255, "%d:%d:%s", sci_get_current_position(doc_list[idx].sci), doc_list[idx].file_type->id, doc_list[idx].file_name);
+			g_snprintf(fname, 255, "%d:%d:%s", sci_get_current_position(doc_list[idx].sci),
+				doc_list[idx].file_type->uid, doc_list[idx].file_name);
 			g_key_file_set_string(config, "files", entry, fname);
 			j++;
 		}
@@ -392,18 +393,18 @@ gboolean configuration_load()
 gboolean configuration_open_files()
 {
 	gint i;
-	guint x, pos, ft_id, y, len;
+	guint x, pos, y, len;
 	gchar *file, *locale_filename, **array;
 	gboolean ret = FALSE;
 
 	i = app->tab_order_ltr ? 0 : GEANY_SESSION_FILES - 1;
 	while(TRUE)
 	{
-		if (session_files[i] && strlen(session_files[i]))
+		if (session_files[i] && *session_files[i])
 		{
+			gint uid = -1;
 			x = 0;
 			y = 0;
-			ft_id = GEANY_MAX_FILE_TYPES;
 
 			// yes it is :, it should be a ;, but now it is too late to change it
 			array = g_strsplit(session_files[i], ":", 3);
@@ -416,7 +417,7 @@ gboolean configuration_open_files()
 			// read filetype (only if there are more than two fields, otherwise we have the old format)
 			if (len > 2 && array[1])
 			{
-				ft_id = atoi(array[1]);
+				uid = atoi(array[1]);
 				file = array[2];
 			}
 			else file = array[1];
@@ -427,8 +428,8 @@ gboolean configuration_open_files()
 
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{
-				document_open_file(-1, locale_filename, pos, FALSE,
-					(ft_id == GEANY_MAX_FILE_TYPES) ? NULL : filetypes[ft_id], NULL);
+				filetype *ft = filetypes_get_from_uid(uid);
+				document_open_file(-1, locale_filename, pos, FALSE, ft, NULL);
 				ret = TRUE;
 			}
 			g_free(locale_filename);

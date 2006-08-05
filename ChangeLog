@@ -1,6 +1,9 @@
 2006-08-05  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c: Allow partial word selection for Find Usage.
+ * src/keyfile.c, src/filetypes.c, src/filetypes.h:
+   Use unique filetype id in geany.conf to avoid new filetype problems.
+   Make unique id numbers compatible with Geany 0.7 filetype order.
 
 
 2006-08-04  Nick Treleaven  <nick.treleaven@btinternet.com>

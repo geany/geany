@@ -32,11 +32,74 @@
 #include "msgwindow.h"
 
 
+/* This is the order of unique ids used in the config file.
+ * The order must not be changed but can be appended to. */
+enum
+{
+	FILETYPE_UID_C = 0,		// 0
+	FILETYPE_UID_CPP,		// 1
+	FILETYPE_UID_JAVA,		// 2
+	FILETYPE_UID_PERL,		// 3
+	FILETYPE_UID_PHP,		// 4
+	FILETYPE_UID_XML,		// 5
+	FILETYPE_UID_DOCBOOK,	// 6
+	FILETYPE_UID_PYTHON,	// 7
+	FILETYPE_UID_LATEX,		// 8
+	FILETYPE_UID_PASCAL,	// 9
+	FILETYPE_UID_SH,		// 10
+	FILETYPE_UID_MAKE,		// 11
+	FILETYPE_UID_CSS,		// 12
+	FILETYPE_UID_CONF,		// 13
+	FILETYPE_UID_ASM,		// 14
+	FILETYPE_UID_SQL,		// 15
+	FILETYPE_UID_CAML,		// 16
+	FILETYPE_UID_OMS,		// 17
+	FILETYPE_UID_RUBY,		// 18
+	FILETYPE_UID_TCL,		// 19
+	FILETYPE_UID_ALL,		// 20
+	FILETYPE_UID_D,			// 21
+	//FILETYPE_UID_HTML,	// 22
+};
+
+
 static void filetypes_create_menu_item(GtkWidget *menu, gchar *label, filetype *ftype);
 static void filetypes_create_newmenu_item(GtkWidget *menu, gchar *label, filetype *ftype);
 static void filetypes_init_build_programs(filetype *ftype);
 
 static GtkWidget *radio_items[GEANY_MAX_FILE_TYPES];
+
+
+// If uid is valid, return corresponding filetype, otherwise NULL.
+filetype *filetypes_get_from_uid(gint uid)
+{
+	switch (uid)
+	{
+		case FILETYPE_UID_C:		return filetypes[GEANY_FILETYPES_C];
+		case FILETYPE_UID_CPP:		return filetypes[GEANY_FILETYPES_CPP];
+		case FILETYPE_UID_JAVA:		return filetypes[GEANY_FILETYPES_JAVA];
+		case FILETYPE_UID_PERL:		return filetypes[GEANY_FILETYPES_PERL];
+		case FILETYPE_UID_PHP:		return filetypes[GEANY_FILETYPES_PHP];
+		case FILETYPE_UID_XML:		return filetypes[GEANY_FILETYPES_XML];
+		case FILETYPE_UID_DOCBOOK:	return filetypes[GEANY_FILETYPES_DOCBOOK];
+		case FILETYPE_UID_PYTHON:	return filetypes[GEANY_FILETYPES_PYTHON];
+		case FILETYPE_UID_LATEX:	return filetypes[GEANY_FILETYPES_LATEX];
+		case FILETYPE_UID_PASCAL:	return filetypes[GEANY_FILETYPES_PASCAL];
+		case FILETYPE_UID_SH:		return filetypes[GEANY_FILETYPES_SH];
+		case FILETYPE_UID_MAKE:		return filetypes[GEANY_FILETYPES_MAKE];
+		case FILETYPE_UID_CSS:		return filetypes[GEANY_FILETYPES_CSS];
+		case FILETYPE_UID_CONF:		return filetypes[GEANY_FILETYPES_CONF];
+		case FILETYPE_UID_ASM:		return filetypes[GEANY_FILETYPES_ASM];
+		case FILETYPE_UID_SQL:		return filetypes[GEANY_FILETYPES_SQL];
+		case FILETYPE_UID_CAML:		return filetypes[GEANY_FILETYPES_CAML];
+		case FILETYPE_UID_OMS:		return filetypes[GEANY_FILETYPES_OMS];
+		case FILETYPE_UID_RUBY:		return filetypes[GEANY_FILETYPES_RUBY];
+		case FILETYPE_UID_TCL:		return filetypes[GEANY_FILETYPES_TCL];
+		case FILETYPE_UID_ALL:		return filetypes[GEANY_FILETYPES_ALL];
+		case FILETYPE_UID_D:		return filetypes[GEANY_FILETYPES_D];
+		//case FILETYPE_UID_HTML:	return filetypes[GEANY_FILETYPES_HTML];
+		default: 					return NULL;
+	}
+}
 
 
 /* inits the filetype array and fill it with the known filetypes
@@ -49,7 +112,7 @@ void filetypes_init_types(void)
 #define C	// these macros are only to ease navigation
 	filetypes[GEANY_FILETYPES_C] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_C]->id = GEANY_FILETYPES_C;
-	filetypes[GEANY_FILETYPES_C]->uid = 0; // never change this value
+	filetypes[GEANY_FILETYPES_C]->uid = FILETYPE_UID_C;
 	filetypes[GEANY_FILETYPES_C]->item = NULL;
 	filetypes[GEANY_FILETYPES_C]->lang = 0;
 	filetypes[GEANY_FILETYPES_C]->name = g_strdup("C");
@@ -70,7 +133,7 @@ void filetypes_init_types(void)
 #define CPP
 	filetypes[GEANY_FILETYPES_CPP] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_CPP]->id = GEANY_FILETYPES_CPP;
-	filetypes[GEANY_FILETYPES_CPP]->uid = 1; // never change this value
+	filetypes[GEANY_FILETYPES_CPP]->uid = FILETYPE_UID_CPP;
 	filetypes[GEANY_FILETYPES_CPP]->item = NULL;
 	filetypes[GEANY_FILETYPES_CPP]->lang = 1;
 	filetypes[GEANY_FILETYPES_CPP]->name = g_strdup("C++");
@@ -99,7 +162,7 @@ void filetypes_init_types(void)
 #define D
 	filetypes[GEANY_FILETYPES_D] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_D]->id = GEANY_FILETYPES_D;
-	filetypes[GEANY_FILETYPES_D]->uid = 2; // never change this value
+	filetypes[GEANY_FILETYPES_D]->uid = FILETYPE_UID_D;
 	filetypes[GEANY_FILETYPES_D]->item = NULL;
 	filetypes[GEANY_FILETYPES_D]->lang = 17;
 	filetypes[GEANY_FILETYPES_D]->name = g_strdup("D");
@@ -121,7 +184,7 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_JAVA] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_JAVA]->id = GEANY_FILETYPES_JAVA;
 	filetypes[GEANY_FILETYPES_JAVA]->name = g_strdup("Java");
-	filetypes[GEANY_FILETYPES_JAVA]->uid = 3; // never change this value
+	filetypes[GEANY_FILETYPES_JAVA]->uid = FILETYPE_UID_JAVA;
 	filetypes[GEANY_FILETYPES_JAVA]->item = NULL;
 	filetypes[GEANY_FILETYPES_JAVA]->lang = 2;
 	filetypes[GEANY_FILETYPES_JAVA]->has_tags = TRUE;
@@ -140,7 +203,7 @@ void filetypes_init_types(void)
 #define PAS // to avoid warnings when building under Windows, the symbol PASCAL is there defined
 	filetypes[GEANY_FILETYPES_PASCAL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_PASCAL]->id = GEANY_FILETYPES_PASCAL;
-	filetypes[GEANY_FILETYPES_PASCAL]->uid = 4; // never change this value
+	filetypes[GEANY_FILETYPES_PASCAL]->uid = FILETYPE_UID_PASCAL;
 	filetypes[GEANY_FILETYPES_PASCAL]->item = NULL;
 	filetypes[GEANY_FILETYPES_PASCAL]->lang = 4;
 	filetypes[GEANY_FILETYPES_PASCAL]->name = g_strdup("Pascal");
@@ -164,7 +227,7 @@ void filetypes_init_types(void)
 #define ASM
 	filetypes[GEANY_FILETYPES_ASM] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_ASM]->id = GEANY_FILETYPES_ASM;
-	filetypes[GEANY_FILETYPES_ASM]->uid = 5; // never change this value
+	filetypes[GEANY_FILETYPES_ASM]->uid = FILETYPE_UID_ASM;
 	filetypes[GEANY_FILETYPES_ASM]->item = NULL;
 	filetypes[GEANY_FILETYPES_ASM]->lang = 9;
 	filetypes[GEANY_FILETYPES_ASM]->name = g_strdup("ASM");
@@ -183,7 +246,7 @@ void filetypes_init_types(void)
 #define CAML
 	filetypes[GEANY_FILETYPES_CAML] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_CAML]->id = GEANY_FILETYPES_CAML;
-	filetypes[GEANY_FILETYPES_CAML]->uid = 6; // never change this value
+	filetypes[GEANY_FILETYPES_CAML]->uid = FILETYPE_UID_CAML;
 	filetypes[GEANY_FILETYPES_CAML]->item = NULL;
 	filetypes[GEANY_FILETYPES_CAML]->lang = -2;
 	filetypes[GEANY_FILETYPES_CAML]->name = g_strdup("CAML");
@@ -203,7 +266,7 @@ void filetypes_init_types(void)
 #define PERL
 	filetypes[GEANY_FILETYPES_PERL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_PERL]->id = GEANY_FILETYPES_PERL;
-	filetypes[GEANY_FILETYPES_PERL]->uid = 7; // never change this value
+	filetypes[GEANY_FILETYPES_PERL]->uid = FILETYPE_UID_PERL;
 	filetypes[GEANY_FILETYPES_PERL]->item = NULL;
 	filetypes[GEANY_FILETYPES_PERL]->lang = 5;
 	filetypes[GEANY_FILETYPES_PERL]->name = g_strdup("Perl");
@@ -224,7 +287,7 @@ void filetypes_init_types(void)
 #define PHP
 	filetypes[GEANY_FILETYPES_PHP] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_PHP]->id = GEANY_FILETYPES_PHP;
-	filetypes[GEANY_FILETYPES_PHP]->uid = 8; // never change this value
+	filetypes[GEANY_FILETYPES_PHP]->uid = FILETYPE_UID_PHP;
 	filetypes[GEANY_FILETYPES_PHP]->item = NULL;
 	filetypes[GEANY_FILETYPES_PHP]->lang = 6;
 	filetypes[GEANY_FILETYPES_PHP]->name = g_strdup("PHP");
@@ -249,7 +312,7 @@ void filetypes_init_types(void)
 #define PYTHON
 	filetypes[GEANY_FILETYPES_PYTHON] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_PYTHON]->id = GEANY_FILETYPES_PYTHON;
-	filetypes[GEANY_FILETYPES_PYTHON]->uid = 9; // never change this value
+	filetypes[GEANY_FILETYPES_PYTHON]->uid = FILETYPE_UID_PYTHON;
 	filetypes[GEANY_FILETYPES_PYTHON]->item = NULL;
 	filetypes[GEANY_FILETYPES_PYTHON]->lang = 7;
 	filetypes[GEANY_FILETYPES_PYTHON]->name = g_strdup("Python");
@@ -269,7 +332,7 @@ void filetypes_init_types(void)
 #define RUBY
 	filetypes[GEANY_FILETYPES_RUBY] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_RUBY]->id = GEANY_FILETYPES_RUBY;
-	filetypes[GEANY_FILETYPES_RUBY]->uid = 10; // never change this value
+	filetypes[GEANY_FILETYPES_RUBY]->uid = FILETYPE_UID_RUBY;
 	filetypes[GEANY_FILETYPES_RUBY]->item = NULL;
 	filetypes[GEANY_FILETYPES_RUBY]->lang = 14;
 	filetypes[GEANY_FILETYPES_RUBY]->name = g_strdup("Ruby");
@@ -290,7 +353,7 @@ void filetypes_init_types(void)
 #define TCL
 	filetypes[GEANY_FILETYPES_TCL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_TCL]->id = GEANY_FILETYPES_TCL;
-	filetypes[GEANY_FILETYPES_TCL]->uid = 11; // never change this value
+	filetypes[GEANY_FILETYPES_TCL]->uid = FILETYPE_UID_TCL;
 	filetypes[GEANY_FILETYPES_TCL]->item = NULL;
 	filetypes[GEANY_FILETYPES_TCL]->lang = 15;
 	filetypes[GEANY_FILETYPES_TCL]->name = g_strdup("Tcl");
@@ -311,7 +374,7 @@ void filetypes_init_types(void)
 #define SH
 	filetypes[GEANY_FILETYPES_SH] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_SH]->id = GEANY_FILETYPES_SH;
-	filetypes[GEANY_FILETYPES_SH]->uid = 12; // never change this value
+	filetypes[GEANY_FILETYPES_SH]->uid = FILETYPE_UID_SH;
 	filetypes[GEANY_FILETYPES_SH]->item = NULL;
 	filetypes[GEANY_FILETYPES_SH]->lang = 16;
 	filetypes[GEANY_FILETYPES_SH]->name = g_strdup("Sh");
@@ -336,7 +399,7 @@ void filetypes_init_types(void)
 #define MAKE
 	filetypes[GEANY_FILETYPES_MAKE] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_MAKE]->id = GEANY_FILETYPES_MAKE;
-	filetypes[GEANY_FILETYPES_MAKE]->uid = 13; // never change this value
+	filetypes[GEANY_FILETYPES_MAKE]->uid = FILETYPE_UID_MAKE;
 	filetypes[GEANY_FILETYPES_MAKE]->item = NULL;
 	filetypes[GEANY_FILETYPES_MAKE]->lang = 3;
 	filetypes[GEANY_FILETYPES_MAKE]->name = g_strdup("Make");
@@ -356,7 +419,7 @@ void filetypes_init_types(void)
 #define XML
 	filetypes[GEANY_FILETYPES_XML] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_XML]->id = GEANY_FILETYPES_XML;
-	filetypes[GEANY_FILETYPES_XML]->uid = 14; // never change this value
+	filetypes[GEANY_FILETYPES_XML]->uid = FILETYPE_UID_XML;
 	filetypes[GEANY_FILETYPES_XML]->item = NULL;
 	filetypes[GEANY_FILETYPES_XML]->lang = -2;
 	filetypes[GEANY_FILETYPES_XML]->name = g_strdup("XML");
@@ -376,7 +439,7 @@ void filetypes_init_types(void)
 #define DOCBOOK
 	filetypes[GEANY_FILETYPES_DOCBOOK] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_DOCBOOK]->id = GEANY_FILETYPES_DOCBOOK;
-	filetypes[GEANY_FILETYPES_DOCBOOK]->uid = 15; // never change this value
+	filetypes[GEANY_FILETYPES_DOCBOOK]->uid = FILETYPE_UID_DOCBOOK;
 	filetypes[GEANY_FILETYPES_DOCBOOK]->item = NULL;
 	filetypes[GEANY_FILETYPES_DOCBOOK]->lang = 12;
 	filetypes[GEANY_FILETYPES_DOCBOOK]->name = g_strdup("Docbook");
@@ -395,7 +458,7 @@ void filetypes_init_types(void)
 #define CSS
 	filetypes[GEANY_FILETYPES_CSS] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_CSS]->id = GEANY_FILETYPES_CSS;
-	filetypes[GEANY_FILETYPES_CSS]->uid = 16; // never change this value;
+	filetypes[GEANY_FILETYPES_CSS]->uid = FILETYPE_UID_CSS;
 	filetypes[GEANY_FILETYPES_CSS]->item = NULL;
 	filetypes[GEANY_FILETYPES_CSS]->lang = 13;
 	filetypes[GEANY_FILETYPES_CSS]->name = g_strdup("CSS");
@@ -414,7 +477,7 @@ void filetypes_init_types(void)
 #define SQL
 	filetypes[GEANY_FILETYPES_SQL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_SQL]->id = GEANY_FILETYPES_SQL;
-	filetypes[GEANY_FILETYPES_SQL]->uid = 17; // never change this value
+	filetypes[GEANY_FILETYPES_SQL]->uid = FILETYPE_UID_SQL;
 	filetypes[GEANY_FILETYPES_SQL]->item = NULL;
 	filetypes[GEANY_FILETYPES_SQL]->lang = 11;
 	filetypes[GEANY_FILETYPES_SQL]->name = g_strdup("SQL");
@@ -433,7 +496,7 @@ void filetypes_init_types(void)
 #define LATEX
 	filetypes[GEANY_FILETYPES_LATEX] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_LATEX]->id = GEANY_FILETYPES_LATEX;
-	filetypes[GEANY_FILETYPES_LATEX]->uid = 18; // never change this value
+	filetypes[GEANY_FILETYPES_LATEX]->uid = FILETYPE_UID_LATEX;
 	filetypes[GEANY_FILETYPES_LATEX]->item = NULL;
 	filetypes[GEANY_FILETYPES_LATEX]->lang = 8;
 	filetypes[GEANY_FILETYPES_LATEX]->name = g_strdup("LaTeX");
@@ -454,7 +517,7 @@ void filetypes_init_types(void)
 #define OMS
 	filetypes[GEANY_FILETYPES_OMS] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_OMS]->id = GEANY_FILETYPES_OMS;
-	filetypes[GEANY_FILETYPES_OMS]->uid = 19; // never change this value
+	filetypes[GEANY_FILETYPES_OMS]->uid = FILETYPE_UID_OMS;
 	filetypes[GEANY_FILETYPES_OMS]->item = NULL;
 	filetypes[GEANY_FILETYPES_OMS]->lang = -2;
 	filetypes[GEANY_FILETYPES_OMS]->name = g_strdup("O-Matrix");
@@ -473,7 +536,7 @@ void filetypes_init_types(void)
 #define CONF
 	filetypes[GEANY_FILETYPES_CONF] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_CONF]->id = GEANY_FILETYPES_CONF;
-	filetypes[GEANY_FILETYPES_CONF]->uid = 20; // never change this value
+	filetypes[GEANY_FILETYPES_CONF]->uid = FILETYPE_UID_CONF;
 	filetypes[GEANY_FILETYPES_CONF]->item = NULL;
 	filetypes[GEANY_FILETYPES_CONF]->lang = 10;
 	filetypes[GEANY_FILETYPES_CONF]->name = g_strdup("Conf");
@@ -497,7 +560,7 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_ALL] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;
 	filetypes[GEANY_FILETYPES_ALL]->name = g_strdup("None");
-	filetypes[GEANY_FILETYPES_ALL]->uid = 21; // never change this value
+	filetypes[GEANY_FILETYPES_ALL]->uid = FILETYPE_UID_ALL;
 	filetypes[GEANY_FILETYPES_ALL]->item = NULL;
 	filetypes[GEANY_FILETYPES_ALL]->lang = -2;
 	filetypes[GEANY_FILETYPES_ALL]->has_tags = FALSE;
