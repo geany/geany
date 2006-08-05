@@ -1321,7 +1321,7 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint i, pos, line = -1;
-	gint flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
+	gint flags;
 	gint idx;
 	struct TextToFind ttf;
 	gchar *buffer, *short_file_name, *string, *search_text;
@@ -1334,9 +1334,13 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 	{	// take selected text if there is a selection
 		search_text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
 		sci_get_selected_text(doc_list[idx].sci, search_text);
+		flags = SCFIND_MATCHCASE;
 	}
 	else
+	{
 		search_text = g_strdup(current_word);
+		flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
+	}
 
 	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
 	{
