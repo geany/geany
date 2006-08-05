@@ -4,6 +4,7 @@
  * src/keyfile.c, src/filetypes.c, src/filetypes.h:
    Use unique filetype id in geany.conf to avoid new filetype problems.
    Make unique id numbers compatible with Geany 0.7 filetype order.
+ * src/highlighting.c: Fix loading Perl, TCL system config files first.
 
 
 2006-08-04  Nick Treleaven  <nick.treleaven@btinternet.com>

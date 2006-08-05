@@ -1260,7 +1260,7 @@ static void styleset_perl_init(void)
 	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.perl", NULL);
 	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.perl", NULL);
 
-	styleset_load_file(config, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_PERL] = g_new(style_set, 1);
@@ -2230,7 +2230,7 @@ static void styleset_tcl_init(void)
 	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.tcl", NULL);
 	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.tcl", NULL);
 
-	styleset_load_file(config, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_TCL] = g_new(style_set, 1);
