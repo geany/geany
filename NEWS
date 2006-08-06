@@ -1,3 +1,35 @@
+Geany 0.8 (TBA)
+
+        Changes:
+        * Find in files feature added which uses the Grep tool.
+        * Added Make object command to compile using the Make tool.
+        * Editor notebook tabs can now be reordered by drag and drop.
+        * Added support for back references when using regex replace.
+        * Added a Find button to the Replace dialog to skip matches.
+        * Greatly improved the speed of Replace all/in selection.
+        * Scroll to 1/4 of the view when jumping to a line number.
+        * Show messages on the status bar and in the Status window.
+        * Preferences options for Auto-indentation and Line wrapping.
+        * Use the mouse click position for Go to tag.
+        * Added separate filetype_extensions.conf system file.
+        * Added makefiles for building on Windows.
+
+        Bugs fixed:
+        * Use the full path for files opened from the command-line.
+        * Fixed saving a file from the unsaved file dialog.
+        * Fixed replacing with regexes the correct matched text length.
+        * Fixed applying virtual terminal widget settings at startup.
+        * Fixed prepending items to the Recent files menu.
+        * Fixed clipboard commands used in the find entry and Scribble.
+
+        Windows bugs fixed:
+        * Don't add .c extension when saving with the All files filter.
+        * Fixed a tool chooser dialog crash when path doesn't exist.
+
+        Documentation:
+        * Added Scintilla keyboard commands for editing appendix.
+
+
 Geany 0.7 (June 04, 2006)
 
         * user-definable keyboard shortcuts
