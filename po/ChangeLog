@@ -1,3 +1,16 @@
+2006-08-06  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * de.po: Fixed small mnemonic error in German translation.
+ * ca.po: Update of Catalan translation(thanks to topi)
+
+
+2006-08-02  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.pot: Update of catalog
+ * es.po: Update of Spanish translation(thanks to Damián Viano)
+ * de.po: Update of German translation
+
+
 2006-07-29  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.pot: Update of catalog

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: geany 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-02 11:35+0200\n"
-"PO-Revision-Date: 2006-08-02 11:51+0100\n"
+"PO-Revision-Date: 2006-08-02 12:45+0100\n"
 "Last-Translator: Enrico Tröger <enrico.troeger@uvena.de>\n"
 "Language-Team: German <frank@frank.uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -488,7 +488,7 @@ msgstr "Speichert die aktuelle Datei"
 #: src/interface.c:836
 #: src/keybindings.c:121
 msgid "Save all"
-msgstr "A_lle speichern"
+msgstr "Alle speichern"
 
 #: src/interface.c:839
 msgid "Save all open files"
