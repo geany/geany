@@ -1,3 +1,9 @@
+2006-08-06  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * doc/geany.docbook:
+   Improved search section; added all find and go to commands.
+
+
 2006-08-05  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c: Allow partial word selection for Find Usage.

@@ -117,8 +117,8 @@
 				recommended.
 			</para>
 		</section>
-		<section>
-			<title>Source Compilation</title>
+		<section id="sourcecompilation">
+			<title>Source compilation</title>
 			<para>
 				Compiling <application>&app;</application> is quite easy. The following should do it:
 				<screen>
@@ -147,8 +147,8 @@
 				otherwise contact the author at <email>&author_mail;</email>.
 			</para>
 		</section>
-		<section>
-			<title>Binary Packages</title>
+		<section id="binarypackages">
+			<title>Binary packages</title>
 			<section>
 				<title>Fedora</title>
 				<para>
@@ -188,8 +188,8 @@
 
 	<chapter id="usage">
 		<title>Usage</title>
-		<section>
-			<title>Getting Started</title>
+		<section id="gettingstarted">
+			<title>Getting started</title>
 			<para>
 				You can start <application>&app;</application> in the following ways:
 				<itemizedlist>
@@ -415,105 +415,199 @@
 		</section>
 -->
 		<section id="searchreplace">
-			<title>Search and Replace</title>
+			<title>Search, replace and go to</title>
 			<para>
-				You can use regular expressions in the search and replace dialogs, just by
-				activating the check box (see the image below).
-				The syntax is POSIX-like, as described in <xref linkend="regexp"/>.
-				<note><para>
-					Searching backwards with regular expressions is not supported.
-				</para></note>
-				<figure>
-				   <title>Search dialog</title>
-				   <graphic fileref="images/find_dialog.jpg"></graphic>
-				</figure>
-
+				This section describes search-related commands from the Search menu and
+				the editor window's popup menu:
 			</para>
 			<para>
-				<table frame="all" id="regexp">
-					<title>Regular expressions</title>
-					<tgroup cols="2">
-						<?dbhtml cellpadding="4" ?>
-						<?dbhtml cellspacing="0" ?>
-						<colspec colnum="1" colname="col1"/>
-						<colspec colnum="2" colname="col2"/>
-						<spanspec spanname="hspan" namest="col1" nameend="col2" align="left"/>
-						<thead>
-							<row>
-								<entry spanname="hspan">
-									In a regular expression, the following characters are interpreted:
-								</entry>
-							</row>
-						</thead>
-						<tbody>
-							<row>
-								<entry>.</entry>
-								<entry>Matches any character.</entry>
-							</row>
-							<row>
-								<entry>(</entry>
-								<entry>This marks the start of a region for tagging a match.</entry>
-							</row>
-							<row>
-								<entry>)</entry>
-								<entry>This marks the end of a tagged region.</entry>
-							</row>
-							<row>
-								<entry>\n</entry>
-								<entry>Where n is 1 through 9 refers to the first through ninth tagged region
-									   when replacing. For example, if the search string was Fred([1-9])XXX
-									   and the replace string was Sam\1YYY, when applied to Fred2XXX this would
-									   generate Sam2YYY.
-								</entry>
-							</row>
-							<row>
-								<entry>\&lt;</entry>
-								<entry>This matches the start of a word.</entry>
-							</row>
-							<row>
-								<entry>\&gt;</entry>
-								<entry>This matches the end of a word.</entry>
-							</row>
-							<row>
-								<entry>\x</entry>
-								<entry>This allows you to use a character x that would otherwise have a special
-									   meaning. For example, \[ would be interpreted as [ and not as the start
-									   of a character set. Use \\ for a literal backslash.
-								</entry>
-							</row>
-							<row>
-								<entry>[...]</entry>
-								<entry>This indicates a set of characters, for example, [abc] means any of the
-									   characters a, b or c. You can also use ranges, for example [a-z] for any
-									   lower case character.
-								</entry>
-							</row>
-							<row>
-								<entry>[^...]</entry>
-								<entry>The complement of the characters in the set. For example, [^A-Za-z] means
-									   any character except an alphabetic character.
-								</entry>
-							</row>
-							<row>
-								<entry>^</entry>
-								<entry>This matches the start of a line (unless used inside a set, see above).</entry>
-							</row>
-							<row>
-								<entry>$</entry>
-								<entry>This matches the end of a line.</entry>
-							</row>
-							<row>
-								<entry>*</entry>
-								<entry>This matches 0 or more times. For example, Sa*m matches Sm, Sam, Saam, Saaam and so on.</entry>
-							</row>
-							<row>
-								<entry>+</entry>
-								<entry>This matches 1 or more times. For example, Sa+m matches Sam, Saam, Saaam and so on.</entry>
-							</row>
-						</tbody>
-					</tgroup>
-				</table>
+				<itemizedlist>
+					<listitem><para>Find</para></listitem>
+					<listitem><para>Find usage *</para></listitem>
+					<listitem><para>Find in files</para></listitem>
+					<listitem><para>Replace</para></listitem>
+					<listitem><para>Go to tag definition *</para></listitem>
+					<listitem><para>Go to tag declaration *</para></listitem>
+					<listitem><para>Go to line</para></listitem>
+				</itemizedlist>
 			</para>
+			<para>
+				* These items are available from the editor window's popup menu, or by
+				using a keyboard shortcut (see <xref linkend="keybindings"/>).
+			</para>
+			<section>
+				<title>Find</title>
+				<para>
+					The Find dialog is used for finding text within the current document.
+					The syntax for the "Use regular expressions" option is shown in
+					<xref linkend="regexp"/>.
+				</para>
+				<para>
+					<figure>
+					   <title>Find dialog</title>
+					   <graphic fileref="images/find_dialog.jpg"></graphic>
+					</figure>
+				</para>
+			</section>
+			<section>
+				<title>Find usage</title>
+				<para>
+					Find usage searches all open files. If there is a selection, then it is used
+					as the search text; otherwise the current word is used.
+					The current word is either taken from the word nearest the edit cursor, or
+					the word underneath the popup menu click position when the popup menu is
+					used.
+					The search results are shown in the Messages window.
+				</para>
+			</section>
+			<section>
+				<title>Find in files</title>
+				<para>
+					Find in files is a more powerful version of Find usage that searches all files
+					in a certain directory using the Grep tool. The Grep tool must be correctly set
+					in Preferences to the path of the system's Grep utility.
+				</para>
+			</section>
+			<section>
+				<title>Replace</title>
+				<para>
+					The Replace dialog has the same options for finding text as the Find
+					dialog. There is also a "Replace in all files" option, which is used with the
+					Replace All button to perform the replacement for all open files.
+				</para>
+				<para>
+					The "Use regular expressions" option applies both to the search string and
+					to the replacement text; for the latter back references can be used -
+					see the entry for '\n' in <xref linkend="regexp"/>.
+				</para>
+			</section>
+			<section>
+				<title>Go to tag definition</title>
+				<para>
+					If the current word is the name of a function and the file containing the
+					function definition (a.k.a. function body) is open, Go to tag definition will
+					switch to that file and go to the corresponding line number.
+					The current word is either taken from the word nearest the edit cursor, or
+					the word underneath the popup menu click position when the popup menu is
+					used.
+				</para>
+			</section>
+			<section>
+				<title>Go to tag declaration</title>
+				<para>
+					Like Go to tag definition, but for a forward function declaration (a.k.a.
+					function prototype) instead of a function definition.
+				</para>
+			</section>
+			<section>
+				<title>Go to line</title>
+				<para>
+					Go to a particular line number in the current file.
+				</para>
+			</section>
+			<section>
+				<title>Regular expressions</title>
+				<para>
+					You can use regular expressions in the Find and Replace dialogs by
+					selecting the "Use regular expressions" check box.
+					The syntax is POSIX-like, as described below in <xref linkend="regexp"/>.
+					<note><para>
+						Searching backwards with regular expressions is not supported.
+					</para></note>
+				</para>
+				<para>
+					<table frame="all" id="regexp">
+						<title>Regular expressions</title>
+						<tgroup cols="2">
+							<?dbhtml cellpadding="4" ?>
+							<?dbhtml cellspacing="0" ?>
+							<colspec colnum="1" colname="col1"/>
+							<colspec colnum="2" colname="col2"/>
+							<spanspec spanname="hspan" namest="col1" nameend="col2" align="left"/>
+							<thead>
+								<row>
+									<entry spanname="hspan">
+										In a regular expression, the following characters are interpreted:
+									</entry>
+								</row>
+							</thead>
+							<tbody>
+								<row>
+									<entry>.</entry>
+									<entry>Matches any character.</entry>
+								</row>
+								<row>
+									<entry>(</entry>
+									<entry>This marks the start of a region for tagging a match.</entry>
+								</row>
+								<row>
+									<entry>)</entry>
+									<entry>This marks the end of a tagged region.</entry>
+								</row>
+								<row>
+									<entry>\n</entry>
+									<entry>Where n is 1 through 9 refers to the first through ninth tagged region
+										   when replacing. For example, if the search string was Fred([1-9])XXX
+										   and the replace string was Sam\1YYY, when applied to Fred2XXX this would
+										   generate Sam2YYY.
+									</entry>
+								</row>
+								<row>
+									<entry>\&lt;</entry>
+									<entry>This matches the start of a word.</entry>
+								</row>
+								<row>
+									<entry>\&gt;</entry>
+									<entry>This matches the end of a word.</entry>
+								</row>
+								<row>
+									<entry>\x</entry>
+									<entry>This allows you to use a character x that would otherwise have a special
+										   meaning. For example, \[ would be interpreted as [ and not as the start
+										   of a character set. Use \\ for a literal backslash.
+									</entry>
+								</row>
+								<row>
+									<entry>[...]</entry>
+									<entry>This indicates a set of characters, for example, [abc] means any of the
+										   characters a, b or c. You can also use ranges, for example [a-z] for any
+										   lower case character.
+									</entry>
+								</row>
+								<row>
+									<entry>[^...]</entry>
+									<entry>The complement of the characters in the set. For example, [^A-Za-z] means
+										   any character except an alphabetic character.
+									</entry>
+								</row>
+								<row>
+									<entry>^</entry>
+									<entry>This matches the start of a line (unless used inside a set, see above).</entry>
+								</row>
+								<row>
+									<entry>$</entry>
+									<entry>This matches the end of a line.</entry>
+								</row>
+								<row>
+									<entry>*</entry>
+									<entry>This matches 0 or more times. For example, Sa*m matches Sm, Sam, Saam, Saaam and so on.</entry>
+								</row>
+								<row>
+									<entry>+</entry>
+									<entry>This matches 1 or more times. For example, Sa+m matches Sam, Saam, Saaam and so on.</entry>
+								</row>
+							</tbody>
+						</tgroup>
+					</table>
+				</para>
+				<note>
+					<title>Partial POSIX compatibility</title>
+					<para>
+						Note that the POSIX '?' regular expression character for optional matching
+						is not supported by the Find and Replace dialogs.
+					</para>
+				</note>
+			</section>
 		</section>
 		<section id="confdialog">
 			<title>Preferences</title>
@@ -680,7 +774,7 @@
 			</section>
 		</section>
 		<section id="buildsystem">
-			<title>Build System</title>
+			<title>Build system</title>
 			<para>
 				<application>&app;</application> has an integrated build system.
 				Firstly this means that the current source file will be saved before
