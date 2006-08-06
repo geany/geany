@@ -117,7 +117,7 @@
 				recommended.
 			</para>
 		</section>
-		<section id="sourcecompilation">
+		<section id="source_compilation">
 			<title>Source compilation</title>
 			<para>
 				Compiling <application>&app;</application> is quite easy. The following should do it:
@@ -147,7 +147,7 @@
 				otherwise contact the author at <email>&author_mail;</email>.
 			</para>
 		</section>
-		<section id="binarypackages">
+		<section id="binary_packages">
 			<title>Binary packages</title>
 			<section>
 				<title>Fedora</title>
@@ -188,7 +188,7 @@
 
 	<chapter id="usage">
 		<title>Usage</title>
-		<section id="gettingstarted">
+		<section id="getting_started">
 			<title>Getting started</title>
 			<para>
 				You can start <application>&app;</application> in the following ways:
@@ -414,7 +414,7 @@
 			</para>
 		</section>
 -->
-		<section id="searchreplace">
+		<section id="search_replace">
 			<title>Search, replace and go to</title>
 			<para>
 				This section describes search-related commands from the Search menu and
@@ -773,7 +773,7 @@
 				</para>
 			</section>
 		</section>
-		<section id="buildsystem">
+		<section id="build_system">
 			<title>Build system</title>
 			<para>
 				<application>&app;</application> has an integrated build system.
@@ -1220,6 +1220,10 @@
 				</table>
 			</para>
 		</section>
+	</chapter>
+
+	<chapter id="config_files">
+		<title>Configuration files</title>
 		<section id="filetypes">
 			<title>Filetype definition files</title>
 			<para>
@@ -1527,6 +1531,40 @@
 					</table>
 				</para>
 			</section>
+		</section>
+		<section id="filetype_extensions">
+			<title>Filetype extensions</title>
+			<para>
+				You can override the default extensions that <application>&app;</application> uses
+				for each filetype using the <filename>filetype_extensions.conf</filename> file.
+			</para>
+			<para>
+				To override the system-wide configuration file,
+				copy it from <filename>$prefix/share/geany</filename> to your
+				configuration directory, usually <filename>~/.geany/</filename>.
+				$prefix is the path where
+				<application>&app;</application> is	installed (commonly
+				<filename>/usr/local</filename>).
+			</para>
+			<para>
+				 For example:
+				 <screen><prompt>%</prompt> <userinput><command>cp /usr/local/share/geany/filetype_extensions.conf /home/username/.geany/</command></userinput></screen>
+			</para>
+			<para>
+				Then edit it and remove all the lines for filetype extensions that you
+				do not want to override. The remaining lines can be edited after the
+				<literal>=</literal> sign, using a semi-colon separated list of patterns
+				which should be matched for that filetype.
+			</para>
+			<para>
+				For example, to set the filetype extensions for Make, the
+				<filename>/home/username/.geany/filetype_extensions.conf</filename>
+				file should look like:
+				<literallayout><literal>
+						[Extensions]
+						Make=Makefile*;*.mk;Buildfile;
+				</literal></literallayout>
+			</para>
 		</section>
 		<section>
 			<title>Templates</title>

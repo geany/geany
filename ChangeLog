@@ -2,6 +2,8 @@
 
  * doc/geany.docbook:
    Improved search section; added all find and go to commands.
+   Added Filetype extensions section.
+   Grouped configuration file sections into a chapter.
 
 
 2006-08-05  Nick Treleaven  <nick.treleaven@btinternet.com>
