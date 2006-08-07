@@ -2,6 +2,8 @@
 
  * src/callbacks.c: Allow Find even when the replace text is the same.
                     Place the cursor in "" for insert blank include.
+ * src/utils.c, src/utils.h, src/callbacks.c, src/document.c:
+   Move recent file item to the top when it is clicked on.
 
 
 2006-08-06  Nick Treleaven  <nick.treleaven@btinternet.com>

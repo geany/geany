@@ -930,15 +930,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		utils_build_show_hide(idx);
 
 		// finally add current file to recent files menu
-		if (g_queue_find_custom(app->recent_queue, doc_list[idx].file_name, (GCompareFunc) strcmp) == NULL)
-		{
-			g_queue_push_head(app->recent_queue, g_strdup(doc_list[idx].file_name));
-			if (g_queue_get_length(app->recent_queue) > app->mru_length)
-			{
-				g_free(g_queue_pop_tail(app->recent_queue));
-			}
-			utils_update_recent_menu();
-		}
+		utils_add_recent_file(doc_list[idx].file_name);
 	}
 	else gtk_widget_hide(app->save_filesel);
 }
@@ -2516,6 +2508,7 @@ on_recent_file_activate                (GtkMenuItem     *menuitem,
 	if (locale_filename == NULL) locale_filename = g_strdup((gchar*) user_data);
 
 	document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL);
+	utils_recent_file_loaded((gchar*) user_data);
 
 	g_free(locale_filename);
 }

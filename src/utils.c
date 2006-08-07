@@ -55,6 +55,11 @@
 #include "images.c"
 
 
+static void utils_update_recent_menu();
+
+static void utils_recreate_recent_menu();
+
+
 void utils_start_browser(const gchar *uri)
 {
 #ifdef G_OS_WIN32
@@ -1757,7 +1762,21 @@ void utils_update_fold_items(void)
 }
 
 
-void utils_update_recent_menu(void)
+void utils_add_recent_file(const gchar *filename)
+{
+	if (g_queue_find_custom(app->recent_queue, filename, (GCompareFunc) strcmp) == NULL)
+	{
+		g_queue_push_head(app->recent_queue, g_strdup(filename));
+		if (g_queue_get_length(app->recent_queue) > app->mru_length)
+		{
+			g_free(g_queue_pop_tail(app->recent_queue));
+		}
+		utils_update_recent_menu();
+	}
+}
+
+
+static void utils_update_recent_menu()
 {
 	GtkWidget *recent_menu = lookup_widget(app->window, "recent_files1_menu");
 	GtkWidget *recent_files_item = lookup_widget(app->window, "recent_files1");
@@ -1779,11 +1798,11 @@ void utils_update_recent_menu(void)
 	children = gtk_container_get_children(GTK_CONTAINER(recent_menu));
 	if (g_list_length(children) > app->mru_length - 1)
 	{
-		children = g_list_nth(children, app->mru_length - 1);
-		while (children != NULL)
+		GList *item = g_list_nth(children, app->mru_length - 1);
+		while (item != NULL)
 		{
-			if (GTK_IS_WIDGET(children->data)) gtk_widget_destroy(GTK_WIDGET(children->data));
-			children = g_list_next(children);
+			if (GTK_IS_MENU_ITEM(item->data)) gtk_widget_destroy(GTK_WIDGET(item->data));
+			item = g_list_next(item);
 		}
 	}
 
@@ -1793,6 +1812,42 @@ void utils_update_recent_menu(void)
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(recent_menu), tmp);
 	g_signal_connect((gpointer) tmp, "activate",
 				G_CALLBACK(on_recent_file_activate), (gpointer) filename);
+}
+
+
+static void utils_recreate_recent_menu()
+{
+	GList *item, *children;
+	void *data;
+	GtkWidget *recent_menu = lookup_widget(app->window, "recent_files1_menu");
+
+	children = gtk_container_get_children(GTK_CONTAINER(recent_menu));
+
+	// remove all menu items (but not the list elements)
+	for (item = children; item != NULL; item = g_list_next(item))
+	{
+		data = item->data;
+		if (! GTK_IS_MENU_ITEM(data)) continue;
+		gtk_widget_destroy(GTK_WIDGET(data));
+	}
+	dialogs_create_recent_menu();
+}
+
+
+void utils_recent_file_loaded(const gchar *filename)
+{
+	GList *item = 
+		g_queue_find_custom(app->recent_queue, filename, (GCompareFunc) strcmp);
+	gchar *data;
+
+	g_return_if_fail(item != NULL);
+	// first reorder the queue
+	data = item->data;
+	g_queue_remove(app->recent_queue, data);
+	g_queue_push_head(app->recent_queue, data);
+
+	// now recreate the recent files menu
+	utils_recreate_recent_menu();
 }
 
 

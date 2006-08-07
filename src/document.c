@@ -642,16 +642,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 
 	// finally add current file to recent files menu, but not the files from the last session
-	if (! app->opening_session_files &&
-		g_queue_find_custom(app->recent_queue, utf8_filename, (GCompareFunc) strcmp) == NULL)
-	{
-		g_queue_push_head(app->recent_queue, g_strdup(utf8_filename));
-		if (g_queue_get_length(app->recent_queue) > app->mru_length)
-		{
-			g_free(g_queue_pop_tail(app->recent_queue));
-		}
-		utils_update_recent_menu();
-	}
+	if (! app->opening_session_files) utils_add_recent_file(utf8_filename);
 
 	if (reload)
 		msgwin_status_add(_("File %s reloaded."), utf8_filename);

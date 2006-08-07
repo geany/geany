@@ -167,7 +167,9 @@ gchar *utils_get_initials(gchar *name);
 
 void utils_update_toolbar_icons(GtkIconSize size);
 
-void utils_update_recent_menu(void);
+void utils_add_recent_file(const gchar *filename);
+
+void utils_recent_file_loaded(const gchar *filename);
 
 gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key, const gboolean default_value);
 
