@@ -1020,7 +1020,7 @@ on_window_key_press_event              (GtkWidget *widget,
                                         GdkEventKey *event,
                                         gpointer user_data)
 {
-	return keybindings_got_event(widget, event, user_data);
+	return event->keyval == 0 ? FALSE : keybindings_got_event(widget, event, user_data);
 }
 
 
