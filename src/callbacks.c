@@ -2430,12 +2430,13 @@ void
 on_insert_include_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
+	gint idx = document_get_cur_idx(), pos = -1;
 	gchar *text;
 
 	if (utils_strcmp(user_data, "blank"))
 	{
 		text = g_strdup("#include \"\"\n");
+		pos = clickpos + 10;
 	}
 	else
 	{
@@ -2444,6 +2445,7 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 
 	sci_insert_text(doc_list[idx].sci, clickpos, text);
 	g_free(text);
+	if (pos > 0) sci_goto_pos(doc_list[idx].sci, pos, FALSE);
 }
 
 

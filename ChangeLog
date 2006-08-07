@@ -1,6 +1,7 @@
 2006-08-07  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c: Allow Find even when the replace text is the same.
+                    Place the cursor in "" for insert blank include.
 
 
 2006-08-06  Nick Treleaven  <nick.treleaven@btinternet.com>
