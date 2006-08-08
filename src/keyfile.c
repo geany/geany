@@ -44,7 +44,8 @@ static void generate_filetype_extensions(const gchar *output_dir);
 
 void configuration_save()
 {
-	gint i = 0, j = 0, idx, max;
+	guint i = 0, j = 0, max;
+	gint idx;
 	gboolean config_exists;
 	GKeyFile *config = g_key_file_new();
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
@@ -240,7 +241,7 @@ gboolean configuration_load()
 		app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_size", tb_iconsize);
 	}
 	app->beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
-	app->mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGHTH);
+	app->mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGTH);
 	app->long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
 	app->long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
 	app->long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
@@ -477,7 +478,7 @@ void configuration_apply_settings()
 		gint idx;
 		guint tabnum = 0;
 
-		while (tabnum < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)))
+		while (tabnum < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)))
 		{
 			idx = document_get_n_idx(tabnum);
 			if (idx < 0) break;

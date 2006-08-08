@@ -733,7 +733,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 	if (closing_all) return;
 
 	// guint == -1 seems useless, but it isn't!
-	if (page_num == -1 && page != NULL)
+	if (page_num == (guint) -1 && page != NULL)
 		idx = document_find_by_sci(SCINTILLA(page));
 	else
 		idx = document_get_n_idx(page_num);
@@ -763,7 +763,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 	if (closing_all) return;
 
 	// guint == -1 seems useless, but it isn't!
-	if (page_num == -1 && page != NULL)
+	if (page_num == (guint) -1 && page != NULL)
 		idx = document_find_by_sci(SCINTILLA(page));
 	else
 		idx = document_get_n_idx(page_num);
@@ -2605,7 +2605,7 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	gchar *basename;
-	guint i = GPOINTER_TO_INT(user_data);
+	gint i = GPOINTER_TO_INT(user_data);
 
 	if (idx < 0 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL ||
 		i < 0 || i >= GEANY_ENCODINGS_MAX || encodings[i].charset == NULL)

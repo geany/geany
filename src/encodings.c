@@ -192,7 +192,8 @@ void encodings_init(void)
 	GCallback cb_func[2];
 	GSList *group = NULL;
 	gchar *label;
-	guint i, j, k, order, group_size;
+	gint order, group_size;
+	guint i, j, k;
 
 	init_encodings();
 

@@ -253,7 +253,7 @@ void treeviews_openfiles_update_all(void)
 	gchar *shortname;
 
 	gtk_list_store_clear(tv.store_openfiles);
-	for (i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
+	for (i = 0; i < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
 	{
 		idx = document_get_n_idx(i);
 		if (! doc_list[idx].is_valid) continue;

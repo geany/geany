@@ -2,6 +2,9 @@
 
  * src/notebook.c: Fixed GTK 2.6 workaround for DnD tab reordering so
                    it works on the first attempt.
+ * src/utils.c, src/highlighting.c, src/geany.h, src/treeviews.c,
+   src/callbacks.c, src/keyfile.c, src/encodings.c, src/dialogs.c:
+   Fixed all sign comparison warnings.
 
 
 2006-08-07  Enrico Tröger  <enrico.troeger@uvena.de>

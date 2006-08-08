@@ -2392,7 +2392,7 @@ gchar **utils_read_file_in_array(const gchar *filename)
  * Replaces \\, \r, \n, \t and \uXXX by their real counterparts */
 gboolean utils_str_replace_escape(gchar *string)
 {
-	gint i, j;
+	gsize i, j;
 	guint unicodechar;
 
 	j = 0;

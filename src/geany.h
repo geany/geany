@@ -69,7 +69,7 @@
 #define GEANY_DEFAULT_TOOLS_BROWSER		"mozilla"
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"
-#define GEANY_DEFAULT_MRU_LENGHTH		10
+#define GEANY_DEFAULT_MRU_LENGTH		10
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Sans 9"
 #define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
@@ -164,7 +164,7 @@ typedef struct MyApp
 	gint				 tab_pos_msgwin;
 	gint				 tab_pos_sidebar;
 	gint				 cur_idx;	// currently only used by the build system (build_spawn_cmd)
-	gint				 mru_length;
+	guint				 mru_length;
 	gint				 long_line_type;
 	gint				 long_line_column;
 #ifdef HAVE_FIFO

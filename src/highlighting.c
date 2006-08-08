@@ -38,7 +38,7 @@ static gboolean global_latex_tags_loaded = FALSE;
 
 /* simple wrapper function to print file errors in DEBUG mode */
 static void styleset_load_file(GKeyFile *key_file, const gchar *file, GKeyFileFlags flags,
-								GError **just_for_compatibility)
+								G_GNUC_UNUSED GError **just_for_compatibility)
 {
 	GError *error = NULL;
 	gboolean done = g_key_file_load_from_file(key_file, file, flags, &error);

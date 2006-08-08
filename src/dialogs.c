@@ -684,7 +684,7 @@ void dialogs_create_recent_menu(void)
 {
 	GtkWidget *recent_menu = lookup_widget(app->window, "recent_files1_menu");
 	GtkWidget *tmp;
-	gint i;
+	guint i;
 	gchar *filename;
 
 	if (g_queue_get_length(app->recent_queue) == 0)
