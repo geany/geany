@@ -75,6 +75,7 @@ void notebook_init()
 	if (gtk_check_version(2, 8, 0) != NULL) //null means version ok
 	{
 		// workaround GTK+2.6 drag start bug when over sci widget:
+		gtk_widget_add_events(app->notebook, GDK_POINTER_MOTION_MASK);
 		g_signal_connect(G_OBJECT(notebook), "motion-notify-event",
 			G_CALLBACK(notebook_motion_notify_event_cb), NULL);
 	}
@@ -249,15 +250,6 @@ gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
 	// signal for clicking the tab-close button
 	g_signal_connect(G_OBJECT(but), "clicked",
 		G_CALLBACK(notebook_tab_close_clicked_cb), page);
-	// motion notify for GTK+2.6 (workaround child widgets don't pass on signal)
-#if ! GTK_CHECK_VERSION(2, 8, 0)
-	if (gtk_check_version(2, 8, 0) != NULL) //null means version ok
-	{
-		gtk_widget_add_events(app->notebook, GDK_POINTER_MOTION_MASK);
-		g_signal_connect(G_OBJECT(app->notebook), "motion-notify-event",
-			G_CALLBACK(notebook_motion_notify_event_cb), NULL);
-	}
-#endif
 	return tabnum;
 }
 
