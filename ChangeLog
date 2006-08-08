@@ -1,3 +1,9 @@
+2006-08-08  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/notebook.c: Fixed GTK 2.6 workaround for DnD tab reordering so
+                   it works on the first attempt.
+
+
 2006-08-07  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c: Applied patch from Củ Văn Chuối to re-enable

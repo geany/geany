@@ -250,9 +250,14 @@ gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
 	g_signal_connect(G_OBJECT(but), "clicked",
 		G_CALLBACK(notebook_tab_close_clicked_cb), page);
 	// motion notify for GTK+2.6 (workaround child widgets don't pass on signal)
-	// doesn't seem to work
-	//g_signal_connect(G_OBJECT(this->tab_label), "motion-notify-event",
-		//G_CALLBACK(notebook_motion_notify_event_cb), NULL);
+#if ! GTK_CHECK_VERSION(2, 8, 0)
+	if (gtk_check_version(2, 8, 0) != NULL) //null means version ok
+	{
+		gtk_widget_add_events(app->notebook, GDK_POINTER_MOTION_MASK);
+		g_signal_connect(G_OBJECT(app->notebook), "motion-notify-event",
+			G_CALLBACK(notebook_motion_notify_event_cb), NULL);
+	}
+#endif
 	return tabnum;
 }
 
