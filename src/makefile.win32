@@ -1,4 +1,3 @@
-# per hand geschrieben, nicht hauen!
 # Note: PACKAGE_DATA_DIR and PACKAGE_LOCALE_DIR are no longer used on Windows.
 
 DEFINES = -DPACKAGE_DATA_DIR=\"data\" \
