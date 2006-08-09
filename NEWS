@@ -1,4 +1,4 @@
-Geany 0.8 (TBA)
+Geany 0.8 (August 09, 2006)
 
         Changes:
         * Find in files feature added which uses the Grep tool.
@@ -13,6 +13,17 @@ Geany 0.8 (TBA)
         * Use the mouse click position for Go to tag.
         * Added separate filetype_extensions.conf system file.
         * Added makefiles for building on Windows.
+        * Added keyboard shortcuts for increase/decrease of line
+          indentation.
+        * Added functionality to uncomment code.
+        * Encoding support
+        * Added support for Unicode Byte-Order-Mark (BOM)
+        * Redesigned preferences dialog.
+        * Added Undo and Redo toolbar buttons.
+        * New filetype: D
+        * Added simple printing support.
+        * Mark errors while compiling source code within Geany with
+          indicators(small squiggly underlines)
 
         Bugs fixed:
         * Use the full path for files opened from the command-line.
@@ -21,14 +32,22 @@ Geany 0.8 (TBA)
         * Fixed applying virtual terminal widget settings at startup.
         * Fixed prepending items to the Recent files menu.
         * Fixed clipboard commands used in the find entry and Scribble.
+        * Fixed wrong interpretation of syntax highlighting colours
+        * And some more.
 
         Windows bugs fixed:
         * Don't add .c extension when saving with the All files filter.
         * Fixed a tool chooser dialog crash when path doesn't exist.
+        * Fixed locale problems with Windows message dialogs.
+
+        Internationalisation:
+        * New translations: be, es, pt_BR, ru.
+        * Updated translations: ca, de, pl.
 
         Documentation:
         * Added Scintilla keyboard commands for editing appendix.
         * Improved search section; added all find and go to commands.
+        * Added section about character sets.
 
 
 Geany 0.7 (June 04, 2006)

@@ -4,6 +4,7 @@
    Removed section about global ctags, the information were obsolete.
    Added section about file encodings and the Unicode Byte-Order-Mark.
  * doc/images/*: Updated screenshots.
+ * New release: Geany 0.8 "Kadir".
 
 
 2006-08-09  Nick Treleaven  <nick.treleaven@btinternet.com>
@@ -445,7 +446,7 @@
  * tagmanager/d.c, tagmanager/Makefile.am, tagmanager/parsers.h,
    src/filetypes.c, src/highlighting.c, src/utils.c, src/build.c,
    src/templates.c, data/filetypes.d:
-   Added new filetype D(patch by Christop Berg, thanks).
+   Added new filetype D(patch by Christoph Berg, thanks).
 
 
 2006-07-08  Nick Treleaven  <nick.treleaven@btinternet.com>
@@ -556,7 +557,7 @@
  * geany.glade, src/interface.c, src/callbacks.c, src/sci_wrappers.c:
    Added "Select All" menu item.
  * geany.glade, src/interface.c, src/document.c, src/sci_wrappers.c,
-   srcprefs.c, src/geany.h:
+   src/prefs.c, src/geany.h:
    Improved settings for the long line marker, it can now be easily
    disabled or set to highlight the background of too long lines.
 
@@ -833,6 +834,7 @@
  * geany.glade, src/interface.c: Added missing mnemonic to build menu
                                  item.
 
+
 2006-06-12  Frank Lanitz  <frank@frank.uvena.de>
 
  * configure.in: Added Belarusian and Russian language support.
@@ -916,8 +918,8 @@
                                   link to the documentation.
  * src/main.c, src/document.c: Fixed wrong setting of filetype when
                                using "All files" as filetype.
- * src/dialogs.c: fixed compiler warning "not enough variable arguments
-                  to fit a sentinel"
+ * src/dialogs.c: Fixed compiler warning "not enough variable arguments
+                  to fit a sentinel".
 
 
 2006-06-04  Enrico Troeger  <enrico.troeger@uvena.de>
