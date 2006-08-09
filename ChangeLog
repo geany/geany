@@ -1,3 +1,11 @@
+2006-08-09  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * doc/geany.docbook:
+   Removed section about global ctags, the information were obsolete.
+   Added section about file encodings and the Unicode Byte-Order-Mark.
+ * doc/images/*: Updated screenshots.
+
+
 2006-08-09  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/main.c: Add startup debug message showing GTK+ runtime version.

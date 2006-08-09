@@ -7,7 +7,7 @@
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY deburl "http://debian.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "July 17, 2006">
+<!ENTITY date "August 09, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -235,7 +235,6 @@
 								<entry>Short option</entry>
 								<entry>Long option</entry>
 								<entry>Function</entry>
-
 							</row>
 						</thead>
 						<tbody>
@@ -243,8 +242,7 @@
 								<entry>-n</entry>
 								<entry>--no-ctags</entry>
 								<entry>Do not load auto completion and call tip data.
-									   Use this option if you do not want to use them. For more
-									   information see <xref linkend="general_ctags"/>.
+									   Use this option if you do not want to use them.
 								</entry>
 							</row>
 							<row>
@@ -347,18 +345,6 @@
 					Otherwise click No and Geany will not start.
 				</para>
 			</section>
-			<section id="general_ctags">
-				<title>Global C tags</title>
-				<para>
-					If a C file (with extension .c, .cpp, .h, etc.) is opened, a global tags file is
-					loaded once, which contains	many function declarations from glibc and some other
-					libraries, like X, Bonobo, Gnome, GTK, Glib and so on. These declarations are used
-					for call tips and auto completion. These tags are only useful if you are writing
-					C or C++ source code, so if you know that you do not need these things, you can skip
-					loading this tag file. To do so, start <application>&app;</application> with the
-					argument "-n" or "--no-ctags", for more information see <xref linkend="clo"/>.
-				</para>
-			</section>
 			<section id="general_vte">
 				<title>Virtual terminal emulator widget (VTE)</title>
 				<para>
@@ -400,20 +386,36 @@
 				</note>
 			</section>
 		</section>
-<!--
-		<section>
-			<title>Editing</title>
+		<section id="charset">
+			<title>Character sets and Unicode Byte-Order-Mark (BOM)</title>
 			<para>
-				&app; has a light improvement using the HOME and END keys. If you press END the cursor
-				is positioned at the end of the line, as expected.  If you then press the END key again,
-				the cursor gets back to the position where it was before. By pressing the HOME key,
-				you get a similar behaviour. The first time you press the HOME key, the cursor jumps
-				to the first non-blank character in the line. If you press it again, the cursor gets
-				to the very first column in the line. And at the third time your press the key, it
-				jumps back to the position where you started.
+				<application>&app;</application> provides support for detecting and converting
+				character sets. So you can open and save files in different character sets and
+				even can convert a file from a character set to another one.
+				To do this, <application>&app;</application> uses the character conversion
+				capabilities of the GLib.
+			</para>
+			<para>
+				Furthermore, Geany detects an Unicode Byte Order Mark
+				(see <ulink url="http://en.wikipedia.org/wiki/Byte_Order_Mark">
+				<citetitle>http://en.wikipedia.org/wiki/Byte_Order_Mark</citetitle>
+				</ulink> for details). Of course, this feature is only available if the opened file
+				is in an unicode encoding. The Byte Order Mark helps to detect the encoding of a
+				file, e.g. whether it is UTF-16LE or UTF-16BE and so on. On Unix-like systems using
+				a Byte Order Mark could cause some problems, e.g. the gcc stops with stray errors,
+				PHP does not parse a script containing a BOM and script files starting with a
+				she-bang maybe cannot be started.
+				In the status bar you can easily see whether the file starts with a BOM or not.
+				If you want to set a BOM for a file or if you want to remove it from a file, just
+				use the document menu and toggle the checkbox.
+				<note>
+					<para>
+						If you are unsure what a BOM is or if you do not understand where to use it,
+						then it is not important for you and you can safely ignore it.
+					</para>
+				</note>
 			</para>
 		</section>
--->
 		<section id="search_replace">
 			<title>Search, replace and go to</title>
 			<para>
@@ -619,6 +621,14 @@
 				   <graphic fileref="images/pref_dialog_gen.jpg"></graphic>
 				</figure>
 				<figure>
+				   <title>Interface tab in preferences dialog</title>
+				   <graphic fileref="images/pref_dialog_interface.jpg"></graphic>
+				</figure>
+				<figure>
+				   <title>Toolbar tab in preferences dialog</title>
+				   <graphic fileref="images/pref_dialog_toolbar.jpg"></graphic>
+				</figure>
+				<figure>
 				   <title>Editor tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_edit.jpg"></graphic>
 				</figure>
@@ -744,6 +754,12 @@
 									<entry>A printing tool. It should be able to accept and process
 										   plain text files. This can also include a path.</entry>
 									<entry>"lpr"</entry>
+								</row>
+								<row>
+									<entry>GEANY_DEFAULT_TOOLS_GREP</entry>
+									<entry>A grep tool. It should be compatible with GNU grep.
+										   This can also include a path.</entry>
+									<entry>"grep"</entry>
 								</row>
 								<row>
 									<entry>GEANY_DEFAULT_MRU_LENGHTH</entry>
