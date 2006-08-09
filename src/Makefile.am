@@ -2,7 +2,7 @@
 # $Id$
 
 
-EXTRA_DIST = images.c gb.c
+EXTRA_DIST = images.c gb.c win32.c win32.h
 
 bin_PROGRAMS = geany
 
