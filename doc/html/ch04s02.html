@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Filetype extensions</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="
+			Geany 0.8
+		"><link rel="up" href="ch04.html" title="Chapter 4. Configuration files"><link rel="prev" href="ch04.html" title="Chapter 4. Configuration files"><link rel="next" href="ch04s03.html" title="Templates"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Filetype extensions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Configuration files</th><td width="20%" align="right"> <a accesskey="n" href="ch04s03.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="filetype_extensions"></a>Filetype extensions</h2></div></div></div><p>
+				You can override the default extensions that <span class="application">Geany</span> uses
+				for each filetype using the <code class="filename">filetype_extensions.conf</code> file.
+			</p><p>
+				To override the system-wide configuration file,
+				copy it from <code class="filename">$prefix/share/geany</code> to your
+				configuration directory, usually <code class="filename">~/.geany/</code>.
+				$prefix is the path where
+				<span class="application">Geany</span> is	installed (commonly
+				<code class="filename">/usr/local</code>).
+			</p><p>
+				 For example:
+				 </p><pre class="screen"><code class="prompt">%</code> <strong class="userinput"><code><span><strong class="command">cp /usr/local/share/geany/filetype_extensions.conf /home/username/.geany/</strong></span></code></strong></pre><p>
+			</p><p>
+				Then edit it and remove all the lines for filetype extensions that you
+				do not want to override. The remaining lines can be edited after the
+				<code class="literal">=</code> sign, using a semi-colon separated list of patterns
+				which should be matched for that filetype.
+			</p><p>
+				For example, to set the filetype extensions for Make, the
+				<code class="filename">/home/username/.geany/filetype_extensions.conf</code>
+				file should look like:
+				</p><div class="literallayout"><p><code class="literal"><br>
+						[Extensions]<br>
+						Make=Makefile*;*.mk;Buildfile;<br>
+				</code></p></div><p>
+			</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch04s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. Configuration files </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Templates</td></tr></table></div></body></html>

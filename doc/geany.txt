@@ -1,7 +1,7 @@
 
 Geany 0.8
 
-Enrico Troeger
+Enrico Tröger
 
 Nick Treleaven
 
@@ -14,7 +14,7 @@ Frank Lanitz
    Foundation; either version 2 of the License, or (at your
    option) any later version. A copy of this license can be found
    in the file COPYING included with the source code of this
-   program and in the appendix of this document.
+   program and see Appendix B.
      _________________________________________________________
 
    Table of Contents
@@ -28,8 +28,8 @@ Frank Lanitz
    2. Installation
 
         2.1. Requirements
-        2.2. Source Compilation
-        2.3. Binary Packages
+        2.2. Source compilation
+        2.3. Binary packages
 
               2.3.1. Fedora
               2.3.2. Debian
@@ -38,85 +38,107 @@ Frank Lanitz
 
    3. Usage
 
-        3.1. Getting Started
+        3.1. Getting started
         3.2. Command line options
         3.3. General
 
               3.3.1. Startup
               3.3.2. Detection of a running instance
-              3.3.3. Global C tags
-              3.3.4. Virtual terminal emulator widget (VTE)
+              3.3.3. Virtual terminal emulator widget (VTE)
 
-        3.4. Search and Replace
-        3.5. Preferences
+        3.4. Character sets and Unicode Byte-Order-Mark (BOM)
+        3.5. Search, replace and go to
 
-              3.5.1. Compile time options
+              3.5.1. Find
+              3.5.2. Find usage
+              3.5.3. Find in files
+              3.5.4. Replace
+              3.5.5. Go to tag definition
+              3.5.6. Go to tag declaration
+              3.5.7. Go to line
+              3.5.8. Regular expressions
 
-        3.6. Build System
+        3.6. Preferences
 
-              3.6.1. Compile
-              3.6.2. Build
-              3.6.3. Build with "make"
-              3.6.4. Build with make (custom target)
-              3.6.5. Execute
-              3.6.6. Set Includes and Arguments
-              3.6.7. Indicators
-              3.6.8. File type configuration settings
+              3.6.1. Compile time options
 
-        3.7. Printing support
-        3.8. Keybindings
-        3.9. Filetype definition files
+        3.7. Build system
 
-              3.9.1. Format
-              3.9.2. Special file filetypes.common
+              3.7.1. Compile
+              3.7.2. Build
+              3.7.3. Make all
+              3.7.4. Make custom target
+              3.7.5. Make object
+              3.7.6. Execute
+              3.7.7. Set Includes and Arguments
+              3.7.8. Indicators
+              3.7.9. File type configuration settings
 
-        3.10. Templates
+        3.8. Printing support
+        3.9. Keybindings
 
-   A. GNU General Public License
+   4. Configuration files
 
-        A.1. Preamble
-        A.2. TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND
+        4.1. Filetype definition files
+
+              4.1.1. Format
+              4.1.2. Special file filetypes.common
+
+        4.2. Filetype extensions
+        4.3. Templates
+
+   A. Scintilla keyboard commands
+
+        A.1. Keyboard commands
+
+   B. GNU General Public License
+
+        B.1. Preamble
+        B.2. TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND
                 MODIFICATION
 
-              A.2.1. Section 0
-              A.2.2. Section 1
-              A.2.3. Section 2
-              A.2.4. Section 3
-              A.2.5. Section 4
-              A.2.6. Section 5
-              A.2.7. Section 6
-              A.2.8. Section 7
-              A.2.9. Section 8
-              A.2.10. Section 9
-              A.2.11. Section 10
-              A.2.12. Section 11 NO WARRANTY
-              A.2.13. Section 12
+              B.2.1. Section 0
+              B.2.2. Section 1
+              B.2.3. Section 2
+              B.2.4. Section 3
+              B.2.5. Section 4
+              B.2.6. Section 5
+              B.2.7. Section 6
+              B.2.8. Section 7
+              B.2.9. Section 8
+              B.2.10. Section 9
+              B.2.11. Section 10
+              B.2.12. Section 11 NO WARRANTY
+              B.2.13. Section 12
 
-        A.3. How to Apply These Terms to Your New Programs
+        B.3. How to Apply These Terms to Your New Programs
 
-   B. License for Scintilla and SciTE
+   C. License for Scintilla and SciTE
 
    List of Tables
    3-1. Command line Options
    3-2. Regular expressions
    3-3. Compile time options
    3-4. Keybindings action table
-   3-5. General settings
-   3-6. Build settings
-   3-7. General settings
-   3-8. Template wildcards
+   4-1. General settings
+   4-2. Build settings
+   4-3. General settings
+   4-4. Template wildcards
+   A-1. Scintilla keyboard commands
 
    List of Figures
-   3-1. Search dialog
+   3-1. Find dialog
    3-2. General tab in preferences dialog
-   3-3. Editor tab in preferences dialog
-   3-4. Tools tab in preferences dialog
-   3-5. Template tab in preferences dialog
-   3-6. Keybinding tab in preferences dialog
-   3-7. VTE tab in preferences dialog
+   3-3. Interface tab in preferences dialog
+   3-4. Toolbar tab in preferences dialog
+   3-5. Editor tab in preferences dialog
+   3-6. Tools tab in preferences dialog
+   3-7. Template tab in preferences dialog
+   3-8. Keybinding tab in preferences dialog
+   3-9. VTE tab in preferences dialog
 
    List of Examples
-   3-1. Comment indentation
+   4-1. Comment indentation
      _________________________________________________________
 
 Chapter 1. Introduction
@@ -163,12 +185,12 @@ Chapter 1. Introduction
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later
    version. A copy of this license can be found in the file
-   COPYING included with the source code of this program and in
-   the appendix A of this document.
+   COPYING included with the source code of this program or see
+   Appendix B.
 
    The included Scintilla library (found in the subdirectory
    scintilla/) has its own license, which can be found in the
-   appendix(see Appendix B).
+   appendix (see Appendix C).
      _________________________________________________________
 
 Chapter 2. Installation
@@ -186,7 +208,7 @@ Chapter 2. Installation
    recommended.
      _________________________________________________________
 
-2.2. Source Compilation
+2.2. Source compilation
 
    Compiling Geany is quite easy. The following should do it:
                                         % ./configure
@@ -213,7 +235,7 @@ Chapter 2. Installation
    author at <enrico.troeger@uvena.de>.
      _________________________________________________________
 
-2.3. Binary Packages
+2.3. Binary packages
 
 2.3.1. Fedora
 
@@ -245,7 +267,7 @@ Chapter 2. Installation
 
 Chapter 3. Usage
 
-3.1. Getting Started
+3.1. Getting started
 
    You can start Geany in the following ways:
 
@@ -263,8 +285,7 @@ Chapter 3. Usage
    Table 3-1. Command line Options
    Short option Long option Function
    -n --no-ctags Do not load auto completion and call tip data.
-   Use this option if you do not want to use them. For more
-   information see Section 3.3.3.
+   Use this option if you do not want to use them.
    -m --no-msgwin Do not show the message window. Use this option
    if you do not need compiler messages or VTE support.
    -p --no-pipe Do not open files in a running instance, force
@@ -305,7 +326,7 @@ Chapter 3. Usage
    recently opened files. It may be that Geany loads not exactly
    15 session files, this depends on the compile time option
    GEANY_SESSION_FILES; the default is 15. For details see
-   Section 3.5.1.
+   Section 3.6.1.
      _________________________________________________________
 
 3.3.2. Detection of a running instance
@@ -323,20 +344,7 @@ Chapter 3. Usage
    start as usual. Otherwise click No and Geany will not start.
      _________________________________________________________
 
-3.3.3. Global C tags
-
-   If a C file (with extension .c, .cpp, .h, etc.) is opened, a
-   global tags file is loaded once, which contains many function
-   declarations from glibc and some other libraries, like X,
-   Bonobo, Gnome, GTK, Glib and so on. These declarations are
-   used for call tips and auto completion. These tags are only
-   useful if you are writing C or C++ source code, so if you know
-   that you do not need these things, you can skip loading this
-   tag file. To do so, start Geany with the argument "-n" or
-   "--no-ctags", for more information see Section 3.2.
-     _________________________________________________________
-
-3.3.4. Virtual terminal emulator widget (VTE)
+3.3.3. Virtual terminal emulator widget (VTE)
 
    If you have installed libvte.so in your system, it is loaded
    automatically by Geany, and you will have a terminal widget in
@@ -376,47 +384,165 @@ Chapter 3. Usage
    number of your libvte.so.
      _________________________________________________________
 
-3.4. Search and Replace
+3.4. Character sets and Unicode Byte-Order-Mark (BOM)
 
-   You can use regular expressions in the search dialog, just by
-   activating the check box (see the image below). Detailed
-   information about special characters can be found in the Table
-   3-2.
+   Geany provides support for detecting and converting character
+   sets. So you can open and save files in different character
+   sets and even can convert a file from a character set to
+   another one. To do this, Geany uses the character conversion
+   capabilities of the GLib.
 
-   Figure 3-1. Search dialog
+   Furthermore, Geany detects an Unicode Byte Order Mark (see
+   http://en.wikipedia.org/wiki/Byte_Order_Mark for details). Of
+   course, this feature is only available if the opened file is
+   in an unicode encoding. The Byte Order Mark helps to detect
+   the encoding of a file, e.g. whether it is UTF-16LE or
+   UTF-16BE and so on. On Unix-like systems using a Byte Order
+   Mark could cause some problems, e.g. the gcc stops with stray
+   errors, PHP does not parse a script containing a BOM and
+   script files starting with a she-bang maybe cannot be started.
+   In the status bar you can easily see whether the file starts
+   with a BOM or not. If you want to set a BOM for a file or if
+   you want to remove it from a file, just use the document menu
+   and toggle the checkbox.
+
+   Note
+
+   If you are unsure what a BOM is or if you do not understand
+   where to use it, then it is not important for you and you can
+   safely ignore it.
+     _________________________________________________________
+
+3.5. Search, replace and go to
+
+   This section describes search-related commands from the Search
+   menu and the editor window's popup menu:
+
+     * Find
+     * Find usage *
+     * Find in files
+     * Replace
+     * Go to tag definition *
+     * Go to tag declaration *
+     * Go to line
+
+   * These items are available from the editor window's popup
+   menu, or by using a keyboard shortcut (see Section 3.9).
+     _________________________________________________________
+
+3.5.1. Find
+
+   The Find dialog is used for finding text within the current
+   document. The syntax for the "Use regular expressions" option
+   is shown in Table 3-2.
+
+   Figure 3-1. Find dialog
 
    [find_dialog.jpg]
+     _________________________________________________________
+
+3.5.2. Find usage
+
+   Find usage searches all open files. If there is a selection,
+   then it is used as the search text; otherwise the current word
+   is used. The current word is either taken from the word
+   nearest the edit cursor, or the word underneath the popup menu
+   click position when the popup menu is used. The search results
+   are shown in the Messages window.
+     _________________________________________________________
+
+3.5.3. Find in files
+
+   Find in files is a more powerful version of Find usage that
+   searches all files in a certain directory using the Grep tool.
+   The Grep tool must be correctly set in Preferences to the path
+   of the system's Grep utility.
+     _________________________________________________________
+
+3.5.4. Replace
+
+   The Replace dialog has the same options for finding text as
+   the Find dialog. There is also a "Replace in all files"
+   option, which is used with the Replace All button to perform
+   the replacement for all open files.
+
+   The "Use regular expressions" option applies both to the
+   search string and to the replacement text; for the latter back
+   references can be used - see the entry for '\n' in Table 3-2.
+     _________________________________________________________
+
+3.5.5. Go to tag definition
+
+   If the current word is the name of a function and the file
+   containing the function definition (a.k.a. function body) is
+   open, Go to tag definition will switch to that file and go to
+   the corresponding line number. The current word is either
+   taken from the word nearest the edit cursor, or the word
+   underneath the popup menu click position when the popup menu
+   is used.
+     _________________________________________________________
+
+3.5.6. Go to tag declaration
+
+   Like Go to tag definition, but for a forward function
+   declaration (a.k.a. function prototype) instead of a function
+   definition.
+     _________________________________________________________
+
+3.5.7. Go to line
+
+   Go to a particular line number in the current file.
+     _________________________________________________________
+
+3.5.8. Regular expressions
+
+   You can use regular expressions in the Find and Replace
+   dialogs by selecting the "Use regular expressions" check box.
+   The syntax is POSIX-like, as described below in Table 3-2.
+
+   Note
+
+   Searching backwards with regular expressions is not supported.
 
    Table 3-2. Regular expressions
    In a regular expression, the following characters are
    interpreted:
    . Matches any character.
-   \( This marks the start of a region for tagging a match.
-   \) This marks the end of a tagged region.
+   ( This marks the start of a region for tagging a match.
+   ) This marks the end of a tagged region.
    \n Where n is 1 through 9 refers to the first through ninth
    tagged region when replacing. For example, if the search
-   string was Fred\([1-9]\)XXX and the replace string was
-   Sam\1YYY, when applied to Fred2XXX this would generate
-   Sam2YYY.
+   string was Fred([1-9])XXX and the replace string was Sam\1YYY,
+   when applied to Fred2XXX this would generate Sam2YYY.
    \< This matches the start of a word.
    \> This matches the end of a word.
    \x This allows you to use a character x that would otherwise
    have a special meaning. For example, \[ would be interpreted
-   as [ and not as the start of a character set.
+   as [ and not as the start of a character set. Use \\ for a
+   literal backslash.
    [...] This indicates a set of characters, for example, [abc]
    means any of the characters a, b or c. You can also use
    ranges, for example [a-z] for any lower case character.
    [^...] The complement of the characters in the set. For
    example, [^A-Za-z] means any character except an alphabetic
    character.
+   ^ This matches the start of a line (unless used inside a set,
+   see above).
    $ This matches the end of a line.
    * This matches 0 or more times. For example, Sa*m matches Sm,
    Sam, Saam, Saaam and so on.
    + This matches 1 or more times. For example, Sa+m matches Sam,
    Saam, Saaam and so on.
+
+   Note Partial POSIX compatibility
+
+
+   Note that the POSIX '?' regular expression character for
+   optional matching is not supported by the Find and Replace
+   dialogs.
      _________________________________________________________
 
-3.5. Preferences
+3.6. Preferences
 
    should be written
 
@@ -424,32 +550,40 @@ Chapter 3. Usage
 
    [pref_dialog_gen.jpg]
 
-   Figure 3-3. Editor tab in preferences dialog
+   Figure 3-3. Interface tab in preferences dialog
+
+   [pref_dialog_interface.jpg]
+
+   Figure 3-4. Toolbar tab in preferences dialog
+
+   [pref_dialog_toolbar.jpg]
+
+   Figure 3-5. Editor tab in preferences dialog
 
    [pref_dialog_edit.jpg]
 
-   Figure 3-4. Tools tab in preferences dialog
+   Figure 3-6. Tools tab in preferences dialog
 
    [pref_dialog_tools.jpg]
 
-   Figure 3-5. Template tab in preferences dialog
+   Figure 3-7. Template tab in preferences dialog
 
    [pref_dialog_templ.jpg]
 
-   Figure 3-6. Keybinding tab in preferences dialog
+   Figure 3-8. Keybinding tab in preferences dialog
 
    [pref_dialog_keys.jpg]
 
    Note
 
-   For more information see Section 3.8.
+   For more information see Section 3.9.
 
-   Figure 3-7. VTE tab in preferences dialog
+   Figure 3-9. VTE tab in preferences dialog
 
    [pref_dialog_vte.jpg]
      _________________________________________________________
 
-3.5.1. Compile time options
+3.6.1. Compile time options
 
    There are some options which can only be changed at compile
    time. To change these options, edit the file src/geany.h. Look
@@ -491,6 +625,8 @@ Chapter 3. Usage
    GEANY_DEFAULT_TOOLS_PRINTCMD A printing tool. It should be
    able to accept and process plain text files. This can also
    include a path. "lpr"
+   GEANY_DEFAULT_TOOLS_GREP A grep tool. It should be compatible
+   with GNU grep. This can also include a path. "grep"
    GEANY_DEFAULT_MRU_LENGHTH The length of the "Recent files"
    list. "10"
    GEANY_DEFAULT_FONT_SYMBOL_LIST The font used in sidebar to
@@ -501,7 +637,7 @@ Chapter 3. Usage
    "Courier New 9"
      _________________________________________________________
 
-3.6. Build System
+3.7. Build system
 
    Geany has an integrated build system. Firstly this means that
    the current source file will be saved before it is processed.
@@ -514,20 +650,22 @@ Chapter 3. Usage
    warnings or errors with line numbers shown in the Compiler
    output tab, you can double click on them and Geany will switch
    to the relevant source file (if it is open) and mark the line
-   number so the problem can be corrected.
+   number so the problem can be corrected. Geany will also set
+   indicators for warnings or errors with line numbers.
 
    Depending on the current file's filetype, the Build menu will
    contain the following items:
 
      * Compile
      * Build
-     * Build with "make"
-     * Build with make (custom target)
+     * Make all
+     * Make custom target
+     * Make object
      * Execute
      * Set Includes and Arguments
      _________________________________________________________
 
-3.6.1. Compile
+3.7.1. Compile
 
    The Compile command has different uses for different kinds of
    files.
@@ -543,7 +681,7 @@ Chapter 3. Usage
    interpreter.
      _________________________________________________________
 
-3.6.2. Build
+3.7.2. Build
 
    For compilable languages such as C and C++, the Build command
    will link the current source file's equivalent object file
@@ -554,22 +692,34 @@ Chapter 3. Usage
    Interpreted languages do not use the Build command.
      _________________________________________________________
 
-3.6.3. Build with "make"
+3.7.3. Make all
 
    This effectively runs "make all" in the same directory as the
-   current file. The Make tool path must be correctly set in the
-   Tools tab of the Preferences dialog.
+   current file.
+
+   Note
+
+   For each of the Make commands, The Make tool path must be
+   correctly set in the Tools tab of the Preferences dialog.
      _________________________________________________________
 
-3.6.4. Build with make (custom target)
+3.7.4. Make custom target
 
-   This is similar to running Build with "make" but you will be
-   prompted for the make target name to be passed to the Make
-   tool. For example, typing 'clean' in the dialog prompt will
-   run "make clean" (again using the full path to the Make tool).
+   This is similar to running 'Make all' but you will be prompted
+   for the make target name to be passed to the Make tool. For
+   example, typing 'clean' in the dialog prompt will run "make
+   clean".
      _________________________________________________________
 
-3.6.5. Execute
+3.7.5. Make object
+
+   Make object will run "make current_file.o" in the same
+   directory as the current file, using its prefix for
+   'current_file'. It is useful for compiling just the current
+   file without building the whole project.
+     _________________________________________________________
+
+3.7.6. Execute
 
    Execute will run the corresponding executable file, shell
    script or interpreted script in a terminal window. Note that
@@ -583,7 +733,7 @@ Chapter 3. Usage
    closed.
      _________________________________________________________
 
-3.6.6. Set Includes and Arguments
+3.7.7. Set Includes and Arguments
 
    By default the Compile and Build commands invoke the compiler
    and linker with only the basic arguments needed by all
@@ -602,11 +752,11 @@ Chapter 3. Usage
    below for how to set permanent arguments.
 
    If you need complex settings for your build system, or several
-   different settings, then writing a Makefile and using Build
-   with "make" is recommended.
+   different settings, then writing a Makefile and using the Make
+   commands is recommended.
      _________________________________________________________
 
-3.6.7. Indicators
+3.7.8. Indicators
 
    Indicators are red squiggly underlines which are used to
    highlight errors which occured while compiling the current
@@ -618,17 +768,17 @@ Chapter 3. Usage
    preferences dialog.
      _________________________________________________________
 
-3.6.8. File type configuration settings
+3.7.9. File type configuration settings
 
    You can set the commands to run for compiling, building or
    executing by opening the relevant filetypes.* configuration
    file, and checking the [build_settings] section. See Section
-   3.9 for more information.
+   4.1 for more information.
      _________________________________________________________
 
-3.7. Printing support
+3.8. Printing support
 
-   Geany has basic printing support. This means you can print
+   Geany has basic printing support. This means you can print a
    file by passing the filename of the current file to a command
    which actually prints the file. However, the printed document
    contains no syntax highlighting. You can adjust the command to
@@ -654,13 +804,20 @@ Chapter 3. Usage
    will be possible.
      _________________________________________________________
 
-3.8. Keybindings
+3.9. Keybindings
 
-   For all listed actions you can define your own keybindings.
-   Open the preferences dialog, select the desired action and
-   click on change. In the opening dialog you can press any key
-   combination you want and it will be saved when you press OK.
-   You can define only one key combination for one action.
+   Geany supports the default keyboard shortcuts for the
+   Scintilla editing widget. For a list of these commands, see
+   Appendix A. The Scintilla keyboard shortcuts will be
+   overridden by any custom keybindings with the same keyboard
+   shortcut.
+
+   For all actions listed below you can define your own
+   keybindings. Open the Preferences dialog, select the desired
+   action and click on change. In the opening dialog you can
+   press any key combination you want and it will be saved when
+   you press OK. You can define only one key combination for one
+   action.
 
    Some of the default key combinations cannot be changed, e.g.
    menu_new or menu_open. These are set by GTK and should be
@@ -669,8 +826,7 @@ Chapter 3. Usage
    set, but you can also define Alt-O, so that the file open
    dialog is shown by pressing either Ctrl-O or Alt-O.
 
-   The following table lists all available actions for keyboard
-   shortcuts.
+   The following table lists all customizable keyboard shortcuts.
 
    Table 3-4. Keybindings action table
    Action Description
@@ -691,9 +847,10 @@ Chapter 3. Usage
    Preferences Opens preferences dialog.
    Find Next Finds next result.
    Find Previous Finds previous result.
-   Replace Opens the replace dialog.
-   Go to line Opens the Go To Line dialog.
-   Show Colour Chooser Opens the colour chooser dialog.
+   Replace Opens the Replace dialog.
+   Find in files Opens the Find in files dialog.
+   Go to line Opens the Go to line dialog.
+   Show Colour Chooser Opens the Colour Chooser dialog.
    Fullscreen Switches to fullscreen mode.
    Toggle Messages Window Toggles the message window (status and
    compiler messages) on and off.
@@ -708,9 +865,10 @@ Chapter 3. Usage
    Compile Compiles the current file.
    Build Builds (compiles if necessary and links) the current
    file.
-   Build with "make" Builds the current file with the Make tool.
-   Build with "make" (custom target) Builds the current file with
-   the Make tool and a given target.
+   Make all Builds the current file with the Make tool.
+   Make custom target Builds the current file with the Make tool
+   and a given target.
+   Make object Compiles the current file with the Make tool.
    Run Executes the current file in a terminal emulation.
    Run (alternative command) Executes the current file in a
    terminal emulation.
@@ -734,19 +892,21 @@ Chapter 3. Usage
    in the workspace.
    Suppress auto completion If you type something like if or for
    and press this key, it will not be auto completed.
-   Find Usage Finds all occurrences of the current word under the
-   mouse pointer and displays them in the messages window.
-   Go to tag definition Jump to the defintion of the current
-   function under the mouse pointer. If the defintion cannot be
-   found(e.g. the file where it is, is not open) Geany will beep
-   and do nothing.
+   Find Usage Finds all occurrences of the current word (near the
+   keyboard cursor) and displays them in the messages window.
+   Go to tag definition Jump to the definition of the current
+   word (near the keyboard cursor). If the definition cannot be
+   found (e.g. the relevant file is not open) Geany will beep and
+   do nothing. Used for function definitions.
    Go to tag declaration Jump to the declaration of the current
-   function under the mouse pointer. If the defintion cannot be
-   found(e.g. the file where it is, is not open) Geany will beep
-   and do nothing.
+   word (near the keyboard cursor). If the declaration cannot be
+   found (e.g. the relevant file is not open) Geany will beep and
+   do nothing. Used for function prototypes.
      _________________________________________________________
 
-3.9. Filetype definition files
+Chapter 4. Configuration files
+
+4.1. Filetype definition files
 
    All colour definitions and other filetype specific settings
    are stored in the filetype definition files. Those settings
@@ -779,9 +939,9 @@ Chapter 3. Usage
    corresponding global definition file in $prefix/share/geany.
      _________________________________________________________
 
-3.9.1. Format
+4.1.1. Format
 
-3.9.1.1. [styling] Section
+4.1.1.1. [styling] Section
 
    In this section the colours for syntax highlighting are
    defined. The format is always:
@@ -795,7 +955,7 @@ Chapter 3. Usage
    "false", "false" is assumed.
      _________________________________________________________
 
-3.9.1.2. [keywords] Section
+4.1.1.2. [keywords] Section
 
    This section contains keys for different keyword lists
    specific to the filetype. Some filetypes do not support
@@ -808,9 +968,9 @@ Chapter 3. Usage
    characters.
      _________________________________________________________
 
-3.9.1.3. [settings] Section
+4.1.1.3. [settings] Section
 
-   Table 3-5. General settings
+   Table 4-1. General settings
    Key Description Example
    wordchars Word delimiting characters. These characters define
    word boundaries. (look at sourcecode)
@@ -823,7 +983,7 @@ Chapter 3. Usage
    string should start at column 0 of a line. If set to true it
    uses any indentation of the line.
 
-   Example 3-1. Comment indentation
+   Example 4-1. Comment indentation
 
    comment_use_indent=true would generate this if a line is
    commented (e.g. with Ctrl-D)
@@ -839,9 +999,9 @@ Chapter 3. Usage
    comment_use_indent=true
      _________________________________________________________
 
-3.9.1.4. [build_settings] Section
+4.1.1.4. [build_settings] Section
 
-   Table 3-6. Build settings
+   Table 4-2. Build settings
    Key Description Example
    compiler This item specifies the command to compile source
    code files. But it is also possible to use it with interpreted
@@ -868,13 +1028,13 @@ Chapter 3. Usage
    scripts. run_cmd="./%e"
      _________________________________________________________
 
-3.9.2. Special file filetypes.common
+4.1.2. Special file filetypes.common
 
    There is a special filetype definition file called
    filetypes.common. This file defines some general
    non-filetype-specific settings.
 
-   Table 3-7. General settings
+   Table 4-3. General settings
    Key Description Example
    default The default style for text (e.g. for files without
    filetype). For the detailed format, please see the above
@@ -886,6 +1046,9 @@ Chapter 3. Usage
    brace was found. brace_good=0xff0000;0xFFFFFF;true;false
    brace_bad The style for brace highlighting when no matching
    brace was found. brace_bad=0x0000ff;0xFFFFFF;true;false
+   caret The style for colouring the caret(the blinking cursor).
+   Only the first argument is interpreted.
+   caret=0x000000;0x0;false;false
    current_line The style for colouring the background of the
    current line. Only the second argument is interpreted.
    current_line=0x0;0xE5E5E5;false;false
@@ -913,7 +1076,33 @@ Chapter 3. Usage
    invert_all=0;0;false;false
      _________________________________________________________
 
-3.10. Templates
+4.2. Filetype extensions
+
+   You can override the default extensions that Geany uses for
+   each filetype using the filetype_extensions.conf file.
+
+   To override the system-wide configuration file, copy it from
+   $prefix/share/geany to your configuration directory, usually
+   ~/.geany/. $prefix is the path where Geany is installed
+   (commonly /usr/local).
+
+   For example:
+% cp /usr/local/share/geany/filetype_extensions.conf /home/username/.ge
+any/
+
+   Then edit it and remove all the lines for filetype extensions
+   that you do not want to override. The remaining lines can be
+   edited after the = sign, using a semi-colon separated list of
+   patterns which should be matched for that filetype.
+
+   For example, to set the filetype extensions for Make, the
+   /home/username/.geany/filetype_extensions.conf file should
+   look like:
+
+   [Extensions] Make=Makefile*;*.mk;Buildfile;
+     _________________________________________________________
+
+4.3. Templates
 
    Geany supports several templates for file headers, multiline
    comments (frame comments), function descriptions, a typical
@@ -943,7 +1132,7 @@ Chapter 3. Usage
    All wildcards must be enclosed by "{" and "}", e.g. {date}.
 
    In the configuration dialog you can find a tab "Templates"
-   (see Figure 3-5). You can define the default values which will
+   (see Figure 3-7). You can define the default values which will
    be inserted in the templates. You should restart Geany after
    making changes, because they are only read at startup.
 
@@ -957,11 +1146,11 @@ Chapter 3. Usage
    next releases. Sorry.
 
 
-   Table 3-8. Template wildcards
+   Table 4-4. Template wildcards
    Wildcard Description Available in following templates
    developer The name of the developer. filetypes, file header,
    function description, ChangeLog entry
-   initial The developer's initials, e.g. "ET" for Enrico Troeger
+   initial The developer's initials, e.g. "ET" for Enrico Tröger
    or "JFD" for John Foobar Doe. filetypes, file header, function
    description, ChangeLog entry
    mail The email address of the developer. file header, function
@@ -991,9 +1180,57 @@ Chapter 3. Usage
    please email the author <enrico.troeger@uvena.de>.
      _________________________________________________________
 
-Appendix A. GNU General Public License
+Appendix A. Scintilla keyboard commands
 
-A.1. Preamble
+A.1. Keyboard commands
+
+   Keyboard commands for Scintilla mostly follow common Windows
+   and GTK+ conventions. All move keys (arrows, page up/down,
+   home and end) allows to extend or reduce the stream selection
+   when holding the Shift key, and the rectangular selection when
+   holding the Shift and Alt keys. Some keys may not be available
+   with some national keyboards or because they are taken by the
+   system such as by a window manager on GTK+. Keyboard
+   equivalents of menu commands are listed in the menus. Some
+   less common commands with no menu equivalent are:
+
+   Table A-1. Scintilla keyboard commands
+                      Action                        Shortcut key
+   Magnify text size.                           Ctrl+Keypad+
+   Reduce text size.                            Ctrl+Keypad-
+   Restore text size to normal.                 Ctrl+Keypad/
+   Indent block.                                Tab
+   Dedent block.                                Shift+Tab
+   Delete to start of word.                     Ctrl+BackSpace
+   Delete to end of word.                       Ctrl+Delete
+   Delete to start of line.                     Ctrl+Shift+BackSpace
+   Delete to end of line.                       Ctrl+Shift+Delete
+   Go to start of document.                     Ctrl+Home
+   Extend selection to start of document.       Ctrl+Shift+Home
+   Go to start of display line.                 Alt+Home
+   Extend selection to start of display line.   Alt+Shift+Home
+   Go to end of document.                       Ctrl+End
+   Extend selection to end of document.         Ctrl+Shift+End
+   Go to end of display line.                   Alt+End
+   Extend selection to end of display line.     Alt+Shift+End
+   Scroll up.                                   Ctrl+Up
+   Scroll down.                                 Ctrl+Down
+   Line cut.                                    Ctrl+L
+   Line copy.                                   Ctrl+Shift+T
+   Line delete.                                 Ctrl+Shift+L
+   Line transpose with previous.                Ctrl+T
+   Selection duplicate.                         Ctrl+D
+   Previous paragraph. Shift extends selection. Ctrl+[
+   Next paragraph. Shift extends selection.     Ctrl+]
+   Previous word. Shift extends selection.      Ctrl+Left
+   Next word. Shift extends selection.          Ctrl+Right
+   Previous word part. Shift extends selection  Ctrl+/
+   Next word part. Shift extends selection.     Ctrl+\
+     _________________________________________________________
+
+Appendix B. GNU General Public License
+
+B.1. Preamble
 
    The licenses for most software are designed to take away your
    freedom to share and change it. By contrast, the GNU General
@@ -1051,9 +1288,9 @@ A.1. Preamble
    modification follow.
      _________________________________________________________
 
-A.2. TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+B.2. TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
-A.2.1. Section 0
+B.2.1. Section 0
 
    This License applies to any program or other work which
    contains a notice placed by the copyright holder saying it may
@@ -1076,7 +1313,7 @@ A.2.1. Section 0
    depends on what the Program does.
      _________________________________________________________
 
-A.2.2. Section 1
+B.2.2. Section 1
 
    You may copy and distribute verbatim copies of the Program's
    source code as you receive it, in any medium, provided that
@@ -1091,7 +1328,7 @@ A.2.2. Section 1
    exchange for a fee.
      _________________________________________________________
 
-A.2.3. Section 2
+B.2.3. Section 2
 
    You may modify your copy or copies of the Program or any
    portion of it, thus forming a work based on the Program, and
@@ -1148,7 +1385,7 @@ A.2.3. Section 2
    the other work under the scope of this License.
      _________________________________________________________
 
-A.2.4. Section 3
+B.2.4. Section 3
 
    You may copy and distribute the Program (or a work based on
    it, under Section 2 in object code or executable form under
@@ -1193,7 +1430,7 @@ A.2.4. Section 3
    object code.
      _________________________________________________________
 
-A.2.5. Section 4
+B.2.5. Section 4
 
    You may not copy, modify, sublicense, or distribute the
    Program except as expressly provided under this License. Any
@@ -1205,7 +1442,7 @@ A.2.5. Section 4
    full compliance.
      _________________________________________________________
 
-A.2.6. Section 5
+B.2.6. Section 5
 
    You are not required to accept this License, since you have
    not signed it. However, nothing else grants you permission to
@@ -1218,7 +1455,7 @@ A.2.6. Section 5
    or works based on it.
      _________________________________________________________
 
-A.2.7. Section 6
+B.2.7. Section 6
 
    Each time you redistribute the Program (or any work based on
    the Program), the recipient automatically receives a license
@@ -1229,7 +1466,7 @@ A.2.7. Section 6
    enforcing compliance by third parties to this License.
      _________________________________________________________
 
-A.2.8. Section 7
+B.2.8. Section 7
 
    If, as a consequence of a court judgment or allegation of
    patent infringement or for any other reason (not limited to
@@ -1267,7 +1504,7 @@ A.2.8. Section 7
    believed to be a consequence of the rest of this License.
      _________________________________________________________
 
-A.2.9. Section 8
+B.2.9. Section 8
 
    If the distribution and/or use of the Program is restricted in
    certain countries either by patents or by copyrighted
@@ -1279,7 +1516,7 @@ A.2.9. Section 8
    limitation as if written in the body of this License.
      _________________________________________________________
 
-A.2.10. Section 9
+B.2.10. Section 9
 
    The Free Software Foundation may publish revised and/or new
    versions of the General Public License from time to time. Such
@@ -1296,7 +1533,7 @@ A.2.10. Section 9
    the Free Software Foundation.
      _________________________________________________________
 
-A.2.11. Section 10
+B.2.11. Section 10
 
    If you wish to incorporate parts of the Program into other
    free programs whose distribution conditions are different,
@@ -1309,7 +1546,7 @@ A.2.11. Section 10
    generally.
      _________________________________________________________
 
-A.2.12. Section 11 NO WARRANTY
+B.2.12. Section 11 NO WARRANTY
 
    BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO
    WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
@@ -1323,7 +1560,7 @@ A.2.12. Section 11 NO WARRANTY
    THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
      _________________________________________________________
 
-A.2.13. Section 12
+B.2.13. Section 12
 
    IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN
    WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY
@@ -1340,7 +1577,7 @@ A.2.13. Section 12
    END OF TERMS AND CONDITIONS
      _________________________________________________________
 
-A.3. How to Apply These Terms to Your New Programs
+B.3. How to Apply These Terms to Your New Programs
 
    If you develop a new program, and you want it to be of the
    greatest possible use to the public, the best way to achieve
@@ -1409,7 +1646,7 @@ A.3. How to Apply These Terms to Your New Programs
    License instead of this License.
      _________________________________________________________
 
-Appendix B. License for Scintilla and SciTE
+Appendix C. License for Scintilla and SciTE
 
    Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 
