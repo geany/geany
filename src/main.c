@@ -211,6 +211,9 @@ static void main_init(void)
 	geany_debug("debug mode built in (can't be disabled)");
 #endif
 	app->debug_mode = debug_mode;
+	geany_debug("GTK+ runtime version: %u.%u.%u",
+		gtk_major_version, gtk_minor_version, gtk_micro_version);
+
 	if (alternate_config)
 	{
 		geany_debug("alternate config: %s", alternate_config);
