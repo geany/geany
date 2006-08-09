@@ -38,6 +38,10 @@ static gboolean
 notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 	gint x, gint y, guint time, gpointer user_data);
 
+static void
+notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
+	gpointer user_data);
+
 #if ! GTK_CHECK_VERSION(2, 8, 0)
 static gboolean
 notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
@@ -50,32 +54,50 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y);
 static void
 notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
 
+static void setup_tab_dnd();
 
-/* There is a bug with drag reordering notebook tabs.
- * Clicking (not dragging) on a notebook tab, then making a selection in the
- * Scintilla widget will cause a strange selection bug.
- * It seems there is a conflict; the drag cursor is shown,
- * and the selection is blocked; however, when releasing the
- * mouse button, the selection continues.
- * Bug present with gtk+2.6.8, not gtk+2.8.? - ntrel */
+
 void notebook_init()
+{
+	setup_tab_dnd();
+}
+
+
+static void setup_tab_dnd()
 {
 	GtkWidget *notebook = app->notebook;
 
-	// don't allow focusing tab labels, focus sci instead
-	// This disables the notebook arrows!
-	//g_object_set(G_OBJECT(notebook), "can-focus", FALSE, NULL);
+	/* Due to a segfault with manual tab DnD setup on GTK 2.10, we must
+	*  use the built in gtk_notebook_set_tab_reorderable from GTK 2.10.
+	*  This means a binary compiled against < 2.10 but run on >= 2.10
+	*  will not have tab DnD support, but this is necessary until
+	*  there is a fix for the older tab DnD code or GTK 2.10. */
+	if (gtk_check_version(2, 10, 0) == NULL) // null means version ok
+	{
+#if GTK_CHECK_VERSION(2, 10, 0)
+		g_signal_connect(G_OBJECT(notebook), "page-reordered",
+			G_CALLBACK(notebook_page_reordered_cb), NULL);
+#endif
+		return;
+	}
 
 	// Set up drag movement callback
 	g_signal_connect(G_OBJECT(notebook), "drag-motion",
 		G_CALLBACK(notebook_drag_motion_cb), NULL);
 
+	/* There is a bug on GTK 2.6 with drag reordering of notebook tabs.
+	 * Clicking (not dragging) on a notebook tab, then making a selection in the
+	 * Scintilla widget will cause a strange selection bug.
+	 * It seems there is a conflict; the drag cursor is shown,
+	 * and the selection is blocked; however, when releasing the
+	 * mouse button, the selection continues.
+	 * Bug is present with gtk+2.6.8, not gtk+2.8.x - ntrel */
 #if ! GTK_CHECK_VERSION(2, 8, 0)
 	// handle higher gtk+ runtime than build environment
-	if (gtk_check_version(2, 8, 0) != NULL) //null means version ok
+	if (gtk_check_version(2, 8, 0) != NULL) // null means version ok
 	{
 		// workaround GTK+2.6 drag start bug when over sci widget:
-		gtk_widget_add_events(app->notebook, GDK_POINTER_MOTION_MASK);
+		gtk_widget_add_events(notebook, GDK_POINTER_MOTION_MASK);
 		g_signal_connect(G_OBJECT(notebook), "motion-notify-event",
 			G_CALLBACK(notebook_motion_notify_event_cb), NULL);
 	}
@@ -91,33 +113,42 @@ void notebook_init()
 
 
 #if ! GTK_CHECK_VERSION(2, 8, 0)
-/* N.B. With GTK+2.6, we don't get notebook motion-notify-event for tab child
- * widgets. */
+/* This is used to disable tab DnD when the cursor is over the
+ * Scintilla widget, and re-enable tab DnD when over the notebook tabs
+ */
 static gboolean
 notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
 	gpointer user_data)
 {
-	static gboolean drag_enabled = TRUE; //stores current state
+	static gboolean drag_enabled = TRUE; // stores current state
 	GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->notebook),
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook)));
 
 	if (page == NULL || event->x < 0 || event->y < 0) return FALSE;
 
-	if (event->window == page->window) //cursor over sci widget
+	if (event->window == page->window) // cursor over sci widget
 	{
-		if (drag_enabled) gtk_drag_source_unset(widget); //disable
+		if (drag_enabled) gtk_drag_source_unset(widget); // disable
 		drag_enabled = FALSE;
 	}
-	else //assume cursor over notebook tab
+	else // assume cursor over notebook tab
 	{
 		if (! drag_enabled)
 			gtk_drag_source_set(widget, GDK_BUTTON1_MASK,
 				drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
 		drag_enabled = TRUE;
 	}
-	return FALSE; //propagate event
+	return FALSE; // propagate event
 }
 #endif
+
+
+static void
+notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
+	gpointer user_data)
+{
+	treeviews_openfiles_update_all();
+}
 
 
 static gboolean
@@ -151,7 +182,7 @@ notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 		{
 			gtk_notebook_reorder_child(notebook,
 							gtk_notebook_get_nth_page(notebook, ncurr), ndest);
-			treeviews_openfiles_update_all();
+			notebook_page_reordered_cb(NULL, NULL, ndest, NULL);
 		}
 	}
 
@@ -176,7 +207,7 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 	switch(gtk_notebook_get_n_pages(notebook))
 	{case 0: return -1; case 1: return 0;}
 
-	tab_pos = gtk_notebook_get_tab_pos(notebook); //which edge
+	tab_pos = gtk_notebook_get_tab_pos(notebook); // which edge
 
 	while ((page = gtk_notebook_get_nth_page(notebook, page_num)))
 	{
@@ -250,6 +281,14 @@ gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
 	// signal for clicking the tab-close button
 	g_signal_connect(G_OBJECT(but), "clicked",
 		G_CALLBACK(notebook_tab_close_clicked_cb), page);
+
+	// This is where tab DnD is enabled for GTK 2.10 and higher
+#if GTK_CHECK_VERSION(2, 10, 0)
+	if (gtk_check_version(2, 10, 0) == NULL) // null means version ok
+	{
+		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(app->notebook), page, TRUE);
+	}
+#endif
 	return tabnum;
 }
 
