@@ -176,7 +176,7 @@ void win32_show_file_dialog(gboolean file_open)
 	{
 		gint idx = document_get_cur_idx();
 		doc_list[idx].file_name = g_strdup(fname);
-		document_save_file(idx);
+		document_save_file(idx, TRUE);
 	}
 	g_free(fname);
 }
