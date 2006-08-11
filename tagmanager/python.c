@@ -97,7 +97,7 @@ static void findPythonTags (void)
 			++cp;
 		    }
 		    vStringTerminate (name);
-		    if (!isspace(*line) || vStringSize(lastClass) <= 0)
+		    if (!isspace(*line) || vStringLength(lastClass) <= 0)
 			makeSimpleTag (name, PythonKinds, K_FUNCTION);
 		    else
 			makeSimpleScopedTag (name, PythonKinds, K_METHOD,
