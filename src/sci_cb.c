@@ -859,7 +859,7 @@ void sci_cb_do_uncomment(gint idx)
 	gboolean break_loop = FALSE;
 	filetype *ft;
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
 
 	ft = doc_list[idx].file_type;
 
@@ -1000,7 +1000,7 @@ void sci_cb_do_comment(gint idx)
 	gboolean break_loop = FALSE;
 	filetype *ft;
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
 
 	ft = doc_list[idx].file_type;
 
