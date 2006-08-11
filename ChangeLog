@@ -1,3 +1,10 @@
+2006-08-11  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c, src/geany.h, src/callbacks.c, src/callbacks.h,
+   src/search.c, src/search.h, src/dialogs.c, src/main.c,
+   src/dialogs.h: Group search related code.
+
+
 2006-08-11  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c:

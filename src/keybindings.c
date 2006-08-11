@@ -29,7 +29,6 @@
 #include "utils.h"
 #include "document.h"
 #include "callbacks.h"
-#include "dialogs.h"
 #include "prefs.h"
 #include "msgwindow.h"
 #include "sci_cb.h"
@@ -411,7 +410,7 @@ static void cb_func_menu_new(void)
 
 static void cb_func_menu_open(void)
 {
-	dialogs_show_open_file();
+	on_open1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_save(void)
@@ -456,7 +455,7 @@ static void cb_func_menu_selectall(void)
 
 static void cb_func_menu_preferences(void)
 {
-	dialogs_show_prefs_dialog();
+	on_preferences1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_findnext(void)
@@ -471,12 +470,12 @@ static void cb_func_menu_findprevious(void)
 
 static void cb_func_menu_replace(void)
 {
-	dialogs_show_replace();
+	on_replace1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_findinfiles(void)
 {
-	dialogs_show_find_in_files();
+	on_find_in_files1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_gotoline(void)

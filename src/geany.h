@@ -189,7 +189,6 @@ typedef struct MyApp
 	gchar				*configdir;
 	gchar				*datadir;
 	gchar				*docdir;
-	gchar				*search_text;
 	gchar				 build_make_custopt[256];
 	gchar				*tools_browser_cmd;
 	gchar				*tools_make_cmd;
@@ -222,9 +221,6 @@ typedef struct MyApp
 	GtkWidget			*open_filesel;
 	GtkWidget			*save_filesel;
 	GtkWidget			*prefs_dialog;
-	GtkWidget			*find_dialog;
-	GtkWidget			*replace_dialog;
-	GtkWidget			*find_in_files_dialog;
 	GtkWidget			*default_tag_tree;
 	const TMWorkspace	*tm_workspace;
 	GQueue				*recent_queue;

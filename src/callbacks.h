@@ -20,14 +20,6 @@
  * $Id$
  */
 
-enum {
-	GEANY_RESPONSE_REPLACE = 1,
-	GEANY_RESPONSE_REPLACE_ALL,
-	GEANY_RESPONSE_REPLACE_SEL,
-	GEANY_RESPONSE_FIND
-};
-
-
 extern gchar current_word[]; //needed for popup menu keybindings access
 
 void
@@ -386,35 +378,13 @@ void
 on_find_previous1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
-void on_find_replace_checkbutton_toggled (GtkToggleButton *togglebutton,
-										  gpointer user_data);
-
 void
-on_find_dialog_response                (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data);
-
-void
-on_find_entry_activate                 (GtkEntry        *entry,
-                                        gpointer         user_data);
-
-void
-on_replace_dialog_response                (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data);
-
-void
-on_replace_entry_activate                 (GtkEntry        *entry,
+on_replace1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
 on_find_in_files1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
-
-void
-on_find_in_files_dialog_response       (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data);
 
 void
 on_new_with_template                   (GtkMenuItem     *menuitem,
@@ -519,10 +489,6 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 
 void
 on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
-on_replace1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void

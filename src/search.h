@@ -28,6 +28,26 @@ typedef enum
 	FIF_INVERT_MATCH	= 1 << 2
 } fif_options;
 
+// the flags given in the search dialog(stored statically for "find next" and "replace")
+typedef struct
+{
+	gchar		*text;
+	gint		flags;
+	gboolean	backwards;
+} GeanySearchData;
+
+extern GeanySearchData search_data;
+
+
+void search_init();
+
+void search_finalise();
+
+void search_show_find_dialog();
+
+void search_show_replace_dialog();
+
+void search_show_find_in_files_dialog();
 
 gboolean search_find_in_files(const gchar *search_text, const gchar *dir, fif_options opts);
 

@@ -49,6 +49,7 @@
 #include "notebook.h"
 #include "keybindings.h"
 #include "sci_cb.h"
+#include "search.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -222,15 +223,11 @@ static void main_init(void)
 	else
 		app->configdir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
 	app->window				= NULL;
-	app->search_text		= NULL;
 	app->open_fontsel		= NULL;
 	app->open_colorsel		= NULL;
 	app->open_filesel		= NULL;
 	app->save_filesel		= NULL;
 	app->prefs_dialog		= NULL;
-	app->find_dialog		= NULL;
-	app->replace_dialog		= NULL;
-	app->find_in_files_dialog = NULL;
 	app->default_tag_tree	= NULL;
 	app->main_window_realized= FALSE;
 	app->tab_order_ltr		= FALSE;
@@ -323,6 +320,8 @@ static void main_init(void)
 	msgwindow.tree_status = lookup_widget(app->window, "treeview3");
 	msgwindow.tree_msg = lookup_widget(app->window, "treeview4");
 	msgwindow.tree_compiler = lookup_widget(app->window, "treeview5");
+
+	search_init();
 }
 
 

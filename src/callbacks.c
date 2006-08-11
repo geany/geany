@@ -74,10 +74,6 @@ static gboolean ignore_toolbar_toggle = FALSE;
 // the selection-changed signal from tv.tree_openfiles
 //static gboolean switch_tv_notebook_page = FALSE;
 
-// the flags given in the search dialog(stored statically for "find next" and "replace")
-static gint search_flags;
-static gboolean search_backwards;
-
 // holds the current position where the mouse pointer is when the popup menu for the scintilla
 // scintilla widget is shown
 static gint clickpos;
@@ -121,7 +117,7 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	g_free(app->configdir);
 	g_free(app->datadir);
 	g_free(app->docdir);
-	g_free(app->search_text);
+	g_free(search_data.text);
 	g_free(app->editor_font);
 	g_free(app->tagbar_font);
 	g_free(app->msgwin_font);
@@ -141,8 +137,6 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	g_queue_free(app->recent_queue);
 
 	if (app->prefs_dialog && GTK_IS_WIDGET(app->prefs_dialog)) gtk_widget_destroy(app->prefs_dialog);
-	if (app->find_dialog && GTK_IS_WIDGET(app->find_dialog)) gtk_widget_destroy(app->find_dialog);
-	if (app->replace_dialog && GTK_IS_WIDGET(app->replace_dialog)) gtk_widget_destroy(app->replace_dialog);
 	if (app->save_filesel && GTK_IS_WIDGET(app->save_filesel)) gtk_widget_destroy(app->save_filesel);
 	if (app->open_filesel && GTK_IS_WIDGET(app->open_filesel)) gtk_widget_destroy(app->open_filesel);
 	if (app->open_fontsel && GTK_IS_WIDGET(app->open_fontsel)) gtk_widget_destroy(app->open_fontsel);
@@ -152,6 +146,7 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 		g_object_unref(app->default_tag_tree);
 		gtk_widget_destroy(app->default_tag_tree);
 	}
+	search_finalise();
 	scintilla_release_resources();
 #ifdef HAVE_VTE
 	if (app->have_vte) vte_close();
@@ -589,11 +584,11 @@ on_toolbutton10_clicked                (GtkToolButton   *toolbutton,
 
 static void setup_find_next(GtkEditable *editable)
 {
-	g_free(app->search_text);
-	app->search_text = g_strdup(gtk_editable_get_chars(editable, 0, -1));
+	g_free(search_data.text);
+	search_data.text = g_strdup(gtk_editable_get_chars(editable, 0, -1));
 	// clear search flags so can later use Search->Find Next/Previous
-	search_flags = 0;
-	search_backwards = FALSE;
+	search_data.flags = 0;
+	search_data.backwards = FALSE;
 }
 
 
@@ -605,7 +600,7 @@ on_entry1_activate                     (GtkEntry        *entry,
 	gint idx = document_get_cur_idx();
 
 	setup_find_next(GTK_EDITABLE(entry));
-	document_find_next(idx, app->search_text, 0, FALSE, FALSE);
+	document_find_next(idx, search_data.text, 0, FALSE, FALSE);
 }
 
 
@@ -617,7 +612,7 @@ on_entry1_changed                      (GtkEditable     *editable,
 	gint idx = document_get_cur_idx();
 
 	setup_find_next(editable);
-	document_find_next(idx, app->search_text, 0, FALSE, TRUE);
+	document_find_next(idx, search_data.text, 0, FALSE, TRUE);
 }
 
 
@@ -631,7 +626,7 @@ on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
 	GtkWidget *entry = lookup_widget(GTK_WIDGET(app->window), "entry1");
 
 	setup_find_next(GTK_EDITABLE(entry));
-	document_find_next(idx, app->search_text, 0, TRUE, FALSE);
+	document_find_next(idx, search_data.text, 0, TRUE, FALSE);
 }
 
 
@@ -1796,15 +1791,7 @@ void
 on_find1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_find();
-}
-
-
-void
-on_replace1_activate                   (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	dialogs_show_replace();
+	search_show_find_dialog();
 }
 
 
@@ -1814,9 +1801,9 @@ on_find_next1_activate                 (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	if (app->search_text)
+	if (search_data.text)
 	{
-		document_find_text(idx, app->search_text, search_flags, search_backwards);
+		document_find_text(idx, search_data.text, search_data.flags, search_data.backwards);
 	}
 }
 
@@ -1827,201 +1814,22 @@ on_find_previous1_activate             (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	if (app->search_text == NULL) return;
+	if (search_data.text == NULL) return;
 
-	if (search_flags & SCFIND_REGEXP)
+	if (search_data.flags & SCFIND_REGEXP)
 		utils_beep(); //Can't reverse search order for a regex (find next ignores search backwards)
 	else
 	{
-		document_find_text(idx, app->search_text, search_flags,
-			!search_backwards);
-	}
-}
-
-
-void on_find_replace_checkbutton_toggled (GtkToggleButton *togglebutton,
-										  gpointer user_data)
-{
-	GtkWidget *dialog = GTK_WIDGET(user_data);
-	GtkToggleButton *chk_regexp = GTK_TOGGLE_BUTTON(
-		lookup_widget(dialog, "check_regexp"));
-
-	if (togglebutton == chk_regexp)
-	{
-		gboolean regex_set = gtk_toggle_button_get_active(chk_regexp);
-		GtkWidget *check_back = lookup_widget(dialog, "check_back");
-		GtkWidget *check_word = lookup_widget(dialog, "check_word");
-		GtkWidget *check_wordstart = lookup_widget(dialog, "check_wordstart");
-
-		gtk_widget_set_sensitive(check_back, ! regex_set);
-		gtk_widget_set_sensitive(check_word, ! regex_set);
-		gtk_widget_set_sensitive(check_wordstart, ! regex_set);
+		document_find_text(idx, search_data.text, search_data.flags, !search_data.backwards);
 	}
 }
 
 
 void
-on_find_dialog_response                (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data)
-{
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		gint idx = document_get_cur_idx();
-		gboolean search_replace_escape;
-		gboolean
-			fl1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(app->find_dialog), "check_case"))),
-			fl2 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(app->find_dialog), "check_word"))),
-			fl3 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(app->find_dialog), "check_regexp"))),
-			fl4 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(app->find_dialog), "check_wordstart")));
-		search_replace_escape = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(app->find_dialog), "check_escape")));
-		search_backwards = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(app->find_dialog), "check_back")));
-
-		g_free(app->search_text);
-		app->search_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
-		if (strlen(app->search_text) == 0 ||
-			(search_replace_escape && ! utils_str_replace_escape(app->search_text)))
-		{
-			utils_beep();
-			gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->find_dialog, "entry"))->child));
-			return;
-		}
-
-		gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), app->search_text);
-		search_flags = (fl1 ? SCFIND_MATCHCASE : 0) |
-				(fl2 ? SCFIND_WHOLEWORD : 0) |
-				(fl3 ? SCFIND_REGEXP | SCFIND_POSIX: 0) |
-				(fl4 ? SCFIND_WORDSTART : 0);
-		document_find_text(idx, app->search_text, search_flags, search_backwards);
-	}
-	else gtk_widget_hide(app->find_dialog);
-}
-
-
-void
-on_find_entry_activate                 (GtkEntry        *entry,
+on_replace1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	on_find_dialog_response(NULL, GTK_RESPONSE_ACCEPT,
-				lookup_widget(GTK_WIDGET(entry), "entry"));
-}
-
-
-void
-on_replace_dialog_response             (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data)
-{
-	gint idx = document_get_cur_idx();
-	GtkWidget *entry_find = lookup_widget(GTK_WIDGET(app->replace_dialog), "entry_find");
-	GtkWidget *entry_replace = lookup_widget(GTK_WIDGET(app->replace_dialog), "entry_replace");
-	gint search_flags_re;
-	gboolean search_backwards_re, search_replace_escape_re, search_in_all_buffers_re;
-	gboolean fl1, fl2, fl3, fl4;
-	gchar *find, *replace;
-
-	if (response == GTK_RESPONSE_CANCEL)
-	{
-		gtk_widget_hide(app->replace_dialog);
-		return;
-	}
-
-	fl1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(app->replace_dialog), "check_case")));
-	fl2 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(app->replace_dialog), "check_word")));
-	fl3 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(app->replace_dialog), "check_regexp")));
-	fl4 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(app->replace_dialog), "check_wordstart")));
-	search_backwards_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(app->replace_dialog), "check_back")));
-	search_replace_escape_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(app->replace_dialog), "check_escape")));
-	search_in_all_buffers_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(app->replace_dialog), "check_all_buffers")));
-	find = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find)))));
-	replace = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace)))));
-
-	if ((response != GEANY_RESPONSE_FIND) && (! fl1) && (strcasecmp(find, replace) == 0))
-	{
-		utils_beep();
-		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->replace_dialog, "entry_find"))->child));
-		return;
-	}
-
-	gtk_combo_box_prepend_text(GTK_COMBO_BOX(entry_find), find);
-	gtk_combo_box_prepend_text(GTK_COMBO_BOX(entry_replace), replace);
-
-	if (search_replace_escape_re &&
-		(! utils_str_replace_escape(find) || ! utils_str_replace_escape(replace)))
-	{
-		utils_beep();
-		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(app->replace_dialog, "entry_find"))->child));
-		return;
-	}
-
-	search_flags_re = (fl1 ? SCFIND_MATCHCASE : 0) |
-					  (fl2 ? SCFIND_WHOLEWORD : 0) |
-					  (fl3 ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
-					  (fl4 ? SCFIND_WORDSTART : 0);
-
-	if (search_in_all_buffers_re && response == GEANY_RESPONSE_REPLACE_ALL)
-	{
-		gint i;
-		for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
-		{
-			if (! doc_list[i].is_valid) continue;
-
-			document_replace_all(i, find, replace, search_flags_re);
-		}
-		gtk_widget_hide(app->replace_dialog);
-	}
-	else
-	{
-		switch (response)
-		{
-			case GEANY_RESPONSE_REPLACE:
-			{
-				document_replace_text(idx, find, replace, search_flags_re,
-					search_backwards_re);
-				break;
-			}
-			case GEANY_RESPONSE_FIND:
-			{
-				document_find_text(idx, find, search_flags_re, search_backwards_re);
-				break;
-			}
-			case GEANY_RESPONSE_REPLACE_ALL:
-			{
-				document_replace_all(idx, find, replace, search_flags_re);
-				gtk_widget_hide(app->replace_dialog);
-				break;
-			}
-			case GEANY_RESPONSE_REPLACE_SEL:
-			{
-				document_replace_sel(idx, find, replace, search_flags_re);
-				gtk_widget_hide(app->replace_dialog);
-				break;
-			}
-		}
-	}
-	g_free(find);
-	g_free(replace);
-}
-
-
-void
-on_replace_entry_activate              (GtkEntry        *entry,
-                                        gpointer         user_data)
-{
-	on_replace_dialog_response(NULL, GEANY_RESPONSE_REPLACE, NULL);
+	search_show_replace_dialog();
 }
 
 
@@ -2029,52 +1837,7 @@ void
 on_find_in_files1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_find_in_files();
-}
-
-
-void
-on_find_in_files_dialog_response       (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data)
-{
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		const gchar *search_text =
-			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data))));
-		const gchar *utf8_dir =
-			gtk_entry_get_text(GTK_ENTRY(lookup_widget(app->find_in_files_dialog, "entry_dir")));
-
-		if (utf8_dir == NULL || utils_strcmp(utf8_dir, ""))
-			msgwin_status_add(_("Invalid directory for find in files."));
-		else if (search_text && *search_text)
-		{
-			gchar *locale_dir;
-			gboolean eregexp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-							lookup_widget(app->find_in_files_dialog, "check_eregexp")));
-			gboolean invert = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-							lookup_widget(app->find_in_files_dialog, "check_invert")));
-			gboolean case_sens = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-							lookup_widget(app->find_in_files_dialog, "check_case")));
-			gint opts = (eregexp ? FIF_USE_EREGEXP : 0) |
-						(invert ? FIF_INVERT_MATCH : 0) |
-						(case_sens ? FIF_CASE_SENSITIVE : 0);
-
-			locale_dir = g_locale_from_utf8(utf8_dir, -1, NULL, NULL, NULL);
-			if (locale_dir == NULL) locale_dir = g_strdup(utf8_dir);
-
-			if (search_find_in_files(search_text, locale_dir, opts))
-			{
-				gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), search_text);
-				gtk_widget_hide(app->find_in_files_dialog);
-			}
-			g_free(locale_dir);
-		}
-		else
-			msgwin_status_add(_("No text to find."));
-	}
-	else
-		gtk_widget_hide(app->find_in_files_dialog);
+	search_show_find_in_files_dialog();
 }
 
 

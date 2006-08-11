@@ -49,12 +49,6 @@ GtkWidget *dialogs_create_build_menu_tex(gint idx);
 
 void dialogs_show_make_target(void);
 
-void dialogs_show_find(void);
-
-void dialogs_show_replace(void);
-
-void dialogs_show_find_in_files(void);
-
 void dialogs_show_goto_line(void);
 
 void dialogs_show_includes_arguments_gen(void);
