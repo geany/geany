@@ -797,7 +797,8 @@ void document_save_file(gint idx, gboolean force)
 }
 
 
-#define SEARCH_NOT_FOUND_TXT _("The match \"%s\" was not found. Wrap search around the document?")
+#define SEARCH_NOT_FOUND_TXT _("The document has been searched completely but the match \"%s\" \
+								was not found. Wrap search around the document?")
 
 /* special search function, used from the find entry in the toolbar */
 void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_button, gboolean inc)
@@ -1335,7 +1336,7 @@ void document_replace_tabs(gint idx)
 		return;
 	}
 
-	text = g_malloc(len + (tabs_amount * (tab_w - 1)));
+	text = g_malloc(len + (tabs_amount * (tab_w - 1)) + 1);
 
 	for (i = 0; i < len; i++)
 	{
@@ -1354,7 +1355,9 @@ void document_replace_tabs(gint idx)
 			text[j++] = data[i];
 		}
 	}
-	geany_debug("tabs_amount: %d, len: %d, %d == %d", tabs_amount, len, len + (tabs_amount * (tab_w - 1)), j);
+	text[j] = '\0';
+
+	geany_debug("Replacing Tabs: tabs_amount: %d, text len: %d, j: %d", tabs_amount, len, j);
 	sci_set_text(doc_list[idx].sci, text);
 	sci_set_current_position(doc_list[idx].sci, pos);
 

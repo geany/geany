@@ -1,3 +1,10 @@
+2006-08-11  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/document.c:
+   Changed SEARCH_NOT_FOUND_TXT.
+   Fixed possible segfault when replacing tabs by spaces.
+
+
 2006-08-09  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook:
