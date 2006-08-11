@@ -28,7 +28,7 @@ typedef enum
 	FIF_INVERT_MATCH	= 1 << 2
 } fif_options;
 
-// the flags given in the search dialog(stored statically for "find next" and "replace")
+// the flags given in the search dialog for "find next"
 typedef struct
 {
 	gchar		*text;

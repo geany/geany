@@ -117,7 +117,6 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	g_free(app->configdir);
 	g_free(app->datadir);
 	g_free(app->docdir);
-	g_free(search_data.text);
 	g_free(app->editor_font);
 	g_free(app->tagbar_font);
 	g_free(app->msgwin_font);
