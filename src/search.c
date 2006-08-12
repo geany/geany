@@ -209,9 +209,9 @@ void search_show_find_dialog()
 				G_CALLBACK(gtk_widget_hide), NULL);
 
 		sbox = gtk_hbox_new(FALSE, 6);
-		gtk_container_add(GTK_CONTAINER(sbox), label);
-		gtk_container_add(GTK_CONTAINER(sbox), entry);
-		align = gtk_alignment_new(0, 1, 0, 0);
+		gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(sbox), entry, TRUE, TRUE, 0);
+		align = gtk_alignment_new(0, 0, 1, 0);
 		gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 0, 0, 0);
 		gtk_container_add(GTK_CONTAINER(align), sbox);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(widgets.find_dialog)->vbox), align);
@@ -435,9 +435,9 @@ void search_show_find_in_files_dialog()
 				G_CALLBACK(gtk_widget_hide), NULL);
 
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
-			dbox, TRUE, TRUE, 6);
+			dbox, TRUE, FALSE, 6);
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
-			sbox, TRUE, TRUE, 0);
+			sbox, TRUE, FALSE, 0);
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
 			cbox, TRUE, TRUE, 6);
 
