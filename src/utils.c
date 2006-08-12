@@ -2623,3 +2623,21 @@ gboolean utils_wrap_string(gchar *string, gint wrapstart)
 	}
 	return ret;
 }
+
+
+gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
+{
+	gchar *locale_text = g_locale_from_utf8(utf8_text, -1, NULL, NULL, NULL);
+	if (locale_text == NULL) locale_text = g_strdup(utf8_text);
+	return locale_text;
+}
+
+
+gchar *utils_get_utf8_from_locale(const gchar *locale_text)
+{
+	gchar *utf8_text = g_locale_to_utf8(locale_text, -1, NULL, NULL, NULL);
+	if (utf8_text == NULL) utf8_text = g_strdup(locale_text);
+	return utf8_text;
+}
+
+

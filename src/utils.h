@@ -233,4 +233,10 @@ void utils_document_show_hide(gint idx);
  * wrapstart is the minimum position to start wrapping or -1 for default */
 gboolean utils_wrap_string(gchar *string, gint wrapstart);
 
+/* Simple wrapper for g_locale_from_utf8; returns a copy of utf8_text on failure. */
+gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
+
+/* Simple wrapper for g_locale_to_utf8; returns a copy of locale_text on failure. */
+gchar *utils_get_utf8_from_locale(const gchar *locale_text);
+
 #endif
