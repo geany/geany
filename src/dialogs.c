@@ -966,7 +966,7 @@ GtkWidget *dialogs_add_file_open_extra_widget(void)
 	GtkWidget *ebox;
 	GtkWidget *hbox;
 	GtkWidget *file_entry;
-	GtkSizeGroup *sizegroup;
+	GtkSizeGroup *size_group;
 	GtkWidget *align;
 	GtkWidget *check_hidden;
 	GtkWidget *filetype_label;
@@ -974,12 +974,10 @@ GtkWidget *dialogs_add_file_open_extra_widget(void)
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 	vbox = gtk_vbox_new(FALSE, 6);
-	sizegroup = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 
 	align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
 	check_hidden = gtk_check_button_new_with_mnemonic(_("Show _hidden files"));
 	gtk_widget_show(check_hidden);
-	gtk_size_group_add_widget(GTK_SIZE_GROUP(sizegroup), check_hidden);
 	gtk_container_add(GTK_CONTAINER(align), check_hidden);
 	gtk_box_pack_start(GTK_BOX(vbox), align, FALSE, FALSE, 0);
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_hidden), FALSE);
@@ -1000,11 +998,15 @@ GtkWidget *dialogs_add_file_open_extra_widget(void)
 		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."), NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), filetype_label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), filetype_combo, FALSE, FALSE, 0);
-	gtk_size_group_add_widget(GTK_SIZE_GROUP(sizegroup), filetype_combo);
 	gtk_container_add(GTK_CONTAINER(ebox), hbox);
 	gtk_box_pack_start(GTK_BOX(lbox), ebox, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), lbox, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
+
+	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+	gtk_size_group_add_widget(GTK_SIZE_GROUP(size_group), check_hidden);
+	gtk_size_group_add_widget(GTK_SIZE_GROUP(size_group), filetype_combo);
+	g_object_unref(G_OBJECT(size_group));	// auto destroy the size group
 
 	g_signal_connect((gpointer) file_entry, "activate",
 				G_CALLBACK(on_file_open_entry_activate), NULL);
