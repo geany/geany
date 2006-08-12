@@ -13,6 +13,9 @@
  * src/search.c: Enable case sensitive when regex search enabled.
                  Some label text changes for the dialogs.
                  Use hbox packing in Find and Find in files dialogs.
+                 Add select directory button for Find in files.
+ * src/utils.c, src/utils.h:
+   Add wrappers for converting between utf8 and locale encoding.
 
 
 2006-08-11  Nick Treleaven  <nick.treleaven@btinternet.com>
