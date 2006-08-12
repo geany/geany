@@ -110,8 +110,36 @@ void search_finalise()
 static void add_find_checkboxes(GtkDialog *dialog)
 {
 	GtkWidget *checkbox1, *checkbox2, *check_regexp, *checkbox4, *checkbox5,
-			  *checkbox7, *hbox, *lbox, *rbox;
+			  *checkbox7, *hbox, *fbox, *mbox;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+
+	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
+	g_object_set_data_full(G_OBJECT(dialog), "check_regexp",
+					gtk_widget_ref(check_regexp), (GDestroyNotify)gtk_widget_unref);
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_regexp), FALSE);
+	gtk_tooltips_set_tip(tooltips, check_regexp, _("Use POSIX-like regular expressions. "
+		"For detailed information about using regular expressions, please read the documentation."), NULL);
+	g_signal_connect(G_OBJECT(check_regexp), "toggled",
+		G_CALLBACK(on_find_replace_checkbutton_toggled), GTK_WIDGET(dialog));
+
+	checkbox4 = gtk_check_button_new_with_mnemonic(_("_Search backwards"));
+	g_object_set_data_full(G_OBJECT(dialog), "check_back",
+					gtk_widget_ref(checkbox4), (GDestroyNotify)gtk_widget_unref);
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox4), FALSE);
+
+	checkbox7 = gtk_check_button_new_with_mnemonic(_("Use _escape sequences"));
+	g_object_set_data_full(G_OBJECT(dialog), "check_escape",
+					gtk_widget_ref(checkbox7), (GDestroyNotify)gtk_widget_unref);
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
+	gtk_tooltips_set_tip(tooltips, checkbox7,
+		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+		  "corresponding control characters."), NULL);
+
+	// Search features
+	fbox = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(fbox), check_regexp);
+	gtk_container_add(GTK_CONTAINER(fbox), checkbox7);
+	gtk_container_add(GTK_CONTAINER(fbox), checkbox4);
 
 	checkbox1 = gtk_check_button_new_with_mnemonic(_("_Case sensitive"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_case",
@@ -128,41 +156,15 @@ static void add_find_checkboxes(GtkDialog *dialog)
 					gtk_widget_ref(checkbox5), (GDestroyNotify)gtk_widget_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox5), FALSE);
 
-	lbox = gtk_vbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(lbox), checkbox1);
-	gtk_container_add(GTK_CONTAINER(lbox), checkbox2);
-	gtk_container_add(GTK_CONTAINER(lbox), checkbox5);
-
-	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
-	g_object_set_data_full(G_OBJECT(dialog), "check_regexp",
-					gtk_widget_ref(check_regexp), (GDestroyNotify)gtk_widget_unref);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check_regexp), FALSE);
-	gtk_tooltips_set_tip(tooltips, check_regexp, _("Use POSIX-like regular expressions. "
-		"For detailed information about using regular expressions, please read the documentation."), NULL);
-	g_signal_connect(G_OBJECT(check_regexp), "toggled",
-		G_CALLBACK(on_find_replace_checkbutton_toggled), GTK_WIDGET(dialog));
-
-	checkbox4 = gtk_check_button_new_with_mnemonic(_("_Search backwards"));
-	g_object_set_data_full(G_OBJECT(dialog), "check_back",
-					gtk_widget_ref(checkbox4), (GDestroyNotify)gtk_widget_unref);
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox4), FALSE);
-
-	checkbox7 = gtk_check_button_new_with_mnemonic(_("_Replace control characters"));
-	g_object_set_data_full(G_OBJECT(dialog), "check_escape",
-					gtk_widget_ref(checkbox7), (GDestroyNotify)gtk_widget_unref);
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
-	gtk_tooltips_set_tip(tooltips, checkbox7,
-		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
-		  "corresponding control characters."), NULL);
-
-	rbox = gtk_vbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(rbox), check_regexp);
-	gtk_container_add(GTK_CONTAINER(rbox), checkbox7);
-	gtk_container_add(GTK_CONTAINER(rbox), checkbox4);
+	// Matching options
+	mbox = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(mbox), checkbox1);
+	gtk_container_add(GTK_CONTAINER(mbox), checkbox2);
+	gtk_container_add(GTK_CONTAINER(mbox), checkbox5);
 
 	hbox = gtk_hbox_new(FALSE, 6);
-	gtk_container_add(GTK_CONTAINER(hbox), lbox);
-	gtk_container_add(GTK_CONTAINER(hbox), rbox);
+	gtk_container_add(GTK_CONTAINER(hbox), fbox);
+	gtk_container_add(GTK_CONTAINER(hbox), mbox);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 6);
 }
 
@@ -189,7 +191,7 @@ void search_show_find_dialog()
 			GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_FIND, GTK_RESPONSE_ACCEPT, NULL);
 
-		label = gtk_label_new(_("Enter the search text here:"));
+		label = gtk_label_new(_("Search for:"));
 		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
@@ -272,10 +274,10 @@ void search_show_replace_dialog()
 		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.replace_dialog), button,
 			GEANY_RESPONSE_REPLACE);
 
-		label_find = gtk_label_new(_("Enter the search text here:"));
+		label_find = gtk_label_new(_("Search for:"));
 		gtk_misc_set_alignment(GTK_MISC(label_find), 0, 0.5);
 
-		label_replace = gtk_label_new(_("Enter the replace text here:"));
+		label_replace = gtk_label_new(_("Replace with:"));
 		gtk_misc_set_alignment(GTK_MISC(label_replace), 0, 0.5);
 
 		entry_find = gtk_combo_box_entry_new_text();
@@ -299,14 +301,14 @@ void search_show_replace_dialog()
 				G_CALLBACK(gtk_widget_hide), NULL);
 
 		fbox = gtk_hbox_new(FALSE, 6);
-		gtk_container_add(GTK_CONTAINER(fbox), label_find);
-		gtk_container_add(GTK_CONTAINER(fbox), entry_find);
+		gtk_box_pack_start(GTK_BOX(fbox), label_find, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(fbox), entry_find, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.replace_dialog)->vbox), fbox,
 			FALSE, FALSE, 6);
 
 		rbox = gtk_hbox_new(FALSE, 6);
-		gtk_container_add(GTK_CONTAINER(rbox), label_replace);
-		gtk_container_add(GTK_CONTAINER(rbox), entry_replace);
+		gtk_box_pack_start(GTK_BOX(rbox), label_replace, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(rbox), entry_replace, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.replace_dialog)->vbox), rbox,
 			FALSE, FALSE, 3);
 
@@ -380,7 +382,7 @@ void search_show_find_in_files_dialog()
 		gtk_box_pack_start(GTK_BOX(vbox1), label1, FALSE, FALSE, 0);
 		gtk_box_pack_start(GTK_BOX(vbox1), entry1, FALSE, FALSE, 0);
 
-		label = gtk_label_new(_("Enter the search text here:"));
+		label = gtk_label_new(_("Search for:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 		combo = gtk_combo_box_entry_new_text();
@@ -394,7 +396,7 @@ void search_show_find_in_files_dialog()
 						gtk_widget_ref(checkbox1), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox1), FALSE);
 
-		checkbox2 = gtk_check_button_new_with_mnemonic(_("Invert search results"));
+		checkbox2 = gtk_check_button_new_with_mnemonic(_("_Invert search results"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_invert",
 						gtk_widget_ref(checkbox2), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox2), FALSE);
@@ -468,10 +470,27 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		GtkWidget *check_back = lookup_widget(dialog, "check_back");
 		GtkWidget *check_word = lookup_widget(dialog, "check_word");
 		GtkWidget *check_wordstart = lookup_widget(dialog, "check_wordstart");
+		GtkToggleButton *check_case = GTK_TOGGLE_BUTTON(
+			lookup_widget(dialog, "check_case"));
+		static gboolean case_state = FALSE; // state before regex enabled
 
+		// hide options that don't apply to regex searches
 		gtk_widget_set_sensitive(check_back, ! regex_set);
 		gtk_widget_set_sensitive(check_word, ! regex_set);
 		gtk_widget_set_sensitive(check_wordstart, ! regex_set);
+
+		if (regex_set)	// regex enabled
+		{
+			// Enable case sensitive but remember original case toggle state
+			case_state = gtk_toggle_button_get_active(check_case);
+			gtk_toggle_button_set_active(check_case, TRUE);
+		}
+		else	// regex disabled
+		{
+			// If case sensitive is still enabled, revert to what it was before we enabled it
+			if (gtk_toggle_button_get_active(check_case) == TRUE)
+				gtk_toggle_button_set_active(check_case, case_state);
+		}
 	}
 }
 
