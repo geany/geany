@@ -58,7 +58,7 @@ else
 AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe
 #AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -g -O0
 geany_SOURCES = $(SRCS) vte.c vte.h
-geany_LDADD = @PACKAGE_LIBS@ -lstdc++ ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a $(INTLLIBS)
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @PACKAGE_LIBS@ -lstdc++ $(INTLLIBS)
 
 INCLUDES = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
