@@ -2,6 +2,7 @@
 
  * src/search.c: Enable case sensitive when regex search enabled.
                  Some label text changes for the dialogs.
+                 Use hbox packing in Find and Find in files dialogs.
 
 
 2006-08-11  Nick Treleaven  <nick.treleaven@btinternet.com>

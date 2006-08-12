@@ -315,6 +315,7 @@ void search_show_replace_dialog()
 		size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 		gtk_size_group_add_widget(size_group, label_find);
 		gtk_size_group_add_widget(size_group, label_replace);
+		g_object_unref(G_OBJECT(size_group));	// auto destroy the size group
 
 		add_find_checkboxes(GTK_DIALOG(widgets.replace_dialog));
 
@@ -358,7 +359,9 @@ void search_show_find_in_files_dialog()
 
 	if (widgets.find_in_files_dialog == NULL)
 	{
-		GtkWidget *label, *label1, *checkbox1, *checkbox2, *checkbox3, *vbox2, *vbox1;
+		GtkWidget *label, *label1, *checkbox1, *checkbox2, *checkbox3;
+		GtkWidget *dbox, *sbox, *cbox;
+		GtkSizeGroup *size_group;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 		widgets.find_in_files_dialog = gtk_dialog_new_with_buttons(
@@ -369,8 +372,8 @@ void search_show_find_in_files_dialog()
 		gtk_dialog_set_default_response(GTK_DIALOG(widgets.find_in_files_dialog),
 			GTK_RESPONSE_ACCEPT);
 
-		label1 = gtk_label_new("Directory to be searched:");
-		gtk_misc_set_alignment(GTK_MISC(label1), 0, 0);
+		label1 = gtk_label_new("Directory:");
+		gtk_misc_set_alignment(GTK_MISC(label1), 0, 0.5);
 
 		entry1 = gtk_entry_new();
 		gtk_entry_set_max_length(GTK_ENTRY(entry1), 248);
@@ -378,18 +381,27 @@ void search_show_find_in_files_dialog()
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "entry_dir",
 						gtk_widget_ref(entry1), (GDestroyNotify)gtk_widget_unref);
 
-		vbox1 = gtk_vbox_new(FALSE, 5);
-		gtk_box_pack_start(GTK_BOX(vbox1), label1, FALSE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(vbox1), entry1, FALSE, FALSE, 0);
+		dbox = gtk_hbox_new(FALSE, 6);
+		gtk_box_pack_start(GTK_BOX(dbox), label1, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(dbox), entry1, TRUE, TRUE, 0);
 
 		label = gtk_label_new(_("Search for:"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 		combo = gtk_combo_box_entry_new_text();
 		entry2 = gtk_bin_get_child(GTK_BIN(combo));
 		gtk_entry_set_max_length(GTK_ENTRY(entry2), 248);
 		gtk_entry_set_width_chars(GTK_ENTRY(entry2), 50);
 		gtk_entry_set_activates_default(GTK_ENTRY(entry2), TRUE);
+
+		sbox = gtk_hbox_new(FALSE, 6);
+		gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(sbox), combo, TRUE, TRUE, 0);
+
+		size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+		gtk_size_group_add_widget(size_group, label1);
+		gtk_size_group_add_widget(size_group, label);
+		g_object_unref(G_OBJECT(size_group));	// auto destroy the size group
 
 		checkbox1 = gtk_check_button_new_with_mnemonic(_("_Case sensitive"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_case",
@@ -410,10 +422,10 @@ void search_show_find_in_files_dialog()
 		gtk_tooltips_set_tip(tooltips, checkbox3,
 							_("See grep's manual page for more information."), NULL);
 
-		vbox2 = gtk_vbox_new(FALSE, 0);
-		gtk_container_add(GTK_CONTAINER(vbox2), checkbox1);
-		gtk_container_add(GTK_CONTAINER(vbox2), checkbox2);
-		gtk_container_add(GTK_CONTAINER(vbox2), checkbox3);
+		cbox = gtk_vbox_new(FALSE, 0);
+		gtk_container_add(GTK_CONTAINER(cbox), checkbox1);
+		gtk_container_add(GTK_CONTAINER(cbox), checkbox2);
+		gtk_container_add(GTK_CONTAINER(cbox), checkbox3);
 
 		g_signal_connect((gpointer) widgets.find_in_files_dialog, "response",
 				G_CALLBACK(on_find_in_files_dialog_response), combo);
@@ -421,13 +433,11 @@ void search_show_find_in_files_dialog()
 				G_CALLBACK(gtk_widget_hide), NULL);
 
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
-			vbox1, TRUE, TRUE, 6);
+			dbox, TRUE, TRUE, 6);
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
-			label, TRUE, TRUE, 0);
+			sbox, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
-			combo, TRUE, TRUE, 0);
-		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
-			vbox2, TRUE, TRUE, 6);
+			cbox, TRUE, TRUE, 6);
 
 		gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox), 6);
 
