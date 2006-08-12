@@ -1308,23 +1308,18 @@ void document_print(gint idx)
 
 void document_replace_tabs(gint idx)
 {
-	gint i, len, j = 0, tabs_amount = 0, tab_w, pos;
-	gchar *data, *replacement, *text;
+	gint i, len, j = 0, k, tabs_amount = 0, tab_w, pos;
+	gchar *data, *text;
 
 	if (idx < 0 || ! doc_list[idx].is_valid) return;
 
 	pos = sci_get_current_position(doc_list[idx].sci);
 	tab_w = sci_get_tab_width(doc_list[idx].sci);
-	replacement = g_malloc(tab_w + 1);
 
 	// get the text
 	len = sci_get_length(doc_list[idx].sci) + 1;
 	data = g_malloc(len);
 	sci_get_text(doc_list[idx].sci, len, data);
-
-	// prepare the spaces with the width of a tab
-	for (i = 0; i < tab_w; i++) replacement[i] = ' ';
-	replacement[tab_w] = '\0';
 
 	for (i = 0; i < len; i++) if (data[i] == 9) tabs_amount++;
 
@@ -1332,7 +1327,6 @@ void document_replace_tabs(gint idx)
 	if (tabs_amount == 0)
 	{
 		g_free(data);
-		g_free(replacement);
 		return;
 	}
 
@@ -1345,10 +1339,7 @@ void document_replace_tabs(gint idx)
 			// increase cursor position to keep it at same position
 			if (pos > i) pos += 3;
 
-			text[j++] = 32;
-			text[j++] = 32;
-			text[j++] = 32;
-			text[j++] = 32;
+			for (k = 0; k < tab_w; k++) text[j++] = 32;
 		}
 		else
 		{
@@ -1363,7 +1354,6 @@ void document_replace_tabs(gint idx)
 
 	g_free(data);
 	g_free(text);
-	g_free(replacement);
 }
 
 

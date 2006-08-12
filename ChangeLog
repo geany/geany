@@ -1,3 +1,10 @@
+2006-08-12  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/document.c:
+   Removed unnecessary code in document_replace_tabs().
+   Really take tab width when replacing instead of using width = 4.
+
+
 2006-08-12  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/search.c: Enable case sensitive when regex search enabled.
