@@ -184,7 +184,7 @@ void search_show_find_dialog()
 
 	if (widgets.find_dialog == NULL)
 	{
-		GtkWidget *label, *entry, *vbox;
+		GtkWidget *label, *entry, *sbox, *align;
 
 		widgets.find_dialog = gtk_dialog_new_with_buttons(_("Find"),
 			GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -192,8 +192,7 @@ void search_show_find_dialog()
 			GTK_STOCK_FIND, GTK_RESPONSE_ACCEPT, NULL);
 
 		label = gtk_label_new(_("Search for:"));
-		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 		entry = gtk_combo_box_entry_new_text();
 		gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 248);
@@ -209,10 +208,13 @@ void search_show_find_dialog()
 		g_signal_connect((gpointer) widgets.find_dialog, "delete_event",
 				G_CALLBACK(gtk_widget_hide), NULL);
 
-		vbox = gtk_vbox_new(FALSE, 0);
-		gtk_container_add(GTK_CONTAINER(vbox), label);
-		gtk_container_add(GTK_CONTAINER(vbox), entry);
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(widgets.find_dialog)->vbox), vbox);
+		sbox = gtk_hbox_new(FALSE, 6);
+		gtk_container_add(GTK_CONTAINER(sbox), label);
+		gtk_container_add(GTK_CONTAINER(sbox), entry);
+		align = gtk_alignment_new(0, 1, 0, 0);
+		gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 0, 0, 0);
+		gtk_container_add(GTK_CONTAINER(align), sbox);
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(widgets.find_dialog)->vbox), align);
 
 		add_find_checkboxes(GTK_DIALOG(widgets.find_dialog));
 
