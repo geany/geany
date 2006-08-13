@@ -147,7 +147,7 @@ static void styleset_get_int(GKeyFile *config, GKeyFile *configh, const gchar *s
 
 static guint invert(guint icolour)
 {
-	if (types[GEANY_FILETYPES_ALL]->styling[9][0])
+	if (types[GEANY_FILETYPES_ALL]->styling[11][0])
 	{
 		guint r, g, b;
 
@@ -204,8 +204,10 @@ static void styleset_common_init(void)
 	styleset_get_hex(config, config_home, "styling", "margin_folding", "0x000000", "0xdfdfdf", "false", types[GEANY_FILETYPES_ALL]->styling[5]);
 	styleset_get_hex(config, config_home, "styling", "current_line", "0x000000", "0xe5e5e5", "true", types[GEANY_FILETYPES_ALL]->styling[6]);
 	styleset_get_hex(config, config_home, "styling", "caret", "0x000000", "0x000000", "false", types[GEANY_FILETYPES_ALL]->styling[7]);
-	styleset_get_int(config, config_home, "styling", "folding_style", 1, 1, types[GEANY_FILETYPES_ALL]->styling[8]);
-	styleset_get_int(config, config_home, "styling", "invert_all", 0, 0, types[GEANY_FILETYPES_ALL]->styling[9]);
+	styleset_get_hex(config, config_home, "styling", "indent_guide", "0xc0c0c0", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[8]);
+	styleset_get_hex(config, config_home, "styling", "white_space", "0xc0c0c0", "0xffffff", "true", types[GEANY_FILETYPES_ALL]->styling[9]);
+	styleset_get_int(config, config_home, "styling", "folding_style", 1, 1, types[GEANY_FILETYPES_ALL]->styling[10]);
+	styleset_get_int(config, config_home, "styling", "invert_all", 0, 0, types[GEANY_FILETYPES_ALL]->styling[11]);
 
 	types[GEANY_FILETYPES_ALL]->keywords = NULL;
 	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_ALL, GEANY_WORDCHARS);
@@ -260,7 +262,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETFOLDFLAGS, 0, 0);
 
 	// choose the folding style - boxes or circles, I prefer boxes, so it is default ;-)
-	switch (types[GEANY_FILETYPES_ALL]->styling[8][0])
+	switch (types[GEANY_FILETYPES_ALL]->styling[10][0])
 	{
 		case 2:
 		{
@@ -281,7 +283,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	}
 
 	// choose the folding style - straight or curved, I prefer straight, so it is default ;-)
-	switch (types[GEANY_FILETYPES_ALL]->styling[8][1])
+	switch (types[GEANY_FILETYPES_ALL]->styling[10][1])
 	{
 		case 2:
 		{
@@ -332,6 +334,12 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	styleset_set_style(sci, STYLE_LINENUMBER, GEANY_FILETYPES_ALL, 4);
 	styleset_set_style(sci, STYLE_BRACELIGHT, GEANY_FILETYPES_ALL, 2);
 	styleset_set_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_ALL, 3);
+	styleset_set_style(sci, STYLE_INDENTGUIDE, GEANY_FILETYPES_ALL, 8);
+
+	SSM(sci, SCI_SETWHITESPACEFORE, types[GEANY_FILETYPES_ALL]->styling[9][2],
+										invert(types[GEANY_FILETYPES_ALL]->styling[9][0]));
+	SSM(sci, SCI_SETWHITESPACEBACK, types[GEANY_FILETYPES_ALL]->styling[9][2],
+										invert(types[GEANY_FILETYPES_ALL]->styling[9][1]));
 }
 
 
@@ -422,7 +430,7 @@ void styleset_c(ScintillaObject *sci)
 	}
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_C]->wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
 
@@ -458,8 +466,6 @@ void styleset_c(ScintillaObject *sci)
 
 	// is used for local structs and typedefs
 	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_C, 18);
-
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 
 	if (types[GEANY_FILETYPES_C]->styling[19][0] == 1)
 		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
@@ -557,7 +563,7 @@ void styleset_cpp(ScintillaObject *sci)
 	}
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_CPP]->wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
 
@@ -591,8 +597,6 @@ void styleset_cpp(ScintillaObject *sci)
 
 	// is used for local structs and typedefs
 	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_CPP, 18);
-
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 
 	if (types[GEANY_FILETYPES_CPP]->styling[19][0] == 1)
 		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
@@ -650,7 +654,7 @@ void styleset_pascal(ScintillaObject *sci)
 	styleset_common(sci, 5);
 
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_PASCAL]->wordchars);
-	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM (sci, SCI_SETLEXER, SCLEX_PASCAL, 0);
 
@@ -669,10 +673,7 @@ void styleset_pascal(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_PASCAL, 10);
 	styleset_set_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_PASCAL, 11);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
-
 	//SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
-
 }
 
 
@@ -836,6 +837,8 @@ void styleset_php(ScintillaObject *sci)
 	SSM (sci, SCI_SETPROPERTY, (sptr_t) "phpscript.mode", (sptr_t) "1");
 	SSM (sci, SCI_SETLEXER, SCLEX_HTML, 0);
 
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
 	// use the same colouring for HTML; XML and so on
 	styleset_markup(sci);
 
@@ -943,8 +946,6 @@ void styleset_markup(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) types[GEANY_FILETYPES_XML]->keywords[3]);
 	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) types[GEANY_FILETYPES_XML]->keywords[4]);
 	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) types[GEANY_FILETYPES_XML]->keywords[5]);
-
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 
 	// hotspotting, nice thing
 	SSM(sci, SCI_SETHOTSPOTACTIVEFORE, 1, invert(0xff0000));
@@ -1215,7 +1216,7 @@ void styleset_java(ScintillaObject *sci)
 	SSM (sci, SCI_SETLEXER, SCLEX_CPP, 0);
 
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_JAVA]->wordchars);
-	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM (sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
 
@@ -1248,8 +1249,6 @@ void styleset_java(ScintillaObject *sci)
 	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
 
 	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_JAVA, 18);
-
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
 
@@ -1333,7 +1332,7 @@ void styleset_perl(ScintillaObject *sci)
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_PERL]->wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_PERL]->keywords[0]);
 
@@ -1354,8 +1353,6 @@ void styleset_perl(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_PL_BACKTICKS, GEANY_FILETYPES_PERL, 14);
 	styleset_set_style(sci, SCE_PL_HASH, GEANY_FILETYPES_PERL, 15);
 	styleset_set_style(sci, SCE_PL_SYMBOLTABLE, GEANY_FILETYPES_PERL, 16);
-
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
 
@@ -1407,6 +1404,7 @@ void styleset_python(ScintillaObject *sci)
 	SSM (sci, SCI_SETLEXER, SCLEX_PYTHON, 0);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_PYTHON]->keywords[0]);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	styleset_set_style(sci, SCE_P_DEFAULT, GEANY_FILETYPES_PYTHON, 0);
 	styleset_set_style(sci, SCE_P_COMMENTLINE, GEANY_FILETYPES_PYTHON, 1);
@@ -1481,6 +1479,7 @@ void styleset_ruby(ScintillaObject *sci)
 	SSM (sci, SCI_SETLEXER, SCLEX_RUBY, 0);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_RUBY]->keywords[0]);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	styleset_set_style(sci, SCE_RB_DEFAULT, GEANY_FILETYPES_RUBY, 0);
 	styleset_set_style(sci, SCE_RB_COMMENTLINE, GEANY_FILETYPES_RUBY, 1);
@@ -1549,7 +1548,7 @@ void styleset_sh(ScintillaObject *sci)
 	SSM (sci, SCI_SETLEXER, SCLEX_BASH, 0);
 
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_SH]->wordchars);
-	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM (sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
 
@@ -1566,8 +1565,6 @@ void styleset_sh(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_SH_BACKTICKS, GEANY_FILETYPES_SH, 8);
 	styleset_set_style(sci, SCE_SH_PARAM, GEANY_FILETYPES_SH, 9);
 	styleset_set_style(sci, SCE_SH_SCALAR, GEANY_FILETYPES_SH, 10);
-
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
 
@@ -1706,7 +1703,7 @@ void styleset_docbook(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) types[GEANY_FILETYPES_DOCBOOK]->keywords[1]);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_DOCBOOK]->wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	// Unknown tags and attributes are highlighed in red.
 	// If a tag is actually OK, it should be added in lower case to the htmlKeyWords string.
@@ -1827,7 +1824,7 @@ void styleset_css(ScintillaObject *sci)
 	styleset_common(sci, 5);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_CSS]->wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_CSS, 0);
 
@@ -1885,7 +1882,7 @@ void styleset_conf(ScintillaObject *sci)
 	SSM (sci, SCI_SETLEXER, SCLEX_PROPERTIES, 0);
 
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_CONF]->wordchars);
-	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM (sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
 
@@ -1948,7 +1945,7 @@ void styleset_asm(ScintillaObject *sci)
 	styleset_common(sci, 5);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_ASM]->wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_ASM, 0);
 
@@ -2051,7 +2048,7 @@ void styleset_sql(ScintillaObject *sci)
 	styleset_common(sci, 5);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_SQL]->wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_SQL, 0);
 
@@ -2128,7 +2125,7 @@ void styleset_caml(ScintillaObject *sci)
 	styleset_common(sci, 5);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_CAML]->wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_CAML, 0);
 
@@ -2201,7 +2198,7 @@ void styleset_oms(ScintillaObject *sci)
 	SSM (sci, SCI_SETLEXER, SCLEX_OMS, 0);
 
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_OMS]->wordchars);
-	SSM (sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM (sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
 
@@ -2218,8 +2215,6 @@ void styleset_oms(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_SH_BACKTICKS, GEANY_FILETYPES_OMS, 8);
 	styleset_set_style(sci, SCE_SH_PARAM, GEANY_FILETYPES_OMS, 9);
 	styleset_set_style(sci, SCE_SH_SCALAR, GEANY_FILETYPES_OMS, 10);
-
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
 
@@ -2278,7 +2273,7 @@ void styleset_tcl(ScintillaObject *sci)
 
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_TCL]->wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_TCL, 0);
 
@@ -2304,8 +2299,6 @@ void styleset_tcl(ScintillaObject *sci)
 	styleset_set_style(sci, SCE_TCL_WORD3, GEANY_FILETYPES_TCL, 13);
 	styleset_set_style(sci, SCE_TCL_WORD4, GEANY_FILETYPES_TCL, 14);
 	styleset_set_style(sci, SCE_TCL_WORD5, GEANY_FILETYPES_TCL, 15);
-
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 
 static void styleset_d_init(void)
@@ -2395,7 +2388,7 @@ void styleset_d(ScintillaObject *sci)
 	}
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_D]->wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, 8, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
 
@@ -2429,7 +2422,5 @@ void styleset_d(ScintillaObject *sci)
 
 	// is used for local structs and typedefs
 	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_D, 18);
-
-	SSM(sci, SCI_SETWHITESPACEFORE, 1, invert(0xc0c0c0));
 }
 

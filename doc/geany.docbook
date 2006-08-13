@@ -1498,7 +1498,24 @@
 									<entry>The style for colouring the background of the current
 										   line. Only the second argument is interpreted.
 									</entry>
-									<entry>current_line=0x0;0xE5E5E5;false;false</entry>
+									<entry>current_line=0x0;0xe5e5e5;false;false</entry>
+								</row>
+								<row>
+									<entry>indent_guide</entry>
+									<entry>The style for colouring the indentation guides.
+										   Only the first and second arguments are interpreted.
+									</entry>
+									<entry>indent_guide=0xc0c0c0;0xffffff;false;false</entry>
+								</row>
+								<row>
+									<entry>white_space</entry>
+									<entry>The style for colouring the white space if it is shown.
+										   The first both arguments define the foreground and
+										   background colours, the third argument sets whether to use
+										   the defined colours or to use the colours defined by each
+										   filetype for the white space.
+									</entry>
+									<entry>white_space=0xc0c0c0;0xffffff;true;false</entry>
 								</row>
 								<row>
 									<entry>folding_style</entry>

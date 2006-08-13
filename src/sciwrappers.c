@@ -847,3 +847,8 @@ gint sci_get_line_indent_position(ScintillaObject *sci, gint line)
 {
 	return SSM(sci, SCI_GETLINEINDENTPOSITION, line, 0);
 }
+
+void sci_set_autoc_max_height(ScintillaObject *sci, gint val)
+{
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, val, 0);
+}

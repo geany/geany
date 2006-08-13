@@ -44,9 +44,6 @@
 #endif
 
 
-gint old_tab_width;
-gint old_long_line_column;
-gchar *old_long_line_color;
 gchar *dialog_key_name;
 static GtkListStore *store = NULL;
 static GtkTreeView *tree = NULL;
@@ -113,7 +110,6 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "spin_long_line");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->long_line_column);
-	old_long_line_column = app->long_line_column;
 
 	switch (app->long_line_type)
 	{
@@ -122,8 +118,6 @@ void prefs_init_dialog(void)
 		default: widget = lookup_widget(app->prefs_dialog, "radio_long_line_disabled"); break;
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
-
-	old_long_line_color = g_strdup(app->long_line_color);
 
 	color = g_new0(GdkColor, 1);
 	gdk_color_parse(app->long_line_color, color);
@@ -191,7 +185,6 @@ void prefs_init_dialog(void)
 	// Editor settings
 	widget = lookup_widget(app->prefs_dialog, "spin_tab_width");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->pref_editor_tab_width);
-	old_tab_width = app->pref_editor_tab_width;
 
 	widget = lookup_widget(app->prefs_dialog, "combo_encoding");
 	// luckily the index of the combo box items match the index of the encodings array
@@ -232,6 +225,9 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "check_indicators");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_use_indicators);
+
+	widget = lookup_widget(app->prefs_dialog, "spin_autocheight");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->autocompletion_max_height);
 
 
 	// Tools Settings
@@ -519,6 +515,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_indicators");
 		app->pref_editor_use_indicators = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = lookup_widget(app->prefs_dialog, "spin_autocheight");
+		app->autocompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+
 
 		// Tools Settings
 		widget = lookup_widget(app->prefs_dialog, "entry_com_make");
@@ -626,10 +625,6 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 				if (! app->pref_editor_folding) document_unfold_all(i);
 			}
 		}
-		old_tab_width = app->pref_editor_tab_width;
-		old_long_line_column = app->long_line_column;
-		g_free(old_long_line_color);
-		old_long_line_color = g_strdup(app->long_line_color);
 
 		// store all settings
 		configuration_save();

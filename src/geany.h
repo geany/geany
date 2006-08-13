@@ -57,6 +57,7 @@
 #define GEANY_WORDCHARS					"_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\\"
 #define GEANY_MAX_WORD_LENGTH			192
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
+#define GEANY_MAX_AUTOCOMPLETE_HEIGHT	10
 #define GEANY_STRING_UNTITLED			_("untitled")
 #define GEANY_MSGWIN_HEIGHT				208
 #define GEANY_WINDOW_MINIMAL_WIDTH		620
@@ -165,6 +166,7 @@ typedef struct MyApp
 	gint				 tab_pos_sidebar;
 	gint				 cur_idx;	// currently only used by the build system (build_spawn_cmd)
 	guint				 mru_length;
+	gint				 autocompletion_max_height;
 	gint				 long_line_type;
 	gint				 long_line_column;
 #ifdef HAVE_FIFO

@@ -205,6 +205,7 @@ void document_apply_update_prefs(ScintillaObject *sci)
 	sci_set_mark_long_lines(sci, app->long_line_type, app->long_line_column, app->long_line_color);
 
 	sci_set_tab_width(sci, app->pref_editor_tab_width);
+	sci_set_autoc_max_height(sci, app->autocompletion_max_height);
 
 	sci_set_indentionguides(sci, app->pref_editor_show_indent_guide);
 	sci_set_visible_white_spaces(sci, app->pref_editor_show_white_space);
@@ -790,8 +791,7 @@ void document_save_file(gint idx, gboolean force)
 }
 
 
-#define SEARCH_NOT_FOUND_TXT _("The document has been searched completely but the match \"%s\" \
-								was not found. Wrap search around the document?")
+#define SEARCH_NOT_FOUND_TXT _("The document has been searched completely but the match \"%s\" was not found. Wrap search around the document?")
 
 /* special search function, used from the find entry in the toolbar */
 void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_button, gboolean inc)

@@ -84,6 +84,7 @@ void configuration_save()
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", app->tab_pos_editor);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", app->tab_pos_msgwin);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_sidebar", app->tab_pos_sidebar);
+	g_key_file_set_integer(config, PACKAGE, "autocompletion_max_height", app->autocompletion_max_height);
 	g_key_file_set_integer(config, PACKAGE, "long_line_column", app->long_line_column);
 	g_key_file_set_string(config, PACKAGE, "long_line_color", app->long_line_color);
 	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", app->beep_on_errors);
@@ -245,6 +246,7 @@ gboolean configuration_load()
 	app->long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
 	app->long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
 	app->long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
+	app->autocompletion_max_height = utils_get_setting_integer(config, PACKAGE, "autocompletion_max_height", GEANY_MAX_AUTOCOMPLETE_HEIGHT);
 	app->tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
 	app->tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
 	app->tab_pos_sidebar = utils_get_setting_integer(config, PACKAGE, "tab_pos_sidebar", GTK_POS_TOP);

@@ -2173,6 +2173,10 @@ create_prefs_dialog (void)
   GtkWidget *check_xmltag;
   GtkWidget *check_folding;
   GtkWidget *check_indicators;
+  GtkWidget *hbox6;
+  GtkWidget *label173;
+  GtkObject *spin_autocheight_adj;
+  GtkWidget *spin_autocheight;
   GtkWidget *label172;
   GtkWidget *label95;
   GtkWidget *vbox2;
@@ -2300,7 +2304,7 @@ create_prefs_dialog (void)
   gtk_widget_show (label163);
   gtk_box_pack_start (GTK_BOX (vbox4), label163, FALSE, FALSE, 0);
 
-  hbox2 = gtk_hbox_new (FALSE, 19);
+  hbox2 = gtk_hbox_new (FALSE, 20);
   gtk_widget_show (hbox2);
   gtk_box_pack_start (GTK_BOX (vbox4), hbox2, FALSE, TRUE, 0);
 
@@ -2811,7 +2815,7 @@ create_prefs_dialog (void)
   gtk_table_set_row_spacings (GTK_TABLE (table5), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table5), 25);
 
-  label116 = gtk_label_new (_("Tab Width"));
+  label116 = gtk_label_new (_("Tab Width:"));
   gtk_widget_show (label116);
   gtk_table_attach (GTK_TABLE (table5), label116, 0, 1, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
@@ -2975,6 +2979,21 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox17), check_indicators, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_indicators, _("Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_indicators), FALSE);
+
+  hbox6 = gtk_hbox_new (FALSE, 20);
+  gtk_widget_show (hbox6);
+  gtk_box_pack_start (GTK_BOX (vbox17), hbox6, TRUE, TRUE, 0);
+
+  label173 = gtk_label_new (_("Rows of auto completion list:"));
+  gtk_widget_show (label173);
+  gtk_box_pack_start (GTK_BOX (hbox6), label173, FALSE, FALSE, 0);
+
+  spin_autocheight_adj = gtk_adjustment_new (10, 1, 99, 1, 10, 10);
+  spin_autocheight = gtk_spin_button_new (GTK_ADJUSTMENT (spin_autocheight_adj), 1, 0);
+  gtk_widget_show (spin_autocheight);
+  gtk_box_pack_start (GTK_BOX (hbox6), spin_autocheight, FALSE, TRUE, 0);
+  gtk_tooltips_set_tip (tooltips, spin_autocheight, _("Number of rows to display when the auto completion list is shown."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_autocheight), TRUE);
 
   label172 = gtk_label_new (_("<b>Features</b>"));
   gtk_widget_show (label172);
@@ -3392,6 +3411,9 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_xmltag, "check_xmltag");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_folding, "check_folding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_indicators, "check_indicators");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox6, "hbox6");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label173, "label173");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_autocheight, "spin_autocheight");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label172, "label172");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label95, "label95");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox2, "vbox2");

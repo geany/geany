@@ -14,6 +14,9 @@ margin_folding=0x000000;0xdfdfdf;false;false
 current_line=0x0;0xe5e5e5;true;false
 # colour of the caret(the blinking cursor), only first argument is interpreted
 caret=0x000000;0x0;false;false
+indent_guide=0xc0c0c0;0xffffff;false;false
+# the third argument defines whether to use these values or use the default values defined by the filetypes
+white_space=0xc0c0c0;0xffffff;true;false
 # style of folding icons, only first and second arguments are used, valid values are:
 # first argument:  1 for boxes, 2 for circles
 # second argument: 1 for straight lines, 2 for curved lines

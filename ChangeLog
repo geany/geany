@@ -6,6 +6,13 @@
  * src/vte.c: Added the GTK IM menu items to the VTE popup menu.
  * src/utils.c, src/dialogs.c, src/build.c, src/callbacks.c,
    src/search.c, src/keyfile.c: Use utf8/locale encoding wrappers.
+ * data/filetypes.common, src/highlighting.c, src/geany.h,
+   src/keyfile.c, src/prefs.c, src/document.c, src/interface.c,
+   geany.glade, doc/geany.docbook:
+   Added colour values for indentation guides and white space.
+   Made hard coded SCI_AUTOCSETMAXHEIGHT changeable and added an option
+   in the preferences dialog.
+ * src/sciwrappers.c: Added sci_set_autoc_max_height().
 
 
 2006-08-12  Enrico Tröger  <enrico.troeger@uvena.de>
