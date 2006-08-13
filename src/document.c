@@ -429,7 +429,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	if (reload)
 	{
 		utf8_filename = g_strdup(doc_list[idx].file_name);
-		locale_filename = g_locale_from_utf8(utf8_filename, -1, NULL, NULL, NULL);
+		locale_filename = utils_get_locale_from_utf8(utf8_filename);
 	}
 	else
 	{
@@ -442,15 +442,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
 		locale_filename = g_strdup(filename);
-		utf8_filename = g_locale_to_utf8(locale_filename, -1, NULL, NULL, &err);
-		if (utf8_filename == NULL)
-		{
-			if (err != NULL) msgwin_status_add("%s (%s)", _("Invalid filename"), err->message);
-			else msgwin_status_add(_("Invalid filename"));
-			utf8_filename = g_strdup(locale_filename);
-			g_error_free(err);
-			err = NULL;	// set to NULL for further usage
-		}
+		utf8_filename = utils_get_utf8_from_locale(locale_filename);
 
 		// if file is already open, switch to it and go
 		idx = document_find_by_filename(utf8_filename, FALSE);
@@ -751,8 +743,9 @@ void document_save_file(gint idx, gboolean force)
 	{
 		len = strlen(data);
 	}
-	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
+	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	fp = fopen(locale_filename, "wb"); // this should fix the windows \n problem
+	g_free(locale_filename);
 	if (fp == NULL)
 	{
 		msgwin_status_add(_("Error saving file (%s)."), strerror(errno));
@@ -1047,7 +1040,7 @@ void document_update_tag_list(gint idx, gboolean update)
 
 	if (doc_list[idx].tm_file == NULL)
 	{
-		gchar *locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
+		gchar *locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 		doc_list[idx].tm_file = tm_source_file_new(locale_filename, FALSE,
 												   doc_list[idx].file_type->name);
 		g_free(locale_filename);

@@ -1,3 +1,10 @@
+2006-08-13  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/document.c:
+   Use wrappers for converting between utf8 and locale encoding.
+   Fixed small memory leak.
+
+
 2006-08-12  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c:
