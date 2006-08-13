@@ -41,6 +41,7 @@ extern gchar **environ;
 static pid_t pid;
 static GModule *module = NULL;
 static struct vte_funcs *vf;
+static gboolean popup_menu_created = FALSE;
 
 
 #define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
@@ -135,7 +136,6 @@ void vte_init(void)
 
 	vte = vf->vte_terminal_new();
 	vc->vte = vte;
-	vc->menu = vte_create_popup_menu();
 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
 	GTK_WIDGET_UNSET_FLAGS(scrollbar, GTK_CAN_FOCUS);
 
@@ -181,7 +181,7 @@ void vte_close(void)
 	 * this prevents a segfault on X close window if the message window is hidden
 	 * (patch from Nick Treleaven, thanks) */
 	gtk_widget_destroy(vc->vte);
-	gtk_widget_destroy(vc->menu);
+	if (popup_menu_created) gtk_widget_destroy(vc->menu);
 	g_free(vc->font);
 	g_free(vc->emulation);
 	g_free(vc->color_back);
@@ -243,6 +243,13 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 {
 	if (event->button == 3)
 	{
+		if (! popup_menu_created)
+		{
+			vc->menu = vte_create_popup_menu();
+			vf->vte_terminal_im_append_menuitems(VTE_TERMINAL(vc->vte), GTK_MENU_SHELL(vc->im_submenu));
+			popup_menu_created = TRUE;
+		}
+
 		gtk_menu_popup(GTK_MENU(vc->menu), NULL, NULL, NULL, NULL, event->button, event->time);
 	}
 
@@ -283,6 +290,7 @@ static void vte_register_symbols(GModule *mod)
 	g_module_symbol(mod, "vte_terminal_set_color_foreground", (void*)&vf->vte_terminal_set_color_foreground);
 	g_module_symbol(mod, "vte_terminal_set_color_background", (void*)&vf->vte_terminal_set_color_background);
 	g_module_symbol(mod, "vte_terminal_feed_child", (void*)&vf->vte_terminal_feed_child);
+	g_module_symbol(mod, "vte_terminal_im_append_menuitems", (void*)&vf->vte_terminal_im_append_menuitems);
 }
 
 
@@ -377,6 +385,18 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(2));
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	vc->im_submenu = gtk_menu_new();
+
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Input Methods"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vc->im_submenu);
 
 	return menu;
 }

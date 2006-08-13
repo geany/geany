@@ -66,8 +66,9 @@ struct _VteTerminal
 
 struct vte_conf
 {
-	GtkWidget *vte;	// small hack, to have always a reference to the widget
+	GtkWidget *vte;
 	GtkWidget *menu;
+	GtkWidget *im_submenu;
 	gboolean scroll_on_key;
 	gboolean scroll_on_out;
 	gboolean follow_path;
@@ -106,6 +107,7 @@ struct vte_funcs
 	void (*vte_terminal_set_color_foreground) (VteTerminal *terminal, const GdkColor *foreground);
 	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
 	void (*vte_terminal_feed_child) (VteTerminal *terminal, const char *data, glong length);
+	void (*vte_terminal_im_append_menuitems) (VteTerminal *terminal, GtkMenuShell *menushell);
 };
 
 

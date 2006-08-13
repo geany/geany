@@ -3,6 +3,7 @@
  * src/document.c:
    Use wrappers for converting between utf8 and locale encoding.
    Fixed small memory leak.
+ * src/vte.c: Added the GTK IM menu items to the VTE popup menu.
 
 
 2006-08-12  Enrico Tröger  <enrico.troeger@uvena.de>
