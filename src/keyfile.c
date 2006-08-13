@@ -424,8 +424,7 @@ gboolean configuration_open_files()
 			else file = array[1];
 
 			// try to get the locale equivalent for the filename, fallback to filename if error
-			locale_filename = g_locale_from_utf8(file, -1, NULL, NULL, NULL);
-			if (locale_filename == NULL) locale_filename = g_strdup(file);
+			locale_filename = utils_get_locale_from_utf8(file);
 
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{

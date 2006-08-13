@@ -730,8 +730,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 						(invert ? FIF_INVERT_MATCH : 0) |
 						(case_sens ? FIF_CASE_SENSITIVE : 0);
 
-			locale_dir = g_locale_from_utf8(utf8_dir, -1, NULL, NULL, NULL);
-			if (locale_dir == NULL) locale_dir = g_strdup(utf8_dir);
+			locale_dir = utils_get_locale_from_utf8(utf8_dir);
 
 			if (search_find_in_files(search_text, locale_dir, opts))
 			{

@@ -81,8 +81,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 	view_file = g_strconcat(executable, (mode == 0) ? ".dvi" : ".pdf", NULL);
 
 	// try convert in locale for stat()
-	locale_filename = g_locale_from_utf8(view_file, -1, NULL, NULL, NULL);
-	if (locale_filename == NULL) locale_filename = g_strdup(view_file);
+	locale_filename = utils_get_locale_from_utf8(view_file);
 
 	// check wether view_file exists
 	if (stat(locale_filename, &st) != 0)
@@ -101,8 +100,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 	cmd_string = utils_str_replace(cmd_string, "%e", executable);
 
 	// try convert in locale
-	locale_cmd_string = g_locale_from_utf8(cmd_string, -1, NULL, NULL, NULL);
-	if (locale_cmd_string == NULL) locale_cmd_string = g_strdup(view_file);
+	locale_cmd_string = utils_get_locale_from_utf8(cmd_string);
 
 	argv = g_new0(gchar *, 4);
 	argv[0] = g_strdup("/bin/sh");
@@ -183,8 +181,7 @@ GPid build_link_file(gint idx)
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
-	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
-	if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
+	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 	executable = utils_remove_ext_from_filename(locale_filename);
 	object_file = g_strdup_printf("%s.o", executable);
@@ -258,8 +255,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	cmd_string = g_strjoinv(" ", cmd);
 	g_strfreev(cmd);
 
-	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
-	if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
+	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 	executable = utils_remove_ext_from_filename(locale_filename);
 
@@ -272,8 +268,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	g_free(tmp);
 	g_free(executable);
 
-	utf8_cmd_string = g_locale_to_utf8(cmd_string, -1, NULL, NULL, NULL);
-	if (utf8_cmd_string == NULL) utf8_cmd_string = g_strdup(cmd_string);
+	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
 
 	argv = g_new0(gchar *, 4);
 	argv[0] = g_strdup("/bin/sh");
@@ -342,11 +337,9 @@ GPid build_run_cmd(gint idx)
 
 	script_name = g_strdup("./geany_run_script.sh");
 
-	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
-	if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
+	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
-	locale_term_cmd = g_locale_from_utf8(app->tools_term_cmd, -1, NULL, NULL, NULL);
-	if (locale_term_cmd == NULL) locale_term_cmd = g_strdup(app->tools_term_cmd);
+	locale_term_cmd = utils_get_locale_from_utf8(app->tools_term_cmd);
 	// split the term_cmd, so arguments will work too
 	term_argv = g_strsplit(locale_term_cmd, " ", -1);
 	term_argv_len = g_strv_length(term_argv);
@@ -393,8 +386,7 @@ GPid build_run_cmd(gint idx)
 	if (chdir(working_dir) != 0)
 	{
 		gchar *utf8_working_dir = NULL;
-		utf8_working_dir = g_locale_to_utf8(working_dir, -1, NULL, NULL, NULL);
-		if (utf8_working_dir == NULL) utf8_working_dir = g_strdup(working_dir);
+		utf8_working_dir = utils_get_utf8_from_locale(working_dir);
 
 		msgwin_status_add(_("Failed to change the working directory to %s"), working_dir);
 		result_id = (GPid) 1;	// return 1, to prevent error handling of the caller

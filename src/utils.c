@@ -967,7 +967,7 @@ gboolean utils_check_disk_status(gint idx)
 
 	if (doc_list[idx].last_check > (t - GEANY_CHECK_FILE_DELAY)) return FALSE;
 
-	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
+	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	if (stat(locale_filename, &st) != 0) return FALSE;
 
 	if (doc_list[idx].mtime > t || st.st_mtime > t)
@@ -1836,7 +1836,7 @@ static void utils_recreate_recent_menu()
 
 void utils_recent_file_loaded(const gchar *filename)
 {
-	GList *item = 
+	GList *item =
 		g_queue_find_custom(app->recent_queue, filename, (GCompareFunc) strcmp);
 	gchar *data;
 

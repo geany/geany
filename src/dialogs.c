@@ -125,8 +125,7 @@ void dialogs_show_open_file ()
 			{
 				gchar *locale_filename;
 
-				locale_filename = g_locale_from_utf8(initdir, -1, NULL, NULL, NULL);
-				if (locale_filename == NULL) locale_filename = g_strdup(initdir);
+				locale_filename = utils_get_locale_from_utf8(initdir);
 
 				if (g_path_is_absolute(locale_filename))
 					gtk_file_chooser_set_current_folder(
@@ -178,8 +177,7 @@ void dialogs_show_save_as()
 	// If the current document has a filename we use that as the default.
 	if (doc_list[idx].file_name != NULL)
 	{
-		gchar *locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
-		if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
+		gchar *locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 		if (g_path_is_absolute(locale_filename))
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->save_filesel), locale_filename);
@@ -1061,8 +1059,7 @@ void dialogs_show_file_properties(gint idx)
 
 
 #if defined(HAVE_SYS_STAT_H) && defined(TIME_WITH_SYS_TIME) && defined(HAVE_SYS_TYPES_H)
-	locale_filename = g_locale_from_utf8(doc_list[idx].file_name, -1, NULL, NULL, NULL);
-	if (locale_filename == NULL) locale_filename = g_strdup(doc_list[idx].file_name);
+	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	if (stat(locale_filename, &st) == 0)
 	{
 		// first copy the returned string and the trim it, to not modify the static glibc string

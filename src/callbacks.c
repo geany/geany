@@ -847,8 +847,7 @@ void
 on_file_open_entry_activate            (GtkEntry        *entry,
                                         gpointer         user_data)
 {
-	gchar *locale_filename = g_locale_from_utf8(gtk_entry_get_text(entry), -1, NULL, NULL, NULL);
-	if (locale_filename == NULL) locale_filename = g_strdup(gtk_entry_get_text(entry));
+	gchar *locale_filename = utils_get_locale_from_utf8(gtk_entry_get_text(entry));
 
 	if (g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
 	{
@@ -874,8 +873,7 @@ on_file_open_selection_changed         (GtkFileChooser  *filechooser,
 	if (filename)
 	{
 		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
-		gchar *utf8_filename = g_locale_to_utf8(filename, -1, NULL, NULL, NULL);
-		if (utf8_filename == NULL) utf8_filename = g_strdup(filename);
+		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(
 				GTK_WIDGET(filechooser), "file_entry")), utf8_filename);
@@ -1672,10 +1670,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 		case 2: //make object
 		{
 			gchar *locale_filename, *short_file, *noext, *object_file; //temp
-			locale_filename = g_locale_from_utf8(doc_list[idx].file_name,
-				-1, NULL, NULL, NULL);
-			if (locale_filename == NULL)
-				locale_filename = g_strdup(doc_list[idx].file_name);
+			locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 			short_file = g_path_get_basename(locale_filename);
 			g_free(locale_filename);
@@ -2265,9 +2260,7 @@ void
 on_recent_file_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gchar *locale_filename = g_locale_from_utf8((gchar*) user_data, -1, NULL, NULL, NULL);
-
-	if (locale_filename == NULL) locale_filename = g_strdup((gchar*) user_data);
+	gchar *locale_filename = utils_get_locale_from_utf8((gchar*) user_data);
 
 	document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL);
 	utils_recent_file_loaded((gchar*) user_data);
