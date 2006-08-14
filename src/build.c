@@ -249,7 +249,8 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	gint     stdout_fd;
 	gint     stderr_fd;
 
-	app->cur_idx = idx;
+	g_return_val_if_fail(idx >= 0 && doc_list[idx].is_valid, (GPid) 1);
+
 	document_clear_indicators(idx);
 
 	cmd_string = g_strjoinv(" ", cmd);
@@ -281,6 +282,13 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	gtk_list_store_clear(msgwindow.store_compiler);
 	msgwin_compiler_add(COLOR_BLUE, FALSE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
+
+	// set the build info for the message window
+	{
+		filetype *ft = doc_list[idx].file_type;
+		guint ft_id = (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL]->id : ft->id;
+		msgwin_set_build_info(working_dir, ft_id);
+	}
 
 	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
 						NULL, NULL, &child_pid, NULL, &stdout_fd, &stderr_fd, &error))
@@ -473,7 +481,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 			{
 				gchar *filename;
 				gint line;
-				utils_parse_compiler_error_line(g_strstrip(msg), &filename, &line);
+				msgwin_parse_compiler_error_line(g_strstrip(msg), &filename, &line);
 				if (line != -1)
 				{
 					gint idx = document_find_by_filename(filename, FALSE);

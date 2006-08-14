@@ -253,7 +253,6 @@ static void main_init(void)
 	app->tagbar = lookup_widget(app->window, "scrolledwindow2");
 	app->treeview_notebook = lookup_widget(app->window, "notebook3");
 	app->notebook = lookup_widget(app->window, "notebook1");
-	msgwindow.notebook = lookup_widget(app->window, "notebook_info");
 	app->statusbar = lookup_widget(app->window, "statusbar");
 	app->popup_menu = create_edit_menu1();
 	app->toolbar_menu = create_toolbar_popup_menu1();
@@ -317,10 +316,8 @@ static void main_init(void)
 	app->undo_items[0] = lookup_widget(app->popup_menu, "undo1");
 	app->undo_items[1] = lookup_widget(app->window, "menu_undo2");
 	app->undo_items[2] = lookup_widget(app->window, "toolbutton_undo");
-	msgwindow.tree_status = lookup_widget(app->window, "treeview3");
-	msgwindow.tree_msg = lookup_widget(app->window, "treeview4");
-	msgwindow.tree_compiler = lookup_widget(app->window, "treeview5");
 
+	msgwin_init();
 	search_init();
 }
 

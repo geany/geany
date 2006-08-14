@@ -201,13 +201,6 @@ void utils_update_fold_items(void);
  * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00". */
 gint utils_strtod(const gchar *source, gchar **end, gboolean with_route);
 
-/* try to parse the file and line number where the error occured described in line
- * and when something useful is found, it stores the line number in *line and the
- * relevant file with the error in filename.
- * *line will be -1 if no error was found in string.
- * filename must be freed unless it is NULL. */
-void utils_parse_compiler_error_line(const gchar *string, gchar **filename, gint *line);
-
 // returned string must be freed.
 gchar *utils_get_current_time_string();
 

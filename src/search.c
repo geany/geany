@@ -100,7 +100,7 @@ void search_init()
 #define FREE_WIDGET(wid) \
 	if (wid && GTK_IS_WIDGET(wid)) gtk_widget_destroy(wid);
 
-void search_finalise()
+void search_finalize()
 {
 	FREE_WIDGET(widgets.find_dialog);
 	FREE_WIDGET(widgets.replace_dialog);
@@ -812,8 +812,8 @@ gboolean search_find_in_files(const gchar *search_text, const gchar *dir, fif_op
 	}
 	else
 	{
-		g_free(find_in_files_dir);
-		find_in_files_dir = g_strdup(dir);
+		g_free(msgwindow.find_in_files_dir);
+		msgwindow.find_in_files_dir = g_strdup(dir);
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
 			search_read_io, NULL);
 		g_child_watch_add(child_pid, search_close_pid, NULL);

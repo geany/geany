@@ -164,7 +164,6 @@ typedef struct MyApp
 	gint				 tab_pos_editor;
 	gint				 tab_pos_msgwin;
 	gint				 tab_pos_sidebar;
-	gint				 cur_idx;	// currently only used by the build system (build_spawn_cmd)
 	guint				 mru_length;
 	gint				 autocompletion_max_height;
 	gint				 long_line_type;

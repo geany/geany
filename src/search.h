@@ -41,7 +41,7 @@ extern GeanySearchData search_data;
 
 void search_init();
 
-void search_finalise();
+void search_finalize();
 
 void search_show_find_dialog();
 

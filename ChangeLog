@@ -1,3 +1,17 @@
+2006-08-14  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sci_cb.c: Applied patch from Jens Granseuer to fix build with
+                 gcc 2.95 (closes #1539502).
+ * src/build.c, src/geany.h, src/msgwindow.c, src/msgwindow.h,
+   src/callbacks.c, src/search.c, src/search.h, src/main.c:
+   Store build information instead of using app->cur_idx.
+   Assume C-like warning messages when running make when the current
+   file is a Makefile.
+   Moved some msgwin setup and cleanup code to msgwindow.c.
+ * src/utils.c, src/utils.h
+   Moved utils_parse_compiler_error_line to msgwindow.c.
+
+
 2006-08-13  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c:

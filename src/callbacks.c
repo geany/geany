@@ -135,6 +135,9 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	}
 	g_queue_free(app->recent_queue);
 
+	msgwin_finalize();
+	search_finalize();
+
 	if (app->prefs_dialog && GTK_IS_WIDGET(app->prefs_dialog)) gtk_widget_destroy(app->prefs_dialog);
 	if (app->save_filesel && GTK_IS_WIDGET(app->save_filesel)) gtk_widget_destroy(app->save_filesel);
 	if (app->open_filesel && GTK_IS_WIDGET(app->open_filesel)) gtk_widget_destroy(app->open_filesel);
@@ -145,7 +148,6 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 		g_object_unref(app->default_tag_tree);
 		gtk_widget_destroy(app->default_tag_tree);
 	}
-	search_finalise();
 	scintilla_release_resources();
 #ifdef HAVE_VTE
 	if (app->have_vte) vte_close();

@@ -42,7 +42,7 @@ enum
 };
 
 
-typedef struct msgwin
+typedef struct
 {
 	GtkListStore	*store_status;
 	GtkListStore	*store_msg;
@@ -54,12 +54,15 @@ typedef struct msgwin
 	GtkWidget		*popup_msg_menu;
 	GtkWidget		*popup_compiler_menu;
 	GtkWidget		*notebook;
-} msgwin;
+	gchar			*find_in_files_dir;
+} MessageWindow;
 
-msgwin msgwindow;
+extern MessageWindow msgwindow;
 
-extern gchar *find_in_files_dir;
 
+void msgwin_init();
+
+void msgwin_finalize();
 
 void msgwin_prepare_msg_tree_view(void);
 
@@ -73,9 +76,18 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, .
 
 void msgwin_status_add(gchar const *format, ...);
 
+void msgwin_set_build_info(const gchar *dir, guint file_type_id);
+
 GtkWidget *msgwin_create_message_popup_menu(gint type);
 
 gboolean msgwin_goto_compiler_file_line();
+
+/* try to parse the file and line number where the error occured described in line
+ * and when something useful is found, it stores the line number in *line and the
+ * relevant file with the error in filename.
+ * *line will be -1 if no error was found in string.
+ * filename must be freed unless it is NULL. */
+void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gint *line);
 
 gboolean msgwin_goto_messages_file_line();
 

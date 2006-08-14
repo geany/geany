@@ -35,13 +35,45 @@
 #include <stdlib.h>
 
 
+static struct
+{
+	gchar	*dir;
+	guint	file_type_id;
+} build_info = {NULL, GEANY_FILETYPES_ALL};
+
+
 static GdkColor dark = {0, 58832, 58832, 58832};
 static GdkColor white = {0, 65535, 65535, 65535};
 
-gchar *find_in_files_dir = NULL;
+MessageWindow msgwindow;
 
 
 static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line);
+
+
+void msgwin_init()
+{
+	msgwindow.tree_status = lookup_widget(app->window, "treeview3");
+	msgwindow.tree_msg = lookup_widget(app->window, "treeview4");
+	msgwindow.tree_compiler = lookup_widget(app->window, "treeview5");
+	msgwindow.notebook = lookup_widget(app->window, "notebook_info");
+	msgwindow.find_in_files_dir = NULL;
+}
+
+
+void msgwin_finalize()
+{
+	g_free(msgwindow.find_in_files_dir);
+	g_free(build_info.dir);
+}
+
+
+void msgwin_set_build_info(const gchar *dir, guint file_type_id)
+{
+	g_free(build_info.dir);
+	build_info.dir = g_strdup(dir);
+	build_info.file_type_id = file_type_id;
+}
 
 
 /* does some preparing things to the status message list widget */
@@ -263,21 +295,155 @@ gboolean msgwin_goto_compiler_file_line()
 			gint line;
 			gint idx;
 			gchar *filename;
-			utils_parse_compiler_error_line(string, &filename, &line);
+			msgwin_parse_compiler_error_line(string, &filename, &line);
 			if (filename != NULL && line > -1)
 			{
-				// use document_open_file to find an already open file, or open it in place
-				idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
-				// document_set_indicator will check valid idx
-				document_set_indicator(idx, line - 1);
-				// utils_goto_file_line will check valid filename.
-				ret = utils_goto_file_line(filename, FALSE, line);
+				gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+				idx = document_find_by_filename(utf8_filename, FALSE);
+				g_free(utf8_filename);
+
+				if (idx < 0)	// file not already open
+					idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
+
+				if (idx >= 0 && doc_list[idx].is_valid)
+				{
+					document_set_indicator(idx, line - 1);
+					ret = utils_goto_line(idx, line);
+				}
 			}
 			g_free(filename);
 		}
 		g_free(string);
 	}
 	return ret;
+}
+
+
+/* try to parse the file and line number where the error occured described in line
+ * and when something useful is found, it stores the line number in *line and the
+ * relevant file with the error in *filename.
+ * *line will be -1 if no error was found in string.
+ * *filename must be freed unless it is NULL. */
+void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gint *line)
+{
+	gchar *end = NULL;
+	gchar **fields;
+	gchar *pattern;				// pattern to split the error message into some fields
+	guint field_min_len;		// used to detect errors after parsing
+	guint field_idx_line;		// idx of the field where the line is
+	guint field_idx_file;		// idx of the field where the filename is
+	guint skip_dot_slash = 0;	// number of characters to skip at the beginning of the filename
+
+	*filename = NULL;
+	*line = -1;
+
+	g_return_if_fail(build_info.dir != NULL);
+	if (string == NULL) return;
+
+	switch (build_info.file_type_id)
+	{
+		// only gcc is supported, I don't know any other C(++) compilers and their error messages
+		case GEANY_FILETYPES_C:
+		case GEANY_FILETYPES_CPP:
+		case GEANY_FILETYPES_RUBY:
+		case GEANY_FILETYPES_JAVA:
+		case GEANY_FILETYPES_MAKE:	// Assume makefile is building C-like code
+		{
+			// empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
+			// empty.c:21: error: conflicting types for `foo'
+			pattern = ":";
+			field_min_len = 4;
+			field_idx_line = 1;
+			field_idx_file = 0;
+			break;
+		}
+		case GEANY_FILETYPES_LATEX:
+		{
+			// ./kommtechnik_2b.tex:18: Emergency stop.
+			pattern = ":";
+			field_min_len = 3;
+			field_idx_line = 1;
+			field_idx_file = 0;
+			break;
+		}
+		case GEANY_FILETYPES_PHP:
+		{
+			// Parse error: parse error, unexpected T_CASE in brace_bug.php on line 3
+			pattern = " ";
+			field_min_len = 11;
+			field_idx_line = 10;
+			field_idx_file = 7;
+			break;
+		}
+		case GEANY_FILETYPES_PERL:
+		{
+			// syntax error at test.pl line 7, near "{
+			pattern = " ";
+			field_min_len = 6;
+			field_idx_line = 5;
+			field_idx_file = 3;
+			break;
+		}
+		// the error output of python and tcl equals
+		case GEANY_FILETYPES_TCL:
+		case GEANY_FILETYPES_PYTHON:
+		{
+			// File "HyperArch.py", line 37, in ?
+			// (file "clrdial.tcl" line 12)
+			pattern = " \"";
+			field_min_len = 6;
+			field_idx_line = 5;
+			field_idx_file = 2;
+			break;
+		}
+		case GEANY_FILETYPES_PASCAL:
+		{
+			// bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
+			pattern = "(";
+			field_min_len = 2;
+			field_idx_line = 1;
+			field_idx_file = 0;
+			break;
+		}
+		case GEANY_FILETYPES_D:
+		{
+			// warning - pi.d(118): implicit conversion of expression (digit) of type int ...
+			pattern = " (";
+			field_min_len = 4;
+			field_idx_line = 3;
+			field_idx_file = 2;
+			break;
+		}
+		default: return;
+	}
+
+	fields = g_strsplit_set(string, pattern, field_min_len);
+
+	// parse the line
+	if (g_strv_length(fields) < field_min_len)
+	{
+		g_strfreev(fields);
+		return;
+	}
+
+	*line = strtol(fields[field_idx_line], &end, 10);
+
+	// if the line could not be read, line is 0 and an error occurred, so we leave
+	if (fields[field_idx_line] == end)
+	{
+		g_strfreev(fields);
+		return;
+	}
+
+	// skip some characters at the beginning of the filename, at the moment only "./"
+	// can be extended if other "trash" is known
+	if (strncmp(fields[field_idx_file], "./", 2) == 0) skip_dot_slash = 2;
+
+	// get the build directory to get the path to look for other files
+	*filename = g_strconcat(build_info.dir, G_DIR_SEPARATOR_S,
+		fields[field_idx_file] + skip_dot_slash, NULL);
+
+	g_strfreev(fields);
 }
 
 
@@ -370,7 +536,7 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 	cur_idx = document_get_cur_idx();
 	if (cur_idx >= 0 && doc_list[cur_idx].is_valid)
 	{
-		*filename = g_strconcat(find_in_files_dir, G_DIR_SEPARATOR_S,
+		*filename = g_strconcat(msgwindow.find_in_files_dir, G_DIR_SEPARATOR_S,
 			fields[field_idx_file] + skip_dot_slash, NULL);
 	}
 
