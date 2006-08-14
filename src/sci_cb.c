@@ -393,8 +393,8 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx)
 	tags = tm_workspace_find(word, tm_tag_max_t, NULL, FALSE, doc_list[idx].file_type->lang);
 	if (tags->len == 1 && TM_TAG(tags->pdata[0])->atts.entry.arglist)
 	{
-		tag = TM_TAG(tags->pdata[0]);
 		gchar *calltip;
+		tag = TM_TAG(tags->pdata[0]);
 		if (tag->atts.entry.var_type)
 			calltip = g_strconcat(tag->atts.entry.var_type, " ", tag->name,
 										 " ", tag->atts.entry.arglist, NULL);
