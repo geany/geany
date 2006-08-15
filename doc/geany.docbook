@@ -1458,14 +1458,6 @@
 							</thead>
 							<tbody>
 								<row>
-									<entry>default</entry>
-									<entry>The default style for text (e.g. for files without
-										   filetype). For the detailed format, please see the above
-										   "[styling] Section".
-									</entry>
-									<entry>default=0x000000;0xffffff;false;false</entry>
-								</row>
-								<row>
 									<entry>selection</entry>
 									<entry>The style for colouring selections. Only foreground and
 										   background colour are interpreted.

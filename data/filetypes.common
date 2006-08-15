@@ -1,7 +1,5 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# foreground;background;bold;italic
-default=0x000000;0xffffff;false;false
 # bold for selection is useless, so say false
 selection=0xc0c0c0;0x7f0000;false;false
 brace_good=0x0000ff;0xFFFFFF;true;false

@@ -224,10 +224,6 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 {
 	if (types[GEANY_FILETYPES_ALL] == NULL) styleset_common_init();
 
-	SSM(sci, SCI_STYLESETFORE, STYLE_DEFAULT, invert(types[GEANY_FILETYPES_ALL]->styling[0][0]));
-	SSM(sci, SCI_STYLESETBACK, STYLE_DEFAULT, invert(types[GEANY_FILETYPES_ALL]->styling[0][1]));
-	SSM(sci, SCI_STYLESETBOLD, STYLE_DEFAULT, invert(types[GEANY_FILETYPES_ALL]->styling[0][2]));
-
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
 	SSM(sci, SCI_SETUSETABS, TRUE, 0);
@@ -441,6 +437,7 @@ void styleset_c(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) types[GEANY_FILETYPES_C]->keywords[1]);
 	//SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) typedefsKeyWords);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_C, 0);
 	styleset_set_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_C, 0);
 	styleset_set_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_C, 1);
 	styleset_set_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_C, 2);
@@ -572,6 +569,7 @@ void styleset_cpp(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_CPP]->keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) types[GEANY_FILETYPES_CPP]->keywords[1]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CPP, 0);
 	styleset_set_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_CPP, 0);
 	styleset_set_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_CPP, 1);
 	styleset_set_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_CPP, 2);
@@ -660,6 +658,7 @@ void styleset_pascal(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_PASCAL]->keywords[0]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PASCAL, 0);
 	styleset_set_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_PASCAL, 0);
 	styleset_set_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_PASCAL, 1);
 	styleset_set_style(sci, SCE_C_NUMBER, GEANY_FILETYPES_PASCAL, 2);
@@ -717,6 +716,7 @@ void styleset_makefile(ScintillaObject *sci)
 	SSM (sci, SCI_SETLEXER, SCLEX_MAKEFILE, 0);
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_MAKE]->wordchars);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_MAKE, 0);
 	styleset_set_style(sci, SCE_MAKE_DEFAULT, GEANY_FILETYPES_MAKE, 0);
 	styleset_set_style(sci, SCE_MAKE_COMMENT, GEANY_FILETYPES_MAKE, 1);
 	styleset_set_style(sci, SCE_MAKE_PREPROCESSOR, GEANY_FILETYPES_MAKE, 2);
@@ -779,6 +779,7 @@ void styleset_latex(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_LATEX]->keywords[0]);
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_LATEX]->wordchars);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_LATEX, 0);
 	styleset_set_style(sci, SCE_L_DEFAULT, GEANY_FILETYPES_LATEX, 0);
 	styleset_set_style(sci, SCE_L_COMMAND, GEANY_FILETYPES_LATEX, 1);
 	styleset_set_style(sci, SCE_L_TAG, GEANY_FILETYPES_LATEX, 2);
@@ -953,6 +954,7 @@ void styleset_markup(ScintillaObject *sci)
 	SSM(sci, SCI_SETHOTSPOTSINGLELINE, 1, 0);
 	SSM(sci, SCI_STYLESETHOTSPOT, SCE_H_QUESTION, 1);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_XML, 0);
 	styleset_set_style(sci, SCE_H_DEFAULT, GEANY_FILETYPES_XML, 0);
 	styleset_set_style(sci, SCE_H_TAG, GEANY_FILETYPES_XML, 1);
 	styleset_set_style(sci, SCE_H_TAGUNKNOWN, GEANY_FILETYPES_XML, 2);
@@ -1225,6 +1227,7 @@ void styleset_java(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) types[GEANY_FILETYPES_JAVA]->keywords[2]);
 	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) types[GEANY_FILETYPES_JAVA]->keywords[3]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_JAVA, 0);
 	styleset_set_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_JAVA, 0);
 	styleset_set_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_JAVA, 1);
 	styleset_set_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_JAVA, 2);
@@ -1336,6 +1339,7 @@ void styleset_perl(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_PERL]->keywords[0]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PERL, 0);
 	styleset_set_style(sci, SCE_PL_DEFAULT, GEANY_FILETYPES_PERL, 0);
 	styleset_set_style(sci, SCE_PL_ERROR, GEANY_FILETYPES_PERL, 1);
 	styleset_set_style(sci, SCE_PL_COMMENTLINE, GEANY_FILETYPES_PERL, 2);
@@ -1406,6 +1410,7 @@ void styleset_python(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_PYTHON]->keywords[0]);
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_PYTHON, 0);
 	styleset_set_style(sci, SCE_P_DEFAULT, GEANY_FILETYPES_PYTHON, 0);
 	styleset_set_style(sci, SCE_P_COMMENTLINE, GEANY_FILETYPES_PYTHON, 1);
 	styleset_set_style(sci, SCE_P_NUMBER, GEANY_FILETYPES_PYTHON, 2);
@@ -1481,6 +1486,7 @@ void styleset_ruby(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_RUBY]->keywords[0]);
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_RUBY, 0);
 	styleset_set_style(sci, SCE_RB_DEFAULT, GEANY_FILETYPES_RUBY, 0);
 	styleset_set_style(sci, SCE_RB_COMMENTLINE, GEANY_FILETYPES_RUBY, 1);
 	styleset_set_style(sci, SCE_RB_NUMBER, GEANY_FILETYPES_RUBY, 2);
@@ -1554,6 +1560,7 @@ void styleset_sh(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_SH]->keywords[0]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_SH, 0);
 	styleset_set_style(sci, SCE_SH_DEFAULT, GEANY_FILETYPES_SH, 0);
 	styleset_set_style(sci, SCE_SH_COMMENTLINE, GEANY_FILETYPES_SH, 1);
 	styleset_set_style(sci, SCE_SH_NUMBER, GEANY_FILETYPES_SH, 2);
@@ -1708,6 +1715,7 @@ void styleset_docbook(ScintillaObject *sci)
 	// Unknown tags and attributes are highlighed in red.
 	// If a tag is actually OK, it should be added in lower case to the htmlKeyWords string.
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_DOCBOOK, 0);
 	styleset_set_style(sci, SCE_H_DEFAULT, GEANY_FILETYPES_DOCBOOK, 0);
 	styleset_set_style(sci, SCE_H_TAG, GEANY_FILETYPES_DOCBOOK, 1);
 	styleset_set_style(sci, SCE_H_TAGUNKNOWN, GEANY_FILETYPES_DOCBOOK, 2);
@@ -1828,6 +1836,7 @@ void styleset_css(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETLEXER, SCLEX_CSS, 0);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CSS, 0);
 	styleset_set_style(sci, SCE_CSS_DEFAULT, GEANY_FILETYPES_CSS, 0);
 	styleset_set_style(sci, SCE_CSS_COMMENT, GEANY_FILETYPES_CSS, 1);
 	styleset_set_style(sci, SCE_CSS_TAG, GEANY_FILETYPES_CSS, 2);
@@ -1886,6 +1895,7 @@ void styleset_conf(ScintillaObject *sci)
 
 	SSM (sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CONF, 0);
 	styleset_set_style(sci, SCE_PROPS_DEFAULT, GEANY_FILETYPES_CONF, 0);
 	styleset_set_style(sci, SCE_PROPS_COMMENT, GEANY_FILETYPES_CONF, 1);
 	styleset_set_style(sci, SCE_PROPS_SECTION, GEANY_FILETYPES_CONF, 2);
@@ -1955,6 +1965,7 @@ void styleset_asm(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) types[GEANY_FILETYPES_ASM]->keywords[2]);
 	//SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) types[GEANY_FILETYPES_ASM]->keywords[0]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ASM, 0);
 	styleset_set_style(sci, SCE_ASM_DEFAULT, GEANY_FILETYPES_ASM, 0);
 	styleset_set_style(sci, SCE_ASM_COMMENT, GEANY_FILETYPES_ASM, 1);
 	styleset_set_style(sci, SCE_ASM_NUMBER, GEANY_FILETYPES_ASM, 2);
@@ -2054,6 +2065,7 @@ void styleset_sql(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_SQL]->keywords[0]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_SQL, 0);
 	styleset_set_style(sci, SCE_SQL_DEFAULT, GEANY_FILETYPES_SQL, 0);
 	styleset_set_style(sci, SCE_SQL_COMMENT, GEANY_FILETYPES_SQL, 1);
 	styleset_set_style(sci, SCE_SQL_COMMENTLINE, GEANY_FILETYPES_SQL, 2);
@@ -2132,6 +2144,7 @@ void styleset_caml(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_CAML]->keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) types[GEANY_FILETYPES_CAML]->keywords[1]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CAML, 0);
 	styleset_set_style(sci, SCE_CAML_DEFAULT, GEANY_FILETYPES_CAML, 0);
 	styleset_set_style(sci, SCE_CAML_COMMENT, GEANY_FILETYPES_CAML, 1);
 	styleset_set_style(sci, SCE_CAML_COMMENT1, GEANY_FILETYPES_CAML, 2);
@@ -2204,6 +2217,7 @@ void styleset_oms(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_OMS]->keywords[0]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_OMS, 0);
 	styleset_set_style(sci, SCE_SH_DEFAULT, GEANY_FILETYPES_OMS, 0);
 	styleset_set_style(sci, SCE_SH_COMMENTLINE, GEANY_FILETYPES_OMS, 1);
 	styleset_set_style(sci, SCE_SH_NUMBER, GEANY_FILETYPES_OMS, 2);
@@ -2283,6 +2297,7 @@ void styleset_tcl(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) types[GEANY_FILETYPES_TCL]->keywords[3]);
 	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) types[GEANY_FILETYPES_TCL]->keywords[4]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_TCL, 0);
 	styleset_set_style(sci, SCE_TCL_DEFAULT, GEANY_FILETYPES_TCL, 0);
 	styleset_set_style(sci, SCE_TCL_COMMENT, GEANY_FILETYPES_TCL, 1);
 	styleset_set_style(sci, SCE_TCL_COMMENTLINE, GEANY_FILETYPES_TCL, 2);
@@ -2397,6 +2412,7 @@ void styleset_d(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_D]->keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) types[GEANY_FILETYPES_D]->keywords[1]);
 
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_D, 0);
 	styleset_set_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_D, 0);
 	styleset_set_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_D, 1);
 	styleset_set_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_D, 2);

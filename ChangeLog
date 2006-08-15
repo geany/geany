@@ -5,6 +5,9 @@
    Keep the old cursor position when working on a single line
    (do not jump to line start).
  * src/sci_cb.c: Fixed "while" and "switch" autocompletion.
+ * src/highlighting.c, data/filetypes.common, doc/geany.docbook:
+   Use the filetype's default style(SCE_*_DEFAULT) as the main default
+   style(STYLE_DEFAULT).
 
 
 2006-08-14  Nick Treleaven  <nick.treleaven@btinternet.com>
