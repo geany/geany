@@ -1,3 +1,9 @@
+2006-08-15  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * tagmanager/c.c: Backported calltips workspace support for C-like
+                   user files from Anjuta.
+
+
 2006-08-15  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c:
