@@ -1070,6 +1070,7 @@ void document_set_filetype(gint idx, filetype *type)
 	if (! type || idx < 0) return;
 	if (type->id > GEANY_MAX_FILE_TYPES) return;
 
+	geany_debug("%s : %s (%s)",	doc_list[idx].file_name, type->name, doc_list[idx].encoding);
 	doc_list[idx].file_type = type;
 	document_update_tag_list(idx, TRUE);
 	type->style_func_ptr(doc_list[idx].sci);
@@ -1114,7 +1115,6 @@ void document_set_filetype(gint idx, filetype *type)
 	}
 	sci_colourise(doc_list[idx].sci, 0, -1);
 	utils_build_show_hide(idx);
-	geany_debug("%s : %s (%s)",	doc_list[idx].file_name, type->name, doc_list[idx].encoding);
 }
 
 
