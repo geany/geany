@@ -1,3 +1,11 @@
+2006-08-15  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c:
+   Made increase/decrease indentation working with selections.
+   Keep the old cursor position when working on a single line
+   (do not jump to line start).
+
+
 2006-08-14  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c: Applied patch from Jens Granseuer to fix build with
@@ -8,7 +16,7 @@
    Assume C-like warning messages when running make when the current
    file is a Makefile.
    Moved some msgwin setup and cleanup code to msgwindow.c.
- * src/utils.c, src/utils.h
+ * src/utils.c, src/utils.h:
    Moved utils_parse_compiler_error_line to msgwindow.c.
 
 
