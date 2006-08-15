@@ -32,7 +32,7 @@ all: $(COMPLIB)
 clean:
 	$(RM) deps.mak *.o $(COMPLIB)
 
-$(COMPLIB): args.o c.o d.o make.o conf.o pascal.o perl.o php.o \
+$(COMPLIB): args.o c.o fortran.o d.o make.o conf.o pascal.o perl.o php.o \
 python.o regex.o sh.o ctags.o entry.o get.o keyword.o options.o parse.o \
 read.o sort.o strlist.o latex.o docbook.o tcl.o ruby.o asm.o sql.o css.o vstring.o tm_workspace.o tm_work_object.o \
 tm_source_file.o tm_project.o tm_tag.o tm_symbol.o tm_file_entry.o \
