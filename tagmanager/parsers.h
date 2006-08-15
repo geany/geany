@@ -32,7 +32,8 @@
     RubyParser, \
     TclParser, \
     ShParser, \
-    DParser
+    DParser, \
+    FortranParser
 
 /*
 langType of each parser
@@ -54,6 +55,7 @@ langType of each parser
 15	TclParser
 16	ShParser
 17	DParser
+18	FortranParser
 */
 #endif	/* _PARSERS_H */
 

@@ -58,7 +58,8 @@ enum
 	FILETYPE_UID_TCL,		// 19
 	FILETYPE_UID_ALL,		// 20
 	FILETYPE_UID_D,			// 21
-	//FILETYPE_UID_HTML,	// 22
+	FILETYPE_UID_FORTRAN	// 22
+	//FILETYPE_UID_HTML,	// 23
 };
 
 
@@ -96,6 +97,7 @@ filetype *filetypes_get_from_uid(gint uid)
 		case FILETYPE_UID_TCL:		return filetypes[GEANY_FILETYPES_TCL];
 		case FILETYPE_UID_ALL:		return filetypes[GEANY_FILETYPES_ALL];
 		case FILETYPE_UID_D:		return filetypes[GEANY_FILETYPES_D];
+		case FILETYPE_UID_FORTRAN:	return filetypes[GEANY_FILETYPES_FORTRAN];
 		//case FILETYPE_UID_HTML:	return filetypes[GEANY_FILETYPES_HTML];
 		default: 					return NULL;
 	}
@@ -242,6 +244,30 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_ASM]->comment_close = NULL;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_ASM]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_ASM]->title, filetypes[GEANY_FILETYPES_ASM]);
+
+#define FORTRAN
+	filetypes[GEANY_FILETYPES_FORTRAN] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_FORTRAN]->id = GEANY_FILETYPES_FORTRAN;
+	filetypes[GEANY_FILETYPES_FORTRAN]->uid = FILETYPE_UID_FORTRAN;
+	filetypes[GEANY_FILETYPES_FORTRAN]->item = NULL;
+	filetypes[GEANY_FILETYPES_FORTRAN]->lang = 18;
+	filetypes[GEANY_FILETYPES_FORTRAN]->name = g_strdup("Fortran");
+	filetypes[GEANY_FILETYPES_FORTRAN]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_FORTRAN]->title = g_strdup(_("Fortran source file (F77)"));
+	filetypes[GEANY_FILETYPES_FORTRAN]->extension = g_strdup("f");
+	filetypes[GEANY_FILETYPES_FORTRAN]->pattern = g_new0(gchar*, 7);
+	filetypes[GEANY_FILETYPES_FORTRAN]->pattern[0] = g_strdup("*.f");
+	filetypes[GEANY_FILETYPES_FORTRAN]->pattern[1] = g_strdup("*.for");
+	filetypes[GEANY_FILETYPES_FORTRAN]->pattern[2] = g_strdup("*.ftn");
+	filetypes[GEANY_FILETYPES_FORTRAN]->pattern[3] = g_strdup("*.f77");
+	filetypes[GEANY_FILETYPES_FORTRAN]->pattern[4] = g_strdup("*.f90");
+	filetypes[GEANY_FILETYPES_FORTRAN]->pattern[5] = g_strdup("*.f95");
+	filetypes[GEANY_FILETYPES_FORTRAN]->pattern[6] = NULL;
+	filetypes[GEANY_FILETYPES_FORTRAN]->style_func_ptr = styleset_fortran;
+	filetypes[GEANY_FILETYPES_FORTRAN]->comment_open = g_strdup("c");
+	filetypes[GEANY_FILETYPES_FORTRAN]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_FORTRAN]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_FORTRAN]->title, filetypes[GEANY_FILETYPES_FORTRAN]);
 
 #define CAML
 	filetypes[GEANY_FILETYPES_CAML] = g_new0(filetype, 1);

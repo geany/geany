@@ -83,4 +83,6 @@ void styleset_tcl(ScintillaObject *sci);
 
 void styleset_d(ScintillaObject *sci);
 
+void styleset_fortran(ScintillaObject *sci);
+
 #endif

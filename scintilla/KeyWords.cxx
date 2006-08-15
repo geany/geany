@@ -141,6 +141,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmBash);
 	LINK_LEXER(lmOMS);
 	LINK_LEXER(lmCaml);
+	LINK_LEXER(lmFortran);
 	LINK_LEXER(lmPython);
 	LINK_LEXER(lmBatch);
 	LINK_LEXER(lmDiff);

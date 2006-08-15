@@ -357,6 +357,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 			field_idx_file = 0;
 			break;
 		}
+		case GEANY_FILETYPES_FORTRAN:
 		case GEANY_FILETYPES_LATEX:
 		{
 			// ./kommtechnik_2b.tex:18: Emergency stop.

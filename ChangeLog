@@ -16,6 +16,12 @@
    style(STYLE_DEFAULT).
  * src/sci_cb.c: Improved HTML "<table>" auto completion to use the
                  indentation better.
+ * src/filetypes.c, src/highlighting.c, src/msgwindow.c,
+   data/filetypes.fortran, data/filetype_extensions.conf,
+   scintilla/Makefile.am, scintilla/LexFortran.cxx,
+   scintilla/KeyWords.cxx, tagmanager/fortran.c,
+   tagmanager/Makefile.am, tagmanager/parsers.c:
+   Added new filetype Fortran 77.
 
 
 2006-08-14  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -16,6 +16,7 @@ LexCaml.cxx \
 LexConf.cxx \
 LexCrontab.cxx \
 LexCSS.cxx \
+LexFortran.cxx \
 LexHTML.cxx \
 LexOthers.cxx \
 LexPascal.cxx \

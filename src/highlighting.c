@@ -1983,6 +1983,84 @@ void styleset_asm(ScintillaObject *sci)
 }
 
 
+static void styleset_fortran_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.fortran", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.fortran", NULL);
+
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	types[GEANY_FILETYPES_FORTRAN] = g_new(style_set, 1);
+	styleset_get_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_FORTRAN]->styling[0]);
+	styleset_get_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", types[GEANY_FILETYPES_FORTRAN]->styling[1]);
+	styleset_get_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", types[GEANY_FILETYPES_FORTRAN]->styling[2]);
+	styleset_get_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", types[GEANY_FILETYPES_FORTRAN]->styling[3]);
+	styleset_get_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", types[GEANY_FILETYPES_FORTRAN]->styling[4]);
+	styleset_get_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_FORTRAN]->styling[5]);
+	styleset_get_hex(config, config_home, "styling", "string2", "0x111199", "0xffffff", "true", types[GEANY_FILETYPES_FORTRAN]->styling[6]);
+	styleset_get_hex(config, config_home, "styling", "word", "0x7f0000", "0xffffff", "true", types[GEANY_FILETYPES_FORTRAN]->styling[7]);
+	styleset_get_hex(config, config_home, "styling", "word2", "0x000099", "0xffffff", "true", types[GEANY_FILETYPES_FORTRAN]->styling[8]);
+	styleset_get_hex(config, config_home, "styling", "word3", "0x3d670f", "0xffffff", "true", types[GEANY_FILETYPES_FORTRAN]->styling[9]);
+	styleset_get_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", types[GEANY_FILETYPES_FORTRAN]->styling[10]);
+	styleset_get_hex(config, config_home, "styling", "operator2", "0x301010", "0xffffff", "true", types[GEANY_FILETYPES_FORTRAN]->styling[11]);
+	styleset_get_hex(config, config_home, "styling", "continuation", "0x000000", "0xf0e080", "false", types[GEANY_FILETYPES_FORTRAN]->styling[12]);
+	styleset_get_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_FORTRAN]->styling[13]);
+	styleset_get_hex(config, config_home, "styling", "label", "0xa861a8", "0xffffff", "true", types[GEANY_FILETYPES_FORTRAN]->styling[14]);
+
+	types[GEANY_FILETYPES_FORTRAN]->keywords = g_new(gchar*, 4);
+	styleset_get_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_FORTRAN, 0, "");
+	styleset_get_keywords(config, config_home, "keywords", "intrinsic_functions", GEANY_FILETYPES_FORTRAN, 1, "");
+	styleset_get_keywords(config, config_home, "keywords", "user_functions", GEANY_FILETYPES_FORTRAN, 2, "");
+	types[GEANY_FILETYPES_FORTRAN]->keywords[3] = NULL;
+
+	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_FORTRAN, GEANY_WORDCHARS);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_FORTRAN);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+	g_free(f0);
+	g_free(f);
+}
+
+
+void styleset_fortran(ScintillaObject *sci)
+{
+	if (types[GEANY_FILETYPES_FORTRAN] == NULL) styleset_fortran_init();
+
+	styleset_common(sci, 5);
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_FORTRAN]->wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_F77, 0);
+	//SSM(sci, SCI_SETLEXER, SCLEX_FORTRAN, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_FORTRAN]->keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) types[GEANY_FILETYPES_FORTRAN]->keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) types[GEANY_FILETYPES_FORTRAN]->keywords[2]);
+
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_FORTRAN, 0);
+	styleset_set_style(sci, SCE_F_DEFAULT, GEANY_FILETYPES_FORTRAN, 0);
+	styleset_set_style(sci, SCE_F_COMMENT, GEANY_FILETYPES_FORTRAN, 1);
+	styleset_set_style(sci, SCE_F_NUMBER, GEANY_FILETYPES_FORTRAN, 2);
+	styleset_set_style(sci, SCE_F_STRING1, GEANY_FILETYPES_FORTRAN, 3);
+	styleset_set_style(sci, SCE_F_OPERATOR, GEANY_FILETYPES_FORTRAN, 4);
+	styleset_set_style(sci, SCE_F_IDENTIFIER, GEANY_FILETYPES_FORTRAN, 5);
+	styleset_set_style(sci, SCE_F_STRING2, GEANY_FILETYPES_FORTRAN, 6);
+	styleset_set_style(sci, SCE_F_WORD, GEANY_FILETYPES_FORTRAN, 7);
+	styleset_set_style(sci, SCE_F_WORD2, GEANY_FILETYPES_FORTRAN, 8);
+	styleset_set_style(sci, SCE_F_WORD3, GEANY_FILETYPES_FORTRAN, 9);
+	styleset_set_style(sci, SCE_F_PREPROCESSOR, GEANY_FILETYPES_FORTRAN, 10);
+	styleset_set_style(sci, SCE_F_OPERATOR2, GEANY_FILETYPES_FORTRAN, 11);
+	styleset_set_style(sci, SCE_F_CONTINUATION, GEANY_FILETYPES_FORTRAN, 12);
+	styleset_set_style(sci, SCE_F_STRINGEOL, GEANY_FILETYPES_FORTRAN, 13);
+	styleset_set_style(sci, SCE_F_LABEL, GEANY_FILETYPES_FORTRAN, 14);
+}
+
+
 static void styleset_sql_init(void)
 {
 	GKeyFile *config = g_key_file_new();
