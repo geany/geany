@@ -32,6 +32,12 @@
 #include "sciwrappers.h"
 #include "utils.h"
 
+static struct
+{
+	gchar *text;
+	gboolean set;
+} calltip = {NULL, FALSE};
+
 static gchar indent[100];
 
 
@@ -157,6 +163,9 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 					{
 						SSM(sci, SCI_CALLTIPCANCEL, 0, 0);
 					}
+					g_free(calltip.text);
+					calltip.text = NULL;
+					calltip.set = FALSE;
 					break;
 				}
 				case ' ':
@@ -176,7 +185,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 					if (doc_list[idx].use_auto_indention) sci_cb_close_block(sci, pos - 1);
 					break;
 				}
-				default: sci_cb_start_auto_complete(sci, pos, idx, FALSE);
+				default: sci_cb_start_auto_complete(idx, pos, FALSE);
 			}
 			break;
 		}
@@ -195,6 +204,22 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 
 				geany_debug("%d-%d", start, pos);
 				SSM(sci, SCI_INSERTTEXT, pos - 1, (sptr_t) nt->text);
+			}
+			break;
+		}
+		case SCN_AUTOCSELECTION:
+		{
+			// now that autocomplete is finishing, reshow calltips if they were showing
+			if (calltip.set)
+			{
+				gint pos = sci_get_current_position(sci);
+				SSM(sci, SCI_CALLTIPSHOW, pos, (sptr_t) calltip.text);
+				// now autocompletion has been cancelled, so do it manually
+				sci_set_selection_start(sci, nt->lParam);
+				sci_set_selection_end(sci, pos);
+				sci_replace_sel(sci, "");	// clear root of word
+				SSM(sci, SCI_INSERTTEXT, nt->lParam, (sptr_t) nt->text);
+				sci_goto_pos(sci, nt->lParam + strlen(nt->text), FALSE);
 			}
 			break;
 		}
@@ -393,30 +418,97 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx)
 	tags = tm_workspace_find(word, tm_tag_max_t, NULL, FALSE, doc_list[idx].file_type->lang);
 	if (tags->len == 1 && TM_TAG(tags->pdata[0])->atts.entry.arglist)
 	{
-		gchar *calltip;
 		tag = TM_TAG(tags->pdata[0]);
+		g_free(calltip.text);	// free the old calltip
+		calltip.set = TRUE;
 		if (tag->atts.entry.var_type)
-			calltip = g_strconcat(tag->atts.entry.var_type, " ", tag->name,
+			calltip.text = g_strconcat(tag->atts.entry.var_type, " ", tag->name,
 										 " ", tag->atts.entry.arglist, NULL);
 		else
-			calltip = g_strconcat(tag->name, " ", tag->atts.entry.arglist, NULL);
+			calltip.text = g_strconcat(tag->name, " ", tag->atts.entry.arglist, NULL);
 
-		utils_wrap_string(calltip, -1);
-		SSM(sci, SCI_CALLTIPSHOW, orig_pos, (sptr_t) calltip);
-		g_free(calltip);
+		utils_wrap_string(calltip.text, -1);
+		SSM(sci, SCI_CALLTIPSHOW, orig_pos, (sptr_t) calltip.text);
 	}
 
 	return TRUE;
 }
 
 
-gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos, gint idx, gboolean force)
+static void show_autocomplete(ScintillaObject *sci, gint rootlen, const gchar *words)
+{
+	// store whether a calltip is showing, so we can reshow it after autocompletion
+	calltip.set = SSM(sci, SCI_CALLTIPACTIVE, 0, 0);
+	SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words);
+}
+
+
+static gboolean
+autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
+{	// HTML entities auto completion
+	guint i, j = 0;
+	GString *words;
+
+	if (*root != '&') return FALSE;
+	if (html_entities == NULL) return FALSE;
+
+	words = g_string_sized_new(500);
+	for (i = 0; ; i++)
+	{
+		if (html_entities[i] == NULL) break;
+		else if (html_entities[i][0] == '#') continue;
+
+		if (! strncmp(html_entities[i], root, rootlen))
+		{
+			if (j++ > 0) g_string_append_c(words, ' ');
+			g_string_append(words, html_entities[i]);
+		}
+	}
+	if (words->len > 0) show_autocomplete(sci, rootlen, words->str);
+	g_string_free(words, TRUE);
+	return TRUE;
+}
+
+
+static gboolean
+autocomplete_tags(gint idx, gchar *root, gsize rootlen)
+{	// PHP, LaTeX, C and C++ tag autocompletion
+	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
+	const GPtrArray *tags;
+	ScintillaObject *sci;
+
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL)
+		return FALSE;
+	sci = doc_list[idx].sci;
+
+	tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc_list[idx].file_type->lang);
+	if (NULL != tags && tags->len > 0)
+	{
+		GString *words = g_string_sized_new(150);
+		guint j;
+
+		for (j = 0; ((j < tags->len) && (j < GEANY_MAX_AUTOCOMPLETE_WORDS)); ++j)
+		{
+			if (j > 0) g_string_append_c(words, ' ');
+			g_string_append(words, ((TMTag *) tags->pdata[j])->name);
+		}
+		show_autocomplete(sci, rootlen, words->str);
+		//geany_debug("string size: %d", words->len);
+		g_string_free(words, TRUE);
+	}
+	return TRUE;
+}
+
+
+gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 {
 	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style;
 	gchar *linebuf, *root;
-	const GPtrArray *tags;
+	ScintillaObject *sci;
+	gboolean ret = FALSE;
 
-	if (sci == NULL) return FALSE;
+	if (idx < 0 || ! doc_list[idx].is_valid || doc_list[idx].sci == NULL) return FALSE;
+	sci = doc_list[idx].sci;
 
 	line = sci_get_line_from_position(sci, pos);
 	line_start = sci_get_position_from_line(sci, line);
@@ -442,68 +534,17 @@ gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos, gint idx, gb
 	root = linebuf + startword;
 	rootlen = current - startword;
 
-	if (*root == '&' && lexer == SCLEX_HTML)
-	{	// HTML entities auto completion
-		guint i, j = 0;
-		GString *words;
-
-		if (html_entities == NULL) return FALSE;
-
-		words = g_string_sized_new(500);
-		for (i = 0; ; i++)
-		{
-			if (html_entities[i] == NULL) break;
-			else if (html_entities[i][0] == '#') continue;
-
-			if (! strncmp(html_entities[i], root, rootlen))
-			{
-				if (j++ > 0) g_string_append_c(words, ' ');
-				g_string_append(words, html_entities[i]);
-			}
-		}
-		if (words->len > 0) SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words->str);
-		g_string_free(words, TRUE);
-	}
+	if (lexer == SCLEX_HTML)
+		ret = autocomplete_html(sci, root, rootlen);
 	else
-	{	// PHP, LaTeX, C and C++ tag autocompletion
-		gint i = 0;
-		TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
-
-		if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL)
-		{
-			g_free(linebuf);
-			return FALSE;
-		}
-
-		if (! force)
-		{	// force is set when called by keyboard shortcut, otherwise start after at third char
-			/// TODO g_ascii_isspace is not the best choise because it allows öprin...
-			while ((line_pos - i >= 0) && ! g_ascii_isspace(linebuf[line_pos - i])) i++;
-			if (i < 4)
-			{	// go home if typed less than 4 chars
-				g_free(linebuf);
-				return FALSE;
-			}
-		}
-
-		tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc_list[idx].file_type->lang);
-		if (NULL != tags && tags->len > 0)
-		{
-			GString *words = g_string_sized_new(150);
-			guint j;
-
-			for (j = 0; ((j < tags->len) && (j < GEANY_MAX_AUTOCOMPLETE_WORDS)); ++j)
-			{
-				if (j > 0) g_string_append_c(words, ' ');
-				g_string_append(words, ((TMTag *) tags->pdata[j])->name);
-			}
-			SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words->str);
-			//geany_debug("string size: %d", words->len);
-			g_string_free(words, TRUE);
-		}
+	{
+		// force is set when called by keyboard shortcut, otherwise start at the 4th char
+		if (force || rootlen >= 4)
+			ret = autocomplete_tags(idx, root, rootlen);
 	}
+
 	g_free(linebuf);
-	return TRUE;
+	return ret;
 }
 
 

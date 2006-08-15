@@ -2,6 +2,9 @@
 
  * tagmanager/c.c: Backported calltips workspace support for C-like
                    user files from Anjuta.
+ * src/keybindings.c, src/sci_cb.c, src/sci_cb.h:
+   Return to showing calltips after successful autocompletion.
+   Use separate functions for html and tag autocompletion.
 
 
 2006-08-15  Enrico Tröger  <enrico.troeger@uvena.de>

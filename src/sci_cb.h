@@ -29,7 +29,7 @@ gchar **html_entities;
 // callback func called by all editors when a signals arises
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
-gboolean sci_cb_start_auto_complete(ScintillaObject *sci, gint pos, gint idx, gboolean force);
+gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force);
 
 void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
 

@@ -724,8 +724,7 @@ static void cb_func_edit_autocomplete(void)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_start_auto_complete(doc_list[idx].sci,
-					sci_get_current_position(doc_list[idx].sci), idx, TRUE);
+	sci_cb_start_auto_complete(idx, sci_get_current_position(doc_list[idx].sci), TRUE);
 }
 
 static void cb_func_edit_calltip(void)
