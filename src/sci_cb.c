@@ -838,13 +838,30 @@ gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch)
 void sci_cb_auto_table(ScintillaObject *sci, gint pos)
 {
 	gchar *table;
+	gint indent_pos;
 
 	if (SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_HTML) return;
 
 	sci_cb_get_indent(sci, pos, TRUE);
-	table = g_strconcat("\n", indent, indent, "<tr>\n", indent, indent, indent, "<td>\n",
-								indent, indent, indent, "</td>\n", indent, indent, "</tr>\n",
-								indent, NULL);
+	indent_pos = sci_get_line_indent_position(sci, sci_get_line_from_position(sci, pos));
+	if ((pos - 7) != indent_pos) // 7 == strlen("<table>")
+	{
+		gint i, x;
+		x = strlen(indent);
+		// find the start of the <table tag
+		i = 1;
+		while (sci_get_char_at(sci, pos - i) != '<') i++;
+		// add all non whitespace before the tag to the indent string
+		while ((pos - i) != indent_pos)
+		{
+			indent[x++] = ' ';
+			i++;
+		}
+		indent[x] = '\0';
+	}
+
+	table = g_strconcat("\n", indent, "    <tr>\n", indent, "        <td>\n", indent, "        </td>\n",
+						indent, "    </tr>\n", indent, NULL);
 	sci_insert_text(sci, pos, table);
 	g_free(table);
 }

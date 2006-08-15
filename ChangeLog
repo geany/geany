@@ -14,6 +14,8 @@
  * src/highlighting.c, data/filetypes.common, doc/geany.docbook:
    Use the filetype's default style(SCE_*_DEFAULT) as the main default
    style(STYLE_DEFAULT).
+ * src/sci_cb.c: Improved HTML "<table>" auto completion to use the
+                 indentation better.
 
 
 2006-08-14  Nick Treleaven  <nick.treleaven@btinternet.com>
