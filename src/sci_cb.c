@@ -670,7 +670,7 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	}
 	else if (! strncmp("while", buf + 10, 5))
 	{
-		if (! isspace(*buf + 9)) goto free_and_return;
+		if (! isspace(*(buf + 9))) goto free_and_return;
 
 		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
 
@@ -701,7 +701,7 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 	}
 	else if (! strncmp("switch", buf + 9, 6))
 	{
-		if (! isspace(*buf + 8)) goto free_and_return;
+		if (! isspace(*(buf + 8))) goto free_and_return;
 
 		construct = g_strdup_printf("()%s{%s\tcase : break;%s\tdefault: %s}%s", eol, eol, eol, eol, eol);
 

@@ -4,6 +4,7 @@
    Made increase/decrease indentation working with selections.
    Keep the old cursor position when working on a single line
    (do not jump to line start).
+ * src/sci_cb.c: Fixed "while" and "switch" autocompletion.
 
 
 2006-08-14  Nick Treleaven  <nick.treleaven@btinternet.com>
