@@ -377,7 +377,7 @@ void search_show_find_in_files_dialog()
 		gtk_dialog_set_default_response(GTK_DIALOG(widgets.find_in_files_dialog),
 			GTK_RESPONSE_ACCEPT);
 
-		label1 = gtk_label_new("Directory:");
+		label1 = gtk_label_new(_("Directory:"));
 		gtk_misc_set_alignment(GTK_MISC(label1), 0, 0.5);
 
 		entry1 = gtk_entry_new();
