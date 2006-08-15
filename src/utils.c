@@ -1930,9 +1930,9 @@ void utils_replace_filename(gint idx)
 	filebase = g_strconcat(GEANY_STRING_UNTITLED, ".", (doc_list[idx].file_type)->extension, NULL);
 	filename = g_path_get_basename(doc_list[idx].file_name);
 
-	// only search the first 2 lines
+	// only search the first 3 lines
 	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_position_from_line(doc_list[idx].sci, 2);
+	ttf.chrg.cpMax = sci_get_position_from_line(doc_list[idx].sci, 3);
 	ttf.lpstrText = (gchar*)filebase;
 
 	if (sci_find_text(doc_list[idx].sci, SCFIND_MATCHCASE, &ttf) != -1)
