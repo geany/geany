@@ -875,6 +875,14 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 	    {
 		tag->extensionFields.access = accessField (st);
 	    }
+		if ((TRUE == st->gotArgs) && (TRUE == Option.extensionFields.argList) &&
+			((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type))) {
+			
+			if (1) {
+				tag->extensionFields.arglist = getArglistFromPos(
+				  tag->filePosition, tag->name);
+			}
+		}
 	    break;
     }
 	

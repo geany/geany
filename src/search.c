@@ -62,7 +62,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data);
 
 static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir);
 
-static GSList *search_get_file_list(const gchar *path, gint *length);
+static GSList *search_get_file_list(const gchar *path, guint *length);
 
 
 static void add_find_checkboxes(GtkDialog *dialog);
@@ -859,11 +859,11 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 /* Gets a list of files in the current directory, or NULL if no files found.
  * The list and the data in the list should be freed after use.
  * *length is set to the number of non-NULL data items in the list. */
-static GSList *search_get_file_list(const gchar *path, gint *length)
+static GSList *search_get_file_list(const gchar *path, guint *length)
 {
 	GError *error = NULL;
 	GSList *list = NULL;
-	gint len = 0;
+	guint len = 0;
 	const gchar *filename;
 	GDir *dir;
 	g_return_val_if_fail(path != NULL, NULL);
