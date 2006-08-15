@@ -147,7 +147,7 @@ static void styleset_get_int(GKeyFile *config, GKeyFile *configh, const gchar *s
 
 static guint invert(guint icolour)
 {
-	if (types[GEANY_FILETYPES_ALL]->styling[11][0])
+	if (types[GEANY_FILETYPES_ALL]->styling[10][0])
 	{
 		guint r, g, b;
 
@@ -196,18 +196,17 @@ static void styleset_common_init(void)
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
 	types[GEANY_FILETYPES_ALL] = g_new(style_set, 1);
-	styleset_get_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[0]);
-	styleset_get_hex(config, config_home, "styling", "selection", "0xc0c0c0", "0x7f0000", "false", types[GEANY_FILETYPES_ALL]->styling[1]);
-	styleset_get_hex(config, config_home, "styling", "brace_good", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[2]);
-	styleset_get_hex(config, config_home, "styling", "brace_bad", "0xff0000", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[3]);
-	styleset_get_hex(config, config_home, "styling", "margin_linenumber", "0x000000", "0xd0d0d0", "false", types[GEANY_FILETYPES_ALL]->styling[4]);
-	styleset_get_hex(config, config_home, "styling", "margin_folding", "0x000000", "0xdfdfdf", "false", types[GEANY_FILETYPES_ALL]->styling[5]);
-	styleset_get_hex(config, config_home, "styling", "current_line", "0x000000", "0xe5e5e5", "true", types[GEANY_FILETYPES_ALL]->styling[6]);
-	styleset_get_hex(config, config_home, "styling", "caret", "0x000000", "0x000000", "false", types[GEANY_FILETYPES_ALL]->styling[7]);
-	styleset_get_hex(config, config_home, "styling", "indent_guide", "0xc0c0c0", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[8]);
-	styleset_get_hex(config, config_home, "styling", "white_space", "0xc0c0c0", "0xffffff", "true", types[GEANY_FILETYPES_ALL]->styling[9]);
-	styleset_get_int(config, config_home, "styling", "folding_style", 1, 1, types[GEANY_FILETYPES_ALL]->styling[10]);
-	styleset_get_int(config, config_home, "styling", "invert_all", 0, 0, types[GEANY_FILETYPES_ALL]->styling[11]);
+	styleset_get_hex(config, config_home, "styling", "selection", "0xc0c0c0", "0x7f0000", "false", types[GEANY_FILETYPES_ALL]->styling[0]);
+	styleset_get_hex(config, config_home, "styling", "brace_good", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[1]);
+	styleset_get_hex(config, config_home, "styling", "brace_bad", "0xff0000", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[2]);
+	styleset_get_hex(config, config_home, "styling", "margin_linenumber", "0x000000", "0xd0d0d0", "false", types[GEANY_FILETYPES_ALL]->styling[3]);
+	styleset_get_hex(config, config_home, "styling", "margin_folding", "0x000000", "0xdfdfdf", "false", types[GEANY_FILETYPES_ALL]->styling[4]);
+	styleset_get_hex(config, config_home, "styling", "current_line", "0x000000", "0xe5e5e5", "true", types[GEANY_FILETYPES_ALL]->styling[5]);
+	styleset_get_hex(config, config_home, "styling", "caret", "0x000000", "0x000000", "false", types[GEANY_FILETYPES_ALL]->styling[6]);
+	styleset_get_hex(config, config_home, "styling", "indent_guide", "0xc0c0c0", "0xffffff", "false", types[GEANY_FILETYPES_ALL]->styling[7]);
+	styleset_get_hex(config, config_home, "styling", "white_space", "0xc0c0c0", "0xffffff", "true", types[GEANY_FILETYPES_ALL]->styling[8]);
+	styleset_get_int(config, config_home, "styling", "folding_style", 1, 1, types[GEANY_FILETYPES_ALL]->styling[9]);
+	styleset_get_int(config, config_home, "styling", "invert_all", 0, 0, types[GEANY_FILETYPES_ALL]->styling[10]);
 
 	types[GEANY_FILETYPES_ALL]->keywords = NULL;
 	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_ALL, GEANY_WORDCHARS);
@@ -229,11 +228,11 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETUSETABS, TRUE, 0);
 
 	// caret colour
-	SSM(sci, SCI_SETCARETFORE, invert(types[GEANY_FILETYPES_ALL]->styling[7][0]), 0);
+	SSM(sci, SCI_SETCARETFORE, invert(types[GEANY_FILETYPES_ALL]->styling[6][0]), 0);
 
 	// colourize the current line
-	SSM(sci, SCI_SETCARETLINEBACK, invert(types[GEANY_FILETYPES_ALL]->styling[6][1]), 0);
-	SSM(sci, SCI_SETCARETLINEVISIBLE, types[GEANY_FILETYPES_ALL]->styling[6][2], 0);
+	SSM(sci, SCI_SETCARETLINEBACK, invert(types[GEANY_FILETYPES_ALL]->styling[5][1]), 0);
+	SSM(sci, SCI_SETCARETLINEVISIBLE, types[GEANY_FILETYPES_ALL]->styling[5][2], 0);
 
 	// indicator settings
 	SSM(sci, SCI_INDICSETSTYLE, 2, INDIC_SQUIGGLE);
@@ -258,7 +257,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETFOLDFLAGS, 0, 0);
 
 	// choose the folding style - boxes or circles, I prefer boxes, so it is default ;-)
-	switch (types[GEANY_FILETYPES_ALL]->styling[10][0])
+	switch (types[GEANY_FILETYPES_ALL]->styling[9][0])
 	{
 		case 2:
 		{
@@ -279,7 +278,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	}
 
 	// choose the folding style - straight or curved, I prefer straight, so it is default ;-)
-	switch (types[GEANY_FILETYPES_ALL]->styling[10][1])
+	switch (types[GEANY_FILETYPES_ALL]->styling[9][1])
 	{
 		case 2:
 		{
@@ -319,23 +318,23 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.at.else", (sptr_t) "1");
 
 
-	SSM(sci, SCI_SETSELFORE, 1, invert(types[GEANY_FILETYPES_ALL]->styling[1][0]));
-	SSM(sci, SCI_SETSELBACK, 1, invert(types[GEANY_FILETYPES_ALL]->styling[1][1]));
+	SSM(sci, SCI_SETSELFORE, 1, invert(types[GEANY_FILETYPES_ALL]->styling[0][0]));
+	SSM(sci, SCI_SETSELBACK, 1, invert(types[GEANY_FILETYPES_ALL]->styling[0][1]));
 
-	SSM (sci, SCI_SETSTYLEBITS, style_bits, 0);
+	SSM(sci, SCI_SETSTYLEBITS, style_bits, 0);
 
 
-	SSM(sci, SCI_SETFOLDMARGINCOLOUR, 1, invert(types[GEANY_FILETYPES_ALL]->styling[5][1]));
-	//SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(types[GEANY_FILETYPES_ALL]->styling[5][1]));
-	styleset_set_style(sci, STYLE_LINENUMBER, GEANY_FILETYPES_ALL, 4);
-	styleset_set_style(sci, STYLE_BRACELIGHT, GEANY_FILETYPES_ALL, 2);
-	styleset_set_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_ALL, 3);
-	styleset_set_style(sci, STYLE_INDENTGUIDE, GEANY_FILETYPES_ALL, 8);
+	SSM(sci, SCI_SETFOLDMARGINCOLOUR, 1, invert(types[GEANY_FILETYPES_ALL]->styling[4][1]));
+	//SSM(sci, SCI_SETFOLDMARGINHICOLOUR, 1, invert(types[GEANY_FILETYPES_ALL]->styling[4][1]));
+	styleset_set_style(sci, STYLE_LINENUMBER, GEANY_FILETYPES_ALL, 3);
+	styleset_set_style(sci, STYLE_BRACELIGHT, GEANY_FILETYPES_ALL, 1);
+	styleset_set_style(sci, STYLE_BRACEBAD, GEANY_FILETYPES_ALL, 2);
+	styleset_set_style(sci, STYLE_INDENTGUIDE, GEANY_FILETYPES_ALL, 7);
 
-	SSM(sci, SCI_SETWHITESPACEFORE, types[GEANY_FILETYPES_ALL]->styling[9][2],
-										invert(types[GEANY_FILETYPES_ALL]->styling[9][0]));
-	SSM(sci, SCI_SETWHITESPACEBACK, types[GEANY_FILETYPES_ALL]->styling[9][2],
-										invert(types[GEANY_FILETYPES_ALL]->styling[9][1]));
+	SSM(sci, SCI_SETWHITESPACEFORE, types[GEANY_FILETYPES_ALL]->styling[8][2],
+										invert(types[GEANY_FILETYPES_ALL]->styling[8][0]));
+	SSM(sci, SCI_SETWHITESPACEBACK, types[GEANY_FILETYPES_ALL]->styling[8][2],
+										invert(types[GEANY_FILETYPES_ALL]->styling[8][1]));
 }
 
 
