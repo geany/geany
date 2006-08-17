@@ -207,21 +207,6 @@ static void apply_settings(void)
 static void main_init(void)
 {
 	// inits
-	app = g_new0(MyApp, 1);
-#ifdef GEANY_DEBUG
-	geany_debug("debug mode built in (can't be disabled)");
-#endif
-	app->debug_mode = debug_mode;
-	geany_debug("GTK+ runtime version: %u.%u.%u",
-		gtk_major_version, gtk_minor_version, gtk_micro_version);
-
-	if (alternate_config)
-	{
-		geany_debug("alternate config: %s", alternate_config);
-		app->configdir = alternate_config;
-	}
-	else
-		app->configdir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
 	app->window				= NULL;
 	app->open_fontsel		= NULL;
 	app->open_colorsel		= NULL;
@@ -233,13 +218,6 @@ static void main_init(void)
 	app->tab_order_ltr		= FALSE;
 	app->quitting			= FALSE;
 	app->ignore_callback	= FALSE;
-#ifdef HAVE_FIFO
-	app->ignore_fifo		= ignore_fifo;
-#endif
-#ifdef HAVE_VTE
-	app->lib_vte			= lib_vte;
-#endif
-	app->ignore_global_tags 		= ignore_global_tags;
 	app->tm_workspace				= tm_get_workspace();
 	app->recent_queue				= g_queue_new();
 	app->opening_session_files		= FALSE;
@@ -449,19 +427,10 @@ static GIOChannel *create_fifo(gint argc, gchar **argv, const gchar *config_dir)
 #endif
 
 
-gint main(gint argc, gchar **argv)
+static void setup_paths()
 {
-	GError *error = NULL;
-	GOptionContext *context;
-#ifdef HAVE_FIFO
-	GIOChannel *ioc = NULL;
-#endif
-	gint mkdir_result = 0;
-	gint idx;
-	gchar *config_dir;
 	gchar *data_dir;
 	gchar *doc_dir;
-	gchar *locale_dir;
 
 	// set paths
 #ifdef G_OS_WIN32
@@ -471,12 +440,25 @@ gint main(gint argc, gchar **argv)
 
 	data_dir = g_strconcat(install_dir, "\\data", NULL); // e.g. C:\Program Files\geany\data
 	doc_dir = g_strconcat(install_dir, "\\doc", NULL);
-	locale_dir = g_strdup(data_dir);
 
 	g_free(install_dir);
 #else
 	data_dir = g_strdup(PACKAGE_DATA_DIR "/" PACKAGE "/"); // e.g. /usr/share/geany
 	doc_dir = g_strdup(PACKAGE_DATA_DIR "/doc/" PACKAGE "/html/");
+#endif
+
+	app->datadir = data_dir;
+	app->docdir = doc_dir;
+}
+
+
+static void locale_init()
+{
+	gchar *locale_dir = NULL;
+
+#ifdef G_OS_WIN32
+	locale_dir = g_strdup(app->datadir);
+#else
 	locale_dir = g_strdup(PACKAGE_LOCALE_DIR);
 #endif
 
@@ -486,12 +468,19 @@ gint main(gint argc, gchar **argv)
 	textdomain(GETTEXT_PACKAGE);
 #endif
 	g_free(locale_dir);
+}
+
+
+static void parse_command_line_options(gint *argc, gchar ***argv)
+{
+	GOptionContext *context;
+	GError *error = NULL;
 
 	context = g_option_context_new(_(" - A fast and lightweight IDE"));
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
 	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
 	g_option_context_add_group(context, gtk_get_option_group(TRUE));
-	g_option_context_parse(context, &argc, &argv, &error);
+	g_option_context_parse(context, argc, argv, &error);
 	g_option_context_free(context);
 
 	if (show_version)
@@ -502,8 +491,73 @@ gint main(gint argc, gchar **argv)
 				GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
 		printf("\n");
 
-		return (0);
+		exit(0);
 	}
+
+	app->debug_mode = debug_mode;
+#ifdef GEANY_DEBUG
+	geany_debug("debug mode built in (can't be disabled)");
+#endif
+	geany_debug("GTK+ runtime version: %u.%u.%u",
+		gtk_major_version, gtk_minor_version, gtk_micro_version);
+
+	if (alternate_config)
+	{
+		geany_debug("alternate config: %s", alternate_config);
+		app->configdir = alternate_config;
+	}
+	else
+		app->configdir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
+
+#ifdef HAVE_FIFO
+	app->ignore_fifo = ignore_fifo;
+#endif
+#ifdef HAVE_VTE
+	app->lib_vte = lib_vte;
+#endif
+	app->ignore_global_tags = ignore_global_tags;
+}
+
+
+// Returns 0 if config dir is OK.
+static gint setup_config_dir()
+{
+	gint mkdir_result = 0;
+
+	mkdir_result = utils_make_settings_dir(app->configdir, app->datadir, app->docdir);
+	if (mkdir_result != 0)
+	{
+		if (! dialogs_show_question(
+			_("Configuration directory could not be created (%s).\nThere could be some problems "
+			  "using Geany without a configuration directory.\nStart Geany anyway?"),
+			  g_strerror(mkdir_result)))
+		{
+			exit(0);
+		}
+	}
+	return mkdir_result;
+}
+
+
+static void signal_cb(gint sig)
+{
+	if (sig == SIGTERM)
+	{
+		on_exit_clicked(NULL, NULL);
+	}
+}
+
+
+gint main(gint argc, gchar **argv)
+{
+	gint idx;
+	gint config_dir_result;
+
+	app = g_new0(MyApp, 1);
+
+	setup_paths();
+	locale_init();
+	parse_command_line_options(&argc, &argv);
 
 	gtk_set_locale();
 
@@ -513,33 +567,18 @@ gint main(gint argc, gchar **argv)
 	signal(SIGPIPE, SIG_IGN);
 #endif
 
-	if (alternate_config) config_dir = g_strdup(alternate_config);
-	else config_dir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
-
-	mkdir_result = utils_make_settings_dir(config_dir, data_dir, doc_dir);
-	if (mkdir_result != 0)
-	{
-		if (! dialogs_show_question(
-			_("Configuration directory could not be created (%s).\nThere could be some problems "
-			  "using Geany without a configuration directory.\nStart Geany anyway?"),
-			  g_strerror(mkdir_result)))
-		{
-			g_free(config_dir);
-			return (0);
-		}
-	}
-
+	config_dir_result = setup_config_dir();
+	// handle fifo
+	app->fifo_ioc = NULL;
 #ifdef HAVE_FIFO
-	if (! ignore_fifo) ioc = create_fifo(argc, argv, config_dir);
+	if (! ignore_fifo)
+		app->fifo_ioc = create_fifo(argc, argv, app->configdir);
 #endif
-	g_free(config_dir);
 
 	gtk_init(&argc, &argv);
 
 	// inits
 	main_init();
-	app->datadir = data_dir;
-	app->docdir = doc_dir;
 	gtk_widget_set_size_request(app->window, GEANY_WINDOW_MINIMAL_WIDTH, GEANY_WINDOW_MINIMAL_HEIGHT);
 	gtk_window_set_default_size(GTK_WINDOW(app->window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 	encodings_init();
@@ -552,9 +591,6 @@ gint main(gint argc, gchar **argv)
 #ifdef HAVE_VTE
 	app->have_vte = app->load_vte;
 	if (no_vte) app->have_vte = FALSE;
-#endif
-#ifdef HAVE_FIFO
-	app->fifo_ioc = ioc;
 #endif
 	filetypes_init_types();
 	if (generate_datafiles)
@@ -588,8 +624,9 @@ gint main(gint argc, gchar **argv)
 	utils_create_insert_menu_items();
 
 	msgwin_status_add(_("This is Geany %s."), VERSION);
-	if (mkdir_result != 0)
-		msgwin_status_add(_("Configuration directory could not be created (%s)."), g_strerror(mkdir_result));
+	if (config_dir_result != 0)
+		msgwin_status_add(_("Configuration directory could not be created (%s)."),
+			g_strerror(config_dir_result));
 
 	// apply all configuration options
 	apply_settings();
