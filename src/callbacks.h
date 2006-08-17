@@ -22,9 +22,6 @@
 
 extern gchar current_word[]; //needed for popup menu keybindings access
 
-void
-signal_cb							   (gint sig);
-
 gint
 destroyapp                             (GtkWidget *widget, gpointer gdata);
 

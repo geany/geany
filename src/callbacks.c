@@ -26,7 +26,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <signal.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "callbacks.h"
@@ -77,15 +76,6 @@ static gboolean ignore_toolbar_toggle = FALSE;
 // holds the current position where the mouse pointer is when the popup menu for the scintilla
 // scintilla widget is shown
 static gint clickpos;
-
-
-void signal_cb(gint sig)
-{
-	if (sig == SIGTERM)
-	{
-		on_exit_clicked(NULL, NULL);
-	}
-}
 
 
 // real exit function
