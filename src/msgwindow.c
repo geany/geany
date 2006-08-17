@@ -503,6 +503,7 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 	*filename = NULL;
 	*line = -1;
 
+	g_return_if_fail(msgwindow.find_in_files_dir != NULL);
 	if (string == NULL) return;
 
 	// conflict:3:conflicting types for `foo'
