@@ -7,6 +7,7 @@
    Use setup_paths, locale_init, parse_command_line_options,
    setup_config_dir in main().
  * src/msgwindow.c: Reorder widget lookup.
+ * src/main.c: Fix Show messages window checkbox state when -m used.
 
 
 2006-08-15  Nick Treleaven  <nick.treleaven@btinternet.com>
