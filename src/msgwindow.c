@@ -53,10 +53,10 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 
 void msgwin_init()
 {
+	msgwindow.notebook = lookup_widget(app->window, "notebook_info");
 	msgwindow.tree_status = lookup_widget(app->window, "treeview3");
 	msgwindow.tree_msg = lookup_widget(app->window, "treeview4");
 	msgwindow.tree_compiler = lookup_widget(app->window, "treeview5");
-	msgwindow.notebook = lookup_widget(app->window, "notebook_info");
 	msgwindow.find_in_files_dir = NULL;
 }
 

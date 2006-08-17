@@ -6,6 +6,7 @@
    Move main_init command line settings to parse_command_line_options.
    Use setup_paths, locale_init, parse_command_line_options,
    setup_config_dir in main().
+ * src/msgwindow.c: Reorder widget lookup.
 
 
 2006-08-15  Nick Treleaven  <nick.treleaven@btinternet.com>
