@@ -13,8 +13,11 @@
    Add dialogs_show_question_full for custom buttons and extra text.
    Don't show message dialogs in the window manager taskbar.
  * src/utils.c: Use Reload button for utils_check_disk_status dialog.
- * src/callbacks.c: Use Reload button for reload dialog.
+ * src/callbacks.c: Improve Reload and Quit dialog.
                     Share on_reload_as_activate code for reloading.
+* tagmanager/d.c, tagmanager/c.c, tagmanager/Makefile.am:
+  Merged tagmanager/d.c with tagmanager/c.c, which also adds user
+  function calltips support for D.
 
 
 2006-08-17  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -27,7 +27,6 @@ libtagmanager_a_SOURCES =\
 	args.c\
 	args.h\
 	c.c\
-	d.c\
 	conf.c\
 	css.c\
 	docbook.c\

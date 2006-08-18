@@ -5,7 +5,7 @@
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
 *
-*   This module contains functions for parsing and scanning C, C++ and Java
+*   This module contains functions for parsing and scanning C, C++, D and Java
 *   source files.
 */
 
@@ -233,6 +233,7 @@ static jmp_buf Exception;
 static langType Lang_c;
 static langType Lang_cpp;
 static langType Lang_java;
+static langType Lang_d;
 
 /* Used to index into the CKinds table. */
 typedef enum {
@@ -819,7 +820,7 @@ static tagType declToTagType (const declType declaration)
 static const char* accessField (const statementInfo *const st)
 {
     const char* result = NULL;
-    if (isLanguage (Lang_cpp)  &&  st->scope == SCOPE_FRIEND)
+    if ((isLanguage (Lang_cpp) || isLanguage (Lang_d))  &&  st->scope == SCOPE_FRIEND)
 	result = "friend";
     else if (st->member.access != ACCESS_UNDEFINED)
 	result = accessString (st->member.access);
@@ -866,7 +867,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 			vStringValue (st->parentClasses);
 	    }
 	    if (st->implementation != IMP_DEFAULT &&
-		(isLanguage (Lang_cpp) || isLanguage (Lang_java)))
+		(isLanguage (Lang_cpp) || isLanguage (Lang_java) || isLanguage (Lang_d)))
 	    {
 		tag->extensionFields.implementation =
 			implementationString (st->implementation);
@@ -900,7 +901,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 
 static void addContextSeparator (vString *const scope)
 {
-    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp))
+    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp) || isLanguage (Lang_d))
 	vStringCatS (scope, "::");
     else if (isLanguage (Lang_java))
 	vStringCatS (scope, ".");
@@ -1426,7 +1427,7 @@ static void setAccess (statementInfo *const st, const accessType access)
 {
     if (isMember (st))
     {
-	if (isLanguage (Lang_cpp))
+	if (isLanguage (Lang_cpp) || isLanguage (Lang_d))
 	{
 	    int c = skipToNonWhite ();
 
@@ -1981,7 +1982,7 @@ static void addContext (statementInfo *const st, const tokenInfo* const token)
     {
 	if (vStringLength (st->context->name) > 0)
 	{
-	    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp))
+	    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp) || isLanguage (Lang_d))
 		vStringCatS (st->context->name, "::");
 	    else if (isLanguage (Lang_java))
 		vStringCatS (st->context->name, ".");
@@ -2004,7 +2005,7 @@ static void processColon (statementInfo *const st)
     else
     {
 	cppUngetc (c);
-	if (isLanguage (Lang_cpp)  && (
+	if ((isLanguage (Lang_cpp) || isLanguage (Lang_d))  && (
 	    st->declaration == DECL_CLASS  ||  st->declaration == DECL_STRUCT))
 	{
 	    readParents (st, ':');
@@ -2403,6 +2404,12 @@ static void initializeJavaParser (const langType language)
     buildKeywordHash (language, 2);
 }
 
+static void initializeDParser (const langType language)
+{
+    Lang_d = language;
+    buildKeywordHash (language, 17);
+}
+
 extern parserDefinition* CParser (void)
 {
     static const char *const extensions [] = { "c", "pc", "sc", NULL };
@@ -2445,5 +2452,18 @@ extern parserDefinition* JavaParser (void)
     def->initialize = initializeJavaParser;
     return def;
 }
+
+extern parserDefinition* DParser (void)
+{
+    static const char *const extensions [] = { "d", "di", NULL };
+    parserDefinition* def = parserNew ("D");
+    def->kinds      = CKinds;
+    def->kindCount  = KIND_COUNT (CKinds);
+    def->extensions = extensions;
+    def->parser2    = findCTags;
+    def->initialize = initializeDParser;
+    return def;
+}
+
 
 /* vi:set tabstop=8 shiftwidth=4: */
