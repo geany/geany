@@ -63,6 +63,10 @@ void dialogs_show_file_properties(gint idx);
 
 gboolean dialogs_show_question(const gchar *text, ...);
 
+/* extra_text can be NULL; otherwise it is displayed below main_text. */
+gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
+	const gchar *extra_text, const gchar *main_text, ...);
+
 void dialogs_show_keyboard_shortcuts(void);
 
 #endif

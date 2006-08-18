@@ -223,7 +223,7 @@ void dialogs_show_info(const gchar *text, ...)
 	win32_message_dialog(GTK_MESSAGE_INFO, string);
 #else
 
-	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
                                   GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", string);
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
@@ -247,7 +247,7 @@ void dialogs_show_error(const gchar *text, ...)
 #ifdef G_OS_WIN32
 	win32_message_dialog(GTK_MESSAGE_ERROR, string);
 #else
-	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
+	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
                                   GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "%s", string);
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
@@ -1384,30 +1384,69 @@ void dialogs_show_file_properties(gint idx)
 }
 
 
+static gboolean
+show_question(const gchar *yes_btn, const gchar *no_btn, const gchar *question_text,
+	const gchar *extra_text)
+{
+	gboolean ret = FALSE;
+#ifdef G_OS_WIN32
+	gchar *string = (extra_text == NULL) ? g_strdup(question_text) :
+		g_strconcat(question_text, "\n\n", extra_text, NULL);
+
+	ret = win32_message_dialog(GTK_MESSAGE_QUESTION, string);
+	g_free(string);
+#else
+	GtkWidget *dialog;
+
+	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window),
+		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
+		GTK_BUTTONS_NONE, "%s", question_text);
+	// question_text will be in bold if optional extra_text used
+	if (extra_text != NULL)
+		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+			"%s", extra_text);
+
+	// For a cancel button, use cancel reponse so user can press escape to cancel
+	gtk_dialog_add_button(GTK_DIALOG(dialog), no_btn,
+		g_str_equal(no_btn, GTK_STOCK_CANCEL) ? GTK_RESPONSE_CANCEL : GTK_RESPONSE_NO);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), yes_btn, GTK_RESPONSE_YES);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES)
+		ret = TRUE;
+	gtk_widget_destroy(dialog);
+#endif
+	return ret;
+}
+
+
 gboolean dialogs_show_question(const gchar *text, ...)
 {
-#ifndef G_OS_WIN32
-	GtkWidget *dialog;
-#endif
-	gchar *string = g_malloc(512);
 	gboolean ret = FALSE;
+	gchar *string = g_malloc(512);
 	va_list args;
 
 	va_start(args, text);
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
-
-#ifdef G_OS_WIN32
-	ret = win32_message_dialog(GTK_MESSAGE_QUESTION, string);
-#else
-	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, "%s", string);
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES)
-		ret = TRUE;
-	gtk_widget_destroy(dialog);
-#endif
+	ret = show_question(GTK_STOCK_YES, GTK_STOCK_NO, string, NULL);
 	g_free(string);
+	return ret;
+}
 
+
+/* extra_text can be NULL; otherwise it is displayed below main_text. */
+gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
+	const gchar *extra_text, const gchar *main_text, ...)
+{
+	gboolean ret = FALSE;
+	gchar *string = g_malloc(512);
+	va_list args;
+
+	va_start(args, main_text);
+	g_vsnprintf(string, 511, main_text, args);
+	va_end(args);
+	ret = show_question(yes_btn, no_btn, string, extra_text);
+	g_free(string);
 	return ret;
 }
 
