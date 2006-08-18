@@ -569,10 +569,8 @@ gint main(gint argc, gchar **argv)
 
 	config_dir_result = setup_config_dir();
 	// handle fifo
-	app->fifo_ioc = NULL;
 #ifdef HAVE_FIFO
-	if (! ignore_fifo)
-		app->fifo_ioc = create_fifo(argc, argv, app->configdir);
+	app->fifo_ioc = (ignore_fifo) ? NULL : create_fifo(argc, argv, app->configdir);
 #endif
 
 	gtk_init(&argc, &argv);

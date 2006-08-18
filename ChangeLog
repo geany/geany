@@ -2,6 +2,7 @@
 
  * src/keyfile.c: Fix a small memory leak in configuration_load.
  * src/dialogs.c: Change Don't save button icon and add mnemonic.
+ * src/main.c: Fix building on win32 - thanks to Củ Văn Chuối.
 
 
 2006-08-17  Nick Treleaven  <nick.treleaven@btinternet.com>
