@@ -220,7 +220,7 @@ gboolean configuration_load()
 {
 	gboolean config_exists;
 	guint i, geo_len;
-	gint *geo = g_malloc(sizeof(gint) * 4);
+	gint *geo;
 	gsize len = 0;
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	gchar *entry = g_malloc(14);
