@@ -1,6 +1,7 @@
 2006-08-18  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keyfile.c: Fix a small memory leak in configuration_load.
+ * src/dialogs.c: Change Don't save button icon and add mnemonic.
 
 
 2006-08-17  Nick Treleaven  <nick.treleaven@btinternet.com>

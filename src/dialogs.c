@@ -285,8 +285,8 @@ gboolean dialogs_show_unsaved_file(gint idx)
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
 	button = gtk_button_new();
-	label = gtk_label_new(_("Don't save"));
-	image = gtk_image_new_from_stock(GTK_STOCK_NO, GTK_ICON_SIZE_BUTTON);
+	label = gtk_label_new_with_mnemonic(_("_Don't save"));
+	image = gtk_image_new_from_stock(GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
 	hbox = gtk_hbox_new(FALSE, 2);
 
 	align = gtk_alignment_new(0.5, 0.5, 0.0, 0.0);
