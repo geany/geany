@@ -238,11 +238,7 @@ gint document_create_new_sci(const gchar *filename)
 
 	gtk_widget_show(GTK_WIDGET(sci));
 
-#ifdef G_OS_WIN32
-	sci_set_codepage(sci, 0);
-#else
 	sci_set_codepage(sci, SC_CP_UTF8);
-#endif
 	//SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);
 	// disable scintilla provided popup menu
 	sci_use_popup(sci, FALSE);

@@ -1,3 +1,9 @@
+2006-08-18  Administrator  <Administrator@localhost>
+
+ * src/document.c: Use codepage SC_CP_UTF8 because we use always
+                   GTK even under Windows.
+
+
 2006-08-18  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keyfile.c: Fix a small memory leak in configuration_load.
