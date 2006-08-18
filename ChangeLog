@@ -3,6 +3,12 @@
  * src/keyfile.c: Fix a small memory leak in configuration_load.
  * src/dialogs.c: Change Don't save button icon and add mnemonic.
  * src/main.c: Fix building on win32 - thanks to Củ Văn Chuối.
+ * src/dialogs.c, src/dialogs.h:
+   Add dialogs_show_question_full for custom buttons and extra text.
+   Don't show message dialogs in the window manager taskbar.
+ * src/utils.c: Use Reload button for utils_check_disk_status dialog.
+ * src/callbacks.c: Use Reload button for reload dialog.
+                    Share on_reload_as_activate code for reloading.
 
 
 2006-08-17  Nick Treleaven  <nick.treleaven@btinternet.com>

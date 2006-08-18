@@ -196,8 +196,9 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 		{
 			if (app->pref_main_confirm_exit)
 			{
-				if (dialogs_show_question(_("Do you really want to quit?")) &&
-					on_close_all1_activate(NULL, NULL)) destroyapp(NULL, gdata);
+				if (dialogs_show_question_full(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
+					_("Do you really want to quit?")) && on_close_all1_activate(NULL, NULL))
+						destroyapp(NULL, gdata);
 				else app->quitting = FALSE;
 			}
 			else
@@ -211,7 +212,9 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 	{
 		if (app->pref_main_confirm_exit)
 		{
-			if (dialogs_show_question(_("Do you really want to quit?"))) destroyapp(NULL, gdata);
+			if (dialogs_show_question(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
+				_("Do you really want to quit?")))
+					destroyapp(NULL, gdata);
 			else app->quitting = FALSE;
 		}
 		else
@@ -489,19 +492,37 @@ void
 on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
+	on_reload_as_activate(NULL, GINT_TO_POINTER(-1));
+}
+
+
+// also used for reloading when user_data is -1
+void
+on_reload_as_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
 	gint idx = document_get_cur_idx();
 	gchar *basename;
+	gint i = GPOINTER_TO_INT(user_data);
+	gchar *charset = NULL;
 
-	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL) return;
-
-	basename = g_path_get_basename(doc_list[idx].file_name);
-	if (dialogs_show_question(_
-				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
-				 basename))
+	if (idx < 0 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL)
+		return;
+	if (i >= 0)
 	{
-		document_reload_file(idx, NULL);
+		if (i >= GEANY_ENCODINGS_MAX || encodings[i].charset == NULL) return;
+		charset = encodings[i].charset;
 	}
 
+	basename = g_path_get_basename(doc_list[idx].file_name);
+	if (dialogs_show_question_full(_("_Reload"), GTK_STOCK_CANCEL,
+		_("Any unsaved changes will be lost."),
+		_("Are you sure you want to reload '%s'?"), basename))
+	{
+		document_reload_file(idx, charset);
+		if (charset != NULL)
+			utils_update_statusbar(idx, -1);
+	}
 	g_free(basename);
 }
 
@@ -2345,29 +2366,6 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 			utils_is_unicode_charset(doc_list[idx].encoding));
 }
 
-
-void
-on_reload_as_activate                  (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
-	gchar *basename;
-	gint i = GPOINTER_TO_INT(user_data);
-
-	if (idx < 0 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL ||
-		i < 0 || i >= GEANY_ENCODINGS_MAX || encodings[i].charset == NULL)
-		return;
-
-	basename = g_path_get_basename(doc_list[idx].file_name);
-	if (dialogs_show_question(_
-				 ("Are you sure you want to reload '%s'?\nAny unsaved changes will be lost."),
-				 basename))
-	{
-		document_reload_file(idx, encodings[i].charset);
-		utils_update_statusbar(idx, -1);
-	}
-	g_free(basename);
-}
 
 void
 on_print1_activate                     (GtkMenuItem     *menuitem,
