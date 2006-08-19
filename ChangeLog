@@ -1,3 +1,9 @@
+2006-08-19  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/callbacks.c: Fix a segfault at startup if terminal follow path
+                    setting is enabled.
+
+
 2006-08-18  Administrator  <Administrator@localhost>
 
  * src/document.c: Use codepage SC_CP_UTF8 because we use always

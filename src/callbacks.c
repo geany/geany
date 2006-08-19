@@ -781,7 +781,9 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 	}
 
 #ifdef HAVE_VTE
-	if (app->have_vte && vc->follow_path && doc_list[idx].file_name != NULL)
+	// at startup, idx is always -1, so terminal startup dir is wrong,
+	// but we could remember the vte dir to fix this.
+	if (idx >= 0 && app->have_vte && vc->follow_path && doc_list[idx].file_name != NULL)
 	{
 		gchar *path;
 		gchar *cmd;
