@@ -322,10 +322,10 @@ void prefs_init_dialog(void)
 	// make VTE switch visible only when VTE is compiled in, it is hidden by default
 	widget = lookup_widget(app->prefs_dialog, "check_vte");
 	gtk_widget_show(widget);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->load_vte);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vte_info.load_vte);
 
 	// VTE settings
-	if (app->have_vte)
+	if (vte_info.have_vte)
 	{
 		widget = lookup_widget(app->prefs_dialog, "font_term");
 		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
@@ -568,10 +568,10 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 #ifdef HAVE_VTE
 		widget = lookup_widget(app->prefs_dialog, "check_vte");
-		app->load_vte = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		vte_info.load_vte = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		// VTE settings
-		if (app->have_vte)
+		if (vte_info.have_vte)
 		{
 			gchar *hex_color_back, *hex_color_fore;
 
@@ -591,10 +591,10 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 			widget = lookup_widget(app->prefs_dialog, "check_follow_path");
 			vc->follow_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-			g_free(app->terminal_settings);
+			g_free(vte_info.terminal_settings);
 			hex_color_fore = utils_get_hex_from_color(vc->color_fore);
 			hex_color_back = utils_get_hex_from_color(vc->color_back);
-			app->terminal_settings = g_strdup_printf("%s;%s;%s;%d;%s;%s;%s;%s", vc->font,
+			vte_info.terminal_settings = g_strdup_printf("%s;%s;%s;%d;%s;%s;%s;%s", vc->font,
 					hex_color_fore, hex_color_back,
 					vc->scrollback_lines, vc->emulation,
 					utils_btoa(vc->scroll_on_key), utils_btoa(vc->scroll_on_out),
@@ -933,7 +933,7 @@ void dialogs_show_prefs_dialog(void)
 		}
 
 #ifdef HAVE_VTE
-		if (app->have_vte)
+		if (vte_info.have_vte)
 		{
 			tooltips = GTK_TOOLTIPS(lookup_widget(app->prefs_dialog, "tooltips"));
 			notebook = lookup_widget(app->prefs_dialog, "notebook2");

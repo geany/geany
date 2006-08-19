@@ -31,6 +31,7 @@
 #include "document.h"
 #include "sciwrappers.h"
 #include "encodings.h"
+#include "vte.h"
 
 
 static gchar *scribble_text = NULL;
@@ -108,10 +109,12 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->pref_editor_auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->pref_editor_auto_complete_constructs);
 #ifdef HAVE_VTE
-	g_key_file_set_boolean(config, PACKAGE, "load_vte", app->load_vte);
+	g_key_file_set_boolean(config, PACKAGE, "load_vte", vte_info.load_vte);
 	g_key_file_set_comment(config, PACKAGE, "terminal_settings",
 			_(" VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on keystroke;scroll on output;follow path of file"), NULL);
-	g_key_file_set_string(config, PACKAGE, "terminal_settings", app->terminal_settings);
+	g_key_file_set_string(config, PACKAGE, "terminal_settings", vte_info.terminal_settings);
+	vte_get_working_directory();	// refresh vte_info.dir
+	g_key_file_set_string(config, PACKAGE, "terminal_dir", vte_info.dir);
 #endif
 	g_key_file_set_string(config, PACKAGE, "custom_date_format", app->custom_date_format);
 	g_key_file_set_string(config, PACKAGE, "editor_font", app->editor_font);
@@ -321,8 +324,9 @@ gboolean configuration_load()
 	app->pref_toolbar_show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
 	app->pref_toolbar_show_fileops = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_fileops", TRUE);
 #ifdef HAVE_VTE
-	app->load_vte = utils_get_setting_boolean(config, PACKAGE, "load_vte", TRUE);
-	app->terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings",	"");
+	vte_info.load_vte = utils_get_setting_boolean(config, PACKAGE, "load_vte", TRUE);
+	vte_info.terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings",	"");
+	vte_info.dir = utils_get_setting_string(config, PACKAGE, "terminal_dir", NULL);
 #endif
 	app->pref_template_developer = utils_get_setting_string(config, PACKAGE, "pref_template_developer", g_get_real_name());
 	app->pref_template_company = utils_get_setting_string(config, PACKAGE, "pref_template_company", "");

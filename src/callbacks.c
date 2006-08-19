@@ -141,8 +141,8 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	}
 	scintilla_release_resources();
 #ifdef HAVE_VTE
-	if (app->have_vte) vte_close();
-	g_free(app->lib_vte);
+	if (vte_info.have_vte) vte_close();
+	g_free(vte_info.lib_vte);
 #endif
 	gtk_widget_destroy(app->window);
 
@@ -779,23 +779,25 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 	if (idx >= 0 && app->opening_session_files == FALSE)
 	{
 		utils_check_disk_status(idx);
-	}
 
 #ifdef HAVE_VTE
-	// at startup, idx is always -1, so terminal startup dir is wrong,
-	// but we could remember the vte dir to fix this.
-	if (idx >= 0 && app->have_vte && vc->follow_path && doc_list[idx].file_name != NULL)
-	{
-		gchar *path;
-		gchar *cmd;
+		if (vte_info.have_vte && vc->follow_path && doc_list[idx].file_name != NULL)
+		{
+			gchar *path;
+			gchar *cmd;
 
-		path = g_path_get_dirname(doc_list[idx].file_name);
-		cmd = g_strconcat("cd ", path, "\n", NULL);
-		vte_send_cmd(cmd);
-		g_free(path);
-		g_free(cmd);
-	}
+			path = g_path_get_dirname(doc_list[idx].file_name);
+			vte_get_working_directory();	// refresh vte_info.dir
+			if (! g_str_equal(path, vte_info.dir))
+			{
+				cmd = g_strconcat("cd ", path, "\n", NULL);
+				vte_send_cmd(cmd);
+				g_free(cmd);
+			}
+			g_free(path);
+		}
 #endif
+	}
 }
 
 

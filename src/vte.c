@@ -37,6 +37,8 @@
 #include "callbacks.h"
 
 
+VteInfo vte_info;
+
 extern gchar **environ;
 static pid_t pid;
 static GModule *module = NULL;
@@ -103,15 +105,15 @@ void vte_init(void)
 
 	GtkWidget *vte, *scrollbar, *hbox, *frame;
 
-	if (app->have_vte == FALSE)
+	if (vte_info.have_vte == FALSE)
 	{	// app->have_vte can be false, even if VTE is compiled in, think of command line option
 		geany_debug("Disabling terminal support");
 		return;
 	}
 
-	if (app->lib_vte && strlen(app->lib_vte))
+	if (vte_info.lib_vte && strlen(vte_info.lib_vte))
 	{
-		module = g_module_open(app->lib_vte, G_MODULE_BIND_LAZY);
+		module = g_module_open(vte_info.lib_vte, G_MODULE_BIND_LAZY);
 	}
 	else
 	{
@@ -122,13 +124,13 @@ void vte_init(void)
 
 	if (module == NULL)
 	{
-		app->have_vte = FALSE;
+		vte_info.have_vte = FALSE;
 		geany_debug("Could not load libvte.so.4, terminal support disabled");
 		return;
 	}
 	else
 	{
-		app->have_vte = TRUE;
+		vte_info.have_vte = TRUE;
 		vf = g_new0(struct vte_funcs, 1);
 		vc = g_new0(struct vte_conf, 1);
 		vte_register_symbols(module);
@@ -234,7 +236,8 @@ static void vte_start(GtkWidget *widget)
 	}
 
 	env = vte_get_child_environment();
-	pid = vf->vte_terminal_fork_command(VTE_TERMINAL(vte), shell, NULL, env, dir, TRUE, TRUE, TRUE);
+	pid = vf->vte_terminal_fork_command(VTE_TERMINAL(vte), shell, NULL, env,
+		(vte_info.dir == NULL) ? dir : vte_info.dir, TRUE, TRUE, TRUE);
 	g_strfreev(env);
 }
 
@@ -310,12 +313,13 @@ void vte_apply_user_settings(void)
 
 static void vte_get_settings(void)
 {
-	gchar **values = g_strsplit(app->terminal_settings, ";", 8);
+	gchar **values = g_strsplit(vte_info.terminal_settings, ";", 8);
 
 	if (g_strv_length(values) != 8)
 	{
-		app->terminal_settings = g_strdup_printf("Monospace 10;#FFFFFF;#000000;500;xterm;true;true;false");
-		values = g_strsplit(app->terminal_settings, ";", 8);
+		vte_info.terminal_settings =
+			g_strdup_printf("Monospace 10;#FFFFFF;#000000;500;xterm;true;true;false");
+		values = g_strsplit(vte_info.terminal_settings, ";", 8);
 	}
 	vc->font = g_strdup(values[0]);
 	vc->color_fore = g_new0(GdkColor, 1);
@@ -405,6 +409,49 @@ static GtkWidget *vte_create_popup_menu(void)
 void vte_send_cmd(const gchar *cmd)
 {
 	vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), cmd, strlen(cmd));
+}
+
+
+/* Taken from Terminal by os-cillation: terminal_screen_get_working_directory, thanks.
+ * Determinies the working directory using various OS-specific mechanisms. */
+const gchar* vte_get_working_directory()
+{
+  gchar  buffer[4096 + 1];
+  gchar *file;
+  gchar *cwd;
+  gint   length;
+
+  if (pid >= 0)
+    {
+      file = g_strdup_printf ("/proc/%d/cwd", pid);
+      length = readlink (file, buffer, sizeof (buffer));
+
+      if (length > 0 && *buffer == '/')
+        {
+          buffer[length] = '\0';
+          g_free(vte_info.dir);
+          vte_info.dir = g_strdup (buffer);
+        }
+      else if (length == 0)
+        {
+          cwd = g_get_current_dir ();
+          if (G_LIKELY (cwd != NULL))
+            {
+              if (chdir (file) == 0)
+                {
+				  g_free(vte_info.dir);
+				  vte_info.dir = g_get_current_dir ();
+                  chdir (cwd);
+                }
+
+              g_free (cwd);
+            }
+        }
+
+      g_free (file);
+    }
+
+  return vte_info.dir;
 }
 
 

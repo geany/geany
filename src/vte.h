@@ -30,6 +30,20 @@
 #include <unistd.h>
 
 
+#ifdef HAVE_VTE
+typedef struct 
+{
+	gboolean load_vte;
+	gboolean have_vte;
+	gchar	*lib_vte;
+	gchar	*terminal_settings;
+	gchar	*dir;
+} VteInfo;
+
+extern VteInfo vte_info;
+#endif
+
+
 void vte_init(void);
 
 void vte_close(void);
@@ -37,6 +51,8 @@ void vte_close(void);
 void vte_apply_user_settings(void);
 
 void vte_send_cmd(const gchar *cmd);
+
+const gchar* vte_get_working_directory();
 
 /*
 void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,

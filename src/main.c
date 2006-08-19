@@ -515,7 +515,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	app->ignore_fifo = ignore_fifo;
 #endif
 #ifdef HAVE_VTE
-	app->lib_vte = lib_vte;
+	vte_info.lib_vte = lib_vte;
 #endif
 	app->ignore_global_tags = ignore_global_tags;
 }
@@ -586,8 +586,7 @@ gint main(gint argc, gchar **argv)
 	configuration_load();
 	// do this here to let cmdline options overwrite configuration settings
 #ifdef HAVE_VTE
-	app->have_vte = app->load_vte;
-	if (no_vte) app->have_vte = FALSE;
+	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
 #endif
 	if (no_msgwin) app->msgwindow_visible = FALSE;
 

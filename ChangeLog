@@ -14,6 +14,13 @@
 
  * src/callbacks.c: Fix a segfault at startup if terminal follow path
                     setting is enabled.
+ * src/geany.h, src/callbacks.c, src/keyfile.c, src/vte.c, src/vte.h,
+   src/prefs.c, src/main.c:
+   Move HAVE_VTE MyApp settings to vte_info struct in src/vte.c.
+ * src/vte.c, src/vte.h:
+   Add vte_get_working_directory adapted from Terminal by os-cillation.
+ * src/vte.c, src/keyfile.c: Remember the VTE current directory.
+ * src/callbacks.c: Only send VTE cd command if directory is different.
 
 
 2006-08-18  Enrico Tröger  <enrico.troeger@uvena.de>

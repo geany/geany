@@ -172,12 +172,6 @@ typedef struct MyApp
 	gboolean			 ignore_fifo;
 	GIOChannel			*fifo_ioc;
 #endif
-#ifdef HAVE_VTE
-	gboolean			 load_vte;
-	gboolean			 have_vte;
-	gchar				*lib_vte;
-	gchar				*terminal_settings;
-#endif
 	gchar				*long_line_color;
 	gchar				*pref_template_developer;
 	gchar				*pref_template_company;
