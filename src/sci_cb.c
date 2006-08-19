@@ -1102,6 +1102,8 @@ void sci_cb_do_comment(gint idx)
 			// use single line comment
 			if (cc == NULL || strlen(cc) == 0)
 			{
+				/* disabled because of #1521714, it makes sense to double(or triple, ...) comment
+				*  if someone think it is not that good we could introduce a config option for it
 				gboolean do_continue = FALSE;
 				switch (strlen(co))
 				{
@@ -1112,7 +1114,7 @@ void sci_cb_do_comment(gint idx)
 					default: return;
 				}
 				if (do_continue) continue;
-
+				*/
 				if (ft->comment_use_indent)
 					sci_insert_text(doc_list[idx].sci, line_start + x, co);
 				else

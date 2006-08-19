@@ -6,6 +6,8 @@
  * src/dialogs.c, src/callbacks.c:
    Replaced dialogs_show_make_target() by dialogs_show_input() to have
    a general input dialog.
+ * src/sci_cb.c:
+   Comment already commented lines, too (re-closes #1521714).
 
 
 2006-08-19  Nick Treleaven  <nick.treleaven@btinternet.com>
