@@ -701,28 +701,29 @@ void dialogs_create_recent_menu(void)
 }
 
 
-void dialogs_show_make_target(void)
+void dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *default_text,
+						GCallback cb_dialog, GCallback cb_entry)
 {
 	GtkWidget *dialog, *label, *entry;
 
-	dialog = gtk_dialog_new_with_buttons(_("Enter custom options for the make tool"), GTK_WINDOW(app->window),
-										GTK_DIALOG_DESTROY_WITH_PARENT,
-										GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
-										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(app->window),
+						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 
-	label = gtk_label_new(_("Enter custom options here, all entered text is passed to the make command."));
+	label = gtk_label_new(label_text);
+	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
 	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	entry = gtk_entry_new();
-	if (app->build_make_custopt)
+	if (default_text != NULL)
 	{
-		gtk_entry_set_text(GTK_ENTRY(entry), app->build_make_custopt);
+		gtk_entry_set_text(GTK_ENTRY(entry), default_text);
 	}
-	gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
+	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
 
-	g_signal_connect((gpointer) entry, "activate", G_CALLBACK(on_make_target_entry_activate), dialog);
-	g_signal_connect((gpointer) dialog, "response", G_CALLBACK(on_make_target_dialog_response), entry);
+	if (cb_entry != NULL) g_signal_connect((gpointer) entry, "activate", cb_entry, dialog);
+	g_signal_connect((gpointer) dialog, "response", cb_dialog, entry);
 	g_signal_connect((gpointer) dialog, "delete_event", G_CALLBACK(gtk_widget_destroy), NULL);
 
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);

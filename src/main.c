@@ -288,6 +288,8 @@ static void main_init(void)
 	app->sensitive_buttons[32] = lookup_widget(app->window, "print1");
 	app->sensitive_buttons[33] = lookup_widget(app->window, "menu_reload_as1");
 	app->sensitive_buttons[34] = lookup_widget(app->window, "menu_select_all1");
+	app->sensitive_buttons[35] = lookup_widget(app->window, "insert_date1");
+	app->sensitive_buttons[36] = lookup_widget(app->window, "menu_format1");
 	app->redo_items[0] = lookup_widget(app->popup_menu, "redo1");
 	app->redo_items[1] = lookup_widget(app->window, "menu_redo2");
 	app->redo_items[2] = lookup_widget(app->window, "toolbutton_redo");
@@ -589,6 +591,8 @@ gint main(gint argc, gchar **argv)
 #endif
 	if (no_msgwin) app->msgwindow_visible = FALSE;
 
+	utils_create_insert_menu_items();
+	utils_create_insert_date_menu_items();
 	keybindings_init();
 	notebook_init();
 	templates_init();
@@ -622,7 +626,6 @@ gint main(gint argc, gchar **argv)
 	vte_init();
 #endif
 	dialogs_create_recent_menu();
-	utils_create_insert_menu_items();
 
 	msgwin_status_add(_("This is Geany %s."), VERSION);
 	if (config_dir_result != 0)

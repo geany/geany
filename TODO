@@ -5,11 +5,8 @@ TODO List:
 
 	Geany 0.8 or later:
 
-	o configurable "date/time"
 	o Go to xxx - definable command
 	o documentation: list and explain filetype modes
-	o inverting highlighting by selection
-	o src/sci_cb.c: improve auto completion(include local tags)
 	o user-definable auto completion structs
 	o documentation: preferences
 	o save build includes & arguments
@@ -17,10 +14,10 @@ TODO List:
 	o don't override Scintilla keybindings by default
 	o allow use of custom global tags files
 	o common default highlighting all in one config file
-	o show checked items for document->set menuitems
 	o (DBUS)
 	o (startup notification)
-	o (indent wrapped lines, but how?)
+	o (indent wrapped lines  - Scintilla issue)
+	o (inverting highlighting by selection - Scintilla issue)
 	o (project management)
 	o (folder tree in the sidebar)
 	o (improved Windows support)

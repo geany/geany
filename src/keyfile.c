@@ -113,6 +113,7 @@ void configuration_save()
 			_(" VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on keystroke;scroll on output;follow path of file"), NULL);
 	g_key_file_set_string(config, PACKAGE, "terminal_settings", app->terminal_settings);
 #endif
+	g_key_file_set_string(config, PACKAGE, "custom_date_format", app->custom_date_format);
 	g_key_file_set_string(config, PACKAGE, "editor_font", app->editor_font);
 	g_key_file_set_string(config, PACKAGE, "tagbar_font", app->tagbar_font);
 	g_key_file_set_string(config, PACKAGE, "msgwin_font", app->msgwin_font);
@@ -269,6 +270,7 @@ gboolean configuration_load()
 	app->tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", FALSE);
 	app->brace_match_ltgt = utils_get_setting_boolean(config, PACKAGE, "brace_match_ltgt", FALSE);
 	app->switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
+	app->custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
 	app->editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	app->tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	app->msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);

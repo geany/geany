@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
+#include <time.h>
 
 #include "callbacks.h"
 #include "interface.h"
@@ -1679,8 +1680,14 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 	switch (GPOINTER_TO_INT(user_data))
 	{
 		case 1: //custom target
-		dialogs_show_make_target();
-		break;
+		{
+			dialogs_show_input(_("Enter custom options for the make tool"),
+				_("Enter custom options here, all entered text is passed to the make command."),
+				app->build_make_custopt,
+				G_CALLBACK(on_make_target_dialog_response),
+				G_CALLBACK(on_make_target_entry_activate));
+			break;
+		}
 
 		case 2: //make object
 		{
@@ -1696,12 +1703,13 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 			object_file = g_strdup_printf("%s.o", noext);
 			g_free(noext);
 
-			g_strlcpy(app->build_make_custopt, object_file, 255);
+			g_free(app->build_make_custopt);
+			app->build_make_custopt = g_strdup(object_file);
 			g_free(object_file);
 			make_object = TRUE;
 		}
-		// fall through
 
+		// fall through
 		case 0: //make all
 		{
 			GPid child_pid;
@@ -1775,7 +1783,8 @@ on_make_target_dialog_response         (GtkDialog *dialog,
 
 		if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
-		strncpy(app->build_make_custopt, gtk_entry_get_text(GTK_ENTRY(user_data)), 255);
+		g_free(app->build_make_custopt);
+		app->build_make_custopt = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
 
 		child_pid = build_make_file(idx, TRUE);
 		if (child_pid != (GPid) 0)
@@ -2191,6 +2200,85 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 
 
 void
+on_custom_date_dialog_response         (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data)
+{
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		g_free(app->custom_date_format);
+		app->custom_date_format = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
+	}
+	gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+
+void
+on_custom_date_entry_activate          (GtkEntry        *entry,
+                                        gpointer         user_data)
+{
+	on_custom_date_dialog_response(GTK_DIALOG(user_data), GTK_RESPONSE_ACCEPT, entry);
+}
+
+
+void
+on_insert_date_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	gchar *format;
+	gchar time_str[300]; // the entered format string can be maximal 256 chars long, so we have
+						 // 44 additional characters for strtime's conversion
+	time_t t;
+	struct tm *tm;
+
+	if (idx < 0 || ! doc_list[idx].is_valid) return;
+
+	if (utils_strcmp(_("dd.mm.yyyy"), (gchar*) user_data))
+		format = "%d.%m.%Y";
+	else if (utils_strcmp(_("mm.dd.yyyy"), (gchar*) user_data))
+		format = "%m.%d.%Y";
+	else if (utils_strcmp(_("yyyy/mm/dd"), (gchar*) user_data))
+		format = "%Y/%m/%d";
+	else if (utils_strcmp(_("dd.mm.yyyy hh:mm:ss"), (gchar*) user_data))
+		format = "%d.%m.%Y %H:%M:%S";
+	else if (utils_strcmp(_("mm.dd.yyyy hh:mm:ss"), (gchar*) user_data))
+		format = "%m.%d.%Y %H:%M:%S";
+	else if (utils_strcmp(_("yyyy/mm/dd hh:mm:ss"), (gchar*) user_data))
+		format = "%Y/%m/%d %H:%M:%S";
+	else if (utils_strcmp(_("Use custom date format"), (gchar*) user_data))
+		format = app->custom_date_format;
+	else
+	{
+		// set default value
+		if (utils_strcmp("", app->custom_date_format)) app->custom_date_format = g_strdup("%d.%m.%Y");
+
+		dialogs_show_input(_("Custom date format"),
+			_("Enter here a custom date and time format which should be inserted. You can use all conversion specifiers which can be used with the ANSI C strftime function. See \"man strftime\" for more information."),
+			app->custom_date_format,
+			G_CALLBACK(on_custom_date_dialog_response),
+			G_CALLBACK(on_custom_date_entry_activate));
+		return;
+	}
+
+	// get the current time
+	t = time(NULL);
+	tm = localtime(&t);
+	if (strftime(time_str, sizeof time_str, format, tm) != 0)
+	{
+		/// FIXME inserts at wrong position if not clicked and the cursor was moved by keyboard
+		sci_insert_text(doc_list[idx].sci, clickpos, time_str);
+	}
+	else
+	{
+		utils_beep();
+		msgwin_status_add(
+				_("Date format string could not be converted (possibly too long)."));
+	}
+}
+
+
+void
 on_insert_include_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -2207,6 +2295,7 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 		text = g_strconcat("#include <", user_data, ">\n", NULL);
 	}
 
+	/// FIXME inserts at wrong position if not clicked and the cursor was moved by keyboard
 	sci_insert_text(doc_list[idx].sci, clickpos, text);
 	g_free(text);
 	if (pos > 0) sci_goto_pos(doc_list[idx].sci, pos, FALSE);

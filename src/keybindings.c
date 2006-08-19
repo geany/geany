@@ -55,6 +55,7 @@ static void cb_func_menu_undo(void);
 static void cb_func_menu_redo(void);
 static void cb_func_menu_selectall(void);
 static void cb_func_menu_preferences(void);
+static void cb_func_menu_insert_date(void);
 static void cb_func_menu_findnext(void);
 static void cb_func_menu_findprevious(void);
 static void cb_func_menu_replace(void);
@@ -132,8 +133,10 @@ void keybindings_init(void)
 		GDK_y, GDK_CONTROL_MASK, "menu_redo", _("Redo"));
 	keys[GEANY_KEYS_MENU_SELECTALL] = fill(cb_func_menu_selectall,
 		GDK_a, GDK_CONTROL_MASK, "menu_selectall", _("Select All"));
+	keys[GEANY_KEYS_MENU_INSERTDATE] = fill(cb_func_menu_insert_date,
+		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"));
 	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences,
-		GDK_p, GDK_CONTROL_MASK, "menu_preferences", _("Preferences"));
+		GDK_p, GDK_MOD1_MASK, "menu_preferences", _("Preferences"));
 	keys[GEANY_KEYS_MENU_FINDNEXT] = fill(cb_func_menu_findnext,
 		GDK_F3, 0, "menu_findnext", _("Find Next"));
 	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious,
@@ -272,6 +275,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNDO, menu_undo2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REDO, menu_redo2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SELECTALL, menu_select_all1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTDATE, insert_date_custom1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PREFERENCES, preferences1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDNEXT, find_next1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1);
@@ -295,6 +299,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_UNDO, undo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_REDO, redo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_SELECTALL, menu_select_all2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_INSERTDATE, insert_date_custom2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_ZOOMIN, zoom_in1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_ZOOMOUT, zoom_out1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_FINDUSAGE, find_usage1);
@@ -768,4 +773,9 @@ static void cb_func_edit_increaseindent(void)
 static void cb_func_edit_decreaseindent(void)
 {
 	on_menu_decrease_indent1_activate(NULL, NULL);
+}
+
+static void cb_func_menu_insert_date(void)
+{
+	gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu, "insert_date_custom2")));
 }

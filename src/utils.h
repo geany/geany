@@ -163,6 +163,8 @@ gchar *utils_get_date(void);
 
 void utils_create_insert_menu_items(void);
 
+void utils_create_insert_date_menu_items(void);
+
 gchar *utils_get_initials(gchar *name);
 
 void utils_update_toolbar_icons(GtkIconSize size);

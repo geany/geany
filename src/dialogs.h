@@ -47,7 +47,8 @@ GtkWidget *dialogs_create_build_menu_gen(gint idx);
 
 GtkWidget *dialogs_create_build_menu_tex(gint idx);
 
-void dialogs_show_make_target(void);
+void dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *default_text,
+						GCallback cb_dialog, GCallback cb_entry);
 
 void dialogs_show_goto_line(void);
 

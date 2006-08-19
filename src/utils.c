@@ -1653,7 +1653,7 @@ gchar *utils_get_date(void)
 }
 
 
-static void insert_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gchar *label)
+static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gchar *label)
 {
 	guint i = 0;
 	GtkWidget *tmp_menu;
@@ -1726,15 +1726,79 @@ void utils_create_insert_menu_items(void)
 	gtk_widget_show(blank);
 	g_signal_connect((gpointer) blank, "activate", G_CALLBACK(on_insert_include_activate),
 																	(gpointer) "blank");
-	blank = gtk_separator_menu_item_new ();
+	blank = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);
 
-	insert_items(menu_edit, menu_popup, (gchar**) c_includes_stdlib, _("C Standard Library"));
-	insert_items(menu_edit, menu_popup, (gchar**) c_includes_c99, _("ISO C99"));
-	insert_items(menu_edit, menu_popup, (gchar**) c_includes_cpp, _("C++ (C Standard Library)"));
-	insert_items(menu_edit, menu_popup, (gchar**) c_includes_cppstdlib, _("C++ Standard Library"));
-	insert_items(menu_edit, menu_popup, (gchar**) c_includes_stl, _("C++ STL"));
+	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_stdlib, _("C Standard Library"));
+	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_c99, _("ISO C99"));
+	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_cpp, _("C++ (C Standard Library)"));
+	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_cppstdlib, _("C++ Standard Library"));
+	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_stl, _("C++ STL"));
+}
+
+
+static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
+{
+	GtkWidget *item;
+
+	item = gtk_menu_item_new_with_label(label);
+	gtk_container_add(GTK_CONTAINER(me), item);
+	gtk_widget_show(item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate), label);
+
+	item = gtk_menu_item_new_with_label(label);
+	gtk_container_add(GTK_CONTAINER(mp), item);
+	gtk_widget_show(item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate), label);
+}
+
+
+void utils_create_insert_date_menu_items(void)
+{
+	GtkMenu *menu_edit = GTK_MENU(lookup_widget(app->window, "insert_date1_menu"));
+	GtkMenu *menu_popup = GTK_MENU(lookup_widget(app->popup_menu, "insert_date2_menu"));
+	GtkWidget *item;
+
+	insert_date_items(menu_edit, menu_popup, _("dd.mm.yyyy"));
+	insert_date_items(menu_edit, menu_popup, _("mm.dd.yyyy"));
+	insert_date_items(menu_edit, menu_popup, _("yyyy/mm/dd"));
+
+	item = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(menu_edit), item);
+	gtk_widget_show(item);
+	item = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(menu_popup), item);
+	gtk_widget_show(item);
+
+	insert_date_items(menu_edit, menu_popup, _("dd.mm.yyyy hh:mm:ss"));
+	insert_date_items(menu_edit, menu_popup, _("mm.dd.yyyy hh:mm:ss"));
+	insert_date_items(menu_edit, menu_popup, _("yyyy/mm/dd hh:mm:ss"));
+
+	item = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(menu_edit), item);
+	gtk_widget_show(item);
+	item = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(menu_popup), item);
+	gtk_widget_show(item);
+
+	item = gtk_menu_item_new_with_label(_("Use custom date format"));
+	gtk_container_add(GTK_CONTAINER(menu_edit), item);
+	gtk_widget_show(item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate),
+													_("Use custom date format"));
+	g_object_set_data_full(G_OBJECT(app->window), "insert_date_custom1", gtk_widget_ref(item),
+													(GDestroyNotify)gtk_widget_unref);
+
+	item = gtk_menu_item_new_with_label(_("Use custom date format"));
+	gtk_container_add(GTK_CONTAINER(menu_popup), item);
+	gtk_widget_show(item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate),
+													_("Use custom date format"));
+	g_object_set_data_full(G_OBJECT(app->popup_menu), "insert_date_custom2", gtk_widget_ref(item),
+													(GDestroyNotify)gtk_widget_unref);
+
+	insert_date_items(menu_edit, menu_popup, _("Set custom date format"));
 }
 
 

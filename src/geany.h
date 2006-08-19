@@ -190,7 +190,8 @@ typedef struct MyApp
 	gchar				*configdir;
 	gchar				*datadir;
 	gchar				*docdir;
-	gchar				 build_make_custopt[256];
+	gchar				*build_make_custopt;
+	gchar				*custom_date_format;
 	gchar				*tools_browser_cmd;
 	gchar				*tools_make_cmd;
 	gchar				*tools_term_cmd;
@@ -216,7 +217,7 @@ typedef struct MyApp
 	GtkWidget			*redo_items[3];
 	GtkWidget			*undo_items[3];
 	GtkWidget			*save_buttons[2];
-	GtkWidget			*sensitive_buttons[35];
+	GtkWidget			*sensitive_buttons[37];
 	GtkWidget			*open_colorsel;
 	GtkWidget			*open_fontsel;
 	GtkWidget			*open_filesel;

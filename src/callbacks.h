@@ -461,6 +461,19 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
+on_custom_date_dialog_response         (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data);
+
+void
+on_custom_date_entry_activate          (GtkEntry        *entry,
+                                        gpointer         user_data);
+
+void
+on_insert_date_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
 on_recent_file_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
