@@ -2,6 +2,11 @@
 
  * src/callbacks.c, src/main.c:
    Fix opening more than one file from the command-line (with fifo).
+ * src/geany.h, src/callbacks.c, src/Makefile.am, src/main.c,
+   src/main.h:
+   Moved HAVE_FIFO MyApp fields to fifo_info struct in src/main.c.
+   Prevent unnecessary 'does not look like a filename' debug messages.
+   Added fifo_finalize().
 
 
 2006-08-19  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -7,7 +7,7 @@ EXTRA_DIST = images.c gb.c win32.c win32.h
 bin_PROGRAMS = geany
 
 SRCS = \
-	main.c geany.h \
+	main.c main.h geany.h \
 	search.c search.h \
 	notebook.c notebook.h \
 	keybindings.c keybindings.h \

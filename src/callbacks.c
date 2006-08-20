@@ -49,7 +49,7 @@
 #include "keybindings.h"
 #include "encodings.h"
 #include "search.h"
-
+#include "main.h"
 
 #ifdef G_OS_WIN32
 # include "win32.h"
@@ -85,18 +85,8 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	geany_debug("Quitting...");
 
 #ifdef HAVE_FIFO
-	if (! app->ignore_fifo)
-	{
-		gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
-		// delete the fifo early, because we don't accept new files anymore
-		if (app->fifo_ioc != NULL)
-		{
-			g_io_channel_shutdown(app->fifo_ioc, FALSE, NULL);
-			g_io_channel_unref(app->fifo_ioc);
-		}
-		unlink(fifo);
-		g_free(fifo);
-	}
+	// delete the fifo early, because we don't accept new files anymore
+	fifo_finalize();
 #endif
 
 	keybindings_free();

@@ -168,10 +168,6 @@ typedef struct MyApp
 	gint				 autocompletion_max_height;
 	gint				 long_line_type;
 	gint				 long_line_column;
-#ifdef HAVE_FIFO
-	gboolean			 ignore_fifo;
-	GIOChannel			*fifo_ioc;
-#endif
 	gchar				*long_line_color;
 	gchar				*pref_template_developer;
 	gchar				*pref_template_company;

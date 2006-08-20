@@ -57,8 +57,17 @@
 
 #define N_(String) (String)
 
+
 #ifdef HAVE_FIFO
-static gchar fifo_name[512];
+static struct
+{
+	gboolean	ignore_fifo;
+	gchar		file_name[512];
+	GIOChannel	*read_ioc;
+} fifo_info;
+#endif
+
+#ifdef HAVE_FIFO
 static gboolean ignore_fifo = FALSE;
 #endif
 static gboolean debug_mode = FALSE;
@@ -334,15 +343,17 @@ static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer d
 	g_strstrip(buffer);	// remove \n char
 
 	// try to interpret the received data as a filename, otherwise do nothing
-	if (status == G_IO_STATUS_NORMAL &&
-		g_file_test(buffer, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	if (status == G_IO_STATUS_NORMAL)
 	{
-		document_open_file(-1, buffer, 0, FALSE, NULL, NULL);
-		gtk_window_deiconify(GTK_WINDOW(app->window));
-	}
-	else
-	{
-		geany_debug("got data from named pipe, but it does not look like a filename");
+		if (g_file_test(buffer, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+		{
+			document_open_file(-1, buffer, 0, FALSE, NULL, NULL);
+			gtk_window_deiconify(GTK_WINDOW(app->window));
+		}
+		else
+		{
+			geany_debug("got data from named pipe, but it does not look like a filename");
+		}
 	}
 	g_free(buffer);
 
@@ -355,7 +366,7 @@ static void write_fifo(gint argc, gchar **argv)
 	gint i;
 	GIOChannel *ioc;
 
-	ioc = g_io_channel_unix_new(open(fifo_name, O_WRONLY));
+	ioc = g_io_channel_unix_new(open(fifo_info.file_name, O_WRONLY));
 
 	for(i = 1; i < argc && argv[i] != NULL; i++)
 	{
@@ -385,14 +396,14 @@ static GIOChannel *create_fifo(gint argc, gchar **argv, const gchar *config_dir)
 	GIOChannel *ioc;
 
 	tmp = g_strconcat(config_dir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
-	g_strlcpy(fifo_name, tmp, sizeof(fifo_name));
+	g_strlcpy(fifo_info.file_name, tmp, sizeof(fifo_info.file_name));
 	g_free(tmp);
 
-	if (stat(fifo_name, &st) == 0 && (! S_ISFIFO(st.st_mode)))
+	if (stat(fifo_info.file_name, &st) == 0 && (! S_ISFIFO(st.st_mode)))
 	{	// the FIFO file exists, but is not a FIFO
-		unlink(fifo_name);
+		unlink(fifo_info.file_name);
 	}
-	else if (stat(fifo_name, &st) == 0 && S_ISFIFO(st.st_mode))
+	else if (stat(fifo_info.file_name, &st) == 0 && S_ISFIFO(st.st_mode))
 	{	// FIFO exists, there should be a running instance of Geany
 		if (argc > 1)
 		{
@@ -404,7 +415,7 @@ static GIOChannel *create_fifo(gint argc, gchar **argv, const gchar *config_dir)
 		{
 			if (dialogs_show_question(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running. If you know Geany is not running, you can delete the file and start Geany anyway.\nDelete the named pipe and start Geany?")))
 			{
-				unlink(fifo_name);
+				unlink(fifo_info.file_name);
 			}
 			else exit(0);
 		}
@@ -413,16 +424,32 @@ static GIOChannel *create_fifo(gint argc, gchar **argv, const gchar *config_dir)
 	// there is no Geany running, create fifo and start as usual, so we are a kind of server
 	geany_debug("trying to create a new named pipe");
 
-	if ((mkfifo(fifo_name, S_IRUSR | S_IWUSR)) == -1)
+	if ((mkfifo(fifo_info.file_name, S_IRUSR | S_IWUSR)) == -1)
 	{
 		if (errno != EEXIST) geany_debug("creating of a named pipe for IPC failed! (%s)", g_strerror(errno));
 		return NULL;
 	}
 
-	ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
+	ioc = g_io_channel_unix_new(open(fifo_info.file_name, O_RDONLY | O_NONBLOCK));
 	g_io_add_watch(ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
 
 	return ioc;
+}
+
+
+void fifo_finalize()
+{
+	if (! fifo_info.ignore_fifo)
+	{
+		gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
+		if (fifo_info.read_ioc != NULL)
+		{
+			g_io_channel_shutdown(fifo_info.read_ioc, FALSE, NULL);
+			g_io_channel_unref(fifo_info.read_ioc);
+		}
+		unlink(fifo);
+		g_free(fifo);
+	}
 }
 #endif
 
@@ -510,7 +537,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		app->configdir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
 
 #ifdef HAVE_FIFO
-	app->ignore_fifo = ignore_fifo;
+	fifo_info.ignore_fifo = ignore_fifo;
 #endif
 #ifdef HAVE_VTE
 	vte_info.lib_vte = lib_vte;
@@ -570,7 +597,7 @@ gint main(gint argc, gchar **argv)
 	config_dir_result = setup_config_dir();
 	// handle fifo
 #ifdef HAVE_FIFO
-	app->fifo_ioc = (ignore_fifo) ? NULL : create_fifo(argc, argv, app->configdir);
+	fifo_info.read_ioc = (ignore_fifo) ? NULL : create_fifo(argc, argv, app->configdir);
 #endif
 
 	gtk_init(&argc, &argv);
