@@ -91,8 +91,8 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 		// delete the fifo early, because we don't accept new files anymore
 		if (app->fifo_ioc != NULL)
 		{
-			g_io_channel_unref(app->fifo_ioc);
 			g_io_channel_shutdown(app->fifo_ioc, FALSE, NULL);
+			g_io_channel_unref(app->fifo_ioc);
 		}
 		unlink(fifo);
 		g_free(fifo);

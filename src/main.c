@@ -331,9 +331,11 @@ static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer d
 
 	//status = g_io_channel_read_to_end(source, &buffer, &len, NULL);
 	status = g_io_channel_read_line(source, &buffer, &len, NULL, NULL);
+	g_strstrip(buffer);	// remove \n char
 
 	// try to interpret the received data as a filename, otherwise do nothing
-	if (g_file_test(buffer, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	if (status == G_IO_STATUS_NORMAL &&
+		g_file_test(buffer, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 	{
 		document_open_file(-1, buffer, 0, FALSE, NULL, NULL);
 		gtk_window_deiconify(GTK_WINDOW(app->window));
@@ -344,16 +346,7 @@ static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer d
 	}
 	g_free(buffer);
 
-	if (status != G_IO_STATUS_NORMAL)
-		return TRUE;
-	else
-	{
-		g_io_channel_unref(app->fifo_ioc);
-		g_io_channel_shutdown(app->fifo_ioc, FALSE, NULL);
-		app->fifo_ioc = g_io_channel_unix_new(open(fifo_name, O_RDONLY | O_NONBLOCK));
-		g_io_add_watch(app->fifo_ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
-		return FALSE;
-	}
+	return TRUE;	// allow receiving more data
 }
 
 
@@ -362,19 +355,24 @@ static void write_fifo(gint argc, gchar **argv)
 	gint i;
 	GIOChannel *ioc;
 
+	ioc = g_io_channel_unix_new(open(fifo_name, O_WRONLY));
+
 	for(i = 1; i < argc && argv[i] != NULL; i++)
 	{
 		gchar *filename = get_argv_filename(argv[i]);
 
 		if (filename && g_file_test(filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 		{
-			ioc = g_io_channel_unix_new(open(fifo_name, O_WRONLY));
 			g_io_channel_write_chars(ioc, filename, -1, NULL, NULL);
+			g_io_channel_write_chars(ioc, "\n", -1, NULL, NULL);	// each line has one file
 			g_io_channel_flush(ioc, NULL);
-			g_io_channel_shutdown(ioc, TRUE, NULL);
 		}
+		else
+			g_printerr(_("Could not find file \"%s\".\n"), filename);
 		g_free(filename);
 	}
+	g_io_channel_shutdown(ioc, TRUE, NULL);
+	g_io_channel_unref(ioc);
 }
 
 
