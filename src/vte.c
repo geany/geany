@@ -35,6 +35,7 @@
 #include "support.h"
 #include "utils.h"
 #include "callbacks.h"
+#include "main.h"
 
 
 VteInfo vte_info;
@@ -413,7 +414,7 @@ void vte_send_cmd(const gchar *cmd)
 
 
 /* Taken from Terminal by os-cillation: terminal_screen_get_working_directory, thanks.
- * Determinies the working directory using various OS-specific mechanisms. */
+ * Determines the working directory using various OS-specific mechanisms. */
 const gchar* vte_get_working_directory()
 {
   gchar  buffer[4096 + 1];

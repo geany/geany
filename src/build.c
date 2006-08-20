@@ -40,6 +40,7 @@
 #include "dialogs.h"
 #include "msgwindow.h"
 #include "document.h"
+#include "main.h"
 
 
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);

@@ -31,6 +31,7 @@
 #include "document.h"
 #include "sciwrappers.h"
 #include "utils.h"
+#include "main.h"
 
 static struct
 {
@@ -910,14 +911,17 @@ void sci_cb_auto_table(ScintillaObject *sci, gint pos)
 
 void sci_cb_do_uncomment(gint idx)
 {
-	gint first_line;
-	gint last_line;
+	gint first_line, last_line;
 	gint x, i, line_start, line_len;
+	gint sel_start, sel_end, co_len;
 	gchar sel[64], *co, *cc;
-	gboolean break_loop = FALSE;
+	gboolean break_loop = FALSE, single_line = FALSE;
 	filetype *ft;
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
+
+	sel_start = sci_get_selection_start(doc_list[idx].sci);
+	sel_end = sci_get_selection_end(doc_list[idx].sci);
 
 	ft = doc_list[idx].file_type;
 
@@ -941,6 +945,8 @@ void sci_cb_do_uncomment(gint idx)
 	cc = ft->comment_close;
 	if (co == NULL) return;
 
+	co_len = strlen(co);
+
 	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
 
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
@@ -962,9 +968,10 @@ void sci_cb_do_uncomment(gint idx)
 			if (cc == NULL || strlen(cc) == 0)
 			{
 				guint i;
-				guint len = strlen(co);
 
-				switch (len)
+				single_line = TRUE;
+
+				switch (co_len)
 				{
 					case 1: if (sel[x] != co[0]) continue; break;
 					case 2: if (sel[x] != co[0] || sel[x+1] != co[1]) continue; break;
@@ -973,8 +980,8 @@ void sci_cb_do_uncomment(gint idx)
 					default: continue;
 				}
 
-				SSM(doc_list[idx].sci, SCI_GOTOPOS, line_start + x + len, 0);
-				for (i = 0; i < len; i++) SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
+				SSM(doc_list[idx].sci, SCI_GOTOPOS, line_start + x + co_len, 0);
+				for (i = 0; i < co_len; i++) SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
 			}
 			// use multi line comment
 			else
@@ -1031,7 +1038,6 @@ void sci_cb_do_uncomment(gint idx)
 					len = sci_get_line_length(doc_list[idx].sci, line);
 					linebuf = g_malloc(len + 1);
 					sci_get_line(doc_list[idx].sci, line, linebuf);
-					geany_debug("%d", line);
 					linebuf[len] = '\0';
 					x = 0;
 					while (linebuf[x] != '\0' && isspace(linebuf[x])) x++;
@@ -1046,19 +1052,35 @@ void sci_cb_do_uncomment(gint idx)
 		}
 	}
 	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
+
+	// restore selection
+	if (single_line)
+	{
+		sci_set_selection_start(doc_list[idx].sci, sel_start - co_len);
+		sci_set_selection_end(doc_list[idx].sci, sel_end - ((i - first_line) * co_len));
+	}
+	else
+	{
+		gint eol_len = (sci_get_eol_mode(doc_list[idx].sci) == SC_EOL_CRLF) ? 2 : 1;
+		sci_set_selection_start(doc_list[idx].sci, sel_start - co_len - eol_len);
+		sci_set_selection_end(doc_list[idx].sci, sel_end - co_len - eol_len);
+	}
 }
 
 
 void sci_cb_do_comment(gint idx)
 {
-	gint first_line;
-	gint last_line;
+	gint first_line, last_line;
 	gint x, i, line_start, line_len;
+	gint sel_start, sel_end, co_len;
 	gchar sel[64], *co, *cc;
-	gboolean break_loop = FALSE;
+	gboolean break_loop = FALSE, single_line = FALSE;
 	filetype *ft;
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
+
+	sel_start = sci_get_selection_start(doc_list[idx].sci);
+	sel_end = sci_get_selection_end(doc_list[idx].sci);
 
 	ft = doc_list[idx].file_type;
 
@@ -1081,6 +1103,8 @@ void sci_cb_do_comment(gint idx)
 	co = ft->comment_open;
 	cc = ft->comment_close;
 	if (co == NULL) return;
+
+	co_len = strlen(co);
 
 	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
 
@@ -1105,7 +1129,7 @@ void sci_cb_do_comment(gint idx)
 				/* disabled because of #1521714, it makes sense to double(or triple, ...) comment
 				*  if someone think it is not that good we could introduce a config option for it
 				gboolean do_continue = FALSE;
-				switch (strlen(co))
+				switch (co_len)
 				{
 					case 1: if (sel[x] == co[0]) do_continue = TRUE; break;
 					case 2: if (sel[x] == co[0] && sel[x+1] == co[1]) do_continue = TRUE; break;
@@ -1115,6 +1139,7 @@ void sci_cb_do_comment(gint idx)
 				}
 				if (do_continue) continue;
 				*/
+				single_line = TRUE;
 				if (ft->comment_use_indent)
 					sci_insert_text(doc_list[idx].sci, line_start + x, co);
 				else
@@ -1165,6 +1190,20 @@ void sci_cb_do_comment(gint idx)
 		}
 	}
 	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
+
+	// restore selection
+	if (single_line)
+	{
+		sci_set_selection_start(doc_list[idx].sci, sel_start + co_len);
+		sci_set_selection_end(doc_list[idx].sci, sel_end + ((i - first_line) * co_len));
+	}
+	else
+	{
+		gint eol_len = (sci_get_eol_mode(doc_list[idx].sci) == SC_EOL_CRLF) ? 2 : 1;
+		sci_set_selection_start(doc_list[idx].sci, sel_start + co_len + eol_len);
+		sci_set_selection_end(doc_list[idx].sci, sel_end + co_len + eol_len);
+	}
+
 }
 
 

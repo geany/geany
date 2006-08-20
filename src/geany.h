@@ -77,38 +77,6 @@
 
 
 
-/* structure for representing an open tab with all its related stuff. */
-typedef struct document
-{
-	gboolean		 is_valid;
-	gboolean		 has_tags;
-	// the filename is encoded in UTF-8, but every GLibC function expect the locale representation
-	gchar 			*file_name;
-	gchar 			*encoding;
-	gboolean		 has_bom;
-	filetype		*file_type;
-	TMWorkObject	*tm_file;
-	ScintillaObject	*sci;
-	GtkWidget		*tab_label;
-	GtkWidget		*tabmenu_label;
-	GtkWidget		*tag_tree;
-	GtkTreeStore	*tag_store;
-	GtkTreeIter		 iter;
-	gboolean		 readonly;
-	gboolean		 changed;
-	gboolean		 do_overwrite;
-	gboolean		 line_breaking;
-	gboolean		 use_auto_indention;
-	time_t			 last_check;	// to remember the last disk check
-	time_t			 mtime;
-} document;
-
-
-
-/* array of document elements to hold all information of the notebook tabs */
-document doc_list[GEANY_MAX_OPEN_FILES];
-
-
 /* store some pointers and variables for frequently used widgets  */
 typedef struct MyApp
 {
@@ -252,9 +220,6 @@ enum {
 	MEGABYTE = (KILOBYTE*1024),
 	GIGABYTE = (MEGABYTE*1024)
 };
-
-// implementation in main.c
-void geany_debug(gchar const *format, ...);
 
 
 #endif

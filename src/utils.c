@@ -49,6 +49,7 @@
 #include "sciwrappers.h"
 #include "dialogs.h"
 #include "win32.h"
+#include "main.h"
 
 #include "utils.h"
 

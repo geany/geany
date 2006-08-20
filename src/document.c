@@ -55,6 +55,7 @@
 #include "utils.h"
 #include "encodings.h"
 #include "notebook.h"
+#include "main.h"
 
 
 /* Returns -1 if no text found or the new range endpoint after replacing. */

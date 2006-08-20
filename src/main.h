@@ -27,4 +27,6 @@
 
 void fifo_finalize();
 
+void geany_debug(gchar const *format, ...);
+
 #endif

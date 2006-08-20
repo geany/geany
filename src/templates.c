@@ -27,6 +27,7 @@
 #include "templates.h"
 #include "support.h"
 #include "utils.h"
+#include "document.h"
 
 // some simple macros to reduce code size and make the code readable
 #define templates_get_filename(x) g_strconcat(app->configdir, G_DIR_SEPARATOR_S, x, NULL)

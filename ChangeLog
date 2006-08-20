@@ -1,3 +1,13 @@
+2006-08-20  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/build.c, src/document.c, src/document.h, src/geany.h,
+   src/highlighting.c, src/main.h, src/sci_cb.c, src/search.c,
+   src/templates.c, src/utils.c, src/vte.c:
+   Moved prototype for geany_debug() to main.h.
+   Moved declaration of document struct to document.h.
+ * src/sci_cb.c: Keep selection when commenting and uncommenting code.
+
+
 2006-08-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c, src/main.c:

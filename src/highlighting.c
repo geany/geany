@@ -27,6 +27,7 @@
 #include "highlighting.h"
 #include "sci_cb.h"
 #include "utils.h"
+#include "main.h"
 
 
 static style_set *types[GEANY_MAX_FILE_TYPES] = { NULL };
