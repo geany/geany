@@ -27,6 +27,8 @@
 #include "sciwrappers.h"
 #include "utils.h"
 
+#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
+
 
 // stolen from cssed (http://cssed.sf.net), thanks
 

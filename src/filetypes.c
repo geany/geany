@@ -827,3 +827,24 @@ void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 		filetypes[ft]->menu_items->can_exec = TRUE;
 	}
 }
+
+
+GtkFileFilter *filetypes_create_file_filter(filetype *ft)
+{
+	GtkFileFilter *new_filter;
+	gint i;
+
+	new_filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(new_filter, ft->title);
+
+	// (GEANY_FILETYPES_MAX_PATTERNS - 1) because the last field in pattern is NULL
+	//for (i = 0; i < (GEANY_MAX_PATTERNS - 1) && ft->pattern[i]; i++)
+	for (i = 0; ft->pattern[i]; i++)
+	{
+		gtk_file_filter_add_pattern(new_filter, ft->pattern[i]);
+	}
+
+	return new_filter;
+}
+
+

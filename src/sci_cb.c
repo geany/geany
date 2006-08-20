@@ -335,10 +335,47 @@ void sci_cb_auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
 }
 
 
+/* Finds a corresponding matching brace to the given pos
+ * (this is taken from Scintilla Editor.cxx,
+ * fit to work with sci_cb_close_block) */
+static gint brace_match(ScintillaObject *sci, gint pos)
+{
+	gchar chBrace = sci_get_char_at(sci, pos);
+	gchar chSeek = utils_brace_opposite(chBrace);
+	gint direction, styBrace, depth = 1;
+
+	if (chSeek == '\0') return -1;
+	styBrace = sci_get_style_at(sci, pos);
+	direction = -1;
+
+	if (chBrace == '(' || chBrace == '[' || chBrace == '{' || chBrace == '<')
+		direction = 1;
+
+	pos = pos + direction;
+	while ((pos >= 0) && (pos < sci_get_length(sci)))
+	{
+		gchar chAtPos = sci_get_char_at(sci, pos - 1);
+		gint styAtPos = sci_get_style_at(sci, pos);
+
+		if ((pos > sci_get_end_styled(sci)) || (styAtPos == styBrace))
+		{
+			if (chAtPos == chBrace)
+				depth++;
+			if (chAtPos == chSeek)
+				depth--;
+			if (depth == 0)
+				return pos;
+		}
+		pos = pos + direction;
+	}
+	return - 1;
+}
+
+
 void sci_cb_close_block(ScintillaObject *sci, gint pos)
 {
 	gint x = 0, cnt = 0;
-	gint start_brace = utils_brace_match(sci, pos);
+	gint start_brace = brace_match(sci, pos);
 	gint line = sci_get_line_from_position(sci, pos);
 	gint line_start = sci_get_position_from_line(sci, line);
 	gint line_len = sci_get_line_length(sci, line);
@@ -374,6 +411,32 @@ void sci_cb_close_block(ScintillaObject *sci, gint pos)
 	sci_set_anchor(sci, line_start);
 	SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
 	g_free(text);
+}
+
+
+void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen)
+{
+	gint line = sci_get_line_from_position(sci, pos);
+	gint line_start = sci_get_position_from_line(sci, line);
+	gint startword = pos - line_start;
+	gint endword = pos - line_start;
+	gchar *chunk = g_malloc(sci_get_line_length(sci, line) + 1);
+
+	word[0] = '\0';
+	sci_get_line(sci, line, chunk);
+	chunk[sci_get_line_length(sci, line)] = '\0';
+
+	while (startword > 0 && strchr(GEANY_WORDCHARS, chunk[startword - 1]))
+		startword--;
+	while (chunk[endword] && strchr(GEANY_WORDCHARS, chunk[endword]))
+		endword++;
+	if(startword == endword)
+		return;
+
+	chunk[endword] = '\0';
+
+	g_strlcpy(word, chunk + startword, wordlen); //ensure null terminated
+	g_free(chunk);
 }
 
 
@@ -413,7 +476,7 @@ gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx)
 	if (lexer == SCLEX_CPP && (style == SCE_C_COMMENT ||
 			style == SCE_C_COMMENTLINE || style == SCE_C_COMMENTDOC)) return FALSE;
 
-	utils_find_current_word(sci, pos - 1, word, sizeof word);
+	sci_cb_find_current_word(sci, pos - 1, word, sizeof word);
 	if (word[0] == '\0') return FALSE;
 
 	tags = tm_workspace_find(word, tm_tag_max_t, NULL, FALSE, doc_list[idx].file_type->lang);
@@ -913,7 +976,8 @@ void sci_cb_do_uncomment(gint idx)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len;
-	gint sel_start, sel_end, co_len;
+	gint sel_start, sel_end;
+	gsize co_len;
 	gchar sel[64], *co, *cc;
 	gboolean break_loop = FALSE, single_line = FALSE;
 	filetype *ft;

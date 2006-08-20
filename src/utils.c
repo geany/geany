@@ -263,25 +263,6 @@ void utils_close_buttons_toggle(void)
 }
 
 
-GtkFileFilter *utils_create_file_filter(filetype *ft)
-{
-	GtkFileFilter *new_filter;
-	gint i;
-
-	new_filter = gtk_file_filter_new();
-	gtk_file_filter_set_name(new_filter, ft->title);
-
-	// (GEANY_FILETYPES_MAX_PATTERNS - 1) because the last field in pattern is NULL
-	//for (i = 0; i < (GEANY_MAX_PATTERNS - 1) && ft->pattern[i]; i++)
-	for (i = 0; ft->pattern[i]; i++)
-	{
-		gtk_file_filter_add_pattern(new_filter, ft->pattern[i]);
-	}
-
-	return new_filter;
-}
-
-
 /* taken from anjuta, to determine the EOL mode of the file */
 gint utils_get_line_endings(gchar* buffer, glong size)
 {
@@ -1089,32 +1070,6 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 }
 
 
-void utils_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen)
-{
-	gint line = sci_get_line_from_position(sci, pos);
-	gint line_start = sci_get_position_from_line(sci, line);
-	gint startword = pos - line_start;
-	gint endword = pos - line_start;
-	gchar *chunk = g_malloc(sci_get_line_length(sci, line) + 1);
-
-	word[0] = '\0';
-	sci_get_line(sci, line, chunk);
-	chunk[sci_get_line_length(sci, line)] = '\0';
-
-	while (startword > 0 && strchr(GEANY_WORDCHARS, chunk[startword - 1]))
-		startword--;
-	while (chunk[endword] && strchr(GEANY_WORDCHARS, chunk[endword]))
-		endword++;
-	if(startword == endword)
-		return;
-
-	chunk[endword] = '\0';
-
-	g_strlcpy(word, chunk + startword, wordlen); //ensure null terminated
-	g_free(chunk);
-}
-
-
 /* returns the end-of-line character(s) length of the specified editor */
 gint utils_get_eol_char_len(gint idx)
 {
@@ -1419,43 +1374,6 @@ gchar *utils_remove_ext_from_filename(const gchar *filename)
 	}
 
 	return result;
-}
-
-
-/* Finds a corresponding matching brace to the given pos
- * (this is taken from Scintilla Editor.cxx,
- * fit to work with sci_cb_close_block) */
-gint utils_brace_match(ScintillaObject *sci, gint pos)
-{
-	gchar chBrace = sci_get_char_at(sci, pos);
-	gchar chSeek = utils_brace_opposite(chBrace);
-	gint direction, styBrace, depth = 1;
-
-	if (chSeek == '\0') return -1;
-	styBrace = sci_get_style_at(sci, pos);
-	direction = -1;
-
-	if (chBrace == '(' || chBrace == '[' || chBrace == '{' || chBrace == '<')
-		direction = 1;
-
-	pos = pos + direction;
-	while ((pos >= 0) && (pos < sci_get_length(sci)))
-	{
-		gchar chAtPos = sci_get_char_at(sci, pos - 1);
-		gint styAtPos = sci_get_style_at(sci, pos);
-
-		if ((pos > sci_get_end_styled(sci)) || (styAtPos == styBrace))
-		{
-			if (chAtPos == chBrace)
-				depth++;
-			if (chAtPos == chSeek)
-				depth--;
-			if (depth == 0)
-				return pos;
-		}
-		pos = pos + direction;
-	}
-	return - 1;
 }
 
 

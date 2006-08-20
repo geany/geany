@@ -22,6 +22,15 @@
 #ifndef GEANY_SCI_CB_H
 #define GEANY_SCI_CB_H 1
 
+#ifndef PLAT_GTK
+#   define PLAT_GTK 1	// needed for ScintillaWidget.h
+#endif
+
+#include "Scintilla.h"
+#include "ScintillaWidget.h"
+
+#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
+
 
 gchar **html_entities;
 
@@ -42,6 +51,8 @@ void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx);
 void sci_cb_show_macro_list(ScintillaObject *sci);
 
 gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch);
+
+void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen);
 
 gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx);
 

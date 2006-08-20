@@ -24,6 +24,13 @@
 #ifndef GEANY_FILETYPES_H
 #define GEANY_FILETYPES_H 1
 
+#ifndef PLAT_GTK
+#   define PLAT_GTK 1	// needed for ScintillaWidget.h
+#endif
+
+#include "Scintilla.h"
+#include "ScintillaWidget.h"
+
 
 enum
 {
@@ -117,5 +124,7 @@ gchar *filetypes_get_template(filetype *ft);
 void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft);
 
 void filetypes_select_radio_item(const filetype *ft);
+
+GtkFileFilter *filetypes_create_file_filter(filetype *ft);
 
 #endif

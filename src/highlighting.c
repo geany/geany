@@ -28,6 +28,7 @@
 #include "sci_cb.h"
 #include "utils.h"
 #include "main.h"
+#include "filetypes.h"
 
 
 static style_set *types[GEANY_MAX_FILE_TYPES] = { NULL };

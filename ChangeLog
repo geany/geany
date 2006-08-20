@@ -17,6 +17,16 @@
    Moved HAVE_FIFO MyApp fields to fifo_info struct in src/main.c.
    Prevent unnecessary 'does not look like a filename' debug messages.
    Added fifo_finalize().
+ * src/geany.h, src/filetypes.h, document.h, src/highlighting.h,
+   src/sci_cb.h, src/highlighting.c, src/sciwrappers.c:
+   Remove filetypes.h and Scintilla includes from geany.h.
+ * src/document.h: Add VALID_DOC_IDX macro.
+ * src/utils.h, src/utils.c, src/callbacks.c, src/keybindings.c,
+   src/sci_cb.h, src/sci_cb.c, src/dialogs.c, src/filetypes.h,
+   src/filetypes.c:
+   Move utils_brace_match to sci_cb.c.
+   Move utils_find_current_word to sci_cb.c.
+   Move utils_create_file_filter to filetypes.c.
 
 
 2006-08-19  Enrico Tröger  <enrico.troeger@uvena.de>

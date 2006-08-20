@@ -24,6 +24,13 @@
 #ifndef GEANY_HIGHLIGHTING_H
 #define GEANY_HIGHLIGHTING_H 1
 
+#ifndef PLAT_GTK
+#   define PLAT_GTK 1	// needed for ScintillaWidget.h
+#endif
+
+#include "Scintilla.h"
+#include "ScintillaWidget.h"
+
 
 typedef struct
 {

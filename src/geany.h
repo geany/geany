@@ -29,18 +29,7 @@
 
 #include <gtk/gtk.h>
 
-#ifndef PLAT_GTK
-#   define PLAT_GTK 1
-#endif
-
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
-
 #include "tm_tagmanager.h"
-
-#include "filetypes.h"
-
-#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
 // for detailed description look in the documentation, things are not

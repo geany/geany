@@ -1042,8 +1042,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 
 	if (event->button == 3)
 	{
-		utils_find_current_word(doc_list[idx].sci, clickpos,
-			current_word, sizeof current_word);
+		sci_cb_find_current_word(doc_list[idx].sci, clickpos, current_word, sizeof current_word);
 
 		utils_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
 		utils_update_popup_copy_items(idx);
@@ -1437,7 +1436,7 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 	if (idx == -1 || ! doc_list[idx].is_valid)
 		return;
 
-	utils_find_current_word(doc_list[idx].sci, pos, colour, sizeof colour);
+	sci_cb_find_current_word(doc_list[idx].sci, pos, colour, sizeof colour);
 	dialogs_show_color(colour);
 }
 

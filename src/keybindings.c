@@ -633,8 +633,7 @@ static void keybindings_call_popup_item(int menuitemkey)
 
 	pos = sci_get_current_position(doc_list[idx].sci);
 
-	utils_find_current_word(doc_list[idx].sci, pos,
-		current_word, GEANY_MAX_WORD_LENGTH);
+	sci_cb_find_current_word(doc_list[idx].sci, pos, current_word, GEANY_MAX_WORD_LENGTH);
 
 	if (*current_word == 0)
 		utils_beep();

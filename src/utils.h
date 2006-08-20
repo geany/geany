@@ -87,8 +87,6 @@ void utils_show_line_endings(void);
 
 void utils_set_fullscreen(void);
 
-GtkFileFilter *utils_create_file_filter(filetype *ft);
-
 void utils_update_tag_list(gint idx, gboolean update);
 
 gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding);
@@ -106,8 +104,6 @@ gboolean utils_check_disk_status(gint idx);
 
 //gchar *utils_get_current_tag(gint idx, gint direction);
 gint utils_get_current_function(gint idx, const gchar **tagname);
-
-void utils_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen);
 
 /* returns the end-of-line character(s) length of the specified editor */
 gint utils_get_eol_char_len(gint idx);
@@ -139,12 +135,6 @@ gboolean utils_strcmp(const gchar *a, const gchar *b);
 /* removes the extension from filename and return the result in
  * a newly allocated string */
 gchar *utils_remove_ext_from_filename(const gchar *filename);
-
-
-/* Finds a corresponding matching brace to the given pos
- * (this is taken from Scintilla Editor.cxx,
- * fit to work with sci_cb_close_block) */
-gint utils_brace_match(ScintillaObject *sci, gint pos);
 
 
 gchar utils_brace_opposite(gchar ch);
