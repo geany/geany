@@ -1,3 +1,10 @@
+2006-08-21  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/images.c, src/notebook.c:
+   Applied patch from Củ Văn Chuối to enlarge the tab close icon. This
+   should fix some display issues.
+
+
 2006-08-20  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/build.c, src/document.c, src/document.h, src/geany.h,

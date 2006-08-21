@@ -259,7 +259,7 @@ gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
 	gtk_container_add(GTK_CONTAINER(but),
 		utils_new_image_from_inline(GEANY_IMAGE_SMALL_CROSS, FALSE));
 	gtk_container_set_border_width(GTK_CONTAINER(but), 0);
-	gtk_widget_set_size_request(but, 17, 15);
+	gtk_widget_set_size_request(but, 19, 18);
 
 	align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(align), but);
