@@ -800,7 +800,7 @@ void ScintillaGTK::StartDrag() {
 }
 
 #ifdef USE_CONVERTER
-static char *ConvertText(int *lenResult, char *s, size_t len, const char *charSetDest, 
+static char *ConvertText(int *lenResult, char *s, size_t len, const char *charSetDest,
 	const char *charSetSource, bool transliterations) {
 	*lenResult = 0;
 	char *destForm = 0;
@@ -1150,10 +1150,16 @@ bool ScintillaGTK::ModifyScrollBars(int nMax, int nPage) {
 	if (horizEndPreferred < 0)
 		horizEndPreferred = 0;
 	unsigned int pageWidth = rcText.Width();
+	unsigned int pageIncrement = pageWidth / 3;
+	unsigned int charWidth = vs.styles[STYLE_DEFAULT].aveCharWidth;
 	if (GTK_ADJUSTMENT(adjustmenth)->upper != horizEndPreferred ||
-	        GTK_ADJUSTMENT(adjustmenth)->page_size != pageWidth) {
+	        GTK_ADJUSTMENT(adjustmenth)->page_size != pageWidth ||
+	        GTK_ADJUSTMENT(adjustmenth)->page_increment != pageIncrement ||
+	        GTK_ADJUSTMENT(adjustmenth)->step_increment != charWidth) {
 		GTK_ADJUSTMENT(adjustmenth)->upper = horizEndPreferred;
+		GTK_ADJUSTMENT(adjustmenth)->step_increment = charWidth;
 		GTK_ADJUSTMENT(adjustmenth)->page_size = pageWidth;
+		GTK_ADJUSTMENT(adjustmenth)->page_increment = pageIncrement;
 		gtk_adjustment_changed(GTK_ADJUSTMENT(adjustmenth));
 		modified = true;
 	}
@@ -1227,8 +1233,6 @@ int ScintillaGTK::KeyDefault(int key, int modifiers) {
 		if (key < 256) {
 			NotifyKey(key, modifiers);
 			return 0;
-			//~ AddChar(key);
-			//~ return 1;
 		} else {
 			// Pass up to container in case it is an accelerator
 			NotifyKey(key, modifiers);
@@ -1744,13 +1748,13 @@ gint ScintillaGTK::PressThis(GdkEventButton *event) {
 			return FALSE;
 		}
 	} else if (event->button == 4) {
-		// Wheel scrolling up (only xwin gtk does it this way)
+		// Wheel scrolling up (only GTK 1.x does it this way)
 		if (ctrl)
 			SetAdjustmentValue(adjustmenth, (xOffset / 2) - 6);
 		else
 			SetAdjustmentValue(adjustmentv, topLine - 3);
 	} else if (event->button == 5) {
-		// Wheel scrolling down (only xwin gtk does it this way)
+		// Wheel scrolling down (only GTK 1.x does it this way)
 		if (ctrl)
 			SetAdjustmentValue(adjustmenth, (xOffset / 2) + 6);
 		else
@@ -1790,8 +1794,8 @@ gint ScintillaGTK::MouseRelease(GtkWidget *widget, GdkEventButton *event) {
 	return FALSE;
 }
 
-// win32gtk has a special wheel mouse event for whatever reason and doesn't
-// use the button4/5 trick used under X windows.
+// win32gtk and GTK >= 2 use SCROLL_* events instead of passing the
+// button4/5/6/7 events to the GTK app
 #if PLAT_GTK_WIN32 || (GTK_MAJOR_VERSION >= 2)
 gint ScintillaGTK::ScrollEvent(GtkWidget *widget,
                                GdkEventScroll *event) {
@@ -1821,7 +1825,7 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget,
 			cLineScroll = 4;
 		sciThis->wheelMouseIntensity = cLineScroll;
 	}
-	if (event->direction == GDK_SCROLL_UP) {
+	if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_LEFT) {
 		cLineScroll *= -1;
 	}
 	g_get_current_time(&sciThis->lastWheelMouseTime);
@@ -1837,21 +1841,23 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget,
 		return FALSE;
 	}
 
+    // Horizontal scrolling
+	if (event->direction == GDK_SCROLL_LEFT || event->direction == GDK_SCROLL_RIGHT) {
+		sciThis->HorizontalScrollTo(sciThis->xOffset + cLineScroll);
+
 	// Text font size zoom
-	if (event->state & GDK_CONTROL_MASK) {
+	} else if (event->state & GDK_CONTROL_MASK) {
 		if (cLineScroll < 0) {
 			sciThis->KeyCommand(SCI_ZOOMIN);
-			return TRUE;
 		} else {
 			sciThis->KeyCommand(SCI_ZOOMOUT);
-			return TRUE;
 		}
 
 	// Regular scrolling
 	} else {
 		sciThis->ScrollTo(sciThis->topLine + cLineScroll);
-		return TRUE;
 	}
+	return TRUE;
 }
 #endif
 

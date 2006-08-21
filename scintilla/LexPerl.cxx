@@ -68,14 +68,22 @@ static bool isPerlKeyword(unsigned int start, unsigned int end, WordList &keywor
 	return keywords.InList(s);
 }
 
+// Note: as lexer uses chars, UTF-8 bytes are considered as <0 values
+// Note: iswordchar() was used in only one place in LexPerl, it is
+// unnecessary as '.' is processed as the concatenation operator, so
+// only isWordStart() is used in LexPerl
+
+static inline bool isWordStart(char ch) {
+	return !isascii(ch) || isalnum(ch) || ch == '_';
+}
+
 static inline bool isEndVar(char ch) {
-	return !isalnum(ch) && ch != '#' && ch != '$' &&
+	return isascii(ch) && !isalnum(ch) && ch != '#' && ch != '$' &&
 	       ch != '_' && ch != '\'';
 }
 
-
 static inline bool isNonQuote(char ch) {
-	return isalnum(ch) || ch == '_';
+	return !isascii(ch) || isalnum(ch) || ch == '_';
 }
 
 static inline char actualNumStyle(int numberStyle) {
@@ -284,7 +292,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 		}
 
 		if (state == SCE_PL_DEFAULT) {
-			if (isdigit(ch) || (isdigit(chNext) &&
+			if ((isascii(ch) && isdigit(ch)) || (isascii(chNext) && isdigit(chNext) &&
 				(ch == '.' || ch == 'v'))) {
 				state = SCE_PL_NUMBER;
                 backflag = BACK_NONE;
@@ -295,7 +303,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 						numState = PERLNUM_HEX;
 					} else if (chNext == 'b') {
                         numState = PERLNUM_BINARY;
-                    } else if (isdigit(chNext)) {
+                    } else if (isascii(chNext) && isdigit(chNext)) {
                         numState = PERLNUM_OCTAL;
                     }
                     if (numState != PERLNUM_DECIMAL) {
@@ -306,7 +314,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 				} else if (ch == 'v') {	// vector
 					numState = PERLNUM_V_VECTOR;
 				}
-			} else if (iswordstart(ch)) {
+			} else if (isWordStart(ch)) {
                 // if immediately prefixed by '::', always a bareword
                 state = SCE_PL_WORD;
                 if (chPrev == ':' && styler.SafeGetCharAt(i - 2) == ':') {
@@ -338,7 +346,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 					Quote.New(1);
                     kw++;
 				} else if (ch == 'x' && (chNext == '=' ||	// repetition
-                           (chNext != '_' && !isalnum(chNext)) ||
+                           !isWordStart(chNext) ||
                            (isdigit(chPrev) && isdigit(chNext)))) {
                     state = SCE_PL_OPERATOR;
                 }
@@ -347,7 +355,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
                 // otherwise it is always a bareword and we skip a lot of scanning
                 // note: keywords assumed to be limited to [_a-zA-Z] only
                 if (state == SCE_PL_WORD) {
-                    while (iswordstart(styler.SafeGetCharAt(kw))) kw++;
+                    while (isWordStart(styler.SafeGetCharAt(kw))) kw++;
                     if (!isPerlKeyword(styler.GetStartSegment(), kw, keywords, styler)) {
                         state = SCE_PL_IDENTIFIER;
                     }
@@ -371,7 +379,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
                         if (ch2 == '{' && !moreback) {
                             // {bareword: possible variable spec
                             brace = true;
-                        } else if ((ch2 == '&')
+                        } else if ((ch2 == '&' && styler.SafeGetCharAt(j - 1) != '&')
                                 // &bareword: subroutine call
                                 || (ch2 == '>' && styler.SafeGetCharAt(j - 1) == '-')
                                 // ->bareword: part of variable spec
@@ -403,7 +411,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
                 backflag = BACK_NONE;
                 // an identifier or bareword
                 if (state == SCE_PL_IDENTIFIER) {
-                    if ((!iswordchar(chNext) && chNext != '\'')
+                    if ((!isWordStart(chNext) && chNext != '\'')
                         || (chNext == '.' && chNext2 == '.')) {
                         // We need that if length of word == 1!
                         // This test is copied from the SCE_PL_WORD handler.
@@ -462,7 +470,8 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 					styler.ColourTo(i, SCE_PL_SCALAR);
 				} else {
 					state = SCE_PL_SCALAR;
-					if (chNext == '`' && chNext2 == '`') {
+					if ((chNext == '`' && chNext2 == '`')
+                     || (chNext == ':' && chNext2 == ':')) {
 						i += 2;
 						ch = styler.SafeGetCharAt(i);
 						chNext = styler.SafeGetCharAt(i + 1);
@@ -474,9 +483,14 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 				}
                 backflag = BACK_NONE;
 			} else if (ch == '@') {
-				if (isalpha(chNext) || chNext == '#' || chNext == '$'
+				if (!isascii(chNext) || isalpha(chNext) || chNext == '#' || chNext == '$'
 					|| chNext == '_' || chNext == '+' || chNext == '-') {
 					state = SCE_PL_ARRAY;
+                } else if (chNext == ':' && chNext2 == ':') {
+                    state = SCE_PL_ARRAY;
+                    i += 2;
+                    ch = styler.SafeGetCharAt(i);
+                    chNext = styler.SafeGetCharAt(i + 1);
 				} else if (chNext != '{' && chNext != '[') {
 					styler.ColourTo(i, SCE_PL_ARRAY);
 				} else {
@@ -484,12 +498,17 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 				}
                 backflag = BACK_NONE;
 			} else if (ch == '%') {
-				if (isalpha(chNext) || chNext == '#' || chNext == '$'
+				if (!isascii(chNext) || isalpha(chNext) || chNext == '#' || chNext == '$'
                     || chNext == '_' || chNext == '!' || chNext == '^') {
 					state = SCE_PL_HASH;
                     i++;
                     ch = chNext;
                     chNext = chNext2;
+                } else if (chNext == ':' && chNext2 == ':') {
+                    state = SCE_PL_HASH;
+                    i += 2;
+                    ch = styler.SafeGetCharAt(i);
+                    chNext = styler.SafeGetCharAt(i + 1);
 				} else if (chNext == '{') {
 					styler.ColourTo(i, SCE_PL_HASH);
 				} else {
@@ -500,8 +519,13 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
                 char strch[2];
                 strch[0] = chNext;
                 strch[1] = '\0';
-				if (isalpha(chNext) || chNext == '_' ||
-                    NULL != strstr("^/|,\\\";#%^:?<>)[]", strch)) {
+                if (chNext == ':' && chNext2 == ':') {
+                    state = SCE_PL_SYMBOLTABLE;
+                    i += 2;
+                    ch = styler.SafeGetCharAt(i);
+                    chNext = styler.SafeGetCharAt(i + 1);
+				} else if (!isascii(chNext) || isalpha(chNext) || chNext == '_'
+                        || NULL != strstr("^/|,\\\";#%^:?<>)[]", strch)) {
 					state = SCE_PL_SYMBOLTABLE;
                     i++;
                     ch = chNext;
@@ -748,9 +772,9 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 				if (!isdigit(chNext)) {
 					goto numAtEnd;
 				}
-			} else if (isalnum(ch)) {
+			} else if (!isascii(ch) || isalnum(ch)) {
 				if (numState == PERLNUM_VECTOR || numState == PERLNUM_V_VECTOR) {
-					if (isalpha(ch)) {
+					if (!isascii(ch) || isalpha(ch)) {
 						if (dotCount == 0) { // change to word
 							state = SCE_PL_IDENTIFIER;
 						} else { // vector then word
@@ -765,7 +789,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 							ch = chNext;
 							chNext = chNext2;
 						}
-					} else if (!isdigit(ch)) { // number then word
+					} else if (!isascii(ch) || !isdigit(ch)) { // number then word
 						goto numAtEnd;
 					}
 				} else if (numState == PERLNUM_FLOAT) {
@@ -798,7 +822,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 				goto restartLexer;
 			}
 		} else if (state == SCE_PL_IDENTIFIER) {
-			if (!iswordstart(chNext) && chNext != '\'') {
+			if (!isWordStart(chNext) && chNext != '\'') {
 				styler.ColourTo(i, SCE_PL_IDENTIFIER);
 				state = SCE_PL_DEFAULT;
 				ch = ' ';
@@ -994,7 +1018,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 						}
 					} else if (ch == Quote.Up /*&& chPrev != '\\'*/) {
 						Quote.Count++;
-					} else if (!isalpha(chNext)) {
+					} else if (!isascii(chNext) || !isalpha(chNext)) {
 						if (Quote.Rep <= 0) {
 							styler.ColourTo(i, state);
 							state = SCE_PL_DEFAULT;
@@ -1028,7 +1052,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 						if (isspacechar(ch)) {
 							// Keep going
 						}
-						else if (isalnum(ch)) {
+						else if (!isascii(ch) || isalnum(ch)) {
 							styler.ColourTo(i, state);
 							state = SCE_PL_DEFAULT;
 							ch = ' ';
@@ -1040,7 +1064,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 						if (Quote.Count == 0) {
 							Quote.Rep--;
 						}
-						if (!isalpha(chNext)) {
+						if (!isascii(chNext) || !isalpha(chNext)) {
 							if (Quote.Rep <= 0) {
 								styler.ColourTo(i, state);
 								state = SCE_PL_DEFAULT;
@@ -1052,7 +1076,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 						}
 					} else if (ch == Quote.Up /*&& chPrev != '\\'*/) {
 						Quote.Count++;
-					} else if (!isalpha(chNext)) {
+					} else if (!isascii(chNext) || !isalpha(chNext)) {
 						if (Quote.Rep <= 0) {
 							styler.ColourTo(i, state);
 							state = SCE_PL_DEFAULT;

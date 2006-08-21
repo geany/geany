@@ -23,6 +23,16 @@ size_t iconv_adaptor(size_t(*f_iconv)(ConverterHandle, T, size_t *, char **, siz
  */
 class Converter {
 	ConverterHandle iconvh;
+	void OpenHandle(const char *fullDestination, const char *charSetSource) {
+#if GTK_MAJOR_VERSION >= 2
+		iconvh = g_iconv_open(fullDestination, charSetSource);
+#else
+		iconvh = iconv_open(fullDestination, charSetSource);
+#endif
+	}
+	bool Succeeded() const {
+		return iconvh != iconvhBad;
+	}
 public:
 	Converter() {
 		iconvh = iconvhBad;
@@ -35,25 +45,26 @@ public:
 		Close();
 	}
 	operator bool() const {
-		return iconvh != iconvhBad;
+		return Succeeded();
 	}
 	void Open(const char *charSetDestination, const char *charSetSource, bool transliterations=true) {
 		Close();
 		if (*charSetSource) {
-			char fullDest[200];
-			strcpy(fullDest, charSetDestination);
+			// Try allowing approximate transliterations
 			if (transliterations) {
+				char fullDest[200];
+				strcpy(fullDest, charSetDestination);
 				strcat(fullDest, "//TRANSLIT");
+				OpenHandle(fullDest, charSetSource);
 			}
-#if GTK_MAJOR_VERSION >= 2
-			iconvh = g_iconv_open(fullDest, charSetSource);
-#else
-			iconvh = iconv_open(fullDest, charSetSource);
-#endif
+			if (!Succeeded()) {
+				// Transliterations failed so try basic name
+				OpenHandle(charSetDestination, charSetSource);
+			}
 		}
 	}
 	void Close() {
-		if (iconvh != iconvhBad) {
+		if (Succeeded()) {
 #if GTK_MAJOR_VERSION >= 2
 			g_iconv_close(iconvh);
 #else
@@ -63,7 +74,7 @@ public:
 		}
 	}
 	size_t Convert(char** src, size_t *srcleft, char **dst, size_t *dstleft) const {
-		if (iconvh == iconvhBad) {
+		if (!Succeeded()) {
 			return (size_t)(-1);
 		} else {
 #if GTK_MAJOR_VERSION >= 2

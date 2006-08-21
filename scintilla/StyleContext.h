@@ -107,16 +107,16 @@ public:
 		return static_cast<unsigned char>(styler.SafeGetCharAt(currentPos+n));
 	}
 	bool Match(char ch0) {
-		return ch == ch0;
+		return ch == static_cast<unsigned char>(ch0);
 	}
 	bool Match(char ch0, char ch1) {
-		return (ch == ch0) && (chNext == ch1);
+		return (ch == static_cast<unsigned char>(ch0)) && (chNext == static_cast<unsigned char>(ch1));
 	}
 	bool Match(const char *s) {
-		if (ch != *s)
+		if (ch != static_cast<unsigned char>(*s))
 			return false;
 		s++;
-		if (chNext != *s)
+		if (chNext != static_cast<unsigned char>(*s))
 			return false;
 		s++;
 		for (int n=2; *s; n++) {
@@ -127,14 +127,14 @@ public:
 		return true;
 	}
 	bool MatchIgnoreCase(const char *s) {
-		if (tolower(ch) != *s)
+		if (tolower(ch) != static_cast<unsigned char>(*s))
 			return false;
 		s++;
-		if (tolower(chNext) != *s)
+		if (tolower(chNext) != static_cast<unsigned char>(*s))
 			return false;
 		s++;
 		for (int n=2; *s; n++) {
-			if (*s !=
+			if (static_cast<unsigned char>(*s) !=
 				tolower(static_cast<unsigned char>(styler.SafeGetCharAt(currentPos+n))))
 				return false;
 			s++;

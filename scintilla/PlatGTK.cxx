@@ -319,7 +319,7 @@ static const char *CharacterSetName(int characterSet) {
 	case SC_CHARSET_VIETNAMESE:
 		return "*-*";
 	case SC_CHARSET_THAI:
-		return "*-1";
+		return "iso8859-11";
 	case SC_CHARSET_8859_15:
 		return "iso8859-15";
 	default:
@@ -781,7 +781,7 @@ const char *CharacterSetID(int characterSet) {
 	case SC_CHARSET_VIETNAMESE:
 		return "";
 	case SC_CHARSET_THAI:
-		return "ISO-8859-1";
+		return "ISO-8859-11";
 	case SC_CHARSET_8859_15:
 		return "ISO-8859-15";
 	default:

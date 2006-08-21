@@ -825,12 +825,12 @@ void WordList::SetFromAllocated() {
 	memcpy(wordsNoCase, words, (len + 1) * sizeof (*words));
 }
 
-int cmpString(const void *a1, const void *a2) {
+extern "C" int cmpString(const void *a1, const void *a2) {
 	// Can't work out the correct incantation to use modern casts here
 	return strcmp(*(char**)(a1), *(char**)(a2));
 }
 
-int cmpStringNoCase(const void *a1, const void *a2) {
+extern "C" int cmpStringNoCase(const void *a1, const void *a2) {
 	// Can't work out the correct incantation to use modern casts here
 	return CompareCaseInsensitive(*(char**)(a1), *(char**)(a2));
 }
