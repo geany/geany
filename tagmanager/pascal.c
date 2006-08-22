@@ -246,6 +246,13 @@ static void findPascalTags (void)
 			kind = K_FUNCTION;
 		    }
 		    break;
+		case 't':
+		    if (tail ("ype"))
+		    {
+			get_tagname = TRUE;
+			kind = K_FUNCTION;
+		    }
+		    break;
 	    }
 	}				/* while not eof */
     }
