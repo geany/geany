@@ -203,7 +203,7 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 	{
 		if (app->pref_main_confirm_exit)
 		{
-			if (dialogs_show_question(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
+			if (dialogs_show_question_full(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
 				_("Do you really want to quit?")))
 					destroyapp(NULL, gdata);
 			else app->quitting = FALSE;
