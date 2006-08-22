@@ -31,16 +31,34 @@
 
 
 #ifdef HAVE_VTE
-typedef struct 
+typedef struct
 {
 	gboolean load_vte;
 	gboolean have_vte;
 	gchar	*lib_vte;
-	gchar	*terminal_settings;
 	gchar	*dir;
 } VteInfo;
 
 extern VteInfo vte_info;
+
+
+typedef struct
+{
+	GtkWidget *vte;
+	GtkWidget *menu;
+	GtkWidget *im_submenu;
+	gboolean scroll_on_key;
+	gboolean scroll_on_out;
+	gboolean ignore_menu_bar_accel;
+	gboolean follow_path;
+	gint scrollback_lines;
+	gchar *emulation;
+	gchar *shell;
+	gchar *font;
+	GdkColor *colour_fore;
+	GdkColor *colour_back;
+} VteConfig;
+VteConfig *vc;
 #endif
 
 
@@ -80,26 +98,9 @@ struct _VteTerminal
 };
 
 
-struct vte_conf
-{
-	GtkWidget *vte;
-	GtkWidget *menu;
-	GtkWidget *im_submenu;
-	gboolean scroll_on_key;
-	gboolean scroll_on_out;
-	gboolean follow_path;
-	gint scrollback_lines;
-	gchar *emulation;
-	gchar *font;
-	GdkColor *color_fore;
-	GdkColor *color_back;
-};
-struct vte_conf *vc;
-
-
 /* store function pointers in a struct to avoid a strange segfault if they are stored directly
  * if accessed directly, gdb says the segfault arrives at old_tab_width(prefs.c), don't ask me */
-struct vte_funcs
+struct VteFunctions
 {
 	GtkWidget* (*vte_terminal_new) (void);
 	pid_t (*vte_terminal_fork_command) (VteTerminal *terminal, const char *command, char **argv,

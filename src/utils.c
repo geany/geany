@@ -1944,6 +1944,8 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 {
 	gchar *buffer = g_malloc0(9);
 
+	if (color == NULL) return NULL;
+
 	g_snprintf(buffer, 8, "#%02X%02X%02X",
 	      (guint) (utils_scale_round(color->red / 256, 255)),
 	      (guint) (utils_scale_round(color->green / 256, 255)),

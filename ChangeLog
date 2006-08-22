@@ -1,3 +1,13 @@
+2006-08-22  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/vte.c, src/prefs.c, src/keyfile.c, src/utils.c:
+   Save all VTE settings in an own VTE section in the configuration
+   file instead of using an unhandy string list.
+   Added new settings: ignore menu bar accelerator and define the shell
+   which is started within the VTE.
+   (Code not yet complete, might be buggy, GUI stuff is missing)
+
+
 2006-08-21  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/images.c, src/notebook.c:

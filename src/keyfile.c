@@ -25,6 +25,12 @@
 
 #include "geany.h"
 
+#ifdef HAVE_VTE
+#include <pwd.h>
+#include <sys/types.h>
+#include <unistd.h>
+#endif
+
 #include "support.h"
 #include "keyfile.h"
 #include "utils.h"
@@ -109,12 +115,29 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->pref_editor_auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->pref_editor_auto_complete_constructs);
 #ifdef HAVE_VTE
-	g_key_file_set_boolean(config, PACKAGE, "load_vte", vte_info.load_vte);
-	g_key_file_set_comment(config, PACKAGE, "terminal_settings",
-			_(" VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on keystroke;scroll on output;follow path of file"), NULL);
-	g_key_file_set_string(config, PACKAGE, "terminal_settings", vte_info.terminal_settings);
-	vte_get_working_directory();	// refresh vte_info.dir
-	g_key_file_set_string(config, PACKAGE, "terminal_dir", vte_info.dir);
+	g_key_file_set_boolean(config, "VTE", "load_vte", vte_info.load_vte);
+	if (vte_info.load_vte)
+	{
+		gchar *tmp_string;
+
+		g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
+		g_key_file_set_string(config, "VTE", "font", vc->font);
+		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
+		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
+		g_key_file_set_boolean(config, "VTE", "ignore_menu_bar_accel", vc->ignore_menu_bar_accel);
+		g_key_file_set_boolean(config, "VTE", "follow_path", vc->follow_path);
+		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
+		g_key_file_set_string(config, "VTE", "font", vc->font);
+		g_key_file_set_string(config, "VTE", "shell", vc->shell);
+		tmp_string = utils_get_hex_from_color(vc->colour_fore);
+		g_key_file_set_string(config, "VTE", "colour_fore", tmp_string);
+		g_free(tmp_string);
+		tmp_string = utils_get_hex_from_color(vc->colour_back);
+		g_key_file_set_string(config, "VTE", "colour_back", tmp_string);
+		g_free(tmp_string);
+		vte_get_working_directory();	// refresh vte_info.dir
+		g_key_file_set_string(config, "VTE", "last_dir", vte_info.dir);
+	}
 #endif
 	g_key_file_set_string(config, PACKAGE, "custom_date_format", app->custom_date_format);
 	g_key_file_set_string(config, PACKAGE, "editor_font", app->editor_font);
@@ -324,9 +347,38 @@ gboolean configuration_load()
 	app->pref_toolbar_show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
 	app->pref_toolbar_show_fileops = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_fileops", TRUE);
 #ifdef HAVE_VTE
-	vte_info.load_vte = utils_get_setting_boolean(config, PACKAGE, "load_vte", TRUE);
-	vte_info.terminal_settings = utils_get_setting_string(config, PACKAGE, "terminal_settings",	"");
-	vte_info.dir = utils_get_setting_string(config, PACKAGE, "terminal_dir", NULL);
+	vte_info.load_vte = utils_get_setting_boolean(config, "VTE", "load_vte", TRUE);
+	if (vte_info.load_vte)
+	{
+		struct passwd *pw = getpwuid(getuid());
+		gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
+
+		vc = g_new0(VteConfig, 1);
+		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
+		if ((vte_info.dir == NULL || utils_strcmp(vte_info.dir, "")) && pw != NULL)
+			// last dir is not set, fallback to user's home directory
+			vte_info.dir = g_strdup(pw->pw_dir);
+		else if (vte_info.dir == NULL && pw == NULL)
+			// fallback to root
+			vte_info.dir = g_strdup("/");
+
+		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
+		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
+		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
+		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
+		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
+		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
+		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
+		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
+		vc->colour_fore = g_new0(GdkColor, 1);
+		vc->colour_back = g_new0(GdkColor, 1);
+		tmp_string = utils_get_setting_string(config, "VTE", "colour_fore", "#ffffff");
+		gdk_color_parse(tmp_string, vc->colour_fore);
+		g_free(tmp_string);
+		tmp_string = utils_get_setting_string(config, "VTE", "colour_back", "#000000");
+		gdk_color_parse(tmp_string, vc->colour_back);
+		g_free(tmp_string);
+	}
 #endif
 	app->pref_template_developer = utils_get_setting_string(config, PACKAGE, "pref_template_developer", g_get_real_name());
 	app->pref_template_company = utils_get_setting_string(config, PACKAGE, "pref_template_company", "");

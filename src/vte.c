@@ -25,8 +25,6 @@
 #ifdef HAVE_VTE
 
 #include <gdk/gdkkeysyms.h>
-#include <pwd.h>
-#include <unistd.h>
 #include <signal.h>
 #include <string.h>
 
@@ -43,7 +41,7 @@ VteInfo vte_info;
 extern gchar **environ;
 static pid_t pid;
 static GModule *module = NULL;
-static struct vte_funcs *vf;
+static struct VteFunctions *vf;
 static gboolean popup_menu_created = FALSE;
 
 
@@ -54,7 +52,6 @@ static void vte_start(GtkWidget *widget);
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
 static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
 static void vte_register_symbols(GModule *module);
-static void vte_get_settings(void);
 static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *vte_create_popup_menu(void);
 static void vte_char_size_changed(VteTerminal *vteterminal, guint arg1, guint arg2,
@@ -132,8 +129,7 @@ void vte_init(void)
 	else
 	{
 		vte_info.have_vte = TRUE;
-		vf = g_new0(struct vte_funcs, 1);
-		vc = g_new0(struct vte_conf, 1);
+		vf = g_new0(struct VteFunctions, 1);
 		vte_register_symbols(module);
 	}
 
@@ -148,8 +144,6 @@ void vte_init(void)
 	gtk_container_add(GTK_CONTAINER(frame), hbox);
 	gtk_box_pack_start(GTK_BOX(hbox), vte, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), scrollbar, FALSE, FALSE, 0);
-
-	vte_get_settings();
 
 	vf->vte_terminal_set_size(VTE_TERMINAL(vte), 30, 1);
 	//vf->vte_terminal_set_encoding(VTE_TERMINAL(vte), "UTF-8");
@@ -187,8 +181,8 @@ void vte_close(void)
 	if (popup_menu_created) gtk_widget_destroy(vc->menu);
 	g_free(vc->font);
 	g_free(vc->emulation);
-	g_free(vc->color_back);
-	g_free(vc->color_fore);
+	g_free(vc->colour_back);
+	g_free(vc->colour_fore);
 	g_free(vc);
 	g_module_close(module);
 }
@@ -219,26 +213,11 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 static void vte_start(GtkWidget *widget)
 {
 	VteTerminal *vte = VTE_TERMINAL(widget);
-	struct passwd *pw;
-	const gchar *shell;
-	const gchar *dir = NULL;
 	gchar **env;
 
-	pw = getpwuid(getuid());
-	if (pw)
-	{
-		shell = pw->pw_shell;
-		dir = pw->pw_dir;
-	}
-	else
-	{
-		shell = "/bin/sh";
-		dir = "/";
-	}
-
 	env = vte_get_child_environment();
-	pid = vf->vte_terminal_fork_command(VTE_TERMINAL(vte), shell, NULL, env,
-		(vte_info.dir == NULL) ? dir : vte_info.dir, TRUE, TRUE, TRUE);
+	pid = vf->vte_terminal_fork_command(VTE_TERMINAL(vte), vc->shell, NULL, env,
+												vte_info.dir, TRUE, TRUE, TRUE);
 	g_strfreev(env);
 }
 
@@ -307,37 +286,12 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
 	vf->vte_terminal_set_emulation(VTE_TERMINAL(vc->vte), vc->emulation);
 	vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
-	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->color_fore);
-	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->color_back);
-}
+	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
+	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
 
-
-static void vte_get_settings(void)
-{
-	gchar **values = g_strsplit(vte_info.terminal_settings, ";", 8);
-
-	if (g_strv_length(values) != 8)
-	{
-		vte_info.terminal_settings =
-			g_strdup_printf("Monospace 10;#FFFFFF;#000000;500;xterm;true;true;false");
-		values = g_strsplit(vte_info.terminal_settings, ";", 8);
-	}
-	vc->font = g_strdup(values[0]);
-	vc->color_fore = g_new0(GdkColor, 1);
-	vc->color_back = g_new0(GdkColor, 1);
-	gdk_color_parse(values[1], vc->color_fore);
-	gdk_color_parse(values[2], vc->color_back);
-
-	vc->scrollback_lines = strtod(values[3], NULL);
-	if ((vc->scrollback_lines < 0) || (vc->scrollback_lines > 5000)) vc->scrollback_lines = 500;
-
-	vc->emulation = g_strdup(values[4]);
-
-	vc->scroll_on_key = utils_atob(values[5]);
-	vc->scroll_on_out = utils_atob(values[6]);
-	vc->follow_path = utils_atob(values[7]);
-
-	g_strfreev(values);
+	if (vc->ignore_menu_bar_accel)
+			gtk_settings_set_string_property(gtk_settings_get_default(), "gtk-menu-bar-accel",
+				"<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
 }
 
 
@@ -487,5 +441,6 @@ gboolean vte_drag_drop(GtkWidget *widget, GdkDragContext *drag_context, gint x, 
 	return TRUE;
 }
 */
+
 
 #endif

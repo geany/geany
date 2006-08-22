@@ -331,10 +331,10 @@ void prefs_init_dialog(void)
 		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
 
 		widget = lookup_widget(app->prefs_dialog, "color_fore");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->color_fore);
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_fore);
 
 		widget = lookup_widget(app->prefs_dialog, "color_back");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->color_back);
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_back);
 
 		widget = lookup_widget(app->prefs_dialog, "spin_scrollback");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
@@ -573,8 +573,6 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		// VTE settings
 		if (vte_info.have_vte)
 		{
-			gchar *hex_color_back, *hex_color_fore;
-
 			widget = lookup_widget(app->prefs_dialog, "spin_scrollback");
 			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
@@ -591,18 +589,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 			widget = lookup_widget(app->prefs_dialog, "check_follow_path");
 			vc->follow_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-			g_free(vte_info.terminal_settings);
-			hex_color_fore = utils_get_hex_from_color(vc->color_fore);
-			hex_color_back = utils_get_hex_from_color(vc->color_back);
-			vte_info.terminal_settings = g_strdup_printf("%s;%s;%s;%d;%s;%s;%s;%s", vc->font,
-					hex_color_fore, hex_color_back,
-					vc->scrollback_lines, vc->emulation,
-					utils_btoa(vc->scroll_on_key), utils_btoa(vc->scroll_on_out),
-					utils_btoa(vc->follow_path));
-
 			vte_apply_user_settings();
-			g_free(hex_color_fore);
-			g_free(hex_color_back);
 		}
 #endif
 
@@ -657,16 +644,16 @@ void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
 #ifdef HAVE_VTE
 		case 2:
 		{
-			g_free(vc->color_fore);
-			vc->color_fore = g_new0(GdkColor, 1);
-			gtk_color_button_get_color(widget, vc->color_fore);
+			g_free(vc->colour_fore);
+			vc->colour_fore = g_new0(GdkColor, 1);
+			gtk_color_button_get_color(widget, vc->colour_fore);
 			break;
 		}
 		case 3:
 		{
-			g_free(vc->color_back);
-			vc->color_back = g_new0(GdkColor, 1);
-			gtk_color_button_get_color(widget, vc->color_back);
+			g_free(vc->colour_back);
+			vc->colour_back = g_new0(GdkColor, 1);
+			gtk_color_button_get_color(widget, vc->colour_back);
 			break;
 		}
 #endif
