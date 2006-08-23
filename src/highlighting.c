@@ -33,6 +33,7 @@
 
 static style_set *types[GEANY_MAX_FILE_TYPES] = { NULL };
 static gboolean global_c_tags_loaded = FALSE;
+static gboolean global_pascal_tags_loaded = FALSE;
 static gboolean global_php_tags_loaded = FALSE;
 static gboolean global_html_tags_loaded = FALSE;
 static gboolean global_latex_tags_loaded = FALSE;
@@ -638,6 +639,15 @@ static void styleset_pascal_init(void)
 
 	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_PASCAL, GEANY_WORDCHARS);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PASCAL);
+
+	// load global tags file for PASCAL autocompletion
+	if (! app->ignore_global_tags && ! global_pascal_tags_loaded)
+	{
+		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "pascal.tags", NULL);
+		tm_workspace_load_global_tags(file, 4);
+		global_pascal_tags_loaded = TRUE;
+		g_free(file);
+	}
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);

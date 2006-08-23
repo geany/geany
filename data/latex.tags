@@ -555,6 +555,7 @@
 \includegraphics||[options]{name}|
 \includegraphics||{name}|
 \includeonly||{filelist}|
+\includepdf||[options]{filelist}|
 \indent|||
 \index||{entry}|
 \indexname||{name}|
@@ -918,6 +919,7 @@
 \Phi|||
 \pi|||
 \Pi|||
+\place||{location}|
 \plus|||
 \pm|||
 \pmatrix|||
@@ -1026,6 +1028,7 @@
 \section*||{title}|
 \sectionmark||{code}|
 \selectfont|||
+\selectlanguage||{language}|
 \setbox|||
 \setcounter||{counter}{value}|
 \setlanguage|||

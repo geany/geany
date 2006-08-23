@@ -1,3 +1,10 @@
+2006-08-23  Frank Lanitz  <frank@frank.uvena.de>
+
+ * src/highlighting.c, data/pascal.tags:
+    Added auto completion for PASCAL
+ * data/latex.tags: Update of catalog
+
+
 2006-08-22  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c: Fix quit confirmation message with no files open.
