@@ -928,6 +928,7 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	gint flags, gint start, gint end)
 {
 	gint search_pos;
+	gint count = 0;
 	gint find_len = 0, replace_len = 0;
 	gboolean match_found = FALSE;
 	struct TextToFind ttf;
@@ -958,9 +959,12 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 			ttf.chrg.cpMin = search_pos + replace_len; //next search starts after replacement
 			end += replace_len - find_len; //update end of range now text has changed
 			ttf.chrg.cpMax = end;
+			count++;
 		}
 	}
 	sci_end_undo_action(doc_list[idx].sci);
+	msgwin_status_add(_("Replaced %d occurrences of \"%s\" with \"%s\"."),
+						count, find_text, replace_text);
 
 	if (match_found)
 	{

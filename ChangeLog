@@ -5,6 +5,8 @@
    Improved ignore menu bar accelerator settings.
    Keep current working directory when restarting the VTE
    (happens when hitting Ctrl+C).
+ * src/document.c: Added counter when using "Replace All" and display
+                   the count of replacements in the status window.
 
 
 2006-08-23  Frank Lanitz  <frank@frank.uvena.de>
