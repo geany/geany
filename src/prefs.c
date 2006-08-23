@@ -342,11 +342,17 @@ void prefs_init_dialog(void)
 		widget = lookup_widget(app->prefs_dialog, "entry_emulation");
 		gtk_entry_set_text(GTK_ENTRY(widget), vc->emulation);
 
+		widget = lookup_widget(app->prefs_dialog, "entry_shell");
+		gtk_entry_set_text(GTK_ENTRY(widget), vc->shell);
+
 		widget = lookup_widget(app->prefs_dialog, "check_scroll_key");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_key);
 
 		widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_out);
+
+		widget = lookup_widget(app->prefs_dialog, "check_ignore_menu_key");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->ignore_menu_bar_accel);
 
 		widget = lookup_widget(app->prefs_dialog, "check_follow_path");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->follow_path);
@@ -580,11 +586,18 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 			g_free(vc->emulation);
 			vc->emulation = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
+			widget = lookup_widget(app->prefs_dialog, "entry_shell");
+			g_free(vc->shell);
+			vc->shell = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
 			widget = lookup_widget(app->prefs_dialog, "check_scroll_key");
 			vc->scroll_on_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 			widget = lookup_widget(app->prefs_dialog, "check_scroll_out");
 			vc->scroll_on_out = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+			widget = lookup_widget(app->prefs_dialog, "check_ignore_menu_key");
+			vc->ignore_menu_bar_accel = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 			widget = lookup_widget(app->prefs_dialog, "check_follow_path");
 			vc->follow_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -891,13 +904,6 @@ void dialogs_show_prefs_dialog(void)
 {
 	if (app->prefs_dialog == NULL)
 	{
-#ifdef HAVE_VTE
-		GtkWidget *notebook, *vbox, *label, *alignment, *table;
-		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback, *entry_emulation;
-		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path;
-		GtkTooltips *tooltips;
-		GtkObject *spin_scrollback_adj;
-#endif
 		GtkWidget *combo;
 		guint i;
 		gchar *encoding_string;
@@ -922,6 +928,13 @@ void dialogs_show_prefs_dialog(void)
 #ifdef HAVE_VTE
 		if (vte_info.have_vte)
 		{
+			GtkWidget *notebook, *vbox, *label, *alignment, *table;
+			GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback, *entry_emulation;
+			GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path, *check_ignore_menu_key;
+			GtkWidget *entry_shell, *button_shell, *image_shell;
+			GtkTooltips *tooltips;
+			GtkObject *spin_scrollback_adj;
+
 			tooltips = GTK_TOOLTIPS(lookup_widget(app->prefs_dialog, "tooltips"));
 			notebook = lookup_widget(app->prefs_dialog, "notebook2");
 			vbox = gtk_vbox_new(FALSE, 0);
@@ -938,10 +951,10 @@ void dialogs_show_prefs_dialog(void)
 			gtk_box_pack_start(GTK_BOX(vbox), alignment, FALSE, FALSE, 0);
 			gtk_alignment_set_padding(GTK_ALIGNMENT(alignment), 0, 0, 12, 6);
 
-			table = gtk_table_new(8, 2, FALSE);
+			table = gtk_table_new(10, 3, FALSE);
 			gtk_container_add(GTK_CONTAINER(alignment), table);
 			gtk_table_set_row_spacings(GTK_TABLE(table), 3);
-			gtk_table_set_col_spacings(GTK_TABLE(table), 25);
+			gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
 			label = gtk_label_new(_("Terminal font"));
 			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
@@ -1008,22 +1021,51 @@ void dialogs_show_prefs_dialog(void)
 						(GtkAttachOptions) (0), 0, 0);
 			gtk_tooltips_set_tip(tooltips, entry_emulation, _("Controls how the terminal emulator should behave. xterm is a good start."), NULL);
 
+			label = gtk_label_new(_("Shell"));
+			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+
+			entry_shell = gtk_entry_new();
+			gtk_table_attach(GTK_TABLE(table), entry_shell, 1, 2, 5, 6,
+						(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, entry_shell, _("Sets the path to the shell which should be started inside the terminal emulation."), NULL);
+
+			button_shell = gtk_button_new();
+			gtk_widget_show(button_shell);
+			gtk_table_attach(GTK_TABLE(table), button_shell, 2, 3, 5, 6,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+
+			image_shell = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
+			gtk_widget_show(image_shell);
+			gtk_container_add(GTK_CONTAINER(button_shell), image_shell);
+
 			check_scroll_key = gtk_check_button_new_with_mnemonic(_("Scroll on keystroke"));
-			gtk_table_attach(GTK_TABLE(table), check_scroll_key, 1, 2, 5, 6,
+			gtk_table_attach(GTK_TABLE(table), check_scroll_key, 1, 2, 6, 7,
 						(GtkAttachOptions) (GTK_FILL),
 						(GtkAttachOptions) (0), 0, 0);
 			gtk_tooltips_set_tip(tooltips, check_scroll_key, _("Whether to scroll to the bottom if a key was pressed."), NULL);
 			gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_key), FALSE);
 
 			check_scroll_out = gtk_check_button_new_with_mnemonic(_("Scroll on output"));
-			gtk_table_attach(GTK_TABLE(table), check_scroll_out, 1, 2, 6, 7,
+			gtk_table_attach(GTK_TABLE(table), check_scroll_out, 1, 2, 7, 8,
 						(GtkAttachOptions) (GTK_FILL),
 						(GtkAttachOptions) (0), 0, 0);
 			gtk_tooltips_set_tip(tooltips, check_scroll_out, _("Whether to scroll to the bottom if an output was generated."), NULL);
 			gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_out), FALSE);
 
+			check_ignore_menu_key = gtk_check_button_new_with_mnemonic(_("Disable menu shortcut key (F10 by default)"));
+			gtk_table_attach(GTK_TABLE(table), check_ignore_menu_key, 1, 2, 8, 9,
+						(GtkAttachOptions) (GTK_FILL),
+						(GtkAttachOptions) (0), 0, 0);
+			gtk_tooltips_set_tip(tooltips, check_ignore_menu_key, _("This option disables the keybinding to popup the menu bar(default is F10). Disabling it can be useful if you use for example the Midnight Commander within the VTE."), NULL);
+			gtk_button_set_focus_on_click(GTK_BUTTON(check_ignore_menu_key), FALSE);
+
 			check_follow_path = gtk_check_button_new_with_mnemonic(_("Follow the path of the current file"));
-			gtk_table_attach(GTK_TABLE(table), check_follow_path, 1, 2, 7, 8,
+			gtk_table_attach(GTK_TABLE(table), check_follow_path, 1, 2, 9, 10,
 						(GtkAttachOptions) (GTK_FILL),
 						(GtkAttachOptions) (0), 0, 0);
 			gtk_tooltips_set_tip(tooltips, check_follow_path, _("Whether to execute \"cd $path\" when you switch between opened files."), NULL);
@@ -1043,21 +1085,27 @@ void dialogs_show_prefs_dialog(void)
 					gtk_widget_ref(spin_scrollback),	(GDestroyNotify) gtk_widget_unref);
 			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "entry_emulation",
 					gtk_widget_ref(entry_emulation),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "entry_shell",
+					gtk_widget_ref(entry_shell),	(GDestroyNotify) gtk_widget_unref);
 			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_key",
 					gtk_widget_ref(check_scroll_key),	(GDestroyNotify) gtk_widget_unref);
 			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_out",
 					gtk_widget_ref(check_scroll_out),	(GDestroyNotify) gtk_widget_unref);
+			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_ignore_menu_key",
+					gtk_widget_ref(check_ignore_menu_key),	(GDestroyNotify) gtk_widget_unref);
 			g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_follow_path",
 					gtk_widget_ref(check_follow_path),	(GDestroyNotify) gtk_widget_unref);
 
 			gtk_widget_show_all(vbox);
 
-			g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "font_term"),
-					"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(4));
-			g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_fore"),
-					"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(2));
-			g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "color_back"),
-					"color-set", G_CALLBACK(on_prefs_color_choosed), GINT_TO_POINTER(3));
+			g_signal_connect((gpointer) font_term, "font-set", G_CALLBACK(on_prefs_font_choosed),
+															   GINT_TO_POINTER(4));
+			g_signal_connect((gpointer) color_fore, "color-set", G_CALLBACK(on_prefs_color_choosed),
+																 GINT_TO_POINTER(2));
+			g_signal_connect((gpointer) color_back, "color-set", G_CALLBACK(on_prefs_color_choosed),
+																 GINT_TO_POINTER(3));
+			g_signal_connect((gpointer) button_shell, "clicked",
+					G_CALLBACK(on_pref_tools_button_clicked), entry_shell);
 		}
 #endif
 		g_signal_connect((gpointer) app->prefs_dialog, "response", G_CALLBACK(on_prefs_button_clicked), NULL);

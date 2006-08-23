@@ -1,8 +1,17 @@
+2006-08-23  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/prefs.c, src/vte.c:
+   Added new VTE settings to the preferences dialog.
+   Improved ignore menu bar accelerator settings.
+   Keep current working directory when restarting the VTE
+   (happens when hitting Ctrl+C).
+
+
 2006-08-23  Frank Lanitz  <frank@frank.uvena.de>
 
  * src/highlighting.c, data/pascal.tags:
-    Added auto completion for PASCAL
- * data/latex.tags: Update of catalog
+   Added auto completion for PASCAL.
+ * data/latex.tags: Update of catalog.
 
 
 2006-08-22  Nick Treleaven  <nick.treleaven@btinternet.com>
@@ -18,6 +27,7 @@
    Added new settings: ignore menu bar accelerator and define the shell
    which is started within the VTE.
    (Code not yet complete, might be buggy, GUI stuff is missing)
+ * tagmanager/pascal.c: Added recognition for keyword "type".
 
 
 2006-08-21  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -43,6 +43,7 @@ static pid_t pid;
 static GModule *module = NULL;
 static struct VteFunctions *vf;
 static gboolean popup_menu_created = FALSE;
+static gchar *gtk_menu_key_accel = NULL;
 
 
 #define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
@@ -184,6 +185,7 @@ void vte_close(void)
 	g_free(vc->colour_back);
 	g_free(vc->colour_fore);
 	g_free(vc);
+	g_free(gtk_menu_key_accel);
 	g_module_close(module);
 }
 
@@ -199,10 +201,13 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		event->keyval == GDK_D) &&
 		event->state & GDK_CONTROL_MASK)
 	{
+		vte_get_working_directory(); // try to keep the working directory when restarting the VTE
+
 		kill(pid, SIGINT);
 		pid = 0;
 		vf->vte_terminal_reset(VTE_TERMINAL(widget), TRUE, TRUE);
 		vte_start(widget);
+
 		return TRUE;
 	}
 
@@ -289,9 +294,16 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
 
+	if (gtk_menu_key_accel == NULL) // for restoring the default value
+		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-menu-bar-accel",
+																	&gtk_menu_key_accel, NULL);
+
 	if (vc->ignore_menu_bar_accel)
-			gtk_settings_set_string_property(gtk_settings_get_default(), "gtk-menu-bar-accel",
-				"<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
+		gtk_settings_set_string_property(gtk_settings_get_default(), "gtk-menu-bar-accel",
+								"<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
+	else
+		gtk_settings_set_string_property(gtk_settings_get_default(),
+								"gtk-menu-bar-accel", gtk_menu_key_accel, "Geany");
 }
 
 
