@@ -14,6 +14,7 @@ SYS_DATA_FILES = \
 	data/global.tags \
 	data/php.tags \
 	data/latex.tags \
+	data/pascal.tags \
 	data/html_entities.tags \
 	data/filetypes.* \
 	data/filetype_extensions.conf
@@ -44,6 +45,7 @@ install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) data/global.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) data/php.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) data/pascal.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) data/latex.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) data/html_entities.tags $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) COPYING $(DESTDIR)$(pkgdatadir)/GPL-2; \
