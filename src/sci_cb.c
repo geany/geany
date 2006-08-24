@@ -1010,6 +1010,7 @@ void sci_cb_do_uncomment(gint idx)
 	if (co == NULL) return;
 
 	co_len = strlen(co);
+	if (co_len == 0) return;
 
 	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
 
@@ -1169,6 +1170,7 @@ void sci_cb_do_comment(gint idx)
 	if (co == NULL) return;
 
 	co_len = strlen(co);
+	if (co_len == 0) return;
 
 	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
 
