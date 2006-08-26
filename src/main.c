@@ -262,6 +262,8 @@ static void main_init(void)
 	app->menu_insert_include_item[1] = lookup_widget(app->window, "insert_include2");
 	app->save_buttons[0] = lookup_widget(app->window, "menu_save1");
 	app->save_buttons[1] = lookup_widget(app->window, "toolbutton10");
+	app->save_buttons[2] = lookup_widget(app->window, "menu_save_all1");
+	app->save_buttons[3] = lookup_widget(app->window, "toolbutton22");
 	app->sensitive_buttons[0] = lookup_widget(app->window, "menu_close1");
 	app->sensitive_buttons[1] = lookup_widget(app->window, "toolbutton15");
 	app->sensitive_buttons[2] = lookup_widget(app->window, "menu_change_font1");

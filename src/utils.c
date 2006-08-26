@@ -248,8 +248,23 @@ void utils_update_popup_goto_items(gboolean enable)
 
 void utils_save_buttons_toggle(gboolean enable)
 {
+	guint i;
+	guint dirty_tabs = 0;
+
 	gtk_widget_set_sensitive(app->save_buttons[0], enable);
 	gtk_widget_set_sensitive(app->save_buttons[1], enable);
+
+	// save all menu item and tool button
+	for (i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
+	{
+		// count the amount of tabs where changes were made and if they are more than one,
+		// we need the save all button / item
+		if (doc_list[i].is_valid && doc_list[i].changed)
+			dirty_tabs++;
+	}
+
+	gtk_widget_set_sensitive(app->save_buttons[2], (dirty_tabs > 1) ? TRUE : FALSE);
+	gtk_widget_set_sensitive(app->save_buttons[3], (dirty_tabs > 1) ? TRUE : FALSE);
 }
 
 

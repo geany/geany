@@ -163,7 +163,7 @@ typedef struct MyApp
 	GtkWidget			*menu_copy_items[5];
 	GtkWidget			*redo_items[3];
 	GtkWidget			*undo_items[3];
-	GtkWidget			*save_buttons[2];
+	GtkWidget			*save_buttons[4];
 	GtkWidget			*sensitive_buttons[37];
 	GtkWidget			*open_colorsel;
 	GtkWidget			*open_fontsel;

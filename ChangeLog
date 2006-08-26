@@ -1,8 +1,14 @@
+2006-08-26  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/geany.h, src/main.c, src/utils.c:
+   Fixed weird behaviour of Save all tool button and menu item.
+
+
 2006-08-23  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/prefs.c, src/vte.c:
    Added new VTE settings to the preferences dialog.
-   Improved ignore menu bar accelerator settings.
+   Improved ignore menu bar accelerator setting.
    Keep current working directory when restarting the VTE
    (happens when hitting Ctrl+C).
  * src/document.c: Added counter when using "Replace All" and display
