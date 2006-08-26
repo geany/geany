@@ -373,6 +373,7 @@ void document_new_file(filetype *ft)
 		doc_list[idx].encoding = g_strdup(encodings[app->pref_editor_default_encoding].charset);
 		//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
 		document_set_filetype(idx, ft);
+		if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
 		utils_set_window_title(idx);
 		utils_build_show_hide(idx);
 		utils_update_tag_list(idx, FALSE);
@@ -774,7 +775,10 @@ void document_save_file(gint idx, gboolean force)
 		sci_set_savepoint(doc_list[idx].sci);
 		doc_list[idx].mtime = time(NULL);
 		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
+		{
 			doc_list[idx].file_type = filetypes_get_from_filename(doc_list[idx].file_name);
+			filetypes_select_radio_item(doc_list[idx].file_type);
+		}
 		document_set_filetype(idx, doc_list[idx].file_type);
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), basename);

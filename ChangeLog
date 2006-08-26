@@ -2,6 +2,10 @@
 
  * src/geany.h, src/main.c, src/utils.c:
    Fixed weird behaviour of Save all tool button and menu item.
+ * src/document.c:
+   Fixed missing styling settings on new files (needs to be tested).
+   Now the filetype sub menu in the document file menu will be updated
+   when the filetype is set by the filename on new files.
 
 
 2006-08-23  Enrico Tröger  <enrico.troeger@uvena.de>
