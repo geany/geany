@@ -1,3 +1,9 @@
+2006-08-27  Frank Lanitz  <frank@frank.uvena.de>
+
+ * configure.in, src/about.c, po/cs.po:
+    Added Czech translation (Thanks Petr Messner)
+
+
 2006-08-27  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * tagmanager/parsers.h, tagmanager/c.c, data/filetype_extensions.conf,
