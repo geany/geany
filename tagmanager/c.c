@@ -76,7 +76,7 @@ typedef enum eKeywordId {
     KEYWORD_SYNCHRONIZED,
     KEYWORD_TEMPLATE, KEYWORD_THROW, KEYWORD_THROWS, KEYWORD_TRANSIENT,
     KEYWORD_TRY, KEYWORD_TYPEDEF, KEYWORD_TYPENAME,
-    KEYWORD_UNION, KEYWORD_UNSIGNED, KEYWORD_USING,
+    KEYWORD_UNION, KEYWORD_UNSIGNED, KEYWORD_USES, KEYWORD_USING,
     KEYWORD_VIRTUAL, KEYWORD_VOID, KEYWORD_VOLATILE,
     KEYWORD_WCHAR_T
 } keywordId;
@@ -234,6 +234,7 @@ static langType Lang_c;
 static langType Lang_cpp;
 static langType Lang_java;
 static langType Lang_d;
+static langType Lang_ferite;
 
 /* Used to index into the CKinds table. */
 typedef enum {
@@ -326,6 +327,7 @@ static const keywordDesc KeywordTable [] = {
     { "typename",	KEYWORD_TYPENAME,	{ 0, 1, 0 } },
     { "union",		KEYWORD_UNION,		{ 1, 1, 0 } },
     { "unsigned",	KEYWORD_UNSIGNED,	{ 1, 1, 0 } },
+    { "uses",		KEYWORD_USES,		{ 0, 1, 0 } },
     { "using",		KEYWORD_USING,		{ 0, 1, 0 } },
     { "virtual",	KEYWORD_VIRTUAL,	{ 0, 1, 0 } },
     { "void",		KEYWORD_VOID,		{ 1, 1, 1 } },
@@ -709,7 +711,7 @@ static void reinitStatement (statementInfo *const st, const boolean partial)
      */
     if (! partial)
 	st->member.access = st->member.accessDefault;
-	
+
 	/* Init first token */
 	if (!partial)
 	initToken(st->firstToken);
@@ -820,7 +822,9 @@ static tagType declToTagType (const declType declaration)
 static const char* accessField (const statementInfo *const st)
 {
     const char* result = NULL;
-    if ((isLanguage (Lang_cpp) || isLanguage (Lang_d))  &&  st->scope == SCOPE_FRIEND)
+
+    if ((isLanguage (Lang_cpp) || isLanguage (Lang_d) || isLanguage (Lang_ferite))  &&
+		 st->scope == SCOPE_FRIEND)
 	result = "friend";
     else if (st->member.access != ACCESS_UNDEFINED)
 	result = accessString (st->member.access);
@@ -867,7 +871,8 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 			vStringValue (st->parentClasses);
 	    }
 	    if (st->implementation != IMP_DEFAULT &&
-		(isLanguage (Lang_cpp) || isLanguage (Lang_java) || isLanguage (Lang_d)))
+		(isLanguage (Lang_cpp) || isLanguage (Lang_java) ||
+		 isLanguage (Lang_d) || isLanguage (Lang_ferite)))
 	    {
 		tag->extensionFields.implementation =
 			implementationString (st->implementation);
@@ -878,7 +883,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 	    }
 		if ((TRUE == st->gotArgs) && (TRUE == Option.extensionFields.argList) &&
 			((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type))) {
-			
+
 			if (1) {
 				tag->extensionFields.arglist = getArglistFromPos(
 				  tag->filePosition, tag->name);
@@ -886,7 +891,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 		}
 	    break;
     }
-	
+
 	if ((TAG_FIELD == tag->type) || (TAG_MEMBER == tag->type) ||
 		(TAG_EXTERN_VAR == tag->type) || (TAG_TYPEDEF == tag->type) ||
 		(TAG_VARIABLE == tag->type) || (TAG_METHOD == tag->type) ||
@@ -901,7 +906,8 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 
 static void addContextSeparator (vString *const scope)
 {
-    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp) || isLanguage (Lang_d))
+    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp) ||
+		isLanguage (Lang_d) || isLanguage (Lang_ferite))
 	vStringCatS (scope, "::");
     else if (isLanguage (Lang_java))
 	vStringCatS (scope, ".");
@@ -1004,9 +1010,17 @@ static void makeTag (const tokenInfo *const token,
     if (isType (token, TOKEN_NAME)  &&  vStringLength (token->name) > 0  /* &&
 	includeTag (type, isFileScope) */)
     {
-	vString *scope = vStringNew ();
+	vString *scope;
 	tagEntryInfo e;
 
+    // take only functions which are introduced by "function ..."
+    if (type == TAG_FUNCTION && isLanguage (Lang_ferite) &&
+		strncmp("function", st->firstToken->name->buffer, 8) != 0)
+    {
+    	return;
+    }
+
+	scope = vStringNew ();
 	initTagEntry (&e, vStringValue (token->name));
 
 	e.lineNumber	= token->lineNumber;
@@ -1427,7 +1441,7 @@ static void setAccess (statementInfo *const st, const accessType access)
 {
     if (isMember (st))
     {
-	if (isLanguage (Lang_cpp) || isLanguage (Lang_d))
+	if (isLanguage (Lang_cpp) || isLanguage (Lang_d) || isLanguage (Lang_ferite))
 	{
 	    int c = skipToNonWhite ();
 
@@ -1982,7 +1996,8 @@ static void addContext (statementInfo *const st, const tokenInfo* const token)
     {
 	if (vStringLength (st->context->name) > 0)
 	{
-	    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp) || isLanguage (Lang_d))
+	    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp) ||
+			isLanguage (Lang_d) || isLanguage (Lang_ferite))
 		vStringCatS (st->context->name, "::");
 	    else if (isLanguage (Lang_java))
 		vStringCatS (st->context->name, ".");
@@ -2005,7 +2020,7 @@ static void processColon (statementInfo *const st)
     else
     {
 	cppUngetc (c);
-	if ((isLanguage (Lang_cpp) || isLanguage (Lang_d))  && (
+	if ((isLanguage (Lang_cpp) || isLanguage (Lang_d) || isLanguage (Lang_ferite))  && (
 	    st->declaration == DECL_CLASS  ||  st->declaration == DECL_STRUCT))
 	{
 	    readParents (st, ':');
@@ -2132,7 +2147,7 @@ static void nextToken (statementInfo *const st)
 	    default:  parseGeneralToken (st, c);				break;
 	}
     } while (isType (token, TOKEN_NONE));
-	
+
 	/* We want to know about non-keyword variable types */
 	if (TOKEN_NONE == st->firstToken->type)
 	{
@@ -2407,7 +2422,13 @@ static void initializeJavaParser (const langType language)
 static void initializeDParser (const langType language)
 {
     Lang_d = language;
-    buildKeywordHash (language, 17);
+    buildKeywordHash (language, 1);
+}
+
+static void initializeFeriteParser (const langType language)
+{
+    Lang_ferite = language;
+    buildKeywordHash (language, 1);
 }
 
 extern parserDefinition* CParser (void)
@@ -2425,8 +2446,7 @@ extern parserDefinition* CParser (void)
 extern parserDefinition* CppParser (void)
 {
     static const char *const extensions [] = {
-	"c++", "cc", "cp", "cpp", "cxx", "h", "h++", "hh", "hp", "hpp", "hxx",
-"i",
+	"c++", "cc", "cp", "cpp", "cxx", "h", "h++", "hh", "hp", "hpp", "hxx", "i",
 #ifndef CASE_INSENSITIVE_FILENAMES
 	"C", "H",
 #endif
@@ -2465,5 +2485,16 @@ extern parserDefinition* DParser (void)
     return def;
 }
 
+extern parserDefinition* FeriteParser (void)
+{
+    static const char *const extensions [] = { "fe", NULL };
+    parserDefinition* def = parserNew ("Ferite");
+    def->kinds      = CKinds;
+    def->kindCount  = KIND_COUNT (CKinds);
+    def->extensions = extensions;
+    def->parser2    = findCTags;
+    def->initialize = initializeFeriteParser;
+    return def;
+}
 
 /* vi:set tabstop=8 shiftwidth=4: */

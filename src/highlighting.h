@@ -92,4 +92,8 @@ void styleset_d(ScintillaObject *sci);
 
 void styleset_fortran(ScintillaObject *sci);
 
+void styleset_diff(ScintillaObject *sci);
+
+void styleset_ferite(ScintillaObject *sci);
+
 #endif

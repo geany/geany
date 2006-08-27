@@ -1,0 +1,20 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# foreground;background;bold;italic
+default=0x000000;0xffffff;false;false
+comment=0x808080;0xffffff;false;false
+command=0x7f7f00;0xffffff;false;false
+header=0x7f0000;0xffffff;false;false
+position=0x00007f;0xffffff;false;false
+deleted=0xff2727;0xffffff;false;false
+added=0x34b034;0xffffff;false;false
+
+
+[settings]
+# the following characters are these which a "word" can contains, see documentation
+wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# only the text before the first --- is a comment
+comment_open=
+comment_close=
+

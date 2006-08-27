@@ -33,7 +33,8 @@
     TclParser, \
     ShParser, \
     DParser, \
-    FortranParser
+    FortranParser, \
+    FeriteParser
 
 /*
 langType of each parser
@@ -56,6 +57,7 @@ langType of each parser
 16	ShParser
 17	DParser
 18	FortranParser
+19	FeriteParser
 */
 #endif	/* _PARSERS_H */
 

@@ -415,6 +415,16 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 			field_idx_file = 2;
 			break;
 		}
+		case GEANY_FILETYPES_FERITE:
+		{
+			// Error: Parse Error: on line 5 in "/misc/tmp/testfiles_geany/hello.fe"
+			pattern = " \"";
+			field_min_len = 10;
+			field_idx_line = 5;
+			field_idx_file = 8;
+			break;
+		}
+
 		default: return;
 	}
 
@@ -441,8 +451,11 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 	if (strncmp(fields[field_idx_file], "./", 2) == 0) skip_dot_slash = 2;
 
 	// get the build directory to get the path to look for other files
-	*filename = g_strconcat(build_info.dir, G_DIR_SEPARATOR_S,
-		fields[field_idx_file] + skip_dot_slash, NULL);
+	if (! utils_is_absolute_path(fields[field_idx_file]))
+		*filename = g_strconcat(build_info.dir, G_DIR_SEPARATOR_S,
+			fields[field_idx_file] + skip_dot_slash, NULL);
+	else
+		*filename = g_strdup(fields[field_idx_file]);
 
 	g_strfreev(fields);
 }

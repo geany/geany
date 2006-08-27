@@ -58,8 +58,10 @@ enum
 	FILETYPE_UID_TCL,		// 19
 	FILETYPE_UID_ALL,		// 20
 	FILETYPE_UID_D,			// 21
-	FILETYPE_UID_FORTRAN	// 22
-	//FILETYPE_UID_HTML,	// 23
+	FILETYPE_UID_FORTRAN,	// 22
+	FILETYPE_UID_DIFF,		// 23
+	FILETYPE_UID_FERITE		// 24
+	//FILETYPE_UID_HTML,	// 25
 };
 
 
@@ -98,6 +100,8 @@ filetype *filetypes_get_from_uid(gint uid)
 		case FILETYPE_UID_ALL:		return filetypes[GEANY_FILETYPES_ALL];
 		case FILETYPE_UID_D:		return filetypes[GEANY_FILETYPES_D];
 		case FILETYPE_UID_FORTRAN:	return filetypes[GEANY_FILETYPES_FORTRAN];
+		case FILETYPE_UID_DIFF:	return filetypes[GEANY_FILETYPES_DIFF];
+		case FILETYPE_UID_FERITE:	return filetypes[GEANY_FILETYPES_FERITE];
 		//case FILETYPE_UID_HTML:	return filetypes[GEANY_FILETYPES_HTML];
 		default: 					return NULL;
 	}
@@ -397,6 +401,25 @@ void filetypes_init_types(void)
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_TCL]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_TCL]->title, filetypes[GEANY_FILETYPES_TCL]);
 
+#define FERITE
+	filetypes[GEANY_FILETYPES_FERITE] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_FERITE]->id = GEANY_FILETYPES_FERITE;
+	filetypes[GEANY_FILETYPES_FERITE]->uid = FILETYPE_UID_FERITE;
+	filetypes[GEANY_FILETYPES_FERITE]->item = NULL;
+	filetypes[GEANY_FILETYPES_FERITE]->lang = 19;
+	filetypes[GEANY_FILETYPES_FERITE]->name = g_strdup("Ferite");
+	filetypes[GEANY_FILETYPES_FERITE]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_FERITE]->title = g_strdup(_("Ferite source file"));
+	filetypes[GEANY_FILETYPES_FERITE]->extension = g_strdup("fe");
+	filetypes[GEANY_FILETYPES_FERITE]->pattern = g_new0(gchar*, 2);
+	filetypes[GEANY_FILETYPES_FERITE]->pattern[0] = g_strdup("*.fe");
+	filetypes[GEANY_FILETYPES_FERITE]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_FERITE]->style_func_ptr = styleset_ferite;
+	filetypes[GEANY_FILETYPES_FERITE]->comment_open = g_strdup("/*");
+	filetypes[GEANY_FILETYPES_FERITE]->comment_close = g_strdup("*/");
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_FERITE]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_FERITE]->title, filetypes[GEANY_FILETYPES_FERITE]);
+
 #define SH
 	filetypes[GEANY_FILETYPES_SH] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_SH]->id = GEANY_FILETYPES_SH;
@@ -558,6 +581,26 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_OMS]->comment_close = NULL;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_OMS]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_OMS]->title, filetypes[GEANY_FILETYPES_OMS]);
+
+#define DIFF
+	filetypes[GEANY_FILETYPES_DIFF] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_DIFF]->id = GEANY_FILETYPES_DIFF;
+	filetypes[GEANY_FILETYPES_DIFF]->uid = FILETYPE_UID_DIFF;
+	filetypes[GEANY_FILETYPES_DIFF]->item = NULL;
+	filetypes[GEANY_FILETYPES_DIFF]->lang = -2;
+	filetypes[GEANY_FILETYPES_DIFF]->name = g_strdup("Diff");
+	filetypes[GEANY_FILETYPES_DIFF]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_DIFF]->title = g_strdup(_("Diff file"));
+	filetypes[GEANY_FILETYPES_DIFF]->extension = g_strdup("diff");
+	filetypes[GEANY_FILETYPES_DIFF]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_DIFF]->pattern[0] = g_strdup("*.diff");
+	filetypes[GEANY_FILETYPES_DIFF]->pattern[1] = g_strdup("*.patch");
+	filetypes[GEANY_FILETYPES_DIFF]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_DIFF]->style_func_ptr = styleset_diff;
+	filetypes[GEANY_FILETYPES_DIFF]->comment_open = g_strdup("#");
+	filetypes[GEANY_FILETYPES_DIFF]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_DIFF]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_DIFF]->title, filetypes[GEANY_FILETYPES_DIFF]);
 
 #define CONF
 	filetypes[GEANY_FILETYPES_CONF] = g_new0(filetype, 1);

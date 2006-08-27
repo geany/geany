@@ -1,3 +1,11 @@
+2006-08-27  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * tagmanager/parsers.h, tagmanager/c.c, data/filetype_extensions.conf,
+   data/filetypes.diff, data/filetypes.ferite, src/highlighting.c,
+   src/filetypes.c, src/msgwindow.c:
+   Added new filetypes Diff and Ferite.
+
+
 2006-08-26  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/geany.h, src/main.c, src/utils.c:

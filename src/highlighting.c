@@ -738,6 +738,58 @@ void styleset_makefile(ScintillaObject *sci)
 }
 
 
+static void styleset_diff_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.diff", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.diff", NULL);
+
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	types[GEANY_FILETYPES_DIFF] = g_new(style_set, 1);
+	styleset_get_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_DIFF]->styling[0]);
+	styleset_get_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", types[GEANY_FILETYPES_DIFF]->styling[1]);
+	styleset_get_hex(config, config_home, "styling", "command", "0x7f7f00", "0xffffff", "false", types[GEANY_FILETYPES_DIFF]->styling[2]);
+	styleset_get_hex(config, config_home, "styling", "header", "0x7f0000", "0xffffff", "false", types[GEANY_FILETYPES_DIFF]->styling[3]);
+	styleset_get_hex(config, config_home, "styling", "position", "0x00007f", "0xffffff", "false", types[GEANY_FILETYPES_DIFF]->styling[4]);
+	styleset_get_hex(config, config_home, "styling", "deleted", "0xff2727", "0xffffff", "false", types[GEANY_FILETYPES_DIFF]->styling[5]);
+	styleset_get_hex(config, config_home, "styling", "added", "0x34b034", "0xffffff", "false", types[GEANY_FILETYPES_DIFF]->styling[6]);
+
+	types[GEANY_FILETYPES_DIFF]->keywords = NULL;
+
+	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_DIFF, GEANY_WORDCHARS);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_DIFF);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+	g_free(f0);
+	g_free(f);
+}
+
+
+void styleset_diff(ScintillaObject *sci)
+{
+	if (types[GEANY_FILETYPES_DIFF] == NULL) styleset_diff_init();
+
+	styleset_common(sci, 5);
+
+	SSM (sci, SCI_SETLEXER, SCLEX_DIFF, 0);
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_DIFF]->wordchars);
+
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_DIFF, 0);
+	styleset_set_style(sci, SCE_DIFF_DEFAULT, GEANY_FILETYPES_DIFF, 0);
+	styleset_set_style(sci, SCE_DIFF_COMMENT, GEANY_FILETYPES_DIFF, 1);
+	styleset_set_style(sci, SCE_DIFF_COMMAND, GEANY_FILETYPES_DIFF, 2);
+	styleset_set_style(sci, SCE_DIFF_HEADER, GEANY_FILETYPES_DIFF, 3);
+	styleset_set_style(sci, SCE_DIFF_POSITION, GEANY_FILETYPES_DIFF, 4);
+	styleset_set_style(sci, SCE_DIFF_DELETED, GEANY_FILETYPES_DIFF, 5);
+	styleset_set_style(sci, SCE_DIFF_ADDED, GEANY_FILETYPES_DIFF, 6);
+}
+
+
 static void styleset_latex_init(void)
 {
 	GKeyFile *config = g_key_file_new();
@@ -788,7 +840,7 @@ void styleset_latex(ScintillaObject *sci)
 	SSM (sci, SCI_SETLEXER, SCLEX_LATEX, 0);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_LATEX]->keywords[0]);
-	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_LATEX]->wordchars);
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_LATEX]->wordchars);
 
 	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_LATEX, 0);
 	styleset_set_style(sci, SCE_L_DEFAULT, GEANY_FILETYPES_LATEX, 0);
@@ -846,8 +898,8 @@ void styleset_php(ScintillaObject *sci)
 
 	styleset_common(sci, 7);
 
-	SSM (sci, SCI_SETPROPERTY, (sptr_t) "phpscript.mode", (sptr_t) "1");
-	SSM (sci, SCI_SETLEXER, SCLEX_HTML, 0);
+	SSM(sci, SCI_SETPROPERTY, (sptr_t) "phpscript.mode", (sptr_t) "1");
+	SSM(sci, SCI_SETLEXER, SCLEX_HTML, 0);
 
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
@@ -2527,5 +2579,99 @@ void styleset_d(ScintillaObject *sci)
 
 	// is used for local structs and typedefs
 	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_D, 18);
+}
+
+
+static void styleset_ferite_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.ferite", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.ferite", NULL);
+
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	types[GEANY_FILETYPES_FERITE] = g_new(style_set, 1);
+	styleset_get_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[0]);
+	styleset_get_hex(config, config_home, "styling", "comment", "0xff0000", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[1]);
+	styleset_get_hex(config, config_home, "styling", "commentline", "0xff0000", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[2]);
+	styleset_get_hex(config, config_home, "styling", "commentdoc", "0xff0000", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[3]);
+	styleset_get_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[4]);
+	styleset_get_hex(config, config_home, "styling", "word", "0x00007f", "0xffffff", "true", types[GEANY_FILETYPES_FERITE]->styling[5]);
+	styleset_get_hex(config, config_home, "styling", "word2", "0x991111", "0xffffff", "true", types[GEANY_FILETYPES_FERITE]->styling[6]);
+	styleset_get_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[7]);
+	styleset_get_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[8]);
+	styleset_get_hex(config, config_home, "styling", "uuid", "0x404080", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[9]);
+	styleset_get_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[10]);
+	styleset_get_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[11]);
+	styleset_get_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[12]);
+	styleset_get_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", types[GEANY_FILETYPES_FERITE]->styling[13]);
+	styleset_get_hex(config, config_home, "styling", "verbatim", "0x101030", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[14]);
+	styleset_get_hex(config, config_home, "styling", "regex", "0x105090", "0xffffff", "false", types[GEANY_FILETYPES_FERITE]->styling[15]);
+	styleset_get_hex(config, config_home, "styling", "commentlinedoc", "0xff0000", "0xffffff", "true", types[GEANY_FILETYPES_FERITE]->styling[16]);
+	styleset_get_hex(config, config_home, "styling", "commentdockeyword", "0xff0000", "0xffffff", "true", types[GEANY_FILETYPES_FERITE]->styling[17]);
+	styleset_get_hex(config, config_home, "styling", "globalclass", "0x1111bb", "0xffffff", "true", types[GEANY_FILETYPES_FERITE]->styling[18]);
+	styleset_get_int(config, config_home, "styling", "styling_within_preprocessor", 1, 0, types[GEANY_FILETYPES_FERITE]->styling[19]);
+
+	types[GEANY_FILETYPES_FERITE]->keywords = g_new(gchar*, 4);
+	styleset_get_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_FERITE, 0, "false null self super true abstract alias arguments attribute_missing break case class closure conformsToProtocol constructor default deliver destructor diliver do else extends final fix for function if iferr implements include instanceof method_missing modifies namespace new private protected protocol public recipient rename return static switch uses using while");
+	styleset_get_keywords(config, config_home, "keywords", "types", GEANY_FILETYPES_FERITE, 1, "number string array object void");
+	styleset_get_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_FERITE, 2, "@brief @class @declaration @description @end @example @extends @function @group @implements @modifies @module @namespace @param @protocol @return @return @static @type @variable @warning");
+	types[GEANY_FILETYPES_FERITE]->keywords[3] = NULL;
+
+	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_FERITE, GEANY_WORDCHARS);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_FERITE);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+	g_free(f0);
+	g_free(f);
+}
+
+
+void styleset_ferite(ScintillaObject *sci)
+{
+	if (types[GEANY_FILETYPES_FERITE] == NULL) styleset_ferite_init();
+
+	styleset_common(sci, 5);
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_FERITE]->wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
+
+	//SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) types[GEANY_FILETYPES_FERITE]->keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) types[GEANY_FILETYPES_FERITE]->keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) types[GEANY_FILETYPES_FERITE]->keywords[2]);
+
+	styleset_set_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_FERITE, 0);
+	styleset_set_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_FERITE, 0);
+	styleset_set_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_FERITE, 1);
+	styleset_set_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_FERITE, 2);
+	styleset_set_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_FERITE, 3);
+	styleset_set_style(sci, SCE_C_NUMBER, GEANY_FILETYPES_FERITE, 4);
+	styleset_set_style(sci, SCE_C_WORD, GEANY_FILETYPES_FERITE, 5);
+	styleset_set_style(sci, SCE_C_WORD2, GEANY_FILETYPES_FERITE, 6);
+	styleset_set_style(sci, SCE_C_STRING, GEANY_FILETYPES_FERITE, 7);
+	styleset_set_style(sci, SCE_C_CHARACTER, GEANY_FILETYPES_FERITE, 8);
+	styleset_set_style(sci, SCE_C_UUID, GEANY_FILETYPES_FERITE, 9);
+	styleset_set_style(sci, SCE_C_PREPROCESSOR, GEANY_FILETYPES_FERITE, 10);
+	styleset_set_style(sci, SCE_C_OPERATOR, GEANY_FILETYPES_FERITE, 11);
+	styleset_set_style(sci, SCE_C_IDENTIFIER, GEANY_FILETYPES_FERITE, 12);
+	styleset_set_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_FERITE, 13);
+	styleset_set_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_FERITE, 14);
+	styleset_set_style(sci, SCE_C_REGEX, GEANY_FILETYPES_FERITE, 15);
+	styleset_set_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_FERITE, 16);
+	styleset_set_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_FERITE, 17);
+
+	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, invert(0x0000ff));
+	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, invert(0xffffff));
+	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
+
+	// is used for local structs and typedefs
+	styleset_set_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_FERITE, 18);
 }
 
