@@ -166,7 +166,7 @@ static void add_find_checkboxes(GtkDialog *dialog)
 	gtk_container_add(GTK_CONTAINER(mbox), checkbox2);
 	gtk_container_add(GTK_CONTAINER(mbox), checkbox5);
 
-	hbox = gtk_hbox_new(FALSE, 6);
+	hbox = gtk_hbox_new(TRUE, 6);
 	gtk_container_add(GTK_CONTAINER(hbox), fbox);
 	gtk_container_add(GTK_CONTAINER(hbox), mbox);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox, TRUE, TRUE, 6);
@@ -253,7 +253,7 @@ void search_show_replace_dialog()
 	if (widgets.replace_dialog == NULL)
 	{
 		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace,
-			*checkbox6, *button, *align, *rbox, *fbox;
+			*checkbox6, *checkbox8, *button, *align, *rbox, *fbox, *hbox;
 		GtkSizeGroup *size_group;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
@@ -332,9 +332,21 @@ void search_show_replace_dialog()
 			_("Replaces the search text in all opened files. This option is only useful(and used) if you click on \"Replace All\"."), NULL);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox6), FALSE);
 
+		// Don't close window checkbox
+		checkbox8 = gtk_check_button_new_with_mnemonic(_("_Don't close this dialog"));
+		g_object_set_data_full(G_OBJECT(widgets.replace_dialog), "check_dont_close_window",
+						gtk_widget_ref(checkbox8), (GDestroyNotify) gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox8), FALSE);
+		gtk_tooltips_set_tip(tooltips, checkbox8,
+				_("The dialog window won't be closed when you start the operation."), NULL);
+
+		hbox = gtk_hbox_new(TRUE, 6);
+		gtk_container_add(GTK_CONTAINER(hbox), checkbox6);
+		gtk_container_add(GTK_CONTAINER(hbox), checkbox8);
+
 		align = gtk_alignment_new(0, 0, 1, 1);
 		gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 9, 0, 0);
-		gtk_container_add(GTK_CONTAINER(align), checkbox6);
+		gtk_container_add(GTK_CONTAINER(align), hbox);
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(widgets.replace_dialog)->vbox), align);
 
 		gtk_widget_show_all(widgets.replace_dialog);
@@ -607,6 +619,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	gint search_flags_re;
 	gboolean search_backwards_re, search_replace_escape_re, search_in_all_buffers_re;
 	gboolean fl1, fl2, fl3, fl4;
+	gboolean close_window;
 	gchar *find, *replace;
 
 	if (response == GTK_RESPONSE_CANCEL)
@@ -623,6 +636,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_regexp")));
 	fl4 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_wordstart")));
+	close_window = !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_dont_close_window")));
 	search_backwards_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_back")));
 	search_replace_escape_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
@@ -664,7 +679,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 			document_replace_all(i, find, replace, search_flags_re);
 		}
-		gtk_widget_hide(widgets.replace_dialog);
+		if (close_window) gtk_widget_hide(widgets.replace_dialog);
 	}
 	else
 	{
@@ -684,13 +699,13 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			case GEANY_RESPONSE_REPLACE_ALL:
 			{
 				document_replace_all(idx, find, replace, search_flags_re);
-				gtk_widget_hide(widgets.replace_dialog);
+				if (close_window) gtk_widget_hide(widgets.replace_dialog);
 				break;
 			}
 			case GEANY_RESPONSE_REPLACE_SEL:
 			{
 				document_replace_sel(idx, find, replace, search_flags_re);
-				gtk_widget_hide(widgets.replace_dialog);
+				if (close_window) gtk_widget_hide(widgets.replace_dialog);
 				break;
 			}
 		}

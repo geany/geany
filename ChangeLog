@@ -4,6 +4,8 @@
    data/filetypes.diff, data/filetypes.ferite, src/highlighting.c,
    src/filetypes.c, src/msgwindow.c:
    Added new filetypes Diff and Ferite.
+ * src/search.c: Applied patch from Stefan Oltmanns to add the
+                 possibility to keep the Replace dialog open.
 
 
 2006-08-26  Enrico Tröger  <enrico.troeger@uvena.de>
