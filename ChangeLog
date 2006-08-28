@@ -2,6 +2,8 @@
 
  * geany.glade, src/interface.c: Fixed typo in a tooltip text.
  * THANKS, src/about.c: Added translator credits.
+ * src/treeviews.c, src/utils.c:
+   Fixed a crash when switching between several filetypes.
 
 
 2006-08-27  Frank Lanitz  <frank@frank.uvena.de>

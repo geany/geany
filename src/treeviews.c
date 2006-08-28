@@ -58,6 +58,17 @@ void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 
 void treeviews_init_tag_list(gint idx)
 {
+	// init all GtkTreeIters with -1 to make them invalid to avoid crashes when switching between
+	// filetypes(e.g. config file to Python crashes Geany without this)
+	tv.tag_function.stamp = -1;
+	tv.tag_class.stamp = -1;
+	tv.tag_member.stamp = -1;
+	tv.tag_macro.stamp = -1;
+	tv.tag_variable.stamp = -1;
+	tv.tag_namespace.stamp = -1;
+	tv.tag_struct.stamp = -1;
+	tv.tag_other.stamp = -1;
+
 	switch (doc_list[idx].file_type->id)
 	{
 		case GEANY_FILETYPES_DOCBOOK:

@@ -742,6 +742,7 @@ void utils_update_tag_list(gint idx, gboolean update)
 					case tm_tag_prototype_t:
 					case tm_tag_function_t:
 					{
+						if (tv.tag_function.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_function));
 						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
@@ -749,18 +750,21 @@ void utils_update_tag_list(gint idx, gboolean update)
 					case tm_tag_macro_t:
 					case tm_tag_macro_with_arg_t:
 					{
+						if (tv.tag_macro.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_macro));
 						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					case tm_tag_class_t:
 					{
+						if (tv.tag_class.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_class));
 						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					case tm_tag_member_t:
 					{
+						if (tv.tag_member.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_member));
 						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
@@ -770,24 +774,28 @@ void utils_update_tag_list(gint idx, gboolean update)
 					case tm_tag_union_t:
 					case tm_tag_struct_t:
 					{
+						if (tv.tag_struct.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_struct));
 						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					case tm_tag_variable_t:
 					{
+						if (tv.tag_variable.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_variable));
 						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					case tm_tag_namespace_t:
 					{
+						if (tv.tag_namespace.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_namespace));
 						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 						break;
 					}
 					default:
 					{
+						if (tv.tag_other.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_other));
 						gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
 					}
