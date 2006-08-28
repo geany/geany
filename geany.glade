@@ -2277,7 +2277,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1048">
+	<widget class="GtkImage" id="image1051">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2309,7 +2309,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1049">
+	<widget class="GtkImage" id="image1052">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2326,7 +2326,7 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="add_changelog_entry2">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Inserts a typical ChangeLog entry in the current </property>
+	      <property name="tooltip" translatable="yes">Inserts a typical ChangeLog entry in the current file</property>
 	      <property name="label" translatable="yes">Insert ChangeLog entry</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_changelog_activate" last_modification_time="Sun, 02 Oct 2005 17:30:10 GMT"/>
@@ -2505,7 +2505,7 @@
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1050">
+	<widget class="GtkImage" id="image1053">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2551,7 +2551,7 @@
       <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 16 Jul 2005 11:20:32 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1051">
+	<widget class="GtkImage" id="image1054">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
