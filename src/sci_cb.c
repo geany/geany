@@ -614,12 +614,10 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 
 void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx)
 {
-	// currently disabled
-#if 0
 	if (sci_get_char_at(sci, pos - 2) == '}')
 	{
 		gchar *eol, *buf, *construct;
-		gchar env[30]; /// FIXME are 30 chars enough?
+		gchar env[50];
 		gint line = sci_get_line_from_position(sci, pos - 2);
 		gint line_len = sci_get_line_length(sci, line);
 		gint i, start;
@@ -629,21 +627,35 @@ void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx)
 		sci_get_line(sci, line, buf);
 
 		// get to the first non-blank char (some kind of ltrim())
-		i = start = 0;
-		while (isspace(buf[i++])) start++;
+		start = 0;
+		//while (isspace(buf[i++])) start++;
+		while (isspace(buf[start])) start++;
 
 		// check for begin
 		if (strncmp(buf + start, "\\begin", 6) == 0)
 		{
-			// goto through the line and get the environment, begin at first non-blank char (= start)
-			for (i = start; i < line_len; i++)
+			gchar full_cmd[15];
+			gint j = 0;
+
+			// take also "\begingroup" (or whatever there can be) and append "\endgroup" and so on.
+			i = start + 6;
+			while (buf[i] != '{' && j < (sizeof(full_cmd) - 1))
+			{	// copy all between "\begin" and "{" to full_cmd
+				full_cmd[j] = buf[i];
+				i++;
+				j++;
+			}
+			full_cmd[j] = '\0';
+
+			// go through the line and get the environment
+			for (i = start + j; i < line_len; i++)
 			{
 				if (buf[i] == '{')
 				{
-					gint j = 0;
+					j = 0;
 					i++;
-					while (buf[i] != '}')
-					{	// this could be done in a shorter way, but so it resists readable ;-)
+					while (buf[i] != '}' && j < (sizeof(env) - 1))
+					{	// this could be done in a shorter way, but so it remains readable ;-)
 						env[j] = buf[i];
 						j++;
 						i++;
@@ -657,7 +669,7 @@ void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx)
 			if (doc_list[idx].use_auto_indention) sci_cb_get_indent(sci, pos, TRUE);
 			eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
 
-			construct = g_strdup_printf("%s\\end{%s}", eol, env);
+			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
 
 			SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 			sci_goto_pos(sci, pos + 1, TRUE);
@@ -670,7 +682,6 @@ void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx)
 			return;
 		}
 	}
-#endif
 }
 
 
