@@ -70,7 +70,9 @@ void vte_apply_user_settings(void);
 
 void vte_send_cmd(const gchar *cmd);
 
-const gchar* vte_get_working_directory();
+const gchar* vte_get_working_directory(void);
+
+void vte_cwd(const gchar *filename);
 
 /*
 void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,

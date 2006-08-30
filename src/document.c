@@ -788,6 +788,10 @@ void document_save_file(gint idx, gboolean force)
 		utils_update_statusbar(idx, -1);
 		treeviews_openfiles_update(doc_list[idx].iter, basename);
 		g_free(basename);
+#ifdef HAVE_VTE
+		vte_cwd(doc_list[idx].file_name);
+#endif
+
 	}
 }
 

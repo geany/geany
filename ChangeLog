@@ -3,6 +3,9 @@
  * configure.in, src/callbacks.c, src/geany.h, src/main.c:
    Removed the whole FIFO code and replaced it with support for
    (Unix Domain) Sockets(including Windows support, but not yet done).
+ * src/vte.c, src/callbacks.c, src/document.c:
+   Change the current working directory within the VTE also when a new
+   file is saved.
 
 
 2006-08-29  Enrico Tröger  <enrico.troeger@uvena.de>
