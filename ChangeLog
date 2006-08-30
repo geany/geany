@@ -1,3 +1,10 @@
+2006-08-30  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * configure.in, src/callbacks.c, src/geany.h, src/main.c:
+   Removed the whole FIFO code and replaced it with support for
+   (Unix Domain) Sockets(including Windows support, but not yet done).
+
+
 2006-08-29  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Added auto completion for LaTeX command "begin".

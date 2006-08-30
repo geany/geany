@@ -33,6 +33,12 @@
 
 #include "geany.h"
 
+#ifdef HAVE_SOCKET
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <netinet/in.h>
+#endif
+
 #include "interface.h"
 #include "support.h"
 #include "callbacks.h"
@@ -58,18 +64,37 @@
 #define N_(String) (String)
 
 
-#ifdef HAVE_FIFO
+#ifdef HAVE_SOCKET
 static struct
 {
-	gboolean	ignore_fifo;
-	gchar		file_name[512];
+	gboolean	 ignore_socket;
+	gchar		*file_name;
 	GIOChannel	*read_ioc;
-} fifo_info;
+	gint 		 lock_socket;
+	gint 		 lock_socket_tag;
+} socket_info;
+static gboolean ignore_socket = FALSE;
+
+static gint socket_init(gint argc, gchar **argv);
+
+static gboolean socket_lock_input_cb(GIOChannel	*source, GIOCondition condition, gpointer data);
+
+#ifdef G_OS_WIN32
+static gint socket_fd_connect_inet	(gushort port);
+static gint socket_fd_open_inet		(gushort port);
+#endif
+static gint socket_fd_connect_unix	(const gchar *path);
+static gint socket_fd_open_unix		(const gchar *path);
+
+static gint socket_fd_write			(gint sock, const gchar *buf, gint len);
+static gint socket_fd_write_all		(gint sock, const gchar *buf, gint len);
+static gint socket_fd_gets			(gint sock, gchar *buf, gint len);
+static gint socket_fd_check_io		(gint fd, GIOCondition cond);
+static gint socket_fd_read			(gint sock, gchar *buf, gint len);
+static gint socket_fd_recv			(gint fd, gchar *buf, gint len, gint flags);
+static gint socket_fd_close			(gint sock);
 #endif
 
-#ifdef HAVE_FIFO
-static gboolean ignore_fifo = FALSE;
-#endif
 static gboolean debug_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_msgwin = FALSE;
@@ -85,8 +110,8 @@ static GOptionEntry entries[] =
 {
 	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, N_("runs in debug mode (means being verbose)"), NULL },
 	{ "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, N_("don't load auto completion data (see documentation)"), NULL },
-#ifdef HAVE_FIFO
-	{ "no-pipe", 'p', 0, G_OPTION_ARG_NONE, &ignore_fifo, N_("don't open files in a running instance, force opening a new instance"), NULL },
+#ifdef HAVE_SOCKET
+	{ "no-socket", 's', 0, G_OPTION_ARG_NONE, &ignore_socket, N_("don't open files in a running instance, force opening a new instance"), NULL },
 #endif
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("use an alternate configuration directory"), NULL },
 	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, N_("don't show message window at startup"), NULL },
@@ -333,129 +358,6 @@ gchar *get_argv_filename(const gchar *filename)
 }
 
 
-#ifdef HAVE_FIFO
-static gboolean read_fifo(GIOChannel *source, GIOCondition condition, gpointer data)
-{
-	GIOStatus status = G_IO_STATUS_NORMAL;
-	gchar *buffer = NULL;
-	gsize len = 0;
-
-	//status = g_io_channel_read_to_end(source, &buffer, &len, NULL);
-	status = g_io_channel_read_line(source, &buffer, &len, NULL, NULL);
-	g_strstrip(buffer);	// remove \n char
-
-	// try to interpret the received data as a filename, otherwise do nothing
-	if (status == G_IO_STATUS_NORMAL)
-	{
-		if (g_file_test(buffer, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-		{
-			document_open_file(-1, buffer, 0, FALSE, NULL, NULL);
-			gtk_window_deiconify(GTK_WINDOW(app->window));
-		}
-		else
-		{
-			geany_debug("got data from named pipe, but it does not look like a filename");
-		}
-	}
-	g_free(buffer);
-
-	return TRUE;	// allow receiving more data
-}
-
-
-static void write_fifo(gint argc, gchar **argv)
-{
-	gint i;
-	GIOChannel *ioc;
-
-	ioc = g_io_channel_unix_new(open(fifo_info.file_name, O_WRONLY));
-
-	for(i = 1; i < argc && argv[i] != NULL; i++)
-	{
-		gchar *filename = get_argv_filename(argv[i]);
-
-		if (filename && g_file_test(filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
-		{
-			g_io_channel_write_chars(ioc, filename, -1, NULL, NULL);
-			g_io_channel_write_chars(ioc, "\n", -1, NULL, NULL);	// each line has one file
-			g_io_channel_flush(ioc, NULL);
-		}
-		else
-			g_printerr(_("Could not find file \"%s\".\n"), filename);
-		g_free(filename);
-	}
-	g_io_channel_shutdown(ioc, TRUE, NULL);
-	g_io_channel_unref(ioc);
-}
-
-
-/* creates a named pipe in GEANY_FIFO_NAME, to communicate with new instances of Geany
- * to submit filenames and possibly other things */
-static GIOChannel *create_fifo(gint argc, gchar **argv, const gchar *config_dir)
-{
-	struct stat st;
-	gchar *tmp;
-	GIOChannel *ioc;
-
-	tmp = g_strconcat(config_dir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
-	g_strlcpy(fifo_info.file_name, tmp, sizeof(fifo_info.file_name));
-	g_free(tmp);
-
-	if (stat(fifo_info.file_name, &st) == 0 && (! S_ISFIFO(st.st_mode)))
-	{	// the FIFO file exists, but is not a FIFO
-		unlink(fifo_info.file_name);
-	}
-	else if (stat(fifo_info.file_name, &st) == 0 && S_ISFIFO(st.st_mode))
-	{	// FIFO exists, there should be a running instance of Geany
-		if (argc > 1)
-		{
-			geany_debug("using running instance of Geany");
-			write_fifo(argc, argv);
-			exit(0);
-		}
-		else
-		{
-			if (dialogs_show_question(_("Geany is exiting because a named pipe was found. Mostly this means, Geany is already running. If you know Geany is not running, you can delete the file and start Geany anyway.\nDelete the named pipe and start Geany?")))
-			{
-				unlink(fifo_info.file_name);
-			}
-			else exit(0);
-		}
-	}
-
-	// there is no Geany running, create fifo and start as usual, so we are a kind of server
-	geany_debug("trying to create a new named pipe");
-
-	if ((mkfifo(fifo_info.file_name, S_IRUSR | S_IWUSR)) == -1)
-	{
-		if (errno != EEXIST) geany_debug("creating of a named pipe for IPC failed! (%s)", g_strerror(errno));
-		return NULL;
-	}
-
-	ioc = g_io_channel_unix_new(open(fifo_info.file_name, O_RDONLY | O_NONBLOCK));
-	g_io_add_watch(ioc, G_IO_IN | G_IO_PRI, read_fifo, NULL);
-
-	return ioc;
-}
-
-
-void fifo_finalize()
-{
-	if (! fifo_info.ignore_fifo)
-	{
-		gchar *fifo = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, GEANY_FIFO_NAME, NULL);
-		if (fifo_info.read_ioc != NULL)
-		{
-			g_io_channel_shutdown(fifo_info.read_ioc, FALSE, NULL);
-			g_io_channel_unref(fifo_info.read_ioc);
-		}
-		unlink(fifo);
-		g_free(fifo);
-	}
-}
-#endif
-
-
 static void setup_paths()
 {
 	gchar *data_dir;
@@ -538,8 +440,8 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	else
 		app->configdir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
 
-#ifdef HAVE_FIFO
-	fifo_info.ignore_fifo = ignore_fifo;
+#ifdef HAVE_SOCKET
+	socket_info.ignore_socket = ignore_socket;
 #endif
 #ifdef HAVE_VTE
 	vte_info.lib_vte = lib_vte;
@@ -597,9 +499,23 @@ gint main(gint argc, gchar **argv)
 #endif
 
 	config_dir_result = setup_config_dir();
-	// handle fifo
-#ifdef HAVE_FIFO
-	fifo_info.read_ioc = (ignore_fifo) ? NULL : create_fifo(argc, argv, app->configdir);
+#ifdef HAVE_SOCKET
+    // check and create (unix domain) socket for remote operation
+	if (! socket_info.ignore_socket)
+	{
+		socket_info.lock_socket = -1;
+		socket_info.lock_socket_tag = 0;
+		socket_info.lock_socket = socket_init(argc, argv);
+		if (socket_info.lock_socket < 0)
+		{
+			g_free(app->configdir);
+			g_free(app->datadir);
+			g_free(app->docdir);
+			g_free(app);
+			return 0;
+		}
+	}
+
 #endif
 
 	gtk_init(&argc, &argv);
@@ -729,11 +645,452 @@ gint main(gint argc, gchar **argv)
 
 	configuration_apply_settings();
 
+#ifdef HAVE_SOCKET
+	// register the callback of socket input
+	if (! socket_info.ignore_socket && socket_info.lock_socket > 0)
+	{
+		socket_info.read_ioc = g_io_channel_unix_new(socket_info.lock_socket);
+		socket_info.lock_socket_tag = g_io_add_watch(socket_info.read_ioc,
+						G_IO_IN|G_IO_PRI|G_IO_ERR, socket_lock_input_cb, app->window);
+	}
+#endif
+
 	//g_timeout_add(0, (GSourceFunc)destroyapp, NULL); // useful for start time tests
 	gtk_main();
 	return 0;
 }
 
 
+#ifdef HAVE_SOCKET
+/* (Unix domain) socket support to replace the old FIFO code
+ * (taken from Sylpheed, thanks) */
+static gint socket_init(gint argc, gchar **argv)
+{
+	gint sock;
+
+#ifdef G_OS_WIN32
+	HANDLE hmutex;
+
+	hmutex = CreateMutexA(NULL, FALSE, "Geany");
+	if (! hmutex)
+	{
+		geany_debug("cannot create Mutex\n");
+		return -1;
+	}
+	if (GetLastError() != ERROR_ALREADY_EXISTS)
+	{
+		sock = socket_fd_open_inet(REMOTE_CMD_PORT);
+		if (sock < 0)
+			return 0;
+		return sock;
+	}
+
+	sock = socket_fd_connect_inet(REMOTE_CMD_PORT);
+	if (sock < 0)
+		return -1;
+#else
+
+	if (socket_info.file_name == NULL)
+		socket_info.file_name = g_strdup_printf("%s%cgeany_socket", app->configdir, G_DIR_SEPARATOR);
+
+	sock = socket_fd_connect_unix(socket_info.file_name);
+	if (sock < 0)
+	{
+		unlink(socket_info.file_name);
+		return socket_fd_open_unix(socket_info.file_name);
+	}
+#endif
+
+	// remote command mode, here we have another running instance and want to use it
+	geany_debug("using running instance of Geany");
+
+	if (argc > 1)
+	{
+		gint i;
+		gchar *filename;
+
+		socket_fd_write_all(sock, "open\n", 5);
+
+		for(i = 1; i < argc && argv[i] != NULL; i++)
+		{
+			filename = get_argv_filename(argv[i]);
+
+			if (filename != NULL)
+			{
+				socket_fd_write_all(sock, filename, strlen(filename));
+				socket_fd_write_all(sock, "\n", 1);
+				g_free(filename);
+			}
+		}
+		socket_fd_write_all(sock, ".\n", 2);
+	}
+
+	socket_fd_close(sock);
+	return -1;
+}
+
+
+gint socket_finalize(void)
+{
+	if (socket_info.lock_socket < 0) return -1;
+
+	if (socket_info.lock_socket_tag > 0)
+		g_source_remove(socket_info.lock_socket_tag);
+	if (socket_info.read_ioc)
+	{
+		g_io_channel_shutdown(socket_info.read_ioc, FALSE, NULL);
+		g_io_channel_unref(socket_info.read_ioc);
+		socket_info.read_ioc = NULL;
+	}
+
+#ifndef G_OS_WIN32
+	unlink(socket_info.file_name);
+	g_free(socket_info.file_name);
+#endif
+
+	return 0;
+}
+
+
+#ifdef G_OS_WIN32
+#define SockDesc		SOCKET
+#define SOCKET_IS_VALID(s)	((s) != INVALID_SOCKET)
+#else
+#define SockDesc		gint
+#define SOCKET_IS_VALID(s)	((s) >= 0)
+#define INVALID_SOCKET		(-1)
+#endif
+
+
+static gint socket_fd_connect_unix(const gchar *path)
+{
+#ifdef G_OS_UNIX
+	gint sock;
+	struct sockaddr_un addr;
+
+	sock = socket(PF_UNIX, SOCK_STREAM, 0);
+	if (sock < 0)
+	{
+		perror("fd_connect_unix(): socket");
+		return -1;
+	}
+
+	memset(&addr, 0, sizeof(addr));
+	addr.sun_family = AF_UNIX;
+	strncpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
+
+	if (connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+	{
+		socket_fd_close(sock);
+		return -1;
+	}
+
+	return sock;
+#else
+	return -1;
+#endif
+}
+
+
+static gint socket_fd_open_unix(const gchar *path)
+{
+#ifdef G_OS_UNIX
+	gint sock;
+	struct sockaddr_un addr;
+	gint val;
+
+	sock = socket(PF_UNIX, SOCK_STREAM, 0);
+
+	if (sock < 0)
+	{
+		perror("sock_open_unix(): socket");
+		return -1;
+	}
+
+	val = 1;
+	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)) < 0)
+	{
+		perror("setsockopt");
+		socket_fd_close(sock);
+		return -1;
+	}
+
+	memset(&addr, 0, sizeof(addr));
+	addr.sun_family = AF_UNIX;
+	strncpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
+
+	if (bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+	{
+		perror("bind");
+		socket_fd_close(sock);
+		return -1;
+	}
+
+	if (listen(sock, 1) < 0)
+	{
+		perror("listen");
+		socket_fd_close(sock);
+		return -1;
+	}
+
+	return sock;
+#else
+	return -1;
+#endif
+}
+
+
+static gint socket_fd_close(gint fd)
+{
+#ifdef G_OS_WIN32
+	return closesocket(fd);
+#else
+	return close(fd);
+#endif
+}
+
+
+#ifdef G_OS_WIN32
+static gint socket_fd_open_inet(gushort port)
+{
+	SockDesc sock;
+	struct sockaddr_in addr;
+	gint val;
+
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (! SOCKET_IS_VALID(sock))
+	{
+#ifdef G_OS_WIN32
+		geany_debug("fd_open_inet(): socket() failed: %ld\n", WSAGetLastError());
+#else
+		perror("fd_open_inet(): socket");
+#endif
+		return -1;
+	}
+
+	val = 1;
+	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)) < 0)
+	{
+		perror("setsockopt");
+		socket_fd_close(sock);
+		return -1;
+	}
+
+	memset(&addr, 0, sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(port);
+	addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+
+	if (bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+	{
+		perror("bind");
+		socket_fd_close(sock);
+		return -1;
+	}
+
+	if (listen(sock, 1) < 0)
+	{
+		perror("listen");
+		socket_fd_close(sock);
+		return -1;
+	}
+
+	return sock;
+}
+
+
+static gint socket_fd_connect_inet(gushort port)
+{
+	SockDesc sock;
+	struct sockaddr_in addr;
+
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (! SOCKET_IS_VALID(sock))
+	{
+#ifdef G_OS_WIN32
+		geany_debug("fd_connect_inet(): socket() failed: %ld\n", WSAGetLastError());
+#else
+		perror("fd_connect_inet(): socket");
+#endif
+		return -1;
+	}
+
+	memset(&addr, 0, sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(port);
+	addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+
+	if (connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+	{
+		socket_fd_close(sock);
+		return -1;
+	}
+
+	return sock;
+}
+#endif
+
+
+static gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpointer data)
+{
+	gint fd, sock;
+	gchar buf[4096];
+	struct sockaddr_in caddr;
+	guint caddr_len;
+
+	caddr_len = sizeof(caddr);
+
+	fd = g_io_channel_unix_get_fd(source);
+	sock = accept(fd, (struct sockaddr *)&caddr, &caddr_len);
+
+	// first get the command
+	if (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && strncmp(buf, "open", 4) == 0)
+	{
+		geany_debug("remote command: open");
+		while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+		{
+			g_strstrip(buf); // remove \n char
+
+			if (g_file_test(buf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+				document_open_file(-1, buf, 0, FALSE, NULL, NULL);
+			else
+				geany_debug("got data from socket, but it does not look like a filename");
+		}
+	}
+
+	socket_fd_close(sock);
+
+	gtk_window_deiconify(GTK_WINDOW(app->window));
+	gtk_window_present(GTK_WINDOW(app->window));
+
+	return TRUE;
+}
+
+
+static gint socket_fd_gets(gint fd, gchar *buf, gint len)
+{
+	gchar *newline, *bp = buf;
+	gint n;
+
+	if (--len < 1)
+		return -1;
+	do
+	{
+		if ((n = socket_fd_recv(fd, bp, len, MSG_PEEK)) <= 0)
+			return -1;
+		if ((newline = memchr(bp, '\n', n)) != NULL)
+			n = newline - bp + 1;
+		if ((n = socket_fd_read(fd, bp, n)) < 0)
+			return -1;
+		bp += n;
+		len -= n;
+	} while (! newline && len);
+
+	*bp = '\0';
+	return bp - buf;
+}
+
+
+static gint socket_fd_recv(gint fd, gchar *buf, gint len, gint flags)
+{
+	if (socket_fd_check_io(fd, G_IO_IN) < 0)
+		return -1;
+
+	return recv(fd, buf, len, flags);
+}
+
+
+static gint socket_fd_read(gint fd, gchar *buf, gint len)
+{
+	if (socket_fd_check_io(fd, G_IO_IN) < 0)
+		return -1;
+
+#ifdef G_OS_WIN32
+	return recv(fd, buf, len, 0);
+#else
+	return read(fd, buf, len);
+#endif
+}
+
+
+static gint socket_fd_check_io(gint fd, GIOCondition cond)
+{
+	struct timeval timeout;
+	fd_set fds;
+
+	timeout.tv_sec  = 60;
+	timeout.tv_usec = 0;
+
+#ifdef G_OS_UNIX
+	// checking for non-blocking mode
+	gint flags;
+
+	flags = fcntl(fd, F_GETFL, 0);
+	if (flags < 0)
+	{
+		perror("fcntl");
+		return 0;
+	}
+
+	if ((flags & O_NONBLOCK) != 0)
+		return 0;
+#endif
+
+	FD_ZERO(&fds);
+	FD_SET(fd, &fds);
+
+	if (cond == G_IO_IN)
+	{
+		select(fd + 1, &fds, NULL, NULL, &timeout);
+	}
+	else
+	{
+		select(fd + 1, NULL, &fds, NULL, &timeout);
+	}
+
+	if (FD_ISSET(fd, &fds))
+	{
+		return 0;
+	}
+	else
+	{
+		geany_debug("Socket IO timeout\n");
+		return -1;
+	}
+}
+
+
+static gint socket_fd_write_all(gint fd, const gchar *buf, gint len)
+{
+	gint n, wrlen = 0;
+
+	while (len)
+	{
+		n = socket_fd_write(fd, buf, len);
+		if (n <= 0)
+			return -1;
+		len -= n;
+		wrlen += n;
+		buf += n;
+	}
+
+	return wrlen;
+}
+
+
+gint socket_fd_write(gint fd, const gchar *buf, gint len)
+{
+	if (socket_fd_check_io(fd, G_IO_OUT) < 0)
+		return -1;
+
+#ifdef G_OS_WIN32
+	return send(fd, buf, len, 0);
+#else
+	return write(fd, buf, len);
+#endif
+}
+
+
+#endif
 
 

@@ -70,17 +70,12 @@ PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 
-# fifo support
-AC_CHECK_FUNC([mkfifo], [have_mkfifo="1"])
-AC_ARG_ENABLE(pipe, AC_HELP_STRING([--enable-pipe],[enable if you want to detect a running instance [[default=yes]]]),
- [want_pipe="$enableval"], [want_pipe="yes"])
+# socket support
+AC_ARG_ENABLE(socket, AC_HELP_STRING([--enable-socket],[enable if you want to detect a running instance [[default=yes]]]),
+ [want_socket="$enableval"], [want_socket="yes"])
 
-if test "x$want_pipe" = "xyes"; then
-	if test "x$have_mkfifo" = "x1"; then
-		AC_DEFINE(HAVE_FIFO, 1, [Define if you want to detect a running instance])
-	else
-		want_pipe=no
-	fi
+if test "x$want_socket" = "xyes"; then
+	AC_DEFINE(HAVE_SOCKET, 1, [Define if you want to detect a running instance])
 fi
 
 # VTE support
@@ -173,7 +168,7 @@ then
 fi
 echo "Using GTK version                  : ${GTK_VERSION}"
 echo "Use virtual terminal support       : ${want_vte}"
-echo "Use named pipe support             : ${want_pipe}"
+echo "Use (UNIX domain) socket support   : ${want_socket}"
 if test "${REVISION}" != "-1"
 then
 	echo "Compiling Subversion revision      : ${REVISION}"

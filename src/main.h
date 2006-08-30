@@ -25,7 +25,9 @@
 #ifndef GEANY_MAIN_H
 #define GEANY_MAIN_H
 
-void fifo_finalize();
+#ifdef HAVE_SOCKET
+gint socket_finalize();
+#endif
 
 void geany_debug(gchar const *format, ...);
 

@@ -84,9 +84,8 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 {
 	geany_debug("Quitting...");
 
-#ifdef HAVE_FIFO
-	// delete the fifo early, because we don't accept new files anymore
-	fifo_finalize();
+#ifdef HAVE_SOCKET
+	socket_finalize();
 #endif
 
 	keybindings_free();

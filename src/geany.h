@@ -36,7 +36,6 @@
 // listed in the documentation should not be changed ;-)
 #define GEANY_HOME_DIR					g_get_home_dir()
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
-#define GEANY_FIFO_NAME					"geany_fifo.0"
 #define GEANY_CODENAME					"Kadir"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_MAX_OPEN_FILES			25
