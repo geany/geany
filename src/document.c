@@ -56,6 +56,7 @@
 #include "encodings.h"
 #include "notebook.h"
 #include "main.h"
+#include "vte.h"
 
 
 /* Returns -1 if no text found or the new range endpoint after replacing. */
