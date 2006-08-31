@@ -417,11 +417,22 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 		}
 		case GEANY_FILETYPES_FERITE:
 		{
-			// Error: Parse Error: on line 5 in "/misc/tmp/testfiles_geany/hello.fe"
-			pattern = " \"";
-			field_min_len = 10;
-			field_idx_line = 5;
-			field_idx_file = 8;
+			// Error: Parse Error: on line 5 in "/tmp/hello.fe"
+			// Error: Compile Error: on line 24, in /test/class.fe
+			if (strncmp(string, "Error: Compile Error", 20) == 0)
+			{
+				pattern = " ";
+				field_min_len = 8;
+				field_idx_line = 5;
+				field_idx_file = 7;
+			}
+			else
+			{
+				pattern = " \"";
+				field_min_len = 10;
+				field_idx_line = 5;
+				field_idx_file = 8;
+			}
 			break;
 		}
 

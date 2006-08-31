@@ -24,12 +24,12 @@ globalclass=0x1111bb;0xffffff;true;false
 [keywords]
 # all items must be in one line
 primary=false null self super true abstract alias arguments attribute_missing break case class closure conformsToProtocol constructor default deliver destructor diliver do else extends final fix for function if iferr implements include instanceof method_missing modifies namespace new private protected protocol public recipient rename return static switch uses using while
-types=string number array object void
-docComment=@brief @class @declaration @description @end @example @extends @function @group @implements @modifies @module @namespace @param @protocol @return @return @static @type @variable @warning
+types=string number array object void XML Unix Sys String Stream Serialize RMI Posix Number Network Math FileSystem Console Array
+docComment=brief class declaration description end example extends function group implements modifies module namespace param protocol return return static type variable warning
 
 [settings]
 # the following characters are these which a "word" can contains, see documentation
-wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+wordchars=@_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # if only single comment char is supported like # in this file, leave comment_close blank
 comment_open=//
@@ -50,5 +50,5 @@ comment_use_indent=true
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=ferite -c "%f"
+compiler=ferite -vc "%f"
 run_cmd=ferite "%f"

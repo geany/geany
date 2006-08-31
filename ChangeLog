@@ -1,3 +1,10 @@
+2006-08-31  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/msgwindow.c, data/filetypes.ferite:
+   Improved parsing compiler messages when using the ferite compiler.
+   Added some primitives and improved compiler settings for Ferite.
+
+
 2006-08-30  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * configure.in, src/callbacks.c, src/geany.h, src/main.c:
