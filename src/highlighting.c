@@ -864,7 +864,7 @@ static void styleset_php_init(void)
 	types[GEANY_FILETYPES_PHP] = g_new(style_set, 1);
 	types[GEANY_FILETYPES_PHP]->keywords = NULL;
 
-	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_PHP, GEANY_WORDCHARS"$");
+	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_PHP, GEANY_WORDCHARS);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PHP);
 
 	// load global tags file for PHP autocompletion
@@ -874,14 +874,6 @@ static void styleset_php_init(void)
 		// 6 is the langType used in TagManager (see the table in tagmanager/parsers.h)
 		tm_workspace_load_global_tags(file, 6);
 		global_php_tags_loaded = TRUE;
-		g_free(file);
-	}
-	// load global tags file for HTML entities autocompletion
-	if (! app->ignore_global_tags && ! global_html_tags_loaded)
-	{
-		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "html_entities.tags", NULL);
-		html_entities = utils_read_file_in_array(file);
-		global_html_tags_loaded = TRUE;
 		g_free(file);
 	}
 
@@ -903,10 +895,59 @@ void styleset_php(ScintillaObject *sci)
 
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
-	// use the same colouring for HTML; XML and so on
+	// use the same colouring as for XML
 	styleset_markup(sci);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_PHP]->wordchars);
+}
+
+
+static void styleset_html_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.html", NULL);
+	gchar *f = g_strconcat(app->configdir, G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.html", NULL);
+
+	styleset_load_file(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	types[GEANY_FILETYPES_HTML] = g_new(style_set, 1);
+	types[GEANY_FILETYPES_HTML]->keywords = NULL;
+
+	styleset_get_wordchars(config, config_home, GEANY_FILETYPES_HTML, GEANY_WORDCHARS);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_HTML);
+
+	// load global tags file for HTML entities autocompletion
+	if (! app->ignore_global_tags && ! global_html_tags_loaded)
+	{
+		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "html_entities.tags", NULL);
+		html_entities = utils_read_file_in_array(file);
+		global_html_tags_loaded = TRUE;
+		g_free(file);
+	}
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+	g_free(f0);
+	g_free(f);
+}
+
+
+void styleset_html(ScintillaObject *sci)
+{
+	if (types[GEANY_FILETYPES_HTML] == NULL) styleset_html_init();
+
+	styleset_common(sci, 7);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_HTML, 0);
+
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
+	// use the same colouring for HTML; XML and so on
+	styleset_markup(sci);
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) types[GEANY_FILETYPES_HTML]->wordchars);
 }
 
 

@@ -5,19 +5,20 @@ TODO List:
 
 	Geany 0.8 or later:
 
+	o fix problems when loading global.tags and other tags files are
+	  already loaded
 	o Go to xxx - definable command
 	o documentation: list and explain filetype modes
-	o user-definable auto completion structs
 	o documentation: preferences
-	o save build includes & arguments
-	o separate filetype for HTML
+	o user-definable auto completion structs
+	o save build includes & arguments (->project management)
 	o don't override Scintilla keybindings by default
 	o allow use of custom global tags files
 	o common default highlighting all in one config file
+	o project management
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines  - Scintilla issue)
 	o (inverting highlighting by selection - Scintilla issue)
-	o (project management)
 	o (folder tree in the sidebar)
 	o (improved Windows support)

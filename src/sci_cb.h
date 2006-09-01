@@ -35,18 +35,18 @@
 gchar **html_entities;
 
 
-// callback func called by all editors when a signals arises
+// callback func called by all editors when a signal arises
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
 gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force);
 
 void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
 
-void sci_cb_close_block(ScintillaObject *sci, gint pos);
+void sci_cb_close_block(gint idx, gint pos);
 
-void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx);
+void sci_cb_auto_forif(gint idx, gint pos);
 
-void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx);
+void sci_cb_auto_latex(gint idx, gint pos);
 
 void sci_cb_show_macro_list(ScintillaObject *sci);
 
@@ -54,7 +54,7 @@ gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch);
 
 void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen);
 
-gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx);
+gboolean sci_cb_show_calltip(gint idx, gint pos);
 
 void sci_cb_do_comment(gint idx);
 

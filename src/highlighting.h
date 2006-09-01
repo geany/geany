@@ -54,6 +54,8 @@ void styleset_latex(ScintillaObject *sci);
 
 void styleset_php(ScintillaObject *sci);
 
+void styleset_html(ScintillaObject *sci);
+
 void styleset_java(ScintillaObject *sci);
 
 void styleset_pascal(ScintillaObject *sci);

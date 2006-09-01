@@ -155,7 +155,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				}
 				case '(':
 				{	// show calltips
-					sci_cb_show_calltip(sci, pos, idx);
+					sci_cb_show_calltip(idx, pos);
 					break;
 				}
 				case ')':
@@ -171,19 +171,19 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				}
 				case ' ':
 				{	// if and for autocompletion
-					if (app->pref_editor_auto_complete_constructs) sci_cb_auto_forif(sci, pos, idx);
+					if (app->pref_editor_auto_complete_constructs) sci_cb_auto_forif(idx, pos);
 					break;
 				}
 				case '[':
 				case '{':
 				{	// Tex auto-closing
 					sci_cb_auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
-					sci_cb_show_calltip(sci, pos, idx);
+					sci_cb_show_calltip(idx, pos);
 					break;
 				}
 				case '}':
 				{	// closing bracket handling
-					if (doc_list[idx].use_auto_indention) sci_cb_close_block(sci, pos - 1);
+					if (doc_list[idx].use_auto_indention) sci_cb_close_block(idx, pos - 1);
 					break;
 				}
 				default: sci_cb_start_auto_complete(idx, pos, FALSE);
@@ -274,7 +274,7 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 	}
 	// " * " auto completion in multiline C/C++ comments
 	sci_cb_auto_multiline(sci, pos);
-	if (app->pref_editor_auto_complete_constructs) sci_cb_auto_latex(sci, pos, idx);
+	if (app->pref_editor_auto_complete_constructs) sci_cb_auto_latex(idx, pos);
 }
 
 
@@ -372,21 +372,28 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 }
 
 
-void sci_cb_close_block(ScintillaObject *sci, gint pos)
+void sci_cb_close_block(gint idx, gint pos)
 {
 	gint x = 0, cnt = 0;
-	gint start_brace = brace_match(sci, pos);
-	gint line = sci_get_line_from_position(sci, pos);
-	gint line_start = sci_get_position_from_line(sci, line);
-	gint line_len = sci_get_line_length(sci, line);
-	// set eol_char_len to 0 if on last line, because there is no EOL char
-	gint eol_char_len = (line == (SSM(sci, SCI_GETLINECOUNT, 0, 0) - 1)) ? 0 :
-								utils_get_eol_char_len(document_find_by_sci(sci));
-	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	gint start_brace, line, line_start, line_len, eol_char_len, lexer;
 	gchar *text, *line_buf;
+	ScintillaObject *sci;
 
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
+
+	sci = doc_list[idx].sci;
+
+	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL && lexer != SCLEX_BASH)
 			return;
+
+	start_brace = brace_match(sci, pos);
+	line = sci_get_line_from_position(sci, pos);
+	line_start = sci_get_position_from_line(sci, line);
+	line_len = sci_get_line_length(sci, line);
+	// set eol_char_len to 0 if on last line, because there is no EOL char
+	eol_char_len = (line == (SSM(sci, SCI_GETLINECOUNT, 0, 0) - 1)) ? 0 :
+								utils_get_eol_char_len(document_find_by_sci(sci));
 
 	// check that the line is empty, to not kill text in the line
 	line_buf = g_malloc(line_len + 1);
@@ -440,19 +447,20 @@ void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_
 }
 
 
-gboolean sci_cb_show_calltip(ScintillaObject *sci, gint pos, gint idx)
+gboolean sci_cb_show_calltip(gint idx, gint pos)
 {
-	gint orig_pos = pos; //the position for the calltip
+	gint orig_pos = pos; // the position for the calltip
 	gint lexer;
 	gint style;
 	gchar word[GEANY_MAX_WORD_LENGTH];
 	TMTag *tag;
 	const GPtrArray *tags;
+	ScintillaObject *sci;
 
-	if (sci == NULL) return FALSE;
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return FALSE;
+	sci = doc_list[idx].sci;
 
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return FALSE;
 
 	word[0] = '\0';
 	if (pos == -1)
@@ -571,7 +579,7 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 	ScintillaObject *sci;
 	gboolean ret = FALSE;
 
-	if (idx < 0 || ! doc_list[idx].is_valid || doc_list[idx].sci == NULL) return FALSE;
+	if (idx < 0 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return FALSE;
 	sci = doc_list[idx].sci;
 
 	line = sci_get_line_from_position(sci, pos);
@@ -612,8 +620,13 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 }
 
 
-void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx)
+void sci_cb_auto_latex(gint idx, gint pos)
 {
+	ScintillaObject *sci;
+
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
+	sci = doc_list[idx].sci;
+
 	if (sci_get_char_at(sci, pos - 2) == '}')
 	{
 		gchar *eol, *buf, *construct;
@@ -685,23 +698,29 @@ void sci_cb_auto_latex(ScintillaObject *sci, gint pos, gint idx)
 }
 
 
-void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
+void sci_cb_auto_forif(gint idx, gint pos)
 {
 	static gchar buf[16];
 	gchar *eol;
 	gchar *construct;
 	gint lexer, style;
 	gint i;
+	ScintillaObject *sci;
 
-	if (sci == NULL || idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
+	sci = doc_list[idx].sci;
 
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
 	// only for C, C++, Java, Perl and PHP
-	if (lexer != SCLEX_CPP &&
-		lexer != SCLEX_HTML &&
-		lexer != SCLEX_PERL)
+	if (doc_list[idx].file_type->id != GEANY_FILETYPES_PHP &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_C &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_D &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_CPP &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_PERL &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_JAVA &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE)
 		return;
 
 	// return, if we are in a comment, or when SCLEX_HTML but not in PHP
@@ -713,9 +732,9 @@ void sci_cb_auto_forif(ScintillaObject *sci, gint pos, gint idx)
 		style == SCE_C_STRING ||
 		style == SCE_C_CHARACTER ||
 		style == SCE_C_PREPROCESSOR)) return;
-	if (lexer == SCLEX_HTML && ! (style >= 118 && style <= 127)) return;
+	//if (lexer == SCLEX_HTML && ! (style >= 118 && style <= 127)) return;
 
-	if (lexer == SCLEX_HTML && (
+	if (doc_list[idx].file_type->id == GEANY_FILETYPES_PHP && (
 		style == SCE_HPHP_SIMPLESTRING ||
 		style == SCE_HPHP_HSTRING ||
 		style == SCE_HPHP_COMMENTLINE ||

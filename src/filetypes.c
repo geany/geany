@@ -60,8 +60,8 @@ enum
 	FILETYPE_UID_D,			// 21
 	FILETYPE_UID_FORTRAN,	// 22
 	FILETYPE_UID_DIFF,		// 23
-	FILETYPE_UID_FERITE		// 24
-	//FILETYPE_UID_HTML,	// 25
+	FILETYPE_UID_FERITE,	// 24
+	FILETYPE_UID_HTML		// 25
 };
 
 
@@ -100,9 +100,9 @@ filetype *filetypes_get_from_uid(gint uid)
 		case FILETYPE_UID_ALL:		return filetypes[GEANY_FILETYPES_ALL];
 		case FILETYPE_UID_D:		return filetypes[GEANY_FILETYPES_D];
 		case FILETYPE_UID_FORTRAN:	return filetypes[GEANY_FILETYPES_FORTRAN];
-		case FILETYPE_UID_DIFF:	return filetypes[GEANY_FILETYPES_DIFF];
+		case FILETYPE_UID_DIFF:		return filetypes[GEANY_FILETYPES_DIFF];
 		case FILETYPE_UID_FERITE:	return filetypes[GEANY_FILETYPES_FERITE];
-		//case FILETYPE_UID_HTML:	return filetypes[GEANY_FILETYPES_HTML];
+		case FILETYPE_UID_HTML:		return filetypes[GEANY_FILETYPES_HTML];
 		default: 					return NULL;
 	}
 }
@@ -322,16 +322,15 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_PHP]->lang = 6;
 	filetypes[GEANY_FILETYPES_PHP]->name = g_strdup("PHP");
 	filetypes[GEANY_FILETYPES_PHP]->has_tags = TRUE;
-	filetypes[GEANY_FILETYPES_PHP]->title = g_strdup(_("PHP / HTML source file"));
+	filetypes[GEANY_FILETYPES_PHP]->title = g_strdup(_("PHP source file"));
 	filetypes[GEANY_FILETYPES_PHP]->extension = g_strdup("php");
-	filetypes[GEANY_FILETYPES_PHP]->pattern = g_new0(gchar*, 7);
+	filetypes[GEANY_FILETYPES_PHP]->pattern = g_new0(gchar*, 6);
 	filetypes[GEANY_FILETYPES_PHP]->pattern[0] = g_strdup("*.php");
 	filetypes[GEANY_FILETYPES_PHP]->pattern[1] = g_strdup("*.php3");
 	filetypes[GEANY_FILETYPES_PHP]->pattern[2] = g_strdup("*.php4");
 	filetypes[GEANY_FILETYPES_PHP]->pattern[3] = g_strdup("*.php5");
-	filetypes[GEANY_FILETYPES_PHP]->pattern[4] = g_strdup("*.html");
-	filetypes[GEANY_FILETYPES_PHP]->pattern[5] = g_strdup("*.htm");
-	filetypes[GEANY_FILETYPES_PHP]->pattern[6] = NULL;
+	filetypes[GEANY_FILETYPES_PHP]->pattern[4] = g_strdup("*.phtml");
+	filetypes[GEANY_FILETYPES_PHP]->pattern[5] = NULL;
 	filetypes[GEANY_FILETYPES_PHP]->style_func_ptr = styleset_php;
 	filetypes[GEANY_FILETYPES_PHP]->comment_open = g_strdup("//");
 	filetypes[GEANY_FILETYPES_PHP]->comment_close = NULL;
@@ -503,6 +502,32 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_DOCBOOK]->comment_close = g_strdup("-->");
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_DOCBOOK]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_DOCBOOK]->title, filetypes[GEANY_FILETYPES_DOCBOOK]);
+
+#define HTML
+	filetypes[GEANY_FILETYPES_HTML] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_HTML]->id = GEANY_FILETYPES_HTML;
+	filetypes[GEANY_FILETYPES_HTML]->uid = FILETYPE_UID_HTML;
+	filetypes[GEANY_FILETYPES_HTML]->item = NULL;
+	filetypes[GEANY_FILETYPES_HTML]->lang = -2;
+	filetypes[GEANY_FILETYPES_HTML]->name = g_strdup("HTML");
+	filetypes[GEANY_FILETYPES_HTML]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_HTML]->title = g_strdup(_("HTML source file"));
+	filetypes[GEANY_FILETYPES_HTML]->extension = g_strdup("html");
+	filetypes[GEANY_FILETYPES_HTML]->pattern = g_new0(gchar*, 8);
+	filetypes[GEANY_FILETYPES_HTML]->pattern[0] = g_strdup("*.htm");
+	filetypes[GEANY_FILETYPES_HTML]->pattern[1] = g_strdup("*.html");
+	filetypes[GEANY_FILETYPES_HTML]->pattern[2] = g_strdup("*.shtml");
+	filetypes[GEANY_FILETYPES_HTML]->pattern[3] = g_strdup("*.hta");
+	filetypes[GEANY_FILETYPES_HTML]->pattern[4] = g_strdup("*.htd");
+	filetypes[GEANY_FILETYPES_HTML]->pattern[5] = g_strdup("*.htt");
+	filetypes[GEANY_FILETYPES_HTML]->pattern[6] = g_strdup("*.cfm");
+	filetypes[GEANY_FILETYPES_HTML]->pattern[7] = NULL;
+	filetypes[GEANY_FILETYPES_HTML]->style_func_ptr = styleset_html;
+	filetypes[GEANY_FILETYPES_HTML]->comment_open = g_strdup("<!--");
+	filetypes[GEANY_FILETYPES_HTML]->comment_close = g_strdup("-->");
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_HTML]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_HTML]->title, filetypes[GEANY_FILETYPES_HTML]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_HTML]->title, filetypes[GEANY_FILETYPES_HTML]);
 
 #define CSS
 	filetypes[GEANY_FILETYPES_CSS] = g_new0(filetype, 1);

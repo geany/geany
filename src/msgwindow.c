@@ -435,7 +435,15 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 			}
 			break;
 		}
-
+		case GEANY_FILETYPES_HTML:
+		{
+			// line 78 column 7 - Warning: <table> missing '>' for end of tag
+			pattern = " ";
+			field_min_len = 4;
+			field_idx_line = 1;
+			field_idx_file = -1;
+			break;
+		}
 		default: return;
 	}
 
@@ -453,6 +461,15 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 	// if the line could not be read, line is 0 and an error occurred, so we leave
 	if (fields[field_idx_line] == end)
 	{
+		g_strfreev(fields);
+		return;
+	}
+
+	// let's stop here if there is no filename in the error message
+	if (field_idx_file == -1)
+	{
+		// we have no filename in the error message, so take the current one and hope it's correct
+		*filename = g_strdup(doc_list[document_get_cur_idx()].file_name);
 		g_strfreev(fields);
 		return;
 	}

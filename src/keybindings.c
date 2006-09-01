@@ -735,7 +735,7 @@ static void cb_func_edit_calltip(void)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_show_calltip(doc_list[idx].sci, -1, idx);
+	sci_cb_show_calltip(idx, -1);
 }
 
 static void cb_func_edit_macrolist(void)

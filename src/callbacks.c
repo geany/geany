@@ -1716,6 +1716,12 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 			msgwin_status_add(_("Failed to execute the view program"));
 		}
 	}
+	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_HTML)
+	{
+		gchar *uri = g_strconcat("file:///", g_path_skip_root(doc_list[idx].file_name), NULL);
+		utils_start_browser(uri);
+		g_free(uri);
+	}
 	else
 	{
 		// save the file only if the run command uses it

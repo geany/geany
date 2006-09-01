@@ -2,6 +2,10 @@
 
  * src/document.c, src/dialogs.c, src/prefs.c, src/callbacks.c,
    src/interface.c, geany.glade: Fixed some typos.
+ * src/filetypes.c, src/highlighting.c, src/keybindings.c,
+   src/sci_cb.c, data/filetypes.html, data/filetype_extensions.conf,
+   src/callbacks.c, src/msgwindow.c:
+   Split filetype PHP/HTML into PHP and HTML.
 
 
 2006-09-01  Frank Lanitz  <frank@frank.uvena.de>
