@@ -1061,7 +1061,7 @@ void dialogs_show_prefs_dialog(void)
 			gtk_table_attach(GTK_TABLE(table), check_ignore_menu_key, 1, 2, 8, 9,
 						(GtkAttachOptions) (GTK_FILL),
 						(GtkAttachOptions) (0), 0, 0);
-			gtk_tooltips_set_tip(tooltips, check_ignore_menu_key, _("This option disables the keybinding to popup the menu bar(default is F10). Disabling it can be useful if you use for example the Midnight Commander within the VTE."), NULL);
+			gtk_tooltips_set_tip(tooltips, check_ignore_menu_key, _("This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."), NULL);
 			gtk_button_set_focus_on_click(GTK_BUTTON(check_ignore_menu_key), FALSE);
 
 			check_follow_path = gtk_check_button_new_with_mnemonic(_("Follow the path of the current file"));

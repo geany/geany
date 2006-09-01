@@ -1054,7 +1054,8 @@ void dialogs_show_file_properties(gint idx)
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL)
 	{
-		dialogs_show_error(_("An error occurred or file information could not be retrieved(e.g. from a new file)."));
+		dialogs_show_error(
+	_("An error occurred or file information could not be retrieved (e.g. from a new file)."));
 		return;
 	}
 

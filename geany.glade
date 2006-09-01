@@ -461,7 +461,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="insert_file_header1">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Inserts a few information at the beginning of the file</property>
+			      <property name="tooltip" translatable="yes">Inserts a file header at the beginning of the file</property>
 			      <property name="label" translatable="yes">Insert file header</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_comments_fileheader_activate" last_modification_time="Mon, 03 Oct 2005 17:33:08 GMT"/>
@@ -2277,7 +2277,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1051">
+	<widget class="GtkImage" id="image1054">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2309,7 +2309,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1052">
+	<widget class="GtkImage" id="image1055">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2336,7 +2336,7 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="insert_file_header2">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Inserts a few information at the beginning of the file</property>
+	      <property name="tooltip" translatable="yes">Inserts a file header at the beginning of the file</property>
 	      <property name="label" translatable="yes">Insert file header</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_fileheader_activate" last_modification_time="Mon, 03 Oct 2005 17:33:08 GMT"/>
@@ -2505,7 +2505,7 @@
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1053">
+	<widget class="GtkImage" id="image1056">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2551,7 +2551,7 @@
       <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 16 Jul 2005 11:20:32 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1054">
+	<widget class="GtkImage" id="image1057">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -2722,7 +2722,7 @@
 		      <child>
 			<widget class="GtkCheckButton" id="check_switch_pages">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">Switch to the status message tab(in the notebook window at the bottom) if a new status message arrive.</property>
+			  <property name="tooltip" translatable="yes">Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Switch to status message list at new message</property>
 			  <property name="use_underline">True</property>
@@ -3480,7 +3480,7 @@
 			      <child>
 				<widget class="GtkRadioButton" id="radio_long_line_line">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Prints a vertical line in the editor window at the given cursor position(see below).</property>
+				  <property name="tooltip" translatable="yes">Prints a vertical line in the editor window at the given cursor position (see below).</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Line</property>
 				  <property name="use_underline">True</property>
@@ -3500,7 +3500,7 @@
 			      <child>
 				<widget class="GtkRadioButton" id="radio_long_line_background">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">The background colour of characters after the given cursor position(see below) changed to the colour set below. (This is recommended if you use proportional fonts)</property>
+				  <property name="tooltip" translatable="yes">The background colour of characters after the given cursor position (see below) changed to the colour set below. (This is recommended if you use proportional fonts)</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Background</property>
 				  <property name="use_underline">True</property>
@@ -4869,7 +4869,7 @@ Bottom
 			  <child>
 			    <widget class="GtkCheckButton" id="check_xmltag">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Automatic completion of open XML tags(includes HTML tags)</property>
+			      <property name="tooltip" translatable="yes">Automatic completion of open XML tags (includes HTML tags)</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">XML tag auto completion</property>
 			      <property name="use_underline">True</property>
@@ -4960,7 +4960,7 @@ Bottom
 			      <child>
 				<widget class="GtkSpinButton" id="spin_autocheight">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Number of rows to display when the auto completion list is shown.</property>
+				  <property name="tooltip" translatable="yes">Number of rows to display in the auto completion list.</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">0</property>
@@ -5356,7 +5356,7 @@ Bottom
 		  <child>
 		    <widget class="GtkEntry" id="entry_print">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Path to the command for printing files(use %f for the filename).</property>
+		      <property name="tooltip" translatable="yes">Path to the command for printing files (use %f for the filename).</property>
 		      <property name="can_focus">True</property>
 		      <property name="editable">True</property>
 		      <property name="visibility">True</property>
@@ -5528,7 +5528,7 @@ Bottom
 		<widget class="GtkLabel" id="label120">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Specify here information you want to use in templates.
-See documentation if you don't know, how templates work.</property>
+See documentation if you don't know how templates work.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>

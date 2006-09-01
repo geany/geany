@@ -1,6 +1,12 @@
+2006-09-01  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/document.c, src/dialogs.c, src/prefs.c, src/callbacks.c,
+   src/interface.c, geany.glade: Fixed some typos.
+
+
 2006-09-01  Frank Lanitz  <frank@frank.uvena.de>
 
- * configure.in, po/vi.po
+ * configure.in, po/vi.po:
    Added Vietnamese translation (Thanks Clytie Siddall).
  * THANKS, src/about.c: Added translator credits.
 

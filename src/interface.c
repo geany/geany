@@ -465,7 +465,7 @@ create_window1 (void)
   insert_file_header1 = gtk_menu_item_new_with_mnemonic (_("Insert file header"));
   gtk_widget_show (insert_file_header1);
   gtk_container_add (GTK_CONTAINER (add_comments1_menu), insert_file_header1);
-  gtk_tooltips_set_tip (tooltips, insert_file_header1, _("Inserts a few information at the beginning of the file"), NULL);
+  gtk_tooltips_set_tip (tooltips, insert_file_header1, _("Inserts a file header at the beginning of the file"), NULL);
 
   insert_function_description2 = gtk_menu_item_new_with_mnemonic (_("Insert function description"));
   gtk_widget_show (insert_function_description2);
@@ -1685,11 +1685,11 @@ create_edit_menu1 (void)
   GtkWidget *normal_size2;
   GtkWidget *separator6;
   GtkWidget *insert_include1;
-  GtkWidget *image1051;
+  GtkWidget *image1054;
   GtkWidget *insert_include1_menu;
   GtkWidget *invisible3;
   GtkWidget *comments;
-  GtkWidget *image1052;
+  GtkWidget *image1055;
   GtkWidget *comments_menu;
   GtkWidget *add_changelog_entry2;
   GtkWidget *insert_file_header2;
@@ -1713,12 +1713,12 @@ create_edit_menu1 (void)
   GtkWidget *menu_decrease_indent2;
   GtkWidget *separator7;
   GtkWidget *find_usage1;
-  GtkWidget *image1053;
+  GtkWidget *image1056;
   GtkWidget *goto_tag_definition1;
   GtkWidget *goto_tag_declaration1;
   GtkWidget *separator15;
   GtkWidget *go_to_line;
-  GtkWidget *image1054;
+  GtkWidget *image1057;
   GtkAccelGroup *accel_group;
   GtkTooltips *tooltips;
 
@@ -1792,9 +1792,9 @@ create_edit_menu1 (void)
   gtk_widget_show (insert_include1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), insert_include1);
 
-  image1051 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1051);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert_include1), image1051);
+  image1054 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1054);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert_include1), image1054);
 
   insert_include1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert_include1), insert_include1_menu);
@@ -1806,9 +1806,9 @@ create_edit_menu1 (void)
   gtk_widget_show (comments);
   gtk_container_add (GTK_CONTAINER (edit_menu1), comments);
 
-  image1052 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1052);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (comments), image1052);
+  image1055 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1055);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (comments), image1055);
 
   comments_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (comments), comments_menu);
@@ -1821,7 +1821,7 @@ create_edit_menu1 (void)
   insert_file_header2 = gtk_menu_item_new_with_mnemonic (_("Insert file header"));
   gtk_widget_show (insert_file_header2);
   gtk_container_add (GTK_CONTAINER (comments_menu), insert_file_header2);
-  gtk_tooltips_set_tip (tooltips, insert_file_header2, _("Inserts a few information at the beginning of the file"), NULL);
+  gtk_tooltips_set_tip (tooltips, insert_file_header2, _("Inserts a file header at the beginning of the file"), NULL);
 
   insert_function_description1 = gtk_menu_item_new_with_mnemonic (_("Insert function description"));
   gtk_widget_show (insert_function_description1);
@@ -1907,9 +1907,9 @@ create_edit_menu1 (void)
   gtk_widget_show (find_usage1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), find_usage1);
 
-  image1053 = gtk_image_new_from_stock ("gtk-find", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1053);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (find_usage1), image1053);
+  image1056 = gtk_image_new_from_stock ("gtk-find", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1056);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (find_usage1), image1056);
 
   goto_tag_definition1 = gtk_menu_item_new_with_mnemonic (_("Go to tag definition"));
   gtk_widget_show (goto_tag_definition1);
@@ -1929,9 +1929,9 @@ create_edit_menu1 (void)
   gtk_container_add (GTK_CONTAINER (edit_menu1), go_to_line);
   gtk_tooltips_set_tip (tooltips, go_to_line, _("Goto to the entered line"), NULL);
 
-  image1054 = gtk_image_new_from_stock ("gtk-jump-to", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1054);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (go_to_line), image1054);
+  image1057 = gtk_image_new_from_stock ("gtk-jump-to", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1057);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (go_to_line), image1057);
 
   g_signal_connect ((gpointer) undo1, "activate",
                     G_CALLBACK (on_undo1_activate),
@@ -2029,11 +2029,11 @@ create_edit_menu1 (void)
   GLADE_HOOKUP_OBJECT (edit_menu1, normal_size2, "normal_size2");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator6, "separator6");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_include1, "insert_include1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1051, "image1051");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1054, "image1054");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_include1_menu, "insert_include1_menu");
   GLADE_HOOKUP_OBJECT (edit_menu1, invisible3, "invisible3");
   GLADE_HOOKUP_OBJECT (edit_menu1, comments, "comments");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1052, "image1052");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1055, "image1055");
   GLADE_HOOKUP_OBJECT (edit_menu1, comments_menu, "comments_menu");
   GLADE_HOOKUP_OBJECT (edit_menu1, add_changelog_entry2, "add_changelog_entry2");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_file_header2, "insert_file_header2");
@@ -2057,12 +2057,12 @@ create_edit_menu1 (void)
   GLADE_HOOKUP_OBJECT (edit_menu1, menu_decrease_indent2, "menu_decrease_indent2");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator7, "separator7");
   GLADE_HOOKUP_OBJECT (edit_menu1, find_usage1, "find_usage1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1053, "image1053");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1056, "image1056");
   GLADE_HOOKUP_OBJECT (edit_menu1, goto_tag_definition1, "goto_tag_definition1");
   GLADE_HOOKUP_OBJECT (edit_menu1, goto_tag_declaration1, "goto_tag_declaration1");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator15, "separator15");
   GLADE_HOOKUP_OBJECT (edit_menu1, go_to_line, "go_to_line");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1054, "image1054");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1057, "image1057");
   GLADE_HOOKUP_OBJECT_NO_REF (edit_menu1, tooltips, "tooltips");
 
   gtk_menu_set_accel_group (GTK_MENU (edit_menu1), accel_group);
@@ -2318,7 +2318,7 @@ create_prefs_dialog (void)
   check_switch_pages = gtk_check_button_new_with_mnemonic (_("Switch to status message list at new message"));
   gtk_widget_show (check_switch_pages);
   gtk_box_pack_start (GTK_BOX (vbox4), check_switch_pages, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_switch_pages, _("Switch to the status message tab(in the notebook window at the bottom) if a new status message arrive."), NULL);
+  gtk_tooltips_set_tip (tooltips, check_switch_pages, _("Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_switch_pages), FALSE);
 
   check_vte = gtk_check_button_new_with_mnemonic (_("Load virtual terminal emulation at startup"));
@@ -2545,14 +2545,14 @@ create_prefs_dialog (void)
   radio_long_line_line = gtk_radio_button_new_with_mnemonic (NULL, _("Line"));
   gtk_widget_show (radio_long_line_line);
   gtk_box_pack_start (GTK_BOX (hbox5), radio_long_line_line, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, radio_long_line_line, _("Prints a vertical line in the editor window at the given cursor position(see below)."), NULL);
+  gtk_tooltips_set_tip (tooltips, radio_long_line_line, _("Prints a vertical line in the editor window at the given cursor position (see below)."), NULL);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_long_line_line), radio_long_line_line_group);
   radio_long_line_line_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_long_line_line));
 
   radio_long_line_background = gtk_radio_button_new_with_mnemonic (NULL, _("Background"));
   gtk_widget_show (radio_long_line_background);
   gtk_box_pack_start (GTK_BOX (hbox5), radio_long_line_background, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, radio_long_line_background, _("The background colour of characters after the given cursor position(see below) changed to the colour set below. (This is recommended if you use proportional fonts)"), NULL);
+  gtk_tooltips_set_tip (tooltips, radio_long_line_background, _("The background colour of characters after the given cursor position (see below) changed to the colour set below. (This is recommended if you use proportional fonts)"), NULL);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_long_line_background), radio_long_line_line_group);
   radio_long_line_line_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_long_line_background));
 
@@ -2998,7 +2998,7 @@ create_prefs_dialog (void)
   check_xmltag = gtk_check_button_new_with_mnemonic (_("XML tag auto completion"));
   gtk_widget_show (check_xmltag);
   gtk_box_pack_start (GTK_BOX (vbox17), check_xmltag, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_xmltag, _("Automatic completion of open XML tags(includes HTML tags)"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_xmltag, _("Automatic completion of open XML tags (includes HTML tags)"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_xmltag), FALSE);
 
   check_folding = gtk_check_button_new_with_mnemonic (_("Enable folding"));
@@ -3025,7 +3025,7 @@ create_prefs_dialog (void)
   spin_autocheight = gtk_spin_button_new (GTK_ADJUSTMENT (spin_autocheight_adj), 1, 0);
   gtk_widget_show (spin_autocheight);
   gtk_box_pack_start (GTK_BOX (hbox6), spin_autocheight, FALSE, TRUE, 0);
-  gtk_tooltips_set_tip (tooltips, spin_autocheight, _("Number of rows to display when the auto completion list is shown."), NULL);
+  gtk_tooltips_set_tip (tooltips, spin_autocheight, _("Number of rows to display in the auto completion list."), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_autocheight), TRUE);
 
   label172 = gtk_label_new (_("<b>Features</b>"));
@@ -3136,7 +3136,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table1), entry_print, 1, 2, 3, 4,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, entry_print, _("Path to the command for printing files(use %f for the filename)."), NULL);
+  gtk_tooltips_set_tip (tooltips, entry_print, _("Path to the command for printing files (use %f for the filename)."), NULL);
 
   button_print = gtk_button_new ();
   gtk_widget_show (button_print);
@@ -3179,7 +3179,7 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox9);
   gtk_container_add (GTK_CONTAINER (notebook2), vbox9);
 
-  label120 = gtk_label_new (_("Specify here information you want to use in templates.\nSee documentation if you don't know, how templates work."));
+  label120 = gtk_label_new (_("Specify here information you want to use in templates.\nSee documentation if you don't know how templates work."));
   gtk_widget_show (label120);
   gtk_box_pack_start (GTK_BOX (vbox9), label120, FALSE, FALSE, 0);
   gtk_misc_set_padding (GTK_MISC (label120), 0, 6);

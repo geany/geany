@@ -1280,7 +1280,6 @@ void document_set_indicator(gint idx, gint line)
 /* simple file print */
 void document_print(gint idx)
 {
-	/// TODO test under Win32
 	gchar *cmdline;
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL) return;
@@ -1297,7 +1296,7 @@ void document_print(gint idx)
 		rc = system(cmdline);
 		if (rc != 0)
 		{
-			dialogs_show_error(_("Printing of \"%s\" failed(return code: %d)."),
+			dialogs_show_error(_("Printing of \"%s\" failed (return code: %d)."),
 								doc_list[idx].file_name, rc);
 		}
 		else
