@@ -59,7 +59,9 @@ Jacek Wolszczak - <language> pl_PL\n\t\
 Alexandre Moreira - <language> pt_BR\n\t\
 &lt;alexandream@gmail.com&gt;\n\n\t\
 brahmann_ - <language> ru_RU\n\t\
-&lt;brahmann@mthr.net.ru&gt;"
+&lt;brahmann@mthr.net.ru&gt;\n\n\t\
+Clytie Siddall - <language> vi_VN\n\t\
+&lt;clytie@riverland.net.au&gt;"
 
 static void header_eventbox_style_set(GtkWidget *widget);
 static void header_label_style_set(GtkWidget *widget);

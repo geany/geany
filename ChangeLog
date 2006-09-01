@@ -1,3 +1,10 @@
+2006-09-01  Frank Lanitz  <frank@frank.uvena.de>
+
+ * configure.in, po/vi.po
+   Added Vietnamese translation (Thanks Clytie Siddall).
+ * THANKS, src/about.c: Added translator credits.
+
+
 2006-08-31  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/msgwindow.c, data/filetypes.ferite:
