@@ -255,7 +255,7 @@ void utils_save_buttons_toggle(gboolean enable)
 	gtk_widget_set_sensitive(app->save_buttons[1], enable);
 
 	// save all menu item and tool button
-	for (i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
+	for (i = 0; i < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
 	{
 		// count the amount of tabs where changes were made and if they are more than one,
 		// we need the save all button / item

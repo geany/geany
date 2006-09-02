@@ -648,7 +648,7 @@ void sci_cb_auto_latex(gint idx, gint pos)
 		if (strncmp(buf + start, "\\begin", 6) == 0)
 		{
 			gchar full_cmd[15];
-			gint j = 0;
+			guint j = 0;
 
 			// take also "\begingroup" (or whatever there can be) and append "\endgroup" and so on.
 			i = start + 6;

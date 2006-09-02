@@ -1,3 +1,9 @@
+2006-09-02  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/sci_cb.c, src/main.c:
+   Fixed C89 variable declaration and two sign comparison warnings.
+
+
 2006-09-01  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c, src/dialogs.c, src/prefs.c, src/callbacks.c,

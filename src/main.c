@@ -1017,13 +1017,13 @@ static gint socket_fd_check_io(gint fd, GIOCondition cond)
 {
 	struct timeval timeout;
 	fd_set fds;
+	gint flags;
 
 	timeout.tv_sec  = 60;
 	timeout.tv_usec = 0;
 
 #ifdef G_OS_UNIX
 	// checking for non-blocking mode
-	gint flags;
 
 	flags = fcntl(fd, F_GETFL, 0);
 	if (flags < 0)
