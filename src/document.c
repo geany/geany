@@ -62,7 +62,7 @@
 /* Returns -1 if no text found or the new range endpoint after replacing. */
 static gint
 document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
-	gint flags, gint start, gint end);
+	gint flags, gint start, gint end, gboolean escaped_chars);
 
 
 /* returns the index of the notebook page which has the given filename
@@ -943,12 +943,13 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 /* Returns -1 if no text found or the new range endpoint after replacing. */
 static gint
 document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
-	gint flags, gint start, gint end)
+	gint flags, gint start, gint end, gboolean escaped_chars)
 {
 	gint search_pos;
 	gint count = 0;
 	gint find_len = 0, replace_len = 0;
 	gboolean match_found = FALSE;
+	gchar *escaped_find_text, *escaped_replace_text;
 	struct TextToFind ttf;
 
 	g_return_val_if_fail(find_text != NULL && replace_text != NULL, FALSE);
@@ -981,8 +982,22 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 		}
 	}
 	sci_end_undo_action(doc_list[idx].sci);
-	msgwin_status_add(_("Replaced %d occurrences of \"%s\" with \"%s\"."),
-						count, find_text, replace_text);
+
+	if (escaped_chars)
+	{	// escape special characters for showing
+		escaped_find_text = g_strescape(find_text, NULL);
+		escaped_replace_text = g_strescape(replace_text, NULL);
+		msgwin_status_add(_("Replaced %d occurrences of \"%s\" with \"%s\"."),
+							count, escaped_find_text, escaped_replace_text);
+		g_free(escaped_find_text);
+		g_free(escaped_replace_text);
+	}
+	else
+	{
+		msgwin_status_add(_("Replaced %d occurrences of \"%s\" with \"%s\"."),
+							count, find_text, replace_text);
+	}
+
 
 	if (match_found)
 	{
@@ -995,7 +1010,8 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 }
 
 
-void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace_text, gint flags)
+void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace_text, gint flags,
+						  gboolean escaped_chars)
 {
 	gint selection_end, selection_start;
 
@@ -1011,7 +1027,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	}
 
 	selection_end = document_replace_range(idx, find_text, replace_text, flags,
-		selection_start, selection_end);
+		selection_start, selection_end, escaped_chars);
 	if (selection_end == -1)
 		utils_beep();
 	else
@@ -1024,14 +1040,14 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 
 
 void document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text,
-	gint flags)
+						  gint flags, gboolean escaped_chars)
 {
 	gint len;
 	g_return_if_fail(find_text != NULL && replace_text != NULL);
 	if (idx == -1 || ! *find_text) return;
 
 	len = sci_get_length(doc_list[idx].sci);
-	if (document_replace_range(idx, find_text, replace_text, flags, 0, len) == -1)
+	if (document_replace_range(idx, find_text, replace_text, flags, 0, len, escaped_chars) == -1)
 		utils_beep();
 }
 

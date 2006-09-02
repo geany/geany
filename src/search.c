@@ -21,6 +21,8 @@
  * $Id$
  */
 
+#include <gdk/gdkkeysyms.h>
+
 #include "geany.h"
 #include "search.h"
 #include "support.h"
@@ -83,6 +85,9 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 static void
 on_replace_entry_activate(GtkEntry *entry, gpointer user_data);
+
+static gboolean
+on_combo_entry_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
 static void
 on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
@@ -299,6 +304,8 @@ void search_show_replace_dialog()
 		g_object_set_data_full(G_OBJECT(widgets.replace_dialog), "entry_replace",
 						gtk_widget_ref(entry_replace), (GDestroyNotify)gtk_widget_unref);
 
+		g_signal_connect((gpointer) gtk_bin_get_child(GTK_BIN(entry_find)), "key-press-event",
+				G_CALLBACK(on_combo_entry_key_pressed), gtk_bin_get_child(GTK_BIN(entry_replace)));
 		g_signal_connect((gpointer) gtk_bin_get_child(GTK_BIN(entry_replace)), "activate",
 				G_CALLBACK(on_replace_entry_activate), NULL);
 		g_signal_connect((gpointer) widgets.replace_dialog, "response",
@@ -453,6 +460,8 @@ void search_show_find_in_files_dialog()
 		gtk_container_add(GTK_CONTAINER(cbox), checkbox2);
 		gtk_container_add(GTK_CONTAINER(cbox), checkbox3);
 
+		g_signal_connect((gpointer) entry1, "key-press-event",
+				G_CALLBACK(on_combo_entry_key_pressed), gtk_bin_get_child(GTK_BIN(combo)));
 		g_signal_connect((gpointer) widgets.find_in_files_dialog, "response",
 				G_CALLBACK(on_find_in_files_dialog_response), combo);
 		g_signal_connect((gpointer) widgets.find_in_files_dialog, "delete_event",
@@ -677,7 +686,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			if (! doc_list[i].is_valid) continue;
 
-			document_replace_all(i, find, replace, search_flags_re);
+			document_replace_all(i, find, replace, search_flags_re, search_replace_escape_re);
 		}
 		if (close_window) gtk_widget_hide(widgets.replace_dialog);
 	}
@@ -698,13 +707,13 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			}
 			case GEANY_RESPONSE_REPLACE_ALL:
 			{
-				document_replace_all(idx, find, replace, search_flags_re);
+				document_replace_all(idx, find, replace, search_flags_re, search_replace_escape_re);
 				if (close_window) gtk_widget_hide(widgets.replace_dialog);
 				break;
 			}
 			case GEANY_RESPONSE_REPLACE_SEL:
 			{
-				document_replace_sel(idx, find, replace, search_flags_re);
+				document_replace_sel(idx, find, replace, search_flags_re, search_replace_escape_re);
 				if (close_window) gtk_widget_hide(widgets.replace_dialog);
 				break;
 			}
@@ -719,6 +728,20 @@ static void
 on_replace_entry_activate(GtkEntry *entry, gpointer user_data)
 {
 	on_replace_dialog_response(NULL, GEANY_RESPONSE_REPLACE, NULL);
+}
+
+
+static gboolean
+on_combo_entry_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+	// catch tabulator key to set the focus in the replace entry instead of
+	// setting it to the combo box
+	if (event->keyval == GDK_Tab)
+	{
+		gtk_widget_grab_focus(GTK_WIDGET(user_data));
+		return TRUE;
+	}
+	return FALSE;
 }
 
 

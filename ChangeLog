@@ -1,3 +1,14 @@
+2006-09-02  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/document.c, src/search.c:
+   Escape special characters when shown in the status window after
+   "Replace All" or replacing a selection.
+   Set the focus to the replace entry widget when pressing the
+   tabulator key in the find entry widget in the replace dialog.
+   Set the focus to the find entry widget when pressing the tabulator
+   key in the directory entry widget in the FIF dialog.
+
+
 2006-09-02  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c, src/sci_cb.c, src/main.c:

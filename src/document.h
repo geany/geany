@@ -150,9 +150,9 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 
 void document_replace_text(gint, const gchar*, const gchar*, gint, gboolean);
 
-void document_replace_all(gint, const gchar*, const gchar*, gint);
+void document_replace_all(gint, const gchar*, const gchar*, gint, gboolean);
 
-void document_replace_sel(gint, const gchar*, const gchar*, gint);
+void document_replace_sel(gint, const gchar*, const gchar*, gint, gboolean);
 
 void document_set_font(gint, const gchar*, gint);
 
