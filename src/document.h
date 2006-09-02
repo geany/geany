@@ -34,7 +34,8 @@
 #include "geany.h"
 #include "filetypes.h"
 
-#define VALID_DOC_IDX(idx) \
+
+#define DOC_IDX_VALID(idx) \
 	((idx) >= 0 && (idx) < GEANY_MAX_OPEN_FILES && doc_list[idx].is_valid)
 
 
@@ -79,7 +80,10 @@ gint document_find_by_sci(ScintillaObject*);
 
 
 /* returns the index of the current notebook page in the document list */
-gint document_get_cur_idx(void);
+gint document_get_cur_idx();
+
+/* returns NULL if no documents are open */
+document *document_get_current();
 
 
 /* returns the index of the given notebook page in the document list */
@@ -88,7 +92,7 @@ gint document_get_n_idx(guint);
 
 /* returns the next free place(i.e. index) in the document list
  * If there is for any reason no free place, -1 is returned */
-gint document_get_new_idx(void);
+gint document_get_new_idx();
 
 
 /* changes the color of the tab text according to the status */
@@ -100,7 +104,7 @@ void document_set_text_changed(gint);
 
 /* sets in all document structs the flag is_valid to FALSE and initializes some members to NULL,
  * to mark it uninitialized. The flag is_valid is set to TRUE in document_create_new_sci(). */
-void document_init_doclist(void);
+void document_init_doclist();
 
 
 // Apply just the prefs that can change in the Preferences dialog

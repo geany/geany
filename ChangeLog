@@ -2,6 +2,7 @@
 
  * src/utils.c, src/sci_cb.c, src/main.c:
    Fixed C89 variable declaration and two sign comparison warnings.
+ * src/document.c, src/document.h: Add document_get_current().
 
 
 2006-09-01  Enrico Tröger  <enrico.troeger@uvena.de>

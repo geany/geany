@@ -118,7 +118,7 @@ gint document_get_n_idx(guint page_num)
 
 
 /* returns the index of the current notebook page in the document list */
-gint document_get_cur_idx(void)
+gint document_get_cur_idx()
 {
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
 	ScintillaObject *sci = (ScintillaObject*)gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->notebook), cur_page);
@@ -130,10 +130,19 @@ gint document_get_cur_idx(void)
 }
 
 
+/* returns NULL if no documents are open */
+document *document_get_current()
+{
+	gint idx = document_get_cur_idx();
+
+	return DOC_IDX_VALID(idx) ? &doc_list[idx] : NULL;
+}
+
+
 /* returns the next free place(i.e. index) in the document list
  * If there is for any reason no free place, -1 is returned
  */
-gint document_get_new_idx(void)
+gint document_get_new_idx()
 {
 	guint i;
 
@@ -178,7 +187,7 @@ void document_set_text_changed(gint index)
 
 /* sets in all document structs the flag is_valid to FALSE and initializes some members to NULL,
  * to mark it uninitialized. The flag is_valid is set to TRUE in document_create_new_sci(). */
-void document_init_doclist(void)
+void document_init_doclist()
 {
 	gint i;
 
