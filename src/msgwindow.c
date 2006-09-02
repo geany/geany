@@ -41,6 +41,16 @@ static struct
 	guint	file_type_id;
 } build_info = {NULL, GEANY_FILETYPES_ALL};
 
+// used for parse_file_line
+typedef struct
+{
+	const gchar *string;	// line data
+	const gchar *dir;		// working directory when string was generated
+	const gchar *pattern;	// pattern to split the error message into some fields
+	guint min_fields;		// used to detect errors after parsing
+	guint line_idx;			// idx of the field where the line is
+	gint file_idx;			// idx of the field where the filename is or -1
+} ParseData;
 
 static GdkColor dark = {0, 58832, 58832, 58832};
 static GdkColor white = {0, 65535, 65535, 65535};
@@ -324,15 +334,69 @@ gboolean msgwin_goto_compiler_file_line()
  * relevant file with the error in *filename.
  * *line will be -1 if no error was found in string.
  * *filename must be freed unless it is NULL. */
-void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gint *line)
+static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 {
 	gchar *end = NULL;
 	gchar **fields;
-	gchar *pattern;				// pattern to split the error message into some fields
-	guint field_min_len;		// used to detect errors after parsing
-	guint field_idx_line;		// idx of the field where the line is
-	guint field_idx_file;		// idx of the field where the filename is
 	guint skip_dot_slash = 0;	// number of characters to skip at the beginning of the filename
+
+	*filename = NULL;
+	*line = -1;
+
+	g_return_if_fail(data->dir != NULL && data->string != NULL);
+
+	fields = g_strsplit_set(data->string, data->pattern, data->min_fields);
+
+	// parse the line
+	if (g_strv_length(fields) < data->min_fields)
+	{
+		g_strfreev(fields);
+		return;
+	}
+
+	*line = strtol(fields[data->line_idx], &end, 10);
+
+	// if the line could not be read, line is 0 and an error occurred, so we leave
+	if (fields[data->line_idx] == end)
+	{
+		g_strfreev(fields);
+		return;
+	}
+
+	// let's stop here if there is no filename in the error message
+	if (data->file_idx == -1)
+	{
+		// we have no filename in the error message, so take the current one and hope it's correct
+		document *doc = document_get_current();
+		if (doc != NULL)
+			*filename = g_strdup(doc->file_name);
+		g_strfreev(fields);
+		return;
+	}
+
+	// skip some characters at the beginning of the filename, at the moment only "./"
+	// can be extended if other "trash" is known
+	if (strncmp(fields[data->file_idx], "./", 2) == 0) skip_dot_slash = 2;
+
+	// get the build directory to get the path to look for other files
+	if (! utils_is_absolute_path(fields[data->file_idx]))
+		*filename = g_strconcat(data->dir, G_DIR_SEPARATOR_S,
+			fields[data->file_idx] + skip_dot_slash, NULL);
+	else
+		*filename = g_strdup(fields[data->file_idx]);
+
+	g_strfreev(fields);
+}
+
+
+/* try to parse the file and line number where the error occured described in string
+ * and when something useful is found, it stores the line number in *line and the
+ * relevant file with the error in *filename.
+ * *line will be -1 if no error was found in string.
+ * *filename must be freed unless it is NULL. */
+void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gint *line)
+{
+	ParseData data = {string, build_info.dir, NULL, 0, 0, 0};
 
 	*filename = NULL;
 	*line = -1;
@@ -342,47 +406,50 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 
 	switch (build_info.file_type_id)
 	{
+		case GEANY_FILETYPES_ALL:
+		{
+			return;
+		}
 		// only gcc is supported, I don't know any other C(++) compilers and their error messages
 		case GEANY_FILETYPES_C:
 		case GEANY_FILETYPES_CPP:
 		case GEANY_FILETYPES_RUBY:
 		case GEANY_FILETYPES_JAVA:
-		case GEANY_FILETYPES_MAKE:	// Assume makefile is building C-like code
 		{
 			// empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
 			// empty.c:21: error: conflicting types for `foo'
-			pattern = ":";
-			field_min_len = 4;
-			field_idx_line = 1;
-			field_idx_file = 0;
+			data.pattern = ":";
+			data.min_fields = 4;
+			data.line_idx = 1;
+			data.file_idx = 0;
 			break;
 		}
 		case GEANY_FILETYPES_FORTRAN:
 		case GEANY_FILETYPES_LATEX:
 		{
 			// ./kommtechnik_2b.tex:18: Emergency stop.
-			pattern = ":";
-			field_min_len = 3;
-			field_idx_line = 1;
-			field_idx_file = 0;
+			data.pattern = ":";
+			data.min_fields = 3;
+			data.line_idx = 1;
+			data.file_idx = 0;
 			break;
 		}
 		case GEANY_FILETYPES_PHP:
 		{
 			// Parse error: parse error, unexpected T_CASE in brace_bug.php on line 3
-			pattern = " ";
-			field_min_len = 11;
-			field_idx_line = 10;
-			field_idx_file = 7;
+			data.pattern = " ";
+			data.min_fields = 11;
+			data.line_idx = 10;
+			data.file_idx = 7;
 			break;
 		}
 		case GEANY_FILETYPES_PERL:
 		{
 			// syntax error at test.pl line 7, near "{
-			pattern = " ";
-			field_min_len = 6;
-			field_idx_line = 5;
-			field_idx_file = 3;
+			data.pattern = " ";
+			data.min_fields = 6;
+			data.line_idx = 5;
+			data.file_idx = 3;
 			break;
 		}
 		// the error output of python and tcl equals
@@ -391,28 +458,43 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 		{
 			// File "HyperArch.py", line 37, in ?
 			// (file "clrdial.tcl" line 12)
-			pattern = " \"";
-			field_min_len = 6;
-			field_idx_line = 5;
-			field_idx_file = 2;
+			data.pattern = " \"";
+			data.min_fields = 6;
+			data.line_idx = 5;
+			data.file_idx = 2;
 			break;
 		}
 		case GEANY_FILETYPES_PASCAL:
 		{
 			// bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
-			pattern = "(";
-			field_min_len = 2;
-			field_idx_line = 1;
-			field_idx_file = 0;
+			data.pattern = "(";
+			data.min_fields = 2;
+			data.line_idx = 1;
+			data.file_idx = 0;
 			break;
 		}
 		case GEANY_FILETYPES_D:
 		{
+			// GNU D compiler front-end, gdc
+			// gantry.d:18: variable gantry.main.c reference to auto class must be auto
+			// warning - gantry.d:20: statement is not reachable
+			// Digital Mars dmd compiler
 			// warning - pi.d(118): implicit conversion of expression (digit) of type int ...
-			pattern = " (";
-			field_min_len = 4;
-			field_idx_line = 3;
-			field_idx_file = 2;
+			// gantry.d(18): variable gantry.main.c reference to auto class must be auto
+			if (strncmp(string, "warning - ", 10) == 0)
+			{
+				data.pattern = " (:";
+				data.min_fields = 4;
+				data.line_idx = 3;
+				data.file_idx = 2;
+			}
+			else
+			{
+				data.pattern = "(:";
+				data.min_fields = 2;
+				data.line_idx = 1;
+				data.file_idx = 0;
+			}
 			break;
 		}
 		case GEANY_FILETYPES_FERITE:
@@ -421,71 +503,43 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 			// Error: Compile Error: on line 24, in /test/class.fe
 			if (strncmp(string, "Error: Compile Error", 20) == 0)
 			{
-				pattern = " ";
-				field_min_len = 8;
-				field_idx_line = 5;
-				field_idx_file = 7;
+				data.pattern = " ";
+				data.min_fields = 8;
+				data.line_idx = 5;
+				data.file_idx = 7;
 			}
 			else
 			{
-				pattern = " \"";
-				field_min_len = 10;
-				field_idx_line = 5;
-				field_idx_file = 8;
+				data.pattern = " \"";
+				data.min_fields = 10;
+				data.line_idx = 5;
+				data.file_idx = 8;
 			}
 			break;
 		}
 		case GEANY_FILETYPES_HTML:
 		{
 			// line 78 column 7 - Warning: <table> missing '>' for end of tag
-			pattern = " ";
-			field_min_len = 4;
-			field_idx_line = 1;
-			field_idx_file = -1;
+			data.pattern = " ";
+			data.min_fields = 4;
+			data.line_idx = 1;
+			data.file_idx = -1;
 			break;
 		}
-		default: return;
+		case GEANY_FILETYPES_MAKE:	// Assume makefile is building with gcc
+		default:	// The default is a GNU gcc type error
+		{
+			// gantry.d:6: variable gantry.main.c reference to auto class must be auto
+			data.pattern = ":";
+			data.min_fields = 3;
+			data.line_idx = 1;
+			data.file_idx = 0;
+			break;
+		}
 	}
 
-	fields = g_strsplit_set(string, pattern, field_min_len);
-
-	// parse the line
-	if (g_strv_length(fields) < field_min_len)
-	{
-		g_strfreev(fields);
-		return;
-	}
-
-	*line = strtol(fields[field_idx_line], &end, 10);
-
-	// if the line could not be read, line is 0 and an error occurred, so we leave
-	if (fields[field_idx_line] == end)
-	{
-		g_strfreev(fields);
-		return;
-	}
-
-	// let's stop here if there is no filename in the error message
-	if (field_idx_file == -1)
-	{
-		// we have no filename in the error message, so take the current one and hope it's correct
-		*filename = g_strdup(doc_list[document_get_cur_idx()].file_name);
-		g_strfreev(fields);
-		return;
-	}
-
-	// skip some characters at the beginning of the filename, at the moment only "./"
-	// can be extended if other "trash" is known
-	if (strncmp(fields[field_idx_file], "./", 2) == 0) skip_dot_slash = 2;
-
-	// get the build directory to get the path to look for other files
-	if (! utils_is_absolute_path(fields[field_idx_file]))
-		*filename = g_strconcat(build_info.dir, G_DIR_SEPARATOR_S,
-			fields[field_idx_file] + skip_dot_slash, NULL);
-	else
-		*filename = g_strdup(fields[field_idx_file]);
-
-	g_strfreev(fields);
+	if (data.pattern != NULL)
+		parse_file_line(&data, filename, line);
 }
 
 
@@ -524,7 +578,6 @@ gboolean msgwin_goto_messages_file_line()
 }
 
 
-// Taken from utils_parse_compiler_error_line, could refactor both (keep get_cur_idx).
 /* Try to parse the file and line number for string and when something useful is
  * found, store the line number in *line and the relevant file with the error in
  * *filename.
@@ -532,14 +585,7 @@ gboolean msgwin_goto_messages_file_line()
  * *filename must be freed unless NULL. */
 static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line)
 {
-	gchar *end = NULL;
-	gchar **fields;
-	gchar *pattern;				// pattern to split the error message into some fields
-	guint field_min_len;		// used to detect errors after parsing
-	guint field_idx_line;		// idx of the field where the line is
-	guint field_idx_file;		// idx of the field where the filename is
-	guint skip_dot_slash = 0;	// number of characters to skip at the beginning of the filename
-	gint cur_idx;
+	ParseData data;
 
 	*filename = NULL;
 	*line = -1;
@@ -548,42 +594,14 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 	if (string == NULL) return;
 
 	// conflict:3:conflicting types for `foo'
-	pattern = ":";
-	field_min_len = 3;
-	field_idx_line = 1;
-	field_idx_file = 0;
+	data.string = string;
+	data.dir = msgwindow.find_in_files_dir;
+	data.pattern = ":";
+	data.min_fields = 3;
+	data.line_idx = 1;
+	data.file_idx = 0;
 
-	fields = g_strsplit_set(string, pattern, field_min_len);
-
-	// parse the line
-	if (g_strv_length(fields) < field_min_len)
-	{
-		g_strfreev(fields);
-		return;
-	}
-
-	*line = strtol(fields[field_idx_line], &end, 10);
-
-	// if the line could not be read, line is 0 and an error occurred, so we leave
-	if (fields[field_idx_line] == end)
-	{
-		g_strfreev(fields);
-		return;
-	}
-
-	// skip some characters at the beginning of the filename, at the moment only "./"
-	// can be extended if other "trash" is known
-	if (strncmp(fields[field_idx_file], "./", 2) == 0) skip_dot_slash = 2;
-
-	// get the basename of the built file to get the path to look for other files
-	cur_idx = document_get_cur_idx();
-	if (cur_idx >= 0 && doc_list[cur_idx].is_valid)
-	{
-		*filename = g_strconcat(msgwindow.find_in_files_dir, G_DIR_SEPARATOR_S,
-			fields[field_idx_file] + skip_dot_slash, NULL);
-	}
-
-	g_strfreev(fields);
+	parse_file_line(&data, filename, line);
 }
 
 

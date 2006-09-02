@@ -3,6 +3,9 @@
  * src/utils.c, src/sci_cb.c, src/main.c:
    Fixed C89 variable declaration and two sign comparison warnings.
  * src/document.c, src/document.h: Add document_get_current().
+ * src/msgwindow.c:
+   Use parse_file_line() for grep and compiler error messages.
+   Add error message support for D, also for the GDC frontend.
 
 
 2006-09-01  Enrico Tröger  <enrico.troeger@uvena.de>
