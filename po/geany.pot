@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-01 13:17+0200\n"
+"POT-Creation-Date: 2006-09-03 21:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,8 +75,8 @@ msgstr ""
 msgid "Configuration directory could not be created (%s)."
 msgstr ""
 
-#: src/main.c:599 src/callbacks.c:825 src/dialogs.c:146 src/document.c:365
-#: src/document.c:399 src/win32.c:150
+#: src/main.c:599 src/callbacks.c:825 src/dialogs.c:146 src/document.c:374
+#: src/document.c:408 src/win32.c:150
 #, c-format
 msgid ""
 "You have opened too many files. There is a limit of %d concurrent open files."
@@ -165,7 +165,7 @@ msgid "Insert file header"
 msgstr ""
 
 #: src/interface.c:468 src/interface.c:1824
-msgid "Inserts a few information at the beginning of the file"
+msgid "Inserts a file header at the beginning of the file"
 msgstr ""
 
 #: src/interface.c:470 src/interface.c:1826
@@ -254,7 +254,7 @@ msgstr ""
 msgid "Find _Previous"
 msgstr ""
 
-#: src/interface.c:579 src/search.c:278
+#: src/interface.c:579 src/search.c:283
 msgid "_Replace"
 msgstr ""
 
@@ -621,8 +621,8 @@ msgstr ""
 
 #: src/interface.c:2321
 msgid ""
-"Switch to the status message tab(in the notebook window at the bottom) if a "
-"new status message arrive."
+"Switch to the status message tab (in the notebook window at the bottom) if a "
+"new status message arrives."
 msgstr ""
 
 #: src/interface.c:2324
@@ -747,8 +747,8 @@ msgstr ""
 
 #: src/interface.c:2548
 msgid ""
-"Prints a vertical line in the editor window at the given cursor position(see "
-"below)."
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)."
 msgstr ""
 
 #: src/interface.c:2552
@@ -757,7 +757,7 @@ msgstr ""
 
 #: src/interface.c:2555
 msgid ""
-"The background colour of characters after the given cursor position(see "
+"The background colour of characters after the given cursor position (see "
 "below) changed to the colour set below. (This is recommended if you use "
 "proportional fonts)"
 msgstr ""
@@ -983,7 +983,7 @@ msgid "XML tag auto completion"
 msgstr ""
 
 #: src/interface.c:3001
-msgid "Automatic completion of open XML tags(includes HTML tags)"
+msgid "Automatic completion of open XML tags (includes HTML tags)"
 msgstr ""
 
 #: src/interface.c:3004
@@ -1009,7 +1009,7 @@ msgid "Rows of auto completion list:"
 msgstr ""
 
 #: src/interface.c:3028
-msgid "Number of rows to display when the auto completion list is shown."
+msgid "Number of rows to display in the auto completion list."
 msgstr ""
 
 #: src/interface.c:3031
@@ -1054,7 +1054,7 @@ msgstr ""
 
 #: src/interface.c:3139
 #, c-format
-msgid "Path to the command for printing files(use %f for the filename)."
+msgid "Path to the command for printing files (use %f for the filename)."
 msgstr ""
 
 #: src/interface.c:3151
@@ -1068,7 +1068,7 @@ msgstr ""
 #: src/interface.c:3182
 msgid ""
 "Specify here information you want to use in templates.\n"
-"See documentation if you don't know, how templates work."
+"See documentation if you don't know how templates work."
 msgstr ""
 
 #: src/interface.c:3198
@@ -1183,62 +1183,62 @@ msgstr ""
 msgid "Failed to execute the view program"
 msgstr ""
 
-#: src/callbacks.c:1727
+#: src/callbacks.c:1733
 msgid "Failed to execute the terminal program"
 msgstr ""
 
 #. initialize the dialog
-#: src/callbacks.c:1951 src/dialogs.c:67
+#: src/callbacks.c:1957 src/dialogs.c:67
 msgid "Open File"
 msgstr ""
 
-#: src/callbacks.c:2000 src/callbacks.c:2045 src/callbacks.c:2085
-#: src/callbacks.c:2143
+#: src/callbacks.c:2006 src/callbacks.c:2051 src/callbacks.c:2091
+#: src/callbacks.c:2149
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 
-#: src/callbacks.c:2213 src/utils.c:1705
+#: src/callbacks.c:2219 src/utils.c:1705
 msgid "dd.mm.yyyy"
 msgstr ""
 
-#: src/callbacks.c:2215 src/utils.c:1706
+#: src/callbacks.c:2221 src/utils.c:1706
 msgid "mm.dd.yyyy"
 msgstr ""
 
-#: src/callbacks.c:2217 src/utils.c:1707
+#: src/callbacks.c:2223 src/utils.c:1707
 msgid "yyyy/mm/dd"
 msgstr ""
 
-#: src/callbacks.c:2219 src/utils.c:1716
+#: src/callbacks.c:2225 src/utils.c:1716
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr ""
 
-#: src/callbacks.c:2221 src/utils.c:1717
+#: src/callbacks.c:2227 src/utils.c:1717
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr ""
 
-#: src/callbacks.c:2223 src/utils.c:1718
+#: src/callbacks.c:2229 src/utils.c:1718
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr ""
 
-#: src/callbacks.c:2225 src/utils.c:1727 src/utils.c:1731 src/utils.c:1735
+#: src/callbacks.c:2231 src/utils.c:1727 src/utils.c:1731 src/utils.c:1735
 #: src/utils.c:1739
 msgid "Use custom date format"
 msgstr ""
 
-#: src/callbacks.c:2232
+#: src/callbacks.c:2238
 msgid "Custom date format"
 msgstr ""
 
-#: src/callbacks.c:2233
+#: src/callbacks.c:2239
 msgid ""
-"Enter here a custom date and time format which should be inserted. You can "
-"use all conversion specifiers which can be used with the ANSI C strftime "
-"function. See \"man strftime\" for more information."
+"Enter here a custom date and time format. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function. See \"man "
+"strftime\" for more information."
 msgstr ""
 
-#: src/callbacks.c:2252
+#: src/callbacks.c:2258
 msgid "Date format string could not be converted (possibly too long)."
 msgstr ""
 
@@ -1484,151 +1484,151 @@ msgid ""
 "filetype."
 msgstr ""
 
-#: src/dialogs.c:1057
+#: src/dialogs.c:1058
 msgid ""
-"An error occurred or file information could not be retrieved(e.g. from a new "
-"file)."
+"An error occurred or file information could not be retrieved (e.g. from a "
+"new file)."
 msgstr ""
 
-#: src/dialogs.c:1076 src/dialogs.c:1077 src/dialogs.c:1078 src/dialogs.c:1084
-#: src/dialogs.c:1085 src/dialogs.c:1086 src/utils.c:150 src/utils.c:152
+#: src/dialogs.c:1077 src/dialogs.c:1078 src/dialogs.c:1079 src/dialogs.c:1085
+#: src/dialogs.c:1086 src/dialogs.c:1087 src/utils.c:150 src/utils.c:152
 #: src/utils.c:1089
 msgid "unknown"
 msgstr ""
 
-#: src/dialogs.c:1090
+#: src/dialogs.c:1091
 msgid "Properties"
 msgstr ""
 
-#: src/dialogs.c:1118
+#: src/dialogs.c:1119
 msgid "<b>Type:</b>"
 msgstr ""
 
-#: src/dialogs.c:1131
+#: src/dialogs.c:1132
 msgid "<b>Size:</b>"
 msgstr ""
 
-#: src/dialogs.c:1146
+#: src/dialogs.c:1147
 msgid "<b>Location:</b>"
 msgstr ""
 
-#: src/dialogs.c:1159
+#: src/dialogs.c:1160
 msgid "<b>Read-only:</b>"
 msgstr ""
 
-#: src/dialogs.c:1166
+#: src/dialogs.c:1167
 msgid "(only inside Geany)"
 msgstr ""
 
-#: src/dialogs.c:1175
+#: src/dialogs.c:1176
 msgid "<b>Encoding:</b>"
 msgstr ""
 
-#: src/dialogs.c:1184 src/utils.c:151
+#: src/dialogs.c:1185 src/utils.c:151
 msgid "(with BOM)"
 msgstr ""
 
-#: src/dialogs.c:1184 src/utils.c:151
+#: src/dialogs.c:1185 src/utils.c:151
 msgid "(without BOM)"
 msgstr ""
 
-#: src/dialogs.c:1194
+#: src/dialogs.c:1195
 msgid "<b>Modified:</b>"
 msgstr ""
 
-#: src/dialogs.c:1207
+#: src/dialogs.c:1208
 msgid "<b>Changed:</b>"
 msgstr ""
 
-#: src/dialogs.c:1220
+#: src/dialogs.c:1221
 msgid "<b>Accessed:</b>"
 msgstr ""
 
 #. Header
-#: src/dialogs.c:1249
+#: src/dialogs.c:1250
 msgid "Read:"
 msgstr ""
 
-#: src/dialogs.c:1256
+#: src/dialogs.c:1257
 msgid "Write:"
 msgstr ""
 
-#: src/dialogs.c:1263
+#: src/dialogs.c:1264
 msgid "Execute:"
 msgstr ""
 
 #. Owner
-#: src/dialogs.c:1271
+#: src/dialogs.c:1272
 msgid "Owner:"
 msgstr ""
 
 #. Group
-#: src/dialogs.c:1307
+#: src/dialogs.c:1308
 msgid "Group:"
 msgstr ""
 
 #. Other
-#: src/dialogs.c:1343
+#: src/dialogs.c:1344
 msgid "Other:"
 msgstr ""
 
-#: src/dialogs.c:1464
+#: src/dialogs.c:1465
 msgid "Keyboard shortcuts"
 msgstr ""
 
-#: src/dialogs.c:1471
+#: src/dialogs.c:1472
 msgid "The following keyboard shortcuts are defined:"
 msgstr ""
 
-#: src/document.c:325
+#: src/document.c:334
 #, c-format
 msgid "File %s closed."
 msgstr ""
 
-#: src/document.c:394
+#: src/document.c:403
 msgid "New file opened."
 msgstr ""
 
-#: src/document.c:439
+#: src/document.c:448
 msgid "Invalid filename"
 msgstr ""
 
-#: src/document.c:463
+#: src/document.c:472
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr ""
 
-#: src/document.c:490 src/document.c:508
+#: src/document.c:499 src/document.c:517
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr ""
 
-#: src/document.c:565
+#: src/document.c:574
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
 msgstr ""
 
-#: src/document.c:640
+#: src/document.c:649
 #, c-format
 msgid "File %s reloaded."
 msgstr ""
 
-#: src/document.c:642
+#: src/document.c:651
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr ""
 
-#: src/document.c:644
+#: src/document.c:653
 msgid ", read-only"
 msgstr ""
 
-#: src/document.c:683 src/document.c:763
+#: src/document.c:692 src/document.c:772
 msgid "Error saving file."
 msgstr ""
 
-#: src/document.c:727
+#: src/document.c:736
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -1636,41 +1636,41 @@ msgid ""
 "Error message: %s\n"
 msgstr ""
 
-#: src/document.c:751
+#: src/document.c:760
 #, c-format
 msgid "Error saving file (%s)."
 msgstr ""
 
-#: src/document.c:788
+#: src/document.c:797
 #, c-format
 msgid "File %s saved."
 msgstr ""
 
-#: src/document.c:800
+#: src/document.c:809
 #, c-format
 msgid ""
 "The document has been searched completely but the match \"%s\" was not "
 "found. Wrap search around the document?"
 msgstr ""
 
-#: src/document.c:975
+#: src/document.c:990 src/document.c:997
 #, c-format
 msgid "Replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr ""
 
-#: src/document.c:1137
+#: src/document.c:1162
 msgid "Win (CRLF)"
 msgstr ""
 
-#: src/document.c:1138
+#: src/document.c:1163
 msgid "Mac (CR)"
 msgstr ""
 
-#: src/document.c:1140
+#: src/document.c:1165
 msgid "Unix (LF)"
 msgstr ""
 
-#: src/document.c:1291
+#: src/document.c:1315
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -1678,12 +1678,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/document.c:1300
+#: src/document.c:1324
 #, c-format
-msgid "Printing of \"%s\" failed(return code: %d)."
+msgid "Printing of \"%s\" failed (return code: %d)."
 msgstr ""
 
-#: src/document.c:1305
+#: src/document.c:1329
 #, c-format
 msgid "File %s printed."
 msgstr ""
@@ -1792,70 +1792,74 @@ msgid "Perl source file"
 msgstr ""
 
 #: src/filetypes.c:325
-msgid "PHP / HTML source file"
+msgid "PHP source file"
 msgstr ""
 
-#: src/filetypes.c:350
+#: src/filetypes.c:349
 msgid "Python source file"
 msgstr ""
 
-#: src/filetypes.c:370
+#: src/filetypes.c:369
 msgid "Ruby source file"
 msgstr ""
 
-#: src/filetypes.c:391
+#: src/filetypes.c:390
 msgid "Tcl source file"
 msgstr ""
 
-#: src/filetypes.c:412
+#: src/filetypes.c:411
 msgid "Ferite source file"
 msgstr ""
 
-#: src/filetypes.c:431
+#: src/filetypes.c:430
 msgid "Shell script file"
 msgstr ""
 
-#: src/filetypes.c:456
+#: src/filetypes.c:455
 msgid "Makefile"
 msgstr ""
 
-#: src/filetypes.c:476
+#: src/filetypes.c:475
 msgid "XML source file"
 msgstr ""
 
-#: src/filetypes.c:496
+#: src/filetypes.c:495
 msgid "Docbook source file"
 msgstr ""
 
-#: src/filetypes.c:515
+#: src/filetypes.c:514
+msgid "HTML source file"
+msgstr ""
+
+#: src/filetypes.c:540
 msgid "Cascading StyleSheet"
 msgstr ""
 
-#: src/filetypes.c:534
+#: src/filetypes.c:559
 msgid "SQL Dump file"
 msgstr ""
 
-#: src/filetypes.c:553
+#: src/filetypes.c:578
 msgid "LaTeX source file"
 msgstr ""
 
-#: src/filetypes.c:574
+#: src/filetypes.c:599
 msgid "O-Matrix source file"
 msgstr ""
 
-#: src/filetypes.c:593
+#: src/filetypes.c:618
 msgid "Diff file"
 msgstr ""
 
-#: src/filetypes.c:613
+#: src/filetypes.c:638
 msgid "Config file"
 msgstr ""
 
-#: src/filetypes.c:636
+#: src/filetypes.c:661
 msgid "All files"
 msgstr ""
 
-#: src/filetypes.c:645
+#: src/filetypes.c:670
 msgid "None"
 msgstr ""
 
@@ -1884,7 +1888,7 @@ msgstr ""
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 
-#: src/msgwindow.c:89
+#: src/msgwindow.c:99
 msgid "Status messages"
 msgstr ""
 
@@ -1893,7 +1897,7 @@ msgstr ""
 msgid "Failed to view %s (make sure it is already compiled)"
 msgstr ""
 
-#: src/build.c:116 src/build.c:298 src/build.c:437 src/search.c:826
+#: src/build.c:116 src/build.c:298 src/build.c:437 src/search.c:849
 #, c-format
 msgid "Process failed (%s)"
 msgstr ""
@@ -2037,8 +2041,8 @@ msgstr ""
 
 #: src/prefs.c:1064
 msgid ""
-"This option disables the keybinding to popup the menu bar(default is F10). "
-"Disabling it can be useful if you use for example the Midnight Commander "
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
 "within the VTE."
 msgstr ""
 
@@ -2405,11 +2409,11 @@ msgstr ""
 msgid "Find Previous"
 msgstr ""
 
-#: src/keybindings.c:145 src/search.c:260
+#: src/keybindings.c:145 src/search.c:265
 msgid "Replace"
 msgstr ""
 
-#: src/keybindings.c:147 src/search.c:387
+#: src/keybindings.c:147 src/search.c:394
 msgid "Find in files"
 msgstr ""
 
@@ -2537,136 +2541,136 @@ msgstr ""
 msgid "Find Usage"
 msgstr ""
 
-#: src/search.c:120
+#: src/search.c:125
 msgid "_Use regular expressions"
 msgstr ""
 
-#: src/search.c:124
+#: src/search.c:129
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
 msgstr ""
 
-#: src/search.c:129
+#: src/search.c:134
 msgid "_Search backwards"
 msgstr ""
 
-#: src/search.c:134
+#: src/search.c:139
 msgid "Use _escape sequences"
 msgstr ""
 
-#: src/search.c:139
+#: src/search.c:144
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters."
 msgstr ""
 
 #. auto destroy the size group
-#: src/search.c:148 src/search.c:432
+#: src/search.c:153 src/search.c:439
 msgid "_Case sensitive"
 msgstr ""
 
-#: src/search.c:153
+#: src/search.c:158
 msgid "Match only a _whole word"
 msgstr ""
 
-#: src/search.c:158
+#: src/search.c:163
 msgid "Match only word s_tart"
 msgstr ""
 
-#: src/search.c:193
+#: src/search.c:198
 msgid "Find"
 msgstr ""
 
-#: src/search.c:198 src/search.c:283 src/search.c:414
+#: src/search.c:203 src/search.c:288 src/search.c:421
 msgid "Search for:"
 msgstr ""
 
-#: src/search.c:264
+#: src/search.c:269
 msgid "_In Selection"
 msgstr ""
 
-#: src/search.c:266
+#: src/search.c:271
 msgid "Replace all matches found in the currently selected text"
 msgstr ""
 
-#: src/search.c:270
+#: src/search.c:275
 msgid "Replace _All"
 msgstr ""
 
-#: src/search.c:286
+#: src/search.c:291
 msgid "Replace with:"
 msgstr ""
 
-#: src/search.c:328
+#: src/search.c:335
 msgid "Replace in all _open files"
 msgstr ""
 
-#: src/search.c:332
+#: src/search.c:339
 msgid ""
 "Replaces the search text in all opened files. This option is only useful(and "
 "used) if you click on \"Replace All\"."
 msgstr ""
 
 #. Don't close window checkbox
-#: src/search.c:336
+#: src/search.c:343
 msgid "_Don't close this dialog"
 msgstr ""
 
-#: src/search.c:341
+#: src/search.c:348
 msgid "The dialog window won't be closed when you start the operation."
 msgstr ""
 
-#: src/search.c:394
+#: src/search.c:401
 msgid "Directory:"
 msgstr ""
 
-#: src/search.c:437
+#: src/search.c:444
 msgid "_Invert search results"
 msgstr ""
 
-#: src/search.c:442
+#: src/search.c:449
 msgid "Invert the sense of matching, to select non-matching lines."
 msgstr ""
 
-#: src/search.c:444
+#: src/search.c:451
 msgid "_Use extended regular expressions"
 msgstr ""
 
-#: src/search.c:449
+#: src/search.c:456
 msgid "See grep's manual page for more information."
 msgstr ""
 
-#: src/search.c:498
+#: src/search.c:507
 msgid "Select folder"
 msgstr ""
 
-#: src/search.c:736
+#: src/search.c:759
 msgid "Invalid directory for find in files."
 msgstr ""
 
-#: src/search.c:760
+#: src/search.c:783
 msgid "No text to find."
 msgstr ""
 
-#: src/search.c:786
+#: src/search.c:809
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 
-#: src/search.c:891
+#: src/search.c:914
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr ""
 
-#: src/search.c:939
+#: src/search.c:962
 msgid "Search failed."
 msgstr ""
 
-#: src/search.c:945
+#: src/search.c:968
 msgid "Search completed."
 msgstr ""
 
-#: src/search.c:946
+#: src/search.c:969
 msgid "No matches found."
 msgstr ""
