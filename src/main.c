@@ -96,6 +96,7 @@ static gint socket_fd_close			(gint sock);
 #endif
 
 static gboolean debug_mode = FALSE;
+static gboolean load_session = TRUE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_msgwin = FALSE;
 static gboolean show_version = FALSE;
@@ -508,14 +509,20 @@ gint main(gint argc, gchar **argv)
 		socket_info.lock_socket = socket_init(argc, argv);
 		if (socket_info.lock_socket < 0)
 		{
-			g_free(app->configdir);
-			g_free(app->datadir);
-			g_free(app->docdir);
-			g_free(app);
-			return 0;
+			// Socket exists
+			if (argc > 1)	// filenames were sent to first instance, so quit
+			{
+				g_free(app->configdir);
+				g_free(app->datadir);
+				g_free(app->docdir);
+				g_free(app);
+				return 0;
+			}
+			// Start a new instance if no command line strings were passed
+			socket_info.ignore_socket = TRUE;
+			load_session = FALSE;
 		}
 	}
-
 #endif
 
 	gtk_init(&argc, &argv);
@@ -603,7 +610,7 @@ gint main(gint argc, gchar **argv)
 			}
 		}
 	}
-	else if (app->pref_main_load_session)
+	else if (app->pref_main_load_session && load_session)
 	{
 		if (! configuration_open_files())
 		{
@@ -702,12 +709,12 @@ static gint socket_init(gint argc, gchar **argv)
 #endif
 
 	// remote command mode, here we have another running instance and want to use it
-	geany_debug("using running instance of Geany");
-
 	if (argc > 1)
 	{
 		gint i;
 		gchar *filename;
+
+		geany_debug("using running instance of Geany");
 
 		socket_fd_write_all(sock, "open\n", 5);
 
@@ -956,12 +963,11 @@ static gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition,
 			else
 				geany_debug("got data from socket, but it does not look like a filename");
 		}
+		gtk_window_deiconify(GTK_WINDOW(app->window));
+		gtk_window_present(GTK_WINDOW(app->window));
 	}
 
 	socket_fd_close(sock);
-
-	gtk_window_deiconify(GTK_WINDOW(app->window));
-	gtk_window_present(GTK_WINDOW(app->window));
 
 	return TRUE;
 }

@@ -1,3 +1,10 @@
+2006-09-03  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/main.c: Open a new instance without loading session files if
+               socket already exists and no filenames are specified
+               on the command-line.
+
+
 2006-09-03  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/utils.c: Save All button is also active when only one file is
