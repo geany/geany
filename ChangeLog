@@ -1,3 +1,9 @@
+2006-09-03  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/utils.c: Save All button is also active when only one file is
+                changed(improves usability).
+
+
 2006-09-02  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c, src/search.c:
