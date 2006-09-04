@@ -32,8 +32,21 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
+typedef struct
+{
+	gchar *current_word;	// holds word under the mouse or keyboard cursor
+	gint click_pos;			// text position where the mouse was clicked
+} EditorInfo;
+
+extern EditorInfo editor_info;
+
 gchar **html_entities;
 
+
+gboolean
+on_editor_button_press_event           (GtkWidget *widget,
+                                        GdkEventButton *event,
+                                        gpointer user_data);
 
 // callback func called by all editors when a signal arises
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);

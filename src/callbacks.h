@@ -20,8 +20,6 @@
  * $Id$
  */
 
-extern gchar current_word[]; //needed for popup menu keybindings access
-
 gint
 destroyapp                             (GtkWidget *widget, gpointer gdata);
 
@@ -131,11 +129,6 @@ on_font_apply_button_clicked           (GtkButton       *button,
 gboolean
 on_close_all1_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
-
-gboolean
-on_editor_button_press_event           (GtkWidget *widget,
-                                        GdkEventButton *event,
-                                        gpointer user_data);
 
 gboolean
 on_tree_view_button_press_event        (GtkWidget *widget,

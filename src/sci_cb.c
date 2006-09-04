@@ -33,6 +33,10 @@
 #include "utils.h"
 #include "main.h"
 
+static gchar current_word[GEANY_MAX_WORD_LENGTH];	// holds word under the mouse or keyboard cursor
+
+EditorInfo editor_info = {current_word, -1};
+
 static struct
 {
 	gchar *text;
@@ -43,6 +47,38 @@ static gchar indent[100];
 
 
 static void on_new_line_added(ScintillaObject *sci, gint idx);
+
+
+// calls the edit popup menu in the editor
+gboolean
+on_editor_button_press_event           (GtkWidget *widget,
+                                        GdkEventButton *event,
+                                        gpointer user_data)
+{
+	gint idx = GPOINTER_TO_INT(user_data);
+	editor_info.click_pos = sci_get_position_from_xy(doc_list[idx].sci, event->x, event->y, FALSE);
+
+#ifndef G_OS_WIN32
+	if (event->button == 1)
+	{
+		return utils_check_disk_status(idx);
+	}
+#endif
+
+	if (event->button == 3)
+	{
+		sci_cb_find_current_word(doc_list[idx].sci, editor_info.click_pos,
+			current_word, sizeof current_word);
+
+		utils_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
+		utils_update_popup_copy_items(idx);
+		utils_update_insert_include_item(idx, 0);
+		gtk_menu_popup(GTK_MENU(app->popup_menu), NULL, NULL, NULL, NULL, event->button, event->time);
+
+		return TRUE;
+	}
+	return FALSE;
+}
 
 
 // callback func called by all editors when a signal arises

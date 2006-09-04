@@ -44,7 +44,6 @@
 #include <stdlib.h>
 
 #include "document.h"
-#include "callbacks.h"
 #include "support.h"
 #include "sciwrappers.h"
 #include "sci_cb.h"

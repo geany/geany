@@ -60,9 +60,6 @@
 #endif
 
 
-// represents the word under the mouse pointer when right button(no. 3) is pressed
-gchar current_word[GEANY_MAX_WORD_LENGTH];
-
 // represents the state while closing all tabs(used to prevent notebook switch page signals)
 static gboolean closing_all = FALSE;
 
@@ -73,10 +70,6 @@ static gboolean ignore_toolbar_toggle = FALSE;
 // represents the state at switching a notebook page(in the left treeviews widget), to not emit
 // the selection-changed signal from tv.tree_openfiles
 //static gboolean switch_tv_notebook_page = FALSE;
-
-// holds the current position where the mouse pointer is when the popup menu for the scintilla
-// scintilla widget is shown
-static gint clickpos;
 
 
 // real exit function
@@ -1009,37 +1002,6 @@ on_window_key_press_event              (GtkWidget *widget,
 }
 
 
-// calls the edit popup menu in the editor
-gboolean
-on_editor_button_press_event           (GtkWidget *widget,
-                                        GdkEventButton *event,
-                                        gpointer user_data)
-{
-	gint idx = GPOINTER_TO_INT(user_data);
-	clickpos = sci_get_position_from_xy(doc_list[idx].sci, event->x, event->y, FALSE);
-
-#ifndef G_OS_WIN32
-	if (event->button == 1)
-	{
-		return utils_check_disk_status(idx);
-	}
-#endif
-
-	if (event->button == 3)
-	{
-		sci_cb_find_current_word(doc_list[idx].sci, clickpos, current_word, sizeof current_word);
-
-		utils_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
-		utils_update_popup_copy_items(idx);
-		utils_update_insert_include_item(idx, 0);
-		gtk_menu_popup(GTK_MENU(app->popup_menu), NULL, NULL, NULL, NULL, event->button, event->time);
-
-		return TRUE;
-	}
-	return FALSE;
-}
-
-
 void
 on_crlf_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
@@ -1314,7 +1276,7 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 	}
 	else
 	{
-		search_text = g_strdup(current_word);
+		search_text = g_strdup(editor_info.current_word);
 		flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
 	}
 
@@ -1383,7 +1345,7 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 				type);
 			if (tags == NULL) continue;
 
-			tmtag = utils_find_tm_tag(tags, current_word);
+			tmtag = utils_find_tm_tag(tags, editor_info.current_word);
 			if (tmtag != NULL)
 			{
 				if (! utils_goto_file_line(
@@ -1396,9 +1358,9 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 	// if we are here, there was no match and we are beeping ;-)
 	utils_beep();
 	if (type == tm_tag_prototype_t)
-		msgwin_status_add(_("Declaration of \"%s()\" not found"), current_word);
+		msgwin_status_add(_("Declaration of \"%s()\" not found"), editor_info.current_word);
 	else
-		msgwin_status_add(_("Definition of \"%s()\" not found"), current_word);
+		msgwin_status_add(_("Definition of \"%s()\" not found"), editor_info.current_word);
 }
 
 
@@ -2074,7 +2036,7 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 		}
 	}
 
-	sci_insert_text(doc_list[idx].sci, clickpos, text);
+	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
 }
 
@@ -2114,7 +2076,7 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 		}
 	}
 
-	sci_insert_text(doc_list[idx].sci, clickpos, text);
+	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
 }
 
@@ -2249,7 +2211,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 	if (strftime(time_str, sizeof time_str, format, tm) != 0)
 	{
 		/// FIXME inserts at wrong position if not clicked and the cursor was moved by keyboard
-		sci_insert_text(doc_list[idx].sci, clickpos, time_str);
+		sci_insert_text(doc_list[idx].sci, editor_info.click_pos, time_str);
 	}
 	else
 	{
@@ -2270,7 +2232,7 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 	if (utils_strcmp(user_data, "blank"))
 	{
 		text = g_strdup("#include \"\"\n");
-		pos = clickpos + 10;
+		pos = editor_info.click_pos + 10;
 	}
 	else
 	{
@@ -2278,7 +2240,7 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 	}
 
 	/// FIXME inserts at wrong position if not clicked and the cursor was moved by keyboard
-	sci_insert_text(doc_list[idx].sci, clickpos, text);
+	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
 	if (pos > 0) sci_goto_pos(doc_list[idx].sci, pos, FALSE);
 }

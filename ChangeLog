@@ -6,6 +6,10 @@
    Only save session when session files were loaded at startup.
  * doc/geany.docbook:
    Update command-line options and running instance behaviour.
+ * src/callbacks.c, src/callbacks.h, src/sci_cb.c, src/sci_cb.h,
+   src/keybindings.c, src/document.c:
+   Move current_word and clickpos to editor_info struct in sci_cb.c.
+   Move on_editor_button_press_event to sci_cb.c.
 
 
 2006-09-03  Nick Treleaven  <nick.treleaven@btinternet.com>
