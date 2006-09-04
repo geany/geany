@@ -239,6 +239,12 @@
 						</thead>
 						<tbody>
 							<row>
+								<entry>-s</entry>
+								<entry>--no-session</entry>
+								<entry>Don't load the previous session's files.
+								</entry>
+							</row>
+							<row>
 								<entry>-n</entry>
 								<entry>--no-ctags</entry>
 								<entry>Do not load auto completion and call tip data.
@@ -253,8 +259,8 @@
 								</entry>
 							</row>
 							<row>
-								<entry>-p</entry>
-								<entry>--no-pipe</entry>
+								<entry>-i</entry>
+								<entry>--new-instance</entry>
 								<entry>Do not open files in a running instance, force opening a new instance.
 								</entry>
 							</row>
@@ -329,20 +335,22 @@
 					on the compile time option GEANY_SESSION_FILES; the default is 15. For details see
 					<xref linkend="cto"/>.
 				</para>
-			</section>
-			<section id="general_fifo">
-				<title>Detection of a running instance</title>
 				<para>
-					&app; detects an already running instance of itself and opens new files in the already running one.
-					So, you can use &app; like an editor to view and edit files by opening them from other
-					programs. If you do not like this for some reason, you can disable it with the appropriate
-					command line option.
+					You can start several instances of Geany, but only the first will load files
+					from the last session. To run a second instance of Geany, do not specify any
+					filenames on the command-line, or disable opening files in a running instance
+					using the appropriate command line option.
 				</para>
+			</section>
+			<section id="general_instance">
+				<title>Opening files from the command-line in a running instance</title>
 				<para>
-					In the case that &app; crashed, you will get a message dialog at the next start,
-					which asks you whether to delete an existing named pipe. If you are sure that there is
-					no other instance of &app; is running, you can say Yes and &app; will start as usual.
-					Otherwise click No and Geany will not start.
+					&app; detects an already running instance of itself and opens files from the
+					command-line in the already running instance.
+					So, &app; can be used to view and edit files by opening them from other
+					programs such as a file manager. If you do not like this for some reason,
+					you can disable using the first instance by using the appropriate command line
+					option - see <xref linkend="clo"/>.
 				</para>
 			</section>
 			<section id="general_vte">

@@ -4,6 +4,8 @@
    Rename --no-socket, -s command-line option to --new-instance, -i.
    Add --no-session, -s command-line option to not load session files.
    Only save session when session files were loaded at startup.
+ * doc/geany.docbook:
+   Update command-line options and running instance behaviour.
 
 
 2006-09-03  Nick Treleaven  <nick.treleaven@btinternet.com>
