@@ -38,6 +38,7 @@
 #include "sciwrappers.h"
 #include "encodings.h"
 #include "vte.h"
+#include "main.h"
 
 
 static gchar *scribble_text = NULL;
@@ -201,25 +202,28 @@ void configuration_save()
 				(const gchar**)recent_files, app->mru_length);
 	g_strfreev(recent_files);
 
-	// store the last 15(or what ever GEANY_SESSION_FILES is set to) filenames, to reopen the next time
-	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-	for(i = 0; (i < max) && (j < GEANY_SESSION_FILES); i++)
+	if (cl_options.load_session)
 	{
-		idx = document_get_n_idx(i);
-		if (idx >= 0 && doc_list[idx].file_name)
+		// store the last 15(or what ever GEANY_SESSION_FILES is set to) filenames, to reopen the next time
+		max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+		for(i = 0; (i < max) && (j < GEANY_SESSION_FILES); i++)
 		{
-			g_snprintf(entry, 13, "FILE_NAME_%d", j);
-			g_snprintf(fname, 255, "%d:%d:%s", sci_get_current_position(doc_list[idx].sci),
-				doc_list[idx].file_type->uid, doc_list[idx].file_name);
-			g_key_file_set_string(config, "files", entry, fname);
-			j++;
+			idx = document_get_n_idx(i);
+			if (idx >= 0 && doc_list[idx].file_name)
+			{
+				g_snprintf(entry, 13, "FILE_NAME_%d", j);
+				g_snprintf(fname, 255, "%d:%d:%s", sci_get_current_position(doc_list[idx].sci),
+					doc_list[idx].file_type->uid, doc_list[idx].file_name);
+				g_key_file_set_string(config, "files", entry, fname);
+				j++;
+			}
 		}
-	}
-	// if open filenames less than GEANY_SESSION_FILES, delete existing saved entries in the list
-	for(i = j; i < GEANY_SESSION_FILES; i++)
-	{
-		g_snprintf(entry, 13, "FILE_NAME_%d", i);
-		g_key_file_set_string(config, "files", entry, "");
+		// if open filenames less than GEANY_SESSION_FILES, delete existing saved entries in the list
+		for(i = j; i < GEANY_SESSION_FILES; i++)
+		{
+			g_snprintf(entry, 13, "FILE_NAME_%d", i);
+			g_key_file_set_string(config, "files", entry, "");
+		}
 	}
 
 	// write the file

@@ -25,6 +25,14 @@
 #ifndef GEANY_MAIN_H
 #define GEANY_MAIN_H
 
+typedef struct
+{
+	gboolean load_session;
+} CommandLineOptions;
+
+extern CommandLineOptions cl_options;
+
+
 #ifdef HAVE_SOCKET
 gint socket_finalize();
 #endif

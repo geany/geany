@@ -39,6 +39,7 @@
 #include <netinet/in.h>
 #endif
 
+#include "main.h"
 #include "interface.h"
 #include "support.h"
 #include "callbacks.h"
@@ -95,8 +96,9 @@ static gint socket_fd_recv			(gint fd, gchar *buf, gint len, gint flags);
 static gint socket_fd_close			(gint sock);
 #endif
 
+CommandLineOptions cl_options;	// fields initialised in parse_command_line_options
+
 static gboolean debug_mode = FALSE;
-static gboolean load_session = TRUE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_msgwin = FALSE;
 static gboolean show_version = FALSE;
@@ -110,9 +112,10 @@ static gboolean generate_datafiles = FALSE;
 static GOptionEntry entries[] =
 {
 	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, N_("runs in debug mode (means being verbose)"), NULL },
+	{ "no-session", 's', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &cl_options.load_session, N_("don't load the previous session's files"), NULL },
 	{ "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, N_("don't load auto completion data (see documentation)"), NULL },
 #ifdef HAVE_SOCKET
-	{ "no-socket", 's', 0, G_OPTION_ARG_NONE, &ignore_socket, N_("don't open files in a running instance, force opening a new instance"), NULL },
+	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &ignore_socket, N_("don't open files in a running instance, force opening a new instance"), NULL },
 #endif
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("use an alternate configuration directory"), NULL },
 	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, N_("don't show message window at startup"), NULL },
@@ -408,6 +411,9 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	GOptionContext *context;
 	GError *error = NULL;
 
+	// first initialise cl_options fields with default values
+	cl_options.load_session = TRUE;
+
 	context = g_option_context_new(_(" - A fast and lightweight IDE"));
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
 	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
@@ -520,7 +526,7 @@ gint main(gint argc, gchar **argv)
 			}
 			// Start a new instance if no command line strings were passed
 			socket_info.ignore_socket = TRUE;
-			load_session = FALSE;
+			cl_options.load_session = FALSE;
 		}
 	}
 #endif
@@ -610,7 +616,7 @@ gint main(gint argc, gchar **argv)
 			}
 		}
 	}
-	else if (app->pref_main_load_session && load_session)
+	else if (app->pref_main_load_session && cl_options.load_session)
 	{
 		if (! configuration_open_files())
 		{

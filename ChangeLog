@@ -1,3 +1,11 @@
+2006-09-04  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keyfile.c, src/main.c, src/main.h:
+   Rename --no-socket, -s command-line option to --new-instance, -i.
+   Add --no-session, -s command-line option to not load session files.
+   Only save session when session files were loaded at startup.
+
+
 2006-09-03  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/main.c: Open a new instance without loading session files if
