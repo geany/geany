@@ -313,10 +313,13 @@ gboolean dialogs_show_unsaved_file(gint idx)
 		case GTK_RESPONSE_YES:
 		{
 			if (doc_list[idx].file_name == NULL)
+			{
 				dialogs_show_save_as();
+				ret = TRUE;
+			}
 			else
-				document_save_file(idx, FALSE);
-			ret = TRUE;
+				// document_save_file() returns the status if the file could be saved
+				ret = document_save_file(idx, FALSE);
 			break;
 		}
 		case GTK_RESPONSE_NO: ret = TRUE; break;

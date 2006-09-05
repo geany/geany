@@ -676,22 +676,23 @@ gint document_reload_file(gint idx, const gchar *forced_enc)
 
 
 /* This saves the file.
- * When force is set then it is always saved, even if it is unchanged(useful when using Save As) */
-void document_save_file(gint idx, gboolean force)
+ * When force is set then it is always saved, even if it is unchanged(useful when using Save As)
+ * It returns whether the file could be saved or not. */
+gboolean document_save_file(gint idx, gboolean force)
 {
 	gchar *data;
 	FILE *fp;
 	gint bytes_written, len;
 	gchar *locale_filename = NULL;
 
-	if (idx == -1) return;
-	if (! force && ! doc_list[idx].changed) return;
+	if (idx == -1) return FALSE;
+	if (! force && ! doc_list[idx].changed) return FALSE;
 
 	if (doc_list[idx].file_name == NULL)
 	{
 		msgwin_status_add(_("Error saving file."));
 		utils_beep();
-		return;
+		return FALSE;
 	}
 
 	// replaces tabs by spaces
@@ -739,7 +740,7 @@ void document_save_file(gint idx, gboolean force)
 			geany_debug("encoding error: %s)", conv_error->message);
 			g_error_free(conv_error);
 			g_free(data);
-			return;
+			return FALSE;
 		}
 		else
 		{
@@ -760,7 +761,7 @@ void document_save_file(gint idx, gboolean force)
 		msgwin_status_add(_("Error saving file (%s)."), strerror(errno));
 		utils_beep();
 		g_free(data);
-		return;
+		return FALSE;
 	}
 	bytes_written = fwrite(data, sizeof (gchar), len, fp);
 	fclose (fp);
@@ -771,7 +772,7 @@ void document_save_file(gint idx, gboolean force)
 	{
 		msgwin_status_add(_("Error saving file."));
 		utils_beep();
-		return;
+		return FALSE;
 	}
 
 	// ignore the following things if we are quitting
@@ -803,6 +804,7 @@ void document_save_file(gint idx, gboolean force)
 #endif
 
 	}
+	return TRUE;
 }
 
 

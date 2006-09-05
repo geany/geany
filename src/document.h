@@ -138,8 +138,9 @@ int document_reload_file(gint idx, const gchar *forced_enc);
 
 
 /* This saves the file.
- * When force is set then it is always saved, even if it is unchanged(useful when using Save As) */
-void document_save_file(gint, gboolean force);
+ * When force is set then it is always saved, even if it is unchanged(useful when using Save As)
+ * It returns whether the file could be saved or not. */
+gboolean document_save_file(gint idx, gboolean force);
 
 /* special search function, used from the find entry in the toolbar */
 void document_find_next(gint, const gchar*, gint, gboolean, gboolean);

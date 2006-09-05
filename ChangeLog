@@ -2,6 +2,8 @@
 
  * src/templates.c, src/document.c, src/filetypes.c:
    Added new file template for filetype HTML.
+ * src/document.c, src/dialogs.c:
+   Don't quit when an error occurs while saving changed files.
 
 
 2006-09-05  Nick Treleaven  <nick.treleaven@btinternet.com>
