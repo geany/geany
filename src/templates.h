@@ -63,6 +63,7 @@ enum
 	GEANY_TEMPLATE_FILETYPE_PASCAL,
 	GEANY_TEMPLATE_FILETYPE_RUBY,
 	GEANY_TEMPLATE_FILETYPE_D,
+	GEANY_TEMPLATE_FILETYPE_HTML,
 
 	GEANY_MAX_TEMPLATES
 };
@@ -219,6 +220,22 @@ int main(char[][] args)\n\
 ";
 
 static const gchar templates_filetype_php[] = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
+  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\
+\n\
+<head>\n\
+	<title>{untitled}</title>\n\
+	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />\n\
+	<meta name=\"generator\" content=\"{geanyversion}\" />\n\
+</head>\n\
+\n\
+<body>\n\
+\n\
+</body>\n\
+</html>\n\
+";
+
+static const gchar templates_filetype_html[] = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
   \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
 <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\
 \n\

@@ -63,6 +63,7 @@ void templates_init(void)
 	gchar *template_filename_filetype_java = templates_get_filename("template.filetype.java");
 	gchar *template_filename_filetype_pascal = templates_get_filename("template.filetype.pascal");
 	gchar *template_filename_filetype_php = templates_get_filename("template.filetype.php");
+	gchar *template_filename_filetype_html = templates_get_filename("template.filetype.html");
 	gchar *template_filename_filetype_ruby = templates_get_filename("template.filetype.ruby");
 
 	time_t tp = time(NULL);
@@ -92,6 +93,7 @@ void templates_init(void)
 	templates_create_file(template_filename_filetype_java, templates_filetype_java);
 	templates_create_file(template_filename_filetype_pascal, templates_filetype_pascal);
 	templates_create_file(template_filename_filetype_php, templates_filetype_php);
+	templates_create_file(template_filename_filetype_html, templates_filetype_html);
 	templates_create_file(template_filename_filetype_ruby, templates_filetype_ruby);
 
 	// read the contents
@@ -156,6 +158,9 @@ void templates_init(void)
 	templates_read_file(template_filename_filetype_php, &templates[GEANY_TEMPLATE_FILETYPE_PHP]);
 	templates[GEANY_TEMPLATE_FILETYPE_PHP] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_PHP], year, date);
 
+	templates_read_file(template_filename_filetype_html, &templates[GEANY_TEMPLATE_FILETYPE_HTML]);
+	templates[GEANY_TEMPLATE_FILETYPE_HTML] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_HTML], year, date);
+
 	templates_read_file(template_filename_filetype_ruby, &templates[GEANY_TEMPLATE_FILETYPE_RUBY]);
 	templates[GEANY_TEMPLATE_FILETYPE_RUBY] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_RUBY], year, date);
 
@@ -182,6 +187,7 @@ void templates_init(void)
 	g_free(template_filename_filetype_d);
 	g_free(template_filename_filetype_java);
 	g_free(template_filename_filetype_php);
+	g_free(template_filename_filetype_html);
 	g_free(template_filename_filetype_pascal);
 	g_free(template_filename_filetype_ruby);
 }

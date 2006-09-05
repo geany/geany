@@ -1186,6 +1186,14 @@ gchar *document_prepare_template(filetype *ft)
 				g_free(tmp);
 				break;
 			}
+			case GEANY_FILETYPES_HTML:
+			{	// HTML: include the comment in <!-- --> - tags
+				gchar *tmp = templates_get_template_fileheader(
+						GEANY_TEMPLATE_FILEHEADER, ft->extension, -1);
+				gpl_notice = g_strconcat("<!--\n", tmp, "-->\n\n", NULL);
+				g_free(tmp);
+				break;
+			}
 			case GEANY_FILETYPES_PASCAL:
 			{	// Pascal: comments are in { } brackets
 				gpl_notice = templates_get_template_fileheader(

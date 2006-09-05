@@ -134,7 +134,6 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_C]->style_func_ptr = styleset_c;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_C]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_C]->title, filetypes[GEANY_FILETYPES_C]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_C]->title, filetypes[GEANY_FILETYPES_C]);
 
 #define CPP
 	filetypes[GEANY_FILETYPES_CPP] = g_new0(filetype, 1);
@@ -163,7 +162,6 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_CPP]->comment_close = NULL;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_CPP]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_CPP]->title, filetypes[GEANY_FILETYPES_CPP]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_CPP]->title, filetypes[GEANY_FILETYPES_CPP]);
 
 #define D
 	filetypes[GEANY_FILETYPES_D] = g_new0(filetype, 1);
@@ -184,7 +182,6 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_D]->style_func_ptr = styleset_d;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_D]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_D]->title, filetypes[GEANY_FILETYPES_D]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_D]->title, filetypes[GEANY_FILETYPES_D]);
 
 #define JAVA
 	filetypes[GEANY_FILETYPES_JAVA] = g_new0(filetype, 1);
@@ -204,7 +201,6 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_JAVA]->style_func_ptr = styleset_java;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_JAVA]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_JAVA]->title, filetypes[GEANY_FILETYPES_JAVA]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_JAVA]->title, filetypes[GEANY_FILETYPES_JAVA]);
 
 #define PAS // to avoid warnings when building under Windows, the symbol PASCAL is there defined
 	filetypes[GEANY_FILETYPES_PASCAL] = g_new0(filetype, 1);
@@ -228,7 +224,6 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_PASCAL]->comment_close = g_strdup("}");
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_PASCAL]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_PASCAL]->title, filetypes[GEANY_FILETYPES_PASCAL]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PASCAL]->title, filetypes[GEANY_FILETYPES_PASCAL]);
 
 #define ASM
 	filetypes[GEANY_FILETYPES_ASM] = g_new0(filetype, 1);
@@ -336,7 +331,6 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_PHP]->comment_close = NULL;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_PHP]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_PHP]->title, filetypes[GEANY_FILETYPES_PHP]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PHP]->title, filetypes[GEANY_FILETYPES_PHP]);
 
 #define PYTHON
 	filetypes[GEANY_FILETYPES_PYTHON] = g_new0(filetype, 1);
@@ -377,7 +371,6 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_RUBY]->comment_close = NULL;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_RUBY]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_RUBY]->title, filetypes[GEANY_FILETYPES_RUBY]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_RUBY]->title, filetypes[GEANY_FILETYPES_RUBY]);
 
 #define TCL
 	filetypes[GEANY_FILETYPES_TCL] = g_new0(filetype, 1);
@@ -527,7 +520,6 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_HTML]->comment_close = g_strdup("-->");
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_HTML]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_HTML]->title, filetypes[GEANY_FILETYPES_HTML]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_HTML]->title, filetypes[GEANY_FILETYPES_HTML]);
 
 #define CSS
 	filetypes[GEANY_FILETYPES_CSS] = g_new0(filetype, 1);
@@ -668,6 +660,25 @@ void filetypes_init_types(void)
 	filetypes[GEANY_FILETYPES_ALL]->comment_close = NULL;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_ALL]);
 	filetypes_create_menu_item(filetype_menu, _("None"), filetypes[GEANY_FILETYPES_ALL]);
+
+	// now add the items for the new file menu
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_C]->title,
+																filetypes[GEANY_FILETYPES_C]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_CPP]->title,
+																filetypes[GEANY_FILETYPES_CPP]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_D]->title,
+																filetypes[GEANY_FILETYPES_D]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_JAVA]->title,
+																filetypes[GEANY_FILETYPES_JAVA]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PASCAL]->title,
+																filetypes[GEANY_FILETYPES_PASCAL]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_RUBY]->title,
+																filetypes[GEANY_FILETYPES_RUBY]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PHP]->title,
+																filetypes[GEANY_FILETYPES_PHP]);
+	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_HTML]->title,
+																filetypes[GEANY_FILETYPES_HTML]);
+
 }
 
 
@@ -821,6 +832,8 @@ gchar *filetypes_get_template(filetype *ft)
 			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_RUBY); break;
 		case GEANY_FILETYPES_D:
 			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_D); break;
+		case GEANY_FILETYPES_HTML:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_HTML); break;
 		default: return NULL;
 	}
 }
