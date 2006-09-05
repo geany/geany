@@ -30,6 +30,7 @@
 #include "sci_cb.h"
 #include "document.h"
 #include "sciwrappers.h"
+#include "ui_utils.h"
 #include "utils.h"
 #include "main.h"
 
@@ -70,9 +71,9 @@ on_editor_button_press_event           (GtkWidget *widget,
 		sci_cb_find_current_word(doc_list[idx].sci, editor_info.click_pos,
 			current_word, sizeof current_word);
 
-		utils_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
-		utils_update_popup_copy_items(idx);
-		utils_update_insert_include_item(idx, 0);
+		ui_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
+		ui_update_popup_copy_items(idx);
+		ui_update_insert_include_item(idx, 0);
 		gtk_menu_popup(GTK_MENU(app->popup_menu), NULL, NULL, NULL, NULL, event->button, event->time);
 
 		return TRUE;
@@ -131,12 +132,12 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			gint pos = sci_get_current_position(sci);
 
 			// undo / redo menu update
-			utils_update_popup_reundo_items(idx);
+			ui_update_popup_reundo_items(idx);
 
 			// brace highlighting
 			sci_cb_highlight_braces(sci, pos);
 
-			utils_update_statusbar(idx, pos);
+			ui_update_statusbar(idx, pos);
 
 #if 0
 			/// experimental code for inverting selections

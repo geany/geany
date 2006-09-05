@@ -26,6 +26,7 @@ SRCS = \
 	sciwrappers.c sciwrappers.h \
 	document.c document.h \
 	utils.c utils.h \
+	ui_utils.c ui_utils.h \
 	support.c support.h \
 	interface.c interface.h \
 	callbacks.c callbacks.h

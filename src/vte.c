@@ -31,7 +31,6 @@
 #include "vte.h"
 #include "msgwindow.h"
 #include "support.h"
-#include "utils.h"
 #include "callbacks.h"
 #include "main.h"
 

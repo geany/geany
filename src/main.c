@@ -44,6 +44,7 @@
 #include "support.h"
 #include "callbacks.h"
 
+#include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
 #include "keyfile.h"
@@ -149,7 +150,7 @@ void geany_debug(gchar const *format, ...)
  * (all the following code is not perfect but it works for the moment) */
 static void apply_settings(void)
 {
-	utils_update_fold_items();
+	ui_update_fold_items();
 
 	// toolbar, message window and sidebar are by default visible, so don't change it if it is true
 	if (! app->toolbar_visible)
@@ -172,7 +173,7 @@ static void apply_settings(void)
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_sidebar1")), FALSE);
 		app->ignore_callback = FALSE;
 	}
-	utils_treeviews_showhide(TRUE);
+	ui_treeviews_show_hide(TRUE);
 	// sets the icon style of the toolbar
 	switch (app->toolbar_icon_style)
 	{
@@ -202,7 +203,7 @@ static void apply_settings(void)
 	{
 		gtk_toolbar_set_icon_size(GTK_TOOLBAR(app->toolbar), app->toolbar_icon_size);
 	}
-	utils_update_toolbar_icons(app->toolbar_icon_size);
+	ui_update_toolbar_icons(app->toolbar_icon_size);
 
 	// line number and markers margin are by default enabled
 	if (! app->show_markers_margin)
@@ -238,7 +239,7 @@ static void apply_settings(void)
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), app->tab_pos_msgwin);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), app->tab_pos_sidebar);
 
-	utils_update_toolbar_items();
+	ui_update_toolbar_items();
 }
 
 
@@ -546,8 +547,8 @@ gint main(gint argc, gchar **argv)
 #endif
 	if (no_msgwin) app->msgwindow_visible = FALSE;
 
-	utils_create_insert_menu_items();
-	utils_create_insert_date_menu_items();
+	ui_create_insert_menu_items();
+	ui_create_insert_date_menu_items();
 	keybindings_init();
 	notebook_init();
 	templates_init();
@@ -560,7 +561,7 @@ gint main(gint argc, gchar **argv)
 	}
 	configuration_read_filetype_extensions();
 
-	gtk_window_set_icon(GTK_WINDOW(app->window), utils_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE));
+	gtk_window_set_icon(GTK_WINDOW(app->window), ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE));
 
 	// registering some basic events
 	g_signal_connect(G_OBJECT(app->window), "delete_event", G_CALLBACK(on_exit_clicked), NULL);
@@ -620,8 +621,8 @@ gint main(gint argc, gchar **argv)
 	{
 		if (! configuration_open_files())
 		{
-			utils_update_popup_copy_items(-1);
-			utils_update_popup_reundo_items(-1);
+			ui_update_popup_copy_items(-1);
+			ui_update_popup_reundo_items(-1);
 		}
 	}
 	app->opening_session_files = FALSE;
@@ -629,14 +630,14 @@ gint main(gint argc, gchar **argv)
 	// open a new file if no other file was opened
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)	document_new_file(NULL);
 
-	utils_close_buttons_toggle();
-	utils_save_buttons_toggle(FALSE);
+	ui_close_buttons_toggle();
+	ui_save_buttons_toggle(FALSE);
 
 	idx = document_get_cur_idx();
 	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
 	gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
-	utils_build_show_hide(idx);
-	utils_update_tag_list(idx, FALSE);
+	ui_build_show_hide(idx);
+	ui_update_tag_list(idx, FALSE);
 
 #ifdef G_OS_WIN32
 	// hide "Build" menu item, at least until it is available for Windows

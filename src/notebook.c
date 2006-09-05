@@ -24,7 +24,7 @@
 #include "geany.h"
 #include "notebook.h"
 #include "document.h"
-#include "utils.h"
+#include "ui_utils.h"
 #include "treeviews.h"
 
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
@@ -257,7 +257,7 @@ gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
 	hbox = gtk_hbox_new(FALSE, 0);
 	but = gtk_button_new();
 	gtk_container_add(GTK_CONTAINER(but),
-		utils_new_image_from_inline(GEANY_IMAGE_SMALL_CROSS, FALSE));
+		ui_new_image_from_inline(GEANY_IMAGE_SMALL_CROSS, FALSE));
 	gtk_container_set_border_width(GTK_CONTAINER(but), 0);
 	gtk_widget_set_size_request(but, 19, 18);
 

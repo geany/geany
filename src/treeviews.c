@@ -25,7 +25,6 @@
 #include "geany.h"
 #include "support.h"
 #include "callbacks.h"
-#include "utils.h"
 #include "treeviews.h"
 #include "document.h"
 

@@ -45,7 +45,7 @@ ALL_GTK_LIBS= \
 CCFLAGS=-Wall -O2 -g -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
 
 OBJS = treeviews.o templates.o encodings.o about.o prefs.o win32.o build.o msgwindow.o dialogs.o \
-	filetypes.o interface.o main.o support.o callbacks.o utils.o \
+	filetypes.o interface.o main.o support.o callbacks.o utils.o ui_utils.o \
 	highlighting.o sci_cb.o document.o sciwrappers.o keyfile.o keybindings.o search.o notebook.o
 
 .c.o:

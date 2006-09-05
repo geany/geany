@@ -27,6 +27,7 @@
 #include "keybindings.h"
 #include "support.h"
 #include "utils.h"
+#include "ui_utils.h"
 #include "document.h"
 #include "callbacks.h"
 #include "prefs.h"
@@ -706,7 +707,7 @@ static void cb_func_toggle_sidebar(void)
 		app->sidebar_symbol_visible = TRUE;
 	}
 
-	utils_treeviews_showhide(TRUE);
+	ui_treeviews_show_hide(TRUE);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->treeview_notebook), active_page);
 }
 

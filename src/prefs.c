@@ -29,6 +29,7 @@
 #include "prefs.h"
 #include "support.h"
 #include "dialogs.h"
+#include "ui_utils.h"
 #include "utils.h"
 #include "msgwindow.h"
 #include "sciwrappers.h"
@@ -495,7 +496,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "check_folding");
 		app->pref_editor_folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		utils_update_fold_items();
+		ui_update_fold_items();
 
 		widget = lookup_widget(app->prefs_dialog, "check_indent");
 		app->pref_editor_show_indent_guide = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -607,10 +608,10 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 #endif
 
 		// apply the changes made
-		utils_update_toolbar_items();
-		utils_update_toolbar_icons(app->toolbar_icon_size);
+		ui_update_toolbar_items();
+		ui_update_toolbar_icons(app->toolbar_icon_size);
 		gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), app->toolbar_icon_style);
-		utils_treeviews_showhide(FALSE);
+		ui_treeviews_show_hide(FALSE);
 
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), app->tab_pos_editor);
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), app->tab_pos_msgwin);
@@ -714,7 +715,7 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 		}
 		case 3:
 		{
-			utils_set_editor_font(fontbtn);
+			ui_set_editor_font(fontbtn);
 			break;
 		}
 #ifdef HAVE_VTE

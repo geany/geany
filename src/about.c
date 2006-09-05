@@ -23,6 +23,7 @@
 #include "about.h"
 #include "geany.h"
 #include "utils.h"
+#include "ui_utils.h"
 #include "support.h"
 
 static GtkWidget *gb_window = NULL;
@@ -130,7 +131,7 @@ static GtkWidget *create_dialog(void)
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), header_eventbox, FALSE, FALSE, 0);
 
 	// set image
-	icon = utils_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
+	icon = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(header_image), icon);
 	gtk_window_set_icon(GTK_WINDOW(dialog), icon);
 

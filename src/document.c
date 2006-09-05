@@ -51,6 +51,7 @@
 #include "msgwindow.h"
 #include "templates.h"
 #include "treeviews.h"
+#include "ui_utils.h"
 #include "utils.h"
 #include "encodings.h"
 #include "notebook.h"
@@ -179,8 +180,8 @@ void document_change_tab_color(gint index)
 void document_set_text_changed(gint index)
 {
 	document_change_tab_color(index);
-	utils_save_buttons_toggle(doc_list[index].changed);
-	utils_set_window_title(index);
+	ui_save_buttons_toggle(doc_list[index].changed);
+	ui_set_window_title(index);
 }
 
 
@@ -290,7 +291,7 @@ gint document_create_new_sci(const gchar *filename)
 	g_signal_connect((GtkWidget*) sci, "button-press-event",
 					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
 
-	utils_close_buttons_toggle();
+	ui_close_buttons_toggle();
 
 	// store important pointers in the tab list
 	this->file_name = (filename) ? g_strdup(filename) : NULL;
@@ -344,12 +345,12 @@ gboolean document_remove(guint page_num)
 		doc_list[idx].tm_file = NULL;
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
-			utils_update_tag_list(-1, FALSE);
+			ui_update_tag_list(-1, FALSE);
 			//on_notebook1_switch_page(GTK_NOTEBOOK(app->notebook), NULL, 0, NULL);
-			utils_set_window_title(-1);
-			utils_save_buttons_toggle(FALSE);
-			utils_close_buttons_toggle();
-			utils_build_show_hide(-1);
+			ui_set_window_title(-1);
+			ui_save_buttons_toggle(FALSE);
+			ui_close_buttons_toggle();
+			ui_build_show_hide(-1);
 		}
 	}
 	else geany_debug("Error: idx: %d page_num: %d", idx, page_num);
@@ -383,13 +384,13 @@ void document_new_file(filetype *ft)
 		//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
 		document_set_filetype(idx, ft);
 		if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
-		utils_set_window_title(idx);
-		utils_build_show_hide(idx);
-		utils_update_tag_list(idx, FALSE);
+		ui_set_window_title(idx);
+		ui_build_show_hide(idx);
+		ui_update_tag_list(idx, FALSE);
 		doc_list[idx].mtime = time(NULL);
 		doc_list[idx].changed = FALSE;
 		document_set_text_changed(idx);
-		utils_document_show_hide(idx); //update the document menu
+		ui_document_show_hide(idx); //update the document menu
 #ifdef G_OS_WIN32
 		sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
 #else
@@ -628,7 +629,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		sci_set_readonly(doc_list[idx].sci, readonly);
 
 		document_set_filetype(idx, use_ft);
-		utils_build_show_hide(idx);
+		ui_build_show_hide(idx);
 	}
 	else
 	{
@@ -636,13 +637,13 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	}
 
 	document_set_text_changed(idx);
-	utils_document_show_hide(idx); //update the document menu
+	ui_document_show_hide(idx); //update the document menu
 
 	g_free(data);
 
 
 	// finally add current file to recent files menu, but not the files from the last session
-	if (! app->opening_session_files) utils_add_recent_file(utf8_filename);
+	if (! app->opening_session_files) ui_add_recent_file(utf8_filename);
 
 	if (reload)
 		msgwin_status_add(_("File %s reloaded."), utf8_filename);
@@ -794,7 +795,7 @@ void document_save_file(gint idx, gboolean force)
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), basename);
 		treeviews_openfiles_update(doc_list[idx].iter, doc_list[idx].file_name);
 		msgwin_status_add(_("File %s saved."), doc_list[idx].file_name);
-		utils_update_statusbar(idx, -1);
+		ui_update_statusbar(idx, -1);
 		treeviews_openfiles_update(doc_list[idx].iter, basename);
 		g_free(basename);
 #ifdef HAVE_VTE
@@ -1082,13 +1083,13 @@ void document_update_tag_list(gint idx, gboolean update)
 		tm_workspace_add_object(doc_list[idx].tm_file);
 		if (update)
 			tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
-		utils_update_tag_list(idx, TRUE);
+		ui_update_tag_list(idx, TRUE);
 	}
 	else
 	{
 		if (tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE))
 		{
-			utils_update_tag_list(idx, TRUE);
+			ui_update_tag_list(idx, TRUE);
 		}
 		else
 		{
@@ -1148,7 +1149,7 @@ void document_set_filetype(gint idx, filetype *type)
 		}
 	}
 	sci_colourise(doc_list[idx].sci, 0, -1);
-	utils_build_show_hide(idx);
+	ui_build_show_hide(idx);
 }
 
 

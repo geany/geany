@@ -28,6 +28,7 @@
 #include "support.h"
 #include "callbacks.h"
 #include "msgwindow.h"
+#include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
 
@@ -231,7 +232,7 @@ void msgwin_status_add(gchar const *format, ...)
 	va_end(args);
 
 	// display status message in status bar
-	utils_set_statusbar(string, FALSE);
+	ui_set_statusbar(string, FALSE);
 
 	gtk_list_store_append(msgwindow.store_status, &iter);
 	//gtk_list_store_insert(msgwindow.store_status, &iter, 0);

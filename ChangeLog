@@ -1,3 +1,13 @@
+2006-09-05  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/utils.h, src/ui_utils.c, src/ui_utils.h,
+   src/keybindings.c, src/about.c, src/treeviews.c, src/msgwindow.c,
+   src/callbacks.c, src/notebook.c, src/sci_cb.c, src/keyfile.c,
+   src/vte.c, src/document.c, src/prefs.c, src/main.c,
+   po/POTFILES.in, src/Makefile.am, src/makefile.win32:
+   Moved UI related utils from utils.c to ui_utils.c.
+
+
 2006-09-04  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keyfile.c, src/main.c, src/main.h:

@@ -33,6 +33,7 @@
 
 #include "support.h"
 #include "keyfile.h"
+#include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
 #include "sciwrappers.h"
@@ -556,7 +557,7 @@ void configuration_apply_settings()
 	{
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_fullscreen1")), TRUE);
 		app->fullscreen = TRUE;
-		utils_set_fullscreen();
+		ui_set_fullscreen();
 	}
 }
 

@@ -27,39 +27,12 @@
 
 void utils_start_browser(const gchar *uri);
 
-/* allow_override is TRUE if text can be ignored when another message has been set
- * that didn't use allow_override and has not timed out. */
-void utils_set_statusbar(const gchar *text, gboolean allow_override);
-
-void utils_update_statusbar(gint idx, gint pos);
-
-void utils_set_buttons_state(gboolean enable);
-
-void utils_update_popup_reundo_items(gint idx);
-
-void utils_update_popup_copy_items(gint idx);
-
-void utils_update_insert_include_item(gint idx, gint item);
-
-void utils_update_menu_copy_items(gint idx);
-
-void utils_update_popup_goto_items(gboolean enable);
-
-void utils_save_buttons_toggle(gboolean enable);
-
-void utils_close_buttons_toggle(void);
-
 /* taken from anjuta, to determine the EOL mode of the file */
 gint utils_get_line_endings(gchar* buffer, glong size);
 
 gboolean utils_isbrace(gchar c);
 
 gboolean utils_is_opening_brace(gchar c);
-
-/* This sets the window title according to the current filename. */
-void utils_set_window_title(gint index);
-
-void utils_set_editor_font(const gchar *font_name);
 
 const GList *utils_get_tag_list(gint idx, guint tag_types);
 
@@ -69,25 +42,7 @@ gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint l
 
 gboolean utils_goto_line(gint idx, gint line);
 
-GdkPixbuf *utils_new_pixbuf_from_inline(gint img, gboolean small_img);
-
-GtkWidget *utils_new_image_from_inline(gint img, gboolean small_img);
-
 gint utils_write_file(const gchar *filename, const gchar *text);
-
-void utils_show_indention_guides(void);
-
-void utils_show_white_space(void);
-
-void utils_show_linenumber_margin(void);
-
-void utils_show_markers_margin(void);
-
-void utils_show_line_endings(void);
-
-void utils_set_fullscreen(void);
-
-void utils_update_tag_list(gint idx, gboolean update);
 
 gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding);
 
@@ -122,10 +77,6 @@ gboolean utils_is_absolute_path(const gchar *path);
 
 gdouble utils_scale_round(gdouble val, gdouble factor);
 
-void utils_widget_show_hide(GtkWidget *widget, gboolean show);
-
-void utils_build_show_hide(gint);
-
 /* (taken from libexo from os-cillation)
  * NULL-safe string comparison. Returns TRUE if both a and b are
  * NULL or if a and b refer to valid strings which are equal.
@@ -139,7 +90,7 @@ gchar *utils_remove_ext_from_filename(const gchar *filename);
 
 gchar utils_brace_opposite(gchar ch);
 
-gchar *utils_get_hostname(void);
+gchar *utils_get_hostname();
 
 gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gchar *doc_dir);
 
@@ -147,21 +98,11 @@ gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *repl
 
 gint utils_strpos(const gchar* haystack, const gchar * needle);
 
-gchar *utils_get_date_time(void);
+gchar *utils_get_date_time();
 
-gchar *utils_get_date(void);
-
-void utils_create_insert_menu_items(void);
-
-void utils_create_insert_date_menu_items(void);
+gchar *utils_get_date();
 
 gchar *utils_get_initials(gchar *name);
-
-void utils_update_toolbar_icons(GtkIconSize size);
-
-void utils_add_recent_file(const gchar *filename);
-
-void utils_recent_file_loaded(const gchar *filename);
 
 gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key, const gboolean default_value);
 
@@ -177,16 +118,12 @@ gint utils_compare_symbol(const GeanySymbol *a, const GeanySymbol *b);
 
 gchar *utils_get_hex_from_color(GdkColor *color);
 
-void utils_treeviews_showhide(gboolean force);
-
 gchar *utils_get_current_file_dir();
 
-void utils_beep(void);
+void utils_beep();
 
 gchar *utils_make_human_readable_str(unsigned long long size, unsigned long block_size,
 									 unsigned long display_unit);
-
-void utils_update_fold_items(void);
 
 /* utils_strtod() converts a string containing a hex colour ("0x00ff00") into an integer.
  * Basically, it is the same as strtod() would do, but it does not understand hex colour values,
@@ -200,8 +137,6 @@ TMTag *utils_find_tm_tag(const GPtrArray *tags, const gchar *tag_name);
 
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gpointer data);
 
-void utils_update_toolbar_items(void);
-
 gchar **utils_read_file_in_array(const gchar *filename);
 
 /* Contributed by Stefan Oltmanns, thanks.
@@ -211,8 +146,6 @@ gboolean utils_str_replace_escape(gchar *string);
 gchar *utils_scan_unicode_bom(const gchar *string);
 
 gboolean utils_is_unicode_charset(const gchar *string);
-
-void utils_document_show_hide(gint idx);
 
 /* Wraps a string in place, replacing a space with a newline character.
  * wrapstart is the minimum position to start wrapping or -1 for default */

@@ -38,6 +38,7 @@
 #include "document.h"
 #include "sciwrappers.h"
 #include "sci_cb.h"
+#include "ui_utils.h"
 #include "utils.h"
 #include "dialogs.h"
 #include "about.h"
@@ -270,8 +271,8 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 		else
 			document_save_file(idx, FALSE);
 	}
-	utils_update_tag_list(cur_idx, TRUE);
-	utils_set_window_title(cur_idx);
+	ui_update_tag_list(cur_idx, TRUE);
+	ui_set_window_title(cur_idx);
 }
 
 
@@ -321,8 +322,8 @@ on_edit1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	utils_update_menu_copy_items(idx);
-	utils_update_insert_include_item(idx, 1);
+	ui_update_menu_copy_items(idx);
+	ui_update_insert_include_item(idx, 1);
 }
 
 
@@ -504,7 +505,7 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 	{
 		document_reload_file(idx, charset);
 		if (charset != NULL)
-			utils_update_statusbar(idx, -1);
+			ui_update_statusbar(idx, -1);
 	}
 	g_free(basename);
 }
@@ -632,7 +633,7 @@ on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	app->toolbar_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-	utils_update_toolbar_icons(GTK_ICON_SIZE_LARGE_TOOLBAR);
+	ui_update_toolbar_icons(GTK_ICON_SIZE_LARGE_TOOLBAR);
 }
 
 
@@ -643,7 +644,7 @@ on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	app->toolbar_icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-	utils_update_toolbar_icons(GTK_ICON_SIZE_SMALL_TOOLBAR);
+	ui_update_toolbar_icons(GTK_ICON_SIZE_SMALL_TOOLBAR);
 }
 
 
@@ -733,11 +734,11 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 
 		document_set_text_changed(idx);
-		utils_document_show_hide(idx); // update the document menu
-		utils_build_show_hide(idx);
-		utils_update_statusbar(idx, -1);
-		utils_set_window_title(idx);
-		utils_update_tag_list(idx, FALSE);
+		ui_document_show_hide(idx); // update the document menu
+		ui_build_show_hide(idx);
+		ui_update_statusbar(idx, -1);
+		ui_set_window_title(idx);
+		ui_update_tag_list(idx, FALSE);
 	}
 }
 
@@ -905,10 +906,10 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		utils_replace_filename(idx);
 		document_save_file(idx, TRUE);
 
-		utils_build_show_hide(idx);
+		ui_build_show_hide(idx);
 
 		// finally add current file to recent files menu
-		utils_add_recent_file(doc_list[idx].file_name);
+		ui_add_recent_file(doc_list[idx].file_name);
 	}
 	else gtk_widget_hide(app->save_filesel);
 }
@@ -935,7 +936,7 @@ on_font_apply_button_clicked           (GtkButton       *button,
 
 	fontname = gtk_font_selection_dialog_get_font_name(
 		GTK_FONT_SELECTION_DIALOG(app->open_fontsel));
-	utils_set_editor_font(fontname);
+	ui_set_editor_font(fontname);
 	g_free(fontname);
 }
 
@@ -1170,7 +1171,7 @@ on_show_toolbar1_toggled               (GtkCheckMenuItem *checkmenuitem,
 	if (app->ignore_callback) return;
 
 	app->toolbar_visible = (app->toolbar_visible) ? FALSE : TRUE;;
-	utils_widget_show_hide(GTK_WIDGET(app->toolbar), app->toolbar_visible);
+	ui_widget_show_hide(GTK_WIDGET(app->toolbar), app->toolbar_visible);
 }
 
 
@@ -1179,7 +1180,7 @@ on_fullscreen1_toggled                 (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
 	app->fullscreen = (app->fullscreen) ? FALSE : TRUE;
-	utils_set_fullscreen();
+	ui_set_fullscreen();
 }
 
 
@@ -1190,7 +1191,7 @@ on_show_messages_window1_toggled       (GtkCheckMenuItem *checkmenuitem,
 	if (app->ignore_callback) return;
 
 	app->msgwindow_visible = (app->msgwindow_visible) ? FALSE : TRUE;
-	utils_widget_show_hide(lookup_widget(app->window, "scrolledwindow1"), app->msgwindow_visible);
+	ui_widget_show_hide(lookup_widget(app->window, "scrolledwindow1"), app->msgwindow_visible);
 }
 
 
@@ -1199,7 +1200,7 @@ on_markers_margin1_toggled             (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
 	app->show_markers_margin = (app->show_markers_margin) ? FALSE : TRUE;
-	utils_show_markers_margin();
+	ui_show_markers_margin();
 }
 
 
@@ -1208,7 +1209,7 @@ on_show_line_numbers1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
 	app->show_linenumber_margin = (app->show_linenumber_margin) ? FALSE : TRUE;
-	utils_show_linenumber_margin();
+	ui_show_linenumber_margin();
 }
 
 
@@ -1236,7 +1237,7 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 		if (idx == -1 || ! doc_list[idx].is_valid) return;
 		doc_list[idx].readonly = ! doc_list[idx].readonly;
 		sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
-		utils_update_statusbar(idx, -1);
+		ui_update_statusbar(idx, -1);
 	}
 }
 
@@ -1464,13 +1465,13 @@ on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
 				case 3:
 				{
 					app->sidebar_openfiles_visible = FALSE;
-					utils_treeviews_showhide(FALSE);
+					ui_treeviews_show_hide(FALSE);
 					break;
 				}
 				case 4:
 				{
 					app->sidebar_visible = FALSE;
-					utils_treeviews_showhide(TRUE);
+					ui_treeviews_show_hide(TRUE);
 					break;
 				}
 			}
@@ -1488,13 +1489,13 @@ on_taglist_tree_popup_clicked          (GtkMenuItem     *menuitem,
 		case 0:
 		{
 			app->sidebar_symbol_visible = FALSE;
-			utils_treeviews_showhide(FALSE);
+			ui_treeviews_show_hide(FALSE);
 			break;
 		}
 		case 1:
 		{
 			app->sidebar_visible = FALSE;
-			utils_treeviews_showhide(TRUE);
+			ui_treeviews_show_hide(TRUE);
 			break;
 		}
 	}
@@ -2311,7 +2312,7 @@ on_recent_file_activate                (GtkMenuItem     *menuitem,
 	gchar *locale_filename = utils_get_locale_from_utf8((gchar*) user_data);
 
 	document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL);
-	utils_recent_file_loaded((gchar*) user_data);
+	ui_recent_file_loaded((gchar*) user_data);
 
 	g_free(locale_filename);
 }
@@ -2396,7 +2397,7 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	doc_list[idx].encoding = g_strdup(encodings[i].charset);
 	doc_list[idx].changed = TRUE;
 	document_set_text_changed(idx);
-	utils_update_statusbar(idx, -1);
+	ui_update_statusbar(idx, -1);
 	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
 			utils_is_unicode_charset(doc_list[idx].encoding));
 }
@@ -2436,7 +2437,7 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 		app->sidebar_symbol_visible = TRUE;
 		app->sidebar_openfiles_visible = TRUE;
 	}
-	utils_treeviews_showhide(TRUE);
+	ui_treeviews_show_hide(TRUE);
 }
 
 
@@ -2454,7 +2455,7 @@ on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
 
 		doc_list[idx].changed = TRUE;
 		document_set_text_changed(idx);
-		utils_update_statusbar(idx, -1);
+		ui_update_statusbar(idx, -1);
 	}
 }
 
