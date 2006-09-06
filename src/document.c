@@ -157,31 +157,26 @@ gint document_get_new_idx()
 }
 
 
-/* changes the color of the tab text according to the status */
-void document_change_tab_color(gint index)
+void document_set_text_changed(gint idx)
 {
-	if (index >= 0 && doc_list[index].sci)
+	if (idx >= 0 && doc_list[idx].is_valid && ! app->quitting)
 	{
+		// changes the color of the tab text according to the status
 		GdkColor colorred = {0, 65535, 0, 0};
 		GdkColor colorblack = {0, 0, 0, 0};
 
-		gtk_widget_modify_fg(doc_list[index].tab_label, GTK_STATE_NORMAL,
-					(doc_list[index].changed) ? &colorred : &colorblack);
-		gtk_widget_modify_fg(doc_list[index].tab_label, GTK_STATE_ACTIVE,
-					(doc_list[index].changed) ? &colorred : &colorblack);
-		gtk_widget_modify_fg(doc_list[index].tabmenu_label, GTK_STATE_PRELIGHT,
-					(doc_list[index].changed) ? &colorred : &colorblack);
-		gtk_widget_modify_fg(doc_list[index].tabmenu_label, GTK_STATE_NORMAL,
-					(doc_list[index].changed) ? &colorred : &colorblack);
+		gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL,
+					(doc_list[idx].changed) ? &colorred : &colorblack);
+		gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_ACTIVE,
+					(doc_list[idx].changed) ? &colorred : &colorblack);
+		gtk_widget_modify_fg(doc_list[idx].tabmenu_label, GTK_STATE_PRELIGHT,
+					(doc_list[idx].changed) ? &colorred : &colorblack);
+		gtk_widget_modify_fg(doc_list[idx].tabmenu_label, GTK_STATE_NORMAL,
+					(doc_list[idx].changed) ? &colorred : &colorblack);
+
+		ui_save_buttons_toggle(doc_list[idx].changed);
+		ui_set_window_title(idx);
 	}
-}
-
-
-void document_set_text_changed(gint index)
-{
-	document_change_tab_color(index);
-	ui_save_buttons_toggle(doc_list[index].changed);
-	ui_set_window_title(index);
 }
 
 
@@ -206,6 +201,8 @@ void document_init_doclist()
 		doc_list[i].encoding = NULL;
 		doc_list[i].has_bom = FALSE;
 		doc_list[i].sci = NULL;
+		doc_list[i].undo_actions = NULL;
+		doc_list[i].redo_actions = NULL;
 	}
 }
 
@@ -281,9 +278,6 @@ gint document_create_new_sci(const gchar *filename)
 	this->tag_store = NULL;
 	this->tag_tree = NULL;
 
-	// "the" SCI signal
-	g_signal_connect((GtkWidget*) sci, "sci-notify",
-					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(new_idx));
 	// signal for insert-key(works without too, but to update the right status bar)
 /*	g_signal_connect((GtkWidget*) sci, "key-press-event",
 					G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));
@@ -336,6 +330,8 @@ gboolean document_remove(guint page_num)
 		g_free(doc_list[idx].encoding);
 		g_free(doc_list[idx].file_name);
 		tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+		document_undo_clear(idx);
+		document_redo_clear(idx);
 		doc_list[idx].is_valid = FALSE;
 		doc_list[idx].sci = NULL;
 		doc_list[idx].file_name = NULL;
@@ -400,13 +396,17 @@ void document_new_file(filetype *ft)
 		sci_empty_undo_buffer(doc_list[idx].sci);
 		sci_goto_pos(doc_list[idx].sci, 0, TRUE);
 
+		// "the" SCI signal (connect after initial setup(i.e. adding text))
+		g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
+					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
+
 		msgwin_status_add(_("New file opened."));
 	}
 	else
 	{
 		dialogs_show_error(
 		_("You have opened too many files. There is a limit of %d concurrent open files."),
-		GEANY_MAX_OPEN_FILES);
+							GEANY_MAX_OPEN_FILES);
 	}
 }
 
@@ -635,6 +635,10 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	{
 		document_update_tag_list(idx, TRUE);
 	}
+
+	// "the" SCI signal (connect after initial setup(i.e. adding text))
+	g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
+					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
 
 	document_set_text_changed(idx);
 	ui_document_show_hide(idx); //update the document menu
@@ -1447,4 +1451,166 @@ void document_ensure_final_newline(gint idx)
 	}
 }
 
+/* own Undo / Redo implementation to be able to undo / redo changes
+ * to the encoding or the Unicode BOM (which are Scintilla independet).
+ * All Scintilla events are stored in the undo / redo buffer and are passed through. */
+
+/* Clears the Undo buffer (to be called after saving a file or when closing the document) */
+void document_undo_clear(gint idx)
+{
+	undo_action *a;
+
+	while (g_trash_stack_height(&doc_list[idx].undo_actions) > 0)
+	{
+		a = g_trash_stack_pop(&doc_list[idx].undo_actions);
+		if (a != NULL)
+		{
+			switch (a->type)
+			{
+				case UNDO_ENCODING: g_free(a->data); break;
+				default: break;
+			}
+
+			g_free(a);
+		}
+	}
+	doc_list[idx].undo_actions = NULL;
+
+	doc_list[idx].changed = FALSE;
+	if (! app->quitting) document_set_text_changed(idx);
+}
+
+
+/* Clears the Redo buffer (to be called after saving a file or when closing the document) */
+void document_redo_clear(gint idx)
+{
+/*
+	undo_action *a;
+
+	while (g_trash_stack_height(&doc_list[idx].redo_actions) > 0)
+	{
+		a = g_trash_stack_pop(&doc_list[idx].redo_actions);
+		if (a != NULL)
+		{
+			switch (a->type)
+			{
+				case UNDO_ENCODING: g_free(a->data); break;
+				default: break;
+			}
+
+			g_free(a);
+		}
+	}
+	doc_list[idx].redo_actions = NULL;
+
+	doc_list[idx].changed = FALSE;
+	if (! app->quitting) document_set_text_changed(idx);
+*/
+}
+
+
+void document_undo_add(gint idx, guint type, gpointer data)
+{
+	undo_action *action;
+
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	action = g_new0(undo_action, 1);
+	action->type = type;
+	action->data = data;
+
+	g_trash_stack_push(&doc_list[idx].undo_actions, action);
+
+	doc_list[idx].changed = TRUE;
+	document_set_text_changed(idx);
+	ui_update_popup_reundo_items(idx);
+
+	{
+		geany_debug("%s: new stack height: %d, added type: %d", __func__,
+				g_trash_stack_height(&doc_list[idx].undo_actions), action->type);
+	}
+}
+
+
+gboolean document_can_undo(gint idx)
+{
+	return sci_can_undo(doc_list[idx].sci);
+
+	if (idx == -1 || ! doc_list[idx].is_valid) return FALSE;
+
+	if (g_trash_stack_height(&doc_list[idx].undo_actions) > 0 || sci_can_undo(doc_list[idx].sci))
+		return TRUE;
+	else
+		return FALSE;
+}
+
+
+gboolean document_can_redo(gint idx)
+{
+	if (idx == -1 || ! doc_list[idx].is_valid) return FALSE;
+
+	return sci_can_redo(doc_list[idx].sci);
+}
+
+
+void document_undo(gint idx)
+{
+	sci_undo(doc_list[idx].sci);
+	return;
+
+	undo_action *action;
+
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	action = g_trash_stack_pop(&doc_list[idx].undo_actions);
+
+	if (action == NULL)
+	{
+		// fallback, should not be necessary
+		sci_undo(doc_list[idx].sci);
+	}
+	else
+	{
+		switch (action->type)
+		{
+			case UNDO_SCINTILLA:
+			{
+				geany_debug("undo: Scintilla");
+				sci_undo(doc_list[idx].sci);
+				break;
+			}
+			case UNDO_BOM:
+			{
+				geany_debug("undo: BOM");
+				doc_list[idx].has_bom = GPOINTER_TO_INT(action->data);
+				ui_update_statusbar(idx, -1);
+				ui_document_show_hide(idx);
+				break;
+			}
+			case UNDO_ENCODING:
+			{
+				geany_debug("undo: Encoding");
+				doc_list[idx].encoding = (gchar*) action->data;
+				ui_update_statusbar(idx, -1);
+				encodings_select_radio_item(doc_list[idx].encoding);
+				gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
+								utils_is_unicode_charset(doc_list[idx].encoding));
+				break;
+			}
+			default: break;
+		}
+	}
+
+	if (g_trash_stack_height(&doc_list[idx].undo_actions) == 0) doc_list[idx].changed = FALSE;
+	ui_update_popup_reundo_items(idx);
+	geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].undo_actions));
+}
+
+
+void document_redo(gint idx)
+{
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	sci_redo(doc_list[idx].sci);
+}
 

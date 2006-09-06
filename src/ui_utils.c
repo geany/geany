@@ -335,11 +335,11 @@ void ui_update_popup_reundo_items(gint index)
 	}
 	else
 	{
-		enable_undo = sci_can_undo(doc_list[index].sci);
-		enable_redo = sci_can_redo(doc_list[index].sci);
+		enable_undo = document_can_undo(index);
+		enable_redo = document_can_redo(index);
 	}
 
-	// index 0 is the popup menu, 1 is the menubar
+	// index 0 is the popup menu, 1 is the menubar, 2 is the toolbar
 	gtk_widget_set_sensitive(app->undo_items[0], enable_undo);
 	gtk_widget_set_sensitive(app->undo_items[1], enable_undo);
 	gtk_widget_set_sensitive(app->undo_items[2], enable_undo);

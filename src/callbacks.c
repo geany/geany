@@ -333,7 +333,7 @@ on_undo1_activate                      (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (sci_can_undo(doc_list[idx].sci)) sci_undo(doc_list[idx].sci);
+	if (document_can_undo(idx)) document_undo(idx);
 }
 
 
@@ -343,7 +343,7 @@ on_redo1_activate                      (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (sci_can_redo(doc_list[idx].sci)) sci_redo(doc_list[idx].sci);
+	if (document_can_redo(idx)) document_redo(idx);
 }
 
 
@@ -2393,10 +2393,9 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	if (app->ignore_callback || idx < 0 || encodings[i].charset == NULL ||
 		utils_strcmp(encodings[i].charset, doc_list[idx].encoding)) return;
 
-	g_free(doc_list[idx].encoding);
+	// old charset string will be freed with the undo buffer
+	document_undo_add(idx, UNDO_ENCODING, doc_list[idx].encoding);
 	doc_list[idx].encoding = g_strdup(encodings[i].charset);
-	doc_list[idx].changed = TRUE;
-	document_set_text_changed(idx);
 	ui_update_statusbar(idx, -1);
 	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
 			utils_is_unicode_charset(doc_list[idx].encoding));
@@ -2453,8 +2452,7 @@ on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
 
 		doc_list[idx].has_bom = ! doc_list[idx].has_bom;
 
-		doc_list[idx].changed = TRUE;
-		document_set_text_changed(idx);
+		document_undo_add(idx, UNDO_BOM, GINT_TO_POINTER(! doc_list[idx].has_bom));
 		ui_update_statusbar(idx, -1);
 	}
 }

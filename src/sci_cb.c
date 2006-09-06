@@ -155,6 +155,11 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 #endif
 			break;
 		}
+		case 2023:
+		{
+			geany_debug("Undo notification");
+			break;
+		}
 /*		case SCN_KEY:
 		{
 			//geany_debug("key notification triggered with %c", nt->ch);
@@ -162,9 +167,11 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 		}
 		case SCN_MODIFIED:
 		{
-			//if (nt->modificationType == SC_MOD_INSERTTEXT)
-			//	geany_debug("modi: %s", nt->text);
-
+			if (nt->modificationType  & SC_MOD_INSERTTEXT ||
+				nt->modificationType & SC_MOD_DELETETEXT)
+			{
+				document_undo_add(idx, UNDO_SCINTILLA, NULL);
+			}
 			break;
 		}
 */		case SCN_CHARADDED:

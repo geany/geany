@@ -63,6 +63,8 @@ typedef struct document
 	gboolean		 use_auto_indention;
 	time_t			 last_check;	// to remember the last disk check
 	time_t			 mtime;
+	GTrashStack		*undo_actions;
+	GTrashStack		*redo_actions;
 } document;
 
 
@@ -93,10 +95,6 @@ gint document_get_n_idx(guint);
 /* returns the next free place(i.e. index) in the document list
  * If there is for any reason no free place, -1 is returned */
 gint document_get_new_idx();
-
-
-/* changes the color of the tab text according to the status */
-void document_change_tab_color(gint);
 
 
 void document_set_text_changed(gint);
@@ -181,5 +179,39 @@ void document_replace_tabs(gint idx);
 void document_strip_trailing_spaces(gint idx);
 
 void document_ensure_final_newline(gint idx);
+
+
+
+/* own Undo / Redo implementation to be able to undo / redo changes
+ * to the encoding or the Unicode BOM (which are Scintilla independet).
+ * All Scintilla events are stored in the undo / redo buffer and are passed through. */
+enum
+{
+	UNDO_SCINTILLA = 0,
+	UNDO_ENCODING,
+	UNDO_BOM,
+	UNDO_ACTIONS_MAX
+};
+
+typedef struct
+{
+	GTrashStack *next;
+	guint type;	// to identify the action
+	gpointer *data; // the old value (before the change)
+} undo_action;
+
+gboolean document_can_undo(gint idx);
+
+gboolean document_can_redo(gint idx);
+
+void document_undo(gint idx);
+
+void document_redo(gint idx);
+
+void document_undo_add(gint idx, guint type, gpointer data);
+
+void document_undo_clear(gint idx);
+
+void document_redo_clear(gint idx);
 
 #endif
