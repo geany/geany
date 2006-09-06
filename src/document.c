@@ -511,7 +511,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		}
 		else
 		{
-			gchar *converted_text = utils_convert_to_utf8_from_charset(data, size, forced_enc);
+			gchar *converted_text = utils_convert_to_utf8_from_charset(data, size, forced_enc, FALSE);
 			if (converted_text == NULL)
 			{
 				msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
@@ -542,7 +542,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 			bom = TRUE;
 			if (enc[4] != '8') // the BOM indicated something else than UTF-8
 			{
-				gchar *converted_text = utils_convert_to_utf8_from_charset(data, size, enc);
+				gchar *converted_text = utils_convert_to_utf8_from_charset(data, size, enc, FALSE);
 				if (converted_text == NULL)
 				{
 					g_free(enc);

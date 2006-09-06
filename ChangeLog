@@ -2,6 +2,8 @@
 
  * src/callbacks.c, src/document.c, src/ui_utils.c, src/sci_cb.c:
    Added own implementation of an Undo stack (not yet working).
+ * src/utils.c, src/document.c:
+   Convert tag names to UTF-8 before showing them in the sidebar.
 
 
 2006-09-05  Enrico Tröger  <enrico.troeger@uvena.de>

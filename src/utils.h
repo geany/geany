@@ -46,7 +46,10 @@ gint utils_write_file(const gchar *filename, const gchar *text);
 
 gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding);
 
-gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const gchar *charset);
+/* Converts a string from the given charset to UTF-8.
+ * If fast is set, no further checks are performed. */
+gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const gchar *charset,
+										  gboolean fast);
 
 /**
  * (stolen from anjuta and modified)

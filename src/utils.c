@@ -201,6 +201,8 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 		TMTag *tag;
 		guint i;
 		GeanySymbol *symbol;
+		gboolean doc_is_utf8 = FALSE;
+		gchar *utf8_name;
 
 		if (tag_names)
 		{
@@ -214,18 +216,24 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 			tag_names = NULL;
 		}
 
+		// do this comparison only once
+		if (utils_strcmp(doc_list[idx].encoding, "UTF-8")) doc_is_utf8 = TRUE;
+
 		for (i = 0; i < (doc_list[idx].tm_file)->tags_array->len; ++i)
 		{
 			tag = TM_TAG((doc_list[idx].tm_file)->tags_array->pdata[i]);
 			if (tag == NULL)
 				return NULL;
-			//geany_debug("%s: %d", doc_list[idx].file_name, tag->type);
+
 			if (tag->type & tag_types)
 			{
+				if (! doc_is_utf8) utf8_name = utils_convert_to_utf8_from_charset(tag->name, -1,
+															doc_list[idx].encoding, TRUE);
+				else utf8_name = tag->name;
 				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
 				{
 					symbol = g_new0(GeanySymbol, 1);
-					symbol->str = g_strdup_printf("%s::%s [%ld]", tag->atts.entry.scope, tag->name, tag->atts.entry.line);
+					symbol->str = g_strdup_printf("%s::%s [%ld]", tag->atts.entry.scope, utf8_name, tag->atts.entry.line);
 					symbol->type = tag->type;
 					symbol->line = tag->atts.entry.line;
 					tag_names = g_list_prepend(tag_names, symbol);
@@ -233,11 +241,12 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 				else
 				{
 					symbol = g_new0(GeanySymbol, 1);
-					symbol->str = g_strdup_printf("%s [%ld]", tag->name, tag->atts.entry.line);
+					symbol->str = g_strdup_printf("%s [%ld]", utf8_name, tag->atts.entry.line);
 					symbol->type = tag->type;
 					symbol->line = tag->atts.entry.line;
 					tag_names = g_list_prepend(tag_names, symbol);
 				}
+				if (! doc_is_utf8) g_free(utf8_name);
 			}
 		}
 		tag_names = g_list_sort(tag_names, (GCompareFunc) utils_compare_symbol);
@@ -335,7 +344,10 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 }
 
 
-gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const gchar *charset)
+/* Converts a string from the given charset to UTF-8.
+ * If fast is set, no further checks are performed. */
+gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const gchar *charset,
+										  gboolean fast)
 {
 	gchar *utf8_content = NULL;
 	GError *conv_error = NULL;
@@ -346,9 +358,14 @@ gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const
 	g_return_val_if_fail(charset != NULL, NULL);
 
 	converted_contents = g_convert(buffer, size, "UTF-8", charset, NULL,
-									&bytes_written, &conv_error);
+								   &bytes_written, &conv_error);
 
-	if (conv_error != NULL || ! g_utf8_validate(converted_contents, bytes_written, NULL))
+	if (fast)
+	{
+		utf8_content = converted_contents;
+		if (conv_error != NULL) g_error_free(conv_error);
+	}
+	else if (conv_error != NULL || ! g_utf8_validate(converted_contents, bytes_written, NULL))
 	{
 		if (conv_error != NULL)
 		{
@@ -395,7 +412,7 @@ gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encod
 			charset = encodings[i].charset;
 
 		geany_debug("Trying to convert %d bytes of data from %s into UTF-8.", size, charset);
-		utf8_content = utils_convert_to_utf8_from_charset(buffer, size, charset);
+		utf8_content = utils_convert_to_utf8_from_charset(buffer, size, charset, FALSE);
 
 		if (utf8_content != NULL)
 		{
