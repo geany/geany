@@ -4,6 +4,9 @@
    Added own implementation of an Undo stack (not yet working).
  * src/utils.c, src/document.c:
    Convert tag names to UTF-8 before showing them in the sidebar.
+ * src/document.c:
+   Fixed a crash when a compiler output reports an error in a blank
+   line(can happen in LaTeX). Thanks to Frank for reporting.
 
 
 2006-09-05  Enrico Tröger  <enrico.troeger@uvena.de>

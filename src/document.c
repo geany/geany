@@ -1295,7 +1295,9 @@ void document_set_indicator(gint idx, gint line)
 	end = sci_get_position_from_line(doc_list[idx].sci, line + 1);
 
 	// skip blank lines
-	if ((start + 1) == end) return;
+	if ((start + 1) == end ||
+		sci_get_line_length(doc_list[idx].sci, line) == utils_get_eol_char_len(idx))
+		return;
 
 	len = end - start;
 	linebuf = g_malloc(len);
@@ -1312,6 +1314,7 @@ void document_set_indicator(gint idx, gint line)
 	current_mask &= INDICS_MASK;
 	current_mask |= INDIC2_MASK;
 	sci_start_styling(doc_list[idx].sci, start + i, INDIC2_MASK);
+	//geany_debug("%p\tline: %d\tstart-end: %d - %d\t%d - %i", doc_list[idx].sci, line, start, end, len, i);
 	sci_set_styling(doc_list[idx].sci, len - i, current_mask);
 }
 
