@@ -832,6 +832,8 @@ gint sci_get_lines_selected(ScintillaObject *sci)
 
 void sci_set_styling(ScintillaObject *sci, gint len, gint style)
 {
+	if (len < 0 || style < 0) return;
+
 	SSM(sci, SCI_SETSTYLING, len, style);
 }
 
