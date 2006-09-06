@@ -330,8 +330,6 @@ gboolean document_remove(guint page_num)
 		g_free(doc_list[idx].encoding);
 		g_free(doc_list[idx].file_name);
 		tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
-		document_undo_clear(idx);
-		document_redo_clear(idx);
 		doc_list[idx].is_valid = FALSE;
 		doc_list[idx].sci = NULL;
 		doc_list[idx].file_name = NULL;
@@ -339,6 +337,8 @@ gboolean document_remove(guint page_num)
 		doc_list[idx].encoding = NULL;
 		doc_list[idx].has_bom = FALSE;
 		doc_list[idx].tm_file = NULL;
+		document_undo_clear(idx);
+		document_redo_clear(idx);
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
 			ui_update_tag_list(-1, FALSE);
