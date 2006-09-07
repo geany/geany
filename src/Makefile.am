@@ -25,6 +25,7 @@ SRCS = \
 	sci_cb.c sci_cb.h \
 	sciwrappers.c sciwrappers.h \
 	document.c document.h \
+	socket.c socket.h \
 	utils.c utils.h \
 	ui_utils.c ui_utils.h \
 	support.c support.h \
