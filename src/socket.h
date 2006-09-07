@@ -1,8 +1,7 @@
 /*
- *      main.h - this file is part of Geany, a fast and lightweight IDE
+ *      socket.h - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
- *      Copyright 2006 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -22,19 +21,24 @@
  */
 
 
-#ifndef GEANY_MAIN_H
-#define GEANY_MAIN_H
+#ifndef GEANY_SOCKET_H
+#define GEANY_SOCKET_H 1
 
-typedef struct
+
+struct
 {
-	gboolean load_session;
-} CommandLineOptions;
+	gboolean	 ignore_socket;
+	gchar		*file_name;
+	GIOChannel	*read_ioc;
+	gint 		 lock_socket;
+	gint 		 lock_socket_tag;
+} socket_info;
 
-extern CommandLineOptions cl_options;
+gint socket_init(gint argc, gchar **argv);
 
+gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpointer data);
 
-void geany_debug(gchar const *format, ...);
+gint socket_finalize();
 
-gchar *get_argv_filename(const gchar *filename);
 
 #endif

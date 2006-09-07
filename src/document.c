@@ -231,10 +231,18 @@ gint document_create_new_sci(const gchar *filename)
 	PangoFontDescription *pfd;
 	gchar *title, *fname;
 	GtkTreeIter iter;
-	gint new_idx = document_get_new_idx();
+	gint new_idx;
 	document *this;
 	gint tabnum;
 
+	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 1)
+	{
+		gint idx = document_get_cur_idx();
+		// remove the empty document and open a new one
+		if (doc_list[idx].file_name == NULL && ! doc_list[idx].changed) document_remove(0);
+	}
+
+	new_idx = document_get_new_idx();
 	if (new_idx == -1) return -1;
 
 	this = &(doc_list[new_idx]);
