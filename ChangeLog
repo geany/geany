@@ -15,6 +15,9 @@
  * src/build.c:
    Show messages window on build failure.
    Show build success message on status bar if messages window hidden.
+ * src/document.c:
+   Use handle_forced_encoding(), handle_encoding() and handle_bom()
+   when opening files.
 
 
 2006-09-07  Enrico Tröger  <enrico.troeger@uvena.de>

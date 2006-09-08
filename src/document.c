@@ -419,6 +419,114 @@ void document_new_file(filetype *ft)
 }
 
 
+// reload file with specified encoding
+static gboolean
+handle_forced_encoding(gchar **data, gsize *size, const gchar *forced_enc, gchar **enc,
+	gboolean *bom)
+{
+	if (utils_strcmp(forced_enc, "UTF-8"))
+	{
+		if (! g_utf8_validate(*data, *size, NULL))
+		{
+			return FALSE;
+		}
+		else
+		{
+			*bom = utils_strcmp(utils_scan_unicode_bom(*data), "UTF-8");
+			*enc = g_strdup(forced_enc);
+		}
+	}
+	else
+	{
+		gchar *converted_text = utils_convert_to_utf8_from_charset(*data, *size, forced_enc, FALSE);
+		if (converted_text == NULL)
+		{
+			return FALSE;
+		}
+		else
+		{
+			g_free(*data);
+			*data = (void*)converted_text;
+			*size = strlen(converted_text);
+			*bom = utils_strcmp(utils_scan_unicode_bom(*data), "UTF-8");
+			*enc = g_strdup(forced_enc);
+		}
+	}
+	return TRUE;
+}
+
+
+static gboolean
+handle_encoding(gchar **data, gsize *size, gchar **enc, gboolean *bom)
+{
+	if (*size > 0)
+	{	// the usual way to detect encoding and convert to UTF-8
+		if (*size >= 4)
+		{
+			*enc = utils_scan_unicode_bom(*data);
+		}
+		if (*enc != NULL)
+		{
+			*bom = TRUE;
+			if ((*enc)[4] != '8') // the BOM indicated something else than UTF-8
+			{
+				gchar *converted_text = utils_convert_to_utf8_from_charset(*data, *size, *enc, FALSE);
+				if (converted_text == NULL)
+				{
+					g_free(*enc);
+					*enc = NULL;
+					*bom = FALSE;
+				}
+				else
+				{
+					g_free(*data);
+					*data = (void*)converted_text;
+					*size = strlen(converted_text);
+				}
+			}
+		}
+		// this if is important, else doesn't work because enc can be altered in the above block
+		if (*enc == NULL)
+		{
+			if (g_utf8_validate(*data, *size, NULL))
+			{
+				*enc = g_strdup("UTF-8");
+			}
+			else
+			{
+				gchar *converted_text = utils_convert_to_utf8(*data, *size, enc);
+
+				if (converted_text == NULL)
+				{
+					return FALSE;
+				}
+				else
+				{
+					g_free(*data);
+					*data = (void*)converted_text;
+					*size = strlen(converted_text);
+				}
+			}
+		}
+	}
+	else
+	{
+		*enc = g_strdup("UTF-8");
+	}
+	return TRUE;
+}
+
+
+static void
+handle_bom(gchar **data)
+{
+	gchar *data_without_bom;
+	data_without_bom = g_strdup(*data + 3);
+	g_free(*data);
+	*data = data_without_bom;
+}
+
+
 /* If idx is set to -1, it creates a new tab, opens the file from filename and
  * set the cursor to pos.
  * If idx is greater than -1, it reloads the file in the tab corresponding to
@@ -499,121 +607,36 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	/* Determine character encoding and convert to utf-8*/
 	if (reload && forced_enc != NULL)
-	{	// reload file with specified encoding
-		if (utils_strcmp(forced_enc, "UTF-8"))
-		{
-			if (! g_utf8_validate(data, size, NULL))
-			{
-				msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, "UTF-8");
-				utils_beep();
-				g_free(data);
-				g_free(utf8_filename);
-				g_free(locale_filename);
-				return -1;
-			}
-			else
-			{
-				bom = utils_strcmp(utils_scan_unicode_bom(data), "UTF-8");
-				enc = g_strdup(forced_enc);
-			}
-		}
-		else
-		{
-			gchar *converted_text = utils_convert_to_utf8_from_charset(data, size, forced_enc, FALSE);
-			if (converted_text == NULL)
-			{
-				msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
-				utils_beep();
-				g_free(data);
-				g_free(utf8_filename);
-				g_free(locale_filename);
-				return -1;
-			}
-			else
-			{
-				g_free(data);
-				data = (void*)converted_text;
-				size = strlen(converted_text);
-				bom = utils_strcmp(utils_scan_unicode_bom(data), "UTF-8");
-				enc = g_strdup(forced_enc);
-			}
-		}
-	}
-	else if (size > 0)
-	{	// the usual way to detect encoding and convert to UTF-8
-		if (size >= 4)
-		{
-			enc = utils_scan_unicode_bom(data);
-		}
-		if (enc != NULL)
-		{
-			bom = TRUE;
-			if (enc[4] != '8') // the BOM indicated something else than UTF-8
-			{
-				gchar *converted_text = utils_convert_to_utf8_from_charset(data, size, enc, FALSE);
-				if (converted_text == NULL)
-				{
-					g_free(enc);
-					enc = NULL;
-					bom = FALSE;
-				}
-				else
-				{
-					g_free(data);
-					data = (void*)converted_text;
-					size = strlen(converted_text);
-				}
-			}
-		}
-		// this if is important, else doesn't work because enc can be altered in the above block
-		if (enc == NULL)
-		{
-			if (g_utf8_validate(data, size, NULL))
-			{
-				enc = g_strdup("UTF-8");
-			}
-			else
-			{
-				gchar *converted_text = utils_convert_to_utf8(data, size, &enc);
-
-				if (converted_text == NULL)
-				{
-					msgwin_status_add(
-		_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
-										utf8_filename);
-					utils_beep();
-					g_free(data);
-					g_free(utf8_filename);
-					g_free(locale_filename);
-					return -1;
-				}
-				else
-				{
-					g_free(data);
-					data = (void*)converted_text;
-					size = strlen(converted_text);
-				}
-			}
-		}
-	}
-	else
 	{
-		enc = g_strdup("UTF-8");
+		if (! handle_forced_encoding(&data, &size, forced_enc, &enc, &bom))
+		{
+			msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
+			utils_beep();
+			g_free(data);
+			g_free(utf8_filename);
+			g_free(locale_filename);
+			return -1;
+		}
 	}
-
-	if (bom)
+	else if (! handle_encoding(&data, &size, &enc, &bom))
 	{
-		gchar *data_without_bom;
-		data_without_bom = g_strdup(data + 3);
+		msgwin_status_add(
+			_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
+			utf8_filename);
+		utils_beep();
 		g_free(data);
-		data = data_without_bom;
+		g_free(utf8_filename);
+		g_free(locale_filename);
+		return -1;
 	}
+
+	if (bom) handle_bom(&data);
 
 	if (! reload) idx = document_create_new_sci(utf8_filename);
 	if (idx == -1) return -1;	// really should not happen
 
 	// set editor mode and add the text to the ScintillaObject
-	sci_set_text(doc_list[idx].sci, data); // NULL terminated data; avoids Unsaved
+	sci_set_text(doc_list[idx].sci, data);	// NULL terminated data; avoids modifying sci
 	editor_mode = utils_get_line_endings(data, size);
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
 
