@@ -171,6 +171,7 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, .
 	GdkColor *color;
 	GtkTreePath *path;
 	static GdkColor red = {0, 65535, 0, 0};
+	static GdkColor dark_red = {0, 65535 / 2, 0, 0};
 	static GdkColor blue = {0, 0, 0, 65535};
 	static GdkColor black = {0, 0, 0, 0};
 	static gchar string[512];
@@ -185,6 +186,7 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, .
 	switch (msg_color)
 	{
 		case COLOR_RED: color = &red; break;
+		case COLOR_DARK_RED: color = &dark_red; break;
 		case COLOR_BLUE: color = &blue; break;
 		default: color = &black;
 	}

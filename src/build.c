@@ -468,31 +468,29 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 	{
 		//GIOStatus s;
 		gchar *msg;
-		guint x = 1;
 
 		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg)
 		{
 			//if (s != G_IO_STATUS_NORMAL && s != G_IO_STATUS_EOF) break;
-			if (GPOINTER_TO_INT(data))
-				msgwin_compiler_add(COLOR_RED, FALSE, g_strstrip(msg));
-			else
-				msgwin_compiler_add(COLOR_BLACK, FALSE, g_strstrip(msg));
+			gint color;
+			color = (GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK;
+			g_strstrip(msg);
 
 			if (app->pref_editor_use_indicators)
 			{
 				gchar *filename;
 				gint line;
-				msgwin_parse_compiler_error_line(g_strstrip(msg), &filename, &line);
-				if (line != -1)
+				msgwin_parse_compiler_error_line(msg, &filename, &line);
+				if (line != -1 && filename != NULL)
 				{
 					gint idx = document_find_by_filename(filename, FALSE);
-					// document_set_indicator will check valid idx
-					document_set_indicator(idx, line - 1);
+					document_set_indicator(idx, line - 1);	// will check valid idx
+					color = COLOR_RED;	// error message parsed on the line
 				}
 				g_free(filename);
 			}
+			msgwin_compiler_add(color, FALSE, msg);
 
-			x++;
 			g_free(msg);
 		}
 	}
@@ -526,11 +524,11 @@ void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 
 	if (failure)
 	{
-		msgwin_compiler_add(COLOR_BLUE, TRUE, _("compilation finished unsuccessful"));
+		msgwin_compiler_add(COLOR_DARK_RED, TRUE, _("Compilation failed."));
 	}
 	else
 	{
-		msgwin_compiler_add(COLOR_BLUE, TRUE, _("compilation finished successful"));
+		msgwin_compiler_add(COLOR_BLUE, TRUE, _("Compilation finished successfully."));
 	}
 
 #endif

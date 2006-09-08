@@ -28,6 +28,7 @@
 enum
 {
 	COLOR_RED,
+	COLOR_DARK_RED,
 	COLOR_BLACK,
 	COLOR_BLUE
 };

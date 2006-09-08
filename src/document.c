@@ -1566,10 +1566,12 @@ gboolean document_can_redo(gint idx)
 
 void document_undo(gint idx)
 {
+	undo_action *action;
+
+#if 1
 	sci_undo(doc_list[idx].sci);
 	return;
-
-	undo_action *action;
+#endif
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 

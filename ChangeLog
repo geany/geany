@@ -1,3 +1,11 @@
+2006-09-08  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c, src/msgwindow.c, src/msgwindow.h:
+   Show parsable errors in red; stderr and compile failure in dark red.
+ * src/callbacks.c: Fix compilation problem with sci_cb_do_comment.
+ * src/document.c: Quick fix for C89 compatibility.
+
+
 2006-09-07  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/socket.c, src/main.c, src/callbacks.c:
