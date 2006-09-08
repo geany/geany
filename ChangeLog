@@ -8,6 +8,13 @@
    Make C, C++, Ruby and Java error message parsing more tolerant so
    that linker errors are also parsed if debug line info is available.
    Group all gcc-like error message parsing information together.
+ * src/msgwindow.c, src/msgwindow.h:
+   Allow compiler and find messages to be added when the messages
+   window is hidden.
+   Add msgwin_show().
+ * src/build.c:
+   Show messages window on build failure.
+   Show build success message on status bar if messages window hidden.
 
 
 2006-09-07  Enrico Tröger  <enrico.troeger@uvena.de>

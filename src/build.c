@@ -37,6 +37,7 @@
 
 #include "support.h"
 #include "utils.h"
+#include "ui_utils.h"
 #include "dialogs.h"
 #include "msgwindow.h"
 #include "document.h"
@@ -525,10 +526,13 @@ void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	if (failure)
 	{
 		msgwin_compiler_add(COLOR_DARK_RED, TRUE, _("Compilation failed."));
+		if (! app->msgwindow_visible) msgwin_show();
 	}
 	else
 	{
-		msgwin_compiler_add(COLOR_BLUE, TRUE, _("Compilation finished successfully."));
+		gchar *msg = _("Compilation finished successfully.");
+		msgwin_compiler_add(COLOR_BLUE, TRUE, msg);
+		if (! app->msgwindow_visible) ui_set_statusbar(msg, FALSE);
 	}
 
 #endif
