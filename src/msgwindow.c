@@ -413,30 +413,6 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 		{
 			return;
 		}
-		// only gcc is supported, I don't know any other C(++) compilers and their error messages
-		case GEANY_FILETYPES_C:
-		case GEANY_FILETYPES_CPP:
-		case GEANY_FILETYPES_RUBY:
-		case GEANY_FILETYPES_JAVA:
-		{
-			// empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
-			// empty.c:21: error: conflicting types for `foo'
-			data.pattern = ":";
-			data.min_fields = 4;
-			data.line_idx = 1;
-			data.file_idx = 0;
-			break;
-		}
-		case GEANY_FILETYPES_FORTRAN:
-		case GEANY_FILETYPES_LATEX:
-		{
-			// ./kommtechnik_2b.tex:18: Emergency stop.
-			data.pattern = ":";
-			data.min_fields = 3;
-			data.line_idx = 1;
-			data.file_idx = 0;
-			break;
-		}
 		case GEANY_FILETYPES_PHP:
 		{
 			// Parse error: parse error, unexpected T_CASE in brace_bug.php on line 3
@@ -529,10 +505,21 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 			data.file_idx = -1;
 			break;
 		}
+		/* All GNU gcc-like error messages */
+		case GEANY_FILETYPES_C:
+		case GEANY_FILETYPES_CPP:
+		case GEANY_FILETYPES_RUBY:
+		case GEANY_FILETYPES_JAVA:
+			// only gcc is supported, I don't know any other C(++) compilers and their error messages
+			// empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
+			// empty.c:21: error: conflicting types for `foo'
+			// Only parse file and line, so that linker errors will also work (with -g)
+		case GEANY_FILETYPES_FORTRAN:
+		case GEANY_FILETYPES_LATEX:
+			// ./kommtechnik_2b.tex:18: Emergency stop.
 		case GEANY_FILETYPES_MAKE:	// Assume makefile is building with gcc
 		default:	// The default is a GNU gcc type error
 		{
-			// gantry.d:6: variable gantry.main.c reference to auto class must be auto
 			data.pattern = ":";
 			data.min_fields = 3;
 			data.line_idx = 1;

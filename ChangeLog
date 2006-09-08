@@ -4,6 +4,10 @@
    Show parsable errors in red; stderr and compile failure in dark red.
  * src/callbacks.c: Fix compilation problem with sci_cb_do_comment.
  * src/document.c: Quick fix for C89 compatibility.
+ * src/msgwindow.c:
+   Make C, C++, Ruby and Java error message parsing more tolerant so
+   that linker errors are also parsed if debug line info is available.
+   Group all gcc-like error message parsing information together.
 
 
 2006-09-07  Enrico Tröger  <enrico.troeger@uvena.de>
