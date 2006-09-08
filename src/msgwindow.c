@@ -168,16 +168,14 @@ void msgwin_prepare_compiler_tree_view(void)
 void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, ...)
 {
 	GtkTreeIter iter;
-	GdkColor *color;
 	GtkTreePath *path;
+	GdkColor *color;
 	static GdkColor red = {0, 65535, 0, 0};
 	static GdkColor dark_red = {0, 65535 / 2, 0, 0};
 	static GdkColor blue = {0, 0, 0, 65535};
 	static GdkColor black = {0, 0, 0, 0};
 	static gchar string[512];
 	va_list args;
-
-	if (! app->msgwindow_visible) return;
 
 	va_start(args, format);
 	g_vsnprintf(string, 511, format, args);
@@ -194,7 +192,8 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, .
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
 	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, string, -1);
 
-	path = gtk_tree_model_get_path(gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_compiler)), &iter);
+	path = gtk_tree_model_get_path(
+		gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_compiler)), &iter);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(msgwindow.tree_compiler), path, NULL, TRUE, 0.5, 0.5);
 
 	if (scroll)
@@ -205,16 +204,24 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, .
 }
 
 
+void msgwin_show()
+{
+	app->msgwindow_visible = TRUE;
+	gtk_widget_show(lookup_widget(app->window, "scrolledwindow1"));
+}
+
+
 // adds string to the msg treeview
 void msgwin_msg_add(gint line, gint idx, gchar *string)
 {
 	GtkTreeIter iter;
 	static gint state = 0;
 
-	if (! app->msgwindow_visible) return;
+	if (! app->msgwindow_visible) msgwin_show();
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
-	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2, ((state++ % 2) == 0) ? &white : &dark, 3, string, -1);
+	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2,
+		((state++ % 2) == 0) ? &white : &dark, 3, string, -1);
 }
 
 
@@ -226,8 +233,6 @@ void msgwin_status_add(gchar const *format, ...)
 	static gchar string[512];
 	gchar *statusmsg, *time_str;
 	va_list args;
-
-	//if (! app->msgwindow_visible) return;
 
 	va_start(args, format);
 	g_vsnprintf(string, 511, format, args);

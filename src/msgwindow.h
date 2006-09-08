@@ -71,6 +71,8 @@ void msgwin_prepare_status_tree_view(void);
 
 void msgwin_prepare_compiler_tree_view(void);
 
+void msgwin_show();
+
 void msgwin_msg_add(gint line, gint idx, gchar *string);
 
 void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, ...);
