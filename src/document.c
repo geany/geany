@@ -573,6 +573,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		idx = document_find_by_filename(utf8_filename, FALSE);
 		if (idx >= 0)
 		{
+			ui_add_recent_file(utf8_filename);	// either add or reorder recent item
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
 					(GtkWidget*) doc_list[idx].sci));

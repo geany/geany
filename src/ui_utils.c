@@ -945,6 +945,7 @@ void ui_add_recent_file(const gchar *filename)
 		}
 		ui_update_recent_menu();
 	}
+	else ui_recent_file_loaded(filename);	// filename already in recent list
 }
 
 

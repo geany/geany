@@ -1,3 +1,10 @@
+2006-09-09  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/document.c, src/ui_utils.c:
+   Reorder the recent files list if necessary when a file is
+   (re)opened - closes #1552178.
+
+
 2006-09-08  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/msgwindow.c, src/msgwindow.h:
