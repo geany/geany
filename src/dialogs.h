@@ -25,7 +25,7 @@
 #define GEANY_DIALOGS_H 1
 
 /* This shows the file selection dialog to open a file. */
-void dialogs_show_open_file(void);
+void dialogs_show_open_file();
 
 /* This shows the file selection dialog to save a file. */
 void dialogs_show_save_as();
@@ -37,28 +37,20 @@ void dialogs_show_error(const gchar *text, ...);
 gboolean dialogs_show_unsaved_file(gint idx);
 
 /* This shows the font selection dialog to choose a font. */
-void dialogs_show_open_font(void);
+void dialogs_show_open_font();
 
-void dialogs_show_word_count(void);
+void dialogs_show_word_count();
 
 void dialogs_show_color(gchar *colour);
-
-GtkWidget *dialogs_create_build_menu_gen(gint idx);
-
-GtkWidget *dialogs_create_build_menu_tex(gint idx);
 
 void dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *default_text,
 						GCallback cb_dialog, GCallback cb_entry);
 
-void dialogs_show_goto_line(void);
+void dialogs_show_goto_line();
 
-void dialogs_show_includes_arguments_gen(void);
+void dialogs_show_includes_arguments_gen();
 
-void dialogs_show_includes_arguments_tex(void);
-
-void dialogs_create_recent_menu(void);
-
-GtkWidget *dialogs_add_file_open_extra_widget(void);
+void dialogs_show_includes_arguments_tex();
 
 void dialogs_show_file_properties(gint idx);
 
@@ -68,6 +60,6 @@ gboolean dialogs_show_question(const gchar *text, ...);
 gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
 	const gchar *extra_text, const gchar *main_text, ...);
 
-void dialogs_show_keyboard_shortcuts(void);
+void dialogs_show_keyboard_shortcuts();
 
 #endif

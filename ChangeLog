@@ -3,6 +3,12 @@
  * src/document.c, src/ui_utils.c:
    Reorder the recent files list if necessary when a file is
    (re)opened - closes #1552178.
+ * src/msgwindow.c: Check msgwin visible before scrolling.
+ * src/ui_utils.h, src/ui_utils.c, src/callbacks.c,
+   src/callbacks.h, src/dialogs.c, src/dialogs.h, src/main.c:
+   Move on_recent_file_activate, dialogs_create_recent_menu,
+   dialogs_create_build_menu_gen, dialogs_create_build_menu_tex to
+   ui_utils.c. Also make some functions static.
 
 
 2006-09-08  Nick Treleaven  <nick.treleaven@btinternet.com>

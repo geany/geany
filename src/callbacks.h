@@ -467,10 +467,6 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_recent_file_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
 on_file_open_selection_changed         (GtkFileChooser  *filechooser,
                                         gpointer         user_data);
 

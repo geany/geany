@@ -85,9 +85,9 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img);
 GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img);
 
 
-void ui_add_recent_file(const gchar *filename);
+void ui_create_recent_menu();
 
-void ui_recent_file_loaded(const gchar *filename);
+void ui_add_recent_file(const gchar *utf8_filename);
 
 
 void ui_show_markers_margin();

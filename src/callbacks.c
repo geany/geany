@@ -2310,19 +2310,6 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 
 
 void
-on_recent_file_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gchar *locale_filename = utils_get_locale_from_utf8((gchar*) user_data);
-
-	document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL);
-	ui_recent_file_loaded((gchar*) user_data);
-
-	g_free(locale_filename);
-}
-
-
-void
 on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
                                         gpointer         user_data)
 {

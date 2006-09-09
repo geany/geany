@@ -550,7 +550,7 @@ gint main(gint argc, gchar **argv)
 #ifdef HAVE_VTE
 	vte_init();
 #endif
-	dialogs_create_recent_menu();
+	ui_create_recent_menu();
 
 	msgwin_status_add(_("This is Geany %s."), VERSION);
 	if (config_dir_result != 0)
