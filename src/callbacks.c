@@ -2455,7 +2455,7 @@ on_menu_comment_line1_activate         (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_do_comment(idx);
+	sci_cb_do_comment(idx, -1);
 }
 
 
@@ -2465,7 +2465,7 @@ on_menu_uncomment_line1_activate       (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_do_uncomment(idx);
+	sci_cb_do_uncomment(idx, -1);
 }
 
 

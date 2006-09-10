@@ -69,9 +69,11 @@ void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_
 
 gboolean sci_cb_show_calltip(gint idx, gint pos);
 
-void sci_cb_do_comment(gint idx);
+void sci_cb_do_comment_toggle(gint idx);
 
-void sci_cb_do_uncomment(gint idx);
+void sci_cb_do_comment(gint idx, gint line);
+
+void sci_cb_do_uncomment(gint idx, gint line);
 
 void sci_cb_highlight_braces(ScintillaObject *sci, gint cur_pos);
 

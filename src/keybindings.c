@@ -87,6 +87,7 @@ static void cb_func_switch_tabright(void);
 static void cb_func_toggle_sidebar(void);
 static void cb_func_edit_duplicateline(void);
 static void cb_func_edit_commentline(void);
+static void cb_func_edit_commentlinetoggle(void);
 static void cb_func_edit_uncommentline(void);
 static void cb_func_edit_increaseindent(void);
 static void cb_func_edit_decreaseindent(void);
@@ -197,6 +198,8 @@ void keybindings_init(void)
 		GDK_Page_Down, GDK_CONTROL_MASK, "switch_tabright", _("Switch to right document"));
 	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit_duplicateline,
 		GDK_g, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
+	keys[GEANY_KEYS_EDIT_COMMENTLINETOGGLE] = fill(cb_func_edit_commentlinetoggle,
+		GDK_b, GDK_CONTROL_MASK, "edit_commentlinetoggle", _("Toggle line commentation"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit_commentline,
 		GDK_d, GDK_CONTROL_MASK, "edit_commentline", _("Comment line"));
 	keys[GEANY_KEYS_EDIT_UNCOMMENTLINE] = fill(cb_func_edit_uncommentline,
@@ -714,6 +717,13 @@ static void cb_func_toggle_sidebar(void)
 static void cb_func_edit_duplicateline(void)
 {
 	on_menu_duplicate_line1_activate(NULL, NULL);
+}
+
+static void cb_func_edit_commentlinetoggle(void)
+{
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	sci_cb_do_comment_toggle(idx);
 }
 
 static void cb_func_edit_commentline(void)
