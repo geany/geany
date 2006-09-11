@@ -1697,7 +1697,9 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 				document_save_file(idx, FALSE);
 		if (build_run_cmd(idx) == (GPid) 0)
 		{
+#ifndef G_OS_WIN32 // on Windows there is no PID returned
 			msgwin_status_add(_("Failed to execute the terminal program"));
+#endif
 		}
 	}
 	//gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));

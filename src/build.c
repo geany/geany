@@ -104,6 +104,12 @@ GPid build_view_tex_file(gint idx, gint mode)
 	// try convert in locale
 	locale_cmd_string = utils_get_locale_from_utf8(cmd_string);
 
+#ifdef G_OS_WIN32
+	argv = NULL;
+	child_pid = (GPid) 0;
+	
+	if (! g_spawn_command_line_async(locale_cmd_string, &error))
+#else
 	argv = g_new0(gchar *, 4);
 	argv[0] = g_strdup("/bin/sh");
 	argv[1] = g_strdup("-c");
@@ -112,6 +118,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 
 	if (! g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
 						NULL, NULL, &child_pid, NULL, NULL, NULL, &error))
+#endif
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
@@ -120,6 +127,9 @@ GPid build_view_tex_file(gint idx, gint mode)
 		g_free(executable);
 		g_free(locale_filename);
 		g_free(cmd_string);
+#ifdef G_OS_WIN32
+		g_free(locale_cmd_string);
+#endif
 		g_strfreev(argv);
 		g_error_free(error);
 		error = NULL;
@@ -345,7 +355,11 @@ GPid build_run_cmd(gint idx)
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
+#ifdef G_OS_WIN32
+	script_name = g_strdup("./geany_run_script.bat");
+#else
 	script_name = g_strdup("./geany_run_script.sh");
+#endif
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
@@ -355,22 +369,37 @@ GPid build_run_cmd(gint idx)
 	term_argv_len = g_strv_length(term_argv);
 
 	long_executable = utils_remove_ext_from_filename(locale_filename);
+#ifdef G_OS_WIN32
+	long_executable = g_strconcat(long_executable, ".exe", NULL);
+#endif
 
 	// only check for existing executable, if executable is required by %e
 	if (strstr(doc_list[idx].file_type->programs->run_cmd, "%e") != NULL)
 	{
 		// add .class extension for JAVA source files (only for stat)
 		if (doc_list[idx].file_type->id == GEANY_FILETYPES_JAVA)
+		{
+#ifdef G_OS_WIN32
+			// there is already the extension .exe, so first remove it and then add .class
+			check_executable = utils_remove_ext_from_filename(long_executable);
+			check_executable = g_strconcat(check_executable, ".class", NULL);
+#else
 			check_executable = g_strconcat(long_executable, ".class", NULL);
+#endif
+		}
 		else
 			check_executable = g_strdup(long_executable);
 
 		// check whether executable exists
 		if (stat(check_executable, &st) != 0)
 		{
+#ifndef G_OS_WIN32
+			utf8_check_executable = g_strdup(check_executable);
+#else
 			utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 			msgwin_status_add(_("Failed to execute %s (make sure it is already built)"),
 														utf8_check_executable);
+#endif
 			result_id = (GPid) 1;
 			goto free_strings;
 		}
@@ -427,10 +456,21 @@ GPid build_run_cmd(gint idx)
 	{
 		argv[i] = g_strdup(term_argv[i]);
 	}
-	argv[term_argv_len   ] = g_strdup("-e");
+#ifdef G_OS_WIN32
+	// command line arguments for cmd.exe
+	argv[term_argv_len   ]  = g_strdup("/Q /C");
+	argv[term_argv_len + 1] = g_path_get_basename(script_name);
+#else
+	argv[term_argv_len   ]  = g_strdup("-e");
 	argv[term_argv_len + 1] = g_strdup(script_name);
+#endif
 	argv[term_argv_len + 2] = NULL;
 
+	for (i = 0; argv[i] != NULL; i++)
+	{
+		msgwin_status_add("%s", argv[i]);
+	}
+	
 	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, 0,
 						NULL, NULL, &child_pid, NULL, NULL, NULL, &error))
 	{
@@ -545,37 +585,34 @@ void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd)
 {
 	FILE *fp;
-	gint i;
-	gchar *str, *exec, **tmp_args = NULL, *tmp;
+	gchar *str;
+#ifdef G_OS_WIN32
+	gchar *tmp;
+#endif
 
 	fp = fopen(fname, "w");
 	if (! fp) return FALSE;
 
-	// enclose all args in ""
-	tmp_args = g_strsplit(cmd, " ", -1);
-	for (i = 0; ; i++)
-	{
-		if (tmp_args[i] == NULL) break;
-		tmp = g_strdup(tmp_args[i]);
-		g_free(tmp_args[i]);
-		tmp_args[i] = g_strconcat("\"", tmp, "\"", NULL);
-		g_free(tmp);
-	}
-	exec = g_strjoinv(" ", tmp_args);
-
+#ifdef G_OS_WIN32
+	tmp = g_path_get_basename(fname);
+	str = g_strdup_printf("%s\n\npause\ndel %s\n", cmd, tmp);
+	g_free(tmp);
+#else
 	str = g_strdup_printf(
 		"#!/bin/sh\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
-		\n\necho \"Press return to continue\"\nread\nunlink $0\n", exec);
+		\n\necho \"Press return to continue\"\nread\nunlink $0\n", cmd);
+#endif
+
 	fputs(str, fp);
 	g_free(str);
-	g_free(exec);
-	g_strfreev(tmp_args);
 
+#ifndef G_OS_WIN32
 	if (chmod(fname, 0700) != 0)
 	{
 		unlink(fname);
 		return FALSE;
 	}
+#endif
 	fclose(fp);
 
 	return TRUE;

@@ -610,10 +610,7 @@ gint main(gint argc, gchar **argv)
 
 #ifdef G_OS_WIN32
 	// hide "Build" menu item, at least until it is available for Windows
-	gtk_widget_hide(lookup_widget(app->window, "menu_build1"));
 	gtk_widget_hide(app->compile_button);
-	gtk_widget_hide(app->run_button);
-	gtk_widget_hide(lookup_widget(app->window, "separatortoolitem6"));
 	{
 		GtkWidget *compiler_tab;
 		compiler_tab = gtk_notebook_get_tab_label(GTK_NOTEBOOK(msgwindow.notebook),

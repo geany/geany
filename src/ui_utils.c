@@ -46,10 +46,9 @@ static void
 recent_file_activate_cb                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
-#ifndef G_OS_WIN32
 static GtkWidget *create_build_menu_tex(gint idx);
 static GtkWidget *create_build_menu_gen(gint idx);
-#endif
+
 
 /* allow_override is TRUE if text can be ignored when another message has been set
  * that didn't use allow_override and has not timed out. */
@@ -619,7 +618,6 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show)
 
 void ui_build_show_hide(gint idx)
 {
-#ifndef G_OS_WIN32
 	gboolean is_header = FALSE;
 	gchar *ext = NULL;
 	filetype *ft;
@@ -637,12 +635,18 @@ void ui_build_show_hide(gint idx)
 
 	ft = doc_list[idx].file_type;
 
+#ifdef G_OS_WIN32
+	// disable compile and link under Windows until it is implemented
+	ft->menu_items->can_compile = FALSE;
+	ft->menu_items->can_link = FALSE;
+#endif
+
 	if (doc_list[idx].file_name)
 	{
 		ext = strrchr(doc_list[idx].file_name, '.');
 	}
 
-	// TODO: separate function for matching headers, perhaps based on file extensions
+	/// TODO: separate function for matching headers, perhaps based on file extensions
 	if (! ext || utils_strcmp(ext + 1, "h") || utils_strcmp(ext + 1, "hpp") ||
 		utils_strcmp(ext + 1, "hxx"))
 	{
@@ -748,11 +752,8 @@ void ui_build_show_hide(gint idx)
 			}
 		}
 	}
-#endif
 }
 
-
-#ifndef G_OS_WIN32
 
 #define GEANY_ADD_WIDGET_ACCEL(gkey, menuitem) \
 	if (keys[(gkey)]->key != 0) \
@@ -768,6 +769,7 @@ static GtkWidget *create_build_menu_gen(gint idx)
 
 	menu = gtk_menu_new();
 
+#ifndef G_OS_WIN32
 	if (ft->menu_items->can_compile)
 	{
 		// compile the code
@@ -828,13 +830,17 @@ static GtkWidget *create_build_menu_gen(gint idx)
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file using the "
 										   "make tool"), NULL);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(2));
+#endif
 
-	if (ft->menu_items->can_exec)
-	{	// execute the code
+	if (item != NULL)
+	{
 		item = gtk_separator_menu_item_new();
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
+	}
 
+	if (ft->menu_items->can_exec)
+	{	// execute the code
 		item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
@@ -878,6 +884,7 @@ static GtkWidget *create_build_menu_tex(gint idx)
 
 	menu = gtk_menu_new();
 
+#ifndef G_OS_WIN32
 	// DVI
 	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> DVI"));
 	gtk_widget_show(item);
@@ -904,27 +911,38 @@ static GtkWidget *create_build_menu_tex(gint idx)
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(1));
 
+	if (item != NULL)
+	{
+		item = gtk_separator_menu_item_new();
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+	}
+
 	// build the code with make all
-	item = gtk_image_menu_item_new_with_mnemonic(_("Build with \"make\""));
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Make all"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the default target"), NULL);
-	if (keys[GEANY_KEYS_BUILD_MAKE]->key)
-		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_MAKE]->key,
-			keys[GEANY_KEYS_BUILD_MAKE]->mods, GTK_ACCEL_VISIBLE);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKE, item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
 
 	// build the code with make
-	item = gtk_image_menu_item_new_with_mnemonic(_("Build with make (custom target)"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Make custom _target"));
 	gtk_widget_show(item);
-	if (keys[GEANY_KEYS_BUILD_MAKEOWNTARGET]->key)
-		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_MAKEOWNTARGET]->key,
-			keys[GEANY_KEYS_BUILD_MAKEOWNTARGET]->mods, GTK_ACCEL_VISIBLE);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOWNTARGET, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the specified target"), NULL);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
+
+	if (item != NULL)
+	{
+		item = gtk_separator_menu_item_new();
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(menu), item);
+	}
+#endif
 
 	// DVI view
 	item = gtk_image_menu_item_new_with_mnemonic(_("View DVI file"));
@@ -976,7 +994,6 @@ static GtkWidget *create_build_menu_tex(gint idx)
 
 	return menu;
 }
-#endif
 
 
 void ui_treeviews_show_hide(gboolean force)

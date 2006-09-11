@@ -237,18 +237,13 @@ void prefs_init_dialog(void)
         gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "label11"), FALSE);
         gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "entry_com_make"), FALSE);
         gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "button_make"), FALSE);
-
-        // hide related Terminal path setting
-        gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "label97"), FALSE);
-        gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "entry_com_term"), FALSE);
-        gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "button_term"), FALSE);
 #else
         if (app->tools_make_cmd)
                 gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_make")), app->tools_make_cmd);
-
-        if (app->tools_term_cmd)
-                gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_term")), app->tools_term_cmd);
 #endif
+    if (app->tools_term_cmd)
+            gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_com_term")), app->tools_term_cmd);
+
 	if (app->tools_browser_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(app->prefs_dialog, "entry_browser")), app->tools_browser_cmd);
 
@@ -443,11 +438,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		app->pref_toolbar_show_undo = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_compile");
-#ifdef G_OS_WIN32
-		app->pref_toolbar_show_compile = FALSE;
-#else
 		app->pref_toolbar_show_compile = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-#endif
 
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_colour");
 		app->pref_toolbar_show_colour = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -911,10 +902,6 @@ void dialogs_show_prefs_dialog(void)
 
 		app->prefs_dialog = create_prefs_dialog();
 		gtk_window_set_transient_for(GTK_WINDOW(app->prefs_dialog), GTK_WINDOW(app->window));
-
-#ifdef G_OS_WIN32
-		gtk_widget_hide(lookup_widget(app->prefs_dialog, "check_toolbar_compile"));
-#endif
 
 		// init the default file encoding combo box
 		combo = lookup_widget(app->prefs_dialog, "combo_encoding");
