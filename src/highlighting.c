@@ -359,8 +359,8 @@ static void styleset_c_init(void)
 	styleset_get_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[4]);
 	styleset_get_hex(config, config_home, "styling", "word", "0x111199", "0xffffff", "true", types[GEANY_FILETYPES_C]->styling[5]);
 	styleset_get_hex(config, config_home, "styling", "word2", "0x7f0000", "0xffffff", "true", types[GEANY_FILETYPES_C]->styling[6]);
-	styleset_get_hex(config, config_home, "styling", "string", "0x90ff1e", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[7]);
-	styleset_get_hex(config, config_home, "styling", "character", "0x90ff1e", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[8]);
+	styleset_get_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[7]);
+	styleset_get_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[8]);
 	styleset_get_hex(config, config_home, "styling", "uuid", "0x404080", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[9]);
 	styleset_get_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[10]);
 	styleset_get_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", types[GEANY_FILETYPES_C]->styling[11]);
