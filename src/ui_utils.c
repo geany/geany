@@ -46,9 +46,10 @@ static void
 recent_file_activate_cb                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
+#ifndef G_OS_WIN32
 static GtkWidget *create_build_menu_tex(gint idx);
 static GtkWidget *create_build_menu_gen(gint idx);
-
+#endif
 
 /* allow_override is TRUE if text can be ignored when another message has been set
  * that didn't use allow_override and has not timed out. */
@@ -751,6 +752,8 @@ void ui_build_show_hide(gint idx)
 }
 
 
+#ifndef G_OS_WIN32
+
 #define GEANY_ADD_WIDGET_ACCEL(gkey, menuitem) \
 	if (keys[(gkey)]->key != 0) \
 		gtk_widget_add_accelerator(menuitem, "activate", accel_group, \
@@ -973,6 +976,7 @@ static GtkWidget *create_build_menu_tex(gint idx)
 
 	return menu;
 }
+#endif
 
 
 void ui_treeviews_show_hide(gboolean force)

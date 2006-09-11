@@ -40,6 +40,7 @@
 #include "document.h"
 #include "support.h"
 #include "utils.h"
+#include "ui_utils.h"
 #include "sciwrappers.h"
 #include "dialogs.h"
 
@@ -210,7 +211,7 @@ void win32_show_font_dialog(void)
 	{
 			gchar *editorfont = g_strdup_printf("%s %d", lf.lfFaceName,
 				(cf.iPointSize / 10));
-			utils_set_editor_font(editorfont);
+			ui_set_editor_font(editorfont);
 			g_free(editorfont);
 	}
 }

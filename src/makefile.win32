@@ -71,7 +71,7 @@ binclean:
 $(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/tagmanager.a
 	$(CXX) $(OBJS) $(RES) -o $(TARGET) \
 	../scintilla/scintilla.a ../tagmanager/tagmanager.a $(ALL_GTK_LIBS) \
-	 -mwindows -limm32 -lshell32 -lole32 -luuid -lcomdlg32 -lcomctl32 -liberty
+	 -mwindows -limm32 -lshell32 -lole32 -luuid -lcomdlg32 -lcomctl32 -liberty -lwsock32
 
 deps.mak:
 	$(CC) -MM  $(CCFLAGS) *.c >deps.mak

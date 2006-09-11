@@ -25,9 +25,14 @@
 
 #ifdef HAVE_SOCKET
 
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <netinet/in.h>
+#ifndef G_OS_WIN32
+# include <sys/socket.h>
+# include <sys/un.h>
+# include <netinet/in.h>
+#else
+# include <winsock2.h>
+# include <ws2tcpip.h>
+#endif
 #include <unistd.h>
 #include <fcntl.h>
 
@@ -38,11 +43,24 @@
 
 
 #ifdef G_OS_WIN32
+#define REMOTE_CMD_PORT		49876
+#define SockDesc			SOCKET
+#define SOCKET_IS_VALID(s)	((s) != INVALID_SOCKET)
+#else
+#define SockDesc			gint
+#define SOCKET_IS_VALID(s)	((s) >= 0)
+#define INVALID_SOCKET		(-1)
+#endif
+
+
+#ifdef G_OS_WIN32
 static gint socket_fd_connect_inet	(gushort port);
 static gint socket_fd_open_inet		(gushort port);
-#endif
+static void socket_init_win32();
+#else
 static gint socket_fd_connect_unix	(const gchar *path);
 static gint socket_fd_open_unix		(const gchar *path);
+#endif
 
 static gint socket_fd_write			(gint sock, const gchar *buf, gint len);
 static gint socket_fd_write_all		(gint sock, const gchar *buf, gint len);
@@ -63,6 +81,7 @@ gint socket_init(gint argc, gchar **argv)
 #ifdef G_OS_WIN32
 	HANDLE hmutex;
 
+	socket_init_win32();
 	hmutex = CreateMutexA(NULL, FALSE, "Geany");
 	if (! hmutex)
 	{
@@ -135,7 +154,9 @@ gint socket_finalize(void)
 		socket_info.read_ioc = NULL;
 	}
 
-#ifndef G_OS_WIN32
+#ifdef G_OS_WIN32
+	WSACleanup();
+#else
 	unlink(socket_info.file_name);
 	g_free(socket_info.file_name);
 #endif
@@ -144,19 +165,9 @@ gint socket_finalize(void)
 }
 
 
-#ifdef G_OS_WIN32
-#define SockDesc		SOCKET
-#define SOCKET_IS_VALID(s)	((s) != INVALID_SOCKET)
-#else
-#define SockDesc		gint
-#define SOCKET_IS_VALID(s)	((s) >= 0)
-#define INVALID_SOCKET		(-1)
-#endif
-
-
+#ifdef G_OS_UNIX
 static gint socket_fd_connect_unix(const gchar *path)
 {
-#ifdef G_OS_UNIX
 	gint sock;
 	struct sockaddr_un addr;
 
@@ -178,15 +189,11 @@ static gint socket_fd_connect_unix(const gchar *path)
 	}
 
 	return sock;
-#else
-	return -1;
-#endif
 }
 
 
 static gint socket_fd_open_unix(const gchar *path)
 {
-#ifdef G_OS_UNIX
 	gint sock;
 	struct sockaddr_un addr;
 	gint val;
@@ -226,11 +233,8 @@ static gint socket_fd_open_unix(const gchar *path)
 	}
 
 	return sock;
-#else
-	return -1;
-#endif
 }
-
+#endif
 
 static gint socket_fd_close(gint fd)
 {
@@ -247,16 +251,12 @@ static gint socket_fd_open_inet(gushort port)
 {
 	SockDesc sock;
 	struct sockaddr_in addr;
-	gint val;
+	gchar val;
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (! SOCKET_IS_VALID(sock))
 	{
-#ifdef G_OS_WIN32
 		geany_debug("fd_open_inet(): socket() failed: %ld\n", WSAGetLastError());
-#else
-		perror("fd_open_inet(): socket");
-#endif
 		return -1;
 	}
 
@@ -299,11 +299,7 @@ static gint socket_fd_connect_inet(gushort port)
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (! SOCKET_IS_VALID(sock))
 	{
-#ifdef G_OS_WIN32
 		geany_debug("fd_connect_inet(): socket() failed: %ld\n", WSAGetLastError());
-#else
-		perror("fd_connect_inet(): socket");
-#endif
 		return -1;
 	}
 
@@ -319,6 +315,17 @@ static gint socket_fd_connect_inet(gushort port)
 	}
 
 	return sock;
+}
+
+
+static void socket_init_win32()
+{
+	WSADATA wsadata;
+
+	if (WSAStartup(MAKEWORD(2, 2), &wsadata) != NO_ERROR)
+		geany_debug("WSAStartup() failed\n");
+
+	return;
 }
 #endif
 
@@ -408,7 +415,9 @@ static gint socket_fd_check_io(gint fd, GIOCondition cond)
 {
 	struct timeval timeout;
 	fd_set fds;
+#ifdef G_OS_UNIX
 	gint flags;
+#endif
 
 	timeout.tv_sec  = 60;
 	timeout.tv_usec = 0;

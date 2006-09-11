@@ -46,8 +46,9 @@
 #include "keybindings.h"
 
 
+#ifndef G_OS_WIN32
 static GtkWidget *add_file_open_extra_widget();
-
+#endif
 
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file ()
@@ -152,6 +153,7 @@ void dialogs_show_open_file ()
 }
 
 
+#ifndef G_OS_WIN32
 static GtkWidget *add_file_open_extra_widget()
 {
 	GtkWidget *vbox;
@@ -215,6 +217,7 @@ static GtkWidget *add_file_open_extra_widget()
 
 	return vbox;
 }
+#endif
 
 
 /* This shows the file selection dialog to save a file. */
