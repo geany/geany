@@ -5,6 +5,9 @@
  * src/win32.c, src/ui_utils.c, src/dialogs.c:
    Fixed compile warnings under Windows.
  * src/highlighting.c: Fixed a typo.
+ * src/callbacks.c, src/build.c, src/main.c, src/prefs.c,
+   src/ui_utils.c: Implemented Run command (from the build menu) under
+                   Windows, the other commands will follow somewhen.
 
 
 2006-09-10  Enrico Tröger  <enrico.troeger@uvena.de>
