@@ -1143,13 +1143,10 @@ on_to_lower_case1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	gchar *text;
-	if (idx < 0) return;
 
-	text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
-	sci_get_selected_text(doc_list[idx].sci, text);
-	sci_replace_sel(doc_list[idx].sci, g_ascii_strdown(text, -1));
-	g_free(text);
+	if (idx < 0 || ! doc_list[idx].is_valid) return;
+
+	sci_cmd(doc_list[idx].sci, SCI_LOWERCASE);
 }
 
 
@@ -1158,13 +1155,10 @@ on_to_upper_case1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	gchar *text;
-	if (idx < 0) return;
 
-	text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
-	sci_get_selected_text(doc_list[idx].sci, text);
-	sci_replace_sel(doc_list[idx].sci, g_ascii_strup(text, -1));
-	g_free(text);
+	if (idx < 0 || ! doc_list[idx].is_valid) return;
+
+	sci_cmd(doc_list[idx].sci, SCI_UPPERCASE);
 }
 
 
@@ -2472,6 +2466,17 @@ on_menu_uncomment_line1_activate       (GtkMenuItem     *menuitem,
 
 
 void
+on_menu_toggle_line_commentation1_activate
+                                       (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	sci_cb_do_comment_toggle(idx);
+}
+
+
+void
 on_menu_duplicate_line1_activate       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -2534,4 +2539,5 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 		sci_set_current_position(doc_list[idx].sci, old_pos - 1);
 	}
 }
+
 

@@ -605,3 +605,8 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 void
 on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_menu_toggle_line_commentation1_activate
+                                       (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

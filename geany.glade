@@ -57,7 +57,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1037">
+			<widget class="GtkImage" id="image1088">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -150,7 +150,7 @@
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1038">
+			<widget class="GtkImage" id="image1089">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -171,7 +171,7 @@
 		      <signal name="activate" handler="on_toolbutton23_clicked" last_modification_time="Mon, 24 Jul 2006 19:26:04 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1039">
+			<widget class="GtkImage" id="image1090">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -191,7 +191,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1040">
+			<widget class="GtkImage" id="image1091">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -271,7 +271,7 @@
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1041">
+			<widget class="GtkImage" id="image1092">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -402,7 +402,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1042">
+			<widget class="GtkImage" id="image1093">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -434,7 +434,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1043">
+			<widget class="GtkImage" id="image1094">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -539,7 +539,7 @@
 			<widget class="GtkMenu" id="menu_format1_menu">
 
 			  <child>
-			    <widget class="GtkMenuItem" id="menu_to_lower-case2">
+			    <widget class="GtkMenuItem" id="menu_to_lower_case2">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Convert Selection to _lower-case</property>
 			      <property name="use_underline">True</property>
@@ -548,7 +548,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkMenuItem" id="menu_to_upper-case2">
+			    <widget class="GtkMenuItem" id="menu_to_upper_case2">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Convert Selection to _upper-case</property>
 			      <property name="use_underline">True</property>
@@ -574,16 +574,25 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="menu_uncomment_line1">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">_Uncomment Line</property>
+			      <property name="label" translatable="yes">U_ncomment Line</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_menu_uncomment_line1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 			    </widget>
 			  </child>
 
 			  <child>
+			    <widget class="GtkMenuItem" id="menu_toggle_line_commentation1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_Toggle line commentation</property>
+			      <property name="use_underline">True</property>
+			      <signal name="activate" handler="on_menu_toggle_line_commentation1_activate" last_modification_time="Tue, 12 Sep 2006 08:06:46 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
 			    <widget class="GtkMenuItem" id="menu_duplicate_line1">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">D_uplicate Line</property>
+			      <property name="label" translatable="yes">Du_plicate Line</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_menu_duplicate_line1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 			    </widget>
@@ -690,7 +699,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1044">
+			<widget class="GtkImage" id="image1095">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -732,7 +741,7 @@
 		      <signal name="activate" handler="on_go_to_line1_activate" last_modification_time="Tue, 23 May 2006 17:10:49 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1045">
+			<widget class="GtkImage" id="image1096">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -767,7 +776,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1046">
+			<widget class="GtkImage" id="image1097">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -789,7 +798,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1047">
+			<widget class="GtkImage" id="image1098">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -1020,7 +1029,7 @@
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Convert and set to _CR/LF (Win)</property>
 			      <property name="use_underline">True</property>
-			      <property name="active">False</property>
+			      <property name="active">True</property>
 			      <signal name="activate" handler="on_crlf_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
 			  </child>
@@ -1030,7 +1039,7 @@
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Convert and set to _LF (Unix)</property>
 			      <property name="use_underline">True</property>
-			      <property name="active">False</property>
+			      <property name="active">True</property>
 			      <property name="group">crlf</property>
 			      <signal name="activate" handler="on_lf_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
@@ -2277,7 +2286,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1054">
+	<widget class="GtkImage" id="image1084">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2309,7 +2318,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1055">
+	<widget class="GtkImage" id="image1085">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2413,7 +2422,7 @@
 	<widget class="GtkMenu" id="menu_format2_menu">
 
 	  <child>
-	    <widget class="GtkMenuItem" id="to_lower-case1">
+	    <widget class="GtkMenuItem" id="to_lower_case1">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Convert Selection to _lower-case</property>
 	      <property name="use_underline">True</property>
@@ -2422,7 +2431,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="to_upper-case1">
+	    <widget class="GtkMenuItem" id="to_upper_case1">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Convert Selection to _upper-case</property>
 	      <property name="use_underline">True</property>
@@ -2448,16 +2457,25 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="menu_uncomment_line2">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">_Uncomment Line</property>
+	      <property name="label" translatable="yes">U_ncomment Line</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_menu_uncomment_line1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 	    </widget>
 	  </child>
 
 	  <child>
+	    <widget class="GtkMenuItem" id="menu_toggle_line_commentation2">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Toggle line commentation</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_menu_toggle_line_commentation1_activate" last_modification_time="Tue, 12 Sep 2006 08:07:58 GMT"/>
+	    </widget>
+	  </child>
+
+	  <child>
 	    <widget class="GtkMenuItem" id="menu_duplicate_line2">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">D_uplicate Line</property>
+	      <property name="label" translatable="yes">Du_plicate Line</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_menu_duplicate_line1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 	    </widget>
@@ -2505,7 +2523,7 @@
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1056">
+	<widget class="GtkImage" id="image1086">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2551,7 +2569,7 @@
       <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 16 Jul 2005 11:20:32 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1057">
+	<widget class="GtkImage" id="image1087">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>

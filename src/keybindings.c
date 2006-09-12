@@ -86,6 +86,8 @@ static void cb_func_switch_tableft(void);
 static void cb_func_switch_tabright(void);
 static void cb_func_toggle_sidebar(void);
 static void cb_func_edit_duplicateline(void);
+static void cb_func_edit_tolowercase(void);
+static void cb_func_edit_touppercase(void);
 static void cb_func_edit_commentline(void);
 static void cb_func_edit_commentlinetoggle(void);
 static void cb_func_edit_uncommentline(void);
@@ -198,6 +200,10 @@ void keybindings_init(void)
 		GDK_Page_Down, GDK_CONTROL_MASK, "switch_tabright", _("Switch to right document"));
 	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit_duplicateline,
 		GDK_g, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
+	keys[GEANY_KEYS_EDIT_TOLOWERCASE] = fill(cb_func_edit_tolowercase,
+		GDK_u, GDK_CONTROL_MASK, "edit_tolowercase", _("Convert Selection to lower-case"));
+	keys[GEANY_KEYS_EDIT_TOUPPERCASE] = fill(cb_func_edit_touppercase,
+		GDK_u, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_touppercase", _("Convert Selection to upper-case"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINETOGGLE] = fill(cb_func_edit_commentlinetoggle,
 		GDK_b, GDK_CONTROL_MASK, "edit_commentlinetoggle", _("Toggle line commentation"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit_commentline,
@@ -294,8 +300,11 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACETABS, menu_replace_tabs);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FOLDALL, menu_fold_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNFOLDALL, menu_unfold_all1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOLOWERCASE, menu_to_lower_case2);
+	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOUPPERCASE, menu_to_upper_case2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_UNCOMMENTLINE, menu_uncomment_line1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_COMMENTLINETOGGLE, menu_toggle_line_commentation1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_DUPLICATELINE, menu_duplicate_line1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_INCREASEINDENT, menu_increase_indent1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_DECREASEINDENT, menu_decrease_indent1);
@@ -310,8 +319,11 @@ static void keybindings_add_accels()
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDEFINITION, goto_tag_definition1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDECLARATION, goto_tag_declaration1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_TOLOWERCASE, to_lower_case1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_TOUPPERCASE, to_upper_case1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_UNCOMMENTLINE, menu_uncomment_line2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_COMMENTLINETOGGLE, menu_toggle_line_commentation2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_DUPLICATELINE, menu_duplicate_line2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_INCREASEINDENT, menu_increase_indent2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_DECREASEINDENT, menu_decrease_indent2);
@@ -721,9 +733,7 @@ static void cb_func_edit_duplicateline(void)
 
 static void cb_func_edit_commentlinetoggle(void)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_do_comment_toggle(idx);
+	on_menu_toggle_line_commentation1_activate(NULL, NULL);
 }
 
 static void cb_func_edit_commentline(void)
@@ -784,6 +794,16 @@ static void cb_func_edit_increaseindent(void)
 static void cb_func_edit_decreaseindent(void)
 {
 	on_menu_decrease_indent1_activate(NULL, NULL);
+}
+
+static void cb_func_edit_tolowercase(void)
+{
+	on_to_lower_case1_activate(NULL, NULL);
+}
+
+static void cb_func_edit_touppercase(void)
+{
+	on_to_upper_case1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_insert_date(void)

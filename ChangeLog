@@ -1,3 +1,12 @@
+2006-09-12  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/interface.c, src/callbacks.c, src/keybindings.c:
+   Added menu items for toggle line commentation.
+   Changed some mnemonics in the "format" submenu.
+ * src/callbacks.c, src/keybindings.c:
+   Added keyboard shortcuts for "Convert Selection to lower-case".
+
+
 2006-09-12  Frank Lanitz  <frank@frank.uvena.de>
 
  * data/pascal.tags: Adding data for unit x86.
