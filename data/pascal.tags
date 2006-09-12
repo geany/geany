@@ -25,6 +25,8 @@ ellipse||(X: SmallInt; Y: SmallInt; stAngle: Word; EndAngle: Word; XRadius: Word
 fillellipse||(X: SmallInt; Y: SmallInt; XRadius: Word; YRadius: Word)|
 fillpoly||(NumPoints: Word; var PolyPoints)|
 floodfill||(x: SmallInt; y: SmallInt; Border: Word)|
+fpioperm|cInt|(From: Cardinal; Num: Cardinal; Value: cInt)|
+fpiopl|cInt|(Level: cInt|)
 getarccoords||(var ArcCoords: ArcCoordsType)|
 getaspectratio||(Xasp: Word; Yasp: Word)|
 getbkcolor|word||
@@ -83,6 +85,15 @@ queryadapterinfo|PModeInfo||
 read||(Identifier)|
 readln||(Identifier)|
 readkey|char||
+readport||(Port: LongInt; var Value: Byte)|
+readport||(Port: LongInt; var Value: LongInt)|
+readport||(Port: LongInt; var Value: Word)|
+readportb|Byte|(Port: LongInt)|
+readportb||(Port: LongInt; var Buf; Count: LongInt)|
+readportl|LongInt|(Port: LongInt)|
+readportl||(Port: LongInt; var Buf; Count: LongInt)|
+readportw|Word|(Port: LongInt)|
+readportw||(Port: LongInt; var Buf; Count: LongInt)|
 rectangle||(x1: SmallInt; y1: SmallInt; x2: SmallInt; y2: SmallInt)|
 red|||
 registerbgidriver|Smallint|(driver: pointer)|
@@ -116,4 +127,13 @@ white|||
 window||(X1: Byte, Y1: Byte, X2: Byte, Y2: Byte)|
 write||(Output)|
 writeln||(Output)|
+writeport||(Port: LongInt; Value: Byte)|
+writeport||(Port: LongInt; Value: LongInt)|
+writeport||(Port: LongInt; Value: Word)|
+writeportb||(Port: LongInt; Value: Byte)|
+wrtieportb||(Port: LongInt; var Buf; Count: LongInt)|
+writeportl||(Port: LongInt; Value: LongInt)|
+wrtieportl||(Port: LongInt; var Buf; Count: LongInt)|
+writeportw||(Port: LongInt; Value: Word)|
+wrtieportw||(Port: LongInt; var Buf; Count: LongInt)|
 yellow|||
