@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: geany 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-12 10:41+0200\n"
-"PO-Revision-Date: 2006-09-12 11:09+0100\n"
+"PO-Revision-Date: 2006-09-13 00:54+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <frank@frank.uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -264,7 +264,7 @@ msgstr "Zeile _einkommentieren"
 #: src/interface.c:530
 #: src/interface.c:1896
 msgid "_Toggle line commentation"
-msgstr "A_uskommentierung klappen"
+msgstr "Kommentierung _umschalten"
 
 #: src/interface.c:534
 #: src/interface.c:1900
@@ -2633,7 +2633,7 @@ msgstr "Auswahl in _Großbuchstaben umwandeln"
 
 #: src/keybindings.c:208
 msgid "Toggle line commentation"
-msgstr "A_uskommentierung umklappen"
+msgstr "Kommentierung umschalten"
 
 #: src/keybindings.c:210
 msgid "Comment line"
