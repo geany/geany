@@ -466,11 +466,6 @@ GPid build_run_cmd(gint idx)
 #endif
 	argv[term_argv_len + 2] = NULL;
 
-	for (i = 0; argv[i] != NULL; i++)
-	{
-		msgwin_status_add("%s", argv[i]);
-	}
-	
 	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, 0,
 						NULL, NULL, &child_pid, NULL, NULL, NULL, &error))
 	{

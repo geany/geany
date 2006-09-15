@@ -4,6 +4,8 @@
    Add ui_frame_new().
    Run set includes build dialogs modally, keeping the same filetype.
    Updated set includes & arguments dialog layout & text.
+ * src/build.c: Don't print the g_spawn argv strings in build_run_cmd()
+                on the status bar.
 
 
 2006-09-12  Enrico Tröger  <enrico.troeger@uvena.de>
