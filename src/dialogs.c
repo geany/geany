@@ -43,6 +43,7 @@
 #include "sciwrappers.h"
 #include "support.h"
 #include "utils.h"
+#include "ui_utils.h"
 #include "keybindings.h"
 
 
@@ -585,7 +586,10 @@ void dialogs_show_includes_arguments_tex()
 {
 	GtkWidget *dialog, *label, *entries[4];
 	gint idx = document_get_cur_idx();
-	filetype *ft = doc_list[idx].file_type;
+	filetype *ft = NULL;
+
+	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
+	g_return_if_fail(ft != NULL);
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Arguments"), GTK_WINDOW(app->window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -682,48 +686,65 @@ void dialogs_show_includes_arguments_tex()
 	}
 
 	g_signal_connect((gpointer) dialog, "response",
-				G_CALLBACK(on_includes_arguments_tex_dialog_response), GINT_TO_POINTER(idx));
+					G_CALLBACK(on_includes_arguments_tex_dialog_response), ft);
 
 	gtk_widget_show_all(dialog);
+	gtk_dialog_run(GTK_DIALOG(dialog));	// run modally to prevent user changing idx filetype
 }
 
 
 void dialogs_show_includes_arguments_gen()
 {
 	GtkWidget *dialog, *label, *entries[3];
+	GtkWidget *ft_table;
+	gint row;
 	gint idx = document_get_cur_idx();
-	filetype *ft = doc_list[idx].file_type;
-	GtkTooltips *tooltips;
+	filetype *ft = NULL;
+
+	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
+	g_return_if_fail(ft != NULL);
+
 	dialog = gtk_dialog_new_with_buttons(_("Set Includes and Arguments"), GTK_WINDOW(app->window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
-										GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	gtk_container_set_border_width(GTK_CONTAINER(dialog), 6);
+	gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(dialog)->vbox), 6);
 
-	label = gtk_label_new(_("Sets the includes and library paths for the compiler and the program arguments for execution\n"));
-	gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	label = gtk_label_new(_("Set the commands for building and running programs."));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-	tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+
+	if (ft->menu_items->can_compile || ft->menu_items->can_link || ft->menu_items->can_exec)
+	{
+		GtkContainer *container;
+		gchar *frame_title = g_strconcat(ft->title, _(" commands"), NULL);
+		container = ui_frame_new(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), frame_title);
+		g_free(frame_title);
+
+		ft_table = gtk_table_new(3, 2, FALSE);
+		gtk_table_set_row_spacings(GTK_TABLE(ft_table), 6);
+		gtk_container_add(container, ft_table);
+		row = 0;
+	}
 
 	// include-args
 	if (ft->menu_items->can_compile)
 	{
-		label = gtk_label_new(_("Enter here arguments to your compiler."));
-		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		label = gtk_label_new(_("Compile:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(ft_table), label, 0, 1, row, row + 1,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+
 		entries[0] = gtk_entry_new();
-		gtk_tooltips_set_tip(tooltips, entries[0],
-_("%f will be replaced by the complete filename\n%e will be replaced by filename without extension"
-  "\nExample: test_file.c\n%f -> test_file.c\n%e -> test_file"), NULL);
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
 		if (ft->programs->compiler)
 		{
 			gtk_entry_set_text(GTK_ENTRY(entries[0]), ft->programs->compiler);
 		}
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[0]);
+		gtk_table_attach_defaults(GTK_TABLE(ft_table), entries[0], 1, 2, row, row + 1);
+		row++;
 
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry1",
 					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
 	}
@@ -731,54 +752,54 @@ _("%f will be replaced by the complete filename\n%e will be replaced by filename
 	// lib-args
 	if (ft->menu_items->can_link)
 	{
-		label = gtk_label_new(_("Enter here arguments to your linker."));
-		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		label = gtk_label_new(_("Build:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(ft_table), label, 0, 1, row, row + 1,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+
 		entries[1] = gtk_entry_new();
-		gtk_tooltips_set_tip(tooltips, entries[1],
-_("%f will be replaced by the complete filename\n%e will be replaced by filename without extension"
-  "\nExample: test_file.c\n%f -> test_file.c\n%e -> test_file"), NULL);
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
 		if (ft->programs->linker)
 		{
 			gtk_entry_set_text(GTK_ENTRY(entries[1]), ft->programs->linker);
 		}
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[1]);
+		gtk_table_attach_defaults(GTK_TABLE(ft_table), entries[1], 1, 2, row, row + 1);
+		row++;
 
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry2",
 					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
 	}
 
-	// lib-args
+	// program-args
 	if (ft->menu_items->can_exec)
 	{
-		// program-args
-		label = gtk_label_new(_("Enter here arguments to your program."));
-		gtk_misc_set_padding(GTK_MISC(label), 0, 6);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		label = gtk_label_new(_("Execute:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(ft_table), label, 0, 1, row, row + 1,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+
 		entries[2] = gtk_entry_new();
-		gtk_tooltips_set_tip(tooltips, entries[2],
-_("%f will be replaced by the complete filename\n%e will be replaced by filename without extension"
-  "\nExample: test_file.c\n%f -> test_file.c\n%e -> test_file"), NULL);
 		gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
 		if (ft->programs->run_cmd)
 		{
 			gtk_entry_set_text(GTK_ENTRY(entries[2]), ft->programs->run_cmd);
 		}
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), entries[2]);
+		gtk_table_attach_defaults(GTK_TABLE(ft_table), entries[2], 1, 2, row, row + 1);
+		row++;
 
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry3",
 						gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
 	}
 
-	g_signal_connect((gpointer) dialog, "response",
-				G_CALLBACK(on_includes_arguments_dialog_response), GINT_TO_POINTER(idx));
+	label = gtk_label_new(_("%f will be replaced by the current filename, e.g. test_file.c\n"
+							"%e will be replaced by the filename without extension, e.g. test_file"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
 
+	g_signal_connect((gpointer) dialog, "response",
+					G_CALLBACK(on_includes_arguments_dialog_response), ft);
 	gtk_widget_show_all(dialog);
+	gtk_dialog_run(GTK_DIALOG(dialog));	// run modally to prevent user changing idx filetype
 }
 
 

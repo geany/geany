@@ -1,3 +1,11 @@
+2006-09-15  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/ui_utils.h, src/ui_utils.c, src/callbacks.c, src/dialogs.c:
+   Add ui_frame_new().
+   Run set includes build dialogs modally, keeping the same filetype.
+   Updated set includes & arguments dialog layout & text.
+
+
 2006-09-12  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.glade, src/interface.c, src/callbacks.c, src/keybindings.c:

@@ -2252,10 +2252,11 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
                                         gint response,
                                         gpointer user_data)
 {
+	filetype *ft = user_data;
+	g_return_if_fail(ft != NULL);
+
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		filetype *ft = doc_list[GPOINTER_TO_INT(user_data)].file_type;
-
 		if (ft->menu_items->can_compile)
 		{
 			if (ft->programs->compiler) g_free(ft->programs->compiler);
@@ -2284,10 +2285,11 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
                                             gint response,
                                             gpointer user_data)
 {
+	filetype *ft = user_data;
+	g_return_if_fail(ft != NULL);
+
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		filetype *ft = doc_list[GPOINTER_TO_INT(user_data)].file_type;
-
 		if (ft->programs->compiler) g_free(ft->programs->compiler);
 		ft->programs->compiler = g_strdup(gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1"))));

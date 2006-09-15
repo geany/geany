@@ -94,4 +94,7 @@ void ui_show_markers_margin();
 
 void ui_show_linenumber_margin();
 
+
+GtkContainer *ui_frame_new(GtkContainer *parent, const gchar *label_text);
+
 #endif

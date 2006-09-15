@@ -1338,4 +1338,30 @@ void ui_show_linenumber_margin()
 }
 
 
+/* Creates a GNOME HIG style frame (with no border and indented child alignment)
+ * and packs it into the parent container.
+ * Returns: the alignment container for the frame */
+GtkContainer *ui_frame_new(GtkContainer *parent, const gchar *label_text)
+{
+	GtkWidget *label, *align;
+	GtkWidget *frame = gtk_frame_new (NULL);
+	gchar *label_markup;
+
+	gtk_container_add(GTK_CONTAINER(parent), frame);
+	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
+
+	align = gtk_alignment_new (0.5, 0.5, 1, 1);
+	gtk_container_add (GTK_CONTAINER (frame), align);
+	gtk_alignment_set_padding (GTK_ALIGNMENT (align), 0, 0, 12, 0);	
+
+	label_markup = g_strconcat("<b>", label_text, "</b>", NULL);
+	label = gtk_label_new (label_markup);
+	gtk_frame_set_label_widget (GTK_FRAME (frame), label);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	g_free(label_markup);
+
+	return GTK_CONTAINER(align);
+}
+
+
 
