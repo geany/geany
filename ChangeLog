@@ -3,6 +3,8 @@
  * src/templates.h, src/templates.c:
    Move all static strings from templates.h to templates.c.
  * src/sci_cb.c: Fix sign comparison warning.
+ * src/utils.c, src/msgwindow.c:
+   Improve utils_get_current_time_string().
 
 
 2006-09-15  Nick Treleaven  <nick.treleaven@btinternet.com>

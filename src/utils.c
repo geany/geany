@@ -1231,21 +1231,15 @@ gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
 }
 
 
-// returned string must be freed.
+// Returns: new string with the current time formatted HH:MM:SS.
 gchar *utils_get_current_time_string()
 {
-	GTimeVal cur_time;
-	gchar *date_str, *time_str, *result;
-	gchar **strv;
+	const time_t tp = time(NULL);
+	const struct tm *tmval = localtime(&tp);
+	gchar *result = g_malloc0(9);
 
-	g_get_current_time(&cur_time);
-	date_str = ctime(&cur_time.tv_sec); //uses internal string buffer
-	strv = g_strsplit(date_str, " ", 6);
-
-	// if single digit day then strv[2] will be empty
-	time_str = (*strv[2] == 0) ? strv[4] : strv[3];
-	result = g_strdup(time_str);
-	g_strfreev(strv);
+	strftime(result, 9, "%T", tmval);
+	result[8] = '\0';
 	return result;
 }
 

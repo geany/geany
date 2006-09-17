@@ -244,10 +244,6 @@ void msgwin_status_add(gchar const *format, ...)
 	// display status message in status bar
 	ui_set_statusbar(string, FALSE);
 
-	gtk_list_store_append(msgwindow.store_status, &iter);
-	//gtk_list_store_insert(msgwindow.store_status, &iter, 0);
-	//gtk_list_store_set(msgwindow.store_status, &iter, 0, (state > 0) ? &white : &dark, 1, string, -1);
-
 	// add a timestamp to status messages
 	time_str = utils_get_current_time_string();
 	if (time_str == NULL)
@@ -256,6 +252,8 @@ void msgwin_status_add(gchar const *format, ...)
 		statusmsg = g_strconcat(time_str, ": ", string, NULL);
 	g_free(time_str);
 
+	// add message to Status window
+	gtk_list_store_append(msgwindow.store_status, &iter);
 	gtk_list_store_set(msgwindow.store_status, &iter, 0,
 		((state++ % 2) == 0) ? &white : &dark, 1, statusmsg, -1);
 	g_free(statusmsg);
