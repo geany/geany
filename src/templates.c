@@ -29,6 +29,224 @@
 #include "utils.h"
 #include "document.h"
 
+
+// default templates, only for initial tempate file creation on first start of Geany
+static const gchar templates_gpl_notice[] = "\
+ *      This program is free software; you can redistribute it and/or modify\n\
+ *      it under the terms of the GNU General Public License as published by\n\
+ *      the Free Software Foundation; either version 2 of the License, or\n\
+ *      (at your option) any later version.\n\
+ *\n\
+ *      This program is distributed in the hope that it will be useful,\n\
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+ *      GNU General Public License for more details.\n\
+ *\n\
+ *      You should have received a copy of the GNU General Public License\n\
+ *      along with this program; if not, write to the Free Software\n\
+ *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
+";
+
+static const gchar templates_gpl_notice_pascal[] = "\
+      This program is free software; you can redistribute it and/or modify\n\
+      it under the terms of the GNU General Public License as published by\n\
+      the Free Software Foundation; either version 2 of the License, or\n\
+      (at your option) any later version.\n\
+\n\
+      This program is distributed in the hope that it will be useful,\n\
+      but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+      GNU General Public License for more details.\n\
+\n\
+      You should have received a copy of the GNU General Public License\n\
+      along with this program; if not, write to the Free Software\n\
+      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
+";
+
+static const gchar templates_gpl_notice_route[] = "\
+#      This program is free software; you can redistribute it and/or modify\n\
+#      it under the terms of the GNU General Public License as published by\n\
+#      the Free Software Foundation; either version 2 of the License, or\n\
+#      (at your option) any later version.\n\
+#\n\
+#      This program is distributed in the hope that it will be useful,\n\
+#      but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+#      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+#      GNU General Public License for more details.\n\
+#\n\
+#      You should have received a copy of the GNU General Public License\n\
+#      along with this program; if not, write to the Free Software\n\
+#      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
+";
+
+static const gchar templates_function_description[] = "\
+/* \n\
+ * name: {functionname}\n\
+ * @param\n\
+ * @return\n\
+*/\n";
+
+static const gchar templates_function_description_pascal[] = "\
+{\n\
+ name: {functionname}\n\
+ @param\n\
+ @return\n\
+}\n";
+
+static const gchar templates_function_description_route[] = "\
+#\n\
+# name: {functionname}\n\
+# @param\n\
+# @return\n\
+";
+
+static const gchar templates_multiline[] = "\
+/* \n\
+ * \n\
+*/";
+
+static const gchar templates_multiline_pascal[] = "\
+{\n\
+ \n\
+}";
+
+static const gchar templates_multiline_route[] = "\
+#\n\
+#";
+
+static const gchar templates_fileheader[] = "\
+/*\n\
+ *      {filename}\n\
+ *\n\
+ *      Copyright {year} {developer} <{mail}>\n\
+ *\n\
+{gpl}\
+ */\n\n";
+
+static const gchar templates_fileheader_pascal[] = "\
+{\n\
+      {filename}\n\
+\n\
+      Copyright {year} {developer} <{mail}>\n\
+\n\
+{gpl}\
+}\n\n";
+
+static const gchar templates_fileheader_route[] = "\
+#\n\
+#      {filename}\n\
+#\n\
+#      Copyright {year} {developer} <{mail}>\n\
+#\n\
+{gpl}\
+#\n\n";
+
+static const gchar templates_changelog[] = "\
+{date}  {developer}  <{mail}>\n\
+\n\
+ * \n\n\n";
+
+static const gchar templates_filetype_none[] = "";
+
+static const gchar templates_filetype_c[] = "\n\
+#include <stdio.h>\n\
+\n\
+int main(int argc, char** argv)\n\
+{\n\
+	\n\
+	return 0;\n\
+}\n\
+";
+
+static const gchar templates_filetype_cpp[] = "\n\
+#include <iostream>\n\
+\n\
+int main(int argc, char** argv)\n\
+{\n\
+	\n\
+	return 0;\n\
+}\n\
+";
+
+static const gchar templates_filetype_d[] = "\n\
+import std.stdio;\n\
+\n\
+int main(char[][] args)\n\
+{\n\
+\n\
+	return 0;\n\
+}\n\
+";
+
+static const gchar templates_filetype_php[] = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
+  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\
+\n\
+<head>\n\
+	<title>{untitled}</title>\n\
+	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />\n\
+	<meta name=\"generator\" content=\"{geanyversion}\" />\n\
+</head>\n\
+\n\
+<body>\n\
+\n\
+</body>\n\
+</html>\n\
+";
+
+static const gchar templates_filetype_html[] = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
+  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\
+\n\
+<head>\n\
+	<title>{untitled}</title>\n\
+	<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\" />\n\
+	<meta name=\"generator\" content=\"{geanyversion}\" />\n\
+</head>\n\
+\n\
+<body>\n\
+\n\
+</body>\n\
+</html>\n\
+";
+
+static const gchar templates_filetype_pascal[] = "program {untitled};\n\
+\n\
+uses crt;\n\
+var i : byte;\n\
+\n\
+BEGIN\n\
+	\n\
+	\n\
+END.\n\
+";
+
+static const gchar templates_filetype_java[] = "\n\
+\n\
+public class {untitled} {\n\
+\n\
+	public static void main (String args[]) {\n\
+		\n\
+		\n\
+	}\n\
+}\n\
+";
+
+static const gchar templates_filetype_ruby[] = "\n\
+\n\
+class StdClass\n\
+	def initialize\n\
+		\n\
+	end\n\
+end\n\
+\n\
+x = StdClass.new\n\
+";
+
+
+static gchar *templates[GEANY_MAX_TEMPLATES];
+
+
 // some simple macros to reduce code size and make the code readable
 #define templates_get_filename(x) g_strconcat(app->configdir, G_DIR_SEPARATOR_S, x, NULL)
 #define templates_create_file(x, y)	if (! g_file_test(x, G_FILE_TEST_EXISTS)) utils_write_file(x, y)
@@ -36,9 +254,7 @@
 
 
 // prototype, because this function should never be used outside of templates.c
-gchar *templates_replace_all(gchar *source, gchar *year, gchar *date);
-
-static gchar *templates[GEANY_MAX_TEMPLATES];
+static gchar *templates_replace_all(gchar *source, gchar *year, gchar *date);
 
 
 void templates_init(void)
@@ -300,7 +516,7 @@ void templates_free_templates(void)
 }
 
 
-gchar *templates_replace_all(gchar *text, gchar *year, gchar *date)
+static gchar *templates_replace_all(gchar *text, gchar *year, gchar *date)
 {
 	text = utils_str_replace(text, "{year}", year);
 	text = utils_str_replace(text, "{date}", date);

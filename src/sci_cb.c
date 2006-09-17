@@ -1396,7 +1396,7 @@ void sci_cb_do_comment_toggle(gint idx)
 			line_start = sci_get_position_from_line(doc_list[idx].sci,
 										sci_get_line_from_position(doc_list[idx].sci, sel_start));
 			sci_cb_get_indent(doc_list[idx].sci, sel_start, TRUE);
-			if ((sel_start - line_start) <= strlen(indent))
+			if ((sel_start - line_start) <= (gint) strlen(indent))
 				a = 0;
 
 			sci_set_selection_start(doc_list[idx].sci, sel_start + a);

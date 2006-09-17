@@ -1,3 +1,10 @@
+2006-09-17  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/templates.h, src/templates.c:
+   Move all static strings from templates.h to templates.c.
+ * src/sci_cb.c: Fix sign comparison warning.
+
+
 2006-09-15  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/ui_utils.h, src/ui_utils.c, src/callbacks.c, src/dialogs.c:
