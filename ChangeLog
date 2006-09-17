@@ -5,6 +5,9 @@
  * src/sci_cb.c: Fix sign comparison warning.
  * src/utils.c, src/msgwindow.c:
    Improve utils_get_current_time_string().
+ * src/ui_utils.c:
+   Only reorder recent files menu when recent file loaded correctly.
+   Reorder the recent file menu instead of recreating it.
 
 
 2006-09-15  Nick Treleaven  <nick.treleaven@btinternet.com>

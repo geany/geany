@@ -39,8 +39,9 @@
 #include "keybindings.h"
 
 
+static const gchar *menu_item_get_text(GtkMenuItem *menu_item);
+
 static void update_recent_menu();
-static void recreate_recent_menu();
 static void recent_file_loaded(const gchar *utf8_filename);
 static void
 recent_file_activate_cb                (GtkMenuItem     *menuitem,
@@ -1217,8 +1218,8 @@ recent_file_activate_cb                (GtkMenuItem     *menuitem,
 {
 	gchar *locale_filename = utils_get_locale_from_utf8((gchar*) user_data);
 
-	document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL);
-	recent_file_loaded((gchar*) user_data);
+	if (document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL) > -1)
+		recent_file_loaded((gchar*) user_data);
 
 	g_free(locale_filename);
 }
@@ -1239,20 +1240,60 @@ void ui_add_recent_file(const gchar *utf8_filename)
 }
 
 
+static const gchar *menu_item_get_text(GtkMenuItem *menu_item)
+{
+	const gchar *text = NULL;
+
+	if (GTK_BIN (menu_item)->child)
+	{
+		GtkWidget *child = GTK_BIN (menu_item)->child;
+
+		if (GTK_IS_LABEL (child))
+			text = gtk_label_get_text(GTK_LABEL(child));
+	}
+	return text;
+}
+
+
 static void recent_file_loaded(const gchar *utf8_filename)
 {
-	GList *item =
-		g_queue_find_custom(app->recent_queue, utf8_filename, (GCompareFunc) strcmp);
-	gchar *data;
+	GList *item, *children;
+	void *data;
+	GtkWidget *recent_menu, *tmp;
 
-	g_return_if_fail(item != NULL);
 	// first reorder the queue
+	item = g_queue_find_custom(app->recent_queue, utf8_filename, (GCompareFunc) strcmp);
+	g_return_if_fail(item != NULL);
+
 	data = item->data;
 	g_queue_remove(app->recent_queue, data);
 	g_queue_push_head(app->recent_queue, data);
 
-	// now recreate the recent files menu
-	recreate_recent_menu();
+	// now reorder the recent files menu
+	recent_menu = lookup_widget(app->window, "recent_files1_menu");
+	children = gtk_container_get_children(GTK_CONTAINER(recent_menu));
+
+	// remove the old menuitem for the filename
+	for (item = children; item != NULL; item = g_list_next(item))
+	{
+		const gchar *menu_text;
+
+		data = item->data;
+		if (! GTK_IS_MENU_ITEM(data)) continue;
+		menu_text = menu_item_get_text(GTK_MENU_ITEM(data));
+
+		if (g_str_equal(menu_text, utf8_filename))
+		{
+			gtk_widget_destroy(GTK_WIDGET(data));
+			break;
+		}
+	}
+	// now prepend a new menuitem for the filename
+	tmp = gtk_menu_item_new_with_label(utf8_filename);
+	gtk_widget_show(tmp);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(recent_menu), tmp);
+	g_signal_connect((gpointer) tmp, "activate",
+				G_CALLBACK(recent_file_activate_cb), (gpointer) utf8_filename);
 }
 
 
@@ -1292,25 +1333,6 @@ static void update_recent_menu()
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(recent_menu), tmp);
 	g_signal_connect((gpointer) tmp, "activate",
 				G_CALLBACK(recent_file_activate_cb), (gpointer) filename);
-}
-
-
-static void recreate_recent_menu()
-{
-	GList *item, *children;
-	void *data;
-	GtkWidget *recent_menu = lookup_widget(app->window, "recent_files1_menu");
-
-	children = gtk_container_get_children(GTK_CONTAINER(recent_menu));
-
-	// remove all menu items (but not the list elements)
-	for (item = children; item != NULL; item = g_list_next(item))
-	{
-		data = item->data;
-		if (! GTK_IS_MENU_ITEM(data)) continue;
-		gtk_widget_destroy(GTK_WIDGET(data));
-	}
-	ui_create_recent_menu();
 }
 
 
