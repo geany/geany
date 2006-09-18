@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-12 10:41+0200\n"
+"POT-Creation-Date: 2006-09-18 14:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,7 @@ msgstr ""
 msgid "Configuration directory could not be created (%s)."
 msgstr ""
 
-#: src/main.c:582 src/callbacks.c:823 src/dialogs.c:150 src/document.c:378
+#: src/main.c:582 src/callbacks.c:823 src/dialogs.c:151 src/document.c:378
 #: src/document.c:416 src/win32.c:151
 #, c-format
 msgid ""
@@ -274,7 +274,7 @@ msgstr ""
 msgid "_Go to line"
 msgstr ""
 
-#: src/interface.c:614 src/dialogs.c:74
+#: src/interface.c:614 src/dialogs.c:75
 msgid "_View"
 msgstr ""
 
@@ -425,7 +425,7 @@ msgid "Removes all set indicators in the current document."
 msgstr ""
 
 #. build the code
-#: src/interface.c:806 src/ui_utils.c:790
+#: src/interface.c:806 src/ui_utils.c:791
 msgid "_Build"
 msgstr ""
 
@@ -489,7 +489,7 @@ msgstr ""
 msgid "Compile the current file"
 msgstr ""
 
-#: src/interface.c:908 src/ui_utils.c:847
+#: src/interface.c:908 src/ui_utils.c:848
 msgid "Run or view the current file"
 msgstr ""
 
@@ -585,7 +585,7 @@ msgstr ""
 msgid "Go to tag declaration"
 msgstr ""
 
-#: src/interface.c:1943 src/dialogs.c:563 src/keybindings.c:153
+#: src/interface.c:1943 src/dialogs.c:564 src/keybindings.c:153
 msgid "Go to line"
 msgstr ""
 
@@ -778,7 +778,7 @@ msgstr ""
 msgid "Sets the color of the long line marker"
 msgstr ""
 
-#: src/interface.c:2591 src/dialogs.c:497 src/prefs.c:976 src/prefs.c:983
+#: src/interface.c:2591 src/dialogs.c:498 src/prefs.c:976 src/prefs.c:983
 msgid "Color Chooser"
 msgstr ""
 
@@ -1196,7 +1196,7 @@ msgid "Failed to execute the terminal program"
 msgstr ""
 
 #. initialize the dialog
-#: src/callbacks.c:1920 src/dialogs.c:71
+#: src/callbacks.c:1920 src/dialogs.c:72
 msgid "Open File"
 msgstr ""
 
@@ -1206,32 +1206,32 @@ msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 
-#: src/callbacks.c:2182 src/ui_utils.c:532
+#: src/callbacks.c:2182 src/ui_utils.c:533
 msgid "dd.mm.yyyy"
 msgstr ""
 
-#: src/callbacks.c:2184 src/ui_utils.c:533
+#: src/callbacks.c:2184 src/ui_utils.c:534
 msgid "mm.dd.yyyy"
 msgstr ""
 
-#: src/callbacks.c:2186 src/ui_utils.c:534
+#: src/callbacks.c:2186 src/ui_utils.c:535
 msgid "yyyy/mm/dd"
 msgstr ""
 
-#: src/callbacks.c:2188 src/ui_utils.c:543
+#: src/callbacks.c:2188 src/ui_utils.c:544
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr ""
 
-#: src/callbacks.c:2190 src/ui_utils.c:544
+#: src/callbacks.c:2190 src/ui_utils.c:545
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr ""
 
-#: src/callbacks.c:2192 src/ui_utils.c:545
+#: src/callbacks.c:2192 src/ui_utils.c:546
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr ""
 
-#: src/callbacks.c:2194 src/ui_utils.c:554 src/ui_utils.c:558
-#: src/ui_utils.c:562 src/ui_utils.c:566
+#: src/callbacks.c:2194 src/ui_utils.c:555 src/ui_utils.c:559
+#: src/ui_utils.c:563 src/ui_utils.c:567
 msgid "Use custom date format"
 msgstr ""
 
@@ -1255,25 +1255,25 @@ msgstr ""
 msgid "Couldn't find pixmap file: %s"
 msgstr ""
 
-#: src/dialogs.c:76
+#: src/dialogs.c:77
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
 msgstr ""
 
-#: src/dialogs.c:112
+#: src/dialogs.c:113
 msgid "Detect by file extension  "
 msgstr ""
 
-#: src/dialogs.c:174
+#: src/dialogs.c:175
 msgid "Show _hidden files"
 msgstr ""
 
-#: src/dialogs.c:190
+#: src/dialogs.c:191
 msgid "Set filetype:"
 msgstr ""
 
-#: src/dialogs.c:193
+#: src/dialogs.c:194
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -1281,44 +1281,44 @@ msgid ""
 "filetype."
 msgstr ""
 
-#: src/dialogs.c:233
+#: src/dialogs.c:234
 msgid "Save File"
 msgstr ""
 
-#: src/dialogs.c:343
+#: src/dialogs.c:344
 #, c-format
 msgid ""
 "The file '%s' is not saved.\n"
 "Do you want to save it before closing?"
 msgstr ""
 
-#: src/dialogs.c:348
+#: src/dialogs.c:349
 msgid ""
 "The file is not saved.\n"
 "Do you want to save it before closing?"
 msgstr ""
 
-#: src/dialogs.c:359
+#: src/dialogs.c:360
 msgid "_Don't save"
 msgstr ""
 
-#: src/dialogs.c:414
+#: src/dialogs.c:415
 msgid "Choose font"
 msgstr ""
 
-#: src/dialogs.c:453
+#: src/dialogs.c:454
 msgid "Word Count"
 msgstr ""
 
-#: src/dialogs.c:462
+#: src/dialogs.c:463
 msgid "selection"
 msgstr ""
 
-#: src/dialogs.c:470
+#: src/dialogs.c:471
 msgid "whole document"
 msgstr ""
 
-#: src/dialogs.c:472
+#: src/dialogs.c:473
 #, c-format
 msgid ""
 "Range:\t\t%s\n"
@@ -1328,167 +1328,161 @@ msgid ""
 "Characters:\t%d\n"
 msgstr ""
 
-#: src/dialogs.c:568
+#: src/dialogs.c:569
 msgid "Enter the line you want to go to"
 msgstr ""
 
 #. arguments
-#: src/dialogs.c:590 src/ui_utils.c:980
+#: src/dialogs.c:594 src/ui_utils.c:981
 msgid "Set Arguments"
 msgstr ""
 
-#: src/dialogs.c:595
+#: src/dialogs.c:599
 msgid ""
 "Set programs and options for compilation and viewing (La)TeX files.\n"
 "The filename is appended automatically at the end.\n"
 msgstr ""
 
-#: src/dialogs.c:603
+#: src/dialogs.c:607
 msgid ""
 "Enter here the (La)TeX command (for DVI creation) and some useful options."
 msgstr ""
 
-#: src/dialogs.c:624
+#: src/dialogs.c:628
 msgid ""
 "Enter here the (La)TeX command (for PDF creation) and some useful options."
 msgstr ""
 
-#: src/dialogs.c:645
+#: src/dialogs.c:649
 msgid ""
 "Enter here the (La)TeX command (for DVI preview) and some useful options."
 msgstr ""
 
-#: src/dialogs.c:666
+#: src/dialogs.c:670
 msgid ""
 "Enter here the (La)TeX command (for PDF preview) and some useful options."
 msgstr ""
 
-#: src/dialogs.c:697
+#: src/dialogs.c:708
 msgid "Set Includes and Arguments"
 msgstr ""
 
-#: src/dialogs.c:702
-msgid ""
-"Sets the includes and library paths for the compiler and the program "
-"arguments for execution\n"
+#: src/dialogs.c:715
+msgid "Set the commands for building and running programs."
 msgstr ""
 
-#: src/dialogs.c:711
-msgid "Enter here arguments to your compiler."
+#: src/dialogs.c:722
+msgid " commands"
 msgstr ""
 
-#: src/dialogs.c:717 src/dialogs.c:740 src/dialogs.c:764
+#: src/dialogs.c:735
+msgid "Compile:"
+msgstr ""
+
+#: src/dialogs.c:756
+msgid "Build:"
+msgstr ""
+
+#: src/dialogs.c:777 src/dialogs.c:1048
+msgid "Execute:"
+msgstr ""
+
+#: src/dialogs.c:795
 #, c-format
 msgid ""
-"%f will be replaced by the complete filename\n"
-"%e will be replaced by filename without extension\n"
-"Example: test_file.c\n"
-"%f -> test_file.c\n"
-"%e -> test_file"
+"%f will be replaced by the current filename, e.g. test_file.c\n"
+"%e will be replaced by the filename without extension, e.g. test_file"
 msgstr ""
 
-#: src/dialogs.c:734
-msgid "Enter here arguments to your linker."
-msgstr ""
-
-#. program-args
-#: src/dialogs.c:758
-msgid "Enter here arguments to your program."
-msgstr ""
-
-#: src/dialogs.c:817
+#: src/dialogs.c:842
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
 msgstr ""
 
-#: src/dialogs.c:836 src/dialogs.c:837 src/dialogs.c:838 src/dialogs.c:844
-#: src/dialogs.c:845 src/dialogs.c:846 src/utils.c:609 src/ui_utils.c:103
-#: src/ui_utils.c:105
+#: src/dialogs.c:861 src/dialogs.c:862 src/dialogs.c:863 src/dialogs.c:869
+#: src/dialogs.c:870 src/dialogs.c:871 src/utils.c:609 src/ui_utils.c:104
+#: src/ui_utils.c:106
 msgid "unknown"
 msgstr ""
 
-#: src/dialogs.c:850
+#: src/dialogs.c:875
 msgid "Properties"
 msgstr ""
 
-#: src/dialogs.c:878
+#: src/dialogs.c:903
 msgid "<b>Type:</b>"
 msgstr ""
 
-#: src/dialogs.c:891
+#: src/dialogs.c:916
 msgid "<b>Size:</b>"
 msgstr ""
 
-#: src/dialogs.c:906
+#: src/dialogs.c:931
 msgid "<b>Location:</b>"
 msgstr ""
 
-#: src/dialogs.c:919
+#: src/dialogs.c:944
 msgid "<b>Read-only:</b>"
 msgstr ""
 
-#: src/dialogs.c:926
+#: src/dialogs.c:951
 msgid "(only inside Geany)"
 msgstr ""
 
-#: src/dialogs.c:935
+#: src/dialogs.c:960
 msgid "<b>Encoding:</b>"
 msgstr ""
 
-#: src/dialogs.c:944 src/ui_utils.c:104
+#: src/dialogs.c:969 src/ui_utils.c:105
 msgid "(with BOM)"
 msgstr ""
 
-#: src/dialogs.c:944 src/ui_utils.c:104
+#: src/dialogs.c:969 src/ui_utils.c:105
 msgid "(without BOM)"
 msgstr ""
 
-#: src/dialogs.c:954
+#: src/dialogs.c:979
 msgid "<b>Modified:</b>"
 msgstr ""
 
-#: src/dialogs.c:967
+#: src/dialogs.c:992
 msgid "<b>Changed:</b>"
 msgstr ""
 
-#: src/dialogs.c:980
+#: src/dialogs.c:1005
 msgid "<b>Accessed:</b>"
 msgstr ""
 
 #. Header
-#: src/dialogs.c:1009
+#: src/dialogs.c:1034
 msgid "Read:"
 msgstr ""
 
-#: src/dialogs.c:1016
+#: src/dialogs.c:1041
 msgid "Write:"
 msgstr ""
 
-#: src/dialogs.c:1023
-msgid "Execute:"
-msgstr ""
-
 #. Owner
-#: src/dialogs.c:1031
+#: src/dialogs.c:1056
 msgid "Owner:"
 msgstr ""
 
 #. Group
-#: src/dialogs.c:1067
+#: src/dialogs.c:1092
 msgid "Group:"
 msgstr ""
 
 #. Other
-#: src/dialogs.c:1103
+#: src/dialogs.c:1128
 msgid "Other:"
 msgstr ""
 
-#: src/dialogs.c:1224
+#: src/dialogs.c:1249
 msgid "Keyboard shortcuts"
 msgstr ""
 
-#: src/dialogs.c:1231
+#: src/dialogs.c:1256
 msgid "The following keyboard shortcuts are defined:"
 msgstr ""
 
@@ -1611,145 +1605,145 @@ msgid ""
 "the current buffer."
 msgstr ""
 
-#: src/ui_utils.c:95
+#: src/ui_utils.c:96
 #, c-format
 msgid ""
 "%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. "
 "function: %s      encoding: %s %s     filetype: %s"
 msgstr ""
 
-#: src/ui_utils.c:99
+#: src/ui_utils.c:100
 msgid "OVR"
 msgstr ""
 
-#: src/ui_utils.c:99
+#: src/ui_utils.c:100
 msgid "INS"
 msgstr ""
 
-#: src/ui_utils.c:125 src/geany.h:49
+#: src/ui_utils.c:126 src/geany.h:49
 msgid "untitled"
 msgstr ""
 
-#: src/ui_utils.c:126
+#: src/ui_utils.c:127
 msgid "(Unsaved)"
 msgstr ""
 
-#: src/ui_utils.c:164
+#: src/ui_utils.c:165
 #, c-format
 msgid "Font updated (%s)."
 msgstr ""
 
-#: src/ui_utils.c:197
+#: src/ui_utils.c:198
 msgid "No tags found"
 msgstr ""
 
-#: src/ui_utils.c:502
+#: src/ui_utils.c:503
 msgid "C Standard Library"
 msgstr ""
 
-#: src/ui_utils.c:503
+#: src/ui_utils.c:504
 msgid "ISO C99"
 msgstr ""
 
-#: src/ui_utils.c:504
+#: src/ui_utils.c:505
 msgid "C++ (C Standard Library)"
 msgstr ""
 
-#: src/ui_utils.c:505
+#: src/ui_utils.c:506
 msgid "C++ Standard Library"
 msgstr ""
 
-#: src/ui_utils.c:506
+#: src/ui_utils.c:507
 msgid "C++ STL"
 msgstr ""
 
-#: src/ui_utils.c:570
+#: src/ui_utils.c:571
 msgid "Set custom date format"
 msgstr ""
 
 #. compile the code
-#: src/ui_utils.c:776
+#: src/ui_utils.c:777
 msgid "_Compile"
 msgstr ""
 
-#: src/ui_utils.c:779
+#: src/ui_utils.c:780
 msgid "Compiles the current file"
 msgstr ""
 
-#: src/ui_utils.c:794
+#: src/ui_utils.c:795
 msgid "Builds the current file (generate an executable file)"
 msgstr ""
 
 #. build the code with make all
-#: src/ui_utils.c:808 src/ui_utils.c:922
+#: src/ui_utils.c:809 src/ui_utils.c:923
 msgid "_Make all"
 msgstr ""
 
-#: src/ui_utils.c:811 src/ui_utils.c:925
+#: src/ui_utils.c:812 src/ui_utils.c:926
 msgid "Builds the current file with the make tool and the default target"
 msgstr ""
 
 #. build the code with make
-#: src/ui_utils.c:817 src/ui_utils.c:931
+#: src/ui_utils.c:818 src/ui_utils.c:932
 msgid "Make custom _target"
 msgstr ""
 
-#: src/ui_utils.c:821 src/ui_utils.c:935
+#: src/ui_utils.c:822 src/ui_utils.c:936
 msgid "Builds the current file with the make tool and the specified target"
 msgstr ""
 
 #. build the code with make object
-#: src/ui_utils.c:826
+#: src/ui_utils.c:827
 msgid "Make _object"
 msgstr ""
 
-#: src/ui_utils.c:830
+#: src/ui_utils.c:831
 msgid "Compiles the current file using the make tool"
 msgstr ""
 
-#: src/ui_utils.c:862
+#: src/ui_utils.c:863
 msgid "_Set Includes and Arguments"
 msgstr ""
 
-#: src/ui_utils.c:867
+#: src/ui_utils.c:868
 msgid ""
 "Sets the includes and library paths for the compiler and the program "
 "arguments for execution"
 msgstr ""
 
 #. DVI
-#: src/ui_utils.c:889
+#: src/ui_utils.c:890
 msgid "LaTeX -> DVI"
 msgstr ""
 
-#: src/ui_utils.c:892
+#: src/ui_utils.c:893
 msgid "Compiles the current file into a DVI file"
 msgstr ""
 
 #. PDF
-#: src/ui_utils.c:902
+#: src/ui_utils.c:903
 msgid "LaTeX -> PDF"
 msgstr ""
 
-#: src/ui_utils.c:905
+#: src/ui_utils.c:906
 msgid "Compiles the current file into a PDF file"
 msgstr ""
 
 #. DVI view
-#: src/ui_utils.c:948
+#: src/ui_utils.c:949
 msgid "View DVI file"
 msgstr ""
 
-#: src/ui_utils.c:954 src/ui_utils.c:967
+#: src/ui_utils.c:955 src/ui_utils.c:968
 msgid "Compiles and view the current file"
 msgstr ""
 
 #. PDF view
-#: src/ui_utils.c:961
+#: src/ui_utils.c:962
 msgid "View PDF file"
 msgstr ""
 
-#: src/ui_utils.c:987
+#: src/ui_utils.c:988
 msgid "Sets the program paths and arguments"
 msgstr ""
 
@@ -1895,7 +1889,7 @@ msgstr ""
 msgid "Failed to view %s (make sure it is already compiled)"
 msgstr ""
 
-#: src/build.c:124 src/build.c:309 src/build.c:478 src/search.c:849
+#: src/build.c:124 src/build.c:309 src/build.c:473 src/search.c:849
 #, c-format
 msgid "Process failed (%s)"
 msgstr ""
@@ -1927,11 +1921,11 @@ msgstr ""
 msgid "Failed to execute %s (start-script could not be created)"
 msgstr ""
 
-#: src/build.c:568
+#: src/build.c:563
 msgid "Compilation failed."
 msgstr ""
 
-#: src/build.c:573
+#: src/build.c:568
 msgid "Compilation finished successfully."
 msgstr ""
 
