@@ -2253,8 +2253,9 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
                                         gpointer user_data)
 {
 	filetype *ft = user_data;
-	g_return_if_fail(ft != NULL);
 
+	g_return_if_fail(ft != NULL);
+	
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		if (ft->menu_items->can_compile)
@@ -2276,7 +2277,6 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3"))));
 		}
 	}
-	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
 

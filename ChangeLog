@@ -1,3 +1,9 @@
+2006-09-18  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c, src/callbacks.c:
+   Fixed compiler warnings and removed unnecessary signal handler.
+
+
 2006-09-17  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/templates.h, src/templates.c:
