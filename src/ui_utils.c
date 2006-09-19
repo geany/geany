@@ -833,15 +833,12 @@ static GtkWidget *create_build_menu_gen(gint idx)
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(2));
 #endif
 
-	if (item != NULL)
-	{
+	if (ft->menu_items->can_exec)
+	{	// execute the code
 		item = gtk_separator_menu_item_new();
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
-	}
 
-	if (ft->menu_items->can_exec)
-	{	// execute the code
 		item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
