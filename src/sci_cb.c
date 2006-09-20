@@ -635,10 +635,36 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
 
-	//if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL) return FALSE;
+	// don't autocomplete in comments and strings
 	if (lexer == SCLEX_HTML && style == SCE_H_DEFAULT) return FALSE;
-	if (lexer == SCLEX_CPP && (style == SCE_C_COMMENT ||
-			style == SCE_C_COMMENTLINE || style == SCE_C_COMMENTDOC)) return FALSE;
+	else if ((lexer == SCLEX_CPP || lexer == SCLEX_PASCAL) && (style == SCE_C_COMMENT ||
+														  style == SCE_C_COMMENTLINE ||
+														  style == SCE_C_COMMENTDOC ||
+														  style == SCE_C_STRING)) return FALSE;
+	else if (lexer == SCLEX_PYTHON && (style == SCE_P_COMMENTLINE ||
+									   style == SCE_P_COMMENTBLOCK ||
+									   style == SCE_P_STRING)) return FALSE;
+	else if (lexer == SCLEX_F77 && (style == SCE_F_COMMENT ||
+									style == SCE_F_STRING1 ||
+									style == SCE_F_STRING2)) return FALSE;
+	else if (lexer == SCLEX_PERL && (style == SCE_PL_COMMENTLINE ||
+									 style == SCE_PL_STRING)) return FALSE;
+	else if (lexer == SCLEX_PROPERTIES && style == SCE_PROPS_COMMENT) return FALSE;
+	else if (lexer == SCLEX_LATEX && style == SCE_L_COMMENT) return FALSE;
+	else if (lexer == SCLEX_MAKEFILE && style == SCE_MAKE_COMMENT) return FALSE;
+	else if (lexer == SCLEX_RUBY && (style == SCE_RB_COMMENTLINE ||
+									 style == SCE_RB_STRING)) return FALSE;
+	else if (lexer == SCLEX_BASH && (style == SCE_SH_COMMENTLINE ||
+									 style == SCE_SH_STRING)) return FALSE;
+	else if (lexer == SCLEX_SQL && (style == SCE_SQL_COMMENT ||
+									style == SCE_SQL_COMMENTLINE ||
+									style == SCE_SQL_COMMENTDOC ||
+									style == SCE_SQL_STRING)) return FALSE;
+	else if (lexer == SCLEX_TCL && (style == SCE_TCL_COMMENT ||
+									style == SCE_TCL_COMMENTLINE ||
+									style == SCE_TCL_IN_QUOTE)) return FALSE;
+	else if (lexer == SCLEX_RUBY && style == SCE_MAKE_COMMENT) return FALSE;
+
 
 	linebuf = g_malloc(line_len + 1);
 	sci_get_line(sci, line, linebuf);

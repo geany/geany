@@ -1,3 +1,8 @@
+2006-09-20  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: Don't start autocompletion in strings and comments.
+
+
 2006-09-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/search.c, src/search.h:
