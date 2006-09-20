@@ -1,3 +1,12 @@
+2006-09-20  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/search.c, src/search.h:
+   Add whole word only matching option for Find in Files.
+   Add fixed string matching option for Find in Files.
+   Make fixed string, case sensitive matching default for efficiency.
+   Sort filenames passed to Grep alphabetically.
+
+
 2006-09-18  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/dialogs.c, src/callbacks.c:

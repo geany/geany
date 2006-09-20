@@ -48,6 +48,22 @@ enum {
 	GEANY_RESPONSE_FIND
 };
 
+
+typedef enum
+{
+	FIF_CASE_SENSITIVE	= 1 << 0,
+	FIF_WHOLE_WORD		= 1 << 1,
+	FIF_INVERT_MATCH	= 1 << 2
+} fif_options;
+
+typedef enum
+{
+	FIF_FGREP,
+	FIF_GREP,
+	FIF_EGREP
+} fif_match_type;
+
+
 GeanySearchData search_data;
 
 static struct
@@ -91,6 +107,10 @@ on_combo_entry_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_
 
 static void
 on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
+
+static gboolean
+search_find_in_files(const gchar *search_text, const gchar *dir, fif_match_type regex_opt,
+		fif_options opts);
 
 static void on_open_dir_dialog_clicked(GtkButton *button, gpointer user_data);
 
@@ -385,8 +405,8 @@ void search_show_find_in_files_dialog()
 
 	if (widgets.find_in_files_dialog == NULL)
 	{
-		GtkWidget *label, *label1, *checkbox1, *checkbox2, *checkbox3;
-		GtkWidget *dbox, *sbox, *cbox;
+		GtkWidget *label, *label1, *checkbox1, *checkbox2, *check_wholeword;
+		GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox;
 		GtkSizeGroup *size_group;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
@@ -436,10 +456,41 @@ void search_show_find_in_files_dialog()
 		gtk_size_group_add_widget(size_group, label);
 		g_object_unref(G_OBJECT(size_group));	// auto destroy the size group
 
+		rbox = gtk_vbox_new(FALSE, 0);
+		rbtn = gtk_radio_button_new_with_mnemonic(NULL, _("_Fixed strings"));
+		// Make fixed strings the default to speed up searching all files in directory.
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(rbtn), TRUE);
+		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "radio_fgrep",
+						gtk_widget_ref(rbtn), (GDestroyNotify)gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
+		gtk_container_add(GTK_CONTAINER(rbox), rbtn);
+
+		rbtn = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(rbtn),
+					_("_Grep regular expressions"));
+		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "radio_grep",
+						gtk_widget_ref(rbtn), (GDestroyNotify)gtk_widget_unref);
+		gtk_tooltips_set_tip(tooltips, rbtn,
+					_("See grep's manual page for more information."), NULL);
+		gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
+		gtk_container_add(GTK_CONTAINER(rbox), rbtn);
+
+		rbtn = gtk_radio_button_new_with_mnemonic_from_widget(GTK_RADIO_BUTTON(rbtn),
+					_("_Extended regular expressions"));
+		gtk_tooltips_set_tip(tooltips, rbtn,
+					_("See grep's manual page for more information."), NULL);
+		gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
+		gtk_container_add(GTK_CONTAINER(rbox), rbtn);
+
 		checkbox1 = gtk_check_button_new_with_mnemonic(_("_Case sensitive"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_case",
 						gtk_widget_ref(checkbox1), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox1), FALSE);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox1), TRUE);
+
+		check_wholeword = gtk_check_button_new_with_mnemonic(_("Match only a _whole word"));
+		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_wholeword",
+						gtk_widget_ref(check_wholeword), (GDestroyNotify)gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(check_wholeword), FALSE);
 
 		checkbox2 = gtk_check_button_new_with_mnemonic(_("_Invert search results"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_invert",
@@ -448,17 +499,23 @@ void search_show_find_in_files_dialog()
 		gtk_tooltips_set_tip(tooltips, checkbox2,
 				_("Invert the sense of matching, to select non-matching lines."), NULL);
 
-		checkbox3 = gtk_check_button_new_with_mnemonic(_("_Use extended regular expressions"));
-		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_eregexp",
-						gtk_widget_ref(checkbox3), (GDestroyNotify)gtk_widget_unref);
-		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox3), FALSE);
-		gtk_tooltips_set_tip(tooltips, checkbox3,
-							_("See grep's manual page for more information."), NULL);
-
 		cbox = gtk_vbox_new(FALSE, 0);
 		gtk_container_add(GTK_CONTAINER(cbox), checkbox1);
+		gtk_container_add(GTK_CONTAINER(cbox), check_wholeword);
 		gtk_container_add(GTK_CONTAINER(cbox), checkbox2);
-		gtk_container_add(GTK_CONTAINER(cbox), checkbox3);
+
+		hbox = gtk_hbox_new(FALSE, 6);
+		gtk_container_add(GTK_CONTAINER(hbox), rbox);
+		gtk_container_add(GTK_CONTAINER(hbox), cbox);
+
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
+			dbox, TRUE, FALSE, 6);
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
+			sbox, TRUE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
+			hbox, TRUE, TRUE, 6);
+
+		gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox), 6);
 
 		g_signal_connect((gpointer) entry1, "key-press-event",
 				G_CALLBACK(on_combo_entry_key_pressed), gtk_bin_get_child(GTK_BIN(combo)));
@@ -466,15 +523,6 @@ void search_show_find_in_files_dialog()
 				G_CALLBACK(on_find_in_files_dialog_response), combo);
 		g_signal_connect((gpointer) widgets.find_in_files_dialog, "delete_event",
 				G_CALLBACK(gtk_widget_hide), NULL);
-
-		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
-			dbox, TRUE, FALSE, 6);
-		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
-			sbox, TRUE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox),
-			cbox, TRUE, TRUE, 6);
-
-		gtk_box_set_spacing(GTK_BOX(GTK_DIALOG(widgets.find_in_files_dialog)->vbox), 6);
 
 		gtk_widget_show_all(widgets.find_in_files_dialog);
 	}
@@ -760,19 +808,24 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 		else if (search_text && *search_text)
 		{
 			gchar *locale_dir;
-			gboolean eregexp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-							lookup_widget(widgets.find_in_files_dialog, "check_eregexp")));
 			gboolean invert = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 							lookup_widget(widgets.find_in_files_dialog, "check_invert")));
 			gboolean case_sens = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 							lookup_widget(widgets.find_in_files_dialog, "check_case")));
-			gint opts = (eregexp ? FIF_USE_EREGEXP : 0) |
-						(invert ? FIF_INVERT_MATCH : 0) |
-						(case_sens ? FIF_CASE_SENSITIVE : 0);
+			gboolean whole_word = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+							lookup_widget(widgets.find_in_files_dialog, "check_wholeword")));
+			gint opts = (invert ? FIF_INVERT_MATCH : 0) |
+						(case_sens ? FIF_CASE_SENSITIVE : 0) |
+						(whole_word ? FIF_WHOLE_WORD : 0);
+			gboolean fgrep = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+							lookup_widget(widgets.find_in_files_dialog, "radio_fgrep")));
+			gboolean grep = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+							lookup_widget(widgets.find_in_files_dialog, "radio_grep")));
+			gint regex_opt = fgrep ? FIF_FGREP : (grep ? FIF_GREP : FIF_EGREP);
 
 			locale_dir = utils_get_locale_from_utf8(utf8_dir);
 
-			if (search_find_in_files(search_text, locale_dir, opts))
+			if (search_find_in_files(search_text, locale_dir, regex_opt, opts))
 			{
 				gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), search_text);
 				gtk_widget_hide(widgets.find_in_files_dialog);
@@ -787,12 +840,14 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 }
 
 
-gboolean search_find_in_files(const gchar *search_text, const gchar *dir, fif_options opts)
+static gboolean
+search_find_in_files(const gchar *search_text, const gchar *dir, fif_match_type regex_opt,
+		fif_options opts)
 {
 	gchar **argv_prefix;
 	gchar **grep_cmd_argv;
 	gchar **argv;
-	gchar grep_opts[] = "-nHI   ";
+	gchar grep_opts[] = "-nHI    ";
 	GPid child_pid;
 	gint stdout_fd, stdin_fd, grep_cmd_argv_len, i, grep_opts_len = 4;
 	GError *error = NULL;
@@ -814,10 +869,18 @@ gboolean search_find_in_files(const gchar *search_text, const gchar *dir, fif_op
 	gtk_list_store_clear(msgwindow.store_msg);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
 
+	switch (regex_opt)
+	{
+		default:
+		case FIF_FGREP:	grep_opts[grep_opts_len++] = 'F'; break;
+		case FIF_GREP:	break;
+		case FIF_EGREP:	grep_opts[grep_opts_len++] = 'E'; break;
+	}
+
 	if (! (opts & FIF_CASE_SENSITIVE))
 		grep_opts[grep_opts_len++] = 'i';
-	if (opts & FIF_USE_EREGEXP)
-		grep_opts[grep_opts_len++] = 'E';
+	if (opts & FIF_WHOLE_WORD)
+		grep_opts[grep_opts_len++] = 'w';
 	if (opts & FIF_INVERT_MATCH)
 		grep_opts[grep_opts_len++] = 'v';
 	grep_opts[grep_opts_len] = '\0';
@@ -828,7 +891,7 @@ gboolean search_find_in_files(const gchar *search_text, const gchar *dir, fif_op
 	{
 		argv_prefix[i] = g_strdup(grep_cmd_argv[i]);
 	}
-	argv_prefix[grep_cmd_argv_len   ] = g_strdup(grep_opts);
+	argv_prefix[grep_cmd_argv_len] = g_strdup(grep_opts);
 	argv_prefix[grep_cmd_argv_len + 1] = g_strdup("--");
 	argv_prefix[grep_cmd_argv_len + 2] = g_strdup(search_text);
 	argv_prefix[grep_cmd_argv_len + 3] = NULL;
@@ -837,7 +900,7 @@ gboolean search_find_in_files(const gchar *search_text, const gchar *dir, fif_op
 	// finally add the arguments(files to be searched)
 	argv = search_get_argv((const gchar**)argv_prefix, dir);
 	g_strfreev(argv_prefix);
-	//geany_debug(g_strjoinv(" ", argv));
+
 	if (argv == NULL) return FALSE;
 
 	if (! g_spawn_async_with_pipes(dir, (gchar**)argv, NULL,
@@ -872,6 +935,7 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 	guint prefix_len, list_len, i, j;
 	gchar **argv;
 	GSList *list, *item;
+
 	g_return_val_if_fail(dir != NULL, NULL);
 
 	prefix_len = g_strv_length((gchar**)argv_prefix);
@@ -896,16 +960,17 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 }
 
 
-/* Gets a list of files in the current directory, or NULL if no files found.
+/* Gets a sorted list of files in the current directory.
  * The list and the data in the list should be freed after use.
+ * Returns: The list or NULL if no files found.
  * *length is set to the number of non-NULL data items in the list. */
 static GSList *search_get_file_list(const gchar *path, guint *length)
 {
 	GError *error = NULL;
 	GSList *list = NULL;
 	guint len = 0;
-	const gchar *filename;
 	GDir *dir;
+
 	g_return_val_if_fail(path != NULL, NULL);
 
 	dir = g_dir_open(path, 0, &error);
@@ -916,21 +981,18 @@ static GSList *search_get_file_list(const gchar *path, guint *length)
 		*length = 0;
 		return NULL;
 	}
-	do
-	{
-		filename = g_dir_read_name(dir);
-		list = g_slist_append(list, g_strdup(filename));
-		len++;
-	} while (filename != NULL);
 
-	g_dir_close(dir);
-	len--; //subtract 1 for the last null data element.
-	*length = len;
-	if (len == 0)
+	while (1)
 	{
-		g_slist_free(list);
-		return NULL;
+		const gchar *filename = g_dir_read_name(dir);
+		if (filename == NULL) break;
+
+		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) strcmp);
+		len++;
 	}
+	g_dir_close(dir);
+
+	*length = len;
 	return list;
 }
 

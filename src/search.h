@@ -22,12 +22,8 @@
  */
 
 
-typedef enum
-{
-	FIF_CASE_SENSITIVE 	= 1 << 0,
-	FIF_USE_EREGEXP		= 1 << 1,
-	FIF_INVERT_MATCH	= 1 << 2
-} fif_options;
+#ifndef GEANY_SEARCH_H
+#define GEANY_SEARCH_H 1
 
 // the flags given in the search dialog for "find next"
 typedef struct
@@ -50,5 +46,4 @@ void search_show_replace_dialog();
 
 void search_show_find_in_files_dialog();
 
-gboolean search_find_in_files(const gchar *search_text, const gchar *dir, fif_options opts);
-
+#endif
