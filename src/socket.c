@@ -356,7 +356,6 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 				geany_debug("got data from socket, but it does not look like a filename");
 		}
 		gtk_window_deiconify(GTK_WINDOW(app->window));
-		gtk_window_present(GTK_WINDOW(app->window));
 	}
 
 	socket_fd_close(sock);
