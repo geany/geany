@@ -1,3 +1,13 @@
+2006-09-21  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/ui_utils.c:
+   Fix a bug when clicking on a recent file.
+ * src/callbacks.c src/sciwrappers.c:
+   Prevent a partial selection on a line being deleted when using
+   CTRL-I to indent; also improve CTRL-Shift-I unindenting. Closes
+   #1557963.
+
+
 2006-09-20  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Don't start autocompletion in strings and comments.
@@ -12,8 +22,6 @@
    Sort filenames passed to Grep alphabetically.
  * src/socket.c:
    Don't move Geany to the current desktop when opening files remotely.
- * src/ui_utils.c:
-   Fix a bug when clicking on a recent file.
 
 
 2006-09-18  Enrico Tröger  <enrico.troeger@uvena.de>

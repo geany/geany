@@ -818,7 +818,9 @@ gint sci_get_current_line(ScintillaObject *sci, gint pos)
 	}
 }
 
-// get number of lines partially or fully selected
+/* Get number of lines partially or fully selected.
+ * Returns 1 if there is a partial selection on the same line.
+ * Returns 2 if a whole line is selected including the line break char(s). */
 gint sci_get_lines_selected(ScintillaObject *sci)
 {
 	gint start = SSM(sci, SCI_GETSELECTIONSTART, 0, 0);

@@ -2498,7 +2498,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
-	if (sci_can_copy(doc_list[idx].sci))
+	if (sci_get_lines_selected(doc_list[idx].sci) > 1)
 	{
 		sci_cmd(doc_list[idx].sci, SCI_TAB);
 	}
@@ -2524,7 +2524,7 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
-	if (sci_can_copy(doc_list[idx].sci))
+	if (sci_get_lines_selected(doc_list[idx].sci) > 1)
 	{
 		sci_cmd(doc_list[idx].sci, SCI_BACKTAB);
 	}
