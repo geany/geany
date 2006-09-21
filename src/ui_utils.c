@@ -39,7 +39,7 @@
 #include "keybindings.h"
 
 
-static const gchar *menu_item_get_text(GtkMenuItem *menu_item);
+static gchar *menu_item_get_text(GtkMenuItem *menu_item);
 
 static void update_recent_menu();
 static void recent_file_loaded(const gchar *utf8_filename);
@@ -1204,21 +1204,23 @@ void ui_create_recent_menu()
 		gtk_widget_show(tmp);
 		gtk_menu_shell_append(GTK_MENU_SHELL(recent_menu), tmp);
 		g_signal_connect((gpointer) tmp, "activate",
-					G_CALLBACK(recent_file_activate_cb), (gpointer) filename);
+					G_CALLBACK(recent_file_activate_cb), NULL);
 	}
 }
 
 
 static void
 recent_file_activate_cb                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+                                        G_GNUC_UNUSED gpointer         user_data)
 {
-	gchar *locale_filename = utils_get_locale_from_utf8((gchar*) user_data);
+	gchar *utf8_filename = menu_item_get_text(menuitem);
+	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
 	if (document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL) > -1)
-		recent_file_loaded((gchar*) user_data);
+		recent_file_loaded(utf8_filename);
 
 	g_free(locale_filename);
+	g_free(utf8_filename);
 }
 
 
@@ -1237,7 +1239,8 @@ void ui_add_recent_file(const gchar *utf8_filename)
 }
 
 
-static const gchar *menu_item_get_text(GtkMenuItem *menu_item)
+// Returns: newly allocated string with the UTF-8 menu text.
+static gchar *menu_item_get_text(GtkMenuItem *menu_item)
 {
 	const gchar *text = NULL;
 
@@ -1248,7 +1251,8 @@ static const gchar *menu_item_get_text(GtkMenuItem *menu_item)
 		if (GTK_IS_LABEL (child))
 			text = gtk_label_get_text(GTK_LABEL(child));
 	}
-	return text;
+	// GTK owns text so it's much safer to return a copy of it in case the memory is reallocated
+	return g_strdup(text);
 }
 
 
@@ -1273,7 +1277,7 @@ static void recent_file_loaded(const gchar *utf8_filename)
 	// remove the old menuitem for the filename
 	for (item = children; item != NULL; item = g_list_next(item))
 	{
-		const gchar *menu_text;
+		gchar *menu_text;
 
 		data = item->data;
 		if (! GTK_IS_MENU_ITEM(data)) continue;
@@ -1282,15 +1286,17 @@ static void recent_file_loaded(const gchar *utf8_filename)
 		if (g_str_equal(menu_text, utf8_filename))
 		{
 			gtk_widget_destroy(GTK_WIDGET(data));
+			g_free(menu_text);
 			break;
 		}
+		g_free(menu_text);
 	}
 	// now prepend a new menuitem for the filename
 	tmp = gtk_menu_item_new_with_label(utf8_filename);
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(recent_menu), tmp);
 	g_signal_connect((gpointer) tmp, "activate",
-				G_CALLBACK(recent_file_activate_cb), (gpointer) utf8_filename);
+				G_CALLBACK(recent_file_activate_cb), NULL);
 }
 
 
@@ -1329,7 +1335,7 @@ static void update_recent_menu()
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(recent_menu), tmp);
 	g_signal_connect((gpointer) tmp, "activate",
-				G_CALLBACK(recent_file_activate_cb), (gpointer) filename);
+				G_CALLBACK(recent_file_activate_cb), NULL);
 }
 
 

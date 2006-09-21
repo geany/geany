@@ -12,6 +12,8 @@
    Sort filenames passed to Grep alphabetically.
  * src/socket.c:
    Don't move Geany to the current desktop when opening files remotely.
+ * src/ui_utils.c:
+   Fix a bug when clicking on a recent file.
 
 
 2006-09-18  Enrico Tröger  <enrico.troeger@uvena.de>
