@@ -165,6 +165,7 @@ static void apply_settings(void)
 			break;
 		}
 	}
+	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), app->toolbar_icon_style);
 
 	// sets the icon size of the toolbar, use user preferences (.gtkrc) if not set
 	if (app->toolbar_icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
