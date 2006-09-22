@@ -54,7 +54,11 @@
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
 // some default settings which are used at the very first start of Geany to fill configuration file
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
+#ifdef G_OS_WIN32
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe"
+#else
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm"
+#endif
 #define GEANY_DEFAULT_TOOLS_BROWSER		"mozilla"
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"

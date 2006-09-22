@@ -107,7 +107,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 #ifdef G_OS_WIN32
 	argv = NULL;
 	child_pid = (GPid) 0;
-	
+
 	if (! g_spawn_command_line_async(locale_cmd_string, &error))
 #else
 	argv = g_new0(gchar *, 4);
@@ -363,11 +363,6 @@ GPid build_run_cmd(gint idx)
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
-	locale_term_cmd = utils_get_locale_from_utf8(app->tools_term_cmd);
-	// split the term_cmd, so arguments will work too
-	term_argv = g_strsplit(locale_term_cmd, " ", -1);
-	term_argv_len = g_strv_length(term_argv);
-
 	long_executable = utils_remove_ext_from_filename(locale_filename);
 #ifdef G_OS_WIN32
 	long_executable = g_strconcat(long_executable, ".exe", NULL);
@@ -405,12 +400,21 @@ GPid build_run_cmd(gint idx)
 		}
 	}
 
+	/* get the terminal path */
+	locale_term_cmd = utils_get_locale_from_utf8(app->tools_term_cmd);
+	// split the term_cmd, so arguments will work too
+	term_argv = g_strsplit(locale_term_cmd, " ", -1);
+	term_argv_len = g_strv_length(term_argv);
 
-	// check if terminal path is set (to prevent misleading error messages)
-	tmp = term_argv[0];
-	term_argv[0] = g_find_program_in_path(tmp);
-	g_free(tmp);
-	if (stat(term_argv[0], &st) != 0)
+	// check that terminal exists (to prevent misleading error messages)
+	if (term_argv[0] != NULL)
+	{
+		tmp = term_argv[0];
+		// g_find_program_in_path checks tmp exists and is executable
+		term_argv[0] = g_find_program_in_path(tmp);
+		g_free(tmp);
+	}
+	if (term_argv[0] == NULL)
 	{
 		msgwin_status_add(
 			_("Could not find terminal '%s' "

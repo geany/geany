@@ -1,6 +1,9 @@
 2006-09-22  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/main.c: Apply toolbar style on startup (Fixes #1563125).
+ * src/build.c src/geany.h:
+   Prevent a segfault if the Terminal tool is not set.
+   Use cmd.exe as default Terminal tool on Windows.
 
 
 2006-09-21  Nick Treleaven  <nick.treleaven@btinternet.com>
