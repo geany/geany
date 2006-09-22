@@ -67,7 +67,7 @@ LexPerl.o LexPython.o LexSQL.o LexCaml.o LexOMS.o LexTCL.o LexRuby.o LexFortran.
 all: $(COMPLIB)
 
 clean:
-	$(RM) deps.mak *.o $(COMPLIB)
+	-$(RM) deps.mak *.o $(COMPLIB)
 
 $(COMPLIB): DocumentAccessor.o WindowAccessor.o KeyWords.o StyleContext.o Document.o CallTip.o \
 	ScintillaBase.o ContractionState.o Editor.o ExternalLexer.o PropSet.o PlatGTK.o \

@@ -1,16 +1,19 @@
 2006-09-22  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/main.c: Apply toolbar style on startup (Fixes #1563125).
- * src/build.c src/geany.h:
+ * src/build.c, src/geany.h:
    Prevent a segfault if the Terminal tool is not set.
    Use cmd.exe as default Terminal tool on Windows.
+ * scintilla/makefile.win32, src/makefile.win32,
+   tagmanager/makefile.win32, makefile.win32:
+   Let make clean continue when a file can't be deleted.
 
 
 2006-09-21  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/ui_utils.c:
    Fix a bug when clicking on a recent file.
- * src/callbacks.c src/sciwrappers.c:
+ * src/callbacks.c, src/sciwrappers.c:
    Prevent a partial selection on a line being deleted when using
    CTRL-I to indent; also improve CTRL-Shift-I unindenting. Closes
    #1557963.
