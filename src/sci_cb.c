@@ -59,12 +59,10 @@ on_editor_button_press_event           (GtkWidget *widget,
 	gint idx = GPOINTER_TO_INT(user_data);
 	editor_info.click_pos = sci_get_position_from_xy(doc_list[idx].sci, event->x, event->y, FALSE);
 
-#ifndef G_OS_WIN32
 	if (event->button == 1)
 	{
 		return utils_check_disk_status(idx);
 	}
-#endif
 
 	if (event->button == 3)
 	{
@@ -1397,12 +1395,12 @@ void sci_cb_do_comment_toggle(gint idx)
 					real_uncomment_multiline(idx);
 					count_uncommented++;
 				}
-				else 
+				else
 				{
 					real_comment_multiline(idx, line_start, last_line);
 					count_commented++;
 				}
-				
+
 				// break because we are already on the last line
 				break_loop = TRUE;
 				break;
@@ -1437,7 +1435,7 @@ void sci_cb_do_comment_toggle(gint idx)
 				sci_set_selection_start(doc_list[idx].sci, sel_start - co_len - eol_len);
 				sci_set_selection_end(doc_list[idx].sci, sel_end - co_len - eol_len);
 			}
-			else 
+			else
 			{
 				sci_set_selection_start(doc_list[idx].sci, sel_start + co_len + eol_len);
 				sci_set_selection_end(doc_list[idx].sci, sel_end + co_len + eol_len);

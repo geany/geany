@@ -1,3 +1,13 @@
+2006-09-26  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * win32-config.h: Enabled socket code on Windows.
+ * src/socket.c: Re-enabled the gtk_window_present() call for Windows
+                 to pop up the main window.
+ * src/utils.c, src/sci_cb.c:
+   Enabled notification if file on disk has changed under Windows, it
+   seems to work (closes #1557689).
+
+
 2006-09-26  Frank Lanitz  <frank@frank.uvena.de>
 
  * po/nl.po, THANKS, configure.in, scr/about.c:

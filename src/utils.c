@@ -481,7 +481,6 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 
 gboolean utils_check_disk_status(gint idx)
 {
-#ifndef G_OS_WIN32
 	struct stat st;
 	time_t t;
 	gchar *locale_filename;
@@ -519,7 +518,6 @@ gboolean utils_check_disk_status(gint idx)
 		g_free(basename);
 		return TRUE; //file has changed
 	}
-#endif
 	return FALSE;
 }
 

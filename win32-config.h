@@ -286,7 +286,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Version number of package */
-#define VERSION "0.8"
+#define VERSION "0.9"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
@@ -320,3 +320,6 @@
 /* #undef volatile */
 
 #define REVISION "SVN"
+
+/* Define if you want to detect a running instance */
+#define HAVE_SOCKET 1
