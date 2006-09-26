@@ -1236,7 +1236,7 @@ gchar *utils_get_current_time_string()
 	const struct tm *tmval = localtime(&tp);
 	gchar *result = g_malloc0(9);
 
-	strftime(result, 9, "%T", tmval);
+	strftime(result, 9, "%H:%M:%S", tmval);
 	result[8] = '\0';
 	return result;
 }
