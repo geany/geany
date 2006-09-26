@@ -1,3 +1,9 @@
+2006-09-26  Frank Lanitz  <frank@frank.uvena.de>
+
+ * po/nl.po, THANKS, configure.in, scr/about.c:
+   Added Dutch translation (Thanks to Kurt De Bree).
+
+
 2006-09-22  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/main.c: Apply toolbar style on startup (Fixes #1563125).

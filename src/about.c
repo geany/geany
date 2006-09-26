@@ -55,6 +55,8 @@ Frank Lanitz - <language> de_DE\n\t\
 &lt;frank@frank.uvena.de&gt;\n\n\t\
 Damián Viano - <language> es\n\t\
 &lt;debian@damianv.com.ar&gt;\n\n\t\
+Kurt De Bree - <language> nl\n\t\
+&lt;kdebree@telenet.be&gt;\n\n\t\
 Jacek Wolszczak - <language> pl_PL\n\t\
 &lt;shutdownrunner@o2.pl&gt;\n\n\t\
 Alexandre Moreira - <language> pt_BR\n\t\
