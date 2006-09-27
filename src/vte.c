@@ -44,6 +44,8 @@ static struct VteFunctions *vf;
 static gboolean popup_menu_created = FALSE;
 static gchar *gtk_menu_key_accel = NULL;
 
+static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
+
 
 #define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
@@ -148,7 +150,7 @@ void vte_init(void)
 	vf->vte_terminal_set_size(VTE_TERMINAL(vte), 30, 1);
 	//vf->vte_terminal_set_encoding(VTE_TERMINAL(vte), "UTF-8");
 	vf->vte_terminal_set_mouse_autohide(VTE_TERMINAL(vte), TRUE);
-	vf->vte_terminal_set_word_chars(VTE_TERMINAL(vte), GEANY_WORDCHARS);
+	vf->vte_terminal_set_word_chars(VTE_TERMINAL(vte), VTE_WORDCHARS);
 
 	g_signal_connect(G_OBJECT(vte), "child-exited", G_CALLBACK(vte_start), NULL);
 	g_signal_connect(G_OBJECT(vte), "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
