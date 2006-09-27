@@ -674,7 +674,9 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 	root = linebuf + startword;
 	rootlen = current - startword;
 
-	if (lexer == SCLEX_HTML)
+	// entity autocompletion always in a HTML file, in a PHP file only when we are outside of <? ?>
+	if (doc_list[idx].file_type->id == GEANY_FILETYPES_HTML ||
+		(doc_list[idx].file_type->id == GEANY_FILETYPES_PHP && (style < 118 || style > 127)))
 		ret = autocomplete_html(sci, root, rootlen);
 	else
 	{

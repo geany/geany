@@ -1,3 +1,8 @@
+2006-09-27  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: Fixed broken autocompletion for filetype PHP.
+
+
 2006-09-26  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * win32-config.h: Enabled socket code on Windows.
