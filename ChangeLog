@@ -1,6 +1,10 @@
 2006-09-27  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/vte.c: Change VTE word selection chars to include paths.
+ * src/highlighting.c, data/filetypes.common:
+   Only override the default Scintilla selection style if foreground
+   and/or background flags are set in filetypes.common.
+   Also increase the current line background brightness.
 
 
 2006-09-27  Enrico Tröger  <enrico.troeger@uvena.de>

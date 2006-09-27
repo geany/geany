@@ -321,8 +321,12 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.at.else", (sptr_t) "1");
 
 
-	SSM(sci, SCI_SETSELFORE, 1, invert(types[GEANY_FILETYPES_ALL]->styling[0][0]));
-	SSM(sci, SCI_SETSELBACK, 1, invert(types[GEANY_FILETYPES_ALL]->styling[0][1]));
+	// 3rd argument is whether to override default foreground selection
+	if (types[GEANY_FILETYPES_ALL]->styling[0][2])
+		SSM(sci, SCI_SETSELFORE, 1, invert(types[GEANY_FILETYPES_ALL]->styling[0][0]));
+	// 4th argument is whether to override default background selection
+	if (types[GEANY_FILETYPES_ALL]->styling[0][3])
+		SSM(sci, SCI_SETSELBACK, 1, invert(types[GEANY_FILETYPES_ALL]->styling[0][1]));
 
 	SSM(sci, SCI_SETSTYLEBITS, style_bits, 0);
 
