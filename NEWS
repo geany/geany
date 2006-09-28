@@ -1,3 +1,31 @@
+Geany 0.9 (TBA)
+
+    Changes:
+    * Added function calltips for files open in the current workspace
+      for C-like languages.
+    * Open a second instance by default when starting Geany with no
+      filenames specified on the command-line.
+    * Added better error message support for D, for both DMD and GDC;
+      also GCC-style linker error messages are now parsed.
+    * Text selections now use syntax highlighting foreground colours
+      (but can still be overridden in filetypes.common).
+    * Find in Files improvements: fixed string and whole word only
+      matching options; a directory selector dialog; filenames passed
+      to Grep are now sorted alphabetically.
+    * Remember the VTE current directory at startup.
+    * Show the messages window on build failure or for Find Usage.
+    * Added -s command-line option to not load session files (-i is now
+      used to force a new instance).
+
+    Bugs fixed:
+    * Fixed a segfault at startup if terminal follow path setting is
+      enabled.
+    * Fixed clicking on error messages being dependent on the current
+      file's directory.
+    * Fixed a bug when clicking on a recent file got the wrong
+      filename.
+
+
 Geany 0.8 (August 09, 2006)
 
         Changes:
