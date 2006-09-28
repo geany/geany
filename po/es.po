@@ -2773,7 +2773,6 @@ msgstr ""
 "coincidentes."
 
 #: src/search.c:451
-#, fuzzy
 msgid "_Use extended regular expressions"
 msgstr "Expresiones regulares _Extendidas"
 
