@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-18 14:36+0200\n"
-"PO-Revision-Date: 2006-06-10 19:30-0300\n"
-"Last-Translator: Damián Viano <dviano@fi.uba.ar>\n"
+"POT-Creation-Date: 2006-09-27 19:04+0200\n"
+"PO-Revision-Date: 2006-09-29 00:05+0100\n"
+"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: Spanish <dviano@fi.uba.ar>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -53,16 +53,16 @@ msgstr "nombre de archivo de libvte.so"
 msgid "show version and exit"
 msgstr "mostrar versión y salir"
 
-#: src/main.c:387
+#: src/main.c:388
 msgid " - A fast and lightweight IDE"
 msgstr " - Un IDE rápido y liviano"
 
-#: src/main.c:397
+#: src/main.c:398
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(compilado en %s con GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: src/main.c:439
+#: src/main.c:440
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -73,17 +73,17 @@ msgstr ""
 "Puede haber problemas usando Geany sin un directorio de configuración.\n"
 "¿Iniciar Geany de todas formas?"
 
-#: src/main.c:555
+#: src/main.c:556
 #, c-format
 msgid "This is Geany %s."
 msgstr "Este es Geany %s."
 
-#: src/main.c:557
+#: src/main.c:558
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "La carpeta de configuración no pudo ser creada (%s)."
 
-#: src/main.c:582 src/callbacks.c:823 src/dialogs.c:151 src/document.c:378
+#: src/main.c:583 src/callbacks.c:823 src/dialogs.c:151 src/document.c:378
 #: src/document.c:416 src/win32.c:151
 #, c-format
 msgid ""
@@ -122,7 +122,7 @@ msgstr "Guardar _todo"
 msgid "Saves all open files"
 msgstr "Guarda todos los archivos abiertos"
 
-#: src/interface.c:317 src/callbacks.c:506 src/utils.c:508
+#: src/interface.c:317 src/callbacks.c:506 src/utils.c:507
 msgid "_Reload"
 msgstr "_Recargar"
 
@@ -270,7 +270,7 @@ msgstr "Buscar _Siguente"
 msgid "Find _Previous"
 msgstr "Buscar _Anterior"
 
-#: src/interface.c:584 src/search.c:283
+#: src/interface.c:584 src/search.c:303
 msgid "_Replace"
 msgstr "_Remplazar"
 
@@ -503,7 +503,7 @@ msgstr "Compilar"
 msgid "Compile the current file"
 msgstr "Compilar el archivo actual"
 
-#: src/interface.c:908 src/ui_utils.c:848
+#: src/interface.c:908 src/ui_utils.c:845
 msgid "Run or view the current file"
 msgstr "Ejecutar o ver el archivo actual"
 
@@ -1081,7 +1081,7 @@ msgstr ""
 msgid "Make"
 msgstr "Make"
 
-#: src/interface.c:3082 src/prefs.c:1062 src/vte.c:164
+#: src/interface.c:3082 src/prefs.c:1062 src/vte.c:166
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1415,7 +1415,7 @@ msgid "Enter the line you want to go to"
 msgstr "Ingrese la linea a la que quiere ir"
 
 #. arguments
-#: src/dialogs.c:594 src/ui_utils.c:981
+#: src/dialogs.c:594 src/ui_utils.c:978
 msgid "Set Arguments"
 msgstr "Seleccionar argumentos"
 
@@ -1498,7 +1498,7 @@ msgstr ""
 "archivo nuevo)."
 
 #: src/dialogs.c:861 src/dialogs.c:862 src/dialogs.c:863 src/dialogs.c:869
-#: src/dialogs.c:870 src/dialogs.c:871 src/utils.c:609 src/ui_utils.c:104
+#: src/dialogs.c:870 src/dialogs.c:871 src/utils.c:607 src/ui_utils.c:104
 #: src/ui_utils.c:106
 msgid "unknown"
 msgstr "desconocido"
@@ -1698,11 +1698,11 @@ msgstr "La impresión de \"%s\" ha fallado (código de retorno: %d)."
 msgid "File %s printed."
 msgstr "Archivo %s impreso."
 
-#: src/utils.c:509
+#: src/utils.c:508
 msgid "Do you want to reload it?"
 msgstr "¿Quiere recargarlo?"
 
-#: src/utils.c:510
+#: src/utils.c:509
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -1783,22 +1783,22 @@ msgid "Builds the current file (generate an executable file)"
 msgstr "Construye el archivo actual (genera un archivo ejecutable)"
 
 #. build the code with make all
-#: src/ui_utils.c:809 src/ui_utils.c:923
+#: src/ui_utils.c:809 src/ui_utils.c:920
 msgid "_Make all"
 msgstr "_Make all"
 
-#: src/ui_utils.c:812 src/ui_utils.c:926
+#: src/ui_utils.c:812 src/ui_utils.c:923
 msgid "Builds the current file with the make tool and the default target"
 msgstr ""
 "Construye el archivo actual con la herramienta make y el objetivo "
 "predeterminado"
 
 #. build the code with make
-#: src/ui_utils.c:818 src/ui_utils.c:932
+#: src/ui_utils.c:818 src/ui_utils.c:929
 msgid "Make custom _target"
 msgstr "Construye con make (obje_tivo personalizado)"
 
-#: src/ui_utils.c:822 src/ui_utils.c:936
+#: src/ui_utils.c:822 src/ui_utils.c:933
 msgid "Builds the current file with the make tool and the specified target"
 msgstr ""
 "Construye el archivo actual con la herramienta make y el objetivo "
@@ -1813,11 +1813,11 @@ msgstr "Make _object"
 msgid "Compiles the current file using the make tool"
 msgstr "Compila el archivo actual usando la herramienta make"
 
-#: src/ui_utils.c:863
+#: src/ui_utils.c:860
 msgid "_Set Includes and Arguments"
 msgstr "_Selecciona Incluciones y Argumentos"
 
-#: src/ui_utils.c:868
+#: src/ui_utils.c:865
 msgid ""
 "Sets the includes and library paths for the compiler and the program "
 "arguments for execution"
@@ -1826,38 +1826,38 @@ msgstr ""
 "argumentos del programa para su ejecución"
 
 #. DVI
-#: src/ui_utils.c:890
+#: src/ui_utils.c:887
 msgid "LaTeX -> DVI"
 msgstr "LaTeX -> DVI"
 
-#: src/ui_utils.c:893
+#: src/ui_utils.c:890
 msgid "Compiles the current file into a DVI file"
 msgstr "Compila el archivo actual a un archivo DVI"
 
 #. PDF
-#: src/ui_utils.c:903
+#: src/ui_utils.c:900
 msgid "LaTeX -> PDF"
 msgstr "LaTeX -> PDF"
 
-#: src/ui_utils.c:906
+#: src/ui_utils.c:903
 msgid "Compiles the current file into a PDF file"
 msgstr "Compila el archivo actual a un archivo PDF"
 
 #. DVI view
-#: src/ui_utils.c:949
+#: src/ui_utils.c:946
 msgid "View DVI file"
 msgstr "Ver archivo DVI"
 
-#: src/ui_utils.c:955 src/ui_utils.c:968
+#: src/ui_utils.c:952 src/ui_utils.c:965
 msgid "Compiles and view the current file"
 msgstr "Compila y muestr el archivo actual"
 
 #. PDF view
-#: src/ui_utils.c:962
+#: src/ui_utils.c:959
 msgid "View PDF file"
 msgstr "Ver archivo PDF"
 
-#: src/ui_utils.c:988
+#: src/ui_utils.c:985
 msgid "Sets the program paths and arguments"
 msgstr "Selecciona las rutas y argumentos del programa"
 
@@ -2003,7 +2003,7 @@ msgstr "Mesajes de estado"
 msgid "Failed to view %s (make sure it is already compiled)"
 msgstr "Fallo al ver %s (asegurece de que está compilado)"
 
-#: src/build.c:124 src/build.c:309 src/build.c:473 src/search.c:849
+#: src/build.c:124 src/build.c:309 src/build.c:477 src/search.c:912
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Falló el proceso (%s)"
@@ -2013,12 +2013,12 @@ msgstr "Falló el proceso (%s)"
 msgid "%s (in directory: %s)"
 msgstr "%s (en directorio: %s)"
 
-#: src/build.c:400
+#: src/build.c:395
 #, c-format
 msgid "Failed to execute %s (make sure it is already built)"
 msgstr "Fallo al ejecutar %s (asegurese de que está construido)"
 
-#: src/build.c:416
+#: src/build.c:420
 #, c-format
 msgid ""
 "Could not find terminal '%s' (check path for Terminal tool setting in "
@@ -2027,21 +2027,21 @@ msgstr ""
 "No se pudo encontrar la terminal '%s' (verifique las rutas para la "
 "herramienta de terminal en las Preferencias"
 
-#: src/build.c:430
+#: src/build.c:434
 #, c-format
 msgid "Failed to change the working directory to %s"
 msgstr "Fallo al cambiar el directorio de trabajo a %s"
 
-#: src/build.c:448
+#: src/build.c:452
 #, c-format
 msgid "Failed to execute %s (start-script could not be created)"
 msgstr "Fallo al ejecutar %s (el guión de inicio no pudo ser creado)"
 
-#: src/build.c:563
+#: src/build.c:567
 msgid "Compilation failed."
 msgstr "La compilación falló."
 
-#: src/build.c:568
+#: src/build.c:572
 msgid "Compilation finished successfully."
 msgstr "La compilación terminó con éxito."
 
@@ -2171,53 +2171,53 @@ msgstr "Seguir la ruta del archivo actual"
 msgid "Whether to execute \"cd $path\" when you switch between opened files."
 msgstr "Si ejecutar \"cd $path\" cuando se cambia de archivo abierto."
 
-#: src/about.c:106
+#: src/about.c:108
 msgid "About Geany"
 msgstr "Acerca de Geany"
 
-#: src/about.c:153
+#: src/about.c:155
 msgid "A fast and lightweight IDE"
 msgstr "Un IDE rápido y liviano"
 
-#: src/about.c:174
+#: src/about.c:176
 #, c-format
 msgid "(built on %s)"
 msgstr "(construido en %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: src/about.c:205
+#: src/about.c:207
 msgid "Info"
 msgstr "Información"
 
-#: src/about.c:217
+#: src/about.c:219
 msgid "Developers"
 msgstr "Desarrolladores"
 
-#: src/about.c:217
+#: src/about.c:219
 msgid "Maintainer"
 msgstr "Mantenedor"
 
-#: src/about.c:217
+#: src/about.c:219
 msgid "developer"
 msgstr "desarrollador"
 
-#: src/about.c:218
+#: src/about.c:220
 msgid "translation maintainer"
 msgstr "mantenedor de traducción"
 
-#: src/about.c:218
+#: src/about.c:220
 msgid "Translators"
 msgstr "Traductores"
 
-#: src/about.c:219
+#: src/about.c:221
 msgid "language"
 msgstr "lenguaje"
 
-#: src/about.c:225
+#: src/about.c:227
 msgid "Credits"
 msgstr "Créditos"
 
-#: src/about.c:238
+#: src/about.c:240
 msgid "License"
 msgstr "Licencia"
 
@@ -2470,7 +2470,7 @@ msgstr "Ocultar barra lateral"
 msgid "Reload"
 msgstr "Recargar"
 
-#: src/vte.c:365
+#: src/vte.c:367
 msgid "_Input Methods"
 msgstr "Métodos de _Entrada"
 
@@ -2526,11 +2526,11 @@ msgstr "Buscar Siguente"
 msgid "Find Previous"
 msgstr "Buscar Anterior"
 
-#: src/keybindings.c:149 src/search.c:265
+#: src/keybindings.c:149 src/search.c:285
 msgid "Replace"
 msgstr "Remplazar"
 
-#: src/keybindings.c:151 src/search.c:394
+#: src/keybindings.c:151 src/search.c:414
 msgid "Find in files"
 msgstr "Buscar en archivos"
 
@@ -2670,11 +2670,11 @@ msgstr "Evitar completado automático"
 msgid "Find Usage"
 msgstr "Encontrar uso"
 
-#: src/search.c:125
+#: src/search.c:145
 msgid "_Use regular expressions"
 msgstr "_Usar expresiones regulares"
 
-#: src/search.c:129
+#: src/search.c:149
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
@@ -2682,15 +2682,15 @@ msgstr ""
 "Usar expresiones regulares estilo-POSIX. Por información detallada sobre el "
 "uso de expresiones regulares, por favor lea la documentación"
 
-#: src/search.c:134
+#: src/search.c:154
 msgid "_Search backwards"
 msgstr "Buscar hacia _atras"
 
-#: src/search.c:139
+#: src/search.c:159
 msgid "Use _escape sequences"
 msgstr "Usar secuencias de _escape"
 
-#: src/search.c:144
+#: src/search.c:164
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters."
@@ -2698,50 +2698,49 @@ msgstr ""
 "Remplaza \\\\, \\t, \\n, \\r y \\uXXXX (carácteres Unicode) con el carácter "
 "de control correspondiente."
 
-#. auto destroy the size group
-#: src/search.c:153 src/search.c:439
+#: src/search.c:173 src/search.c:484
 msgid "_Case sensitive"
 msgstr "_Respetar Mayúsculas y minúsculas"
 
-#: src/search.c:158
+#: src/search.c:178 src/search.c:490
 msgid "Match only a _whole word"
 msgstr "Sólo _palabras enteras"
 
-#: src/search.c:163
+#: src/search.c:183
 msgid "Match only word s_tart"
 msgstr "Ocurrencias sólo al _inicio de la palabra"
 
-#: src/search.c:198
+#: src/search.c:218
 msgid "Find"
 msgstr "Encontrar"
 
-#: src/search.c:203 src/search.c:288 src/search.c:421
+#: src/search.c:223 src/search.c:308 src/search.c:441
 msgid "Search for:"
 msgstr "_Buscar por:"
 
-#: src/search.c:269
+#: src/search.c:289
 msgid "_In Selection"
 msgstr "_En la selección"
 
-#: src/search.c:271
+#: src/search.c:291
 msgid "Replace all matches found in the currently selected text"
 msgstr ""
 "Remplaza todas las ocurrencias encontradas en el texto actualmente "
 "seleccionado"
 
-#: src/search.c:275
+#: src/search.c:295
 msgid "Replace _All"
 msgstr "Remplazar _todas"
 
-#: src/search.c:291
+#: src/search.c:311
 msgid "Replace with:"
 msgstr "Remplazar con:"
 
-#: src/search.c:335
+#: src/search.c:355
 msgid "Replace in all _open files"
 msgstr "Remplazar en t_odos los archivos abiertos"
 
-#: src/search.c:339
+#: src/search.c:359
 msgid ""
 "Replaces the search text in all opened files. This option is only useful(and "
 "used) if you click on \"Replace All\"."
@@ -2750,77 +2749,79 @@ msgstr ""
 "es útil si luego se seleccióna \"Remplazar todas\"."
 
 #. Don't close window checkbox
-#: src/search.c:343
+#: src/search.c:363
 msgid "_Don't close this dialog"
 msgstr "No cerrar esta ventana"
 
-#: src/search.c:348
+#: src/search.c:368
 msgid "The dialog window won't be closed when you start the operation."
 msgstr "Esta ventana no será cerrada cuando se inicie la operación."
 
-#: src/search.c:401
+#: src/search.c:421
 msgid "Directory:"
 msgstr "Carpeta:"
 
-#: src/search.c:444
+#: src/search.c:460
+msgid "_Fixed strings"
+msgstr "Cadenas _Fijas"
+
+#: src/search.c:469
+msgid "_Grep regular expressions"
+msgstr "Expresiones regulares _Grep"
+
+#: src/search.c:473 src/search.c:480
+msgid "See grep's manual page for more information."
+msgstr "Ver la pagina de manual de grep para más información"
+
+#: src/search.c:478
+msgid "_Extended regular expressions"
+msgstr "Expresiones regulares _Extendidas"
+
+#: src/search.c:495
 msgid "_Invert search results"
 msgstr "_Inverir los resultados de la búsqueda"
 
-#: src/search.c:449
+#: src/search.c:500
 msgid "Invert the sense of matching, to select non-matching lines."
 msgstr ""
 "Invierte el sentido de coincidencia, seleccionando las lineas no "
 "coincidentes."
 
-#: src/search.c:451
-msgid "_Use extended regular expressions"
-msgstr "Expresiones regulares _Extendidas"
-
-#: src/search.c:456
-msgid "See grep's manual page for more information."
-msgstr "Ver la pagina de manual de grep para más información"
-
-#: src/search.c:507
+#: src/search.c:555
 msgid "Select folder"
 msgstr "Seleccionar carpeta"
 
-#: src/search.c:759
+#: src/search.c:807
 msgid "Invalid directory for find in files."
 msgstr "Directorio no válido para buscar archivos."
 
-#: src/search.c:783
+#: src/search.c:836
 msgid "No text to find."
 msgstr "No hay texto para busar."
 
-#: src/search.c:809
+#: src/search.c:864
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "No se pudo encontrar la herramienta grep '%s'; verifique la ruta en las "
 "Preferencias"
 
-#: src/search.c:914
+#: src/search.c:979
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "No se pudo abrir el directorio (%s)"
 
-#: src/search.c:962
+#: src/search.c:1024
 msgid "Search failed."
 msgstr "Búsqueda fallida."
 
-#: src/search.c:968
+#: src/search.c:1030
 msgid "Search completed."
 msgstr "Búsqueda completada."
 
-#: src/search.c:969
+#: src/search.c:1031
 msgid "No matches found."
 msgstr "No se encontraron coincidencias."
-
-#~ msgid "_Fixed strings"
-#~ msgstr "Cadenas _Fijas"
-
-#~ msgid "_Grep regular expressions"
-#~ msgstr "Expresiones regulares _Grep"
 
 #~ msgid ""
 #~ "Geany is exiting because a named pipe was found. Mostly this means, Geany "

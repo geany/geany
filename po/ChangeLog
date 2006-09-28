@@ -1,6 +1,13 @@
+2006-09-29  Frank Lanitz  <frank@frank.uvena.de>
+
+ * cs.po: Update of Czech translation (Thanks to Petr Messner)
+ * es.po: Small fixes
+ * nl.po: Update of Czech translation (Thanks to Kurt De Bree)
+
+
 2006-09-28  Enrico Tröger  <enrico.troeger@uvena.de>
 
- * es.po: Removed fuzzy mark.
+ * es.po: Removed fuzzy mark
 
 
 2006-09-27  Frank Lanitz  <frank@frank.uvena.de>
