@@ -1467,10 +1467,20 @@
 							<tbody>
 								<row>
 									<entry>selection</entry>
-									<entry>The style for colouring selections. Only foreground and
-										   background colour are interpreted.
+									<entry>
+										The style for colouring selected text.
+										The format is:
+										<itemizedlist>
+											<listitem><para>Foreground colour</para></listitem>
+											<listitem><para>Background colour</para></listitem>
+											<listitem><para>Use foreground colour</para></listitem>
+											<listitem><para>Use background colour</para></listitem>
+										</itemizedlist>
+										The colours are only set if the 3rd or 4th argument is true.
+										When the colours are not overridden, the default is a dark
+										grey background with syntax highlighted foreground text.
 									</entry>
-									<entry>selection=0xc0c0c0;0x00007F;false;false</entry>
+									<entry>selection=0xc0c0c0;0x00007F;true;true</entry>
 								</row>
 								<row>
 									<entry>brace_good</entry>
