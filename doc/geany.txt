@@ -1,5 +1,5 @@
 
-Geany 0.8
+Geany 0.9
 
 Enrico Tröger
 
@@ -43,7 +43,9 @@ Frank Lanitz
         3.3. General
 
               3.3.1. Startup
-              3.3.2. Detection of a running instance
+              3.3.2. Opening files from the command-line in a
+                      running instance
+
               3.3.3. Virtual terminal emulator widget (VTE)
 
         3.4. Character sets and Unicode Byte-Order-Mark (BOM)
@@ -241,18 +243,16 @@ Chapter 2. Installation
 
    You can use the Fedora Core 4 repository from
    http://naturidentisch.de/packages/fc4/.
+
+   You can also use the Fedora Core 5 repository from
+   http://naturidentisch.de/packages/fc5/.
      _________________________________________________________
 
 2.3.2. Debian
 
-   Binary packages for Debian are available at
-   http://debian.uvena.de/. You can add one of the following
-   lines(depending on your system) to your apt sources.list to
-   automatically get the latest version of Geany:
+   Geany is available through the official Debian archives.
 
-   deb http://debian.uvena.de/ ./stable/
-
-   deb http://debian.uvena.de/ ./testing/
+   apt-get install geany
      _________________________________________________________
 
 2.3.3. SuSE
@@ -262,7 +262,7 @@ Chapter 2. Installation
 
 2.3.4. Gentoo
 
-   An ebuild for Gentoo can be found on http://www.gentoo.de.
+   An ebuild for Gentoo can be found on http://bugs.gentoo.de.
      _________________________________________________________
 
 Chapter 3. Usage
@@ -284,12 +284,13 @@ Chapter 3. Usage
 
    Table 3-1. Command line Options
    Short option Long option Function
+   -s --no-session Don't load the previous session's files.
    -n --no-ctags Do not load auto completion and call tip data.
    Use this option if you do not want to use them.
    -m --no-msgwin Do not show the message window. Use this option
    if you do not need compiler messages or VTE support.
-   -p --no-pipe Do not open files in a running instance, force
-   opening a new instance.
+   -i --new-instance Do not open files in a running instance,
+   force opening a new instance.
    -t --no-terminal Do not load terminal support. Use this option
    if you do not want to load the virtual terminal emulator
    widget at startup. If you do not have libvte.so.4 installed,
@@ -327,21 +328,23 @@ Chapter 3. Usage
    15 session files, this depends on the compile time option
    GEANY_SESSION_FILES; the default is 15. For details see
    Section 3.6.1.
+
+   You can start several instances of Geany, but only the first
+   will load files from the last session. To run a second
+   instance of Geany, do not specify any filenames on the
+   command-line, or disable opening files in a running instance
+   using the appropriate command line option.
      _________________________________________________________
 
-3.3.2. Detection of a running instance
+3.3.2. Opening files from the command-line in a running instance
 
    Geany detects an already running instance of itself and opens
-   new files in the already running one. So, you can use Geany
-   like an editor to view and edit files by opening them from
-   other programs. If you do not like this for some reason, you
-   can disable it with the appropriate command line option.
-
-   In the case that Geany crashed, you will get a message dialog
-   at the next start, which asks you whether to delete an
-   existing named pipe. If you are sure that there is no other
-   instance of Geany is running, you can say Yes and Geany will
-   start as usual. Otherwise click No and Geany will not start.
+   files from the command-line in the already running instance.
+   So, Geany can be used to view and edit files by opening them
+   from other programs such as a file manager. If you do not like
+   this for some reason, you can disable using the first instance
+   by using the appropriate command line option - see Section
+   3.2.
      _________________________________________________________
 
 3.3.3. Virtual terminal emulator widget (VTE)
@@ -1036,12 +1039,18 @@ Chapter 4. Configuration files
 
    Table 4-3. General settings
    Key Description Example
-   default The default style for text (e.g. for files without
-   filetype). For the detailed format, please see the above
-   "[styling] Section". default=0x000000;0xffffff;false;false
-   selection The style for colouring selections. Only foreground
-   and background colour are interpreted.
-   selection=0xc0c0c0;0x00007F;false;false
+   selection The style for colouring selected text. The format
+   is:
+
+     * Foreground colour
+     * Background colour
+     * Use foreground colour
+     * Use background colour
+
+   The colours are only set if the 3rd or 4th argument is true.
+   When the colours are not overridden, the default is a dark
+   grey background with syntax highlighted foreground text.
+   selection=0xc0c0c0;0x00007F;true;true
    brace_good The style for brace highlighting when a matching
    brace was found. brace_good=0xff0000;0xFFFFFF;true;false
    brace_bad The style for brace highlighting when no matching
@@ -1051,7 +1060,15 @@ Chapter 4. Configuration files
    caret=0x000000;0x0;false;false
    current_line The style for colouring the background of the
    current line. Only the second argument is interpreted.
-   current_line=0x0;0xE5E5E5;false;false
+   current_line=0x0;0xe5e5e5;false;false
+   indent_guide The style for colouring the indentation guides.
+   Only the first and second arguments are interpreted.
+   indent_guide=0xc0c0c0;0xffffff;false;false
+   white_space The style for colouring the white space if it is
+   shown. The first both arguments define the foreground and
+   background colours, the third argument sets whether to use the
+   defined colours or to use the colours defined by each filetype
+   for the white space. white_space=0xc0c0c0;0xffffff;true;false
    folding_style The style of folding icons. Only first and
    second arguments are used.
 
@@ -1166,7 +1183,7 @@ any/
    untitled The string "untitled" (this will be translated to
    your locale), used in filetype templates filetypes, file
    header, function description, ChangeLog entry
-   geanyversion The actual Geany version, e.g. "Geany 0.8"
+   geanyversion The actual Geany version, e.g. "Geany 0.9"
    filetypes, file header, function description, ChangeLog entry
    datetime The current date and time in the format: DD.MM.YYYY
    HH:mm:ss ZZZZ file header, function description

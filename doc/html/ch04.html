@@ -1,7 +1,7 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 4. Configuration files</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="
-			Geany 0.8
+			Geany 0.9
 		"><link rel="up" href="index.html" title="
-			Geany 0.8
+			Geany 0.9
 		"><link rel="prev" href="ch03s09.html" title="Keybindings"><link rel="next" href="ch04s02.html" title="Filetype extensions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Configuration files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s09.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch04s02.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="config_files"></a>Chapter 4. Configuration files</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch04.html#filetypes">Filetype definition files</a></span></dt><dd><dl><dt><span class="section"><a href="ch04.html#filetypes_format">Format</a></span></dt><dt><span class="section"><a href="ch04.html#filetypes_common">Special file filetypes.common</a></span></dt></dl></dd><dt><span class="section"><a href="ch04s02.html">Filetype extensions</a></span></dt><dt><span class="section"><a href="ch04s03.html">Templates</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="filetypes"></a>Filetype definition files</h2></div></div></div><p>
 				All colour definitions and other filetype specific settings are stored in the
 				filetype definition files. Those settings are colours for syntax highlighting,
@@ -30,7 +30,7 @@
 				 <code class="filename">~/.geany/filedefs/filetypes.X</code> and add only these settings you
 				 want to change. All missing settings will be read from the corresponding global
 				 definition file in <code class="filename">$prefix/share/geany</code>.
-			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="filetypes_format"></a>Format</h3></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2754664"></a>[styling] Section</h4></div></div></div><p>
+			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="filetypes_format"></a>Format</h3></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2754797"></a>[styling] Section</h4></div></div></div><p>
 						In this section the colours for syntax highlighting are defined.
 						The format is always:
 						<code class="constant">key=forground_colour;background_colour;bold;italic</code>
@@ -40,14 +40,14 @@
 						but it is a good idea to use small letters. Bold and italic are flags and
 						should only be "true" or "false". If their value is something other than
 						"true" or "false", "false" is assumed.
-					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2754689"></a>[keywords] Section</h4></div></div></div><p>
+					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2754822"></a>[keywords] Section</h4></div></div></div><p>
 						This section contains keys for different keyword lists specific	to the
 						filetype. Some filetypes do not support keywords, so adding a new key will
 						not work. You can only add or remove keywords to/from an existing list.
 						</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Important</h3><p>The keywords list must be in one line without line ending
 						characters.</p></div><p>
-					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2754708"></a>[settings] Section</h4></div></div></div><p>
-						</p><div class="table"><a name="id2754716"></a><p class="title"><b>Table 4.1. General settings</b></p><table summary="General settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>wordchars</td><td>Word delimiting characters. These characters define
+					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2754842"></a>[settings] Section</h4></div></div></div><p>
+						</p><div class="table"><a name="id2754850"></a><p class="title"><b>Table 4.1. General settings</b></p><table summary="General settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>wordchars</td><td>Word delimiting characters. These characters define
 											   word boundaries.
 										</td><td>(look at sourcecode)</td></tr><tr><td>comment_open</td><td>A character or string which is used to comment code.
 											   If you want to use multiline comments, also set
@@ -57,7 +57,7 @@
 										</td><td>comment_close=*/</td></tr><tr><td>comment_use_indent</td><td>Set this to false if a comment character or string
 											   should start at column 0 of a line. If set to true
 											   it uses any indentation of the line.
-											   <div class="example"><a name="id2754815"></a><p class="title"><b>Example 4.1. Comment indentation</b></p><p>
+											   <div class="example"><a name="id2754948"></a><p class="title"><b>Example 4.1. Comment indentation</b></p><p>
 											   comment_use_indent=true would generate this if a line
 											   is commented (e.g. with
 											   <span><strong class="keycap">Ctrl</strong></span>-<span><strong class="keycap">D</strong></span>)
@@ -71,8 +71,8 @@
 													This setting only works for single line comments.
 											   </p></div>
 										</td><td>comment_use_indent=true</td></tr></tbody></table></div><p>
-					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2754884"></a>[build_settings] Section</h4></div></div></div><p>
-						</p><div class="table"><a name="id2754892"></a><p class="title"><b>Table 4.2. Build settings</b></p><table summary="Build settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>compiler</td><td>
+					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2755017"></a>[build_settings] Section</h4></div></div></div><p>
+						</p><div class="table"><a name="id2755025"></a><p class="title"><b>Table 4.2. Build settings</b></p><table summary="Build settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>compiler</td><td>
 											   This item specifies the command to compile source code
 											   files. But it is also possible to use it with
 											   interpreted languages like Perl or Python. With these
@@ -108,12 +108,14 @@
 					  <code class="filename">filetypes.common</code>. This file defines some general
 					  non-filetype-specific settings.
 				</p><p>
-					</p><div class="table"><a name="id2755046"></a><p class="title"><b>Table 4.3. General settings</b></p><table summary="General settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>default</td><td>The default style for text (e.g. for files without
-										   filetype). For the detailed format, please see the above
-										   "[styling] Section".
-									</td><td>default=0x000000;0xffffff;false;false</td></tr><tr><td>selection</td><td>The style for colouring selections. Only foreground and
-										   background colour are interpreted.
-									</td><td>selection=0xc0c0c0;0x00007F;false;false</td></tr><tr><td>brace_good</td><td>The style for brace highlighting when a
+					</p><div class="table"><a name="id2755180"></a><p class="title"><b>Table 4.3. General settings</b></p><table summary="General settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>selection</td><td>
+										The style for colouring selected text.
+										The format is:
+										<div class="itemizedlist"><ul type="disc"><li><p>Foreground colour</p></li><li><p>Background colour</p></li><li><p>Use foreground colour</p></li><li><p>Use background colour</p></li></ul></div>
+										The colours are only set if the 3rd or 4th argument is true.
+										When the colours are not overridden, the default is a dark
+										grey background with syntax highlighted foreground text.
+									</td><td>selection=0xc0c0c0;0x00007F;true;true</td></tr><tr><td>brace_good</td><td>The style for brace highlighting when a
 										   matching brace was found.
 									</td><td>brace_good=0xff0000;0xFFFFFF;true;false</td></tr><tr><td>brace_bad</td><td>The style for brace highlighting when no
 										   matching brace was found.
@@ -121,7 +123,14 @@
 										   Only the first argument is interpreted.
 									</td><td>caret=0x000000;0x0;false;false</td></tr><tr><td>current_line</td><td>The style for colouring the background of the current
 										   line. Only the second argument is interpreted.
-									</td><td>current_line=0x0;0xE5E5E5;false;false</td></tr><tr><td>folding_style</td><td>The style of folding icons. Only first and second
+									</td><td>current_line=0x0;0xe5e5e5;false;false</td></tr><tr><td>indent_guide</td><td>The style for colouring the indentation guides.
+										   Only the first and second arguments are interpreted.
+									</td><td>indent_guide=0xc0c0c0;0xffffff;false;false</td></tr><tr><td>white_space</td><td>The style for colouring the white space if it is shown.
+										   The first both arguments define the foreground and
+										   background colours, the third argument sets whether to use
+										   the defined colours or to use the colours defined by each
+										   filetype for the white space.
+									</td><td>white_space=0xc0c0c0;0xffffff;true;false</td></tr><tr><td>folding_style</td><td>The style of folding icons. Only first and second
 										   arguments are used.
 										   <p>
 											Valid values for the first argument are:

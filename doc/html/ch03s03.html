@@ -1,5 +1,5 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>General</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="
-			Geany 0.8
+			Geany 0.9
 		"><link rel="up" href="ch03.html" title="Chapter 3. Usage"><link rel="prev" href="ch03s02.html" title="Command line options"><link rel="next" href="ch03s04.html" title="Character sets and Unicode Byte-Order-Mark (BOM)"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">General</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="general"></a>General</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="general_startup"></a>Startup</h3></div></div></div><p>
 					At startup, Geany loads the first 15 files from the last time
 					<span class="application">Geany</span> was launched. You can disable this feature in the
@@ -9,16 +9,18 @@
 					15 recently opened files. It may be that Geany loads not exactly 15 session files, this depends
 					on the compile time option GEANY_SESSION_FILES; the default is 15. For details see
 					<a href="ch03s06.html#cto" title="Compile time options">the section called “Compile time options”</a>.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="general_fifo"></a>Detection of a running instance</h3></div></div></div><p>
-					Geany detects an already running instance of itself and opens new files in the already running one.
-					So, you can use Geany like an editor to view and edit files by opening them from other
-					programs. If you do not like this for some reason, you can disable it with the appropriate
-					command line option.
 				</p><p>
-					In the case that Geany crashed, you will get a message dialog at the next start,
-					which asks you whether to delete an existing named pipe. If you are sure that there is
-					no other instance of Geany is running, you can say Yes and Geany will start as usual.
-					Otherwise click No and Geany will not start.
+					You can start several instances of Geany, but only the first will load files
+					from the last session. To run a second instance of Geany, do not specify any
+					filenames on the command-line, or disable opening files in a running instance
+					using the appropriate command line option.
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="general_instance"></a>Opening files from the command-line in a running instance</h3></div></div></div><p>
+					Geany detects an already running instance of itself and opens files from the
+					command-line in the already running instance.
+					So, Geany can be used to view and edit files by opening them from other
+					programs such as a file manager. If you do not like this for some reason,
+					you can disable using the first instance by using the appropriate command line
+					option - see <a href="ch03s02.html" title="Command line options">the section called “Command line options”</a>.
 				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="general_vte"></a>Virtual terminal emulator widget (VTE)</h3></div></div></div><p>
 					If you have installed <code class="filename">libvte.so</code> in your system, it is loaded
 					automatically by <span class="application">Geany</span>, and you will have a terminal widget

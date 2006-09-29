@@ -1,5 +1,5 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Build system</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="
-			Geany 0.8
+			Geany 0.9
 		"><link rel="up" href="ch03.html" title="Chapter 3. Usage"><link rel="prev" href="ch03s06.html" title="Preferences"><link rel="next" href="ch03s08.html" title="Printing support"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Build system</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s06.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s08.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="build_system"></a>Build system</h2></div></div></div><p>
 				<span class="application">Geany</span> has an integrated build system.
 				Firstly this means that the current source file will be saved before
@@ -17,7 +17,7 @@
 				Depending on the current file's filetype, the Build menu will contain the following
 				items:
 				</p><div class="itemizedlist"><ul type="disc"><li><p>Compile</p></li><li><p>Build</p></li><li><p>Make all</p></li><li><p>Make custom target</p></li><li><p>Make object</p></li><li><p>Execute</p></li><li><p>Set Includes and Arguments</p></li></ul></div><p>
-			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753472"></a>Compile</h3></div></div></div><p>
+			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753605"></a>Compile</h3></div></div></div><p>
 					The Compile command has different uses for different kinds of files.
 				</p><p>
 					For compilable languages such as C and C++, the Compile command is setup
@@ -27,28 +27,28 @@
 					Interpreted languages such as Perl, Python, Ruby will
 					compile to bytecode if the language supports it, or will run a syntax check,
 					or failing that will run the file in its language interpreter.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753497"></a>Build</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753630"></a>Build</h3></div></div></div><p>
 					For compilable languages such as C and C++, the Build command will link the
 					current source file's equivalent object file into an executable. If the object
 					file does not exist, the source will be compiled and linked in one step,
 					producing just the executable binary.
 				</p><p>
 					Interpreted languages do not use the Build command.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753516"></a>Make all</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753649"></a>Make all</h3></div></div></div><p>
 					This effectively runs "make all" in the same directory as the current file.
 					</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
 						For each of the Make commands, The Make tool path must be correctly set
 						in the Tools tab of the Preferences dialog.
 					</p></div><p>
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753534"></a>Make custom target</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753668"></a>Make custom target</h3></div></div></div><p>
 					This is similar to running 'Make all' but you will be prompted
 					for the make target name to be passed to the Make tool. For example,
 					typing 'clean' in the dialog prompt will run "make clean".
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753548"></a>Make object</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753681"></a>Make object</h3></div></div></div><p>
 					Make object will run "make current_file.o" in the same directory as the current
 					file, using its prefix for 'current_file'. It is useful for compiling just the
 					current file without building the whole project.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753562"></a>Execute</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753695"></a>Execute</h3></div></div></div><p>
 					Execute will run the corresponding executable file, shell script or interpreted
 					script in a terminal window. Note that the Terminal tool path must be correctly
 					set in the Tools tab of the Preferences dialog - you can use any terminal
@@ -57,7 +57,7 @@
 					After your program or script has finished executing, you will be prompted to
 					press the return key. This allows you to review any text output from the program
 					before the terminal window is closed.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753584"></a>Set Includes and Arguments</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753717"></a>Set Includes and Arguments</h3></div></div></div><p>
 					By default the Compile and Build commands invoke the compiler and linker with
 					only the basic arguments needed by all programs.
 					Using Set Includes and Arguments you can add any include
@@ -73,14 +73,14 @@
 				</p><p>
 					If you need complex settings for your build system, or several different
 					settings, then writing a Makefile and using the Make commands is recommended.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753625"></a>Indicators</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753758"></a>Indicators</h3></div></div></div><p>
 					Indicators are red squiggly underlines which are used to highlight errors which
 					occured while compiling the current file. So you can easily see where your code
 					failed to compile. To remove the indicators, just click on
 					"Remove all indicators" in the document file menu.
 				</p><p>
 					If you do not like this feature, you can disable it in the preferences dialog.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753644"></a>File type configuration settings</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2753778"></a>File type configuration settings</h3></div></div></div><p>
 					You can set the commands to run for compiling, building or executing
 					by opening the relevant <code class="filename">filetypes.*</code> configuration file,
 					and checking the [build_settings] section. See <a href="ch04.html#filetypes" title="Filetype definition files">the section called “Filetype definition files”</a> for more

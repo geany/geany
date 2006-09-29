@@ -3,11 +3,10 @@
         "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!ENTITY app "Geany">
 <!ENTITY app_small "geany">
-<!ENTITY appversion "0.8">
+<!ENTITY appversion "0.9">
 <!ENTITY appurl "http://geany.uvena.de">
-<!ENTITY deburl "http://debian.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "August 09, 2006">
+<!ENTITY date "September 29, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -155,20 +154,18 @@
 					You can use the Fedora Core 4 repository from
 					<ulink url="http://naturidentisch.de/packages/fc4/">http://naturidentisch.de/packages/fc4/</ulink>.
 				</para>
+				<para>
+					You can also use the Fedora Core 5 repository from
+					<ulink url="http://naturidentisch.de/packages/fc5/">http://naturidentisch.de/packages/fc5/</ulink>.
+				</para>
 			</section>
 			<section>
 				<title>Debian</title>
 				<para>
-					Binary packages for Debian are available at <ulink url="&deburl;">&deburl;/</ulink>.
-					You can add one of the following lines(depending on your system) to your apt
-					<filename>sources.list</filename> to automatically get the latest version of
-					<application>&app;</application>:
+					Geany is available through the official Debian archives.
 				</para>
 				<para>
-					<command>deb &deburl;/ ./stable/</command>
-				</para>
-				<para>
-					<command>deb &deburl;/ ./testing/</command>
+					<command>apt-get install geany</command>
 				</para>
 			</section>
 			<section>
@@ -180,7 +177,7 @@
 			<section>
 				<title>Gentoo</title>
 				<para>
-					An ebuild for Gentoo can be found on <ulink url="http://www.gentoo.de/">http://www.gentoo.de</ulink>.
+					An ebuild for Gentoo can be found on <ulink url="https://bugs.gentoo.org/show_bug.cgi?id=114815">http://bugs.gentoo.de</ulink>.
 				</para>
 			</section>
 		</section>
