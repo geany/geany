@@ -1,3 +1,9 @@
+2006-09-29  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/filetypes.c, data/filetype_extensions.conf:
+   Added pattern *.agi for filetype Perl (closes #1567355).
+
+
 2006-09-27  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/vte.c: Change VTE word selection chars to include paths.
