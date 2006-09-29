@@ -5,6 +5,7 @@
  * doc/geany.docbook:
    Updated information for Debian and Gentoo packages.
  * New release: Geany 0.9 "Kintaro".
+ * THANKS, src/about.c: Changed credtits of topi.
 
 
 2006-09-27  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -47,8 +47,8 @@ Frank Lanitz - %s\n\t\
 \
 Yura Semashko - <language> be_BY\n\t\
 &lt;yurand2@gmail.com&gt;\n\n\t\
-Topi - <language> ca_ES\n\t\
-&lt;topi@phreaker.net&gt;\n\n\t\
+Toni Garcia-Navarro - <language> ca_ES\n\t\
+&lt;topi@elpiset.net&gt;\n\n\t\
 Petr Messner - <language> cs_CZ \n\t\
 &lt;messa@messa.cz&gt;\n\n\t\
 Frank Lanitz - <language> de_DE\n\t\
