@@ -1,4 +1,4 @@
-Geany 0.9 (TBA)
+Geany 0.9 (September 29, 2006)
 
     Changes:
     * Added function calltips for files open in the current workspace
@@ -16,6 +16,21 @@ Geany 0.9 (TBA)
     * Show the messages window on build failure or for Find Usage.
     * Added -s command-line option to not load session files (-i is now
       used to force a new instance).
+    * Added comment toggle functionality to easily comment and
+      uncomment a line with one shortcut.
+    * Separated filetypes PHP and HTML for better usage.
+    * New filetypes: Diff, Fortran 77 and Ferite.
+    * Added auto completion tags for PASCAL.
+    * Improved VTE usage by adding options for selecting the used shell
+      and ignoring menu bar accelerator (default F10).
+    * Added menu items to insert configurable date/time strings.
+    * Removed the whole FIFO code and replaced it with support for
+      (Unix Domain) Sockets(including Windows support).
+
+    Windows changes:
+    * Implemented Run command (from the build menu) under Windows.
+    * Enabled socket code on Windows to detect a running instance.
+    * Enabled notification if file on disk has changed under Windows.
 
     Bugs fixed:
     * Fixed a segfault at startup if terminal follow path setting is
@@ -24,6 +39,14 @@ Geany 0.9 (TBA)
       file's directory.
     * Fixed a bug when clicking on a recent file got the wrong
       filename.
+    * Fixed a crash when a compiler output reports an error in a blank
+      line(can happen in LaTeX)
+    * Fixed a crash when switching between several filetypes.
+    * Fixed segfault when replacing tabs by spaces.
+
+    Internationalisation:
+    * New translations: cs, nl, vi.
+    * Updated translations: de, es.
 
 
 Geany 0.8 (August 09, 2006)

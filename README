@@ -68,10 +68,8 @@ Windows
 Geany runs also under Windows. To download the binary with all necessary files,
 visit Geany's homepage. But you should know, that the Windows version is not yet
 well tested and there are some features missing:
-- complete build support (perhaps will be added later)
-- notification if file on disk has changed (perhaps will be added later)
+- build support (perhaps will be added later, Run command is working)
 - embedded terminal emulation (VTE)
-- support for detecting a running instance
 
 
 License
@@ -93,5 +91,5 @@ format) to the mailing list, enrico.troeger@uvena.de or nick.treleaven@btinterne
 
 
 --
-2005-2006 by Enrico Troeger
+2005-2006 by Enrico Tröger, Nick Treleaven and Frank Lanitz
 enrico.troeger@uvena.de

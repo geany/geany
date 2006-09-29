@@ -2,6 +2,9 @@
 
  * src/filetypes.c, data/filetype_extensions.conf:
    Added pattern *.agi for filetype Perl (closes #1567355).
+ * doc/geany.docbook:
+   Updated information for Debian and Gentoo packages.
+ * New release: Geany 0.9 "Kintaro".
 
 
 2006-09-27  Nick Treleaven  <nick.treleaven@btinternet.com>
