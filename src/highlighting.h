@@ -32,14 +32,6 @@
 #include "ScintillaWidget.h"
 
 
-typedef struct
-{
-	gint		  styling[55][4];
-	gchar		**keywords;
-	gchar		 *wordchars;
-} style_set;
-
-
 void styleset_free_styles(void);
 
 void styleset_common(ScintillaObject *sci, gint style_bits);

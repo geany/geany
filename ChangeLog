@@ -1,3 +1,12 @@
+2006-09-30  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/highlighting.c, src/highlighting.h:
+   Changed StyleSet struct to use Style array, which can use less
+   memory. Added separate struct for the common style set. Also
+   use a struct for tracking the loaded global tags files. Renamed
+   some static functions.
+
+
 2006-09-29  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/filetypes.c, data/filetype_extensions.conf:
@@ -5,7 +14,7 @@
  * doc/geany.docbook:
    Updated information for Debian and Gentoo packages.
  * New release: Geany 0.9 "Kintaro".
- * THANKS, src/about.c: Changed credtits of topi.
+ * THANKS, src/about.c: Changed credits of topi.
 
 
 2006-09-27  Nick Treleaven  <nick.treleaven@btinternet.com>
