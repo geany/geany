@@ -180,6 +180,7 @@ void ui_set_fullscreen()
 }
 
 
+// update = rescan the tags for document[idx].filename
 void ui_update_tag_list(gint idx, gboolean update)
 {
 	GList *tmp;

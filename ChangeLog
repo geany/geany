@@ -5,6 +5,8 @@
    memory. Added separate struct for the common style set. Also
    use a struct for tracking the loaded global tags files. Renamed
    some static functions.
+ * src/document.c, src/ui_utils.c:
+   Clear the symbol list when opening a file with no tags.
 
 
 2006-09-29  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -386,11 +386,10 @@ void document_new_file(filetype *ft)
 
 		doc_list[idx].encoding = g_strdup(encodings[app->pref_editor_default_encoding].charset);
 		//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
-		document_set_filetype(idx, ft);
+		document_set_filetype(idx, ft);	// also clears taglist
 		if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
 		ui_set_window_title(idx);
 		ui_build_show_hide(idx);
-		ui_update_tag_list(idx, FALSE);
 		doc_list[idx].mtime = time(NULL);
 		doc_list[idx].changed = FALSE;
 		document_set_text_changed(idx);
@@ -660,11 +659,11 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		doc_list[idx].readonly = readonly;
 		sci_set_readonly(doc_list[idx].sci, readonly);
 
-		document_set_filetype(idx, use_ft);
+		document_set_filetype(idx, use_ft);	// also sets taglist
 		ui_build_show_hide(idx);
 	}
 	else
-	{
+	{	// reloading
 		document_update_tag_list(idx, TRUE);
 	}
 
@@ -1107,9 +1106,14 @@ void document_set_font(gint idx, const gchar *font_name, gint size)
 
 void document_update_tag_list(gint idx, gboolean update)
 {
-	// if the filetype doesn't has a tag parser or it is a new file, leave
+	// if the filetype doesn't have a tag parser or it is a new file
 	if (idx == -1 || doc_list[idx].file_type == NULL ||
-		! doc_list[idx].file_type->has_tags || ! doc_list[idx].file_name) return;
+		! doc_list[idx].file_type->has_tags || ! doc_list[idx].file_name)
+	{
+		// set the default (empty) tag list
+		ui_update_tag_list(idx, FALSE);
+		return;
+	}
 
 	if (doc_list[idx].tm_file == NULL)
 	{
