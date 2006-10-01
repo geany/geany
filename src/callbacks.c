@@ -161,7 +161,11 @@ gboolean
 on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 {
 	app->quitting = TRUE;
+
+	// TODO: only save config if definitely quitting
 	configuration_save();
+	filetypes_save_commands();
+
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) > 0)
 	{
 		gint i;
@@ -2258,23 +2262,41 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 	
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
+		const gchar *newstr;
+		struct build_programs *programs = ft->programs;
+
 		if (ft->menu_items->can_compile)
 		{
-			if (ft->programs->compiler) g_free(ft->programs->compiler);
-			ft->programs->compiler = g_strdup(gtk_entry_get_text(
-					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry1"))));
+			newstr = gtk_entry_get_text(
+					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry1")));
+			if (! utils_strcmp(newstr, programs->compiler))
+			{
+				if (programs->compiler) g_free(programs->compiler);
+				programs->compiler = g_strdup(newstr);
+				programs->modified = TRUE;
+			}
 		}
 		if (ft->menu_items->can_link)
 		{
-			if (ft->programs->linker) g_free(ft->programs->linker);
-			ft->programs->linker = g_strdup(gtk_entry_get_text(
-					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry2"))));
+			newstr = gtk_entry_get_text(
+					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry2")));
+			if (! utils_strcmp(newstr, programs->linker))
+			{
+				if (programs->linker) g_free(programs->linker);
+				programs->linker = g_strdup(newstr);
+				programs->modified = TRUE;
+			}
 		}
 		if (ft->menu_items->can_exec)
 		{
-			if (ft->programs->run_cmd) g_free(ft->programs->run_cmd);
-			ft->programs->run_cmd = g_strdup(gtk_entry_get_text(
-					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3"))));
+			newstr = gtk_entry_get_text(
+					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3")));
+			if (! utils_strcmp(newstr, programs->run_cmd))
+			{
+				if (programs->run_cmd) g_free(programs->run_cmd);
+				programs->run_cmd = g_strdup(newstr);
+				programs->modified = TRUE;
+			}
 		}
 	}
 }
@@ -2290,18 +2312,41 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		if (ft->programs->compiler) g_free(ft->programs->compiler);
-		ft->programs->compiler = g_strdup(gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1"))));
-		if (ft->programs->linker) g_free(ft->programs->linker);
-		ft->programs->linker = g_strdup(gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry2"))));
-		if (ft->programs->run_cmd) g_free(ft->programs->run_cmd);
-		ft->programs->run_cmd = g_strdup(gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry3"))));
-		if (ft->programs->run_cmd2) g_free(ft->programs->run_cmd2);
-		ft->programs->run_cmd2 = g_strdup(gtk_entry_get_text(
-				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry4"))));
+		const gchar *newstr;
+		struct build_programs *programs = ft->programs;
+
+		newstr = gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1")));
+		if (! utils_strcmp(newstr, programs->compiler))
+		{
+			if (programs->compiler) g_free(programs->compiler);
+			programs->compiler = g_strdup(newstr);
+			programs->modified = TRUE;
+		}
+		newstr = gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry2")));
+		if (! utils_strcmp(newstr, programs->linker))
+		{
+			if (programs->linker) g_free(programs->linker);
+			programs->linker = g_strdup(newstr);
+			programs->modified = TRUE;
+		}
+		newstr = gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry3")));
+		if (! utils_strcmp(newstr, programs->run_cmd))
+		{
+			if (programs->run_cmd) g_free(programs->run_cmd);
+			programs->run_cmd = g_strdup(newstr);
+			programs->modified = TRUE;
+		}
+		newstr = gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry4")));
+		if (! utils_strcmp(newstr, programs->run_cmd2))
+		{
+			if (programs->run_cmd2) g_free(programs->run_cmd2);
+			programs->run_cmd2 = g_strdup(newstr);
+			programs->modified = TRUE;
+		}
 	}
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 }

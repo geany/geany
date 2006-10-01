@@ -59,7 +59,7 @@ enum
 	GEANY_FILETYPES_OMS,
 	GEANY_FILETYPES_DIFF,
 	GEANY_FILETYPES_CONF,
-	GEANY_FILETYPES_ALL,
+	GEANY_FILETYPES_ALL,	// must be last filetype
 	GEANY_MAX_FILE_TYPES
 };
 
@@ -81,6 +81,7 @@ struct build_programs
 	gchar *linker;
 	gchar *run_cmd;
 	gchar *run_cmd2;
+	gboolean modified;
 };
 
 typedef struct filetype
@@ -122,6 +123,8 @@ void filetypes_free_types(void);
 gchar *filetypes_get_template(filetype *ft);
 
 void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft);
+
+void filetypes_save_commands();
 
 void filetypes_select_radio_item(const filetype *ft);
 

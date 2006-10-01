@@ -30,6 +30,7 @@
 #include "callbacks.h"
 #include "templates.h"
 #include "msgwindow.h"
+#include "utils.h"
 
 
 /* This is the order of unique ids used in the config file.
@@ -683,7 +684,7 @@ void filetypes_init_types(void)
 }
 
 
-/* convenient function to save code size */
+/* convenience function - NULLs and zeros struct members */
 static void filetypes_init_build_programs(filetype *ftype)
 {
 	ftype->programs = g_new0(struct build_programs, 1);
@@ -908,6 +909,62 @@ void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 		filetypes[ft]->programs->run_cmd2 = result;
 		filetypes[ft]->menu_items->can_exec = TRUE;
 	}
+}
+
+
+static gchar *get_conf_extension(gint filetype_idx)
+{
+	gchar *result, *tmp = g_strdup(filetypes[filetype_idx]->name);
+
+	switch (filetype_idx)
+	{
+		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
+		case GEANY_FILETYPES_MAKE: result = g_strdup("makefile"); break;
+		case GEANY_FILETYPES_OMS: result = g_strdup("oms"); break;
+		default: result = g_ascii_strdown(tmp, -1); break;
+	}
+	g_free(tmp);
+	return result;
+}
+
+
+void filetypes_save_commands()
+{
+	gchar *conf_prefix = g_strconcat(app->configdir,
+		G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", NULL);
+	gint i;
+
+	for (i = 0; i < GEANY_FILETYPES_ALL; i++)
+	{
+		struct build_programs *bp = filetypes[i]->programs;
+		GKeyFile *config_home;
+		gchar *fname, *ext, *data;
+
+		if (! bp->modified) continue;
+		
+		ext = get_conf_extension(i);
+		fname = g_strconcat(conf_prefix, ext, NULL);
+		g_free(ext);
+
+		config_home = g_key_file_new();
+		g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+		if (bp->compiler && *bp->compiler)
+			g_key_file_set_string(config_home, "build_settings", "compiler", bp->compiler);
+		if (bp->linker && *bp->linker)
+			g_key_file_set_string(config_home, "build_settings", "linker", bp->linker);
+		if (bp->run_cmd && *bp->run_cmd)
+			g_key_file_set_string(config_home, "build_settings", "run_cmd", bp->run_cmd);
+		if (bp->run_cmd2 && *bp->run_cmd2)
+			g_key_file_set_string(config_home, "build_settings", "run_cmd2", bp->run_cmd2);
+
+		data = g_key_file_to_data(config_home, NULL, NULL);
+		utils_write_file(fname, data);
+		g_free(data);
+		g_key_file_free(config_home);
+		g_free(fname);
+	}
+	g_free(conf_prefix);
 }
 
 

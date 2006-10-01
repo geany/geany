@@ -3,7 +3,7 @@ TODO List:
 (features included in () have lower priority)
 
 
-	Geany 0.8 or later:
+	Next version or later:
 
 	o fix problems when loading global.tags and other tags files are
 	  already loaded
@@ -11,7 +11,6 @@ TODO List:
 	o documentation: list and explain filetype modes
 	o documentation: preferences
 	o user-definable auto completion structs
-	o save build includes & arguments (->project management)
 	o don't override Scintilla keybindings by default
 	o allow use of custom global tags files
 	o common default highlighting all in one config file
@@ -19,6 +18,5 @@ TODO List:
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines  - Scintilla issue)
-	o (inverting highlighting by selection - Scintilla issue)
 	o (folder tree in the sidebar)
 	o (improved Windows support)
