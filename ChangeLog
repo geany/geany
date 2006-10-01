@@ -1,3 +1,9 @@
+2006-10-01  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * configure.in: Use datarootdir for defining paths to fix autoconf
+                 2.60 problems(thanks to Christoph Berg for reporting).
+
+
 2006-10-01  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c, src/filetypes.c, src/filetypes.h, TODO:
