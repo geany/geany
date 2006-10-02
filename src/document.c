@@ -1335,12 +1335,9 @@ void document_set_indicator(gint idx, gint line)
 		sci_get_line_length(doc_list[idx].sci, line) == utils_get_eol_char_len(idx))
 		return;
 
-	len = end - start;
-	linebuf = g_malloc(len);
-
 	// don't set the indicator on whitespace
-	sci_get_line(doc_list[idx].sci, line, linebuf);
-	if (linebuf == NULL) return;
+	len = end - start;
+	linebuf = sci_get_line(doc_list[idx].sci, line);
 
 	while (isspace(linebuf[i])) i++;
 	while (isspace(linebuf[len-1])) len--;

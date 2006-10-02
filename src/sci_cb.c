@@ -330,9 +330,7 @@ void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 
 	if (! use_this_line) prev_line--;
 	len = sci_get_line_length(sci, prev_line);
-	linebuf = g_malloc(len + 1);
-	sci_get_line(sci, prev_line, linebuf);
-	linebuf[len] = '\0';
+	linebuf = sci_get_line(sci, prev_line);
 
 	for (i = 0; i < len; i++)
 	{
@@ -438,8 +436,7 @@ void sci_cb_close_block(gint idx, gint pos)
 								utils_get_eol_char_len(document_find_by_sci(sci));
 
 	// check that the line is empty, to not kill text in the line
-	line_buf = g_malloc(line_len + 1);
-	sci_get_line(sci, line, line_buf);
+	line_buf = sci_get_line(sci, line);
 	line_buf[line_len - eol_char_len] = '\0';
 	while (x < (line_len - eol_char_len))
 	{
@@ -469,11 +466,10 @@ void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_
 	gint line_start = sci_get_position_from_line(sci, line);
 	gint startword = pos - line_start;
 	gint endword = pos - line_start;
-	gchar *chunk = g_malloc(sci_get_line_length(sci, line) + 1);
+	gchar *chunk;
 
 	word[0] = '\0';
-	sci_get_line(sci, line, chunk);
-	chunk[sci_get_line_length(sci, line)] = '\0';
+	chunk = sci_get_line(sci, line);
 
 	while (startword > 0 && strchr(GEANY_WORDCHARS, chunk[startword - 1]))
 		startword--;
@@ -664,8 +660,7 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 	else if (lexer == SCLEX_RUBY && style == SCE_MAKE_COMMENT) return FALSE;
 
 
-	linebuf = g_malloc(line_len + 1);
-	sci_get_line(sci, line, linebuf);
+	linebuf = sci_get_line(sci, line);
 
 	// find the start of the current word
 	while ((startword > 0) && (strchr(GEANY_WORDCHARS, linebuf[startword - 1])))
@@ -706,8 +701,7 @@ void sci_cb_auto_latex(gint idx, gint pos)
 		gint i, start;
 
 		// get the line
-		buf = g_malloc0(line_len + 1);
-		sci_get_line(sci, line, buf);
+		buf = sci_get_line(sci, line);
 
 		// get to the first non-blank char (some kind of ltrim())
 		start = 0;
@@ -722,7 +716,7 @@ void sci_cb_auto_latex(gint idx, gint pos)
 
 			// take also "\begingroup" (or whatever there can be) and append "\endgroup" and so on.
 			i = start + 6;
-			while (buf[i] != '{' && j < (sizeof(full_cmd) - 1))
+			while (i < line_len && buf[i] != '{' && j < (sizeof(full_cmd) - 1))
 			{	// copy all between "\begin" and "{" to full_cmd
 				full_cmd[j] = buf[i];
 				i++;
@@ -757,13 +751,11 @@ void sci_cb_auto_latex(gint idx, gint pos)
 			SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 			sci_goto_pos(sci, pos + 1, TRUE);
 			g_free(construct);
-			g_free(buf);
 			g_free(eol);
 		}
-		else
-		{	// later there could be some else ifs for other keywords
-			return;
-		}
+		// later there could be some else ifs for other keywords
+
+		g_free(buf);
 	}
 }
 
@@ -1107,9 +1099,7 @@ static void real_uncomment_multiline(gint idx)
 	// check whether the line is empty and can be deleted
 	line = sci_get_line_from_position(doc_list[idx].sci, pos);
 	len = sci_get_line_length(doc_list[idx].sci, line);
-	linebuf = g_malloc(len + 1);
-	sci_get_line(doc_list[idx].sci, line, linebuf);
-	linebuf[len] = '\0';
+	linebuf = sci_get_line(doc_list[idx].sci, line);
 	x = 0;
 	while (linebuf[x] != '\0' && isspace(linebuf[x])) x++;
 	if (x == len) SSM(doc_list[idx].sci, SCI_LINEDELETE, 0, 0);
@@ -1122,9 +1112,7 @@ static void real_uncomment_multiline(gint idx)
 	// check whether the line is empty and can be deleted
 	line = sci_get_line_from_position(doc_list[idx].sci, pos);
 	len = sci_get_line_length(doc_list[idx].sci, line);
-	linebuf = g_malloc(len + 1);
-	sci_get_line(doc_list[idx].sci, line, linebuf);
-	linebuf[len] = '\0';
+	linebuf = sci_get_line(doc_list[idx].sci, line);
 	x = 0;
 	while (linebuf[x] != '\0' && isspace(linebuf[x])) x++;
 	if (x == len) SSM(doc_list[idx].sci, SCI_LINEDELETE, 0, 0);

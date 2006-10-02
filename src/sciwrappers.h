@@ -81,7 +81,7 @@ gint				sci_get_length				(ScintillaObject* sci);
 void				sci_get_text				(ScintillaObject* sci,gint len,gchar* text);
 void				sci_get_selected_text		(ScintillaObject* sci, gchar* text);
 gint				sci_get_selected_text_length(ScintillaObject* sci);
-void				sci_get_line				(ScintillaObject* sci, gint line, gchar* text);
+gchar *				sci_get_line				(ScintillaObject* sci, gint line_num);
 gint 				sci_get_line_length			(ScintillaObject* sci, gint line);
 gint				sci_get_line_count			( ScintillaObject* sci );
 void 				sci_get_xy_from_position	(ScintillaObject* sci,gint pos, gint* x, gint* y);

@@ -6,6 +6,10 @@
    src/makefile.win32, src/Makefile.am, po/POTFILES.in:
    Move global tags code to symbols.c.
    Added symbols_global_tags_loaded(), symbols_get_global_keywords().
+ * src/callbacks.c, src/sci_cb.c, src/sciwrappers.c, src/sciwrappers.h,
+   src/document.c:
+   Change sci_get_line to return a NULL terminated string.
+   Fix memory leak and possible invalid read in sci_cb_auto_latex().
 
 
 2006-10-01  Enrico Tröger  <enrico.troeger@uvena.de>

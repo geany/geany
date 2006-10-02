@@ -1296,8 +1296,7 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 				if (pos == -1) break;
 
 				line = sci_get_line_from_position(doc_list[i].sci, pos);
-				buffer = g_malloc0(sci_get_line_length(doc_list[i].sci, line) + 1);
-				sci_get_line(doc_list[i].sci, line, buffer);
+				buffer = sci_get_line(doc_list[i].sci, line);
 
 				if (doc_list[i].file_name == NULL)
 					short_file_name = g_strdup(GEANY_STRING_UNTITLED);

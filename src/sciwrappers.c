@@ -469,10 +469,17 @@ gint sci_get_line_length(ScintillaObject* sci,gint line)
 }
 
 
-void sci_get_line(ScintillaObject* sci, gint line, gchar* text)
+// Returns: a NULL-terminated copy of the line text
+gchar *sci_get_line(ScintillaObject* sci, gint line_num)
 {
-	SSM(sci,SCI_GETLINE, line, (sptr_t) text);
+	gint len = sci_get_line_length(sci, line_num);
+	gchar *linebuf = g_malloc(len + 1);
+
+	SSM(sci, SCI_GETLINE, line_num, (sptr_t) linebuf);
+	linebuf[len] = '\0';
+	return linebuf;
 }
+
 
 // the last char will be null terminated
 void sci_get_text(ScintillaObject* sci, gint len, gchar* text)
