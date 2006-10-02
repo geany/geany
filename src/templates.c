@@ -173,7 +173,7 @@ import std.stdio;\n\
 \n\
 int main(char[][] args)\n\
 {\n\
-\n\
+	\n\
 	return 0;\n\
 }\n\
 ";
@@ -189,7 +189,7 @@ static const gchar templates_filetype_php[] = "<!DOCTYPE html PUBLIC \"-//W3C//D
 </head>\n\
 \n\
 <body>\n\
-\n\
+	\n\
 </body>\n\
 </html>\n\
 ";
@@ -205,7 +205,7 @@ static const gchar templates_filetype_html[] = "<!DOCTYPE html PUBLIC \"-//W3C//
 </head>\n\
 \n\
 <body>\n\
-\n\
+	\n\
 </body>\n\
 </html>\n\
 ";
