@@ -29,6 +29,7 @@
 #include "utils.h"
 #include "main.h"
 #include "filetypes.h"
+#include "symbols.h"
 
 
 typedef struct
@@ -81,42 +82,6 @@ static struct
 } common_style_set;
 
 
-enum	// Geany tag files
-{
-	GTF_C,
-	GTF_PASCAL,
-	GTF_PHP,
-	GTF_HTML_ENTITIES,
-	GTF_LATEX,
-	GTF_MAX
-};
-
-// langType used in TagManager (see the table in tagmanager/parsers.h)
-enum	// Geany lang type
-{
-	GLT_C = 0,
-	GLT_CPP = 1,
-	GLT_PASCAL = 4,
-	GLT_PHP = 6,
-	GLT_LATEX = 8
-};
-
-typedef struct
-{
-	gboolean	tags_loaded;
-	const gchar	*tag_file;
-} TagFileInfo;
-
-static TagFileInfo tag_file_info[GTF_MAX] =
-{
-	{FALSE, "global.tags"},
-	{FALSE, "pascal.tags"},
-	{FALSE, "php.tags"},
-	{FALSE, "html_entities.tags"},
-	{FALSE, "latex.tags"}
-};
-
-
 static void new_style_array(gint file_type_id, gint styling_count)
 {
 	style_sets[file_type_id].styling = g_new0(Style, styling_count);
@@ -129,41 +94,6 @@ static Style *get_styling(gint file_type_id, gint styling_index)
 	return &style_sets[file_type_id].styling[styling_index];
 }
 #endif
-
-
-// lang_type is for langType used in TagManager (see the table in tagmanager/parsers.h)
-static void ensure_tags_loaded(gint tag_file_index, gint lang_type)
-{
-	TagFileInfo *tfi;
-
-	if (app->ignore_global_tags) return;
-
-	tfi = &tag_file_info[tag_file_index];
-	if (! tfi->tags_loaded)
-	{
-		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
-		tm_workspace_load_global_tags(file, lang_type);
-		tfi->tags_loaded = TRUE;
-		g_free(file);
-	}
-}
-
-
-static void ensure_html_tags_loaded()
-{
-	TagFileInfo *tfi;
-
-	if (app->ignore_global_tags) return;
-
-	tfi = &tag_file_info[GTF_HTML_ENTITIES];
-	if (! tfi->tags_loaded)
-	{
-		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
-		html_entities = utils_read_file_in_array(file);
-		tfi->tags_loaded = TRUE;
-		g_free(file);
-	}
-}
 
 
 /* simple wrapper function to print file errors in DEBUG mode */
@@ -581,35 +511,23 @@ static void styleset_c_init(void)
 	g_key_file_free(config_home);
 
 	// load global tags file for C autocompletion
-	ensure_tags_loaded(GTF_C, GLT_C);
+	symbols_global_tags_loaded(GEANY_FILETYPES_C);
 }
 
 
 void styleset_c(ScintillaObject *sci)
 {
+	GString *s;
+
 	styleset_common(sci, 5);
 	if (style_sets[GEANY_FILETYPES_C].styling == NULL) styleset_c_init();
 
 	/* Assign global keywords */
-	if ((app->tm_workspace) && (app->tm_workspace->global_tags))
+	s = symbols_get_global_keywords();
+	if (s != NULL)
 	{
-		guint j;
-		GPtrArray *g_typedefs = tm_tags_extract(app->tm_workspace->global_tags, tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
-		if ((g_typedefs) && (g_typedefs->len > 0))
-		{
-			GString *s = g_string_sized_new(g_typedefs->len * 10);
-			for (j = 0; j < g_typedefs->len; ++j)
-			{
-				if (!(TM_TAG(g_typedefs->pdata[j])->atts.entry.scope))
-				{
-					g_string_append(s, TM_TAG(g_typedefs->pdata[j])->name);
-					g_string_append_c(s, ' ');
-				}
-			}
-			SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
-			g_string_free(s, TRUE);
-		}
-		g_ptr_array_free(g_typedefs, TRUE);
+		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
+		g_string_free(s, TRUE);
 	}
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_C].wordchars);
@@ -702,35 +620,23 @@ static void styleset_cpp_init(void)
 	g_key_file_free(config_home);
 
 	// load global tags file for C autocompletion
-	ensure_tags_loaded(GTF_C, GLT_CPP);
+	symbols_global_tags_loaded(GEANY_FILETYPES_CPP);
 }
 
 
 void styleset_cpp(ScintillaObject *sci)
 {
+	GString *s;
+
 	styleset_common(sci, 5);
 	if (style_sets[GEANY_FILETYPES_CPP].styling == NULL) styleset_cpp_init();
 
 	/* Assign global keywords */
-	if ((app->tm_workspace) && (app->tm_workspace->global_tags))
+	s = symbols_get_global_keywords();
+	if (s != NULL)
 	{
-		guint j;
-		GPtrArray *g_typedefs = tm_tags_extract(app->tm_workspace->global_tags, tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
-		if ((g_typedefs) && (g_typedefs->len > 0))
-		{
-			GString *s = g_string_sized_new(g_typedefs->len * 10);
-			for (j = 0; j < g_typedefs->len; ++j)
-			{
-				if (!(TM_TAG(g_typedefs->pdata[j])->atts.entry.scope))
-				{
-					g_string_append(s, TM_TAG(g_typedefs->pdata[j])->name);
-					g_string_append_c(s, ' ');
-				}
-			}
-			SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
-			g_string_free(s, TRUE);
-		}
-		g_ptr_array_free(g_typedefs, TRUE);
+		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
+		g_string_free(s, TRUE);
 	}
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CPP].wordchars);
@@ -811,7 +717,7 @@ static void styleset_pascal_init(void)
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PASCAL);
 
 	// load global tags file for PASCAL autocompletion
-	ensure_tags_loaded(GTF_PASCAL, GLT_PASCAL);
+	symbols_global_tags_loaded(GEANY_FILETYPES_PASCAL);
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
@@ -964,7 +870,7 @@ static void styleset_latex_init(void)
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_LATEX);
 
 	// load global tags file for LaTeX autocompletion
-	ensure_tags_loaded(GTF_LATEX, GLT_LATEX);
+	symbols_global_tags_loaded(GEANY_FILETYPES_LATEX);
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
@@ -1005,7 +911,7 @@ static void styleset_php_init(void)
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PHP);
 
 	// load global tags file for PHP autocompletion
-	ensure_tags_loaded(GTF_PHP, GLT_PHP);
+	symbols_global_tags_loaded(GEANY_FILETYPES_PHP);
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
@@ -1045,7 +951,7 @@ static void styleset_html_init(void)
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_HTML);
 
 	// load global tags file for HTML entities autocompletion
-	ensure_html_tags_loaded();
+	symbols_global_tags_loaded(GEANY_FILETYPES_HTML);
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
@@ -2591,35 +2497,23 @@ static void styleset_d_init(void)
 
 	// load global tags file for C autocompletion
 	// C++ is a special case, here we use 0 to have C global tags in C++, too
-	ensure_tags_loaded(GTF_C, GLT_C);
+	symbols_global_tags_loaded(GEANY_FILETYPES_C);
 }
 
 
 void styleset_d(ScintillaObject *sci)
 {
+	GString *s;
+
 	styleset_common(sci, 5);
 	if (style_sets[GEANY_FILETYPES_D].styling == NULL) styleset_d_init();
 
 	/* Assign global keywords */
-	if ((app->tm_workspace) && (app->tm_workspace->global_tags))
+	s = symbols_get_global_keywords();
+	if (s != NULL)
 	{
-		guint j;
-		GPtrArray *g_typedefs = tm_tags_extract(app->tm_workspace->global_tags, tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
-		if ((g_typedefs) && (g_typedefs->len > 0))
-		{
-			GString *s = g_string_sized_new(g_typedefs->len * 10);
-			for (j = 0; j < g_typedefs->len; ++j)
-			{
-				if (!(TM_TAG(g_typedefs->pdata[j])->atts.entry.scope))
-				{
-					g_string_append(s, TM_TAG(g_typedefs->pdata[j])->name);
-					g_string_append_c(s, ' ');
-				}
-			}
-			SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
-			g_string_free(s, TRUE);
-		}
-		g_ptr_array_free(g_typedefs, TRUE);
+		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
+		g_string_free(s, TRUE);
 	}
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_D].wordchars);

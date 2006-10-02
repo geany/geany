@@ -2,6 +2,10 @@
 
  * src/templates.c:
    Added a blank line indent for templates D, HTML, PHP.
+ * src/symbols.c, src/symbols.h, src/highlighting.c,
+   src/makefile.win32, src/Makefile.am, po/POTFILES.in:
+   Move global tags code to symbols.c.
+   Added symbols_global_tags_loaded(), symbols_get_global_keywords().
 
 
 2006-10-01  Enrico Tröger  <enrico.troeger@uvena.de>

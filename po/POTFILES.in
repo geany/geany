@@ -27,3 +27,4 @@ src/vte.c
 src/keybindings.c
 src/search.c
 src/notebook.c
+src/symbols.c

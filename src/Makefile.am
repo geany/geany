@@ -8,6 +8,7 @@ bin_PROGRAMS = geany
 
 SRCS = \
 	main.c main.h geany.h \
+	symbols.c symbols.h \
 	search.c search.h \
 	notebook.c notebook.h \
 	keybindings.c keybindings.h \
