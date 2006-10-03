@@ -1638,7 +1638,7 @@ static void styleset_sh_init(void)
 	get_keyfile_hex(config, config_home, "styling", "scalar", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SH].styling[10]);
 
 	style_sets[GEANY_FILETYPES_SH].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_SH, 0, "break case continue do done elif else esac eval exit export fi for goto if in integer return set shift then while");
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_SH, 0, "break case continue do done elif else esac eval exit export fi for goto if in integer return set shift then until while");
 	style_sets[GEANY_FILETYPES_SH].keywords[1] = NULL;
 
 	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,

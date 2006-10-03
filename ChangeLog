@@ -7,6 +7,7 @@
    Reordered command line options alphabetically.
    Added new command line option --line to set the initial line for the
    first opened file.
+ * data/filetypes.sh, src/highlighting.c: Added keyword "until".
 
 
 2006-10-02  Nick Treleaven  <nick.treleaven@btinternet.com>
