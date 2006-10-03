@@ -191,21 +191,21 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 		{
 			if (app->pref_main_confirm_exit)
 			{
-				// there is the chance that the user cancel the exit process while closing open
-				// files, so save the configuration(i.e. the list of open files) first
-				configuration_save();
 				if (dialogs_show_question_full(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
 					_("Do you really want to quit?")) && on_close_all1_activate(NULL, NULL))
 					{
+						configuration_save();
 						destroyapp(NULL, gdata);
 					}
 				else app->quitting = FALSE;
 			}
 			else
 			{
+				// there is the chance that the user cancel the exit process while closing open
+				// files, so save the configuration(i.e. the list of open files) first
+				configuration_save();
 				if (on_close_all1_activate(NULL, NULL))
 				{
-					configuration_save();
 					destroyapp(NULL, gdata);
 				}
 				else app->quitting = FALSE;
