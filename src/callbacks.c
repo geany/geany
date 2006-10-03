@@ -87,6 +87,7 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 #endif
 
 	keybindings_free();
+	filetypes_save_commands();
 	filetypes_free_types();
 	styleset_free_styles();
 	templates_free_templates();
@@ -162,10 +163,6 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 {
 	app->quitting = TRUE;
 
-	// TODO: only save config if definitely quitting
-	configuration_save();
-	filetypes_save_commands();
-
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) > 0)
 	{
 		gint i;
@@ -181,21 +178,36 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 		}
 		if (has_dirty_editors)
 		{
-			if (on_close_all1_activate(NULL, NULL)) destroyapp(NULL, gdata);
+			// there is the chance that the user cancel the exit process while closing open
+			// files, so save the configuration(i.e. the list of open files) first
+			configuration_save();
+			if (on_close_all1_activate(NULL, NULL))
+			{
+				destroyapp(NULL, gdata);
+			}
 			else app->quitting = FALSE;
 		}
 		else
 		{
 			if (app->pref_main_confirm_exit)
 			{
+				// there is the chance that the user cancel the exit process while closing open
+				// files, so save the configuration(i.e. the list of open files) first
+				configuration_save();
 				if (dialogs_show_question_full(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
 					_("Do you really want to quit?")) && on_close_all1_activate(NULL, NULL))
+					{
 						destroyapp(NULL, gdata);
+					}
 				else app->quitting = FALSE;
 			}
 			else
 			{
-				if (on_close_all1_activate(NULL, NULL)) destroyapp(NULL, gdata);
+				if (on_close_all1_activate(NULL, NULL))
+				{
+					configuration_save();
+					destroyapp(NULL, gdata);
+				}
 				else app->quitting = FALSE;
 			}
 		}
@@ -206,11 +218,15 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 		{
 			if (dialogs_show_question_full(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
 				_("Do you really want to quit?")))
-					destroyapp(NULL, gdata);
+			{
+				configuration_save();
+				destroyapp(NULL, gdata);
+			}
 			else app->quitting = FALSE;
 		}
 		else
 		{
+			configuration_save();
 			destroyapp(NULL, gdata);
 		}
 	}
@@ -2258,7 +2274,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 	filetype *ft = user_data;
 
 	g_return_if_fail(ft != NULL);
-	
+
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		const gchar *newstr;

@@ -1,3 +1,10 @@
+2006-10-03  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: Save configuration(i.e. list of open files) as late
+                    as possible and save the filetype build commands
+                    first shortly before quitting.
+
+
 2006-10-02  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/templates.c:
