@@ -28,6 +28,7 @@
 typedef struct
 {
 	gboolean load_session;
+	gint goto_line;
 } CommandLineOptions;
 
 extern CommandLineOptions cl_options;

@@ -236,51 +236,7 @@
 						</thead>
 						<tbody>
 							<row>
-								<entry>-s</entry>
-								<entry>--no-session</entry>
-								<entry>Don't load the previous session's files.
-								</entry>
-							</row>
-							<row>
-								<entry>-n</entry>
-								<entry>--no-ctags</entry>
-								<entry>Do not load auto completion and call tip data.
-									   Use this option if you do not want to use them.
-								</entry>
-							</row>
-							<row>
-								<entry>-m</entry>
-								<entry>--no-msgwin</entry>
-								<entry>Do not show the message window. Use this option if you do not
-									   need compiler messages or VTE support.
-								</entry>
-							</row>
-							<row>
-								<entry>-i</entry>
-								<entry>--new-instance</entry>
-								<entry>Do not open files in a running instance, force opening a new instance.
-								</entry>
-							</row>
-							<row>
-								<entry>-t</entry>
-								<entry>--no-terminal</entry>
-								<entry>Do not load terminal support. Use this option if you do not
-									   want to load the virtual terminal emulator widget at startup.
-									   If you do not have <filename>libvte.so.4</filename> installed,
-									   then terminal-support is automatically disabled.
-								</entry>
-							</row>
-							<row>
-								<entry>-l</entry>
-								<entry>--vte-lib</entry>
-								<entry>Specify explicitly the path including filename or only the filename
-									   to the VTE library, e.g. <filename>/usr/lib/libvte.so</filename> or
-									   <filename>libvte.so</filename>. This option is only needed when the
-									   autodetection does not work.
-								</entry>
-							</row>
-							<row>
-								<entry>-c directory_name</entry>
+								<entry>-c dir_name</entry>
 								<entry>--config=directory_name</entry>
 								<entry>Use an alternate configuration directory. Default
 									   configuration directory is <filename>~/.&app_small;/</filename>
@@ -296,14 +252,67 @@
 								</entry>
 							</row>
 							<row>
-								<entry>-?</entry>
-								<entry>--help</entry>
-								<entry>Show help information and exit.</entry>
+								<entry>-i</entry>
+								<entry>--new-instance</entry>
+								<entry>Do not open files in a running instance, force opening a new instance.
+									   Only available if &app; was compiled with support for Sockets.
+								</entry>
+							</row>
+							<row>
+								<entry>-l</entry>
+								<entry>--line</entry>
+								<entry>Set initial line number for the first opened file.
+								</entry>
+							</row>
+							<row>
+								<entry>-m</entry>
+								<entry>--no-msgwin</entry>
+								<entry>Do not show the message window. Use this option if you do not
+									   need compiler messages or VTE support.
+								</entry>
+							</row>
+							<row>
+								<entry>-n</entry>
+								<entry>--no-ctags</entry>
+								<entry>Do not load auto completion and call tip data.
+									   Use this option if you do not want to use them.
+								</entry>
+							</row>
+							<row>
+								<entry>-s</entry>
+								<entry>--no-session</entry>
+								<entry>Don't load the previous session's files.
+								</entry>
+							</row>
+							<row>
+								<entry>-t</entry>
+								<entry>--no-terminal</entry>
+								<entry>Do not load terminal support. Use this option if you do not
+									   want to load the virtual terminal emulator widget at startup.
+									   If you do not have <filename>libvte.so.4</filename> installed,
+									   then terminal-support is automatically disabled. Only available
+									   if &app; was compiled with support for VTE.
+								</entry>
+							</row>
+							<row>
+								<entry></entry>
+								<entry>--vte-lib</entry>
+								<entry>Specify explicitly the path including filename or only the filename
+									   to the VTE library, e.g. <filename>/usr/lib/libvte.so</filename> or
+									   <filename>libvte.so</filename>. This option is only needed when the
+									   autodetection does not work. Only available if &app; was compiled
+									   with support for VTE.
+								</entry>
 							</row>
 							<row>
 								<entry>-v</entry>
 								<entry>--version</entry>
 								<entry>Show version information and exit.</entry>
+							</row>
+							<row>
+								<entry>-?</entry>
+								<entry>--help</entry>
+								<entry>Show help information and exit.</entry>
 							</row>
 							<row>
 								<entry></entry>

@@ -3,6 +3,10 @@
  * src/callbacks.c: Save configuration(i.e. list of open files) as late
                     as possible and save the filetype build commands
                     first shortly before quitting.
+ * doc/geany.docbook, doc/geany.1.in, src/main.c, src/document.c:
+   Reordered command line options alphabetically.
+   Added new command line option --line to set the initial line for the
+   first opened file.
 
 
 2006-10-02  Nick Treleaven  <nick.treleaven@btinternet.com>

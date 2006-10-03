@@ -650,7 +650,13 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	doc_list[idx].encoding = enc;
 	doc_list[idx].has_bom = bom;
 
-	sci_goto_pos(doc_list[idx].sci, pos, TRUE);
+	if (cl_options.goto_line >= 0)
+	{	// goto line which was specified on command line and then undefine the line
+		sci_goto_line_scroll(doc_list[idx].sci, cl_options.goto_line - 1, 0.25);
+		cl_options.goto_line = -1;
+	}
+	else if (pos >= 0)
+		sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 
 	if (! reload)
 	{
