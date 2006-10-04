@@ -759,7 +759,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 
 		document_set_text_changed(idx);
 		ui_document_show_hide(idx); // update the document menu
-		ui_build_show_hide(idx);
+		ui_update_build_menu(idx);
 		ui_update_statusbar(idx, -1);
 		ui_set_window_title(idx);
 		ui_update_tag_list(idx, FALSE);
@@ -930,7 +930,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		utils_replace_filename(idx);
 		document_save_file(idx, TRUE);
 
-		ui_build_show_hide(idx);
+		ui_update_build_menu(idx);
 
 		// finally add current file to recent files menu
 		ui_add_recent_file(doc_list[idx].file_name);
@@ -1648,21 +1648,25 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 		case 2: //make object
 		{
 			gchar *locale_filename, *short_file, *noext, *object_file; //temp
-			locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
-			short_file = g_path_get_basename(locale_filename);
-			g_free(locale_filename);
+			if (doc_list[idx].file_name != NULL)
+			{
+				locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
-			noext = utils_remove_ext_from_filename(short_file);
-			g_free(short_file);
+				short_file = g_path_get_basename(locale_filename);
+				g_free(locale_filename);
 
-			object_file = g_strdup_printf("%s.o", noext);
-			g_free(noext);
+				noext = utils_remove_ext_from_filename(short_file);
+				g_free(short_file);
 
-			g_free(app->build_make_custopt);
-			app->build_make_custopt = g_strdup(object_file);
-			g_free(object_file);
-			make_object = TRUE;
+				object_file = g_strdup_printf("%s.o", noext);
+				g_free(noext);
+
+				g_free(app->build_make_custopt);
+				app->build_make_custopt = g_strdup(object_file);
+				g_free(object_file);
+				make_object = TRUE;
+			}
 		}
 
 		// fall through

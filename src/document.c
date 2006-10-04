@@ -354,7 +354,7 @@ gboolean document_remove(guint page_num)
 			ui_set_window_title(-1);
 			ui_save_buttons_toggle(FALSE);
 			ui_close_buttons_toggle();
-			ui_build_show_hide(-1);
+			ui_update_build_menu(-1);
 		}
 	}
 	else geany_debug("Error: idx: %d page_num: %d", idx, page_num);
@@ -389,7 +389,7 @@ void document_new_file(filetype *ft)
 		document_set_filetype(idx, ft);	// also clears taglist
 		if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
 		ui_set_window_title(idx);
-		ui_build_show_hide(idx);
+		ui_update_build_menu(idx);
 		doc_list[idx].mtime = time(NULL);
 		doc_list[idx].changed = FALSE;
 		document_set_text_changed(idx);
@@ -666,7 +666,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		sci_set_readonly(doc_list[idx].sci, readonly);
 
 		document_set_filetype(idx, use_ft);	// also sets taglist
-		ui_build_show_hide(idx);
+		ui_update_build_menu(idx);
 	}
 	else
 	{	// reloading
@@ -1197,7 +1197,7 @@ void document_set_filetype(gint idx, filetype *type)
 		}
 	}
 	sci_colourise(doc_list[idx].sci, 0, -1);
-	ui_build_show_hide(idx);
+	ui_update_build_menu(idx);
 }
 
 

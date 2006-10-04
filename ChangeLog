@@ -1,3 +1,11 @@
+2006-10-04  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/ui_utils.c, src/main.c, src/document.c, src/callbacks.c:
+   Renamed ui_build_show_hide() in ui_update_build_menu().
+ * src/filetypes.c, src/ui_utils.c:
+   Fixed crash when using "Make object" on new files(closes #1570818).
+
+
 2006-10-03  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c: Save configuration(i.e. list of open files) as late

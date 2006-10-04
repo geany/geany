@@ -805,6 +805,9 @@ void filetypes_free_types(void)
 			if (filetypes[i]->menu_items->item_exec != NULL &&
 				GTK_IS_WIDGET(filetypes[i]->menu_items->item_exec))
 				gtk_widget_destroy(filetypes[i]->menu_items->item_exec);
+			if (filetypes[i]->menu_items->item_make_object != NULL &&
+				GTK_IS_WIDGET(filetypes[i]->menu_items->item_make_object))
+				gtk_widget_destroy(filetypes[i]->menu_items->item_make_object);
 */			g_free(filetypes[i]->menu_items);
 
 			g_strfreev(filetypes[i]->pattern);
@@ -941,7 +944,7 @@ void filetypes_save_commands()
 		gchar *fname, *ext, *data;
 
 		if (! bp->modified) continue;
-		
+
 		ext = get_conf_extension(i);
 		fname = g_strconcat(conf_prefix, ext, NULL);
 		g_free(ext);

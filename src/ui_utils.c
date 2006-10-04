@@ -618,7 +618,7 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show)
 }
 
 
-void ui_build_show_hide(gint idx)
+void ui_update_build_menu(gint idx)
 {
 	gboolean is_header = FALSE;
 	gchar *ext = NULL;
@@ -671,7 +671,7 @@ void ui_build_show_hide(gint idx)
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
 								ft->menu_items->menu);
 
-			if (is_header)
+			if (is_header) // means also filename is NULL
 			{
 				gtk_widget_set_sensitive(app->compile_button, FALSE);
 				gtk_widget_set_sensitive(app->run_button, FALSE);
@@ -681,6 +681,7 @@ void ui_build_show_hide(gint idx)
 					gtk_widget_set_sensitive(ft->menu_items->item_link, FALSE);
 				if (ft->menu_items->can_exec)
 					gtk_widget_set_sensitive(ft->menu_items->item_exec, FALSE);
+				gtk_widget_set_sensitive(ft->menu_items->item_make_object, FALSE);
 			}
 			else
 			{
@@ -692,8 +693,8 @@ void ui_build_show_hide(gint idx)
 					gtk_widget_set_sensitive(ft->menu_items->item_link, TRUE);
 				if (ft->menu_items->can_exec)
 					gtk_widget_set_sensitive(ft->menu_items->item_exec, TRUE);
+				gtk_widget_set_sensitive(ft->menu_items->item_make_object, TRUE);
 			}
-
 			break;
 		}
 		case GEANY_FILETYPES_LATEX:
@@ -709,7 +710,7 @@ void ui_build_show_hide(gint idx)
 								ft->menu_items->menu);
 				gtk_widget_set_sensitive(app->compile_button, FALSE);
 				gtk_widget_set_sensitive(app->run_button, FALSE);
-		}
+			}
 			else
 			{
 				gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
@@ -738,6 +739,7 @@ void ui_build_show_hide(gint idx)
 				if (ft->menu_items->can_link)
 					gtk_widget_set_sensitive(ft->menu_items->item_link, FALSE);
 				if (ft->menu_items->can_exec) gtk_widget_set_sensitive(ft->menu_items->item_exec, FALSE);
+				gtk_widget_set_sensitive(ft->menu_items->item_make_object, FALSE);
 			}
 			else
 			{
@@ -751,6 +753,7 @@ void ui_build_show_hide(gint idx)
 					gtk_widget_set_sensitive(ft->menu_items->item_link, TRUE);
 				if (ft->menu_items->can_exec)
 					gtk_widget_set_sensitive(ft->menu_items->item_exec, TRUE);
+				gtk_widget_set_sensitive(ft->menu_items->item_make_object, TRUE);
 			}
 		}
 	}
@@ -832,6 +835,7 @@ static GtkWidget *create_build_menu_gen(gint idx)
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file using the "
 										   "make tool"), NULL);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(2));
+	ft->menu_items->item_make_object = item;
 #endif
 
 	if (ft->menu_items->can_exec)
@@ -1378,7 +1382,7 @@ GtkContainer *ui_frame_new(GtkContainer *parent, const gchar *label_text)
 
 	align = gtk_alignment_new (0.5, 0.5, 1, 1);
 	gtk_container_add (GTK_CONTAINER (frame), align);
-	gtk_alignment_set_padding (GTK_ALIGNMENT (align), 0, 0, 12, 0);	
+	gtk_alignment_set_padding (GTK_ALIGNMENT (align), 0, 0, 12, 0);
 
 	label_markup = g_strconcat("<b>", label_text, "</b>", NULL);
 	label = gtk_label_new (label_markup);

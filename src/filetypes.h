@@ -70,6 +70,7 @@ struct build_menu_items
 	GtkWidget		*item_compile;
 	GtkWidget		*item_link;
 	GtkWidget		*item_exec;
+	GtkWidget		*item_make_object;
 	gboolean		 can_compile;
 	gboolean		 can_link;
 	gboolean		 can_exec;
