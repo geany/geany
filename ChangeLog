@@ -1,6 +1,9 @@
 2006-10-06  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * tagmanager/python.c: Improved Python parser to support nested classes.
+ * src/filetypes.c, src/document.c:
+   Implemented simple "shebang" detection. It is used prior to the
+   filename extension detection.
 
 
 2006-10-04  Enrico Tröger  <enrico.troeger@uvena.de>

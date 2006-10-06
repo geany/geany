@@ -660,7 +660,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	if (! reload)
 	{
-		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(utf8_filename);
+		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(idx);
 
 		doc_list[idx].readonly = readonly;
 		sci_set_readonly(doc_list[idx].sci, readonly);
@@ -828,7 +828,7 @@ gboolean document_save_file(gint idx, gboolean force)
 		doc_list[idx].mtime = time(NULL);
 		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
 		{
-			doc_list[idx].file_type = filetypes_get_from_filename(doc_list[idx].file_name);
+			doc_list[idx].file_type = filetypes_get_from_filename(idx);
 			filetypes_select_radio_item(doc_list[idx].file_type);
 		}
 		document_set_filetype(idx, doc_list[idx].file_type);

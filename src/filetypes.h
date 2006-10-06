@@ -113,13 +113,13 @@ filetype *filetypes_get_from_uid(gint uid);
 
 /* inits the filetype array and fill it with the known filetypes
  * and create the filetype menu*/
-void filetypes_init_types(void);
+void filetypes_init_types();
 
 /* simple filetype selection based on the filename extension */
-filetype *filetypes_get_from_filename(const gchar *filename);
+filetype *filetypes_get_from_filename(gint idx);
 
 /* frees the array and all related pointers */
-void filetypes_free_types(void);
+void filetypes_free_types();
 
 gchar *filetypes_get_template(filetype *ft);
 

@@ -31,6 +31,8 @@
 #include "templates.h"
 #include "msgwindow.h"
 #include "utils.h"
+#include "document.h"
+#include "sciwrappers.h"
 
 
 /* This is the order of unique ids used in the config file.
@@ -111,7 +113,7 @@ filetype *filetypes_get_from_uid(gint uid)
 
 /* inits the filetype array and fill it with the known filetypes
  * and create the filetype menu*/
-void filetypes_init_types(void)
+void filetypes_init_types()
 {
 	GtkWidget *filetype_menu = lookup_widget(app->window, "set_filetype1_menu");
 	GtkWidget *template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
@@ -693,17 +695,66 @@ static void filetypes_init_build_programs(filetype *ftype)
 }
 
 
+static filetype *find_shebang(gint idx)
+{
+	gchar *line = sci_get_line(doc_list[idx].sci, 0);
+	filetype *ft = NULL;
+
+	if (strlen(line) > 2 && line[0] == '#' && line[1]=='!')
+	{
+		/// TODO does g_path_get_basename() also work under Win32 for Unix filenames?
+		gchar *basename_interpreter = g_path_get_basename(line + 2);
+
+		if (strncmp(basename_interpreter, "sh", 2) == 0)
+			ft = filetypes[GEANY_FILETYPES_SH];
+		else if (strncmp(basename_interpreter, "bash", 4) == 0)
+			ft = filetypes[GEANY_FILETYPES_SH];
+		else if (strncmp(basename_interpreter, "perl", 4) == 0)
+			ft = filetypes[GEANY_FILETYPES_PERL];
+		else if (strncmp(basename_interpreter, "python", 6) == 0)
+			ft = filetypes[GEANY_FILETYPES_PYTHON];
+		else if (strncmp(basename_interpreter, "php", 3) == 0)
+			ft = filetypes[GEANY_FILETYPES_PHP];
+		else if (strncmp(basename_interpreter, "ruby", 4) == 0)
+			ft = filetypes[GEANY_FILETYPES_RUBY];
+		else if (strncmp(basename_interpreter, "tcl", 3) == 0)
+			ft = filetypes[GEANY_FILETYPES_TCL];
+		else if (strncmp(basename_interpreter, "zsh", 3) == 0)
+			ft = filetypes[GEANY_FILETYPES_SH];
+		else if (strncmp(basename_interpreter, "ksh", 3) == 0)
+			ft = filetypes[GEANY_FILETYPES_SH];
+		else if (strncmp(basename_interpreter, "csh", 3) == 0)
+			ft = filetypes[GEANY_FILETYPES_SH];
+		// what else to add?
+
+		g_free(basename_interpreter);
+	}
+
+	g_free(line);
+	return ft;
+}
+
+
 /* simple filetype selection based on the filename extension */
-filetype *filetypes_get_from_filename(const gchar *filename)
+filetype *filetypes_get_from_filename(gint idx)
 {
 	GPatternSpec *pattern;
+	filetype *ft;
+	gchar *filename;
 	gchar *base_filename, *utf8_filename;
 	gint i, j;
 
-	if (filename == NULL)
-	{
+	if (! DOC_IDX_VALID(idx))
 		return filetypes[GEANY_FILETYPES_ALL];
-	}
+
+	// try to find a shebang and if found use it prior to the filename extension
+	ft = find_shebang(idx);
+	if (ft != NULL) return ft;
+
+	if (doc_list[idx].file_name == NULL)
+		return filetypes[GEANY_FILETYPES_ALL];
+	else
+		filename = doc_list[idx].file_name;
 
 	// try to get the UTF-8 equivalent for the filename
 	utf8_filename = g_locale_to_utf8(filename, -1, NULL, NULL, NULL);
@@ -774,7 +825,7 @@ static void filetypes_create_newmenu_item(GtkWidget *menu, gchar *label, filetyp
 
 
 /* frees the array and all related pointers */
-void filetypes_free_types(void)
+void filetypes_free_types()
 {
 	gint i;
 
