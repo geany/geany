@@ -4,6 +4,9 @@
  * src/filetypes.c, src/document.c:
    Implemented simple "shebang" detection. It is used prior to the
    filename extension detection.
+ * src/highlighting.c, data/filetypes.latex:
+   Changed foreground colour for LaTeX sytle "math" to differentiate it
+   from the "comment" style.
 
 
 2006-10-04  Enrico Tröger  <enrico.troeger@uvena.de>

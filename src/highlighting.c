@@ -858,7 +858,7 @@ static void styleset_latex_init(void)
 	get_keyfile_hex(config, config_home, "styling", "default", "0x00002f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LATEX].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "command", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_LATEX].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "tag", "0x007f7f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_LATEX].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "math", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LATEX].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "math", "0x00007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LATEX].styling[3]);
 	get_keyfile_hex(config, config_home, "styling", "comment", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LATEX].styling[4]);
 
 	style_sets[GEANY_FILETYPES_LATEX].keywords = g_new(gchar*, 2);

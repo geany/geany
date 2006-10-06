@@ -4,7 +4,7 @@
 default=0x00002f;0xffffff;false;false
 command=0xff0000;0xffffff;true;false
 tag=0x007f7f;0xffffff;true;false
-math=0x007f00;0xffffff;false;false
+math=0x00007f;0xffffff;false;false
 comment=0x007f00;0xffffff;false;true
 
 [keywords]
