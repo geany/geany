@@ -13,7 +13,7 @@
 *   INCLUDE FILES
 */
 #include "general.h"	/* must always come first */
-
+#include <glib.h>
 #include <string.h>
 
 #include "parse.h"
@@ -33,21 +33,55 @@ static kindOption PythonKinds [] = {
     { TRUE, 'm', "member", "methods" }
 };
 
+typedef struct _lastClass {
+	gchar *name;
+	gint indent;
+} lastClass;
+
 /*
 *   FUNCTION DEFINITIONS
 */
 
+
+// remove all previous classes with more indent than the current one
+static GList *clean_class_list(GList *list, gint indent)
+{
+	GList *tmp, *tmp2;
+
+	tmp = g_list_first(list);
+	while (tmp != NULL)
+	{
+		if (((lastClass*)tmp->data)->indent >= indent)
+		{
+			g_free(((lastClass*)tmp->data)->name);
+			g_free(tmp->data);
+			tmp2 = tmp->next;
+
+			list = g_list_remove(list, tmp->data);
+			tmp = tmp2;
+		}
+		else
+		{
+			tmp = tmp->next;
+		}
+	}
+
+	return list;
+}
+
+
 static void findPythonTags (void)
 {
+    GList *parents = NULL, *tmp; // list of classes which are around the token
     vString *name = vStringNew ();
-    vString *lastClass = vStringNew();
+    gint indent;
     const unsigned char *line;
     boolean inMultilineString = FALSE;
 
     while ((line = fileReadLine ()) != NULL)
     {
 	const unsigned char *cp = line;
-
+	indent = 0;
 	while (*cp != '\0')
 	{
 	    if (*cp=='"' &&
@@ -62,33 +96,60 @@ static void findPythonTags (void)
 		inMultilineString = (boolean) !inMultilineString;
 		cp += 3;
 	    }
-	    if (inMultilineString  ||  isspace ((int) *cp))
+
+	    if (inMultilineString)
 		++cp;
+		else if (isspace ((int) *cp))
+		{
+			cp++;
+			// count indentation amount of current line
+			indent++;
+			/// TODO should be improved by separating between tabs and spaces but to do this we
+			/// have to know the tabulator width which is set in geany and not available here
+		}
 	    else if (*cp == '#')
 		break;
 	    else if (strncmp ((const char*) cp, "class", (size_t) 5) == 0)
 	    {
-		cp += 5;
-		if (isspace ((int) *cp))
-		{
-		    while (isspace ((int) *cp))
-			++cp;
-		    while (isalnum ((int) *cp)  ||  *cp == '_')
-		    {
-			vStringPut (name, (int) *cp);
-			++cp;
-		    }
-		    vStringTerminate (name);
-		    makeSimpleTag (name, PythonKinds, K_CLASS);
-		    vStringCopy (lastClass, name);
-		    vStringClear (name);
-		}
+			cp += 5;
+			if (isspace ((int) *cp))
+			{
+				GList *last = g_list_last(parents);
+				lastClass *lastclass = NULL;
+				lastClass *newclass = g_new(lastClass, 1);
+
+				if (last != NULL) lastclass = last->data;
+
+				while (isspace ((int) *cp))
+				++cp;
+				while (isalnum ((int) *cp)  ||  *cp == '_')
+				{
+				vStringPut (name, (int) *cp);
+				++cp;
+				}
+				vStringTerminate (name);
+
+				parents = clean_class_list(parents, indent);
+
+				newclass->name = g_strdup(vStringValue(name));
+				newclass->indent = indent;
+				parents = g_list_append(parents, newclass);
+				makeSimpleTag (name, PythonKinds, K_CLASS);
+				vStringClear (name);
+			}
 	    }
 	    else if (strncmp ((const char*) cp, "def", (size_t) 3) == 0)
 	    {
 		cp += 3;
 		if (isspace ((int) *cp))
 		{
+		    GList *last;
+		    lastClass *lastclass = NULL;
+
+			parents = clean_class_list(parents, indent);
+			last = g_list_last(parents);
+			if (last != NULL) lastclass = last->data;
+
 		    while (isspace ((int) *cp))
 			++cp;
 		    while (isalnum ((int) *cp)  ||  *cp == '_')
@@ -97,12 +158,11 @@ static void findPythonTags (void)
 			++cp;
 		    }
 		    vStringTerminate (name);
-		    if (!isspace(*line) || vStringLength(lastClass) <= 0)
+		    if (!isspace(*line) || lastclass == NULL || strlen(lastclass->name) <= 0)
 			makeSimpleTag (name, PythonKinds, K_FUNCTION);
 		    else
 			makeSimpleScopedTag (name, PythonKinds, K_METHOD,
-					     PythonKinds[K_CLASS].name,
-					     vStringValue(lastClass), "public");
+					     PythonKinds[K_CLASS].name, lastclass->name, "public");
 		    vStringClear (name);
 		}
 	    }
@@ -115,7 +175,19 @@ static void findPythonTags (void)
 	}
     }
     vStringDelete (name);
-    vStringDelete (lastClass);
+
+    // clear the remaining elements in the list
+    tmp = g_list_first(parents);
+    while (tmp != NULL)
+    {
+    	if (tmp->data)
+    	{
+			g_free(((lastClass*)tmp->data)->name);
+			g_free(tmp->data);
+    	}
+    	tmp = tmp->next;
+    }
+    g_list_free(parents);
 }
 
 extern parserDefinition* PythonParser (void)
