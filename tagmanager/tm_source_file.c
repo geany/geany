@@ -49,7 +49,7 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
 			TagEntryFunction = tm_source_file_tags;
 	}
 
-	if (name == NULL) 
+	if (name == NULL)
 		source_file->lang = LANG_AUTO;
 	else
 		source_file->lang = getNamedLanguage(name);
@@ -114,14 +114,16 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 			TagEntryFunction = tm_source_file_tags;
 	}
 	current_source_file = source_file;
-	
+
 	if (LANG_AUTO == source_file->lang)
 		source_file->lang = getFileLanguage (file_name);
 
 	if (source_file->lang < 0 || ! LanguageTable [source_file->lang]->enabled)
 		return status;
-	
-	while ((TRUE == status) && (passCount < 3))
+
+	//while ((TRUE == status) && (passCount < 3))
+	// parse files only once instead of three times until we know why
+	while ((TRUE == status) && (passCount < 1))
 	{
 		if (source_file->work_object.tags_array)
 			tm_tags_array_free(source_file->work_object.tags_array, FALSE);
@@ -135,7 +137,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 		}
 		else
 		{
-			g_warning("Unable to open %s", file_name);
+			g_warning("%s: Unable to open %s", __func__, file_name);
 			return FALSE;
 		}
 		++ passCount;
