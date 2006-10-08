@@ -1,3 +1,10 @@
+2006-10-08  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/highlighting.c, data/filetypes.ferite: Added some new keywords.
+ * src/sci_cb.c:
+   Added auto completion for iferr construct for filetype Ferite.
+
+
 2006-10-08  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * tagmanager/tm_source_file.c:

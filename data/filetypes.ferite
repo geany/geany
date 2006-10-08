@@ -23,8 +23,8 @@ globalclass=0x1111bb;0xffffff;true;false
 
 [keywords]
 # all items must be in one line
-primary=false null self super true abstract alias arguments attribute_missing break case class closure conformsToProtocol constructor default deliver destructor diliver do else extends final fix for function if iferr implements include instanceof method_missing modifies namespace new private protected protocol public recipient rename return static switch uses using while
-types=string number array object void XML Unix Sys String Stream Serialize RMI Posix Number Network Math FileSystem Console Array
+primary=false null self super true abstract alias and arguments attribute_missing break case class closure conformsToProtocol constructor continue default deliver destructor diliver directive do else extends eval final fix for function global handle if iferr implements include instanceof isa method_missing modifies monitor namespace new or private protected protocol public raise recipient rename return static switch uses using while
+types=boolean string number array object void XML Unix Sys String Stream Serialize RMI Posix Number Network Math FileSystem Console Array Regexp XSLT
 docComment=brief class declaration description end example extends function group implements modifies module namespace param protocol return return static type variable warning
 
 [settings]

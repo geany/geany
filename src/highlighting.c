@@ -2585,9 +2585,9 @@ static void styleset_ferite_init(void)
 	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor", 1, 0, &style_sets[GEANY_FILETYPES_FERITE].styling[19]);
 
 	style_sets[GEANY_FILETYPES_FERITE].keywords = g_new(gchar*, 4);
-	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_FERITE, 0, "false null self super true abstract alias arguments attribute_missing break case class closure conformsToProtocol constructor default deliver destructor diliver do else extends final fix for function if iferr implements include instanceof method_missing modifies namespace new private protected protocol public recipient rename return static switch uses using while");
-	get_keyfile_keywords(config, config_home, "keywords", "types", GEANY_FILETYPES_FERITE, 1, "number string array object void");
-	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_FERITE, 2, "@brief @class @declaration @description @end @example @extends @function @group @implements @modifies @module @namespace @param @protocol @return @return @static @type @variable @warning");
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_FERITE, 0, "false null self super true abstract alias and arguments attribute_missing break case class closure conformsToProtocol constructor continue default deliver destructor diliver directive do else extends eval final fix for function global handle if iferr implements include instanceof isa method_missing modifies monitor namespace new or private protected protocol public raise recipient rename return static switch uses using while");
+	get_keyfile_keywords(config, config_home, "keywords", "types", GEANY_FILETYPES_FERITE, 1, "boolean string number array object void");
+	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_FERITE, 2, "brief class declaration description end example extends function group implements modifies module namespace param protocol return return static type variable warning");
 	style_sets[GEANY_FILETYPES_FERITE].keywords[3] = NULL;
 
 	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,

@@ -906,6 +906,17 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		sci_goto_pos(sci, pos + 1, TRUE);
 		g_free(construct);
 	}
+	else if (! strncmp("iferr", buf + 10, 5))
+	{
+		if (doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE ||
+			! isspace(*(buf + 9))) goto free_and_return;
+
+		construct = g_strdup_printf("%s{%s\t%s}%sfix%s{%s\t%s}%s", eol, eol, eol, eol, eol, eol, eol, eol);
+
+		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
+		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
+		g_free(construct);
+	}
 
 	free_and_return:
 	g_free(eol);
