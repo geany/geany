@@ -1,3 +1,9 @@
+2006-10-08  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * tagmanager/tm_source_file.c:
+   Only parse tags once for simple parsers.
+
+
 2006-10-06  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * tagmanager/python.c: Improved Python parser to support nested classes.

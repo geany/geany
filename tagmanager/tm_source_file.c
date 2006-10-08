@@ -121,16 +121,18 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 	if (source_file->lang < 0 || ! LanguageTable [source_file->lang]->enabled)
 		return status;
 
-	//while ((TRUE == status) && (passCount < 3))
-	// parse files only once instead of three times until we know why
-	while ((TRUE == status) && (passCount < 1))
+	while ((TRUE == status) && (passCount < 3))
 	{
 		if (source_file->work_object.tags_array)
 			tm_tags_array_free(source_file->work_object.tags_array, FALSE);
 		if (fileOpen (file_name, source_file->lang))
 		{
 			if (LanguageTable [source_file->lang]->parser != NULL)
+			{
 				LanguageTable [source_file->lang]->parser ();
+				fileClose ();
+				break;
+			}
 			else if (LanguageTable [source_file->lang]->parser2 != NULL)
 				status = LanguageTable [source_file->lang]->parser2 (passCount);
 			fileClose ();
