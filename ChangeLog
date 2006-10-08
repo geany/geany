@@ -3,6 +3,8 @@
  * src/highlighting.c, data/filetypes.ferite: Added some new keywords.
  * src/sci_cb.c:
    Added auto completion for iferr construct for filetype Ferite.
+ * src/socket.c:
+   Added additional header files for compatibility with FreeBSD.
 
 
 2006-10-08  Nick Treleaven  <nick.treleaven@btinternet.com>
