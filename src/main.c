@@ -567,25 +567,14 @@ gint main(gint argc, gchar **argv)
 	app->opening_session_files = TRUE;
 	if (argc > 1)
 	{
-		gint i, opened = 0;
+		gint i;
 		for(i = 1; i < argc; i++)
 		{
 			if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
 			{
-				if (opened < GEANY_MAX_OPEN_FILES)
-				{
-					gchar *filename = get_argv_filename(argv[i]);
-					document_open_file(-1, filename, 0, FALSE, NULL, NULL);
-					g_free(filename);
-					opened++;
-				}
-				else
-				{
-					dialogs_show_error(
-			_("You have opened too many files. There is a limit of %d concurrent open files."),
-			GEANY_MAX_OPEN_FILES);
-					break;
-				}
+				gchar *filename = get_argv_filename(argv[i]);
+				document_open_file(-1, filename, 0, FALSE, NULL, NULL);
+				g_free(filename);
 			}
 		}
 	}

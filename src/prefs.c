@@ -366,7 +366,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 	if (response == GTK_RESPONSE_OK)
 	{
 		GtkWidget *widget;
-		gint i;
+		guint i;
 
 		// General settings
 		widget = lookup_widget(app->prefs_dialog, "spin_mru");
@@ -609,7 +609,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), app->tab_pos_sidebar);
 
 		// re-colourise all open documents, if tab width or long line settings have changed
-		for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+		for (i = 0; i < doc_array->len; i++)
 		{
 			if (doc_list[i].is_valid)
 			{
@@ -669,7 +669,7 @@ void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
 void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 {
 	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
-	gint i;
+	guint i;
 
 	switch (GPOINTER_TO_INT(user_data))
 	{
@@ -678,7 +678,7 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			if (strcmp(fontbtn, app->tagbar_font) == 0) break;
 			g_free(app->tagbar_font);
 			app->tagbar_font = g_strdup(fontbtn);
-			for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+			for (i = 0; i < doc_array->len; i++)
 			{
 				if (doc_list[i].is_valid && GTK_IS_WIDGET(doc_list[i].tag_tree))
 					gtk_widget_modify_font(doc_list[i].tag_tree,

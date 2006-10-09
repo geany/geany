@@ -59,6 +59,10 @@
 #include "vte.h"
 
 
+/* dynamic array of document elements to hold all information of the notebook tabs */
+GArray *doc_array;
+
+
 /* Returns -1 if no text found or the new range endpoint after replacing. */
 static gint
 document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
@@ -74,7 +78,7 @@ gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
 
 	if (! filename) return -1;
 
-	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+	for(i = 0; i < doc_array->len; i++)
 	{
 		gchar *dl_fname = (is_tm_filename && doc_list[i].tm_file) ?
 							doc_list[i].tm_file->file_name : doc_list[i].file_name;
@@ -96,7 +100,7 @@ gint document_find_by_sci(ScintillaObject *sci)
 
 	if (! sci) return -1;
 
-	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+	for(i = 0; i < doc_array->len; i++)
 	{
 		if (doc_list[i].is_valid && doc_list[i].sci == sci) return i;
 	}
@@ -108,7 +112,7 @@ gint document_find_by_sci(ScintillaObject *sci)
 gint document_get_n_idx(guint page_num)
 {
 	ScintillaObject *sci;
-	if (page_num >= GEANY_MAX_OPEN_FILES) return -1;
+	if (page_num >= doc_array->len) return -1;
 
 	sci = (ScintillaObject*)gtk_notebook_get_nth_page(
 				GTK_NOTEBOOK(app->notebook), page_num);
@@ -139,21 +143,15 @@ document *document_get_current()
 }
 
 
-/* returns the next free place(i.e. index) in the document list
- * If there is for any reason no free place, -1 is returned
- */
-gint document_get_new_idx()
+void document_init_doclist()
 {
-	guint i;
+	doc_array = g_array_new(FALSE, FALSE, sizeof(document));
+}
 
-	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
-	{
-		if (doc_list[i].sci == NULL)
-		{
-			return (gint) i;
-		}
-	}
-	return -1;
+
+void document_finalize()
+{
+	g_array_free(doc_array, TRUE);
 }
 
 
@@ -180,33 +178,6 @@ void document_set_text_changed(gint idx)
 }
 
 
-/* sets in all document structs the flag is_valid to FALSE and initializes some members to NULL,
- * to mark it uninitialized. The flag is_valid is set to TRUE in document_create_new_sci(). */
-void document_init_doclist()
-{
-	gint i;
-
-	for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
-	{
-		doc_list[i].is_valid = FALSE;
-		doc_list[i].has_tags = FALSE;
-		doc_list[i].use_auto_indention = app->pref_editor_use_auto_indention;
-		doc_list[i].line_breaking = app->pref_editor_line_breaking;
-		doc_list[i].readonly = FALSE;
-		doc_list[i].tag_store = NULL;
-		doc_list[i].tag_tree = NULL;
-		doc_list[i].file_name = NULL;
-		doc_list[i].file_type = NULL;
-		doc_list[i].tm_file = NULL;
-		doc_list[i].encoding = NULL;
-		doc_list[i].has_bom = FALSE;
-		doc_list[i].sci = NULL;
-		doc_list[i].undo_actions = NULL;
-		doc_list[i].redo_actions = NULL;
-	}
-}
-
-
 // Apply just the prefs that can change in the Preferences dialog
 void document_apply_update_prefs(ScintillaObject *sci)
 {
@@ -220,6 +191,45 @@ void document_apply_update_prefs(ScintillaObject *sci)
 	sci_set_visible_eols(sci, app->pref_editor_show_line_endings);
 
 	sci_set_folding_margin_visible(sci, app->pref_editor_folding);
+}
+
+
+/* Sets is_valid to FALSE and initializes some members to NULL, to mark it uninitialized.
+ * The flag is_valid is set to TRUE in document_create_new_sci(). */
+static void init_doc_struct(document *new_doc)
+{
+	new_doc->is_valid = FALSE;
+	new_doc->has_tags = FALSE;
+	new_doc->use_auto_indention = app->pref_editor_use_auto_indention;
+	new_doc->line_breaking = app->pref_editor_line_breaking;
+	new_doc->readonly = FALSE;
+	new_doc->tag_store = NULL;
+	new_doc->tag_tree = NULL;
+	new_doc->file_name = NULL;
+	new_doc->file_type = NULL;
+	new_doc->tm_file = NULL;
+	new_doc->encoding = NULL;
+	new_doc->has_bom = FALSE;
+	new_doc->sci = NULL;
+	new_doc->undo_actions = NULL;
+	new_doc->redo_actions = NULL;
+}
+
+
+/* returns the next free place(i.e. index) in the document list,
+ * or -1 if the current doc_array is full */
+static gint document_get_new_idx()
+{
+	guint i;
+
+	for(i = 0; i < doc_array->len; i++)
+	{
+		if (doc_list[i].sci == NULL)
+		{
+			return (gint) i;
+		}
+	}
+	return -1;
 }
 
 
@@ -243,9 +253,14 @@ gint document_create_new_sci(const gchar *filename)
 	}
 
 	new_idx = document_get_new_idx();
-	if (new_idx == -1) return -1;
-
-	this = &(doc_list[new_idx]);
+	if (new_idx == -1)	// expand the array, no free places
+	{
+		document new_doc;
+		init_doc_struct(&new_doc);
+		new_idx = doc_array->len;
+		g_array_append_val(doc_array, new_doc);
+	}
+	this = &doc_list[new_idx];
 
 	/* SCI - Code */
 	sci = SCINTILLA(scintilla_new());
@@ -311,6 +326,7 @@ gint document_create_new_sci(const gchar *filename)
 	this->has_tags = FALSE;
 	this->is_valid = TRUE;
 
+	g_assert(doc_list[new_idx].sci == sci);
 	return new_idx;
 }
 
@@ -320,7 +336,7 @@ gboolean document_remove(guint page_num)
 {
 	gint idx = document_get_n_idx(page_num);
 
-	if (idx >= 0 && idx <= GEANY_MAX_OPEN_FILES)
+	if (DOC_IDX_VALID(idx))
 	{
 		if (doc_list[idx].changed && ! dialogs_show_unsaved_file(idx))
 		{
@@ -367,54 +383,39 @@ gboolean document_remove(guint page_num)
    current filename to NULL. */
 void document_new_file(filetype *ft)
 {
-	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) < GEANY_MAX_OPEN_FILES)
-	{
-		gint idx = document_create_new_sci(NULL);
-		gchar *template = document_prepare_template(ft);
+	gint idx = document_create_new_sci(NULL);
+	gchar *template = document_prepare_template(ft);
 
-		if (idx == -1)
-		{
-			dialogs_show_error(
-			_("You have opened too many files. There is a limit of %d concurrent open files."),
-			GEANY_MAX_OPEN_FILES);
-			return;
-		}
+	g_assert(idx != -1);
 
-		sci_clear_all(doc_list[idx].sci);
-		sci_set_text(doc_list[idx].sci, template);
-		g_free(template);
+	sci_clear_all(doc_list[idx].sci);
+	sci_set_text(doc_list[idx].sci, template);
+	g_free(template);
 
-		doc_list[idx].encoding = g_strdup(encodings[app->pref_editor_default_encoding].charset);
-		//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
-		document_set_filetype(idx, ft);	// also clears taglist
-		if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
-		ui_set_window_title(idx);
-		ui_update_build_menu(idx);
-		doc_list[idx].mtime = time(NULL);
-		doc_list[idx].changed = FALSE;
-		document_set_text_changed(idx);
-		ui_document_show_hide(idx); //update the document menu
+	doc_list[idx].encoding = g_strdup(encodings[app->pref_editor_default_encoding].charset);
+	//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
+	document_set_filetype(idx, ft);	// also clears taglist
+	if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
+	ui_set_window_title(idx);
+	ui_update_build_menu(idx);
+	doc_list[idx].mtime = time(NULL);
+	doc_list[idx].changed = FALSE;
+	document_set_text_changed(idx);
+	ui_document_show_hide(idx); //update the document menu
 #ifdef G_OS_WIN32
-		sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
+	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
 #else
-		sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
+	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
 #endif
-		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
-		sci_empty_undo_buffer(doc_list[idx].sci);
-		sci_goto_pos(doc_list[idx].sci, 0, TRUE);
+	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
+	sci_empty_undo_buffer(doc_list[idx].sci);
+	sci_goto_pos(doc_list[idx].sci, 0, TRUE);
 
-		// "the" SCI signal (connect after initial setup(i.e. adding text))
-		g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
-					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
+	// "the" SCI signal (connect after initial setup(i.e. adding text))
+	g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
+				G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
 
-		msgwin_status_add(_("New file opened."));
-	}
-	else
-	{
-		dialogs_show_error(
-		_("You have opened too many files. There is a limit of %d concurrent open files."),
-							GEANY_MAX_OPEN_FILES);
-	}
+	msgwin_status_add(_("New file opened."));
 }
 
 
@@ -1182,7 +1183,7 @@ void document_set_filetype(gint idx, filetype *type)
 						}
 					}
 				}
-				for (n = 0; n < GEANY_MAX_OPEN_FILES; n++)
+				for (n = 0; n < doc_array->len; n++)
 				{
 					if (doc_list[n].sci)
 					{

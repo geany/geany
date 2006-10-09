@@ -1,3 +1,11 @@
+2006-10-09  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/win32.c, src/geany.h, src/callbacks.c, src/search.c,
+   src/document.c, src/document.h, src/prefs.c, src/dialogs.c,
+   src/main.c, src/ui_utils.c:
+   Removed the GEANY_MAX_OPEN_FILES limit, using a dynamic array.
+
+
 2006-10-09  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/dialogs.c:

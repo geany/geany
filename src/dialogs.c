@@ -54,103 +54,91 @@ static GtkWidget *add_file_open_extra_widget();
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file ()
 {
-	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) < GEANY_MAX_OPEN_FILES)
-	{
 #ifdef G_OS_WIN32
-		win32_show_file_dialog(TRUE);
+	win32_show_file_dialog(TRUE);
 #else /* X11, not win32: use GTK_FILE_CHOOSER */
+	gchar *initdir;
 
-		/* We use the same file selection widget each time, so first
-	   		of all we create it if it hasn't already been created. */
-		if (app->open_filesel == NULL)
+	/* We use the same file selection widget each time, so first
+		of all we create it if it hasn't already been created. */
+	if (app->open_filesel == NULL)
+	{
+		GtkWidget *combo;
+		GtkWidget *viewbtn;
+		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+		gint i;
+
+		app->open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->window),
+				GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
+
+		viewbtn = gtk_button_new_with_mnemonic(_("_View"));
+		gtk_tooltips_set_tip(tooltips, viewbtn,
+			_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."), NULL);
+		gtk_widget_show(viewbtn);
+		gtk_dialog_add_action_widget(GTK_DIALOG(app->open_filesel),
+			viewbtn, GTK_RESPONSE_APPLY);
+		gtk_dialog_add_buttons(GTK_DIALOG(app->open_filesel),
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+		// set default Open, so pressing enter can open multiple files
+		gtk_dialog_set_default_response(GTK_DIALOG(app->open_filesel),
+			GTK_RESPONSE_ACCEPT);
+
+		gtk_widget_set_size_request(app->open_filesel, 520, 460);
+		gtk_window_set_modal(GTK_WINDOW(app->open_filesel), TRUE);
+		gtk_window_set_destroy_with_parent(GTK_WINDOW(app->open_filesel), TRUE);
+		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(app->open_filesel), TRUE);
+		gtk_window_set_type_hint(GTK_WINDOW(app->open_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
+		gtk_window_set_transient_for(GTK_WINDOW(app->open_filesel), GTK_WINDOW(app->window));
+		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(app->open_filesel), TRUE);
+
+		// add checkboxes and filename entry
+		gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(app->open_filesel),
+			add_file_open_extra_widget());
+		combo = lookup_widget(app->open_filesel, "filetype_combo");
+
+		// add FileFilters(start with "All Files")
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
+					filetypes_create_file_filter(filetypes[GEANY_FILETYPES_ALL]));
+		for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
 		{
-			GtkWidget *combo;
-			GtkWidget *viewbtn;
-			GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-			gint i;
-
-			app->open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->window),
-					GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
-
-			viewbtn = gtk_button_new_with_mnemonic(_("_View"));
-			gtk_tooltips_set_tip(tooltips, viewbtn,
-				_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."), NULL);
-			gtk_widget_show(viewbtn);
-			gtk_dialog_add_action_widget(GTK_DIALOG(app->open_filesel),
-				viewbtn, GTK_RESPONSE_APPLY);
-			gtk_dialog_add_buttons(GTK_DIALOG(app->open_filesel),
-				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-			// set default Open, so pressing enter can open multiple files
-			gtk_dialog_set_default_response(GTK_DIALOG(app->open_filesel),
-				GTK_RESPONSE_ACCEPT);
-
-			gtk_widget_set_size_request(app->open_filesel, 520, 460);
-			gtk_window_set_modal(GTK_WINDOW(app->open_filesel), TRUE);
-			gtk_window_set_destroy_with_parent(GTK_WINDOW(app->open_filesel), TRUE);
-			gtk_window_set_skip_taskbar_hint(GTK_WINDOW(app->open_filesel), TRUE);
-			gtk_window_set_type_hint(GTK_WINDOW(app->open_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
-			gtk_window_set_transient_for(GTK_WINDOW(app->open_filesel), GTK_WINDOW(app->window));
-			gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(app->open_filesel), TRUE);
-
-			// add checkboxes and filename entry
-			gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(app->open_filesel),
-				add_file_open_extra_widget());
-			combo = lookup_widget(app->open_filesel, "filetype_combo");
-
-			// add FileFilters(start with "All Files")
-			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
-						filetypes_create_file_filter(filetypes[GEANY_FILETYPES_ALL]));
-			for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
+			if (filetypes[i])
 			{
-				if (filetypes[i])
-				{
-					gtk_combo_box_append_text(GTK_COMBO_BOX(combo), filetypes[i]->title);
-					gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
-						filetypes_create_file_filter(filetypes[i]));
-				}
-			}
-			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), _("Detect by file extension  "));
-			gtk_combo_box_set_active(GTK_COMBO_BOX(combo), GEANY_MAX_FILE_TYPES - 1);
-
-			g_signal_connect((gpointer) app->open_filesel, "selection-changed",
-						G_CALLBACK(on_file_open_selection_changed), NULL);
-			g_signal_connect ((gpointer) app->open_filesel, "delete_event",
-						G_CALLBACK(gtk_widget_hide), NULL);
-			g_signal_connect((gpointer) app->open_filesel, "response",
-						G_CALLBACK(on_file_open_dialog_response), NULL);
-
- 		}
-
-		// set dialog directory to the current file's directory, if present
-		{
-			gchar *initdir = utils_get_current_file_dir();
-
-			if (initdir != NULL)
-			{
-				gchar *locale_filename;
-
-				locale_filename = utils_get_locale_from_utf8(initdir);
-
-				if (g_path_is_absolute(locale_filename))
-					gtk_file_chooser_set_current_folder(
-						GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
-
-				g_free(initdir);
-				g_free(locale_filename);
+				gtk_combo_box_append_text(GTK_COMBO_BOX(combo), filetypes[i]->title);
+				gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
+					filetypes_create_file_filter(filetypes[i]));
 			}
 		}
+		gtk_combo_box_append_text(GTK_COMBO_BOX(combo), _("Detect by file extension  "));
+		gtk_combo_box_set_active(GTK_COMBO_BOX(combo), GEANY_MAX_FILE_TYPES - 1);
 
-		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(app->open_filesel));
-		gtk_widget_show(app->open_filesel);
-#endif
+		g_signal_connect((gpointer) app->open_filesel, "selection-changed",
+					G_CALLBACK(on_file_open_selection_changed), NULL);
+		g_signal_connect ((gpointer) app->open_filesel, "delete_event",
+					G_CALLBACK(gtk_widget_hide), NULL);
+		g_signal_connect((gpointer) app->open_filesel, "response",
+					G_CALLBACK(on_file_open_dialog_response), NULL);
 	}
-	else
+
+	// set dialog directory to the current file's directory, if present
+	initdir = utils_get_current_file_dir();
+	if (initdir != NULL)
 	{
-		dialogs_show_error(
-		_("You have opened too many files. There is a limit of %d concurrent open files."),
-		GEANY_MAX_OPEN_FILES);
+		gchar *locale_filename;
+
+		locale_filename = utils_get_locale_from_utf8(initdir);
+
+		if (g_path_is_absolute(locale_filename))
+			gtk_file_chooser_set_current_folder(
+				GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
+
+		g_free(initdir);
+		g_free(locale_filename);
 	}
+
+	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(app->open_filesel));
+	gtk_widget_show(app->open_filesel);
+#endif
 }
 
 

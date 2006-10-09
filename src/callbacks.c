@@ -91,6 +91,10 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	filetypes_free_types();
 	styleset_free_styles();
 	templates_free_templates();
+	msgwin_finalize();
+	search_finalize();
+	document_finalize();
+
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_strfreev(html_entities);
 	g_free(app->configdir);
@@ -113,9 +117,6 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 		g_free(g_queue_pop_tail(app->recent_queue));
 	}
 	g_queue_free(app->recent_queue);
-
-	msgwin_finalize();
-	search_finalize();
 
 	if (app->prefs_dialog && GTK_IS_WIDGET(app->prefs_dialog)) gtk_widget_destroy(app->prefs_dialog);
 	if (app->save_filesel && GTK_IS_WIDGET(app->save_filesel)) gtk_widget_destroy(app->save_filesel);
@@ -165,10 +166,10 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) > 0)
 	{
-		gint i;
+		guint i;
 		gboolean has_dirty_editors = FALSE;
 
-		for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+		for (i = 0; i < doc_array->len; i++)
 		{
 			if (doc_list[i].is_valid && doc_list[i].changed)
 			{
@@ -830,20 +831,9 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		flist = filelist;
 		while(flist != NULL)
 		{
-			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) < GEANY_MAX_OPEN_FILES)
+			if (g_file_test((gchar*) flist->data, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 			{
-				if (g_file_test((gchar*) flist->data, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-				{
-					document_open_file(-1, (gchar*) flist->data, 0, ro, ft, NULL);
-				}
-			}
-			else
-			{
-				dialogs_show_error(
-		_("You have opened too many files. There is a limit of %d concurrent open files."),
-		GEANY_MAX_OPEN_FILES);
-				g_slist_foreach(flist, (GFunc)g_free, NULL);
-				break;
+				document_open_file(-1, (gchar*) flist->data, 0, ro, ft, NULL);
 			}
 			g_free(flist->data);
 			flist = flist->next;
@@ -1277,9 +1267,8 @@ void
 on_find_usage1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint i, pos, line = -1;
-	gint flags;
-	gint idx;
+	guint i;
+	gint pos, line = -1, flags, idx;
 	struct TextToFind ttf;
 	gchar *buffer, *short_file_name, *string, *search_text;
 
@@ -1299,7 +1288,7 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 		flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
 	}
 
-	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+	for(i = 0; i < doc_array->len; i++)
 	{
 		if (doc_list[i].is_valid)
 		{

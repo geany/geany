@@ -135,7 +135,8 @@ void ui_set_window_title(gint index)
 
 void ui_set_editor_font(const gchar *font_name)
 {
-	gint i, size;
+	guint i;
+	gint size;
 	gchar *fname;
 	PangoFontDescription *font_desc;
 
@@ -153,7 +154,7 @@ void ui_set_editor_font(const gchar *font_name)
 	size = pango_font_description_get_size(font_desc) / PANGO_SCALE;
 
 	/* We copy the current style, and update the font in all open tabs. */
-	for(i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+	for(i = 0; i < doc_array->len; i++)
 	{
 		if (doc_list[i].sci)
 		{

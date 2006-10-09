@@ -729,8 +729,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 	if (search_in_all_buffers_re && response == GEANY_RESPONSE_REPLACE_ALL)
 	{
-		gint i;
-		for (i = 0; i < GEANY_MAX_OPEN_FILES; i++)
+		guint i;
+		for (i = 0; i < doc_array->len; i++)
 		{
 			if (! doc_list[i].is_valid) continue;
 

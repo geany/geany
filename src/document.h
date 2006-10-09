@@ -35,10 +35,6 @@
 #include "filetypes.h"
 
 
-#define DOC_IDX_VALID(idx) \
-	((idx) >= 0 && (idx) < GEANY_MAX_OPEN_FILES && doc_list[idx].is_valid)
-
-
 /* structure for representing an open tab with all its related stuff. */
 typedef struct document
 {
@@ -68,9 +64,15 @@ typedef struct document
 } document;
 
 
-/* array of document elements to hold all information of the notebook tabs */
-document doc_list[GEANY_MAX_OPEN_FILES];
+/* dynamic array of document elements to hold all information of the notebook tabs */
+extern GArray *doc_array;
 
+/* doc_list wraps doc_array so it can be used with C array syntax.
+ * Example: doc_list[0].sci = NULL; */
+#define doc_list ((document *)doc_array->data)
+
+#define DOC_IDX_VALID(idx) \
+	((idx) >= 0 && (guint)(idx) < doc_array->len && doc_list[idx].is_valid)
 
 
 /* returns the index of the notebook page which has the given filename */
@@ -81,6 +83,9 @@ gint document_find_by_filename(const gchar*, gboolean is_tm_filename);
 gint document_find_by_sci(ScintillaObject*);
 
 
+/* returns the index of the given notebook page in the document list */
+gint document_get_n_idx(guint page_num);
+
 /* returns the index of the current notebook page in the document list */
 gint document_get_cur_idx();
 
@@ -88,21 +93,12 @@ gint document_get_cur_idx();
 document *document_get_current();
 
 
-/* returns the index of the given notebook page in the document list */
-gint document_get_n_idx(guint);
+void document_init_doclist();
 
-
-/* returns the next free place(i.e. index) in the document list
- * If there is for any reason no free place, -1 is returned */
-gint document_get_new_idx();
+void document_finalize();
 
 
 void document_set_text_changed(gint);
-
-
-/* sets in all document structs the flag is_valid to FALSE and initializes some members to NULL,
- * to mark it uninitialized. The flag is_valid is set to TRUE in document_create_new_sci(). */
-void document_init_doclist();
 
 
 // Apply just the prefs that can change in the Preferences dialog
@@ -114,9 +110,8 @@ void document_apply_update_prefs(ScintillaObject *sci);
 gint document_create_new_sci(const gchar*);
 
 
-/* removes the given notebook tab and clears the related entry in the document
- * list */
-gboolean document_remove(guint);
+/* removes the given notebook tab and clears the related entry in the document list */
+gboolean document_remove(guint page_num);
 
 
 /* This creates a new document, by clearing the text widget and setting the

@@ -145,16 +145,7 @@ void win32_show_file_dialog(gboolean file_open)
 		x = of.nFileOffset - 1;
 		if (x != strlen(fname))
 		{	// open a single file
-			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) >= GEANY_MAX_OPEN_FILES)
-			{
-				dialogs_show_error(
-			_("You have opened too many files. There is a limit of %d concurrent open files."),
-			GEANY_MAX_OPEN_FILES);
-			}
-			else
-			{
-				document_open_file(-1, fname, 0, of.Flags & OFN_READONLY, NULL, NULL);
-			}
+			document_open_file(-1, fname, 0, of.Flags & OFN_READONLY, NULL, NULL);
 		}
 		else
 		{	// open mutiple files
@@ -162,9 +153,7 @@ void win32_show_file_dialog(gboolean file_open)
 			{
 				if (! fname[x])
 				{
-					if (! fname[x+1] &&	(
-						gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) < GEANY_MAX_OPEN_FILES))
-						break;
+					if (! fname[x+1]) break;
 
 					g_snprintf(file_name, 254, "%s\\%s", fname, fname + x + 1);
 					document_open_file(-1, file_name, 0, of.Flags & OFN_READONLY, NULL, NULL);
