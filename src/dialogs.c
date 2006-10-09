@@ -802,7 +802,7 @@ void dialogs_show_includes_arguments_gen()
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	// call the callback manually
 	on_includes_arguments_dialog_response(GTK_DIALOG(dialog), response, ft);
-	
+
 	gtk_widget_destroy(dialog);
 }
 
@@ -1021,7 +1021,7 @@ void dialogs_show_file_properties(gint idx)
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), gtk_label_new(""));
 
 	// create permission label and then table with the permissions
-	label = gtk_label_new("<b>Permissions:</b>");
+	label = gtk_label_new(_("<b>Permissions:</b>"));
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);

@@ -1,3 +1,9 @@
+2006-10-09  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c:
+   Made string "Permissions" in the file property dialog translatable.
+
+
 2006-10-08  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/highlighting.c, data/filetypes.ferite: Added some new keywords.
