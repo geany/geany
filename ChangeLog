@@ -1,6 +1,13 @@
 2006-10-10  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c: Connect only once to the "sci-notify" signal.
+ * scintilla/CellBuffer.cxx, scintilla/Document.cxx,
+   scintilla/include/Scintilla.h:
+   Applied patch from Armel Asselin (thanks). It adds SC_START_ACTION
+   notification which is required for Geany's new Undo system.
+ * src/document.c, src/sci_cb.c, src/callbacks.c:
+   Finished new Undo system. Now some more actions can be undone and
+   also redone.
 
 
 2006-10-09  Nick Treleaven  <nick.treleaven@btinternet.com>

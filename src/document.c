@@ -68,6 +68,10 @@ static gint
 document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
 	gint flags, gint start, gint end, gboolean escaped_chars);
 
+static void document_undo_clear(gint idx);
+static void document_redo_add(gint idx, guint type, gpointer data);
+
+
 
 /* returns the index of the notebook page which has the given filename
  * is_tm_filename is needed when passing TagManager filenames because they are
@@ -362,7 +366,6 @@ gboolean document_remove(guint page_num)
 		doc_list[idx].has_bom = FALSE;
 		doc_list[idx].tm_file = NULL;
 		document_undo_clear(idx);
-		document_redo_clear(idx);
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
 			ui_update_tag_list(-1, FALSE);
@@ -388,9 +391,18 @@ void document_new_file(filetype *ft)
 
 	g_assert(idx != -1);
 
+	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
 	sci_clear_all(doc_list[idx].sci);
 	sci_set_text(doc_list[idx].sci, template);
 	g_free(template);
+
+#ifdef G_OS_WIN32
+	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
+#else
+	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
+#endif
+	sci_set_undo_collection(doc_list[idx].sci, TRUE);
+	sci_empty_undo_buffer(doc_list[idx].sci);
 
 	doc_list[idx].encoding = g_strdup(encodings[app->pref_editor_default_encoding].charset);
 	//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
@@ -402,13 +414,8 @@ void document_new_file(filetype *ft)
 	doc_list[idx].changed = FALSE;
 	document_set_text_changed(idx);
 	ui_document_show_hide(idx); //update the document menu
-#ifdef G_OS_WIN32
-	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
-#else
-	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
-#endif
+
 	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
-	sci_empty_undo_buffer(doc_list[idx].sci);
 	sci_goto_pos(doc_list[idx].sci, 0, TRUE);
 
 	// "the" SCI signal (connect after initial setup(i.e. adding text))
@@ -637,15 +644,17 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	if (idx == -1) return -1;	// really should not happen
 
 	// set editor mode and add the text to the ScintillaObject
-	sci_set_text(doc_list[idx].sci, data);	// NULL terminated data; avoids modifying sci
+	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
+	sci_empty_undo_buffer(doc_list[idx].sci);
+	sci_set_text(doc_list[idx].sci, data);	// NULL terminated data
+
 	editor_mode = utils_get_line_endings(data, size);
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
-
 	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
-	sci_set_savepoint(doc_list[idx].sci);
-	sci_empty_undo_buffer(doc_list[idx].sci);
-	// get the modification time from file and keep it
-	doc_list[idx].mtime = st.st_mtime;
+
+	sci_set_undo_collection(doc_list[idx].sci, TRUE);
+
+	doc_list[idx].mtime = st.st_mtime; // get the modification time from file and keep it
 	doc_list[idx].changed = FALSE;
 	doc_list[idx].file_name = g_strdup(utf8_filename);
 	doc_list[idx].encoding = enc;
@@ -676,6 +685,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	else
 	{	// reloading
 		document_update_tag_list(idx, TRUE);
+		document_undo_clear(idx);
 	}
 
 	document_set_text_changed(idx);
@@ -1494,11 +1504,26 @@ void document_ensure_final_newline(gint idx)
 	}
 }
 
+
+void document_set_encoding(gint idx, const gchar *new_encoding)
+{
+	if (! DOC_IDX_VALID(idx) || new_encoding == NULL ||
+		utils_strcmp(new_encoding, doc_list[idx].encoding)) return;
+
+	g_free(doc_list[idx].encoding);
+	doc_list[idx].encoding = g_strdup(new_encoding);
+
+	ui_update_statusbar(idx, -1);
+	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
+			utils_is_unicode_charset(doc_list[idx].encoding));
+}
+
+
 /* own Undo / Redo implementation to be able to undo / redo changes
  * to the encoding or the Unicode BOM (which are Scintilla independet).
  * All Scintilla events are stored in the undo / redo buffer and are passed through. */
 
-/* Clears the Undo buffer (to be called after saving a file or when closing the document) */
+/* Clears the Undo and Redo buffer (to be called when reloading or closing the document) */
 void document_undo_clear(gint idx)
 {
 	undo_action *a;
@@ -1519,17 +1544,6 @@ void document_undo_clear(gint idx)
 	}
 	doc_list[idx].undo_actions = NULL;
 
-	doc_list[idx].changed = FALSE;
-	if (! app->quitting) document_set_text_changed(idx);
-}
-
-
-/* Clears the Redo buffer (to be called after saving a file or when closing the document) */
-void document_redo_clear(gint idx)
-{
-/*
-	undo_action *a;
-
 	while (g_trash_stack_height(&doc_list[idx].redo_actions) > 0)
 	{
 		a = g_trash_stack_pop(&doc_list[idx].redo_actions);
@@ -1548,7 +1562,9 @@ void document_redo_clear(gint idx)
 
 	doc_list[idx].changed = FALSE;
 	if (! app->quitting) document_set_text_changed(idx);
-*/
+
+	//geany_debug("%s: new undo stack height: %d, new redo stack height: %d", __func__,
+				//g_trash_stack_height(&doc_list[idx].undo_actions), g_trash_stack_height(&doc_list[idx].redo_actions));
 }
 
 
@@ -1556,7 +1572,7 @@ void document_undo_add(gint idx, guint type, gpointer data)
 {
 	undo_action *action;
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (! DOC_IDX_VALID(idx)) return;
 
 	action = g_new0(undo_action, 1);
 	action->type = type;
@@ -1568,18 +1584,14 @@ void document_undo_add(gint idx, guint type, gpointer data)
 	document_set_text_changed(idx);
 	ui_update_popup_reundo_items(idx);
 
-	{
-		geany_debug("%s: new stack height: %d, added type: %d", __func__,
-				g_trash_stack_height(&doc_list[idx].undo_actions), action->type);
-	}
+	//geany_debug("%s: new stack height: %d, added type: %d", __func__,
+				//g_trash_stack_height(&doc_list[idx].undo_actions), action->type);
 }
 
 
 gboolean document_can_undo(gint idx)
 {
-	return sci_can_undo(doc_list[idx].sci);
-
-	if (idx == -1 || ! doc_list[idx].is_valid) return FALSE;
+	if (! DOC_IDX_VALID(idx)) return FALSE;
 
 	if (g_trash_stack_height(&doc_list[idx].undo_actions) > 0 || sci_can_undo(doc_list[idx].sci))
 		return TRUE;
@@ -1588,30 +1600,18 @@ gboolean document_can_undo(gint idx)
 }
 
 
-gboolean document_can_redo(gint idx)
-{
-	if (idx == -1 || ! doc_list[idx].is_valid) return FALSE;
-
-	return sci_can_redo(doc_list[idx].sci);
-}
-
-
 void document_undo(gint idx)
 {
 	undo_action *action;
 
-#if 1
-	sci_undo(doc_list[idx].sci);
-	return;
-#endif
-
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (! DOC_IDX_VALID(idx)) return;
 
 	action = g_trash_stack_pop(&doc_list[idx].undo_actions);
 
 	if (action == NULL)
 	{
 		// fallback, should not be necessary
+		geany_debug("%s: fallback used", __func__);
 		sci_undo(doc_list[idx].sci);
 	}
 	else
@@ -1620,13 +1620,15 @@ void document_undo(gint idx)
 		{
 			case UNDO_SCINTILLA:
 			{
-				geany_debug("undo: Scintilla");
+				document_redo_add(idx, UNDO_SCINTILLA, NULL);
+
 				sci_undo(doc_list[idx].sci);
 				break;
 			}
 			case UNDO_BOM:
 			{
-				geany_debug("undo: BOM");
+				document_redo_add(idx, UNDO_BOM, GINT_TO_POINTER(doc_list[idx].has_bom));
+
 				doc_list[idx].has_bom = GPOINTER_TO_INT(action->data);
 				ui_update_statusbar(idx, -1);
 				ui_document_show_hide(idx);
@@ -1634,28 +1636,123 @@ void document_undo(gint idx)
 			}
 			case UNDO_ENCODING:
 			{
-				geany_debug("undo: Encoding");
-				doc_list[idx].encoding = (gchar*) action->data;
-				ui_update_statusbar(idx, -1);
-				encodings_select_radio_item(doc_list[idx].encoding);
-				gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
-								utils_is_unicode_charset(doc_list[idx].encoding));
+				// use the "old" encoding
+				document_redo_add(idx, UNDO_ENCODING, g_strdup(doc_list[idx].encoding));
+
+				document_set_encoding(idx, (const gchar*)action->data);
+
+				app->ignore_callback = TRUE;
+				encodings_select_radio_item((const gchar*)action->data);
+				app->ignore_callback = FALSE;
+
+				g_free(action->data);
 				break;
 			}
 			default: break;
 		}
 	}
+	g_free(action); // free the action which was taken from the stack
 
-	if (g_trash_stack_height(&doc_list[idx].undo_actions) == 0) doc_list[idx].changed = FALSE;
+	if (g_trash_stack_height(&doc_list[idx].undo_actions) == 0)
+	{
+		doc_list[idx].changed = FALSE;
+		document_set_text_changed(idx);
+	}
+	else
+		doc_list[idx].changed = TRUE;
+
 	ui_update_popup_reundo_items(idx);
-	geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].undo_actions));
+	//geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].undo_actions));
+}
+
+
+gboolean document_can_redo(gint idx)
+{
+	if (! DOC_IDX_VALID(idx)) return FALSE;
+
+	if (g_trash_stack_height(&doc_list[idx].redo_actions) > 0 || sci_can_redo(doc_list[idx].sci))
+		return TRUE;
+	else
+		return FALSE;
 }
 
 
 void document_redo(gint idx)
 {
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	undo_action *action;
 
-	sci_redo(doc_list[idx].sci);
+	if (! DOC_IDX_VALID(idx)) return;
+
+	action = g_trash_stack_pop(&doc_list[idx].redo_actions);
+
+	if (action == NULL)
+	{
+		// fallback, should not be necessary
+		geany_debug("%s: fallback used", __func__);
+		sci_redo(doc_list[idx].sci);
+	}
+	else
+	{
+		switch (action->type)
+		{
+			case UNDO_SCINTILLA:
+			{
+				document_undo_add(idx, UNDO_SCINTILLA, NULL);
+
+				sci_redo(doc_list[idx].sci);
+				break;
+			}
+			case UNDO_BOM:
+			{
+				document_undo_add(idx, UNDO_BOM, GINT_TO_POINTER(doc_list[idx].has_bom));
+
+				doc_list[idx].has_bom = GPOINTER_TO_INT(action->data);
+				ui_update_statusbar(idx, -1);
+				ui_document_show_hide(idx);
+				break;
+			}
+			case UNDO_ENCODING:
+			{
+				document_undo_add(idx, UNDO_ENCODING, g_strdup(doc_list[idx].encoding));
+
+				document_set_encoding(idx, (const gchar*)action->data);
+
+				app->ignore_callback = TRUE;
+				encodings_select_radio_item((const gchar*)action->data);
+				app->ignore_callback = FALSE;
+
+				g_free(action->data);
+				break;
+			}
+			default: break;
+		}
+	}
+	g_free(action); // free the action which was taken from the stack
+
+	ui_update_popup_reundo_items(idx);
+	//geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].redo_actions));
 }
+
+
+static void document_redo_add(gint idx, guint type, gpointer data)
+{
+	undo_action *action;
+
+	if (! DOC_IDX_VALID(idx)) return;
+
+	action = g_new0(undo_action, 1);
+	action->type = type;
+	action->data = data;
+
+	g_trash_stack_push(&doc_list[idx].redo_actions, action);
+
+	doc_list[idx].changed = TRUE;
+	document_set_text_changed(idx);
+	ui_update_popup_reundo_items(idx);
+
+	//geany_debug("%s: new stack height: %d, added type: %d", __func__,
+				//g_trash_stack_height(&doc_list[idx].redo_actions), action->type);
+}
+
+
 

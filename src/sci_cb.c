@@ -153,26 +153,16 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 #endif
 			break;
 		}
-		case 2023:
+ 		case SCN_MODIFIED:
 		{
-			geany_debug("Undo notification");
-			break;
-		}
-/*		case SCN_KEY:
-		{
-			//geany_debug("key notification triggered with %c", nt->ch);
-			break;
-		}
-		case SCN_MODIFIED:
-		{
-			if (nt->modificationType  & SC_MOD_INSERTTEXT ||
-				nt->modificationType & SC_MOD_DELETETEXT)
+			if (nt->modificationType & SC_START_ACTION && ! app->ignore_callback)
 			{
+				// get notified about undo changes
 				document_undo_add(idx, UNDO_SCINTILLA, NULL);
 			}
 			break;
 		}
-*/		case SCN_CHARADDED:
+		case SCN_CHARADDED:
 		{
 			gint pos = sci_get_current_position(sci);
 

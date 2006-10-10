@@ -2432,15 +2432,12 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	guint i = GPOINTER_TO_INT(user_data);
 
-	if (app->ignore_callback || idx < 0 || encodings[i].charset == NULL ||
+	if (app->ignore_callback || ! DOC_IDX_VALID(idx) || encodings[i].charset == NULL ||
 		utils_strcmp(encodings[i].charset, doc_list[idx].encoding)) return;
 
-	// old charset string will be freed with the undo buffer
-	document_undo_add(idx, UNDO_ENCODING, doc_list[idx].encoding);
-	doc_list[idx].encoding = g_strdup(encodings[i].charset);
-	ui_update_statusbar(idx, -1);
-	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
-			utils_is_unicode_charset(doc_list[idx].encoding));
+	document_undo_add(idx, UNDO_ENCODING, g_strdup(doc_list[idx].encoding));
+
+	document_set_encoding(idx, encodings[i].charset);
 }
 
 
@@ -2492,9 +2489,10 @@ on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
 
 		if (idx == -1 || ! doc_list[idx].is_valid) return;
 
+		document_undo_add(idx, UNDO_BOM, GINT_TO_POINTER(doc_list[idx].has_bom));
+
 		doc_list[idx].has_bom = ! doc_list[idx].has_bom;
 
-		document_undo_add(idx, UNDO_BOM, GINT_TO_POINTER(! doc_list[idx].has_bom));
 		ui_update_statusbar(idx, -1);
 	}
 }

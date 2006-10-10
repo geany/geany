@@ -175,11 +175,14 @@ void document_strip_trailing_spaces(gint idx);
 
 void document_ensure_final_newline(gint idx);
 
+void document_set_encoding(gint idx, const gchar *new_encoding);
 
 
 /* own Undo / Redo implementation to be able to undo / redo changes
  * to the encoding or the Unicode BOM (which are Scintilla independet).
  * All Scintilla events are stored in the undo / redo buffer and are passed through. */
+
+// available UNDO actions, UNDO_SCINTILLA is a pseudo action to trigger Scintilla's undo management
 enum
 {
 	UNDO_SCINTILLA = 0,
@@ -188,11 +191,13 @@ enum
 	UNDO_ACTIONS_MAX
 };
 
+// an undo action, also used for redo actions
 typedef struct
 {
-	GTrashStack *next;
-	guint type;	// to identify the action
-	gpointer *data; // the old value (before the change)
+	GTrashStack *next;	// pointer to the next stack element(required for the GTrashStack)
+	guint type;			// to identify the action
+	gpointer *data; 	// the old value (before the change), in case of a redo action it contains
+						// the new value
 } undo_action;
 
 gboolean document_can_undo(gint idx);
@@ -204,9 +209,5 @@ void document_undo(gint idx);
 void document_redo(gint idx);
 
 void document_undo_add(gint idx, guint type, gpointer data);
-
-void document_undo_clear(gint idx);
-
-void document_redo_clear(gint idx);
 
 #endif
