@@ -316,10 +316,10 @@ void LineVector::DeleteMark(int line, int markerNum, bool all) {
 			delete linesData[line].handleSet;
 			linesData[line].handleSet = 0;
 		} else {
-			bool performedDeletion = 
+			bool performedDeletion =
 				linesData[line].handleSet->RemoveNumber(markerNum);
 			while (all && performedDeletion) {
-				performedDeletion = 
+				performedDeletion =
 					linesData[line].handleSet->RemoveNumber(markerNum);
 			}
 			if (linesData[line].handleSet->Length() == 0) {
@@ -446,7 +446,7 @@ void UndoHistory::EnsureUndoRoom() {
 	}
 }
 
-void UndoHistory::AppendAction(actionType at, int position, char *data, int lengthData) {
+void UndoHistory::AppendAction(actionType at, int position, char *data, int lengthData, bool &startSequence) {
 	EnsureUndoRoom();
 	//Platform::DebugPrintf("%% %d action %d %d %d\n", at, position, lengthData, currentAction);
 	//Platform::DebugPrintf("^ %d action %d %d\n", actions[currentAction - 1].at,
@@ -454,6 +454,8 @@ void UndoHistory::AppendAction(actionType at, int position, char *data, int leng
 	if (currentAction < savePoint) {
 		savePoint = -1;
 	}
+
+	int oldCurrentAction = currentAction;
 	if (currentAction >= 1) {
 		if (0 == undoSequenceDepth) {
 			// Top level actions may not always be coalesced
@@ -497,6 +499,7 @@ void UndoHistory::AppendAction(actionType at, int position, char *data, int leng
 	} else {
 		currentAction++;
 	}
+	startSequence = oldCurrentAction!=currentAction;
 	actions[currentAction].Create(at, position, data, lengthData);
 	currentAction++;
 	actions[currentAction].Create(startAction);
@@ -714,7 +717,7 @@ char CellBuffer::StyleAt(int position) {
 	return ByteAt(position*2 + 1);
 }
 
-const char *CellBuffer::InsertString(int position, char *s, int insertLength) {
+const char *CellBuffer::InsertString(int position, char *s, int insertLength, bool &startSequence) {
 	char *data = 0;
 	// InsertString and DeleteChars are the bottleneck though which all changes occur
 	if (!readOnly) {
@@ -725,7 +728,7 @@ const char *CellBuffer::InsertString(int position, char *s, int insertLength) {
 			for (int i = 0; i < insertLength / 2; i++) {
 				data[i] = s[i * 2];
 			}
-			uh.AppendAction(insertAction, position / 2, data, insertLength / 2);
+			uh.AppendAction(insertAction, position / 2, data, insertLength / 2, startSequence);
 		}
 
 		BasicInsertString(position, s, insertLength);
@@ -760,7 +763,7 @@ bool CellBuffer::SetStyleFor(int position, int lengthStyle, char style, char mas
 	return changed;
 }
 
-const char *CellBuffer::DeleteChars(int position, int deleteLength) {
+const char *CellBuffer::DeleteChars(int position, int deleteLength, bool &startSequence) {
 	// InsertString and DeleteChars are the bottleneck though which all changes occur
 	PLATFORM_ASSERT(deleteLength > 0);
 	char *data = 0;
@@ -771,7 +774,7 @@ const char *CellBuffer::DeleteChars(int position, int deleteLength) {
 			for (int i = 0; i < deleteLength / 2; i++) {
 				data[i] = ByteAt(position + i * 2);
 			}
-			uh.AppendAction(removeAction, position / 2, data, deleteLength / 2);
+			uh.AppendAction(removeAction, position / 2, data, deleteLength / 2, startSequence);
 		}
 
 		BasicDeleteChars(position, deleteLength);

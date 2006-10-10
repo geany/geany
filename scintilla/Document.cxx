@@ -380,7 +380,8 @@ bool Document::DeleteChars(int pos, int len) {
 			        0, 0));
 			int prevLinesTotal = LinesTotal();
 			bool startSavePoint = cb.IsSavePoint();
-			const char *text = cb.DeleteChars(pos * 2, len * 2);
+			bool startSequence=false;
+			const char *text = cb.DeleteChars(pos * 2, len * 2, startSequence);
 			if (startSavePoint && cb.IsCollectingUndo())
 				NotifySavePoint(!startSavePoint);
 			if ((pos < Length()) || (pos == 0))
@@ -389,7 +390,7 @@ bool Document::DeleteChars(int pos, int len) {
 				ModifiedAt(pos-1);
 			NotifyModified(
 			    DocModification(
-			        SC_MOD_DELETETEXT | SC_PERFORMED_USER,
+			        SC_MOD_DELETETEXT | SC_PERFORMED_USER | (startSequence?SC_START_ACTION:0),
 			        pos, len,
 			        LinesTotal() - prevLinesTotal, text));
 		}
@@ -415,13 +416,14 @@ bool Document::InsertStyledString(int position, char *s, int insertLength) {
 			        0, s));
 			int prevLinesTotal = LinesTotal();
 			bool startSavePoint = cb.IsSavePoint();
-			const char *text = cb.InsertString(position, s, insertLength);
+			bool startSequence=false;
+			const char *text = cb.InsertString(position, s, insertLength, startSequence);
 			if (startSavePoint && cb.IsCollectingUndo())
 				NotifySavePoint(!startSavePoint);
 			ModifiedAt(position / 2);
 			NotifyModified(
 			    DocModification(
-			        SC_MOD_INSERTTEXT | SC_PERFORMED_USER,
+			        SC_MOD_INSERTTEXT | SC_PERFORMED_USER | (startSequence?SC_START_ACTION:0),
 			        position / 2, insertLength / 2,
 			        LinesTotal() - prevLinesTotal, text));
 		}

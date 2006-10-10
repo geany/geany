@@ -119,7 +119,7 @@ public:
 	UndoHistory();
 	~UndoHistory();
 
-	void AppendAction(actionType at, int position, char *data, int length);
+	void AppendAction(actionType at, int position, char *data, int length, bool &startSequence);
 
 	void BeginUndoAction();
 	void EndUndoAction();
@@ -190,14 +190,14 @@ public:
 	int Lines();
 	int LineStart(int line);
 	int LineFromPosition(int pos) { return lv.LineFromPosition(pos); }
-	const char *InsertString(int position, char *s, int insertLength);
+	const char *InsertString(int position, char *s, int insertLength, bool &startSequence);
 
 	/// Setting styles for positions outside the range of the buffer is safe and has no effect.
 	/// @return true if the style of a character is changed.
 	bool SetStyleAt(int position, char style, char mask='\377');
 	bool SetStyleFor(int position, int length, char style, char mask);
 
-	const char *DeleteChars(int position, int deleteLength);
+	const char *DeleteChars(int position, int deleteLength, bool &startSequence);
 
 	bool IsReadOnly();
 	void SetReadOnly(bool set);
