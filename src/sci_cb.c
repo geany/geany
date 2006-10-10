@@ -757,11 +757,13 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	gchar *construct;
 	gint lexer, style;
 	gint i;
+	gint last_pos;
 	ScintillaObject *sci;
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
 	sci = doc_list[idx].sci;
 
+	last_pos = sci_get_length(sci);
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
@@ -799,16 +801,24 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	// check the first 8 characters of buf for whitespace, but only in this line
 	i = 14;
 	while (isalpha(buf[i])) i--;	// find pos before keyword
-	while (i >= 0 && buf[i] != '\n' && buf[i] != '\r')	// we want to keep in this line('\n' check)
+	while (i >= 0 && buf[i] != '\n' && buf[i] != '\r') // we want to stay in this line('\n' check)
 	{
-		if (! isspace(buf[i])) goto free_and_return;
+		if (! isspace(buf[i]))
+		{
+			g_free(eol);
+			return;
+		}
 		i--;
 	}
 
 	// "pattern", buf + x, y -> x + y = 15, because buf is (pos - 16)...(pos - 1) = 15
 	if (! strncmp("if", buf + 13, 2))
 	{
-		if (! isspace(*(buf + 12))) goto free_and_return;
+		if (! isspace(*(buf + 12)))
+		{
+			g_free(eol);
+			return;
+		}
 
 		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
 
@@ -818,7 +828,11 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	}
 	else if (! strncmp("else", buf + 11, 4))
 	{
-		if (! isspace(*(buf + 10))) goto free_and_return;
+		if (! isspace(*(buf + 10)))
+		{
+			g_free(eol);
+			return;
+		}
 
 		construct = g_strdup_printf("%s{%s\t%s}%s", eol, eol, eol, eol);
 
@@ -831,7 +845,11 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		gchar *var;
 		gint contruct_len;
 
-		if (! isspace(*(buf + 11))) goto free_and_return;
+		if (! isspace(*(buf + 11)))
+		{
+			g_free(eol);
+			return;
+		}
 
 		if (doc_list[idx].file_type->id == GEANY_FILETYPES_PHP)
 		{
@@ -857,7 +875,11 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	}
 	else if (! strncmp("while", buf + 10, 5))
 	{
-		if (! isspace(*(buf + 9))) goto free_and_return;
+		if (! isspace(*(buf + 9)))
+		{
+			g_free(eol);
+			return;
+		}
 
 		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
 
@@ -867,7 +889,11 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	}
 	else if (! strncmp("do", buf + 13, 2))
 	{
-		if (! isspace(*(buf + 12))) goto free_and_return;
+		if (! isspace(*(buf + 12)))
+		{
+			g_free(eol);
+			return;
+		}
 
 		construct = g_strdup_printf("%s{%s\t%s}%swhile ();%s", eol, eol, eol, eol, eol);
 
@@ -877,7 +903,11 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	}
 	else if (! strncmp("try", buf + 12, 3))
 	{
-		if (! isspace(*(buf + 11))) goto free_and_return;
+		if (! isspace(*(buf + 11)))
+		{
+			g_free(eol);
+			return;
+		}
 
 		construct = g_strdup_printf("%s{%s\t%s}%scatch ()%s{%s\t%s}%s",
 							eol, eol, eol, eol, eol, eol, eol, eol);
@@ -888,7 +918,11 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	}
 	else if (! strncmp("switch", buf + 9, 6))
 	{
-		if (! isspace(*(buf + 8))) goto free_and_return;
+		if (! isspace(*(buf + 8)))
+		{
+			g_free(eol);
+			return;
+		}
 
 		construct = g_strdup_printf("()%s{%s\tcase : break;%s\tdefault: %s}%s", eol, eol, eol, eol, eol);
 
@@ -896,10 +930,14 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		sci_goto_pos(sci, pos + 1, TRUE);
 		g_free(construct);
 	}
-	else if (! strncmp("iferr", buf + 10, 5))
+	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_FERITE && ! strncmp("iferr", buf + 10, 5))
 	{
 		if (doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE ||
-			! isspace(*(buf + 9))) goto free_and_return;
+			! isspace(*(buf + 9)))
+		{
+			g_free(eol);
+			return;
+		}
 
 		construct = g_strdup_printf("%s{%s\t%s}%sfix%s{%s\t%s}%s", eol, eol, eol, eol, eol, eol, eol, eol);
 
@@ -907,9 +945,20 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
 		g_free(construct);
 	}
+	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_FERITE && ! strncmp("monitor", buf + 8, 7))
+	{
+		if (! isspace(*(buf + 7)))
+		{
+			g_free(eol);
+			return;
+		}
 
-	free_and_return:
-	g_free(eol);
+		construct = g_strdup_printf("%s{%s\t%s}%shandle%s{%s\t%s}%s", eol, eol, eol, eol, eol, eol, eol, eol);
+
+		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
+		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
+		g_free(construct);
+	}
 }
 
 

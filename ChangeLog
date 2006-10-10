@@ -8,6 +8,8 @@
  * src/document.c, src/sci_cb.c, src/callbacks.c:
    Finished new Undo system. Now some more actions can be undone and
    also redone.
+ * src/sci_cb.c: Got rid of goto usage and added auto completion for
+                 monitor construct for filetype Ferite.
 
 
 2006-10-09  Nick Treleaven  <nick.treleaven@btinternet.com>
