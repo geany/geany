@@ -668,15 +668,15 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 		document_set_filetype(idx, use_ft);	// also sets taglist
 		ui_update_build_menu(idx);
+
+		// "the" SCI signal (connect after initial setup(i.e. adding text))
+		g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
+					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
 	}
 	else
 	{	// reloading
 		document_update_tag_list(idx, TRUE);
 	}
-
-	// "the" SCI signal (connect after initial setup(i.e. adding text))
-	g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
-					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
 
 	document_set_text_changed(idx);
 	ui_document_show_hide(idx); //update the document menu

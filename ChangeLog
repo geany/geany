@@ -1,3 +1,8 @@
+2006-10-10  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/document.c: Connect only once to the "sci-notify" signal.
+
+
 2006-10-09  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/win32.c, src/geany.h, src/callbacks.c, src/search.c,
