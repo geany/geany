@@ -6,14 +6,17 @@ comment=0x808080;0xffffff;false;false
 tag=0x2166a4;0xffffff;true;false
 class=0x007f00;0xffffff;true;false
 pseudoclass=0x660010;0xffffff;true;true
-unknown_pseudoclass=0x000099;0xffffff;false;false
-unknown_identifier=0x000099;0xffffff;false;false
+unknown_pseudoclass=0xff0099;0xffffff;false;false
+unknown_identifier=0xff0099;0xffffff;false;false
 operator=0x301010;0xffffff;false;false
 identifier=0x000099;0xffffff;true;false
 doublestring=0x330066;0xffffff;false;false
 singlestring=0x330066;0xffffff;false;false
 attribute=0x007f00;0xffffff;false;false
 value=0x303030;0xffffff;false;false
+id=0x7f0000;0xffffff;false;false
+identifier2=0x6b6bff;0xffffff;false;false
+important=0xff0000;0xffffff;false;false
 
 [keywords]
 primary=color background-color background-image background-repeat background-attachment background-position background font-family font-style font-variant font-weight font-size font word-spacing letter-spacing text-decoration vertical-align text-transform text-align text-indent line-height margin-top margin-right margin-bottom margin-left margin padding-top padding-right padding-bottom padding-left padding border-top-width border-right-width border-bottom-width border-left-width border-width border-top border-right border-bottom border-left border border-color border-style width height float clear display white-space list-style-type list-style-image list-style-position list-style

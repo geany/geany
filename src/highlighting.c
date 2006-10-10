@@ -1868,20 +1868,23 @@ static void styleset_css_init(void)
 
 	load_keyfiles(config, config_home, "filetypes.css");
 
-	new_style_array(GEANY_FILETYPES_CSS, 13);
+	new_style_array(GEANY_FILETYPES_CSS, 16);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x003399", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "tag", "0x2166a4", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[2]);
 	get_keyfile_hex(config, config_home, "styling", "class", "0x007f00", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[3]);
 	get_keyfile_hex(config, config_home, "styling", "pseudoclass", "0x660010", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[4]);
-	get_keyfile_hex(config, config_home, "styling", "unknown_pseudoclass", "0x000099", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[5]);
-	get_keyfile_hex(config, config_home, "styling", "unknown_identifier", "0x000099", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "unknown_pseudoclass", "0xff0099", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "unknown_identifier", "0xff0099", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[6]);
 	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[7]);
 	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000099", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[8]);
 	get_keyfile_hex(config, config_home, "styling", "doublestring", "0x330066", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[9]);
 	get_keyfile_hex(config, config_home, "styling", "singlestring", "0x330066", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[10]);
 	get_keyfile_hex(config, config_home, "styling", "attribute", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[11]);
 	get_keyfile_hex(config, config_home, "styling", "value", "0x303030", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "id", "0x7f0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "identifier2", "0x6b6bff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[14]);
+	get_keyfile_hex(config, config_home, "styling", "important", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CSS].styling[15]);
 
 	style_sets[GEANY_FILETYPES_CSS].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CSS, 0,
@@ -1894,7 +1897,8 @@ static void styleset_css_init(void)
 								border-top border-right border-bottom border-left border \
 								border-color border-style width height float clear \
 								display white-space list-style-type list-style-image list-style-position list-style");
-	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_CSS, 1,
+	get_keyfile_keywords(config, config_home, "keywords", "pseudoclasses", GEANY_FILETYPES_CSS, 1, "first-letter first-line link active visited lang first-child focus hover before after left right first");
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_CSS, 2,
 								"border-top-color border-right-color border-bottom-color border-left-color border-color \
 								border-top-style border-right-style border-bottom-style border-left-style border-style \
 								top right bottom left position z-index direction unicode-bidi \
@@ -1909,7 +1913,6 @@ static void styleset_css_init(void)
 								volume speak pause-before pause-after pause cue-before cue-after cue \
 								play-during azimuth elevation speech-rate voice-family pitch pitch-range stress richness \
 								speak-punctuation speak-numeral");
-	get_keyfile_keywords(config, config_home, "keywords", "pseudoclasses", GEANY_FILETYPES_CSS, 2, "first-letter first-line link active visited lang first-child focus hover before after left right first");
 	style_sets[GEANY_FILETYPES_CSS].keywords[3] = NULL;
 
 	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
@@ -1929,6 +1932,10 @@ void styleset_css(ScintillaObject *sci)
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CSS].wordchars);
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CSS].keywords[2]);
+
 	SSM(sci, SCI_SETLEXER, SCLEX_CSS, 0);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CSS, 0);
@@ -1945,6 +1952,9 @@ void styleset_css(ScintillaObject *sci)
 	set_sci_style(sci, SCE_CSS_SINGLESTRING, GEANY_FILETYPES_CSS, 10);
 	set_sci_style(sci, SCE_CSS_ATTRIBUTE, GEANY_FILETYPES_CSS, 11);
 	set_sci_style(sci, SCE_CSS_VALUE, GEANY_FILETYPES_CSS, 12);
+	set_sci_style(sci, SCE_CSS_ID, GEANY_FILETYPES_CSS, 13);
+	set_sci_style(sci, SCE_CSS_IDENTIFIER2, GEANY_FILETYPES_CSS, 14);
+	set_sci_style(sci, SCE_CSS_IMPORTANT, GEANY_FILETYPES_CSS, 15);
 }
 
 

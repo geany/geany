@@ -10,6 +10,9 @@
    also redone.
  * src/sci_cb.c: Got rid of goto usage and added auto completion for
                  monitor construct for filetype Ferite.
+ * src/highlighting.c, data/filetypes.css:
+   Fixed several highlighting errors, added new styles: identifier2,
+   important and id.
 
 
 2006-10-09  Nick Treleaven  <nick.treleaven@btinternet.com>
