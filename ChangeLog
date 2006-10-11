@@ -9,7 +9,7 @@
  * src/sci_wrappers.c: Added sci_find_bracematch().
  * src/keybindings.c: Added keyboard shortcut Ctrl+< to jump between
                       matching braces(closes #1571283).
-
+ * doc/geany.docbook: Updated missing keybindings.
 
 
 2006-10-10  Enrico Tröger  <enrico.troeger@uvena.de>

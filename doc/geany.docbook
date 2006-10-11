@@ -1192,6 +1192,31 @@
 								<entry>Comments current line or selection.</entry>
 							</row>
 							<row>
+								<entry>Uncomment line</entry>
+								<entry>Uncomments current line or selection.</entry>
+							</row>
+							<row>
+								<entry>Toggle line commentation</entry>
+								<entry>Comments a line if it is not commented or removes a comment
+									   if the line is commented.</entry>
+							</row>
+							<row>
+								<entry>Increase indent</entry>
+								<entry>Indents the current line or selection by one tabulator.</entry>
+							</row>
+							<row>
+								<entry>Decrease indent</entry>
+								<entry>Removes one tabulator from the indentation of the current
+									   line or selection.</entry>
+							</row>
+							<row>
+								<entry>Goto matching brace</entry>
+								<entry>If the cursor is ahead or behind a brace, then it is moved to
+									   the brace which belongs to the current one. If this keyboard
+									   shortcut is pressed again, the cursor is moved back to the
+									   first brace.</entry>
+							</row>
+							<row>
 								<entry>Complete word</entry>
 								<entry>Shows auto completion list.</entry>
 							</row>
