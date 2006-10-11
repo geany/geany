@@ -70,6 +70,12 @@ void treeviews_init_tag_list(gint idx)
 
 	switch (doc_list[idx].file_type->id)
 	{
+		case GEANY_FILETYPES_DIFF:
+		{
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Files"), -1);
+			break;
+		}
 		case GEANY_FILETYPES_DOCBOOK:
 		{
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);

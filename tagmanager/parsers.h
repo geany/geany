@@ -34,7 +34,8 @@
     ShParser, \
     DParser, \
     FortranParser, \
-    FeriteParser
+    FeriteParser, \
+    DiffParser
 
 /*
 langType of each parser
@@ -58,6 +59,7 @@ langType of each parser
 17	DParser
 18	FortranParser
 19	FeriteParser
+20	DiffParser
 */
 #endif	/* _PARSERS_H */
 

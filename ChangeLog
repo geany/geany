@@ -2,6 +2,11 @@
 
  * src/keyfile.c, src/geany.h: Removed hard limit of session files.
  * doc/geany.docbook: Updated section about session files limit.
+ * tagmanager/makefile.win32, tagmanager/Makefile.am,
+   tagmanager/parsers.h, tagmanager/diff.c, src/filetypes.c,
+   src/treeviews.c: Added simple parser for filetype Diff to create
+                    tags for each patched file in a diff file.
+
 
 
 2006-10-10  Enrico Tröger  <enrico.troeger@uvena.de>
