@@ -157,5 +157,6 @@ void				sci_start_styling			(ScintillaObject * sci, gint pos, gint mask);
 void				sci_select_all				(ScintillaObject * sci);
 gint				sci_get_line_indent_position(ScintillaObject * sci, gint line);
 void				sci_set_autoc_max_height	(ScintillaObject * sci, gint val);
+gint				sci_find_bracematch			(ScintillaObject * sci, gint pos);
 
 #endif

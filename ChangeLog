@@ -6,6 +6,9 @@
    tagmanager/parsers.h, tagmanager/diff.c, src/filetypes.c,
    src/treeviews.c: Added simple parser for filetype Diff to create
                     tags for each patched file in a diff file.
+ * src/sci_wrappers.c: Added sci_find_bracematch().
+ * src/keybindings.c: Added keyboard shortcut Ctrl+< to jump between
+                      matching braces(closes #1571283).
 
 
 

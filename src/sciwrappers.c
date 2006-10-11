@@ -865,3 +865,9 @@ void sci_set_autoc_max_height(ScintillaObject *sci, gint val)
 {
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, val, 0);
 }
+
+gint sci_find_bracematch(ScintillaObject *sci, gint pos)
+{
+	return SSM(sci, SCI_BRACEMATCH, pos, 0);
+}
+

@@ -92,6 +92,7 @@ static void cb_func_edit_commentline(void);
 static void cb_func_edit_commentlinetoggle(void);
 static void cb_func_edit_uncommentline(void);
 static void cb_func_edit_increaseindent(void);
+static void cb_func_edit_gotomatchingbrace(void);
 static void cb_func_edit_decreaseindent(void);
 static void cb_func_edit_autocomplete(void);
 static void cb_func_edit_calltip(void);
@@ -214,6 +215,8 @@ void keybindings_init(void)
 		GDK_i, GDK_CONTROL_MASK, "edit_increaseindent", _("Increase indent"));
 	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit_decreaseindent,
 		GDK_i, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_decreaseindent", _("Decrease indent"));
+	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit_gotomatchingbrace,
+		GDK_less, GDK_CONTROL_MASK, "edit_gotomatchingbrace", _("Goto matching brace"));
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
 #ifdef G_OS_WIN32
@@ -794,6 +797,26 @@ static void cb_func_edit_increaseindent(void)
 static void cb_func_edit_decreaseindent(void)
 {
 	on_menu_decrease_indent1_activate(NULL, NULL);
+}
+
+static void cb_func_edit_gotomatchingbrace(void)
+{
+	gint pos, new_pos;
+	gint idx = document_get_cur_idx();
+
+	if (! DOC_IDX_VALID(idx)) return;
+
+	pos = sci_get_current_position(doc_list[idx].sci);
+	if (! utils_isbrace(sci_get_char_at(doc_list[idx].sci, pos)))
+		pos--; // set pos to the brace
+
+	new_pos = sci_find_bracematch(doc_list[idx].sci, pos);
+	if (new_pos != -1)
+	{
+		gint line = sci_get_line_from_position(doc_list[idx].sci, new_pos);
+		sci_goto_line_scroll(doc_list[idx].sci, line, 0.5);
+		sci_goto_pos(doc_list[idx].sci, new_pos, FALSE); // set also the cursor the brace
+	}
 }
 
 static void cb_func_edit_tolowercase(void)
