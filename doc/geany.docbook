@@ -3,10 +3,10 @@
         "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!ENTITY app "Geany">
 <!ENTITY app_small "geany">
-<!ENTITY appversion "0.9">
+<!ENTITY appversion "0.10">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "September 29, 2006">
+<!ENTITY date "October 11, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -332,14 +332,13 @@
 			<section id="general_startup">
 				<title>Startup</title>
 				<para>
-					At startup, &app; loads the first 15 files from the last time
+					At startup, &app; loads all files from the last time
 					<application>&app;</application> was launched. You can disable this feature in the
 					preferences dialog(see <xref linkend="confdialog_gen"/>). If you specify some files on
 					the command line, only these files will be opened, but you can find the files from the
-					last session in the file menu under the "Recent files" item. This contains the last
-					15 recently opened files. It may be that &app; loads not exactly 15 session files, this depends
-					on the compile time option GEANY_SESSION_FILES; the default is 15. For details see
-					<xref linkend="cto"/>.
+					last session in the file menu under the "Recent files" item. By default this contains
+					the last 10 recently opened files. You can change the amount of recently opened
+					files in the preferences dialog.
 				</para>
 				<para>
 					You can start several instances of Geany, but only the first will load files
@@ -690,17 +689,6 @@
 								</row>
 							</thead>
 							<tbody>
-								<row>
-									<entry>GEANY_MAX_OPEN_FILES</entry>
-									<entry>The limit to how many files can be open at the same time.</entry>
-									<entry>25</entry>
-								</row>
-								<row>
-									<entry>GEANY_SESSION_FILES</entry>
-									<entry>How many files should be reopened from the last run. Obviously,
-									the value should be smaller than GEANY_MAX_OPEN_FILES.</entry>
-									<entry>15</entry>
-								</row>
 								<row>
 									<entry>GEANY_WORDCHARS</entry>
 									<entry>These characters define word boundaries.</entry>

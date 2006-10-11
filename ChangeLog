@@ -1,6 +1,7 @@
 2006-10-11  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/keyfile.c, src/geany.h: Removed hard limit of session files.
+ * doc/geany.docbook: Updated section about session files limit.
 
 
 2006-10-10  Enrico Tröger  <enrico.troeger@uvena.de>
