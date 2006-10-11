@@ -43,7 +43,7 @@
 
 
 static gchar *scribble_text = NULL;
-static gchar *session_files[GEANY_SESSION_FILES];
+static GPtrArray *session_files = NULL;
 static gint hpan_position;
 static gint vpan_position;
 
@@ -56,9 +56,10 @@ void configuration_save()
 	guint i = 0, j = 0, max;
 	gint idx;
 	gboolean config_exists;
+	gboolean have_session_files;
 	GKeyFile *config = g_key_file_new();
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
-	gchar *data;
+	gchar *data, *tmp;
 	gchar *entry = g_malloc(14);
 	gchar *fname = g_malloc0(256);
 	gchar **recent_files = g_new0(gchar*, app->mru_length + 1);
@@ -205,9 +206,9 @@ void configuration_save()
 
 	if (cl_options.load_session)
 	{
-		// store the last 15(or what ever GEANY_SESSION_FILES is set to) filenames, to reopen the next time
+		// store the filenames to reopen them the next time
 		max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-		for(i = 0; (i < max) && (j < GEANY_SESSION_FILES); i++)
+		for(i = 0; i < max; i++)
 		{
 			idx = document_get_n_idx(i);
 			if (idx >= 0 && doc_list[idx].file_name)
@@ -219,11 +220,23 @@ void configuration_save()
 				j++;
 			}
 		}
-		// if open filenames less than GEANY_SESSION_FILES, delete existing saved entries in the list
-		for(i = j; i < GEANY_SESSION_FILES; i++)
+		// if open filenames less than saved session files, delete existing entries in the list
+		have_session_files = TRUE;
+		i = j;
+		while (have_session_files)
 		{
 			g_snprintf(entry, 13, "FILE_NAME_%d", i);
-			g_key_file_set_string(config, "files", entry, "");
+			tmp = g_key_file_get_string(config, "files", entry, NULL);
+			if (tmp == NULL)
+			{
+				have_session_files = FALSE;
+			}
+			else
+			{
+				g_key_file_remove_key(config, "files", entry, NULL);
+				g_free(tmp);
+				i++;
+			}
 		}
 	}
 
@@ -251,6 +264,7 @@ void configuration_save()
 gboolean configuration_load()
 {
 	gboolean config_exists;
+	gboolean have_session_files;
 	guint i, geo_len;
 	gint *geo;
 	gsize len = 0;
@@ -436,16 +450,21 @@ gboolean configuration_load()
 	}
 	g_strfreev(recent_files);
 
-	for(i = 0; i < GEANY_SESSION_FILES; i++)
+	session_files = g_ptr_array_new();
+	have_session_files = TRUE;
+	i = 0;
+	while (have_session_files)
 	{
 		g_snprintf(entry, 13, "FILE_NAME_%d", i);
-		session_files[i] = g_key_file_get_string(config, "files", entry, &error);
-		if (! session_files[i] || error)
+		tmp_string = g_key_file_get_string(config, "files", entry, &error);
+		if (! tmp_string || error)
 		{
 			g_error_free(error);
 			error = NULL;
-			session_files[i] = NULL;
+			have_session_files = FALSE;
 		}
+		g_ptr_array_add(session_files, tmp_string);
+		i++;
 	}
 
 	g_key_file_free(config);
@@ -460,20 +479,21 @@ gboolean configuration_open_files()
 {
 	gint i;
 	guint x, pos, y, len;
-	gchar *file, *locale_filename, **array;
+	gchar *file, *locale_filename, **array, *tmp;
 	gboolean ret = FALSE;
 
-	i = app->tab_order_ltr ? 0 : GEANY_SESSION_FILES - 1;
-	while(TRUE)
+	i = app->tab_order_ltr ? 0 : (session_files->len - 1);
+	while (TRUE)
 	{
-		if (session_files[i] && *session_files[i])
+		tmp = g_ptr_array_index(session_files, i);
+		if (tmp && *tmp)
 		{
 			gint uid = -1;
 			x = 0;
 			y = 0;
 
 			// yes it is :, it should be a ;, but now it is too late to change it
-			array = g_strsplit(session_files[i], ":", 3);
+			array = g_strsplit(tmp, ":", 3);
 			len = g_strv_length(array);
 
 			// read position
@@ -499,12 +519,12 @@ gboolean configuration_open_files()
 			}
 			g_free(locale_filename);
 		}
-		g_free(session_files[i]);
+		g_free(tmp);
 
 		if (app->tab_order_ltr)
 		{
 			i++;
-			if (i >= GEANY_SESSION_FILES) break;
+			if (i >= session_files->len) break;
 		}
 		else
 		{
@@ -513,6 +533,7 @@ gboolean configuration_open_files()
 		}
 	}
 
+	g_ptr_array_free(session_files, TRUE);
 	return ret;
 }
 
