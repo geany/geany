@@ -138,6 +138,12 @@ void tm_workspace_dump(void);
 const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs
  , gboolean partial, langType lang);
 
+/*! Returns TMTag to function which "own" given line
+ \param line Current line in edited file.
+ \param file_tags A GPtrArray of edited file TMTag pointers.
+ \return TMTag pointers to owner function. */
+const TMTag *tm_get_current_function(GPtrArray *file_tags, const gulong line);
+
 /*! Returns a list of parent classes for the given class name
  \param name Name of the class
  \return A GPtrArray of TMTag pointers (includes the TMTag for the class) */
