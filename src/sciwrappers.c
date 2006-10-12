@@ -533,6 +533,20 @@ gint sci_get_fold_level(ScintillaObject* sci, gint line)
 }
 
 
+/* Get the next line after start_line with fold level <= level */
+gint sci_get_last_child(ScintillaObject* sci, gint start_line, gint level)
+{
+	return SSM( sci, SCI_GETLASTCHILD, start_line, level);
+}
+
+
+/* Get the line number of the fold point before start_line, or -1 if there isn't one */
+gint sci_get_fold_parent(ScintillaObject* sci, gint start_line)
+{
+	return SSM( sci, SCI_GETFOLDPARENT, start_line, 0);
+}
+
+
 void sci_toggle_fold(ScintillaObject* sci, gint line)
 {
 	SSM( sci, SCI_TOGGLEFOLD, line, 1);

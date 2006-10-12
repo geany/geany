@@ -32,6 +32,8 @@
 
 void 				sci_set_line_numbers		(ScintillaObject* sci,  gboolean set, gint extra_width);
 void				sci_set_mark_long_lines		(ScintillaObject* sci,	gint type, gint column, const gchar *color);
+gboolean			sci_get_line_numbers		(ScintillaObject * sci);
+
 void 				sci_set_text				(ScintillaObject* sci,  const gchar* text);
 void 				sci_add_text				(ScintillaObject* sci,  const gchar* text);
 void				sci_add_text_buffer			(ScintillaObject* sci,  const gchar* text, gint	len);
@@ -98,14 +100,14 @@ void 				sci_toggle_fold				(ScintillaObject* sci, gint line);
 gboolean			sci_get_line_is_visible		(ScintillaObject* sci, gint line);
 void				sci_ensure_line_is_visible	(ScintillaObject* sci, gint line);
 gint				sci_get_fold_level			(ScintillaObject* sci, gint line);
+gint				sci_get_last_child			(ScintillaObject* sci, gint start_line, gint level);
+gint				sci_get_fold_parent			(ScintillaObject* sci, gint start_line);
 
 void 				sci_set_folding_margin_visible (ScintillaObject * sci, gboolean set );
 gboolean			sci_get_folding_margin_visible(ScintillaObject * sci);
 gboolean			sci_get_fold_expanded		(ScintillaObject* sci, gint line);
+
 void				sci_colourise				(ScintillaObject* sci, gint start, gint end);
-
-gboolean			sci_get_line_numbers		(ScintillaObject * sci);
-
 void				sci_set_lexer				(ScintillaObject * sci, gint lexer);
 void				sci_clear_all				(ScintillaObject * sci);
 gint				sci_get_end_styled			(ScintillaObject * sci);
