@@ -554,37 +554,35 @@ static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_
 }
 
 
-// Parse the function name up to 2 lines before tag_line.
+// Parse the function name
 static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 {
-	gint start, end, last_pos;
+	gint start, end, first_pos;
 	gint tmp;
+	gchar c;
 	gchar *cur_tag;
 
-	start = sci_get_position_from_line(sci, tag_line - 2);
-	last_pos = sci_get_length(sci);
-	tmp = 0;
-	while (sci_get_style_at(sci, start) != SCE_C_IDENTIFIER
-		&& sci_get_style_at(sci, start) != SCE_C_GLOBALCLASS
-		&& start < last_pos) start++;
-	end = start;
-	// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
-	// this fails on C++ code like 'Vek3 Vek3::mul(double s)' this code returns
-	// "Vek3" because the return type of the prototype is also a GLOBALCLASS,
-	// no idea how to fix at the moment
-	// fails also in C with code like
-	// typedef void viod;
-	// viod do_nothing() {}  -> return viod instead of do_nothing
-	// perhaps: get the first colon, read forward the second colon and then method
-	// name, then go from the first colon backwards and read class name until space
-	while (((tmp = sci_get_style_at(sci, end)) == SCE_C_IDENTIFIER
-		 || tmp == SCE_C_GLOBALCLASS
-		 || sci_get_char_at(sci, end) == '~'
-		 || sci_get_char_at(sci, end) == ':')
-		 && end < last_pos) end++;
+	first_pos = end = sci_get_position_from_line(sci, tag_line);
+	while (sci_get_char_at(sci, end) != '{') end++; // goto the begin of function body
+	while (sci_get_char_at(sci, end) != '(') end--; // go back to the end of function identifier
+	end--;
+	while (isspace(sci_get_char_at(sci, end))) end--; // skip whitespaces between identifier and (
 
-	cur_tag = g_malloc(end - start + 1);
-	sci_get_text_range(sci, start, end, cur_tag);
+	start = end;
+	tmp = 0;
+	c = 0;
+	// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
+	while (((tmp = sci_get_style_at(sci, start)) == SCE_C_IDENTIFIER
+		 ||  tmp == SCE_C_GLOBALCLASS
+		 || (c = sci_get_char_at(sci, start)) == '~'
+		 ||  c == ':'))
+		start--;
+
+	if (sci_get_char_at(sci, start) == ' ') start++; // skip possible whitespace
+	if (sci_get_char_at(sci, start) == '*') start++; // skip possible * char
+
+	cur_tag = g_malloc(end - start + 2);
+	sci_get_text_range(sci, start, end + 1, cur_tag);
 	return cur_tag;
 }
 
@@ -632,10 +630,9 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 			return tag_line;
 		}
 	}
-	
+
 	/* parse the current function name here because TM line numbers may have changed,
 	 * and it would take too long to reparse the whole file. */
-	
 	if (doc_list[idx].file_type != NULL &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_ALL)
 	{

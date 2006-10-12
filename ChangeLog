@@ -1,3 +1,9 @@
+2006-10-12  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/utils.c: Improved function name parsing to fix some invalid
+                parsed function names.
+
+
 2006-10-12  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c:
