@@ -608,7 +608,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_DIFF]->id = GEANY_FILETYPES_DIFF;
 	filetypes[GEANY_FILETYPES_DIFF]->uid = FILETYPE_UID_DIFF;
 	filetypes[GEANY_FILETYPES_DIFF]->item = NULL;
-	filetypes[GEANY_FILETYPES_DIFF]->lang = -2;
+	filetypes[GEANY_FILETYPES_DIFF]->lang = 20;
 	filetypes[GEANY_FILETYPES_DIFF]->name = g_strdup("Diff");
 	filetypes[GEANY_FILETYPES_DIFF]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_DIFF]->title = g_strdup(_("Diff file"));
