@@ -524,7 +524,7 @@ gboolean configuration_open_files()
 		if (app->tab_order_ltr)
 		{
 			i++;
-			if (i >= session_files->len) break;
+			if (i >= (gint)session_files->len) break;
 		}
 		else
 		{
