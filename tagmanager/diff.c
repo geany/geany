@@ -50,13 +50,13 @@ static void findDiffTags (void)
 			cp += 4;
 			if (isspace ((int) *cp)) continue;
 
-			tmp = strrchr(cp, '/');
+			tmp = (const unsigned char*) strrchr((const char*) cp,  '/');
 			if (tmp == NULL)
 			{	// if no / is contained try \ in case of a Windows filename
-				tmp = strrchr(cp, '\\');
+				tmp = (const unsigned char*) strrchr((const char*) cp, '\\');
 				if (tmp == NULL)
 				{	// last fallback, probably the filename doesn't contain a path, so take it
-					if (strlen(cp) > 0)
+					if (strlen((const char*) cp) > 0)
 					{
 						tmp = cp;
 						skipSlash = FALSE;
