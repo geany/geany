@@ -1,3 +1,18 @@
+2006-10-12  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c:
+   Fix parsing the current function name for Java.
+   When the document is unedited, get the current function name from
+   the previous function tag parsed by tagmanager.
+   Don't update the current function if the cursor is 1 line from the
+   previous call and the fold level is unchanged.
+ * tagmanager/tm_workspace.c, tagmanager/include/tm_workspace.h:
+   Backported tm_get_current_function() from Anjuta.
+ * src/sciwrappers.c, src/sciwrappers.h:
+   Added sci_get_last_child(), sci_get_fold_parent().
+ * src/keyfile.c: Small fix for sign warning.
+
+
 2006-10-11  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/keyfile.c, src/geany.h: Removed hard limit of session files.

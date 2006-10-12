@@ -522,84 +522,139 @@ gboolean utils_check_disk_status(gint idx)
 }
 
 
+/* Should be used only with utils_get_current_function. */
+static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_level)
+{
+	static gint old_line = -2;
+	static gint old_idx = -1;
+	static gint old_fold_level = -1;
+	gboolean ret;
+
+	// check if the cached line and file index have changed since last time:
+	if (cur_idx != old_idx)
+		ret = TRUE;
+	else
+	if (cur_line == old_line)
+		ret = FALSE;
+	else
+	{
+		// if the line has only changed by 1 and fold_level is the same, return unchanged.
+		if (abs(cur_line - old_line) == 1)
+		{
+			ret = (fold_level != old_fold_level);
+		}
+		else ret = TRUE;
+	}
+
+	//record current line and file index for next time
+	old_line = cur_line;
+	old_idx = cur_idx;
+	old_fold_level = fold_level;
+	return ret;
+}
+
+
+// Parse the function name up to 2 lines before tag_line.
+static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
+{
+	gint start, end, last_pos;
+	gint tmp;
+	gchar *cur_tag;
+
+	start = sci_get_position_from_line(sci, tag_line - 2);
+	last_pos = sci_get_length(sci);
+	tmp = 0;
+	while (sci_get_style_at(sci, start) != SCE_C_IDENTIFIER
+		&& sci_get_style_at(sci, start) != SCE_C_GLOBALCLASS
+		&& start < last_pos) start++;
+	end = start;
+	// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
+	// this fails on C++ code like 'Vek3 Vek3::mul(double s)' this code returns
+	// "Vek3" because the return type of the prototype is also a GLOBALCLASS,
+	// no idea how to fix at the moment
+	// fails also in C with code like
+	// typedef void viod;
+	// viod do_nothing() {}  -> return viod instead of do_nothing
+	// perhaps: get the first colon, read forward the second colon and then method
+	// name, then go from the first colon backwards and read class name until space
+	while (((tmp = sci_get_style_at(sci, end)) == SCE_C_IDENTIFIER
+		 || tmp == SCE_C_GLOBALCLASS
+		 || sci_get_char_at(sci, end) == '~'
+		 || sci_get_char_at(sci, end) == ':')
+		 && end < last_pos) end++;
+
+	cur_tag = g_malloc(end - start + 1);
+	sci_get_text_range(sci, start, end, cur_tag);
+	return cur_tag;
+}
+
+
 gint utils_get_current_function(gint idx, const gchar **tagname)
 {
 	static gint tag_line = -1;
-	gint line;
-	static gint old_line = -1;
-	static gint old_idx = -1;
 	static gchar *cur_tag = NULL;
+	gint line;
 	gint fold_level;
-	gint start, end, last_pos;
-	gint tmp;
-	const GList *tags;
+	TMWorkObject * tm_file = doc_list[idx].tm_file;
 
 	line = sci_get_current_line(doc_list[idx].sci, -1);
+	fold_level = sci_get_fold_level(doc_list[idx].sci, line);
 	// check if the cached line and file index have changed since last time:
-	if (line == old_line && idx == old_idx)
+	if (! current_function_changed(idx, line, fold_level))
 	{
 		// we can assume same current function as before
 		*tagname = cur_tag;
 		return tag_line;
 	}
 	g_free(cur_tag); // free the old tag, it will be replaced.
-	//record current line and file index for next time
-	old_line = line;
-	old_idx = idx;
 
-	// look first in the tag list
-	tags = utils_get_tag_list(idx, tm_tag_max_t);
-	for (; tags; tags = g_list_next(tags))
+	// if line is at base fold level, we're not in a function
+	if ((fold_level & SC_FOLDLEVELNUMBERMASK) == SC_FOLDLEVELBASE)
 	{
-		tag_line = ((GeanySymbol*)tags->data)->line;
-		if (line + 1 == tag_line)
+		cur_tag = g_strdup(_("unknown"));
+		*tagname = cur_tag;
+		tag_line = -1;
+		return tag_line;
+	}
+
+	// if the document has no changes, get the previous function name from TM
+	if(! doc_list[idx].changed && tm_file != NULL && tm_file->tags_array != NULL)
+	{
+		TMTag *tag = TM_TAG(tm_get_current_function(tm_file->tags_array, line));
+
+		if (tag != NULL)
 		{
-			cur_tag = g_strdup(strtok(((GeanySymbol*)tags->data)->str, " "));
+			gchar *tmp;
+			tmp = tag->atts.entry.scope;
+			cur_tag = tmp ? g_strconcat(tmp, "::", tag->name, NULL) : g_strdup(tag->name);
 			*tagname = cur_tag;
+			tag_line = tag->atts.entry.line;
 			return tag_line;
 		}
 	}
-
+	
+	/* parse the current function name here because TM line numbers may have changed,
+	 * and it would take too long to reparse the whole file. */
+	
 	if (doc_list[idx].file_type != NULL &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_JAVA &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_ALL)
 	{
-		fold_level = sci_get_fold_level(doc_list[idx].sci, line);
+		// for Java the functions are one fold level above the class scope
+		gint top_fold_level = (doc_list[idx].file_type->id == GEANY_FILETYPES_JAVA) ?
+			SC_FOLDLEVELBASE + 1 : SC_FOLDLEVELBASE;
 
-		if ((fold_level & 0xFF) != 0)
+		tag_line = line;
+		do	// find the top level fold point
 		{
-			tag_line = line;
-			while((fold_level & SC_FOLDLEVELNUMBERMASK) != SC_FOLDLEVELBASE && tag_line >= 0)
-			{
-				fold_level = sci_get_fold_level(doc_list[idx].sci, --tag_line);
-			}
+			tag_line = sci_get_fold_parent(doc_list[idx].sci, tag_line);
+			fold_level = sci_get_fold_level(doc_list[idx].sci, tag_line);
+		} while (tag_line >= 0 &&
+			(fold_level & SC_FOLDLEVELNUMBERMASK) != top_fold_level);
 
-			start = sci_get_position_from_line(doc_list[idx].sci, tag_line - 2);
-			last_pos = sci_get_length(doc_list[idx].sci);
-			tmp = 0;
-			while (sci_get_style_at(doc_list[idx].sci, start) != SCE_C_IDENTIFIER
-				&& sci_get_style_at(doc_list[idx].sci, start) != SCE_C_GLOBALCLASS
-				&& start < last_pos) start++;
-			end = start;
-			// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
-			// this fails on C++ code like 'Vek3 Vek3::mul(double s)' this code returns
-			// "Vek3" because the return type of the prototype is also a GLOBALCLASS,
-			// no idea how to fix at the moment
-			// fails also in C with code like
-			// typedef void viod;
-			// viod do_nothing() {}  -> return viod instead of do_nothing
-			// perhaps: get the first colon, read forward the second colon and then method
-			// name, then go from the first colon backwards and read class name until space
-			while (((tmp = sci_get_style_at(doc_list[idx].sci, end)) == SCE_C_IDENTIFIER
-				 || tmp == SCE_C_GLOBALCLASS
-				 || sci_get_char_at(doc_list[idx].sci, end) == '~'
-				 || sci_get_char_at(doc_list[idx].sci, end) == ':')
-				 && end < last_pos) end++;
-
-			cur_tag = g_malloc(end - start + 1);
-			sci_get_text_range(doc_list[idx].sci, start, end, cur_tag);
+		if (tag_line >= 0)
+		{
+			cur_tag = parse_function_at_line(doc_list[idx].sci, tag_line);
 			*tagname = cur_tag;
-
 			return tag_line;
 		}
 	}
