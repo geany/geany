@@ -240,6 +240,7 @@ void ui_update_tag_list(gint idx, gboolean update)
 				switch (((GeanySymbol*)tmp->data)->type)
 				{
 					case tm_tag_prototype_t:
+					case tm_tag_method_t:
 					case tm_tag_function_t:
 					{
 						if (tv.tag_function.stamp == -1) break;
@@ -263,6 +264,7 @@ void ui_update_tag_list(gint idx, gboolean update)
 						break;
 					}
 					case tm_tag_member_t:
+					case tm_tag_field_t:
 					{
 						if (tv.tag_member.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_member));
@@ -273,6 +275,7 @@ void ui_update_tag_list(gint idx, gboolean update)
 					case tm_tag_enum_t:
 					case tm_tag_union_t:
 					case tm_tag_struct_t:
+					case tm_tag_interface_t:
 					{
 						if (tv.tag_struct.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_struct));
@@ -287,6 +290,7 @@ void ui_update_tag_list(gint idx, gboolean update)
 						break;
 					}
 					case tm_tag_namespace_t:
+					case tm_tag_package_t:
 					{
 						if (tv.tag_namespace.stamp == -1) break;
 						gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_namespace));

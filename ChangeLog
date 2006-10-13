@@ -1,3 +1,9 @@
+2006-10-13  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/ui_utils.c, src/treeviews.c:
+   Improved symbol list view for filetype Java.
+
+
 2006-10-13  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c: Fix infinite loop from parsing current function name.
