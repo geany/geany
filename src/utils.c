@@ -595,6 +595,7 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 
 	first_pos = end = sci_get_position_from_line(sci, tag_line);
 	max_pos = sci_get_position_from_line(sci, tag_line + 1);
+	tmp = 0;
 	// goto the begin of function body
 	while (end < max_pos &&
 		(tmp = sci_get_char_at(sci, end)) != '{' &&
