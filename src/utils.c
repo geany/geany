@@ -554,22 +554,64 @@ static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_
 }
 
 
-// Parse the function name
+/* Parse the function name up to 2 lines before tag_line.
+ * C++ like syntax should be parsed by parse_cpp_function_at_line, otherwise the return
+ * type or argument names can be confused with the function name. */
 static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 {
-	gint start, end, first_pos;
+	gint start, end, max_pos;
+	gchar *cur_tag;
+	gint fn_style;
+
+	switch (sci_get_lexer(sci))
+	{
+		case SCLEX_RUBY:	fn_style = SCE_RB_DEFNAME; break;
+		case SCLEX_PYTHON:	fn_style = SCE_P_DEFNAME; break;
+		default: fn_style = SCE_C_IDENTIFIER;	// several lexers use SCE_C_IDENTIFIER
+	}
+	start = sci_get_position_from_line(sci, tag_line - 2);
+	max_pos = sci_get_position_from_line(sci, tag_line + 1);
+	while (sci_get_style_at(sci, start) != fn_style
+		&& start < max_pos) start++;
+
+	end = start;
+	while (sci_get_style_at(sci, end) == fn_style
+		&& end < max_pos) end++;
+
+	if (start == end) return NULL;
+	cur_tag = g_malloc(end - start + 1);
+	sci_get_text_range(sci, start, end, cur_tag);
+	return cur_tag;
+}
+
+
+// Parse the function name
+static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
+{
+	gint start, end, first_pos, max_pos;
 	gint tmp;
 	gchar c;
 	gchar *cur_tag;
 
 	first_pos = end = sci_get_position_from_line(sci, tag_line);
-	while (sci_get_char_at(sci, end) != '{') end++; // goto the begin of function body
-	while (sci_get_char_at(sci, end) != '(') end--; // go back to the end of function identifier
+	max_pos = sci_get_position_from_line(sci, tag_line + 1);
+	// goto the begin of function body
+	while (end < max_pos &&
+		(tmp = sci_get_char_at(sci, end)) != '{' &&
+		tmp != 0) end++;
+	if (tmp == 0) end --;
+
+	// go back to the end of function identifier
+	while (end > 0 && end > first_pos - 1000 &&
+		(tmp = sci_get_char_at(sci, end)) != '(' &&
+		tmp != 0) end--;
 	end--;
-	while (isspace(sci_get_char_at(sci, end))) end--; // skip whitespaces between identifier and (
+	if (end < 0) end = 0;
+
+	// skip whitespaces between identifier and (
+	while (isspace(sci_get_char_at(sci, end))) end--;
 
 	start = end;
-	tmp = 0;
 	c = 0;
 	// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
 	while (((tmp = sci_get_style_at(sci, start)) == SCE_C_IDENTIFIER
@@ -577,10 +619,12 @@ static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 		 || (c = sci_get_char_at(sci, start)) == '~'
 		 ||  c == ':'))
 		start--;
+	if (start < 0) start = 0;
 
 	if (sci_get_char_at(sci, start) == ' ') start++; // skip possible whitespace
 	if (sci_get_char_at(sci, start) == '*') start++; // skip possible * char
 
+	if (start == end) return NULL;
 	cur_tag = g_malloc(end - start + 2);
 	sci_get_text_range(sci, start, end + 1, cur_tag);
 	return cur_tag;
@@ -650,9 +694,16 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 
 		if (tag_line >= 0)
 		{
-			cur_tag = parse_function_at_line(doc_list[idx].sci, tag_line);
-			*tagname = cur_tag;
-			return tag_line;
+			if (sci_get_lexer(doc_list[idx].sci) == SCLEX_CPP)
+				cur_tag = parse_cpp_function_at_line(doc_list[idx].sci, tag_line);
+			else
+				cur_tag = parse_function_at_line(doc_list[idx].sci, tag_line);
+
+			if (cur_tag != NULL)
+			{
+				*tagname = cur_tag;
+				return tag_line;
+			}
 		}
 	}
 

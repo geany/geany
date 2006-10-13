@@ -1,3 +1,8 @@
+2006-10-13  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c: Fix infinite loop from parsing current function name.
+
+
 2006-10-12  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/utils.c: Improved function name parsing to fix some invalid
