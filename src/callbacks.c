@@ -1620,7 +1620,10 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	gboolean make_object = FALSE;
+	gint build_opts = GBO_MAKE_ALL;
+
+	//CHECK MENUS DISABLED
+	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
 
 	switch (GPOINTER_TO_INT(user_data))
 	{
@@ -1628,44 +1631,23 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 		{
 			dialogs_show_input(_("Enter custom options for the make tool"),
 				_("Enter custom options here, all entered text is passed to the make command."),
-				app->build_make_custopt,
+				build_options.custom_target,
 				G_CALLBACK(on_make_target_dialog_response),
 				G_CALLBACK(on_make_target_entry_activate));
 			break;
 		}
 
 		case 2: //make object
-		{
-			gchar *locale_filename, *short_file, *noext, *object_file; //temp
-
-			if (doc_list[idx].file_name != NULL)
-			{
-				locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-
-				short_file = g_path_get_basename(locale_filename);
-				g_free(locale_filename);
-
-				noext = utils_remove_ext_from_filename(short_file);
-				g_free(short_file);
-
-				object_file = g_strdup_printf("%s.o", noext);
-				g_free(noext);
-
-				g_free(app->build_make_custopt);
-				app->build_make_custopt = g_strdup(object_file);
-				g_free(object_file);
-				make_object = TRUE;
-			}
-		}
-
+		build_opts = GBO_MAKE_OBJECT;
 		// fall through
+
 		case 0: //make all
 		{
 			GPid child_pid;
 
 			if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
-			child_pid = build_make_file(idx, make_object);
+			child_pid = build_make_file(idx, build_opts);
 			if (child_pid != (GPid) 0)
 			{
 				gtk_widget_set_sensitive(app->compile_button, FALSE);
@@ -1740,10 +1722,10 @@ on_make_target_dialog_response         (GtkDialog *dialog,
 
 		if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
-		g_free(app->build_make_custopt);
-		app->build_make_custopt = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
+		g_free(build_options.custom_target);
+		build_options.custom_target = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
 
-		child_pid = build_make_file(idx, TRUE);
+		child_pid = build_make_file(idx, GBO_MAKE_CUSTOM);
 		if (child_pid != (GPid) 0)
 		{
 			gtk_widget_set_sensitive(app->compile_button, FALSE);

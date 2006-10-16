@@ -138,7 +138,6 @@ typedef struct MyApp
 	gchar				*configdir;
 	gchar				*datadir;
 	gchar				*docdir;
-	gchar				*build_make_custopt;
 	gchar				*custom_date_format;
 	gchar				*tools_browser_cmd;
 	gchar				*tools_make_cmd;

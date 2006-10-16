@@ -44,6 +44,9 @@
 #include "main.h"
 
 
+BuildOptions build_options = {NULL};
+
+
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd);
 static GPid build_spawn_cmd(gint idx, gchar **cmd);
@@ -146,22 +149,48 @@ GPid build_view_tex_file(gint idx, gint mode)
 }
 
 
-GPid build_make_file(gint idx, gboolean cust_target)
+static gchar *get_object_filename(gint idx)
+{
+	gchar *locale_filename, *short_file, *noext, *object_file;
+
+	if (doc_list[idx].file_name == NULL) return NULL;
+
+	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+
+	short_file = g_path_get_basename(locale_filename);
+	g_free(locale_filename);
+
+	noext = utils_remove_ext_from_filename(short_file);
+	g_free(short_file);
+
+	object_file = g_strdup_printf("%s.o", noext);
+	g_free(noext);
+	
+	return object_file;
+}
+
+
+GPid build_make_file(gint idx, gint build_opts)
 {
 	gchar **argv;
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
 	argv = g_new0(gchar*, 3);
-	if (cust_target && app->build_make_custopt)
-	{	//cust-target
-		argv[0] = g_strdup(app->tools_make_cmd);
-		argv[1] = g_strdup(app->build_make_custopt);
+	argv[0] = g_strdup(app->tools_make_cmd);
+	
+	if (build_opts == GBO_MAKE_OBJECT)
+	{
+		argv[1] = get_object_filename(idx);
 		argv[2] = NULL;
 	}
-	else
+	else if (build_opts == GBO_MAKE_CUSTOM && build_options.custom_target)
+	{	//cust-target
+		argv[1] = g_strdup(build_options.custom_target);
+		argv[2] = NULL;
+	}
+	else	// GBO_MAKE_ALL
 	{
-		argv[0] = g_strdup(app->tools_make_cmd);
 		argv[1] = g_strdup("all");
 		argv[2] = NULL;
 	}

@@ -24,7 +24,22 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
-GPid build_make_file(gint idx, gboolean cust_target);
+enum	// Geany Build Options
+{
+	GBO_MAKE_ALL,
+	GBO_MAKE_CUSTOM,
+	GBO_MAKE_OBJECT
+};
+
+typedef struct
+{
+	gchar *custom_target;
+} BuildOptions;
+
+extern BuildOptions build_options;
+
+
+GPid build_make_file(gint idx, gint build_opts);
 
 GPid build_compile_file(gint idx);
 
