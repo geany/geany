@@ -5,7 +5,9 @@
  * src/build.c, src/build.h, src/geany.h, src/callbacks.c:
    Don't overwrite Make Custom string when using Make Object.
    Move app->build_make_custopt to build_options struct in build.c.
-
+ * src/build.c, src/build.h, src/msgwindow.c, src/callbacks.c,
+   src/msgwindow.h:
+   Move build_info struct to build.c and merge with build_options.
 
 2006-10-13  Enrico Tröger  <enrico.troeger@uvena.de>
 

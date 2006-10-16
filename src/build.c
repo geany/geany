@@ -44,13 +44,20 @@
 #include "main.h"
 
 
-BuildOptions build_options = {NULL};
+BuildInfo build_info = {NULL, GEANY_FILETYPES_ALL, NULL};
 
 
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd);
 static GPid build_spawn_cmd(gint idx, gchar **cmd);
 
+
+
+void build_finalize()
+{
+	g_free(build_info.dir);
+	g_free(build_info.custom_target);
+}
 
 
 GPid build_compile_tex_file(gint idx, gint mode)
@@ -184,9 +191,9 @@ GPid build_make_file(gint idx, gint build_opts)
 		argv[1] = get_object_filename(idx);
 		argv[2] = NULL;
 	}
-	else if (build_opts == GBO_MAKE_CUSTOM && build_options.custom_target)
+	else if (build_opts == GBO_MAKE_CUSTOM && build_info.custom_target)
 	{	//cust-target
-		argv[1] = g_strdup(build_options.custom_target);
+		argv[1] = g_strdup(build_info.custom_target);
 		argv[2] = NULL;
 	}
 	else	// GBO_MAKE_ALL
@@ -328,7 +335,10 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	{
 		filetype *ft = doc_list[idx].file_type;
 		guint ft_id = (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL]->id : ft->id;
-		msgwin_set_build_info(working_dir, ft_id);
+
+		g_free(build_info.dir);
+		build_info.dir = g_strdup(working_dir);
+		build_info.file_type_id = ft_id;
 	}
 
 	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,

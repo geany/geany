@@ -79,8 +79,6 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, .
 
 void msgwin_status_add(gchar const *format, ...);
 
-void msgwin_set_build_info(const gchar *dir, guint file_type_id);
-
 GtkWidget *msgwin_create_message_popup_menu(gint type);
 
 gboolean msgwin_goto_compiler_file_line();

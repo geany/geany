@@ -33,11 +33,15 @@ enum	// Geany Build Options
 
 typedef struct
 {
-	gchar *custom_target;
-} BuildOptions;
+	gchar	*dir;
+	guint	file_type_id;
+	gchar	*custom_target;
+} BuildInfo;
 
-extern BuildOptions build_options;
+extern BuildInfo build_info;
 
+
+void build_finalize();
 
 GPid build_make_file(gint idx, gint build_opts);
 

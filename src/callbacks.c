@@ -93,6 +93,7 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 	templates_free_templates();
 	msgwin_finalize();
 	search_finalize();
+	build_finalize();
 	document_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
@@ -1631,7 +1632,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 		{
 			dialogs_show_input(_("Enter custom options for the make tool"),
 				_("Enter custom options here, all entered text is passed to the make command."),
-				build_options.custom_target,
+				build_info.custom_target,
 				G_CALLBACK(on_make_target_dialog_response),
 				G_CALLBACK(on_make_target_entry_activate));
 			break;
@@ -1722,8 +1723,8 @@ on_make_target_dialog_response         (GtkDialog *dialog,
 
 		if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
-		g_free(build_options.custom_target);
-		build_options.custom_target = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
+		g_free(build_info.custom_target);
+		build_info.custom_target = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
 
 		child_pid = build_make_file(idx, GBO_MAKE_CUSTOM);
 		if (child_pid != (GPid) 0)

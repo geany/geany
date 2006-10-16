@@ -31,16 +31,11 @@
 #include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
+#include "build.h"
 
 #include <string.h>
 #include <stdlib.h>
 
-
-static struct
-{
-	gchar	*dir;
-	guint	file_type_id;
-} build_info = {NULL, GEANY_FILETYPES_ALL};
 
 // used for parse_file_line
 typedef struct
@@ -75,15 +70,6 @@ void msgwin_init()
 void msgwin_finalize()
 {
 	g_free(msgwindow.find_in_files_dir);
-	g_free(build_info.dir);
-}
-
-
-void msgwin_set_build_info(const gchar *dir, guint file_type_id)
-{
-	g_free(build_info.dir);
-	build_info.dir = g_strdup(dir);
-	build_info.file_type_id = file_type_id;
 }
 
 
