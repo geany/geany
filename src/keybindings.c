@@ -216,7 +216,8 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit_decreaseindent,
 		GDK_i, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_decreaseindent", _("Decrease indent"));
 	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit_gotomatchingbrace,
-		GDK_less, GDK_CONTROL_MASK, "edit_gotomatchingbrace", _("Goto matching brace"));
+		GDK_less, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_gotomatchingbrace",
+		_("Goto matching brace"));
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
 #ifdef G_OS_WIN32

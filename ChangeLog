@@ -1,3 +1,9 @@
+2006-10-16  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c: Change goto matching brace default keybinding to
+                      CTRL-SHIFT-< (requires shift on some keyboards).
+
+
 2006-10-13  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/ui_utils.c, src/treeviews.c:
