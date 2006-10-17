@@ -1,3 +1,10 @@
+2006-10-17  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * THANKS, configure.in, src/about.c:
+   Added Italian translation (thanks to M. Baldinelli and
+   Dario Santomarco).
+
+
 2006-10-16  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c: Change goto matching brace default keybinding to
@@ -205,7 +212,7 @@
 
 2006-09-26  Frank Lanitz  <frank@frank.uvena.de>
 
- * po/nl.po, THANKS, configure.in, scr/about.c:
+ * po/nl.po, THANKS, configure.in, src/about.c:
    Added Dutch translation (Thanks to Kurt De Bree).
 
 
