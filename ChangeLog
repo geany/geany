@@ -3,6 +3,9 @@
  * src/callbacks.c, src/filetypes.h, src/ui_utils.c:
    Disable Make All, Make Custom menu items for unnamed files.
    Allow Run and Make Object for C header files.
+ * src/document.c:
+   Fixed Undo/Redo setting the wrong document changed state when making
+   edits after saving a file.
 
 
 2006-10-17  Enrico Tröger  <enrico.troeger@uvena.de>

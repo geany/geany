@@ -1653,14 +1653,6 @@ void document_undo(gint idx)
 	}
 	g_free(action); // free the action which was taken from the stack
 
-	if (g_trash_stack_height(&doc_list[idx].undo_actions) == 0)
-	{
-		doc_list[idx].changed = FALSE;
-		document_set_text_changed(idx);
-	}
-	else
-		doc_list[idx].changed = TRUE;
-
 	ui_update_popup_reundo_items(idx);
 	//geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].undo_actions));
 }
