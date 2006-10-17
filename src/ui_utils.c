@@ -37,6 +37,7 @@
 #include "images.c"
 #include "treeviews.h"
 #include "keybindings.h"
+#include "build.h"
 
 
 static gchar *menu_item_get_text(GtkMenuItem *menu_item);
@@ -623,11 +624,22 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show)
 }
 
 
+static gboolean is_c_header(const gchar *fname)
+{
+	gchar *ext = NULL;
+
+	if (fname)
+	{
+		ext = strrchr(fname, '.');
+	}
+	return (ext == NULL) ? FALSE : (*(ext + 1) == 'h');	// match *.h*
+}
+
+
 void ui_update_build_menu(gint idx)
 {
-	gboolean is_header = FALSE;
-	gchar *ext = NULL;
 	filetype *ft;
+	gboolean have_path;
 
 	if (idx == -1 || doc_list[idx].file_type == NULL)
 	{
@@ -648,118 +660,60 @@ void ui_update_build_menu(gint idx)
 	ft->menu_items->can_link = FALSE;
 #endif
 
-	if (doc_list[idx].file_name)
-	{
-		ext = strrchr(doc_list[idx].file_name, '.');
-	}
-
-	/// TODO: separate function for matching headers, perhaps based on file extensions
-	if (! ext || utils_strcmp(ext + 1, "h") || utils_strcmp(ext + 1, "hpp") ||
-		utils_strcmp(ext + 1, "hxx"))
-	{
-		is_header = TRUE;
-	}
-
 	gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")));
 
+	if (ft->menu_items->menu == NULL)
+	{
+		ft->menu_items->menu = (ft->id == GEANY_FILETYPES_LATEX) ?
+			create_build_menu_tex(idx) : create_build_menu_gen(idx);
+		g_object_ref((gpointer)ft->menu_items->menu);	// to hold it after removing
+	}
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
+						ft->menu_items->menu);
+
+	have_path = (doc_list[idx].file_name != NULL);
+	// update the Make items
+	if (ft->menu_items->item_make_all != NULL)
+		gtk_widget_set_sensitive(ft->menu_items->item_make_all, have_path);
+	if (ft->menu_items->item_make_custom != NULL)
+		gtk_widget_set_sensitive(ft->menu_items->item_make_custom, have_path);
+	if (ft->menu_items->item_make_object != NULL)
+		gtk_widget_set_sensitive(ft->menu_items->item_make_object, have_path);
+	
 	switch (ft->id)
 	{
+		case GEANY_FILETYPES_LATEX:
+		{
+			gtk_widget_set_sensitive(app->compile_button, have_path && ft->menu_items->can_compile);
+			gtk_widget_set_sensitive(app->run_button, have_path && ft->menu_items->can_exec);
+			break;
+		}
 		case GEANY_FILETYPES_C:	// intended fallthrough, C and C++ behave equal
 		case GEANY_FILETYPES_CPP:
 		{
-			if (ft->menu_items->menu == NULL)
-			{
-				ft->menu_items->menu = create_build_menu_gen(idx);
-				g_object_ref((gpointer)ft->menu_items->menu);	// to hold it after removing
+			if (ft->menu_items->can_exec)
+				gtk_widget_set_sensitive(ft->menu_items->item_exec, have_path);
+			gtk_widget_set_sensitive(app->run_button, have_path && ft->menu_items->can_exec);
 
-			}
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-								ft->menu_items->menu);
-
-			if (is_header) // means also filename is NULL
-			{
-				gtk_widget_set_sensitive(app->compile_button, FALSE);
-				gtk_widget_set_sensitive(app->run_button, FALSE);
-				if (ft->menu_items->can_compile)
-					gtk_widget_set_sensitive(ft->menu_items->item_compile, FALSE);
-				if (ft->menu_items->can_link)
-					gtk_widget_set_sensitive(ft->menu_items->item_link, FALSE);
-				if (ft->menu_items->can_exec)
-					gtk_widget_set_sensitive(ft->menu_items->item_exec, FALSE);
-				gtk_widget_set_sensitive(ft->menu_items->item_make_object, FALSE);
-			}
-			else
-			{
-				gtk_widget_set_sensitive(app->compile_button, TRUE);
-				gtk_widget_set_sensitive(app->run_button, TRUE);
-				if (ft->menu_items->can_compile)
-					gtk_widget_set_sensitive(ft->menu_items->item_compile, TRUE);
-				if (ft->menu_items->can_link)
-					gtk_widget_set_sensitive(ft->menu_items->item_link, TRUE);
-				if (ft->menu_items->can_exec)
-					gtk_widget_set_sensitive(ft->menu_items->item_exec, TRUE);
-				gtk_widget_set_sensitive(ft->menu_items->item_make_object, TRUE);
-			}
-			break;
-		}
-		case GEANY_FILETYPES_LATEX:
-		{
-			if (ft->menu_items->menu == NULL)
-			{
-				ft->menu_items->menu = create_build_menu_tex(idx);
-				g_object_ref((gpointer)ft->menu_items->menu);	// to hold it after removing
-			}
-			if (doc_list[idx].file_name == NULL)
-			{
-				gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-								ft->menu_items->menu);
-				gtk_widget_set_sensitive(app->compile_button, FALSE);
-				gtk_widget_set_sensitive(app->run_button, FALSE);
-			}
-			else
-			{
-				gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-								ft->menu_items->menu);
-				gtk_widget_set_sensitive(app->compile_button, ft->menu_items->can_compile);
-				gtk_widget_set_sensitive(app->run_button, ft->menu_items->can_exec);
-			}
-
+			// compile and link are disabled for header files
+			have_path = have_path && ! is_c_header(doc_list[idx].file_name);
+			gtk_widget_set_sensitive(app->compile_button, have_path && ft->menu_items->can_compile);
+			if (ft->menu_items->can_compile)
+				gtk_widget_set_sensitive(ft->menu_items->item_compile, have_path);
+			if (ft->menu_items->can_link)
+				gtk_widget_set_sensitive(ft->menu_items->item_link, have_path);
 			break;
 		}
 		default:
 		{
-			if (ft->menu_items->menu == NULL)
-			{
-				ft->menu_items->menu = create_build_menu_gen(idx);
-				g_object_ref((gpointer)ft->menu_items->menu);	// to hold it after removing
-			}
-			if (doc_list[idx].file_name == NULL)
-			{
-				gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-								ft->menu_items->menu);
-				gtk_widget_set_sensitive(app->compile_button, FALSE);
-				gtk_widget_set_sensitive(app->run_button, FALSE);
-				if (ft->menu_items->can_compile)
-					gtk_widget_set_sensitive(ft->menu_items->item_compile, FALSE);
-				if (ft->menu_items->can_link)
-					gtk_widget_set_sensitive(ft->menu_items->item_link, FALSE);
-				if (ft->menu_items->can_exec) gtk_widget_set_sensitive(ft->menu_items->item_exec, FALSE);
-				gtk_widget_set_sensitive(ft->menu_items->item_make_object, FALSE);
-			}
-			else
-			{
-				gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-								ft->menu_items->menu);
-				gtk_widget_set_sensitive(app->compile_button, ft->menu_items->can_compile);
-				gtk_widget_set_sensitive(app->run_button, ft->menu_items->can_exec);
-				if (ft->menu_items->can_compile)
-					gtk_widget_set_sensitive(ft->menu_items->item_compile, TRUE);
-				if (ft->menu_items->can_link)
-					gtk_widget_set_sensitive(ft->menu_items->item_link, TRUE);
-				if (ft->menu_items->can_exec)
-					gtk_widget_set_sensitive(ft->menu_items->item_exec, TRUE);
-				gtk_widget_set_sensitive(ft->menu_items->item_make_object, TRUE);
-			}
+			gtk_widget_set_sensitive(app->compile_button, have_path && ft->menu_items->can_compile);
+			gtk_widget_set_sensitive(app->run_button, have_path && ft->menu_items->can_exec);
+			if (ft->menu_items->can_compile)
+				gtk_widget_set_sensitive(ft->menu_items->item_compile, have_path);
+			if (ft->menu_items->can_link)
+				gtk_widget_set_sensitive(ft->menu_items->item_link, have_path);
+			if (ft->menu_items->can_exec)
+				gtk_widget_set_sensitive(ft->menu_items->item_exec, have_path);
 		}
 	}
 }
@@ -821,16 +775,20 @@ static GtkWidget *create_build_menu_gen(gint idx)
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the default target"), NULL);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKE, item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
+		GINT_TO_POINTER(GBO_MAKE_ALL));
+	ft->menu_items->item_make_all = item;
 
-	// build the code with make
+	// build the code with make custom
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make custom _target"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOWNTARGET, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the specified target"), NULL);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
+		GINT_TO_POINTER(GBO_MAKE_CUSTOM));
+	ft->menu_items->item_make_custom = item;
 
 	// build the code with make object
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make _object"));
@@ -839,7 +797,8 @@ static GtkWidget *create_build_menu_gen(gint idx)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file using the "
 										   "make tool"), NULL);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(2));
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
+		GINT_TO_POINTER(GBO_MAKE_OBJECT));
 	ft->menu_items->item_make_object = item;
 #endif
 
@@ -889,6 +848,7 @@ static GtkWidget *create_build_menu_tex(gint idx)
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	filetype *ft = filetypes[GEANY_FILETYPES_LATEX];
 
 	menu = gtk_menu_new();
 
@@ -933,16 +893,20 @@ static GtkWidget *create_build_menu_tex(gint idx)
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the default target"), NULL);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKE, item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(0));
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
+		GINT_TO_POINTER(GBO_MAKE_ALL));
+	ft->menu_items->item_make_all = item;
 
-	// build the code with make
+	// build the code with make custom
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make custom _target"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOWNTARGET, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
 										   "make tool and the specified target"), NULL);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate), GINT_TO_POINTER(1));
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
+		GINT_TO_POINTER(GBO_MAKE_CUSTOM));
+	ft->menu_items->item_make_custom = item;
 
 	if (item != NULL)
 	{

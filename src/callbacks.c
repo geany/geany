@@ -1621,14 +1621,13 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	gint build_opts = GBO_MAKE_ALL;
+	gint build_opts = GPOINTER_TO_INT(user_data);
 
-	//CHECK MENUS DISABLED
 	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
 
-	switch (GPOINTER_TO_INT(user_data))
+	switch (build_opts)
 	{
-		case 1: //custom target
+		case GBO_MAKE_CUSTOM:
 		{
 			dialogs_show_input(_("Enter custom options for the make tool"),
 				_("Enter custom options here, all entered text is passed to the make command."),
@@ -1638,11 +1637,9 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 			break;
 		}
 
-		case 2: //make object
-		build_opts = GBO_MAKE_OBJECT;
+		case GBO_MAKE_OBJECT:
 		// fall through
-
-		case 0: //make all
+		case GBO_MAKE_ALL:
 		{
 			GPid child_pid;
 
