@@ -320,43 +320,6 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_build_compile_activate              (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_tex_activate                  (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_build_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_make_activate                 (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_execute_activate              (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_arguments_activate            (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_tex_arguments_activate        (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_make_target_dialog_response         (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data);
-
-void
-on_make_target_entry_activate          (GtkEntry        *entry,
-                                        gpointer         user_data);
-
-void
 on_find1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 

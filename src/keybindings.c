@@ -34,6 +34,7 @@
 #include "msgwindow.h"
 #include "sci_cb.h"
 #include "sciwrappers.h"
+#include "build.h"
 // include vte.h on non-Win32 systems, else define fake vte_init
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -572,7 +573,7 @@ static void cb_func_build_make(void)
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (doc_list[idx].file_name != NULL)
-		on_build_make_activate(NULL, GINT_TO_POINTER(0));
+		on_build_make_activate(NULL, GINT_TO_POINTER(GBO_MAKE_ALL));
 }
 
 static void cb_func_build_makeowntarget(void)
@@ -580,7 +581,7 @@ static void cb_func_build_makeowntarget(void)
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (doc_list[idx].file_name != NULL)
-		on_build_make_activate(NULL, GINT_TO_POINTER(1));
+		on_build_make_activate(NULL, GINT_TO_POINTER(GBO_MAKE_CUSTOM));
 }
 
 static void cb_func_build_makeobject(void)
@@ -588,7 +589,7 @@ static void cb_func_build_makeobject(void)
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	if (doc_list[idx].file_name != NULL)
-		on_build_make_activate(NULL, GINT_TO_POINTER(2));
+		on_build_make_activate(NULL, GINT_TO_POINTER(GBO_MAKE_OBJECT));
 }
 
 static void cb_func_build_run(void)

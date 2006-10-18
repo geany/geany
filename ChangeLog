@@ -1,3 +1,11 @@
+2006-10-18  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c, src/build.h, src/ui_utils.h, src/ui_utils.c,
+   src/keybindings.c, src/callbacks.c, src/callbacks.h, src/document.c,
+   src/main.c:
+   Move build menu related functions and callbacks to build.c.
+   Renamed ui_update_build_menu -> build_menu_update.
+
 2006-10-17  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c, src/filetypes.h, src/ui_utils.c:

@@ -50,6 +50,7 @@
 #include "keybindings.h"
 #include "sci_cb.h"
 #include "search.h"
+#include "build.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -597,7 +598,7 @@ gint main(gint argc, gchar **argv)
 	idx = document_get_cur_idx();
 	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
 	gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
-	ui_update_build_menu(idx);
+	build_menu_update(idx);
 	ui_update_tag_list(idx, FALSE);
 
 #ifdef G_OS_WIN32

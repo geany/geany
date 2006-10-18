@@ -68,8 +68,6 @@ void ui_close_buttons_toggle();
 
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
 
-void ui_update_build_menu(gint);
-
 void ui_treeviews_show_hide(gboolean force);
 
 void ui_document_show_hide(gint idx);

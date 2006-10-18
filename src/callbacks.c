@@ -761,7 +761,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 
 		document_set_text_changed(idx);
 		ui_document_show_hide(idx); // update the document menu
-		ui_update_build_menu(idx);
+		build_menu_update(idx);
 		ui_update_statusbar(idx, -1);
 		ui_set_window_title(idx);
 		ui_update_tag_list(idx, FALSE);
@@ -921,7 +921,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		utils_replace_filename(idx);
 		document_save_file(idx, TRUE);
 
-		ui_update_build_menu(idx);
+		build_menu_update(idx);
 
 		// finally add current file to recent files menu
 		ui_add_recent_file(doc_list[idx].file_name);
@@ -1544,201 +1544,6 @@ on_compile_button_clicked              (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
 	on_build_compile_activate(NULL, NULL);
-}
-
-
-void
-on_build_compile_activate              (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
-	GPid child_pid = (GPid) 0;
-
-	if (doc_list[idx].changed) document_save_file(idx, FALSE);
-
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
-		child_pid = build_compile_tex_file(idx, 0);
-	else
-		child_pid = build_compile_file(idx);
-
-	if (child_pid != (GPid) 0)
-	{
-		gtk_widget_set_sensitive(app->compile_button, FALSE);
-		g_child_watch_add(child_pid, build_exit_cb, NULL);
-	}
-}
-
-
-void
-on_build_tex_activate                  (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
-	GPid child_pid = (GPid) 0;
-
-	if (doc_list[idx].changed) document_save_file(idx, FALSE);
-
-	switch (GPOINTER_TO_INT(user_data))
-	{
-		case 0: child_pid = build_compile_tex_file(idx, 0); break;
-		case 1: child_pid = build_compile_tex_file(idx, 1); break;
-		case 2: child_pid = build_view_tex_file(idx, 0); break;
-		case 3: child_pid = build_view_tex_file(idx, 1); break;
-	}
-
-	if (GPOINTER_TO_INT(user_data) <= 1 && child_pid != (GPid) 0)
-	{
-		gtk_widget_set_sensitive(app->compile_button, FALSE);
-		g_child_watch_add(child_pid, build_exit_cb, NULL);
-	}
-}
-
-
-void
-on_build_build_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
-	GPid child_pid = (GPid) 0;
-
-	if (doc_list[idx].changed) document_save_file(idx, FALSE);
-
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
-		child_pid = build_compile_tex_file(idx, 1);
-	else
-		child_pid = build_link_file(idx);
-
-	if (child_pid != (GPid) 0)
-	{
-		gtk_widget_set_sensitive(app->compile_button, FALSE);
-		g_child_watch_add(child_pid, build_exit_cb, NULL);
-	}
-}
-
-
-void
-on_build_make_activate                 (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
-	gint build_opts = GPOINTER_TO_INT(user_data);
-
-	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
-
-	switch (build_opts)
-	{
-		case GBO_MAKE_CUSTOM:
-		{
-			dialogs_show_input(_("Enter custom options for the make tool"),
-				_("Enter custom options here, all entered text is passed to the make command."),
-				build_info.custom_target,
-				G_CALLBACK(on_make_target_dialog_response),
-				G_CALLBACK(on_make_target_entry_activate));
-			break;
-		}
-
-		case GBO_MAKE_OBJECT:
-		// fall through
-		case GBO_MAKE_ALL:
-		{
-			GPid child_pid;
-
-			if (doc_list[idx].changed) document_save_file(idx, FALSE);
-
-			child_pid = build_make_file(idx, build_opts);
-			if (child_pid != (GPid) 0)
-			{
-				gtk_widget_set_sensitive(app->compile_button, FALSE);
-				g_child_watch_add(child_pid, build_exit_cb, NULL);
-			}
-		}
-	}
-}
-
-
-void
-on_build_execute_activate              (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
-
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX && user_data != NULL)
-	{
-		if (build_view_tex_file(idx, GPOINTER_TO_INT(user_data)) == (GPid) 0)
-		{
-			msgwin_status_add(_("Failed to execute the view program"));
-		}
-	}
-	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_HTML)
-	{
-		gchar *uri = g_strconcat("file:///", g_path_skip_root(doc_list[idx].file_name), NULL);
-		utils_start_browser(uri);
-		g_free(uri);
-	}
-	else
-	{
-		// save the file only if the run command uses it
-		if (doc_list[idx].changed &&
-			strstr(doc_list[idx].file_type->programs->run_cmd, "%f") != NULL)
-				document_save_file(idx, FALSE);
-		if (build_run_cmd(idx) == (GPid) 0)
-		{
-#ifndef G_OS_WIN32 // on Windows there is no PID returned
-			msgwin_status_add(_("Failed to execute the terminal program"));
-#endif
-		}
-	}
-	//gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
-}
-
-
-void
-on_build_arguments_activate            (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	dialogs_show_includes_arguments_gen();
-}
-
-
-void
-on_build_tex_arguments_activate        (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	dialogs_show_includes_arguments_tex();
-}
-
-
-void
-on_make_target_dialog_response         (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data)
-{
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		gint idx = document_get_cur_idx();
-		GPid child_pid;
-
-		if (doc_list[idx].changed) document_save_file(idx, FALSE);
-
-		g_free(build_info.custom_target);
-		build_info.custom_target = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
-
-		child_pid = build_make_file(idx, GBO_MAKE_CUSTOM);
-		if (child_pid != (GPid) 0)
-		{
-			gtk_widget_set_sensitive(app->compile_button, FALSE);
-			g_child_watch_add(child_pid, build_exit_cb, NULL);
-		}
-	}
-	gtk_widget_destroy(GTK_WIDGET(dialog));
-}
-
-
-void
-on_make_target_entry_activate          (GtkEntry        *entry,
-                                        gpointer         user_data)
-{
-	on_make_target_dialog_response(GTK_DIALOG(user_data), GTK_RESPONSE_ACCEPT, entry);
 }
 
 

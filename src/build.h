@@ -55,6 +55,35 @@ GPid build_view_tex_file(gint idx, gint mode);
 
 GPid build_run_cmd(gint idx);
 
-void build_exit_cb (GPid child_pid, gint status, gpointer user_data);
+void build_menu_update(gint idx);
+
+
+void
+on_build_compile_activate              (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_build_tex_activate                  (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_build_build_activate                (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_build_make_activate                 (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_build_execute_activate              (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_build_arguments_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_build_tex_arguments_activate        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
 
 #endif
