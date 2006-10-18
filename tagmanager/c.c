@@ -67,7 +67,7 @@ typedef enum eKeywordId {
     KEYWORD_IMPLEMENTS, KEYWORD_IMPORT, KEYWORD_INLINE, KEYWORD_INT,
     KEYWORD_INTERFACE,
     KEYWORD_LONG,
-    KEYWORD_MUTABLE,
+    KEYWORD_MUTABLE, KEYWORD_MODULE,
     KEYWORD_NAMESPACE, KEYWORD_NEW, KEYWORD_NATIVE,
     KEYWORD_OPERATOR, KEYWORD_OVERLOAD,
     KEYWORD_PACKAGE, KEYWORD_PRIVATE, KEYWORD_PROTECTED, KEYWORD_PUBLIC,
@@ -127,6 +127,7 @@ typedef enum eDeclaration {
     DECL_FUNCTION,
     DECL_IGNORE,		/* non-taggable "declaration" */
     DECL_INTERFACE,
+    DECL_MODULE,
     DECL_NAMESPACE,
     DECL_NOMANGLE,		/* C++ name demangling block */
     DECL_PACKAGE,
@@ -302,6 +303,7 @@ static const keywordDesc KeywordTable [] = {
     { "int",		KEYWORD_INT,		{ 1, 1, 1 } },
     { "interface",	KEYWORD_INTERFACE,	{ 0, 0, 1 } },
     { "long",		KEYWORD_LONG,		{ 1, 1, 1 } },
+    { "module",		KEYWORD_MODULE,		{ 0, 1, 0 } },
     { "mutable",	KEYWORD_MUTABLE,	{ 0, 1, 0 } },
     { "namespace",	KEYWORD_NAMESPACE,	{ 0, 1, 0 } },
     { "native",		KEYWORD_NATIVE,		{ 0, 0, 1 } },
@@ -809,8 +811,8 @@ static tagType declToTagType (const declType declaration)
 	case DECL_CLASS:	type = TAG_CLASS;	break;
 	case DECL_ENUM:		type = TAG_ENUM;	break;
 	case DECL_FUNCTION:	type = TAG_FUNCTION;	break;
-	case DECL_INTERFACE:	type = TAG_INTERFACE;	break;
-	case DECL_NAMESPACE:	type = TAG_NAMESPACE;	break;
+	case DECL_INTERFACE:type = TAG_INTERFACE;	break;
+	case DECL_NAMESPACE:type = TAG_NAMESPACE;	break;
 	case DECL_STRUCT:	type = TAG_STRUCT;	break;
 	case DECL_UNION:	type = TAG_UNION;	break;
 
@@ -1143,6 +1145,8 @@ static void qualifyVariableTag (const statementInfo *const st,
 	makeTag (nameToken, st, TRUE, TAG_TYPEDEF);
     else if (st->declaration == DECL_PACKAGE)
 	makeTag (nameToken, st, FALSE, TAG_PACKAGE);
+    else if (st->declaration == DECL_MODULE) // handle modules in D as namespaces
+	makeTag (nameToken, st, FALSE, TAG_NAMESPACE);
     else if (isValidTypeSpecifier (st->declaration))
     {
 	if (isMember (st))
@@ -1343,7 +1347,10 @@ static void readPackage (statementInfo *const st)
     Assert (isType (token, TOKEN_KEYWORD));
     readPackageName (token, skipToNonWhite ());
     token->type = TOKEN_NAME;
-    st->declaration = DECL_PACKAGE;
+    if (isLanguage (Lang_d))
+		st->declaration = DECL_MODULE;
+	else
+		st->declaration = DECL_PACKAGE;
     st->gotName = TRUE;
     st->haveQualifyingName = TRUE;
 }
@@ -1541,6 +1548,7 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 	case KEYWORD_LONG:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_NAMESPACE: st->declaration = DECL_NAMESPACE;	break;
 	case KEYWORD_OPERATOR:	readOperator (st);			break;
+	case KEYWORD_MODULE:	readPackage (st);			break;
 	case KEYWORD_PACKAGE:	readPackage (st);			break;
 	case KEYWORD_PRIVATE:	setAccess (st, ACCESS_PRIVATE);		break;
 	case KEYWORD_PROTECTED:	setAccess (st, ACCESS_PROTECTED);	break;

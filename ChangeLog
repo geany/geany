@@ -1,3 +1,10 @@
+2006-10-18  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/utils.c, src/treeviews.c, tagmanager/c.c:
+   Use "::" as context separator only for C++, otherwise use ".".
+   Detect module declarations in D and put them in the symbol list.
+
+
 2006-10-18  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/build.h, src/ui_utils.h, src/ui_utils.c,
@@ -5,6 +12,7 @@
    src/main.c:
    Move build menu related functions and callbacks to build.c.
    Renamed ui_update_build_menu -> build_menu_update.
+
 
 2006-10-17  Nick Treleaven  <nick.treleaven@btinternet.com>
 

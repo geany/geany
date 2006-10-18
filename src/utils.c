@@ -232,8 +232,12 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 				else utf8_name = tag->name;
 				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
 				{
+					// context separator
+					gchar *cosep = (doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? "::" : ".";
+					
 					symbol = g_new0(GeanySymbol, 1);
-					symbol->str = g_strdup_printf("%s::%s [%ld]", tag->atts.entry.scope, utf8_name, tag->atts.entry.line);
+					symbol->str = g_strdup_printf("%s%s%s [%ld]", tag->atts.entry.scope, cosep,
+																utf8_name, tag->atts.entry.line);
 					symbol->type = tag->type;
 					symbol->line = tag->atts.entry.line;
 					tag_names = g_list_prepend(tag_names, symbol);

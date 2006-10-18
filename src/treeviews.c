@@ -180,7 +180,12 @@ void treeviews_init_tag_list(gint idx)
 			break;
 		}
 		case GEANY_FILETYPES_JAVA:
+		case GEANY_FILETYPES_D:
 		{
+			// use singular because one file can only belong to one Package / Module
+			gchar *namespace_name = (doc_list[idx].file_type->id == GEANY_FILETYPES_D) ?
+									 _("Module") : _("Package");
+			
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Methods"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_class), NULL);
@@ -194,7 +199,7 @@ void treeviews_init_tag_list(gint idx)
 			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_variable), NULL);
 			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_variable), 0, _("Variables"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_namespace), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Packages"), -1);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, namespace_name, -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_other), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_other), 0, _("Other"), -1);
 			break;
