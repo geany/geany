@@ -44,7 +44,7 @@ void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_widget_modify_font(tree, pango_font_description_from_string(app->tagbar_font));
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 	g_signal_connect(G_OBJECT(tree), "button-press-event",
-						G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(7));
+						G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(TREEVIEW_SYMBOL));
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), FALSE);
 
@@ -254,7 +254,7 @@ void treeviews_prepare_openfiles(void)
 
 	gtk_widget_modify_font(tv.tree_openfiles, pango_font_description_from_string(app->tagbar_font));
 	g_signal_connect(G_OBJECT(tv.tree_openfiles), "button-press-event",
-						G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(6));
+						G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(TREEVIEW_OPENFILES));
 
 	// selection handling
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));

@@ -3,6 +3,9 @@
  * src/utils.c, src/treeviews.c, tagmanager/c.c:
    Use "::" as context separator only for C++, otherwise use ".".
    Detect module declarations in D and put them in the symbol list.
+ * src/callbacks.c, src/geany.h, src/msgwindow.c, src/treeviews.c:
+   Use enum values to reference different treeview widgets
+   (code cleanup).
 
 
 2006-10-18  Nick Treleaven  <nick.treleaven@btinternet.com>

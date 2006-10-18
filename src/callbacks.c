@@ -1404,17 +1404,17 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 {
 	if (event->type == GDK_2BUTTON_PRESS && user_data)
 	{
-		if (GPOINTER_TO_INT(user_data) == 4)
+		if (GPOINTER_TO_INT(user_data) == MSG_MESSAGE)
 		{	// double click in the message treeview (results of 'Find usage')
 			msgwin_goto_messages_file_line();
 		}
-		else if (GPOINTER_TO_INT(user_data) == 5)
+		else if (GPOINTER_TO_INT(user_data) == MSG_COMPILER)
 		{	// double click in the compiler treeview
 			msgwin_goto_compiler_file_line();
 		}
 	}
 
-	if (event->button == 1 && user_data && GPOINTER_TO_INT(user_data) == 7)
+	if (event->button == 1 && user_data && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
 	{	// allow reclicking of taglist treeview item
 		GtkTreeSelection *select =
 			gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
@@ -1423,15 +1423,15 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 
 	if (user_data && event->button == 3)
 	{	// popupmenu to hide or clear the active treeview
-		if (user_data && GPOINTER_TO_INT(user_data) == 3)
+		if (GPOINTER_TO_INT(user_data) == MSG_STATUS)
 			gtk_menu_popup(GTK_MENU(msgwindow.popup_status_menu), NULL, NULL, NULL, NULL, event->button, event->time);
-		else if (user_data && GPOINTER_TO_INT(user_data) == 4)
+		else if (GPOINTER_TO_INT(user_data) == MSG_MESSAGE)
 			gtk_menu_popup(GTK_MENU(msgwindow.popup_msg_menu), NULL, NULL, NULL, NULL, event->button, event->time);
-		else if (user_data && GPOINTER_TO_INT(user_data) == 5)
+		else if (GPOINTER_TO_INT(user_data) == MSG_COMPILER)
 			gtk_menu_popup(GTK_MENU(msgwindow.popup_compiler_menu), NULL, NULL, NULL, NULL, event->button, event->time);
-		else if (user_data && GPOINTER_TO_INT(user_data) == 6)
+		else if (GPOINTER_TO_INT(user_data) == TREEVIEW_OPENFILES)
 			gtk_menu_popup(GTK_MENU(tv.popup_openfiles), NULL, NULL, NULL, NULL, event->button, event->time);
-		else if (user_data && GPOINTER_TO_INT(user_data) == 7)
+		else if (GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
 			gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL, event->button, event->time);
 	}
 	return FALSE;
