@@ -1,3 +1,11 @@
+2006-10-19  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c, src/about.c, src/dialogs.c:
+   Added 6pt border, changed padding for all dialogs in dialogs.c;
+   also allow ESC to close cancellable dialogs.
+   Updated unsaved, LaTeX Set Arguments dialogs.
+
+
 2006-10-18  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/utils.c, src/treeviews.c, tagmanager/c.c:

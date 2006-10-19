@@ -1093,7 +1093,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 	{
 		case GBO_MAKE_CUSTOM:
 		{
-			dialogs_show_input(_("Enter custom options for the make tool"),
+			dialogs_show_input(_("Make custom target"),
 				_("Enter custom options here, all entered text is passed to the make command."),
 				build_info.custom_target,
 				G_CALLBACK(on_make_target_dialog_response),
