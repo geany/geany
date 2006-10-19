@@ -1402,7 +1402,9 @@ on_tree_view_button_press_event        (GtkWidget *widget,
                                         GdkEventButton *event,
                                         gpointer user_data)
 {
-	if (event->type == GDK_2BUTTON_PRESS && user_data)
+	// user_data might be NULL, GPOINTER_TO_INT returns 0 if called with NULL
+	
+	if (event->type == GDK_2BUTTON_PRESS)
 	{
 		if (GPOINTER_TO_INT(user_data) == MSG_MESSAGE)
 		{	// double click in the message treeview (results of 'Find usage')
@@ -1414,14 +1416,14 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 		}
 	}
 
-	if (event->button == 1 && user_data && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
+	if (event->button == 1 && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
 	{	// allow reclicking of taglist treeview item
 		GtkTreeSelection *select =
 			gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
-		on_taglist_tree_selection_changed(select, user_data);
+		on_taglist_tree_selection_changed(select, NULL);
 	}
 
-	if (user_data && event->button == 3)
+	if (event->button == 3)
 	{	// popupmenu to hide or clear the active treeview
 		if (GPOINTER_TO_INT(user_data) == MSG_STATUS)
 			gtk_menu_popup(GTK_MENU(msgwindow.popup_status_menu), NULL, NULL, NULL, NULL, event->button, event->time);
