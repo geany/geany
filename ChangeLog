@@ -1,3 +1,12 @@
+2006-10-20  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/interface.c, src/main.c, geany.glade:
+   Add drop-down recent files menu to Open toolbar button.
+   Align quit toolbar button on the right.
+   Move Colour Chooser, Word Count to Tools menu.
+   Reorder Format, add Indent icons, edit Remove Indicators items.
+
+
 2006-10-19  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/about.c, src/dialogs.c:
