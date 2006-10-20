@@ -334,19 +334,18 @@ gboolean dialogs_show_unsaved_file(gint idx)
 #ifndef G_OS_WIN32
 	GtkWidget *dialog, *button, *label, *image, *hbox, *align;
 #endif
-	gchar *msg;
+	gchar *msg, *short_fn = NULL;
 	gint ret;
 
 	if (doc_list[idx].file_name != NULL)
 	{
-		gchar *short_fn = g_path_get_basename(doc_list[idx].file_name);
-		msg = g_strdup_printf(_("The file '%s' is not saved."), short_fn);
-		g_free(short_fn);
+		short_fn = g_path_get_basename(doc_list[idx].file_name);
 	}
-	else
-	{
-		msg = g_strdup(_("This unnamed file is not saved."));
-	}
+
+	msg = g_strdup_printf(_("The file '%s' is not saved."),
+		(short_fn != NULL) ? short_fn : GEANY_STRING_UNTITLED);
+	g_free(short_fn);
+
 #ifdef G_OS_WIN32
 	ret = win32_message_dialog_unsaved(msg);
 #else
