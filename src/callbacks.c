@@ -33,7 +33,6 @@
 #include "interface.h"
 #include "support.h"
 
-#include "highlighting.h"
 #include "keyfile.h"
 #include "document.h"
 #include "sciwrappers.h"
@@ -50,6 +49,7 @@
 #include "keybindings.h"
 #include "encodings.h"
 #include "search.h"
+#include "main.h"
 
 #ifdef G_OS_WIN32
 # include "win32.h"
@@ -79,81 +79,7 @@ static gboolean ignore_toolbar_toggle = FALSE;
 // real exit function
 gint destroyapp(GtkWidget *widget, gpointer gdata)
 {
-	geany_debug("Quitting...");
-
-#ifdef HAVE_SOCKET
-	socket_finalize();
-#endif
-
-	keybindings_free();
-	filetypes_save_commands();
-	filetypes_free_types();
-	styleset_free_styles();
-	templates_free_templates();
-	msgwin_finalize();
-	search_finalize();
-	build_finalize();
-	document_finalize();
-
-	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
-	g_strfreev(html_entities);
-	g_free(app->configdir);
-	g_free(app->datadir);
-	g_free(app->docdir);
-	g_free(app->editor_font);
-	g_free(app->tagbar_font);
-	g_free(app->msgwin_font);
-	g_free(app->long_line_color);
-	g_free(app->pref_template_developer);
-	g_free(app->pref_template_company);
-	g_free(app->pref_template_mail);
-	g_free(app->pref_template_initial);
-	g_free(app->pref_template_version);
-	g_free(app->tools_make_cmd);
-	g_free(app->tools_term_cmd);
-	g_free(app->tools_browser_cmd);
-	while (! g_queue_is_empty(app->recent_queue))
-	{
-		g_free(g_queue_pop_tail(app->recent_queue));
-	}
-	g_queue_free(app->recent_queue);
-
-	if (app->prefs_dialog && GTK_IS_WIDGET(app->prefs_dialog)) gtk_widget_destroy(app->prefs_dialog);
-	if (app->save_filesel && GTK_IS_WIDGET(app->save_filesel)) gtk_widget_destroy(app->save_filesel);
-	if (app->open_filesel && GTK_IS_WIDGET(app->open_filesel)) gtk_widget_destroy(app->open_filesel);
-	if (app->open_fontsel && GTK_IS_WIDGET(app->open_fontsel)) gtk_widget_destroy(app->open_fontsel);
-	if (app->open_colorsel && GTK_IS_WIDGET(app->open_colorsel)) gtk_widget_destroy(app->open_colorsel);
-	if (app->default_tag_tree && GTK_IS_WIDGET(app->default_tag_tree))
-	{
-		g_object_unref(app->default_tag_tree);
-		gtk_widget_destroy(app->default_tag_tree);
-	}
-	scintilla_release_resources();
-#ifdef HAVE_VTE
-	if (vte_info.have_vte) vte_close();
-	g_free(vte_info.lib_vte);
-#endif
-	gtk_widget_destroy(app->window);
-
-	// destroy popup menus
-	if (app->popup_menu && GTK_IS_WIDGET(app->popup_menu))
-					gtk_widget_destroy(app->popup_menu);
-	if (app->toolbar_menu && GTK_IS_WIDGET(app->toolbar_menu))
-					gtk_widget_destroy(app->toolbar_menu);
-	if (tv.popup_taglist && GTK_IS_WIDGET(tv.popup_taglist))
-					gtk_widget_destroy(tv.popup_taglist);
-	if (tv.popup_openfiles && GTK_IS_WIDGET(tv.popup_openfiles))
-					gtk_widget_destroy(tv.popup_openfiles);
-	if (msgwindow.popup_status_menu && GTK_IS_WIDGET(msgwindow.popup_status_menu))
-					gtk_widget_destroy(msgwindow.popup_status_menu);
-	if (msgwindow.popup_msg_menu && GTK_IS_WIDGET(msgwindow.popup_msg_menu))
-					gtk_widget_destroy(msgwindow.popup_msg_menu);
-	if (msgwindow.popup_compiler_menu && GTK_IS_WIDGET(msgwindow.popup_compiler_menu))
-					gtk_widget_destroy(msgwindow.popup_compiler_menu);
-
-	g_free(app);
-
-	gtk_main_quit();
+	main_quit();
 	return (FALSE);
 }
 

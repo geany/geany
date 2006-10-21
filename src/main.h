@@ -36,4 +36,6 @@ extern CommandLineOptions cl_options;
 
 gchar *get_argv_filename(const gchar *filename);
 
+void main_quit();
+
 #endif

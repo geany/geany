@@ -13,6 +13,8 @@
    src/callbacks.c, src/sci_cb.c, src/vte.c, src/search.c, src/main.h:
    Move geany_debug prototype to geany.h so that all files can use it
    without a dependency on main.h.
+ * src/callbacks.c, src/main.c, src/main.h:
+   Moved finalization code from destroyapp() to main_quit().
 
 
 2006-10-20  Nick Treleaven  <nick.treleaven@btinternet.com>
