@@ -27,7 +27,6 @@
 #include "highlighting.h"
 #include "sci_cb.h"
 #include "utils.h"
-#include "main.h"
 #include "filetypes.h"
 #include "symbols.h"
 

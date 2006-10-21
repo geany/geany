@@ -50,7 +50,6 @@
 #include "keybindings.h"
 #include "encodings.h"
 #include "search.h"
-#include "main.h"
 
 #ifdef G_OS_WIN32
 # include "win32.h"

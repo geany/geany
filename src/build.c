@@ -41,7 +41,6 @@
 #include "dialogs.h"
 #include "msgwindow.h"
 #include "document.h"
-#include "main.h"
 #include "keybindings.h"
 
 

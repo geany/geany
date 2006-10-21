@@ -9,6 +9,11 @@
    Rename document_find_next() document_search_bar_find().
  * src/msgwindow.h, src/dialogs.h, src/main.h:
    Add G_GNUC_PRINTF checks for variable argument function prototypes.
+ * src/build.c, src/utils.c, src/highlighting.c, src/geany.h,
+   src/callbacks.c, src/sci_cb.c, src/vte.c, src/search.c, src/main.h:
+   Move geany_debug prototype to geany.h so that all files can use it
+   without a dependency on main.h.
+
 
 2006-10-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 

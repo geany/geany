@@ -30,7 +30,6 @@
 #include "msgwindow.h"
 #include "document.h"
 #include "sciwrappers.h"
-#include "main.h"
 
 #include <unistd.h>
 #include <string.h>

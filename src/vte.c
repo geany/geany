@@ -32,7 +32,6 @@
 #include "msgwindow.h"
 #include "support.h"
 #include "callbacks.h"
-#include "main.h"
 
 
 VteInfo vte_info;

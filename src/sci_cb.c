@@ -32,7 +32,7 @@
 #include "sciwrappers.h"
 #include "ui_utils.h"
 #include "utils.h"
-#include "main.h"
+
 
 static gchar current_word[GEANY_MAX_WORD_LENGTH];	// holds word under the mouse or keyboard cursor
 
