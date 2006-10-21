@@ -1,3 +1,11 @@
+2006-10-21  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/document.c:
+   Make search bar automatically wraparound if necessary.
+   Detect when Find has searched all text and display a 'not found'
+   message on the status bar.
+
+
 2006-10-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/interface.c, src/main.c, geany.glade:

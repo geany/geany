@@ -861,43 +861,49 @@ gboolean document_save_file(gint idx, gboolean force)
 }
 
 
-#define SEARCH_NOT_FOUND_TXT _("The document has been searched completely but the match \"%s\" was not found. Wrap search around the document?")
-
 /* special search function, used from the find entry in the toolbar */
-void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_button, gboolean inc)
+void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_button,
+		gboolean inc)
 {
-	gint selection_end, search_pos;
+	gint start_pos, search_pos;
+	struct TextToFind ttf;
 
 	g_return_if_fail(text != NULL);
-	if (idx == -1 || ! *text) return;
+	if (! DOC_IDX_VALID(idx) || ! *text) return;
 
-	selection_end =  sci_get_selection_end(doc_list[idx].sci);
-	if (!inc && sci_can_copy(doc_list[idx].sci))
-	{ // there's a selection so go to the end
-		sci_goto_pos(doc_list[idx].sci, selection_end, TRUE);
+	start_pos = (inc) ? sci_get_selection_start(doc_list[idx].sci) :
+		sci_get_selection_end(doc_list[idx].sci);	// equal if no selection
+
+	// search cursor to end
+	ttf.chrg.cpMin = start_pos;
+	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
+	ttf.lpstrText = (gchar *)text;
+	search_pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
+
+	// if no match, search start to cursor
+	if (search_pos == -1)
+	{
+		ttf.chrg.cpMin = 0;
+		ttf.chrg.cpMax = start_pos + strlen(text);
+		search_pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
 	}
 
-	sci_set_search_anchor(doc_list[idx].sci);
-	search_pos = sci_search_next(doc_list[idx].sci, flags, text);
 	if (search_pos != -1)
 	{
+		sci_set_selection_start(doc_list[idx].sci, ttf.chrgText.cpMin);
+		sci_set_selection_end(doc_list[idx].sci, ttf.chrgText.cpMax);
 		sci_scroll_caret(doc_list[idx].sci);
 	}
 	else
 	{
 		if (find_button)
 		{
-			if (dialogs_show_question(SEARCH_NOT_FOUND_TXT, text))
-			{
-				sci_goto_pos(doc_list[idx].sci, 0, FALSE);
-				document_find_next(idx, text, flags, TRUE, inc);
-			}
+			gchar *msg = g_strdup_printf(_("\"%s\" was not found."), text);
+			ui_set_statusbar(msg, FALSE);
+			g_free(msg);
 		}
-		else
-		{
-			utils_beep();
-			sci_goto_pos(doc_list[idx].sci, 0, FALSE);
-		}
+		utils_beep();
+		sci_goto_pos(doc_list[idx].sci, start_pos, FALSE);	// clear selection
 	}
 }
 
@@ -936,10 +942,30 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 	}
 	else
 	{
-		if (dialogs_show_question(SEARCH_NOT_FOUND_TXT, text))
+		gint sci_len = sci_get_length(doc_list[idx].sci);
+
+		// if we just searched the whole text, give up searching.
+		if ((selection_end == 0 && ! search_backwards) ||
+			(selection_end == sci_len && search_backwards))
 		{
-			sci_goto_pos(doc_list[idx].sci, (search_backwards) ? sci_get_length(doc_list[idx].sci) : 0, TRUE);
-			return document_find_text(idx, text, flags, search_backwards);
+			gchar *msg = g_strdup_printf(_("\"%s\" was not found."), text);
+			ui_set_statusbar(msg, FALSE);
+			g_free(msg);
+			utils_beep();
+			return -1;
+		}
+
+		// we searched only part of the document, so ask whether to wraparound.
+		if (dialogs_show_question_full(GTK_STOCK_FIND, GTK_STOCK_CANCEL,
+			_("Wrap search and find again?"),
+			_("\"%s\" was not found."), text))
+		{
+			gint ret;
+			sci_goto_pos(doc_list[idx].sci, (search_backwards) ? sci_len : 0, TRUE);
+			ret = document_find_text(idx, text, flags, search_backwards);
+			if (ret == -1)	// return to original cursor position if not found
+				sci_goto_pos(doc_list[idx].sci, selection_end, FALSE);
+			return ret;
 		}
 	}
 	return search_pos;
