@@ -34,7 +34,7 @@ typedef struct
 extern CommandLineOptions cl_options;
 
 
-void geany_debug(gchar const *format, ...);
+void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 
 gchar *get_argv_filename(const gchar *filename);
 

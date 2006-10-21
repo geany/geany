@@ -30,9 +30,9 @@ void dialogs_show_open_file();
 /* This shows the file selection dialog to save a file. */
 void dialogs_show_save_as();
 
-void dialogs_show_info(const gchar *text, ...);
+void dialogs_show_info(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 
-void dialogs_show_error(const gchar *text, ...);
+void dialogs_show_error(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 
 gboolean dialogs_show_unsaved_file(gint idx);
 
@@ -54,11 +54,11 @@ void dialogs_show_includes_arguments_tex();
 
 void dialogs_show_file_properties(gint idx);
 
-gboolean dialogs_show_question(const gchar *text, ...);
+gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 
 /* extra_text can be NULL; otherwise it is displayed below main_text. */
 gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
-	const gchar *extra_text, const gchar *main_text, ...);
+	const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (4, 5);
 
 void dialogs_show_keyboard_shortcuts();
 

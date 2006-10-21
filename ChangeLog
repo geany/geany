@@ -4,7 +4,11 @@
    Make search bar automatically wraparound if necessary.
    Detect when Find has searched all text and display a 'not found'
    message on the status bar.
-
+ * src/build.c: Remove unused argument.
+ * src/callbacks.c, src/document.c, src/document.h:
+   Rename document_find_next() document_search_bar_find().
+ * src/msgwindow.h, src/dialogs.h, src/main.h:
+   Add G_GNUC_PRINTF checks for variable argument function prototypes.
 
 2006-10-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 

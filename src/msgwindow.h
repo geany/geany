@@ -67,9 +67,10 @@ void msgwin_show();
 
 void msgwin_msg_add(gint line, gint idx, gchar *string);
 
-void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, ...);
+void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, ...)
+		G_GNUC_PRINTF (3, 4);
 
-void msgwin_status_add(gchar const *format, ...);
+void msgwin_status_add(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 
 GtkWidget *msgwin_create_message_popup_menu(gint type);
 
