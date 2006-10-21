@@ -791,7 +791,7 @@ static GtkWidget *create_build_menu_gen(gint idx)
 }
 
 
-static GtkWidget *create_build_menu_tex(gint idx)
+static GtkWidget *create_build_menu_tex()
 {
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
@@ -957,7 +957,7 @@ void build_menu_update(gint idx)
 	if (ft->menu_items->menu == NULL)
 	{
 		ft->menu_items->menu = (ft->id == GEANY_FILETYPES_LATEX) ?
-			create_build_menu_tex(idx) : create_build_menu_gen(idx);
+			create_build_menu_tex() : create_build_menu_gen(idx);
 		g_object_ref((gpointer)ft->menu_items->menu);	// to hold it after removing
 	}
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),

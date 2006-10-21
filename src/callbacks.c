@@ -622,7 +622,7 @@ on_entry1_activate                     (GtkEntry        *entry,
 	gint idx = document_get_cur_idx();
 
 	setup_find_next(GTK_EDITABLE(entry));
-	document_find_next(idx, search_data.text, 0, FALSE, FALSE);
+	document_search_bar_find(idx, search_data.text, 0, FALSE, FALSE);
 }
 
 
@@ -634,7 +634,7 @@ on_entry1_changed                      (GtkEditable     *editable,
 	gint idx = document_get_cur_idx();
 
 	setup_find_next(editable);
-	document_find_next(idx, search_data.text, 0, FALSE, TRUE);
+	document_search_bar_find(idx, search_data.text, 0, FALSE, TRUE);
 }
 
 
@@ -648,7 +648,7 @@ on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
 	GtkWidget *entry = lookup_widget(GTK_WIDGET(app->window), "entry1");
 
 	setup_find_next(GTK_EDITABLE(entry));
-	document_find_next(idx, search_data.text, 0, TRUE, FALSE);
+	document_search_bar_find(idx, search_data.text, 0, TRUE, FALSE);
 }
 
 

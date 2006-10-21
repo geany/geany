@@ -862,7 +862,7 @@ gboolean document_save_file(gint idx, gboolean force)
 
 
 /* special search function, used from the find entry in the toolbar */
-void document_find_next(gint idx, const gchar *text, gint flags, gboolean find_button,
+void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean find_button,
 		gboolean inc)
 {
 	gint start_pos, search_pos;
