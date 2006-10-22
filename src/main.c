@@ -216,6 +216,11 @@ static void apply_settings(void)
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), app->tab_pos_msgwin);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), app->tab_pos_sidebar);
 
+	// align quit button on the right
+	if (! app->align_quit_button_on_right)
+		gtk_tool_item_set_expand(GTK_TOOL_ITEM(
+					lookup_widget(app->window, "separatortoolitem8")), FALSE);
+	
 	ui_update_toolbar_items();
 }
 

@@ -81,6 +81,7 @@ typedef struct MyApp
 	gboolean			 ignore_callback;
 	gboolean			 ignore_global_tags;
 	gboolean			 toolbar_visible;
+	gboolean			 align_quit_button_on_right;
 	gboolean			 sidebar_symbol_visible;
 	gboolean			 sidebar_openfiles_visible;
 	gboolean			 sidebar_visible;

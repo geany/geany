@@ -1,3 +1,9 @@
+2006-10-22  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/geany.h, src/keyfile.c, src/main.c:
+   Added configuration option for the alignment of toolbar quit button.
+
+
 2006-10-22  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/ui_utils.h, src/search.c, src/document.c, src/dialogs.c,
