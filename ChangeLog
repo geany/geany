@@ -1,3 +1,14 @@
+2006-10-22  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/ui_utils.h, src/search.c, src/document.c, src/dialogs.c,
+   src/document.h, src/ui_utils.c:
+   Add separate Replace button, rename old button Replace & Find.
+   Add expander to group Replace All options for Replace dialog.
+   Use Replace All In Session button instead of checkbox.
+   Add border, update packing for all dialogs in search.c.
+   Add ui_dialog_vbox_new() for consistent dialog borders.
+
+
 2006-10-21  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/document.c:

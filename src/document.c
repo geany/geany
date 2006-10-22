@@ -972,24 +972,26 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 }
 
 
-/* Replaces the selection if it matches, otherwise just finds the next match */
-void document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text,
-	gint flags, gboolean search_backwards)
+/* Replaces the selection if it matches, otherwise just finds the next match.
+ * Returns: start of replaced text, or -1 if no replacement was made */
+gint document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text,
+		gint flags, gboolean search_backwards)
 {
 	gint selection_end, selection_start, search_pos;
 
-	g_return_if_fail(find_text != NULL && replace_text != NULL);
-	if (idx == -1 || ! *find_text) return;
+	g_return_val_if_fail(find_text != NULL && replace_text != NULL, -1);
+	if (idx == -1 || ! *find_text) return -1;
+
 	// Sci doesn't support searching backwards with a regex
 	if (flags & SCFIND_REGEXP) search_backwards = FALSE;
 
-	selection_start =  sci_get_selection_start(doc_list[idx].sci);
-	selection_end =  sci_get_selection_end(doc_list[idx].sci);
+	selection_start = sci_get_selection_start(doc_list[idx].sci);
+	selection_end = sci_get_selection_end(doc_list[idx].sci);
 	if (selection_end == selection_start)
 	{
 		// no selection so just find the next match
 		document_find_text(idx, find_text, flags, search_backwards);
-		return;
+		return -1;
 	}
 	// there's a selection so go to the start before finding to search through it
 	// this ensures there is a match
@@ -1000,7 +1002,7 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 
 	search_pos = document_find_text(idx, find_text, flags, search_backwards);
 	// return if the original selected text did not match (at the start of the selection)
-	if (search_pos != selection_start) return;
+	if (search_pos != selection_start) return -1;
 
 	if (search_pos != -1)
 	{
@@ -1011,13 +1013,13 @@ void document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 		// select the replacement - find text will skip past the selected text
 		sci_set_selection_start(doc_list[idx].sci, search_pos);
 		sci_set_selection_end(doc_list[idx].sci, search_pos + replace_len);
-		document_find_text(idx, find_text, flags, search_backwards);
 	}
 	else
 	{
 		// no match in the selection
 		utils_beep();
 	}
+	return search_pos;
 }
 
 

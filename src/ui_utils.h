@@ -95,4 +95,6 @@ void ui_show_linenumber_margin();
 
 GtkContainer *ui_frame_new(GtkContainer *parent, const gchar *label_text);
 
+GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
+
 #endif

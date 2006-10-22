@@ -52,18 +52,6 @@ static GtkWidget *add_file_open_extra_widget();
 #endif
 
 
-/* common convenience function for getting a fixed border for dialogs
- * that doesn't increase the button box border */
-static GtkWidget *dialog_vbox_new(GtkDialog *dialog)
-{
-	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	// need child vbox to set a separate border.
-
-	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), vbox);
-	return vbox;
-}
-
-
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file ()
 {
@@ -451,7 +439,7 @@ void dialogs_show_word_count()
 	dialog = gtk_dialog_new_with_buttons(_("Word Count"), GTK_WINDOW(app->window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
-	vbox = dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 
 	if (sci_can_copy(doc_list[idx].sci))
 	{
@@ -530,7 +518,7 @@ void dialogs_show_input(const gchar *title, const gchar *label_text, const gchar
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(app->window),
 						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
 	label = gtk_label_new(label_text);
@@ -562,7 +550,7 @@ void dialogs_show_goto_line()
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 
 	label = gtk_label_new(_("Enter the line you want to go to:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -592,7 +580,7 @@ void dialogs_show_includes_arguments_tex()
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 
 	label = gtk_label_new(_("Set programs and options for compiling and viewing (La)TeX files."));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -707,7 +695,7 @@ void dialogs_show_includes_arguments_gen()
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 
 	label = gtk_label_new(_("Set the commands for building and running programs."));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -874,7 +862,7 @@ void dialogs_show_file_properties(gint idx)
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	g_free(title);
-	vbox = dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 
 	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
 	g_signal_connect(dialog, "delete_event", G_CALLBACK(gtk_widget_destroy), NULL);
@@ -1245,7 +1233,7 @@ void dialogs_show_keyboard_shortcuts()
 
 	dialog = gtk_dialog_new_with_buttons(_("Keyboard shortcuts"), GTK_WINDOW(app->window),
 				GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
-	vbox = dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
 	height = GEANY_WINDOW_MINIMAL_HEIGHT;

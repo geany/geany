@@ -1014,4 +1014,18 @@ GtkContainer *ui_frame_new(GtkContainer *parent, const gchar *label_text)
 }
 
 
+const gint BUTTON_BOX_BORDER = 5;
+
+/* common convenience function for getting a fixed border for dialogs
+ * that doesn't increase the button box border */
+GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
+{
+	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	// need child vbox to set a separate border.
+
+	gtk_container_set_border_width(GTK_CONTAINER(vbox), BUTTON_BOX_BORDER);
+	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), vbox);
+	return vbox;
+}
+
+
 
