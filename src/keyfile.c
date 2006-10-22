@@ -97,7 +97,6 @@ void configuration_save()
 	g_key_file_set_integer(config, PACKAGE, "autocompletion_max_height", app->autocompletion_max_height);
 	g_key_file_set_integer(config, PACKAGE, "long_line_column", app->long_line_column);
 	g_key_file_set_string(config, PACKAGE, "long_line_color", app->long_line_color);
-	g_key_file_set_boolean(config, PACKAGE, "align_quit_button_on_right", app->align_quit_button_on_right);
 	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", app->beep_on_errors);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", app->sidebar_symbol_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", app->sidebar_openfiles_visible);
@@ -288,7 +287,6 @@ gboolean configuration_load()
 		app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_style", tb_style);
 		app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_size", tb_iconsize);
 	}
-	app->align_quit_button_on_right = utils_get_setting_boolean(config, PACKAGE, "align_quit_button_on_right", TRUE);
 	app->beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	app->mru_length = utils_get_setting_integer(config, PACKAGE, "mru_length", GEANY_DEFAULT_MRU_LENGTH);
 	app->long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);

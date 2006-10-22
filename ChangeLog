@@ -2,6 +2,9 @@
 
  * src/geany.h, src/keyfile.c, src/main.c:
    Added configuration option for the alignment of toolbar quit button.
+ * geany.glade, src/interface.c, src/geany.h, src/keyfile.c,
+   src/main.c: Removed previously added configuration option and
+               removed the right alignment of the toolbar quit button.
 
 
 2006-10-22  Nick Treleaven  <nick.treleaven@btinternet.com>

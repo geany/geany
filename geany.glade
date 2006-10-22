@@ -1642,7 +1642,7 @@
 	      <property name="visible_vertical">True</property>
 	    </widget>
 	    <packing>
-	      <property name="expand">True</property>
+	      <property name="expand">False</property>
 	      <property name="homogeneous">False</property>
 	    </packing>
 	  </child>

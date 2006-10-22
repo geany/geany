@@ -992,7 +992,6 @@ create_window1 (void)
 
   separatortoolitem8 = (GtkWidget*) gtk_separator_tool_item_new ();
   gtk_widget_show (separatortoolitem8);
-  gtk_tool_item_set_expand (GTK_TOOL_ITEM (separatortoolitem8), TRUE);
   gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem8);
   gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM (separatortoolitem8), FALSE);
 
