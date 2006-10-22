@@ -65,6 +65,9 @@ void sci_cb_show_macro_list(ScintillaObject *sci);
 
 gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch);
 
+/* Reads the word at given cursor position and writes it into the given buffer. The buffer will be
+ * NULL terminated in any case, even when the word is truncated because wordlen is too small.
+ * position can be -1, then the current position is used. */
 void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen);
 
 gboolean sci_cb_show_calltip(gint idx, gint pos);

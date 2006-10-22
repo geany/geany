@@ -31,6 +31,7 @@
 #include "document.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
+#include "sci_cb.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -206,6 +207,26 @@ static void send_find_dialog_response(GtkButton *button, gpointer user_data)
 #endif
 
 
+static gchar *get_default_text(gint idx)
+{
+	gchar *s = NULL;
+	
+	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
+	{
+		s = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
+		sci_get_selected_text(doc_list[idx].sci, s);
+	}
+	else if (sci_get_lines_selected(doc_list[idx].sci) == 0)
+	{	// use the word at current cursor position
+		static gchar word[GEANY_MAX_WORD_LENGTH];
+		sci_cb_find_current_word(doc_list[idx].sci, -1, word, sizeof(word));
+		if (word[0] != '\0') s = g_strdup(word);
+	}
+	
+	return s;
+}
+
+
 void search_show_find_dialog()
 {
 	gint idx = document_get_cur_idx();
@@ -213,11 +234,7 @@ void search_show_find_dialog()
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
-	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
-	{
-		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
-		sci_get_selected_text(doc_list[idx].sci, sel);
-	}
+	sel = get_default_text(idx);
 
 	if (widgets.find_dialog == NULL)
 	{
@@ -281,11 +298,7 @@ void search_show_replace_dialog()
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
-	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
-	{
-		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
-		sci_get_selected_text(doc_list[idx].sci, sel);
-	}
+	sel = get_default_text(idx);
 
 	if (widgets.replace_dialog == NULL)
 	{
@@ -547,11 +560,7 @@ void search_show_find_in_files_dialog()
 		gtk_widget_show_all(widgets.find_in_files_dialog);
 	}
 
-	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
-	{
-		sel = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
-		sci_get_selected_text(doc_list[idx].sci, sel);
-	}
+	sel = get_default_text(idx);
 
 	entry2 = GTK_BIN(combo)->child;
 	if (sel) gtk_entry_set_text(GTK_ENTRY(entry2), sel);

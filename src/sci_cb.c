@@ -450,13 +450,21 @@ void sci_cb_close_block(gint idx, gint pos)
 }
 
 
+/* Reads the word at given cursor position and writes it into the given buffer. The buffer will be
+ * NULL terminated in any case, even when the word is truncated because wordlen is too small.
+ * position can be -1, then the current position is used. */
 void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen)
 {
-	gint line = sci_get_line_from_position(sci, pos);
-	gint line_start = sci_get_position_from_line(sci, line);
-	gint startword = pos - line_start;
-	gint endword = pos - line_start;
+	gint line, line_start, startword, endword;
 	gchar *chunk;
+
+	if (pos == -1)
+		pos = sci_get_current_position(sci);
+		
+	line = sci_get_line_from_position(sci, pos);
+	line_start = sci_get_position_from_line(sci, line);
+	startword = pos - line_start;
+	endword = pos - line_start;
 
 	word[0] = '\0';
 	chunk = sci_get_line(sci, line);

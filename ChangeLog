@@ -5,6 +5,9 @@
  * geany.glade, src/interface.c, src/geany.h, src/keyfile.c,
    src/main.c: Removed previously added configuration option and
                removed the right alignment of the toolbar quit button.
+ * src/sci_cb.c, src/sci_cb.h, src/search.c:
+   Let the Find, Replace and FIF dialogs use the word at current cursor
+   position if there is no selection.
 
 
 2006-10-22  Nick Treleaven  <nick.treleaven@btinternet.com>
