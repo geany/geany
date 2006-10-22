@@ -725,6 +725,8 @@ static filetype *find_shebang(gint idx)
 			ft = filetypes[GEANY_FILETYPES_SH];
 		else if (strncmp(basename_interpreter, "csh", 3) == 0)
 			ft = filetypes[GEANY_FILETYPES_SH];
+		else if (strncmp(basename_interpreter, "dmd", 3) == 0)
+			ft = filetypes[GEANY_FILETYPES_D];
 		// what else to add?
 
 		g_free(basename_interpreter);
