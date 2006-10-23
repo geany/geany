@@ -114,6 +114,8 @@ static void init_encodings(void)
 	fill(11, EASTASIAN, GEANY_ENCODING_ISO_2022_KR, "ISO-2022-KR", _("Korean"));
 	fill(12, EASTASIAN, GEANY_ENCODING_JOHAB, "JOHAB", _("Korean"));
 	fill(13, EASTASIAN, GEANY_ENCODING_UHC, "UHC", _("Korean"));
+
+	fill(0, NONE, GEANY_ENCODING_NONE, "None", _("Without encoding"));
 }
 
 
@@ -253,7 +255,7 @@ void encodings_init(void)
 				case ASIAN: submenu = menu_asian; group_size = 9; break;
 				case MIDDLEEASTERN: submenu = menu_middleeast; group_size = 7; break;
 				case UNICODE: submenu = menu_utf8; group_size = 8; break;
-				default: submenu = menu[k]; group_size = 0;
+				default: submenu = menu[k]; group_size = 1;
 			}
 
 			while (order < group_size)	// the biggest group has 13 elements

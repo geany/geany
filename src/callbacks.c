@@ -758,8 +758,6 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_ALL) ft = filetypes[filetype_idx];
 		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[encoding_idx].charset;
-		else if (encoding_idx == GEANY_ENCODINGS_MAX)
-			charset = "none";
 
 		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(app->open_filesel));
 		flist = filelist;

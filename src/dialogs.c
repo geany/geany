@@ -120,9 +120,9 @@ void dialogs_show_open_file ()
 			gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), encoding_string);
 			g_free(encoding_string);
 		}
-		gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Do not any conversion"));
+		//gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Do not any conversion"));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Detect from file"));
-		gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combo), GEANY_ENCODINGS_MAX + 1);
+		gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combo), GEANY_ENCODINGS_MAX);
 
 		g_signal_connect((gpointer) app->open_filesel, "selection-changed",
 					G_CALLBACK(on_file_open_selection_changed), NULL);

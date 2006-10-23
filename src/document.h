@@ -105,11 +105,6 @@ void document_set_text_changed(gint);
 void document_apply_update_prefs(ScintillaObject *sci);
 
 
-/* creates a new tab in the notebook and does all related stuff
- * finally it returns the index of the created document */
-gint document_create_new_sci(const gchar*);
-
-
 /* removes the given notebook tab and clears the related entry in the document list */
 gboolean document_remove(guint page_num);
 

@@ -240,7 +240,7 @@ static gint document_get_new_idx()
 
 /* creates a new tab in the notebook and does all related stuff
  * finally it returns the index of the created document */
-gint document_create_new_sci(const gchar *filename)
+static gint document_create_new_sci(const gchar *filename)
 {
 	ScintillaObject	*sci;
 	PangoFontDescription *pfd;
@@ -617,11 +617,10 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	if (forced_enc != NULL)
 	{
 		// the encoding should be ignored(requested by user), so open the file "as it is"
-		if (utils_strcmp(forced_enc, "none"))
+		if (utils_strcmp(forced_enc, encodings[GEANY_ENCODING_NONE].charset))
 		{
-			/// TODO enc = NULL breaks several tests, e.g. encodings_select_radio_item. Will be fixed soon.
 			bom = FALSE;
-			enc = NULL;
+			enc = g_strdup(encodings[GEANY_ENCODING_NONE].charset);
 		}
 		else if (! handle_forced_encoding(&data, &size, forced_enc, &enc, &bom))
 		{
@@ -744,8 +743,9 @@ gboolean document_save_file(gint idx, gboolean force)
 	gint bytes_written, len;
 	gchar *locale_filename = NULL;
 
-	if (idx == -1) return FALSE;
-	if (! force && ! doc_list[idx].changed) return FALSE;
+	if (! DOC_IDX_VALID(idx)) return FALSE;
+	// the changed flag should exclude the readonly flag, but check it anyway for safety
+	if (! force && (! doc_list[idx].changed || doc_list[idx].readonly)) return FALSE;
 
 	if (doc_list[idx].file_name == NULL)
 	{
@@ -779,8 +779,9 @@ gboolean document_save_file(gint idx, gboolean force)
 		sci_get_text(doc_list[idx].sci, len, data);
 	}
 
-	// save in original encoding, skip when it is already UTF-8
-	if (doc_list[idx].encoding != NULL && ! utils_strcmp(doc_list[idx].encoding, "UTF-8"))
+	// save in original encoding, skip when it is already UTF-8 or has the encoding "None"
+	if (doc_list[idx].encoding != NULL && ! utils_strcmp(doc_list[idx].encoding, "UTF-8") &&
+		! utils_strcmp(doc_list[idx].encoding, encodings[GEANY_ENCODING_NONE].charset))
 	{
 		GError *conv_error = NULL;
 		gchar* conv_file_contents = NULL;
