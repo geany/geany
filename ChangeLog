@@ -3,6 +3,8 @@
  * src/encodings.c, src/encodings.h, src/document.c, src/callbacks.c,
    src/dialogs.c: Added new encoding "None" to open files without any
                   character conversions (fixes #1580456).
+ * src/callbacks.c: Don't allow changing the encoding or setting a BOM
+                    if the file is read only.
 
 
 2006-10-22  Enrico Tröger  <enrico.troeger@uvena.de>

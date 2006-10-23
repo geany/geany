@@ -2153,6 +2153,11 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	if (app->ignore_callback || ! DOC_IDX_VALID(idx) || encodings[i].charset == NULL ||
 		utils_strcmp(encodings[i].charset, doc_list[idx].encoding)) return;
 
+	if (doc_list[idx].readonly)
+	{
+		utils_beep();
+		return;
+	}
 	document_undo_add(idx, UNDO_ENCODING, g_strdup(doc_list[idx].encoding));
 
 	document_set_encoding(idx, encodings[i].charset);
@@ -2206,6 +2211,11 @@ on_menu_write_unicode_bom1_toggled     (GtkCheckMenuItem *checkmenuitem,
 		gint idx = document_get_cur_idx();
 
 		if (idx == -1 || ! doc_list[idx].is_valid) return;
+		if (doc_list[idx].readonly)
+		{
+			utils_beep();
+			return;
+		}
 
 		document_undo_add(idx, UNDO_BOM, GINT_TO_POINTER(doc_list[idx].has_bom));
 
