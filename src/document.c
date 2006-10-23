@@ -606,7 +606,6 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	if (! g_file_get_contents(locale_filename, &data, &size, &err))
 #endif
 	{
-		//msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(err->code));
 		msgwin_status_add(err->message);
 		g_error_free(err);
 		g_free(utf8_filename);
@@ -614,10 +613,17 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		return -1;
 	}
 
-	/* Determine character encoding and convert to utf-8*/
-	if (reload && forced_enc != NULL)
+	/* Determine character encoding and convert to UTF-8 */
+	if (forced_enc != NULL)
 	{
-		if (! handle_forced_encoding(&data, &size, forced_enc, &enc, &bom))
+		// the encoding should be ignored(requested by user), so open the file "as it is"
+		if (utils_strcmp(forced_enc, "none"))
+		{
+			/// TODO enc = NULL breaks several tests, e.g. encodings_select_radio_item. Will be fixed soon.
+			bom = FALSE;
+			enc = NULL;
+		}
+		else if (! handle_forced_encoding(&data, &size, forced_enc, &enc, &bom))
 		{
 			msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
 			utils_beep();

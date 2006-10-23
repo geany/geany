@@ -747,11 +747,19 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 	{
 		GSList *filelist;
 		GSList *flist;
-		gint ft_id = gtk_combo_box_get_active(GTK_COMBO_BOX(lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
+		gint filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
+						lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
+		gint encoding_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
+						lookup_widget(GTK_WIDGET(dialog), "encoding_combo")));
 		filetype *ft = NULL;
+		gchar *charset = NULL;
 		gboolean ro = (response == GTK_RESPONSE_APPLY);	// View clicked
 
-		if (ft_id >= 0 && ft_id < GEANY_FILETYPES_ALL) ft = filetypes[ft_id];
+		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_ALL) ft = filetypes[filetype_idx];
+		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
+			charset = encodings[encoding_idx].charset;
+		else if (encoding_idx == GEANY_ENCODINGS_MAX)
+			charset = "none";
 
 		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(app->open_filesel));
 		flist = filelist;
@@ -759,7 +767,7 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 		{
 			if (g_file_test((gchar*) flist->data, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 			{
-				document_open_file(-1, (gchar*) flist->data, 0, ro, ft, NULL);
+				document_open_file(-1, (gchar*) flist->data, 0, ro, ft, charset);
 			}
 			g_free(flist->data);
 			flist = flist->next;

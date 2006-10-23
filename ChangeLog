@@ -9,6 +9,10 @@
    Let the Find, Replace and FIF dialogs use the word at current cursor
    position if there is no selection.
  * src/filetypes.c: Added shebang detection for D files (dmd).
+ * src/callbacks.c, src/dialogs.c, src/document.c:
+   Added drop down box to the file open dialog to select an encoding.
+   Added possibility to open a file without any character set
+   conversions (could already fix #1580456, have to be continued).
 
 
 2006-10-22  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -45,6 +45,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 #include "keybindings.h"
+#include "encodings.h"
 
 
 #ifndef G_OS_WIN32
@@ -64,10 +65,11 @@ void dialogs_show_open_file ()
 		of all we create it if it hasn't already been created. */
 	if (app->open_filesel == NULL)
 	{
-		GtkWidget *combo;
+		GtkWidget *filetype_combo, *encoding_combo;
 		GtkWidget *viewbtn;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 		gint i;
+		gchar *encoding_string;
 
 		app->open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->window),
 				GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
@@ -96,22 +98,31 @@ void dialogs_show_open_file ()
 		// add checkboxes and filename entry
 		gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(app->open_filesel),
 			add_file_open_extra_widget());
-		combo = lookup_widget(app->open_filesel, "filetype_combo");
+		filetype_combo = lookup_widget(app->open_filesel, "filetype_combo");
 
 		// add FileFilters(start with "All Files")
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
 					filetypes_create_file_filter(filetypes[GEANY_FILETYPES_ALL]));
 		for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
 		{
-			if (filetypes[i])
-			{
-				gtk_combo_box_append_text(GTK_COMBO_BOX(combo), filetypes[i]->title);
-				gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
+			gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), filetypes[i]->title);
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
 					filetypes_create_file_filter(filetypes[i]));
-			}
 		}
-		gtk_combo_box_append_text(GTK_COMBO_BOX(combo), _("Detect by file extension  "));
-		gtk_combo_box_set_active(GTK_COMBO_BOX(combo), GEANY_MAX_FILE_TYPES - 1);
+		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
+		gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), GEANY_MAX_FILE_TYPES - 1);
+
+		// fill encoding combo box
+		encoding_combo = lookup_widget(app->open_filesel, "encoding_combo");
+		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
+		{
+			encoding_string = encodings_to_string(&encodings[i]);
+			gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), encoding_string);
+			g_free(encoding_string);
+		}
+		gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Do not any conversion"));
+		gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Detect from file"));
+		gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combo), GEANY_ENCODINGS_MAX + 1);
 
 		g_signal_connect((gpointer) app->open_filesel, "selection-changed",
 					G_CALLBACK(on_file_open_selection_changed), NULL);
@@ -146,52 +157,75 @@ void dialogs_show_open_file ()
 #ifndef G_OS_WIN32
 static GtkWidget *add_file_open_extra_widget()
 {
-	GtkWidget *vbox;
-	GtkWidget *lbox;
-	GtkWidget *ebox;
-	GtkWidget *hbox;
-	GtkWidget *file_entry;
-	GtkSizeGroup *size_group;
-	GtkWidget *align;
-	GtkWidget *check_hidden;
-	GtkWidget *filetype_label;
-	GtkWidget *filetype_combo;
+	GtkWidget *vbox, *table, *file_entry, *check_hidden;
+	GtkWidget *filetype_ebox, *filetype_label, *filetype_combo;
+	GtkWidget *encoding_ebox, *encoding_label, *encoding_combo;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 	vbox = gtk_vbox_new(FALSE, 6);
 
-	align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
-	check_hidden = gtk_check_button_new_with_mnemonic(_("Show _hidden files"));
-	gtk_widget_show(check_hidden);
-	gtk_container_add(GTK_CONTAINER(align), check_hidden);
-	gtk_box_pack_start(GTK_BOX(vbox), align, FALSE, FALSE, 0);
-	gtk_button_set_focus_on_click(GTK_BUTTON(check_hidden), FALSE);
+	table = gtk_table_new(2, 4, FALSE);
 
-	lbox = gtk_hbox_new(FALSE, 12);
+	// line 1 with checkbox and encoding combo
+	check_hidden = gtk_check_button_new_with_mnemonic(_("Show _hidden files"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_hidden), FALSE);
+	gtk_widget_show(check_hidden);
+	gtk_table_attach(GTK_TABLE(table), check_hidden, 0, 1, 0, 1,
+					(GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
+					(GtkAttachOptions) (0), 0, 5);
+
+	// spacing
+	gtk_table_attach(GTK_TABLE(table), gtk_label_new(""), 1, 2, 0, 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 5, 5);
+
+	encoding_label = gtk_label_new(_("Set encoding:"));
+	gtk_misc_set_alignment(GTK_MISC(encoding_label), 1, 0);
+	gtk_table_attach(GTK_TABLE(table), encoding_label, 2, 3, 0, 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 4, 5);
+	// the ebox is for the tooltip, because gtk_combo_box can't show tooltips
+	encoding_ebox = gtk_event_box_new();
+	encoding_combo = gtk_combo_box_new_text();
+	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(encoding_combo), 3);
+	gtk_tooltips_set_tip(tooltips, encoding_ebox,
+		_("Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\nNote if you choose multiple files, they will all be opened with the chosen encoding."), NULL);
+	gtk_container_add(GTK_CONTAINER(encoding_ebox), encoding_combo);
+	gtk_table_attach(GTK_TABLE(table), encoding_ebox, 3, 4, 0, 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 5);
+
+	// line 2 with filename entry and filetype combo
 	file_entry = gtk_entry_new();
 	gtk_widget_show(file_entry);
-	gtk_box_pack_start(GTK_BOX(lbox), file_entry, TRUE, TRUE, 0);
 	//gtk_editable_set_editable(GTK_EDITABLE(file_entry), FALSE);
 	gtk_entry_set_activates_default(GTK_ENTRY(file_entry), TRUE);
+	gtk_table_attach(GTK_TABLE(table), file_entry, 0, 1, 1, 2,
+					(GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
+					(GtkAttachOptions) (0), 0, 5);
 
-	// the ebox is for the tooltip, because gtk_combo_box doesn't show a tooltip for unknown reason
-	ebox = gtk_event_box_new();
-	hbox = gtk_hbox_new(FALSE, 6);
+	// spacing
+	gtk_table_attach(GTK_TABLE(table), gtk_label_new(""), 1, 2, 1, 2,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 5, 5);
+
 	filetype_label = gtk_label_new(_("Set filetype:"));
+	gtk_misc_set_alignment(GTK_MISC(filetype_label), 1, 0);
+	gtk_table_attach(GTK_TABLE(table), filetype_label, 2, 3, 1, 2,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 4, 5);
+	// the ebox is for the tooltip, because gtk_combo_box can't show tooltips
+	filetype_ebox = gtk_event_box_new();
 	filetype_combo = gtk_combo_box_new_text();
-	gtk_tooltips_set_tip(tooltips, ebox,
+	gtk_tooltips_set_tip(tooltips, filetype_ebox,
 		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."), NULL);
-	gtk_box_pack_start(GTK_BOX(hbox), filetype_label, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), filetype_combo, FALSE, FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(ebox), hbox);
-	gtk_box_pack_start(GTK_BOX(lbox), ebox, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), lbox, FALSE, FALSE, 0);
-	gtk_widget_show_all(vbox);
+	gtk_container_add(GTK_CONTAINER(filetype_ebox), filetype_combo);
+	gtk_table_attach(GTK_TABLE(table), filetype_ebox, 3, 4, 1, 2,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 5);
 
-	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
-	gtk_size_group_add_widget(GTK_SIZE_GROUP(size_group), check_hidden);
-	gtk_size_group_add_widget(GTK_SIZE_GROUP(size_group), filetype_combo);
-	g_object_unref(G_OBJECT(size_group));	// auto destroy the size group
+	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
+	gtk_widget_show_all(vbox);
 
 	g_signal_connect((gpointer) file_entry, "activate",
 				G_CALLBACK(on_file_open_entry_activate), NULL);
@@ -204,6 +238,8 @@ static GtkWidget *add_file_open_extra_widget()
 				gtk_widget_ref(check_hidden), (GDestroyNotify)gtk_widget_unref);
 	g_object_set_data_full(G_OBJECT(app->open_filesel), "filetype_combo",
 				gtk_widget_ref(filetype_combo), (GDestroyNotify)gtk_widget_unref);
+	g_object_set_data_full(G_OBJECT(app->open_filesel), "encoding_combo",
+				gtk_widget_ref(encoding_combo), (GDestroyNotify)gtk_widget_unref);
 
 	return vbox;
 }
