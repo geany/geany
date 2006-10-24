@@ -48,7 +48,7 @@
 #include "encodings.h"
 
 
-#ifndef G_OS_WIN32
+#ifndef USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget();
 #endif
 
@@ -56,7 +56,7 @@ static GtkWidget *add_file_open_extra_widget();
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file ()
 {
-#ifdef G_OS_WIN32
+#ifdef USE_WIN32_DIALOG
 	win32_show_file_dialog(TRUE);
 #else /* X11, not win32: use GTK_FILE_CHOOSER */
 	gchar *initdir;
@@ -154,7 +154,7 @@ void dialogs_show_open_file ()
 }
 
 
-#ifndef G_OS_WIN32
+#ifndef USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget()
 {
 	GtkWidget *vbox, *table, *file_entry, *check_hidden;
@@ -217,6 +217,7 @@ static GtkWidget *add_file_open_extra_widget()
 	// the ebox is for the tooltip, because gtk_combo_box can't show tooltips
 	filetype_ebox = gtk_event_box_new();
 	filetype_combo = gtk_combo_box_new_text();
+	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(filetype_combo), 2);
 	gtk_tooltips_set_tip(tooltips, filetype_ebox,
 		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."), NULL);
 	gtk_container_add(GTK_CONTAINER(filetype_ebox), filetype_combo);
