@@ -38,7 +38,7 @@
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_CODENAME					"Kintaro"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
-#define GEANY_MAX_TAGS_COUNT			1000
+#define GEANY_USE_WIN32_DIALOG			0
 #define GEANY_CHECK_FILE_DELAY			30
 #define GEANY_WORDCHARS					"_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\\"
 #define GEANY_MAX_WORD_LENGTH			192

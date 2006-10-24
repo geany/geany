@@ -324,5 +324,3 @@
 /* Define if you want to detect a running instance */
 #define HAVE_SOCKET 1
 
-/* #define USE_WIN32_DIALOG 1 */
-

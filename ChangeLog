@@ -4,6 +4,9 @@
  * win32-config.h, src/dialogs.c:
    Use GTK's file open dialog also under Windows to have the extended
    options(kept old dialog code for optional use).
+ * win32-config.h, src/dialogs.c, src/geany.h:
+   Removed unneeded macro GEANY_MAX_TAGS_COUNT.
+   Moved macro GEANY_USE_WIN32_DIALOG to geany.h.
 
 
 2006-10-24  Nick Treleaven  <nick.treleaven@btinternet.com>

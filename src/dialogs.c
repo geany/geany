@@ -48,7 +48,7 @@
 #include "encodings.h"
 
 
-#ifndef USE_WIN32_DIALOG
+#if ! GEANY_USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget();
 #endif
 
@@ -56,7 +56,7 @@ static GtkWidget *add_file_open_extra_widget();
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file ()
 {
-#ifdef USE_WIN32_DIALOG
+#if GEANY_USE_WIN32_DIALOG
 	win32_show_file_dialog(TRUE);
 #else /* X11, not win32: use GTK_FILE_CHOOSER */
 	gchar *initdir;
