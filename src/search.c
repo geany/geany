@@ -386,15 +386,15 @@ void search_show_replace_dialog()
 		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_replace_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_SEL));
 
-		button = gtk_button_new_with_mnemonic(_("In F_ile"));
-		gtk_container_add(GTK_CONTAINER(bbox), button);
-		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_replace_dialog_response),
-			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_FILE));
-
 		button = gtk_button_new_with_mnemonic(_("In Sessi_on"));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
 		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_replace_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_SESSION));
+
+		button = gtk_button_new_with_mnemonic(_("In F_ile"));
+		gtk_container_add(GTK_CONTAINER(bbox), button);
+		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_replace_dialog_response),
+			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_FILE));
 
 		gtk_size_group_add_widget(GTK_SIZE_GROUP(button_size), button);
 
