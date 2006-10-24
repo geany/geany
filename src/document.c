@@ -179,6 +179,7 @@ void document_set_text_changed(gint idx)
 
 		ui_save_buttons_toggle(doc_list[idx].changed);
 		ui_set_window_title(idx);
+		ui_update_statusbar(idx, -1);
 	}
 }
 
@@ -318,6 +319,8 @@ static gint document_create_new_sci(const gchar *filename)
 	// store important pointers in the tab list
 	this->file_name = (filename) ? g_strdup(filename) : NULL;
 	this->encoding = NULL;
+	this->saved_encoding.encoding = NULL;
+	this->saved_encoding.has_bom = FALSE;
 	this->tm_file = NULL;
 	this->iter = iter;
 	this->file_type = NULL;
@@ -357,6 +360,7 @@ gboolean document_remove(guint page_num)
 		msgwin_status_add(_("File %s closed."),
 				(doc_list[idx].file_name) ? doc_list[idx].file_name : GEANY_STRING_UNTITLED);
 		g_free(doc_list[idx].encoding);
+		g_free(doc_list[idx].saved_encoding.encoding);
 		g_free(doc_list[idx].file_name);
 		tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
 		doc_list[idx].is_valid = FALSE;
@@ -383,6 +387,15 @@ gboolean document_remove(guint page_num)
 }
 
 
+// used to keep a record of the unchanged document state encoding
+static void store_saved_encoding(gint idx)
+{
+	g_free(doc_list[idx].saved_encoding.encoding);
+	doc_list[idx].saved_encoding.encoding = g_strdup(doc_list[idx].encoding);
+	doc_list[idx].saved_encoding.has_bom = doc_list[idx].has_bom;
+}
+
+
 /* This creates a new document, by clearing the text widget and setting the
    current filename to NULL. */
 void document_new_file(filetype *ft)
@@ -406,6 +419,9 @@ void document_new_file(filetype *ft)
 	sci_empty_undo_buffer(doc_list[idx].sci);
 
 	doc_list[idx].encoding = g_strdup(encodings[app->pref_editor_default_encoding].charset);
+	// store the opened encoding for undo/redo
+	store_saved_encoding(idx);
+
 	//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
 	document_set_filetype(idx, ft);	// also clears taglist
 	if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
@@ -665,6 +681,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	doc_list[idx].file_name = g_strdup(utf8_filename);
 	doc_list[idx].encoding = enc;
 	doc_list[idx].has_bom = bom;
+	store_saved_encoding(idx);	// store the opened encoding for undo/redo
 
 	if (cl_options.goto_line >= 0)
 	{	// goto line which was specified on command line and then undefine the line
@@ -834,6 +851,9 @@ gboolean document_save_file(gint idx, gboolean force)
 		utils_beep();
 		return FALSE;
 	}
+
+	// store the opened encoding for undo/redo
+	store_saved_encoding(idx);
 
 	// ignore the following things if we are quitting
 	if (! app->quitting)
@@ -1636,6 +1656,16 @@ gboolean document_can_undo(gint idx)
 }
 
 
+static void update_changed_state(gint idx)
+{
+	doc_list[idx].changed =
+		(sci_is_modified(doc_list[idx].sci) ||
+		doc_list[idx].has_bom != doc_list[idx].saved_encoding.has_bom ||
+		! utils_strcmp(doc_list[idx].encoding, doc_list[idx].saved_encoding.encoding));
+	document_set_text_changed(idx);
+}
+
+
 void document_undo(gint idx)
 {
 	undo_action *action;
@@ -1689,6 +1719,7 @@ void document_undo(gint idx)
 	}
 	g_free(action); // free the action which was taken from the stack
 
+	update_changed_state(idx);
 	ui_update_popup_reundo_items(idx);
 	//geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].undo_actions));
 }
@@ -1757,6 +1788,7 @@ void document_redo(gint idx)
 	}
 	g_free(action); // free the action which was taken from the stack
 
+	update_changed_state(idx);
 	ui_update_popup_reundo_items(idx);
 	//geany_debug("%s: new stack height: %d", __func__, g_trash_stack_height(&doc_list[idx].redo_actions));
 }
@@ -1783,4 +1815,9 @@ static void document_redo_add(gint idx, guint type, gpointer data)
 }
 
 
+// useful debugging function (usually debug macros aren't enabled)
+document *doc(gint idx)
+{
+	return DOC_IDX_VALID(idx) ? &doc_list[idx] : NULL;
+}
 

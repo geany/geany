@@ -273,6 +273,12 @@ void sci_empty_undo_buffer( ScintillaObject* sci )
 }
 
 
+gboolean sci_is_modified(ScintillaObject *sci)
+{
+	return (SSM(sci, SCI_GETMODIFY, 0, 0) != 0);
+}
+
+
 void sci_zoom_in( ScintillaObject* sci )
 {
 	SSM( sci, SCI_ZOOMIN,0,0);

@@ -1,3 +1,13 @@
+2006-10-24  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sciwrappers.h, src/sciwrappers.c, src/document.h,
+   src/document.c:
+   Fix setting document unchanged state when using Undo/Redo for
+   encoding or BOM changes.
+   Add sci_is_modified().
+   Added useful doc() function used only when debugging.
+
+
 2006-10-23  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/encodings.c, src/encodings.h, src/document.c, src/callbacks.c,

@@ -35,6 +35,13 @@
 #include "filetypes.h"
 
 
+typedef struct FileEncoding
+{
+	gchar 			*encoding;
+	gboolean		 has_bom;
+} FileEncoding;
+
+
 /* structure for representing an open tab with all its related stuff. */
 typedef struct document
 {
@@ -61,6 +68,7 @@ typedef struct document
 	time_t			 mtime;
 	GTrashStack		*undo_actions;
 	GTrashStack		*redo_actions;
+	FileEncoding	 saved_encoding;
 } document;
 
 

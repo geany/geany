@@ -45,6 +45,7 @@ void 				sci_redo					(ScintillaObject* sci);
 void 				sci_empty_undo_buffer		(ScintillaObject* sci);
 void 				sci_end_undo_action			(ScintillaObject* sci);
 void 				sci_start_undo_action		(ScintillaObject* sci);
+gboolean			sci_is_modified				(ScintillaObject *sci);
 
 void				sci_set_visible_eols		(ScintillaObject* sci, gboolean set );
 gboolean			sci_get_visible_eols		(ScintillaObject* sci);
