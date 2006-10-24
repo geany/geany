@@ -1816,8 +1816,9 @@ static void document_redo_add(gint idx, guint type, gpointer data)
 
 
 // useful debugging function (usually debug macros aren't enabled)
+#ifdef GEANY_DEBUG
 document *doc(gint idx)
 {
 	return DOC_IDX_VALID(idx) ? &doc_list[idx] : NULL;
 }
-
+#endif
