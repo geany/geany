@@ -1,3 +1,8 @@
+2006-10-24  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/build.c, src/socket.c: Fixed compiler warnings under Windows.
+
+
 2006-10-24  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sciwrappers.h, src/sciwrappers.c, src/document.h,

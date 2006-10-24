@@ -259,7 +259,7 @@ static gint socket_fd_open_inet(gushort port)
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (! SOCKET_IS_VALID(sock))
 	{
-		geany_debug("fd_open_inet(): socket() failed: %ld\n", WSAGetLastError());
+		geany_debug("fd_open_inet(): socket() failed: %d\n", WSAGetLastError());
 		return -1;
 	}
 
@@ -302,7 +302,7 @@ static gint socket_fd_connect_inet(gushort port)
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (! SOCKET_IS_VALID(sock))
 	{
-		geany_debug("fd_connect_inet(): socket() failed: %ld\n", WSAGetLastError());
+		geany_debug("fd_connect_inet(): socket() failed: %d\n", WSAGetLastError());
 		return -1;
 	}
 

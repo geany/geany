@@ -181,7 +181,7 @@ static gchar *get_object_filename(gint idx)
 
 	object_file = g_strdup_printf("%s.o", noext);
 	g_free(noext);
-	
+
 	return object_file;
 }
 
@@ -194,7 +194,7 @@ GPid build_make_file(gint idx, gint build_opts)
 
 	argv = g_new0(gchar*, 3);
 	argv[0] = g_strdup(app->tools_make_cmd);
-	
+
 	if (build_opts == GBO_MAKE_OBJECT)
 	{
 		argv[1] = get_object_filename(idx);
@@ -795,7 +795,9 @@ static GtkWidget *create_build_menu_tex()
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+#ifndef G_OS_WIN32
 	filetype *ft = filetypes[GEANY_FILETYPES_LATEX];
+#endif
 
 	menu = gtk_menu_new();
 
@@ -970,7 +972,7 @@ void build_menu_update(gint idx)
 		gtk_widget_set_sensitive(ft->menu_items->item_make_custom, have_path);
 	if (ft->menu_items->item_make_object != NULL)
 		gtk_widget_set_sensitive(ft->menu_items->item_make_object, have_path);
-	
+
 	switch (ft->id)
 	{
 		case GEANY_FILETYPES_LATEX:
