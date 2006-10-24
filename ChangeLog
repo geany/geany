@@ -6,6 +6,11 @@
    encoding or BOM changes.
    Add sci_is_modified().
    Added useful doc() function used only when debugging.
+ * src/search.c:
+   Reorder Replace All buttons.
+ * src/msgwindow.c src/callbacks.c:
+   Change Messages and Compiler window to go to line with a single
+   click instead of double click.
 
 
 2006-10-23  Enrico Tröger  <enrico.troeger@uvena.de>

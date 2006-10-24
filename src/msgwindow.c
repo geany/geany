@@ -113,7 +113,8 @@ void msgwin_prepare_msg_tree_view(void)
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
 
 	gtk_widget_modify_font(msgwindow.tree_msg, pango_font_description_from_string(app->msgwin_font));
-	g_signal_connect(G_OBJECT(msgwindow.tree_msg), "button-press-event",
+	// use button-release-event so the selection has changed (connect_after button-press-event doesn't work)
+	g_signal_connect(G_OBJECT(msgwindow.tree_msg), "button-release-event",
 					G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
 
 	// selection handling
@@ -140,7 +141,8 @@ void msgwin_prepare_compiler_tree_view(void)
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
 
 	gtk_widget_modify_font(msgwindow.tree_compiler, pango_font_description_from_string(app->msgwin_font));
-	g_signal_connect(G_OBJECT(msgwindow.tree_compiler), "button-press-event",
+	// use button-release-event so the selection has changed (connect_after button-press-event doesn't work)
+	g_signal_connect(G_OBJECT(msgwindow.tree_compiler), "button-release-event",
 					G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(MSG_COMPILER));
 
 	// selection handling

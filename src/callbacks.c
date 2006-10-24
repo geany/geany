@@ -1335,23 +1335,28 @@ on_tree_view_button_press_event        (GtkWidget *widget,
 {
 	// user_data might be NULL, GPOINTER_TO_INT returns 0 if called with NULL
 	
-	if (event->type == GDK_2BUTTON_PRESS)
+	if (event->button == 1)
 	{
-		if (GPOINTER_TO_INT(user_data) == MSG_MESSAGE)
-		{	// double click in the message treeview (results of 'Find usage')
-			msgwin_goto_messages_file_line();
+		switch (GPOINTER_TO_INT(user_data))
+		{
+			case TREEVIEW_SYMBOL:
+			{	// allow reclicking of taglist treeview item
+				GtkTreeSelection *select =
+					gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+				on_taglist_tree_selection_changed(select, NULL);
+				break;
+			}
+			case MSG_COMPILER:
+			{	// single click in the compiler treeview
+				msgwin_goto_compiler_file_line();
+				break;
+			}
+			case MSG_MESSAGE:
+			{	// single click in the message treeview (results of 'Find usage')
+				msgwin_goto_messages_file_line();
+				break;
+			}
 		}
-		else if (GPOINTER_TO_INT(user_data) == MSG_COMPILER)
-		{	// double click in the compiler treeview
-			msgwin_goto_compiler_file_line();
-		}
-	}
-
-	if (event->button == 1 && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
-	{	// allow reclicking of taglist treeview item
-		GtkTreeSelection *select =
-			gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
-		on_taglist_tree_selection_changed(select, NULL);
 	}
 
 	if (event->button == 3)
