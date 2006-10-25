@@ -637,7 +637,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	if (size != st.st_size)
 	{
 		gchar *warn_msg = _("The file \"%s\" could not opened properly and probably was truncated. "
-				"Be aware that saving it can cause data lost.\nThe file was set to read-only.");
+				"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
 
 		if (app->main_window_realized)
 			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
