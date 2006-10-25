@@ -617,9 +617,9 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	}
 
 #ifdef G_OS_WIN32
-	if (! g_file_get_contents(utf8_filename, &data, &size, &err))
+	if (! g_file_get_contents(utf8_filename, &data, NULL, &err))
 #else
-	if (! g_file_get_contents(locale_filename, &data, &size, &err))
+	if (! g_file_get_contents(locale_filename, &data, NULL, &err))
 #endif
 	{
 		msgwin_status_add(err->message);
@@ -627,6 +627,23 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		g_free(utf8_filename);
 		g_free(locale_filename);
 		return -1;
+	}
+
+	/* check whether the size of the loaded data is equal to the size of the file in the filesystem */
+	//size = strlen(data);
+	size = strlen(data);
+	if (size != st.st_size)
+	{
+		gchar *warn_msg = _("The file \"%s\" could not opened properly and probably was truncated. "
+				"Be aware that saving it can cause data lost.\nThe file was set to read-only.");
+
+		if (app->main_window_realized)
+			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
+		
+		msgwin_status_add(warn_msg, utf8_filename);
+			
+		// set the file to read-only mode because saving it is probably dangerous
+		readonly = TRUE;
 	}
 
 	/* Determine character encoding and convert to UTF-8 */
@@ -810,7 +827,7 @@ gboolean document_save_file(gint idx, gboolean force)
 
 		if (conv_error != NULL)
 		{
-			dialogs_show_error(
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 	_("An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."
 	  "\nError message: %s\n"),
 			doc_list[idx].encoding, conv_error->message);
@@ -1444,7 +1461,7 @@ void document_print(gint idx)
 		rc = system(cmdline);
 		if (rc != 0)
 		{
-			dialogs_show_error(_("Printing of \"%s\" failed (return code: %d)."),
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Printing of \"%s\" failed (return code: %d)."),
 								doc_list[idx].file_name, rc);
 		}
 		else

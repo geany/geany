@@ -337,6 +337,12 @@ gboolean win32_message_dialog(GtkMessageType type, const gchar *msg)
 			title = _("Question");
 			break;
 		}
+		case GTK_MESSAGE_WARNING:
+		{
+			t = MB_OK | MB_ICONWARNING;
+			title = _("Warning");
+			break;
+		}
 		default:
 		{
 			t = MB_OK | MB_ICONINFORMATION;

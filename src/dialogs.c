@@ -120,7 +120,6 @@ void dialogs_show_open_file ()
 			gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), encoding_string);
 			g_free(encoding_string);
 		}
-		//gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Do not any conversion"));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Detect from file"));
 		gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combo), GEANY_ENCODINGS_MAX);
 
@@ -305,7 +304,7 @@ void dialogs_show_save_as()
 }
 
 
-void dialogs_show_info(const gchar *text, ...)
+void dialogs_show_msgbox(gint type, const gchar *text, ...)
 {
 #ifndef G_OS_WIN32
 	GtkWidget *dialog;
@@ -318,35 +317,10 @@ void dialogs_show_info(const gchar *text, ...)
 	va_end(args);
 
 #ifdef G_OS_WIN32
-	win32_message_dialog(GTK_MESSAGE_INFO, string);
-#else
-
-	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", string);
-	gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-#endif
-	g_free(string);
-}
-
-
-void dialogs_show_error(const gchar *text, ...)
-{
-#ifndef G_OS_WIN32
-	GtkWidget *dialog;
-#endif
-	gchar *string = g_malloc(512);
-	va_list args;
-
-	va_start(args, text);
-	g_vsnprintf(string, 511, text, args);
-	va_end(args);
-
-#ifdef G_OS_WIN32
-	win32_message_dialog(GTK_MESSAGE_ERROR, string);
+	win32_message_dialog(type, string);
 #else
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
-                                  GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "%s", string);
+                                  type, GTK_BUTTONS_OK, "%s", string);
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 #endif
@@ -860,8 +834,8 @@ void dialogs_show_file_properties(gint idx)
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL)
 	{
-		dialogs_show_error(
-	_("An error occurred or file information could not be retrieved (e.g. from a new file)."));
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+		_("An error occurred or file information could not be retrieved (e.g. from a new file)."));
 		return;
 	}
 

@@ -873,7 +873,7 @@ static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const
 		if (keys[i]->key == key && keys[i]->mods == mods
 			&& ! (keys[i]->key == keys[idx]->key && keys[i]->mods == keys[idx]->mods))
 		{
-			dialogs_show_error(
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 				_("The combination '%s' is already used for \"%s\". Please choose another one."),
 				action, keys[i]->label);
 			return TRUE;

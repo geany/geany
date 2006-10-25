@@ -1,3 +1,13 @@
+2006-10-25  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c, src/dialogs.h, src/build.c, src/prefs.c, src/win32.c
+   src/document.c:
+   Added warning message dialog, united dialogs_show_info() and
+   dialogs_show_error() to dialogs_show_msgbox().
+ * src/document.c: Added warning message when opening files that cannot
+                   be handled correctly and set them to read-only mode.
+
+
 2006-10-24  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/build.c, src/socket.c: Fixed compiler warnings under Windows.

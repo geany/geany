@@ -30,10 +30,6 @@ void dialogs_show_open_file();
 /* This shows the file selection dialog to save a file. */
 void dialogs_show_save_as();
 
-void dialogs_show_info(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
-
-void dialogs_show_error(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
-
 gboolean dialogs_show_unsaved_file(gint idx);
 
 /* This shows the font selection dialog to choose a font. */
@@ -61,5 +57,7 @@ gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
 	const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (4, 5);
 
 void dialogs_show_keyboard_shortcuts();
+
+void dialogs_show_msgbox(gint type, const gchar *text, ...);
 
 #endif

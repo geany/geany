@@ -258,7 +258,8 @@ GPid build_link_file(gint idx)
 		}
 		else
 		{
-			dialogs_show_error("Something very strange is occured, could not stat %s (%s)",
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+					_("Something very strange is occured, could not stat %s (%s)"),
 					doc_list[idx].file_name, strerror(errno));
 		}
 	}
