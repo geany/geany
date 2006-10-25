@@ -44,13 +44,6 @@ gboolean utils_goto_line(gint idx, gint line);
 
 gint utils_write_file(const gchar *filename, const gchar *text);
 
-gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding);
-
-/* Converts a string from the given charset to UTF-8.
- * If fast is set, no further checks are performed. */
-gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const gchar *charset,
-										  gboolean fast);
-
 /**
  * (stolen from anjuta and modified)
  * Search backward through size bytes looking for a '<', then return the tag if any

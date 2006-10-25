@@ -462,7 +462,8 @@ handle_forced_encoding(gchar **data, gsize *size, const gchar *forced_enc, gchar
 	}
 	else
 	{
-		gchar *converted_text = utils_convert_to_utf8_from_charset(*data, *size, forced_enc, FALSE);
+		gchar *converted_text = encodings_convert_to_utf8_from_charset(
+													*data, *size, forced_enc, FALSE);
 		if (converted_text == NULL)
 		{
 			return FALSE;
@@ -494,7 +495,8 @@ handle_encoding(gchar **data, gsize *size, gchar **enc, gboolean *bom)
 			*bom = TRUE;
 			if ((*enc)[4] != '8') // the BOM indicated something else than UTF-8
 			{
-				gchar *converted_text = utils_convert_to_utf8_from_charset(*data, *size, *enc, FALSE);
+				gchar *converted_text = encodings_convert_to_utf8_from_charset(
+															*data, *size, *enc, FALSE);
 				if (converted_text == NULL)
 				{
 					g_free(*enc);
@@ -518,7 +520,7 @@ handle_encoding(gchar **data, gsize *size, gchar **enc, gboolean *bom)
 			}
 			else
 			{
-				gchar *converted_text = utils_convert_to_utf8(*data, *size, enc);
+				gchar *converted_text = encodings_convert_to_utf8(*data, *size, enc);
 
 				if (converted_text == NULL)
 				{

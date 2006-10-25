@@ -226,8 +226,8 @@ const GList *utils_get_tag_list(gint idx, guint tag_types)
 
 			if (tag->type & tag_types)
 			{
-				if (! doc_is_utf8) utf8_name = utils_convert_to_utf8_from_charset(tag->name, -1,
-															doc_list[idx].encoding, TRUE);
+				if (! doc_is_utf8) utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
+															-1, doc_list[idx].encoding, TRUE);
 				else utf8_name = tag->name;
 				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
 				{
@@ -344,95 +344,6 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 		return errno;
 	}
 	return 0;
-}
-
-
-/* Converts a string from the given charset to UTF-8.
- * If fast is set, no further checks are performed. */
-gchar *utils_convert_to_utf8_from_charset(const gchar *buffer, gsize size, const gchar *charset,
-										  gboolean fast)
-{
-	gchar *utf8_content = NULL;
-	GError *conv_error = NULL;
-	gchar* converted_contents = NULL;
-	gsize bytes_written;
-
-	g_return_val_if_fail(buffer != NULL, NULL);
-	g_return_val_if_fail(charset != NULL, NULL);
-
-	converted_contents = g_convert(buffer, size, "UTF-8", charset, NULL,
-								   &bytes_written, &conv_error);
-
-	if (fast)
-	{
-		utf8_content = converted_contents;
-		if (conv_error != NULL) g_error_free(conv_error);
-	}
-	else if (conv_error != NULL || ! g_utf8_validate(converted_contents, bytes_written, NULL))
-	{
-		if (conv_error != NULL)
-		{
-			geany_debug("Couldn't convert from %s to UTF-8 (%s).", charset, conv_error->message);
-			g_error_free(conv_error);
-			conv_error = NULL;
-		}
-		else
-			geany_debug("Couldn't convert from %s to UTF-8.", charset);
-
-		utf8_content = NULL;
-		if (converted_contents != NULL) g_free(converted_contents);
-	}
-	else
-	{
-		geany_debug("Converted from %s to UTF-8.", charset);
-		utf8_content = converted_contents;
-	}
-
-	return utf8_content;
-}
-
-
-gchar *utils_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding)
-{
-	gchar *locale_charset = NULL;
-	gchar *utf8_content;
-	gchar *charset;
-	gboolean check_current = FALSE;
-	guint i;
-
-	// current locale is not UTF-8, we have to check this charset
-	check_current = ! g_get_charset((const gchar**)&locale_charset);
-
-	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
-	{
-		if (check_current)
-		{
-			check_current = FALSE;
-			charset = locale_charset;
-			i = -1;
-		}
-		else
-			charset = encodings[i].charset;
-
-		geany_debug("Trying to convert %d bytes of data from %s into UTF-8.", size, charset);
-		utf8_content = utils_convert_to_utf8_from_charset(buffer, size, charset, FALSE);
-
-		if (utf8_content != NULL)
-		{
-			if (used_encoding != NULL)
-			{
-				if (*used_encoding != NULL)
-				{
-					g_free(*used_encoding);
-					geany_debug("%s:%d", __FILE__, __LINE__);
-				}
-				*used_encoding = g_strdup(charset);
-			}
-			return utf8_content;
-		}
-	}
-
-	return NULL;
 }
 
 

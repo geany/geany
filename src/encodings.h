@@ -67,6 +67,13 @@ void encodings_select_radio_item(const gchar *charset);
 
 void encodings_init(void);
 
+gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding);
+
+/* Converts a string from the given charset to UTF-8.
+ * If fast is set, no further checks are performed. */
+gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
+											  const gchar *charset, gboolean fast);
+
 
 /*
  * The original versions of the following tables are taken from profterm

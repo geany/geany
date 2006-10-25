@@ -6,6 +6,9 @@
    dialogs_show_error() to dialogs_show_msgbox().
  * src/document.c: Added warning message when opening files that cannot
                    be handled correctly and set them to read-only mode.
+ * src/document.c, src/encodings.c, src/encodings.h, src/utils.c,
+   src/utils.h: Moved utils_convert_to_utf8() and
+                utils_convert_to_utf8_from_charset() to encodings.c.
 
 
 2006-10-24  Enrico Tröger  <enrico.troeger@uvena.de>
