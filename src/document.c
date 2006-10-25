@@ -1478,13 +1478,14 @@ void document_print(gint idx)
 void document_replace_tabs(gint idx)
 {
 	gint search_pos;
-	gint tab_len = sci_get_tab_width(doc_list[idx].sci);
+	gint tab_len;
 	gchar *tab_str;
 	struct TextToFind ttf;
 
 	if (! DOC_IDX_VALID(idx)) return;
 
 	sci_start_undo_action(doc_list[idx].sci);
+	tab_len = sci_get_tab_width(doc_list[idx].sci);
 	ttf.chrg.cpMin = 0;
 	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
 	ttf.lpstrText = (gchar*)"\t";
