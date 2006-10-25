@@ -1477,52 +1477,32 @@ void document_print(gint idx)
 
 void document_replace_tabs(gint idx)
 {
-	gint i, len, j = 0, k, tabs_amount = 0, tab_w, pos;
-	gchar *data, *text;
+	gint search_pos;
+	gint tab_len = sci_get_tab_width(doc_list[idx].sci);
+	gchar *tab_str;
+	struct TextToFind ttf;
 
-	if (idx < 0 || ! doc_list[idx].is_valid) return;
+	if (! DOC_IDX_VALID(idx)) return;
 
-	pos = sci_get_current_position(doc_list[idx].sci);
-	tab_w = sci_get_tab_width(doc_list[idx].sci);
+	sci_start_undo_action(doc_list[idx].sci);
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
+	ttf.lpstrText = (gchar*)"\t";
+	tab_str = g_strnfill(tab_len, ' ');
 
-	// get the text
-	len = sci_get_length(doc_list[idx].sci) + 1;
-	data = g_malloc(len);
-	sci_get_text(doc_list[idx].sci, len, data);
-
-	for (i = 0; i < len; i++) if (data[i] == 9) tabs_amount++;
-
-	// if there are no tabs, just return and leave the content untouched
-	if (tabs_amount == 0)
+	while (TRUE)
 	{
-		g_free(data);
-		return;
+		search_pos = sci_find_text(doc_list[idx].sci, SCFIND_MATCHCASE, &ttf);
+		if (search_pos == -1) break;
+
+		sci_target_start(doc_list[idx].sci, search_pos);
+		sci_target_end(doc_list[idx].sci, search_pos + 1);
+		sci_target_replace(doc_list[idx].sci, tab_str, FALSE);
+		ttf.chrg.cpMin = search_pos + tab_len - 1;	// next search starts after replacement
+		ttf.chrg.cpMax += tab_len - 1;	// update end of range now text has changed
 	}
-
-	text = g_malloc(len + (tabs_amount * (tab_w - 1)) + 1);
-
-	for (i = 0; i < len; i++)
-	{
-		if (data[i] == 9)
-		{
-			// increase cursor position to keep it at same position
-			if (pos > i) pos += 3;
-
-			for (k = 0; k < tab_w; k++) text[j++] = 32;
-		}
-		else
-		{
-			text[j++] = data[i];
-		}
-	}
-	text[j] = '\0';
-
-	geany_debug("Replacing Tabs: tabs_amount: %d, text len: %d, j: %d", tabs_amount, len, j);
-	sci_set_text(doc_list[idx].sci, text);
-	sci_set_current_position(doc_list[idx].sci, pos);
-
-	g_free(data);
-	g_free(text);
+	sci_end_undo_action(doc_list[idx].sci);
+	g_free(tab_str);
 }
 
 
