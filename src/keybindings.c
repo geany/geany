@@ -43,67 +43,57 @@
 
 
 /* simple convenience function to allocate and fill the struct */
-static binding *fill(void (*func) (void), guint key, GdkModifierType mod, const gchar *name, const gchar *label);
+static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gchar *name,
+		const gchar *label);
 
-static void cb_func_menu_new(void);
-static void cb_func_menu_open(void);
-static void cb_func_menu_save(void);
-static void cb_func_menu_saveall(void);
-static void cb_func_menu_print(void);
-static void cb_func_menu_close(void);
-static void cb_func_menu_closeall(void);
-static void cb_func_menu_reloadfile(void);
-static void cb_func_menu_undo(void);
-static void cb_func_menu_redo(void);
-static void cb_func_menu_selectall(void);
-static void cb_func_menu_preferences(void);
-static void cb_func_menu_insert_date(void);
-static void cb_func_menu_findnext(void);
-static void cb_func_menu_findprevious(void);
-static void cb_func_menu_replace(void);
-static void cb_func_menu_findinfiles(void);
-static void cb_func_menu_gotoline(void);
-static void cb_func_menu_opencolorchooser(void);
-static void cb_func_menu_fullscreen(void);
-static void cb_func_menu_messagewindow(void);
-static void cb_func_menu_zoomin(void);
-static void cb_func_menu_zoomout(void);
-static void cb_func_menu_replacetabs(void);
-static void cb_func_menu_foldall(void);
-static void cb_func_menu_unfoldall(void);
-static void cb_func_build_compile(void);
-static void cb_func_build_link(void);
-static void cb_func_build_make(void);
-static void cb_func_build_makeowntarget(void);
-static void cb_func_build_makeobject(void);
-static void cb_func_build_run(void);
-static void cb_func_build_run2(void);
-static void cb_func_build_options(void);
-static void cb_func_reloadtaglist(void);
-static void cb_func_switch_editor(void);
-static void cb_func_switch_scribble(void);
-static void cb_func_switch_vte(void);
-static void cb_func_switch_tableft(void);
-static void cb_func_switch_tabright(void);
-static void cb_func_toggle_sidebar(void);
-static void cb_func_edit_duplicateline(void);
-static void cb_func_edit_tolowercase(void);
-static void cb_func_edit_touppercase(void);
-static void cb_func_edit_commentline(void);
-static void cb_func_edit_commentlinetoggle(void);
-static void cb_func_edit_uncommentline(void);
-static void cb_func_edit_increaseindent(void);
-static void cb_func_edit_gotomatchingbrace(void);
-static void cb_func_edit_decreaseindent(void);
-static void cb_func_edit_autocomplete(void);
-static void cb_func_edit_calltip(void);
-static void cb_func_edit_macrolist(void);
-static void cb_func_edit_suppresscompletion(void);
-static void cb_func_popup_findusage(void);
-static void cb_func_popup_gototagdefinition(void);
-static void cb_func_popup_gototagdeclaration(void);
+static void cb_func_menu_new(guint key_id);
+static void cb_func_menu_open(guint key_id);
+static void cb_func_menu_save(guint key_id);
+static void cb_func_menu_saveall(guint key_id);
+static void cb_func_menu_print(guint key_id);
+static void cb_func_menu_close(guint key_id);
+static void cb_func_menu_closeall(guint key_id);
+static void cb_func_menu_reloadfile(guint key_id);
+static void cb_func_menu_undo(guint key_id);
+static void cb_func_menu_redo(guint key_id);
+static void cb_func_menu_selectall(guint key_id);
+static void cb_func_menu_preferences(guint key_id);
+static void cb_func_menu_insert_date(guint key_id);
+static void cb_func_menu_findnext(guint key_id);
+static void cb_func_menu_findprevious(guint key_id);
+static void cb_func_menu_replace(guint key_id);
+static void cb_func_menu_findinfiles(guint key_id);
+static void cb_func_menu_gotoline(guint key_id);
+static void cb_func_menu_opencolorchooser(guint key_id);
+static void cb_func_menu_fullscreen(guint key_id);
+static void cb_func_menu_messagewindow(guint key_id);
+static void cb_func_menu_zoomin(guint key_id);
+static void cb_func_menu_zoomout(guint key_id);
+static void cb_func_menu_replacetabs(guint key_id);
+static void cb_func_menu_foldall(guint key_id);
+static void cb_func_menu_unfoldall(guint key_id);
+static void cb_func_build_compile(guint key_id);
+static void cb_func_build_link(guint key_id);
+static void cb_func_build_make(guint key_id);
+static void cb_func_build_makeowntarget(guint key_id);
+static void cb_func_build_makeobject(guint key_id);
+static void cb_func_build_run(guint key_id);
+static void cb_func_build_run2(guint key_id);
+static void cb_func_build_options(guint key_id);
+static void cb_func_reloadtaglist(guint key_id);
+static void cb_func_switch_editor(guint key_id);
+static void cb_func_switch_scribble(guint key_id);
+static void cb_func_switch_vte(guint key_id);
+static void cb_func_switch_tableft(guint key_id);
+static void cb_func_switch_tabright(guint key_id);
+static void cb_func_toggle_sidebar(guint key_id);
 
-static void keybindings_call_popup_item(int menuitemkey);
+// common function for editing keybindings, only valid when scintilla has focus.
+static void cb_func_edit(guint key_id);
+
+// common function for keybindings using current word
+static void cb_func_current_word(guint key_id);
+
 static void keybindings_add_accels();
 
 
@@ -200,44 +190,46 @@ void keybindings_init(void)
 		GDK_Page_Up, GDK_CONTROL_MASK, "switch_tableft", _("Switch to left document"));
 	keys[GEANY_KEYS_SWITCH_TABRIGHT] = fill(cb_func_switch_tabright,
 		GDK_Page_Down, GDK_CONTROL_MASK, "switch_tabright", _("Switch to right document"));
-	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit_duplicateline,
+
+	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit,
 		GDK_g, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
-	keys[GEANY_KEYS_EDIT_TOLOWERCASE] = fill(cb_func_edit_tolowercase,
+	keys[GEANY_KEYS_EDIT_TOLOWERCASE] = fill(cb_func_edit,
 		GDK_u, GDK_CONTROL_MASK, "edit_tolowercase", _("Convert Selection to lower-case"));
-	keys[GEANY_KEYS_EDIT_TOUPPERCASE] = fill(cb_func_edit_touppercase,
+	keys[GEANY_KEYS_EDIT_TOUPPERCASE] = fill(cb_func_edit,
 		GDK_u, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_touppercase", _("Convert Selection to upper-case"));
-	keys[GEANY_KEYS_EDIT_COMMENTLINETOGGLE] = fill(cb_func_edit_commentlinetoggle,
+	keys[GEANY_KEYS_EDIT_COMMENTLINETOGGLE] = fill(cb_func_edit,
 		GDK_b, GDK_CONTROL_MASK, "edit_commentlinetoggle", _("Toggle line commentation"));
-	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit_commentline,
+	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit,
 		GDK_d, GDK_CONTROL_MASK, "edit_commentline", _("Comment line"));
-	keys[GEANY_KEYS_EDIT_UNCOMMENTLINE] = fill(cb_func_edit_uncommentline,
+	keys[GEANY_KEYS_EDIT_UNCOMMENTLINE] = fill(cb_func_edit,
 		GDK_d, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_uncommentline", _("Uncomment line"));
-	keys[GEANY_KEYS_EDIT_INCREASEINDENT] = fill(cb_func_edit_increaseindent,
+	keys[GEANY_KEYS_EDIT_INCREASEINDENT] = fill(cb_func_edit,
 		GDK_i, GDK_CONTROL_MASK, "edit_increaseindent", _("Increase indent"));
-	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit_decreaseindent,
+	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit,
 		GDK_i, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_decreaseindent", _("Decrease indent"));
-	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit_gotomatchingbrace,
+	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit,
 		GDK_less, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_gotomatchingbrace",
 		_("Goto matching brace"));
-	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit_autocomplete,
+	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
 #ifdef G_OS_WIN32
 	// on windows alt-space is taken by the window manager
-	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit_calltip,
+	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit,
 		GDK_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_calltip", _("Show calltip"));
 #else
-	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit_calltip,
+	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit,
 		GDK_space, GDK_MOD1_MASK, "edit_calltip", _("Show calltip"));
 #endif
-	keys[GEANY_KEYS_EDIT_MACROLIST] = fill(cb_func_edit_macrolist,
+	keys[GEANY_KEYS_EDIT_MACROLIST] = fill(cb_func_edit,
 		GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"));
-	keys[GEANY_KEYS_EDIT_SUPPRESSCOMPLETION] = fill(cb_func_edit_suppresscompletion,
+	keys[GEANY_KEYS_EDIT_SUPPRESSCOMPLETION] = fill(cb_func_edit,
 		GDK_space, GDK_SHIFT_MASK, "edit_suppresscompletion", _("Suppress auto completion"));
-	keys[GEANY_KEYS_POPUP_FINDUSAGE] = fill(cb_func_popup_findusage,
+
+	keys[GEANY_KEYS_POPUP_FINDUSAGE] = fill(cb_func_current_word,
 		0, 0, "popup_findusage", _("Find Usage"));
-	keys[GEANY_KEYS_POPUP_GOTOTAGDEFINITION] = fill(cb_func_popup_gototagdefinition,
+	keys[GEANY_KEYS_POPUP_GOTOTAGDEFINITION] = fill(cb_func_current_word,
 		0, 0, "popup_gototagdefinition", _("Go to tag definition"));
-	keys[GEANY_KEYS_POPUP_GOTOTAGDECLARATION] = fill(cb_func_popup_gototagdeclaration,
+	keys[GEANY_KEYS_POPUP_GOTOTAGDECLARATION] = fill(cb_func_current_word,
 		0, 0, "popup_gototagdeclaration", _("Go to tag declaration"));
 
 	// now load user defined keys
@@ -404,7 +396,7 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 		if (event->keyval == k && event->state == keys[i]->mods)
 		{
 			// call the corresponding callback function for this shortcut
-			if (keys[i]->cb_func != NULL) keys[i]->cb_func();
+			if (keys[i]->cb_func != NULL) keys[i]->cb_func(i);
 			return TRUE;
 		}
 	}
@@ -413,7 +405,8 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 
 
 /* simple convenience function to allocate and fill the struct */
-static binding *fill(void (*func) (void), guint key, GdkModifierType mod, const gchar *name, const gchar *label)
+static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gchar *name,
+		const gchar *label)
 {
 	binding *result;
 
@@ -429,130 +422,130 @@ static binding *fill(void (*func) (void), guint key, GdkModifierType mod, const 
 
 
 /* these are the callback functions, each shortcut has its own function, this is only for clear code */
-static void cb_func_menu_new(void)
+static void cb_func_menu_new(G_GNUC_UNUSED guint key_id)
 {
 	document_new_file(NULL);
 }
 
-static void cb_func_menu_open(void)
+static void cb_func_menu_open(G_GNUC_UNUSED guint key_id)
 {
 	on_open1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_save(void)
+static void cb_func_menu_save(G_GNUC_UNUSED guint key_id)
 {
 	on_save1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_saveall(void)
+static void cb_func_menu_saveall(G_GNUC_UNUSED guint key_id)
 {
 	on_save_all1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_close(void)
+static void cb_func_menu_close(G_GNUC_UNUSED guint key_id)
 {
 	on_close1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_closeall(void)
+static void cb_func_menu_closeall(G_GNUC_UNUSED guint key_id)
 {
 	on_close_all1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_reloadfile(void)
+static void cb_func_menu_reloadfile(G_GNUC_UNUSED guint key_id)
 {
 	on_toolbutton23_clicked(NULL, NULL);
 }
 
-static void cb_func_menu_undo(void)
+static void cb_func_menu_undo(G_GNUC_UNUSED guint key_id)
 {
 	on_undo1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_redo(void)
+static void cb_func_menu_redo(G_GNUC_UNUSED guint key_id)
 {
 	on_redo1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_selectall(void)
+static void cb_func_menu_selectall(G_GNUC_UNUSED guint key_id)
 {
 	on_menu_select_all1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_preferences(void)
+static void cb_func_menu_preferences(G_GNUC_UNUSED guint key_id)
 {
 	on_preferences1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_findnext(void)
+static void cb_func_menu_findnext(G_GNUC_UNUSED guint key_id)
 {
 	on_find_next1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_findprevious(void)
+static void cb_func_menu_findprevious(G_GNUC_UNUSED guint key_id)
 {
 	on_find_previous1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_replace(void)
+static void cb_func_menu_replace(G_GNUC_UNUSED guint key_id)
 {
 	on_replace1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_findinfiles(void)
+static void cb_func_menu_findinfiles(G_GNUC_UNUSED guint key_id)
 {
 	on_find_in_files1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_gotoline(void)
+static void cb_func_menu_gotoline(G_GNUC_UNUSED guint key_id)
 {
 	on_go_to_line1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_opencolorchooser(void)
+static void cb_func_menu_opencolorchooser(G_GNUC_UNUSED guint key_id)
 {
 	on_show_color_chooser1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_fullscreen(void)
+static void cb_func_menu_fullscreen(G_GNUC_UNUSED guint key_id)
 {
 	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_fullscreen1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
 
-static void cb_func_menu_messagewindow(void)
+static void cb_func_menu_messagewindow(G_GNUC_UNUSED guint key_id)
 {
 	GtkCheckMenuItem *c = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
 }
 
-static void cb_func_menu_zoomin(void)
+static void cb_func_menu_zoomin(G_GNUC_UNUSED guint key_id)
 {
 	on_zoom_in1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_zoomout(void)
+static void cb_func_menu_zoomout(G_GNUC_UNUSED guint key_id)
 {
 	on_zoom_out1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_foldall(void)
+static void cb_func_menu_foldall(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	document_fold_all(idx);
 }
 
-static void cb_func_menu_unfoldall(void)
+static void cb_func_menu_unfoldall(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	document_unfold_all(idx);
 }
 
-static void cb_func_build_compile(void)
+static void cb_func_build_compile(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -560,7 +553,7 @@ static void cb_func_build_compile(void)
 		on_build_compile_activate(NULL, NULL);
 }
 
-static void cb_func_build_link(void)
+static void cb_func_build_link(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -568,7 +561,7 @@ static void cb_func_build_link(void)
 		on_build_build_activate(NULL, NULL);
 }
 
-static void cb_func_build_make(void)
+static void cb_func_build_make(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -576,7 +569,7 @@ static void cb_func_build_make(void)
 		on_build_make_activate(NULL, GINT_TO_POINTER(GBO_MAKE_ALL));
 }
 
-static void cb_func_build_makeowntarget(void)
+static void cb_func_build_makeowntarget(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -584,7 +577,7 @@ static void cb_func_build_makeowntarget(void)
 		on_build_make_activate(NULL, GINT_TO_POINTER(GBO_MAKE_CUSTOM));
 }
 
-static void cb_func_build_makeobject(void)
+static void cb_func_build_makeobject(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -592,7 +585,7 @@ static void cb_func_build_makeobject(void)
 		on_build_make_activate(NULL, GINT_TO_POINTER(GBO_MAKE_OBJECT));
 }
 
-static void cb_func_build_run(void)
+static void cb_func_build_run(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -600,7 +593,7 @@ static void cb_func_build_run(void)
 		on_build_execute_activate(NULL, GINT_TO_POINTER(0));
 }
 
-static void cb_func_build_run2(void)
+static void cb_func_build_run2(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -608,7 +601,7 @@ static void cb_func_build_run2(void)
 		on_build_execute_activate(NULL, GINT_TO_POINTER(1));
 }
 
-static void cb_func_build_options(void)
+static void cb_func_build_options(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -619,7 +612,7 @@ static void cb_func_build_options(void)
 		on_build_arguments_activate(NULL, NULL);
 }
 
-static void cb_func_reloadtaglist(void)
+static void cb_func_reloadtaglist(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -627,25 +620,8 @@ static void cb_func_reloadtaglist(void)
 }
 
 
-static void cb_func_popup_findusage(void)
-{
-	keybindings_call_popup_item(GEANY_KEYS_POPUP_FINDUSAGE);
-}
-
-
-static void cb_func_popup_gototagdefinition(void)
-{
-	keybindings_call_popup_item(GEANY_KEYS_POPUP_GOTOTAGDEFINITION);
-}
-
-
-static void cb_func_popup_gototagdeclaration(void)
-{
-	keybindings_call_popup_item(GEANY_KEYS_POPUP_GOTOTAGDECLARATION);
-}
-
-
-static void keybindings_call_popup_item(int menuitemkey)
+// common function for keybindings using current word
+static void cb_func_current_word(guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	gint pos;
@@ -660,7 +636,7 @@ static void keybindings_call_popup_item(int menuitemkey)
 	if (*editor_info.current_word == 0)
 		utils_beep();
 	else
-		switch (menuitemkey)
+		switch (key_id)
 		{
 			case GEANY_KEYS_POPUP_FINDUSAGE:
 			on_find_usage1_activate(NULL, NULL);
@@ -677,20 +653,20 @@ static void keybindings_call_popup_item(int menuitemkey)
 }
 
 
-static void cb_func_switch_editor(void)
+static void cb_func_switch_editor(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
 }
 
-static void cb_func_switch_scribble(void)
+static void cb_func_switch_scribble(G_GNUC_UNUSED guint key_id)
 {
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_SCRATCH);
 	gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
 }
 
-static void cb_func_switch_vte(void)
+static void cb_func_switch_vte(G_GNUC_UNUSED guint key_id)
 {
 #ifdef HAVE_VTE
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
@@ -698,17 +674,17 @@ static void cb_func_switch_vte(void)
 #endif
 }
 
-static void cb_func_switch_tableft(void)
+static void cb_func_switch_tableft(G_GNUC_UNUSED guint key_id)
 {
 	utils_switch_document(LEFT);
 }
 
-static void cb_func_switch_tabright(void)
+static void cb_func_switch_tabright(G_GNUC_UNUSED guint key_id)
 {
 	utils_switch_document(RIGHT);
 }
 
-static void cb_func_toggle_sidebar(void)
+static void cb_func_toggle_sidebar(G_GNUC_UNUSED guint key_id)
 {
 	static gint active_page = -1;
 
@@ -731,80 +707,10 @@ static void cb_func_toggle_sidebar(void)
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->treeview_notebook), active_page);
 }
 
-static void cb_func_edit_duplicateline(void)
-{
-	on_menu_duplicate_line1_activate(NULL, NULL);
-}
 
-static void cb_func_edit_commentlinetoggle(void)
-{
-	on_menu_toggle_line_commentation1_activate(NULL, NULL);
-}
-
-static void cb_func_edit_commentline(void)
-{
-	on_menu_comment_line1_activate(NULL, NULL);
-}
-
-static void cb_func_edit_uncommentline(void)
-{
-	on_menu_uncomment_line1_activate(NULL, NULL);
-}
-
-static void cb_func_edit_autocomplete(void)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_start_auto_complete(idx, sci_get_current_position(doc_list[idx].sci), TRUE);
-}
-
-static void cb_func_edit_calltip(void)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_show_calltip(idx, -1);
-}
-
-static void cb_func_edit_macrolist(void)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_show_macro_list(doc_list[idx].sci);
-}
-
-static void cb_func_edit_suppresscompletion(void)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_add_text(doc_list[idx].sci, " ");
-}
-
-static void cb_func_menu_replacetabs(void)
-{
-	on_replace_tabs_activate(NULL, NULL);
-}
-
-static void cb_func_menu_print(void)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	document_print(idx);
-}
-
-static void cb_func_edit_increaseindent(void)
-{
-	on_menu_increase_indent1_activate(NULL, NULL);
-}
-
-static void cb_func_edit_decreaseindent(void)
-{
-	on_menu_decrease_indent1_activate(NULL, NULL);
-}
-
-static void cb_func_edit_gotomatchingbrace(void)
+static void goto_matching_brace(gint idx)
 {
 	gint pos, new_pos;
-	gint idx = document_get_cur_idx();
 
 	if (! DOC_IDX_VALID(idx)) return;
 
@@ -821,17 +727,74 @@ static void cb_func_edit_gotomatchingbrace(void)
 	}
 }
 
-static void cb_func_edit_tolowercase(void)
+
+// common function for editing keybindings, only valid when scintilla has focus.
+static void cb_func_edit(guint key_id)
 {
-	on_to_lower_case1_activate(NULL, NULL);
+	gint idx = document_get_cur_idx();
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+
+	// edit keybindings only valid when scintilla widget has focus
+	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
+
+	switch (key_id)
+	{
+		case GEANY_KEYS_EDIT_DUPLICATELINE:
+			on_menu_duplicate_line1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_EDIT_COMMENTLINETOGGLE:
+			on_menu_toggle_line_commentation1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_EDIT_COMMENTLINE:
+			on_menu_comment_line1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_EDIT_UNCOMMENTLINE:
+			on_menu_uncomment_line1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_EDIT_AUTOCOMPLETE:
+			sci_cb_start_auto_complete(idx, sci_get_current_position(doc_list[idx].sci), TRUE);
+			break;
+		case GEANY_KEYS_EDIT_CALLTIP:
+			sci_cb_show_calltip(idx, -1);
+			break;
+		case GEANY_KEYS_EDIT_MACROLIST:
+			sci_cb_show_macro_list(doc_list[idx].sci);
+			break;
+		case GEANY_KEYS_EDIT_SUPPRESSCOMPLETION:
+			sci_add_text(doc_list[idx].sci, " ");
+			break;
+		case GEANY_KEYS_EDIT_INCREASEINDENT:
+			on_menu_increase_indent1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_EDIT_DECREASEINDENT:
+			on_menu_decrease_indent1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_EDIT_GOTOMATCHINGBRACE:
+			goto_matching_brace(idx);
+			break;
+		case GEANY_KEYS_EDIT_TOLOWERCASE:
+			on_to_lower_case1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_EDIT_TOUPPERCASE:
+			on_to_upper_case1_activate(NULL, NULL);
+			break;
+	}
 }
 
-static void cb_func_edit_touppercase(void)
+
+static void cb_func_menu_replacetabs(G_GNUC_UNUSED guint key_id)
 {
-	on_to_upper_case1_activate(NULL, NULL);
+	on_replace_tabs_activate(NULL, NULL);
 }
 
-static void cb_func_menu_insert_date(void)
+static void cb_func_menu_print(G_GNUC_UNUSED guint key_id)
+{
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	document_print(idx);
+}
+
+static void cb_func_menu_insert_date(G_GNUC_UNUSED guint key_id)
 {
 	gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu, "insert_date_custom2")));
 }

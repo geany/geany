@@ -1,3 +1,12 @@
+2006-10-26  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c, src/keybindings.h:
+   Only accept editing keybindings when the current Scintilla widget
+   has focus.
+   Group editing keybindings together in cb_func_edit.
+   Change keybinding callbacks to pass keybinding index as an argument.
+
+
 2006-10-25  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/document.c:

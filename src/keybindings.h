@@ -24,6 +24,8 @@
 #ifndef GEANY_KEYBINDINGS_H
 #define GEANY_KEYBINDINGS_H 1
 
+typedef void (*KBCallback) (guint key_id);
+
 // holds all user-definable key bindings
 typedef struct binding
 {
@@ -35,7 +37,7 @@ typedef struct binding
 	const gchar *label;
 	// function pointer to a callback function, just to keep the code in keypress event
 	// callback function clear
-	void (*cb_func) (void);
+	KBCallback cb_func;
 } binding;
 
 
