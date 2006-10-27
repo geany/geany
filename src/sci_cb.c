@@ -209,8 +209,11 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				case '[':
 				case '{':
 				{	// Tex auto-closing
-					sci_cb_auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
-					sci_cb_show_calltip(idx, pos);
+					if (sci_get_lexer(sci) == SCLEX_LATEX)
+					{
+						sci_cb_auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
+						sci_cb_show_calltip(idx, pos);
+					}
 					break;
 				}
 				case '}':
@@ -483,6 +486,42 @@ void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_
 }
 
 
+static gint find_previous_brace(ScintillaObject *sci, gint pos)
+{
+	gchar c;
+	gint orig_pos = pos;
+	// we need something more intelligent than only check for '(' because LaTeX
+	// uses {, [ or (
+	c = SSM(sci, SCI_GETCHARAT, pos, 0);
+	while (pos >= 0 && pos > orig_pos - 300)
+	{
+		c = SSM(sci, SCI_GETCHARAT, pos, 0);
+		pos--;
+		if (utils_is_opening_brace(c)) return pos;
+	}
+	return -1;
+}
+
+
+static gint find_start_bracket(ScintillaObject *sci, gint pos)
+{
+	gchar c;
+	gint brackets = 0;
+	gint orig_pos = pos;
+
+	c = SSM(sci, SCI_GETCHARAT, pos, 0);
+	while (pos > 0 && pos > orig_pos - 300)
+	{
+		c = SSM(sci, SCI_GETCHARAT, pos, 0);
+		if (c == ')') brackets++;
+		else if (c == '(') brackets--;
+		pos--;
+		if (brackets < 0) return pos;	// found start bracket
+	}
+	return -1;
+}
+
+
 gboolean sci_cb_show_calltip(gint idx, gint pos)
 {
 	gint orig_pos = pos; // the position for the calltip
@@ -498,28 +537,22 @@ gboolean sci_cb_show_calltip(gint idx, gint pos)
 
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 
-	word[0] = '\0';
 	if (pos == -1)
 	{
-		gchar c;
-		// position of '(' is unknown, so go backwards to find it
+		// position of '(' is unknown, so go backwards from current position to find it
 		pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
+		pos--;
 		orig_pos = pos;
-		// I'm not sure if utils_is_opening_brace() is a good idea, but it is the simplest way,
-		// but we need something more intelligent than only check for '(' because e.g. LaTeX
-		// uses {, [ or (
-		c = SSM(sci, SCI_GETCHARAT, pos, 0);
-		while (pos > 0 && ! utils_is_opening_brace(c) && c != ';')
-		{
-			c = SSM(sci, SCI_GETCHARAT, pos, 0);
-			pos--;
-		}
+		pos = (lexer == SCLEX_LATEX) ? find_previous_brace(sci, pos) :
+			find_start_bracket(sci, pos);
+		if (pos == -1) return FALSE;
 	}
 
 	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
 	if (lexer == SCLEX_CPP && (style == SCE_C_COMMENT ||
 			style == SCE_C_COMMENTLINE || style == SCE_C_COMMENTDOC)) return FALSE;
 
+	word[0] = '\0';
 	sci_cb_find_current_word(sci, pos - 1, word, sizeof word);
 	if (word[0] == '\0') return FALSE;
 
