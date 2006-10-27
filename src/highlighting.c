@@ -81,6 +81,14 @@ static struct
 } common_style_set;
 
 
+// used for default styles
+typedef struct
+{
+	gchar *name;
+	Style style;
+} StyleEntry;
+
+
 static void new_style_array(gint file_type_id, gint styling_count)
 {
 	style_sets[file_type_id].styling = g_new0(Style, styling_count);
@@ -110,15 +118,19 @@ static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileF
 }
 
 
-static void load_keyfiles(GKeyFile *config, GKeyFile *config_home, const gchar *filename)
+static void load_keyfiles(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 {
-	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, filename, NULL);
+	gchar *ext = filetypes_get_conf_extension(filetype_idx);
+	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
 	gchar *f = g_strconcat(app->configdir,
-		G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S, filename, NULL);
+		G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
 
 	load_system_keyfile(config, f0, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	g_key_file_load_from_file(config_home, f, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
+	g_free(ext);
+	g_free(f);
+	g_free(f0);
 }
 
 
@@ -167,6 +179,45 @@ static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh,
 	}
 	else
 		*wordchars = result;
+}
+
+
+static gint rotate_rgb(gint color)
+{
+	return ((color & 0xFF0000) >> 16) +
+		(color & 0x00FF00) +
+		((color & 0x0000FF) << 16);
+}
+
+
+static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
+		StyleEntry *entry, Style *style)
+{
+	gchar **list;
+	gsize len;
+
+	g_return_if_fail(config && configh && entry && style);
+
+	list = g_key_file_get_string_list(configh, "styling", entry->name, &len, NULL);
+	if (list == NULL) list = g_key_file_get_string_list(config, "styling", entry->name, &len, NULL);
+
+	if (list != NULL && list[0] != NULL)
+		style->foreground = (gint) utils_strtod(list[0], NULL, FALSE);
+	else
+		style->foreground = rotate_rgb(entry->style.foreground);
+
+	if (list != NULL && list[1] != NULL)
+		style->background = (gint) utils_strtod(list[1], NULL, FALSE);
+	else
+		style->background = rotate_rgb(entry->style.background);
+
+	if (list != NULL && list[2] != NULL) style->bold = utils_atob(list[2]);
+	else style->bold = entry->style.bold;
+
+	if (list != NULL && list[3] != NULL) style->italic = utils_atob(list[3]);
+	else style->italic = entry->style.italic;
+
+	g_strfreev(list);
 }
 
 
@@ -295,7 +346,7 @@ static void styleset_common_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.common");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_ALL);
 
 	get_keyfile_hex(config, config_home, "styling", "selection",
 		"0xc0c0c0", "0x7f0000", "false", &common_style_set.styling[GCS_SELECTION]);
@@ -468,34 +519,50 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 }
 
 
+static void init_c_like_styleset(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
+{
+	StyleEntry entries[] =
+	{
+		{"default",		{0x000000, 0xffffff, FALSE, FALSE}},
+		{"comment",		{0xd00000, 0xffffff, FALSE, FALSE}},
+		{"commentline",	{0xd00000, 0xffffff, FALSE, FALSE}},
+		{"commentdoc",	{0xd00000, 0xffffff, FALSE, FALSE}},
+		{"number",		{0x007f00, 0xffffff, FALSE, FALSE}},
+		{"word",		{0x111199, 0xffffff, TRUE, FALSE}},
+		{"word2",		{0x7f0000, 0xffffff, TRUE, FALSE}},
+		{"string",		{0xff901e, 0xffffff, FALSE, FALSE}},
+		{"character",	{0xff901e, 0xffffff, FALSE, FALSE}},
+		{"uuid",		{0x404080, 0xffffff, FALSE, FALSE}},
+		{"preprocessor",{0x007f7f, 0xffffff, FALSE, FALSE}},
+		{"operator",	{0x301010, 0xffffff, FALSE, FALSE}},
+		{"identifier",	{0x000000, 0xffffff, FALSE, FALSE}},
+		{"stringeol",	{0x000000, 0xe0c0e0, FALSE, FALSE}},
+		{"verbatim",	{0x301010, 0xffffff, FALSE, FALSE}},
+		{"regex",		{0x105090, 0xffffff, FALSE, FALSE}},
+		{"commentlinedoc", {0xd00000, 0xffffff, TRUE, FALSE}},
+		{"commentdockeyword", {0xd00000, 0xffffff, TRUE, FALSE}},
+		{"globalclass",	{0x0000d0, 0xffffff, TRUE, FALSE}}
+	};
+	gint i;
+
+	new_style_array(filetype_idx, 20);
+
+	for (i = 0; i < 19; i++)
+		get_keyfile_style(config, config_home, &entries[i],
+			&style_sets[filetype_idx].styling[i]);
+
+	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
+		1, 0, &style_sets[filetype_idx].styling[19]);
+}
+
+
 static void styleset_c_init(void)
 {
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.c");
-
-	new_style_array(GEANY_FILETYPES_C, 20);
-	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[0]);
-	get_keyfile_hex(config, config_home, "styling", "comment", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[1]);
-	get_keyfile_hex(config, config_home, "styling", "commentline", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "commentdoc", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[3]);
-	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[4]);
-	get_keyfile_hex(config, config_home, "styling", "word", "0x111199", "0xffffff", "true", &style_sets[GEANY_FILETYPES_C].styling[5]);
-	get_keyfile_hex(config, config_home, "styling", "word2", "0x7f0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_C].styling[6]);
-	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[7]);
-	get_keyfile_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[8]);
-	get_keyfile_hex(config, config_home, "styling", "uuid", "0x404080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[9]);
-	get_keyfile_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[10]);
-	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[11]);
-	get_keyfile_hex(config, config_home, "styling", "identifier", "0x,00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[12]);
-	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_C].styling[13]);
-	get_keyfile_hex(config, config_home, "styling", "verbatim", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[14]);
-	get_keyfile_hex(config, config_home, "styling", "regex", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_C].styling[15]);
-	get_keyfile_hex(config, config_home, "styling", "commentlinedoc", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_C].styling[16]);
-	get_keyfile_hex(config, config_home, "styling", "commentdockeyword", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_C].styling[17]);
-	get_keyfile_hex(config, config_home, "styling", "globalclass", "0x1111bb", "0xffffff", "true", &style_sets[GEANY_FILETYPES_C].styling[18]);
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor", 1, 0, &style_sets[GEANY_FILETYPES_C].styling[19]);
+	load_keyfiles(config, config_home, GEANY_FILETYPES_C);
+	init_c_like_styleset(config, config_home, GEANY_FILETYPES_C);
 
 	style_sets[GEANY_FILETYPES_C].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_C, 0, "if const struct char int float double void long for while do case switch return");
@@ -582,29 +649,8 @@ static void styleset_cpp_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.cpp");
-
-	new_style_array(GEANY_FILETYPES_CPP, 20);
-	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[0]);
-	get_keyfile_hex(config, config_home, "styling", "comment", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[1]);
-	get_keyfile_hex(config, config_home, "styling", "commentline", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "commentdoc", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[3]);
-	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[4]);
-	get_keyfile_hex(config, config_home, "styling", "word", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CPP].styling[5]);
-	get_keyfile_hex(config, config_home, "styling", "word2", "0x991111", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CPP].styling[6]);
-	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[7]);
-	get_keyfile_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[8]);
-	get_keyfile_hex(config, config_home, "styling", "uuid", "0x404080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[9]);
-	get_keyfile_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[10]);
-	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[11]);
-	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[12]);
-	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_CPP].styling[13]);
-	get_keyfile_hex(config, config_home, "styling", "verbatim", "0x101030", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[14]);
-	get_keyfile_hex(config, config_home, "styling", "regex", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CPP].styling[15]);
-	get_keyfile_hex(config, config_home, "styling", "commentlinedoc", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CPP].styling[16]);
-	get_keyfile_hex(config, config_home, "styling", "commentdockeyword", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CPP].styling[17]);
-	get_keyfile_hex(config, config_home, "styling", "globalclass", "0x1111bb", "0xffffff", "true", &style_sets[GEANY_FILETYPES_CPP].styling[18]);
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor", 1, 0, &style_sets[GEANY_FILETYPES_CPP].styling[19]);
+	load_keyfiles(config, config_home, GEANY_FILETYPES_CPP);
+	init_c_like_styleset(config, config_home, GEANY_FILETYPES_CPP);
 
 	style_sets[GEANY_FILETYPES_CPP].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CPP, 0, "and and_eq asm auto bitand bitor bool break case catch char class compl const const_cast continue default delete do double dynamic_cast else enum explicit export extern false float for friend goto if inline int long mutable namespace new not not_eq operator or or_eq private protected public register reinterpret_cast return short signed sizeof static static_cast struct switch template this throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq");
@@ -689,7 +735,7 @@ static void styleset_pascal_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.pascal");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_PASCAL);
 
 	new_style_array(GEANY_FILETYPES_PASCAL, 12);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x0000ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PASCAL].styling[0]);
@@ -758,7 +804,7 @@ static void styleset_makefile_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.makefile");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_MAKE);
 
 	new_style_array(GEANY_FILETYPES_MAKE, 7);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x00002f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_MAKE].styling[0]);
@@ -804,7 +850,7 @@ static void styleset_diff_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.diff");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_DIFF);
 
 	new_style_array(GEANY_FILETYPES_DIFF, 7);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DIFF].styling[0]);
@@ -851,7 +897,7 @@ static void styleset_latex_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.latex");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_LATEX);
 
 	new_style_array(GEANY_FILETYPES_LATEX, 5);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x00002f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LATEX].styling[0]);
@@ -900,7 +946,7 @@ static void styleset_php_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.php");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_PHP);
 
 	style_sets[GEANY_FILETYPES_PHP].styling = NULL;
 	style_sets[GEANY_FILETYPES_PHP].keywords = NULL;
@@ -940,7 +986,7 @@ static void styleset_html_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.html");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_HTML);
 
 	style_sets[GEANY_FILETYPES_HTML].styling = NULL;
 	style_sets[GEANY_FILETYPES_HTML].keywords = NULL;
@@ -979,7 +1025,7 @@ static void styleset_markup_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.xml");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_XML);
 
 	new_style_array(GEANY_FILETYPES_XML, 55);
 	get_keyfile_hex(config, config_home, "styling", "html_default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_XML].styling[0]);
@@ -1284,28 +1330,9 @@ static void styleset_java_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.java");
-
-	new_style_array(GEANY_FILETYPES_JAVA, 19);
-	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[0]);
-	get_keyfile_hex(config, config_home, "styling", "comment", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[1]);
-	get_keyfile_hex(config, config_home, "styling", "commentline", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "commentdoc", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[3]);
-	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[4]);
-	get_keyfile_hex(config, config_home, "styling", "word", "0x111199", "0xffffff", "true", &style_sets[GEANY_FILETYPES_JAVA].styling[5]);
-	get_keyfile_hex(config, config_home, "styling", "word2", "0x7f0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_JAVA].styling[6]);
-	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[7]);
-	get_keyfile_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[8]);
-	get_keyfile_hex(config, config_home, "styling", "uuid", "0x404080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[9]);
-	get_keyfile_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[10]);
-	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[11]);
-	get_keyfile_hex(config, config_home, "styling", "identifier", "0x404000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[12]);
-	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[13]);
-	get_keyfile_hex(config, config_home, "styling", "verbatim", "0x406090", "0x0000ff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[14]);
-	get_keyfile_hex(config, config_home, "styling", "regex", "0x905010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_JAVA].styling[15]);
-	get_keyfile_hex(config, config_home, "styling", "commentlinedoc", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_JAVA].styling[16]);
-	get_keyfile_hex(config, config_home, "styling", "commentdockeyword", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_JAVA].styling[17]);
-	get_keyfile_hex(config, config_home, "styling", "globalclass", "0x409010", "0xffffff", "true", &style_sets[GEANY_FILETYPES_JAVA].styling[18]);
+	load_keyfiles(config, config_home, GEANY_FILETYPES_JAVA);
+	init_c_like_styleset(config, config_home, GEANY_FILETYPES_JAVA);
+	style_sets[GEANY_FILETYPES_JAVA].styling[19].foreground = 0;	// disable styling_within_preprocessor
 
 	style_sets[GEANY_FILETYPES_JAVA].keywords = g_new(gchar*, 5);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_JAVA, 0, "\
@@ -1379,7 +1406,7 @@ static void styleset_perl_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.perl");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_PERL);
 
 	new_style_array(GEANY_FILETYPES_PERL, 17);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[0]);
@@ -1480,7 +1507,7 @@ static void styleset_python_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.python");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_PYTHON);
 
 	new_style_array(GEANY_FILETYPES_PYTHON, 14);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[0]);
@@ -1547,7 +1574,7 @@ static void styleset_ruby_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.ruby");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_RUBY);
 
 	new_style_array(GEANY_FILETYPES_RUBY, 19);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[0]);
@@ -1621,7 +1648,7 @@ static void styleset_sh_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.sh");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_SH);
 
 	new_style_array(GEANY_FILETYPES_SH, 11);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SH].styling[0]);
@@ -1696,7 +1723,7 @@ static void styleset_docbook_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.docbook");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_DOCBOOK);
 
 	new_style_array(GEANY_FILETYPES_DOCBOOK, 29);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_DOCBOOK].styling[0]);
@@ -1865,7 +1892,7 @@ static void styleset_css_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.css");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_CSS);
 
 	new_style_array(GEANY_FILETYPES_CSS, 16);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x003399", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CSS].styling[0]);
@@ -1962,7 +1989,7 @@ static void styleset_conf_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.conf");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_CONF);
 
 	new_style_array(GEANY_FILETYPES_CONF, 6);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x7f0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_CONF].styling[0]);
@@ -2010,7 +2037,7 @@ static void styleset_asm_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.asm");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_ASM);
 
 	new_style_array(GEANY_FILETYPES_ASM, 15);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_ASM].styling[0]);
@@ -2084,7 +2111,7 @@ static void styleset_fortran_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.fortran");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_FORTRAN);
 
 	new_style_array(GEANY_FILETYPES_FORTRAN, 15);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FORTRAN].styling[0]);
@@ -2157,7 +2184,7 @@ static void styleset_sql_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.sql");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_SQL);
 
 	new_style_array(GEANY_FILETYPES_SQL, 15);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SQL].styling[0]);
@@ -2252,7 +2279,7 @@ static void styleset_caml_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.caml");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_CAML);
 
 	new_style_array(GEANY_FILETYPES_CAML, 14);
 
@@ -2325,7 +2352,7 @@ static void styleset_oms_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.oms");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_OMS);
 
 	new_style_array(GEANY_FILETYPES_OMS, 11);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_OMS].styling[0]);
@@ -2391,7 +2418,7 @@ static void styleset_tcl_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.tcl");
+	load_keyfiles(config, config_home, GEANY_FILETYPES_TCL);
 
 	new_style_array(GEANY_FILETYPES_TCL, 16);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_TCL].styling[0]);
@@ -2468,29 +2495,8 @@ static void styleset_d_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.d");
-
-	new_style_array(GEANY_FILETYPES_D, 20);
-	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[0]);
-	get_keyfile_hex(config, config_home, "styling", "comment", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[1]);
-	get_keyfile_hex(config, config_home, "styling", "commentline", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "commentdoc", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[3]);
-	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[4]);
-	get_keyfile_hex(config, config_home, "styling", "word", "0x111199", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[5]);
-	get_keyfile_hex(config, config_home, "styling", "word2", "0x7f0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[6]);
-	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[7]);
-	get_keyfile_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[8]);
-	get_keyfile_hex(config, config_home, "styling", "uuid", "0x404080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[9]);
-	get_keyfile_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[10]);
-	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[11]);
-	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[12]);
-	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_D].styling[13]);
-	get_keyfile_hex(config, config_home, "styling", "verbatim", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[14]);
-	get_keyfile_hex(config, config_home, "styling", "regex", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[15]);
-	get_keyfile_hex(config, config_home, "styling", "commentlinedoc", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[16]);
-	get_keyfile_hex(config, config_home, "styling", "commentdockeyword", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[17]);
-	get_keyfile_hex(config, config_home, "styling", "globalclass", "0x1111bb", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[18]);
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor", 1, 0, &style_sets[GEANY_FILETYPES_D].styling[19]);
+	load_keyfiles(config, config_home, GEANY_FILETYPES_D);
+	init_c_like_styleset(config, config_home, GEANY_FILETYPES_D);
 
 	style_sets[GEANY_FILETYPES_D].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_D, 0, "__FILE__ __LINE__ __DATA__ __TIME__ __TIMESTAMP__ abstract alias align asm assert auto body bool break byte case cast catch cdouble cent cfloat char class const continue creal dchar debug default delegate delete deprecated do double else enum export extern false final finally float for foreach function goto idouble if ifloat import in inout int interface invariant ireal is long mixin module new null out override package pragma private protected public real return scope short static struct super switch synchronized template this throw true try typedef typeof ubyte ucent uint ulong union unittest ushort version void volatile wchar while with");
@@ -2569,29 +2575,8 @@ static void styleset_ferite_init(void)
 	GKeyFile *config = g_key_file_new();
 	GKeyFile *config_home = g_key_file_new();
 
-	load_keyfiles(config, config_home, "filetypes.ferite");
-
-	new_style_array(GEANY_FILETYPES_FERITE, 20);
-	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[0]);
-	get_keyfile_hex(config, config_home, "styling", "comment", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[1]);
-	get_keyfile_hex(config, config_home, "styling", "commentline", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "commentdoc", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[3]);
-	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[4]);
-	get_keyfile_hex(config, config_home, "styling", "word", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_FERITE].styling[5]);
-	get_keyfile_hex(config, config_home, "styling", "word2", "0x991111", "0xffffff", "true", &style_sets[GEANY_FILETYPES_FERITE].styling[6]);
-	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[7]);
-	get_keyfile_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[8]);
-	get_keyfile_hex(config, config_home, "styling", "uuid", "0x404080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[9]);
-	get_keyfile_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[10]);
-	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[11]);
-	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[12]);
-	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[13]);
-	get_keyfile_hex(config, config_home, "styling", "verbatim", "0x101030", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[14]);
-	get_keyfile_hex(config, config_home, "styling", "regex", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_FERITE].styling[15]);
-	get_keyfile_hex(config, config_home, "styling", "commentlinedoc", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_FERITE].styling[16]);
-	get_keyfile_hex(config, config_home, "styling", "commentdockeyword", "0xff0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_FERITE].styling[17]);
-	get_keyfile_hex(config, config_home, "styling", "globalclass", "0x1111bb", "0xffffff", "true", &style_sets[GEANY_FILETYPES_FERITE].styling[18]);
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor", 1, 0, &style_sets[GEANY_FILETYPES_FERITE].styling[19]);
+	load_keyfiles(config, config_home, GEANY_FILETYPES_FERITE);
+	init_c_like_styleset(config, config_home, GEANY_FILETYPES_FERITE);
 
 	style_sets[GEANY_FILETYPES_FERITE].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_FERITE, 0, "false null self super true abstract alias and arguments attribute_missing break case class closure conformsToProtocol constructor continue default deliver destructor diliver directive do else extends eval final fix for function global handle if iferr implements include instanceof isa method_missing modifies monitor namespace new or private protected protocol public raise recipient rename return static switch uses using while");

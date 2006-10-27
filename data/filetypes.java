@@ -2,24 +2,24 @@
 [styling]
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false;false
-comment=0xff0000;0xffffff;false;false
-commentline=0xff0000;0xffffff;false;false
-commentdoc=0xff0000;0xffffff;false;false
+comment=0xd00000;0xffffff;false;false
+commentline=0xd00000;0xffffff;false;false
+commentdoc=0xd00000;0xffffff;false;false
 number=0x007f00;0xffffff;false;false
-word=0x111199;0xffffff;true;false
-word2=0x7f0000;0xffffff;true;false
+word=0x00007f;0xffffff;true;false
+word2=0x991111;0xffffff;true;false
 string=0xff901e;0xffffff;false;false
 character=0xff901e;0xffffff;false;false
 uuid=0x404080;0xffffff;false;false
-preprocessor=0x007f7f;0xffffff;false;false
+preprocessor=0x007F7F;0xffffff;false;false
 operator=0x301010;0xffffff;false;false
-identifier=0x404000;0xffffff;false;false
+identifier=0x000000;0xffffff;false;false
 stringeol=0x000000;0xe0c0e0;false;false
-verbatim=0x406090;0x0000ff;false;false
-regex=0x905010;0xffffff;false;false
-commentlinedoc=0xff0000;0xffffff;true;true
-commentdockeyword=0xff0000;0xffffff;true;true
-globalclass=0x409010;0xffffff;true;false
+verbatim=0x101030;0xffffff;false;false
+regex=0x105090;0xffffff;false;false
+commentlinedoc=0xd00000;0xffffff;true;false
+commentdockeyword=0xd00000;0xffffff;true;true
+globalclass=0x0000d0;0xffffff;true;false
 
 [keywords]
 primary=abstract assert break case catch class const continue default do else extends final finally for future generic goto if implements import inner instanceof interface native new outer package private protected public rest return static super switch synchronized this throw throws transient try var volatile while

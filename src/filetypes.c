@@ -968,12 +968,13 @@ void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 }
 
 
-static gchar *get_conf_extension(gint filetype_idx)
+gchar *filetypes_get_conf_extension(gint filetype_idx)
 {
 	gchar *result, *tmp = g_strdup(filetypes[filetype_idx]->name);
 
 	switch (filetype_idx)
 	{
+		case GEANY_FILETYPES_ALL: result = g_strdup("common"); break;
 		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
 		case GEANY_FILETYPES_MAKE: result = g_strdup("makefile"); break;
 		case GEANY_FILETYPES_OMS: result = g_strdup("oms"); break;
@@ -998,7 +999,7 @@ void filetypes_save_commands()
 
 		if (! bp->modified) continue;
 
-		ext = get_conf_extension(i);
+		ext = filetypes_get_conf_extension(i);
 		fname = g_strconcat(conf_prefix, ext, NULL);
 		g_free(ext);
 
