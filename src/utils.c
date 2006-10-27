@@ -517,7 +517,7 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 	if (tmp == 0) end --;
 
 	// go back to the end of function identifier
-	while (end > 0 && end > first_pos - 1000 &&
+	while (end > 0 && end > first_pos - 500 &&
 		(tmp = sci_get_char_at(sci, end)) != '(' &&
 		tmp != 0) end--;
 	end--;
