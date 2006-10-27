@@ -9,6 +9,11 @@
    Make C-like comment colour darker; make globalclass brighter to
    distinguish it from word colour.
    Make Java use same default syntax highlighting colours as C.
+ * src/utils.c:
+   Limit parse depth to 500 chars when parsing C-like function name.
+ * src/sci_cb.c:
+   Find last unmatched open bracket for Show Calltip so nested matched
+   brackets are ignored (except LaTeX).
 
 
 2006-10-26  Nick Treleaven  <nick.treleaven@btinternet.com>
