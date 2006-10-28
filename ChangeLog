@@ -1,3 +1,11 @@
+2006-10-28  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * doc/geany.docbook:
+   Some small updates.
+   Got rid of &app; entitity.
+   Extended description of encoding support.
+
+
 2006-10-27  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/highlighting.c, src/filetypes.c, src/filetypes.h,

@@ -1,12 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
         "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
-<!ENTITY app "Geany">
 <!ENTITY app_small "geany">
 <!ENTITY appversion "0.10">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "October 11, 2006">
+<!ENTITY date "October 28, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -40,7 +39,7 @@
 			</para>
 		</legalnotice>
 		<title>
-			&app; &appversion;
+			Geany &appversion;
 		</title>
 	</bookinfo>
 
@@ -51,14 +50,14 @@
 		<section>
 			<title>About Geany</title>
 			<para>
-				<application>&app;</application> is a small and lightweight Integrated Development Environment.
+				<application>Geany</application> is a small and lightweight Integrated Development Environment.
 				It was developed to provide a small and fast IDE, which has only a few dependencies from other
 				packages. Another goal was to be as independent as possible from a special Desktop Environment
-				like KDE or GNOME, so <application>&app;</application> only requires the GTK2 toolkit
+				like KDE or GNOME, so <application>Geany</application> only requires the GTK2 toolkit
 				and therefore you only need the GTK2 runtime libraries installed to run it.
 			</para>
 			<para>
-				The basic features of <application>&app;</application> are:
+				The basic features of <application>Geany</application> are:
 				<itemizedlist>
 					<listitem><para>Syntax highlighting</para></listitem>
 					<listitem><para>Code completion</para></listitem>
@@ -80,14 +79,14 @@
 		<section>
 			<title>Where to get it</title>
 			<para>
-				You can obtain <application>&app;</application> from <ulink url="&appurl;">&appurl;</ulink>
+				You can obtain <application>Geany</application> from <ulink url="&appurl;">&appurl;</ulink>
 				or perhaps from your distributor.
 			</para>
 		</section>
 		<section>
 			<title>License</title>
 			<para>
-				<application>&app;</application> is distributed under the terms of the GNU General Public License as published
+				<application>Geany</application> is distributed under the terms of the GNU General Public License as published
 				by the Free	Software Foundation; either version 2 of the License, or (at your option) any later version.
 				A copy of this license can be found in the file COPYING included with the source code of this
 				program or see <xref linkend="geany-gpl"/>.
@@ -106,7 +105,7 @@
 		<section>
 			<title>Requirements</title>
 			<para>
-				For compiling <application>&app;</application> yourself, you will need the GTK (>= 2.6.0)
+				For compiling <application>Geany</application> yourself, you will need the GTK (>= 2.6.0)
 				libraries and header files. You will also need the Pango, Glib and ATK libraries and header files.
 				All these files are available at <ulink url="http://www.gtk.org">http://www.gtk.org</ulink>.
 			</para>
@@ -119,7 +118,7 @@
 		<section id="source_compilation">
 			<title>Source compilation</title>
 			<para>
-				Compiling <application>&app;</application> is quite easy. The following should do it:
+				Compiling <application>Geany</application> is quite easy. The following should do it:
 				<screen>
 					<prompt>%</prompt> <userinput><command>./configure</command></userinput>
 					<prompt>%</prompt> <userinput><command>make</command></userinput>
@@ -129,17 +128,18 @@
 				The configure script supports several common options, for a detailed list, type
 				<screen>
 					<prompt>%</prompt> <userinput><command>./configure</command> --help</userinput></screen>
+				There also some compile time options which can be found in <filename>src/geany.h</filename>.
+				Please see <xref linkend="cto"/> for more information.
 			</para>
 			<para>
 				In the case that your system lacks dynamic linking loader support, you probably want
 				to pass the option --disable-vte to the configure script. This prevents compiling
-				&app; with dynamic linking loader support to automatically load
+				<application>Geany</application> with dynamic linking loader support to automatically load
 				<filename>libvte.so.4</filename> if available.
 			</para>
-			<para>&app; has been successfully compiled and tested under Debian 3.1 Sarge, Debian 3.2 Etch,
-				  Fedora Core 4, LinuxFromScratch and FreeBSD 6.0. It also compiles under
-				  <trademark class="trade">Microsoft Windows</trademark>, but there are lots of changes
-				  to the makefiles necessary.
+			<para><application>Geany</application> has been successfully compiled and tested under Debian 3.1 Sarge, Debian 4.0 Etch,
+				  Fedora Core 3/4/5, LinuxFromScratch and FreeBSD 6.0. It also compiles under
+				  <trademark class="trade">Microsoft Windows</trademark>.
 			</para>
 			<para>
 				If there are any errors during compilation, check your build environment and try to find the error,
@@ -162,7 +162,7 @@
 			<section>
 				<title>Debian</title>
 				<para>
-					Geany is available through the official Debian archives.
+					<application>Geany</application> is available through the official Debian archives.
 				</para>
 				<para>
 					<command>apt-get install geany</command>
@@ -188,7 +188,7 @@
 		<section id="getting_started">
 			<title>Getting started</title>
 			<para>
-				You can start <application>&app;</application> in the following ways:
+				You can start <application>Geany</application> in the following ways:
 				<itemizedlist>
 						<listitem>
 						<para>
@@ -198,7 +198,7 @@
 							Choose in your application menu of your used Desktop Environment:
 							<menuchoice>
 							<guisubmenu>Development</guisubmenu>
-							<guimenuitem>&app;</guimenuitem>
+							<guimenuitem>Geany</guimenuitem>
 							</menuchoice>.
 						</para>
 					</listitem>
@@ -207,7 +207,7 @@
 							From the command line
 						</para>
 						<para>
-							To start <application>&app;</application> from a command line, type the following
+							To start <application>Geany</application> from a command line, type the following
 							and press <keycap>Return</keycap>:
 							<screen>
 								<prompt>%</prompt> <userinput><command>&app_small;</command></userinput></screen>
@@ -247,15 +247,16 @@
 							<row>
 								<entry>-d</entry>
 								<entry>--debug</entry>
-								<entry>Run &app; in debug mode, which means being verbose
-									   and printing lots of information.
+								<entry>Run <application>Geany</application> in debug mode, which
+									   means being verbose and printing lots of information.
 								</entry>
 							</row>
 							<row>
 								<entry>-i</entry>
 								<entry>--new-instance</entry>
-								<entry>Do not open files in a running instance, force opening a new instance.
-									   Only available if &app; was compiled with support for Sockets.
+								<entry>Do not open files in a running instance, force opening a
+									   new instance. Only available if <application>Geany</application>
+									   was compiled with support for Sockets.
 								</entry>
 							</row>
 							<row>
@@ -291,7 +292,8 @@
 									   want to load the virtual terminal emulator widget at startup.
 									   If you do not have <filename>libvte.so.4</filename> installed,
 									   then terminal-support is automatically disabled. Only available
-									   if &app; was compiled with support for VTE.
+									   if <application>Geany</application> was compiled with support
+									   for VTE.
 								</entry>
 							</row>
 							<row>
@@ -300,8 +302,8 @@
 								<entry>Specify explicitly the path including filename or only the filename
 									   to the VTE library, e.g. <filename>/usr/lib/libvte.so</filename> or
 									   <filename>libvte.so</filename>. This option is only needed when the
-									   autodetection does not work. Only available if &app; was compiled
-									   with support for VTE.
+									   autodetection does not work. Only available if
+									   <application>Geany</application> was compiled with support for VTE.
 								</entry>
 							</row>
 							<row>
@@ -317,14 +319,16 @@
 							<row>
 								<entry></entry>
 								<entry>[files ...]</entry>
-								<entry>Open all given files at startup. This option causes &app; to
-									   ignore loading stored files from the last session (if enabled).
+								<entry>Open all given files at startup. This option causes
+									   <application>Geany</application> to ignore loading stored
+									   files from the last session (if enabled).
 								</entry>
 							</row>
 						</tbody>
 					</tgroup>
 				</table>
-				&app; supports all generic GTK options, a list is available on the help screen.
+				<application>Geany</application> supports all generic GTK options, a list is
+				available on the help screen.
 			</para>
 		</section>
 		<section id="general">
@@ -332,8 +336,8 @@
 			<section id="general_startup">
 				<title>Startup</title>
 				<para>
-					At startup, &app; loads all files from the last time
-					<application>&app;</application> was launched. You can disable this feature in the
+					At startup, <application>Geany</application> loads all files from the last time
+					<application>Geany</application> was launched. You can disable this feature in the
 					preferences dialog(see <xref linkend="confdialog_gen"/>). If you specify some files on
 					the command line, only these files will be opened, but you can find the files from the
 					last session in the file menu under the "Recent files" item. By default this contains
@@ -341,34 +345,35 @@
 					files in the preferences dialog.
 				</para>
 				<para>
-					You can start several instances of Geany, but only the first will load files
-					from the last session. To run a second instance of Geany, do not specify any
-					filenames on the command-line, or disable opening files in a running instance
-					using the appropriate command line option.
+					You can start several instances of <application>Geany</application>, but only
+					the first will load files from the last session. To run a second instance of
+					<application>Geany</application>, do not specify any filenames on the
+					command-line, or disable opening files in a running instance using the
+					appropriate command line option.
 				</para>
 			</section>
 			<section id="general_instance">
 				<title>Opening files from the command-line in a running instance</title>
 				<para>
-					&app; detects an already running instance of itself and opens files from the
-					command-line in the already running instance.
-					So, &app; can be used to view and edit files by opening them from other
-					programs such as a file manager. If you do not like this for some reason,
-					you can disable using the first instance by using the appropriate command line
-					option - see <xref linkend="clo"/>.
+					<application>Geany</application> detects an already running instance of itself
+					and opens files from the command-line in the already running instance.
+					So, <application>Geany</application> can be used to view and edit files by
+					opening them from other programs such as a file manager. If you do not like
+					this for some reason, you can disable using the first instance by using the
+					appropriate command line option - see <xref linkend="clo"/>.
 				</para>
 			</section>
 			<section id="general_vte">
 				<title>Virtual terminal emulator widget (VTE)</title>
 				<para>
 					If you have installed <filename>libvte.so</filename> in your system, it is loaded
-					automatically by <application>&app;</application>, and you will have a terminal widget
+					automatically by <application>Geany</application>, and you will have a terminal widget
 					in the notebook	at the bottom.
 				</para>
 				<para>
-					If <application>&app;</application> cannot find <filename>libvte.so</filename> at
+					If <application>Geany</application> cannot find <filename>libvte.so</filename> at
 					startup, the terminal widget will not be loaded. So there is no need to install the
-					package containing this	file in order to run <application>&app;</application>.
+					package containing this	file in order to run <application>Geany</application>.
 					Additionally, you can disable the use of the terminal widget by command line option,
 					for more information see <xref linkend="clo"/>.
 				</para>
@@ -384,9 +389,10 @@
 					 the middle button can often be simulated by pressing both mouse buttons together).
 				</para>
 				<note>
-					<para>&app; tries to load <filename>libvte.so</filename>. If this fails, it tries to
-						  load <filename>libvte.so.4</filename>. If this fails too, you should check whether
-						  you installed libvte correctly. Again, &app; also runs without this library.
+					<para><application>Geany</application> tries to load <filename>libvte.so</filename>.
+						  If this fails, it tries to load <filename>libvte.so.4</filename>. If this
+						  fails too, you should check whether you installed libvte correctly. Again,
+						  <application>Geany</application> also runs without this library.
 					</para>
 					<para>
 						  It could be, that the library is called something else than
@@ -401,33 +407,95 @@
 		</section>
 		<section id="charset">
 			<title>Character sets and Unicode Byte-Order-Mark (BOM)</title>
-			<para>
-				<application>&app;</application> provides support for detecting and converting
-				character sets. So you can open and save files in different character sets and
-				even can convert a file from a character set to another one.
-				To do this, <application>&app;</application> uses the character conversion
-				capabilities of the GLib.
-			</para>
-			<para>
-				Furthermore, Geany detects an Unicode Byte Order Mark
-				(see <ulink url="http://en.wikipedia.org/wiki/Byte_Order_Mark">
-				<citetitle>http://en.wikipedia.org/wiki/Byte_Order_Mark</citetitle>
-				</ulink> for details). Of course, this feature is only available if the opened file
-				is in an unicode encoding. The Byte Order Mark helps to detect the encoding of a
-				file, e.g. whether it is UTF-16LE or UTF-16BE and so on. On Unix-like systems using
-				a Byte Order Mark could cause some problems, e.g. the gcc stops with stray errors,
-				PHP does not parse a script containing a BOM and script files starting with a
-				she-bang maybe cannot be started.
-				In the status bar you can easily see whether the file starts with a BOM or not.
-				If you want to set a BOM for a file or if you want to remove it from a file, just
-				use the document menu and toggle the checkbox.
-				<note>
-					<para>
-						If you are unsure what a BOM is or if you do not understand where to use it,
-						then it is not important for you and you can safely ignore it.
-					</para>
-				</note>
-			</para>
+			<section>
+				<title>Using character sets</title>
+				<para>
+					<application>Geany</application> provides support for detecting and converting
+					character sets. So you can open and save files in different character sets and
+					even can convert a file from a character set to another one.
+					To do this, <application>Geany</application> uses the character conversion
+					capabilities of the GLib.
+				</para>
+				<para>
+					Only text files are supported, i.e. opening files which contain NUL-bytes may
+					fail. <application>Geany</application> will try to open the file anyway but it
+					is likely that the file will be truncated because it can only opened up to the
+					first occurrence of the first NUL-byte. All characters after this position are
+					lost and are not written when you save the file.
+				</para>
+				<para>
+					<application>Geany</application> tries to detect the encoding of a file while
+					opening it. It might be that the encoding of a file cannot be detected correctly
+					so you have to set manually the encoding of the file in order to display it
+					correctly. You can this in the file open dialog by selecting an encoding in the
+					drop down box or by reloading the file with the file menu item "Reload as".
+					The auto detection works well for most encodings but there are also some encodings
+					known where auto detection has its problems. Auto detecting the encoding of a file
+					is not easy and sometimes an encoding might be detected not correctly.
+				</para>
+				<para>
+					There are different ways to use different encodings in <application>Geany</application>:
+					<orderedlist numeration="arabic">
+						<listitem>
+							<para>Using the file open dialog</para>
+							<para>This opens the file with the encoding specified in the encoding
+								  drop down box. If the encoding is set to "Detect from file"
+								  auto detection will be used. If the encoding is set to
+								  "Without encoding (None)" the file will be opened without any
+								  character conversion and <application>Geany</application> will
+								  not try to auto detect the encoding(see below for more information).
+							</para>
+						</listitem>
+						<listitem>
+							<para>Using the "Reload as" menu item</para>
+							<para>This item reloads the current file with the specified encoding.
+								  It can help if you opened a file and found out that a wrong
+								  encoding was used.
+							</para>
+						</listitem>
+						<listitem>
+							<para>Using the "Set encoding" menu item</para>
+							<para>In contrary to the above two options, this will not change or
+								  reload the current file unless you save it. It is useful when
+								  you want to change the encoding of the file.</para>
+						</listitem>
+					</orderedlist>
+				</para>
+			</section>
+			<section>
+				<title>Special encoding "None"</title>
+				<para>
+					There is a special encoding "None" which is actually no real encoding. It is
+					useful when you know that Geany cannot auto detect the encoding of a file and
+					it is not displayed correctly. Especially when the file contains NUL-bytes this
+					can be useful to skip auto detection and open the file properly at least until
+					the occurrence of the first NUL-byte. Using this encoding opens the file as it
+					is without any character conversion.
+				</para>
+			</section>
+			<section>
+				<title>Unicode Byte-Order-Mark (BOM)</title>
+				<para>
+					Furthermore, <application>Geany</application> detects an Unicode Byte Order Mark
+					(see <ulink url="http://en.wikipedia.org/wiki/Byte_Order_Mark">
+					<citetitle>http://en.wikipedia.org/wiki/Byte_Order_Mark</citetitle>
+					</ulink> for details). Of course, this feature is only available if the opened file
+					is in an unicode encoding. The Byte Order Mark helps to detect the encoding of a
+					file, e.g. whether it is UTF-16LE or UTF-16BE and so on. On Unix-like systems using
+					a Byte Order Mark could cause some problems, e.g. the gcc stops with stray errors,
+					PHP does not parse a script containing a BOM and script files starting with a
+					she-bang maybe cannot be started.
+					In the status bar you can easily see whether the file starts with a BOM or not.
+					If you want to set a BOM for a file or if you want to remove it from a file, just
+					use the document menu and toggle the checkbox.
+					<note>
+						<para>
+							If you are unsure what a BOM is or if you do not understand where to use it,
+							then it is not important for you and you can safely ignore it.
+						</para>
+					</note>
+				</para>
+			</section>
 		</section>
 		<section id="search_replace">
 			<title>Search, replace and go to</title>
@@ -696,8 +764,15 @@
 								</row>
 								<row>
 									<entry>GEANY_MAX_AUTOCOMPLETE_WORDS</entry>
-									<entry>How many auto completion suggestions should &app; provide.</entry>
+									<entry>How many auto completion suggestions should
+										   <application>Geany</application> provide.
+									</entry>
 									<entry>30</entry>
+								</row>
+								<row>
+									<entry>GEANY_MAX_AUTOCOMPLETE_HEIGHT</entry>
+									<entry>How many suggestions should be visible in the auto completion list.</entry>
+									<entry>10</entry>
 								</row>
 								<row>
 									<entry>GEANY_STRING_UNTITLED</entry>
@@ -772,17 +847,29 @@
 									<entry>GEANY_DEFAULT_FONT_SYMBOL_LIST</entry>
 									<entry>The font used in sidebar to show symbols and open files.
 									</entry>
-									<entry>"Cursor 8"</entry>
+									<entry>"Sans 9"</entry>
 								</row>
 								<row>
 									<entry>GEANY_DEFAULT_FONT_MSG_WINDOW</entry>
 									<entry>The font used in the messages window.</entry>
-									<entry>"Cursor 8"</entry>
+									<entry>"Sans 9"</entry>
 								</row>
 								<row>
 									<entry>GEANY_DEFAULT_FONT_EDITOR</entry>
 									<entry>The font used in the editor window.</entry>
-									<entry>"Courier New 9"</entry>
+									<entry>"Monospace 10"</entry>
+								</row>
+								<row>
+									<entry align="left" spanname="hspan">Windows specific</entry>
+								</row>
+								<row>
+									<entry>GEANY_USE_WIN32_DIALOG</entry>
+									<entry>Set this to 1 if you want to use the default Windows
+										   file open dialog instead GTK's file open dialog. The default
+										   Windows file open dialog is missing some nice features like
+										   choosing a filetype or an encoding. Do not touch this
+										   setting when building on a non-Win32 system.</entry>
+									<entry>0</entry>
 								</row>
 							</tbody>
 						</tgroup>
@@ -794,7 +881,7 @@
 		<section id="build_system">
 			<title>Build system</title>
 			<para>
-				<application>&app;</application> has an integrated build system.
+				<application>Geany</application> has an integrated build system.
 				Firstly this means that the current source file will be saved before
 				it is processed. This is for convenience so that you don't need to keep saving
 				small changes to the current file before building.
@@ -803,9 +890,9 @@
 				Secondly the output for Compile, Build and Make actions will be captured
 				in the Compiler notebook tab of the messages window (assuming you have it visible).
 				If there are any warnings or errors with line numbers shown in the Compiler output tab,
-				you can double click on them and <application>&app;</application> will switch to
+				you can double click on them and <application>Geany</application> will switch to
 				the relevant source file (if it is open) and mark the line number so the problem
-				can be corrected. <application>&app;</application> will also set indicators for
+				can be corrected. <application>Geany</application> will also set indicators for
 				warnings or errors with line numbers.
 			</para>
 			<para>
@@ -904,7 +991,7 @@
 					command setting.
 				</para></note>
 				<para>
-					These settings are not saved when <application>&app;</application> is shut
+					These settings are not saved when <application>Geany</application> is shut
 					down. See below for how to set permanent arguments.
 				</para>
 				<para>
@@ -937,13 +1024,14 @@
 		<section id="printing">
 			<title>Printing support</title>
 			<para>
-				Geany has basic printing support. This means you can print a file by passing the
-				filename of the current file to a command which actually prints the file. However,
-				the printed document contains no syntax highlighting. You can adjust the command
-				to which the filename is passed in the preferences dialog. The default command is:
+				<application>Geany</application> has basic printing support. This means you can
+				print a file by passing the filename of the current file to a command which actually
+				prints the file. However, the printed document contains no syntax highlighting.
+				You can adjust the command to which the filename is passed in the preferences dialog.
+				The default command is:
 				<screen><prompt>%</prompt> <userinput><command>lpr</command> %f</userinput></screen>
 				%f will be substituted by the filename of the current file.
-				<application>&app;</application> will not show errors from the command itself, so
+				<application>Geany</application> will not show errors from the command itself, so
 				you should make sure that it works before(e.g. by trying to execute it from the
 				command line).
 			</para>
@@ -955,15 +1043,15 @@
 			</para>
 			<note>
 				<para>
-				The printing support of Geany will be improved in the future. With GTK 2.10, better
-				printing (including syntax highlighting) will be possible.
+				The printing support of <application>Geany</application> will be improved in the
+				future. With GTK 2.10, better printing (including syntax highlighting) will be possible.
 				</para>
 			</note>
 		</section>
 		<section id="keybindings">
 			<title>Keybindings</title>
 			<para>
-				<application>&app;</application> supports the default keyboard shortcuts for the
+				<application>Geany</application> supports the default keyboard shortcuts for the
 				Scintilla editing widget. For a list of these commands, see
 				<xref linkend="scikeybinding"/>.
 				The Scintilla keyboard shortcuts will be overridden by any custom keybindings
@@ -1246,7 +1334,7 @@
 								<entry>Go to tag definition</entry>
 								<entry>Jump to the definition of the current word (near the
 									   keyboard cursor). If the definition cannot be found (e.g. the
-									   relevant file is not open) <application>&app;</application>
+									   relevant file is not open) <application>Geany</application>
 									   will beep and do nothing. Used for function definitions.
 								</entry>
 							</row>
@@ -1254,7 +1342,7 @@
 								<entry>Go to tag declaration</entry>
 								<entry>Jump to the declaration of the current word (near the
 									   keyboard cursor). If the declaration cannot be found (e.g. the
-									   relevant file is not open) <application>&app;</application>
+									   relevant file is not open) <application>Geany</application>
 									   will beep and do nothing. Used for function prototypes.
 								</entry>
 							</row>
@@ -1279,12 +1367,13 @@
 				The system-wide configuration files can be found in
 				<filename>$prefix/share/geany</filename> and are called
 				<filename>filetypes.$ext</filename>, where $prefix is the path where
-				<application>&app;</application> is	installed (commonly
+				<application>Geany</application> is	installed (commonly
 				<filename>/usr/local</filename>) and $ext is the name of the filetype.
 				For every filetype there is a corresponding definition file. There is one exception:
 				<filename>filetypes.common</filename> - this file is for general settings, which
 				are not specific to a certain filetype. It is not recommended to edit the
-				system-wide files, because they will be overridden when Geany is updated.
+				system-wide files, because they will be overridden when
+				<application>Geany</application> is updated.
 			</para>
 			<para>
 				To change the settings, copy a file from <filename>$prefix/share/geany</filename>
@@ -1295,7 +1384,7 @@
 				 For example:
 				 <screen><prompt>%</prompt> <userinput><command>cp /usr/local/share/geany/filetypes.c /home/username/.geany/filedefs/</command></userinput></screen>
 				 Then you can edit the file and the changes are also available after an update of
-				 <application>&app;</application> because they reside in your configuration
+				 <application>Geany</application> because they reside in your configuration
 				 directory. Alternatively, you can create a file
 				 <filename>~/.geany/filedefs/filetypes.X</filename> and add only these settings you
 				 want to change. All missing settings will be read from the corresponding global
@@ -1441,7 +1530,7 @@
 											   If the file is not already compiled, it will be
 											   compiled while linking. The -o option is
 											   automatically added by
-											   <application>&app;</application>. This item works
+											   <application>Geany</application>. This item works
 											   well with GNU gcc, but may be problematic with other
 											   compilers (esp. with the linker).
 										</entry>
@@ -1597,7 +1686,7 @@
 		<section id="filetype_extensions">
 			<title>Filetype extensions</title>
 			<para>
-				You can override the default extensions that <application>&app;</application> uses
+				You can override the default extensions that <application>Geany</application> uses
 				for each filetype using the <filename>filetype_extensions.conf</filename> file.
 			</para>
 			<para>
@@ -1605,7 +1694,7 @@
 				copy it from <filename>$prefix/share/geany</filename> to your
 				configuration directory, usually <filename>~/.geany/</filename>.
 				$prefix is the path where
-				<application>&app;</application> is	installed (commonly
+				<application>Geany</application> is	installed (commonly
 				<filename>/usr/local</filename>).
 			</para>
 			<para>
@@ -1631,43 +1720,46 @@
 		<section>
 			<title>Templates</title>
 			<para>
-				<application>&app;</application> supports several templates for file headers, multiline
-				comments (frame comments), function descriptions, a typical ChangeLog entry and a short GPL notice.
-				To use these templates, just open the Edit menu or open the popup menu by right-clicking in the
-				editor widget, and choose "Insert Comments" and insert templates as you want.
+				<application>Geany</application> supports several templates for file headers,
+				multiline comments (frame comments), function descriptions, a typical ChangeLog entry
+				and a short GPL notice. To use these templates, just open the Edit menu or open the
+				popup menu by right-clicking in the editor widget, and choose "Insert Comments" and
+				insert templates as you want.
 			</para>
 			<para>
-				Some templates (like file header or ChangeLog entry) will always be inserted at the top of the file.
+				Some templates (like file header or ChangeLog entry) will always be inserted at the
+				top of the file.
 			</para>
 			<para>
-				To insert a function description, the cursor must be inside of the function, so that the function
-				name can be determined automatically. The description will be positioned correctly one line above
-				the function, just check it out. If the cursor is not inside of a function or the function name cannot
-				be determined, you cannot insert a function description.
+				To insert a function description, the cursor must be inside of the function, so that
+				the function name can be determined automatically. The description will be positioned
+				correctly one line above the function, just check it out. If the cursor is not inside
+				of a function or the function name cannot be determined, you cannot insert a function
+				description.
 			</para>
 			<para>
-				Each template can be customized to your needs. The templates are in the configuration directory, which
-				is in <filename>~/.&app_small;/</filename> (see <xref linkend="clo"/> for further information about the
-				configuration directory). Just open the desired template with an editor (ideally &app; ;-) ) and edit
-				the template as your needs.	There are some wildcards which will be automatically replaced by
-				<application>&app;</application> at startup.
+				Each template can be customized to your needs. The templates are in the configuration
+				directory, which is in <filename>~/.&app_small;/</filename> (see <xref linkend="clo"/>
+				for further information about the configuration directory). Just open the desired
+				template with an editor (ideally <application>Geany</application> ;-) ) and edit
+				the template as your needs.	There are some wildcards which will be automatically
+				replaced by <application>Geany</application> at startup.
 			</para>
 			<para>
 				All wildcards must be enclosed by "{" and "}", e.g. {date}.
 			</para>
 			<para>
-				In the configuration dialog you can find a tab "Templates" (see <xref linkend="confdialog_templ"/>).
-				You can define the default values which will be inserted in the templates. You should restart
-				<application>&app;</application> after making changes, because they are only read at startup.
+				In the configuration dialog you can find a tab "Templates"
+				(see <xref linkend="confdialog_templ"/>). You can define the default values which
+				will be inserted in the templates. You should restart <application>Geany</application>
+				after making changes, because they are only read at startup.
 			</para>
 			<para>
-				Since <application>&app;</application> 0.3 there are also templates for creating new files.
-				They can be found in <filename>~/.&app_small;/</filename>, too.
-				All template files for creating new files begin with
-				<filename>template.filetype.</filename> followed by the filetype.
-				At creating a new file with a filetype template, the template for the fileheader is automatically prepended.
-				Please note that the complete behaviour is still under development and will probably be changed in one of
-				the next releases. Sorry.
+				Since <application>Geany</application> 0.3 there are also templates for creating new
+				files. They can be found in <filename>~/.&app_small;/</filename>, too. All template
+				files for creating new files begin with <filename>template.filetype.</filename>
+				followed by the filetype. At creating a new file with a filetype template, the
+				template for the fileheader is automatically prepended.
 			</para>
 			<para>&nbsp;</para>
 			<para>
@@ -1731,7 +1823,9 @@
 							</row>
 							<row>
 								<entry>geanyversion</entry>
-								<entry>The actual Geany version, e.g. "&app; &appversion;"</entry>
+								<entry>The actual <application>Geany</application> version,
+									   e.g. "Geany &appversion;"
+								</entry>
 								<entry>filetypes, file header, function description, ChangeLog entry</entry>
 							</row>
 							<row>
@@ -1759,7 +1853,8 @@
 						</tbody>
 					</tgroup>
 				</table>
-				If you need any other wildcards or a special date/time format, please email the author <email>&author_mail;</email>.
+				If you need any other wildcards or a special date/time format, please email the
+				author <email>&author_mail;</email>.
 			</para>
 		</section>
 	</chapter>
