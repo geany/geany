@@ -87,7 +87,14 @@ void ui_update_statusbar(gint idx, gint pos)
 
 		if (pos == -1) pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
-		col = sci_get_col_from_position(doc_list[idx].sci, pos);
+
+	   // Add temporary fix for sci infinite loop in Document::GetColumn(int)
+	   // when current pos is beyond document end (can occur when removing
+	   // blocks of selected lines especially esp. brace sections near end of file).
+		if (pos <= sci_get_length(doc_list[idx].sci))
+			col = sci_get_col_from_position(doc_list[idx].sci, pos);
+		else
+			col = 0;
 
 		text = g_strdup_printf(_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s %s     filetype: %s"),
 			(doc_list[idx].changed) ? 42 : 32,
