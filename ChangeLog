@@ -12,6 +12,8 @@
    src/treeviews.c, src/treeviews.h, src/geany.h:
    Moved all treeview related callback functions from callbacks.c to
    msgwindow.c and treeviews.c.
+ * src/document.c: Fixed bug when setting colour of open files list
+                   entry on new, unnamed files.
 
 
 2006-10-28  Nick Treleaven  <nick.treleaven@btinternet.com>

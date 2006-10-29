@@ -167,7 +167,6 @@ void document_set_text_changed(gint idx)
 		// changes the color of the tab text according to the status
 		static GdkColor colorred = {0, 65535, 0, 0};
 		static GdkColor colorblack = {0, 0, 0, 0};
-		gchar *basename = g_path_get_basename(doc_list[idx].file_name);
 
 		gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL,
 					(doc_list[idx].changed) ? &colorred : &colorblack);
@@ -181,8 +180,12 @@ void document_set_text_changed(gint idx)
 		ui_save_buttons_toggle(doc_list[idx].changed);
 		ui_set_window_title(idx);
 		ui_update_statusbar(idx, -1);
-		treeviews_openfiles_update(doc_list[idx].iter, basename, doc_list[idx].changed);
-		g_free(basename);
+		if (doc_list[idx].file_name != NULL)
+		{
+			gchar *basename = g_path_get_basename(doc_list[idx].file_name);
+			treeviews_openfiles_update(doc_list[idx].iter, basename, doc_list[idx].changed);
+			g_free(basename);
+		}
 	}
 }
 
