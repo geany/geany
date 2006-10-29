@@ -8,6 +8,10 @@
  * src/document.c, src/treeviews.c, src/treeviews.h:
    Colour also the open files list items according to their changed
    state.
+ * src/callbacks.c, src/callbacks.h, src/msgwindow.c, src/msgwindow.h,
+   src/treeviews.c, src/treeviews.h, src/geany.h:
+   Moved all treeview related callback functions from callbacks.c to
+   msgwindow.c and treeviews.c.
 
 
 2006-10-28  Nick Treleaven  <nick.treleaven@btinternet.com>

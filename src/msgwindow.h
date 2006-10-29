@@ -33,6 +33,15 @@ enum
 	COLOR_BLUE
 };
 
+enum
+{
+	MSG_STATUS = 0, // force it to start at 0 to keep in sync with the notebook page numbers
+	MSG_COMPILER,
+	MSG_MESSAGE,
+	MSG_SCRATCH,
+	MSG_VTE,
+};
+
 
 
 typedef struct

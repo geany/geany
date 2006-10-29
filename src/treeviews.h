@@ -52,19 +52,19 @@ gint treeviews_sort_tag_list(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b
 
 void treeviews_init_tag_list(gint idx);
 
-void treeviews_prepare_openfiles(void);
+void treeviews_prepare_openfiles();
 
 GtkTreeIter treeviews_openfiles_add(gint idx, const gchar *string, gboolean changed);
 
 void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string, gboolean changed);
 
-void treeviews_openfiles_update_all(void);
+void treeviews_openfiles_update_all();
 
 void treeviews_openfiles_remove(GtkTreeIter iter);
 
-void treeviews_create_openfiles_popup_menu(void);
+void treeviews_create_openfiles_popup_menu();
 
-void treeviews_create_taglist_popup_menu(void);
+void treeviews_create_taglist_popup_menu();
 
 /* compares the given data (GINT_TO_PONTER(idx)) with the idx from the selected row of openfiles
  * treeview, in case of a match the row is selected and TRUE is returned

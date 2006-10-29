@@ -212,16 +212,6 @@ enum {
 	GIGABYTE = (MEGABYTE*1024)
 };
 
-enum
-{
-	MSG_STATUS = 0, // force it to start at 0 to keep in sync with the notebook page numbers
-	MSG_COMPILER,
-	MSG_MESSAGE,
-	MSG_SCRATCH,
-	MSG_VTE,
-	TREEVIEW_SYMBOL,
-	TREEVIEW_OPENFILES
-};
 
 
 // implementation in main.c; prototype is here so that all files can use it.

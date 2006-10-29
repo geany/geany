@@ -130,11 +130,6 @@ gboolean
 on_close_all1_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
-gboolean
-on_tree_view_button_press_event        (GtkWidget *widget,
-                                        GdkEventButton *event,
-                                        gpointer user_data);
-
 void
 on_crlf_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
@@ -223,15 +218,6 @@ on_zoom_out1_activate                  (GtkMenuItem     *menuitem,
 void
 on_entry1_changed                      (GtkEditable     *editable,
                                         gpointer         user_data);
-
-
-void
-on_openfiles_tree_selection_changed    (GtkTreeSelection *selection,
-                                        gpointer data);
-
-void
-on_taglist_tree_selection_changed      (GtkTreeSelection *selection,
-                                        gpointer data);
 
 void
 on_filetype_change                     (GtkMenuItem     *menuitem,
@@ -457,14 +443,6 @@ void
 on_tv_notebook_switch_page             (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
                                         guint            page_num,
-                                        gpointer         user_data);
-
-void
-on_openfiles_tree_popup_clicked        (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_taglist_tree_popup_clicked          (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 gboolean

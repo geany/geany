@@ -37,6 +37,7 @@
 #include <stdlib.h>
 
 
+
 // used for parse_file_line
 typedef struct
 {
@@ -55,6 +56,8 @@ MessageWindow msgwindow;
 
 
 static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line);
+static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *event,
+																			gpointer user_data);
 
 
 void msgwin_init()
@@ -90,7 +93,7 @@ void msgwin_prepare_status_tree_view(void)
 
 	gtk_widget_modify_font(msgwindow.tree_status, pango_font_description_from_string(app->msgwin_font));
 	g_signal_connect(G_OBJECT(msgwindow.tree_status), "button-press-event",
-				G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(MSG_STATUS));
+				G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_STATUS));
 
 }
 
@@ -115,7 +118,7 @@ void msgwin_prepare_msg_tree_view(void)
 	gtk_widget_modify_font(msgwindow.tree_msg, pango_font_description_from_string(app->msgwin_font));
 	// use button-release-event so the selection has changed (connect_after button-press-event doesn't work)
 	g_signal_connect(G_OBJECT(msgwindow.tree_msg), "button-release-event",
-					G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
+					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
 
 	// selection handling
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
@@ -143,7 +146,7 @@ void msgwin_prepare_compiler_tree_view(void)
 	gtk_widget_modify_font(msgwindow.tree_compiler, pango_font_description_from_string(app->msgwin_font));
 	// use button-release-event so the selection has changed (connect_after button-press-event doesn't work)
 	g_signal_connect(G_OBJECT(msgwindow.tree_compiler), "button-release-event",
-					G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(MSG_COMPILER));
+					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_COMPILER));
 
 	// selection handling
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
@@ -589,3 +592,51 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 }
 
 
+static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *event,
+																			gpointer user_data)
+{
+	// user_data might be NULL, GPOINTER_TO_INT returns 0 if called with NULL
+	
+	if (event->button == 1)
+	{
+		switch (GPOINTER_TO_INT(user_data))
+		{
+			case MSG_COMPILER:
+			{	// single click in the compiler treeview
+				msgwin_goto_compiler_file_line();
+				break;
+			}
+			case MSG_MESSAGE:
+			{	// single click in the message treeview (results of 'Find usage')
+				msgwin_goto_messages_file_line();
+				break;
+			}
+		}
+	}
+
+	if (event->button == 3)
+	{	// popupmenu to hide or clear the active treeview
+		switch (GPOINTER_TO_INT(user_data))
+		{
+			case MSG_STATUS:
+			{
+				gtk_menu_popup(GTK_MENU(msgwindow.popup_status_menu), NULL, NULL, NULL, NULL,
+																	event->button, event->time);
+				break;
+			}
+			case MSG_MESSAGE:
+			{
+				gtk_menu_popup(GTK_MENU(msgwindow.popup_msg_menu), NULL, NULL, NULL, NULL,
+																	event->button, event->time);
+				break;
+			}
+			case MSG_COMPILER:
+			{
+				gtk_menu_popup(GTK_MENU(msgwindow.popup_compiler_menu), NULL, NULL, NULL, NULL,
+																	event->button, event->time);
+				break;
+			}
+		}
+	}
+	return FALSE;
+}

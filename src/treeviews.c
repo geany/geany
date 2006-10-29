@@ -27,6 +27,36 @@
 #include "callbacks.h"
 #include "treeviews.h"
 #include "document.h"
+#include "utils.h"
+#include "ui_utils.h"
+
+
+enum
+{
+	TREEVIEW_SYMBOL = 0,
+	TREEVIEW_OPENFILES
+};
+
+enum
+{
+	OPENFILES_ACTION_REMOVE = 0,
+	OPENFILES_ACTION_SAVE,
+	OPENFILES_ACTION_RELOAD,
+	OPENFILES_ACTION_HIDE,
+	OPENFILES_ACTION_HIDE_ALL,
+	SYMBOL_ACTION_HIDE,
+	SYMBOL_ACTION_HIDE_ALL
+};
+
+
+/* callback prototypes */
+static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data);
+static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpointer data);
+static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data);
+static void on_taglist_tree_selection_changed(GtkTreeSelection *selection, gpointer data);
+static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButton *event,
+																			gpointer user_data);
+
 
 
 /* the following two functions are document-related, but I think they fit better here than in document.c */
@@ -44,14 +74,15 @@ void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_widget_modify_font(tree, pango_font_description_from_string(app->tagbar_font));
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 	g_signal_connect(G_OBJECT(tree), "button-press-event",
-						G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(TREEVIEW_SYMBOL));
+					G_CALLBACK(on_treeviews_button_press_event), GINT_TO_POINTER(TREEVIEW_SYMBOL));
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), FALSE);
 
 	// selection handling
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-	g_signal_connect(G_OBJECT(select), "changed", G_CALLBACK(on_taglist_tree_selection_changed), NULL);
+	g_signal_connect(G_OBJECT(select), "changed",
+				G_CALLBACK(on_taglist_tree_selection_changed), NULL);
 }
 
 
@@ -228,7 +259,7 @@ void treeviews_init_tag_list(gint idx)
 
 
 /* does some preparing things to the open files list widget */
-void treeviews_prepare_openfiles(void)
+void treeviews_prepare_openfiles()
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -255,7 +286,7 @@ void treeviews_prepare_openfiles(void)
 
 	gtk_widget_modify_font(tv.tree_openfiles, pango_font_description_from_string(app->tagbar_font));
 	g_signal_connect(G_OBJECT(tv.tree_openfiles), "button-press-event",
-						G_CALLBACK(on_tree_view_button_press_event), GINT_TO_POINTER(TREEVIEW_OPENFILES));
+						G_CALLBACK(on_treeviews_button_press_event), GINT_TO_POINTER(TREEVIEW_OPENFILES));
 
 	// selection handling
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
@@ -306,7 +337,7 @@ void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string, gboolean 
 }
 
 
-void treeviews_openfiles_update_all(void)
+void treeviews_openfiles_update_all()
 {
 	guint i;
 	gint idx;
@@ -329,7 +360,7 @@ void treeviews_openfiles_update_all(void)
 }
 
 
-void treeviews_create_taglist_popup_menu(void)
+void treeviews_create_taglist_popup_menu()
 {
 	GtkWidget *item;
 
@@ -341,7 +372,7 @@ void treeviews_create_taglist_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
 	g_signal_connect((gpointer) item, "activate",
-				G_CALLBACK(on_taglist_tree_popup_clicked), GINT_TO_POINTER(0));
+				G_CALLBACK(on_taglist_tree_popup_clicked), GINT_TO_POINTER(SYMBOL_ACTION_HIDE));
 
 	item = gtk_image_menu_item_new_with_label(_("Hide sidebar"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
@@ -349,11 +380,11 @@ void treeviews_create_taglist_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
 	g_signal_connect((gpointer) item, "activate",
-				G_CALLBACK(on_taglist_tree_popup_clicked), GINT_TO_POINTER(1));
+				G_CALLBACK(on_taglist_tree_popup_clicked), GINT_TO_POINTER(SYMBOL_ACTION_HIDE_ALL));
 }
 
 
-void treeviews_create_openfiles_popup_menu(void)
+void treeviews_create_openfiles_popup_menu()
 {
 	GtkWidget *item;
 
@@ -363,7 +394,7 @@ void treeviews_create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
 	g_signal_connect((gpointer) item, "activate",
-				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(0));
+				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(OPENFILES_ACTION_REMOVE));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -373,7 +404,7 @@ void treeviews_create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
 	g_signal_connect((gpointer) item, "activate",
-				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(1));
+				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(OPENFILES_ACTION_SAVE));
 
 	item = gtk_image_menu_item_new_with_label(_("Reload"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
@@ -381,7 +412,7 @@ void treeviews_create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
 	g_signal_connect((gpointer) item, "activate",
-				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(2));
+				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(OPENFILES_ACTION_RELOAD));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -392,16 +423,16 @@ void treeviews_create_openfiles_popup_menu(void)
 		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
-	g_signal_connect((gpointer) item, "activate",
-				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(3));
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_openfiles_tree_popup_clicked),
+												GINT_TO_POINTER(OPENFILES_ACTION_HIDE));
 
 	item = gtk_image_menu_item_new_with_label(_("Hide sidebar"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
-	g_signal_connect((gpointer) item, "activate",
-				G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(4));
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_openfiles_tree_popup_clicked),
+													GINT_TO_POINTER(OPENFILES_ACTION_HIDE_ALL));
 }
 
 
@@ -422,3 +453,132 @@ gboolean treeviews_find_node(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter
 	else return FALSE;
 }
 
+
+/* callbacks */
+
+static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GtkTreeIter iter;
+	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
+	GtkTreeModel *model;
+	gint idx = -1;
+
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	{
+		gtk_tree_model_get(model, &iter, 1, &idx, -1);
+		if (idx >= 0)
+		{
+			switch (GPOINTER_TO_INT(user_data))
+			{
+				case OPENFILES_ACTION_REMOVE:
+				{
+					document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci)));
+					break;
+				}
+				case OPENFILES_ACTION_SAVE:
+				{
+					if (doc_list[idx].changed) document_save_file(idx, FALSE);
+					break;
+				}
+				case OPENFILES_ACTION_RELOAD:
+				{
+					on_toolbutton23_clicked(NULL, NULL);
+					break;
+				}
+				case OPENFILES_ACTION_HIDE:
+				{
+					app->sidebar_openfiles_visible = FALSE;
+					ui_treeviews_show_hide(FALSE);
+					break;
+				}
+				case OPENFILES_ACTION_HIDE_ALL:
+				{
+					app->sidebar_visible = FALSE;
+					ui_treeviews_show_hide(TRUE);
+					break;
+				}
+			}
+		}
+	}
+}
+
+
+static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	gint idx = 0;
+
+	// use switch_notebook_page to ignore changing the notebook page because it is already done
+	if (gtk_tree_selection_get_selected(selection, &model, &iter) && ! app->ignore_callback)
+	{
+		gtk_tree_model_get(model, &iter, 1, &idx, -1);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
+					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+					(GtkWidget*) doc_list[idx].sci));
+	}
+}
+
+
+static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data)
+{
+	switch (GPOINTER_TO_INT(user_data))
+	{
+		case SYMBOL_ACTION_HIDE:
+		{
+			app->sidebar_symbol_visible = FALSE;
+			ui_treeviews_show_hide(FALSE);
+			break;
+		}
+		case SYMBOL_ACTION_HIDE_ALL:
+		{
+			app->sidebar_visible = FALSE;
+			ui_treeviews_show_hide(TRUE);
+			break;
+		}
+	}
+}
+
+
+static void on_taglist_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	gchar *string;
+
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	{
+		gtk_tree_model_get(model, &iter, 0, &string, -1);
+		if (string && (strlen(string) > 0))
+		{
+			gint idx = document_get_cur_idx();
+			utils_goto_line(idx, utils_get_local_tag(idx, string));
+			g_free(string);
+		}
+	}
+}
+
+
+static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButton *event,
+																			gpointer user_data)
+{
+	if (event->button == 1)
+	{
+		if (GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
+		{	// allow reclicking of taglist treeview item
+			GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+			on_taglist_tree_selection_changed(select, NULL);
+		}
+	}
+
+	if (event->button == 3)
+	{	// popupmenu to hide or clear the active treeview
+		if (GPOINTER_TO_INT(user_data) == TREEVIEW_OPENFILES)
+			gtk_menu_popup(GTK_MENU(tv.popup_openfiles), NULL, NULL, NULL, NULL,
+																event->button, event->time);
+		else if (GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
+			gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL,
+																event->button, event->time);
+	}
+	return FALSE;
+}
