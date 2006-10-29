@@ -8,7 +8,7 @@ Vendor:        Enrico Tröger <enrico.troeger@uvena.de>
 Packager:      Enrico Tröger <enrico.troeger@uvena.de>
 Source:        http://files.uvena.de/geany/%{name}-%{version}.tar.bz2
 URL:           http://geany.uvena.de/
-BuildRoot:     %{_tmpdir}/%{name}-%{version}-%{release}-root
+BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires:      glib2, gtk2, pango
 BuildRequires: glib2-devel, gtk2-devel, pango-devel
 
