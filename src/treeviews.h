@@ -54,9 +54,9 @@ void treeviews_init_tag_list(gint idx);
 
 void treeviews_prepare_openfiles(void);
 
-GtkTreeIter treeviews_openfiles_add(gint idx, const gchar *string);
+GtkTreeIter treeviews_openfiles_add(gint idx, const gchar *string, gboolean changed);
 
-void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string);
+void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string, gboolean changed);
 
 void treeviews_openfiles_update_all(void);
 

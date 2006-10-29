@@ -29,7 +29,7 @@
 #include "document.h"
 
 
-/* the following two functions are document-related, but I think they fit better here than in document.c*/
+/* the following two functions are document-related, but I think they fit better here than in document.c */
 void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 {
 	GtkCellRenderer *renderer;
@@ -236,7 +236,7 @@ void treeviews_prepare_openfiles(void)
 	tv.tree_openfiles = lookup_widget(app->window, "treeview6");
 
 	// store the short filename to show, and the index as reference
-	tv.store_openfiles = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_INT);
+	tv.store_openfiles = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_INT, GDK_TYPE_COLOR);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(tv.store_openfiles));
 
 	// set policy settings for the scolledwindow around the treeview again, because glade
@@ -246,7 +246,8 @@ void treeviews_prepare_openfiles(void)
 			GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(_("Open files"), renderer, "text", 0, NULL);
+	column = gtk_tree_view_column_new_with_attributes(_("Open files"), renderer,
+															"text", 0, "foreground-gdk", 2, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tv.tree_openfiles), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
 
@@ -263,12 +264,21 @@ void treeviews_prepare_openfiles(void)
 }
 
 
-GtkTreeIter treeviews_openfiles_add(gint idx, const gchar *string)
+GtkTreeIter treeviews_openfiles_add(gint idx, const gchar *string, gboolean changed)
 {
 	GtkTreeIter iter;
+	static GdkColor black = {0, 0, 0, 0};
+	static GdkColor red = {0, 65535, 0, 0};
+	GdkColor *colour;
+	
+	if (changed)
+		colour = &red;
+	else
+		colour = &black;
+	
 
 	gtk_list_store_append(tv.store_openfiles, &iter);
-	gtk_list_store_set(tv.store_openfiles, &iter, 0, string, 1, idx, -1);
+	gtk_list_store_set(tv.store_openfiles, &iter, 0, string, 1, idx, 2, colour, -1);
 
 	return iter;
 }
@@ -281,9 +291,18 @@ void treeviews_openfiles_remove(GtkTreeIter iter)
 }
 
 
-void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string)
+void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string, gboolean changed)
 {
-	gtk_list_store_set(tv.store_openfiles, &iter, 0, string, -1);
+	static GdkColor black = {0, 0, 0, 0};
+	static GdkColor red = {0, 65535, 0, 0};
+	GdkColor *colour;
+	
+	if (changed)
+		colour = &red;
+	else
+		colour = &black;
+	
+	gtk_list_store_set(tv.store_openfiles, &iter, 0, string, 2, colour, -1);
 }
 
 
@@ -304,10 +323,9 @@ void treeviews_openfiles_update_all(void)
 		else
 			shortname = g_path_get_basename(doc_list[idx].file_name);
 
-		doc_list[idx].iter = treeviews_openfiles_add(idx, shortname);
+		doc_list[idx].iter = treeviews_openfiles_add(idx, shortname, doc_list[idx].changed);
 		g_free(shortname);
 	}
-
 }
 
 

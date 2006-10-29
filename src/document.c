@@ -165,8 +165,9 @@ void document_set_text_changed(gint idx)
 	if (idx >= 0 && doc_list[idx].is_valid && ! app->quitting)
 	{
 		// changes the color of the tab text according to the status
-		GdkColor colorred = {0, 65535, 0, 0};
-		GdkColor colorblack = {0, 0, 0, 0};
+		static GdkColor colorred = {0, 65535, 0, 0};
+		static GdkColor colorblack = {0, 0, 0, 0};
+		gchar *basename = g_path_get_basename(doc_list[idx].file_name);
 
 		gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL,
 					(doc_list[idx].changed) ? &colorred : &colorblack);
@@ -180,6 +181,8 @@ void document_set_text_changed(gint idx)
 		ui_save_buttons_toggle(doc_list[idx].changed);
 		ui_set_window_title(idx);
 		ui_update_statusbar(idx, -1);
+		treeviews_openfiles_update(doc_list[idx].iter, basename, doc_list[idx].changed);
+		g_free(basename);
 	}
 }
 
@@ -301,7 +304,7 @@ static gint document_create_new_sci(const gchar *filename)
 	tabnum = notebook_new_tab(new_idx, title, GTK_WIDGET(sci));
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), tabnum);
 
-	iter = treeviews_openfiles_add(new_idx, title);
+	iter = treeviews_openfiles_add(new_idx, title, FALSE);
 	g_free(title);
 
 	this->tag_store = NULL;
@@ -893,10 +896,8 @@ gboolean document_save_file(gint idx, gboolean force)
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), basename);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), basename);
-		treeviews_openfiles_update(doc_list[idx].iter, doc_list[idx].file_name);
 		msgwin_status_add(_("File %s saved."), doc_list[idx].file_name);
 		ui_update_statusbar(idx, -1);
-		treeviews_openfiles_update(doc_list[idx].iter, basename);
 		g_free(basename);
 #ifdef HAVE_VTE
 		vte_cwd(doc_list[idx].file_name);

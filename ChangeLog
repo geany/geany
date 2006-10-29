@@ -5,6 +5,9 @@
    Added an Apply button to preferences dialog.
    New setting to show/hide the Quit toolbar item.
    New setting to show/hide notebook tabs.
+ * src/document.c, src/treeviews.c, src/treeviews.h:
+   Colour also the open files list items according to their changed
+   state.
 
 
 2006-10-28  Nick Treleaven  <nick.treleaven@btinternet.com>
