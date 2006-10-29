@@ -217,6 +217,9 @@ static void apply_settings(void)
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), app->tab_pos_sidebar);
 
 	ui_update_toolbar_items();
+	
+	// whether to show notebook tabs or not
+	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), app->show_notebook_tabs);
 }
 
 

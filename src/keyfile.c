@@ -113,6 +113,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", app->pref_editor_show_line_endings);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", app->fullscreen);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", app->tab_order_ltr);
+	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", app->show_notebook_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "brace_match_ltgt", app->brace_match_ltgt);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", app->switch_msgwin_pages);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->pref_editor_auto_close_xml_tags);
@@ -165,6 +166,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", app->pref_toolbar_show_compile);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", app->pref_toolbar_show_colour);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_fileops", app->pref_toolbar_show_fileops);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_quit", app->pref_toolbar_show_quit);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", app->toolbar_icon_style);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", app->toolbar_icon_size);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", app->pref_editor_new_line);
@@ -313,6 +315,7 @@ gboolean configuration_load()
 	app->show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
 	app->fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	app->tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", FALSE);
+	app->show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
 	app->brace_match_ltgt = utils_get_setting_boolean(config, PACKAGE, "brace_match_ltgt", FALSE);
 	app->switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	app->custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
@@ -365,6 +368,7 @@ gboolean configuration_load()
 	app->pref_toolbar_show_undo = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_undo", FALSE);
 	app->pref_toolbar_show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
 	app->pref_toolbar_show_fileops = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_fileops", TRUE);
+	app->pref_toolbar_show_quit = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_quit", TRUE);
 #ifdef HAVE_VTE
 	vte_info.load_vte = utils_get_setting_boolean(config, "VTE", "load_vte", TRUE);
 	if (vte_info.load_vte)

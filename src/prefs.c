@@ -57,6 +57,8 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
 static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data);
 static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const gchar *action);
+static void on_pref_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_pref_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
 
 void prefs_init_dialog(void)
@@ -85,6 +87,12 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "check_ask_for_quit");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_confirm_exit);
+
+	widget = lookup_widget(app->prefs_dialog, "check_show_notebook_tabs");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->show_notebook_tabs);
+	// disable following setting if notebook tabs are hidden
+	on_pref_show_notebook_tabs_toggled(GTK_TOGGLE_BUTTON(
+					lookup_widget(app->prefs_dialog, "check_show_notebook_tabs")), NULL);
 
 	if (app->tab_order_ltr)
 		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
@@ -160,6 +168,9 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "check_toolbar_fileops");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_fileops);
+
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_quit");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_quit);
 
 
 	switch (app->toolbar_icon_style)
@@ -356,14 +367,13 @@ void prefs_init_dialog(void)
 #endif
 }
 
-//gtk_notebook_set_tab_pos
 
 /*
  * callbacks
  */
 void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	if (response == GTK_RESPONSE_OK)
+	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
 		GtkWidget *widget;
 		guint i;
@@ -389,6 +399,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
 		app->tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_show_notebook_tabs");
+		app->show_notebook_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
 		// Interface settings
@@ -445,6 +458,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_fileops");
 		app->pref_toolbar_show_fileops = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_quit");
+		app->pref_toolbar_show_quit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "radio_toolbar_imagetext");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) app->toolbar_icon_style = 2;
@@ -603,6 +619,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		ui_update_toolbar_icons(app->toolbar_icon_size);
 		gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), app->toolbar_icon_style);
 		ui_treeviews_show_hide(FALSE);
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), app->show_notebook_tabs);
 
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), app->tab_pos_editor);
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), app->tab_pos_msgwin);
@@ -621,8 +638,12 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		// store all settings
 		configuration_save();
 	}
-	gtk_list_store_clear(store);
-	gtk_widget_hide(GTK_WIDGET(dialog));
+	
+	if (response != GTK_RESPONSE_APPLY)
+	{
+		gtk_list_store_clear(store);
+		gtk_widget_hide(GTK_WIDGET(dialog));
+	}
 }
 
 
@@ -722,7 +743,6 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 #endif
 	}
 }
-
 
 
 static gboolean on_prefs_tree_view_button_press_event(
@@ -883,12 +903,20 @@ static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const
 }
 
 
-void on_pref_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+static void on_pref_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
 	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "frame11"), sens);
 	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "frame13"), sens);
+}
+
+
+static void on_pref_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gboolean sens = gtk_toggle_button_get_active(togglebutton);
+
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "hbox3"), sens);
 }
 
 
@@ -1120,6 +1148,8 @@ void dialogs_show_prefs_dialog(void)
 
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_toolbar_show"),
 				"toggled", G_CALLBACK(on_pref_toolbar_show_toggled), NULL);
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_show_notebook_tabs"),
+				"toggled", G_CALLBACK(on_pref_show_notebook_tabs_toggled), NULL);
 
 	}
 

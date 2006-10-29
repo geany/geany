@@ -88,6 +88,7 @@ typedef struct MyApp
 	gboolean			 fullscreen;
 	gboolean			 beep_on_errors;
 	gboolean			 switch_msgwin_pages;
+	gboolean			 show_notebook_tabs;
 	gboolean			 tab_order_ltr;
 	gboolean			 show_markers_margin;
 	gboolean			 show_linenumber_margin;
@@ -119,6 +120,7 @@ typedef struct MyApp
 	gboolean			 pref_toolbar_show_zoom;
 	gboolean			 pref_toolbar_show_colour;
 	gboolean			 pref_toolbar_show_fileops;
+	gboolean			 pref_toolbar_show_quit;
 	gint				 tab_pos_editor;
 	gint				 tab_pos_msgwin;
 	gint				 tab_pos_sidebar;

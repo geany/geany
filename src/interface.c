@@ -2143,16 +2143,19 @@ create_prefs_dialog (void)
   GtkWidget *check_vte;
   GtkWidget *check_ask_for_quit;
   GtkWidget *label163;
-  GtkWidget *hbox2;
-  GtkWidget *label147;
-  GtkObject *spin_mru_adj;
-  GtkWidget *spin_mru;
+  GtkWidget *frame15;
+  GtkWidget *alignment18;
   GtkWidget *hbox3;
   GtkWidget *label150;
   GtkWidget *radio_tab_left;
   GSList *radio_tab_left_group = NULL;
   GtkWidget *label149;
   GtkWidget *radio_tab_right;
+  GtkWidget *check_show_notebook_tabs;
+  GtkWidget *hbox2;
+  GtkWidget *label147;
+  GtkObject *spin_mru_adj;
+  GtkWidget *spin_mru;
   GtkWidget *label162;
   GtkWidget *label94;
   GtkWidget *vbox14;
@@ -2213,6 +2216,7 @@ create_prefs_dialog (void)
   GtkWidget *check_toolbar_undo;
   GtkWidget *check_toolbar_search;
   GtkWidget *check_toolbar_goto;
+  GtkWidget *check_toolbar_quit;
   GtkWidget *label165;
   GtkWidget *frame13;
   GtkWidget *alignment16;
@@ -2316,8 +2320,9 @@ create_prefs_dialog (void)
   GtkWidget *button2;
   GtkWidget *label151;
   GtkWidget *dialog_action_area3;
-  GtkWidget *cancelbutton1;
-  GtkWidget *okbutton1;
+  GtkWidget *button3;
+  GtkWidget *button4;
+  GtkWidget *button5;
   GtkTooltips *tooltips;
 
   tooltips = gtk_tooltips_new ();
@@ -2394,25 +2399,19 @@ create_prefs_dialog (void)
   gtk_widget_show (label163);
   gtk_box_pack_start (GTK_BOX (vbox4), label163, FALSE, FALSE, 0);
 
-  hbox2 = gtk_hbox_new (FALSE, 20);
-  gtk_widget_show (hbox2);
-  gtk_box_pack_start (GTK_BOX (vbox4), hbox2, FALSE, TRUE, 0);
+  frame15 = gtk_frame_new (NULL);
+  gtk_widget_show (frame15);
+  gtk_box_pack_start (GTK_BOX (vbox4), frame15, FALSE, FALSE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame15), GTK_SHADOW_NONE);
 
-  label147 = gtk_label_new (_("Recent files list length:"));
-  gtk_widget_show (label147);
-  gtk_box_pack_start (GTK_BOX (hbox2), label147, FALSE, FALSE, 0);
-
-  spin_mru_adj = gtk_adjustment_new (4, 1, 50, 1, 10, 10);
-  spin_mru = gtk_spin_button_new (GTK_ADJUSTMENT (spin_mru_adj), 1, 0);
-  gtk_widget_show (spin_mru);
-  gtk_box_pack_start (GTK_BOX (hbox2), spin_mru, FALSE, TRUE, 0);
-  gtk_tooltips_set_tip (tooltips, spin_mru, _("Specifies the number of files which are stored in the Recent files list."), NULL);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_mru), TRUE);
-  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_mru), TRUE);
+  alignment18 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment18);
+  gtk_container_add (GTK_CONTAINER (frame15), alignment18);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment18), 0, 0, 12, 0);
 
   hbox3 = gtk_hbox_new (FALSE, 1);
   gtk_widget_show (hbox3);
-  gtk_box_pack_start (GTK_BOX (vbox4), hbox3, FALSE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (alignment18), hbox3);
 
   label150 = gtk_label_new (_("Placement of new file tabs: "));
   gtk_widget_show (label150);
@@ -2436,6 +2435,27 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, radio_tab_right, _("New file tabs will be placed to the right of the tab list"), NULL);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_tab_right), radio_tab_left_group);
   radio_tab_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_tab_right));
+
+  check_show_notebook_tabs = gtk_check_button_new_with_mnemonic (_("Show file tabs"));
+  gtk_widget_show (check_show_notebook_tabs);
+  gtk_frame_set_label_widget (GTK_FRAME (frame15), check_show_notebook_tabs);
+
+  hbox2 = gtk_hbox_new (FALSE, 20);
+  gtk_widget_show (hbox2);
+  gtk_box_pack_start (GTK_BOX (vbox4), hbox2, FALSE, FALSE, 0);
+
+  label147 = gtk_label_new (_("Recent files list length:"));
+  gtk_widget_show (label147);
+  gtk_box_pack_start (GTK_BOX (hbox2), label147, FALSE, FALSE, 0);
+  gtk_misc_set_padding (GTK_MISC (label147), 0, 7);
+
+  spin_mru_adj = gtk_adjustment_new (4, 1, 50, 1, 10, 10);
+  spin_mru = gtk_spin_button_new (GTK_ADJUSTMENT (spin_mru_adj), 1, 0);
+  gtk_widget_show (spin_mru);
+  gtk_box_pack_start (GTK_BOX (hbox2), spin_mru, FALSE, TRUE, 0);
+  gtk_tooltips_set_tip (tooltips, spin_mru, _("Specifies the number of files which are stored in the Recent files list."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_mru), TRUE);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_mru), TRUE);
 
   label162 = gtk_label_new ("");
   gtk_widget_show (label162);
@@ -2796,6 +2816,13 @@ create_prefs_dialog (void)
   GTK_WIDGET_UNSET_FLAGS (check_toolbar_goto, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_goto, _("Display the line number field and button in the toolbar"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_goto), FALSE);
+
+  check_toolbar_quit = gtk_check_button_new_with_mnemonic (_("Show Quit button"));
+  gtk_widget_show (check_toolbar_quit);
+  gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_quit, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_toolbar_quit, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_toolbar_quit, _("Display the quit button in the toolbar"), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_quit), FALSE);
 
   label165 = gtk_label_new (_("<b>Items</b>"));
   gtk_widget_show (label165);
@@ -3364,15 +3391,20 @@ create_prefs_dialog (void)
   gtk_widget_show (dialog_action_area3);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area3), GTK_BUTTONBOX_END);
 
-  cancelbutton1 = gtk_button_new_from_stock ("gtk-cancel");
-  gtk_widget_show (cancelbutton1);
-  gtk_dialog_add_action_widget (GTK_DIALOG (prefs_dialog), cancelbutton1, GTK_RESPONSE_CANCEL);
-  GTK_WIDGET_SET_FLAGS (cancelbutton1, GTK_CAN_DEFAULT);
+  button3 = gtk_button_new_from_stock ("gtk-apply");
+  gtk_widget_show (button3);
+  gtk_dialog_add_action_widget (GTK_DIALOG (prefs_dialog), button3, GTK_RESPONSE_APPLY);
+  GTK_WIDGET_SET_FLAGS (button3, GTK_CAN_DEFAULT);
 
-  okbutton1 = gtk_button_new_from_stock ("gtk-ok");
-  gtk_widget_show (okbutton1);
-  gtk_dialog_add_action_widget (GTK_DIALOG (prefs_dialog), okbutton1, GTK_RESPONSE_OK);
-  GTK_WIDGET_SET_FLAGS (okbutton1, GTK_CAN_DEFAULT);
+  button4 = gtk_button_new_from_stock ("gtk-cancel");
+  gtk_widget_show (button4);
+  gtk_dialog_add_action_widget (GTK_DIALOG (prefs_dialog), button4, GTK_RESPONSE_CANCEL);
+  GTK_WIDGET_SET_FLAGS (button4, GTK_CAN_DEFAULT);
+
+  button5 = gtk_button_new_from_stock ("gtk-ok");
+  gtk_widget_show (button5);
+  gtk_dialog_add_action_widget (GTK_DIALOG (prefs_dialog), button5, GTK_RESPONSE_OK);
+  GTK_WIDGET_SET_FLAGS (button5, GTK_CAN_DEFAULT);
 
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, prefs_dialog, "prefs_dialog");
@@ -3388,14 +3420,17 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_vte, "check_vte");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_for_quit, "check_ask_for_quit");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label163, "label163");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox2, "hbox2");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label147, "label147");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_mru, "spin_mru");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame15, "frame15");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment18, "alignment18");
   GLADE_HOOKUP_OBJECT (prefs_dialog, hbox3, "hbox3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label150, "label150");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_left, "radio_tab_left");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label149, "label149");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_right, "radio_tab_right");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_show_notebook_tabs, "check_show_notebook_tabs");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox2, "hbox2");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label147, "label147");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_mru, "spin_mru");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label162, "label162");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label94, "label94");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox14, "vbox14");
@@ -3454,6 +3489,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_undo, "check_toolbar_undo");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_search, "check_toolbar_search");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_goto, "check_toolbar_goto");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_quit, "check_toolbar_quit");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label165, "label165");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame13, "frame13");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment16, "alignment16");
@@ -3553,11 +3589,12 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, button2, "button2");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label151, "label151");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, dialog_action_area3, "dialog_action_area3");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, cancelbutton1, "cancelbutton1");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, okbutton1, "okbutton1");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, button3, "button3");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, button4, "button4");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, button5, "button5");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, tooltips, "tooltips");
 
-  gtk_widget_grab_focus (cancelbutton1);
+  gtk_widget_grab_default (button5);
   return prefs_dialog;
 }
 

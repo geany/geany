@@ -1,3 +1,12 @@
+2006-10-29  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/interface.c, src/prefs.c, src/geany.h,
+   src/keyfile.c, src/ui_utils.c, src/main.c:
+   Added an Apply button to preferences dialog.
+   New setting to show/hide the Quit toolbar item.
+   New setting to show/hide notebook tabs.
+
+
 2006-10-28  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/ui_utils.c:
