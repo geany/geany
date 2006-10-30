@@ -306,6 +306,15 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 	{
 		sci_cb_get_indent(sci, pos, FALSE);
 		sci_add_text(sci, indent);
+
+		// add extra indentation for Python after colon
+		if (doc_list[idx].file_type->id == GEANY_FILETYPES_PYTHON &&
+			sci_get_char_at(sci, pos - 2) == ':')
+		{
+			/// TODO add something like insert_tabs() which inserts a tab or tab_width times a space
+			sci_add_text(sci, "\t");
+		}
+		
 	}
 	// " * " auto completion in multiline C/C++ comments
 	sci_cb_auto_multiline(sci, pos);
