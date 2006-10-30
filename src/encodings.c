@@ -346,7 +346,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
-		if (i == encodings[GEANY_ENCODING_NONE].idx) continue;
+		if (i == (guint) encodings[GEANY_ENCODING_NONE].idx) continue;
 		
 		if (check_current)
 		{

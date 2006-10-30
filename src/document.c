@@ -640,7 +640,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	/* check whether the size of the loaded data is equal to the size of the file in the filesystem */
 	//size = strlen(data);
 	size = strlen(data);
-	if (size != st.st_size)
+	if (size != (gsize) st.st_size)
 	{
 		gchar *warn_msg = _("The file \"%s\" could not opened properly and probably was truncated. "
 				"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
