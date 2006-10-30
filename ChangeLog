@@ -1,6 +1,8 @@
 2006-10-30  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Add extra indentation for Python after a colon.
+ * tagmanager/latex.c, src/treeviews.c:
+   Removed "begin" section in symbol list and sort it at environment.
 
 
 2006-10-29  Enrico Tröger  <enrico.troeger@uvena.de>
@@ -330,7 +332,7 @@
    Implemented simple "shebang" detection. It is used prior to the
    filename extension detection.
  * src/highlighting.c, data/filetypes.latex:
-   Changed foreground colour for LaTeX sytle "math" to differentiate it
+   Changed foreground colour for LaTeX style "math" to differentiate it
    from the "comment" style.
 
 

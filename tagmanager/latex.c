@@ -32,7 +32,6 @@ typedef enum {
      K_SECTION,
      K_SUBSECTION,
      K_SUBSUBSECTION,
-     K_BEGIN,
      K_LABEL
 } TeXKind;
 
@@ -42,7 +41,6 @@ static kindOption TeXKinds[] = {
      { TRUE, 'm', "member",        "labels, sections and bibliography" },
      { TRUE, 'd', "macro",         "subsections" },
      { TRUE, 'v', "variable",      "subsubsections" },
-     { TRUE, 'n', "namespace",     "begin" },
      { TRUE, 's', "struct",        "labels and bibliography" }
 };
 
@@ -143,7 +141,7 @@ static void findTeXTags(void)
  		}
 
  		/* \DeclareMathOperator{\command} */
- 		if (getWord("DeclareMathOperator", &cp))
+ 		else if (getWord("DeclareMathOperator", &cp))
  		{
  		    if (*cp == '*')
  			cp++;
@@ -152,15 +150,16 @@ static void findTeXTags(void)
  		}
 
  		/* \def\command */
- 		if (getWord("def", &cp))
+ 		else if (getWord("def", &cp))
  		{
  		    createTag(TEX_BSLASH, K_COMMAND, cp);
  		    continue;
  		}
 
  		/* \newenvironment{name} */
- 		if ( getWord("newenvironment", &cp)
+ 		else if ( getWord("newenvironment", &cp)
  		    || getWord("newtheorem", &cp)
+ 		    || getWord("begin", &cp)
  		    )
  		{
  		    createTag(TEX_BRACES, K_ENVIRONMENT, cp);
@@ -168,7 +167,7 @@ static void findTeXTags(void)
  		}
 
  		/* \bibitem[label]{key} */
- 		if (getWord("bibitem", &cp))
+ 		else if (getWord("bibitem", &cp))
  		{
  		    while (*cp == ' ')
  			cp++;
@@ -183,33 +182,27 @@ static void findTeXTags(void)
  		}
 
  		/* \label{key} */
- 		if (getWord("label", &cp))
+ 		else if (getWord("label", &cp))
  		{
  		    createTag(TEX_LABEL, K_LABEL, cp);
  		    continue;
  		}
  		/* \section{key} */
- 		if (getWord("section", &cp))
+ 		else if (getWord("section", &cp))
  		{
  		    createTag(TEX_LABEL, K_SECTION, cp);
  		    continue;
  		}
  		/* \subsection{key} */
- 		if (getWord("subsection", &cp))
+ 		else if (getWord("subsection", &cp))
  		{
  		    createTag(TEX_LABEL, K_SUBSECTION, cp);
  		    continue;
  		}
  		/* \subsubsection{key} */
- 		if (getWord("subsubsection", &cp))
+ 		else if (getWord("subsubsection", &cp))
  		{
  		    createTag(TEX_LABEL, K_SUBSUBSECTION, cp);
- 		    continue;
- 		}
- 		/* \begin{key} */
- 		if (getWord("begin", &cp))
- 		{
- 		    createTag(TEX_LABEL, K_BEGIN, cp);
  		    continue;
  		}
  	    }
