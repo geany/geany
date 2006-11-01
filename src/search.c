@@ -877,6 +877,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 				document_replace_all(i, find, replace, search_flags_re, search_replace_escape_re);
 			}
+			ui_save_buttons_toggle(doc_list[idx].changed);	// update save all
 			if (close_window) gtk_widget_hide(widgets.replace_dialog);
 			break;
 		}
