@@ -685,6 +685,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 
 		document_set_text_changed(idx);
+		ui_update_popup_reundo_items(idx);
 		ui_document_show_hide(idx); // update the document menu
 		build_menu_update(idx);
 		ui_update_statusbar(idx, -1);

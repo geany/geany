@@ -14,6 +14,9 @@
    dialog.
    Move Find Usage code from on_find_usage1_activate to search.c.
    Add ui_button_new_with_image(), ui_hbutton_box_copy_layout().
+ * src/utils.c: Prevent end of line char showing for current function.
+ * src/search.c: Update Save All state after Replace in Session.
+ * src/callbacks.c: Update Undo items when switching notebook pages.
 
 
 2006-10-30  Enrico Tröger  <enrico.troeger@uvena.de>
