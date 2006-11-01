@@ -323,7 +323,7 @@ void search_show_find_dialog()
 						gtk_widget_ref(check_close), (GDestroyNotify) gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 		gtk_tooltips_set_tip(tooltips, check_close,
-				_("The dialog window won't be closed when you start the operation."), NULL);
+				_("Disable this option to do not close this dialog."), NULL);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
 		gtk_container_add(GTK_CONTAINER(bbox), check_close);
 		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
@@ -458,7 +458,7 @@ void search_show_replace_dialog()
 						gtk_widget_ref(check_close), (GDestroyNotify) gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 		gtk_tooltips_set_tip(tooltips, check_close,
-				_("The dialog window won't be closed when you start the operation."), NULL);
+				_("Disable this option to do not close this dialog."), NULL);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
 		gtk_container_add(GTK_CONTAINER(bbox), check_close);
 		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
