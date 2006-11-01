@@ -2,6 +2,7 @@
 
  * src/search.c: Changed tooltip of checkbox "Close dialog" to be more
                  descriptive.
+ * src/keybindings.c: Changed keybinding for Print to Ctrl+C.
 
 
 2006-11-01  Nick Treleaven  <nick.treleaven@btinternet.com>

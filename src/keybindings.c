@@ -116,7 +116,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_SAVEALL] = fill(cb_func_menu_saveall,
 		GDK_S, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall", _("Save all"));
 	keys[GEANY_KEYS_MENU_PRINT] = fill(cb_func_menu_print,
-		GDK_p, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_print", _("Print"));
+		GDK_p, GDK_CONTROL_MASK, "menu_print", _("Print"));
 	keys[GEANY_KEYS_MENU_CLOSE] = fill(cb_func_menu_close,
 		GDK_w, GDK_CONTROL_MASK, "menu_close", _("Close"));
 	keys[GEANY_KEYS_MENU_CLOSEALL] = fill(cb_func_menu_closeall,
