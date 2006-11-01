@@ -301,6 +301,8 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 {
 	gint pos = sci_get_current_position(sci);
 
+	if (doc_list[idx].file_type == NULL) return;
+
 	// simple indentation
 	if (doc_list[idx].use_auto_indention)
 	{
