@@ -2,7 +2,7 @@
 
  * src/search.c: Changed tooltip of checkbox "Close dialog" to be more
                  descriptive.
- * src/keybindings.c: Changed keybinding for Print to Ctrl+C.
+ * src/keybindings.c: Changed keybinding for Print to Ctrl+P.
  * scintilla/LexBash.cxx: Fixed wrong detection of some words.
 
 
