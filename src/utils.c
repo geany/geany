@@ -529,15 +529,12 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 	start = end;
 	c = 0;
 	// Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars
-	while (((tmp = sci_get_style_at(sci, start)) == SCE_C_IDENTIFIER
+	while (start >= 0 && ((tmp = sci_get_style_at(sci, start)) == SCE_C_IDENTIFIER
 		 ||  tmp == SCE_C_GLOBALCLASS
 		 || (c = sci_get_char_at(sci, start)) == '~'
 		 ||  c == ':'))
 		start--;
-	if (start < 0) start = 0;
-
-	if (sci_get_char_at(sci, start) == ' ') start++; // skip possible whitespace
-	if (sci_get_char_at(sci, start) == '*') start++; // skip possible * char
+	if (start != 0 && start < end) start++;	// correct for last non-matching char
 
 	if (start == end) return NULL;
 	cur_tag = g_malloc(end - start + 2);
