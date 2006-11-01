@@ -1436,7 +1436,7 @@ void document_set_indicator(gint idx, gint line)
 	linebuf = sci_get_line(doc_list[idx].sci, line);
 
 	while (isspace(linebuf[i])) i++;
-	while (isspace(linebuf[len-1])) len--;
+	while (len > 1 && len > i && isspace(linebuf[len-1])) len--;
 	g_free(linebuf);
 
 	current_mask = sci_get_style_at(doc_list[idx].sci, start);
