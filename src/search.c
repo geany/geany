@@ -43,9 +43,13 @@
 
 
 enum {
-	GEANY_RESPONSE_REPLACE = 1,
+	GEANY_RESPONSE_FIND = 1,
+	GEANY_RESPONSE_FIND_PREVIOUS,
+	GEANY_RESPONSE_FIND_IN_FILE,
+	GEANY_RESPONSE_FIND_IN_SESSION,
+	GEANY_RESPONSE_MARK,
+	GEANY_RESPONSE_REPLACE,
 	GEANY_RESPONSE_REPLACE_AND_FIND,
-	GEANY_RESPONSE_FIND,
 	GEANY_RESPONSE_REPLACE_IN_SESSION,
 	GEANY_RESPONSE_REPLACE_IN_FILE,
 	GEANY_RESPONSE_REPLACE_IN_SEL
@@ -139,7 +143,7 @@ void search_finalize()
 
 static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 {
-	GtkWidget *checkbox1, *checkbox2, *check_regexp, *checkbox4, *checkbox5,
+	GtkWidget *checkbox1, *checkbox2, *check_regexp, *check_back, *checkbox5,
 			  *checkbox7, *hbox, *fbox, *mbox;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
@@ -152,11 +156,22 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	g_signal_connect(G_OBJECT(check_regexp), "toggled",
 		G_CALLBACK(on_find_replace_checkbutton_toggled), GTK_WIDGET(dialog));
 
-	checkbox4 = gtk_check_button_new_with_mnemonic(_("_Search backwards"));
-	g_object_set_data_full(G_OBJECT(dialog), "check_back",
-					gtk_widget_ref(checkbox4), (GDestroyNotify)gtk_widget_unref);
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox4), FALSE);
-
+	if (dialog != GTK_DIALOG(widgets.find_dialog))
+	{
+		check_back = gtk_check_button_new_with_mnemonic(_("_Search backwards"));
+		g_object_set_data_full(G_OBJECT(dialog), "check_back",
+						gtk_widget_ref(check_back), (GDestroyNotify)gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(check_back), FALSE);
+	}
+	else
+	{	// align the two checkboxes at the top of the hbox
+		GtkSizeGroup *label_size;
+		check_back = gtk_label_new(NULL);
+		label_size = gtk_size_group_new(GTK_SIZE_GROUP_VERTICAL);
+		gtk_size_group_add_widget(GTK_SIZE_GROUP(label_size), check_back);
+		gtk_size_group_add_widget(GTK_SIZE_GROUP(label_size), check_regexp);
+		g_object_unref(label_size);
+	}
 	checkbox7 = gtk_check_button_new_with_mnemonic(_("Use _escape sequences"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_escape",
 					gtk_widget_ref(checkbox7), (GDestroyNotify)gtk_widget_unref);
@@ -169,7 +184,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	fbox = gtk_vbox_new(FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(fbox), check_regexp);
 	gtk_container_add(GTK_CONTAINER(fbox), checkbox7);
-	gtk_container_add(GTK_CONTAINER(fbox), checkbox4);
+	gtk_container_add(GTK_CONTAINER(fbox), check_back);
 
 	checkbox1 = gtk_check_button_new_with_mnemonic(_("_Case sensitive"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_case",
@@ -199,12 +214,10 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 }
 
 
-#if 0
 static void send_find_dialog_response(GtkButton *button, gpointer user_data)
 {
 	gtk_dialog_response(GTK_DIALOG(widgets.find_dialog), GPOINTER_TO_INT(user_data));
 }
-#endif
 
 
 static gchar *get_default_text(gint idx)
@@ -239,13 +252,24 @@ void search_show_find_dialog()
 	if (widgets.find_dialog == NULL)
 	{
 		GtkWidget *label, *entry, *sbox, *vbox;
+		GtkWidget *exp, *bbox, *button, *check_close;
+		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 		widgets.find_dialog = gtk_dialog_new_with_buttons(_("Find"),
 			GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
-			GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_FIND, GTK_RESPONSE_ACCEPT, NULL);
+			GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(widgets.find_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 9);
+
+		button = gtk_button_new_with_mnemonic(_("Find _Previous"));
+		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.find_dialog), button,
+			GEANY_RESPONSE_FIND_PREVIOUS);
+		g_object_set_data_full(G_OBJECT(widgets.find_dialog), "btn_previous",
+						gtk_widget_ref(button), (GDestroyNotify)gtk_widget_unref);
+
+		button = ui_button_new_with_image(GTK_STOCK_FIND, _("Find _Next"));
+		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.find_dialog), button,
+			GEANY_RESPONSE_FIND);
 
 		label = gtk_label_new(_("Search for:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -267,10 +291,48 @@ void search_show_find_dialog()
 		sbox = gtk_hbox_new(FALSE, 6);
 		gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
 		gtk_box_pack_start(GTK_BOX(sbox), entry, TRUE, TRUE, 0);
-		gtk_container_add(GTK_CONTAINER(vbox), sbox);
+		gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
 
 		gtk_container_add(GTK_CONTAINER(vbox),
 			add_find_checkboxes(GTK_DIALOG(widgets.find_dialog)));
+
+		// Now add the multiple match options
+		exp = gtk_expander_new(_("Find All"));
+		bbox = gtk_hbutton_box_new();
+
+#if 0
+		button = gtk_button_new_with_mnemonic(_("_Mark"));
+		gtk_container_add(GTK_CONTAINER(bbox), button);
+		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_find_dialog_response),
+			GINT_TO_POINTER(GEANY_RESPONSE_MARK));
+#endif	// not implemented yet
+
+		button = gtk_button_new_with_mnemonic(_("In Sessi_on"));
+		gtk_container_add(GTK_CONTAINER(bbox), button);
+		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_find_dialog_response),
+			GINT_TO_POINTER(GEANY_RESPONSE_FIND_IN_SESSION));
+
+		button = gtk_button_new_with_mnemonic(_("In F_ile"));
+		gtk_container_add(GTK_CONTAINER(bbox), button);
+		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_find_dialog_response),
+			GINT_TO_POINTER(GEANY_RESPONSE_FIND_IN_FILE));
+
+		// close window checkbox
+		check_close = gtk_check_button_new_with_mnemonic(_("Close _dialog"));
+		g_object_set_data_full(G_OBJECT(widgets.find_dialog), "check_close",
+						gtk_widget_ref(check_close), (GDestroyNotify) gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
+		gtk_tooltips_set_tip(tooltips, check_close,
+				_("The dialog window won't be closed when you start the operation."), NULL);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
+		gtk_container_add(GTK_CONTAINER(bbox), check_close);
+		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
+
+		ui_hbutton_box_copy_layout(
+			GTK_BUTTON_BOX(GTK_DIALOG(widgets.find_dialog)->action_area),
+			GTK_BUTTON_BOX(bbox));
+		gtk_container_add(GTK_CONTAINER(exp), bbox);
+		gtk_container_add(GTK_CONTAINER(vbox), exp);
 
 		gtk_widget_show_all(widgets.find_dialog);
 	}
@@ -304,7 +366,7 @@ void search_show_replace_dialog()
 	{
 		GtkWidget *label_find, *label_replace, *entry_find, *entry_replace,
 			*check_close, *button, *rbox, *fbox, *vbox, *exp, *bbox;
-		GtkSizeGroup *label_size, *button_size;
+		GtkSizeGroup *label_size;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 		widgets.replace_dialog = gtk_dialog_new_with_buttons(_("Replace"),
@@ -322,10 +384,6 @@ void search_show_replace_dialog()
 		button = gtk_button_new_with_mnemonic(_("Re_place & Find"));
 		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.replace_dialog), button,
 			GEANY_RESPONSE_REPLACE_AND_FIND);
-
-		button_size = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
-		gtk_size_group_add_widget(GTK_SIZE_GROUP(button_size), button);
-		g_object_unref(G_OBJECT(button_size));
 
 		label_find = gtk_label_new(_("Search for:"));
 		gtk_misc_set_alignment(GTK_MISC(label_find), 0, 0.5);
@@ -376,8 +434,6 @@ void search_show_replace_dialog()
 		// Now add the multiple replace options
 		exp = gtk_expander_new(_("Replace All"));
 		bbox = gtk_hbutton_box_new();
-		gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_END);
-		gtk_button_box_set_spacing(GTK_BUTTON_BOX(bbox), 10);
 
 		button = gtk_button_new_with_mnemonic(_("In Se_lection"));
 		gtk_tooltips_set_tip(tooltips, button,
@@ -396,9 +452,7 @@ void search_show_replace_dialog()
 		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_replace_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_FILE));
 
-		gtk_size_group_add_widget(GTK_SIZE_GROUP(button_size), button);
-
-		// Don't close window checkbox
+		// close window checkbox
 		check_close = gtk_check_button_new_with_mnemonic(_("Close _dialog"));
 		g_object_set_data_full(G_OBJECT(widgets.replace_dialog), "check_close",
 						gtk_widget_ref(check_close), (GDestroyNotify) gtk_widget_unref);
@@ -409,6 +463,9 @@ void search_show_replace_dialog()
 		gtk_container_add(GTK_CONTAINER(bbox), check_close);
 		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
 
+		ui_hbutton_box_copy_layout(
+			GTK_BUTTON_BOX(GTK_DIALOG(widgets.replace_dialog)->action_area),
+			GTK_BUTTON_BOX(bbox));
 		gtk_container_add(GTK_CONTAINER(exp), bbox);
 		gtk_container_add(GTK_CONTAINER(vbox), exp);
 
@@ -618,7 +675,6 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 	if (togglebutton == chk_regexp)
 	{
 		gboolean regex_set = gtk_toggle_button_get_active(chk_regexp);
-		GtkWidget *check_back = lookup_widget(dialog, "check_back");
 		GtkWidget *check_word = lookup_widget(dialog, "check_word");
 		GtkWidget *check_wordstart = lookup_widget(dialog, "check_wordstart");
 		GtkToggleButton *check_case = GTK_TOGGLE_BUTTON(
@@ -626,7 +682,11 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		static gboolean case_state = FALSE; // state before regex enabled
 
 		// hide options that don't apply to regex searches
-		gtk_widget_set_sensitive(check_back, ! regex_set);
+		if (dialog == widgets.find_dialog)
+			gtk_widget_set_sensitive(lookup_widget(dialog, "btn_previous"), ! regex_set);
+		else
+			gtk_widget_set_sensitive(lookup_widget(dialog, "check_back"), ! regex_set);
+
 		gtk_widget_set_sensitive(check_word, ! regex_set);
 		gtk_widget_set_sensitive(check_wordstart, ! regex_set);
 
@@ -649,7 +709,9 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 static void
 on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	if (response == GTK_RESPONSE_ACCEPT)
+	if (response == GTK_RESPONSE_CANCEL)
+		gtk_widget_hide(widgets.find_dialog);
+	else
 	{
 		gint idx = document_get_cur_idx();
 		gboolean search_replace_escape;
@@ -661,11 +723,14 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			fl3 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_regexp"))),
 			fl4 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_wordstart")));
+						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_wordstart"))),
+			check_close = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_close")));
 		search_replace_escape = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_escape")));
-		search_data.backwards = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_back")));
+		search_data.backwards = FALSE;
+
+		if (! DOC_IDX_VALID(idx)) return;
 
 		g_free(search_data.text);
 		search_data.text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
@@ -682,9 +747,31 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				(fl2 ? SCFIND_WHOLEWORD : 0) |
 				(fl3 ? SCFIND_REGEXP | SCFIND_POSIX: 0) |
 				(fl4 ? SCFIND_WORDSTART : 0);
-		document_find_text(idx, search_data.text, search_data.flags, search_data.backwards);
+		
+		switch (response)
+		{
+			case GEANY_RESPONSE_FIND:
+			case GEANY_RESPONSE_FIND_PREVIOUS:
+			document_find_text(idx, search_data.text, search_data.flags,
+				(response == GEANY_RESPONSE_FIND_PREVIOUS));
+			check_close = FALSE;
+			break;
+
+			case GEANY_RESPONSE_FIND_IN_FILE:
+			search_find_usage(search_data.text, search_data.flags, FALSE);
+			break;
+
+			case GEANY_RESPONSE_FIND_IN_SESSION:
+			search_find_usage(search_data.text, search_data.flags, TRUE);
+			break;
+
+			case GEANY_RESPONSE_MARK:
+			// TODO
+			break;
+		}
+		if (check_close)
+			gtk_widget_hide(widgets.find_dialog);
 	}
-	else gtk_widget_hide(widgets.find_dialog);
 }
 
 
@@ -1075,3 +1162,72 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 }
 
 
+static gint find_document_usage(gint idx, const gchar *search_text, gint flags)
+{
+	gchar *buffer, *short_file_name, *string;
+	gint pos, line, count = 0;
+	struct TextToFind ttf;
+
+	g_return_val_if_fail(DOC_IDX_VALID(idx), 0);
+
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
+	ttf.lpstrText = (gchar *)search_text;
+	while (1)
+	{
+		pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
+		if (pos == -1) break;
+
+		line = sci_get_line_from_position(doc_list[idx].sci, pos);
+		buffer = sci_get_line(doc_list[idx].sci, line);
+
+		if (doc_list[idx].file_name == NULL)
+			short_file_name = g_strdup(GEANY_STRING_UNTITLED);
+		else
+			short_file_name = g_path_get_basename(doc_list[idx].file_name);
+		string = g_strdup_printf("%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
+		msgwin_msg_add(line + 1, idx, string);
+
+		g_free(buffer);
+		g_free(short_file_name);
+		g_free(string);
+		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
+		count++;
+	}
+	return count;
+}
+
+
+void search_find_usage(const gchar *search_text, gint flags, gboolean in_session)
+{
+	gint idx;
+	gboolean found = FALSE;
+
+	idx = document_get_cur_idx();
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
+	gtk_list_store_clear(msgwindow.store_msg);
+
+	if (! in_session)
+	{	// use current document
+		found = (find_document_usage(idx, search_text, flags) > 0);
+	}
+	else
+	{
+		guint i;
+		for(i = 0; i < doc_array->len; i++)
+		{
+			if (doc_list[i].is_valid)
+				if (find_document_usage(i, search_text, flags) > 0) found = TRUE;
+		}
+	}
+
+	if (! found) // no matches were found
+	{
+		gchar *text = g_strdup_printf(_("No matches found for '%s'."), search_text);
+		ui_set_statusbar(text, FALSE);
+		msgwin_msg_add(-1, -1, text);
+		g_free(text);
+	}
+}

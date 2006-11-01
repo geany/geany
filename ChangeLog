@@ -1,6 +1,12 @@
 2006-11-01  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/document.c: Prevent possible invalid memory read.
+ * src/ui_utils.h, src/search.c, src/search.h, src/ui_utils.c,
+   src/callbacks.c:
+   Add Find Previous, Find All in File/Session buttons to the Find
+   dialog.
+   Move Find Usage code from on_find_usage1_activate to search.c.
+   Add ui_button_new_with_image(), ui_hbutton_box_copy_layout().
 
 
 2006-10-30  Enrico Tröger  <enrico.troeger@uvena.de>

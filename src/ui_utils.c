@@ -1038,4 +1038,52 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 }
 
 
+/* Create a GtkButton with custom text and a stock image, aligned like
+ * gtk_button_new_from_stock */
+GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
+{
+	GtkWidget *image, *label, *align, *hbox, *button;
+
+	hbox = gtk_hbox_new(FALSE, 2);
+	image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_BUTTON);
+	label = gtk_label_new_with_mnemonic(text);
+	gtk_box_pack_start(GTK_BOX(hbox), image, FALSE, FALSE, 0);
+	gtk_box_pack_end(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+	button = gtk_button_new();
+	align = gtk_alignment_new(0.5, 0.5, 0.0, 0.0);
+	gtk_container_add(GTK_CONTAINER(align), hbox);
+	gtk_container_add(GTK_CONTAINER(button), align);
+	return button;
+}
+
+
+static void add_to_size_group(GtkWidget *widget, gpointer size_group)
+{
+	g_return_if_fail(GTK_IS_SIZE_GROUP(size_group));
+	gtk_size_group_add_widget(GTK_SIZE_GROUP(size_group), widget);
+}
+
+
+/* Copies the spacing and layout of the master GtkHButtonBox and synchronises
+ * the width of each button box's children.
+ * Should be called after all child widgets have been packed. */
+void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy)
+{
+	GtkSizeGroup *size_group;
+
+	/* set_spacing is deprecated but there seems to be no alternative,
+	* GTK 2.6 defaults to no spacing, unlike dialog button box */
+	gtk_button_box_set_spacing(copy, 10);
+	gtk_button_box_set_layout(copy, gtk_button_box_get_layout(master));
+
+	/* now we need to put the widest widget from each button box in a size group,
+	* but we don't know the width before they are drawn, and for different label
+	* translations the widest widget can vary, so we just add all widgets. */
+	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+	gtk_container_foreach(GTK_CONTAINER(master), add_to_size_group, size_group);
+	gtk_container_foreach(GTK_CONTAINER(copy), add_to_size_group, size_group);
+	g_object_unref(size_group);
+}
+
 

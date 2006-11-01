@@ -1159,15 +1159,12 @@ void
 on_find_usage1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	guint i;
-	gint pos, line = -1, flags, idx;
-	struct TextToFind ttf;
-	gchar *buffer, *short_file_name, *string, *search_text;
-
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
-	gtk_list_store_clear(msgwindow.store_msg);
+	gint flags, idx;
+	gchar *search_text;
 
 	idx = document_get_cur_idx();
+	if (! DOC_IDX_VALID(idx)) return;
+
 	if (sci_can_copy(doc_list[idx].sci))
 	{	// take selected text if there is a selection
 		search_text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
@@ -1180,43 +1177,7 @@ on_find_usage1_activate                (GtkMenuItem     *menuitem,
 		flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
 	}
 
-	for(i = 0; i < doc_array->len; i++)
-	{
-		if (doc_list[i].is_valid)
-		{
-			ttf.chrg.cpMin = 0;
-			ttf.chrg.cpMax = sci_get_length(doc_list[i].sci);
-			ttf.lpstrText = search_text;
-			while (1)
-			{
-				pos = sci_find_text(doc_list[i].sci, flags, &ttf);
-				if (pos == -1) break;
-
-				line = sci_get_line_from_position(doc_list[i].sci, pos);
-				buffer = sci_get_line(doc_list[i].sci, line);
-
-				if (doc_list[i].file_name == NULL)
-					short_file_name = g_strdup(GEANY_STRING_UNTITLED);
-				else
-					short_file_name = g_path_get_basename(doc_list[i].file_name);
-				string = g_strdup_printf("%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
-				msgwin_msg_add(line + 1, i, string);
-
-				g_free(buffer);
-				g_free(short_file_name);
-				g_free(string);
-				ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
-			}
-		}
-	}
-	if (line == -1) // no matches were found (searching from unnamed file)
-	{
-		gchar *text = g_strdup_printf(_("No matches found for '%s'."), search_text);
-		msgwin_status_add(text);
-		msgwin_msg_add(-1, -1, text);
-		g_free(text);
-	}
-
+	search_find_usage(search_text, flags, TRUE);
 	g_free(search_text);
 }
 

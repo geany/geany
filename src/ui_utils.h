@@ -97,4 +97,8 @@ GtkContainer *ui_frame_new(GtkContainer *parent, const gchar *label_text);
 
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
 
+GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
+
+void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
+
 #endif
