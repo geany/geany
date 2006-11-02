@@ -582,6 +582,7 @@ void dialogs_show_includes_arguments_tex()
 {
 	GtkWidget *dialog, *label, *entries[4], *vbox, *table;
 	gint idx = document_get_cur_idx();
+	gint response;
 	filetype *ft = NULL;
 
 	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
@@ -682,11 +683,13 @@ void dialogs_show_includes_arguments_tex()
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 	gtk_container_add(GTK_CONTAINER(vbox), label);
 
-	g_signal_connect((gpointer) dialog, "response",
-					G_CALLBACK(on_includes_arguments_tex_dialog_response), ft);
-
 	gtk_widget_show_all(dialog);
-	gtk_dialog_run(GTK_DIALOG(dialog));	// run modally to prevent user changing idx filetype
+	// run modally to prevent user changing idx filetype
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	// call the callback manually
+	on_includes_arguments_tex_dialog_response(GTK_DIALOG(dialog), response, ft);
+
+	gtk_widget_destroy(dialog);
 }
 
 

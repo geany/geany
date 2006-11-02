@@ -1,3 +1,9 @@
+2006-11-02  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c, src/dialogs:
+   Run set includes build dialogs for LaTeX files modally, too.
+
+
 2006-11-02  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/highlighting.c, data/filetypes.perl, data/filetypes.pascal,

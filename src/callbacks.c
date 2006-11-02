@@ -1881,7 +1881,6 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 			programs->modified = TRUE;
 		}
 	}
-	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
 
