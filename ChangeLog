@@ -1,3 +1,14 @@
+2006-11-02  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/highlighting.c, data/filetypes.perl, data/filetypes.pascal,
+   data/filetypes.sh, data/filetypes.makefile, data/filetypes.ruby,
+   data/filetypes.tcl:
+   Make all remaining 0xff0000 comment styles darker using a common
+   default comment style.
+   Add some other generic styles (used only by C-like filetypes for
+   now).
+
+
 2006-11-01  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/search.c: Changed tooltip of checkbox "Close dialog" to be more

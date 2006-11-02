@@ -2,7 +2,7 @@
 [styling]
 # foreground;background;bold;italic
 default=0x000000;0xffffff;false
-commentline=0xff0000;0xffffff;false;false
+commentline=0xd00000;0xffffff;false;false
 number=0x400080;0xffffff;false;false
 string=0x008000;0xffffff;false;false
 character=0x008000;0xffffff;false;false

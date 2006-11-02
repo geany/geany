@@ -2,7 +2,7 @@
 [styling]
 # foreground;background;bold;italic
 default=0x00002f;0xffffff;false;false
-comment=0xff0000;0xffffff;false;false
+comment=0xd00000;0xffffff;false;false
 preprocessor=0x007f7f;0xffffff;false;false
 identifier=0x007f00;0xffffff;false;false
 operator=0x301010;0xffffff;false;false
