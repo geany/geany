@@ -58,8 +58,22 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
 static void setup_tab_dnd();
 
 
+static void focus_sci(GtkWidget *widget, gpointer user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	if (! DOC_IDX_VALID(idx)) return;
+
+	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
+}
+
+
 void notebook_init()
 {
+	// focus the current document after clicking on a tab
+	g_signal_connect_after(G_OBJECT(app->notebook), "button-release-event",
+		G_CALLBACK(focus_sci), NULL);
+
 	setup_tab_dnd();
 }
 
