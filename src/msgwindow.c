@@ -317,7 +317,8 @@ gboolean msgwin_goto_compiler_file_line()
 
 				if (idx >= 0 && doc_list[idx].is_valid)
 				{
-					document_set_indicator(idx, line - 1);
+					if (! doc_list[idx].changed)	// if modified, line may be wrong
+						document_set_indicator(idx, line - 1);
 					ret = utils_goto_line(idx, line);
 				}
 			}
