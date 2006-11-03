@@ -303,7 +303,8 @@ gboolean utils_goto_line(gint idx, gint line)
 	sci_marker_delete_all(doc_list[idx].sci, 0);
 	sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
 
-	sci_goto_line_scroll(doc_list[idx].sci, line, 0.25);
+	sci_goto_line(doc_list[idx].sci, line, TRUE);
+	sci_scroll_to_line(doc_list[idx].sci, -1, 0.25);
 
 	// finally switch to the page
 	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci));

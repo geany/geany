@@ -710,7 +710,8 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	if (cl_options.goto_line >= 0)
 	{	// goto line which was specified on command line and then undefine the line
-		sci_goto_line_scroll(doc_list[idx].sci, cl_options.goto_line - 1, 0.25);
+		sci_goto_line(doc_list[idx].sci, cl_options.goto_line - 1, TRUE);
+		sci_scroll_to_line(doc_list[idx].sci, -1, 0.5);
 		cl_options.goto_line = -1;
 	}
 	else if (pos >= 0)
@@ -912,8 +913,7 @@ gboolean document_save_file(gint idx, gboolean force)
 
 
 /* special search function, used from the find entry in the toolbar */
-void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean find_button,
-		gboolean inc)
+void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc)
 {
 	gint start_pos, search_pos;
 	struct TextToFind ttf;
@@ -942,11 +942,11 @@ void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean 
 	{
 		sci_set_selection_start(doc_list[idx].sci, ttf.chrgText.cpMin);
 		sci_set_selection_end(doc_list[idx].sci, ttf.chrgText.cpMax);
-		sci_scroll_caret(doc_list[idx].sci);
+		sci_scroll_to_line(doc_list[idx].sci, -1, 0.3);
 	}
 	else
 	{
-		if (find_button)
+		if (! inc)
 		{
 			gchar *msg = g_strdup_printf(_("\"%s\" was not found."), text);
 			ui_set_statusbar(msg, FALSE);
@@ -961,7 +961,8 @@ void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean 
 /* General search function, used from the find dialog.
  * Returns -1 on failure or the start position of the matching text.
  * Will skip past any selection, ignoring it. */
-gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards)
+gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards,
+		gboolean scroll)
 {
 	gint selection_end, selection_start, search_pos;
 
@@ -988,7 +989,8 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 
 	if (search_pos != -1)
 	{
-		sci_scroll_caret(doc_list[idx].sci);
+		if (scroll)
+			sci_scroll_to_line(doc_list[idx].sci, -1, 0.3);
 	}
 	else
 	{
@@ -1012,7 +1014,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 		{
 			gint ret;
 			sci_goto_pos(doc_list[idx].sci, (search_backwards) ? sci_len : 0, TRUE);
-			ret = document_find_text(idx, text, flags, search_backwards);
+			ret = document_find_text(idx, text, flags, search_backwards, scroll);
 			if (ret == -1)	// return to original cursor position if not found
 				sci_goto_pos(doc_list[idx].sci, selection_end, FALSE);
 			return ret;
@@ -1040,7 +1042,7 @@ gint document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 	if (selection_end == selection_start)
 	{
 		// no selection so just find the next match
-		document_find_text(idx, find_text, flags, search_backwards);
+		document_find_text(idx, find_text, flags, search_backwards, TRUE);
 		return -1;
 	}
 	// there's a selection so go to the start before finding to search through it
@@ -1050,7 +1052,7 @@ gint document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 	else
 		sci_goto_pos(doc_list[idx].sci, selection_start, TRUE);
 
-	search_pos = document_find_text(idx, find_text, flags, search_backwards);
+	search_pos = document_find_text(idx, find_text, flags, search_backwards, TRUE);
 	// return if the original selected text did not match (at the start of the selection)
 	if (search_pos != selection_start) return -1;
 

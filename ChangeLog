@@ -3,6 +3,14 @@
  * src/msgwindow.c:
    Don't set error indicators when clicking on an error message if the
    document has been modified.
+ * src/notebook.c: Focus the current document after clicking on a tab.
+ * src/utils.c, src/keybindings.c, src/callbacks.c, src/sci_cb.c,
+   src/sciwrappers.c, src/search.c, src/sciwrappers.h, src/document.c,
+   src/document.h:
+   Scroll matching selection to 1/3 of the view when searching.
+   Add sci_scroll_to_line(); remove sci_goto_line_scroll().
+   Show 'not found' message on status bar also when enter is pressed in
+   the search bar.
 
 
 2006-11-02  Enrico Tröger  <enrico.troeger@uvena.de>

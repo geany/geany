@@ -666,6 +666,31 @@ void sci_scroll_caret(ScintillaObject *sci)
 }
 
 
+void sci_scroll_lines(ScintillaObject *sci, gint lines)
+{
+	SSM(sci, SCI_LINESCROLL, 0, lines);
+}
+
+
+/* Scroll the view to make line appear at percent_of_view.
+ * line can be -1 to use the current position. */
+void sci_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view)
+{
+	gint vis1, los, delta;
+
+	if (line == -1)
+		line = sci_get_current_line(sci, -1);
+
+	// sci 'visible line' != file line number
+	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
+	vis1 = SSM(sci, SCI_DOCLINEFROMVISIBLE, vis1, 0);
+	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
+	delta = (line - vis1) - los * percent_of_view;
+	sci_scroll_lines(sci, delta);
+	sci_scroll_caret(sci); //ensure visible, in case of excessive folding/wrapping
+}
+
+
 gint sci_search_next(ScintillaObject *sci, gint flags, const gchar *text)
 {
 	return SSM(sci, SCI_SEARCHNEXT, flags, (sptr_t) text );
@@ -695,21 +720,6 @@ void sci_goto_line(ScintillaObject *sci, gint line, gboolean ensure_visibility)
 {
 	if (ensure_visibility) SSM(sci,SCI_ENSUREVISIBLE,line,0);
 	SSM(sci, SCI_GOTOLINE, line, 0);
-}
-
-
-void sci_goto_line_scroll(ScintillaObject *sci, gint line, gdouble percent_of_view)
-{
-	gint vis1, los, delta;
-
-	sci_goto_line(sci, line, TRUE);
-	// sci 'visible line' != file line number
-	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
-	vis1 = SSM(sci, SCI_DOCLINEFROMVISIBLE, vis1, 0);
-	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
-	delta = (line - vis1) - los * percent_of_view;
-	sci_scroll_lines(sci, delta);
-	sci_scroll_caret(sci); //ensure visible, in case of excessive folding/wrapping
 }
 
 
@@ -810,11 +820,6 @@ gint sci_target_replace(ScintillaObject *sci, const gchar *text, gboolean regex)
 void sci_set_keywords(ScintillaObject *sci, gint k, gchar *text)
 {
 	SSM(sci, SCI_SETKEYWORDS, k, (sptr_t) text);
-}
-
-void sci_scroll_lines(ScintillaObject *sci, gint lines)
-{
-	SSM(sci, SCI_LINESCROLL, 0, lines);
 }
 
 void sci_set_readonly(ScintillaObject *sci, gboolean readonly)

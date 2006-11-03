@@ -753,7 +753,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			case GEANY_RESPONSE_FIND:
 			case GEANY_RESPONSE_FIND_PREVIOUS:
 			document_find_text(idx, search_data.text, search_data.flags,
-				(response == GEANY_RESPONSE_FIND_PREVIOUS));
+				(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE);
 			check_close = FALSE;
 			break;
 
@@ -848,7 +848,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			gint rep = document_replace_text(idx, find, replace, search_flags_re,
 				search_backwards_re);
 			if (rep != -1)
-				document_find_text(idx, find, search_flags_re, search_backwards_re);
+				document_find_text(idx, find, search_flags_re, search_backwards_re,
+					TRUE);
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE:
@@ -859,7 +860,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 		case GEANY_RESPONSE_FIND:
 		{
-			document_find_text(idx, find, search_flags_re, search_backwards_re);
+			document_find_text(idx, find, search_flags_re, search_backwards_re, TRUE);
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE_IN_FILE:

@@ -721,9 +721,8 @@ static void goto_matching_brace(gint idx)
 	new_pos = sci_find_bracematch(doc_list[idx].sci, pos);
 	if (new_pos != -1)
 	{
-		gint line = sci_get_line_from_position(doc_list[idx].sci, new_pos);
-		sci_goto_line_scroll(doc_list[idx].sci, line, 0.5);
-		sci_goto_pos(doc_list[idx].sci, new_pos, FALSE); // set also the cursor the brace
+		sci_goto_pos(doc_list[idx].sci, new_pos, TRUE); // set the cursor at the brace
+		sci_scroll_to_line(doc_list[idx].sci, -1, 0.5);
 	}
 }
 

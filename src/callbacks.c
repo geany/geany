@@ -547,7 +547,7 @@ on_entry1_activate                     (GtkEntry        *entry,
 	gint idx = document_get_cur_idx();
 
 	setup_find_next(GTK_EDITABLE(entry));
-	document_search_bar_find(idx, search_data.text, 0, FALSE, FALSE);
+	document_search_bar_find(idx, search_data.text, 0, FALSE);
 }
 
 
@@ -559,7 +559,7 @@ on_entry1_changed                      (GtkEditable     *editable,
 	gint idx = document_get_cur_idx();
 
 	setup_find_next(editable);
-	document_search_bar_find(idx, search_data.text, 0, FALSE, TRUE);
+	document_search_bar_find(idx, search_data.text, 0, TRUE);
 }
 
 
@@ -573,7 +573,7 @@ on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
 	GtkWidget *entry = lookup_widget(GTK_WIDGET(app->window), "entry1");
 
 	setup_find_next(GTK_EDITABLE(entry));
-	document_search_bar_find(idx, search_data.text, 0, TRUE, FALSE);
+	document_search_bar_find(idx, search_data.text, 0, FALSE);
 }
 
 
@@ -1303,7 +1303,8 @@ on_find_next1_activate                 (GtkMenuItem     *menuitem,
 
 	if (search_data.text)
 	{
-		document_find_text(idx, search_data.text, search_data.flags, search_data.backwards);
+		document_find_text(idx, search_data.text, search_data.flags,
+			search_data.backwards, TRUE);
 	}
 }
 
@@ -1320,7 +1321,8 @@ on_find_previous1_activate             (GtkMenuItem     *menuitem,
 		utils_beep(); //Can't reverse search order for a regex (find next ignores search backwards)
 	else
 	{
-		document_find_text(idx, search_data.text, search_data.flags, !search_data.backwards);
+		document_find_text(idx, search_data.text, search_data.flags,
+			!search_data.backwards, TRUE);
 	}
 }
 

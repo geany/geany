@@ -139,12 +139,12 @@ int document_reload_file(gint idx, const gchar *forced_enc);
 gboolean document_save_file(gint idx, gboolean force);
 
 /* special search function, used from the find entry in the toolbar */
-void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean find_button,
-		gboolean inc);
+void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc);
 
 /* General search function, used from the find dialog.
  * Returns -1 on failure or the start position of the matching text. */
-gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards);
+gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards,
+	gboolean scroll);
 
 gint document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text,
 	gint flags, gboolean search_backwards);
