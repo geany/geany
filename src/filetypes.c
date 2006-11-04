@@ -452,8 +452,9 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_MAKE]->title = g_strdup(_("Makefile"));
 	filetypes[GEANY_FILETYPES_MAKE]->extension = g_strdup("mak");
 	{
-		gchar *pattern_make[] = {"*.mak", "*.mk", "Makefile*", "makefile*", NULL};
-		filetypes[GEANY_FILETYPES_MAKE]->pattern = g_strdupv(pattern_make);
+		gchar *patterns[] = {"*.mak", "*.mk", "GNUmakefile", "makefile", "Makefile",
+			"makefile.*", "Makefile.*", NULL};
+		filetypes[GEANY_FILETYPES_MAKE]->pattern = g_strdupv(patterns);
 	}
 	filetypes[GEANY_FILETYPES_MAKE]->style_func_ptr = styleset_makefile;
 	filetypes[GEANY_FILETYPES_MAKE]->comment_open = g_strdup("#");
@@ -471,10 +472,10 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_XML]->has_tags = FALSE;
 	filetypes[GEANY_FILETYPES_XML]->title = g_strdup(_("XML source file"));
 	filetypes[GEANY_FILETYPES_XML]->extension = g_strdup("xml");
-	filetypes[GEANY_FILETYPES_XML]->pattern = g_new0(gchar*, 3);
-	filetypes[GEANY_FILETYPES_XML]->pattern[0] = g_strdup("*.xml");
-	filetypes[GEANY_FILETYPES_XML]->pattern[1] = g_strdup("*.sgml");
-	filetypes[GEANY_FILETYPES_XML]->pattern[2] = NULL;
+	{
+		gchar *patterns[] = {"*.xml", "*.sgml", "*.xsl", "*.xslt", NULL};
+		filetypes[GEANY_FILETYPES_XML]->pattern = g_strdupv(patterns);
+	}
 	filetypes[GEANY_FILETYPES_XML]->style_func_ptr = styleset_xml;
 	filetypes[GEANY_FILETYPES_XML]->comment_open = g_strdup("<!--");
 	filetypes[GEANY_FILETYPES_XML]->comment_close = g_strdup("-->");

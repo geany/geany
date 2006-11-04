@@ -1,7 +1,13 @@
 2006-11-04  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/search.c: Fix pressing enter to search from the Find dialog.
-
+ * src/keyfile.c, src/keyfile.h, src/main.c:
+   Make filetype_extensions.conf generation only available with a debug
+   build of Geany.
+ * src/filetypes.c, data/filetype_extensions.conf:
+   Recognise *.xsl, *.xslt filenames for XML filetype.
+   Recognise 'GNUmakefile' filename for Make filetype.
+ 
 
 2006-11-03  Nick Treleaven  <nick.treleaven@btinternet.com>
 
