@@ -707,6 +707,14 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 
 
 static void
+on_find_entry_activate(GtkEntry *entry, gpointer user_data)
+{
+	on_find_dialog_response(NULL, GEANY_RESPONSE_FIND,
+				lookup_widget(GTK_WIDGET(entry), "entry"));
+}
+
+
+static void
 on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (response == GTK_RESPONSE_CANCEL)
@@ -776,10 +784,9 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 static void
-on_find_entry_activate(GtkEntry *entry, gpointer user_data)
+on_replace_entry_activate(GtkEntry *entry, gpointer user_data)
 {
-	on_find_dialog_response(NULL, GTK_RESPONSE_ACCEPT,
-				lookup_widget(GTK_WIDGET(entry), "entry"));
+	on_replace_dialog_response(NULL, GEANY_RESPONSE_REPLACE, NULL);
 }
 
 
@@ -893,13 +900,6 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	}
 	g_free(find);
 	g_free(replace);
-}
-
-
-static void
-on_replace_entry_activate(GtkEntry *entry, gpointer user_data)
-{
-	on_replace_dialog_response(NULL, GEANY_RESPONSE_REPLACE, NULL);
 }
 
 
