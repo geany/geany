@@ -62,8 +62,6 @@ void styleset_sh(ScintillaObject *sci);
 
 void styleset_xml(ScintillaObject *sci);
 
-void styleset_markup(ScintillaObject *sci);
-
 void styleset_docbook(ScintillaObject *sci);
 
 void styleset_none(ScintillaObject *sci);

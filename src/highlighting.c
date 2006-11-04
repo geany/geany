@@ -31,6 +31,8 @@
 #include "symbols.h"
 
 
+static void styleset_markup(ScintillaObject *sci, gboolean set_keywords);
+
 typedef struct
 {
 	gint	foreground;
@@ -995,7 +997,7 @@ void styleset_php(ScintillaObject *sci)
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	// use the same colouring as for XML
-	styleset_markup(sci);
+	styleset_markup(sci, TRUE);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_PHP].wordchars);
 }
@@ -1034,7 +1036,7 @@ void styleset_html(ScintillaObject *sci)
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
 	// use the same colouring for HTML; XML and so on
-	styleset_markup(sci);
+	styleset_markup(sci, TRUE);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HTML].wordchars);
 }
@@ -1125,16 +1127,19 @@ static void styleset_markup_init(void)
 }
 
 
-void styleset_markup(ScintillaObject *sci)
+static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 {
 	if (style_sets[GEANY_FILETYPES_XML].styling == NULL) styleset_markup_init();
 
-
-	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[1]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[2]);
-	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[3]);
-	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[4]);
+	// don't set keywords for plain XML
+	if(set_keywords) 
+	{
+		SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[0]);
+		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[1]);
+		SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[2]);
+		SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[3]);
+		SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[4]);
+	}
 	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[5]);
 
 	// hotspotting, nice thing
@@ -1732,7 +1737,7 @@ void styleset_xml(ScintillaObject *sci)
 	SSM (sci, SCI_SETLEXER, SCLEX_XML, 0);
 
 	// use the same colouring for HTML; XML and so on
-	styleset_markup(sci);
+	styleset_markup(sci, FALSE);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_XML].wordchars);
 }
