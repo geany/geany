@@ -48,9 +48,6 @@ static gint hpan_position;
 static gint vpan_position;
 
 
-static void generate_filetype_extensions(const gchar *output_dir);
-
-
 void configuration_save()
 {
 	guint i = 0, j = 0, max;
@@ -587,6 +584,12 @@ void configuration_apply_settings()
 }
 
 
+#ifdef GEANY_DEBUG
+// Geany data file generation is only available with a debug build of Geany.
+
+static void generate_filetype_extensions(const gchar *output_dir);
+
+
 /* Generate the config files in "data/" from defaults */
 void configuration_generate_data_files()
 {
@@ -602,6 +605,7 @@ void configuration_generate_data_files()
 		return;
 	}
 	g_print("Generating system files in %s:\n", gen_dir);
+	// currently only filetype extensions are auto-generated.
 	generate_filetype_extensions(gen_dir);
 	g_free(gen_dir);
 }
@@ -642,6 +646,8 @@ static void generate_filetype_extensions(const gchar *output_dir)
 	g_free(data);
 	g_key_file_free(config);
 }
+
+#endif
 
 
 void configuration_read_filetype_extensions()

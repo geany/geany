@@ -36,7 +36,9 @@ void configuration_read_filetype_extensions();
  * realisation of the main window */
 void configuration_apply_settings();
 
+#ifdef GEANY_DEBUG
 /* Generate the config files in "data/" from defaults */
 void configuration_generate_data_files();
+#endif
 
 #endif

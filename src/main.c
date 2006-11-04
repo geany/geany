@@ -535,11 +535,13 @@ gint main(gint argc, gchar **argv)
 	templates_init();
 	document_init_doclist();
 	filetypes_init_types();
+#ifdef GEANY_DEBUG
 	if (generate_datafiles)
 	{
 		configuration_generate_data_files();
 		exit(0);
 	}
+#endif
 	configuration_read_filetype_extensions();
 
 	gtk_window_set_icon(GTK_WINDOW(app->window), ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE));
