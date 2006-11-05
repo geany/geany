@@ -1,9 +1,15 @@
+2006-11-05  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: Fixed (hopefully) wrong indentation in some cases when
+                 inserting '}'.
+
+
 2006-11-04  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/highlighting.c, src/highlighting.h:
    Applied patch from Bob Doan to do not set keywords for XML
    documents(thanks).
-   Made styleset_markup() static. 
+   Made styleset_markup() static.
 
 
 2006-11-04  Nick Treleaven  <nick.treleaven@btinternet.com>
@@ -15,7 +21,7 @@
  * src/filetypes.c, data/filetype_extensions.conf:
    Recognise *.xsl, *.xslt filenames for XML filetype.
    Recognise 'GNUmakefile' filename for Make filetype.
- 
+
 
 2006-11-03  Nick Treleaven  <nick.treleaven@btinternet.com>
 

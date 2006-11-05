@@ -316,7 +316,7 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 			/// TODO add something like insert_tabs() which inserts a tab or tab_width times a space
 			sci_add_text(sci, "\t");
 		}
-		
+
 	}
 	// " * " auto completion in multiline C/C++ comments
 	sci_cb_auto_multiline(sci, pos);
@@ -452,15 +452,18 @@ void sci_cb_close_block(gint idx, gint pos)
 	//geany_debug("line_len: %d eol: %d cnt: %d", line_len, eol_char_len, cnt);
 	if ((line_len - eol_char_len - 1) != cnt) return;
 
-	if (start_brace >= 0) sci_cb_get_indent(sci, start_brace, TRUE);
 /*	geany_debug("pos: %d, start: %d char: %c start_line: %d", pos, start_brace,
 					sci_get_char_at(sci, pos), sci_get_line_from_position(sci, start_brace));
 */
 
-	text = g_strconcat(indent, "}", NULL);
-	sci_set_anchor(sci, line_start);
-	SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
-	g_free(text);
+	if (start_brace >= 0)
+	{
+		sci_cb_get_indent(sci, start_brace, TRUE);
+		text = g_strconcat(indent, "}", NULL);
+		sci_set_anchor(sci, line_start);
+		SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
+		g_free(text);
+	}
 }
 
 
@@ -474,7 +477,7 @@ void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_
 
 	if (pos == -1)
 		pos = sci_get_current_position(sci);
-		
+
 	line = sci_get_line_from_position(sci, pos);
 	line_start = sci_get_position_from_line(sci, line);
 	startword = pos - line_start;
