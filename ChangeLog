@@ -3,6 +3,7 @@
  * data/filetypes.java, src/highlighting.c:
    Added Java keywords true and false.
    Converted "NULL" to lower case.
+ * src/sci_cb.c: Little code cleanup in brace_match().
 
 
 2006-11-05  Enrico Tröger  <enrico.troeger@uvena.de>

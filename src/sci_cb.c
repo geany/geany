@@ -259,12 +259,14 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			}
 			break;
 		}
-/*		case SCN_STYLENEEDED:
+#ifdef GEANY_DEBUG
+		case SCN_STYLENEEDED:
 		{
 			geany_debug("style");
 			break;
 		}
-*/		case SCN_URIDROPPED:
+#endif
+		case SCN_URIDROPPED:
 		{
 			if (nt->text != NULL && strlen(nt->text) > 0)
 			{
@@ -386,20 +388,22 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 {
 	gchar chBrace = sci_get_char_at(sci, pos);
 	gchar chSeek = utils_brace_opposite(chBrace);
-	gint direction, styBrace, depth = 1;
+	gchar chAtPos;
+	gint direction = -1;
+	gint styBrace;
+	gint depth = 1;
+	gint styAtPos;
 
-	if (chSeek == '\0') return -1;
 	styBrace = sci_get_style_at(sci, pos);
-	direction = -1;
 
-	if (chBrace == '(' || chBrace == '[' || chBrace == '{' || chBrace == '<')
+	if (utils_is_opening_brace(chBrace))
 		direction = 1;
 
 	pos = pos + direction;
 	while ((pos >= 0) && (pos < sci_get_length(sci)))
 	{
-		gchar chAtPos = sci_get_char_at(sci, pos - 1);
-		gint styAtPos = sci_get_style_at(sci, pos);
+		chAtPos = sci_get_char_at(sci, pos - 1);
+		styAtPos = sci_get_style_at(sci, pos);
 
 		if ((pos > sci_get_end_styled(sci)) || (styAtPos == styBrace))
 		{
@@ -412,7 +416,7 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 		}
 		pos = pos + direction;
 	}
-	return - 1;
+	return -1;
 }
 
 
