@@ -1132,7 +1132,7 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 	if (style_sets[GEANY_FILETYPES_XML].styling == NULL) styleset_markup_init();
 
 	// don't set keywords for plain XML
-	if(set_keywords) 
+	if(set_keywords)
 	{
 		SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[0]);
 		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_XML].keywords[1]);
@@ -1366,9 +1366,9 @@ static void styleset_java_init(void)
 										generic goto if implements import inner instanceof interface \
 										native new outer package private protected public rest \
 										return static super switch synchronized this throw throws \
-										transient try var volatile while");
-	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_JAVA, 1, "boolean byte char double float int long null short void NULL");
-	get_keyfile_keywords(config, config_home, "keywords", "doccomment", GEANY_FILETYPES_JAVA, 2, "return param author");
+										transient try var volatile while true false null");
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_JAVA, 1, "boolean byte char double float int long null short void");
+	get_keyfile_keywords(config, config_home, "keywords", "doccomment", GEANY_FILETYPES_JAVA, 2, "return param author throws");
 	get_keyfile_keywords(config, config_home, "keywords", "typedefs", GEANY_FILETYPES_JAVA, 3, "");
 	style_sets[GEANY_FILETYPES_JAVA].keywords[4] = NULL;
 

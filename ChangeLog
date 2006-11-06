@@ -1,3 +1,10 @@
+2006-11-06  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * data/filetypes.java, src/highlighting.c:
+   Added Java keywords true and false.
+   Converted "NULL" to lower case.
+
+
 2006-11-05  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Fixed (hopefully) wrong indentation in some cases when
