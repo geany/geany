@@ -84,79 +84,79 @@ gint destroyapp(GtkWidget *widget, gpointer gdata)
 }
 
 
+static gboolean check_no_unsaved()
+{
+	guint i;
+
+	for (i = 0; i < doc_array->len; i++)
+	{
+		if (doc_list[i].is_valid && doc_list[i].changed)
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;	// no unsaved edits
+}
+
+
+static gboolean account_for_unsaved()
+{
+	gint p;
+
+	for (p = 0; p < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); p++)
+	{
+		gint idx = document_get_n_idx(p);
+
+		if (doc_list[idx].changed)
+		{
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), p);
+			if (! dialogs_show_unsaved_file(idx))
+				return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+
+// should only be called from on_exit_clicked
+static void quit_app()
+{
+	guint i;
+
+	configuration_save();
+
+	// force close all tabs
+	for (i = 0; i < doc_array->len; i++)
+	{
+		if (doc_list[i].is_valid && doc_list[i].changed)
+		{
+			doc_list[i].changed = FALSE;	// ignore changes (already asked user in on_exit_clicked)
+		}
+	}
+	on_close_all1_activate(NULL, NULL);
+
+	destroyapp(NULL, NULL);
+}
+
+
 // wrapper function to abort exit process if cancel button is pressed
 gboolean
 on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 {
 	app->quitting = TRUE;
 
-	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) > 0)
+	if (! check_no_unsaved())
 	{
-		guint i;
-		gboolean has_dirty_editors = FALSE;
-
-		for (i = 0; i < doc_array->len; i++)
-		{
-			if (doc_list[i].is_valid && doc_list[i].changed)
-			{
-				has_dirty_editors = TRUE;
-				break;
-			}
-		}
-		if (has_dirty_editors)
-		{
-			// there is the chance that the user cancel the exit process while closing open
-			// files, so save the configuration(i.e. the list of open files) first
-			configuration_save();
-			if (on_close_all1_activate(NULL, NULL))
-			{
-				destroyapp(NULL, gdata);
-			}
-			else app->quitting = FALSE;
-		}
-		else
-		{
-			if (app->pref_main_confirm_exit)
-			{
-				if (dialogs_show_question_full(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
-					_("Do you really want to quit?")) && on_close_all1_activate(NULL, NULL))
-					{
-						configuration_save();
-						destroyapp(NULL, gdata);
-					}
-				else app->quitting = FALSE;
-			}
-			else
-			{
-				// there is the chance that the user cancel the exit process while closing open
-				// files, so save the configuration(i.e. the list of open files) first
-				configuration_save();
-				if (on_close_all1_activate(NULL, NULL))
-				{
-					destroyapp(NULL, gdata);
-				}
-				else app->quitting = FALSE;
-			}
-		}
+		if (account_for_unsaved())
+			quit_app();
 	}
 	else
-	{
-		if (app->pref_main_confirm_exit)
-		{
-			if (dialogs_show_question_full(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
-				_("Do you really want to quit?")))
-			{
-				configuration_save();
-				destroyapp(NULL, gdata);
-			}
-			else app->quitting = FALSE;
-		}
-		else
-		{
-			configuration_save();
-			destroyapp(NULL, gdata);
-		}
-	}
+	if (! app->pref_main_confirm_exit ||
+		dialogs_show_question_full(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
+			_("Do you really want to quit?")))
+			quit_app();
+
+	app->quitting = FALSE;
 	return TRUE;
 }
 

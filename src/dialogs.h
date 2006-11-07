@@ -28,7 +28,7 @@
 void dialogs_show_open_file();
 
 /* This shows the file selection dialog to save a file. */
-void dialogs_show_save_as();
+gboolean dialogs_show_save_as();
 
 gboolean dialogs_show_unsaved_file(gint idx);
 

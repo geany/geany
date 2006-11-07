@@ -83,7 +83,8 @@ static gchar *win32_get_filters(gboolean exe)
 }
 
 
-void win32_show_file_dialog(gboolean file_open)
+// return TRUE if the dialog was not cancelled.
+gboolean win32_show_file_dialog(gboolean file_open)
 {
 	OPENFILENAME of;
 	gint retval;
@@ -134,7 +135,7 @@ void win32_show_file_dialog(gboolean file_open)
 			win32_message_dialog(GTK_MESSAGE_ERROR, error);
 		}
 		g_free(fname);
-		return;
+		return FALSE;
 	}
 
 	if (file_open)
@@ -169,6 +170,7 @@ void win32_show_file_dialog(gboolean file_open)
 		document_save_file(idx, TRUE);
 	}
 	g_free(fname);
+	return (retval != 0);
 }
 
 

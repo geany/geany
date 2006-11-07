@@ -26,7 +26,7 @@
 
 void win32_show_pref_file_dialog(GtkEntry *item);
 
-void win32_show_file_dialog(gboolean file_open);
+gboolean win32_show_file_dialog(gboolean file_open);
 
 void win32_show_font_dialog(void);
 

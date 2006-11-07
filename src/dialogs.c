@@ -246,13 +246,14 @@ static GtkWidget *add_file_open_extra_widget()
 #endif
 
 
-/* This shows the file selection dialog to save a file. */
-void dialogs_show_save_as()
+/* This shows the file selection dialog to save a file, returning TRUE if
+ * the file was saved. */
+gboolean dialogs_show_save_as()
 {
 #ifdef G_OS_WIN32
-	win32_show_file_dialog(FALSE);
+	return win32_show_file_dialog(FALSE);
 #else
-	gint idx = document_get_cur_idx();
+	gint idx = document_get_cur_idx(), resp;
 
 	if (app->save_filesel == NULL)
 	{
@@ -299,7 +300,8 @@ void dialogs_show_save_as()
 	}
 
 	// Run the dialog synchronously, pausing this function call
-	gtk_dialog_run(GTK_DIALOG(app->save_filesel));
+	resp = gtk_dialog_run(GTK_DIALOG(app->save_filesel));
+	return (resp == GTK_RESPONSE_ACCEPT);
 #endif
 }
 
@@ -384,8 +386,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 		{
 			if (doc_list[idx].file_name == NULL)
 			{
-				dialogs_show_save_as();
-				ret = TRUE;
+				ret = dialogs_show_save_as();
 			}
 			else
 				// document_save_file() returns the status if the file could be saved

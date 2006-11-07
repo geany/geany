@@ -58,7 +58,6 @@ void configuration_save()
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	gchar *data, *tmp;
 	gchar *entry = g_malloc(14);
-	gchar *fname = g_malloc0(256);
 	gchar **recent_files = g_new0(gchar*, app->mru_length + 1);
 	GtkTextBuffer *buffer;
 	GtkTextIter start, end;
@@ -212,10 +211,16 @@ void configuration_save()
 			idx = document_get_n_idx(i);
 			if (idx >= 0 && doc_list[idx].file_name)
 			{
+				gchar *fname;
+				filetype *ft = doc_list[idx].file_type;
+
+				if (ft == NULL)	// can happen when saving a new file when quitting
+					ft = filetypes[GEANY_FILETYPES_ALL];
 				g_snprintf(entry, 13, "FILE_NAME_%d", j);
-				g_snprintf(fname, 255, "%d:%d:%s", sci_get_current_position(doc_list[idx].sci),
-					doc_list[idx].file_type->uid, doc_list[idx].file_name);
+				fname = g_strdup_printf("%d:%d:%s", sci_get_current_position(doc_list[idx].sci),
+					ft->uid, doc_list[idx].file_name);
 				g_key_file_set_string(config, "files", entry, fname);
+				g_free(fname);
 				j++;
 			}
 		}
@@ -247,7 +252,6 @@ void configuration_save()
 	g_key_file_free(config);
 	g_free(configfile);
 	g_free(entry);
-	g_free(fname);
 	g_free(scribble_text);
 }
 

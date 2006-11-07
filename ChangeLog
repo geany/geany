@@ -1,3 +1,15 @@
+2006-11-07  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/win32.c, src/win32.h, src/callbacks.c, src/keyfile.c,
+   src/dialogs.c, src/dialogs.h:
+   Don't close any tabs when quitting until all unsaved changes have
+   been accounted for; switch to each unsaved file before showing the
+   unsaved dialog.
+   Remove limit of ~256 chars for session filenames.
+   Make dialogs_show_unsaved_file() fail if the Save As dialog was
+   cancelled.
+ 
+
 2006-11-06  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * data/filetypes.java, src/highlighting.c:
