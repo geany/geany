@@ -216,7 +216,7 @@ void treeviews_init_tag_list(gint idx)
 			// use singular because one file can only belong to one Package / Module
 			gchar *namespace_name = (doc_list[idx].file_type->id == GEANY_FILETYPES_D) ?
 									 _("Module") : _("Package");
-			
+
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Methods"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_class), NULL);
@@ -301,12 +301,12 @@ GtkTreeIter treeviews_openfiles_add(gint idx, const gchar *string, gboolean chan
 	static GdkColor black = {0, 0, 0, 0};
 	static GdkColor red = {0, 65535, 0, 0};
 	GdkColor *colour;
-	
+
 	if (changed)
 		colour = &red;
 	else
 		colour = &black;
-	
+
 
 	gtk_list_store_append(tv.store_openfiles, &iter);
 	gtk_list_store_set(tv.store_openfiles, &iter, 0, string, 1, idx, 2, colour, -1);
@@ -327,12 +327,12 @@ void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string, gboolean 
 	static GdkColor black = {0, 0, 0, 0};
 	static GdkColor red = {0, 65535, 0, 0};
 	GdkColor *colour;
-	
+
 	if (changed)
 		colour = &red;
 	else
 		colour = &black;
-	
+
 	gtk_list_store_set(tv.store_openfiles, &iter, 0, string, 2, colour, -1);
 }
 
@@ -494,6 +494,8 @@ static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user
 				case OPENFILES_ACTION_HIDE_ALL:
 				{
 					app->sidebar_visible = FALSE;
+					app->sidebar_openfiles_visible = FALSE;
+					app->sidebar_symbol_visible = FALSE;
 					ui_treeviews_show_hide(TRUE);
 					break;
 				}

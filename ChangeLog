@@ -1,3 +1,9 @@
+2006-11-07  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/treeviews.c: Fixed unintentional appearance of sidebar after it
+                    was hidden and the preferences dialog was closed.
+
+
 2006-11-07  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/win32.c, src/win32.h, src/callbacks.c, src/keyfile.c,
@@ -8,7 +14,7 @@
    Remove limit of ~256 chars for session filenames.
    Make dialogs_show_unsaved_file() fail if the Save As dialog was
    cancelled.
- 
+
 
 2006-11-06  Enrico Tröger  <enrico.troeger@uvena.de>
 
