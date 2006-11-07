@@ -87,7 +87,7 @@ void dialogs_show_open_file ()
 		gtk_dialog_set_default_response(GTK_DIALOG(app->open_filesel),
 			GTK_RESPONSE_ACCEPT);
 
-		gtk_widget_set_size_request(app->open_filesel, 520, 460);
+		gtk_widget_set_size_request(app->open_filesel, -1, 460);
 		gtk_window_set_modal(GTK_WINDOW(app->open_filesel), TRUE);
 		gtk_window_set_destroy_with_parent(GTK_WINDOW(app->open_filesel), TRUE);
 		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(app->open_filesel), TRUE);

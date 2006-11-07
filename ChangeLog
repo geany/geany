@@ -5,6 +5,7 @@
  * data/filetypes.common, src/highlighting.c:
    Added an option to draw an horizontal line above or below folded
    text.
+ * src/dialogs.c: Don't set width of file open dialog.
 
 
 2006-11-07  Nick Treleaven  <nick.treleaven@btinternet.com>
