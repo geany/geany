@@ -69,9 +69,10 @@ enum	// Geany common styling
 
 typedef struct
 {
-	// can take values 1 or 2
+	// can take values 1 or 2 (or 3)
 	guchar marker:2;
 	guchar lines:2;
+	guchar draw_line:3;
 } FoldingStyle;
 
 static struct
@@ -380,6 +381,9 @@ static void styleset_common_init(void)
 		get_keyfile_int(config, config_home, "styling", "invert_all",
 			0, 0, &tmp_style);
 		common_style_set.invert_all = tmp_style.foreground;
+		get_keyfile_int(config, config_home, "styling", "folding_horiz_line",
+			0, 0, &tmp_style);
+		common_style_set.folding_style.draw_line = tmp_style.foreground;
 	}
 
 	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS, &common_style_set.wordchars);
@@ -434,25 +438,44 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	// 2 -> folding marker, other folding settings
 	SSM(sci, SCI_SETMARGINTYPEN, 2, SC_MARGIN_SYMBOL);
 	SSM(sci, SCI_SETMARGINMASKN, 2, SC_MASK_FOLDERS);
-	SSM(sci, SCI_SETFOLDFLAGS, 0, 0);
+
+	// drawing a horizontal line when text if folded
+	switch (common_style_set.folding_style.draw_line)
+	{
+		case 1:
+		{
+			SSM(sci, SCI_SETFOLDFLAGS, 4, 0);
+			break;
+		}
+		case 2:
+		{
+			SSM(sci, SCI_SETFOLDFLAGS, 16, 0);
+			break;
+		}
+		default:
+		{
+			SSM(sci, SCI_SETFOLDFLAGS, 0, 0);
+			break;
+		}
+	}
 
 	// choose the folding style - boxes or circles, I prefer boxes, so it is default ;-)
 	switch (common_style_set.folding_style.marker)
 	{
 		case 2:
 		{
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPEN, SC_MARK_CIRCLEMINUS);
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDER, SC_MARK_CIRCLEPLUS);
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEREND, SC_MARK_CIRCLEPLUSCONNECTED);
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPENMID, SC_MARK_CIRCLEMINUSCONNECTED);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPEN, SC_MARK_CIRCLEMINUS);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDER, SC_MARK_CIRCLEPLUS);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEREND, SC_MARK_CIRCLEPLUSCONNECTED);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPENMID, SC_MARK_CIRCLEMINUSCONNECTED);
 			break;
 		}
 		default:
 		{
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS);
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS);
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEREND, SC_MARK_BOXPLUSCONNECTED);
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPENMID, SC_MARK_BOXMINUSCONNECTED);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPEN, SC_MARK_BOXMINUS);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDER, SC_MARK_BOXPLUS);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEREND, SC_MARK_BOXPLUSCONNECTED);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDEROPENMID, SC_MARK_BOXMINUSCONNECTED);
 			break;
 		}
 	}
@@ -462,14 +485,14 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 	{
 		case 2:
 		{
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNERCURVE);
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNERCURVE);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNERCURVE);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNERCURVE);
 			break;
 		}
 		default:
 		{
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNER);
-			SSM (sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNER);
+			SSM(sci,SCI_MARKERDEFINE,  SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER);
 			break;
 		}
 	}

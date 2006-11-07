@@ -2,6 +2,9 @@
 
  * src/treeviews.c: Fixed unintentional appearance of sidebar after it
                     was hidden and the preferences dialog was closed.
+ * data/filetypes.common, src/highlighting.c:
+   Added an option to draw an horizontal line above or below folded
+   text.
 
 
 2006-11-07  Nick Treleaven  <nick.treleaven@btinternet.com>
