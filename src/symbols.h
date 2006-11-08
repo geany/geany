@@ -27,6 +27,12 @@
 
 void symbols_global_tags_loaded(gint file_type_idx);
 
-GString *symbols_get_global_keywords();
+GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types);
+
+const GList *symbols_get_tag_list(gint idx, guint tag_types);
+
+GString *symbols_get_macro_list();
+
+TMTag *symbols_find_in_workspace(const gchar *tag_name, gint type);
 
 #endif

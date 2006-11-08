@@ -50,6 +50,7 @@
 #include "encodings.h"
 #include "search.h"
 #include "main.h"
+#include "symbols.h"
 
 #ifdef G_OS_WIN32
 # include "win32.h"
@@ -1188,8 +1189,6 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint type;
-	guint j;
-	const GPtrArray *tags;
 	TMTag *tmtag;
 
 	if (menuitem == GTK_MENU_ITEM(lookup_widget(app->popup_menu, "goto_tag_definition1")))
@@ -1197,24 +1196,13 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 	else
 		type = tm_tag_prototype_t;
 
-	if (app->tm_workspace->work_objects != NULL)
+	tmtag = symbols_find_in_workspace(editor_info.current_word, type);
+	if (tmtag != NULL)
 	{
-		for (j = 0; j < app->tm_workspace->work_objects->len; j++)
-		{
-			tags = tm_tags_extract(
-				TM_WORK_OBJECT(app->tm_workspace->work_objects->pdata[j])->tags_array,
-				type);
-			if (tags == NULL) continue;
-
-			tmtag = utils_find_tm_tag(tags, editor_info.current_word);
-			if (tmtag != NULL)
-			{
-				if (! utils_goto_file_line(
-					tmtag->atts.entry.file->work_object.file_name,
-					TRUE, tmtag->atts.entry.line)) break;
-				return;
-			}
-		}
+		if (utils_goto_file_line(
+			tmtag->atts.entry.file->work_object.file_name,
+			TRUE, tmtag->atts.entry.line))
+			return;
 	}
 	// if we are here, there was no match and we are beeping ;-)
 	utils_beep();

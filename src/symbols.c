@@ -22,10 +22,15 @@
  */
 
 #include "geany.h"
+
+#include <ctype.h>
+
 #include "symbols.h"
 #include "utils.h"
 #include "filetypes.h"
 #include "sci_cb.h"	// html_entities
+#include "encodings.h"
+#include "document.h"
 
 
 enum	// Geany tag files
@@ -53,16 +58,6 @@ static TagFileInfo tag_file_info[GTF_MAX] =
 	{FALSE, "latex.tags"}
 };
 
-// langType used in TagManager (see tagmanager/parsers.h)
-enum	// Geany lang type
-{
-	GLT_C = 0,
-	GLT_CPP = 1,
-	GLT_PASCAL = 4,
-	GLT_PHP = 6,
-	GLT_LATEX = 8
-};
-
 
 static void html_tags_loaded();
 
@@ -80,14 +75,15 @@ void symbols_global_tags_loaded(gint file_type_idx)
 		case GEANY_FILETYPES_HTML:
 			html_tags_loaded();
 			return;
-		case GEANY_FILETYPES_C:		gtf = GTF_C;		lt = GLT_C; break;
-		case GEANY_FILETYPES_CPP:	gtf = GTF_C;		lt = GLT_CPP; break;
-		case GEANY_FILETYPES_PASCAL:gtf = GTF_PASCAL;	lt = GLT_PASCAL; break;
-		case GEANY_FILETYPES_PHP:	gtf = GTF_PHP;		lt = GLT_PHP; break;
-		case GEANY_FILETYPES_LATEX:	gtf = GTF_LATEX;	lt = GLT_LATEX; break;
+		case GEANY_FILETYPES_C:		gtf = GTF_C; break;
+		case GEANY_FILETYPES_CPP:	gtf = GTF_C; break;
+		case GEANY_FILETYPES_PASCAL:gtf = GTF_PASCAL; break;
+		case GEANY_FILETYPES_PHP:	gtf = GTF_PHP; break;
+		case GEANY_FILETYPES_LATEX:	gtf = GTF_LATEX; break;
 		default:
 			return;
 	}
+	lt = filetypes[file_type_idx]->lang;
 	tfi = &tag_file_info[gtf];
 
 	if (! tfi->tags_loaded)
@@ -117,29 +113,175 @@ static void html_tags_loaded()
 }
 
 
-GString *symbols_get_global_keywords()
+GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types)
 {
+	guint j;
 	GString *s = NULL;
+	GPtrArray *typedefs;
 
-	if ((app->tm_workspace) && (app->tm_workspace->global_tags))
+	g_return_val_if_fail(tags_array != NULL, NULL);
+
+	typedefs = tm_tags_extract(tags_array, tag_types);
+
+	if ((typedefs) && (typedefs->len > 0))
 	{
-		guint j;
-		GPtrArray *g_typedefs = tm_tags_extract(app->tm_workspace->global_tags,
-				tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
-
-		if ((g_typedefs) && (g_typedefs->len > 0))
+		s = g_string_sized_new(typedefs->len * 10);
+		for (j = 0; j < typedefs->len; ++j)
 		{
-			s = g_string_sized_new(g_typedefs->len * 10);
-			for (j = 0; j < g_typedefs->len; ++j)
+			if (!(TM_TAG(typedefs->pdata[j])->atts.entry.scope))
 			{
-				if (!(TM_TAG(g_typedefs->pdata[j])->atts.entry.scope))
+				if (TM_TAG(typedefs->pdata[j])->name)
 				{
-					g_string_append(s, TM_TAG(g_typedefs->pdata[j])->name);
+					g_string_append(s, TM_TAG(typedefs->pdata[j])->name);
 					g_string_append_c(s, ' ');
 				}
 			}
 		}
-		g_ptr_array_free(g_typedefs, TRUE);
 	}
+	g_ptr_array_free(typedefs, TRUE);
 	return s;
 }
+
+
+const GList *symbols_get_tag_list(gint idx, guint tag_types)
+{
+	static GList *tag_names = NULL;
+
+	if (idx >= 0 && doc_list[idx].is_valid && doc_list[idx].tm_file &&
+		doc_list[idx].tm_file->tags_array)
+	{
+		TMTag *tag;
+		guint i;
+		GeanySymbol *symbol;
+		gboolean doc_is_utf8 = FALSE;
+		gchar *utf8_name;
+
+		if (tag_names)
+		{
+			GList *tmp;
+			for (tmp = tag_names; tmp; tmp = g_list_next(tmp))
+			{
+				g_free(((GeanySymbol*)tmp->data)->str);
+				g_free(tmp->data);
+			}
+			g_list_free(tag_names);
+			tag_names = NULL;
+		}
+
+		// do this comparison only once
+		if (utils_strcmp(doc_list[idx].encoding, "UTF-8")) doc_is_utf8 = TRUE;
+
+		for (i = 0; i < (doc_list[idx].tm_file)->tags_array->len; ++i)
+		{
+			tag = TM_TAG((doc_list[idx].tm_file)->tags_array->pdata[i]);
+			if (tag == NULL)
+				return NULL;
+
+			if (tag->type & tag_types)
+			{
+				if (! doc_is_utf8) utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
+															-1, doc_list[idx].encoding, TRUE);
+				else utf8_name = tag->name;
+				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
+				{
+					// context separator
+					gchar *cosep = (doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? "::" : ".";
+					
+					symbol = g_new0(GeanySymbol, 1);
+					symbol->str = g_strdup_printf("%s%s%s [%ld]", tag->atts.entry.scope, cosep,
+																utf8_name, tag->atts.entry.line);
+					symbol->type = tag->type;
+					symbol->line = tag->atts.entry.line;
+					tag_names = g_list_prepend(tag_names, symbol);
+				}
+				else
+				{
+					symbol = g_new0(GeanySymbol, 1);
+					symbol->str = g_strdup_printf("%s [%ld]", utf8_name, tag->atts.entry.line);
+					symbol->type = tag->type;
+					symbol->line = tag->atts.entry.line;
+					tag_names = g_list_prepend(tag_names, symbol);
+				}
+				if (! doc_is_utf8) g_free(utf8_name);
+			}
+		}
+		tag_names = g_list_sort(tag_names, (GCompareFunc) utils_compare_symbol);
+		return tag_names;
+	}
+	else
+		return NULL;
+}
+
+
+GString *symbols_get_macro_list()
+{
+	guint j, i;
+	const GPtrArray *tags;
+	GPtrArray *ftags;
+	GString *words;
+
+	ftags = g_ptr_array_sized_new(50);
+	words = g_string_sized_new(200);
+
+	for (j = 0; j < app->tm_workspace->work_objects->len; j++)
+	{
+		tags = tm_tags_extract(TM_WORK_OBJECT(app->tm_workspace->work_objects->pdata[j])->tags_array,
+			tm_tag_enum_t | tm_tag_variable_t | tm_tag_macro_t | tm_tag_macro_with_arg_t);
+		if (NULL != tags)
+		{
+			for (i = 0; ((i < tags->len) && (i < GEANY_MAX_AUTOCOMPLETE_WORDS)); ++i)
+			{
+				g_ptr_array_add(ftags, (gpointer) tags->pdata[i]);
+			}
+		}
+	}
+	tm_tags_sort(ftags, NULL, FALSE);
+	for (j = 0; j < ftags->len; j++)
+	{
+		if (j > 0) g_string_append_c(words, ' ');
+		g_string_append(words, TM_TAG(ftags->pdata[j])->name);
+	}
+	g_ptr_array_free(ftags, TRUE);
+	return words;
+}
+
+
+static TMTag *
+symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
+{
+	guint i;
+	g_return_val_if_fail(tags != NULL, NULL);
+
+	for (i = 0; i < tags->len; ++i)
+	{
+		if (utils_strcmp(TM_TAG(tags->pdata[i])->name, tag_name))
+			return TM_TAG(tags->pdata[i]);
+	}
+	return NULL;
+}
+
+
+TMTag *symbols_find_in_workspace(const gchar *tag_name, gint type)
+{
+	guint j;
+	const GPtrArray *tags;
+	TMTag *tmtag;
+
+	if (app->tm_workspace->work_objects != NULL)
+	{
+		for (j = 0; j < app->tm_workspace->work_objects->len; j++)
+		{
+			tags = tm_tags_extract(
+				TM_WORK_OBJECT(app->tm_workspace->work_objects->pdata[j])->tags_array,
+				type);
+			if (tags == NULL) continue;
+
+			tmtag = symbols_find_tm_tag(tags, tag_name);
+			if (tmtag != NULL)
+				return tmtag;
+		}
+	}
+	return NULL;	// not found
+}
+
+

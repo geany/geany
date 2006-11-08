@@ -1,3 +1,17 @@
+2006-11-07  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/highlighting.c, src/utils.h, src/callbacks.c,
+   src/sci_cb.c, src/document.c, src/symbols.c, src/ui_utils.c,
+   src/symbols.h:
+   Move utils_get_tag_list() to symbols.c, make utils_find_tm_tag()
+   static.
+   Move symbols_get_global_keywords() to get_global_typenames() in
+   highlighting.c.
+   Add symbols_find_tags_as_string(), symbols_get_tag_list(),
+   symbols_get_macro_list(), symbols_find_in_workspace() from various
+   tag-related existing code.
+
+
 2006-11-07  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/treeviews.c: Fixed unintentional appearance of sidebar after it

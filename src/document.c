@@ -58,6 +58,7 @@
 #include "main.h"
 #include "vte.h"
 #include "build.h"
+#include "symbols.h"
 
 
 /* dynamic array of document elements to hold all information of the notebook tabs */
@@ -1239,6 +1240,24 @@ void document_update_tag_list(gint idx, gboolean update)
 }
 
 
+static GString *get_project_typenames()
+{
+	GString *s = NULL;
+
+	if (app->tm_workspace)
+	{
+		GPtrArray *tags_array = app->tm_workspace->work_object.tags_array;
+
+		if (tags_array)
+		{
+			s = symbols_find_tags_as_string(tags_array,
+				tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
+		}
+	}
+	return s;
+}
+
+
 /* sets the filetype of the the document (sets syntax highlighting and tagging) */
 void document_set_filetype(gint idx, filetype *type)
 {
@@ -1253,39 +1272,22 @@ void document_set_filetype(gint idx, filetype *type)
 	// For C/C++/Java files, get list of typedefs for colourising
 	if (sci_get_lexer(doc_list[idx].sci) == SCLEX_CPP)
 	{
-		guint j, n;
+		GString *s = get_project_typenames();
 
-		// assign project keywords
-		if ((app->tm_workspace) && (app->tm_workspace->work_object.tags_array))
+		if (s != NULL)
 		{
-			GPtrArray *typedefs = tm_tags_extract(app->tm_workspace->work_object.tags_array,
-									tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
-			if ((typedefs) && (typedefs->len > 0))
+			guint n;
+
+			for (n = 0; n < doc_array->len; n++)
 			{
-				GString *s = g_string_sized_new(typedefs->len * 10);
-				for (j = 0; j < typedefs->len; ++j)
+				if (doc_list[n].sci)
 				{
-					if (!(TM_TAG(typedefs->pdata[j])->atts.entry.scope))
-					{
-						if (TM_TAG(typedefs->pdata[j])->name)
-						{
-							g_string_append(s, TM_TAG(typedefs->pdata[j])->name);
-							g_string_append_c(s, ' ');
-						}
-					}
+					sci_set_keywords(doc_list[n].sci, 3, s->str);
+					sci_colourise(doc_list[n].sci, 0, -1);
 				}
-				for (n = 0; n < doc_array->len; n++)
-				{
-					if (doc_list[n].sci)
-					{
-						sci_set_keywords(doc_list[n].sci, 3, s->str);
-						sci_colourise(doc_list[n].sci, 0, -1);
-					}
-				}
-				//SSM(doc_list[idx].sci, SCI_SETKEYWORDS, 3, (sptr_t) s->str);
-				g_string_free(s, TRUE);
 			}
-			g_ptr_array_free(typedefs, TRUE);
+			//SSM(doc_list[idx].sci, SCI_SETKEYWORDS, 3, (sptr_t) s->str);
+			g_string_free(s, TRUE);
 		}
 	}
 	sci_colourise(doc_list[idx].sci, 0, -1);

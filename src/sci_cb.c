@@ -32,6 +32,7 @@
 #include "sciwrappers.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "symbols.h"
 
 
 static gchar current_word[GEANY_MAX_WORD_LENGTH];	// holds word under the mouse or keyboard cursor
@@ -1023,36 +1024,12 @@ void sci_cb_auto_forif(gint idx, gint pos)
 
 void sci_cb_show_macro_list(ScintillaObject *sci)
 {
-	guint j, i;
-	const GPtrArray *tags;
-	GPtrArray *ftags;
 	GString *words;
 
 	if (sci == NULL) return;
 
-	ftags = g_ptr_array_sized_new(50);
-	words = g_string_sized_new(200);
-
-	for (j = 0; j < app->tm_workspace->work_objects->len; j++)
-	{
-		tags = tm_tags_extract(TM_WORK_OBJECT(app->tm_workspace->work_objects->pdata[j])->tags_array,
-			tm_tag_enum_t | tm_tag_variable_t | tm_tag_macro_t | tm_tag_macro_with_arg_t);
-		if (NULL != tags)
-		{
-			for (i = 0; ((i < tags->len) && (i < GEANY_MAX_AUTOCOMPLETE_WORDS)); ++i)
-			{
-				g_ptr_array_add(ftags, (gpointer) tags->pdata[i]);
-			}
-		}
-	}
-	tm_tags_sort(ftags, NULL, FALSE);
-	for (j = 0; j < ftags->len; j++)
-	{
-		if (j > 0) g_string_append_c(words, ' ');
-		g_string_append(words, TM_TAG(ftags->pdata[j])->name);
-	}
+	words = symbols_get_macro_list();
 	SSM(sci, SCI_USERLISTSHOW, 1, (sptr_t) words->str);
-	g_ptr_array_free(ftags, TRUE);
 	g_string_free(words, TRUE);
 }
 

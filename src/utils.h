@@ -34,8 +34,6 @@ gboolean utils_isbrace(gchar c);
 
 gboolean utils_is_opening_brace(gchar c);
 
-const GList *utils_get_tag_list(gint idx, guint tag_types);
-
 gint utils_get_local_tag(gint idx, const gchar *qual_name);
 
 gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line);
@@ -128,8 +126,6 @@ gint utils_strtod(const gchar *source, gchar **end, gboolean with_route);
 
 // returned string must be freed.
 gchar *utils_get_current_time_string();
-
-TMTag *utils_find_tm_tag(const GPtrArray *tags, const gchar *tag_name);
 
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gpointer data);
 

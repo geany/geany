@@ -346,6 +346,24 @@ void styleset_free_styles()
 }
 
 
+static GString *get_global_typenames()
+{
+	GString *s = NULL;
+
+	if (app->tm_workspace)
+	{
+		GPtrArray *tags_array = app->tm_workspace->global_tags;
+
+		if (tags_array)
+		{
+			s = symbols_find_tags_as_string(tags_array,
+				tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
+		}
+	}
+	return s;
+}
+
+
 static void styleset_common_init(void)
 {
 	GKeyFile *config = g_key_file_new();
@@ -634,7 +652,7 @@ void styleset_c(ScintillaObject *sci)
 	if (style_sets[GEANY_FILETYPES_C].styling == NULL) styleset_c_init();
 
 	/* Assign global keywords */
-	s = symbols_get_global_keywords();
+	s = get_global_typenames();
 	if (s != NULL)
 	{
 		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
@@ -722,7 +740,7 @@ void styleset_cpp(ScintillaObject *sci)
 	if (style_sets[GEANY_FILETYPES_CPP].styling == NULL) styleset_cpp_init();
 
 	/* Assign global keywords */
-	s = symbols_get_global_keywords();
+	s = get_global_typenames();
 	if (s != NULL)
 	{
 		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
@@ -2572,7 +2590,7 @@ void styleset_d(ScintillaObject *sci)
 	if (style_sets[GEANY_FILETYPES_D].styling == NULL) styleset_d_init();
 
 	/* Assign global keywords */
-	s = symbols_get_global_keywords();
+	s = get_global_typenames();
 	if (s != NULL)
 	{
 		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);

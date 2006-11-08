@@ -36,6 +36,7 @@
 #include "encodings.h"
 #include "images.c"
 #include "treeviews.h"
+#include "symbols.h"
 
 
 static gchar *menu_item_get_text(GtkMenuItem *menu_item);
@@ -224,7 +225,7 @@ void ui_update_tag_list(gint idx, gboolean update)
 			g_object_ref((gpointer)doc_list[idx].tag_tree);	// to hold it after removing
 		}
 
-		tags = utils_get_tag_list(idx, tm_tag_max_t);
+		tags = symbols_get_tag_list(idx, tm_tag_max_t);
 		if (doc_list[idx].tm_file != NULL && tags != NULL)
 		{
 			GtkTreeIter iter;
