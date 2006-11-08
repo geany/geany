@@ -627,7 +627,7 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show)
 }
 
 
-void ui_treeviews_show_hide(gboolean force)
+void ui_treeviews_show_hide(G_GNUC_UNUSED gboolean force)
 {
 	GtkWidget *widget;
 
@@ -635,12 +635,7 @@ void ui_treeviews_show_hide(gboolean force)
 					ui_btoa(app->sidebar_symbol_visible), ui_btoa(app->sidebar_openfiles_visible));
 */
 
-	if (! force && ! app->sidebar_visible && (app->sidebar_openfiles_visible ||
-		app->sidebar_symbol_visible))
-	{
-		app->sidebar_visible = TRUE;
-	}
-	else if (! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible)
+	if (! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible)
 	{
 		app->sidebar_visible = FALSE;
 	}

@@ -10,6 +10,10 @@
    Add symbols_find_tags_as_string(), symbols_get_tag_list(),
    symbols_get_macro_list(), symbols_find_in_workspace() from various
    tag-related existing code.
+ * src/ui_utils.c:
+   Never show the Sidebar if app->show_sidebar is false (prevents
+   showing Sidebar after setting Preferences, when user has chosen to
+   hide the Sidebar).
 
 
 2006-11-07  Enrico Tröger  <enrico.troeger@uvena.de>
