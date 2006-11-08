@@ -1,3 +1,10 @@
+2006-11-08  Frank Lanitz  <frank@Eco>
+
+ * de.po: Update of German translation 
+ * geany.pot: Update of catalog
+ * it.po: Update of Italian translation (thanks to M. Baldinelli)
+
+
 2006-10-17  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * it.po: Added Italian translation (thanks to M. Baldinelli and
@@ -154,7 +161,7 @@
  * geany.pot: Update of catalog
  * de.po: Update of German translation
  * es.po: Adding Spanish translation contributed by
-		  Damián Viano <dviano@fi.uba.ar>
+          Damián Viano <dviano@fi.uba.ar>
  * ru.po: Update of Russian translation by brahmann
           <brahmann@lifelogs.org.ru>
 
@@ -171,7 +178,7 @@
 2006-06-12  Frank Lanitz  <frank@frank.uvena.de>
 
  * be.po: Added Belarusian language support contributed by
-		  Yura Semashko <yurand2@gmail.com>
+          Yura Semashko <yurand2@gmail.com>
  * ru.po: Added Russian language support contributed by
           brahmann <brahmann@lifelogs.org.ru>
  * de.po: Minor update of new strings
@@ -188,7 +195,7 @@
 
  * de.po: Update for final release of geany 0.7
  * ca.po: Update for final release of geany 0.7 contributed by
-		  topi <topi@phreaker.net>
+          topi <topi@phreaker.net>
 
 
 2006-05-29  Frank Lanitz  <frank@frank.uvena.de>

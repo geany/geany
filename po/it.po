@@ -9,14 +9,13 @@ msgstr ""
 "Project-Id-Version: geany 0.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-29 10:21+0200\n"
-"PO-Revision-Date: 2006-10-14 21:33+0100\n"
-"Last-Translator: Max Firebeam <M.Baldinelli@agora.it>\n"
+"PO-Revision-Date: 2006-11-05 19:37+0100\n"
+"Last-Translator: Max <M.Baldinelli@agora.it>\n"
 "Language-Team:  <dario.santomarco@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Language: Italian\n"
 "X-Poedit-Country: ITALY\n"
 "X-Poedit-SourceCharset: iso-8859-15\n"
 
@@ -109,7 +108,7 @@ msgstr "_File"
 # OK
 #: src/interface.c:262
 msgid "New (with _template)"
-msgstr "Nuovo da modello"
+msgstr "Nuovo da _modello"
 
 #: src/interface.c:273
 #: src/interface.c:292
@@ -129,7 +128,7 @@ msgstr "_File recenti"
 
 #: src/interface.c:308
 msgid "Save a_ll"
-msgstr "S_alva tutti"
+msgstr "Salva _tutti"
 
 #: src/interface.c:311
 msgid "Saves all open files"
@@ -143,7 +142,7 @@ msgstr "_Ripristina"
 
 #: src/interface.c:325
 msgid "R_eload as"
-msgstr "Ripristina _come"
+msgstr "R_ipristina come"
 
 #: src/interface.c:356
 msgid "Prints the current file"
@@ -151,7 +150,7 @@ msgstr "Stampa il file corrente"
 
 #: src/interface.c:367
 msgid "C_lose all"
-msgstr "Chiudi tutto"
+msgstr "C_hiudi tutto"
 
 #: src/interface.c:370
 msgid "Closes all open files"
@@ -173,11 +172,11 @@ msgstr "_Seleziona Tutto"
 
 #: src/interface.c:436
 msgid "_Insert \"include <...>\""
-msgstr "_Inserisci \"include <...>\""
+msgstr "I_nserisci \"include <...>\""
 
 #: src/interface.c:450
 msgid "I_nsert Comments"
-msgstr "I_nserisci Commenti"
+msgstr "In_serisci Commenti"
 
 #: src/interface.c:461
 #: src/interface.c:1828
@@ -232,7 +231,7 @@ msgstr "Inserisce il testo della GPL (si dovrebbe fare all'inizio del file)"
 #: src/interface.c:486
 #: src/interface.c:1853
 msgid "Insert Dat_e"
-msgstr "Inserisci Data"
+msgstr "Inserisci _Data"
 
 #: src/interface.c:501
 #: src/interface.c:1868
@@ -308,7 +307,7 @@ msgstr "Trova _precedente"
 #: src/interface.c:584
 #: src/search.c:303
 msgid "_Replace"
-msgstr "S_ostituisci"
+msgstr "Sos_tituisci"
 
 #: src/interface.c:597
 msgid "Find in f_iles"
@@ -354,7 +353,7 @@ msgstr "Mostra/nasconde la finestra dei messaggi di stato e del compilatore"
 
 #: src/interface.c:654
 msgid "Show _Toolbar"
-msgstr "Mostra barra degli s_trumenti"
+msgstr "Mostra _barra degli strumenti"
 
 #: src/interface.c:657
 msgid "Toggle the toolbar on and off"
@@ -362,7 +361,7 @@ msgstr "Mostra/Nasconde la barra degli strumenti"
 
 #: src/interface.c:660
 msgid "Show Side_bar"
-msgstr "Mostra _barra laterale"
+msgstr "Mostra barra _laterale"
 
 #: src/interface.c:665
 msgid "Show _Markers Margin"
@@ -386,7 +385,7 @@ msgstr "_Documento"
 
 #: src/interface.c:701
 msgid "_Line wrapping"
-msgstr "A capo automatico"
+msgstr "_A capo automatico"
 
 #: src/interface.c:704
 #: src/interface.c:3010
@@ -395,11 +394,11 @@ msgstr "Manda a capo la riga al bordo della finestra e la continua alla riga suc
 
 #: src/interface.c:707
 msgid "_Use auto indentation"
-msgstr "Rientro automatico"
+msgstr "_Rientro automatico"
 
 #: src/interface.c:712
 msgid "Read _only"
-msgstr "Sola lettura"
+msgstr "Sola _lettura"
 
 #: src/interface.c:715
 msgid "Treat this file as read-only. No changes can be made."
@@ -436,7 +435,7 @@ msgstr "Converti e imposta a CR (_Mac)"
 
 #: src/interface.c:776
 msgid "_Replace tabs by spaces"
-msgstr "Inserisci spazi invece di tab"
+msgstr "Inserisci spa_zi invece di tab"
 
 #: src/interface.c:779
 #: src/interface.c:2943
@@ -445,7 +444,7 @@ msgstr "Sostituisce tutte le tabulazioni del documento con spazi."
 
 #: src/interface.c:786
 msgid "_Fold all"
-msgstr "_Contrai tutto"
+msgstr "C_ontrai tutto"
 
 # contraibili o ripiegabili mi pare brutto ma anche richiudibili non è il massimo della vita...
 # Cercando in rete comunque ho trovato questo:
@@ -484,7 +483,7 @@ msgstr "_Aiuto"
 
 #: src/interface.c:821
 msgid "_Keyboard shortcuts"
-msgstr "Scorciatoie da tastiera"
+msgstr "Scorciatoie da _tastiera"
 
 #: src/interface.c:824
 msgid "Shows a list of all keyboard shortcuts for Geany."
@@ -494,7 +493,7 @@ msgstr "Mostra tutte le scorciatoie da tastiera in Geany."
 # OK :-)
 #: src/interface.c:826
 msgid "_Website"
-msgstr "Sito Internet"
+msgstr "_Sito Internet"
 
 #: src/interface.c:849
 msgid "Create a new file"
@@ -1806,9 +1805,8 @@ msgstr "Compila il file corrente tramite make verso destinazione predefinita"
 #. build the code with make
 #: src/ui_utils.c:818
 #: src/ui_utils.c:929
-#, fuzzy
 msgid "Make custom _target"
-msgstr "Compila su destinazione scelta"
+msgstr "Compila su _destinazione scelta"
 
 #: src/ui_utils.c:822
 #: src/ui_utils.c:933
@@ -2131,7 +2129,6 @@ msgid "Scrollback lines"
 msgstr "Righe di scorrimento all'indietro"
 
 #: src/prefs.c:996
-#, fuzzy
 msgid "Specifies the history in lines, which you can scroll back in the terminal widget."
 msgstr "Imposta il numero di righe del buffer di scorrimento all'indietro nel terminale."
 
@@ -2369,7 +2366,7 @@ msgstr "Coreano"
 
 #: src/encodings.c:209
 msgid "_West European"
-msgstr "Europee occidentali"
+msgstr "Europee _occidentali"
 
 #: src/encodings.c:215
 msgid "_East European"
