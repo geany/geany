@@ -14,6 +14,11 @@
    Never show the Sidebar if app->show_sidebar is false (prevents
    showing Sidebar after setting Preferences, when user has chosen to
    hide the Sidebar).
+ * src/utils.c, src/utils.h, src/about.c, src/callbacks.c,
+   src/sci_cb.c, src/keyfile.c, src/search.c, src/encodings.c,
+   src/document.c, src/prefs.c, src/gb.c, src/symbols.c:
+   Rename utils_strcmp() utils_str_equal() (to avoid return value
+   confusion with strcmp()).
 
 
 2006-11-07  Enrico Tröger  <enrico.troeger@uvena.de>

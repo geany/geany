@@ -1078,15 +1078,15 @@ gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch)
 		str_found = utils_find_open_xml_tag(sel, pos - min, FALSE);
 
 	// when found string is something like br, img or another short tag, quit
-	if (utils_strcmp(str_found, "br")
-	 || utils_strcmp(str_found, "img")
-	 || utils_strcmp(str_found, "base")
-	 || utils_strcmp(str_found, "basefont")	// < or not <
-	 || utils_strcmp(str_found, "frame")
-	 || utils_strcmp(str_found, "input")
-	 || utils_strcmp(str_found, "link")
-	 || utils_strcmp(str_found, "area")
-	 || utils_strcmp(str_found, "meta"))
+	if (utils_str_equal(str_found, "br")
+	 || utils_str_equal(str_found, "img")
+	 || utils_str_equal(str_found, "base")
+	 || utils_str_equal(str_found, "basefont")	// < or not <
+	 || utils_str_equal(str_found, "frame")
+	 || utils_str_equal(str_found, "input")
+	 || utils_str_equal(str_found, "link")
+	 || utils_str_equal(str_found, "area")
+	 || utils_str_equal(str_found, "meta"))
 	{
 		return FALSE;
 	}
@@ -1103,7 +1103,7 @@ gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch)
 		if (ch == '>')
 		{
 			SSM(sci, SCI_SETSEL, pos, pos);
-			if (utils_strcmp(str_found, "table")) sci_cb_auto_table(sci, pos);
+			if (utils_str_equal(str_found, "table")) sci_cb_auto_table(sci, pos);
 		}
 		sci_end_undo_action(sci);
 		g_free(to_insert);

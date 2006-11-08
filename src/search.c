@@ -627,7 +627,7 @@ void search_show_find_in_files_dialog()
 	g_free(cur_dir);
 
 	// put the focus to the directory entry if it is empty
-	if (utils_strcmp(gtk_entry_get_text(GTK_ENTRY(entry1)), ""))
+	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(entry1)), ""))
 		gtk_widget_grab_focus(entry1);
 	else
 		gtk_widget_grab_focus(entry2);
@@ -927,7 +927,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 		const gchar *utf8_dir =
 			gtk_entry_get_text(GTK_ENTRY(lookup_widget(widgets.find_in_files_dialog, "entry_dir")));
 
-		if (utf8_dir == NULL || utils_strcmp(utf8_dir, ""))
+		if (utf8_dir == NULL || utils_str_equal(utf8_dir, ""))
 			msgwin_status_add(_("Invalid directory for find in files."));
 		else if (search_text && *search_text)
 		{

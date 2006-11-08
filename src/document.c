@@ -92,7 +92,7 @@ gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
 		// ignore the case of filenames and paths under WIN32, causes errors if not
 		if (dl_fname && ! strcasecmp(dl_fname, filename)) return i;
 #else
-		if (dl_fname && utils_strcmp(dl_fname, filename)) return i;
+		if (dl_fname && utils_str_equal(dl_fname, filename)) return i;
 #endif
 	}
 	return -1;
@@ -455,7 +455,7 @@ static gboolean
 handle_forced_encoding(gchar **data, gsize *size, const gchar *forced_enc, gchar **enc,
 	gboolean *bom)
 {
-	if (utils_strcmp(forced_enc, "UTF-8"))
+	if (utils_str_equal(forced_enc, "UTF-8"))
 	{
 		if (! g_utf8_validate(*data, *size, NULL))
 		{
@@ -463,7 +463,7 @@ handle_forced_encoding(gchar **data, gsize *size, const gchar *forced_enc, gchar
 		}
 		else
 		{
-			*bom = utils_strcmp(utils_scan_unicode_bom(*data), "UTF-8");
+			*bom = utils_str_equal(utils_scan_unicode_bom(*data), "UTF-8");
 			*enc = g_strdup(forced_enc);
 		}
 	}
@@ -480,7 +480,7 @@ handle_forced_encoding(gchar **data, gsize *size, const gchar *forced_enc, gchar
 			g_free(*data);
 			*data = (void*)converted_text;
 			*size = strlen(converted_text);
-			*bom = utils_strcmp(utils_scan_unicode_bom(*data), "UTF-8");
+			*bom = utils_str_equal(utils_scan_unicode_bom(*data), "UTF-8");
 			*enc = g_strdup(forced_enc);
 		}
 	}
@@ -659,7 +659,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	if (forced_enc != NULL)
 	{
 		// the encoding should be ignored(requested by user), so open the file "as it is"
-		if (utils_strcmp(forced_enc, encodings[GEANY_ENCODING_NONE].charset))
+		if (utils_str_equal(forced_enc, encodings[GEANY_ENCODING_NONE].charset))
 		{
 			bom = FALSE;
 			enc = g_strdup(encodings[GEANY_ENCODING_NONE].charset);
@@ -824,8 +824,8 @@ gboolean document_save_file(gint idx, gboolean force)
 	}
 
 	// save in original encoding, skip when it is already UTF-8 or has the encoding "None"
-	if (doc_list[idx].encoding != NULL && ! utils_strcmp(doc_list[idx].encoding, "UTF-8") &&
-		! utils_strcmp(doc_list[idx].encoding, encodings[GEANY_ENCODING_NONE].charset))
+	if (doc_list[idx].encoding != NULL && ! utils_str_equal(doc_list[idx].encoding, "UTF-8") &&
+		! utils_str_equal(doc_list[idx].encoding, encodings[GEANY_ENCODING_NONE].charset))
 	{
 		GError *conv_error = NULL;
 		gchar* conv_file_contents = NULL;
@@ -1572,7 +1572,7 @@ void document_ensure_final_newline(gint idx)
 void document_set_encoding(gint idx, const gchar *new_encoding)
 {
 	if (! DOC_IDX_VALID(idx) || new_encoding == NULL ||
-		utils_strcmp(new_encoding, doc_list[idx].encoding)) return;
+		utils_str_equal(new_encoding, doc_list[idx].encoding)) return;
 
 	g_free(doc_list[idx].encoding);
 	doc_list[idx].encoding = g_strdup(new_encoding);
@@ -1669,7 +1669,7 @@ static void update_changed_state(gint idx)
 	doc_list[idx].changed =
 		(sci_is_modified(doc_list[idx].sci) ||
 		doc_list[idx].has_bom != doc_list[idx].saved_encoding.has_bom ||
-		! utils_strcmp(doc_list[idx].encoding, doc_list[idx].saved_encoding.encoding));
+		! utils_str_equal(doc_list[idx].encoding, doc_list[idx].saved_encoding.encoding));
 	document_set_text_changed(idx);
 }
 

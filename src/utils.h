@@ -75,7 +75,7 @@ gdouble utils_scale_round(gdouble val, gdouble factor);
  * NULL-safe string comparison. Returns TRUE if both a and b are
  * NULL or if a and b refer to valid strings which are equal.
  */
-gboolean utils_strcmp(const gchar *a, const gchar *b);
+gboolean utils_str_equal(const gchar *a, const gchar *b);
 
 /* removes the extension from filename and return the result in
  * a newly allocated string */

@@ -126,7 +126,7 @@ static GtkWidget *create_dialog(void)
 	header_label = gtk_label_new(NULL);
 	gtk_label_set_use_markup(GTK_LABEL(header_label), TRUE);
 	// print the subversion revision if it is available
-	g_snprintf(buffer, sizeof(buffer), HEADER, (utils_strcmp(REVISION, "-1")) ? "" : " (" REVISION ")");
+	g_snprintf(buffer, sizeof(buffer), HEADER, (utils_str_equal(REVISION, "-1")) ? "" : " (" REVISION ")");
 	gtk_label_set_markup(GTK_LABEL(header_label), buffer);
 	gtk_widget_show(header_label);
 	gtk_box_pack_start(GTK_BOX(header_hbox), header_label, FALSE,FALSE,0);

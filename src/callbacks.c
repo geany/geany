@@ -1706,24 +1706,24 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 
 	if (idx < 0 || ! doc_list[idx].is_valid) return;
 
-	if (utils_strcmp(_("dd.mm.yyyy"), (gchar*) user_data))
+	if (utils_str_equal(_("dd.mm.yyyy"), (gchar*) user_data))
 		format = "%d.%m.%Y";
-	else if (utils_strcmp(_("mm.dd.yyyy"), (gchar*) user_data))
+	else if (utils_str_equal(_("mm.dd.yyyy"), (gchar*) user_data))
 		format = "%m.%d.%Y";
-	else if (utils_strcmp(_("yyyy/mm/dd"), (gchar*) user_data))
+	else if (utils_str_equal(_("yyyy/mm/dd"), (gchar*) user_data))
 		format = "%Y/%m/%d";
-	else if (utils_strcmp(_("dd.mm.yyyy hh:mm:ss"), (gchar*) user_data))
+	else if (utils_str_equal(_("dd.mm.yyyy hh:mm:ss"), (gchar*) user_data))
 		format = "%d.%m.%Y %H:%M:%S";
-	else if (utils_strcmp(_("mm.dd.yyyy hh:mm:ss"), (gchar*) user_data))
+	else if (utils_str_equal(_("mm.dd.yyyy hh:mm:ss"), (gchar*) user_data))
 		format = "%m.%d.%Y %H:%M:%S";
-	else if (utils_strcmp(_("yyyy/mm/dd hh:mm:ss"), (gchar*) user_data))
+	else if (utils_str_equal(_("yyyy/mm/dd hh:mm:ss"), (gchar*) user_data))
 		format = "%Y/%m/%d %H:%M:%S";
-	else if (utils_strcmp(_("Use custom date format"), (gchar*) user_data))
+	else if (utils_str_equal(_("Use custom date format"), (gchar*) user_data))
 		format = app->custom_date_format;
 	else
 	{
 		// set default value
-		if (utils_strcmp("", app->custom_date_format)) app->custom_date_format = g_strdup("%d.%m.%Y");
+		if (utils_str_equal("", app->custom_date_format)) app->custom_date_format = g_strdup("%d.%m.%Y");
 
 		dialogs_show_input(_("Custom date format"),
 			_("Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function. See \"man strftime\" for more information."),
@@ -1757,7 +1757,7 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx(), pos = -1;
 	gchar *text;
 
-	if (utils_strcmp(user_data, "blank"))
+	if (utils_str_equal(user_data, "blank"))
 	{
 		text = g_strdup("#include \"\"\n");
 		pos = editor_info.click_pos + 10;
@@ -1792,7 +1792,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		{
 			newstr = gtk_entry_get_text(
 					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry1")));
-			if (! utils_strcmp(newstr, programs->compiler))
+			if (! utils_str_equal(newstr, programs->compiler))
 			{
 				if (programs->compiler) g_free(programs->compiler);
 				programs->compiler = g_strdup(newstr);
@@ -1803,7 +1803,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		{
 			newstr = gtk_entry_get_text(
 					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry2")));
-			if (! utils_strcmp(newstr, programs->linker))
+			if (! utils_str_equal(newstr, programs->linker))
 			{
 				if (programs->linker) g_free(programs->linker);
 				programs->linker = g_strdup(newstr);
@@ -1814,7 +1814,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		{
 			newstr = gtk_entry_get_text(
 					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3")));
-			if (! utils_strcmp(newstr, programs->run_cmd))
+			if (! utils_str_equal(newstr, programs->run_cmd))
 			{
 				if (programs->run_cmd) g_free(programs->run_cmd);
 				programs->run_cmd = g_strdup(newstr);
@@ -1840,7 +1840,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 
 		newstr = gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1")));
-		if (! utils_strcmp(newstr, programs->compiler))
+		if (! utils_str_equal(newstr, programs->compiler))
 		{
 			if (programs->compiler) g_free(programs->compiler);
 			programs->compiler = g_strdup(newstr);
@@ -1848,7 +1848,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 		}
 		newstr = gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry2")));
-		if (! utils_strcmp(newstr, programs->linker))
+		if (! utils_str_equal(newstr, programs->linker))
 		{
 			if (programs->linker) g_free(programs->linker);
 			programs->linker = g_strdup(newstr);
@@ -1856,7 +1856,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 		}
 		newstr = gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry3")));
-		if (! utils_strcmp(newstr, programs->run_cmd))
+		if (! utils_str_equal(newstr, programs->run_cmd))
 		{
 			if (programs->run_cmd) g_free(programs->run_cmd);
 			programs->run_cmd = g_strdup(newstr);
@@ -1864,7 +1864,7 @@ on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
 		}
 		newstr = gtk_entry_get_text(
 				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry4")));
-		if (! utils_strcmp(newstr, programs->run_cmd2))
+		if (! utils_str_equal(newstr, programs->run_cmd2))
 		{
 			if (programs->run_cmd2) g_free(programs->run_cmd2);
 			programs->run_cmd2 = g_strdup(newstr);
@@ -1947,7 +1947,7 @@ on_encoding_change                     (GtkMenuItem     *menuitem,
 	guint i = GPOINTER_TO_INT(user_data);
 
 	if (app->ignore_callback || ! DOC_IDX_VALID(idx) || encodings[i].charset == NULL ||
-		utils_strcmp(encodings[i].charset, doc_list[idx].encoding)) return;
+		utils_str_equal(encodings[i].charset, doc_list[idx].encoding)) return;
 
 	if (doc_list[idx].readonly)
 	{
