@@ -4,7 +4,7 @@
 default=0x000000;0xffffff;false;false
 comment=0xd00000;0xffffff;false;false
 commentline=0xd00000;0xffffff;false;false
-commentdoc=0xd00000;0xffffff;false;false
+commentdoc=0x3f5fbf;0xffffff;false;false
 number=0x007f00;0xffffff;false;false
 word=0x00007f;0xffffff;true;false
 word2=0x991111;0xffffff;true;false
@@ -17,8 +17,8 @@ identifier=0x000000;0xffffff;false;false
 stringeol=0x000000;0xe0c0e0;false;false
 verbatim=0x101030;0xffffff;false;false
 regex=0x105090;0xffffff;false;false
-commentlinedoc=0xd00000;0xffffff;true;false
-commentdockeyword=0xd00000;0xffffff;true;true
+commentlinedoc=0x3f5fbf;0xffffff;true;false
+commentdockeyword=0x3f5fbf;0xffffff;true;true
 globalclass=0x0000d0;0xffffff;true;false
 
 [keywords]

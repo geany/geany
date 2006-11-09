@@ -4,7 +4,7 @@
 default=0x000000;0xffffff;false;false
 comment=0x808080;0xffffff;false;false
 commentline=0x808080;0xffffff;false;false
-commentdoc=0x808080;0xffffff;false;false
+commentdoc=0x3f5fbf;0xffffff;false;false
 number=0x7f7f00;0xffffff;false;false
 word=0x001a7f;0xffffff;true;false
 word2=0x7f0000;0xffffff;true;false

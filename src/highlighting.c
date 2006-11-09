@@ -567,7 +567,7 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 // Geany generic styles, initialized to defaults
 Style gsd_default =		{0x000000, 0xffffff, FALSE, FALSE};
 Style gsd_comment =		{0xd00000, 0xffffff, FALSE, FALSE};
-Style gsd_comment_doc =	{0xd00000, 0xffffff, TRUE, FALSE};
+Style gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
 Style gsd_number =		{0x007f00, 0xffffff, FALSE, FALSE};
 Style gsd_reserved_word =	{0x111199, 0xffffff, TRUE, FALSE};
 Style gsd_system_word =	{0x7f0000, 0xffffff, TRUE, FALSE};
@@ -1141,7 +1141,7 @@ static void styleset_markup_init(void)
 	get_keyfile_hex(config, config_home, "styling", "jscript_default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_XML].styling[44]);
 	get_keyfile_hex(config, config_home, "styling", "jscript_comment", "0x222222", "0xffffff", "false", &style_sets[GEANY_FILETYPES_XML].styling[45]);
 	get_keyfile_hex(config, config_home, "styling", "jscript_commentline", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_XML].styling[46]);
-	get_keyfile_hex(config, config_home, "styling", "jscript_commentdoc", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_XML].styling[47]);
+	get_keyfile_hex(config, config_home, "styling", "jscript_commentdoc", "0x3f5fbf", "0xffffff", "false", &style_sets[GEANY_FILETYPES_XML].styling[47]);
 	get_keyfile_hex(config, config_home, "styling", "jscript_number", "0x006060", "0xffffff", "false", &style_sets[GEANY_FILETYPES_XML].styling[48]);
 	get_keyfile_hex(config, config_home, "styling", "jscript_word", "0x0000ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_XML].styling[49]);
 	get_keyfile_hex(config, config_home, "styling", "jscript_keyword", "0x501010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_XML].styling[50]);
@@ -2256,7 +2256,7 @@ static void styleset_sql_init(void)
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SQL].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SQL].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "commentline", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SQL].styling[2]);
-	get_keyfile_hex(config, config_home, "styling", "commentdoc", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SQL].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "commentdoc", "0x3f5fbf", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SQL].styling[3]);
 	get_keyfile_hex(config, config_home, "styling", "number", "0x7f7f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_SQL].styling[4]);
 	get_keyfile_hex(config, config_home, "styling", "word", "0x001a7f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_SQL].styling[5]);
 	get_keyfile_hex(config, config_home, "styling", "word2", "0x7f0000", "0xffffff", "true", &style_sets[GEANY_FILETYPES_SQL].styling[6]);
