@@ -40,6 +40,7 @@
 #include "encodings.h"
 #include "vte.h"
 #include "main.h"
+#include "msgwindow.h"
 
 
 static gchar *scribble_text = NULL;
@@ -485,7 +486,7 @@ gboolean configuration_open_files()
 	gint i;
 	guint x, pos, y, len;
 	gchar *file, *locale_filename, **array, *tmp;
-	gboolean ret = FALSE;
+	gboolean ret = FALSE, failure = FALSE;
 
 	i = app->tab_order_ltr ? 0 : (session_files->len - 1);
 	while (TRUE)
@@ -516,12 +517,18 @@ gboolean configuration_open_files()
 			// try to get the locale equivalent for the filename, fallback to filename if error
 			locale_filename = utils_get_locale_from_utf8(file);
 
-			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
+			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 			{
 				filetype *ft = filetypes_get_from_uid(uid);
 				document_open_file(-1, locale_filename, pos, FALSE, ft, NULL);
 				ret = TRUE;
 			}
+			else
+			{
+				failure = TRUE;
+				geany_debug("Could not find file '%s'.", file);
+			}
+
 			g_free(locale_filename);
 		}
 		g_free(tmp);
@@ -539,6 +546,8 @@ gboolean configuration_open_files()
 	}
 
 	g_ptr_array_free(session_files, TRUE);
+	if (failure)
+		msgwin_status_add(_("Failed to load one or more session files."));
 	return ret;
 }
 

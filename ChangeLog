@@ -1,4 +1,12 @@
-2006-11-07  Nick Treleaven  <nick.treleaven@btinternet.com>
+2006-11-09  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keyfile.c, src/main.c:
+   Fix a possible bug with g_file_test when opening files at startup.
+   Show warning message on status bar if some session files couldn't be
+   loaded, showing debug messages for each session file that fails.
+
+
+2006-11-08  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c, src/highlighting.c, src/utils.h, src/callbacks.c,
    src/sci_cb.c, src/document.c, src/symbols.c, src/ui_utils.c,

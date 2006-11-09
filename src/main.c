@@ -581,7 +581,7 @@ gint main(gint argc, gchar **argv)
 		gint i;
 		for(i = 1; i < argc; i++)
 		{
-			if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR || G_FILE_TEST_IS_SYMLINK))
+			if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 			{
 				gchar *filename = get_argv_filename(argv[i]);
 				document_open_file(-1, filename, 0, FALSE, NULL, NULL);
