@@ -41,7 +41,7 @@ msgstr "Kein Meldungsfenster beim Starten anzeigen"
 
 #: src/main.c:94
 msgid "don't load auto completion data (see documentation)"
-msgstr "Autovervollständigungsdaten nicht laden "
+msgstr "Autovervollständigungsdaten nicht laden"
 
 #: src/main.c:95
 msgid "don't load the previous session's files"
@@ -76,7 +76,7 @@ msgid ""
 "Start Geany anyway?"
 msgstr ""
 "Konfigurationsverzeichnis konnte nicht erstellt werden (%s).\n"
-"Es könnte zu Problemen bei der Verwendung von Geany kommen. \n"
+"Es könnte zu Problemen bei der Verwendung von Geany kommen.\n"
 "Geany trotzdem starten?"
 
 #: src/main.c:569
@@ -365,7 +365,7 @@ msgstr "Zeilenu_mbruch"
 #: src/interface.c:702
 #: src/interface.c:3074
 msgid "Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."
-msgstr "Bricht lange Zeilen am Fensterrand um und setzt sie auf der nächsten Zeile fort. Achtung: Bei großen Dokumenten erfordert der Zeilenumbruch  viel Rechenleistung und sollte daher auf langsameren Rechnern deaktiviert werden. "
+msgstr "Bricht lange Zeilen am Fensterrand um und setzt sie auf der nächsten Zeile fort. Achtung: Bei großen Dokumenten erfordert der Zeilenumbruch viel Rechenleistung und sollte daher auf langsameren Rechnern deaktiviert werden."
 
 #: src/interface.c:705
 msgid "_Use auto indentation"
@@ -796,7 +796,7 @@ msgstr "Long line marker Farbe"
 
 #: src/interface.c:2605
 msgid "The long line marker is a thin vertical line in the editor. It helps to mark long lines, or as a hint to break the line. Set this value to a value greater than 0 to specify the column where it should appear."
-msgstr "Der \"long line marker\" ist eine dünne Linie im Editorfenster. Sie hilft dabei, lange Zeilen zu markieren und dabei auf einen eventuell notwendigen Zeilenumbruch hinzuweisen. Werte größer als 0 geben die Spalte an, in der die Linie angezeigt werden soll. "
+msgstr "Der \"long line marker\" ist eine dünne Linie im Editorfenster. Sie hilft dabei, lange Zeilen zu markieren und dabei auf einen eventuell notwendigen Zeilenumbruch hinzuweisen. Werte größer als 0 geben die Spalte an, in der die Linie angezeigt werden soll."
 
 #: src/interface.c:2609
 msgid "Type"
@@ -809,7 +809,7 @@ msgstr "Linie"
 # Ich kenne das dt. Wort für Monospace einfach nicht. Hoffe, das es richtig ist
 #: src/interface.c:2625
 msgid "Prints a vertical line in the editor window at the given cursor position (see below)."
-msgstr "Zeichnet eine vertikale Linie im Editorfenster an der angegebenen Cursor-Position. (Nur sinnvoll mit Antiproportional Schriften)"
+msgstr "Zeichnet eine vertikale Linie im Editorfenster an der angegebenen Cursor-Position (nur sinnvoll mit Festbreitenschriften)."
 
 #: src/interface.c:2629
 msgid "Background"
@@ -817,7 +817,7 @@ msgstr "Hintergrund"
 
 #: src/interface.c:2632
 msgid "The background colour of characters after the given cursor position (see below) changed to the colour set below. (This is recommended if you use proportional fonts)"
-msgstr "Die Hintergrundfarbe der Zeichen, die hinter der angegebenen Cursor-Position(siehe unten) stehen, wird auf die unten angegebene Farbe geändert. (Das ist nützlich für proportionale Schriftarten)"
+msgstr "Die Hintergrundfarbe der Zeichen, die hinter der angegebenen Cursor-Position(siehe unten) stehen, wird auf die unten angegebene Farbe geändert (das ist nützlich für proportionale Schriftarten)."
 
 #: src/interface.c:2636
 msgid "Disabled"
@@ -889,7 +889,7 @@ msgstr "Kompileren und Ausführen anzeigen"
 
 #: src/interface.c:2782
 msgid "Display the Compile and Run buttons in the toolbar"
-msgstr "Zeigt die Symbole zum Kompilieren- und Ausführen in der Werkzeugleiste."
+msgstr "Zeigt die Symbole zum Kompilieren und Ausführen in der Werkzeugleiste."
 
 #: src/interface.c:2785
 msgid "Show Colour Chooser button"
@@ -913,7 +913,7 @@ msgstr "Rückgängig und Wiederholen anzeigen"
 
 #: src/interface.c:2803
 msgid "Display the Redo and Undo buttons in the toolbar"
-msgstr "Zeigt die Symbole zum Rückgängigmachen und Wiederholen Werkzeugleiste."
+msgstr "Zeigt die Symbole zum Rückgängigmachen und Wiederholen in der Werkzeugleiste."
 
 #: src/interface.c:2806
 msgid "Show Search field"
@@ -937,7 +937,7 @@ msgstr "Icon zum Beenden anzeigen"
 
 #: src/interface.c:2824
 msgid "Display the quit button in the toolbar"
-msgstr "Zeigt das Icon zum Beenden von Geany in der Werkzeugleiste an. "
+msgstr "Zeigt das Icon zum Beenden von Geany in der Werkzeugleiste an."
 
 #: src/interface.c:2827
 msgid "<b>Items</b>"
@@ -1066,15 +1066,15 @@ msgstr "Quellcode-Ausblendung aktivieren"
 
 #: src/interface.c:3091
 msgid "Whether to enable folding the code"
-msgstr "Legt fest, ob es möglich sein soll, Teile des Quellcodes auszublenden. "
+msgstr "Legt fest, ob es möglich sein soll, Teile des Quellcodes auszublenden."
 
 #: src/interface.c:3094
 msgid "Use indicators to show compile errors"
-msgstr "Benutzt Markierungen, um Probleme beim Kompilieren anzuzeigen. "
+msgstr "Benutzt Markierungen, um Probleme beim Kompilieren anzuzeigen."
 
 #: src/interface.c:3097
 msgid "Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error."
-msgstr "Legt fest, ob Markierungen (wellige Unterstreichungen) benutzt werden sollen, um die Zeilen zu markieren, in denen Fehler beim Kompilieren aufgetreten sind. "
+msgstr "Legt fest, ob Markierungen (wellige Unterstreichungen) benutzt werden sollen, um Zeilen mit Fehlern beim Kompiliervorgang zu markieren"
 
 #: src/interface.c:3104
 msgid "Rows of auto completion list:"
@@ -1082,7 +1082,7 @@ msgstr "Anzahl der Zeilen der Autovervollständigungsliste: "
 
 #: src/interface.c:3112
 msgid "Number of rows to display in the auto completion list."
-msgstr "Anzahl der Zeilen, die maximal angezeigt werden sollen, wenn die Autovervollständigungsliste angezeigt wird. "
+msgstr "Anzahl der Zeilen, die maximal angezeigt werden sollen, wenn die Autovervollständigungsliste angezeigt wird."
 
 # Denke trifft es besser als »Eigenschaften«
 #: src/interface.c:3115
@@ -1094,8 +1094,8 @@ msgid ""
 "Enter here the paths to the make tool and the compiler\n"
 "(tools you do not need can be let blank)"
 msgstr ""
-"Geben Sie hier die Pfade für make und Ihrem Compiler an\n"
-"(Programme, die nicht benötigt werden, können Sie frei lassen)"
+"Geben Sie hier die Pfade für make und den Compiler an.\n"
+"(Programme, die nicht benötigt werden, können freigelassen werden)"
 
 #: src/interface.c:3139
 msgid "Make"
@@ -1117,7 +1117,7 @@ msgstr "Pfad und spezielle Optionen und / oder Targets für \"make\" angeben."
 
 #: src/interface.c:3172
 msgid "A terminal emulator like xterm, gnome-terminal or konsole (should accept the -e argument)"
-msgstr "Ein Terminal-Emulation wie z.B. xterm, gnome-terminal oder konsole (sie sollte die Option -e akzeptieren)"
+msgstr "Eine Terminal-Emulation wie z.B. xterm, gnome-terminal oder konsole (sie sollte die Option -e akzeptieren)"
 
 #: src/interface.c:3179
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -1202,7 +1202,7 @@ msgstr "Vorlagen"
 
 #: src/interface.c:3359
 msgid "Here you can change keyboard shortcuts for various actions. Just double click on a action or select one and press the Change button to enter a new shortcut. You can also edit the string representation of the shortcut directly."
-msgstr "Hier können die Tastenkominationen für verschiedene Aktionen innerhalb von Geany festgelegt bzw. verändert werden. Um die Tastenkombinationen zu ändern, einfach Doppelklicken oder markieren und auf Ändern klicken. Zudem können die Tastenkombinationen auch direkt eingegeben werden. "
+msgstr "Hier können die Tastenkominationen für verschiedene Aktionen innerhalb von Geany festgelegt bzw. verändert werden. Um die Tastenkombinationen zu ändern, einfach Doppelklicken oder markieren und auf Ändern klicken. Zudem können die Tastenkombinationen auch direkt eingegeben werden."
 
 #: src/interface.c:3382
 msgid "Change"
@@ -1251,7 +1251,7 @@ msgstr "Datei öffnen"
 #: src/callbacks.c:1581
 #: src/callbacks.c:1639
 msgid "Please set the filetype for the current file before using this function."
-msgstr "Bitte legen Sie den Dateityp fest, bevor Sie diese Funktion benutzen. "
+msgstr "Bitte legen Sie den Dateityp fest, bevor Sie diese Funktion benutzen."
 
 #: src/callbacks.c:1709
 #: src/ui_utils.c:543
@@ -1297,11 +1297,11 @@ msgstr "Benutzerdefiniertes Datumsformat"
 
 #: src/callbacks.c:1729
 msgid "Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function. See \"man strftime\" for more information."
-msgstr "Hier kann ein benutzerdefiniertes Datumsformat eingegeben werden. Dabei können alle Platzhalter verwendet werden, die auch in ANSI C strftime zum Einsatz kommen. "
+msgstr "Hier kann ein benutzerdefiniertes Datumsformat eingegeben werden. Dabei können alle Platzhalter verwendet werden, die auch in ANSI C strftime zum Einsatz kommen."
 
 #: src/callbacks.c:1748
 msgid "Date format string could not be converted (possibly too long)."
-msgstr "Das Datenformat konnte nicht umgewandelt werden. Eventuell ist es zu lang. "
+msgstr "Das Datenformat konnte nicht umgewandelt werden. Eventuell ist es zu lang."
 
 #: src/support.c:90
 #: src/support.c:114
@@ -1319,7 +1319,7 @@ msgstr "Durch Dateiendung erkennen"
 
 #: src/dialogs.c:123
 msgid "Detect from file"
-msgstr "Aus Datei lesen "
+msgstr "Aus Datei lesen"
 
 #. line 1 with checkbox and encoding combo
 #: src/dialogs.c:169
@@ -1328,14 +1328,14 @@ msgstr "_Versteckte Dateien anzeigen"
 
 #: src/dialogs.c:181
 msgid "Set encoding:"
-msgstr "Zeichenkodierung festlegen"
+msgstr "Zeichenkodierung festlegen:"
 
 #: src/dialogs.c:191
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\n"
 "Note if you choose multiple files, they will all be opened with the chosen encoding."
 msgstr ""
-"Definiert explizit eine bestimmte Zeichenkodierung, wenn sie nicht automatisch erkannt werden kann. \n"
+"Definiert explizit eine bestimmte Zeichenkodierung, wenn sie nicht automatisch erkannt werden kann.\n"
 "Beachten Sie, wenn Sie mehrere Dateien auswählen, werden alle mit der gewählten Zeichenkodierung geöffnet."
 
 #: src/dialogs.c:211
@@ -1361,7 +1361,7 @@ msgstr "'%s' wurde nicht gespeichert."
 
 #: src/dialogs.c:356
 msgid "Do you want to save it before closing?"
-msgstr "Wollen Sie vor dem Schließen speichern?"
+msgstr "Möchten Sie vor dem Schließen speichern?"
 
 #: src/dialogs.c:360
 msgid "_Don't save"
@@ -1412,7 +1412,7 @@ msgstr "Programm-Parameter angeben"
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr ""
 "Setzt Programme und deren Optionen zum Kompilieren bzw. Betrachten von (La)TeX-Dateien.\n"
-"Der jeweilige Dateiname wird bei einem Aufruf automatisch an das Ende angefügt. "
+"Der jeweilige Dateiname wird bei einem Aufruf automatisch an das Ende angefügt."
 
 #: src/dialogs.c:609
 msgid "DVI creation:"
@@ -1420,7 +1420,7 @@ msgstr "DVI-Erstellung:"
 
 #: src/dialogs.c:628
 msgid "PDF creation:"
-msgstr "PDF-Erstellung: "
+msgstr "PDF-Erstellung:"
 
 #: src/dialogs.c:647
 msgid "DVI preview:"
@@ -1446,7 +1446,7 @@ msgstr "Programm-Parameter angeben"
 
 #: src/dialogs.c:715
 msgid "Set the commands for building and running programs."
-msgstr "Legt die Kommandos zum Erstellen und Ausführen von Programmen fest. "
+msgstr "Legt die Kommandos zum Erstellen und Ausführen von Programmen fest."
 
 #: src/dialogs.c:722
 msgid " commands"
@@ -1652,7 +1652,7 @@ msgstr "\"%s\" wurde nicht gefunden."
 
 #: src/document.c:1013
 msgid "Wrap search and find again?"
-msgstr "Suche abbrechen und neu beginnen?"
+msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
 
 #: src/document.c:1126
 #: src/document.c:1133
@@ -1695,14 +1695,14 @@ msgstr "Datei %s wurde gedruckt."
 
 #: src/utils.c:353
 msgid "Do you want to reload it?"
-msgstr "Möchte Sie die Datei neu laden? "
+msgstr "Möchten Sie die Datei neu laden?"
 
 #: src/utils.c:354
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
 "the current buffer."
-msgstr "Die Datei '%s' auf den Datenträger ist aktueller als die momentan geöffnete Version "
+msgstr "Die Datei '%s' auf dem Datenträger ist aktueller als die momentan geöffnete Version."
 
 #: src/ui_utils.c:100
 #, c-format
@@ -1917,7 +1917,7 @@ msgstr "Prozess fehlgeschlagen (%s)"
 #: src/build.c:262
 #, c-format
 msgid "Something very strange is occured, could not stat %s (%s)"
-msgstr "Something very strange is occured, could not stat %s (%s)"
+msgstr "Ein Fehler ist aufgetreten, konnte Datei %s nicht prüfen (%s)."
 
 #: src/build.c:341
 #, c-format
@@ -1937,7 +1937,7 @@ msgstr "Konnte das Terminalprogramm '%s' nicht finden (Pfad zum Terminalprogramm
 #: src/build.c:483
 #, c-format
 msgid "Failed to change the working directory to %s"
-msgstr "Konnte Arbeitsverzeichnis (%s) nicht wechseln"
+msgstr "Konnte nicht in Arbeitsverzeichnis %s wechseln"
 
 #: src/build.c:501
 #, c-format
@@ -2073,12 +2073,12 @@ msgstr "Tasten festlegen"
 #: src/prefs.c:773
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
-msgstr "Welche Tastenkomination soll für \"%s\" benutzt werden? "
+msgstr "Welche Tastenkomination soll für \"%s\" benutzt werden?"
 
 #: src/prefs.c:897
 #, c-format
 msgid "The combination '%s' is already used for \"%s\". Please choose another one."
-msgstr "Die Tastenkombination '%s' wird bereits für \"%s\" verwendet. Bitte wählen Sie eine andere Tastenkombination. "
+msgstr "Die Tastenkombination '%s' wird bereits für \"%s\" verwendet. Bitte wählen Sie eine andere Tastenkombination."
 
 #: src/prefs.c:959
 msgid "These are settings for the virtual terminal emulator widget (VTE). They only apply, if the VTE library could be loaded."
@@ -2090,7 +2090,7 @@ msgstr "Terminal Schriftart"
 
 #: src/prefs.c:985
 msgid "Sets the font for the terminal widget."
-msgstr "Ändert die Schriftart des Terminals"
+msgstr "Ändert die Schriftart des Terminals."
 
 #: src/prefs.c:987
 msgid "Foreground color"
@@ -2130,7 +2130,7 @@ msgstr "Shell"
 
 #: src/prefs.c:1050
 msgid "Sets the path to the shell which should be started inside the terminal emulation."
-msgstr "Setzt den Pfad zu der Shell, die in der VTE benutzt werden soll. "
+msgstr "Setzt den Pfad zu der Shell, die in der VTE benutzt werden soll."
 
 #: src/prefs.c:1062
 msgid "Scroll on keystroke"
@@ -2138,7 +2138,7 @@ msgstr "Bei Tastendruck scrollen"
 
 #: src/prefs.c:1066
 msgid "Whether to scroll to the bottom if a key was pressed."
-msgstr "Legt fest, ob das Fenster bei einem Tastendruck bis zum Ende gescrollt werden soll"
+msgstr "Legt fest, ob das Fenster bei einem Tastendruck bis zum Ende gescrollt werden soll."
 
 #: src/prefs.c:1069
 msgid "Scroll on output"
@@ -2146,7 +2146,7 @@ msgstr "Bei Ausgabe scrollen"
 
 #: src/prefs.c:1073
 msgid "Whether to scroll to the bottom if an output was generated."
-msgstr "Legt fest, ob das Fenster bei Ausgabe bis zum Ende gescrollt werden soll"
+msgstr "Legt fest, ob das Fenster bei Ausgabe bis zum Ende gescrollt werden soll."
 
 #: src/prefs.c:1076
 msgid "Disable menu shortcut key (F10 by default)"
@@ -2154,7 +2154,7 @@ msgstr "Me_nütastenkombination deaktivieren (Vorgabe ist F10)"
 
 #: src/prefs.c:1080
 msgid "This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."
-msgstr "Diese Option deaktiviert bestimmte Tastenkombinationen des Menüs. Eine Deaktivierung kann sinnvoll sein, wenn Sie zum Beispiel den Midnight Commander in der VTE benutzen möchten. "
+msgstr "Diese Option deaktiviert bestimmte Tastenkombinationen des Menüs. Eine Deaktivierung kann sinnvoll sein, wenn Sie zum Beispiel den Midnight Commander in der VTE benutzen möchten."
 
 #: src/prefs.c:1083
 msgid "Follow the path of the current file"
@@ -2162,7 +2162,7 @@ msgstr "Pfad der aktuellen Datei setzen"
 
 #: src/prefs.c:1087
 msgid "Whether to execute \"cd $path\" when you switch between opened files."
-msgstr "Legt fest, ob  \"cd $path\" in der VTE ausgeführt werden soll, wenn Sie zwischen geöffneten Dateien wechseln."
+msgstr "Legt fest, ob \"cd $path\" in der VTE ausgeführt werden soll, wenn Sie zwischen geöffneten Dateien wechseln."
 
 #: src/about.c:111
 msgid "About Geany"
@@ -2349,7 +2349,7 @@ msgstr "Koreanisch"
 
 #: src/encodings.c:118
 msgid "Without encoding"
-msgstr "Ohne Zeichenkodierung:"
+msgstr "Ohne Zeichenkodierung"
 
 #: src/encodings.c:211
 msgid "_West European"
@@ -2491,7 +2491,7 @@ msgstr "Funktionen"
 
 #: src/treeviews.c:218
 msgid "Module"
-msgstr "Module"
+msgstr "Modul"
 
 #: src/treeviews.c:225
 msgid "Interfaces"
@@ -2517,7 +2517,7 @@ msgstr "Verbergen"
 #: src/treeviews.c:377
 #: src/treeviews.c:429
 msgid "Hide sidebar"
-msgstr "Sidebar verbergen"
+msgstr "Seitenleiste verbergen"
 
 #: src/treeviews.c:409
 msgid "Reload"
@@ -2703,7 +2703,7 @@ msgstr "Einzug verringern"
 
 #: src/keybindings.c:212
 msgid "Goto matching brace"
-msgstr "Springe zur passende Klammer"
+msgstr "Springe zur passenden Klammer"
 
 #: src/keybindings.c:214
 msgid "Complete word"
@@ -2797,12 +2797,12 @@ msgstr "In Datei"
 #: src/search.c:321
 #: src/search.c:456
 msgid "Close _dialog"
-msgstr "Diesen Dialog  _schließen. "
+msgstr "Diesen Dialog _schließen."
 
 #: src/search.c:326
 #: src/search.c:461
 msgid "Disable this option to do not close this dialog."
-msgstr "Diese Option deaktivieren, um den Dialog nicht zu schließen. "
+msgstr "Diese Option deaktivieren, um den Dialog nicht zu schließen."
 
 #: src/search.c:384
 msgid "Re_place & Find"
@@ -2815,7 +2815,7 @@ msgstr "Ersetzen durch:"
 #. Now add the multiple replace options
 #: src/search.c:435
 msgid "Replace All"
-msgstr "_Alle ersetzen"
+msgstr "Alle ersetzen"
 
 #: src/search.c:438
 msgid "In Se_lection"
@@ -2852,7 +2852,7 @@ msgstr "_Suchmuster umkehren"
 
 #: src/search.c:595
 msgid "Invert the sense of matching, to select non-matching lines."
-msgstr "Invertiert die Trefferliste. "
+msgstr "Invertiert die Trefferliste."
 
 #: src/search.c:641
 msgid "Select folder"
@@ -2895,7 +2895,7 @@ msgstr "Keine Treffer für '%s' gefunden."
 
 #~ msgid "The dialog window won't be closed when you start the operation."
 #~ msgstr ""
-#~ "Wenn diese Option aktiv ist. wird das Dialogfenster nicht geschlossen. "
+#~ "Wenn diese Option aktiv ist. wird das Dialogfenster nicht geschlossen."
 #~ msgid "Begin"
 #~ msgstr "Begin"
 
