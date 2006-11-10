@@ -494,8 +494,6 @@ static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user
 				case OPENFILES_ACTION_HIDE_ALL:
 				{
 					app->sidebar_visible = FALSE;
-					app->sidebar_openfiles_visible = FALSE;
-					app->sidebar_symbol_visible = FALSE;
 					ui_treeviews_show_hide(TRUE);
 					break;
 				}
