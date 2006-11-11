@@ -10,6 +10,9 @@
    Added stop button(using the Run button) to cancel the execution of a
    command like Run, Compile or Build.
    Fixed a typo in an error message.
+ * doc/geany.docbook:
+   Described new folding_horiz_line setting in filetypes.common.
+   Added documentation for stopping of running processes.
 
 
 2006-11-09  Enrico Tröger  <enrico.troeger@uvena.de>

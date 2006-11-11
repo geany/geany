@@ -5,7 +5,7 @@
 <!ENTITY appversion "0.10">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "October 28, 2006">
+<!ENTITY date "November 11, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -968,12 +968,30 @@
 					Execute will run the corresponding executable file, shell script or interpreted
 					script in a terminal window. Note that the Terminal tool path must be correctly
 					set in the Tools tab of the Preferences dialog - you can use any terminal
-					program that runs a Bourne compatible shell.
+					program that runs a Bourne compatible shell and accept the "-e" command line
+					argument to start a command.
 				</para>
 				<para>
 					After your program or script has finished executing, you will be prompted to
 					press the return key. This allows you to review any text output from the program
 					before the terminal window is closed.
+				</para>
+			</section>
+			<section>
+				<title>Stopping running processes</title>
+				<para>
+					If you started a build action (Compile, Build or Run) the Run button in the
+					toolbar becomes a stop button and you can stop the curent action. This works
+					by sending a signal to the process (and its child process(es)) to stop the
+					process. The used signal is SIGQUIT.
+				</para>
+				<para>
+					Depending on the process you started it might occur that the process cannot be
+					stopped. This can happen when the process creates more than one child process.
+					Therefore stopping any make actions is not possible because make creates child
+					processes and these child processes creates again child process. There might be
+					some other programs which cannot be stopped correctly, e.g. "Terminal" (the
+					terminal program of Xfce). Xterm is known to work properly.
 				</para>
 			</section>
 			<section>
@@ -1663,6 +1681,27 @@
 										   </para>
 									</entry>
 									<entry>folding_style=1;1;false;false</entry>
+								</row>
+								<row>
+									<entry>folding_horiz_line</entry>
+									<entry>Draw a thin horizontal line at the line where text is
+										   folded. Only first argument is used.
+										   <para>
+											Valid values for the first argument are:
+											<itemizedlist>
+												<listitem><para>
+													0 - disable, do not draw a line
+												</para></listitem>
+												<listitem><para>
+													1 - draw the line above folded text
+												</para></listitem>
+												<listitem><para>
+													2 - draw the line below folded text
+												</para></listitem>
+											</itemizedlist>
+										   </para>
+									</entry>
+									<entry>folding_horiz_line=0;0;false;false</entry>
 								</row>
 								<row>
 									<entry>invert_all</entry>
