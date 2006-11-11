@@ -2,6 +2,8 @@
 
  * src/vte.c: Probe different versions of libvte.so, not only libvte.so
               and libvte.so.4.
+ * src/keyfile.c: Fixed a segfault when closing preferences dialog and
+                  loading VTE was enabled after it was disabled.
 
 
 2006-11-09  Enrico Tröger  <enrico.troeger@uvena.de>

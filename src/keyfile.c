@@ -117,7 +117,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->pref_editor_auto_complete_constructs);
 #ifdef HAVE_VTE
 	g_key_file_set_boolean(config, "VTE", "load_vte", vte_info.load_vte);
-	if (vte_info.load_vte)
+	if (vte_info.load_vte && vc != NULL)
 	{
 		gchar *tmp_string;
 
