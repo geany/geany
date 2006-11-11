@@ -217,7 +217,7 @@ static void apply_settings(void)
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), app->tab_pos_sidebar);
 
 	ui_update_toolbar_items();
-	
+
 	// whether to show notebook tabs or not
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), app->show_notebook_tabs);
 }
@@ -482,6 +482,8 @@ gint main(gint argc, gchar **argv)
 	gtk_set_locale();
 
 	signal(SIGTERM, signal_cb);
+	// SIGQUIT is used to kill spawned children and we get also this signal, so ignore
+	signal(SIGQUIT, SIG_IGN);
 #ifdef G_OS_UNIX
 	/* ignore SIGPIPE signal for preventing sudden death of program */
 	signal(SIGPIPE, SIG_IGN);

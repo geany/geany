@@ -29,6 +29,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
+#include <stdarg.h>
 
 #ifdef G_OS_UNIX
 # include <sys/types.h>
@@ -44,22 +45,27 @@
 #include "keybindings.h"
 
 
-BuildInfo build_info = {NULL, GEANY_FILETYPES_ALL, NULL};
+BuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_ALL, NULL};
+
+enum
+{
+	LATEX_CMD_TO_DVI,
+	LATEX_CMD_TO_PDF,
+	LATEX_CMD_VIEW_DVI,
+	LATEX_CMD_VIEW_PDF
+};
 
 
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
-static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd);
+static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd,
+								gboolean autoclose);
 static GPid build_spawn_cmd(gint idx, gchar **cmd);
-
-static void
-on_make_target_dialog_response         (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data);
-
-static void
-on_make_target_entry_activate          (GtkEntry        *entry,
-                                        gpointer         user_data);
-
+static void on_make_target_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
+static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
+static void set_stop_button(gboolean stop);
+static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
+static void kill_process(gint pid);
+static void free_pointers(gpointer first, ...);
 
 
 void build_finalize()
@@ -76,8 +82,16 @@ GPid build_compile_tex_file(gint idx, gint mode)
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
 	argv = g_new0(gchar*, 2);
-	argv[0] = (mode == 0) ? g_strdup(doc_list[idx].file_type->programs->compiler) :
-							g_strdup(doc_list[idx].file_type->programs->linker);
+	if (mode == LATEX_CMD_TO_DVI)
+	{
+		argv[0] = g_strdup(doc_list[idx].file_type->programs->compiler);
+		build_info.type = GBO_COMPILE;
+	}
+	else
+	{
+		argv[0] = g_strdup(doc_list[idx].file_type->programs->linker);
+		build_info.type = GBO_BUILD;
+	}
 	argv[1] = NULL;
 
 	return build_spawn_cmd(idx, argv);
@@ -86,20 +100,31 @@ GPid build_compile_tex_file(gint idx, gint mode)
 
 GPid build_view_tex_file(gint idx, gint mode)
 {
-	gchar **argv;
+	gchar **argv, **term_argv;
 	gchar  *executable = NULL;
 	gchar  *view_file = NULL;
 	gchar  *locale_filename = NULL;
 	gchar  *cmd_string = NULL;
 	gchar  *locale_cmd_string = NULL;
+	gchar  *locale_term_cmd;
+	gchar  *script_name;
+	gint	term_argv_len, i;
 	GError *error = NULL;
-	GPid 	child_pid;
 	struct stat st;
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
+	build_info.file_type_id = GEANY_FILETYPES_LATEX;
+	build_info.type = GBO_RUN;
+
+#ifdef G_OS_WIN32
+	script_name = g_strdup("./geany_run_script.bat");
+#else
+	script_name = g_strdup("./geany_run_script.sh");
+#endif
+
 	executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
-	view_file = g_strconcat(executable, (mode == 0) ? ".dvi" : ".pdf", NULL);
+	view_file = g_strconcat(executable, (mode == LATEX_CMD_VIEW_DVI) ? ".dvi" : ".pdf", NULL);
 
 	// try convert in locale for stat()
 	locale_filename = utils_get_locale_from_utf8(view_file);
@@ -108,14 +133,14 @@ GPid build_view_tex_file(gint idx, gint mode)
 	if (stat(locale_filename, &st) != 0)
 	{
 		msgwin_status_add(_("Failed to view %s (make sure it is already compiled)"), view_file);
-		g_free(executable);
-		g_free(view_file);
-		g_free(locale_filename);
+		free_pointers(executable, view_file, locale_filename, script_name);
+
 		return (GPid) 1;
 	}
 
 	// replace %f and %e in the run_cmd string
-	cmd_string = g_strdup((mode == 0) ?	g_strdup(doc_list[idx].file_type->programs->run_cmd) :
+	cmd_string = g_strdup((mode == LATEX_CMD_VIEW_DVI) ?
+										g_strdup(doc_list[idx].file_type->programs->run_cmd) :
 										g_strdup(doc_list[idx].file_type->programs->run_cmd2));
 	cmd_string = utils_str_replace(cmd_string, "%f", view_file);
 	cmd_string = utils_str_replace(cmd_string, "%e", executable);
@@ -123,45 +148,89 @@ GPid build_view_tex_file(gint idx, gint mode)
 	// try convert in locale
 	locale_cmd_string = utils_get_locale_from_utf8(cmd_string);
 
+	/* get the terminal path */
+	locale_term_cmd = utils_get_locale_from_utf8(app->tools_term_cmd);
+	// split the term_cmd, so arguments will work too
+	term_argv = g_strsplit(locale_term_cmd, " ", -1);
+	term_argv_len = g_strv_length(term_argv);
+
+	// check that terminal exists (to prevent misleading error messages)
+	if (term_argv[0] != NULL)
+	{
+		gchar *tmp = term_argv[0];
+		// g_find_program_in_path checks tmp exists and is executable
+		term_argv[0] = g_find_program_in_path(tmp);
+		g_free(tmp);
+	}
+	if (term_argv[0] == NULL)
+	{
+		msgwin_status_add(
+			_("Could not find terminal '%s' "
+				"(check path for Terminal tool setting in Preferences)"), app->tools_term_cmd);
+
+		free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										script_name, locale_term_cmd);
+		g_strfreev(term_argv);
+		return (GPid) 1;
+	}
+
+	// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
+	// (script_name should be ok in UTF8 without converting in locale because it contains no umlauts)
+	if (! build_create_shellscript(idx, script_name, locale_cmd_string, TRUE))
+	{
+		gchar *utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
+		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
+													utf8_check_executable);
+		free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										utf8_check_executable, script_name, locale_term_cmd);
+		g_strfreev(term_argv);
+		return (GPid) 1;
+	}
+
+	argv = g_new0(gchar *, term_argv_len + 3);
+	for (i = 0; i < term_argv_len; i++)
+	{
+		argv[i] = g_strdup(term_argv[i]);
+	}
 #ifdef G_OS_WIN32
-	argv = NULL;
-	child_pid = (GPid) 0;
-
-	if (! g_spawn_command_line_async(locale_cmd_string, &error))
+	// command line arguments for cmd.exe
+	argv[term_argv_len   ]  = g_strdup("/Q /C");
+	argv[term_argv_len + 1] = g_path_get_basename(script_name);
 #else
-	argv = g_new0(gchar *, 4);
-	argv[0] = g_strdup("/bin/sh");
-	argv[1] = g_strdup("-c");
-	argv[2] = locale_cmd_string;
-	argv[3] = NULL;
-
-	if (! g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
-						NULL, NULL, &child_pid, NULL, NULL, NULL, &error))
+	argv[term_argv_len   ]  = g_strdup("-e");
+	argv[term_argv_len + 1] = g_strdup(script_name);
 #endif
+	argv[term_argv_len + 2] = NULL;
+
+
+	if (! g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
+						NULL, NULL, &(build_info.pid), NULL, NULL, NULL, &error))
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
 
-		g_free(view_file);
-		g_free(executable);
-		g_free(locale_filename);
-		g_free(cmd_string);
-#ifdef G_OS_WIN32
-		g_free(locale_cmd_string);
-#endif
+		free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										script_name, locale_term_cmd);
 		g_strfreev(argv);
+		g_strfreev(term_argv);
 		g_error_free(error);
 		error = NULL;
 		return (GPid) 0;
 	}
 
-	g_free(view_file);
-	g_free(executable);
-	g_free(locale_filename);
-	g_free(cmd_string);
-	g_strfreev(argv);
+	if (build_info.pid > 0)
+	{
+		//setpgid(0, getppid());
+		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
+		set_stop_button(TRUE);
+	}
 
-	return child_pid;
+	free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										script_name, locale_term_cmd);
+	g_strfreev(argv);
+	g_strfreev(term_argv);
+
+	return build_info.pid;
 }
 
 
@@ -197,16 +266,19 @@ GPid build_make_file(gint idx, gint build_opts)
 
 	if (build_opts == GBO_MAKE_OBJECT)
 	{
+		build_info.type = GBO_MAKE_OBJECT;
 		argv[1] = get_object_filename(idx);
 		argv[2] = NULL;
 	}
 	else if (build_opts == GBO_MAKE_CUSTOM && build_info.custom_target)
 	{	//cust-target
+		build_info.type = GBO_MAKE_CUSTOM;
 		argv[1] = g_strdup(build_info.custom_target);
 		argv[2] = NULL;
 	}
 	else	// GBO_MAKE_ALL
 	{
+		build_info.type = GBO_MAKE_ALL;
 		argv[1] = g_strdup("all");
 		argv[2] = NULL;
 	}
@@ -225,6 +297,7 @@ GPid build_compile_file(gint idx)
 	argv[0] = g_strdup(doc_list[idx].file_type->programs->compiler);
 	argv[1] = NULL;
 
+	build_info.type = GBO_COMPILE;
 	return build_spawn_cmd(idx, argv);
 }
 
@@ -259,8 +332,8 @@ GPid build_link_file(gint idx)
 		else
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-					_("Something very strange is occured, could not stat %s (%s)"),
-					doc_list[idx].file_name, strerror(errno));
+					_("Something very strange is occurred, could not stat %s (%s)."),
+					doc_list[idx].file_name, g_strerror(errno));
 		}
 	}
 
@@ -288,6 +361,7 @@ GPid build_link_file(gint idx)
 	g_free(object_file);
 	g_free(locale_filename);
 
+	build_info.type = GBO_BUILD;
 	return build_spawn_cmd(idx, argv);
 }
 
@@ -303,7 +377,6 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	gchar	*locale_filename;
 	gchar	*executable;
 	gchar	*tmp;
-	GPid     child_pid;
 	gint     stdout_fd;
 	gint     stderr_fd;
 
@@ -352,7 +425,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	}
 
 	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
-						NULL, NULL, &child_pid, NULL, &stdout_fd, &stderr_fd, &error))
+						NULL, NULL, &(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
@@ -364,6 +437,12 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 		g_free(locale_filename);
 		error = NULL;
 		return (GPid) 0;
+	}
+
+	if (build_info.pid > 0)
+	{
+		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
+		set_stop_button(TRUE);
 	}
 
 	// use GIOChannels to monitor stdout and stderr
@@ -378,13 +457,12 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	g_free(working_dir);
 	g_free(locale_filename);
 
-	return child_pid;
+	return build_info.pid;
 }
 
 
 GPid build_run_cmd(gint idx)
 {
-	GPid	 child_pid;
 	GPid	 result_id;	// either child_pid or error id.
 	GError	*error = NULL;
 	gchar  **argv = NULL;
@@ -402,7 +480,10 @@ GPid build_run_cmd(gint idx)
 	guint    term_argv_len, i;
 	struct stat st;
 
-	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL) return (GPid) 1;
+
+	build_info.file_type_id = doc_list[idx].file_type->id;
+	build_info.type = GBO_RUN;
 
 #ifdef G_OS_WIN32
 	script_name = g_strdup("./geany_run_script.bat");
@@ -437,13 +518,14 @@ GPid build_run_cmd(gint idx)
 		// check whether executable exists
 		if (stat(check_executable, &st) != 0)
 		{
+/// TODO why?
 #ifndef G_OS_WIN32
 			utf8_check_executable = g_strdup(check_executable);
 #else
 			utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
+#endif
 			msgwin_status_add(_("Failed to execute %s (make sure it is already built)"),
 														utf8_check_executable);
-#endif
 			result_id = (GPid) 1;
 			goto free_strings;
 		}
@@ -495,7 +577,7 @@ GPid build_run_cmd(gint idx)
 
 	// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
 	// (script_name should be ok in UTF8 without converting in locale because it contains no umlauts)
-	if (! build_create_shellscript(idx, script_name, cmd))
+	if (! build_create_shellscript(idx, script_name, cmd, FALSE))
 	{
 		utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
@@ -519,8 +601,8 @@ GPid build_run_cmd(gint idx)
 #endif
 	argv[term_argv_len + 2] = NULL;
 
-	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, 0,
-						NULL, NULL, &child_pid, NULL, NULL, NULL, &error))
+	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
+						NULL, NULL, &(build_info.pid), NULL, NULL, NULL, &error))
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
@@ -531,7 +613,12 @@ GPid build_run_cmd(gint idx)
 		goto free_strings;
 	}
 
-	result_id = child_pid; // g_spawn was successful, result is child process id
+	result_id = build_info.pid; // g_spawn was successful, result is child process id
+	if (build_info.pid > 0)
+	{
+		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
+		set_stop_button(TRUE);
+	}
 
 	free_strings:
 	/* free all non-NULL strings */
@@ -592,45 +679,59 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
+	if (build_info.type != GBO_RUN) // not necessary when executing a file
+	{
 #ifdef G_OS_UNIX
-	gboolean failure = FALSE;
+		gboolean failure = FALSE;
 
-	if (WIFEXITED(status))
-	{
-		if (WEXITSTATUS(status) != EXIT_SUCCESS)
+		if (WIFEXITED(status))
+		{
+			if (WEXITSTATUS(status) != EXIT_SUCCESS)
+				failure = TRUE;
+		}
+		else if (WIFSIGNALED(status))
+		{
+			// the terminating signal: WTERMSIG (status));
 			failure = TRUE;
-	}
-	else if (WIFSIGNALED(status))
-	{
-		// the terminating signal: WTERMSIG (status));
-		failure = TRUE;
-	}
-	else
-	{	// any other failure occured
-		failure = TRUE;
-	}
+		}
+		else
+		{	// any other failure occured
+			failure = TRUE;
+		}
 
 
-	if (failure)
-	{
-		msgwin_compiler_add(COLOR_DARK_RED, TRUE, _("Compilation failed."));
-		if (! app->msgwindow_visible) msgwin_show();
-	}
-	else
-	{
-		gchar *msg = _("Compilation finished successfully.");
-		msgwin_compiler_add(COLOR_BLUE, TRUE, msg);
-		if (! app->msgwindow_visible) ui_set_statusbar(msg, FALSE);
-	}
-
+		if (failure)
+		{
+			msgwin_compiler_add(COLOR_DARK_RED, TRUE, _("Compilation failed."));
+			if (! app->msgwindow_visible) msgwin_show();
+		}
+		else
+		{
+			gchar *msg = _("Compilation finished successfully.");
+			msgwin_compiler_add(COLOR_BLUE, TRUE, msg);
+			if (! app->msgwindow_visible) ui_set_statusbar(msg, FALSE);
+		}
 #endif
-	utils_beep();
-	gtk_widget_set_sensitive(app->compile_button, TRUE);
+	}
+
+	if (build_info.type != GBO_RUN) utils_beep();
 	g_spawn_close_pid(child_pid);
+
+	build_info.pid = 0;
+	// reset the stop button and menu item to the original meaning
+	switch (build_info.type)
+	{
+		case GBO_COMPILE:
+		case GBO_BUILD:
+		case GBO_RUN:
+			set_stop_button(FALSE); break;
+		default: ;
+	}
 }
 
 
-static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd)
+static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd,
+											gboolean autoclose)
 {
 	FILE *fp;
 	gchar *str;
@@ -643,12 +744,12 @@ static gboolean build_create_shellscript(const gint idx, const gchar *fname, con
 
 #ifdef G_OS_WIN32
 	tmp = g_path_get_basename(fname);
-	str = g_strdup_printf("%s\n\npause\ndel %s\n", cmd, tmp);
+	str = g_strdup_printf("%s\n\n%s\ndel %s\n", cmd, (autoclose) ? "" : "pause", tmp);
 	g_free(tmp);
 #else
 	str = g_strdup_printf(
 		"#!/bin/sh\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
-		\n\necho \"Press return to continue\"\nread\nunlink $0\n", cmd);
+		\n\necho \"Press return to continue\"\n%s\nunlink $0\n", cmd, (autoclose) ? "" : "read");
 #endif
 
 	fputs(str, fp);
@@ -814,7 +915,8 @@ static GtkWidget *create_build_menu_tex()
 	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(0));
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_DVI));
 
 	// PDF
 	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> PDF"));
@@ -827,7 +929,8 @@ static GtkWidget *create_build_menu_tex()
 	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(1));
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_PDF));
 
 	if (item != NULL)
 	{
@@ -867,7 +970,8 @@ static GtkWidget *create_build_menu_tex()
 #endif
 
 	// DVI view
-	item = gtk_image_menu_item_new_with_mnemonic(_("View DVI file"));
+#define LATEX_VIEW_DVI_LABEL _("View DVI file") // used later again
+	item = gtk_image_menu_item_new_with_mnemonic(LATEX_VIEW_DVI_LABEL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	if (keys[GEANY_KEYS_BUILD_RUN]->key)
@@ -877,7 +981,9 @@ static GtkWidget *create_build_menu_tex()
 	image = gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(2));
+	g_signal_connect((gpointer) item, "activate",
+						G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_DVI));
+	ft->menu_items->item_exec = item;
 
 	// PDF view
 	item = gtk_image_menu_item_new_with_mnemonic(_("View PDF file"));
@@ -890,7 +996,8 @@ static GtkWidget *create_build_menu_tex()
 	image = gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(3));
+	g_signal_connect((gpointer) item, "activate",
+						G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_PDF));
 
 	// separator
 	separator = gtk_separator_menu_item_new();
@@ -1018,20 +1125,15 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	GPid child_pid = (GPid) 0;
+
+	if (! DOC_IDX_VALID(idx)) return;
 
 	if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
 	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
-		child_pid = build_compile_tex_file(idx, 0);
+		build_compile_tex_file(idx, 0);
 	else
-		child_pid = build_compile_file(idx);
-
-	if (child_pid != (GPid) 0)
-	{
-		gtk_widget_set_sensitive(app->compile_button, FALSE);
-		g_child_watch_add(child_pid, build_exit_cb, NULL);
-	}
+		build_compile_file(idx);
 }
 
 
@@ -1040,22 +1142,17 @@ on_build_tex_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	GPid child_pid = (GPid) 0;
 
 	if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
 	switch (GPOINTER_TO_INT(user_data))
 	{
-		case 0: child_pid = build_compile_tex_file(idx, 0); break;
-		case 1: child_pid = build_compile_tex_file(idx, 1); break;
-		case 2: child_pid = build_view_tex_file(idx, 0); break;
-		case 3: child_pid = build_view_tex_file(idx, 1); break;
-	}
-
-	if (GPOINTER_TO_INT(user_data) <= 1 && child_pid != (GPid) 0)
-	{
-		gtk_widget_set_sensitive(app->compile_button, FALSE);
-		g_child_watch_add(child_pid, build_exit_cb, NULL);
+		case LATEX_CMD_TO_DVI:
+		case LATEX_CMD_TO_PDF:
+			build_compile_tex_file(idx, GPOINTER_TO_INT(user_data)); break;
+		case LATEX_CMD_VIEW_DVI:
+		case LATEX_CMD_VIEW_PDF:
+			build_view_tex_file(idx, GPOINTER_TO_INT(user_data)); break;
 	}
 }
 
@@ -1065,20 +1162,15 @@ on_build_build_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	GPid child_pid = (GPid) 0;
+
+	if (! DOC_IDX_VALID(idx)) return;
 
 	if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
 	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
-		child_pid = build_compile_tex_file(idx, 1);
+		build_compile_tex_file(idx, 1);
 	else
-		child_pid = build_link_file(idx);
-
-	if (child_pid != (GPid) 0)
-	{
-		gtk_widget_set_sensitive(app->compile_button, FALSE);
-		g_child_watch_add(child_pid, build_exit_cb, NULL);
-	}
+		build_link_file(idx);
 }
 
 
@@ -1107,16 +1199,9 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 		// fall through
 		case GBO_MAKE_ALL:
 		{
-			GPid child_pid;
-
 			if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
-			child_pid = build_make_file(idx, build_opts);
-			if (child_pid != (GPid) 0)
-			{
-				gtk_widget_set_sensitive(app->compile_button, FALSE);
-				g_child_watch_add(child_pid, build_exit_cb, NULL);
-			}
+			build_make_file(idx, build_opts);
 		}
 	}
 }
@@ -1128,33 +1213,41 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX && user_data != NULL)
+#ifndef G_OS_WIN32 // on Windows there is no PID returned (resp. it is a handle)
+	// make the process "stopable"
+	if (build_info.pid > 1)
 	{
+		kill_process(build_info.pid);
+		return;
+	}
+#endif
+
+	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
+	{	// run LaTeX file
 		if (build_view_tex_file(idx, GPOINTER_TO_INT(user_data)) == (GPid) 0)
 		{
 			msgwin_status_add(_("Failed to execute the view program"));
 		}
 	}
 	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_HTML)
-	{
+	{	// run HTML file
 		gchar *uri = g_strconcat("file:///", g_path_skip_root(doc_list[idx].file_name), NULL);
 		utils_start_browser(uri);
 		g_free(uri);
 	}
 	else
-	{
+	{	// run everything else
+
 		// save the file only if the run command uses it
 		if (doc_list[idx].changed &&
 			strstr(doc_list[idx].file_type->programs->run_cmd, "%f") != NULL)
 				document_save_file(idx, FALSE);
+
 		if (build_run_cmd(idx) == (GPid) 0)
 		{
-#ifndef G_OS_WIN32 // on Windows there is no PID returned
 			msgwin_status_add(_("Failed to execute the terminal program"));
-#endif
 		}
 	}
-	//gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
 }
 
 
@@ -1182,19 +1275,13 @@ on_make_target_dialog_response         (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		gint idx = document_get_cur_idx();
-		GPid child_pid;
 
 		if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
 		g_free(build_info.custom_target);
 		build_info.custom_target = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
 
-		child_pid = build_make_file(idx, GBO_MAKE_CUSTOM);
-		if (child_pid != (GPid) 0)
-		{
-			gtk_widget_set_sensitive(app->compile_button, FALSE);
-			g_child_watch_add(child_pid, build_exit_cb, NULL);
-		}
+		build_make_file(idx, GBO_MAKE_CUSTOM);
 	}
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
@@ -1207,4 +1294,93 @@ on_make_target_entry_activate          (GtkEntry        *entry,
 	on_make_target_dialog_response(GTK_DIALOG(user_data), GTK_RESPONSE_ACCEPT, entry);
 }
 
+
+static void set_stop_button(gboolean stop)
+{
+	GtkStockItem sitem;
+
+	// use the run button also as stop button
+	if (stop)
+	{
+		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->run_button), "gtk-stop");
+		gtk_widget_set_sensitive(app->compile_button, FALSE);
+		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(
+						filetypes[build_info.file_type_id]->menu_items->item_exec),
+						gtk_image_new_from_stock("gtk-stop", GTK_ICON_SIZE_MENU));
+
+		gtk_stock_lookup("gtk-stop", &sitem);
+		gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(
+					GTK_BIN(filetypes[build_info.file_type_id]->menu_items->item_exec))),
+					sitem.label);
+	}
+	else
+	{
+		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->run_button), "gtk-execute");
+		gtk_widget_set_sensitive(app->compile_button, TRUE);
+
+		// LaTeX hacks ;-(
+		if (build_info.file_type_id == GEANY_FILETYPES_LATEX)
+		{
+			gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(
+					GTK_BIN(filetypes[build_info.file_type_id]->menu_items->item_exec))),
+					LATEX_VIEW_DVI_LABEL);
+			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(
+						filetypes[build_info.file_type_id]->menu_items->item_exec),
+						gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU));
+		}
+		else
+		{
+			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(
+						filetypes[build_info.file_type_id]->menu_items->item_exec),
+						gtk_image_new_from_stock("gtk-execute", GTK_ICON_SIZE_MENU));
+
+			gtk_stock_lookup("gtk-execute", &sitem);
+			gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(
+						GTK_BIN(filetypes[build_info.file_type_id]->menu_items->item_exec))),
+						sitem.label);
+		}
+
+	}
+}
+
+
+static void kill_process(gint pid)
+{
+	/* SIGQUIT is not the best signal to use because it causes a core dump (this should not
+	 * perforce necessary for just killing a process). But we must use a signal which we can
+	 * ignore because the main process get it too, it is declared to ignore in main.c. */
+
+	gint resultpg, result;
+
+	// sent SIGQUIT to all the processes to the processes' own process group
+	result = kill(pid, SIGQUIT);
+	resultpg = killpg(0, SIGQUIT);
+
+	if (result != 0 || resultpg != 0)
+		msgwin_status_add(_("Process could not be stopped (%s)."), g_strerror(errno));
+	else
+	{
+		build_info.pid = 0;
+		set_stop_button(FALSE);
+	}
+}
+
+
+// frees all passed pointers if they are non-NULL, the first argument is nothing special,
+// it will also be freed
+static void free_pointers(gpointer first, ...)
+{
+	va_list a;
+	gpointer sa;
+
+    for (va_start(a, first);  (sa = va_arg(a, gpointer), sa!=NULL);)
+    {
+    	if (sa != NULL)
+    		g_free(sa);
+	}
+	va_end(a);
+
+    if (first != NULL)
+    	g_free(first);
+}
 

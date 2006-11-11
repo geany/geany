@@ -4,6 +4,12 @@
               and libvte.so.4.
  * src/keyfile.c: Fixed a segfault when closing preferences dialog and
                   loading VTE was enabled after it was disabled.
+ * src/build.c, src/build.h, src/main.c:
+   Extended the build_info struct with useful information of the
+   current running command.
+   Added stop button(using the Run button) to cancel the execution of a
+   command like Run, Compile or Build.
+   Fixed a typo in an error message.
 
 
 2006-11-09  Enrico Tröger  <enrico.troeger@uvena.de>

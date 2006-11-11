@@ -24,18 +24,23 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
-enum	// Geany Build Options
+typedef enum	// Geany Build Options
 {
+	GBO_COMPILE,
+	GBO_BUILD,
 	GBO_MAKE_ALL,
 	GBO_MAKE_CUSTOM,
-	GBO_MAKE_OBJECT
-};
+	GBO_MAKE_OBJECT,
+	GBO_RUN
+} build_type;
 
 typedef struct
 {
-	gchar	*dir;
-	guint	file_type_id;
-	gchar	*custom_target;
+	build_type	type;	// current action(one of the above enumeration)
+	GPid		pid;	// process id of the spawned process
+	gchar		*dir;
+	guint		file_type_id;
+	gchar		*custom_target;
 } BuildInfo;
 
 extern BuildInfo build_info;
