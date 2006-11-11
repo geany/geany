@@ -1,3 +1,18 @@
+2006-11-11  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/vte.c: Probe different versions of libvte.so, not only libvte.so
+              and libvte.so.4.
+
+
+2006-11-09  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/highlighting.c, data/filetypes.java, data/filetypes.cpp,
+   data/filetypes.ferite, data/filetypes.c, data/filetypes.d,
+   data/filetypes.pascal, data/filetypes.sql, data/filetypes.xml:
+   Changed commentdoc(used for javadoc and Doxygen, /** */) colour to a
+   light blue.
+
+
 2006-11-09  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keyfile.c, src/main.c:

@@ -117,14 +117,16 @@ void vte_init(void)
 	else
 	{
 		module = g_module_open("libvte.so", G_MODULE_BIND_LAZY);
-		// try to fallback to libvte.so.4, if it is installed
+		// try to fallback to different versions of libvte.so.x
 		if (module == NULL) module = g_module_open("libvte.so.4", G_MODULE_BIND_LAZY);
+		else if (module == NULL) module = g_module_open("libvte.so.8", G_MODULE_BIND_LAZY);
+		else if (module == NULL) module = g_module_open("libvte.so.9", G_MODULE_BIND_LAZY);
 	}
 
 	if (module == NULL)
 	{
 		vte_info.have_vte = FALSE;
-		geany_debug("Could not load libvte.so.4, terminal support disabled");
+		geany_debug("Could not load libvte.so, terminal support disabled");
 		return;
 	}
 	else
