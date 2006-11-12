@@ -148,6 +148,7 @@ void vte_init(void)
 	gtk_box_pack_start(GTK_BOX(hbox), vte, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), scrollbar, FALSE, FALSE, 0);
 
+	gtk_widget_set_size_request(GTK_WIDGET(vte), 10, 10);
 	vf->vte_terminal_set_size(VTE_TERMINAL(vte), 30, 1);
 	//vf->vte_terminal_set_encoding(VTE_TERMINAL(vte), "UTF-8");
 	vf->vte_terminal_set_mouse_autohide(VTE_TERMINAL(vte), TRUE);

@@ -1,3 +1,9 @@
+2006-11-12  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/vte.c: Fix message window horizontal scrollbar being too tall on
+              some systems (thanks to Rob van der Linde).
+
+
 2006-11-11  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/vte.c: Probe different versions of libvte.so, not only libvte.so
