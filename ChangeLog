@@ -1,3 +1,14 @@
+2006-11-13  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/filetypes.c, src/filetypes.h, src/highlighting.c,
+   src/highlighting.h, src/treeviews.c, scintilla/Makefile.am,
+   scintilla/makefile.win32, scintilla/KeyWords.cxx,
+   scintilla/LexVHDL.cxx, tagmanager/vhdl.c, tagmanager/parsers.h,
+   tagmanager/Makefile.am, tagmanager/makefile.win32,
+   data/filetype_extensions.conf, data/filetypes.vhdl:
+   Added new filetype VHDL.
+
+
 2006-11-13  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c: Fix invalid memory read in sci_cb_get_indent().

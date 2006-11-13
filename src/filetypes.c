@@ -64,7 +64,8 @@ enum
 	FILETYPE_UID_FORTRAN,	// 22
 	FILETYPE_UID_DIFF,		// 23
 	FILETYPE_UID_FERITE,	// 24
-	FILETYPE_UID_HTML		// 25
+	FILETYPE_UID_HTML,		// 25
+	FILETYPE_UID_VHDL		// 26
 };
 
 
@@ -106,6 +107,7 @@ filetype *filetypes_get_from_uid(gint uid)
 		case FILETYPE_UID_DIFF:		return filetypes[GEANY_FILETYPES_DIFF];
 		case FILETYPE_UID_FERITE:	return filetypes[GEANY_FILETYPES_FERITE];
 		case FILETYPE_UID_HTML:		return filetypes[GEANY_FILETYPES_HTML];
+		case FILETYPE_UID_VHDL:		return filetypes[GEANY_FILETYPES_VHDL];
 		default: 					return NULL;
 	}
 }
@@ -603,6 +605,26 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_OMS]->comment_close = NULL;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_OMS]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_OMS]->title, filetypes[GEANY_FILETYPES_OMS]);
+
+#define VHDL
+	filetypes[GEANY_FILETYPES_VHDL] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_VHDL]->id = GEANY_FILETYPES_VHDL;
+	filetypes[GEANY_FILETYPES_VHDL]->uid = FILETYPE_UID_VHDL;
+	filetypes[GEANY_FILETYPES_VHDL]->item = NULL;
+	filetypes[GEANY_FILETYPES_VHDL]->lang = 21;
+	filetypes[GEANY_FILETYPES_VHDL]->name = g_strdup("VHDL");
+	filetypes[GEANY_FILETYPES_VHDL]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_VHDL]->title = g_strdup(_("VHDL source file"));
+	filetypes[GEANY_FILETYPES_VHDL]->extension = g_strdup("vhd");
+	filetypes[GEANY_FILETYPES_VHDL]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_VHDL]->pattern[0] = g_strdup("*.vhd");
+	filetypes[GEANY_FILETYPES_VHDL]->pattern[1] = g_strdup("*.vhdl");
+	filetypes[GEANY_FILETYPES_VHDL]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_VHDL]->style_func_ptr = styleset_vhdl;
+	filetypes[GEANY_FILETYPES_VHDL]->comment_open = g_strdup("--");
+	filetypes[GEANY_FILETYPES_VHDL]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_VHDL]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_VHDL]->title, filetypes[GEANY_FILETYPES_VHDL]);
 
 #define DIFF
 	filetypes[GEANY_FILETYPES_DIFF] = g_new0(filetype, 1);

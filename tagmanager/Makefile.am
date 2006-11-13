@@ -44,6 +44,7 @@ libtagmanager_a_SOURCES =\
 	regex.c\
 	tcl.c\
 	sh.c\
+	vhdl.c\
 	ctags.c\
 	entry.c\
 	get.c\

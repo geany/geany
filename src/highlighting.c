@@ -2702,3 +2702,106 @@ void styleset_ferite(ScintillaObject *sci)
 	// is used for local structs and typedefs
 	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_FERITE, 18);
 }
+
+
+static void styleset_vhdl_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+
+	load_keyfiles(config, config_home, GEANY_FILETYPES_VHDL);
+
+	new_style_array(GEANY_FILETYPES_VHDL, 15);
+
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0xd00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "comment_line_bang", "0x3f5fbf", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "keyword", "0x001a7f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_VHDL].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "stdoperator", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "attribute", "0x804020", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "stdfunction", "0x808020", "0xffffff", "true", &style_sets[GEANY_FILETYPES_VHDL].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "stdpackage", "0x208020", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "stdtype", "0x208080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_VHDL].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "userword", "0x804020", "0xffffff", "true", &style_sets[GEANY_FILETYPES_VHDL].styling[14]);
+
+	style_sets[GEANY_FILETYPES_VHDL].keywords = g_new(gchar*, 8);
+	get_keyfile_keywords(config, config_home, "keywords", "keywords", GEANY_FILETYPES_VHDL, 0,
+			"access after alias all architecture array assert attribute begin block \
+			 body buffer bus case component configuration constant disconnect downto else elsif \
+			 end entity exit file for function generate generic group guarded if impure in inertial \
+			 inout is label library linkage literal loop map new next null of on open others out \
+			 package port postponed procedure process pure range record register reject report \
+			 return select severity shared signal subtype then to transport type unaffected units \
+			 until use variable wait when while with");
+	get_keyfile_keywords(config, config_home, "keywords", "operators", GEANY_FILETYPES_VHDL, 1,
+			"abs and mod nand nor not or rem rol ror sla sll sra srl xnor xor");
+	get_keyfile_keywords(config, config_home, "keywords", "attributes", GEANY_FILETYPES_VHDL, 2,
+			"left right low high ascending image value pos val succ pred leftof rightof base range \
+			 reverse_range length delayed stable quiet transaction event active last_event last_active \
+			 last_value driving driving_value simple_name path_name instance_name");
+	get_keyfile_keywords(config, config_home, "keywords", "std_functions", GEANY_FILETYPES_VHDL, 3,
+			"now readline read writeline write endfile resolved to_bit to_bitvector to_stdulogic \
+			 to_stdlogicvector to_stdulogicvector to_x01 to_x01z to_UX01 rising_edge falling_edge \
+			 is_x shift_left shift_right rotate_left rotate_right resize to_integer to_unsigned \
+			 to_signed std_match to_01");
+	get_keyfile_keywords(config, config_home, "keywords", "std_packages", GEANY_FILETYPES_VHDL, 4,
+			"std ieee work standard textio std_logic_1164 std_logic_arith std_logic_misc \
+			 std_logic_signed std_logic_textio std_logic_unsigned numeric_bit numeric_std \
+			 math_complex math_real vital_primitives vital_timing");
+	get_keyfile_keywords(config, config_home, "keywords", "std_types", GEANY_FILETYPES_VHDL, 5,
+			"boolean bit character severity_level integer real time delay_length natural positive \
+			 string bit_vector file_open_kind file_open_status line text side width std_ulogic \
+			 std_ulogic_vector std_logic std_logic_vector X01 X01Z UX01 UX01Z unsigned signed");
+	get_keyfile_keywords(config, config_home, "keywords", "userwords", GEANY_FILETYPES_VHDL, 6, "");
+	style_sets[GEANY_FILETYPES_VHDL].keywords[7] = NULL;
+
+	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+		&style_sets[GEANY_FILETYPES_VHDL].wordchars);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_VHDL);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+}
+
+
+void styleset_vhdl(ScintillaObject *sci)
+{
+	styleset_common(sci, 5);
+	if (style_sets[GEANY_FILETYPES_VHDL].styling == NULL) styleset_vhdl_init();
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_VHDL, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[3]);
+	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[4]);
+	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[5]);
+	SSM(sci, SCI_SETKEYWORDS, 6, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].keywords[6]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_VHDL, 0);
+	set_sci_style(sci, SCE_VHDL_DEFAULT, GEANY_FILETYPES_VHDL, 0);
+	set_sci_style(sci, SCE_VHDL_COMMENT, GEANY_FILETYPES_VHDL, 1);
+	set_sci_style(sci, SCE_VHDL_COMMENTLINEBANG, GEANY_FILETYPES_VHDL, 2);
+	set_sci_style(sci, SCE_VHDL_NUMBER, GEANY_FILETYPES_VHDL, 3);
+	set_sci_style(sci, SCE_VHDL_STRING, GEANY_FILETYPES_VHDL, 4);
+	set_sci_style(sci, SCE_VHDL_OPERATOR, GEANY_FILETYPES_VHDL, 5);
+	set_sci_style(sci, SCE_VHDL_IDENTIFIER, GEANY_FILETYPES_VHDL, 6);
+	set_sci_style(sci, SCE_VHDL_STRINGEOL, GEANY_FILETYPES_VHDL, 7);
+	set_sci_style(sci, SCE_VHDL_KEYWORD, GEANY_FILETYPES_VHDL, 8);
+	set_sci_style(sci, SCE_VHDL_STDOPERATOR, GEANY_FILETYPES_VHDL, 9);
+	set_sci_style(sci, SCE_VHDL_ATTRIBUTE, GEANY_FILETYPES_VHDL, 10);
+	set_sci_style(sci, SCE_VHDL_STDFUNCTION, GEANY_FILETYPES_VHDL, 11);
+	set_sci_style(sci, SCE_VHDL_STDPACKAGE, GEANY_FILETYPES_VHDL, 12);
+	set_sci_style(sci, SCE_VHDL_STDTYPE, GEANY_FILETYPES_VHDL, 13);
+	set_sci_style(sci, SCE_VHDL_USERWORD, GEANY_FILETYPES_VHDL, 14);
+}
+

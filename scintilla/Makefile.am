@@ -24,7 +24,8 @@ LexPerl.cxx \
 LexPython.cxx \
 LexRuby.cxx \
 LexSQL.cxx \
-LexTCL.cxx
+LexTCL.cxx \
+LexVHDL.cxx
 
 SRCS= \
 CallTip.cxx \

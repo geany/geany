@@ -88,4 +88,6 @@ void styleset_diff(ScintillaObject *sci);
 
 void styleset_ferite(ScintillaObject *sci);
 
+void styleset_vhdl(ScintillaObject *sci);
+
 #endif

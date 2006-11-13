@@ -235,6 +235,27 @@ void treeviews_init_tag_list(gint idx)
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_other), 0, _("Other"), -1);
 			break;
 		}
+		case GEANY_FILETYPES_VHDL:
+		{
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_function), 0, _("Functions"), -1);
+/*			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_class), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_class), 0, _("Constants"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_member), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_member), 0, _("Members"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_macro), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_macro), 0, _("Macros"), -1);
+*/			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_variable), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_variable), 0, _("Variables"), -1);
+/*			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_namespace), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Namespaces"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_struct), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_struct), 0, _("Signals"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_other), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_other), 0, _("Other"), -1);
+*/
+			break;
+		}
 		default:
 		{
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_function), NULL);
