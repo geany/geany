@@ -354,7 +354,7 @@ void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 		{
 			gint k = len - 1;
 			if (use_this_line) break;	// break immediately in the case of sci_cb_close_block
-			while (isspace(linebuf[k])) k--;
+			while (k > 0 && isspace(linebuf[k])) k--;
 			// if last non-whitespace character is a { increase indention by a tab
 			// e.g. for (...) {
 			if (linebuf[k] == '{') indent[j++] = '\t';
