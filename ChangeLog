@@ -7,6 +7,8 @@
    tagmanager/Makefile.am, tagmanager/makefile.win32,
    data/filetype_extensions.conf, data/filetypes.vhdl:
    Added new filetype VHDL.
+ * geany.glade, src/interface.c, src/keybindings.c:
+   Use plural for line commentation description labels.
 
 
 2006-11-13  Nick Treleaven  <nick.treleaven@btinternet.com>
