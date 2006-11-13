@@ -149,13 +149,19 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 	if (! check_no_unsaved())
 	{
 		if (account_for_unsaved())
+		{
 			quit_app();
+			return FALSE;
+		}
 	}
 	else
 	if (! app->pref_main_confirm_exit ||
 		dialogs_show_question_full(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
 			_("Do you really want to quit?")))
-			quit_app();
+	{
+		quit_app();
+		return FALSE;
+	}
 
 	app->quitting = FALSE;
 	return TRUE;

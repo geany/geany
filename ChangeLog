@@ -1,6 +1,7 @@
 2006-11-13  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c: Fix invalid memory read in sci_cb_get_indent().
+ * src/callbacks.c: Fix invalid memory write in on_exit_clicked().
 
 
 2006-11-12  Nick Treleaven  <nick.treleaven@btinternet.com>
