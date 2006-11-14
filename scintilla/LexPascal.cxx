@@ -187,10 +187,11 @@ static void ColourisePascalDoc(unsigned int startPos, int length, int initStyle,
 			}
 		} else if (state == SCE_C_IDENTIFIER) {
 			bool bDoublePoint = ((ch == '.') && (chPrev == '.'));
-			if ((!iswordchar(ch) && ch != '$' && ch != '#' && (ch != '@' || !bInAsm)) || bDoublePoint) {
+			bool bSinglePoint = (ch == '.');
+
+			if ((!iswordchar(ch) && ch != '$' && ch != '#' && (ch != '@' || !bInAsm)) || bDoublePoint || bSinglePoint) {
 				if (bDoublePoint) i--;
 				int lStateChange = classifyWordPascal(styler.GetStartSegment(), i - 1, keywordlists, styler, bInClassDefinition, bInAsm);
-
 				if(lStateChange == 1) {
 					styler.SetLineState(currentLine, 1);
 					bInClassDefinition = true;
