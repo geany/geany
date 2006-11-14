@@ -513,15 +513,11 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_HTML]->has_tags = FALSE;
 	filetypes[GEANY_FILETYPES_HTML]->title = g_strdup(_("HTML source file"));
 	filetypes[GEANY_FILETYPES_HTML]->extension = g_strdup("html");
-	filetypes[GEANY_FILETYPES_HTML]->pattern = g_new0(gchar*, 8);
-	filetypes[GEANY_FILETYPES_HTML]->pattern[0] = g_strdup("*.htm");
-	filetypes[GEANY_FILETYPES_HTML]->pattern[1] = g_strdup("*.html");
-	filetypes[GEANY_FILETYPES_HTML]->pattern[2] = g_strdup("*.shtml");
-	filetypes[GEANY_FILETYPES_HTML]->pattern[3] = g_strdup("*.hta");
-	filetypes[GEANY_FILETYPES_HTML]->pattern[4] = g_strdup("*.htd");
-	filetypes[GEANY_FILETYPES_HTML]->pattern[5] = g_strdup("*.htt");
-	filetypes[GEANY_FILETYPES_HTML]->pattern[6] = g_strdup("*.cfm");
-	filetypes[GEANY_FILETYPES_HTML]->pattern[7] = NULL;
+	{
+		gchar *patterns[] = {"*.htm", "*.html", "*.shtml", "*.hta", "*.htd", "*.htt",
+			"*.cfm", NULL};
+		filetypes[GEANY_FILETYPES_HTML]->pattern = g_strdupv(patterns);
+	}
 	filetypes[GEANY_FILETYPES_HTML]->style_func_ptr = styleset_html;
 	filetypes[GEANY_FILETYPES_HTML]->comment_open = g_strdup("<!--");
 	filetypes[GEANY_FILETYPES_HTML]->comment_close = g_strdup("-->");
@@ -889,33 +885,6 @@ void filetypes_free_types()
 			g_strfreev(filetypes[i]->pattern);
 			g_free(filetypes[i]);
 		}
-	}
-}
-
-
-gchar *filetypes_get_template(filetype *ft)
-{
-	if (ft == NULL) return NULL;
-
-	switch (ft->id)
-	{
-		case GEANY_FILETYPES_C:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_C); break;
-		case GEANY_FILETYPES_CPP:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_CPP); break;
-		case GEANY_FILETYPES_PHP:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_PHP); break;
-		case GEANY_FILETYPES_JAVA:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_JAVA); break;
-		case GEANY_FILETYPES_PASCAL:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_PASCAL); break;
-		case GEANY_FILETYPES_RUBY:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_RUBY); break;
-		case GEANY_FILETYPES_D:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_D); break;
-		case GEANY_FILETYPES_HTML:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_HTML); break;
-		default: return NULL;
 	}
 }
 

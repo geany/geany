@@ -408,7 +408,7 @@ static void store_saved_encoding(gint idx)
 void document_new_file(filetype *ft)
 {
 	gint idx = document_create_new_sci(NULL);
-	gchar *template = document_prepare_template(ft);
+	gchar *template = templates_get_template_new_file(ft);
 
 	g_assert(idx != -1);
 
@@ -1305,68 +1305,6 @@ gchar *document_get_eol_mode(gint idx)
 		case SC_EOL_CR: return _("Mac (CR)"); break;
 		case SC_EOL_LF:
 		default: return _("Unix (LF)"); break;
-	}
-}
-
-
-/// TODO move me to filetypes.c
-gchar *document_prepare_template(filetype *ft)
-{
-	gchar *gpl_notice = NULL;
-	gchar *template = NULL;
-	gchar *ft_template = NULL;
-
-	if (ft != NULL)
-	{
-		switch (ft->id)
-		{
-			case GEANY_FILETYPES_PHP:
-			{	// PHP: include the comment in <?php ?> - tags
-				gchar *tmp = templates_get_template_fileheader(
-						GEANY_TEMPLATE_FILEHEADER, ft->extension, -1);
-				gpl_notice = g_strconcat("<?php\n", tmp, "?>\n\n", NULL);
-				g_free(tmp);
-				break;
-			}
-			case GEANY_FILETYPES_HTML:
-			{	// HTML: include the comment in <!-- --> - tags
-				gchar *tmp = templates_get_template_fileheader(
-						GEANY_TEMPLATE_FILEHEADER, ft->extension, -1);
-				gpl_notice = g_strconcat("<!--\n", tmp, "-->\n\n", NULL);
-				g_free(tmp);
-				break;
-			}
-			case GEANY_FILETYPES_PASCAL:
-			{	// Pascal: comments are in { } brackets
-				gpl_notice = templates_get_template_fileheader(
-						GEANY_TEMPLATE_FILEHEADER_PASCAL, ft->extension, -1);
-				break;
-			}
-			case GEANY_FILETYPES_PYTHON:
-			case GEANY_FILETYPES_RUBY:
-			case GEANY_FILETYPES_SH:
-			case GEANY_FILETYPES_MAKE:
-			case GEANY_FILETYPES_PERL:
-			{
-				gpl_notice = templates_get_template_fileheader(
-						GEANY_TEMPLATE_FILEHEADER_ROUTE, ft->extension, -1);
-				break;
-			}
-			default:
-			{	// -> C, C++, Java, ...
-				gpl_notice = templates_get_template_fileheader(
-						GEANY_TEMPLATE_FILEHEADER, ft->extension, -1);
-			}
-		}
-		ft_template = filetypes_get_template(ft);
-		template = g_strconcat(gpl_notice, ft_template, NULL);
-		g_free(ft_template);
-		g_free(gpl_notice);
-		return template;
-	}
-	else
-	{	// new file w/o template
-		return templates_get_template_fileheader(GEANY_TEMPLATE_FILETYPE_NONE, NULL, -1);
 	}
 }
 

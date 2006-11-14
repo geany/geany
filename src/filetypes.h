@@ -64,6 +64,10 @@ enum
 	GEANY_MAX_FILE_TYPES
 };
 
+// Safe wrapper to get the id field of a possibly NULL filetype pointer.
+#define FILETYPE_ID(filetype_ptr) \
+	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_ALL)
+
 
 struct build_menu_items
 {
@@ -123,8 +127,6 @@ filetype *filetypes_get_from_filename(gint idx);
 
 /* frees the array and all related pointers */
 void filetypes_free_types();
-
-gchar *filetypes_get_template(filetype *ft);
 
 void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft);
 

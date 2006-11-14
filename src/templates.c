@@ -84,7 +84,7 @@ static const gchar templates_function_description[] = "\
  * name: {functionname}\n\
  * @param\n\
  * @return\n\
-*/\n";
+ */\n";
 
 static const gchar templates_function_description_pascal[] = "\
 {\n\
@@ -103,7 +103,7 @@ static const gchar templates_function_description_route[] = "\
 static const gchar templates_multiline[] = "\
 /* \n\
  * \n\
-*/";
+ */";
 
 static const gchar templates_multiline_pascal[] = "\
 {\n\
@@ -121,7 +121,7 @@ static const gchar templates_fileheader[] = "\
  *      Copyright {year} {developer} <{mail}>\n\
  *\n\
 {gpl}\
- */\n\n";
+ */\n";
 
 static const gchar templates_fileheader_pascal[] = "\
 {\n\
@@ -130,7 +130,7 @@ static const gchar templates_fileheader_pascal[] = "\
       Copyright {year} {developer} <{mail}>\n\
 \n\
 {gpl}\
-}\n\n";
+}\n";
 
 static const gchar templates_fileheader_route[] = "\
 #\n\
@@ -139,7 +139,7 @@ static const gchar templates_fileheader_route[] = "\
 #      Copyright {year} {developer} <{mail}>\n\
 #\n\
 {gpl}\
-#\n\n";
+#\n";
 
 static const gchar templates_changelog[] = "\
 {date}  {developer}  <{mail}>\n\
@@ -409,28 +409,97 @@ void templates_init(void)
 }
 
 
+/* double_comment is a hack for PHP/HTML for whether to first add C style commenting.
+ * In future we could probably remove the need for this by making most templates
+ * automatically commented (so template files are not commented) */
+static gchar *make_comment_block(const gchar *comment_text, gint filetype_id,
+		gboolean double_comment)
+{
+	switch (filetype_id)
+	{
+		case GEANY_FILETYPES_ALL:
+		return g_strdup(comment_text);	// no need to add to the text
+
+		case GEANY_FILETYPES_PHP:
+		case GEANY_FILETYPES_HTML:
+		{	// double comment
+			gchar *tmp = (double_comment) ?
+				make_comment_block(comment_text, GEANY_FILETYPES_C, FALSE) :
+				g_strdup(comment_text);
+			gchar *block = (filetype_id == GEANY_FILETYPES_PHP) ?
+				g_strconcat("<?php\n", tmp, "?>\n", NULL) :
+				g_strconcat("<!--\n", tmp, "-->\n", NULL);
+			g_free(tmp);
+			return block;
+		}
+
+		case GEANY_FILETYPES_PYTHON:
+		case GEANY_FILETYPES_RUBY:
+		case GEANY_FILETYPES_SH:
+		case GEANY_FILETYPES_MAKE:
+		case GEANY_FILETYPES_PERL:
+		return g_strconcat("#\n", comment_text, "#\n", NULL);
+
+		case GEANY_FILETYPES_PASCAL:
+		return g_strconcat("{\n", comment_text, "}\n", NULL);
+
+		default:
+		return g_strconcat("/*\n", comment_text, " */\n", NULL);
+	}
+}
+
+
+gchar *templates_get_template_gpl(gint filetype_id)
+{
+	const gchar *text;
+
+	switch (filetype_id)
+	{
+		case GEANY_FILETYPES_PYTHON:
+		case GEANY_FILETYPES_RUBY:
+		case GEANY_FILETYPES_SH:
+		case GEANY_FILETYPES_MAKE:
+		case GEANY_FILETYPES_PERL:
+		text = templates[GEANY_TEMPLATE_GPL_ROUTE];
+		break;
+
+		case GEANY_FILETYPES_PASCAL:
+		case GEANY_FILETYPES_ALL:
+		text = templates[GEANY_TEMPLATE_GPL_PASCAL];
+		break;
+
+		case GEANY_FILETYPES_HTML:
+		case GEANY_FILETYPES_PHP:
+		default:
+		text = templates[GEANY_TEMPLATE_GPL];
+		break;
+	}
+	return make_comment_block(text, filetype_id, TRUE);
+}
+
+
 /* Returns a template chosen by template with GEANY_STRING_UNTITLED.extension
  * as filename if idx is -1, or the real filename if idx is greater than -1.
- * The flag gpl decides wether a GPL notice is appended or not
-*/
-gchar *templates_get_template_fileheader(gint template, const gchar *extension, gint idx)
+ * The flag gpl decides whether a GPL notice is appended or not */
+static gchar *
+prepare_file_header(gint template, const gchar *extension, const gchar *filename)
 {
 	gchar *result = g_strdup(templates[template]);
-	gchar *filename;
+	gchar *shortname;
 	gchar *date = utils_get_date_time();
 
-	if (idx == -1 || doc_list[idx].file_name == NULL)
+	if (filename == NULL)
 	{
 		if (extension != NULL)
-			filename = g_strconcat(GEANY_STRING_UNTITLED, ".", extension, NULL);
+			shortname = g_strconcat(GEANY_STRING_UNTITLED, ".", extension, NULL);
 		else
-			filename = g_strdup(GEANY_STRING_UNTITLED);
+			shortname = g_strdup(GEANY_STRING_UNTITLED);
 	}
 	else
 	{
-		filename = g_path_get_basename(doc_list[idx].file_name);
+		shortname = g_path_get_basename(filename);
 	}
-	result = utils_str_replace(result, "{filename}", filename);
+	result = utils_str_replace(result, "{filename}", shortname);
 
 	if (template == GEANY_TEMPLATE_FILEHEADER_PASCAL)
 	{
@@ -446,9 +515,114 @@ gchar *templates_get_template_fileheader(gint template, const gchar *extension, 
 	}
 	result = utils_str_replace(result, "{datetime}", date);
 
-	g_free(filename);
+	g_free(shortname);
 	g_free(date);
 	return result;
+}
+
+
+// ft, fname can be NULL
+static gchar *get_file_header(filetype *ft, const gchar *fname)
+{
+	gchar *text = NULL;
+
+	switch (FILETYPE_ID(ft))
+	{
+		case GEANY_FILETYPES_ALL:	// ft may be NULL
+		{
+			text = prepare_file_header(GEANY_TEMPLATE_FILEHEADER, NULL, fname);
+			break;
+		}
+		case GEANY_FILETYPES_PHP:
+		case GEANY_FILETYPES_HTML:
+		{
+			gchar *tmp = prepare_file_header(
+					GEANY_TEMPLATE_FILEHEADER, ft->extension, fname);
+			text = make_comment_block(tmp, ft->id, FALSE);
+			g_free(tmp);
+			break;
+		}
+		case GEANY_FILETYPES_PASCAL:
+		{	// Pascal: comments are in { } brackets
+			text = prepare_file_header(
+					GEANY_TEMPLATE_FILEHEADER_PASCAL, ft->extension, fname);
+			break;
+		}
+		case GEANY_FILETYPES_PYTHON:
+		case GEANY_FILETYPES_RUBY:
+		case GEANY_FILETYPES_SH:
+		case GEANY_FILETYPES_MAKE:
+		case GEANY_FILETYPES_PERL:
+		{
+			text = prepare_file_header(
+					GEANY_TEMPLATE_FILEHEADER_ROUTE, ft->extension, fname);
+			break;
+		}
+		default:
+		{	// -> C, C++, Java, ...
+			text = prepare_file_header(
+					GEANY_TEMPLATE_FILEHEADER, ft->extension, fname);
+		}
+	}
+	return text;
+}
+
+
+gchar *templates_get_template_fileheader(gint idx)
+{
+	gchar *fname;
+	filetype *ft;
+
+	g_return_val_if_fail(DOC_IDX_VALID(idx), NULL);
+	ft = doc_list[idx].file_type;
+	fname = doc_list[idx].file_name;
+
+	return get_file_header(ft, fname);
+}
+
+
+static gchar *get_file_template(filetype *ft)
+{
+	switch (FILETYPE_ID(ft))
+	{
+		case GEANY_FILETYPES_ALL:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_NONE); break;
+		case GEANY_FILETYPES_C:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_C); break;
+		case GEANY_FILETYPES_CPP:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_CPP); break;
+		case GEANY_FILETYPES_PHP:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_PHP); break;
+		case GEANY_FILETYPES_JAVA:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_JAVA); break;
+		case GEANY_FILETYPES_PASCAL:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_PASCAL); break;
+		case GEANY_FILETYPES_RUBY:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_RUBY); break;
+		case GEANY_FILETYPES_D:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_D); break;
+		case GEANY_FILETYPES_HTML:
+			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_HTML); break;
+		default: return NULL;
+	}
+}
+
+
+gchar *templates_get_template_new_file(filetype *ft)
+{
+	gchar *template = NULL;
+	gchar *ft_template = NULL;
+	gchar *file_header = NULL;
+
+	if (FILETYPE_ID(ft) == GEANY_FILETYPES_ALL)
+		return get_file_template(ft);
+
+	file_header = get_file_header(ft, NULL);	// file template only used for new files
+	ft_template = get_file_template(ft);
+	template = g_strconcat(file_header, "\n", ft_template, NULL);
+	g_free(ft_template);
+	g_free(file_header);
+	return template;
 }
 
 
@@ -472,28 +646,6 @@ gchar *templates_get_template_function(gint template, const gchar *func_name)
 	g_free(datetime);
 	return result;
 }
-
-gchar *templates_get_template_gpl(gint template)
-{
-	switch (template)
-	{
-		case GEANY_TEMPLATE_GPL_PASCAL:
-		{
-			return g_strconcat("{\n", templates[template], "}\n", NULL);
-			break;
-		}
-		case GEANY_TEMPLATE_GPL_ROUTE:
-		{
-			return g_strconcat("#\n", templates[template], "#\n", NULL);
-			break;
-		}
-		default:
-		{
-			return g_strconcat("/*\n", templates[template], "*/\n", NULL);
-		}
-	}
-}
-
 
 gchar *templates_get_template_changelog(void)
 {

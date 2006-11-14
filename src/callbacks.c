@@ -1582,33 +1582,7 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	gchar *text;
 
-	if (doc_list[idx].file_type == NULL)
-	{
-		msgwin_status_add(_("Please set the filetype for the current file before using this function."));
-		return;
-	}
-
-	switch (doc_list[idx].file_type->id)
-	{
-		case GEANY_FILETYPES_PASCAL:
-		{
-			text = templates_get_template_gpl(GEANY_TEMPLATE_GPL_PASCAL);
-			break;
-		}
-		case GEANY_FILETYPES_PYTHON:
-		case GEANY_FILETYPES_RUBY:
-		case GEANY_FILETYPES_SH:
-		case GEANY_FILETYPES_MAKE:
-		case GEANY_FILETYPES_PERL:
-		{
-			text = templates_get_template_gpl(GEANY_TEMPLATE_GPL_ROUTE);
-			break;
-		}
-		default:
-		{
-			text = templates_get_template_gpl(GEANY_TEMPLATE_GPL);
-		}
-	}
+	text = templates_get_template_gpl(FILETYPE_ID(doc_list[idx].file_type));
 
 	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
@@ -1638,38 +1612,8 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	gchar *text;
-	gchar *ext = NULL;
 
-	if (doc_list[idx].file_type == NULL)
-	{
-		msgwin_status_add(_("Please set the filetype for the current file before using this function."));
-		return;
-	}
-
-	if (doc_list[idx].file_name == NULL)
-		ext = doc_list[idx].file_type->extension;
-
-	switch (doc_list[idx].file_type->id)
-	{
-		case GEANY_FILETYPES_PASCAL:
-		{
-			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER_PASCAL, ext, idx);
-			break;
-		}
-		case GEANY_FILETYPES_PYTHON:
-		case GEANY_FILETYPES_RUBY:
-		case GEANY_FILETYPES_SH:
-		case GEANY_FILETYPES_MAKE:
-		case GEANY_FILETYPES_PERL:
-		{
-			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER_ROUTE, ext, idx);
-			break;
-		}
-		default:
-		{
-			text = templates_get_template_fileheader(GEANY_TEMPLATE_FILEHEADER, ext, idx);
-		}
-	}
+	text = templates_get_template_fileheader(idx);
 
 	sci_insert_text(doc_list[idx].sci, 0, text);
 	sci_goto_pos(doc_list[idx].sci, 0, FALSE);

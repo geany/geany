@@ -1,3 +1,16 @@
+2006-11-14  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/templates.c, src/templates.h, src/callbacks.c, src/filetypes.c,
+   src/filetypes.h, src/document.c, src/document.h:
+   Add NULL-safe FILETYPE_ID macro to get filetype::id from pointer.
+   Allow insertion of GPL notice and file header when the filetype is
+   not set.
+   Add commenting for PHP & HTML GPL notice and file header templates.
+   Add make_comment_block() to templates.c.
+   Move document_prepare_template(), filetypes_get_template() to
+   templates.c.
+
+
 2006-11-13  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/filetypes.c, src/filetypes.h, src/highlighting.c,

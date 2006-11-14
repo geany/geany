@@ -23,10 +23,14 @@
 #ifndef GEANY_TEMPLATES_H
 #define GEANY_TEMPLATES_H 1
 
+#include "filetypes.h"
+
 
 void templates_init(void);
 
-gchar *templates_get_template_fileheader(gint template, const gchar *extension, gint idx);
+gchar *templates_get_template_fileheader(gint idx);
+
+gchar *templates_get_template_new_file(filetype *ft);
 
 gchar *templates_get_template_changelog(void);
 
@@ -34,7 +38,7 @@ gchar *templates_get_template_generic(gint template);
 
 gchar *templates_get_template_function(gint template, const gchar *func_name);
 
-gchar *templates_get_template_gpl(gint template);
+gchar *templates_get_template_gpl(gint filetype_id);
 
 void templates_free_templates(void);
 
