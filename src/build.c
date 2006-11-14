@@ -34,6 +34,7 @@
 #ifdef G_OS_UNIX
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <signal.h>
 #endif
 
 #include "support.h"

@@ -9,6 +9,7 @@
    Added new filetype VHDL.
  * geany.glade, src/interface.c, src/keybindings.c:
    Use plural for line commentation description labels.
+ * src/build.c: Added missing inclusion of signal.h.
 
 
 2006-11-13  Nick Treleaven  <nick.treleaven@btinternet.com>
