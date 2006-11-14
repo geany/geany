@@ -68,9 +68,9 @@ Alexandre Moreira - <language> pt_BR\n\t\
 brahmann_ - <language> ru_RU\n\t\
 &lt;brahmann@mthr.net.ru&gt;\n\n\t\
 Clytie Siddall - <language> vi_VN\n\t\
-+&lt;clytie@riverland.net.au&gt;\n\n\t\
-+Dormouse Young - <language> zh_CH\n\t\
-+&lt;dormouse.young@gmail.com&gt;\n\n\t"
+&lt;clytie@riverland.net.au&gt;\n\n\t\
+Dormouse Young - <language> zh_CH\n\t\
+&lt;dormouse.young@gmail.com&gt;\n\n\t"
 
 static void header_eventbox_style_set(GtkWidget *widget);
 static void header_label_style_set(GtkWidget *widget);
