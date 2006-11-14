@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-08 22:05+0100\n"
-"PO-Revision-Date: 2006-11-08 22:31+0100\n"
+"POT-Creation-Date: 2006-11-12 20:44+0100\n"
+"PO-Revision-Date: 2006-11-14 18:11+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <frank@frank.uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -79,12 +79,12 @@ msgstr ""
 "Es könnte zu Problemen bei der Verwendung von Geany kommen.\n"
 "Geany trotzdem starten?"
 
-#: src/main.c:569
+#: src/main.c:571
 #, c-format
 msgid "This is Geany %s."
 msgstr "Willkommen zu Geany %s."
 
-#: src/main.c:571
+#: src/main.c:573
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigurationsverzeichnis konnte nicht erstellt werden (%s)."
@@ -442,7 +442,7 @@ msgstr "Entfernt alle gesetzten (Fehler)-Markierungen innerhalb des Dokumentes."
 
 #. build the code
 #: src/interface.c:804
-#: src/build.c:702
+#: src/build.c:803
 msgid "_Build"
 msgstr "_Erstellen"
 
@@ -530,7 +530,7 @@ msgid "Compile the current file"
 msgstr "Kompiliert die aktuelle Datei"
 
 #: src/interface.c:928
-#: src/build.c:762
+#: src/build.c:863
 msgid "Run or view the current file"
 msgstr "Aktuelle Datei anzeigen oder ausführen"
 
@@ -1103,7 +1103,7 @@ msgstr "Make"
 
 #: src/interface.c:3146
 #: src/prefs.c:1090
-#: src/vte.c:165
+#: src/vte.c:168
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1404,7 +1404,7 @@ msgstr "Geben Sie die Zeile an, zu der Sie springen möchten:"
 
 #. arguments
 #: src/dialogs.c:592
-#: src/build.c:902
+#: src/build.c:1009
 msgid "Set Arguments"
 msgstr "Programm-Parameter angeben"
 
@@ -1888,175 +1888,186 @@ msgstr "Warnung"
 msgid "Information"
 msgstr "Information"
 
-#: src/keyfile.c:69
+#: src/keyfile.c:70
 #, c-format
 msgid "%s configuration file, edit as you need"
 msgstr "%s Konfigurationsdatei. Bei Bedarf anpassen."
 
-#: src/keyfile.c:327
+#: src/keyfile.c:328
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Schreiben Sie hier rein, was sie möchten. Sie können es als Notizbuch nutzen."
+
+#: src/keyfile.c:550
+msgid "Failed to load one or more session files."
+msgstr "Eine oder mehre Datei(en) aus der letzten Sitzung konnte(n) nicht geladen werden."
 
 #: src/msgwindow.c:89
 msgid "Status messages"
 msgstr "Meldungen"
 
-#: src/build.c:110
+#: src/build.c:135
 #, c-format
 msgid "Failed to view %s (make sure it is already compiled)"
 msgstr "Konnte %s nicht anzeigen (die Datei muss bereits erzeugt worden sein)"
 
-#: src/build.c:143
-#: src/build.c:358
-#: src/build.c:526
+#: src/build.c:168
+#: src/build.c:551
+#, c-format
+msgid "Could not find terminal '%s' (check path for Terminal tool setting in Preferences)"
+msgstr "Konnte das Terminalprogramm '%s' nicht finden (Pfad zum Terminalprogramm in den Einstellungen überprüfen)"
+
+#: src/build.c:182
+#: src/build.c:583
+#, c-format
+msgid "Failed to execute %s (start-script could not be created)"
+msgstr "Konnte %s nicht ausführen (Start-Script konnte nicht erzeugt werden)"
+
+#: src/build.c:210
+#: src/build.c:431
+#: src/build.c:608
 #: src/search.c:1036
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prozess fehlgeschlagen (%s)"
 
-#: src/build.c:262
+#: src/build.c:335
 #, c-format
-msgid "Something very strange is occured, could not stat %s (%s)"
+msgid "Something very strange is occurred, could not stat %s (%s)."
 msgstr "Ein Fehler ist aufgetreten, konnte Datei %s nicht prüfen (%s)."
 
-#: src/build.c:341
+#: src/build.c:414
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (im Verzeichnis: %s)"
 
-#: src/build.c:444
+#: src/build.c:527
 #, c-format
 msgid "Failed to execute %s (make sure it is already built)"
 msgstr "Konnte %s nicht ausführen (die Datei muss bereits erzeugt worden sein)"
 
-#: src/build.c:469
-#, c-format
-msgid "Could not find terminal '%s' (check path for Terminal tool setting in Preferences)"
-msgstr "Konnte das Terminalprogramm '%s' nicht finden (Pfad zum Terminalprogramm in den Einstellungen überprüfen)"
-
-#: src/build.c:483
+#: src/build.c:565
 #, c-format
 msgid "Failed to change the working directory to %s"
 msgstr "Konnte nicht in Arbeitsverzeichnis %s wechseln"
 
-#: src/build.c:501
-#, c-format
-msgid "Failed to execute %s (start-script could not be created)"
-msgstr "Konnte %s nicht ausführen (Start-Script konnte nicht erzeugt werden)"
-
-#: src/build.c:616
+#: src/build.c:705
 msgid "Compilation failed."
 msgstr "Kompilierung fehlgeschlagen."
 
-#: src/build.c:621
+#: src/build.c:710
 msgid "Compilation finished successfully."
 msgstr "Kompilierung beendet - erfolgreich."
 
 #. compile the code
-#: src/build.c:688
+#: src/build.c:789
 msgid "_Compile"
 msgstr "_Kompilieren"
 
-#: src/build.c:691
+#: src/build.c:792
 msgid "Compiles the current file"
 msgstr "Kompiliert die aktuelle Datei"
 
-#: src/build.c:706
+#: src/build.c:807
 msgid "Builds the current file (generate an executable file)"
 msgstr "Erstellt die aktuelle Datei (erzeugt eine ausführbare Datei)"
 
 #. build the code with make all
-#: src/build.c:720
-#: src/build.c:840
+#: src/build.c:821
+#: src/build.c:943
 msgid "_Make all"
 msgstr "_Make all"
 
-#: src/build.c:723
-#: src/build.c:843
+#: src/build.c:824
+#: src/build.c:946
 msgid "Builds the current file with the make tool and the default target"
 msgstr "Erstellt die aktuelle Datei mit \"make\" und dem Default-Target"
 
 #. build the code with make custom
-#: src/build.c:731
-#: src/build.c:851
+#: src/build.c:832
+#: src/build.c:954
 msgid "Make custom _target"
 msgstr "Make eigenes _Target"
 
-#: src/build.c:735
-#: src/build.c:855
+#: src/build.c:836
+#: src/build.c:958
 msgid "Builds the current file with the make tool and the specified target"
 msgstr "Erstellt die aktuelle Datei mit \"make\" und dem angegebenem Target"
 
 #. build the code with make object
-#: src/build.c:742
+#: src/build.c:843
 msgid "Make _object"
 msgstr "Make _Objekt-Datei"
 
-#: src/build.c:746
+#: src/build.c:847
 msgid "Compiles the current file using the make tool"
 msgstr "Kompiliert die aktuelle Datei mittels make "
 
-#: src/build.c:777
+#: src/build.c:878
 msgid "_Set Includes and Arguments"
 msgstr "_Programm-Parameter angeben"
 
-#: src/build.c:782
+#: src/build.c:883
 msgid "Sets the includes and library paths for the compiler and the program arguments for execution"
 msgstr "Include-Dateien und Bibliotheken-Pfade sowie Programmparameter festlegen"
 
 #. DVI
-#: src/build.c:807
+#: src/build.c:908
 msgid "LaTeX -> DVI"
 msgstr "LaTeX -> DVI"
 
-#: src/build.c:810
+#: src/build.c:911
 msgid "Compiles the current file into a DVI file"
 msgstr "Kompiliert die aktuelle Datei als DVI-Datei."
 
 #. PDF
-#: src/build.c:820
+#: src/build.c:922
 msgid "LaTeX -> PDF"
 msgstr "LaTeX -> PDF"
 
-#: src/build.c:823
+#: src/build.c:925
 msgid "Compiles the current file into a PDF file"
 msgstr "Kompiliert die aktuelle Datei als PDF-Datei."
 
 #. DVI view
-#: src/build.c:870
+#: src/build.c:973
 msgid "View DVI file"
 msgstr "DVI-Datei anzeigen"
 
-#: src/build.c:876
-#: src/build.c:889
+#: src/build.c:980
+#: src/build.c:995
 msgid "Compiles and view the current file"
 msgstr "Kompiliert und zeigt die aktuelle Datei an."
 
 #. PDF view
-#: src/build.c:883
+#: src/build.c:989
 msgid "View PDF file"
 msgstr "PDF-Datei anzeigen"
 
-#: src/build.c:909
+#: src/build.c:1016
 msgid "Sets the program paths and arguments"
 msgstr "Programm-Parameter angeben"
 
-#: src/build.c:1098
+#: src/build.c:1190
 #: src/keybindings.c:172
 msgid "Make custom target"
 msgstr "Make mit eigenem Target"
 
-#: src/build.c:1099
+#: src/build.c:1191
 msgid "Enter custom options here, all entered text is passed to the make command."
 msgstr "Alles was Sie hier angeben, wird direkt an \"make\" übergeben."
 
-#: src/build.c:1135
+#: src/build.c:1229
 msgid "Failed to execute the view program"
 msgstr "Konnte das Anzeigeprogramm nicht ausführen."
 
-#: src/build.c:1153
+#: src/build.c:1248
 msgid "Failed to execute the terminal program"
 msgstr "Konnte das Terminal-Programm nicht ausführen."
+
+#: src/build.c:1360
+#, c-format
+msgid "Process could not be stopped (%s)."
+msgstr "Der Prozess konnte nicht angehalten werden (%s)."
 
 #: src/prefs.c:298
 msgid "Action"
@@ -2164,53 +2175,53 @@ msgstr "Pfad der aktuellen Datei setzen"
 msgid "Whether to execute \"cd $path\" when you switch between opened files."
 msgstr "Legt fest, ob \"cd $path\" in der VTE ausgeführt werden soll, wenn Sie zwischen geöffneten Dateien wechseln."
 
-#: src/about.c:111
+#: src/about.c:113
 msgid "About Geany"
 msgstr "Über Geany"
 
-#: src/about.c:159
+#: src/about.c:161
 msgid "A fast and lightweight IDE"
 msgstr "Eine kleine und schnelle Entwicklungsumgebung"
 
-#: src/about.c:180
+#: src/about.c:182
 #, c-format
 msgid "(built on %s)"
 msgstr "(kompiliert am %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: src/about.c:211
+#: src/about.c:213
 msgid "Info"
 msgstr "Info"
 
-#: src/about.c:223
+#: src/about.c:225
 msgid "Developers"
 msgstr "Entwickler"
 
-#: src/about.c:223
+#: src/about.c:225
 msgid "Maintainer"
 msgstr "Hauptentwickler"
 
-#: src/about.c:223
+#: src/about.c:225
 msgid "developer"
 msgstr "Entwickler"
 
-#: src/about.c:224
+#: src/about.c:226
 msgid "translation maintainer"
 msgstr "Übersetzungskoordinator"
 
-#: src/about.c:224
+#: src/about.c:226
 msgid "Translators"
 msgstr "Übersetzer"
 
-#: src/about.c:225
+#: src/about.c:227
 msgid "language"
 msgstr "Sprache"
 
-#: src/about.c:231
+#: src/about.c:233
 msgid "Credits"
 msgstr "Credits"
 
-#: src/about.c:244
+#: src/about.c:246
 msgid "License"
 msgstr "Lizenz"
 
@@ -2523,7 +2534,7 @@ msgstr "Seitenleiste verbergen"
 msgid "Reload"
 msgstr "Neu laden"
 
-#: src/vte.c:366
+#: src/vte.c:369
 msgid "_Input Methods"
 msgstr "_Eingabemethoden"
 
