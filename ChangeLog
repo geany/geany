@@ -1,6 +1,6 @@
 2006-11-14  Frank Lanitz  <frank@frank.uvena.de>
 
- * po/zh.po, src/about.c, configure.in, THANKS: 
+ * po/zh_CN.po, src/about.c, configure.in, THANKS: 
    Added simple Chinese (zh_CN) translation (Thanks to 
    Dormouse Young <mouselinux@163.com>)
 
