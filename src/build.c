@@ -416,14 +416,9 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
 
 	// set the build info for the message window
-	{
-		filetype *ft = doc_list[idx].file_type;
-		guint ft_id = (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL]->id : ft->id;
-
-		g_free(build_info.dir);
-		build_info.dir = g_strdup(working_dir);
-		build_info.file_type_id = ft_id;
-	}
+	g_free(build_info.dir);
+	build_info.dir = g_strdup(working_dir);
+	build_info.file_type_id = FILETYPE_ID(doc_list[idx].file_type);
 
 	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
 						NULL, NULL, &(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
@@ -483,7 +478,7 @@ GPid build_run_cmd(gint idx)
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL) return (GPid) 1;
 
-	build_info.file_type_id = doc_list[idx].file_type->id;
+	build_info.file_type_id = FILETYPE_ID(doc_list[idx].file_type);
 	build_info.type = GBO_RUN;
 
 #ifdef G_OS_WIN32
@@ -720,14 +715,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 
 	build_info.pid = 0;
 	// reset the stop button and menu item to the original meaning
-	switch (build_info.type)
-	{
-		case GBO_COMPILE:
-		case GBO_BUILD:
-		case GBO_RUN:
-			set_stop_button(FALSE); break;
-		default: ;
-	}
+	set_stop_button(FALSE);
 }
 
 
@@ -1299,48 +1287,48 @@ on_make_target_entry_activate          (GtkEntry        *entry,
 static void set_stop_button(gboolean stop)
 {
 	GtkStockItem sitem;
+	GtkWidget *menuitem =
+		filetypes[build_info.file_type_id]->menu_items->item_exec;
 
 	// use the run button also as stop button
 	if (stop)
 	{
 		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->run_button), "gtk-stop");
 		gtk_widget_set_sensitive(app->compile_button, FALSE);
-		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(
-						filetypes[build_info.file_type_id]->menu_items->item_exec),
-						gtk_image_new_from_stock("gtk-stop", GTK_ICON_SIZE_MENU));
-
-		gtk_stock_lookup("gtk-stop", &sitem);
-		gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(
-					GTK_BIN(filetypes[build_info.file_type_id]->menu_items->item_exec))),
-					sitem.label);
+		if (menuitem != NULL)
+		{
+			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
+							gtk_image_new_from_stock("gtk-stop", GTK_ICON_SIZE_MENU));
+			gtk_stock_lookup("gtk-stop", &sitem);
+			gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
+						sitem.label);
+		}
 	}
 	else
 	{
 		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->run_button), "gtk-execute");
 		gtk_widget_set_sensitive(app->compile_button, TRUE);
 
-		// LaTeX hacks ;-(
-		if (build_info.file_type_id == GEANY_FILETYPES_LATEX)
+		if (menuitem != NULL)
 		{
-			gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(
-					GTK_BIN(filetypes[build_info.file_type_id]->menu_items->item_exec))),
-					LATEX_VIEW_DVI_LABEL);
-			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(
-						filetypes[build_info.file_type_id]->menu_items->item_exec),
-						gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU));
-		}
-		else
-		{
-			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(
-						filetypes[build_info.file_type_id]->menu_items->item_exec),
-						gtk_image_new_from_stock("gtk-execute", GTK_ICON_SIZE_MENU));
+			// LaTeX hacks ;-(
+			if (build_info.file_type_id == GEANY_FILETYPES_LATEX)
+			{
+				gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
+						LATEX_VIEW_DVI_LABEL);
+				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
+							gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU));
+			}
+			else
+			{
+				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
+							gtk_image_new_from_stock("gtk-execute", GTK_ICON_SIZE_MENU));
 
-			gtk_stock_lookup("gtk-execute", &sitem);
-			gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(
-						GTK_BIN(filetypes[build_info.file_type_id]->menu_items->item_exec))),
-						sitem.label);
+				gtk_stock_lookup("gtk-execute", &sitem);
+				gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
+							sitem.label);
+			}
 		}
-
 	}
 }
 

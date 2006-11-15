@@ -5,6 +5,10 @@
    Add ui_combo_box_add_to_history() and use to prevent blocks of
    duplicates (but not all duplicates) from search history combo boxes,
    and limit history to 30 entries.
+ * src/build.c:
+   Remove the stop button in build_exit_cb() when using Make commands.
+   Fix set_stop_button() when using Make when the current file has no
+   filetype.
 
 
 2006-11-14  Enrico Tröger  <enrico.troeger@uvena.de>
