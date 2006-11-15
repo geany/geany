@@ -269,30 +269,11 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 #endif
 		case SCN_URIDROPPED:
 		{
-			if (nt->text != NULL && strlen(nt->text) > 0)
+			if (nt->text != NULL)
 			{
-				gint i;
-				gchar *filename;
-				gchar **list;
-
-				switch (utils_get_line_endings((gchar*) nt->text, strlen(nt->text)))
-				{
-					case SC_EOL_CR: list = g_strsplit(nt->text, "\r", 0); break;
-					case SC_EOL_CRLF: list = g_strsplit(nt->text, "\r\n", 0); break;
-					case SC_EOL_LF: list = g_strsplit(nt->text, "\n", 0); break;
-					default: list = g_strsplit(nt->text, "\n", 0);
-				}
-
-				for (i = 0; ; i++)
-				{
-					if (list[i] == NULL) break;
-					filename = g_filename_from_uri(list[i], NULL, NULL);
-					if (filename == NULL) continue;
-					document_open_file(-1, filename, 0, FALSE, NULL, NULL);
-					g_free(filename);
-				}
-
-				g_strfreev(list);
+				gsize len = strlen(nt->text);
+					if (len > 0)
+						document_open_file_list(nt->text, len);
 			}
 			break;
 		}

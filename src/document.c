@@ -648,9 +648,9 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 		if (app->main_window_realized)
 			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
-		
+
 		msgwin_status_add(warn_msg, utf8_filename);
-			
+
 		// set the file to read-only mode because saving it is probably dangerous
 		readonly = TRUE;
 	}
@@ -760,6 +760,40 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	//geany_debug("%s: %d", filename, (gint)(tv1.tv_usec - tv.tv_usec));
 
 	return idx;
+}
+
+
+/* Takes a new line separated list of filename URIs and opens each file.
+ * length is the length of the string or -1 if it should be detected */
+void document_open_file_list(const gchar *data, gsize length)
+{
+	gint i;
+	gchar *filename;
+	gchar **list;
+
+	if (data == NULL) return;
+
+	if (length == -1)
+		length = strlen(data);
+
+	switch (utils_get_line_endings((gchar*) data, length))
+	{
+		case SC_EOL_CR: list = g_strsplit(data, "\r", 0); break;
+		case SC_EOL_CRLF: list = g_strsplit(data, "\r\n", 0); break;
+		case SC_EOL_LF: list = g_strsplit(data, "\n", 0); break;
+		default: list = g_strsplit(data, "\n", 0);
+	}
+
+	for (i = 0; ; i++)
+	{
+		if (list[i] == NULL) break;
+		filename = g_filename_from_uri(list[i], NULL, NULL);
+		if (filename == NULL) continue;
+		document_open_file(-1, filename, 0, FALSE, NULL, NULL);
+		g_free(filename);
+	}
+
+	g_strfreev(list);
 }
 
 

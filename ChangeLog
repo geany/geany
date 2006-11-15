@@ -3,6 +3,11 @@
  * src/vte.c: Don't unload the VTE module on exit to avoid crashes on
               some systems.
  * src/main.c: Fixed small memory leak.
+ * src/callbacks.c, src/callbacks.h, src/document.c, src/document.h,
+   src/main.c, src/sci_cb.c:
+   Enabled drag and drop for the whole main window to be able to drop
+   files even if no tabs are open.
+   Moved code for getting the file list to document_open_file_list().
 
 
 2006-11-15  Frank Lanitz  <frank@frank.uvena.de>
