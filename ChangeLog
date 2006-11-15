@@ -1,8 +1,14 @@
+2006-11-15  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/vte.c: Don't unload the VTE module on exit to avoid crashes on
+              some systems.
+
+
 2006-11-15  Frank Lanitz  <frank@frank.uvena.de>
 
- * src/about.c, configure.in, THANKS, po/zh_TW.po: 
-   Added tranditional Chinese translation (Thanks to KoViCH 
-   <kovich.ian@gmail.com>)
+ * src/about.c, configure.in, THANKS, po/zh_TW.po:
+   Added tranditional Chinese translation (Thanks to KoViCH
+   <kovich.ian@gmail.com>).
 
 
 2006-11-15  Nick Treleaven  <nick.treleaven@btinternet.com>
@@ -27,7 +33,7 @@
 
  * po/zh_CN.po, src/about.c, configure.in, THANKS:
    Added simple Chinese (zh_CN) translation (Thanks to
-   Dormouse Young <mouselinux@163.com>)
+   Dormouse Young <mouselinux@163.com>).
 
 
 2006-11-14  Nick Treleaven  <nick.treleaven@btinternet.com>

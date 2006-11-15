@@ -189,7 +189,8 @@ void vte_close(void)
 	g_free(vc->colour_fore);
 	g_free(vc);
 	g_free(gtk_menu_key_accel);
-	g_module_close(module);
+	// don't unload the module explicitly because it causes a segfault on FreeBSD
+	//g_module_close(module);
 }
 
 
