@@ -2,6 +2,7 @@
 
  * src/vte.c: Don't unload the VTE module on exit to avoid crashes on
               some systems.
+ * src/main.c: Fixed small memory leak.
 
 
 2006-11-15  Frank Lanitz  <frank@frank.uvena.de>

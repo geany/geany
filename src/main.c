@@ -701,6 +701,7 @@ void main_quit()
 #ifdef HAVE_VTE
 	if (vte_info.have_vte) vte_close();
 	g_free(vte_info.lib_vte);
+	g_free(vte_info.dir);
 #endif
 	gtk_widget_destroy(app->window);
 
