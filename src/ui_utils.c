@@ -1083,3 +1083,34 @@ void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy)
 }
 
 
+/* Prepends the active text to the drop down list, unless the first element in
+ * the list is identical, ensuring there are <= history_len elements. */
+void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
+{
+	const gint history_len = 30;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gchar *combo_text;
+	gboolean equal = FALSE;
+	GtkTreePath *path;
+
+	model = gtk_combo_box_get_model(combo);
+	if (gtk_tree_model_get_iter_first(model, &iter))
+	{
+		gtk_tree_model_get(model, &iter, 0, &combo_text, -1);
+		equal = utils_str_equal(combo_text, text);
+		g_free(combo_text);
+	}
+	if (equal) return;	// don't prepend duplicate
+
+	gtk_combo_box_prepend_text(combo, text);
+	
+	// limit history
+	path = gtk_tree_path_new_from_indices(history_len, -1);
+	if (gtk_tree_model_get_iter(model, &iter, path))
+	{
+		gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
+	}
+	gtk_tree_path_free(path);
+}
+

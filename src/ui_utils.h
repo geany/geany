@@ -101,4 +101,6 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
 
 void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
 
+void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text);
+
 #endif

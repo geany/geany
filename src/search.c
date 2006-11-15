@@ -108,7 +108,7 @@ static void
 on_replace_entry_activate(GtkEntry *entry, gpointer user_data);
 
 static gboolean
-on_combo_entry_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
+on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
 static void
 on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
@@ -404,8 +404,9 @@ void search_show_replace_dialog()
 		g_object_set_data_full(G_OBJECT(widgets.replace_dialog), "entry_replace",
 						gtk_widget_ref(entry_replace), (GDestroyNotify)gtk_widget_unref);
 
-		g_signal_connect((gpointer) gtk_bin_get_child(GTK_BIN(entry_find)), "key-press-event",
-				G_CALLBACK(on_combo_entry_key_pressed), gtk_bin_get_child(GTK_BIN(entry_replace)));
+		g_signal_connect((gpointer) gtk_bin_get_child(GTK_BIN(entry_find)),
+				"key-press-event", G_CALLBACK(on_widget_key_pressed_set_focus),
+				gtk_bin_get_child(GTK_BIN(entry_replace)));
 		g_signal_connect((gpointer) gtk_bin_get_child(GTK_BIN(entry_replace)), "activate",
 				G_CALLBACK(on_replace_entry_activate), NULL);
 		g_signal_connect((gpointer) widgets.replace_dialog, "response",
@@ -485,16 +486,14 @@ void search_show_replace_dialog()
 void search_show_find_in_files_dialog()
 {
 	static GtkWidget *combo = NULL;
-	static GtkWidget *entry1;
-	GtkWidget *entry2; // the child GtkEntry of combo
+	static GtkWidget *dir_combo;
+	GtkWidget *entry; // the child GtkEntry of combo (or dir_combo)
 	GtkWidget *dirbtn, *openimg;
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
 	gchar *cur_dir;
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-
-	cur_dir = utils_get_current_file_dir();
 
 	if (widgets.find_in_files_dialog == NULL)
 	{
@@ -516,11 +515,12 @@ void search_show_find_in_files_dialog()
 		label1 = gtk_label_new(_("Directory:"));
 		gtk_misc_set_alignment(GTK_MISC(label1), 0, 0.5);
 
-		entry1 = gtk_entry_new();
-		gtk_entry_set_max_length(GTK_ENTRY(entry1), 248);
-		gtk_entry_set_width_chars(GTK_ENTRY(entry1), 50);
-		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "entry_dir",
-						gtk_widget_ref(entry1), (GDestroyNotify)gtk_widget_unref);
+		dir_combo = gtk_combo_box_entry_new_text();
+		entry = gtk_bin_get_child(GTK_BIN(dir_combo));
+		gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
+		gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
+		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "dir_combo",
+						gtk_widget_ref(dir_combo), (GDestroyNotify)gtk_widget_unref);
 
 		dirbtn = gtk_button_new();
 		openimg = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
@@ -530,17 +530,17 @@ void search_show_find_in_files_dialog()
 
 		dbox = gtk_hbox_new(FALSE, 6);
 		gtk_box_pack_start(GTK_BOX(dbox), label1, FALSE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(dbox), entry1, TRUE, TRUE, 0);
+		gtk_box_pack_start(GTK_BOX(dbox), dir_combo, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(dbox), dirbtn, FALSE, FALSE, 0);
 
 		label = gtk_label_new(_("Search for:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 		combo = gtk_combo_box_entry_new_text();
-		entry2 = gtk_bin_get_child(GTK_BIN(combo));
-		gtk_entry_set_max_length(GTK_ENTRY(entry2), 248);
-		gtk_entry_set_width_chars(GTK_ENTRY(entry2), 50);
-		gtk_entry_set_activates_default(GTK_ENTRY(entry2), TRUE);
+		entry = gtk_bin_get_child(GTK_BIN(combo));
+		gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
+		gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
+		gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 
 		sbox = gtk_hbox_new(FALSE, 6);
 		gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
@@ -603,12 +603,12 @@ void search_show_find_in_files_dialog()
 		gtk_container_add(GTK_CONTAINER(hbox), rbox);
 		gtk_container_add(GTK_CONTAINER(hbox), cbox);
 
-		gtk_container_add(GTK_CONTAINER(vbox), dbox);
-		gtk_container_add(GTK_CONTAINER(vbox), sbox);
+		gtk_box_pack_start(GTK_BOX(vbox), dbox, TRUE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
 
-		g_signal_connect((gpointer) entry1, "key-press-event",
-				G_CALLBACK(on_combo_entry_key_pressed), gtk_bin_get_child(GTK_BIN(combo)));
+		g_signal_connect((gpointer) dir_combo, "key-press-event",
+				G_CALLBACK(on_widget_key_pressed_set_focus), combo);
 		g_signal_connect((gpointer) widgets.find_in_files_dialog, "response",
 				G_CALLBACK(on_find_in_files_dialog_response), combo);
 		g_signal_connect((gpointer) widgets.find_in_files_dialog, "delete_event",
@@ -619,18 +619,23 @@ void search_show_find_in_files_dialog()
 
 	sel = get_default_text(idx);
 
-	entry2 = GTK_BIN(combo)->child;
-	if (sel) gtk_entry_set_text(GTK_ENTRY(entry2), sel);
+	entry = GTK_BIN(combo)->child;
+	if (sel) gtk_entry_set_text(GTK_ENTRY(entry), sel);
 	g_free(sel);
 
-	if (cur_dir) gtk_entry_set_text(GTK_ENTRY(entry1), cur_dir);
-	g_free(cur_dir);
+	entry = GTK_BIN(dir_combo)->child;
+	cur_dir = utils_get_current_file_dir();
+	if (cur_dir)
+	{
+		gtk_entry_set_text(GTK_ENTRY(entry), cur_dir);
+		g_free(cur_dir);
+	}
 
 	// put the focus to the directory entry if it is empty
-	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(entry1)), ""))
-		gtk_widget_grab_focus(entry1);
+	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), ""))
+		gtk_widget_grab_focus(dir_combo);
 	else
-		gtk_widget_grab_focus(entry2);
+		gtk_widget_grab_focus(combo);
 
 	gtk_widget_show(widgets.find_in_files_dialog);
 }
@@ -642,7 +647,9 @@ static void on_open_dir_dialog_clicked(GtkButton *button, gpointer user_data)
 		GTK_WINDOW(app->window), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
-	GtkWidget *entry_dir = lookup_widget(widgets.find_in_files_dialog, "entry_dir");
+	GtkWidget *dir_combo =
+		lookup_widget(widgets.find_in_files_dialog, "dir_combo");
+	GtkWidget *entry_dir = gtk_bin_get_child(GTK_BIN(dir_combo));
 	gchar *dir_locale;
 	const gchar *entry_text;
 
@@ -750,7 +757,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			return;
 		}
 
-		gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), search_data.text);
+		ui_combo_box_add_to_history(GTK_COMBO_BOX(user_data), search_data.text);
 		search_data.flags = (fl1 ? SCFIND_MATCHCASE : 0) |
 				(fl2 ? SCFIND_WHOLEWORD : 0) |
 				(fl3 ? SCFIND_REGEXP | SCFIND_POSIX: 0) |
@@ -832,8 +839,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		return;
 	}
 
-	gtk_combo_box_prepend_text(GTK_COMBO_BOX(entry_find), find);
-	gtk_combo_box_prepend_text(GTK_COMBO_BOX(entry_replace), replace);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX(entry_find), find);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX(entry_replace), replace);
 
 	if (search_replace_escape_re &&
 		(! utils_str_replace_escape(find) || ! utils_str_replace_escape(replace)))
@@ -904,7 +911,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 static gboolean
-on_combo_entry_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
 	// catch tabulator key to set the focus in the replace entry instead of
 	// setting it to the combo box
@@ -924,8 +931,10 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 	{
 		const gchar *search_text =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data))));
+		GtkWidget *dir_combo =
+			lookup_widget(widgets.find_in_files_dialog, "dir_combo");
 		const gchar *utf8_dir =
-			gtk_entry_get_text(GTK_ENTRY(lookup_widget(widgets.find_in_files_dialog, "entry_dir")));
+			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
 
 		if (utf8_dir == NULL || utils_str_equal(utf8_dir, ""))
 			msgwin_status_add(_("Invalid directory for find in files."));
@@ -951,7 +960,8 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 
 			if (search_find_in_files(search_text, locale_dir, regex_opt, opts))
 			{
-				gtk_combo_box_prepend_text(GTK_COMBO_BOX(user_data), search_text);
+				ui_combo_box_add_to_history(GTK_COMBO_BOX(user_data), search_text);
+				ui_combo_box_add_to_history(GTK_COMBO_BOX(dir_combo), utf8_dir);
 				gtk_widget_hide(widgets.find_in_files_dialog);
 			}
 			g_free(locale_dir);
