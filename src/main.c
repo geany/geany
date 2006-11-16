@@ -565,7 +565,12 @@ gint main(gint argc, gchar **argv)
 		gtk_drag_dest_set(app->window, GTK_DEST_DEFAULT_ALL, targets,
 					G_N_ELEMENTS(targets),
 					GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
+		gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_ALL, targets,
+					G_N_ELEMENTS(targets),
+					GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
 		g_signal_connect(G_OBJECT(app->window), "drag-data-received",
+									G_CALLBACK(on_window_drag_data_received), NULL);
+		g_signal_connect(G_OBJECT(app->notebook), "drag-data-received",
 									G_CALLBACK(on_window_drag_data_received), NULL);
 	}
 

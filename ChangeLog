@@ -1,3 +1,9 @@
+2006-11-16  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/main.c: Enabled DnD also for the main notebook widget to drop
+               files in the main area of Geany.
+
+
 2006-11-15  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/vte.c: Don't unload the VTE module on exit to avoid crashes on
