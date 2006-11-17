@@ -765,7 +765,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 /* Takes a new line separated list of filename URIs and opens each file.
  * length is the length of the string or -1 if it should be detected */
-void document_open_file_list(const gchar *data, gsize length)
+void document_open_file_list(const gchar *data, gssize length)
 {
 	gint i;
 	gchar *filename;
@@ -773,7 +773,7 @@ void document_open_file_list(const gchar *data, gsize length)
 
 	if (data == NULL) return;
 
-	if (length == -1)
+	if (length < 0)
 		length = strlen(data);
 
 	switch (utils_get_line_endings((gchar*) data, length))

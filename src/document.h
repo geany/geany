@@ -133,7 +133,7 @@ int document_open_file(gint, const gchar*, gint, gboolean, filetype*, const gcha
 
 /* Takes a new line separated list of filename URIs and opens each file.
  * length is the length of the string or -1 if it should be detected */
-void document_open_file_list(const gchar *data, gsize length);
+void document_open_file_list(const gchar *data, gssize length);
 
 
 int document_reload_file(gint idx, const gchar *forced_enc);

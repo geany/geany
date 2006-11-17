@@ -2083,7 +2083,7 @@ on_window_drag_data_received
 			drag_context->action = GDK_ACTION_COPY;
 		}
 
-		document_open_file_list(data->data, data->length);
+		document_open_file_list((const gchar *)data->data, data->length);
 
 		success = TRUE;
 	}

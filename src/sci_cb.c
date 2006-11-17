@@ -271,9 +271,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 		{
 			if (nt->text != NULL)
 			{
-				gsize len = strlen(nt->text);
-					if (len > 0)
-						document_open_file_list(nt->text, len);
+				document_open_file_list(nt->text, -1);
 			}
 			break;
 		}
