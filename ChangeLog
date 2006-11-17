@@ -1,3 +1,11 @@
+2006-11-17  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/build.c, src/main.c:
+   Fixed compile error under Win32.
+   Ignore pressed Stop button under Win32 (at least for the moment,
+   not yet implemented).
+
+
 2006-11-17  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/search.c:

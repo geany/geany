@@ -65,9 +65,10 @@ static void on_make_target_dialog_response(GtkDialog *dialog, gint response, gpo
 static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
 static void set_stop_button(gboolean stop);
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
-static void kill_process(gint pid);
 static void free_pointers(gpointer first, ...);
-
+#ifndef G_OS_WIN32
+static void kill_process(gint pid);
+#endif
 
 void build_finalize()
 {
@@ -886,9 +887,7 @@ static GtkWidget *create_build_menu_tex()
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-#ifndef G_OS_WIN32
 	filetype *ft = filetypes[GEANY_FILETYPES_LATEX];
-#endif
 
 	menu = gtk_menu_new();
 
@@ -1202,14 +1201,15 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
-#ifndef G_OS_WIN32 // on Windows there is no PID returned (resp. it is a handle)
 	// make the process "stopable"
-	if (build_info.pid > 1)
+	if (build_info.pid > (GPid) 1)
 	{
+		// on Windows there is no PID returned (resp. it is a handle), currently unsupported
+#ifndef G_OS_WIN32
 		kill_process(build_info.pid);
+#endif
 		return;
 	}
-#endif
 
 	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
 	{	// run LaTeX file
@@ -1333,6 +1333,7 @@ static void set_stop_button(gboolean stop)
 }
 
 
+#ifndef G_OS_WIN32
 static void kill_process(gint pid)
 {
 	/* SIGQUIT is not the best signal to use because it causes a core dump (this should not
@@ -1353,6 +1354,7 @@ static void kill_process(gint pid)
 		set_stop_button(FALSE);
 	}
 }
+#endif
 
 
 // frees all passed pointers if they are non-NULL, the first argument is nothing special,

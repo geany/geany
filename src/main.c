@@ -482,10 +482,10 @@ gint main(gint argc, gchar **argv)
 	gtk_set_locale();
 
 	signal(SIGTERM, signal_cb);
+#ifdef G_OS_UNIX
 	// SIGQUIT is used to kill spawned children and we get also this signal, so ignore
 	signal(SIGQUIT, SIG_IGN);
-#ifdef G_OS_UNIX
-	/* ignore SIGPIPE signal for preventing sudden death of program */
+	// ignore SIGPIPE signal for preventing sudden death of program
 	signal(SIGPIPE, SIG_IGN);
 #endif
 
