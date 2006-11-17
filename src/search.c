@@ -261,13 +261,13 @@ void search_show_find_dialog()
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(widgets.find_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 9);
 
-		button = gtk_button_new_with_mnemonic(_("Find _Previous"));
+		button = ui_button_new_with_image(GTK_STOCK_GO_BACK, _("_Previous"));
 		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.find_dialog), button,
 			GEANY_RESPONSE_FIND_PREVIOUS);
 		g_object_set_data_full(G_OBJECT(widgets.find_dialog), "btn_previous",
 						gtk_widget_ref(button), (GDestroyNotify)gtk_widget_unref);
 
-		button = ui_button_new_with_image(GTK_STOCK_FIND, _("Find _Next"));
+		button = ui_button_new_with_image(GTK_STOCK_GO_FORWARD, _("_Next"));
 		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.find_dialog), button,
 			GEANY_RESPONSE_FIND);
 
