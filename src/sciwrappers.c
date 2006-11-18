@@ -838,6 +838,7 @@ gboolean sci_get_readonly(ScintillaObject *sci)
 	SSM(sci, cmd, 0, 0);
 }
 
+
 gint sci_get_current_line(ScintillaObject *sci, gint pos)
 {
 	if (pos >= 0)
@@ -863,6 +864,12 @@ gint sci_get_lines_selected(ScintillaObject *sci)
 
 	return SSM(sci, SCI_LINEFROMPOSITION, end, 0) - SSM(sci, SCI_LINEFROMPOSITION, start, 0) + 1;
 }
+
+gint sci_get_first_visible_line(ScintillaObject *sci)
+{
+	return SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
+}
+
 
 void sci_set_styling(ScintillaObject *sci, gint len, gint style)
 {
