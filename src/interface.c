@@ -2282,6 +2282,8 @@ create_prefs_dialog (void)
   GtkWidget *spin_autocheight;
   GtkWidget *label177;
   GtkWidget *label95;
+  GtkWidget *frame20;
+  GtkWidget *alignment23;
   GtkWidget *vbox2;
   GtkWidget *label17;
   GtkWidget *table1;
@@ -2305,7 +2307,10 @@ create_prefs_dialog (void)
   GtkWidget *entry_grep;
   GtkWidget *button_grep;
   GtkWidget *image808;
+  GtkWidget *label179;
   GtkWidget *label96;
+  GtkWidget *frame21;
+  GtkWidget *alignment24;
   GtkWidget *vbox9;
   GtkWidget *label120;
   GtkWidget *table6;
@@ -2320,13 +2325,17 @@ create_prefs_dialog (void)
   GtkWidget *label131;
   GtkWidget *entry_template_developer;
   GtkWidget *label132;
+  GtkWidget *label180;
   GtkWidget *label119;
+  GtkWidget *frame22;
+  GtkWidget *alignment25;
   GtkWidget *vbox13;
   GtkWidget *label152;
   GtkWidget *scrolledwindow8;
   GtkWidget *treeview7;
   GtkWidget *alignment10;
   GtkWidget *button2;
+  GtkWidget *label181;
   GtkWidget *label151;
   GtkWidget *dialog_action_area3;
   GtkWidget *button3;
@@ -2925,11 +2934,12 @@ create_prefs_dialog (void)
   gtk_table_set_row_spacings (GTK_TABLE (table10), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table10), 25);
 
-  label150 = gtk_label_new (_("Notebook tab placement:"));
+  label150 = gtk_label_new (_("Placement of new file tabs:"));
   gtk_widget_show (label150);
   gtk_table_attach (GTK_TABLE (table10), label150, 0, 1, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label150), 0, 0.5);
 
   spin_mru_adj = gtk_adjustment_new (4, 1, 50, 1, 10, 10);
   spin_mru = gtk_spin_button_new (GTK_ADJUSTMENT (spin_mru_adj), 1, 0);
@@ -2967,6 +2977,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table10), label147, 0, 1, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label147), 0, 0.5);
   gtk_misc_set_padding (GTK_MISC (label147), 0, 7);
 
   label176 = gtk_label_new (_("<b>Misc.</b>"));
@@ -3179,6 +3190,7 @@ create_prefs_dialog (void)
   label173 = gtk_label_new (_("Rows of autocompletion list:"));
   gtk_widget_show (label173);
   gtk_box_pack_start (GTK_BOX (hbox6), label173, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label173), 0, 0.5);
 
   spin_autocheight_adj = gtk_adjustment_new (10, 1, 99, 1, 10, 10);
   spin_autocheight = gtk_spin_button_new (GTK_ADJUSTMENT (spin_autocheight_adj), 1, 0);
@@ -3196,18 +3208,29 @@ create_prefs_dialog (void)
   gtk_widget_show (label95);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 4), label95);
 
+  frame20 = gtk_frame_new (NULL);
+  gtk_widget_show (frame20);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame20);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame20), GTK_SHADOW_NONE);
+
+  alignment23 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment23);
+  gtk_container_add (GTK_CONTAINER (frame20), alignment23);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment23), 0, 0, 12, 0);
+
   vbox2 = gtk_vbox_new (FALSE, 12);
   gtk_widget_show (vbox2);
-  gtk_container_add (GTK_CONTAINER (notebook2), vbox2);
+  gtk_container_add (GTK_CONTAINER (alignment23), vbox2);
 
   label17 = gtk_label_new (_("Enter tool paths below. Tools you do not need can be left blank."));
   gtk_widget_show (label17);
   gtk_box_pack_start (GTK_BOX (vbox2), label17, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label17), 0, 0.5);
   gtk_misc_set_padding (GTK_MISC (label17), 0, 6);
 
   table1 = gtk_table_new (5, 3, FALSE);
   gtk_widget_show (table1);
-  gtk_box_pack_start (GTK_BOX (vbox2), table1, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2), table1, FALSE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table1), 7);
   gtk_table_set_col_spacings (GTK_TABLE (table1), 5);
 
@@ -3330,22 +3353,39 @@ create_prefs_dialog (void)
   gtk_widget_show (image808);
   gtk_container_add (GTK_CONTAINER (button_grep), image808);
 
+  label179 = gtk_label_new (_("<b>Tool paths</b>"));
+  gtk_widget_show (label179);
+  gtk_frame_set_label_widget (GTK_FRAME (frame20), label179);
+  gtk_label_set_use_markup (GTK_LABEL (label179), TRUE);
+
   label96 = gtk_label_new (_("Tools"));
   gtk_widget_show (label96);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 5), label96);
 
-  vbox9 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_show (vbox9);
-  gtk_container_add (GTK_CONTAINER (notebook2), vbox9);
+  frame21 = gtk_frame_new (NULL);
+  gtk_widget_show (frame21);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame21);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame21), GTK_SHADOW_NONE);
 
-  label120 = gtk_label_new (_("Specify here information you want to use in templates.\nSee documentation if you don't know how templates work."));
+  alignment24 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment24);
+  gtk_container_add (GTK_CONTAINER (frame21), alignment24);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment24), 0, 0, 12, 0);
+
+  vbox9 = gtk_vbox_new (FALSE, 12);
+  gtk_widget_show (vbox9);
+  gtk_container_add (GTK_CONTAINER (alignment24), vbox9);
+
+  label120 = gtk_label_new (_("Set the information to be used in templates. See the documentation for details."));
   gtk_widget_show (label120);
   gtk_box_pack_start (GTK_BOX (vbox9), label120, FALSE, FALSE, 0);
+  gtk_label_set_line_wrap (GTK_LABEL (label120), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label120), 0, 0.5);
   gtk_misc_set_padding (GTK_MISC (label120), 0, 6);
 
-  table6 = gtk_table_new (8, 2, FALSE);
+  table6 = gtk_table_new (5, 2, FALSE);
   gtk_widget_show (table6);
-  gtk_box_pack_start (GTK_BOX (vbox9), table6, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox9), table6, FALSE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table6), 7);
   gtk_table_set_col_spacings (GTK_TABLE (table6), 5);
 
@@ -3419,25 +3459,42 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, entry_template_developer, _("The name of the developer"), NULL);
 
-  label132 = gtk_label_new (_("<i>Notice: For all changes you make here to take effect,\nyou need to restart Geany.</i>"));
+  label132 = gtk_label_new (_("<i>Notice: For all changes you make here to take effect, you need to restart Geany.</i>"));
   gtk_widget_show (label132);
   gtk_box_pack_start (GTK_BOX (vbox9), label132, FALSE, FALSE, 0);
   gtk_label_set_use_markup (GTK_LABEL (label132), TRUE);
+  gtk_label_set_line_wrap (GTK_LABEL (label132), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (label132), 0, 0.5);
+
+  label180 = gtk_label_new (_("<b>Template data</b>"));
+  gtk_widget_show (label180);
+  gtk_frame_set_label_widget (GTK_FRAME (frame21), label180);
+  gtk_label_set_use_markup (GTK_LABEL (label180), TRUE);
 
   label119 = gtk_label_new (_("Templates"));
   gtk_widget_show (label119);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 6), label119);
 
+  frame22 = gtk_frame_new (NULL);
+  gtk_widget_show (frame22);
+  gtk_container_add (GTK_CONTAINER (notebook2), frame22);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame22), GTK_SHADOW_NONE);
+
+  alignment25 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment25);
+  gtk_container_add (GTK_CONTAINER (frame22), alignment25);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment25), 0, 0, 12, 0);
+
   vbox13 = gtk_vbox_new (FALSE, 5);
   gtk_widget_show (vbox13);
-  gtk_container_add (GTK_CONTAINER (notebook2), vbox13);
+  gtk_container_add (GTK_CONTAINER (alignment25), vbox13);
 
   label152 = gtk_label_new (_("Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."));
   gtk_widget_show (label152);
   gtk_box_pack_start (GTK_BOX (vbox13), label152, FALSE, TRUE, 0);
   gtk_label_set_justify (GTK_LABEL (label152), GTK_JUSTIFY_FILL);
   gtk_label_set_line_wrap (GTK_LABEL (label152), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label152), 0.1, 0);
+  gtk_misc_set_alignment (GTK_MISC (label152), 0, 0);
   gtk_misc_set_padding (GTK_MISC (label152), 0, 5);
 
   scrolledwindow8 = gtk_scrolled_window_new (NULL, NULL);
@@ -3458,6 +3515,11 @@ create_prefs_dialog (void)
   button2 = gtk_button_new_with_mnemonic (_("Change"));
   gtk_widget_show (button2);
   gtk_container_add (GTK_CONTAINER (alignment10), button2);
+
+  label181 = gtk_label_new (_("<b>Keyboard shortcuts</b>"));
+  gtk_widget_show (label181);
+  gtk_frame_set_label_widget (GTK_FRAME (frame22), label181);
+  gtk_label_set_use_markup (GTK_LABEL (label181), TRUE);
 
   label151 = gtk_label_new (_("Keybindings"));
   gtk_widget_show (label151);
@@ -3629,6 +3691,8 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_autocheight, "spin_autocheight");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label177, "label177");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label95, "label95");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame20, "frame20");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment23, "alignment23");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox2, "vbox2");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label17, "label17");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table1, "table1");
@@ -3652,7 +3716,10 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_grep, "entry_grep");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button_grep, "button_grep");
   GLADE_HOOKUP_OBJECT (prefs_dialog, image808, "image808");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label179, "label179");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label96, "label96");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame21, "frame21");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment24, "alignment24");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox9, "vbox9");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label120, "label120");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table6, "table6");
@@ -3667,13 +3734,17 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label131, "label131");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_template_developer, "entry_template_developer");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label132, "label132");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label180, "label180");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label119, "label119");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame22, "frame22");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment25, "alignment25");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox13, "vbox13");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label152, "label152");
   GLADE_HOOKUP_OBJECT (prefs_dialog, scrolledwindow8, "scrolledwindow8");
   GLADE_HOOKUP_OBJECT (prefs_dialog, treeview7, "treeview7");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment10, "alignment10");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button2, "button2");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label181, "label181");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label151, "label151");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, dialog_action_area3, "dialog_action_area3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button3, "button3");

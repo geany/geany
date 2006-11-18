@@ -10,6 +10,9 @@
    Rearranged some Preferences dialog options, added Files tab.
    Disable tab position when file tabs are hidden (not new file tab
    placement option, it still affects order of pages).
+ * src/interface.c, geany.glade:
+   Add Preferences frame alignment for Tools, Templates, Keybindings.
+   Revert tab placement label text.
 
 
 2006-11-17  Enrico Tröger  <enrico.troeger@uvena.de>
