@@ -1,3 +1,17 @@
+2006-11-18  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sciwrappers.c, src/sciwrappers.h:
+   Added sci_get_first_visible_line().
+ * src/interface.c, src/geany.h, src/sci_cb.h, src/keyfile.c,
+   src/vte.c, src/search.c, src/document.c, src/prefs.c, geany.glade:
+   Applied patch from Bob Doan to prevent scrolling when wrap searching
+   around a document, and to add a preference for suppressing search
+   dialogs when wrapping or after Find Next.
+   Rearranged some Preferences dialog options, added Files tab.
+   Disable tab position when file tabs are hidden (not new file tab
+   placement option, it still affects order of pages).
+
+
 2006-11-17  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/build.c, src/main.c:

@@ -29,6 +29,7 @@
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
+// Note: Avoid using SSM in files not related to scintilla, use sciwrappers.h instead.
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 

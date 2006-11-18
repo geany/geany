@@ -999,13 +999,15 @@ void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean 
 gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards,
 		gboolean scroll)
 {
-	gint selection_end, selection_start, search_pos;
+	gint selection_end, selection_start, search_pos, first_visible_line;
 
 	g_return_val_if_fail(text != NULL, -1);
 	if (idx == -1 || ! *text) return -1;
 	// Sci doesn't support searching backwards with a regex
 	if (flags & SCFIND_REGEXP) search_backwards = FALSE;
 
+	first_visible_line = sci_get_first_visible_line(doc_list[idx].sci);
+	
 	selection_start = sci_get_selection_start(doc_list[idx].sci);
 	selection_end = sci_get_selection_end(doc_list[idx].sci);
 	if ((selection_end - selection_start) > 0)
@@ -1036,6 +1038,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 			(selection_end == sci_len && search_backwards))
 		{
 			gchar *msg = g_strdup_printf(_("\"%s\" was not found."), text);
+
 			ui_set_statusbar(msg, FALSE);
 			g_free(msg);
 			utils_beep();
@@ -1043,15 +1046,22 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 		}
 
 		// we searched only part of the document, so ask whether to wraparound.
-		if (dialogs_show_question_full(GTK_STOCK_FIND, GTK_STOCK_CANCEL,
-			_("Wrap search and find again?"),
-			_("\"%s\" was not found."), text))
+		if (app->pref_main_suppress_search_dialogs ||
+			dialogs_show_question_full(GTK_STOCK_FIND, GTK_STOCK_CANCEL,
+				_("Wrap search and find again?"), _("\"%s\" was not found."), text))
 		{
 			gint ret;
+
 			sci_goto_pos(doc_list[idx].sci, (search_backwards) ? sci_len : 0, TRUE);
 			ret = document_find_text(idx, text, flags, search_backwards, scroll);
-			if (ret == -1)	// return to original cursor position if not found
-				sci_goto_pos(doc_list[idx].sci, selection_end, FALSE);
+			if (ret == -1)
+			{	// return to original cursor position if not found
+				gint new_visible_line;
+
+				sci_goto_pos(doc_list[idx].sci, selection_start, FALSE);
+				new_visible_line = sci_get_first_visible_line(doc_list[idx].sci);
+				sci_scroll_lines(doc_list[idx].sci, first_visible_line - new_visible_line);
+			}
 			return ret;
 		}
 	}

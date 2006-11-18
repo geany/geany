@@ -328,8 +328,12 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		}
 		case 2:
 		{
+			GtkWidget *notebook =
+				lookup_widget(app->prefs_dialog, "notebook2");
+
 			on_preferences1_activate(menuitem, NULL);
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(lookup_widget(app->prefs_dialog, "notebook2")), 7);
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook),
+				gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook)) - 1);
 			break;
 		}
 	}
