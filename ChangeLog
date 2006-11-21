@@ -8,6 +8,8 @@
    DnD for moving file tabs. Dropping files into Geany when file tabs
    are open still works because then it is handled by the Scintilla
    widget.
+ * src/msgwin.c: Applied patch from Bob Doan to parse PHP compile
+                 errors better (thanks).
 
 
 2006-11-18  Nick Treleaven  <nick.treleaven@btinternet.com>

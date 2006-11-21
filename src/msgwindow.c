@@ -414,10 +414,24 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 		case GEANY_FILETYPES_PHP:
 		{
 			// Parse error: parse error, unexpected T_CASE in brace_bug.php on line 3
-			data.pattern = " ";
-			data.min_fields = 11;
-			data.line_idx = 10;
-			data.file_idx = 7;
+			// Parse error: syntax error, unexpected T_LNUMBER, expecting T_FUNCTION in bob.php on line 16
+			gchar *tmp = strstr(string, " in ");
+
+			if(tmp != NULL)
+			{
+				data.string = tmp;
+				data.pattern = " ";
+				data.min_fields = 6;
+				data.line_idx = 5;
+				data.file_idx = 2;
+			}
+			else
+			{
+				data.pattern = " ";
+				data.min_fields = 11;
+				data.line_idx = 10;
+				data.file_idx = 7;
+			}
 			break;
 		}
 		case GEANY_FILETYPES_PERL:
@@ -597,7 +611,7 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 																			gpointer user_data)
 {
 	// user_data might be NULL, GPOINTER_TO_INT returns 0 if called with NULL
-	
+
 	if (event->button == 1)
 	{
 		switch (GPOINTER_TO_INT(user_data))
