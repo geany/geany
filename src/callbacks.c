@@ -2067,26 +2067,3 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 	}
 }
 
-
-void
-on_window_drag_data_received
-                                       (GtkWidget *widget, GdkDragContext *drag_context,
-                                        gint x, gint y, GtkSelectionData *data, guint info,
-                                        guint time, gpointer user_data)
-{
-	gboolean success = FALSE;
-
-	if (data->length > 0 && data->format == 8)
-	{
-		if (drag_context->action == GDK_ACTION_ASK)
-		{
-			drag_context->action = GDK_ACTION_COPY;
-		}
-
-		document_open_file_list((const gchar *)data->data, data->length);
-
-		success = TRUE;
-	}
-	gtk_drag_finish(drag_context, success, FALSE, time);
-}
-

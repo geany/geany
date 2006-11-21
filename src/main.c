@@ -554,26 +554,6 @@ gint main(gint argc, gchar **argv)
 	g_signal_connect(G_OBJECT(app->window), "key-press-event", G_CALLBACK(on_window_key_press_event), NULL);
 	g_signal_connect(G_OBJECT(app->toolbar), "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
 
-	/* enable DnD files somewhere in the main window */
-	{
-		GtkTargetEntry targets[] = {
-										{ "STRING",			0, 0 },
-										{ "UTF8_STRING",	0, 0 },
-										{ "text/plain",		0, 0 },
-										{ "text/uri-list",	0, 0 }
-								   };
-		gtk_drag_dest_set(app->window, GTK_DEST_DEFAULT_ALL, targets,
-					G_N_ELEMENTS(targets),
-					GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
-		gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_ALL, targets,
-					G_N_ELEMENTS(targets),
-					GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
-		g_signal_connect(G_OBJECT(app->window), "drag-data-received",
-									G_CALLBACK(on_window_drag_data_received), NULL);
-		g_signal_connect(G_OBJECT(app->notebook), "drag-data-received",
-									G_CALLBACK(on_window_drag_data_received), NULL);
-	}
-
 	treeviews_prepare_openfiles();
 	treeviews_create_taglist_popup_menu();
 	treeviews_create_openfiles_popup_menu();

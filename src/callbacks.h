@@ -551,9 +551,3 @@ void
 on_menu_toggle_line_commentation1_activate
                                        (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
-
-void
-on_window_drag_data_received
-                                       (GtkWidget *widget, GdkDragContext *drag_context,
-                                        gint x, gint y, GtkSelectionData *data, guint info,
-                                        guint time, gpointer user_data);

@@ -34,6 +34,13 @@ static const GtkTargetEntry drag_targets[] =
 	{GEANY_DND_NOTEBOOK_TAB_TYPE, GTK_TARGET_SAME_APP | GTK_TARGET_SAME_WIDGET, 0}
 };
 
+static GtkTargetEntry files_drop_targets[] = {
+	{ "STRING",			0, 0 },
+	{ "UTF8_STRING",	0, 0 },
+	{ "text/plain",		0, 0 },
+	{ "text/uri-list",	0, 0 }
+};
+
 
 static gboolean
 notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
@@ -48,6 +55,11 @@ static gboolean
 notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
 	gpointer user_data);
 #endif
+
+static void
+on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
+                             gint x, gint y, GtkSelectionData *data, guint info,
+                             guint time, gpointer user_data);
 
 static gint
 notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y);
@@ -73,6 +85,9 @@ void notebook_init()
 	// focus the current document after clicking on a tab
 	g_signal_connect_after(G_OBJECT(app->notebook), "button-release-event",
 		G_CALLBACK(focus_sci), NULL);
+
+	g_signal_connect(G_OBJECT(app->notebook), "drag-data-received",
+		G_CALLBACK(on_window_drag_data_received), NULL);
 
 	setup_tab_dnd();
 }
@@ -315,3 +330,46 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data)
 		GTK_WIDGET(user_data));
 	document_remove(cur_page);
 }
+
+
+/* Enables DnD for dropping files into the empty notebook widget */
+void notebook_enable_dnd_for_dropping_files()
+{
+	gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_ALL,
+		files_drop_targets,	G_N_ELEMENTS(files_drop_targets),
+		GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
+
+}
+
+
+/* Disables DnD for dropping files into the notebook widget and enables the DnD for moving file
+ * tabs. Files can still be dropped into the notebook widget because it will be handled by the
+ * active Scintilla Widget (only dropping to the tab bar is not possible but it should be ok) */
+void notebook_disable_dnd_for_dropping_files()
+{
+	gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
+}
+
+
+static void
+on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
+                             gint x, gint y, GtkSelectionData *data, guint target_type,
+                             guint time, gpointer user_data)
+{
+	gboolean success = FALSE;
+
+	if (data->length > 0 && data->format == 8)
+	{
+		if (drag_context->action == GDK_ACTION_ASK)
+		{
+			drag_context->action = GDK_ACTION_COPY;
+		}
+
+		document_open_file_list((const gchar *)data->data, data->length);
+
+		success = TRUE;
+	}
+	gtk_drag_finish(drag_context, success, FALSE, time);
+}
+

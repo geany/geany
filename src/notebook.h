@@ -29,4 +29,12 @@ void notebook_init();
 /* Returns index of notebook page, or -1 on error */
 gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page);
 
+/* Enables DnD for dropping files into the empty notebook widget */
+void notebook_enable_dnd_for_dropping_files();
+
+/* Disables DnD for dropping files into the notebook widget and enables the DnD for moving file
+ * tabs. Files can still be dropped into the notebook widget because it will be handled by the
+ * active Scintilla Widget (only dropping to the tab bar is not possible but it should be ok) */
+void notebook_disable_dnd_for_dropping_files();
+
 #endif
