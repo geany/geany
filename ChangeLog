@@ -1,3 +1,10 @@
+2006-11-22  Frank Lanitz  <frank@frank.uvena.de>
+
+ * po/hu.po, src/about.c, THANKS, configure.in:
+   Added Hungarian translation (Thanks to Gabor Kmetyko aka 
+   kilo <kg_kilo@freemail.hu>).
+
+
 2006-11-22  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/notebook.c, src/notebook.h, src/document.c:
