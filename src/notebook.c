@@ -271,6 +271,27 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 }
 
 
+// call this whenever the number of tabs in app->notebook changes.
+static void tab_count_changed()
+{
+	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
+	{
+		/* Enables DnD for dropping files into the empty notebook widget */
+		gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_ALL,
+			files_drop_targets,	G_N_ELEMENTS(files_drop_targets),
+			GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
+	}
+	else
+	{
+		/* Disables DnD for dropping files into the notebook widget and enables the DnD for moving file
+		 * tabs. Files can still be dropped into the notebook widget because it will be handled by the
+		 * active Scintilla Widget (only dropping to the tab bar is not possible but it should be ok) */
+		gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+			drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
+	}
+}
+
+
 /* Returns index of notebook page, or -1 on error */
 gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
 {
@@ -308,6 +329,8 @@ gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
 		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook),
 			GTK_WIDGET(page), hbox, this->tabmenu_label, 0);
 
+	tab_count_changed();
+
 	// signal for clicking the tab-close button
 	g_signal_connect(G_OBJECT(but), "clicked",
 		G_CALLBACK(notebook_tab_close_clicked_cb), page);
@@ -332,23 +355,11 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data)
 }
 
 
-/* Enables DnD for dropping files into the empty notebook widget */
-void notebook_enable_dnd_for_dropping_files()
+// Always use this instead of gtk_notebook_remove_page().
+void notebook_remove_page(gint page_num)
 {
-	gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_ALL,
-		files_drop_targets,	G_N_ELEMENTS(files_drop_targets),
-		GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
-
-}
-
-
-/* Disables DnD for dropping files into the notebook widget and enables the DnD for moving file
- * tabs. Files can still be dropped into the notebook widget because it will be handled by the
- * active Scintilla Widget (only dropping to the tab bar is not possible but it should be ok) */
-void notebook_disable_dnd_for_dropping_files()
-{
-	gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-		drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
+	gtk_notebook_remove_page(GTK_NOTEBOOK(app->notebook), page_num);
+	tab_count_changed();
 }
 
 
@@ -372,4 +383,5 @@ on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 	}
 	gtk_drag_finish(drag_context, success, FALSE, time);
 }
+
 

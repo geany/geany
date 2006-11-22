@@ -259,13 +259,7 @@ static gint document_create_new_sci(const gchar *filename)
 	gint tabnum;
 	gint cur_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 
-	if (cur_pages == 0)
-	{
-		// now we get the first file tab so enable moving of file tabs and
-		// disable Dnd for dropping files
-		notebook_disable_dnd_for_dropping_files();
-	}
-	else if (cur_pages == 1)
+	if (cur_pages == 1)
 	{
 		gint idx = document_get_cur_idx();
 		// remove the empty document and open a new one
@@ -364,7 +358,7 @@ gboolean document_remove(guint page_num)
 		{
 			return FALSE;
 		}
-		gtk_notebook_remove_page(GTK_NOTEBOOK(app->notebook), page_num);
+		notebook_remove_page(page_num);
 		treeviews_openfiles_remove(doc_list[idx].iter);
 		if (GTK_IS_WIDGET(doc_list[idx].tag_tree))
 		{
@@ -387,10 +381,6 @@ gboolean document_remove(guint page_num)
 		document_undo_clear(idx);
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
-			// no more open file tabs so disable moving of file tabs and
-			// enable Dnd for dropping files
-			notebook_enable_dnd_for_dropping_files();
-
 			ui_update_tag_list(-1, FALSE);
 			//on_notebook1_switch_page(GTK_NOTEBOOK(app->notebook), NULL, 0, NULL);
 			ui_set_window_title(-1);
