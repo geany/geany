@@ -41,6 +41,8 @@
 #endif
 
 
+const gboolean swap_alt_tab_order = FALSE;
+
 
 /* simple convenience function to allocate and fill the struct */
 static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gchar *name,
@@ -373,10 +375,34 @@ void keybindings_free(void)
 }
 
 
+static gboolean check_fixed_kb(GdkEventKey *event)
+{
+	// check alt-0 to alt-9 for setting current notebook page
+	if (event->state & GDK_MOD1_MASK && event->keyval >= GDK_0 && event->keyval <= GDK_9)
+	{
+		gint page = event->keyval - GDK_0 - 1;
+		gint npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+
+		// alt-0 is for the rightmost tab
+		if (event->keyval == GDK_0)
+			page = npages - 1;
+		// invert the order if tabs are added on the other side
+		if (swap_alt_tab_order && ! app->tab_order_ltr)
+			page = (npages - 1) - page;
+
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 /* central keypress event handler, almost all keypress events go to this function */
 gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
 	guint i, k;
+
+	if (check_fixed_kb(event)) return TRUE;
 
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
 	{

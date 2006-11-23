@@ -4,6 +4,9 @@
    data/filetypes.*:
    Only use [a-zA-Z0-9] chars for default wordchars, to avoid problems
    with word matching when using Find & Replace functions.
+ * src/keybindings.c:
+   Add switching to a notebook tab number using Alt-1 to Alt-9; Alt-0
+   switches to the last tab.
 
 
 2006-11-22  Frank Lanitz  <frank@frank.uvena.de>
