@@ -1,3 +1,9 @@
+2006-11-23  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/vte.c: Fixed segfault when opening the preferences dialog for
+              the first time from the VTE widget.
+
+
 2006-11-23  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/highlighting.c, src/geany.h, doc/geany.docbook,
@@ -12,7 +18,7 @@
 2006-11-22  Frank Lanitz  <frank@frank.uvena.de>
 
  * po/hu.po, src/about.c, THANKS, configure.in:
-   Added Hungarian translation (Thanks to Gabor Kmetyko aka 
+   Added Hungarian translation (Thanks to Gabor Kmetyko aka
    kilo <kg_kilo@freemail.hu>).
 
 

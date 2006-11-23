@@ -31,7 +31,7 @@
 #include "vte.h"
 #include "msgwindow.h"
 #include "support.h"
-#include "callbacks.h"
+#include "prefs.h"
 
 
 VteInfo vte_info;
@@ -328,10 +328,12 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		}
 		case 2:
 		{
-			GtkWidget *notebook =
-				lookup_widget(app->prefs_dialog, "notebook2");
+			GtkWidget *notebook;
 
-			on_preferences1_activate(menuitem, NULL);
+			dialogs_show_prefs_dialog();
+
+			notebook = lookup_widget(app->prefs_dialog, "notebook2");
+
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook),
 				gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook)) - 1);
 			break;
