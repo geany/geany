@@ -13,6 +13,8 @@
  * src/keybindings.c:
    Add switching to a notebook tab number using Alt-1 to Alt-9; Alt-0
    switches to the last tab.
+ * src/geany.h, data/filetypes.*:
+   Add underscore to default wordchars again (oops).
 
 
 2006-11-22  Frank Lanitz  <frank@frank.uvena.de>

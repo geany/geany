@@ -28,7 +28,7 @@ primary=__FILE__ load define_method attr_accessor attr_writer attr_reader and de
 
 [settings]
 # the following characters are these which a "word" can contains, see documentation
-#wordchars=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # if only single comment char is supported like # in this file, leave comment_close blank
 comment_open=#

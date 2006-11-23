@@ -20,7 +20,7 @@ primary=absolute and array asm begin break case const constructor continue destr
 
 [settings]
 # the following characters are these which a "word" can contains, see documentation
-#wordchars=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # if only single comment char is supported like # in this file, leave comment_close blank
 comment_open={
