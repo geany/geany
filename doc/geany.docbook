@@ -759,7 +759,11 @@
 							<tbody>
 								<row>
 									<entry>GEANY_WORDCHARS</entry>
-									<entry>These characters define word boundaries.</entry>
+									<entry>
+										These characters define word boundaries when
+										making selections and searching using word matching
+										options.
+									</entry>
 									<entry>(look at sourcecode)</entry>
 								</row>
 								<row>
@@ -1453,10 +1457,12 @@
 								<tbody>
 									<row>
 										<entry>wordchars</entry>
-										<entry>Word delimiting characters. These characters define
-											   word boundaries.
+										<entry>
+											These characters define word boundaries when
+											making selections and searching using word matching
+											options.
 										</entry>
-										<entry>(look at sourcecode)</entry>
+										<entry>(look at system filetypes.* files)</entry>
 									</row>
 									<row>
 										<entry>comment_open</entry>

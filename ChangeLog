@@ -1,3 +1,11 @@
+2006-11-23  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/highlighting.c, src/geany.h, doc/geany.docbook,
+   data/filetypes.*:
+   Only use [a-zA-Z0-9] chars for default wordchars, to avoid problems
+   with word matching when using Find & Replace functions.
+
+
 2006-11-22  Frank Lanitz  <frank@frank.uvena.de>
 
  * po/hu.po, src/about.c, THANKS, configure.in:

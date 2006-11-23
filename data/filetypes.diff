@@ -12,7 +12,7 @@ added=0x34b034;0xffffff;false;false
 
 [settings]
 # the following characters are these which a "word" can contains, see documentation
-wordchars=_#&abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+#wordchars=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # only the text before the first --- is a comment
 comment_open=

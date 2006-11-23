@@ -162,14 +162,13 @@ static void get_keyfile_keywords(GKeyFile *config, GKeyFile *configh, const gcha
 }
 
 
-static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh,
-				const gchar *default_value, gchar **wordchars)
+static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **wordchars)
 {
 	gchar *result;
 
 	if (config == NULL || configh == NULL)
 	{
-		*wordchars = g_strdup(default_value);
+		*wordchars = g_strdup(GEANY_WORDCHARS);
 		return;
 	}
 
@@ -178,7 +177,7 @@ static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh,
 
 	if (result == NULL)
 	{
-		*wordchars = g_strdup(default_value);
+		*wordchars = g_strdup(GEANY_WORDCHARS);
 	}
 	else
 		*wordchars = result;
@@ -404,7 +403,7 @@ static void styleset_common_init(void)
 		common_style_set.folding_style.draw_line = tmp_style.foreground;
 	}
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS, &common_style_set.wordchars);
+	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_ALL);
 
 	g_key_file_free(config);
@@ -632,7 +631,7 @@ static void styleset_c_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_C, 1, "TODO FIXME");
 	style_sets[GEANY_FILETYPES_C].keywords[2] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_C].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_C);
 
@@ -720,7 +719,7 @@ static void styleset_cpp_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_CPP, 1, "TODO FIXME");
 	style_sets[GEANY_FILETYPES_CPP].keywords[2] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_CPP].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_CPP);
 
@@ -820,7 +819,7 @@ static void styleset_pascal_init(void)
 									asm unit interface implementation procedure function object try class");
 	style_sets[GEANY_FILETYPES_PASCAL].keywords[1] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_PASCAL].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PASCAL);
 
@@ -880,7 +879,7 @@ static void styleset_makefile_init(void)
 
 	style_sets[GEANY_FILETYPES_MAKE].keywords = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_MAKE].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_MAKE);
 
@@ -926,7 +925,7 @@ static void styleset_diff_init(void)
 
 	style_sets[GEANY_FILETYPES_DIFF].keywords = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_DIFF].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_DIFF);
 
@@ -973,7 +972,7 @@ static void styleset_latex_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_LATEX, 0, "section subsection begin item");
 	style_sets[GEANY_FILETYPES_LATEX].keywords[1] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_LATEX].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_LATEX);
 
@@ -1014,7 +1013,7 @@ static void styleset_php_init(void)
 	style_sets[GEANY_FILETYPES_PHP].styling = NULL;
 	style_sets[GEANY_FILETYPES_PHP].keywords = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_PHP].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PHP);
 
@@ -1054,7 +1053,7 @@ static void styleset_html_init(void)
 	style_sets[GEANY_FILETYPES_HTML].styling = NULL;
 	style_sets[GEANY_FILETYPES_HTML].keywords = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_HTML].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_HTML);
 
@@ -1159,7 +1158,7 @@ static void styleset_markup_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "sgml", GEANY_FILETYPES_XML, 5, "ELEMENT DOCTYPE ATTLIST ENTITY NOTATION");
 	style_sets[GEANY_FILETYPES_XML].keywords[6] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS"$",
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_XML].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_XML);
 
@@ -1413,7 +1412,7 @@ static void styleset_java_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "typedefs", GEANY_FILETYPES_JAVA, 3, "");
 	style_sets[GEANY_FILETYPES_JAVA].keywords[4] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_JAVA].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_JAVA);
 
@@ -1524,7 +1523,7 @@ static void styleset_perl_init(void)
 									x xor y");
 	style_sets[GEANY_FILETYPES_PERL].keywords[1] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_PERL].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PERL);
 
@@ -1595,7 +1594,7 @@ static void styleset_python_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_PYTHON, 0, "and assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while yield");
 	style_sets[GEANY_FILETYPES_PYTHON].keywords[1] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_PYTHON].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PYTHON);
 
@@ -1667,7 +1666,7 @@ static void styleset_ruby_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_RUBY, 0, "load define_method attr_accessor attr_writer attr_reader include __FILE__ and def end in or self unless __LINE__ begin defined? ensure module redo super until BEGIN break do false next rescue then when END case else for nil require retry true while alias class elsif if not return undef yield");
 	style_sets[GEANY_FILETYPES_RUBY].keywords[1] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_RUBY].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_RUBY);
 
@@ -1733,7 +1732,7 @@ static void styleset_sh_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_SH, 0, "break case continue do done elif else esac eval exit export fi for goto if in integer return set shift then until while");
 	style_sets[GEANY_FILETYPES_SH].keywords[1] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_SH].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_SH);
 
@@ -1882,7 +1881,7 @@ static void styleset_docbook_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "dtd", GEANY_FILETYPES_DOCBOOK, 1, "ELEMENT DOCTYPE ATTLIST ENTITY NOTATION");
 	style_sets[GEANY_FILETYPES_DOCBOOK].keywords[2] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_DOCBOOK].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_DOCBOOK);
 
@@ -2007,7 +2006,7 @@ static void styleset_css_init(void)
 								speak-punctuation speak-numeral");
 	style_sets[GEANY_FILETYPES_CSS].keywords[3] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_CSS].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_CSS);
 
@@ -2067,7 +2066,7 @@ static void styleset_conf_init(void)
 
 	style_sets[GEANY_FILETYPES_CONF].keywords = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_CONF].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_CONF);
 
@@ -2128,7 +2127,7 @@ static void styleset_asm_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "directives", GEANY_FILETYPES_ASM, 2, "ORG LIST NOLIST PAGE EQUIVALENT WORD TEXT");
 	style_sets[GEANY_FILETYPES_ASM].keywords[3] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_ASM].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_ASM);
 
@@ -2202,7 +2201,7 @@ static void styleset_fortran_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "user_functions", GEANY_FILETYPES_FORTRAN, 2, "");
 	style_sets[GEANY_FILETYPES_FORTRAN].keywords[3] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_FORTRAN].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_FORTRAN);
 
@@ -2300,7 +2299,7 @@ static void styleset_sql_init(void)
 						value values varchar variable varying view when whenever where with without work write");
 	style_sets[GEANY_FILETYPES_SQL].keywords[1] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_SQL].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_SQL);
 
@@ -2373,7 +2372,7 @@ static void styleset_caml_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "keywords_optional", GEANY_FILETYPES_CAML, 1, "option Some None ignore ref");
 	style_sets[GEANY_FILETYPES_CAML].keywords[2] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_CAML].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_CAML);
 
@@ -2441,7 +2440,7 @@ static void styleset_oms_init(void)
 			addcontrol addcontrol delwin fillrows function gaspect conjdir");
 	style_sets[GEANY_FILETYPES_OMS].keywords[1] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_OMS].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_OMS);
 
@@ -2512,7 +2511,7 @@ static void styleset_tcl_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "expand", GEANY_FILETYPES_TCL, 4, "");
 	style_sets[GEANY_FILETYPES_TCL].keywords[5] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_TCL].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_TCL);
 
@@ -2569,7 +2568,7 @@ static void styleset_d_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_D, 1, "TODO FIXME");
 	style_sets[GEANY_FILETYPES_D].keywords[2] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_D].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_D);
 
@@ -2650,7 +2649,7 @@ static void styleset_ferite_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_FERITE, 2, "brief class declaration description end example extends function group implements modifies module namespace param protocol return return static type variable warning");
 	style_sets[GEANY_FILETYPES_FERITE].keywords[3] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_FERITE].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_FERITE);
 
@@ -2760,7 +2759,7 @@ static void styleset_vhdl_init(void)
 	get_keyfile_keywords(config, config_home, "keywords", "userwords", GEANY_FILETYPES_VHDL, 6, "");
 	style_sets[GEANY_FILETYPES_VHDL].keywords[7] = NULL;
 
-	get_keyfile_wordchars(config, config_home, GEANY_WORDCHARS,
+	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_VHDL].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_VHDL);
 
