@@ -271,23 +271,25 @@ notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y)
 }
 
 
-// call this whenever the number of tabs in app->notebook changes.
+// call this after the number of tabs in app->notebook changes.
 static void tab_count_changed()
 {
-	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
+	switch (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)))
 	{
+		case 0:
 		/* Enables DnD for dropping files into the empty notebook widget */
 		gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_ALL,
 			files_drop_targets,	G_N_ELEMENTS(files_drop_targets),
 			GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
-	}
-	else
-	{
+		break;
+
+		case 1:
 		/* Disables DnD for dropping files into the notebook widget and enables the DnD for moving file
 		 * tabs. Files can still be dropped into the notebook widget because it will be handled by the
 		 * active Scintilla Widget (only dropping to the tab bar is not possible but it should be ok) */
 		gtk_drag_dest_set(app->notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
 			drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
+		break;
 	}
 }
 
