@@ -370,11 +370,6 @@ on_website1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_pref_tools_button_clicked           (GtkButton       *button,
-                                        gpointer         user_data);
-
-
-void
 on_line_breaking1_toggled              (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
 

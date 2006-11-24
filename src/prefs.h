@@ -35,4 +35,6 @@ void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data);
 
 void dialogs_show_prefs_dialog(void);
 
+void on_prefs_tools_button_clicked(GtkButton *button, gpointer user_data);
+
 #endif

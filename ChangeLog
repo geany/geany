@@ -3,6 +3,10 @@
  * src/ui_utils.h, src/prefs.c, src/dialogs.c, src/ui_utils.c:
    Add frame for VTE Preferences tab, update packing.
    Replace ui_frame_new() with ui_frame_new_with_alignment().
+ * src/callbacks.c, src/callbacks.h, src/vte.c, src/vte.h, src/prefs.c,
+   src/prefs.h:
+   Move VTE preferences GUI code to vte.c.
+   Move on_pref_tools_button_clicked() to prefs.c.
 
 
 2006-11-23  Enrico Tröger  <enrico.troeger@uvena.de>

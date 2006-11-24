@@ -52,10 +52,6 @@
 #include "main.h"
 #include "symbols.h"
 
-#ifdef G_OS_WIN32
-# include "win32.h"
-#endif
-
 #ifdef HAVE_VTE
 # include "vte.h"
 #endif
@@ -1436,55 +1432,6 @@ on_website1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	utils_start_browser(GEANY_HOMEPAGE);
-}
-
-
-void
-on_pref_tools_button_clicked           (GtkButton       *button,
-                                        gpointer         item)
-{
-#ifdef G_OS_WIN32
-	win32_show_pref_file_dialog(item);
-#else
-	GtkWidget *dialog;
-	gchar *filename, *tmp, **field;
-
-	// initialize the dialog
-	dialog = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->prefs_dialog),
-					GTK_FILE_CHOOSER_ACTION_OPEN,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	// cut the options from the command line
-	field = g_strsplit(gtk_entry_get_text(GTK_ENTRY(item)), " ", 2);
-	if (field[0])
-	{
-		filename = g_find_program_in_path(field[0]);
-		if (filename)
-		{
-			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog), filename);
-			g_free(filename);
-		}
-	}
-
-	// run it
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-	{
-		tmp = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		if (g_strv_length(field) > 1)
-			filename = g_strconcat(tmp, " ", field[1], NULL);
-		else
-		{
-			filename = tmp;
-			tmp = NULL;
-		}
-		gtk_entry_set_text(GTK_ENTRY(item), filename);
-		g_free(filename);
-		g_free(tmp);
-	}
-
-	g_strfreev(field);
-	gtk_widget_destroy(dialog);
-#endif
 }
 
 

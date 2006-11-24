@@ -24,13 +24,14 @@
 #ifndef GEANY_VTE_H
 #define GEANY_VTE_H 1
 
+#ifdef HAVE_VTE
+
 /* include stdlib.h AND unistd.h, because on GNU/Linux pid_t seems to be
  * in stdlib.h, on FreeBSD in unistd.h */
 #include <stdlib.h>
 #include <unistd.h>
 
 
-#ifdef HAVE_VTE
 typedef struct
 {
 	gboolean load_vte;
@@ -59,7 +60,6 @@ typedef struct
 	GdkColor *colour_back;
 } VteConfig;
 VteConfig *vc;
-#endif
 
 
 void vte_init(void);
@@ -73,6 +73,8 @@ void vte_send_cmd(const gchar *cmd);
 const gchar* vte_get_working_directory(void);
 
 void vte_cwd(const gchar *filename);
+
+void vte_append_preferences_tab();
 
 /*
 void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,
@@ -129,5 +131,6 @@ struct VteFunctions
 	void (*vte_terminal_im_append_menuitems) (VteTerminal *terminal, GtkMenuShell *menushell);
 };
 
+#endif
 
 #endif
