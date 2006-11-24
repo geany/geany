@@ -1,3 +1,10 @@
+2006-11-24  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/ui_utils.h, src/prefs.c, src/dialogs.c, src/ui_utils.c:
+   Add frame for VTE Preferences tab, update packing.
+   Replace ui_frame_new() with ui_frame_new_with_alignment().
+
+
 2006-11-23  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/vte.c: Fixed segfault when opening the preferences dialog for

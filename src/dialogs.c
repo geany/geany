@@ -718,14 +718,16 @@ void dialogs_show_includes_arguments_gen()
 
 	if (ft->menu_items->can_compile || ft->menu_items->can_link || ft->menu_items->can_exec)
 	{
-		GtkContainer *container;
+		GtkWidget *align, *frame;
 		gchar *frame_title = g_strconcat(ft->title, _(" commands"), NULL);
-		container = ui_frame_new(GTK_CONTAINER(vbox), frame_title);
+
+		frame = ui_frame_new_with_alignment(frame_title, &align);
+		gtk_container_add(GTK_CONTAINER(vbox), frame);
 		g_free(frame_title);
 
 		ft_table = gtk_table_new(3, 2, FALSE);
 		gtk_table_set_row_spacings(GTK_TABLE(ft_table), 6);
-		gtk_container_add(container, ft_table);
+		gtk_container_add(GTK_CONTAINER(align), ft_table);
 		row = 0;
 	}
 
