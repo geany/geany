@@ -38,7 +38,6 @@
 #include "keybindings.h"
 #include "interface.h"
 #include "encodings.h"
-#include "callbacks.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
