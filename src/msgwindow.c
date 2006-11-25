@@ -49,8 +49,8 @@ typedef struct
 	gint file_idx;			// idx of the field where the filename is or -1
 } ParseData;
 
-static GdkColor dark = {0, 58832, 58832, 58832};
-static GdkColor white = {0, 65535, 65535, 65535};
+static const GdkColor dark = {0, 58832, 58832, 58832};
+static const GdkColor white = {0, 65535, 65535, 65535};
 
 MessageWindow msgwindow;
 
@@ -156,16 +156,16 @@ void msgwin_prepare_compiler_tree_view(void)
 
 
 // adds string to the compiler textview
-void msgwin_compiler_add(gint msg_color, gboolean scroll, gchar const *format, ...)
+void msgwin_compiler_add(gint msg_color, gboolean scroll, const gchar *format, ...)
 {
 	GtkTreeIter iter;
 	GtkTreePath *path;
-	GdkColor *color;
-	static GdkColor red = {0, 65535, 0, 0};
-	static GdkColor dark_red = {0, 65535 / 2, 0, 0};
-	static GdkColor blue = {0, 0, 0, 65535};
-	static GdkColor black = {0, 0, 0, 0};
-	static gchar string[512];
+	const GdkColor *color;
+	const GdkColor red = {0, 65535, 0, 0};
+	const GdkColor dark_red = {0, 65535 / 2, 0, 0};
+	const GdkColor blue = {0, 0, 0, 65535};
+	const GdkColor black = {0, 0, 0, 0};
+	gchar string[512];
 	va_list args;
 
 	va_start(args, format);
@@ -206,7 +206,7 @@ void msgwin_show()
 
 
 // adds string to the msg treeview
-void msgwin_msg_add(gint line, gint idx, gchar *string)
+void msgwin_msg_add(gint line, gint idx, const gchar *string)
 {
 	GtkTreeIter iter;
 	static gint state = 0;
@@ -219,12 +219,12 @@ void msgwin_msg_add(gint line, gint idx, gchar *string)
 }
 
 
-// adds a status message
-void msgwin_status_add(gchar const *format, ...)
+// logs a status message (use ui_set_statusbar() to just display text on the statusbar)
+void msgwin_status_add(const gchar *format, ...)
 {
 	GtkTreeIter iter;
 	static gint state = 0;
-	static gchar string[512];
+	gchar string[512];
 	gchar *statusmsg, *time_str;
 	va_list args;
 

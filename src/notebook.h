@@ -27,7 +27,7 @@
 void notebook_init();
 
 /* Returns index of notebook page, or -1 on error */
-gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page);
+gint notebook_new_tab(gint doc_idx, const gchar *title, GtkWidget *page);
 
 // Always use this instead of gtk_notebook_remove_page().
 void notebook_remove_page(gint page_num);

@@ -1,3 +1,10 @@
+2006-11-25  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/msgwindow.c, src/notebook.c, src/msgwindow.h, src/notebook.h:
+   Add some const char* argument modifiers, remove unneeded static from
+   some local vars.
+
+
 2006-11-24  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/ui_utils.h, src/prefs.c, src/dialogs.c, src/ui_utils.c:

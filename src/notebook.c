@@ -295,7 +295,7 @@ static void tab_count_changed()
 
 
 /* Returns index of notebook page, or -1 on error */
-gint notebook_new_tab(gint doc_idx, gchar *title, GtkWidget *page)
+gint notebook_new_tab(gint doc_idx, const gchar *title, GtkWidget *page)
 {
 	GtkWidget *hbox, *but;
 	GtkWidget *align;
