@@ -169,7 +169,7 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, const gchar *format, .
 	va_list args;
 
 	va_start(args, format);
-	g_vsnprintf(string, 511, format, args);
+	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
 	switch (msg_color)
@@ -229,11 +229,11 @@ void msgwin_status_add(const gchar *format, ...)
 	va_list args;
 
 	va_start(args, format);
-	g_vsnprintf(string, 511, format, args);
+	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
 	// display status message in status bar
-	ui_set_statusbar(string, FALSE);
+	ui_set_statusbar("%s", string);
 
 	// add a timestamp to status messages
 	time_str = utils_get_current_time_string();

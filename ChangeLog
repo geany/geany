@@ -11,6 +11,10 @@
    of the files changed.
    Show the filename when replacing text over a range.
    Add DOC_FILENAME() null-safe macro to get the filename at doc_idx.
+ * src/build.c, src/ui_utils.h, src/msgwindow.c, src/search.c,
+   src/document.c, src/ui_utils.c:
+   Make ui_set_statusbar() use printf-style arguments & assume the
+   message should not be overridden.
 
 
 2006-11-24  Nick Treleaven  <nick.treleaven@btinternet.com>

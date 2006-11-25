@@ -50,7 +50,7 @@ recent_file_activate_cb                (GtkMenuItem     *menuitem,
 
 /* allow_override is TRUE if text can be ignored when another message has been set
  * that didn't use allow_override and has not timed out. */
-void ui_set_statusbar(const gchar *text, gboolean allow_override)
+static void set_statusbar(const gchar *text, gboolean allow_override)
 {
 	static glong last_time = 0;
 	GTimeVal timeval;
@@ -73,7 +73,21 @@ void ui_set_statusbar(const gchar *text, gboolean allow_override)
 }
 
 
-/* updates the status bar */
+// Display text on the statusbar (without logging it to the Status window).
+void ui_set_statusbar(const gchar *format, ...)
+{
+	gchar string[512];
+	va_list args;
+
+	va_start(args, format);
+	g_vsnprintf(string, 512, format, args);
+	va_end(args);
+
+	set_statusbar(string, FALSE);
+}
+
+
+/* updates the status bar document statistics */
 void ui_update_statusbar(gint idx, gint pos)
 {
 	gchar *text;
@@ -89,9 +103,9 @@ void ui_update_statusbar(gint idx, gint pos)
 		if (pos == -1) pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
 
-	   // Add temporary fix for sci infinite loop in Document::GetColumn(int)
-	   // when current pos is beyond document end (can occur when removing
-	   // blocks of selected lines especially esp. brace sections near end of file).
+		// Add temporary fix for sci infinite loop in Document::GetColumn(int)
+		// when current pos is beyond document end (can occur when removing
+		// blocks of selected lines especially esp. brace sections near end of file).
 		if (pos <= sci_get_length(doc_list[idx].sci))
 			col = sci_get_col_from_position(doc_list[idx].sci, pos);
 		else
@@ -108,12 +122,12 @@ void ui_update_statusbar(gint idx, gint pos)
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
 			(utils_is_unicode_charset(doc_list[idx].encoding)) ? ((doc_list[idx].has_bom) ? _("(with BOM)") : _("(without BOM)")) : "",
 			(doc_list[idx].file_type) ? doc_list[idx].file_type->title : _("unknown"));
-		ui_set_statusbar(text, TRUE); //can be overridden by status messages
+		set_statusbar(text, TRUE);	// can be overridden by status messages
 		g_free(text);
 	}
 	else
 	{
-		ui_set_statusbar("", TRUE); //can be overridden by status messages
+		set_statusbar("", TRUE);	// can be overridden by status messages
 	}
 }
 

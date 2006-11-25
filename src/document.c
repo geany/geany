@@ -982,9 +982,7 @@ void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean 
 	{
 		if (! inc)
 		{
-			gchar *msg = g_strdup_printf(_("\"%s\" was not found."), text);
-			ui_set_statusbar(msg, FALSE);
-			g_free(msg);
+			ui_set_statusbar(_("\"%s\" was not found."), text);
 		}
 		utils_beep();
 		sci_goto_pos(doc_list[idx].sci, start_pos, FALSE);	// clear selection
@@ -1036,10 +1034,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 		if ((selection_end == 0 && ! search_backwards) ||
 			(selection_end == sci_len && search_backwards))
 		{
-			gchar *msg = g_strdup_printf(_("\"%s\" was not found."), text);
-
-			ui_set_statusbar(msg, FALSE);
-			g_free(msg);
+			ui_set_statusbar(_("\"%s\" was not found."), text);
 			utils_beep();
 			return -1;
 		}

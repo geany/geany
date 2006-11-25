@@ -706,7 +706,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 		{
 			gchar *msg = _("Compilation finished successfully.");
 			msgwin_compiler_add(COLOR_BLUE, TRUE, msg);
-			if (! app->msgwindow_visible) ui_set_statusbar(msg, FALSE);
+			if (! app->msgwindow_visible) ui_set_statusbar("%s", msg);
 		}
 #endif
 	}

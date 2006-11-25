@@ -888,7 +888,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		case GEANY_RESPONSE_REPLACE_IN_SESSION:
 		{
 			guint n, count = 0;
-			gchar *msg;
+
 			// replace in all documents following notebook tab order
 			for (n = 0; (gint) n < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); n++)
 			{
@@ -899,9 +899,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				if (document_replace_all(idx, find, replace, search_flags_re,
 					search_replace_escape_re)) count++;
 			}
-			msg = g_strdup_printf(_("Replaced text in %u files."), count);
-			ui_set_statusbar(msg, FALSE);
-			g_free(msg);
+			ui_set_statusbar(_("Replaced text in %u files."), count);
 
 			ui_save_buttons_toggle(doc_list[idx].changed);	// update save all
 			if (close_window) gtk_widget_hide(widgets.replace_dialog);
@@ -1239,7 +1237,7 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 	else
 	{
 		guint i;
-		for(i = 0; i < doc_array->len; i++)
+		for (i = 0; i < doc_array->len; i++)
 		{
 			if (doc_list[i].is_valid)
 				if (find_document_usage(i, search_text, flags) > 0) found = TRUE;
@@ -1249,7 +1247,7 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 	if (! found) // no matches were found
 	{
 		gchar *text = g_strdup_printf(_("No matches found for '%s'."), search_text);
-		ui_set_statusbar(text, FALSE);
+		ui_set_statusbar("%s", text);
 		msgwin_msg_add(-1, -1, text);
 		g_free(text);
 	}

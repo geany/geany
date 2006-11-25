@@ -24,9 +24,8 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
-/* allow_override is TRUE if text can be ignored when another message has been set
- * that didn't use allow_override and has not timed out. */
-void ui_set_statusbar(const gchar *text, gboolean allow_override);
+// Display text on the statusbar without logging it to the Status window.
+void ui_set_statusbar(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 
 void ui_update_statusbar(gint idx, gint pos);
 
