@@ -3,6 +3,9 @@
  * src/msgwindow.c, src/notebook.c, src/msgwindow.h, src/notebook.h:
    Add some const char* argument modifiers, remove unneeded static from
    some local vars.
+ * src/vte.c:
+   Remove vte_char_size_changed() workaround, not needed since r988;
+   this also fixes an issue where the VTE is limited to 30x5 chars.
 
 
 2006-11-24  Nick Treleaven  <nick.treleaven@btinternet.com>
