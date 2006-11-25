@@ -305,7 +305,6 @@ static gint document_create_new_sci(const gchar *filename)
 	g_free(fname);
 
 	title = (filename) ? g_path_get_basename(filename) : g_strdup(GEANY_STRING_UNTITLED);
-
 	tabnum = notebook_new_tab(new_idx, title, GTK_WIDGET(sci));
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), tabnum);
 
@@ -365,8 +364,7 @@ gboolean document_remove(guint page_num)
 			//g_object_unref(doc_list[idx].tag_tree); // no need to unref when destroying?
 			gtk_widget_destroy(doc_list[idx].tag_tree);
 		}
-		msgwin_status_add(_("File %s closed."),
-				(doc_list[idx].file_name) ? doc_list[idx].file_name : GEANY_STRING_UNTITLED);
+		msgwin_status_add(_("File %s closed."), DOC_FILENAME(idx));
 		g_free(doc_list[idx].encoding);
 		g_free(doc_list[idx].saved_encoding.encoding);
 		g_free(doc_list[idx].file_name);
@@ -1130,7 +1128,7 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	gint count = 0;
 	gint find_len = 0, replace_len = 0;
 	gboolean match_found = FALSE;
-	gchar *escaped_find_text, *escaped_replace_text;
+	gchar *escaped_find_text, *escaped_replace_text, *filename;
 	struct TextToFind ttf;
 
 	g_return_val_if_fail(find_text != NULL && replace_text != NULL, FALSE);
@@ -1164,21 +1162,23 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	}
 	sci_end_undo_action(doc_list[idx].sci);
 
+	filename = g_path_get_basename(DOC_FILENAME(idx));
+
 	if (escaped_chars)
 	{	// escape special characters for showing
 		escaped_find_text = g_strescape(find_text, NULL);
 		escaped_replace_text = g_strescape(replace_text, NULL);
-		msgwin_status_add(_("Replaced %d occurrences of \"%s\" with \"%s\"."),
-							count, escaped_find_text, escaped_replace_text);
+		msgwin_status_add(_("%s: replaced %d occurrences of \"%s\" with \"%s\"."),
+						filename, count, escaped_find_text, escaped_replace_text);
 		g_free(escaped_find_text);
 		g_free(escaped_replace_text);
 	}
 	else
 	{
-		msgwin_status_add(_("Replaced %d occurrences of \"%s\" with \"%s\"."),
-							count, find_text, replace_text);
+		msgwin_status_add(_("%s: replaced %d occurrences of \"%s\" with \"%s\"."),
+						filename, count, find_text, replace_text);
 	}
-
+	g_free(filename);
 
 	if (match_found)
 	{
@@ -1220,16 +1220,21 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 }
 
 
-void document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text,
-						  gint flags, gboolean escaped_chars)
+// returns TRUE if at least one replacement was made.
+gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text,
+		gint flags, gboolean escaped_chars)
 {
 	gint len;
-	g_return_if_fail(find_text != NULL && replace_text != NULL);
-	if (idx == -1 || ! *find_text) return;
+	g_return_val_if_fail(find_text != NULL && replace_text != NULL, FALSE);
+	if (idx == -1 || ! *find_text) return FALSE;
 
 	len = sci_get_length(doc_list[idx].sci);
 	if (document_replace_range(idx, find_text, replace_text, flags, 0, len, escaped_chars) == -1)
+	{
 		utils_beep();
+		return FALSE;
+	}
+	return TRUE;
 }
 
 

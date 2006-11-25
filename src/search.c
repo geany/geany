@@ -887,13 +887,22 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 		case GEANY_RESPONSE_REPLACE_IN_SESSION:
 		{
-			guint i;
-			for (i = 0; i < doc_array->len; i++)
+			guint n, count = 0;
+			gchar *msg;
+			// replace in all documents following notebook tab order
+			for (n = 0; (gint) n < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); n++)
 			{
-				if (! doc_list[i].is_valid) continue;
+				gint idx = document_get_n_idx(n);
 
-				document_replace_all(i, find, replace, search_flags_re, search_replace_escape_re);
+				if (! doc_list[idx].is_valid) continue;
+
+				if (document_replace_all(idx, find, replace, search_flags_re,
+					search_replace_escape_re)) count++;
 			}
+			msg = g_strdup_printf(_("Replaced text in %u files."), count);
+			ui_set_statusbar(msg, FALSE);
+			g_free(msg);
+
 			ui_save_buttons_toggle(doc_list[idx].changed);	// update save all
 			if (close_window) gtk_widget_hide(widgets.replace_dialog);
 			break;

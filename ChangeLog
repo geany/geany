@@ -6,6 +6,11 @@
  * src/vte.c:
    Remove vte_char_size_changed() workaround, not needed since r988;
    this also fixes an issue where the VTE is limited to 30x5 chars.
+ * src/search.c, src/document.c, src/document.h:
+   When replacing in session, use notebook page order and show a count
+   of the files changed.
+   Show the filename when replacing text over a range.
+   Add DOC_FILENAME() null-safe macro to get the filename at doc_idx.
 
 
 2006-11-24  Nick Treleaven  <nick.treleaven@btinternet.com>

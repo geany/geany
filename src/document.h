@@ -82,6 +82,10 @@ extern GArray *doc_array;
 #define DOC_IDX_VALID(idx) \
 	((idx) >= 0 && (guint)(idx) < doc_array->len && doc_list[idx].is_valid)
 
+#define DOC_FILENAME(doc_idx) \
+	((doc_list[doc_idx].file_name != NULL) ? \
+	(doc_list[doc_idx].file_name) : GEANY_STRING_UNTITLED)
+
 
 /* returns the index of the notebook page which has the given filename */
 gint document_find_by_filename(const gchar*, gboolean is_tm_filename);
@@ -155,7 +159,8 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 gint document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text,
 	gint flags, gboolean search_backwards);
 
-void document_replace_all(gint, const gchar*, const gchar*, gint, gboolean);
+gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text,
+		gint flags, gboolean escaped_chars);
 
 void document_replace_sel(gint, const gchar*, const gchar*, gint, gboolean);
 
