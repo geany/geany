@@ -15,6 +15,9 @@
    src/document.c, src/ui_utils.c:
    Make ui_set_statusbar() use printf-style arguments & assume the
    message should not be overridden.
+ * data/filetypes.python:
+   Change python default compile command to create a compiled python
+   .pyc file (thanks to Bajusz Tamás).
 
 
 2006-11-24  Nick Treleaven  <nick.treleaven@btinternet.com>
