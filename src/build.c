@@ -674,6 +674,35 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 }
 
 
+static void show_build_result_message(gboolean failure)
+{
+	gchar *msg;
+
+	if (failure)
+	{
+		msg = _("Compilation failed.");
+		msgwin_compiler_add(COLOR_DARK_RED, TRUE, "%s", msg);
+		// If msgwindow is hidden, user will want to display it to see the error
+		if (! app->msgwindow_visible)
+		{
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
+			msgwin_show();
+		}
+		else
+		if (gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
+			ui_set_statusbar("%s", msg);
+	}
+	else
+	{
+		msg = _("Compilation finished successfully.");
+		msgwin_compiler_add(COLOR_BLUE, TRUE, "%s", msg);
+		if (! app->msgwindow_visible ||
+			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
+				ui_set_statusbar("%s", msg);
+	}
+}
+
+
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
 	if (build_info.type != GBO_RUN) // not necessary when executing a file
@@ -695,19 +724,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 		{	// any other failure occured
 			failure = TRUE;
 		}
-
-
-		if (failure)
-		{
-			msgwin_compiler_add(COLOR_DARK_RED, TRUE, _("Compilation failed."));
-			if (! app->msgwindow_visible) msgwin_show();
-		}
-		else
-		{
-			gchar *msg = _("Compilation finished successfully.");
-			msgwin_compiler_add(COLOR_BLUE, TRUE, msg);
-			if (! app->msgwindow_visible) ui_set_statusbar("%s", msg);
-		}
+		show_build_result_message(failure);
 #endif
 	}
 
