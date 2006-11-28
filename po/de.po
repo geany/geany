@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-23 21:24+0100\n"
-"PO-Revision-Date: 2006-11-23 22:38+0100\n"
+"POT-Creation-Date: 2006-11-28 20:59+0100\n"
+"PO-Revision-Date: 2006-11-28 21:02+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <frank@frank.uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -127,7 +127,7 @@ msgid "Saves all open files"
 msgstr "Speichert alle offenen Dateien"
 
 #: src/interface.c:321
-#: src/callbacks.c:460
+#: src/callbacks.c:456
 #: src/utils.c:352
 msgid "_Reload"
 msgstr "_Neu laden"
@@ -440,7 +440,7 @@ msgstr "Entfernt alle gesetzten (Fehler)-Markierungen innerhalb des Dokumentes."
 
 #. build the code
 #: src/interface.c:802
-#: src/build.c:793
+#: src/build.c:810
 msgid "_Build"
 msgstr "_Erstellen"
 
@@ -528,7 +528,7 @@ msgid "Compile the current file"
 msgstr "Kompiliert die aktuelle Datei"
 
 #: src/interface.c:926
-#: src/build.c:853
+#: src/build.c:870
 msgid "Run or view the current file"
 msgstr "Aktuelle Datei anzeigen oder ausführen"
 
@@ -702,13 +702,12 @@ msgid "Switch to the status message tab (in the notebook window at the bottom) i
 msgstr "Automatisch zu dem Statusmeldungs-Reiter im unteren Fenster wechseln, wenn eine neue Statusmeldung vorliegt."
 
 #: src/interface.c:2439
-#, fuzzy
 msgid "Always wrap search and hide the Find dialog"
-msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
+msgstr "Das vollständige Dokument durchsuchen und den Suchen-Dialog schließen"
 
 #: src/interface.c:2443
 msgid "Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous"
-msgstr ""
+msgstr "Immer das vollständige Dokument durchsuchen und den Suchen-Dialog nach Klicken auf Nächstes/Vorheriges schließen."
 
 # Denke trifft es besser als »Eigenschaften«
 #: src/interface.c:2446
@@ -1016,8 +1015,8 @@ msgstr "Stellt die Farbe des \"long line markers\" ein."
 
 #: src/interface.c:3076
 #: src/dialogs.c:494
-#: src/prefs.c:992
-#: src/prefs.c:999
+#: src/vte.c:538
+#: src/vte.c:545
 msgid "Color Chooser"
 msgstr "Farbwähler"
 
@@ -1237,92 +1236,86 @@ msgstr "<b>Tastaturkürzel</b>"
 msgid "Keybindings"
 msgstr "Tastenkürzel"
 
-#: src/callbacks.c:160
+#: src/callbacks.c:156
 msgid "Do you really want to quit?"
 msgstr "Möchten Sie wirklich beenden?"
 
-#: src/callbacks.c:461
+#: src/callbacks.c:457
 msgid "Any unsaved changes will be lost."
 msgstr "Alle ungesicherten Änderungen gehen verloren."
 
-#: src/callbacks.c:462
+#: src/callbacks.c:458
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Wollen Sie %s wirklich neu laden?"
 
-#: src/callbacks.c:847
+#: src/callbacks.c:843
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Die Datei '%s' existiert bereits. Möchten Sie sie überschreiben?"
 
-#: src/callbacks.c:1216
+#: src/callbacks.c:1212
 #, c-format
 msgid "Declaration of \"%s()\" not found"
 msgstr "Deklaration von \"%s()\" nicht gefunden."
 
-#: src/callbacks.c:1218
+#: src/callbacks.c:1214
 #, c-format
 msgid "Definition of \"%s()\" not found"
 msgstr "Definition von \"%s()\" nicht gefunden."
 
-#. initialize the dialog
-#: src/callbacks.c:1453
-#: src/dialogs.c:74
-msgid "Open File"
-msgstr "Datei öffnen"
-
-#: src/callbacks.c:1502
-#: src/callbacks.c:1547
+#: src/callbacks.c:1449
+#: src/callbacks.c:1494
 msgid "Please set the filetype for the current file before using this function."
 msgstr "Bitte legen Sie den Dateityp fest, bevor Sie diese Funktion benutzen."
 
-#: src/callbacks.c:1659
-#: src/ui_utils.c:543
+#: src/callbacks.c:1606
+#: src/ui_utils.c:557
 msgid "dd.mm.yyyy"
 msgstr "TT.MM.JJ"
 
-#: src/callbacks.c:1661
-#: src/ui_utils.c:544
+#: src/callbacks.c:1608
+#: src/ui_utils.c:558
 msgid "mm.dd.yyyy"
 msgstr "MM.TT.JJ"
 
-#: src/callbacks.c:1663
-#: src/ui_utils.c:545
+#: src/callbacks.c:1610
+#: src/ui_utils.c:559
 msgid "yyyy/mm/dd"
 msgstr "JJJJ/MM/TT"
 
-#: src/callbacks.c:1665
-#: src/ui_utils.c:554
+#: src/callbacks.c:1612
+#: src/ui_utils.c:568
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "TT.MM.JJJJ Stunden:Minuten:Sekunden"
 
-#: src/callbacks.c:1667
-#: src/ui_utils.c:555
+#: src/callbacks.c:1614
+#: src/ui_utils.c:569
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "MM.TT.JJJJ Stunden:Minuten:Sekunden"
 
-#: src/callbacks.c:1669
-#: src/ui_utils.c:556
+#: src/callbacks.c:1616
+#: src/ui_utils.c:570
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "JJJJ/MM/TT Stunden:Minuten:Sekunden"
 
-#: src/callbacks.c:1671
-#: src/ui_utils.c:565
-#: src/ui_utils.c:569
-#: src/ui_utils.c:573
-#: src/ui_utils.c:577
+#: src/callbacks.c:1618
+#: src/ui_utils.c:579
+#: src/ui_utils.c:583
+#: src/ui_utils.c:587
+#: src/ui_utils.c:591
 msgid "Use custom date format"
 msgstr "Benutze selbst erstelltes Zeitformat"
 
-#: src/callbacks.c:1678
+#: src/callbacks.c:1625
 msgid "Custom date format"
 msgstr "Benutzerdefiniertes Datumsformat"
 
-#: src/callbacks.c:1679
+#: src/callbacks.c:1626
 msgid "Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function. See \"man strftime\" for more information."
 msgstr "Hier kann ein benutzerdefiniertes Datumsformat eingegeben werden. Dabei können alle Platzhalter verwendet werden, die auch in ANSI C strftime zum Einsatz kommen."
 
-#: src/callbacks.c:1698
+#: src/callbacks.c:1645
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Das Datenformat konnte nicht umgewandelt werden. Eventuell ist es zu lang."
 
@@ -1331,6 +1324,12 @@ msgstr "Das Datenformat konnte nicht umgewandelt werden. Eventuell ist es zu lan
 #, c-format
 msgid "Couldn't find pixmap file: %s"
 msgstr "Konnte PixMap %s nicht finden."
+
+#. initialize the dialog
+#: src/dialogs.c:74
+#: src/prefs.c:1003
+msgid "Open File"
+msgstr "Datei öffnen"
 
 #: src/dialogs.c:79
 msgid "Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."
@@ -1427,7 +1426,7 @@ msgstr "Geben Sie die Zeile an, zu der Sie springen möchten:"
 
 #. arguments
 #: src/dialogs.c:592
-#: src/build.c:997
+#: src/build.c:1014
 msgid "Set Arguments"
 msgstr "Programm-Parameter angeben"
 
@@ -1454,7 +1453,7 @@ msgid "PDF preview:"
 msgstr "PDF-Vorschau:"
 
 #: src/dialogs.c:682
-#: src/dialogs.c:795
+#: src/dialogs.c:797
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -1475,141 +1474,141 @@ msgstr "Legt die Kommandos zum Erstellen und Ausführen von Programmen fest."
 msgid " commands"
 msgstr "Kommandos"
 
-#: src/dialogs.c:735
+#: src/dialogs.c:737
 msgid "Compile:"
 msgstr "Kompilieren:"
 
-#: src/dialogs.c:756
+#: src/dialogs.c:758
 msgid "Build:"
 msgstr "Erstellen:"
 
-#: src/dialogs.c:777
-#: src/dialogs.c:1048
+#: src/dialogs.c:779
+#: src/dialogs.c:1050
 msgid "Execute:"
 msgstr "Ausführen:"
 
-#: src/dialogs.c:842
+#: src/dialogs.c:844
 msgid "An error occurred or file information could not be retrieved (e.g. from a new file)."
 msgstr "Es ist ein Fehler aufgetreten oder Datei-Informationen konnten nicht gelesen werden(z.B. bei einer neuen, ungespeicherten Datei)."
 
-#: src/dialogs.c:861
-#: src/dialogs.c:862
 #: src/dialogs.c:863
-#: src/dialogs.c:869
-#: src/dialogs.c:870
+#: src/dialogs.c:864
+#: src/dialogs.c:865
 #: src/dialogs.c:871
+#: src/dialogs.c:872
+#: src/dialogs.c:873
 #: src/utils.c:499
 #: src/utils.c:553
-#: src/ui_utils.c:108
-#: src/ui_utils.c:110
+#: src/ui_utils.c:122
+#: src/ui_utils.c:124
 msgid "unknown"
 msgstr "unbekannt"
 
-#: src/dialogs.c:875
+#: src/dialogs.c:877
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: src/dialogs.c:903
+#: src/dialogs.c:905
 msgid "<b>Type:</b>"
 msgstr "<b>Dateityp:</b>"
 
-#: src/dialogs.c:916
+#: src/dialogs.c:918
 msgid "<b>Size:</b>"
 msgstr "<b>Größe:</b>"
 
-#: src/dialogs.c:931
+#: src/dialogs.c:933
 msgid "<b>Location:</b>"
 msgstr "<b>Ort:</b>"
 
-#: src/dialogs.c:944
+#: src/dialogs.c:946
 msgid "<b>Read-only:</b>"
 msgstr "<b>Schreibgeschützt:</b>"
 
-#: src/dialogs.c:951
+#: src/dialogs.c:953
 msgid "(only inside Geany)"
 msgstr "(nur innerhalb von Geany)"
 
-#: src/dialogs.c:960
+#: src/dialogs.c:962
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kodierung:</b>"
 
-#: src/dialogs.c:969
-#: src/ui_utils.c:109
+#: src/dialogs.c:971
+#: src/ui_utils.c:123
 msgid "(with BOM)"
 msgstr "(mit BOM)"
 
-#: src/dialogs.c:969
-#: src/ui_utils.c:109
+#: src/dialogs.c:971
+#: src/ui_utils.c:123
 msgid "(without BOM)"
 msgstr "(ohne BOM)"
 
-#: src/dialogs.c:979
+#: src/dialogs.c:981
 msgid "<b>Modified:</b>"
 msgstr "<b>Modifiziert:</b>"
 
-#: src/dialogs.c:992
+#: src/dialogs.c:994
 msgid "<b>Changed:</b>"
 msgstr "<b>Geändert:</b>"
 
-#: src/dialogs.c:1005
+#: src/dialogs.c:1007
 msgid "<b>Accessed:</b>"
 msgstr "<b>Zugriff:</b>"
 
-#: src/dialogs.c:1026
+#: src/dialogs.c:1028
 msgid "<b>Permissions:</b>"
 msgstr "<b>Berechtigungen:</b>"
 
 #. Header
-#: src/dialogs.c:1034
+#: src/dialogs.c:1036
 msgid "Read:"
 msgstr "Lesen:"
 
-#: src/dialogs.c:1041
+#: src/dialogs.c:1043
 msgid "Write:"
 msgstr "Schreiben:"
 
 #. Owner
-#: src/dialogs.c:1056
+#: src/dialogs.c:1058
 msgid "Owner:"
 msgstr "Eigentümer:"
 
 #. Group
-#: src/dialogs.c:1092
+#: src/dialogs.c:1094
 msgid "Group:"
 msgstr "Gruppe:"
 
 #. Other
-#: src/dialogs.c:1128
+#: src/dialogs.c:1130
 msgid "Other:"
 msgstr "Andere:"
 
-#: src/dialogs.c:1249
+#: src/dialogs.c:1251
 msgid "Keyboard shortcuts"
 msgstr "Tastaturkürzel"
 
-#: src/dialogs.c:1258
+#: src/dialogs.c:1260
 msgid "The following keyboard shortcuts are defined:"
 msgstr "Folgende Tastenkürzel sind definiert: "
 
-#: src/document.c:368
+#: src/document.c:367
 #, c-format
 msgid "File %s closed."
 msgstr "Datei %s wurde geschlossen."
 
-#: src/document.c:450
+#: src/document.c:448
 msgid "New file opened."
 msgstr "Neue Datei geöffnet."
 
-#: src/document.c:598
+#: src/document.c:596
 msgid "Invalid filename"
 msgstr "Ungültiger Dateiname"
 
-#: src/document.c:623
+#: src/document.c:621
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Konnte Datei '%s' nicht öffnen(%s)."
 
-#: src/document.c:647
+#: src/document.c:645
 #, c-format
 msgid ""
 "The file \"%s\" could not opened properly and probably was truncated. Be aware that saving it can cause data loss.\n"
@@ -1618,36 +1617,36 @@ msgstr ""
 "Die Datei »%s« konnte nicht ordnungsgemäß geladen werden und wurde evtl. nicht vollständig abgeschnitten. Die kann zu Datenvelust beim Speichern führen!\n"
 "Die Datei wird schreibgeschützt geöffnet."
 
-#: src/document.c:670
+#: src/document.c:668
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Die Datei \"%s\" ist kein gültiges %s."
 
-#: src/document.c:681
+#: src/document.c:679
 #, c-format
 msgid "The file \"%s\" does not look like a text file or the file encoding is not supported."
 msgstr "Die Datei \"%s\" scheint keine Textdatei zu sein, oder das Format wird nicht unterstützt."
 
-#: src/document.c:752
+#: src/document.c:750
 #, c-format
 msgid "File %s reloaded."
 msgstr "Datei %s neu geladen."
 
-#: src/document.c:754
+#: src/document.c:752
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Datei %s geöffnet(%d%s)."
 
-#: src/document.c:756
+#: src/document.c:754
 msgid ", read-only"
 msgstr ", schreibgeschützt"
 
-#: src/document.c:831
-#: src/document.c:912
+#: src/document.c:829
+#: src/document.c:910
 msgid "Error saving file."
 msgstr "Fehler beim Speichern der Datei."
 
-#: src/document.c:876
+#: src/document.c:874
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved.\n"
@@ -1656,32 +1655,32 @@ msgstr ""
 "Beim Konvertieren der Datei von UTF-8 in \"%s\" ist ein Fehler aufgetreten. Die Datei bleibt ungespeichert.\n"
 "Fehlermeldung: %s\n"
 
-#: src/document.c:900
+#: src/document.c:898
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Fehler beim Speichern der Datei (%s)."
 
-#: src/document.c:939
+#: src/document.c:937
 #, c-format
 msgid "File %s saved."
 msgstr "Datei %s wurde gespeichert."
 
-#: src/document.c:987
-#: src/document.c:1041
-#: src/document.c:1052
+#: src/document.c:985
+#: src/document.c:1037
+#: src/document.c:1045
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" wurde nicht gefunden."
 
-#: src/document.c:1052
+#: src/document.c:1045
 msgid "Wrap search and find again?"
 msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
 
-#: src/document.c:1171
-#: src/document.c:1178
+#: src/document.c:1166
+#: src/document.c:1173
 #, c-format
-msgid "Replaced %d occurrences of \"%s\" with \"%s\"."
-msgstr "%d mal \"%s\" gegen \"%s\" ausgetauscht."
+msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr "%s: Es wurde %d Mal \"%s\" gegen \"%s\" ersetzt."
 
 #: src/document.c:1349
 msgid "Win (CRLF)"
@@ -1727,58 +1726,58 @@ msgid ""
 "the current buffer."
 msgstr "Die Datei '%s' auf dem Datenträger ist aktueller als die momentan geöffnete Version."
 
-#: src/ui_utils.c:100
+#: src/ui_utils.c:114
 #, c-format
 msgid "%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s %s     filetype: %s"
 msgstr "%c  Zeile: % 4d Spalte: % 3d  Auswahl: % 4d   %s     Modus: %s%s      akt. Funktion: %s      Kodierung: %s %s     Dateityp: %s"
 
-#: src/ui_utils.c:104
+#: src/ui_utils.c:118
 msgid "OVR"
 msgstr "ÜBER"
 
-#: src/ui_utils.c:104
+#: src/ui_utils.c:118
 msgid "INS"
 msgstr "EINF"
 
-#: src/ui_utils.c:130
+#: src/ui_utils.c:144
 #: src/geany.h:47
 msgid "untitled"
 msgstr "unbenannt"
 
-#: src/ui_utils.c:131
+#: src/ui_utils.c:145
 msgid "(Unsaved)"
 msgstr "(Ungespeichert)"
 
-#: src/ui_utils.c:170
+#: src/ui_utils.c:184
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Schriftart gewechselt (%s)."
 
-#: src/ui_utils.c:204
+#: src/ui_utils.c:218
 msgid "No tags found"
 msgstr "Keine Symbole gefunden."
 
-#: src/ui_utils.c:513
+#: src/ui_utils.c:527
 msgid "C Standard Library"
 msgstr "C Standard Bibliothek"
 
-#: src/ui_utils.c:514
+#: src/ui_utils.c:528
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: src/ui_utils.c:515
+#: src/ui_utils.c:529
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C Standard Bibliothek)"
 
-#: src/ui_utils.c:516
+#: src/ui_utils.c:530
 msgid "C++ Standard Library"
 msgstr "C++ Standard Bibliothek"
 
-#: src/ui_utils.c:517
+#: src/ui_utils.c:531
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: src/ui_utils.c:581
+#: src/ui_utils.c:595
 msgid "Set custom date format"
 msgstr "Benutzerdefiniertes Datumsformat einstellen "
 
@@ -1952,7 +1951,7 @@ msgstr "Konnte %s nicht ausführen (Start-Script konnte nicht erzeugt werden)"
 #: src/build.c:212
 #: src/build.c:428
 #: src/build.c:605
-#: src/search.c:1048
+#: src/search.c:1055
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prozess fehlgeschlagen (%s)"
@@ -1977,235 +1976,146 @@ msgstr "Konnte %s nicht ausführen (die Datei muss bereits erzeugt worden sein)"
 msgid "Failed to change the working directory to %s"
 msgstr "Konnte nicht in Arbeitsverzeichnis %s wechseln"
 
-#: src/build.c:702
+#: src/build.c:683
 msgid "Compilation failed."
 msgstr "Kompilierung fehlgeschlagen."
 
-#: src/build.c:707
+#: src/build.c:697
 msgid "Compilation finished successfully."
 msgstr "Kompilierung beendet - erfolgreich."
 
 #. compile the code
-#: src/build.c:779
+#: src/build.c:796
 msgid "_Compile"
 msgstr "_Kompilieren"
 
-#: src/build.c:782
+#: src/build.c:799
 msgid "Compiles the current file"
 msgstr "Kompiliert die aktuelle Datei"
 
-#: src/build.c:797
+#: src/build.c:814
 msgid "Builds the current file (generate an executable file)"
 msgstr "Erstellt die aktuelle Datei (erzeugt eine ausführbare Datei)"
 
 #. build the code with make all
-#: src/build.c:811
-#: src/build.c:931
+#: src/build.c:828
+#: src/build.c:948
 msgid "_Make all"
 msgstr "_Make all"
 
-#: src/build.c:814
-#: src/build.c:934
+#: src/build.c:831
+#: src/build.c:951
 msgid "Builds the current file with the make tool and the default target"
 msgstr "Erstellt die aktuelle Datei mit \"make\" und dem Default-Target"
 
 #. build the code with make custom
-#: src/build.c:822
-#: src/build.c:942
+#: src/build.c:839
+#: src/build.c:959
 msgid "Make custom _target"
 msgstr "Make eigenes _Target"
 
-#: src/build.c:826
-#: src/build.c:946
+#: src/build.c:843
+#: src/build.c:963
 msgid "Builds the current file with the make tool and the specified target"
 msgstr "Erstellt die aktuelle Datei mit \"make\" und dem angegebenem Target"
 
 #. build the code with make object
-#: src/build.c:833
+#: src/build.c:850
 msgid "Make _object"
 msgstr "Make _Objekt-Datei"
 
-#: src/build.c:837
+#: src/build.c:854
 msgid "Compiles the current file using the make tool"
 msgstr "Kompiliert die aktuelle Datei mittels make "
 
-#: src/build.c:868
+#: src/build.c:885
 msgid "_Set Includes and Arguments"
 msgstr "_Programm-Parameter angeben"
 
-#: src/build.c:873
+#: src/build.c:890
 msgid "Sets the includes and library paths for the compiler and the program arguments for execution"
 msgstr "Include-Dateien und Bibliotheken-Pfade sowie Programmparameter festlegen"
 
 #. DVI
-#: src/build.c:896
+#: src/build.c:913
 msgid "LaTeX -> DVI"
 msgstr "LaTeX -> DVI"
 
-#: src/build.c:899
+#: src/build.c:916
 msgid "Compiles the current file into a DVI file"
 msgstr "Kompiliert die aktuelle Datei als DVI-Datei."
 
 #. PDF
-#: src/build.c:910
+#: src/build.c:927
 msgid "LaTeX -> PDF"
 msgstr "LaTeX -> PDF"
 
-#: src/build.c:913
+#: src/build.c:930
 msgid "Compiles the current file into a PDF file"
 msgstr "Kompiliert die aktuelle Datei als PDF-Datei."
 
 #. DVI view
-#: src/build.c:961
+#: src/build.c:978
 msgid "View DVI file"
 msgstr "DVI-Datei anzeigen"
 
-#: src/build.c:968
-#: src/build.c:983
+#: src/build.c:985
+#: src/build.c:1000
 msgid "Compiles and view the current file"
 msgstr "Kompiliert und zeigt die aktuelle Datei an."
 
 #. PDF view
-#: src/build.c:977
+#: src/build.c:994
 msgid "View PDF file"
 msgstr "PDF-Datei anzeigen"
 
-#: src/build.c:1004
+#: src/build.c:1021
 msgid "Sets the program paths and arguments"
 msgstr "Programm-Parameter angeben"
 
-#: src/build.c:1178
+#: src/build.c:1195
 #: src/keybindings.c:174
 msgid "Make custom target"
 msgstr "Make mit eigenem Target"
 
-#: src/build.c:1179
+#: src/build.c:1196
 msgid "Enter custom options here, all entered text is passed to the make command."
 msgstr "Alles was Sie hier angeben, wird direkt an \"make\" übergeben."
 
-#: src/build.c:1218
+#: src/build.c:1235
 msgid "Failed to execute the view program"
 msgstr "Konnte das Anzeigeprogramm nicht ausführen."
 
-#: src/build.c:1237
+#: src/build.c:1254
 msgid "Failed to execute the terminal program"
 msgstr "Konnte das Terminal-Programm nicht ausführen."
 
-#: src/build.c:1350
+#: src/build.c:1367
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Der Prozess konnte nicht angehalten werden (%s)."
 
-#: src/prefs.c:301
+#: src/prefs.c:304
 msgid "Action"
 msgstr "Aktion"
 
-#: src/prefs.c:306
+#: src/prefs.c:309
 msgid "Shortcut"
 msgstr "Tastenkürzel"
 
-#: src/prefs.c:775
+#: src/prefs.c:778
 msgid "Grab key"
 msgstr "Tasten festlegen"
 
-#: src/prefs.c:779
+#: src/prefs.c:782
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
 msgstr "Welche Tastenkomination soll für \"%s\" benutzt werden?"
 
-#: src/prefs.c:903
+#: src/prefs.c:906
 #, c-format
 msgid "The combination '%s' is already used for \"%s\". Please choose another one."
 msgstr "Die Tastenkombination '%s' wird bereits für \"%s\" verwendet. Bitte wählen Sie eine andere Tastenkombination."
-
-#: src/prefs.c:947
-msgid "These are settings for the virtual terminal emulator widget (VTE). They only apply, if the VTE library could be loaded."
-msgstr "Hier sehen Sie Einstellungen für die Terminalemulation (VTE). Änderungen werden nur wirksam, wenn die VTE-Bibliothek geladen werden konnte."
-
-#: src/prefs.c:963
-msgid "Terminal font"
-msgstr "Terminal Schriftart"
-
-#: src/prefs.c:973
-msgid "Sets the font for the terminal widget."
-msgstr "Ändert die Schriftart des Terminals."
-
-#: src/prefs.c:975
-msgid "Foreground color"
-msgstr "Vordergrundfarbe"
-
-#: src/prefs.c:981
-msgid "Background color"
-msgstr "Hintergrundfarbe"
-
-#: src/prefs.c:991
-msgid "Sets the foreground color of the text in the terminal widget."
-msgstr "Setzt die Vordergrundfarbe für das Terminal."
-
-#: src/prefs.c:998
-msgid "Sets the background color of the text in the terminal widget."
-msgstr "Setzt die Hintergrundfarbe für das Terminal."
-
-#: src/prefs.c:1001
-msgid "Scrollback lines"
-msgstr "Zeilen zum Zurückrollen"
-
-#: src/prefs.c:1012
-msgid "Specifies the history in lines, which you can scroll back in the terminal widget."
-msgstr "Gibt die Zeilen an, die man im Terminal zurückrollen kann."
-
-#: src/prefs.c:1016
-msgid "Terminal emulation"
-msgstr "Terminalemulation"
-
-#: src/prefs.c:1026
-msgid "Controls how the terminal emulator should behave. xterm is a good start."
-msgstr "Steuert wie sich das Terminal verhalten soll. In der Regel ist »xterm« ein guter Startwert."
-
-#: src/prefs.c:1028
-msgid "Shell"
-msgstr "Shell"
-
-#: src/prefs.c:1038
-msgid "Sets the path to the shell which should be started inside the terminal emulation."
-msgstr "Setzt den Pfad zu der Shell, die in der VTE benutzt werden soll."
-
-#: src/prefs.c:1050
-msgid "Scroll on keystroke"
-msgstr "Bei Tastendruck scrollen"
-
-#: src/prefs.c:1054
-msgid "Whether to scroll to the bottom if a key was pressed."
-msgstr "Legt fest, ob das Fenster bei einem Tastendruck bis zum Ende gescrollt werden soll."
-
-#: src/prefs.c:1057
-msgid "Scroll on output"
-msgstr "Bei Ausgabe scrollen"
-
-#: src/prefs.c:1061
-msgid "Whether to scroll to the bottom if an output was generated."
-msgstr "Legt fest, ob das Fenster bei Ausgabe bis zum Ende gescrollt werden soll."
-
-#: src/prefs.c:1064
-msgid "Disable menu shortcut key (F10 by default)"
-msgstr "Me_nütastenkombination deaktivieren (Vorgabe ist F10)"
-
-#: src/prefs.c:1068
-msgid "This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."
-msgstr "Diese Option deaktiviert bestimmte Tastenkombinationen des Menüs. Eine Deaktivierung kann sinnvoll sein, wenn Sie zum Beispiel den Midnight Commander in der VTE benutzen möchten."
-
-#: src/prefs.c:1071
-msgid "Follow the path of the current file"
-msgstr "Pfad der aktuellen Datei setzen"
-
-#: src/prefs.c:1075
-msgid "Whether to execute \"cd $path\" when you switch between opened files."
-msgstr "Legt fest, ob \"cd $path\" in der VTE ausgeführt werden soll, wenn Sie zwischen geöffneten Dateien wechseln."
-
-#: src/prefs.c:1078
-#: src/vte.c:168
-msgid "Terminal"
-msgstr "Terminal"
 
 #: src/about.c:117
 msgid "About Geany"
@@ -2571,9 +2481,102 @@ msgstr "Seitenleiste verbergen"
 msgid "Reload"
 msgstr "Neu laden"
 
-#: src/vte.c:376
+#: src/vte.c:170
+#: src/vte.c:495
+msgid "Terminal"
+msgstr "Terminal"
+
+#: src/vte.c:366
 msgid "_Input Methods"
 msgstr "_Eingabemethoden"
+
+#: src/vte.c:491
+msgid "Terminal plugin"
+msgstr "Terminalplugin"
+
+#: src/vte.c:498
+msgid "These settings for the virtual terminal emulator widget (VTE) only apply if the VTE library could be loaded."
+msgstr "Die Einstellungen für VTE werden nur wirksam, wenn die VTE-Bibliothek erfolgreich geladen werden konnte."
+
+#: src/vte.c:509
+msgid "Terminal font:"
+msgstr "Terminalschriftart:"
+
+#: src/vte.c:519
+msgid "Sets the font for the terminal widget."
+msgstr "Ändert die Schriftart des Terminals."
+
+#: src/vte.c:521
+msgid "Foreground color:"
+msgstr "Vordergrundfarbe:"
+
+#: src/vte.c:527
+msgid "Background color:"
+msgstr "Hintergrundfarbe:"
+
+#: src/vte.c:537
+msgid "Sets the foreground color of the text in the terminal widget."
+msgstr "Setzt die Vordergrundfarbe für das Terminal."
+
+#: src/vte.c:544
+msgid "Sets the background color of the text in the terminal widget."
+msgstr "Setzt die Hintergrundfarbe für das Terminal."
+
+#: src/vte.c:547
+msgid "Scrollback lines:"
+msgstr "Zeilen zum Zurückrollen:"
+
+#: src/vte.c:558
+msgid "Specifies the history in lines, which you can scroll back in the terminal widget."
+msgstr "Gibt die Zeilen an, die man im Terminal zurückrollen kann."
+
+#: src/vte.c:562
+msgid "Terminal emulation:"
+msgstr "Terminalemulation:"
+
+#: src/vte.c:572
+msgid "Controls how the terminal emulator should behave. xterm is a good start."
+msgstr "Steuert wie sich das Terminal verhalten soll. In der Regel ist »xterm« ein guter Startwert."
+
+#: src/vte.c:574
+msgid "Shell:"
+msgstr "Shell:"
+
+#: src/vte.c:581
+msgid "Sets the path to the shell which should be started inside the terminal emulation."
+msgstr "Setzt den Pfad zu der Shell, die in der VTE benutzt werden soll."
+
+#: src/vte.c:598
+msgid "Scroll on keystroke"
+msgstr "Bei Tastendruck scrollen"
+
+#: src/vte.c:599
+msgid "Whether to scroll to the bottom if a key was pressed."
+msgstr "Legt fest, ob das Fenster bei einem Tastendruck bis zum Ende gescrollt werden soll."
+
+#: src/vte.c:603
+msgid "Scroll on output"
+msgstr "Bei Ausgabe scrollen"
+
+#: src/vte.c:604
+msgid "Whether to scroll to the bottom when output is generated."
+msgstr "Legt fest, ob das Fenster bei einer Ausgabe gescrollt werden soll."
+
+#: src/vte.c:608
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr "Me_nütastenkombination deaktivieren (Vorgabe ist F10)"
+
+#: src/vte.c:609
+msgid "This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."
+msgstr "Diese Option deaktiviert bestimmte Tastenkombinationen des Menüs. Eine Deaktivierung kann sinnvoll sein, wenn Sie zum Beispiel den Midnight Commander in der VTE benutzen möchten."
+
+#: src/vte.c:613
+msgid "Follow the path of the current file"
+msgstr "Pfad der aktuellen Datei setzen"
+
+#: src/vte.c:614
+msgid "Whether to execute \"cd $path\" when you switch between opened files."
+msgstr "Legt fest, ob \"cd $path\" in der VTE ausgeführt werden soll, wenn Sie zwischen geöffneten Dateien wechseln."
 
 #: src/keybindings.c:113
 msgid "New"
@@ -2914,37 +2917,42 @@ msgstr "Invertiert die Trefferliste."
 msgid "Select folder"
 msgstr "Ordner wählen"
 
-#: src/search.c:942
+#: src/search.c:902
+#, c-format
+msgid "Replaced text in %u files."
+msgstr "Text wurde in %u Dateien ersetzt. "
+
+#: src/search.c:949
 msgid "Invalid directory for find in files."
 msgstr "Ungültiges Verzeichnis."
 
-#: src/search.c:972
+#: src/search.c:979
 msgid "No text to find."
 msgstr "Kein Text zum Suchen angegeben."
 
-#: src/search.c:1000
+#: src/search.c:1007
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr "Konnte das grep Kommando '%s' nicht finden (Pfad zum Grep Kommando in den Einstellungen überprüfen)."
 
-#: src/search.c:1115
+#: src/search.c:1122
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Konnte Verzeichnis nicht öffnen (%s)."
 
-#: src/search.c:1160
+#: src/search.c:1167
 msgid "Search failed."
 msgstr "Suche schlug fehl."
 
-#: src/search.c:1166
+#: src/search.c:1173
 msgid "Search completed."
 msgstr "Suche abgeschlossen."
 
-#: src/search.c:1167
+#: src/search.c:1174
 msgid "No matches found."
 msgstr "Keine Treffer gefunden."
 
-#: src/search.c:1242
+#: src/search.c:1249
 #, c-format
 msgid "No matches found for '%s'."
 msgstr "Keine Treffer für '%s' gefunden."
