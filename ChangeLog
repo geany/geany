@@ -1,3 +1,15 @@
+2006-11-29  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c, src/build.h, src/keybindings.c, src/filetypes.c,
+   src/filetypes.h:
+   Make stop button only apply for killing running programs.
+   Disable build commands when building is in progress.
+   Make build_menu_update() detect how to call set_stop_button().
+   Make build_menu_update() also update the LaTeX build menu.
+   Make build keybindings only active when the equivalent menu item
+   is also active.
+
+
 2006-11-27  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c:

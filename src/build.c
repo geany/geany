@@ -48,6 +48,12 @@
 
 BuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_ALL, NULL};
 
+static struct
+{
+	GPid pid;
+	gint file_type_id;
+} run_info = {0, GEANY_FILETYPES_ALL};
+
 enum
 {
 	LATEX_CMD_TO_DVI,
@@ -65,9 +71,11 @@ static void on_make_target_dialog_response(GtkDialog *dialog, gint response, gpo
 static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
 static void set_stop_button(gboolean stop);
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
+static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void free_pointers(gpointer first, ...);
+
 #ifndef G_OS_WIN32
-static void kill_process(gint pid);
+static void kill_process(GPid *pid);
 #endif
 
 void build_finalize()
@@ -116,8 +124,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
-	build_info.file_type_id = GEANY_FILETYPES_LATEX;
-	build_info.type = GBO_RUN;
+	run_info.file_type_id = GEANY_FILETYPES_LATEX;
 
 #ifdef G_OS_WIN32
 	script_name = g_strdup("./geany_run_script.bat");
@@ -206,7 +213,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 
 
 	if (! g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
-						NULL, NULL, &(build_info.pid), NULL, NULL, NULL, &error))
+						NULL, NULL, &(run_info.pid), NULL, NULL, NULL, &error))
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
@@ -220,11 +227,11 @@ GPid build_view_tex_file(gint idx, gint mode)
 		return (GPid) 0;
 	}
 
-	if (build_info.pid > 0)
+	if (run_info.pid > 0)
 	{
 		//setpgid(0, getppid());
-		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
-		set_stop_button(TRUE);
+		g_child_watch_add(run_info.pid, (GChildWatchFunc) run_exit_cb, NULL);
+		build_menu_update(idx);
 	}
 
 	free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
@@ -232,7 +239,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 	g_strfreev(argv);
 	g_strfreev(term_argv);
 
-	return build_info.pid;
+	return run_info.pid;
 }
 
 
@@ -439,7 +446,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	if (build_info.pid > 0)
 	{
 		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
-		set_stop_button(TRUE);
+		build_menu_update(idx);
 	}
 
 	// use GIOChannels to monitor stdout and stderr
@@ -479,8 +486,7 @@ GPid build_run_cmd(gint idx)
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL) return (GPid) 1;
 
-	build_info.file_type_id = FILETYPE_ID(doc_list[idx].file_type);
-	build_info.type = GBO_RUN;
+	run_info.file_type_id = FILETYPE_ID(doc_list[idx].file_type);
 
 #ifdef G_OS_WIN32
 	script_name = g_strdup("./geany_run_script.bat");
@@ -599,7 +605,7 @@ GPid build_run_cmd(gint idx)
 	argv[term_argv_len + 2] = NULL;
 
 	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
-						NULL, NULL, &(build_info.pid), NULL, NULL, NULL, &error))
+						NULL, NULL, &(run_info.pid), NULL, NULL, NULL, &error))
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
@@ -610,11 +616,11 @@ GPid build_run_cmd(gint idx)
 		goto free_strings;
 	}
 
-	result_id = build_info.pid; // g_spawn was successful, result is child process id
-	if (build_info.pid > 0)
+	result_id = run_info.pid; // g_spawn was successful, result is child process id
+	if (run_info.pid > 0)
 	{
-		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
-		set_stop_button(TRUE);
+		g_child_watch_add(run_info.pid, (GChildWatchFunc) run_exit_cb, NULL);
+		build_menu_update(idx);
 	}
 
 	free_strings:
@@ -705,35 +711,42 @@ static void show_build_result_message(gboolean failure)
 
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
-	if (build_info.type != GBO_RUN) // not necessary when executing a file
-	{
 #ifdef G_OS_UNIX
-		gboolean failure = FALSE;
+	gboolean failure = FALSE;
 
-		if (WIFEXITED(status))
-		{
-			if (WEXITSTATUS(status) != EXIT_SUCCESS)
-				failure = TRUE;
-		}
-		else if (WIFSIGNALED(status))
-		{
-			// the terminating signal: WTERMSIG (status));
+	if (WIFEXITED(status))
+	{
+		if (WEXITSTATUS(status) != EXIT_SUCCESS)
 			failure = TRUE;
-		}
-		else
-		{	// any other failure occured
-			failure = TRUE;
-		}
-		show_build_result_message(failure);
-#endif
 	}
+	else if (WIFSIGNALED(status))
+	{
+		// the terminating signal: WTERMSIG (status));
+		failure = TRUE;
+	}
+	else
+	{	// any other failure occured
+		failure = TRUE;
+	}
+	show_build_result_message(failure);
+#endif
 
-	if (build_info.type != GBO_RUN) utils_beep();
+	utils_beep();
 	g_spawn_close_pid(child_pid);
 
 	build_info.pid = 0;
+	// enable build items again
+	build_menu_update(-1);
+}
+
+
+static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
+{
+	g_spawn_close_pid(child_pid);
+
+	run_info.pid = 0;
 	// reset the stop button and menu item to the original meaning
-	set_stop_button(FALSE);
+	build_menu_update(-1);
 }
 
 
@@ -922,6 +935,7 @@ static GtkWidget *create_build_menu_tex()
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect((gpointer) item, "activate",
 				G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_DVI));
+	ft->menu_items->item_compile = item;
 
 	// PDF
 	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> PDF"));
@@ -936,6 +950,7 @@ static GtkWidget *create_build_menu_tex()
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect((gpointer) item, "activate",
 				G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_PDF));
+	ft->menu_items->item_link = item;
 
 	if (item != NULL)
 	{
@@ -1003,6 +1018,7 @@ static GtkWidget *create_build_menu_tex()
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect((gpointer) item, "activate",
 						G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_PDF));
+	ft->menu_items->item_exec2 = item;
 
 	// separator
 	separator = gtk_separator_menu_item_new();
@@ -1022,7 +1038,8 @@ static GtkWidget *create_build_menu_tex()
 	image = gtk_image_new_from_stock("gtk-preferences", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_tex_arguments_activate), NULL);
+	g_signal_connect((gpointer) item, "activate",
+		G_CALLBACK(on_build_arguments_activate), ft);
 
 	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
 
@@ -1045,9 +1062,13 @@ static gboolean is_c_header(const gchar *fname)
 void build_menu_update(gint idx)
 {
 	filetype *ft;
-	gboolean have_path;
+	gboolean have_path, can_build, can_make;
 
-	if (idx == -1 || doc_list[idx].file_type == NULL)
+	if (idx == -1)
+		idx = document_get_cur_idx();
+	if (idx == -1 ||
+		(FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_ALL &&
+			doc_list[idx].file_name == NULL))
 	{
 		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
 		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")));
@@ -1066,60 +1087,106 @@ void build_menu_update(gint idx)
 	ft->menu_items->can_link = FALSE;
 #endif
 
-	gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")));
-
 	if (ft->menu_items->menu == NULL)
 	{
 		ft->menu_items->menu = (ft->id == GEANY_FILETYPES_LATEX) ?
 			create_build_menu_tex() : create_build_menu_gen(idx);
 		g_object_ref((gpointer)ft->menu_items->menu);	// to hold it after removing
 	}
+	/* Note: don't remove the submenu first because it can now cause an X hang if
+	 * the menu is already open when called from build_exit_cb(). */
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
 						ft->menu_items->menu);
 
 	have_path = (doc_list[idx].file_name != NULL);
-	// update the Make items
-	if (ft->menu_items->item_make_all != NULL)
-		gtk_widget_set_sensitive(ft->menu_items->item_make_all, have_path);
-	if (ft->menu_items->item_make_custom != NULL)
-		gtk_widget_set_sensitive(ft->menu_items->item_make_custom, have_path);
-	if (ft->menu_items->item_make_object != NULL)
-		gtk_widget_set_sensitive(ft->menu_items->item_make_object, have_path);
 
-	switch (ft->id)
+	can_make = have_path && build_info.pid <= 1;
+
+	// disable compile and link for C/C++ header files
+	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
+		can_build = can_make && ! is_c_header(doc_list[idx].file_name);
+	else
+		can_build = can_make;
+
+	if (ft->menu_items->can_compile)
+		gtk_widget_set_sensitive(ft->menu_items->item_compile, can_build);
+	if (ft->menu_items->can_link)
+		gtk_widget_set_sensitive(ft->menu_items->item_link, can_build);
+	if (ft->menu_items->item_make_all)
+		gtk_widget_set_sensitive(ft->menu_items->item_make_all, can_make);
+	if (ft->menu_items->item_make_custom)
+		gtk_widget_set_sensitive(ft->menu_items->item_make_custom, can_make);
+	if (ft->menu_items->item_make_object)
+		gtk_widget_set_sensitive(ft->menu_items->item_make_object, can_make);
+	if (ft->menu_items->can_exec)
 	{
-		case GEANY_FILETYPES_LATEX:
-		{
-			gtk_widget_set_sensitive(app->compile_button, have_path && ft->menu_items->can_compile);
-			gtk_widget_set_sensitive(app->run_button, have_path && ft->menu_items->can_exec);
-			break;
-		}
-		case GEANY_FILETYPES_C:	// intended fallthrough, C and C++ behave equal
-		case GEANY_FILETYPES_CPP:
-		{
-			if (ft->menu_items->can_exec)
-				gtk_widget_set_sensitive(ft->menu_items->item_exec, have_path);
-			gtk_widget_set_sensitive(app->run_button, have_path && ft->menu_items->can_exec);
+		gboolean can_run = have_path && run_info.pid <= 1;
 
-			// compile and link are disabled for header files
-			have_path = have_path && ! is_c_header(doc_list[idx].file_name);
-			gtk_widget_set_sensitive(app->compile_button, have_path && ft->menu_items->can_compile);
-			if (ft->menu_items->can_compile)
-				gtk_widget_set_sensitive(ft->menu_items->item_compile, have_path);
-			if (ft->menu_items->can_link)
-				gtk_widget_set_sensitive(ft->menu_items->item_link, have_path);
-			break;
-		}
-		default:
+		/* can_run only applies item_exec2
+		 * item_exec is enabled for both run and stop commands */
+		if (ft->menu_items->item_exec)
+			gtk_widget_set_sensitive(ft->menu_items->item_exec, have_path);
+		if (ft->menu_items->item_exec2)
+			gtk_widget_set_sensitive(ft->menu_items->item_exec2, can_run);
+	}
+
+	gtk_widget_set_sensitive(app->compile_button, can_build && ft->menu_items->can_compile);
+	gtk_widget_set_sensitive(app->run_button, have_path && ft->menu_items->can_exec);
+
+	// show the stop command if a program is running, otherwise show run command
+	set_stop_button(run_info.pid > 1);
+}
+
+
+// Call build_menu_update() instead of calling this directly.
+static void set_stop_button(gboolean stop)
+{
+	GtkStockItem sitem;
+	GtkWidget *menuitem =
+		filetypes[run_info.file_type_id]->menu_items->item_exec;
+
+	if (stop && utils_str_equal(
+		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(app->run_button)), "gtk-stop")) return;
+	if (! stop && utils_str_equal(
+		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(app->run_button)), "gtk-execute")) return;
+
+	// use the run button also as stop button
+	if (stop)
+	{
+		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->run_button), "gtk-stop");
+
+		if (menuitem != NULL)
 		{
-			gtk_widget_set_sensitive(app->compile_button, have_path && ft->menu_items->can_compile);
-			gtk_widget_set_sensitive(app->run_button, have_path && ft->menu_items->can_exec);
-			if (ft->menu_items->can_compile)
-				gtk_widget_set_sensitive(ft->menu_items->item_compile, have_path);
-			if (ft->menu_items->can_link)
-				gtk_widget_set_sensitive(ft->menu_items->item_link, have_path);
-			if (ft->menu_items->can_exec)
-				gtk_widget_set_sensitive(ft->menu_items->item_exec, have_path);
+			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
+							gtk_image_new_from_stock("gtk-stop", GTK_ICON_SIZE_MENU));
+			gtk_stock_lookup("gtk-stop", &sitem);
+			gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
+						sitem.label);
+		}
+	}
+	else
+	{
+		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->run_button), "gtk-execute");
+
+		if (menuitem != NULL)
+		{
+			// LaTeX hacks ;-(
+			if (run_info.file_type_id == GEANY_FILETYPES_LATEX)
+			{
+				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
+							gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU));
+				gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
+						LATEX_VIEW_DVI_LABEL);
+			}
+			else
+			{
+				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
+							gtk_image_new_from_stock("gtk-execute", GTK_ICON_SIZE_MENU));
+
+				gtk_stock_lookup("gtk-execute", &sitem);
+				gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
+							sitem.label);
+			}
 		}
 	}
 }
@@ -1219,11 +1286,11 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 
 	// make the process "stopable"
-	if (build_info.pid > (GPid) 1)
+	if (run_info.pid > (GPid) 1)
 	{
 		// on Windows there is no PID returned (resp. it is a handle), currently unsupported
 #ifndef G_OS_WIN32
-		kill_process(build_info.pid);
+		kill_process(&run_info.pid);
 #endif
 		return;
 	}
@@ -1261,15 +1328,10 @@ void
 on_build_arguments_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_includes_arguments_gen();
-}
-
-
-void
-on_build_tex_arguments_activate        (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	dialogs_show_includes_arguments_tex();
+	if (user_data && FILETYPE_ID((filetype*) user_data) == GEANY_FILETYPES_LATEX)
+		dialogs_show_includes_arguments_tex();
+	else
+		dialogs_show_includes_arguments_gen();
 }
 
 
@@ -1301,57 +1363,8 @@ on_make_target_entry_activate          (GtkEntry        *entry,
 }
 
 
-static void set_stop_button(gboolean stop)
-{
-	GtkStockItem sitem;
-	GtkWidget *menuitem =
-		filetypes[build_info.file_type_id]->menu_items->item_exec;
-
-	// use the run button also as stop button
-	if (stop)
-	{
-		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->run_button), "gtk-stop");
-		gtk_widget_set_sensitive(app->compile_button, FALSE);
-		if (menuitem != NULL)
-		{
-			gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
-							gtk_image_new_from_stock("gtk-stop", GTK_ICON_SIZE_MENU));
-			gtk_stock_lookup("gtk-stop", &sitem);
-			gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
-						sitem.label);
-		}
-	}
-	else
-	{
-		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->run_button), "gtk-execute");
-		gtk_widget_set_sensitive(app->compile_button, TRUE);
-
-		if (menuitem != NULL)
-		{
-			// LaTeX hacks ;-(
-			if (build_info.file_type_id == GEANY_FILETYPES_LATEX)
-			{
-				gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
-						LATEX_VIEW_DVI_LABEL);
-				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
-							gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU));
-			}
-			else
-			{
-				gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menuitem),
-							gtk_image_new_from_stock("gtk-execute", GTK_ICON_SIZE_MENU));
-
-				gtk_stock_lookup("gtk-execute", &sitem);
-				gtk_label_set_text_with_mnemonic(GTK_LABEL(gtk_bin_get_child(GTK_BIN(menuitem))),
-							sitem.label);
-			}
-		}
-	}
-}
-
-
 #ifndef G_OS_WIN32
-static void kill_process(gint pid)
+static void kill_process(GPid *pid)
 {
 	/* SIGQUIT is not the best signal to use because it causes a core dump (this should not
 	 * perforce necessary for just killing a process). But we must use a signal which we can
@@ -1360,15 +1373,15 @@ static void kill_process(gint pid)
 	gint resultpg, result;
 
 	// sent SIGQUIT to all the processes to the processes' own process group
-	result = kill(pid, SIGQUIT);
+	result = kill(*pid, SIGQUIT);
 	resultpg = killpg(0, SIGQUIT);
 
 	if (result != 0 || resultpg != 0)
 		msgwin_status_add(_("Process could not be stopped (%s)."), g_strerror(errno));
 	else
 	{
-		build_info.pid = 0;
-		set_stop_button(FALSE);
+		*pid = 0;
+		build_menu_update(-1);
 	}
 }
 #endif

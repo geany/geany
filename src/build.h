@@ -30,8 +30,7 @@ typedef enum	// Geany Build Options
 	GBO_BUILD,
 	GBO_MAKE_ALL,
 	GBO_MAKE_CUSTOM,
-	GBO_MAKE_OBJECT,
-	GBO_RUN
+	GBO_MAKE_OBJECT
 } build_type;
 
 typedef struct
@@ -85,10 +84,6 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 
 void
 on_build_arguments_activate            (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_tex_arguments_activate        (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 #endif

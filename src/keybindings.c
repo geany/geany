@@ -74,13 +74,7 @@ static void cb_func_menu_zoomout(guint key_id);
 static void cb_func_menu_replacetabs(guint key_id);
 static void cb_func_menu_foldall(guint key_id);
 static void cb_func_menu_unfoldall(guint key_id);
-static void cb_func_build_compile(guint key_id);
-static void cb_func_build_link(guint key_id);
-static void cb_func_build_make(guint key_id);
-static void cb_func_build_makeowntarget(guint key_id);
-static void cb_func_build_makeobject(guint key_id);
-static void cb_func_build_run(guint key_id);
-static void cb_func_build_run2(guint key_id);
+static void cb_func_build_action(guint key_id);
 static void cb_func_build_options(guint key_id);
 static void cb_func_reloadtaglist(guint key_id);
 static void cb_func_switch_editor(guint key_id);
@@ -163,20 +157,20 @@ void keybindings_init(void)
 		0, 0, "menu_foldall", _("Fold all"));
 	keys[GEANY_KEYS_MENU_UNFOLDALL] = fill(cb_func_menu_unfoldall,
 		0, 0, "menu_unfoldall", _("Unfold all"));
-	keys[GEANY_KEYS_BUILD_COMPILE] = fill(cb_func_build_compile,
+	keys[GEANY_KEYS_BUILD_COMPILE] = fill(cb_func_build_action,
 		GDK_F8, 0, "build_compile", _("Compile"));
-	keys[GEANY_KEYS_BUILD_LINK] = fill(cb_func_build_link,
+	keys[GEANY_KEYS_BUILD_LINK] = fill(cb_func_build_action,
 		GDK_F9, 0, "build_link", _("Build"));
-	keys[GEANY_KEYS_BUILD_MAKE] = fill(cb_func_build_make,
+	keys[GEANY_KEYS_BUILD_MAKE] = fill(cb_func_build_action,
 		GDK_F9, GDK_SHIFT_MASK, "build_make", _("Make all"));
-	keys[GEANY_KEYS_BUILD_MAKEOWNTARGET] = fill(cb_func_build_makeowntarget,
+	keys[GEANY_KEYS_BUILD_MAKEOWNTARGET] = fill(cb_func_build_action,
 		GDK_F9, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "build_makeowntarget",
 		_("Make custom target"));
-	keys[GEANY_KEYS_BUILD_MAKEOBJECT] = fill(cb_func_build_makeobject,
+	keys[GEANY_KEYS_BUILD_MAKEOBJECT] = fill(cb_func_build_action,
 		0, 0, "build_makeobject", _("Make object"));
-	keys[GEANY_KEYS_BUILD_RUN] = fill(cb_func_build_run,
+	keys[GEANY_KEYS_BUILD_RUN] = fill(cb_func_build_action,
 		GDK_F5, 0, "build_run", _("Run"));
-	keys[GEANY_KEYS_BUILD_RUN2] = fill(cb_func_build_run2,
+	keys[GEANY_KEYS_BUILD_RUN2] = fill(cb_func_build_action,
 		0, 0, "build_run2", _("Run (alternative command)"));
 	keys[GEANY_KEYS_BUILD_OPTIONS] = fill(cb_func_build_options,
 		0, 0, "build_options", _("Build options"));
@@ -571,71 +565,70 @@ static void cb_func_menu_unfoldall(G_GNUC_UNUSED guint key_id)
 	document_unfold_all(idx);
 }
 
-static void cb_func_build_compile(G_GNUC_UNUSED guint key_id)
+static void cb_func_build_action(guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (doc_list[idx].file_type->menu_items->can_compile && doc_list[idx].file_name != NULL)
-		on_build_compile_activate(NULL, NULL);
-}
+	GtkWidget *item;
+	filetype *ft;
 
-static void cb_func_build_link(G_GNUC_UNUSED guint key_id)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (doc_list[idx].file_type->menu_items->can_link && doc_list[idx].file_name != NULL)
-		on_build_build_activate(NULL, NULL);
-}
+	if (! DOC_IDX_VALID(idx)) return;
 
-static void cb_func_build_make(G_GNUC_UNUSED guint key_id)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (doc_list[idx].file_name != NULL)
-		on_build_make_activate(NULL, GINT_TO_POINTER(GBO_MAKE_ALL));
-}
+	ft = doc_list[idx].file_type;
+	if (! ft || ! ft->menu_items) return;
 
-static void cb_func_build_makeowntarget(G_GNUC_UNUSED guint key_id)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (doc_list[idx].file_name != NULL)
-		on_build_make_activate(NULL, GINT_TO_POINTER(GBO_MAKE_CUSTOM));
-}
+	switch (key_id)
+	{
+		case GEANY_KEYS_BUILD_COMPILE:
+		item = ft->menu_items->item_compile;
+		break;
 
-static void cb_func_build_makeobject(G_GNUC_UNUSED guint key_id)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (doc_list[idx].file_name != NULL)
-		on_build_make_activate(NULL, GINT_TO_POINTER(GBO_MAKE_OBJECT));
-}
+		case GEANY_KEYS_BUILD_LINK:
+		item = ft->menu_items->item_link;
+		break;
 
-static void cb_func_build_run(G_GNUC_UNUSED guint key_id)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (doc_list[idx].file_type->menu_items->can_exec && doc_list[idx].file_name != NULL)
-		on_build_execute_activate(NULL, GINT_TO_POINTER(0));
-}
+		case GEANY_KEYS_BUILD_MAKE:
+		item = ft->menu_items->item_make_all;
+		break;
 
-static void cb_func_build_run2(G_GNUC_UNUSED guint key_id)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (doc_list[idx].file_type->menu_items->can_exec && doc_list[idx].file_name != NULL)
-		on_build_execute_activate(NULL, GINT_TO_POINTER(1));
+		case GEANY_KEYS_BUILD_MAKEOWNTARGET:
+		item = ft->menu_items->item_make_custom;
+		break;
+
+		case GEANY_KEYS_BUILD_MAKEOBJECT:
+		item = ft->menu_items->item_make_object;
+		break;
+
+		case GEANY_KEYS_BUILD_RUN:
+		item = ft->menu_items->item_exec;
+		break;
+
+		case GEANY_KEYS_BUILD_RUN2:
+		item = ft->menu_items->item_exec2;
+		break;
+
+		default:
+		item = NULL;
+	}
+	if (item && GTK_WIDGET_IS_SENSITIVE(item))
+		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 }
 
 static void cb_func_build_options(G_GNUC_UNUSED guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if ((doc_list[idx].file_type->menu_items->can_compile ||
-		doc_list[idx].file_type->menu_items->can_link ||
-		doc_list[idx].file_type->menu_items->can_exec) &&
-		doc_list[idx].file_name != NULL)
-		on_build_arguments_activate(NULL, NULL);
+	document *doc;
+	filetype *ft;
+
+	if (! DOC_IDX_VALID(idx)) return;
+	doc = &doc_list[idx];
+	ft = doc->file_type;
+	if (! ft || ! ft->menu_items) return;
+	if ((ft->menu_items->can_compile ||
+		ft->menu_items->can_link ||
+		ft->menu_items->can_exec) &&
+		(doc->file_name != NULL ||
+			FILETYPE_ID(ft) != GEANY_FILETYPES_ALL))
+		on_build_arguments_activate(NULL, ft);
 }
 
 static void cb_func_reloadtaglist(G_GNUC_UNUSED guint key_id)

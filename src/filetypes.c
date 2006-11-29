@@ -867,20 +867,7 @@ void filetypes_free_types()
 			if (filetypes[i]->menu_items->menu != NULL &&
 				GTK_IS_WIDGET(filetypes[i]->menu_items->menu))
 				gtk_widget_destroy(filetypes[i]->menu_items->menu);
-			/// TODO not necessary because they got freed with the menu?
-/*			if (filetypes[i]->menu_items->item_compile != NULL &&
-				GTK_IS_WIDGET(filetypes[i]->menu_items->item_compile))
-				gtk_widget_destroy(filetypes[i]->menu_items->item_compile);
-			if (filetypes[i]->menu_items->item_link != NULL &&
-				GTK_IS_WIDGET(filetypes[i]->menu_items->item_link))
-				gtk_widget_destroy(filetypes[i]->menu_items->item_link);
-			if (filetypes[i]->menu_items->item_exec != NULL &&
-				GTK_IS_WIDGET(filetypes[i]->menu_items->item_exec))
-				gtk_widget_destroy(filetypes[i]->menu_items->item_exec);
-			if (filetypes[i]->menu_items->item_make_object != NULL &&
-				GTK_IS_WIDGET(filetypes[i]->menu_items->item_make_object))
-				gtk_widget_destroy(filetypes[i]->menu_items->item_make_object);
-*/			g_free(filetypes[i]->menu_items);
+			g_free(filetypes[i]->menu_items);
 
 			g_strfreev(filetypes[i]->pattern);
 			g_free(filetypes[i]);

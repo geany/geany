@@ -75,6 +75,7 @@ struct build_menu_items
 	GtkWidget		*item_compile;
 	GtkWidget		*item_link;
 	GtkWidget		*item_exec;
+	GtkWidget		*item_exec2;
 	GtkWidget		*item_make_all;
 	GtkWidget		*item_make_custom;
 	GtkWidget		*item_make_object;
