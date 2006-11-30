@@ -1,3 +1,10 @@
+2006-11-30  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/main.c:
+   Disable open toolbutton recent files menu for now because on
+   GTK+2.10 packing the recent files menu twice causes warnings.
+
+
 2006-11-29  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/build.h, src/keybindings.c, src/filetypes.c,
