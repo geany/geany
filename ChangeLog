@@ -3,6 +3,11 @@
  * src/main.c:
    Disable open toolbutton recent files menu for now because on
    GTK+2.10 packing the recent files menu twice causes warnings.
+ * src/build.c, src/build.h, src/keybindings.c, src/callbacks.c,
+   src/filetypes.c, src/filetypes.h, src/dialogs.c:
+   Make all filetypes except LaTeX use the same build menu, disabling
+   any items that don't apply for the current document.
+   Move BuildMenuItems struct type to build.h.
 
 
 2006-11-29  Nick Treleaven  <nick.treleaven@btinternet.com>

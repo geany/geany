@@ -1685,7 +1685,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 		const gchar *newstr;
 		struct build_programs *programs = ft->programs;
 
-		if (ft->menu_items->can_compile)
+		if (ft->actions->can_compile)
 		{
 			newstr = gtk_entry_get_text(
 					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry1")));
@@ -1696,7 +1696,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 				programs->modified = TRUE;
 			}
 		}
-		if (ft->menu_items->can_link)
+		if (ft->actions->can_link)
 		{
 			newstr = gtk_entry_get_text(
 					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry2")));
@@ -1707,7 +1707,7 @@ on_includes_arguments_dialog_response  (GtkDialog *dialog,
 				programs->modified = TRUE;
 			}
 		}
-		if (ft->menu_items->can_exec)
+		if (ft->actions->can_exec)
 		{
 			newstr = gtk_entry_get_text(
 					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3")));

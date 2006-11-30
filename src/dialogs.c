@@ -716,7 +716,7 @@ void dialogs_show_includes_arguments_gen()
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 	gtk_container_add(GTK_CONTAINER(vbox), label);
 
-	if (ft->menu_items->can_compile || ft->menu_items->can_link || ft->menu_items->can_exec)
+	if (ft->actions->can_compile || ft->actions->can_link || ft->actions->can_exec)
 	{
 		GtkWidget *align, *frame;
 		gchar *frame_title = g_strconcat(ft->title, _(" commands"), NULL);
@@ -732,7 +732,7 @@ void dialogs_show_includes_arguments_gen()
 	}
 
 	// include-args
-	if (ft->menu_items->can_compile)
+	if (ft->actions->can_compile)
 	{
 		label = gtk_label_new(_("Compile:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -753,7 +753,7 @@ void dialogs_show_includes_arguments_gen()
 	}
 
 	// lib-args
-	if (ft->menu_items->can_link)
+	if (ft->actions->can_link)
 	{
 		label = gtk_label_new(_("Build:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -774,7 +774,7 @@ void dialogs_show_includes_arguments_gen()
 	}
 
 	// program-args
-	if (ft->menu_items->can_exec)
+	if (ft->actions->can_exec)
 	{
 		label = gtk_label_new(_("Execute:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);

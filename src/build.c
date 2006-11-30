@@ -62,6 +62,11 @@ enum
 	LATEX_CMD_VIEW_PDF
 };
 
+static BuildMenuItems default_menu_items =
+	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+static BuildMenuItems latex_menu_items =
+	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+
 
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd,
@@ -82,6 +87,11 @@ void build_finalize()
 {
 	g_free(build_info.dir);
 	g_free(build_info.custom_target);
+
+	if (default_menu_items.menu != NULL && GTK_IS_WIDGET(default_menu_items.menu))
+		gtk_widget_destroy(default_menu_items.menu);
+	if (latex_menu_items.menu != NULL && GTK_IS_WIDGET(latex_menu_items.menu))
+		gtk_widget_destroy(latex_menu_items.menu);
 }
 
 
@@ -793,49 +803,40 @@ static gboolean build_create_shellscript(const gint idx, const gchar *fname, con
 		gtk_widget_add_accelerator(menuitem, "activate", accel_group, \
 			keys[(gkey)]->key, keys[(gkey)]->mods, GTK_ACCEL_VISIBLE)
 
-static GtkWidget *create_build_menu_gen(gint idx)
+static void create_build_menu_gen(BuildMenuItems *menu_items)
 {
 	GtkWidget *menu, *item = NULL, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-	filetype *ft = doc_list[idx].file_type;
 
 	menu = gtk_menu_new();
 
 #ifndef G_OS_WIN32
-	if (ft->menu_items->can_compile)
-	{
-		// compile the code
-		item = gtk_image_menu_item_new_with_mnemonic(_("_Compile"));
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-		gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file"), NULL);
-		GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_COMPILE, item);
-		image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
-		gtk_widget_show(image);
-		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
-		ft->menu_items->item_compile = item;
-	}
+	// compile the code
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Compile"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file"), NULL);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_COMPILE, item);
+	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
+	gtk_widget_show(image);
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_compile_activate), NULL);
+	menu_items->item_compile = item;
 
-	if (ft->menu_items->can_link)
-	{	// build the code
-		item = gtk_image_menu_item_new_with_mnemonic(_("_Build"));
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-		gtk_tooltips_set_tip(tooltips, item,
-					_("Builds the current file (generate an executable file)"), NULL);
-		GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_LINK, item);
-		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_build_activate), NULL);
-		ft->menu_items->item_link = item;
-	}
+	// build the code
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Build"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item,
+				_("Builds the current file (generate an executable file)"), NULL);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_LINK, item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_build_activate), NULL);
+	menu_items->item_link = item;
 
-	if (item != NULL)
-	{
-		item = gtk_separator_menu_item_new();
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-	}
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	// build the code with make all
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Make all"));
@@ -846,7 +847,7 @@ static GtkWidget *create_build_menu_gen(gint idx)
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKE, item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
 		GINT_TO_POINTER(GBO_MAKE_ALL));
-	ft->menu_items->item_make_all = item;
+	menu_items->item_make_all = item;
 
 	// build the code with make custom
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make custom _target"));
@@ -857,7 +858,7 @@ static GtkWidget *create_build_menu_gen(gint idx)
 										   "make tool and the specified target"), NULL);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
 		GINT_TO_POINTER(GBO_MAKE_CUSTOM));
-	ft->menu_items->item_make_custom = item;
+	menu_items->item_make_custom = item;
 
 	// build the code with make object
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make _object"));
@@ -868,56 +869,51 @@ static GtkWidget *create_build_menu_gen(gint idx)
 										   "make tool"), NULL);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
 		GINT_TO_POINTER(GBO_MAKE_OBJECT));
-	ft->menu_items->item_make_object = item;
+	menu_items->item_make_object = item;
 #endif
 
-	if (ft->menu_items->can_exec)
-	{	// execute the code
-		item = gtk_separator_menu_item_new();
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
 
-		item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-		gtk_tooltips_set_tip(tooltips, item, _("Run or view the current file"), NULL);
-		GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_RUN, item);
-		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_execute_activate), NULL);
-		ft->menu_items->item_exec = item;
-	}
+	// execute the code
+	item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item, _("Run or view the current file"), NULL);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_RUN, item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_execute_activate), NULL);
+	menu_items->item_exec = item;
+
+	separator = gtk_separator_menu_item_new();
+	gtk_widget_show(separator);
+	gtk_container_add(GTK_CONTAINER(menu), separator);
+	gtk_widget_set_sensitive(separator, FALSE);
 
 	// arguments
-	if (ft->menu_items->can_compile || ft->menu_items->can_link || ft->menu_items->can_exec)
-	{
-		// separator
-		separator = gtk_separator_menu_item_new();
-		gtk_widget_show(separator);
-		gtk_container_add(GTK_CONTAINER(menu), separator);
-		gtk_widget_set_sensitive(separator, FALSE);
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Set Includes and Arguments"));
+	gtk_widget_show(item);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_OPTIONS, item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_tooltips_set_tip(tooltips, item,
+				_("Sets the includes and library paths for the compiler and "
+				  "the program arguments for execution"), NULL);
+	image = gtk_image_new_from_stock("gtk-preferences", GTK_ICON_SIZE_MENU);
+	gtk_widget_show(image);
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_arguments_activate), NULL);
+	menu_items->item_set_args = item;
 
-		item = gtk_image_menu_item_new_with_mnemonic(_("_Set Includes and Arguments"));
-		gtk_widget_show(item);
-		GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_OPTIONS, item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-		gtk_tooltips_set_tip(tooltips, item,
-					_("Sets the includes and library paths for the compiler and "
-					  "the program arguments for execution"), NULL);
-		image = gtk_image_new_from_stock("gtk-preferences", GTK_ICON_SIZE_MENU);
-		gtk_widget_show(image);
-		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
-		g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_arguments_activate), NULL);
-	}
-
-	return menu;
+	menu_items->menu = menu;
+	g_object_ref((gpointer)menu_items->menu);	// to hold it after removing
 }
 
 
-static GtkWidget *create_build_menu_tex()
+static void create_build_menu_tex(BuildMenuItems *menu_items)
 {
 	GtkWidget *menu, *item, *image, *separator;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-	filetype *ft = filetypes[GEANY_FILETYPES_LATEX];
 
 	menu = gtk_menu_new();
 
@@ -935,7 +931,7 @@ static GtkWidget *create_build_menu_tex()
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect((gpointer) item, "activate",
 				G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_DVI));
-	ft->menu_items->item_compile = item;
+	menu_items->item_compile = item;
 
 	// PDF
 	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> PDF"));
@@ -950,7 +946,7 @@ static GtkWidget *create_build_menu_tex()
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect((gpointer) item, "activate",
 				G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_PDF));
-	ft->menu_items->item_link = item;
+	menu_items->item_link = item;
 
 	if (item != NULL)
 	{
@@ -968,7 +964,7 @@ static GtkWidget *create_build_menu_tex()
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKE, item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
 		GINT_TO_POINTER(GBO_MAKE_ALL));
-	ft->menu_items->item_make_all = item;
+	menu_items->item_make_all = item;
 
 	// build the code with make custom
 	item = gtk_image_menu_item_new_with_mnemonic(_("Make custom _target"));
@@ -979,7 +975,7 @@ static GtkWidget *create_build_menu_tex()
 										   "make tool and the specified target"), NULL);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
 		GINT_TO_POINTER(GBO_MAKE_CUSTOM));
-	ft->menu_items->item_make_custom = item;
+	menu_items->item_make_custom = item;
 
 	if (item != NULL)
 	{
@@ -1003,7 +999,7 @@ static GtkWidget *create_build_menu_tex()
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect((gpointer) item, "activate",
 						G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_DVI));
-	ft->menu_items->item_exec = item;
+	menu_items->item_exec = item;
 
 	// PDF view
 	item = gtk_image_menu_item_new_with_mnemonic(_("View PDF file"));
@@ -1018,7 +1014,7 @@ static GtkWidget *create_build_menu_tex()
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect((gpointer) item, "activate",
 						G_CALLBACK(on_build_execute_activate), GINT_TO_POINTER(LATEX_CMD_VIEW_PDF));
-	ft->menu_items->item_exec2 = item;
+	menu_items->item_exec2 = item;
 
 	// separator
 	separator = gtk_separator_menu_item_new();
@@ -1039,11 +1035,13 @@ static GtkWidget *create_build_menu_tex()
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	g_signal_connect((gpointer) item, "activate",
-		G_CALLBACK(on_build_arguments_activate), ft);
+		G_CALLBACK(on_build_arguments_activate), filetypes[GEANY_FILETYPES_LATEX]);
+	menu_items->item_set_args = item;
 
 	gtk_window_add_accel_group(GTK_WINDOW(app->window), accel_group);
 
-	return menu;
+	menu_items->menu = menu;
+	g_object_ref((gpointer)menu_items->menu);	// to hold it after removing
 }
 
 
@@ -1059,10 +1057,13 @@ static gboolean is_c_header(const gchar *fname)
 }
 
 
+/* Call this whenever build menu items need to be enabled/disabled.
+ * Uses current document (if there is one) when idx == -1 */
 void build_menu_update(gint idx)
 {
 	filetype *ft;
-	gboolean have_path, can_build, can_make;
+	gboolean have_path, can_build, can_make, can_run, can_set_args;
+	BuildMenuItems *menu_items;
 
 	if (idx == -1)
 		idx = document_get_cur_idx();
@@ -1080,6 +1081,7 @@ void build_menu_update(gint idx)
 		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), TRUE);
 
 	ft = doc_list[idx].file_type;
+	g_return_if_fail(ft != NULL);
 
 #ifdef G_OS_WIN32
 	// disable compile and link under Windows until it is implemented
@@ -1087,16 +1089,11 @@ void build_menu_update(gint idx)
 	ft->menu_items->can_link = FALSE;
 #endif
 
-	if (ft->menu_items->menu == NULL)
-	{
-		ft->menu_items->menu = (ft->id == GEANY_FILETYPES_LATEX) ?
-			create_build_menu_tex() : create_build_menu_gen(idx);
-		g_object_ref((gpointer)ft->menu_items->menu);	// to hold it after removing
-	}
+	menu_items = build_get_menu_items(ft);
 	/* Note: don't remove the submenu first because it can now cause an X hang if
 	 * the menu is already open when called from build_exit_cb(). */
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
-						ft->menu_items->menu);
+		menu_items->menu);
 
 	have_path = (doc_list[idx].file_name != NULL);
 
@@ -1108,30 +1105,35 @@ void build_menu_update(gint idx)
 	else
 		can_build = can_make;
 
-	if (ft->menu_items->can_compile)
-		gtk_widget_set_sensitive(ft->menu_items->item_compile, can_build);
-	if (ft->menu_items->can_link)
-		gtk_widget_set_sensitive(ft->menu_items->item_link, can_build);
-	if (ft->menu_items->item_make_all)
-		gtk_widget_set_sensitive(ft->menu_items->item_make_all, can_make);
-	if (ft->menu_items->item_make_custom)
-		gtk_widget_set_sensitive(ft->menu_items->item_make_custom, can_make);
-	if (ft->menu_items->item_make_object)
-		gtk_widget_set_sensitive(ft->menu_items->item_make_object, can_make);
-	if (ft->menu_items->can_exec)
-	{
-		gboolean can_run = have_path && run_info.pid <= 1;
+	if (menu_items->item_compile)
+		gtk_widget_set_sensitive(menu_items->item_compile, can_build && ft->actions->can_compile);
+	if (menu_items->item_link)
+		gtk_widget_set_sensitive(menu_items->item_link, can_build && ft->actions->can_link);
+	if (menu_items->item_make_all)
+		gtk_widget_set_sensitive(menu_items->item_make_all, can_make);
+	if (menu_items->item_make_custom)
+		gtk_widget_set_sensitive(menu_items->item_make_custom, can_make);
+	if (menu_items->item_make_object)
+		gtk_widget_set_sensitive(menu_items->item_make_object, can_make);
 
-		/* can_run only applies item_exec2
-		 * item_exec is enabled for both run and stop commands */
-		if (ft->menu_items->item_exec)
-			gtk_widget_set_sensitive(ft->menu_items->item_exec, have_path);
-		if (ft->menu_items->item_exec2)
-			gtk_widget_set_sensitive(ft->menu_items->item_exec2, can_run);
-	}
+	can_run = have_path && run_info.pid <= 1;
+	/* can_run only applies item_exec2
+	 * item_exec is enabled for both run and stop commands */
+	if (menu_items->item_exec)
+		gtk_widget_set_sensitive(menu_items->item_exec, have_path && ft->actions->can_exec);
+	if (menu_items->item_exec2)
+		gtk_widget_set_sensitive(menu_items->item_exec2, can_run && ft->actions->can_exec);
 
-	gtk_widget_set_sensitive(app->compile_button, can_build && ft->menu_items->can_compile);
-	gtk_widget_set_sensitive(app->run_button, have_path && ft->menu_items->can_exec);
+	can_set_args =
+		((ft->actions->can_compile ||
+		ft->actions->can_link ||
+		ft->actions->can_exec) &&
+		FILETYPE_ID(ft) != GEANY_FILETYPES_ALL);
+	if (menu_items->item_set_args)
+		gtk_widget_set_sensitive(menu_items->item_set_args, can_set_args);
+
+	gtk_widget_set_sensitive(app->compile_button, can_build && ft->actions->can_compile);
+	gtk_widget_set_sensitive(app->run_button, have_path && ft->actions->can_exec);
 
 	// show the stop command if a program is running, otherwise show run command
 	set_stop_button(run_info.pid > 1);
@@ -1143,7 +1145,7 @@ static void set_stop_button(gboolean stop)
 {
 	GtkStockItem sitem;
 	GtkWidget *menuitem =
-		filetypes[run_info.file_type_id]->menu_items->item_exec;
+		build_get_menu_items(filetypes[run_info.file_type_id])->item_exec;
 
 	if (stop && utils_str_equal(
 		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(app->run_button)), "gtk-stop")) return;
@@ -1189,6 +1191,27 @@ static void set_stop_button(gboolean stop)
 			}
 		}
 	}
+}
+
+
+// Creates the relevant build menu if necessary.
+BuildMenuItems *build_get_menu_items(const filetype *ft)
+{
+	BuildMenuItems *items;
+
+	if (FILETYPE_ID(ft) == GEANY_FILETYPES_LATEX)
+	{
+		items = &latex_menu_items;
+		if (items->menu == NULL)
+			create_build_menu_tex(items);
+	}
+	else
+	{
+		items = &default_menu_items;
+		if (items->menu == NULL)
+			create_build_menu_gen(items);
+	}
+	return items;
 }
 
 
@@ -1404,4 +1427,5 @@ static void free_pointers(gpointer first, ...)
     if (first != NULL)
     	g_free(first);
 }
+
 

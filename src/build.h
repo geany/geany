@@ -24,6 +24,8 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
+#include "filetypes.h"
+
 typedef enum	// Geany Build Options
 {
 	GBO_COMPILE,
@@ -44,6 +46,20 @@ typedef struct
 
 extern BuildInfo build_info;
 
+typedef struct
+{
+	GtkWidget		*menu;
+	GtkWidget		*item_compile;
+	GtkWidget		*item_link;
+	GtkWidget		*item_make_all;
+	GtkWidget		*item_make_custom;
+	GtkWidget		*item_make_object;
+	GtkWidget		*item_exec;
+	GtkWidget		*item_exec2;
+	GtkWidget		*item_set_args;
+} BuildMenuItems;
+
+
 
 void build_finalize();
 
@@ -60,6 +76,8 @@ GPid build_view_tex_file(gint idx, gint mode);
 GPid build_run_cmd(gint idx);
 
 void build_menu_update(gint idx);
+
+BuildMenuItems *build_get_menu_items(const filetype *ft);
 
 
 void

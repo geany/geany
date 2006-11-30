@@ -710,7 +710,7 @@ static void filetypes_init_build_programs(filetype *ftype)
 {
 	ftype->programs = g_new0(struct build_programs, 1);
 
-	ftype->menu_items = g_new0(struct build_menu_items, 1);
+	ftype->actions = g_new0(struct build_actions, 1);
 }
 
 
@@ -864,10 +864,7 @@ void filetypes_free_types()
 			g_free(filetypes[i]->programs->run_cmd);
 			g_free(filetypes[i]->programs->run_cmd2);
 			g_free(filetypes[i]->programs);
-			if (filetypes[i]->menu_items->menu != NULL &&
-				GTK_IS_WIDGET(filetypes[i]->menu_items->menu))
-				gtk_widget_destroy(filetypes[i]->menu_items->menu);
-			g_free(filetypes[i]->menu_items);
+			g_free(filetypes[i]->actions);
 
 			g_strfreev(filetypes[i]->pattern);
 			g_free(filetypes[i]);
@@ -918,7 +915,7 @@ void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->compiler = result;
-		filetypes[ft]->menu_items->can_compile = TRUE;
+		filetypes[ft]->actions->can_compile = TRUE;
 	}
 
 	result = g_key_file_get_string(configh, "build_settings", "linker", NULL);
@@ -926,7 +923,7 @@ void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->linker = result;
-		filetypes[ft]->menu_items->can_link = TRUE;
+		filetypes[ft]->actions->can_link = TRUE;
 	}
 
 	result = g_key_file_get_string(configh, "build_settings", "run_cmd", NULL);
@@ -934,7 +931,7 @@ void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->run_cmd = result;
-		filetypes[ft]->menu_items->can_exec = TRUE;
+		filetypes[ft]->actions->can_exec = TRUE;
 	}
 
 	result = g_key_file_get_string(configh, "build_settings", "run_cmd2", NULL);
@@ -942,7 +939,7 @@ void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 	if (result != NULL)
 	{
 		filetypes[ft]->programs->run_cmd2 = result;
-		filetypes[ft]->menu_items->can_exec = TRUE;
+		filetypes[ft]->actions->can_exec = TRUE;
 	}
 }
 

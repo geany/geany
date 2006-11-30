@@ -69,19 +69,11 @@ enum
 	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_ALL)
 
 
-struct build_menu_items
+struct build_actions
 {
-	GtkWidget		*menu;
-	GtkWidget		*item_compile;
-	GtkWidget		*item_link;
-	GtkWidget		*item_exec;
-	GtkWidget		*item_exec2;
-	GtkWidget		*item_make_all;
-	GtkWidget		*item_make_custom;
-	GtkWidget		*item_make_object;
-	gboolean		 can_compile;
-	gboolean		 can_link;
-	gboolean		 can_exec;
+	gboolean	can_compile:1;
+	gboolean	can_link:1;
+	gboolean	can_exec:1;
 };
 
 struct build_programs
@@ -108,8 +100,8 @@ typedef struct filetype
 	gchar	 		 *comment_open;
 	gchar	 		 *comment_close;
 	gboolean  		  comment_use_indent;
-	struct build_programs *programs;
-	struct build_menu_items *menu_items;
+	struct build_programs	*programs;
+	struct build_actions	*actions;
 	void (*style_func_ptr) (ScintillaObject*);
 } filetype;
 

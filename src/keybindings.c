@@ -75,7 +75,6 @@ static void cb_func_menu_replacetabs(guint key_id);
 static void cb_func_menu_foldall(guint key_id);
 static void cb_func_menu_unfoldall(guint key_id);
 static void cb_func_build_action(guint key_id);
-static void cb_func_build_options(guint key_id);
 static void cb_func_reloadtaglist(guint key_id);
 static void cb_func_switch_editor(guint key_id);
 static void cb_func_switch_scribble(guint key_id);
@@ -172,7 +171,7 @@ void keybindings_init(void)
 		GDK_F5, 0, "build_run", _("Run"));
 	keys[GEANY_KEYS_BUILD_RUN2] = fill(cb_func_build_action,
 		0, 0, "build_run2", _("Run (alternative command)"));
-	keys[GEANY_KEYS_BUILD_OPTIONS] = fill(cb_func_build_options,
+	keys[GEANY_KEYS_BUILD_OPTIONS] = fill(cb_func_build_action,
 		0, 0, "build_options", _("Build options"));
 	keys[GEANY_KEYS_RELOADTAGLIST] = fill(cb_func_reloadtaglist,
 		GDK_r, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "reloadtaglist", _("Reload symbol list"));
@@ -570,40 +569,46 @@ static void cb_func_build_action(guint key_id)
 	gint idx = document_get_cur_idx();
 	GtkWidget *item;
 	filetype *ft;
+	BuildMenuItems *menu_items;
 
 	if (! DOC_IDX_VALID(idx)) return;
 
 	ft = doc_list[idx].file_type;
-	if (! ft || ! ft->menu_items) return;
+	if (! ft) return;
+	menu_items = build_get_menu_items(ft);
 
 	switch (key_id)
 	{
 		case GEANY_KEYS_BUILD_COMPILE:
-		item = ft->menu_items->item_compile;
+		item = menu_items->item_compile;
 		break;
 
 		case GEANY_KEYS_BUILD_LINK:
-		item = ft->menu_items->item_link;
+		item = menu_items->item_link;
 		break;
 
 		case GEANY_KEYS_BUILD_MAKE:
-		item = ft->menu_items->item_make_all;
+		item = menu_items->item_make_all;
 		break;
 
 		case GEANY_KEYS_BUILD_MAKEOWNTARGET:
-		item = ft->menu_items->item_make_custom;
+		item = menu_items->item_make_custom;
 		break;
 
 		case GEANY_KEYS_BUILD_MAKEOBJECT:
-		item = ft->menu_items->item_make_object;
+		item = menu_items->item_make_object;
 		break;
 
 		case GEANY_KEYS_BUILD_RUN:
-		item = ft->menu_items->item_exec;
+		item = menu_items->item_exec;
 		break;
 
 		case GEANY_KEYS_BUILD_RUN2:
-		item = ft->menu_items->item_exec2;
+		item = menu_items->item_exec2;
+		break;
+
+		case GEANY_KEYS_BUILD_OPTIONS:
+		item = menu_items->item_set_args;
 		break;
 
 		default:
@@ -611,24 +616,6 @@ static void cb_func_build_action(guint key_id)
 	}
 	if (item && GTK_WIDGET_IS_SENSITIVE(item))
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
-}
-
-static void cb_func_build_options(G_GNUC_UNUSED guint key_id)
-{
-	gint idx = document_get_cur_idx();
-	document *doc;
-	filetype *ft;
-
-	if (! DOC_IDX_VALID(idx)) return;
-	doc = &doc_list[idx];
-	ft = doc->file_type;
-	if (! ft || ! ft->menu_items) return;
-	if ((ft->menu_items->can_compile ||
-		ft->menu_items->can_link ||
-		ft->menu_items->can_exec) &&
-		(doc->file_name != NULL ||
-			FILETYPE_ID(ft) != GEANY_FILETYPES_ALL))
-		on_build_arguments_activate(NULL, ft);
 }
 
 static void cb_func_reloadtaglist(G_GNUC_UNUSED guint key_id)
