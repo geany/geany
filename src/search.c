@@ -196,7 +196,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 					gtk_widget_ref(checkbox2), (GDestroyNotify)gtk_widget_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox2), FALSE);
 
-	checkbox5 = gtk_check_button_new_with_mnemonic(_("Match only word s_tart"));
+	checkbox5 = gtk_check_button_new_with_mnemonic(_("Match from s_tart of word"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_wordstart",
 					gtk_widget_ref(checkbox5), (GDestroyNotify)gtk_widget_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox5), FALSE);
@@ -312,7 +312,7 @@ void search_show_find_dialog()
 		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_find_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_FIND_IN_SESSION));
 
-		button = gtk_button_new_with_mnemonic(_("In F_ile"));
+		button = gtk_button_new_with_mnemonic(_("_In Document"));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
 		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_find_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_FIND_IN_FILE));
@@ -323,7 +323,7 @@ void search_show_find_dialog()
 						gtk_widget_ref(check_close), (GDestroyNotify) gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 		gtk_tooltips_set_tip(tooltips, check_close,
-				_("Disable this option to do not close this dialog."), NULL);
+				_("Disable this option to keep the dialog open."), NULL);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
 		gtk_container_add(GTK_CONTAINER(bbox), check_close);
 		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
@@ -448,7 +448,7 @@ void search_show_replace_dialog()
 		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_replace_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_SESSION));
 
-		button = gtk_button_new_with_mnemonic(_("In F_ile"));
+		button = gtk_button_new_with_mnemonic(_("_In Document"));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
 		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_replace_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_REPLACE_IN_FILE));
@@ -459,7 +459,7 @@ void search_show_replace_dialog()
 						gtk_widget_ref(check_close), (GDestroyNotify) gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 		gtk_tooltips_set_tip(tooltips, check_close,
-				_("Disable this option to do not close this dialog."), NULL);
+				_("Disable this option to keep the dialog open."), NULL);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_close), TRUE);
 		gtk_container_add(GTK_CONTAINER(bbox), check_close);
 		gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
