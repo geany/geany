@@ -207,12 +207,8 @@ static void apply_settings(void)
 	// connect the toolbar dropdown menus
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
 			lookup_widget(app->window, "menutoolbutton1")), app->new_file_menu);
-#if 0
-	// gtk2.10 doesn't like doubly attached menus
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
-			lookup_widget(app->window, "toolbutton9")),
-			lookup_widget(app->window, "recent_files1_menu"));
-#endif
+			lookup_widget(app->window, "toolbutton9")), app->recent_files_toolbar);
 
 	// set the tab placements of the notebooks
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), app->tab_pos_editor);
@@ -247,6 +243,7 @@ static void main_init(void)
 
 	app->window = create_window1();
 	app->new_file_menu = gtk_menu_new();
+	app->recent_files_toolbar = gtk_menu_new();
 
 	// store important pointers in the MyApp structure
 	app->toolbar = lookup_widget(app->window, "toolbar1");
@@ -258,6 +255,7 @@ static void main_init(void)
 	app->toolbar_menu = create_toolbar_popup_menu1();
 	app->compile_button = lookup_widget(app->window, "toolbutton13");
 	app->run_button = lookup_widget(app->window, "toolbutton26");
+	app->recent_files_menubar = lookup_widget(app->window, "recent_files1_menu");
 	app->popup_goto_items[0] = lookup_widget(app->popup_menu, "goto_tag_definition1");
 	app->popup_goto_items[1] = lookup_widget(app->popup_menu, "goto_tag_declaration1");
 	app->popup_goto_items[2] = lookup_widget(app->popup_menu, "find_usage1");

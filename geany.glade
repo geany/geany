@@ -18,6 +18,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <accessibility>
     <atkproperty name="AtkObject::accessible_name" translatable="yes">Geany</atkproperty>
   </accessibility>
@@ -31,6 +32,8 @@
       <child>
 	<widget class="GtkMenuBar" id="menubar1">
 	  <property name="visible">True</property>
+	  <property name="pack_direction">GTK_PACK_DIRECTION_LTR</property>
+	  <property name="child_pack_direction">GTK_PACK_DIRECTION_LTR</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="menuitem1">
@@ -105,13 +108,6 @@
 
 		      <child>
 			<widget class="GtkMenu" id="recent_files1_menu">
-
-			  <child>
-			    <widget class="GtkMenuItem" id="invisible5">
-			      <property name="label" translatable="yes">invisible</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
 			</widget>
 		      </child>
 		    </widget>
@@ -2658,6 +2654,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">

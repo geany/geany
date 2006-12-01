@@ -830,24 +830,30 @@ GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img)
 
 void ui_create_recent_menu()
 {
-	GtkWidget *recent_menu = lookup_widget(app->window, "recent_files1_menu");
 	GtkWidget *tmp;
 	guint i;
 	gchar *filename;
 
 	if (g_queue_get_length(app->recent_queue) == 0)
 	{
-		gtk_widget_set_sensitive(lookup_widget(app->window, "recent_files1"), FALSE);
+		gtk_widget_set_sensitive(app->recent_files_menubar, FALSE);
+		gtk_widget_set_sensitive(app->recent_files_toolbar, FALSE);
 		return;
 	}
 
-	for (i = 0; i < MIN(app->mru_length, g_queue_get_length(app->recent_queue));
-		i++)
+	for (i = 0; i < MIN(app->mru_length, g_queue_get_length(app->recent_queue)); i++)
 	{
 		filename = g_queue_peek_nth(app->recent_queue, i);
+		// create menu item for the recent files menu in the menu bar
 		tmp = gtk_menu_item_new_with_label(filename);
 		gtk_widget_show(tmp);
-		gtk_menu_shell_append(GTK_MENU_SHELL(recent_menu), tmp);
+		gtk_menu_shell_append(GTK_MENU_SHELL(app->recent_files_menubar), tmp);
+		g_signal_connect((gpointer) tmp, "activate",
+					G_CALLBACK(recent_file_activate_cb), NULL);
+		// create menu item for the recent files menu in the toolbar bar
+		tmp = gtk_menu_item_new_with_label(filename);
+		gtk_widget_show(tmp);
+		gtk_menu_shell_append(GTK_MENU_SHELL(app->recent_files_toolbar), tmp);
 		g_signal_connect((gpointer) tmp, "activate",
 					G_CALLBACK(recent_file_activate_cb), NULL);
 	}
@@ -889,11 +895,11 @@ static gchar *menu_item_get_text(GtkMenuItem *menu_item)
 {
 	const gchar *text = NULL;
 
-	if (GTK_BIN (menu_item)->child)
+	if (GTK_BIN(menu_item)->child)
 	{
-		GtkWidget *child = GTK_BIN (menu_item)->child;
+		GtkWidget *child = GTK_BIN(menu_item)->child;
 
-		if (GTK_IS_LABEL (child))
+		if (GTK_IS_LABEL(child))
 			text = gtk_label_get_text(GTK_LABEL(child));
 	}
 	// GTK owns text so it's much safer to return a copy of it in case the memory is reallocated
@@ -901,11 +907,26 @@ static gchar *menu_item_get_text(GtkMenuItem *menu_item)
 }
 
 
+static gint find_recent_file_item(gconstpointer list_data, gconstpointer user_data)
+{
+	gchar *menu_text = menu_item_get_text(GTK_MENU_ITEM(list_data));
+	gint result;
+
+	if (g_str_equal(menu_text, user_data))
+		result = 0;
+	else
+		result = 1;
+
+	g_free(menu_text);
+	return result;
+}
+
+
 static void recent_file_loaded(const gchar *utf8_filename)
 {
 	GList *item, *children;
 	void *data;
-	GtkWidget *recent_menu, *tmp;
+	GtkWidget *tmp;
 
 	// first reorder the queue
 	item = g_queue_find_custom(app->recent_queue, utf8_filename, (GCompareFunc) strcmp);
@@ -915,31 +936,25 @@ static void recent_file_loaded(const gchar *utf8_filename)
 	g_queue_remove(app->recent_queue, data);
 	g_queue_push_head(app->recent_queue, data);
 
-	// now reorder the recent files menu
-	recent_menu = lookup_widget(app->window, "recent_files1_menu");
-	children = gtk_container_get_children(GTK_CONTAINER(recent_menu));
-
 	// remove the old menuitem for the filename
-	for (item = children; item != NULL; item = g_list_next(item))
-	{
-		gchar *menu_text;
+	children = gtk_container_get_children(GTK_CONTAINER(app->recent_files_menubar));
+	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
+	if (item != NULL) gtk_widget_destroy(GTK_WIDGET(item->data));
 
-		data = item->data;
-		if (! GTK_IS_MENU_ITEM(data)) continue;
-		menu_text = menu_item_get_text(GTK_MENU_ITEM(data));
+	children = gtk_container_get_children(GTK_CONTAINER(app->recent_files_toolbar));
+	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
+	if (item != NULL) gtk_widget_destroy(GTK_WIDGET(item->data));
 
-		if (g_str_equal(menu_text, utf8_filename))
-		{
-			gtk_widget_destroy(GTK_WIDGET(data));
-			g_free(menu_text);
-			break;
-		}
-		g_free(menu_text);
-	}
-	// now prepend a new menuitem for the filename
+	// now prepend a new menuitem for the filename, first for the recent files menu in the menu bar
 	tmp = gtk_menu_item_new_with_label(utf8_filename);
 	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(recent_menu), tmp);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(app->recent_files_menubar), tmp);
+	g_signal_connect((gpointer) tmp, "activate",
+				G_CALLBACK(recent_file_activate_cb), NULL);
+	// then for the recent files menu in the tool bar
+	tmp = gtk_menu_item_new_with_label(utf8_filename);
+	gtk_widget_show(tmp);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(app->recent_files_toolbar), tmp);
 	g_signal_connect((gpointer) tmp, "activate",
 				G_CALLBACK(recent_file_activate_cb), NULL);
 }
@@ -947,11 +962,10 @@ static void recent_file_loaded(const gchar *utf8_filename)
 
 static void update_recent_menu()
 {
-	GtkWidget *recent_menu = lookup_widget(app->window, "recent_files1_menu");
 	GtkWidget *recent_files_item = lookup_widget(app->window, "recent_files1");
 	GtkWidget *tmp;
 	gchar *filename;
-	GList *children;
+	GList *children, *item;
 
 	if (g_queue_get_length(app->recent_queue) == 0)
 	{
@@ -963,11 +977,23 @@ static void update_recent_menu()
 		gtk_widget_set_sensitive(recent_files_item, TRUE);
 	}
 
-	// clean the MRU list before adding an item
-	children = gtk_container_get_children(GTK_CONTAINER(recent_menu));
+	// clean the MRU list before adding an item (menubar)
+	children = gtk_container_get_children(GTK_CONTAINER(app->recent_files_menubar));
 	if (g_list_length(children) > app->mru_length - 1)
 	{
-		GList *item = g_list_nth(children, app->mru_length - 1);
+		item = g_list_nth(children, app->mru_length - 1);
+		while (item != NULL)
+		{
+			if (GTK_IS_MENU_ITEM(item->data)) gtk_widget_destroy(GTK_WIDGET(item->data));
+			item = g_list_next(item);
+		}
+	}
+
+	// clean the MRU list before adding an item (toolbar)
+	children = gtk_container_get_children(GTK_CONTAINER(app->recent_files_toolbar));
+	if (g_list_length(children) > app->mru_length - 1)
+	{
+		item = g_list_nth(children, app->mru_length - 1);
 		while (item != NULL)
 		{
 			if (GTK_IS_MENU_ITEM(item->data)) gtk_widget_destroy(GTK_WIDGET(item->data));
@@ -976,9 +1002,16 @@ static void update_recent_menu()
 	}
 
 	filename = g_queue_peek_head(app->recent_queue);
+	// create item for the menu bar menu
 	tmp = gtk_menu_item_new_with_label(filename);
 	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(recent_menu), tmp);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(app->recent_files_menubar), tmp);
+	g_signal_connect((gpointer) tmp, "activate",
+				G_CALLBACK(recent_file_activate_cb), NULL);
+	// create item for the tool bar menu
+	tmp = gtk_menu_item_new_with_label(filename);
+	gtk_widget_show(tmp);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(app->recent_files_toolbar), tmp);
 	g_signal_connect((gpointer) tmp, "activate",
 				G_CALLBACK(recent_file_activate_cb), NULL);
 }
@@ -1117,7 +1150,7 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 	if (equal) return;	// don't prepend duplicate
 
 	gtk_combo_box_prepend_text(combo, text);
-	
+
 	// limit history
 	path = gtk_tree_path_new_from_indices(history_len, -1);
 	if (gtk_tree_model_get_iter(model, &iter, path))

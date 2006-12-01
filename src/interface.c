@@ -44,7 +44,6 @@ create_window1 (void)
   GtkWidget *menu_open1;
   GtkWidget *recent_files1;
   GtkWidget *recent_files1_menu;
-  GtkWidget *invisible5;
   GtkWidget *separator13;
   GtkWidget *menu_save1;
   GtkWidget *menu_save_as1;
@@ -292,9 +291,6 @@ create_window1 (void)
 
   recent_files1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (recent_files1), recent_files1_menu);
-
-  invisible5 = gtk_menu_item_new_with_mnemonic (_("invisible"));
-  gtk_container_add (GTK_CONTAINER (recent_files1_menu), invisible5);
 
   separator13 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator13);
@@ -1408,7 +1404,6 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, menu_open1, "menu_open1");
   GLADE_HOOKUP_OBJECT (window1, recent_files1, "recent_files1");
   GLADE_HOOKUP_OBJECT (window1, recent_files1_menu, "recent_files1_menu");
-  GLADE_HOOKUP_OBJECT (window1, invisible5, "invisible5");
   GLADE_HOOKUP_OBJECT (window1, separator13, "separator13");
   GLADE_HOOKUP_OBJECT (window1, menu_save1, "menu_save1");
   GLADE_HOOKUP_OBJECT (window1, menu_save_as1, "menu_save_as1");
