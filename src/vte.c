@@ -100,6 +100,21 @@ static gchar **vte_get_child_environment(void)
 }
 
 
+static void override_menu_key()
+{
+	if (gtk_menu_key_accel == NULL) // for restoring the default value
+		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-menu-bar-accel",
+																	&gtk_menu_key_accel, NULL);
+
+	if (vc->ignore_menu_bar_accel)
+		gtk_settings_set_string_property(gtk_settings_get_default(), "gtk-menu-bar-accel",
+								"<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
+	else
+		gtk_settings_set_string_property(gtk_settings_get_default(),
+								"gtk-menu-bar-accel", gtk_menu_key_accel, "Geany");
+}
+
+
 void vte_init(void)
 {
 
@@ -172,8 +187,8 @@ void vte_init(void)
 	// the vte widget has to be realised before color changes take effect
 	g_signal_connect(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
 
-	//gtk_widget_realize(vte);
-	//vte_apply_user_settings();
+	// setup the f10 menu override (so it works before the widget is first realized).
+	override_menu_key();
 }
 
 
@@ -289,16 +304,7 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), vc->colour_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), vc->colour_back);
 
-	if (gtk_menu_key_accel == NULL) // for restoring the default value
-		g_object_get(G_OBJECT(gtk_settings_get_default()), "gtk-menu-bar-accel",
-																	&gtk_menu_key_accel, NULL);
-
-	if (vc->ignore_menu_bar_accel)
-		gtk_settings_set_string_property(gtk_settings_get_default(), "gtk-menu-bar-accel",
-								"<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
-	else
-		gtk_settings_set_string_property(gtk_settings_get_default(),
-								"gtk-menu-bar-accel", gtk_menu_key_accel, "Geany");
+	override_menu_key();
 }
 
 

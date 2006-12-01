@@ -1,3 +1,10 @@
+2006-12-01  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/vte.c:
+   Make the switch to vte menu shortcut override work before the VTE
+   has been realized.
+
+
 2006-11-30  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/main.c:
