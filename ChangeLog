@@ -1,3 +1,9 @@
+2006-12-02  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/highlighting.c: Use the same style for unknown doc keywords
+                       (/** @something */) as for known keywords.
+
+
 2006-12-01  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.glade, src/interface.c, src/geany.h, src/main.c,

@@ -689,10 +689,8 @@ void styleset_c(ScintillaObject *sci)
 	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_C, 15);
 	set_sci_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_C, 16);
 	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_C, 17);
-
-	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, invert(0x0000ff));
-	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, invert(0xFFFFFF));
-	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
+	// use for unknown doc keywords (/** @something */) the same style as for known keywords
+	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_C, 17);
 
 	// is used for local structs and typedefs
 	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_C, 18);
@@ -775,10 +773,8 @@ void styleset_cpp(ScintillaObject *sci)
 	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_CPP, 15);
 	set_sci_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_CPP, 16);
 	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_CPP, 17);
-
-	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, invert(0x0000ff));
-	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, invert(0xffffff));
-	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
+	// use for unknown doc keywords (/** @something */) the same style as for known keywords
+	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_CPP, 17);
 
 	// is used for local structs and typedefs
 	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_CPP, 18);
@@ -1457,10 +1453,8 @@ void styleset_java(ScintillaObject *sci)
 	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_JAVA, 15);
 	set_sci_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_JAVA, 16);
 	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_JAVA, 17);
-
-	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, invert(0x0000ff));
-	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, invert(0xffffff));
-	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
+	// use for unknown doc keywords (/** @something */) the same style as for known keywords
+	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_JAVA, 17);
 
 	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_JAVA, 18);
 }
@@ -2625,10 +2619,8 @@ void styleset_d(ScintillaObject *sci)
 	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_D, 15);
 	set_sci_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_D, 16);
 	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_D, 17);
-
-	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, invert(0x0000ff));
-	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, invert(0xffffff));
-	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
+	// use for unknown doc keywords (/** @something */) the same style as for known keywords
+	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_D, 17);
 
 	// is used for local structs and typedefs
 	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_D, 18);
@@ -2693,10 +2685,8 @@ void styleset_ferite(ScintillaObject *sci)
 	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_FERITE, 15);
 	set_sci_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_FERITE, 16);
 	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_FERITE, 17);
-
-	SSM(sci, SCI_STYLESETFORE, SCE_C_COMMENTDOCKEYWORDERROR, invert(0x0000ff));
-	SSM(sci, SCI_STYLESETBACK, SCE_C_COMMENTDOCKEYWORDERROR, invert(0xffffff));
-	SSM(sci, SCI_STYLESETITALIC, SCE_C_COMMENTDOCKEYWORDERROR, TRUE);
+	// use for unknown doc keywords (/** @something */) the same style as for known keywords
+	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_FERITE, 17);
 
 	// is used for local structs and typedefs
 	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_FERITE, 18);
