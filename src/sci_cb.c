@@ -49,6 +49,7 @@ static gchar indent[100];
 
 
 static void on_new_line_added(ScintillaObject *sci, gint idx);
+static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx);
 
 
 // calls the edit popup menu in the editor
@@ -200,7 +201,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				case '>':
 				case '/':
 				{	// close xml-tags
-					sci_cb_handle_xml(sci, nt->ch);
+					handle_xml(sci, nt->ch, idx);
 					break;
 				}
 				case '(':
@@ -1036,8 +1037,7 @@ void sci_cb_show_macro_list(ScintillaObject *sci)
  * @param ch The character we are dealing with, currently only works with the '>' character
  * @return True if handled, false otherwise
  */
-
-gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch)
+static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx)
 {
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	gint pos, min;
@@ -1048,9 +1048,18 @@ gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch)
 	if (! app->pref_editor_auto_close_xml_tags || (lexer != SCLEX_HTML && lexer != SCLEX_XML))
 		return FALSE;
 
+	pos = sci_get_current_position(sci);
+
+	// return if we are in PHP but not in a string or outside of <? ?> tags
+	if (doc_list[idx].file_type->id == GEANY_FILETYPES_PHP)
+	{
+		gint style = sci_get_style_at(sci, pos);
+		if (style != SCE_HPHP_SIMPLESTRING && style != SCE_HPHP_HSTRING &&
+			style <= SCE_HPHP_OPERATOR && style >= SCE_HPHP_DEFAULT)
+			return FALSE;
+	}
 
 	// if ch is /, check for </, else quit
-	pos = sci_get_current_position(sci);
 	if (ch == '/' && sci_get_char_at(sci, pos - 2) != '<')
 		return FALSE;
 
