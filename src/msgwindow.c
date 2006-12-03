@@ -532,11 +532,15 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 		case GEANY_FILETYPES_MAKE:	// Assume makefile is building with gcc
 		default:	// The default is a GNU gcc type error
 		{
-			data.pattern = ":";
-			data.min_fields = 3;
-			data.line_idx = 1;
-			data.file_idx = 0;
-			break;
+			// don't accidently find libtool versions x:y:x and think it is a file name
+			if (strstr(string, "libtool --mode=link") == NULL)
+			{
+				data.pattern = ":";
+				data.min_fields = 3;
+				data.line_idx = 1;
+				data.file_idx = 0;
+				break;
+			}
 		}
 	}
 

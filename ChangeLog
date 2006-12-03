@@ -8,6 +8,8 @@
    src/prefs.c, src/sci_cb.c:
    Added new preference to unfold all children of a fold point if the
    fold point is unfolded.
+ * src/msgwindow.c: Applied patch from Bob Doan to ignore libtool
+                    messages when parsing the output of make (thanks).
 
 
 2006-12-02  Enrico Tröger  <enrico.troeger@uvena.de>
