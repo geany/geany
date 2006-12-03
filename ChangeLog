@@ -1,3 +1,11 @@
+2006-12-03  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * data/filetypes.c, data/filetypes.cpp, data/filetypes.d,
+   data/filetypes.ferite, data/filetypes.java, src/highlighting.c:
+   Added new style for doc keyword error and added some doc key words
+   for Doxygen and Javadoc.
+
+
 2006-12-02  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/highlighting.c: Use the same style for unknown doc keywords

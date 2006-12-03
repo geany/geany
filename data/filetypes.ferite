@@ -19,6 +19,7 @@ verbatim=0x101030;0xffffff;false;false
 regex=0x105090;0xffffff;false;false
 commentlinedoc=0x3f5fbf;0xffffff;true;false
 commentdockeyword=0x3f5fbf;0xffffff;true;true
+commentdockeyworderror=0x3f5fbf;0xffffff;false;false
 globalclass=0x0000d0;0xffffff;true;false
 
 [keywords]

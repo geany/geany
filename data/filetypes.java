@@ -19,12 +19,14 @@ verbatim=0x101030;0xffffff;false;false
 regex=0x105090;0xffffff;false;false
 commentlinedoc=0x3f5fbf;0xffffff;true;false
 commentdockeyword=0x3f5fbf;0xffffff;true;true
+commentdockeyworderror=0x3f5fbf;0xffffff;false;false
 globalclass=0x0000d0;0xffffff;true;false
 
 [keywords]
 primary=abstract assert break case catch class const continue default do else extends final finally for future generic goto if implements import inner instanceof interface native new outer package private protected public rest return static super switch synchronized this throw throws transient try var volatile while true false null
 secondary=boolean byte char double float int long null short void
-doccomment=return param author throws
+# documentation keywords for javadoc
+doccomment=author deprecated exception param return see serial serialData serialField since throws todo version
 typedefs=
 
 

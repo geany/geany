@@ -19,6 +19,7 @@ verbatim=0x301010;0xffffff;false;false
 regex=0x105090;0xffffff;false;false
 commentlinedoc=0x3f5fbf;0xffffff;true;false
 commentdockeyword=0x3f5fbf;0xffffff;true;true
+commentdockeyworderror=0x3f5fbf;0xffffff;false;true
 globalclass=0x0000d0;0xffffff;true;false
 # whether arguments of preprocessor commands should be styled (only first argument is used)
 # 1 to enable, 0 to disable
@@ -27,7 +28,8 @@ styling_within_preprocessor=1;0;false;false
 [keywords]
 # all items must be in one line
 primary=__FILE__ __LINE__ __DATA__ __TIME__ __TIMESTAMP__ abstract alias align asm assert auto body bool break byte case cast catch cdouble cent cfloat char class const continue creal dchar debug default delegate delete deprecated do double else enum export extern false final finally float for foreach function goto idouble if ifloat import in inout int interface invariant ireal is long mixin module new null out override package pragma private protected public real return scope short static struct super switch synchronized template this throw true try typedef typeof ubyte ucent uint ulong union unittest ushort version void volatile wchar while with
-docComment=TODO FIXME
+# documentation keywords for D, currently not working
+docComment=Authors Bugs Copyright Date Deprecated Examples History License Macros Params Returns See_Also Standards Throws Version
 
 [settings]
 # the following characters are these which a "word" can contains, see documentation

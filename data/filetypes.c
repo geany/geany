@@ -19,6 +19,7 @@ verbatim=0x101030;0xffffff;false;false
 regex=0x105090;0xffffff;false;false
 commentlinedoc=0x3f5fbf;0xffffff;true;false
 commentdockeyword=0x3f5fbf;0xffffff;true;true
+commentdockeyworderror=0x3f5fbf;0xffffff;false;false
 globalclass=0x0000d0;0xffffff;true;false
 # whether arguments of preprocessor commands should be styled (only first argument is used)
 # 1 to enable, 0 to disable
@@ -27,7 +28,8 @@ styling_within_preprocessor=1;0;false;false
 [keywords]
 # all items must be in one line
 primary=volatile default export goto sizeof typename asm enum bool union NULL FALSE TRUE typedef struct char int float double void unsigned signed long short extern static register auto const if else switch for while do break continue return class new delete inline case
-docComment=TODO FIXME
+# these are some doxygen keywords (incomplete)
+docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
 
 [settings]
 # the following characters are these which a "word" can contains, see documentation
