@@ -100,6 +100,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", app->sidebar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", app->msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", app->pref_editor_folding);
+	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", app->pref_editor_unfold_all_children);
 	g_key_file_set_boolean(config, PACKAGE, "use_auto_indention", app->pref_editor_use_auto_indention);
 	g_key_file_set_boolean(config, PACKAGE, "use_indicators", app->pref_editor_use_indicators);
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", app->pref_editor_show_indent_guide);
@@ -314,6 +315,7 @@ gboolean configuration_load()
 	app->pref_editor_auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
 	app->pref_editor_auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
 	app->pref_editor_folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
+	app->pref_editor_unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
 	app->show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
 	app->show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
 	app->fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);

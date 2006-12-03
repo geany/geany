@@ -62,6 +62,7 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const gchar *action);
 static void on_pref_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_pref_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_pref_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
 
 void prefs_init_dialog(void)
@@ -240,6 +241,11 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "check_folding");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_folding);
+
+	widget = lookup_widget(app->prefs_dialog, "check_unfold_children");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_unfold_all_children);
+	on_pref_use_folding_toggled(GTK_TOGGLE_BUTTON(
+					lookup_widget(app->prefs_dialog, "check_folding")), NULL);
 
 	widget = lookup_widget(app->prefs_dialog, "check_indicators");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_use_indicators);
@@ -514,6 +520,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		app->pref_editor_folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 		ui_update_fold_items();
 
+		widget = lookup_widget(app->prefs_dialog, "check_unfold_children");
+		app->pref_editor_unfold_all_children = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
 		widget = lookup_widget(app->prefs_dialog, "check_indent");
 		app->pref_editor_show_indent_guide = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -647,7 +656,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		// store all settings
 		configuration_save();
 	}
-	
+
 	if (response != GTK_RESPONSE_APPLY)
 	{
 		gtk_list_store_clear(store);
@@ -930,6 +939,14 @@ static void on_pref_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gp
 }
 
 
+static void on_pref_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gboolean sens = gtk_toggle_button_get_active(togglebutton);
+
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_unfold_children"), sens);
+}
+
+
 void dialogs_show_prefs_dialog(void)
 {
 	if (app->prefs_dialog == NULL)
@@ -981,7 +998,8 @@ void dialogs_show_prefs_dialog(void)
 				"toggled", G_CALLBACK(on_pref_toolbar_show_toggled), NULL);
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_show_notebook_tabs"),
 				"toggled", G_CALLBACK(on_pref_show_notebook_tabs_toggled), NULL);
-
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_folding"),
+				"toggled", G_CALLBACK(on_pref_use_folding_toggled), NULL);
 	}
 
 	prefs_init_dialog();

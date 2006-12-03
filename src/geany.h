@@ -105,6 +105,7 @@ typedef struct MyApp
 	gboolean			 pref_editor_auto_close_xml_tags;
 	gboolean			 pref_editor_auto_complete_constructs;
 	gboolean			 pref_editor_folding;
+	gboolean			 pref_editor_unfold_all_children;
 	gint				 pref_editor_tab_width;
 	gint				 pref_editor_default_encoding;
 	gboolean			 pref_editor_new_line;

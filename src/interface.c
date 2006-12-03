@@ -2264,6 +2264,7 @@ create_prefs_dialog (void)
   GtkWidget *check_auto_indent;
   GtkWidget *check_line_wrapping;
   GtkWidget *check_folding;
+  GtkWidget *check_unfold_children;
   GtkWidget *check_indicators;
   GtkWidget *label172;
   GtkWidget *frame18;
@@ -3141,6 +3142,12 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_folding, _("Whether to enable folding the code"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_folding), FALSE);
 
+  check_unfold_children = gtk_check_button_new_with_mnemonic (_("Unfold all children of a fold point"));
+  gtk_widget_show (check_unfold_children);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_unfold_children, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_unfold_children, _("Unfold all children of a fold point when unfolding it."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_unfold_children), FALSE);
+
   check_indicators = gtk_check_button_new_with_mnemonic (_("Use indicators to show compile errors"));
   gtk_widget_show (check_indicators);
   gtk_box_pack_start (GTK_BOX (vbox17), check_indicators, FALSE, FALSE, 0);
@@ -3674,6 +3681,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_indent, "check_auto_indent");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_line_wrapping, "check_line_wrapping");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_folding, "check_folding");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_unfold_children, "check_unfold_children");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_indicators, "check_indicators");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label172, "label172");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame18, "frame18");

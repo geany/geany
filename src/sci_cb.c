@@ -120,9 +120,26 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				//sci_marker_delete_all(doc_list[idx].sci, 1);
 				sci_set_marker_at_line(sci, line, sci_is_marker_set_at_line(sci, line, 1), 1);
 			}
+			// left click on the folding margin to toggle folding state of current line
 			else if (nt->margin == 2 && app->pref_editor_folding)
 			{
-				SSM(sci, SCI_TOGGLEFOLD, SSM(sci, SCI_LINEFROMPOSITION, nt->position, 0), 0);
+				gint line = SSM(sci, SCI_LINEFROMPOSITION, nt->position, 0);
+
+				SSM(sci, SCI_TOGGLEFOLD, line, 0);
+				if (app->pref_editor_unfold_all_children &&
+					SSM(sci, SCI_GETLINEVISIBLE, line + 1, 0))
+				{	// unfold all children of the current fold point
+					gint last_line = SSM(sci, SCI_GETLASTCHILD, line, -1);
+					gint i;
+
+					for (i = line; i < last_line; i++)
+					{
+						if (! SSM(sci, SCI_GETLINEVISIBLE, i, 0))
+						{
+							SSM(sci, SCI_TOGGLEFOLD, SSM(sci, SCI_GETFOLDPARENT, i, 0), 0);
+						}
+					}
+				}
 			}
 			break;
 		}
@@ -1016,7 +1033,7 @@ void sci_cb_show_macro_list(ScintillaObject *sci)
 /**
  * (stolen from anjuta and heavily modified)
  * This routine will auto complete XML or HTML tags that are still open by closing them
- * @parm ch The character we are dealing with, currently only works with the '>' character
+ * @param ch The character we are dealing with, currently only works with the '>' character
  * @return True if handled, false otherwise
  */
 
@@ -1042,7 +1059,7 @@ gboolean sci_cb_handle_xml(ScintillaObject *sci, gchar ch)
 	if (min < 0) min = 0;
 
 	if (pos - min < 3)
-		return FALSE; // Smallest tag is 3 characters ex. <p>
+		return FALSE; // Smallest tag is 3 characters e.g. <p>
 
 	sci_get_text_range(sci, min, pos, sel);
 	sel[sizeof(sel) - 1] = '\0';
