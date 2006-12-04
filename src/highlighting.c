@@ -563,20 +563,25 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 }
 
 
-// Geany generic styles, initialized to defaults
+/* Geany generic styles, initialized to defaults.
+ * Ideally these would be used as common styling for all compilable programming
+ * languages (and perhaps partially used for scripting languages too).
+ * Currently only used as default styling for C-like languages. */
 Style gsd_default =		{0x000000, 0xffffff, FALSE, FALSE};
 Style gsd_comment =		{0xd00000, 0xffffff, FALSE, FALSE};
 Style gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
 Style gsd_number =		{0x007f00, 0xffffff, FALSE, FALSE};
-Style gsd_reserved_word =	{0x111199, 0xffffff, TRUE, FALSE};
-Style gsd_system_word =	{0x7f0000, 0xffffff, TRUE, FALSE};
+Style gsd_reserved_word =	{0x00007f, 0xffffff, TRUE, FALSE};
+Style gsd_system_word =	{0x991111, 0xffffff, TRUE, FALSE};
 Style gsd_user_word =	{0x0000d0, 0xffffff, TRUE, FALSE};
 Style gsd_string =		{0xff901e, 0xffffff, FALSE, FALSE};
 Style gsd_pragma =		{0x007f7f, 0xffffff, FALSE, FALSE};
 Style gsd_string_eol =	{0x000000, 0xe0c0e0, FALSE, FALSE};
 
 
-static void init_c_like_styleset(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
+// call new_style_array(filetype_idx, >= 20) before using this.
+static void
+styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 {
 	Style uuid = {0x404080, 0xffffff, FALSE, FALSE};
 	Style operator = {0x301010, 0xffffff, FALSE, FALSE};
@@ -608,14 +613,36 @@ static void init_c_like_styleset(GKeyFile *config, GKeyFile *config_home, gint f
 	};
 	gint i;
 
-	new_style_array(filetype_idx, 21);
-
 	for (i = 0; i < 20; i++)
 		get_keyfile_style(config, config_home, entries[i].name, entries[i].style,
 			&style_sets[filetype_idx].styling[i]);
+}
 
-	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
-		1, 0, &style_sets[filetype_idx].styling[20]);
+
+static void styleset_c_like(ScintillaObject *sci, gint filetype_id)
+{
+	set_sci_style(sci, STYLE_DEFAULT, filetype_id, 0);
+	set_sci_style(sci, SCE_C_DEFAULT, filetype_id, 0);
+	set_sci_style(sci, SCE_C_COMMENT, filetype_id, 1);
+	set_sci_style(sci, SCE_C_COMMENTLINE, filetype_id, 2);
+	set_sci_style(sci, SCE_C_COMMENTDOC, filetype_id, 3);
+	set_sci_style(sci, SCE_C_NUMBER, filetype_id, 4);
+	set_sci_style(sci, SCE_C_WORD, filetype_id, 5);
+	set_sci_style(sci, SCE_C_WORD2, filetype_id, 6);
+	set_sci_style(sci, SCE_C_STRING, filetype_id, 7);
+	set_sci_style(sci, SCE_C_CHARACTER, filetype_id, 8);
+	set_sci_style(sci, SCE_C_UUID, filetype_id, 9);
+	set_sci_style(sci, SCE_C_PREPROCESSOR, filetype_id, 10);
+	set_sci_style(sci, SCE_C_OPERATOR, filetype_id, 11);
+	set_sci_style(sci, SCE_C_IDENTIFIER, filetype_id, 12);
+	set_sci_style(sci, SCE_C_STRINGEOL, filetype_id, 13);
+	set_sci_style(sci, SCE_C_VERBATIM, filetype_id, 14);
+	set_sci_style(sci, SCE_C_REGEX, filetype_id, 15);
+	set_sci_style(sci, SCE_C_COMMENTLINEDOC, filetype_id, 16);
+	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, filetype_id, 17);
+	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, filetype_id, 18);
+	// is used for local structs and typedefs
+	set_sci_style(sci, SCE_C_GLOBALCLASS, filetype_id, 19);
 }
 
 
@@ -625,7 +652,11 @@ static void styleset_c_init(void)
 	GKeyFile *config_home = g_key_file_new();
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_C);
-	init_c_like_styleset(config, config_home, GEANY_FILETYPES_C);
+
+	new_style_array(GEANY_FILETYPES_C, 21);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_C);
+	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
+		1, 0, &style_sets[GEANY_FILETYPES_C].styling[20]);
 
 	style_sets[GEANY_FILETYPES_C].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_C, 0, "if const struct char int float double void long for while do case switch return");
@@ -671,29 +702,7 @@ void styleset_c(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[1]);
 	//SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) typedefsKeyWords);
 
-	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_C, 0);
-	set_sci_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_C, 0);
-	set_sci_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_C, 1);
-	set_sci_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_C, 2);
-	set_sci_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_C, 3);
-	set_sci_style(sci, SCE_C_NUMBER, GEANY_FILETYPES_C, 4);
-	set_sci_style(sci, SCE_C_WORD, GEANY_FILETYPES_C, 5);
-	set_sci_style(sci, SCE_C_WORD2, GEANY_FILETYPES_C, 6);
-	set_sci_style(sci, SCE_C_STRING, GEANY_FILETYPES_C, 7);
-	set_sci_style(sci, SCE_C_CHARACTER, GEANY_FILETYPES_C, 8);
-	set_sci_style(sci, SCE_C_UUID, GEANY_FILETYPES_C, 9);
-	set_sci_style(sci, SCE_C_PREPROCESSOR, GEANY_FILETYPES_C, 10);
-	set_sci_style(sci, SCE_C_OPERATOR, GEANY_FILETYPES_C, 11);
-	set_sci_style(sci, SCE_C_IDENTIFIER, GEANY_FILETYPES_C, 12);
-	set_sci_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_C, 13);
-	set_sci_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_C, 14);
-	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_C, 15);
-	set_sci_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_C, 16);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_C, 17);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_C, 18);
-
-	// is used for local structs and typedefs
-	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_C, 19);
+	styleset_c_like(sci, GEANY_FILETYPES_C);
 
 	if (style_sets[GEANY_FILETYPES_C].styling[20].foreground == 1)
 		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
@@ -710,7 +719,11 @@ static void styleset_cpp_init(void)
 	GKeyFile *config_home = g_key_file_new();
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_CPP);
-	init_c_like_styleset(config, config_home, GEANY_FILETYPES_CPP);
+
+	new_style_array(GEANY_FILETYPES_CPP, 21);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_CPP);
+	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
+		1, 0, &style_sets[GEANY_FILETYPES_CPP].styling[20]);
 
 	style_sets[GEANY_FILETYPES_CPP].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CPP, 0, "and and_eq asm auto bitand bitor bool break case catch char class compl const const_cast continue default delete do double dynamic_cast else enum explicit export extern false float for friend goto if inline int long mutable namespace new not not_eq operator or or_eq private protected public register reinterpret_cast return short signed sizeof static static_cast struct switch template this throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq");
@@ -754,29 +767,7 @@ void styleset_cpp(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[1]);
 
-	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_CPP, 0);
-	set_sci_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_CPP, 0);
-	set_sci_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_CPP, 1);
-	set_sci_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_CPP, 2);
-	set_sci_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_CPP, 3);
-	set_sci_style(sci, SCE_C_NUMBER, GEANY_FILETYPES_CPP, 4);
-	set_sci_style(sci, SCE_C_WORD, GEANY_FILETYPES_CPP, 5);
-	set_sci_style(sci, SCE_C_WORD2, GEANY_FILETYPES_CPP, 6);
-	set_sci_style(sci, SCE_C_STRING, GEANY_FILETYPES_CPP, 7);
-	set_sci_style(sci, SCE_C_CHARACTER, GEANY_FILETYPES_CPP, 8);
-	set_sci_style(sci, SCE_C_UUID, GEANY_FILETYPES_CPP, 9);
-	set_sci_style(sci, SCE_C_PREPROCESSOR, GEANY_FILETYPES_CPP, 10);
-	set_sci_style(sci, SCE_C_OPERATOR, GEANY_FILETYPES_CPP, 11);
-	set_sci_style(sci, SCE_C_IDENTIFIER, GEANY_FILETYPES_CPP, 12);
-	set_sci_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_CPP, 13);
-	set_sci_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_CPP, 14);
-	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_CPP, 15);
-	set_sci_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_CPP, 16);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_CPP, 17);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_CPP, 18);
-
-	// is used for local structs and typedefs
-	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_CPP, 19);
+	styleset_c_like(sci, GEANY_FILETYPES_CPP);
 
 	if (style_sets[GEANY_FILETYPES_CPP].styling[20].foreground == 1)
 		SSM(sci, SCI_SETPROPERTY, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
@@ -1391,8 +1382,9 @@ static void styleset_java_init(void)
 	GKeyFile *config_home = g_key_file_new();
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_JAVA);
-	init_c_like_styleset(config, config_home, GEANY_FILETYPES_JAVA);
-	style_sets[GEANY_FILETYPES_JAVA].styling[19].foreground = 0;	// disable styling_within_preprocessor
+
+	new_style_array(GEANY_FILETYPES_JAVA, 20);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_JAVA);
 
 	style_sets[GEANY_FILETYPES_JAVA].keywords = g_new(gchar*, 5);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_JAVA, 0, "\
@@ -1433,27 +1425,7 @@ void styleset_java(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_JAVA].keywords[2]);
 	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) style_sets[GEANY_FILETYPES_JAVA].keywords[3]);
 
-	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_JAVA, 0);
-	set_sci_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_JAVA, 0);
-	set_sci_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_JAVA, 1);
-	set_sci_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_JAVA, 2);
-	set_sci_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_JAVA, 3);
-	set_sci_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_JAVA, 4);
-	set_sci_style(sci, SCE_C_WORD, GEANY_FILETYPES_JAVA, 5);
-	set_sci_style(sci, SCE_C_WORD2, GEANY_FILETYPES_JAVA, 6);
-	set_sci_style(sci, SCE_C_STRING, GEANY_FILETYPES_JAVA, 7);
-	set_sci_style(sci, SCE_C_CHARACTER, GEANY_FILETYPES_JAVA, 8);
-	set_sci_style(sci, SCE_C_UUID, GEANY_FILETYPES_JAVA, 9);
-	set_sci_style(sci, SCE_C_PREPROCESSOR, GEANY_FILETYPES_JAVA, 10);
-	set_sci_style(sci, SCE_C_OPERATOR, GEANY_FILETYPES_JAVA, 11);
-	set_sci_style(sci, SCE_C_IDENTIFIER, GEANY_FILETYPES_JAVA, 12);
-	set_sci_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_JAVA, 13);
-	set_sci_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_JAVA, 14);
-	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_JAVA, 15);
-	set_sci_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_JAVA, 16);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_JAVA, 17);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_JAVA, 18);
-	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_JAVA, 19);
+	styleset_c_like(sci, GEANY_FILETYPES_JAVA);
 }
 
 
@@ -2552,7 +2524,9 @@ static void styleset_d_init(void)
 	GKeyFile *config_home = g_key_file_new();
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_D);
-	init_c_like_styleset(config, config_home, GEANY_FILETYPES_D);
+
+	new_style_array(GEANY_FILETYPES_D, 20);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_D);
 
 	style_sets[GEANY_FILETYPES_D].keywords = g_new(gchar*, 3);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_D, 0, "__FILE__ __LINE__ __DATA__ __TIME__ __TIMESTAMP__ abstract alias align asm assert auto body bool break byte case cast catch cdouble cent cfloat char class const continue creal dchar debug default delegate delete deprecated do double else enum export extern false final finally float for foreach function goto idouble if ifloat import in inout int interface invariant ireal is long mixin module new null out override package pragma private protected public real return scope short static struct super switch synchronized template this throw true try typedef typeof ubyte ucent uint ulong union unittest ushort version void volatile wchar while with");
@@ -2597,28 +2571,7 @@ void styleset_d(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[0]);
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[1]);
 
-	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_D, 0);
-	set_sci_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_D, 0);
-	set_sci_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_D, 1);
-	set_sci_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_D, 2);
-	set_sci_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_D, 3);
-	set_sci_style(sci, SCE_C_NUMBER, GEANY_FILETYPES_D, 4);
-	set_sci_style(sci, SCE_C_WORD, GEANY_FILETYPES_D, 5);
-	set_sci_style(sci, SCE_C_WORD2, GEANY_FILETYPES_D, 6);
-	set_sci_style(sci, SCE_C_STRING, GEANY_FILETYPES_D, 7);
-	set_sci_style(sci, SCE_C_CHARACTER, GEANY_FILETYPES_D, 8);
-	set_sci_style(sci, SCE_C_UUID, GEANY_FILETYPES_D, 9);
-	set_sci_style(sci, SCE_C_PREPROCESSOR, GEANY_FILETYPES_D, 10);
-	set_sci_style(sci, SCE_C_OPERATOR, GEANY_FILETYPES_D, 11);
-	set_sci_style(sci, SCE_C_IDENTIFIER, GEANY_FILETYPES_D, 12);
-	set_sci_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_D, 13);
-	set_sci_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_D, 14);
-	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_D, 15);
-	set_sci_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_D, 16);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_D, 17);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_D, 18);
-	// is used for local structs and typedefs
-	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_D, 19);
+	styleset_c_like(sci, GEANY_FILETYPES_D);
 }
 
 
@@ -2628,7 +2581,9 @@ static void styleset_ferite_init(void)
 	GKeyFile *config_home = g_key_file_new();
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_FERITE);
-	init_c_like_styleset(config, config_home, GEANY_FILETYPES_FERITE);
+
+	new_style_array(GEANY_FILETYPES_FERITE, 20);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_FERITE);
 
 	style_sets[GEANY_FILETYPES_FERITE].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_FERITE, 0, "false null self super true abstract alias and arguments attribute_missing break case class closure conformsToProtocol constructor continue default deliver destructor diliver directive do else extends eval final fix for function global handle if iferr implements include instanceof isa method_missing modifies monitor namespace new or private protected protocol public raise recipient rename return static switch uses using while");
@@ -2661,28 +2616,7 @@ void styleset_ferite(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_FERITE].keywords[1]);
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_FERITE].keywords[2]);
 
-	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_FERITE, 0);
-	set_sci_style(sci, SCE_C_DEFAULT, GEANY_FILETYPES_FERITE, 0);
-	set_sci_style(sci, SCE_C_COMMENT, GEANY_FILETYPES_FERITE, 1);
-	set_sci_style(sci, SCE_C_COMMENTLINE, GEANY_FILETYPES_FERITE, 2);
-	set_sci_style(sci, SCE_C_COMMENTDOC, GEANY_FILETYPES_FERITE, 3);
-	set_sci_style(sci, SCE_C_NUMBER, GEANY_FILETYPES_FERITE, 4);
-	set_sci_style(sci, SCE_C_WORD, GEANY_FILETYPES_FERITE, 5);
-	set_sci_style(sci, SCE_C_WORD2, GEANY_FILETYPES_FERITE, 6);
-	set_sci_style(sci, SCE_C_STRING, GEANY_FILETYPES_FERITE, 7);
-	set_sci_style(sci, SCE_C_CHARACTER, GEANY_FILETYPES_FERITE, 8);
-	set_sci_style(sci, SCE_C_UUID, GEANY_FILETYPES_FERITE, 9);
-	set_sci_style(sci, SCE_C_PREPROCESSOR, GEANY_FILETYPES_FERITE, 10);
-	set_sci_style(sci, SCE_C_OPERATOR, GEANY_FILETYPES_FERITE, 11);
-	set_sci_style(sci, SCE_C_IDENTIFIER, GEANY_FILETYPES_FERITE, 12);
-	set_sci_style(sci, SCE_C_STRINGEOL, GEANY_FILETYPES_FERITE, 13);
-	set_sci_style(sci, SCE_C_VERBATIM, GEANY_FILETYPES_FERITE, 14);
-	set_sci_style(sci, SCE_C_REGEX, GEANY_FILETYPES_FERITE, 15);
-	set_sci_style(sci, SCE_C_COMMENTLINEDOC, GEANY_FILETYPES_FERITE, 16);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, GEANY_FILETYPES_FERITE, 17);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_FERITE, 18);
-	// is used for local structs and typedefs
-	set_sci_style(sci, SCE_C_GLOBALCLASS, GEANY_FILETYPES_FERITE, 19);
+	styleset_c_like(sci, GEANY_FILETYPES_FERITE);
 }
 
 

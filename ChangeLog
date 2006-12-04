@@ -1,3 +1,12 @@
+2006-12-04  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/highlighting.c, data/filetypes.d:
+   Move C/C++ styling_within_preprocessor code out of C-like styles.
+   Use styleset_c_like() when applying C-like Scintilla styles.
+   Synchronize gsd_reserved_word, gsd_system_word and data/filetypes.d
+   with styles in data/filetypes.c.
+
+
 2006-12-04  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c: Use default GTK foreground colour for filenames on
