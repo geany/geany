@@ -7,14 +7,16 @@ TODO List:
 
 	o fix problems when loading global.tags and other tags files are
 	  already loaded
+	o fix calltip return type to show pointers (and maybe const, etc.)
 	o Go to xxx - definable command
 	o documentation: list and explain filetype modes
 	o documentation: preferences
-	o user-definable auto completion structs
-	o don't override Scintilla keybindings by default
+	o user-definable construct completion
+	o don't override Scintilla keybindings by default (Ctrl-D, Ctrl-L)
 	o allow use of custom global tags files
-	o common default highlighting all in one config file
 	o project management
+	o filetype template support for all filetypes
+	o common default highlighting for all programming languages
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines  - Scintilla issue)
