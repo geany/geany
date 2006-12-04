@@ -163,20 +163,19 @@ void document_finalize()
 
 void document_set_text_changed(gint idx)
 {
-	if (idx >= 0 && doc_list[idx].is_valid && ! app->quitting)
+	if (DOC_IDX_VALID(idx) && ! app->quitting)
 	{
-		// changes the color of the tab text according to the status
-		static GdkColor colorred = {0, 65535, 0, 0};
-		static GdkColor colorblack = {0, 0, 0, 0};
+		// changes the colour of the tab text according to the status
+		static GdkColor red = {0, 65535, 0, 0};
+		static GtkStyle *style = NULL;
+
+		if (style == NULL) // use and store default foreground colour
+			style = gtk_rc_get_style(doc_list[idx].tab_label);
 
 		gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL,
-					(doc_list[idx].changed) ? &colorred : &colorblack);
+					(doc_list[idx].changed) ? &red : &(style->fg[GTK_STATE_NORMAL]));
 		gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_ACTIVE,
-					(doc_list[idx].changed) ? &colorred : &colorblack);
-		gtk_widget_modify_fg(doc_list[idx].tabmenu_label, GTK_STATE_PRELIGHT,
-					(doc_list[idx].changed) ? &colorred : &colorblack);
-		gtk_widget_modify_fg(doc_list[idx].tabmenu_label, GTK_STATE_NORMAL,
-					(doc_list[idx].changed) ? &colorred : &colorblack);
+					(doc_list[idx].changed) ? &red : &(style->fg[GTK_STATE_ACTIVE]));
 
 		ui_save_buttons_toggle(doc_list[idx].changed);
 		ui_set_window_title(idx);
