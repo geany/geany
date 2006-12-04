@@ -634,7 +634,7 @@ autocomplete_tags(gint idx, gchar *root, gsize rootlen)
 	const GPtrArray *tags;
 	ScintillaObject *sci;
 
-	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL)
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
 		return FALSE;
 	sci = doc_list[idx].sci;
 
@@ -663,8 +663,9 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 	gchar *linebuf, *root;
 	ScintillaObject *sci;
 	gboolean ret = FALSE;
+	gchar *wordchars;
 
-	if (idx < 0 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return FALSE;
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL) return FALSE;
 	sci = doc_list[idx].sci;
 
 	line = sci_get_line_from_position(sci, pos);
@@ -709,8 +710,13 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 
 	linebuf = sci_get_line(sci, line);
 
+	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
+		wordchars = GEANY_WORDCHARS"\\"; // add \ to word chars if we are in a LaTeX file
+	else
+		wordchars = GEANY_WORDCHARS;
+
 	// find the start of the current word
-	while ((startword > 0) && (strchr(GEANY_WORDCHARS, linebuf[startword - 1])))
+	while ((startword > 0) && (strchr(wordchars, linebuf[startword - 1])))
 		startword--;
 	linebuf[current] = '\0';
 	root = linebuf + startword;

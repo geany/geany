@@ -11,6 +11,7 @@
 
  * src/document.c: Use default GTK foreground colour for filenames on
                    notebook tabs instead of hardcoded colour black.
+ * src/sci_cb.c: Fixed broken auto completion for LaTeX files.
 
 
 2006-12-03  Enrico Tröger  <enrico.troeger@uvena.de>
