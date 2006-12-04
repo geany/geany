@@ -785,6 +785,9 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			case GEANY_RESPONSE_MARK:
 			// TODO
 			break;
+
+			default:
+			geany_debug("Missing response in %s.", __func__);
 		}
 		if (check_close)
 			gtk_widget_hide(widgets.find_dialog);
@@ -912,7 +915,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			break;
 		}
 		default:
-		geany_debug("Missing reponse in %s.", G_GNUC_FUNCTION);
+		geany_debug("Missing response in %s.", __func__);
 	}
 	g_free(find);
 	g_free(replace);
