@@ -160,8 +160,11 @@ gint socket_finalize(void)
 #ifdef G_OS_WIN32
 	WSACleanup();
 #else
-	unlink(socket_info.file_name);
-	g_free(socket_info.file_name);
+	if (socket_info.file_name)
+	{
+		unlink(socket_info.file_name);
+		g_free(socket_info.file_name);
+	}
 #endif
 
 	return 0;

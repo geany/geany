@@ -1,3 +1,9 @@
+2006-12-05  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/socket.c:
+   Prevent Valgrind warning with unlink(NULL).
+
+
 2006-12-04  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/highlighting.c, data/filetypes.d:
