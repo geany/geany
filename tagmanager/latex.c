@@ -32,6 +32,7 @@ typedef enum {
      K_SECTION,
      K_SUBSECTION,
      K_SUBSUBSECTION,
+     K_CHAPTER,
      K_LABEL
 } TeXKind;
 
@@ -41,6 +42,7 @@ static kindOption TeXKinds[] = {
      { TRUE, 'm', "member",        "labels, sections and bibliography" },
      { TRUE, 'd', "macro",         "subsections" },
      { TRUE, 'v', "variable",      "subsubsections" },
+     { TRUE, 'n', "namespace",     "chapters"},
      { TRUE, 's', "struct",        "labels and bibliography" }
 };
 
@@ -203,6 +205,12 @@ static void findTeXTags(void)
  		else if (getWord("subsubsection", &cp))
  		{
  		    createTag(TEX_LABEL, K_SUBSUBSECTION, cp);
+ 		    continue;
+ 		}
+ 		/* \chapter{key} */
+ 		else if (getWord("chapter", &cp))
+ 		{
+ 		    createTag(TEX_LABEL, K_CHAPTER, cp);
  		    continue;
  		}
  	    }

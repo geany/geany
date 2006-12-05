@@ -141,8 +141,8 @@ void treeviews_init_tag_list(gint idx)
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_variable), 0, _("Subsubsection"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_struct), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_struct), 0, _("Label"), -1);
-			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_namespace), NULL);
-			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Begin"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_namespace), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_namespace), 0, _("Chapter"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_other), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_other), 0, _("Other"), -1);
 			break;

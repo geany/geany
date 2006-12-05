@@ -1,3 +1,9 @@
+2006-12-05  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/treeviews.c, tagmanager/latex.c:
+   Let the LaTeX parser recognise the keyword \chapter.
+
+
 2006-12-05  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/socket.c:
