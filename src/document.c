@@ -165,27 +165,10 @@ void document_set_text_changed(gint idx)
 {
 	if (DOC_IDX_VALID(idx) && ! app->quitting)
 	{
-		// changes the colour of the tab text according to the status
-		static GdkColor red = {0, 65535, 0, 0};
-		static GtkStyle *style = NULL;
-
-		if (style == NULL) // use and store default foreground colour
-			style = gtk_rc_get_style(doc_list[idx].tab_label);
-
-		gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL,
-					(doc_list[idx].changed) ? &red : &(style->fg[GTK_STATE_NORMAL]));
-		gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_ACTIVE,
-					(doc_list[idx].changed) ? &red : &(style->fg[GTK_STATE_ACTIVE]));
-
+		ui_update_tab_status(idx);
 		ui_save_buttons_toggle(doc_list[idx].changed);
 		ui_set_window_title(idx);
 		ui_update_statusbar(idx, -1);
-		if (doc_list[idx].file_name != NULL)
-		{
-			gchar *basename = g_path_get_basename(doc_list[idx].file_name);
-			treeviews_openfiles_update(doc_list[idx].iter, basename, doc_list[idx].changed);
-			g_free(basename);
-		}
 	}
 }
 
@@ -251,8 +234,7 @@ static gint document_create_new_sci(const gchar *filename)
 {
 	ScintillaObject	*sci;
 	PangoFontDescription *pfd;
-	gchar *title, *fname;
-	GtkTreeIter iter;
+	gchar *fname;
 	gint new_idx;
 	document *this;
 	gint tabnum;
@@ -297,22 +279,6 @@ static gint document_create_new_sci(const gchar *filename)
 	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);
 
-	pfd = pango_font_description_from_string(app->editor_font);
-	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
-	document_set_font(new_idx, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
-	pango_font_description_free(pfd);
-	g_free(fname);
-
-	title = (filename) ? g_path_get_basename(filename) : g_strdup(GEANY_STRING_UNTITLED);
-	tabnum = notebook_new_tab(new_idx, title, GTK_WIDGET(sci));
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), tabnum);
-
-	iter = treeviews_openfiles_add(new_idx, title, FALSE);
-	g_free(title);
-
-	this->tag_store = NULL;
-	this->tag_tree = NULL;
-
 	// signal for insert-key(works without too, but to update the right status bar)
 /*	g_signal_connect((GtkWidget*) sci, "key-press-event",
 					G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));
@@ -320,7 +286,14 @@ static gint document_create_new_sci(const gchar *filename)
 	g_signal_connect((GtkWidget*) sci, "button-press-event",
 					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
 
-	ui_close_buttons_toggle();
+	pfd = pango_font_description_from_string(app->editor_font);
+	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
+	document_set_font(new_idx, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
+	pango_font_description_free(pfd);
+	g_free(fname);
+
+	this->tag_store = NULL;
+	this->tag_tree = NULL;
 
 	// store important pointers in the tab list
 	this->file_name = (filename) ? g_strdup(filename) : NULL;
@@ -328,7 +301,6 @@ static gint document_create_new_sci(const gchar *filename)
 	this->saved_encoding.encoding = NULL;
 	this->saved_encoding.has_bom = FALSE;
 	this->tm_file = NULL;
-	this->iter = iter;
 	this->file_type = NULL;
 	this->mtime = 0;
 	this->changed = FALSE;
@@ -338,8 +310,15 @@ static gint document_create_new_sci(const gchar *filename)
 	this->line_breaking = app->pref_editor_line_breaking;
 	this->use_auto_indention = app->pref_editor_use_auto_indention;
 	this->has_tags = FALSE;
-	this->is_valid = TRUE;
 
+	treeviews_openfiles_add(new_idx);	// sets this->iter
+
+	tabnum = notebook_new_tab(new_idx);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), tabnum);
+
+	ui_close_buttons_toggle();
+
+	this->is_valid = TRUE;	// do this last to prevent UI updating with NULL items.
 	g_assert(doc_list[new_idx].sci == sci);
 	return new_idx;
 }
@@ -357,12 +336,7 @@ gboolean document_remove(guint page_num)
 			return FALSE;
 		}
 		notebook_remove_page(page_num);
-		treeviews_openfiles_remove(doc_list[idx].iter);
-		if (GTK_IS_WIDGET(doc_list[idx].tag_tree))
-		{
-			//g_object_unref(doc_list[idx].tag_tree); // no need to unref when destroying?
-			gtk_widget_destroy(doc_list[idx].tag_tree);
-		}
+		treeviews_remove_document(idx);
 		msgwin_status_add(_("File %s closed."), DOC_FILENAME(idx));
 		g_free(doc_list[idx].encoding);
 		g_free(doc_list[idx].saved_encoding.encoding);
@@ -736,8 +710,8 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		document_undo_clear(idx);
 	}
 
-	document_set_text_changed(idx);
-	ui_document_show_hide(idx); //update the document menu
+	document_set_text_changed(idx);	// also updates tab state
+	ui_document_show_hide(idx);	// update the document menu
 
 	g_free(data);
 
@@ -1802,6 +1776,23 @@ static void document_redo_add(gint idx, guint type, gpointer data)
 
 	//geany_debug("%s: new stack height: %d, added type: %d", __func__,
 				//g_trash_stack_height(&doc_list[idx].redo_actions), action->type);
+}
+
+
+/* Gets the status colour of the document, or NULL if default widget
+ * colouring should be used. */
+GdkColor *document_get_status(gint idx)
+{
+	static GdkColor red = {0, 0xFFFF, 0, 0};
+	static GdkColor green = {0, 0, 0x7FFF, 0};
+	GdkColor *color = NULL;
+
+	if (doc_list[idx].changed)
+		color = &red;
+	else if (doc_list[idx].readonly)
+		color = &green;
+
+	return color;	// return pointer to static GdkColor.
 }
 
 

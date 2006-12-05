@@ -54,13 +54,13 @@ void treeviews_init_tag_list(gint idx);
 
 void treeviews_prepare_openfiles();
 
-GtkTreeIter treeviews_openfiles_add(gint idx, const gchar *string, gboolean changed);
+void treeviews_openfiles_add(gint idx);
 
-void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string, gboolean changed);
+void treeviews_openfiles_update(gint idx);
 
 void treeviews_openfiles_update_all();
 
-void treeviews_openfiles_remove(GtkTreeIter iter);
+void treeviews_remove_document(gint idx);
 
 void treeviews_create_openfiles_popup_menu();
 

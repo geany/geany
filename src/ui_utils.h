@@ -102,4 +102,7 @@ void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
 
 void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text);
 
+
+void ui_update_tab_status(gint idx);
+
 #endif

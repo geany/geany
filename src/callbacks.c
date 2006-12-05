@@ -1141,6 +1141,7 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 		if (idx == -1 || ! doc_list[idx].is_valid) return;
 		doc_list[idx].readonly = ! doc_list[idx].readonly;
 		sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
+		ui_update_tab_status(idx);
 		ui_update_statusbar(idx, -1);
 	}
 }

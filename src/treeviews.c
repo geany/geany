@@ -316,45 +316,25 @@ void treeviews_prepare_openfiles()
 }
 
 
-GtkTreeIter treeviews_openfiles_add(gint idx, const gchar *string, gboolean changed)
+// Also sets doc_list[idx].iter.
+void treeviews_openfiles_add(gint idx)
 {
-	GtkTreeIter iter;
-	static GdkColor black = {0, 0, 0, 0};
-	static GdkColor red = {0, 65535, 0, 0};
-	GdkColor *colour;
+	GtkTreeIter *iter = &doc_list[idx].iter;
 
-	if (changed)
-		colour = &red;
-	else
-		colour = &black;
-
-
-	gtk_list_store_append(tv.store_openfiles, &iter);
-	gtk_list_store_set(tv.store_openfiles, &iter, 0, string, 1, idx, 2, colour, -1);
-
-	return iter;
+	gtk_list_store_append(tv.store_openfiles, iter);
+	treeviews_openfiles_update(idx);
 }
 
 
-// I think this wrapper function is useful
-void treeviews_openfiles_remove(GtkTreeIter iter)
+void treeviews_openfiles_update(gint idx)
 {
-	gtk_list_store_remove(tv.store_openfiles, &iter);
-}
+	gchar *basename;
+	GdkColor *color = document_get_status(idx);
 
-
-void treeviews_openfiles_update(GtkTreeIter iter, const gchar *string, gboolean changed)
-{
-	static GdkColor black = {0, 0, 0, 0};
-	static GdkColor red = {0, 65535, 0, 0};
-	GdkColor *colour;
-
-	if (changed)
-		colour = &red;
-	else
-		colour = &black;
-
-	gtk_list_store_set(tv.store_openfiles, &iter, 0, string, 2, colour, -1);
+	basename = g_path_get_basename(DOC_FILENAME(idx));
+	gtk_list_store_set(tv.store_openfiles, &doc_list[idx].iter,
+		0, basename, 1, idx, 2, color, -1);
+	g_free(basename);
 }
 
 
@@ -362,7 +342,6 @@ void treeviews_openfiles_update_all()
 {
 	guint i;
 	gint idx;
-	gchar *shortname;
 
 	gtk_list_store_clear(tv.store_openfiles);
 	for (i = 0; i < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
@@ -370,13 +349,20 @@ void treeviews_openfiles_update_all()
 		idx = document_get_n_idx(i);
 		if (! doc_list[idx].is_valid) continue;
 
-		if (doc_list[idx].file_name == NULL)
-			shortname = g_strdup(GEANY_STRING_UNTITLED);
-		else
-			shortname = g_path_get_basename(doc_list[idx].file_name);
+		treeviews_openfiles_add(idx);
+	}
+}
 
-		doc_list[idx].iter = treeviews_openfiles_add(idx, shortname, doc_list[idx].changed);
-		g_free(shortname);
+
+void treeviews_remove_document(gint idx)
+{
+	GtkTreeIter *iter = &doc_list[idx].iter;
+
+	gtk_list_store_remove(tv.store_openfiles, iter);
+
+	if (GTK_IS_WIDGET(doc_list[idx].tag_tree))
+	{
+		gtk_widget_destroy(doc_list[idx].tag_tree);
 	}
 }
 

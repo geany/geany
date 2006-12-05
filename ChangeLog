@@ -2,6 +2,16 @@
 
  * src/socket.c:
    Prevent Valgrind warning with unlink(NULL).
+ * src/ui_utils.h, src/treeviews.c, src/callbacks.c, src/notebook.c,
+   src/treeviews.h, src/notebook.h, src/document.c, src/document.h,
+   src/ui_utils.c:
+   Show read-only notebook tabs in green.
+   Add document_get_status() to get the tab colour for the document.
+   Use ui_update_tab_status() to update notebook tabs and open files
+   treeview items.
+   Avoid using GtkTreeIter struct as treeviews function arguments.
+   Remove unneeded arguments for treeviews_openfiles_add(),
+   notebook_new_tab().
 
 
 2006-12-04  Nick Treleaven  <nick.treleaven@btinternet.com>

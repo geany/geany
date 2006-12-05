@@ -26,6 +26,7 @@
 #include "document.h"
 #include "ui_utils.h"
 #include "treeviews.h"
+#include "support.h"
 
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
 
@@ -294,15 +295,20 @@ static void tab_count_changed()
 }
 
 
-/* Returns index of notebook page, or -1 on error */
-gint notebook_new_tab(gint doc_idx, const gchar *title, GtkWidget *page)
+/* Returns page number of notebook page, or -1 on error */
+gint notebook_new_tab(gint doc_idx)
 {
 	GtkWidget *hbox, *but;
 	GtkWidget *align;
 	gint tabnum;
+	gchar *title;
 	document *this = &(doc_list[doc_idx]);
+	GtkWidget *page;
 
 	g_return_val_if_fail(doc_idx >= 0 && this != NULL, -1);
+
+	page = GTK_WIDGET(this->sci);
+	title = g_path_get_basename(DOC_FILENAME(doc_idx));
 
 	this->tab_label = gtk_label_new(title);
 
@@ -325,11 +331,11 @@ gint notebook_new_tab(gint doc_idx, const gchar *title, GtkWidget *page)
 	gtk_misc_set_alignment(GTK_MISC(this->tabmenu_label), 0.0, 0);
 
 	if (app->tab_order_ltr)
-		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook),
-			GTK_WIDGET(page), hbox, this->tabmenu_label);
+		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook), page,
+			hbox, this->tabmenu_label);
 	else
-		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook),
-			GTK_WIDGET(page), hbox, this->tabmenu_label, 0);
+		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(app->notebook), page,
+			hbox, this->tabmenu_label, 0);
 
 	tab_count_changed();
 
@@ -344,6 +350,7 @@ gint notebook_new_tab(gint doc_idx, const gchar *title, GtkWidget *page)
 		gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(app->notebook), page, TRUE);
 	}
 #endif
+	g_free(title);
 	return tabnum;
 }
 

@@ -1160,3 +1160,23 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 	gtk_tree_path_free(path);
 }
 
+
+/* Changes the color of the notebook tab text and open files items according to
+ * document status. */
+void ui_update_tab_status(gint idx)
+{
+	GdkColor *color = document_get_status(idx);
+	static GtkStyle *style = NULL;
+
+	if (style == NULL) // use and store default foreground colour
+		style = gtk_rc_get_style(doc_list[idx].tab_label);
+
+	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL,
+		color ? color : &(style->fg[GTK_STATE_NORMAL]));
+	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_ACTIVE,
+		color ? color : &(style->fg[GTK_STATE_ACTIVE]));
+
+	treeviews_openfiles_update(idx);
+}
+
+
