@@ -311,7 +311,8 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 
 		// add extra indentation for Python after colon
 		if (doc_list[idx].file_type->id == GEANY_FILETYPES_PYTHON &&
-			sci_get_char_at(sci, pos - 2) == ':')
+			sci_get_char_at(sci, pos - 2) == ':' &&
+			sci_get_style_at(sci, pos - 2) == SCE_P_OPERATOR)
 		{
 			/// TODO add something like insert_tabs() which inserts a tab or tab_width times a space
 			sci_add_text(sci, "\t");
