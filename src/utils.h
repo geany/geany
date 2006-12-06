@@ -71,12 +71,6 @@ gboolean utils_is_absolute_path(const gchar *path);
 
 gdouble utils_scale_round(gdouble val, gdouble factor);
 
-/* (taken from libexo from os-cillation)
- * NULL-safe string comparison. Returns TRUE if both a and b are
- * NULL or if a and b refer to valid strings which are equal.
- */
-gboolean utils_str_equal(const gchar *a, const gchar *b);
-
 /* removes the extension from filename and return the result in
  * a newly allocated string */
 gchar *utils_remove_ext_from_filename(const gchar *filename);

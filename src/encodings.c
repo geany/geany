@@ -176,7 +176,7 @@ void encodings_select_radio_item(const gchar *charset)
 	i = 0;
 	while (i < GEANY_ENCODINGS_MAX)
 	{
-		if (utils_str_equal(charset, encodings[i].charset)) break;
+		if (g_str_equal(charset, encodings[i].charset)) break;
 		i++;
 	}
 	if (i == GEANY_ENCODINGS_MAX) i = GEANY_ENCODING_UTF_8; // fallback to UTF-8
@@ -347,7 +347,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
 		if (i == (guint) encodings[GEANY_ENCODING_NONE].idx) continue;
-		
+
 		if (check_current)
 		{
 			check_current = FALSE;

@@ -679,23 +679,6 @@ gdouble utils_scale_round (gdouble val, gdouble factor)
 }
 
 
-/* (taken from libexo from os-cillation)
- * NULL-safe string comparison. Returns TRUE if both a and b are
- * NULL or if a and b refer to valid strings which are equal.
- */
-gboolean utils_str_equal(const gchar *a, const gchar *b)
-{
-	if (a == NULL && b == NULL) return TRUE;
-	else if (a == NULL || b == NULL) return FALSE;
-
-	while (*a == *b++)
-		if (*a++ == '\0')
-			return TRUE;
-
-	return FALSE;
-}
-
-
 /* removes the extension from filename and return the result in
  * a newly allocated string */
 gchar *utils_remove_ext_from_filename(const gchar *filename)

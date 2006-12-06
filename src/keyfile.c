@@ -288,8 +288,7 @@ gboolean configuration_load()
 		GtkIconSize tb_iconsize;
 		GtkToolbarStyle tb_style;
 		GEANY_GET_SETTING("gtk-toolbar-style", tb_style, GTK_TOOLBAR_ICONS);
-		GEANY_GET_SETTING("gtk-toolbar-icon-size", tb_iconsize,
-			GTK_ICON_SIZE_LARGE_TOOLBAR);
+		GEANY_GET_SETTING("gtk-toolbar-icon-size", tb_iconsize, GTK_ICON_SIZE_LARGE_TOOLBAR);
 		app->toolbar_icon_style = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_style", tb_style);
 		app->toolbar_icon_size = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_size", tb_iconsize);
 	}
@@ -384,7 +383,7 @@ gboolean configuration_load()
 
 		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
-		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
+		if ((vte_info.dir == NULL || g_str_equal(vte_info.dir, "")) && pw != NULL)
 			// last dir is not set, fallback to user's home directory
 			vte_info.dir = g_strdup(pw->pw_dir);
 		else if (vte_info.dir == NULL && pw == NULL)

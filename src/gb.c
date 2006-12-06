@@ -1324,7 +1324,7 @@ static gboolean gb_on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointe
 		{
 			text[4] = 'y';
 			text[5] = '\0';
-			if (utils_str_equal(text, "geany")) gb_start_easteregg();
+			if (g_str_equal(text, "geany")) gb_start_easteregg();
 			return TRUE;
 			break;
 		}

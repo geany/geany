@@ -872,7 +872,7 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 
 		for (idx = 0; idx < GEANY_MAX_KEYS; idx++)
 		{
-			if (utils_str_equal(dialog_key_name, keys[idx]->label)) break;
+			if (g_str_equal(dialog_key_name, keys[idx]->label)) break;
 		}
 
 		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);

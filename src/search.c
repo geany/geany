@@ -223,7 +223,7 @@ static void send_find_dialog_response(GtkButton *button, gpointer user_data)
 static gchar *get_default_text(gint idx)
 {
 	gchar *s = NULL;
-	
+
 	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
 	{
 		s = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
@@ -235,7 +235,7 @@ static gchar *get_default_text(gint idx)
 		sci_cb_find_current_word(doc_list[idx].sci, -1, word, sizeof(word));
 		if (word[0] != '\0') s = g_strdup(word);
 	}
-	
+
 	return s;
 }
 
@@ -632,7 +632,7 @@ void search_show_find_in_files_dialog()
 	}
 
 	// put the focus to the directory entry if it is empty
-	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), ""))
+	if (g_str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), ""))
 		gtk_widget_grab_focus(dir_combo);
 	else
 		gtk_widget_grab_focus(combo);
@@ -762,7 +762,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				(fl2 ? SCFIND_WHOLEWORD : 0) |
 				(fl3 ? SCFIND_REGEXP | SCFIND_POSIX: 0) |
 				(fl4 ? SCFIND_WORDSTART : 0);
-		
+
 		switch (response)
 		{
 			case GEANY_RESPONSE_FIND:
@@ -948,7 +948,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 		const gchar *utf8_dir =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
 
-		if (utf8_dir == NULL || utils_str_equal(utf8_dir, ""))
+		if (utf8_dir == NULL || g_str_equal(utf8_dir, ""))
 			msgwin_status_add(_("Invalid directory for find in files."));
 		else if (search_text && *search_text)
 		{

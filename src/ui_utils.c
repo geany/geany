@@ -1144,7 +1144,7 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 	if (gtk_tree_model_get_iter_first(model, &iter))
 	{
 		gtk_tree_model_get(model, &iter, 0, &combo_text, -1);
-		equal = utils_str_equal(combo_text, text);
+		equal = g_str_equal(combo_text, text);
 		g_free(combo_text);
 	}
 	if (equal) return;	// don't prepend duplicate
