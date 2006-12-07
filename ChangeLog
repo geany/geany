@@ -10,8 +10,9 @@
  * src/about.c, src/build.c, src/callbacks.c, src/document.c,
    src/encodings.c, src/gb.c, src/keyfile.c, src/prefs.c, src/sci_cb.c,
    src/search.c, src/symbols.c, src/ui_utils.c, src/utils.c,
-   src/utils.h: Revert the last change to utils_str_equal() and use it
-                again because g_str_equal() is not NULL-safe.
+   src/utils.h, src/dialogs.c, src/vte.c:
+   Revert the last change to utils_str_equal() and use it again because
+   g_str_equal() is not NULL-safe.
 
 
 2006-12-06  Enrico Tröger  <enrico.troeger@uvena.de>

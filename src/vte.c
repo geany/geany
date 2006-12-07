@@ -437,7 +437,7 @@ void vte_cwd(const gchar *filename)
 
 		path = g_path_get_dirname(filename);
 		vte_get_working_directory();	// refresh vte_info.dir
-		if (! g_str_equal(path, vte_info.dir))
+		if (! utils_str_equal(path, vte_info.dir))
 		{
 			cmd = g_strconcat("cd ", path, "\n", NULL);
 			vte_send_cmd(cmd);

@@ -1196,7 +1196,7 @@ show_question(const gchar *yes_btn, const gchar *no_btn, const gchar *question_t
 
 	// For a cancel button, use cancel reponse so user can press escape to cancel
 	gtk_dialog_add_button(GTK_DIALOG(dialog), no_btn,
-		g_str_equal(no_btn, GTK_STOCK_CANCEL) ? GTK_RESPONSE_CANCEL : GTK_RESPONSE_NO);
+		utils_str_equal(no_btn, GTK_STOCK_CANCEL) ? GTK_RESPONSE_CANCEL : GTK_RESPONSE_NO);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), yes_btn, GTK_RESPONSE_YES);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES)
