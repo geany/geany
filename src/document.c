@@ -1276,14 +1276,24 @@ static GString *get_project_typenames()
 }
 
 
-/* sets the filetype of the the document (sets syntax highlighting and tagging) */
+/* sets the filetype of the document (sets syntax highlighting and tagging) */
 void document_set_filetype(gint idx, filetype *type)
 {
-	if (! type || idx < 0) return;
-	if (type->id > GEANY_MAX_FILE_TYPES) return;
+	if (type == NULL ||
+		! DOC_IDX_VALID(idx) ||
+		doc_list[idx].file_type == type)
+		return;
 
 	geany_debug("%s : %s (%s)",	doc_list[idx].file_name, type->name, doc_list[idx].encoding);
 	doc_list[idx].file_type = type;
+
+	// delete tm file object to force creation of a new one
+	if (doc_list[idx].tm_file != NULL)
+	{
+		tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+		doc_list[idx].tm_file = NULL;
+	}
+
 	document_update_tag_list(idx, TRUE);
 	type->style_func_ptr(doc_list[idx].sci);
 
