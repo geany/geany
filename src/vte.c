@@ -33,6 +33,7 @@
 #include "support.h"
 #include "prefs.h"
 #include "ui_utils.h"
+#include "utils.h"
 
 
 VteInfo vte_info;
