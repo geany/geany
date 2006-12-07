@@ -2,6 +2,11 @@
 
  * src/document.c: Create new tm file object when changing the filetype
                    of a document to avoid a confused tagmanager.
+ * data/filetypes.d, scintilla/KeyWords.cxx, scintilla/LexD.cxx,
+   scintilla/Makefile.am, scintilla/makefile.win32,
+   scintilla/include/SciLexer.h, src/highlighting.c:
+   Added new scintilla lexer for D. It needs testing and there is more
+   work to do to get it working properly.
 
 
 2006-12-06  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -2525,53 +2525,88 @@ static void styleset_d_init(void)
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_D);
 
-	new_style_array(GEANY_FILETYPES_D, 20);
-	styleset_c_like_init(config, config_home, GEANY_FILETYPES_D);
+	new_style_array(GEANY_FILETYPES_D, 18);
 
-	style_sets[GEANY_FILETYPES_D].keywords = g_new(gchar*, 3);
-	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_D, 0, "__FILE__ __LINE__ __DATA__ __TIME__ __TIMESTAMP__ abstract alias align asm assert auto body bool break byte case cast catch cdouble cent cfloat char class const continue creal dchar debug default delegate delete deprecated do double else enum export extern false final finally float for foreach function goto idouble if ifloat import in inout int interface invariant ireal is long mixin module new null out override package pragma private protected public real return scope short static struct super switch synchronized template this throw true try typedef typeof ubyte ucent uint ulong union unittest ushort version void volatile wchar while with");
-	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_D, 1, "TODO FIXME");
-	style_sets[GEANY_FILETYPES_D].keywords[2] = NULL;
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0xd00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "commentline", "0xd00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "commentdoc", "0x3f5fbf", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "commentdocnested", "0x3f5fbf", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "word", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "word2", "0x991111", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "word3", "0x991111", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "typedef", "0x0000d0", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_D].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[14]);
+	get_keyfile_hex(config, config_home, "styling", "commentlinedoc", "0x3f5fbf", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[15]);
+	get_keyfile_hex(config, config_home, "styling", "commentdockeyword", "0x3f5fbf", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[16]);
+	get_keyfile_hex(config, config_home, "styling", "commentdockeyworderror", "0x3f5fbf", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[17]);
 
-	get_keyfile_wordchars(config, config_home,
-		&style_sets[GEANY_FILETYPES_D].wordchars);
+	style_sets[GEANY_FILETYPES_D].keywords = g_new(gchar*, 5);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_D, 0,
+			"__FILE__ __LINE__ __DATA__ __TIME__ __TIMESTAMP__ abstract alias align asm assert auto \
+			 body bool break byte case cast catch cdouble cent cfloat char class const continue creal \
+			 dchar debug default delegate delete deprecated do double else enum export extern false \
+			 final finally float for foreach function goto idouble if ifloat import in inout int \
+			 interface invariant ireal is long mixin module new null out override package pragma \
+			 private protected public real return scope short static struct super switch \
+			 synchronized template this throw true try typedef typeof ubyte ucent uint ulong union \
+			 unittest ushort version void volatile wchar while with");
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_D, 1,
+			"");
+	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_D, 2,
+			"Authors Bugs Copyright Date Deprecated Examples History License Macros Params Returns \
+			 See_Also Standards Throws Version");
+	get_keyfile_keywords(config, config_home, "keywords", "types", GEANY_FILETYPES_D, 3,
+			"");
+	style_sets[GEANY_FILETYPES_D].keywords[4] = NULL;
+
+	get_keyfile_wordchars(config, config_home, &style_sets[GEANY_FILETYPES_D].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_D);
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
-
-	// load global tags file for C autocompletion
-	// C++ is a special case, here we use 0 to have C global tags in C++, too
-	symbols_global_tags_loaded(GEANY_FILETYPES_C);
 }
 
 
 void styleset_d(ScintillaObject *sci)
 {
-	GString *s;
-
 	styleset_common(sci, 5);
 	if (style_sets[GEANY_FILETYPES_D].styling == NULL) styleset_d_init();
-
-	/* Assign global keywords */
-	s = get_global_typenames();
-	if (s != NULL)
-	{
-		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
-		g_string_free(s, TRUE);
-	}
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_D].wordchars);
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
 
-	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
-
-	//SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
+	SSM(sci, SCI_SETLEXER, SCLEX_D, 0);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_D].keywords[3]);
 
-	styleset_c_like(sci, GEANY_FILETYPES_D);
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_D, 0);
+	set_sci_style(sci, SCE_D_DEFAULT, GEANY_FILETYPES_D, 0);
+	set_sci_style(sci, SCE_D_COMMENT, GEANY_FILETYPES_D, 1);
+	set_sci_style(sci, SCE_D_COMMENTLINE, GEANY_FILETYPES_D, 2);
+	set_sci_style(sci, SCE_D_COMMENTDOC, GEANY_FILETYPES_D, 3);
+	set_sci_style(sci, SCE_D_COMMENTNESTED, GEANY_FILETYPES_D, 4);
+	set_sci_style(sci, SCE_D_NUMBER, GEANY_FILETYPES_D, 5);
+	set_sci_style(sci, SCE_D_WORD, GEANY_FILETYPES_D, 6);
+	set_sci_style(sci, SCE_D_WORD2, GEANY_FILETYPES_D, 7);
+	set_sci_style(sci, SCE_D_WORD3, GEANY_FILETYPES_D, 8);
+	set_sci_style(sci, SCE_D_TYPEDEF, GEANY_FILETYPES_D, 9);
+	set_sci_style(sci, SCE_D_STRING, GEANY_FILETYPES_D, 10);
+	set_sci_style(sci, SCE_D_STRINGEOL, GEANY_FILETYPES_D, 11);
+	set_sci_style(sci, SCE_D_CHARACTER, GEANY_FILETYPES_D, 12);
+	set_sci_style(sci, SCE_D_OPERATOR, GEANY_FILETYPES_D, 13);
+	set_sci_style(sci, SCE_D_IDENTIFIER, GEANY_FILETYPES_D, 14);
+	set_sci_style(sci, SCE_D_COMMENTLINEDOC, GEANY_FILETYPES_D, 15);
+	set_sci_style(sci, SCE_D_COMMENTDOCKEYWORD, GEANY_FILETYPES_D, 16);
+	set_sci_style(sci, SCE_D_COMMENTDOCKEYWORDERROR, GEANY_FILETYPES_D, 17);
 }
 
 
