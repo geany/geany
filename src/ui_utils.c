@@ -912,7 +912,7 @@ static gint find_recent_file_item(gconstpointer list_data, gconstpointer user_da
 	gchar *menu_text = menu_item_get_text(GTK_MENU_ITEM(list_data));
 	gint result;
 
-	if (g_str_equal(menu_text, user_data))
+	if (utils_str_equal(menu_text, user_data))
 		result = 0;
 	else
 		result = 1;
@@ -1144,7 +1144,7 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 	if (gtk_tree_model_get_iter_first(model, &iter))
 	{
 		gtk_tree_model_get(model, &iter, 0, &combo_text, -1);
-		equal = g_str_equal(combo_text, text);
+		equal = utils_str_equal(combo_text, text);
 		g_free(combo_text);
 	}
 	if (equal) return;	// don't prepend duplicate

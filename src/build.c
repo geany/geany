@@ -1147,9 +1147,9 @@ static void set_stop_button(gboolean stop)
 	GtkWidget *menuitem =
 		build_get_menu_items(filetypes[run_info.file_type_id])->item_exec;
 
-	if (stop && g_str_equal(
+	if (stop && utils_str_equal(
 		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(app->run_button)), "gtk-stop")) return;
-	if (! stop && g_str_equal(
+	if (! stop && utils_str_equal(
 		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(app->run_button)), "gtk-execute")) return;
 
 	// use the run button also as stop button

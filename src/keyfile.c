@@ -383,7 +383,7 @@ gboolean configuration_load()
 
 		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
-		if ((vte_info.dir == NULL || g_str_equal(vte_info.dir, "")) && pw != NULL)
+		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
 			// last dir is not set, fallback to user's home directory
 			vte_info.dir = g_strdup(pw->pw_dir);
 		else if (vte_info.dir == NULL && pw == NULL)

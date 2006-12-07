@@ -169,7 +169,7 @@ const GList *symbols_get_tag_list(gint idx, guint tag_types)
 		}
 
 		// do this comparison only once
-		if (g_str_equal(doc_list[idx].encoding, "UTF-8")) doc_is_utf8 = TRUE;
+		if (utils_str_equal(doc_list[idx].encoding, "UTF-8")) doc_is_utf8 = TRUE;
 
 		for (i = 0; i < (doc_list[idx].tm_file)->tags_array->len; ++i)
 		{
@@ -254,7 +254,7 @@ symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
 
 	for (i = 0; i < tags->len; ++i)
 	{
-		if (g_str_equal(TM_TAG(tags->pdata[i])->name, tag_name))
+		if (utils_str_equal(TM_TAG(tags->pdata[i])->name, tag_name))
 			return TM_TAG(tags->pdata[i]);
 	}
 	return NULL;
