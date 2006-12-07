@@ -55,6 +55,8 @@ Frank Lanitz - <language> de_DE\n\t\
 &lt;frank@frank.uvena.de&gt;\n\n\t\
 Damián Viano - <language> es\n\t\
 &lt;debian@damianv.com.ar&gt;\n\n\t\
+Jean-Philippe Moal - <language> fr\n\t\
+&lt;skateinmars@momo.servegame.org&gt;\n\n\t\
 Gabor Kmetyko - <language> hu\n\t\
 &lt;kg_kilo@freemail.hu&gt;\n\n\t\
 M. Baldinelli - <language> it\n\t\
