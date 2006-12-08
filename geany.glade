@@ -18,7 +18,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <accessibility>
     <atkproperty name="AtkObject::accessible_name" translatable="yes">Geany</atkproperty>
   </accessibility>
@@ -32,8 +31,6 @@
       <child>
 	<widget class="GtkMenuBar" id="menubar1">
 	  <property name="visible">True</property>
-	  <property name="pack_direction">GTK_PACK_DIRECTION_LTR</property>
-	  <property name="child_pack_direction">GTK_PACK_DIRECTION_LTR</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="menuitem1">
@@ -60,7 +57,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1176">
+			<widget class="GtkImage" id="image1252">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -105,11 +102,6 @@
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">Recent _files</property>
 		      <property name="use_underline">True</property>
-
-		      <child>
-			<widget class="GtkMenu" id="recent_files1_menu">
-			</widget>
-		      </child>
 		    </widget>
 		  </child>
 
@@ -146,7 +138,7 @@
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1177">
+			<widget class="GtkImage" id="image1253">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -167,7 +159,7 @@
 		      <signal name="activate" handler="on_toolbutton23_clicked" last_modification_time="Mon, 24 Jul 2006 19:26:04 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1178">
+			<widget class="GtkImage" id="image1254">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -187,7 +179,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1179">
+			<widget class="GtkImage" id="image1255">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -267,7 +259,7 @@
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1180">
+			<widget class="GtkImage" id="image1256">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -475,7 +467,7 @@
 			      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image1181">
+				<widget class="GtkImage" id="image1257">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-indent</property>
 				  <property name="icon_size">1</property>
@@ -496,7 +488,7 @@
 			      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image1182">
+				<widget class="GtkImage" id="image1258">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-unindent</property>
 				  <property name="icon_size">1</property>
@@ -526,7 +518,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1183">
+			<widget class="GtkImage" id="image1259">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -558,7 +550,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1184">
+			<widget class="GtkImage" id="image1260">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -702,6 +694,15 @@
 		  </child>
 
 		  <child>
+		    <widget class="GtkMenuItem" id="find_in_files1">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Find in f_iles</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_find_in_files1_activate" last_modification_time="Thu, 06 Jul 2006 11:31:09 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
 		    <widget class="GtkImageMenuItem" id="replace1">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Replace</property>
@@ -709,7 +710,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1185">
+			<widget class="GtkImage" id="image1261">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -723,22 +724,22 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkSeparatorMenuItem" id="separator27">
+		    <widget class="GtkSeparatorMenuItem" id="separator33">
 		      <property name="visible">True</property>
 		    </widget>
 		  </child>
 
 		  <child>
-		    <widget class="GtkMenuItem" id="find_in_files1">
+		    <widget class="GtkMenuItem" id="next_message1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Find in f_iles</property>
+		      <property name="label" translatable="yes">Next _Message</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_find_in_files1_activate" last_modification_time="Thu, 06 Jul 2006 11:31:09 GMT"/>
+		      <signal name="activate" handler="on_next_message1_activate" last_modification_time="Tue, 05 Dec 2006 11:15:02 GMT"/>
 		    </widget>
 		  </child>
 
 		  <child>
-		    <widget class="GtkSeparatorMenuItem" id="separator11">
+		    <widget class="GtkSeparatorMenuItem" id="separator32">
 		      <property name="visible">True</property>
 		    </widget>
 		  </child>
@@ -751,7 +752,7 @@
 		      <signal name="activate" handler="on_go_to_line1_activate" last_modification_time="Tue, 23 May 2006 17:10:49 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1186">
+			<widget class="GtkImage" id="image1262">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -786,7 +787,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1187">
+			<widget class="GtkImage" id="image1263">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -1017,7 +1018,7 @@
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Convert and set to _CR/LF (Win)</property>
 			      <property name="use_underline">True</property>
-			      <property name="active">False</property>
+			      <property name="active">True</property>
 			      <signal name="activate" handler="on_crlf_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
 			  </child>
@@ -1027,7 +1028,7 @@
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Convert and set to _LF (Unix)</property>
 			      <property name="use_underline">True</property>
-			      <property name="active">False</property>
+			      <property name="active">True</property>
 			      <property name="group">crlf</property>
 			      <signal name="activate" handler="on_lf_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
@@ -1136,7 +1137,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1188">
+			<widget class="GtkImage" id="image1264">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -2654,7 +2655,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">

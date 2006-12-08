@@ -244,6 +244,9 @@ static void main_init(void)
 	app->window = create_window1();
 	app->new_file_menu = gtk_menu_new();
 	app->recent_files_toolbar = gtk_menu_new();
+	app->recent_files_menubar = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "recent_files1")),
+		app->recent_files_menubar);
 
 	// store important pointers in the MyApp structure
 	app->toolbar = lookup_widget(app->window, "toolbar1");
@@ -255,7 +258,6 @@ static void main_init(void)
 	app->toolbar_menu = create_toolbar_popup_menu1();
 	app->compile_button = lookup_widget(app->window, "toolbutton13");
 	app->run_button = lookup_widget(app->window, "toolbutton26");
-	app->recent_files_menubar = lookup_widget(app->window, "recent_files1_menu");
 	app->popup_goto_items[0] = lookup_widget(app->popup_menu, "goto_tag_definition1");
 	app->popup_goto_items[1] = lookup_widget(app->popup_menu, "goto_tag_declaration1");
 	app->popup_goto_items[2] = lookup_widget(app->popup_menu, "find_usage1");
@@ -561,9 +563,9 @@ gint main(gint argc, gchar **argv)
 	msgwin_prepare_status_tree_view();
 	msgwin_prepare_msg_tree_view();
 	msgwin_prepare_compiler_tree_view();
-	msgwindow.popup_status_menu = msgwin_create_message_popup_menu(3);
-	msgwindow.popup_msg_menu = msgwin_create_message_popup_menu(4);
-	msgwindow.popup_compiler_menu = msgwin_create_message_popup_menu(5);
+	msgwindow.popup_status_menu = msgwin_create_message_popup_menu(MSG_STATUS);
+	msgwindow.popup_msg_menu = msgwin_create_message_popup_menu(MSG_MESSAGE);
+	msgwindow.popup_compiler_menu = msgwin_create_message_popup_menu(MSG_COMPILER);
 #ifdef HAVE_VTE
 	vte_init();
 #endif

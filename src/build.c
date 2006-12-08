@@ -63,9 +63,9 @@ enum
 };
 
 static BuildMenuItems default_menu_items =
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static BuildMenuItems latex_menu_items =
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
@@ -82,6 +82,7 @@ static void free_pointers(gpointer first, ...);
 #ifndef G_OS_WIN32
 static void kill_process(GPid *pid);
 #endif
+
 
 void build_finalize()
 {
@@ -430,7 +431,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	working_dir = g_path_get_dirname(locale_filename);
 	utf8_working_dir = g_path_get_dirname(doc_list[idx].file_name);
 	gtk_list_store_clear(msgwindow.store_compiler);
-	msgwin_compiler_add(COLOR_BLUE, FALSE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
+	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
 
 	// set the build info for the message window
@@ -678,7 +679,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 				}
 				g_free(filename);
 			}
-			msgwin_compiler_add(color, FALSE, msg);
+			msgwin_compiler_add(color, msg);
 
 			g_free(msg);
 		}
@@ -697,7 +698,7 @@ static void show_build_result_message(gboolean failure)
 	if (failure)
 	{
 		msg = _("Compilation failed.");
-		msgwin_compiler_add(COLOR_DARK_RED, TRUE, "%s", msg);
+		msgwin_compiler_add(COLOR_DARK_RED, "%s", msg);
 		// If msgwindow is hidden, user will want to display it to see the error
 		if (! app->msgwindow_visible)
 		{
@@ -711,7 +712,7 @@ static void show_build_result_message(gboolean failure)
 	else
 	{
 		msg = _("Compilation finished successfully.");
-		msgwin_compiler_add(COLOR_BLUE, TRUE, "%s", msg);
+		msgwin_compiler_add(COLOR_BLUE, "%s", msg);
 		if (! app->msgwindow_visible ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
 				ui_set_statusbar("%s", msg);
@@ -877,6 +878,17 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
+	// next error
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Next Error"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_next_error), NULL);
+	menu_items->item_next_error = item;
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
 	// execute the code
 	item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
 	gtk_widget_show(item);
@@ -949,12 +961,9 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 				G_CALLBACK(on_build_tex_activate), GINT_TO_POINTER(LATEX_CMD_TO_PDF));
 	menu_items->item_link = item;
 
-	if (item != NULL)
-	{
-		item = gtk_separator_menu_item_new();
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-	}
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	// build the code with make all
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Make all"));
@@ -978,13 +987,21 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 		GINT_TO_POINTER(GBO_MAKE_CUSTOM));
 	menu_items->item_make_custom = item;
 
-	if (item != NULL)
-	{
-		item = gtk_separator_menu_item_new();
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-	}
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
 #endif
+
+	// next error
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Next Error"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_next_error), NULL);
+	menu_items->item_next_error = item;
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	// DVI view
 #define LATEX_VIEW_DVI_LABEL _("View DVI file") // used later again
@@ -1063,7 +1080,7 @@ static gboolean is_c_header(const gchar *fname)
 void build_menu_update(gint idx)
 {
 	filetype *ft;
-	gboolean have_path, can_build, can_make, can_run, can_set_args;
+	gboolean have_path, can_build, can_make, can_run, can_set_args, have_errors;
 	BuildMenuItems *menu_items;
 
 	if (idx == -1)
@@ -1090,7 +1107,7 @@ void build_menu_update(gint idx)
 	ft->menu_items->can_link = FALSE;
 #endif
 
-	menu_items = build_get_menu_items(ft);
+	menu_items = build_get_menu_items(ft->id);
 	/* Note: don't remove the submenu first because it can now cause an X hang if
 	 * the menu is already open when called from build_exit_cb(). */
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")),
@@ -1138,6 +1155,10 @@ void build_menu_update(gint idx)
 
 	// show the stop command if a program is running, otherwise show run command
 	set_stop_button(run_info.pid > 1);
+
+	have_errors = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_compiler),
+		NULL) > 0;
+	gtk_widget_set_sensitive(menu_items->item_next_error, have_errors);
 }
 
 
@@ -1146,7 +1167,7 @@ static void set_stop_button(gboolean stop)
 {
 	GtkStockItem sitem;
 	GtkWidget *menuitem =
-		build_get_menu_items(filetypes[run_info.file_type_id])->item_exec;
+		build_get_menu_items(run_info.file_type_id)->item_exec;
 
 	if (stop && utils_str_equal(
 		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(app->run_button)), "gtk-stop")) return;
@@ -1195,12 +1216,23 @@ static void set_stop_button(gboolean stop)
 }
 
 
-// Creates the relevant build menu if necessary.
-BuildMenuItems *build_get_menu_items(const filetype *ft)
+/* Creates the relevant build menu if necessary.
+ * If filetype_id is -1, the current filetype is used, or GEANY_FILETYPES_ALL */
+BuildMenuItems *build_get_menu_items(gint filetype_id)
 {
 	BuildMenuItems *items;
 
-	if (FILETYPE_ID(ft) == GEANY_FILETYPES_LATEX)
+	if (filetype_id == -1)
+	{
+		gint idx = document_get_cur_idx();
+		filetype *ft = NULL;
+
+		if (DOC_IDX_VALID(idx))
+			ft = doc_list[idx].file_type;
+		filetype_id = FILETYPE_ID(ft);
+	}
+
+	if (filetype_id == GEANY_FILETYPES_LATEX)
 	{
 		items = &latex_menu_items;
 		if (items->menu == NULL)
@@ -1427,6 +1459,16 @@ static void free_pointers(gpointer first, ...)
 
     if (first != NULL)
     	g_free(first);
+}
+
+
+void
+on_build_next_error                    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	if (! ui_tree_view_find_next(GTK_TREE_VIEW(msgwindow.tree_compiler),
+		msgwin_goto_compiler_file_line))
+		ui_set_statusbar(_("No more build errors."));
 }
 
 

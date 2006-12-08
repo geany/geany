@@ -76,8 +76,8 @@ void msgwin_show();
 
 void msgwin_msg_add(gint line, gint idx, const gchar *string);
 
-void msgwin_compiler_add(gint msg_color, gboolean scroll, const gchar *format, ...)
-		G_GNUC_PRINTF (3, 4);
+void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
+		G_GNUC_PRINTF (2, 3);
 
 void msgwin_status_add(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 
@@ -85,11 +85,6 @@ GtkWidget *msgwin_create_message_popup_menu(gint type);
 
 gboolean msgwin_goto_compiler_file_line();
 
-/* try to parse the file and line number where the error occured described in line
- * and when something useful is found, it stores the line number in *line and the
- * relevant file with the error in filename.
- * *line will be -1 if no error was found in string.
- * filename must be freed unless it is NULL. */
 void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gint *line);
 
 gboolean msgwin_goto_messages_file_line();

@@ -575,7 +575,7 @@ static void cb_func_build_action(guint key_id)
 
 	ft = doc_list[idx].file_type;
 	if (! ft) return;
-	menu_items = build_get_menu_items(ft);
+	menu_items = build_get_menu_items(ft->id);
 
 	switch (key_id)
 	{

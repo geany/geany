@@ -105,4 +105,9 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text);
 
 void ui_update_tab_status(gint idx);
 
+
+typedef gboolean TVMatchCallback();
+
+gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb);
+
 #endif

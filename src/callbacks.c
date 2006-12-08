@@ -1241,36 +1241,6 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 
 
 void
-on_message_treeview_clear_activate     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gtk_list_store_clear(GTK_LIST_STORE(user_data));
-}
-
-
-void
-on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	GtkTreeIter iter;
-	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
-	GtkTreeModel *model;
-	gchar *string;
-
-	if (gtk_tree_selection_get_selected(selection, &model, &iter))
-	{
-		gtk_tree_model_get(model, &iter, 1, &string, -1);
-		if (string || strlen (string) > 0)
-		{
-			gtk_clipboard_set_text(gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)), string, -1);
-		}
-		g_free(string);
-	}
-
-}
-
-
-void
 on_compile_button_clicked              (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
@@ -2015,3 +1985,12 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 	}
 }
 
+
+void
+on_next_message1_activate              (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	if (! ui_tree_view_find_next(GTK_TREE_VIEW(msgwindow.tree_msg),
+		msgwin_goto_messages_file_line))
+		ui_set_statusbar(_("No more message items."));
+}

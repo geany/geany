@@ -273,17 +273,8 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_message_treeview_clear_activate     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
 on_construct_completion1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
-
 
 void
 on_count_words1_activate               (GtkMenuItem     *menuitem,
@@ -546,3 +537,8 @@ void
 on_menu_toggle_line_commentation1_activate
                                        (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_next_message1_activate              (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+

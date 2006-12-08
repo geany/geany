@@ -1180,3 +1180,35 @@ void ui_update_tab_status(gint idx)
 }
 
 
+/* Returns FALSE if the treeview has items but no matching next item. */
+gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb)
+{
+	GtkTreeSelection *treesel;
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+
+	treesel = gtk_tree_view_get_selection(treeview);
+	if (gtk_tree_selection_get_selected(treesel, &model, &iter))
+	{
+		// get the next selected item
+		if (! gtk_tree_model_iter_next(model, &iter))
+			return FALSE;	// no more items
+	}
+	else	// no selection
+	{
+		if (! gtk_tree_model_get_iter_first(model, &iter))
+			return TRUE;	// no items
+	}
+	while (TRUE)
+	{
+		gtk_tree_selection_select_iter(treesel, &iter);
+		if (cb())
+			break;	// found next message
+
+		if (! gtk_tree_model_iter_next(model, &iter))
+			return FALSE;	// no more items
+	}
+	return TRUE;
+}
+
+

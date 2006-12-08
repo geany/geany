@@ -24,8 +24,6 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
-#include "filetypes.h"
-
 typedef enum	// Geany Build Options
 {
 	GBO_COMPILE,
@@ -54,6 +52,7 @@ typedef struct
 	GtkWidget		*item_make_all;
 	GtkWidget		*item_make_custom;
 	GtkWidget		*item_make_object;
+	GtkWidget		*item_next_error;
 	GtkWidget		*item_exec;
 	GtkWidget		*item_exec2;
 	GtkWidget		*item_set_args;
@@ -77,7 +76,7 @@ GPid build_run_cmd(gint idx);
 
 void build_menu_update(gint idx);
 
-BuildMenuItems *build_get_menu_items(const filetype *ft);
+BuildMenuItems *build_get_menu_items(gint filetype_id);
 
 
 void
@@ -104,4 +103,7 @@ void
 on_build_arguments_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
+void
+on_build_next_error                    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
 #endif

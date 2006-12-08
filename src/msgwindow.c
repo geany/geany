@@ -67,6 +67,8 @@ void msgwin_init()
 	msgwindow.tree_msg = lookup_widget(app->window, "treeview4");
 	msgwindow.tree_compiler = lookup_widget(app->window, "treeview5");
 	msgwindow.find_in_files_dir = NULL;
+
+	gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), FALSE);
 }
 
 
@@ -155,15 +157,16 @@ void msgwin_prepare_compiler_tree_view(void)
 }
 
 
+static const GdkColor color_error = {0, 65535, 0, 0};
+
 // adds string to the compiler textview
-void msgwin_compiler_add(gint msg_color, gboolean scroll, const gchar *format, ...)
+void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 {
 	GtkTreeIter iter;
 	GtkTreePath *path;
 	const GdkColor *color;
-	const GdkColor red = {0, 65535, 0, 0};
 	const GdkColor dark_red = {0, 65535 / 2, 0, 0};
-	const GdkColor blue = {0, 0, 0, 65535};
+	const GdkColor blue = {0, 0, 0, 0xD000};	// not too bright ;-)
 	const GdkColor black = {0, 0, 0, 0};
 	gchar string[512];
 	va_list args;
@@ -174,7 +177,7 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, const gchar *format, .
 
 	switch (msg_color)
 	{
-		case COLOR_RED: color = &red; break;
+		case COLOR_RED: color = &color_error; break;
 		case COLOR_DARK_RED: color = &dark_red; break;
 		case COLOR_BLUE: color = &blue; break;
 		default: color = &black;
@@ -188,13 +191,11 @@ void msgwin_compiler_add(gint msg_color, gboolean scroll, const gchar *format, .
 		path = gtk_tree_model_get_path(
 			gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_compiler)), &iter);
 		gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(msgwindow.tree_compiler), path, NULL, TRUE, 0.5, 0.5);
-
-		if (scroll)
-		{
-			gtk_tree_view_set_cursor(GTK_TREE_VIEW(msgwindow.tree_compiler), path, NULL, FALSE);
-		}
 		gtk_tree_path_free(path);
 	}
+
+	// calling build_menu_update for every build message would be overkill
+	gtk_widget_set_sensitive(build_get_menu_items(-1)->item_next_error, TRUE);
 }
 
 
@@ -216,6 +217,8 @@ void msgwin_msg_add(gint line, gint idx, const gchar *string)
 	gtk_list_store_append(msgwindow.store_msg, &iter);
 	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2,
 		((state++ % 2) == 0) ? &white : &dark, 3, string, -1);
+
+	gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), TRUE);
 }
 
 
@@ -260,9 +263,77 @@ void msgwin_status_add(const gchar *format, ...)
 }
 
 
+static void
+on_message_treeview_clear_activate     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	GtkListStore *store;
+
+	switch (GPOINTER_TO_INT(user_data))
+	{
+		case MSG_STATUS:
+		store = msgwindow.store_status;
+		break;
+
+		case MSG_MESSAGE:
+		gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), FALSE);
+		store = msgwindow.store_msg;
+		break;
+
+		case MSG_COMPILER:
+		gtk_widget_set_sensitive(build_get_menu_items(-1)->item_next_error, FALSE);
+		store = msgwindow.store_compiler;
+		break;
+	}
+	gtk_list_store_clear(store);
+}
+
+
+static void
+on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	GtkWidget *tv = NULL;
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gint str_idx = 1;
+
+	switch (GPOINTER_TO_INT(user_data))
+	{
+		case MSG_STATUS:
+		tv = msgwindow.tree_status;
+		break;
+
+		case MSG_COMPILER:
+		tv = msgwindow.tree_compiler;
+		break;
+
+		case MSG_MESSAGE:
+		tv = msgwindow.tree_msg;
+		str_idx = 3;
+		break;
+	}
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
+
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	{
+		gchar *string;
+
+		gtk_tree_model_get(model, &iter, str_idx, &string, -1);
+		if (string && *string)
+		{
+			gtk_clipboard_set_text(gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)),
+				string, -1);
+		}
+		g_free(string);
+	}
+}
+
+
 GtkWidget *msgwin_create_message_popup_menu(gint type)
 {
-	GtkWidget *message_popup_menu, *clear;
+	GtkWidget *message_popup_menu, *clear, *copy;
 
 	message_popup_menu = gtk_menu_new();
 
@@ -270,19 +341,14 @@ GtkWidget *msgwin_create_message_popup_menu(gint type)
 	gtk_widget_show(clear);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), clear);
 
-	if (type == 3)
-		g_signal_connect((gpointer)clear, "activate", G_CALLBACK(on_message_treeview_clear_activate), msgwindow.store_status);
-	else if (type == 4)
-		g_signal_connect((gpointer)clear, "activate", G_CALLBACK(on_message_treeview_clear_activate), msgwindow.store_msg);
-	else if (type == 5)
-	{
-		GtkWidget *copy = gtk_image_menu_item_new_from_stock("gtk-copy", NULL);
-		gtk_widget_show(copy);
-		gtk_container_add(GTK_CONTAINER(message_popup_menu), copy);
+	copy = gtk_image_menu_item_new_from_stock("gtk-copy", NULL);
+	gtk_widget_show(copy);
+	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy);
 
-		g_signal_connect((gpointer)copy, "activate", G_CALLBACK(on_compiler_treeview_copy_activate), NULL);
-		g_signal_connect((gpointer)clear, "activate", G_CALLBACK(on_message_treeview_clear_activate), msgwindow.store_compiler);
-	}
+	g_signal_connect((gpointer)copy, "activate",
+		G_CALLBACK(on_compiler_treeview_copy_activate), GINT_TO_POINTER(type));
+	g_signal_connect((gpointer)clear, "activate",
+		G_CALLBACK(on_message_treeview_clear_activate), GINT_TO_POINTER(type));
 
 	return message_popup_menu;
 }
@@ -295,10 +361,20 @@ gboolean msgwin_goto_compiler_file_line()
 	GtkTreeSelection *selection;
 	gchar *string;
 	gboolean ret = FALSE;
+	GdkColor *color;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
+		// if the item is not coloured red, it's not an error line
+		gtk_tree_model_get(model, &iter, 0, &color, -1);
+		if (! gdk_color_equal(color, &color_error))
+		{
+			gdk_color_free(color);
+			return FALSE;
+		}
+		gdk_color_free(color);
+
 		gtk_tree_model_get(model, &iter, 1, &string, -1);
 		if (string != NULL)
 		{
@@ -564,7 +640,9 @@ gboolean msgwin_goto_messages_file_line()
 
 		gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, 3, &string, -1);
 		if (line >= 0 && idx >= 0)
-			utils_goto_line(idx, line); //checks valid idx
+		{
+			ret = utils_goto_line(idx, line);	// checks valid idx
+		}
 		else if (line < 0 && string != NULL)
 		{
 			gchar *filename;
@@ -659,3 +737,5 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 	}
 	return FALSE;
 }
+
+
