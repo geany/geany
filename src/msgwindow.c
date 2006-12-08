@@ -271,10 +271,6 @@ on_message_treeview_clear_activate     (GtkMenuItem     *menuitem,
 
 	switch (GPOINTER_TO_INT(user_data))
 	{
-		case MSG_STATUS:
-		store = msgwindow.store_status;
-		break;
-
 		case MSG_MESSAGE:
 		gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), FALSE);
 		store = msgwindow.store_msg;
@@ -284,6 +280,9 @@ on_message_treeview_clear_activate     (GtkMenuItem     *menuitem,
 		gtk_widget_set_sensitive(build_get_menu_items(-1)->item_next_error, FALSE);
 		store = msgwindow.store_compiler;
 		break;
+
+		default: // MSG_STATUS
+		store = msgwindow.store_status;
 	}
 	gtk_list_store_clear(store);
 }
