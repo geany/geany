@@ -1096,6 +1096,7 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 	align = gtk_alignment_new(0.5, 0.5, 0.0, 0.0);
 	gtk_container_add(GTK_CONTAINER(align), hbox);
 	gtk_container_add(GTK_CONTAINER(button), align);
+	gtk_widget_show_all(align);
 	return button;
 }
 

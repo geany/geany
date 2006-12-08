@@ -333,7 +333,7 @@ void dialogs_show_msgbox(gint type, const gchar *text, ...)
 gboolean dialogs_show_unsaved_file(gint idx)
 {
 #ifndef G_OS_WIN32
-	GtkWidget *dialog, *button, *label, *image, *hbox, *align;
+	GtkWidget *dialog, *button;
 #endif
 	gchar *msg, *short_fn = NULL;
 	gint ret;
@@ -356,18 +356,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 		"%s", _("Do you want to save it before closing?"));
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
-	button = gtk_button_new();
-	label = gtk_label_new_with_mnemonic(_("_Don't save"));
-	image = gtk_image_new_from_stock(GTK_STOCK_CLEAR, GTK_ICON_SIZE_BUTTON);
-	hbox = gtk_hbox_new(FALSE, 2);
-
-	align = gtk_alignment_new(0.5, 0.5, 0.0, 0.0);
-	gtk_box_pack_start(GTK_BOX(hbox), image, FALSE, FALSE, 0);
-	gtk_box_pack_end(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-	gtk_container_add(GTK_CONTAINER(button), align);
-	gtk_container_add(GTK_CONTAINER(align), hbox);
-	gtk_widget_show_all(align);
+	button = ui_button_new_with_image(GTK_STOCK_CLEAR, _("_Don't save"));
 	gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, GTK_RESPONSE_NO);
 	gtk_widget_show(button);
 
