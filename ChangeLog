@@ -3,6 +3,10 @@
  * src/build.c: Made the created run script for command execution a bit
                 more portable to other shells than bash (thanks to
                 Nacho Cabanes for reporting).
+ * src/document.c, src/document.h, src/sciwrappers.c, src/ui_utils.h,
+   src/sciwrappers.h:
+   Fixed broken overtype update in the statusbar.
+   Removed unused field do_overwrite in document struct.
 
 
 2006-12-07  Frank Lanitz  <frank@frank.uvena.de>

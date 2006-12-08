@@ -115,7 +115,7 @@ void ui_update_statusbar(gint idx, gint pos)
 			(doc_list[idx].changed) ? 42 : 32,
 			(line + 1), (col + 1),
 			sci_get_selected_text_length(doc_list[idx].sci) - 1,
-			doc_list[idx].do_overwrite ? _("OVR") : _("INS"),
+			sci_get_overtype(doc_list[idx].sci) ? _("OVR") : _("INS"),
 			document_get_eol_mode(idx),
 			(doc_list[idx].readonly) ? ", read only" : "",
 			cur_tag,

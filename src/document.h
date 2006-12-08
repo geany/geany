@@ -61,7 +61,6 @@ typedef struct document
 	GtkTreeIter		 iter;
 	gboolean		 readonly;
 	gboolean		 changed;
-	gboolean		 do_overwrite;
 	gboolean		 line_breaking;
 	gboolean		 use_auto_indention;
 	time_t			 last_check;	// to remember the last disk check

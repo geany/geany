@@ -305,7 +305,6 @@ static gint document_create_new_sci(const gchar *filename)
 	this->mtime = 0;
 	this->changed = FALSE;
 	this->last_check = time(NULL);
-	this->do_overwrite = FALSE;
 	this->readonly = FALSE;
 	this->line_breaking = app->pref_editor_line_breaking;
 	this->use_auto_indention = app->pref_editor_use_auto_indention;

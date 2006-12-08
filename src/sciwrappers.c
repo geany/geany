@@ -903,3 +903,8 @@ gint sci_find_bracematch(ScintillaObject *sci, gint pos)
 	return SSM(sci, SCI_BRACEMATCH, pos, 0);
 }
 
+gint sci_get_overtype(ScintillaObject *sci)
+{
+	return SSM(sci, SCI_GETOVERTYPE, 0, 0);
+}
+
