@@ -779,7 +779,8 @@ static gboolean build_create_shellscript(const gint idx, const gchar *fname, con
 #else
 	str = g_strdup_printf(
 		"#!/bin/sh\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
-		\n\necho \"Press return to continue\"\n%s\nunlink $0\n", cmd, (autoclose) ? "" : "read");
+		\n\necho \"Press return to continue\"\n%s\nunlink $0\n", cmd, (autoclose) ? "" :
+		"#to be more compatible with shells like dash\ndummy_var=\"\"\nread dummy_var");
 #endif
 
 	fputs(str, fp);
