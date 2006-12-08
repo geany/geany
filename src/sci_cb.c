@@ -50,6 +50,8 @@ static gchar indent[100];
 
 static void on_new_line_added(ScintillaObject *sci, gint idx);
 static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx);
+static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
+static void auto_multiline(ScintillaObject *sci, gint pos);
 
 
 // calls the edit popup menu in the editor
@@ -306,7 +308,7 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 	// simple indentation
 	if (doc_list[idx].use_auto_indention)
 	{
-		sci_cb_get_indent(sci, pos, FALSE);
+		get_indent(sci, pos, FALSE);
 		sci_add_text(sci, indent);
 
 		// add extra indentation for Python after colon
@@ -319,13 +321,13 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 		}
 
 	}
-	// " * " auto completion in multiline C/C++ comments
-	sci_cb_auto_multiline(sci, pos);
+	// " * " auto completion in multiline C/C++/D/Java comments
+	auto_multiline(sci, pos);
 	if (app->pref_editor_auto_complete_constructs) sci_cb_auto_latex(idx, pos);
 }
 
 
-void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
+static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 {
 	// very simple indentation algorithm
 	gint i, prev_line, len, j = 0;
@@ -461,7 +463,7 @@ void sci_cb_close_block(gint idx, gint pos)
 
 	if (start_brace >= 0)
 	{
-		sci_cb_get_indent(sci, start_brace, TRUE);
+		get_indent(sci, start_brace, TRUE);
 		text = g_strconcat(indent, "}", NULL);
 		sci_set_anchor(sci, line_start);
 		SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
@@ -797,7 +799,7 @@ void sci_cb_auto_latex(gint idx, gint pos)
 			}
 
 			// get the indention
-			if (doc_list[idx].use_auto_indention) sci_cb_get_indent(sci, pos, TRUE);
+			if (doc_list[idx].use_auto_indention) get_indent(sci, pos, TRUE);
 			eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
 
 			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
@@ -859,7 +861,7 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		style == SCE_HPHP_COMMENT)) return;
 
 	// get the indention
-	if (doc_list[idx].use_auto_indention) sci_cb_get_indent(sci, pos, TRUE);
+	if (doc_list[idx].use_auto_indention) get_indent(sci, pos, TRUE);
 	eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
 	sci_get_text_range(sci, pos - 16, pos - 1, buf);
 	// check the first 8 characters of buf for whitespace, but only in this line
@@ -1136,7 +1138,7 @@ void sci_cb_auto_table(ScintillaObject *sci, gint pos)
 
 	if (SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_HTML) return;
 
-	sci_cb_get_indent(sci, pos, TRUE);
+	get_indent(sci, pos, TRUE);
 	indent_pos = sci_get_line_indent_position(sci, sci_get_line_from_position(sci, pos));
 	if ((pos - 7) != indent_pos) // 7 == strlen("<table>")
 	{
@@ -1507,7 +1509,7 @@ void sci_cb_do_comment_toggle(gint idx)
 			// don't modify sel_start when the selection starts within indentation
 			line_start = sci_get_position_from_line(doc_list[idx].sci,
 										sci_get_line_from_position(doc_list[idx].sci, sel_start));
-			sci_cb_get_indent(doc_list[idx].sci, sel_start, TRUE);
+			get_indent(doc_list[idx].sci, sel_start, TRUE);
 			if ((sel_start - line_start) <= (gint) strlen(indent))
 				a = 0;
 
@@ -1710,27 +1712,56 @@ void sci_cb_highlight_braces(ScintillaObject *sci, gint cur_pos)
 		SSM(sci, SCI_BRACEBADLIGHT, -1, 0);
 	}
 }
-void sci_cb_auto_multiline(ScintillaObject *sci, gint pos)
+
+
+static gboolean is_doc_comment_char(gchar c, gint lexer)
 {
-	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
-	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	gint i = pos;
-
-	if ((lexer == SCLEX_CPP && (style == SCE_C_COMMENT || style == SCE_C_COMMENTDOC)) ||
-		(lexer == SCLEX_HTML && style == SCE_HPHP_COMMENT))
-	{
-		while (isspace(sci_get_char_at(sci, i))) i--;
-		if (sci_get_char_at(sci, i - 1) == '*' && sci_get_char_at(sci, i) == '/') return;
-
-		if (strlen(indent) == 0)
-		{	// if strlen(indent) is 0, there is no indentation, but should
-			sci_add_text(sci, " * ");
-		}
-		else
-		{
-			sci_add_text(sci, "* ");
-		}
-	}
+	if (c == '*' && (lexer = SCLEX_HTML || lexer == SCLEX_CPP))
+		return TRUE;
+	else if ((c == '*' || c == '+') && lexer == SCLEX_D)
+		return TRUE;
+	else
+		return FALSE;
 }
 
 
+static void auto_multiline(ScintillaObject *sci, gint pos)
+{
+	gint style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
+	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	gint i;
+
+	if ((lexer == SCLEX_CPP && (style == SCE_C_COMMENT || style == SCE_C_COMMENTDOC)) ||
+		(lexer == SCLEX_HTML && style == SCE_HPHP_COMMENT) ||
+		(lexer == SCLEX_D && (style == SCE_D_COMMENT ||
+							  style == SCE_D_COMMENTDOC ||
+							  style == SCE_D_COMMENTNESTED)))
+	{
+		gchar *previous_line = sci_get_line(sci, sci_get_line_from_position(sci, pos - 2));
+		gchar *continuation = "*"; // the type of comment, '*' (C/C++/Java), '+' and the others (D)
+		gchar *whitespace = ""; // to hold whitespace if needed
+		gchar *result;
+
+		// find and stop at end of multi line comment
+		i = strlen(previous_line);
+		while (isspace(previous_line[i])) i--;
+		if (is_doc_comment_char(previous_line[i - 1], lexer) && previous_line[i] == '/') return;
+
+		// check whether we are on the second line of multi line comment
+		i = 0;
+		while (isspace(previous_line[i])) i++; // get to start of the line
+
+		if (previous_line[i] == '/' && is_doc_comment_char(previous_line[i + 1], lexer))
+		{ // we are on the second line of a multi line comment, so we have to insert white space
+			whitespace = " ";
+		}
+
+		if (style == SCE_D_COMMENTNESTED) continuation = "+"; // for nested comments in D
+
+		result = g_strconcat(whitespace, continuation, " ", NULL);
+		sci_add_text(sci, result);
+		g_free(result);
+
+		g_free(previous_line);
+	}
+}

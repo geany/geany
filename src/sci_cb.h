@@ -54,8 +54,6 @@ void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer
 
 gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force);
 
-void sci_cb_get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
-
 void sci_cb_close_block(gint idx, gint pos);
 
 void sci_cb_auto_forif(gint idx, gint pos);
@@ -78,8 +76,6 @@ void sci_cb_do_comment(gint idx, gint line);
 void sci_cb_do_uncomment(gint idx, gint line);
 
 void sci_cb_highlight_braces(ScintillaObject *sci, gint cur_pos);
-
-void sci_cb_auto_multiline(ScintillaObject *sci, gint pos);
 
 void sci_cb_auto_table(ScintillaObject *sci, gint pos);
 
