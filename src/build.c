@@ -691,6 +691,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 }
 
 
+#ifndef G_OS_WIN32
 static void show_build_result_message(gboolean failure)
 {
 	gchar *msg;
@@ -718,6 +719,7 @@ static void show_build_result_message(gboolean failure)
 				ui_set_statusbar("%s", msg);
 	}
 }
+#endif
 
 
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
@@ -1103,8 +1105,8 @@ void build_menu_update(gint idx)
 
 #ifdef G_OS_WIN32
 	// disable compile and link under Windows until it is implemented
-	ft->menu_items->can_compile = FALSE;
-	ft->menu_items->can_link = FALSE;
+	ft->actions->can_compile = FALSE;
+	ft->actions->can_link = FALSE;
 #endif
 
 	menu_items = build_get_menu_items(ft->id);
@@ -1115,7 +1117,7 @@ void build_menu_update(gint idx)
 
 	have_path = (doc_list[idx].file_name != NULL);
 
-	can_make = have_path && build_info.pid <= 1;
+	can_make = have_path && build_info.pid <= (GPid) 1;
 
 	// disable compile and link for C/C++ header files
 	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
@@ -1134,7 +1136,7 @@ void build_menu_update(gint idx)
 	if (menu_items->item_make_object)
 		gtk_widget_set_sensitive(menu_items->item_make_object, can_make);
 
-	can_run = have_path && run_info.pid <= 1;
+	can_run = have_path && run_info.pid <= (GPid) 1;
 	/* can_run only applies item_exec2
 	 * item_exec is enabled for both run and stop commands */
 	if (menu_items->item_exec)
@@ -1154,7 +1156,7 @@ void build_menu_update(gint idx)
 	gtk_widget_set_sensitive(app->run_button, have_path && ft->actions->can_exec);
 
 	// show the stop command if a program is running, otherwise show run command
-	set_stop_button(run_info.pid > 1);
+	set_stop_button(run_info.pid > (GPid) 1);
 
 	have_errors = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_compiler),
 		NULL) > 0;
