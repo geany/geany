@@ -22,7 +22,7 @@ GTK_INCLUDES= \
 
 INCLUDEDIRS=-I include $(GTK_INCLUDES)
 
-CCFLAGS=-g -Wall -DPACKAGE=\"geany\" -DG_OS_WIN32 -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS) -mms-bitfields
+CCFLAGS=-Wall -O2 -g -mms-bitfields -DPACKAGE=\"geany\" -DG_OS_WIN32 -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
 
 .c.o:
 	$(CC) $(CCFLAGS) -w -c $<
