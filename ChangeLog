@@ -5,6 +5,8 @@
  * src/document.c:
    Read the file's modification timestamp after saving because on
    Windows it can be later than expected (closes #1611530).
+ * src/keybindings.c:
+   Show the Message window when switching to the vte.
 
 
 2006-12-08  Nick Treleaven  <nick.treleaven@btinternet.com>
