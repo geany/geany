@@ -883,6 +883,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	// next error
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Next Error"));
 	gtk_widget_show(item);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_NEXTERROR, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_next_error), NULL);
 	menu_items->item_next_error = item;
@@ -938,9 +939,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file into a DVI file"), NULL);
-	if (keys[GEANY_KEYS_BUILD_COMPILE]->key)
-		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_COMPILE]->key,
-			keys[GEANY_KEYS_BUILD_COMPILE]->mods, GTK_ACCEL_VISIBLE);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_COMPILE, item);
 	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
@@ -953,9 +952,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles the current file into a PDF file"), NULL);
-	if (keys[GEANY_KEYS_BUILD_LINK]->key)
-		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_LINK]->key,
-			keys[GEANY_KEYS_BUILD_LINK]->mods, GTK_ACCEL_VISIBLE);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_LINK, item);
 	image = gtk_image_new_from_stock("gtk-convert", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
@@ -997,6 +994,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	// next error
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Next Error"));
 	gtk_widget_show(item);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_NEXTERROR, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_next_error), NULL);
 	menu_items->item_next_error = item;
@@ -1010,9 +1008,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	item = gtk_image_menu_item_new_with_mnemonic(LATEX_VIEW_DVI_LABEL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	if (keys[GEANY_KEYS_BUILD_RUN]->key)
-		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_RUN]->key,
-			keys[GEANY_KEYS_BUILD_RUN]->mods, GTK_ACCEL_VISIBLE);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_RUN, item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles and view the current file"), NULL);
 	image = gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
@@ -1025,9 +1021,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	item = gtk_image_menu_item_new_with_mnemonic(_("View PDF file"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	if (keys[GEANY_KEYS_BUILD_RUN2]->key)
-		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_RUN2]->key,
-			keys[GEANY_KEYS_BUILD_RUN2]->mods, GTK_ACCEL_VISIBLE);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_RUN2, item);
 	gtk_tooltips_set_tip(tooltips, item, _("Compiles and view the current file"), NULL);
 	image = gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
@@ -1045,9 +1039,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	// arguments
 	item = gtk_image_menu_item_new_with_mnemonic(_("Set Arguments"));
 	gtk_widget_show(item);
-	if (keys[GEANY_KEYS_BUILD_OPTIONS]->key)
-		gtk_widget_add_accelerator(item, "activate", accel_group, keys[GEANY_KEYS_BUILD_OPTIONS]->key,
-			keys[GEANY_KEYS_BUILD_OPTIONS]->mods, GTK_ACCEL_VISIBLE);
+	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_OPTIONS, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item,
 				_("Sets the program paths and arguments"), NULL);

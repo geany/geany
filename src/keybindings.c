@@ -65,6 +65,7 @@ static void cb_func_menu_findnext(guint key_id);
 static void cb_func_menu_findprevious(guint key_id);
 static void cb_func_menu_replace(guint key_id);
 static void cb_func_menu_findinfiles(guint key_id);
+static void cb_func_menu_nextmessage(guint key_id);
 static void cb_func_menu_gotoline(guint key_id);
 static void cb_func_menu_opencolorchooser(guint key_id);
 static void cb_func_menu_fullscreen(guint key_id);
@@ -136,6 +137,8 @@ void keybindings_init(void)
 		GDK_e, GDK_CONTROL_MASK, "menu_replace", _("Replace"));
 	keys[GEANY_KEYS_MENU_FINDINFILES] = fill(cb_func_menu_findinfiles, GDK_f,
 		GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findinfiles", _("Find in files"));
+	keys[GEANY_KEYS_MENU_NEXTMESSAGE] = fill(cb_func_menu_nextmessage,
+		0, 0, "menu_nextmessage", _("Next Message"));
 	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline,
 		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
 	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser,
@@ -167,6 +170,8 @@ void keybindings_init(void)
 		_("Make custom target"));
 	keys[GEANY_KEYS_BUILD_MAKEOBJECT] = fill(cb_func_build_action,
 		0, 0, "build_makeobject", _("Make object"));
+	keys[GEANY_KEYS_BUILD_NEXTERROR] = fill(cb_func_build_action,
+		0, 0, "build_nexterror", _("Next error"));
 	keys[GEANY_KEYS_BUILD_RUN] = fill(cb_func_build_action,
 		GDK_F5, 0, "build_run", _("Run"));
 	keys[GEANY_KEYS_BUILD_RUN2] = fill(cb_func_build_action,
@@ -283,6 +288,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACE, replace1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDINFILES, find_in_files1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_NEXTMESSAGE, next_message1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FULLSCREEN, menu_fullscreen1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_MESSAGEWINDOW, menu_show_messages_window1);
@@ -516,6 +522,11 @@ static void cb_func_menu_findinfiles(G_GNUC_UNUSED guint key_id)
 	on_find_in_files1_activate(NULL, NULL);
 }
 
+static void cb_func_menu_nextmessage(guint key_id)
+{
+	on_next_message1_activate(NULL, NULL);
+}
+
 static void cb_func_menu_gotoline(G_GNUC_UNUSED guint key_id)
 {
 	on_go_to_line1_activate(NULL, NULL);
@@ -597,6 +608,10 @@ static void cb_func_build_action(guint key_id)
 
 		case GEANY_KEYS_BUILD_MAKEOBJECT:
 		item = menu_items->item_make_object;
+		break;
+
+		case GEANY_KEYS_BUILD_NEXTERROR:
+		item = menu_items->item_next_error;
 		break;
 
 		case GEANY_KEYS_BUILD_RUN:
