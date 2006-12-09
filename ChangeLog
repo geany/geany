@@ -1,3 +1,12 @@
+2006-12-09  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c:
+   Fix building on win32; also fix some warnings.
+ * src/document.c:
+   Read the file's modification timestamp after saving because on
+   Windows it can be later than expected (closes #1611530).
+
+
 2006-12-08  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/interface.c, src/ui_utils.h, src/build.h,
@@ -14,8 +23,6 @@
    removes empty menus.
  * src/dialogs.c, src/ui_utils.c:
    Use ui_button_new_with_image() in dialogs_show_unsaved_file().
-   Improved auto completion of multi line comments and support
-   /+ +/ for D files.
 
 
 2006-12-08  Enrico Troeger  <enrico.troeger@uvena.de>
@@ -30,6 +37,9 @@
  * src/msgwindow.c: Removed compiler warning.
  * src/sci_cb.c, src/sci_cb.h:
    Made sci_cb_get_indent and sci_Cb_auto_multiline static.
+ * src/sci_cb.c, src/sci_cb.h:
+   Improved auto completion of multi line comments and support
+   /+ +/ for D files.
  * src/msgwindow.c: Fixed wrong check button state in view menu if
                     message window was shown automatically.
 

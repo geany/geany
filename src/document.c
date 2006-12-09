@@ -782,6 +782,29 @@ gint document_reload_file(gint idx, const gchar *forced_enc)
 }
 
 
+static gboolean document_update_timestamp(gint idx)
+{
+	struct stat st;
+	gchar *locale_filename;
+	
+	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
+
+	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+
+	if (stat(locale_filename, &st) != 0)
+	{
+		msgwin_status_add(_("Could not open file %s (%s)"), doc_list[idx].file_name,
+			g_strerror(errno));
+		g_free(locale_filename);
+		return FALSE;
+	}
+
+	doc_list[idx].mtime = st.st_mtime; // get the modification time from file and keep it
+	g_free(locale_filename);
+	return TRUE;
+}
+
+
 /* This saves the file.
  * When force is set then it is always saved, even if it is unchanged(useful when using Save As)
  * It returns whether the file could be saved or not. */
@@ -896,7 +919,11 @@ gboolean document_save_file(gint idx, gboolean force)
 		// there are more lines than before
 		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 		sci_set_savepoint(doc_list[idx].sci);
-		doc_list[idx].mtime = time(NULL);
+
+		/* stat the file to get the timestamp, otherwise on Windows the actual
+		 * timestamp can be ahead of time(NULL) */
+		document_update_timestamp(idx);
+
 		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
 		{
 			doc_list[idx].file_type = filetypes_get_from_filename(idx);
