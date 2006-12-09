@@ -202,6 +202,10 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 void msgwin_show()
 {
 	app->msgwindow_visible = TRUE;
+	app->ignore_callback = TRUE;
+	gtk_check_menu_item_set_active(
+		GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1")), TRUE);
+	app->ignore_callback = FALSE;
 	gtk_widget_show(lookup_widget(app->window, "scrolledwindow1"));
 }
 
