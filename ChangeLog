@@ -4,6 +4,7 @@
    src/prefs.c, src/vte.c, src/vte.h:
    Added option to execute programs in the VTE instead of executing
    them in a terminal emulation window (closes #1594456).
+ * src/dialogs.c: Use a table to layout the word count dialog.
 
 
 2006-12-09  Nick Treleaven  <nick.treleaven@btinternet.com>

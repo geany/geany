@@ -429,10 +429,10 @@ void dialogs_show_open_font()
 
 void dialogs_show_word_count()
 {
-	GtkWidget *dialog, *label, *vbox;
+	GtkWidget *dialog, *label, *vbox, *table;
 	gint idx;
 	guint chars, lines, words;
-	gchar *string, *text, *range;
+	gchar *text, *range;
 
 	idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
@@ -446,23 +446,76 @@ void dialogs_show_word_count()
 	{
 		text = g_malloc0(sci_get_selected_text_length(doc_list[idx].sci) + 1);
 		sci_get_selected_text(doc_list[idx].sci, text);
-		utils_wordcount(text, &chars, &lines, &words);
-		g_free(text);
 		range = _("selection");
 	}
 	else
 	{
 		text = g_malloc(sci_get_length(doc_list[idx].sci) + 1);
 		sci_get_text(doc_list[idx].sci, sci_get_length(doc_list[idx].sci) + 1 , text);
-		utils_wordcount(text, &chars, &lines, &words);
-		g_free(text);
 		range = _("whole document");
 	}
-	string = g_strdup_printf(_("Range:\t\t%s\n\nLines:\t\t%d\nWords:\t\t%d\nCharacters:\t%d"),
-								range, lines, words, chars);
-	label = gtk_label_new(string);
-	g_free(string);
-	gtk_container_add(GTK_CONTAINER(vbox), label);
+	utils_wordcount(text, &chars, &lines, &words);
+	g_free(text);
+
+	table = gtk_table_new(4, 2, FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
+	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
+
+	label = gtk_label_new(_("Range:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	label = gtk_label_new(range);
+	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+
+	label = gtk_label_new(_("Lines:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	text = g_strdup_printf("%d", lines);
+	label = gtk_label_new(text);
+	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 1, 2,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	g_free(text);
+
+	label = gtk_label_new(_("Words:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	text = g_strdup_printf("%d", words);
+	label = gtk_label_new(text);
+	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	g_free(text);
+
+	label = gtk_label_new(_("Characters:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	text = g_strdup_printf("%d", chars);
+	label = gtk_label_new(text);
+	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 3, 4,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	g_free(text);
+
+	gtk_container_add(GTK_CONTAINER(vbox), table);
 
 	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
 	g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_destroy), dialog);
