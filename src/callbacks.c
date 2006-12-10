@@ -719,7 +719,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 		utils_check_disk_status(idx);
 
 #ifdef HAVE_VTE
-	vte_cwd(doc_list[idx].file_name);
+	vte_cwd(doc_list[idx].file_name, FALSE);
 #endif
 	}
 }

@@ -52,6 +52,7 @@ typedef struct
 	gboolean scroll_on_out;
 	gboolean ignore_menu_bar_accel;
 	gboolean follow_path;
+	gboolean run_in_vte;
 	gint scrollback_lines;
 	gchar *emulation;
 	gchar *shell;
@@ -72,7 +73,7 @@ void vte_send_cmd(const gchar *cmd);
 
 const gchar* vte_get_working_directory(void);
 
-void vte_cwd(const gchar *filename);
+void vte_cwd(const gchar *filename, gboolean force);
 
 void vte_append_preferences_tab();
 

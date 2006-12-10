@@ -786,7 +786,7 @@ static gboolean document_update_timestamp(gint idx)
 {
 	struct stat st;
 	gchar *locale_filename;
-	
+
 	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
@@ -937,7 +937,7 @@ gboolean document_save_file(gint idx, gboolean force)
 		ui_update_statusbar(idx, -1);
 		g_free(basename);
 #ifdef HAVE_VTE
-		vte_cwd(doc_list[idx].file_name);
+		vte_cwd(doc_list[idx].file_name, FALSE);
 #endif
 
 	}

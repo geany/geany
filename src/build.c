@@ -44,6 +44,7 @@
 #include "msgwindow.h"
 #include "document.h"
 #include "keybindings.h"
+#include "vte.h"
 
 
 BuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_ALL, NULL};
@@ -493,6 +494,7 @@ GPid build_run_cmd(gint idx)
 	gchar	*executable = NULL;
 	gchar	*script_name;
 	guint    term_argv_len, i;
+	gboolean autoclose = FALSE;
 	struct stat st;
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL) return (GPid) 1;
@@ -589,9 +591,14 @@ GPid build_run_cmd(gint idx)
 	g_free(tmp);
 	cmd = utils_str_replace(cmd, "%e", executable);
 
+#ifdef HAVE_VTE
+	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
+		autoclose = TRUE; // don't wait for user input at the end of script when we are running in VTE
+#endif
+
 	// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
 	// (script_name should be ok in UTF8 without converting in locale because it contains no umlauts)
-	if (! build_create_shellscript(idx, script_name, cmd, FALSE))
+	if (! build_create_shellscript(idx, script_name, cmd, autoclose))
 	{
 		utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
@@ -600,39 +607,60 @@ GPid build_run_cmd(gint idx)
 		goto free_strings;
 	}
 
-	argv = g_new0(gchar *, term_argv_len + 3);
-	for (i = 0; i < term_argv_len; i++)
+#ifdef HAVE_VTE
+	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
 	{
-		argv[i] = g_strdup(term_argv[i]);
+		gchar *cmd = g_strconcat(script_name, "\n", NULL);
+		// change into current directory if it is not done by default
+		if (! vc->follow_path) vte_cwd(doc_list[idx].file_name, TRUE);
+		vte_send_cmd(cmd);
+
+		// show the VTE
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
+		gtk_widget_grab_focus(vc->vte);
+		msgwin_show();
+
+		run_info.pid = 1;
+
+		g_free(cmd);
 	}
-#ifdef G_OS_WIN32
-	// command line arguments for cmd.exe
-	argv[term_argv_len   ]  = g_strdup("/Q /C");
-	argv[term_argv_len + 1] = g_path_get_basename(script_name);
-#else
-	argv[term_argv_len   ]  = g_strdup("-e");
-	argv[term_argv_len + 1] = g_strdup(script_name);
+	else
 #endif
-	argv[term_argv_len + 2] = NULL;
-
-	if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
-						NULL, NULL, &(run_info.pid), NULL, NULL, NULL, &error))
 	{
-		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
-		msgwin_status_add(_("Process failed (%s)"), error->message);
-		unlink(script_name);
-		g_error_free(error);
-		error = NULL;
-		result_id = (GPid) 0;
-		goto free_strings;
-	}
+		argv = g_new0(gchar *, term_argv_len + 3);
+		for (i = 0; i < term_argv_len; i++)
+		{
+			argv[i] = g_strdup(term_argv[i]);
+		}
+#ifdef G_OS_WIN32
+		// command line arguments for cmd.exe
+		argv[term_argv_len   ]  = g_strdup("/Q /C");
+		argv[term_argv_len + 1] = g_path_get_basename(script_name);
+#else
+		argv[term_argv_len   ]  = g_strdup("-e");
+		argv[term_argv_len + 1] = g_strdup(script_name);
+#endif
+		argv[term_argv_len + 2] = NULL;
 
+		if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
+							NULL, NULL, &(run_info.pid), NULL, NULL, NULL, &error))
+		{
+			geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
+			msgwin_status_add(_("Process failed (%s)"), error->message);
+			unlink(script_name);
+			g_error_free(error);
+			error = NULL;
+			result_id = (GPid) 0;
+			goto free_strings;
+		}
+
+		if (run_info.pid > 0)
+		{
+			g_child_watch_add(run_info.pid, (GChildWatchFunc) run_exit_cb, NULL);
+			build_menu_update(idx);
+		}
+	}
 	result_id = run_info.pid; // g_spawn was successful, result is child process id
-	if (run_info.pid > 0)
-	{
-		g_child_watch_add(run_info.pid, (GChildWatchFunc) run_exit_cb, NULL);
-		build_menu_update(idx);
-	}
 
 	free_strings:
 	/* free all non-NULL strings */
@@ -782,8 +810,8 @@ static gboolean build_create_shellscript(const gint idx, const gchar *fname, con
 #else
 	str = g_strdup_printf(
 		"#!/bin/sh\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
-		\n\necho \"Press return to continue\"\n%s\nunlink $0\n", cmd, (autoclose) ? "" :
-		"#to be more compatible with shells like dash\ndummy_var=\"\"\nread dummy_var");
+		\n\n%s\nunlink $0\n", cmd, (autoclose) ? "" :
+		"\necho \"Press return to continue\"\n#to be more compatible with shells like dash\ndummy_var=\"\"\nread dummy_var");
 #endif
 
 	fputs(str, fp);

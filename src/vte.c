@@ -390,48 +390,47 @@ void vte_send_cmd(const gchar *cmd)
  * Determines the working directory using various OS-specific mechanisms. */
 const gchar* vte_get_working_directory()
 {
-  gchar  buffer[4096 + 1];
-  gchar *file;
-  gchar *cwd;
-  gint   length;
+	gchar  buffer[4096 + 1];
+	gchar *file;
+	gchar *cwd;
+	gint   length;
 
-  if (pid >= 0)
-    {
-      file = g_strdup_printf ("/proc/%d/cwd", pid);
-      length = readlink (file, buffer, sizeof (buffer));
+	if (pid >= 0)
+	{
+		file = g_strdup_printf("/proc/%d/cwd", pid);
+		length = readlink(file, buffer, sizeof (buffer));
 
-      if (length > 0 && *buffer == '/')
-        {
-          buffer[length] = '\0';
-          g_free(vte_info.dir);
-          vte_info.dir = g_strdup (buffer);
-        }
-      else if (length == 0)
-        {
-          cwd = g_get_current_dir ();
-          if (G_LIKELY (cwd != NULL))
-            {
-              if (chdir (file) == 0)
-                {
-				  g_free(vte_info.dir);
-				  vte_info.dir = g_get_current_dir ();
-                  chdir (cwd);
-                }
+		if (length > 0 && *buffer == '/')
+		{
+			buffer[length] = '\0';
+			g_free(vte_info.dir);
+			vte_info.dir = g_strdup(buffer);
+		}
+		else if (length == 0)
+		{
+			cwd = g_get_current_dir();
+			if (G_LIKELY(cwd != NULL))
+			{
+				if (chdir(file) == 0)
+				{
+					g_free(vte_info.dir);
+					vte_info.dir = g_get_current_dir();
+					chdir(cwd);
+				}
+				g_free(cwd);
+			}
+		}
+		g_free(file);
+	}
 
-              g_free (cwd);
-            }
-        }
-
-      g_free (file);
-    }
-
-  return vte_info.dir;
+	return vte_info.dir;
 }
 
 
-void vte_cwd(const gchar *filename)
+// if force is set to TRUE, it will always change the cwd
+void vte_cwd(const gchar *filename, gboolean force)
 {
-	if (vte_info.have_vte && vc->follow_path && filename != NULL)
+	if (vte_info.have_vte && (vc->follow_path || force) && filename != NULL)
 	{
 		gchar *path;
 		gchar *cmd;
@@ -488,7 +487,7 @@ void vte_append_preferences_tab()
 		GtkWidget *notebook, *vbox, *label, *alignment, *table, *frame, *box;
 		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback, *entry_emulation;
 		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path, *check_ignore_menu_key;
-		GtkWidget *entry_shell, *button_shell, *image_shell;
+		GtkWidget *check_run_in_vte, *entry_shell, *button_shell, *image_shell;
 		GtkTooltips *tooltips;
 		GtkObject *spin_scrollback_adj;
 
@@ -622,6 +621,11 @@ void vte_append_preferences_tab()
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_follow_path), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_follow_path);
 
+		check_run_in_vte = gtk_check_button_new_with_mnemonic(_("Execute programs in VTE"));
+		gtk_tooltips_set_tip(tooltips, check_run_in_vte, _("Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped."), NULL);
+		gtk_button_set_focus_on_click(GTK_BUTTON(check_run_in_vte), FALSE);
+		gtk_container_add(GTK_CONTAINER(box), check_run_in_vte);
+
 		gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
 
 		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "font_term",
@@ -644,6 +648,8 @@ void vte_append_preferences_tab()
 				gtk_widget_ref(check_ignore_menu_key),	(GDestroyNotify) gtk_widget_unref);
 		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_follow_path",
 				gtk_widget_ref(check_follow_path),	(GDestroyNotify) gtk_widget_unref);
+		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_run_in_vte",
+				gtk_widget_ref(check_run_in_vte),	(GDestroyNotify) gtk_widget_unref);
 
 		gtk_widget_show_all(frame);
 

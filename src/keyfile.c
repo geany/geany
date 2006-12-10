@@ -128,6 +128,7 @@ void configuration_save()
 		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
 		g_key_file_set_boolean(config, "VTE", "ignore_menu_bar_accel", vc->ignore_menu_bar_accel);
 		g_key_file_set_boolean(config, "VTE", "follow_path", vc->follow_path);
+		g_key_file_set_boolean(config, "VTE", "run_in_vte", vc->run_in_vte);
 		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_string(config, "VTE", "shell", vc->shell);
@@ -397,6 +398,7 @@ gboolean configuration_load()
 		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
 		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
+		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		vc->colour_fore = g_new0(GdkColor, 1);
 		vc->colour_back = g_new0(GdkColor, 1);

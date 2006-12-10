@@ -375,6 +375,9 @@ void prefs_init_dialog(void)
 
 		widget = lookup_widget(app->prefs_dialog, "check_follow_path");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->follow_path);
+
+		widget = lookup_widget(app->prefs_dialog, "check_run_in_vte");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->run_in_vte);
 	}
 #endif
 }
@@ -627,6 +630,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 			widget = lookup_widget(app->prefs_dialog, "check_follow_path");
 			vc->follow_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+			widget = lookup_widget(app->prefs_dialog, "check_run_in_vte");
+			vc->run_in_vte = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 			vte_apply_user_settings();
 		}
