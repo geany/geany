@@ -421,8 +421,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 #ifdef GEANY_DEBUG
 	geany_debug("debug mode built in (can't be disabled)");
 #endif
-	geany_debug("GTK+ runtime version: %u.%u.%u",
-		gtk_major_version, gtk_minor_version, gtk_micro_version);
 
 	if (alternate_config)
 	{
@@ -518,6 +516,9 @@ gint main(gint argc, gchar **argv)
 	}
 #endif
 
+	geany_debug("GTK+ %u.%u.%u, GLib %u.%u.%u",
+		gtk_major_version, gtk_minor_version, gtk_micro_version,
+		glib_major_version, glib_minor_version, glib_micro_version);
 	gtk_init(&argc, &argv);
 
 	// inits

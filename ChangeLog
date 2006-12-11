@@ -1,3 +1,9 @@
+2006-12-11  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/main.c:
+   Show GTK+, GLib runtime version debug message, after socket_init().
+
+
 2006-12-10  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/build.c, src/callbacks.c, src/document.c, src/keyfile.c,
