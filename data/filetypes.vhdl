@@ -4,8 +4,8 @@
 default=0x000000;0xffffff;false;false
 comment=0xd00000;0xffffff;false;false
 comment_line_bang=0x3f5fbf;0xffffff;false;false;
-number=0x007f00=0xffffff;false;false
-string=0xff901e=0xffffff;false;false
+number=0x007f00;0xffffff;false;false
+string=0xff901e;0xffffff;false;false
 operator=0x301010;0xffffff;false;false
 identifier=0x000000;0xffffff;false;false
 stringeol=0x000000;0xe0c0e0;false;false
