@@ -1947,15 +1947,16 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 	}
 	else
 	{
-		gint line, pos, old_pos;
+		gint line, ind_pos, old_pos;
 
 		old_pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_current_line(doc_list[idx].sci, old_pos);
-		pos = sci_get_line_indent_position(doc_list[idx].sci, line);
+		ind_pos = sci_get_line_indent_position(doc_list[idx].sci, line);
 
-		sci_set_current_position(doc_list[idx].sci, pos);
+		sci_set_current_position(doc_list[idx].sci, ind_pos);
 		sci_cmd(doc_list[idx].sci, SCI_TAB);
-		sci_set_current_position(doc_list[idx].sci, old_pos + 1);
+		sci_set_current_position(doc_list[idx].sci,
+			(old_pos > ind_pos) ? old_pos + 1 : old_pos);
 	}
 }
 
@@ -1973,15 +1974,18 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 	}
 	else
 	{
-		gint line, pos, old_pos;
+		gint line, ind_pos, old_pos;
 
 		old_pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_current_line(doc_list[idx].sci, old_pos);
-		pos = sci_get_line_indent_position(doc_list[idx].sci, line);
+		ind_pos = sci_get_line_indent_position(doc_list[idx].sci, line);
 
-		sci_set_current_position(doc_list[idx].sci, pos);
+		if (ind_pos == sci_get_position_from_line(doc_list[idx].sci, line))
+			return;
+		sci_set_current_position(doc_list[idx].sci, ind_pos);
 		sci_cmd(doc_list[idx].sci, SCI_BACKTAB);
-		sci_set_current_position(doc_list[idx].sci, old_pos - 1);
+		sci_set_current_position(doc_list[idx].sci,
+			(old_pos >= ind_pos) ? old_pos - 1 : old_pos);
 	}
 }
 
