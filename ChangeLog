@@ -10,6 +10,8 @@
  * src/callbacks.c:
    Make indenting and unindenting keep the same cursor position when
    the cursor is within the indentation characters.
+ * configure.in:
+   Link with libsocket if necessary to fix building on Solaris.
 
 
 2006-12-10  Enrico Tröger  <enrico.troeger@uvena.de>

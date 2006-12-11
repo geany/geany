@@ -76,6 +76,8 @@ AC_ARG_ENABLE(socket, AC_HELP_STRING([--enable-socket],[enable if you want to de
 
 if test "x$want_socket" = "xyes"; then
 	AC_DEFINE(HAVE_SOCKET, 1, [Define if you want to detect a running instance])
+	# this should bring in libsocket on Solaris:
+	AC_SEARCH_LIBS([connect],[socket],[],[],[])
 fi
 
 # VTE support
