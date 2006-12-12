@@ -590,9 +590,16 @@ gint main(gint argc, gchar **argv)
 			if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 			{
 				gchar *filename = get_argv_filename(argv[i]);
-				document_open_file(-1, filename, 0, FALSE, NULL, NULL);
+				gint idx;
+
+				idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
+				// add recent file manually because opening_session_files is set
+				if (DOC_IDX_VALID(idx))
+					ui_add_recent_file(doc_list[idx].file_name);
 				g_free(filename);
 			}
+			else
+				geany_debug("Could not load file '%s'.", argv[i]);
 		}
 	}
 	else if (app->pref_main_load_session && cl_options.load_session)
