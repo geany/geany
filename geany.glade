@@ -53,11 +53,11 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_new_with_template1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">New (with _template)</property>
+		      <property name="label" translatable="yes">New (with _Template)</property>
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1252">
+			<widget class="GtkImage" id="image1295">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -100,7 +100,7 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="recent_files1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Recent _files</property>
+		      <property name="label" translatable="yes">Recent _Files</property>
 		      <property name="use_underline">True</property>
 		    </widget>
 		  </child>
@@ -133,12 +133,12 @@
 		    <widget class="GtkImageMenuItem" id="menu_save_all1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Saves all open files</property>
-		      <property name="label" translatable="yes">Save a_ll</property>
+		      <property name="label" translatable="yes">Save A_ll</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1253">
+			<widget class="GtkImage" id="image1296">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -159,7 +159,7 @@
 		      <signal name="activate" handler="on_toolbutton23_clicked" last_modification_time="Mon, 24 Jul 2006 19:26:04 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1254">
+			<widget class="GtkImage" id="image1297">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -175,11 +175,11 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_reload_as1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">R_eload as</property>
+		      <property name="label" translatable="yes">R_eload As</property>
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1255">
+			<widget class="GtkImage" id="image1298">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -254,12 +254,12 @@
 		    <widget class="GtkImageMenuItem" id="menu_close_all1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Closes all open files</property>
-		      <property name="label" translatable="yes">C_lose all</property>
+		      <property name="label" translatable="yes">C_lose All</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1256">
+			<widget class="GtkImage" id="image1299">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -396,7 +396,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="menu_to_lower_case2">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Convert Selection to _lower-case</property>
+			      <property name="label" translatable="yes">Convert Selection to _Lower-case</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_to_lower-case1_activate" last_modification_time="Fri, 06 May 2005 18:21:23 GMT"/>
 			    </widget>
@@ -405,7 +405,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="menu_to_upper_case2">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Convert Selection to _upper-case</property>
+			      <property name="label" translatable="yes">Convert Selection to _Upper-case</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_to_upper-case1_activate" last_modification_time="Fri, 06 May 2005 18:21:23 GMT"/>
 			    </widget>
@@ -438,7 +438,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="menu_toggle_line_commentation1">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">_Toggle line commentation</property>
+			      <property name="label" translatable="yes">_Toggle Line Commentation</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_menu_toggle_line_commentation1_activate" last_modification_time="Tue, 12 Sep 2006 08:06:46 GMT"/>
 			    </widget>
@@ -467,7 +467,7 @@
 			      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image1257">
+				<widget class="GtkImage" id="image1300">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-indent</property>
 				  <property name="icon_size">1</property>
@@ -488,7 +488,7 @@
 			      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image1258">
+				<widget class="GtkImage" id="image1301">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-unindent</property>
 				  <property name="icon_size">1</property>
@@ -518,7 +518,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1259">
+			<widget class="GtkImage" id="image1302">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -550,7 +550,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1260">
+			<widget class="GtkImage" id="image1303">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -568,7 +568,7 @@
 			    <widget class="GtkMenuItem" id="menu_add_changelog_entry1">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Inserts a typical ChangeLog entry in the current file</property>
-			      <property name="label" translatable="yes">Insert ChangeLog entry</property>
+			      <property name="label" translatable="yes">Insert ChangeLog Entry</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_comments_changelog_activate" last_modification_time="Sun, 02 Oct 2005 17:29:39 GMT"/>
 			    </widget>
@@ -578,7 +578,7 @@
 			    <widget class="GtkMenuItem" id="insert_file_header1">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Inserts a file header at the beginning of the file</property>
-			      <property name="label" translatable="yes">Insert file header</property>
+			      <property name="label" translatable="yes">Insert File Header</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_comments_fileheader_activate" last_modification_time="Mon, 03 Oct 2005 17:33:08 GMT"/>
 			    </widget>
@@ -588,7 +588,7 @@
 			    <widget class="GtkMenuItem" id="insert_function_description2">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Inserts a description before the current function</property>
-			      <property name="label" translatable="yes">Insert function description</property>
+			      <property name="label" translatable="yes">Insert Function Description</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_comments_function_activate" last_modification_time="Sat, 01 Oct 2005 17:35:15 GMT"/>
 			    </widget>
@@ -598,7 +598,7 @@
 			    <widget class="GtkMenuItem" id="insert_multiline_comment2">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Inserts a multiline comment</property>
-			      <property name="label" translatable="yes">Insert multiline comment</property>
+			      <property name="label" translatable="yes">Insert Multiline Comment</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_comments_multiline_activate" last_modification_time="Sat, 01 Oct 2005 17:35:15 GMT"/>
 			    </widget>
@@ -608,7 +608,7 @@
 			    <widget class="GtkMenuItem" id="insert_gpl_notice2">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Inserts a GPL notice (should be done at the beginning of the file)</property>
-			      <property name="label" translatable="yes">Insert GPL notice</property>
+			      <property name="label" translatable="yes">Insert GPL Notice</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_comments_gpl_activate" last_modification_time="Sun, 02 Oct 2005 17:37:43 GMT"/>
 			    </widget>
@@ -696,7 +696,7 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="find_in_files1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Find in f_iles</property>
+		      <property name="label" translatable="yes">Find in F_iles</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_find_in_files1_activate" last_modification_time="Thu, 06 Jul 2006 11:31:09 GMT"/>
 		    </widget>
@@ -710,7 +710,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1261">
+			<widget class="GtkImage" id="image1304">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -747,12 +747,12 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="go_to_line1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Go to line</property>
+		      <property name="label" translatable="yes">_Go to Line</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_go_to_line1_activate" last_modification_time="Tue, 23 May 2006 17:10:49 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1262">
+			<widget class="GtkImage" id="image1305">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -787,7 +787,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1263">
+			<widget class="GtkImage" id="image1306">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -820,7 +820,7 @@
 		    <widget class="GtkCheckMenuItem" id="menu_show_messages_window1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Toggle the window with status and compiler messages on and off</property>
-		      <property name="label" translatable="yes">Show Messages _Window</property>
+		      <property name="label" translatable="yes">Show Message _Window</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
 		      <signal name="toggled" handler="on_show_messages_window1_toggled" last_modification_time="Sat, 28 May 2005 19:47:24 GMT"/>
@@ -920,7 +920,7 @@
 		    <widget class="GtkCheckMenuItem" id="menu_line_breaking1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines.</property>
-		      <property name="label" translatable="yes">_Line wrapping</property>
+		      <property name="label" translatable="yes">_Line Wrapping</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
 		      <signal name="toggled" handler="on_line_breaking1_toggled" last_modification_time="Sun, 04 Sep 2005 11:12:08 GMT"/>
@@ -930,7 +930,7 @@
 		  <child>
 		    <widget class="GtkCheckMenuItem" id="menu_use_auto_indention1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Use auto indentation</property>
+		      <property name="label" translatable="yes">_Use Auto-indentation</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
 		      <signal name="toggled" handler="on_use_auto_indention1_toggled" last_modification_time="Mon, 13 Feb 2006 21:27:30 GMT"/>
@@ -941,7 +941,7 @@
 		    <widget class="GtkCheckMenuItem" id="set_file_readonly1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Treat this file as read-only. No changes can be made.</property>
-		      <property name="label" translatable="yes">Read _only</property>
+		      <property name="label" translatable="yes">Read _Only</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">False</property>
 		      <signal name="toggled" handler="on_set_file_readonly1_toggled" last_modification_time="Sat, 22 Oct 2005 17:34:04 GMT"/>
@@ -967,7 +967,7 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="set_filetype1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Set file_type</property>
+		      <property name="label" translatable="yes">Set File_type</property>
 		      <property name="use_underline">True</property>
 
 		      <child>
@@ -987,7 +987,7 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="set_encoding1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Set _encoding</property>
+		      <property name="label" translatable="yes">Set _Encoding</property>
 		      <property name="use_underline">True</property>
 
 		      <child>
@@ -1007,7 +1007,7 @@
 		  <child>
 		    <widget class="GtkMenuItem" id="menu_line_endings1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Set line e_ndings</property>
+		      <property name="label" translatable="yes">Set Line E_ndings</property>
 		      <property name="use_underline">True</property>
 
 		      <child>
@@ -1016,9 +1016,9 @@
 			  <child>
 			    <widget class="GtkRadioMenuItem" id="crlf">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Convert and set to _CR/LF (Win)</property>
+			      <property name="label" translatable="yes">Convert and Set to _CR/LF (Win)</property>
 			      <property name="use_underline">True</property>
-			      <property name="active">True</property>
+			      <property name="active">False</property>
 			      <signal name="activate" handler="on_crlf_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
 			  </child>
@@ -1026,9 +1026,9 @@
 			  <child>
 			    <widget class="GtkRadioMenuItem" id="lf">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Convert and set to _LF (Unix)</property>
+			      <property name="label" translatable="yes">Convert and Set to _LF (Unix)</property>
 			      <property name="use_underline">True</property>
-			      <property name="active">True</property>
+			      <property name="active">False</property>
 			      <property name="group">crlf</property>
 			      <signal name="activate" handler="on_lf_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
@@ -1037,7 +1037,7 @@
 			  <child>
 			    <widget class="GtkRadioMenuItem" id="cr">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Convert and set to CR (_Mac)</property>
+			      <property name="label" translatable="yes">Convert and Set to CR (_Mac)</property>
 			      <property name="use_underline">True</property>
 			      <property name="active">True</property>
 			      <property name="group">crlf</property>
@@ -1059,7 +1059,7 @@
 		    <widget class="GtkMenuItem" id="menu_replace_tabs">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Replaces all tabs in document by spaces.</property>
-		      <property name="label" translatable="yes">_Replace tabs by spaces</property>
+		      <property name="label" translatable="yes">_Replace Tabs by Spaces</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_replace_tabs_activate" last_modification_time="Fri, 29 Apr 2005 08:43:22 GMT"/>
 		    </widget>
@@ -1075,7 +1075,7 @@
 		    <widget class="GtkMenuItem" id="menu_fold_all1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Folds all contractible code blocks</property>
-		      <property name="label" translatable="yes">_Fold all</property>
+		      <property name="label" translatable="yes">_Fold All</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_fold_all1_activate" last_modification_time="Sun, 26 Feb 2006 15:42:32 GMT"/>
 		    </widget>
@@ -1085,7 +1085,7 @@
 		    <widget class="GtkMenuItem" id="menu_unfold_all1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Unfolds all contracted code blocks</property>
-		      <property name="label" translatable="yes">_Unfold all</property>
+		      <property name="label" translatable="yes">_Unfold All</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_unfold_all1_activate" last_modification_time="Sun, 26 Feb 2006 15:42:32 GMT"/>
 		    </widget>
@@ -1101,7 +1101,7 @@
 		    <widget class="GtkMenuItem" id="menu_remove_indicators1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Removes all error indicators in the current document.</property>
-		      <property name="label" translatable="yes">Remove error _indicators</property>
+		      <property name="label" translatable="yes">Remove Error _Indicators</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_remove_indicators1_activate" last_modification_time="Tue, 13 Jun 2006 19:25:23 GMT"/>
 		    </widget>
@@ -1137,7 +1137,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image1264">
+			<widget class="GtkImage" id="image1307">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -1186,7 +1186,7 @@
 		    <widget class="GtkMenuItem" id="keyboard_shortcuts1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Shows a list of all keyboard shortcuts for Geany.</property>
-		      <property name="label" translatable="yes">_Keyboard shortcuts</property>
+		      <property name="label" translatable="yes">_Keyboard Shortcuts</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_help_shortcuts1_activate" last_modification_time="Sun, 18 Dec 2005 22:24:52 GMT"/>
 		    </widget>
@@ -2325,7 +2325,7 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="to_lower_case1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Convert Selection to _lower-case</property>
+	      <property name="label" translatable="yes">Convert Selection to _Lower-case</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_to_lower-case1_activate" last_modification_time="Thu, 05 May 2005 08:29:19 GMT"/>
 	    </widget>
@@ -2334,7 +2334,7 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="to_upper_case1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Convert Selection to _upper-case</property>
+	      <property name="label" translatable="yes">Convert Selection to _Upper-case</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_to_upper-case1_activate" last_modification_time="Thu, 05 May 2005 08:29:19 GMT"/>
 	    </widget>
@@ -2367,7 +2367,7 @@
 	  <child>
 	    <widget class="GtkMenuItem" id="menu_toggle_line_commentation2">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">_Toggle line commentation</property>
+	      <property name="label" translatable="yes">_Toggle Line Commentation</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_menu_toggle_line_commentation1_activate" last_modification_time="Tue, 12 Sep 2006 08:07:58 GMT"/>
 	    </widget>
@@ -2396,7 +2396,7 @@
 	      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1170">
+		<widget class="GtkImage" id="image1289">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-indent</property>
 		  <property name="icon_size">1</property>
@@ -2417,7 +2417,7 @@
 	      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1171">
+		<widget class="GtkImage" id="image1290">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-unindent</property>
 		  <property name="icon_size">1</property>
@@ -2447,7 +2447,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1172">
+	<widget class="GtkImage" id="image1291">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2479,7 +2479,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1173">
+	<widget class="GtkImage" id="image1292">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2497,7 +2497,7 @@
 	    <widget class="GtkMenuItem" id="add_changelog_entry2">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Inserts a typical ChangeLog entry in the current file</property>
-	      <property name="label" translatable="yes">Insert ChangeLog entry</property>
+	      <property name="label" translatable="yes">Insert ChangeLog Entry</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_changelog_activate" last_modification_time="Sun, 02 Oct 2005 17:30:10 GMT"/>
 	    </widget>
@@ -2507,7 +2507,7 @@
 	    <widget class="GtkMenuItem" id="insert_file_header2">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Inserts a file header at the beginning of the file</property>
-	      <property name="label" translatable="yes">Insert file header</property>
+	      <property name="label" translatable="yes">Insert File Header</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_fileheader_activate" last_modification_time="Mon, 03 Oct 2005 17:33:08 GMT"/>
 	    </widget>
@@ -2517,7 +2517,7 @@
 	    <widget class="GtkMenuItem" id="insert_function_description1">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Inserts a description before the current function</property>
-	      <property name="label" translatable="yes">Insert function description</property>
+	      <property name="label" translatable="yes">Insert Function Description</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_function_activate" last_modification_time="Sat, 01 Oct 2005 17:28:26 GMT"/>
 	    </widget>
@@ -2527,7 +2527,7 @@
 	    <widget class="GtkMenuItem" id="insert_multiline_comment1">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Inserts a multiline comment</property>
-	      <property name="label" translatable="yes">Insert multiline comment</property>
+	      <property name="label" translatable="yes">Insert Multiline Comment</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_multiline_activate" last_modification_time="Sat, 01 Oct 2005 17:28:26 GMT"/>
 	    </widget>
@@ -2537,7 +2537,7 @@
 	    <widget class="GtkMenuItem" id="insert_gpl_notice1">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Inserts a GPL notice (should be done at the beginning of the file)</property>
-	      <property name="label" translatable="yes">Insert GPL notice</property>
+	      <property name="label" translatable="yes">Insert GPL Notice</property>
 	      <property name="use_underline">True</property>
 	      <signal name="activate" handler="on_comments_gpl_activate" last_modification_time="Sun, 02 Oct 2005 17:37:31 GMT"/>
 	    </widget>
@@ -2576,12 +2576,12 @@
   <child>
     <widget class="GtkImageMenuItem" id="find_usage1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Find usage</property>
+      <property name="label" translatable="yes">Find Usage</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1174">
+	<widget class="GtkImage" id="image1293">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2597,7 +2597,7 @@
   <child>
     <widget class="GtkMenuItem" id="goto_tag_definition1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Go to tag definition</property>
+      <property name="label" translatable="yes">Go to Tag Definition</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_goto_tag_activate" last_modification_time="Sun, 29 May 2005 22:08:28 GMT"/>
     </widget>
@@ -2606,7 +2606,7 @@
   <child>
     <widget class="GtkMenuItem" id="goto_tag_declaration1">
       <property name="visible">True</property>
-      <property name="label" translatable="yes">Go to tag declaration</property>
+      <property name="label" translatable="yes">Go to Tag Declaration</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_goto_tag_activate" last_modification_time="Sun, 29 May 2005 22:08:28 GMT"/>
     </widget>
@@ -2622,12 +2622,12 @@
     <widget class="GtkImageMenuItem" id="go_to_line">
       <property name="visible">True</property>
       <property name="tooltip" translatable="yes">Goto to the entered line</property>
-      <property name="label" translatable="yes">Go to line</property>
+      <property name="label" translatable="yes">Go to Line</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 16 Jul 2005 11:20:32 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1175">
+	<widget class="GtkImage" id="image1294">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>

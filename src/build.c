@@ -871,7 +871,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	// build the code with make all
-	item = gtk_image_menu_item_new_with_mnemonic(_("_Make all"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Make All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
@@ -882,7 +882,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	menu_items->item_make_all = item;
 
 	// build the code with make custom
-	item = gtk_image_menu_item_new_with_mnemonic(_("Make custom _target"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Make Custom _Target"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOWNTARGET, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -893,7 +893,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	menu_items->item_make_custom = item;
 
 	// build the code with make object
-	item = gtk_image_menu_item_new_with_mnemonic(_("Make _object"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Make _Object"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOBJECT, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -993,7 +993,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	// build the code with make all
-	item = gtk_image_menu_item_new_with_mnemonic(_("_Make all"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Make All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	gtk_tooltips_set_tip(tooltips, item, _("Builds the current file with the "
@@ -1004,7 +1004,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	menu_items->item_make_all = item;
 
 	// build the code with make custom
-	item = gtk_image_menu_item_new_with_mnemonic(_("Make custom _target"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Make Custom _Target"));
 	gtk_widget_show(item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_MAKEOWNTARGET, item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1032,7 +1032,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	// DVI view
-#define LATEX_VIEW_DVI_LABEL _("View DVI file") // used later again
+#define LATEX_VIEW_DVI_LABEL _("View DVI File") // used later again
 	item = gtk_image_menu_item_new_with_mnemonic(LATEX_VIEW_DVI_LABEL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
@@ -1046,7 +1046,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	menu_items->item_exec = item;
 
 	// PDF view
-	item = gtk_image_menu_item_new_with_mnemonic(_("View PDF file"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("View PDF File"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_RUN2, item);
@@ -1337,7 +1337,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 	{
 		case GBO_MAKE_CUSTOM:
 		{
-			dialogs_show_input(_("Make custom target"),
+			dialogs_show_input(_("Make Custom Target"),
 				_("Enter custom options here, all entered text is passed to the make command."),
 				build_info.custom_target,
 				G_CALLBACK(on_make_target_dialog_response),
