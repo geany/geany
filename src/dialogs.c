@@ -470,7 +470,7 @@ void dialogs_show_word_count()
 	label = gtk_label_new(range);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1,
 					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
+					(GtkAttachOptions) (0), 20, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 
 	label = gtk_label_new(_("Lines:"));
@@ -483,7 +483,7 @@ void dialogs_show_word_count()
 	label = gtk_label_new(text);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
+					(GtkAttachOptions) (0), 20, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	g_free(text);
 
@@ -497,7 +497,7 @@ void dialogs_show_word_count()
 	label = gtk_label_new(text);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3,
 					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
+					(GtkAttachOptions) (0), 20, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	g_free(text);
 
@@ -511,7 +511,7 @@ void dialogs_show_word_count()
 	label = gtk_label_new(text);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
+					(GtkAttachOptions) (0), 20, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	g_free(text);
 
