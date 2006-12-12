@@ -102,6 +102,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", app->pref_editor_folding);
 	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", app->pref_editor_unfold_all_children);
 	g_key_file_set_boolean(config, PACKAGE, "use_auto_indention", app->pref_editor_use_auto_indention);
+	g_key_file_set_boolean(config, PACKAGE, "use_tab_to_indent", app->use_tab_to_indent);
 	g_key_file_set_boolean(config, PACKAGE, "use_indicators", app->pref_editor_use_indicators);
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", app->pref_editor_show_indent_guide);
 	g_key_file_set_boolean(config, PACKAGE, "show_white_space", app->pref_editor_show_white_space);
@@ -308,6 +309,7 @@ gboolean configuration_load()
 	app->msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	app->pref_editor_line_breaking = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); //default is off for better performance
 	app->pref_editor_use_auto_indention = utils_get_setting_boolean(config, PACKAGE, "use_auto_indention", TRUE);
+	app->use_tab_to_indent = utils_get_setting_boolean(config, PACKAGE, "use_tab_to_indent", TRUE);
 	app->pref_editor_use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
 	app->pref_editor_show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
 	app->pref_editor_show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);

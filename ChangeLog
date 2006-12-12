@@ -1,3 +1,10 @@
+2006-12-12  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/document.c, src/geany.h, src/keyfile.c, src/sciwrappers.c,
+   src/sciwrappers.h: Added option to toggle usage of Tab button for
+                      indentation.
+
+
 2006-12-12  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/interface.c, src/callbacks.c, src/ui_utils.c,

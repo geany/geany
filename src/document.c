@@ -275,6 +275,7 @@ static gint document_create_new_sci(const gchar *filename)
 
 	document_apply_update_prefs(sci);
 
+	sci_set_tab_indents(sci, app->use_tab_to_indent);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);

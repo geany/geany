@@ -908,3 +908,8 @@ gint sci_get_overtype(ScintillaObject *sci)
 	return SSM(sci, SCI_GETOVERTYPE, 0, 0);
 }
 
+void sci_set_tab_indents(ScintillaObject *sci, gboolean set)
+{
+	SSM(sci, SCI_SETTABINDENTS, set, 0);
+}
+

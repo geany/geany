@@ -93,6 +93,7 @@ typedef struct MyApp
 	gboolean			 show_markers_margin;
 	gboolean			 show_linenumber_margin;
 	gboolean			 brace_match_ltgt;
+	gboolean			 use_tab_to_indent;
 	gboolean			 main_window_realized;
 	// I know, it is a bit confusing, but this line breaking is globally,
 	// to change the default value at startup, I think

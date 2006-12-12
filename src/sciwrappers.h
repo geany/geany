@@ -166,5 +166,6 @@ void				sci_set_autoc_max_height	(ScintillaObject * sci, gint val);
 gint				sci_find_bracematch			(ScintillaObject * sci, gint pos);
 
 gint				sci_get_overtype			(ScintillaObject * sci);
+void				sci_set_tab_indents			(ScintillaObject * sci, gboolean set);
 
 #endif
