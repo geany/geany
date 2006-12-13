@@ -13,6 +13,9 @@
    message window area.
    Add msgwin_menu_add_common_items().
    Move remaining message window setup code to msgwin_init().
+ * src/interface.c, geany.glade:
+   Add 'Invert syntax highlighting colours' Preferences dialog option
+   (hidden for now).
 
 
 2006-12-12  Enrico Tröger  <enrico.troeger@uvena.de>
