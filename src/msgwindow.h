@@ -66,13 +66,7 @@ void msgwin_init();
 
 void msgwin_finalize();
 
-void msgwin_prepare_msg_tree_view(void);
-
-void msgwin_prepare_status_tree_view(void);
-
-void msgwin_prepare_compiler_tree_view(void);
-
-void msgwin_show();
+void msgwin_show_hide(gboolean show);
 
 void msgwin_msg_add(gint line, gint idx, const gchar *string);
 
@@ -81,7 +75,7 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 
 void msgwin_status_add(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 
-GtkWidget *msgwin_create_message_popup_menu(gint type);
+void msgwin_menu_add_common_items(GtkMenu *menu);
 
 gboolean msgwin_goto_compiler_file_line();
 

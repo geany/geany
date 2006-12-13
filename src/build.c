@@ -618,7 +618,7 @@ GPid build_run_cmd(gint idx)
 		// show the VTE
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
 		gtk_widget_grab_focus(vc->vte);
-		msgwin_show();
+		msgwin_show_hide(TRUE);
 
 		run_info.pid = 1;
 
@@ -732,7 +732,7 @@ static void show_build_result_message(gboolean failure)
 		if (! app->msgwindow_visible)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
-			msgwin_show();
+			msgwin_show_hide(TRUE);
 		}
 		else
 		if (gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)

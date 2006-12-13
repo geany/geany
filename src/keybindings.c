@@ -696,7 +696,7 @@ static void cb_func_switch_vte(G_GNUC_UNUSED guint key_id)
 #ifdef HAVE_VTE
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
 	gtk_widget_grab_focus(vc->vte);
-	msgwin_show();
+	msgwin_show_hide(TRUE);
 #endif
 }
 

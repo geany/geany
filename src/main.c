@@ -320,9 +320,6 @@ static void main_init(void)
 	app->undo_items[0] = lookup_widget(app->popup_menu, "undo1");
 	app->undo_items[1] = lookup_widget(app->window, "menu_undo2");
 	app->undo_items[2] = lookup_widget(app->window, "toolbutton_undo");
-
-	msgwin_init();
-	search_init();
 }
 
 
@@ -534,6 +531,8 @@ gint main(gint argc, gchar **argv)
 #endif
 	if (no_msgwin) app->msgwindow_visible = FALSE;
 
+	msgwin_init();
+	search_init();
 	ui_create_insert_menu_items();
 	ui_create_insert_date_menu_items();
 	keybindings_init();
@@ -568,12 +567,6 @@ gint main(gint argc, gchar **argv)
 	treeviews_prepare_openfiles();
 	treeviews_create_taglist_popup_menu();
 	treeviews_create_openfiles_popup_menu();
-	msgwin_prepare_status_tree_view();
-	msgwin_prepare_msg_tree_view();
-	msgwin_prepare_compiler_tree_view();
-	msgwindow.popup_status_menu = msgwin_create_message_popup_menu(MSG_STATUS);
-	msgwindow.popup_msg_menu = msgwin_create_message_popup_menu(MSG_MESSAGE);
-	msgwindow.popup_compiler_menu = msgwin_create_message_popup_menu(MSG_COMPILER);
 #ifdef HAVE_VTE
 	vte_init();
 #endif

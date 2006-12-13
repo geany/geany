@@ -55,9 +55,14 @@ static const GdkColor white = {0, 65535, 65535, 65535};
 MessageWindow msgwindow;
 
 
+static void prepare_msg_tree_view(void);
+static void prepare_status_tree_view(void);
+static void prepare_compiler_tree_view(void);
+static GtkWidget *create_message_popup_menu(gint type);
 static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *line);
 static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *event,
 																			gpointer user_data);
+static void on_scribble_populate(GtkTextView *textview, GtkMenu *arg1, gpointer user_data);
 
 
 void msgwin_init()
@@ -69,6 +74,16 @@ void msgwin_init()
 	msgwindow.find_in_files_dir = NULL;
 
 	gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), FALSE);
+
+	prepare_status_tree_view();
+	prepare_msg_tree_view();
+	prepare_compiler_tree_view();
+	msgwindow.popup_status_menu = create_message_popup_menu(MSG_STATUS);
+	msgwindow.popup_msg_menu = create_message_popup_menu(MSG_MESSAGE);
+	msgwindow.popup_compiler_menu = create_message_popup_menu(MSG_COMPILER);
+
+	g_signal_connect(G_OBJECT(lookup_widget(app->window, "textview_scribble")),
+		"populate-popup", G_CALLBACK(on_scribble_populate), NULL);
 }
 
 
@@ -79,7 +94,7 @@ void msgwin_finalize()
 
 
 /* does some preparing things to the status message list widget */
-void msgwin_prepare_status_tree_view(void)
+static void prepare_status_tree_view(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -100,13 +115,12 @@ void msgwin_prepare_status_tree_view(void)
 
 	g_signal_connect(G_OBJECT(msgwindow.tree_status), "button-press-event",
 				G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_STATUS));
-
 }
 
 
 /* does some preparing things to the message list widget
  * (currently used for showing results of 'Find usage') */
-void msgwin_prepare_msg_tree_view(void)
+static void prepare_msg_tree_view(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -138,7 +152,7 @@ void msgwin_prepare_msg_tree_view(void)
 
 
 /* does some preparing things to the compiler list widget */
-void msgwin_prepare_compiler_tree_view(void)
+static void prepare_compiler_tree_view(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -211,14 +225,15 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 }
 
 
-void msgwin_show()
+void msgwin_show_hide(gboolean show)
 {
-	app->msgwindow_visible = TRUE;
+	app->msgwindow_visible = show;
 	app->ignore_callback = TRUE;
 	gtk_check_menu_item_set_active(
-		GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1")), TRUE);
+		GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1")),
+		show);
 	app->ignore_callback = FALSE;
-	gtk_widget_show(lookup_widget(app->window, "scrolledwindow1"));
+	ui_widget_show_hide(lookup_widget(app->window, "scrolledwindow1"), show);
 }
 
 
@@ -228,7 +243,7 @@ void msgwin_msg_add(gint line, gint idx, const gchar *string)
 	GtkTreeIter iter;
 	static gint state = 0;
 
-	if (! app->msgwindow_visible) msgwin_show();
+	if (! app->msgwindow_visible) msgwin_show_hide(TRUE);
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
 	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2,
@@ -346,7 +361,15 @@ on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
 }
 
 
-GtkWidget *msgwin_create_message_popup_menu(gint type)
+static void
+on_hide_message_window                 (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	msgwin_show_hide(FALSE);
+}
+
+
+static GtkWidget *create_message_popup_menu(gint type)
 {
 	GtkWidget *message_popup_menu, *clear, *copy;
 
@@ -355,17 +378,41 @@ GtkWidget *msgwin_create_message_popup_menu(gint type)
 	clear = gtk_image_menu_item_new_from_stock("gtk-clear", NULL);
 	gtk_widget_show(clear);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), clear);
+	g_signal_connect((gpointer)clear, "activate",
+		G_CALLBACK(on_message_treeview_clear_activate), GINT_TO_POINTER(type));
 
 	copy = gtk_image_menu_item_new_from_stock("gtk-copy", NULL);
 	gtk_widget_show(copy);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy);
-
 	g_signal_connect((gpointer)copy, "activate",
 		G_CALLBACK(on_compiler_treeview_copy_activate), GINT_TO_POINTER(type));
-	g_signal_connect((gpointer)clear, "activate",
-		G_CALLBACK(on_message_treeview_clear_activate), GINT_TO_POINTER(type));
+
+	msgwin_menu_add_common_items(GTK_MENU(message_popup_menu));
 
 	return message_popup_menu;
+}
+
+
+static void on_scribble_populate(GtkTextView *textview, GtkMenu *arg1, gpointer user_data)
+{
+	msgwin_menu_add_common_items(arg1);
+}
+
+
+/* Menu items that should be on all message window popup menus */
+void msgwin_menu_add_common_items(GtkMenu *menu)
+{
+	GtkWidget *item;
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	item = gtk_menu_item_new_with_mnemonic(_("_Hide Message Window"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer)item, "activate",
+		G_CALLBACK(on_hide_message_window), NULL);
 }
 
 

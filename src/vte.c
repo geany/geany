@@ -374,6 +374,8 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
+	msgwin_menu_add_common_items(GTK_MENU(menu));
+
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vc->im_submenu);
 
 	return menu;
