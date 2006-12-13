@@ -139,15 +139,14 @@ void ui_set_window_title(gint index)
 
 	if (index >= 0)
 	{
-		title = g_strdup_printf ("%s: %s %s",
-				PACKAGE,
-				(doc_list[index].file_name != NULL) ? g_filename_to_utf8(doc_list[index].file_name, -1, NULL, NULL, NULL) : _("untitled"),
+		title = g_strdup_printf("Geany: %s %s",
+				DOC_FILENAME(index),
 				doc_list[index].changed ? _("(Unsaved)") : "");
 		gtk_window_set_title(GTK_WINDOW(app->window), title);
 		g_free(title);
 	}
 	else
-		gtk_window_set_title(GTK_WINDOW(app->window), PACKAGE);
+		gtk_window_set_title(GTK_WINDOW(app->window), "Geany");
 }
 
 
@@ -785,6 +784,7 @@ void ui_update_toolbar_items()
 }
 
 
+// Note: remember to unref the pixbuf once an image or window has added a reference.
 GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
 {
 	switch(img)
@@ -826,7 +826,13 @@ GdkPixbuf *ui_new_pixbuf_from_inline(gint img, gboolean small_img)
 
 GtkWidget *ui_new_image_from_inline(gint img, gboolean small_img)
 {
-	return gtk_image_new_from_pixbuf(ui_new_pixbuf_from_inline(img, small_img));
+	GtkWidget *wid;
+	GdkPixbuf *pb;
+
+	pb = ui_new_pixbuf_from_inline(img, small_img);
+	wid = gtk_image_new_from_pixbuf(pb);
+	g_object_unref(pb);	// the image doesn't adopt our reference, so remove our ref.
+	return wid;
 }
 
 
@@ -1212,6 +1218,16 @@ gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb)
 			return FALSE;	// no more items
 	}
 	return TRUE;
+}
+
+
+void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str)
+{
+	PangoFontDescription *pfd;
+
+	pfd = pango_font_description_from_string(str);
+	gtk_widget_modify_font(wid, pfd);
+	pango_font_description_free(pfd);
 }
 
 

@@ -65,13 +65,17 @@ void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
+	PangoFontDescription *pfd;
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Symbols"), renderer, "text", 0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
-	gtk_widget_modify_font(tree, pango_font_description_from_string(app->tagbar_font));
+	pfd = pango_font_description_from_string(app->tagbar_font);
+	gtk_widget_modify_font(tree, pfd);
+	pango_font_description_free(pfd);
+
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 	g_signal_connect(G_OBJECT(tree), "button-press-event",
 					G_CALLBACK(on_treeviews_button_press_event), GINT_TO_POINTER(TREEVIEW_SYMBOL));
@@ -285,6 +289,8 @@ void treeviews_prepare_openfiles()
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
+	PangoFontDescription *pfd;
+
 	tv.tree_openfiles = lookup_widget(app->window, "treeview6");
 
 	// store the short filename to show, and the index as reference
@@ -305,7 +311,10 @@ void treeviews_prepare_openfiles()
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
 
-	gtk_widget_modify_font(tv.tree_openfiles, pango_font_description_from_string(app->tagbar_font));
+	pfd = pango_font_description_from_string(app->tagbar_font);
+	gtk_widget_modify_font(tv.tree_openfiles, pfd);
+	pango_font_description_free(pfd);
+
 	g_signal_connect(G_OBJECT(tv.tree_openfiles), "button-press-event",
 						G_CALLBACK(on_treeviews_button_press_event), GINT_TO_POINTER(TREEVIEW_OPENFILES));
 

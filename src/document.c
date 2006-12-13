@@ -676,7 +676,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	doc_list[idx].mtime = st.st_mtime; // get the modification time from file and keep it
 	doc_list[idx].changed = FALSE;
-	doc_list[idx].file_name = g_strdup(utf8_filename);
+	g_free(doc_list[idx].encoding);	// if reloading, free old encoding
 	doc_list[idx].encoding = enc;
 	doc_list[idx].has_bom = bom;
 	store_saved_encoding(idx);	// store the opened encoding for undo/redo

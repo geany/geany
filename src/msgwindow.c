@@ -83,6 +83,7 @@ void msgwin_prepare_status_tree_view(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
+	PangoFontDescription *pfd;
 
 	msgwindow.store_status = gtk_list_store_new(2, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_status), GTK_TREE_MODEL(msgwindow.store_status));
@@ -93,7 +94,10 @@ void msgwin_prepare_status_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_status), FALSE);
 
-	gtk_widget_modify_font(msgwindow.tree_status, pango_font_description_from_string(app->msgwin_font));
+	pfd = pango_font_description_from_string(app->msgwin_font);
+	gtk_widget_modify_font(msgwindow.tree_status, pfd);
+	pango_font_description_free(pfd);
+
 	g_signal_connect(G_OBJECT(msgwindow.tree_status), "button-press-event",
 				G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_STATUS));
 
@@ -107,6 +111,7 @@ void msgwin_prepare_msg_tree_view(void)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
+	PangoFontDescription *pfd;
 
 	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_INT, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
@@ -117,7 +122,10 @@ void msgwin_prepare_msg_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
 
-	gtk_widget_modify_font(msgwindow.tree_msg, pango_font_description_from_string(app->msgwin_font));
+	pfd = pango_font_description_from_string(app->msgwin_font);
+	gtk_widget_modify_font(msgwindow.tree_msg, pfd);
+	pango_font_description_free(pfd);
+
 	// use button-release-event so the selection has changed (connect_after button-press-event doesn't work)
 	g_signal_connect(G_OBJECT(msgwindow.tree_msg), "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
@@ -135,6 +143,7 @@ void msgwin_prepare_compiler_tree_view(void)
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
+	PangoFontDescription *pfd;
 
 	msgwindow.store_compiler = gtk_list_store_new(2, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_compiler), GTK_TREE_MODEL(msgwindow.store_compiler));
@@ -145,7 +154,10 @@ void msgwin_prepare_compiler_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
 
-	gtk_widget_modify_font(msgwindow.tree_compiler, pango_font_description_from_string(app->msgwin_font));
+	pfd = pango_font_description_from_string(app->msgwin_font);
+	gtk_widget_modify_font(msgwindow.tree_compiler, pfd);
+	pango_font_description_free(pfd);
+
 	// use button-release-event so the selection has changed (connect_after button-press-event doesn't work)
 	g_signal_connect(G_OBJECT(msgwindow.tree_compiler), "button-release-event",
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_COMPILER));

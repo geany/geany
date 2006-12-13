@@ -700,6 +700,8 @@ void configuration_read_filetype_extensions()
 		else g_strfreev(list);
 	}
 
+	g_free(sysconfigfile);
+	g_free(userconfigfile);
 	g_key_file_free(sysconfig);
 	g_key_file_free(userconfig);
 }

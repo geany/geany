@@ -726,14 +726,13 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			for (i = 0; i < doc_array->len; i++)
 			{
 				if (doc_list[i].is_valid && GTK_IS_WIDGET(doc_list[i].tag_tree))
-					gtk_widget_modify_font(doc_list[i].tag_tree,
-						pango_font_description_from_string(app->tagbar_font));
+					ui_widget_modify_font_from_string(doc_list[i].tag_tree,
+						app->tagbar_font);
 			}
 			if (GTK_IS_WIDGET(app->default_tag_tree))
-				gtk_widget_modify_font(app->default_tag_tree,
-					pango_font_description_from_string(app->tagbar_font));
-			gtk_widget_modify_font(lookup_widget(app->window, "entry1"),
-				pango_font_description_from_string(app->tagbar_font));
+				ui_widget_modify_font_from_string(app->default_tag_tree, app->tagbar_font);
+			ui_widget_modify_font_from_string(lookup_widget(app->window, "entry1"),
+				app->tagbar_font);
 			break;
 		}
 		case 2:
@@ -741,12 +740,9 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			if (strcmp(fontbtn, app->msgwin_font) == 0) break;
 			g_free(app->msgwin_font);
 			app->msgwin_font = g_strdup(fontbtn);
-			gtk_widget_modify_font(msgwindow.tree_compiler,
-				pango_font_description_from_string(app->msgwin_font));
-			gtk_widget_modify_font(msgwindow.tree_msg,
-				pango_font_description_from_string(app->msgwin_font));
-			gtk_widget_modify_font(msgwindow.tree_status,
-				pango_font_description_from_string(app->msgwin_font));
+			ui_widget_modify_font_from_string(msgwindow.tree_compiler, app->msgwin_font);
+			ui_widget_modify_font_from_string(msgwindow.tree_msg, app->msgwin_font);
+			ui_widget_modify_font_from_string(msgwindow.tree_status, app->msgwin_font);
 			break;
 		}
 		case 3:

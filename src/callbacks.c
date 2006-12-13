@@ -1592,7 +1592,11 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 	else
 	{
 		// set default value
-		if (utils_str_equal("", app->custom_date_format)) app->custom_date_format = g_strdup("%d.%m.%Y");
+		if (utils_str_equal("", app->custom_date_format))
+		{
+			g_free(app->custom_date_format);
+			app->custom_date_format = g_strdup("%d.%m.%Y");
+		}
 
 		dialogs_show_input(_("Custom Date Format"),
 			_("Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function. See \"man strftime\" for more information."),

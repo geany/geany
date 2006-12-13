@@ -550,7 +550,14 @@ gint main(gint argc, gchar **argv)
 #endif
 	configuration_read_filetype_extensions();
 
-	gtk_window_set_icon(GTK_WINDOW(app->window), ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE));
+	// set window icon
+	{
+		GdkPixbuf *pb;
+
+		pb = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
+		gtk_window_set_icon(GTK_WINDOW(app->window), pb);
+		g_object_unref(pb);	// free our reference
+	}
 
 	// registering some basic events
 	g_signal_connect(G_OBJECT(app->window), "delete_event", G_CALLBACK(on_exit_clicked), NULL);
@@ -680,6 +687,7 @@ void main_quit()
 	g_free(app->configdir);
 	g_free(app->datadir);
 	g_free(app->docdir);
+	g_free(app->custom_date_format);
 	g_free(app->editor_font);
 	g_free(app->tagbar_font);
 	g_free(app->msgwin_font);
@@ -692,6 +700,8 @@ void main_quit()
 	g_free(app->tools_make_cmd);
 	g_free(app->tools_term_cmd);
 	g_free(app->tools_browser_cmd);
+	g_free(app->tools_print_cmd);
+	g_free(app->tools_grep_cmd);
 	while (! g_queue_is_empty(app->recent_queue))
 	{
 		g_free(g_queue_pop_tail(app->recent_queue));

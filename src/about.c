@@ -148,6 +148,7 @@ static GtkWidget *create_dialog(void)
 	icon = ui_new_pixbuf_from_inline(GEANY_IMAGE_LOGO, FALSE);
 	gtk_image_set_from_pixbuf(GTK_IMAGE(header_image), icon);
 	gtk_window_set_icon(GTK_WINDOW(dialog), icon);
+	g_object_unref(icon);	// free our reference
 
 	// create notebook
 	notebook = gtk_notebook_new();
