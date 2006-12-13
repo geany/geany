@@ -75,6 +75,7 @@ static void cb_func_menu_zoomout(guint key_id);
 static void cb_func_menu_replacetabs(guint key_id);
 static void cb_func_menu_foldall(guint key_id);
 static void cb_func_menu_unfoldall(guint key_id);
+static void cb_func_menu_insert_specialchars(guint key_id);
 static void cb_func_build_action(guint key_id);
 static void cb_func_reloadtaglist(guint key_id);
 static void cb_func_switch_editor(guint key_id);
@@ -159,6 +160,8 @@ void keybindings_init(void)
 		0, 0, "menu_foldall", _("Fold all"));
 	keys[GEANY_KEYS_MENU_UNFOLDALL] = fill(cb_func_menu_unfoldall,
 		0, 0, "menu_unfoldall", _("Unfold all"));
+	keys[GEANY_KEYS_MENU_INSERTSPECIALCHARS] = fill(cb_func_menu_insert_specialchars,
+		0, 0, "menu_insert_specialchars", _("Insert Special HTML Characters"));
 	keys[GEANY_KEYS_BUILD_COMPILE] = fill(cb_func_build_action,
 		GDK_F8, 0, "build_compile", _("Compile"));
 	keys[GEANY_KEYS_BUILD_LINK] = fill(cb_func_build_action,
@@ -298,6 +301,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACETABS, menu_replace_tabs);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FOLDALL, menu_fold_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNFOLDALL, menu_unfold_all1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTSPECIALCHARS, menu_insert_special_chars1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOLOWERCASE, menu_to_lower_case2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOUPPERCASE, menu_to_upper_case2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line1);
@@ -818,4 +822,9 @@ static void cb_func_menu_print(G_GNUC_UNUSED guint key_id)
 static void cb_func_menu_insert_date(G_GNUC_UNUSED guint key_id)
 {
 	gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu, "insert_date_custom2")));
+}
+
+static void cb_func_menu_insert_specialchars(G_GNUC_UNUSED guint key_id)
+{
+	on_menu_insert_special_chars1_activate(NULL, NULL);
 }

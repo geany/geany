@@ -51,6 +51,7 @@
 #include "search.h"
 #include "main.h"
 #include "symbols.h"
+#include "tools.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -1998,3 +1999,12 @@ on_next_message1_activate              (GtkMenuItem     *menuitem,
 		msgwin_goto_messages_file_line))
 		ui_set_statusbar(_("No more message items."));
 }
+
+
+void
+on_menu_insert_special_chars1_activate (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	tools_show_dialog_insert_special_chars();
+}
+
