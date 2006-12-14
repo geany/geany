@@ -73,7 +73,7 @@ brahmann_ - <language> ru_RU\n\t\
 &lt;brahmann@mthr.net.ru&gt;\n\n\t\
 Clytie Siddall - <language> vi_VN\n\t\
 &lt;clytie@riverland.net.au&gt;\n\n\t\
-Dormouse Young - <language> zh_CH\n\t\
+Dormouse Young - <language> zh_CN\n\t\
 &lt;dormouse.young@gmail.com&gt;\n\n\t\
 KoViCH - <language> zh_TW\n\t\
 &lt;kovich.ian@gmail.com&gt;\n\n\t"
