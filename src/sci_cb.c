@@ -1741,17 +1741,23 @@ static void auto_multiline(ScintillaObject *sci, gint pos)
 		gchar *continuation = "*"; // the type of comment, '*' (C/C++/Java), '+' and the others (D)
 		gchar *whitespace = ""; // to hold whitespace if needed
 		gchar *result;
+		gint len = strlen(previous_line);
 
 		// find and stop at end of multi line comment
-		i = strlen(previous_line);
-		while (isspace(previous_line[i])) i--;
-		if (is_doc_comment_char(previous_line[i - 1], lexer) && previous_line[i] == '/') return;
-
+		i = len - 1;
+		while (i >= 0 && isspace(previous_line[i])) i--;
+		if (i >= 1 && is_doc_comment_char(previous_line[i - 1], lexer) && previous_line[i] == '/')
+		{
+			SSM(sci, SCI_DELETEBACK, 0, 0);	// remove whitespace indent
+			g_free(previous_line);
+			return;
+		}
 		// check whether we are on the second line of multi line comment
 		i = 0;
-		while (isspace(previous_line[i])) i++; // get to start of the line
+		while (i < len && isspace(previous_line[i])) i++; // get to start of the line
 
-		if (previous_line[i] == '/' && is_doc_comment_char(previous_line[i + 1], lexer))
+		if (i + 1 < len &&
+			previous_line[i] == '/' && is_doc_comment_char(previous_line[i + 1], lexer))
 		{ // we are on the second line of a multi line comment, so we have to insert white space
 			whitespace = " ";
 		}
