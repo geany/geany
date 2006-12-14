@@ -551,6 +551,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	gchar *locale_filename = NULL;
 	GError *err = NULL;
 	gchar *data = NULL;
+	filetype *use_ft;
 
 	//struct timeval tv, tv1;
 	//struct timezone tz;
@@ -692,23 +693,22 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	if (! reload)
 	{
-		filetype *use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(idx);
-
 		doc_list[idx].readonly = readonly;
 		sci_set_readonly(doc_list[idx].sci, readonly);
-
-		document_set_filetype(idx, use_ft);	// also sets taglist
-		build_menu_update(idx);
 
 		// "the" SCI signal (connect after initial setup(i.e. adding text))
 		g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
 					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
+
+		use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(idx);
 	}
 	else
 	{	// reloading
-		document_update_tag_list(idx, TRUE);
 		document_undo_clear(idx);
+		use_ft = ft;
 	}
+	// update taglist, typedef keywords and build menu if necessary
+	document_set_filetype(idx, use_ft);
 
 	document_set_text_changed(idx);	// also updates tab state
 	ui_document_show_hide(idx);	// update the document menu
@@ -1306,23 +1306,26 @@ static GString *get_project_typenames()
 /* sets the filetype of the document (sets syntax highlighting and tagging) */
 void document_set_filetype(gint idx, filetype *type)
 {
-	if (type == NULL ||
-		! DOC_IDX_VALID(idx) ||
-		doc_list[idx].file_type == type)
+	if (type == NULL || ! DOC_IDX_VALID(idx))
 		return;
 
 	geany_debug("%s : %s (%s)",	doc_list[idx].file_name, type->name, doc_list[idx].encoding);
-	doc_list[idx].file_type = type;
 
-	// delete tm file object to force creation of a new one
-	if (doc_list[idx].tm_file != NULL)
+	if (doc_list[idx].file_type != type)	// filetype has changed
 	{
-		tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
-		doc_list[idx].tm_file = NULL;
+		doc_list[idx].file_type = type;
+
+		// delete tm file object to force creation of a new one
+		if (doc_list[idx].tm_file != NULL)
+		{
+			tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+			doc_list[idx].tm_file = NULL;
+		}
+		build_menu_update(idx);
+		type->style_func_ptr(doc_list[idx].sci);	// set new styles
 	}
 
 	document_update_tag_list(idx, TRUE);
-	type->style_func_ptr(doc_list[idx].sci);
 
 	// For C/C++/Java files, get list of typedefs for colourising
 	if (sci_get_lexer(doc_list[idx].sci) == SCLEX_CPP)
@@ -1346,7 +1349,6 @@ void document_set_filetype(gint idx, filetype *type)
 		}
 	}
 	sci_colourise(doc_list[idx].sci, 0, -1);
-	build_menu_update(idx);
 }
 
 

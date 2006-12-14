@@ -1,3 +1,10 @@
+2006-12-14  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/document.c:
+   Fix updating the symbol list when a file is saved.
+   Update C-like typedef keywords when reloading a file.
+
+
 2006-12-13  Frank Lanitz  <frank@frank.uvena.de>
 
  * THANKS: Small update of contact data and small fix of translated 
