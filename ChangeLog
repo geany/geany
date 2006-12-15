@@ -1,3 +1,10 @@
+2006-12-15  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sci_cb.c:
+   Only remove extra space indent after a multiline comment if the
+   indent contains one too many spaces.
+
+
 2006-12-14  Frank Lanitz  <frank@frank.uvena.de>
 
  * about.c: Fixed a typo.

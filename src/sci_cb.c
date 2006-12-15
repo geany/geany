@@ -1748,7 +1748,14 @@ static void auto_multiline(ScintillaObject *sci, gint pos)
 		while (i >= 0 && isspace(previous_line[i])) i--;
 		if (i >= 1 && is_doc_comment_char(previous_line[i - 1], lexer) && previous_line[i] == '/')
 		{
-			SSM(sci, SCI_DELETEBACK, 0, 0);	// remove whitespace indent
+			gint cur_line = sci_get_current_line(sci, -1);
+			gint indent_pos = sci_get_line_indent_position(sci, cur_line);
+			gint indent_len = sci_get_col_from_position(sci, indent_pos);
+
+			/* if there is one too many spaces, delete the last space,
+			 * to return to the indent used before the multiline comment was started. */
+			if (indent_len % app->pref_editor_tab_width == 1)
+				SSM(sci, SCI_DELETEBACKNOTLINE, 0, 0);	// remove whitespace indent
 			g_free(previous_line);
 			return;
 		}
