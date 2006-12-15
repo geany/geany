@@ -2536,7 +2536,7 @@ static void styleset_d_init(void)
 	get_keyfile_hex(config, config_home, "styling", "word", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[6]);
 	get_keyfile_hex(config, config_home, "styling", "word2", "0x991111", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[7]);
 	get_keyfile_hex(config, config_home, "styling", "word3", "0x991111", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[8]);
-	get_keyfile_hex(config, config_home, "styling", "typedef", "0x0000d0", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "typedef", "0x0000d0", "0xffffff", "true", &style_sets[GEANY_FILETYPES_D].styling[9]);
 	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[10]);
 	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_D].styling[11]);
 	get_keyfile_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_D].styling[12]);

@@ -3,6 +3,8 @@
  * src/sci_cb.c:
    Only remove extra space indent after a multiline comment if the
    indent contains one too many spaces.
+ * src/highlighting.c, data/filetypes.d:
+   Show D typedefs in bold.
 
 
 2006-12-14  Frank Lanitz  <frank@frank.uvena.de>
