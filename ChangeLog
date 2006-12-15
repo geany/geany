@@ -5,6 +5,11 @@
    indent contains one too many spaces.
  * src/highlighting.c, data/filetypes.d:
    Show D typedefs in bold.
+ * src/sci_cb.c, src/sci_cb.h, src/document.c:
+   Fix setting project typenames for the new D lexer.
+   Add sci_cb_lexer_is_c_like() which returns TRUE for C++/D lexers.
+   Only recolourise C-like files when updating project typename
+   keywords.
 
 
 2006-12-14  Frank Lanitz  <frank@frank.uvena.de>

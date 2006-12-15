@@ -81,4 +81,6 @@ void sci_cb_auto_table(ScintillaObject *sci, gint pos);
 
 void sci_cb_auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
 
+gboolean sci_cb_lexer_is_c_like(gint lexer);
+
 #endif

@@ -1778,3 +1778,19 @@ static void auto_multiline(ScintillaObject *sci, gint pos)
 		g_free(previous_line);
 	}
 }
+
+
+gboolean sci_cb_lexer_is_c_like(gint lexer)
+{
+	switch (lexer)
+	{
+		case SCLEX_CPP:
+		case SCLEX_D:
+		return TRUE;
+
+		default:
+		return FALSE;
+	}
+}
+
+

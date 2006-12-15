@@ -1303,9 +1303,43 @@ static GString *get_project_typenames()
 }
 
 
+/* Returns: whether sci_colourise has been called for sci */
+static gboolean update_type_keywords(ScintillaObject *sci)
+{
+	gboolean ret = FALSE;
+
+	// For C/C++/Java files, get list of typedefs for colourising
+	if (sci_cb_lexer_is_c_like(sci_get_lexer(sci)))
+	{
+		GString *s = get_project_typenames();
+
+		if (s != NULL)
+		{
+			guint n;
+
+			for (n = 0; n < doc_array->len; n++)
+			{
+				ScintillaObject *wid = doc_list[n].sci;
+
+				if (wid && sci_cb_lexer_is_c_like(sci_get_lexer(wid)))
+				{
+					sci_set_keywords(wid, 3, s->str);
+					sci_colourise(wid, 0, -1);
+				}
+			}
+			g_string_free(s, TRUE);
+			ret = TRUE;
+		}
+	}
+	return ret;
+}
+
+
 /* sets the filetype of the document (sets syntax highlighting and tagging) */
 void document_set_filetype(gint idx, filetype *type)
 {
+	gboolean colourise = FALSE;
+
 	if (type == NULL || ! DOC_IDX_VALID(idx))
 		return;
 
@@ -1323,32 +1357,13 @@ void document_set_filetype(gint idx, filetype *type)
 		}
 		build_menu_update(idx);
 		type->style_func_ptr(doc_list[idx].sci);	// set new styles
+		colourise = TRUE;
 	}
 
 	document_update_tag_list(idx, TRUE);
-
-	// For C/C++/Java files, get list of typedefs for colourising
-	if (sci_get_lexer(doc_list[idx].sci) == SCLEX_CPP)
-	{
-		GString *s = get_project_typenames();
-
-		if (s != NULL)
-		{
-			guint n;
-
-			for (n = 0; n < doc_array->len; n++)
-			{
-				if (doc_list[n].sci)
-				{
-					sci_set_keywords(doc_list[n].sci, 3, s->str);
-					sci_colourise(doc_list[n].sci, 0, -1);
-				}
-			}
-			//SSM(doc_list[idx].sci, SCI_SETKEYWORDS, 3, (sptr_t) s->str);
-			g_string_free(s, TRUE);
-		}
-	}
-	sci_colourise(doc_list[idx].sci, 0, -1);
+	colourise &= ! update_type_keywords(doc_list[idx].sci);
+	if (colourise)
+		sci_colourise(doc_list[idx].sci, 0, -1);
 }
 
 
