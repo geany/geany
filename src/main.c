@@ -52,6 +52,7 @@
 #include "search.h"
 #include "build.h"
 #include "highlighting.h"
+#include "symbols.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -239,7 +240,6 @@ static void main_init(void)
 	app->tm_workspace				= tm_get_workspace();
 	app->recent_queue				= g_queue_new();
 	app->opening_session_files		= FALSE;
-	html_entities					= NULL;
 
 	app->window = create_window1();
 	app->new_file_menu = gtk_menu_new();
@@ -674,9 +674,9 @@ void main_quit()
 	search_finalize();
 	build_finalize();
 	document_finalize();
+	symbols_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
-	g_strfreev(html_entities);
 	g_free(app->configdir);
 	g_free(app->datadir);
 	g_free(app->docdir);

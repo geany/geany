@@ -35,4 +35,8 @@ GString *symbols_get_macro_list();
 
 TMTag *symbols_find_in_workspace(const gchar *tag_name, gint type);
 
+gchar **symbols_get_html_entities();
+
+void symbols_finalize();
+
 #endif

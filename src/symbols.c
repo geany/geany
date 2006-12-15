@@ -28,7 +28,6 @@
 #include "symbols.h"
 #include "utils.h"
 #include "filetypes.h"
-#include "sci_cb.h"	// html_entities
 #include "encodings.h"
 #include "document.h"
 
@@ -42,6 +41,8 @@ enum	// Geany tag files
 	GTF_LATEX,
 	GTF_MAX
 };
+
+static gchar **html_entities = NULL;
 
 typedef struct
 {
@@ -285,3 +286,16 @@ TMTag *symbols_find_in_workspace(const gchar *tag_name, gint type)
 }
 
 
+gchar **symbols_get_html_entities()
+{
+	if (html_entities == NULL)
+		html_tags_loaded(); // if not yet created, force creation of the array but shouldn't occur
+
+	return html_entities;
+}
+
+
+void symbols_finalize()
+{
+	g_strfreev(html_entities);
+}

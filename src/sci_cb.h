@@ -41,8 +41,6 @@ typedef struct
 
 extern EditorInfo editor_info;
 
-gchar **html_entities;
-
 
 gboolean
 on_editor_button_press_event           (GtkWidget *widget,

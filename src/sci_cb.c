@@ -52,6 +52,7 @@ static void on_new_line_added(ScintillaObject *sci, gint idx);
 static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx);
 static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
 static void auto_multiline(ScintillaObject *sci, gint pos);
+static gboolean is_comment(gint lexer, gint style);
 
 
 // calls the edit popup menu in the editor
@@ -259,7 +260,6 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				start = pos;
 				while (sci_get_char_at(sci, --start) != '&') ;
 
-				geany_debug("%d-%d", start, pos);
 				SSM(sci, SCI_INSERTTEXT, pos - 1, (sptr_t) nt->text);
 			}
 			break;
@@ -433,8 +433,9 @@ void sci_cb_close_block(gint idx, gint pos)
 	sci = doc_list[idx].sci;
 
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL && lexer != SCLEX_BASH)
-			return;
+	if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL &&
+		lexer != SCLEX_D && lexer != SCLEX_BASH)
+		return;
 
 	start_brace = brace_match(sci, pos);
 	line = sci_get_line_from_position(sci, pos);
@@ -454,12 +455,7 @@ void sci_cb_close_block(gint idx, gint pos)
 	}
 	g_free(line_buf);
 
-	//geany_debug("line_len: %d eol: %d cnt: %d", line_len, eol_char_len, cnt);
 	if ((line_len - eol_char_len - 1) != cnt) return;
-
-/*	geany_debug("pos: %d, start: %d char: %c start_line: %d", pos, start_brace,
-					sci_get_char_at(sci, pos), sci_get_line_from_position(sci, start_brace));
-*/
 
 	if (start_brace >= 0)
 	{
@@ -509,8 +505,7 @@ static gint find_previous_brace(ScintillaObject *sci, gint pos)
 {
 	gchar c;
 	gint orig_pos = pos;
-	// we need something more intelligent than only check for '(' because LaTeX
-	// uses {, [ or (
+
 	c = SSM(sci, SCI_GETCHARAT, pos, 0);
 	while (pos >= 0 && pos > orig_pos - 300)
 	{
@@ -568,8 +563,11 @@ gboolean sci_cb_show_calltip(gint idx, gint pos)
 	}
 
 	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
-	if (lexer == SCLEX_CPP && (style == SCE_C_COMMENT ||
-			style == SCE_C_COMMENTLINE || style == SCE_C_COMMENTDOC)) return FALSE;
+	if (is_comment(lexer, style))
+		return FALSE;
+	// never show a calltip in a PHP file outside of the <? ?> tags
+	if (lexer == SCLEX_HTML && ! (style >= SCE_HPHP_DEFAULT && style <= SCE_HPHP_OPERATOR))
+		return FALSE;
 
 	word[0] = '\0';
 	sci_cb_find_current_word(sci, pos - 1, word, sizeof word);
@@ -608,20 +606,20 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 {	// HTML entities auto completion
 	guint i, j = 0;
 	GString *words;
+	gchar **entities = symbols_get_html_entities();
 
-	if (*root != '&') return FALSE;
-	if (html_entities == NULL) return FALSE;
+	if (*root != '&' || entities == NULL) return FALSE;
 
 	words = g_string_sized_new(500);
 	for (i = 0; ; i++)
 	{
-		if (html_entities[i] == NULL) break;
-		else if (html_entities[i][0] == '#') continue;
+		if (entities[i] == NULL) break;
+		else if (entities[i][0] == '#') continue;
 
-		if (! strncmp(html_entities[i], root, rootlen))
+		if (! strncmp(entities[i], root, rootlen))
 		{
 			if (j++ > 0) g_string_append_c(words, ' ');
-			g_string_append(words, html_entities[i]);
+			g_string_append(words, entities[i]);
 		}
 	}
 	if (words->len > 0) show_autocomplete(sci, rootlen, words->str);
@@ -632,7 +630,7 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 
 static gboolean
 autocomplete_tags(gint idx, gchar *root, gsize rootlen)
-{	// PHP, LaTeX, C and C++ tag autocompletion
+{	// PHP, LaTeX, C, C++, D and Java tag autocompletion
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	const GPtrArray *tags;
 	ScintillaObject *sci;
@@ -653,7 +651,6 @@ autocomplete_tags(gint idx, gchar *root, gsize rootlen)
 			g_string_append(words, ((TMTag *) tags->pdata[j])->name);
 		}
 		show_autocomplete(sci, rootlen, words->str);
-		//geany_debug("string size: %d", words->len);
 		g_string_free(words, TRUE);
 	}
 	return TRUE;
@@ -667,9 +664,11 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 	ScintillaObject *sci;
 	gboolean ret = FALSE;
 	gchar *wordchars;
+	filetype *ft;
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL) return FALSE;
 	sci = doc_list[idx].sci;
+	ft = doc_list[idx].file_type;
 
 	line = sci_get_line_from_position(sci, pos);
 	line_start = sci_get_position_from_line(sci, line);
@@ -680,41 +679,16 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
 
-	// don't autocomplete in comments and strings
-	if (lexer == SCLEX_HTML && style == SCE_H_DEFAULT) return FALSE;
-	else if ((lexer == SCLEX_CPP || lexer == SCLEX_PASCAL) && (style == SCE_C_COMMENT ||
-														  style == SCE_C_COMMENTLINE ||
-														  style == SCE_C_COMMENTDOC ||
-														  style == SCE_C_STRING)) return FALSE;
-	else if (lexer == SCLEX_PYTHON && (style == SCE_P_COMMENTLINE ||
-									   style == SCE_P_COMMENTBLOCK ||
-									   style == SCE_P_STRING)) return FALSE;
-	else if (lexer == SCLEX_F77 && (style == SCE_F_COMMENT ||
-									style == SCE_F_STRING1 ||
-									style == SCE_F_STRING2)) return FALSE;
-	else if (lexer == SCLEX_PERL && (style == SCE_PL_COMMENTLINE ||
-									 style == SCE_PL_STRING)) return FALSE;
-	else if (lexer == SCLEX_PROPERTIES && style == SCE_PROPS_COMMENT) return FALSE;
-	else if (lexer == SCLEX_LATEX && style == SCE_L_COMMENT) return FALSE;
-	else if (lexer == SCLEX_MAKEFILE && style == SCE_MAKE_COMMENT) return FALSE;
-	else if (lexer == SCLEX_RUBY && (style == SCE_RB_COMMENTLINE ||
-									 style == SCE_RB_STRING)) return FALSE;
-	else if (lexer == SCLEX_BASH && (style == SCE_SH_COMMENTLINE ||
-									 style == SCE_SH_STRING)) return FALSE;
-	else if (lexer == SCLEX_SQL && (style == SCE_SQL_COMMENT ||
-									style == SCE_SQL_COMMENTLINE ||
-									style == SCE_SQL_COMMENTDOC ||
-									style == SCE_SQL_STRING)) return FALSE;
-	else if (lexer == SCLEX_TCL && (style == SCE_TCL_COMMENT ||
-									style == SCE_TCL_COMMENTLINE ||
-									style == SCE_TCL_IN_QUOTE)) return FALSE;
-	else if (lexer == SCLEX_RUBY && style == SCE_MAKE_COMMENT) return FALSE;
-
+	 // don't autocomplete in comments and strings
+	 if (is_comment(lexer, style))
+		return FALSE;
 
 	linebuf = sci_get_line(sci, line);
 
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
+	if (ft->id == GEANY_FILETYPES_LATEX)
 		wordchars = GEANY_WORDCHARS"\\"; // add \ to word chars if we are in a LaTeX file
+	else if (ft->id == GEANY_FILETYPES_HTML || ft->id == GEANY_FILETYPES_PHP)
+		wordchars = GEANY_WORDCHARS"&"; // add & to word chars if we are in a PHP or HTML file
 	else
 		wordchars = GEANY_WORDCHARS;
 
@@ -726,8 +700,8 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 	rootlen = current - startword;
 
 	// entity autocompletion always in a HTML file, in a PHP file only when we are outside of <? ?>
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_HTML ||
-		(doc_list[idx].file_type->id == GEANY_FILETYPES_PHP && (style < 118 || style > 127)))
+	if (ft->id == GEANY_FILETYPES_HTML ||
+		(ft->id == GEANY_FILETYPES_PHP && (style < SCE_HPHP_DEFAULT || style > SCE_HPHP_OPERATOR)))
 		ret = autocomplete_html(sci, root, rootlen);
 	else
 	{
@@ -833,7 +807,7 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
-	// only for C, C++, Java, Perl and PHP
+	// only for C, C++, D, Ferite, Java, Perl and PHP
 	if (doc_list[idx].file_type->id != GEANY_FILETYPES_PHP &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_C &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_D &&
@@ -843,22 +817,12 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE)
 		return;
 
-	// return, if we are in a comment, or when SCLEX_HTML but not in PHP
-	if (lexer == SCLEX_CPP && (
-		style == SCE_C_COMMENT ||
-	    style == SCE_C_COMMENTLINE ||
-	    style == SCE_C_COMMENTDOC ||
-	    style == SCE_C_COMMENTLINEDOC ||
-		style == SCE_C_STRING ||
-		style == SCE_C_CHARACTER ||
-		style == SCE_C_PREPROCESSOR)) return;
-	//if (lexer == SCLEX_HTML && ! (style >= 118 && style <= 127)) return;
-
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_PHP && (
-		style == SCE_HPHP_SIMPLESTRING ||
-		style == SCE_HPHP_HSTRING ||
-		style == SCE_HPHP_COMMENTLINE ||
-		style == SCE_HPHP_COMMENT)) return;
+	// return, if we are in a comment
+	if (is_comment(lexer, style))
+		return;
+	// never auto complete in a PHP file outside of the <? ?> tags
+	if (lexer == SCLEX_HTML && ! (style >= SCE_HPHP_DEFAULT && style <= SCE_HPHP_OPERATOR))
+		return;
 
 	// get the indention
 	if (doc_list[idx].use_auto_indention) get_indent(sci, pos, TRUE);
@@ -1274,7 +1238,6 @@ void sci_cb_do_uncomment(gint idx, gint line)
 		line_len = sci_get_line_length(doc_list[idx].sci, i);
 		x = 0;
 
-		//geany_debug("line: %d line_start: %d len: %d (%d)", i, line_start, MIN(255, (line_len - 1)), line_len);
 		sci_get_text_range(doc_list[idx].sci, line_start, MIN((line_start + 255), (line_start + line_len - 1)), sel);
 		sel[MIN(255, (line_len - 1))] = '\0';
 
@@ -1323,8 +1286,7 @@ void sci_cb_do_uncomment(gint idx, gint line)
 					case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
 					case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
 					case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
-					case SCLEX_CPP:
-					case SCLEX_PASCAL:
+					case SCLEX_D: style_comment = SCE_D_COMMENT; break;
 					default: style_comment = SCE_C_COMMENT;
 				}
 				if (sci_get_style_at(doc_list[idx].sci, line_start + x) == style_comment)
@@ -1405,7 +1367,6 @@ void sci_cb_do_comment_toggle(gint idx)
 		line_len = sci_get_line_length(doc_list[idx].sci, i);
 		x = 0;
 
-		//geany_debug("line: %d line_start: %d len: %d (%d)", i, line_start, MIN(255, (line_len - 1)), line_len);
 		sci_get_text_range(doc_list[idx].sci, line_start, MIN((line_start + 255), (line_start + line_len - 1)), sel);
 		sel[MIN(255, (line_len - 1))] = '\0';
 
@@ -1476,8 +1437,7 @@ void sci_cb_do_comment_toggle(gint idx)
 					case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
 					case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
 					case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
-					case SCLEX_CPP:
-					case SCLEX_PASCAL:
+					case SCLEX_D: style_comment = SCE_D_COMMENT; break;
 					default: style_comment = SCE_C_COMMENT;
 				}
 				if (sci_get_style_at(doc_list[idx].sci, line_start + x) == style_comment)
@@ -1593,7 +1553,6 @@ void sci_cb_do_comment(gint idx, gint line)
 		line_len = sci_get_line_length(doc_list[idx].sci, i);
 		x = 0;
 
-		//geany_debug("line: %d line_start: %d len: %d (%d)", i, line_start, MIN(256, (line_len - 1)), line_len);
 		sci_get_text_range(doc_list[idx].sci, line_start, MIN((line_start + 256), (line_start + line_len - 1)), sel);
 		sel[MIN(256, (line_len - 1))] = '\0';
 
@@ -1633,8 +1592,7 @@ void sci_cb_do_comment(gint idx, gint line)
 					case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
 					case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
 					case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
-					case SCLEX_CPP:
-					case SCLEX_PASCAL:
+					case SCLEX_D: style_comment = SCE_D_COMMENT; break;
 					default: style_comment = SCE_C_COMMENT;
 				}
 				if (sci_get_style_at(doc_list[idx].sci, line_start + x) == style_comment) continue;
@@ -1780,6 +1738,135 @@ static void auto_multiline(ScintillaObject *sci, gint pos)
 }
 
 
+/* Checks whether the given style is a comment or string for the given lexer.
+ * It doesn't handle LEX_HTML, this should be done by the caller.
+ * Returns true if the style is a comment, FALSE otherwise.
+ */
+static gboolean is_comment(gint lexer, gint style)
+{
+	gboolean result = FALSE;
+
+	switch (lexer)
+	{
+		case SCLEX_CPP:
+		case SCLEX_PASCAL:
+		{
+			if (style == SCE_C_COMMENT ||
+				style == SCE_C_COMMENTLINE ||
+				style == SCE_C_COMMENTDOC ||
+				style == SCE_D_COMMENTLINEDOC ||
+				style == SCE_C_CHARACTER ||
+				style == SCE_C_PREPROCESSOR ||
+				style == SCE_C_STRING)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_D:
+		{
+			if (style == SCE_D_COMMENT ||
+				style == SCE_D_COMMENTLINE ||
+				style == SCE_D_COMMENTDOC ||
+				style == SCE_D_COMMENTLINEDOC ||
+				style == SCE_D_COMMENTNESTED ||
+				style == SCE_D_CHARACTER ||
+				style == SCE_D_STRING)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_PYTHON:
+		{
+			if (style == SCE_P_COMMENTLINE ||
+				style == SCE_P_COMMENTBLOCK ||
+				style == SCE_P_STRING)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_F77:
+		{
+			if (style == SCE_F_COMMENT ||
+				style == SCE_F_STRING1 ||
+				style == SCE_F_STRING2)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_PERL:
+		{
+			if (style == SCE_PL_COMMENTLINE ||
+				style == SCE_PL_STRING)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_PROPERTIES:
+		{
+			if (style == SCE_PROPS_COMMENT)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_LATEX:
+		{
+			if (style == SCE_L_COMMENT)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_MAKEFILE:
+		{
+			if (style == SCE_MAKE_COMMENT)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_RUBY:
+		{
+			if (style == SCE_RB_COMMENTLINE ||
+				style == SCE_RB_STRING)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_BASH:
+		{
+			if (style == SCE_SH_COMMENTLINE ||
+				style == SCE_SH_STRING)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_SQL:
+		{
+			if (style == SCE_SQL_COMMENT ||
+				style == SCE_SQL_COMMENTLINE ||
+				style == SCE_SQL_COMMENTDOC ||
+				style == SCE_SQL_STRING)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_TCL:
+		{
+			if (style == SCE_TCL_COMMENT ||
+				style == SCE_TCL_COMMENTLINE ||
+				style == SCE_TCL_IN_QUOTE)
+				result = TRUE;
+			break;
+		}
+		case SCLEX_HTML:
+		{
+			if (style == SCE_HPHP_SIMPLESTRING ||
+				style == SCE_HPHP_HSTRING ||
+				style == SCE_HPHP_COMMENTLINE ||
+				style == SCE_HPHP_COMMENT ||
+				style == SCE_H_DOUBLESTRING ||
+				style == SCE_H_SINGLESTRING ||
+				style == SCE_H_CDATA ||
+				style == SCE_H_COMMENT ||
+				style == SCE_H_SGML_DOUBLESTRING ||
+				style == SCE_H_SGML_SIMPLESTRING ||
+				style == SCE_H_SGML_COMMENT)
+				result = TRUE;
+			break;
+		}
+	}
+
+	return result;
+}
+
+
 gboolean sci_cb_lexer_is_c_like(gint lexer)
 {
 	switch (lexer)
@@ -1792,5 +1879,4 @@ gboolean sci_cb_lexer_is_c_like(gint lexer)
 		return FALSE;
 	}
 }
-
 
