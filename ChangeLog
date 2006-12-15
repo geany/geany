@@ -5,6 +5,8 @@
    Moved html_entities array to symbols.c.
    Fixed some checks for the new D lexer and improved detection of
    comments when auto completing or showing calltips.
+ * src/search.c: Bring the Find, Replace and FIF dialog back to top if
+                 they are already shown but lost focus.
 
 
 2006-12-15  Nick Treleaven  <nick.treleaven@btinternet.com>

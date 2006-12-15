@@ -338,10 +338,14 @@ void search_show_find_dialog()
 	}
 	else
 	{
-		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(
+		// only set selection if the dialog is not already visible
+		if (! GTK_WIDGET_VISIBLE(widgets.find_dialog) && sel)
+			gtk_entry_set_text(GTK_ENTRY(GTK_BIN(
 							lookup_widget(widgets.find_dialog, "entry"))->child), sel);
 		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(widgets.find_dialog, "entry"))->child));
 		gtk_widget_show(widgets.find_dialog);
+		// bring the dialog back in the foreground in case it is already open but the focus is away
+		gtk_window_present(GTK_WINDOW(widgets.find_dialog));
 	}
 	g_free(sel);
 }
@@ -474,10 +478,14 @@ void search_show_replace_dialog()
 	}
 	else
 	{
-		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(
+		// only set selection if the dialog is not already visible
+		if (! GTK_WIDGET_VISIBLE(widgets.replace_dialog) && sel)
+			gtk_entry_set_text(GTK_ENTRY(GTK_BIN(
 							lookup_widget(widgets.replace_dialog, "entry_find"))->child), sel);
 		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(widgets.replace_dialog, "entry_find"))->child));
 		gtk_widget_show(widgets.replace_dialog);
+		// bring the dialog back in the foreground in case it is already open but the focus is away
+		gtk_window_present(GTK_WINDOW(widgets.replace_dialog));
 	}
 	g_free(sel);
 }
@@ -620,7 +628,9 @@ void search_show_find_in_files_dialog()
 	sel = get_default_text(idx);
 
 	entry = GTK_BIN(combo)->child;
-	if (sel) gtk_entry_set_text(GTK_ENTRY(entry), sel);
+	// only set selection if the dialog is not already visible
+	if (! GTK_WIDGET_VISIBLE(widgets.find_in_files_dialog) && sel)
+		gtk_entry_set_text(GTK_ENTRY(entry), sel);
 	g_free(sel);
 
 	entry = GTK_BIN(dir_combo)->child;
@@ -638,6 +648,8 @@ void search_show_find_in_files_dialog()
 		gtk_widget_grab_focus(combo);
 
 	gtk_widget_show(widgets.find_in_files_dialog);
+	// bring the dialog back in the foreground in case it is already open but the focus is away
+	gtk_window_present(GTK_WINDOW(widgets.find_in_files_dialog));
 }
 
 
