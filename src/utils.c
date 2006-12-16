@@ -329,6 +329,7 @@ gboolean utils_check_disk_status(gint idx)
 	struct stat st;
 	time_t t;
 	gchar *locale_filename;
+	gboolean ret = FALSE;
 
 	if (idx == -1 || doc_list[idx].file_name == NULL) return FALSE;
 
@@ -337,15 +338,15 @@ gboolean utils_check_disk_status(gint idx)
 	if (doc_list[idx].last_check > (t - GEANY_CHECK_FILE_DELAY)) return FALSE;
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-	if (stat(locale_filename, &st) != 0) return FALSE;
-
-	if (doc_list[idx].mtime > t || st.st_mtime > t)
+	if (stat(locale_filename, &st) != 0)
+	{
+		// TODO: warn user file on disk is missing
+	}
+	else if (doc_list[idx].mtime > t || st.st_mtime > t)
 	{
 		geany_debug("Strange: Something is wrong with the time stamps.");
-		return FALSE;
 	}
-
-	if (doc_list[idx].mtime < st.st_mtime)
+	else if (doc_list[idx].mtime < st.st_mtime)
 	{
 		gchar *basename = g_path_get_basename(doc_list[idx].file_name);
 
@@ -361,9 +362,10 @@ gboolean utils_check_disk_status(gint idx)
 			doc_list[idx].mtime = st.st_mtime;
 
 		g_free(basename);
-		return TRUE; //file has changed
+		ret = TRUE; // file has changed
 	}
-	return FALSE;
+	g_free(locale_filename);
+	return ret;
 }
 
 

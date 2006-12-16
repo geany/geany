@@ -1,3 +1,9 @@
+2006-12-16  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c:
+   Fix memory leak in utils_check_disk_status().
+
+
 2006-12-15  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/main.c, src/sci_cb.c, src/sci_cb.h, src/symbols.c,
