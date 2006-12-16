@@ -25,6 +25,9 @@
 #ifndef GEANY_SYMBOLS_H
 #define GEANY_SYMBOLS_H 1
 
+extern const guint TM_GLOBAL_TYPE_MASK;
+
+
 void symbols_global_tags_loaded(gint file_type_idx);
 
 GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types);

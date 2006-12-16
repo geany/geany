@@ -32,6 +32,11 @@
 #include "document.h"
 
 
+const guint TM_GLOBAL_TYPE_MASK =
+	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
+	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t;
+
+
 enum	// Geany tag files
 {
 	GTF_C,
@@ -133,8 +138,9 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types)
 			{
 				if (TM_TAG(typedefs->pdata[j])->name)
 				{
+					if (j != 0)
+						g_string_append_c(s, ' ');
 					g_string_append(s, TM_TAG(typedefs->pdata[j])->name);
-					g_string_append_c(s, ' ');
 				}
 			}
 		}

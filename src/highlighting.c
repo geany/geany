@@ -355,8 +355,7 @@ static GString *get_global_typenames()
 
 		if (tags_array)
 		{
-			s = symbols_find_tags_as_string(tags_array,
-				tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
+			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK);
 		}
 	}
 	return s;

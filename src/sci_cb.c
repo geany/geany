@@ -1754,7 +1754,7 @@ static gboolean is_comment(gint lexer, gint style)
 			if (style == SCE_C_COMMENT ||
 				style == SCE_C_COMMENTLINE ||
 				style == SCE_C_COMMENTDOC ||
-				style == SCE_D_COMMENTLINEDOC ||
+				style == SCE_C_COMMENTLINEDOC ||
 				style == SCE_C_CHARACTER ||
 				style == SCE_C_PREPROCESSOR ||
 				style == SCE_C_STRING)
@@ -1867,6 +1867,7 @@ static gboolean is_comment(gint lexer, gint style)
 }
 
 
+#if 0
 gboolean sci_cb_lexer_is_c_like(gint lexer)
 {
 	switch (lexer)
@@ -1879,4 +1880,19 @@ gboolean sci_cb_lexer_is_c_like(gint lexer)
 		return FALSE;
 	}
 }
+#endif
 
+
+// Returns: -1 if lexer doesn't support type keywords
+gint sci_cb_lexer_get_type_keyword_idx(gint lexer)
+{
+	switch (lexer)
+	{
+		case SCLEX_CPP:
+		case SCLEX_D:
+		return 3;
+
+		default:
+		return -1;
+	}
+}

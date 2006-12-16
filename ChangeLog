@@ -2,6 +2,11 @@
 
  * src/utils.c:
    Fix memory leak in utils_check_disk_status().
+ * src/highlighting.c, src/sci_cb.c, src/sci_cb.h, src/document.c,
+   src/symbols.c, src/symbols.h:
+   Colourise C enum, union and D/Java interface typenames.
+   Add sci_cb_lexer_get_type_keyword_idx() for use when finding if a lexer
+   supports typename colouring.
 
 
 2006-12-15  Enrico Tröger  <enrico.troeger@uvena.de>

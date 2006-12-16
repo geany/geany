@@ -20,7 +20,6 @@
  * $Id$
  */
 
-#include "SciLexer.h"
 #include "geany.h"
 
 #ifdef TIME_WITH_SYS_TIME
@@ -1295,8 +1294,7 @@ static GString *get_project_typenames()
 
 		if (tags_array)
 		{
-			s = symbols_find_tags_as_string(tags_array,
-				tm_tag_typedef_t | tm_tag_struct_t | tm_tag_class_t);
+			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK);
 		}
 	}
 	return s;
@@ -1308,28 +1306,31 @@ static gboolean update_type_keywords(ScintillaObject *sci)
 {
 	gboolean ret = FALSE;
 
-	// For C/C++/Java files, get list of typedefs for colourising
-	if (sci_cb_lexer_is_c_like(sci_get_lexer(sci)))
+	if (sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(sci)) != -1)
 	{
+		guint n;
 		GString *s = get_project_typenames();
 
-		if (s != NULL)
+		if (s == NULL) return FALSE;
+
+		for (n = 0; n < doc_array->len; n++)
 		{
-			guint n;
+			ScintillaObject *wid = doc_list[n].sci;
 
-			for (n = 0; n < doc_array->len; n++)
+			if (wid)
 			{
-				ScintillaObject *wid = doc_list[n].sci;
+				gint keyword_idx = sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(wid));
 
-				if (wid && sci_cb_lexer_is_c_like(sci_get_lexer(wid)))
+				if (keyword_idx > 0)
 				{
-					sci_set_keywords(wid, 3, s->str);
+					sci_set_keywords(wid, keyword_idx, s->str);
 					sci_colourise(wid, 0, -1);
+					if (sci == wid)
+						ret = TRUE;
 				}
 			}
-			g_string_free(s, TRUE);
-			ret = TRUE;
 		}
+		g_string_free(s, TRUE);
 	}
 	return ret;
 }
