@@ -4,6 +4,8 @@
    Fix using the current word on first use of the Find in Files dialog.
  * src/document.c:
    Don't log 'replaced 0 occurrences' status messages.
+ * src/search.c:
+   Remove unneeded 'missing response' debug messages.
 
 
 2006-12-16  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -799,8 +799,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			// TODO
 			break;
 
-			default:
-			geany_debug("Missing response in %s.", __func__);
+			// Note: we can get GTK_RESPONSE_DELETE_EVENT responses when ESC is pressed
 		}
 		if (check_close)
 			gtk_widget_hide(widgets.find_dialog);
@@ -927,8 +926,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			if (close_window) gtk_widget_hide(widgets.replace_dialog);
 			break;
 		}
-		default:
-		geany_debug("Missing response in %s.", __func__);
+		// Note: we can get GTK_RESPONSE_DELETE_EVENT responses when ESC is pressed
 	}
 	g_free(find);
 	g_free(replace);
