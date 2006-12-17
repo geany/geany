@@ -6,9 +6,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.8\n"
+"Project-Id-Version: geany 0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-13 20:08+0100\n"
+"POT-Creation-Date: 2006-12-17 13:26+0100\n"
 "PO-Revision-Date: 2006-12-13 23:15+0100\n"
 "Last-Translator: kilo <kg_kilo@freemail.hu>\n"
 "Language-Team: Hungarian <translation-team-hu@lists.sourceforge.net>\n"
@@ -19,43 +19,43 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: src/main.c:86
+#: src/main.c:87
 msgid "use an alternate configuration directory"
 msgstr "másik konfigurációs könyvtár használata"
 
-#: src/main.c:87
+#: src/main.c:88
 msgid "runs in debug mode (means being verbose)"
 msgstr "hibakereső üzemmódban fut (bőbeszédű)"
 
-#: src/main.c:90
+#: src/main.c:91
 msgid "don't open files in a running instance, force opening a new instance"
 msgstr "ne nyisson meg fájlokat egy már futó példányban, új példányt indítson"
 
-#: src/main.c:92
+#: src/main.c:93
 msgid "set initial line number for the first opened file"
 msgstr "állítsa a kezdő sorszámot az első megnyitott fájlhoz"
 
-#: src/main.c:93
+#: src/main.c:94
 msgid "don't show message window at startup"
 msgstr "induláskor ne mutasson üzenetablakot"
 
-#: src/main.c:94
+#: src/main.c:95
 msgid "don't load auto completion data (see documentation)"
 msgstr "ne töltse be az automatikus kiegészítés adatokat (ld. dokumentáció)"
 
-#: src/main.c:95
+#: src/main.c:96
 msgid "don't load the previous session's files"
 msgstr "ne töltse be az előző munkamenet fájljait"
 
-#: src/main.c:97
+#: src/main.c:98
 msgid "don't load terminal support"
 msgstr "ne töltse be a terminál támogatást"
 
-#: src/main.c:98
+#: src/main.c:99
 msgid "filename of libvte.so"
 msgstr "libvte.so fájlneve"
 
-#: src/main.c:100
+#: src/main.c:101
 msgid "show version and exit"
 msgstr "verziószám megjelenítése és kilépés"
 
@@ -120,7 +120,7 @@ msgstr "_Mindet menti"
 msgid "Saves all open files"
 msgstr "Elment minden megnyitott fájlt"
 
-#: src/interface.c:315 src/callbacks.c:457 src/utils.c:352
+#: src/interface.c:315 src/callbacks.c:457 src/utils.c:353
 msgid "_Reload"
 msgstr "Ú_jraolvasás"
 
@@ -260,7 +260,7 @@ msgstr "Elő_ző találat"
 msgid "Find in F_iles"
 msgstr "Keresés _fájlokban"
 
-#: src/interface.c:589 src/search.c:381
+#: src/interface.c:589 src/search.c:385
 msgid "_Replace"
 msgstr "_Csere"
 
@@ -294,7 +294,8 @@ msgstr "Üzenet _ablak megjelenítése"
 
 #: src/interface.c:647
 msgid "Toggle the window with status and compiler messages on and off"
-msgstr "Ki/bekapcsolja az állapotokat és fordítóüzeneteket megjelenítő ablakot "
+msgstr ""
+"Ki/bekapcsolja az állapotokat és fordítóüzeneteket megjelenítő ablakot "
 
 #: src/interface.c:650
 msgid "Show _Toolbar"
@@ -356,7 +357,8 @@ msgstr "Csak _olvasható"
 
 #: src/interface.c:711
 msgid "Treat this file as read-only. No changes can be made."
-msgstr "A fájlt csak olvashatóként kezeli. Nem lehet benne változtatásokat tenni."
+msgstr ""
+"A fájlt csak olvashatóként kezeli. Nem lehet benne változtatásokat tenni."
 
 #: src/interface.c:713
 msgid "_Write Unicode BOM"
@@ -432,7 +434,8 @@ msgid "_Colour Chooser"
 msgstr "_Színválasztó"
 
 #: src/interface.c:816 src/interface.c:941
-msgid "Open a color chooser dialog, to interactively pick colors from a palette."
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette."
 msgstr ""
 "Megnyit egy színválasztó dialógus ablakot, hogy interaktív módon lehessek "
 "egy palettáról színt választani."
@@ -691,7 +694,9 @@ msgstr "Mindig újbóli keresés a fájl elejétől és a Keresés ablak elrejt�
 msgid ""
 "Always wrap search around the document and hide the Find dialog after "
 "clicking Find Next/Previous"
-msgstr "Mindig újból keres a dokumentum elejétől, valamint elrejti a Keresés dialógusablakot a Következő/Előző keresés gomb lenyomása után"
+msgstr ""
+"Mindig újból keres a dokumentum elejétől, valamint elrejti a Keresés "
+"dialógusablakot a Következő/Előző keresés gomb lenyomása után"
 
 #: src/interface.c:2458
 msgid "<b>Behaviour</b>"
@@ -875,7 +880,8 @@ msgstr "Tabulátor szélessége:"
 
 #: src/interface.c:2865
 msgid "Sets the default encoding for newly created files."
-msgstr "Beállítja az alapértelmezett kódolást újonnan létrehozott fájlok esetén."
+msgstr ""
+"Beállítja az alapértelmezett kódolást újonnan létrehozott fájlok esetén."
 
 #: src/interface.c:2877
 msgid "The width in chars, which one tab character will take"
@@ -918,7 +924,8 @@ msgid "Placement of new file tabs:"
 msgstr "Új fájl fülek elhelyezkedése:"
 
 #: src/interface.c:2962
-msgid "Specifies the number of files which are stored in the Recent files list."
+msgid ""
+"Specifies the number of files which are stored in the Recent files list."
 msgstr "Megadja, hogy hány fájl jelenjen meg a Legutóbbi fájlok listáján."
 
 #: src/interface.c:2975
@@ -1124,7 +1131,9 @@ msgstr "Szerkesztő"
 
 #: src/interface.c:3247
 msgid "Enter tool paths below. Tools you do not need can be left blank."
-msgstr "Adja meg az eszközök elérési útját. Amelyik eszközre nincs szüksége, ott üresen lehet hagyni."
+msgstr ""
+"Adja meg az eszközök elérési útját. Amelyik eszközre nincs szüksége, ott "
+"üresen lehet hagyni."
 
 #: src/interface.c:3259
 msgid "Make:"
@@ -1161,7 +1170,8 @@ msgstr "Nyomtatás parancs:"
 #: src/interface.c:3343
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)."
-msgstr "Elérési út a fájl nyomtatási parancshoz (használjon %f-et a fájlnév helyén)."
+msgstr ""
+"Elérési út a fájl nyomtatási parancshoz (használjon %f-et a fájlnév helyén)."
 
 #: src/interface.c:3355
 msgid "Grep:"
@@ -1179,7 +1189,9 @@ msgstr "Eszközök"
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
-msgstr "Adja meg a sablonokban használni kívánt információkat. A részletekhez tekintse meg a dokumentációt."
+msgstr ""
+"Adja meg a sablonokban használni kívánt információkat. A részletekhez "
+"tekintse meg a dokumentációt."
 
 #: src/interface.c:3419
 msgid "email address of the developer"
@@ -1225,7 +1237,9 @@ msgstr "A fejlesztő neve"
 msgid ""
 "<i>Notice: For all changes you make here to take effect, you need to restart "
 "Geany.</i>"
-msgstr "<i>Figyelem: minden itt végzett változtatáséletbe lépéséhez újra kell indítani a Geany-t.</i>"
+msgstr ""
+"<i>Figyelem: minden itt végzett változtatáséletbe lépéséhez újra kell "
+"indítani a Geany-t.</i>"
 
 #: src/interface.c:3491
 msgid "<b>Template data</b>"
@@ -1240,7 +1254,11 @@ msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
 "action to edit the string representation of the shortcut directly."
-msgstr "Itt megváltoztathatja az egyes eseményekhez rendelt gyorsbillentyűket. Válasszon ki egy eseményt, majd nyomja meg a Változtat gombot az új gyorsbillentyű megadásához. Duplakattintással közvetlentül az eseményhez rendelt gyorsbillentyű stringet is szerkesztheti."
+msgstr ""
+"Itt megváltoztathatja az egyes eseményekhez rendelt gyorsbillentyűket. "
+"Válasszon ki egy eseményt, majd nyomja meg a Változtat gombot az új "
+"gyorsbillentyű megadásához. Duplakattintással közvetlentül az eseményhez "
+"rendelt gyorsbillentyű stringet is szerkesztheti."
 
 #: src/interface.c:3537
 msgid "Change"
@@ -1283,7 +1301,8 @@ msgid "Definition of \"%s()\" not found"
 msgstr "\"%s()\" definíciója nem található"
 
 #: src/callbacks.c:1421 src/callbacks.c:1466
-msgid "Please set the filetype for the current file before using this function."
+msgid ""
+"Please set the filetype for the current file before using this function."
 msgstr "Mielőtt ezt a funkciót használná, adja meg a jelenlegi fájl típusát."
 
 #: src/callbacks.c:1578 src/ui_utils.c:557
@@ -1330,7 +1349,8 @@ msgstr ""
 
 #: src/callbacks.c:1621
 msgid "Date format string could not be converted (possibly too long)."
-msgstr "A dátum formátum stringet nem lehetett átalakítani (feltehetően túl hosszú)."
+msgstr ""
+"A dátum formátum stringet nem lehetett átalakítani (feltehetően túl hosszú)."
 
 #: src/callbacks.c:2004
 msgid "No more message items."
@@ -1527,7 +1547,7 @@ msgstr ""
 "esetén)."
 
 #: src/dialogs.c:905 src/dialogs.c:906 src/dialogs.c:907 src/dialogs.c:913
-#: src/dialogs.c:914 src/dialogs.c:915 src/utils.c:499 src/utils.c:553
+#: src/dialogs.c:914 src/dialogs.c:915 src/utils.c:501 src/utils.c:555
 #: src/ui_utils.c:122 src/ui_utils.c:124
 msgid "unknown"
 msgstr "ismeretlen"
@@ -1616,12 +1636,12 @@ msgstr "Gyorsbillentyűk"
 msgid "The following keyboard shortcuts are defined:"
 msgstr "A következő gyorsbillentyűk vannak definiálva:"
 
-#: src/document.c:340
+#: src/document.c:339
 #, c-format
 msgid "File %s closed."
 msgstr "%s fájl bezárva."
 
-#: src/document.c:421
+#: src/document.c:420
 msgid "New file opened."
 msgstr "Új fájl megnyitva."
 
@@ -1629,7 +1649,7 @@ msgstr "Új fájl megnyitva."
 msgid "Invalid filename"
 msgstr "Érvénytelen fájlnév"
 
-#: src/document.c:594 src/document.c:797
+#: src/document.c:594 src/document.c:796
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Nem lehetett megnyitni a(z) %s fájlt (%s)"
@@ -1659,25 +1679,25 @@ msgstr ""
 "A(z) \"%s\" fájl nem tűnik szöveges fájlnak, vagy a fájl kódolása nem "
 "támogatott."
 
-#: src/document.c:723
+#: src/document.c:722
 #, c-format
 msgid "File %s reloaded."
 msgstr "%s fájl újraolvasva."
 
-#: src/document.c:725
+#: src/document.c:724
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "%s fájl megnyitva (%d%s)."
 
-#: src/document.c:727
+#: src/document.c:726
 msgid ", read-only"
 msgstr ", csak olvasható"
 
-#: src/document.c:825 src/document.c:906
+#: src/document.c:824 src/document.c:905
 msgid "Error saving file."
 msgstr "Hiba a fájl mentésekor."
 
-#: src/document.c:870
+#: src/document.c:869
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -1688,43 +1708,43 @@ msgstr ""
 "mentésre.\n"
 "Hibaüzenet: %s\n"
 
-#: src/document.c:894
+#: src/document.c:893
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Hiba a fájl mentésekor (%s)."
 
-#: src/document.c:937
+#: src/document.c:936
 #, c-format
 msgid "File %s saved."
 msgstr "%s fájl elmentve."
 
-#: src/document.c:985 src/document.c:1037 src/document.c:1045
+#: src/document.c:984 src/document.c:1036 src/document.c:1044
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" nem található."
 
-#: src/document.c:1045
+#: src/document.c:1044
 msgid "Wrap search and find again?"
 msgstr "Újbóli keresés a fájl elejétől?"
 
-#: src/document.c:1166 src/document.c:1173
+#: src/document.c:1165 src/document.c:1172
 #, c-format
 msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr "%s: %d előfordulás cserélve, \"%s\" helyett \"%s\"."
 
-#: src/document.c:1359
+#: src/document.c:1377
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: src/document.c:1360
+#: src/document.c:1378
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: src/document.c:1362
+#: src/document.c:1380
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: src/document.c:1458
+#: src/document.c:1476
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -1735,21 +1755,21 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/document.c:1467
+#: src/document.c:1485
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %d)."
 msgstr "\"%s\" nyomtatása sikertelen (visszatérési érték: %d)."
 
-#: src/document.c:1472
+#: src/document.c:1490
 #, c-format
 msgid "File %s printed."
 msgstr "%s fájl kinyomtatva."
 
-#: src/utils.c:353
+#: src/utils.c:354
 msgid "Do you want to reload it?"
 msgstr "Újra akarja olvasni?"
 
-#: src/utils.c:354
+#: src/utils.c:355
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -1986,9 +2006,10 @@ msgstr ""
 #: src/build.c:203 src/build.c:604
 #, c-format
 msgid "Failed to execute %s (start-script could not be created)"
-msgstr "%s végrehajtása nem sikerült (az indító szkriptet nem lehetett létrehozni)"
+msgstr ""
+"%s végrehajtása nem sikerült (az indító szkriptet nem lehetett létrehozni)"
 
-#: src/build.c:231 src/build.c:447 src/build.c:649 src/search.c:1058
+#: src/build.c:231 src/build.c:447 src/build.c:649 src/search.c:1070
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Folyamat sikertelen (%s)"
@@ -2054,7 +2075,8 @@ msgstr "Egyedi cél készí_tése"
 
 #: src/build.c:889 src/build.c:1011
 msgid "Builds the current file with the make tool and the specified target"
-msgstr "Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
+msgstr ""
+"Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
 
 #. build the code with make object
 #: src/build.c:896
@@ -2124,7 +2146,8 @@ msgid "Make Custom Target"
 msgstr "Egyedi cél készítése"
 
 #: src/build.c:1341
-msgid "Enter custom options here, all entered text is passed to the make command."
+msgid ""
+"Enter custom options here, all entered text is passed to the make command."
 msgstr ""
 "Adja meg itt az egyedi opciókat, minden bevitt szöveg átadásra kerül a make "
 "parancs számára."
@@ -2167,7 +2190,8 @@ msgstr ""
 
 #: src/prefs.c:917
 #, c-format
-msgid "The combination '%s' is already used for \"%s\". Please choose another one."
+msgid ""
+"The combination '%s' is already used for \"%s\". Please choose another one."
 msgstr ""
 "A '%s' kombináció már használatban van a \"%s\" parancsnál. Válasszon "
 "másikat!"
@@ -2553,8 +2577,10 @@ msgid "Terminal emulation:"
 msgstr "Terminál emuláció:"
 
 #: src/vte.c:580
-msgid "Controls how the terminal emulator should behave. xterm is a good start."
-msgstr "A terminál emulátor működését szabályozza. Kezdetnek az xterm jó példa."
+msgid ""
+"Controls how the terminal emulator should behave. xterm is a good start."
+msgstr ""
+"A terminál emulátor működését szabályozza. Kezdetnek az xterm jó példa."
 
 #: src/vte.c:582
 msgid "Shell:"
@@ -2616,7 +2642,9 @@ msgstr "Programok futtatása a VTE-ben"
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped."
-msgstr "A programokat a VTE-ben futtatja, nem egy külön megnyitott terminál emulátor ablakban. Figyelem: a VTE-n belül futó programokat nem lehet félbeszakítani."
+msgstr ""
+"A programokat a VTE-ben futtatja, nem egy külön megnyitott terminál emulátor "
+"ablakban. Figyelem: a VTE-n belül futó programokat nem lehet félbeszakítani."
 
 #: src/keybindings.c:108
 msgid "New"
@@ -2670,11 +2698,11 @@ msgstr "Következő"
 msgid "Find Previous"
 msgstr "Előző"
 
-#: src/keybindings.c:138 src/search.c:372
+#: src/keybindings.c:138 src/search.c:376
 msgid "Replace"
 msgstr "Csere"
 
-#: src/keybindings.c:140 src/search.c:506
+#: src/keybindings.c:140 src/search.c:514
 msgid "Find in files"
 msgstr "Keresés fájlokban"
 
@@ -2862,11 +2890,11 @@ msgstr ""
 "Helyettesítse a \\\\, \\t, \\n, \\r és \\uXXXX (Unicode karakterek) jeleket "
 "a megfelelő vezérlőkarakterekkel."
 
-#: src/search.c:189 src/search.c:579
+#: src/search.c:189 src/search.c:587
 msgid "_Case sensitive"
 msgstr "_Kis/nagybetű számít"
 
-#: src/search.c:194 src/search.c:585
+#: src/search.c:194 src/search.c:593
 msgid "Match only a _whole word"
 msgstr "Csak teljes s_zavak"
 
@@ -2886,7 +2914,7 @@ msgstr "Elő_ző"
 msgid "_Next"
 msgstr "Kö_vetkező"
 
-#: src/search.c:274 src/search.c:388 src/search.c:536
+#: src/search.c:274 src/search.c:392 src/search.c:544
 msgid "Search for:"
 msgstr "Keresni:"
 
@@ -2899,116 +2927,116 @@ msgstr "Minde keresi"
 msgid "_Mark"
 msgstr "_Jelöl"
 
-#: src/search.c:310 src/search.c:446
+#: src/search.c:310 src/search.c:450
 msgid "In Sessi_on"
 msgstr "M_unkamenetben"
 
-#: src/search.c:315 src/search.c:451
+#: src/search.c:315 src/search.c:455
 msgid "_In Document"
 msgstr "_Dokumentumban"
 
 #. close window checkbox
-#: src/search.c:321 src/search.c:457
+#: src/search.c:321 src/search.c:461
 msgid "Close _dialog"
 msgstr "Ablak _bezárása"
 
-#: src/search.c:326 src/search.c:462
+#: src/search.c:326 src/search.c:466
 msgid "Disable this option to keep the dialog open."
 msgstr "Kapcsolja ki ezt az opciót, hogy a dialógusablak ne záruljon be."
 
-#: src/search.c:384
+#: src/search.c:388
 msgid "Re_place & Find"
 msgstr "Cse_re & Keresés"
 
-#: src/search.c:391
+#: src/search.c:395
 msgid "Replace with:"
 msgstr "Csere erre:"
 
 #. Now add the multiple replace options
-#: src/search.c:436
+#: src/search.c:440
 msgid "Replace All"
 msgstr "Mindet cseréli"
 
-#: src/search.c:439
+#: src/search.c:443
 msgid "In Se_lection"
 msgstr "A kije_lölésben"
 
-#: src/search.c:441
+#: src/search.c:445
 msgid "Replace all matches found in the currently selected text"
 msgstr "Minden előfordulást cseréljen le a jelenleg kijelölt szövegben"
 
-#: src/search.c:515
+#: src/search.c:523
 msgid "Directory:"
 msgstr "Könyvtár:"
 
-#: src/search.c:555
+#: src/search.c:563
 msgid "_Fixed strings"
 msgstr "_Fix stringek"
 
-#: src/search.c:564
+#: src/search.c:572
 msgid "_Grep regular expressions"
 msgstr "_Grep reguláris kifejezések"
 
-#: src/search.c:568 src/search.c:575
+#: src/search.c:576 src/search.c:583
 msgid "See grep's manual page for more information."
 msgstr "További információkért ld. a grep kézikönyvet."
 
-#: src/search.c:573
+#: src/search.c:581
 msgid "_Extended regular expressions"
 msgstr "_Kibővített reguláris kifejezések"
 
-#: src/search.c:590
+#: src/search.c:598
 msgid "_Invert search results"
 msgstr "Ke_resési eredmények átfordítása"
 
-#: src/search.c:595
+#: src/search.c:603
 msgid "Invert the sense of matching, to select non-matching lines."
 msgstr ""
 "Az egyezőség feltételének megfordítása, hogy a nem egyező sorok kerüljenek "
 "kiválasztásra."
 
-#: src/search.c:646
+#: src/search.c:658
 msgid "Select folder"
 msgstr "Könyvtár kiválasztása"
 
-#: src/search.c:905
+#: src/search.c:917
 #, c-format
 msgid "Replaced text in %u files."
 msgstr "Szöveg cserélve %u fájlban."
 
-#: src/search.c:952
+#: src/search.c:964
 msgid "Invalid directory for find in files."
 msgstr "Érvénytelen könyvtár a fájlokban keresésnél."
 
-#: src/search.c:982
+#: src/search.c:994
 msgid "No text to find."
 msgstr "Nincs keresendő szöveg."
 
-#: src/search.c:1010
+#: src/search.c:1022
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Nem sikerült elindítani a(z) '%s' grep eszközt; ellenőrizze az elérési utat "
 "a Beállítások között."
 
-#: src/search.c:1125
+#: src/search.c:1137
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Nem sikerült megnyitni a könyvtárat (%s)"
 
-#: src/search.c:1170
+#: src/search.c:1182
 msgid "Search failed."
 msgstr "A keresés sikertelen."
 
-#: src/search.c:1176
+#: src/search.c:1188
 msgid "Search completed."
 msgstr "Keresés befejeződött."
 
-#: src/search.c:1177
+#: src/search.c:1189
 msgid "No matches found."
 msgstr "Nincs találat."
 
-#: src/search.c:1252
+#: src/search.c:1264
 #, c-format
 msgid "No matches found for '%s'."
 msgstr "Nincs találat erre: '%s'."
@@ -3025,7 +3053,10 @@ msgstr "_Beszúrás"
 msgid ""
 "Choose a special character from the list below and double click on it or use "
 "the button to insert it at the current cursor position."
-msgstr "Válasszon speciális karaktert az alábbi listából, majd duplakattintással használja azt, vagy a gomb segítségével szúrja be azt a jelenlegi kurzor pozícióban."
+msgstr ""
+"Válasszon speciális karaktert az alábbi listából, majd duplakattintással "
+"használja azt, vagy a gomb segítségével szúrja be azt a jelenlegi kurzor "
+"pozícióban."
 
 #: src/tools.c:85
 msgid "Character"
@@ -3067,5 +3098,3 @@ msgstr "Elválasztás karakterek"
 #: src/tools.c:235
 msgid "Miscellaneous characters"
 msgstr "Egyéb karakterek"
-
-

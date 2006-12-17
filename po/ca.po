@@ -2,14 +2,12 @@
 # Copyright (C) 2006 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 # Toni Garcia-Navarro <topi@elpiset.net>, 2006.
-# Toni Garcia-Navarro <topi@elpiset.net>, 2006.
-#
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-14 17:29+0100\n"
+"POT-Creation-Date: 2006-12-17 13:26+0100\n"
 "PO-Revision-Date: 2006-12-14 04:50+0100\n"
 "Last-Translator: Toni Garcia-Navarro <topi@elpiset.net>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -17,45 +15,45 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main.c:86
+#: src/main.c:87
 msgid "use an alternate configuration directory"
 msgstr "utilitza un directori de configuració alternatiu"
 
-#: src/main.c:87
+#: src/main.c:88
 msgid "runs in debug mode (means being verbose)"
 msgstr "s'executa en mode de depuració (implica més informació)"
 
-#: src/main.c:90
+#: src/main.c:91
 msgid "don't open files in a running instance, force opening a new instance"
 msgstr ""
 "no obris fitxers en una instància en execució, força a obrir-los en una nova "
 "instància"
 
-#: src/main.c:92
+#: src/main.c:93
 msgid "set initial line number for the first opened file"
 msgstr "indica el número de línia inicial per al primer fitxer obert"
 
-#: src/main.c:93
+#: src/main.c:94
 msgid "don't show message window at startup"
 msgstr "no mostris la finestra de missatges a l'inici"
 
-#: src/main.c:94
+#: src/main.c:95
 msgid "don't load auto completion data (see documentation)"
 msgstr "no carreguis l'auto-completat (veieu la documentació)"
 
-#: src/main.c:95
+#: src/main.c:96
 msgid "don't load the previous session's files"
 msgstr "no carreguis els fitxers de l'última sessió"
 
-#: src/main.c:97
+#: src/main.c:98
 msgid "don't load terminal support"
 msgstr "no carreguis el suport de terminal"
 
-#: src/main.c:98
+#: src/main.c:99
 msgid "filename of libvte.so"
 msgstr "nom del fitxer libvte.so"
 
-#: src/main.c:100
+#: src/main.c:101
 msgid "show version and exit"
 msgstr "mostra la versió i surt"
 
@@ -119,7 +117,7 @@ msgstr "Desa To_t"
 msgid "Saves all open files"
 msgstr "Desar tots els fitxers oberts"
 
-#: src/interface.c:315 src/callbacks.c:457 src/utils.c:352
+#: src/interface.c:315 src/callbacks.c:457 src/utils.c:353
 msgid "_Reload"
 msgstr "A_ctualitza"
 
@@ -259,7 +257,7 @@ msgstr "Cerca l'_Anterior"
 msgid "Find in F_iles"
 msgstr "Cerca en els F_itxers"
 
-#: src/interface.c:589 src/search.c:381
+#: src/interface.c:589 src/search.c:385
 msgid "_Replace"
 msgstr "_Reemplaça"
 
@@ -1537,7 +1535,7 @@ msgstr ""
 "e. des d'un fitxer nou)."
 
 #: src/dialogs.c:905 src/dialogs.c:906 src/dialogs.c:907 src/dialogs.c:913
-#: src/dialogs.c:914 src/dialogs.c:915 src/utils.c:499 src/utils.c:553
+#: src/dialogs.c:914 src/dialogs.c:915 src/utils.c:501 src/utils.c:555
 #: src/ui_utils.c:122 src/ui_utils.c:124
 msgid "unknown"
 msgstr "desconegut"
@@ -1626,25 +1624,25 @@ msgstr "Dreceres de teclat"
 msgid "The following keyboard shortcuts are defined:"
 msgstr "Estan definides les dreceres de teclat següents:"
 
-#: src/document.c:340
+#: src/document.c:339
 #, c-format
 msgid "File %s closed."
 msgstr "Fitxer %s tancat."
 
-#: src/document.c:421
+#: src/document.c:420
 msgid "New file opened."
 msgstr "Nou fitxer obert."
 
-#: src/document.c:570
+#: src/document.c:569
 msgid "Invalid filename"
 msgstr "Nom de fitxer invàlid"
 
-#: src/document.c:595 src/document.c:797
+#: src/document.c:594 src/document.c:796
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "No s'ha pogut obrir el fitxer %s (%s)"
 
-#: src/document.c:619
+#: src/document.c:618
 #, c-format
 msgid ""
 "The file \"%s\" could not opened properly and probably was truncated. Be "
@@ -1656,12 +1654,12 @@ msgstr ""
 "dades.\n"
 "El fitxer està en mode només lectura."
 
-#: src/document.c:642
+#: src/document.c:641
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "El fitxer \"%s\" no és %s vàlid."
 
-#: src/document.c:653
+#: src/document.c:652
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -1670,25 +1668,25 @@ msgstr ""
 "El fitxer \"%s\" no sembla ser un fitxer de text o la codificació no està "
 "suportada."
 
-#: src/document.c:723
+#: src/document.c:722
 #, c-format
 msgid "File %s reloaded."
 msgstr "S'ha actualitzat el fitxer %s."
 
-#: src/document.c:725
+#: src/document.c:724
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "S'ha obert el fitxer %s (%d%s)."
 
-#: src/document.c:727
+#: src/document.c:726
 msgid ", read-only"
 msgstr ", només lectura"
 
-#: src/document.c:825 src/document.c:906
+#: src/document.c:824 src/document.c:905
 msgid "Error saving file."
 msgstr "S'ha produït un error desant el fitxer."
 
-#: src/document.c:870
+#: src/document.c:869
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -1699,43 +1697,43 @@ msgstr ""
 "s'ha desat.\n"
 "Missatge d'error: %s\n"
 
-#: src/document.c:894
+#: src/document.c:893
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "S'ha produït un error desant el fitxer (%s)."
 
-#: src/document.c:937
+#: src/document.c:936
 #, c-format
 msgid "File %s saved."
 msgstr "S'ha desat el fitxer %s."
 
-#: src/document.c:985 src/document.c:1037 src/document.c:1045
+#: src/document.c:984 src/document.c:1036 src/document.c:1044
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "No s'ha trobat la declaració \"%s()\""
 
-#: src/document.c:1045
+#: src/document.c:1044
 msgid "Wrap search and find again?"
 msgstr "Recomençar la cerca des del principi?"
 
-#: src/document.c:1166 src/document.c:1173
+#: src/document.c:1165 src/document.c:1172
 #, c-format
 msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr "%s: s'han reemplaçat %d ocurrències de \"%s\" amb \"%s\"."
 
-#: src/document.c:1361
+#: src/document.c:1377
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: src/document.c:1362
+#: src/document.c:1378
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: src/document.c:1364
+#: src/document.c:1380
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: src/document.c:1460
+#: src/document.c:1476
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -1746,21 +1744,21 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/document.c:1469
+#: src/document.c:1485
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %d)."
 msgstr "S'ha produït un error imprimint \"%s\" (codi de retorn %d)."
 
-#: src/document.c:1474
+#: src/document.c:1490
 #, c-format
 msgid "File %s printed."
 msgstr "S'ha imprès el fitxer '%s'."
 
-#: src/utils.c:353
+#: src/utils.c:354
 msgid "Do you want to reload it?"
 msgstr "Voleu actualitzar-la?"
 
-#: src/utils.c:354
+#: src/utils.c:355
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -1997,7 +1995,7 @@ msgid "Failed to execute %s (start-script could not be created)"
 msgstr ""
 "S'ha produït un error executant %s (el guió d'inici no s'ha pogut crear)"
 
-#: src/build.c:231 src/build.c:447 src/build.c:649 src/search.c:1058
+#: src/build.c:231 src/build.c:447 src/build.c:649 src/search.c:1070
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Ha fallat el procés (%s)"
@@ -2677,11 +2675,11 @@ msgstr "Cerca la Següent"
 msgid "Find Previous"
 msgstr "Cerca l'anterior"
 
-#: src/keybindings.c:138 src/search.c:372
+#: src/keybindings.c:138 src/search.c:376
 msgid "Replace"
 msgstr "Reemplaça"
 
-#: src/keybindings.c:140 src/search.c:506
+#: src/keybindings.c:140 src/search.c:514
 msgid "Find in files"
 msgstr "Cerca als fitxers"
 
@@ -2869,11 +2867,11 @@ msgstr ""
 "Reemplaça \\\\, \\t, \\n, \\r i \\uXXXX (caràcters Unicode) amb els "
 "caràcters de control corresponents."
 
-#: src/search.c:189 src/search.c:579
+#: src/search.c:189 src/search.c:587
 msgid "_Case sensitive"
 msgstr "Sensible a _majúscules"
 
-#: src/search.c:194 src/search.c:585
+#: src/search.c:194 src/search.c:593
 msgid "Match only a _whole word"
 msgstr "Cerca només paraules _completes"
 
@@ -2893,7 +2891,7 @@ msgstr "Cerca l'_anterior"
 msgid "_Next"
 msgstr "Cerca el _següent"
 
-#: src/search.c:274 src/search.c:388 src/search.c:536
+#: src/search.c:274 src/search.c:392 src/search.c:544
 msgid "Search for:"
 msgstr "Cerca:"
 
@@ -2906,114 +2904,114 @@ msgstr "Cerca Tot"
 msgid "_Mark"
 msgstr "_Marca"
 
-#: src/search.c:310 src/search.c:446
+#: src/search.c:310 src/search.c:450
 msgid "In Sessi_on"
 msgstr "A la _Sessió"
 
-#: src/search.c:315 src/search.c:451
+#: src/search.c:315 src/search.c:455
 msgid "_In Document"
 msgstr "_Al Document"
 
 #. close window checkbox
-#: src/search.c:321 src/search.c:457
+#: src/search.c:321 src/search.c:461
 msgid "Close _dialog"
 msgstr "Tanca el _diàleg"
 
-#: src/search.c:326 src/search.c:462
+#: src/search.c:326 src/search.c:466
 msgid "Disable this option to keep the dialog open."
 msgstr "Desactiva aquesta opció i mantingues obert el diàleg."
 
-#: src/search.c:384
+#: src/search.c:388
 msgid "Re_place & Find"
 msgstr "Cerca i Reemplaça"
 
-#: src/search.c:391
+#: src/search.c:395
 msgid "Replace with:"
 msgstr "Reemplaça amb:"
 
 #. Now add the multiple replace options
-#: src/search.c:436
+#: src/search.c:440
 msgid "Replace All"
 msgstr "Reemplaça-ho _Tot"
 
-#: src/search.c:439
+#: src/search.c:443
 msgid "In Se_lection"
 msgstr "A la Se_lecció"
 
-#: src/search.c:441
+#: src/search.c:445
 msgid "Replace all matches found in the currently selected text"
 msgstr "Reemplaça totes les ocurrències en el text seleccionat"
 
-#: src/search.c:515
+#: src/search.c:523
 msgid "Directory:"
 msgstr "Directori:"
 
-#: src/search.c:555
+#: src/search.c:563
 msgid "_Fixed strings"
 msgstr "Cadenes _fixes"
 
-#: src/search.c:564
+#: src/search.c:572
 msgid "_Grep regular expressions"
 msgstr "_Grep amb expressions regulars"
 
-#: src/search.c:568 src/search.c:575
+#: src/search.c:576 src/search.c:583
 msgid "See grep's manual page for more information."
 msgstr "Veieu el manual de 'grep' per a més informació."
 
-#: src/search.c:573
+#: src/search.c:581
 msgid "_Extended regular expressions"
 msgstr "_Utilitza expressions regulars esteses"
 
-#: src/search.c:590
+#: src/search.c:598
 msgid "_Invert search results"
 msgstr "_Inverteix els resultats de la cerca"
 
-#: src/search.c:595
+#: src/search.c:603
 msgid "Invert the sense of matching, to select non-matching lines."
 msgstr ""
 "Inverteix el sentit la cerca, selecciona les línies que no contenen el text."
 
-#: src/search.c:646
+#: src/search.c:658
 msgid "Select folder"
 msgstr "Seleccioneu una carpeta"
 
-#: src/search.c:905
+#: src/search.c:917
 #, c-format
 msgid "Replaced text in %u files."
 msgstr "S'ha reemplaçat el text en %u fitxers."
 
-#: src/search.c:952
+#: src/search.c:964
 msgid "Invalid directory for find in files."
 msgstr "El directori per cercar als fitxers no és vàlid."
 
-#: src/search.c:982
+#: src/search.c:994
 msgid "No text to find."
 msgstr "No ha ha text per cercar."
 
-#: src/search.c:1010
+#: src/search.c:1022
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "No s'ha pogut executar l'eina 'grep' '%s'; comproveu la ruta a Preferències."
 
-#: src/search.c:1125
+#: src/search.c:1137
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "No s'ha pogut obrir el directori (%s)"
 
-#: src/search.c:1170
+#: src/search.c:1182
 msgid "Search failed."
 msgstr "Ha fallat la cerca."
 
-#: src/search.c:1176
+#: src/search.c:1188
 msgid "Search completed."
 msgstr "S'ha finalitzat la cerca."
 
-#: src/search.c:1177
+#: src/search.c:1189
 msgid "No matches found."
 msgstr "No s'han trobat coincidències."
 
-#: src/search.c:1252
+#: src/search.c:1264
 #, c-format
 msgid "No matches found for '%s'."
 msgstr "No s'ha trobat '%s'."
