@@ -1015,6 +1015,7 @@ create_window1 (void)
   notebook3 = gtk_notebook_new ();
   gtk_widget_show (notebook3);
   gtk_paned_pack1 (GTK_PANED (hpaned1), notebook3, FALSE, TRUE);
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook3), TRUE);
 
   scrolledwindow2 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_show (scrolledwindow2);

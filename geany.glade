@@ -1695,7 +1695,7 @@
 		  <property name="show_tabs">True</property>
 		  <property name="show_border">True</property>
 		  <property name="tab_pos">GTK_POS_TOP</property>
-		  <property name="scrollable">False</property>
+		  <property name="scrollable">True</property>
 		  <property name="enable_popup">False</property>
 		  <signal name="switch_page" handler="on_tv_notebook_switch_page" last_modification_time="Sun, 20 Nov 2005 00:41:15 GMT"/>
 
