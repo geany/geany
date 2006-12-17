@@ -1373,8 +1373,8 @@ void document_set_filetype(gint idx, filetype *type)
 			tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
 			doc_list[idx].tm_file = NULL;
 		}
-		build_menu_update(idx);
 		type->style_func_ptr(doc_list[idx].sci);	// set new styles
+		build_menu_update(idx);
 		colourise = TRUE;
 	}
 

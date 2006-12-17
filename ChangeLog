@@ -8,6 +8,8 @@
    and comments, includes or a date was inserted.
    Also fixed some segfault when inserting comments, dates and includes
    at a position prior to some deleted text.
+ * src/document.c: Fixed disabled build menu items after opening the
+                   first file of a filetype.
 
 
 2006-12-17  Nick Treleaven  <nick.treleaven@btinternet.com>
