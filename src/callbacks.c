@@ -69,6 +69,11 @@ static gboolean closing_all = FALSE;
 // toggled callback should ignore the change since it is not triggered by the user
 static gboolean ignore_toolbar_toggle = FALSE;
 
+// flag to indicate that an insert callback was triggered from the file menu,
+// so we need to store the current cursor position in editor_info.click_pos.
+/// TODO rename me
+static gboolean insert_callback_from_menu = FALSE;
+
 // represents the state at switching a notebook page(in the left treeviews widget), to not emit
 // the selection-changed signal from tv.tree_openfiles
 //static gboolean switch_tv_notebook_page = FALSE;
@@ -113,6 +118,18 @@ static gboolean account_for_unsaved()
 		}
 	}
 	return TRUE;
+}
+
+
+// set editor_info.click_pos to the current cursor position if insert_callback_from_menu is TRUE
+// to prevent invalid cursor positions which can cause segfaults
+static void verify_click_pos(gint idx)
+{
+	if (insert_callback_from_menu)
+	{
+		editor_info.click_pos = sci_get_current_position(doc_list[idx].sci);
+		insert_callback_from_menu = FALSE;
+	}
 }
 
 
@@ -1489,6 +1506,8 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 		}
 	}
 
+	verify_click_pos(idx); // make sure that the click_pos is valid
+
 	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
 }
@@ -1502,6 +1521,8 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 	gchar *text;
 
 	text = templates_get_template_gpl(FILETYPE_ID(doc_list[idx].file_type));
+
+	verify_click_pos(idx); // make sure that the click_pos is valid
 
 	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
@@ -1611,7 +1632,8 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 	tm = localtime(&t);
 	if (strftime(time_str, sizeof time_str, format, tm) != 0)
 	{
-		/// FIXME inserts at wrong position if not clicked and the cursor was moved by keyboard
+		verify_click_pos(idx); // make sure that the click_pos is valid
+
 		sci_insert_text(doc_list[idx].sci, editor_info.click_pos, time_str);
 	}
 	else
@@ -1627,8 +1649,13 @@ void
 on_insert_include_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx(), pos = -1;
+	gint idx = document_get_cur_idx();
+	gint pos = -1;
 	gchar *text;
+
+	if (! DOC_IDX_VALID(idx) || user_data == NULL) return;
+
+	verify_click_pos(idx); // make sure that the click_pos is valid
 
 	if (utils_str_equal(user_data, "blank"))
 	{
@@ -1640,10 +1667,10 @@ on_insert_include_activate             (GtkMenuItem     *menuitem,
 		text = g_strconcat("#include <", user_data, ">\n", NULL);
 	}
 
-	/// FIXME inserts at wrong position if not clicked and the cursor was moved by keyboard
 	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
-	if (pos > 0) sci_goto_pos(doc_list[idx].sci, pos, FALSE);
+	if (pos >= 0)
+		sci_goto_pos(doc_list[idx].sci, pos, FALSE);
 }
 
 
@@ -2012,3 +2039,38 @@ on_menu_insert_special_chars1_activate (GtkMenuItem     *menuitem,
 	tools_show_dialog_insert_special_chars();
 }
 
+
+void
+on_menu_comments_multiline_activate    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	insert_callback_from_menu = TRUE;
+	on_comments_multiline_activate(menuitem, user_data);
+}
+
+
+void
+on_menu_comments_gpl_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	insert_callback_from_menu = TRUE;
+	on_comments_gpl_activate(menuitem, user_data);
+}
+
+
+void
+on_menu_insert_include_activate        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	insert_callback_from_menu = TRUE;
+	on_insert_include_activate(menuitem, user_data);
+}
+
+
+void
+on_menu_insert_date_activate           (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	insert_callback_from_menu = TRUE;
+	on_insert_date_activate(menuitem, user_data);
+}

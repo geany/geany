@@ -2,6 +2,12 @@
 
  * geany.glade, src/interface.c:
    Made the sidebar notebook tabs scrollable.
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/interface.c,
+   src/ui_utils.c:
+   Fixed wrong insert position when the cursor was moved by keyboard
+   and comments, includes or a date was inserted.
+   Also fixed some segfault when inserting comments, dates and includes
+   at a position prior to some deleted text.
 
 
 2006-12-17  Nick Treleaven  <nick.treleaven@btinternet.com>

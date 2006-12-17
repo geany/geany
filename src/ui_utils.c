@@ -467,10 +467,10 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 		tmp_popup = gtk_menu_item_new_with_label(includes[i]);
 		gtk_container_add(GTK_CONTAINER(edit_menu), tmp_menu);
 		gtk_container_add(GTK_CONTAINER(popup_menu), tmp_popup);
-		g_signal_connect((gpointer) tmp_menu, "activate", G_CALLBACK(on_insert_include_activate),
-																	(gpointer) includes[i]);
-		g_signal_connect((gpointer) tmp_popup, "activate", G_CALLBACK(on_insert_include_activate),
-																	 (gpointer) includes[i]);
+		g_signal_connect((gpointer) tmp_menu, "activate",
+					G_CALLBACK(on_menu_insert_include_activate), (gpointer) includes[i]);
+		g_signal_connect((gpointer) tmp_popup, "activate",
+					G_CALLBACK(on_insert_include_activate), (gpointer) includes[i]);
 		i++;
 	}
 	gtk_widget_show_all(edit_menu_item);
@@ -508,7 +508,7 @@ void ui_create_insert_menu_items()
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
-	g_signal_connect((gpointer) blank, "activate", G_CALLBACK(on_insert_include_activate),
+	g_signal_connect((gpointer) blank, "activate", G_CALLBACK(on_menu_insert_include_activate),
 																	(gpointer) "blank");
 	blank = gtk_separator_menu_item_new ();
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
@@ -538,7 +538,7 @@ static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
 	item = gtk_menu_item_new_with_label(label);
 	gtk_container_add(GTK_CONTAINER(me), item);
 	gtk_widget_show(item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate), label);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_menu_insert_date_activate), label);
 
 	item = gtk_menu_item_new_with_label(label);
 	gtk_container_add(GTK_CONTAINER(mp), item);
@@ -580,7 +580,7 @@ void ui_create_insert_date_menu_items()
 	item = gtk_menu_item_new_with_label(str);
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
 	gtk_widget_show(item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate),
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_menu_insert_date_activate),
 		str);
 	g_object_set_data_full(G_OBJECT(app->window), "insert_date_custom1", gtk_widget_ref(item),
 													(GDestroyNotify)gtk_widget_unref);
