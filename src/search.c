@@ -623,13 +623,14 @@ void search_show_find_in_files_dialog()
 				G_CALLBACK(gtk_widget_hide), NULL);
 
 		gtk_widget_show_all(widgets.find_in_files_dialog);
+		sel = get_default_text(idx);
 	}
 
-	sel = get_default_text(idx);
-
 	entry = GTK_BIN(combo)->child;
-	// only set selection if the dialog is not already visible
-	if (! GTK_WIDGET_VISIBLE(widgets.find_in_files_dialog) && sel)
+	// only set selection if the dialog is not already visible, or has just been created
+	if (! sel && ! GTK_WIDGET_VISIBLE(widgets.find_in_files_dialog))
+		sel = get_default_text(idx);
+	if (sel)
 		gtk_entry_set_text(GTK_ENTRY(entry), sel);
 	g_free(sel);
 
