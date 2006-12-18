@@ -2,6 +2,8 @@
 
  * src/callbacks.c, src/search.c, src/document.c:
    Don't log simple error messages like 'No text to find'.
+ * src/keyfile.c:
+   Open tabs left to right by default.
 
 
 2006-12-17  Enrico Tröger  <enrico.troeger@uvena.de>
