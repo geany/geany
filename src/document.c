@@ -582,7 +582,6 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
 					(GtkWidget*) doc_list[idx].sci));
-			sci_goto_pos(doc_list[idx].sci, pos, TRUE);
 			g_free(utf8_filename);
 			g_free(locale_filename);
 			return idx;
