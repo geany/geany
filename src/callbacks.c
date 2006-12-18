@@ -112,7 +112,6 @@ static gboolean account_for_unsaved()
 
 		if (doc_list[idx].changed)
 		{
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), p);
 			if (! dialogs_show_unsaved_file(idx))
 				return FALSE;
 		}
