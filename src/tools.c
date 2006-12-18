@@ -28,6 +28,7 @@
 #include "sciwrappers.h"
 #include "ui_utils.h"
 
+
 enum
 {
 	COLUMN_CHARACTER,
@@ -74,7 +75,6 @@ void tools_show_dialog_insert_special_chars()
 		gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 		special_characters_tree = GTK_TREE_VIEW(gtk_tree_view_new());
-		//g_object_set(tree, "vertical-separator", 6, NULL);
 
 		special_characters_store = gtk_tree_store_new(N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
 		gtk_tree_view_set_model(GTK_TREE_VIEW(special_characters_tree),
@@ -108,13 +108,15 @@ void tools_show_dialog_insert_special_chars()
 
 		special_characters_fill_store(special_characters_store);
 
-		gtk_tree_view_expand_all(special_characters_tree);
+		//gtk_tree_view_expand_all(special_characters_tree);
+		gtk_tree_view_set_search_column(special_characters_tree, COLUMN_HTML_NAME);
 	}
 	gtk_widget_show_all(special_characters_dialog);
 }
 
 
 // fill the tree model with data
+/// TODO move this in a file and make it extendable for more data types
 static void special_characters_fill_store(GtkTreeStore *store)
 {
 	GtkTreeIter iter;
@@ -123,13 +125,13 @@ static void special_characters_fill_store(GtkTreeStore *store)
 
 	gchar *chars[][2] =
 		{
-			{ N_("HTML characters"), NULL },
+			{ _("HTML characters"), NULL },
 			{ "\"", "&quot;" },
 			{ "&", "&amp;" },
 			{ "<", "&lt;" },
 			{ ">", "&gt;" },
 
-			{ N_("ISO 8859-1 characters"), NULL },
+			{ _("ISO 8859-1 characters"), NULL },
 			{ " ", "&nbsp;" },
 			{ "¡", "&iexcl;" },
 			{ "¢", "&cent;" },
@@ -226,13 +228,162 @@ static void special_characters_fill_store(GtkTreeStore *store)
 			{ "ý", "&yacute;" },
 			{ "þ", "&thorn;" },
 			{ "ÿ", "&yuml;" },
-			/// TODO add the symbols from http://de.selfhtml.org/html/referenz/zeichen.htm
-			{ N_("Greek characters"), NULL },
-			{ N_("Mathematical characters"), NULL },
-			{ N_("Technical characters"), NULL },
-			{ N_("Arrow characters"), NULL },
-			{ N_("Punctuation characters"), NULL },
-			{ N_("Miscellaneous characters"), NULL }
+
+			{ _("Greek characters"), NULL },
+			{ "Α", "&Alpha;" },
+			{ "α", "&alpha;" },
+			{ "Β", "&Beta;" },
+			{ "β", "&beta;" },
+			{ "Γ", "&Gamma;" },
+			{ "γ", "&gamma;" },
+			{ "Δ", "&Delta;" },
+			{ "δ", "&Delta;" },
+			{ "δ", "&delta;" },
+			{ "Ε", "&Epsilon;" },
+			{ "ε", "&epsilon;" },
+			{ "Ζ", "&Zeta;" },
+			{ "ζ", "&zeta;" },
+			{ "Η", "&Eta;" },
+			{ "η", "&eta;" },
+			{ "Θ", "&Theta;" },
+			{ "θ", "&theta;" },
+			{ "Ι", "&Iota;" },
+			{ "ι", "&iota;" },
+			{ "Κ", "&Kappa;" },
+			{ "κ", "&kappa;" },
+			{ "Λ", "&Lambda;" },
+			{ "λ", "&lambda;" },
+			{ "Μ", "&Mu;" },
+			{ "μ", "&mu;" },
+			{ "Ν", "&Nu;" },
+			{ "ν", "&nu;" },
+			{ "Ξ", "&Xi;" },
+			{ "ξ", "&xi;" },
+			{ "Ο", "&Omicron;" },
+			{ "ο", "&omicron;" },
+			{ "Π", "&Pi;" },
+			{ "π", "&pi;" },
+			{ "Ρ", "&Rho;" },
+			{ "ρ", "&rho;" },
+			{ "Σ", "&Sigma;" },
+			{ "ς", "&sigmaf;" },
+			{ "σ", "&sigma;" },
+			{ "Τ", "&Tau;" },
+			{ "τ", "&tau;" },
+			{ "Υ", "&Upsilon;" },
+			{ "υ", "&upsilon;" },
+			{ "Φ", "&Phi;" },
+			{ "φ", "&phi;" },
+			{ "Χ", "&Chi;" },
+			{ "χ", "&chi;" },
+			{ "Ψ", "&Psi;" },
+			{ "ψ", "&psi;" },
+			{ "Ω", "&Omega;" },
+			{ "ω", "&omega;" },
+			{ "ϑ", "&thetasym;" },
+			{ "ϒ", "&upsih;" },
+			{ "ϖ", "&piv;" },
+
+			{ _("Mathematical characters"), NULL },
+			{ "∀", "&forall;" },
+			{ "∂", "&part;" },
+			{ "∃", "&exist;" },
+			{ "∅", "&empty;" },
+			{ "∇", "&nabla;" },
+			{ "∈", "&isin;" },
+			{ "∉", "&notin;" },
+			{ "∋", "&ni;" },
+			{ "∏", "&prod;" },
+			{ "∑", "&sum;" },
+			{ "−", "&minus;" },
+			{ "∗", "&lowast;" },
+			{ "√", "&radic;" },
+			{ "∝", "&prop;" },
+			{ "∞", "&infin;" },
+			{ "∠", "&ang;" },
+			{ "∧", "&and;" },
+			{ "∨", "&or;" },
+			{ "∩", "&cap;" },
+			{ "∪", "&cup;" },
+			{ "∫", "&int;" },
+			{ "∴", "&there4;" },
+			{ "∼", "&sim;" },
+			{ "≅", "&cong;" },
+			{ "≈", "&asymp;" },
+			{ "≠", "&ne;" },
+			{ "≡", "&equiv;" },
+			{ "≤", "&le;" },
+			{ "≥", "&ge;" },
+			{ "⊂", "&sub;" },
+			{ "⊃", "&sup;" },
+			{ "⊄", "&nsub;" },
+			{ "⊆", "&sube;" },
+			{ "⊇", "&supe;" },
+			{ "⊕", "&oplus;" },
+			{ "⊗", "&otimes;" },
+			{ "⊥", "&perp;" },
+			{ "⋅", "&sdot;" },
+			{ "◊", "&loz;" },
+
+			{ _("Technical characters"), NULL },
+			{ "⌈", "&lceil;" },
+			{ "⌉", "&rceil;" },
+			{ "⌊", "&lfloor;" },
+			{ "⌋", "&rfloor;" },
+			{ "〈", "&lang;" },
+			{ "〉", "&rang;" },
+
+			{ _("Arrow characters"), NULL },
+			{ "←", "&larr;" },
+			{ "↑", "&uarr;" },
+			{ "→", "&rarr;" },
+			{ "↓", "&darr;" },
+			{ "↔", "&harr;" },
+			{ "↵", "&crarr;" },
+			{ "⇐", "&lArr;" },
+			{ "⇑", "&uArr;" },
+			{ "⇒", "&rArr;" },
+			{ "⇓", "&dArr;" },
+			{ "⇔", "&hArr;" },
+
+			{ _("Punctuation characters"), NULL },
+			{ "–", "&ndash;" },
+			{ "—", "&mdash;" },
+			{ "‘", "&lsquo;" },
+			{ "’", "&rsquo;" },
+			{ "‚", "&sbquo;" },
+			{ "“", "&ldquo;" },
+			{ "”", "&rdquo;" },
+			{ "„", "&bdquo;" },
+			{ "†", "&dagger;" },
+			{ "‡", "&Dagger;" },
+			{ "…", "&hellip;" },
+			{ "‰", "&permil;" },
+			{ "‹", "&lsaquo;" },
+			{ "›", "&rsaquo;" },
+
+			{ _("Miscellaneous characters"), NULL },
+			{ "•", "&bull;" },
+			{ "′", "&prime;" },
+			{ "″", "&Prime;" },
+			{ "‾", "&oline;" },
+			{ "⁄", "&frasl;" },
+			{ "℘", "&weierp;" },
+			{ "ℑ", "&image;" },
+			{ "ℜ", "&real;" },
+			{ "™", "&trade;" },
+			{ "€", "&euro;" },
+			{ "ℵ", "&alefsym;" },
+			{ "♠", "&spades;" },
+			{ "♣", "&clubs;" },
+			{ "♥", "&hearts;" },
+			{ "♦", "&diams;" },
+			{ "Œ", "&OElig;" },
+			{ "œ", "&oelig;" },
+			{ "Š", "&Scaron;" },
+			{ "š", "&scaron;" },
+			{ "Ÿ", "&Yuml;" },
+			{ "ƒ", "&fnof;" },
 		};
 
 	for (i = 0; i < G_N_ELEMENTS(chars); i++)
@@ -313,9 +464,11 @@ static void on_special_characters_tree_row_activated(GtkTreeView *treeview, GtkT
 		if (special_characters_insert(model, &iter))
 			gtk_widget_hide(special_characters_dialog);
 		else
-		{ // double click on a category to toggle the expand or collapse it
-			/// TODO
+		{	// double click on a category to toggle the expand or collapse it
+			if (gtk_tree_view_row_expanded(special_characters_tree, path))
+				gtk_tree_view_collapse_row(special_characters_tree, path);
+			else
+				gtk_tree_view_expand_row(special_characters_tree, path, FALSE);
 		}
-
 	}
 }
