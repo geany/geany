@@ -390,7 +390,7 @@ msgstr "_Reemplazar Tabulaciones por Espacios"
 
 #: src/interface.c:775 src/interface.c:2925
 msgid "Replaces all tabs in document by spaces."
-msgstr "Remplaza todas las tabulaciones en el documento por espacios"
+msgstr "Reemplaza todas las tabulaciones en el documento por espacios"
 
 #: src/interface.c:782
 msgid "_Fold All"
@@ -436,7 +436,7 @@ msgstr "Abrir un diálogo selector de colores para elegir colores de una paleta"
 
 #: src/interface.c:822
 msgid "_Word Count"
-msgstr "_Contar Palabras"
+msgstr "C_ontar Palabras"
 
 #: src/interface.c:825
 msgid ""
@@ -452,7 +452,7 @@ msgstr "_Insertar Carácteres Especiales de HTML"
 
 #: src/interface.c:831
 msgid "_Help"
-msgstr "_Ayuda"
+msgstr "Ayuda"
 
 #: src/interface.c:842
 msgid "_Keyboard Shortcuts"
@@ -1509,8 +1509,8 @@ msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
 "%e will be replaced by the filename without extension, e.g. test_file"
 msgstr ""
-"%f será remplazado por el nombre del archivo actual, ej. prueba.c\n"
-"%e será remplazado por el nombre del archivo actual sin extencion, ej. prueba"
+"%f será reemplazado por el nombre del archivo actual, ej. prueba.c\n"
+"%e será reemplazado por el nombre del archivo actual sin extencion, ej. prueba"
 
 #: src/dialogs.c:751
 msgid "Set Includes and Arguments"
@@ -2007,7 +2007,7 @@ msgstr "Falló el proceso (%s)"
 #: src/build.c:356
 #, c-format
 msgid "Something very strange is occurred, could not stat %s (%s)."
-msgstr "Algo muy raro ha ocurrido, no su pudo realizar stat() sobre %s (%s)."
+msgstr "Algo muy raro ha ocurrido, no se pudo realizar stat() sobre %s (%s)."
 
 #: src/build.c:435
 #, c-format
@@ -2282,7 +2282,7 @@ msgstr "Rumano"
 
 #: src/encodings.c:76 src/encodings.c:77 src/encodings.c:78
 msgid "Arabic"
-msgstr "Arábigo"
+msgstr "Árabe"
 
 #: src/encodings.c:79 src/encodings.c:80 src/encodings.c:81
 msgid "Hebrew"
@@ -2386,7 +2386,7 @@ msgstr "Sec3"
 
 #: src/treeviews.c:127
 msgid "Appendix"
-msgstr "Apendice"
+msgstr "Apéndice"
 
 #: src/treeviews.c:129 src/treeviews.c:151 src/treeviews.c:239
 #: src/treeviews.c:280
@@ -2403,7 +2403,7 @@ msgstr "Entorno"
 
 #: src/treeviews.c:143
 msgid "Subsection"
-msgstr "Seb-sección"
+msgstr "Sub-sección"
 
 #: src/treeviews.c:145
 msgid "Subsubsection"
@@ -2511,7 +2511,7 @@ msgstr "Métodos de _Entrada"
 
 #: src/vte.c:499
 msgid "Terminal plugin"
-msgstr "Aditamento de Terminal"
+msgstr "Plugin de Terminal"
 
 #: src/vte.c:506
 msgid ""
@@ -2531,7 +2531,7 @@ msgstr "Selecciona la fuente para la ventana de terminal"
 
 #: src/vte.c:529
 msgid "Foreground color:"
-msgstr "Color de frente:"
+msgstr "Color de primer plano:"
 
 #: src/vte.c:535
 msgid "Background color:"
@@ -2788,11 +2788,11 @@ msgstr "Duplicar línea o selección"
 
 #: src/keybindings.c:200
 msgid "Convert Selection to lower-case"
-msgstr "Convertir Selección a _minúsculas"
+msgstr "Convertir Selección a Minúsculas"
 
 #: src/keybindings.c:202
 msgid "Convert Selection to upper-case"
-msgstr "Convertir Selección a _Mayuscúlas"
+msgstr "Convertir Selección a Mayúsculas"
 
 #: src/keybindings.c:204
 msgid "Toggle line commentation"
@@ -2867,7 +2867,7 @@ msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters."
 msgstr ""
-"Remplaza \\\\, \\t, \\n, \\r y \\uXXXX (carácteres Unicode) con el carácter "
+"Reemplaza \\\\, \\t, \\n, \\r y \\uXXXX (carácteres Unicode) con el carácter "
 "de control correspondiente."
 
 #: src/search.c:189 src/search.c:579
@@ -2944,7 +2944,7 @@ msgstr "En la Se_lección"
 #: src/search.c:441
 msgid "Replace all matches found in the currently selected text"
 msgstr ""
-"Remplaza todas las ocurrencias encontradas en el texto actualmente "
+"Reemplaza todas las ocurrencias encontradas en el texto actualmente "
 "seleccionado"
 
 #: src/search.c:515
@@ -3089,7 +3089,7 @@ msgstr "Carácteres misceláneos"
 #~ msgstr "Du_plicar línea"
 
 #~ msgid "Count _words"
-#~ msgstr "_Contar palabras"
+#~ msgstr "C_ontar palabras"
 
 #~ msgid "Show _Colour Chooser"
 #~ msgstr "Mostrar Selector de _Colores"
@@ -3169,7 +3169,7 @@ msgstr "Carácteres misceláneos"
 #~ "Replaces the search text in all opened files. This option is only useful"
 #~ "(and used) if you click on \"Replace All\"."
 #~ msgstr ""
-#~ "Remplaza el texto buscado en todos los archivos abiertos. Esta opción "
+#~ "Reemplaza el texto buscado en todos los archivos abiertos. Esta opción "
 #~ "sólo es útil si luego se selecciona \"Reemplazar todas\"."
 
 #~ msgid "_Don't close this dialog"
@@ -3203,7 +3203,7 @@ msgstr "Carácteres misceláneos"
 #~ msgstr "Ingrese el texto a buscar aquí:"
 
 #~ msgid "Enter the replace text here:"
-#~ msgstr "Ingrese el texto de remplazo aquí:"
+#~ msgstr "Ingrese el texto de reemplazo aquí:"
 
 #~ msgid ""
 #~ "Sets the includes and library paths for the compiler and the program "
@@ -3292,4 +3292,5 @@ msgstr "Carácteres misceláneos"
 
 #~ msgid "Use auto indention"
 #~ msgstr "Usar formateo automático de código"
+
 
