@@ -1228,9 +1228,9 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 	// if we are here, there was no match and we are beeping ;-)
 	utils_beep();
 	if (type == tm_tag_prototype_t)
-		msgwin_status_add(_("Declaration of \"%s()\" not found"), editor_info.current_word);
+		ui_set_statusbar(_("Declaration of \"%s()\" not found"), editor_info.current_word);
 	else
-		msgwin_status_add(_("Definition of \"%s()\" not found"), editor_info.current_word);
+		ui_set_statusbar(_("Definition of \"%s()\" not found"), editor_info.current_word);
 }
 
 
@@ -1435,7 +1435,7 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 
 	if (doc_list[idx].file_type == NULL)
 	{
-		msgwin_status_add(_("Please set the filetype for the current file before using this function."));
+		ui_set_statusbar(_("Please set the filetype for the current file before using this function."));
 		return;
 	}
 
@@ -1480,7 +1480,7 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 
 	if (doc_list[idx].file_type == NULL)
 	{
-		msgwin_status_add(_("Please set the filetype for the current file before using this function."));
+		ui_set_statusbar(_("Please set the filetype for the current file before using this function."));
 		return;
 	}
 

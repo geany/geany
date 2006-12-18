@@ -566,7 +566,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		// filename must not be NULL when it is a new file
 		if (filename == NULL)
 		{
-			msgwin_status_add(_("Invalid filename"));
+			ui_set_statusbar(_("Invalid filename"));
 			return -1;
 		}
 

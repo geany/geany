@@ -960,7 +960,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
 
 		if (utf8_dir == NULL || utils_str_equal(utf8_dir, ""))
-			msgwin_status_add(_("Invalid directory for find in files."));
+			ui_set_statusbar(_("Invalid directory for find in files."));
 		else if (search_text && *search_text)
 		{
 			gchar *locale_dir;
@@ -990,7 +990,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 			g_free(locale_dir);
 		}
 		else
-			msgwin_status_add(_("No text to find."));
+			ui_set_statusbar(_("No text to find."));
 	}
 	else
 		gtk_widget_hide(widgets.find_in_files_dialog);
