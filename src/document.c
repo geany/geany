@@ -584,6 +584,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 					(GtkWidget*) doc_list[idx].sci));
 			g_free(utf8_filename);
 			g_free(locale_filename);
+			utils_check_disk_status(idx, TRUE);	// force a file changed check
 			return idx;
 		}
 	}

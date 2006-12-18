@@ -324,7 +324,9 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 }
 
 
-gboolean utils_check_disk_status(gint idx)
+/* Set force to force a disk check, otherwise it is ignored if there was a check
+ * in the last GEANY_CHECK_FILE_DELAY seconds. */
+gboolean utils_check_disk_status(gint idx, gboolean force)
 {
 	struct stat st;
 	time_t t;
@@ -335,7 +337,7 @@ gboolean utils_check_disk_status(gint idx)
 
 	t = time(NULL);
 
-	if (doc_list[idx].last_check > (t - GEANY_CHECK_FILE_DELAY)) return FALSE;
+	if (! force && doc_list[idx].last_check > (t - GEANY_CHECK_FILE_DELAY)) return FALSE;
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	if (stat(locale_filename, &st) != 0)

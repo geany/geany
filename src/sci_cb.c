@@ -66,7 +66,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 
 	if (event->button == 1)
 	{
-		return utils_check_disk_status(idx);
+		return utils_check_disk_status(idx, FALSE);
 	}
 
 	if (event->button == 3)
