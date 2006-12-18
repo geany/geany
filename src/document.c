@@ -688,7 +688,11 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		cl_options.goto_line = -1;
 	}
 	else if (pos >= 0)
-		sci_goto_pos(doc_list[idx].sci, pos, TRUE);
+	{
+		sci_goto_pos(doc_list[idx].sci, pos, FALSE);
+		if (reload)
+			sci_scroll_to_line(doc_list[idx].sci, -1, 0.5);
+	}
 
 	if (! reload)
 	{

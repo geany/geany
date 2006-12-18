@@ -119,7 +119,7 @@ gchar				sci_get_char_at				(ScintillaObject * sci, gint pos);
 void				sci_set_savepoint			(ScintillaObject * sci);
 void				sci_set_indentionguides		(ScintillaObject * sci, gboolean enable);
 void				sci_use_popup				(ScintillaObject * sci, gboolean enable);
-void				sci_goto_pos				(ScintillaObject * sci, gint pos, gboolean ensure_visibility);
+void				sci_goto_pos				(ScintillaObject * sci, gint pos, gboolean unfold);
 void				sci_set_search_anchor		(ScintillaObject * sci);
 void				sci_set_anchor				(ScintillaObject * sci, gint pos);
 void				sci_scroll_caret			(ScintillaObject * sci);

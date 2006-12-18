@@ -641,9 +641,9 @@ gboolean sci_can_copy(ScintillaObject *sci)
 }
 
 
-void sci_goto_pos(ScintillaObject *sci, gint pos, gboolean ensure_visibility)
+void sci_goto_pos(ScintillaObject *sci, gint pos, gboolean unfold)
 {
-	if (ensure_visibility) SSM(sci,SCI_ENSUREVISIBLE,SSM(sci, SCI_LINEFROMPOSITION, pos, 0),0);
+	if (unfold) SSM(sci,SCI_ENSUREVISIBLE,SSM(sci, SCI_LINEFROMPOSITION, pos, 0),0);
 	SSM(sci, SCI_GOTOPOS, pos, 0);
 }
 
@@ -678,6 +678,7 @@ void sci_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view)
 {
 	gint vis1, los, delta;
 
+	if (GTK_WIDGET(sci)->allocation.height <= 1) return;	// prevent gdk_window_scroll warning
 	if (line == -1)
 		line = sci_get_current_line(sci, -1);
 
