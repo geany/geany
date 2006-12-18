@@ -588,7 +588,7 @@ void configuration_apply_settings()
 		{
 			idx = document_get_n_idx(tabnum);
 			if (idx < 0) break;
-			sci_scroll_caret(doc_list[idx].sci);
+			sci_scroll_to_line(doc_list[idx].sci, -1, 0.5F);
 			tabnum++;
 		}
 	}
