@@ -197,12 +197,12 @@ void vte_close(void)
 {
 	g_free(vf);
 	/* free the vte widget before unloading vte module
-	 * this prevents a segfault on X close window if the message window is hidden
-	 * (patch from Nick Treleaven, thanks) */
+	 * this prevents a segfault on X close window if the message window is hidden */
 	gtk_widget_destroy(vc->vte);
 	if (popup_menu_created) gtk_widget_destroy(vc->menu);
-	g_free(vc->font);
 	g_free(vc->emulation);
+	g_free(vc->shell);
+	g_free(vc->font);
 	g_free(vc->colour_back);
 	g_free(vc->colour_fore);
 	g_free(vc);
