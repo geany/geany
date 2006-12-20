@@ -372,6 +372,12 @@ void treeviews_remove_document(gint idx)
 	if (GTK_IS_WIDGET(doc_list[idx].tag_tree))
 	{
 		gtk_widget_destroy(doc_list[idx].tag_tree);
+		if (GTK_IS_TREE_VIEW(doc_list[idx].tag_tree))
+		{
+			// Because it was ref'd in ui_update_tag_list, it needs unref'ing
+			g_object_unref((gpointer)doc_list[idx].tag_tree);
+		}
+		doc_list[idx].tag_tree = NULL;
 	}
 }
 

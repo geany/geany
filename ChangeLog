@@ -2,6 +2,9 @@
 
  * src/keyfile.c:
    Fix strv leak in configuration_open_files().
+ * src/treeviews.c, src/ui_utils.c:
+   Fix tag treeview not being freed (because of g_object_ref).
+   Separate recreate_tag_list() from ui_update_tag_list().
 
 
 2006-12-18  Enrico Tröger  <enrico.troeger@uvena.de>
