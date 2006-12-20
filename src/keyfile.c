@@ -492,15 +492,17 @@ gboolean configuration_open_files()
 {
 	gint i;
 	guint x, pos, y, len;
-	gchar *file, *locale_filename, **array, *tmp;
 	gboolean ret = FALSE, failure = FALSE;
 
 	i = app->tab_order_ltr ? 0 : (session_files->len - 1);
 	while (TRUE)
 	{
-		tmp = g_ptr_array_index(session_files, i);
+		gchar *tmp = g_ptr_array_index(session_files, i);
+
 		if (tmp && *tmp)
 		{
+			const gchar *file;
+			gchar *locale_filename, **array;
 			gint uid = -1;
 			x = 0;
 			y = 0;
@@ -523,6 +525,7 @@ gboolean configuration_open_files()
 
 			// try to get the locale equivalent for the filename, fallback to filename if error
 			locale_filename = utils_get_locale_from_utf8(file);
+			g_strfreev(array);
 
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 			{
