@@ -1245,7 +1245,7 @@ void
 on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	static gchar colour[9];
+	gchar colour[9];
 	gint idx = document_get_cur_idx();
 	gint pos = sci_get_current_position(doc_list[idx].sci);
 
