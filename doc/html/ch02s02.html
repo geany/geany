@@ -1,10 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Source compilation</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="
-			Geany 0.9
-		"><link rel="up" href="ch02.html" title="Chapter 2. 
-			Installation
-		"><link rel="prev" href="ch02.html" title="Chapter 2. 
-			Installation
-		"><link rel="next" href="ch02s03.html" title="Binary packages"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Source compilation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><th width="60%" align="center">Chapter 2. 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Source compilation</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="Geany 0.10"><link rel="up" href="ch02.html" title="Chapter 2.  Installation"><link rel="prev" href="ch02.html" title="Chapter 2.  Installation"><link rel="next" href="ch02s03.html" title="Binary packages"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Source compilation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a> </td><th width="60%" align="center">Chapter 2. 
 			Installation
 		</th><td width="20%" align="right"> <a accesskey="n" href="ch02s03.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="source_compilation"></a>Source compilation</h2></div></div></div><p>
 				Compiling <span class="application">Geany</span> is quite easy. The following should do it:
@@ -16,15 +10,16 @@
 				The configure script supports several common options, for a detailed list, type
 				</p><pre class="screen">
 					<code class="prompt">%</code> <strong class="userinput"><code><span><strong class="command">./configure</strong></span> --help</code></strong></pre><p>
+				There also some compile time options which can be found in <code class="filename">src/geany.h</code>.
+				Please see <a href="ch03s06.html#cto" title="Compile time options">the section called “Compile time options”</a> for more information.
 			</p><p>
 				In the case that your system lacks dynamic linking loader support, you probably want
 				to pass the option --disable-vte to the configure script. This prevents compiling
-				Geany with dynamic linking loader support to automatically load
+				<span class="application">Geany</span> with dynamic linking loader support to automatically load
 				<code class="filename">libvte.so.4</code> if available.
-			</p><p>Geany has been successfully compiled and tested under Debian 3.1 Sarge, Debian 3.2 Etch,
-				  Fedora Core 4, LinuxFromScratch and FreeBSD 6.0. It also compiles under
-				  <span class="trademark">Microsoft Windows</span>™, but there are lots of changes
-				  to the makefiles necessary.
+			</p><p><span class="application">Geany</span> has been successfully compiled and tested under Debian 3.1 Sarge, Debian 4.0 Etch,
+				  Fedora Core 3/4/5, LinuxFromScratch and FreeBSD 6.0. It also compiles under
+				  <span class="trademark">Microsoft Windows</span>™.
 			</p><p>
 				If there are any errors during compilation, check your build environment and try to find the error,
 				otherwise contact the author at <code class="email">&lt;<a href="mailto:enrico.troeger@uvena.de">enrico.troeger@uvena.de</a>&gt;</code>.

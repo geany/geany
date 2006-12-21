@@ -1,6 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Search, replace and go to</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="
-			Geany 0.9
-		"><link rel="up" href="ch03.html" title="Chapter 3. Usage"><link rel="prev" href="ch03s04.html" title="Character sets and Unicode Byte-Order-Mark (BOM)"><link rel="next" href="ch03s06.html" title="Preferences"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Search, replace and go to</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s04.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s06.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="search_replace"></a>Search, replace and go to</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Search, replace and go to</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="Geany 0.10"><link rel="up" href="ch03.html" title="Chapter 3. Usage"><link rel="prev" href="ch03s04.html" title="Character sets and Unicode Byte-Order-Mark (BOM)"><link rel="next" href="ch03s06.html" title="Preferences"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Search, replace and go to</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s04.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s06.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="search_replace"></a>Search, replace and go to</h2></div></div></div><p>
 				This section describes search-related commands from the Search menu and
 				the editor window's popup menu:
 			</p><p>
@@ -8,44 +6,48 @@
 			</p><p>
 				* These items are available from the editor window's popup menu, or by
 				using a keyboard shortcut (see <a href="ch03s09.html" title="Keybindings">the section called “Keybindings”</a>).
-			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2752448"></a>Find</h3></div></div></div><p>
+			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2794269"></a>Find</h3></div></div></div><p>
 					The Find dialog is used for finding text within the current document.
 					The syntax for the "Use regular expressions" option is shown in
 					<a href="ch03s05.html#regexp" title="Table 3.2. Regular expressions">Table 3.2, “Regular expressions”</a>.
 				</p><p>
-					</p><div class="figure"><a name="id2752468"></a><p class="title"><b>Figure 3.1. Find dialog</b></p><div><img src="images/find_dialog.jpg" alt="Find dialog"></div></div><p>
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2752484"></a>Find usage</h3></div></div></div><p>
+					</p><div class="figure"><a name="id2794289"></a><p class="title"><b>Figure 3.1. Find dialog</b></p><div class="figure-contents"><div><img src="images/find_dialog.png" alt="Find dialog"></div></div></div><p><br class="figure-break">
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2794305"></a>Find usage</h3></div></div></div><p>
 					Find usage searches all open files. If there is a selection, then it is used
 					as the search text; otherwise the current word is used.
 					The current word is either taken from the word nearest the edit cursor, or
 					the word underneath the popup menu click position when the popup menu is
 					used.
 					The search results are shown in the Messages window.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2752500"></a>Find in files</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2794321"></a>Find in files</h3></div></div></div><p>
 					Find in files is a more powerful version of Find usage that searches all files
 					in a certain directory using the Grep tool. The Grep tool must be correctly set
 					in Preferences to the path of the system's Grep utility.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2752514"></a>Replace</h3></div></div></div><p>
+				</p><p>
+					</p><div class="figure"><a name="id2794336"></a><p class="title"><b>Figure 3.2. Find in files dialog</b></p><div class="figure-contents"><div><img src="images/find_in_files_dialog.png" alt="Find in files dialog"></div></div></div><p><br class="figure-break">
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2794352"></a>Replace</h3></div></div></div><p>
 					The Replace dialog has the same options for finding text as the Find
 					dialog. There is also a "Replace in all files" option, which is used with the
 					Replace All button to perform the replacement for all open files.
 				</p><p>
+					</p><div class="figure"><a name="id2794367"></a><p class="title"><b>Figure 3.3. Replace dialog</b></p><div class="figure-contents"><div><img src="images/replace_dialog.png" alt="Replace dialog"></div></div></div><p><br class="figure-break">
+				</p><p>
 					The "Use regular expressions" option applies both to the search string and
 					to the replacement text; for the latter back references can be used -
 					see the entry for '\n' in <a href="ch03s05.html#regexp" title="Table 3.2. Regular expressions">Table 3.2, “Regular expressions”</a>.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2752540"></a>Go to tag definition</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2794395"></a>Go to tag definition</h3></div></div></div><p>
 					If the current word is the name of a function and the file containing the
 					function definition (a.k.a. function body) is open, Go to tag definition will
 					switch to that file and go to the corresponding line number.
 					The current word is either taken from the word nearest the edit cursor, or
 					the word underneath the popup menu click position when the popup menu is
 					used.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2689791"></a>Go to tag declaration</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2794419"></a>Go to tag declaration</h3></div></div></div><p>
 					Like Go to tag definition, but for a forward function declaration (a.k.a.
 					function prototype) instead of a function definition.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2689804"></a>Go to line</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2794432"></a>Go to line</h3></div></div></div><p>
 					Go to a particular line number in the current file.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2689815"></a>Regular expressions</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2794443"></a>Regular expressions</h3></div></div></div><p>
 					You can use regular expressions in the Find and Replace dialogs by
 					selecting the "Use regular expressions" check box.
 					The syntax is POSIX-like, as described below in <a href="ch03s05.html#regexp" title="Table 3.2. Regular expressions">Table 3.2, “Regular expressions”</a>.
@@ -53,7 +55,7 @@
 						Searching backwards with regular expressions is not supported.
 					</p></div><p>
 				</p><p>
-					</p><div class="table"><a name="regexp"></a><p class="title"><b>Table 3.2. Regular expressions</b></p><table summary="Regular expressions" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col></colgroup><thead><tr><th colspan="2" align="left">
+					</p><div class="table"><a name="regexp"></a><p class="title"><b>Table 3.2. Regular expressions</b></p><div class="table-contents"><table summary="Regular expressions" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col></colgroup><thead><tr><th colspan="2" align="left">
 										In a regular expression, the following characters are interpreted:
 									</th></tr></thead><tbody><tr><td>.</td><td>Matches any character.</td></tr><tr><td>(</td><td>This marks the start of a region for tagging a match.</td></tr><tr><td>)</td><td>This marks the end of a tagged region.</td></tr><tr><td>\n</td><td>Where n is 1 through 9 refers to the first through ninth tagged region
 										   when replacing. For example, if the search string was Fred([1-9])XXX
@@ -67,7 +69,7 @@
 										   lower case character.
 									</td></tr><tr><td>[^...]</td><td>The complement of the characters in the set. For example, [^A-Za-z] means
 										   any character except an alphabetic character.
-									</td></tr><tr><td>^</td><td>This matches the start of a line (unless used inside a set, see above).</td></tr><tr><td>$</td><td>This matches the end of a line.</td></tr><tr><td>*</td><td>This matches 0 or more times. For example, Sa*m matches Sm, Sam, Saam, Saaam and so on.</td></tr><tr><td>+</td><td>This matches 1 or more times. For example, Sa+m matches Sam, Saam, Saaam and so on.</td></tr></tbody></table></div><p>
+									</td></tr><tr><td>^</td><td>This matches the start of a line (unless used inside a set, see above).</td></tr><tr><td>$</td><td>This matches the end of a line.</td></tr><tr><td>*</td><td>This matches 0 or more times. For example, Sa*m matches Sm, Sam, Saam, Saaam and so on.</td></tr><tr><td>+</td><td>This matches 1 or more times. For example, Sa+m matches Sam, Saam, Saaam and so on.</td></tr></tbody></table></div></div><p><br class="table-break">
 				</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Partial POSIX compatibility</h3><p>
 						Note that the POSIX '?' regular expression character for optional matching
 						is not supported by the Find and Replace dialogs.

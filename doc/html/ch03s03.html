@@ -1,26 +1,24 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>General</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="
-			Geany 0.9
-		"><link rel="up" href="ch03.html" title="Chapter 3. Usage"><link rel="prev" href="ch03s02.html" title="Command line options"><link rel="next" href="ch03s04.html" title="Character sets and Unicode Byte-Order-Mark (BOM)"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">General</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="general"></a>General</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="general_startup"></a>Startup</h3></div></div></div><p>
-					At startup, Geany loads the first 15 files from the last time
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>General</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="Geany 0.10"><link rel="up" href="ch03.html" title="Chapter 3. Usage"><link rel="prev" href="ch03s02.html" title="Command line options"><link rel="next" href="ch03s04.html" title="Character sets and Unicode Byte-Order-Mark (BOM)"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">General</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="general"></a>General</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="general_startup"></a>Startup</h3></div></div></div><p>
+					At startup, <span class="application">Geany</span> loads all files from the last time
 					<span class="application">Geany</span> was launched. You can disable this feature in the
-					preferences dialog(see <a href="ch03s06.html#confdialog_gen" title="Figure 3.2. General tab in preferences dialog">Figure 3.2, “General tab in preferences dialog”</a>). If you specify some files on
+					preferences dialog(see <a href="ch03s06.html#confdialog_gen" title="Figure 3.4. General tab in preferences dialog">Figure 3.4, “General tab in preferences dialog”</a>). If you specify some files on
 					the command line, only these files will be opened, but you can find the files from the
-					last session in the file menu under the "Recent files" item. This contains the last
-					15 recently opened files. It may be that Geany loads not exactly 15 session files, this depends
-					on the compile time option GEANY_SESSION_FILES; the default is 15. For details see
-					<a href="ch03s06.html#cto" title="Compile time options">the section called “Compile time options”</a>.
+					last session in the file menu under the "Recent files" item. By default this contains
+					the last 10 recently opened files. You can change the amount of recently opened
+					files in the preferences dialog.
 				</p><p>
-					You can start several instances of Geany, but only the first will load files
-					from the last session. To run a second instance of Geany, do not specify any
-					filenames on the command-line, or disable opening files in a running instance
-					using the appropriate command line option.
+					You can start several instances of <span class="application">Geany</span>, but only
+					the first will load files from the last session. To run a second instance of
+					<span class="application">Geany</span>, do not specify any filenames on the
+					command-line, or disable opening files in a running instance using the
+					appropriate command line option.
 				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="general_instance"></a>Opening files from the command-line in a running instance</h3></div></div></div><p>
-					Geany detects an already running instance of itself and opens files from the
-					command-line in the already running instance.
-					So, Geany can be used to view and edit files by opening them from other
-					programs such as a file manager. If you do not like this for some reason,
-					you can disable using the first instance by using the appropriate command line
-					option - see <a href="ch03s02.html" title="Command line options">the section called “Command line options”</a>.
+					<span class="application">Geany</span> detects an already running instance of itself
+					and opens files from the command-line in the already running instance.
+					So, <span class="application">Geany</span> can be used to view and edit files by
+					opening them from other programs such as a file manager. If you do not like
+					this for some reason, you can disable using the first instance by using the
+					appropriate command line option - see <a href="ch03s02.html" title="Command line options">the section called “Command line options”</a>.
 				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="general_vte"></a>Virtual terminal emulator widget (VTE)</h3></div></div></div><p>
 					If you have installed <code class="filename">libvte.so</code> in your system, it is loaded
 					automatically by <span class="application">Geany</span>, and you will have a terminal widget
@@ -41,9 +39,10 @@
 					 On systems running the X Window System you can paste the last selected text by
 					 pressing the middle mouse button in the VTE (on 2-button mice,
 					 the middle button can often be simulated by pressing both mouse buttons together).
-				</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Geany tries to load <code class="filename">libvte.so</code>. If this fails, it tries to
-						  load <code class="filename">libvte.so.4</code>. If this fails too, you should check whether
-						  you installed libvte correctly. Again, Geany also runs without this library.
+				</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p><span class="application">Geany</span> tries to load <code class="filename">libvte.so</code>.
+						  If this fails, it tries to load <code class="filename">libvte.so.4</code>. If this
+						  fails too, you should check whether you installed libvte correctly. Again,
+						  <span class="application">Geany</span> also runs without this library.
 					</p><p>
 						  It could be, that the library is called something else than
 						  <code class="filename">libvte.so.4</code> (e.g. on FreeBSD 6.0 it is called

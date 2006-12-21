@@ -1,28 +1,34 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Command line options</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="
-			Geany 0.9
-		"><link rel="up" href="ch03.html" title="Chapter 3. Usage"><link rel="prev" href="ch03.html" title="Chapter 3. Usage"><link rel="next" href="ch03s03.html" title="General"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Command line options</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s03.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="clo"></a>Command line options</h2></div></div></div><p>
-				</p><div class="table"><a name="id2690506"></a><p class="title"><b>Table 3.1. Command line Options</b></p><table summary="Command line Options" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Short option</th><th>Long option</th><th>Function</th></tr></thead><tbody><tr><td>-s</td><td>--no-session</td><td>Don't load the previous session's files.
-								</td></tr><tr><td>-n</td><td>--no-ctags</td><td>Do not load auto completion and call tip data.
-									   Use this option if you do not want to use them.
-								</td></tr><tr><td>-m</td><td>--no-msgwin</td><td>Do not show the message window. Use this option if you do not
-									   need compiler messages or VTE support.
-								</td></tr><tr><td>-i</td><td>--new-instance</td><td>Do not open files in a running instance, force opening a new instance.
-								</td></tr><tr><td>-t</td><td>--no-terminal</td><td>Do not load terminal support. Use this option if you do not
-									   want to load the virtual terminal emulator widget at startup.
-									   If you do not have <code class="filename">libvte.so.4</code> installed,
-									   then terminal-support is automatically disabled.
-								</td></tr><tr><td>-l</td><td>--vte-lib</td><td>Specify explicitly the path including filename or only the filename
-									   to the VTE library, e.g. <code class="filename">/usr/lib/libvte.so</code> or
-									   <code class="filename">libvte.so</code>. This option is only needed when the
-									   autodetection does not work.
-								</td></tr><tr><td>-c directory_name</td><td>--config=directory_name</td><td>Use an alternate configuration directory. Default
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Command line options</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="Geany 0.10"><link rel="up" href="ch03.html" title="Chapter 3. Usage"><link rel="prev" href="ch03.html" title="Chapter 3. Usage"><link rel="next" href="ch03s03.html" title="General"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Command line options</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s03.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="clo"></a>Command line options</h2></div></div></div><p>
+				</p><div class="table"><a name="id2746904"></a><p class="title"><b>Table 3.1. Command line Options</b></p><div class="table-contents"><table summary="Command line Options" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Short option</th><th>Long option</th><th>Function</th></tr></thead><tbody><tr><td>-c dir_name</td><td>--config=directory_name</td><td>Use an alternate configuration directory. Default
 									   configuration directory is <code class="filename">~/.geany/</code>
 									   and there resides <code class="filename">geany.conf</code> and
 									   other configuration files.
-								</td></tr><tr><td>-d</td><td>--debug</td><td>Run Geany in debug mode, which means being verbose
-									   and printing lots of information.
-								</td></tr><tr><td>-?</td><td>--help</td><td>Show help information and exit.</td></tr><tr><td>-v</td><td>--version</td><td>Show version information and exit.</td></tr><tr><td> </td><td>[files ...]</td><td>Open all given files at startup. This option causes Geany to
-									   ignore loading stored files from the last session (if enabled).
-								</td></tr></tbody></table></div><p>
-				Geany supports all generic GTK options, a list is available on the help screen.
+								</td></tr><tr><td>-d</td><td>--debug</td><td>Run <span class="application">Geany</span> in debug mode, which
+									   means being verbose and printing lots of information.
+								</td></tr><tr><td>-i</td><td>--new-instance</td><td>Do not open files in a running instance, force opening a
+									   new instance. Only available if <span class="application">Geany</span>
+									   was compiled with support for Sockets.
+								</td></tr><tr><td>-l</td><td>--line</td><td>Set initial line number for the first opened file.
+								</td></tr><tr><td>-m</td><td>--no-msgwin</td><td>Do not show the message window. Use this option if you do not
+									   need compiler messages or VTE support.
+								</td></tr><tr><td>-n</td><td>--no-ctags</td><td>Do not load auto completion and call tip data.
+									   Use this option if you do not want to use them.
+								</td></tr><tr><td>-s</td><td>--no-session</td><td>Don't load the previous session's files.
+								</td></tr><tr><td>-t</td><td>--no-terminal</td><td>Do not load terminal support. Use this option if you do not
+									   want to load the virtual terminal emulator widget at startup.
+									   If you do not have <code class="filename">libvte.so.4</code> installed,
+									   then terminal-support is automatically disabled. Only available
+									   if <span class="application">Geany</span> was compiled with support
+									   for VTE.
+								</td></tr><tr><td> </td><td>--vte-lib</td><td>Specify explicitly the path including filename or only the filename
+									   to the VTE library, e.g. <code class="filename">/usr/lib/libvte.so</code> or
+									   <code class="filename">libvte.so</code>. This option is only needed when the
+									   autodetection does not work. Only available if
+									   <span class="application">Geany</span> was compiled with support for VTE.
+								</td></tr><tr><td>-v</td><td>--version</td><td>Show version information and exit.</td></tr><tr><td>-?</td><td>--help</td><td>Show help information and exit.</td></tr><tr><td> </td><td>[files ...]</td><td>Open all given files at startup. This option causes
+									   <span class="application">Geany</span> to ignore loading stored
+									   files from the last session (if enabled).
+								</td></tr></tbody></table></div></div><p><br class="table-break">
+				<span class="application">Geany</span> supports all generic GTK options, a list is
+				available on the help screen.
 			</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 3. Usage </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> General</td></tr></table></div></body></html>

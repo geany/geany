@@ -5,7 +5,7 @@
 <!ENTITY appversion "0.10">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "November 11, 2006">
+<!ENTITY date "December 21, 2006">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -528,7 +528,7 @@
 				<para>
 					<figure>
 					   <title>Find dialog</title>
-					   <graphic fileref="images/find_dialog.jpg"></graphic>
+					   <graphic fileref="images/find_dialog.png"></graphic>
 					</figure>
 				</para>
 			</section>
@@ -550,6 +550,12 @@
 					in a certain directory using the Grep tool. The Grep tool must be correctly set
 					in Preferences to the path of the system's Grep utility.
 				</para>
+				<para>
+					<figure>
+					   <title>Find in files dialog</title>
+					   <graphic fileref="images/find_in_files_dialog.png"></graphic>
+					</figure>
+				</para>
 			</section>
 			<section>
 				<title>Replace</title>
@@ -557,6 +563,12 @@
 					The Replace dialog has the same options for finding text as the Find
 					dialog. There is also a "Replace in all files" option, which is used with the
 					Replace All button to perform the replacement for all open files.
+				</para>
+				<para>
+					<figure>
+					   <title>Replace dialog</title>
+					   <graphic fileref="images/replace_dialog.png"></graphic>
+					</figure>
 				</para>
 				<para>
 					The "Use regular expressions" option applies both to the search string and
@@ -699,38 +711,42 @@
 				<!-- I know that <mediaobject> is better than <graphic> but <mediaobject> does not work with PDF -->
 				<figure id="confdialog_gen">
 				   <title>General tab in preferences dialog</title>
-				   <graphic fileref="images/pref_dialog_gen.jpg"></graphic>
+				   <graphic fileref="images/pref_dialog_gen.png"></graphic>
 				</figure>
 				<figure>
 				   <title>Interface tab in preferences dialog</title>
-				   <graphic fileref="images/pref_dialog_interface.jpg"></graphic>
+				   <graphic fileref="images/pref_dialog_interface.png"></graphic>
 				</figure>
 				<figure>
 				   <title>Toolbar tab in preferences dialog</title>
-				   <graphic fileref="images/pref_dialog_toolbar.jpg"></graphic>
+				   <graphic fileref="images/pref_dialog_toolbar.png"></graphic>
+				</figure>
+				<figure>
+				   <title>Files tab in preferences dialog</title>
+				   <graphic fileref="images/pref_dialog_files.png"></graphic>
 				</figure>
 				<figure>
 				   <title>Editor tab in preferences dialog</title>
-				   <graphic fileref="images/pref_dialog_edit.jpg"></graphic>
+				   <graphic fileref="images/pref_dialog_edit.png"></graphic>
 				</figure>
 				<figure>
 				   <title>Tools tab in preferences dialog</title>
-				   <graphic fileref="images/pref_dialog_tools.jpg"></graphic>
+				   <graphic fileref="images/pref_dialog_tools.png"></graphic>
 				</figure>
 				<figure id="confdialog_templ">
 				   <title>Template tab in preferences dialog</title>
-				   <graphic fileref="images/pref_dialog_templ.jpg"></graphic>
+				   <graphic fileref="images/pref_dialog_templ.png"></graphic>
 				</figure>
 				<figure id="confdialog_keys">
 				   <title>Keybinding tab in preferences dialog</title>
-				   <graphic fileref="images/pref_dialog_keys.jpg"></graphic>
+				   <graphic fileref="images/pref_dialog_keys.png"></graphic>
 				</figure>
 			   <note>
 					<para>For more information see <xref linkend="keybindings"/>.</para>
 			   </note>
 				<figure id="confdialog_vte">
 				   <title>VTE tab in preferences dialog</title>
-				   <graphic fileref="images/pref_dialog_vte.jpg"></graphic>
+				   <graphic fileref="images/pref_dialog_vte.png"></graphic>
 				</figure>
 			</para>
 			<section id="cto">
