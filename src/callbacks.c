@@ -373,7 +373,24 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 		gtk_editable_paste_clipboard(GTK_EDITABLE(focusw));
 	else
 	if (IS_SCINTILLA(focusw) && idx >= 0)
+	{
+#ifdef G_OS_WIN32
+		// insert the text manually for now, because the auto conversion of EOL characters by
+		// by Scintilla seems to make problems
+		if (gtk_clipboard_wait_is_text_available(gtk_clipboard_get(GDK_NONE)))
+		{
+			gchar *content = gtk_clipboard_wait_for_text(gtk_clipboard_get(GDK_NONE));
+			if (content != NULL)
+			{
+				sci_insert_text(doc_list[idx].sci,
+										sci_get_current_position(doc_list[idx].sci), content);
+				g_free(content);
+			}
+		}
+#else
 		sci_paste(doc_list[idx].sci);
+#endif
+	}
 	else
 	if (GTK_IS_TEXT_VIEW(focusw))
 	{
