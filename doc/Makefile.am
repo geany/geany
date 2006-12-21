@@ -1,12 +1,12 @@
 man_MANS=geany.1
 DOCDIR = $(DESTDIR)/$(datadir)/doc/@PACKAGE@
 HTML_FILES = html/*.html geany.css
-IMAGE_FILES = images/*.jpg
+IMAGE_FILES = images/*.png
 EXTRA_DIST = geany.css geany.xsl make_webable.sh geany.txt geany_gpl.docbook geany.1 \
 			 scikeybinding.docbook geany.docbook $(HTML_FILES) $(IMAGE_FILES)
 
 pdf:
-	jw -b pdf geany.docbook
+	SP_ENCODING=XML SP_CHARSET_FIXED=YES jw -b pdf geany.docbook
 	mv geany.pdf geany-$(VERSION).pdf
 
 geany.txt:
