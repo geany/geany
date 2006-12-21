@@ -36,7 +36,7 @@
 // listed in the documentation should not be changed ;-)
 #define GEANY_HOME_DIR					g_get_home_dir()
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
-#define GEANY_CODENAME					"Sander"
+#define GEANY_CODENAME					"Bandor"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_USE_WIN32_DIALOG			0
 #define GEANY_CHECK_FILE_DELAY			30
