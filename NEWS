@@ -1,3 +1,28 @@
+Geany 0.10 (TBA)
+
+    Changes:
+    * Removed the limit on the number of files open.
+    * Save the build includes and arguments when quitting.
+    * Added Next Message search command and Next Error build command.
+    * Make search bar automatically wraparound if necessary.
+    * Applied patch from Bob Doan to prevent unnecessary search
+      scrolling and add a preference to suppress some of the search
+      dialogs.
+    * Added Find Previous, Find All in Document/Session buttons for the
+      Find dialog.
+    * Added Replace (but don't Find) button for the Replace dialog.
+    * Added 'Hide Message Window' popup menu command.
+    * Added Alt-[1-9] shortcuts to switch to a certain tab number.
+    * Limit search dialog history to 30 entries.
+    * Change python default compile command to create a compiled
+      python .pyc file (thanks to Bajusz Tamás).
+
+   Bugs fixed:
+    * Fix #1611530 'file has changed' message on Windows after saving.
+    * Fix message window horizontal scrollbar being too tall on some
+      systems (thanks to Rob van der Linde).
+
+
 Geany 0.9 (September 29, 2006)
 
     Changes:
