@@ -113,7 +113,7 @@ void ui_update_statusbar(gint idx, gint pos)
 
 		text = g_strdup_printf(_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s %s     filetype: %s"),
 			(doc_list[idx].changed) ? 42 : 32,
-			(line + 1), (col + 1),
+			(line + 1), col,
 			sci_get_selected_text_length(doc_list[idx].sci) - 1,
 			sci_get_overtype(doc_list[idx].sci) ? _("OVR") : _("INS"),
 			document_get_eol_mode(idx),

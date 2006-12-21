@@ -7,6 +7,7 @@
    Updated date in documentation and manpage.
  * src/callbacks.c: Fixed wrong paste behaviour under Windows with some
                     applications.
+ * src/ui_utils.c: Start column count from 0 in the statusbar display.
 
 
 2006-12-20  Enrico Tröger  <enrico.troeger@uvena.de>
