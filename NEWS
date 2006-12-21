@@ -1,6 +1,21 @@
-Geany 0.10 (TBA)
+Geany 0.10 (December 21, 2006)
 
     Changes:
+    * Added a dialog to insert HTML special characters.
+    * Added new command line option --line to set the initial line for
+      the first opened file.
+    * Implemented new, own Undo system to undo/redo encoding changes.
+    * Added simple parser for filetype Diff to create tags for each
+      patched file in a diff file.
+    * Added new encoding "None" to open files without any character
+      conversions.
+    * Added stop button(using the Run button) to cancel the execution
+      of a command like Run, Compile or Build.
+    * New filetype VHDL.
+    * New scintilla lexer for filetype D with several improvements.
+    * Improved auto completion of multi line comments
+    * Added option to execute programs in the VTE instead of executing
+      them in a terminal emulation window
     * Removed the limit on the number of files open.
     * Save the build includes and arguments when quitting.
     * Added Next Message search command and Next Error build command.
@@ -17,10 +32,24 @@ Geany 0.10 (TBA)
     * Change python default compile command to create a compiled
       python .pyc file (thanks to Bajusz Tamás).
 
-   Bugs fixed:
+    Windows changes:
     * Fix #1611530 'file has changed' message on Windows after saving.
+    * Fixed wrong paste behaviour under Windows with some applications.
+
+    Bugs fixed:
+    * Fixed crash when using "Make object" on new files.
+    * Fixed incompatible use of read command in the created shell
+      script to execute programs.
+    * Fixed wrong insert position when the cursor was moved by keyboard
+      and comments, includes or a date was inserted.
+    * Fixed some segfaults when inserting comments, dates and
+      includes at a position prior to some deleted text.
     * Fix message window horizontal scrollbar being too tall on some
       systems (thanks to Rob van der Linde).
+
+    Internationalisation:
+    * New translations: fr, hu, it, zh_CN, zh_TW.
+    * Updated translations: be, ca, cs, de, es, vi.
 
 
 Geany 0.9 (September 29, 2006)
