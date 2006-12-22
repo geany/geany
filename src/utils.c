@@ -371,12 +371,24 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 }
 
 
+/* This could perhaps be improved to check for #if, class etc. */
+static gint get_function_fold_number(gint idx)
+{
+	// for Java the functions are always one fold level above the class scope
+	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_JAVA)
+		return SC_FOLDLEVELBASE + 1;
+	else
+		return SC_FOLDLEVELBASE;
+}
+
+
 /* Should be used only with utils_get_current_function. */
 static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_level)
 {
 	static gint old_line = -2;
 	static gint old_idx = -1;
-	static gint old_fold_level = -1;
+	static gint old_fold_num = -1;
+	const gint fold_num = fold_level & SC_FOLDLEVELNUMBERMASK;
 	gboolean ret;
 
 	// check if the cached line and file index have changed since last time:
@@ -387,18 +399,26 @@ static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_
 		ret = FALSE;
 	else
 	{
-		// if the line has only changed by 1 and fold_level is the same, return unchanged.
+		// if the line has only changed by 1
 		if (abs(cur_line - old_line) == 1)
 		{
-			ret = (fold_level != old_fold_level);
+			const gint fn_fold =
+				get_function_fold_number(cur_idx);
+			/* It's the same function if the fold number hasn't changed, or both the new
+			 * and old fold numbers are above the function fold number. */
+			gboolean same =
+				fold_num == old_fold_num ||
+				(old_fold_num > fn_fold && fold_num > fn_fold);
+
+			ret = ! same;
 		}
 		else ret = TRUE;
 	}
 
-	//record current line and file index for next time
+	// record current line and file index for next time
 	old_line = cur_line;
 	old_idx = cur_idx;
-	old_fold_level = fold_level;
+	old_fold_num = fold_num;
 	return ret;
 }
 
@@ -527,9 +547,7 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 	if (doc_list[idx].file_type != NULL &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_ALL)
 	{
-		// for Java the functions are one fold level above the class scope
-		gint top_fold_level = (doc_list[idx].file_type->id == GEANY_FILETYPES_JAVA) ?
-			SC_FOLDLEVELBASE + 1 : SC_FOLDLEVELBASE;
+		const gint fn_fold = get_function_fold_number(idx);
 
 		tag_line = line;
 		do	// find the top level fold point
@@ -537,7 +555,7 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 			tag_line = sci_get_fold_parent(doc_list[idx].sci, tag_line);
 			fold_level = sci_get_fold_level(doc_list[idx].sci, tag_line);
 		} while (tag_line >= 0 &&
-			(fold_level & SC_FOLDLEVELNUMBERMASK) != top_fold_level);
+			(fold_level & SC_FOLDLEVELNUMBERMASK) != fn_fold);
 
 		if (tag_line >= 0)
 		{
