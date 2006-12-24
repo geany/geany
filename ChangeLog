@@ -1,3 +1,10 @@
+2006-12-24  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/sci_cb.c:
+   Only call SCI_BRACEMATCH once in sci_cb_highlight_braces().
+   Separate find_calltip() from sci_cb_show_calltip().
+
+
 2006-12-22  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c:

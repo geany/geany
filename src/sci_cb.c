@@ -536,14 +536,35 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 }
 
 
+static gchar *find_calltip(const gchar *word, filetype *ft)
+{
+	TMTag *tag;
+	const GPtrArray *tags;
+
+	g_return_val_if_fail(ft && word && *word, NULL);
+
+	tags = tm_workspace_find(word, tm_tag_max_t, NULL, FALSE, ft->lang);
+	if (tags->len == 1 && TM_TAG(tags->pdata[0])->atts.entry.arglist)
+	{
+		tag = TM_TAG(tags->pdata[0]);
+		if (tag->atts.entry.var_type)
+			return g_strconcat(tag->atts.entry.var_type, " ", tag->name,
+										 " ", tag->atts.entry.arglist, NULL);
+		else
+			return g_strconcat(tag->name, " ", tag->atts.entry.arglist, NULL);
+	}
+	else
+		return NULL;
+}
+
+
 gboolean sci_cb_show_calltip(gint idx, gint pos)
 {
 	gint orig_pos = pos; // the position for the calltip
 	gint lexer;
 	gint style;
 	gchar word[GEANY_MAX_WORD_LENGTH];
-	TMTag *tag;
-	const GPtrArray *tags;
+	gchar *str;
 	ScintillaObject *sci;
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return FALSE;
@@ -573,23 +594,17 @@ gboolean sci_cb_show_calltip(gint idx, gint pos)
 	sci_cb_find_current_word(sci, pos - 1, word, sizeof word);
 	if (word[0] == '\0') return FALSE;
 
-	tags = tm_workspace_find(word, tm_tag_max_t, NULL, FALSE, doc_list[idx].file_type->lang);
-	if (tags->len == 1 && TM_TAG(tags->pdata[0])->atts.entry.arglist)
+	str = find_calltip(word, doc_list[idx].file_type);
+	if (str)
 	{
-		tag = TM_TAG(tags->pdata[0]);
 		g_free(calltip.text);	// free the old calltip
+		calltip.text = str;
 		calltip.set = TRUE;
-		if (tag->atts.entry.var_type)
-			calltip.text = g_strconcat(tag->atts.entry.var_type, " ", tag->name,
-										 " ", tag->atts.entry.arglist, NULL);
-		else
-			calltip.text = g_strconcat(tag->name, " ", tag->atts.entry.arglist, NULL);
-
 		utils_wrap_string(calltip.text, -1);
 		SSM(sci, SCI_CALLTIPSHOW, orig_pos, (sptr_t) calltip.text);
+		return TRUE;
 	}
-
-	return TRUE;
+	return FALSE;
 }
 
 
@@ -1627,48 +1642,24 @@ void sci_cb_do_comment(gint idx, gint line)
 
 void sci_cb_highlight_braces(ScintillaObject *sci, gint cur_pos)
 {
-#if 0
-	// is it useful (or performant) to check for lexer and style, only to prevent brace highlighting in comments
-	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	gint style = SSM(sci, SCI_GETSTYLEAT, cur_pos - 2, 0);
+	gint brace_pos = cur_pos - 1;
+	gint end_pos;
 
-	if (lexer == SCLEX_CPP && (
-		style == SCE_C_COMMENT ||
-	    style == SCE_C_COMMENTLINE ||
-	    style == SCE_C_COMMENTDOC ||
-	    style == SCE_C_COMMENTLINEDOC ||
-		style == SCE_C_STRING ||
-		style == SCE_C_PREPROCESSOR)) return;
-	if (lexer == SCLEX_HTML && (style == SCE_HPHP_COMMENT ||
-		style == SCE_H_COMMENT ||
-		style == SCE_H_SGML_COMMENT ||
-		style == SCE_H_XCCOMMENT)) return;
-	if (lexer == SCLEX_PASCAL && (
-		style == SCE_C_COMMENT ||
-	    style == SCE_C_COMMENTLINE ||
-	    style == SCE_C_COMMENTDOC ||
-	    style == SCE_C_COMMENTLINEDOC)) return;
-#endif
-	if (utils_isbrace(sci_get_char_at(sci, cur_pos)) || utils_isbrace(sci_get_char_at(sci, cur_pos - 1)))
+	if (! utils_isbrace(sci_get_char_at(sci, brace_pos)))
 	{
-		gint end_pos = SSM(sci, SCI_BRACEMATCH, cur_pos, 0);
-		gint end_pos_prev = SSM(sci, SCI_BRACEMATCH, (cur_pos - 1), 0);
-		if (end_pos >= 0)
-			SSM(sci, SCI_BRACEHIGHLIGHT, cur_pos, end_pos);
-		else if (end_pos_prev >= 0)
-			SSM(sci, SCI_BRACEHIGHLIGHT, (cur_pos - 1), end_pos_prev);
-		else
+		brace_pos++;
+		if (! utils_isbrace(sci_get_char_at(sci, brace_pos)))
 		{
-			if (utils_isbrace(sci_get_char_at(sci, cur_pos)))
-				SSM(sci, SCI_BRACEBADLIGHT, cur_pos, 0);
-			if (utils_isbrace(sci_get_char_at(sci, cur_pos - 1)))
-				SSM(sci, SCI_BRACEBADLIGHT, cur_pos - 1, 0);
+			SSM(sci, SCI_BRACEBADLIGHT, -1, 0);
+			return;
 		}
 	}
+	end_pos = SSM(sci, SCI_BRACEMATCH, brace_pos, 0);
+
+	if (end_pos >= 0)
+		SSM(sci, SCI_BRACEHIGHLIGHT, brace_pos, end_pos);
 	else
-	{
-		SSM(sci, SCI_BRACEBADLIGHT, -1, 0);
-	}
+		SSM(sci, SCI_BRACEBADLIGHT, brace_pos, 0);
 }
 
 

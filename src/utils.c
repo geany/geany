@@ -141,18 +141,13 @@ gint utils_get_line_endings(gchar* buffer, glong size)
 
 gboolean utils_isbrace(gchar c)
 {
-	// match < and > only if desired, because I don't like it, but some people do
-	if (app->brace_match_ltgt)
-	{
-		switch (c)
-		{
-			case '<':
-			case '>': return TRUE;
-		}
-	}
-
 	switch (c)
 	{
+		// match < and > only if desired, because I don't like it, but some people do
+		case '<':
+		case '>':
+		return app->brace_match_ltgt;
+
 		case '(':
 		case ')':
 		case '{':
@@ -168,17 +163,12 @@ gboolean utils_isbrace(gchar c)
 
 gboolean utils_is_opening_brace(gchar c)
 {
-	// match < only if desired, because I don't like it, but some people do
-	if (app->brace_match_ltgt)
-	{
-		switch (c)
-		{
-			case '<': return TRUE;
-		}
-	}
-
 	switch (c)
 	{
+		// match < only if desired, because I don't like it, but some people do
+		case '<':
+		return app->brace_match_ltgt;
+
 		case '(':
 		case '{':
 		case '[':  return TRUE;
