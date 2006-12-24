@@ -3,6 +3,9 @@
  * src/utils.c, src/sci_cb.c:
    Only call SCI_BRACEMATCH once in sci_cb_highlight_braces().
    Separate find_calltip() from sci_cb_show_calltip().
+ * src/sciwrappers.c:
+   Improve accuracy of sci_scroll_to_line() when line wrapping and/or
+   folding is used.
 
 
 2006-12-22  Nick Treleaven  <nick.treleaven@btinternet.com>
