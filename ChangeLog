@@ -1,3 +1,9 @@
+2006-12-26  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * tagmanager/tm_tag.c, tagmanager/include/tm_tag.h:
+   Fix missed matches in tm_tags_find().
+
+
 2006-12-24  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c, src/sci_cb.c:
