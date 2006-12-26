@@ -526,6 +526,70 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 }
 
 
+/* scope can be NULL.
+ * lang can be -1 */
+static int
+fill_find_tags_array (GPtrArray * dst, const GPtrArray * src,
+					  const char *name, const char *scope, int type, gboolean partial,
+					  gint lang, gboolean first)
+{
+	TMTag **match;
+	int tagIter, count;
+
+	if ((!src) || (!dst) || (!name) || (!*name))
+		return 0;
+
+	match = tm_tags_find (src, name, partial, &count);
+	if (count && match && *match)
+	{
+		for (tagIter = 0; tagIter < count; ++tagIter)
+		{
+			if (! scope || (match[tagIter]->atts.entry.scope &&
+				0 == strcmp(match[tagIter]->atts.entry.scope, scope)))
+			{
+				if ((lang == -1 || lang == match[tagIter]->atts.entry.file->lang) &&
+					type & match[tagIter]->type)
+				{
+					g_ptr_array_add (dst, match[tagIter]);
+					if (first)
+						break;
+				}
+			}
+		}
+	}
+	return dst->len;
+}
+
+
+// adapted from tm_workspace_find, Anjuta 2.02
+const GPtrArray *
+tm_workspace_find_scoped (const char *name, const char *scope, gint type,
+		TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search)
+{
+	static GPtrArray *tags = NULL;
+
+	if ((!theWorkspace))
+		return NULL;
+
+	if (tags)
+		g_ptr_array_set_size (tags, 0);
+	else
+		tags = g_ptr_array_new ();
+
+	fill_find_tags_array (tags, theWorkspace->work_object.tags_array,
+						  name, scope, type, partial, lang, TRUE);
+	if (global_search)
+	{
+		// for a scoped tag, I think we always want the same language
+		fill_find_tags_array (tags, theWorkspace->global_tags,
+							  name, scope, type, partial, lang, TRUE);
+	}
+	if (attrs)
+		tm_tags_sort (tags, attrs, TRUE);
+	return tags;
+}
+
+
 const TMTag *
 tm_get_current_function (GPtrArray * file_tags, const gulong line)
 {

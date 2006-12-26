@@ -544,17 +544,35 @@ static gchar *find_calltip(const gchar *word, filetype *ft)
 	g_return_val_if_fail(ft && word && *word, NULL);
 
 	tags = tm_workspace_find(word, tm_tag_max_t, NULL, FALSE, ft->lang);
-	if (tags->len == 1 && TM_TAG(tags->pdata[0])->atts.entry.arglist)
+
+	if (tags->len == 0)
+		return NULL;
+
+	tag = TM_TAG(tags->pdata[0]);
+	if (tag->atts.entry.arglist)
 	{
-		tag = TM_TAG(tags->pdata[0]);
 		if (tag->atts.entry.var_type)
 			return g_strconcat(tag->atts.entry.var_type, " ", tag->name,
 										 " ", tag->atts.entry.arglist, NULL);
 		else
 			return g_strconcat(tag->name, " ", tag->atts.entry.arglist, NULL);
 	}
-	else
-		return NULL;
+	else if (tag->type == tm_tag_class_t && FILETYPE_ID(ft) == GEANY_FILETYPES_D)
+	{
+		TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
+
+		// user typed e.g. 'new Classname(' so lookup D constructor Classname::this()
+		tags = tm_workspace_find_scoped("this", tag->name, tm_tag_function_t | tm_tag_prototype_t,
+			attrs, FALSE, ft->lang, TRUE);
+		if (tags->len != 0)
+		{
+			tag = TM_TAG(tags->pdata[0]);
+			if (tag->atts.entry.arglist)
+				return g_strconcat(tag->atts.entry.scope, ".this ",
+					tag->atts.entry.arglist, NULL);
+		}
+	}
+	return NULL;
 }
 
 

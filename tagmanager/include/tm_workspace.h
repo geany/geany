@@ -138,6 +138,20 @@ void tm_workspace_dump(void);
 const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs
  , gboolean partial, langType lang);
 
+/*! Returns all matching tags found in the workspace.
+ \param name The name of the tag to find.
+ \param scope The scope name of the tag to find, or NULL.
+ \param type The tag types to return (TMTagType). Can be a bitmask.
+ \param attrs The attributes to sort and dedup on (0 terminated integer array).
+ \param partial Whether partial match is allowed.
+ \param lang Specifies the language(see the table in parsers.h) of the tags to be found,
+             -1 for all
+ \return Array of matching tags. Do not free() it since it is a static member.
+*/
+const GPtrArray *
+tm_workspace_find_scoped (const char *name, const char *scope, gint type,
+		TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search);
+
 /*! Returns TMTag to function which "own" given line
  \param line Current line in edited file.
  \param file_tags A GPtrArray of edited file TMTag pointers.
