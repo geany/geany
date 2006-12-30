@@ -1179,15 +1179,10 @@ void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text)
 void ui_update_tab_status(gint idx)
 {
 	GdkColor *color = document_get_status(idx);
-	static GtkStyle *style = NULL;
 
-	if (style == NULL) // use and store default foreground colour
-		style = gtk_rc_get_style(doc_list[idx].tab_label);
-
-	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL,
-		color ? color : &(style->fg[GTK_STATE_NORMAL]));
-	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_ACTIVE,
-		color ? color : &(style->fg[GTK_STATE_ACTIVE]));
+	// NULL color will reset to default
+	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL, color);
+	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_ACTIVE, color);
 
 	treeviews_openfiles_update(idx);
 }
