@@ -685,7 +685,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
 		//GIOStatus s;
-		gchar *msg;
+		gchar *msg, *dir = NULL;
 
 		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg)
 		{
@@ -694,11 +694,18 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 			color = (GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK;
 			g_strstrip(msg);
 
+			if (strstr(msg, "Entering directory") != NULL) {
+				if (dir != NULL)
+					g_free(dir);
+				build_parse_make_dir(msg, &dir);
+			}
+
 			if (app->pref_editor_use_indicators)
 			{
 				gchar *filename;
 				gint line;
-				msgwin_parse_compiler_error_line(msg, &filename, &line);
+
+				msgwin_parse_compiler_error_line(msg, dir, &filename, &line);
 				if (line != -1 && filename != NULL)
 				{
 					gint idx = document_find_by_filename(filename, FALSE);
@@ -711,11 +718,51 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 
 			g_free(msg);
 		}
+
+		if (dir != NULL)
+			g_free(dir);
 	}
 	if (cond & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
 		return FALSE;
 
 	return TRUE;
+}
+
+
+gboolean build_parse_make_dir(gchar *string, gchar **prefix)
+{
+	gchar *pos, *input;
+
+	*prefix = NULL;
+
+	input = g_strdup(string);
+	if (input == NULL)
+		return FALSE;
+
+	if ((pos = strstr(input, "Entering directory")) != NULL)
+	{
+		gsize len = strlen(input);
+
+		//get the start of the path
+		pos = strstr(input, "/");
+
+		if (pos == NULL) {
+			g_free(input);
+			return FALSE;
+		}
+
+		//kill the ' at the end of the path
+		input[len-1] = '\0';
+
+		//duplicate
+		*prefix = g_strdup(pos);
+
+		g_free(input);
+		return TRUE;
+	}
+
+	g_free(input);
+	return FALSE;
 }
 
 

@@ -3,6 +3,11 @@
  * src/ui_utils.c:
    Don't use gtk_rc_get_style() in ui_update_tab_status() because it
    can cause an invalid memory read on some systems.
+ * src/build.c, src/build.h, src/msgwindow.c, src/msgwindow.h:
+   Applied patch from Josef Whiter to parse 'Entering directory' build
+   messages so that subsequent error messages are handled correctly
+   (thanks).
+   Assume gcc-style error messages when filetype is not set.
 
 
 2006-12-26  Nick Treleaven  <nick.treleaven@btinternet.com>

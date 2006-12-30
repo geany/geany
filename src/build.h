@@ -74,6 +74,8 @@ GPid build_view_tex_file(gint idx, gint mode);
 
 GPid build_run_cmd(gint idx);
 
+gboolean build_parse_make_dir(gchar *string, gchar **prefix);
+
 void build_menu_update(gint idx);
 
 BuildMenuItems *build_get_menu_items(gint filetype_id);
@@ -106,4 +108,5 @@ on_build_arguments_activate            (GtkMenuItem     *menuitem,
 void
 on_build_next_error                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
 #endif

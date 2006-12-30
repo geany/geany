@@ -416,6 +416,32 @@ void msgwin_menu_add_common_items(GtkMenu *menu)
 }
 
 
+/* look back up from the current path and find the directory we came from */
+static gboolean
+find_prev_build_dir(GtkTreePath *cur, GtkTreeModel *model, gchar **prefix)
+{
+	GtkTreeIter iter;
+	*prefix = NULL;
+
+	while (gtk_tree_path_prev(cur))
+	{
+		if (gtk_tree_model_get_iter(model, &iter, cur))
+		{
+			gchar *string;
+			gtk_tree_model_get(model, &iter, 1, &string, -1);
+			if (string != NULL && build_parse_make_dir(string, prefix))
+			{
+				g_free(string);
+				return TRUE;
+			}
+			g_free(string);
+		}
+	}
+
+	return FALSE;
+}
+
+
 gboolean msgwin_goto_compiler_file_line()
 {
 	GtkTreeIter iter;
@@ -442,8 +468,17 @@ gboolean msgwin_goto_compiler_file_line()
 		{
 			gint line;
 			gint idx;
-			gchar *filename;
-			msgwin_parse_compiler_error_line(string, &filename, &line);
+			gchar *filename, *dir;
+			GtkTreePath *path;
+
+			path = gtk_tree_model_get_path(model, &iter);
+			find_prev_build_dir(path, model, &dir);
+			gtk_tree_path_free(path);
+			msgwin_parse_compiler_error_line(string, dir, &filename, &line);
+
+			if (dir != NULL)
+				g_free(dir);
+
 			if (filename != NULL && line > -1)
 			{
 				gchar *utf8_filename = utils_get_utf8_from_locale(filename);
@@ -533,22 +568,21 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
  * relevant file with the error in *filename.
  * *line will be -1 if no error was found in string.
  * *filename must be freed unless it is NULL. */
-void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gint *line)
+void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gchar **filename, gint *line)
 {
 	ParseData data = {string, build_info.dir, NULL, 0, 0, 0};
 
 	*filename = NULL;
 	*line = -1;
 
-	g_return_if_fail(build_info.dir != NULL);
+	if (dir != NULL)
+		data.dir = dir;
+
+	g_return_if_fail(build_info.dir != NULL || dir != NULL);
 	if (string == NULL) return;
 
 	switch (build_info.file_type_id)
 	{
-		case GEANY_FILETYPES_ALL:
-		{
-			return;
-		}
 		case GEANY_FILETYPES_PHP:
 		{
 			// Parse error: parse error, unexpected T_CASE in brace_bug.php on line 3
@@ -668,6 +702,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, gchar **filename, gin
 		case GEANY_FILETYPES_LATEX:
 			// ./kommtechnik_2b.tex:18: Emergency stop.
 		case GEANY_FILETYPES_MAKE:	// Assume makefile is building with gcc
+		case GEANY_FILETYPES_ALL:
 		default:	// The default is a GNU gcc type error
 		{
 			// don't accidently find libtool versions x:y:x and think it is a file name
