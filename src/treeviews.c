@@ -332,6 +332,10 @@ void treeviews_openfiles_add(gint idx)
 
 	gtk_list_store_append(tv.store_openfiles, iter);
 	treeviews_openfiles_update(idx);
+
+	// select opened file
+	GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
+	gtk_tree_selection_select_iter(sel, iter);
 }
 
 
