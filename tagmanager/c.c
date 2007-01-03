@@ -47,7 +47,7 @@
 *   DATA DECLARATIONS
 */
 
-enum { NumTokens = 3 };
+enum { NumTokens = 8 };
 
 typedef enum eException {
     ExceptionNone, ExceptionEOF, ExceptionFormattingError,
@@ -105,6 +105,7 @@ typedef enum eTokenType {
     TOKEN_PAREN_NAME,	/* a single name in parentheses */
     TOKEN_SEMICOLON,	/* the semicolon character */
     TOKEN_SPEC,		/* a storage class specifier, qualifier, type, etc. */
+    TOKEN_STAR,   /* pointer detection */
     TOKEN_COUNT
 } tokenType;
 
@@ -156,6 +157,8 @@ typedef struct sTokenInfo {
     tokenType     type;
     keywordId     keyword;
     vString*      name;		/* the name of the token */
+    int           pointerOrder; /* 0=no pointer, 1=pointer, 2=pointer
+				   to pointer, etc */
     unsigned long lineNumber;	/* line number of tag */
     fpos_t        filePosition;	/* file position of line containing name */
 } tokenInfo;
@@ -178,7 +181,8 @@ typedef struct sStatementInfo {
     boolean	haveQualifyingName;  /* do we have a name we are considering? */
     boolean	gotParenName;	/* was a name inside parentheses parsed yet? */
     boolean	gotArgs;	/* was a list of parameters parsed yet? */
-    boolean	isPointer;	/* is 'name' a pointer? */
+    int         pointerOrder;   /* 0=no pointer, 1=pointer, 2=pointer
+				   to pointer, etc */
     impType	implementation;	/* abstract or concrete implementation? */
     unsigned int tokenIndex;	/* currently active token */
     tokenInfo*	token [(int) NumTokens];
@@ -216,7 +220,7 @@ typedef enum eTagType {
 } tagType;
 
 typedef struct sParenInfo {
-    boolean isPointer;
+    int pointerOrder;
     boolean isParamList;
     boolean isKnrParamList;
     boolean isNameCandidate;
@@ -350,7 +354,7 @@ static void createTags (const unsigned int nestLevel, statementInfo *const paren
 #if DEBUG_C
 static char *tokenTypeName[] = {
     "none", "args", "'}'", "'{'", "','", "'::'", "keyword", "name",
-    "package", "paren-name", "';'",	"spec", "count"
+    "package", "paren-name", "';'",	"spec", "*","count"
 };
 
 static char *tagScopeNames[] = {
@@ -427,6 +431,7 @@ static void initToken (tokenInfo* const token)
 {
     token->type		= TOKEN_NONE;
     token->keyword	= KEYWORD_NONE;
+    token->pointerOrder = 0;
     token->lineNumber	= getSourceLineNumber ();
     token->filePosition	= getInputFilePosition ();
     vStringClear (token->name);
@@ -516,7 +521,7 @@ static const char *tokenString (const tokenType type)
 {
     static const char *const names [] = {
 	"none", "args", "}", "{", "comma", "double colon", "keyword", "name",
-	"package", "paren-name", "semicolon", "specifier"
+	"package", "paren-name", "semicolon", "specifier", "*","count"
     };
     Assert (sizeof (names) / sizeof (names [0]) == TOKEN_COUNT);
     Assert ((int) type < TOKEN_COUNT);
@@ -602,6 +607,26 @@ static void __unused__ ps (statementInfo *const st)
 /*
 *   Statement management
 */
+
+static boolean isVariableKeyword (const tokenInfo *const token)
+{
+    switch (token->keyword)
+    {
+      case KEYWORD_CONST:
+      case KEYWORD_EXTERN:
+      case KEYWORD_REGISTER:
+      case KEYWORD_STATIC:
+#if 0
+      case KEYWORD_AUTO:
+      case KEYWORD_RESTRICT:
+#endif
+      case KEYWORD_VIRTUAL:
+      case KEYWORD_SIGNED:
+      case KEYWORD_UNSIGNED:
+	  return TRUE;
+      default: return FALSE;
+    }
+}
 
 static boolean isContextualKeyword (const tokenInfo *const token)
 {
@@ -694,7 +719,7 @@ static void reinitStatement (statementInfo *const st, const boolean partial)
 	    st->declaration = DECL_NONE;
     }
     st->gotParenName	= FALSE;
-    st->isPointer	= FALSE;
+    st->pointerOrder    = 0;
     st->implementation	= IMP_DEFAULT;
     st->gotArgs		= FALSE;
     st->gotName		= FALSE;
@@ -1031,6 +1056,7 @@ static void makeTag (const tokenInfo *const token,
 	e.kindName	= tagName (type);
 	e.kind		= tagLetter (type);
 	e.type = type;
+	e.pointerOrder = token->pointerOrder;
 
 	findScopeHierarchy (scope, st);
 	addOtherFields (&e, type, st, scope);
@@ -1441,6 +1467,7 @@ static void copyToken (tokenInfo *const dest, const tokenInfo *const src)
     dest->keyword      = src->keyword;
     dest->filePosition = src->filePosition;
     dest->lineNumber   = src->lineNumber;
+    dest->pointerOrder = src->pointerOrder;
     vStringCopy (dest->name, src->name);
 }
 
@@ -1819,7 +1846,8 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 	{
 	    case '&':
 	    case '*':
-		info->isPointer = TRUE;
+		/* DEBUG_PRINT("parseParens, po++\n"); */
+		info->pointerOrder++;
 		info->isKnrParamList = FALSE;
 		if (identifierCount == 0)
 		    info->isParamList = FALSE;
@@ -1944,7 +1972,7 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 
 static void initParenInfo (parenInfo *const info)
 {
-    info->isPointer		= FALSE;
+    info->pointerOrder          = 0;
     info->isParamList		= TRUE;
     info->isKnrParamList	= TRUE;
     info->isNameCandidate	= TRUE;
@@ -1980,7 +2008,7 @@ static void analyzeParens (statementInfo *const st)
 	    processName (st);
 	    st->gotParenName = TRUE;
 	    if (! (c == '('  &&  info.nestedArgs))
-		st->isPointer = info.isPointer;
+				st->pointerOrder = info.pointerOrder;
 	}
 	else if (! st->gotArgs  &&  info.isParamList)
 	{
@@ -2143,7 +2171,10 @@ static void nextToken (statementInfo *const st)
 	{
 	    case EOF: longjmp (Exception, (int) ExceptionEOF);		break;
 	    case '(': analyzeParens (st); token = activeToken (st); break;
-	    case '*': st->haveQualifyingName = FALSE;			break;
+	    case '*':
+		st->haveQualifyingName = FALSE;
+		setToken (st, TOKEN_STAR);
+		break;
 	    case ',': setToken (st, TOKEN_COMMA);			break;
 	    case ':': processColon (st);					break;
 	    case ';': setToken (st, TOKEN_SEMICOLON);			break;
@@ -2269,6 +2300,28 @@ static void nest (statementInfo *const st, const unsigned int nestLevel)
     setToken (st, TOKEN_BRACE_CLOSE);
 }
 
+static int getTokenPointerOrder (statementInfo *const st, int prev)
+{
+    const tokenInfo *prev_tmp = prevToken (st, prev);
+    int pointer_order = 0;
+
+    /* ... , *const ptr; */
+    if (isVariableKeyword ( prev_tmp ))
+    {
+	prev++;
+	prev_tmp = prevToken (st, prev);
+    }
+
+    while (isType ( prev_tmp, TOKEN_STAR ))
+    {
+	pointer_order++;
+	prev++;
+	prev_tmp = prevToken (st, prev);
+    }
+
+    return pointer_order;
+}
+
 static void tagCheck (statementInfo *const st)
 {
     const tokenInfo *const token = activeToken (st);
@@ -2295,6 +2348,10 @@ static void tagCheck (statementInfo *const st)
 		    st->declaration = DECL_FUNCTION;
 		    if (isType (prev2, TOKEN_NAME))
 			copyToken (st->blockName, prev2);
+		    if (!isLanguage (Lang_java))
+		    {
+			((tokenInfo *)prev2)->pointerOrder = getTokenPointerOrder (st, 3);
+		    }
 		    qualifyFunctionTag (st, prev2);
 		}
 	    }
@@ -2315,13 +2372,20 @@ static void tagCheck (statementInfo *const st)
 		if (isContextualKeyword (prev2))
 		    st->scope = SCOPE_EXTERN;
 		else
+		{
+		    if (!isLanguage (Lang_java))
+		    {
+			((tokenInfo *)prev)->pointerOrder = getTokenPointerOrder (st, 2);
+		    }
 			qualifyVariableTag (st, prev);
+	    }
 	    }
 	    else if (isType (prev, TOKEN_ARGS)  &&  isType (prev2, TOKEN_NAME))
 	    {
-		if (st->isPointer)
-		    qualifyVariableTag (st, prev2);
-		else
+			if (!isLanguage (Lang_java))
+			{
+			    ((tokenInfo *)prev2)->pointerOrder = getTokenPointerOrder (st, 3);
+			}
 		    qualifyFunctionDeclTag (st, prev2);
 	    }
 	    break;

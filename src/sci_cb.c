@@ -536,6 +536,44 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 }
 
 
+static gchar *tag_to_calltip(const TMTag *tag, gint ft_id)
+{
+	GString *str;
+	gchar *result;
+
+	if (! tag->atts.entry.arglist) return NULL;
+
+	str = g_string_new(NULL);
+
+	if (tag->atts.entry.var_type)
+	{
+		guint i;
+
+		g_string_append(str, tag->atts.entry.var_type);
+		for (i = 0; i < tag->atts.entry.pointerOrder; i++)
+		{
+			g_string_append_c(str, '*');
+		}
+		g_string_append_c(str, ' ');
+	}
+	if (tag->atts.entry.scope)
+	{
+		g_string_append(str, tag->atts.entry.scope);
+		if (ft_id == GEANY_FILETYPES_D)
+			g_string_append_c(str, '.');
+		else
+			g_string_append(str, "::");
+	}
+	g_string_append(str, tag->name);
+	g_string_append_c(str, ' ');
+	g_string_append(str, tag->atts.entry.arglist);
+
+	result = str->str;
+	g_string_free(str, FALSE);
+	return result;
+}
+
+
 static gchar *find_calltip(const gchar *word, filetype *ft)
 {
 	TMTag *tag;
@@ -551,11 +589,7 @@ static gchar *find_calltip(const gchar *word, filetype *ft)
 	tag = TM_TAG(tags->pdata[0]);
 	if (tag->atts.entry.arglist)
 	{
-		if (tag->atts.entry.var_type)
-			return g_strconcat(tag->atts.entry.var_type, " ", tag->name,
-										 " ", tag->atts.entry.arglist, NULL);
-		else
-			return g_strconcat(tag->name, " ", tag->atts.entry.arglist, NULL);
+		return tag_to_calltip(tag, FILETYPE_ID(ft));
 	}
 	else if (tag->type == tm_tag_class_t && FILETYPE_ID(ft) == GEANY_FILETYPES_D)
 	{
@@ -568,8 +602,7 @@ static gchar *find_calltip(const gchar *word, filetype *ft)
 		{
 			tag = TM_TAG(tags->pdata[0]);
 			if (tag->atts.entry.arglist)
-				return g_strconcat(tag->atts.entry.scope, ".this ",
-					tag->atts.entry.arglist, NULL);
+				return tag_to_calltip(tag, FILETYPE_ID(ft));
 		}
 	}
 	return NULL;

@@ -1,3 +1,12 @@
+2007-01-03  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sci_cb.c, tagmanager/entry.h, tagmanager/tm_tag.c,
+   tagmanager/include/tm_tag.h, tagmanager/c.c:
+   Parse pointers in function return type for C-like files.
+   Show scope in calltips.
+   Made tm_tag_destroy() static.
+
+
 2006-12-31  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/treeviews.c: When opening a file, set the current selected

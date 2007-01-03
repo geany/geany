@@ -60,6 +60,7 @@ typedef struct sTagEntryInfo {
     boolean	isFileScope;	/* is tag visibile only within source file? */
     boolean	isFileEntry;	/* is this just an entry for a file name? */
     boolean	truncateLine;	/* truncate tag line at end of tag name? */
+    int         pointerOrder;   /* The number of *'s this variable has */
     const char *sourceFileName;	/* name of source file */
     const char *name;		/* name of the tag */
     const char *kindName;	/* kind of tag */
