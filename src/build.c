@@ -1286,22 +1286,22 @@ static void set_stop_button(gboolean stop)
 
 
 /* Creates the relevant build menu if necessary.
- * If filetype_id is -1, the current filetype is used, or GEANY_FILETYPES_ALL */
-BuildMenuItems *build_get_menu_items(gint filetype_id)
+ * If filetype_idx is -1, the current filetype is used, or GEANY_FILETYPES_ALL */
+BuildMenuItems *build_get_menu_items(gint filetype_idx)
 {
 	BuildMenuItems *items;
 
-	if (filetype_id == -1)
+	if (filetype_idx == -1)
 	{
 		gint idx = document_get_cur_idx();
 		filetype *ft = NULL;
 
 		if (DOC_IDX_VALID(idx))
 			ft = doc_list[idx].file_type;
-		filetype_id = FILETYPE_ID(ft);
+		filetype_idx = FILETYPE_ID(ft);
 	}
 
-	if (filetype_id == GEANY_FILETYPES_LATEX)
+	if (filetype_idx == GEANY_FILETYPES_LATEX)
 	{
 		items = &latex_menu_items;
 		if (items->menu == NULL)

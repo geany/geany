@@ -412,10 +412,10 @@ void templates_init(void)
 /* double_comment is a hack for PHP/HTML for whether to first add C style commenting.
  * In future we could probably remove the need for this by making most templates
  * automatically commented (so template files are not commented) */
-static gchar *make_comment_block(const gchar *comment_text, gint filetype_id,
+static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx,
 		gboolean double_comment)
 {
-	switch (filetype_id)
+	switch (filetype_idx)
 	{
 		case GEANY_FILETYPES_ALL:
 		return g_strdup(comment_text);	// no need to add to the text
@@ -426,7 +426,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_id,
 			gchar *tmp = (double_comment) ?
 				make_comment_block(comment_text, GEANY_FILETYPES_C, FALSE) :
 				g_strdup(comment_text);
-			gchar *block = (filetype_id == GEANY_FILETYPES_PHP) ?
+			gchar *block = (filetype_idx == GEANY_FILETYPES_PHP) ?
 				g_strconcat("<?php\n", tmp, "?>\n", NULL) :
 				g_strconcat("<!--\n", tmp, "-->\n", NULL);
 			g_free(tmp);
@@ -449,11 +449,11 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_id,
 }
 
 
-gchar *templates_get_template_gpl(gint filetype_id)
+gchar *templates_get_template_gpl(gint filetype_idx)
 {
 	const gchar *text;
 
-	switch (filetype_id)
+	switch (filetype_idx)
 	{
 		case GEANY_FILETYPES_PYTHON:
 		case GEANY_FILETYPES_RUBY:
@@ -474,7 +474,7 @@ gchar *templates_get_template_gpl(gint filetype_id)
 		text = templates[GEANY_TEMPLATE_GPL];
 		break;
 	}
-	return make_comment_block(text, filetype_id, TRUE);
+	return make_comment_block(text, filetype_idx, TRUE);
 }
 
 

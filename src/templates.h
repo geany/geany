@@ -38,7 +38,7 @@ gchar *templates_get_template_generic(gint template);
 
 gchar *templates_get_template_function(gint template, const gchar *func_name);
 
-gchar *templates_get_template_gpl(gint filetype_id);
+gchar *templates_get_template_gpl(gint filetype_idx);
 
 void templates_free_templates(void);
 

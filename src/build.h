@@ -78,7 +78,7 @@ gboolean build_parse_make_dir(gchar *string, gchar **prefix);
 
 void build_menu_update(gint idx);
 
-BuildMenuItems *build_get_menu_items(gint filetype_id);
+BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
 
 void

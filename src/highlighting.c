@@ -618,30 +618,30 @@ styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 }
 
 
-static void styleset_c_like(ScintillaObject *sci, gint filetype_id)
+static void styleset_c_like(ScintillaObject *sci, gint filetype_idx)
 {
-	set_sci_style(sci, STYLE_DEFAULT, filetype_id, 0);
-	set_sci_style(sci, SCE_C_DEFAULT, filetype_id, 0);
-	set_sci_style(sci, SCE_C_COMMENT, filetype_id, 1);
-	set_sci_style(sci, SCE_C_COMMENTLINE, filetype_id, 2);
-	set_sci_style(sci, SCE_C_COMMENTDOC, filetype_id, 3);
-	set_sci_style(sci, SCE_C_NUMBER, filetype_id, 4);
-	set_sci_style(sci, SCE_C_WORD, filetype_id, 5);
-	set_sci_style(sci, SCE_C_WORD2, filetype_id, 6);
-	set_sci_style(sci, SCE_C_STRING, filetype_id, 7);
-	set_sci_style(sci, SCE_C_CHARACTER, filetype_id, 8);
-	set_sci_style(sci, SCE_C_UUID, filetype_id, 9);
-	set_sci_style(sci, SCE_C_PREPROCESSOR, filetype_id, 10);
-	set_sci_style(sci, SCE_C_OPERATOR, filetype_id, 11);
-	set_sci_style(sci, SCE_C_IDENTIFIER, filetype_id, 12);
-	set_sci_style(sci, SCE_C_STRINGEOL, filetype_id, 13);
-	set_sci_style(sci, SCE_C_VERBATIM, filetype_id, 14);
-	set_sci_style(sci, SCE_C_REGEX, filetype_id, 15);
-	set_sci_style(sci, SCE_C_COMMENTLINEDOC, filetype_id, 16);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, filetype_id, 17);
-	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, filetype_id, 18);
+	set_sci_style(sci, STYLE_DEFAULT, filetype_idx, 0);
+	set_sci_style(sci, SCE_C_DEFAULT, filetype_idx, 0);
+	set_sci_style(sci, SCE_C_COMMENT, filetype_idx, 1);
+	set_sci_style(sci, SCE_C_COMMENTLINE, filetype_idx, 2);
+	set_sci_style(sci, SCE_C_COMMENTDOC, filetype_idx, 3);
+	set_sci_style(sci, SCE_C_NUMBER, filetype_idx, 4);
+	set_sci_style(sci, SCE_C_WORD, filetype_idx, 5);
+	set_sci_style(sci, SCE_C_WORD2, filetype_idx, 6);
+	set_sci_style(sci, SCE_C_STRING, filetype_idx, 7);
+	set_sci_style(sci, SCE_C_CHARACTER, filetype_idx, 8);
+	set_sci_style(sci, SCE_C_UUID, filetype_idx, 9);
+	set_sci_style(sci, SCE_C_PREPROCESSOR, filetype_idx, 10);
+	set_sci_style(sci, SCE_C_OPERATOR, filetype_idx, 11);
+	set_sci_style(sci, SCE_C_IDENTIFIER, filetype_idx, 12);
+	set_sci_style(sci, SCE_C_STRINGEOL, filetype_idx, 13);
+	set_sci_style(sci, SCE_C_VERBATIM, filetype_idx, 14);
+	set_sci_style(sci, SCE_C_REGEX, filetype_idx, 15);
+	set_sci_style(sci, SCE_C_COMMENTLINEDOC, filetype_idx, 16);
+	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORD, filetype_idx, 17);
+	set_sci_style(sci, SCE_C_COMMENTDOCKEYWORDERROR, filetype_idx, 18);
 	// is used for local structs and typedefs
-	set_sci_style(sci, SCE_C_GLOBALCLASS, filetype_id, 19);
+	set_sci_style(sci, SCE_C_GLOBALCLASS, filetype_idx, 19);
 }
 
 

@@ -32,7 +32,7 @@
 #include "ScintillaWidget.h"
 
 
-enum
+typedef enum
 {
 	GEANY_FILETYPES_C = 0,
 	GEANY_FILETYPES_CPP,
@@ -62,7 +62,7 @@ enum
 	GEANY_FILETYPES_CONF,
 	GEANY_FILETYPES_ALL,	// must be last filetype
 	GEANY_MAX_FILE_TYPES
-};
+} filetype_id;
 
 // Safe wrapper to get the id field of a possibly NULL filetype pointer.
 #define FILETYPE_ID(filetype_ptr) \
@@ -87,7 +87,7 @@ struct build_programs
 
 typedef struct filetype
 {
-	guint	 		  id;
+	filetype_id		  id;
 	guint	 		  uid;				// unique id as reference for saved filetype in config file
 	GtkWidget		 *item;				// holds a pointer to the menu item for this filetypes
 	langType 		  lang;				// represents the langType of tagmanager(see the table
