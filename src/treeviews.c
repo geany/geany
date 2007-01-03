@@ -329,12 +329,13 @@ void treeviews_prepare_openfiles()
 void treeviews_openfiles_add(gint idx)
 {
 	GtkTreeIter *iter = &doc_list[idx].iter;
+	GtkTreeSelection *sel;
 
 	gtk_list_store_append(tv.store_openfiles, iter);
 	treeviews_openfiles_update(idx);
 
 	// select opened file
-	GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
+	sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
 	gtk_tree_selection_select_iter(sel, iter);
 }
 
