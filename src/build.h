@@ -74,7 +74,7 @@ GPid build_view_tex_file(gint idx, gint mode);
 
 GPid build_run_cmd(gint idx);
 
-gboolean build_parse_make_dir(gchar *string, gchar **prefix);
+gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
 
 void build_menu_update(gint idx);
 

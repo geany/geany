@@ -1,3 +1,9 @@
+2007-01-04  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c, src/build.h:
+   Make build_parse_make_dir() more efficient.
+
+
 2007-01-03  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c, tagmanager/entry.h, tagmanager/tm_tag.c,
