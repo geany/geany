@@ -6,11 +6,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.10\n"
+"Project-Id-Version: geany 0.10svn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-12-17 13:26+0100\n"
-"PO-Revision-Date: 2006-12-18 22:31+0100\n"
-"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
+"PO-Revision-Date: 2007-01-05 16:41+0100\n"
+"Last-Translator: Enrico Tröger <enrico.troeger@uvena.de>\n"
 "Language-Team: German <frank@frank.uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -226,7 +226,7 @@ msgstr "ChangeLog-Eintrag hinzufügen"
 #: src/interface.c:525
 #: src/interface.c:1928
 msgid "Inserts a typical ChangeLog entry in the current file"
-msgstr "Fügt einen typischen ChangeLog-Eintrag an den Anfang der Datei ein"
+msgstr "Fügt einen typischen ChangeLog-Eintrag an den Anfang der Datei ein."
 
 #: src/interface.c:527
 #: src/interface.c:1930
@@ -236,7 +236,7 @@ msgstr "Dateikopf einfügen"
 #: src/interface.c:530
 #: src/interface.c:1933
 msgid "Inserts a file header at the beginning of the file"
-msgstr "Fügt einen Dateikopf am Anfang einer neu erzeugten Datei ein"
+msgstr "Fügt einen Dateikopf am Anfang einer neu erzeugten Datei ein."
 
 #: src/interface.c:532
 #: src/interface.c:1935
@@ -261,12 +261,12 @@ msgstr "Fügt einen mehrzeiligen Kommentar ein."
 #: src/interface.c:542
 #: src/interface.c:1945
 msgid "Insert GPL Notice"
-msgstr "GPL-Hinweis am Dateianfang einfügen"
+msgstr "GPL-Hinweis einfügen"
 
 #: src/interface.c:545
 #: src/interface.c:1948
 msgid "Inserts a GPL notice (should be done at the beginning of the file)"
-msgstr "Fügt einen kurzen Lizenz-Hinweis auf die GPL am Anfang einer neu erzeugten Datei ein"
+msgstr "Fügt einen kurzen Lizenz-Hinweis auf die GPL ein (sollte am Anfang einer Datei sein)."
 
 #: src/interface.c:547
 #: src/interface.c:1950
