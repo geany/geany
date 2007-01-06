@@ -421,38 +421,48 @@ void document_new_file(filetype *ft)
 }
 
 
+typedef struct
+{
+	gchar		*data;	// null-terminated file data
+	gsize		 len;	// string length of data
+	gchar		*enc;
+	gboolean	 bom;
+	time_t		 mtime;	// modification time, read by stat::st_mtime
+	gboolean	 readonly;
+} FileData;
+
+
 // reload file with specified encoding
 static gboolean
-handle_forced_encoding(gchar **data, gsize *size, const gchar *forced_enc, gchar **enc,
-	gboolean *bom)
+handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 {
 	if (utils_str_equal(forced_enc, "UTF-8"))
 	{
-		if (! g_utf8_validate(*data, *size, NULL))
+		if (! g_utf8_validate(filedata->data, filedata->len, NULL))
 		{
 			return FALSE;
 		}
 		else
 		{
-			*bom = utils_str_equal(utils_scan_unicode_bom(*data), "UTF-8");
-			*enc = g_strdup(forced_enc);
+			filedata->bom = utils_str_equal(utils_scan_unicode_bom(filedata->data), "UTF-8");
+			filedata->enc = g_strdup(forced_enc);
 		}
 	}
 	else
 	{
 		gchar *converted_text = encodings_convert_to_utf8_from_charset(
-													*data, *size, forced_enc, FALSE);
+										filedata->data, filedata->len, forced_enc, FALSE);
 		if (converted_text == NULL)
 		{
 			return FALSE;
 		}
 		else
 		{
-			g_free(*data);
-			*data = (void*)converted_text;
-			*size = strlen(converted_text);
-			*bom = utils_str_equal(utils_scan_unicode_bom(*data), "UTF-8");
-			*enc = g_strdup(forced_enc);
+			g_free(filedata->data);
+			filedata->data = converted_text;
+			filedata->len = strlen(converted_text);
+			filedata->bom = utils_str_equal(utils_scan_unicode_bom(filedata->data), "UTF-8");
+			filedata->enc = g_strdup(forced_enc);
 		}
 	}
 	return TRUE;
@@ -460,45 +470,46 @@ handle_forced_encoding(gchar **data, gsize *size, const gchar *forced_enc, gchar
 
 
 static gboolean
-handle_encoding(gchar **data, gsize *size, gchar **enc, gboolean *bom)
+handle_encoding(FileData *filedata)
 {
-	if (*size > 0)
+	if (filedata->len > 0)
 	{	// the usual way to detect encoding and convert to UTF-8
-		if (*size >= 4)
+		if (filedata->len >= 4)
 		{
-			*enc = utils_scan_unicode_bom(*data);
+			filedata->enc = utils_scan_unicode_bom(filedata->data);
 		}
-		if (*enc != NULL)
+		if (filedata->enc != NULL)
 		{
-			*bom = TRUE;
-			if ((*enc)[4] != '8') // the BOM indicated something else than UTF-8
+			filedata->bom = TRUE;
+			if ((filedata->enc)[4] != '8') // the BOM indicated something else than UTF-8
 			{
 				gchar *converted_text = encodings_convert_to_utf8_from_charset(
-															*data, *size, *enc, FALSE);
+															filedata->data, filedata->len, filedata->enc, FALSE);
 				if (converted_text == NULL)
 				{
-					g_free(*enc);
-					*enc = NULL;
-					*bom = FALSE;
+					g_free(filedata->enc);
+					filedata->enc = NULL;
+					filedata->bom = FALSE;
 				}
 				else
 				{
-					g_free(*data);
-					*data = (void*)converted_text;
-					*size = strlen(converted_text);
+					g_free(filedata->data);
+					filedata->data = converted_text;
+					filedata->len = strlen(converted_text);
 				}
 			}
 		}
 		// this if is important, else doesn't work because enc can be altered in the above block
-		if (*enc == NULL)
+		if (filedata->enc == NULL)
 		{
-			if (g_utf8_validate(*data, *size, NULL))
+			if (g_utf8_validate(filedata->data, filedata->len, NULL))
 			{
-				*enc = g_strdup("UTF-8");
+				filedata->enc = g_strdup("UTF-8");
 			}
 			else
 			{
-				gchar *converted_text = encodings_convert_to_utf8(*data, *size, enc);
+				gchar *converted_text = encodings_convert_to_utf8(filedata->data,
+					filedata->len, &filedata->enc);
 
 				if (converted_text == NULL)
 				{
@@ -506,51 +517,132 @@ handle_encoding(gchar **data, gsize *size, gchar **enc, gboolean *bom)
 				}
 				else
 				{
-					g_free(*data);
-					*data = (void*)converted_text;
-					*size = strlen(converted_text);
+					g_free(filedata->data);
+					filedata->data = converted_text;
+					filedata->len = strlen(converted_text);
 				}
 			}
 		}
 	}
 	else
 	{
-		*enc = g_strdup("UTF-8");
+		filedata->enc = g_strdup("UTF-8");
 	}
 	return TRUE;
 }
 
 
 static void
-handle_bom(gchar **data)
+handle_bom(FileData *filedata)
 {
 	gchar *data_without_bom;
-	data_without_bom = g_strdup(*data + 3);
-	g_free(*data);
-	*data = data_without_bom;
+
+	g_return_if_fail(filedata->len >= 3);
+
+	data_without_bom = g_strdup(filedata->data + 3);
+	g_free(filedata->data);
+	filedata->data = data_without_bom;
+	filedata->len -= 3;
 }
 
 
-/* If idx is set to -1, it creates a new tab, opens the file from filename and
- * set the cursor to pos.
- * If idx is greater than -1, it reloads the file in the tab corresponding to
- * idx and set the cursor to position 0. In this case, filename should be NULL
- * It returns the idx of the opened file or -1 if an error occurred.
+/* loads textfile data, verifies and converts to forced_enc or UTF-8. Also handles BOM. */
+static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_filename,
+		FileData *filedata, const gchar *forced_enc)
+{
+	GError *err = NULL;
+	struct stat st;
+
+	filedata->data = NULL;
+	filedata->len = 0;
+	filedata->enc = NULL;
+	filedata->bom = FALSE;
+	filedata->readonly = FALSE;
+
+	if (stat(locale_filename, &st) != 0)
+	{
+		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
+		return FALSE;
+	}
+
+	filedata->mtime = st.st_mtime;
+
+#ifdef G_OS_WIN32
+	if (! g_file_get_contents(utf8_filename, &filedata->data, NULL, &err))
+#else
+	if (! g_file_get_contents(locale_filename, &filedata->data, NULL, &err))
+#endif
+	{
+		msgwin_status_add(err->message);
+		g_error_free(err);
+		return FALSE;
+	}
+
+	// use strlen to check for null chars
+	filedata->len = strlen(filedata->data);
+
+	/* check whether the size of the loaded data is equal to the size of the file in the filesystem */
+	if (filedata->len != (gsize) st.st_size)
+	{
+		gchar *warn_msg = _("The file \"%s\" could not be opened properly and has been truncated. "
+				"This can occur if the file contains a NULL byte. "
+				"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
+
+		if (app->main_window_realized)
+			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
+
+		msgwin_status_add(warn_msg, utf8_filename);
+
+		// set the file to read-only mode because saving it is probably dangerous
+		filedata->readonly = TRUE;
+	}
+
+	/* Determine character encoding and convert to UTF-8 */
+	if (forced_enc != NULL)
+	{
+		// the encoding should be ignored(requested by user), so open the file "as it is"
+		if (utils_str_equal(forced_enc, encodings[GEANY_ENCODING_NONE].charset))
+		{
+			filedata->bom = FALSE;
+			filedata->enc = g_strdup(encodings[GEANY_ENCODING_NONE].charset);
+		}
+		else if (! handle_forced_encoding(filedata, forced_enc))
+		{
+			msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
+			utils_beep();
+			g_free(filedata->data);
+			return FALSE;
+		}
+	}
+	else if (! handle_encoding(filedata))
+	{
+		msgwin_status_add(
+			_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
+			utf8_filename);
+		utils_beep();
+		g_free(filedata->data);
+		return FALSE;
+	}
+
+	if (filedata->bom)
+		handle_bom(filedata);
+	return TRUE;
+}
+
+
+/* To open a new file, set idx to -1; filename should be locale encoded.
+ * To reload a file, set the idx for the document to be reloaded; filename should be NULL.
+ * Returns: idx of the opened file or -1 if an error occurred.
  */
 int document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly, filetype *ft,
 					   const gchar *forced_enc)
 {
 	gint editor_mode;
-	gsize size;
 	gboolean reload = (idx == -1) ? FALSE : TRUE;
-	struct stat st;
-	gboolean bom = FALSE;
-	gchar *enc = NULL;
 	gchar *utf8_filename = NULL;
 	gchar *locale_filename = NULL;
-	GError *err = NULL;
-	gchar *data = NULL;
 	filetype *use_ft;
+	FileData filedata;
 
 	//struct timeval tv, tv1;
 	//struct timezone tz;
@@ -589,97 +681,41 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		}
 	}
 
-	if (stat(locale_filename, &st) != 0)
+	if (! load_text_file(locale_filename, utf8_filename, &filedata, forced_enc))
 	{
-		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
 		g_free(utf8_filename);
 		g_free(locale_filename);
 		return -1;
 	}
-
-#ifdef G_OS_WIN32
-	if (! g_file_get_contents(utf8_filename, &data, NULL, &err))
-#else
-	if (! g_file_get_contents(locale_filename, &data, NULL, &err))
-#endif
-	{
-		msgwin_status_add(err->message);
-		g_error_free(err);
-		g_free(utf8_filename);
-		g_free(locale_filename);
-		return -1;
-	}
-
-	/* check whether the size of the loaded data is equal to the size of the file in the filesystem */
-	//size = strlen(data);
-	size = strlen(data);
-	if (size != (gsize) st.st_size)
-	{
-		gchar *warn_msg = _("The file \"%s\" could not opened properly and probably was truncated. "
-				"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
-
-		if (app->main_window_realized)
-			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
-
-		msgwin_status_add(warn_msg, utf8_filename);
-
-		// set the file to read-only mode because saving it is probably dangerous
-		readonly = TRUE;
-	}
-
-	/* Determine character encoding and convert to UTF-8 */
-	if (forced_enc != NULL)
-	{
-		// the encoding should be ignored(requested by user), so open the file "as it is"
-		if (utils_str_equal(forced_enc, encodings[GEANY_ENCODING_NONE].charset))
-		{
-			bom = FALSE;
-			enc = g_strdup(encodings[GEANY_ENCODING_NONE].charset);
-		}
-		else if (! handle_forced_encoding(&data, &size, forced_enc, &enc, &bom))
-		{
-			msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
-			utils_beep();
-			g_free(data);
-			g_free(utf8_filename);
-			g_free(locale_filename);
-			return -1;
-		}
-	}
-	else if (! handle_encoding(&data, &size, &enc, &bom))
-	{
-		msgwin_status_add(
-			_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
-			utf8_filename);
-		utils_beep();
-		g_free(data);
-		g_free(utf8_filename);
-		g_free(locale_filename);
-		return -1;
-	}
-
-	if (bom) handle_bom(&data);
 
 	if (! reload) idx = document_create_new_sci(utf8_filename);
-	if (idx == -1) return -1;	// really should not happen
+	g_return_val_if_fail(idx != -1, -1);	// really should not happen
 
-	// set editor mode and add the text to the ScintillaObject
 	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
 	sci_empty_undo_buffer(doc_list[idx].sci);
-	sci_set_text(doc_list[idx].sci, data);	// NULL terminated data
 
-	editor_mode = utils_get_line_endings(data, size);
+	// add the text to the ScintillaObject
+	sci_set_text(doc_list[idx].sci, filedata.data);	// NULL terminated data
+
+	// detect & set line endings
+	editor_mode = utils_get_line_endings(filedata.data, filedata.len);
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
-	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
+	g_free(filedata.data);
 
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 
-	doc_list[idx].mtime = st.st_mtime; // get the modification time from file and keep it
+	doc_list[idx].mtime = filedata.mtime; // get the modification time from file and keep it
 	doc_list[idx].changed = FALSE;
 	g_free(doc_list[idx].encoding);	// if reloading, free old encoding
-	doc_list[idx].encoding = enc;
-	doc_list[idx].has_bom = bom;
+	doc_list[idx].encoding = filedata.enc;
+	doc_list[idx].has_bom = filedata.bom;
 	store_saved_encoding(idx);	// store the opened encoding for undo/redo
+
+	doc_list[idx].readonly = readonly || filedata.readonly;
+	sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
+
+	// update line number margin width
+	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 
 	if (cl_options.goto_line >= 0)
 	{	// goto line which was specified on command line and then undefine the line
@@ -696,9 +732,6 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	if (! reload)
 	{
-		doc_list[idx].readonly = readonly;
-		sci_set_readonly(doc_list[idx].sci, readonly);
-
 		// "the" SCI signal (connect after initial setup(i.e. adding text))
 		g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
 					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
@@ -715,8 +748,6 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	document_set_text_changed(idx);	// also updates tab state
 	ui_document_show_hide(idx);	// update the document menu
-
-	g_free(data);
 
 
 	// finally add current file to recent files menu, but not the files from the last session

@@ -4,6 +4,11 @@
    Ensure the VTE visual settings are applied when switching to VTE
    when the Message Window is hidden.
    Show the Message Window when switching to Scribble.
+ * src/document.c:
+   Use load_text_file() in document_open_file() to read, verify and
+   handle encoding using FileData struct.
+   Refactored handle_[forced_]encoding with FileData* argument.
+   Update data length after removing BOM chars in handle_bom().
 
 
 2007-01-04  Nick Treleaven  <nick.treleaven@btinternet.com>
