@@ -1,8 +1,8 @@
 /*
  *      ui_utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
- *      Copyright 2006 Nick Treleaven <nick.treleaven@btinternet.com>
+ *      Copyright 2006-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -1183,6 +1183,8 @@ void ui_update_tab_status(gint idx)
 	// NULL color will reset to default
 	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_NORMAL, color);
 	gtk_widget_modify_fg(doc_list[idx].tab_label, GTK_STATE_ACTIVE, color);
+	gtk_widget_modify_fg(doc_list[idx].tabmenu_label, GTK_STATE_NORMAL, color);
+	gtk_widget_modify_fg(doc_list[idx].tabmenu_label, GTK_STATE_ACTIVE, color);
 
 	treeviews_openfiles_update(idx);
 }
