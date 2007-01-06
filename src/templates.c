@@ -1,7 +1,8 @@
 /*
  *      templates.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -21,6 +22,7 @@
  */
 
 #include <time.h>
+#include <string.h>
 
 #include "geany.h"
 
@@ -32,114 +34,40 @@
 
 // default templates, only for initial tempate file creation on first start of Geany
 static const gchar templates_gpl_notice[] = "\
- *      This program is free software; you can redistribute it and/or modify\n\
- *      it under the terms of the GNU General Public License as published by\n\
- *      the Free Software Foundation; either version 2 of the License, or\n\
- *      (at your option) any later version.\n\
- *\n\
- *      This program is distributed in the hope that it will be useful,\n\
- *      but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
- *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
- *      GNU General Public License for more details.\n\
- *\n\
- *      You should have received a copy of the GNU General Public License\n\
- *      along with this program; if not, write to the Free Software\n\
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
-";
-
-static const gchar templates_gpl_notice_pascal[] = "\
-      This program is free software; you can redistribute it and/or modify\n\
-      it under the terms of the GNU General Public License as published by\n\
-      the Free Software Foundation; either version 2 of the License, or\n\
-      (at your option) any later version.\n\
+This program is free software; you can redistribute it and/or modify\n\
+it under the terms of the GNU General Public License as published by\n\
+the Free Software Foundation; either version 2 of the License, or\n\
+(at your option) any later version.\n\
 \n\
-      This program is distributed in the hope that it will be useful,\n\
-      but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
-      GNU General Public License for more details.\n\
+This program is distributed in the hope that it will be useful,\n\
+but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+GNU General Public License for more details.\n\
 \n\
-      You should have received a copy of the GNU General Public License\n\
-      along with this program; if not, write to the Free Software\n\
-      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
-";
-
-static const gchar templates_gpl_notice_route[] = "\
-#      This program is free software; you can redistribute it and/or modify\n\
-#      it under the terms of the GNU General Public License as published by\n\
-#      the Free Software Foundation; either version 2 of the License, or\n\
-#      (at your option) any later version.\n\
-#\n\
-#      This program is distributed in the hope that it will be useful,\n\
-#      but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
-#      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
-#      GNU General Public License for more details.\n\
-#\n\
-#      You should have received a copy of the GNU General Public License\n\
-#      along with this program; if not, write to the Free Software\n\
-#      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
+You should have received a copy of the GNU General Public License\n\
+along with this program; if not, write to the Free Software\n\
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
 ";
 
 static const gchar templates_function_description[] = "\
-/* \n\
- * name: {functionname}\n\
- * @param\n\
- * @return\n\
- */\n";
-
-static const gchar templates_function_description_pascal[] = "\
-{\n\
- name: {functionname}\n\
- @param\n\
- @return\n\
-}\n";
-
-static const gchar templates_function_description_route[] = "\
-#\n\
-# name: {functionname}\n\
-# @param\n\
-# @return\n\
+\n\
+name: {functionname}\n\
+@param\n\
+@return\n\
 ";
 
 static const gchar templates_multiline[] = "\
-/* \n\
- * \n\
- */";
-
-static const gchar templates_multiline_pascal[] = "\
-{\n\
  \n\
-}";
-
-static const gchar templates_multiline_route[] = "\
-#\n\
-#";
+ \n\
+";
 
 static const gchar templates_fileheader[] = "\
-/*\n\
- *      {filename}\n\
- *\n\
- *      Copyright {year} {developer} <{mail}>\n\
- *\n\
-{gpl}\
- */\n";
-
-static const gchar templates_fileheader_pascal[] = "\
-{\n\
-      {filename}\n\
+{filename}\n\
 \n\
-      Copyright {year} {developer} <{mail}>\n\
+Copyright {year} {developer} <{mail}>\n\
 \n\
 {gpl}\
-}\n";
-
-static const gchar templates_fileheader_route[] = "\
-#\n\
-#      {filename}\n\
-#\n\
-#      Copyright {year} {developer} <{mail}>\n\
-#\n\
-{gpl}\
-#\n";
+";
 
 static const gchar templates_changelog[] = "\
 {date}  {developer}  <{mail}>\n\
@@ -210,7 +138,8 @@ static const gchar templates_filetype_html[] = "<!DOCTYPE html PUBLIC \"-//W3C//
 </html>\n\
 ";
 
-static const gchar templates_filetype_pascal[] = "program {untitled};\n\
+static const gchar templates_filetype_pascal[] = "\n\
+program {untitled};\n\
 \n\
 uses crt;\n\
 var i : byte;\n\
@@ -222,10 +151,9 @@ END.\n\
 ";
 
 static const gchar templates_filetype_java[] = "\n\
-\n\
 public class {untitled} {\n\
 \n\
-	public static void main (String args[]) {\n\
+	public static void main (String args[]) {\
 		\n\
 		\n\
 	}\n\
@@ -248,9 +176,9 @@ static gchar *templates[GEANY_MAX_TEMPLATES];
 
 
 // some simple macros to reduce code size and make the code readable
-#define templates_get_filename(x) g_strconcat(app->configdir, G_DIR_SEPARATOR_S, x, NULL)
-#define templates_create_file(x, y)	if (! g_file_test(x, G_FILE_TEST_EXISTS)) utils_write_file(x, y)
-#define templates_read_file(x, y) g_file_get_contents(x, y, NULL, NULL);
+#define TEMPLATES_GET_FILENAME(x) g_strconcat(app->configdir, G_DIR_SEPARATOR_S, x, NULL)
+#define TEMPLATES_CREATE_FILE(x, y)	if (! g_file_test(x, G_FILE_TEST_EXISTS)) utils_write_file(x, y)
+#define TEMPLATES_READ_FILE(x, y) g_file_get_contents(x, y, NULL, NULL);
 
 
 // prototype, because this function should never be used outside of templates.c
@@ -259,28 +187,19 @@ static gchar *templates_replace_all(gchar *source, gchar *year, gchar *date);
 
 void templates_init(void)
 {
-	gchar *template_filename_fileheader = templates_get_filename("template.fileheader");
-	gchar *template_filename_fileheader_pascal =templates_get_filename("template.fileheader.pascal");
-	gchar *template_filename_fileheader_route =templates_get_filename("template.fileheader.route");
-	gchar *template_filename_gpl = templates_get_filename("template.gpl");
-	gchar *template_filename_gpl_pascal = templates_get_filename("template.gpl.pascal");
-	gchar *template_filename_gpl_route = templates_get_filename("template.gpl.route");
-	gchar *template_filename_function = templates_get_filename("template.function");
-	gchar *template_filename_function_pascal = templates_get_filename("template.function.pascal");
-	gchar *template_filename_function_route = templates_get_filename("template.function.route");
-	gchar *template_filename_multiline = templates_get_filename("template.multiline");
-	gchar *template_filename_multiline_pascal = templates_get_filename("template.multiline.pascal");
-	gchar *template_filename_multiline_route = templates_get_filename("template.multiline.route");
-	gchar *template_filename_changelog = templates_get_filename("template.changelog");
-	gchar *template_filename_filetype_none = templates_get_filename("template.filetype.none");
-	gchar *template_filename_filetype_c = templates_get_filename("template.filetype.c");
-	gchar *template_filename_filetype_cpp = templates_get_filename("template.filetype.cpp");
-	gchar *template_filename_filetype_d = templates_get_filename("template.filetype.d");
-	gchar *template_filename_filetype_java = templates_get_filename("template.filetype.java");
-	gchar *template_filename_filetype_pascal = templates_get_filename("template.filetype.pascal");
-	gchar *template_filename_filetype_php = templates_get_filename("template.filetype.php");
-	gchar *template_filename_filetype_html = templates_get_filename("template.filetype.html");
-	gchar *template_filename_filetype_ruby = templates_get_filename("template.filetype.ruby");
+	gchar *template_filename_fileheader = TEMPLATES_GET_FILENAME("template.fileheader");
+	gchar *template_filename_gpl = TEMPLATES_GET_FILENAME("template.gpl");
+	gchar *template_filename_function = TEMPLATES_GET_FILENAME("template.function");
+	gchar *template_filename_changelog = TEMPLATES_GET_FILENAME("template.changelog");
+	gchar *template_filename_filetype_none = TEMPLATES_GET_FILENAME("template.filetype.none");
+	gchar *template_filename_filetype_c = TEMPLATES_GET_FILENAME("template.filetype.c");
+	gchar *template_filename_filetype_cpp = TEMPLATES_GET_FILENAME("template.filetype.cpp");
+	gchar *template_filename_filetype_d = TEMPLATES_GET_FILENAME("template.filetype.d");
+	gchar *template_filename_filetype_java = TEMPLATES_GET_FILENAME("template.filetype.java");
+	gchar *template_filename_filetype_pascal = TEMPLATES_GET_FILENAME("template.filetype.pascal");
+	gchar *template_filename_filetype_php = TEMPLATES_GET_FILENAME("template.filetype.php");
+	gchar *template_filename_filetype_html = TEMPLATES_GET_FILENAME("template.filetype.html");
+	gchar *template_filename_filetype_ruby = TEMPLATES_GET_FILENAME("template.filetype.ruby");
 
 	time_t tp = time(NULL);
 	const struct tm *tm = localtime(&tp);
@@ -289,95 +208,58 @@ void templates_init(void)
 	strftime(year, 5, "%Y", tm);
 
 	// create the template files in the configuration directory, if they don't exist
-	templates_create_file(template_filename_fileheader, templates_fileheader);
-	templates_create_file(template_filename_fileheader_pascal, templates_fileheader_pascal);
-	templates_create_file(template_filename_fileheader_route, templates_fileheader_route);
-	templates_create_file(template_filename_gpl, templates_gpl_notice);
-	templates_create_file(template_filename_gpl_pascal, templates_gpl_notice_pascal);
-	templates_create_file(template_filename_gpl_route, templates_gpl_notice_route);
-	templates_create_file(template_filename_function, templates_function_description);
-	templates_create_file(template_filename_function_pascal, templates_function_description_pascal);
-	templates_create_file(template_filename_function_route, templates_function_description_route);
-	templates_create_file(template_filename_multiline, templates_multiline);
-	templates_create_file(template_filename_multiline_pascal, templates_multiline_pascal);
-	templates_create_file(template_filename_multiline_route, templates_multiline_route);
-	templates_create_file(template_filename_changelog, templates_changelog);
-	templates_create_file(template_filename_filetype_none, templates_filetype_none);
-	templates_create_file(template_filename_filetype_c, templates_filetype_c);
-	templates_create_file(template_filename_filetype_cpp, templates_filetype_cpp);
-	templates_create_file(template_filename_filetype_d, templates_filetype_d);
-	templates_create_file(template_filename_filetype_java, templates_filetype_java);
-	templates_create_file(template_filename_filetype_pascal, templates_filetype_pascal);
-	templates_create_file(template_filename_filetype_php, templates_filetype_php);
-	templates_create_file(template_filename_filetype_html, templates_filetype_html);
-	templates_create_file(template_filename_filetype_ruby, templates_filetype_ruby);
+	TEMPLATES_CREATE_FILE(template_filename_fileheader, templates_fileheader);
+	TEMPLATES_CREATE_FILE(template_filename_gpl, templates_gpl_notice);
+	TEMPLATES_CREATE_FILE(template_filename_function, templates_function_description);
+	TEMPLATES_CREATE_FILE(template_filename_changelog, templates_changelog);
+	TEMPLATES_CREATE_FILE(template_filename_filetype_none, templates_filetype_none);
+	TEMPLATES_CREATE_FILE(template_filename_filetype_c, templates_filetype_c);
+	TEMPLATES_CREATE_FILE(template_filename_filetype_cpp, templates_filetype_cpp);
+	TEMPLATES_CREATE_FILE(template_filename_filetype_d, templates_filetype_d);
+	TEMPLATES_CREATE_FILE(template_filename_filetype_java, templates_filetype_java);
+	TEMPLATES_CREATE_FILE(template_filename_filetype_pascal, templates_filetype_pascal);
+	TEMPLATES_CREATE_FILE(template_filename_filetype_php, templates_filetype_php);
+	TEMPLATES_CREATE_FILE(template_filename_filetype_html, templates_filetype_html);
+	TEMPLATES_CREATE_FILE(template_filename_filetype_ruby, templates_filetype_ruby);
 
 	// read the contents
-	templates_read_file(template_filename_fileheader, &templates[GEANY_TEMPLATE_FILEHEADER]);
+	TEMPLATES_READ_FILE(template_filename_fileheader, &templates[GEANY_TEMPLATE_FILEHEADER]);
 	templates[GEANY_TEMPLATE_FILEHEADER] = templates_replace_all(templates[GEANY_TEMPLATE_FILEHEADER], year, date);
 
-	templates_read_file(template_filename_fileheader_pascal, &templates[GEANY_TEMPLATE_FILEHEADER_PASCAL]);
-	templates[GEANY_TEMPLATE_FILEHEADER_PASCAL] = templates_replace_all(templates[GEANY_TEMPLATE_FILEHEADER_PASCAL], year, date);
-
-	templates_read_file(template_filename_fileheader_route, &templates[GEANY_TEMPLATE_FILEHEADER_ROUTE]);
-	templates[GEANY_TEMPLATE_FILEHEADER_ROUTE] = templates_replace_all(templates[GEANY_TEMPLATE_FILEHEADER_ROUTE], year, date);
-
-	templates_read_file(template_filename_gpl, &templates[GEANY_TEMPLATE_GPL]);
+	TEMPLATES_READ_FILE(template_filename_gpl, &templates[GEANY_TEMPLATE_GPL]);
 	//templates[GEANY_TEMPLATE_GPL] = templates_replace_all(templates[GEANY_TEMPLATE_GPL], year, date);
 
-	templates_read_file(template_filename_gpl_pascal, &templates[GEANY_TEMPLATE_GPL_PASCAL]);
-	//templates[GEANY_TEMPLATE_GPL_PASCAL] = templates_replace_all(templates[GEANY_TEMPLATE_GPL_PASCAL], year, date);
-
-	templates_read_file(template_filename_gpl_route, &templates[GEANY_TEMPLATE_GPL_ROUTE]);
-	//templates[GEANY_TEMPLATE_GPL_ROUTE] = templates_replace_all(templates[GEANY_TEMPLATE_GPL_ROUTE], year, date);
-
-	templates_read_file(template_filename_function, &templates[GEANY_TEMPLATE_FUNCTION]);
+	TEMPLATES_READ_FILE(template_filename_function, &templates[GEANY_TEMPLATE_FUNCTION]);
 	templates[GEANY_TEMPLATE_FUNCTION] = templates_replace_all(templates[GEANY_TEMPLATE_FUNCTION], year, date);
 
-	templates_read_file(template_filename_function_pascal, &templates[GEANY_TEMPLATE_FUNCTION_PASCAL]);
-	templates[GEANY_TEMPLATE_FUNCTION_PASCAL] = templates_replace_all(templates[GEANY_TEMPLATE_FUNCTION_PASCAL], year, date);
-
-	templates_read_file(template_filename_function_route, &templates[GEANY_TEMPLATE_FUNCTION_ROUTE]);
-	templates[GEANY_TEMPLATE_FUNCTION_ROUTE] = templates_replace_all(templates[GEANY_TEMPLATE_FUNCTION_ROUTE], year, date);
-
-	templates_read_file(template_filename_multiline, &templates[GEANY_TEMPLATE_MULTILINE]);
-	//templates[GEANY_TEMPLATE_MULTILINE] = templates_replace_all(templates[GEANY_TEMPLATE_MULTILINE], year, date);
-
-	templates_read_file(template_filename_multiline_pascal, &templates[GEANY_TEMPLATE_MULTILINE_PASCAL]);
-	//templates[GEANY_TEMPLATE_MULTILINE_PASCAL] = templates_replace_all(templates[GEANY_TEMPLATE_MULTILINE_PASCAL], year, date);
-
-	templates_read_file(template_filename_multiline_route, &templates[GEANY_TEMPLATE_MULTILINE_ROUTE]);
-	//templates[GEANY_TEMPLATE_MULTILINE_ROUTE] = templates_replace_all(templates[GEANY_TEMPLATE_MULTILINE_ROUTE], year, date);
-
-	templates_read_file(template_filename_changelog, &templates[GEANY_TEMPLATE_CHANGELOG]);
+	TEMPLATES_READ_FILE(template_filename_changelog, &templates[GEANY_TEMPLATE_CHANGELOG]);
 	templates[GEANY_TEMPLATE_CHANGELOG] = templates_replace_all(templates[GEANY_TEMPLATE_CHANGELOG], year, date);
 
-
-	templates_read_file(template_filename_filetype_none, &templates[GEANY_TEMPLATE_FILETYPE_NONE]);
+	TEMPLATES_READ_FILE(template_filename_filetype_none, &templates[GEANY_TEMPLATE_FILETYPE_NONE]);
 	templates[GEANY_TEMPLATE_FILETYPE_NONE] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_NONE], year, date);
 
-	templates_read_file(template_filename_filetype_c, &templates[GEANY_TEMPLATE_FILETYPE_C]);
+	TEMPLATES_READ_FILE(template_filename_filetype_c, &templates[GEANY_TEMPLATE_FILETYPE_C]);
 	templates[GEANY_TEMPLATE_FILETYPE_C] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_C], year, date);
 
-	templates_read_file(template_filename_filetype_d, &templates[GEANY_TEMPLATE_FILETYPE_D]);
+	TEMPLATES_READ_FILE(template_filename_filetype_d, &templates[GEANY_TEMPLATE_FILETYPE_D]);
 	templates[GEANY_TEMPLATE_FILETYPE_D] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_D], year, date);
 
-	templates_read_file(template_filename_filetype_cpp, &templates[GEANY_TEMPLATE_FILETYPE_CPP]);
+	TEMPLATES_READ_FILE(template_filename_filetype_cpp, &templates[GEANY_TEMPLATE_FILETYPE_CPP]);
 	templates[GEANY_TEMPLATE_FILETYPE_CPP] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_CPP], year, date);
 
-	templates_read_file(template_filename_filetype_java, &templates[GEANY_TEMPLATE_FILETYPE_JAVA]);
+	TEMPLATES_READ_FILE(template_filename_filetype_java, &templates[GEANY_TEMPLATE_FILETYPE_JAVA]);
 	templates[GEANY_TEMPLATE_FILETYPE_JAVA] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_JAVA], year, date);
 
-	templates_read_file(template_filename_filetype_pascal, &templates[GEANY_TEMPLATE_FILETYPE_PASCAL]);
+	TEMPLATES_READ_FILE(template_filename_filetype_pascal, &templates[GEANY_TEMPLATE_FILETYPE_PASCAL]);
 	templates[GEANY_TEMPLATE_FILETYPE_PASCAL] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_PASCAL], year, date);
 
-	templates_read_file(template_filename_filetype_php, &templates[GEANY_TEMPLATE_FILETYPE_PHP]);
+	TEMPLATES_READ_FILE(template_filename_filetype_php, &templates[GEANY_TEMPLATE_FILETYPE_PHP]);
 	templates[GEANY_TEMPLATE_FILETYPE_PHP] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_PHP], year, date);
 
-	templates_read_file(template_filename_filetype_html, &templates[GEANY_TEMPLATE_FILETYPE_HTML]);
+	TEMPLATES_READ_FILE(template_filename_filetype_html, &templates[GEANY_TEMPLATE_FILETYPE_HTML]);
 	templates[GEANY_TEMPLATE_FILETYPE_HTML] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_HTML], year, date);
 
-	templates_read_file(template_filename_filetype_ruby, &templates[GEANY_TEMPLATE_FILETYPE_RUBY]);
+	TEMPLATES_READ_FILE(template_filename_filetype_ruby, &templates[GEANY_TEMPLATE_FILETYPE_RUBY]);
 	templates[GEANY_TEMPLATE_FILETYPE_RUBY] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_RUBY], year, date);
 
 
@@ -385,17 +267,8 @@ void templates_init(void)
 	g_free(date);
 	g_free(year);
 	g_free(template_filename_fileheader);
-	g_free(template_filename_fileheader_pascal);
-	g_free(template_filename_fileheader_route);
 	g_free(template_filename_gpl);
-	g_free(template_filename_gpl_pascal);
-	g_free(template_filename_gpl_route);
 	g_free(template_filename_function);
-	g_free(template_filename_function_pascal);
-	g_free(template_filename_function_route);
-	g_free(template_filename_multiline);
-	g_free(template_filename_multiline_pascal);
-	g_free(template_filename_multiline_route);
 	g_free(template_filename_changelog);
 	g_free(template_filename_filetype_none);
 	g_free(template_filename_filetype_c);
@@ -409,28 +282,33 @@ void templates_init(void)
 }
 
 
-/* double_comment is a hack for PHP/HTML for whether to first add C style commenting.
- * In future we could probably remove the need for this by making most templates
- * automatically commented (so template files are not commented) */
-static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx,
-		gboolean double_comment)
+/* indent is used to make some whitespace between comment char and real start of the line
+ * e.g. indent = 8 prints " *     here comes the text of the line"
+ * indent is meant to be the whole amount of characters before the real line content follows, i.e.
+ * 6 characters are filled with whitespace when the comment characters include " *" */
+static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, gint indent)
 {
+	gchar *frame_start = "";	// to add before comment_text
+	gchar *frame_end = "";		// to add after comment_text
+	gchar *line_prefix;			// to add before every line in comment_text
+	gchar *result;
+	gchar *tmp;
+	gchar *prefix;
+	gchar **lines;
+	gint i;
+
+	/// TODO the following switch could be replaced by some intelligent code which reads
+	/// frame_start, frame_end and line_prefix from the filetype definition files
 	switch (filetype_idx)
 	{
-		case GEANY_FILETYPES_ALL:
-		return g_strdup(comment_text);	// no need to add to the text
-
-		case GEANY_FILETYPES_PHP:
 		case GEANY_FILETYPES_HTML:
-		{	// double comment
-			gchar *tmp = (double_comment) ?
-				make_comment_block(comment_text, GEANY_FILETYPES_C, FALSE) :
-				g_strdup(comment_text);
-			gchar *block = (filetype_idx == GEANY_FILETYPES_PHP) ?
-				g_strconcat("<?php\n", tmp, "?>\n", NULL) :
-				g_strconcat("<!--\n", tmp, "-->\n", NULL);
-			g_free(tmp);
-			return block;
+		case GEANY_FILETYPES_XML:
+		case GEANY_FILETYPES_DOCBOOK:
+		{
+			frame_start = "<!--\n";
+			frame_end = "-->\n";
+			line_prefix = "";
+			break;
 		}
 
 		case GEANY_FILETYPES_PYTHON:
@@ -438,133 +316,142 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx,
 		case GEANY_FILETYPES_SH:
 		case GEANY_FILETYPES_MAKE:
 		case GEANY_FILETYPES_PERL:
-		return g_strconcat("#\n", comment_text, "#\n", NULL);
+		case GEANY_FILETYPES_DIFF:
+		case GEANY_FILETYPES_TCL:
+		case GEANY_FILETYPES_OMS:
+		case GEANY_FILETYPES_CONF:
+		{
+			line_prefix = "#";
+			break;
+		}
+
+		case GEANY_FILETYPES_LATEX:
+		{
+			line_prefix = "%";
+			break;
+		}
+
+		case GEANY_FILETYPES_VHDL:
+		{
+			line_prefix = "--";
+			break;
+		}
+
+		case GEANY_FILETYPES_FORTRAN:
+		{
+			line_prefix = "c";
+			break;
+		}
+
+		case GEANY_FILETYPES_ASM:
+		{
+			line_prefix = ";";
+			break;
+		}
 
 		case GEANY_FILETYPES_PASCAL:
-		return g_strconcat("{\n", comment_text, "}\n", NULL);
+		{
+			frame_start = "{\n";
+			frame_end = "}\n";
+			line_prefix = "";
+			break;
+		}
 
-		default:
-		return g_strconcat("/*\n", comment_text, " */\n", NULL);
-	}
-}
-
-
-gchar *templates_get_template_gpl(gint filetype_idx)
-{
-	const gchar *text;
-
-	switch (filetype_idx)
-	{
-		case GEANY_FILETYPES_PYTHON:
-		case GEANY_FILETYPES_RUBY:
-		case GEANY_FILETYPES_SH:
-		case GEANY_FILETYPES_MAKE:
-		case GEANY_FILETYPES_PERL:
-		text = templates[GEANY_TEMPLATE_GPL_ROUTE];
-		break;
-
-		case GEANY_FILETYPES_PASCAL:
-		case GEANY_FILETYPES_ALL:
-		text = templates[GEANY_TEMPLATE_GPL_PASCAL];
-		break;
-
-		case GEANY_FILETYPES_HTML:
 		case GEANY_FILETYPES_PHP:
-		default:
-		text = templates[GEANY_TEMPLATE_GPL];
-		break;
+		{
+			frame_start = "<?\n/*\n";
+			frame_end = " */\n?>\n";
+			line_prefix = " *";
+			break;
+		}
+
+		case GEANY_FILETYPES_CAML:
+		{
+			frame_start = "(*\n";
+			frame_end = " *)\n";
+			line_prefix = " *";
+			break;
+		}
+
+		case GEANY_FILETYPES_ALL:
+		{
+			line_prefix = "";
+			break;
+		}
+
+		default: // guess /* */ is appropriate
+		{
+			frame_start = "/*\n";
+			frame_end = " */\n";
+			line_prefix = " *";
+		}
 	}
-	return make_comment_block(text, filetype_idx, TRUE);
-}
+
+	// construct the real prefix with given amount of whitespace
+	i = (indent > strlen(line_prefix)) ? (indent - strlen(line_prefix)) : strlen(line_prefix);
+	tmp = g_strnfill(i, ' ');
+	prefix = g_strconcat(line_prefix, tmp, NULL);
+	g_free(tmp);
 
 
-/* Returns a template chosen by template with GEANY_STRING_UNTITLED.extension
- * as filename if idx is -1, or the real filename if idx is greater than -1.
- * The flag gpl decides whether a GPL notice is appended or not */
-static gchar *
-prepare_file_header(gint template, const gchar *extension, const gchar *filename)
-{
-	gchar *result = g_strdup(templates[template]);
-	gchar *shortname;
-	gchar *date = utils_get_date_time();
+	// add line_prefix to every line of comment_text
+	lines = g_strsplit(comment_text, "\n", -1);
+	for (i = 0; i < (g_strv_length(lines) - 1); i++)
+	{
+		tmp = lines[i];
+		lines[i] = g_strconcat(prefix, tmp, NULL);
+		g_free(tmp);
+	}
+	tmp = g_strjoinv("\n", lines);
 
-	if (filename == NULL)
-	{
-		if (extension != NULL)
-			shortname = g_strconcat(GEANY_STRING_UNTITLED, ".", extension, NULL);
-		else
-			shortname = g_strdup(GEANY_STRING_UNTITLED);
-	}
-	else
-	{
-		shortname = g_path_get_basename(filename);
-	}
-	result = utils_str_replace(result, "{filename}", shortname);
+	// add frame_start and frame_end
+	result = g_strconcat(frame_start, tmp, frame_end, NULL);
 
-	if (template == GEANY_TEMPLATE_FILEHEADER_PASCAL)
-	{
-		result = utils_str_replace(result, "{gpl}", templates[GEANY_TEMPLATE_GPL_PASCAL]);
-	}
-	else if (template == GEANY_TEMPLATE_FILEHEADER_ROUTE)
-	{
-		result = utils_str_replace(result, "{gpl}", templates[GEANY_TEMPLATE_GPL_ROUTE]);
-	}
-	else
-	{
-		result = utils_str_replace(result, "{gpl}", templates[GEANY_TEMPLATE_GPL]);
-	}
-	result = utils_str_replace(result, "{datetime}", date);
-
-	g_free(shortname);
-	g_free(date);
+	g_free(prefix);
+	g_free(tmp);
+	g_strfreev(lines);
 	return result;
 }
 
 
-// ft, fname can be NULL
+gchar *templates_get_template_licence(gint filetype_idx)
+{
+	//if (licence_type != GEANY_TEMPLATE_GPL)
+		//return NULL;
+
+	return make_comment_block(templates[GEANY_TEMPLATE_GPL], filetype_idx, 8);
+}
+
+
 static gchar *get_file_header(filetype *ft, const gchar *fname)
 {
-	gchar *text = NULL;
+	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FILEHEADER]);
+	gchar *shortname;
+	gchar *result;
+	gchar *date = utils_get_date_time();
 
-	switch (FILETYPE_ID(ft))
+	if (fname == NULL)
 	{
-		case GEANY_FILETYPES_ALL:	// ft may be NULL
-		{
-			text = prepare_file_header(GEANY_TEMPLATE_FILEHEADER, NULL, fname);
-			break;
-		}
-		case GEANY_FILETYPES_PHP:
-		case GEANY_FILETYPES_HTML:
-		{
-			gchar *tmp = prepare_file_header(
-					GEANY_TEMPLATE_FILEHEADER, ft->extension, fname);
-			text = make_comment_block(tmp, ft->id, FALSE);
-			g_free(tmp);
-			break;
-		}
-		case GEANY_FILETYPES_PASCAL:
-		{	// Pascal: comments are in { } brackets
-			text = prepare_file_header(
-					GEANY_TEMPLATE_FILEHEADER_PASCAL, ft->extension, fname);
-			break;
-		}
-		case GEANY_FILETYPES_PYTHON:
-		case GEANY_FILETYPES_RUBY:
-		case GEANY_FILETYPES_SH:
-		case GEANY_FILETYPES_MAKE:
-		case GEANY_FILETYPES_PERL:
-		{
-			text = prepare_file_header(
-					GEANY_TEMPLATE_FILEHEADER_ROUTE, ft->extension, fname);
-			break;
-		}
-		default:
-		{	// -> C, C++, Java, ...
-			text = prepare_file_header(
-					GEANY_TEMPLATE_FILEHEADER, ft->extension, fname);
-		}
+		if (FILETYPE_ID(ft) == GEANY_FILETYPES_ALL)
+			shortname = g_strdup(GEANY_STRING_UNTITLED);
+		else
+			shortname = g_strconcat(GEANY_STRING_UNTITLED, ".", ft->extension, NULL);
 	}
-	return text;
+	else
+		shortname = g_path_get_basename(fname);
+
+	template = utils_str_replace(template, "{filename}", shortname);
+
+	template = utils_str_replace(template, "{gpl}", templates[GEANY_TEMPLATE_GPL]);
+
+	template = utils_str_replace(template, "{datetime}", date);
+
+	result = make_comment_block(template, FILETYPE_ID(ft), 8);
+
+	g_free(template);
+	g_free(shortname);
+	g_free(date);
+	return result;
 }
 
 
@@ -632,20 +519,25 @@ gchar *templates_get_template_generic(gint template)
 }
 
 
-gchar *templates_get_template_function(gint template, const gchar *func_name)
+gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name)
 {
-	gchar *result = g_strdup(templates[template]);
+	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FUNCTION]);
 	gchar *date = utils_get_date();
 	gchar *datetime = utils_get_date_time();
+	gchar *result;
 
-	result = utils_str_replace(result, "{date}", date);
-	result = utils_str_replace(result, "{datetime}", datetime);
-	result = utils_str_replace(result, "{functionname}", (func_name) ? func_name : "");
+	template = utils_str_replace(template, "{date}", date);
+	template = utils_str_replace(template, "{datetime}", datetime);
+	template = utils_str_replace(template, "{functionname}", (func_name) ? func_name : "");
 
+	result = make_comment_block(template, filetype_idx, 3);
+
+	g_free(template);
 	g_free(date);
 	g_free(datetime);
 	return result;
 }
+
 
 gchar *templates_get_template_changelog(void)
 {

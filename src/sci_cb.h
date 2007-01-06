@@ -1,7 +1,8 @@
 /*
  *      sci_cb.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -69,7 +70,7 @@ gboolean sci_cb_show_calltip(gint idx, gint pos);
 
 void sci_cb_do_comment_toggle(gint idx);
 
-void sci_cb_do_comment(gint idx, gint line);
+void sci_cb_do_comment(gint idx, gint line, gboolean allow_empty_lines);
 
 void sci_cb_do_uncomment(gint idx, gint line);
 
@@ -82,5 +83,7 @@ void sci_cb_auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
 gboolean sci_cb_lexer_is_c_like(gint lexer);
 
 gint sci_cb_lexer_get_type_keyword_idx(gint lexer);
+
+void sci_cb_insert_multiline_comment(gint idx);
 
 #endif

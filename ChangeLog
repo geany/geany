@@ -1,3 +1,15 @@
+2007-01-06  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c, src/sci_cb.c, src/sci_cb.h, src/templates.c,
+   src/templates.h:
+   Removed multiline template because it makes not much sense, instead
+   just comment three lines using the general comment functionality.
+   Removed special templates for Pascal and some other filetypes using
+   "#" as comment char. The comment characters for fileheader and GPL
+   templates are now added dynamically according to the current
+   filetype.
+
+
 2007-01-06  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c:

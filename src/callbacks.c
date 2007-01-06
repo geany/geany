@@ -1,7 +1,8 @@
 /*
  *      callbacks.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -1460,27 +1461,7 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 	line = utils_get_current_function(idx, &cur_tag);
 	pos = sci_get_position_from_line(doc_list[idx].sci, line - 1);
 
-	switch (doc_list[idx].file_type->id)
-	{
-		case GEANY_FILETYPES_PASCAL:
-		{
-			text = templates_get_template_function(GEANY_TEMPLATE_FUNCTION_PASCAL, cur_tag);
-			break;
-		}
-		case GEANY_FILETYPES_PYTHON:
-		case GEANY_FILETYPES_RUBY:
-		case GEANY_FILETYPES_SH:
-		case GEANY_FILETYPES_MAKE:
-		case GEANY_FILETYPES_PERL:
-		{
-			text = templates_get_template_function(GEANY_TEMPLATE_FUNCTION_ROUTE, cur_tag);
-			break;
-		}
-		default:
-		{
-			text = templates_get_template_function(GEANY_TEMPLATE_FUNCTION, cur_tag);
-		}
-	}
+	text = templates_get_template_function(doc_list[idx].file_type->id, cur_tag);
 
 	sci_insert_text(doc_list[idx].sci, pos, text);
 	g_free(text);
@@ -1492,40 +1473,16 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	gchar *text;
 
-	if (doc_list[idx].file_type == NULL)
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
 	{
 		ui_set_statusbar(_("Please set the filetype for the current file before using this function."));
 		return;
 	}
 
-	switch (doc_list[idx].file_type->id)
-	{
-		case GEANY_FILETYPES_PASCAL:
-		{
-			text = templates_get_template_generic(GEANY_TEMPLATE_MULTILINE_PASCAL);
-			break;
-		}
-		case GEANY_FILETYPES_PYTHON:
-		case GEANY_FILETYPES_RUBY:
-		case GEANY_FILETYPES_SH:
-		case GEANY_FILETYPES_MAKE:
-		case GEANY_FILETYPES_PERL:
-		{
-			text = templates_get_template_generic(GEANY_TEMPLATE_MULTILINE_ROUTE);
-			break;
-		}
-		default:
-		{
-			text = templates_get_template_generic(GEANY_TEMPLATE_MULTILINE);
-		}
-	}
-
 	verify_click_pos(idx); // make sure that the click_pos is valid
 
-	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
-	g_free(text);
+	sci_cb_insert_multiline_comment(idx);
 }
 
 
@@ -1536,12 +1493,30 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	gchar *text;
 
-	text = templates_get_template_gpl(FILETYPE_ID(doc_list[idx].file_type));
+	text = templates_get_template_licence(FILETYPE_ID(doc_list[idx].file_type));
 
 	verify_click_pos(idx); // make sure that the click_pos is valid
 
 	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
+}
+
+
+void
+on_comments_bsd_activate               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+/*
+	gint idx = document_get_cur_idx();
+	gchar *text;
+
+	text = templates_get_template_licence(FILETYPE_ID(doc_list[idx].file_type), GEANY_TEMPLATE_BSD);
+
+	verify_click_pos(idx); // make sure that the click_pos is valid
+
+	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
+	g_free(text);
+*/
 }
 
 
@@ -1944,7 +1919,7 @@ on_menu_comment_line1_activate         (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_do_comment(idx, -1);
+	sci_cb_do_comment(idx, -1, FALSE);
 }
 
 
@@ -2075,6 +2050,15 @@ on_menu_comments_gpl_activate          (GtkMenuItem     *menuitem,
 
 
 void
+on_menu_comments_bsd_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	insert_callback_from_menu = TRUE;
+	on_comments_bsd_activate(menuitem, user_data);
+}
+
+
+void
 on_menu_insert_include_activate        (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -2090,3 +2074,6 @@ on_menu_insert_date_activate           (GtkMenuItem     *menuitem,
 	insert_callback_from_menu = TRUE;
 	on_insert_date_activate(menuitem, user_data);
 }
+
+
+

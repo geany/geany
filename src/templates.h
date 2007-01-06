@@ -1,7 +1,8 @@
 /*
  *      templates.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -25,7 +26,6 @@
 
 #include "filetypes.h"
 
-
 void templates_init(void);
 
 gchar *templates_get_template_fileheader(gint idx);
@@ -36,28 +36,19 @@ gchar *templates_get_template_changelog(void);
 
 gchar *templates_get_template_generic(gint template);
 
-gchar *templates_get_template_function(gint template, const gchar *func_name);
+gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name);
 
-gchar *templates_get_template_gpl(gint filetype_idx);
+gchar *templates_get_template_licence(gint filetype_idx);
 
 void templates_free_templates(void);
 
 
 enum
 {
-	GEANY_TEMPLATE_GPL_PASCAL = 0,
-	GEANY_TEMPLATE_GPL_ROUTE,
-	GEANY_TEMPLATE_GPL,
-	GEANY_TEMPLATE_FILEHEADER_PASCAL,
-	GEANY_TEMPLATE_FILEHEADER_ROUTE,
+	GEANY_TEMPLATE_GPL = 0,
 	GEANY_TEMPLATE_FILEHEADER,
 	GEANY_TEMPLATE_CHANGELOG,
 	GEANY_TEMPLATE_FUNCTION,
-	GEANY_TEMPLATE_FUNCTION_PASCAL,
-	GEANY_TEMPLATE_FUNCTION_ROUTE,
-	GEANY_TEMPLATE_MULTILINE,
-	GEANY_TEMPLATE_MULTILINE_PASCAL,
-	GEANY_TEMPLATE_MULTILINE_ROUTE,
 
 	GEANY_TEMPLATE_FILETYPE_NONE,
 	GEANY_TEMPLATE_FILETYPE_C,

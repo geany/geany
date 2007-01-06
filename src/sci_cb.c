@@ -1,7 +1,8 @@
 /*
  *      sci_cb.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -1479,7 +1480,7 @@ void sci_cb_do_comment_toggle(gint idx)
 				if (do_continue) continue;
 
 				// we are still here, so the above lines were not already comments, so comment it
-				sci_cb_do_comment(idx, i);
+				sci_cb_do_comment(idx, i, FALSE);
 				count_commented++;
 			}
 			// use multi line comment
@@ -1566,7 +1567,7 @@ void sci_cb_do_comment_toggle(gint idx)
 }
 
 
-void sci_cb_do_comment(gint idx, gint line)
+void sci_cb_do_comment(gint idx, gint line, gboolean allow_empty_lines)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len;
@@ -1622,10 +1623,14 @@ void sci_cb_do_comment(gint idx, gint line)
 		sci_get_text_range(doc_list[idx].sci, line_start, MIN((line_start + 256), (line_start + line_len - 1)), sel);
 		sel[MIN(256, (line_len - 1))] = '\0';
 
+		/// TODO fix the above code to remove the described segfault below
+		// The following loop causes a segfault when the cursor is on the last line of doc and
+		// there are no other characters on this line and Geany was compiled with -O2, with -O0
+		// all works fine.
 		while (isspace(sel[x])) x++;
 
 		// to skip blank lines
-		if (x < line_len && sel[x] != '\0')
+		if (allow_empty_lines || (x < line_len && sel[x] != '\0'))
 		{
 			// use single line comment
 			if (cc == NULL || strlen(cc) == 0)
@@ -1937,4 +1942,60 @@ gint sci_cb_lexer_get_type_keyword_idx(gint lexer)
 		default:
 		return -1;
 	}
+}
+
+
+// inserts a three-line comment at one line above current cursor position
+void sci_cb_insert_multiline_comment(gint idx)
+{
+	gchar *text;
+	gint text_len;
+	gint line;
+	gint pos;
+	gboolean have_multiline_comment = FALSE;
+
+	if (doc_list[idx].file_type->comment_close != NULL &&
+		strlen(doc_list[idx].file_type->comment_close) > 0)
+		have_multiline_comment = TRUE;
+
+	// insert three lines one line above of the current position
+	line = sci_get_line_from_position(doc_list[idx].sci, editor_info.click_pos);
+	pos = sci_get_position_from_line(doc_list[idx].sci, line);
+
+	// use the indentation on the current line but only when comment indention is used
+	// and we don't have multi line comment characters
+	if (doc_list[idx].use_auto_indention && ! have_multiline_comment &&
+		doc_list[idx].file_type->comment_use_indent)
+	{
+		get_indent(doc_list[idx].sci, editor_info.click_pos, TRUE);
+		text = g_strdup_printf("%s\n%s\n%s\n", indent, indent, indent);
+		text_len = strlen(text);
+	}
+	else
+	{
+		text = g_strdup("\n\n\n");
+		text_len = 3;
+	}
+	sci_insert_text(doc_list[idx].sci, pos, text);
+	g_free(text);
+
+
+	// select the inserted lines for commenting
+	sci_set_selection_start(doc_list[idx].sci, pos);
+	sci_set_selection_end(doc_list[idx].sci, pos + text_len);
+
+	sci_cb_do_comment(idx, -1, TRUE);
+
+	// set the current position to the start of the first inserted line
+	pos += strlen(doc_list[idx].file_type->comment_open);
+
+	// on multi line comment jump to the next line, otherwise add the length of added indentation
+	if (have_multiline_comment)
+		pos += 1;
+	else
+		pos += strlen(indent);
+
+	sci_set_current_position(doc_list[idx].sci, pos);
+	// reset the selection
+	sci_set_anchor(doc_list[idx].sci, pos);
 }
