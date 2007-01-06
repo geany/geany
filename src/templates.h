@@ -38,7 +38,7 @@ gchar *templates_get_template_generic(gint template);
 
 gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name);
 
-gchar *templates_get_template_licence(gint filetype_idx);
+gchar *templates_get_template_licence(gint filetype_idx, gint licence_type);
 
 void templates_free_templates(void);
 
@@ -46,6 +46,7 @@ void templates_free_templates(void);
 enum
 {
 	GEANY_TEMPLATE_GPL = 0,
+	GEANY_TEMPLATE_BSD,
 	GEANY_TEMPLATE_FILEHEADER,
 	GEANY_TEMPLATE_CHANGELOG,
 	GEANY_TEMPLATE_FUNCTION,

@@ -1,7 +1,8 @@
 /*
  *      callbacks.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -561,4 +562,12 @@ on_menu_insert_include_activate        (GtkMenuItem     *menuitem,
 
 void
 on_menu_insert_date_activate           (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_comments_bsd_activate          (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_comments_bsd_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);

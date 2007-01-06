@@ -49,6 +49,34 @@ along with this program; if not, write to the Free Software\n\
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
 ";
 
+static const gchar templates_bsd_notice[] = "\
+Redistribution and use in source and binary forms, with or without\n\
+modification, are permitted provided that the following conditions are\n\
+met:\n\
+\n\
+* Redistributions of source code must retain the above copyright\n\
+  notice, this list of conditions and the following disclaimer.\n\
+* Redistributions in binary form must reproduce the above\n\
+  copyright notice, this list of conditions and the following disclaimer\n\
+  in the documentation and/or other materials provided with the\n\
+  distribution.\n\
+* Neither the name of the {company} nor the names of its\n\
+  contributors may be used to endorse or promote products derived from\n\
+  this software without specific prior written permission.\n\
+\n\
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n\
+\"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n\
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\n\
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\n\
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\n\
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT\n\
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n\
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n\
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n\
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n\
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\
+";
+
 static const gchar templates_function_description[] = "\
 \n\
 name: {functionname}\n\
@@ -189,6 +217,7 @@ void templates_init(void)
 {
 	gchar *template_filename_fileheader = TEMPLATES_GET_FILENAME("template.fileheader");
 	gchar *template_filename_gpl = TEMPLATES_GET_FILENAME("template.gpl");
+	gchar *template_filename_bsd = TEMPLATES_GET_FILENAME("template.bsd");
 	gchar *template_filename_function = TEMPLATES_GET_FILENAME("template.function");
 	gchar *template_filename_changelog = TEMPLATES_GET_FILENAME("template.changelog");
 	gchar *template_filename_filetype_none = TEMPLATES_GET_FILENAME("template.filetype.none");
@@ -210,6 +239,7 @@ void templates_init(void)
 	// create the template files in the configuration directory, if they don't exist
 	TEMPLATES_CREATE_FILE(template_filename_fileheader, templates_fileheader);
 	TEMPLATES_CREATE_FILE(template_filename_gpl, templates_gpl_notice);
+	TEMPLATES_CREATE_FILE(template_filename_bsd, templates_bsd_notice);
 	TEMPLATES_CREATE_FILE(template_filename_function, templates_function_description);
 	TEMPLATES_CREATE_FILE(template_filename_changelog, templates_changelog);
 	TEMPLATES_CREATE_FILE(template_filename_filetype_none, templates_filetype_none);
@@ -227,7 +257,10 @@ void templates_init(void)
 	templates[GEANY_TEMPLATE_FILEHEADER] = templates_replace_all(templates[GEANY_TEMPLATE_FILEHEADER], year, date);
 
 	TEMPLATES_READ_FILE(template_filename_gpl, &templates[GEANY_TEMPLATE_GPL]);
-	//templates[GEANY_TEMPLATE_GPL] = templates_replace_all(templates[GEANY_TEMPLATE_GPL], year, date);
+	templates[GEANY_TEMPLATE_GPL] = templates_replace_all(templates[GEANY_TEMPLATE_GPL], year, date);
+
+	TEMPLATES_READ_FILE(template_filename_bsd, &templates[GEANY_TEMPLATE_BSD]);
+	templates[GEANY_TEMPLATE_BSD] = templates_replace_all(templates[GEANY_TEMPLATE_BSD], year, date);
 
 	TEMPLATES_READ_FILE(template_filename_function, &templates[GEANY_TEMPLATE_FUNCTION]);
 	templates[GEANY_TEMPLATE_FUNCTION] = templates_replace_all(templates[GEANY_TEMPLATE_FUNCTION], year, date);
@@ -268,6 +301,7 @@ void templates_init(void)
 	g_free(year);
 	g_free(template_filename_fileheader);
 	g_free(template_filename_gpl);
+	g_free(template_filename_bsd);
 	g_free(template_filename_function);
 	g_free(template_filename_changelog);
 	g_free(template_filename_filetype_none);
@@ -414,12 +448,12 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 }
 
 
-gchar *templates_get_template_licence(gint filetype_idx)
+gchar *templates_get_template_licence(gint filetype_idx, gint licence_type)
 {
-	//if (licence_type != GEANY_TEMPLATE_GPL)
-		//return NULL;
+	if (licence_type != GEANY_TEMPLATE_GPL && licence_type != GEANY_TEMPLATE_BSD)
+		return NULL;
 
-	return make_comment_block(templates[GEANY_TEMPLATE_GPL], filetype_idx, 8);
+	return make_comment_block(templates[licence_type], filetype_idx, 8);
 }
 
 
@@ -443,6 +477,8 @@ static gchar *get_file_header(filetype *ft, const gchar *fname)
 	template = utils_str_replace(template, "{filename}", shortname);
 
 	template = utils_str_replace(template, "{gpl}", templates[GEANY_TEMPLATE_GPL]);
+
+	template = utils_str_replace(template, "{bsd}", templates[GEANY_TEMPLATE_BSD]);
 
 	template = utils_str_replace(template, "{datetime}", date);
 

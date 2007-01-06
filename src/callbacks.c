@@ -1493,7 +1493,7 @@ on_comments_gpl_activate               (GtkMenuItem     *menuitem,
 	gint idx = document_get_cur_idx();
 	gchar *text;
 
-	text = templates_get_template_licence(FILETYPE_ID(doc_list[idx].file_type));
+	text = templates_get_template_licence(FILETYPE_ID(doc_list[idx].file_type), GEANY_TEMPLATE_GPL);
 
 	verify_click_pos(idx); // make sure that the click_pos is valid
 
@@ -1506,7 +1506,7 @@ void
 on_comments_bsd_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-/*
+
 	gint idx = document_get_cur_idx();
 	gchar *text;
 
@@ -1516,7 +1516,7 @@ on_comments_bsd_activate               (GtkMenuItem     *menuitem,
 
 	sci_insert_text(doc_list[idx].sci, editor_info.click_pos, text);
 	g_free(text);
-*/
+
 }
 
 

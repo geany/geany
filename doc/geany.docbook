@@ -1778,11 +1778,11 @@
 				</literal></literallayout>
 			</para>
 		</section>
-		<section>
+		<section id="templates">
 			<title>Templates</title>
 			<para>
 				<application>Geany</application> supports several templates for file headers,
-				multiline comments (frame comments), function descriptions, a typical ChangeLog entry
+				function descriptions, a typical ChangeLog entry
 				and a short GPL notice. To use these templates, just open the Edit menu or open the
 				popup menu by right-clicking in the editor widget, and choose "Insert Comments" and
 				insert templates as you want.
@@ -1843,51 +1843,60 @@
 							<row>
 								<entry>developer</entry>
 								<entry>The name of the developer.</entry>
-								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry,
+									   bsd, gpl</entry>
 							</row>
 							<row>
 								<entry>initial</entry>
 								<entry>The developer's initials, e.g. "ET" for
 									   Enrico Tröger or "JFD" for John Foobar Doe.</entry>
-								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry,
+									   bsd, gpl</entry>
 							</row>
 							<row>
 								<entry>mail</entry>
 								<entry>The email address of the developer.</entry>
-								<entry>file header, function description, ChangeLog entry</entry>
+								<entry>file header, function description, ChangeLog entry,
+									   bsd, gpl</entry>
 							</row>
 							<row>
 								<entry>company</entry>
 								<entry>The company the developer is working for.</entry>
-								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry,
+									   bsd, gpl</entry>
 							</row>
 							<row>
 								<entry>year</entry>
 								<entry>The current year in the format: YYYY</entry>
-								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry,
+									   bsd, gpl</entry>
 							</row>
 							<row>
 								<entry>version</entry>
 								<entry>The initial version of a new file.</entry>
-								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry,
+									   bsd, gpl</entry>
 							</row>
 							<row>
 								<entry>date</entry>
 								<entry>The current date in the format: YYYY-MM-DD</entry>
-								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry,
+									   bsd, gpl</entry>
 							</row>
 							<row>
 								<entry>untitled</entry>
 								<entry>The string "untitled" (this will be translated to your locale),
 									   used in filetype templates</entry>
-								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry,
+									   bsd, gpl</entry>
 							</row>
 							<row>
 								<entry>geanyversion</entry>
 								<entry>The actual <application>Geany</application> version,
 									   e.g. "Geany &appversion;"
 								</entry>
-								<entry>filetypes, file header, function description, ChangeLog entry</entry>
+								<entry>filetypes, file header, function description, ChangeLog entry,
+									   bsd, gpl</entry>
 							</row>
 							<row>
 								<entry>datetime</entry>
@@ -1902,6 +1911,11 @@
 							<row>
 								<entry>gpl</entry>
 								<entry>This wildcard inserts a short GPL notice.</entry>
+								<entry>file header</entry>
+							</row>
+							<row>
+								<entry>bsd</entry>
+								<entry>This wildcard inserts a short BSD licence notice.</entry>
 								<entry>file header</entry>
 							</row>
 							<row>
