@@ -1,7 +1,8 @@
 /*
  *      geany.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -36,6 +37,7 @@
 // listed in the documentation should not be changed ;-)
 #define GEANY_HOME_DIR					g_get_home_dir()
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
+#define GEANY_TEMPLATES_SUBDIR			"templates"
 #define GEANY_CODENAME					"Bandor"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_USE_WIN32_DIALOG			0

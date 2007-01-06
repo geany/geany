@@ -2,10 +2,10 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
         "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!ENTITY app_small "geany">
-<!ENTITY appversion "0.10">
+<!ENTITY appversion "0.11">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "December 21, 2006">
+<!ENTITY date "January 06, 2007">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -28,7 +28,7 @@
 			<address><email>frank@frank.uvena.de</email></address>
 		</author>
 		<copyright>
-			<year>2005-2006</year>
+			<year>2005-2007</year>
 		</copyright>
 		<legalnotice>
 			<para>
@@ -1800,7 +1800,7 @@
 			</para>
 			<para>
 				Each template can be customized to your needs. The templates are in the configuration
-				directory, which is in <filename>~/.&app_small;/</filename> (see <xref linkend="clo"/>
+				directory, which is in <filename>~/.geany/templates/</filename> (see <xref linkend="clo"/>
 				for further information about the configuration directory). Just open the desired
 				template with an editor (ideally <application>Geany</application> ;-) ) and edit
 				the template as your needs.	There are some wildcards which will be automatically

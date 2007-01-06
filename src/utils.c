@@ -1,7 +1,8 @@
 /*
  *      utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -769,12 +770,12 @@ gchar *utils_get_hostname()
 gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gchar *doc_dir)
 {
 	gint error_nr = 0;
-	gchar *filetypes_readme = g_strconcat(
-					dir, G_DIR_SEPARATOR_S, "template.README", NULL);
+	gchar *conf_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	gchar *filedefs_dir = g_strconcat(dir, G_DIR_SEPARATOR_S,
 					GEANY_FILEDEFS_SUBDIR, G_DIR_SEPARATOR_S, NULL);
-	gchar *filedefs_readme = g_strconcat(dir, G_DIR_SEPARATOR_S, GEANY_FILEDEFS_SUBDIR,
-					G_DIR_SEPARATOR_S, "filetypes.README", NULL);
+
+	gchar *templates_dir = g_strconcat(dir, G_DIR_SEPARATOR_S,
+					GEANY_TEMPLATES_SUBDIR, G_DIR_SEPARATOR_S, NULL);
 
 	if (! g_file_test(dir, G_FILE_TEST_EXISTS))
 	{
@@ -786,17 +787,11 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 #endif
 	}
 
-	if (error_nr == 0 && ! g_file_test(filetypes_readme, G_FILE_TEST_EXISTS))
-	{	// try to write template.README
-		gchar *text;
-		text = g_strconcat(
-"There are several template files in this directory. For these templates you can use wildcards.\n\
-For more information read the documentation (in ", doc_dir, "index.html or visit " GEANY_HOMEPAGE ").",
-					NULL);
-		error_nr = utils_write_file(filetypes_readme, text);
-		g_free(text);
+	if (error_nr == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
+	{	// try to write geany.conf
+		error_nr = utils_write_file(conf_file, "");
 
- 		if (error_nr == 0 && ! g_file_test(filetypes_readme, G_FILE_TEST_EXISTS))
+ 		if (error_nr == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
 		{ // check whether write test was successful, otherwise directory is not writable
 			geany_debug("The chosen configuration directory is not writable.");
 			errno = EPERM;
@@ -806,6 +801,9 @@ For more information read the documentation (in ", doc_dir, "index.html or visit
 	// make subdir for filetype definitions
 	if (error_nr == 0)
 	{
+		gchar *filedefs_readme = g_strconcat(dir, G_DIR_SEPARATOR_S, GEANY_FILEDEFS_SUBDIR,
+					G_DIR_SEPARATOR_S, "filetypes.README", NULL);
+
 		if (! g_file_test(filedefs_dir, G_FILE_TEST_EXISTS))
 		{
 #ifdef G_OS_WIN32
@@ -822,12 +820,39 @@ For more information read the documentation (in ", doc_dir, "index.html or visit
 "the documentation (in ", doc_dir, "index.html or visit " GEANY_HOMEPAGE ").", NULL);
 			utils_write_file(filedefs_readme, text);
 			g_free(text);
+			g_free(filedefs_readme);
 		}
 	}
 
-	g_free(filetypes_readme);
+	// make subdir for template files
+	if (error_nr == 0)
+	{
+		gchar *templates_readme = g_strconcat(dir, G_DIR_SEPARATOR_S, GEANY_TEMPLATES_SUBDIR,
+					G_DIR_SEPARATOR_S, "templates.README", NULL);
+
+		if (! g_file_test(templates_dir, G_FILE_TEST_EXISTS))
+		{
+#ifdef G_OS_WIN32
+			if (mkdir(templates_dir) != 0) error_nr = errno;
+#else
+			if (mkdir(templates_dir, 0700) != 0) error_nr = errno;
+#endif
+		}
+		if (error_nr == 0 && ! g_file_test(templates_readme, G_FILE_TEST_EXISTS))
+		{
+			gchar *text = g_strconcat(
+"There are several template files in this directory. For these templates you can use wildcards.\n\
+For more information read the documentation (in ", doc_dir, "index.html or visit " GEANY_HOMEPAGE ").",
+					NULL);
+			utils_write_file(templates_readme, text);
+			g_free(text);
+			g_free(templates_readme);
+		}
+	}
+
 	g_free(filedefs_dir);
-	g_free(filedefs_readme);
+	g_free(templates_dir);
+	g_free(conf_file);
 
 	return error_nr;
 }

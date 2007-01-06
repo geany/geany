@@ -204,7 +204,8 @@ static gchar *templates[GEANY_MAX_TEMPLATES];
 
 
 // some simple macros to reduce code size and make the code readable
-#define TEMPLATES_GET_FILENAME(x) g_strconcat(app->configdir, G_DIR_SEPARATOR_S, x, NULL)
+#define TEMPLATES_GET_FILENAME(x) g_strconcat(app->configdir, \
+				G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, x, NULL)
 #define TEMPLATES_CREATE_FILE(x, y)	if (! g_file_test(x, G_FILE_TEST_EXISTS)) utils_write_file(x, y)
 #define TEMPLATES_READ_FILE(x, y) g_file_get_contents(x, y, NULL, NULL);
 
@@ -215,20 +216,20 @@ static gchar *templates_replace_all(gchar *source, gchar *year, gchar *date);
 
 void templates_init(void)
 {
-	gchar *template_filename_fileheader = TEMPLATES_GET_FILENAME("template.fileheader");
-	gchar *template_filename_gpl = TEMPLATES_GET_FILENAME("template.gpl");
-	gchar *template_filename_bsd = TEMPLATES_GET_FILENAME("template.bsd");
-	gchar *template_filename_function = TEMPLATES_GET_FILENAME("template.function");
-	gchar *template_filename_changelog = TEMPLATES_GET_FILENAME("template.changelog");
-	gchar *template_filename_filetype_none = TEMPLATES_GET_FILENAME("template.filetype.none");
-	gchar *template_filename_filetype_c = TEMPLATES_GET_FILENAME("template.filetype.c");
-	gchar *template_filename_filetype_cpp = TEMPLATES_GET_FILENAME("template.filetype.cpp");
-	gchar *template_filename_filetype_d = TEMPLATES_GET_FILENAME("template.filetype.d");
-	gchar *template_filename_filetype_java = TEMPLATES_GET_FILENAME("template.filetype.java");
-	gchar *template_filename_filetype_pascal = TEMPLATES_GET_FILENAME("template.filetype.pascal");
-	gchar *template_filename_filetype_php = TEMPLATES_GET_FILENAME("template.filetype.php");
-	gchar *template_filename_filetype_html = TEMPLATES_GET_FILENAME("template.filetype.html");
-	gchar *template_filename_filetype_ruby = TEMPLATES_GET_FILENAME("template.filetype.ruby");
+	gchar *template_filename_fileheader = TEMPLATES_GET_FILENAME("fileheader");
+	gchar *template_filename_gpl = TEMPLATES_GET_FILENAME("gpl");
+	gchar *template_filename_bsd = TEMPLATES_GET_FILENAME("bsd");
+	gchar *template_filename_function = TEMPLATES_GET_FILENAME("function");
+	gchar *template_filename_changelog = TEMPLATES_GET_FILENAME("changelog");
+	gchar *template_filename_filetype_none = TEMPLATES_GET_FILENAME("filetype.none");
+	gchar *template_filename_filetype_c = TEMPLATES_GET_FILENAME("filetype.c");
+	gchar *template_filename_filetype_cpp = TEMPLATES_GET_FILENAME("filetype.cpp");
+	gchar *template_filename_filetype_d = TEMPLATES_GET_FILENAME("filetype.d");
+	gchar *template_filename_filetype_java = TEMPLATES_GET_FILENAME("filetype.java");
+	gchar *template_filename_filetype_pascal = TEMPLATES_GET_FILENAME("filetype.pascal");
+	gchar *template_filename_filetype_php = TEMPLATES_GET_FILENAME("filetype.php");
+	gchar *template_filename_filetype_html = TEMPLATES_GET_FILENAME("filetype.html");
+	gchar *template_filename_filetype_ruby = TEMPLATES_GET_FILENAME("filetype.ruby");
 
 	time_t tp = time(NULL);
 	const struct tm *tm = localtime(&tp);

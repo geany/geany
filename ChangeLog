@@ -12,6 +12,9 @@
    src/interface.c, src/templates.c, src/templates.h:
    Added template for BSD licence.
  * src/document.c: Fixed missing colouring of tab menu label.
+ * doc/geany.docbook, src/geany.h, src/utils.c, src/templates.c:
+   Save template files in a subdirectory "templates" inside Geany's
+   configuration directory.
 
 
 2007-01-06  Nick Treleaven  <nick.treleaven@btinternet.com>
