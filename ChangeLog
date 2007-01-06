@@ -1,3 +1,11 @@
+2007-01-06  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c:
+   Ensure the VTE visual settings are applied when switching to VTE
+   when the Message Window is hidden.
+   Show the Message Window when switching to Scribble.
+
+
 2007-01-04  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/build.h:

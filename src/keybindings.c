@@ -688,15 +688,18 @@ static void cb_func_switch_editor(G_GNUC_UNUSED guint key_id)
 static void cb_func_switch_scribble(G_GNUC_UNUSED guint key_id)
 {
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_SCRATCH);
+	msgwin_show_hide(TRUE);
 	gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
 }
 
 static void cb_func_switch_vte(G_GNUC_UNUSED guint key_id)
 {
 #ifdef HAVE_VTE
+	msgwin_show_hide(TRUE);
+	/* the msgwin must be visible before we switch to the VTE page so that
+	 * the font settings are applied on realization */
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
 	gtk_widget_grab_focus(vc->vte);
-	msgwin_show_hide(TRUE);
 #endif
 }
 
