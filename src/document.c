@@ -1,7 +1,8 @@
 /*
  *      document.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -548,7 +549,7 @@ handle_bom(FileData *filedata)
 	filedata->len -= bom_len;
 	// overwrite the BOM with the remainder of the file contents, plus the NULL terminator.
 	g_memmove(filedata->data, filedata->data + bom_len, filedata->len + 1);
-	g_realloc(filedata->data, filedata->len + 1);
+	filedata->data = g_realloc(filedata->data, filedata->len + 1);
 }
 
 
@@ -878,7 +879,9 @@ gboolean document_save_file(gint idx, gboolean force)
 
 	len = sci_get_length(doc_list[idx].sci) + 1;
 	if (doc_list[idx].has_bom && encodings_is_unicode_charset(doc_list[idx].encoding))
-	{
+	{	// always write a UTF-8 BOM because in this moment the text itself is still in UTF-8
+		// encoding, it will be converted to doc_list[idx].encoding below and this conversion
+		// also changes the BOM
 		data = (gchar*) g_malloc(len + 3);	// 3 chars for BOM
 		data[0] = 0xef;
 		data[1] = 0xbb;
