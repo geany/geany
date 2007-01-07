@@ -74,6 +74,8 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 											  const gchar *charset, gboolean fast);
 
+gboolean encodings_is_unicode_charset(const gchar *string);
+
 
 /*
  * The original versions of the following tables are taken from profterm
@@ -152,7 +154,7 @@ typedef enum
 	GEANY_ENCODING_WINDOWS_1256,
 	GEANY_ENCODING_WINDOWS_1257,
 	GEANY_ENCODING_WINDOWS_1258,
-	
+
 	GEANY_ENCODING_NONE,
 
 	GEANY_ENCODINGS_MAX
@@ -160,5 +162,8 @@ typedef enum
 
 
 GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
+
+
+GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, guint *bom_len);
 
 #endif

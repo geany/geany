@@ -135,10 +135,6 @@ gchar **utils_read_file_in_array(const gchar *filename);
  * Replaces \\, \r, \n, \t and \uXXX by their real counterparts */
 gboolean utils_str_replace_escape(gchar *string);
 
-gchar *utils_scan_unicode_bom(const gchar *string);
-
-gboolean utils_is_unicode_charset(const gchar *string);
-
 /* Wraps a string in place, replacing a space with a newline character.
  * wrapstart is the minimum position to start wrapping or -1 for default */
 gboolean utils_wrap_string(gchar *string, gint wrapstart);

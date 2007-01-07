@@ -436,16 +436,13 @@ typedef struct
 static gboolean
 handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 {
+	GeanyEncodingIndex enc_idx;
+
 	if (utils_str_equal(forced_enc, "UTF-8"))
 	{
 		if (! g_utf8_validate(filedata->data, filedata->len, NULL))
 		{
 			return FALSE;
-		}
-		else
-		{
-			filedata->bom = utils_str_equal(utils_scan_unicode_bom(filedata->data), "UTF-8");
-			filedata->enc = g_strdup(forced_enc);
 		}
 	}
 	else
@@ -461,53 +458,68 @@ handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 			g_free(filedata->data);
 			filedata->data = converted_text;
 			filedata->len = strlen(converted_text);
-			filedata->bom = utils_str_equal(utils_scan_unicode_bom(filedata->data), "UTF-8");
-			filedata->enc = g_strdup(forced_enc);
 		}
 	}
+	enc_idx = encodings_scan_unicode_bom(filedata->data, filedata->len, NULL);
+	filedata->bom = (enc_idx == GEANY_ENCODING_UTF_8);
+	filedata->enc = g_strdup(forced_enc);
 	return TRUE;
 }
 
 
+// detect encoding and convert to UTF-8 if necessary
 static gboolean
 handle_encoding(FileData *filedata)
 {
-	if (filedata->len > 0)
-	{	// the usual way to detect encoding and convert to UTF-8
-		if (filedata->len >= 4)
+	g_return_val_if_fail(filedata->enc == NULL, FALSE);
+	g_return_val_if_fail(filedata->bom == FALSE, FALSE);
+
+	if (filedata->len == 0)
+	{
+		// we have no data so assume UTF-8
+		filedata->enc = g_strdup("UTF-8");
+	}
+	else
+	{
+		// first check for a BOM
+		GeanyEncodingIndex enc_idx =
+			encodings_scan_unicode_bom(filedata->data, filedata->len, NULL);
+
+		if (enc_idx != GEANY_ENCODING_NONE)
 		{
-			filedata->enc = utils_scan_unicode_bom(filedata->data);
-		}
-		if (filedata->enc != NULL)
-		{
+			filedata->enc = g_strdup(encodings[enc_idx].charset);
 			filedata->bom = TRUE;
-			if ((filedata->enc)[4] != '8') // the BOM indicated something else than UTF-8
+
+			if (enc_idx != GEANY_ENCODING_UTF_8) // the BOM indicated something else than UTF-8
 			{
 				gchar *converted_text = encodings_convert_to_utf8_from_charset(
-															filedata->data, filedata->len, filedata->enc, FALSE);
-				if (converted_text == NULL)
-				{
-					g_free(filedata->enc);
-					filedata->enc = NULL;
-					filedata->bom = FALSE;
-				}
-				else
+										filedata->data, filedata->len, filedata->enc, FALSE);
+				if (converted_text != NULL)
 				{
 					g_free(filedata->data);
 					filedata->data = converted_text;
 					filedata->len = strlen(converted_text);
 				}
+				else
+				{
+					// there was a problem converting data from BOM encoding type
+					g_free(filedata->enc);
+					filedata->enc = NULL;
+					filedata->bom = FALSE;
+				}
 			}
 		}
-		// this if is important, else doesn't work because enc can be altered in the above block
-		if (filedata->enc == NULL)
+
+		if (filedata->enc == NULL)	// either there was no BOM or the BOM encoding failed
 		{
+			// try UTF-8 first
 			if (g_utf8_validate(filedata->data, filedata->len, NULL))
 			{
 				filedata->enc = g_strdup("UTF-8");
 			}
 			else
 			{
+				// detect the encoding
 				gchar *converted_text = encodings_convert_to_utf8(filedata->data,
 					filedata->len, &filedata->enc);
 
@@ -515,18 +527,11 @@ handle_encoding(FileData *filedata)
 				{
 					return FALSE;
 				}
-				else
-				{
-					g_free(filedata->data);
-					filedata->data = converted_text;
-					filedata->len = strlen(converted_text);
-				}
+				g_free(filedata->data);
+				filedata->data = converted_text;
+				filedata->len = strlen(converted_text);
 			}
 		}
-	}
-	else
-	{
-		filedata->enc = g_strdup("UTF-8");
 	}
 	return TRUE;
 }
@@ -535,14 +540,15 @@ handle_encoding(FileData *filedata)
 static void
 handle_bom(FileData *filedata)
 {
-	gchar *data_without_bom;
+	guint bom_len;
 
-	g_return_if_fail(filedata->len >= 3);
+	encodings_scan_unicode_bom(filedata->data, filedata->len, &bom_len);
+	g_return_if_fail(bom_len != 0);
 
-	data_without_bom = g_strdup(filedata->data + 3);
-	g_free(filedata->data);
-	filedata->data = data_without_bom;
-	filedata->len -= 3;
+	filedata->len -= bom_len;
+	// overwrite the BOM with the remainder of the file contents, plus the NULL terminator.
+	g_memmove(filedata->data, filedata->data + bom_len, filedata->len + 1);
+	g_realloc(filedata->data, filedata->len + 1);
 }
 
 
@@ -871,7 +877,7 @@ gboolean document_save_file(gint idx, gboolean force)
 	sci_convert_eols(doc_list[idx].sci, sci_get_eol_mode(doc_list[idx].sci));
 
 	len = sci_get_length(doc_list[idx].sci) + 1;
-	if (doc_list[idx].has_bom && utils_is_unicode_charset(doc_list[idx].encoding))
+	if (doc_list[idx].has_bom && encodings_is_unicode_charset(doc_list[idx].encoding))
 	{
 		data = (gchar*) g_malloc(len + 3);	// 3 chars for BOM
 		data[0] = 0xef;
@@ -1642,7 +1648,7 @@ void document_set_encoding(gint idx, const gchar *new_encoding)
 
 	ui_update_statusbar(idx, -1);
 	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
-			utils_is_unicode_charset(doc_list[idx].encoding));
+			encodings_is_unicode_charset(doc_list[idx].encoding));
 }
 
 

@@ -39,12 +39,12 @@
 
 
 
-#define fill(v, w, x, y, z) \
-		encodings[x].idx = x; \
-		encodings[x].order = v; \
-		encodings[x].group = w; \
-		encodings[x].charset = y; \
-		encodings[x].name = z;
+#define fill(Order, Group, Idx, Charset, Name) \
+		encodings[Idx].idx = Idx; \
+		encodings[Idx].order = Order; \
+		encodings[Idx].group = Group; \
+		encodings[Idx].charset = Charset; \
+		encodings[Idx].name = Name;
 
 static void init_encodings(void)
 {
@@ -377,3 +377,72 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 
 	return NULL;
 }
+
+
+/* If there's a BOM, return a corresponding GEANY_ENCODING_UTF_* index,
+ * otherwise GEANY_ENCODING_NONE.
+ * */
+GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, guint *bom_len)
+{
+	if (len >= 3)
+	{
+		if (bom_len)
+			*bom_len = 3;
+
+		if ((guchar)string[0] == 0xef && (guchar)string[1] == 0xbb &&
+			(guchar)string[2] == 0xbf)
+		{
+			return GEANY_ENCODING_UTF_8;
+		}
+	}
+	if (len >= 4)
+	{
+		if (bom_len)
+			*bom_len = 4;
+
+		if ((guchar)string[0] == 0x00 && (guchar)string[1] == 0x00 &&
+				 (guchar)string[2] == 0xfe && (guchar)string[3] == 0xff)
+		{
+			return GEANY_ENCODING_UTF_32BE; // Big endian
+		}
+		if ((guchar)string[0] == 0xff && (guchar)string[1] == 0xfe &&
+				 (guchar)string[2] == 0x00 && (guchar)string[3] == 0x00)
+		{
+			return GEANY_ENCODING_UTF_32LE; // Little endian
+		}
+		if ((string[0] == 0x2b && string[1] == 0x2f && string[2] == 0x76) &&
+				 (string[3] == 0x38 || string[3] == 0x39 || string[3] == 0x2b || string[3] == 0x2f))
+		{
+			 return GEANY_ENCODING_UTF_7;
+		}
+	}
+	if (len >= 2)
+	{
+		if (bom_len)
+			*bom_len = 2;
+
+		if ((guchar)string[0]==0xfe && (guchar)string[1] == 0xff)
+		{
+			return GEANY_ENCODING_UTF_16BE; // Big endian
+		}
+		if ((guchar)string[0] == 0xff && (guchar)string[1] == 0xfe)
+		{
+			return GEANY_ENCODING_UTF_16LE; // Little endian
+		}
+	}
+	if (bom_len)
+		*bom_len = 0;
+	return GEANY_ENCODING_NONE;
+}
+
+
+gboolean encodings_is_unicode_charset(const gchar *string)
+{
+	if (string != NULL && (strncmp(string, "UTF", 3) == 0 || strncmp(string, "UCS", 3) == 0))
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+
+

@@ -120,7 +120,8 @@ void ui_update_statusbar(gint idx, gint pos)
 			(doc_list[idx].readonly) ? ", read only" : "",
 			cur_tag,
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
-			(utils_is_unicode_charset(doc_list[idx].encoding)) ? ((doc_list[idx].has_bom) ? _("(with BOM)") : _("(without BOM)")) : "",
+			(encodings_is_unicode_charset(doc_list[idx].encoding)) ?
+				((doc_list[idx].has_bom) ? _("(with BOM)") : _("(without BOM)")) : "",
 			(doc_list[idx].file_type) ? doc_list[idx].file_type->title : _("unknown"));
 		set_statusbar(text, TRUE);	// can be overridden by status messages
 		g_free(text);
@@ -706,7 +707,7 @@ void ui_document_show_hide(gint idx)
 																					TRUE);
 
 	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
-			utils_is_unicode_charset(doc_list[idx].encoding));
+			encodings_is_unicode_charset(doc_list[idx].encoding));
 
 	encodings_select_radio_item(doc_list[idx].encoding);
 	filetypes_select_radio_item(doc_list[idx].file_type);

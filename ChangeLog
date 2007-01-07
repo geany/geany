@@ -1,3 +1,15 @@
+2007-01-07  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/utils.h, src/encodings.c, src/document.c,
+   src/encodings.h, src/dialogs.c, src/ui_utils.c:
+   Fix memory leak when using utils_scan_unicode_bom().
+   Prevent invalid memory read in utils_scan_unicode_bom() when text
+   length is < 4.
+   Move utils_scan_unicode_bom(), utils_is_unicode_charset() to
+   encodings.c.
+   Read the BOM length in handle_bom().
+
+
 2007-01-07  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.glade, src/interface.c: Fixed typo.
