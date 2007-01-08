@@ -3,6 +3,7 @@
  * doc/geany.docbook, src/keybindings.c, src/keybindings.h:
    Added keyboard shortcut for Save As.
    Added missing documentation for some keyboard shortcuts.
+ * src/vte.c: Improved tool tip for terminal emulation.
 
 
 2007-01-07  Nick Treleaven  <nick.treleaven@btinternet.com>

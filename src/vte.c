@@ -577,7 +577,7 @@ void vte_append_preferences_tab()
 		gtk_table_attach(GTK_TABLE(table), entry_emulation, 1, 2, 4, 5,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-		gtk_tooltips_set_tip(tooltips, entry_emulation, _("Controls how the terminal emulator should behave. xterm is a good start."), NULL);
+		gtk_tooltips_set_tip(tooltips, entry_emulation, _("Controls how the terminal emulator should behave. Do not change this value unless you know exactly what you are doing."), NULL);
 
 		label = gtk_label_new(_("Shell:"));
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
