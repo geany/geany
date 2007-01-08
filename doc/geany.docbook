@@ -1146,6 +1146,10 @@
 								<entry>Saves the current file.</entry>
 							</row>
 							<row>
+								<entry>Save As</entry>
+								<entry>Saves the current file under a new name.</entry>
+							</row>
+							<row>
 								<entry>Save all</entry>
 								<entry>Saves all open files.</entry>
 							</row>
@@ -1180,6 +1184,10 @@
 								</entry>
 							</row>
 							<row>
+								<entry>Insert date</entry>
+								<entry>Inserts a customisable date.</entry>
+							</row>
+							<row>
 								<entry>Preferences</entry>
 								<entry>Opens preferences dialog.</entry>
 							</row>
@@ -1198,6 +1206,11 @@
 							<row>
 								<entry>Find in files</entry>
 								<entry>Opens the Find in files dialog.</entry>
+							</row>
+							<row>
+								<entry>Next message</entry>
+								<entry>Jumps to the line with the next message from the last call
+									   to Find usage.</entry>
 							</row>
 							<row>
 								<entry>Go to line</entry>
@@ -1268,6 +1281,12 @@
 								</entry>
 							</row>
 							<row>
+								<entry>Next error</entry>
+								<entry>Jumps to the line with the next error from the last build
+									   process.
+								</entry>
+							</row>
+							<row>
 								<entry>Run</entry>
 								<entry>Executes the current file in a terminal emulation.</entry>
 							</row>
@@ -1308,6 +1327,14 @@
 							</row>
 							<row>
 								<entry align="left" spanname="hspan">Editing operations</entry>
+							</row>
+							<row>
+								<entry>Convert selection to lower case</entry>
+								<entry>Converts the current selection to lower case.</entry>
+							</row>
+							<row>
+								<entry>Convert selection to upper case</entry>
+								<entry>Converts the current selection to upper case.</entry>
 							</row>
 							<row>
 								<entry>Duplicate line or selection</entry>

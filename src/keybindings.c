@@ -52,6 +52,7 @@ static void cb_func_menu_new(guint key_id);
 static void cb_func_menu_open(guint key_id);
 static void cb_func_menu_save(guint key_id);
 static void cb_func_menu_saveall(guint key_id);
+static void cb_func_menu_saveas(guint key_id);
 static void cb_func_menu_print(guint key_id);
 static void cb_func_menu_close(guint key_id);
 static void cb_func_menu_closeall(guint key_id);
@@ -110,6 +111,8 @@ void keybindings_init(void)
 		GDK_o, GDK_CONTROL_MASK, "menu_open", _("Open"));
 	keys[GEANY_KEYS_MENU_SAVE] = fill(cb_func_menu_save,
 		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"));
+	keys[GEANY_KEYS_MENU_SAVEAS] = fill(cb_func_menu_saveas,
+		0, 0, "menu_saveas", _("Save as"));
 	keys[GEANY_KEYS_MENU_SAVEALL] = fill(cb_func_menu_saveall,
 		GDK_S, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall", _("Save all"));
 	keys[GEANY_KEYS_MENU_PRINT] = fill(cb_func_menu_print,
@@ -278,6 +281,7 @@ static void keybindings_add_accels()
 
 	// apply the settings
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEALL, menu_save_all1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEAS, menu_save_as1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PRINT, print1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_CLOSE, menu_close1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_CLOSEALL, menu_close_all1);
@@ -469,6 +473,11 @@ static void cb_func_menu_save(G_GNUC_UNUSED guint key_id)
 static void cb_func_menu_saveall(G_GNUC_UNUSED guint key_id)
 {
 	on_save_all1_activate(NULL, NULL);
+}
+
+static void cb_func_menu_saveas(G_GNUC_UNUSED guint key_id)
+{
+	on_save_as1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_close(G_GNUC_UNUSED guint key_id)
