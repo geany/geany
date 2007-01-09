@@ -1,3 +1,9 @@
+2007-01-09  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/sci_cb.c, src/sciwrappers.c:
+   Prevent some possible buffer overflows.
+
+
 2007-01-08  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook, src/keybindings.c, src/keybindings.h:
