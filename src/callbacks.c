@@ -383,8 +383,7 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 			gchar *content = gtk_clipboard_wait_for_text(gtk_clipboard_get(GDK_NONE));
 			if (content != NULL)
 			{
-				sci_insert_text(doc_list[idx].sci,
-										sci_get_current_position(doc_list[idx].sci), content);
+				sci_replace_sel(doc_list[idx].sci, content);
 				g_free(content);
 			}
 		}

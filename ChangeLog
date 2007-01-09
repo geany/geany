@@ -1,3 +1,9 @@
+2007-01-09  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c:
+   Try to fix paste problems on Windows (should close #1628951).
+
+
 2007-01-09  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c, src/sci_cb.c, src/sciwrappers.c:
