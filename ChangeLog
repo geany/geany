@@ -1,3 +1,10 @@
+2007-01-11  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sci_cb.c:
+   Fix commenting multiple lines (oops).
+   Set single undo action when toggling multiple lines.
+
+
 2007-01-09  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c:

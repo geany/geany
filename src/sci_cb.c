@@ -1309,7 +1309,7 @@ void sci_cb_do_uncomment(gint idx, gint line)
 
 		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
 		if (buf_len <= 0)
-			break;
+			continue;
 		sci_get_text_range(doc_list[idx].sci, line_start, line_start + buf_len, sel);
 		sel[buf_len] = '\0';
 
@@ -1433,6 +1433,8 @@ void sci_cb_do_comment_toggle(gint idx)
 	co_len = strlen(co);
 	if (co_len == 0) return;
 
+	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
+
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
 		gint buf_len;
@@ -1443,7 +1445,7 @@ void sci_cb_do_comment_toggle(gint idx)
 
 		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
 		if (buf_len <= 0)
-			break;
+			continue;
 		sci_get_text_range(doc_list[idx].sci, line_start, line_start + buf_len, sel);
 		sel[buf_len] = '\0';
 
@@ -1534,6 +1536,8 @@ void sci_cb_do_comment_toggle(gint idx)
 			}
 		}
 	}
+
+	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
 
 	// restore selection if there is one
 	if (sel_start < sel_end)
@@ -1634,7 +1638,7 @@ void sci_cb_do_comment(gint idx, gint line, gboolean allow_empty_lines)
 
 		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
 		if (buf_len <= 0)
-			break;
+			continue;
 		sci_get_text_range(doc_list[idx].sci, line_start, line_start + buf_len, sel);
 		sel[buf_len] = '\0';
 
