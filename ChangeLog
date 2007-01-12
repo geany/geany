@@ -5,6 +5,9 @@
    syntax, and C++ .h headers use correct syntax).
    Add symbols_get_context_separator() and use for calltips and the
    symbol list.
+ * src/treeviews.c, src/document.c:
+   Don't select the current document when reordering tabs (fixes
+   #1632708).
 
 
 2007-01-11  Nick Treleaven  <nick.treleaven@btinternet.com>

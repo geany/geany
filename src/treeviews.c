@@ -325,18 +325,14 @@ void treeviews_prepare_openfiles()
 }
 
 
-// Also sets doc_list[idx].iter.
+/* Also sets doc_list[idx].iter.
+ * This is called recursively in treeviews_openfiles_update_all(). */
 void treeviews_openfiles_add(gint idx)
 {
 	GtkTreeIter *iter = &doc_list[idx].iter;
-	GtkTreeSelection *sel;
 
 	gtk_list_store_append(tv.store_openfiles, iter);
 	treeviews_openfiles_update(idx);
-
-	// select opened file
-	sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
-	gtk_tree_selection_select_iter(sel, iter);
 }
 
 

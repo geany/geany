@@ -281,9 +281,9 @@ static gint document_create_new_sci(const gchar *filename)
 	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);
 
 	// signal for insert-key(works without too, but to update the right status bar)
-/*	g_signal_connect((GtkWidget*) sci, "key-press-event",
-					G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));
-*/	// signal for the popup menu
+	//g_signal_connect((GtkWidget*) sci, "key-press-event",
+					//G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));
+	// signal for the popup menu
 	g_signal_connect((GtkWidget*) sci, "button-press-event",
 					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
 
@@ -315,6 +315,14 @@ static gint document_create_new_sci(const gchar *filename)
 
 	tabnum = notebook_new_tab(new_idx);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), tabnum);
+
+	// select document in sidebar
+	{
+		GtkTreeSelection *sel;
+
+		sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
+		gtk_tree_selection_select_iter(sel, &this->iter);
+	}
 
 	ui_close_buttons_toggle();
 
