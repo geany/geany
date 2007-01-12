@@ -8,6 +8,8 @@
  * src/treeviews.c, src/document.c:
    Don't select the current document when reordering tabs (fixes
    #1632708).
+ * src/utils.c:
+   Fix g_strconcat leaks in utils_make_settings_dir().
 
 
 2007-01-11  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -820,8 +820,8 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 "the documentation (in ", doc_dir, "index.html or visit " GEANY_HOMEPAGE ").", NULL);
 			utils_write_file(filedefs_readme, text);
 			g_free(text);
-			g_free(filedefs_readme);
 		}
+		g_free(filedefs_readme);
 	}
 
 	// make subdir for template files
@@ -846,8 +846,8 @@ For more information read the documentation (in ", doc_dir, "index.html or visit
 					NULL);
 			utils_write_file(templates_readme, text);
 			g_free(text);
-			g_free(templates_readme);
 		}
+		g_free(templates_readme);
 	}
 
 	g_free(filedefs_dir);
