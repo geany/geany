@@ -25,12 +25,16 @@
 #ifndef GEANY_SYMBOLS_H
 #define GEANY_SYMBOLS_H 1
 
+#include "filetypes.h"
+
 extern const guint TM_GLOBAL_TYPE_MASK;
 
 
 void symbols_global_tags_loaded(gint file_type_idx);
 
 GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types);
+
+const gchar *symbols_get_context_separator(filetype_id ft_id);
 
 const GList *symbols_get_tag_list(gint idx, guint tag_types);
 

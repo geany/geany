@@ -537,7 +537,7 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 }
 
 
-static gchar *tag_to_calltip(const TMTag *tag, gint ft_id)
+static gchar *tag_to_calltip(const TMTag *tag, filetype_id ft_id)
 {
 	GString *str;
 	gchar *result;
@@ -559,11 +559,10 @@ static gchar *tag_to_calltip(const TMTag *tag, gint ft_id)
 	}
 	if (tag->atts.entry.scope)
 	{
+		const gchar *cosep = symbols_get_context_separator(ft_id);
+
 		g_string_append(str, tag->atts.entry.scope);
-		if (ft_id == GEANY_FILETYPES_D)
-			g_string_append_c(str, '.');
-		else
-			g_string_append(str, "::");
+		g_string_append(str, cosep);
 	}
 	g_string_append(str, tag->name);
 	g_string_append_c(str, ' ');

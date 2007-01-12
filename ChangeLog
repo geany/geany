@@ -1,3 +1,12 @@
+2007-01-12  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sci_cb.c, src/symbols.c, src/symbols.h:
+   Use '::' context separator for C also (so C/C++ share the same
+   syntax, and C++ .h headers use correct syntax).
+   Add symbols_get_context_separator() and use for calltips and the
+   symbol list.
+
+
 2007-01-11  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c:

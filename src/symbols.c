@@ -150,6 +150,32 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types)
 }
 
 
+const gchar *symbols_get_context_separator(filetype_id ft_id)
+{
+	gchar *cosep;
+
+	switch (ft_id)
+	{
+		case GEANY_FILETYPES_C:	// for C++ .h headers or C structs
+		case GEANY_FILETYPES_CPP:
+		{
+			static gchar cc[] = "::";
+
+			cosep = cc;
+		}
+		break;
+
+		default:
+		{
+			static gchar def[] = ".";
+
+			cosep = def;
+		}
+	}
+	return cosep;	// return ptr to static string
+}
+
+
 const GList *symbols_get_tag_list(gint idx, guint tag_types)
 {
 	static GList *tag_names = NULL;
@@ -162,6 +188,8 @@ const GList *symbols_get_tag_list(gint idx, guint tag_types)
 		GeanySymbol *symbol;
 		gboolean doc_is_utf8 = FALSE;
 		gchar *utf8_name;
+		const gchar *cosep =
+			symbols_get_context_separator(FILETYPE_ID(doc_list[idx].file_type));
 
 		if (tag_names)
 		{
@@ -191,9 +219,6 @@ const GList *symbols_get_tag_list(gint idx, guint tag_types)
 				else utf8_name = tag->name;
 				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
 				{
-					// context separator
-					gchar *cosep = (doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? "::" : ".";
-
 					symbol = g_new0(GeanySymbol, 1);
 					symbol->str = g_strdup_printf("%s%s%s [%ld]", tag->atts.entry.scope, cosep,
 																utf8_name, tag->atts.entry.line);
