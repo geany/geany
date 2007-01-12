@@ -198,15 +198,15 @@ notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
 		// prevent oscillation between non-homogeneous sized tabs
 		switch(gtk_notebook_get_tab_pos(notebook))
 		{
-		case GTK_POS_LEFT:
-		case GTK_POS_RIGHT:
-		ok = ((ndest > ncurr) && (y > oldy)) || ((ndest < ncurr) && (y < oldy));
-		break;
+			case GTK_POS_LEFT:
+			case GTK_POS_RIGHT:
+			ok = ((ndest > ncurr) && (y > oldy)) || ((ndest < ncurr) && (y < oldy));
+			break;
 
-		case GTK_POS_TOP:
-		case GTK_POS_BOTTOM:
-		ok = ((ndest > ncurr) && (x > oldx)) || ((ndest < ncurr) && (x < oldx));
-		break;
+			case GTK_POS_TOP:
+			case GTK_POS_BOTTOM:
+			ok = ((ndest > ncurr) && (x > oldx)) || ((ndest < ncurr) && (x < oldx));
+			break;
 		}
 
 		if (ok)
