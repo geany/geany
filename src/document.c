@@ -414,8 +414,11 @@ void document_new_file(filetype *ft)
 	if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
 	ui_set_window_title(idx);
 	build_menu_update(idx);
+
 	doc_list[idx].mtime = time(NULL);
 	doc_list[idx].changed = FALSE;
+
+	document_update_tag_list(idx, FALSE);
 	document_set_text_changed(idx);
 	ui_document_show_hide(idx); //update the document menu
 

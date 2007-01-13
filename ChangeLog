@@ -7,6 +7,8 @@
    src/ui_utils.c, src/symbols.h:
    Move utils_compare_symbol(), GeanySymbol, recreate_tag_list()
    to symbols.c.
+ * src/document.c:
+   Update the symbol list when starting a new document.
 
 
 2007-01-12  Nick Treleaven  <nick.treleaven@btinternet.com>
