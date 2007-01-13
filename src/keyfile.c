@@ -173,6 +173,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", app->pref_editor_new_line);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", app->pref_editor_replace_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", app->pref_editor_trail_space);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", app->pref_editor_disable_dnd);
 	g_key_file_set_string(config, PACKAGE, "pref_editor_default_encoding", encodings[app->pref_editor_default_encoding].charset);
 	g_key_file_set_string(config, PACKAGE, "pref_template_developer", app->pref_template_developer);
 	g_key_file_set_string(config, PACKAGE, "pref_template_company", app->pref_template_company);
@@ -429,6 +430,7 @@ gboolean configuration_load()
 	app->pref_editor_replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
 	app->pref_editor_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
 	app->pref_editor_trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
+	app->pref_editor_disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
 
 	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_MAKE);
 	app->tools_make_cmd = utils_get_setting_string(config, "tools", "make_cmd", tmp_string);

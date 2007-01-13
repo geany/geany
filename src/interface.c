@@ -2303,6 +2303,7 @@ create_prefs_dialog (void)
   GtkWidget *check_folding;
   GtkWidget *check_unfold_children;
   GtkWidget *check_indicators;
+  GtkWidget *check_disable_dnd;
   GtkWidget *label172;
   GtkWidget *frame18;
   GtkWidget *alignment21;
@@ -3195,6 +3196,12 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_indicators, _("Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_indicators), FALSE);
 
+  check_disable_dnd = gtk_check_button_new_with_mnemonic (_("Disable Drag and Drop"));
+  gtk_widget_show (check_disable_dnd);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_disable_dnd, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_disable_dnd, _("Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_disable_dnd), FALSE);
+
   label172 = gtk_label_new (_("<b>Features</b>"));
   gtk_widget_show (label172);
   gtk_frame_set_label_widget (GTK_FRAME (frame14), label172);
@@ -3725,6 +3732,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_folding, "check_folding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_unfold_children, "check_unfold_children");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_indicators, "check_indicators");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_disable_dnd, "check_disable_dnd");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label172, "label172");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame18, "frame18");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment21, "alignment21");

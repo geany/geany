@@ -114,6 +114,7 @@ typedef struct MyApp
 	gboolean			 pref_editor_new_line;
 	gboolean			 pref_editor_replace_tabs;
 	gboolean			 pref_editor_trail_space;
+	gboolean			 pref_editor_disable_dnd;
 	gboolean			 pref_main_load_session;
 	gboolean			 pref_main_save_winpos;
 	gboolean			 pref_main_confirm_exit;

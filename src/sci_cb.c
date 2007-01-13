@@ -67,6 +67,11 @@ on_editor_button_press_event           (GtkWidget *widget,
 
 	if (event->button == 1)
 	{
+		if (GDK_BUTTON_PRESS==event->type && app->pref_editor_disable_dnd)
+		{
+			gint ss = sci_get_selection_start(doc_list[idx].sci);
+			sci_set_selection_end(doc_list[idx].sci, ss);
+		}
 		return utils_check_disk_status(idx, FALSE);
 	}
 

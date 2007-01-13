@@ -247,6 +247,9 @@ void prefs_init_dialog(void)
 	on_pref_use_folding_toggled(GTK_TOGGLE_BUTTON(
 					lookup_widget(app->prefs_dialog, "check_folding")), NULL);
 
+	widget = lookup_widget(app->prefs_dialog, "check_disable_dnd");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_disable_dnd);
+
 	widget = lookup_widget(app->prefs_dialog, "check_indicators");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_use_indicators);
 
@@ -549,6 +552,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "check_indicators");
 		app->pref_editor_use_indicators = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_disable_dnd");
+		app->pref_editor_disable_dnd = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "spin_autocheight");
 		app->autocompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));

@@ -7,6 +7,10 @@
    src/sci_cb.c, src/templates.c, tagmanager/js.c, tagmanager/lua.c,
    tagmanager/Makefile.am, tagmanager/makefile.win32,
    tagmanager/parsers.h: Added new filetypes Javascript and Lua.
+ * geany.glade, THANKS, src/geany.h, src/interface.c, src/keyfile.c,
+   src/prefs.c, src/sci_cb.c:
+   Applied patch from Jeff Pohlmeyer to add an option for disabling DnD
+   in the editor widget.
 
 
 2007-01-13  Nick Treleaven  <nick.treleaven@btinternet.com>
