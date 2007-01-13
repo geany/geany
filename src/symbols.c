@@ -24,12 +24,14 @@
 #include "geany.h"
 
 #include <ctype.h>
+#include <string.h>
 
 #include "symbols.h"
 #include "utils.h"
 #include "filetypes.h"
 #include "encodings.h"
 #include "document.h"
+#include "treeviews.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =
@@ -176,75 +178,6 @@ const gchar *symbols_get_context_separator(filetype_id ft_id)
 }
 
 
-const GList *symbols_get_tag_list(gint idx, guint tag_types)
-{
-	static GList *tag_names = NULL;
-
-	if (idx >= 0 && doc_list[idx].is_valid && doc_list[idx].tm_file &&
-		doc_list[idx].tm_file->tags_array)
-	{
-		TMTag *tag;
-		guint i;
-		GeanySymbol *symbol;
-		gboolean doc_is_utf8 = FALSE;
-		gchar *utf8_name;
-		const gchar *cosep =
-			symbols_get_context_separator(FILETYPE_ID(doc_list[idx].file_type));
-
-		if (tag_names)
-		{
-			GList *tmp;
-			for (tmp = tag_names; tmp; tmp = g_list_next(tmp))
-			{
-				g_free(((GeanySymbol*)tmp->data)->str);
-				g_free(tmp->data);
-			}
-			g_list_free(tag_names);
-			tag_names = NULL;
-		}
-
-		// do this comparison only once
-		if (utils_str_equal(doc_list[idx].encoding, "UTF-8")) doc_is_utf8 = TRUE;
-
-		for (i = 0; i < (doc_list[idx].tm_file)->tags_array->len; ++i)
-		{
-			tag = TM_TAG((doc_list[idx].tm_file)->tags_array->pdata[i]);
-			if (tag == NULL)
-				return NULL;
-
-			if (tag->type & tag_types)
-			{
-				if (! doc_is_utf8) utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
-															-1, doc_list[idx].encoding, TRUE);
-				else utf8_name = tag->name;
-				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
-				{
-					symbol = g_new0(GeanySymbol, 1);
-					symbol->str = g_strdup_printf("%s%s%s [%ld]", tag->atts.entry.scope, cosep,
-																utf8_name, tag->atts.entry.line);
-					symbol->type = tag->type;
-					symbol->line = tag->atts.entry.line;
-					tag_names = g_list_prepend(tag_names, symbol);
-				}
-				else
-				{
-					symbol = g_new0(GeanySymbol, 1);
-					symbol->str = g_strdup_printf("%s [%ld]", utf8_name, tag->atts.entry.line);
-					symbol->type = tag->type;
-					symbol->line = tag->atts.entry.line;
-					tag_names = g_list_prepend(tag_names, symbol);
-				}
-				if (! doc_is_utf8) g_free(utf8_name);
-			}
-		}
-		tag_names = g_list_sort(tag_names, (GCompareFunc) utils_compare_symbol);
-		return tag_names;
-	}
-	else
-		return NULL;
-}
-
-
 GString *symbols_get_macro_list()
 {
 	guint j, i;
@@ -330,3 +263,187 @@ void symbols_finalize()
 {
 	g_strfreev(html_entities);
 }
+
+
+// small struct to track tag name and type together
+typedef struct GeanySymbol
+{
+	gchar	*str;
+	gint	 type;
+	gint	 line;
+} GeanySymbol;
+
+
+/* wrapper function to let strcmp work with GeanySymbol struct */
+static gint compare_symbol(const GeanySymbol *a, const GeanySymbol *b)
+{
+	if (a == NULL || b == NULL) return 0;
+
+	return strcmp(a->str, b->str);
+}
+
+
+static const GList *
+get_tag_list(gint idx, guint tag_types)
+{
+	static GList *tag_names = NULL;
+
+	if (idx >= 0 && doc_list[idx].is_valid && doc_list[idx].tm_file &&
+		doc_list[idx].tm_file->tags_array)
+	{
+		TMTag *tag;
+		guint i;
+		GeanySymbol *symbol;
+		gboolean doc_is_utf8 = FALSE;
+		gchar *utf8_name;
+		const gchar *cosep =
+			symbols_get_context_separator(FILETYPE_ID(doc_list[idx].file_type));
+
+		if (tag_names)
+		{
+			GList *tmp;
+			for (tmp = tag_names; tmp; tmp = g_list_next(tmp))
+			{
+				g_free(((GeanySymbol*)tmp->data)->str);
+				g_free(tmp->data);
+			}
+			g_list_free(tag_names);
+			tag_names = NULL;
+		}
+
+		// do this comparison only once
+		if (utils_str_equal(doc_list[idx].encoding, "UTF-8")) doc_is_utf8 = TRUE;
+
+		for (i = 0; i < (doc_list[idx].tm_file)->tags_array->len; ++i)
+		{
+			tag = TM_TAG((doc_list[idx].tm_file)->tags_array->pdata[i]);
+			if (tag == NULL)
+				return NULL;
+
+			if (tag->type & tag_types)
+			{
+				if (! doc_is_utf8) utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
+															-1, doc_list[idx].encoding, TRUE);
+				else utf8_name = tag->name;
+				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
+				{
+					symbol = g_new0(GeanySymbol, 1);
+					symbol->str = g_strdup_printf("%s%s%s [%ld]", tag->atts.entry.scope, cosep,
+																utf8_name, tag->atts.entry.line);
+					symbol->type = tag->type;
+					symbol->line = tag->atts.entry.line;
+					tag_names = g_list_prepend(tag_names, symbol);
+				}
+				else
+				{
+					symbol = g_new0(GeanySymbol, 1);
+					symbol->str = g_strdup_printf("%s [%ld]", utf8_name, tag->atts.entry.line);
+					symbol->type = tag->type;
+					symbol->line = tag->atts.entry.line;
+					tag_names = g_list_prepend(tag_names, symbol);
+				}
+				if (! doc_is_utf8) g_free(utf8_name);
+			}
+		}
+		tag_names = g_list_sort(tag_names, (GCompareFunc) compare_symbol);
+		return tag_names;
+	}
+	else
+		return NULL;
+}
+
+
+gboolean symbols_recreate_tag_list(gint idx)
+{
+	GList *tmp;
+	const GList *tags;
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+
+	tags = get_tag_list(idx, tm_tag_max_t);
+	if (doc_list[idx].tm_file == NULL || tags == NULL) return FALSE;
+
+	gtk_tree_store_clear(doc_list[idx].tag_store);
+	// unref the store to speed up the filling(from TreeView Tutorial)
+	model = gtk_tree_view_get_model(GTK_TREE_VIEW(doc_list[idx].tag_tree));
+	g_object_ref(model); // Make sure the model stays with us after the tree view unrefs it
+	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), NULL); // Detach model from view
+
+	treeviews_init_tag_list(idx);
+	for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
+	{
+		switch (((GeanySymbol*)tmp->data)->type)
+		{
+			case tm_tag_prototype_t:
+			case tm_tag_method_t:
+			case tm_tag_function_t:
+			{
+				if (tv.tag_function.stamp == -1) break;
+				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_function));
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+				break;
+			}
+			case tm_tag_macro_t:
+			case tm_tag_macro_with_arg_t:
+			{
+				if (tv.tag_macro.stamp == -1) break;
+				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_macro));
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+				break;
+			}
+			case tm_tag_class_t:
+			{
+				if (tv.tag_class.stamp == -1) break;
+				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_class));
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+				break;
+			}
+			case tm_tag_member_t:
+			case tm_tag_field_t:
+			{
+				if (tv.tag_member.stamp == -1) break;
+				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_member));
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+				break;
+			}
+			case tm_tag_typedef_t:
+			case tm_tag_enum_t:
+			case tm_tag_union_t:
+			case tm_tag_struct_t:
+			case tm_tag_interface_t:
+			{
+				if (tv.tag_struct.stamp == -1) break;
+				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_struct));
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+				break;
+			}
+			case tm_tag_variable_t:
+			{
+				if (tv.tag_variable.stamp == -1) break;
+				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_variable));
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+				break;
+			}
+			case tm_tag_namespace_t:
+			case tm_tag_package_t:
+			{
+				if (tv.tag_namespace.stamp == -1) break;
+				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_namespace));
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+				break;
+			}
+			default:
+			{
+				if (tv.tag_other.stamp == -1) break;
+				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_other));
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
+			}
+		}
+	}
+	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), model); // Re-attach model to view
+	g_object_unref(model);
+	gtk_tree_view_expand_all(GTK_TREE_VIEW(doc_list[idx].tag_tree));
+	return TRUE;
+}
+
+

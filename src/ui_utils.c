@@ -199,101 +199,6 @@ void ui_set_fullscreen()
 }
 
 
-static gboolean recreate_tag_list(gint idx)
-{
-	GList *tmp;
-	const GList *tags;
-	GtkTreeIter iter;
-	GtkTreeModel *model;
-
-	tags = symbols_get_tag_list(idx, tm_tag_max_t);
-	if (doc_list[idx].tm_file == NULL || tags == NULL) return FALSE;
-
-	doc_list[idx].has_tags = TRUE;
-	gtk_tree_store_clear(doc_list[idx].tag_store);
-	// unref the store to speed up the filling(from TreeView Tutorial)
-	model = gtk_tree_view_get_model(GTK_TREE_VIEW(doc_list[idx].tag_tree));
-	g_object_ref(model); // Make sure the model stays with us after the tree view unrefs it
-	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), NULL); // Detach model from view
-
-	treeviews_init_tag_list(idx);
-	for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
-	{
-		switch (((GeanySymbol*)tmp->data)->type)
-		{
-			case tm_tag_prototype_t:
-			case tm_tag_method_t:
-			case tm_tag_function_t:
-			{
-				if (tv.tag_function.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_function));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
-				break;
-			}
-			case tm_tag_macro_t:
-			case tm_tag_macro_with_arg_t:
-			{
-				if (tv.tag_macro.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_macro));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
-				break;
-			}
-			case tm_tag_class_t:
-			{
-				if (tv.tag_class.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_class));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
-				break;
-			}
-			case tm_tag_member_t:
-			case tm_tag_field_t:
-			{
-				if (tv.tag_member.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_member));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
-				break;
-			}
-			case tm_tag_typedef_t:
-			case tm_tag_enum_t:
-			case tm_tag_union_t:
-			case tm_tag_struct_t:
-			case tm_tag_interface_t:
-			{
-				if (tv.tag_struct.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_struct));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
-				break;
-			}
-			case tm_tag_variable_t:
-			{
-				if (tv.tag_variable.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_variable));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
-				break;
-			}
-			case tm_tag_namespace_t:
-			case tm_tag_package_t:
-			{
-				if (tv.tag_namespace.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_namespace));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
-				break;
-			}
-			default:
-			{
-				if (tv.tag_other.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv.tag_other));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, ((GeanySymbol*)tmp->data)->str, -1);
-			}
-		}
-	}
-	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), model); // Re-attach model to view
-	g_object_unref(model);
-	gtk_tree_view_expand_all(GTK_TREE_VIEW(doc_list[idx].tag_tree));
-	return TRUE;
-}
-
-
 // update = rescan the tags for document[idx].filename
 void ui_update_tag_list(gint idx, gboolean update)
 {
@@ -304,6 +209,7 @@ void ui_update_tag_list(gint idx, gboolean update)
 	{
 		GtkTreeIter iter;
 		GtkTreeStore *store = gtk_tree_store_new(1, G_TYPE_STRING);
+
 		app->default_tag_tree = gtk_tree_view_new();
 		treeviews_prepare_taglist(app->default_tag_tree, store);
 		gtk_tree_store_append(store, &iter, NULL);
@@ -331,29 +237,18 @@ void ui_update_tag_list(gint idx, gboolean update)
 			g_object_ref((gpointer)doc_list[idx].tag_tree);	// to hold it after removing
 		}
 
-		if (recreate_tag_list(idx))
-		{
-			gtk_widget_set_sensitive(app->tagbar, TRUE);
-			gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
-		}
-		else
-		{	// no tags
-			gtk_widget_set_sensitive(app->tagbar, FALSE);
-			gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
-		}
+		doc_list[idx].has_tags = symbols_recreate_tag_list(idx);
+	}
+
+	if (doc_list[idx].has_tags)
+	{
+		gtk_widget_set_sensitive(app->tagbar, TRUE);
+		gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
 	}
 	else
-	{	// update == FALSE
-		if (doc_list[idx].has_tags)
-		{
-			gtk_widget_set_sensitive(app->tagbar, TRUE);
-			gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
-		}
-		else
-		{
-			gtk_widget_set_sensitive(app->tagbar, FALSE);
-			gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
-		}
+	{
+		gtk_widget_set_sensitive(app->tagbar, FALSE);
+		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
 	}
 }
 

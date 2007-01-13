@@ -46,4 +46,6 @@ gchar **symbols_get_html_entities();
 
 void symbols_finalize();
 
+gboolean symbols_recreate_tag_list(gint idx);
+
 #endif

@@ -187,15 +187,6 @@ typedef struct MyApp
 MyApp *app;
 
 
-// small struct to track tag name and type together
-typedef struct GeanySymbol
-{
-	gchar	*str;
-	gint	 type;
-	gint	 line;
-} GeanySymbol;
-
-
 enum
 {
 	GEANY_IMAGE_SMALL_CROSS,

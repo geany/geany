@@ -1064,15 +1064,6 @@ void utils_replace_filename(gint idx)
 }
 
 
-/* wrapper function to let strcmp work with GeanySymbol struct */
-gint utils_compare_symbol(const GeanySymbol *a, const GeanySymbol *b)
-{
-	if (a == NULL || b == NULL) return 0;
-
-	return strcmp(a->str, b->str);
-}
-
-
 gchar *utils_get_hex_from_color(GdkColor *color)
 {
 	gchar *buffer = g_malloc0(9);

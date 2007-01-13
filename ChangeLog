@@ -3,6 +3,10 @@
  * src/main.c, src/socket.c, po/POTFILES.in:
    Print an error message (instead of debug message) when a
    command-line file cannot be loaded.
+ * src/utils.c, src/utils.h, src/geany.h, src/symbols.c,
+   src/ui_utils.c, src/symbols.h:
+   Move utils_compare_symbol(), GeanySymbol, recreate_tag_list()
+   to symbols.c.
 
 
 2007-01-12  Nick Treleaven  <nick.treleaven@btinternet.com>
