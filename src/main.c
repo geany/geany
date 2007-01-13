@@ -335,6 +335,7 @@ gchar *get_argv_filename(const gchar *filename)
 	{
 		//use current dir
 		gchar *cur_dir = g_get_current_dir();
+
 		result = g_strjoin(
 			G_DIR_SEPARATOR_S, cur_dir, filename, NULL);
 		g_free(cur_dir);
@@ -466,6 +467,41 @@ static void signal_cb(gint sig)
 }
 
 
+// open files from command line
+gboolean open_cl_files(gint argc, gchar **argv)
+{
+	gint i;
+
+	if (argc <= 1) return FALSE;
+
+	for(i = 1; i < argc; i++)
+	{
+		gchar *filename = get_argv_filename(argv[i]);
+
+		if (filename &&
+			g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+		{
+			gint idx;
+
+			idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
+			// add recent file manually because opening_session_files is set
+			if (DOC_IDX_VALID(idx))
+				ui_add_recent_file(doc_list[idx].file_name);
+		}
+		else
+		{
+			gchar *msg = _("Could not find file '%s'.");
+
+			g_printerr(msg, filename);	// also print to the terminal
+			g_printerr("\n");
+			msgwin_status_add(msg, filename);
+		}
+		g_free(filename);
+	}
+	return TRUE;
+}
+
+
 gint main(gint argc, gchar **argv)
 {
 	gint idx;
@@ -580,34 +616,17 @@ gint main(gint argc, gchar **argv)
 	// apply all configuration options
 	apply_settings();
 
-	// open files from command line
+	// load any command line files or session files
 	app->opening_session_files = TRUE;
-	if (argc > 1)
+	if (! open_cl_files(argc, argv))
 	{
-		gint i;
-		for(i = 1; i < argc; i++)
+		if (app->pref_main_load_session && cl_options.load_session)
 		{
-			if (argv[i] && g_file_test(argv[i], G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+			if (! configuration_open_files())
 			{
-				gchar *filename = get_argv_filename(argv[i]);
-				gint idx;
-
-				idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
-				// add recent file manually because opening_session_files is set
-				if (DOC_IDX_VALID(idx))
-					ui_add_recent_file(doc_list[idx].file_name);
-				g_free(filename);
+				ui_update_popup_copy_items(-1);
+				ui_update_popup_reundo_items(-1);
 			}
-			else
-				geany_debug("Could not load file '%s'.", argv[i]);
-		}
-	}
-	else if (app->pref_main_load_session && cl_options.load_session)
-	{
-		if (! configuration_open_files())
-		{
-			ui_update_popup_copy_items(-1);
-			ui_update_popup_reundo_items(-1);
 		}
 	}
 	app->opening_session_files = FALSE;

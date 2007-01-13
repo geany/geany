@@ -1,3 +1,10 @@
+2007-01-13  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/main.c, src/socket.c, po/POTFILES.in:
+   Print an error message (instead of debug message) when a
+   command-line file cannot be loaded.
+
+
 2007-01-12  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c, src/symbols.c, src/symbols.h:

@@ -42,6 +42,7 @@
 #include "main.h"
 #include "socket.h"
 #include "document.h"
+#include "support.h"
 
 
 
@@ -73,6 +74,37 @@ static gint socket_fd_read			(gint sock, gchar *buf, gint len);
 static gint socket_fd_recv			(gint fd, gchar *buf, gint len, gint flags);
 static gint socket_fd_close			(gint sock);
 
+
+
+void send_open_command(gint sock, gint argc, gchar **argv)
+{
+	gint i;
+	gchar *filename;
+
+	g_return_if_fail(argc > 1);
+	geany_debug("using running instance of Geany");
+
+	socket_fd_write_all(sock, "open\n", 5);
+
+	for(i = 1; i < argc && argv[i] != NULL; i++)
+	{
+		filename = get_argv_filename(argv[i]);
+
+		if (filename != NULL &&
+			g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+		{
+			socket_fd_write_all(sock, filename, strlen(filename));
+			socket_fd_write_all(sock, "\n", 1);
+		}
+		else
+		{
+			g_printerr(_("Could not find file '%s'."), filename);
+			g_printerr("\n");	// keep translation from open_cl_files() in main.c.
+		}
+		g_free(filename);
+	}
+	socket_fd_write_all(sock, ".\n", 2);
+}
 
 
 /* (Unix domain) socket support to replace the old FIFO code
@@ -118,25 +150,7 @@ gint socket_init(gint argc, gchar **argv)
 	// remote command mode, here we have another running instance and want to use it
 	if (argc > 1)
 	{
-		gint i;
-		gchar *filename;
-
-		geany_debug("using running instance of Geany");
-
-		socket_fd_write_all(sock, "open\n", 5);
-
-		for(i = 1; i < argc && argv[i] != NULL; i++)
-		{
-			filename = get_argv_filename(argv[i]);
-
-			if (filename != NULL)
-			{
-				socket_fd_write_all(sock, filename, strlen(filename));
-				socket_fd_write_all(sock, "\n", 1);
-				g_free(filename);
-			}
-		}
-		socket_fd_write_all(sock, ".\n", 2);
+		send_open_command(sock, argc, argv);
 	}
 
 	socket_fd_close(sock);
