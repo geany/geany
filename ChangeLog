@@ -1,3 +1,14 @@
+2007-01-13  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * data/filetype_extensions.conf, data/filetypes.javascript,
+   data/filetypes.lua, scintilla/KeyWords.cxx, scintilla/LexLua.cxx,
+   scintilla/Makefile.am, scintilla/makefile.win32, src/filetypes.c,
+   src/filetypes.h, src/highlighting.c, src/highlighting.h,
+   src/sci_cb.c, src/templates.c, tagmanager/js.c, tagmanager/lua.c,
+   tagmanager/Makefile.am, tagmanager/makefile.win32,
+   tagmanager/parsers.h: Added new filetypes Javascript and Lua.
+
+
 2007-01-13  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/main.c, src/socket.c, po/POTFILES.in:

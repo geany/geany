@@ -1,7 +1,8 @@
 /*
  *      highlighting.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -2755,3 +2756,168 @@ void styleset_vhdl(ScintillaObject *sci)
 	set_sci_style(sci, SCE_VHDL_USERWORD, GEANY_FILETYPES_VHDL, 14);
 }
 
+
+static void styleset_js_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+
+	load_keyfiles(config, config_home, GEANY_FILETYPES_JS);
+
+	new_style_array(GEANY_FILETYPES_JS, 20);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_JS);
+
+	style_sets[GEANY_FILETYPES_JS].keywords = g_new(gchar*, 2);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_JS, 0, "\
+			abstract boolean break byte case catch char class \
+			const continue debugger default delete do double else enum export extends \
+			final finally float for function goto if implements import in instanceof \
+			int interface long native new package private protected public \
+			return short static super switch synchronized this throw throws \
+			transient try typeof var void volatile while with");
+	style_sets[GEANY_FILETYPES_JS].keywords[1] = NULL;
+
+	get_keyfile_wordchars(config, config_home, &style_sets[GEANY_FILETYPES_JS].wordchars);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_JS);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+}
+
+
+void styleset_js(ScintillaObject *sci)
+{
+	styleset_common(sci, 5);
+	if (style_sets[GEANY_FILETYPES_JS].styling == NULL) styleset_js_init();
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_JS].wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
+
+	SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_JS].keywords[0]);
+
+	styleset_c_like(sci, GEANY_FILETYPES_JS);
+}
+
+
+static void styleset_lua_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+
+	load_keyfiles(config, config_home, GEANY_FILETYPES_LUA);
+
+	new_style_array(GEANY_FILETYPES_LUA, 20);
+
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0xd00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "commentline", "0xd00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "commentdoc", "0x3f5fbf", "0xffffff", "true", &style_sets[GEANY_FILETYPES_LUA].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "word", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_LUA].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "character", "0x008000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "literalstring", "0x008020", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_LUA].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "function_basic", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "function_other", "0x690000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[14]);
+	get_keyfile_hex(config, config_home, "styling", "coroutines", "0x66005c", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[15]);
+	get_keyfile_hex(config, config_home, "styling", "word5", "0x7979ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[16]);
+	get_keyfile_hex(config, config_home, "styling", "word6", "0xad00ff", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[17]);
+	get_keyfile_hex(config, config_home, "styling", "word7", "0x03D000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[18]);
+	get_keyfile_hex(config, config_home, "styling", "word8", "0xff7600", "0xffffff", "false", &style_sets[GEANY_FILETYPES_LUA].styling[19]);
+
+	style_sets[GEANY_FILETYPES_LUA].keywords = g_new(gchar*, 9);
+	get_keyfile_keywords(config, config_home, "keywords", "keywords", GEANY_FILETYPES_LUA, 0,
+			"and break do else elseif end false for function if \
+			 in local nil not or repeat return then true until while");
+	get_keyfile_keywords(config, config_home, "keywords", "function_basic", GEANY_FILETYPES_LUA, 1,
+			"_VERSION assert collectgarbage dofile error gcinfo loadfile loadstring \
+			 print rawget rawset require tonumber tostring type unpack \
+			 _ALERT _ERRORMESSAGE _INPUT _PROMPT _OUTPUT \
+			 _STDERR _STDIN _STDOUT call dostring foreach foreachi getn globals newtype \
+			 sort tinsert tremove _G getfenv getmetatable ipairs loadlib next pairs pcall \
+			 rawequal setfenv setmetatable xpcall string table math coroutine io os debug \
+			 load module select");
+	get_keyfile_keywords(config, config_home, "keywords", "function_other", GEANY_FILETYPES_LUA, 2,
+			"abs acos asin atan atan2 ceil cos deg exp \
+			 floor format frexp gsub ldexp log log10 max min mod rad random randomseed \
+			 sin sqrt strbyte strchar strfind strlen strlower strrep strsub strupper tan \
+			 string.byte string.char string.dump string.find string.len \
+			 string.lower string.rep string.sub string.upper string.format string.gfind string.gsub \
+			 table.concat table.foreach table.foreachi table.getn table.sort table.insert table.remove table.setn \
+			 math.abs math.acos math.asin math.atan math.atan2 math.ceil math.cos math.deg math.exp \
+			 math.floor math.frexp math.ldexp math.log math.log10 math.max math.min math.mod \
+			 math.pi math.pow math.rad math.random math.randomseed math.sin math.sqrt math.tan \
+			 string.gmatch string.match string.reverse table.maxn \
+			 math.cosh math.fmod math.modf math.sinh math.tanh math.huge");
+	get_keyfile_keywords(config, config_home, "keywords", "coroutines", GEANY_FILETYPES_LUA, 3,
+			"openfile closefile readfrom writeto appendto remove rename flush seek tmpfile tmpname \
+			 read write clock date difftime execute exit getenv setlocale time coroutine.create \
+			 coroutine.resume coroutine.status coroutine.wrap coroutine.yield io.close io.flush \
+			 io.input io.lines io.open io.output io.read io.tmpfile io.type io.write io.stdin \
+			 io.stdout io.stderr os.clock os.date os.difftime os.execute os.exit os.getenv \
+			 os.remove os.rename os.setlocale os.time os.tmpname coroutine.running package.cpath \
+			 package.loaded package.loadlib package.path package.preload package.seeall io.popen");
+	get_keyfile_keywords(config, config_home, "keywords", "user1", GEANY_FILETYPES_LUA, 4, "");
+	get_keyfile_keywords(config, config_home, "keywords", "user2", GEANY_FILETYPES_LUA, 5, "");
+	get_keyfile_keywords(config, config_home, "keywords", "user3", GEANY_FILETYPES_LUA, 6, "");
+	get_keyfile_keywords(config, config_home, "keywords", "user4", GEANY_FILETYPES_LUA, 7, "");
+	style_sets[GEANY_FILETYPES_LUA].keywords[8] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_LUA].wordchars);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_LUA);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+}
+
+
+void styleset_lua(ScintillaObject *sci)
+{
+	styleset_common(sci, 5);
+	if (style_sets[GEANY_FILETYPES_LUA].styling == NULL) styleset_lua_init();
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_LUA].wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_LUA, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[3]);
+	SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[4]);
+	SSM(sci, SCI_SETKEYWORDS, 5, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[5]);
+	SSM(sci, SCI_SETKEYWORDS, 6, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[6]);
+	SSM(sci, SCI_SETKEYWORDS, 7, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[7]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_VHDL, 0);
+	set_sci_style(sci, SCE_LUA_DEFAULT, GEANY_FILETYPES_LUA, 0);
+	set_sci_style(sci, SCE_LUA_COMMENT, GEANY_FILETYPES_LUA, 1);
+	set_sci_style(sci, SCE_LUA_COMMENTLINE, GEANY_FILETYPES_LUA, 2);
+	set_sci_style(sci, SCE_LUA_COMMENTDOC, GEANY_FILETYPES_LUA, 3);
+	set_sci_style(sci, SCE_LUA_NUMBER, GEANY_FILETYPES_LUA, 4);
+	set_sci_style(sci, SCE_LUA_WORD, GEANY_FILETYPES_LUA, 5);
+	set_sci_style(sci, SCE_LUA_STRING, GEANY_FILETYPES_LUA, 6);
+	set_sci_style(sci, SCE_LUA_CHARACTER, GEANY_FILETYPES_LUA, 7);
+	set_sci_style(sci, SCE_LUA_LITERALSTRING, GEANY_FILETYPES_LUA, 8);
+	set_sci_style(sci, SCE_LUA_PREPROCESSOR, GEANY_FILETYPES_LUA, 9);
+	set_sci_style(sci, SCE_LUA_OPERATOR, GEANY_FILETYPES_LUA, 10);
+	set_sci_style(sci, SCE_LUA_IDENTIFIER, GEANY_FILETYPES_LUA, 11);
+	set_sci_style(sci, SCE_LUA_STRINGEOL, GEANY_FILETYPES_LUA, 12);
+	set_sci_style(sci, SCE_LUA_WORD2, GEANY_FILETYPES_LUA, 13);
+	set_sci_style(sci, SCE_LUA_WORD3, GEANY_FILETYPES_LUA, 14);
+	set_sci_style(sci, SCE_LUA_WORD4, GEANY_FILETYPES_LUA, 15);
+	set_sci_style(sci, SCE_LUA_WORD5, GEANY_FILETYPES_LUA, 16);
+	set_sci_style(sci, SCE_LUA_WORD6, GEANY_FILETYPES_LUA, 17);
+	set_sci_style(sci, SCE_LUA_WORD7, GEANY_FILETYPES_LUA, 18);
+	set_sci_style(sci, SCE_LUA_WORD8, GEANY_FILETYPES_LUA, 19);
+}

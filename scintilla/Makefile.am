@@ -19,6 +19,7 @@ LexCSS.cxx \
 LexD.cxx \
 LexFortran.cxx \
 LexHTML.cxx \
+LexLua.cxx \
 LexOthers.cxx \
 LexPascal.cxx \
 LexPerl.cxx \

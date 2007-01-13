@@ -1,7 +1,8 @@
 /*
  *      filetypes.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -65,7 +66,9 @@ enum
 	FILETYPE_UID_DIFF,		// 23
 	FILETYPE_UID_FERITE,	// 24
 	FILETYPE_UID_HTML,		// 25
-	FILETYPE_UID_VHDL		// 26
+	FILETYPE_UID_VHDL,		// 26
+	FILETYPE_UID_JS,		// 27
+	FILETYPE_UID_LUA		// 28
 };
 
 
@@ -108,6 +111,8 @@ filetype *filetypes_get_from_uid(gint uid)
 		case FILETYPE_UID_FERITE:	return filetypes[GEANY_FILETYPES_FERITE];
 		case FILETYPE_UID_HTML:		return filetypes[GEANY_FILETYPES_HTML];
 		case FILETYPE_UID_VHDL:		return filetypes[GEANY_FILETYPES_VHDL];
+		case FILETYPE_UID_JS:		return filetypes[GEANY_FILETYPES_JS];
+		case FILETYPE_UID_LUA:		return filetypes[GEANY_FILETYPES_LUA];
 		default: 					return NULL;
 	}
 }
@@ -338,6 +343,26 @@ void filetypes_init_types()
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_PHP]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_PHP]->title, filetypes[GEANY_FILETYPES_PHP]);
 
+#define JAVASCRIPT
+	filetypes[GEANY_FILETYPES_JS] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_JS]->id = GEANY_FILETYPES_JS;
+	filetypes[GEANY_FILETYPES_JS]->uid = FILETYPE_UID_JS;
+	filetypes[GEANY_FILETYPES_JS]->item = NULL;
+	filetypes[GEANY_FILETYPES_JS]->lang = 23;
+	filetypes[GEANY_FILETYPES_JS]->name = g_strdup("Javascript");
+	filetypes[GEANY_FILETYPES_JS]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_JS]->title = g_strdup(_("Javascript source file"));
+	filetypes[GEANY_FILETYPES_JS]->extension = g_strdup("js");
+	filetypes[GEANY_FILETYPES_JS]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_JS]->pattern[0] = g_strdup("*.js");
+	filetypes[GEANY_FILETYPES_JS]->pattern[1] = g_strdup("*.jsp"); /// TODO what is jsp actually?
+	filetypes[GEANY_FILETYPES_JS]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_JS]->style_func_ptr = styleset_js;
+	filetypes[GEANY_FILETYPES_JS]->comment_open = g_strdup("//");
+	filetypes[GEANY_FILETYPES_JS]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_JS]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_JS]->title, filetypes[GEANY_FILETYPES_JS]);
+
 #define PYTHON
 	filetypes[GEANY_FILETYPES_PYTHON] = g_new0(filetype, 1);
 	filetypes[GEANY_FILETYPES_PYTHON]->id = GEANY_FILETYPES_PYTHON;
@@ -398,6 +423,25 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_TCL]->comment_close = NULL;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_TCL]);
 	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_TCL]->title, filetypes[GEANY_FILETYPES_TCL]);
+
+#define LUA
+	filetypes[GEANY_FILETYPES_LUA] = g_new0(filetype, 1);
+	filetypes[GEANY_FILETYPES_LUA]->id = GEANY_FILETYPES_LUA;
+	filetypes[GEANY_FILETYPES_LUA]->uid = FILETYPE_UID_LUA;
+	filetypes[GEANY_FILETYPES_LUA]->item = NULL;
+	filetypes[GEANY_FILETYPES_LUA]->lang = 22;
+	filetypes[GEANY_FILETYPES_LUA]->name = g_strdup("Lua");
+	filetypes[GEANY_FILETYPES_LUA]->has_tags = TRUE;
+	filetypes[GEANY_FILETYPES_LUA]->title = g_strdup(_("Lua source file"));
+	filetypes[GEANY_FILETYPES_LUA]->extension = g_strdup("lua");
+	filetypes[GEANY_FILETYPES_LUA]->pattern = g_new0(gchar*, 2);
+	filetypes[GEANY_FILETYPES_LUA]->pattern[0] = g_strdup("*.lua");
+	filetypes[GEANY_FILETYPES_LUA]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_LUA]->style_func_ptr = styleset_lua;
+	filetypes[GEANY_FILETYPES_LUA]->comment_open = g_strdup("--");
+	filetypes[GEANY_FILETYPES_LUA]->comment_close = NULL;
+	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_LUA]);
+	filetypes_create_menu_item(filetype_menu, filetypes[GEANY_FILETYPES_LUA]->title, filetypes[GEANY_FILETYPES_LUA]);
 
 #define FERITE
 	filetypes[GEANY_FILETYPES_FERITE] = g_new0(filetype, 1);

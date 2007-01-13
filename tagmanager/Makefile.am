@@ -32,6 +32,8 @@ libtagmanager_a_SOURCES =\
 	diff.c\
 	docbook.c\
 	fortran.c\
+	js.c\
+	lua.c\
 	make.c\
 	asm.c\
 	latex.c\

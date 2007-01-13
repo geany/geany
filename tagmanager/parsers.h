@@ -36,7 +36,9 @@
     FortranParser, \
     FeriteParser, \
     DiffParser, \
-    VhdlParser
+    VhdlParser, \
+    LuaParser, \
+    JavaScriptParser
 
 /*
 langType of each parser
@@ -62,6 +64,8 @@ langType of each parser
 19	FeriteParser
 20	DiffParser
 21	VhdlParser
+22	LuaParser
+23	JavaScriptParser
 */
 #endif	/* _PARSERS_H */
 

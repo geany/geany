@@ -1906,6 +1906,17 @@ static gboolean is_comment(gint lexer, gint style)
 				result = TRUE;
 			break;
 		}
+		case SCLEX_LUA:
+		{
+			if (style == SCE_LUA_COMMENT ||
+				style == SCE_LUA_COMMENTLINE ||
+				style == SCE_LUA_COMMENTDOC ||
+				style == SCE_LUA_LITERALSTRING ||
+				style == SCE_LUA_CHARACTER ||
+				style == SCE_LUA_STRING)
+				result = TRUE;
+			break;
+		}
 		case SCLEX_HTML:
 		{
 			if (style == SCE_HPHP_SIMPLESTRING ||
