@@ -2899,7 +2899,7 @@ void styleset_lua(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 6, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[6]);
 	SSM(sci, SCI_SETKEYWORDS, 7, (sptr_t) style_sets[GEANY_FILETYPES_LUA].keywords[7]);
 
-	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_VHDL, 0);
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_LUA, 0);
 	set_sci_style(sci, SCE_LUA_DEFAULT, GEANY_FILETYPES_LUA, 0);
 	set_sci_style(sci, SCE_LUA_COMMENT, GEANY_FILETYPES_LUA, 1);
 	set_sci_style(sci, SCE_LUA_COMMENTLINE, GEANY_FILETYPES_LUA, 2);

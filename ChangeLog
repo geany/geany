@@ -3,6 +3,8 @@
  * src/treeviews.c, src/treeviews.h, src/symbols.c, po/POTFILES.in:
    Move treeviews_init_tag_list() and symbol list GtkTreeIters to
    symbols.c.
+ * src/highlighting.c:
+   Fix segfault when setting Lua filetype.
 
 
 2007-01-13  Enrico Tröger  <enrico.troeger@uvena.de>
