@@ -203,9 +203,10 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_JAVA]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_JAVA]->title = g_strdup(_("Java source file"));
 	filetypes[GEANY_FILETYPES_JAVA]->extension = g_strdup("java");
-	filetypes[GEANY_FILETYPES_JAVA]->pattern = g_new0(gchar*, 2);
+	filetypes[GEANY_FILETYPES_JAVA]->pattern = g_new0(gchar*, 3);
 	filetypes[GEANY_FILETYPES_JAVA]->pattern[0] = g_strdup("*.java");
-	filetypes[GEANY_FILETYPES_JAVA]->pattern[1] = NULL;
+	filetypes[GEANY_FILETYPES_JAVA]->pattern[1] = g_strdup("*.jsp");
+	filetypes[GEANY_FILETYPES_JAVA]->pattern[2] = NULL;
 	filetypes[GEANY_FILETYPES_JAVA]->comment_open = g_strdup("/*");
 	filetypes[GEANY_FILETYPES_JAVA]->comment_close = g_strdup("*/");
 	filetypes[GEANY_FILETYPES_JAVA]->style_func_ptr = styleset_java;
@@ -353,10 +354,9 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_JS]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_JS]->title = g_strdup(_("Javascript source file"));
 	filetypes[GEANY_FILETYPES_JS]->extension = g_strdup("js");
-	filetypes[GEANY_FILETYPES_JS]->pattern = g_new0(gchar*, 3);
+	filetypes[GEANY_FILETYPES_JS]->pattern = g_new0(gchar*, 2);
 	filetypes[GEANY_FILETYPES_JS]->pattern[0] = g_strdup("*.js");
-	filetypes[GEANY_FILETYPES_JS]->pattern[1] = g_strdup("*.jsp"); /// TODO what is jsp actually?
-	filetypes[GEANY_FILETYPES_JS]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_JS]->pattern[1] = NULL;
 	filetypes[GEANY_FILETYPES_JS]->style_func_ptr = styleset_js;
 	filetypes[GEANY_FILETYPES_JS]->comment_open = g_strdup("//");
 	filetypes[GEANY_FILETYPES_JS]->comment_close = NULL;

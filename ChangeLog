@@ -12,6 +12,8 @@
  * src/about.c: Updated copyright information.
  * geany_private.rc, README, src/*.c, src/*.h:
    Updated copyright information.
+ * data/filetype_extensions.conf, src/filetypes.c:
+   jsp is a Java extension.
 
 
 2007-01-14  Nick Treleaven  <nick.treleaven@btinternet.com>
