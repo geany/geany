@@ -903,13 +903,14 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
-	// only for C, C++, D, Ferite, Java, Perl and PHP
+	// only for C, C++, D, Ferite, Java, JavaScript, Perl and PHP
 	if (doc_list[idx].file_type->id != GEANY_FILETYPES_PHP &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_C &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_D &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_CPP &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_PERL &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_JAVA &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_JS &&
 		doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE)
 		return;
 

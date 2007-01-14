@@ -14,6 +14,8 @@
    Updated copyright information.
  * data/filetype_extensions.conf, src/filetypes.c:
    jsp is a Java extension.
+ * src/sci_cb.c:
+   Enabled auto completion of constructs for filetype JavaScript.
 
 
 2007-01-14  Nick Treleaven  <nick.treleaven@btinternet.com>
