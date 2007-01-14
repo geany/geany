@@ -9,6 +9,7 @@
    Moved free_pointers() to utils.c.
    Applied patch from Jeff Pohlmeyer to add an option for using spaces
    or tabulators when inserting some whitespace.
+ * src/about.c: Updated copyright information.
 
 
 2007-01-14  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -1,7 +1,8 @@
 /*
  *      about.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -34,7 +35,7 @@ static GtkWidget *gb_window = NULL;
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT "Copyright (c)  2005-2006 \n Enrico Tröger \nAll rights reserved."
+#define COPYRIGHT "Copyright (c)  2005-2007\nEnrico Tröger\nNick Treleaven\nFrank Lanitz\nAll rights reserved."
 #define CREDITS \
 "<span size=\"larger\" weight=\"bold\">%s</span>\n\t\
 Enrico Tröger - %s\n\t\
