@@ -1,7 +1,8 @@
 /*
  *      build.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -29,7 +30,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
-#include <stdarg.h>
 
 #ifdef G_OS_UNIX
 # include <sys/types.h>
@@ -78,7 +78,6 @@ static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
 static void set_stop_button(gboolean stop);
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
-static void free_pointers(gpointer first, ...);
 
 #ifndef G_OS_WIN32
 static void kill_process(GPid *pid);
@@ -154,7 +153,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 	if (stat(locale_filename, &st) != 0)
 	{
 		msgwin_status_add(_("Failed to view %s (make sure it is already compiled)"), view_file);
-		free_pointers(executable, view_file, locale_filename, script_name);
+		utils_free_pointers(executable, view_file, locale_filename, script_name, NULL);
 
 		return (GPid) 1;
 	}
@@ -189,8 +188,8 @@ GPid build_view_tex_file(gint idx, gint mode)
 			_("Could not find terminal '%s' "
 				"(check path for Terminal tool setting in Preferences)"), app->tools_term_cmd);
 
-		free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										script_name, locale_term_cmd);
+		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										script_name, locale_term_cmd, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
@@ -202,8 +201,8 @@ GPid build_view_tex_file(gint idx, gint mode)
 		gchar *utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
 													utf8_check_executable);
-		free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										utf8_check_executable, script_name, locale_term_cmd);
+		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										utf8_check_executable, script_name, locale_term_cmd, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
@@ -230,8 +229,8 @@ GPid build_view_tex_file(gint idx, gint mode)
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
 
-		free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										script_name, locale_term_cmd);
+		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										script_name, locale_term_cmd, NULL);
 		g_strfreev(argv);
 		g_strfreev(term_argv);
 		g_error_free(error);
@@ -246,8 +245,8 @@ GPid build_view_tex_file(gint idx, gint mode)
 		build_menu_update(idx);
 	}
 
-	free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										script_name, locale_term_cmd);
+	utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										script_name, locale_term_cmd, NULL);
 	g_strfreev(argv);
 	g_strfreev(term_argv);
 
@@ -1511,25 +1510,6 @@ static void kill_process(GPid *pid)
 	}
 }
 #endif
-
-
-// frees all passed pointers if they are non-NULL, the first argument is nothing special,
-// it will also be freed
-static void free_pointers(gpointer first, ...)
-{
-	va_list a;
-	gpointer sa;
-
-    for (va_start(a, first);  (sa = va_arg(a, gpointer), sa!=NULL);)
-    {
-    	if (sa != NULL)
-    		g_free(sa);
-	}
-	va_end(a);
-
-    if (first != NULL)
-    	g_free(first);
-}
 
 
 void

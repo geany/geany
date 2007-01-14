@@ -1,7 +1,8 @@
 /*
  *      utils.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -142,5 +143,15 @@ gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
 
 /* Simple wrapper for g_locale_to_utf8; returns a copy of locale_text on failure. */
 gchar *utils_get_utf8_from_locale(const gchar *locale_text);
+
+/* Returns a string containing whitespace of the amount a according to the
+ * setting app->pref_editor_use_tabs filled with simple space characters or with the right amount
+ * of tabulator characters (a is filled with tabulators *and* spaces if a isn't a multiple of
+ * app->pref_editor_tab_width) */
+gchar *utils_get_whitespace(gint amount);
+
+/* frees all passed pointers if they are non-NULL, the first argument is nothing special,
+ * it will also be freed, the list should be ended with NULL */
+void utils_free_pointers(gpointer first, ...);
 
 #endif

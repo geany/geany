@@ -917,3 +917,7 @@ void sci_set_tab_indents(ScintillaObject *sci, gboolean set)
 	SSM(sci, SCI_SETTABINDENTS, set, 0);
 }
 
+void sci_set_use_tabs(ScintillaObject *sci, gboolean set)
+{
+	SSM(sci, SCI_SETUSETABS, set, 0);
+}

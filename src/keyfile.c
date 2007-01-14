@@ -1,7 +1,8 @@
 /*
  *      keyfile.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -155,6 +156,7 @@ void configuration_save()
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", app->geometry, 4);
 	}
 	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", app->pref_editor_tab_width);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", app->pref_editor_use_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", app->pref_main_confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", app->pref_main_suppress_search_dialogs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", app->pref_main_load_session);
@@ -354,6 +356,7 @@ gboolean configuration_load()
 
 
 	app->pref_editor_tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
+	app->pref_editor_use_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_use_tabs", TRUE);
 	tmp_string = utils_get_setting_string(config, PACKAGE, "pref_editor_default_encoding",
 											encodings[GEANY_ENCODING_UTF_8].charset);
 	if (tmp_string)

@@ -31,6 +31,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <stdarg.h>
 
 #ifdef HAVE_SYS_STAT_H
 # include <sys/stat.h>
@@ -1429,6 +1430,54 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 	gchar *utf8_text = g_locale_to_utf8(locale_text, -1, NULL, NULL, NULL);
 	if (utf8_text == NULL) utf8_text = g_strdup(locale_text);
 	return utf8_text;
+}
+
+
+/* Returns a string containing whitespace of the amount a according to the
+ * setting app->pref_editor_use_tabs filled with simple space characters or with the right amount
+ * of tabulator characters (a is filled with tabulators *and* spaces if a isn't a multiple of
+ * app->pref_editor_tab_width) */
+gchar *utils_get_whitespace(gint a)
+{
+	gchar *str;
+
+	g_return_val_if_fail(a > 0, NULL);
+
+	if (app->pref_editor_use_tabs)
+	{	// first fill text with tabluators and fill the rest with spaces
+		gint tabs = a / app->pref_editor_tab_width;
+		gint spaces = a % app->pref_editor_tab_width;
+		gint len = tabs + spaces;
+
+		str = g_malloc(len + 1);
+
+		memset(str, '\t', tabs);
+		memset(str + tabs, ' ', spaces);
+		str[len] = '\0';
+ 	}
+	else
+		str = g_strnfill(a, ' ');
+
+	return str;
+}
+
+
+/* frees all passed pointers if they are non-NULL, the first argument is nothing special,
+ * it will also be freed, the list should be ended with NULL */
+void utils_free_pointers(gpointer first, ...)
+{
+	va_list a;
+	gpointer sa;
+
+    for (va_start(a, first);  (sa = va_arg(a, gpointer), sa!=NULL);)
+    {
+    	if (sa != NULL)
+    		g_free(sa);
+	}
+	va_end(a);
+
+    if (first != NULL)
+    	g_free(first);
 }
 
 

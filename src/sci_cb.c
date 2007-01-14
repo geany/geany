@@ -321,9 +321,10 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 		if (doc_list[idx].file_type->id == GEANY_FILETYPES_PYTHON &&
 			sci_get_char_at(sci, pos - 2) == ':' &&
 			sci_get_style_at(sci, pos - 2) == SCE_P_OPERATOR)
-		{
-			/// TODO add something like insert_tabs() which inserts a tab or tab_width times a space
-			sci_add_text(sci, "\t");
+		{	// creates and inserts one tabulator sign or whitespace of the amount of the tab width
+			gchar *text = utils_get_whitespace(app->pref_editor_tab_width);
+			sci_add_text(sci, text);
+			g_free(text);
 		}
 
 	}
@@ -353,7 +354,17 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 		// and ignore the case of sci_cb_close_block
 		else if (linebuf[i] == '{' && ! use_this_line)
 		{
-			indent[j++] = '\t';
+			if (app->pref_editor_use_tabs)
+			{
+				indent[j++] = '\t';
+			}
+			else
+			{	// insert as many spaces as a tabulator would take
+				gint i;
+				for (i = 0; i < app->pref_editor_tab_width; i++)
+					indent[j++] = ' ';
+			}
+
 			break;
 		}
 		else
@@ -363,7 +374,19 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 			while (k > 0 && isspace(linebuf[k])) k--;
 			// if last non-whitespace character is a { increase indention by a tab
 			// e.g. for (...) {
-			if (linebuf[k] == '{') indent[j++] = '\t';
+			if (linebuf[k] == '{')
+			{
+				if (app->pref_editor_use_tabs)
+				{
+					indent[j++] = '\t';
+				}
+				else
+				{	// insert as many spaces as a tabulator would take
+					gint i;
+					for (i = 0; i < app->pref_editor_use_tabs; i++)
+						indent[j++] = ' ';
+				}
+			}
 			break;
 		}
 	}
@@ -865,10 +888,12 @@ void sci_cb_auto_forif(gint idx, gint pos)
 {
 	static gchar buf[16];
 	gchar *eol;
+	gchar *space;
 	gchar *construct;
 	gint lexer, style;
 	gint i;
 	gint last_pos;
+	gint space_len;
 	ScintillaObject *sci;
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
@@ -895,7 +920,7 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	if (lexer == SCLEX_HTML && ! (style >= SCE_HPHP_DEFAULT && style <= SCE_HPHP_OPERATOR))
 		return;
 
-	// get the indention
+	// get the indentation
 	if (doc_list[idx].use_auto_indention) get_indent(sci, pos, TRUE);
 	eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
 	sci_get_text_range(sci, pos - 16, pos - 1, buf);
@@ -912,16 +937,20 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		i--;
 	}
 
+	// get the whitespace for additional indentation
+	space = utils_get_whitespace(app->pref_editor_tab_width);
+	space_len = strlen(space);
+
 	// "pattern", buf + x, y -> x + y = 15, because buf is (pos - 16)...(pos - 1) = 15
 	if (! strncmp("if", buf + 13, 2))
 	{
 		if (! isspace(*(buf + 12)))
 		{
-			g_free(eol);
+			utils_free_pointers(eol, space, NULL);
 			return;
 		}
 
-		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
+		construct = g_strdup_printf("()%s{%s%s%s}%s", eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 1, TRUE);
@@ -931,14 +960,14 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	{
 		if (! isspace(*(buf + 10)))
 		{
-			g_free(eol);
+			utils_free_pointers(eol, space, NULL);
 			return;
 		}
 
-		construct = g_strdup_printf("%s{%s\t%s}%s", eol, eol, eol, eol);
+		construct = g_strdup_printf("%s{%s%s%s}%s", eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
+		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
 		g_free(construct);
 	}
 	else if (! strncmp("for", buf + 12, 3))
@@ -948,7 +977,7 @@ void sci_cb_auto_forif(gint idx, gint pos)
 
 		if (! isspace(*(buf + 11)))
 		{
-			g_free(eol);
+			utils_free_pointers(eol, space, NULL);
 			return;
 		}
 
@@ -962,9 +991,9 @@ void sci_cb_auto_forif(gint idx, gint pos)
 			var = g_strdup("i");
 			contruct_len = 12;
 		}
-		construct = g_strdup_printf("(%s%s = 0; %s < ; %s++)%s{%s\t%s}%s",
+		construct = g_strdup_printf("(%s%s = 0; %s < ; %s++)%s{%s%s%s}%s",
 						(doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? "int " : "",
-						var, var, var, eol, eol, eol, eol);
+						var, var, var, eol, eol, space, eol, eol);
 
 		// add 4 characters because of "int " in C++ mode
 		contruct_len += (doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? 4 : 0;
@@ -978,11 +1007,11 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	{
 		if (! isspace(*(buf + 9)))
 		{
-			g_free(eol);
+			utils_free_pointers(eol, space, NULL);
 			return;
 		}
 
-		construct = g_strdup_printf("()%s{%s\t%s}%s", eol, eol, eol, eol);
+		construct = g_strdup_printf("()%s{%s%s%s}%s", eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 1, TRUE);
@@ -992,40 +1021,41 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	{
 		if (! isspace(*(buf + 12)))
 		{
-			g_free(eol);
+			utils_free_pointers(eol, space, NULL);
 			return;
 		}
 
-		construct = g_strdup_printf("%s{%s\t%s}%swhile ();%s", eol, eol, eol, eol, eol);
+		construct = g_strdup_printf("%s{%s%s%s}%swhile ();%s", eol, eol, space, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
+		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
 		g_free(construct);
 	}
 	else if (! strncmp("try", buf + 12, 3))
 	{
 		if (! isspace(*(buf + 11)))
 		{
-			g_free(eol);
+			utils_free_pointers(eol, space, NULL);
 			return;
 		}
 
-		construct = g_strdup_printf("%s{%s\t%s}%scatch ()%s{%s\t%s}%s",
-							eol, eol, eol, eol, eol, eol, eol, eol);
+		construct = g_strdup_printf("%s{%s%s%s}%scatch ()%s{%s%s%s}%s",
+							eol, eol, space, eol, eol, eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
+		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
 		g_free(construct);
 	}
 	else if (! strncmp("switch", buf + 9, 6))
 	{
 		if (! isspace(*(buf + 8)))
 		{
-			g_free(eol);
+			utils_free_pointers(eol, space, NULL);
 			return;
 		}
 
-		construct = g_strdup_printf("()%s{%s\tcase : break;%s\tdefault: %s}%s", eol, eol, eol, eol, eol);
+		construct = g_strdup_printf("()%s{%s%scase : break;%s%sdefault: %s}%s",
+										eol, eol, space, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 1, TRUE);
@@ -1036,30 +1066,34 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		if (doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE ||
 			! isspace(*(buf + 9)))
 		{
-			g_free(eol);
+			utils_free_pointers(eol, space, NULL);
 			return;
 		}
 
-		construct = g_strdup_printf("%s{%s\t%s}%sfix%s{%s\t%s}%s", eol, eol, eol, eol, eol, eol, eol, eol);
+		construct = g_strdup_printf("%s{%s%s%s}%sfix%s{%s%s%s}%s",
+										eol, eol, space, eol, eol, eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
+		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
 		g_free(construct);
 	}
 	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_FERITE && ! strncmp("monitor", buf + 8, 7))
 	{
 		if (! isspace(*(buf + 7)))
 		{
-			g_free(eol);
+			utils_free_pointers(eol, space, NULL);
 			return;
 		}
 
-		construct = g_strdup_printf("%s{%s\t%s}%shandle%s{%s\t%s}%s", eol, eol, eol, eol, eol, eol, eol, eol);
+		construct = g_strdup_printf("%s{%s%s%s}%shandle%s{%s%s%s}%s",
+										eol, eol, space, eol, eol, eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 4 + (2 * strlen(indent)), TRUE);
+		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
 		g_free(construct);
 	}
+
+	utils_free_pointers(eol, space, NULL);
 }
 
 

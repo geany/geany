@@ -1,3 +1,16 @@
+2007-01-14  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/build.c, src/document.c, src/geany.h,
+   src/highlighting.c, src/interface.c, src/keyfile.c, src/prefs.c,
+   src/sci_cb.c, src/sci_wrappers.c, src/sciwrappers.h, src/utils.c,
+   src/utils.h:
+   Added sci_set_use_tabs().
+   Fixed mem leak in sci_cb_auto_forif().
+   Moved free_pointers() to utils.c.
+   Applied patch from Jeff Pohlmeyer to add an option for using spaces
+   or tabulators when inserting some whitespace.
+
+
 2007-01-14  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/treeviews.c, src/treeviews.h, src/symbols.c, po/POTFILES.in:

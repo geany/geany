@@ -110,6 +110,7 @@ typedef struct MyApp
 	gboolean			 pref_editor_folding;
 	gboolean			 pref_editor_unfold_all_children;
 	gint				 pref_editor_tab_width;
+	gboolean			 pref_editor_use_tabs;
 	gint				 pref_editor_default_encoding;
 	gboolean			 pref_editor_new_line;
 	gboolean			 pref_editor_replace_tabs;
