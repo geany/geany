@@ -26,31 +26,16 @@
 #define GEANY_TREEVIEWS_H 1
 
 
-
-typedef struct treeviews {
+struct SidebarTreeviews
+{
 	GtkListStore	*store_openfiles;
 	GtkWidget		*tree_openfiles;
 	GtkWidget		*popup_taglist;
 	GtkWidget		*popup_openfiles;
-	GtkTreeIter		 tag_function;
-	GtkTreeIter		 tag_class;
-	GtkTreeIter		 tag_macro;
-	GtkTreeIter		 tag_member;
-	GtkTreeIter		 tag_variable;
-	GtkTreeIter		 tag_namespace;
-	GtkTreeIter		 tag_struct;
-	GtkTreeIter		 tag_other;
-} treeviews;
-
-treeviews tv;
-
+} tv;
 
 
 void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store);
-
-gint treeviews_sort_tag_list(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
-
-void treeviews_init_tag_list(gint idx);
 
 void treeviews_prepare_openfiles();
 

@@ -30,3 +30,4 @@ src/notebook.c
 src/symbols.c
 src/tools.c
 src/socket.c
+src/symbols.c
