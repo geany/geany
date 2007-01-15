@@ -1,3 +1,11 @@
+2007-01-15  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/symbols.c:
+   Reorder symbol list by Namespaces, Classes, Functions, Members,
+   Structs, Macros, Variables.
+   Add D Variables, rename D Methods -> Functions.
+
+
 2007-01-14  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.glade, src/build.c, src/document.c, src/geany.h,

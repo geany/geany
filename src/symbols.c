@@ -365,7 +365,8 @@ struct TreeviewSymbols
 	GtkTreeIter		 tag_other;
 } tv_iters;
 
-static void init_tag_list(gint idx)
+
+static void init_tag_iters()
 {
 	// init all GtkTreeIters with -1 to make them invalid to avoid crashes when switching between
 	// filetypes(e.g. config file to Python crashes Geany without this)
@@ -377,8 +378,16 @@ static void init_tag_list(gint idx)
 	tv_iters.tag_namespace.stamp = -1;
 	tv_iters.tag_struct.stamp = -1;
 	tv_iters.tag_other.stamp = -1;
+}
 
-	switch (doc_list[idx].file_type->id)
+
+static void init_tag_list(gint idx)
+{
+	filetype_id ft_id = doc_list[idx].file_type->id;
+
+	init_tag_iters();
+
+	switch (ft_id)
 	{
 		case GEANY_FILETYPES_DIFF:
 		{
@@ -428,10 +437,10 @@ static void init_tag_list(gint idx)
 		}
 		case GEANY_FILETYPES_PERL:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Function"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Package"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Function"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("My"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
@@ -449,18 +458,18 @@ static void init_tag_list(gint idx)
 		}
 		case GEANY_FILETYPES_RUBY:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Methods"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Classes"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Singletons"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Mixins"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Methods"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Members"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
 /*			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Begin"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
@@ -470,12 +479,12 @@ static void init_tag_list(gint idx)
 		}
 		case GEANY_FILETYPES_PYTHON:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Functions"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Classes"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Methods"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Functions"), -1);
 /*			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Mixin"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
@@ -487,31 +496,6 @@ static void init_tag_list(gint idx)
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
 */
-			break;
-		}
-		case GEANY_FILETYPES_JAVA:
-		case GEANY_FILETYPES_D:
-		{
-			// use singular because one file can only belong to one Package / Module
-			gchar *namespace_name = (doc_list[idx].file_type->id == GEANY_FILETYPES_D) ?
-									 _("Module") : _("Package");
-
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Methods"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Classes"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Interfaces"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Members"), -1);
-			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
-			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, namespace_name, -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
 			break;
 		}
 		case GEANY_FILETYPES_VHDL:
@@ -535,22 +519,58 @@ static void init_tag_list(gint idx)
 */
 			break;
 		}
-		default:
+		case GEANY_FILETYPES_JAVA:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Functions"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Package"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Interfaces"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Classes"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Methods"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Members"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
+			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
+			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
+			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
+			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
+			break;
+		}
+		case GEANY_FILETYPES_D:
+		default:
+		{
+			gchar *namespace_name;
+
+			switch (ft_id)
+			{
+				case GEANY_FILETYPES_D:
+				namespace_name = _("Module");	// one file can only belong to one module
+				break;
+
+				default:
+				namespace_name = _("Namespaces");
+			}
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Namespaces"), -1);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, namespace_name, -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Classes"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Functions"), -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Members"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Structs / Typedefs"), -1);
+			// TODO: maybe D Mixins could be parsed instead of macros
+			if (ft_id != GEANY_FILETYPES_D)
+			{
+				gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
+				gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
+			}
+			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
 		}
