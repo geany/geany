@@ -885,7 +885,8 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 			doc_list[idx].tm_file = NULL;
 			g_free(doc_list[idx].file_name);
 		}
-		doc_list[idx].file_name = new_filename;
+		doc_list[idx].file_name = utils_get_utf8_from_locale(new_filename);
+		g_free(new_filename);
 
 		utils_replace_filename(idx);
 		document_save_file(idx, TRUE);

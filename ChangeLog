@@ -2,6 +2,8 @@
 
  * src/vte.c:
    Fixed changing directories when the path contains whitespace.
+ * src/callbacks.c: When using Save As the returned filename needs to be
+                    converted into UTF-8.
 
 
 2007-01-15  Nick Treleaven  <nick.treleaven@btinternet.com>
