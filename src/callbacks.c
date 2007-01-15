@@ -53,6 +53,7 @@
 #include "main.h"
 #include "symbols.h"
 #include "tools.h"
+#include "project.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -2076,4 +2077,54 @@ on_menu_insert_date_activate           (GtkMenuItem     *menuitem,
 }
 
 
+
+
+void
+on_project_new1_activate               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	project_new();
+}
+
+
+void
+on_project_open1_activate              (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	project_open();
+}
+
+
+void
+on_project_close1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	project_close();
+}
+
+
+void
+on_project_properties1_activate        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	project_properties();
+}
+
+
+void
+on_menu_project1_activate              (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	static GtkWidget *item_close= NULL;
+	static GtkWidget *item_properties= NULL;
+
+	if (item_close == NULL)
+	{
+		item_close = lookup_widget(app->window, "project_close1");
+		item_properties = lookup_widget(app->window, "project_properties1");
+	}
+
+	gtk_widget_set_sensitive(item_close, (app->project != NULL));
+	gtk_widget_set_sensitive(item_properties, (app->project != NULL));
+}
 

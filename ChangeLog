@@ -4,6 +4,11 @@
    Fixed changing directories when the path contains whitespace.
  * src/callbacks.c: When using Save As the returned filename needs to be
                     converted into UTF-8.
+ * geany.glade, po/POTFILES.in, src/callbacks.c, src/callbacks.h,
+   src/geany.h, src/interface.c, src/main.c, src/makefile.win32,
+   src/Makefile.am, src/project.c, src/project.h:
+   Started to implement project management (still unusable).
+   Added project.[c|h].
 
 
 2007-01-15  Nick Treleaven  <nick.treleaven@btinternet.com>

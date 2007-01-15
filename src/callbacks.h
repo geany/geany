@@ -571,3 +571,23 @@ on_menu_comments_bsd_activate          (GtkMenuItem     *menuitem,
 void
 on_comments_bsd_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_project_new1_activate               (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_project_open1_activate              (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_project_close1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_project_properties1_activate        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_project1_activate              (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

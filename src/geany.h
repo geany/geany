@@ -69,6 +69,10 @@
 
 
 
+// simple forward declaration to avoid unnecessary inclusion of project.h
+typedef struct _GeanyProject GeanyProject;
+
+
 /* store some pointers and variables for frequently used widgets  */
 typedef struct MyApp
 {
@@ -184,6 +188,7 @@ typedef struct MyApp
 	GtkWidget			*default_tag_tree;
 	const TMWorkspace	*tm_workspace;
 	GQueue				*recent_queue;
+	GeanyProject		*project; // currently active project or NULL if none is open
 } MyApp;
 
 MyApp *app;

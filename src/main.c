@@ -228,6 +228,7 @@ static void main_init(void)
 {
 	// inits
 	app->window				= NULL;
+	app->project			= NULL;
 	app->open_fontsel		= NULL;
 	app->open_colorsel		= NULL;
 	app->open_filesel		= NULL;
@@ -695,6 +696,7 @@ void main_quit()
 	build_finalize();
 	document_finalize();
 	symbols_finalize();
+	if (app->project != NULL) project_close();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_free(app->configdir);

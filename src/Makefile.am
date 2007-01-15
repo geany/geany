@@ -7,33 +7,33 @@ EXTRA_DIST = images.c gb.c win32.c win32.h
 bin_PROGRAMS = geany
 
 SRCS = \
-	main.c main.h geany.h \
-	symbols.c symbols.h \
-	search.c search.h \
-	notebook.c notebook.h \
-	keybindings.c keybindings.h \
-	templates.c templates.h \
-	treeviews.c treeviews.h \
 	about.c about.h \
-	encodings.c encodings.h \
-	keyfile.c keyfile.h \
-	prefs.c prefs.h \
-	dialogs.c dialogs.h \
-	msgwindow.c msgwindow.h \
 	build.c build.h \
+	callbacks.c callbacks.h \
+	dialogs.c dialogs.h \
+	document.c document.h \
+	encodings.c encodings.h \
 	filetypes.c filetypes.h \
 	highlighting.c highlighting.h \
+	interface.c interface.h \
+	keybindings.c keybindings.h \
+	keyfile.c keyfile.h \
+	main.c main.h geany.h \
+	msgwindow.c msgwindow.h \
+	notebook.c notebook.h \
+	prefs.c prefs.h \
+	project.c project.h \
 	sci_cb.c sci_cb.h \
 	sciwrappers.c sciwrappers.h \
-	document.c document.h \
+	search.c search.h \
 	socket.c socket.h \
-	tools.c tools.h \
-	utils.c utils.h \
-	ui_utils.c ui_utils.h \
 	support.c support.h \
-	interface.c interface.h \
-	callbacks.c callbacks.h
-
+	symbols.c symbols.h \
+	templates.c templates.h \
+	tools.c tools.h \
+	treeviews.c treeviews.h \
+	ui_utils.c ui_utils.h \
+	utils.c utils.h
 
 
 if MINGW
