@@ -54,6 +54,7 @@
 #include "build.h"
 #include "highlighting.h"
 #include "symbols.h"
+#include "project.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
