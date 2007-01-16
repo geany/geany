@@ -441,8 +441,11 @@ void vte_cwd(const gchar *filename, gboolean force)
 		vte_get_working_directory();	// refresh vte_info.dir
 		if (! utils_str_equal(path, vte_info.dir))
 		{
-			gchar *cmd = g_strconcat("cd \"", path, "\"\n", NULL);
+			// use g_shell_quote to avoid problems with spaces, '!' or something else in path
+			gchar *quoted_path = g_shell_quote(path);
+			gchar *cmd = g_strconcat("cd ", quoted_path, "\n", NULL);
 			vte_send_cmd(cmd);
+			g_free(quoted_path);
 			g_free(cmd);
 		}
 		g_free(path);

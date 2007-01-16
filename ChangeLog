@@ -1,3 +1,9 @@
+2007-01-16  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/vte.c: Use g_shell_quote to avoid problems with special
+              characters in the path of a filename.
+
+
 2007-01-16  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * tagmanager/c.c:
