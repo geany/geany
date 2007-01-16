@@ -4,6 +4,9 @@
    Backport improvements from Anjuta 2.02.
    Parse anonymous struct and enums (using contextual_fake_count).
    Add better C99 support, e.g. wchar_t variables.
+ * tagmanager/include/tm_symbol.h, tagmanager/tm_symbol.c:
+   Add tm_arglist_compare().
+   Fix comparison in tm_symbol_tag_compare().
 
 
 2007-01-15  Enrico Tröger  <enrico.troeger@uvena.de>

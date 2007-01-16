@@ -75,6 +75,16 @@ int tm_symbol_compare(const void *p1, const void *p2)
 	return strcmp(s1->tag->name, s2->tag->name);
 }
 
+/*
+ * Compares function argument lists.
+ * FIXME: Compare based on types, not an exact string match.
+ */
+int tm_arglist_compare(const TMTag* t1, const TMTag* t2)
+{
+	return strcmp(NVL(t1->atts.entry.arglist, ""),
+			NVL(t2->atts.entry.arglist, ""));
+}
+
 /* Need this custom compare function to generate a symbol tree
 in a simgle pass from tag list */
 int tm_symbol_tag_compare(const TMTag **t1, const TMTag **t2)
@@ -120,8 +130,8 @@ int tm_symbol_tag_compare(const TMTag **t1, const TMTag **t2)
 	/* If none of them are function/prototype, they are effectively equal */
 	if ((tm_tag_function_t != (*t1)->type) &&
 	    (tm_tag_prototype_t != (*t1)->type)&&
-	    (tm_tag_function_t != (*t1)->type) &&
-	    (tm_tag_prototype_t != (*t1)->type))
+	    (tm_tag_function_t != (*t2)->type) &&
+	    (tm_tag_prototype_t != (*t2)->type))
 		return 0;
 
 	/* Whichever is not a function/prototype goes first */
@@ -133,8 +143,7 @@ int tm_symbol_tag_compare(const TMTag **t1, const TMTag **t2)
 		return 1;
 
 	/* Compare the argument list */
-	s1 = strcmp(NVL((*t1)->atts.entry.arglist, ""),
-	  NVL((*t2)->atts.entry.arglist, ""));
+	s1 = tm_arglist_compare(*t1, *t2);
 	if (s1 != 0)
 		return s1;
 
@@ -145,7 +154,7 @@ int tm_symbol_tag_compare(const TMTag **t1, const TMTag **t2)
 	if ((tm_tag_function_t != (*t1)->type) &&
 	    (tm_tag_function_t == (*t2)->type))
 		return 1;
-	
+
 	/* Give up */
 	return 0;
 }
@@ -165,12 +174,14 @@ TMSymbol *tm_symbol_tree_new(GPtrArray *tags_array)
 #ifdef TM_DEBUG
 	fprintf(stderr, "Dumping all tags..\n");
 	tm_tags_array_print(tags_array, stderr);
-#endif	
+#endif
+
 	tags = tm_tags_extract(tags_array, tm_tag_max_t);
 #ifdef TM_DEBUG
 	fprintf(stderr, "Dumping unordered tags..\n");
 	tm_tags_array_print(tags, stderr);
 #endif
+
 	if (tags && (tags->len > 0))
 	{
 		guint i;
@@ -186,6 +197,7 @@ TMSymbol *tm_symbol_tree_new(GPtrArray *tags_array)
 		SYM_NEW(root);
 		tm_tags_custom_sort(tags, (TMTagCompareFunc) tm_symbol_tag_compare
 		  , FALSE);
+
 #ifdef TM_DEBUG
 		fprintf(stderr, "Dumping ordered tags..");
 		tm_tags_array_print(tags, stderr);
@@ -194,6 +206,7 @@ TMSymbol *tm_symbol_tree_new(GPtrArray *tags_array)
 		for (i=0; i < tags->len; ++i)
 		{
 			tag = TM_TAG(tags->pdata[i]);
+
 			if (tm_tag_prototype_t == tag->type)
 			{
 				if (sym && (tm_tag_function_t == sym->tag->type) &&
