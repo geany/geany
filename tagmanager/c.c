@@ -22,9 +22,9 @@
 #include "get.h"
 #include "keyword.h"
 #include "main.h"
+#include "options.h"
 #include "parse.h"
 #include "read.h"
-#include "options.h"
 
 /*
 *   MACROS
@@ -67,7 +67,8 @@ typedef enum eKeywordId {
     KEYWORD_IMPLEMENTS, KEYWORD_IMPORT, KEYWORD_INLINE, KEYWORD_INT,
     KEYWORD_INTERFACE,
     KEYWORD_LONG,
-    KEYWORD_MUTABLE, KEYWORD_MODULE,
+	KEYWORD_MODULE,
+    KEYWORD_MUTABLE,
     KEYWORD_NAMESPACE, KEYWORD_NEW, KEYWORD_NATIVE,
     KEYWORD_OPERATOR, KEYWORD_OVERLOAD,
     KEYWORD_PACKAGE, KEYWORD_PRIVATE, KEYWORD_PROTECTED, KEYWORD_PUBLIC,
@@ -78,7 +79,8 @@ typedef enum eKeywordId {
     KEYWORD_TRY, KEYWORD_TYPEDEF, KEYWORD_TYPENAME,
     KEYWORD_UNION, KEYWORD_UNSIGNED, KEYWORD_USES, KEYWORD_USING,
     KEYWORD_VIRTUAL, KEYWORD_VOID, KEYWORD_VOLATILE,
-    KEYWORD_WCHAR_T
+    KEYWORD_WCHAR_T, KEYWORD_AUTO, KEYWORD_RESTRICT, KEYWORD_SIZE_T,
+    KEYWORD_BOOL
 } keywordId;
 
 /*  Used to determine whether keyword is valid for the current language and
@@ -185,7 +187,7 @@ typedef struct sStatementInfo {
 				   to pointer, etc */
     impType	implementation;	/* abstract or concrete implementation? */
     unsigned int tokenIndex;	/* currently active token */
-    tokenInfo*	token [(int) NumTokens];
+    tokenInfo*	token [((int) NumTokens)];
     tokenInfo*	context;	/* accumulated scope of current statement */
     tokenInfo*	blockName;	/* name of current block */
     memberInfo	member;		/* information regarding parent class/struct */
@@ -338,13 +340,18 @@ static const keywordDesc KeywordTable [] = {
     { "virtual",	KEYWORD_VIRTUAL,	{ 0, 1, 0 } },
     { "void",		KEYWORD_VOID,		{ 1, 1, 1 } },
     { "volatile",	KEYWORD_VOLATILE,	{ 1, 1, 1 } },
-    { "wchar_t",	KEYWORD_WCHAR_T,	{ 1, 1, 0 } }
+    { "wchar_t",	KEYWORD_WCHAR_T,	{ 1, 1, 0 } },
+    { "auto",		KEYWORD_AUTO,		{ 1, 1, 0 } },
+    { "restrict",	KEYWORD_RESTRICT,	{ 1, 0, 0 } },
+    { "size_t",	KEYWORD_SIZE_T,		{ 1, 1, 0 } },
+    { "bool",		KEYWORD_BOOL,		{ 0, 1, 0 } }
 };
 
 /*
 *   FUNCTION PROTOTYPES
 */
 static void createTags (const unsigned int nestLevel, statementInfo *const parent);
+static void copyToken (tokenInfo *const dest, const tokenInfo *const src);
 
 /*
 *   FUNCTION DEFINITIONS
@@ -409,15 +416,6 @@ void printStatement(const statementInfo *const statement)
 }
 #endif
 
-/* Checks if the token is a base data type (int/log/float/void/etc) */
-static boolean isBaseDataType(const char *name)
-{
-	return (boolean) ((0 == strcmp(name, "int")) || (0 == strcmp(name, "char")) ||
-	  (0 == strcmp(name, "long")) || (0 == strcmp(name, "float")) ||
-	  (0 == strcmp(name, "double")) || (0 == strcmp(name, "short")) ||
-	  (0 == strcmp(name, "void")) || (0 == strcmp(name, "bool")));
-}
-
 extern boolean includingDefineTags (void)
 {
     return CKinds [CK_DEFINE].enabled;
@@ -440,9 +438,13 @@ static void initToken (tokenInfo* const token)
 static void advanceToken (statementInfo* const st)
 {
     if (st->tokenIndex >= (unsigned int) NumTokens - 1)
-	st->tokenIndex = 0;
+    {
+      st->tokenIndex = 0;
+    }
     else
-	++st->tokenIndex;
+    {
+      ++st->tokenIndex;
+    }
     initToken (st->token [st->tokenIndex]);
 }
 
@@ -452,6 +454,7 @@ static tokenInfo *prevToken (const statementInfo *const st, unsigned int n)
     unsigned int num = (unsigned int) NumTokens;
     Assert (n < num);
     tokenIndex = (st->tokenIndex + num - n) % num;
+
     return st->token [tokenIndex];
 }
 
@@ -466,9 +469,13 @@ static void setToken (statementInfo *const st, const tokenType type)
 static void retardToken (statementInfo *const st)
 {
     if (st->tokenIndex == 0)
-	st->tokenIndex = (unsigned int) NumTokens - 1;
+    {
+      st->tokenIndex = (unsigned int) NumTokens - 1;
+    }
     else
-	--st->tokenIndex;
+    {
+      --st->tokenIndex;
+    }
     setToken (st, TOKEN_NONE);
 }
 
@@ -484,8 +491,8 @@ static void deleteToken (tokenInfo *const token)
 {
     if (token != NULL)
     {
-	vStringDelete (token->name);
-	eFree (token);
+      vStringDelete (token->name);
+      eFree (token);
     }
 }
 
@@ -608,6 +615,28 @@ static void __unused__ ps (statementInfo *const st)
 *   Statement management
 */
 
+static boolean isDataTypeKeyword (const tokenInfo *const token)
+{
+    switch (token->keyword)
+    {
+      case KEYWORD_BOOLEAN:
+      case KEYWORD_BYTE:
+      case KEYWORD_CHAR:
+      case KEYWORD_DOUBLE:
+      case KEYWORD_FLOAT:
+      case KEYWORD_INT:
+      case KEYWORD_LONG:
+      case KEYWORD_SHORT:
+      case KEYWORD_VOID:
+      case KEYWORD_WCHAR_T:
+      case KEYWORD_SIZE_T:
+      case KEYWORD_BOOL:
+         return TRUE;
+      default: return FALSE;
+    }
+    return FALSE;
+}
+
 static boolean isVariableKeyword (const tokenInfo *const token)
 {
     switch (token->keyword)
@@ -616,10 +645,8 @@ static boolean isVariableKeyword (const tokenInfo *const token)
       case KEYWORD_EXTERN:
       case KEYWORD_REGISTER:
       case KEYWORD_STATIC:
-#if 0
       case KEYWORD_AUTO:
       case KEYWORD_RESTRICT:
-#endif
       case KEYWORD_VIRTUAL:
       case KEYWORD_SIGNED:
       case KEYWORD_UNSIGNED:
@@ -724,11 +751,13 @@ static void reinitStatement (statementInfo *const st, const boolean partial)
     st->gotArgs		= FALSE;
     st->gotName		= FALSE;
     st->haveQualifyingName = FALSE;
-    st->tokenIndex	= 0;
 	st->argEndPosition = 0;
 
+    st->tokenIndex	= 0;
     for (i = 0  ;  i < (unsigned int) NumTokens  ;  ++i)
-	initToken (st->token [i]);
+    {
+      initToken (st->token [i]);
+    }
 
     initToken (st->context);
     initToken (st->blockName);
@@ -744,11 +773,31 @@ static void reinitStatement (statementInfo *const st, const boolean partial)
 	initToken(st->firstToken);
 }
 
+static void reinitStatementWithToken (statementInfo *const st,
+                                tokenInfo *token, const boolean partial)
+{
+    tokenInfo *const save = newToken ();
+    /* given token can be part of reinit statementInfo */
+    copyToken (save, token);
+    reinitStatement (st, partial);
+    token = activeToken (st);
+    copyToken (token, save);
+    deleteToken (save);
+    ++st->tokenIndex;	/* this is quite save becouse current tokenIndex = 0 */
+}
+
 static void initStatement (statementInfo *const st, statementInfo *const parent)
 {
     st->parent = parent;
     initMemberInfo (st);
     reinitStatement (st, FALSE);
+    if(parent)
+    {
+      const tokenInfo *const src = activeToken (parent);
+      tokenInfo *const dst = activeToken (st);
+      copyToken (dst, src);
+      st->tokenIndex++;
+    }
 }
 
 /*
@@ -883,30 +932,30 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 	    if (isMember (st) &&
 		! (type == TAG_ENUMERATOR  &&  vStringLength (scope) == 0))
 	    {
-		if (isType (st->context, TOKEN_NAME))
-		    tag->extensionFields.scope [0] = tagName (TAG_CLASS);
-		else
-		    tag->extensionFields.scope [0] =
-			tagName (declToTagType (parentDecl (st)));
-		tag->extensionFields.scope [1] = vStringValue (scope);
+			if (isType (st->context, TOKEN_NAME))
+		    	tag->extensionFields.scope [0] = tagName (TAG_CLASS);
+			else
+		    	tag->extensionFields.scope [0] =
+					tagName (declToTagType (parentDecl (st)));
+			tag->extensionFields.scope [1] = vStringValue (scope);
 	    }
 	    if ((type == TAG_CLASS  ||  type == TAG_INTERFACE  ||
 		 type == TAG_STRUCT) && vStringLength (st->parentClasses) > 0)
 	    {
 
-		tag->extensionFields.inheritance =
-			vStringValue (st->parentClasses);
+			tag->extensionFields.inheritance =
+				vStringValue (st->parentClasses);
 	    }
 	    if (st->implementation != IMP_DEFAULT &&
 		(isLanguage (Lang_cpp) || isLanguage (Lang_java) ||
 		 isLanguage (Lang_d) || isLanguage (Lang_ferite)))
 	    {
-		tag->extensionFields.implementation =
-			implementationString (st->implementation);
+			tag->extensionFields.implementation =
+				implementationString (st->implementation);
 	    }
 	    if (isMember (st))
 	    {
-		tag->extensionFields.access = accessField (st);
+			tag->extensionFields.access = accessField (st);
 	    }
 		if ((TRUE == st->gotArgs) && (TRUE == Option.extensionFields.argList) &&
 			((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type))) {
@@ -924,8 +973,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 		(TAG_VARIABLE == tag->type) || (TAG_METHOD == tag->type) ||
 		(TAG_PROTOTYPE == tag->type) || (TAG_FUNCTION == tag->type))
 	{
-		if (((TOKEN_NAME == st->firstToken->type) || ((TOKEN_KEYWORD == st->firstToken->type)
-			  && isBaseDataType(st->firstToken->name->buffer)))
+		if (((TOKEN_NAME == st->firstToken->type) || isDataTypeKeyword(st->firstToken))
 			  && (0 != strcmp(vStringValue(st->firstToken->name), tag->name)))
 				tag->extensionFields.varType = vStringValue(st->firstToken->name);
 	}
@@ -933,10 +981,10 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 
 static void addContextSeparator (vString *const scope)
 {
-    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp) ||
-		isLanguage (Lang_d) || isLanguage (Lang_ferite))
+    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp))
 	vStringCatS (scope, "::");
-    else if (isLanguage (Lang_java))
+    else if (isLanguage (Lang_java) ||
+		isLanguage (Lang_d) || isLanguage (Lang_ferite))
 	vStringCatS (scope, ".");
 }
 
@@ -991,7 +1039,7 @@ static void findScopeHierarchy (vString *const string,
 static void makeExtraTagEntry (const tagType type, tagEntryInfo *const e,
 			       vString *const scope)
 {
-    if (0  &&
+    if (Option.include.qualifiedTags  &&
 	scope != NULL  &&  vStringLength (scope) > 0)
     {
 	vString *const scopedName = vStringNew ();
@@ -1037,7 +1085,7 @@ static void makeTag (const tokenInfo *const token,
     if (isType (token, TOKEN_NAME)  &&  vStringLength (token->name) > 0  /* &&
 	includeTag (type, isFileScope) */)
     {
-	vString *scope;
+	vString *scope = vStringNew ();
 	tagEntryInfo e;
 
     // take only functions which are introduced by "function ..."
@@ -1047,7 +1095,6 @@ static void makeTag (const tokenInfo *const token,
     	return;
     }
 
-	scope = vStringNew ();
 	initTagEntry (&e, vStringValue (token->name));
 
 	e.lineNumber	= token->lineNumber;
@@ -1206,7 +1253,9 @@ static int skipToNonWhite (void)
     int c;
 
     do
-	c = cppGetc ();
+	{
+		c = cppGetc ();
+	}
     while (isspace (c));
 
     return c;
@@ -1267,11 +1316,12 @@ static void skipToMatch (const char *const pair)
     }
     if (c == EOF)
     {
-		verbose ("%s: failed to find match for '%c' at line %lu\n",	getInputFileName (), begin, inputLineNumber);
-	if (braceMatching)
-	    longjmp (Exception, (int) ExceptionBraceFormattingError);
-	else
-	    longjmp (Exception, (int) ExceptionFormattingError);
+		verbose ("%s: failed to find match for '%c' at line %lu\n",
+			getInputFileName (), begin, inputLineNumber);
+		if (braceMatching)
+		    longjmp (Exception, (int) ExceptionBraceFormattingError);
+		else
+		    longjmp (Exception, (int) ExceptionFormattingError);
     }
 }
 
@@ -1480,7 +1530,7 @@ static void setAccess (statementInfo *const st, const accessType access)
 	    int c = skipToNonWhite ();
 
 	    if (c == ':')
-		reinitStatement (st, FALSE);
+        reinitStatementWithToken (st, prevToken (st, 1), FALSE);
 	    else
 		cppUngetc (c);
 
@@ -1561,6 +1611,8 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 	case KEYWORD_CHAR:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_CLASS:	st->declaration = DECL_CLASS;		break;
 	case KEYWORD_CONST:	st->declaration = DECL_BASE;		break;
+	case KEYWORD_AUTO:	st->declaration = DECL_BASE;		break;
+	case KEYWORD_RESTRICT: st->declaration = DECL_BASE;		break;
 	case KEYWORD_DOUBLE:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_ENUM:	st->declaration = DECL_ENUM;		break;
 	case KEYWORD_EXTENDS:	readParents (st, '.');
@@ -1571,6 +1623,9 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 				setToken (st, TOKEN_NONE);		break;
 	case KEYWORD_IMPORT:	st->declaration = DECL_IGNORE;		break;
 	case KEYWORD_INT:	st->declaration = DECL_BASE;		break;
+	case KEYWORD_BOOL:	st->declaration = DECL_BASE;		break;
+	case KEYWORD_WCHAR_T:	st->declaration = DECL_BASE;		break;
+	case KEYWORD_SIZE_T:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_INTERFACE: st->declaration = DECL_INTERFACE;	break;
 	case KEYWORD_LONG:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_NAMESPACE: st->declaration = DECL_NAMESPACE;	break;
@@ -1615,6 +1670,7 @@ static void restartStatement (statementInfo *const st)
     tokenInfo *token = activeToken (st);
 
     copyToken (save, token);
+    DebugStatement ( if (debug (DEBUG_PARSE)) printf ("<ES>");)
     reinitStatement (st, FALSE);
     token = activeToken (st);
     copyToken (token, save);
@@ -1730,7 +1786,6 @@ static boolean skipPostArgumentStuff (statementInfo *const st,
 		case KEYWORD_CONST:			break;
 		case KEYWORD_TRY:			break;
 		case KEYWORD_VOLATILE:		break;
-		case KEYWORD_WCHAR_T:		st->declaration = DECL_BASE; break;
 
 		case KEYWORD_CATCH:	case KEYWORD_CLASS:
 		case KEYWORD_EXPLICIT:	case KEYWORD_EXTERN:
@@ -1842,6 +1897,7 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
     do
     {
 	int c = skipToNonWhite ();
+
 	switch (c)
 	{
 	    case '&':
@@ -1987,38 +2043,44 @@ static void analyzeParens (statementInfo *const st)
 
     if (! isType (prev, TOKEN_NONE))    /* in case of ignored enclosing macros */
     {
-	tokenInfo *const token = activeToken (st);
-	parenInfo info;
-	int c;
+		tokenInfo *const token = activeToken (st);
+		parenInfo info;
+		int c;
 
-	initParenInfo (&info);
-	parseParens (st, &info);
-	c = skipToNonWhite ();
-	cppUngetc (c);
-	if (info.invalidContents)
-	    reinitStatement (st, FALSE);
-	else if (info.isNameCandidate  &&  isType (token, TOKEN_PAREN_NAME)  &&
-		 ! st->gotParenName  &&
-		 (! info.isParamList || ! st->haveQualifyingName  ||
-		  c == '('  ||
-		  (c == '='  &&  st->implementation != IMP_VIRTUAL) ||
-		  (st->declaration == DECL_NONE  &&  isOneOf (c, ",;"))))
-	{
-	    token->type = TOKEN_NAME;
-	    processName (st);
-	    st->gotParenName = TRUE;
-	    if (! (c == '('  &&  info.nestedArgs))
+		initParenInfo (&info);
+		parseParens (st, &info);
+
+		c = skipToNonWhite ();
+
+		cppUngetc (c);
+		if (info.invalidContents)
+		{
+	    	reinitStatement (st, FALSE);
+		}
+		else if (info.isNameCandidate  &&  isType (token, TOKEN_PAREN_NAME)  &&
+			 ! st->gotParenName  &&
+		 	(! info.isParamList || ! st->haveQualifyingName  ||
+		  	c == '('  ||
+		  	(c == '='  &&  st->implementation != IMP_VIRTUAL) ||
+		  	(st->declaration == DECL_NONE  &&  isOneOf (c, ",;"))))
+		{
+	    	token->type = TOKEN_NAME;
+	    	processName (st);
+	    	st->gotParenName = TRUE;
+	    	if (! (c == '('  &&  info.nestedArgs))
 				st->pointerOrder = info.pointerOrder;
-	}
-	else if (! st->gotArgs  &&  info.isParamList)
-	{
-	    st->gotArgs = TRUE;
-	    setToken (st, TOKEN_ARGS);
-	    advanceToken (st);
-	    analyzePostParens (st, &info);
-	}
-	else
-	    setToken (st, TOKEN_NONE);
+		}
+		else if (! st->gotArgs  &&  info.isParamList)
+		{
+		    st->gotArgs = TRUE;
+		    setToken (st, TOKEN_ARGS);
+		    advanceToken (st);
+		    analyzePostParens (st, &info);
+		}
+		else
+		{
+		    setToken (st, TOKEN_NONE);
+		}
     }
 }
 
@@ -2032,10 +2094,10 @@ static void addContext (statementInfo *const st, const tokenInfo* const token)
     {
 	if (vStringLength (st->context->name) > 0)
 	{
-	    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp) ||
-			isLanguage (Lang_d) || isLanguage (Lang_ferite))
+	    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp))
 		vStringCatS (st->context->name, "::");
-	    else if (isLanguage (Lang_java))
+	    else if (isLanguage (Lang_java) ||
+			isLanguage (Lang_d) || isLanguage (Lang_ferite))
 		vStringCatS (st->context->name, ".");
 	}
 	vStringCat (st->context->name, token->name);
@@ -2161,45 +2223,41 @@ static void parseGeneralToken (statementInfo *const st, const int c)
  */
 static void nextToken (statementInfo *const st)
 {
+    int c;
     tokenInfo *token = activeToken (st);
     do
     {
-
-	int c = skipToNonWhite ();
-
-	switch (c)
-	{
-	    case EOF: longjmp (Exception, (int) ExceptionEOF);		break;
-	    case '(': analyzeParens (st); token = activeToken (st); break;
-	    case '*':
-		st->haveQualifyingName = FALSE;
-		setToken (st, TOKEN_STAR);
-		break;
-	    case ',': setToken (st, TOKEN_COMMA);			break;
-	    case ':': processColon (st);					break;
-	    case ';': setToken (st, TOKEN_SEMICOLON);			break;
-	    case '<': skipToMatch ("<>");				break;
-	    case '=': processInitializer (st);				break;
-	    case '[': skipToMatch ("[]");				break;
-	    case '{': setToken (st, TOKEN_BRACE_OPEN);			break;
-	    case '}': setToken (st, TOKEN_BRACE_CLOSE);			break;
-	    default:  parseGeneralToken (st, c);				break;
-	}
+		c = skipToNonWhite();
+		switch (c)
+		{
+		    case EOF: longjmp (Exception, (int) ExceptionEOF);		break;
+		    case '(': analyzeParens (st); token = activeToken (st);     break;
+	    	case '*': setToken (st, TOKEN_STAR);			break;
+		    case ',': setToken (st, TOKEN_COMMA);			break;
+		    case ':': processColon (st);				      break;
+		    case ';': setToken (st, TOKEN_SEMICOLON);			break;
+		    case '<': skipToMatch ("<>");				break;
+	    	case '=': processInitializer (st);				break;
+		    case '[': skipToMatch ("[]");				break;
+		    case '{': setToken (st, TOKEN_BRACE_OPEN);			break;
+	    	case '}': setToken (st, TOKEN_BRACE_CLOSE);			break;
+	    	default:  parseGeneralToken (st, c);				break;
+		}
     } while (isType (token, TOKEN_NONE));
 
 	/* We want to know about non-keyword variable types */
 	if (TOKEN_NONE == st->firstToken->type)
 	{
-		if ((TOKEN_NAME == token->type) || ((TOKEN_KEYWORD == token->type)
-			&& (isBaseDataType(token->name->buffer))))
+	    if ((TOKEN_NAME == token->type) || isDataTypeKeyword(token)) {
 			copyToken(st->firstToken, token);
+		}
 	}
 }
 
 /*
 *   Scanning support functions
 */
-
+static unsigned int contextual_fake_count = 0;
 static statementInfo *CurrentStatement = NULL;
 
 static statementInfo *newStatement (statementInfo *const parent)
@@ -2253,8 +2311,7 @@ static boolean isStatementEnd (const statementInfo *const st)
     if (isType (token, TOKEN_SEMICOLON))
 	isEnd = TRUE;
     else if (isType (token, TOKEN_BRACE_CLOSE))
-	isEnd = (boolean) (isLanguage (Lang_java) ||
-			  ! isContextualStatement (st));
+	isEnd = (boolean) (isLanguage (Lang_java) || ! isContextualStatement (st));
     else
 	isEnd = FALSE;
 
@@ -2264,12 +2321,14 @@ static boolean isStatementEnd (const statementInfo *const st)
 static void checkStatementEnd (statementInfo *const st)
 {
     const tokenInfo *const token = activeToken (st);
+    boolean comma = isType (token, TOKEN_COMMA);
 
-    if (isType (token, TOKEN_COMMA))
-	reinitStatement (st, TRUE);
-    else if (isStatementEnd (st))
+    if (comma || isStatementEnd (st))
     {
-	reinitStatement (st, FALSE);
+      reinitStatementWithToken (st, activeToken (st), comma);
+
+
+	DebugStatement ( if (debug (DEBUG_PARSE)) printf ("<ES>"); )
 	cppEndStatement ();
     }
     else
@@ -2348,6 +2407,7 @@ static void tagCheck (statementInfo *const st)
 		    st->declaration = DECL_FUNCTION;
 		    if (isType (prev2, TOKEN_NAME))
 			copyToken (st->blockName, prev2);
+
 		    if (!isLanguage (Lang_java))
 		    {
 			((tokenInfo *)prev2)->pointerOrder = getTokenPointerOrder (st, 3);
@@ -2357,12 +2417,37 @@ static void tagCheck (statementInfo *const st)
 	    }
 	    else if (isContextualStatement (st))
 	    {
-		if (isType (prev, TOKEN_NAME))
-		    copyToken (st->blockName, prev);
-		qualifyBlockTag (st, prev);
+		tokenInfo *name_token = (tokenInfo *)prev;
+		if (isType (name_token, TOKEN_NAME))
+		{
+		    copyToken (st->blockName, name_token);
+		}
+		else
+		{
+		    tokenInfo *contextual_token = (tokenInfo *)prev;
+		    if(isContextualKeyword (contextual_token))
+		    {
+			char buffer[64];
+			sprintf(buffer, "_anon_%d", contextual_fake_count++);
+
+			name_token = newToken ();
+			copyToken (name_token, contextual_token);
+			vStringCatS(name_token->name, buffer);
+
+			name_token->type = TOKEN_NAME;
+			name_token->keyword	= KEYWORD_NONE;
+
+			advanceToken (st);
+			contextual_token = activeToken (st);
+			copyToken (contextual_token, token);
+			copyToken ((tokenInfo *const)token, name_token);
+			copyToken (st->blockName, name_token);
+			copyToken (st->firstToken, name_token);
+		    }
+		}
+		qualifyBlockTag (st, name_token);
 	    }
 	    break;
-
 	case TOKEN_SEMICOLON:
 	case TOKEN_COMMA:
 	    if (insideEnumBody (st))
@@ -2402,37 +2487,43 @@ static void createTags (const unsigned int nestLevel,
 {
     statementInfo *const st = newStatement (parent);
 
+    DebugStatement ( if (nestLevel > 0) debugParseNest (TRUE, nestLevel); )
     while (TRUE)
-    {
-	tokenInfo *token;
+	{
+		tokenInfo *token;
 
-	nextToken (st);
-	token = activeToken (st);
-	if (isType (token, TOKEN_BRACE_CLOSE))
-	{
-	    if (nestLevel > 0)
-		break;
-	    else
-	    {
-		verbose ("%s: unexpected closing brace at line %lu\n",
-			getInputFileName (), getInputLineNumber ());
-		longjmp (Exception, (int) ExceptionBraceFormattingError);
-	    }
-	}
-	else if (isType (token, TOKEN_DOUBLE_COLON))
-	{
-	    addContext (st, prevToken (st, 1));
-	    advanceToken (st);
-	}
-	else
-	{
-	    tagCheck (st);
-	    if (isType (token, TOKEN_BRACE_OPEN))
-		nest (st, nestLevel + 1);
-	    checkStatementEnd (st);
-	}
+		nextToken (st);
+
+		token = activeToken (st);
+
+		if (isType (token, TOKEN_BRACE_CLOSE))
+		{
+	    	if (nestLevel > 0)
+			{
+				break;
+			}
+		    else
+		    {
+				verbose ("%s: unexpected closing brace at line %lu\n",
+					getInputFileName (), getInputLineNumber ());
+				longjmp (Exception, (int) ExceptionBraceFormattingError);
+	    	}
+		}
+		else if (isType (token, TOKEN_DOUBLE_COLON))
+		{
+	    	addContext (st, prevToken (st, 1));
+	    	advanceToken (st);
+		}
+		else
+		{
+	    	tagCheck (st);/* this can add new token */
+	    	if (isType (activeToken (st), TOKEN_BRACE_OPEN))
+				nest (st, nestLevel + 1);
+		    checkStatementEnd (st);
+		}
     }
     deleteStatement ();
+    DebugStatement ( if (nestLevel > 0) debugParseNest (FALSE, nestLevel - 1); )
 }
 
 static boolean findCTags (const unsigned int passCount)
@@ -2445,17 +2536,20 @@ static boolean findCTags (const unsigned int passCount)
 
     exception = (exception_t) setjmp (Exception);
     retry = FALSE;
+
     if (exception == ExceptionNone)
-	createTags (0, NULL);
+	{
+		createTags (0, NULL);
+	}
     else
     {
-	deleteAllStatements ();
-	if (exception == ExceptionBraceFormattingError  &&  passCount == 1)
-	{
-	    retry = TRUE;
-	   verbose ("%s: retrying file with fallback brace matching algorithm\n",
-		    getInputFileName ());
-	}
+		deleteAllStatements ();
+		if (exception == ExceptionBraceFormattingError  &&  passCount == 1)
+		{
+		    retry = TRUE;
+		   verbose ("%s: retrying file with fallback brace matching algorithm\n",
+			    getInputFileName ());
+		}
     }
     cppTerminate ();
     return retry;
@@ -2475,30 +2569,35 @@ static void buildKeywordHash (const langType language, unsigned int idx)
 
 static void initializeCParser (const langType language)
 {
+    contextual_fake_count = 0;
     Lang_c = language;
     buildKeywordHash (language, 0);
 }
 
 static void initializeCppParser (const langType language)
 {
+    contextual_fake_count = 0;
     Lang_cpp = language;
     buildKeywordHash (language, 1);
 }
 
 static void initializeJavaParser (const langType language)
 {
+    contextual_fake_count = 0;
     Lang_java = language;
     buildKeywordHash (language, 2);
 }
 
 static void initializeDParser (const langType language)
 {
+    contextual_fake_count = 0;
     Lang_d = language;
     buildKeywordHash (language, 1);
 }
 
 static void initializeFeriteParser (const langType language)
 {
+    contextual_fake_count = 0;
     Lang_ferite = language;
     buildKeywordHash (language, 1);
 }
@@ -2518,7 +2617,8 @@ extern parserDefinition* CParser (void)
 extern parserDefinition* CppParser (void)
 {
     static const char *const extensions [] = {
-	"c++", "cc", "cp", "cpp", "cxx", "h", "h++", "hh", "hp", "hpp", "hxx", "i",
+	"c++", "cc", "cp", "cpp", "cxx", "h", "h++", "hh", "hp", "hpp", "hxx",
+	"i",
 #ifndef CASE_INSENSITIVE_FILENAMES
 	"C", "H",
 #endif
