@@ -1227,13 +1227,15 @@ void
 on_goto_tag_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
+	const gint forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
 	gint type;
 	TMTag *tmtag;
 
+	// goto tag definition: all except prototypes / forward declarations / externs
 	if (menuitem == GTK_MENU_ITEM(lookup_widget(app->popup_menu, "goto_tag_definition1")))
-		type = tm_tag_function_t;
+		type = tm_tag_max_t - forward_types;
 	else
-		type = tm_tag_prototype_t;
+		type = forward_types;
 
 	tmtag = symbols_find_in_workspace(editor_info.current_word, type);
 	if (tmtag != NULL)
@@ -1245,10 +1247,10 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 	}
 	// if we are here, there was no match and we are beeping ;-)
 	utils_beep();
-	if (type == tm_tag_prototype_t)
-		ui_set_statusbar(_("Declaration of \"%s()\" not found"), editor_info.current_word);
+	if (type == forward_types)
+		ui_set_statusbar(_("Forward declaration \"%s\" not found."), editor_info.current_word);
 	else
-		ui_set_statusbar(_("Definition of \"%s()\" not found"), editor_info.current_word);
+		ui_set_statusbar(_("Definition of \"%s\" not found."), editor_info.current_word);
 }
 
 

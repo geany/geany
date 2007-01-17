@@ -576,11 +576,11 @@
 					see the entry for '\n' in <xref linkend="regexp"/>.
 				</para>
 			</section>
-			<section>
+			<section id="go_to_tag">
 				<title>Go to tag definition</title>
 				<para>
-					If the current word is the name of a function and the file containing the
-					function definition (a.k.a. function body) is open, Go to tag definition will
+					If the current word is the name of a tag definition (like a function body)
+					and the file containing the tag definition is open, this command will
 					switch to that file and go to the corresponding line number.
 					The current word is either taken from the word nearest the edit cursor, or
 					the word underneath the popup menu click position when the popup menu is
@@ -590,8 +590,9 @@
 			<section>
 				<title>Go to tag declaration</title>
 				<para>
-					Like Go to tag definition, but for a forward function declaration (a.k.a.
-					function prototype) instead of a function definition.
+					Like Go to tag definition, but for a forward declaration such as a
+					function prototype or <literal>extern</literal> declaration instead
+					of a function body.
 				</para>
 			</section>
 			<section>
@@ -1400,7 +1401,7 @@
 								<entry>Jump to the definition of the current word (near the
 									   keyboard cursor). If the definition cannot be found (e.g. the
 									   relevant file is not open) <application>Geany</application>
-									   will beep and do nothing. Used for function definitions.
+									   will beep and do nothing. See <xref linkend="go_to_tag"/>.
 								</entry>
 							</row>
 							<row>
@@ -1408,7 +1409,7 @@
 								<entry>Jump to the declaration of the current word (near the
 									   keyboard cursor). If the declaration cannot be found (e.g. the
 									   relevant file is not open) <application>Geany</application>
-									   will beep and do nothing. Used for function prototypes.
+									   will beep and do nothing. See <xref linkend="go_to_tag"/>.
 								</entry>
 							</row>
 						</tbody>
