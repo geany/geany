@@ -154,4 +154,6 @@ gchar *utils_get_whitespace(gint amount);
  * it will also be freed, the list should be ended with NULL */
 void utils_free_pointers(gpointer first, ...);
 
+gint utils_mkdir(const gchar *path);
+
 #endif

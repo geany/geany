@@ -38,7 +38,7 @@ struct _GeanyProject
 	gchar *executable; 		// name of the project executable
 	// ...					// fields for build process(run arguments and so on) should be added
 
-
+	gchar **file_patterns;	// array of filename extension patterns
 };
 
 

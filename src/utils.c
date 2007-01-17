@@ -781,11 +781,7 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 	if (! g_file_test(dir, G_FILE_TEST_EXISTS))
 	{
 		geany_debug("creating config directory %s", dir);
-#ifdef G_OS_WIN32
-		if (mkdir(dir) != 0) error_nr = errno;
-#else
-		if (mkdir(dir, 0700) != 0) error_nr = errno;
-#endif
+		error_nr = utils_mkdir(dir);
 	}
 
 	if (error_nr == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
@@ -807,11 +803,7 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 
 		if (! g_file_test(filedefs_dir, G_FILE_TEST_EXISTS))
 		{
-#ifdef G_OS_WIN32
-			if (mkdir(filedefs_dir) != 0) error_nr = errno;
-#else
-			if (mkdir(filedefs_dir, 0700) != 0) error_nr = errno;
-#endif
+			error_nr = utils_mkdir(filedefs_dir);
 		}
 		if (error_nr == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
 		{
@@ -833,11 +825,7 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 
 		if (! g_file_test(templates_dir, G_FILE_TEST_EXISTS))
 		{
-#ifdef G_OS_WIN32
-			if (mkdir(templates_dir) != 0) error_nr = errno;
-#else
-			if (mkdir(templates_dir, 0700) != 0) error_nr = errno;
-#endif
+			error_nr = utils_mkdir(templates_dir);
 		}
 		if (error_nr == 0 && ! g_file_test(templates_readme, G_FILE_TEST_EXISTS))
 		{
@@ -1481,3 +1469,15 @@ void utils_free_pointers(gpointer first, ...)
 }
 
 
+gint utils_mkdir(const gchar *path)
+{
+	if (path == NULL || strlen(path) == 0)
+		return EFAULT;
+
+#ifdef G_OS_WIN32
+	if (mkdir(path) != 0) return errno;
+#else
+	if (mkdir(path, 0700) != 0) return errno;
+#endif
+	return 0;
+}
