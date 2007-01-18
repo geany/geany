@@ -40,6 +40,7 @@
 #define GEANY_TEMPLATES_SUBDIR			"templates"
 #define GEANY_CODENAME					"Bandor"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
+#define GEANY_PROJECT_EXT				"geany"
 #define GEANY_USE_WIN32_DIALOG			0
 #define GEANY_CHECK_FILE_DELAY			30
 #define GEANY_WORDCHARS					"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

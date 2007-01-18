@@ -2,6 +2,9 @@
 
  * src/project.c: Do not auto complete project filename and base path
                   when they were changed manually.
+ * src/geany.h, src/project.c:
+   Implemented project open dialog, but open doesn't do anything yet.
+   Added GEANY_PROJECT_EXT macro.
 
 
 2007-01-18  Nick Treleaven  <nick.treleaven@btinternet.com>

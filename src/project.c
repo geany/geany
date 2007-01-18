@@ -54,9 +54,15 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 										  PropertyDialogElements *e);
 static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry);
 static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry);
+static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 static gboolean close_open_project();
+static gboolean load_config(const gchar *filename);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
+
+
+#define SHOW_ERR(...) dialogs_show_msgbox(GTK_MESSAGE_ERROR, __VA_ARGS__)
+#define MAX_NAME_LEN 50
 
 
 void project_new()
@@ -69,9 +75,44 @@ void project_new()
 
 void project_open()
 {
+#ifndef G_OS_WIN32
+	GtkWidget *dialog;
+	GtkFileFilter *filter;
+#endif
 	if (! close_open_project()) return;
 
+#ifdef G_OS_WIN32
+	win32_show_file_dialog(TRUE);
+#else
 
+	dialog = gtk_file_chooser_dialog_new(_("Open project"), GTK_WINDOW(app->window),
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+
+	// set default Open, so pressing enter can open multiple files
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app->window));
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
+
+	// add FileFilters
+	filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(filter, _("All files"));
+	gtk_file_filter_add_pattern(filter, "*");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+	filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(filter, _("Project files"));
+	gtk_file_filter_add_pattern(filter, "*." GEANY_PROJECT_EXT);
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
+
+	g_signal_connect ((gpointer) dialog, "response", G_CALLBACK(on_open_dialog_response), NULL);
+
+	gtk_widget_show_all(dialog);
+#endif
 }
 
 
@@ -281,9 +322,6 @@ static gboolean close_open_project()
 }
 
 
-#define SHOW_ERR(...) dialogs_show_msgbox(GTK_MESSAGE_ERROR, __VA_ARGS__)
-#define MAX_LEN 50
-
 static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 										  PropertyDialogElements *e)
 {
@@ -301,9 +339,9 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 			gtk_widget_grab_focus(e->name);
 			return;
 		}
-		else if (name_len > MAX_LEN)
+		else if (name_len > MAX_NAME_LEN)
 		{
-			SHOW_ERR(_("The specified project name is too long (max. %d characters)."), MAX_LEN);
+			SHOW_ERR(_("The specified project name is too long (max. %d characters)."), MAX_NAME_LEN);
 			gtk_widget_grab_focus(e->name);
 			return;
 		}
@@ -383,6 +421,32 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 }
 
 
+static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
+{
+	// set filename
+	gchar *locale_filename = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(entry)));
+
+	if (g_path_is_absolute(locale_filename))
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_filename);
+	else
+		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), locale_filename);
+	g_free(locale_filename);
+
+	// run it
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+
+		gtk_entry_set_text(GTK_ENTRY(entry), utf8_filename);
+
+		g_free(utf8_filename);
+		g_free(filename);
+	}
+	gtk_widget_destroy(dialog);
+}
+
+
 static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry)
 {
 #ifdef G_OS_WIN32
@@ -401,29 +465,7 @@ static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry)
 	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
-	{	// set filename
-		gchar *locale_filename = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(entry)));
-
-		if (g_path_is_absolute(locale_filename))
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_filename);
-		else
-			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), locale_filename);
-		g_free(locale_filename);
-	}
-
-	// run it
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-	{
-		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-
-		gtk_entry_set_text(GTK_ENTRY(entry), utf8_filename);
-
-		g_free(utf8_filename);
-		g_free(filename);
-	}
-
-	gtk_widget_destroy(dialog);
+	run_dialog(dialog, entry);
 #endif
 }
 
@@ -446,29 +488,7 @@ static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry)
 	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
-	{	// set filename
-		gchar *locale_filename = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(entry)));
-
-		if (g_path_is_absolute(locale_filename))
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_filename);
-		else
-			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), locale_filename);
-		g_free(locale_filename);
-	}
-
-	// run it
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
-	{
-		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-
-		gtk_entry_set_text(GTK_ENTRY(entry), utf8_filename);
-
-		g_free(utf8_filename);
-		g_free(filename);
-	}
-
-	gtk_widget_destroy(dialog);
+	run_dialog(dialog, entry);
 #endif
 }
 
@@ -495,7 +515,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 			name, G_DIR_SEPARATOR_S, NULL);
 		file_name = g_strconcat(
 			GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, G_DIR_SEPARATOR_S,
-			name, G_DIR_SEPARATOR_S, name, ".geany", NULL);
+			name, G_DIR_SEPARATOR_S, name, "." GEANY_PROJECT_EXT, NULL);
 		g_free(name);
 	}
 	else
@@ -503,7 +523,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 		base_path = g_strconcat(
 			GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, G_DIR_SEPARATOR_S, NULL);
 		file_name = g_strconcat(
-			GEANY_HOME_DIR, G_DIR_SEPARATOR_S,PROJECT_DIR, G_DIR_SEPARATOR_S, NULL);
+			GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, G_DIR_SEPARATOR_S, NULL);
 	}
 
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), base_path);
@@ -519,4 +539,32 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 {
 	entries_modified = TRUE;
+}
+
+
+static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
+{
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+		// try to load the config
+		if (load_config(filename))
+			gtk_widget_destroy(GTK_WIDGET(dialog));
+		else
+		{
+			SHOW_ERR(_("Project file could not be loaded."));
+			gtk_widget_grab_focus(GTK_WIDGET(dialog));
+		}
+		g_free(filename);
+	}
+	else
+		gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+
+static gboolean load_config(const gchar *filename)
+{
+	/// TODO write me
+	return TRUE;
 }
