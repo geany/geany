@@ -5,6 +5,9 @@
  * src/geany.h, src/project.c:
    Implemented project open dialog, but open doesn't do anything yet.
    Added GEANY_PROJECT_EXT macro.
+ * geany.glade, src/interface.c:
+   Removed unintended keybindings for the project menu items.
+
 
 
 2007-01-18  Nick Treleaven  <nick.treleaven@btinternet.com>

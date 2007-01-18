@@ -2117,8 +2117,8 @@ void
 on_menu_project1_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	static GtkWidget *item_close= NULL;
-	static GtkWidget *item_properties= NULL;
+	static GtkWidget *item_close = NULL;
+	static GtkWidget *item_properties = NULL;
 
 	if (item_close == NULL)
 	{
