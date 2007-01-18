@@ -7,7 +7,7 @@
    Added GEANY_PROJECT_EXT macro.
  * geany.glade, src/interface.c:
    Removed unintended keybindings for the project menu items.
-
+ * geany.desktop.in: Added MimeType entry as suggested by Nick Schermer.
 
 
 2007-01-18  Nick Treleaven  <nick.treleaven@btinternet.com>
