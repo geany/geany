@@ -121,7 +121,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_CLOSE] = fill(cb_func_menu_close,
 		GDK_w, GDK_CONTROL_MASK, "menu_close", _("Close"));
 	keys[GEANY_KEYS_MENU_CLOSEALL] = fill(cb_func_menu_closeall,
-		GDK_d, GDK_MOD1_MASK, "menu_closeall", _("Close all"));
+		GDK_w, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_closeall", _("Close all"));
 	keys[GEANY_KEYS_MENU_RELOADFILE] = fill(cb_func_menu_reloadfile,
 		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"));
 	keys[GEANY_KEYS_MENU_UNDO] = fill(cb_func_menu_undo,
@@ -133,7 +133,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_INSERTDATE] = fill(cb_func_menu_insert_date,
 		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"));
 	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences,
-		GDK_p, GDK_MOD1_MASK, "menu_preferences", _("Preferences"));
+		0, 0, "menu_preferences", _("Preferences"));
 	keys[GEANY_KEYS_MENU_FINDNEXT] = fill(cb_func_menu_findnext,
 		GDK_F3, 0, "menu_findnext", _("Find Next"));
 	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious,

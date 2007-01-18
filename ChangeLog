@@ -1,3 +1,12 @@
+2007-01-18  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c:
+   Change default keybinding for Close All to Ctrl-Shift-W to avoid
+   conflict with Document menu (thanks to Jeff Pohlmeyer).
+   Remove Alt-P default KB for Preferences to avoid conflict with
+   Project menu.
+
+
 2007-01-17  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/project.c, src/project.h:
