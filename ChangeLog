@@ -1,3 +1,9 @@
+2007-01-18  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/project.c: Do not auto complete project filename and base path
+                  when they were changed manually.
+
+
 2007-01-18  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c:

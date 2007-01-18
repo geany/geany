@@ -35,6 +35,8 @@
 #endif
 
 
+static gboolean entries_modified;
+
 // simple struct to keep references to the elements of the properties dialog
 typedef struct
 {
@@ -54,6 +56,7 @@ static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry);
 static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry);
 static gboolean close_open_project();
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
+static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 
 
 void project_new()
@@ -112,6 +115,7 @@ void project_properties()
 										 ok_button, GTK_RESPONSE_OK, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(e->dialog));
 
+	entries_modified = FALSE;
 
 	table = gtk_table_new(5, 2, FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
@@ -207,6 +211,9 @@ void project_properties()
 		g_signal_connect((gpointer) e->name, "changed", G_CALLBACK(on_name_entry_changed), e);
 		// run the callback manually to initialise the base_path and file_name fields
 		on_name_entry_changed(GTK_EDITABLE(e->name), e);
+
+		g_signal_connect((gpointer) e->file_name, "changed", G_CALLBACK(on_entries_changed), e);
+		g_signal_connect((gpointer) e->base_path, "changed", G_CALLBACK(on_entries_changed), e);
 	}
 	g_signal_connect((gpointer) e->dialog, "response",
 				G_CALLBACK(on_properties_dialog_response), e);
@@ -465,17 +472,20 @@ static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry)
 #endif
 }
 
+
 // "projects" is part of the default project base path so be carefully when translating
 // please avoid special characters and spaces, look at the source for details or ask Frank
 #define PROJECT_DIR _("projects")
 
 /* sets the project base path and the project file name according to the project name */
-/// TODO cancel the process once base_path resp. file_name has been changed manually
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e)
 {
 	gchar *base_path;
 	gchar *file_name;
 	gchar *name;
+
+	if (entries_modified)
+		return;
 
 	name = gtk_editable_get_chars(editable, 0, -1);
 	if (name != NULL && strlen(name) > 0)
@@ -499,6 +509,14 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), base_path);
 	gtk_entry_set_text(GTK_ENTRY(e->file_name), file_name);
 
+	entries_modified = FALSE;
+
 	g_free(base_path);
 	g_free(file_name);
+}
+
+
+static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
+{
+	entries_modified = TRUE;
 }
