@@ -1,3 +1,9 @@
+2007-01-19  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/build.c: Use "rm" to delete the run script because unlink is not
+                available on all systems.
+
+
 2007-01-18  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/project.c: Do not auto complete project filename and base path
