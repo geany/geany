@@ -4,6 +4,8 @@
                 available on all systems.
  * geany.desktop.in: Added more mimetypes supplied by Nick Schermer.
  * doc/geany.docbook: Documented GEANY_PROJECT_EXT.
+ * src/dialogs.c, src/prefs.c, src/prefs.h, src/search.c:
+   Fixed crashes when using some dialogs after they were closed before.
 
 
 2007-01-18  Enrico Tröger  <enrico.troeger@uvena.de>

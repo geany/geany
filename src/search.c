@@ -286,7 +286,7 @@ void search_show_find_dialog()
 		g_signal_connect((gpointer) widgets.find_dialog, "response",
 				G_CALLBACK(on_find_dialog_response), entry);
 		g_signal_connect((gpointer) widgets.find_dialog, "delete_event",
-				G_CALLBACK(gtk_widget_hide), NULL);
+				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		sbox = gtk_hbox_new(FALSE, 6);
 		gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
@@ -416,7 +416,7 @@ void search_show_replace_dialog()
 		g_signal_connect((gpointer) widgets.replace_dialog, "response",
 				G_CALLBACK(on_replace_dialog_response), entry_replace);
 		g_signal_connect((gpointer) widgets.replace_dialog, "delete_event",
-				G_CALLBACK(gtk_widget_hide), NULL);
+				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		fbox = gtk_hbox_new(FALSE, 6);
 		gtk_box_pack_start(GTK_BOX(fbox), label_find, FALSE, FALSE, 0);
@@ -620,7 +620,7 @@ void search_show_find_in_files_dialog()
 		g_signal_connect((gpointer) widgets.find_in_files_dialog, "response",
 				G_CALLBACK(on_find_in_files_dialog_response), combo);
 		g_signal_connect((gpointer) widgets.find_in_files_dialog, "delete_event",
-				G_CALLBACK(gtk_widget_hide), NULL);
+				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		gtk_widget_show_all(widgets.find_in_files_dialog);
 		sel = get_default_text(idx);
