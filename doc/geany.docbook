@@ -796,6 +796,13 @@
 									<entry>10</entry>
 								</row>
 								<row>
+									<entry>GEANY_PROJECT_EXT</entry>
+									<entry>The default filename extension for Geany project files.
+										   It is used when creating new projects and as filter mask
+										   for the project open dialog.</entry>
+									<entry>geany</entry>
+								</row>
+								<row>
 									<entry>GEANY_STRING_UNTITLED</entry>
 									<entry>A string used as the default name for new files. Be aware
 										   that the string can be translated,
