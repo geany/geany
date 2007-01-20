@@ -1,3 +1,8 @@
+2007-01-20  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * scintilla/makefile.win32: Fixed typo.
+
+
 2007-01-19  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/build.c: Use "rm" to delete the run script because unlink is not
