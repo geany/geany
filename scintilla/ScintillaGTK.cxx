@@ -28,6 +28,8 @@
 #endif
 #include "ContractionState.h"
 #include "SVector.h"
+#include "SplitVector.h"
+#include "Partitioning.h"
 #include "CellBuffer.h"
 #include "CallTip.h"
 #include "KeyMap.h"
@@ -1807,7 +1809,15 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget,
 	// Compute amount and direction to scroll (even tho on win32 there is
 	// intensity of scrolling info in the native message, gtk doesn't
 	// support this so we simulate similarly adaptive scrolling)
+	// Note that this is disabled on OS X (Darwin) where the X11 server already has
+	// and adaptive scrolling algorithm that fights with this one
 	int cLineScroll;
+#if defined(__MWERKS__) || defined(__APPLE_CPP__) || defined(__APPLE_CC__)
+	cLineScroll = sciThis->linesPerScroll;
+	if (cLineScroll == 0)
+		cLineScroll = 4;
+	sciThis->wheelMouseIntensity = cLineScroll;
+#else
 	int timeDelta = 1000000;
 	GTimeVal curTime;
 	g_get_current_time(&curTime);
@@ -1825,6 +1835,7 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget,
 			cLineScroll = 4;
 		sciThis->wheelMouseIntensity = cLineScroll;
 	}
+#endif
 	if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_LEFT) {
 		cLineScroll *= -1;
 	}
@@ -1841,7 +1852,7 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget,
 		return FALSE;
 	}
 
-    // Horizontal scrolling
+	// Horizontal scrolling
 	if (event->direction == GDK_SCROLL_LEFT || event->direction == GDK_SCROLL_RIGHT) {
 		sciThis->HorizontalScrollTo(sciThis->xOffset + cLineScroll);
 
@@ -1945,6 +1956,12 @@ static int KeyTranslate(int keyIn) {
 		return SCK_SUBTRACT;
 	case GDK_KP_Divide:
 		return SCK_DIVIDE;
+	case GDK_Super_L:
+		return SCK_WIN;
+	case GDK_Super_R:
+		return SCK_RWIN;
+	case GDK_Menu:
+		return SCK_MENU;
 	default:
 		return keyIn;
 	}
@@ -1974,10 +1991,8 @@ gboolean ScintillaGTK::KeyThis(GdkEventKey *event) {
 	// This will have to change for Unicode
 	else if (key >= 0xFE00)
 		key = KeyTranslate(key);
-	else if (IsUnicodeMode())
-		;	// No operation
 #if GTK_MAJOR_VERSION < 2
-	else if ((key >= 0x100) && (key < 0x1000))
+	else if (!IsUnicodeMode() && (key >= 0x100) && (key < 0x1000))
 		key &= 0xff;
 #endif
 
@@ -1988,7 +2003,7 @@ gboolean ScintillaGTK::KeyThis(GdkEventKey *event) {
 	//fprintf(stderr, "SK-key: %d %x %x\n",event->keyval, event->state, consumed);
 	if (event->keyval == 0xffffff && event->length > 0) {
 		ClearSelection();
-		if (pdoc->InsertString(CurrentPosition(), event->string)) {
+		if (pdoc->InsertCString(CurrentPosition(), event->string)) {
 			MovePositionTo(CurrentPosition() + event->length);
 		}
 	}
@@ -2325,14 +2340,17 @@ void ScintillaGTK::DragBegin(GtkWidget *, GdkDragContext *) {
 }
 
 gboolean ScintillaGTK::DragMotion(GtkWidget *widget, GdkDragContext *context,
-                                  gint x, gint y, guint dragtime) {
+                                 gint x, gint y, guint dragtime) {
 	ScintillaGTK *sciThis = ScintillaFromWidget(widget);
-	//Platform::DebugPrintf("DragMotion %d %d %x %x %x\n", x, y,
-	//	context->actions, context->suggested_action, sciThis);
 	Point npt(x, y);
 	sciThis->inDragDrop = true;
 	sciThis->SetDragPosition(sciThis->PositionFromLocation(npt));
-	gdk_drag_status(context, context->suggested_action, dragtime);
+	GdkDragAction preferredAction = context->suggested_action;
+	if (context->actions == static_cast<GdkDragAction>
+		(GDK_ACTION_COPY | GDK_ACTION_MOVE)) {
+		preferredAction = GDK_ACTION_MOVE;
+	}
+	gdk_drag_status(context, preferredAction, dragtime);
 	return FALSE;
 }
 

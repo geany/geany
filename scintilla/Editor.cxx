@@ -19,6 +19,8 @@
 
 #include "ContractionState.h"
 #include "SVector.h"
+#include "SplitVector.h"
+#include "Partitioning.h"
 #include "CellBuffer.h"
 #include "KeyMap.h"
 #include "Indicator.h"
@@ -1661,7 +1663,7 @@ void Editor::LinesSplit(int pixelWidth) {
 				unsigned int posLineStart = pdoc->LineStart(line);
 				LayoutLine(line, surface, vs, ll, pixelWidth);
 				for (int subLine = 1; subLine < ll->lines; subLine++) {
-					pdoc->InsertString(posLineStart + (subLine - 1) * strlen(eol) +
+					pdoc->InsertCString(posLineStart + (subLine - 1) * strlen(eol) +
 						ll->LineStart(subLine), eol);
 					targetEnd += static_cast<int>(strlen(eol));
 				}
@@ -1915,6 +1917,7 @@ static bool IsSpaceOrTab(char ch) {
 LineLayout *Editor::RetrieveLineLayout(int lineNumber) {
 	int posLineStart = pdoc->LineStart(lineNumber);
 	int posLineEnd = pdoc->LineStart(lineNumber + 1);
+	PLATFORM_ASSERT(posLineEnd >= posLineStart);
 	int lineCaret = pdoc->LineFromPosition(currentPos);
 	return llc.Retrieve(lineNumber, lineCaret,
 	                    posLineEnd - posLineStart, pdoc->GetStyleClock(),
@@ -1930,6 +1933,7 @@ void Editor::LayoutLine(int line, Surface *surface, ViewStyle &vstyle, LineLayou
 	if (!ll)
 		return;
 	PLATFORM_ASSERT(line < pdoc->LinesTotal());
+	PLATFORM_ASSERT(ll->chars != NULL);
 	int posLineStart = pdoc->LineStart(line);
 	int posLineEnd = pdoc->LineStart(line + 1);
 	// If the line is very long, limit the treatment to a length that should fit in the viewport
@@ -2272,6 +2276,21 @@ void Editor::DrawEOL(Surface *surface, ViewStyle &vsDraw, PRectangle rcLine, Lin
 	} else {
 		surface->FillRectangle(rcSegment, vsDraw.styles[STYLE_DEFAULT].back.allocated);
 	}
+
+	if (vsDraw.selEOLFilled && eolInSelection && vsDraw.selbackset && (line < pdoc->LinesTotal() - 1) && (vsDraw.selAlpha == SC_ALPHA_NOALPHA)) {
+		surface->FillRectangle(rcSegment, SelectionBackground(vsDraw));
+	} else {
+		if (overrideBackground) {
+			surface->FillRectangle(rcSegment, background);
+		} else if (vsDraw.styles[ll->styles[ll->numCharsInLine] & styleMask].eolFilled) {
+			surface->FillRectangle(rcSegment, vsDraw.styles[ll->styles[ll->numCharsInLine] & styleMask].back.allocated);
+		} else {
+			surface->FillRectangle(rcSegment, vsDraw.styles[STYLE_DEFAULT].back.allocated);
+		}
+		if (vsDraw.selEOLFilled && eolInSelection && vsDraw.selbackset && (line < pdoc->LinesTotal() - 1) && (vsDraw.selAlpha != SC_ALPHA_NOALPHA)) {
+			SimpleAlphaRectangle(surface, rcSegment, SelectionBackground(vsDraw), vsDraw.selAlpha);
+		}
+ 	}
 
 	if (drawWrapMarkEnd) {
 		PRectangle rcPlace = rcSegment;
@@ -4096,7 +4115,7 @@ void Editor::Duplicate(bool forLine) {
 	char *text = CopyRange(start, end);
 	if (forLine) {
 		const char *eol = StringFromEOLMode(pdoc->eolMode);
-		pdoc->InsertString(end, eol);
+		pdoc->InsertCString(end, eol);
 		pdoc->InsertString(end + istrlen(eol), text, end - start);
 	} else {
 		pdoc->InsertString(end, text, end - start);
@@ -4116,7 +4135,7 @@ void Editor::NewLine() {
 	} else if (pdoc->eolMode == SC_EOL_CR) {
 		eol = "\r";
 	} // else SC_EOL_LF -> "\n" already set
-	if (pdoc->InsertString(currentPos, eol)) {
+	if (pdoc->InsertCString(currentPos, eol)) {
 		SetEmptySelection(currentPos + istrlen(eol));
 		while (*eol) {
 			NotifyChar(*eol);
@@ -4975,7 +4994,7 @@ void Editor::DropAt(int position, const char *value, bool moving, bool rectangul
 			SetEmptySelection(position);
 		} else {
 			position = MovePositionOutsideChar(position, currentPos - position);
-			if (pdoc->InsertString(position, value)) {
+			if (pdoc->InsertCString(position, value)) {
 				SetSelection(position + istrlen(value), position);
 			}
 			pdoc->EndUndoAction();
@@ -5681,6 +5700,26 @@ int Editor::WrapCount(int line) {
 	}
 }
 
+void Editor::AddStyledText(char *buffer, int appendLength) {
+	// The buffer consists of alternating character bytes and style bytes
+	size_t textLength = appendLength / 2;
+	char *text = new char[textLength];
+	if (text) {
+		size_t i;
+		for (i=0;i<textLength;i++) {
+			text[i] = buffer[i*2];
+		}
+		pdoc->InsertString(CurrentPosition(), text, textLength);
+		for (i=0;i<textLength;i++) {
+			text[i] = buffer[i*2+1];
+		}
+		pdoc->StartStyling(CurrentPosition(), static_cast<char>(0xff));
+		pdoc->SetStyles(textLength, text);
+		delete []text;
+	}
+	SetEmptySelection(currentPos + textLength);
+}
+
 static bool ValidMargin(unsigned long wParam) {
 	return wParam < ViewStyle::margins;
 }
@@ -5717,7 +5756,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			pdoc->BeginUndoAction();
 			pdoc->DeleteChars(0, pdoc->Length());
 			SetEmptySelection(0);
-			pdoc->InsertString(0, CharPtrFromSPtr(lParam));
+			pdoc->InsertCString(0, CharPtrFromSPtr(lParam));
 			pdoc->EndUndoAction();
 			return 1;
 		}
@@ -5867,7 +5906,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			pdoc->BeginUndoAction();
 			ClearSelection();
 			char *replacement = CharPtrFromSPtr(lParam);
-			pdoc->InsertString(currentPos, replacement);
+			pdoc->InsertCString(currentPos, replacement);
 			pdoc->EndUndoAction();
 			SetEmptySelection(currentPos + istrlen(replacement));
 			EnsureCaretVisible();
@@ -6023,13 +6062,10 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 			return 0;
 		}
 
-	case SCI_ADDSTYLEDTEXT: {
-			if (lParam == 0)
-				return 0;
-			pdoc->InsertStyledString(CurrentPosition() * 2, CharPtrFromSPtr(lParam), wParam);
-			SetEmptySelection(currentPos + wParam / 2);
-			return 0;
-		}
+	case SCI_ADDSTYLEDTEXT:
+		if (lParam)
+			AddStyledText(CharPtrFromSPtr(lParam), wParam);
+		return 0;
 
 	case SCI_INSERTTEXT: {
 			if (lParam == 0)
@@ -6039,7 +6075,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 				insertPos = CurrentPosition();
 			int newCurrent = CurrentPosition();
 			char *sz = CharPtrFromSPtr(lParam);
-			pdoc->InsertString(insertPos, sz);
+			pdoc->InsertCString(insertPos, sz);
 			if (newCurrent > insertPos)
 				newCurrent += istrlen(sz);
 			SetEmptySelection(newCurrent);
@@ -6897,6 +6933,14 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 
 	case SCI_GETSELALPHA:
 		return vs.selAlpha;
+
+	case SCI_GETSELEOLFILLED:
+		return vs.selEOLFilled;
+
+	case SCI_SETSELEOLFILLED:
+		vs.selEOLFilled = wParam != 0;
+		InvalidateStyleRedraw();
+		break;
 
 	case SCI_SETWHITESPACEFORE:
 		vs.whitespaceForegroundSet = wParam != 0;

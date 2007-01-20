@@ -74,6 +74,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	selbackground.desired = source.selbackground.desired;
 	selbackground2.desired = source.selbackground2.desired;
 	selAlpha = source.selAlpha;
+	selEOLFilled = source.selEOLFilled;
 
 	foldmarginColourSet = source.foldmarginColourSet;
 	foldmarginColour.desired = source.foldmarginColour.desired;
@@ -143,6 +144,7 @@ void ViewStyle::Init() {
 	selbackground.desired = ColourDesired(0xc0, 0xc0, 0xc0);
 	selbackground2.desired = ColourDesired(0xb0, 0xb0, 0xb0);
 	selAlpha = SC_ALPHA_NOALPHA;
+	selEOLFilled = false;
 
 	foldmarginColourSet = false;
 	foldmarginColour.desired = ColourDesired(0xff, 0, 0);

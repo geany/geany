@@ -2,7 +2,6 @@
  ** Lexer for D.
  **
  ** Copyright (c) 2006 by Waldemar Augustyn <waldemar@wdmsys.com>
- ** Licensed under the terms described in LicenseContributor.txt.
  **/
 // Copyright 1998-2005 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -24,24 +23,24 @@
 
 /*/ Nested comments require keeping the value of the nesting level for every
     position in the document.  But since scintilla always styles line by line,
-    we only need to store that value per line. The non-negative number indicates
+    we only need to store one value per line. The non-negative number indicates
     nesting level at the end of the line.
 /*/
 
 // We use custom qualifiers since it is not clear what D allows.
 
-static bool IsWordStart(char ch) {
+static bool IsWordStart(int ch) {
 	return isascii(ch) && (isalpha(ch) || ch == '_');
 }
 
-static bool IsWord(char ch) {
+static bool IsWord(int ch) {
 	return isascii(ch) && (isalnum(ch) || ch == '_');
 }
 
-static bool IsDoxygen(char ch) {
+static bool IsDoxygen(int ch) {
 	if (isascii(ch) && islower(ch))
 		return true;
-	if (ch == '$' || ch == '@' || ch == '\\' || 
+	if (ch == '$' || ch == '@' || ch == '\\' ||
 		ch == '&' || ch == '#' || ch == '<' || ch == '>' ||
 		ch == '{' || ch == '}' || ch == '[' || ch == ']')
 		return true;
@@ -49,7 +48,7 @@ static bool IsDoxygen(char ch) {
 }
 
 
-static void ColouriseDDoc(unsigned int startPos, int length, int initStyle, 
+static void ColouriseDoc(unsigned int startPos, int length, int initStyle, 
     WordList *keywordlists[], Accessor &styler, bool caseSensitive) {
 
     WordList &keywords = *keywordlists[0];
@@ -60,12 +59,9 @@ static void ColouriseDDoc(unsigned int startPos, int length, int initStyle,
     int styleBeforeDCKeyword = SCE_D_DEFAULT;
 
     StyleContext sc(startPos, length, initStyle, styler);
-	    
+
     int curLine = styler.GetLine(startPos);
     int curNcLevel = curLine > 0? styler.GetLineState(curLine-1): 0;
-
-    //~ printf("WA LexD::Colorize start(%d)  end(%d)  initStyle(%d) curLine(%d) begNcLevel(%d)\n",
-        //~ startPos, startPos+length, initStyle, curLine+1, curNcLevel);
 
     for (; sc.More(); sc.Forward()) {
 
@@ -77,10 +73,8 @@ static void ColouriseDDoc(unsigned int startPos, int length, int initStyle,
             }
             curLine = styler.GetLine(sc.currentPos);
             styler.SetLineState(curLine, curNcLevel);
-            //~ printf("    WA LexD::Colorize set line(%d) to curNcLevel(%d) BOL\n",
-                //~ curLine+1, curNcLevel);
         }
-	
+
         // Handle line continuation generically.
         if (sc.ch == '\\') {
             if (sc.chNext == '\n' || sc.chNext == '\r') {
@@ -179,8 +173,6 @@ static void ColouriseDDoc(unsigned int startPos, int length, int initStyle,
                         curNcLevel -= 1;
                     curLine = styler.GetLine(sc.currentPos);
                     styler.SetLineState(curLine, curNcLevel);
-                    //~ printf("    WA LexD::Colorize set line(%d) to curNcLevel(%d) NEST DOWN\n",
-                        //~ curLine+1, curNcLevel);
                     sc.Forward();
                     if (curNcLevel == 0) {
                         sc.ForwardSetState(SCE_D_DEFAULT);
@@ -190,8 +182,6 @@ static void ColouriseDDoc(unsigned int startPos, int length, int initStyle,
                     curNcLevel += 1;
                     curLine = styler.GetLine(sc.currentPos);
                     styler.SetLineState(curLine, curNcLevel);
-                    //~ printf("    WA LexD::Colorize set line(%d) to curNcLevel(%d) NEST UP\n",
-                        //~ curLine+1, curNcLevel);
                     sc.Forward();
                 }
                 break;
@@ -234,8 +224,6 @@ static void ColouriseDDoc(unsigned int startPos, int length, int initStyle,
                 curNcLevel += 1;
 		curLine = styler.GetLine(sc.currentPos);
                 styler.SetLineState(curLine, curNcLevel);
-                //~ printf("    WA LexD::Colorize set line(%d) to curNcLevel(%d) NEST NEW\n",
-                    //~ curLine+1, curNcLevel);
                 sc.SetState(SCE_D_COMMENTNESTED);
                 sc.Forward();
             } else if (sc.Match('/', '*')) {
@@ -261,8 +249,6 @@ static void ColouriseDDoc(unsigned int startPos, int length, int initStyle,
         }
     }
     sc.Complete();
-    //~ styler.Flush();	// Make sure nested comments are properly accounted for
-    //~ styler.ClearNestedCommentChange();
 }
 
 static bool IsStreamCommentStyle(int style) {
@@ -275,11 +261,11 @@ static bool IsStreamCommentStyle(int style) {
 // Store both the current line's fold level and the next lines in the
 // level store to make it easy to pick up with each increment
 // and to make it possible to fiddle the current level for "} else {".
-static void FoldNoBoxDDoc(unsigned int startPos, int length, int initStyle,
-                            Accessor &styler) {
+static void FoldDoc(unsigned int startPos, int length, int initStyle, Accessor &styler) {
     bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
     bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
-    bool foldAtElse = styler.GetPropertyInt("fold.at.else", 0) != 0;
+    bool foldAtElse = styler.GetPropertyInt("lexer.d.fold.at.else",
+		styler.GetPropertyInt("fold.at.else", 0)) != 0;
     unsigned int endPos = startPos + length;
     int visibleChars = 0;
     int lineCurrent = styler.GetLine(startPos);
@@ -347,9 +333,9 @@ static void FoldNoBoxDDoc(unsigned int startPos, int length, int initStyle,
     }
 }
 
-static void FoldDDoc(unsigned int startPos, int length, int initStyle, 
+static void FoldDDoc(unsigned int startPos, int length, int initStyle,
     WordList *[], Accessor &styler) {
-        FoldNoBoxDDoc(startPos, length, initStyle, styler);
+        FoldDoc(startPos, length, initStyle, styler);
 }
 
 static const char * const dWordLists[] = {
@@ -360,10 +346,9 @@ static const char * const dWordLists[] = {
             0,
         };
 
-static void ColouriseDDocSensitive(unsigned int startPos, int length, 
+static void ColouriseDDoc(unsigned int startPos, int length, 
     int initStyle, WordList *keywordlists[], Accessor &styler) {
-        ColouriseDDoc(startPos, length, initStyle, keywordlists, styler, true);
+        ColouriseDoc(startPos, length, initStyle, keywordlists, styler, true);
 }
 
-LexerModule lmD(SCLEX_D, ColouriseDDocSensitive, "d", FoldDDoc, dWordLists);
-
+LexerModule lmD(SCLEX_D, ColouriseDDoc, "d", FoldDDoc, dWordLists);

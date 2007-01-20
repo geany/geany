@@ -183,7 +183,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 		}
  		case SCN_MODIFIED:
 		{
-			if (nt->modificationType & SC_START_ACTION && ! app->ignore_callback)
+			if (nt->modificationType & SC_STARTACTION && ! app->ignore_callback)
 			{
 				// get notified about undo changes
 				document_undo_add(idx, UNDO_SCINTILLA, NULL);

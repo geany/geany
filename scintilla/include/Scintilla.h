@@ -201,6 +201,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_SETSELBACK 2068
 #define SCI_GETSELALPHA 2477
 #define SCI_SETSELALPHA 2478
+#define SCI_GETSELEOLFILLED 2479
+#define SCI_SETSELEOLFILLED 2480
 #define SCI_SETCARETFORE 2069
 #define SCI_ASSIGNCMDKEY 2070
 #define SCI_CLEARCMDKEY 2071
@@ -647,7 +649,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SC_MOD_BEFOREINSERT 0x400
 #define SC_MOD_BEFOREDELETE 0x800
 #define SC_MULTILINEUNDOREDO 0x1000
-#define SC_START_ACTION 0x2000
+#define SC_STARTACTION 0x2000
 #define SC_MODEVENTMASKALL 0x2FFF
 #define SCEN_CHANGE 768
 #define SCEN_SETFOCUS 512
@@ -669,6 +671,9 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCK_ADD 310
 #define SCK_SUBTRACT 311
 #define SCK_DIVIDE 312
+#define SCK_WIN 313
+#define SCK_RWIN 314
+#define SCK_MENU 315
 #define SCMOD_NORM 0
 #define SCMOD_SHIFT 1
 #define SCMOD_CTRL 2

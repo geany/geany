@@ -173,6 +173,7 @@ static inline bool stateAllowsTermination(int state) {
 	bool allowTermination = !isStringState(state);
 	if (allowTermination) {
 		switch (state) {
+		case SCE_HB_COMMENTLINE:
 		case SCE_HPHP_COMMENT:
 		case SCE_HP_COMMENTLINE:
 		case SCE_HPA_COMMENTLINE:

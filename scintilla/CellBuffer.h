@@ -27,10 +27,10 @@ class MarkerHandleSet {
 public:
 	MarkerHandleSet();
 	~MarkerHandleSet();
-	int Length();
-	int NumberFromHandle(int handle);
-	int MarkValue();	///< Bit set of marker numbers.
-	bool Contains(int handle);
+	int Length() const;
+	int NumberFromHandle(int handle) const;
+	int MarkValue() const;	///< Bit set of marker numbers.
+	bool Contains(int handle) const;
 	bool InsertHandle(int handle, int markerNum);
 	void RemoveHandle(int handle);
 	bool RemoveNumber(int markerNum);
@@ -38,43 +38,40 @@ public:
 };
 
 /**
- * Each line stores the starting position of the first character of the line in the cell buffer
- * and potentially a marker handle set. Often a line will not have any attached markers.
- */
-struct LineData {
-	int startPosition;
-	MarkerHandleSet *handleSet;
-	LineData() : startPosition(0), handleSet(0) {
-	}
-};
-
-/**
  * The line vector contains information about each of the lines in a cell buffer.
  */
 class LineVector {
-public:
-	int growSize;
-	int lines;
-	LineData *linesData;
-	int size;
-	int *levels;
-	int sizeLevels;
 
+	Partitioning starts;
+	SplitVector<MarkerHandleSet *> markers;
+	SplitVector<int> levels;
 	/// Handles are allocated sequentially and should never have to be reused as 32 bit ints are very big.
 	int handleCurrent;
+
+public:
 
 	LineVector();
 	~LineVector();
 	void Init();
 
-	void Expand(int sizeNew);
 	void ExpandLevels(int sizeNew=-1);
 	void ClearLevels();
-	void InsertValue(int pos, int value);
-	void SetValue(int pos, int value);
-	void Remove(int pos);
-	int LineFromPosition(int pos);
+	int SetLevel(int line, int level);
+	int GetLevel(int line);
 
+	void InsertText(int line, int delta);
+	void InsertLine(int line, int position);
+	void SetLineStart(int line, int position);
+	void RemoveLine(int line);
+	int Lines() {
+		return starts.Partitions();
+	}
+	int LineFromPosition(int pos);
+	int LineStart(int line) {
+		return starts.PositionFromPartition(line);
+	}
+
+	int MarkValue(int line);
 	int AddMark(int line, int marker);
 	void MergeMarkers(int pos);
 	void DeleteMark(int line, int markerNum, bool all);
@@ -150,16 +147,9 @@ public:
  */
 class CellBuffer {
 private:
-	char *body;		///< The cell buffer itself.
-	int size;		///< Allocated size of the buffer.
-	int length;		///< Total length of the data.
-	int part1len;	///< Length of the first part.
-	int gaplen;		///< Length of the gap between the two parts.
-	char *part2body;	///< The second part of the cell buffer.
-						///< Doesn't point after the gap but set so that
-						///< part2body[position] is consistent with body[position].
+	SplitVector<char> substance;
+	SplitVector<char> style;
 	bool readOnly;
-	int growSize;
 
 	bool collectingUndo;
 	UndoHistory uh;
@@ -168,15 +158,9 @@ private:
 
 	SVector lineStates;
 
-	void GapTo(int position);
-	void RoomFor(int insertionLength);
-
-	inline char ByteAt(int position);
-	void SetByteAt(int position, char ch);
-
 public:
 
-	CellBuffer(int initialLength = 4000);
+	CellBuffer();
 	~CellBuffer();
 
 	/// Retrieving positions outside the range of the buffer works and returns 0
@@ -184,18 +168,17 @@ public:
 	void GetCharRange(char *buffer, int position, int lengthRetrieve);
 	char StyleAt(int position);
 
-	int ByteLength();
 	int Length();
 	void Allocate(int newSize);
 	int Lines();
 	int LineStart(int line);
 	int LineFromPosition(int pos) { return lv.LineFromPosition(pos); }
-	const char *InsertString(int position, char *s, int insertLength, bool &startSequence);
+	const char *InsertString(int position, const char *s, int insertLength, bool &startSequence);
 
 	/// Setting styles for positions outside the range of the buffer is safe and has no effect.
 	/// @return true if the style of a character is changed.
-	bool SetStyleAt(int position, char style, char mask='\377');
-	bool SetStyleFor(int position, int length, char style, char mask);
+	bool SetStyleAt(int position, char styleValue, char mask='\377');
+	bool SetStyleFor(int position, int length, char styleValue, char mask);
 
 	const char *DeleteChars(int position, int deleteLength, bool &startSequence);
 
@@ -216,7 +199,7 @@ public:
 	int LineFromHandle(int markerHandle);
 
 	/// Actions without undo
-	void BasicInsertString(int position, char *s, int insertLength);
+	void BasicInsertString(int position, const char *s, int insertLength);
 	void BasicDeleteChars(int position, int deleteLength);
 
 	bool SetUndoCollection(bool collectUndo);
@@ -244,7 +227,5 @@ public:
 	int GetLevel(int line);
 	void ClearLevels();
 };
-
-#define CELL_SIZE	2
 
 #endif

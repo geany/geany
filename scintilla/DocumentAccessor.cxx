@@ -16,6 +16,8 @@
 #include "SVector.h"
 #include "Accessor.h"
 #include "DocumentAccessor.h"
+#include "SplitVector.h"
+#include "Partitioning.h"
 #include "CellBuffer.h"
 #include "Scintilla.h"
 #include "CharClassify.h"

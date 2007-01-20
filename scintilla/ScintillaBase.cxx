@@ -22,6 +22,8 @@
 #endif
 #include "ContractionState.h"
 #include "SVector.h"
+#include "SplitVector.h"
+#include "Partitioning.h"
 #include "CellBuffer.h"
 #include "CallTip.h"
 #include "KeyMap.h"
@@ -356,7 +358,7 @@ void ScintillaBase::AutoCompleteCompleted() {
 	SetEmptySelection(ac.posStart);
 	if (item != -1) {
 		SString piece = selected;
-		pdoc->InsertString(firstPos, piece.c_str());
+		pdoc->InsertCString(firstPos, piece.c_str());
 		SetEmptySelection(firstPos + static_cast<int>(piece.length()));
 	}
 	pdoc->EndUndoAction();

@@ -125,7 +125,7 @@ static void ColouriseBatchLine(
 			styler.ColourTo(startLine + offset + 1, SCE_BAT_IDENTIFIER);
 			offset += 2;
 			// Check for External Command / Program
-			if (!isspacechar(lineBuffer[offset])) {
+			if (offset < lengthLine && !isspacechar(lineBuffer[offset])) {
 				cmdLoc = offset;
 			}
 		// Check for Environment Variable (%x...%)
@@ -136,7 +136,7 @@ static void ColouriseBatchLine(
 			styler.ColourTo(startLine + offset, SCE_BAT_IDENTIFIER);
 			offset++;
 			// Check for External Command / Program
-			if (!isspacechar(lineBuffer[offset])) {
+			if (offset < lengthLine && !isspacechar(lineBuffer[offset])) {
 				cmdLoc = offset;
 			}
 		}
@@ -371,6 +371,7 @@ static void ColouriseBatchLine(
 				offset -= (wbl - wbo);
 			// Check for Local Variable (%%a)
 			} else if (
+				(wbl > 2) &&
 				(wordBuffer[1] == '%') &&
 				(wordBuffer[2] != '%') &&
 				(!IsBOperator(wordBuffer[2])) &&
@@ -473,6 +474,7 @@ static void ColouriseBatchDoc(
 		}
 	}
 	if (linePos > 0) {	// Last line does not have ending characters
+		lineBuffer[linePos] = '\0';
 		ColouriseBatchLine(lineBuffer, linePos, startLine, startPos + length - 1,
 		                   keywordlists, styler);
 	}

@@ -208,11 +208,11 @@ bool ContractionState::SetVisible(int lineDocStart, int lineDocEnd, bool visible
 			if (lines[line].visible != visible) {
 				delta += visible ? lines[line].height : -lines[line].height;
 				lines[line].visible = visible;
+				valid = false;
 			}
 		}
 	}
 	linesInDisplay += delta;
-	valid = false;
 	return delta != 0;
 }
 

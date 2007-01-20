@@ -136,7 +136,7 @@ public:
 	// Gateways to modifying document
 	void ModifiedAt(int pos);
 	bool DeleteChars(int pos, int len);
-	bool InsertStyledString(int position, char *s, int insertLength);
+	bool InsertString(int position, const char *s, int insertLength);
 	int Undo();
 	int Redo();
 	bool CanUndo() { return cb.CanUndo(); }
@@ -163,8 +163,7 @@ public:
 	bool IsReadOnly() { return cb.IsReadOnly(); }
 
 	bool InsertChar(int pos, char ch);
-	bool InsertString(int position, const char *s);
-	bool InsertString(int position, const char *s, size_t insertLength);
+	bool InsertCString(int position, const char *s);
 	void ChangeChar(int pos, char ch);
 	void DelChar(int pos);
 	void DelCharBack(int pos);
@@ -197,7 +196,7 @@ public:
 	int NextWordStart(int pos, int delta);
 	int NextWordEnd(int pos, int delta);
 	int Length() { return cb.Length(); }
-	void Allocate(int newSize) { cb.Allocate(newSize*2); }
+	void Allocate(int newSize) { cb.Allocate(newSize); }
 	long FindText(int minPos, int maxPos, const char *s,
 		bool caseSensitive, bool word, bool wordStart, bool regExp, bool posix, int *length);
 	long FindText(int iMessage, unsigned long wParam, long lParam);

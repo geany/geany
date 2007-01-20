@@ -527,6 +527,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int CodePage() const;
 	virtual bool ValidCodePage(int /* codePage */) const { return true; }
 	int WrapCount(int line);
+	void AddStyledText(char *buffer, int appendLength);
 
 	virtual sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) = 0;
 
