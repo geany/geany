@@ -103,9 +103,9 @@ static void findPythonTags (void)
 		{
 			cp++;
 			// count indentation amount of current line
+			// the indentation has to be made with tabs only _or_ spaces only, if they are mixed
+			// the code below gets confused
 			indent++;
-			/// TODO should be improved by separating between tabs and spaces but to do this we
-			/// have to know the tabulator width which is set in geany and not available here
 		}
 	    else if (*cp == '#')
 		break;
