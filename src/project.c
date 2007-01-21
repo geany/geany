@@ -148,7 +148,6 @@ void project_close()
 
 void project_properties()
 {
-	gchar *ok_button;
 	GtkWidget *vbox;
 	GtkWidget *table;
 	GtkWidget *image;
@@ -158,15 +157,26 @@ void project_properties()
 	GtkWidget *swin;
 	PropertyDialogElements *e = g_new(PropertyDialogElements, 1);
 
-	if (app->project == NULL)
-		ok_button = GTK_STOCK_NEW;
-	else
-		ok_button = GTK_STOCK_OK;
-
 	e->dialog = gtk_dialog_new_with_buttons(_("Project properties"), GTK_WINDOW(app->window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
-										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-										 ok_button, GTK_RESPONSE_OK, NULL);
+										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+
+	if (app->project == NULL)
+	{
+		bbox = gtk_hbox_new(FALSE, 0);
+		button = gtk_button_new();
+		image = gtk_image_new_from_stock("gtk-new", GTK_ICON_SIZE_BUTTON);
+		label = gtk_label_new_with_mnemonic(_("C_reate"));
+		gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 3);
+		gtk_box_pack_start(GTK_BOX(bbox), label, FALSE, FALSE, 3);
+		gtk_container_add(GTK_CONTAINER(button), bbox);
+		gtk_dialog_add_action_widget(GTK_DIALOG(e->dialog), button, GTK_RESPONSE_OK);
+	}
+	else
+	{
+		gtk_dialog_add_buttons(GTK_DIALOG(e->dialog), GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+	}
+
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(e->dialog));
 
 	entries_modified = FALSE;

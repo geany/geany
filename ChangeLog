@@ -5,6 +5,7 @@
  * src/build.c, src/msgwindow.c, src/msgwindow.h:
    Applied patch from Jeff Pohlmeyer to avoid parsing of compiler errors
    by the va_list system.
+ * src/project.c: Replaced the New button by a Create button.
 
 
 2007-01-20  Enrico Tröger  <enrico.troeger@uvena.de>
