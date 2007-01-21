@@ -30,6 +30,7 @@
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
+#include "msgwindow.h"
 #ifdef G_OS_WIN32
 # include "win32.h"
 #endif
@@ -38,7 +39,7 @@
 static gboolean entries_modified;
 
 // simple struct to keep references to the elements of the properties dialog
-typedef struct
+typedef struct _PropertyDialogElements
 {
 	GtkWidget *dialog;
 	GtkWidget *name;
@@ -57,12 +58,16 @@ static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry);
 static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 static gboolean close_open_project();
 static gboolean load_config(const gchar *filename);
+static gboolean write_config();
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 
 
 #define SHOW_ERR(...) dialogs_show_msgbox(GTK_MESSAGE_ERROR, __VA_ARGS__)
 #define MAX_NAME_LEN 50
+// "projects" is part of the default project base path so be carefully when translating
+// please avoid special characters and spaces, look at the source for details or ask Frank
+#define PROJECT_DIR _("projects")
 
 
 void project_new()
@@ -78,6 +83,7 @@ void project_open()
 #ifndef G_OS_WIN32
 	GtkWidget *dialog;
 	GtkFileFilter *filter;
+	gchar *dir;
 #endif
 	if (! close_open_project()) return;
 
@@ -109,6 +115,10 @@ void project_open()
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
 	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 
+	dir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, NULL);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dir);
+	g_free(dir);
+
 	g_signal_connect ((gpointer) dialog, "response", G_CALLBACK(on_open_dialog_response), NULL);
 
 	gtk_widget_show_all(dialog);
@@ -118,9 +128,12 @@ void project_open()
 
 void project_close()
 {
-	/// TODO should we handle open files in any way here?
-
 	g_return_if_fail(app->project != NULL);
+
+	/// TODO handle open project files
+
+	write_config();
+	msgwin_status_add(_("Project \"%s\" closed."), app->project->name);
 
 	g_free(app->project->name);
 	g_free(app->project->description);
@@ -169,6 +182,7 @@ void project_properties()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->name = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
 	gtk_table_attach(GTK_TABLE(table), e->name, 1, 2, 0, 1,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -180,7 +194,9 @@ void project_properties()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->description = gtk_text_view_new();
+	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(e->description), GTK_WRAP_WORD);
 	swin = gtk_scrolled_window_new(NULL, NULL);
+	gtk_widget_set_size_request(swin, 250, 80);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), GTK_WIDGET(e->description));
@@ -188,7 +204,7 @@ void project_properties()
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new(_("File location:"));
+	label = gtk_label_new(_("Filename:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -235,6 +251,7 @@ void project_properties()
 
 	e->patterns = gtk_text_view_new();
 	swin = gtk_scrolled_window_new(NULL, NULL);
+	gtk_widget_set_size_request(swin, -1, 80);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), GTK_WIDGET(e->patterns));
@@ -288,7 +305,7 @@ void project_properties()
 				}
 			}
 			gtk_text_buffer_set_text(buffer, str->str, -1);
-			g_string_free(str, FALSE); // can this leak?
+			g_string_free(str, TRUE);
 		}
 
 		gtk_entry_set_text(GTK_ENTRY(e->file_name), p->file_name);
@@ -329,6 +346,7 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 	{
 		const gchar *name, *file_name, *base_path;
 		gint name_len;
+		gboolean new_project = FALSE;
 		GeanyProject *p;
 
 		name = gtk_entry_get_text(GTK_ENTRY(e->name));
@@ -349,7 +367,7 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 		file_name = gtk_entry_get_text(GTK_ENTRY(e->file_name));
 		if (strlen(file_name) == 0)
 		{
-			SHOW_ERR(_("You have specified an invalid project file location."));
+			SHOW_ERR(_("You have specified an invalid project filename."));
 			gtk_widget_grab_focus(e->file_name);
 			return;
 		}
@@ -389,9 +407,14 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 			return;
 		}
 
-		app->project = g_new0(GeanyProject, 1);
+		if (app->project == NULL)
+		{
+			app->project = g_new0(GeanyProject, 1);
+			new_project = TRUE;
+		}
 		p = app->project;
 
+		if (p->name != NULL) g_free(p->name);
 		p->name = g_strdup(name);
 		{	// get and set the project description
 			GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
@@ -400,7 +423,10 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 			gtk_text_buffer_get_end_iter(buffer, &end);
 			p->description = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 		}
+		if (p->file_name != NULL) g_free(p->file_name);
 		p->file_name = g_strdup(file_name);
+
+		if (p->base_path != NULL) g_free(p->base_path);
 		p->base_path = g_strdup(base_path);
 
 		{	// get and set the project file patterns
@@ -414,6 +440,11 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 			p->file_patterns = g_strsplit(tmp, "\n", -1);
 			g_free(tmp);
 		}
+		write_config();
+		if (new_project)
+			msgwin_status_add(_("Project \"%s\" created."), p->name);
+		else
+			msgwin_status_add(_("Project \"%s\" saved."), p->name);
 	}
 
 	gtk_widget_destroy(GTK_WIDGET(dialog));
@@ -493,10 +524,6 @@ static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry)
 }
 
 
-// "projects" is part of the default project base path so be carefully when translating
-// please avoid special characters and spaces, look at the source for details or ask Frank
-#define PROJECT_DIR _("projects")
-
 /* sets the project base path and the project file name according to the project name */
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e)
 {
@@ -550,7 +577,10 @@ static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer u
 
 		// try to load the config
 		if (load_config(filename))
+		{
 			gtk_widget_destroy(GTK_WIDGET(dialog));
+			msgwin_status_add(_("Project \"%s\" opened."), app->project->name);
+		}
 		else
 		{
 			SHOW_ERR(_("Project file could not be loaded."));
@@ -563,8 +593,74 @@ static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer u
 }
 
 
+/* Reads the given filename and creates a new project with the data found in the file.
+ * At this point there should not be an already opened project in Geany otherwise it will just
+ * return.
+ * The filename is expected in the locale encoding. */
 static gboolean load_config(const gchar *filename)
 {
-	/// TODO write me
+	GKeyFile *config;
+	GeanyProject *p;
+
+	// there should not be an open project
+	g_return_val_if_fail(app->project == NULL && filename != NULL, FALSE);
+
+	p = app->project = g_new0(GeanyProject, 1);
+
+	config = g_key_file_new();
+	if (! g_key_file_load_from_file(config, filename, G_KEY_FILE_KEEP_COMMENTS, NULL))
+	{
+		g_key_file_free(config);
+		return FALSE;
+	}
+
+	p->name = utils_get_setting_string(config, "project", "name", GEANY_STRING_UNTITLED);
+	p->description = utils_get_setting_string(config, "project", "description", "");
+	p->file_name = utils_get_utf8_from_locale(filename);
+	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
+	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
+
+	g_key_file_free(config);
+
+	return TRUE;
+}
+
+
+static gboolean write_config()
+{
+	GeanyProject *p;
+	GKeyFile *config;
+	gchar *filename;
+	gchar *data;
+
+	g_return_val_if_fail(app->project != NULL, FALSE);
+
+	p = app->project;
+
+	config = g_key_file_new();
+	// try to load an existing config to keep manually added comments
+	filename = utils_get_locale_from_utf8(p->file_name);
+	g_key_file_load_from_file(config, filename, G_KEY_FILE_KEEP_COMMENTS, NULL);
+
+	g_key_file_set_string(config, "project", "name", p->name);
+	g_key_file_set_string(config, "project", "description", p->description);
+	g_key_file_set_string(config, "project", "base_path", p->base_path);
+	g_key_file_set_string_list(config, "project", "file_patterns",
+		(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
+
+	// write the file
+	data = g_key_file_to_data(config, NULL, NULL);
+	if (utils_write_file(filename, data) != 0)
+	{
+		g_free(data);
+		g_free(filename);
+		g_key_file_free(config);
+		return FALSE;
+	}
+
+	g_free(data);
+	g_free(filename);
+	g_key_file_free(config);
+
 	return TRUE;
 }

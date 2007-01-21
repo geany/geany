@@ -32,7 +32,7 @@ struct _GeanyProject
 	gchar *name; 			// the name of the project
 	gchar *description; 	// short description of the project
 
-	gchar *file_name; 		// where the project file is stored
+	gchar *file_name; 		// where the project file is stored (in UTF-8)
 
 	gchar *base_path;		// base path of the project directory
 	gchar *executable; 		// name of the project executable

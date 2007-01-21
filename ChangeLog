@@ -4,6 +4,8 @@
  * scintilla/*, src/sci_cb.c: Updated Scintilla to version 1.72.
  * doc/geany.docbook:
    Added a notice of changed DnD behaviour in Scintilla 1.72.
+ * src/project.c: Implemented loading and saving of the project file
+                  and minor improvements.
 
 
 2007-01-19  Enrico Tröger  <enrico.troeger@uvena.de>
