@@ -431,7 +431,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	working_dir = g_path_get_dirname(locale_filename);
 	utf8_working_dir = g_path_get_dirname(doc_list[idx].file_name);
 	gtk_list_store_clear(msgwindow.store_compiler);
-	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
+	msgwin_compiler_add_fmt(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
 
 	// set the build info for the message window
@@ -774,7 +774,7 @@ static void show_build_result_message(gboolean failure)
 	if (failure)
 	{
 		msg = _("Compilation failed.");
-		msgwin_compiler_add(COLOR_DARK_RED, "%s", msg);
+		msgwin_compiler_add(COLOR_DARK_RED, msg);
 		// If msgwindow is hidden, user will want to display it to see the error
 		if (! app->msgwindow_visible)
 		{
@@ -788,7 +788,7 @@ static void show_build_result_message(gboolean failure)
 	else
 	{
 		msg = _("Compilation finished successfully.");
-		msgwin_compiler_add(COLOR_BLUE, "%s", msg);
+		msgwin_compiler_add(COLOR_BLUE, msg);
 		if (! app->msgwindow_visible ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
 				ui_set_statusbar("%s", msg);

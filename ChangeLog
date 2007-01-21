@@ -1,11 +1,18 @@
+2007-01-21  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/project.c: Implemented loading and saving of the project file
+                  and minor improvements.
+ * src/build.c, src/msgwindow.c, src/msgwindow.h:
+   Applied patch from Jeff Pohlmeyer to avoid parsing of compiler errors
+   by the va_list system.
+
+
 2007-01-20  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * scintilla/makefile.win32: Fixed typo.
  * scintilla/*, src/sci_cb.c: Updated Scintilla to version 1.72.
  * doc/geany.docbook:
    Added a notice of changed DnD behaviour in Scintilla 1.72.
- * src/project.c: Implemented loading and saving of the project file
-                  and minor improvements.
 
 
 2007-01-19  Enrico Tröger  <enrico.troeger@uvena.de>
