@@ -1,16 +1,16 @@
 # German translations for geany package.
 # Copyright (C) 2006 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Enrico Troeger <enrico.troeger@uvena.de>, 2006.
-# Frank Lanitz <frank@frank.uvena.de>,2006
+# Enrico Troeger <enrico.troeger@uvena.de> 2006,2007
+# Frank Lanitz <frank@frank.uvena.de> 2006,2007
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.10svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-21 01:12+0100\n"
-"PO-Revision-Date: 2007-01-21 01:13+0100\n"
-"Last-Translator: Enrico Tröger <enrico.troeger@uvena.de>\n"
+"POT-Creation-Date: 2007-01-21 20:20+0100\n"
+"PO-Revision-Date: 2007-01-21 20:21+0100\n"
+"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <frank@frank.uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -998,7 +998,7 @@ msgstr "Diff Daten"
 msgid "Config file"
 msgstr "Konfigurationsdatei"
 
-#: src/filetypes.c:720 src/project.c:104
+#: src/filetypes.c:720 src/project.c:109
 msgid "All files"
 msgstr "Alle Dateien"
 
@@ -2544,7 +2544,7 @@ msgstr "Konfigurationsverzeichnis konnte nicht erstellt werden (%s)."
 msgid "Status messages"
 msgstr "Meldungen"
 
-#: src/msgwindow.c:412
+#: src/msgwindow.c:418
 msgid "_Hide Message Window"
 msgstr "Meldungsfenster ausblenden"
 
@@ -2573,39 +2573,54 @@ msgstr ""
 "Die Tastenkombination '%s' wird bereits für \"%s\" verwendet. Bitte wählen "
 "Sie eine andere Tastenkombination."
 
-#: src/project.c:89
+#. "projects" is part of the default project base path so be carefully when translating
+#. please avoid special characters and spaces, look at the source for details or ask Frank
+#: src/project.c:70
+msgid "projects"
+msgstr "projekte"
+
+#: src/project.c:94
 msgid "Open project"
 msgstr "Projekt öffnen"
 
-#: src/project.c:108
+#: src/project.c:113
 msgid "Project files"
 msgstr "Projektdateien"
 
-#: src/project.c:156
+#: src/project.c:136
+#, c-format
+msgid "Project \"%s\" closed."
+msgstr "Projekt \"%s\" geschlossen."
+
+#: src/project.c:160
 msgid "Project properties"
 msgstr "Projekteigenschaften"
 
-#: src/project.c:168
+#: src/project.c:169
+msgid "C_reate"
+msgstr "_Erstellen"
+
+#: src/project.c:188
 msgid "Name:"
 msgstr "Name:"
 
-#: src/project.c:179
+#: src/project.c:200
 msgid "Description:"
 msgstr "Beschreibung:"
 
-#: src/project.c:194
+#: src/project.c:217
 msgid "Filename:"
 msgstr "Dateiname:"
 
-#: src/project.c:213
+#: src/project.c:236
 msgid "Base path:"
 msgstr "Basispfad:"
 
-#: src/project.c:232
+#: src/project.c:255
 msgid "File patterns:"
 msgstr "Dateinamenmuster:"
 
-#: src/project.c:313
+#: src/project.c:337
 #, c-format
 msgid ""
 "There is already an open project \"%s\". Do you want to close it before "
@@ -2614,49 +2629,58 @@ msgstr ""
 "Es ist schon ein Projekt \"%s\" geöffnet. Soll es vor dem Weiterarbeiten "
 "geschlossen werden? "
 
-#: src/project.c:341
+#: src/project.c:366
 msgid "The specified project name is too short."
 msgstr "Der eingegebene Projektname ist zu kurz. "
 
-#: src/project.c:347
+#: src/project.c:372
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Der eingegebene Projektname ist zu lang (max %d Zeichen)."
 
-#: src/project.c:355
+#: src/project.c:380
 msgid "You have specified an invalid project filename."
 msgstr "Sie haben einen ungültigen Dateinamen angegeben. "
 
-#: src/project.c:363
+#: src/project.c:388
 msgid "You have specified an invalid project base path."
 msgstr "Sie haben einen ungültigen Projektbasispfad angegeben. "
 
-#: src/project.c:373
+#: src/project.c:398
 msgid "The specified project base path does not exist. Should it be created?"
 msgstr ""
 "Der Projektbasispfad existiert nicht. Soll er durch Geany angelegt werden? "
 
-#: src/project.c:390
+#: src/project.c:415
 msgid "Project file could not be written."
 msgstr "Projektdatei konnte nicht geschrieben werden. "
 
+#: src/project.c:455
+#, c-format
+msgid "Project \"%s\" created."
+msgstr "Projekt \"%s\" erstellt."
+
+#: src/project.c:457
+#, c-format
+msgid "Project \"%s\" saved."
+msgstr "Projekt \"%s\" gespeichert."
+
 #. initialise the dialog
-#: src/project.c:462
+#: src/project.c:500
 msgid "Choose project filename"
 msgstr "Wählen Sie den Dateinamen für die Projektdatei"
 
 #. initialise the dialog
-#: src/project.c:485
+#: src/project.c:523
 msgid "Choose project base path"
 msgstr "Wählen Sie den Projektbasispfad"
 
-#. "projects" is part of the default project base path so be carefully when translating
-#. please avoid special characters and spaces, look at the source for details or ask Frank
-#: src/project.c:501
-msgid "projects"
-msgstr "projekte"
+#: src/project.c:592
+#, c-format
+msgid "Project \"%s\" opened."
+msgstr "Projekt \"%s\" geöffnet."
 
-#: src/project.c:559
+#: src/project.c:596
 msgid "Project file could not be loaded."
 msgstr "Die Projektdatei konnte nicht geladen werden. "
 
