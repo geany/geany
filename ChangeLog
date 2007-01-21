@@ -2,6 +2,8 @@
 
  * scintilla/makefile.win32: Fixed typo.
  * scintilla/*, src/sci_cb.c: Updated Scintilla to version 1.72.
+ * doc/geany.docbook:
+   Added a notice of changed DnD behaviour in Scintilla 1.72.
 
 
 2007-01-19  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -363,6 +363,16 @@
 					appropriate command line option - see <xref linkend="clo"/>.
 				</para>
 			</section>
+			<section id="general_dnd">
+				<title>Drag and drop of text</title>
+				<para>
+					If you drag selected text in the editor widget of
+					<application>Geany</application> the text is moved to the position where the
+					mouse pointer is when releasing the mouse button. This behaviour has been
+					changed in <application>Geany</application> 0.12. Before the selected text
+					was copied to the new position.
+				</para>
+			</section>
 			<section id="general_vte">
 				<title>Virtual terminal emulator widget (VTE)</title>
 				<para>
