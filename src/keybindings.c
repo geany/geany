@@ -65,6 +65,8 @@ static void cb_func_menu_preferences(guint key_id);
 static void cb_func_menu_insert_date(guint key_id);
 static void cb_func_menu_findnext(guint key_id);
 static void cb_func_menu_findprevious(guint key_id);
+static void cb_func_menu_findnextsel(guint key_id);
+static void cb_func_menu_findprevsel(guint key_id);
 static void cb_func_menu_replace(guint key_id);
 static void cb_func_menu_findinfiles(guint key_id);
 static void cb_func_menu_nextmessage(guint key_id);
@@ -138,6 +140,10 @@ void keybindings_init(void)
 		GDK_F3, 0, "menu_findnext", _("Find Next"));
 	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious,
 		GDK_F3, GDK_SHIFT_MASK, "menu_findprevious", _("Find Previous"));
+	keys[GEANY_KEYS_MENU_FINDNEXTSEL] = fill(cb_func_menu_findnextsel,
+		0, 0, "menu_findnextsel", _("Find Next Selection"));
+	keys[GEANY_KEYS_MENU_FINDPREVSEL] = fill(cb_func_menu_findprevsel,
+		0, 0, "menu_findprevsel", _("Find Previous Selection"));
 	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace,
 		GDK_e, GDK_CONTROL_MASK, "menu_replace", _("Replace"));
 	keys[GEANY_KEYS_MENU_FINDINFILES] = fill(cb_func_menu_findinfiles, GDK_f,
@@ -294,6 +300,8 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PREFERENCES, preferences1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDNEXT, find_next1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDNEXTSEL, find_nextsel1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVSEL, find_prevsel1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACE, replace1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDINFILES, find_in_files1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_NEXTMESSAGE, next_message1);
@@ -525,6 +533,17 @@ static void cb_func_menu_findprevious(G_GNUC_UNUSED guint key_id)
 {
 	on_find_previous1_activate(NULL, NULL);
 }
+
+static void cb_func_menu_findprevsel(G_GNUC_UNUSED guint key_id)
+{
+	on_find_prevsel1_activate(NULL, NULL);
+}
+
+static void cb_func_menu_findnextsel(G_GNUC_UNUSED guint key_id)
+{
+	on_find_nextsel1_activate(NULL, NULL);
+}
+
 
 static void cb_func_menu_replace(G_GNUC_UNUSED guint key_id)
 {

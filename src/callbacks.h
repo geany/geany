@@ -308,6 +308,12 @@ on_find_next1_activate                 (GtkMenuItem     *menuitem,
 void
 on_find_previous1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+void
+on_find_nextsel1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+void
+on_find_prevsel1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
 
 void
 on_replace1_activate                   (GtkMenuItem     *menuitem,

@@ -240,6 +240,39 @@ static gchar *get_default_text(gint idx)
 }
 
 
+/* Search for next match of the current "selection"
+ * For X11 based systems, this will try to use the system-wide
+ * x-selection first. If it doesn't find anything suitable in
+ * the x-selection (or if we are on Win32) it will try to use
+ * the scintilla selection or current token instead.
+ * Search flags are always zero.
+ */
+void search_find_selection(gint idx, gboolean search_backwards)
+{
+	gchar *s = NULL;
+	GtkClipboard *clipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
+
+	if ( idx < 0 ) { return; }
+#ifdef G_OS_UNIX
+	s=gtk_clipboard_wait_for_text(clipboard);
+	if (s)
+	{
+		if (strchr(s,'\n') || strchr(s, '\r'))
+		{
+			g_free(s);
+			s=NULL;
+		};
+	}
+#endif
+	if (!s)	{ s=get_default_text(idx); }
+	if (s)
+	{
+		document_find_text(idx, s, 0, search_backwards, TRUE);
+		g_free(s);
+	}
+}
+
+
 void search_show_find_dialog()
 {
 	gint idx = document_get_cur_idx();

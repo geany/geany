@@ -1327,6 +1327,22 @@ on_find_previous1_activate             (GtkMenuItem     *menuitem,
 
 
 void
+on_find_nextsel1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	search_find_selection(document_get_cur_idx(), FALSE);
+}
+
+
+void
+on_find_prevsel1_activate             (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	search_find_selection(document_get_cur_idx(), TRUE);
+}
+
+
+void
 on_replace1_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {

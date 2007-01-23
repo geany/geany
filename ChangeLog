@@ -1,3 +1,12 @@
+2007-01-23  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/interface.c, src/keybindings.c, src/keybindings.h,
+   src/callbacks.c, src/callbacks.h, src/search.c, src/search.h,
+   geany.glade:
+   Applied patch from Jeff Pohlmeyer to add 'Find Selected' and
+   'Find Prev Selected' Search commands and keybindings (thanks).
+
+
 2007-01-21  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/project.c: Implemented loading and saving of the project file
