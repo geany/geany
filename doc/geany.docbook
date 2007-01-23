@@ -368,8 +368,9 @@
 				<para>
 					If you drag selected text in the editor widget of
 					<application>Geany</application> the text is moved to the position where the
-					mouse pointer is when releasing the mouse button. This behaviour has been
-					changed in <application>Geany</application> 0.11. Before the selected text
+					mouse pointer is when releasing the mouse button. Holding Control when releasing
+					the mouse button will copy the text instead. This behaviour was
+					changed in <application>Geany</application> 0.11 - before the selected text
 					was copied to the new position.
 				</para>
 			</section>
