@@ -1,3 +1,9 @@
+2007-01-24  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * data/filetype_extensions.conf, src/filetypes.c:
+   Added *.xsd to XML file patterns.
+
+
 2007-01-24  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c, src/search.c:

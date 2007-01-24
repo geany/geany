@@ -519,7 +519,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_XML]->title = g_strdup(_("XML source file"));
 	filetypes[GEANY_FILETYPES_XML]->extension = g_strdup("xml");
 	{
-		gchar *patterns[] = {"*.xml", "*.sgml", "*.xsl", "*.xslt", NULL};
+		gchar *patterns[] = {"*.xml", "*.sgml", "*.xsl", "*.xslt", "*.xsd", NULL};
 		filetypes[GEANY_FILETYPES_XML]->pattern = g_strdupv(patterns);
 	}
 	filetypes[GEANY_FILETYPES_XML]->style_func_ptr = styleset_xml;
