@@ -11,6 +11,16 @@
    open tabs.
    Removed Zoom items from popup menu.
  * tagmanager/latex.c: Allow \section*{} and other commands with *.
+ * doc/geany.1.in, doc/geany.docbook, src/document.c, src/main.c,
+   src/main.h, src/socket.c:
+   Added command line option --column to allow setting the initial
+   column for the first opened file on command line.
+   Don't apply the --line and --column options to the first opened
+   session file.
+   Make --line and --column options work for opening files in an already
+   running instance.
+ * src/document.c: Oops. Revert the change to ignore --line setting when
+                   opening session files.
 
 
 2007-01-24  Nick Treleaven  <nick.treleaven@btinternet.com>
