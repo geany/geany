@@ -2,6 +2,14 @@
 
  * data/filetype_extensions.conf, src/filetypes.c:
    Added *.xsd to XML file patterns.
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/geany.h,
+   src/interface.c, src/keybindings.c, src/keybindings.h, src/main.c,
+   src/sci_cb.c, src/sci_cb.h, src/search.c:
+   Added keybinding and menu entry to open a file which is selected
+   in current tab.
+   Made Insert Special HTML characters insensitive if there are no
+   open tabs.
+   Removed Zoom items from popup menu.
 
 
 2007-01-24  Nick Treleaven  <nick.treleaven@btinternet.com>

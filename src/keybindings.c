@@ -51,6 +51,7 @@ static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gcha
 
 static void cb_func_menu_new(guint key_id);
 static void cb_func_menu_open(guint key_id);
+static void cb_func_menu_open_selected(guint key_id);
 static void cb_func_menu_save(guint key_id);
 static void cb_func_menu_saveall(guint key_id);
 static void cb_func_menu_saveas(guint key_id);
@@ -112,6 +113,8 @@ void keybindings_init(void)
 		GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"));
 	keys[GEANY_KEYS_MENU_OPEN] = fill(cb_func_menu_open,
 		GDK_o, GDK_CONTROL_MASK, "menu_open", _("Open"));
+	keys[GEANY_KEYS_MENU_OPEN_SELECTED] = fill(cb_func_menu_open_selected,
+		GDK_o, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_open_selected", _("Open selected file"));
 	keys[GEANY_KEYS_MENU_SAVE] = fill(cb_func_menu_save,
 		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"));
 	keys[GEANY_KEYS_MENU_SAVEAS] = fill(cb_func_menu_saveas,
@@ -287,6 +290,7 @@ static void keybindings_add_accels()
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 
 	// apply the settings
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPEN_SELECTED, menu_open_selected_file1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEALL, menu_save_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEAS, menu_save_as1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PRINT, print1);
@@ -328,8 +332,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_REDO, redo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_SELECTALL, menu_select_all2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_INSERTDATE, insert_date_custom2);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_ZOOMIN, zoom_in1);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_ZOOMOUT, zoom_out1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_OPEN_SELECTED, menu_open_selected_file2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_FINDUSAGE, find_usage1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDEFINITION, goto_tag_definition1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDECLARATION, goto_tag_declaration1);
@@ -472,6 +475,11 @@ static void cb_func_menu_new(G_GNUC_UNUSED guint key_id)
 static void cb_func_menu_open(G_GNUC_UNUSED guint key_id)
 {
 	on_open1_activate(NULL, NULL);
+}
+
+static void cb_func_menu_open_selected(G_GNUC_UNUSED guint key_id)
+{
+	on_menu_open_selected_file1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_save(G_GNUC_UNUSED guint key_id)
@@ -685,7 +693,7 @@ static void cb_func_current_word(guint key_id)
 	pos = sci_get_current_position(doc_list[idx].sci);
 
 	sci_cb_find_current_word(doc_list[idx].sci, pos,
-		editor_info.current_word, GEANY_MAX_WORD_LENGTH);
+		editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
 
 	if (*editor_info.current_word == 0)
 		utils_beep();

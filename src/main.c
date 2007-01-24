@@ -317,6 +317,8 @@ static void main_init(void)
 	app->sensitive_buttons[34] = lookup_widget(app->window, "menu_select_all1");
 	app->sensitive_buttons[35] = lookup_widget(app->window, "insert_date1");
 	app->sensitive_buttons[36] = lookup_widget(app->window, "menu_format1");
+	app->sensitive_buttons[37] = lookup_widget(app->window, "menu_open_selected_file1");
+	app->sensitive_buttons[38] = lookup_widget(app->window, "menu_insert_special_chars1");
 	app->redo_items[0] = lookup_widget(app->popup_menu, "redo1");
 	app->redo_items[1] = lookup_widget(app->window, "menu_redo2");
 	app->redo_items[2] = lookup_widget(app->window, "toolbutton_redo");

@@ -597,3 +597,7 @@ on_project_properties1_activate        (GtkMenuItem     *menuitem,
 void
 on_menu_project1_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

@@ -1273,7 +1273,7 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 	if (idx == -1 || ! doc_list[idx].is_valid)
 		return;
 
-	sci_cb_find_current_word(doc_list[idx].sci, pos, colour, sizeof colour);
+	sci_cb_find_current_word(doc_list[idx].sci, pos, colour, sizeof colour, NULL);
 	dialogs_show_color(colour);
 }
 
@@ -2046,6 +2046,10 @@ void
 on_menu_insert_special_chars1_activate (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
+	// refuse opening the dialog if we don't have an active tab
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
 	tools_show_dialog_insert_special_chars();
 }
 
@@ -2146,3 +2150,54 @@ on_menu_project1_activate              (GtkMenuItem     *menuitem,
 	gtk_widget_set_sensitive(item_properties, (app->project != NULL));
 }
 
+
+void
+on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	gchar *filename = NULL;
+
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
+	{
+		filename = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
+		sci_get_selected_text(doc_list[idx].sci, filename);
+	}
+	else if (sci_get_lines_selected(doc_list[idx].sci) == 0)
+	{	// use the word at current cursor position
+		gchar word[GEANY_MAX_WORD_LENGTH];
+
+		sci_cb_find_current_word(doc_list[idx].sci, -1, word, sizeof(word), GEANY_WORDCHARS"./");
+		if (word[0] != '\0')
+			filename = g_strdup(word);
+	}
+
+	if (filename != NULL)
+	{
+		gchar *locale_filename;
+
+		if (! g_path_is_absolute(filename))
+		{	// relative filename, add the path of the current file
+			gchar *path;
+			gchar *tmp = filename;
+
+			// use the projects base path if we have an open project (useful?)
+			if (app->project != NULL && app->project->base_path != NULL)
+				path = g_strdup(app->project->base_path);
+			else
+				path = g_path_get_dirname(doc_list[idx].file_name);
+
+			filename = g_strconcat(path, G_DIR_SEPARATOR_S, filename, NULL);
+			g_free(tmp);
+			g_free(path);
+		}
+
+		locale_filename = utils_get_locale_from_utf8(filename);
+		document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL);
+
+		g_free(filename);
+		g_free(locale_filename);
+	}
+}

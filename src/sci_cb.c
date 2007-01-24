@@ -78,7 +78,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 	if (event->button == 3)
 	{
 		sci_cb_find_current_word(doc_list[idx].sci, editor_info.click_pos,
-			current_word, sizeof current_word);
+			current_word, sizeof current_word, NULL);
 
 		ui_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
 		ui_update_popup_copy_items(idx);
@@ -499,8 +499,10 @@ void sci_cb_close_block(gint idx, gint pos)
 
 /* Reads the word at given cursor position and writes it into the given buffer. The buffer will be
  * NULL terminated in any case, even when the word is truncated because wordlen is too small.
- * position can be -1, then the current position is used. */
-void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen)
+ * position can be -1, then the current position is used.
+ * wc are the wordchars to use, if NULL, GEANY_WORDCHARS will be used */
+void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen,
+							  const gchar *wc)
 {
 	gint line, line_start, startword, endword;
 	gchar *chunk;
@@ -516,9 +518,12 @@ void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_
 	word[0] = '\0';
 	chunk = sci_get_line(sci, line);
 
-	while (startword > 0 && strchr(GEANY_WORDCHARS, chunk[startword - 1]))
+	if (wc == NULL)
+		wc = GEANY_WORDCHARS;
+
+	while (startword > 0 && strchr(wc, chunk[startword - 1]))
 		startword--;
-	while (chunk[endword] && strchr(GEANY_WORDCHARS, chunk[endword]))
+	while (chunk[endword] && strchr(wc, chunk[endword]))
 		endword++;
 	if(startword == endword)
 		return;
@@ -670,7 +675,7 @@ gboolean sci_cb_show_calltip(gint idx, gint pos)
 		return FALSE;
 
 	word[0] = '\0';
-	sci_cb_find_current_word(sci, pos - 1, word, sizeof word);
+	sci_cb_find_current_word(sci, pos - 1, word, sizeof word, NULL);
 	if (word[0] == '\0') return FALSE;
 
 	str = find_calltip(word, doc_list[idx].file_type);
