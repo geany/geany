@@ -567,11 +567,11 @@ on_toolbutton10_clicked                (GtkToolButton   *toolbutton,
 }
 
 
+// store text, clear search flags so we can use Search->Find Next/Previous
 static void setup_find_next(GtkEditable *editable)
 {
 	g_free(search_data.text);
-	search_data.text = g_strdup(gtk_editable_get_chars(editable, 0, -1));
-	// clear search flags so can later use Search->Find Next/Previous
+	search_data.text = gtk_editable_get_chars(editable, 0, -1);
 	search_data.flags = 0;
 	search_data.backwards = FALSE;
 }

@@ -240,6 +240,16 @@ static gchar *get_default_text(gint idx)
 }
 
 
+// store text, clear search flags so we can use Search->Find Next/Previous
+static void setup_find_next(const gchar *text)
+{
+	g_free(search_data.text);
+	search_data.text = g_strdup(text);
+	search_data.flags = 0;
+	search_data.backwards = FALSE;
+}
+
+
 /* Search for next match of the current "selection"
  * For X11 based systems, this will try to use the system-wide
  * x-selection first. If it doesn't find anything suitable in
@@ -267,6 +277,7 @@ void search_find_selection(gint idx, gboolean search_backwards)
 	if (!s)	{ s=get_default_text(idx); }
 	if (s)
 	{
+		setup_find_next(s);	// allow find next/prev
 		document_find_text(idx, s, 0, search_backwards, TRUE);
 		g_free(s);
 	}

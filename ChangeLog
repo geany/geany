@@ -1,3 +1,10 @@
+2007-01-24  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/callbacks.c, src/search.c:
+   Setup Find Next/Previous to use the same search text after using
+   Find Selected/Prev Selected.
+
+
 2007-01-23  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/interface.c, src/keybindings.c, src/keybindings.h,
