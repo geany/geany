@@ -236,6 +236,12 @@
 						</thead>
 						<tbody>
 							<row>
+								<entry></entry>
+								<entry>--column</entry>
+								<entry>Set initial column number for the first opened file.
+								</entry>
+							</row>
+							<row>
 								<entry>-c dir_name</entry>
 								<entry>--config=directory_name</entry>
 								<entry>Use an alternate configuration directory. Default

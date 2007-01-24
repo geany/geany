@@ -21,6 +21,21 @@
  * $Id$
  */
 
+/*
+ * Little dev doc:
+ * Each command which is sent between two instances (see send_open_command and
+ * socket_lock_input_cb) should have the following scheme:
+ * command name\n
+ * data\n
+ * data\n
+ * ...
+ * .\n
+ * The first thing should be the command name followed by the data belonging to the command and
+ * to mark the end of data send a single '.'. Each message should be ended with \n.
+ *
+ * At the moment the commands open, line and column are available.
+ */
+
 
 #include "geany.h"
 
@@ -37,6 +52,7 @@
 # include <winsock2.h>
 # include <ws2tcpip.h>
 #endif
+#include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 
@@ -84,6 +100,24 @@ void send_open_command(gint sock, gint argc, gchar **argv)
 
 	g_return_if_fail(argc > 1);
 	geany_debug("using running instance of Geany");
+
+	if (cl_options.goto_line >= 0)
+	{
+		gchar *line = g_strdup_printf("%d\n", cl_options.goto_line);
+		socket_fd_write_all(sock, "line\n", 5);
+		socket_fd_write_all(sock, line, strlen(line));
+		socket_fd_write_all(sock, ".\n", 2);
+		g_free(line);
+	}
+
+	if (cl_options.goto_column >= 0)
+	{
+		gchar *col = g_strdup_printf("%d\n", cl_options.goto_column);
+		socket_fd_write_all(sock, "column\n", 7);
+		socket_fd_write_all(sock, col, strlen(col));
+		socket_fd_write_all(sock, ".\n", 2);
+		g_free(col);
+	}
 
 	socket_fd_write_all(sock, "open\n", 5);
 
@@ -364,24 +398,43 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	sock = accept(fd, (struct sockaddr *)&caddr, &caddr_len);
 
 	// first get the command
-	if (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && strncmp(buf, "open", 4) == 0)
+	while (socket_fd_gets(sock, buf, sizeof(buf)) != -1)
 	{
-		geany_debug("remote command: open");
-		while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+		if (strncmp(buf, "open", 4) == 0)
 		{
-			g_strstrip(buf); // remove \n char
+			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+			{
+				g_strstrip(buf); // remove \n char
 
-			if (g_file_test(buf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-				document_open_file(-1, buf, 0, FALSE, NULL, NULL);
-			else
-				geany_debug("got data from socket, but it does not look like a filename");
-		}
-		gtk_window_deiconify(GTK_WINDOW(app->window));
+				if (g_file_test(buf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+					document_open_file(-1, buf, 0, FALSE, NULL, NULL);
+				else
+					geany_debug("got data from socket, but it does not look like a filename");
+			}
+			gtk_window_deiconify(GTK_WINDOW(app->window));
 #ifdef G_OS_WIN32
-		gtk_window_present(GTK_WINDOW(app->window));
+			gtk_window_present(GTK_WINDOW(app->window));
 #endif
+		}
+		else if (strncmp(buf, "line", 4) == 0)
+		{
+			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+			{
+				g_strstrip(buf); // remove \n char
+				// on any error we get 0 which should be save enough as fallback
+				cl_options.goto_line = atoi(buf);
+			}
+		}
+		else if (strncmp(buf, "column", 6) == 0)
+		{
+			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+			{
+				g_strstrip(buf); // remove \n char
+				// on any error we get 0 which should be save enough as fallback
+				cl_options.goto_column = atoi(buf);
+			}
+		}
 	}
-
 	socket_fd_close(sock);
 
 	return TRUE;

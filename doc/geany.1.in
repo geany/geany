@@ -16,11 +16,13 @@ Homepage: http://geany.uvena.de
 Set initial line number for the first opened file
 
 .SH "OPTIONS"
+.IP "\fB\fP           \fB\-\-column\fP         " 10
+Set initial column number for the first opened file (useful in conjunction with --line).
 .IP "\fB-c\fP           \fB\-\-config\fP         " 10
 Use an alternate configuration directory. Default configuration directory is
 ~/.geany/ and there resides geany.conf and some template files.
 .IP "\fB-d\fP           \fB\-\-debug\fP         " 10
-Runs Geany in debug mode, which means being verbose and printing lots of information.
+Run Geany in debug mode, which means being verbose and printing lots of information.
 .IP "\fB-i\fP           \fB\-\-new-instance\fP         " 10
 Don't open files in a running instance, force opening a new instance.
 Only available if Geany was compiled with support for Sockets.

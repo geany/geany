@@ -737,10 +737,10 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	// update line number margin width
 	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 
-	if (cl_options.goto_line >= 0)
+	if (! app->opening_session_files && cl_options.goto_line >= 0)
 	{	// goto line which was specified on command line and then undefine the line
 		sci_goto_line(doc_list[idx].sci, cl_options.goto_line - 1, TRUE);
-		sci_scroll_to_line(doc_list[idx].sci, -1, 0.5);
+		sci_scroll_to_line(doc_list[idx].sci, cl_options.goto_line - 1, 0.5);
 		cl_options.goto_line = -1;
 	}
 	else if (pos >= 0)
@@ -748,6 +748,12 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 		sci_goto_pos(doc_list[idx].sci, pos, FALSE);
 		if (reload)
 			sci_scroll_to_line(doc_list[idx].sci, -1, 0.5);
+	}
+	if (! app->opening_session_files && cl_options.goto_column >= 0)
+	{	// goto column which was specified on command line and then undefine the column
+		gint cur_pos = sci_get_current_position(doc_list[idx].sci);
+		sci_set_current_position(doc_list[idx].sci, cur_pos + cl_options.goto_column);
+		cl_options.goto_column = -1;
 	}
 
 	if (! reload)

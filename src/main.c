@@ -86,6 +86,7 @@ static gboolean generate_datafiles = FALSE;
 
 static GOptionEntry entries[] =
 {
+	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("use an alternate configuration directory"), NULL },
 	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, N_("runs in debug mode (means being verbose)"), NULL },
 	{ "generate-data-files", 'g', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, "", NULL },
@@ -401,6 +402,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	// first initialise cl_options fields with default values
 	cl_options.load_session = TRUE;
 	cl_options.goto_line = -1;
+	cl_options.goto_column = -1;
 
 	context = g_option_context_new(_(" - A fast and lightweight IDE"));
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
