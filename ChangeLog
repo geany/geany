@@ -10,6 +10,7 @@
    Made Insert Special HTML characters insensitive if there are no
    open tabs.
    Removed Zoom items from popup menu.
+ * tagmanager/latex.c: Allow \section*{} and other commands with *.
 
 
 2007-01-24  Nick Treleaven  <nick.treleaven@btinternet.com>

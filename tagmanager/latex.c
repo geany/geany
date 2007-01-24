@@ -54,18 +54,22 @@ static kindOption TeXKinds[] = {
 *   FUNCTION DEFINITIONS
 */
 
-static int getWord(const char * ref, const char **pointer)
+static int getWord(const char * ref, const char **ptr)
 {
-     const char * p = *pointer;
+    const char *p = *ptr;
 
-     while ((*ref != '\0') && (*p != '\0') && (*ref == *p))
- 	ref++, p++;
+	while ((*ref != '\0') && (*p != '\0') && (*ref == *p))
+		ref++, p++;
 
-     if (*ref)
- 	return FALSE;
 
-     *pointer = p;
-     return TRUE;
+    if (*ref)
+		return FALSE;
+
+	if (*p == '*') // to allow something like \section*{foobar}
+		p++;
+
+    *ptr = p;
+	return TRUE;
 }
 
 static void createTag(int flags, TeXKind kind, const char * l)
@@ -92,7 +96,8 @@ static void createTag(int flags, TeXKind kind, const char * l)
  	    ++l;
  	} while ((*l != '\0') && (*l != '}'));
  	vStringTerminate(name);
- 	makeSimpleTag(name, TeXKinds, kind);
+ 	if (name->buffer[0] != '}')
+ 		makeSimpleTag(name, TeXKinds, kind);
      }
      else if (isalpha((int) *l) || *l == '@')
      {
@@ -127,7 +132,7 @@ static void findTeXTags(void)
  	for (; *cp != '\0'; cp++)
  	{
  	    if (*cp == '%')
- 		break;
+			break;
  	    if (*cp == '\\')
  	    {
  		cp++;
