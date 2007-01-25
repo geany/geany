@@ -2,6 +2,8 @@
 
  * src/vte.c: Applied patch from Jeff Pohlmeyer to improve loading of
               the VTE library.
+ * src/ui_utils.c: Applied patch from Jeff Pohlmeyer to make the
+                   window title Gnome HIG compatible.
 
 
 2007-01-24  Enrico Tröger  <enrico.troeger@uvena.de>

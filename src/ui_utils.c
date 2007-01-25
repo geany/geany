@@ -140,9 +140,11 @@ void ui_set_window_title(gint index)
 
 	if (index >= 0)
 	{
-		title = g_strdup_printf("Geany: %s %s",
-				DOC_FILENAME(index),
-				doc_list[index].changed ? _("(Unsaved)") : "");
+		gchar *basename = g_path_get_basename(DOC_FILENAME(index));
+		title = g_strdup_printf("%s%s - Geany",
+				doc_list[index].changed ? "*" : "",
+				basename);
+		g_free(basename);
 		gtk_window_set_title(GTK_WINDOW(app->window), title);
 		g_free(title);
 	}
