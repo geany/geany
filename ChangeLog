@@ -1,3 +1,9 @@
+2007-01-25  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/vte.c: Applied patch from Jeff Pohlmeyer to improve loading of
+              the VTE library.
+
+
 2007-01-24  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * data/filetype_extensions.conf, src/filetypes.c:
