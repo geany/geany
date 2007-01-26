@@ -1,3 +1,9 @@
+2007-01-26  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/document.c: Applied patch from Jeff Pohlmeyer to clear the line
+                   marker when clearing the compile error markers.
+
+
 2007-01-25  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/vte.c: Applied patch from Jeff Pohlmeyer to improve loading of

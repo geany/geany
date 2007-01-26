@@ -1507,6 +1507,8 @@ void document_clear_indicators(gint idx)
 		sci_start_styling(doc_list[idx].sci, 0, INDIC2_MASK);
 		sci_set_styling(doc_list[idx].sci, last_pos, 0);
 	}
+	// delete the yellow marker if still set
+	if (! app->show_markers_margin) sci_marker_delete_all(doc_list[idx].sci, 0);
 }
 
 
