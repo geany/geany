@@ -2,6 +2,10 @@
 
  * src/document.c: Applied patch from Jeff Pohlmeyer to clear the line
                    marker when clearing the compile error markers.
+ * geany.glade, src/geany.h, src/interface.c, src/keyfile.c,
+   src/prefs.c, src/sci_cb.c:
+   Added an option to disable auto completion of known symbols while
+   typing (still can be forced by pressing the keybinding).
 
 
 2007-01-25  Enrico Tröger  <enrico.troeger@uvena.de>

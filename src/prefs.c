@@ -55,15 +55,16 @@ static GtkTreeView *tree = NULL;
 GtkWidget *dialog_label;
 static gboolean edited = FALSE;
 
-static gboolean on_prefs_tree_view_button_press_event(
+static gboolean on_tree_view_button_press_event(
 						GtkWidget *widget, GdkEventButton *event, gpointer user_data);
 static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, gpointer user_data);
 static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data);
 static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data);
 static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const gchar *action);
-static void on_pref_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
-static void on_pref_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
-static void on_pref_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_symbol_auto_completion_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
 
 void prefs_init_dialog(void)
@@ -99,7 +100,7 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_show_notebook_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->show_notebook_tabs);
 	// disable following setting if notebook tabs are hidden
-	on_pref_show_notebook_tabs_toggled(GTK_TOGGLE_BUTTON(
+	on_show_notebook_tabs_toggled(GTK_TOGGLE_BUTTON(
 					lookup_widget(app->prefs_dialog, "check_show_notebook_tabs")), NULL);
 
 	if (app->tab_order_ltr)
@@ -198,7 +199,7 @@ void prefs_init_dialog(void)
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 	// disable elements if toolbar is hidden
-	on_pref_toolbar_show_toggled(GTK_TOGGLE_BUTTON(
+	on_toolbar_show_toggled(GTK_TOGGLE_BUTTON(
 					lookup_widget(app->prefs_dialog, "check_toolbar_show")), NULL);
 
 
@@ -245,7 +246,7 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "check_unfold_children");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_unfold_all_children);
-	on_pref_use_folding_toggled(GTK_TOGGLE_BUTTON(
+	on_use_folding_toggled(GTK_TOGGLE_BUTTON(
 					lookup_widget(app->prefs_dialog, "check_folding")), NULL);
 
 	widget = lookup_widget(app->prefs_dialog, "check_disable_dnd");
@@ -256,6 +257,10 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "check_indicators");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_use_indicators);
+
+	widget = lookup_widget(app->prefs_dialog, "check_symbol_auto_completion");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_auto_complete_symbols);
+	on_symbol_auto_completion_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
 
 	widget = lookup_widget(app->prefs_dialog, "spin_autocheight");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->autocompletion_max_height);
@@ -330,9 +335,9 @@ void prefs_init_dialog(void)
 
 		g_signal_connect(G_OBJECT(renderer), "edited", G_CALLBACK(on_cell_edited), NULL);
 		g_signal_connect(G_OBJECT(tree), "button-press-event",
-					G_CALLBACK(on_prefs_tree_view_button_press_event), NULL);
+					G_CALLBACK(on_tree_view_button_press_event), NULL);
 		g_signal_connect(G_OBJECT(lookup_widget(app->prefs_dialog, "button2")), "button-press-event",
-					G_CALLBACK(on_prefs_tree_view_button_press_event), NULL);
+					G_CALLBACK(on_tree_view_button_press_event), NULL);
 	}
 
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
@@ -563,6 +568,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_use_tabs");
 		app->pref_editor_use_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = lookup_widget(app->prefs_dialog, "check_symbol_auto_completion");
+		app->pref_editor_auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
 		widget = lookup_widget(app->prefs_dialog, "spin_autocheight");
 		app->autocompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
@@ -770,7 +778,7 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 }
 
 
-static gboolean on_prefs_tree_view_button_press_event(
+static gboolean on_tree_view_button_press_event(
 						GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	GtkTreeIter iter;
@@ -928,7 +936,7 @@ static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const
 }
 
 
-static void on_pref_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
@@ -937,7 +945,7 @@ static void on_pref_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer
 }
 
 
-static void on_pref_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
@@ -946,11 +954,19 @@ static void on_pref_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gp
 }
 
 
-static void on_pref_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
 	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_unfold_children"), sens);
+}
+
+
+static void on_symbol_auto_completion_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gboolean sens = gtk_toggle_button_get_active(togglebutton);
+
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "hbox6"), sens);
 }
 
 
@@ -1004,11 +1020,13 @@ void dialogs_show_prefs_dialog(void)
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_grep"));
 
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_toolbar_show"),
-				"toggled", G_CALLBACK(on_pref_toolbar_show_toggled), NULL);
+				"toggled", G_CALLBACK(on_toolbar_show_toggled), NULL);
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_show_notebook_tabs"),
-				"toggled", G_CALLBACK(on_pref_show_notebook_tabs_toggled), NULL);
+				"toggled", G_CALLBACK(on_show_notebook_tabs_toggled), NULL);
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_folding"),
-				"toggled", G_CALLBACK(on_pref_use_folding_toggled), NULL);
+				"toggled", G_CALLBACK(on_use_folding_toggled), NULL);
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_symbol_auto_completion"),
+				"toggled", G_CALLBACK(on_symbol_auto_completion_toggled), NULL);
 	}
 
 	prefs_init_dialog();

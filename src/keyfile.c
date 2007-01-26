@@ -118,6 +118,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", app->switch_msgwin_pages);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->pref_editor_auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->pref_editor_auto_complete_constructs);
+	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", app->pref_editor_auto_complete_symbols);
 #ifdef HAVE_VTE
 	g_key_file_set_boolean(config, "VTE", "load_vte", vte_info.load_vte);
 	if (vte_info.load_vte && vc != NULL)
@@ -319,6 +320,7 @@ gboolean configuration_load()
 	app->pref_editor_show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
 	app->pref_editor_auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
 	app->pref_editor_auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
+	app->pref_editor_auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
 	app->pref_editor_folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
 	app->pref_editor_unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
 	app->show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);

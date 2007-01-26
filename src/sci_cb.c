@@ -765,7 +765,10 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 	gchar *wordchars;
 	filetype *ft;
 
-	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL) return FALSE;
+	if ((! app->pref_editor_auto_complete_symbols && ! force) ||
+		! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
+		return FALSE;
+
 	sci = doc_list[idx].sci;
 	ft = doc_list[idx].file_type;
 

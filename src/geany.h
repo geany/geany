@@ -110,6 +110,7 @@ typedef struct MyApp
 	gboolean			 pref_editor_show_white_space;
 	gboolean			 pref_editor_show_indent_guide;
 	gboolean			 pref_editor_show_line_endings;
+	gboolean			 pref_editor_auto_complete_symbols;
 	gboolean			 pref_editor_auto_close_xml_tags;
 	gboolean			 pref_editor_auto_complete_constructs;
 	gboolean			 pref_editor_folding;
