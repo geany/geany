@@ -380,9 +380,15 @@ gint sci_get_current_position(ScintillaObject* sci )
 }
 
 
-void sci_set_current_position(ScintillaObject* sci, gint position )
+void sci_set_current_position(ScintillaObject* sci, gint position, gboolean scroll_to_caret)
 {
-	SSM(sci, SCI_GOTOPOS, position, 0);
+	if (scroll_to_caret)
+		SSM(sci, SCI_GOTOPOS, position, 0);
+	else
+	{
+		SSM(sci, SCI_SETCURRENTPOS, position, 0);
+		SSM(sci, SCI_SETANCHOR, position, 0); // to avoid creation of a selection
+	}
 }
 
 

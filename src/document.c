@@ -312,6 +312,7 @@ static gint document_create_new_sci(const gchar *filename)
 	this->line_breaking = app->pref_editor_line_breaking;
 	this->use_auto_indention = app->pref_editor_use_auto_indention;
 	this->has_tags = FALSE;
+	this->need_scrolling = FALSE;
 
 	treeviews_openfiles_add(new_idx);	// sets this->iter
 
@@ -740,19 +741,19 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	if (cl_options.goto_line >= 0)
 	{	// goto line which was specified on command line and then undefine the line
 		sci_goto_line(doc_list[idx].sci, cl_options.goto_line - 1, TRUE);
-		sci_scroll_to_line(doc_list[idx].sci, cl_options.goto_line - 1, 0.5);
+		doc_list[idx].need_scrolling = TRUE;
 		cl_options.goto_line = -1;
 	}
 	else if (pos >= 0)
 	{
-		sci_goto_pos(doc_list[idx].sci, pos, FALSE);
-		if (reload)
-			sci_scroll_to_line(doc_list[idx].sci, -1, 0.5);
+		sci_set_current_position(doc_list[idx].sci, pos, FALSE);
+		doc_list[idx].need_scrolling = TRUE;
 	}
 	if (cl_options.goto_column >= 0)
 	{	// goto column which was specified on command line and then undefine the column
 		gint cur_pos = sci_get_current_position(doc_list[idx].sci);
-		sci_set_current_position(doc_list[idx].sci, cur_pos + cl_options.goto_column);
+		sci_set_current_position(doc_list[idx].sci, cur_pos + cl_options.goto_column, FALSE);
+		doc_list[idx].need_scrolling = TRUE;
 		cl_options.goto_column = -1;
 	}
 

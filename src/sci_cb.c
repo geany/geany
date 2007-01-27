@@ -164,6 +164,12 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			sci_cb_highlight_braces(sci, pos);
 
 			ui_update_statusbar(idx, pos);
+			
+			if (doc_list[idx].need_scrolling)
+			{	// scroll the document if needed because here it is already realised
+				sci_scroll_to_line(doc_list[idx].sci, -1, 0.5F);
+				doc_list[idx].need_scrolling = FALSE;
+			}		
 
 #if 0
 			/// experimental code for inverting selections
@@ -407,7 +413,7 @@ void sci_cb_auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
 	{
 		sci_add_text(sci, "}");
 	}
-	sci_set_current_position(sci, pos);
+	sci_set_current_position(sci, pos, TRUE);
 }
 
 
@@ -1623,7 +1629,7 @@ void sci_cb_do_comment_toggle(gint idx)
 	else if (count_uncommented > 0)
 	{
 		gint eol_len = (sci_get_eol_mode(doc_list[idx].sci) == SC_EOL_CRLF) ? 2 : 1;
-		sci_set_current_position(doc_list[idx].sci, sel_start - co_len - eol_len);
+		sci_set_current_position(doc_list[idx].sci, sel_start - co_len - eol_len, TRUE);
 	}
 }
 
@@ -2068,7 +2074,7 @@ void sci_cb_insert_multiline_comment(gint idx)
 	else
 		pos += strlen(indent);
 
-	sci_set_current_position(doc_list[idx].sci, pos);
+	sci_set_current_position(doc_list[idx].sci, pos, TRUE);
 	// reset the selection
 	sci_set_anchor(doc_list[idx].sci, pos);
 }

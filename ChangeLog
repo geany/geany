@@ -1,3 +1,11 @@
+2007-01-27  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c, src/document.c, src/document.h, src/keyfile.c,
+   src/sci_cb.c, src/sciwrappers.c, src/sciwrappers.h:
+   Fixed some scrolling issues with session files and files remotely
+   open via the socket. Added need_scrolling flag to document struct.
+
+
 2007-01-26  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c: Applied patch from Jeff Pohlmeyer to clear the line

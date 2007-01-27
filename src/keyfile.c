@@ -588,21 +588,6 @@ void configuration_apply_settings()
 		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "vpaned1")), vpan_position);
 	}
 
-	// now the scintilla widget pages may need scrolling in view
-	if (app->pref_main_load_session)
-	{
-		gint idx;
-		guint tabnum = 0;
-
-		while (tabnum < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)))
-		{
-			idx = document_get_n_idx(tabnum);
-			if (idx < 0) break;
-			sci_scroll_to_line(doc_list[idx].sci, -1, 0.5F);
-			tabnum++;
-		}
-	}
-
 	// set fullscreen after initial draw so that returning to normal view is the right size.
 	// fullscreen mode is disabled by default, so act only if it is true
 	if (app->fullscreen)
