@@ -17,6 +17,7 @@ TODO List:
 	o project management
 	o filetype template support for all filetypes
 	o common default highlighting for all programming languages
+	o fix parsing command line args after given filenames
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines  - Scintilla issue)
