@@ -788,7 +788,7 @@ static void goto_matching_brace(gint idx)
 	if (new_pos != -1)
 	{
 		sci_goto_pos(doc_list[idx].sci, new_pos, TRUE); // set the cursor at the brace
-		sci_scroll_to_line(doc_list[idx].sci, -1, 0.5);
+		doc_list[idx].scroll_percent = 0.5F;
 	}
 }
 

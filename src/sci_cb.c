@@ -54,6 +54,7 @@ static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx);
 static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
 static void auto_multiline(ScintillaObject *sci, gint pos);
 static gboolean is_comment(gint lexer, gint style);
+static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view);
 
 
 // calls the edit popup menu in the editor
@@ -164,13 +165,16 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			sci_cb_highlight_braces(sci, pos);
 
 			ui_update_statusbar(idx, pos);
-			
-			if (doc_list[idx].need_scrolling)
-			{	// scroll the document if needed because here it is already realised
-				sci_scroll_to_line(doc_list[idx].sci, -1, 0.5F);
-				doc_list[idx].need_scrolling = FALSE;
-			}		
 
+			/* Visible lines are only laid out accurately once [SCN_UPDATEUI] is sent,
+			 * so we need to only call sci_scroll_to_line here, because the document
+			 * may have line wrapping and folding enabled.
+			 * http://scintilla.sourceforge.net/ScintillaDoc.html#LineWrapping */
+			if (doc_list[idx].scroll_percent > 0.0F)
+			{
+				scroll_to_line(sci, -1, doc_list[idx].scroll_percent);
+				doc_list[idx].scroll_percent = -1.0F;	// disable further scrolling
+			}
 #if 0
 			/// experimental code for inverting selections
 			{
@@ -2078,3 +2082,30 @@ void sci_cb_insert_multiline_comment(gint idx)
 	// reset the selection
 	sci_set_anchor(doc_list[idx].sci, pos);
 }
+
+
+/* Scroll the view to make line appear at percent_of_view.
+ * line can be -1 to use the current position. */
+static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view)
+{
+	gint vis1, los, delta;
+	GtkWidget *wid = GTK_WIDGET(sci);
+
+	if (! wid->window || ! gdk_window_is_viewable(wid->window))
+		return;
+	//if (GTK_WIDGET(sci)->allocation.height <= 1) return;	// try to prevent gdk_window_scroll warning
+
+	if (line == -1)
+		line = sci_get_current_line(sci, -1);
+
+	// sci 'visible line' != doc line number because of folding and line wrapping
+	/* calling SCI_VISIBLEFROMDOCLINE for line is more accurate than calling
+	 * SCI_DOCLINEFROMVISIBLE for vis1. */
+	line = SSM(sci, SCI_VISIBLEFROMDOCLINE, line, 0);
+	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
+	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
+	delta = (line - vis1) - los * percent_of_view;
+	sci_scroll_lines(sci, delta);
+	//sci_scroll_caret(sci); // ensure visible (maybe not needed now)
+}
+

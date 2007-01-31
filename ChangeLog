@@ -1,10 +1,18 @@
+2007-01-31  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * scintilla/ScintillaGTK.cxx, src/document.c, src/document.h,
+   src/keybindings.c, src/sci_cb.c, src/sciwrappers.c,
+   src/sciwrappers.h, src/utils.c:
+   Improved the auto scrolling of documents (actually done by Nick).
+
+
 2007-01-30  Frank Lanitz  <frank@frank.uvena.de>
 
- * configure.in, src/about.c, po/fi.po: 
+ * configure.in, THANKS, src/about.c, po/fi.po:
    Added Finnish translation (Thanks to Harri Koskinen).
 
 
-2007-01-27  Enrico Troeger  <enrico.troeger@uvena.de>
+2007-01-27  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c, src/document.c, src/document.h, src/keyfile.c,
    src/sci_cb.c, src/sciwrappers.c, src/sciwrappers.h:

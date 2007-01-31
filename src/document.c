@@ -210,6 +210,7 @@ static void init_doc_struct(document *new_doc)
 	new_doc->sci = NULL;
 	new_doc->undo_actions = NULL;
 	new_doc->redo_actions = NULL;
+	new_doc->scroll_percent = -1.0F;
 }
 
 
@@ -312,7 +313,6 @@ static gint document_create_new_sci(const gchar *filename)
 	this->line_breaking = app->pref_editor_line_breaking;
 	this->use_auto_indention = app->pref_editor_use_auto_indention;
 	this->has_tags = FALSE;
-	this->need_scrolling = FALSE;
 
 	treeviews_openfiles_add(new_idx);	// sets this->iter
 
@@ -353,6 +353,7 @@ gboolean document_remove(guint page_num)
 		g_free(doc_list[idx].saved_encoding.encoding);
 		g_free(doc_list[idx].file_name);
 		tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+
 		doc_list[idx].is_valid = FALSE;
 		doc_list[idx].sci = NULL;
 		doc_list[idx].file_name = NULL;
@@ -360,6 +361,7 @@ gboolean document_remove(guint page_num)
 		doc_list[idx].encoding = NULL;
 		doc_list[idx].has_bom = FALSE;
 		doc_list[idx].tm_file = NULL;
+		doc_list[idx].scroll_percent = -1.0F;
 		document_undo_clear(idx);
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
@@ -741,19 +743,19 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	if (cl_options.goto_line >= 0)
 	{	// goto line which was specified on command line and then undefine the line
 		sci_goto_line(doc_list[idx].sci, cl_options.goto_line - 1, TRUE);
-		doc_list[idx].need_scrolling = TRUE;
+		doc_list[idx].scroll_percent = 0.5F;
 		cl_options.goto_line = -1;
 	}
 	else if (pos >= 0)
 	{
 		sci_set_current_position(doc_list[idx].sci, pos, FALSE);
-		doc_list[idx].need_scrolling = TRUE;
+		doc_list[idx].scroll_percent = 0.5F;
 	}
 	if (cl_options.goto_column >= 0)
 	{	// goto column which was specified on command line and then undefine the column
 		gint cur_pos = sci_get_current_position(doc_list[idx].sci);
 		sci_set_current_position(doc_list[idx].sci, cur_pos + cl_options.goto_column, FALSE);
-		doc_list[idx].need_scrolling = TRUE;
+		doc_list[idx].scroll_percent = 0.5F;
 		cl_options.goto_column = -1;
 	}
 
@@ -1039,7 +1041,7 @@ void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean 
 	{
 		sci_set_selection_start(doc_list[idx].sci, ttf.chrgText.cpMin);
 		sci_set_selection_end(doc_list[idx].sci, ttf.chrgText.cpMax);
-		sci_scroll_to_line(doc_list[idx].sci, -1, 0.3);
+		doc_list[idx].scroll_percent = 0.3F;
 	}
 	else
 	{
@@ -1087,7 +1089,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 	if (search_pos != -1)
 	{
 		if (scroll)
-			sci_scroll_to_line(doc_list[idx].sci, -1, 0.3);
+			doc_list[idx].scroll_percent = 0.3F;
 	}
 	else
 	{

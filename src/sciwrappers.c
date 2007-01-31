@@ -679,28 +679,6 @@ void sci_scroll_lines(ScintillaObject *sci, gint lines)
 }
 
 
-/* Scroll the view to make line appear at percent_of_view.
- * line can be -1 to use the current position. */
-void sci_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view)
-{
-	gint vis1, los, delta;
-
-	if (GTK_WIDGET(sci)->allocation.height <= 1) return;	// try to prevent gdk_window_scroll warning
-	if (line == -1)
-		line = sci_get_current_line(sci, -1);
-
-	// sci 'visible line' != doc line number because of folding and line wrapping
-	/* calling SCI_VISIBLEFROMDOCLINE for line is more accurate than calling
-	 * SCI_DOCLINEFROMVISIBLE for vis1. */
-	line = SSM(sci, SCI_VISIBLEFROMDOCLINE, line, 0);
-	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
-	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
-	delta = (line - vis1) - los * percent_of_view;
-	sci_scroll_lines(sci, delta);
-	sci_scroll_caret(sci); // ensure visible (maybe not needed now)
-}
-
-
 gint sci_search_next(ScintillaObject *sci, gint flags, const gchar *text)
 {
 	return SSM(sci, SCI_SEARCHNEXT, flags, (sptr_t) text );

@@ -226,7 +226,7 @@ gboolean utils_goto_line(gint idx, gint line)
 	sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
 
 	sci_goto_line(doc_list[idx].sci, line, TRUE);
-	sci_scroll_to_line(doc_list[idx].sci, -1, 0.25);
+	doc_list[idx].scroll_percent = 0.25F;
 
 	// finally switch to the page
 	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci));

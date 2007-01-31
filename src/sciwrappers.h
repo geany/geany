@@ -125,7 +125,6 @@ void				sci_set_search_anchor		(ScintillaObject * sci);
 void				sci_set_anchor				(ScintillaObject * sci, gint pos);
 void				sci_scroll_caret			(ScintillaObject * sci);
 void				sci_scroll_lines			(ScintillaObject * sci, gint lines);
-void				sci_scroll_to_line			(ScintillaObject * sci, gint line, gfloat percent_of_view);
 gint				sci_search_next				(ScintillaObject * sci, gint flags, const gchar *text);
 gint				sci_search_prev				(ScintillaObject * sci, gint flags, const gchar *text);
 gint				sci_find_text				(ScintillaObject * sci, gint flags, struct TextToFind *ttf);
