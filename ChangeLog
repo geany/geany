@@ -2,6 +2,8 @@
 
  * src/build.c: Prevent compiling or executing of files without a
                 filename extension(closes #1642029).
+ * src/document.c: Made --line and --column also working for already
+                   open files (thanks to Mark Knoop for his help).
 
 
 2007-01-31  Enrico Tröger  <enrico.troeger@uvena.de>

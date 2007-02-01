@@ -653,6 +653,33 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 }
 
 
+/* Sets the cursor position on opening a file. First it sets the line when cl_options.goto_line
+ * is set, otherwise it sets the line when pos is greater than zero and finally it sets the column
+ * if cl_options.goto_column is set. */
+static void set_cursor_position(gint idx, gint pos)
+{
+	if (cl_options.goto_line >= 0)
+	{	// goto line which was specified on command line and then undefine the line
+		sci_goto_line(doc_list[idx].sci, cl_options.goto_line - 1, TRUE);
+		doc_list[idx].scroll_percent = 0.5F;
+		cl_options.goto_line = -1;
+	}
+	else if (pos > 0)
+	{
+		sci_set_current_position(doc_list[idx].sci, pos, FALSE);
+		doc_list[idx].scroll_percent = 0.5F;
+	}
+
+	if (cl_options.goto_column >= 0)
+	{	// goto column which was specified on command line and then undefine the column
+		gint cur_pos = sci_get_current_position(doc_list[idx].sci);
+		sci_set_current_position(doc_list[idx].sci, cur_pos + cl_options.goto_column, FALSE);
+		doc_list[idx].scroll_percent = 0.5F;
+		cl_options.goto_column = -1;
+	}
+}
+
+
 /* To open a new file, set idx to -1; filename should be locale encoded.
  * To reload a file, set the idx for the document to be reloaded; filename should be NULL.
  * Returns: idx of the opened file or -1 if an error occurred.
@@ -700,6 +727,7 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 			g_free(utf8_filename);
 			g_free(locale_filename);
 			utils_check_disk_status(idx, TRUE);	// force a file changed check
+			set_cursor_position(idx, pos);
 			return idx;
 		}
 	}
@@ -740,24 +768,8 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 	// update line number margin width
 	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 
-	if (cl_options.goto_line >= 0)
-	{	// goto line which was specified on command line and then undefine the line
-		sci_goto_line(doc_list[idx].sci, cl_options.goto_line - 1, TRUE);
-		doc_list[idx].scroll_percent = 0.5F;
-		cl_options.goto_line = -1;
-	}
-	else if (pos >= 0)
-	{
-		sci_set_current_position(doc_list[idx].sci, pos, FALSE);
-		doc_list[idx].scroll_percent = 0.5F;
-	}
-	if (cl_options.goto_column >= 0)
-	{	// goto column which was specified on command line and then undefine the column
-		gint cur_pos = sci_get_current_position(doc_list[idx].sci);
-		sci_set_current_position(doc_list[idx].sci, cur_pos + cl_options.goto_column, FALSE);
-		doc_list[idx].scroll_percent = 0.5F;
-		cl_options.goto_column = -1;
-	}
+	// set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column
+	set_cursor_position(idx, pos);
 
 	if (! reload)
 	{
