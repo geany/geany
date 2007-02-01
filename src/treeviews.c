@@ -98,6 +98,7 @@ void treeviews_prepare_openfiles()
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
 	PangoFontDescription *pfd;
+	GtkTreeSortable    *sortable;
 
 	tv.tree_openfiles = lookup_widget(app->window, "treeview6");
 
@@ -118,6 +119,10 @@ void treeviews_prepare_openfiles()
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
+
+	// sort opened filenames in the store_openfiles treeview
+	sortable = GTK_TREE_SORTABLE(GTK_TREE_MODEL(tv.store_openfiles));
+	gtk_tree_sortable_set_sort_column_id(sortable, 0, GTK_SORT_ASCENDING);
 
 	pfd = pango_font_description_from_string(app->tagbar_font);
 	gtk_widget_modify_font(tv.tree_openfiles, pfd);

@@ -4,6 +4,9 @@
                 filename extension(closes #1642029).
  * src/document.c: Made --line and --column also working for already
                    open files (thanks to Mark Knoop for his help).
+ * THANKS, src/treeviews.c:
+   Applied patch from Tomás Vírseda to sort the list of open files in
+   the sidebar alphabetically (thanks).
 
 
 2007-01-31  Enrico Tröger  <enrico.troeger@uvena.de>

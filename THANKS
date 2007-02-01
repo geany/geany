@@ -22,6 +22,7 @@ Bob Doan <bdoan(at)sicom(dot)com> - some patches
 Rob van der Linde <robvdl(at)paradise(dot)net(dot)nz> - fixed wrong vte height on some systems
 Josef Whiter <josef(at)toxicpanda(dot)com> - parse 'Entering directory' build messages.
 Jeff Pohlmeyer <yetanothergeek(at)gmail(dot)com> - "Allow DnD", "Use tabs" and other great patches
+Tomás Vírseda <kaskaras(at)gmail(dot)com> - sort open files patch
 
 Translators:
 ----------------------------------
