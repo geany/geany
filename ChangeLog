@@ -1,3 +1,9 @@
+2007-02-01  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/build.c: Prevent compiling or executing of files without a
+                filename extension(closes #1642029).
+
+
 2007-01-31  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * scintilla/ScintillaGTK.cxx, src/document.c, src/document.h,

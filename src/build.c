@@ -389,7 +389,7 @@ GPid build_link_file(gint idx)
 static GPid build_spawn_cmd(gint idx, gchar **cmd)
 {
 	GError  *error = NULL;
-	gchar **argv;
+	gchar  **argv;
 	gchar	*working_dir;
 	gchar	*utf8_working_dir;
 	gchar	*cmd_string;
@@ -400,7 +400,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	gint     stdout_fd;
 	gint     stderr_fd;
 
-	g_return_val_if_fail(idx >= 0 && doc_list[idx].is_valid, (GPid) 1);
+	g_return_val_if_fail(DOC_IDX_VALID(idx), (GPid) 1);
 
 	document_clear_indicators(idx);
 
@@ -410,6 +410,14 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 	executable = utils_remove_ext_from_filename(locale_filename);
+
+	// check for filename extension and abort if filename doesn't have one
+	if (utils_str_equal(locale_filename, executable))
+	{
+		msgwin_status_add(_("Command stopped because the current file has no extension."));
+		utils_beep();
+		return (GPid) 1;
+	}
 
 	// replace %f and %e in the command string
 	tmp = g_path_get_basename(locale_filename);
@@ -529,6 +537,14 @@ GPid build_run_cmd(gint idx)
 		}
 		else
 			check_executable = g_strdup(long_executable);
+
+		// check for filename extension and abort if filename doesn't have one
+		if (utils_str_equal(locale_filename, check_executable))
+		{
+			msgwin_status_add(_("Command stopped because the current file has no extension."));
+			utils_beep();
+			return (GPid) 1;
+		}
 
 		// check whether executable exists
 		if (stat(check_executable, &st) != 0)
