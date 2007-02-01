@@ -140,11 +140,23 @@ void ui_set_window_title(gint index)
 
 	if (index >= 0)
 	{
-		gchar *basename = g_path_get_basename(DOC_FILENAME(index));
-		title = g_strdup_printf("%s%s - Geany",
-				doc_list[index].changed ? "*" : "",
-				basename);
-		g_free(basename);
+		if (doc_list[index].file_name == NULL)
+		{
+			title = g_strdup_printf("%s%s - Geany",
+					doc_list[index].changed ? "*" : "",
+					DOC_FILENAME(index));
+		}
+		else
+		{
+			gchar *basename = g_path_get_basename(DOC_FILENAME(index));
+			gchar *dirname = g_path_get_dirname(DOC_FILENAME(index));
+
+			title = g_strdup_printf("%s%s - %s - Geany",
+					doc_list[index].changed ? "*" : "",
+					basename, dirname ? dirname : "");
+			g_free(basename);
+			g_free(dirname);
+		}
 		gtk_window_set_title(GTK_WINDOW(app->window), title);
 		g_free(title);
 	}
