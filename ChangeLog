@@ -7,6 +7,9 @@
    Make anonymous typenames use anon_typename_n instead of
    typename_anon_n (it seems we can't use <> brackets because of
    missing scope problem).
+ * src/build.c:
+   Allow Make for files with no extension - prevent Build when the
+   output filename would be the same as the source file.
 
 
 2007-02-01  Nick Treleaven  <nick.treleaven@btinternet.com>

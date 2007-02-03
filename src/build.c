@@ -334,6 +334,15 @@ GPid build_link_file(gint idx)
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 	executable = utils_remove_ext_from_filename(locale_filename);
+	// check for filename extension and abort if filename doesn't have one
+	if (utils_str_equal(locale_filename, executable))
+	{
+		msgwin_status_add(_("Command stopped because the current file has no extension."));
+		utils_beep();
+		utils_free_pointers(locale_filename, executable);
+		return (GPid) 1;
+	}
+
 	object_file = g_strdup_printf("%s.o", executable);
 
 	// check wether object file (file.o) exists
@@ -410,14 +419,6 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 	executable = utils_remove_ext_from_filename(locale_filename);
-
-	// check for filename extension and abort if filename doesn't have one
-	if (utils_str_equal(locale_filename, executable))
-	{
-		msgwin_status_add(_("Command stopped because the current file has no extension."));
-		utils_beep();
-		return (GPid) 1;
-	}
 
 	// replace %f and %e in the command string
 	tmp = g_path_get_basename(locale_filename);
@@ -543,7 +544,8 @@ GPid build_run_cmd(gint idx)
 		{
 			msgwin_status_add(_("Command stopped because the current file has no extension."));
 			utils_beep();
-			return (GPid) 1;
+			result_id = (GPid) 1;
+			goto free_strings;
 		}
 
 		// check whether executable exists
