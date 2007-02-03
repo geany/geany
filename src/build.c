@@ -339,7 +339,7 @@ GPid build_link_file(gint idx)
 	{
 		msgwin_status_add(_("Command stopped because the current file has no extension."));
 		utils_beep();
-		utils_free_pointers(locale_filename, executable);
+		utils_free_pointers(locale_filename, executable, NULL);
 		return (GPid) 1;
 	}
 
