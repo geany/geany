@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.10svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-30 22:49+0100\n"
-"PO-Revision-Date: 2007-01-30 22:50+0100\n"
+"POT-Creation-Date: 2007-02-03 18:30+0100\n"
+"PO-Revision-Date: 2007-02-03 18:32+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <frank@frank.uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -75,188 +75,193 @@ msgid "Failed to view %s (make sure it is already compiled)"
 msgstr "Konnte %s nicht anzeigen (die Datei muss bereits erzeugt worden sein)"
 
 #: src/build.c:188
-#: src/build.c:566
+#: src/build.c:584
 #, c-format
 msgid "Could not find terminal '%s' (check path for Terminal tool setting in Preferences)"
 msgstr "Konnte das Terminalprogramm '%s' nicht finden (Pfad zum Terminalprogramm in den Einstellungen überprüfen)"
 
 #: src/build.c:202
-#: src/build.c:603
+#: src/build.c:621
 #, c-format
 msgid "Failed to execute %s (start-script could not be created)"
 msgstr "Konnte %s nicht ausführen (Start-Script konnte nicht erzeugt werden)"
 
 #: src/build.c:230
-#: src/build.c:446
-#: src/build.c:648
+#: src/build.c:455
+#: src/build.c:666
 #: src/search.c:1113
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prozess fehlgeschlagen (%s)"
 
-#: src/build.c:355
+#: src/build.c:340
+#: src/build.c:545
+msgid "Command stopped because the current file has no extension."
+msgstr "Die Ausführung des Kommandos wurde unterbrochen, da die Datei keine Dateiendung besitzt. "
+
+#: src/build.c:364
 #, c-format
 msgid "Something very strange is occurred, could not stat %s (%s)."
 msgstr "Ein Fehler ist aufgetreten, konnte Datei %s nicht prüfen (%s)."
 
-#: src/build.c:434
+#: src/build.c:443
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (im Verzeichnis: %s)"
 
-#: src/build.c:542
+#: src/build.c:560
 #, c-format
 msgid "Failed to execute %s (make sure it is already built)"
 msgstr "Konnte %s nicht ausführen (die Datei muss bereits erzeugt worden sein)"
 
-#: src/build.c:580
+#: src/build.c:598
 #, c-format
 msgid "Failed to change the working directory to %s"
 msgstr "Konnte nicht in Arbeitsverzeichnis %s wechseln"
 
-#: src/build.c:776
+#: src/build.c:794
 msgid "Compilation failed."
 msgstr "Kompilierung fehlgeschlagen."
 
-#: src/build.c:790
+#: src/build.c:808
 msgid "Compilation finished successfully."
 msgstr "Kompilierung beendet - erfolgreich."
 
 #. compile the code
-#: src/build.c:895
+#: src/build.c:913
 msgid "_Compile"
 msgstr "_Kompilieren"
 
-#: src/build.c:898
+#: src/build.c:916
 msgid "Compiles the current file"
 msgstr "Kompiliert die aktuelle Datei"
 
 #. build the code
-#: src/build.c:907
+#: src/build.c:925
 #: src/interface.c:879
 msgid "_Build"
 msgstr "_Erstellen"
 
-#: src/build.c:911
+#: src/build.c:929
 msgid "Builds the current file (generate an executable file)"
 msgstr "Erstellt die aktuelle Datei (erzeugt eine ausführbare Datei)"
 
 #. build the code with make all
-#: src/build.c:921
-#: src/build.c:1043
+#: src/build.c:939
+#: src/build.c:1061
 msgid "_Make All"
 msgstr "_Make all"
 
-#: src/build.c:924
-#: src/build.c:1046
+#: src/build.c:942
+#: src/build.c:1064
 msgid "Builds the current file with the make tool and the default target"
 msgstr "Erstellt die aktuelle Datei mit \"make\" und dem Default-Target"
 
 #. build the code with make custom
-#: src/build.c:932
-#: src/build.c:1054
+#: src/build.c:950
+#: src/build.c:1072
 msgid "Make Custom _Target"
 msgstr "Make (eigenes _Target)"
 
-#: src/build.c:936
-#: src/build.c:1058
+#: src/build.c:954
+#: src/build.c:1076
 msgid "Builds the current file with the make tool and the specified target"
 msgstr "Erstellt die aktuelle Datei mit \"make\" und dem angegebenem Target"
 
 #. build the code with make object
-#: src/build.c:943
+#: src/build.c:961
 msgid "Make _Object"
 msgstr "Make _Objekt-Datei"
 
-#: src/build.c:947
+#: src/build.c:965
 msgid "Compiles the current file using the make tool"
 msgstr "Kompiliert die aktuelle Datei mittels make "
 
 #. next error
-#: src/build.c:959
-#: src/build.c:1070
+#: src/build.c:977
+#: src/build.c:1088
 msgid "_Next Error"
 msgstr "Nächster _Fehler"
 
-#: src/build.c:974
+#: src/build.c:992
 #: src/interface.c:1007
 msgid "Run or view the current file"
 msgstr "Aktuelle Datei anzeigen oder ausführen"
 
 #. arguments
-#: src/build.c:985
+#: src/build.c:1003
 msgid "_Set Includes and Arguments"
 msgstr "_Programm-Parameter angeben"
 
-#: src/build.c:990
+#: src/build.c:1008
 msgid "Sets the includes and library paths for the compiler and the program arguments for execution"
 msgstr "Include-Dateien und Bibliotheken-Pfade sowie Programmparameter festlegen"
 
 #. DVI
-#: src/build.c:1013
+#: src/build.c:1031
 msgid "LaTeX -> DVI"
 msgstr "LaTeX -> DVI"
 
-#: src/build.c:1016
+#: src/build.c:1034
 msgid "Compiles the current file into a DVI file"
 msgstr "Kompiliert die aktuelle Datei als DVI-Datei."
 
 #. PDF
-#: src/build.c:1026
+#: src/build.c:1044
 msgid "LaTeX -> PDF"
 msgstr "LaTeX -> PDF"
 
-#: src/build.c:1029
+#: src/build.c:1047
 msgid "Compiles the current file into a PDF file"
 msgstr "Kompiliert die aktuelle Datei als PDF-Datei."
 
 #. DVI view
-#: src/build.c:1082
+#: src/build.c:1100
 msgid "View DVI File"
 msgstr "DVI-Datei anzeigen"
 
-#: src/build.c:1087
-#: src/build.c:1100
+#: src/build.c:1105
+#: src/build.c:1118
 msgid "Compiles and view the current file"
 msgstr "Kompiliert und zeigt die aktuelle Datei an."
 
 #. PDF view
-#: src/build.c:1096
+#: src/build.c:1114
 msgid "View PDF File"
 msgstr "PDF-Datei anzeigen"
 
 #. arguments
-#: src/build.c:1115
+#: src/build.c:1133
 #: src/dialogs.c:642
 msgid "Set Arguments"
 msgstr "Programm-Parameter angeben"
 
-#: src/build.c:1120
+#: src/build.c:1138
 msgid "Sets the program paths and arguments"
 msgstr "Programm-Parameter angeben"
 
-#: src/build.c:1387
+#: src/build.c:1405
 msgid "Make Custom Target"
 msgstr "Make (eigenes Target)"
 
-#: src/build.c:1388
+#: src/build.c:1406
 msgid "Enter custom options here, all entered text is passed to the make command."
 msgstr "Alles was Sie hier angeben, wird direkt an \"make\" übergeben."
 
-#: src/build.c:1427
+#: src/build.c:1445
 msgid "Failed to execute the view program"
 msgstr "Konnte das Anzeigeprogramm nicht ausführen."
 
-#: src/build.c:1446
+#: src/build.c:1464
 msgid "Failed to execute the terminal program"
 msgstr "Konnte das Terminal-Programm nicht ausführen."
 
-#: src/build.c:1505
+#: src/build.c:1523
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Der Prozess konnte nicht angehalten werden (%s)."
 
-#: src/build.c:1521
+#: src/build.c:1539
 msgid "No more build errors."
 msgstr "Keine weiteren Fehlermeldungen."
 
@@ -300,37 +305,37 @@ msgid "Please set the filetype for the current file before using this function."
 msgstr "Bitte legen Sie den Dateityp fest, bevor Sie diese Funktion benutzen."
 
 #: src/callbacks.c:1609
-#: src/ui_utils.c:459
+#: src/ui_utils.c:471
 msgid "dd.mm.yyyy"
 msgstr "TT.MM.JJ"
 
 #: src/callbacks.c:1611
-#: src/ui_utils.c:460
+#: src/ui_utils.c:472
 msgid "mm.dd.yyyy"
 msgstr "MM.TT.JJ"
 
 #: src/callbacks.c:1613
-#: src/ui_utils.c:461
+#: src/ui_utils.c:473
 msgid "yyyy/mm/dd"
 msgstr "JJJJ/MM/TT"
 
 #: src/callbacks.c:1615
-#: src/ui_utils.c:470
+#: src/ui_utils.c:482
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "TT.MM.JJJJ Stunden:Minuten:Sekunden"
 
 #: src/callbacks.c:1617
-#: src/ui_utils.c:471
+#: src/ui_utils.c:483
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "MM.TT.JJJJ Stunden:Minuten:Sekunden"
 
 #: src/callbacks.c:1619
-#: src/ui_utils.c:472
+#: src/ui_utils.c:484
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "JJJJ/MM/TT Stunden:Minuten:Sekunden"
 
 #: src/callbacks.c:1621
-#: src/ui_utils.c:481
+#: src/ui_utils.c:493
 msgid "Use Custom Date Format"
 msgstr "Benutze selbst erstelltes Zeitformat"
 
@@ -632,17 +637,17 @@ msgstr "Folgende Tastenkürzel sind definiert: "
 msgid "File %s closed."
 msgstr "Datei %s wurde geschlossen."
 
-#: src/document.c:435
+#: src/document.c:437
 msgid "New file opened."
 msgstr "Neue Datei geöffnet."
 
-#: src/document.c:585
-#: src/document.c:858
+#: src/document.c:587
+#: src/document.c:872
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Konnte Datei '%s' nicht öffnen(%s)."
 
-#: src/document.c:608
+#: src/document.c:610
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This can occur if the file contains a NULL byte. Be aware that saving it can cause data loss.\n"
@@ -651,40 +656,40 @@ msgstr ""
 "Die Datei »%s« konnte nicht ordnungsgemäß geladen werden und wurde evtl.  abgeschnitten. Die kann zu Datenverlust beim Speichern führen!\n"
 "Die Datei wird schreibgeschützt geöffnet."
 
-#: src/document.c:632
+#: src/document.c:634
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Die Datei \"%s\" ist kein gültiges %s."
 
-#: src/document.c:641
+#: src/document.c:643
 #, c-format
 msgid "The file \"%s\" does not look like a text file or the file encoding is not supported."
 msgstr "Die Datei \"%s\" scheint keine Textdatei zu sein, oder das Format wird nicht unterstützt."
 
-#: src/document.c:682
+#: src/document.c:711
 msgid "Invalid filename"
 msgstr "Ungültiger Dateiname"
 
-#: src/document.c:784
+#: src/document.c:798
 #, c-format
 msgid "File %s reloaded."
 msgstr "Datei %s neu geladen."
 
-#: src/document.c:786
+#: src/document.c:800
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Datei %s geöffnet(%d%s)."
 
-#: src/document.c:788
+#: src/document.c:802
 msgid ", read-only"
 msgstr ", schreibgeschützt"
 
-#: src/document.c:886
-#: src/document.c:969
+#: src/document.c:900
+#: src/document.c:983
 msgid "Error saving file."
 msgstr "Fehler beim Speichern der Datei."
 
-#: src/document.c:933
+#: src/document.c:947
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved.\n"
@@ -693,51 +698,51 @@ msgstr ""
 "Beim Konvertieren der Datei von UTF-8 in \"%s\" ist ein Fehler aufgetreten. Die Datei bleibt ungespeichert.\n"
 "Fehlermeldung: %s\n"
 
-#: src/document.c:957
+#: src/document.c:971
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Fehler beim Speichern der Datei (%s)."
 
-#: src/document.c:1000
+#: src/document.c:1014
 #, c-format
 msgid "File %s saved."
 msgstr "Datei %s wurde gespeichert."
 
-#: src/document.c:1048
-#: src/document.c:1100
-#: src/document.c:1108
+#: src/document.c:1062
+#: src/document.c:1114
+#: src/document.c:1122
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" wurde nicht gefunden."
 
-#: src/document.c:1108
+#: src/document.c:1122
 msgid "Wrap search and find again?"
 msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
 
-#: src/document.c:1187
+#: src/document.c:1197
 #: src/search.c:1232
 msgid "No matches found."
 msgstr "Keine Treffer gefunden."
 
-#: src/document.c:1197
-#: src/document.c:1204
+#: src/document.c:1207
+#: src/document.c:1214
 #, c-format
 msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr "%s: Es wurde %d Mal \"%s\" gegen \"%s\" ersetzt."
 
-#: src/document.c:1458
+#: src/document.c:1468
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: src/document.c:1459
+#: src/document.c:1469
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: src/document.c:1461
+#: src/document.c:1471
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: src/document.c:1559
+#: src/document.c:1569
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -748,12 +753,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/document.c:1568
+#: src/document.c:1578
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %d)."
 msgstr "Drucken der Datei \"%s\" ist fehlgeschlagen (Rückgabewert: %d)."
 
-#: src/document.c:1573
+#: src/document.c:1583
 #, c-format
 msgid "File %s printed."
 msgstr "Datei %s wurde gedruckt."
@@ -1541,7 +1546,7 @@ msgid "Symbols"
 msgstr "Symbole"
 
 #: src/interface.c:1121
-#: src/treeviews.c:115
+#: src/treeviews.c:116
 msgid "Open files"
 msgstr "Geöffnete Dateien"
 
@@ -2106,7 +2111,7 @@ msgstr "Autovervollständigung von Variablen "
 
 #: src/interface.c:3339
 msgid "Automatic completion of known symbols in open source file(s) (function, global variables, ...)"
-msgstr ""
+msgstr "Automatische Vervollständigung von bekannten Variablen. "
 
 #: src/interface.c:3350
 msgid "Rows of autocompletion list:"
@@ -3085,17 +3090,17 @@ msgstr "Zeichen für Interpunktion"
 msgid "Miscellaneous characters"
 msgstr "Sonstige Zeichen"
 
-#: src/treeviews.c:200
-#: src/treeviews.c:252
+#: src/treeviews.c:205
+#: src/treeviews.c:257
 msgid "Hide"
 msgstr "Verbergen"
 
-#: src/treeviews.c:208
-#: src/treeviews.c:260
+#: src/treeviews.c:213
+#: src/treeviews.c:265
 msgid "Hide sidebar"
 msgstr "Seitenleiste verbergen"
 
-#: src/treeviews.c:240
+#: src/treeviews.c:245
 msgid "Reload"
 msgstr "Neu laden"
 
@@ -3112,36 +3117,36 @@ msgstr "ÜBER"
 msgid "INS"
 msgstr "EINF"
 
-#: src/ui_utils.c:186
+#: src/ui_utils.c:198
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Schriftart gewechselt (%s)."
 
-#: src/ui_utils.c:218
+#: src/ui_utils.c:230
 msgid "No tags found"
 msgstr "Keine Symbole gefunden."
 
-#: src/ui_utils.c:428
+#: src/ui_utils.c:440
 msgid "C Standard Library"
 msgstr "C Standard Bibliothek"
 
-#: src/ui_utils.c:429
+#: src/ui_utils.c:441
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: src/ui_utils.c:430
+#: src/ui_utils.c:442
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C Standard Bibliothek)"
 
-#: src/ui_utils.c:431
+#: src/ui_utils.c:443
 msgid "C++ Standard Library"
 msgstr "C++ Standard Bibliothek"
 
-#: src/ui_utils.c:432
+#: src/ui_utils.c:444
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: src/ui_utils.c:498
+#: src/ui_utils.c:510
 msgid "Set Custom Date Format"
 msgstr "Benutzerdefiniertes Datumsformat einstellen "
 
