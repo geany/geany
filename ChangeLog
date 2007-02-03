@@ -3,6 +3,10 @@
  * src/document.c:
    Prevent scroll bar from moving when using document_find_text() and
    no match is found.
+ * tagmanager/c.c:
+   Make anonymous typenames use anon_typename_n instead of
+   typename_anon_n (it seems we can't use <> brackets because of
+   missing scope problem).
 
 
 2007-02-01  Nick Treleaven  <nick.treleaven@btinternet.com>

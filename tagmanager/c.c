@@ -2427,22 +2427,24 @@ static void tagCheck (statementInfo *const st)
 		    tokenInfo *contextual_token = (tokenInfo *)prev;
 		    if(isContextualKeyword (contextual_token))
 		    {
-			char buffer[64];
-			sprintf(buffer, "_anon_%d", contextual_fake_count++);
+				char buffer[64];
 
-			name_token = newToken ();
-			copyToken (name_token, contextual_token);
-			vStringCatS(name_token->name, buffer);
+				name_token = newToken ();
+				copyToken (name_token, contextual_token);
 
-			name_token->type = TOKEN_NAME;
-			name_token->keyword	= KEYWORD_NONE;
+				sprintf(buffer, "anon_%s_%d", name_token->name->buffer, contextual_fake_count++);
+				vStringClear(name_token->name);
+				vStringCatS(name_token->name, buffer);
 
-			advanceToken (st);
-			contextual_token = activeToken (st);
-			copyToken (contextual_token, token);
-			copyToken ((tokenInfo *const)token, name_token);
-			copyToken (st->blockName, name_token);
-			copyToken (st->firstToken, name_token);
+				name_token->type = TOKEN_NAME;
+				name_token->keyword	= KEYWORD_NONE;
+
+				advanceToken (st);
+				contextual_token = activeToken (st);
+				copyToken (contextual_token, token);
+				copyToken ((tokenInfo *const)token, name_token);
+				copyToken (st->blockName, name_token);
+				copyToken (st->firstToken, name_token);
 		    }
 		}
 		qualifyBlockTag (st, name_token);
