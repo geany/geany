@@ -1123,15 +1123,11 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 		{
 			gint ret;
 
-			sci_goto_pos(doc_list[idx].sci, (search_backwards) ? sci_len : 0, TRUE);
+			sci_set_current_position(doc_list[idx].sci, (search_backwards) ? sci_len : 0, FALSE);
 			ret = document_find_text(idx, text, flags, search_backwards, scroll);
 			if (ret == -1)
 			{	// return to original cursor position if not found
-				gint new_visible_line;
-
-				sci_goto_pos(doc_list[idx].sci, selection_start, FALSE);
-				new_visible_line = sci_get_first_visible_line(doc_list[idx].sci);
-				sci_scroll_lines(doc_list[idx].sci, first_visible_line - new_visible_line);
+				sci_set_current_position(doc_list[idx].sci, selection_start, FALSE);
 			}
 			return ret;
 		}
