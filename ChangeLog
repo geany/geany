@@ -1,3 +1,9 @@
+2007-02-05  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/treeviews.c:
+   Prevent right click in Symbol list from selecting a tag.
+
+
 2007-02-03  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/document.c:

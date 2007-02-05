@@ -413,8 +413,11 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 			gtk_menu_popup(GTK_MENU(tv.popup_openfiles), NULL, NULL, NULL, NULL,
 																event->button, event->time);
 		else if (GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
+		{
 			gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL,
 																event->button, event->time);
+			return TRUE;	// prevent selection changed signal for symbol tags
+		}
 	}
 	return FALSE;
 }
