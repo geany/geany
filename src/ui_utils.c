@@ -36,7 +36,6 @@
 #include "encodings.h"
 #include "images.c"
 #include "treeviews.h"
-#include "symbols.h"
 
 
 static gchar *menu_item_get_text(GtkMenuItem *menu_item);
@@ -209,60 +208,6 @@ void ui_set_fullscreen()
 	else
 	{
 		gtk_window_unfullscreen(GTK_WINDOW(app->window));
-	}
-}
-
-
-// update = rescan the tags for document[idx].filename
-void ui_update_tag_list(gint idx, gboolean update)
-{
-	if (gtk_bin_get_child(GTK_BIN(app->tagbar)))
-		gtk_container_remove(GTK_CONTAINER(app->tagbar), gtk_bin_get_child(GTK_BIN(app->tagbar)));
-
-	if (app->default_tag_tree == NULL)
-	{
-		GtkTreeIter iter;
-		GtkTreeStore *store = gtk_tree_store_new(1, G_TYPE_STRING);
-
-		app->default_tag_tree = gtk_tree_view_new();
-		treeviews_prepare_taglist(app->default_tag_tree, store);
-		gtk_tree_store_append(store, &iter, NULL);
-		gtk_tree_store_set(store, &iter, 0, _("No tags found"), -1);
-		gtk_widget_show(app->default_tag_tree);
-		g_object_ref((gpointer)app->default_tag_tree);	// to hold it after removing
-	}
-
-	// make all inactive, because there is no more tab left, or something strange occured
-	if (idx == -1 || doc_list[idx].file_type == NULL || ! doc_list[idx].file_type->has_tags)
-	{
-		gtk_widget_set_sensitive(app->tagbar, FALSE);
-		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
-		return;
-	}
-
-	if (update)
-	{	// updating the tag list in the left tag window
-		if (doc_list[idx].tag_tree == NULL)
-		{
-			doc_list[idx].tag_store = gtk_tree_store_new(1, G_TYPE_STRING);
-			doc_list[idx].tag_tree = gtk_tree_view_new();
-			treeviews_prepare_taglist(doc_list[idx].tag_tree, doc_list[idx].tag_store);
-			gtk_widget_show(doc_list[idx].tag_tree);
-			g_object_ref((gpointer)doc_list[idx].tag_tree);	// to hold it after removing
-		}
-
-		doc_list[idx].has_tags = symbols_recreate_tag_list(idx);
-	}
-
-	if (doc_list[idx].has_tags)
-	{
-		gtk_widget_set_sensitive(app->tagbar, TRUE);
-		gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
-	}
-	else
-	{
-		gtk_widget_set_sensitive(app->tagbar, FALSE);
-		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
 	}
 }
 

@@ -365,7 +365,7 @@ gboolean document_remove(guint page_num)
 		document_undo_clear(idx);
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
-			ui_update_tag_list(-1, FALSE);
+			treeviews_update_tag_list(-1, FALSE);
 			//on_notebook1_switch_page(GTK_NOTEBOOK(app->notebook), NULL, 0, NULL);
 			ui_set_window_title(-1);
 			ui_save_buttons_toggle(FALSE);
@@ -1345,7 +1345,7 @@ void document_update_tag_list(gint idx, gboolean update)
 		! doc_list[idx].file_type->has_tags || ! doc_list[idx].file_name)
 	{
 		// set the default (empty) tag list
-		ui_update_tag_list(idx, FALSE);
+		treeviews_update_tag_list(idx, FALSE);
 		return;
 	}
 
@@ -1359,13 +1359,13 @@ void document_update_tag_list(gint idx, gboolean update)
 		tm_workspace_add_object(doc_list[idx].tm_file);
 		if (update)
 			tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
-		ui_update_tag_list(idx, TRUE);
+		treeviews_update_tag_list(idx, TRUE);
 	}
 	else
 	{
 		if (tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE))
 		{
-			ui_update_tag_list(idx, TRUE);
+			treeviews_update_tag_list(idx, TRUE);
 		}
 		else
 		{

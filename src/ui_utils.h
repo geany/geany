@@ -38,9 +38,6 @@ void ui_set_editor_font(const gchar *font_name);
 void ui_set_fullscreen();
 
 
-void ui_update_tag_list(gint idx, gboolean update);
-
-
 void ui_update_popup_reundo_items(gint idx);
 
 void ui_update_popup_copy_items(gint idx);

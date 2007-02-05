@@ -36,7 +36,7 @@ struct SidebarTreeviews
 } tv;
 
 
-void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store);
+void treeviews_update_tag_list(gint idx, gboolean update);
 
 void treeviews_prepare_openfiles();
 

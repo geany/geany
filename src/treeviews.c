@@ -30,6 +30,7 @@
 #include "document.h"
 #include "utils.h"
 #include "ui_utils.h"
+#include "symbols.h"
 
 
 enum
@@ -60,8 +61,8 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 
 
 
-/* the following two functions are document-related, but I think they fit better here than in document.c */
-void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
+/* the prepare_* functions are document-related, but I think they fit better here than in document.c */
+static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -88,6 +89,60 @@ void treeviews_prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
 	g_signal_connect(G_OBJECT(select), "changed",
 				G_CALLBACK(on_taglist_tree_selection_changed), NULL);
+}
+
+
+// update = rescan the tags for document[idx].filename
+void treeviews_update_tag_list(gint idx, gboolean update)
+{
+	if (gtk_bin_get_child(GTK_BIN(app->tagbar)))
+		gtk_container_remove(GTK_CONTAINER(app->tagbar), gtk_bin_get_child(GTK_BIN(app->tagbar)));
+
+	if (app->default_tag_tree == NULL)
+	{
+		GtkTreeIter iter;
+		GtkTreeStore *store = gtk_tree_store_new(1, G_TYPE_STRING);
+
+		app->default_tag_tree = gtk_tree_view_new();
+		prepare_taglist(app->default_tag_tree, store);
+		gtk_tree_store_append(store, &iter, NULL);
+		gtk_tree_store_set(store, &iter, 0, _("No tags found"), -1);
+		gtk_widget_show(app->default_tag_tree);
+		g_object_ref((gpointer)app->default_tag_tree);	// to hold it after removing
+	}
+
+	// make all inactive, because there is no more tab left, or something strange occured
+	if (idx == -1 || doc_list[idx].file_type == NULL || ! doc_list[idx].file_type->has_tags)
+	{
+		gtk_widget_set_sensitive(app->tagbar, FALSE);
+		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
+		return;
+	}
+
+	if (update)
+	{	// updating the tag list in the left tag window
+		if (doc_list[idx].tag_tree == NULL)
+		{
+			doc_list[idx].tag_store = gtk_tree_store_new(1, G_TYPE_STRING);
+			doc_list[idx].tag_tree = gtk_tree_view_new();
+			prepare_taglist(doc_list[idx].tag_tree, doc_list[idx].tag_store);
+			gtk_widget_show(doc_list[idx].tag_tree);
+			g_object_ref((gpointer)doc_list[idx].tag_tree);	// to hold it after removing
+		}
+
+		doc_list[idx].has_tags = symbols_recreate_tag_list(idx);
+	}
+
+	if (doc_list[idx].has_tags)
+	{
+		gtk_widget_set_sensitive(app->tagbar, TRUE);
+		gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
+	}
+	else
+	{
+		gtk_widget_set_sensitive(app->tagbar, FALSE);
+		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
+	}
 }
 
 
@@ -188,7 +243,7 @@ void treeviews_remove_document(gint idx)
 		gtk_widget_destroy(doc_list[idx].tag_tree);
 		if (GTK_IS_TREE_VIEW(doc_list[idx].tag_tree))
 		{
-			// Because it was ref'd in ui_update_tag_list, it needs unref'ing
+			// Because it was ref'd in treeviews_update_tag_list, it needs unref'ing
 			g_object_unref((gpointer)doc_list[idx].tag_tree);
 		}
 		doc_list[idx].tag_tree = NULL;

@@ -648,7 +648,7 @@ gint main(gint argc, gchar **argv)
 	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
 	gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 	build_menu_update(idx);
-	ui_update_tag_list(idx, FALSE);
+	treeviews_update_tag_list(idx, FALSE);
 
 #ifdef G_OS_WIN32
 	// hide "Build" menu item, at least until it is available for Windows

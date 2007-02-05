@@ -244,7 +244,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 		else
 			document_save_file(idx, FALSE);
 	}
-	ui_update_tag_list(cur_idx, TRUE);
+	treeviews_update_tag_list(cur_idx, TRUE);
 	ui_set_window_title(cur_idx);
 }
 
@@ -728,7 +728,7 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 		build_menu_update(idx);
 		ui_update_statusbar(idx, -1);
 		ui_set_window_title(idx);
-		ui_update_tag_list(idx, FALSE);
+		treeviews_update_tag_list(idx, FALSE);
 	}
 }
 

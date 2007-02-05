@@ -2,6 +2,10 @@
 
  * src/treeviews.c:
    Prevent right click in Symbol list from selecting a tag.
+ * src/ui_utils.h, src/treeviews.c, src/callbacks.c, src/treeviews.h,
+   src/document.c, src/main.c, src/ui_utils.c:
+   Move ui_update_tag_list() to treeviews.c.
+   Make treeviews_prepare_taglist() static.
 
 
 2007-02-03  Nick Treleaven  <nick.treleaven@btinternet.com>
