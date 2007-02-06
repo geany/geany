@@ -27,8 +27,6 @@ void prefs_init_dialog(void);
 
 void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data);
 
-gboolean on_prefs_delete_event(GtkWidget *widget, GdkEvent *event, gpointer user_data);
-
 void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data);
 
 void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data);

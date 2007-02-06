@@ -126,7 +126,7 @@ void dialogs_show_open_file ()
 		g_signal_connect((gpointer) app->open_filesel, "selection-changed",
 					G_CALLBACK(on_file_open_selection_changed), NULL);
 		g_signal_connect ((gpointer) app->open_filesel, "delete_event",
-					G_CALLBACK(gtk_widget_hide), NULL);
+					G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 		g_signal_connect((gpointer) app->open_filesel, "response",
 					G_CALLBACK(on_file_open_dialog_response), NULL);
 	}
@@ -266,8 +266,10 @@ gboolean dialogs_show_save_as()
 		gtk_window_set_type_hint(GTK_WINDOW(app->save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
 		gtk_dialog_set_default_response(GTK_DIALOG(app->save_filesel), GTK_RESPONSE_ACCEPT);
 
-		g_signal_connect((gpointer) app->save_filesel, "delete_event", G_CALLBACK(gtk_widget_hide), NULL);
-		g_signal_connect((gpointer) app->save_filesel, "response", G_CALLBACK(on_file_save_dialog_response), NULL);
+		g_signal_connect((gpointer) app->save_filesel, "delete_event",
+			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+		g_signal_connect((gpointer) app->save_filesel, "response",
+			G_CALLBACK(on_file_save_dialog_response), NULL);
 
 		gtk_window_set_transient_for(GTK_WINDOW(app->save_filesel), GTK_WINDOW(app->window));
 	}
@@ -414,7 +416,7 @@ void dialogs_show_open_font()
 		gtk_widget_show(GTK_FONT_SELECTION_DIALOG(app->open_fontsel)->apply_button);
 
 		g_signal_connect((gpointer) app->open_fontsel,
-					"delete_event", G_CALLBACK(gtk_widget_hide), NULL);
+					"delete_event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 		g_signal_connect((gpointer) GTK_FONT_SELECTION_DIALOG(app->open_fontsel)->ok_button,
 					"clicked", G_CALLBACK(on_font_ok_button_clicked), NULL);
 		g_signal_connect((gpointer) GTK_FONT_SELECTION_DIALOG(app->open_fontsel)->cancel_button,
@@ -422,7 +424,8 @@ void dialogs_show_open_font()
 		g_signal_connect((gpointer) GTK_FONT_SELECTION_DIALOG(app->open_fontsel)->apply_button,
 					"clicked", G_CALLBACK(on_font_apply_button_clicked), NULL);
 
-		gtk_font_selection_dialog_set_font_name(GTK_FONT_SELECTION_DIALOG(app->open_fontsel), app->editor_font);
+		gtk_font_selection_dialog_set_font_name(
+			GTK_FONT_SELECTION_DIALOG(app->open_fontsel), app->editor_font);
 		gtk_window_set_transient_for(GTK_WINDOW(app->open_fontsel), GTK_WINDOW(app->window));
 	}
 	/* We make sure the dialog is visible. */
@@ -545,7 +548,7 @@ void dialogs_show_color(gchar *colour)
 		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->ok_button, "clicked",
 						G_CALLBACK(on_color_ok_button_clicked), NULL);
 		g_signal_connect(app->open_colorsel, "delete_event",
-						G_CALLBACK(gtk_widget_hide), NULL);
+						G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	}
 	// if colour is non-NULL set it in the dialog as preselected colour
 	if (colour != NULL && (colour[0] == '0' || colour[0] == '#'))

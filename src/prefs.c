@@ -671,14 +671,6 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 }
 
 
-gboolean on_prefs_delete_event(GtkWidget *widget, GdkEvent *event, gpointer user_data)
-{
-	gtk_widget_hide(widget);
-
-	return TRUE;
-}
-
-
 void on_prefs_color_choosed(GtkColorButton *widget, gpointer user_data)
 {
 	GdkColor color;
@@ -974,8 +966,10 @@ void dialogs_show_prefs_dialog(void)
 		vte_append_preferences_tab();
 #endif
 
-		g_signal_connect((gpointer) app->prefs_dialog, "response", G_CALLBACK(on_prefs_button_clicked), NULL);
-		g_signal_connect((gpointer) app->prefs_dialog, "delete_event", G_CALLBACK(on_prefs_delete_event), NULL);
+		g_signal_connect((gpointer) app->prefs_dialog, "response",
+			G_CALLBACK(on_prefs_button_clicked), NULL);
+		g_signal_connect((gpointer) app->prefs_dialog, "delete_event",
+			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "tagbar_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "msgwin_font"),
