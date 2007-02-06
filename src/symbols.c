@@ -39,6 +39,15 @@ const guint TM_GLOBAL_TYPE_MASK =
 	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t;
 
 
+static gchar **html_entities = NULL;
+
+
+typedef struct
+{
+	gboolean	tags_loaded;
+	const gchar	*tag_file;
+} TagFileInfo;
+
 enum	// Geany tag files
 {
 	GTF_C,
@@ -48,14 +57,6 @@ enum	// Geany tag files
 	GTF_LATEX,
 	GTF_MAX
 };
-
-static gchar **html_entities = NULL;
-
-typedef struct
-{
-	gboolean	tags_loaded;
-	const gchar	*tag_file;
-} TagFileInfo;
 
 static TagFileInfo tag_file_info[GTF_MAX] =
 {
@@ -74,7 +75,7 @@ static void html_tags_loaded();
 void symbols_global_tags_loaded(gint file_type_idx)
 {
 	TagFileInfo *tfi;
-	gint gtf, lt;
+	gint tag_type;
 
 	if (app->ignore_global_tags) return;
 
@@ -83,27 +84,32 @@ void symbols_global_tags_loaded(gint file_type_idx)
 		case GEANY_FILETYPES_HTML:
 			html_tags_loaded();
 			return;
-		case GEANY_FILETYPES_C:		gtf = GTF_C; break;
-		case GEANY_FILETYPES_CPP:	gtf = GTF_C; break;
-		case GEANY_FILETYPES_PASCAL:gtf = GTF_PASCAL; break;
-		case GEANY_FILETYPES_PHP:	gtf = GTF_PHP; break;
-		case GEANY_FILETYPES_LATEX:	gtf = GTF_LATEX; break;
+		case GEANY_FILETYPES_CPP:
+			symbols_global_tags_loaded(GEANY_FILETYPES_C);	// load C global tags
+			return;	// no C++ tagfile yet
+		case GEANY_FILETYPES_C:		tag_type = GTF_C; break;
+		case GEANY_FILETYPES_PASCAL:tag_type = GTF_PASCAL; break;
+		case GEANY_FILETYPES_PHP:	tag_type = GTF_PHP; break;
+		case GEANY_FILETYPES_LATEX:	tag_type = GTF_LATEX; break;
 		default:
 			return;
 	}
-	lt = filetypes[file_type_idx]->lang;
-	tfi = &tag_file_info[gtf];
+	tfi = &tag_file_info[tag_type];
 
 	if (! tfi->tags_loaded)
 	{
-		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
-		tm_workspace_load_global_tags(file, lt);
+		gchar *fname = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
+		gint tm_lang;
+
+		tm_lang = filetypes[file_type_idx]->lang;
+		tm_workspace_load_global_tags(fname, tm_lang);
 		tfi->tags_loaded = TRUE;
-		g_free(file);
+		g_free(fname);
 	}
 }
 
 
+// HTML tagfile is just a list of entities for autocompletion (e.g. '&amp;')
 static void html_tags_loaded()
 {
 	TagFileInfo *tfi;
@@ -114,6 +120,7 @@ static void html_tags_loaded()
 	if (! tfi->tags_loaded)
 	{
 		gchar *file = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, tfi->tag_file, NULL);
+
 		html_entities = utils_read_file_in_array(file);
 		tfi->tags_loaded = TRUE;
 		g_free(file);
