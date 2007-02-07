@@ -113,7 +113,7 @@ settextstyle||(font: Word; direction: Word; charsize: Word)|
 setusercharsize||(Multx: Word; Divx: Word; Multy: Word; Divy: Word)|
 setviewport||(X1: SmallInt; Y1: SmallInt; X2: SmallInt; Y2: SmallInt; Clip: Boolean)|
 setwritemode||(WriteMode: SmallInt)|
-soundSound||(Hz: Word)|
+sound||(Hz: Word)|
 textbackground||(Color: Byte)|
 textcolor||(Color: Byte)|
 textheight|Word|(const TextString: String)|

@@ -6,6 +6,7 @@ Geany 0.10.1 (TBA)
 	* Fixed missing global tags for C files when a C++ source file was
 	  loaded first.
 	* Fixed autocompletion missing tag matches.
+	* Fixed a wrong PASCAL autocompletion.
 
 
 Geany 0.10 (December 21, 2006)
