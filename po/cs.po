@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.10\n"
+"Project-Id-Version: geany 0.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-19 20:42+0100\n"
+"POT-Creation-Date: 2007-02-07 19:53+0100\n"
 "PO-Revision-Date: 2006-12-19 21:19+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: Czech <messa@messa.cz>\n"
@@ -115,7 +115,7 @@ msgstr "Uložit vš_e"
 msgid "Saves all open files"
 msgstr "Uloží všechny otevřené soubory"
 
-#: src/interface.c:315 src/callbacks.c:473 src/utils.c:355
+#: src/interface.c:315 src/callbacks.c:490 src/utils.c:355
 msgid "_Reload"
 msgstr "Znovu načíst soubo_r"
 
@@ -1000,7 +1000,7 @@ msgstr "Typ:"
 msgid "Sets the color of the long line marker"
 msgstr "Nastaví barvu pravého okraje"
 
-#: src/interface.c:3093 src/dialogs.c:540 src/vte.c:546 src/vte.c:553
+#: src/interface.c:3093 src/dialogs.c:543 src/vte.c:546 src/vte.c:553
 msgid "Color Chooser"
 msgstr "Výběr barvy"
 
@@ -1267,68 +1267,68 @@ msgstr "Přiřazení kláves"
 msgid "Do you really want to quit?"
 msgstr "Opravdu chcete ukončit program?"
 
-#: src/callbacks.c:474
+#: src/callbacks.c:491
 msgid "Any unsaved changes will be lost."
 msgstr "Neuložené změny budou ztraceny."
 
-#: src/callbacks.c:475
+#: src/callbacks.c:492
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Opravdu chcete znovu načíst '%s'?"
 
-#: src/callbacks.c:860
+#: src/callbacks.c:877
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Soubor '%s' již existuje. Chcete ho přepsat?"
 
-#: src/callbacks.c:1230
-#, c-format
+#: src/callbacks.c:1247
+#, fuzzy, c-format
 msgid "Declaration of \"%s()\" not found"
-msgstr "Deklarace \"%s()\" nebyla nalezena."
+msgstr "Definice \"%s()\" nebyla nalezena."
 
-#: src/callbacks.c:1232
-#, c-format
+#: src/callbacks.c:1249
+#, fuzzy, c-format
 msgid "Definition of \"%s()\" not found"
 msgstr "Definice \"%s()\" nebyla nalezena."
 
-#: src/callbacks.c:1437 src/callbacks.c:1482
+#: src/callbacks.c:1454 src/callbacks.c:1499
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "Prosím zadejte typ aktuálního souboru před použitím této funkce."
 
-#: src/callbacks.c:1598 src/ui_utils.c:557
+#: src/callbacks.c:1615 src/ui_utils.c:561
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.rrrr"
 
-#: src/callbacks.c:1600 src/ui_utils.c:558
+#: src/callbacks.c:1617 src/ui_utils.c:562
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.rrrr"
 
-#: src/callbacks.c:1602 src/ui_utils.c:559
+#: src/callbacks.c:1619 src/ui_utils.c:563
 msgid "yyyy/mm/dd"
 msgstr "rrrr/mm/dd"
 
-#: src/callbacks.c:1604 src/ui_utils.c:568
+#: src/callbacks.c:1621 src/ui_utils.c:572
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.rrrr hh:mm:ss"
 
-#: src/callbacks.c:1606 src/ui_utils.c:569
+#: src/callbacks.c:1623 src/ui_utils.c:573
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.rrrr hh:mm:ss"
 
-#: src/callbacks.c:1608 src/ui_utils.c:570
+#: src/callbacks.c:1625 src/ui_utils.c:574
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "rrrr/mm/dd hh:mm:ss"
 
-#: src/callbacks.c:1610 src/ui_utils.c:579
+#: src/callbacks.c:1627 src/ui_utils.c:583
 msgid "Use Custom Date Format"
 msgstr "Použít vlastní formát data"
 
-#: src/callbacks.c:1621
+#: src/callbacks.c:1638
 msgid "Custom Date Format"
 msgstr "Vlastní formát data"
 
-#: src/callbacks.c:1622
+#: src/callbacks.c:1639
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function. See \"man "
@@ -1338,11 +1338,11 @@ msgstr ""
 "specifikátory jako v ANSI C funkci strftime. Viz \"man strftime\" pro více "
 "informací."
 
-#: src/callbacks.c:1642
+#: src/callbacks.c:1659
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Formát data nemohl být převeden (možná je příliš dlouhý)."
 
-#: src/callbacks.c:2030
+#: src/callbacks.c:2047
 msgid "No more message items."
 msgstr "Žádné další zprávy."
 
@@ -1352,7 +1352,7 @@ msgid "Couldn't find pixmap file: %s"
 msgstr "Nebyl nalezen soubor pixmap: %s"
 
 #. initialize the dialog
-#: src/dialogs.c:74 src/prefs.c:1023
+#: src/dialogs.c:74 src/prefs.c:1017
 msgid "Open File"
 msgstr "Otevřít soubor"
 
@@ -1412,85 +1412,85 @@ msgstr ""
 msgid "Save File"
 msgstr "Uložit soubor"
 
-#: src/dialogs.c:350
+#: src/dialogs.c:352
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "Soubor \"%s\" není uložen."
 
-#: src/dialogs.c:360
+#: src/dialogs.c:362
 msgid "Do you want to save it before closing?"
 msgstr "Chcete ho před zavřením uložit?"
 
-#: src/dialogs.c:363
+#: src/dialogs.c:365
 msgid "_Don't save"
 msgstr "_Neukládat"
 
-#: src/dialogs.c:407
+#: src/dialogs.c:409
 msgid "Choose font"
 msgstr "Vybrat písmo"
 
-#: src/dialogs.c:444
+#: src/dialogs.c:447
 msgid "Word Count"
 msgstr "Počet slov"
 
-#: src/dialogs.c:453
+#: src/dialogs.c:456
 msgid "selection"
 msgstr "výběr"
 
-#: src/dialogs.c:459
+#: src/dialogs.c:462
 msgid "whole document"
 msgstr "celý dokument"
 
-#: src/dialogs.c:468
+#: src/dialogs.c:471
 msgid "Range:"
 msgstr "Rozsah:"
 
-#: src/dialogs.c:480
+#: src/dialogs.c:483
 msgid "Lines:"
 msgstr "Řádky:"
 
-#: src/dialogs.c:494
+#: src/dialogs.c:497
 msgid "Words:"
 msgstr "Slova:"
 
-#: src/dialogs.c:508
+#: src/dialogs.c:511
 msgid "Characters:"
 msgstr "Znaky:"
 
-#: src/dialogs.c:607 src/keybindings.c:144
+#: src/dialogs.c:610 src/keybindings.c:144
 msgid "Go to line"
 msgstr "Přejít na řádek..."
 
-#: src/dialogs.c:613
+#: src/dialogs.c:616
 msgid "Enter the line you want to go to:"
 msgstr "Zadejte číslo řádku, na který chcete jít:"
 
 #. arguments
-#: src/dialogs.c:638 src/build.c:1068
+#: src/dialogs.c:641 src/build.c:1068
 msgid "Set Arguments"
 msgstr "Nastavení argumentů"
 
-#: src/dialogs.c:644
+#: src/dialogs.c:647
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr "Nastavte program a volby pro přeložení a zobrazení (La)TeX souborů."
 
-#: src/dialogs.c:655
+#: src/dialogs.c:658
 msgid "DVI creation:"
 msgstr "Tvorba DVI:"
 
-#: src/dialogs.c:674
+#: src/dialogs.c:677
 msgid "PDF creation:"
 msgstr "Tvorba PDF:"
 
-#: src/dialogs.c:693
+#: src/dialogs.c:696
 msgid "DVI preview:"
 msgstr "Náhled DVI:"
 
-#: src/dialogs.c:712
+#: src/dialogs.c:715
 msgid "PDF preview:"
 msgstr "Náhled PDF:"
 
-#: src/dialogs.c:728 src/dialogs.c:843
+#: src/dialogs.c:731 src/dialogs.c:846
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -1499,31 +1499,31 @@ msgstr ""
 "%f bude nahrazeno kompletním názvem souboru, např. test_file.c\n"
 "%e bude nahrazeno názvem souboru bez přípony, např. test_file"
 
-#: src/dialogs.c:755
+#: src/dialogs.c:758
 msgid "Set Includes and Arguments"
 msgstr "Nastavení include a argumentů"
 
-#: src/dialogs.c:761
+#: src/dialogs.c:764
 msgid "Set the commands for building and running programs."
 msgstr "Nastavení příkazů pro sestavení a spouštění programů."
 
-#: src/dialogs.c:768
+#: src/dialogs.c:771
 msgid " commands"
 msgstr " příkazy"
 
-#: src/dialogs.c:783
+#: src/dialogs.c:786
 msgid "Compile:"
 msgstr "Přeložit:"
 
-#: src/dialogs.c:804
+#: src/dialogs.c:807
 msgid "Build:"
 msgstr "Sestavit:"
 
-#: src/dialogs.c:825 src/dialogs.c:1096
+#: src/dialogs.c:828 src/dialogs.c:1099
 msgid "Execute:"
 msgstr "Spustit"
 
-#: src/dialogs.c:890
+#: src/dialogs.c:893
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -1531,93 +1531,93 @@ msgstr ""
 "Nastala chyba nebo informace o souboru nemohla být získána (např. z prázného "
 "souboru)."
 
-#: src/dialogs.c:909 src/dialogs.c:910 src/dialogs.c:911 src/dialogs.c:917
-#: src/dialogs.c:918 src/dialogs.c:919 src/utils.c:503 src/utils.c:557
+#: src/dialogs.c:912 src/dialogs.c:913 src/dialogs.c:914 src/dialogs.c:920
+#: src/dialogs.c:921 src/dialogs.c:922 src/utils.c:503 src/utils.c:557
 #: src/ui_utils.c:122 src/ui_utils.c:124
 msgid "unknown"
 msgstr "neznámý"
 
-#: src/dialogs.c:923
+#: src/dialogs.c:926
 msgid "Properties"
 msgstr "Vlastnosti"
 
-#: src/dialogs.c:951
+#: src/dialogs.c:954
 msgid "<b>Type:</b>"
 msgstr "<b>Typ:</b>"
 
-#: src/dialogs.c:964
+#: src/dialogs.c:967
 msgid "<b>Size:</b>"
 msgstr "<b>Velikost:</b>"
 
-#: src/dialogs.c:979
+#: src/dialogs.c:982
 msgid "<b>Location:</b>"
 msgstr "<b>Umístění:</b>"
 
-#: src/dialogs.c:992
+#: src/dialogs.c:995
 msgid "<b>Read-only:</b>"
 msgstr "<b>Jen pro čtení:</b>"
 
-#: src/dialogs.c:999
+#: src/dialogs.c:1002
 msgid "(only inside Geany)"
 msgstr "(pouze pro Geany)"
 
-#: src/dialogs.c:1008
+#: src/dialogs.c:1011
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kódování:</b>"
 
-#: src/dialogs.c:1017 src/ui_utils.c:123
+#: src/dialogs.c:1020 src/ui_utils.c:123
 msgid "(with BOM)"
 msgstr "(s BOM)"
 
-#: src/dialogs.c:1017 src/ui_utils.c:123
+#: src/dialogs.c:1020 src/ui_utils.c:123
 msgid "(without BOM)"
 msgstr "(bez BOM)"
 
-#: src/dialogs.c:1027
+#: src/dialogs.c:1030
 msgid "<b>Modified:</b>"
 msgstr "<b>Upraveno:</b>"
 
-#: src/dialogs.c:1040
+#: src/dialogs.c:1043
 msgid "<b>Changed:</b>"
 msgstr "<b>Změněno:</b>"
 
-#: src/dialogs.c:1053
+#: src/dialogs.c:1056
 msgid "<b>Accessed:</b>"
 msgstr "<b>Poslední přístup:</b>"
 
-#: src/dialogs.c:1074
+#: src/dialogs.c:1077
 msgid "<b>Permissions:</b>"
 msgstr "<b>Oprávnění:</b>"
 
 #. Header
-#: src/dialogs.c:1082
+#: src/dialogs.c:1085
 msgid "Read:"
 msgstr "Číst"
 
-#: src/dialogs.c:1089
+#: src/dialogs.c:1092
 msgid "Write:"
 msgstr "Zapisovat"
 
 #. Owner
-#: src/dialogs.c:1104
+#: src/dialogs.c:1107
 msgid "Owner:"
 msgstr "Vlastník:"
 
 #. Group
-#: src/dialogs.c:1140
+#: src/dialogs.c:1143
 msgid "Group:"
 msgstr "Skupina:"
 
 #. Other
-#: src/dialogs.c:1176
+#: src/dialogs.c:1179
 msgid "Other:"
 msgstr "Ostatní:"
 
-#: src/dialogs.c:1297
+#: src/dialogs.c:1300
 msgid "Keyboard shortcuts"
 msgstr "Klávesové zkratky"
 
-#: src/dialogs.c:1306
+#: src/dialogs.c:1309
 msgid "The following keyboard shortcuts are defined:"
 msgstr "Jsou definovány následující klávesové zkratky:"
 
@@ -1640,7 +1640,7 @@ msgid "Could not open file %s (%s)"
 msgstr "Soubor %s nemohl být otevřen (%s)"
 
 #: src/document.c:618
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The file \"%s\" could not opened properly and probably was truncated. Be "
 "aware that saving it can cause data loss.\n"
@@ -1792,31 +1792,31 @@ msgstr "(neuložený)"
 msgid "Font updated (%s)."
 msgstr "Písmo aktualizováno (%s)."
 
-#: src/ui_utils.c:217
+#: src/ui_utils.c:309
 msgid "No tags found"
 msgstr "Nenalezeny žádné tagy"
 
-#: src/ui_utils.c:526
+#: src/ui_utils.c:530
 msgid "C Standard Library"
 msgstr "C Standard Library"
 
-#: src/ui_utils.c:527
+#: src/ui_utils.c:531
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: src/ui_utils.c:528
+#: src/ui_utils.c:532
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C Standard Library)"
 
-#: src/ui_utils.c:529
+#: src/ui_utils.c:533
 msgid "C++ Standard Library"
 msgstr "C++ Standard Library"
 
-#: src/ui_utils.c:530
+#: src/ui_utils.c:534
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: src/ui_utils.c:596
+#: src/ui_utils.c:600
 msgid "Set Custom Date Format"
 msgstr "Nastavit vlastní formát data"
 
@@ -1961,7 +1961,7 @@ msgstr "%s konfigurační soubor, upravte podle svých potřeb"
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Pište sem cokoliv, použijte toto jako poznámkový blok."
 
-#: src/keyfile.c:557
+#: src/keyfile.c:560
 msgid "Failed to load one or more session files."
 msgstr "Chyba při otevírání jednoho či více souborů sezení."
 
@@ -2154,68 +2154,68 @@ msgstr "Akce"
 msgid "Shortcut"
 msgstr "Zkratka"
 
-#: src/prefs.c:789
+#: src/prefs.c:781
 msgid "Grab key"
 msgstr "Zadání klávesové zkratky"
 
-#: src/prefs.c:793
+#: src/prefs.c:785
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
 msgstr "Zadejte kombunaci kláves, kterou chcete použít pro \"%s\""
 
-#: src/prefs.c:917
+#: src/prefs.c:909
 #, c-format
 msgid ""
 "The combination '%s' is already used for \"%s\". Please choose another one."
 msgstr "Kombinace '%s' je již použita pro \"%s\". Prosím vyberte jinou."
 
-#: src/about.c:119
+#: src/about.c:121
 msgid "About Geany"
 msgstr "O Geany"
 
-#: src/about.c:168
+#: src/about.c:170
 msgid "A fast and lightweight IDE"
 msgstr "Rychlé a lehké IDE"
 
-#: src/about.c:189
+#: src/about.c:191
 #, c-format
 msgid "(built on %s)"
 msgstr "(sestaveno %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: src/about.c:220
+#: src/about.c:222
 msgid "Info"
 msgstr "Informace"
 
-#: src/about.c:232
+#: src/about.c:234
 msgid "Developers"
 msgstr "Vývojáři"
 
-#: src/about.c:232
+#: src/about.c:234
 msgid "Maintainer"
 msgstr "správce"
 
-#: src/about.c:232
+#: src/about.c:234
 msgid "developer"
 msgstr "vývojář"
 
-#: src/about.c:233
+#: src/about.c:235
 msgid "translation maintainer"
 msgstr "správce překladu"
 
-#: src/about.c:233
+#: src/about.c:235
 msgid "Translators"
 msgstr "Překladatelé"
 
-#: src/about.c:234
+#: src/about.c:236
 msgid "language"
 msgstr "jazyk"
 
-#: src/about.c:240
+#: src/about.c:242
 msgid "Credits"
 msgstr "Kredity"
 
-#: src/about.c:253
+#: src/about.c:255
 msgid "License"
 msgstr "Licence"
 
@@ -2477,15 +2477,15 @@ msgstr "Namespaces"
 msgid "Structs / Typedefs"
 msgstr "Structs / Typedefs"
 
-#: src/treeviews.c:385 src/treeviews.c:437
+#: src/treeviews.c:391 src/treeviews.c:443
 msgid "Hide"
 msgstr "Skrýt"
 
-#: src/treeviews.c:393 src/treeviews.c:445
+#: src/treeviews.c:399 src/treeviews.c:451
 msgid "Hide sidebar"
 msgstr "Skrýt postranní panel"
 
-#: src/treeviews.c:425
+#: src/treeviews.c:431
 msgid "Reload"
 msgstr "Znovu načíst"
 
@@ -2548,6 +2548,7 @@ msgid "Terminal emulation:"
 msgstr "Emulátor terminálu:"
 
 #: src/vte.c:580
+#, fuzzy
 msgid ""
 "Controls how the terminal emulator should behave. xterm is a good start."
 msgstr "Způsob chování emulátoru terminálu; xterm je pro začátek dobrý."
@@ -3056,6 +3057,145 @@ msgstr "Interpunkce"
 msgid "Miscellaneous characters"
 msgstr "Různé znaky"
 
+#, fuzzy
+#~ msgid "Forward declaration \"%s\" not found."
+#~ msgstr "Deklarace \"%s()\" nebyla nalezena."
+
+#, fuzzy
+#~ msgid "Javascript source file"
+#~ msgstr "Java zdrojový kód"
+
+#, fuzzy
+#~ msgid "Lua source file"
+#~ msgstr "LaTeX soubor"
+
+#, fuzzy
+#~ msgid "Open Selected F_ile"
+#~ msgstr "Otevřít soubor"
+
+#, fuzzy
+#~ msgid "Insert BSD License Notice"
+#~ msgstr "Vložit poznámku o GPL"
+
+#, fuzzy
+#~ msgid ""
+#~ "Inserts a BSD licence notice (should be done at the beginning of the file)"
+#~ msgstr "Vloží poznámku o GPL (měla by být na začátku souboru)"
+
+#, fuzzy
+#~ msgid "Find _Selected"
+#~ msgstr "Najít _další"
+
+#, fuzzy
+#~ msgid "_New"
+#~ msgstr "Nový"
+
+#, fuzzy
+#~ msgid "_Open"
+#~ msgstr "Otevřít"
+
+#, fuzzy
+#~ msgid "_Close"
+#~ msgstr "Zavřít"
+
+#, fuzzy
+#~ msgid "Insert BSD license Notice"
+#~ msgstr "Vložit poznámku o GPL"
+
+#, fuzzy
+#~ msgid "Open selected file"
+#~ msgstr "Otevřené soubory"
+
+#, fuzzy
+#~ msgid "Save as"
+#~ msgstr "Uložit vše"
+
+#, fuzzy
+#~ msgid "Find Next Selection"
+#~ msgstr "_Ve výběru"
+
+#, fuzzy
+#~ msgid "Find Previous Selection"
+#~ msgstr "Najít předchozí"
+
+#, fuzzy
+#~ msgid ""
+#~ "set initial column number for the first opened file (useful in "
+#~ "conjunction with --line)"
+#~ msgstr "nastavit výchozí počet řádek pro poprvé otevřené soubory"
+
+#, fuzzy
+#~ msgid "Could not find file '%s'."
+#~ msgstr "Soubor \"%s\" nebyl nalezen.\n"
+
+#, fuzzy
+#~ msgid "Open project"
+#~ msgstr "Make objekt"
+
+#, fuzzy
+#~ msgid "Project files"
+#~ msgstr "Vlastnosti"
+
+#, fuzzy
+#~ msgid "Project \"%s\" closed."
+#~ msgstr "Soubor %s zavřen."
+
+#, fuzzy
+#~ msgid "Project properties"
+#~ msgstr "Vlastnosti"
+
+#, fuzzy
+#~ msgid "C_reate"
+#~ msgstr "Znak"
+
+#, fuzzy
+#~ msgid "Name:"
+#~ msgstr "Make:"
+
+#, fuzzy
+#~ msgid "Description:"
+#~ msgstr "Tvorba DVI:"
+
+#, fuzzy
+#~ msgid "Filename:"
+#~ msgstr "Vietnamské"
+
+#, fuzzy
+#~ msgid "File patterns:"
+#~ msgstr "_Střední Východ"
+
+#, fuzzy
+#~ msgid ""
+#~ "There is already an open project \"%s\". Do you want to close it before "
+#~ "proceed?"
+#~ msgstr ""
+#~ "Soubor '%s' nebyl uložen.\n"
+#~ "Chcete ho před zavřením uložit?"
+
+#, fuzzy
+#~ msgid "Project file could not be written."
+#~ msgstr "Proces nemohl být přerušen (%s)."
+
+#, fuzzy
+#~ msgid "Project \"%s\" created."
+#~ msgstr "Vlastnosti"
+
+#, fuzzy
+#~ msgid "Project \"%s\" saved."
+#~ msgstr "Soubor %s uložen."
+
+#, fuzzy
+#~ msgid "Project \"%s\" opened."
+#~ msgstr "Vlastnosti"
+
+#, fuzzy
+#~ msgid "Project file could not be loaded."
+#~ msgstr "Proces nemohl být přerušen (%s)."
+
+#, fuzzy
+#~ msgid "File location:"
+#~ msgstr "Tvorba PDF:"
+
 #~ msgid ""
 #~ "You have opened too many files. There is a limit of %d concurrent open "
 #~ "files."
@@ -3086,13 +3226,6 @@ msgstr "Různé znaky"
 
 #~ msgid "Enter custom options for the make tool"
 #~ msgstr "Zadejte vlastní volby pro nástroj make"
-
-#~ msgid ""
-#~ "The file '%s' is not saved.\n"
-#~ "Do you want to save it before closing?"
-#~ msgstr ""
-#~ "Soubor '%s' nebyl uložen.\n"
-#~ "Chcete ho před zavřením uložit?"
 
 #~ msgid ""
 #~ "Range:\t\t%s\n"
@@ -3148,9 +3281,6 @@ msgstr "Různé znaky"
 
 #~ msgid "The dialog window won't be closed when you start the operation."
 #~ msgstr "Toto okno nebude uzavřeno po spuštění hledání."
-
-#~ msgid "Could not find file \"%s\".\n"
-#~ msgstr "Soubor \"%s\" nebyl nalezen.\n"
 
 #~ msgid ""
 #~ "Geany is exiting because a named pipe was found. Mostly this means, Geany "

@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.10\n"
+"Project-Id-Version: geany 0.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-19 20:42+0100\n"
+"POT-Creation-Date: 2007-02-07 19:53+0100\n"
 "PO-Revision-Date: 2006-06-01 10:55+0200\n"
 "Last-Translator: Yura Semashko <yurand2@gmail.com>\n"
 "Language-Team: Belarusian <yurand2@gmail.com>\n"
@@ -118,7 +118,7 @@ msgstr "Захаваць усе"
 msgid "Saves all open files"
 msgstr "Захаваць усе адчыненыя файлы"
 
-#: src/interface.c:315 src/callbacks.c:473 src/utils.c:355
+#: src/interface.c:315 src/callbacks.c:490 src/utils.c:355
 msgid "_Reload"
 msgstr "Загрузіць зноў"
 
@@ -985,7 +985,7 @@ msgstr "Тып:"
 msgid "Sets the color of the long line marker"
 msgstr "Усталяваць колер маркёра доўгага радка"
 
-#: src/interface.c:3093 src/dialogs.c:540 src/vte.c:546 src/vte.c:553
+#: src/interface.c:3093 src/dialogs.c:543 src/vte.c:546 src/vte.c:553
 msgid "Color Chooser"
 msgstr "Выбар колеру"
 
@@ -1251,79 +1251,79 @@ msgstr "Прывязкі клявіш"
 msgid "Do you really want to quit?"
 msgstr "Вы ўпэўнены што жадаеце выйсьці?"
 
-#: src/callbacks.c:474
+#: src/callbacks.c:491
 msgid "Any unsaved changes will be lost."
 msgstr "Усе незахаваныя зьмяненьні зьнікнуць."
 
-#: src/callbacks.c:475
+#: src/callbacks.c:492
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Вы упэўнены што жадаеце загрузіць зноў '%s?'"
 
-#: src/callbacks.c:860
+#: src/callbacks.c:877
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Файл '%s' ужо існуе. Замяніць яго?"
 
-#: src/callbacks.c:1230
-#, c-format
+#: src/callbacks.c:1247
+#, fuzzy, c-format
 msgid "Declaration of \"%s()\" not found"
-msgstr "Аб'яуленне \"%s()\" не знойдзена"
+msgstr "Рэалізацыя \"%s()\" не знойдзена\""
 
-#: src/callbacks.c:1232
-#, c-format
+#: src/callbacks.c:1249
+#, fuzzy, c-format
 msgid "Definition of \"%s()\" not found"
 msgstr "Рэалізацыя \"%s()\" не знойдзена\""
 
-#: src/callbacks.c:1437 src/callbacks.c:1482
+#: src/callbacks.c:1454 src/callbacks.c:1499
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "Калі ласка вызначыце тып файла перад выкарыстоўваньнем гэтай функцыі"
 
-#: src/callbacks.c:1598 src/ui_utils.c:557
+#: src/callbacks.c:1615 src/ui_utils.c:561
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: src/callbacks.c:1600 src/ui_utils.c:558
+#: src/callbacks.c:1617 src/ui_utils.c:562
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: src/callbacks.c:1602 src/ui_utils.c:559
+#: src/callbacks.c:1619 src/ui_utils.c:563
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: src/callbacks.c:1604 src/ui_utils.c:568
+#: src/callbacks.c:1621 src/ui_utils.c:572
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: src/callbacks.c:1606 src/ui_utils.c:569
+#: src/callbacks.c:1623 src/ui_utils.c:573
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: src/callbacks.c:1608 src/ui_utils.c:570
+#: src/callbacks.c:1625 src/ui_utils.c:574
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: src/callbacks.c:1610 src/ui_utils.c:579
+#: src/callbacks.c:1627 src/ui_utils.c:583
 msgid "Use Custom Date Format"
 msgstr "Выкарыстоўваць свой фармат даты"
 
-#: src/callbacks.c:1621
+#: src/callbacks.c:1638
 msgid "Custom Date Format"
 msgstr "Свой фармат даты"
 
-#: src/callbacks.c:1622
+#: src/callbacks.c:1639
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function. See \"man "
 "strftime\" for more information."
 msgstr ""
 
-#: src/callbacks.c:1642
+#: src/callbacks.c:1659
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Фармат даты ня можа быць пераўтвораны (магчыма надта доўгі)."
 
-#: src/callbacks.c:2030
+#: src/callbacks.c:2047
 msgid "No more message items."
 msgstr "Няма больш паведамленьняў."
 
@@ -1333,7 +1333,7 @@ msgid "Couldn't find pixmap file: %s"
 msgstr "Нельга знайсьці pixmap файл: %s"
 
 #. initialize the dialog
-#: src/dialogs.c:74 src/prefs.c:1023
+#: src/dialogs.c:74 src/prefs.c:1017
 msgid "Open File"
 msgstr "Адчыніць файл"
 
@@ -1393,86 +1393,86 @@ msgstr ""
 msgid "Save File"
 msgstr "Захаваць файл"
 
-#: src/dialogs.c:350
+#: src/dialogs.c:352
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "Файл '%s' не захаваны."
 
-#: src/dialogs.c:360
+#: src/dialogs.c:362
 msgid "Do you want to save it before closing?"
 msgstr "Жадаеш захаваць яго перад зачыненьнем?"
 
-#: src/dialogs.c:363
+#: src/dialogs.c:365
 msgid "_Don't save"
 msgstr "Не захоўваць"
 
-#: src/dialogs.c:407
+#: src/dialogs.c:409
 msgid "Choose font"
 msgstr "Выбраць шрыфт"
 
-#: src/dialogs.c:444
+#: src/dialogs.c:447
 msgid "Word Count"
 msgstr "Лічыць словы"
 
-#: src/dialogs.c:453
+#: src/dialogs.c:456
 msgid "selection"
 msgstr "вылучэньне"
 
-#: src/dialogs.c:459
+#: src/dialogs.c:462
 msgid "whole document"
 msgstr "увесь дакумэнт"
 
-#: src/dialogs.c:468
+#: src/dialogs.c:471
 msgid "Range:"
 msgstr "Дыстанцыя:"
 
-#: src/dialogs.c:480
+#: src/dialogs.c:483
 msgid "Lines:"
 msgstr "Радкі:"
 
-#: src/dialogs.c:494
+#: src/dialogs.c:497
 msgid "Words:"
 msgstr "Словы:"
 
-#: src/dialogs.c:508
+#: src/dialogs.c:511
 msgid "Characters:"
 msgstr "Літары:"
 
-#: src/dialogs.c:607 src/keybindings.c:144
+#: src/dialogs.c:610 src/keybindings.c:144
 msgid "Go to line"
 msgstr "Перайсьці да радка"
 
-#: src/dialogs.c:613
+#: src/dialogs.c:616
 msgid "Enter the line you want to go to:"
 msgstr "Увядзі радок да якога жадаеш перайсьці:"
 
 #. arguments
-#: src/dialogs.c:638 src/build.c:1068
+#: src/dialogs.c:641 src/build.c:1068
 msgid "Set Arguments"
 msgstr "Усталяваць аргумэнты"
 
-#: src/dialogs.c:644
+#: src/dialogs.c:647
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr ""
 "Усталяваць праграмы і наладкі дзеля кампіляцыі і прагляду (La)TeX файлаў."
 
-#: src/dialogs.c:655
+#: src/dialogs.c:658
 msgid "DVI creation:"
 msgstr "Стварэньне DVI"
 
-#: src/dialogs.c:674
+#: src/dialogs.c:677
 msgid "PDF creation:"
 msgstr "Стварэньне PDF"
 
-#: src/dialogs.c:693
+#: src/dialogs.c:696
 msgid "DVI preview:"
 msgstr "Прагляд DVI:"
 
-#: src/dialogs.c:712
+#: src/dialogs.c:715
 msgid "PDF preview:"
 msgstr "Прагляд PDF:"
 
-#: src/dialogs.c:728 src/dialogs.c:843
+#: src/dialogs.c:731 src/dialogs.c:846
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -1481,31 +1481,31 @@ msgstr ""
 "%f будзе заменены на поўнае імя, напрыклад, test_file.c\n"
 "%e будзе заменены на імя файла без расшырэньня, напрыклад, test_file"
 
-#: src/dialogs.c:755
+#: src/dialogs.c:758
 msgid "Set Includes and Arguments"
 msgstr "Усталяваць Includes і аргумэнты"
 
-#: src/dialogs.c:761
+#: src/dialogs.c:764
 msgid "Set the commands for building and running programs."
 msgstr "Вызначыць каманды для будоўлі і выкананьня праграм."
 
-#: src/dialogs.c:768
+#: src/dialogs.c:771
 msgid " commands"
 msgstr "Каманды"
 
-#: src/dialogs.c:783
+#: src/dialogs.c:786
 msgid "Compile:"
 msgstr "Кампіляваць:"
 
-#: src/dialogs.c:804
+#: src/dialogs.c:807
 msgid "Build:"
 msgstr "Пабудаваць:"
 
-#: src/dialogs.c:825 src/dialogs.c:1096
+#: src/dialogs.c:828 src/dialogs.c:1099
 msgid "Execute:"
 msgstr "Выканаць:"
 
-#: src/dialogs.c:890
+#: src/dialogs.c:893
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -1513,93 +1513,93 @@ msgstr ""
 "Адбылася памылка, ці немагчыма атрымаць інфармацыю а файле (г.з. з новага "
 "файла)."
 
-#: src/dialogs.c:909 src/dialogs.c:910 src/dialogs.c:911 src/dialogs.c:917
-#: src/dialogs.c:918 src/dialogs.c:919 src/utils.c:503 src/utils.c:557
+#: src/dialogs.c:912 src/dialogs.c:913 src/dialogs.c:914 src/dialogs.c:920
+#: src/dialogs.c:921 src/dialogs.c:922 src/utils.c:503 src/utils.c:557
 #: src/ui_utils.c:122 src/ui_utils.c:124
 msgid "unknown"
 msgstr "невядомы"
 
-#: src/dialogs.c:923
+#: src/dialogs.c:926
 msgid "Properties"
 msgstr "Уласьцівасьці"
 
-#: src/dialogs.c:951
+#: src/dialogs.c:954
 msgid "<b>Type:</b>"
 msgstr "<b>Тып:</b>"
 
-#: src/dialogs.c:964
+#: src/dialogs.c:967
 msgid "<b>Size:</b>"
 msgstr "<b>Памер:</b>"
 
-#: src/dialogs.c:979
+#: src/dialogs.c:982
 msgid "<b>Location:</b>"
 msgstr "<b>Месца:</b>"
 
-#: src/dialogs.c:992
+#: src/dialogs.c:995
 msgid "<b>Read-only:</b>"
 msgstr "<b>Толькі чытаць:</b>"
 
-#: src/dialogs.c:999
+#: src/dialogs.c:1002
 msgid "(only inside Geany)"
 msgstr "(толькі ў Geany)"
 
-#: src/dialogs.c:1008
+#: src/dialogs.c:1011
 msgid "<b>Encoding:</b>"
 msgstr "<b>Знаканабор:</b>"
 
-#: src/dialogs.c:1017 src/ui_utils.c:123
+#: src/dialogs.c:1020 src/ui_utils.c:123
 msgid "(with BOM)"
 msgstr "(з BOM)"
 
-#: src/dialogs.c:1017 src/ui_utils.c:123
+#: src/dialogs.c:1020 src/ui_utils.c:123
 msgid "(without BOM)"
 msgstr "(без BOM)"
 
-#: src/dialogs.c:1027
+#: src/dialogs.c:1030
 msgid "<b>Modified:</b>"
 msgstr "<b>Зьменены:</b>"
 
-#: src/dialogs.c:1040
+#: src/dialogs.c:1043
 msgid "<b>Changed:</b>"
 msgstr "<b>Зьменены:</b>"
 
-#: src/dialogs.c:1053
+#: src/dialogs.c:1056
 msgid "<b>Accessed:</b>"
 msgstr "<b>Даступаўся:</b>"
 
-#: src/dialogs.c:1074
+#: src/dialogs.c:1077
 msgid "<b>Permissions:</b>"
 msgstr "<b>Дазваленьні:</b>"
 
 #. Header
-#: src/dialogs.c:1082
+#: src/dialogs.c:1085
 msgid "Read:"
 msgstr "Чытаць:"
 
-#: src/dialogs.c:1089
+#: src/dialogs.c:1092
 msgid "Write:"
 msgstr "Пісаць:"
 
 #. Owner
-#: src/dialogs.c:1104
+#: src/dialogs.c:1107
 msgid "Owner:"
 msgstr "Уладальнік:"
 
 #. Group
-#: src/dialogs.c:1140
+#: src/dialogs.c:1143
 msgid "Group:"
 msgstr "Група:"
 
 #. Other
-#: src/dialogs.c:1176
+#: src/dialogs.c:1179
 msgid "Other:"
 msgstr "Другі:"
 
-#: src/dialogs.c:1297
+#: src/dialogs.c:1300
 msgid "Keyboard shortcuts"
 msgstr "Наладка клявіш"
 
-#: src/dialogs.c:1306
+#: src/dialogs.c:1309
 msgid "The following keyboard shortcuts are defined:"
 msgstr "Вызначаны наступныя клявішы."
 
@@ -1622,7 +1622,7 @@ msgid "Could not open file %s (%s)"
 msgstr "Немагчыма адчыніць файл %s (%s)"
 
 #: src/document.c:618
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The file \"%s\" could not opened properly and probably was truncated. Be "
 "aware that saving it can cause data loss.\n"
@@ -1774,31 +1774,31 @@ msgstr "(Незахаваны)"
 msgid "Font updated (%s)."
 msgstr "Шрыфт адноўлены (%s)."
 
-#: src/ui_utils.c:217
+#: src/ui_utils.c:309
 msgid "No tags found"
 msgstr "tags ня знойдзены"
 
-#: src/ui_utils.c:526
+#: src/ui_utils.c:530
 msgid "C Standard Library"
 msgstr "Стандартная бібліятэка C"
 
-#: src/ui_utils.c:527
+#: src/ui_utils.c:531
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: src/ui_utils.c:528
+#: src/ui_utils.c:532
 msgid "C++ (C Standard Library)"
 msgstr "C++ (Стандартная бібліятэка)"
 
-#: src/ui_utils.c:529
+#: src/ui_utils.c:533
 msgid "C++ Standard Library"
 msgstr "C++ Стандартная бібліятэка"
 
-#: src/ui_utils.c:530
+#: src/ui_utils.c:534
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: src/ui_utils.c:596
+#: src/ui_utils.c:600
 msgid "Set Custom Date Format"
 msgstr "Усталяваць свой фармат даты"
 
@@ -1943,7 +1943,7 @@ msgstr "Файл наладкі %s, зьмяняй як табе трэба"
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Пішы тут што жадаеш, выкарыстоўвай для заметак."
 
-#: src/keyfile.c:557
+#: src/keyfile.c:560
 msgid "Failed to load one or more session files."
 msgstr "Немагчыма загрузіць адзін або больш файлаў з прошлай сесіі"
 
@@ -2132,68 +2132,68 @@ msgstr "Справа"
 msgid "Shortcut"
 msgstr "Ярлык"
 
-#: src/prefs.c:789
+#: src/prefs.c:781
 msgid "Grab key"
 msgstr "Захапіць клявішу"
 
-#: src/prefs.c:793
+#: src/prefs.c:785
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
 msgstr "Цісьні камбінацыю клявіш, якія ты жадаеш выкарыстоўваць для \"%s\""
 
-#: src/prefs.c:917
+#: src/prefs.c:909
 #, c-format
 msgid ""
 "The combination '%s' is already used for \"%s\". Please choose another one."
 msgstr "Камбінацыя '%s' ужо выкарыстана для \"%s\". Калі ласка выбяры іншую."
 
-#: src/about.c:119
+#: src/about.c:121
 msgid "About Geany"
 msgstr "Пра Geany"
 
-#: src/about.c:168
+#: src/about.c:170
 msgid "A fast and lightweight IDE"
 msgstr "Хуткае лёгкае IDE"
 
-#: src/about.c:189
+#: src/about.c:191
 #, c-format
 msgid "(built on %s)"
 msgstr "(збудаваны на %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: src/about.c:220
+#: src/about.c:222
 msgid "Info"
 msgstr "Інфармацыя"
 
-#: src/about.c:232
+#: src/about.c:234
 msgid "Developers"
 msgstr "Распрацоўшчыкі"
 
-#: src/about.c:232
+#: src/about.c:234
 msgid "Maintainer"
 msgstr "Падтрымка"
 
-#: src/about.c:232
+#: src/about.c:234
 msgid "developer"
 msgstr "распрацоўшчык"
 
-#: src/about.c:233
+#: src/about.c:235
 msgid "translation maintainer"
 msgstr "падтрымка перакладу"
 
-#: src/about.c:233
+#: src/about.c:235
 msgid "Translators"
 msgstr "Перакладчыкі"
 
-#: src/about.c:234
+#: src/about.c:236
 msgid "language"
 msgstr "мова"
 
-#: src/about.c:240
+#: src/about.c:242
 msgid "Credits"
 msgstr "Аўтары"
 
-#: src/about.c:253
+#: src/about.c:255
 msgid "License"
 msgstr "Ліцэнзія"
 
@@ -2455,15 +2455,15 @@ msgstr "Namespaces"
 msgid "Structs / Typedefs"
 msgstr "Struct / Typedef"
 
-#: src/treeviews.c:385 src/treeviews.c:437
+#: src/treeviews.c:391 src/treeviews.c:443
 msgid "Hide"
 msgstr "Схаваць"
 
-#: src/treeviews.c:393 src/treeviews.c:445
+#: src/treeviews.c:399 src/treeviews.c:451
 msgid "Hide sidebar"
 msgstr "Схаваць сайд-бар"
 
-#: src/treeviews.c:425
+#: src/treeviews.c:431
 msgid "Reload"
 msgstr "Загрузіць зноў"
 
@@ -2527,6 +2527,7 @@ msgid "Terminal emulation:"
 msgstr "Эмуляцыя тэрмінала:"
 
 #: src/vte.c:580
+#, fuzzy
 msgid ""
 "Controls how the terminal emulator should behave. xterm is a good start."
 msgstr ""
@@ -3028,3 +3029,140 @@ msgstr "Знакі прыпынку"
 #: src/tools.c:365
 msgid "Miscellaneous characters"
 msgstr "Іншыя літары"
+
+#, fuzzy
+#~ msgid "Forward declaration \"%s\" not found."
+#~ msgstr "Аб'яуленне \"%s()\" не знойдзена"
+
+#, fuzzy
+#~ msgid "Javascript source file"
+#~ msgstr "Java"
+
+#, fuzzy
+#~ msgid "Lua source file"
+#~ msgstr "LaTeX"
+
+#, fuzzy
+#~ msgid "Open Selected F_ile"
+#~ msgstr "Адчыніць файл"
+
+#, fuzzy
+#~ msgid "Insert BSD License Notice"
+#~ msgstr "Уставіць GPL паведамленьне"
+
+#, fuzzy
+#~ msgid ""
+#~ "Inserts a BSD licence notice (should be done at the beginning of the file)"
+#~ msgstr "Уставіць GPL паведамленьне (павінна быць зроблена ў пачатку файла)"
+
+#, fuzzy
+#~ msgid "Find _Selected"
+#~ msgstr "Шукаць наступны"
+
+#, fuzzy
+#~ msgid "_New"
+#~ msgstr "Новы"
+
+#, fuzzy
+#~ msgid "_Open"
+#~ msgstr "Адчыніць"
+
+#, fuzzy
+#~ msgid "_Close"
+#~ msgstr "Зачыніць"
+
+#, fuzzy
+#~ msgid "Insert BSD license Notice"
+#~ msgstr "Уставіць GPL паведамленьне"
+
+#, fuzzy
+#~ msgid "Open selected file"
+#~ msgstr "Адчыніць файлы"
+
+#, fuzzy
+#~ msgid "Save as"
+#~ msgstr "Захаваць усе"
+
+#, fuzzy
+#~ msgid "Find Next Selection"
+#~ msgstr "У вылучэньні"
+
+#, fuzzy
+#~ msgid "Find Previous Selection"
+#~ msgstr "Шукаць былы"
+
+#, fuzzy
+#~ msgid ""
+#~ "set initial column number for the first opened file (useful in "
+#~ "conjunction with --line)"
+#~ msgstr "усталяваць пачатковы радок для адчыняемых файлаў"
+
+#, fuzzy
+#~ msgid "Could not find file '%s'."
+#~ msgstr "Нельга знайсьці pixmap файл: %s"
+
+#, fuzzy
+#~ msgid "Open project"
+#~ msgstr "Будаваць аб'ект"
+
+#, fuzzy
+#~ msgid "Project files"
+#~ msgstr "Уласьцівасьці"
+
+#, fuzzy
+#~ msgid "Project \"%s\" closed."
+#~ msgstr "Файл %s зачынены."
+
+#, fuzzy
+#~ msgid "Project properties"
+#~ msgstr "Уласьцівасьці"
+
+#, fuzzy
+#~ msgid "C_reate"
+#~ msgstr "Літара"
+
+#, fuzzy
+#~ msgid "Name:"
+#~ msgstr "Зрабіць:"
+
+#, fuzzy
+#~ msgid "Description:"
+#~ msgstr "Стварэньне DVI"
+
+#, fuzzy
+#~ msgid "Filename:"
+#~ msgstr "Vietnamese"
+
+#, fuzzy
+#~ msgid "File patterns:"
+#~ msgstr "Middle Eastern"
+
+#, fuzzy
+#~ msgid ""
+#~ "There is already an open project \"%s\". Do you want to close it before "
+#~ "proceed?"
+#~ msgstr "Файл '%s' ужо існуе. Замяніць яго?"
+
+#, fuzzy
+#~ msgid "Project file could not be written."
+#~ msgstr "Немагчыма зрабіць наладкавую дырэкторыю (%s)."
+
+#, fuzzy
+#~ msgid "Project \"%s\" created."
+#~ msgstr "Уласьцівасьці"
+
+#, fuzzy
+#~ msgid "Project \"%s\" saved."
+#~ msgstr "Файл %s захаваны."
+
+#, fuzzy
+#~ msgid "Project \"%s\" opened."
+#~ msgstr "Уласьцівасьці"
+
+#, fuzzy
+#~ msgid "Project file could not be loaded."
+#~ msgstr "Немагчыма зрабіць наладкавую дырэкторыю (%s)."
+
+#, fuzzy
+#~ msgid "File location:"
+#~ msgstr "Стварэньне PDF"

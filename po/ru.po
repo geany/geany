@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.8\n"
+"Project-Id-Version: geany 0.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-08 16:22+0200\n"
+"POT-Creation-Date: 2007-02-07 19:53+0100\n"
 "PO-Revision-Date: 2006-07-15 11:43-0000\n"
 "Last-Translator: brahmann <brahmann@lifec0re.org.ru>\n"
 "Language-Team: RUSSIAN <ru@li.org>\n"
@@ -18,1379 +18,1619 @@ msgstr ""
 "X-Poedit-Country: UKRAINE\n"
 "X-Poedit-Basepath: ../\n"
 
-#: src/main.c:73
-msgid "runs in debug mode (means being verbose)"
-msgstr "запущено в отладочном режиме (выдает больше сообщений)"
-
-#: src/main.c:74
-msgid "don't load auto completion data (see documentation)"
-msgstr "не загружать авто завершение в данных (смотрите документацию)"
-
-#: src/main.c:76
-msgid "don't open files in a running instance, force opening a new instance"
-msgstr "не открывать в запущенном, запустить новое"
-
-#: src/main.c:78
+#: src/main.c:87
 msgid "use an alternate configuration directory"
 msgstr "использовать иную конфигурационную директорию"
 
-#: src/main.c:79
+#: src/main.c:88
+msgid "runs in debug mode (means being verbose)"
+msgstr "запущено в отладочном режиме (выдает больше сообщений)"
+
+#: src/main.c:91
+msgid "don't open files in a running instance, force opening a new instance"
+msgstr "не открывать в запущенном, запустить новое"
+
+#: src/main.c:93
+msgid "set initial line number for the first opened file"
+msgstr ""
+
+#: src/main.c:94
 msgid "don't show message window at startup"
 msgstr "не показывать окно сообщений при запуске"
 
-#: src/main.c:81
+#: src/main.c:95
+msgid "don't load auto completion data (see documentation)"
+msgstr "не загружать авто завершение в данных (смотрите документацию)"
+
+#: src/main.c:96
+msgid "don't load the previous session's files"
+msgstr ""
+
+#: src/main.c:98
 msgid "don't load terminal support"
 msgstr "не загружать поддержку терминала"
 
-#: src/main.c:82
+#: src/main.c:99
 msgid "filename of libvte.so"
 msgstr "имя файла библиотеки libvte.so"
 
-#: src/main.c:84
+#: src/main.c:101
 msgid "show version and exit"
 msgstr "Показать версию и выйти"
 
-#: src/main.c:405
-msgid ""
-"Geany is exiting because a named pipe was found. Mostly this means, Geany is already running. If you know Geany is not running, you can delete the file and start Geany anyway.\n"
-"Delete the named pipe and start Geany?"
-msgstr "Geany завершает работу по причине обнаружения именованной трубы обмена. Это означает что Geany уже запущена. Если Geany не запущена, просто удалите именованный файл(трубу) обмена и запустить Geany еще раз."
-
-#: src/main.c:447
+#: src/main.c:399
 msgid " - A fast and lightweight IDE"
 msgstr " - Быстрая и легковесная IDE"
 
-#: src/main.c:457
+#: src/main.c:409
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(собрано на %s с GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: src/main.c:534
+#: src/main.c:449
+#, fuzzy, c-format
+msgid ""
+"Configuration directory could not be created (%s).\n"
+"There could be some problems using Geany without a configuration directory.\n"
+"Start Geany anyway?"
+msgstr ""
+"Папка конфигурации не может быть создана (%s).\n"
+"Могут возникнуть некоторые проблемы в использовании %s без конфигурационной "
+"папки.\n"
+"Запустить %s в любом случае?"
+
+#: src/main.c:575
 #, c-format
 msgid "This is Geany %s."
 msgstr "Это Geany %s"
 
-#: src/main.c:536
+#: src/main.c:577
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Каталог конфигурации не может быть создан (%s)."
 
-#: src/interface.c:217
-#: src/interface.c:1218
+#: src/interface.c:245 src/interface.c:1404
 msgid "Geany"
 msgstr "Geany"
 
-#: src/interface.c:227
+#: src/interface.c:255
 msgid "_File"
 msgstr "_Файл"
 
-#: src/interface.c:238
-msgid "New (with _template)"
+#: src/interface.c:266
+#, fuzzy
+msgid "New (with _Template)"
 msgstr "Новый (с шаблоном)"
 
-#: src/interface.c:249
-#: src/interface.c:268
-#: src/interface.c:405
-#: src/interface.c:628
-#: src/interface.c:638
-#: src/interface.c:1621
+#: src/interface.c:277 src/interface.c:334 src/interface.c:508
+#: src/interface.c:554 src/interface.c:729 src/interface.c:739
+#: src/interface.c:1912 src/interface.c:1958
 msgid "invisible"
 msgstr "невидимый"
 
-#: src/interface.c:261
-msgid "Recent _files"
+#: src/interface.c:289
+#, fuzzy
+msgid "Recent _Files"
 msgstr "Нед_авние файлы"
 
-#: src/interface.c:284
-#: src/interface.c:750
-#: src/keybindings.c:116
-msgid "Save all"
+#: src/interface.c:306
+#, fuzzy
+msgid "Save A_ll"
 msgstr "Сохранить все"
 
-#: src/interface.c:287
+#: src/interface.c:309
 msgid "Saves all open files"
 msgstr "Сохраняет все открытые файлы"
 
-#: src/interface.c:314
+#: src/interface.c:315 src/callbacks.c:490 src/utils.c:355
+#, fuzzy
+msgid "_Reload"
+msgstr "Обновить"
+
+#: src/interface.c:323
+#, fuzzy
+msgid "R_eload As"
+msgstr "Обновить"
+
+#: src/interface.c:354
 msgid "Prints the current file"
 msgstr "Печатает текущий файл"
 
-#: src/interface.c:325
-msgid "C_lose all"
+#: src/interface.c:365
+#, fuzzy
+msgid "C_lose All"
 msgstr "Закрыть все"
 
-#: src/interface.c:328
+#: src/interface.c:368
 msgid "Closes all open files"
 msgstr "Закрывает все открытые файлы"
 
-#: src/interface.c:342
-#: src/interface.c:857
+#: src/interface.c:382 src/interface.c:1003
 msgid "Quit Geany"
 msgstr "Выйти из Geany"
 
-#: src/interface.c:344
+#: src/interface.c:384
 msgid "_Edit"
 msgstr "_Редактировать"
 
-#: src/interface.c:385
-#: src/interface.c:1584
+#: src/interface.c:425 src/interface.c:1813
 msgid "Select _All"
 msgstr "Выделить Всё"
 
-#: src/interface.c:394
-#: src/interface.c:1610
-msgid "Insert \"include <...>\""
+#: src/interface.c:434 src/interface.c:1839
+msgid "_Format"
+msgstr ""
+
+#: src/interface.c:437
+#, fuzzy
+msgid "Convert the case of the current selection"
+msgstr "Следовать пути текущего файла"
+
+#: src/interface.c:442 src/interface.c:1846
+msgid "Convert Selection to _Lower-case"
+msgstr ""
+
+#: src/interface.c:446 src/interface.c:1850
+msgid "Convert Selection to _Upper-case"
+msgstr ""
+
+#: src/interface.c:455 src/interface.c:1859
+#, fuzzy
+msgid "_Comment Line(s)"
+msgstr "Комментировать строку"
+
+#: src/interface.c:459 src/interface.c:1863
+#, fuzzy
+msgid "U_ncomment Line(s)"
+msgstr "Комментировать строку"
+
+#: src/interface.c:463 src/interface.c:1867
+msgid "_Toggle Line Commentation"
+msgstr ""
+
+#: src/interface.c:467 src/interface.c:1871
+#, fuzzy
+msgid "Du_plicate Line or Selection"
+msgstr "Дублировать строку или выделенное"
+
+#: src/interface.c:476 src/interface.c:1880
+msgid "_Increase Indent"
+msgstr ""
+
+#: src/interface.c:484 src/interface.c:1888
+msgid "_Decrease Indent"
+msgstr ""
+
+#: src/interface.c:497
+#, fuzzy
+msgid "_Insert \"include <...>\""
 msgstr "Вставить \"include <...>\""
 
-#: src/interface.c:408
-#: src/interface.c:1624
-msgid "Insert Comments"
+#: src/interface.c:511
+#, fuzzy
+msgid "I_nsert Comments"
 msgstr "Вставить Комментарии"
 
-#: src/interface.c:419
-#: src/interface.c:1635
-msgid "Insert ChangeLog entry"
+#: src/interface.c:522 src/interface.c:1926
+#, fuzzy
+msgid "Insert ChangeLog Entry"
 msgstr "Вставить ChangeLog вход"
 
-#: src/interface.c:422
+#: src/interface.c:525 src/interface.c:1929
 msgid "Inserts a typical ChangeLog entry in the current file"
 msgstr "Вставляет типичный ChangeLog вход в текущий файл"
 
-#: src/interface.c:424
-#: src/interface.c:1640
-msgid "Insert file header"
+#: src/interface.c:527 src/interface.c:1931
+#, fuzzy
+msgid "Insert File Header"
 msgstr "Вставить заголовок файла"
 
-#: src/interface.c:427
-#: src/interface.c:1643
-msgid "Inserts a few information at the beginning of the file"
+#: src/interface.c:530 src/interface.c:1934
+#, fuzzy
+msgid "Inserts a file header at the beginning of the file"
 msgstr "Вставляет небольшую информацию в начало файла"
 
-#: src/interface.c:429
-#: src/interface.c:1645
-msgid "Insert function description"
+#: src/interface.c:532 src/interface.c:1936
+#, fuzzy
+msgid "Insert Function Description"
 msgstr "Вставить описание функции"
 
-#: src/interface.c:432
-#: src/interface.c:1648
+#: src/interface.c:535 src/interface.c:1939
 msgid "Inserts a description before the current function"
 msgstr "Вставляет описание перед текущей функцией"
 
-#: src/interface.c:434
-#: src/interface.c:1650
-msgid "Insert multiline comment"
+#: src/interface.c:537 src/interface.c:1941
+#, fuzzy
+msgid "Insert Multiline Comment"
 msgstr "Вставить много-строчный комментарий"
 
-#: src/interface.c:437
-#: src/interface.c:1653
+#: src/interface.c:540 src/interface.c:1944
 msgid "Inserts a multiline comment"
 msgstr "Вставляет много-строчный комментарий"
 
-#: src/interface.c:439
-#: src/interface.c:1655
-msgid "Insert GPL notice"
+#: src/interface.c:542 src/interface.c:1946
+#, fuzzy
+msgid "Insert GPL Notice"
 msgstr "Вставить GPL-уведомление"
 
-#: src/interface.c:442
-#: src/interface.c:1658
+#: src/interface.c:545 src/interface.c:1949
 msgid "Inserts a GPL notice (should be done at the beginning of the file)"
 msgstr "Вставляет GPL-уведомление (должно быть вставлено в начале файла)"
 
-#: src/interface.c:449
-#: src/interface.c:1665
-msgid "Change Selection"
-msgstr "Изменить выделенное"
+#: src/interface.c:547 src/interface.c:1951
+#, fuzzy
+msgid "Insert Dat_e"
+msgstr "Вставить GPL-уведомление"
 
-#: src/interface.c:456
-#: src/interface.c:1672
-msgid "To lower-case"
-msgstr "В нижний регистр"
-
-#: src/interface.c:460
-#: src/interface.c:1676
-msgid "To upper-case"
-msgstr "В верхний регистр"
-
-#: src/interface.c:464
-msgid "_Count words"
-msgstr "Подсчет слов"
-
-#: src/interface.c:467
-msgid "Counts the words and characters in the current selection or the whole document"
-msgstr "Подсчитывает слова и символы в текущей выделенной области или во всем документе"
-
-#: src/interface.c:478
+#: src/interface.c:566
 msgid "_Search"
 msgstr "Поиск"
 
-#: src/interface.c:489
+#: src/interface.c:577
 msgid "Find _Next"
 msgstr "Най_ти далее"
 
-#: src/interface.c:493
+#: src/interface.c:581
 msgid "Find _Previous"
 msgstr "Найти следующее"
 
-#: src/interface.c:497
-#: src/dialogs.c:924
+#: src/interface.c:585
+#, fuzzy
+msgid "Find in F_iles"
+msgstr "Открытые файлы"
+
+#: src/interface.c:589 src/search.c:385
 msgid "_Replace"
 msgstr "Заменить"
 
-#: src/interface.c:510
-msgid "_Go to line"
+#: src/interface.c:602
+#, fuzzy
+msgid "Next _Message"
+msgstr "Сообщения"
+
+#: src/interface.c:611
+#, fuzzy
+msgid "_Go to Line"
 msgstr "Перейти к строке"
 
-#: src/interface.c:518
-#: src/dialogs.c:74
+#: src/interface.c:619 src/dialogs.c:77
 msgid "_View"
 msgstr "Вид"
 
-#: src/interface.c:525
+#: src/interface.c:626
 msgid "Change _Font"
 msgstr "Сменить шрифт"
 
-#: src/interface.c:528
+#: src/interface.c:629
 msgid "Change the default font"
 msgstr "Изменить шрифт по умолчанию"
 
-#: src/interface.c:534
-msgid "Show _Colour Chooser"
-msgstr "Показать Выбор цвета"
+#: src/interface.c:640
+msgid "Full_screen"
+msgstr "Во-весь экран"
 
-#: src/interface.c:537
-#: src/interface.c:796
-msgid "Open a color chooser dialog, to interactively pick colors from a palette."
+#: src/interface.c:644
+#, fuzzy
+msgid "Show Message _Window"
+msgstr "Показывать окно сообщений"
+
+#: src/interface.c:647
+msgid "Toggle the window with status and compiler messages on and off"
+msgstr "Включает/выключает окно дежурных(статусных) и компиляторных сообщений"
+
+#: src/interface.c:650
+msgid "Show _Toolbar"
+msgstr "Показывать панель инструментов"
+
+#: src/interface.c:653
+msgid "Toggle the toolbar on and off"
+msgstr "Включает/выключает отображение панели инструментов"
+
+#: src/interface.c:656
+#, fuzzy
+msgid "Show Side_bar"
+msgstr "Боковая панель"
+
+#: src/interface.c:661
+msgid "Show _Markers Margin"
+msgstr "Показывать Маркер строк"
+
+#: src/interface.c:664
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines."
+msgstr ""
+"Показывает или прячет маленький маркер строк с права от номеров строк, "
+"который отмечает определенные строки."
+
+#: src/interface.c:667
+msgid "Show _Line Numbers"
+msgstr "Показывать Номера строк"
+
+#: src/interface.c:670
+msgid "Shows or hides the Line Number margin."
+msgstr "Включает или выключает отображение номеров строк"
+
+#: src/interface.c:690
+msgid "_Document"
+msgstr "Документ"
+
+#: src/interface.c:697
+#, fuzzy
+msgid "_Line Wrapping"
+msgstr "Окончания строк"
+
+#: src/interface.c:700 src/interface.c:3158
+msgid ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
+msgstr ""
+
+#: src/interface.c:703
+#, fuzzy
+msgid "_Use Auto-indentation"
+msgstr "Использовать авто-углубление"
+
+#: src/interface.c:708
+#, fuzzy
+msgid "Read _Only"
+msgstr "Только чтение"
+
+#: src/interface.c:711
+msgid "Treat this file as read-only. No changes can be made."
+msgstr ""
+"Рассматривает этот файл как только для чтения. Никакие изменения не могут "
+"быть сделаны."
+
+#: src/interface.c:713
+msgid "_Write Unicode BOM"
+msgstr ""
+
+#: src/interface.c:722
+#, fuzzy
+msgid "Set File_type"
+msgstr "Установить тип документа"
+
+#: src/interface.c:732
+#, fuzzy
+msgid "Set _Encoding"
+msgstr "Установить кодировку"
+
+#: src/interface.c:742
+#, fuzzy
+msgid "Set Line E_ndings"
+msgstr "Показывать окончание строк"
+
+#: src/interface.c:749
+#, fuzzy
+msgid "Convert and Set to _CR/LF (Win)"
+msgstr "Заменить окончания строк на CR/LF (Win)"
+
+#: src/interface.c:755
+#, fuzzy
+msgid "Convert and Set to _LF (Unix)"
+msgstr "Заменить окончания строк на LF (Unix)"
+
+#: src/interface.c:761
+#, fuzzy
+msgid "Convert and Set to CR (_Mac)"
+msgstr "Заменить окончания строк на CR (Mac)"
+
+#: src/interface.c:772
+#, fuzzy
+msgid "_Replace Tabs by Spaces"
+msgstr "Заменить табуляции пробелами"
+
+#: src/interface.c:775 src/interface.c:2926
+msgid "Replaces all tabs in document by spaces."
+msgstr "Заменяет все табуляции в документе пробелами."
+
+#: src/interface.c:782
+#, fuzzy
+msgid "_Fold All"
+msgstr "Свернуть все"
+
+#: src/interface.c:785
+msgid "Folds all contractible code blocks"
+msgstr "Сворачивает все развернутые блоки объединенного кода"
+
+#: src/interface.c:787
+#, fuzzy
+msgid "_Unfold All"
+msgstr "Развернуть все"
+
+#: src/interface.c:790
+msgid "Unfolds all contracted code blocks"
+msgstr "Разворачивает все свернутые блоки объединенного кода"
+
+#: src/interface.c:797
+#, fuzzy
+msgid "Remove Error _Indicators"
+msgstr "Убрать все индикаторы"
+
+#: src/interface.c:800
+#, fuzzy
+msgid "Removes all error indicators in the current document."
+msgstr "Убирает все поставленные индикаторы в текущем документе"
+
+#. build the code
+#: src/interface.c:802 src/build.c:860
+msgid "_Build"
+msgstr "Постро_ить"
+
+#: src/interface.c:806
+#, fuzzy
+msgid "_Tools"
+msgstr "Инструменты"
+
+#: src/interface.c:813
+#, fuzzy
+msgid "_Colour Chooser"
+msgstr "Выбор цвета"
+
+#: src/interface.c:816 src/interface.c:941
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette."
 msgstr ""
 "Открывает диалог выбора цвета, позволяющий интерактивно \n"
 "выбирать цвет из палитры."
 
-#: src/interface.c:548
-msgid "Full_screen"
-msgstr "Во-весь экран"
+#: src/interface.c:822
+#, fuzzy
+msgid "_Word Count"
+msgstr "Подсчет слов"
 
-#: src/interface.c:552
-msgid "Show Messages _Window"
-msgstr "Показывать окно сообщений"
+#: src/interface.c:825
+msgid ""
+"Counts the words and characters in the current selection or the whole "
+"document"
+msgstr ""
+"Подсчитывает слова и символы в текущей выделенной области или во всем "
+"документе"
 
-#: src/interface.c:555
-msgid "Toggle the window with status and compiler messages on and off"
-msgstr "Включает/выключает окно дежурных(статусных) и компиляторных сообщений"
+#: src/interface.c:827
+msgid "_Insert Special HTML Characters"
+msgstr ""
 
-#: src/interface.c:558
-msgid "Show _Toolbar"
-msgstr "Показывать панель инструментов"
-
-#: src/interface.c:561
-msgid "Toggle the toolbar on and off"
-msgstr "Включает/выключает отображение панели инструментов"
-
-#: src/interface.c:564
-msgid "Show _Markers Margin"
-msgstr "Показывать Маркер строк"
-
-#: src/interface.c:567
-msgid "Shows or hides the small margin right of the line numbers, which is used to mark lines."
-msgstr "Показывает или прячет маленький маркер строк с права от номеров строк, который отмечает определенные строки."
-
-#: src/interface.c:570
-msgid "Show _Line Numbers"
-msgstr "Показывать Номера строк"
-
-#: src/interface.c:573
-msgid "Shows or hides the Line Number margin."
-msgstr "Включает или выключает отображение номеров строк"
-
-#: src/interface.c:593
-msgid "_Document"
-msgstr "Документ"
-
-#: src/interface.c:600
-msgid "_Line breaking"
-msgstr "Окончания строк"
-
-#: src/interface.c:603
-msgid "Break the line at the window border and continue it on the next line"
-msgstr "Прерывает строку у бордюра окна и продолжает с новой строки"
-
-#: src/interface.c:606
-msgid "_Use auto indentation"
-msgstr "Использовать авто-углубление"
-
-#: src/interface.c:611
-msgid "Read _only"
-msgstr "Только чтение"
-
-#: src/interface.c:614
-msgid "Treat this file as read-only. No changes can be made."
-msgstr "Рассматривает этот файл как только для чтения. Никакие изменения не могут быть сделаны."
-
-#: src/interface.c:621
-msgid "Set filetype"
-msgstr "Установить тип документа"
-
-#: src/interface.c:631
-msgid "Set encoding"
-msgstr "Установить кодировку"
-
-#: src/interface.c:641
-msgid "Line endings"
-msgstr "Окончания строк"
-
-#: src/interface.c:648
-msgid "Convert and set to CR/LF (Win)"
-msgstr "Заменить окончания строк на CR/LF (Win)"
-
-#: src/interface.c:652
-msgid "Convert and set to LF (Unix)"
-msgstr "Заменить окончания строк на LF (Unix)"
-
-#: src/interface.c:656
-msgid "Convert and set to CR (Mac)"
-msgstr "Заменить окончания строк на CR (Mac)"
-
-#: src/interface.c:665
-msgid "_Replace tabs by space"
-msgstr "Заменить табуляции пробелами"
-
-#: src/interface.c:668
-#: src/interface.c:2499
-msgid "Replaces all tabs in document by spaces."
-msgstr "Заменяет все табуляции в документе пробелами."
-
-#: src/interface.c:675
-msgid "_Fold all"
-msgstr "Свернуть все"
-
-#: src/interface.c:678
-msgid "Folds all contractible code blocks"
-msgstr "Сворачивает все развернутые блоки объединенного кода"
-
-#: src/interface.c:680
-msgid "_Unfold all"
-msgstr "Развернуть все"
-
-#: src/interface.c:683
-msgid "Unfolds all contracted code blocks"
-msgstr "Разворачивает все свернутые блоки объединенного кода"
-
-#: src/interface.c:690
-msgid "Remove all _indicators"
-msgstr "Убрать все индикаторы"
-
-#: src/interface.c:693
-msgid "Removes all set indicators in the current document."
-msgstr "Убирает все поставленные индикаторы в текущем документе"
-
-#. build the code
-#: src/interface.c:695
-#: src/dialogs.c:526
-msgid "_Build"
-msgstr "Постро_ить"
-
-#: src/interface.c:699
+#: src/interface.c:831
 msgid "_Help"
 msgstr "Помощь"
 
-#: src/interface.c:710
-msgid "_Keyboard shortcuts"
+#: src/interface.c:842
+#, fuzzy
+msgid "_Keyboard Shortcuts"
 msgstr "Клавиатурные сочетания"
 
-#: src/interface.c:713
+#: src/interface.c:845
 msgid "Shows a list of all keyboard shortcuts for Geany."
 msgstr "Показывает список всех клавиатурных сочетаний для Geany."
 
-#: src/interface.c:715
+#: src/interface.c:847
 msgid "_Website"
 msgstr "Страница Проекта"
 
-#: src/interface.c:738
+#: src/interface.c:870
 msgid "Create a new file"
 msgstr "Создать новый файл"
 
-#: src/interface.c:743
+#: src/interface.c:876
 msgid "Open an existing file"
 msgstr "Открыть существующий файл"
 
-#: src/interface.c:748
+#: src/interface.c:881
 msgid "Save the current file"
 msgstr "Сохранить текущий файл"
 
-#: src/interface.c:753
+#: src/interface.c:883 src/keybindings.c:114
+msgid "Save all"
+msgstr "Сохранить все"
+
+#: src/interface.c:886
 msgid "Save all open files"
 msgstr "Сохранить все открытые файлы"
 
-#: src/interface.c:762
+#: src/interface.c:895
 msgid "Reload the current file from disk"
 msgstr "Перечитать текущий файл с диска"
 
-#: src/interface.c:767
+#: src/interface.c:900
 msgid "Close the current file"
 msgstr "Закрыть текущий файл"
 
-#: src/interface.c:775
-#: src/keybindings.c:160
+#: src/interface.c:909
+msgid "Undo the last modification"
+msgstr ""
+
+#: src/interface.c:914
+msgid "Redo the last modification"
+msgstr ""
+
+#: src/interface.c:922 src/keybindings.c:166
 msgid "Compile"
 msgstr "Собрать"
 
-#: src/interface.c:778
+#: src/interface.c:925
 msgid "Compile the current file"
 msgstr "Собрать текущий файл"
 
-#: src/interface.c:782
-#: src/keybindings.c:171
-msgid "Run"
-msgstr "Запустить"
-
-#: src/interface.c:785
-#: src/dialogs.c:579
+#: src/interface.c:930 src/build.c:927
 msgid "Run or view the current file"
 msgstr "Запустить или посмотреть текущий файл"
 
-#: src/interface.c:793
+#: src/interface.c:938
 msgid "Color"
 msgstr "Цвет"
 
-#: src/interface.c:805
+#: src/interface.c:950
 msgid "Zoom in the text"
 msgstr "Увеличить текст"
 
-#: src/interface.c:810
+#: src/interface.c:955
 msgid "Zoom out the text"
 msgstr "Уменьшить текст"
 
-#: src/interface.c:823
-#: src/interface.c:828
+#: src/interface.c:968 src/interface.c:973
 msgid "Find the entered text in the current file"
 msgstr "Найти введенный текст в текущем файле"
 
-#: src/interface.c:841
+#: src/interface.c:986
 msgid "Enter a line number and jump to it."
 msgstr "Ввести номер строки и перейти на нее."
 
-#: src/interface.c:848
+#: src/interface.c:993
 msgid "Jump to the entered line number."
 msgstr "Перейти на строку под введенным номером"
 
-#: src/interface.c:884
-#: src/treeviews.c:40
+#: src/interface.c:1031 src/treeviews.c:71
 msgid "Symbols"
 msgstr "Теги"
 
-#: src/interface.c:897
-#: src/treeviews.c:207
+#: src/interface.c:1044 src/treeviews.c:307
 msgid "Open files"
 msgstr "Открытые файлы"
 
-#: src/interface.c:932
+#: src/interface.c:1079
 msgid "Status"
 msgstr "Статус"
 
-#: src/interface.c:946
+#: src/interface.c:1093
 msgid "Compiler"
 msgstr "Компилятор"
 
-#: src/interface.c:960
+#: src/interface.c:1107
 msgid "Messages"
 msgstr "Сообщения"
 
-#: src/interface.c:973
+#: src/interface.c:1120
 msgid "Scribble"
 msgstr "Заметки"
 
-#: src/interface.c:1420
+#: src/interface.c:1634 src/interface.c:2781
 msgid "Images and text"
 msgstr "Иконки и текст"
 
-#: src/interface.c:1426
+#: src/interface.c:1640 src/interface.c:2813
 msgid "Images only"
 msgstr "Только иконки"
 
-#: src/interface.c:1432
+#: src/interface.c:1646 src/interface.c:2805
 msgid "Text only"
 msgstr "Только текст"
 
-#: src/interface.c:1443
+#: src/interface.c:1657 src/interface.c:2797
 msgid "Large icons"
 msgstr "Большие иконки"
 
-#: src/interface.c:1447
+#: src/interface.c:1662 src/interface.c:2789
 msgid "Small icons"
 msgstr "Маленькие иконки"
 
-#: src/interface.c:1456
+#: src/interface.c:1672
 msgid "Hide toolbar"
 msgstr "Спрятать панель инструментов"
 
-#: src/interface.c:1638
-msgid "Inserts a typical ChangeLog entry in the current "
-msgstr "Вставляет типичный ChangeLog-вход в текущий файл"
+#: src/interface.c:1901
+msgid "Insert \"include <...>\""
+msgstr "Вставить \"include <...>\""
 
-#: src/interface.c:1685
-msgid "Find usage"
-msgstr "Найти использование"
+#: src/interface.c:1915
+msgid "Insert Comments"
+msgstr "Вставить Комментарии"
 
-#: src/interface.c:1693
-#: src/keybindings.c:203
-msgid "Go to tag definition"
+#: src/interface.c:1966 src/keybindings.c:232
+msgid "Find Usage"
+msgstr "Найти Использование"
+
+#: src/interface.c:1974
+#, fuzzy
+msgid "Go to Tag Definition"
 msgstr "Перейти к определению тега"
 
-#: src/interface.c:1697
-#: src/keybindings.c:205
-msgid "Go to tag declaration"
+#: src/interface.c:1978
+#, fuzzy
+msgid "Go to Tag Declaration"
 msgstr "Перейти к декларации тега"
 
-#: src/interface.c:1706
-#: src/dialogs.c:779
-#: src/keybindings.c:140
-msgid "Go to line"
+#: src/interface.c:1987
+#, fuzzy
+msgid "Go to Line"
 msgstr "Перейти к строке"
 
-#: src/interface.c:1709
+#: src/interface.c:1990
 msgid "Goto to the entered line"
 msgstr "Перейти к введенной строке"
 
-#: src/interface.c:1986
-#: src/keybindings.c:132
+#: src/interface.c:2362 src/keybindings.c:132
 msgid "Preferences"
 msgstr "Настройки"
 
-#: src/interface.c:2014
+#: src/interface.c:2395
 msgid "Load files from the last session"
 msgstr "Загрузить файлы из последней сессии"
 
-#: src/interface.c:2018
+#: src/interface.c:2399
 msgid "Opens at startup the files from the last session"
 msgstr "Открывает при загрузке файлы из последнего запуска"
 
-#: src/interface.c:2021
+#: src/interface.c:2402
 msgid "Save window position and geometry"
 msgstr "Сохранять позицию и размеры окна"
 
-#: src/interface.c:2025
+#: src/interface.c:2406
 msgid "Saves the window position and geometry and restores it at the start"
 msgstr "Сохраняет позицию и размеры окна, и восстанавливает их при запуске"
 
-#: src/interface.c:2028
-msgid "Beep on errors or when compilation has finished"
-msgstr "Сигнал при ошибках или по окончании сборки"
-
-#: src/interface.c:2031
-msgid "Whether to beep if an error occured or when the compilation process has finished."
-msgstr "Подает звуковой сигнал при возникновении ошибки, а так же при окончании процесса сборки(компиляции) проекта."
-
-#: src/interface.c:2034
-msgid "Switch to status message list at new message"
-msgstr "Перейти на \"Статус\" при новых сообщениях"
-
-#: src/interface.c:2037
-msgid "Switch to the status message tab(in the notebook window at the bottom) if a new status message arrive."
-msgstr "Переходит фокусом на \"Статус\" закладку(в служебной области сообщений внизу)когда приходят новые статусные(дежурные) сообщения."
-
-#: src/interface.c:2040
+#: src/interface.c:2409
 msgid "Load virtual terminal emulation at startup"
 msgstr "Загружать эмуляцию виртуального терминала при загрузке"
 
-#: src/interface.c:2042
-msgid "Whether the virtual terminal emulation(VTE) should be loaded at startup. Disable it if you do not need it."
-msgstr "Включает эмуляцию виртуального терминала при старте.Отключите если Вам это не надо."
+#: src/interface.c:2411
+msgid ""
+"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
+"Disable it if you do not need it."
+msgstr ""
+"Включает эмуляцию виртуального терминала при старте.Отключите если Вам это "
+"не надо."
 
-#: src/interface.c:2045
+#: src/interface.c:2414
 msgid "Confirm exit"
 msgstr "Подтверждение выхода"
 
-#: src/interface.c:2049
+#: src/interface.c:2418
 msgid "Shows a confirmation dialog on exit."
 msgstr "Показывает диалог подтверждения выхода при закрытии."
 
-#: src/interface.c:2060
-msgid "Recent files list length:"
-msgstr "Длинна списка недавних файлов"
+#: src/interface.c:2421
+msgid "<b>Startup and shutdown</b>"
+msgstr ""
 
-#: src/interface.c:2068
-msgid "Specifies the number of files which are stored in the Recent files list."
-msgstr "Определяет количество файлов сохраненных в списке Последних открываемых файлов."
+#: src/interface.c:2440
+msgid "Beep on errors or when compilation has finished"
+msgstr "Сигнал при ошибках или по окончании сборки"
 
-#: src/interface.c:2076
-msgid "Placement of new file tabs: "
-msgstr "Расположение новых закладок"
+#: src/interface.c:2443
+msgid ""
+"Whether to beep if an error occured or when the compilation process has "
+"finished."
+msgstr ""
+"Подает звуковой сигнал при возникновении ошибки, а так же при окончании "
+"процесса сборки(компиляции) проекта."
 
-#: src/interface.c:2080
-#: src/interface.c:2369
-#: src/interface.c:2379
-#: src/interface.c:2389
-msgid "Left"
-msgstr "Слева"
+#: src/interface.c:2446
+msgid "Switch to status message list at new message"
+msgstr "Перейти на \"Статус\" при новых сообщениях"
 
-#: src/interface.c:2083
-msgid "New file tabs will be placed to the left of the tab list"
-msgstr "Новые закладки будут располагаться слева в списке закладок"
+#: src/interface.c:2449
+#, fuzzy
+msgid ""
+"Switch to the status message tab (in the notebook window at the bottom) if a "
+"new status message arrives."
+msgstr ""
+"Переходит фокусом на \"Статус\" закладку(в служебной области сообщений внизу)"
+"когда приходят новые статусные(дежурные) сообщения."
 
-#: src/interface.c:2092
-#: src/interface.c:2370
-#: src/interface.c:2380
-#: src/interface.c:2390
-msgid "Right"
-msgstr "Справа"
+#: src/interface.c:2452
+msgid "Always wrap search and hide the Find dialog"
+msgstr ""
 
-#: src/interface.c:2095
-msgid "New file tabs will be placed to the right of the tab list"
-msgstr "Новые закладки будут располагаться справа в списке закладок"
+#: src/interface.c:2456
+msgid ""
+"Always wrap search around the document and hide the Find dialog after "
+"clicking Find Next/Previous"
+msgstr ""
 
-#: src/interface.c:2104
+#: src/interface.c:2459
+#, fuzzy
+msgid "<b>Behaviour</b>"
+msgstr "<b>Шрифты</b>"
+
+#: src/interface.c:2464
 msgid "General"
 msgstr "Общее"
 
-#: src/interface.c:2126
-msgid "Show search field"
-msgstr "Отображать поле поиска"
-
-#: src/interface.c:2130
-msgid "Display the search field and button in the toolbar"
-msgstr "Включает отображение поля и кнопки поиска на панели инструментов"
-
-#: src/interface.c:2133
-msgid "Show goto line field"
-msgstr "Отображать поле перехода на строку"
-
-#: src/interface.c:2137
-msgid "Display the line number field and button in the toolbar"
-msgstr "Включает отображение поля и кнопки перехода на строку по её номеру"
-
-#: src/interface.c:2140
-msgid "<b>Toolbar</b>"
-msgstr "<b>Панель инструментов</b>"
-
-#: src/interface.c:2159
+#: src/interface.c:2486
 msgid "Show symbol list"
 msgstr "Отображать список тегов"
 
-#: src/interface.c:2162
-#: src/interface.c:2168
+#: src/interface.c:2489 src/interface.c:2495
 msgid "Toggle the symbol list on and off"
 msgstr "Включает отображение списка тегов"
 
-#: src/interface.c:2165
+#: src/interface.c:2492
 msgid "Show open files list"
 msgstr "Показать список открытых файлов"
 
-#: src/interface.c:2171
+#: src/interface.c:2498
 msgid "<b>Sidebar</b>"
 msgstr "<b>Боковая панель</b>"
 
-#: src/interface.c:2192
-msgid "Symbol list font"
-msgstr "Шрифт списка тегов"
+#: src/interface.c:2519
+#, fuzzy
+msgid "Symbol list:"
+msgstr "Отображать список тегов"
 
-#: src/interface.c:2199
-msgid "Message window font"
-msgstr "Шрифт окна сообщений"
+#: src/interface.c:2526 src/interface.c:2591
+#, fuzzy
+msgid "Message window:"
+msgstr "Окно сообщений"
 
-#: src/interface.c:2211
+#: src/interface.c:2533 src/interface.c:2598
+#, fuzzy
+msgid "Editor:"
+msgstr "Редактор"
+
+#: src/interface.c:2545
 msgid "Sets the font for the message window"
 msgstr "Устанавливает шрифт для окна сообщений"
 
-#: src/interface.c:2219
-msgid "Sets the font for symbol list window"
+#: src/interface.c:2553
+#, fuzzy
+msgid "Sets the font for the symbol list"
 msgstr "Устанавливает шрифт для списка тегов"
 
-#: src/interface.c:2222
-msgid "Editor font"
+#: src/interface.c:2561
+#, fuzzy
+msgid "Sets the editor font"
 msgstr "Шрифт Редактора"
 
-#: src/interface.c:2234
-msgid "Sets the font for the editors windows"
-msgstr "Устанавливает шрифт окна редактирования"
-
-#: src/interface.c:2236
+#: src/interface.c:2563
 msgid "<b>Fonts</b>"
 msgstr "<b>Шрифты</b>"
 
-#: src/interface.c:2257
-msgid "Long line marker"
-msgstr "Маркер длинны строки"
-
-#: src/interface.c:2264
-msgid "Long line marker color"
-msgstr "Цвет Маркера длинны строки"
-
-#: src/interface.c:2277
-msgid "The long line marker is a thin vertical line in the editor. It helps to mark long lines, or as a hint to break the line. Set this value to a value greater than 0 to specify the column where it should appear."
-msgstr "Маркер Длинны Строки это вертикальная тонка линии в редакторе. Помогает отмечать длинные строки или является сигналом для перехода на следующую строку. Что бы отключить установите значение в 0, или больше нуля для указания колонки где оно должно быть."
-
-#: src/interface.c:2281
-msgid "Type"
-msgstr "Тип"
-
-#: src/interface.c:2294
-msgid "Line"
-msgstr "Строка"
-
-#: src/interface.c:2297
-msgid "Prints a vertical line in the editor window at the given cursor position(see below)."
-msgstr "Печатает вертикальную линию в окне редактора в заданной позиции курсора(см. выше)"
-
-#: src/interface.c:2301
-msgid "Background"
-msgstr "Задний план"
-
-#: src/interface.c:2304
-msgid "The background colour of characters after the given cursor position(see below) changed to the colour set below. (This is recommended if you use proportional fonts)"
-msgstr "Цвет фона символов после заданной позиции курсора(см. выше) меняется на цвет который установлен выше. (Рекомендовано если Вы используете пропорциональные шрифты)"
-
-#: src/interface.c:2308
-msgid "Disabled"
-msgstr "Отключено"
-
-#: src/interface.c:2319
-msgid "Sets the color of the long line marker"
-msgstr "Устанавливает цвет Маркера Длинны строки"
-
-#: src/interface.c:2320
-#: src/dialogs.c:479
-#: src/dialogs.c:1737
-#: src/dialogs.c:1744
-msgid "Color Chooser"
-msgstr "Выбор цвета"
-
-#: src/interface.c:2322
-msgid "<b>Long line marker</b>"
-msgstr "<b>Маркер длинны строки</b>"
-
-#: src/interface.c:2343
-#: src/interface.c:2572
-msgid "Editor"
-msgstr "Редактор"
-
-#: src/interface.c:2350
-msgid "Message window"
-msgstr "Окно сообщений"
-
-#: src/interface.c:2357
-msgid "Sidebar"
+#: src/interface.c:2584
+#, fuzzy
+msgid "Sidebar:"
 msgstr "Боковая панель"
 
-#: src/interface.c:2371
-#: src/interface.c:2381
-#: src/interface.c:2391
+#: src/interface.c:2605
+#, fuzzy
+msgid "Show editor tabs"
+msgstr "Показать список открытых файлов"
+
+#: src/interface.c:2616 src/interface.c:2626 src/interface.c:2636
+#: src/interface.c:2973
+msgid "Left"
+msgstr "Слева"
+
+#: src/interface.c:2617 src/interface.c:2627 src/interface.c:2637
+#: src/interface.c:2981
+msgid "Right"
+msgstr "Справа"
+
+#: src/interface.c:2618 src/interface.c:2628 src/interface.c:2638
 msgid "Top"
 msgstr "Вверху"
 
-#: src/interface.c:2372
-#: src/interface.c:2382
-#: src/interface.c:2392
+#: src/interface.c:2619 src/interface.c:2629 src/interface.c:2639
 msgid "Bottom"
 msgstr "Внизу"
 
-#: src/interface.c:2394
+#: src/interface.c:2641
 msgid "<b>Tab placement</b>"
 msgstr "<b>Расположение закладок</b>"
 
-#: src/interface.c:2399
+#: src/interface.c:2646
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: src/interface.c:2427
-msgid "Tab Width"
+#: src/interface.c:2665
+#, fuzzy
+msgid "Show Toolbar"
+msgstr "Показывать панель инструментов"
+
+#: src/interface.c:2690
+#, fuzzy
+msgid "Show file operation buttons"
+msgstr "Показывать подсказки углубления"
+
+#: src/interface.c:2694
+#, fuzzy
+msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
+msgstr "Включает отображение поля и кнопки перехода на строку по её номеру"
+
+#: src/interface.c:2697
+msgid "Show Compile and Run"
+msgstr ""
+
+#: src/interface.c:2701
+#, fuzzy
+msgid "Display the Compile and Run buttons in the toolbar"
+msgstr "Включает отображение поля и кнопки поиска на панели инструментов"
+
+#: src/interface.c:2704
+#, fuzzy
+msgid "Show Colour Chooser button"
+msgstr "Показывать Выбор цвета"
+
+#: src/interface.c:2708
+#, fuzzy
+msgid "Display the Colour Chooser button in the toolbar"
+msgstr "Включает отображение поля и кнопки перехода на строку по её номеру"
+
+#: src/interface.c:2711
+msgid "Show Zoom In and Zoom Out"
+msgstr ""
+
+#: src/interface.c:2715
+#, fuzzy
+msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
+msgstr "Включает отображение поля и кнопки поиска на панели инструментов"
+
+#: src/interface.c:2718
+msgid "Show Redo and Undo buttons"
+msgstr ""
+
+#: src/interface.c:2722
+#, fuzzy
+msgid "Display the Redo and Undo buttons in the toolbar"
+msgstr "Включает отображение поля и кнопки поиска на панели инструментов"
+
+#: src/interface.c:2725
+#, fuzzy
+msgid "Show Search field"
+msgstr "Отображать поле поиска"
+
+#: src/interface.c:2729
+msgid "Display the search field and button in the toolbar"
+msgstr "Включает отображение поля и кнопки поиска на панели инструментов"
+
+#: src/interface.c:2732
+#, fuzzy
+msgid "Show Goto line field"
+msgstr "Отображать поле перехода на строку"
+
+#: src/interface.c:2736
+msgid "Display the line number field and button in the toolbar"
+msgstr "Включает отображение поля и кнопки перехода на строку по её номеру"
+
+#: src/interface.c:2739
+msgid "Show Quit button"
+msgstr ""
+
+#: src/interface.c:2743
+#, fuzzy
+msgid "Display the quit button in the toolbar"
+msgstr "Включает отображение поля и кнопки поиска на панели инструментов"
+
+#: src/interface.c:2746
+#, fuzzy
+msgid "<b>Items</b>"
+msgstr "<b>Шрифты</b>"
+
+#: src/interface.c:2767
+msgid "Icon style:"
+msgstr ""
+
+#: src/interface.c:2774
+msgid "Icon size:"
+msgstr ""
+
+#: src/interface.c:2821
+#, fuzzy
+msgid "<b>Appearance</b>"
+msgstr "<b>Боковая панель</b>"
+
+#: src/interface.c:2826
+#, fuzzy
+msgid "Toolbar"
+msgstr "Показывать панель инструментов"
+
+#: src/interface.c:2854
+#, fuzzy
+msgid "Tab Width:"
 msgstr "Ширина закладок"
 
-#: src/interface.c:2434
-msgid "Default encoding:"
-msgstr "Кодировка по умолчанию"
-
-#: src/interface.c:2445
+#: src/interface.c:2866
 msgid "Sets the default encoding for newly created files."
 msgstr "Устанавливает кодировку по умолчанию для недавно созданных файлов. "
 
-#: src/interface.c:2457
+#: src/interface.c:2878
 msgid "The width in chars, which one tab character will take"
 msgstr "Ширина в символах каждой закладки"
 
-#: src/interface.c:2462
+#: src/interface.c:2883
+msgid "Default encoding:"
+msgstr "Кодировка по умолчанию"
+
+#: src/interface.c:2889
 msgid "<b>New files</b>"
 msgstr "<b>Новые файлы</b>"
 
-#: src/interface.c:2481
+#: src/interface.c:2908
 msgid "Strip trailing spaces"
 msgstr "Убирать остаточные пробелы"
 
-#: src/interface.c:2485
+#: src/interface.c:2912
 msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr "Убирает при переносе лишние остаточные пробелы, табуляции и окончания строк"
+msgstr ""
+"Убирает при переносе лишние остаточные пробелы, табуляции и окончания строк"
 
-#: src/interface.c:2488
+#: src/interface.c:2915
 msgid "Ensure new line at file end"
 msgstr "EOF с новой строки файла"
 
-#: src/interface.c:2492
+#: src/interface.c:2919
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Конец файла(EOF) ставит c новой строки в конце файла"
 
-#: src/interface.c:2495
-#: src/keybindings.c:154
+#: src/interface.c:2922 src/keybindings.c:158
 msgid "Replace tabs by space"
 msgstr "Заменить табуляции пробелами"
 
-#: src/interface.c:2502
+#: src/interface.c:2929
 msgid "<b>Saving files</b>"
 msgstr "<b>Сохранение файлов</b>"
 
-#: src/interface.c:2521
+#: src/interface.c:2950
+#, fuzzy
+msgid "Placement of new file tabs:"
+msgstr "Расположение новых закладок"
+
+#: src/interface.c:2963
+msgid ""
+"Specifies the number of files which are stored in the Recent files list."
+msgstr ""
+"Определяет количество файлов сохраненных в списке Последних открываемых "
+"файлов."
+
+#: src/interface.c:2976
+#, fuzzy
+msgid "File tabs will be placed on the left of the notebook"
+msgstr "Новые закладки будут располагаться слева в списке закладок"
+
+#: src/interface.c:2984
+#, fuzzy
+msgid "File tabs will be placed on the right of the notebook"
+msgstr "Новые закладки будут располагаться справа в списке закладок"
+
+#: src/interface.c:2988
+msgid "Recent files list length:"
+msgstr "Длинна списка недавних файлов"
+
+#: src/interface.c:2996
+#, fuzzy
+msgid "<b>Misc.</b>"
+msgstr "<b>Разное</b>"
+
+#: src/interface.c:3001 src/treeviews.c:111
+#, fuzzy
+msgid "Files"
+msgstr "_Файл"
+
+#: src/interface.c:3023
+msgid "Invert syntax highlighting colours"
+msgstr ""
+
+#: src/interface.c:3025
+msgid "Use white text on a black background."
+msgstr ""
+
+#: src/interface.c:3027
 msgid "Show indentation guides"
 msgstr "Показывать подсказки углубления"
 
-#: src/interface.c:2524
+#: src/interface.c:3030
 msgid "Shows small dotted lines to help you to use the right indentation."
-msgstr "Показывает маленькие прерывистые линии для помощи в использовании правильного переноса."
+msgstr ""
+"Показывает маленькие прерывистые линии для помощи в использовании "
+"правильного переноса."
 
-#: src/interface.c:2527
+#: src/interface.c:3033
 msgid "Show white space"
 msgstr "Показать чистые пробелы"
 
-#: src/interface.c:2530
+#: src/interface.c:3036
 msgid "Marks spaces with dots and tabs with arrows."
 msgstr "Маркирует пробелы точками, а табуляции стрелками."
 
-#: src/interface.c:2533
+#: src/interface.c:3039
 msgid "Show line endings"
 msgstr "Показывать окончание строк"
 
-#: src/interface.c:2536
+#: src/interface.c:3042
 msgid "Show the line ending character"
 msgstr "Показывает символы окончания строк"
 
-#: src/interface.c:2539
-msgid "XML tag auto completion"
-msgstr "Авто-завершение XML тегов"
+#: src/interface.c:3045
+#, fuzzy
+msgid "<b>Display</b>"
+msgstr "<b>Разное</b>"
 
-#: src/interface.c:2542
-msgid "Automatic completion of open XML tags(includes HTML tags)"
-msgstr "Автоматическое завершение открытых XML тегов(включая HTML теги)"
+#: src/interface.c:3066
+#, fuzzy
+msgid "Long line marker:"
+msgstr "Маркер длинны строки"
 
-#: src/interface.c:2545
-msgid "Construct auto completion"
-msgstr "Авто-завершение конструкций"
+#: src/interface.c:3073
+#, fuzzy
+msgid "Long line marker color:"
+msgstr "Цвет Маркера длинны строки"
 
-#: src/interface.c:2548
-msgid "Automatic completion of often used constructs like if and for"
-msgstr "Автоматическое завершение часто используемых конструкций(к примеру, if и for)"
+#: src/interface.c:3080
+#, fuzzy
+msgid "Type:"
+msgstr "Тип"
 
-#: src/interface.c:2551
+#: src/interface.c:3092
+msgid "Sets the color of the long line marker"
+msgstr "Устанавливает цвет Маркера Длинны строки"
+
+#: src/interface.c:3093 src/dialogs.c:543 src/vte.c:546 src/vte.c:553
+msgid "Color Chooser"
+msgstr "Выбор цвета"
+
+#: src/interface.c:3101
+msgid ""
+"The long line marker is a thin vertical line in the editor. It helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
+msgstr ""
+"Маркер Длинны Строки это вертикальная тонка линии в редакторе. Помогает "
+"отмечать длинные строки или является сигналом для перехода на следующую "
+"строку. Что бы отключить установите значение в 0, или больше нуля для "
+"указания колонки где оно должно быть."
+
+#: src/interface.c:3111
+msgid "Line"
+msgstr "Строка"
+
+#: src/interface.c:3114
+#, fuzzy
+msgid ""
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)."
+msgstr ""
+"Печатает вертикальную линию в окне редактора в заданной позиции курсора(см. "
+"выше)"
+
+#: src/interface.c:3118
+msgid "Background"
+msgstr "Задний план"
+
+#: src/interface.c:3121
+#, fuzzy
+msgid ""
+"The background colour of characters after the given cursor position (see "
+"below) changed to the colour set below. (This is recommended if you use "
+"proportional fonts)"
+msgstr ""
+"Цвет фона символов после заданной позиции курсора(см. выше) меняется на цвет "
+"который установлен выше. (Рекомендовано если Вы используете пропорциональные "
+"шрифты)"
+
+#: src/interface.c:3125
+msgid "Disabled"
+msgstr "Отключено"
+
+#: src/interface.c:3131
+msgid "<b>Long line marker</b>"
+msgstr "<b>Маркер длинны строки</b>"
+
+#: src/interface.c:3150
+#, fuzzy
+msgid "Auto indentation"
+msgstr "Использовать авто-углубление"
+
+#: src/interface.c:3153
+msgid "Add the same indentation as the previous line after pressing enter"
+msgstr ""
+
+#: src/interface.c:3155
+#, fuzzy
+msgid "Line wrapping"
+msgstr "Окончания строк"
+
+#: src/interface.c:3160
 msgid "Enable folding"
 msgstr "Включить разделение блоков кода"
 
-#: src/interface.c:2554
+#: src/interface.c:3163
 msgid "Whether to enable folding the code"
-msgstr "Включает разделение кода на блоки(сворачивать/разворачивать отдельные функции)"
+msgstr ""
+"Включает разделение кода на блоки(сворачивать/разворачивать отдельные "
+"функции)"
 
-#: src/interface.c:2557
+#: src/interface.c:3166
+msgid "Unfold all children of a fold point"
+msgstr ""
+
+#: src/interface.c:3169
+msgid "Unfold all children of a fold point when unfolding it."
+msgstr ""
+
+#: src/interface.c:3172
 msgid "Use indicators to show compile errors"
 msgstr "Использовать индикаторы для показа ошибок при сборке"
 
-#: src/interface.c:2560
-msgid "Whether to use indicators(a squiggly underline) to highlight the lines, where the compiler found a warning or an error."
-msgstr "Использовать ли индикаторы(волнистое подчеркивание) для выделения строк, где компилятор нашел предупреждение или ошибку."
-
-#: src/interface.c:2567
-msgid "<b>Miscellaneous</b>"
-msgstr "<b>Разное</b>"
-
-#: src/interface.c:2580
+#: src/interface.c:3175
+#, fuzzy
 msgid ""
-"Enter here the paths to the make tool and the compiler\n"
-"(tools you do not need can be let blank)"
+"Whether to use indicators (a squiggly underline) to highlight the lines "
+"where the compiler found a warning or an error."
+msgstr ""
+"Использовать ли индикаторы(волнистое подчеркивание) для выделения строк, где "
+"компилятор нашел предупреждение или ошибку."
+
+#: src/interface.c:3178
+#, fuzzy
+msgid "<b>Features</b>"
+msgstr "<b>Шрифты</b>"
+
+#: src/interface.c:3197
+#, fuzzy
+msgid "Construct autocompletion"
+msgstr "Авто-завершение конструкций"
+
+#: src/interface.c:3200
+msgid "Automatic completion of often used constructs like if and for"
+msgstr ""
+"Автоматическое завершение часто используемых конструкций(к примеру, if и for)"
+
+#: src/interface.c:3203
+#, fuzzy
+msgid "XML tag autocompletion"
+msgstr "Авто-завершение XML тегов"
+
+#: src/interface.c:3206
+#, fuzzy
+msgid "Automatic completion of open XML tags (includes HTML tags)"
+msgstr "Автоматическое завершение открытых XML тегов(включая HTML теги)"
+
+#: src/interface.c:3213
+#, fuzzy
+msgid "Rows of autocompletion list:"
+msgstr "Авто-завершение конструкций"
+
+#: src/interface.c:3222
+#, fuzzy
+msgid "Number of rows to display in the autocompletion list."
+msgstr "Авто-завершение конструкций"
+
+#: src/interface.c:3225
+#, fuzzy
+msgid "<b>Autocompletion</b>"
+msgstr "<b>Размещение:</b>"
+
+#: src/interface.c:3230
+msgid "Editor"
+msgstr "Редактор"
+
+#: src/interface.c:3248
+#, fuzzy
+msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Введите здесь пути к утилите make и к компилятору \n"
 "(для не нужных инструментов оставляйте поля чистыми)"
 
-#: src/interface.c:2591
-msgid "Make"
+#: src/interface.c:3260
+#, fuzzy
+msgid "Make:"
 msgstr "Make"
 
-#: src/interface.c:2598
-#: src/dialogs.c:1794
-#: src/vte.c:163
-msgid "Terminal"
+#: src/interface.c:3267
+#, fuzzy
+msgid "Terminal:"
 msgstr "Терминал"
 
-#: src/interface.c:2605
-msgid "Browser"
+#: src/interface.c:3274
+#, fuzzy
+msgid "Browser:"
 msgstr "Просмотрщик"
 
-#: src/interface.c:2617
+#: src/interface.c:3286
 msgid "Path and options for the make tool"
 msgstr "Путь и опции для make"
 
-#: src/interface.c:2624
-msgid "A terminal emulator like xterm, gnome-terminal or konsole (should accept the -e argument)"
-msgstr "Эмулятор терминалов таких как xterm, gnome-terminal или konsole(все которые принимают ключ -e <аргумент>)"
+#: src/interface.c:3293
+msgid ""
+"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
+"-e argument)"
+msgstr ""
+"Эмулятор терминалов таких как xterm, gnome-terminal или konsole(все которые "
+"принимают ключ -e <аргумент>)"
 
-#: src/interface.c:2631
+#: src/interface.c:3300
 msgid "Path (and possibly additional arguments) to your favorite browser"
-msgstr "Путь (и возможно дополнительные аргументы) к Вашему предпочитаемому просмотрщику"
+msgstr ""
+"Путь (и возможно дополнительные аргументы) к Вашему предпочитаемому "
+"просмотрщику"
 
-#: src/interface.c:2663
-msgid "Print command"
+#: src/interface.c:3332
+#, fuzzy
+msgid "Print command:"
 msgstr "Команда печати"
 
-#: src/interface.c:2675
-#, c-format
-msgid "Path to the command for printing files(use %f for the filename)."
+#: src/interface.c:3344
+#, fuzzy, c-format
+msgid "Path to the command for printing files (use %f for the filename)."
 msgstr "Путь к команде печати файлов(используйте %f для имени файла)"
 
-#: src/interface.c:2687
+#: src/interface.c:3356
+#, fuzzy
+msgid "Grep:"
+msgstr "Греческая"
+
+#: src/interface.c:3379
+#, fuzzy
+msgid "<b>Tool paths</b>"
+msgstr "<b>Панель инструментов</b>"
+
+#: src/interface.c:3384
 msgid "Tools"
 msgstr "Инструменты"
 
-#: src/interface.c:2695
+#: src/interface.c:3402
+#, fuzzy
 msgid ""
-"Specify here information you want to use in templates.\n"
-"See documentation if you don't know, how templates work."
+"Set the information to be used in templates. See the documentation for "
+"details."
 msgstr ""
 "Введите тут информацию для использования в шаблонах.\n"
 "Смотрите документацию для изучение работы с шаблонами."
 
-#: src/interface.c:2711
+#: src/interface.c:3420
 msgid "email address of the developer"
 msgstr "адрес электронной почты разработчика"
 
-#: src/interface.c:2718
+#: src/interface.c:3427
 msgid "Initials of the developer name"
 msgstr "Инициалы имени разработчика"
 
-#: src/interface.c:2720
-msgid "Initial Version"
+#: src/interface.c:3429
+#, fuzzy
+msgid "Initial Version:"
 msgstr "Стартовая версия"
 
-#: src/interface.c:2732
+#: src/interface.c:3441
 msgid "Version number, which a new file initially has"
 msgstr "Номер версии, которую изначально имеет новый файл"
 
-#: src/interface.c:2739
+#: src/interface.c:3448
 msgid "Company name"
 msgstr "Имя компании"
 
-#: src/interface.c:2741
-msgid "Developer"
+#: src/interface.c:3450
+#, fuzzy
+msgid "Developer:"
 msgstr "Разработчик"
 
-#: src/interface.c:2748
-msgid "Company"
+#: src/interface.c:3457
+#, fuzzy
+msgid "Company:"
 msgstr "Компания"
 
-#: src/interface.c:2755
-msgid "Mail address"
+#: src/interface.c:3464
+#, fuzzy
+msgid "Mail address:"
 msgstr "Адрес электронной почты"
 
-#: src/interface.c:2762
-msgid "Initials"
+#: src/interface.c:3471
+#, fuzzy
+msgid "Initials:"
 msgstr "Инициалы"
 
-#: src/interface.c:2774
+#: src/interface.c:3483
 msgid "The name of the developer"
 msgstr "Имя разработчика"
 
-#: src/interface.c:2776
+#: src/interface.c:3485
+#, fuzzy
 msgid ""
-"Notice: For all changes you make here,\n"
-"you need to restart Geany to take effect."
+"<i>Notice: For all changes you make here to take effect, you need to restart "
+"Geany.</i>"
 msgstr ""
 "Внимание: Для вступление всех сделанных тут изменений в силу,\n"
 "Вам необходимо перезапустить Geany."
 
-#: src/interface.c:2780
+#: src/interface.c:3492
+#, fuzzy
+msgid "<b>Template data</b>"
+msgstr "<b>Расположение закладок</b>"
+
+#: src/interface.c:3497
 msgid "Templates"
 msgstr "Шаблоны"
 
-#: src/interface.c:2788
-msgid "Here you can change keyboard shortcuts for various actions. Just double click on a action or select one and press the Change button to enter a new shortcut. You can also edit the string representation of the shortcut directly."
-msgstr "Тут Вы можете изменять различные сочетания клавиш для различных действий. Достаточно двойного нажатия левой кнопкой мыши на действии или выберите одно действие и нажмите кнопку Изменить что бы создать новое сочетание. Так же Вы можете редактировать строку сочетания напрямую."
+#: src/interface.c:3515
+#, fuzzy
+msgid ""
+"Here you can change keyboard shortcuts for various actions. Select one and "
+"press the Change button to enter a new shortcut, or double click on an "
+"action to edit the string representation of the shortcut directly."
+msgstr ""
+"Тут Вы можете изменять различные сочетания клавиш для различных действий. "
+"Достаточно двойного нажатия левой кнопкой мыши на действии или выберите одно "
+"действие и нажмите кнопку Изменить что бы создать новое сочетание. Так же Вы "
+"можете редактировать строку сочетания напрямую."
 
-#: src/interface.c:2811
+#: src/interface.c:3538
 msgid "Change"
 msgstr "Изменить"
 
-#: src/interface.c:2815
+#: src/interface.c:3542
+#, fuzzy
+msgid "<b>Keyboard shortcuts</b>"
+msgstr "Клавиатурные сокращения"
+
+#: src/interface.c:3547
 msgid "Keybindings"
 msgstr "Привязки"
 
-#: src/callbacks.c:210
-#: src/callbacks.c:225
+#: src/callbacks.c:173
 msgid "Do you really want to quit?"
 msgstr "Вы действительно хотите выйти?"
 
-#: src/callbacks.c:510
-#, c-format
-msgid ""
-"Are you sure you want to reload '%s'?\n"
-"Any unsaved changes will be lost."
+#: src/callbacks.c:491
+#, fuzzy
+msgid "Any unsaved changes will be lost."
 msgstr ""
 "Вы уверены в перезагрузке '%s'?\n"
 "Любые не сохраненные изменения будут потеряны."
 
-#: src/callbacks.c:904
+#: src/callbacks.c:492
+#, fuzzy, c-format
+msgid "Are you sure you want to reload '%s'?"
+msgstr ""
+"Вы уверены в перезагрузке '%s'?\n"
+"Любые не сохраненные изменения будут потеряны."
+
+#: src/callbacks.c:877
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Файл '%s' уже существует. Переписать поверху?"
 
-#. no matches were found (searching from unnamed file)
-#: src/callbacks.c:1338
-#, c-format
-msgid "No matches found for '%s'."
-msgstr "Совпадений для '%s' не найдено."
-
-#: src/callbacks.c:1378
-#, c-format
+#: src/callbacks.c:1247
+#, fuzzy, c-format
 msgid "Declaration of \"%s()\" not found"
-msgstr "Декларирование функции \"%s()\" не найдено"
+msgstr "Определение функции \"%s()\" не найдено"
 
-#: src/callbacks.c:1380
-#, c-format
+#: src/callbacks.c:1249
+#, fuzzy, c-format
 msgid "Definition of \"%s()\" not found"
 msgstr "Определение функции \"%s()\" не найдено"
 
-#: src/callbacks.c:1724
-msgid "Failed to execute the view program"
-msgstr "Невозможно запустить программу просмотра"
+#: src/callbacks.c:1454 src/callbacks.c:1499
+msgid ""
+"Please set the filetype for the current file before using this function."
+msgstr ""
+"Пожалуйста, установите тип файла для текущего документа перед использованием "
+"этой функции"
 
-#: src/callbacks.c:1735
-msgid "Failed to execute the terminal program"
-msgstr "Невозможно запустить терминальную программу"
+#: src/callbacks.c:1615 src/ui_utils.c:561
+msgid "dd.mm.yyyy"
+msgstr ""
 
-#. initialize the dialog
-#: src/callbacks.c:2058
-#: src/dialogs.c:71
-msgid "Open File"
-msgstr "Открыть Файл"
+#: src/callbacks.c:1617 src/ui_utils.c:562
+msgid "mm.dd.yyyy"
+msgstr ""
 
-#: src/callbacks.c:2107
-#: src/callbacks.c:2152
-#: src/callbacks.c:2192
-#: src/callbacks.c:2250
-msgid "Please set the filetype for the current file before using this function."
-msgstr "Пожалуйста, установите тип файла для текущего документа перед использованием этой функции"
+#: src/callbacks.c:1619 src/ui_utils.c:563
+msgid "yyyy/mm/dd"
+msgstr ""
 
-#: src/support.c:90
-#: src/support.c:114
+#: src/callbacks.c:1621 src/ui_utils.c:572
+msgid "dd.mm.yyyy hh:mm:ss"
+msgstr ""
+
+#: src/callbacks.c:1623 src/ui_utils.c:573
+msgid "mm.dd.yyyy hh:mm:ss"
+msgstr ""
+
+#: src/callbacks.c:1625 src/ui_utils.c:574
+msgid "yyyy/mm/dd hh:mm:ss"
+msgstr ""
+
+#: src/callbacks.c:1627 src/ui_utils.c:583
+#, fuzzy
+msgid "Use Custom Date Format"
+msgstr "Построить свою цель"
+
+#: src/callbacks.c:1638
+#, fuzzy
+msgid "Custom Date Format"
+msgstr "Построить свою цель"
+
+#: src/callbacks.c:1639
+msgid ""
+"Enter here a custom date and time format. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function. See \"man "
+"strftime\" for more information."
+msgstr ""
+
+#: src/callbacks.c:1659
+msgid "Date format string could not be converted (possibly too long)."
+msgstr ""
+
+#: src/callbacks.c:2047
+msgid "No more message items."
+msgstr ""
+
+#: src/support.c:90 src/support.c:114
 #, c-format
 msgid "Couldn't find pixmap file: %s"
 msgstr "Не могу найти pixmap файл: %s"
 
-#: src/dialogs.c:76
-msgid "Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."
-msgstr "Открытие файла в режиме \"только чтение\". Если выбрать более чем один файл для открытия, все выбранные файлы будут открыты в режиме \"только чтение\"."
+#. initialize the dialog
+#: src/dialogs.c:74 src/prefs.c:1017
+msgid "Open File"
+msgstr "Открыть Файл"
+
+#: src/dialogs.c:79
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+"Открытие файла в режиме \"только чтение\". Если выбрать более чем один файл "
+"для открытия, все выбранные файлы будут открыты в режиме \"только чтение\"."
 
 #: src/dialogs.c:112
-msgid "Detect by file extension  "
+#, fuzzy
+msgid "Detect by file extension"
 msgstr "Распознать по расширению файла  "
 
-#: src/dialogs.c:165
+#: src/dialogs.c:123
+msgid "Detect from file"
+msgstr ""
+
+#. line 1 with checkbox and encoding combo
+#: src/dialogs.c:169
+msgid "Show _hidden files"
+msgstr "Показать скрытые файлы"
+
+#: src/dialogs.c:181
+#, fuzzy
+msgid "Set encoding:"
+msgstr "Установить кодировку"
+
+#: src/dialogs.c:191
+#, fuzzy
+msgid ""
+"Explicitly defines an encoding for the file, if it would not be detected. "
+"This is useful when you know that the encoding of a file cannot be detected "
+"correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"encoding."
+msgstr ""
+"Ручная установка типа открываемого файла, если файл не будет распознан по "
+"его расширению.\n"
+"Если Вы выбрали не один файл, все они будут открываться с выбранным типом "
+"файла."
+
+#: src/dialogs.c:211
+msgid "Set filetype:"
+msgstr "Тип файла:"
+
+#: src/dialogs.c:221
+msgid ""
+"Explicitly defines a filetype for the file, if it would not be detected by "
+"filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"filetype."
+msgstr ""
+"Ручная установка типа открываемого файла, если файл не будет распознан по "
+"его расширению.\n"
+"Если Вы выбрали не один файл, все они будут открываться с выбранным типом "
+"файла."
+
+#: src/dialogs.c:260
 msgid "Save File"
 msgstr "Сохранить Файл"
 
-#: src/dialogs.c:217
-#, c-format
-msgid "There is a limit of %d concurrent open tabs."
-msgstr "Это лимит конкурирующих %d открытых закладок."
+#: src/dialogs.c:352
+#, fuzzy, c-format
+msgid "The file '%s' is not saved."
+msgstr "Файл %s сохранен."
 
-#: src/dialogs.c:218
-msgid "error: too many open files"
-msgstr "ОШИБКА: слишком много открытых файлов"
-
-#: src/dialogs.c:241
-#, c-format
-msgid "The match \"%s\" was not found. Wrap search around the document?"
-msgstr "Совпадение с фразой \"%s\" не было найдено. Начать поиск с начала документа?"
-
-#: src/dialogs.c:244
-#: src/dialogs.c:1866
-msgid "Question"
-msgstr "Вопрос"
-
-#: src/dialogs.c:273
-msgid "Information"
-msgstr "Информация"
-
-#: src/dialogs.c:298
-#: src/dialogs.c:330
-#: src/dialogs.c:1285
-#: src/win32.c:217
-#: src/win32.c:379
-msgid "Error"
-msgstr "Ошибка"
-
-#: src/dialogs.c:322
-#, c-format
-msgid ""
-"The file '%s' is not saved.\n"
-"Do you want to save it before closing?"
-msgstr ""
-"Файл '%s' не сохранен.\n"
-"Сохранить его перед закрытием?"
-
-#: src/dialogs.c:327
-msgid ""
-"The file is not saved.\n"
-"Do you want to save it before closing?"
+#: src/dialogs.c:362
+#, fuzzy
+msgid "Do you want to save it before closing?"
 msgstr ""
 "Файл не сохранен.\n"
 "Сохранить файл до закрытия?"
 
-#: src/dialogs.c:344
-msgid "Don't save"
+#: src/dialogs.c:365
+#, fuzzy
+msgid "_Don't save"
 msgstr "Не сохранять"
 
-#: src/dialogs.c:396
+#: src/dialogs.c:409
 msgid "Choose font"
 msgstr "Выбрать шрифт"
 
-#: src/dialogs.c:435
+#: src/dialogs.c:447
 msgid "Word Count"
 msgstr "Подсчет слов"
 
-#: src/dialogs.c:444
+#: src/dialogs.c:456
 msgid "selection"
 msgstr "выделение"
 
-#: src/dialogs.c:452
+#: src/dialogs.c:462
 msgid "whole document"
 msgstr "весь документ"
 
-#: src/dialogs.c:454
-#, c-format
-msgid ""
-"Range:\t\t%s\n"
-"\n"
-"Lines:\t\t%d\n"
-"Words:\t\t%d\n"
-"Characters:\t%d\n"
+#: src/dialogs.c:471
+#, fuzzy
+msgid "Range:"
+msgstr "Изменить"
+
+#: src/dialogs.c:483
+#, fuzzy
+msgid "Lines:"
+msgstr "Строка"
+
+#: src/dialogs.c:497
+msgid "Words:"
 msgstr ""
-"Размер:\t\t%s\n"
-"\n"
-"Cтрок:\t\t%d\n"
-"Слов:\t\t%d\n"
-"Символов:\t%d\n"
 
-#. compile the code
-#: src/dialogs.c:512
-msgid "_Compile"
-msgstr "_Собрать"
+#: src/dialogs.c:511
+#, fuzzy
+msgid "Characters:"
+msgstr "Глава"
 
-#: src/dialogs.c:515
-msgid "Compiles the current file"
-msgstr "Собирает текущий файл"
+#: src/dialogs.c:610 src/keybindings.c:144
+msgid "Go to line"
+msgstr "Перейти к строке"
 
-#: src/dialogs.c:530
-msgid "Builds the current file (generate an executable file)"
-msgstr "Строит текущий файл (генерирует выполняемый файл)"
-
-#. build the code with make all
-#: src/dialogs.c:544
-msgid "_Make all"
-msgstr "Построит_ь всё"
-
-#: src/dialogs.c:547
-#: src/dialogs.c:649
-msgid "Builds the current file with the make tool and the default target"
-msgstr "Сборка данного файлы используя make и объект сборки по умолчанию"
-
-#. build the code with make
-#: src/dialogs.c:553
-msgid "Make custom _target"
-msgstr "Построить свою цель"
-
-#: src/dialogs.c:557
-#: src/dialogs.c:663
-msgid "Builds the current file with the make tool and the specified target"
-msgstr "Строит текущий файл используя make и указанную цель"
-
-#. build the code with make object
-#: src/dialogs.c:562
-msgid "Make _object"
-msgstr "Построить объект"
-
-#: src/dialogs.c:566
-msgid "Compiles the current file using the make tool"
-msgstr "Собирает текущий файл используя make"
-
-#: src/dialogs.c:594
-msgid "_Set Includes and Arguments"
-msgstr "Установить Включения и Аргументы"
-
-#: src/dialogs.c:599
-msgid "Sets the includes and library paths for the compiler and the program arguments for execution"
-msgstr "Устанавливает включаемые заголовочные файлы и пути библиотек для компилятора(сборщика)  и аргументов для запуска программ"
-
-#. DVI
-#: src/dialogs.c:620
-msgid "LaTeX -> DVI"
-msgstr "LaTeX -> DVI"
-
-#: src/dialogs.c:623
-msgid "Compiles the current file into a DVI file"
-msgstr "Собирает текущий файл в DVI файл"
-
-#. PDF
-#: src/dialogs.c:633
-msgid "LaTeX -> PDF"
-msgstr "LaTeX -> PDF"
-
-#: src/dialogs.c:636
-msgid "Compiles the current file into a PDF file"
-msgstr "Собирает текущий файл в PDF файл"
-
-#. build the code with make all
-#: src/dialogs.c:646
-msgid "Build with \"make\""
-msgstr "Построить используя \"make\""
-
-#. build the code with make
-#: src/dialogs.c:657
-msgid "Build with make (custom target)"
-msgstr "Построить используя make (другая цель)"
-
-#. DVI view
-#: src/dialogs.c:668
-msgid "View DVI file"
-msgstr "Смотреть DVI файл"
-
-#: src/dialogs.c:674
-#: src/dialogs.c:687
-msgid "Compiles and view the current file"
-msgstr "Собирает и смотрит текущий файл"
-
-#. PDF view
-#: src/dialogs.c:681
-msgid "View PDF file"
-msgstr "Смотреть PDF файл"
+#: src/dialogs.c:616
+#, fuzzy
+msgid "Enter the line you want to go to:"
+msgstr "Введите строку куда перейти"
 
 #. arguments
-#: src/dialogs.c:700
-#: src/dialogs.c:1016
+#: src/dialogs.c:641 src/build.c:1068
 msgid "Set Arguments"
 msgstr "Установить аргументы"
 
-#: src/dialogs.c:707
-msgid "Sets the program paths and arguments"
-msgstr "Устанавливает пути и аргументы программ"
-
-#: src/dialogs.c:749
-msgid "Enter custom options for the make tool"
-msgstr "Введите свои опции для make"
-
-#: src/dialogs.c:754
-msgid "Enter custom options here, all entered text is passed to the make command."
-msgstr "Введите здесь свои опции, весь введенный текст добавляется к команде make."
-
-#: src/dialogs.c:784
-msgid "Enter the line you want to go to"
-msgstr "Введите строку куда перейти"
-
-#: src/dialogs.c:816
-msgid "Find"
-msgstr "Найти"
-
-#: src/dialogs.c:821
-#: src/dialogs.c:929
-msgid "Enter the search text here"
-msgstr "Введите текст для поиска"
-
-#: src/dialogs.c:842
-#: src/dialogs.c:962
-msgid "_Case sensitive"
-msgstr "Регистровая чувствительность"
-
-#: src/dialogs.c:847
-#: src/dialogs.c:967
-msgid "Match only a _whole word"
-msgstr "Совпадение только всего слова"
-
-#: src/dialogs.c:852
-#: src/dialogs.c:972
-msgid "_Use regular expressions"
-msgstr "Использовать регулярные выражения"
-
-#: src/dialogs.c:857
-#: src/dialogs.c:977
-msgid "For detailed information about using regular expressions, please read the documentation."
-msgstr "Для более подробной информации по использованию регулярных выражений, читайте соответствующую документацию."
-
-#: src/dialogs.c:859
-#: src/dialogs.c:979
-msgid "_Search backwards"
-msgstr "Обратный поиск"
-
-#: src/dialogs.c:864
-#: src/dialogs.c:984
-msgid "Match only word s_tart"
-msgstr "Совпадение только стартового слова"
-
-#: src/dialogs.c:911
-#: src/keybindings.c:138
-msgid "Replace"
-msgstr "Заменить"
-
-#: src/dialogs.c:914
-msgid "_In Selection"
-msgstr "В выделенном"
-
-#: src/dialogs.c:916
-msgid "Replace all matches found in the currently selected text"
-msgstr "Заменяет все совпадения с фразой в конкретном выделенном тексте"
-
-#: src/dialogs.c:920
-msgid "Replace _All"
-msgstr "З_аменить Все"
-
-#: src/dialogs.c:933
-msgid "Enter the replace text here"
-msgstr "Введите текст для замены"
-
-#: src/dialogs.c:1021
-msgid ""
-"Set programs and options for compilation and viewing (La)TeX files.\n"
-"The filename is appended automatically at the end.\n"
+#: src/dialogs.c:647
+#, fuzzy
+msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr ""
 "Программы и опции для сборки и просмотра (La)TeX файлов.\n"
 "Имя файла добавляется в конец документа автоматически.\n"
 
-#: src/dialogs.c:1029
-msgid "Enter here the (La)TeX command (for DVI creation) and some useful options."
-msgstr "Введите здесь (La)TeX команду (для создания DVI) и некоторые полезные опции."
+#: src/dialogs.c:658
+msgid "DVI creation:"
+msgstr ""
 
-#: src/dialogs.c:1050
-msgid "Enter here the (La)TeX command (for PDF creation) and some useful options."
-msgstr "Введите здесь (La)TeX команду (для создания PDF) и некоторые полезные опции."
+#: src/dialogs.c:677
+msgid "PDF creation:"
+msgstr ""
 
-#: src/dialogs.c:1071
-msgid "Enter here the (La)TeX command (for DVI preview) and some useful options."
-msgstr "Введите здесь (La)TeX команду (для пред-просмотра DVI) и некоторые полезные опции."
+#: src/dialogs.c:696
+msgid "DVI preview:"
+msgstr ""
 
-#: src/dialogs.c:1092
-msgid "Enter here the (La)TeX command (for PDF preview) and some useful options."
-msgstr "Введите здесь (La)TeX команду (для пред-просмотра DVI) и некоторые полезные опции."
+#: src/dialogs.c:715
+msgid "PDF preview:"
+msgstr ""
 
-#: src/dialogs.c:1123
-msgid "Set Includes and Arguments"
-msgstr "Установить \"include <...>\" и Аргументы"
-
-#: src/dialogs.c:1128
-msgid "Sets the includes and library paths for the compiler and the program arguments for execution\n"
-msgstr "Устанавливает включаемые заголовочные файлы и пути библиотек для компилятора(сборщика)  и аргументов для запуска программ \n"
-
-#: src/dialogs.c:1137
-msgid "Enter here arguments to your compiler."
-msgstr "Введите аргументы для Вашего компилятора(сборщика)"
-
-#: src/dialogs.c:1143
-#: src/dialogs.c:1166
-#: src/dialogs.c:1190
-#, c-format
+#: src/dialogs.c:731 src/dialogs.c:846
+#, fuzzy, c-format
 msgid ""
-"%f will be replaced by the complete filename\n"
-"%e will be replaced by filename without extension\n"
-"Example: test_file.c\n"
-"%f -> test_file.c\n"
-"%e -> test_file"
+"%f will be replaced by the current filename, e.g. test_file.c\n"
+"%e will be replaced by the filename without extension, e.g. test_file"
 msgstr ""
 "%f будет заменено на полное имя файла\n"
 "%e будет заменено на имя файла без расширения\n"
@@ -1398,277 +1638,242 @@ msgstr ""
 "%f -> test_file.c\n"
 "%e -> test_file"
 
-#: src/dialogs.c:1160
-msgid "Enter here arguments to your linker."
-msgstr "Введите аргументы для Вашего компоновщика"
+#: src/dialogs.c:758
+msgid "Set Includes and Arguments"
+msgstr "Установить \"include <...>\" и Аргументы"
 
-#. program-args
-#: src/dialogs.c:1184
-msgid "Enter here arguments to your program."
-msgstr "Введите аргументы для Вашей программы"
-
-#: src/dialogs.c:1229
-msgid "Show _hidden files"
-msgstr "Показать скрытые файлы"
-
-#: src/dialogs.c:1246
-msgid "Set filetype:"
-msgstr "Тип файла:"
-
-#: src/dialogs.c:1249
-msgid ""
-"Explicitly defines a filetype for the file, if it would not be detected by filename extension.\n"
-"Note if you choose multiple files, they will all be opened with the chosen filetype."
+#: src/dialogs.c:764
+msgid "Set the commands for building and running programs."
 msgstr ""
-"Ручная установка типа открываемого файла, если файл не будет распознан по его расширению.\n"
-"Если Вы выбрали не один файл, все они будут открываться с выбранным типом файла."
 
-#: src/dialogs.c:1281
-#, c-format
-msgid ""
-"Configuration directory could not be created (%s).\n"
-"There could be some problems using %s without a configuration directory.\n"
-"Start %s anyway?"
-msgstr ""
-"Папка конфигурации не может быть создана (%s).\n"
-"Могут возникнуть некоторые проблемы в использовании %s без конфигурационной папки.\n"
-"Запустить %s в любом случае?"
+#: src/dialogs.c:771
+#, fuzzy
+msgid " commands"
+msgstr "Команда"
 
-#: src/dialogs.c:1330
-msgid "An error occurred or file information could not be retrieved(e.g. from a new file)."
-msgstr "Произошла ошибка или информация о файле не может быть получена(новый файл?)."
+#: src/dialogs.c:786
+#, fuzzy
+msgid "Compile:"
+msgstr "Собрать"
 
-#: src/dialogs.c:1350
-#: src/dialogs.c:1351
-#: src/dialogs.c:1352
-#: src/dialogs.c:1358
-#: src/dialogs.c:1359
-#: src/dialogs.c:1360
-#: src/utils.c:143
-#: src/utils.c:144
-#: src/utils.c:1093
-msgid "unknown"
-msgstr "Неизвестный"
+#: src/dialogs.c:807
+#, fuzzy
+msgid "Build:"
+msgstr "Построить"
 
-#: src/dialogs.c:1364
-msgid "Properties"
-msgstr "Свойства"
-
-#: src/dialogs.c:1392
-msgid "<b>Type:</b>"
-msgstr "<b>Тип:</b>"
-
-#: src/dialogs.c:1405
-msgid "<b>Size:</b>"
-msgstr "<b>Размер:</b>"
-
-#: src/dialogs.c:1420
-msgid "<b>Location:</b>"
-msgstr "<b>Размещение:</b>"
-
-#: src/dialogs.c:1433
-msgid "<b>Read-only:</b>"
-msgstr "<b>Только чтение:</b>"
-
-#: src/dialogs.c:1440
-msgid "(only inside Geany)"
-msgstr "(только внутри Geany)"
-
-#: src/dialogs.c:1449
-msgid "<b>Encoding:</b>"
-msgstr "<b>Кодировка:</b>"
-
-#: src/dialogs.c:1462
-msgid "<b>Modified:</b>"
-msgstr "<b>Модифицирован:</b>"
-
-#: src/dialogs.c:1475
-msgid "<b>Changed:</b>"
-msgstr "<b>Изменен:</b>"
-
-#: src/dialogs.c:1488
-msgid "<b>Accessed:</b>"
-msgstr "<b>Последний доступ:</b>"
-
-#. Header
-#: src/dialogs.c:1517
-msgid "Read:"
-msgstr "Чтение:"
-
-#: src/dialogs.c:1524
-msgid "Write:"
-msgstr "Запись:"
-
-#: src/dialogs.c:1531
+#: src/dialogs.c:828 src/dialogs.c:1099
 msgid "Execute:"
 msgstr "Запуск:"
 
+#: src/dialogs.c:893
+#, fuzzy
+msgid ""
+"An error occurred or file information could not be retrieved (e.g. from a "
+"new file)."
+msgstr ""
+"Произошла ошибка или информация о файле не может быть получена(новый файл?)."
+
+#: src/dialogs.c:912 src/dialogs.c:913 src/dialogs.c:914 src/dialogs.c:920
+#: src/dialogs.c:921 src/dialogs.c:922 src/utils.c:503 src/utils.c:557
+#: src/ui_utils.c:122 src/ui_utils.c:124
+msgid "unknown"
+msgstr "Неизвестный"
+
+#: src/dialogs.c:926
+msgid "Properties"
+msgstr "Свойства"
+
+#: src/dialogs.c:954
+msgid "<b>Type:</b>"
+msgstr "<b>Тип:</b>"
+
+#: src/dialogs.c:967
+msgid "<b>Size:</b>"
+msgstr "<b>Размер:</b>"
+
+#: src/dialogs.c:982
+msgid "<b>Location:</b>"
+msgstr "<b>Размещение:</b>"
+
+#: src/dialogs.c:995
+msgid "<b>Read-only:</b>"
+msgstr "<b>Только чтение:</b>"
+
+#: src/dialogs.c:1002
+msgid "(only inside Geany)"
+msgstr "(только внутри Geany)"
+
+#: src/dialogs.c:1011
+msgid "<b>Encoding:</b>"
+msgstr "<b>Кодировка:</b>"
+
+#: src/dialogs.c:1020 src/ui_utils.c:123
+msgid "(with BOM)"
+msgstr ""
+
+#: src/dialogs.c:1020 src/ui_utils.c:123
+msgid "(without BOM)"
+msgstr ""
+
+#: src/dialogs.c:1030
+msgid "<b>Modified:</b>"
+msgstr "<b>Модифицирован:</b>"
+
+#: src/dialogs.c:1043
+msgid "<b>Changed:</b>"
+msgstr "<b>Изменен:</b>"
+
+#: src/dialogs.c:1056
+msgid "<b>Accessed:</b>"
+msgstr "<b>Последний доступ:</b>"
+
+#: src/dialogs.c:1077
+#, fuzzy
+msgid "<b>Permissions:</b>"
+msgstr "<b>Шрифты</b>"
+
+#. Header
+#: src/dialogs.c:1085
+msgid "Read:"
+msgstr "Чтение:"
+
+#: src/dialogs.c:1092
+msgid "Write:"
+msgstr "Запись:"
+
 #. Owner
-#: src/dialogs.c:1539
+#: src/dialogs.c:1107
 msgid "Owner:"
 msgstr "Владелец:"
 
 #. Group
-#: src/dialogs.c:1575
+#: src/dialogs.c:1143
 msgid "Group:"
 msgstr "Группа:"
 
 #. Other
-#: src/dialogs.c:1611
+#: src/dialogs.c:1179
 msgid "Other:"
 msgstr "Прочие:"
 
-#: src/dialogs.c:1692
-msgid "These are settings for the virtual terminal emulator widget (VTE). They only apply, if the VTE library could be loaded."
-msgstr "Это установки для эмулятора виртуального терминала(VTE). Они только действительны, если VTE-библиотека не была загружена."
-
-#: src/dialogs.c:1708
-msgid "Terminal font"
-msgstr "Шрифт терминала"
-
-#: src/dialogs.c:1718
-msgid "Sets the font for the terminal widget."
-msgstr "Устанавливает шрифт для окна терминала"
-
-#: src/dialogs.c:1720
-msgid "Foreground color"
-msgstr "Цвет переднего плана"
-
-#: src/dialogs.c:1726
-msgid "Background color"
-msgstr "Цвет заднего плана"
-
-#: src/dialogs.c:1736
-msgid "Sets the foreground color of the text in the terminal widget."
-msgstr "Устанавливает цвет переднего плана отображения текста и окна"
-
-#: src/dialogs.c:1743
-msgid "Sets the background color of the text in the terminal widget."
-msgstr "Устанавливает цвет заднего плана отображения текста и окна"
-
-#: src/dialogs.c:1746
-msgid "Scrollback lines"
-msgstr "Прокручиваемые строки"
-
-#: src/dialogs.c:1757
-msgid "Specifies the history in lines, which you can scroll back in the terminal widget."
-msgstr "Устанавливает историю строк, которые Вы можете прокрутить назад в терминальном окне."
-
-#: src/dialogs.c:1761
-msgid "Terminal emulation"
-msgstr "Эмуляция терминала"
-
-#: src/dialogs.c:1771
-msgid "Controls how the terminal emulator should behave. xterm is a good start."
-msgstr "Устанавливает то, как эмулятор будет работать. xterm это хорошее начало."
-
-#: src/dialogs.c:1773
-msgid "Scroll on keystroke"
-msgstr "Прокрутка построчно"
-
-#: src/dialogs.c:1777
-msgid "Whether to scroll to the bottom if a key was pressed."
-msgstr "Прокрутка построчно вниз если было клавиша была нажата."
-
-#: src/dialogs.c:1780
-msgid "Scroll on output"
-msgstr "Прокрутка вывода"
-
-#: src/dialogs.c:1784
-msgid "Whether to scroll to the bottom if an output was generated."
-msgstr "Прокрутка вниз если был вывод."
-
-#: src/dialogs.c:1787
-msgid "Follow the path of the current file"
-msgstr "Следовать пути текущего файла"
-
-#: src/dialogs.c:1791
-msgid "Whether to execute \"cd $path\" when you switch between opened files."
-msgstr "Выполняет \"cd $path\" когда Вы переключаетесь между открытыми файлами."
-
-#: src/dialogs.c:1890
+#: src/dialogs.c:1300
 msgid "Keyboard shortcuts"
 msgstr "Клавиатурные сокращения"
 
-#: src/dialogs.c:1897
+#: src/dialogs.c:1309
 msgid "The following keyboard shortcuts are defined:"
 msgstr "Определены следующие клавиатурные сокращения:"
 
-#: src/document.c:310
+#: src/document.c:339
 #, c-format
 msgid "File %s closed."
 msgstr "Файл '%s' закрыт."
 
-#: src/document.c:364
+#: src/document.c:420
 msgid "New file opened."
 msgstr "Открыт новый файл."
 
-#: src/document.c:405
-#: src/document.c:414
-#: src/document.c:415
+#: src/document.c:569
 msgid "Invalid filename"
 msgstr "Неправильное имя файла"
 
-#: src/document.c:437
+#: src/document.c:594 src/document.c:800
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Не могу открыть файл %s (%s)"
 
-#: src/document.c:470
-msgid "The file does not look like a text file or the file encoding is not supported."
-msgstr "Этот файл не похож на текстовой или такая кодировка файла не поддерживается."
+#: src/document.c:618
+#, c-format
+msgid ""
+"The file \"%s\" could not opened properly and probably was truncated. Be "
+"aware that saving it can cause data loss.\n"
+"The file was set to read-only."
+msgstr ""
 
-#: src/document.c:554
+#: src/document.c:641
+#, c-format
+msgid "The file \"%s\" is not valid %s."
+msgstr ""
+
+#: src/document.c:652
+#, fuzzy, c-format
+msgid ""
+"The file \"%s\" does not look like a text file or the file encoding is not "
+"supported."
+msgstr ""
+"Этот файл не похож на текстовой или такая кодировка файла не поддерживается."
+
+#: src/document.c:726
 #, c-format
 msgid "File %s reloaded."
 msgstr "Файл %s перечитан."
 
-#: src/document.c:556
+#: src/document.c:728
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Файл %s открыт(%d%s)."
 
-#: src/document.c:558
+#: src/document.c:730
 msgid ", read-only"
 msgstr ", только чтение"
 
-#: src/document.c:594
-#: src/document.c:664
+#: src/document.c:828 src/document.c:909
 msgid "Error saving file."
 msgstr "Ошибка записи файла."
 
-#: src/document.c:625
+#: src/document.c:873
 #, c-format
 msgid ""
-"An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved.\n"
+"An error occurred while converting the file from UTF-8 in \"%s\". The file "
+"remains unsaved.\n"
 "Error message: %s\n"
 msgstr ""
-"Произошла ошибка при переводе файла из UTF-8 в \"%s\". Файл остается не сохраненным.\n"
+"Произошла ошибка при переводе файла из UTF-8 в \"%s\". Файл остается не "
+"сохраненным.\n"
 "Сообщение ошибки: %s\n"
 
-#: src/document.c:645
+#: src/document.c:897
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Ошибка записи файла (%s)."
 
-#: src/document.c:686
+#: src/document.c:940
 #, c-format
 msgid "File %s saved."
 msgstr "Файл %s сохранен."
 
-#: src/document.c:993
+#: src/document.c:988 src/document.c:1040 src/document.c:1048
+#, c-format
+msgid "\"%s\" was not found."
+msgstr ""
+
+#: src/document.c:1048
+msgid "Wrap search and find again?"
+msgstr ""
+
+#: src/document.c:1127 src/search.c:1188
+#, fuzzy
+msgid "No matches found."
+msgstr "Совпадений для '%s' не найдено."
+
+#: src/document.c:1137 src/document.c:1144
+#, c-format
+msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr ""
+
+#: src/document.c:1398
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: src/document.c:994
+#: src/document.c:1399
 msgid "Mac (CR)"
 msgstr "Мак (CR)"
 
-#: src/document.c:996
+#: src/document.c:1401
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: src/document.c:1147
+#: src/document.c:1497
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -1679,601 +1884,954 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/document.c:1156
-#, c-format
-msgid "Printing of \"%s\" failed(return code: %d)."
+#: src/document.c:1506
+#, fuzzy, c-format
+msgid "Printing of \"%s\" failed (return code: %d)."
 msgstr "Печать \"%s\" провалилась(код ошибки: %d)."
 
-#: src/document.c:1161
+#: src/document.c:1511
 #, c-format
 msgid "File %s printed."
 msgstr "Файл %s распечатан."
 
-#: src/utils.c:135
-#, c-format
-msgid "%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s      filetype: %s"
-msgstr "%c  строка: % 4d столбец: % 3d  выделено: % 4d   %s    режим: %s%s    тек.функция: %s    кодировка: %s    тип: %s"
+#: src/utils.c:356
+#, fuzzy
+msgid "Do you want to reload it?"
+msgstr "Вы действительно хотите выйти?"
 
-#: src/utils.c:139
-msgid "OVR"
-msgstr "ПРЗ"
-
-#: src/utils.c:139
-msgid "INS"
-msgstr "ВСТ"
-
-#: src/utils.c:410
-#, c-format
-msgid "Font updated (%s)."
-msgstr "Шрифт обновлен (%s)."
-
-#: src/utils.c:424
-#: src/geany.h:70
-msgid "untitled"
-msgstr "Безымянный "
-
-#: src/utils.c:425
-msgid "(Unsaved)"
-msgstr "(Не сохранено)"
-
-#: src/utils.c:694
-msgid "No tags found"
-msgstr "Тегов не найдено."
-
-#: src/utils.c:994
-#, c-format
+#: src/utils.c:357
+#, fuzzy, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
-"the current buffer.\n"
-"Do you want to reload it?"
+"the current buffer."
 msgstr ""
 "Файл %s на диске более поздний чем в текущем буфере.\n"
 "Перезагрузить его?"
 
-#: src/utils.c:1901
+#: src/ui_utils.c:114
+#, fuzzy, c-format
+msgid ""
+"%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. "
+"function: %s      encoding: %s %s     filetype: %s"
+msgstr ""
+"%c  строка: % 4d столбец: % 3d  выделено: % 4d   %s    режим: %s%s    тек."
+"функция: %s    кодировка: %s    тип: %s"
+
+#: src/ui_utils.c:118
+msgid "OVR"
+msgstr "ПРЗ"
+
+#: src/ui_utils.c:118
+msgid "INS"
+msgstr "ВСТ"
+
+#: src/ui_utils.c:144
+msgid "(Unsaved)"
+msgstr "(Не сохранено)"
+
+#: src/ui_utils.c:183
+#, c-format
+msgid "Font updated (%s)."
+msgstr "Шрифт обновлен (%s)."
+
+#: src/ui_utils.c:309
+msgid "No tags found"
+msgstr "Тегов не найдено."
+
+#: src/ui_utils.c:530
 msgid "C Standard Library"
 msgstr "С стандартная библиотека"
 
-#: src/utils.c:1902
+#: src/ui_utils.c:531
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: src/utils.c:1903
+#: src/ui_utils.c:532
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C стандартная библиотека)"
 
-#: src/utils.c:1904
+#: src/ui_utils.c:533
 msgid "C++ Standard Library"
 msgstr "C ++ стандартная библиотека"
 
-#: src/utils.c:1905
+#: src/ui_utils.c:534
 msgid "C++ STL"
 msgstr "С++ Стб"
 
-#: src/filetypes.c:54
+#: src/ui_utils.c:600
+#, fuzzy
+msgid "Set Custom Date Format"
+msgstr "Построить свою цель"
+
+#: src/filetypes.c:131
 msgid "C source file"
 msgstr "С исходный файл"
 
-#: src/filetypes.c:74
+#: src/filetypes.c:151
 msgid "C++ source file"
 msgstr "С++ исходный файл"
 
-#: src/filetypes.c:101
+#: src/filetypes.c:179
+#, fuzzy
+msgid "D source file"
+msgstr "С исходный файл"
+
+#: src/filetypes.c:199
 msgid "Java source file"
 msgstr "Java исходный файл"
 
-#: src/filetypes.c:119
-msgid "Perl source file"
-msgstr "Perl исходный файл"
-
-#: src/filetypes.c:138
-msgid "PHP / HTML source file"
-msgstr "PHP / HTML исходный файл"
-
-#: src/filetypes.c:161
-msgid "XML source file"
-msgstr "XML исходный файл"
-
-#: src/filetypes.c:179
-msgid "Docbook source file"
-msgstr "Docbook исходный файл"
-
-#: src/filetypes.c:196
-msgid "Python source file"
-msgstr "Python исходный файл"
-
-#: src/filetypes.c:214
-msgid "LaTeX source file"
-msgstr "LaTeX исходный файл"
-
-#: src/filetypes.c:233
+#: src/filetypes.c:218
 msgid "Pascal source file"
 msgstr "Pascal исходный файл"
 
-#: src/filetypes.c:255
-msgid "Shell script file"
-msgstr "Файл шелл-скрипта"
-
-#: src/filetypes.c:278
-msgid "Makefile"
-msgstr "Makefile"
-
-#: src/filetypes.c:297
-msgid "Cascading StyleSheet"
-msgstr "Файл вебстилей(CSS)"
-
-#: src/filetypes.c:314
-msgid "Config file"
-msgstr "Конфигурационный файл"
-
-#: src/filetypes.c:334
+#: src/filetypes.c:241
 msgid "Assembler source file"
 msgstr "Ассемблерный исходный файл"
 
-#: src/filetypes.c:351
-msgid "SQL Dump file"
-msgstr "SQL Dump файл"
+#: src/filetypes.c:260
+#, fuzzy
+msgid "Fortran source file (F77)"
+msgstr "Python исходный файл"
 
-#: src/filetypes.c:368
+#: src/filetypes.c:284
 msgid "(O)Caml source file"
 msgstr "(O)Caml исходный файл"
 
-#: src/filetypes.c:386
-msgid "O-Matrix source file"
-msgstr "O-Matrix исходный файл"
+#: src/filetypes.c:304
+msgid "Perl source file"
+msgstr "Perl исходный файл"
 
-#: src/filetypes.c:403
+#: src/filetypes.c:326
+#, fuzzy
+msgid "PHP source file"
+msgstr "С исходный файл"
+
+#: src/filetypes.c:349
+msgid "Python source file"
+msgstr "Python исходный файл"
+
+#: src/filetypes.c:369
 msgid "Ruby source file"
 msgstr "Ruby исходный файл"
 
-#: src/filetypes.c:422
+#: src/filetypes.c:389
 msgid "Tcl source file"
 msgstr "Tcl исходный файл"
 
-#: src/filetypes.c:441
+#: src/filetypes.c:410
+#, fuzzy
+msgid "Ferite source file"
+msgstr "Perl исходный файл"
+
+#: src/filetypes.c:429
+msgid "Shell script file"
+msgstr "Файл шелл-скрипта"
+
+#: src/filetypes.c:454
+msgid "Makefile"
+msgstr "Makefile"
+
+#: src/filetypes.c:475
+msgid "XML source file"
+msgstr "XML исходный файл"
+
+#: src/filetypes.c:495
+msgid "Docbook source file"
+msgstr "Docbook исходный файл"
+
+#: src/filetypes.c:514
+#, fuzzy
+msgid "HTML source file"
+msgstr "XML исходный файл"
+
+#: src/filetypes.c:535
+msgid "Cascading StyleSheet"
+msgstr "Файл вебстилей(CSS)"
+
+#: src/filetypes.c:554
+msgid "SQL Dump file"
+msgstr "SQL Dump файл"
+
+#: src/filetypes.c:573
+msgid "LaTeX source file"
+msgstr "LaTeX исходный файл"
+
+#: src/filetypes.c:594
+msgid "O-Matrix source file"
+msgstr "O-Matrix исходный файл"
+
+#: src/filetypes.c:613
+#, fuzzy
+msgid "VHDL source file"
+msgstr "XML исходный файл"
+
+#: src/filetypes.c:633
+#, fuzzy
+msgid "Diff file"
+msgstr "Конфигурационный файл"
+
+#: src/filetypes.c:653
+msgid "Config file"
+msgstr "Конфигурационный файл"
+
+#: src/filetypes.c:676
 msgid "All files"
 msgstr "Все типы"
 
-#: src/filetypes.c:450
+#: src/filetypes.c:685
 msgid "None"
 msgstr "Никакой"
 
-#: src/win32.c:143
+#: src/win32.c:60
 msgid "Executables"
 msgstr "Выполняемые"
 
-#: src/keyfile.c:58
+#: src/win32.c:333
+msgid "Error"
+msgstr "Ошибка"
+
+#: src/win32.c:339 src/win32.c:380
+msgid "Question"
+msgstr "Вопрос"
+
+#: src/win32.c:345
+msgid "Warning"
+msgstr ""
+
+#: src/win32.c:351
+msgid "Information"
+msgstr "Информация"
+
+#: src/keyfile.c:70
 #, c-format
 msgid "%s configuration file, edit as you need"
 msgstr "%s конфигурационный файл, редактируйте по своим нуждам"
 
-#: src/keyfile.c:110
-msgid " VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on keystroke;scroll on output;follow path of file"
-msgstr "VTE установки: ШРИФТ;ПЕРЕДНИЙ_ПЛАН;ЗАДНИЙ_ПЛАН;scrollback;тип; scroll on keystroke;scroll on output; полный путь к файлу"
-
-#: src/keyfile.c:262
+#: src/keyfile.c:333
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Пишите тут что хотите, используйте это как заметки/быстрые записи"
 
-#: src/msgwindow.c:47
+#: src/keyfile.c:560
+msgid "Failed to load one or more session files."
+msgstr ""
+
+#: src/msgwindow.c:107
 msgid "Status messages"
 msgstr "Дежурные сообщения"
 
-#: src/build.c:90
+#: src/msgwindow.c:411
+#, fuzzy
+msgid "_Hide Message Window"
+msgstr "Показывать окно сообщений"
+
+#: src/build.c:156
 #, c-format
 msgid "Failed to view %s (make sure it is already compiled)"
 msgstr "Ошибка при просмотре %s (убедитесь что файл собран(откомпилирован)"
 
-#: src/build.c:117
-#: src/build.c:280
-#: src/build.c:417
+#: src/build.c:189 src/build.c:567
 #, c-format
-msgid "Process failed (%s)"
-msgstr "Процесс остановлен (%s)"
+msgid ""
+"Could not find terminal '%s' (check path for Terminal tool setting in "
+"Preferences)"
+msgstr ""
+"Не могу найти терминал '%s' (проверьте путь для терминала в Настройках)"
 
-#: src/build.c:273
-#, c-format
-msgid "%s (in directory: %s)"
-msgstr "%s (в папке: %s)"
-
-#: src/build.c:353
-#, c-format
-msgid "Failed to execute %s (make sure it is already built)"
-msgstr "Ошибка запуска %s (убедитесь что файл собран(откомпилирован)"
-
-#: src/build.c:365
-#, c-format
-msgid "Could not find terminal '%s' (check path for Terminal tool setting in Preferences)"
-msgstr "Не могу найти терминал '%s' (проверьте путь для терминала в Настройках)"
-
-#: src/build.c:380
-#, c-format
-msgid "Failed to change the working directory to %s"
-msgstr "Не могу сменить рабочую папку на %s"
-
-#: src/build.c:398
+#: src/build.c:203 src/build.c:604
 #, c-format
 msgid "Failed to execute %s (start-script could not be created)"
 msgstr "Ошибка запуска %s (стартовый скрипт не может быть создан)"
 
-#: src/build.c:538
-msgid "compilation finished unsuccessful"
-msgstr "сборка прошла не удачно"
+#: src/build.c:231 src/build.c:447 src/build.c:649 src/search.c:1069
+#, c-format
+msgid "Process failed (%s)"
+msgstr "Процесс остановлен (%s)"
 
-#: src/build.c:542
-msgid "compilation finished successful"
+#: src/build.c:356
+#, c-format
+msgid "Something very strange is occurred, could not stat %s (%s)."
+msgstr ""
+
+#: src/build.c:435
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s (в папке: %s)"
+
+#: src/build.c:543
+#, c-format
+msgid "Failed to execute %s (make sure it is already built)"
+msgstr "Ошибка запуска %s (убедитесь что файл собран(откомпилирован)"
+
+#: src/build.c:581
+#, c-format
+msgid "Failed to change the working directory to %s"
+msgstr "Не могу сменить рабочую папку на %s"
+
+#: src/build.c:729
+#, fuzzy
+msgid "Compilation failed."
+msgstr "Собрать текущий файл"
+
+#: src/build.c:743
+#, fuzzy
+msgid "Compilation finished successfully."
 msgstr "сборка прошла успешно"
 
-#: src/prefs.c:242
+#. compile the code
+#: src/build.c:848
+msgid "_Compile"
+msgstr "_Собрать"
+
+#: src/build.c:851
+msgid "Compiles the current file"
+msgstr "Собирает текущий файл"
+
+#: src/build.c:864
+msgid "Builds the current file (generate an executable file)"
+msgstr "Строит текущий файл (генерирует выполняемый файл)"
+
+#. build the code with make all
+#: src/build.c:874 src/build.c:996
+#, fuzzy
+msgid "_Make All"
+msgstr "Построит_ь всё"
+
+#: src/build.c:877 src/build.c:999
+msgid "Builds the current file with the make tool and the default target"
+msgstr "Сборка данного файлы используя make и объект сборки по умолчанию"
+
+#. build the code with make custom
+#: src/build.c:885 src/build.c:1007
+#, fuzzy
+msgid "Make Custom _Target"
+msgstr "Построить свою цель"
+
+#: src/build.c:889 src/build.c:1011
+msgid "Builds the current file with the make tool and the specified target"
+msgstr "Строит текущий файл используя make и указанную цель"
+
+#. build the code with make object
+#: src/build.c:896
+#, fuzzy
+msgid "Make _Object"
+msgstr "Построить объект"
+
+#: src/build.c:900
+msgid "Compiles the current file using the make tool"
+msgstr "Собирает текущий файл используя make"
+
+#. next error
+#: src/build.c:912 src/build.c:1023
+#, fuzzy
+msgid "_Next Error"
+msgstr "Ошибка"
+
+#. arguments
+#: src/build.c:938
+msgid "_Set Includes and Arguments"
+msgstr "Установить Включения и Аргументы"
+
+#: src/build.c:943
+msgid ""
+"Sets the includes and library paths for the compiler and the program "
+"arguments for execution"
+msgstr ""
+"Устанавливает включаемые заголовочные файлы и пути библиотек для компилятора"
+"(сборщика)  и аргументов для запуска программ"
+
+#. DVI
+#: src/build.c:966
+msgid "LaTeX -> DVI"
+msgstr "LaTeX -> DVI"
+
+#: src/build.c:969
+msgid "Compiles the current file into a DVI file"
+msgstr "Собирает текущий файл в DVI файл"
+
+#. PDF
+#: src/build.c:979
+msgid "LaTeX -> PDF"
+msgstr "LaTeX -> PDF"
+
+#: src/build.c:982
+msgid "Compiles the current file into a PDF file"
+msgstr "Собирает текущий файл в PDF файл"
+
+#. DVI view
+#: src/build.c:1035
+#, fuzzy
+msgid "View DVI File"
+msgstr "Смотреть DVI файл"
+
+#: src/build.c:1040 src/build.c:1053
+msgid "Compiles and view the current file"
+msgstr "Собирает и смотрит текущий файл"
+
+#. PDF view
+#: src/build.c:1049
+#, fuzzy
+msgid "View PDF File"
+msgstr "Смотреть PDF файл"
+
+#: src/build.c:1073
+msgid "Sets the program paths and arguments"
+msgstr "Устанавливает пути и аргументы программ"
+
+#: src/build.c:1340
+#, fuzzy
+msgid "Make Custom Target"
+msgstr "Построить свою цель"
+
+#: src/build.c:1341
+msgid ""
+"Enter custom options here, all entered text is passed to the make command."
+msgstr ""
+"Введите здесь свои опции, весь введенный текст добавляется к команде make."
+
+#: src/build.c:1380
+msgid "Failed to execute the view program"
+msgstr "Невозможно запустить программу просмотра"
+
+#: src/build.c:1399
+msgid "Failed to execute the terminal program"
+msgstr "Невозможно запустить терминальную программу"
+
+#: src/build.c:1458
+#, fuzzy, c-format
+msgid "Process could not be stopped (%s)."
+msgstr "Каталог конфигурации не может быть создан (%s)."
+
+#: src/build.c:1493
+msgid "No more build errors."
+msgstr ""
+
+#: src/prefs.c:310
 msgid "Action"
 msgstr "Действие"
 
-#: src/prefs.c:247
+#: src/prefs.c:315
 msgid "Shortcut"
 msgstr "Сокращение"
 
-#: src/prefs.c:665
+#: src/prefs.c:781
 msgid "Grab key"
 msgstr "Запечатлить клавишу"
 
-#: src/prefs.c:669
+#: src/prefs.c:785
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
 msgstr "Введите сочетание клавиш для \"%s\""
 
-#: src/prefs.c:793
+#: src/prefs.c:909
 #, c-format
-msgid "The combination '%s' is already used for \"%s\". Please choose another one."
-msgstr "Комбинация клавиш '%s' уже используется для \"%s\". Пожалуйста выберите другие."
+msgid ""
+"The combination '%s' is already used for \"%s\". Please choose another one."
+msgstr ""
+"Комбинация клавиш '%s' уже используется для \"%s\". Пожалуйста выберите "
+"другие."
 
-#: src/about.c:100
+#: src/about.c:121
 msgid "About Geany"
 msgstr "О Geany"
 
-#: src/about.c:147
+#: src/about.c:170
 msgid "A fast and lightweight IDE"
 msgstr "Быстрая и легковесная IDE"
 
+#: src/about.c:191
+#, c-format
+msgid "(built on %s)"
+msgstr ""
+
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: src/about.c:197
+#: src/about.c:222
 msgid "Info"
 msgstr "Инфо"
 
-#: src/about.c:209
+#: src/about.c:234
 msgid "Developers"
 msgstr "Разработчики"
 
-#: src/about.c:209
+#: src/about.c:234
 msgid "Maintainer"
 msgstr "Ведущий разработчик"
 
-#: src/about.c:209
+#: src/about.c:234
 msgid "developer"
 msgstr "разработчик"
 
-#: src/about.c:210
+#: src/about.c:235
 msgid "translation maintainer"
 msgstr "Ведущий переводчик"
 
-#: src/about.c:210
+#: src/about.c:235
 msgid "Translators"
 msgstr "Переводчики"
 
-#: src/about.c:211
+#: src/about.c:236
 msgid "language"
 msgstr "язык"
 
-#: src/about.c:217
+#: src/about.c:242
 msgid "Credits"
 msgstr "О Нас"
 
-#: src/about.c:230
+#: src/about.c:255
 msgid "License"
 msgstr "Лицензия"
 
-#: src/encodings.c:44
-#: src/encodings.c:57
-#: src/encodings.c:80
-#: src/encodings.c:102
-msgid "Western"
-msgstr "Western"
-
-#: src/encodings.c:45
-#: src/encodings.c:81
-#: src/encodings.c:100
-msgid "Central European"
-msgstr "Центрально-Европейская"
-
-#: src/encodings.c:46
-msgid "South European"
-msgstr "Южно-Европейская"
-
-#: src/encodings.c:47
-#: src/encodings.c:55
-#: src/encodings.c:107
-msgid "Baltic"
-msgstr "Прибалтийская"
-
-#: src/encodings.c:48
-#: src/encodings.c:82
-#: src/encodings.c:89
-#: src/encodings.c:91
-#: src/encodings.c:101
-msgid "Cyrillic"
-msgstr "Кириллица"
-
-#: src/encodings.c:49
-#: src/encodings.c:85
-#: src/encodings.c:106
-msgid "Arabic"
-msgstr "Арабская"
-
-#: src/encodings.c:50
-#: src/encodings.c:103
-msgid "Greek"
-msgstr "Греческая"
+#: src/geany.h:47
+msgid "untitled"
+msgstr "Безымянный "
 
 #: src/encodings.c:51
-msgid "Hebrew Visual"
-msgstr "Иврит Визуальный"
+msgid "Celtic"
+msgstr "Кельтская"
 
-#: src/encodings.c:52
-#: src/encodings.c:84
-#: src/encodings.c:105
-msgid "Hebrew"
-msgstr "Иврит"
-
-#: src/encodings.c:53
-#: src/encodings.c:83
-#: src/encodings.c:104
-msgid "Turkish"
-msgstr "Турецкая"
+#: src/encodings.c:52 src/encodings.c:53
+msgid "Greek"
+msgstr "Греческая"
 
 #: src/encodings.c:54
 msgid "Nordic"
 msgstr "Скандинавская"
 
-#: src/encodings.c:56
-msgid "Celtic"
-msgstr "Кельтская"
+#: src/encodings.c:55
+msgid "South European"
+msgstr "Южно-Европейская"
 
-#: src/encodings.c:58
-msgid "Romanian"
-msgstr "Румынская"
+#: src/encodings.c:56 src/encodings.c:57 src/encodings.c:58 src/encodings.c:59
+msgid "Western"
+msgstr "Western"
 
-#: src/encodings.c:60
-#: src/encodings.c:61
-#: src/encodings.c:62
-#: src/encodings.c:63
-msgid "Unicode"
-msgstr "Юникод"
+#: src/encodings.c:61 src/encodings.c:62 src/encodings.c:63
+msgid "Baltic"
+msgstr "Прибалтийская"
 
-#: src/encodings.c:65
-msgid "Armenian"
-msgstr "Армянская"
+#: src/encodings.c:64 src/encodings.c:65 src/encodings.c:66
+msgid "Central European"
+msgstr "Центрально-Европейская"
 
-#: src/encodings.c:66
-#: src/encodings.c:67
+#: src/encodings.c:67 src/encodings.c:68 src/encodings.c:69 src/encodings.c:70
+#: src/encodings.c:71
+msgid "Cyrillic"
+msgstr "Кириллица"
+
 #: src/encodings.c:72
-msgid "Chinese Traditional"
-msgstr "Китайская традиционная"
-
-#: src/encodings.c:68
 msgid "Cyrillic/Russian"
 msgstr "Кириллица/Русская"
 
-#: src/encodings.c:70
-#: src/encodings.c:87
-#: src/encodings.c:94
-msgid "Japanese"
-msgstr "Японская"
-
-#: src/encodings.c:71
-#: src/encodings.c:88
-#: src/encodings.c:90
-#: src/encodings.c:97
-msgid "Korean"
-msgstr "Корейская"
-
-#: src/encodings.c:74
-#: src/encodings.c:75
-#: src/encodings.c:76
-#: src/encodings.c:78
-msgid "Chinese Simplified"
-msgstr "Китайская упрощенная"
-
-#: src/encodings.c:77
-msgid "Georgian"
-msgstr "Грузинская"
-
-#: src/encodings.c:92
+#: src/encodings.c:73
 msgid "Cyrillic/Ukrainian"
 msgstr "Кириллица/Украинская"
 
-#: src/encodings.c:95
-#: src/encodings.c:98
-#: src/encodings.c:108
-msgid "Vietnamese"
-msgstr "Вьетнамская"
+#: src/encodings.c:74
+msgid "Romanian"
+msgstr "Румынская"
 
-#: src/encodings.c:96
+#: src/encodings.c:76 src/encodings.c:77 src/encodings.c:78
+msgid "Arabic"
+msgstr "Арабская"
+
+#: src/encodings.c:79 src/encodings.c:80 src/encodings.c:81
+msgid "Hebrew"
+msgstr "Иврит"
+
+#: src/encodings.c:82
+msgid "Hebrew Visual"
+msgstr "Иврит Визуальный"
+
+#: src/encodings.c:84
+msgid "Armenian"
+msgstr "Армянская"
+
+#: src/encodings.c:85
+msgid "Georgian"
+msgstr "Грузинская"
+
+#: src/encodings.c:86
 msgid "Thai"
 msgstr "Тайская"
 
-#: src/treeviews.c:65
+#: src/encodings.c:87 src/encodings.c:88 src/encodings.c:89
+msgid "Turkish"
+msgstr "Турецкая"
+
+#: src/encodings.c:90 src/encodings.c:91 src/encodings.c:92
+msgid "Vietnamese"
+msgstr "Вьетнамская"
+
+#: src/encodings.c:94 src/encodings.c:95 src/encodings.c:96 src/encodings.c:97
+#: src/encodings.c:98 src/encodings.c:99 src/encodings.c:100
+#: src/encodings.c:101
+msgid "Unicode"
+msgstr "Юникод"
+
+#: src/encodings.c:103 src/encodings.c:104 src/encodings.c:105
+#: src/encodings.c:106
+msgid "Chinese Simplified"
+msgstr "Китайская упрощенная"
+
+#: src/encodings.c:107 src/encodings.c:108 src/encodings.c:109
+msgid "Chinese Traditional"
+msgstr "Китайская традиционная"
+
+#: src/encodings.c:110 src/encodings.c:111 src/encodings.c:112
+msgid "Japanese"
+msgstr "Японская"
+
+#: src/encodings.c:113 src/encodings.c:114 src/encodings.c:115
+#: src/encodings.c:116
+msgid "Korean"
+msgstr "Корейская"
+
+#: src/encodings.c:118
+#, fuzzy
+msgid "Without encoding"
+msgstr "Установить кодировку"
+
+#: src/encodings.c:211
+#, fuzzy
+msgid "_West European"
+msgstr "Центрально-Европейская"
+
+#: src/encodings.c:217
+#, fuzzy
+msgid "_East European"
+msgstr "Южно-Европейская"
+
+#: src/encodings.c:223
+msgid "East _Asian"
+msgstr ""
+
+#: src/encodings.c:229
+msgid "_SE & SW Asian"
+msgstr ""
+
+#: src/encodings.c:235
+msgid "_Middle Eastern"
+msgstr ""
+
+#: src/encodings.c:241
+#, fuzzy
+msgid "_Unicode"
+msgstr "Юникод"
+
+#: src/treeviews.c:117 src/treeviews.c:149
 msgid "Chapter"
 msgstr "Глава"
 
-#: src/treeviews.c:67
-#: src/treeviews.c:89
+#: src/treeviews.c:119 src/treeviews.c:141
 msgid "Section"
 msgstr "Раздел"
 
-#: src/treeviews.c:69
+#: src/treeviews.c:121
 msgid "Sect1"
 msgstr "Секция1"
 
-#: src/treeviews.c:71
+#: src/treeviews.c:123
 msgid "Sect2"
 msgstr "Секция2"
 
-#: src/treeviews.c:73
+#: src/treeviews.c:125
 msgid "Sect3"
 msgstr "Секция3"
 
-#: src/treeviews.c:75
+#: src/treeviews.c:127
 msgid "Appendix"
 msgstr "Дополнение"
 
-#: src/treeviews.c:77
-#: src/treeviews.c:99
-#: src/treeviews.c:182
+#: src/treeviews.c:129 src/treeviews.c:151 src/treeviews.c:239
+#: src/treeviews.c:280
 msgid "Other"
 msgstr "Другое"
 
-#: src/treeviews.c:85
+#: src/treeviews.c:137
 msgid "Command"
 msgstr "Команда"
 
-#: src/treeviews.c:87
+#: src/treeviews.c:139
 msgid "Environment"
 msgstr "Окружение"
 
-#: src/treeviews.c:91
+#: src/treeviews.c:143
 msgid "Subsection"
 msgstr "Подраздел"
 
-#: src/treeviews.c:93
+#: src/treeviews.c:145
 msgid "Subsubsection"
 msgstr "Субподраздел"
 
-#: src/treeviews.c:95
+#: src/treeviews.c:147
 msgid "Label"
 msgstr "Метка"
 
-#: src/treeviews.c:97
-msgid "Begin"
-msgstr "Начало"
-
-#: src/treeviews.c:105
+#: src/treeviews.c:157
 msgid "Function"
 msgstr "Функция"
 
-#: src/treeviews.c:107
+#: src/treeviews.c:159 src/treeviews.c:222
 msgid "Package"
 msgstr "Пакет"
 
-#: src/treeviews.c:109
+#: src/treeviews.c:161
 msgid "My"
 msgstr "Мой"
 
-#: src/treeviews.c:111
+#: src/treeviews.c:163
 msgid "Local"
 msgstr "Локальный"
 
-#: src/treeviews.c:113
+#: src/treeviews.c:165
 msgid "Our"
 msgstr "Наш"
 
-#: src/treeviews.c:126
-#: src/treeviews.c:151
+#: src/treeviews.c:178 src/treeviews.c:203 src/treeviews.c:225
 msgid "Methods"
 msgstr "Методы"
 
-#: src/treeviews.c:128
-#: src/treeviews.c:149
-#: src/treeviews.c:170
+#: src/treeviews.c:180 src/treeviews.c:201 src/treeviews.c:227
+#: src/treeviews.c:268
 msgid "Classes"
 msgstr "Классы "
 
-#: src/treeviews.c:130
+#: src/treeviews.c:182
 msgid "Singletons"
 msgstr "Единичные Предметы"
 
-#: src/treeviews.c:132
+#: src/treeviews.c:184
 msgid "Mixins"
 msgstr "Смешивания"
 
-#: src/treeviews.c:134
-#: src/treeviews.c:176
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_class), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_class), 0, _("Constants"), -1);
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_member), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_member), 0, _("Members"), -1);
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_macro), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_macro), 0, _("Macros"), -1);
+#.
+#: src/treeviews.c:186 src/treeviews.c:253 src/treeviews.c:274
 msgid "Variables"
 msgstr "Переменные"
 
-#: src/treeviews.c:136
-#: src/treeviews.c:172
+#: src/treeviews.c:188 src/treeviews.c:231 src/treeviews.c:270
 msgid "Members"
 msgstr "Составляющие"
 
-#: src/treeviews.c:147
-#: src/treeviews.c:168
+#: src/treeviews.c:199 src/treeviews.c:245 src/treeviews.c:266
 msgid "Functions"
 msgstr "Функции"
 
-#: src/treeviews.c:174
+#: src/treeviews.c:222
+msgid "Module"
+msgstr ""
+
+#: src/treeviews.c:229
+#, fuzzy
+msgid "Interfaces"
+msgstr "Интерфейс"
+
+#: src/treeviews.c:272
 msgid "Macros"
 msgstr "Макросы"
 
-#: src/treeviews.c:178
+#: src/treeviews.c:276
 msgid "Namespaces"
 msgstr "Пространства имен"
 
-#: src/treeviews.c:180
+#: src/treeviews.c:278
 msgid "Structs / Typedefs"
 msgstr "Структуры(Structs) / Определения(Typedefs)"
 
-#: src/treeviews.c:254
-#: src/treeviews.c:306
+#: src/treeviews.c:391 src/treeviews.c:443
 msgid "Hide"
 msgstr "Скрыть"
 
-#: src/treeviews.c:262
-#: src/treeviews.c:314
+#: src/treeviews.c:399 src/treeviews.c:451
 msgid "Hide sidebar"
 msgstr "Скрыть боковую панель"
 
-#: src/treeviews.c:294
+#: src/treeviews.c:431
 msgid "Reload"
 msgstr "Обновить"
 
-#: src/keybindings.c:110
+#: src/vte.c:186 src/vte.c:503
+msgid "Terminal"
+msgstr "Терминал"
+
+#: src/vte.c:373
+#, fuzzy
+msgid "_Input Methods"
+msgstr "Методы"
+
+#: src/vte.c:499
+#, fuzzy
+msgid "Terminal plugin"
+msgstr "Эмуляция терминала"
+
+#: src/vte.c:506
+#, fuzzy
+msgid ""
+"These settings for the virtual terminal emulator widget (VTE) only apply if "
+"the VTE library could be loaded."
+msgstr ""
+"Это установки для эмулятора виртуального терминала(VTE). Они только "
+"действительны, если VTE-библиотека не была загружена."
+
+#: src/vte.c:517
+#, fuzzy
+msgid "Terminal font:"
+msgstr "Шрифт терминала"
+
+#: src/vte.c:527
+msgid "Sets the font for the terminal widget."
+msgstr "Устанавливает шрифт для окна терминала"
+
+#: src/vte.c:529
+#, fuzzy
+msgid "Foreground color:"
+msgstr "Цвет переднего плана"
+
+#: src/vte.c:535
+#, fuzzy
+msgid "Background color:"
+msgstr "Цвет заднего плана"
+
+#: src/vte.c:545
+msgid "Sets the foreground color of the text in the terminal widget."
+msgstr "Устанавливает цвет переднего плана отображения текста и окна"
+
+#: src/vte.c:552
+msgid "Sets the background color of the text in the terminal widget."
+msgstr "Устанавливает цвет заднего плана отображения текста и окна"
+
+#: src/vte.c:555
+#, fuzzy
+msgid "Scrollback lines:"
+msgstr "Прокручиваемые строки"
+
+#: src/vte.c:566
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget."
+msgstr ""
+"Устанавливает историю строк, которые Вы можете прокрутить назад в "
+"терминальном окне."
+
+#: src/vte.c:570
+#, fuzzy
+msgid "Terminal emulation:"
+msgstr "Эмуляция терминала"
+
+#: src/vte.c:580
+#, fuzzy
+msgid ""
+"Controls how the terminal emulator should behave. xterm is a good start."
+msgstr ""
+"Устанавливает то, как эмулятор будет работать. xterm это хорошее начало."
+
+#: src/vte.c:582
+#, fuzzy
+msgid "Shell:"
+msgstr "Сохранить все"
+
+#: src/vte.c:589
+msgid ""
+"Sets the path to the shell which should be started inside the terminal "
+"emulation."
+msgstr ""
+
+#: src/vte.c:606
+msgid "Scroll on keystroke"
+msgstr "Прокрутка построчно"
+
+#: src/vte.c:607
+msgid "Whether to scroll to the bottom if a key was pressed."
+msgstr "Прокрутка построчно вниз если было клавиша была нажата."
+
+#: src/vte.c:611
+msgid "Scroll on output"
+msgstr "Прокрутка вывода"
+
+#: src/vte.c:612
+#, fuzzy
+msgid "Whether to scroll to the bottom when output is generated."
+msgstr "Прокрутка вниз если был вывод."
+
+#: src/vte.c:616
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr ""
+
+#: src/vte.c:617
+msgid ""
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
+"within the VTE."
+msgstr ""
+
+#: src/vte.c:621
+msgid "Follow the path of the current file"
+msgstr "Следовать пути текущего файла"
+
+#: src/vte.c:622
+msgid "Whether to execute \"cd $path\" when you switch between opened files."
+msgstr ""
+"Выполняет \"cd $path\" когда Вы переключаетесь между открытыми файлами."
+
+#: src/vte.c:626
+msgid "Execute programs in VTE"
+msgstr ""
+
+#: src/vte.c:627
+msgid ""
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped."
+msgstr ""
+
+#: src/keybindings.c:108
 msgid "New"
 msgstr "Новый"
 
-#: src/keybindings.c:112
+#: src/keybindings.c:110
 msgid "Open"
 msgstr "Открыть"
 
-#: src/keybindings.c:114
+#: src/keybindings.c:112
 msgid "Save"
 msgstr "Сохранить"
 
-#: src/keybindings.c:118
+#: src/keybindings.c:116
 msgid "Print"
 msgstr "Печать"
 
-#: src/keybindings.c:120
+#: src/keybindings.c:118
 msgid "Close"
 msgstr "Закрыть"
 
-#: src/keybindings.c:122
+#: src/keybindings.c:120
 msgid "Close all"
 msgstr "Закрыть Все"
 
-#: src/keybindings.c:124
+#: src/keybindings.c:122
 msgid "Reload file"
 msgstr "Перечитать файл"
 
-#: src/keybindings.c:126
+#: src/keybindings.c:124
 msgid "Undo"
 msgstr "Отменить"
 
-#: src/keybindings.c:128
+#: src/keybindings.c:126
 msgid "Redo"
 msgstr "Накатить"
 
-#: src/keybindings.c:130
+#: src/keybindings.c:128
 msgid "Select All"
 msgstr "Выбрать все"
+
+#: src/keybindings.c:130
+#, fuzzy
+msgid "Insert date"
+msgstr "Вставить GPL-уведомление"
 
 #: src/keybindings.c:134
 msgid "Find Next"
@@ -2283,118 +2841,705 @@ msgstr "Найти далее"
 msgid "Find Previous"
 msgstr "Найти Предыдущее"
 
+#: src/keybindings.c:138 src/search.c:376
+msgid "Replace"
+msgstr "Заменить"
+
+#: src/keybindings.c:140 src/search.c:514
+#, fuzzy
+msgid "Find in files"
+msgstr "Открытые файлы"
+
 #: src/keybindings.c:142
+#, fuzzy
+msgid "Next Message"
+msgstr "Сообщения"
+
+#: src/keybindings.c:146
 msgid "Show Colour Chooser"
 msgstr "Показывать Выбор цвета"
 
-#: src/keybindings.c:144
+#: src/keybindings.c:148
 msgid "Fullscreen"
 msgstr "Во весь экран"
 
-#: src/keybindings.c:146
+#: src/keybindings.c:150
 msgid "Toggle Messages Window"
 msgstr "Показывать окно сообщений"
 
-#: src/keybindings.c:148
+#: src/keybindings.c:152
 msgid "Toggle Sidebar"
 msgstr "Показывать боковую панель"
 
-#: src/keybindings.c:150
+#: src/keybindings.c:154
 msgid "Zoom In"
 msgstr "Увеличить"
 
-#: src/keybindings.c:152
+#: src/keybindings.c:156
 msgid "Zoom Out"
 msgstr "Уменьшить"
 
-#: src/keybindings.c:156
+#: src/keybindings.c:160
 msgid "Fold all"
 msgstr "Свернуть все"
 
-#: src/keybindings.c:158
+#: src/keybindings.c:162
 msgid "Unfold all"
 msgstr "Развернуть все"
 
-#: src/keybindings.c:162
+#: src/keybindings.c:164
+msgid "Insert Special HTML Characters"
+msgstr ""
+
+#: src/keybindings.c:168
 msgid "Build"
 msgstr "Построить"
 
-#: src/keybindings.c:164
+#: src/keybindings.c:170
 msgid "Make all"
 msgstr "Построить все"
 
-#: src/keybindings.c:167
+#: src/keybindings.c:173
 msgid "Make custom target"
 msgstr "Построить свою цель"
 
-#: src/keybindings.c:169
+#: src/keybindings.c:175
 msgid "Make object"
 msgstr "Построить объект"
 
-#: src/keybindings.c:173
+#: src/keybindings.c:177
+msgid "Next error"
+msgstr ""
+
+#: src/keybindings.c:179
+msgid "Run"
+msgstr "Запустить"
+
+#: src/keybindings.c:181
 msgid "Run (alternative command)"
 msgstr "Запустить (иная команда)"
 
-#: src/keybindings.c:175
+#: src/keybindings.c:183
 msgid "Build options"
 msgstr "Опции сборки"
 
-#: src/keybindings.c:177
+#: src/keybindings.c:185
 msgid "Reload symbol list"
 msgstr "Перечитать список тегов"
 
-#: src/keybindings.c:179
+#: src/keybindings.c:187
 msgid "Switch to Editor"
 msgstr "Перейти к редактору"
 
-#: src/keybindings.c:181
+#: src/keybindings.c:189
 msgid "Switch to Scribble"
 msgstr "Перейти к заметкам"
 
-#: src/keybindings.c:183
+#: src/keybindings.c:191
 msgid "Switch to VTE"
 msgstr "Переключиться в терминал"
 
-#: src/keybindings.c:185
+#: src/keybindings.c:193
 msgid "Switch to left document"
 msgstr "Перейти на левый документ"
 
-#: src/keybindings.c:187
+#: src/keybindings.c:195
 msgid "Switch to right document"
 msgstr "Перейти на правый документ"
 
-#: src/keybindings.c:189
+#: src/keybindings.c:198
 msgid "Duplicate line or selection"
 msgstr "Дублировать строку или выделенное"
 
-#: src/keybindings.c:191
-msgid "Comment line"
+#: src/keybindings.c:200
+msgid "Convert Selection to lower-case"
+msgstr ""
+
+#: src/keybindings.c:202
+msgid "Convert Selection to upper-case"
+msgstr ""
+
+#: src/keybindings.c:204
+msgid "Toggle line commentation"
+msgstr ""
+
+#: src/keybindings.c:206
+#, fuzzy
+msgid "Comment line(s)"
 msgstr "Комментировать строку"
 
-#: src/keybindings.c:193
+#: src/keybindings.c:208
+#, fuzzy
+msgid "Uncomment line(s)"
+msgstr "Комментировать строку"
+
+#: src/keybindings.c:210
+msgid "Increase indent"
+msgstr ""
+
+#: src/keybindings.c:212
+msgid "Decrease indent"
+msgstr ""
+
+#: src/keybindings.c:215
+msgid "Goto matching brace"
+msgstr ""
+
+#: src/keybindings.c:217
 msgid "Complete word"
 msgstr "Полное слово"
 
-#: src/keybindings.c:195
+#: src/keybindings.c:221 src/keybindings.c:224
 msgid "Show calltip"
 msgstr "Показать подсказку"
 
-#: src/keybindings.c:197
+#: src/keybindings.c:227
 msgid "Show macro list"
 msgstr "Показать список макросов"
 
-#: src/keybindings.c:199
+#: src/keybindings.c:229
 msgid "Suppress auto completion"
 msgstr "Авто-завершение конструкций"
 
-#: src/keybindings.c:201
-msgid "Find Usage"
-msgstr "Найти Использование"
+#: src/keybindings.c:234
+msgid "Go to tag definition"
+msgstr "Перейти к определению тега"
+
+#: src/keybindings.c:236
+msgid "Go to tag declaration"
+msgstr "Перейти к декларации тега"
+
+#: src/search.c:150
+msgid "_Use regular expressions"
+msgstr "Использовать регулярные выражения"
+
+#: src/search.c:154
+#, fuzzy
+msgid ""
+"Use POSIX-like regular expressions. For detailed information about using "
+"regular expressions, please read the documentation."
+msgstr ""
+"Для более подробной информации по использованию регулярных выражений, "
+"читайте соответствующую документацию."
+
+#: src/search.c:161
+msgid "_Search backwards"
+msgstr "Обратный поиск"
+
+#: src/search.c:175
+msgid "Use _escape sequences"
+msgstr ""
+
+#: src/search.c:180
+msgid ""
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"corresponding control characters."
+msgstr ""
+
+#: src/search.c:189 src/search.c:587
+msgid "_Case sensitive"
+msgstr "Регистровая чувствительность"
+
+#: src/search.c:194 src/search.c:593
+msgid "Match only a _whole word"
+msgstr "Совпадение только всего слова"
+
+#: src/search.c:199
+#, fuzzy
+msgid "Match from s_tart of word"
+msgstr "Совпадение только всего слова"
+
+#: src/search.c:258
+msgid "Find"
+msgstr "Найти"
+
+#: src/search.c:264
+#, fuzzy
+msgid "_Previous"
+msgstr "Найти следующее"
+
+#: src/search.c:270
+#, fuzzy
+msgid "_Next"
+msgstr "Най_ти далее"
+
+#: src/search.c:274 src/search.c:392 src/search.c:544
+#, fuzzy
+msgid "Search for:"
+msgstr "Поиск"
+
+#. Now add the multiple match options
+#: src/search.c:300
+#, fuzzy
+msgid "Find All"
+msgstr "Найти"
+
+#: src/search.c:304
+#, fuzzy
+msgid "_Mark"
+msgstr "Make"
+
+#: src/search.c:310 src/search.c:450
+#, fuzzy
+msgid "In Sessi_on"
+msgstr "В выделенном"
+
+#: src/search.c:315 src/search.c:455
+#, fuzzy
+msgid "_In Document"
+msgstr "Документ"
+
+#. close window checkbox
+#: src/search.c:321 src/search.c:461
+#, fuzzy
+msgid "Close _dialog"
+msgstr "Закрыть Все"
+
+#: src/search.c:326 src/search.c:466
+msgid "Disable this option to keep the dialog open."
+msgstr ""
+
+#: src/search.c:388
+#, fuzzy
+msgid "Re_place & Find"
+msgstr "Заменить"
+
+#: src/search.c:395
+#, fuzzy
+msgid "Replace with:"
+msgstr "Заменить"
+
+#. Now add the multiple replace options
+#: src/search.c:440
+#, fuzzy
+msgid "Replace All"
+msgstr "З_аменить Все"
+
+#: src/search.c:443
+#, fuzzy
+msgid "In Se_lection"
+msgstr "В выделенном"
+
+#: src/search.c:445
+msgid "Replace all matches found in the currently selected text"
+msgstr "Заменяет все совпадения с фразой в конкретном выделенном тексте"
+
+#: src/search.c:523
+msgid "Directory:"
+msgstr ""
+
+#: src/search.c:563
+msgid "_Fixed strings"
+msgstr ""
+
+#: src/search.c:572
+#, fuzzy
+msgid "_Grep regular expressions"
+msgstr "Использовать регулярные выражения"
+
+#: src/search.c:576 src/search.c:583
+msgid "See grep's manual page for more information."
+msgstr ""
+
+#: src/search.c:581
+#, fuzzy
+msgid "_Extended regular expressions"
+msgstr "Использовать регулярные выражения"
+
+#: src/search.c:598
+msgid "_Invert search results"
+msgstr ""
+
+#: src/search.c:603
+msgid "Invert the sense of matching, to select non-matching lines."
+msgstr ""
+
+#: src/search.c:659
+#, fuzzy
+msgid "Select folder"
+msgstr "Выбрать все"
+
+#: src/search.c:917
+#, c-format
+msgid "Replaced text in %u files."
+msgstr ""
+
+#: src/search.c:963
+msgid "Invalid directory for find in files."
+msgstr ""
+
+#: src/search.c:993
+msgid "No text to find."
+msgstr ""
+
+#: src/search.c:1021
+#, fuzzy, c-format
+msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
+msgstr ""
+"Не могу найти терминал '%s' (проверьте путь для терминала в Настройках)"
+
+#: src/search.c:1136
+#, fuzzy, c-format
+msgid "Could not open directory (%s)"
+msgstr "Не могу открыть файл %s (%s)"
+
+#: src/search.c:1181
+#, fuzzy
+msgid "Search failed."
+msgstr "Отображать поле поиска"
+
+#: src/search.c:1187
+msgid "Search completed."
+msgstr ""
+
+#: src/search.c:1263
+#, c-format
+msgid "No matches found for '%s'."
+msgstr "Совпадений для '%s' не найдено."
+
+#: src/tools.c:62
+#, fuzzy
+msgid "Special characters"
+msgstr "Глава"
+
+#: src/tools.c:64
+#, fuzzy
+msgid "_Insert"
+msgstr "Вставить GPL-уведомление"
+
+#: src/tools.c:72
+msgid ""
+"Choose a special character from the list below and double click on it or use "
+"the button to insert it at the current cursor position."
+msgstr ""
+
+#: src/tools.c:85
+#, fuzzy
+msgid "Character"
+msgstr "Глава"
+
+#: src/tools.c:91
+msgid "HTML (name)"
+msgstr ""
+
+#: src/tools.c:128
+#, fuzzy
+msgid "HTML characters"
+msgstr "Глава"
+
+#: src/tools.c:134
+msgid "ISO 8859-1 characters"
+msgstr ""
+
+#: src/tools.c:232
+#, fuzzy
+msgid "Greek characters"
+msgstr "Глава"
+
+#: src/tools.c:287
+msgid "Mathematical characters"
+msgstr ""
+
+#: src/tools.c:328
+msgid "Technical characters"
+msgstr ""
+
+#: src/tools.c:336
+#, fuzzy
+msgid "Arrow characters"
+msgstr "Глава"
+
+#: src/tools.c:349
+msgid "Punctuation characters"
+msgstr ""
+
+#: src/tools.c:365
+msgid "Miscellaneous characters"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Forward declaration \"%s\" not found."
+#~ msgstr "Декларирование функции \"%s()\" не найдено"
+
+#, fuzzy
+#~ msgid "Javascript source file"
+#~ msgstr "Java исходный файл"
+
+#, fuzzy
+#~ msgid "Lua source file"
+#~ msgstr "LaTeX исходный файл"
+
+#, fuzzy
+#~ msgid "Open Selected F_ile"
+#~ msgstr "Открыть Файл"
+
+#, fuzzy
+#~ msgid "Insert BSD License Notice"
+#~ msgstr "Вставить GPL-уведомление"
+
+#, fuzzy
+#~ msgid ""
+#~ "Inserts a BSD licence notice (should be done at the beginning of the file)"
+#~ msgstr "Вставляет GPL-уведомление (должно быть вставлено в начале файла)"
+
+#, fuzzy
+#~ msgid "Find _Selected"
+#~ msgstr "Най_ти далее"
+
+#, fuzzy
+#~ msgid "_New"
+#~ msgstr "Новый"
+
+#, fuzzy
+#~ msgid "_Open"
+#~ msgstr "Открыть"
+
+#, fuzzy
+#~ msgid "_Close"
+#~ msgstr "Закрыть"
+
+#, fuzzy
+#~ msgid "Insert BSD license Notice"
+#~ msgstr "Вставить GPL-уведомление"
+
+#, fuzzy
+#~ msgid "Open selected file"
+#~ msgstr "Открытые файлы"
+
+#, fuzzy
+#~ msgid "Save as"
+#~ msgstr "Сохранить все"
+
+#, fuzzy
+#~ msgid "Find Next Selection"
+#~ msgstr "В выделенном"
+
+#, fuzzy
+#~ msgid "Find Previous Selection"
+#~ msgstr "Найти Предыдущее"
+
+#, fuzzy
+#~ msgid "Could not find file '%s'."
+#~ msgstr "Не могу найти pixmap файл: %s"
+
+#, fuzzy
+#~ msgid "Open project"
+#~ msgstr "Построить объект"
+
+#, fuzzy
+#~ msgid "Project files"
+#~ msgstr "Свойства"
+
+#, fuzzy
+#~ msgid "Project \"%s\" closed."
+#~ msgstr "Файл '%s' закрыт."
+
+#, fuzzy
+#~ msgid "Project properties"
+#~ msgstr "Свойства"
+
+#, fuzzy
+#~ msgid "C_reate"
+#~ msgstr "Глава"
+
+#, fuzzy
+#~ msgid "Name:"
+#~ msgstr "Make"
+
+#, fuzzy
+#~ msgid "Description:"
+#~ msgstr "Раздел"
+
+#, fuzzy
+#~ msgid "Filename:"
+#~ msgstr "Вьетнамская"
+
+#, fuzzy
+#~ msgid ""
+#~ "There is already an open project \"%s\". Do you want to close it before "
+#~ "proceed?"
+#~ msgstr ""
+#~ "Файл '%s' не сохранен.\n"
+#~ "Сохранить его перед закрытием?"
+
+#, fuzzy
+#~ msgid "Project file could not be written."
+#~ msgstr "Каталог конфигурации не может быть создан (%s)."
+
+#, fuzzy
+#~ msgid "Project \"%s\" created."
+#~ msgstr "Свойства"
+
+#, fuzzy
+#~ msgid "Project \"%s\" saved."
+#~ msgstr "Файл %s сохранен."
+
+#, fuzzy
+#~ msgid "Project \"%s\" opened."
+#~ msgstr "Свойства"
+
+#, fuzzy
+#~ msgid "Project file could not be loaded."
+#~ msgstr "Каталог конфигурации не может быть создан (%s)."
+
+#, fuzzy
+#~ msgid "File location:"
+#~ msgstr "выделение"
+
+#~ msgid "Find usage"
+#~ msgstr "Найти использование"
+
+#, fuzzy
+#~ msgid ""
+#~ "Range:\t\t%s\n"
+#~ "\n"
+#~ "Lines:\t\t%d\n"
+#~ "Words:\t\t%d\n"
+#~ "Characters:\t%d"
+#~ msgstr ""
+#~ "Размер:\t\t%s\n"
+#~ "\n"
+#~ "Cтрок:\t\t%d\n"
+#~ "Слов:\t\t%d\n"
+#~ "Символов:\t%d\n"
+
+#~ msgid "Match only word s_tart"
+#~ msgstr "Совпадение только стартового слова"
+
+#, fuzzy
+#~ msgid "In F_ile"
+#~ msgstr "Открыть Файл"
+
+#~ msgid "Symbol list font"
+#~ msgstr "Шрифт списка тегов"
+
+#~ msgid "Message window font"
+#~ msgstr "Шрифт окна сообщений"
+
+#~ msgid "Sets the font for the editors windows"
+#~ msgstr "Устанавливает шрифт окна редактирования"
+
+#~ msgid ""
+#~ "Geany is exiting because a named pipe was found. Mostly this means, Geany "
+#~ "is already running. If you know Geany is not running, you can delete the "
+#~ "file and start Geany anyway.\n"
+#~ "Delete the named pipe and start Geany?"
+#~ msgstr ""
+#~ "Geany завершает работу по причине обнаружения именованной трубы обмена. "
+#~ "Это означает что Geany уже запущена. Если Geany не запущена, просто "
+#~ "удалите именованный файл(трубу) обмена и запустить Geany еще раз."
+
+#~ msgid "Change Selection"
+#~ msgstr "Изменить выделенное"
+
+#~ msgid "To lower-case"
+#~ msgstr "В нижний регистр"
+
+#~ msgid "To upper-case"
+#~ msgstr "В верхний регистр"
+
+#~ msgid "_Count words"
+#~ msgstr "Подсчет слов"
+
+#~ msgid "Show _Colour Chooser"
+#~ msgstr "Показать Выбор цвета"
+
+#~ msgid "Break the line at the window border and continue it on the next line"
+#~ msgstr "Прерывает строку у бордюра окна и продолжает с новой строки"
+
+#~ msgid "Line endings"
+#~ msgstr "Окончания строк"
+
+#~ msgid "Inserts a typical ChangeLog entry in the current "
+#~ msgstr "Вставляет типичный ChangeLog-вход в текущий файл"
+
+#~ msgid "There is a limit of %d concurrent open tabs."
+#~ msgstr "Это лимит конкурирующих %d открытых закладок."
+
+#~ msgid "error: too many open files"
+#~ msgstr "ОШИБКА: слишком много открытых файлов"
+
+#~ msgid "The match \"%s\" was not found. Wrap search around the document?"
+#~ msgstr ""
+#~ "Совпадение с фразой \"%s\" не было найдено. Начать поиск с начала "
+#~ "документа?"
+
+#~ msgid "Build with \"make\""
+#~ msgstr "Построить используя \"make\""
+
+#~ msgid "Build with make (custom target)"
+#~ msgstr "Построить используя make (другая цель)"
+
+#~ msgid "Enter custom options for the make tool"
+#~ msgstr "Введите свои опции для make"
+
+#~ msgid "Enter the search text here"
+#~ msgstr "Введите текст для поиска"
+
+#~ msgid "Enter the replace text here"
+#~ msgstr "Введите текст для замены"
+
+#~ msgid ""
+#~ "Enter here the (La)TeX command (for DVI creation) and some useful options."
+#~ msgstr ""
+#~ "Введите здесь (La)TeX команду (для создания DVI) и некоторые полезные "
+#~ "опции."
+
+#~ msgid ""
+#~ "Enter here the (La)TeX command (for PDF creation) and some useful options."
+#~ msgstr ""
+#~ "Введите здесь (La)TeX команду (для создания PDF) и некоторые полезные "
+#~ "опции."
+
+#~ msgid ""
+#~ "Enter here the (La)TeX command (for DVI preview) and some useful options."
+#~ msgstr ""
+#~ "Введите здесь (La)TeX команду (для пред-просмотра DVI) и некоторые "
+#~ "полезные опции."
+
+#~ msgid ""
+#~ "Enter here the (La)TeX command (for PDF preview) and some useful options."
+#~ msgstr ""
+#~ "Введите здесь (La)TeX команду (для пред-просмотра DVI) и некоторые "
+#~ "полезные опции."
+
+#~ msgid ""
+#~ "Sets the includes and library paths for the compiler and the program "
+#~ "arguments for execution\n"
+#~ msgstr ""
+#~ "Устанавливает включаемые заголовочные файлы и пути библиотек для "
+#~ "компилятора(сборщика)  и аргументов для запуска программ \n"
+
+#~ msgid "Enter here arguments to your compiler."
+#~ msgstr "Введите аргументы для Вашего компилятора(сборщика)"
+
+#~ msgid "Enter here arguments to your linker."
+#~ msgstr "Введите аргументы для Вашего компоновщика"
+
+#~ msgid "Enter here arguments to your program."
+#~ msgstr "Введите аргументы для Вашей программы"
+
+#~ msgid "PHP / HTML source file"
+#~ msgstr "PHP / HTML исходный файл"
+
+#~ msgid ""
+#~ " VTE settings: FONT;FOREGROUND;BACKGROUND;scrollback;type;scroll on "
+#~ "keystroke;scroll on output;follow path of file"
+#~ msgstr ""
+#~ "VTE установки: ШРИФТ;ПЕРЕДНИЙ_ПЛАН;ЗАДНИЙ_ПЛАН;scrollback;тип; scroll on "
+#~ "keystroke;scroll on output; полный путь к файлу"
+
+#~ msgid "compilation finished unsuccessful"
+#~ msgstr "сборка прошла не удачно"
+
+#~ msgid "Begin"
+#~ msgstr "Начало"
 
 #~ msgid "Build with \"_make\" (custom _target)"
 #~ msgstr "Собрать с  \"_make\" (своя цель)"
+
 #~ msgid "Error while converting file (%s)."
 #~ msgstr "Ошибка при конвертации файла (%s)."
+
 #~ msgid "Build with \"make\" (custom target)"
 #~ msgstr "Построить с \"make\" (своя цель)"
-

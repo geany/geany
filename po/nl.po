@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany_0.9.nl\n"
+"Project-Id-Version: geany_0.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-27 19:04+0200\n"
+"POT-Creation-Date: 2007-02-07 19:53+0100\n"
 "PO-Revision-Date: 2006-09-28 17:25+0200\n"
 "Last-Translator: Kurt De Bree <kdebree@telenet.be>\n"
 "Language-Team: Dutch <debian-l10n-dutch@lists.debian.org>\n"
@@ -16,54 +16,58 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 
-#: src/main.c:84
+#: src/main.c:87
+msgid "use an alternate configuration directory"
+msgstr "gebruik een alternatieve configuratiemap"
+
+#: src/main.c:88
 msgid "runs in debug mode (means being verbose)"
 msgstr "draait in debug modus (betekent geeft veel informatie)"
 
-#: src/main.c:85
-msgid "don't load the previous session's files"
-msgstr "bestanden van vorige sessies niet laden"
-
-#: src/main.c:86
-msgid "don't load auto completion data (see documentation)"
-msgstr "autovoltooiingsdata niet laden (zie documentatie)"
-
-#: src/main.c:88
+#: src/main.c:91
 msgid "don't open files in a running instance, force opening a new instance"
 msgstr ""
 "open geen bestanden tijdens een actie, forceer openen van een nieuwe "
 "instantie"
 
-#: src/main.c:90
-msgid "use an alternate configuration directory"
-msgstr "gebruik een alternatieve configuratiemap"
+#: src/main.c:93
+msgid "set initial line number for the first opened file"
+msgstr ""
 
-#: src/main.c:91
+#: src/main.c:94
 msgid "don't show message window at startup"
 msgstr "toon geen berichtenvenster bij opstarten"
 
-#: src/main.c:93
+#: src/main.c:95
+msgid "don't load auto completion data (see documentation)"
+msgstr "autovoltooiingsdata niet laden (zie documentatie)"
+
+#: src/main.c:96
+msgid "don't load the previous session's files"
+msgstr "bestanden van vorige sessies niet laden"
+
+#: src/main.c:98
 msgid "don't load terminal support"
 msgstr "terminalondersteuning niet laden"
 
-#: src/main.c:94
+#: src/main.c:99
 msgid "filename of libvte.so"
 msgstr "bestandsnaam van libvte.so"
 
-#: src/main.c:96
+#: src/main.c:101
 msgid "show version and exit"
 msgstr "toon versie en sluit af"
 
-#: src/main.c:388
+#: src/main.c:399
 msgid " - A fast and lightweight IDE"
 msgstr " - Een snelle en lichtgewicht IDE"
 
-#: src/main.c:398
+#: src/main.c:409
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(gebouwd op %s met GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: src/main.c:440
+#: src/main.c:449
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -75,269 +79,262 @@ msgstr ""
 "configuratiemap.\n"
 "Geany sowieso starten?"
 
-#: src/main.c:556
+#: src/main.c:575
 #, c-format
 msgid "This is Geany %s."
 msgstr "Dit is Geany %s."
 
-#: src/main.c:558
+#: src/main.c:577
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Configuratiemap kon niet worden aangemaakt (%s)."
 
-#: src/main.c:583 src/callbacks.c:823 src/dialogs.c:151 src/document.c:378
-#: src/document.c:416 src/win32.c:151
-#, c-format
-msgid ""
-"You have opened too many files. There is a limit of %d concurrent open files."
-msgstr ""
-"U heeft teveel bestanden geopend. Er is een limiet van %d tegelijkertijd "
-"geopende bestanden."
-
-#: src/interface.c:241 src/interface.c:1374
+#: src/interface.c:245 src/interface.c:1404
 msgid "Geany"
 msgstr "Geany"
 
-#: src/interface.c:251
+#: src/interface.c:255
 msgid "_File"
 msgstr "_Bestand"
 
-#: src/interface.c:262
-msgid "New (with _template)"
+#: src/interface.c:266
+#, fuzzy
+msgid "New (with _Template)"
 msgstr "Nieuw (met _sjabloon)"
 
-#: src/interface.c:273 src/interface.c:292 src/interface.c:336
-#: src/interface.c:447 src/interface.c:493 src/interface.c:733
-#: src/interface.c:743 src/interface.c:1814 src/interface.c:1860
+#: src/interface.c:277 src/interface.c:334 src/interface.c:508
+#: src/interface.c:554 src/interface.c:729 src/interface.c:739
+#: src/interface.c:1912 src/interface.c:1958
 msgid "invisible"
 msgstr "onzichtbaar"
 
-#: src/interface.c:285
-msgid "Recent _files"
+#: src/interface.c:289
+#, fuzzy
+msgid "Recent _Files"
 msgstr "_Recente bestanden"
 
-#: src/interface.c:308
-msgid "Save a_ll"
+#: src/interface.c:306
+#, fuzzy
+msgid "Save A_ll"
 msgstr "A_lles opslaan"
 
-#: src/interface.c:311
+#: src/interface.c:309
 msgid "Saves all open files"
 msgstr "Slaat alle geopende bestanden op"
 
-#: src/interface.c:317 src/callbacks.c:506 src/utils.c:507
+#: src/interface.c:315 src/callbacks.c:490 src/utils.c:355
 msgid "_Reload"
 msgstr "_Herladen"
 
-#: src/interface.c:325
-msgid "R_eload as"
+#: src/interface.c:323
+#, fuzzy
+msgid "R_eload As"
 msgstr "H_erladen als"
 
-#: src/interface.c:356
+#: src/interface.c:354
 msgid "Prints the current file"
 msgstr "Drukt het huidige bestand af"
 
-#: src/interface.c:367
-msgid "C_lose all"
+#: src/interface.c:365
+#, fuzzy
+msgid "C_lose All"
 msgstr "_Alles sluiten"
 
-#: src/interface.c:370
+#: src/interface.c:368
 msgid "Closes all open files"
 msgstr "Sluit alle bestanden af"
 
-#: src/interface.c:384 src/interface.c:980
+#: src/interface.c:382 src/interface.c:1003
 msgid "Quit Geany"
 msgstr "Gean_y afsluiten"
 
-#: src/interface.c:386
+#: src/interface.c:384
 msgid "_Edit"
 msgstr "Be_werken"
 
-#: src/interface.c:427 src/interface.c:1777
+#: src/interface.c:425 src/interface.c:1813
 msgid "Select _All"
 msgstr "_Alles selecteren"
 
-#: src/interface.c:436
+#: src/interface.c:434 src/interface.c:1839
+msgid "_Format"
+msgstr "Inde_ling"
+
+#: src/interface.c:437
+msgid "Convert the case of the current selection"
+msgstr "Converteert de hoofdletter van de huidige selectie"
+
+#: src/interface.c:442 src/interface.c:1846
+#, fuzzy
+msgid "Convert Selection to _Lower-case"
+msgstr "Converteert selectie naar _kleine letters"
+
+#: src/interface.c:446 src/interface.c:1850
+#, fuzzy
+msgid "Convert Selection to _Upper-case"
+msgstr "Converteert selectie naar _hoofdletters"
+
+#: src/interface.c:455 src/interface.c:1859
+#, fuzzy
+msgid "_Comment Line(s)"
+msgstr "_Plaats het hekje voor de regel"
+
+#: src/interface.c:459 src/interface.c:1863
+#, fuzzy
+msgid "U_ncomment Line(s)"
+msgstr "Lijn"
+
+#: src/interface.c:463 src/interface.c:1867
+#, fuzzy
+msgid "_Toggle Line Commentation"
+msgstr "_Regelcommentaar inschakelen"
+
+#: src/interface.c:467 src/interface.c:1871
+#, fuzzy
+msgid "Du_plicate Line or Selection"
+msgstr "Kloon regel of selectie"
+
+#: src/interface.c:476 src/interface.c:1880
+msgid "_Increase Indent"
+msgstr "I_nspringing vergroten"
+
+#: src/interface.c:484 src/interface.c:1888
+msgid "_Decrease Indent"
+msgstr "In_springing verkleinen"
+
+#: src/interface.c:497
 msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" _invoegen"
 
-#: src/interface.c:450
+#: src/interface.c:511
 msgid "I_nsert Comments"
 msgstr "_Commentaren Invoegen"
 
-#: src/interface.c:461 src/interface.c:1828
-msgid "Insert ChangeLog entry"
+#: src/interface.c:522 src/interface.c:1926
+#, fuzzy
+msgid "Insert ChangeLog Entry"
 msgstr "Logboek item invoegen"
 
-#: src/interface.c:464 src/interface.c:1831
+#: src/interface.c:525 src/interface.c:1929
 msgid "Inserts a typical ChangeLog entry in the current file"
 msgstr "Voegt een typisch logboek item in in het huidig bestand"
 
-#: src/interface.c:466 src/interface.c:1833
-msgid "Insert file header"
+#: src/interface.c:527 src/interface.c:1931
+#, fuzzy
+msgid "Insert File Header"
 msgstr "Bestandshoofding invoegen"
 
-#: src/interface.c:469 src/interface.c:1836
+#: src/interface.c:530 src/interface.c:1934
 msgid "Inserts a file header at the beginning of the file"
 msgstr "Voegt een bestandshoofding toe aan het begin van van het bestand"
 
-#: src/interface.c:471 src/interface.c:1838
-msgid "Insert function description"
+#: src/interface.c:532 src/interface.c:1936
+#, fuzzy
+msgid "Insert Function Description"
 msgstr "Functiebschrijving invoegen"
 
-#: src/interface.c:474 src/interface.c:1841
+#: src/interface.c:535 src/interface.c:1939
 msgid "Inserts a description before the current function"
 msgstr "Voegt een beschrijving in vóór de huidige functie"
 
-#: src/interface.c:476 src/interface.c:1843
-msgid "Insert multiline comment"
+#: src/interface.c:537 src/interface.c:1941
+#, fuzzy
+msgid "Insert Multiline Comment"
 msgstr "Multiregel commentaar invoegen"
 
-#: src/interface.c:479 src/interface.c:1846
+#: src/interface.c:540 src/interface.c:1944
 msgid "Inserts a multiline comment"
 msgstr "Voegt een multiregel commmentaar in"
 
-#: src/interface.c:481 src/interface.c:1848
-msgid "Insert GPL notice"
+#: src/interface.c:542 src/interface.c:1946
+#, fuzzy
+msgid "Insert GPL Notice"
 msgstr "GPL-informatie invoegen"
 
-#: src/interface.c:484 src/interface.c:1851
+#: src/interface.c:545 src/interface.c:1949
 msgid "Inserts a GPL notice (should be done at the beginning of the file)"
 msgstr ""
 "Voegt een GPL-informatie in (zou aan het begin van het bestand moeten "
 "gebeuren)"
 
-#: src/interface.c:486 src/interface.c:1853
+#: src/interface.c:547 src/interface.c:1951
 msgid "Insert Dat_e"
 msgstr "_Datum invoegen"
 
-#: src/interface.c:501 src/interface.c:1868
-msgid "_Format"
-msgstr "Inde_ling"
-
-#: src/interface.c:504
-msgid "Convert the case of the current selection"
-msgstr "Converteert de hoofdletter van de huidige selectie"
-
-#: src/interface.c:509 src/interface.c:1875
-msgid "Convert Selection to _lower-case"
-msgstr "Converteert selectie naar _kleine letters"
-
-#: src/interface.c:513 src/interface.c:1879
-msgid "Convert Selection to _upper-case"
-msgstr "Converteert selectie naar _hoofdletters"
-
-#: src/interface.c:522 src/interface.c:1888
-msgid "_Comment Line"
-msgstr "_Plaats het hekje voor de regel"
-
-#: src/interface.c:526 src/interface.c:1892
-msgid "U_ncomment Line"
-msgstr "Lijn"
-
-#: src/interface.c:530 src/interface.c:1896
-msgid "_Toggle line commentation"
-msgstr "_Regelcommentaar inschakelen"
-
-#: src/interface.c:534 src/interface.c:1900
-msgid "Du_plicate Line"
-msgstr "Lijn"
-
-#: src/interface.c:543 src/interface.c:1909
-msgid "_Increase Indent"
-msgstr "I_nspringing vergroten"
-
-#: src/interface.c:547 src/interface.c:1913
-msgid "_Decrease Indent"
-msgstr "In_springing verkleinen"
-
-#: src/interface.c:551
-msgid "Count _words"
-msgstr "_Tel woorden"
-
-#: src/interface.c:554
-msgid ""
-"Counts the words and characters in the current selection or the whole "
-"document"
-msgstr ""
-"Telt de woorden en tekens in de huidige selectie of het volledige document"
-
-#: src/interface.c:565
+#: src/interface.c:566
 msgid "_Search"
 msgstr "_Zoeken"
 
-#: src/interface.c:576
+#: src/interface.c:577
 msgid "Find _Next"
 msgstr "V_olgende zoeken"
 
-#: src/interface.c:580
+#: src/interface.c:581
 msgid "Find _Previous"
 msgstr "Zoek Vor_ige"
 
-#: src/interface.c:584 src/search.c:303
+#: src/interface.c:585
+#, fuzzy
+msgid "Find in F_iles"
+msgstr "Zoek in _bestanden"
+
+#: src/interface.c:589 src/search.c:385
 msgid "_Replace"
 msgstr "_Vervangen"
 
-#: src/interface.c:597
-msgid "Find in f_iles"
-msgstr "Zoek in _bestanden"
+#: src/interface.c:602
+#, fuzzy
+msgid "Next _Message"
+msgstr "Berichten"
 
-#: src/interface.c:606
-msgid "_Go to line"
+#: src/interface.c:611
+#, fuzzy
+msgid "_Go to Line"
 msgstr "_Ga naar regel"
 
-#: src/interface.c:614 src/dialogs.c:75
+#: src/interface.c:619 src/dialogs.c:77
 msgid "_View"
 msgstr "_Beeld"
 
-#: src/interface.c:621
+#: src/interface.c:626
 msgid "Change _Font"
 msgstr "_Lettertype wijzigen"
 
-#: src/interface.c:624
+#: src/interface.c:629
 msgid "Change the default font"
 msgstr "Wijzigt het standaard lettertype"
 
-#: src/interface.c:630
-msgid "Show _Colour Chooser"
-msgstr "_Kleurkiezer openen"
-
-#: src/interface.c:633 src/interface.c:919
-msgid ""
-"Open a color chooser dialog, to interactively pick colors from a palette."
-msgstr ""
-"Open een kleurkiesvenster, om interactief een kleur te kiezen uit een "
-"kleurpalet."
-
-#: src/interface.c:644
+#: src/interface.c:640
 msgid "Full_screen"
 msgstr "_Volledig scherm"
 
-#: src/interface.c:648
-msgid "Show Messages _Window"
+#: src/interface.c:644
+#, fuzzy
+msgid "Show Message _Window"
 msgstr "B_erichtenvenster weergeven"
 
-#: src/interface.c:651
+#: src/interface.c:647
 msgid "Toggle the window with status and compiler messages on and off"
 msgstr ""
 "Schakelt het berichtenvenster met status- en compilerberichten aan en uit"
 
-#: src/interface.c:654
+#: src/interface.c:650
 msgid "Show _Toolbar"
 msgstr "_Werkbalk weergeven"
 
-#: src/interface.c:657
+#: src/interface.c:653
 msgid "Toggle the toolbar on and off"
 msgstr "Schakelt de weergave van de werkbalk aan en uit"
 
-#: src/interface.c:660
+#: src/interface.c:656
 msgid "Show Side_bar"
 msgstr "_Zijbalk weergeven"
 
-#: src/interface.c:665
+#: src/interface.c:661
 msgid "Show _Markers Margin"
 msgstr "_Markeerrand weergeven"
 
-#: src/interface.c:668
+#: src/interface.c:664
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
 "mark lines."
@@ -345,23 +342,24 @@ msgstr ""
 "Toont of verbergt de smalle rand rechts van de regelnummers, welke wordt "
 "gebruikt om regels te markeren"
 
-#: src/interface.c:671
+#: src/interface.c:667
 msgid "Show _Line Numbers"
 msgstr "_Regelnummers weergeven"
 
-#: src/interface.c:674
+#: src/interface.c:670
 msgid "Shows or hides the Line Number margin."
 msgstr "Toont of verbergt de regelnummerrand"
 
-#: src/interface.c:694
+#: src/interface.c:690
 msgid "_Document"
 msgstr "_Document"
 
-#: src/interface.c:701
-msgid "_Line wrapping"
+#: src/interface.c:697
+#, fuzzy
+msgid "_Line Wrapping"
 msgstr "_Regelterugloop"
 
-#: src/interface.c:704 src/interface.c:3010
+#: src/interface.c:700 src/interface.c:3158
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
@@ -371,297 +369,323 @@ msgstr ""
 "volgende regel. Let op: regelterugloop eist veel van uw systeem voor grote "
 "documenten, dus zou moeten worden uitgeschakeld op trage systemen."
 
-#: src/interface.c:707
-msgid "_Use auto indentation"
+#: src/interface.c:703
+#, fuzzy
+msgid "_Use Auto-indentation"
 msgstr "Gebruik _auto-inspringing"
 
-#: src/interface.c:712
-msgid "Read _only"
+#: src/interface.c:708
+#, fuzzy
+msgid "Read _Only"
 msgstr "Alleen _lezen"
 
-#: src/interface.c:715
+#: src/interface.c:711
 msgid "Treat this file as read-only. No changes can be made."
 msgstr ""
 "Behandel dit bestand als alleen lezen. Er zijn geen wijzigingen mogelijk."
 
-#: src/interface.c:717
+#: src/interface.c:713
 msgid "_Write Unicode BOM"
 msgstr "_Unicode BOM schrijven"
 
-#: src/interface.c:726
-msgid "Set file_type"
+#: src/interface.c:722
+#, fuzzy
+msgid "Set File_type"
 msgstr "_Bestandstype instellen"
 
-#: src/interface.c:736
-msgid "Set _encoding"
+#: src/interface.c:732
+#, fuzzy
+msgid "Set _Encoding"
 msgstr "_Codering instellen"
 
-#: src/interface.c:746
-msgid "Set line e_ndings"
+#: src/interface.c:742
+#, fuzzy
+msgid "Set Line E_ndings"
 msgstr "Regel_einden instellen"
 
-#: src/interface.c:753
-msgid "Convert and set to _CR/LF (Win)"
+#: src/interface.c:749
+#, fuzzy
+msgid "Convert and Set to _CR/LF (Win)"
 msgstr "Converteren en instellen op CR/LF (_Win)"
 
-#: src/interface.c:759
-msgid "Convert and set to _LF (Unix)"
+#: src/interface.c:755
+#, fuzzy
+msgid "Convert and Set to _LF (Unix)"
 msgstr "Converteren en instellen op LF (_Unix)"
 
-#: src/interface.c:765
-msgid "Convert and set to CR (_Mac)"
+#: src/interface.c:761
+#, fuzzy
+msgid "Convert and Set to CR (_Mac)"
 msgstr "Converteren en instellen op CR (_Mac)"
 
-#: src/interface.c:776
-msgid "_Replace tabs by spaces"
+#: src/interface.c:772
+#, fuzzy
+msgid "_Replace Tabs by Spaces"
 msgstr "_Vervang tabs door spaties"
 
-#: src/interface.c:779 src/interface.c:2943
+#: src/interface.c:775 src/interface.c:2926
 msgid "Replaces all tabs in document by spaces."
 msgstr "Vervangt alle tabs in het document door spaties"
 
-#: src/interface.c:786
-msgid "_Fold all"
+#: src/interface.c:782
+#, fuzzy
+msgid "_Fold All"
 msgstr "Alles _invouwen"
 
-#: src/interface.c:789
+#: src/interface.c:785
 msgid "Folds all contractible code blocks"
 msgstr "Vouwt alle samentrekbare codeblokken in"
 
-#: src/interface.c:791
-msgid "_Unfold all"
+#: src/interface.c:787
+#, fuzzy
+msgid "_Unfold All"
 msgstr "Alles _uitvouwen"
 
-#: src/interface.c:794
+#: src/interface.c:790
 msgid "Unfolds all contracted code blocks"
 msgstr "Vouwt alle samengetrokken codeblokken uit"
 
-#: src/interface.c:801
-msgid "Remove all _indicators"
+#: src/interface.c:797
+#, fuzzy
+msgid "Remove Error _Indicators"
 msgstr "Alle _markeringen verwijderen"
 
-#: src/interface.c:804
-msgid "Removes all set indicators in the current document."
+#: src/interface.c:800
+#, fuzzy
+msgid "Removes all error indicators in the current document."
 msgstr "Verwijdert alle markeringen in het huidige document."
 
 #. build the code
-#: src/interface.c:806 src/ui_utils.c:791
+#: src/interface.c:802 src/build.c:860
 msgid "_Build"
 msgstr "B_ouwen"
 
-#: src/interface.c:810
+#: src/interface.c:806
+#, fuzzy
+msgid "_Tools"
+msgstr "Hulpprogramma's"
+
+#: src/interface.c:813
+#, fuzzy
+msgid "_Colour Chooser"
+msgstr "Kleurkiezer"
+
+#: src/interface.c:816 src/interface.c:941
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette."
+msgstr ""
+"Open een kleurkiesvenster, om interactief een kleur te kiezen uit een "
+"kleurpalet."
+
+#: src/interface.c:822
+#, fuzzy
+msgid "_Word Count"
+msgstr "Woorden tellen"
+
+#: src/interface.c:825
+msgid ""
+"Counts the words and characters in the current selection or the whole "
+"document"
+msgstr ""
+"Telt de woorden en tekens in de huidige selectie of het volledige document"
+
+#: src/interface.c:827
+msgid "_Insert Special HTML Characters"
+msgstr ""
+
+#: src/interface.c:831
 msgid "_Help"
 msgstr "_Help"
 
-#: src/interface.c:821
-msgid "_Keyboard shortcuts"
+#: src/interface.c:842
+#, fuzzy
+msgid "_Keyboard Shortcuts"
 msgstr "_Sneltoetsen"
 
-#: src/interface.c:824
+#: src/interface.c:845
 msgid "Shows a list of all keyboard shortcuts for Geany."
 msgstr "Toont een lijst met alle sneltoetsen voor Geany."
 
-#: src/interface.c:826
+#: src/interface.c:847
 msgid "_Website"
 msgstr "_Website"
 
-#: src/interface.c:849
+#: src/interface.c:870
 msgid "Create a new file"
 msgstr "Nieuw bestand aanmaken"
 
-#: src/interface.c:854
+#: src/interface.c:876
 msgid "Open an existing file"
 msgstr "Bestaand bestand openen"
 
-#: src/interface.c:859
+#: src/interface.c:881
 msgid "Save the current file"
 msgstr "Huidig bestand opslaan"
 
-#: src/interface.c:861 src/keybindings.c:125
+#: src/interface.c:883 src/keybindings.c:114
 msgid "Save all"
 msgstr "Alles opslaan"
 
-#: src/interface.c:864
+#: src/interface.c:886
 msgid "Save all open files"
 msgstr "Alle geopende bestanden opslaan"
 
-#: src/interface.c:873
+#: src/interface.c:895
 msgid "Reload the current file from disk"
 msgstr "Huidig bestand van schijf herladen"
 
-#: src/interface.c:878
+#: src/interface.c:900
 msgid "Close the current file"
 msgstr "Huidig bestand sluiten"
 
-#: src/interface.c:887
+#: src/interface.c:909
 msgid "Undo the last modification"
 msgstr "Laatste wijziging ongedaan maken"
 
-#: src/interface.c:892
+#: src/interface.c:914
 msgid "Redo the last modification"
 msgstr "Laatste wijziging herhalen"
 
-#: src/interface.c:900 src/keybindings.c:173
+#: src/interface.c:922 src/keybindings.c:166
 msgid "Compile"
 msgstr "Compileer"
 
-#: src/interface.c:903
+#: src/interface.c:925
 msgid "Compile the current file"
 msgstr "Huidig bestand compileren"
 
-#: src/interface.c:908 src/ui_utils.c:845
+#: src/interface.c:930 src/build.c:927
 msgid "Run or view the current file"
 msgstr "Huidig bestand uitvoeren of weergeven"
 
-#: src/interface.c:916
+#: src/interface.c:938
 msgid "Color"
 msgstr "Kleur"
 
-#: src/interface.c:928
+#: src/interface.c:950
 msgid "Zoom in the text"
 msgstr "Inzoomen"
 
-#: src/interface.c:933
+#: src/interface.c:955
 msgid "Zoom out the text"
 msgstr "Uitzoomen"
 
-#: src/interface.c:946 src/interface.c:951
+#: src/interface.c:968 src/interface.c:973
 msgid "Find the entered text in the current file"
 msgstr "Zoek de aangegeven tekst in het huidig document"
 
-#: src/interface.c:964
+#: src/interface.c:986
 msgid "Enter a line number and jump to it."
 msgstr "Voer het regelnummer in waarnaar u wilt gaan. "
 
-#: src/interface.c:971
+#: src/interface.c:993
 msgid "Jump to the entered line number."
 msgstr "Ga naar het ingevoerde regelnummer"
 
-#: src/interface.c:1007 src/treeviews.c:40
+#: src/interface.c:1031 src/treeviews.c:71
 msgid "Symbols"
 msgstr "Symbolen"
 
-#: src/interface.c:1020 src/treeviews.c:218
+#: src/interface.c:1044 src/treeviews.c:307
 msgid "Open files"
 msgstr "Bestanden openen"
 
-#: src/interface.c:1055
+#: src/interface.c:1079
 msgid "Status"
 msgstr "Status"
 
-#: src/interface.c:1069
+#: src/interface.c:1093
 msgid "Compiler"
 msgstr "Compiler"
 
-#: src/interface.c:1083
+#: src/interface.c:1107
 msgid "Messages"
 msgstr "Berichten"
 
-#: src/interface.c:1096
+#: src/interface.c:1120
 msgid "Scribble"
 msgstr "Notities"
 
-#: src/interface.c:1600 src/interface.c:2784
+#: src/interface.c:1634 src/interface.c:2781
 msgid "Images and text"
 msgstr "Pictogrammen met tekst"
 
-#: src/interface.c:1606 src/interface.c:2792
+#: src/interface.c:1640 src/interface.c:2813
 msgid "Images only"
 msgstr "Enkel pictogrammen"
 
-#: src/interface.c:1612 src/interface.c:2800
+#: src/interface.c:1646 src/interface.c:2805
 msgid "Text only"
 msgstr "Enkel tekst"
 
-#: src/interface.c:1623 src/interface.c:2808
+#: src/interface.c:1657 src/interface.c:2797
 msgid "Large icons"
 msgstr "Grote pictogrammen"
 
-#: src/interface.c:1628 src/interface.c:2816
+#: src/interface.c:1662 src/interface.c:2789
 msgid "Small icons"
 msgstr "Kleine pictogrammen"
 
-#: src/interface.c:1638
+#: src/interface.c:1672
 msgid "Hide toolbar"
 msgstr "Werkbalk verbergen"
 
-#: src/interface.c:1803
+#: src/interface.c:1901
 msgid "Insert \"include <...>\""
 msgstr "\"include <...>\" invoegen"
 
-#: src/interface.c:1817
+#: src/interface.c:1915
 msgid "Insert Comments"
 msgstr "Commentaren invoegen"
 
-#: src/interface.c:1922
-msgid "Find usage"
+#: src/interface.c:1966 src/keybindings.c:232
+msgid "Find Usage"
 msgstr "Zoek boodschappen"
 
-#: src/interface.c:1930 src/keybindings.c:234
-msgid "Go to tag definition"
+#: src/interface.c:1974
+#, fuzzy
+msgid "Go to Tag Definition"
 msgstr "Ga naar tag definitie"
 
-#: src/interface.c:1934 src/keybindings.c:236
-msgid "Go to tag declaration"
+#: src/interface.c:1978
+#, fuzzy
+msgid "Go to Tag Declaration"
 msgstr "Ga naar tag declaratie"
 
-#: src/interface.c:1943 src/dialogs.c:564 src/keybindings.c:153
-msgid "Go to line"
+#: src/interface.c:1987
+#, fuzzy
+msgid "Go to Line"
 msgstr "Ga naar regel"
 
-#: src/interface.c:1946
+#: src/interface.c:1990
 msgid "Goto to the entered line"
 msgstr "Ga naar ingevoerde regel"
 
-#: src/interface.c:2289 src/keybindings.c:143
+#: src/interface.c:2362 src/keybindings.c:132
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#: src/interface.c:2318
+#: src/interface.c:2395
 msgid "Load files from the last session"
 msgstr "Laad bestanden van de laatste sessie"
 
-#: src/interface.c:2322
+#: src/interface.c:2399
 msgid "Opens at startup the files from the last session"
 msgstr "Opent bij opstarten de bestanden van de laatste sessie"
 
-#: src/interface.c:2325
+#: src/interface.c:2402
 msgid "Save window position and geometry"
 msgstr "Bewaar vensterpositie en geometrie"
 
-#: src/interface.c:2329
+#: src/interface.c:2406
 msgid "Saves the window position and geometry and restores it at the start"
 msgstr "Bewaart de vensterpositie en geometrie en herstelt dat bij het begin"
 
-#: src/interface.c:2332
-msgid "Beep on errors or when compilation has finished"
-msgstr "Beep bij fouten of wanneer compilatie is beëindigd"
-
-#: src/interface.c:2335
-msgid ""
-"Whether to beep if an error occured or when the compilation process has "
-"finished."
-msgstr ""
-"Of er een beeptoon moet worden weergegeven bij een fout of wanneer het "
-"compilatieproces is beëindigd."
-
-#: src/interface.c:2338
-msgid "Switch to status message list at new message"
-msgstr "Schakel naar statusmeldingsvenster bij nieuw bericht"
-
-#: src/interface.c:2341
-msgid ""
-"Switch to the status message tab (in the notebook window at the bottom) if a "
-"new status message arrives."
-msgstr ""
-"Schakel naar de tab statusberichten (onderaan in het notitieboek venster) "
-"indien een er een nieuw statusbericht is."
-
-#: src/interface.c:2344
+#: src/interface.c:2409
 msgid "Load virtual terminal emulation at startup"
 msgstr "Virtuele terminalemulatie laden bij opstarten"
 
-#: src/interface.c:2346
+#: src/interface.c:2411
 msgid ""
 "Whether the virtual terminal emulation(VTE) should be loaded at startup. "
 "Disable it if you do not need it."
@@ -669,104 +693,383 @@ msgstr ""
 "Of de virtuele terminalemulatie (VTE) moet worden geladen bij het opstarten."
 "Schakel deze functie uit indien u dit niet nodig heeft."
 
-#: src/interface.c:2349
+#: src/interface.c:2414
 msgid "Confirm exit"
 msgstr "afsluiten bevestigen"
 
-#: src/interface.c:2353
+#: src/interface.c:2418
 msgid "Shows a confirmation dialog on exit."
 msgstr "Toont een bevestigingsvenster bij afsluiten."
 
-#: src/interface.c:2364
-msgid "Recent files list length:"
-msgstr "Lengte 'laatst geopende bestanden' lijst:"
+#: src/interface.c:2421
+msgid "<b>Startup and shutdown</b>"
+msgstr ""
 
-#: src/interface.c:2372
+#: src/interface.c:2440
+msgid "Beep on errors or when compilation has finished"
+msgstr "Beep bij fouten of wanneer compilatie is beëindigd"
+
+#: src/interface.c:2443
+msgid ""
+"Whether to beep if an error occured or when the compilation process has "
+"finished."
+msgstr ""
+"Of er een beeptoon moet worden weergegeven bij een fout of wanneer het "
+"compilatieproces is beëindigd."
+
+#: src/interface.c:2446
+msgid "Switch to status message list at new message"
+msgstr "Schakel naar statusmeldingsvenster bij nieuw bericht"
+
+#: src/interface.c:2449
+msgid ""
+"Switch to the status message tab (in the notebook window at the bottom) if a "
+"new status message arrives."
+msgstr ""
+"Schakel naar de tab statusberichten (onderaan in het notitieboek venster) "
+"indien een er een nieuw statusbericht is."
+
+#: src/interface.c:2452
+msgid "Always wrap search and hide the Find dialog"
+msgstr ""
+
+#: src/interface.c:2456
+msgid ""
+"Always wrap search around the document and hide the Find dialog after "
+"clicking Find Next/Previous"
+msgstr ""
+
+#: src/interface.c:2459
+#, fuzzy
+msgid "<b>Behaviour</b>"
+msgstr "<b>Functies</b>"
+
+#: src/interface.c:2464
+msgid "General"
+msgstr "Algemeen"
+
+#: src/interface.c:2486
+msgid "Show symbol list"
+msgstr "Toon symbolenlijst"
+
+#: src/interface.c:2489 src/interface.c:2495
+msgid "Toggle the symbol list on and off"
+msgstr "Schakelt de symbolenlijst aan en uit"
+
+#: src/interface.c:2492
+msgid "Show open files list"
+msgstr "Toon open bestanden lijst"
+
+#: src/interface.c:2498
+msgid "<b>Sidebar</b>"
+msgstr "<b>Zijbalk</b>"
+
+#: src/interface.c:2519
+#, fuzzy
+msgid "Symbol list:"
+msgstr "Toon symbolenlijst"
+
+#: src/interface.c:2526 src/interface.c:2591
+#, fuzzy
+msgid "Message window:"
+msgstr "Berichtenvenster"
+
+#: src/interface.c:2533 src/interface.c:2598
+#, fuzzy
+msgid "Editor:"
+msgstr "Editor"
+
+#: src/interface.c:2545
+msgid "Sets the font for the message window"
+msgstr "Stelt het lettertype in voor het berichtenvenster"
+
+#: src/interface.c:2553
+#, fuzzy
+msgid "Sets the font for the symbol list"
+msgstr "Stelt het lettertype in voor de symbolenlijst"
+
+#: src/interface.c:2561
+#, fuzzy
+msgid "Sets the editor font"
+msgstr "Lettertype editor"
+
+#: src/interface.c:2563
+msgid "<b>Fonts</b>"
+msgstr "<b>Lettertypes</b>"
+
+#: src/interface.c:2584
+#, fuzzy
+msgid "Sidebar:"
+msgstr "Zijbalk"
+
+#: src/interface.c:2605
+#, fuzzy
+msgid "Show editor tabs"
+msgstr "Toon open bestanden lijst"
+
+#: src/interface.c:2616 src/interface.c:2626 src/interface.c:2636
+#: src/interface.c:2973
+msgid "Left"
+msgstr "Links"
+
+#: src/interface.c:2617 src/interface.c:2627 src/interface.c:2637
+#: src/interface.c:2981
+msgid "Right"
+msgstr "Rechts"
+
+#: src/interface.c:2618 src/interface.c:2628 src/interface.c:2638
+msgid "Top"
+msgstr "Bovenaan"
+
+#: src/interface.c:2619 src/interface.c:2629 src/interface.c:2639
+msgid "Bottom"
+msgstr "Onderaan"
+
+#: src/interface.c:2641
+msgid "<b>Tab placement</b>"
+msgstr "<b>Tab plaatsing</b>"
+
+#: src/interface.c:2646
+msgid "Interface"
+msgstr "Interface"
+
+#: src/interface.c:2665
+msgid "Show Toolbar"
+msgstr "Werkbalk weergeven"
+
+#: src/interface.c:2690
+msgid "Show file operation buttons"
+msgstr "Aktieknoppen voor bestanden weergeven"
+
+#: src/interface.c:2694
+msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
+msgstr ""
+"Toont de knoppen Nieuw, Openen, Sluiten, Opslaan en Herladen in de werkbalk"
+
+#: src/interface.c:2697
+msgid "Show Compile and Run"
+msgstr "Compileer en uitvoeren weergeven"
+
+#: src/interface.c:2701
+msgid "Display the Compile and Run buttons in the toolbar"
+msgstr "Toont de knoppen Compileer en Uitvoeren in de werkbalk"
+
+#: src/interface.c:2704
+msgid "Show Colour Chooser button"
+msgstr "Kleurkiezer knop weergeven"
+
+#: src/interface.c:2708
+msgid "Display the Colour Chooser button in the toolbar"
+msgstr "Toont de knop Kleurkiezer in de werkbalk"
+
+#: src/interface.c:2711
+msgid "Show Zoom In and Zoom Out"
+msgstr "Inzoomen en Uitzoomen weergeven"
+
+#: src/interface.c:2715
+msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
+msgstr "Toont de knoppen Inzoomen en Uitzoomen in de werkbalk"
+
+#: src/interface.c:2718
+msgid "Show Redo and Undo buttons"
+msgstr "Knoppen Herdoen en Ongedaan maken weergeven"
+
+#: src/interface.c:2722
+msgid "Display the Redo and Undo buttons in the toolbar"
+msgstr "Toont de knoppen Herdoen en Ongedaan maken in de werkbalk"
+
+#: src/interface.c:2725
+msgid "Show Search field"
+msgstr "Zoekveld weergeven"
+
+#: src/interface.c:2729
+msgid "Display the search field and button in the toolbar"
+msgstr "Toont het veld en de knop zoeken in de werkbalk"
+
+#: src/interface.c:2732
+msgid "Show Goto line field"
+msgstr "Veld 'Ga naar regelnummer' weergeven"
+
+#: src/interface.c:2736
+msgid "Display the line number field and button in the toolbar"
+msgstr "Toont het veld en de knop 'Ga naar regelnummer' in de werkbalk"
+
+#: src/interface.c:2739
+#, fuzzy
+msgid "Show Quit button"
+msgstr "Aktieknoppen voor bestanden weergeven"
+
+#: src/interface.c:2743
+#, fuzzy
+msgid "Display the quit button in the toolbar"
+msgstr "Toont de knop Kleurkiezer in de werkbalk"
+
+#: src/interface.c:2746
+msgid "<b>Items</b>"
+msgstr "<b>Items</b>"
+
+#: src/interface.c:2767
+#, fuzzy
+msgid "Icon style:"
+msgstr "Pictogramstijl"
+
+#: src/interface.c:2774
+#, fuzzy
+msgid "Icon size:"
+msgstr "Pictogramgrootte"
+
+#: src/interface.c:2821
+msgid "<b>Appearance</b>"
+msgstr "<b>Uiterlijk</b>"
+
+#: src/interface.c:2826
+msgid "Toolbar"
+msgstr "Werkbalk"
+
+#: src/interface.c:2854
+msgid "Tab Width:"
+msgstr "Tabgrootte:"
+
+#: src/interface.c:2866
+msgid "Sets the default encoding for newly created files."
+msgstr "Stelt de standaard codering in voor nieuw aangemaakte bestanden"
+
+#: src/interface.c:2878
+msgid "The width in chars, which one tab character will take"
+msgstr "De breedte in tekens, die één tabteken inneemt"
+
+#: src/interface.c:2883
+msgid "Default encoding:"
+msgstr "Standaard codering:"
+
+#: src/interface.c:2889
+msgid "<b>New files</b>"
+msgstr "<b>Nieuwe bestanden</b>"
+
+#: src/interface.c:2908
+msgid "Strip trailing spaces"
+msgstr "Lege spaties aan regeleinde verwijderen"
+
+#: src/interface.c:2912
+msgid "Removes trailing spaces and tabs and the end of lines"
+msgstr "Verwijdert lege spaties aan regeleinden"
+
+#: src/interface.c:2915
+msgid "Ensure new line at file end"
+msgstr "Nieuwe regel aan einde van het bestand"
+
+#: src/interface.c:2919
+msgid "Ensures that at the end of the file is a new line"
+msgstr ""
+"Voegt aan het einde van het bestand een nieuwe regel in als er geen "
+"voorhanden is"
+
+#: src/interface.c:2922 src/keybindings.c:158
+msgid "Replace tabs by space"
+msgstr "Vervang tabs door spaties"
+
+#: src/interface.c:2929
+msgid "<b>Saving files</b>"
+msgstr "<b>Saving files</b>"
+
+#: src/interface.c:2950
+#, fuzzy
+msgid "Placement of new file tabs:"
+msgstr "Plaatsing van nieuwe bestanden tabs:"
+
+#: src/interface.c:2963
 msgid ""
 "Specifies the number of files which are stored in the Recent files list."
 msgstr ""
 "Specificeert het aantal bestanden dat opgeslagen zijn in de 'laatst geopende "
 "bestanden' lijst"
 
-#: src/interface.c:2380
-msgid "Placement of new file tabs: "
-msgstr "Plaatsing van nieuwe bestanden tabs:"
-
-#: src/interface.c:2384 src/interface.c:2640 src/interface.c:2650
-#: src/interface.c:2660
-msgid "Left"
-msgstr "Links"
-
-#: src/interface.c:2387
-msgid "New file tabs will be placed to the left of the tab list"
+#: src/interface.c:2976
+#, fuzzy
+msgid "File tabs will be placed on the left of the notebook"
 msgstr "Nieuwe bestanden tabs zullen links van de tab lijst worden geplaatst"
 
-#: src/interface.c:2396 src/interface.c:2641 src/interface.c:2651
-#: src/interface.c:2661
-msgid "Right"
-msgstr "Rechts"
-
-#: src/interface.c:2399
-msgid "New file tabs will be placed to the right of the tab list"
+#: src/interface.c:2984
+#, fuzzy
+msgid "File tabs will be placed on the right of the notebook"
 msgstr "Nieuwe bestanden tabs zullen rechts van de tab lijst worden geplaatst"
 
-#: src/interface.c:2408
-msgid "General"
-msgstr "Algemeen"
+#: src/interface.c:2988
+msgid "Recent files list length:"
+msgstr "Lengte 'laatst geopende bestanden' lijst:"
 
-#: src/interface.c:2430
-msgid "Show symbol list"
-msgstr "Toon symbolenlijst"
+#: src/interface.c:2996
+#, fuzzy
+msgid "<b>Misc.</b>"
+msgstr "<b>Weergave</b>"
 
-#: src/interface.c:2433 src/interface.c:2439
-msgid "Toggle the symbol list on and off"
-msgstr "Schakelt de symbolenlijst aan en uit"
+#: src/interface.c:3001 src/treeviews.c:111
+#, fuzzy
+msgid "Files"
+msgstr "_Bestand"
 
-#: src/interface.c:2436
-msgid "Show open files list"
-msgstr "Toon open bestanden lijst"
+#: src/interface.c:3023
+msgid "Invert syntax highlighting colours"
+msgstr ""
 
-#: src/interface.c:2442
-msgid "<b>Sidebar</b>"
-msgstr "<b>Zijbalk</b>"
+#: src/interface.c:3025
+msgid "Use white text on a black background."
+msgstr ""
 
-#: src/interface.c:2463
-msgid "Symbol list font"
-msgstr "Lettertype symbolenlijst"
+#: src/interface.c:3027
+msgid "Show indentation guides"
+msgstr "Inspringingsmarkeringen weergeven"
 
-#: src/interface.c:2470
-msgid "Message window font"
-msgstr "Lettertype berichtenvenster"
+#: src/interface.c:3030
+msgid "Shows small dotted lines to help you to use the right indentation."
+msgstr ""
+"Toont kleine puntjeslijnen om het gebruik van de juiste inspringing te "
+"vergemakkelijken"
 
-#: src/interface.c:2482
-msgid "Sets the font for the message window"
-msgstr "Stelt het lettertype in voor het berichtenvenster"
+#: src/interface.c:3033
+msgid "Show white space"
+msgstr "Lege spaties weergeven"
 
-#: src/interface.c:2490
-msgid "Sets the font for symbol list window"
-msgstr "Stelt het lettertype in voor de symbolenlijst"
+#: src/interface.c:3036
+msgid "Marks spaces with dots and tabs with arrows."
+msgstr "Markeert lege spaties met punten en tabs met pijlen."
 
-#: src/interface.c:2493
-msgid "Editor font"
-msgstr "Lettertype editor"
+#: src/interface.c:3039
+msgid "Show line endings"
+msgstr "Regeleinden weergeven"
 
-#: src/interface.c:2505
-msgid "Sets the font for the editors windows"
-msgstr "Stelt het lettertype in voor de editorvensters"
+#: src/interface.c:3042
+msgid "Show the line ending character"
+msgstr "Toont het regeleinde teken"
 
-#: src/interface.c:2507
-msgid "<b>Fonts</b>"
-msgstr "<b>Lettertypes</b>"
+#: src/interface.c:3045
+msgid "<b>Display</b>"
+msgstr "<b>Weergave</b>"
 
-#: src/interface.c:2528
-msgid "Long line marker"
+#: src/interface.c:3066
+#, fuzzy
+msgid "Long line marker:"
 msgstr "'Lange regel' marker"
 
-#: src/interface.c:2535
-msgid "Long line marker color"
+#: src/interface.c:3073
+#, fuzzy
+msgid "Long line marker color:"
 msgstr "Kleur 'lange regel' marker"
 
-#: src/interface.c:2548
+#: src/interface.c:3080
+#, fuzzy
+msgid "Type:"
+msgstr "Type"
+
+#: src/interface.c:3092
+msgid "Sets the color of the long line marker"
+msgstr "Stelt de kleur van de 'lange regel' marker in"
+
+#: src/interface.c:3093 src/dialogs.c:543 src/vte.c:546 src/vte.c:553
+msgid "Color Chooser"
+msgstr "Kleurkiezer"
+
+#: src/interface.c:3101
 msgid ""
 "The long line marker is a thin vertical line in the editor. It helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
@@ -776,15 +1079,11 @@ msgstr ""
 "om lange regels te markeren, of als een hint om de regel te breken. Voer een "
 "grotere waarde dan '0' in om de kolom te bepalen waar deze moet verschijnen."
 
-#: src/interface.c:2552
-msgid "Type"
-msgstr "Type"
-
-#: src/interface.c:2565
+#: src/interface.c:3111
 msgid "Line"
 msgstr "Lijn"
 
-#: src/interface.c:2568
+#: src/interface.c:3114
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)."
@@ -792,11 +1091,11 @@ msgstr ""
 "Geeft een verticale lijn weer in het bewerkingsvenster op de huidige "
 "cursorpositie (zie hieronder)."
 
-#: src/interface.c:2572
+#: src/interface.c:3118
 msgid "Background"
 msgstr "Achtergrond"
 
-#: src/interface.c:2575
+#: src/interface.c:3121
 msgid ""
 "The background colour of characters after the given cursor position (see "
 "below) changed to the colour set below. (This is recommended if you use "
@@ -806,250 +1105,48 @@ msgstr ""
 "veranderde naar de kleurinstelling hieronder. (Aangeraden indien u "
 "proportionele lettertypen gebruikt)"
 
-#: src/interface.c:2579
+#: src/interface.c:3125
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: src/interface.c:2590
-msgid "Sets the color of the long line marker"
-msgstr "Stelt de kleur van de 'lange regel' marker in"
-
-#: src/interface.c:2591 src/dialogs.c:498 src/prefs.c:976 src/prefs.c:983
-msgid "Color Chooser"
-msgstr "Kleurkiezer"
-
-#: src/interface.c:2593
+#: src/interface.c:3131
 msgid "<b>Long line marker</b>"
 msgstr "<b>Lange regel marker</b>"
 
-#: src/interface.c:2614 src/interface.c:3056
-msgid "Editor"
-msgstr "Editor"
-
-#: src/interface.c:2621
-msgid "Message window"
-msgstr "Berichtenvenster"
-
-#: src/interface.c:2628
-msgid "Sidebar"
-msgstr "Zijbalk"
-
-#: src/interface.c:2642 src/interface.c:2652 src/interface.c:2662
-msgid "Top"
-msgstr "Bovenaan"
-
-#: src/interface.c:2643 src/interface.c:2653 src/interface.c:2663
-msgid "Bottom"
-msgstr "Onderaan"
-
-#: src/interface.c:2665
-msgid "<b>Tab placement</b>"
-msgstr "<b>Tab plaatsing</b>"
-
-#: src/interface.c:2670
-msgid "Interface"
-msgstr "Interface"
-
-#: src/interface.c:2689
-msgid "Show Toolbar"
-msgstr "Werkbalk weergeven"
-
-#: src/interface.c:2714
-msgid "Show file operation buttons"
-msgstr "Aktieknoppen voor bestanden weergeven"
-
-#: src/interface.c:2718
-msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
-msgstr ""
-"Toont de knoppen Nieuw, Openen, Sluiten, Opslaan en Herladen in de werkbalk"
-
-#: src/interface.c:2721
-msgid "Show Compile and Run"
-msgstr "Compileer en uitvoeren weergeven"
-
-#: src/interface.c:2725
-msgid "Display the Compile and Run buttons in the toolbar"
-msgstr "Toont de knoppen Compileer en Uitvoeren in de werkbalk"
-
-#: src/interface.c:2728
-msgid "Show Colour Chooser button"
-msgstr "Kleurkiezer knop weergeven"
-
-#: src/interface.c:2732
-msgid "Display the Colour Chooser button in the toolbar"
-msgstr "Toont de knop Kleurkiezer in de werkbalk"
-
-#: src/interface.c:2735
-msgid "Show Zoom In and Zoom Out"
-msgstr "Inzoomen en Uitzoomen weergeven"
-
-#: src/interface.c:2739
-msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
-msgstr "Toont de knoppen Inzoomen en Uitzoomen in de werkbalk"
-
-#: src/interface.c:2742
-msgid "Show Redo and Undo buttons"
-msgstr "Knoppen Herdoen en Ongedaan maken weergeven"
-
-#: src/interface.c:2746
-msgid "Display the Redo and Undo buttons in the toolbar"
-msgstr "Toont de knoppen Herdoen en Ongedaan maken in de werkbalk"
-
-#: src/interface.c:2749
-msgid "Show Search field"
-msgstr "Zoekveld weergeven"
-
-#: src/interface.c:2753
-msgid "Display the search field and button in the toolbar"
-msgstr "Toont het veld en de knop zoeken in de werkbalk"
-
-#: src/interface.c:2756
-msgid "Show Goto line field"
-msgstr "Veld 'Ga naar regelnummer' weergeven"
-
-#: src/interface.c:2760
-msgid "Display the line number field and button in the toolbar"
-msgstr "Toont het veld en de knop 'Ga naar regelnummer' in de werkbalk"
-
-#: src/interface.c:2763
-msgid "<b>Items</b>"
-msgstr "<b>Items</b>"
-
-#: src/interface.c:2824
-msgid "Icon style"
-msgstr "Pictogramstijl"
-
-#: src/interface.c:2831
-msgid "Icon size"
-msgstr "Pictogramgrootte"
-
-#: src/interface.c:2838
-msgid "<b>Appearance</b>"
-msgstr "<b>Uiterlijk</b>"
-
-#: src/interface.c:2843
-msgid "Toolbar"
-msgstr "Werkbalk"
-
-#: src/interface.c:2871
-msgid "Tab Width:"
-msgstr "Tabgrootte:"
-
-#: src/interface.c:2878
-msgid "Default encoding:"
-msgstr "Standaard codering:"
-
-#: src/interface.c:2889
-msgid "Sets the default encoding for newly created files."
-msgstr "Stelt de standaard codering in voor nieuw aangemaakte bestanden"
-
-#: src/interface.c:2901
-msgid "The width in chars, which one tab character will take"
-msgstr "De breedte in tekens, die één tabteken inneemt"
-
-#: src/interface.c:2906
-msgid "<b>New files</b>"
-msgstr "<b>Nieuwe bestanden</b>"
-
-#: src/interface.c:2925
-msgid "Strip trailing spaces"
-msgstr "Lege spaties aan regeleinde verwijderen"
-
-#: src/interface.c:2929
-msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr "Verwijdert lege spaties aan regeleinden"
-
-#: src/interface.c:2932
-msgid "Ensure new line at file end"
-msgstr "Nieuwe regel aan einde van het bestand"
-
-#: src/interface.c:2936
-msgid "Ensures that at the end of the file is a new line"
-msgstr ""
-"Voegt aan het einde van het bestand een nieuwe regel in als er geen "
-"voorhanden is"
-
-#: src/interface.c:2939 src/keybindings.c:167
-msgid "Replace tabs by space"
-msgstr "Vervang tabs door spaties"
-
-#: src/interface.c:2946
-msgid "<b>Saving files</b>"
-msgstr "<b>Saving files</b>"
-
-#: src/interface.c:2965
-msgid "Show indentation guides"
-msgstr "Inspringingsmarkeringen weergeven"
-
-#: src/interface.c:2968
-msgid "Shows small dotted lines to help you to use the right indentation."
-msgstr ""
-"Toont kleine puntjeslijnen om het gebruik van de juiste inspringing te "
-"vergemakkelijken"
-
-#: src/interface.c:2971
-msgid "Show white space"
-msgstr "Lege spaties weergeven"
-
-#: src/interface.c:2974
-msgid "Marks spaces with dots and tabs with arrows."
-msgstr "Markeert lege spaties met punten en tabs met pijlen."
-
-#: src/interface.c:2977
-msgid "Show line endings"
-msgstr "Regeleinden weergeven"
-
-#: src/interface.c:2980
-msgid "Show the line ending character"
-msgstr "Toont het regeleinde teken"
-
-#: src/interface.c:2983
-msgid "<b>Display</b>"
-msgstr "<b>Weergave</b>"
-
-#: src/interface.c:3002
+#: src/interface.c:3150
 msgid "Auto indentation"
 msgstr "Auto inspringing"
 
-#: src/interface.c:3005
+#: src/interface.c:3153
 msgid "Add the same indentation as the previous line after pressing enter"
 msgstr ""
 "Voegt dezelfde inspringing van de vorige regel toe na het indrukken van enter"
 
-#: src/interface.c:3007
+#: src/interface.c:3155
 msgid "Line wrapping"
 msgstr "Regelterugloop"
 
-#: src/interface.c:3012
-msgid "Construct auto completion"
-msgstr "Autovervollediging van constructies"
-
-#: src/interface.c:3015
-msgid "Automatic completion of often used constructs like if and for"
-msgstr ""
-"Automatisch vervolledigen van veel gebruikte constructies zoals if en for"
-
-#: src/interface.c:3018
-msgid "XML tag auto completion"
-msgstr "XML-tag autovervollediging"
-
-#: src/interface.c:3021
-msgid "Automatic completion of open XML tags (includes HTML tags)"
-msgstr "Automatische voltooiing van open XML-tags (HTML-tags inbegrepen)"
-
-#: src/interface.c:3024
+#: src/interface.c:3160
 msgid "Enable folding"
 msgstr "Invouwen activeren"
 
-#: src/interface.c:3027
+#: src/interface.c:3163
 msgid "Whether to enable folding the code"
 msgstr "Of invouwen van code moet worden geactiveerd"
 
-#: src/interface.c:3030
+#: src/interface.c:3166
+msgid "Unfold all children of a fold point"
+msgstr ""
+
+#: src/interface.c:3169
+msgid "Unfold all children of a fold point when unfolding it."
+msgstr ""
+
+#: src/interface.c:3172
 msgid "Use indicators to show compile errors"
 msgstr "Gebruik markeringen om compile fouten weer te geven"
 
-#: src/interface.c:3033
+#: src/interface.c:3175
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error."
@@ -1058,43 +1155,75 @@ msgstr ""
 "regels te markeren waarin de compiler een waarschuwing of een fout heeft "
 "gevonden."
 
-#: src/interface.c:3040
-msgid "Rows of auto completion list:"
-msgstr "Aantal regels voor autovervolledigingslijst:"
-
-#: src/interface.c:3048
-msgid "Number of rows to display in the auto completion list."
-msgstr "Weer te geven aantal regels in de autovoltooiingslijst."
-
-#: src/interface.c:3051
+#: src/interface.c:3178
 msgid "<b>Features</b>"
 msgstr "<b>Functies</b>"
 
-#: src/interface.c:3064
-msgid ""
-"Enter here the paths to the make tool and the compiler\n"
-"(tools you do not need can be let blank)"
+#: src/interface.c:3197
+#, fuzzy
+msgid "Construct autocompletion"
+msgstr "Autovervollediging van constructies"
+
+#: src/interface.c:3200
+msgid "Automatic completion of often used constructs like if and for"
+msgstr ""
+"Automatisch vervolledigen van veel gebruikte constructies zoals if en for"
+
+#: src/interface.c:3203
+#, fuzzy
+msgid "XML tag autocompletion"
+msgstr "XML-tag autovervollediging"
+
+#: src/interface.c:3206
+msgid "Automatic completion of open XML tags (includes HTML tags)"
+msgstr "Automatische voltooiing van open XML-tags (HTML-tags inbegrepen)"
+
+#: src/interface.c:3213
+#, fuzzy
+msgid "Rows of autocompletion list:"
+msgstr "Aantal regels voor autovervolledigingslijst:"
+
+#: src/interface.c:3222
+#, fuzzy
+msgid "Number of rows to display in the autocompletion list."
+msgstr "Weer te geven aantal regels in de autovoltooiingslijst."
+
+#: src/interface.c:3225
+#, fuzzy
+msgid "<b>Autocompletion</b>"
+msgstr "<b>Locatie:</b>"
+
+#: src/interface.c:3230
+msgid "Editor"
+msgstr "Editor"
+
+#: src/interface.c:3248
+#, fuzzy
+msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Voer hier de paden in voor de hulpprogramma's 'make' en 'compiler'\n"
 "(hulpprogramma's die u niet nodig heeft kunt u leeg laten)"
 
-#: src/interface.c:3075
-msgid "Make"
+#: src/interface.c:3260
+#, fuzzy
+msgid "Make:"
 msgstr "Make"
 
-#: src/interface.c:3082 src/prefs.c:1062 src/vte.c:166
-msgid "Terminal"
+#: src/interface.c:3267
+#, fuzzy
+msgid "Terminal:"
 msgstr "Terminal"
 
-#: src/interface.c:3089
-msgid "Browser"
+#: src/interface.c:3274
+#, fuzzy
+msgid "Browser:"
 msgstr "Browser"
 
-#: src/interface.c:3101
+#: src/interface.c:3286
 msgid "Path and options for the make tool"
 msgstr "Pad en optie's voor het hulpprogramma 'make'"
 
-#: src/interface.c:3108
+#: src/interface.c:3293
 msgid ""
 "A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
 "-e argument)"
@@ -1102,207 +1231,202 @@ msgstr ""
 "Een terminalemulator zoals xterm, gnome-terminal of konsole (zou het -e "
 "argument moeten accepteren"
 
-#: src/interface.c:3115
+#: src/interface.c:3300
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Pad (en mogelijke bijkomende argumenten)"
 
-#: src/interface.c:3147
-msgid "Print command"
+#: src/interface.c:3332
+#, fuzzy
+msgid "Print command:"
 msgstr "Pint commando"
 
-#: src/interface.c:3159
+#: src/interface.c:3344
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)."
 msgstr ""
 "Pad naar het commando om bestanden af te drukken (gebruik %f voor de "
 "bestandsnaam)"
 
-#: src/interface.c:3171
-msgid "Grep"
+#: src/interface.c:3356
+#, fuzzy
+msgid "Grep:"
 msgstr "Grep"
 
-#: src/interface.c:3194
+#: src/interface.c:3379
+#, fuzzy
+msgid "<b>Tool paths</b>"
+msgstr "<b>Lettertypes</b>"
+
+#: src/interface.c:3384
 msgid "Tools"
 msgstr "Hulpprogramma's"
 
-#: src/interface.c:3202
+#: src/interface.c:3402
+#, fuzzy
 msgid ""
-"Specify here information you want to use in templates.\n"
-"See documentation if you don't know how templates work."
+"Set the information to be used in templates. See the documentation for "
+"details."
 msgstr ""
 "Specificeer hier de informatie die u wenst te gebruiken in sjablonen.\n"
 "Lees de documentatie indien u niet weet hoe sjablonen werken."
 
-#: src/interface.c:3218
+#: src/interface.c:3420
 msgid "email address of the developer"
 msgstr "E-mailadres van de ontwikkelaar"
 
-#: src/interface.c:3225
+#: src/interface.c:3427
 msgid "Initials of the developer name"
 msgstr "Initialen van de ontwikkelaar"
 
-#: src/interface.c:3227
-msgid "Initial Version"
+#: src/interface.c:3429
+#, fuzzy
+msgid "Initial Version:"
 msgstr "Initiële versie"
 
-#: src/interface.c:3239
+#: src/interface.c:3441
 msgid "Version number, which a new file initially has"
 msgstr "Versienummer, welke een nieuw bestand initieel heeft"
 
-#: src/interface.c:3246
+#: src/interface.c:3448
 msgid "Company name"
 msgstr "Bedrijfsnaam"
 
-#: src/interface.c:3248
-msgid "Developer"
+#: src/interface.c:3450
+#, fuzzy
+msgid "Developer:"
 msgstr "Ontwikkelaar"
 
-#: src/interface.c:3255
-msgid "Company"
+#: src/interface.c:3457
+#, fuzzy
+msgid "Company:"
 msgstr "Bedrijf"
 
-#: src/interface.c:3262
-msgid "Mail address"
+#: src/interface.c:3464
+#, fuzzy
+msgid "Mail address:"
 msgstr "E-mailadres"
 
-#: src/interface.c:3269
-msgid "Initials"
+#: src/interface.c:3471
+#, fuzzy
+msgid "Initials:"
 msgstr "Initialen"
 
-#: src/interface.c:3281
+#: src/interface.c:3483
 msgid "The name of the developer"
 msgstr "De naam van de ontwikkelaar"
 
-#: src/interface.c:3283
+#: src/interface.c:3485
+#, fuzzy
 msgid ""
-"Notice: For all changes you make here,\n"
-"you need to restart Geany to take effect."
+"<i>Notice: For all changes you make here to take effect, you need to restart "
+"Geany.</i>"
 msgstr ""
 "Informatie: Voor alle wijzigingen die u hier maakt,\n"
 "dient u Geany te herstarten om deze te activeren."
 
-#: src/interface.c:3287
+#: src/interface.c:3492
+#, fuzzy
+msgid "<b>Template data</b>"
+msgstr "<b>Tab plaatsing</b>"
+
+#: src/interface.c:3497
 msgid "Templates"
 msgstr "Sjablonen"
 
-#: src/interface.c:3295
+#: src/interface.c:3515
+#, fuzzy
 msgid ""
-"Here you can change keyboard shortcuts for various actions. Just double "
-"click on a action or select one and press the Change button to enter a new "
-"shortcut. You can also edit the string representation of the shortcut "
-"directly."
+"Here you can change keyboard shortcuts for various actions. Select one and "
+"press the Change button to enter a new shortcut, or double click on an "
+"action to edit the string representation of the shortcut directly."
 msgstr ""
 "Hier kunt u sneltoetsen wijzigen voor verscheidene acties. Dubbelklik op of "
 "selecteer een actie en druk op de knop 'Wijzigen'om een nieuwe snelkoppeling "
 "in te geven. U kunt ook de stringrepresentatie rechtstreeks wijzigen."
 
-#: src/interface.c:3318
+#: src/interface.c:3538
 msgid "Change"
 msgstr "Wijzigen"
 
-#: src/interface.c:3322
+#: src/interface.c:3542
+#, fuzzy
+msgid "<b>Keyboard shortcuts</b>"
+msgstr "Sneltoetsen"
+
+#: src/interface.c:3547
 msgid "Keybindings"
 msgstr "Sneltoetsen"
 
-#: src/callbacks.c:188 src/callbacks.c:204
+#: src/callbacks.c:173
 msgid "Do you really want to quit?"
 msgstr "Wilt u Geany werkelijk afsluiten?"
 
-#: src/callbacks.c:507
+#: src/callbacks.c:491
 msgid "Any unsaved changes will be lost."
 msgstr "Niet opgeslagen wijzigingen zullen verloren gaan."
 
-#: src/callbacks.c:508
+#: src/callbacks.c:492
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Bent u zeker om '%s' te herladen?"
 
-#: src/callbacks.c:897
+#: src/callbacks.c:877
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Het bestand '%s' bestaat reeds. Wenst u deze te overschrijven?"
 
-#: src/callbacks.c:1314
-#, c-format
-msgid "No matches found for '%s'."
-msgstr "Geen overeenkomsten gevonden voor '%s'"
-
-#: src/callbacks.c:1360
-#, c-format
+#: src/callbacks.c:1247
+#, fuzzy, c-format
 msgid "Declaration of \"%s()\" not found"
-msgstr "Declaratie van \"%s()\" niet gevonden"
+msgstr "Definitie van \"%s()\" niet gevonden"
 
-#: src/callbacks.c:1362
-#, c-format
+#: src/callbacks.c:1249
+#, fuzzy, c-format
 msgid "Definition of \"%s()\" not found"
 msgstr "Definitie van \"%s()\" niet gevonden"
 
-#: src/callbacks.c:1621
-msgid "Enter custom options for the make tool"
-msgstr "Aangepaste opties voor het hulpprogramma 'make'"
-
-#: src/callbacks.c:1622
-msgid ""
-"Enter custom options here, all entered text is passed to the make command."
-msgstr ""
-"Voer hier de aangepaste opties in, alle ingevoerde tekst wordt aan het "
-"commando 'make' overgegeven."
-
-#: src/callbacks.c:1677
-msgid "Failed to execute the view program"
-msgstr "Kon het weergaveprogramma niet uitvoeren"
-
-#: src/callbacks.c:1695
-msgid "Failed to execute the terminal program"
-msgstr "Kon het terminalprogramma niet uitvoeren"
-
-#. initialize the dialog
-#: src/callbacks.c:1920 src/dialogs.c:72
-msgid "Open File"
-msgstr "Bestand openen"
-
-#: src/callbacks.c:1969 src/callbacks.c:2014 src/callbacks.c:2054
-#: src/callbacks.c:2112
+#: src/callbacks.c:1454 src/callbacks.c:1499
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Gelieve het bestandstype voor het huidige bestand in te stellen vooraleer "
 "deze functie te gebruiken."
 
-#: src/callbacks.c:2182 src/ui_utils.c:533
+#: src/callbacks.c:1615 src/ui_utils.c:561
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: src/callbacks.c:2184 src/ui_utils.c:534
+#: src/callbacks.c:1617 src/ui_utils.c:562
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: src/callbacks.c:2186 src/ui_utils.c:535
+#: src/callbacks.c:1619 src/ui_utils.c:563
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: src/callbacks.c:2188 src/ui_utils.c:544
+#: src/callbacks.c:1621 src/ui_utils.c:572
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: src/callbacks.c:2190 src/ui_utils.c:545
+#: src/callbacks.c:1623 src/ui_utils.c:573
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: src/callbacks.c:2192 src/ui_utils.c:546
+#: src/callbacks.c:1625 src/ui_utils.c:574
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: src/callbacks.c:2194 src/ui_utils.c:555 src/ui_utils.c:559
-#: src/ui_utils.c:563 src/ui_utils.c:567
-msgid "Use custom date format"
+#: src/callbacks.c:1627 src/ui_utils.c:583
+#, fuzzy
+msgid "Use Custom Date Format"
 msgstr "Gebruik het standaard datumformaat"
 
-#: src/callbacks.c:2201
-msgid "Custom date format"
+#: src/callbacks.c:1638
+#, fuzzy
+msgid "Custom Date Format"
 msgstr "Standaard datumformaat"
 
-#: src/callbacks.c:2202
+#: src/callbacks.c:1639
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function. See \"man "
@@ -1312,17 +1436,26 @@ msgstr ""
 "het even welke conversie specifieerder welke kan gebruikt worden met de ANSI "
 "C strftime functie. Lees \"man strftime\" voor meer informatie."
 
-#: src/callbacks.c:2221
+#: src/callbacks.c:1659
 msgid "Date format string could not be converted (possibly too long)."
 msgstr ""
 "Datumformaatstring kon niet worden geconverteerd (waarschijlijk te lang)."
+
+#: src/callbacks.c:2047
+msgid "No more message items."
+msgstr ""
 
 #: src/support.c:90 src/support.c:114
 #, c-format
 msgid "Couldn't find pixmap file: %s"
 msgstr "Kon pixmap bestand %s niet vinden"
 
-#: src/dialogs.c:77
+#. initialize the dialog
+#: src/dialogs.c:74 src/prefs.c:1017
+msgid "Open File"
+msgstr "Bestand openen"
+
+#: src/dialogs.c:79
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
@@ -1330,19 +1463,45 @@ msgstr ""
 "Opent het bestand in alleen lezen modus. Indien u meer dan één bestand kiest "
 "om te openen, zullen alle bestanden als alleen lezen worden geopend."
 
-#: src/dialogs.c:113
-msgid "Detect by file extension  "
+#: src/dialogs.c:112
+#, fuzzy
+msgid "Detect by file extension"
 msgstr "Herkenning door bestandsextensie"
 
-#: src/dialogs.c:175
+#: src/dialogs.c:123
+#, fuzzy
+msgid "Detect from file"
+msgstr "Map selecteren"
+
+#. line 1 with checkbox and encoding combo
+#: src/dialogs.c:169
 msgid "Show _hidden files"
 msgstr "_Verborgen bestanden weergeven"
 
+#: src/dialogs.c:181
+#, fuzzy
+msgid "Set encoding:"
+msgstr "_Codering instellen"
+
 #: src/dialogs.c:191
+#, fuzzy
+msgid ""
+"Explicitly defines an encoding for the file, if it would not be detected. "
+"This is useful when you know that the encoding of a file cannot be detected "
+"correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"encoding."
+msgstr ""
+"Definieert uitdrukkelijk een bestandstype voor het bestand, indien het niet "
+"wordt herkend via de bestandsextensie.\n"
+"Notitie: indien u meerdere bestanden kiest, worden deze allen geopend met "
+"het gekozen bestandstype."
+
+#: src/dialogs.c:211
 msgid "Set filetype:"
 msgstr "Bestandstype instellen:"
 
-#: src/dialogs.c:194
+#: src/dialogs.c:221
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -1354,133 +1513,100 @@ msgstr ""
 "Notitie: indien u meerdere bestanden kiest, worden deze allen geopend met "
 "het gekozen bestandstype."
 
-#: src/dialogs.c:234
+#: src/dialogs.c:260
 msgid "Save File"
 msgstr "Bestand opslaan"
 
-#: src/dialogs.c:344
-#, c-format
-msgid ""
-"The file '%s' is not saved.\n"
-"Do you want to save it before closing?"
-msgstr ""
-"Het bestand '%s' werd niet opgeslagen.\n"
-"Wenst u het op te slaan vooraleer af te sluiten?"
+#: src/dialogs.c:352
+#, fuzzy, c-format
+msgid "The file '%s' is not saved."
+msgstr "Het bestand \"%s\" is niet geldig %s."
 
-#: src/dialogs.c:349
-msgid ""
-"The file is not saved.\n"
-"Do you want to save it before closing?"
+#: src/dialogs.c:362
+#, fuzzy
+msgid "Do you want to save it before closing?"
 msgstr ""
 "Het bestand werd niet opgeslagen.\n"
 "Wenst u het op te slaan vooraleer af te sluiten?"
 
-#: src/dialogs.c:360
+#: src/dialogs.c:365
 msgid "_Don't save"
 msgstr "_Niet opslaan"
 
-#: src/dialogs.c:415
+#: src/dialogs.c:409
 msgid "Choose font"
 msgstr "Lettertype kiezen"
 
-#: src/dialogs.c:454
+#: src/dialogs.c:447
 msgid "Word Count"
 msgstr "Woorden tellen"
 
-#: src/dialogs.c:463
+#: src/dialogs.c:456
 msgid "selection"
 msgstr "Selectie"
 
-#: src/dialogs.c:471
+#: src/dialogs.c:462
 msgid "whole document"
 msgstr "Volledig document"
 
-#: src/dialogs.c:473
-#, c-format
-msgid ""
-"Range:\t\t%s\n"
-"\n"
-"Lines:\t\t%d\n"
-"Words:\t\t%d\n"
-"Characters:\t%d\n"
-msgstr ""
-"Bereik:\t\t%s\n"
-"\n"
-"Regels:\t\t%d\n"
-"Woorden:\t\t%d\n"
-"Tekens:\t%d\n"
+#: src/dialogs.c:471
+#, fuzzy
+msgid "Range:"
+msgstr "Wijzigen"
 
-#: src/dialogs.c:569
-msgid "Enter the line you want to go to"
+#: src/dialogs.c:483
+#, fuzzy
+msgid "Lines:"
+msgstr "Lijn"
+
+#: src/dialogs.c:497
+msgid "Words:"
+msgstr ""
+
+#: src/dialogs.c:511
+#, fuzzy
+msgid "Characters:"
+msgstr "Hoofdstuk"
+
+#: src/dialogs.c:610 src/keybindings.c:144
+msgid "Go to line"
+msgstr "Ga naar regel"
+
+#: src/dialogs.c:616
+#, fuzzy
+msgid "Enter the line you want to go to:"
 msgstr "Voer het regelnummer in waarnaar u wilt springen"
 
 #. arguments
-#: src/dialogs.c:594 src/ui_utils.c:978
+#: src/dialogs.c:641 src/build.c:1068
 msgid "Set Arguments"
 msgstr "Argumenten instellen"
 
-#: src/dialogs.c:599
-msgid ""
-"Set programs and options for compilation and viewing (La)TeX files.\n"
-"The filename is appended automatically at the end.\n"
+#: src/dialogs.c:647
+#, fuzzy
+msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr ""
 "Stelt programma's en opties in voor compilatie en weergave van (La)TeX "
 "bestanden.\n"
 "De bestandsnaam wordt automatisch aan het einde toegevoegd.\n"
 
-#: src/dialogs.c:607
-msgid ""
-"Enter here the (La)TeX command (for DVI creation) and some useful options."
+#: src/dialogs.c:658
+msgid "DVI creation:"
 msgstr ""
-"Voer hier het (La)TeX commando en nuttige opties in voor het aanmaken van "
-"DVI."
 
-#: src/dialogs.c:628
-msgid ""
-"Enter here the (La)TeX command (for PDF creation) and some useful options."
+#: src/dialogs.c:677
+msgid "PDF creation:"
 msgstr ""
-"Voer hier het (La)TeX commando en nuttige opties in voor het aanmaken van "
-"PDF."
 
-#: src/dialogs.c:649
-msgid ""
-"Enter here the (La)TeX command (for DVI preview) and some useful options."
+#: src/dialogs.c:696
+msgid "DVI preview:"
 msgstr ""
-"Voer hier het (La)TeX commando en nuttige opties in voor het weergeven van "
-"DVI."
-
-#: src/dialogs.c:670
-msgid ""
-"Enter here the (La)TeX command (for PDF preview) and some useful options."
-msgstr ""
-"Voer hier het (La)TeX commando en nuttige opties in voor het weergeven van "
-"PDF."
-
-#: src/dialogs.c:708
-msgid "Set Includes and Arguments"
-msgstr "Programma parameters instellen"
 
 #: src/dialogs.c:715
-msgid "Set the commands for building and running programs."
-msgstr "Stel de commandos in voor het bouwen en draaien van programma's."
+msgid "PDF preview:"
+msgstr ""
 
-#: src/dialogs.c:722
-msgid " commands"
-msgstr " commandos"
-
-#: src/dialogs.c:735
-msgid "Compile:"
-msgstr "Compileer:"
-
-#: src/dialogs.c:756
-msgid "Build:"
-msgstr "Bouwen:"
-
-#: src/dialogs.c:777 src/dialogs.c:1048
-msgid "Execute:"
-msgstr "Uitvoeren:"
-
-#: src/dialogs.c:795
+#: src/dialogs.c:731 src/dialogs.c:846
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -1490,7 +1616,31 @@ msgstr ""
 "%e zal worden vervangen door de bestandsnaam zonder extensie, bijv "
 "test_bestand"
 
-#: src/dialogs.c:842
+#: src/dialogs.c:758
+msgid "Set Includes and Arguments"
+msgstr "Programma parameters instellen"
+
+#: src/dialogs.c:764
+msgid "Set the commands for building and running programs."
+msgstr "Stel de commandos in voor het bouwen en draaien van programma's."
+
+#: src/dialogs.c:771
+msgid " commands"
+msgstr " commandos"
+
+#: src/dialogs.c:786
+msgid "Compile:"
+msgstr "Compileer:"
+
+#: src/dialogs.c:807
+msgid "Build:"
+msgstr "Bouwen:"
+
+#: src/dialogs.c:828 src/dialogs.c:1099
+msgid "Execute:"
+msgstr "Uitvoeren:"
+
+#: src/dialogs.c:893
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -1498,116 +1648,129 @@ msgstr ""
 "Er is een fout opgetreden of er kon geen bestandsinformatie worden opgehaald "
 "(bijv van een nieuw bestand)."
 
-#: src/dialogs.c:861 src/dialogs.c:862 src/dialogs.c:863 src/dialogs.c:869
-#: src/dialogs.c:870 src/dialogs.c:871 src/utils.c:607 src/ui_utils.c:104
-#: src/ui_utils.c:106
+#: src/dialogs.c:912 src/dialogs.c:913 src/dialogs.c:914 src/dialogs.c:920
+#: src/dialogs.c:921 src/dialogs.c:922 src/utils.c:503 src/utils.c:557
+#: src/ui_utils.c:122 src/ui_utils.c:124
 msgid "unknown"
 msgstr "Ongekend"
 
-#: src/dialogs.c:875
+#: src/dialogs.c:926
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: src/dialogs.c:903
+#: src/dialogs.c:954
 msgid "<b>Type:</b>"
 msgstr "<b>Bestandstype:</b>"
 
-#: src/dialogs.c:916
+#: src/dialogs.c:967
 msgid "<b>Size:</b>"
 msgstr "<b>Grootte:</b>"
 
-#: src/dialogs.c:931
+#: src/dialogs.c:982
 msgid "<b>Location:</b>"
 msgstr "<b>Locatie:</b>"
 
-#: src/dialogs.c:944
+#: src/dialogs.c:995
 msgid "<b>Read-only:</b>"
 msgstr "<b>Alleen lezen:</b>"
 
-#: src/dialogs.c:951
+#: src/dialogs.c:1002
 msgid "(only inside Geany)"
 msgstr "(enkel binnenin Geany)"
 
-#: src/dialogs.c:960
+#: src/dialogs.c:1011
 msgid "<b>Encoding:</b>"
 msgstr "<b>Codering:</b>"
 
-#: src/dialogs.c:969 src/ui_utils.c:105
+#: src/dialogs.c:1020 src/ui_utils.c:123
 msgid "(with BOM)"
 msgstr "(met BOM)"
 
-#: src/dialogs.c:969 src/ui_utils.c:105
+#: src/dialogs.c:1020 src/ui_utils.c:123
 msgid "(without BOM)"
 msgstr "(zonder BOM"
 
-#: src/dialogs.c:979
+#: src/dialogs.c:1030
 msgid "<b>Modified:</b>"
 msgstr "<b>Gemodifieert:</b>"
 
-#: src/dialogs.c:992
+#: src/dialogs.c:1043
 msgid "<b>Changed:</b>"
 msgstr "<b>Gewijzigd:</b>"
 
-#: src/dialogs.c:1005
+#: src/dialogs.c:1056
 msgid "<b>Accessed:</b>"
 msgstr "<b>Toegang tot:</b"
 
+#: src/dialogs.c:1077
+#, fuzzy
+msgid "<b>Permissions:</b>"
+msgstr "<b>Items</b>"
+
 #. Header
-#: src/dialogs.c:1034
+#: src/dialogs.c:1085
 msgid "Read:"
 msgstr "Lezen:"
 
-#: src/dialogs.c:1041
+#: src/dialogs.c:1092
 msgid "Write:"
 msgstr "Schrijven:"
 
 #. Owner
-#: src/dialogs.c:1056
+#: src/dialogs.c:1107
 msgid "Owner:"
 msgstr "Eigenaar:"
 
 #. Group
-#: src/dialogs.c:1092
+#: src/dialogs.c:1143
 msgid "Group:"
 msgstr "Groep:"
 
 #. Other
-#: src/dialogs.c:1128
+#: src/dialogs.c:1179
 msgid "Other:"
 msgstr "Andere:"
 
-#: src/dialogs.c:1249
+#: src/dialogs.c:1300
 msgid "Keyboard shortcuts"
 msgstr "Sneltoetsen"
 
-#: src/dialogs.c:1256
+#: src/dialogs.c:1309
 msgid "The following keyboard shortcuts are defined:"
 msgstr "Volgende sneltoetsen zijn gedefinieert:"
 
-#: src/document.c:336
+#: src/document.c:339
 #, c-format
 msgid "File %s closed."
 msgstr "Bestand %s gesloten."
 
-#: src/document.c:411
+#: src/document.c:420
 msgid "New file opened."
 msgstr "Nieuw bestand geopend."
 
-#: src/document.c:564
+#: src/document.c:569
 msgid "Invalid filename"
 msgstr "Ongeldige bestandsnaam"
 
-#: src/document.c:589
+#: src/document.c:594 src/document.c:800
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Kon bestand %s niet openen (%s)"
 
-#: src/document.c:614
+#: src/document.c:618
+#, c-format
+msgid ""
+"The file \"%s\" could not opened properly and probably was truncated. Be "
+"aware that saving it can cause data loss.\n"
+"The file was set to read-only."
+msgstr ""
+
+#: src/document.c:641
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Het bestand \"%s\" is niet geldig %s."
 
-#: src/document.c:625
+#: src/document.c:652
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -1616,25 +1779,25 @@ msgstr ""
 "Het bestand \"%s\" lijkt niet op een tekstbestand of een de bestandscodering "
 "is niet ondersteund."
 
-#: src/document.c:685
+#: src/document.c:726
 #, c-format
 msgid "File %s reloaded."
 msgstr "Bestand %s herladen."
 
-#: src/document.c:687
+#: src/document.c:728
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Bestand %s geopend (%d%s)."
 
-#: src/document.c:689
+#: src/document.c:730
 msgid ", read-only"
 msgstr ", alleen lezen"
 
-#: src/document.c:729 src/document.c:809
+#: src/document.c:828 src/document.c:909
 msgid "Error saving file."
 msgstr "Fout bij het opslaan van het bestand."
 
-#: src/document.c:773
+#: src/document.c:873
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -1645,43 +1808,47 @@ msgstr ""
 "8 in \"%s\". Het bestand blijft niet opgeslagen.\n"
 "Foutmelding: %s\n"
 
-#: src/document.c:797
+#: src/document.c:897
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Fout bij het opslaan van het bestand (%s)."
 
-#: src/document.c:834
+#: src/document.c:940
 #, c-format
 msgid "File %s saved."
 msgstr "Bestand %s opgeslagen."
 
-#: src/document.c:847
+#: src/document.c:988 src/document.c:1040 src/document.c:1048
 #, c-format
-msgid ""
-"The document has been searched completely but the match \"%s\" was not "
-"found. Wrap search around the document?"
+msgid "\"%s\" was not found."
 msgstr ""
-"Het document is volledig doorzocht maar de overeenkomst \"%s\" werd niet "
-"gevonden. Bij het begin van het document starten?"
 
-#: src/document.c:1028 src/document.c:1035
-#, c-format
-msgid "Replaced %d occurrences of \"%s\" with \"%s\"."
+#: src/document.c:1048
+msgid "Wrap search and find again?"
+msgstr ""
+
+#: src/document.c:1127 src/search.c:1188
+msgid "No matches found."
+msgstr "Geen overeenkomsten gevonden."
+
+#: src/document.c:1137 src/document.c:1144
+#, fuzzy, c-format
+msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr "Verving %d keer \"%s\" door\"%s\"."
 
-#: src/document.c:1200
+#: src/document.c:1398
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: src/document.c:1201
+#: src/document.c:1399
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: src/document.c:1203
+#: src/document.c:1401
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: src/document.c:1364
+#: src/document.c:1497
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -1692,21 +1859,21 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/document.c:1373
+#: src/document.c:1506
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %d)."
 msgstr "Afdrukken van \"%s\" mislukt (foutcode: %d)."
 
-#: src/document.c:1378
+#: src/document.c:1511
 #, c-format
 msgid "File %s printed."
 msgstr "Bestand %s afgedrukt."
 
-#: src/utils.c:508
+#: src/utils.c:356
 msgid "Do you want to reload it?"
 msgstr "Wenst u het opnieuw te laden?"
 
-#: src/utils.c:509
+#: src/utils.c:357
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -1715,7 +1882,7 @@ msgstr ""
 "Het bestand '%s' op de schijf is recenter als\n"
 "de huidig geopende versie."
 
-#: src/ui_utils.c:96
+#: src/ui_utils.c:114
 #, c-format
 msgid ""
 "%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. "
@@ -1724,248 +1891,162 @@ msgstr ""
 "%c  Regel: % 4d kolom: % 3d  selectie: % 4d   %s      modus: %s%s      act. "
 "functie: %s      codering: %s %s     bestandstype: %s"
 
-#: src/ui_utils.c:100
+#: src/ui_utils.c:118
 msgid "OVR"
 msgstr "OVR"
 
-#: src/ui_utils.c:100
+#: src/ui_utils.c:118
 msgid "INS"
 msgstr "DEL"
 
-#: src/ui_utils.c:126 src/geany.h:49
-msgid "untitled"
-msgstr "naamloos"
-
-#: src/ui_utils.c:127
+#: src/ui_utils.c:144
 msgid "(Unsaved)"
 msgstr "(Niet opgeslagen)"
 
-#: src/ui_utils.c:165
+#: src/ui_utils.c:183
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Lettertype gewijzigd (%s)."
 
-#: src/ui_utils.c:198
+#: src/ui_utils.c:309
 msgid "No tags found"
 msgstr "Geen tags gevonden"
 
-#: src/ui_utils.c:503
+#: src/ui_utils.c:530
 msgid "C Standard Library"
 msgstr "C standaard bibliotheek"
 
-#: src/ui_utils.c:504
+#: src/ui_utils.c:531
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: src/ui_utils.c:505
+#: src/ui_utils.c:532
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C standaard bibliotheek"
 
-#: src/ui_utils.c:506
+#: src/ui_utils.c:533
 msgid "C++ Standard Library"
 msgstr "C++ standaard bibliotheek"
 
-#: src/ui_utils.c:507
+#: src/ui_utils.c:534
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: src/ui_utils.c:571
-msgid "Set custom date format"
+#: src/ui_utils.c:600
+#, fuzzy
+msgid "Set Custom Date Format"
 msgstr "Aangepast datumformaat instellen"
 
-#. compile the code
-#: src/ui_utils.c:777
-msgid "_Compile"
-msgstr "_Compileren"
-
-#: src/ui_utils.c:780
-msgid "Compiles the current file"
-msgstr "Compileert het huidig bestand"
-
-#: src/ui_utils.c:795
-msgid "Builds the current file (generate an executable file)"
-msgstr "Bouwt het huidig bestand (genereert een uitvoerbaar bestand)"
-
-#. build the code with make all
-#: src/ui_utils.c:809 src/ui_utils.c:920
-msgid "_Make all"
-msgstr "_Make all"
-
-#: src/ui_utils.c:812 src/ui_utils.c:923
-msgid "Builds the current file with the make tool and the default target"
-msgstr "Bouwt het huidig bestand met 'make' en het standaard  doel"
-
-#. build the code with make
-#: src/ui_utils.c:818 src/ui_utils.c:929
-msgid "Make custom _target"
-msgstr "Make aangepast _doel"
-
-#: src/ui_utils.c:822 src/ui_utils.c:933
-msgid "Builds the current file with the make tool and the specified target"
-msgstr "Bouwt het huidig bestand met 'make' en het opgegeven doel"
-
-#. build the code with make object
-#: src/ui_utils.c:827
-msgid "Make _object"
-msgstr "Make _object"
-
-#: src/ui_utils.c:831
-msgid "Compiles the current file using the make tool"
-msgstr "Compileert het huidig bestand gebruikmakend van 'make'"
-
-#: src/ui_utils.c:860
-msgid "_Set Includes and Arguments"
-msgstr "Programma parameters instellen"
-
-#: src/ui_utils.c:865
-msgid ""
-"Sets the includes and library paths for the compiler and the program "
-"arguments for execution"
-msgstr ""
-"Stelt de parameters en de bibliotheekpaden in voor de compiler en de "
-"programma argumenten voor uitvoering"
-
-#. DVI
-#: src/ui_utils.c:887
-msgid "LaTeX -> DVI"
-msgstr "LaTeX -> DVI"
-
-#: src/ui_utils.c:890
-msgid "Compiles the current file into a DVI file"
-msgstr "Compileert het huidig bestand in een DVI bestand"
-
-#. PDF
-#: src/ui_utils.c:900
-msgid "LaTeX -> PDF"
-msgstr "LaTeX -> PDF"
-
-#: src/ui_utils.c:903
-msgid "Compiles the current file into a PDF file"
-msgstr "Compileert het huidig bestand in een PDF bestand"
-
-#. DVI view
-#: src/ui_utils.c:946
-msgid "View DVI file"
-msgstr "DVI bestand weergeven"
-
-#: src/ui_utils.c:952 src/ui_utils.c:965
-msgid "Compiles and view the current file"
-msgstr "Compileert en toont het huidig bestand"
-
-#. PDF view
-#: src/ui_utils.c:959
-msgid "View PDF file"
-msgstr "PDF besand weergeven"
-
-#: src/ui_utils.c:985
-msgid "Sets the program paths and arguments"
-msgstr "Stelt de programmapaden en argumenten in"
-
-#: src/filetypes.c:126
+#: src/filetypes.c:131
 msgid "C source file"
 msgstr "C bronbestand"
 
-#: src/filetypes.c:146
+#: src/filetypes.c:151
 msgid "C++ source file"
 msgstr "C++ bronbestand"
 
-#: src/filetypes.c:174
+#: src/filetypes.c:179
 msgid "D source file"
 msgstr "D bronbestand"
 
-#: src/filetypes.c:194
+#: src/filetypes.c:199
 msgid "Java source file"
 msgstr "Java bronbestand"
 
-#: src/filetypes.c:213
+#: src/filetypes.c:218
 msgid "Pascal source file"
 msgstr "Pascal bronbestand"
 
-#: src/filetypes.c:236
+#: src/filetypes.c:241
 msgid "Assembler source file"
 msgstr "Assembler bronbestand"
 
-#: src/filetypes.c:255
+#: src/filetypes.c:260
 msgid "Fortran source file (F77)"
 msgstr "Fortran  bronbestand (F77)"
 
-#: src/filetypes.c:279
+#: src/filetypes.c:284
 msgid "(O)Caml source file"
 msgstr "(O) Caml bronbestand"
 
-#: src/filetypes.c:299
+#: src/filetypes.c:304
 msgid "Perl source file"
 msgstr "Perl bronbestand"
 
-#: src/filetypes.c:320
+#: src/filetypes.c:326
 msgid "PHP source file"
 msgstr "PHP bronbestand"
 
-#: src/filetypes.c:343
+#: src/filetypes.c:349
 msgid "Python source file"
 msgstr "Python bronbestand"
 
-#: src/filetypes.c:363
+#: src/filetypes.c:369
 msgid "Ruby source file"
 msgstr "Ruby bronbestand"
 
-#: src/filetypes.c:383
+#: src/filetypes.c:389
 msgid "Tcl source file"
 msgstr "Tcl bronbestand"
 
-#: src/filetypes.c:404
+#: src/filetypes.c:410
 msgid "Ferite source file"
 msgstr "Ferite bronbestand"
 
-#: src/filetypes.c:423
+#: src/filetypes.c:429
 msgid "Shell script file"
 msgstr "Shell scriptbestand"
 
-#: src/filetypes.c:448
+#: src/filetypes.c:454
 msgid "Makefile"
 msgstr "Makebestand"
 
-#: src/filetypes.c:468
+#: src/filetypes.c:475
 msgid "XML source file"
 msgstr "XML bronbestand"
 
-#: src/filetypes.c:488
+#: src/filetypes.c:495
 msgid "Docbook source file"
 msgstr "Docbook bronbestand"
 
-#: src/filetypes.c:507
+#: src/filetypes.c:514
 msgid "HTML source file"
 msgstr "HTML bronbestand"
 
-#: src/filetypes.c:532
+#: src/filetypes.c:535
 msgid "Cascading StyleSheet"
 msgstr "Cascading StyleSheet"
 
-#: src/filetypes.c:551
+#: src/filetypes.c:554
 msgid "SQL Dump file"
 msgstr "SQL Dump bestand"
 
-#: src/filetypes.c:570
+#: src/filetypes.c:573
 msgid "LaTeX source file"
 msgstr "LaTeX bronbestand"
 
-#: src/filetypes.c:591
+#: src/filetypes.c:594
 msgid "O-Matrix source file"
 msgstr "O-Matrix bronbestand"
 
-#: src/filetypes.c:610
+#: src/filetypes.c:613
+#, fuzzy
+msgid "VHDL source file"
+msgstr "D bronbestand"
+
+#: src/filetypes.c:633
 msgid "Diff file"
 msgstr "Diff bestand"
 
-#: src/filetypes.c:630
+#: src/filetypes.c:653
 msgid "Config file"
 msgstr "Configuratiebestand"
 
-#: src/filetypes.c:653
+#: src/filetypes.c:676
 msgid "All files"
 msgstr "Alle bestanden"
 
-#: src/filetypes.c:662
+#: src/filetypes.c:685
 msgid "None"
 msgstr "Geen"
 
@@ -1973,52 +2054,51 @@ msgstr "Geen"
 msgid "Executables"
 msgstr "Uitvoerbare"
 
-#: src/win32.c:342
+#: src/win32.c:333
 msgid "Error"
 msgstr "Fout"
 
-#: src/win32.c:348 src/win32.c:383
+#: src/win32.c:339 src/win32.c:380
 msgid "Question"
 msgstr "Vraag"
 
-#: src/win32.c:354
+#: src/win32.c:345
+msgid "Warning"
+msgstr ""
+
+#: src/win32.c:351
 msgid "Information"
 msgstr "Informatie"
 
-#: src/keyfile.c:72
+#: src/keyfile.c:70
 #, c-format
 msgid "%s configuration file, edit as you need"
 msgstr "%s configuratiebestand, bewerk het inien nodig"
 
-#: src/keyfile.c:309
+#: src/keyfile.c:333
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Type hier wat u wilt, gebruik het als notitie/krabbelbord"
 
-#: src/msgwindow.c:100
+#: src/keyfile.c:560
+#, fuzzy
+msgid "Failed to load one or more session files."
+msgstr "bestanden van vorige sessies niet laden"
+
+#: src/msgwindow.c:107
 msgid "Status messages"
 msgstr "Statusberichten"
 
-#: src/build.c:91
+#: src/msgwindow.c:411
+#, fuzzy
+msgid "_Hide Message Window"
+msgstr "Berichtenvenster verbergen"
+
+#: src/build.c:156
 #, c-format
 msgid "Failed to view %s (make sure it is already compiled)"
 msgstr "Weergave van %s mislukt (controleer of het reeds is gecomileerd)"
 
-#: src/build.c:124 src/build.c:309 src/build.c:477 src/search.c:912
-#, c-format
-msgid "Process failed (%s)"
-msgstr "Proces mislukt (%s)"
-
-#: src/build.c:295
-#, c-format
-msgid "%s (in directory: %s)"
-msgstr "%s (in map: %s)"
-
-#: src/build.c:395
-#, c-format
-msgid "Failed to execute %s (make sure it is already built)"
-msgstr "Uitvoeren van %s mislukt (controleer of het reeds gebouwd is)"
-
-#: src/build.c:420
+#: src/build.c:189 src/build.c:567
 #, c-format
 msgid ""
 "Could not find terminal '%s' (check path for Terminal tool setting in "
@@ -2027,42 +2107,191 @@ msgstr ""
 "Kon terminal '%s' niet vinden (controleer de instelling van het pad voor "
 "hulpprogramma terminal in Voorkeuren)"
 
-#: src/build.c:434
-#, c-format
-msgid "Failed to change the working directory to %s"
-msgstr "Kon werkmap niet veranderen naar %s"
-
-#: src/build.c:452
+#: src/build.c:203 src/build.c:604
 #, c-format
 msgid "Failed to execute %s (start-script could not be created)"
 msgstr "Uitvoeren van %s mislukt (start-script kon niet worden aangemaakt)"
 
-#: src/build.c:567
+#: src/build.c:231 src/build.c:447 src/build.c:649 src/search.c:1069
+#, c-format
+msgid "Process failed (%s)"
+msgstr "Proces mislukt (%s)"
+
+#: src/build.c:356
+#, c-format
+msgid "Something very strange is occurred, could not stat %s (%s)."
+msgstr ""
+
+#: src/build.c:435
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s (in map: %s)"
+
+#: src/build.c:543
+#, c-format
+msgid "Failed to execute %s (make sure it is already built)"
+msgstr "Uitvoeren van %s mislukt (controleer of het reeds gebouwd is)"
+
+#: src/build.c:581
+#, c-format
+msgid "Failed to change the working directory to %s"
+msgstr "Kon werkmap niet veranderen naar %s"
+
+#: src/build.c:729
 msgid "Compilation failed."
 msgstr "Compilatie mislukt."
 
-#: src/build.c:572
+#: src/build.c:743
 msgid "Compilation finished successfully."
 msgstr "Compilatie met succes beëindigd."
 
-#: src/prefs.c:287
+#. compile the code
+#: src/build.c:848
+msgid "_Compile"
+msgstr "_Compileren"
+
+#: src/build.c:851
+msgid "Compiles the current file"
+msgstr "Compileert het huidig bestand"
+
+#: src/build.c:864
+msgid "Builds the current file (generate an executable file)"
+msgstr "Bouwt het huidig bestand (genereert een uitvoerbaar bestand)"
+
+#. build the code with make all
+#: src/build.c:874 src/build.c:996
+#, fuzzy
+msgid "_Make All"
+msgstr "_Make all"
+
+#: src/build.c:877 src/build.c:999
+msgid "Builds the current file with the make tool and the default target"
+msgstr "Bouwt het huidig bestand met 'make' en het standaard  doel"
+
+#. build the code with make custom
+#: src/build.c:885 src/build.c:1007
+#, fuzzy
+msgid "Make Custom _Target"
+msgstr "Make aangepast _doel"
+
+#: src/build.c:889 src/build.c:1011
+msgid "Builds the current file with the make tool and the specified target"
+msgstr "Bouwt het huidig bestand met 'make' en het opgegeven doel"
+
+#. build the code with make object
+#: src/build.c:896
+#, fuzzy
+msgid "Make _Object"
+msgstr "Make _object"
+
+#: src/build.c:900
+msgid "Compiles the current file using the make tool"
+msgstr "Compileert het huidig bestand gebruikmakend van 'make'"
+
+#. next error
+#: src/build.c:912 src/build.c:1023
+#, fuzzy
+msgid "_Next Error"
+msgstr "Fout"
+
+#. arguments
+#: src/build.c:938
+msgid "_Set Includes and Arguments"
+msgstr "Programma parameters instellen"
+
+#: src/build.c:943
+msgid ""
+"Sets the includes and library paths for the compiler and the program "
+"arguments for execution"
+msgstr ""
+"Stelt de parameters en de bibliotheekpaden in voor de compiler en de "
+"programma argumenten voor uitvoering"
+
+#. DVI
+#: src/build.c:966
+msgid "LaTeX -> DVI"
+msgstr "LaTeX -> DVI"
+
+#: src/build.c:969
+msgid "Compiles the current file into a DVI file"
+msgstr "Compileert het huidig bestand in een DVI bestand"
+
+#. PDF
+#: src/build.c:979
+msgid "LaTeX -> PDF"
+msgstr "LaTeX -> PDF"
+
+#: src/build.c:982
+msgid "Compiles the current file into a PDF file"
+msgstr "Compileert het huidig bestand in een PDF bestand"
+
+#. DVI view
+#: src/build.c:1035
+#, fuzzy
+msgid "View DVI File"
+msgstr "DVI bestand weergeven"
+
+#: src/build.c:1040 src/build.c:1053
+msgid "Compiles and view the current file"
+msgstr "Compileert en toont het huidig bestand"
+
+#. PDF view
+#: src/build.c:1049
+#, fuzzy
+msgid "View PDF File"
+msgstr "PDF besand weergeven"
+
+#: src/build.c:1073
+msgid "Sets the program paths and arguments"
+msgstr "Stelt de programmapaden en argumenten in"
+
+#: src/build.c:1340
+#, fuzzy
+msgid "Make Custom Target"
+msgstr "Make aangepast doel"
+
+#: src/build.c:1341
+msgid ""
+"Enter custom options here, all entered text is passed to the make command."
+msgstr ""
+"Voer hier de aangepaste opties in, alle ingevoerde tekst wordt aan het "
+"commando 'make' overgegeven."
+
+#: src/build.c:1380
+msgid "Failed to execute the view program"
+msgstr "Kon het weergaveprogramma niet uitvoeren"
+
+#: src/build.c:1399
+msgid "Failed to execute the terminal program"
+msgstr "Kon het terminalprogramma niet uitvoeren"
+
+#: src/build.c:1458
+#, fuzzy, c-format
+msgid "Process could not be stopped (%s)."
+msgstr "Configuratiemap kon niet worden aangemaakt (%s)."
+
+#: src/build.c:1493
+msgid "No more build errors."
+msgstr ""
+
+#: src/prefs.c:310
 msgid "Action"
 msgstr "Actie"
 
-#: src/prefs.c:292
+#: src/prefs.c:315
 msgid "Shortcut"
 msgstr "Sneltoets"
 
-#: src/prefs.c:749
+#: src/prefs.c:781
 msgid "Grab key"
 msgstr "Toets vastleggen"
 
-#: src/prefs.c:753
+#: src/prefs.c:785
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
 msgstr "Type de combinatie van de toetsen die u wenst te gebruiken voor \"%s\""
 
-#: src/prefs.c:877
+#: src/prefs.c:909
 #, c-format
 msgid ""
 "The combination '%s' is already used for \"%s\". Please choose another one."
@@ -2070,162 +2299,59 @@ msgstr ""
 "Ge combinatie '%s' is reeds in gebruik voor \"%s\". Gelieve een andere te "
 "kiezen."
 
-#: src/prefs.c:931
-msgid ""
-"These are settings for the virtual terminal emulator widget (VTE). They only "
-"apply, if the VTE library could be loaded."
-msgstr ""
-"Dit zijn instellingen voor het virtuele terminal emulatoronderdeel (VTE). "
-"Wijzigingen zijn enkel van kracht als de VTE-bibliotheek kon worden geladen."
-
-#: src/prefs.c:947
-msgid "Terminal font"
-msgstr "Terminal lettertype"
-
-#: src/prefs.c:957
-msgid "Sets the font for the terminal widget."
-msgstr "Stelt het lettertype in voor het terminalonderdeel."
-
-#: src/prefs.c:959
-msgid "Foreground color"
-msgstr "Voorgrondkleur"
-
-#: src/prefs.c:965
-msgid "Background color"
-msgstr "Achtergrondkleur"
-
-#: src/prefs.c:975
-msgid "Sets the foreground color of the text in the terminal widget."
-msgstr "Stelt de voorgrondkleur in van de de tekst in het terminalonderdeel."
-
-#: src/prefs.c:982
-msgid "Sets the background color of the text in the terminal widget."
-msgstr "Stelt de achtergrondkleur in van de tekst in het terminalonderdeel."
-
-#: src/prefs.c:985
-msgid "Scrollback lines"
-msgstr "Regels om terug te schuiven"
-
-#: src/prefs.c:996
-msgid ""
-"Specifies the history in lines, which you can scroll back in the terminal "
-"widget."
-msgstr ""
-"Specificeert de historiek van de regels, welke u terug kunt schuiven in het "
-"terminalonderdeel."
-
-#: src/prefs.c:1000
-msgid "Terminal emulation"
-msgstr "Terminalemulatie"
-
-#: src/prefs.c:1010
-msgid ""
-"Controls how the terminal emulator should behave. xterm is a good start."
-msgstr ""
-"Beheert de wijze waarop de terminalemulator zich moet gedragen. xterm is een "
-"goede start."
-
-#: src/prefs.c:1012
-msgid "Shell"
-msgstr "Shell"
-
-#: src/prefs.c:1022
-msgid ""
-"Sets the path to the shell which should be started inside the terminal "
-"emulation."
-msgstr ""
-"Stelt het pad in naar de shell welke moet worden gestart in de "
-"terminalemulatie."
-
-#: src/prefs.c:1034
-msgid "Scroll on keystroke"
-msgstr "Schuiven op toetsaanslag"
-
-#: src/prefs.c:1038
-msgid "Whether to scroll to the bottom if a key was pressed."
-msgstr "Of het schuiven naar beneden als een toets wordt ingedrukt."
-
-#: src/prefs.c:1041
-msgid "Scroll on output"
-msgstr "Schuiven op uitvoer"
-
-#: src/prefs.c:1045
-msgid "Whether to scroll to the bottom if an output was generated."
-msgstr "Of het schuiven naar beneden als een uitvoer werd gegenereerd."
-
-#: src/prefs.c:1048
-msgid "Disable menu shortcut key (F10 by default)"
-msgstr "Sneltoetsmenu uitschakelen (standaard: F10)"
-
-#: src/prefs.c:1052
-msgid ""
-"This option disables the keybinding to popup the menu bar (default is F10). "
-"Disabling it can be useful if you use, for example, Midnight Commander "
-"within the VTE."
-msgstr ""
-"Deze optie schakelt de sneltoets uit om de menu taakbalk naar de voorgrond "
-"te brengen (standaard: F10). Dit kan nuttig zijn als u bijv Midnight "
-"Commander gebruikt binnenin de VTE."
-
-#: src/prefs.c:1055
-msgid "Follow the path of the current file"
-msgstr "Pad van het huidige bestand volgen"
-
-#: src/prefs.c:1059
-msgid "Whether to execute \"cd $path\" when you switch between opened files."
-msgstr ""
-"Of \"cd $path\" moet worden uitgevoerd als u tussen geopende bestanden "
-"wisselt."
-
-#: src/about.c:108
+#: src/about.c:121
 msgid "About Geany"
 msgstr "Over Geany"
 
-#: src/about.c:155
+#: src/about.c:170
 msgid "A fast and lightweight IDE"
 msgstr "Een snel en lichtgewicht IDE"
 
-#: src/about.c:176
+#: src/about.c:191
 #, c-format
 msgid "(built on %s)"
 msgstr "(gebouwd op %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: src/about.c:207
+#: src/about.c:222
 msgid "Info"
 msgstr "Info"
 
-#: src/about.c:219
+#: src/about.c:234
 msgid "Developers"
 msgstr "Ontwikkelaars"
 
-#: src/about.c:219
+#: src/about.c:234
 msgid "Maintainer"
 msgstr "Hoofdontwikkelaar"
 
-#: src/about.c:219
+#: src/about.c:234
 msgid "developer"
 msgstr "ontwikkelaar"
 
-#: src/about.c:220
+#: src/about.c:235
 msgid "translation maintainer"
 msgstr "vertalingscoördinator"
 
-#: src/about.c:220
+#: src/about.c:235
 msgid "Translators"
 msgstr "Vertalers"
 
-#: src/about.c:221
+#: src/about.c:236
 msgid "language"
 msgstr "taal"
 
-#: src/about.c:227
+#: src/about.c:242
 msgid "Credits"
 msgstr "Credits"
 
-#: src/about.c:240
+#: src/about.c:255
 msgid "License"
 msgstr "Licentie"
+
+#: src/geany.h:47
+msgid "untitled"
+msgstr "naamloos"
 
 #: src/encodings.c:51
 msgid "Celtic"
@@ -2328,359 +2454,536 @@ msgstr "Japans"
 msgid "Korean"
 msgstr "Koreaans"
 
-#: src/encodings.c:209
+#: src/encodings.c:118
+#, fuzzy
+msgid "Without encoding"
+msgstr "_Codering instellen"
+
+#: src/encodings.c:211
 msgid "_West European"
 msgstr "_West-Europees"
 
-#: src/encodings.c:215
+#: src/encodings.c:217
 msgid "_East European"
 msgstr "_Oost-Europees"
 
-#: src/encodings.c:221
+#: src/encodings.c:223
 msgid "East _Asian"
 msgstr "_Oost-_Aziatisch"
 
-#: src/encodings.c:227
+#: src/encodings.c:229
 msgid "_SE & SW Asian"
 msgstr "_ZO & ZW Aziatisch"
 
-#: src/encodings.c:233
+#: src/encodings.c:235
 msgid "_Middle Eastern"
 msgstr "_Midden Oosten"
 
-#: src/encodings.c:239
+#: src/encodings.c:241
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: src/treeviews.c:76
+#: src/treeviews.c:117 src/treeviews.c:149
 msgid "Chapter"
 msgstr "Hoofdstuk"
 
-#: src/treeviews.c:78 src/treeviews.c:100
+#: src/treeviews.c:119 src/treeviews.c:141
 msgid "Section"
 msgstr "Sectie"
 
-#: src/treeviews.c:80
+#: src/treeviews.c:121
 msgid "Sect1"
 msgstr "Sect1"
 
-#: src/treeviews.c:82
+#: src/treeviews.c:123
 msgid "Sect2"
 msgstr "Sect2"
 
-#: src/treeviews.c:84
+#: src/treeviews.c:125
 msgid "Sect3"
 msgstr "Sect3"
 
-#: src/treeviews.c:86
+#: src/treeviews.c:127
 msgid "Appendix"
 msgstr "Appendix"
 
-#: src/treeviews.c:88 src/treeviews.c:110 src/treeviews.c:193
+#: src/treeviews.c:129 src/treeviews.c:151 src/treeviews.c:239
+#: src/treeviews.c:280
 msgid "Other"
 msgstr "Andere"
 
-#: src/treeviews.c:96
+#: src/treeviews.c:137
 msgid "Command"
 msgstr "Commando"
 
-#: src/treeviews.c:98
+#: src/treeviews.c:139
 msgid "Environment"
 msgstr "Omgeving"
 
-#: src/treeviews.c:102
+#: src/treeviews.c:143
 msgid "Subsection"
 msgstr "Subsectie"
 
-#: src/treeviews.c:104
+#: src/treeviews.c:145
 msgid "Subsubsection"
 msgstr "Subsubsectie"
 
-#: src/treeviews.c:106
+#: src/treeviews.c:147
 msgid "Label"
 msgstr "Label"
 
-#: src/treeviews.c:108
-msgid "Begin"
-msgstr "Begin"
-
-#: src/treeviews.c:116
+#: src/treeviews.c:157
 msgid "Function"
 msgstr "Functie"
 
-#: src/treeviews.c:118
+#: src/treeviews.c:159 src/treeviews.c:222
 msgid "Package"
 msgstr "Pakket"
 
-#: src/treeviews.c:120
+#: src/treeviews.c:161
 msgid "My"
 msgstr "Mijn"
 
-#: src/treeviews.c:122
+#: src/treeviews.c:163
 msgid "Local"
 msgstr "Lokaal"
 
-#: src/treeviews.c:124
+#: src/treeviews.c:165
 msgid "Our"
 msgstr "Onze"
 
-#: src/treeviews.c:137 src/treeviews.c:162
+#: src/treeviews.c:178 src/treeviews.c:203 src/treeviews.c:225
 msgid "Methods"
 msgstr "Methoden"
 
-#: src/treeviews.c:139 src/treeviews.c:160 src/treeviews.c:181
+#: src/treeviews.c:180 src/treeviews.c:201 src/treeviews.c:227
+#: src/treeviews.c:268
 msgid "Classes"
 msgstr "Klassen"
 
-#: src/treeviews.c:141
+#: src/treeviews.c:182
 msgid "Singletons"
 msgstr "Wezen"
 
-#: src/treeviews.c:143
+#: src/treeviews.c:184
 msgid "Mixins"
 msgstr "Mixins"
 
-#: src/treeviews.c:145 src/treeviews.c:187
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_class), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_class), 0, _("Constants"), -1);
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_member), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_member), 0, _("Members"), -1);
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_macro), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_macro), 0, _("Macros"), -1);
+#.
+#: src/treeviews.c:186 src/treeviews.c:253 src/treeviews.c:274
 msgid "Variables"
 msgstr "Variabelen"
 
-#: src/treeviews.c:147 src/treeviews.c:183
+#: src/treeviews.c:188 src/treeviews.c:231 src/treeviews.c:270
 msgid "Members"
 msgstr "Leden"
 
-#: src/treeviews.c:158 src/treeviews.c:179
+#: src/treeviews.c:199 src/treeviews.c:245 src/treeviews.c:266
 msgid "Functions"
 msgstr "Functies"
 
-#: src/treeviews.c:185
+#: src/treeviews.c:222
+msgid "Module"
+msgstr ""
+
+#: src/treeviews.c:229
+#, fuzzy
+msgid "Interfaces"
+msgstr "Interface"
+
+#: src/treeviews.c:272
 msgid "Macros"
 msgstr "Macro's"
 
-#: src/treeviews.c:189
+#: src/treeviews.c:276
 msgid "Namespaces"
 msgstr "Naamruimtes"
 
-#: src/treeviews.c:191
+#: src/treeviews.c:278
 msgid "Structs / Typedefs"
 msgstr "Structs / Typedefs"
 
-#: src/treeviews.c:289 src/treeviews.c:341
+#: src/treeviews.c:391 src/treeviews.c:443
 msgid "Hide"
 msgstr "Verbergen"
 
-#: src/treeviews.c:297 src/treeviews.c:349
+#: src/treeviews.c:399 src/treeviews.c:451
 msgid "Hide sidebar"
 msgstr "Zijbalk verbergen"
 
-#: src/treeviews.c:329
+#: src/treeviews.c:431
 msgid "Reload"
 msgstr "Herladen"
 
-#: src/vte.c:367
+#: src/vte.c:186 src/vte.c:503
+msgid "Terminal"
+msgstr "Terminal"
+
+#: src/vte.c:373
 msgid "_Input Methods"
 msgstr "_Invoermethoden"
 
-#: src/keybindings.c:119
+#: src/vte.c:499
+#, fuzzy
+msgid "Terminal plugin"
+msgstr "Terminalemulatie"
+
+#: src/vte.c:506
+#, fuzzy
+msgid ""
+"These settings for the virtual terminal emulator widget (VTE) only apply if "
+"the VTE library could be loaded."
+msgstr ""
+"Dit zijn instellingen voor het virtuele terminal emulatoronderdeel (VTE). "
+"Wijzigingen zijn enkel van kracht als de VTE-bibliotheek kon worden geladen."
+
+#: src/vte.c:517
+#, fuzzy
+msgid "Terminal font:"
+msgstr "Terminal lettertype"
+
+#: src/vte.c:527
+msgid "Sets the font for the terminal widget."
+msgstr "Stelt het lettertype in voor het terminalonderdeel."
+
+#: src/vte.c:529
+#, fuzzy
+msgid "Foreground color:"
+msgstr "Voorgrondkleur"
+
+#: src/vte.c:535
+#, fuzzy
+msgid "Background color:"
+msgstr "Achtergrondkleur"
+
+#: src/vte.c:545
+msgid "Sets the foreground color of the text in the terminal widget."
+msgstr "Stelt de voorgrondkleur in van de de tekst in het terminalonderdeel."
+
+#: src/vte.c:552
+msgid "Sets the background color of the text in the terminal widget."
+msgstr "Stelt de achtergrondkleur in van de tekst in het terminalonderdeel."
+
+#: src/vte.c:555
+#, fuzzy
+msgid "Scrollback lines:"
+msgstr "Regels om terug te schuiven"
+
+#: src/vte.c:566
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget."
+msgstr ""
+"Specificeert de historiek van de regels, welke u terug kunt schuiven in het "
+"terminalonderdeel."
+
+#: src/vte.c:570
+#, fuzzy
+msgid "Terminal emulation:"
+msgstr "Terminalemulatie"
+
+#: src/vte.c:580
+#, fuzzy
+msgid ""
+"Controls how the terminal emulator should behave. xterm is a good start."
+msgstr ""
+"Beheert de wijze waarop de terminalemulator zich moet gedragen. xterm is een "
+"goede start."
+
+#: src/vte.c:582
+#, fuzzy
+msgid "Shell:"
+msgstr "Shell"
+
+#: src/vte.c:589
+msgid ""
+"Sets the path to the shell which should be started inside the terminal "
+"emulation."
+msgstr ""
+"Stelt het pad in naar de shell welke moet worden gestart in de "
+"terminalemulatie."
+
+#: src/vte.c:606
+msgid "Scroll on keystroke"
+msgstr "Schuiven op toetsaanslag"
+
+#: src/vte.c:607
+msgid "Whether to scroll to the bottom if a key was pressed."
+msgstr "Of het schuiven naar beneden als een toets wordt ingedrukt."
+
+#: src/vte.c:611
+msgid "Scroll on output"
+msgstr "Schuiven op uitvoer"
+
+#: src/vte.c:612
+#, fuzzy
+msgid "Whether to scroll to the bottom when output is generated."
+msgstr "Of het schuiven naar beneden als een uitvoer werd gegenereerd."
+
+#: src/vte.c:616
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr "Sneltoetsmenu uitschakelen (standaard: F10)"
+
+#: src/vte.c:617
+msgid ""
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
+"within the VTE."
+msgstr ""
+"Deze optie schakelt de sneltoets uit om de menu taakbalk naar de voorgrond "
+"te brengen (standaard: F10). Dit kan nuttig zijn als u bijv Midnight "
+"Commander gebruikt binnenin de VTE."
+
+#: src/vte.c:621
+msgid "Follow the path of the current file"
+msgstr "Pad van het huidige bestand volgen"
+
+#: src/vte.c:622
+msgid "Whether to execute \"cd $path\" when you switch between opened files."
+msgstr ""
+"Of \"cd $path\" moet worden uitgevoerd als u tussen geopende bestanden "
+"wisselt."
+
+#: src/vte.c:626
+msgid "Execute programs in VTE"
+msgstr ""
+
+#: src/vte.c:627
+msgid ""
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped."
+msgstr ""
+
+#: src/keybindings.c:108
 msgid "New"
 msgstr "Nieuw"
 
-#: src/keybindings.c:121
+#: src/keybindings.c:110
 msgid "Open"
 msgstr "Openen"
 
-#: src/keybindings.c:123
+#: src/keybindings.c:112
 msgid "Save"
 msgstr "Opslaan"
 
-#: src/keybindings.c:127
+#: src/keybindings.c:116
 msgid "Print"
 msgstr "Afdrukken"
 
-#: src/keybindings.c:129
+#: src/keybindings.c:118
 msgid "Close"
 msgstr "Sluiten"
 
-#: src/keybindings.c:131
+#: src/keybindings.c:120
 msgid "Close all"
 msgstr "Alles sluiten"
 
-#: src/keybindings.c:133
+#: src/keybindings.c:122
 msgid "Reload file"
 msgstr "Bestand herladen"
 
-#: src/keybindings.c:135
+#: src/keybindings.c:124
 msgid "Undo"
 msgstr "Ongedaan maken"
 
-#: src/keybindings.c:137
+#: src/keybindings.c:126
 msgid "Redo"
 msgstr "Herdoen"
 
-#: src/keybindings.c:139
+#: src/keybindings.c:128
 msgid "Select All"
 msgstr "Alles selecteren"
 
-#: src/keybindings.c:141
+#: src/keybindings.c:130
 msgid "Insert date"
 msgstr "Datum  invoegen"
 
-#: src/keybindings.c:145
+#: src/keybindings.c:134
 msgid "Find Next"
 msgstr "Zoek volgende"
 
-#: src/keybindings.c:147
+#: src/keybindings.c:136
 msgid "Find Previous"
 msgstr "Zoek vorige"
 
-#: src/keybindings.c:149 src/search.c:285
+#: src/keybindings.c:138 src/search.c:376
 msgid "Replace"
 msgstr "Vervangen"
 
-#: src/keybindings.c:151 src/search.c:414
+#: src/keybindings.c:140 src/search.c:514
 msgid "Find in files"
 msgstr "Zoek in bestanden"
 
-#: src/keybindings.c:155
+#: src/keybindings.c:142
+#, fuzzy
+msgid "Next Message"
+msgstr "Berichten"
+
+#: src/keybindings.c:146
 msgid "Show Colour Chooser"
 msgstr "Kleurkiezer weergeven"
 
-#: src/keybindings.c:157
+#: src/keybindings.c:148
 msgid "Fullscreen"
 msgstr "Volledig scherm"
 
-#: src/keybindings.c:159
+#: src/keybindings.c:150
 msgid "Toggle Messages Window"
 msgstr "Berichtenvenster verbergen"
 
-#: src/keybindings.c:161
+#: src/keybindings.c:152
 msgid "Toggle Sidebar"
 msgstr "Zijbalk verbergen"
 
-#: src/keybindings.c:163
+#: src/keybindings.c:154
 msgid "Zoom In"
 msgstr "Inzoomen"
 
-#: src/keybindings.c:165
+#: src/keybindings.c:156
 msgid "Zoom Out"
 msgstr "Uitzoomen"
 
-#: src/keybindings.c:169
+#: src/keybindings.c:160
 msgid "Fold all"
 msgstr "Alles invouwen"
 
-#: src/keybindings.c:171
+#: src/keybindings.c:162
 msgid "Unfold all"
 msgstr "Alles uitvouwen"
 
-#: src/keybindings.c:175
+#: src/keybindings.c:164
+msgid "Insert Special HTML Characters"
+msgstr ""
+
+#: src/keybindings.c:168
 msgid "Build"
 msgstr "Bouwen"
 
-#: src/keybindings.c:177
+#: src/keybindings.c:170
 msgid "Make all"
 msgstr "Make all"
 
-#: src/keybindings.c:180
+#: src/keybindings.c:173
 msgid "Make custom target"
 msgstr "Make aangepast doel"
 
-#: src/keybindings.c:182
+#: src/keybindings.c:175
 msgid "Make object"
 msgstr "Make object"
 
-#: src/keybindings.c:184
+#: src/keybindings.c:177
+msgid "Next error"
+msgstr ""
+
+#: src/keybindings.c:179
 msgid "Run"
 msgstr "Uitvoeren"
 
-#: src/keybindings.c:186
+#: src/keybindings.c:181
 msgid "Run (alternative command)"
 msgstr "Uitvoeren (alternatief commando)"
 
-#: src/keybindings.c:188
+#: src/keybindings.c:183
 msgid "Build options"
 msgstr "Bouwopties"
 
-#: src/keybindings.c:190
+#: src/keybindings.c:185
 msgid "Reload symbol list"
 msgstr "Symbolenlijst herladen"
 
-#: src/keybindings.c:192
+#: src/keybindings.c:187
 msgid "Switch to Editor"
 msgstr "Sckakel naar Editor"
 
-#: src/keybindings.c:194
+#: src/keybindings.c:189
 msgid "Switch to Scribble"
 msgstr "Schakel naar Notities"
 
-#: src/keybindings.c:196
+#: src/keybindings.c:191
 msgid "Switch to VTE"
 msgstr "Schakel naar VTE"
 
-#: src/keybindings.c:198
+#: src/keybindings.c:193
 msgid "Switch to left document"
 msgstr "Schakel naar linker document"
 
-#: src/keybindings.c:200
+#: src/keybindings.c:195
 msgid "Switch to right document"
 msgstr "Schakel naar rechter document"
 
-#: src/keybindings.c:202
+#: src/keybindings.c:198
 msgid "Duplicate line or selection"
 msgstr "Kloon regel of selectie"
 
-#: src/keybindings.c:204
+#: src/keybindings.c:200
 msgid "Convert Selection to lower-case"
 msgstr "Converteer selectie naar kleine letters "
 
-#: src/keybindings.c:206
+#: src/keybindings.c:202
 msgid "Convert Selection to upper-case"
 msgstr "Converteer selectie naar hoofdletters"
 
-#: src/keybindings.c:208
+#: src/keybindings.c:204
 msgid "Toggle line commentation"
 msgstr "Schakel regelcommentaar uit"
 
-#: src/keybindings.c:210
-msgid "Comment line"
+#: src/keybindings.c:206
+#, fuzzy
+msgid "Comment line(s)"
 msgstr "Plaats hekje voor regel"
 
-#: src/keybindings.c:212
-msgid "Uncomment line"
+#: src/keybindings.c:208
+#, fuzzy
+msgid "Uncomment line(s)"
 msgstr "Verwijder hekje voor regel"
 
-#: src/keybindings.c:214
+#: src/keybindings.c:210
 msgid "Increase indent"
 msgstr "Inspringing vergroten"
 
-#: src/keybindings.c:216
+#: src/keybindings.c:212
 msgid "Decrease indent"
 msgstr "Inspringing verkleinen"
 
-#: src/keybindings.c:218
+#: src/keybindings.c:215
+msgid "Goto matching brace"
+msgstr ""
+
+#: src/keybindings.c:217
 msgid "Complete word"
 msgstr "Woord vervolledigen"
 
-#: src/keybindings.c:222 src/keybindings.c:225
+#: src/keybindings.c:221 src/keybindings.c:224
 msgid "Show calltip"
 msgstr "Hulptip weergeven"
 
-#: src/keybindings.c:228
+#: src/keybindings.c:227
 msgid "Show macro list"
 msgstr "Macrolijst weergeven"
 
-#: src/keybindings.c:230
+#: src/keybindings.c:229
 msgid "Suppress auto completion"
 msgstr "Autovervollediging onderdrukken"
 
-#: src/keybindings.c:232
-msgid "Find Usage"
-msgstr "Zoek boodschappen"
+#: src/keybindings.c:234
+msgid "Go to tag definition"
+msgstr "Ga naar tag definitie"
 
-#: src/search.c:145
+#: src/keybindings.c:236
+msgid "Go to tag declaration"
+msgstr "Ga naar tag declaratie"
+
+#: src/search.c:150
 msgid "_Use regular expressions"
 msgstr "Gebruik _reguliere expressies"
 
-#: src/search.c:149
+#: src/search.c:154
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
@@ -2688,15 +2991,15 @@ msgstr ""
 "Gebruik POSIX-achtige reguliere expressies. Voor gedetailleerde informatie "
 "over het gebruik van reguliere expressies, gelieve de documentatie te lezen."
 
-#: src/search.c:154
+#: src/search.c:161
 msgid "_Search backwards"
 msgstr "_Achterwaarts zoeken"
 
-#: src/search.c:159
+#: src/search.c:175
 msgid "Use _escape sequences"
 msgstr "Gebruik _escape sequences"
 
-#: src/search.c:164
+#: src/search.c:180
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters."
@@ -2704,126 +3007,453 @@ msgstr ""
 "Vervang \\\\, \\t, \\n, \\r en \\uXXXX (Unicode tekens) met de "
 "overeenkomende besturingstekens."
 
-#: src/search.c:173 src/search.c:484
+#: src/search.c:189 src/search.c:587
 msgid "_Case sensitive"
 msgstr "_Hoofdlettergevoelig"
 
-#: src/search.c:178 src/search.c:490
+#: src/search.c:194 src/search.c:593
 msgid "Match only a _whole word"
 msgstr "Alleen op _volledig woord zoeken"
 
-#: src/search.c:183
-msgid "Match only word s_tart"
-msgstr "Alleen op woord_begin zoeken"
+#: src/search.c:199
+#, fuzzy
+msgid "Match from s_tart of word"
+msgstr "Alleen op _volledig woord zoeken"
 
-#: src/search.c:218
+#: src/search.c:258
 msgid "Find"
 msgstr "Zoek"
 
-#: src/search.c:223 src/search.c:308 src/search.c:441
+#: src/search.c:264
+#, fuzzy
+msgid "_Previous"
+msgstr "Zoek Vor_ige"
+
+#: src/search.c:270
+#, fuzzy
+msgid "_Next"
+msgstr "V_olgende zoeken"
+
+#: src/search.c:274 src/search.c:392 src/search.c:544
 msgid "Search for:"
 msgstr "Zoek naar:"
 
-#: src/search.c:289
-msgid "_In Selection"
+#. Now add the multiple match options
+#: src/search.c:300
+#, fuzzy
+msgid "Find All"
+msgstr "Zoek"
+
+#: src/search.c:304
+#, fuzzy
+msgid "_Mark"
+msgstr "Make"
+
+#: src/search.c:310 src/search.c:450
+#, fuzzy
+msgid "In Sessi_on"
 msgstr "_In selectie"
 
-#: src/search.c:291
+#: src/search.c:315 src/search.c:455
+#, fuzzy
+msgid "_In Document"
+msgstr "_Document"
+
+#. close window checkbox
+#: src/search.c:321 src/search.c:461
+#, fuzzy
+msgid "Close _dialog"
+msgstr "Alles sluiten"
+
+#: src/search.c:326 src/search.c:466
+#, fuzzy
+msgid "Disable this option to keep the dialog open."
+msgstr "Dit _dialoogvenster niet sluiten"
+
+#: src/search.c:388
+#, fuzzy
+msgid "Re_place & Find"
+msgstr "Vervangen met:"
+
+#: src/search.c:395
+msgid "Replace with:"
+msgstr "Vervangen met:"
+
+#. Now add the multiple replace options
+#: src/search.c:440
+#, fuzzy
+msgid "Replace All"
+msgstr "_Alles vervangen"
+
+#: src/search.c:443
+#, fuzzy
+msgid "In Se_lection"
+msgstr "_In selectie"
+
+#: src/search.c:445
 msgid "Replace all matches found in the currently selected text"
 msgstr ""
 "Vervang alle overeenkomsten die werden gevonden in de geselecteerde tekst"
 
-#: src/search.c:295
-msgid "Replace _All"
-msgstr "_Alles vervangen"
-
-#: src/search.c:311
-msgid "Replace with:"
-msgstr "Vervangen met:"
-
-#: src/search.c:355
-msgid "Replace in all _open files"
-msgstr "Vervangen in alle _geopende bestanden"
-
-#: src/search.c:359
-msgid ""
-"Replaces the search text in all opened files. This option is only useful(and "
-"used) if you click on \"Replace All\"."
-msgstr ""
-"Vervangt de zoektekst in alle geopende bestanden. Deze optie is enkel nuttig "
-"(en wordt gebruikt) indien u op \"Replace All\" klikt."
-
-#. Don't close window checkbox
-#: src/search.c:363
-msgid "_Don't close this dialog"
-msgstr "Dit _dialoogvenster niet sluiten"
-
-#: src/search.c:368
-msgid "The dialog window won't be closed when you start the operation."
-msgstr "Het dialoogvenster zal niet worden gesloten als u de actie start."
-
-#: src/search.c:421
+#: src/search.c:523
 msgid "Directory:"
 msgstr "Map:"
 
-#: src/search.c:460
+#: src/search.c:563
 msgid "_Fixed strings"
 msgstr "_Herstelde strings"
 
-#: src/search.c:469
+#: src/search.c:572
 msgid "_Grep regular expressions"
 msgstr "_Grep reguliere expressies"
 
-#: src/search.c:473 src/search.c:480
+#: src/search.c:576 src/search.c:583
 msgid "See grep's manual page for more information."
 msgstr "Zie greps man-pagina voor meer informatie."
 
-#: src/search.c:478
+#: src/search.c:581
 msgid "_Extended regular expressions"
 msgstr "_Uitgebreide reguliere expressies"
 
-#: src/search.c:495
+#: src/search.c:598
 msgid "_Invert search results"
 msgstr "Zoekresultaten omkeren"
 
-#: src/search.c:500
+#: src/search.c:603
 msgid "Invert the sense of matching, to select non-matching lines."
 msgstr ""
 "Keert de zoekresultaten om, zodoende enkel de niet-overeenkomende regels te "
 "selecteren"
 
-#: src/search.c:555
+#: src/search.c:659
 msgid "Select folder"
 msgstr "Map selecteren"
 
-#: src/search.c:807
+#: src/search.c:917
+#, fuzzy, c-format
+msgid "Replaced text in %u files."
+msgstr "Vervangen in alle _geopende bestanden"
+
+#: src/search.c:963
 msgid "Invalid directory for find in files."
 msgstr "Ongeldige map voor zoeken in bestanden."
 
-#: src/search.c:836
+#: src/search.c:993
 msgid "No text to find."
 msgstr "Geen tekst te vinden."
 
-#: src/search.c:864
+#: src/search.c:1021
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Kon hulpprogramma grep '%s' niet uitvoeren; controleer de padinstelling in "
 "Voorkeuren."
 
-#: src/search.c:979
+#: src/search.c:1136
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Kon de map niet openen (%s)"
 
-#: src/search.c:1024
+#: src/search.c:1181
 msgid "Search failed."
 msgstr "Zoeken mislukt."
 
-#: src/search.c:1030
+#: src/search.c:1187
 msgid "Search completed."
 msgstr "Zoeken beëindigd."
 
-#: src/search.c:1031
-msgid "No matches found."
-msgstr "Geen overeenkomsten gevonden."
+#: src/search.c:1263
+#, c-format
+msgid "No matches found for '%s'."
+msgstr "Geen overeenkomsten gevonden voor '%s'"
+
+#: src/tools.c:62
+#, fuzzy
+msgid "Special characters"
+msgstr "Hoofdstuk"
+
+#: src/tools.c:64
+#, fuzzy
+msgid "_Insert"
+msgstr "Datum  invoegen"
+
+#: src/tools.c:72
+msgid ""
+"Choose a special character from the list below and double click on it or use "
+"the button to insert it at the current cursor position."
+msgstr ""
+
+#: src/tools.c:85
+#, fuzzy
+msgid "Character"
+msgstr "Hoofdstuk"
+
+#: src/tools.c:91
+msgid "HTML (name)"
+msgstr ""
+
+#: src/tools.c:128
+#, fuzzy
+msgid "HTML characters"
+msgstr "Hoofdstuk"
+
+#: src/tools.c:134
+msgid "ISO 8859-1 characters"
+msgstr ""
+
+#: src/tools.c:232
+#, fuzzy
+msgid "Greek characters"
+msgstr "Hoofdstuk"
+
+#: src/tools.c:287
+msgid "Mathematical characters"
+msgstr ""
+
+#: src/tools.c:328
+msgid "Technical characters"
+msgstr ""
+
+#: src/tools.c:336
+#, fuzzy
+msgid "Arrow characters"
+msgstr "Hoofdstuk"
+
+#: src/tools.c:349
+msgid "Punctuation characters"
+msgstr ""
+
+#: src/tools.c:365
+msgid "Miscellaneous characters"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Forward declaration \"%s\" not found."
+#~ msgstr "Declaratie van \"%s()\" niet gevonden"
+
+#, fuzzy
+#~ msgid "Javascript source file"
+#~ msgstr "Java bronbestand"
+
+#, fuzzy
+#~ msgid "Lua source file"
+#~ msgstr "LaTeX bronbestand"
+
+#, fuzzy
+#~ msgid "Open Selected F_ile"
+#~ msgstr "Bestand openen"
+
+#, fuzzy
+#~ msgid "Insert BSD License Notice"
+#~ msgstr "GPL-informatie invoegen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Inserts a BSD licence notice (should be done at the beginning of the file)"
+#~ msgstr ""
+#~ "Voegt een GPL-informatie in (zou aan het begin van het bestand moeten "
+#~ "gebeuren)"
+
+#, fuzzy
+#~ msgid "Find _Selected"
+#~ msgstr "V_olgende zoeken"
+
+#, fuzzy
+#~ msgid "_New"
+#~ msgstr "Nieuw"
+
+#, fuzzy
+#~ msgid "_Open"
+#~ msgstr "Openen"
+
+#, fuzzy
+#~ msgid "_Close"
+#~ msgstr "Sluiten"
+
+#, fuzzy
+#~ msgid "Insert BSD license Notice"
+#~ msgstr "GPL-informatie invoegen"
+
+#, fuzzy
+#~ msgid "Open selected file"
+#~ msgstr "Bestanden openen"
+
+#, fuzzy
+#~ msgid "Save as"
+#~ msgstr "Alles opslaan"
+
+#, fuzzy
+#~ msgid "Find Next Selection"
+#~ msgstr "_In selectie"
+
+#, fuzzy
+#~ msgid "Find Previous Selection"
+#~ msgstr "Zoek vorige"
+
+#, fuzzy
+#~ msgid "Could not find file '%s'."
+#~ msgstr "Kon pixmap bestand %s niet vinden"
+
+#, fuzzy
+#~ msgid "Open project"
+#~ msgstr "Make object"
+
+#, fuzzy
+#~ msgid "Project files"
+#~ msgstr "Eigenschappen"
+
+#, fuzzy
+#~ msgid "Project \"%s\" closed."
+#~ msgstr "Bestand %s gesloten."
+
+#, fuzzy
+#~ msgid "Project properties"
+#~ msgstr "Eigenschappen"
+
+#, fuzzy
+#~ msgid "C_reate"
+#~ msgstr "Hoofdstuk"
+
+#, fuzzy
+#~ msgid "Name:"
+#~ msgstr "Make"
+
+#, fuzzy
+#~ msgid "Description:"
+#~ msgstr "Sectie"
+
+#, fuzzy
+#~ msgid "Filename:"
+#~ msgstr "Vietnamees"
+
+#, fuzzy
+#~ msgid "File patterns:"
+#~ msgstr "_Midden Oosten"
+
+#, fuzzy
+#~ msgid ""
+#~ "There is already an open project \"%s\". Do you want to close it before "
+#~ "proceed?"
+#~ msgstr ""
+#~ "Het bestand '%s' werd niet opgeslagen.\n"
+#~ "Wenst u het op te slaan vooraleer af te sluiten?"
+
+#, fuzzy
+#~ msgid "Project file could not be written."
+#~ msgstr "Configuratiemap kon niet worden aangemaakt (%s)."
+
+#, fuzzy
+#~ msgid "Project \"%s\" created."
+#~ msgstr "Eigenschappen"
+
+#, fuzzy
+#~ msgid "Project \"%s\" saved."
+#~ msgstr "Bestand %s opgeslagen."
+
+#, fuzzy
+#~ msgid "Project \"%s\" opened."
+#~ msgstr "Eigenschappen"
+
+#, fuzzy
+#~ msgid "Project file could not be loaded."
+#~ msgstr "Configuratiemap kon niet worden aangemaakt (%s)."
+
+#, fuzzy
+#~ msgid "File location:"
+#~ msgstr "Selectie"
+
+#~ msgid "Find usage"
+#~ msgstr "Zoek boodschappen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Range:\t\t%s\n"
+#~ "\n"
+#~ "Lines:\t\t%d\n"
+#~ "Words:\t\t%d\n"
+#~ "Characters:\t%d"
+#~ msgstr ""
+#~ "Bereik:\t\t%s\n"
+#~ "\n"
+#~ "Regels:\t\t%d\n"
+#~ "Woorden:\t\t%d\n"
+#~ "Tekens:\t%d\n"
+
+#~ msgid "Match only word s_tart"
+#~ msgstr "Alleen op woord_begin zoeken"
+
+#, fuzzy
+#~ msgid "In F_ile"
+#~ msgstr "Bestand openen"
+
+#~ msgid "Symbol list font"
+#~ msgstr "Lettertype symbolenlijst"
+
+#~ msgid "Message window font"
+#~ msgstr "Lettertype berichtenvenster"
+
+#~ msgid "Sets the font for the editors windows"
+#~ msgstr "Stelt het lettertype in voor de editorvensters"
+
+#~ msgid ""
+#~ "You have opened too many files. There is a limit of %d concurrent open "
+#~ "files."
+#~ msgstr ""
+#~ "U heeft teveel bestanden geopend. Er is een limiet van %d tegelijkertijd "
+#~ "geopende bestanden."
+
+#~ msgid "Du_plicate Line"
+#~ msgstr "Lijn"
+
+#~ msgid "Count _words"
+#~ msgstr "_Tel woorden"
+
+#~ msgid "Show _Colour Chooser"
+#~ msgstr "_Kleurkiezer openen"
+
+#~ msgid "Enter custom options for the make tool"
+#~ msgstr "Aangepaste opties voor het hulpprogramma 'make'"
+
+#~ msgid ""
+#~ "Enter here the (La)TeX command (for DVI creation) and some useful options."
+#~ msgstr ""
+#~ "Voer hier het (La)TeX commando en nuttige opties in voor het aanmaken van "
+#~ "DVI."
+
+#~ msgid ""
+#~ "Enter here the (La)TeX command (for PDF creation) and some useful options."
+#~ msgstr ""
+#~ "Voer hier het (La)TeX commando en nuttige opties in voor het aanmaken van "
+#~ "PDF."
+
+#~ msgid ""
+#~ "Enter here the (La)TeX command (for DVI preview) and some useful options."
+#~ msgstr ""
+#~ "Voer hier het (La)TeX commando en nuttige opties in voor het weergeven "
+#~ "van DVI."
+
+#~ msgid ""
+#~ "Enter here the (La)TeX command (for PDF preview) and some useful options."
+#~ msgstr ""
+#~ "Voer hier het (La)TeX commando en nuttige opties in voor het weergeven "
+#~ "van PDF."
+
+#~ msgid ""
+#~ "The document has been searched completely but the match \"%s\" was not "
+#~ "found. Wrap search around the document?"
+#~ msgstr ""
+#~ "Het document is volledig doorzocht maar de overeenkomst \"%s\" werd niet "
+#~ "gevonden. Bij het begin van het document starten?"
+
+#~ msgid "Begin"
+#~ msgstr "Begin"
+
+#~ msgid ""
+#~ "Replaces the search text in all opened files. This option is only useful"
+#~ "(and used) if you click on \"Replace All\"."
+#~ msgstr ""
+#~ "Vervangt de zoektekst in alle geopende bestanden. Deze optie is enkel "
+#~ "nuttig (en wordt gebruikt) indien u op \"Replace All\" klikt."
+
+#~ msgid "The dialog window won't be closed when you start the operation."
+#~ msgstr "Het dialoogvenster zal niet worden gesloten als u de actie start."
