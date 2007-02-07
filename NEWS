@@ -3,6 +3,8 @@ Geany 0.10.1 (TBA)
 	Bugs fixed:
 	* Wrong tab foreground colour for unmodified documents.
 	* Fixed crashes when closing dialogs by clicking X on some systems.
+	* Fix missing global tags for C files when a C++ source file was
+	  loaded first.
 
 
 Geany 0.10 (December 21, 2006)
