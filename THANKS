@@ -20,6 +20,7 @@ Kevin Ellwood <kellwood(at)ameritech(dot)net>
 Stefan Oltmanns <stefan(dot)oltmanns(at)abi2006(dot)gymnasium-achim(dot)de> - escape sequences patch
 Bob Doan <bdoan(at)sicom(dot)com> - some patches
 Rob van der Linde <robvdl(at)paradise(dot)net(dot)nz> - fixed wrong vte height on some systems
+Dirk Weber <dietrich-weber(at)web(dot)de>
 
 Translators:
 ----------------------------------
@@ -29,6 +30,7 @@ Toni Garcia-Navarro <topi(at)elpiset(dot)net> - ca_ES
 Petr Messner <messa(at)messa(dot)cz> - cs_CZ
 Frank Lanitz <frank(at)frank(dot)uvena(dot)de> - de_DE
 Damián Viano <debian(at)damianv(dot)com(dot)ar> - es
+Harri Koskinen <harri(at)fastmonkey(dot)org> - fi_FI
 Jean-Philippe Moal <skateinmars(at)momo(dot)servegame(dot)org> - fr
 Gabor Kmetyko aka kilo <kg_kilo(at)freemail(dot)hu> - hu
 M.Baldinelli <m(dot)baldinelli(at)agora(dot)it> - it
