@@ -1,7 +1,7 @@
 # Spanish translation file for geany
 # Copyright (C) 2006 Damián Viano <dviano@fi.uba.ar>
 # This file is distributed under the same license as the geany package.
-# Damián Viano <dviano@fi.uba.ar>, 2006.
+# Damián Viano <dviano@fi.uba.ar>, 2006, 2007.
 #
 msgid ""
 msgstr ""
@@ -1294,12 +1294,12 @@ msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "El archivo '%s' ya existe. ¿Quiere sobreescribirlo?"
 
 #: src/callbacks.c:1247
-#, fuzzy, c-format
+#, c-format
 msgid "Declaration of \"%s()\" not found"
-msgstr "Definición de \"%s()\" no encontrada"
+msgstr "Declaración de \"%s()\" no encontrada"
 
 #: src/callbacks.c:1249
-#, fuzzy, c-format
+#, c-format
 msgid "Definition of \"%s()\" not found"
 msgstr "Definición de \"%s()\" no encontrada"
 
@@ -1662,14 +1662,14 @@ msgid "Could not open file %s (%s)"
 msgstr "No se pudo abrir el archivo %s (%s)"
 
 #: src/document.c:618
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file \"%s\" could not opened properly and probably was truncated. Be "
 "aware that saving it can cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
 "El archivo \"%s\" no pudo ser abierto adecuadamente y probablemente fue "
-"recortado. Este consciente de que grabarlo puede provocar perdida de datos.\n"
+"recortado. Esté consciente de que grabarlo puede provocar perdida de datos.\n"
 "El archivo fue abierto como sólo lectura."
 
 #: src/document.c:641
@@ -2575,7 +2575,6 @@ msgid "Terminal emulation:"
 msgstr "Emulación de terminal:"
 
 #: src/vte.c:580
-#, fuzzy
 msgid ""
 "Controls how the terminal emulator should behave. xterm is a good start."
 msgstr ""
