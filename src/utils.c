@@ -459,7 +459,7 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 	if (end < 0) end = 0;
 
 	// skip whitespaces between identifier and (
-	while (isspace(sci_get_char_at(sci, end))) end--;
+	while (end > 0 && isspace(sci_get_char_at(sci, end))) end--;
 
 	start = end;
 	c = 0;

@@ -258,7 +258,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			{
 				gint start, pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
 				start = pos;
-				while (sci_get_char_at(sci, --start) != '&') ;
+				while (start > 0 && sci_get_char_at(sci, --start) != '&') ;
 
 				SSM(sci, SCI_INSERTTEXT, pos - 1, (sptr_t) nt->text);
 			}
@@ -830,7 +830,7 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	sci_get_text_range(sci, pos - 16, pos - 1, buf);
 	// check the first 8 characters of buf for whitespace, but only in this line
 	i = 14;
-	while (isalpha(buf[i])) i--;	// find pos before keyword
+	while (i >= 0 && isalpha(buf[i])) i--;	// find pos before keyword
 	while (i >= 0 && buf[i] != '\n' && buf[i] != '\r') // we want to stay in this line('\n' check)
 	{
 		if (! isspace(buf[i]))
@@ -1110,7 +1110,7 @@ void sci_cb_auto_table(ScintillaObject *sci, gint pos)
 		x = strlen(indent);
 		// find the start of the <table tag
 		i = 1;
-		while (sci_get_char_at(sci, pos - i) != '<') i++;
+		while (i <= pos && sci_get_char_at(sci, pos - i) != '<') i++;
 		// add all non whitespace before the tag to the indent string
 		while ((pos - i) != indent_pos)
 		{
@@ -1234,12 +1234,17 @@ void sci_cb_do_uncomment(gint idx, gint line)
 
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
+		gint buf_len;
+
 		line_start = sci_get_position_from_line(doc_list[idx].sci, i);
 		line_len = sci_get_line_length(doc_list[idx].sci, i);
 		x = 0;
 
-		sci_get_text_range(doc_list[idx].sci, line_start, MIN((line_start + 255), (line_start + line_len - 1)), sel);
-		sel[MIN(255, (line_len - 1))] = '\0';
+		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
+		if (buf_len <= 0)
+			continue;
+		sci_get_text_range(doc_list[idx].sci, line_start, line_start + buf_len, sel);
+		sel[buf_len] = '\0';
 
 		while (isspace(sel[x])) x++;
 
@@ -1361,14 +1366,21 @@ void sci_cb_do_comment_toggle(gint idx)
 	co_len = strlen(co);
 	if (co_len == 0) return;
 
+	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
+
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
+		gint buf_len;
+
 		line_start = sci_get_position_from_line(doc_list[idx].sci, i);
 		line_len = sci_get_line_length(doc_list[idx].sci, i);
 		x = 0;
 
-		sci_get_text_range(doc_list[idx].sci, line_start, MIN((line_start + 255), (line_start + line_len - 1)), sel);
-		sel[MIN(255, (line_len - 1))] = '\0';
+		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
+		if (buf_len <= 0)
+			continue;
+		sci_get_text_range(doc_list[idx].sci, line_start, line_start + buf_len, sel);
+		sel[buf_len] = '\0';
 
 		while (isspace(sel[x])) x++;
 
@@ -1457,6 +1469,8 @@ void sci_cb_do_comment_toggle(gint idx)
 			}
 		}
 	}
+
+	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
 
 	// restore selection if there is one
 	if (sel_start < sel_end)
@@ -1549,12 +1563,17 @@ void sci_cb_do_comment(gint idx, gint line)
 
 	for (i = first_line; (i <= last_line) && (! break_loop); i++)
 	{
+		gint buf_len;
+
 		line_start = sci_get_position_from_line(doc_list[idx].sci, i);
 		line_len = sci_get_line_length(doc_list[idx].sci, i);
 		x = 0;
 
-		sci_get_text_range(doc_list[idx].sci, line_start, MIN((line_start + 256), (line_start + line_len - 1)), sel);
-		sel[MIN(256, (line_len - 1))] = '\0';
+		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
+		if (buf_len <= 0)
+			continue;
+		sci_get_text_range(doc_list[idx].sci, line_start, line_start + buf_len, sel);
+		sel[buf_len] = '\0';
 
 		while (isspace(sel[x])) x++;
 

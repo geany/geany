@@ -754,6 +754,7 @@ void sci_clear_cmdkey(ScintillaObject *sci, gint key)
 }
 
 
+/* text will be zero terminated and must be allocated (end - start + 1) bytes */
 void sci_get_text_range(ScintillaObject *sci, gint start, gint end, gchar *text)
 {
 	struct TextRange tr;
