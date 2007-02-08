@@ -8,6 +8,9 @@ Geany 0.10.1 (TBA)
 	* Fixed autocompletion missing tag matches.
 	* Fixed a wrong PASCAL autocompletion.
 
+    Internationalisation:
+    * New translations: fi (thanks to Harri Koskinen).
+
 
 Geany 0.10 (December 21, 2006)
 
