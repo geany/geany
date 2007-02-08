@@ -23,8 +23,7 @@ Geany 0.10 (December 21, 2006)
       patched file in a diff file.
     * Added new encoding "None" to open files without any character
       conversions.
-    * Added stop button(using the Run button) to cancel the execution
-      of a command like Run, Compile or Build.
+    * Added Stop button to abort the Run command.
     * New filetype VHDL.
     * New scintilla lexer for filetype D with several improvements.
     * Improved auto completion of multi line comments
