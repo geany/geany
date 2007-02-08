@@ -497,11 +497,8 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_MAKE]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_MAKE]->title = g_strdup(_("Makefile"));
 	filetypes[GEANY_FILETYPES_MAKE]->extension = g_strdup("mak");
-	{
-		gchar *patterns[] = {"*.mak", "*.mk", "GNUmakefile", "makefile", "Makefile",
-			"makefile.*", "Makefile.*", NULL};
-		filetypes[GEANY_FILETYPES_MAKE]->pattern = g_strdupv(patterns);
-	}
+	filetypes[GEANY_FILETYPES_MAKE]->pattern = utils_strv_new(
+		"*.mak", "*.mk", "GNUmakefile", "makefile", "Makefile", "makefile.*", "Makefile.*", NULL);
 	filetypes[GEANY_FILETYPES_MAKE]->style_func_ptr = styleset_makefile;
 	filetypes[GEANY_FILETYPES_MAKE]->comment_open = g_strdup("#");
 	filetypes[GEANY_FILETYPES_MAKE]->comment_close = NULL;
@@ -518,10 +515,8 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_XML]->has_tags = FALSE;
 	filetypes[GEANY_FILETYPES_XML]->title = g_strdup(_("XML source file"));
 	filetypes[GEANY_FILETYPES_XML]->extension = g_strdup("xml");
-	{
-		gchar *patterns[] = {"*.xml", "*.sgml", "*.xsl", "*.xslt", "*.xsd", NULL};
-		filetypes[GEANY_FILETYPES_XML]->pattern = g_strdupv(patterns);
-	}
+	filetypes[GEANY_FILETYPES_XML]->pattern = utils_strv_new(
+		"*.xml", "*.sgml", "*.xsl", "*.xslt", "*.xsd", NULL);
 	filetypes[GEANY_FILETYPES_XML]->style_func_ptr = styleset_xml;
 	filetypes[GEANY_FILETYPES_XML]->comment_open = g_strdup("<!--");
 	filetypes[GEANY_FILETYPES_XML]->comment_close = g_strdup("-->");
@@ -557,11 +552,8 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_HTML]->has_tags = FALSE;
 	filetypes[GEANY_FILETYPES_HTML]->title = g_strdup(_("HTML source file"));
 	filetypes[GEANY_FILETYPES_HTML]->extension = g_strdup("html");
-	{
-		gchar *patterns[] = {"*.htm", "*.html", "*.shtml", "*.hta", "*.htd", "*.htt",
-			"*.cfm", NULL};
-		filetypes[GEANY_FILETYPES_HTML]->pattern = g_strdupv(patterns);
-	}
+	filetypes[GEANY_FILETYPES_HTML]->pattern = utils_strv_new(
+		"*.htm", "*.html", "*.shtml", "*.hta", "*.htd", "*.htt", "*.cfm", NULL);
 	filetypes[GEANY_FILETYPES_HTML]->style_func_ptr = styleset_html;
 	filetypes[GEANY_FILETYPES_HTML]->comment_open = g_strdup("<!--");
 	filetypes[GEANY_FILETYPES_HTML]->comment_close = g_strdup("-->");
@@ -676,10 +668,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_DIFF]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_DIFF]->title = g_strdup(_("Diff file"));
 	filetypes[GEANY_FILETYPES_DIFF]->extension = g_strdup("diff");
-	filetypes[GEANY_FILETYPES_DIFF]->pattern = g_new0(gchar*, 3);
-	filetypes[GEANY_FILETYPES_DIFF]->pattern[0] = g_strdup("*.diff");
-	filetypes[GEANY_FILETYPES_DIFF]->pattern[1] = g_strdup("*.patch");
-	filetypes[GEANY_FILETYPES_DIFF]->pattern[2] = NULL;
+	filetypes[GEANY_FILETYPES_DIFF]->pattern = utils_strv_new("*.diff", "*.patch", "*.rej", NULL);
 	filetypes[GEANY_FILETYPES_DIFF]->style_func_ptr = styleset_diff;
 	filetypes[GEANY_FILETYPES_DIFF]->comment_open = g_strdup("#");
 	filetypes[GEANY_FILETYPES_DIFF]->comment_close = NULL;

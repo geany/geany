@@ -1,7 +1,15 @@
+2007-02-08  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/utils.h, src/filetypes.c,
+   data/filetype_extensions.conf:
+   Add *.rej as a Diff filename pattern.
+   Add utils_strv_new() to duplicate a va_list of strings.
+
+
 2007-02-07  Frank Lanitz  <frank@frank.uvena.de>
 
- * data/pascal.tags, THANKS: Fixed a wrong autocompletion. Thanks to 
-   Dirk Weber for reporting. 
+ * data/pascal.tags, THANKS: Fixed a wrong autocompletion. Thanks to
+   Dirk Weber for reporting.
 
 
 2007-02-06  Nick Treleaven  <nick.treleaven@btinternet.com>

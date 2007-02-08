@@ -154,6 +154,12 @@ gchar *utils_get_whitespace(gint amount);
  * it will also be freed, the list should be ended with NULL */
 void utils_free_pointers(gpointer first, ...);
 
+/* creates a string array deep copy of a series of non-NULL strings.
+ * the first argument is nothing special.
+ * the list must be ended with NULL.
+ * if first is NULL, NULL is returned. */
+gchar **utils_strv_new(gchar *first, ...);
+
 gint utils_mkdir(const gchar *path);
 
 #endif

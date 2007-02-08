@@ -1469,6 +1469,42 @@ void utils_free_pointers(gpointer first, ...)
 }
 
 
+/* creates a string array deep copy of a series of non-NULL strings.
+ * the first argument is nothing special.
+ * the list must be ended with NULL.
+ * if first is NULL, NULL is returned. */
+gchar **utils_strv_new(gchar *first, ...)
+{
+	gsize strvlen, i;
+	va_list args;
+	gchar *str;
+	gchar **strv;
+
+	if (first == NULL)
+		return NULL;
+
+	strvlen = 1;	// for first argument
+
+    // count other arguments
+    va_start(args, first);
+    for (; va_arg(args, gchar*) != NULL; strvlen++);
+	va_end(args);
+
+	strv = g_new(gchar*, strvlen + 1);	// +1 for NULL terminator
+	strv[0] = g_strdup(first);
+
+    va_start(args, first);
+    for (i = 1; str = va_arg(args, gchar*), str != NULL; i++)
+    {
+		strv[i] = g_strdup(str);
+	}
+	va_end(args);
+
+	strv[i] = NULL;
+	return strv;
+}
+
+
 gint utils_mkdir(const gchar *path)
 {
 	if (path == NULL || strlen(path) == 0)
