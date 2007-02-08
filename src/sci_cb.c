@@ -2092,8 +2092,7 @@ static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_vi
 	GtkWidget *wid = GTK_WIDGET(sci);
 
 	if (! wid->window || ! gdk_window_is_viewable(wid->window))
-		return;
-	//if (GTK_WIDGET(sci)->allocation.height <= 1) return;	// try to prevent gdk_window_scroll warning
+		return;	// prevent gdk_window_scroll warning
 
 	if (line == -1)
 		line = sci_get_current_line(sci, -1);
