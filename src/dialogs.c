@@ -1016,8 +1016,9 @@ void dialogs_show_file_properties(gint idx)
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	enctext = g_strdup_printf("%s %s",
-	doc_list[idx].encoding,
-	(utils_is_unicode_charset(doc_list[idx].encoding)) ? ((doc_list[idx].has_bom) ? _("(with BOM)") : _("(without BOM)")) : "");
+		doc_list[idx].encoding,
+		(encodings_is_unicode_charset(doc_list[idx].encoding)) ?
+			((doc_list[idx].has_bom) ? _("(with BOM)") : _("(without BOM)")) : "");
 
 	label = gtk_label_new(enctext);
 	g_free(enctext);

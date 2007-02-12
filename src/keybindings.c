@@ -689,12 +689,16 @@ static void cb_func_switch_editor(G_GNUC_UNUSED guint key_id)
 static void cb_func_switch_scribble(G_GNUC_UNUSED guint key_id)
 {
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_SCRATCH);
+	msgwin_show_hide(TRUE);
 	gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
 }
 
 static void cb_func_switch_vte(G_GNUC_UNUSED guint key_id)
 {
 #ifdef HAVE_VTE
+	msgwin_show_hide(TRUE);
+	/* the msgwin must be visible before we switch to the VTE page so that
+	 * the font settings are applied on realization */
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
 	gtk_widget_grab_focus(vc->vte);
 	msgwin_show_hide(TRUE);
@@ -749,7 +753,7 @@ static void goto_matching_brace(gint idx)
 	if (new_pos != -1)
 	{
 		sci_goto_pos(doc_list[idx].sci, new_pos, TRUE); // set the cursor at the brace
-		sci_scroll_to_line(doc_list[idx].sci, -1, 0.5);
+		doc_list[idx].scroll_percent = 0.5F;
 	}
 }
 

@@ -1,7 +1,8 @@
 /*
  *      document.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -207,6 +208,7 @@ static void init_doc_struct(document *new_doc)
 	new_doc->sci = NULL;
 	new_doc->undo_actions = NULL;
 	new_doc->redo_actions = NULL;
+	new_doc->scroll_percent = -1.0F;
 }
 
 
@@ -348,6 +350,7 @@ gboolean document_remove(guint page_num)
 		doc_list[idx].encoding = NULL;
 		doc_list[idx].has_bom = FALSE;
 		doc_list[idx].tm_file = NULL;
+		doc_list[idx].scroll_percent = -1.0F;
 		document_undo_clear(idx);
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
 		{
@@ -421,113 +424,236 @@ void document_new_file(filetype *ft)
 }
 
 
+typedef struct
+{
+	gchar		*data;	// null-terminated file data
+	gsize		 len;	// string length of data
+	gchar		*enc;
+	gboolean	 bom;
+	time_t		 mtime;	// modification time, read by stat::st_mtime
+	gboolean	 readonly;
+} FileData;
+
+
 // reload file with specified encoding
 static gboolean
-handle_forced_encoding(gchar **data, gsize *size, const gchar *forced_enc, gchar **enc,
-	gboolean *bom)
+handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 {
+	GeanyEncodingIndex enc_idx;
+
 	if (utils_str_equal(forced_enc, "UTF-8"))
 	{
-		if (! g_utf8_validate(*data, *size, NULL))
+		if (! g_utf8_validate(filedata->data, filedata->len, NULL))
 		{
 			return FALSE;
-		}
-		else
-		{
-			*bom = utils_str_equal(utils_scan_unicode_bom(*data), "UTF-8");
-			*enc = g_strdup(forced_enc);
 		}
 	}
 	else
 	{
 		gchar *converted_text = encodings_convert_to_utf8_from_charset(
-													*data, *size, forced_enc, FALSE);
+										filedata->data, filedata->len, forced_enc, FALSE);
 		if (converted_text == NULL)
 		{
 			return FALSE;
 		}
 		else
 		{
-			g_free(*data);
-			*data = (void*)converted_text;
-			*size = strlen(converted_text);
-			*bom = utils_str_equal(utils_scan_unicode_bom(*data), "UTF-8");
-			*enc = g_strdup(forced_enc);
+			g_free(filedata->data);
+			filedata->data = converted_text;
+			filedata->len = strlen(converted_text);
 		}
 	}
+	enc_idx = encodings_scan_unicode_bom(filedata->data, filedata->len, NULL);
+	filedata->bom = (enc_idx == GEANY_ENCODING_UTF_8);
+	filedata->enc = g_strdup(forced_enc);
 	return TRUE;
 }
 
 
+// detect encoding and convert to UTF-8 if necessary
 static gboolean
-handle_encoding(gchar **data, gsize *size, gchar **enc, gboolean *bom)
+handle_encoding(FileData *filedata)
 {
-	if (*size > 0)
-	{	// the usual way to detect encoding and convert to UTF-8
-		if (*size >= 4)
+	g_return_val_if_fail(filedata->enc == NULL, FALSE);
+	g_return_val_if_fail(filedata->bom == FALSE, FALSE);
+
+	if (filedata->len == 0)
+	{
+		// we have no data so assume UTF-8
+		filedata->enc = g_strdup("UTF-8");
+	}
+	else
+	{
+		// first check for a BOM
+		GeanyEncodingIndex enc_idx =
+			encodings_scan_unicode_bom(filedata->data, filedata->len, NULL);
+
+		if (enc_idx != GEANY_ENCODING_NONE)
 		{
-			*enc = utils_scan_unicode_bom(*data);
-		}
-		if (*enc != NULL)
-		{
-			*bom = TRUE;
-			if ((*enc)[4] != '8') // the BOM indicated something else than UTF-8
+			filedata->enc = g_strdup(encodings[enc_idx].charset);
+			filedata->bom = TRUE;
+
+			if (enc_idx != GEANY_ENCODING_UTF_8) // the BOM indicated something else than UTF-8
 			{
 				gchar *converted_text = encodings_convert_to_utf8_from_charset(
-															*data, *size, *enc, FALSE);
-				if (converted_text == NULL)
+										filedata->data, filedata->len, filedata->enc, FALSE);
+				if (converted_text != NULL)
 				{
-					g_free(*enc);
-					*enc = NULL;
-					*bom = FALSE;
+					g_free(filedata->data);
+					filedata->data = converted_text;
+					filedata->len = strlen(converted_text);
 				}
 				else
 				{
-					g_free(*data);
-					*data = (void*)converted_text;
-					*size = strlen(converted_text);
+					// there was a problem converting data from BOM encoding type
+					g_free(filedata->enc);
+					filedata->enc = NULL;
+					filedata->bom = FALSE;
 				}
 			}
 		}
-		// this if is important, else doesn't work because enc can be altered in the above block
-		if (*enc == NULL)
+
+		if (filedata->enc == NULL)	// either there was no BOM or the BOM encoding failed
 		{
-			if (g_utf8_validate(*data, *size, NULL))
+			// try UTF-8 first
+			if (g_utf8_validate(filedata->data, filedata->len, NULL))
 			{
-				*enc = g_strdup("UTF-8");
+				filedata->enc = g_strdup("UTF-8");
 			}
 			else
 			{
-				gchar *converted_text = encodings_convert_to_utf8(*data, *size, enc);
+				// detect the encoding
+				gchar *converted_text = encodings_convert_to_utf8(filedata->data,
+					filedata->len, &filedata->enc);
 
 				if (converted_text == NULL)
 				{
 					return FALSE;
 				}
-				else
-				{
-					g_free(*data);
-					*data = (void*)converted_text;
-					*size = strlen(converted_text);
-				}
+				g_free(filedata->data);
+				filedata->data = converted_text;
+				filedata->len = strlen(converted_text);
 			}
 		}
-	}
-	else
-	{
-		*enc = g_strdup("UTF-8");
 	}
 	return TRUE;
 }
 
 
 static void
-handle_bom(gchar **data)
+handle_bom(FileData *filedata)
 {
-	gchar *data_without_bom;
-	data_without_bom = g_strdup(*data + 3);
-	g_free(*data);
-	*data = data_without_bom;
+	guint bom_len;
+
+	encodings_scan_unicode_bom(filedata->data, filedata->len, &bom_len);
+	g_return_if_fail(bom_len != 0);
+
+	filedata->len -= bom_len;
+	// overwrite the BOM with the remainder of the file contents, plus the NULL terminator.
+	g_memmove(filedata->data, filedata->data + bom_len, filedata->len + 1);
+	filedata->data = g_realloc(filedata->data, filedata->len + 1);
+}
+
+
+/* loads textfile data, verifies and converts to forced_enc or UTF-8. Also handles BOM. */
+static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_filename,
+		FileData *filedata, const gchar *forced_enc)
+{
+	GError *err = NULL;
+	struct stat st;
+
+	filedata->data = NULL;
+	filedata->len = 0;
+	filedata->enc = NULL;
+	filedata->bom = FALSE;
+	filedata->readonly = FALSE;
+
+	if (stat(locale_filename, &st) != 0)
+	{
+		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
+		return FALSE;
+	}
+
+	filedata->mtime = st.st_mtime;
+
+#ifdef G_OS_WIN32
+	if (! g_file_get_contents(utf8_filename, &filedata->data, NULL, &err))
+#else
+	if (! g_file_get_contents(locale_filename, &filedata->data, NULL, &err))
+#endif
+	{
+		msgwin_status_add(err->message);
+		g_error_free(err);
+		return FALSE;
+	}
+
+	// use strlen to check for null chars
+	filedata->len = strlen(filedata->data);
+
+	/* check whether the size of the loaded data is equal to the size of the file in the filesystem */
+	if (filedata->len != (gsize) st.st_size)
+	{
+		gchar *warn_msg = _("The file \"%s\" could not be opened properly and has been truncated. "
+				"This can occur if the file contains a NULL byte. "
+				"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
+
+		if (app->main_window_realized)
+			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
+
+		msgwin_status_add(warn_msg, utf8_filename);
+
+		// set the file to read-only mode because saving it is probably dangerous
+		filedata->readonly = TRUE;
+	}
+
+	/* Determine character encoding and convert to UTF-8 */
+	if (forced_enc != NULL)
+	{
+		// the encoding should be ignored(requested by user), so open the file "as it is"
+		if (utils_str_equal(forced_enc, encodings[GEANY_ENCODING_NONE].charset))
+		{
+			filedata->bom = FALSE;
+			filedata->enc = g_strdup(encodings[GEANY_ENCODING_NONE].charset);
+		}
+		else if (! handle_forced_encoding(filedata, forced_enc))
+		{
+			msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
+			utils_beep();
+			g_free(filedata->data);
+			return FALSE;
+		}
+	}
+	else if (! handle_encoding(filedata))
+	{
+		msgwin_status_add(
+			_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
+			utf8_filename);
+		utils_beep();
+		g_free(filedata->data);
+		return FALSE;
+	}
+
+	if (filedata->bom)
+		handle_bom(filedata);
+	return TRUE;
+}
+
+
+/* Sets the cursor position on opening a file. First it sets the line when cl_options.goto_line
+ * is set, otherwise it sets the line when pos is greater than zero. */
+static void set_cursor_position(gint idx, gint pos)
+{
+	if (cl_options.goto_line >= 0)
+	{	// goto line which was specified on command line and then undefine the line
+		sci_goto_line(doc_list[idx].sci, cl_options.goto_line - 1, TRUE);
+		doc_list[idx].scroll_percent = 0.5F;
+		cl_options.goto_line = -1;
+	}
+	else if (pos > 0)
+	{
+		sci_set_current_position(doc_list[idx].sci, pos, FALSE);
+		doc_list[idx].scroll_percent = 0.5F;
+	}
 }
 
 
@@ -541,16 +667,11 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 					   const gchar *forced_enc)
 {
 	gint editor_mode;
-	gsize size;
 	gboolean reload = (idx == -1) ? FALSE : TRUE;
-	struct stat st;
-	gboolean bom = FALSE;
-	gchar *enc = NULL;
 	gchar *utf8_filename = NULL;
 	gchar *locale_filename = NULL;
-	GError *err = NULL;
-	gchar *data = NULL;
 	filetype *use_ft;
+	FileData filedata;
 
 	//struct timeval tv, tv1;
 	//struct timezone tz;
@@ -585,120 +706,52 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 			g_free(utf8_filename);
 			g_free(locale_filename);
 			utils_check_disk_status(idx, TRUE);	// force a file changed check
+			set_cursor_position(idx, pos);
 			return idx;
 		}
 	}
 
-	if (stat(locale_filename, &st) != 0)
+	if (! load_text_file(locale_filename, utf8_filename, &filedata, forced_enc))
 	{
-		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
 		g_free(utf8_filename);
 		g_free(locale_filename);
 		return -1;
 	}
-
-#ifdef G_OS_WIN32
-	if (! g_file_get_contents(utf8_filename, &data, NULL, &err))
-#else
-	if (! g_file_get_contents(locale_filename, &data, NULL, &err))
-#endif
-	{
-		msgwin_status_add(err->message);
-		g_error_free(err);
-		g_free(utf8_filename);
-		g_free(locale_filename);
-		return -1;
-	}
-
-	/* check whether the size of the loaded data is equal to the size of the file in the filesystem */
-	//size = strlen(data);
-	size = strlen(data);
-	if (size != (gsize) st.st_size)
-	{
-		gchar *warn_msg = _("The file \"%s\" could not opened properly and probably was truncated. "
-				"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
-
-		if (app->main_window_realized)
-			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
-
-		msgwin_status_add(warn_msg, utf8_filename);
-
-		// set the file to read-only mode because saving it is probably dangerous
-		readonly = TRUE;
-	}
-
-	/* Determine character encoding and convert to UTF-8 */
-	if (forced_enc != NULL)
-	{
-		// the encoding should be ignored(requested by user), so open the file "as it is"
-		if (utils_str_equal(forced_enc, encodings[GEANY_ENCODING_NONE].charset))
-		{
-			bom = FALSE;
-			enc = g_strdup(encodings[GEANY_ENCODING_NONE].charset);
-		}
-		else if (! handle_forced_encoding(&data, &size, forced_enc, &enc, &bom))
-		{
-			msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
-			utils_beep();
-			g_free(data);
-			g_free(utf8_filename);
-			g_free(locale_filename);
-			return -1;
-		}
-	}
-	else if (! handle_encoding(&data, &size, &enc, &bom))
-	{
-		msgwin_status_add(
-			_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
-			utf8_filename);
-		utils_beep();
-		g_free(data);
-		g_free(utf8_filename);
-		g_free(locale_filename);
-		return -1;
-	}
-
-	if (bom) handle_bom(&data);
 
 	if (! reload) idx = document_create_new_sci(utf8_filename);
-	if (idx == -1) return -1;	// really should not happen
+	g_return_val_if_fail(idx != -1, -1);	// really should not happen
 
-	// set editor mode and add the text to the ScintillaObject
 	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
 	sci_empty_undo_buffer(doc_list[idx].sci);
-	sci_set_text(doc_list[idx].sci, data);	// NULL terminated data
 
-	editor_mode = utils_get_line_endings(data, size);
+	// add the text to the ScintillaObject
+	sci_set_text(doc_list[idx].sci, filedata.data);	// NULL terminated data
+
+	// detect & set line endings
+	editor_mode = utils_get_line_endings(filedata.data, filedata.len);
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
-	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
+	g_free(filedata.data);
 
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 
-	doc_list[idx].mtime = st.st_mtime; // get the modification time from file and keep it
+	doc_list[idx].mtime = filedata.mtime; // get the modification time from file and keep it
 	doc_list[idx].changed = FALSE;
 	g_free(doc_list[idx].encoding);	// if reloading, free old encoding
-	doc_list[idx].encoding = enc;
-	doc_list[idx].has_bom = bom;
+	doc_list[idx].encoding = filedata.enc;
+	doc_list[idx].has_bom = filedata.bom;
 	store_saved_encoding(idx);	// store the opened encoding for undo/redo
 
-	if (cl_options.goto_line >= 0)
-	{	// goto line which was specified on command line and then undefine the line
-		sci_goto_line(doc_list[idx].sci, cl_options.goto_line - 1, TRUE);
-		sci_scroll_to_line(doc_list[idx].sci, -1, 0.5);
-		cl_options.goto_line = -1;
-	}
-	else if (pos >= 0)
-	{
-		sci_goto_pos(doc_list[idx].sci, pos, FALSE);
-		if (reload)
-			sci_scroll_to_line(doc_list[idx].sci, -1, 0.5);
-	}
+	doc_list[idx].readonly = readonly || filedata.readonly;
+	sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
+
+	// update line number margin width
+	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
+
+	// set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column
+	set_cursor_position(idx, pos);
 
 	if (! reload)
 	{
-		doc_list[idx].readonly = readonly;
-		sci_set_readonly(doc_list[idx].sci, readonly);
-
 		// "the" SCI signal (connect after initial setup(i.e. adding text))
 		g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
 					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
@@ -715,8 +768,6 @@ int document_open_file(gint idx, const gchar *filename, gint pos, gboolean reado
 
 	document_set_text_changed(idx);	// also updates tab state
 	ui_document_show_hide(idx);	// update the document menu
-
-	g_free(data);
 
 
 	// finally add current file to recent files menu, but not the files from the last session
@@ -840,7 +891,7 @@ gboolean document_save_file(gint idx, gboolean force)
 	sci_convert_eols(doc_list[idx].sci, sci_get_eol_mode(doc_list[idx].sci));
 
 	len = sci_get_length(doc_list[idx].sci) + 1;
-	if (doc_list[idx].has_bom && utils_is_unicode_charset(doc_list[idx].encoding))
+	if (doc_list[idx].has_bom && encodings_is_unicode_charset(doc_list[idx].encoding))
 	{
 		data = (gchar*) g_malloc(len + 3);	// 3 chars for BOM
 		data[0] = 0xef;
@@ -979,7 +1030,7 @@ void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean 
 	{
 		sci_set_selection_start(doc_list[idx].sci, ttf.chrgText.cpMin);
 		sci_set_selection_end(doc_list[idx].sci, ttf.chrgText.cpMax);
-		sci_scroll_to_line(doc_list[idx].sci, -1, 0.3);
+		doc_list[idx].scroll_percent = 0.3F;
 	}
 	else
 	{
@@ -1027,7 +1078,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 	if (search_pos != -1)
 	{
 		if (scroll)
-			sci_scroll_to_line(doc_list[idx].sci, -1, 0.3);
+			doc_list[idx].scroll_percent = 0.3F;
 	}
 	else
 	{
@@ -1611,7 +1662,7 @@ void document_set_encoding(gint idx, const gchar *new_encoding)
 
 	ui_update_statusbar(idx, -1);
 	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
-			utils_is_unicode_charset(doc_list[idx].encoding));
+			encodings_is_unicode_charset(doc_list[idx].encoding));
 }
 
 

@@ -22,7 +22,11 @@ Geany 0.10.1 (TBA)
     * Change default keybinding for Close All to Ctrl-Shift-W.
     * Allow Make for files with no extension - prevent Build when the
       output filename would be the same as the source file.
-
+    * Ensure the VTE visual settings are applied when switching to VTE
+      when the Message Window is hidden.
+    * Fixed several issues while opening files and improved code.
+    * Improved the auto scrolling of documents and fixed a bug when
+      opening files remotely.
 
     Internationalisation:
     * New translations: fi (thanks to Harri Koskinen).

@@ -1,7 +1,8 @@
 /*
  *      encodings.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -73,6 +74,8 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
  * If fast is set, no further checks are performed. */
 gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 											  const gchar *charset, gboolean fast);
+
+gboolean encodings_is_unicode_charset(const gchar *string);
 
 
 /*
@@ -152,7 +155,7 @@ typedef enum
 	GEANY_ENCODING_WINDOWS_1256,
 	GEANY_ENCODING_WINDOWS_1257,
 	GEANY_ENCODING_WINDOWS_1258,
-	
+
 	GEANY_ENCODING_NONE,
 
 	GEANY_ENCODINGS_MAX
@@ -160,5 +163,8 @@ typedef enum
 
 
 GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
+
+
+GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, guint *bom_len);
 
 #endif

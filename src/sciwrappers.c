@@ -1,7 +1,8 @@
 /*
  *      sciwrappers.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -379,9 +380,15 @@ gint sci_get_current_position(ScintillaObject* sci )
 }
 
 
-void sci_set_current_position(ScintillaObject* sci, gint position )
+void sci_set_current_position(ScintillaObject* sci, gint position, gboolean scroll_to_caret)
 {
-	SSM(sci, SCI_GOTOPOS, position, 0);
+	if (scroll_to_caret)
+		SSM(sci, SCI_GOTOPOS, position, 0);
+	else
+	{
+		SSM(sci, SCI_SETCURRENTPOS, position, 0);
+		SSM(sci, SCI_SETANCHOR, position, 0); // to avoid creation of a selection
+	}
 }
 
 
@@ -669,26 +676,6 @@ void sci_scroll_caret(ScintillaObject *sci)
 void sci_scroll_lines(ScintillaObject *sci, gint lines)
 {
 	SSM(sci, SCI_LINESCROLL, 0, lines);
-}
-
-
-/* Scroll the view to make line appear at percent_of_view.
- * line can be -1 to use the current position. */
-void sci_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view)
-{
-	gint vis1, los, delta;
-
-	if (GTK_WIDGET(sci)->allocation.height <= 1) return;	// prevent gdk_window_scroll warning
-	if (line == -1)
-		line = sci_get_current_line(sci, -1);
-
-	// sci 'visible line' != file line number
-	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
-	vis1 = SSM(sci, SCI_DOCLINEFROMVISIBLE, vis1, 0);
-	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
-	delta = (line - vis1) - los * percent_of_view;
-	sci_scroll_lines(sci, delta);
-	sci_scroll_caret(sci); //ensure visible, in case of excessive folding/wrapping
 }
 
 

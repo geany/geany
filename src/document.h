@@ -1,7 +1,8 @@
 /*
  *      document.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -63,6 +64,7 @@ typedef struct document
 	gboolean		 changed;
 	gboolean		 line_breaking;
 	gboolean		 use_auto_indention;
+	gfloat			 scroll_percent;	// % to scroll view by on paint, if positive.
 	time_t			 last_check;	// to remember the last disk check
 	time_t			 mtime;
 	GTrashStack		*undo_actions;

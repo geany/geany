@@ -1,7 +1,8 @@
 /*
  *      socket.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -36,12 +37,14 @@
 # include <winsock2.h>
 # include <ws2tcpip.h>
 #endif
+#include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 
 #include "main.h"
 #include "socket.h"
 #include "document.h"
+#include "support.h"
 
 
 
@@ -73,6 +76,46 @@ static gint socket_fd_read			(gint sock, gchar *buf, gint len);
 static gint socket_fd_recv			(gint fd, gchar *buf, gint len, gint flags);
 static gint socket_fd_close			(gint sock);
 
+
+
+void send_open_command(gint sock, gint argc, gchar **argv)
+{
+	gint i;
+	gchar *filename;
+
+	g_return_if_fail(argc > 1);
+	geany_debug("using running instance of Geany");
+
+	if (cl_options.goto_line >= 0)
+	{
+		gchar *line = g_strdup_printf("%d\n", cl_options.goto_line);
+		socket_fd_write_all(sock, "line\n", 5);
+		socket_fd_write_all(sock, line, strlen(line));
+		socket_fd_write_all(sock, ".\n", 2);
+		g_free(line);
+	}
+
+	socket_fd_write_all(sock, "open\n", 5);
+
+	for(i = 1; i < argc && argv[i] != NULL; i++)
+	{
+		filename = get_argv_filename(argv[i]);
+
+		if (filename != NULL &&
+			g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+		{
+			socket_fd_write_all(sock, filename, strlen(filename));
+			socket_fd_write_all(sock, "\n", 1);
+		}
+		else
+		{
+			g_printerr(_("Could not find file '%s'."), filename);
+			g_printerr("\n");	// keep translation from open_cl_files() in main.c.
+		}
+		g_free(filename);
+	}
+	socket_fd_write_all(sock, ".\n", 2);
+}
 
 
 /* (Unix domain) socket support to replace the old FIFO code
@@ -118,25 +161,7 @@ gint socket_init(gint argc, gchar **argv)
 	// remote command mode, here we have another running instance and want to use it
 	if (argc > 1)
 	{
-		gint i;
-		gchar *filename;
-
-		geany_debug("using running instance of Geany");
-
-		socket_fd_write_all(sock, "open\n", 5);
-
-		for(i = 1; i < argc && argv[i] != NULL; i++)
-		{
-			filename = get_argv_filename(argv[i]);
-
-			if (filename != NULL)
-			{
-				socket_fd_write_all(sock, filename, strlen(filename));
-				socket_fd_write_all(sock, "\n", 1);
-				g_free(filename);
-			}
-		}
-		socket_fd_write_all(sock, ".\n", 2);
+		send_open_command(sock, argc, argv);
 	}
 
 	socket_fd_close(sock);
@@ -349,24 +374,34 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	sock = accept(fd, (struct sockaddr *)&caddr, &caddr_len);
 
 	// first get the command
-	if (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && strncmp(buf, "open", 4) == 0)
+	while (socket_fd_gets(sock, buf, sizeof(buf)) != -1)
 	{
-		geany_debug("remote command: open");
-		while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+		if (strncmp(buf, "open", 4) == 0)
 		{
-			g_strstrip(buf); // remove \n char
+			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+			{
+				g_strstrip(buf); // remove \n char
 
-			if (g_file_test(buf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-				document_open_file(-1, buf, 0, FALSE, NULL, NULL);
-			else
-				geany_debug("got data from socket, but it does not look like a filename");
-		}
-		gtk_window_deiconify(GTK_WINDOW(app->window));
+				if (g_file_test(buf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+					document_open_file(-1, buf, 0, FALSE, NULL, NULL);
+				else
+					geany_debug("got data from socket, but it does not look like a filename");
+			}
+			gtk_window_deiconify(GTK_WINDOW(app->window));
 #ifdef G_OS_WIN32
-		gtk_window_present(GTK_WINDOW(app->window));
+			gtk_window_present(GTK_WINDOW(app->window));
 #endif
+		}
+		else if (strncmp(buf, "line", 4) == 0)
+		{
+			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+			{
+				g_strstrip(buf); // remove \n char
+				// on any error we get 0 which should be save enough as fallback
+				cl_options.goto_line = atoi(buf);
+			}
+		}
 	}
-
 	socket_fd_close(sock);
 
 	return TRUE;

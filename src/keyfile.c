@@ -1,7 +1,8 @@
 /*
  *      keyfile.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -579,21 +580,6 @@ void configuration_apply_settings()
 	{
 		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "hpaned1")), hpan_position);
 		gtk_paned_set_position(GTK_PANED(lookup_widget(app->window, "vpaned1")), vpan_position);
-	}
-
-	// now the scintilla widget pages may need scrolling in view
-	if (app->pref_main_load_session)
-	{
-		gint idx;
-		guint tabnum = 0;
-
-		while (tabnum < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)))
-		{
-			idx = document_get_n_idx(tabnum);
-			if (idx < 0) break;
-			sci_scroll_to_line(doc_list[idx].sci, -1, 0.5F);
-			tabnum++;
-		}
 	}
 
 	// set fullscreen after initial draw so that returning to normal view is the right size.

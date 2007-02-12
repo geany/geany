@@ -1,7 +1,8 @@
 /*
  *      sciwrappers.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -68,7 +69,7 @@ gint 				sci_get_col_from_position	(ScintillaObject* sci, gint position);
 gint 				sci_get_line_from_position	(ScintillaObject* sci, gint position);
 gint 				sci_get_position_from_line	(ScintillaObject* sci, gint line );
 gint 				sci_get_current_position	(ScintillaObject* sci);
-void 				sci_set_current_position	(ScintillaObject* sci, gint position);
+void 				sci_set_current_position	(ScintillaObject* sci, gint position, gboolean scroll_to_caret);
 void 				sci_set_current_line		(ScintillaObject* sci, gint line);
 
 void 				sci_cut						(ScintillaObject* sci);
@@ -124,7 +125,6 @@ void				sci_set_search_anchor		(ScintillaObject * sci);
 void				sci_set_anchor				(ScintillaObject * sci, gint pos);
 void				sci_scroll_caret			(ScintillaObject * sci);
 void				sci_scroll_lines			(ScintillaObject * sci, gint lines);
-void				sci_scroll_to_line			(ScintillaObject * sci, gint line, gfloat percent_of_view);
 gint				sci_search_next				(ScintillaObject * sci, gint flags, const gchar *text);
 gint				sci_search_prev				(ScintillaObject * sci, gint flags, const gchar *text);
 gint				sci_find_text				(ScintillaObject * sci, gint flags, struct TextToFind *ttf);

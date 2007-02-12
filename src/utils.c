@@ -235,7 +235,7 @@ gboolean utils_goto_line(gint idx, gint line)
 	sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 0);
 
 	sci_goto_line(doc_list[idx].sci, line, TRUE);
-	sci_scroll_to_line(doc_list[idx].sci, -1, 0.25);
+	doc_list[idx].scroll_percent = 0.25F;
 
 	// finally switch to the page
 	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(doc_list[idx].sci));
@@ -1368,50 +1368,6 @@ gboolean utils_str_replace_escape(gchar *string)
 		j++;
 	}
 	return TRUE;
-}
-
-
-gchar *utils_scan_unicode_bom(const gchar *string)
-{
-	if ((unsigned char)string[0] == 0xef && (unsigned char)string[1] == 0xbb &&
-		(unsigned char)string[2] == 0xbf)
-	{
-		return g_strdup("UTF-8");
-	}
-	else if ((unsigned char)string[0] == 0x00 && (unsigned char)string[1] == 0x00 &&
-			 (unsigned char)string[2] == 0xfe && (unsigned char)string[3] == 0xff)
-	{
-		return g_strdup("UTF-32BE"); // Big endian
-	}
-	else if ((unsigned char)string[0] == 0xff && (unsigned char)string[1] == 0xfe &&
-			 (unsigned char)string[2] == 0x00 && (unsigned char)string[3] == 0x00)
-	{
-		return g_strdup("UTF-32LE"); // Little endian
-	}
-	else if ((unsigned char)string[0]==0xfe && (unsigned char)string[1] == 0xff)
-	{
-		return g_strdup("UTF-16BE"); // Big endian
-	}
-	else if ((unsigned char)string[0] == 0xff && (unsigned char)string[1] == 0xfe)
-	{
-		return g_strdup("UTF-16LE"); // Little endian
-	}
-	else if ((string[0] == 0x2b && string[1] == 0x2f && string[2] == 0x76) &&
-			 (string[3] == 0x38 || string[3] == 0x39 || string[3] == 0x2b || string[3] == 0x2f))
-	{
-		 return g_strdup("UTF-7");
-	}
-	return NULL;
-}
-
-
-gboolean utils_is_unicode_charset(const gchar *string)
-{
-	if (string != NULL && (strncmp(string, "UTF", 3) == 0 || strncmp(string, "UCS", 3) == 0))
-	{
-		return TRUE;
-	}
-	return FALSE;
 }
 
 

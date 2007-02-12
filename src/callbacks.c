@@ -2002,10 +2002,10 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 		line = sci_get_current_line(doc_list[idx].sci, old_pos);
 		ind_pos = sci_get_line_indent_position(doc_list[idx].sci, line);
 
-		sci_set_current_position(doc_list[idx].sci, ind_pos);
+		sci_set_current_position(doc_list[idx].sci, ind_pos, TRUE);
 		sci_cmd(doc_list[idx].sci, SCI_TAB);
 		sci_set_current_position(doc_list[idx].sci,
-			(old_pos > ind_pos) ? old_pos + 1 : old_pos);
+			(old_pos > ind_pos) ? old_pos + 1 : old_pos, TRUE);
 	}
 }
 
@@ -2031,10 +2031,10 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 
 		if (ind_pos == sci_get_position_from_line(doc_list[idx].sci, line))
 			return;
-		sci_set_current_position(doc_list[idx].sci, ind_pos);
+		sci_set_current_position(doc_list[idx].sci, ind_pos, TRUE);
 		sci_cmd(doc_list[idx].sci, SCI_BACKTAB);
 		sci_set_current_position(doc_list[idx].sci,
-			(old_pos >= ind_pos) ? old_pos - 1 : old_pos);
+			(old_pos >= ind_pos) ? old_pos - 1 : old_pos, TRUE);
 	}
 }
 
