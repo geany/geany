@@ -1,7 +1,8 @@
 /*
  *      msgwindow.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -185,8 +186,20 @@ static void prepare_compiler_tree_view(void)
 
 static const GdkColor color_error = {0, 65535, 0, 0};
 
+void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...)
+{
+	gchar string[512];
+	va_list args;
+
+	va_start(args, format);
+	g_vsnprintf(string, 512, format, args);
+	va_end(args);
+	msgwin_compiler_add(msg_color, string);
+}
+
+
 // adds string to the compiler textview
-void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
+void msgwin_compiler_add(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
 	GtkTreePath *path;
@@ -194,12 +207,6 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 	const GdkColor dark_red = {0, 65535 / 2, 0, 0};
 	const GdkColor blue = {0, 0, 0, 0xD000};	// not too bright ;-)
 	const GdkColor black = {0, 0, 0, 0};
-	gchar string[512];
-	va_list args;
-
-	va_start(args, format);
-	g_vsnprintf(string, 512, format, args);
-	va_end(args);
 
 	switch (msg_color)
 	{
@@ -210,7 +217,7 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 	}
 
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
-	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, string, -1);
+	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, msg, -1);
 
 	if (app->msgwindow_visible)
 	{

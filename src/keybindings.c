@@ -1,7 +1,8 @@
 /*
  *      keybindings.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -117,7 +118,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_CLOSE] = fill(cb_func_menu_close,
 		GDK_w, GDK_CONTROL_MASK, "menu_close", _("Close"));
 	keys[GEANY_KEYS_MENU_CLOSEALL] = fill(cb_func_menu_closeall,
-		GDK_d, GDK_MOD1_MASK, "menu_closeall", _("Close all"));
+		GDK_w, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_closeall", _("Close all"));
 	keys[GEANY_KEYS_MENU_RELOADFILE] = fill(cb_func_menu_reloadfile,
 		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"));
 	keys[GEANY_KEYS_MENU_UNDO] = fill(cb_func_menu_undo,

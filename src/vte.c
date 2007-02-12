@@ -1,7 +1,8 @@
 /*
  *      vte.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -133,11 +134,14 @@ void vte_init(void)
 	}
 	else
 	{
-		module = g_module_open("libvte.so", G_MODULE_BIND_LAZY);
-		// try to fallback to different versions of libvte.so.x
-		if (module == NULL) module = g_module_open("libvte.so.4", G_MODULE_BIND_LAZY);
-		else if (module == NULL) module = g_module_open("libvte.so.8", G_MODULE_BIND_LAZY);
-		else if (module == NULL) module = g_module_open("libvte.so.9", G_MODULE_BIND_LAZY);
+		gint i;
+		const gchar *sonames[] = {  "libvte.so", "libvte.so.4",
+									"libvte.so.8", "libvte.so.9", NULL };
+
+		for (i = 0; sonames[i] != NULL && module == NULL; i++ )
+		{
+			module = g_module_open(sonames[i], G_MODULE_BIND_LAZY);
+		}
 	}
 
 	if (module == NULL)
@@ -435,14 +439,16 @@ void vte_cwd(const gchar *filename, gboolean force)
 	if (vte_info.have_vte && (vc->follow_path || force) && filename != NULL)
 	{
 		gchar *path;
-		gchar *cmd;
 
 		path = g_path_get_dirname(filename);
 		vte_get_working_directory();	// refresh vte_info.dir
 		if (! utils_str_equal(path, vte_info.dir))
 		{
-			cmd = g_strconcat("cd ", path, "\n", NULL);
+			// use g_shell_quote to avoid problems with spaces, '!' or something else in path
+			gchar *quoted_path = g_shell_quote(path);
+			gchar *cmd = g_strconcat("cd ", quoted_path, "\n", NULL);
 			vte_send_cmd(cmd);
+			g_free(quoted_path);
 			g_free(cmd);
 		}
 		g_free(path);

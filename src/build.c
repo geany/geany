@@ -1,7 +1,8 @@
 /*
  *      build.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -78,7 +79,6 @@ static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
 static void set_stop_button(gboolean stop);
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
-static void free_pointers(gpointer first, ...);
 
 #ifndef G_OS_WIN32
 static void kill_process(GPid *pid);
@@ -154,7 +154,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 	if (stat(locale_filename, &st) != 0)
 	{
 		msgwin_status_add(_("Failed to view %s (make sure it is already compiled)"), view_file);
-		free_pointers(executable, view_file, locale_filename, script_name);
+		utils_free_pointers(executable, view_file, locale_filename, script_name, NULL);
 
 		return (GPid) 1;
 	}
@@ -189,8 +189,8 @@ GPid build_view_tex_file(gint idx, gint mode)
 			_("Could not find terminal '%s' "
 				"(check path for Terminal tool setting in Preferences)"), app->tools_term_cmd);
 
-		free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										script_name, locale_term_cmd);
+		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										script_name, locale_term_cmd, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
@@ -202,8 +202,8 @@ GPid build_view_tex_file(gint idx, gint mode)
 		gchar *utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
 													utf8_check_executable);
-		free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										utf8_check_executable, script_name, locale_term_cmd);
+		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										utf8_check_executable, script_name, locale_term_cmd, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
@@ -230,8 +230,8 @@ GPid build_view_tex_file(gint idx, gint mode)
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
 
-		free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										script_name, locale_term_cmd);
+		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										script_name, locale_term_cmd, NULL);
 		g_strfreev(argv);
 		g_strfreev(term_argv);
 		g_error_free(error);
@@ -246,8 +246,8 @@ GPid build_view_tex_file(gint idx, gint mode)
 		build_menu_update(idx);
 	}
 
-	free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										script_name, locale_term_cmd);
+	utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
+										script_name, locale_term_cmd, NULL);
 	g_strfreev(argv);
 	g_strfreev(term_argv);
 
@@ -335,6 +335,15 @@ GPid build_link_file(gint idx)
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 	executable = utils_remove_ext_from_filename(locale_filename);
+	// check for filename extension and abort if filename doesn't have one
+	if (utils_str_equal(locale_filename, executable))
+	{
+		msgwin_status_add(_("Command stopped because the current file has no extension."));
+		utils_beep();
+		utils_free_pointers(locale_filename, executable, NULL);
+		return (GPid) 1;
+	}
+
 	object_file = g_strdup_printf("%s.o", executable);
 
 	// check wether object file (file.o) exists
@@ -401,7 +410,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	gint     stdout_fd;
 	gint     stderr_fd;
 
-	g_return_val_if_fail(idx >= 0 && doc_list[idx].is_valid, (GPid) 1);
+	g_return_val_if_fail(DOC_IDX_VALID(idx), (GPid) 1);
 
 	document_clear_indicators(idx);
 
@@ -432,7 +441,7 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 	working_dir = g_path_get_dirname(locale_filename);
 	utf8_working_dir = g_path_get_dirname(doc_list[idx].file_name);
 	gtk_list_store_clear(msgwindow.store_compiler);
-	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
+	msgwin_compiler_add_fmt(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
 
 	// set the build info for the message window
@@ -530,6 +539,15 @@ GPid build_run_cmd(gint idx)
 		}
 		else
 			check_executable = g_strdup(long_executable);
+
+		// check for filename extension and abort if filename doesn't have one
+		if (utils_str_equal(locale_filename, check_executable))
+		{
+			msgwin_status_add(_("Command stopped because the current file has no extension."));
+			utils_beep();
+			result_id = (GPid) 1;
+			goto free_strings;
+		}
 
 		// check whether executable exists
 		if (stat(check_executable, &st) != 0)
@@ -727,7 +745,7 @@ static void show_build_result_message(gboolean failure)
 	if (failure)
 	{
 		msg = _("Compilation failed.");
-		msgwin_compiler_add(COLOR_DARK_RED, "%s", msg);
+		msgwin_compiler_add(COLOR_DARK_RED, msg);
 		// If msgwindow is hidden, user will want to display it to see the error
 		if (! app->msgwindow_visible)
 		{
@@ -741,7 +759,7 @@ static void show_build_result_message(gboolean failure)
 	else
 	{
 		msg = _("Compilation finished successfully.");
-		msgwin_compiler_add(COLOR_BLUE, "%s", msg);
+		msgwin_compiler_add(COLOR_BLUE, msg);
 		if (! app->msgwindow_visible ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
 				ui_set_statusbar("%s", msg);
@@ -810,7 +828,7 @@ static gboolean build_create_shellscript(const gint idx, const gchar *fname, con
 #else
 	str = g_strdup_printf(
 		"#!/bin/sh\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
-		\n\n%s\nunlink $0\n", cmd, (autoclose) ? "" :
+		\n\n%s\nrm $0\n", cmd, (autoclose) ? "" :
 		"\necho \"Press return to continue\"\n#to be more compatible with shells like dash\ndummy_var=\"\"\nread dummy_var");
 #endif
 
@@ -1463,25 +1481,6 @@ static void kill_process(GPid *pid)
 	}
 }
 #endif
-
-
-// frees all passed pointers if they are non-NULL, the first argument is nothing special,
-// it will also be freed
-static void free_pointers(gpointer first, ...)
-{
-	va_list a;
-	gpointer sa;
-
-    for (va_start(a, first);  (sa = va_arg(a, gpointer), sa!=NULL);)
-    {
-    	if (sa != NULL)
-    		g_free(sa);
-	}
-	va_end(a);
-
-    if (first != NULL)
-    	g_free(first);
-}
 
 
 void

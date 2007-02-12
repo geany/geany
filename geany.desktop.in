@@ -11,6 +11,7 @@ Terminal=false
 Type=Application
 Categories=Application;GTK;Development;IDE;
 Encoding=UTF-8
+MimeType=text/plain;text/html;text/css;text/x-chdr;text/x-csrc;text/x-c++src;text/x-java;text/x-dsrc;text/x-sql;application/x-php;
 # currently false, changes perhaps in the future
 StartupNotify=false
 Version=1.1

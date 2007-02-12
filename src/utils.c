@@ -1,7 +1,8 @@
 /*
  *      utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -1450,5 +1451,25 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 	if (utf8_text == NULL) utf8_text = g_strdup(locale_text);
 	return utf8_text;
 }
+
+
+/* frees all passed pointers if they are non-NULL, the first argument is nothing special,
+ * it will also be freed, the list should be ended with NULL */
+void utils_free_pointers(gpointer first, ...)
+{
+	va_list a;
+	gpointer sa;
+
+    for (va_start(a, first);  (sa = va_arg(a, gpointer), sa!=NULL);)
+    {
+    	if (sa != NULL)
+    		g_free(sa);
+	}
+	va_end(a);
+
+    if (first != NULL)
+    	g_free(first);
+}
+
 
 

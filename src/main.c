@@ -1,7 +1,8 @@
 /*
  *      main.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -363,8 +364,12 @@ static void setup_paths()
 	doc_dir = g_strdup(PACKAGE_DATA_DIR "/doc/" PACKAGE "/html/");
 #endif
 
-	app->datadir = data_dir;
-	app->docdir = doc_dir;
+	// convert path names to locale encoding
+	app->datadir = utils_get_locale_from_utf8(data_dir);
+	app->docdir = utils_get_locale_from_utf8(doc_dir);
+
+	g_free(data_dir);
+	g_free(doc_dir);
 }
 
 
@@ -441,6 +446,12 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 static gint setup_config_dir()
 {
 	gint mkdir_result = 0;
+
+	gchar *tmp = app->configdir;
+
+	// convert configdir to locale encoding to avoid troubles
+	app->configdir = utils_get_locale_from_utf8(app->configdir);
+	g_free(tmp);
 
 	mkdir_result = utils_make_settings_dir(app->configdir, app->datadir, app->docdir);
 	if (mkdir_result != 0)

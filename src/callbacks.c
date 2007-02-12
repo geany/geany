@@ -1,7 +1,8 @@
 /*
  *      callbacks.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006 Enrico Troeger <enrico.troeger@uvena.de>
+ *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
+ *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -382,8 +383,7 @@ on_paste1_activate                     (GtkMenuItem     *menuitem,
 			gchar *content = gtk_clipboard_wait_for_text(gtk_clipboard_get(GDK_NONE));
 			if (content != NULL)
 			{
-				sci_insert_text(doc_list[idx].sci,
-										sci_get_current_position(doc_list[idx].sci), content);
+				sci_replace_sel(doc_list[idx].sci, content);
 				g_free(content);
 			}
 		}
@@ -885,7 +885,8 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 			doc_list[idx].tm_file = NULL;
 			g_free(doc_list[idx].file_name);
 		}
-		doc_list[idx].file_name = new_filename;
+		doc_list[idx].file_name = utils_get_utf8_from_locale(new_filename);
+		g_free(new_filename);
 
 		utils_replace_filename(idx);
 		document_save_file(idx, TRUE);

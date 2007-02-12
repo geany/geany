@@ -1,18 +1,32 @@
 Geany 0.10.1 (TBA)
 
-	Bugs fixed:
-	* Wrong tab foreground colour for unmodified documents.
-	* Fixed crashes when closing dialogs by clicking X on some systems.
-	* Fixed missing global tags for C files when a C++ source file was
-	  loaded first.
-	* Fixed autocompletion missing tag matches.
-	* Fixed a wrong PASCAL autocompletion.
-	* Set single undo action when toggling multiple lines.
-	* Prevent some possible invalid memory reads.
+    Bugs fixed:
+    * Wrong tab foreground colour for unmodified documents.
+    * Fixed crashes when closing dialogs by clicking X on some systems.
+    * Fixed missing global tags for C files when a C++ source file was
+      loaded first.
+    * Fixed autocompletion missing tag matches.
+    * Fixed a wrong PASCAL autocompletion.
+    * Set single undo action when toggling multiple lines.
+    * Prevent some possible invalid memory reads.
+    * Convert config, application and documentation dir paths to locale
+      encoding before using it.
+    * Fixed errors when changing directories containing special
+      characters within the VTE component.
+    * Fixed paste problems on Windows.
+    * When using Save As the returned filename needs to be converted
+      into UTF-8.
+    * Fixed error when parsing of compiler errors by the va_list system.
+    * Added MimeType entry as suggested by Nick Schermer.
+    * LaTeX parser: Allow \section*{} and other commands with *.
+    * Change default keybinding for Close All to Ctrl-Shift-W.
+    * Allow Make for files with no extension - prevent Build when the
+      output filename would be the same as the source file.
+
 
     Internationalisation:
     * New translations: fi (thanks to Harri Koskinen).
-    * Updated translations: de, es. 
+    * Updated translations: de, es.
 
 
 Geany 0.10 (December 21, 2006)
