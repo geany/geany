@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: geany 0.10.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-02-06 00:32+0100\n"
-"PO-Revision-Date: 2007-01-30 23:07+0200\n"
+"PO-Revision-Date: 2007-02-12 20:12+0200\n"
 "Last-Translator: Harri Koskinen <geany_fi@fastmonkey.org>\n"
 "Language-Team: Finnish <geany_fi@fastmonkey.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "Nopea ja kevyt ohjelmointiympäristö"
 #: src/about.c:192
 #, c-format
 msgid "(built on %s)"
-msgstr ""
+msgstr "(käännetty %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: src/about.c:223
@@ -72,29 +72,32 @@ msgstr "Lisenssi"
 #: src/build.c:155
 #, c-format
 msgid "Failed to view %s (make sure it is already compiled)"
-msgstr ""
-"Tiedoston %s näyttäminen epäonnistui. Varmista että se on jo käännetty."
+msgstr "Tiedoston %s näyttäminen epäonnistui. Varmista että se on jo käännetty."
 
-#: src/build.c:188 src/build.c:584
+#: src/build.c:188
+#: src/build.c:584
 #, c-format
-msgid ""
-"Could not find terminal '%s' (check path for Terminal tool setting in "
-"Preferences)"
+msgid "Could not find terminal '%s' (check path for Terminal tool setting in Preferences)"
 msgstr "Terminaaliemulaattoria '%s' ei löytynyt. Tarkista polku Asetuksista."
 
-#: src/build.c:202 src/build.c:621
+#: src/build.c:202
+#: src/build.c:621
 #, c-format
 msgid "Failed to execute %s (start-script could not be created)"
 msgstr "Ohjelman %s ajo epäonnistui. (Käynnistystiedostoa ei voitu luoda)"
 
-#: src/build.c:230 src/build.c:455 src/build.c:666 src/search.c:1113
+#: src/build.c:230
+#: src/build.c:455
+#: src/build.c:666
+#: src/search.c:1113
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prosessi epäonnistui (%s)"
 
-#: src/build.c:340 src/build.c:545
+#: src/build.c:340
+#: src/build.c:545
 msgid "Command stopped because the current file has no extension."
-msgstr ""
+msgstr "Komento pysäytetty koska nykyisellä tiedostolla ei ole tarkenninta."
 
 #: src/build.c:364
 #, fuzzy, c-format
@@ -134,7 +137,8 @@ msgid "Compiles the current file"
 msgstr ""
 
 #. build the code
-#: src/build.c:925 src/interface.c:879
+#: src/build.c:925
+#: src/interface.c:879
 msgid "_Build"
 msgstr ""
 
@@ -143,20 +147,24 @@ msgid "Builds the current file (generate an executable file)"
 msgstr ""
 
 #. build the code with make all
-#: src/build.c:939 src/build.c:1061
+#: src/build.c:939
+#: src/build.c:1061
 msgid "_Make All"
 msgstr ""
 
-#: src/build.c:942 src/build.c:1064
+#: src/build.c:942
+#: src/build.c:1064
 msgid "Builds the current file with the make tool and the default target"
 msgstr ""
 
 #. build the code with make custom
-#: src/build.c:950 src/build.c:1072
+#: src/build.c:950
+#: src/build.c:1072
 msgid "Make Custom _Target"
 msgstr ""
 
-#: src/build.c:954 src/build.c:1076
+#: src/build.c:954
+#: src/build.c:1076
 msgid "Builds the current file with the make tool and the specified target"
 msgstr ""
 
@@ -167,27 +175,28 @@ msgstr ""
 
 #: src/build.c:965
 msgid "Compiles the current file using the make tool"
-msgstr ""
+msgstr "Kääntää nykyisen tiedoston käyttäen make työkalua"
 
 #. next error
-#: src/build.c:977 src/build.c:1088
+#: src/build.c:977
+#: src/build.c:1088
 msgid "_Next Error"
-msgstr ""
+msgstr "_Seuraava Virhe"
 
-#: src/build.c:992 src/interface.c:1007
+#: src/build.c:992
+#: src/interface.c:1007
 msgid "Run or view the current file"
 msgstr "Suorita tai näytä tiedosto"
 
 #. arguments
 #: src/build.c:1003
+#, fuzzy
 msgid "_Set Includes and Arguments"
-msgstr ""
+msgstr "_Määritä 'include' tiedostot ja parametrit"
 
 #: src/build.c:1008
-msgid ""
-"Sets the includes and library paths for the compiler and the program "
-"arguments for execution"
-msgstr ""
+msgid "Sets the includes and library paths for the compiler and the program arguments for execution"
+msgstr "Asettaa otsikko- ja kirjastotiedostojen polut kääntäjää varten sekä parametrit ohjelman ajoa varten"
 
 #. DVI
 #: src/build.c:1031
@@ -212,7 +221,8 @@ msgstr "Kääntää tiedoston PDF muotoon"
 msgid "View DVI File"
 msgstr "Näytä DVI tiedosto"
 
-#: src/build.c:1105 src/build.c:1118
+#: src/build.c:1105
+#: src/build.c:1118
 msgid "Compiles and view the current file"
 msgstr ""
 
@@ -222,7 +232,8 @@ msgid "View PDF File"
 msgstr "Näytä PDF tiedosto"
 
 #. arguments
-#: src/build.c:1133 src/dialogs.c:642
+#: src/build.c:1133
+#: src/dialogs.c:642
 msgid "Set Arguments"
 msgstr "Aseta parametrit"
 
@@ -235,8 +246,7 @@ msgid "Make Custom Target"
 msgstr ""
 
 #: src/build.c:1406
-msgid ""
-"Enter custom options here, all entered text is passed to the make command."
+msgid "Enter custom options here, all entered text is passed to the make command."
 msgstr ""
 
 #: src/build.c:1445
@@ -260,7 +270,9 @@ msgstr "Kääntövirheitä ei ole enempää."
 msgid "Do you really want to quit?"
 msgstr "Haluatko varmasti lopettaa ohjelman?"
 
-#: src/callbacks.c:491 src/interface.c:334 src/utils.c:347
+#: src/callbacks.c:491
+#: src/interface.c:334
+#: src/utils.c:347
 msgid "_Reload"
 msgstr "L_ataa uudelleen"
 
@@ -284,40 +296,47 @@ msgid "Forward declaration \"%s\" not found."
 msgstr ""
 
 #: src/callbacks.c:1253
-#, fuzzy, c-format
+#, c-format
 msgid "Definition of \"%s\" not found."
-msgstr "\"%s\" ei löytynyt."
+msgstr "\"%s\" määritelmää ei löytynyt."
 
-#: src/callbacks.c:1474 src/callbacks.c:1498
-msgid ""
-"Please set the filetype for the current file before using this function."
+#: src/callbacks.c:1474
+#: src/callbacks.c:1498
+msgid "Please set the filetype for the current file before using this function."
 msgstr "Aseta tiedoston tyyppi ennen tämän toiminnon käyttämistä."
 
-#: src/callbacks.c:1609 src/ui_utils.c:416
+#: src/callbacks.c:1609
+#: src/ui_utils.c:416
 msgid "dd.mm.yyyy"
 msgstr "pp.kk.vvvv"
 
-#: src/callbacks.c:1611 src/ui_utils.c:417
+#: src/callbacks.c:1611
+#: src/ui_utils.c:417
 msgid "mm.dd.yyyy"
 msgstr "kk.pp.vvvv"
 
-#: src/callbacks.c:1613 src/ui_utils.c:418
+#: src/callbacks.c:1613
+#: src/ui_utils.c:418
 msgid "yyyy/mm/dd"
 msgstr "vvvv/kk/pp"
 
-#: src/callbacks.c:1615 src/ui_utils.c:427
+#: src/callbacks.c:1615
+#: src/ui_utils.c:427
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "pp.kk.vvvv tt:mm:ss"
 
-#: src/callbacks.c:1617 src/ui_utils.c:428
+#: src/callbacks.c:1617
+#: src/ui_utils.c:428
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "kk.pp.vvvv tt:mm:ss"
 
-#: src/callbacks.c:1619 src/ui_utils.c:429
+#: src/callbacks.c:1619
+#: src/ui_utils.c:429
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "vvvv/kk/pp tt:mm:ss"
 
-#: src/callbacks.c:1621 src/ui_utils.c:438
+#: src/callbacks.c:1621
+#: src/ui_utils.c:438
 msgid "Use Custom Date Format"
 msgstr "Käytä käyttäjän määrittelemää päivämäärän muotoa"
 
@@ -326,41 +345,31 @@ msgid "Custom Date Format"
 msgstr "Käyttäjän määrittelemä päivämäärän muoto"
 
 #: src/callbacks.c:1633
-msgid ""
-"Enter here a custom date and time format. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function. See \"man "
-"strftime\" for more information."
-msgstr ""
-"Syötä tähän haluamasi päivämäärän ja ajan muoto. Voit käyttää mitä tahansa "
-"ANSI C kirjaston function 'strftime' ymmärtämiä merkintöjä. Lisätietoja saat "
-"komennolla \"man strftime\"."
+msgid "Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function. See \"man strftime\" for more information."
+msgstr "Syötä tähän haluamasi päivämäärän ja ajan muoto. Voit käyttää mitä tahansa ANSI C kirjaston function 'strftime' ymmärtämiä merkintöjä. Lisätietoja saat komennolla \"man strftime\"."
 
 #: src/callbacks.c:1653
 msgid "Date format string could not be converted (possibly too long)."
-msgstr ""
-"Päivämäärän määrittelemää merkkijonoa ei voitu muuntaa (mahdollisesti liian "
-"pitkä)."
+msgstr "Päivämäärän määrittelemää merkkijonoa ei voitu muuntaa (mahdollisesti liian pitkä)."
 
 #: src/callbacks.c:2041
 msgid "No more message items."
 msgstr "Ei muita viestejä."
 
 #. initialize the dialog
-#: src/dialogs.c:75 src/prefs.c:1048
+#: src/dialogs.c:75
+#: src/prefs.c:1048
 msgid "Open File"
 msgstr "Avaa Tiedosto"
 
-#: src/dialogs.c:78 src/interface.c:656
+#: src/dialogs.c:78
+#: src/interface.c:656
 msgid "_View"
 msgstr "_Näytä"
 
 #: src/dialogs.c:80
-msgid ""
-"Opens the file in read-only mode. If you choose more than one file to open, "
-"all files will be opened read-only."
-msgstr ""
-"Avaan tiedoston ilman kirjoitusoikeuksia. Jos aukaiset useampia tiedostoja "
-"kerralla, avataan ne kaikki ilman kirjoitusoikeuksia."
+msgid "Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."
+msgstr "Avaan tiedoston ilman kirjoitusoikeuksia. Jos aukaiset useampia tiedostoja kerralla, avataan ne kaikki ilman kirjoitusoikeuksia."
 
 #: src/dialogs.c:113
 msgid "Detect by file extension"
@@ -381,11 +390,8 @@ msgstr "Aseta merkistökoodaus:"
 
 #: src/dialogs.c:192
 msgid ""
-"Explicitly defines an encoding for the file, if it would not be detected. "
-"This is useful when you know that the encoding of a file cannot be detected "
-"correctly by Geany.\n"
-"Note if you choose multiple files, they will all be opened with the chosen "
-"encoding."
+"Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen encoding."
 msgstr ""
 
 #: src/dialogs.c:212
@@ -394,10 +400,8 @@ msgstr "Aseta tiedostotyyppi:"
 
 #: src/dialogs.c:222
 msgid ""
-"Explicitly defines a filetype for the file, if it would not be detected by "
-"filename extension.\n"
-"Note if you choose multiple files, they will all be opened with the chosen "
-"filetype."
+"Explicitly defines a filetype for the file, if it would not be detected by filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen filetype."
 msgstr ""
 
 #: src/dialogs.c:261
@@ -449,11 +453,15 @@ msgstr "Sanat:"
 msgid "Characters:"
 msgstr "Merkit:"
 
-#: src/dialogs.c:544 src/interface.c:3208 src/vte.c:552 src/vte.c:559
+#: src/dialogs.c:544
+#: src/interface.c:3208
+#: src/vte.c:552
+#: src/vte.c:559
 msgid "Color Chooser"
 msgstr ""
 
-#: src/dialogs.c:611 src/keybindings.c:157
+#: src/dialogs.c:611
+#: src/keybindings.c:157
 msgid "Go to line"
 msgstr "Mene riville"
 
@@ -481,7 +489,8 @@ msgstr "DVI:n esikatselu:"
 msgid "PDF preview:"
 msgstr "PDF:n esikatselu:"
 
-#: src/dialogs.c:732 src/dialogs.c:847
+#: src/dialogs.c:732
+#: src/dialogs.c:847
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -498,7 +507,7 @@ msgstr ""
 
 #: src/dialogs.c:772
 msgid " commands"
-msgstr ""
+msgstr "komennot"
 
 #: src/dialogs.c:787
 msgid "Compile:"
@@ -508,21 +517,25 @@ msgstr "Käännä:"
 msgid "Build:"
 msgstr "Kokoa:"
 
-#: src/dialogs.c:829 src/dialogs.c:1101
+#: src/dialogs.c:829
+#: src/dialogs.c:1101
 msgid "Execute:"
 msgstr "Suorita:"
 
 #: src/dialogs.c:894
-msgid ""
-"An error occurred or file information could not be retrieved (e.g. from a "
-"new file)."
-msgstr ""
-"Tapahtui virhe tai tiedoston tietoja ei voitu hakea (esim. uudesta "
-"tiedostosta)"
+msgid "An error occurred or file information could not be retrieved (e.g. from a new file)."
+msgstr "Tapahtui virhe tai tiedoston tietoja ei voitu hakea (esim. uudesta tiedostosta)"
 
-#: src/dialogs.c:913 src/dialogs.c:914 src/dialogs.c:915 src/dialogs.c:921
-#: src/dialogs.c:922 src/dialogs.c:923 src/ui_utils.c:121 src/ui_utils.c:124
-#: src/utils.c:515 src/utils.c:567
+#: src/dialogs.c:913
+#: src/dialogs.c:914
+#: src/dialogs.c:915
+#: src/dialogs.c:921
+#: src/dialogs.c:922
+#: src/dialogs.c:923
+#: src/ui_utils.c:121
+#: src/ui_utils.c:124
+#: src/utils.c:515
+#: src/utils.c:567
 msgid "unknown"
 msgstr "tuntematon"
 
@@ -548,19 +561,21 @@ msgstr "<b>Kirjoitussuojattu:</b>"
 
 #: src/dialogs.c:1003
 msgid "(only inside Geany)"
-msgstr ""
+msgstr "(vain Geanyn sisällä)"
 
 #: src/dialogs.c:1012
 msgid "<b>Encoding:</b>"
 msgstr "<b>Merkistökoodaus:</b>"
 
-#: src/dialogs.c:1022 src/ui_utils.c:123
+#: src/dialogs.c:1022
+#: src/ui_utils.c:123
 msgid "(with BOM)"
-msgstr ""
+msgstr "(BOM:n kanssa)"
 
-#: src/dialogs.c:1022 src/ui_utils.c:123
+#: src/dialogs.c:1022
+#: src/ui_utils.c:123
 msgid "(without BOM)"
-msgstr ""
+msgstr "(Ilman BOM:a)"
 
 #: src/dialogs.c:1032
 msgid "<b>Modified:</b>"
@@ -619,7 +634,8 @@ msgstr "Tiedosto %s suljettu."
 msgid "New file opened."
 msgstr "Uusi tiedosto avattu."
 
-#: src/document.c:587 src/document.c:872
+#: src/document.c:587
+#: src/document.c:872
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Tiedostoa %s ei voitu avata (%s)"
@@ -627,9 +643,7 @@ msgstr "Tiedostoa %s ei voitu avata (%s)"
 #: src/document.c:610
 #, c-format
 msgid ""
-"The file \"%s\" could not be opened properly and has been truncated. This "
-"can occur if the file contains a NULL byte. Be aware that saving it can "
-"cause data loss.\n"
+"The file \"%s\" could not be opened properly and has been truncated. This can occur if the file contains a NULL byte. Be aware that saving it can cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
 
@@ -640,9 +654,7 @@ msgstr "Tiedosto \"%s\" ei ole kelvollinen %s."
 
 #: src/document.c:643
 #, c-format
-msgid ""
-"The file \"%s\" does not look like a text file or the file encoding is not "
-"supported."
+msgid "The file \"%s\" does not look like a text file or the file encoding is not supported."
 msgstr ""
 
 #: src/document.c:711
@@ -663,19 +675,18 @@ msgstr "Tiedosto %s avattu (%d%s)."
 msgid ", read-only"
 msgstr ", kirjoitussuojattu"
 
-#: src/document.c:900 src/document.c:983
+#: src/document.c:900
+#: src/document.c:983
 msgid "Error saving file."
 msgstr "Virhe tiedostoa tallennettaessa."
 
 #: src/document.c:947
 #, c-format
 msgid ""
-"An error occurred while converting the file from UTF-8 in \"%s\". The file "
-"remains unsaved.\n"
+"An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved.\n"
 "Error message: %s\n"
 msgstr ""
-"Muunnettaessa tiedostoa merkistöstä UTF-8 tapahtui virhe (%s). Tiedostoa ei "
-"ole tallennettu.\n"
+"Muunnettaessa tiedostoa merkistöstä UTF-8 tapahtui virhe (%s). Tiedostoa ei ole tallennettu.\n"
 "Virhe ilmoitus: %s\n"
 
 #: src/document.c:971
@@ -688,7 +699,9 @@ msgstr "Virhe tallennettaessa tiedostoa (%s)."
 msgid "File %s saved."
 msgstr "Tiedosto %s tallennettu."
 
-#: src/document.c:1062 src/document.c:1114 src/document.c:1122
+#: src/document.c:1062
+#: src/document.c:1114
+#: src/document.c:1122
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" ei löytynyt."
@@ -697,11 +710,13 @@ msgstr "\"%s\" ei löytynyt."
 msgid "Wrap search and find again?"
 msgstr "Siirrytäänkö alkuun ja etsitään uudestaan?"
 
-#: src/document.c:1197 src/search.c:1232
+#: src/document.c:1197
+#: src/search.c:1232
 msgid "No matches found."
 msgstr "Mitään ei löydetty."
 
-#: src/document.c:1207 src/document.c:1214
+#: src/document.c:1207
+#: src/document.c:1214
 #, c-format
 msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr "%s: %d merkkijonon \"%s\" esiintymää korvattiin: \"%s\"."
@@ -743,7 +758,8 @@ msgstr "Tiedosto %s tulostettu."
 msgid "Celtic"
 msgstr "Kelttiläinen"
 
-#: src/encodings.c:53 src/encodings.c:54
+#: src/encodings.c:53
+#: src/encodings.c:54
 msgid "Greek"
 msgstr "Kreikkalainen"
 
@@ -755,19 +771,29 @@ msgstr "Pohjoismaalainen"
 msgid "South European"
 msgstr "Eteläeurooppalainen"
 
-#: src/encodings.c:57 src/encodings.c:58 src/encodings.c:59 src/encodings.c:60
+#: src/encodings.c:57
+#: src/encodings.c:58
+#: src/encodings.c:59
+#: src/encodings.c:60
 msgid "Western"
 msgstr "Länsimainen"
 
-#: src/encodings.c:62 src/encodings.c:63 src/encodings.c:64
+#: src/encodings.c:62
+#: src/encodings.c:63
+#: src/encodings.c:64
 msgid "Baltic"
 msgstr "Balttilainen"
 
-#: src/encodings.c:65 src/encodings.c:66 src/encodings.c:67
+#: src/encodings.c:65
+#: src/encodings.c:66
+#: src/encodings.c:67
 msgid "Central European"
 msgstr "Keskieurooppalainen"
 
-#: src/encodings.c:68 src/encodings.c:69 src/encodings.c:70 src/encodings.c:71
+#: src/encodings.c:68
+#: src/encodings.c:69
+#: src/encodings.c:70
+#: src/encodings.c:71
 #: src/encodings.c:72
 msgid "Cyrillic"
 msgstr "Kyrillinen"
@@ -784,11 +810,15 @@ msgstr "Kyrillinen/Ukrainalainen"
 msgid "Romanian"
 msgstr "Romanialainen"
 
-#: src/encodings.c:77 src/encodings.c:78 src/encodings.c:79
+#: src/encodings.c:77
+#: src/encodings.c:78
+#: src/encodings.c:79
 msgid "Arabic"
 msgstr "Arabialainen"
 
-#: src/encodings.c:80 src/encodings.c:81 src/encodings.c:82
+#: src/encodings.c:80
+#: src/encodings.c:81
+#: src/encodings.c:82
 msgid "Hebrew"
 msgstr "Heprealainen"
 
@@ -808,34 +838,51 @@ msgstr "Georgialainen"
 msgid "Thai"
 msgstr "Thaimaalainen"
 
-#: src/encodings.c:88 src/encodings.c:89 src/encodings.c:90
+#: src/encodings.c:88
+#: src/encodings.c:89
+#: src/encodings.c:90
 msgid "Turkish"
 msgstr "Turkkilainen"
 
-#: src/encodings.c:91 src/encodings.c:92 src/encodings.c:93
+#: src/encodings.c:91
+#: src/encodings.c:92
+#: src/encodings.c:93
 msgid "Vietnamese"
 msgstr "Vietnamilainen"
 
-#: src/encodings.c:95 src/encodings.c:96 src/encodings.c:97 src/encodings.c:98
-#: src/encodings.c:99 src/encodings.c:100 src/encodings.c:101
+#: src/encodings.c:95
+#: src/encodings.c:96
+#: src/encodings.c:97
+#: src/encodings.c:98
+#: src/encodings.c:99
+#: src/encodings.c:100
+#: src/encodings.c:101
 #: src/encodings.c:102
 msgid "Unicode"
 msgstr "Unicode"
 
-#: src/encodings.c:104 src/encodings.c:105 src/encodings.c:106
+#: src/encodings.c:104
+#: src/encodings.c:105
+#: src/encodings.c:106
 #: src/encodings.c:107
 msgid "Chinese Simplified"
 msgstr "Kiinalainen, yksinkertaistettu"
 
-#: src/encodings.c:108 src/encodings.c:109 src/encodings.c:110
+#: src/encodings.c:108
+#: src/encodings.c:109
+#: src/encodings.c:110
 msgid "Chinese Traditional"
 msgstr "Kiinalainen, perinteinen"
 
-#: src/encodings.c:111 src/encodings.c:112 src/encodings.c:113
+#: src/encodings.c:111
+#: src/encodings.c:112
+#: src/encodings.c:113
 msgid "Japanese"
 msgstr "Japanilainen"
 
-#: src/encodings.c:114 src/encodings.c:115 src/encodings.c:116
+#: src/encodings.c:114
+#: src/encodings.c:115
+#: src/encodings.c:116
 #: src/encodings.c:117
 msgid "Korean"
 msgstr "Korealainen"
@@ -909,9 +956,8 @@ msgid "PHP source file"
 msgstr "PHP lähdekoodi"
 
 #: src/filetypes.c:355
-#, fuzzy
 msgid "Javascript source file"
-msgstr "Java lähdekoodi"
+msgstr "Javascript lähdekoodi"
 
 #: src/filetypes.c:374
 msgid "Python source file"
@@ -926,9 +972,8 @@ msgid "Tcl source file"
 msgstr "Tcl lähdekoodi"
 
 #: src/filetypes.c:435
-#, fuzzy
 msgid "Lua source file"
-msgstr "LaTex lähdekoodi"
+msgstr "Lua lähdekoodi"
 
 #: src/filetypes.c:454
 msgid "Ferite source file"
@@ -982,7 +1027,8 @@ msgstr "Diff tiedosto"
 msgid "Config file"
 msgstr "Config tiedosto"
 
-#: src/filetypes.c:720 src/project.c:109
+#: src/filetypes.c:720
+#: src/project.c:109
 msgid "All files"
 msgstr "Kaikki tiedostot"
 
@@ -994,7 +1040,8 @@ msgstr "Ei mitään"
 msgid "untitled"
 msgstr "nimetön"
 
-#: src/interface.c:260 src/interface.c:1508
+#: src/interface.c:260
+#: src/interface.c:1508
 msgid "Geany"
 msgstr "Geany"
 
@@ -1006,16 +1053,21 @@ msgstr "_Tiedosto"
 msgid "New (with _Template)"
 msgstr "Uusi (käyttäen valmista _Pohjaa)"
 
-#: src/interface.c:292 src/interface.c:353 src/interface.c:527
-#: src/interface.c:578 src/interface.c:766 src/interface.c:776
-#: src/interface.c:2022 src/interface.c:2073
+#: src/interface.c:292
+#: src/interface.c:353
+#: src/interface.c:527
+#: src/interface.c:578
+#: src/interface.c:766
+#: src/interface.c:776
+#: src/interface.c:2022
+#: src/interface.c:2073
 msgid "invisible"
 msgstr "näkymätön"
 
-#: src/interface.c:304 src/interface.c:1940
-#, fuzzy
+#: src/interface.c:304
+#: src/interface.c:1940
 msgid "Open Selected F_ile"
-msgstr "Avaa Tiedosto"
+msgstr "Avaa _Valittu Tiedosto"
 
 #: src/interface.c:308
 msgid "Recent _Files"
@@ -1045,7 +1097,8 @@ msgstr "S_ulje Kaikki"
 msgid "Closes all open files"
 msgstr "Sulkee kaikki avoimet tiedostot"
 
-#: src/interface.c:401 src/interface.c:1080
+#: src/interface.c:401
+#: src/interface.c:1080
 msgid "Quit Geany"
 msgstr "Lopeta Geany"
 
@@ -1053,11 +1106,13 @@ msgstr "Lopeta Geany"
 msgid "_Edit"
 msgstr "_Muokkaa"
 
-#: src/interface.c:444 src/interface.c:1931
+#: src/interface.c:444
+#: src/interface.c:1931
 msgid "Select _All"
 msgstr "Valitse _Kaikki"
 
-#: src/interface.c:453 src/interface.c:1949
+#: src/interface.c:453
+#: src/interface.c:1949
 msgid "_Format"
 msgstr "M_uoto"
 
@@ -1065,35 +1120,43 @@ msgstr "M_uoto"
 msgid "Convert the case of the current selection"
 msgstr ""
 
-#: src/interface.c:461 src/interface.c:1956
+#: src/interface.c:461
+#: src/interface.c:1956
 msgid "Convert Selection to _Lower-case"
 msgstr ""
 
-#: src/interface.c:465 src/interface.c:1960
+#: src/interface.c:465
+#: src/interface.c:1960
 msgid "Convert Selection to _Upper-case"
 msgstr ""
 
-#: src/interface.c:474 src/interface.c:1969
+#: src/interface.c:474
+#: src/interface.c:1969
 msgid "_Comment Line(s)"
 msgstr "_Kommentoi Rivi(t)"
 
-#: src/interface.c:478 src/interface.c:1973
+#: src/interface.c:478
+#: src/interface.c:1973
 msgid "U_ncomment Line(s)"
 msgstr "_Poista kommentti"
 
-#: src/interface.c:482 src/interface.c:1977
+#: src/interface.c:482
+#: src/interface.c:1977
 msgid "_Toggle Line Commentation"
 msgstr ""
 
-#: src/interface.c:486 src/interface.c:1981
+#: src/interface.c:486
+#: src/interface.c:1981
 msgid "Du_plicate Line or Selection"
 msgstr ""
 
-#: src/interface.c:495 src/interface.c:1990
+#: src/interface.c:495
+#: src/interface.c:1990
 msgid "_Increase Indent"
 msgstr "_Kasvata Sisennystä"
 
-#: src/interface.c:503 src/interface.c:1998
+#: src/interface.c:503
+#: src/interface.c:1998
 msgid "_Decrease Indent"
 msgstr "_Vähennä Sisennystä"
 
@@ -1105,62 +1168,67 @@ msgstr "_Lisää \"include <...>\""
 msgid "I_nsert Comments"
 msgstr "L_isää Kommentti"
 
-#: src/interface.c:541 src/interface.c:2036
+#: src/interface.c:541
+#: src/interface.c:2036
 msgid "Insert ChangeLog Entry"
 msgstr "Lisää ChangeLog merkintä"
 
-#: src/interface.c:544 src/interface.c:2039
+#: src/interface.c:544
+#: src/interface.c:2039
 msgid "Inserts a typical ChangeLog entry in the current file"
 msgstr "Lisää tavanomainen ChangeLog merkintä nykyiseen tiedostoon"
 
-#: src/interface.c:546 src/interface.c:2041
+#: src/interface.c:546
+#: src/interface.c:2041
 msgid "Insert File Header"
 msgstr ""
 
-#: src/interface.c:549 src/interface.c:2044
+#: src/interface.c:549
+#: src/interface.c:2044
 msgid "Inserts a file header at the beginning of the file"
 msgstr ""
 
-#: src/interface.c:551 src/interface.c:2046
+#: src/interface.c:551
+#: src/interface.c:2046
 msgid "Insert Function Description"
 msgstr "Lisää Funktion Kuvaus"
 
-#: src/interface.c:554 src/interface.c:2049
+#: src/interface.c:554
+#: src/interface.c:2049
 msgid "Inserts a description before the current function"
 msgstr "Lisää kuvauksen funktiosta sen rivin yläpuolelle jolla kursori on"
 
-#: src/interface.c:556 src/interface.c:2051
+#: src/interface.c:556
+#: src/interface.c:2051
 msgid "Insert Multiline Comment"
 msgstr "Lisää useamman rivin kommentti"
 
-#: src/interface.c:559 src/interface.c:2054
+#: src/interface.c:559
+#: src/interface.c:2054
 msgid "Inserts a multiline comment"
 msgstr ""
 
-#: src/interface.c:561 src/interface.c:2056
+#: src/interface.c:561
+#: src/interface.c:2056
 msgid "Insert GPL Notice"
 msgstr "Lisää GPL lisenssin teksti"
 
-#: src/interface.c:564 src/interface.c:2059
+#: src/interface.c:564
+#: src/interface.c:2059
 msgid "Inserts a GPL notice (should be done at the beginning of the file)"
-msgstr ""
-"Lisää GPL lisenssin tekstin tiedostoon. Teksti tulisi lisätä aina tiedoston "
-"alkuun."
+msgstr "Lisää GPL lisenssin tekstin tiedostoon. Teksti tulisi lisätä aina tiedoston alkuun."
 
 #: src/interface.c:566
-#, fuzzy
 msgid "Insert BSD License Notice"
-msgstr "Lisää GPL lisenssin teksti"
+msgstr "Lisää BSD lisenssin teksti"
 
-#: src/interface.c:569 src/interface.c:2064
-#, fuzzy
-msgid ""
-"Inserts a BSD licence notice (should be done at the beginning of the file)"
-msgstr ""
-"Lisää GPL lisenssin tekstin tiedostoon. Teksti tulisi lisätä aina tiedoston "
-"alkuun."
+#: src/interface.c:569
+#: src/interface.c:2064
+msgid "Inserts a BSD licence notice (should be done at the beginning of the file)"
+msgstr "Lisää BSD lisenssin tekstin tiedostoon. Teksti tulisi lisätä aina tiedoston alkuun."
 
-#: src/interface.c:571 src/interface.c:2066
+#: src/interface.c:571
+#: src/interface.c:2066
 msgid "Insert Dat_e"
 msgstr "Lisää _Päivä"
 
@@ -1180,14 +1248,14 @@ msgstr "Etsi E_dellinen"
 msgid "Find in F_iles"
 msgstr "Etsi _Tiedostoista"
 
-#: src/interface.c:613 src/search.c:429
+#: src/interface.c:613
+#: src/search.c:429
 msgid "_Replace"
 msgstr "K_orvaa"
 
 #: src/interface.c:626
-#, fuzzy
 msgid "Find _Selected"
-msgstr "Etsi _Seuraava"
+msgstr "Etsi _Valittu"
 
 #: src/interface.c:630
 msgid "Find Pre_v Selected"
@@ -1238,9 +1306,7 @@ msgid "Show _Markers Margin"
 msgstr ""
 
 #: src/interface.c:701
-msgid ""
-"Shows or hides the small margin right of the line numbers, which is used to "
-"mark lines."
+msgid "Shows or hides the small margin right of the line numbers, which is used to mark lines."
 msgstr ""
 
 #: src/interface.c:704
@@ -1259,16 +1325,14 @@ msgstr ""
 msgid "_Line Wrapping"
 msgstr ""
 
-#: src/interface.c:737 src/interface.c:3273
-msgid ""
-"Wrap the line at the window border and continue it on the next line. Note: "
-"line wrapping has a high performance cost for large documents so should be "
-"disabled on slow machines."
+#: src/interface.c:737
+#: src/interface.c:3273
+msgid "Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."
 msgstr ""
 
 #: src/interface.c:740
 msgid "_Use Auto-indentation"
-msgstr ""
+msgstr "_Käytä automaattista sisennystä"
 
 #: src/interface.c:745
 msgid "Read _Only"
@@ -1284,15 +1348,15 @@ msgstr ""
 
 #: src/interface.c:759
 msgid "Set File_type"
-msgstr ""
+msgstr "Aseta Tiedoston _tyyppi"
 
 #: src/interface.c:769
 msgid "Set _Encoding"
-msgstr ""
+msgstr "Aseta _Merkistökoodaus"
 
 #: src/interface.c:779
 msgid "Set Line E_ndings"
-msgstr ""
+msgstr "Aseta _Rivinvaihdot"
 
 #: src/interface.c:786
 msgid "Convert and Set to _CR/LF (Win)"
@@ -1308,11 +1372,12 @@ msgstr "Muunna rivinvaihdot muotoon CR (_Mac)"
 
 #: src/interface.c:809
 msgid "_Replace Tabs by Spaces"
-msgstr ""
+msgstr "_Korvaa tabulaattorit välilyönneillä"
 
-#: src/interface.c:812 src/interface.c:3041
+#: src/interface.c:812
+#: src/interface.c:3041
 msgid "Replaces all tabs in document by spaces."
-msgstr ""
+msgstr "Korvaa kaikki tabulaattorit välilyönneillä"
 
 #: src/interface.c:819
 msgid "_Fold All"
@@ -1340,34 +1405,31 @@ msgstr ""
 
 #: src/interface.c:839
 msgid "_Project"
-msgstr ""
+msgstr "_Projekti"
 
 #: src/interface.c:846
-#, fuzzy
 msgid "_New"
-msgstr "Uusi"
+msgstr "_Uusi"
 
 #: src/interface.c:854
-#, fuzzy
 msgid "_Open"
-msgstr "Avaa"
+msgstr "_Avaa"
 
 #: src/interface.c:862
-#, fuzzy
 msgid "_Close"
-msgstr "Sulje"
+msgstr "_Sulje"
 
 #: src/interface.c:883
 msgid "_Tools"
-msgstr ""
+msgstr "_Työkalut"
 
 #: src/interface.c:890
 msgid "_Colour Chooser"
 msgstr "_Värivalitsin"
 
-#: src/interface.c:893 src/interface.c:1018
-msgid ""
-"Open a color chooser dialog, to interactively pick colors from a palette."
+#: src/interface.c:893
+#: src/interface.c:1018
+msgid "Open a color chooser dialog, to interactively pick colors from a palette."
 msgstr ""
 
 #: src/interface.c:899
@@ -1375,9 +1437,7 @@ msgid "_Word Count"
 msgstr "_Laske Sanat"
 
 #: src/interface.c:902
-msgid ""
-"Counts the words and characters in the current selection or the whole "
-"document"
+msgid "Counts the words and characters in the current selection or the whole document"
 msgstr ""
 
 #: src/interface.c:904
@@ -1412,7 +1472,8 @@ msgstr "Avaa tiedosto"
 msgid "Save the current file"
 msgstr "Tallenna tiedosto"
 
-#: src/interface.c:960 src/keybindings.c:123
+#: src/interface.c:960
+#: src/keybindings.c:123
 msgid "Save all"
 msgstr "Tallenna kaikki"
 
@@ -1436,7 +1497,8 @@ msgstr "Peru viimeisin muutos"
 msgid "Redo the last modification"
 msgstr "Tee uudelleen viimeisin muutos"
 
-#: src/interface.c:999 src/keybindings.c:179
+#: src/interface.c:999
+#: src/keybindings.c:179
 msgid "Compile"
 msgstr "Käännä"
 
@@ -1456,7 +1518,8 @@ msgstr "Suurenna tekstiä"
 msgid "Zoom out the text"
 msgstr "Pienennä tekstiä"
 
-#: src/interface.c:1045 src/interface.c:1050
+#: src/interface.c:1045
+#: src/interface.c:1050
 msgid "Find the entered text in the current file"
 msgstr "Etsi teksti tiedostosta"
 
@@ -1468,11 +1531,13 @@ msgstr "Syötä rivinumero jolle haluat siirtyä."
 msgid "Jump to the entered line number."
 msgstr "Siirry haluamallesi riville."
 
-#: src/interface.c:1108 src/treeviews.c:73
+#: src/interface.c:1108
+#: src/treeviews.c:73
 msgid "Symbols"
 msgstr "Symbolit"
 
-#: src/interface.c:1121 src/treeviews.c:171
+#: src/interface.c:1121
+#: src/treeviews.c:171
 msgid "Open files"
 msgstr "Avoimet tiedostot"
 
@@ -1492,23 +1557,28 @@ msgstr "Viesti"
 msgid "Scribble"
 msgstr "Muistilappu"
 
-#: src/interface.c:1753 src/interface.c:2896
+#: src/interface.c:1753
+#: src/interface.c:2896
 msgid "Images and text"
 msgstr "Kuvat ja teksti"
 
-#: src/interface.c:1759 src/interface.c:2928
+#: src/interface.c:1759
+#: src/interface.c:2928
 msgid "Images only"
 msgstr "Vain kuvat"
 
-#: src/interface.c:1765 src/interface.c:2920
+#: src/interface.c:1765
+#: src/interface.c:2920
 msgid "Text only"
 msgstr "Vain teksti"
 
-#: src/interface.c:1776 src/interface.c:2912
+#: src/interface.c:1776
+#: src/interface.c:2912
 msgid "Large icons"
 msgstr "Suuret ikonit"
 
-#: src/interface.c:1781 src/interface.c:2904
+#: src/interface.c:1781
+#: src/interface.c:2904
 msgid "Small icons"
 msgstr "Pienet ikonit"
 
@@ -1525,13 +1595,13 @@ msgid "Insert Comments"
 msgstr "Lisää Kommentteja"
 
 #: src/interface.c:2061
-#, fuzzy
 msgid "Insert BSD license Notice"
-msgstr "Lisää GPL lisenssin teksti"
+msgstr "Lisää BSD lisenssin teksti"
 
-#: src/interface.c:2081 src/keybindings.c:245
+#: src/interface.c:2081
+#: src/keybindings.c:245
 msgid "Find Usage"
-msgstr ""
+msgstr "Etsi-toiminnon käyttöohje"
 
 #: src/interface.c:2089
 msgid "Go to Tag Definition"
@@ -1543,19 +1613,20 @@ msgstr ""
 
 #: src/interface.c:2102
 msgid "Go to Line"
-msgstr ""
+msgstr "Mene riville"
 
 #: src/interface.c:2105
 msgid "Goto to the entered line"
-msgstr ""
+msgstr "Mene annetulle riville"
 
-#: src/interface.c:2477 src/keybindings.c:141
+#: src/interface.c:2477
+#: src/keybindings.c:141
 msgid "Preferences"
 msgstr "Valinnat"
 
 #: src/interface.c:2510
 msgid "Load files from the last session"
-msgstr ""
+msgstr "Lataa edellisen istunnon tiedostot"
 
 #: src/interface.c:2514
 msgid "Opens at startup the files from the last session"
@@ -1567,21 +1638,15 @@ msgstr "Tallenna ikkunan sijainti ja muoto"
 
 #: src/interface.c:2521
 msgid "Saves the window position and geometry and restores it at the start"
-msgstr ""
-"Tallentaa ikkunan sijainnin ja muodon ja palauttaa ne ohjelman "
-"käynnistyksessä"
+msgstr "Tallentaa ikkunan sijainnin ja muodon ja palauttaa ne ohjelman käynnistyksessä"
 
 #: src/interface.c:2524
 msgid "Load virtual terminal emulation at startup"
 msgstr "Lataa virtuaalinen terminaaliemulaatio ohjelman käynnistyessä"
 
 #: src/interface.c:2526
-msgid ""
-"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
-"Disable it if you do not need it."
-msgstr ""
-"Ladataanko virtuaalinen terminaaliemulaatio (VTE) käynnistyksessä. Ota tämä "
-"toiminto pois päältä jollet sitä tarvitse."
+msgid "Whether the virtual terminal emulation(VTE) should be loaded at startup. Disable it if you do not need it."
+msgstr "Ladataanko virtuaalinen terminaaliemulaatio (VTE) käynnistyksessä. Ota tämä toiminto pois päältä jollet sitä tarvitse."
 
 #: src/interface.c:2529
 msgid "Confirm exit"
@@ -1600,21 +1665,15 @@ msgid "Beep on errors or when compilation has finished"
 msgstr "Äänimerkki käännöksen valmistuessa tai virhetilanteissa"
 
 #: src/interface.c:2558
-msgid ""
-"Whether to beep if an error occured or when the compilation process has "
-"finished."
-msgstr ""
-"Tämän ollessa valittuna ohjelma antaa äänimerkin aina kun kääntö valmistuu "
-"tai tulee virhetilanne."
+msgid "Whether to beep if an error occured or when the compilation process has finished."
+msgstr "Tämän ollessa valittuna ohjelma antaa äänimerkin aina kun kääntö valmistuu tai tulee virhetilanne."
 
 #: src/interface.c:2561
 msgid "Switch to status message list at new message"
 msgstr "Vaihda tilaviestien näkymään uuden viestin tullessa"
 
 #: src/interface.c:2564
-msgid ""
-"Switch to the status message tab (in the notebook window at the bottom) if a "
-"new status message arrives."
+msgid "Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives."
 msgstr ""
 
 #: src/interface.c:2567
@@ -1622,9 +1681,7 @@ msgid "Always wrap search and hide the Find dialog"
 msgstr ""
 
 #: src/interface.c:2571
-msgid ""
-"Always wrap search around the document and hide the Find dialog after "
-"clicking Find Next/Previous"
+msgid "Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous"
 msgstr ""
 
 #: src/interface.c:2574
@@ -1633,89 +1690,100 @@ msgstr ""
 
 #: src/interface.c:2579
 msgid "General"
-msgstr ""
+msgstr "Yleinen"
 
 #: src/interface.c:2601
 msgid "Show symbol list"
-msgstr ""
+msgstr "Näytä symbolilista"
 
-#: src/interface.c:2604 src/interface.c:2610
+#: src/interface.c:2604
+#: src/interface.c:2610
 msgid "Toggle the symbol list on and off"
-msgstr ""
+msgstr "Symbolilista päälle/pois"
 
 #: src/interface.c:2607
 msgid "Show open files list"
-msgstr ""
+msgstr "Näytä avointen tiedostojen lista"
 
 #: src/interface.c:2613
 msgid "<b>Sidebar</b>"
-msgstr ""
+msgstr "<b>Sivupalkki</b>"
 
 #: src/interface.c:2634
 msgid "Symbol list:"
-msgstr ""
+msgstr "Symbolilista:"
 
-#: src/interface.c:2641 src/interface.c:2706
+#: src/interface.c:2641
+#: src/interface.c:2706
 msgid "Message window:"
-msgstr ""
+msgstr "Viesti-ikkuna"
 
-#: src/interface.c:2648 src/interface.c:2713
+#: src/interface.c:2648
+#: src/interface.c:2713
 msgid "Editor:"
-msgstr ""
+msgstr "Editori:"
 
 #: src/interface.c:2660
 msgid "Sets the font for the message window"
-msgstr ""
+msgstr "Asettaa viesti-ikkunan kirjasimen"
 
 #: src/interface.c:2668
 msgid "Sets the font for the symbol list"
-msgstr ""
+msgstr "Asettaa symboli listan kirjasimen"
 
 #: src/interface.c:2676
 msgid "Sets the editor font"
-msgstr ""
+msgstr "Asettaa editorin kirjasimen"
 
 #: src/interface.c:2678
 msgid "<b>Fonts</b>"
-msgstr ""
+msgstr "<b>Kirjasimet</b>"
 
 #: src/interface.c:2699
 msgid "Sidebar:"
-msgstr ""
+msgstr "Sivupalkki:"
 
 #: src/interface.c:2720
 msgid "Show editor tabs"
-msgstr ""
+msgstr "Näytä editorin välilehdet"
 
-#: src/interface.c:2731 src/interface.c:2741 src/interface.c:2751
+#: src/interface.c:2731
+#: src/interface.c:2741
+#: src/interface.c:2751
 #: src/interface.c:3088
 msgid "Left"
-msgstr ""
+msgstr "Vasen"
 
-#: src/interface.c:2732 src/interface.c:2742 src/interface.c:2752
+#: src/interface.c:2732
+#: src/interface.c:2742
+#: src/interface.c:2752
 #: src/interface.c:3096
 msgid "Right"
-msgstr ""
+msgstr "Oikea"
 
-#: src/interface.c:2733 src/interface.c:2743 src/interface.c:2753
+#: src/interface.c:2733
+#: src/interface.c:2743
+#: src/interface.c:2753
 msgid "Top"
-msgstr ""
+msgstr "Ylä"
 
-#: src/interface.c:2734 src/interface.c:2744 src/interface.c:2754
+#: src/interface.c:2734
+#: src/interface.c:2744
+#: src/interface.c:2754
 msgid "Bottom"
-msgstr ""
+msgstr "Ala"
 
 #: src/interface.c:2756
 msgid "<b>Tab placement</b>"
-msgstr ""
+msgstr "<b>Välilehtien sijoittelu</b>"
 
 #: src/interface.c:2761
 msgid "Interface"
-msgstr ""
+msgstr "Käyttöliittymä"
 
 #: src/interface.c:2780
 msgid "Show Toolbar"
-msgstr ""
+msgstr "Näytä Työkalupalkki"
 
 #: src/interface.c:2805
 msgid "Show file operation buttons"
@@ -1775,11 +1843,11 @@ msgstr ""
 
 #: src/interface.c:2854
 msgid "Show Quit button"
-msgstr ""
+msgstr "Näytä Lopeta nappi"
 
 #: src/interface.c:2858
 msgid "Display the quit button in the toolbar"
-msgstr ""
+msgstr "Näytä lopeta nappi työkalupalkissa"
 
 #: src/interface.c:2861
 msgid "<b>Items</b>"
@@ -1787,15 +1855,15 @@ msgstr ""
 
 #: src/interface.c:2882
 msgid "Icon style:"
-msgstr ""
+msgstr "Ikonin tyyli:"
 
 #: src/interface.c:2889
 msgid "Icon size:"
-msgstr ""
+msgstr "Ikonin koko:"
 
 #: src/interface.c:2936
 msgid "<b>Appearance</b>"
-msgstr ""
+msgstr "<b>Ulkoasu</b>"
 
 #: src/interface.c:2941
 msgid "Toolbar"
@@ -1807,7 +1875,7 @@ msgstr ""
 
 #: src/interface.c:2981
 msgid "Sets the default encoding for newly created files."
-msgstr ""
+msgstr "Asettaa uusien tiedostojen merkistökoodauksen oletusarvon."
 
 #: src/interface.c:2993
 msgid "The width in chars, which one tab character will take"
@@ -1815,15 +1883,15 @@ msgstr ""
 
 #: src/interface.c:2998
 msgid "Default encoding:"
-msgstr ""
+msgstr "Oletus merkistökoodaus:"
 
 #: src/interface.c:3004
 msgid "<b>New files</b>"
-msgstr ""
+msgstr "<b>Uudet tiedostot</b>"
 
 #: src/interface.c:3023
 msgid "Strip trailing spaces"
-msgstr ""
+msgstr "Poista rivien lopussa olevat välilyönnit"
 
 #: src/interface.c:3027
 msgid "Removes trailing spaces and tabs and the end of lines"
@@ -1831,28 +1899,28 @@ msgstr ""
 
 #: src/interface.c:3030
 msgid "Ensure new line at file end"
-msgstr ""
+msgstr "Varmista että tiedoston lopussa on tyhjä rivi."
 
 #: src/interface.c:3034
 msgid "Ensures that at the end of the file is a new line"
-msgstr ""
+msgstr "Varmistaa että tiedosto loppuu tyhjään riviin"
 
-#: src/interface.c:3037 src/keybindings.c:171
+#: src/interface.c:3037
+#: src/keybindings.c:171
 msgid "Replace tabs by space"
-msgstr ""
+msgstr "Korvaa tabulaattorit välilyönnillä"
 
 #: src/interface.c:3044
 msgid "<b>Saving files</b>"
-msgstr ""
+msgstr "<b>Tallentaa tiedostoja</b>"
 
 #: src/interface.c:3065
 msgid "Placement of new file tabs:"
 msgstr ""
 
 #: src/interface.c:3078
-msgid ""
-"Specifies the number of files which are stored in the Recent files list."
-msgstr ""
+msgid "Specifies the number of files which are stored in the Recent files list."
+msgstr "Määrittää montako tiedostoa näytetään Viimeisimmät tiedostot listalla."
 
 #: src/interface.c:3091
 msgid "File tabs will be placed on the left of the notebook"
@@ -1870,7 +1938,8 @@ msgstr ""
 msgid "<b>Misc.</b>"
 msgstr ""
 
-#: src/interface.c:3116 src/symbols.c:395
+#: src/interface.c:3116
+#: src/symbols.c:395
 msgid "Files"
 msgstr "Tiedostot"
 
@@ -1880,7 +1949,7 @@ msgstr ""
 
 #: src/interface.c:3140
 msgid "Use white text on a black background."
-msgstr ""
+msgstr "Valkoinen teksti mustalla pohjalla."
 
 #: src/interface.c:3142
 msgid "Show indentation guides"
@@ -1920,17 +1989,14 @@ msgstr ""
 
 #: src/interface.c:3195
 msgid "Type:"
-msgstr ""
+msgstr "Tyyppi:"
 
 #: src/interface.c:3207
 msgid "Sets the color of the long line marker"
 msgstr ""
 
 #: src/interface.c:3216
-msgid ""
-"The long line marker is a thin vertical line in the editor. It helps to mark "
-"long lines, or as a hint to break the line. Set this value to a value "
-"greater than 0 to specify the column where it should appear."
+msgid "The long line marker is a thin vertical line in the editor. It helps to mark long lines, or as a hint to break the line. Set this value to a value greater than 0 to specify the column where it should appear."
 msgstr ""
 
 #: src/interface.c:3226
@@ -1938,9 +2004,7 @@ msgid "Line"
 msgstr "Rivi"
 
 #: src/interface.c:3229
-msgid ""
-"Prints a vertical line in the editor window at the given cursor position "
-"(see below)."
+msgid "Prints a vertical line in the editor window at the given cursor position (see below)."
 msgstr ""
 
 #: src/interface.c:3233
@@ -1948,10 +2012,7 @@ msgid "Background"
 msgstr "Tausta"
 
 #: src/interface.c:3236
-msgid ""
-"The background colour of characters after the given cursor position (see "
-"below) changed to the colour set below. (This is recommended if you use "
-"proportional fonts)"
+msgid "The background colour of characters after the given cursor position (see below) changed to the colour set below. (This is recommended if you use proportional fonts)"
 msgstr ""
 
 #: src/interface.c:3240
@@ -1995,9 +2056,7 @@ msgid "Use indicators to show compile errors"
 msgstr ""
 
 #: src/interface.c:3290
-msgid ""
-"Whether to use indicators (a squiggly underline) to highlight the lines "
-"where the compiler found a warning or an error."
+msgid "Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error."
 msgstr ""
 
 #: src/interface.c:3293
@@ -2005,9 +2064,7 @@ msgid "Disable Drag and Drop"
 msgstr ""
 
 #: src/interface.c:3296
-msgid ""
-"Disable drag and drop completely in the editor window so you can't drag and "
-"drop any selections within or outside of the editor window."
+msgid "Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window."
 msgstr ""
 
 #: src/interface.c:3299
@@ -2015,9 +2072,7 @@ msgid "Use tabulators when inserting whitespace"
 msgstr ""
 
 #: src/interface.c:3302
-msgid ""
-"Whenever some whitespace is inserted by Geany it will use tabluators when "
-"enabled otherwise Geany will use just spaces."
+msgid "Whenever some whitespace is inserted by Geany it will use tabluators when enabled otherwise Geany will use just spaces."
 msgstr ""
 
 #: src/interface.c:3305
@@ -2045,9 +2100,7 @@ msgid "Symbol autocompletion"
 msgstr ""
 
 #: src/interface.c:3339
-msgid ""
-"Automatic completion of known symbols in open source file(s) (function, "
-"global variables, ...)"
+msgid "Automatic completion of known symbols in open source file(s) (function, global variables, ...)"
 msgstr ""
 
 #: src/interface.c:3350
@@ -2087,12 +2140,8 @@ msgid "Path and options for the make tool"
 msgstr "Polku ja parametrit Make-työkalulle"
 
 #: src/interface.c:3430
-msgid ""
-"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
-"-e argument)"
-msgstr ""
-"Terminaaliemulaattori, kuten xterm, gnome-terminal tai konsole (ohjelman "
-"pitää hyväksyä -e parametri)"
+msgid "A terminal emulator like xterm, gnome-terminal or konsole (should accept the -e argument)"
+msgstr "Terminaaliemulaattori, kuten xterm, gnome-terminal tai konsole (ohjelman pitää hyväksyä -e parametri)"
 
 #: src/interface.c:3437
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -2120,15 +2169,12 @@ msgid "Tools"
 msgstr "Työkalut"
 
 #: src/interface.c:3539
-msgid ""
-"Set the information to be used in templates. See the documentation for "
-"details."
-msgstr ""
-"Aseta sivupohjissa käytettävät tiedot. Katso käyttöohjeesta lisätietoja."
+msgid "Set the information to be used in templates. See the documentation for details."
+msgstr "Aseta sivupohjissa käytettävät tiedot. Katso käyttöohjeesta lisätietoja."
 
 #: src/interface.c:3557
 msgid "email address of the developer"
-msgstr ""
+msgstr "kehittäjän sähköpostiosoite"
 
 #: src/interface.c:3564
 msgid "Initials of the developer name"
@@ -2167,27 +2213,19 @@ msgid "The name of the developer"
 msgstr "Kehittäjän nimi"
 
 #: src/interface.c:3622
-msgid ""
-"<i>Notice: For all changes you make here to take effect, you need to restart "
-"Geany.</i>"
-msgstr ""
-"<i>Huom! Jotta tässä tekemäsi muutokset astuisivat voimaan, tulee sinun "
-"käynnistää Geany uudelleen.</i>"
+msgid "<i>Notice: For all changes you make here to take effect, you need to restart Geany.</i>"
+msgstr "<i>Huom! Jotta tässä tekemäsi muutokset astuisivat voimaan, tulee sinun käynnistää Geany uudelleen.</i>"
 
 #: src/interface.c:3629
-#, fuzzy
 msgid "<b>Template data</b>"
-msgstr "<b>Sivupohjiin tietoja</b>"
+msgstr "<b>Perustietoja Sivupohjiin</b>"
 
 #: src/interface.c:3634
 msgid "Templates"
 msgstr "Pohjat"
 
 #: src/interface.c:3652
-msgid ""
-"Here you can change keyboard shortcuts for various actions. Select one and "
-"press the Change button to enter a new shortcut, or double click on an "
-"action to edit the string representation of the shortcut directly."
+msgid "Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."
 msgstr ""
 
 #: src/interface.c:3675
@@ -2196,7 +2234,7 @@ msgstr "Vaihda"
 
 #: src/interface.c:3679
 msgid "<b>Keyboard shortcuts</b>"
-msgstr ""
+msgstr "<b>Näppäinoikotiet</b>"
 
 #: src/interface.c:3684
 msgid "Keybindings"
@@ -2211,18 +2249,16 @@ msgid "Open"
 msgstr "Avaa"
 
 #: src/keybindings.c:117
-#, fuzzy
 msgid "Open selected file"
-msgstr "Avoimet tiedostot"
+msgstr "Avaa valittu tiedosto"
 
 #: src/keybindings.c:119
 msgid "Save"
 msgstr "Tallenna"
 
 #: src/keybindings.c:121
-#, fuzzy
 msgid "Save as"
-msgstr "Tallenna kaikki"
+msgstr "Tallenna nimellä"
 
 #: src/keybindings.c:125
 msgid "Print"
@@ -2265,20 +2301,20 @@ msgid "Find Previous"
 msgstr "Etsi Edellinen"
 
 #: src/keybindings.c:147
-#, fuzzy
 msgid "Find Next Selection"
-msgstr "Etsi Seuraava"
+msgstr "Etsi Seuraava Valinta"
 
 #: src/keybindings.c:149
-#, fuzzy
 msgid "Find Previous Selection"
-msgstr "Etsi Edellinen"
+msgstr "Etsi Edellinen Valinta"
 
-#: src/keybindings.c:151 src/search.c:420
+#: src/keybindings.c:151
+#: src/search.c:420
 msgid "Replace"
 msgstr "Korvaa"
 
-#: src/keybindings.c:153 src/search.c:558
+#: src/keybindings.c:153
+#: src/search.c:558
 msgid "Find in files"
 msgstr "Etsi tiedostoista"
 
@@ -2360,15 +2396,15 @@ msgstr ""
 
 #: src/keybindings.c:200
 msgid "Switch to Editor"
-msgstr ""
+msgstr "Siirry Editoriin"
 
 #: src/keybindings.c:202
 msgid "Switch to Scribble"
-msgstr ""
+msgstr "Siirry Muistilappuun"
 
 #: src/keybindings.c:204
 msgid "Switch to VTE"
-msgstr ""
+msgstr "Siirry VTE-tilaan"
 
 #: src/keybindings.c:206
 msgid "Switch to left document"
@@ -2384,11 +2420,11 @@ msgstr ""
 
 #: src/keybindings.c:213
 msgid "Convert Selection to lower-case"
-msgstr ""
+msgstr "Muunna pieniksi kirjaimiksi"
 
 #: src/keybindings.c:215
 msgid "Convert Selection to upper-case"
-msgstr ""
+msgstr "Muunna isoiksi kirjaimiksi"
 
 #: src/keybindings.c:217
 msgid "Toggle line commentation"
@@ -2396,11 +2432,11 @@ msgstr ""
 
 #: src/keybindings.c:219
 msgid "Comment line(s)"
-msgstr ""
+msgstr "Kommentoi rivi(t)"
 
 #: src/keybindings.c:221
 msgid "Uncomment line(s)"
-msgstr ""
+msgstr "Poista kommentit"
 
 #: src/keybindings.c:223
 msgid "Increase indent"
@@ -2418,7 +2454,8 @@ msgstr ""
 msgid "Complete word"
 msgstr "Täydennä sana"
 
-#: src/keybindings.c:234 src/keybindings.c:237
+#: src/keybindings.c:234
+#: src/keybindings.c:237
 msgid "Show calltip"
 msgstr ""
 
@@ -2445,18 +2482,14 @@ msgstr "%s asetustiedosto, muokkaa tarpeidesi mukaan"
 
 #: src/keyfile.c:338
 msgid "Type here what you want, use it as a notice/scratch board"
-msgstr ""
-"Kirjoita tähän mitä haluat. Tätä tilaa voit käyttää vaikkapa eräänlaisena "
-"muistilappuna"
+msgstr "Kirjoita tähän mitä haluat. Tätä tilaa voit käyttää vaikkapa eräänlaisena muistilappuna"
 
 #: src/keyfile.c:567
 msgid "Failed to load one or more session files."
 msgstr "Yhtä tai useampaa istunnon tiedostoa ei voitu ladata."
 
 #: src/main.c:89
-msgid ""
-"set initial column number for the first opened file (useful in conjunction "
-"with --line)"
+msgid "set initial column number for the first opened file (useful in conjunction with --line)"
 msgstr ""
 
 #: src/main.c:90
@@ -2519,10 +2552,11 @@ msgstr ""
 "Geany ei välttämättä toimi oikein ilman asetushakemistoa.\n"
 "Käynnistetäänkö Geany tästä huolimatta?"
 
-#: src/main.c:500 src/socket.c:136
-#, fuzzy, c-format
+#: src/main.c:500
+#: src/socket.c:136
+#, c-format
 msgid "Could not find file '%s'."
-msgstr "Pixmap tiedostoa '%s' ei löytynyt"
+msgstr "Tiedostoa '%s' ei löytynyt"
 
 #: src/main.c:618
 #, c-format
@@ -2561,138 +2595,122 @@ msgstr ""
 
 #: src/prefs.c:930
 #, c-format
-msgid ""
-"The combination '%s' is already used for \"%s\". Please choose another one."
+msgid "The combination '%s' is already used for \"%s\". Please choose another one."
 msgstr ""
 
 #. "projects" is part of the default project base path so be carefully when translating
 #. please avoid special characters and spaces, look at the source for details or ask Frank
 #: src/project.c:70
 msgid "projects"
-msgstr ""
+msgstr "projektit"
 
 #: src/project.c:94
 msgid "Open project"
-msgstr ""
+msgstr "Avaa projekti"
 
 #: src/project.c:113
-#, fuzzy
 msgid "Project files"
-msgstr "Ominaisuudet"
+msgstr "Projektitiedostot"
 
 #: src/project.c:136
-#, fuzzy, c-format
+#, c-format
 msgid "Project \"%s\" closed."
-msgstr "Tiedosto %s suljettu."
+msgstr "Projekti \"%s\" suljettu."
 
 #: src/project.c:160
-#, fuzzy
 msgid "Project properties"
-msgstr "Ominaisuudet"
+msgstr "Projektin ominaisuudet"
 
 #: src/project.c:169
-#, fuzzy
 msgid "C_reate"
-msgstr "Merkki"
+msgstr "_Luo"
 
 #: src/project.c:188
-#, fuzzy
 msgid "Name:"
-msgstr "Make:"
+msgstr "Nimi:"
 
 #: src/project.c:200
-#, fuzzy
 msgid "Description:"
-msgstr "DVI:n luominen:"
+msgstr "Kuvaus:"
 
 #: src/project.c:217
-#, fuzzy
 msgid "Filename:"
-msgstr "Vietnamilainen"
+msgstr "Tiedostonimi:"
 
 #: src/project.c:236
 msgid "Base path:"
 msgstr ""
 
 #: src/project.c:255
-#, fuzzy
 msgid "File patterns:"
-msgstr "Itä_mainen"
+msgstr "File patterns:"
 
 #: src/project.c:337
-#, fuzzy, c-format
-msgid ""
-"There is already an open project \"%s\". Do you want to close it before "
-"proceed?"
-msgstr "Tiedosto '%s' on jo olemassa. Korvataanko se?"
+#, c-format
+msgid "There is already an open project \"%s\". Do you want to close it before proceed?"
+msgstr "Avoinna on jo projekti \"%s\". Suljetaanko se ennen kuin jatketaan?"
 
 #: src/project.c:366
 msgid "The specified project name is too short."
-msgstr ""
+msgstr "Projektin nimi on liian lyhyt."
 
 #: src/project.c:372
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
-msgstr ""
+msgstr "Projektin nimi on liian pitkä (enintään %d merkkiä)."
 
 #: src/project.c:380
 msgid "You have specified an invalid project filename."
-msgstr ""
+msgstr "Projektin tiedostonimi on viallinen."
 
 #: src/project.c:388
 msgid "You have specified an invalid project base path."
-msgstr ""
+msgstr "Projektin polku on viallinen."
 
 #: src/project.c:398
 msgid "The specified project base path does not exist. Should it be created?"
-msgstr ""
+msgstr "Projektin polkua ei ole vielä olemassa. Luodaanko se?"
 
 #: src/project.c:415
-#, fuzzy
 msgid "Project file could not be written."
-msgstr "Prosessia (%s) ei voitu pysäyttää."
+msgstr "Projektitiedostoa ei voitu tallentaa."
 
 #: src/project.c:455
 #, c-format
 msgid "Project \"%s\" created."
-msgstr ""
+msgstr "Projekti \"%s\" luotu."
 
 #: src/project.c:457
-#, fuzzy, c-format
+#, c-format
 msgid "Project \"%s\" saved."
-msgstr "Tiedosto %s tallennettu."
+msgstr "Projekti \"%s\" tallennettu."
 
 #. initialise the dialog
 #: src/project.c:500
 msgid "Choose project filename"
-msgstr ""
+msgstr "Valitse projektille tiedostonimi"
 
 #. initialise the dialog
 #: src/project.c:523
 msgid "Choose project base path"
-msgstr ""
+msgstr "Valitse projektin sijainti."
 
 #: src/project.c:592
 #, c-format
 msgid "Project \"%s\" opened."
-msgstr ""
+msgstr "Projekti \"%s\" avattu."
 
 #: src/project.c:596
-#, fuzzy
 msgid "Project file could not be loaded."
-msgstr "Prosessia (%s) ei voitu pysäyttää."
+msgstr "Projektitiedostoa ei voitu ladata."
 
 #: src/search.c:150
 msgid "_Use regular expressions"
 msgstr ""
 
 #: src/search.c:154
-msgid ""
-"Use POSIX-like regular expressions. For detailed information about using "
-"regular expressions, please read the documentation."
-msgstr ""
-"Käytä POSIX-standardin mukaisia säännöllisiä lausekkeita (regular "
-"expressions). Lisätietoja käyttöohjeessa."
+msgid "Use POSIX-like regular expressions. For detailed information about using regular expressions, please read the documentation."
+msgstr "Käytä POSIX-standardin mukaisia säännöllisiä lausekkeita (regular expressions). Lisätietoja käyttöohjeessa."
 
 #: src/search.c:161
 msgid "_Search backwards"
@@ -2704,15 +2722,17 @@ msgstr ""
 
 #: src/search.c:180
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
-"corresponding control characters."
+"Replace \\\\, \\t, \\n"
+", \\r and \\uXXXX (Unicode chararacters) with the corresponding control characters."
 msgstr ""
 
-#: src/search.c:189 src/search.c:631
+#: src/search.c:189
+#: src/search.c:631
 msgid "_Case sensitive"
 msgstr ""
 
-#: src/search.c:194 src/search.c:637
+#: src/search.c:194
+#: src/search.c:637
 msgid "Match only a _whole word"
 msgstr ""
 
@@ -2726,13 +2746,15 @@ msgstr "Etsi"
 
 #: src/search.c:308
 msgid "_Previous"
-msgstr ""
+msgstr "_Edellinen"
 
 #: src/search.c:314
 msgid "_Next"
-msgstr ""
+msgstr "_Seuraava"
 
-#: src/search.c:318 src/search.c:436 src/search.c:588
+#: src/search.c:318
+#: src/search.c:436
+#: src/search.c:588
 msgid "Search for:"
 msgstr "Etsi:"
 
@@ -2745,26 +2767,30 @@ msgstr "Etsi Kaikki"
 msgid "_Mark"
 msgstr ""
 
-#: src/search.c:354 src/search.c:494
+#: src/search.c:354
+#: src/search.c:494
 msgid "In Sessi_on"
 msgstr ""
 
-#: src/search.c:359 src/search.c:499
+#: src/search.c:359
+#: src/search.c:499
 msgid "_In Document"
 msgstr ""
 
 #. close window checkbox
-#: src/search.c:365 src/search.c:505
+#: src/search.c:365
+#: src/search.c:505
 msgid "Close _dialog"
-msgstr ""
+msgstr "Sulje _dialogi"
 
-#: src/search.c:370 src/search.c:510
+#: src/search.c:370
+#: src/search.c:510
 msgid "Disable this option to keep the dialog open."
 msgstr ""
 
 #: src/search.c:432
 msgid "Re_place & Find"
-msgstr ""
+msgstr "_Etsi & Korvaa"
 
 #: src/search.c:439
 msgid "Replace with:"
@@ -2795,7 +2821,8 @@ msgstr ""
 msgid "_Grep regular expressions"
 msgstr ""
 
-#: src/search.c:620 src/search.c:627
+#: src/search.c:620
+#: src/search.c:627
 msgid "See grep's manual page for more information."
 msgstr "Katso grep:n man -sivuilta lisätietoja."
 
@@ -2851,36 +2878,42 @@ msgstr "Etsintä suoritettu."
 msgid "No matches found for '%s'."
 msgstr ""
 
-#: src/support.c:90 src/support.c:114
+#: src/support.c:90
+#: src/support.c:114
 #, c-format
 msgid "Couldn't find pixmap file: %s"
 msgstr "Pixmap tiedostoa '%s' ei löytynyt"
 
-#: src/symbols.c:401 src/symbols.c:433
+#: src/symbols.c:401
+#: src/symbols.c:433
 msgid "Chapter"
 msgstr "Kappale"
 
-#: src/symbols.c:403 src/symbols.c:425
+#: src/symbols.c:403
+#: src/symbols.c:425
 msgid "Section"
 msgstr ""
 
 #: src/symbols.c:405
 msgid "Sect1"
-msgstr ""
+msgstr "Sect1"
 
 #: src/symbols.c:407
 msgid "Sect2"
-msgstr ""
+msgstr "Sect2"
 
 #: src/symbols.c:409
 msgid "Sect3"
-msgstr ""
+msgstr "Sect3"
 
 #: src/symbols.c:411
 msgid "Appendix"
 msgstr "Lisäosa"
 
-#: src/symbols.c:413 src/symbols.c:435 src/symbols.c:539 src/symbols.c:575
+#: src/symbols.c:413
+#: src/symbols.c:435
+#: src/symbols.c:539
+#: src/symbols.c:575
 msgid "Other"
 msgstr "Muu"
 
@@ -2894,55 +2927,63 @@ msgstr "Ympäristö"
 
 #: src/symbols.c:427
 msgid "Subsection"
-msgstr ""
+msgstr "Subsection"
 
 #: src/symbols.c:429
 msgid "Subsubsection"
-msgstr ""
+msgstr "Subsubsection"
 
 #: src/symbols.c:431
 msgid "Label"
-msgstr ""
+msgstr "Label"
 
-#: src/symbols.c:441 src/symbols.c:525
+#: src/symbols.c:441
+#: src/symbols.c:525
 msgid "Package"
-msgstr ""
+msgstr "Package"
 
 #: src/symbols.c:443
 msgid "Function"
-msgstr ""
+msgstr "Funktio"
 
 #: src/symbols.c:445
 msgid "My"
-msgstr ""
+msgstr "My"
 
 #: src/symbols.c:447
 msgid "Local"
-msgstr ""
+msgstr "Local"
 
 #: src/symbols.c:449
 msgid "Our"
-msgstr ""
+msgstr "Our"
 
-#: src/symbols.c:462 src/symbols.c:483 src/symbols.c:529 src/symbols.c:559
+#: src/symbols.c:462
+#: src/symbols.c:483
+#: src/symbols.c:529
+#: src/symbols.c:559
 msgid "Classes"
-msgstr ""
+msgstr "Luokat"
 
 #: src/symbols.c:464
 msgid "Singletons"
-msgstr ""
+msgstr "Singletons"
 
 #: src/symbols.c:466
 msgid "Mixins"
-msgstr ""
+msgstr "Mixins"
 
-#: src/symbols.c:468 src/symbols.c:485 src/symbols.c:531
+#: src/symbols.c:468
+#: src/symbols.c:485
+#: src/symbols.c:531
 msgid "Methods"
-msgstr ""
+msgstr "Metodit"
 
-#: src/symbols.c:470 src/symbols.c:533 src/symbols.c:563
+#: src/symbols.c:470
+#: src/symbols.c:533
+#: src/symbols.c:563
 msgid "Members"
-msgstr ""
+msgstr "Jäsenet"
 
 #. gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
 #. gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Constants"), -1);
@@ -2951,13 +2992,17 @@ msgstr ""
 #. gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
 #. gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
 #.
-#: src/symbols.c:472 src/symbols.c:512 src/symbols.c:573
+#: src/symbols.c:472
+#: src/symbols.c:512
+#: src/symbols.c:573
 msgid "Variables"
-msgstr ""
+msgstr "Muuttujat"
 
-#: src/symbols.c:487 src/symbols.c:504 src/symbols.c:561
+#: src/symbols.c:487
+#: src/symbols.c:504
+#: src/symbols.c:561
 msgid "Functions"
-msgstr ""
+msgstr "Funktiot"
 
 #: src/symbols.c:527
 msgid "Interfaces"
@@ -2977,7 +3022,7 @@ msgstr ""
 
 #: src/symbols.c:570
 msgid "Macros"
-msgstr ""
+msgstr "Makrot"
 
 #: src/tools.c:62
 msgid "Special characters"
@@ -2988,9 +3033,7 @@ msgid "_Insert"
 msgstr "_Lisää"
 
 #: src/tools.c:72
-msgid ""
-"Choose a special character from the list below and double click on it or use "
-"the button to insert it at the current cursor position."
+msgid "Choose a special character from the list below and double click on it or use the button to insert it at the current cursor position."
 msgstr ""
 
 #: src/tools.c:85
@@ -3035,13 +3078,15 @@ msgstr "Sekalaiset merkit"
 
 #: src/treeviews.c:109
 msgid "No tags found"
-msgstr ""
+msgstr "Tageja ei löytynyt"
 
-#: src/treeviews.c:260 src/treeviews.c:312
+#: src/treeviews.c:260
+#: src/treeviews.c:312
 msgid "Hide"
 msgstr "Piilota"
 
-#: src/treeviews.c:268 src/treeviews.c:320
+#: src/treeviews.c:268
+#: src/treeviews.c:320
 msgid "Hide sidebar"
 msgstr "Piilota sivupalkki"
 
@@ -3051,12 +3096,8 @@ msgstr "Lataa uudelleen"
 
 #: src/ui_utils.c:113
 #, c-format
-msgid ""
-"%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. "
-"function: %s      encoding: %s %s     filetype: %s"
-msgstr ""
-"%c  rivi: % 4d sarake: % 3d  valinta: % 4d   %s      moodi: %s%s      nyk. "
-"funktio: %s      merkistökoodaus: %s %s     tiedostotyyppi: %s"
+msgid "%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s %s     filetype: %s"
+msgstr "%c  rivi: % 4d sarake: % 3d  valinta: % 4d   %s      moodi: %s%s      nyk. funktio: %s      merkistökoodaus: %s %s     tiedostotyyppi: %s"
 
 #: src/ui_utils.c:117
 msgid "OVR"
@@ -3108,7 +3149,8 @@ msgstr ""
 "Levyllä oleva tiedosto '%s' on uudempi kuin\n"
 "Geanyn muistissa oleva."
 
-#: src/vte.c:190 src/vte.c:509
+#: src/vte.c:190
+#: src/vte.c:509
 msgid "Terminal"
 msgstr "Terminaali"
 
@@ -3117,14 +3159,11 @@ msgid "_Input Methods"
 msgstr ""
 
 #: src/vte.c:505
-#, fuzzy
 msgid "Terminal plugin"
 msgstr "Terminaali plugin"
 
 #: src/vte.c:512
-msgid ""
-"These settings for the virtual terminal emulator widget (VTE) only apply if "
-"the VTE library could be loaded."
+msgid "These settings for the virtual terminal emulator widget (VTE) only apply if the VTE library could be loaded."
 msgstr ""
 
 #: src/vte.c:523
@@ -3133,7 +3172,7 @@ msgstr "Terminaalin kirjasin:"
 
 #: src/vte.c:533
 msgid "Sets the font for the terminal widget."
-msgstr ""
+msgstr "Asettaa terminaali-ikkunan kirjasimen."
 
 #: src/vte.c:535
 msgid "Foreground color:"
@@ -3156,9 +3195,7 @@ msgid "Scrollback lines:"
 msgstr ""
 
 #: src/vte.c:572
-msgid ""
-"Specifies the history in lines, which you can scroll back in the terminal "
-"widget."
+msgid "Specifies the history in lines, which you can scroll back in the terminal widget."
 msgstr ""
 
 #: src/vte.c:576
@@ -3166,9 +3203,7 @@ msgid "Terminal emulation:"
 msgstr "Terminaaliemulaatio:"
 
 #: src/vte.c:586
-msgid ""
-"Controls how the terminal emulator should behave. Do not change this value "
-"unless you know exactly what you are doing."
+msgid "Controls how the terminal emulator should behave. Do not change this value unless you know exactly what you are doing."
 msgstr ""
 
 #: src/vte.c:588
@@ -3176,9 +3211,7 @@ msgid "Shell:"
 msgstr "Shell:"
 
 #: src/vte.c:595
-msgid ""
-"Sets the path to the shell which should be started inside the terminal "
-"emulation."
+msgid "Sets the path to the shell which should be started inside the terminal emulation."
 msgstr ""
 
 #: src/vte.c:612
@@ -3202,10 +3235,7 @@ msgid "Disable menu shortcut key (F10 by default)"
 msgstr ""
 
 #: src/vte.c:623
-msgid ""
-"This option disables the keybinding to popup the menu bar (default is F10). "
-"Disabling it can be useful if you use, for example, Midnight Commander "
-"within the VTE."
+msgid "This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."
 msgstr ""
 
 #: src/vte.c:627
@@ -3221,12 +3251,8 @@ msgid "Execute programs in VTE"
 msgstr "Suorita ohjelmat VTE:ssä"
 
 #: src/vte.c:633
-msgid ""
-"Run programs in VTE instead of opening a terminal emulation window. Please "
-"note, programs executed in VTE cannot be stopped."
-msgstr ""
-"Aja ohjelmat VTE:ssä terminaaliemulaattori-ikkunan sijaan. Huomaa että VTE:"
-"ssä ajettuja ohjelmia ei voi pysäyttää."
+msgid "Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped."
+msgstr "Aja ohjelmat VTE:ssä terminaaliemulaattori-ikkunan sijaan. Huomaa että VTE:ssä ajettuja ohjelmia ei voi pysäyttää."
 
 #: src/win32.c:61
 msgid "Executables"
@@ -3236,7 +3262,8 @@ msgstr "Ajettavat tiedostot"
 msgid "Error"
 msgstr "Virhe"
 
-#: src/win32.c:340 src/win32.c:381
+#: src/win32.c:340
+#: src/win32.c:381
 msgid "Question"
 msgstr "Kysymys"
 
@@ -3250,3 +3277,5 @@ msgstr "Tietoja"
 
 #~ msgid "(Unsaved)"
 #~ msgstr "(Tallentamaton)"
+
+
