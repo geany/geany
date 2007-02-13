@@ -1,3 +1,11 @@
+2007-02-13  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/treeviews.c:
+   Allow popup Symbols menu when the current document has no tags, so
+   the sidebar can be hidden.
+   Use a GtkLabel to display 'No tags found'.
+
+
 2007-02-12  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/main.c: Convert config, application and documentation dir paths

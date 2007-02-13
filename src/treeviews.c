@@ -92,6 +92,18 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 }
 
 
+static gboolean
+on_default_tag_tree_button_press_event(GtkWidget *widget, GdkEventButton *event,
+		gpointer user_data)
+{
+	if (event->button == 3)
+	{
+		on_treeviews_button_press_event(widget, event, GINT_TO_POINTER(TREEVIEW_SYMBOL));
+	}
+	return FALSE;
+}
+
+
 // update = rescan the tags for document[idx].filename
 void treeviews_update_tag_list(gint idx, gboolean update)
 {
@@ -100,21 +112,22 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 
 	if (app->default_tag_tree == NULL)
 	{
-		GtkTreeIter iter;
-		GtkTreeStore *store = gtk_tree_store_new(1, G_TYPE_STRING);
+		GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW(app->tagbar);
 
-		app->default_tag_tree = gtk_tree_view_new();
-		prepare_taglist(app->default_tag_tree, store);
-		gtk_tree_store_append(store, &iter, NULL);
-		gtk_tree_store_set(store, &iter, 0, _("No tags found"), -1);
-		gtk_widget_show(app->default_tag_tree);
+		// default_tag_tree is a GtkViewPort with a GtkLabel inside it
+		app->default_tag_tree = gtk_viewport_new(
+			gtk_scrolled_window_get_hadjustment(scrolled_window),
+			gtk_scrolled_window_get_vadjustment(scrolled_window));
+		gtk_container_add(GTK_CONTAINER(app->default_tag_tree), gtk_label_new(_("No tags found")));
+		gtk_widget_show_all(app->default_tag_tree);
+		g_signal_connect(G_OBJECT(app->default_tag_tree), "button-press-event",
+			G_CALLBACK(on_default_tag_tree_button_press_event), NULL);
 		g_object_ref((gpointer)app->default_tag_tree);	// to hold it after removing
 	}
 
-	// make all inactive, because there is no more tab left, or something strange occured
+	// show default empty tag tree if there are no tags
 	if (idx == -1 || doc_list[idx].file_type == NULL || ! doc_list[idx].file_type->has_tags)
 	{
-		gtk_widget_set_sensitive(app->tagbar, FALSE);
 		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
 		return;
 	}
@@ -135,12 +148,10 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 
 	if (doc_list[idx].has_tags)
 	{
-		gtk_widget_set_sensitive(app->tagbar, TRUE);
 		gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
 	}
 	else
 	{
-		gtk_widget_set_sensitive(app->tagbar, FALSE);
 		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
 	}
 }
