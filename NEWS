@@ -12,7 +12,9 @@ Geany 0.10.1 (TBA)
     * Convert config, application and documentation dir paths to locale
       encoding before using it.
     * Fixed errors when changing directories containing special
-      characters within the VTE component.
+      characters within the VTE component (thanks to Jeff Pohlmeyer).
+    * Support newer so-names when loading the VTE library (thanks to
+      Jeff Pohlmeyer).
     * Fixed paste problems on Windows.
     * When using Save As the returned filename needs to be converted
       into UTF-8.
