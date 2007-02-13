@@ -2183,7 +2183,13 @@ gint ScintillaGTK::ExposeTextThis(GtkWidget * /*widget*/, GdkEventExpose *ose) {
 	rcPaint.right = ose->area.x + ose->area.width;
 	rcPaint.bottom = ose->area.y + ose->area.height;
 
-	PLATFORM_ASSERT(rgnUpdate == NULL);
+	/* We can receive an expose-event during an expose-event.
+	 * This can happen when two different scroll messages are sent at different times. */
+	if (rgnUpdate != NULL)
+	{
+		gdk_region_destroy(rgnUpdate);
+		rgnUpdate = NULL;
+	}
 #if GTK_MAJOR_VERSION >= 2
 	rgnUpdate = gdk_region_copy(ose->region);
 #endif
