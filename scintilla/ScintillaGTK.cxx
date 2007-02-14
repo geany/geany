@@ -1116,6 +1116,11 @@ void ScintillaGTK::ScrollText(int linesToMove) {
 
 	gdk_gc_unref(gc);
 #else
+	// check if e.g. an existing scroll event has occurred
+	if (rgnUpdate != NULL) {
+		Redraw();
+		return;
+	}
 	gdk_window_scroll(wi->window, 0, -diff);
 	gdk_window_process_updates(wi->window, FALSE);
 #endif
@@ -2183,13 +2188,7 @@ gint ScintillaGTK::ExposeTextThis(GtkWidget * /*widget*/, GdkEventExpose *ose) {
 	rcPaint.right = ose->area.x + ose->area.width;
 	rcPaint.bottom = ose->area.y + ose->area.height;
 
-	/* We can receive an expose-event during an expose-event.
-	 * This can happen when two different scroll messages are sent at different times. */
-	if (rgnUpdate != NULL)
-	{
-		gdk_region_destroy(rgnUpdate);
-		rgnUpdate = NULL;
-	}
+	PLATFORM_ASSERT(rgnUpdate == NULL);
 #if GTK_MAJOR_VERSION >= 2
 	rgnUpdate = gdk_region_copy(ose->region);
 #endif
