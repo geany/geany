@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-30 22:49+0100\n"
+"POT-Creation-Date: 2007-02-14 20:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,180 +71,184 @@ msgstr ""
 msgid "Failed to view %s (make sure it is already compiled)"
 msgstr ""
 
-#: src/build.c:188 src/build.c:566
+#: src/build.c:188 src/build.c:584
 #, c-format
 msgid ""
 "Could not find terminal '%s' (check path for Terminal tool setting in "
 "Preferences)"
 msgstr ""
 
-#: src/build.c:202 src/build.c:603
+#: src/build.c:202 src/build.c:621
 #, c-format
 msgid "Failed to execute %s (start-script could not be created)"
 msgstr ""
 
-#: src/build.c:230 src/build.c:446 src/build.c:648 src/search.c:1113
+#: src/build.c:230 src/build.c:455 src/build.c:666 src/search.c:1113
 #, c-format
 msgid "Process failed (%s)"
 msgstr ""
 
-#: src/build.c:355
+#: src/build.c:340 src/build.c:545
+msgid "Command stopped because the current file has no extension."
+msgstr ""
+
+#: src/build.c:364
 #, c-format
 msgid "Something very strange is occurred, could not stat %s (%s)."
 msgstr ""
 
-#: src/build.c:434
+#: src/build.c:443
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr ""
 
-#: src/build.c:542
+#: src/build.c:560
 #, c-format
 msgid "Failed to execute %s (make sure it is already built)"
 msgstr ""
 
-#: src/build.c:580
+#: src/build.c:598
 #, c-format
 msgid "Failed to change the working directory to %s"
 msgstr ""
 
-#: src/build.c:776
+#: src/build.c:794
 msgid "Compilation failed."
 msgstr ""
 
-#: src/build.c:790
+#: src/build.c:808
 msgid "Compilation finished successfully."
 msgstr ""
 
 #. compile the code
-#: src/build.c:895
+#: src/build.c:913
 msgid "_Compile"
 msgstr ""
 
-#: src/build.c:898
+#: src/build.c:916
 msgid "Compiles the current file"
 msgstr ""
 
 #. build the code
-#: src/build.c:907 src/interface.c:879
+#: src/build.c:925 src/interface.c:879
 msgid "_Build"
 msgstr ""
 
-#: src/build.c:911
+#: src/build.c:929
 msgid "Builds the current file (generate an executable file)"
 msgstr ""
 
 #. build the code with make all
-#: src/build.c:921 src/build.c:1043
+#: src/build.c:939 src/build.c:1061
 msgid "_Make All"
 msgstr ""
 
-#: src/build.c:924 src/build.c:1046
+#: src/build.c:942 src/build.c:1064
 msgid "Builds the current file with the make tool and the default target"
 msgstr ""
 
 #. build the code with make custom
-#: src/build.c:932 src/build.c:1054
+#: src/build.c:950 src/build.c:1072
 msgid "Make Custom _Target"
 msgstr ""
 
-#: src/build.c:936 src/build.c:1058
+#: src/build.c:954 src/build.c:1076
 msgid "Builds the current file with the make tool and the specified target"
 msgstr ""
 
 #. build the code with make object
-#: src/build.c:943
+#: src/build.c:961
 msgid "Make _Object"
 msgstr ""
 
-#: src/build.c:947
+#: src/build.c:965
 msgid "Compiles the current file using the make tool"
 msgstr ""
 
 #. next error
-#: src/build.c:959 src/build.c:1070
+#: src/build.c:977 src/build.c:1088
 msgid "_Next Error"
 msgstr ""
 
-#: src/build.c:974 src/interface.c:1007
+#: src/build.c:992 src/interface.c:1007
 msgid "Run or view the current file"
 msgstr ""
 
 #. arguments
-#: src/build.c:985
+#: src/build.c:1003
 msgid "_Set Includes and Arguments"
 msgstr ""
 
-#: src/build.c:990
+#: src/build.c:1008
 msgid ""
 "Sets the includes and library paths for the compiler and the program "
 "arguments for execution"
 msgstr ""
 
 #. DVI
-#: src/build.c:1013
+#: src/build.c:1031
 msgid "LaTeX -> DVI"
 msgstr ""
 
-#: src/build.c:1016
+#: src/build.c:1034
 msgid "Compiles the current file into a DVI file"
 msgstr ""
 
 #. PDF
-#: src/build.c:1026
+#: src/build.c:1044
 msgid "LaTeX -> PDF"
 msgstr ""
 
-#: src/build.c:1029
+#: src/build.c:1047
 msgid "Compiles the current file into a PDF file"
 msgstr ""
 
 #. DVI view
-#: src/build.c:1082
+#: src/build.c:1100
 msgid "View DVI File"
 msgstr ""
 
-#: src/build.c:1087 src/build.c:1100
+#: src/build.c:1105 src/build.c:1118
 msgid "Compiles and view the current file"
 msgstr ""
 
 #. PDF view
-#: src/build.c:1096
+#: src/build.c:1114
 msgid "View PDF File"
 msgstr ""
 
 #. arguments
-#: src/build.c:1115 src/dialogs.c:642
+#: src/build.c:1133 src/dialogs.c:642
 msgid "Set Arguments"
 msgstr ""
 
-#: src/build.c:1120
+#: src/build.c:1138
 msgid "Sets the program paths and arguments"
 msgstr ""
 
-#: src/build.c:1387
+#: src/build.c:1405
 msgid "Make Custom Target"
 msgstr ""
 
-#: src/build.c:1388
+#: src/build.c:1406
 msgid ""
 "Enter custom options here, all entered text is passed to the make command."
 msgstr ""
 
-#: src/build.c:1427
+#: src/build.c:1445
 msgid "Failed to execute the view program"
 msgstr ""
 
-#: src/build.c:1446
+#: src/build.c:1464
 msgid "Failed to execute the terminal program"
 msgstr ""
 
-#: src/build.c:1505
+#: src/build.c:1523
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr ""
 
-#: src/build.c:1521
+#: src/build.c:1539
 msgid "No more build errors."
 msgstr ""
 
@@ -285,31 +289,31 @@ msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 
-#: src/callbacks.c:1609 src/ui_utils.c:459
+#: src/callbacks.c:1609 src/ui_utils.c:416
 msgid "dd.mm.yyyy"
 msgstr ""
 
-#: src/callbacks.c:1611 src/ui_utils.c:460
+#: src/callbacks.c:1611 src/ui_utils.c:417
 msgid "mm.dd.yyyy"
 msgstr ""
 
-#: src/callbacks.c:1613 src/ui_utils.c:461
+#: src/callbacks.c:1613 src/ui_utils.c:418
 msgid "yyyy/mm/dd"
 msgstr ""
 
-#: src/callbacks.c:1615 src/ui_utils.c:470
+#: src/callbacks.c:1615 src/ui_utils.c:427
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr ""
 
-#: src/callbacks.c:1617 src/ui_utils.c:471
+#: src/callbacks.c:1617 src/ui_utils.c:428
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr ""
 
-#: src/callbacks.c:1619 src/ui_utils.c:472
+#: src/callbacks.c:1619 src/ui_utils.c:429
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr ""
 
-#: src/callbacks.c:1621 src/ui_utils.c:481
+#: src/callbacks.c:1621 src/ui_utils.c:438
 msgid "Use Custom Date Format"
 msgstr ""
 
@@ -504,7 +508,7 @@ msgid ""
 msgstr ""
 
 #: src/dialogs.c:913 src/dialogs.c:914 src/dialogs.c:915 src/dialogs.c:921
-#: src/dialogs.c:922 src/dialogs.c:923 src/ui_utils.c:122 src/ui_utils.c:125
+#: src/dialogs.c:922 src/dialogs.c:923 src/ui_utils.c:121 src/ui_utils.c:124
 #: src/utils.c:515 src/utils.c:567
 msgid "unknown"
 msgstr ""
@@ -537,11 +541,11 @@ msgstr ""
 msgid "<b>Encoding:</b>"
 msgstr ""
 
-#: src/dialogs.c:1022 src/ui_utils.c:124
+#: src/dialogs.c:1022 src/ui_utils.c:123
 msgid "(with BOM)"
 msgstr ""
 
-#: src/dialogs.c:1022 src/ui_utils.c:124
+#: src/dialogs.c:1022 src/ui_utils.c:123
 msgid "(without BOM)"
 msgstr ""
 
@@ -598,16 +602,16 @@ msgstr ""
 msgid "File %s closed."
 msgstr ""
 
-#: src/document.c:435
+#: src/document.c:437
 msgid "New file opened."
 msgstr ""
 
-#: src/document.c:585 src/document.c:858
+#: src/document.c:587 src/document.c:872
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr ""
 
-#: src/document.c:608
+#: src/document.c:610
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -616,41 +620,41 @@ msgid ""
 "The file was set to read-only."
 msgstr ""
 
-#: src/document.c:632
+#: src/document.c:634
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr ""
 
-#: src/document.c:641
+#: src/document.c:643
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
 msgstr ""
 
-#: src/document.c:682
+#: src/document.c:711
 msgid "Invalid filename"
 msgstr ""
 
-#: src/document.c:784
+#: src/document.c:798
 #, c-format
 msgid "File %s reloaded."
 msgstr ""
 
-#: src/document.c:786
+#: src/document.c:800
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr ""
 
-#: src/document.c:788
+#: src/document.c:802
 msgid ", read-only"
 msgstr ""
 
-#: src/document.c:886 src/document.c:969
+#: src/document.c:900 src/document.c:983
 msgid "Error saving file."
 msgstr ""
 
-#: src/document.c:933
+#: src/document.c:947
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -658,47 +662,47 @@ msgid ""
 "Error message: %s\n"
 msgstr ""
 
-#: src/document.c:957
+#: src/document.c:971
 #, c-format
 msgid "Error saving file (%s)."
 msgstr ""
 
-#: src/document.c:1000
+#: src/document.c:1014
 #, c-format
 msgid "File %s saved."
 msgstr ""
 
-#: src/document.c:1048 src/document.c:1100 src/document.c:1108
+#: src/document.c:1062 src/document.c:1114 src/document.c:1122
 #, c-format
 msgid "\"%s\" was not found."
 msgstr ""
 
-#: src/document.c:1108
+#: src/document.c:1122
 msgid "Wrap search and find again?"
 msgstr ""
 
-#: src/document.c:1187 src/search.c:1232
+#: src/document.c:1197 src/search.c:1232
 msgid "No matches found."
 msgstr ""
 
-#: src/document.c:1197 src/document.c:1204
+#: src/document.c:1207 src/document.c:1214
 #, c-format
 msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr ""
 
-#: src/document.c:1458
+#: src/document.c:1468
 msgid "Win (CRLF)"
 msgstr ""
 
-#: src/document.c:1459
+#: src/document.c:1469
 msgid "Mac (CR)"
 msgstr ""
 
-#: src/document.c:1461
+#: src/document.c:1471
 msgid "Unix (LF)"
 msgstr ""
 
-#: src/document.c:1559
+#: src/document.c:1569
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -706,12 +710,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/document.c:1568
+#: src/document.c:1578
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %d)."
 msgstr ""
 
-#: src/document.c:1573
+#: src/document.c:1583
 #, c-format
 msgid "File %s printed."
 msgstr ""
@@ -917,51 +921,51 @@ msgstr ""
 msgid "Makefile"
 msgstr ""
 
-#: src/filetypes.c:519
+#: src/filetypes.c:516
 msgid "XML source file"
 msgstr ""
 
-#: src/filetypes.c:539
+#: src/filetypes.c:534
 msgid "Docbook source file"
 msgstr ""
 
-#: src/filetypes.c:558
+#: src/filetypes.c:553
 msgid "HTML source file"
 msgstr ""
 
-#: src/filetypes.c:579
+#: src/filetypes.c:571
 msgid "Cascading StyleSheet"
 msgstr ""
 
-#: src/filetypes.c:598
+#: src/filetypes.c:590
 msgid "SQL Dump file"
 msgstr ""
 
-#: src/filetypes.c:617
+#: src/filetypes.c:609
 msgid "LaTeX source file"
 msgstr ""
 
-#: src/filetypes.c:638
+#: src/filetypes.c:630
 msgid "O-Matrix source file"
 msgstr ""
 
-#: src/filetypes.c:657
+#: src/filetypes.c:649
 msgid "VHDL source file"
 msgstr ""
 
-#: src/filetypes.c:677
+#: src/filetypes.c:669
 msgid "Diff file"
 msgstr ""
 
-#: src/filetypes.c:697
+#: src/filetypes.c:686
 msgid "Config file"
 msgstr ""
 
-#: src/filetypes.c:720 src/project.c:109
+#: src/filetypes.c:709 src/project.c:109
 msgid "All files"
 msgstr ""
 
-#: src/filetypes.c:729
+#: src/filetypes.c:718
 msgid "None"
 msgstr ""
 
@@ -1432,11 +1436,11 @@ msgstr ""
 msgid "Jump to the entered line number."
 msgstr ""
 
-#: src/interface.c:1108 src/treeviews.c:72
+#: src/interface.c:1108 src/treeviews.c:73
 msgid "Symbols"
 msgstr ""
 
-#: src/interface.c:1121 src/treeviews.c:115
+#: src/interface.c:1121 src/treeviews.c:182
 msgid "Open files"
 msgstr ""
 
@@ -1827,7 +1831,7 @@ msgstr ""
 msgid "<b>Misc.</b>"
 msgstr ""
 
-#: src/interface.c:3116 src/symbols.c:395
+#: src/interface.c:3116 src/symbols.c:405
 msgid "Files"
 msgstr ""
 
@@ -1973,7 +1977,7 @@ msgstr ""
 
 #: src/interface.c:3302
 msgid ""
-"Whenever some whitespace is inserted by Geany it will use tabluators when "
+"Whenever some whitespace is inserted by Geany it will use tabulators when "
 "enabled otherwise Geany will use just spaces."
 msgstr ""
 
@@ -2444,16 +2448,16 @@ msgstr ""
 msgid "show version and exit"
 msgstr ""
 
-#: src/main.c:407
+#: src/main.c:411
 msgid " - A fast and lightweight IDE"
 msgstr ""
 
-#: src/main.c:417
+#: src/main.c:421
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr ""
 
-#: src/main.c:457
+#: src/main.c:466
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -2461,17 +2465,17 @@ msgid ""
 "Start Geany anyway?"
 msgstr ""
 
-#: src/main.c:500 src/socket.c:136
+#: src/main.c:509 src/socket.c:136
 #, c-format
 msgid "Could not find file '%s'."
 msgstr ""
 
-#: src/main.c:618
+#: src/main.c:627
 #, c-format
 msgid "This is Geany %s."
 msgstr ""
 
-#: src/main.c:620
+#: src/main.c:629
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr ""
@@ -2787,91 +2791,91 @@ msgstr ""
 msgid "Couldn't find pixmap file: %s"
 msgstr ""
 
-#: src/symbols.c:401 src/symbols.c:433
+#: src/symbols.c:411 src/symbols.c:443
 msgid "Chapter"
 msgstr ""
 
-#: src/symbols.c:403 src/symbols.c:425
+#: src/symbols.c:413 src/symbols.c:435
 msgid "Section"
 msgstr ""
 
-#: src/symbols.c:405
+#: src/symbols.c:415
 msgid "Sect1"
 msgstr ""
 
-#: src/symbols.c:407
+#: src/symbols.c:417
 msgid "Sect2"
 msgstr ""
 
-#: src/symbols.c:409
+#: src/symbols.c:419
 msgid "Sect3"
 msgstr ""
 
-#: src/symbols.c:411
+#: src/symbols.c:421
 msgid "Appendix"
 msgstr ""
 
-#: src/symbols.c:413 src/symbols.c:435 src/symbols.c:539 src/symbols.c:575
+#: src/symbols.c:423 src/symbols.c:445 src/symbols.c:549 src/symbols.c:585
 msgid "Other"
 msgstr ""
 
-#: src/symbols.c:421
+#: src/symbols.c:431
 msgid "Command"
 msgstr ""
 
-#: src/symbols.c:423
+#: src/symbols.c:433
 msgid "Environment"
 msgstr ""
 
-#: src/symbols.c:427
+#: src/symbols.c:437
 msgid "Subsection"
 msgstr ""
 
-#: src/symbols.c:429
+#: src/symbols.c:439
 msgid "Subsubsection"
 msgstr ""
 
-#: src/symbols.c:431
+#: src/symbols.c:441
 msgid "Label"
 msgstr ""
 
-#: src/symbols.c:441 src/symbols.c:525
+#: src/symbols.c:451 src/symbols.c:535
 msgid "Package"
 msgstr ""
 
-#: src/symbols.c:443
+#: src/symbols.c:453
 msgid "Function"
 msgstr ""
 
-#: src/symbols.c:445
+#: src/symbols.c:455
 msgid "My"
 msgstr ""
 
-#: src/symbols.c:447
+#: src/symbols.c:457
 msgid "Local"
 msgstr ""
 
-#: src/symbols.c:449
+#: src/symbols.c:459
 msgid "Our"
 msgstr ""
 
-#: src/symbols.c:462 src/symbols.c:483 src/symbols.c:529 src/symbols.c:559
+#: src/symbols.c:472 src/symbols.c:493 src/symbols.c:539 src/symbols.c:569
 msgid "Classes"
 msgstr ""
 
-#: src/symbols.c:464
+#: src/symbols.c:474
 msgid "Singletons"
 msgstr ""
 
-#: src/symbols.c:466
+#: src/symbols.c:476
 msgid "Mixins"
 msgstr ""
 
-#: src/symbols.c:468 src/symbols.c:485 src/symbols.c:531
+#: src/symbols.c:478 src/symbols.c:495 src/symbols.c:541
 msgid "Methods"
 msgstr ""
 
-#: src/symbols.c:470 src/symbols.c:533 src/symbols.c:563
+#: src/symbols.c:480 src/symbols.c:543 src/symbols.c:573
 msgid "Members"
 msgstr ""
 
@@ -2882,31 +2886,31 @@ msgstr ""
 #. gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
 #. gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
 #.
-#: src/symbols.c:472 src/symbols.c:512 src/symbols.c:573
+#: src/symbols.c:482 src/symbols.c:522 src/symbols.c:583
 msgid "Variables"
 msgstr ""
 
-#: src/symbols.c:487 src/symbols.c:504 src/symbols.c:561
+#: src/symbols.c:497 src/symbols.c:514 src/symbols.c:571
 msgid "Functions"
 msgstr ""
 
-#: src/symbols.c:527
+#: src/symbols.c:537
 msgid "Interfaces"
 msgstr ""
 
-#: src/symbols.c:550
+#: src/symbols.c:560
 msgid "Module"
 msgstr ""
 
-#: src/symbols.c:554
+#: src/symbols.c:564
 msgid "Namespaces"
 msgstr ""
 
-#: src/symbols.c:565
+#: src/symbols.c:575
 msgid "Structs / Typedefs"
 msgstr ""
 
-#: src/symbols.c:570
+#: src/symbols.c:580
 msgid "Macros"
 msgstr ""
 
@@ -2964,63 +2968,63 @@ msgstr ""
 msgid "Miscellaneous characters"
 msgstr ""
 
-#: src/treeviews.c:200 src/treeviews.c:252
+#: src/treeviews.c:121
+msgid "No tags found"
+msgstr ""
+
+#: src/treeviews.c:271 src/treeviews.c:323
 msgid "Hide"
 msgstr ""
 
-#: src/treeviews.c:208 src/treeviews.c:260
+#: src/treeviews.c:279 src/treeviews.c:331
 msgid "Hide sidebar"
 msgstr ""
 
-#: src/treeviews.c:240
+#: src/treeviews.c:311
 msgid "Reload"
 msgstr ""
 
-#: src/ui_utils.c:114
+#: src/ui_utils.c:113
 #, c-format
 msgid ""
 "%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. "
 "function: %s      encoding: %s %s     filetype: %s"
 msgstr ""
 
-#: src/ui_utils.c:118
+#: src/ui_utils.c:117
 msgid "OVR"
 msgstr ""
 
-#: src/ui_utils.c:118
+#: src/ui_utils.c:117
 msgid "INS"
 msgstr ""
 
-#: src/ui_utils.c:186
+#: src/ui_utils.c:197
 #, c-format
 msgid "Font updated (%s)."
 msgstr ""
 
-#: src/ui_utils.c:218
-msgid "No tags found"
-msgstr ""
-
-#: src/ui_utils.c:428
+#: src/ui_utils.c:385
 msgid "C Standard Library"
 msgstr ""
 
-#: src/ui_utils.c:429
+#: src/ui_utils.c:386
 msgid "ISO C99"
 msgstr ""
 
-#: src/ui_utils.c:430
+#: src/ui_utils.c:387
 msgid "C++ (C Standard Library)"
 msgstr ""
 
-#: src/ui_utils.c:431
+#: src/ui_utils.c:388
 msgid "C++ Standard Library"
 msgstr ""
 
-#: src/ui_utils.c:432
+#: src/ui_utils.c:389
 msgid "C++ STL"
 msgstr ""
 
-#: src/ui_utils.c:498
+#: src/ui_utils.c:455
 msgid "Set Custom Date Format"
 msgstr ""
 
