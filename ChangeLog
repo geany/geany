@@ -1,3 +1,8 @@
+2007-02-14  Frank Lanitz  <frank@frank.uvena.de>
+
+ * src/interface.c: Fixed a typo.
+
+
 2007-02-14  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * geany.desktop.in:
