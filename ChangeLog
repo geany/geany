@@ -2,6 +2,10 @@
 
  * geany.desktop.in:
    Add MimeType text/x-diff.
+ * scintilla/ScintillaGTK.cxx:
+   Redraw instead of scrolling in ScintillaGTK::ScrollText if there is
+   an existing update region.
+   Revert earlier ScintillaGTK::ExposeTextThis change.
 
 
 2007-02-13  Nick Treleaven  <nick.treleaven@btinternet.com>
