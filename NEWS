@@ -29,6 +29,7 @@ Geany 0.10.1 (TBA)
     * Fixed several issues while opening files and improved code.
     * Improved the auto scrolling of documents and fixed a bug when
       opening files remotely.
+    * Fixed wrong D function return type after a class definition.
 
     Internationalisation:
     * New translations: fi (thanks to Harri Koskinen).
