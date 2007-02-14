@@ -6,6 +6,8 @@
    Redraw instead of scrolling in ScintillaGTK::ScrollText if there is
    an existing update region.
    Revert earlier ScintillaGTK::ExposeTextThis change.
+ * tagmanager/c.c:
+   Fix wrong D function return type after a class definition.
 
 
 2007-02-13  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -2309,11 +2309,15 @@ static boolean isStatementEnd (const statementInfo *const st)
     boolean isEnd;
 
     if (isType (token, TOKEN_SEMICOLON))
-	isEnd = TRUE;
+		isEnd = TRUE;
     else if (isType (token, TOKEN_BRACE_CLOSE))
-	isEnd = (boolean) (isLanguage (Lang_java) || ! isContextualStatement (st));
+		/* Java, D, C# do not require semicolons to end a block. Neither do C++
+		 * namespaces. All other blocks require a semicolon to terminate them.
+		 */
+		isEnd = (boolean) (isLanguage (Lang_java) || isLanguage (Lang_d) ||
+				! isContextualStatement (st));
     else
-	isEnd = FALSE;
+		isEnd = FALSE;
 
     return isEnd;
 }
