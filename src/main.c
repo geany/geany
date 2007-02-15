@@ -484,7 +484,7 @@ static void signal_cb(gint sig)
 
 
 // open files from command line
-gboolean open_cl_files(gint argc, gchar **argv)
+static gboolean open_cl_files(gint argc, gchar **argv)
 {
 	gint i;
 
@@ -494,13 +494,21 @@ gboolean open_cl_files(gint argc, gchar **argv)
 	{
 		gchar *filename = get_argv_filename(argv[i]);
 
-		if (filename &&
+		if (filename != NULL &&
 			g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 		{
 			gint idx;
 
 			idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
 			// add recent file manually because opening_session_files is set
+			if (DOC_IDX_VALID(idx))
+				ui_add_recent_file(doc_list[idx].file_name);
+		}
+		else if (filename != NULL)
+		{	// create new file if it doesn't exist
+			gint idx;
+
+			idx = document_new_file(filename, NULL);
 			if (DOC_IDX_VALID(idx))
 				ui_add_recent_file(doc_list[idx].file_name);
 		}
@@ -648,7 +656,7 @@ gint main(gint argc, gchar **argv)
 	app->opening_session_files = FALSE;
 
 	// open a new file if no other file was opened
-	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)	document_new_file(NULL);
+	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)	document_new_file(NULL, NULL);
 
 	ui_close_buttons_toggle();
 	ui_save_buttons_toggle(FALSE);

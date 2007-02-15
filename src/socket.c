@@ -60,6 +60,7 @@
 #include "socket.h"
 #include "document.h"
 #include "support.h"
+#include "ui_utils.h"
 
 
 
@@ -125,8 +126,8 @@ void send_open_command(gint sock, gint argc, gchar **argv)
 	{
 		filename = get_argv_filename(argv[i]);
 
-		if (filename != NULL &&
-			g_file_test(filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+		// if the filename is valid or if a new file should be opened is check on the other side
+		if (filename != NULL)
 		{
 			socket_fd_write_all(sock, filename, strlen(filename));
 			socket_fd_write_all(sock, "\n", 1);
@@ -409,7 +410,15 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 				if (g_file_test(buf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 					document_open_file(-1, buf, 0, FALSE, NULL, NULL);
 				else
-					geany_debug("got data from socket, but it does not look like a filename");
+				{	// create new file if it doesn't exist
+					gint idx;
+
+					idx = document_new_file(buf, NULL);
+					if (DOC_IDX_VALID(idx))
+						ui_add_recent_file(doc_list[idx].file_name);
+					else
+						geany_debug("got data from socket, but it does not look like a filename");
+				}
 			}
 			gtk_window_deiconify(GTK_WINDOW(app->window));
 #ifdef G_OS_WIN32

@@ -191,7 +191,7 @@ void
 on_new1_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	document_new_file(NULL);
+	document_new_file(NULL, NULL);
 }
 
 
@@ -199,7 +199,7 @@ void
 on_new_with_template                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	document_new_file((filetype*) user_data);
+	document_new_file(NULL, (filetype*) user_data);
 }
 
 
@@ -546,7 +546,7 @@ void
 on_toolbutton8_clicked                 (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	document_new_file(NULL);
+	document_new_file(NULL, NULL);
 }
 
 // open file
@@ -1362,7 +1362,7 @@ void
 on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	document_new_file(NULL);
+	document_new_file(NULL, NULL);
 }
 
 

@@ -389,10 +389,12 @@ static void store_saved_encoding(gint idx)
 
 
 /* This creates a new document, by clearing the text widget and setting the
-   current filename to NULL. */
-void document_new_file(filetype *ft)
+   current filename to filename or NULL. If ft is NULL and filename is not NULL, then the filetype
+   will be guessed from the given filename.
+   filename is expected in UTF-8 encoding. */
+gint document_new_file(const gchar *filename, filetype *ft)
 {
-	gint idx = document_create_new_sci(NULL);
+	gint idx = document_create_new_sci(filename);
 	gchar *template = templates_get_template_new_file(ft);
 
 	g_assert(idx != -1);
@@ -415,6 +417,9 @@ void document_new_file(filetype *ft)
 	store_saved_encoding(idx);
 
 	//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
+	if (ft == NULL && filename != NULL) // guess the filetype from the filename if one is given
+		ft = filetypes_get_from_filename(idx);
+
 	document_set_filetype(idx, ft);	// also clears taglist
 	if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
 	ui_set_window_title(idx);
@@ -425,7 +430,7 @@ void document_new_file(filetype *ft)
 
 	document_update_tag_list(idx, FALSE);
 	document_set_text_changed(idx);
-	ui_document_show_hide(idx); //update the document menu
+	ui_document_show_hide(idx); // update the document menu
 
 	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
 	sci_goto_pos(doc_list[idx].sci, 0, TRUE);
@@ -434,7 +439,10 @@ void document_new_file(filetype *ft)
 	g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
 				G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
 
-	msgwin_status_add(_("New file opened."));
+	msgwin_status_add(_("New file \"%s\" opened."),
+		(doc_list[idx].file_name != NULL) ? doc_list[idx].file_name : GEANY_STRING_UNTITLED);
+
+	return idx;
 }
 
 

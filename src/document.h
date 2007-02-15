@@ -123,8 +123,10 @@ gboolean document_remove(guint page_num);
 
 
 /* This creates a new document, by clearing the text widget and setting the
-   current filename to NULL. */
-void document_new_file(filetype *ft);
+   current filename to filename or NULL. If ft is NULL and filename is not NULL, then the filetype
+   will be guessed from the given filename.
+   filename is expected in UTF-8 encoding. */
+gint document_new_file(const gchar *filename, filetype *ft);
 
 
 /* If idx is set to -1, it creates a new tab, opens the file from filename and
@@ -133,7 +135,7 @@ void document_new_file(filetype *ft);
  * idx and set the cursor to position 0. In this case, filename should be NULL
  * It returns the idx of the opened file or -1 if an error occurred.
  */
-int document_open_file(gint, const gchar*, gint, gboolean, filetype*, const gchar*);
+gint document_open_file(gint, const gchar*, gint, gboolean, filetype*, const gchar*);
 
 
 /* Takes a new line separated list of filename URIs and opens each file.
@@ -141,7 +143,7 @@ int document_open_file(gint, const gchar*, gint, gboolean, filetype*, const gcha
 void document_open_file_list(const gchar *data, gssize length);
 
 
-int document_reload_file(gint idx, const gchar *forced_enc);
+gint document_reload_file(gint idx, const gchar *forced_enc);
 
 
 /* This saves the file.

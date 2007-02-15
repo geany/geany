@@ -469,7 +469,7 @@ static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gcha
 /* these are the callback functions, each shortcut has its own function, this is only for clear code */
 static void cb_func_menu_new(G_GNUC_UNUSED guint key_id)
 {
-	document_new_file(NULL);
+	document_new_file(NULL, NULL);
 }
 
 static void cb_func_menu_open(G_GNUC_UNUSED guint key_id)

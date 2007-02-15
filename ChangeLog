@@ -4,6 +4,10 @@
    Added several missing style types for filetype Perl
    (thanks to John Gabriele for reporting).
  * src/treeviews.c: Aligned "No symbols found" label to top.
+ * src/callbacks.c, src/document.c, src/document.h, src/keybindings.c,
+   src/main.c, src/socket.c:
+   Added possibility to create and open non-existent files from command
+   line (closes #1635094 and #1652917).
 
 
 2007-02-14  Frank Lanitz  <frank@frank.uvena.de>
