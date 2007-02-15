@@ -5348,7 +5348,7 @@ Bottom
 			  <child>
 			    <widget class="GtkCheckButton" id="check_use_tabs">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Whenever some whitespace is inserted by Geany it will use tabluators when enabled otherwise Geany will use just spaces.</property>
+			      <property name="tooltip" translatable="yes">Whenever some whitespace is inserted by Geany it will use tabulators when enabled otherwise Geany will use just spaces.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Use tabulators when inserting whitespace</property>
 			      <property name="use_underline">True</property>
