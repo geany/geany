@@ -113,12 +113,15 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 	if (app->default_tag_tree == NULL)
 	{
 		GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW(app->tagbar);
+		GtkWidget *label;
 
 		// default_tag_tree is a GtkViewPort with a GtkLabel inside it
 		app->default_tag_tree = gtk_viewport_new(
 			gtk_scrolled_window_get_hadjustment(scrolled_window),
 			gtk_scrolled_window_get_vadjustment(scrolled_window));
-		gtk_container_add(GTK_CONTAINER(app->default_tag_tree), gtk_label_new(_("No tags found")));
+		label = gtk_label_new(_("No tags found"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0.1, 0.01);
+		gtk_container_add(GTK_CONTAINER(app->default_tag_tree), label);
 		gtk_widget_show_all(app->default_tag_tree);
 		g_signal_connect(G_OBJECT(app->default_tag_tree), "button-press-event",
 			G_CALLBACK(on_default_tag_tree_button_press_event), NULL);

@@ -3,6 +3,7 @@
  * data/filetypes.perl, src/highlighting.c:
    Added several missing style types for filetype Perl
    (thanks to John Gabriele for reporting).
+ * src/treeviews.c: Aligned "No symbols found" label to top.
 
 
 2007-02-14  Frank Lanitz  <frank@frank.uvena.de>
