@@ -30,6 +30,8 @@ Geany 0.10.1 (TBA)
     * Improved the auto scrolling of documents and fixed a bug when
       opening files remotely.
     * Fixed wrong D function return type after a class definition.
+    * Added several missing style types for filetype Perl (thanks to
+      John Gabriele for reporting).
 
     Internationalisation:
     * New translations: fi (thanks to Harri Koskinen).
