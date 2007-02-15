@@ -1434,7 +1434,7 @@ static void styleset_perl_init(void)
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_PERL);
 
-	new_style_array(GEANY_FILETYPES_PERL, 17);
+	new_style_array(GEANY_FILETYPES_PERL, 30);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "error", "0xff0000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[1]);
 	get_keyfile_style(config, config_home, "commentline", &gsd_comment, &style_sets[GEANY_FILETYPES_PERL].styling[2]);
@@ -1452,6 +1452,19 @@ static void styleset_perl_init(void)
 	get_keyfile_hex(config, config_home, "styling", "hash", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[14]);
 	get_keyfile_hex(config, config_home, "styling", "symboltable", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[15]);
 	get_keyfile_hex(config, config_home, "styling", "backticks", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_PERL].styling[16]);
+	get_keyfile_hex(config, config_home, "styling", "pod_verbatim", "0x004000", "0xc0ffc0", "false", &style_sets[GEANY_FILETYPES_PERL].styling[17]);
+	get_keyfile_hex(config, config_home, "styling", "reg_subst", "0x000000", "0xf0e080", "false", &style_sets[GEANY_FILETYPES_PERL].styling[18]);
+	get_keyfile_hex(config, config_home, "styling", "datasection", "0x600000", "0xfff0d8", "false", &style_sets[GEANY_FILETYPES_PERL].styling[19]);
+	get_keyfile_hex(config, config_home, "styling", "here_delim", "0x000000", "0xddd0dd", "false", &style_sets[GEANY_FILETYPES_PERL].styling[20]);
+	get_keyfile_hex(config, config_home, "styling", "here_q", "0x7f007f", "0xddd0dd", "false", &style_sets[GEANY_FILETYPES_PERL].styling[21]);
+	get_keyfile_hex(config, config_home, "styling", "here_qq", "0x7f007f", "0xddd0dd", "true", &style_sets[GEANY_FILETYPES_PERL].styling[22]);
+	get_keyfile_hex(config, config_home, "styling", "here_qx", "0x7f007f", "0xddd0dd", "true", &style_sets[GEANY_FILETYPES_PERL].styling[23]);
+	get_keyfile_hex(config, config_home, "styling", "string_q", "0x7f007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[24]);
+	get_keyfile_hex(config, config_home, "styling", "string_qq", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[25]);
+	get_keyfile_hex(config, config_home, "styling", "string_qx", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_PERL].styling[26]);
+	get_keyfile_hex(config, config_home, "styling", "string_qr", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[27]);
+	get_keyfile_hex(config, config_home, "styling", "string_qw", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[28]);
+	get_keyfile_hex(config, config_home, "styling", "variable_indexer", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PERL].styling[29]);
 
 	style_sets[GEANY_FILETYPES_PERL].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_PERL, 0, "\
@@ -1522,9 +1535,22 @@ void styleset_perl(ScintillaObject *sci)
 	set_sci_style(sci, SCE_PL_POD, GEANY_FILETYPES_PERL, 11);
 	set_sci_style(sci, SCE_PL_REGEX, GEANY_FILETYPES_PERL, 12);
 	set_sci_style(sci, SCE_PL_ARRAY, GEANY_FILETYPES_PERL, 13);
-	set_sci_style(sci, SCE_PL_BACKTICKS, GEANY_FILETYPES_PERL, 14);
-	set_sci_style(sci, SCE_PL_HASH, GEANY_FILETYPES_PERL, 15);
-	set_sci_style(sci, SCE_PL_SYMBOLTABLE, GEANY_FILETYPES_PERL, 16);
+	set_sci_style(sci, SCE_PL_HASH, GEANY_FILETYPES_PERL, 14);
+	set_sci_style(sci, SCE_PL_SYMBOLTABLE, GEANY_FILETYPES_PERL, 15);
+	set_sci_style(sci, SCE_PL_BACKTICKS, GEANY_FILETYPES_PERL, 16);
+	set_sci_style(sci, SCE_PL_POD_VERB, GEANY_FILETYPES_PERL, 17);
+	set_sci_style(sci, SCE_PL_REGSUBST, GEANY_FILETYPES_PERL, 18);
+	set_sci_style(sci, SCE_PL_DATASECTION, GEANY_FILETYPES_PERL, 19);
+	set_sci_style(sci, SCE_PL_HERE_DELIM, GEANY_FILETYPES_PERL, 20);
+	set_sci_style(sci, SCE_PL_HERE_Q, GEANY_FILETYPES_PERL, 21);
+	set_sci_style(sci, SCE_PL_HERE_QQ, GEANY_FILETYPES_PERL, 22);
+	set_sci_style(sci, SCE_PL_HERE_QX, GEANY_FILETYPES_PERL, 23);
+	set_sci_style(sci, SCE_PL_STRING_Q, GEANY_FILETYPES_PERL, 24);
+	set_sci_style(sci, SCE_PL_STRING_QQ, GEANY_FILETYPES_PERL, 25);
+	set_sci_style(sci, SCE_PL_STRING_QX, GEANY_FILETYPES_PERL, 26);
+	set_sci_style(sci, SCE_PL_STRING_QR, GEANY_FILETYPES_PERL, 27);
+	set_sci_style(sci, SCE_PL_STRING_QW, GEANY_FILETYPES_PERL, 28);
+	set_sci_style(sci, SCE_PL_VARIABLE_INDEXER, GEANY_FILETYPES_PERL, 29);
 }
 
 
