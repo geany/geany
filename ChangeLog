@@ -1,3 +1,11 @@
+2007-02-16  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sciwrappers.c, src/sciwrappers.h, src/sci_cb.c, src/document.c:
+   Rename sci_get_line_end_from_position() with line argument, not
+   position.
+   Don't autocomplete for/if constructs when editing an existing line.
+
+
 2007-02-15  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * data/filetypes.perl, src/highlighting.c:

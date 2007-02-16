@@ -902,6 +902,14 @@ void sci_cb_auto_latex(gint idx, gint pos)
 }
 
 
+static gboolean at_eol(ScintillaObject *sci, gint pos)
+{
+	gint line = sci_get_line_from_position(sci, pos);
+
+	return (pos == sci_get_line_end_position(sci, line));
+}
+
+
 void sci_cb_auto_forif(gint idx, gint pos)
 {
 	static gchar buf[16];
@@ -910,16 +918,10 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	gchar *construct;
 	gint lexer, style;
 	gint i;
-	gint last_pos;
 	gint space_len;
 	ScintillaObject *sci;
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
-	sci = doc_list[idx].sci;
-
-	last_pos = sci_get_length(sci);
-	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
 	// only for C, C++, D, Ferite, Java, JavaScript, Perl and PHP
 	if (doc_list[idx].file_type->id != GEANY_FILETYPES_PHP &&
@@ -932,6 +934,13 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE)
 		return;
 
+	sci = doc_list[idx].sci;
+	// return if we are editing an existing line (chars on right of cursor)
+	if (! at_eol(sci, pos))
+		return;
+
+	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 	// return, if we are in a comment
 	if (is_comment(lexer, style))
 		return;

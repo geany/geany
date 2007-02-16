@@ -416,9 +416,9 @@ void sci_set_selection_end(ScintillaObject* sci, gint position)
 }
 
 
-gint sci_get_line_end_from_position(ScintillaObject* sci, gint position)
+gint sci_get_line_end_position(ScintillaObject* sci, gint line)
 {
-	return SSM(sci, SCI_GETLINEENDPOSITION, position, 0);
+	return SSM(sci, SCI_GETLINEENDPOSITION, line, 0);
 }
 
 

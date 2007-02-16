@@ -1635,7 +1635,7 @@ void document_strip_trailing_spaces(gint idx)
 	for (line = 0; line < max_lines; line++)
 	{
 		gint line_start = sci_get_position_from_line(doc_list[idx].sci, line);
-		gint line_end = sci_get_line_end_from_position(doc_list[idx].sci, line);
+		gint line_end = sci_get_line_end_position(doc_list[idx].sci, line);
 		gint i = line_end - 1;
 		gchar ch = sci_get_char_at(doc_list[idx].sci, i);
 

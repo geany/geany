@@ -96,7 +96,7 @@ gboolean			sci_get_undo_collection		(ScintillaObject* sci);
 
 void 				sci_set_selection_start		(ScintillaObject* sci, gint position);
 void				sci_set_selection_end		(ScintillaObject* sci, gint position);
-gint				sci_get_line_end_from_position	(ScintillaObject* sci, gint position);
+gint				sci_get_line_end_position	(ScintillaObject* sci, gint line);
 
 void 				sci_toggle_fold				(ScintillaObject* sci, gint line);
 gboolean			sci_get_line_is_visible		(ScintillaObject* sci, gint line);
