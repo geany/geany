@@ -6,6 +6,8 @@
    Don't autocomplete for/if constructs when editing an existing line.
  * src/src/document.c:
    Set single undo action when using document_strip_trailing_spaces().
+ * src/search.c:
+   Show grep command and directory when using Find in Files.
 
 
 2007-02-15  Enrico Tröger  <enrico.troeger@uvena.de>
