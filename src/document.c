@@ -1603,6 +1603,8 @@ void document_strip_trailing_spaces(gint idx)
 	gint max_lines = sci_get_line_count(doc_list[idx].sci);
 	gint line;
 
+	sci_start_undo_action(doc_list[idx].sci);
+
 	for (line = 0; line < max_lines; line++)
 	{
 		gint line_start = sci_get_position_from_line(doc_list[idx].sci, line);
@@ -1622,6 +1624,7 @@ void document_strip_trailing_spaces(gint idx)
 			sci_target_replace(doc_list[idx].sci, "", FALSE);
 		}
 	}
+	sci_end_undo_action(doc_list[idx].sci);
 }
 
 

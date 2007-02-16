@@ -7,7 +7,8 @@ Geany 0.10.1 (TBA)
       loaded first.
     * Fixed autocompletion missing tag matches.
     * Fixed a wrong PASCAL autocompletion.
-    * Set single undo action when toggling multiple lines.
+    * Set single undo action when toggling multiple lines or stripping
+      trailing spaces.
     * Prevent some possible invalid memory reads.
     * Convert config, application and documentation dir paths to locale
       encoding before using it.
