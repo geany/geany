@@ -32,6 +32,7 @@ Geany 0.10.1 (TBA)
     * Fixed wrong D function return type after a class definition.
     * Added several missing style types for filetype Perl (thanks to
       John Gabriele for reporting).
+    * Prevent right click in Symbol list from selecting a tag.
 
     Internationalisation:
     * New translations: fi (thanks to Harri Koskinen).
