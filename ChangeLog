@@ -4,6 +4,8 @@
    Rename sci_get_line_end_from_position() with line argument, not
    position.
    Don't autocomplete for/if constructs when editing an existing line.
+ * src/src/document.c:
+   Set single undo action when using document_strip_trailing_spaces().
 
 
 2007-02-15  Enrico Tröger  <enrico.troeger@uvena.de>
