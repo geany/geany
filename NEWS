@@ -35,6 +35,8 @@ Geany 0.10.1 (TBA)
       John Gabriele for reporting).
     * Prevent right click in Symbol list from selecting a tag.
     * Update the symbol list when starting a new document.
+    * Scroll Compiler and Messages window in view when using Next Error
+      or Next Message.
 
     Internationalisation:
     * New translations: fi (thanks to Harri Koskinen).
