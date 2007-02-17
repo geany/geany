@@ -1073,6 +1073,15 @@ gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb)
 		if (! gtk_tree_model_iter_next(model, &iter))
 			return FALSE;	// no more items
 	}
+	// scroll item in view
+	if (app->msgwindow_visible)
+	{
+		GtkTreePath *path = gtk_tree_model_get_path(
+			gtk_tree_view_get_model(treeview), &iter);
+
+		gtk_tree_view_scroll_to_cell(treeview, path, NULL, TRUE, 0.5, 0.5);
+		gtk_tree_path_free(path);
+	}
 	return TRUE;
 }
 

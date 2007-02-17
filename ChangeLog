@@ -1,3 +1,10 @@
+2007-02-17  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/ui_utils.c:
+   Scroll Compiler and Messages window in view when using Next Error
+   or Next Message.
+
+
 2007-02-16  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sciwrappers.c, src/sciwrappers.h, src/sci_cb.c, src/document.c:
