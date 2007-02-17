@@ -1845,6 +1845,9 @@ on_menu_remove_indicators1_activate    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+
+	if (! DOC_IDX_VALID(idx))
+		return;
 	document_clear_indicators(idx);
 }
 
@@ -2201,3 +2204,18 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 		g_free(locale_filename);
 	}
 }
+
+
+void
+on_remove_markers1_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	if (! DOC_IDX_VALID(idx))
+		return;
+
+	sci_marker_delete_all(doc_list[idx].sci, 0);	// delete the yellow tag marker
+	sci_marker_delete_all(doc_list[idx].sci, 1);	// delete user markers
+}
+

@@ -5,6 +5,10 @@
    or Next Message.
  * src/search.c:
    Add Mark button as a Find All option in the Find dialog.
+ * src/interface.c, src/callbacks.c, src/callbacks.h, src/document.c,
+   geany.glade:
+   Add Remove Markers item to the Document menu.
+   Remove Error Indicators no longer removes current tag marker.
 
 
 2007-02-16  Nick Treleaven  <nick.treleaven@btinternet.com>

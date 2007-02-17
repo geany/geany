@@ -1520,14 +1520,16 @@ void document_fold_all(gint idx)
 
 void document_clear_indicators(gint idx)
 {
-	glong last_pos = sci_get_length(doc_list[idx].sci);
+	glong last_pos;
+
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	last_pos = sci_get_length(doc_list[idx].sci);
 	if (last_pos > 0)
 	{
 		sci_start_styling(doc_list[idx].sci, 0, INDIC2_MASK);
 		sci_set_styling(doc_list[idx].sci, last_pos, 0);
 	}
-	// delete the yellow marker if still set
-	if (! app->show_markers_margin) sci_marker_delete_all(doc_list[idx].sci, 0);
 }
 
 
