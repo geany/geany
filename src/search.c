@@ -344,12 +344,12 @@ void search_show_find_dialog()
 		exp = gtk_expander_new(_("Find All"));
 		bbox = gtk_hbutton_box_new();
 
-#if 0
 		button = gtk_button_new_with_mnemonic(_("_Mark"));
+		gtk_tooltips_set_tip(tooltips, button,
+				_("Mark all matches in the current document."), NULL);
 		gtk_container_add(GTK_CONTAINER(bbox), button);
 		g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(send_find_dialog_response),
 			GINT_TO_POINTER(GEANY_RESPONSE_MARK));
-#endif	// not implemented yet
 
 		button = gtk_button_new_with_mnemonic(_("In Sessi_on"));
 		gtk_container_add(GTK_CONTAINER(bbox), button);
@@ -770,6 +770,31 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 }
 
 
+static gint search_mark(gint idx, const gchar *search_text, gint flags)
+{
+	gint pos, line, count = 0;
+	struct TextToFind ttf;
+
+	g_return_val_if_fail(DOC_IDX_VALID(idx), 0);
+
+	ttf.chrg.cpMin = 0;
+	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
+	ttf.lpstrText = (gchar *)search_text;
+	while (1)
+	{
+		pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
+		if (pos == -1) break;
+
+		line = sci_get_line_from_position(doc_list[idx].sci, pos);
+		sci_set_marker_at_line(doc_list[idx].sci, line, TRUE, 1);
+
+		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
+		count++;
+	}
+	return count;
+}
+
+
 static void
 on_find_entry_activate(GtkEntry *entry, gpointer user_data)
 {
@@ -824,24 +849,29 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			case GEANY_RESPONSE_FIND:
 			case GEANY_RESPONSE_FIND_PREVIOUS:
-			document_find_text(idx, search_data.text, search_data.flags,
-				(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE);
-			check_close = FALSE;
-			if (app->pref_main_suppress_search_dialogs)
-				check_close = TRUE;
-			break;
+				document_find_text(idx, search_data.text, search_data.flags,
+					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE);
+				check_close = FALSE;
+				if (app->pref_main_suppress_search_dialogs)
+					check_close = TRUE;
+				break;
 
 			case GEANY_RESPONSE_FIND_IN_FILE:
-			search_find_usage(search_data.text, search_data.flags, FALSE);
-			break;
+				search_find_usage(search_data.text, search_data.flags, FALSE);
+				break;
 
 			case GEANY_RESPONSE_FIND_IN_SESSION:
-			search_find_usage(search_data.text, search_data.flags, TRUE);
-			break;
+				search_find_usage(search_data.text, search_data.flags, TRUE);
+				break;
 
 			case GEANY_RESPONSE_MARK:
-			// TODO
-			break;
+			{
+				gint idx = document_get_cur_idx();
+
+				if (DOC_IDX_VALID(idx))
+					search_mark(idx, search_data.text, search_data.flags);
+				break;
+			}
 
 			// Note: we can get GTK_RESPONSE_DELETE_EVENT responses when ESC is pressed
 		}
@@ -1318,3 +1348,5 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 		g_free(text);
 	}
 }
+
+

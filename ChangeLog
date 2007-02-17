@@ -3,6 +3,8 @@
  * src/ui_utils.c:
    Scroll Compiler and Messages window in view when using Next Error
    or Next Message.
+ * src/search.c:
+   Add Mark button as a Find All option in the Find dialog.
 
 
 2007-02-16  Nick Treleaven  <nick.treleaven@btinternet.com>
