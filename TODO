@@ -5,9 +5,9 @@ TODO List:
 
 	Next version or later:
 
-	o fix problems when loading global.tags and other tags files are
-	  already loaded
-	o fix calltip return type to show pointers (and maybe const, etc.)
+	o fix bug that prevents UTF-16, UTF-32 files from being loaded.
+	o make calltips show full function signature for C-like files (e.g.
+	  return type with const, [] for D, etc.)
 	o Go to xxx - definable command
 	o documentation: list and explain filetype modes
 	o documentation: preferences
@@ -16,6 +16,7 @@ TODO List:
 	o allow use of custom global tags files
 	o project management
 	o filetype template support for all filetypes
+	o word wrapping mode to limit chars on a line for e.g. XML content.
 	o common default highlighting for all programming languages
 	o fix parsing command line args after given filenames
 	o (DBUS)
