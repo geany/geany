@@ -5,8 +5,6 @@ TODO List:
 
 	Next version or later:
 
-	o fix problems when loading global.tags and other tags files are
-	  already loaded
 	o fix calltip return type to show pointers (and maybe const, etc.)
 	o Go to xxx - definable command
 	o documentation: list and explain filetype modes
