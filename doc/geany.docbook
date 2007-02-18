@@ -5,7 +5,7 @@
 <!ENTITY appversion "0.11">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "January 06, 2007">
+<!ENTITY date "February 18, 2007">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -61,10 +61,10 @@
 				<itemizedlist>
 					<listitem><para>Syntax highlighting</para></listitem>
 					<listitem><para>Code completion</para></listitem>
-					<listitem><para>Auto completion of often used constructs like if, for and while</para></listitem>
+					<listitem><para>Auto completion of often-used constructs like "if", "for" and "while"</para></listitem>
 					<listitem><para>Auto completion of XML and HTML tags</para></listitem>
 					<listitem><para>Call tips</para></listitem>
-					<listitem><para>Many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal</para></listitem>
+					<listitem><para>Many supported filetypes including C, Java, PHP, HTML, Python, Perl, Pascal, and others</para></listitem>
 					<listitem><para>Tag/Symbol lists</para></listitem>
 				</itemizedlist>
 			</para>
@@ -1985,6 +1985,28 @@
 			</para>
 		</section>
 	</chapter>
+
+	<!-- Contributing to this document -->
+	<appendix id="contrib">
+	    <title>Contributing to this document</title>
+	    <para>This document is written in Docbook XML. The source file for it is located in the
+	    	  subdirectory "doc" of the source directory of <application>Geany</application>.
+	    	  If you intend on making changes, you should grab the source right from SVN to make
+	    	  sure you have got the newest version. After editing that file, to build the docs and
+	    	  see how your changes look, run "make doc" in the subdirectory "doc" of the source
+	    	  directory of <application>Geany</application> to build HTML pages and a text file.
+	    	  Your updated HTML docs will end up in the <filename>./html</filename> directory.
+	    	  To generate a PDF file, use the command "make pdf" which should generate a
+	          file called <filename>geany-&appversion;.pdf</filename>.
+	    </para>
+	    <para>After you are happy with your changes, create a patch:
+	    	  <screen>
+				<prompt>%</prompt> <userinput><command>svn diff geany.docbook > whatever.patch</command></userinput></screen>
+	    		and then submit that file to the mailing list for review.
+	    </para>
+	    <para>Note, you will need the docbook-xml and xmlto software packages installed to build the docs.
+	    </para>
+	</appendix>
 
 	<!-- Sci default keys appendix -->
 	<appendix id="scikeybinding">
