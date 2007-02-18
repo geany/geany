@@ -1628,7 +1628,7 @@ static void styleset_ruby_init(void)
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_RUBY);
 
-	new_style_array(GEANY_FILETYPES_RUBY, 19);
+	new_style_array(GEANY_FILETYPES_RUBY, 33);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[0]);
 	get_keyfile_style(config, config_home, "commentline", &gsd_comment, &style_sets[GEANY_FILETYPES_RUBY].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "number", "0x400080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[2]);
@@ -1648,6 +1648,20 @@ static void styleset_ruby_init(void)
 	get_keyfile_hex(config, config_home, "styling", "datasection", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[16]);
 	get_keyfile_hex(config, config_home, "styling", "heredelim", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[17]);
 	get_keyfile_hex(config, config_home, "styling", "worddemoted", "0x111199", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[18]);
+	get_keyfile_hex(config, config_home, "styling", "stdin", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[19]);
+	get_keyfile_hex(config, config_home, "styling", "stdout", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[20]);
+	get_keyfile_hex(config, config_home, "styling", "stderr", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[21]);
+	get_keyfile_hex(config, config_home, "styling", "datasection", "0x600000", "0xfff0d8", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[22]);
+	get_keyfile_hex(config, config_home, "styling", "regex", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[23]);
+	get_keyfile_hex(config, config_home, "styling", "here_q", "0x7f007f", "0xddd0dd", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[24]);
+	get_keyfile_hex(config, config_home, "styling", "here_qq", "0x7f007f", "0xddd0dd", "true", &style_sets[GEANY_FILETYPES_RUBY].styling[25]);
+	get_keyfile_hex(config, config_home, "styling", "here_qx", "0x7f007f", "0xddd0dd", "true", &style_sets[GEANY_FILETYPES_RUBY].styling[26]);
+	get_keyfile_hex(config, config_home, "styling", "string_q", "0x7f007f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[27]);
+	get_keyfile_hex(config, config_home, "styling", "string_qq", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[28]);
+	get_keyfile_hex(config, config_home, "styling", "string_qx", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[29]);
+	get_keyfile_hex(config, config_home, "styling", "string_qr", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[30]);
+	get_keyfile_hex(config, config_home, "styling", "string_qw", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[31]);
+	get_keyfile_hex(config, config_home, "styling", "upper_bound", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[32]);
 
 	style_sets[GEANY_FILETYPES_RUBY].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_RUBY, 0, "load define_method attr_accessor attr_writer attr_reader include __FILE__ and def end in or self unless __LINE__ begin defined? ensure module redo super until BEGIN break do false next rescue then when END case else for nil require retry true while alias class elsif if not return undef yield");
@@ -1692,6 +1706,20 @@ void styleset_ruby(ScintillaObject *sci)
 	set_sci_style(sci, SCE_RB_DATASECTION, GEANY_FILETYPES_RUBY, 16);
 	set_sci_style(sci, SCE_RB_HERE_DELIM, GEANY_FILETYPES_RUBY, 17);
 	set_sci_style(sci, SCE_RB_WORD_DEMOTED, GEANY_FILETYPES_RUBY, 18);
+	set_sci_style(sci, SCE_RB_STDIN, GEANY_FILETYPES_RUBY, 19);
+	set_sci_style(sci, SCE_RB_STDOUT, GEANY_FILETYPES_RUBY, 20);
+	set_sci_style(sci, SCE_RB_STDERR, GEANY_FILETYPES_RUBY, 21);
+	set_sci_style(sci, SCE_RB_DATASECTION, GEANY_FILETYPES_RUBY, 22);
+	set_sci_style(sci, SCE_RB_REGEX, GEANY_FILETYPES_RUBY, 23);
+	set_sci_style(sci, SCE_RB_HERE_Q, GEANY_FILETYPES_RUBY, 24);
+	set_sci_style(sci, SCE_RB_HERE_QQ, GEANY_FILETYPES_RUBY, 25);
+	set_sci_style(sci, SCE_RB_HERE_QX, GEANY_FILETYPES_RUBY, 26);
+	set_sci_style(sci, SCE_RB_STRING_Q, GEANY_FILETYPES_RUBY, 27);
+	set_sci_style(sci, SCE_RB_STRING_QQ, GEANY_FILETYPES_RUBY, 28);
+	set_sci_style(sci, SCE_RB_STRING_QX, GEANY_FILETYPES_RUBY, 29);
+	set_sci_style(sci, SCE_RB_STRING_QR, GEANY_FILETYPES_RUBY, 30);
+	set_sci_style(sci, SCE_RB_STRING_QW, GEANY_FILETYPES_RUBY, 31);
+	set_sci_style(sci, SCE_RB_UPPER_BOUND, GEANY_FILETYPES_RUBY, 32);
 }
 
 

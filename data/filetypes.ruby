@@ -20,6 +20,20 @@ classvar=0x000000;0xffffff;true;true
 datasection=0x000000;0xffffff;false;false
 heredelim=0x000000;0xffffff;false;false
 worddemoted=0x111199;0xffffff;false;false
+stdin=0x000000;0xffffff;false;false
+stdout=0x000000;0xffffff;false;false
+stderr=0x000000;0xffffff;false;false
+datasection=0x600000;0xfff0d8;false;false
+regex=0x105090;0xffffff;false;false
+here_q=0x7f007f;0xddd0dd;false;false
+here_qq=0x7f007f;0xddd0dd;true;false
+here_qx=0x7f007f;0xddd0dd;false;true
+string_q=0x7f007f;0xffffff;false;false
+string_qq=0xff901e;0xffffff;false;false
+string_qx=0x000000;0xe0c0e0;false;false
+string_qr=0x105090;0xffffff;false;false
+string_qw=0x105090;0xffffff;false;false
+upper_bound=0x000000;0xffffff;false;false
 
 [keywords]
 # all items must be in one line

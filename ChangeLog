@@ -1,3 +1,9 @@
+2007-02-18  Enrico Troeger  <enrico.troeger@uvena.de>
+
+ * data/filetypes.ruby, src/highlighting.c:
+   Added several missing style types for filetype Ruby.
+
+
 2007-02-17  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/ui_utils.c:
@@ -17,7 +23,7 @@
    Rename sci_get_line_end_from_position() with line argument, not
    position.
    Don't autocomplete for/if constructs when editing an existing line.
- * src/src/document.c:
+ * src/document.c:
    Set single undo action when using document_strip_trailing_spaces().
  * src/search.c:
    Show grep command and directory when using Find in Files.
