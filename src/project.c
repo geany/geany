@@ -55,7 +55,9 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 										  PropertyDialogElements *e);
 static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry);
 static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry);
+#ifndef G_OS_WIN32
 static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
+#endif
 static gboolean close_open_project();
 static gboolean load_config(const gchar *filename);
 static gboolean write_config();
@@ -80,15 +82,23 @@ void project_new()
 
 void project_open()
 {
-#ifndef G_OS_WIN32
+	gchar *dir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, NULL);
+#ifdef G_OS_WIN32
+	gchar *file;
+#else
 	GtkWidget *dialog;
 	GtkFileFilter *filter;
-	gchar *dir;
 #endif
 	if (! close_open_project()) return;
 
 #ifdef G_OS_WIN32
-	win32_show_file_dialog(TRUE);
+	file = win32_show_project_open_dialog(_("Open project"), dir, FALSE);
+	if (file != NULL)
+	{
+		load_config(file);
+		g_free(file);
+		g_free(dir);
+	}
 #else
 
 	dialog = gtk_file_chooser_dialog_new(_("Open project"), GTK_WINDOW(app->window),
@@ -115,7 +125,6 @@ void project_open()
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
 	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 
-	dir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, NULL);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dir);
 	g_free(dir);
 
@@ -462,9 +471,10 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 }
 
 
+#ifndef G_OS_WIN32
 static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 {
-	// set filename
+	// set filename in the file chooser dialog
 	gchar *locale_filename = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(entry)));
 
 	if (g_path_is_absolute(locale_filename))
@@ -486,13 +496,19 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 	}
 	gtk_widget_destroy(dialog);
 }
+#endif
 
 
 static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry)
 {
 #ifdef G_OS_WIN32
-	/// TODO write me
-	//win32_show_project_file_dialog(item);
+	gchar *path = win32_show_project_open_dialog(_("Choose project filename"),
+						gtk_entry_get_text(GTK_ENTRY(entry)), TRUE);
+	if (path != NULL)
+	{
+		gtk_entry_set_text(GTK_ENTRY(entry), path);
+		g_free(path);
+	}
 #else
 	GtkWidget *dialog;
 
@@ -514,8 +530,13 @@ static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry)
 static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry)
 {
 #ifdef G_OS_WIN32
-	/// TODO write me
-	//win32_show_project_folder_dialog(item);
+	gchar *path = win32_show_project_folder_dialog(_("Choose project base path"),
+						gtk_entry_get_text(GTK_ENTRY(entry)));
+	if (path != NULL)
+	{
+		gtk_entry_set_text(GTK_ENTRY(entry), path);
+		g_free(path);
+	}
 #else
 	GtkWidget *dialog;
 
@@ -579,6 +600,7 @@ static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 }
 
 
+#ifndef G_OS_WIN32
 static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (response == GTK_RESPONSE_ACCEPT)
@@ -601,6 +623,7 @@ static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer u
 	else
 		gtk_widget_destroy(GTK_WIDGET(dialog));
 }
+#endif
 
 
 /* Reads the given filename and creates a new project with the data found in the file.

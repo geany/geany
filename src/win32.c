@@ -30,11 +30,14 @@
 
 #include <windows.h>
 #include <commdlg.h>
+#include <shlobj.h>
 
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
 #include <stdlib.h>
+
+#include <gdk/gdkwin32.h>
 
 #include "win32.h"
 
@@ -46,33 +49,27 @@
 #include "dialogs.h"
 
 
-static gchar *filters;
-static gchar *exe_filters;
 
-
-static gchar *win32_get_filters(gboolean exe)
+static gchar *win32_get_file_filters()
 {
-	gchar *string = "";
+	gchar *string;
 	gint i, len;
 
-	if (exe)
+	GString *str = g_string_sized_new(100);
+	gchar *tmp;
+
+	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
-		string = g_strconcat(string,
-				_("Executables"), "\t", "*.exe;*.bat;*.cmd", "\t",
-				filetypes[GEANY_FILETYPES_ALL]->title, "\t",
-				g_strjoinv(";", filetypes[GEANY_FILETYPES_ALL]->pattern), "\t", NULL);
-	}
-	else
-	{
-		for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+		if (filetypes[i])
 		{
-			if (filetypes[i])
-			{
-				string = g_strconcat(string, filetypes[i]->title, "\t", g_strjoinv(";", filetypes[i]->pattern), "\t", NULL);
-			}
+			tmp = g_strjoinv(";", filetypes[i]->pattern);
+			g_string_append_printf(str, "%s\t%s\t", filetypes[i]->title, tmp);
+			g_free(tmp);
 		}
 	}
-	string = g_strconcat(string, "\t", NULL);
+	g_string_append_c(str, '\t'); // the final \0 byte to mark the end of the string
+	string = str->str;
+	g_string_free(str, FALSE);
 
 	// replace all "\t"s by \0
 	len = strlen(string);
@@ -84,6 +81,159 @@ static gchar *win32_get_filters(gboolean exe)
 }
 
 
+static gchar *win32_get_filters(gboolean exe)
+{
+	gchar *string;
+	gint i, len;
+
+	if (exe)
+	{
+		string = g_strconcat(_("Executables"), "\t", "*.exe;*.bat;*.cmd", "\t",
+			filetypes[GEANY_FILETYPES_ALL]->title, "\t",
+			filetypes[GEANY_FILETYPES_ALL]->pattern[0], "\t", NULL);
+	}
+	else
+	{
+		string = g_strconcat(_("Geany project files"), "\t", "*." GEANY_PROJECT_EXT, "\t",
+			filetypes[GEANY_FILETYPES_ALL]->title, "\t",
+			filetypes[GEANY_FILETYPES_ALL]->pattern[0], "\t", NULL);
+	}
+
+	// replace all "\t"s by \0
+	len = strlen(string);
+	for(i = 0; i < len; i++)
+	{
+		if (string[i] == '\t') string[i] = '\0';
+	}
+	return string;
+}
+
+
+/* Returns the directory part of the given filename. */
+static gchar *get_dir(const gchar *filename)
+{
+	if (! g_file_test(filename, G_FILE_TEST_IS_DIR))
+		return g_path_get_dirname(filename);
+	else
+		return g_strdup(filename);
+}
+
+
+/* Callback function for setting the initial directory of the folder open dialog. This could also
+ * be done with BROWSEINFO.pidlRoot and SHParseDisplayName but SHParseDisplayName is not available
+ * on systems below Windows XP. So, we go the hard way by creating a callback which will set up the
+ * folder when the dialog is initialised. Yeah, I like Windows. */
+INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
+{
+	switch(uMsg)
+	{
+		case BFFM_INITIALIZED:
+			SendMessage(hwnd, BFFM_SETSELECTION, TRUE, (LPARAM) pData);
+			break;
+
+		case BFFM_SELCHANGED:
+		{
+			// set the status window to the currently selected path.
+			static TCHAR szDir[MAX_PATH];
+			if (SHGetPathFromIDList((LPITEMIDLIST) lp, szDir))
+			{
+				SendMessage(hwnd, BFFM_SETSTATUSTEXT, 0, (LPARAM) szDir);
+			}
+			break;
+		}
+	}
+	return 0;
+}
+
+
+/* Shows a folder selection dialog.
+ * The selected folder name is returned. */
+gchar *win32_show_project_folder_dialog(const gchar *title, const gchar *initial_dir)
+{
+	BROWSEINFO bi;
+	LPCITEMIDLIST pidl;
+	gchar *fname = g_malloc(MAX_PATH);
+	gchar *dir = get_dir(initial_dir);
+
+	memset(&bi, 0, sizeof bi);
+	bi.hwndOwner = GDK_WINDOW_HWND(app->window->window);
+	bi.pidlRoot = NULL;
+	bi.lpszTitle = title;
+	bi.lpfn = BrowseCallbackProc;
+	bi.lParam = (LPARAM) dir;
+	bi.ulFlags = BIF_DONTGOBELOWDOMAIN | BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
+
+	pidl = SHBrowseForFolder(&bi);
+	g_free(dir);
+
+	// convert the strange Windows folder list item something into an usual path string ;-)
+	if (pidl != NULL && SHGetPathFromIDList(pidl, fname))
+		return fname;
+	else
+	{
+		g_free(fname);
+		return NULL;
+	}
+}
+
+
+/* Shows a file open dialog.
+ * If allow_new_file is set, the file to be opened doesn't have to exist.
+ * The selected file name is returned. */
+gchar *win32_show_project_open_dialog(const gchar *title, const gchar *initial_dir, gboolean allow_new_file)
+{
+	OPENFILENAME of;
+	gint retval;
+	gchar *fname = g_malloc(2048);
+	gchar *filters = win32_get_filters(FALSE);
+	gchar *dir = get_dir(initial_dir);
+
+	fname[0] = '\0';
+
+	/* initialise file dialog info struct */
+	memset(&of, 0, sizeof of);
+#ifdef OPENFILENAME_SIZE_VERSION_400
+	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
+#else
+	of.lStructSize = sizeof of;
+#endif
+	of.hwndOwner = GDK_WINDOW_HWND(app->window->window);
+	of.lpstrFilter = filters;
+
+	of.lpstrCustomFilter = NULL;
+	of.nFilterIndex = 0;
+	of.lpstrFile = fname;
+	of.lpstrInitialDir = dir;
+	of.nMaxFile = 2048;
+	of.lpstrFileTitle = NULL;
+	of.lpstrTitle = title;
+	of.lpstrDefExt = "";
+	of.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_HIDEREADONLY;
+	if (! allow_new_file)
+		of.Flags |= OFN_FILEMUSTEXIST;
+
+	retval = GetOpenFileName(&of);
+
+	g_free(dir);
+	g_free(filters);
+
+	if (! retval)
+	{
+		if (CommDlgExtendedError())
+		{
+			gchar *error;
+			error = g_strdup_printf("File dialog box error (%x)", (int)CommDlgExtendedError());
+			win32_message_dialog(GTK_MESSAGE_ERROR, error);
+			g_free(error);
+		}
+		g_free(fname);
+		return NULL;
+	}
+
+	return fname;
+}
+
+
 // return TRUE if the dialog was not cancelled.
 gboolean win32_show_file_dialog(gboolean file_open)
 {
@@ -91,10 +241,9 @@ gboolean win32_show_file_dialog(gboolean file_open)
 	gint retval;
 	gchar *fname = g_malloc(2048);
 	gchar *current_dir = utils_get_current_file_dir();
+	gchar *filters = win32_get_file_filters();
 
 	fname[0] = '\0';
-
-	if (! filters) filters = win32_get_filters(FALSE);
 
 	/* initialize file dialog info struct */
 	memset(&of, 0, sizeof of);
@@ -103,7 +252,7 @@ gboolean win32_show_file_dialog(gboolean file_open)
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = NULL;
+	of.hwndOwner = GDK_WINDOW_HWND(app->window->window);
 	of.lpstrFilter = filters;
 
 	of.lpstrCustomFilter = NULL;
@@ -126,6 +275,7 @@ gboolean win32_show_file_dialog(gboolean file_open)
 	}
 
 	g_free(current_dir);
+	g_free(filters);
 
 	if (!retval)
 	{
@@ -183,7 +333,7 @@ void win32_show_font_dialog(void)
 
 	memset(&cf, 0, sizeof cf);
 	cf.lStructSize = sizeof cf;
-	cf.hwndOwner = NULL;
+	cf.hwndOwner = GDK_WINDOW_HWND(app->window->window);
 	cf.lpLogFont = &lf;
 	cf.Flags = CF_APPLY | CF_NOSCRIPTSEL | CF_FORCEFONTEXIST | CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS;
 
@@ -220,7 +370,7 @@ void win32_show_color_dialog(const gchar *colour)
 	// Initialize CHOOSECOLOR
 	memset(&cc, 0, sizeof cc);
 	cc.lStructSize = sizeof(cc);
-	cc.hwndOwner = NULL;
+	cc.hwndOwner = GDK_WINDOW_HWND(app->window->window);
 	cc.lpCustColors = (LPDWORD) acr_cust_clr;
 	cc.rgbResult = (colour != NULL) ? utils_strtod(colour, NULL, colour[0] == '#') : 0;
 	cc.Flags = CC_FULLOPEN | CC_RGBINIT;
@@ -245,9 +395,9 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	gint retval;
 	gchar *fname = g_malloc(512);
 	gchar **field, *filename, *tmp;
+	gchar *filters = win32_get_filters(TRUE);
 
 	fname[0] = '\0';
-	if (! exe_filters) exe_filters = win32_get_filters(TRUE);
 
 	// cut the options from the command line
 	field = g_strsplit(gtk_entry_get_text(GTK_ENTRY(item)), " ", 2);
@@ -265,9 +415,9 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = NULL;
+	of.hwndOwner = GDK_WINDOW_HWND(app->window->window);
 
-	of.lpstrFilter = exe_filters;
+	of.lpstrFilter = filters;
 	of.lpstrCustomFilter = NULL;
 	of.nFilterIndex = 1;
 
@@ -280,6 +430,8 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	of.lpstrDefExt = "exe";
 	of.Flags = OFN_ALLOWMULTISELECT | OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER;
 	retval = GetOpenFileName(&of);
+
+	g_free(filters);
 
 	if (!retval)
 	{
@@ -360,7 +512,7 @@ gboolean win32_message_dialog(GtkMessageType type, const gchar *msg)
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
 
 	// display the message box
-	rc = MessageBoxW(NULL, w_msg, w_title, t);
+	rc = MessageBoxW(GDK_WINDOW_HWND(app->window->window), w_msg, w_title, t);
 
 	if (type == GTK_MESSAGE_QUESTION && rc != IDYES)
 		ret = FALSE;
@@ -380,7 +532,7 @@ gint win32_message_dialog_unsaved(const gchar *msg)
 	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0]));
 	MultiByteToWideChar(CP_UTF8, 0, _("Question"), -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
 
-	ret = MessageBoxW(NULL, w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
+	ret = MessageBoxW(GDK_WINDOW_HWND(app->window->window), w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
 	switch(ret)
 	{
 		case IDYES: ret = GTK_RESPONSE_YES; break;

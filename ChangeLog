@@ -1,6 +1,9 @@
 2007-02-19  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/search.c: Fixed compiler warning.
+ * src/project.c, src/win32.c, src/win32.h:
+   Added Windows dialogs for Project new and Project open actions.
+   Fixed some mem leaks in the Windows code.
 
 
 2007-02-19  Nick Treleaven  <nick.treleaven@btinternet.com>
