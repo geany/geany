@@ -597,8 +597,6 @@ gint main(gint argc, gchar **argv)
 	ui_create_insert_date_menu_items();
 	keybindings_init();
 	notebook_init();
-	templates_init();
-	document_init_doclist();
 	filetypes_init_types();
 #ifdef GEANY_DEBUG
 	if (generate_datafiles)
@@ -607,6 +605,8 @@ gint main(gint argc, gchar **argv)
 		exit(0);
 	}
 #endif
+	templates_init();
+	document_init_doclist();
 	configuration_read_filetype_extensions();
 
 	// set window icon

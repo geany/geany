@@ -1,3 +1,14 @@
+2007-02-19  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/templates.c, src/templates.h, src/highlighting.c,
+   src/callbacks.c, src/callbacks.h, src/filetypes.c, src/main.c:
+   Support filetype templates for all filetypes (scan
+   ~/.geany/templates/filetype.* at startup).
+   Default filetype templates are now created in init_ft_templates().
+   Move on_new_with_template() to templates.c.
+   Move on_filetype_change() to filetypes.c.
+
+
 2007-02-18  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * data/filetypes.ruby, src/highlighting.c:

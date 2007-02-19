@@ -221,10 +221,6 @@ on_entry1_changed                      (GtkEditable     *editable,
                                         gpointer         user_data);
 
 void
-on_filetype_change                     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
 on_to_lower_case1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
@@ -321,10 +317,6 @@ on_replace1_activate                   (GtkMenuItem     *menuitem,
 
 void
 on_find_in_files1_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_new_with_template                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void

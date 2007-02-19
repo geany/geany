@@ -196,15 +196,6 @@ on_new1_activate                       (GtkMenuItem     *menuitem,
 
 
 void
-on_new_with_template                   (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	document_new_file(NULL, (filetype*) user_data);
-}
-
-
-
-void
 on_save1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -1066,17 +1057,6 @@ toolbar_popup_menu                     (GtkWidget *widget,
 		return TRUE;
 	}
 	return FALSE;
-}
-
-
-void
-on_filetype_change                     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
-	if (app->ignore_callback || idx < 0 || ! doc_list[idx].is_valid) return;
-
-	document_set_filetype(idx, (filetype*)user_data);
 }
 
 

@@ -201,41 +201,33 @@ x = StdClass.new\n\
 
 
 static gchar *templates[GEANY_MAX_TEMPLATES];
+static gchar *ft_templates[GEANY_MAX_FILE_TYPES] = {NULL};
 
 
 // some simple macros to reduce code size and make the code readable
-#define TEMPLATES_GET_FILENAME(x) g_strconcat(app->configdir, \
-				G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, x, NULL)
-#define TEMPLATES_CREATE_FILE(x, y)	if (! g_file_test(x, G_FILE_TEST_EXISTS)) utils_write_file(x, y)
-#define TEMPLATES_READ_FILE(x, y) g_file_get_contents(x, y, NULL, NULL);
+#define TEMPLATES_GET_FILENAME(shortname) \
+	g_strconcat(app->configdir, \
+		G_DIR_SEPARATOR_S GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S, shortname, NULL)
+
+#define TEMPLATES_CREATE_FILE(fname, text)	\
+	if (! g_file_test(fname, G_FILE_TEST_EXISTS)) \
+		utils_write_file(fname, text)
+
+#define TEMPLATES_READ_FILE(fname, contents_ptr) \
+	g_file_get_contents(fname, contents_ptr, NULL, NULL);
 
 
 // prototype, because this function should never be used outside of templates.c
-static gchar *templates_replace_all(gchar *source, gchar *year, gchar *date);
+static gchar *templates_replace_all(gchar *source, const gchar *year, const gchar *date);
 
 
-void templates_init(void)
+static void init_general_templates(const gchar *year, const gchar *date)
 {
 	gchar *template_filename_fileheader = TEMPLATES_GET_FILENAME("fileheader");
 	gchar *template_filename_gpl = TEMPLATES_GET_FILENAME("gpl");
 	gchar *template_filename_bsd = TEMPLATES_GET_FILENAME("bsd");
 	gchar *template_filename_function = TEMPLATES_GET_FILENAME("function");
 	gchar *template_filename_changelog = TEMPLATES_GET_FILENAME("changelog");
-	gchar *template_filename_filetype_none = TEMPLATES_GET_FILENAME("filetype.none");
-	gchar *template_filename_filetype_c = TEMPLATES_GET_FILENAME("filetype.c");
-	gchar *template_filename_filetype_cpp = TEMPLATES_GET_FILENAME("filetype.cpp");
-	gchar *template_filename_filetype_d = TEMPLATES_GET_FILENAME("filetype.d");
-	gchar *template_filename_filetype_java = TEMPLATES_GET_FILENAME("filetype.java");
-	gchar *template_filename_filetype_pascal = TEMPLATES_GET_FILENAME("filetype.pascal");
-	gchar *template_filename_filetype_php = TEMPLATES_GET_FILENAME("filetype.php");
-	gchar *template_filename_filetype_html = TEMPLATES_GET_FILENAME("filetype.html");
-	gchar *template_filename_filetype_ruby = TEMPLATES_GET_FILENAME("filetype.ruby");
-
-	time_t tp = time(NULL);
-	const struct tm *tm = localtime(&tp);
-	gchar *year = g_malloc0(5);
-	gchar *date = utils_get_date();
-	strftime(year, 5, "%Y", tm);
 
 	// create the template files in the configuration directory, if they don't exist
 	TEMPLATES_CREATE_FILE(template_filename_fileheader, templates_fileheader);
@@ -243,15 +235,6 @@ void templates_init(void)
 	TEMPLATES_CREATE_FILE(template_filename_bsd, templates_bsd_notice);
 	TEMPLATES_CREATE_FILE(template_filename_function, templates_function_description);
 	TEMPLATES_CREATE_FILE(template_filename_changelog, templates_changelog);
-	TEMPLATES_CREATE_FILE(template_filename_filetype_none, templates_filetype_none);
-	TEMPLATES_CREATE_FILE(template_filename_filetype_c, templates_filetype_c);
-	TEMPLATES_CREATE_FILE(template_filename_filetype_cpp, templates_filetype_cpp);
-	TEMPLATES_CREATE_FILE(template_filename_filetype_d, templates_filetype_d);
-	TEMPLATES_CREATE_FILE(template_filename_filetype_java, templates_filetype_java);
-	TEMPLATES_CREATE_FILE(template_filename_filetype_pascal, templates_filetype_pascal);
-	TEMPLATES_CREATE_FILE(template_filename_filetype_php, templates_filetype_php);
-	TEMPLATES_CREATE_FILE(template_filename_filetype_html, templates_filetype_html);
-	TEMPLATES_CREATE_FILE(template_filename_filetype_ruby, templates_filetype_ruby);
 
 	// read the contents
 	TEMPLATES_READ_FILE(template_filename_fileheader, &templates[GEANY_TEMPLATE_FILEHEADER]);
@@ -269,51 +252,101 @@ void templates_init(void)
 	TEMPLATES_READ_FILE(template_filename_changelog, &templates[GEANY_TEMPLATE_CHANGELOG]);
 	templates[GEANY_TEMPLATE_CHANGELOG] = templates_replace_all(templates[GEANY_TEMPLATE_CHANGELOG], year, date);
 
-	TEMPLATES_READ_FILE(template_filename_filetype_none, &templates[GEANY_TEMPLATE_FILETYPE_NONE]);
-	templates[GEANY_TEMPLATE_FILETYPE_NONE] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_NONE], year, date);
-
-	TEMPLATES_READ_FILE(template_filename_filetype_c, &templates[GEANY_TEMPLATE_FILETYPE_C]);
-	templates[GEANY_TEMPLATE_FILETYPE_C] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_C], year, date);
-
-	TEMPLATES_READ_FILE(template_filename_filetype_d, &templates[GEANY_TEMPLATE_FILETYPE_D]);
-	templates[GEANY_TEMPLATE_FILETYPE_D] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_D], year, date);
-
-	TEMPLATES_READ_FILE(template_filename_filetype_cpp, &templates[GEANY_TEMPLATE_FILETYPE_CPP]);
-	templates[GEANY_TEMPLATE_FILETYPE_CPP] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_CPP], year, date);
-
-	TEMPLATES_READ_FILE(template_filename_filetype_java, &templates[GEANY_TEMPLATE_FILETYPE_JAVA]);
-	templates[GEANY_TEMPLATE_FILETYPE_JAVA] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_JAVA], year, date);
-
-	TEMPLATES_READ_FILE(template_filename_filetype_pascal, &templates[GEANY_TEMPLATE_FILETYPE_PASCAL]);
-	templates[GEANY_TEMPLATE_FILETYPE_PASCAL] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_PASCAL], year, date);
-
-	TEMPLATES_READ_FILE(template_filename_filetype_php, &templates[GEANY_TEMPLATE_FILETYPE_PHP]);
-	templates[GEANY_TEMPLATE_FILETYPE_PHP] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_PHP], year, date);
-
-	TEMPLATES_READ_FILE(template_filename_filetype_html, &templates[GEANY_TEMPLATE_FILETYPE_HTML]);
-	templates[GEANY_TEMPLATE_FILETYPE_HTML] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_HTML], year, date);
-
-	TEMPLATES_READ_FILE(template_filename_filetype_ruby, &templates[GEANY_TEMPLATE_FILETYPE_RUBY]);
-	templates[GEANY_TEMPLATE_FILETYPE_RUBY] = templates_replace_all(templates[GEANY_TEMPLATE_FILETYPE_RUBY], year, date);
-
-
 	// free the whole stuff
-	g_free(date);
-	g_free(year);
 	g_free(template_filename_fileheader);
 	g_free(template_filename_gpl);
 	g_free(template_filename_bsd);
 	g_free(template_filename_function);
 	g_free(template_filename_changelog);
-	g_free(template_filename_filetype_none);
-	g_free(template_filename_filetype_c);
-	g_free(template_filename_filetype_cpp);
-	g_free(template_filename_filetype_d);
-	g_free(template_filename_filetype_java);
-	g_free(template_filename_filetype_php);
-	g_free(template_filename_filetype_html);
-	g_free(template_filename_filetype_pascal);
-	g_free(template_filename_filetype_ruby);
+}
+
+
+static void init_ft_templates(const gchar *year, const gchar *date)
+{
+	filetype_id ft_id;
+
+	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
+	{
+		gchar *ext = filetypes_get_conf_extension(ft_id);
+		gchar *shortname = g_strconcat("filetype.", ext, NULL);
+		gchar *fname = TEMPLATES_GET_FILENAME(shortname);
+
+		switch (ft_id)
+		{
+			case GEANY_FILETYPES_ALL:	TEMPLATES_CREATE_FILE(fname, templates_filetype_none); break;
+			case GEANY_FILETYPES_C:		TEMPLATES_CREATE_FILE(fname, templates_filetype_c); break;
+			case GEANY_FILETYPES_CPP:	TEMPLATES_CREATE_FILE(fname, templates_filetype_cpp); break;
+			case GEANY_FILETYPES_D:		TEMPLATES_CREATE_FILE(fname, templates_filetype_d); break;
+			case GEANY_FILETYPES_JAVA:	TEMPLATES_CREATE_FILE(fname, templates_filetype_java); break;
+			case GEANY_FILETYPES_PASCAL:TEMPLATES_CREATE_FILE(fname, templates_filetype_pascal); break;
+			case GEANY_FILETYPES_PHP:	TEMPLATES_CREATE_FILE(fname, templates_filetype_php); break;
+			case GEANY_FILETYPES_HTML:	TEMPLATES_CREATE_FILE(fname, templates_filetype_html); break;
+			case GEANY_FILETYPES_RUBY:	TEMPLATES_CREATE_FILE(fname, templates_filetype_ruby); break;
+			default: break;
+		}
+		TEMPLATES_READ_FILE(fname, &ft_templates[ft_id]);
+		ft_templates[ft_id] = templates_replace_all(ft_templates[ft_id], year, date);
+
+		g_free(fname);
+		g_free(shortname);
+		g_free(ext);
+	}
+}
+
+
+static void
+on_new_with_template                   (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	document_new_file(NULL, (filetype*) user_data);
+}
+
+
+// template items for the new file menu
+static void create_new_menu_items()
+{
+	GtkWidget *template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
+	filetype_id ft_id;
+
+	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
+	{
+		GtkWidget *tmp_menu, *tmp_button;
+		filetype *ft = filetypes[ft_id];
+		const gchar *label = ft->title;
+
+		if (ft_templates[ft_id] == NULL)
+		{
+			continue;
+		}
+		tmp_menu = gtk_menu_item_new_with_label(label);
+		tmp_button = gtk_menu_item_new_with_label(label);
+		gtk_widget_show(tmp_menu);
+		gtk_widget_show(tmp_button);
+		gtk_container_add(GTK_CONTAINER(template_menu), tmp_menu);
+		gtk_container_add(GTK_CONTAINER(app->new_file_menu), tmp_button);
+		g_signal_connect((gpointer) tmp_menu, "activate",
+			G_CALLBACK(on_new_with_template), (gpointer) ft);
+		g_signal_connect((gpointer) tmp_button, "activate",
+			G_CALLBACK(on_new_with_template), (gpointer) ft);
+	}
+}
+
+
+void templates_init(void)
+{
+	time_t tp = time(NULL);
+	const struct tm *tm = localtime(&tp);
+	gchar *year = g_malloc0(5);
+	gchar *date = utils_get_date();
+
+	strftime(year, 5, "%Y", tm);
+
+	init_general_templates(year, date);
+	init_ft_templates(year, date);
+	create_new_menu_items();
+
+	g_free(date);
+	g_free(year);
 }
 
 
@@ -514,28 +547,9 @@ gchar *templates_get_template_fileheader(gint idx)
 
 static gchar *get_file_template(filetype *ft)
 {
-	switch (FILETYPE_ID(ft))
-	{
-		case GEANY_FILETYPES_ALL:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_NONE); break;
-		case GEANY_FILETYPES_C:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_C); break;
-		case GEANY_FILETYPES_CPP:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_CPP); break;
-		case GEANY_FILETYPES_PHP:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_PHP); break;
-		case GEANY_FILETYPES_JAVA:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_JAVA); break;
-		case GEANY_FILETYPES_PASCAL:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_PASCAL); break;
-		case GEANY_FILETYPES_RUBY:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_RUBY); break;
-		case GEANY_FILETYPES_D:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_D); break;
-		case GEANY_FILETYPES_HTML:
-			return templates_get_template_generic(GEANY_TEMPLATE_FILETYPE_HTML); break;
-		default: return NULL;
-	}
+	filetype_id ft_id = FILETYPE_ID(ft);
+
+	return g_strdup(ft_templates[ft_id]);
 }
 
 
@@ -604,7 +618,7 @@ void templates_free_templates(void)
 }
 
 
-static gchar *templates_replace_all(gchar *text, gchar *year, gchar *date)
+static gchar *templates_replace_all(gchar *text, const gchar *year, const gchar *date)
 {
 	text = utils_str_replace(text, "{year}", year);
 	text = utils_str_replace(text, "{date}", date);

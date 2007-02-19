@@ -122,9 +122,11 @@ static void load_system_keyfile(GKeyFile *key_file, const gchar *file, GKeyFileF
 }
 
 
-static void load_keyfiles(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
+static void load_keyfiles(GKeyFile *config, GKeyFile *config_home, filetype_id ft_id)
 {
-	gchar *ext = filetypes_get_conf_extension(filetype_idx);
+	// highlighting uses GEANY_FILETYPES_ALL for common settings
+	gchar *ext = (ft_id != GEANY_FILETYPES_ALL) ?
+		filetypes_get_conf_extension(ft_id) : g_strdup("common");
 	gchar *f0 = g_strconcat(app->datadir, G_DIR_SEPARATOR_S "filetypes.", ext, NULL);
 	gchar *f = g_strconcat(app->configdir,
 		G_DIR_SEPARATOR_S GEANY_FILEDEFS_SUBDIR G_DIR_SEPARATOR_S "filetypes.", ext, NULL);

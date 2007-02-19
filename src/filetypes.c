@@ -28,7 +28,6 @@
 #include "filetypes.h"
 #include "highlighting.h"
 #include "support.h"
-#include "callbacks.h"
 #include "templates.h"
 #include "msgwindow.h"
 #include "utils.h"
@@ -73,7 +72,6 @@ enum
 
 
 static void filetypes_create_menu_item(GtkWidget *menu, gchar *label, filetype *ftype);
-static void filetypes_create_newmenu_item(GtkWidget *menu, gchar *label, filetype *ftype);
 static void filetypes_init_build_programs(filetype *ftype);
 
 static GtkWidget *radio_items[GEANY_MAX_FILE_TYPES];
@@ -123,7 +121,6 @@ filetype *filetypes_get_from_uid(gint uid)
 void filetypes_init_types()
 {
 	GtkWidget *filetype_menu = lookup_widget(app->window, "set_filetype1_menu");
-	GtkWidget *template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
 
 #define C	// these macros are only to ease navigation
 	filetypes[GEANY_FILETYPES_C] = g_new0(filetype, 1);
@@ -716,25 +713,6 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_ALL]->comment_close = NULL;
 	filetypes_init_build_programs(filetypes[GEANY_FILETYPES_ALL]);
 	filetypes_create_menu_item(filetype_menu, _("None"), filetypes[GEANY_FILETYPES_ALL]);
-
-	// now add the items for the new file menu
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_C]->title,
-																filetypes[GEANY_FILETYPES_C]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_CPP]->title,
-																filetypes[GEANY_FILETYPES_CPP]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_D]->title,
-																filetypes[GEANY_FILETYPES_D]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_JAVA]->title,
-																filetypes[GEANY_FILETYPES_JAVA]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PASCAL]->title,
-																filetypes[GEANY_FILETYPES_PASCAL]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_RUBY]->title,
-																filetypes[GEANY_FILETYPES_RUBY]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_PHP]->title,
-																filetypes[GEANY_FILETYPES_PHP]);
-	filetypes_create_newmenu_item(template_menu, filetypes[GEANY_FILETYPES_HTML]->title,
-																filetypes[GEANY_FILETYPES_HTML]);
-
 }
 
 
@@ -852,6 +830,17 @@ void filetypes_select_radio_item(const filetype *ft)
 }
 
 
+static void
+on_filetype_change                     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+	if (app->ignore_callback || idx < 0 || ! doc_list[idx].is_valid) return;
+
+	document_set_filetype(idx, (filetype*)user_data);
+}
+
+
 static void filetypes_create_menu_item(GtkWidget *menu, gchar *label, filetype *ftype)
 {
 	static GSList *group = NULL;
@@ -862,19 +851,6 @@ static void filetypes_create_menu_item(GtkWidget *menu, gchar *label, filetype *
 	gtk_widget_show(tmp);
 	gtk_container_add(GTK_CONTAINER(menu), tmp);
 	g_signal_connect((gpointer) tmp, "activate", G_CALLBACK(on_filetype_change), (gpointer) ftype);
-}
-
-
-static void filetypes_create_newmenu_item(GtkWidget *menu, gchar *label, filetype *ftype)
-{
-	GtkWidget *tmp_menu = gtk_menu_item_new_with_label(label);
-	GtkWidget *tmp_button = gtk_menu_item_new_with_label(label);
-	gtk_widget_show(tmp_menu);
-	gtk_widget_show(tmp_button);
-	gtk_container_add(GTK_CONTAINER(menu), tmp_menu);
-	gtk_container_add(GTK_CONTAINER(app->new_file_menu), tmp_button);
-	g_signal_connect((gpointer) tmp_menu, "activate", G_CALLBACK(on_new_with_template), (gpointer) ftype);
-	g_signal_connect((gpointer) tmp_button, "activate", G_CALLBACK(on_new_with_template), (gpointer) ftype);
 }
 
 
@@ -981,9 +957,9 @@ gchar *filetypes_get_conf_extension(gint filetype_idx)
 {
 	gchar *result, *tmp = g_strdup(filetypes[filetype_idx]->name);
 
+	// Handle any special extensions different from lowercase filetype->name
 	switch (filetype_idx)
 	{
-		case GEANY_FILETYPES_ALL: result = g_strdup("common"); break;
 		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
 		case GEANY_FILETYPES_MAKE: result = g_strdup("makefile"); break;
 		case GEANY_FILETYPES_OMS: result = g_strdup("oms"); break;
