@@ -260,9 +260,12 @@ static void setup_find_next(const gchar *text)
 void search_find_selection(gint idx, gboolean search_backwards)
 {
 	gchar *s = NULL;
+#ifdef G_OS_UNIX
 	GtkClipboard *clipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
+#endif
 
-	if ( idx < 0 ) { return; }
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
 #ifdef G_OS_UNIX
 	s=gtk_clipboard_wait_for_text(clipboard);
 	if (s)
@@ -274,6 +277,7 @@ void search_find_selection(gint idx, gboolean search_backwards)
 		};
 	}
 #endif
+
 	if (!s)	{ s=get_default_text(idx); }
 	if (s)
 	{
@@ -289,7 +293,7 @@ void search_show_find_dialog()
 	gint idx = document_get_cur_idx();
 	gchar *sel = NULL;
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	g_return_if_fail(DOC_IDX_VALID(idx));
 
 	sel = get_default_text(idx);
 

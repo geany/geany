@@ -1,3 +1,8 @@
+2007-02-19  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/search.c: Fixed compiler warning.
+
+
 2007-02-19  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/templates.c, src/templates.h, src/highlighting.c,
@@ -9,7 +14,7 @@
    Move on_filetype_change() to filetypes.c.
 
 
-2007-02-18  Enrico Troeger  <enrico.troeger@uvena.de>
+2007-02-18  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * data/filetypes.ruby, src/highlighting.c:
    Added several missing style types for filetype Ruby.
