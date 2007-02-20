@@ -1,3 +1,10 @@
+2007-02-20  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/document.c:
+   Remove the yellow error line marker also when using 'Remove Error
+   Indicators'.
+
+
 2007-02-19  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/search.c: Fixed compiler warning.

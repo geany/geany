@@ -1530,6 +1530,7 @@ void document_clear_indicators(gint idx)
 		sci_start_styling(doc_list[idx].sci, 0, INDIC2_MASK);
 		sci_set_styling(doc_list[idx].sci, last_pos, 0);
 	}
+	sci_marker_delete_all(doc_list[idx].sci, 0);	// remove the yellow error line marker
 }
 
 
