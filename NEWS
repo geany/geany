@@ -1,4 +1,4 @@
-Geany 0.10.1 (TBA)
+Geany 0.10.1 (February 23, 2007)
 
     Bugs fixed:
     * Wrong tab foreground colour for unmodified documents.
@@ -37,6 +37,8 @@ Geany 0.10.1 (TBA)
     * Update the symbol list when starting a new document.
     * Scroll Compiler and Messages window in view when using Next Error
       or Next Message.
+    * Auto close brackets only when auto completion of constructs is
+      enabled (closes #1665015).
 
     Internationalisation:
     * New translations: fi (thanks to Harri Koskinen).
