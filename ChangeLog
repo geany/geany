@@ -4,6 +4,7 @@
    Made auto_close_bracket() static and auto close brackets only when
    auto completion of constructs is enabled (closes #1665015).
  * doc/geany.1.in: Fixed typo.
+ * geany.glade, src/interface.c: Improved tooltip for auto completion.
 
 
 2007-02-20  Nick Treleaven  <nick.treleaven@btinternet.com>

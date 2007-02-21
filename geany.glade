@@ -5476,7 +5476,7 @@ Bottom
 			  <child>
 			    <widget class="GtkCheckButton" id="check_symbol_auto_completion">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Automatic completion of known symbols in open source file(s) (function, global variables, ...)</property>
+			      <property name="tooltip" translatable="yes">Automatic completion of known symbols in open files (function names, global variables, ...)</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Symbol autocompletion</property>
 			      <property name="use_underline">True</property>

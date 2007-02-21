@@ -3345,7 +3345,7 @@ create_prefs_dialog (void)
   check_symbol_auto_completion = gtk_check_button_new_with_mnemonic (_("Symbol autocompletion"));
   gtk_widget_show (check_symbol_auto_completion);
   gtk_box_pack_start (GTK_BOX (vbox19), check_symbol_auto_completion, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_symbol_auto_completion, _("Automatic completion of known symbols in open source file(s) (function, global variables, ...)"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_symbol_auto_completion, _("Automatic completion of known symbols in open files (function names, global variables, ...)"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_symbol_auto_completion), FALSE);
 
   hbox6 = gtk_hbox_new (FALSE, 20);
