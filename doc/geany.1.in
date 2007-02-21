@@ -1,4 +1,4 @@
-.TH "GEANY" "1" "December 21, 2006" "@PACKAGE@ @VERSION@" ""
+.TH "GEANY" "1" "February 23, 2007" "@PACKAGE@ @VERSION@" ""
 .SH "NAME"
 Geany \(em a small and lightweight IDE
 .SH "SYNOPSIS"
@@ -12,9 +12,6 @@ Some of its features: syntax highlighting, code completion, code folding, symbol
 many supported filetypes like C(++), Java, PHP, HTML, DocBook, Perl and more.
 .PP
 Homepage: http://geany.uvena.de
-
-Set initial line number for the first opened file
-
 .SH "OPTIONS"
 .IP "\fB-c\fP           \fB\-\-config\fP         " 10
 Use an alternate configuration directory. Default configuration directory is
@@ -48,13 +45,11 @@ Show version information and exit.
 Show help information and exit.
 .PP
 Geany supports all generic GTK options, a list is available on the help screen.
-
 .SH "AUTHOR"
 .PP
-This manual page was written by Enrico Tröger <enrico.troeger@uvena.de>. Permission is
+This manual page was written by Enrico Troeger <enrico.troeger@uvena.de>. Permission is
 granted to copy, distribute and/or modify this document under
 the terms of the GNU General Public License, Version 2 any
 later version published by the Free Software Foundation.
 .PP
 The complete text of the GNU General Public License can be found in @GEANY_DATA_DIR@/GPL-2.
-
