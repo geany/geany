@@ -55,6 +55,7 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
 static void auto_multiline(ScintillaObject *sci, gint pos);
 static gboolean is_comment(gint lexer, gint style);
 static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view);
+static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
 
 
 // calls the edit popup menu in the editor
@@ -249,7 +250,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				{	// Tex auto-closing
 					if (sci_get_lexer(sci) == SCLEX_LATEX)
 					{
-						sci_cb_auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
+						auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
 						sci_cb_show_calltip(idx, pos);
 					}
 					break;
@@ -405,9 +406,10 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 }
 
 
-void sci_cb_auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
+static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
 {
-	if (SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_LATEX) return;
+	if (! app->pref_editor_auto_complete_constructs || SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_LATEX)
+		return;
 
 	if (c == '[')
 	{
