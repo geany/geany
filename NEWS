@@ -39,6 +39,7 @@ Geany 0.10.1 (February 23, 2007)
       or Next Message.
     * Auto close brackets only when auto completion of constructs is
       enabled (closes #1665015).
+    * Fixed switching to the wrong tab when showing the unsaved dialog.
 
     Internationalisation:
     * New translations: fi (thanks to Harri Koskinen).

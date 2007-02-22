@@ -88,13 +88,18 @@ extern GArray *doc_array;
 	(doc_list[doc_idx].file_name) : GEANY_STRING_UNTITLED)
 
 
-/* returns the index of the notebook page which has the given filename */
-gint document_find_by_filename(const gchar*, gboolean is_tm_filename);
+/* returns the document index which has the given filename.
+ * is_tm_filename is needed when passing TagManager filenames because they are
+ * dereferenced, and would not match the link filename. */
+gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename);
 
 
-/* returns the index of the notebook page which has sci */
-gint document_find_by_sci(ScintillaObject*);
+/* returns the document index which has sci */
+gint document_find_by_sci(ScintillaObject *sci);
 
+
+/* returns the index of the notebook page from the document index */
+gint document_get_notebook_page(gint doc_idx);
 
 /* returns the index of the given notebook page in the document list */
 gint document_get_n_idx(guint page_num);
