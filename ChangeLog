@@ -1,3 +1,7 @@
+***	NOTE: This ChangeLog was not updated for the 0.10.1 release.
+	Instead see the NEWS file for a list of changes.
+
+
 2006-12-21  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.1.in, doc/Makefile.am, doc/geany.docbook, doc/images/*,
