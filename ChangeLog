@@ -9,6 +9,8 @@
    Add document_delay_colourise(), document_colourise_all().
  * src/dialogs.c, src/document.c, src/document.h:
    Fixed switching to the wrong tab when showing the unsaved dialog.
+ * src/templates.c:
+   Don't include filetype.none in the new file template menus.
 
 
 2007-02-20  Enrico Troeger  <enrico.troeger@uvena.de>

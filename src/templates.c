@@ -308,7 +308,7 @@ static void create_new_menu_items()
 	GtkWidget *template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
 	filetype_id ft_id;
 
-	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
+	for (ft_id = 0; ft_id < GEANY_FILETYPES_ALL; ft_id++)
 	{
 		GtkWidget *tmp_menu, *tmp_button;
 		filetype *ft = filetypes[ft_id];
