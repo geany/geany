@@ -1,3 +1,51 @@
+Geany 0.10.1 (February 23, 2007)
+
+    Bugs fixed:
+    * Wrong tab foreground colour for unmodified documents.
+    * Fixed crashes when closing dialogs by clicking X on some systems.
+    * Fixed missing global tags for C files when a C++ source file was
+      loaded first.
+    * Fixed autocompletion missing tag matches.
+    * Fixed a wrong PASCAL autocompletion.
+    * Set single undo action when toggling multiple lines or stripping
+      trailing spaces.
+    * Prevent some possible invalid memory reads.
+    * Convert config, application and documentation dir paths to locale
+      encoding before using it.
+    * Fixed errors when changing directories containing special
+      characters within the VTE component (thanks to Jeff Pohlmeyer).
+    * Support newer so-names when loading the VTE library (thanks to
+      Jeff Pohlmeyer).
+    * Fixed paste problems on Windows.
+    * When using Save As the returned filename needs to be converted
+      into UTF-8.
+    * Fixed error when parsing of compiler errors by the va_list system.
+    * Added MimeType entry as suggested by Nick Schermer.
+    * LaTeX parser: Allow \section*{} and other commands with *.
+    * Change default keybinding for Close All to Ctrl-Shift-W.
+    * Allow Make for files with no extension - prevent Build when the
+      output filename would be the same as the source file.
+    * Ensure the VTE visual settings are applied when switching to VTE
+      when the Message Window is hidden.
+    * Fixed several issues while opening files and improved code.
+    * Improved the auto scrolling of documents and fixed a bug when
+      opening files remotely.
+    * Fixed wrong D function return type after a class definition.
+    * Added several missing style types for filetype Perl (thanks to
+      John Gabriele for reporting).
+    * Prevent right click in Symbol list from selecting a tag.
+    * Update the symbol list when starting a new document.
+    * Scroll Compiler and Messages window in view when using Next Error
+      or Next Message.
+    * Auto close brackets only when auto completion of constructs is
+      enabled (closes #1665015).
+    * Fixed switching to the wrong tab when showing the unsaved dialog.
+
+    Internationalisation:
+    * New translations: fi (thanks to Harri Koskinen).
+    * Updated translations: cs, de, es, fr, hu.
+
+
 Geany 0.10 (December 21, 2006)
 
     Changes:
@@ -9,8 +57,7 @@ Geany 0.10 (December 21, 2006)
       patched file in a diff file.
     * Added new encoding "None" to open files without any character
       conversions.
-    * Added stop button(using the Run button) to cancel the execution
-      of a command like Run, Compile or Build.
+    * Added Stop button to abort the Run command.
     * New filetype VHDL.
     * New scintilla lexer for filetype D with several improvements.
     * Improved auto completion of multi line comments
