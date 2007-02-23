@@ -15,7 +15,7 @@
 				Depending on the current file's filetype, the Build menu will contain the following
 				items:
 				</p><div class="itemizedlist"><ul type="disc"><li><p>Compile</p></li><li><p>Build</p></li><li><p>Make all</p></li><li><p>Make custom target</p></li><li><p>Make object</p></li><li><p>Execute</p></li><li><p>Set Includes and Arguments</p></li></ul></div><p>
-			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2795997"></a>Compile</h3></div></div></div><p>
+			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2798170"></a>Compile</h3></div></div></div><p>
 					The Compile command has different uses for different kinds of files.
 				</p><p>
 					For compilable languages such as C and C++, the Compile command is setup
@@ -25,28 +25,28 @@
 					Interpreted languages such as Perl, Python, Ruby will
 					compile to bytecode if the language supports it, or will run a syntax check,
 					or failing that will run the file in its language interpreter.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2796022"></a>Build</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2798195"></a>Build</h3></div></div></div><p>
 					For compilable languages such as C and C++, the Build command will link the
 					current source file's equivalent object file into an executable. If the object
 					file does not exist, the source will be compiled and linked in one step,
 					producing just the executable binary.
 				</p><p>
 					Interpreted languages do not use the Build command.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2796041"></a>Make all</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2798214"></a>Make all</h3></div></div></div><p>
 					This effectively runs "make all" in the same directory as the current file.
 					</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
 						For each of the Make commands, The Make tool path must be correctly set
 						in the Tools tab of the Preferences dialog.
 					</p></div><p>
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2796060"></a>Make custom target</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2798232"></a>Make custom target</h3></div></div></div><p>
 					This is similar to running 'Make all' but you will be prompted
 					for the make target name to be passed to the Make tool. For example,
 					typing 'clean' in the dialog prompt will run "make clean".
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2796073"></a>Make object</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2798246"></a>Make object</h3></div></div></div><p>
 					Make object will run "make current_file.o" in the same directory as the current
 					file, using its prefix for 'current_file'. It is useful for compiling just the
 					current file without building the whole project.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2796087"></a>Execute</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2798260"></a>Execute</h3></div></div></div><p>
 					Execute will run the corresponding executable file, shell script or interpreted
 					script in a terminal window. Note that the Terminal tool path must be correctly
 					set in the Tools tab of the Preferences dialog - you can use any terminal
@@ -56,7 +56,7 @@
 					After your program or script has finished executing, you will be prompted to
 					press the return key. This allows you to review any text output from the program
 					before the terminal window is closed.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2796110"></a>Stopping running processes</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2798283"></a>Stopping running processes</h3></div></div></div><p>
 					If you started a build action (Compile, Build or Run) the Run button in the
 					toolbar becomes a stop button and you can stop the curent action. This works
 					by sending a signal to the process (and its child process(es)) to stop the
@@ -68,7 +68,7 @@
 					processes and these child processes creates again child process. There might be
 					some other programs which cannot be stopped correctly, e.g. "Terminal" (the
 					terminal program of Xfce). Xterm is known to work properly.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2745933"></a>Set Includes and Arguments</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2745916"></a>Set Includes and Arguments</h3></div></div></div><p>
 					By default the Compile and Build commands invoke the compiler and linker with
 					only the basic arguments needed by all programs.
 					Using Set Includes and Arguments you can add any include
@@ -84,14 +84,14 @@
 				</p><p>
 					If you need complex settings for your build system, or several different
 					settings, then writing a Makefile and using the Make commands is recommended.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2745974"></a>Indicators</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2745957"></a>Indicators</h3></div></div></div><p>
 					Indicators are red squiggly underlines which are used to highlight errors which
 					occured while compiling the current file. So you can easily see where your code
 					failed to compile. To remove the indicators, just click on
 					"Remove all indicators" in the document file menu.
 				</p><p>
 					If you do not like this feature, you can disable it in the preferences dialog.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2745994"></a>File type configuration settings</h3></div></div></div><p>
+				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2745977"></a>File type configuration settings</h3></div></div></div><p>
 					You can set the commands to run for compiling, building or executing
 					by opening the relevant <code class="filename">filetypes.*</code> configuration file,
 					and checking the [build_settings] section. See <a href="ch04.html#filetypes" title="Filetype definition files">the section called “Filetype definition files”</a> for more
