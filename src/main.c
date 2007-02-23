@@ -490,6 +490,8 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 
 	if (argc <= 1) return FALSE;
 
+	document_delay_colourise();
+
 	for(i = 1; i < argc; i++)
 	{
 		gchar *filename = get_argv_filename(argv[i]);
@@ -522,6 +524,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 		}
 		g_free(filename);
 	}
+	document_colourise_all();
 	return TRUE;
 }
 

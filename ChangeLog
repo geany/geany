@@ -1,3 +1,14 @@
+2007-02-23  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keyfile.c, src/document.c, src/document.h, src/main.c:
+   Speed up loading multiple C-like files when restoring session or
+   loading command-line files at startup by ensuring documents are
+   only colourised once.
+   Also prevent re-colourising C-like documents after saving a file
+   unless the list of typenames has changed.
+   Add document_delay_colourise(), document_colourise_all().
+
+
 2007-02-20  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c, src/sci_cb.c:

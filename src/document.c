@@ -64,6 +64,10 @@
 /* dynamic array of document elements to hold all information of the notebook tabs */
 GArray *doc_array;
 
+/* Whether to colourise the document straight after styling settings are changed.
+ * (e.g. when filetype is set or typenames are updated) */
+static gboolean delay_colourise = FALSE;
+
 
 /* Returns -1 if no text found or the new range endpoint after replacing. */
 static gint
@@ -73,6 +77,7 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 static void document_undo_clear(gint idx);
 static void document_redo_add(gint idx, guint type, gpointer data);
 
+static gboolean update_type_keywords(ScintillaObject *sci);
 
 
 /* returns the index of the notebook page which has the given filename
@@ -1400,16 +1405,28 @@ static GString *get_project_typenames()
 }
 
 
-/* Returns: whether sci_colourise has been called for sci */
+/* Returns: TRUE if any scintilla type keywords were updated.
+ * sci can be NULL to update if necessary (non-NULL can save time if only one
+ * document was changed) */
 static gboolean update_type_keywords(ScintillaObject *sci)
 {
 	gboolean ret = FALSE;
 
-	if (sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(sci)) != -1)
+	if (sci == NULL || sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(sci)) != -1)
 	{
 		guint n;
+		static GString *last_typenames = NULL;
 		GString *s = get_project_typenames();
 
+		if (s && last_typenames && g_string_equal(s, last_typenames))
+		{
+			g_string_free(s, TRUE);
+			return FALSE;	// avoid unnecessary recolourising
+		}
+		// keep typename list for next time
+		if (last_typenames)
+			g_string_free(last_typenames, TRUE);
+		last_typenames = s;
 		if (s == NULL) return FALSE;
 
 		for (n = 0; n < doc_array->len; n++)
@@ -1423,13 +1440,14 @@ static gboolean update_type_keywords(ScintillaObject *sci)
 				if (keyword_idx > 0)
 				{
 					sci_set_keywords(wid, keyword_idx, s->str);
-					sci_colourise(wid, 0, -1);
-					if (sci == wid)
-						ret = TRUE;
+					if (! delay_colourise)
+					{
+						sci_colourise(wid, 0, -1);
+					}
+					ret = TRUE;
 				}
 			}
 		}
-		g_string_free(s, TRUE);
 	}
 	return ret;
 }
@@ -1461,9 +1479,11 @@ void document_set_filetype(gint idx, filetype *type)
 	}
 
 	document_update_tag_list(idx, TRUE);
-	colourise &= ! update_type_keywords(doc_list[idx].sci);
-	if (colourise)
-		sci_colourise(doc_list[idx].sci, 0, -1);
+	if (! delay_colourise)
+	{
+		if (colourise && ! update_type_keywords(doc_list[idx].sci))
+			sci_colourise(doc_list[idx].sci, 0, -1);
+	}
 }
 
 
@@ -1965,3 +1985,33 @@ document *doc(gint idx)
 	return DOC_IDX_VALID(idx) ? &doc_list[idx] : NULL;
 }
 #endif
+
+
+void document_delay_colourise()
+{
+	g_return_if_fail(delay_colourise == FALSE);
+
+	delay_colourise = TRUE;
+}
+
+
+void document_colourise_all()
+{
+	guint n;
+
+	g_return_if_fail(delay_colourise == TRUE);
+
+	// update typenames if necessary
+	update_type_keywords(NULL);
+
+	for (n = 0; n < doc_array->len; n++)
+	{
+		ScintillaObject *sci = doc_list[n].sci;
+
+		if (sci)
+			sci_colourise(sci, 0, -1);
+	}
+	delay_colourise = FALSE;
+}
+
+

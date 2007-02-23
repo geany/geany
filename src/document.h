@@ -230,4 +230,9 @@ void document_undo_add(gint idx, guint type, gpointer data);
 
 GdkColor *document_get_status(gint idx);
 
+
+void document_delay_colourise();
+
+void document_colourise_all();
+
 #endif

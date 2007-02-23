@@ -501,6 +501,8 @@ gboolean configuration_open_files()
 	guint x, pos, y, len;
 	gboolean ret = FALSE, failure = FALSE;
 
+	document_delay_colourise();
+
 	i = app->tab_order_ltr ? 0 : (session_files->len - 1);
 	while (TRUE)
 	{
@@ -561,6 +563,7 @@ gboolean configuration_open_files()
 			if (i < 0) break;
 		}
 	}
+	document_colourise_all();
 
 	g_ptr_array_free(session_files, TRUE);
 	if (failure)
