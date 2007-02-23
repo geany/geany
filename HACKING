@@ -1,0 +1,52 @@
+Patches
+-------
+We are happy to receive patches, but it's best to check with us by email or mailing list whether a
+new feature is appropriate, and whether someone is already working on similar code.
+
+In general it's best to work from the current SVN, but we accept patches against other releases.
+$ svn diff > fix-some-bug.patch
+
+If you're not using SVN, you can use the diff command:
+$ diff -u originalpath modifiedpath > new-feature.patch
+
+File organization
+-----------------
+We aim to use callbacks.c only for Glade callbacks.
+Avoid adding code to geany.h if it will fit better elsewhere.
+
+Glade
+-----
+Use the code generation features of Glade instead of editing interface.c or support.c.
+Glade 2.10 is recommended as long as we support GTK+ 2.6, because later versions of Glade are not
+100% compatible with GTK+ 2.6 (e.g. they may use functions added in GTK+ 2.8).
+
+Coding
+------
+Use static functions where possible.
+Try to use GLib types and functions - e.g. g_free instead of free and try to use only GLib 2.6 and
+GTK 2.6 functions. At least for the moment, we want to keep the minimum requirement for GTK at 2.6.
+We currently try to support the old GCC 2.9.x compiler, so we always declare variables before
+statements. You can use -Wdeclaration-after-statement in your ./configure CFLAGS to warn about
+this.
+
+Style
+-----
+We use a tab width of 4 and indent completely with tabs not spaces.
+To comment small blocks of code we use the C++ // comments and for functions descriptions or longer
+explanations of code, the multiline comment /* */ should be used. In any case, the more comments
+are in your code the better.
+Lines should not be longer than about 100 characters and after 100 characters the lines should be
+wrapped and more indented than the first line to highlight that the line is continued.
+We avoid putting spaces between function names and the opening brace for argument lists.
+Try to fit in with the existing code brace indenting style, comments, operator spacing etc. It's
+not required but it makes our lives easier ;-)
+
+Libraries
+---------
+We prefer to use an unmodified version of Scintilla - any changes should be passed on to the
+maintainers at scintilla.org.
+Tagmanager was originally taken from Anjuta 1.2.2, and parts of it (notably c.c) have been merged
+from later versions of Anjuta. The independent Tagmanager library itself ceased development before
+Geany was started. It's source code parsing is mostly taken from Exuberant Ctags (ctags.sf.net).
+
+
