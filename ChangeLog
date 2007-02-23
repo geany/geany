@@ -7,6 +7,8 @@
    Also prevent re-colourising C-like documents after saving a file
    unless the list of typenames has changed.
    Add document_delay_colourise(), document_colourise_all().
+ * src/dialogs.c, src/document.c, src/document.h:
+   Fixed switching to the wrong tab when showing the unsaved dialog.
 
 
 2007-02-20  Enrico Troeger  <enrico.troeger@uvena.de>

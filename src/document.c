@@ -80,7 +80,7 @@ static void document_redo_add(gint idx, guint type, gpointer data);
 static gboolean update_type_keywords(ScintillaObject *sci);
 
 
-/* returns the index of the notebook page which has the given filename
+/* returns the document index which has the given filename.
  * is_tm_filename is needed when passing TagManager filenames because they are
  * dereferenced, and would not match the link filename. */
 gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
@@ -104,7 +104,7 @@ gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
 }
 
 
-/* returns the index of the notebook page which has sci */
+/* returns the document index which has sci */
 gint document_find_by_sci(ScintillaObject *sci)
 {
 	guint i;
@@ -116,6 +116,16 @@ gint document_find_by_sci(ScintillaObject *sci)
 		if (doc_list[i].is_valid && doc_list[i].sci == sci) return i;
 	}
 	return -1;
+}
+
+
+/* returns the index of the notebook page from the document index */
+gint document_get_notebook_page(gint doc_idx)
+{
+	if (! DOC_IDX_VALID(doc_idx)) return -1;
+
+	return gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
+		GTK_WIDGET(doc_list[doc_idx].sci));
 }
 
 

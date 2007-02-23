@@ -343,7 +343,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 
 	// display the file tab to remind the user of the document
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
-		document_find_by_sci(doc_list[idx].sci));
+		document_get_notebook_page(idx));
 
 	if (doc_list[idx].file_name != NULL)
 	{
