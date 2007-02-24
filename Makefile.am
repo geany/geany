@@ -25,6 +25,9 @@ EXTRA_DIST = \
 	geany.spec \
 	geany.glade \
 	geany.gladep \
+	HACKING \
+	README.I18N \
+	po/intl_stats.sh \
 	$(SYS_DATA_FILES) \
 	$(WIN32_BUILD_FILES)
 
