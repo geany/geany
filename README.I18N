@@ -12,7 +12,8 @@ into Italian you would type:
 msginit -l it_IT -o it.po -i geany.pot
 
 This will create a file it.po. This file can be opened with a text editor (like Geany ;-)) or
-you can also use a graphical interface. I can suggest PoEdit, but there are several other GUIs.
+you can also use a graphical interface. I can suggest PoEdit(http://www.poedit.org/), but there
+are several other GUIs.
 
 When you have finished editing the file, check the file with:
 msgfmt -c --check-accelerators=_ it.po
@@ -40,6 +41,8 @@ Some translation statistics can be found at: http://geany.uvena.de/i18n/
 I18n mailing list
 -----------------
 
-There is also a mailing list dedicated to translation issues. Please go to Mailing lists for more information.
+There is also a mailing list dedicated to translation issues. Please visit
+http://geany.uvena.de/Support/MailingList for more information.
+
 
 Contact: Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
