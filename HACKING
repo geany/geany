@@ -13,6 +13,7 @@ File organization
 -----------------
 We aim to use callbacks.c only for Glade callbacks.
 Avoid adding code to geany.h if it will fit better elsewhere.
+See the src/*.c files for descriptions.
 
 Glade
 -----
@@ -44,9 +45,10 @@ not required but it makes our lives easier ;-)
 Libraries
 ---------
 We prefer to use an unmodified version of Scintilla - any changes should be passed on to the
-maintainers at scintilla.org.
+maintainers at http://scintilla.org.
 Tagmanager was originally taken from Anjuta 1.2.2, and parts of it (notably c.c) have been merged
 from later versions of Anjuta. The independent Tagmanager library itself ceased development before
-Geany was started. It's source code parsing is mostly taken from Exuberant Ctags (ctags.sf.net).
+Geany was started. It's source code parsing is mostly taken from Exuberant Ctags (see
+http://ctags.sf.net).
 
 
