@@ -21,6 +21,9 @@
  * $Id$
  */
 
+/*
+ * General utility functions, non-GTK related.
+ */
 
 #include "SciLexer.h"
 #include "geany.h"

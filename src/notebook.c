@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * Notebook tab Drag 'n' Drop reordering and tab management.
+ */
+
 #include "geany.h"
 #include "notebook.h"
 #include "document.h"

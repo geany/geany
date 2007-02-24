@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * General dialogs.
+ */
+
 #include "geany.h"
 
 #include <gdk/gdkkeysyms.h>

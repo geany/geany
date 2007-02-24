@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * geany.conf preferences file loading and saving.
+ */
+
 #include <stdlib.h>
 #include <string.h>
 

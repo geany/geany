@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * Project Management.
+ */
+
 #include "geany.h"
 
 #include <string.h>

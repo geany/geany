@@ -21,6 +21,13 @@
  * $Id$
  */
 
+/*
+ * Tagmanager related convenience functions.
+ * Tagmanager parses tags in the current documents, known as the workspace, plus global tags,
+ * which are lists of tags for each filetype. Global tags are loaded when a document with a
+ * matching filetype is first loaded.
+ */
+
 #include "geany.h"
 
 #include <ctype.h>

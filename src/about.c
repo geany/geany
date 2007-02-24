@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * About dialog and credits.
+ */
+
 #include "about.h"
 #include "geany.h"
 #include "utils.h"

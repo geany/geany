@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * GTK-Bandit.
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -68,7 +72,7 @@ static void create_window(void)
 	GtkWidget *button5;
 
 	gb_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(gb_window), "Happy Eastern!");
+	gtk_window_set_title(GTK_WINDOW(gb_window), "Happy Easter!");
 	gtk_window_set_resizable(GTK_WINDOW(gb_window), FALSE);
 	gtk_window_set_position(GTK_WINDOW(gb_window), GTK_WIN_POS_CENTER);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(gb_window), TRUE);

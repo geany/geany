@@ -21,8 +21,9 @@
  *  $Id$
  */
 
-
-// special functions for the win32 platform
+/*
+ * Special functions for the win32 platform, to provide native dialogs.
+ */
 
 #include "geany.h"
 

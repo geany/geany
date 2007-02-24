@@ -1,5 +1,5 @@
 /*
- *      socket.h - this file is part of Geany, a fast and lightweight IDE
+ *      socket.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2006-2007 Enrico Tröger <enrico.troeger@uvena.de>
  *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
@@ -19,6 +19,12 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * $Id$
+ */
+
+/*
+ * Socket setup and messages handling.
+ * The socket allows detection and messages to be sent to the first running instance of Geany.
+ * Only the first instance loads session files at startup, and opens files from the command-line.
  */
 
 /*

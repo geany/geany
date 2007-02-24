@@ -21,6 +21,9 @@
  * $Id$
  */
 
+/*
+ * Filetype detection, file extensions and filetype menu items.
+ */
 
 #include <string.h>
 

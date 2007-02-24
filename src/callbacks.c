@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * Callbacks used by Glade. These are mainly in response to menu item and button events in the
+ * main window. Callbacks not used by Glade should go elsewhere.
+ */
 
 #include "geany.h"
 

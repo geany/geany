@@ -21,6 +21,9 @@
  * $Id$
  */
 
+/*
+ * Configurable keyboard shortcuts.
+ */
 
 #include <gdk/gdkkeysyms.h>
 

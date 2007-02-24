@@ -20,6 +20,9 @@
  *
  */
 
+/*
+ * Inline image data.
+ */
 
 /* GdkPixbuf RGBA C-Source image dump */
 #include <gtk/gtk.h>

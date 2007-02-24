@@ -21,6 +21,9 @@
  * $Id$
  */
 
+/*
+ * Program initialization and cleanup.
+ */
 
 #include <signal.h>
 #include <time.h>

@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * Syntax highlighting for the different filetypes, using the Scintilla lexers.
+ */
+
 #include <stdlib.h>
 
 #include "SciLexer.h"

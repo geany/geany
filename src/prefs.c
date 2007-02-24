@@ -21,6 +21,9 @@
  * $Id$
  */
 
+/*
+ * Preferences dialog support functions.
+ */
 
 #include <stdlib.h>
 #include <string.h>

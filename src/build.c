@@ -21,6 +21,9 @@
  * $Id$
  */
 
+/*
+ * Build commands and menu items.
+ */
 
 #include "geany.h"
 #include "build.h"

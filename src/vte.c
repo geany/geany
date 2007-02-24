@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * Virtual Terminal Emulation setup and handling code, using the libvte plugin library.
+ */
+
 #include "geany.h"
 
 #ifdef HAVE_VTE

@@ -21,6 +21,11 @@
  * $Id$
  */
 
+/*
+ * Document related actions: new, save, open, etc.
+ * Also Scintilla search actions.
+ */
+
 #include "geany.h"
 
 #ifdef TIME_WITH_SYS_TIME

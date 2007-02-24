@@ -21,6 +21,9 @@
  * $Id$
  */
 
+/*
+ * User Interface general utility functions.
+ */
 
 #include "geany.h"
 

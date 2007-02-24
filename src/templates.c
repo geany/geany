@@ -21,6 +21,11 @@
  * $Id$
  */
 
+/*
+ * Templates to insert into the current document, or filetype templates to create a new
+ * document from.
+ */
+
 #include <time.h>
 #include <string.h>
 

@@ -21,6 +21,11 @@
  * $Id$
  */
 
+/*
+ * Wrappers for the SCI_* Scintilla messages.
+ * Originally from the cssed project (http://cssed.sf.net).
+ */
+
 #include <string.h>
 
 #include "geany.h"

@@ -21,6 +21,11 @@
  * $Id$
  */
 
+/*
+ * Find, Replace, Find in Files dialog related functions.
+ * Note that the basic text find functions are in document.c.
+ */
+
 #include <gdk/gdkkeysyms.h>
 
 #include "geany.h"

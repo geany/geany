@@ -21,6 +21,9 @@
  *  $Id$
  */
 
+/*
+ * Encoding conversion and Byte Order Mark (BOM) handling.
+ */
 
 /*
  * Modified by the gedit Team, 2002. See the gedit AUTHORS file for a

@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * Miscellaneous code for the Tools menu items.
+ */
+
 #include "geany.h"
 
 #include "support.h"

@@ -21,6 +21,12 @@
  * $Id$
  */
 
+/*
+ * Callbacks for the Scintilla widget (ScintillaObject).
+ * Most important is the sci-notify callback, handled in on_editor_notification().
+ * This includes auto-indentation, comments, auto-completion, calltips, etc.
+ * Also some general Scintilla-related functions.
+ */
 
 #include <ctype.h>
 #include <string.h>

@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * Message window functions (status, compiler, messages windows).
+ * Also compiler error message parsing and grep file and line parsing.
+ */
 
 #include <time.h>
 

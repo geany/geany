@@ -21,6 +21,10 @@
  * $Id$
  */
 
+/*
+ * Sidebar related code for the Symbol list and Open files GtkTreeViews.
+ */
+
 #include <string.h>
 
 #include "geany.h"
