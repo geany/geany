@@ -1516,13 +1516,13 @@ static void kill_process(GPid *pid)
 	 * perforce necessary for just killing a process). But we must use a signal which we can
 	 * ignore because the main process get it too, it is declared to ignore in main.c. */
 
-	gint resultpg, result;
+	gint result;
 
-	// sent SIGQUIT to all the processes to the processes' own process group
+	g_return_if_fail(*pid > 1);
+
 	result = kill(*pid, SIGQUIT);
-	resultpg = killpg(0, SIGQUIT);
 
-	if (result != 0 || resultpg != 0)
+	if (result != 0)
 		msgwin_status_add(_("Process could not be stopped (%s)."), g_strerror(errno));
 	else
 	{

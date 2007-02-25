@@ -1,3 +1,11 @@
+2007-02-25  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c:
+   Prevent undefined behaviour when using the Stop command that can kill
+   X when Geany is run from the KDE or Xfce menu (not from a terminal).
+   Should close #1668017.
+
+
 2007-02-24  Enrico Troeger  <enrico.troeger@uvena.de>
 
  * configure.in, Makefile.am, README.I18N, po/intl_stats.sh, po/LINGUAS:
