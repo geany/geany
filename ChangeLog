@@ -7,6 +7,8 @@
    commands and replace the selection with the output.
  * data/filetype_extensions.conf, src/filetypes.c:
    Added *.pod to Perl file patterns.
+ * src/sci_cb.c: Auto complete multi line comments only when auto
+                 completion of constructs is enabled.
 
 
 2007-02-25  Nick Treleaven  <nick.treleaven@btinternet.com>

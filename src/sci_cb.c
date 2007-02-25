@@ -343,11 +343,14 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 			sci_add_text(sci, text);
 			g_free(text);
 		}
-
 	}
-	// " * " auto completion in multiline C/C++/D/Java comments
-	auto_multiline(sci, pos);
-	if (app->pref_editor_auto_complete_constructs) sci_cb_auto_latex(idx, pos);
+
+	if (app->pref_editor_auto_complete_constructs)
+	{
+		auto_multiline(sci, pos); // " * " auto completion in multiline C/C++/D/Java comments
+
+		sci_cb_auto_latex(idx, pos);
+	}
 }
 
 
