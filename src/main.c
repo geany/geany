@@ -58,6 +58,7 @@
 #include "highlighting.h"
 #include "symbols.h"
 #include "project.h"
+#include "tools.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -602,6 +603,7 @@ gint main(gint argc, gchar **argv)
 	ui_create_insert_menu_items();
 	ui_create_insert_date_menu_items();
 	keybindings_init();
+	tools_create_insert_custom_command_menu_items();
 	notebook_init();
 	filetypes_init_types();
 #ifdef GEANY_DEBUG
@@ -745,6 +747,7 @@ void main_quit()
 	g_free(app->tools_browser_cmd);
 	g_free(app->tools_print_cmd);
 	g_free(app->tools_grep_cmd);
+	g_strfreev(app->custom_commands);
 	while (! g_queue_is_empty(app->recent_queue))
 	{
 		g_free(g_queue_pop_tail(app->recent_queue));

@@ -150,6 +150,12 @@ void configuration_save()
 	}
 #endif
 	g_key_file_set_string(config, PACKAGE, "custom_date_format", app->custom_date_format);
+	if (app->custom_commands != NULL)
+	{
+		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
+				(const gchar**) app->custom_commands, g_strv_length(app->custom_commands));
+	}
+
 	g_key_file_set_string(config, PACKAGE, "editor_font", app->editor_font);
 	g_key_file_set_string(config, PACKAGE, "tagbar_font", app->tagbar_font);
 	g_key_file_set_string(config, PACKAGE, "msgwin_font", app->msgwin_font);
@@ -335,6 +341,7 @@ gboolean configuration_load()
 	app->brace_match_ltgt = utils_get_setting_boolean(config, PACKAGE, "brace_match_ltgt", FALSE);
 	app->switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	app->custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
+	app->custom_commands = g_key_file_get_string_list(config, PACKAGE, "custom_commands", NULL, NULL);
 	app->editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	app->tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	app->msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);

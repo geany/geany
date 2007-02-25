@@ -1,3 +1,12 @@
+2007-02-25  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, doc/geany.docbook, src/geany.h, src/interface.c,
+   src/keybindings.c, src/keybindings.h, src/keyfile.c, src/main.c,
+   src/tools.c, src/tools.h:
+   Added custom commands to send selected text through some definable
+   commands and replace the selection with the output.
+
+
 2007-02-25  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c:
@@ -6,7 +15,7 @@
    Should close #1668017.
 
 
-2007-02-24  Enrico Troeger  <enrico.troeger@uvena.de>
+2007-02-24  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * configure.in, Makefile.am, README.I18N, po/intl_stats.sh, po/LINGUAS:
    Moved list of available translations to new file po/LINGUAS.
@@ -36,9 +45,9 @@
    Don't include filetype.none in the new file template menus.
 
 
-2007-02-20  Enrico Troeger  <enrico.troeger@uvena.de>
+2007-02-20  Enrico Tröger  <enrico.troeger@uvena.de>
 
- * src/sci_cb.c, src/sci_cb.c:
+ * src/sci_cb.c, src/sci_cb.h:
    Made auto_close_bracket() static and auto close brackets only when
    auto completion of constructs is enabled (closes #1665015).
  * doc/geany.1.in: Fixed typo.

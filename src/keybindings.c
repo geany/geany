@@ -39,6 +39,7 @@
 #include "sci_cb.h"
 #include "sciwrappers.h"
 #include "build.h"
+#include "tools.h"
 // include vte.h on non-Win32 systems, else define fake vte_init
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -226,6 +227,12 @@ void keybindings_init(void)
 		GDK_i, GDK_CONTROL_MASK, "edit_increaseindent", _("Increase indent"));
 	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit,
 		GDK_i, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_decreaseindent", _("Decrease indent"));
+	keys[GEANY_KEYS_EDIT_SENDTOCMD1] = fill(cb_func_edit,
+		GDK_1, GDK_CONTROL_MASK, "edit_sendtocmd1", _("Send Selection to custom command 1"));
+	keys[GEANY_KEYS_EDIT_SENDTOCMD2] = fill(cb_func_edit,
+		GDK_2, GDK_CONTROL_MASK, "edit_sendtocmd2", _("Send Selection to custom command 2"));
+	keys[GEANY_KEYS_EDIT_SENDTOCMD3] = fill(cb_func_edit,
+		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send Selection to custom command 3"));
 	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit,
 		GDK_less, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_gotomatchingbrace",
 		_("Goto matching brace"));
@@ -845,6 +852,18 @@ static void cb_func_edit(guint key_id)
 			break;
 		case GEANY_KEYS_EDIT_TOUPPERCASE:
 			on_to_upper_case1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_EDIT_SENDTOCMD1:
+			if (g_strv_length(app->custom_commands) > 0)
+				tools_execute_custom_command(idx, app->custom_commands[0]);
+			break;
+		case GEANY_KEYS_EDIT_SENDTOCMD2:
+			if (g_strv_length(app->custom_commands) > 1)
+				tools_execute_custom_command(idx, app->custom_commands[1]);
+			break;
+		case GEANY_KEYS_EDIT_SENDTOCMD3:
+			if (g_strv_length(app->custom_commands) > 2)
+				tools_execute_custom_command(idx, app->custom_commands[2]);
 			break;
 	}
 }

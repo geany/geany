@@ -421,6 +421,28 @@
 					</para>
 				</note>
 			</section>
+			<section id="general_cc">
+				<title>Send text through definable commands</title>
+				<para>
+					You can define several custom commands in <application>Geany</application> and
+					send the current selection to one of these commands. The output of the command
+					will be used to replace the current selection. So, it is possible to use text
+					formatting tools with Geany in a general way.
+					The selected text will be sent to the standard input of the executed command,
+					so the command should be able to read from it and it should print all results
+					to its standard output which will be read by <application>Geany</application>.
+					To help finding errors in executing the command, the output of the program's
+					standard error will be printed on <application>Geany</application>'s standard
+					output.
+				</para>
+				<para>
+					To add a custom command, just go to the Set Custom Commands dialog in the
+					Format sub menu of the Edit and Popup menu. Then click on Add to get a new
+					text entry and type the command. You can also specify some command line options.
+					To delete a command,  just clear the text entry and press Ok. It will be deleted
+					automatically.
+				</para>
+			</section>
 		</section>
 		<section id="charset">
 			<title>Character sets and Unicode Byte-Order-Mark (BOM)</title>

@@ -2086,8 +2086,6 @@ on_menu_insert_date_activate           (GtkMenuItem     *menuitem,
 }
 
 
-
-
 void
 on_project_new1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
