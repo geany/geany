@@ -309,12 +309,13 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_PERL]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_PERL]->title = g_strdup(_("Perl source file"));
 	filetypes[GEANY_FILETYPES_PERL]->extension = g_strdup("perl");
-	filetypes[GEANY_FILETYPES_PERL]->pattern = g_new0(gchar*, 5);
+	filetypes[GEANY_FILETYPES_PERL]->pattern = g_new0(gchar*, 6);
 	filetypes[GEANY_FILETYPES_PERL]->pattern[0] = g_strdup("*.pl");
 	filetypes[GEANY_FILETYPES_PERL]->pattern[1] = g_strdup("*.perl");
 	filetypes[GEANY_FILETYPES_PERL]->pattern[2] = g_strdup("*.pm");
 	filetypes[GEANY_FILETYPES_PERL]->pattern[3] = g_strdup("*.agi");
-	filetypes[GEANY_FILETYPES_PERL]->pattern[4] = NULL;
+	filetypes[GEANY_FILETYPES_PERL]->pattern[4] = g_strdup("*.pod");
+	filetypes[GEANY_FILETYPES_PERL]->pattern[5] = NULL;
 	filetypes[GEANY_FILETYPES_PERL]->comment_open = g_strdup("#");
 	filetypes[GEANY_FILETYPES_PERL]->comment_close = NULL;
 	filetypes[GEANY_FILETYPES_PERL]->style_func_ptr = styleset_perl;

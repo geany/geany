@@ -5,6 +5,8 @@
    src/tools.c, src/tools.h:
    Added custom commands to send selected text through some definable
    commands and replace the selection with the output.
+ * data/filetype_extensions.conf, src/filetypes.c:
+   Added *.pod to Perl file patterns.
 
 
 2007-02-25  Nick Treleaven  <nick.treleaven@btinternet.com>
