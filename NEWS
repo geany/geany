@@ -1,3 +1,10 @@
+Geany 0.10.2 (February 25, 2007)
+
+    Bugs fixed:
+    * Fixed serious crash of complete X session when using the Stop
+      command when Geany is run from the program menu (closes #1668017).
+
+
 Geany 0.10.1 (February 23, 2007)
 
     Bugs fixed:

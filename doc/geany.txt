@@ -1,4 +1,4 @@
-Geany 0.10.1
+Geany 0.10.2
 
 Enrico Tröger
 
@@ -1549,7 +1549,7 @@ Table 4.4. Template wildcards
 ├──────────────┼───────────────────────────────────────┼──────────────────────┤
 │              │                                       │ filetypes, file      │
 │ geanyversion │ The actual Geany version, e.g. "Geany │ header, function     │
-│              │ 0.10.1"                               │ description,         │
+│              │ 0.10.2"                               │ description,         │
 │              │                                       │ ChangeLog entry      │
 ├──────────────┼───────────────────────────────────────┼──────────────────────┤
 │ datetime     │ The current date and time in the      │ file header,         │
