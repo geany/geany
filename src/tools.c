@@ -681,7 +681,7 @@ static void cc_show_dialog_custom_commands()
 		GSList *result_list = NULL;
 		gint i = 0;
 		gint len = 0;
-		gchar **result;
+		gchar **result = NULL;
 		const gchar *text;
 
 		while (children != NULL)
@@ -702,21 +702,27 @@ static void cc_show_dialog_custom_commands()
 			}
 			children = children->next;
 		}
-		// create a new null-terminated array
-		result = g_new(gchar*, len + 1);
-		while (result_list != NULL)
+		// create a new null-terminated array but only if there any commands defined
+		if (len > 0)
 		{
-			result[i] = (gchar*) result_list->data;
+			result = g_new(gchar*, len + 1);
+			while (result_list != NULL)
+			{
+				result[i] = (gchar*) result_list->data;
 
-			result_list = result_list->next;
-			i++;
+				result_list = result_list->next;
+				i++;
+			}
+			result[len] = NULL; // null-terminate the array
 		}
-		g_slist_free(result_list);
-		g_list_free(children);
-		result[len] = NULL; // null-terminate the array
+		// set the new array
 		g_strfreev(app->custom_commands);
 		app->custom_commands = result;
+		// rebuild the menu items
 		tools_create_insert_custom_command_menu_items();
+
+		g_slist_free(result_list);
+		g_list_free(children);
 	}
 	gtk_widget_destroy(dialog);
 }
@@ -732,7 +738,7 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	enable = sci_can_copy(doc_list[idx].sci);
+	enable = sci_can_copy(doc_list[idx].sci) && (app->custom_commands != NULL);
 
 	children = gtk_container_get_children(GTK_CONTAINER(user_data));
 	len = g_list_length(children);
