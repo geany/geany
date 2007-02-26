@@ -24,6 +24,7 @@ Josef Whiter <josef(at)toxicpanda(dot)com> - parse 'Entering directory' build me
 Jeff Pohlmeyer <yetanothergeek(at)gmail(dot)com> - "Allow DnD", "Use tabs" and other great patches
 Tomás Vírseda <kaskaras(at)gmail(dot)com> - sort open files patch
 Dirk Weber <dietrich-weber(at)web(dot)de>
+Slava Semushin <slava(dot)semushin(at)gmail(dot)com> - patch to improve SVN checks in cofigure script
 
 Translators:
 ----------------------------------

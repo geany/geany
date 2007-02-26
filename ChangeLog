@@ -1,6 +1,8 @@
 2007-02-26  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/tools.c: Fixed wrong sensitiveness of custom commands menu items.
+ * configure.in, THANKS:
+   Applied patch from Slava Semushin to improve SVN checks (thank you).
 
 
 2007-02-25  Enrico Tröger  <enrico.troeger@uvena.de>
