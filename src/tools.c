@@ -633,7 +633,7 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 static void cc_show_dialog_custom_commands()
 {
 	GtkWidget *dialog, *label, *vbox, *button;
-	gint i;
+	guint i;
 	struct cc_dialog cc;
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Custom Commands"), GTK_WINDOW(app->window),
@@ -765,7 +765,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 	command_idx = GPOINTER_TO_INT(user_data);
 
 	if (app->custom_commands == NULL ||
-		command_idx < 0 || command_idx > g_strv_length(app->custom_commands))
+		command_idx < 0 || command_idx > (gint) g_strv_length(app->custom_commands))
 	{
 		cc_show_dialog_custom_commands();
 		return;
@@ -844,7 +844,7 @@ void tools_create_insert_custom_command_menu_items()
 	}
 	else
 	{
-		gint i;
+		guint i;
 		gint idx = 0;
 		for (i = 0; i < g_strv_length(app->custom_commands); i++)
 		{
