@@ -75,7 +75,7 @@ static BuildMenuItems latex_menu_items =
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd,
 								gboolean autoclose);
-static GPid build_spawn_cmd(gint idx, gchar **cmd);
+static GPid build_spawn_cmd(gint idx, const gchar *cmd);
 static void on_make_target_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
 static void set_stop_button(gboolean stop);
@@ -101,24 +101,22 @@ void build_finalize()
 
 GPid build_compile_tex_file(gint idx, gint mode)
 {
-	gchar **argv;
+	const gchar *cmd = NULL;
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
-	argv = g_new0(gchar*, 2);
 	if (mode == LATEX_CMD_TO_DVI)
 	{
-		argv[0] = g_strdup(doc_list[idx].file_type->programs->compiler);
+		cmd = doc_list[idx].file_type->programs->compiler;
 		build_info.type = GBO_COMPILE;
 	}
 	else
 	{
-		argv[0] = g_strdup(doc_list[idx].file_type->programs->linker);
+		cmd = doc_list[idx].file_type->programs->linker;
 		build_info.type = GBO_BUILD;
 	}
-	argv[1] = NULL;
 
-	return build_spawn_cmd(idx, argv);
+	return build_spawn_cmd(idx, cmd);
 }
 
 
@@ -257,6 +255,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 }
 
 
+// get curfile.o in locale encoding from document::file_name
 static gchar *get_object_filename(gint idx)
 {
 	gchar *locale_filename, *short_file, *noext, *object_file;
@@ -280,54 +279,57 @@ static gchar *get_object_filename(gint idx)
 
 GPid build_make_file(gint idx, gint build_opts)
 {
-	gchar **argv;
+	GString *cmdstr;
+	GPid pid;
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
-	argv = g_new0(gchar*, 3);
-	argv[0] = g_strdup(app->tools_make_cmd);
+	cmdstr = g_string_new(app->tools_make_cmd);
+	g_string_append_c(cmdstr, ' ');
 
 	if (build_opts == GBO_MAKE_OBJECT)
 	{
-		build_info.type = GBO_MAKE_OBJECT;
-		argv[1] = get_object_filename(idx);
-		argv[2] = NULL;
+		gchar *tmp;
+
+		build_info.type = build_opts;
+		tmp = get_object_filename(idx);
+		g_string_append(cmdstr, tmp);
+		g_free(tmp);
 	}
 	else if (build_opts == GBO_MAKE_CUSTOM && build_info.custom_target)
-	{	//cust-target
+	{
 		build_info.type = GBO_MAKE_CUSTOM;
-		argv[1] = g_strdup(build_info.custom_target);
-		argv[2] = NULL;
+		g_string_append(cmdstr, build_info.custom_target);
 	}
 	else	// GBO_MAKE_ALL
 	{
 		build_info.type = GBO_MAKE_ALL;
-		argv[1] = g_strdup("all");
-		argv[2] = NULL;
+		g_string_append(cmdstr, "all");
 	}
 
-	return build_spawn_cmd(idx, argv);
+	pid = build_spawn_cmd(idx, cmdstr->str);
+	g_string_free(cmdstr, TRUE);
+	return pid;
 }
 
 
 GPid build_compile_file(gint idx)
 {
-	gchar **argv;
+	const gchar *cmd;
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
-	argv = g_new0(gchar *, 2);
-	argv[0] = g_strdup(doc_list[idx].file_type->programs->compiler);
-	argv[1] = NULL;
+	cmd = doc_list[idx].file_type->programs->compiler;
 
 	build_info.type = GBO_COMPILE;
-	return build_spawn_cmd(idx, argv);
+	return build_spawn_cmd(idx, cmd);
 }
 
 
 GPid build_link_file(gint idx)
 {
-	gchar **argv;
+	GString *cmdstr;
+	GPid pid;
 	gchar *executable = NULL;
 	gchar *object_file, *locale_filename;
 	struct stat st, st2;
@@ -369,24 +371,25 @@ GPid build_link_file(gint idx)
 		}
 	}
 
+	cmdstr = g_string_new(doc_list[idx].file_type->programs->linker);
+	g_string_append_c(cmdstr, ' ');
+
 	if (doc_list[idx].file_type->id == GEANY_FILETYPES_D)
 	{	// the dmd compiler needs -of instead of -o and it accepts no whitespace after -of
 		gchar *tmp = g_path_get_basename(executable);
 
-		argv = g_new0(gchar *, 3);
-		argv[0] = g_strdup(doc_list[idx].file_type->programs->linker);
-		argv[1] = g_strconcat("-of", tmp, NULL);
-		argv[2] = NULL;
-
+		g_string_append(cmdstr, "-of");
+		g_string_append(cmdstr, tmp);
 		g_free(tmp);
 	}
 	else
 	{
-		argv = g_new0(gchar *, 4);
-		argv[0] = g_strdup(doc_list[idx].file_type->programs->linker);
-		argv[1] = g_strdup("-o");
-		argv[2] = g_path_get_basename(executable);
-		argv[3] = NULL;
+		gchar *tmp = g_path_get_basename(executable);
+
+		g_string_append(cmdstr, "-o");
+		g_string_append_c(cmdstr, ' ');
+		g_string_append(cmdstr, tmp);
+		g_free(tmp);
 	}
 
 	g_free(executable);
@@ -394,11 +397,13 @@ GPid build_link_file(gint idx)
 	g_free(locale_filename);
 
 	build_info.type = GBO_BUILD;
-	return build_spawn_cmd(idx, argv);
+	pid = build_spawn_cmd(idx, cmdstr->str);
+	g_string_free(cmdstr, TRUE);
+	return pid;
 }
 
 
-static GPid build_spawn_cmd(gint idx, gchar **cmd)
+static GPid build_spawn_cmd(gint idx, const gchar *cmd)
 {
 	GError  *error = NULL;
 	gchar  **argv;
@@ -416,13 +421,10 @@ static GPid build_spawn_cmd(gint idx, gchar **cmd)
 
 	document_clear_indicators(idx);
 
-	cmd_string = g_strjoinv(" ", cmd);
-	g_strfreev(cmd);
-
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-
 	executable = utils_remove_ext_from_filename(locale_filename);
 
+	cmd_string = g_strdup(cmd);
 	// replace %f and %e in the command string
 	tmp = g_path_get_basename(locale_filename);
 	cmd_string = utils_str_replace(cmd_string, "%f", tmp);

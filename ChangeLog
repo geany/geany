@@ -3,6 +3,9 @@
  * src/msgwindow.c, src/msgwindow.h, src/search.c:
    Show number of matches when using Find All or Find in Files.
    Add msgwin_msg_add_fmt().
+ * src/build.c:
+   Make build_spawn_cmd() take a command string instead of joining an
+   array of strings.
 
 
 2007-02-27  Nick Treleaven  <nick.treleaven@btinternet.com>
