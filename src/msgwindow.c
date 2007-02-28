@@ -248,6 +248,19 @@ void msgwin_show_hide(gboolean show)
 }
 
 
+void msgwin_msg_add_fmt(gint line, gint idx, const gchar *format, ...)
+{
+	gchar string[512];
+	va_list args;
+
+	va_start(args, format);
+	g_vsnprintf(string, 512, format, args);
+	va_end(args);
+
+	msgwin_msg_add(line, idx, string);
+}
+
+
 // adds string to the msg treeview
 void msgwin_msg_add(gint line, gint idx, const gchar *string)
 {
@@ -782,8 +795,7 @@ static void msgwin_parse_grep_line(const gchar *string, gchar **filename, gint *
 	*filename = NULL;
 	*line = -1;
 
-	g_return_if_fail(msgwindow.find_in_files_dir != NULL);
-	if (string == NULL) return;
+	if (string == NULL || msgwindow.find_in_files_dir == NULL) return;
 
 	// conflict:3:conflicting types for `foo'
 	data.string = string;

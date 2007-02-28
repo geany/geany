@@ -1269,20 +1269,31 @@ static gboolean search_read_io              (GIOChannel *source,
 static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 {
 #ifdef G_OS_UNIX
-	gchar *msg = _("Search failed.");
+	const gchar *msg = _("Search failed.");
 
 	if (WIFEXITED(status))
 	{
 		switch (WEXITSTATUS(status))
 		{
-			case 0: msg = _("Search completed."); break;
-			case 1: msg = _("No matches found."); break;
-			default: break;
+			case 0:
+			{
+				gint count = gtk_tree_model_iter_n_children(
+					GTK_TREE_MODEL(msgwindow.store_msg), NULL) - 1;
+
+				msgwin_msg_add_fmt(-1, -1, _("Search completed with %d matches."), count);
+				ui_set_statusbar(_("Search completed with %d matches."), count);
+				break;
+			}
+			case 1:
+				msg = _("No matches found.");
+			default:
+				msgwin_msg_add(-1, -1, msg);
+				ui_set_statusbar("%s", msg);
+				break;
 		}
 	}
-
-	msgwin_msg_add(-1, -1, msg);
 #endif
+
 	utils_beep();
 	g_spawn_close_pid(child_pid);
 }
@@ -1290,7 +1301,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 
 static gint find_document_usage(gint idx, const gchar *search_text, gint flags)
 {
-	gchar *buffer, *short_file_name, *string;
+	gchar *buffer, *short_file_name;
 	gint pos, line, count = 0;
 	struct TextToFind ttf;
 
@@ -1311,12 +1322,12 @@ static gint find_document_usage(gint idx, const gchar *search_text, gint flags)
 			short_file_name = g_strdup(GEANY_STRING_UNTITLED);
 		else
 			short_file_name = g_path_get_basename(doc_list[idx].file_name);
-		string = g_strdup_printf("%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
-		msgwin_msg_add(line + 1, idx, string);
+
+		msgwin_msg_add_fmt(line + 1, idx,
+			"%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
 
 		g_free(buffer);
 		g_free(short_file_name);
-		g_free(string);
 		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
 		count++;
 	}
@@ -1351,10 +1362,15 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 
 	if (! found) // no matches were found
 	{
-		gchar *text = g_strdup_printf(_("No matches found for '%s'."), search_text);
-		ui_set_statusbar("%s", text);
-		msgwin_msg_add(-1, -1, text);
-		g_free(text);
+		ui_set_statusbar(_("No matches found for '%s'."), search_text);
+		msgwin_msg_add_fmt(-1, -1, _("No matches found for '%s'."), search_text);
+	}
+	else
+	{
+		gint count = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_msg), NULL);
+
+		ui_set_statusbar(_("Found %d matches for '%s'."), count, search_text);
+		msgwin_msg_add_fmt(-1, -1, _("Found %d matches for '%s'."), count, search_text);
 	}
 }
 

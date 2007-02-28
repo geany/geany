@@ -69,6 +69,9 @@ void msgwin_finalize();
 
 void msgwin_show_hide(gboolean show);
 
+
+void msgwin_msg_add_fmt(gint line, gint idx, const gchar *format, ...) G_GNUC_PRINTF (3, 4);
+
 void msgwin_msg_add(gint line, gint idx, const gchar *string);
 
 void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
@@ -76,6 +79,7 @@ void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...) G_GNUC_PR
 void msgwin_compiler_add(gint msg_color, const gchar *msg);
 
 void msgwin_status_add(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
+
 
 void msgwin_menu_add_common_items(GtkMenu *menu);
 
