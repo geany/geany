@@ -1160,7 +1160,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, fif_match_type 
 		g_free(msgwindow.find_in_files_dir);
 		msgwindow.find_in_files_dir = g_strdup(dir);
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
-			search_read_io, NULL);
+			TRUE, search_read_io, NULL);
 		g_child_watch_add(child_pid, search_close_pid, NULL);
 
 		str = g_strdup_printf(_("%s %s %s %s (in directory: %s)"),
