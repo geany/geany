@@ -483,9 +483,9 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 
 	// use GIOChannels to monitor stdout and stderr
 	utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
-		build_iofunc, GINT_TO_POINTER(0));
+		TRUE, build_iofunc, GINT_TO_POINTER(0));
 	utils_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
-		build_iofunc, GINT_TO_POINTER(1));
+		TRUE, build_iofunc, GINT_TO_POINTER(1));
 
 	g_strfreev(argv);
 	g_free(working_dir);

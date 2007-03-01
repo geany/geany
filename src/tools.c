@@ -616,10 +616,10 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 
 		// use GIOChannel to monitor stdout
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
-				cc_iofunc, GINT_TO_POINTER(idx));
+				FALSE, cc_iofunc, GINT_TO_POINTER(idx));
 		// copy program's stderr to Geany's stdout to help error tracking
 		utils_set_up_io_channel(stderr_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
-				cc_iofunc_err, (gpointer)command);
+				FALSE, cc_iofunc_err, (gpointer)command);
 
 		// get selection
 		len = sci_get_selected_text_length(doc_list[idx].sci);

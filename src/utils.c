@@ -1208,14 +1208,17 @@ gchar *utils_get_current_time_string()
 }
 
 
-GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gpointer data)
+GIOChannel *utils_set_up_io_channel(
+				gint fd, GIOCondition cond, gboolean nblock, GIOFunc func, gpointer data)
 {
 	GIOChannel *ioc;
 	//const gchar *encoding;
 
 	ioc = g_io_channel_unix_new(fd);
 
-	g_io_channel_set_flags(ioc, G_IO_FLAG_NONBLOCK, NULL);
+	if (nblock)
+		g_io_channel_set_flags(ioc, G_IO_FLAG_NONBLOCK, NULL);
+	
 	g_io_channel_set_encoding(ioc, NULL, NULL);
 /*
 	if (! g_get_charset(&encoding))

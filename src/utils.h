@@ -126,7 +126,8 @@ gint utils_strtod(const gchar *source, gchar **end, gboolean with_route);
 // returned string must be freed.
 gchar *utils_get_current_time_string();
 
-GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gpointer data);
+GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, gboolean nblock,
+									GIOFunc func, gpointer data);
 
 gchar **utils_read_file_in_array(const gchar *filename);
 
