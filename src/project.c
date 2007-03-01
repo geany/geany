@@ -69,7 +69,8 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 
 
-#define SHOW_ERR(...) dialogs_show_msgbox(GTK_MESSAGE_ERROR, __VA_ARGS__)
+// avoid using __VA_ARGS__ because older gcc 2.x versions probably don't support C99
+#define SHOW_ERR(args...) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
 #define MAX_NAME_LEN 50
 // "projects" is part of the default project base path so be carefully when translating
 // please avoid special characters and spaces, look at the source for details or ask Frank
