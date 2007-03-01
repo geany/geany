@@ -18,6 +18,8 @@
  * src/build.c, src/tools.c, src/utils.c, src/utils.h:
    Set IO channels for custom commands to blocking mode
    (thanks to Jeff Pohlmeyer).
+ * data/filetypes.python:
+   Added missing keywords: as, with, False, None and True.
    
 
 2007-02-28  Nick Treleaven  <nick.treleaven@btinternet.com>

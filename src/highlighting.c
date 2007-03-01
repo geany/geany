@@ -1584,7 +1584,7 @@ static void styleset_python_init(void)
 	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[13]);
 
 	style_sets[GEANY_FILETYPES_PYTHON].keywords = g_new(gchar*, 2);
-	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_PYTHON, 0, "and assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while yield");
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_PYTHON, 0, "and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield False None True");
 	style_sets[GEANY_FILETYPES_PYTHON].keywords[1] = NULL;
 
 	get_keyfile_wordchars(config, config_home,

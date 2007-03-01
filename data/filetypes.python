@@ -18,7 +18,7 @@ stringeol=0x000000;0xe0c0e0;false;false
 
 [keywords]
 # all items must be in one line
-primary=and assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while yield
+primary=and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield False None True
 
 
 [settings]
