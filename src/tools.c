@@ -536,23 +536,35 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 		gint idx = GPOINTER_TO_INT(data);
 		gchar *msg = NULL;
 		GString *str = g_string_sized_new(256);
+		GIOStatus rv;     
+		GError *err = NULL;
 
-		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg != NULL)
+		do
 		{
-			g_string_append(str, msg);
-			g_free(msg);
-		}
-		/// without the following if we replace the selection several hundred times with "" because
-		/// we get to often in this callback but I don't know why
-		if (str->len > 0)
-		{
+			rv = g_io_channel_read_line(ioc, &msg, NULL, NULL, &err);
+			if (msg != NULL)
+			{
+				g_string_append(str, msg);
+				g_free(msg);
+			}
+			if (err != NULL)
+			{
+				geany_debug("%s: %s", __func__, err->message);
+				g_error_free(err);
+				err = NULL;
+			}
+		} while (rv == G_IO_STATUS_NORMAL || rv == G_IO_STATUS_AGAIN);
+		
+		if (rv == G_IO_STATUS_EOF) 
+		{	// Command completed successfully
 			sci_replace_sel(doc_list[idx].sci, str->str);
 		}
+		else
+		{	// Something went wrong?
+			g_warning("%s: %s\n", __func__, "Incomplete command output");
+		}
 		g_string_free(str, TRUE);
-
-		return TRUE;
 	}
-
 	return FALSE;
 }
 
@@ -599,11 +611,9 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 						NULL, NULL, &pid, &stdin_fd, &stdout_fd, &stderr_fd, &error))
 	{
 		gchar *sel;
-		gint len;
+		gint len, remaining, wrote;
 
 		// use GIOChannel to monitor stdout
-		/// TODO there is something wrong with the whole channel code because the callback is
-		/// called about several hundred times
 		utils_set_up_io_channel(stdout_fd, G_IO_IN|G_IO_PRI|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
 				cc_iofunc, GINT_TO_POINTER(idx));
 		// copy program's stderr to Geany's stdout to help error tracking
@@ -616,7 +626,17 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 		sci_get_selected_text(doc_list[idx].sci, sel);
 
 		// write data to the command
-		write(stdin_fd, sel, len - 1);
+		remaining = len - 1;
+		do
+		{
+			wrote = write(stdin_fd, sel, remaining);
+			if (wrote < 0)
+			{
+				g_warning("%s: %s: %m\n", __func__, "Failed sending data to command");
+				break;
+			}
+			remaining -= wrote;
+		} while (remaining > 0);
 		close(stdin_fd);
 		g_free(sel);
 	}

@@ -1211,14 +1211,16 @@ gchar *utils_get_current_time_string()
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gpointer data)
 {
 	GIOChannel *ioc;
-	GError *error = NULL;
-	const gchar *encoding;
+	//const gchar *encoding;
 
 	ioc = g_io_channel_unix_new(fd);
 
 	g_io_channel_set_flags(ioc, G_IO_FLAG_NONBLOCK, NULL);
+	g_io_channel_set_encoding(ioc, NULL, NULL);
+/*
 	if (! g_get_charset(&encoding))
 	{	// hope this works reliably
+		GError *error = NULL;
 		g_io_channel_set_encoding(ioc, encoding, &error);
 		if (error)
 		{
@@ -1227,6 +1229,7 @@ GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, GIOFunc func, gp
 			return ioc;
 		}
 	}
+*/
 	// "auto-close" ;-)
 	g_io_channel_set_close_on_unref(ioc, TRUE);
 
