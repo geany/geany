@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 
 #ifdef G_OS_UNIX
 # include <sys/types.h>
@@ -632,7 +633,8 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 			wrote = write(stdin_fd, sel, remaining);
 			if (wrote < 0)
 			{
-				g_warning("%s: %s: %m\n", __func__, "Failed sending data to command");
+				g_warning("%s: %s: %s\n", __func__, "Failed sending data to command",
+										strerror(errno));
 				break;
 			}
 			remaining -= wrote;
