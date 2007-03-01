@@ -924,11 +924,34 @@ void filetypes_save_commands()
 }
 
 
+/* create one file filter which has each file pattern of each filetype */
+GtkFileFilter *filetypes_create_file_filter_all_source()
+{
+	GtkFileFilter *new_filter;
+	gint i, j;
+
+	new_filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(new_filter, _("All Source"));
+
+	for (i = 0; i < GEANY_FILETYPES_ALL; i++)
+	{
+		for (j = 0; filetypes[i]->pattern[j]; j++)
+		{
+			gtk_file_filter_add_pattern(new_filter, filetypes[i]->pattern[j]);
+		}
+	}
+
+	return new_filter;
+}
+
+
 GtkFileFilter *filetypes_create_file_filter(filetype *ft)
 {
 	GtkFileFilter *new_filter;
 	gint i;
 
+	g_return_val_if_fail(ft != NULL, NULL);
+	
 	new_filter = gtk_file_filter_new();
 	gtk_file_filter_set_name(new_filter, ft->title);
 

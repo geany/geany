@@ -132,6 +132,8 @@ void filetypes_select_radio_item(const filetype *ft);
 
 GtkFileFilter *filetypes_create_file_filter(filetype *ft);
 
+GtkFileFilter *filetypes_create_file_filter_all_source();
+
 gchar *filetypes_get_conf_extension(gint filetype_idx);
 
 #endif

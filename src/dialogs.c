@@ -108,6 +108,9 @@ void dialogs_show_open_file ()
 		// add FileFilters(start with "All Files")
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
 					filetypes_create_file_filter(filetypes[GEANY_FILETYPES_ALL]));
+		// now create meta filter "All Source"
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(app->open_filesel),
+					filetypes_create_file_filter_all_source());
 		for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
 		{
 			gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), filetypes[i]->title);

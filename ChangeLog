@@ -18,8 +18,11 @@
  * src/build.c, src/tools.c, src/utils.c, src/utils.h:
    Set IO channels for custom commands to blocking mode
    (thanks to Jeff Pohlmeyer).
- * data/filetypes.python:
+ * data/filetypes.python, src/highlighting.c:
    Added missing keywords: as, with, False, None and True.
+ * src/dialogs.c, src/filetypes.c, src/filetypes.h:
+   Added new file filter for Open File dialog to only show supported
+   source files (list of all defined filename extensions).
    
 
 2007-02-28  Nick Treleaven  <nick.treleaven@btinternet.com>
