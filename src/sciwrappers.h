@@ -80,6 +80,12 @@ void 				sci_clear					(ScintillaObject* sci);
 gint				sci_get_selection_start		(ScintillaObject* sci);
 gint				sci_get_selection_end		(ScintillaObject* sci);
 void 				sci_replace_sel				(ScintillaObject* sci, gchar* text);
+gint				sci_get_selection_mode		(ScintillaObject* sci);
+void				sci_set_selection_mode		(ScintillaObject* sci, gint mode);
+gint				sci_get_pos_at_line_sel_start(ScintillaObject*sci, gint line);
+gint				sci_get_pos_at_line_sel_end	(ScintillaObject* sci, gint line);
+void 				sci_set_selection_start		(ScintillaObject* sci, gint position);
+void				sci_set_selection_end		(ScintillaObject* sci, gint position);
 
 gint				sci_get_length				(ScintillaObject* sci);
 void				sci_get_text				(ScintillaObject* sci,gint len,gchar* text);
@@ -87,15 +93,13 @@ void				sci_get_selected_text		(ScintillaObject* sci, gchar* text);
 gint				sci_get_selected_text_length(ScintillaObject* sci);
 gchar *				sci_get_line				(ScintillaObject* sci, gint line_num);
 gint 				sci_get_line_length			(ScintillaObject* sci, gint line);
-gint				sci_get_line_count			( ScintillaObject* sci );
+gint				sci_get_line_count			(ScintillaObject* sci);
 void 				sci_get_xy_from_position	(ScintillaObject* sci,gint pos, gint* x, gint* y);
 gint				sci_get_position_from_xy	(ScintillaObject* sci, gint x, gint y, gboolean nearby);
 
 void 				sci_set_undo_collection		(ScintillaObject* sci, gboolean set);
 gboolean			sci_get_undo_collection		(ScintillaObject* sci);
 
-void 				sci_set_selection_start		(ScintillaObject* sci, gint position);
-void				sci_set_selection_end		(ScintillaObject* sci, gint position);
 gint				sci_get_line_end_position	(ScintillaObject* sci, gint line);
 
 void 				sci_toggle_fold				(ScintillaObject* sci, gint line);
@@ -147,6 +151,7 @@ void				sci_target_from_selection	(ScintillaObject * sci);
 void				sci_target_start			(ScintillaObject * sci, gint start);
 void				sci_target_end				(ScintillaObject * sci, gint end);
 gint				sci_target_replace			(ScintillaObject * sci, const gchar *text, gboolean regex);
+
 void				sci_set_keywords			(ScintillaObject * sci, gint k, gchar *text);
 gint				sci_get_lexer				(ScintillaObject * sci);
 void				sci_set_readonly			(ScintillaObject * sci, gboolean readonly);

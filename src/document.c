@@ -77,7 +77,7 @@ static gboolean delay_colourise = FALSE;
 /* Returns -1 if no text found or the new range endpoint after replacing. */
 static gint
 document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
-	gint flags, gint start, gint end, gboolean escaped_chars);
+	gint flags, gint start, gint end, gboolean escaped_chars, gboolean scroll_to_match);
 
 static void document_undo_clear(gint idx);
 static void document_redo_add(gint idx, guint type, gpointer data);
@@ -1249,7 +1249,7 @@ static void show_replace_summary(gint idx, gint count, const gchar *find_text,
 /* Returns -1 if no text found or the new range endpoint after replacing. */
 static gint
 document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
-	gint flags, gint start, gint end, gboolean escaped_chars)
+	gint flags, gint start, gint end, gboolean escaped_chars, gboolean scroll_to_match)
 {
 	gint search_pos;
 	gint count = 0;
@@ -1264,11 +1264,12 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	ttf.chrg.cpMin = start;
 	ttf.chrg.cpMax = end;
 	ttf.lpstrText = (gchar*)find_text;
-
+	
 	while (TRUE)
 	{
 		search_pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
-		if (search_pos == -1) break;
+		if (search_pos == -1)
+			break;
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
 
 		if (search_pos + find_len > end)
@@ -1291,9 +1292,10 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	show_replace_summary(idx, count, find_text, replace_text, escaped_chars);
 
 	if (match_found)
-	{
-		// scroll last match in view.
-		sci_goto_pos(doc_list[idx].sci, ttf.chrg.cpMin, TRUE);
+	{	// scroll last match in view, will destroy the existing selection
+		if (scroll_to_match)
+			sci_goto_pos(doc_list[idx].sci, ttf.chrg.cpMin, TRUE);
+		
 		return end;
 	}
 	else
@@ -1304,32 +1306,96 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace_text, gint flags,
 						  gboolean escaped_chars)
 {
-	gint selection_end, selection_start;
+	gint selection_end, selection_start, selection_mode, selected_lines, last_line;
+	gint max_column = 0;
+	gboolean replaced = FALSE;
 
 	g_return_if_fail(find_text != NULL && replace_text != NULL);
 	if (idx == -1 || ! *find_text) return;
 
 	selection_start = sci_get_selection_start(doc_list[idx].sci);
 	selection_end = sci_get_selection_end(doc_list[idx].sci);
+	// do we have a selection?
 	if ((selection_end - selection_start) == 0)
 	{
 		utils_beep();
 		return;
 	}
 
-	selection_end = document_replace_range(idx, find_text, replace_text, flags,
-		selection_start, selection_end, escaped_chars);
-	if (selection_end == -1)
+	selection_mode = sci_get_selection_mode(doc_list[idx].sci);
+	selected_lines = sci_get_lines_selected(doc_list[idx].sci);
+	// handle rectangle, multi line selections (it doesn't matter on a single line)
+	if (selection_mode == SC_SEL_RECTANGLE && selected_lines > 1)
 	{
-		// no replacements
-		utils_beep();
+		gint first_line, line, line_start, line_end, tmp;
+		
+		sci_start_undo_action(doc_list[idx].sci);
+		
+		first_line = sci_get_line_from_position(doc_list[idx].sci, selection_start);
+		// Find the last line with chars selected (not EOL char)
+		last_line = sci_get_line_from_position(doc_list[idx].sci, selection_end - 1);
+		last_line = MAX(first_line, last_line);
+		for (line = first_line; line < (first_line + selected_lines); line++)
+		{
+			line_start = sci_get_pos_at_line_sel_start(doc_list[idx].sci, line);
+			line_end = sci_get_pos_at_line_sel_end(doc_list[idx].sci, line);
+			
+			// skip line if there is no selection
+			if (line_start != INVALID_POSITION)
+			{
+				// don't let document_replace_range() scroll to match to keep our selection
+				tmp = document_replace_range(idx, find_text, replace_text, flags,
+												line_start, line_end, escaped_chars, FALSE);
+				if (tmp != -1)
+				{
+					replaced = TRUE;				
+					// this gets the greatest column within the selection after replacing
+					max_column = MAX(max_column,
+						tmp - sci_get_position_from_line(doc_list[idx].sci, line));
+				}
+			}
+		}
+		sci_end_undo_action(doc_list[idx].sci);
 	}
 	else
 	{
-		// update the selection for the new endpoint
-		sci_set_selection_start(doc_list[idx].sci, selection_start);
-		sci_set_selection_end(doc_list[idx].sci, selection_end);
+		selection_end = document_replace_range(idx, find_text, replace_text, flags,
+											selection_start, selection_end, escaped_chars, TRUE);
+		if (selection_end != -1)
+			replaced = TRUE;
 	}
+	
+	if (replaced)
+	{	// update the selection for the new endpoint
+		
+		if (selection_mode == SC_SEL_RECTANGLE && selected_lines > 1)
+		{
+			// now we can scroll to the selection and destroy it because we rebuild it later
+			//sci_goto_pos(doc_list[idx].sci, selection_start, FALSE);
+			
+			// Note: the selection will be wrapped to last_line + 1 if max_column is greater than
+			// the highest column on the last line. The wrapped selection is completely different
+			// from the original one, so skip the selection at all
+			/// TODO is there a better way to handle the wrapped selection?
+			if ((sci_get_line_length(doc_list[idx].sci, last_line) - 1) >= max_column)
+			{
+				// for keeping and adjusting the selection in multi line rectangle selection we
+				// need the last line of the original selection and the greatest column number after
+				// replacing and set the selection end to the last line at the greatest column
+				sci_set_selection_start(doc_list[idx].sci, selection_start);
+				sci_set_selection_end(doc_list[idx].sci,
+					sci_get_position_from_line(doc_list[idx].sci, last_line) + max_column);
+				sci_set_selection_mode(doc_list[idx].sci, selection_mode);
+			}
+		}
+		else 
+		{
+			sci_set_selection_start(doc_list[idx].sci, selection_start);
+			sci_set_selection_end(doc_list[idx].sci, selection_end);
+		}
+	}	
+	else // no replacements
+		utils_beep();
 }
 
 
@@ -1342,7 +1408,8 @@ gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *rep
 	if (idx == -1 || ! *find_text) return FALSE;
 
 	len = sci_get_length(doc_list[idx].sci);
-	if (document_replace_range(idx, find_text, replace_text, flags, 0, len, escaped_chars) == -1)
+	if (document_replace_range(
+			idx, find_text, replace_text, flags, 0, len, escaped_chars, TRUE) == -1)
 	{
 		utils_beep();
 		return FALSE;

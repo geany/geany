@@ -911,3 +911,24 @@ void sci_set_use_tabs(ScintillaObject *sci, gboolean set)
 {
 	SSM(sci, SCI_SETUSETABS, set, 0);
 }
+
+gint sci_get_pos_at_line_sel_start(ScintillaObject *sci, gint line)
+{
+	return SSM(sci, SCI_GETLINESELSTARTPOSITION, line, 0);
+}
+
+gint sci_get_pos_at_line_sel_end(ScintillaObject *sci, gint line)
+{
+	return SSM(sci, SCI_GETLINESELENDPOSITION, line, 0);
+}
+
+gint sci_get_selection_mode(ScintillaObject *sci)
+{
+	return SSM(sci, SCI_GETSELECTIONMODE, 0, 0);
+}
+
+void sci_set_selection_mode(ScintillaObject *sci, gint mode)
+{
+	SSM(sci, SCI_SETSELECTIONMODE, mode, 0);
+}
+

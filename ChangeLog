@@ -10,7 +10,12 @@
  * src/tools.c, src/utils.c:
    Applied patch from Jeff Pohlmeyer to improve the custom command
    execution code(thanks).
-
+ * src/sciwrappers.c, src/sciwrappers.h:
+   Added sci_get_selection_mode(), sci_set_selection_mode(),
+   sci_get_pos_at_line_sel_start(), sci_get_pos_at_line_sel_end().
+ * src/document.c:
+   Improved replacing in rectangle selections (closes #1665571).
+   
 
 2007-02-28  Nick Treleaven  <nick.treleaven@btinternet.com>
 
