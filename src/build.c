@@ -48,6 +48,7 @@
 #include "document.h"
 #include "keybindings.h"
 #include "vte.h"
+#include "project.h"
 
 
 BuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_ALL, NULL};
@@ -75,7 +76,7 @@ static BuildMenuItems latex_menu_items =
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd,
 								gboolean autoclose);
-static GPid build_spawn_cmd(gint idx, const gchar *cmd);
+static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir);
 static void on_make_target_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
 static void set_stop_button(gboolean stop);
@@ -116,7 +117,7 @@ GPid build_compile_tex_file(gint idx, gint mode)
 		build_info.type = GBO_BUILD;
 	}
 
-	return build_spawn_cmd(idx, cmd);
+	return build_spawn_cmd(idx, cmd, NULL);
 }
 
 
@@ -280,6 +281,7 @@ static gchar *get_object_filename(gint idx)
 GPid build_make_file(gint idx, gint build_opts)
 {
 	GString *cmdstr;
+	const gchar *dir = NULL;
 	GPid pid;
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
@@ -300,14 +302,16 @@ GPid build_make_file(gint idx, gint build_opts)
 	{
 		build_info.type = GBO_MAKE_CUSTOM;
 		g_string_append(cmdstr, build_info.custom_target);
+		dir = project_get_make_dir();
 	}
 	else	// GBO_MAKE_ALL
 	{
 		build_info.type = GBO_MAKE_ALL;
 		g_string_append(cmdstr, "all");
+		dir = project_get_make_dir();
 	}
 
-	pid = build_spawn_cmd(idx, cmdstr->str);
+	pid = build_spawn_cmd(idx, cmdstr->str, dir);	// if dir is NULL, idx filename is used
 	g_string_free(cmdstr, TRUE);
 	return pid;
 }
@@ -322,7 +326,7 @@ GPid build_compile_file(gint idx)
 	cmd = doc_list[idx].file_type->programs->compiler;
 
 	build_info.type = GBO_COMPILE;
-	return build_spawn_cmd(idx, cmd);
+	return build_spawn_cmd(idx, cmd, NULL);
 }
 
 
@@ -397,13 +401,15 @@ GPid build_link_file(gint idx)
 	g_free(locale_filename);
 
 	build_info.type = GBO_BUILD;
-	pid = build_spawn_cmd(idx, cmdstr->str);
+	pid = build_spawn_cmd(idx, cmdstr->str, NULL);
 	g_string_free(cmdstr, TRUE);
 	return pid;
 }
 
 
-static GPid build_spawn_cmd(gint idx, const gchar *cmd)
+/* dir is the UTF-8 working directory to run cmd in. It can be NULL to use the
+ * idx document directory */
+static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 {
 	GError  *error = NULL;
 	gchar  **argv;
@@ -434,19 +440,22 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd)
 	g_free(tmp);
 	g_free(executable);
 
-	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
-
 	argv = g_new0(gchar *, 4);
 	argv[0] = g_strdup("/bin/sh");
 	argv[1] = g_strdup("-c");
 	argv[2] = cmd_string;
 	argv[3] = NULL;
 
-	working_dir = g_path_get_dirname(locale_filename);
-	utf8_working_dir = g_path_get_dirname(doc_list[idx].file_name);
+	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
+	utf8_working_dir = (dir != NULL) ? g_strdup(dir) :
+		g_path_get_dirname(doc_list[idx].file_name);
+	working_dir = utils_get_locale_from_utf8(utf8_working_dir);
+
 	gtk_list_store_clear(msgwindow.store_compiler);
-	msgwin_compiler_add_fmt(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
+	msgwin_compiler_add_fmt(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
+	g_free(utf8_working_dir);
+	g_free(utf8_cmd_string);
 
 	// set the build info for the message window
 	g_free(build_info.dir);
@@ -461,8 +470,6 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd)
 		g_strfreev(argv);
 		g_error_free(error);
 		g_free(working_dir);
-		g_free(utf8_working_dir);
-		g_free(utf8_cmd_string);
 		g_free(locale_filename);
 		error = NULL;
 		return (GPid) 0;
@@ -481,8 +488,6 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd)
 		build_iofunc, GINT_TO_POINTER(1));
 
 	g_strfreev(argv);
-	g_free(utf8_working_dir);
-	g_free(utf8_cmd_string);
 	g_free(working_dir);
 	g_free(locale_filename);
 

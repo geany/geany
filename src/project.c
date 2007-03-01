@@ -701,3 +701,13 @@ static gboolean write_config()
 
 	return TRUE;
 }
+
+
+const gchar *project_get_make_dir()
+{
+	if (app->project != NULL)
+		return app->project->base_path;
+	else
+		return NULL;
+}
+

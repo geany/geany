@@ -1,3 +1,10 @@
+2007-03-01  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c, src/project.c, src/project.h:
+   Run Make All and Make Custom from the project base directory, if set.
+   Add project_get_make_dir().
+
+
 2007-03-01  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/tools.c, src/utils.c:

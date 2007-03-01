@@ -51,4 +51,6 @@ void project_close();
 void project_properties();
 
 
+const gchar *project_get_make_dir();
+
 #endif
