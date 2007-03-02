@@ -54,20 +54,30 @@
 static gchar *win32_get_file_filters()
 {
 	gchar *string;
-	gint i, len;
+	gint i, j, len;
 
 	GString *str = g_string_sized_new(100);
+	GString *all_patterns = g_string_sized_new(100);
 	gchar *tmp;
 
-	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	for (i = 0; filetypes[i] != NULL; i++)
 	{
-		if (filetypes[i])
+		tmp = g_strjoinv(";", filetypes[i]->pattern);
+		g_string_append_printf(str, "%s\t%s\t", filetypes[i]->title, tmp);
+		g_free(tmp);
+	}
+	// create meta file filter "All Source"
+	for (i = 0; filetypes[i] != NULL; i++)
+	{
+		for (j = 0; filetypes[i]->pattern[j] != NULL; j++)
 		{
-			tmp = g_strjoinv(";", filetypes[i]->pattern);
-			g_string_append_printf(str, "%s\t%s\t", filetypes[i]->title, tmp);
-			g_free(tmp);
+			g_string_append(all_patterns, filetypes[i]->pattern[j]);
+			g_string_append_c(all_patterns, ';');
 		}
 	}
+	g_string_append_printf(str, "%s\t%s\t", _("All Source"), all_patterns->str);
+	g_string_free(all_patterns, TRUE);
+
 	g_string_append_c(str, '\t'); // the final \0 byte to mark the end of the string
 	string = str->str;
 	g_string_free(str, FALSE);
