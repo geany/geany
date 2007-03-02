@@ -6,6 +6,8 @@
  * src/main.c: Changed location of translation files to lib\locale
                on Win32.
  * geany.nsi: Added NSIS installer script for the Win32 installer.
+ * data/filetypes.c, data/filetypes.cpp, src/highlighting.c:
+   Added support for secondary keywords for filetypes C and C++.
 
 
 2007-03-01  Nick Treleaven  <nick.treleaven@btinternet.com>

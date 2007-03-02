@@ -567,6 +567,24 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 }
 
 
+/* Assign global typedefs and user secondary keywords */
+static void assign_global_and_user_keywords(ScintillaObject *sci, const gchar *user_words)
+{
+	GString *s;
+	
+	s = get_global_typenames();
+	if (s == NULL)
+		s = g_string_sized_new(200);
+	else
+		g_string_append_c(s, ' '); // append a space as delimiter to the existing list of words
+	
+	g_string_append(s, user_words);
+	
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
+	g_string_free(s, TRUE);
+}
+
+
 /* Geany generic styles, initialized to defaults.
  * Ideally these would be used as common styling for all compilable programming
  * languages (and perhaps partially used for scripting languages too).
@@ -662,10 +680,11 @@ static void styleset_c_init(void)
 	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
 		1, 0, &style_sets[GEANY_FILETYPES_C].styling[20]);
 
-	style_sets[GEANY_FILETYPES_C].keywords = g_new(gchar*, 3);
+	style_sets[GEANY_FILETYPES_C].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_C, 0, "if const struct char int float double void long for while do case switch return");
-	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_C, 1, "TODO FIXME");
-	style_sets[GEANY_FILETYPES_C].keywords[2] = NULL;
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_C, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_C, 2, "TODO FIXME");
+	style_sets[GEANY_FILETYPES_C].keywords[3] = NULL;
 
 	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_C].wordchars);
@@ -681,18 +700,8 @@ static void styleset_c_init(void)
 
 void styleset_c(ScintillaObject *sci)
 {
-	GString *s;
-
 	styleset_common(sci, 5);
 	if (style_sets[GEANY_FILETYPES_C].styling == NULL) styleset_c_init();
-
-	/* Assign global keywords */
-	s = get_global_typenames();
-	if (s != NULL)
-	{
-		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
-		g_string_free(s, TRUE);
-	}
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_C].wordchars);
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
@@ -702,10 +711,12 @@ void styleset_c(ScintillaObject *sci)
 	//SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[0]);
-	//SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) secondaryKeyWords);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[1]);
-	//SSM(sci, SCI_SETKEYWORDS, 4, (sptr_t) typedefsKeyWords);
+	//SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[1]);// see below
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[2]);
 
+	// assign global types, merge them with user defined keywords and set them
+	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_C].keywords[1]);
+	
 	styleset_c_like(sci, GEANY_FILETYPES_C);
 
 	if (style_sets[GEANY_FILETYPES_C].styling[20].foreground == 1)
@@ -729,10 +740,11 @@ static void styleset_cpp_init(void)
 	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
 		1, 0, &style_sets[GEANY_FILETYPES_CPP].styling[20]);
 
-	style_sets[GEANY_FILETYPES_CPP].keywords = g_new(gchar*, 3);
+	style_sets[GEANY_FILETYPES_CPP].keywords = g_new(gchar*, 4);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CPP, 0, "and and_eq asm auto bitand bitor bool break case catch char class compl const const_cast continue default delete do double dynamic_cast else enum explicit export extern false float for friend goto if inline int long mutable namespace new not not_eq operator or or_eq private protected public register reinterpret_cast return short signed sizeof static static_cast struct switch template this throw true try typedef typeid typename union unsigned using virtual void volatile wchar_t while xor xor_eq");
-	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_CPP, 1, "TODO FIXME");
-	style_sets[GEANY_FILETYPES_CPP].keywords[2] = NULL;
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_CPP, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_CPP, 2, "TODO FIXME");
+	style_sets[GEANY_FILETYPES_CPP].keywords[3] = NULL;
 
 	get_keyfile_wordchars(config, config_home,
 		&style_sets[GEANY_FILETYPES_CPP].wordchars);
@@ -748,18 +760,8 @@ static void styleset_cpp_init(void)
 
 void styleset_cpp(ScintillaObject *sci)
 {
-	GString *s;
-
 	styleset_common(sci, 5);
 	if (style_sets[GEANY_FILETYPES_CPP].styling == NULL) styleset_cpp_init();
-
-	/* Assign global keywords */
-	s = get_global_typenames();
-	if (s != NULL)
-	{
-		SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
-		g_string_free(s, TRUE);
-	}
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CPP].wordchars);
 	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
@@ -769,7 +771,11 @@ void styleset_cpp(ScintillaObject *sci)
 	//SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
 
 	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[0]);
-	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[1]);
+	//SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[1]); // see below
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[2]);
+
+	// assign global types, merge them with user defined keywords and set them
+	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_CPP].keywords[1]);
 
 	styleset_c_like(sci, GEANY_FILETYPES_CPP);
 
