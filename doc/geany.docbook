@@ -1583,7 +1583,7 @@
 											   comment_use_indent=false would generate this if a line
 											   is commented (e.g. with
 											   <keycombo><keycap>Ctrl</keycap><keycap>D</keycap></keycombo>)
-											   <programlisting>#command_example();</programlisting>
+											   <programlisting>#	command_example();</programlisting>
 											   </para></example></para>
 											   <note><para>
 													This setting only works for single line comments.

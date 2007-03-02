@@ -8,6 +8,7 @@
  * geany.nsi: Added NSIS installer script for the Win32 installer.
  * data/filetypes.c, data/filetypes.cpp, src/highlighting.c:
    Added support for secondary keywords for filetypes C and C++.
+ * doc/geany.docbook: Fixed typo (thanks to John Gabriele).
 
 
 2007-03-01  Nick Treleaven  <nick.treleaven@btinternet.com>
