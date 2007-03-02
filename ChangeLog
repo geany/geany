@@ -5,6 +5,7 @@
    source files (for native Win32 dialog).
  * src/main.c: Changed location of translation files to lib\locale
                on Win32.
+ * geany.nsi: Added NSIS installer script for the Win32 installer.
 
 
 2007-03-01  Nick Treleaven  <nick.treleaven@btinternet.com>
