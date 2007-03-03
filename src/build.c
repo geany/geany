@@ -59,6 +59,12 @@ static struct
 	gint file_type_id;
 } run_info = {0, GEANY_FILETYPES_ALL};
 
+#ifdef G_OS_WIN32
+static const gchar RUN_SCRIPT_CMD[] = "./geany_run_script.bat";
+#else
+static const gchar RUN_SCRIPT_CMD[] = "./geany_run_script.sh";
+#endif
+
 enum
 {
 	LATEX_CMD_TO_DVI,
@@ -130,7 +136,6 @@ GPid build_view_tex_file(gint idx, gint mode)
 	gchar  *cmd_string = NULL;
 	gchar  *locale_cmd_string = NULL;
 	gchar  *locale_term_cmd;
-	gchar  *script_name;
 	gint	term_argv_len, i;
 	GError *error = NULL;
 	struct stat st;
@@ -138,12 +143,6 @@ GPid build_view_tex_file(gint idx, gint mode)
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
 	run_info.file_type_id = GEANY_FILETYPES_LATEX;
-
-#ifdef G_OS_WIN32
-	script_name = g_strdup("./geany_run_script.bat");
-#else
-	script_name = g_strdup("./geany_run_script.sh");
-#endif
 
 	executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 	view_file = g_strconcat(executable, (mode == LATEX_CMD_VIEW_DVI) ? ".dvi" : ".pdf", NULL);
@@ -155,7 +154,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 	if (stat(locale_filename, &st) != 0)
 	{
 		msgwin_status_add(_("Failed to view %s (make sure it is already compiled)"), view_file);
-		utils_free_pointers(executable, view_file, locale_filename, script_name, NULL);
+		utils_free_pointers(executable, view_file, locale_filename, NULL);
 
 		return (GPid) 1;
 	}
@@ -191,20 +190,20 @@ GPid build_view_tex_file(gint idx, gint mode)
 				"(check path for Terminal tool setting in Preferences)"), app->tools_term_cmd);
 
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										script_name, locale_term_cmd, NULL);
+										locale_term_cmd, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
 
 	// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
-	// (script_name should be ok in UTF8 without converting in locale because it contains no umlauts)
-	if (! build_create_shellscript(idx, script_name, locale_cmd_string, TRUE))
+	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
+	if (! build_create_shellscript(idx, RUN_SCRIPT_CMD, locale_cmd_string, TRUE))
 	{
 		gchar *utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
 													utf8_check_executable);
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										utf8_check_executable, script_name, locale_term_cmd, NULL);
+										utf8_check_executable, locale_term_cmd, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
@@ -217,10 +216,10 @@ GPid build_view_tex_file(gint idx, gint mode)
 #ifdef G_OS_WIN32
 	// command line arguments for cmd.exe
 	argv[term_argv_len   ]  = g_strdup("/Q /C");
-	argv[term_argv_len + 1] = g_path_get_basename(script_name);
+	argv[term_argv_len + 1] = g_path_get_basename(RUN_SCRIPT_CMD);
 #else
 	argv[term_argv_len   ]  = g_strdup("-e");
-	argv[term_argv_len + 1] = g_strdup(script_name);
+	argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);
 #endif
 	argv[term_argv_len + 2] = NULL;
 
@@ -232,7 +231,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 		msgwin_status_add(_("Process failed (%s)"), error->message);
 
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										script_name, locale_term_cmd, NULL);
+										locale_term_cmd, NULL);
 		g_strfreev(argv);
 		g_strfreev(term_argv);
 		g_error_free(error);
@@ -248,7 +247,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 	}
 
 	utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										script_name, locale_term_cmd, NULL);
+										locale_term_cmd, NULL);
 	g_strfreev(argv);
 	g_strfreev(term_argv);
 
@@ -495,35 +494,20 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 }
 
 
-GPid build_run_cmd(gint idx)
+// Returns: NULL if there was an error, or the working directory the script was created in.
+static gchar *prepare_run_script(gint idx)
 {
-	GPid	 result_id;	// either child_pid or error id.
-	GError	*error = NULL;
-	gchar  **argv = NULL;
-	gchar  **term_argv = NULL;
-	gchar	*working_dir = NULL;
 	gchar	*long_executable = NULL;
 	gchar	*check_executable = NULL;
 	gchar	*utf8_check_executable = NULL;
 	gchar	*locale_filename = NULL;
-	gchar	*locale_term_cmd = NULL;
 	gchar	*cmd = NULL;
-	gchar	*tmp = NULL;
 	gchar	*executable = NULL;
-	gchar	*script_name;
-	guint    term_argv_len, i;
+	gchar	*working_dir = NULL;
 	gboolean autoclose = FALSE;
 	struct stat st;
-
-	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL) return (GPid) 1;
-
-	run_info.file_type_id = FILETYPE_ID(doc_list[idx].file_type);
-
-#ifdef G_OS_WIN32
-	script_name = g_strdup("./geany_run_script.bat");
-#else
-	script_name = g_strdup("./geany_run_script.sh");
-#endif
+	gboolean result = FALSE;
+	gchar	*tmp;
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
@@ -554,7 +538,6 @@ GPid build_run_cmd(gint idx)
 		{
 			msgwin_status_add(_("Command stopped because the current file has no extension."));
 			utils_beep();
-			result_id = (GPid) 1;
 			goto free_strings;
 		}
 
@@ -569,32 +552,8 @@ GPid build_run_cmd(gint idx)
 #endif
 			msgwin_status_add(_("Failed to execute %s (make sure it is already built)"),
 														utf8_check_executable);
-			result_id = (GPid) 1;
 			goto free_strings;
 		}
-	}
-
-	/* get the terminal path */
-	locale_term_cmd = utils_get_locale_from_utf8(app->tools_term_cmd);
-	// split the term_cmd, so arguments will work too
-	term_argv = g_strsplit(locale_term_cmd, " ", -1);
-	term_argv_len = g_strv_length(term_argv);
-
-	// check that terminal exists (to prevent misleading error messages)
-	if (term_argv[0] != NULL)
-	{
-		tmp = term_argv[0];
-		// g_find_program_in_path checks tmp exists and is executable
-		term_argv[0] = g_find_program_in_path(tmp);
-		g_free(tmp);
-	}
-	if (term_argv[0] == NULL)
-	{
-		msgwin_status_add(
-			_("Could not find terminal '%s' "
-				"(check path for Terminal tool setting in Preferences)"), app->tools_term_cmd);
-		result_id = (GPid) 1;
-		goto free_strings;
 	}
 
 	executable = g_path_get_basename(long_executable);
@@ -605,8 +564,7 @@ GPid build_run_cmd(gint idx)
 		gchar *utf8_working_dir = NULL;
 		utf8_working_dir = utils_get_utf8_from_locale(working_dir);
 
-		msgwin_status_add(_("Failed to change the working directory to %s"), working_dir);
-		result_id = (GPid) 1;	// return 1, to prevent error handling of the caller
+		msgwin_status_add(_("Failed to change the working directory to %s"), utf8_working_dir);
 		g_free(utf8_working_dir);
 		goto free_strings;
 	}
@@ -624,23 +582,56 @@ GPid build_run_cmd(gint idx)
 #endif
 
 	// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
-	// (script_name should be ok in UTF8 without converting in locale because it contains no umlauts)
-	if (! build_create_shellscript(idx, script_name, cmd, autoclose))
+	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
+	if (! build_create_shellscript(idx, RUN_SCRIPT_CMD, cmd, autoclose))
 	{
 		utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
 													utf8_check_executable);
-		result_id = (GPid) 1;
-		goto free_strings;
 	}
+	else
+	{
+		result = TRUE;
+	}
+
+	free_strings:
+	g_free(executable);
+	g_free(cmd);
+	g_free(locale_filename);
+	g_free(utf8_check_executable);
+	g_free(check_executable);
+	g_free(long_executable);
+
+	if (result)
+		return working_dir;
+
+	g_free(working_dir);
+	return NULL;
+}
+
+
+GPid build_run_cmd(gint idx)
+{
+	gchar	*working_dir;
+	GError	*error = NULL;
+
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL) return (GPid) 1;
+
+	working_dir = prepare_run_script(idx);
+	if (working_dir == NULL)
+	{
+		return (GPid) 1;
+	}
+
+	run_info.file_type_id = FILETYPE_ID(doc_list[idx].file_type);
 
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
 	{
-		gchar *cmd = g_strconcat(script_name, "\n", NULL);
+		gchar *vte_cmd = g_strconcat(RUN_SCRIPT_CMD, "\n", NULL);
 		// change into current directory if it is not done by default
 		if (! vc->follow_path) vte_cwd(doc_list[idx].file_name, TRUE);
-		vte_send_cmd(cmd);
+		vte_send_cmd(vte_cmd);
 
 		// show the VTE
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
@@ -649,11 +640,39 @@ GPid build_run_cmd(gint idx)
 
 		run_info.pid = 1;
 
-		g_free(cmd);
+		g_free(vte_cmd);
 	}
 	else
 #endif
 	{
+		gchar	*locale_term_cmd = NULL;
+		gchar  **term_argv = NULL;
+		guint    term_argv_len, i;
+		gchar  **argv = NULL;
+
+		/* get the terminal path */
+		locale_term_cmd = utils_get_locale_from_utf8(app->tools_term_cmd);
+		// split the term_cmd, so arguments will work too
+		term_argv = g_strsplit(locale_term_cmd, " ", -1);
+		term_argv_len = g_strv_length(term_argv);
+
+		// check that terminal exists (to prevent misleading error messages)
+		if (term_argv[0] != NULL)
+		{
+			gchar *tmp = term_argv[0];
+			// g_find_program_in_path checks tmp exists and is executable
+			term_argv[0] = g_find_program_in_path(tmp);
+			g_free(tmp);
+		}
+		if (term_argv[0] == NULL)
+		{
+			msgwin_status_add(
+				_("Could not find terminal '%s' "
+					"(check path for Terminal tool setting in Preferences)"), app->tools_term_cmd);
+			run_info.pid = (GPid) 1;
+			goto free_strings;
+		}
+
 		argv = g_new0(gchar *, term_argv_len + 3);
 		for (i = 0; i < term_argv_len; i++)
 		{
@@ -662,10 +681,10 @@ GPid build_run_cmd(gint idx)
 #ifdef G_OS_WIN32
 		// command line arguments for cmd.exe
 		argv[term_argv_len   ]  = g_strdup("/Q /C");
-		argv[term_argv_len + 1] = g_path_get_basename(script_name);
+		argv[term_argv_len + 1] = g_path_get_basename(RUN_SCRIPT_CMD);
 #else
 		argv[term_argv_len   ]  = g_strdup("-e");
-		argv[term_argv_len + 1] = g_strdup(script_name);
+		argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);
 #endif
 		argv[term_argv_len + 2] = NULL;
 
@@ -674,11 +693,10 @@ GPid build_run_cmd(gint idx)
 		{
 			geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
 			msgwin_status_add(_("Process failed (%s)"), error->message);
-			unlink(script_name);
+			unlink(RUN_SCRIPT_CMD);
 			g_error_free(error);
 			error = NULL;
-			result_id = (GPid) 0;
-			goto free_strings;
+			run_info.pid = (GPid) 0;
 		}
 
 		if (run_info.pid > 0)
@@ -686,24 +704,14 @@ GPid build_run_cmd(gint idx)
 			g_child_watch_add(run_info.pid, (GChildWatchFunc) run_exit_cb, NULL);
 			build_menu_update(idx);
 		}
+		free_strings:
+		g_strfreev(argv);
+		g_strfreev(term_argv);
+		g_free(locale_term_cmd);
 	}
-	result_id = run_info.pid; // g_spawn was successful, result is child process id
 
-	free_strings:
-	/* free all non-NULL strings */
-	g_strfreev(argv);
-	g_strfreev(term_argv);
 	g_free(working_dir);
-	g_free(cmd);
-	g_free(utf8_check_executable);
-	g_free(locale_filename);
-	g_free(locale_term_cmd);
-	g_free(check_executable);
-	g_free(long_executable);
-	g_free(executable);
-	g_free(script_name);
-
-	return result_id;
+	return run_info.pid;
 }
 
 
