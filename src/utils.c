@@ -717,20 +717,22 @@ gboolean utils_str_equal(const gchar *a, const gchar *b)
  * a newly allocated string */
 gchar *utils_remove_ext_from_filename(const gchar *filename)
 {
-	gchar *result = g_malloc0(strlen(filename));
 	gchar *last_dot = strrchr(filename, '.');
-	gint i = 0;
+	gchar *result;
+	gint i;
 
 	if (filename == NULL) return NULL;
 
 	if (! last_dot) return g_strdup(filename);
 
+	result = g_malloc(strlen(filename));	// assumes extension is small, so extra bytes don't matter
+	i = 0;
 	while ((filename + i) != last_dot)
 	{
 		result[i] = filename[i];
 		i++;
 	}
-
+	result[i] = 0;
 	return result;
 }
 
@@ -1218,7 +1220,7 @@ GIOChannel *utils_set_up_io_channel(
 
 	if (nblock)
 		g_io_channel_set_flags(ioc, G_IO_FLAG_NONBLOCK, NULL);
-	
+
 	g_io_channel_set_encoding(ioc, NULL, NULL);
 /*
 	if (! g_get_charset(&encoding))

@@ -3,6 +3,8 @@
  * src/build.c:
    Moved all code for checking and creating the geany run script
    temporary file from build_run_cmd() to prepare_run_script().
+ * src/build.c, src/utils.c:
+   Fix memory leak with utils_remove_ext_from_filename().
 
 
 2007-03-02  Enrico Tröger  <enrico.troeger@uvena.de>

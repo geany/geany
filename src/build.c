@@ -513,7 +513,9 @@ static gchar *prepare_run_script(gint idx)
 
 	long_executable = utils_remove_ext_from_filename(locale_filename);
 #ifdef G_OS_WIN32
+	tmp = long_executable;
 	long_executable = g_strconcat(long_executable, ".exe", NULL);
+	g_free(tmp);
 #endif
 
 	// only check for existing executable, if executable is required by %e
