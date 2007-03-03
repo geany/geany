@@ -80,8 +80,7 @@ static BuildMenuItems latex_menu_items =
 
 
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
-static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd,
-								gboolean autoclose);
+static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose);
 static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir);
 static void on_make_target_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
@@ -197,7 +196,7 @@ GPid build_view_tex_file(gint idx, gint mode)
 
 	// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
-	if (! build_create_shellscript(idx, RUN_SCRIPT_CMD, locale_cmd_string, TRUE))
+	if (! build_create_shellscript(RUN_SCRIPT_CMD, locale_cmd_string, TRUE))
 	{
 		gchar *utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
@@ -525,9 +524,11 @@ static gchar *prepare_run_script(gint idx)
 		if (doc_list[idx].file_type->id == GEANY_FILETYPES_JAVA)
 		{
 #ifdef G_OS_WIN32
+			gchar *tmp;
 			// there is already the extension .exe, so first remove it and then add .class
-			check_executable = utils_remove_ext_from_filename(long_executable);
-			check_executable = g_strconcat(check_executable, ".class", NULL);
+			tmp = utils_remove_ext_from_filename(long_executable);
+			check_executable = g_strconcat(tmp, ".class", NULL);
+			g_free(tmp);
 #else
 			check_executable = g_strconcat(long_executable, ".class", NULL);
 #endif
@@ -585,7 +586,7 @@ static gchar *prepare_run_script(gint idx)
 
 	// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
-	if (! build_create_shellscript(idx, RUN_SCRIPT_CMD, cmd, autoclose))
+	if (! build_create_shellscript(RUN_SCRIPT_CMD, cmd, autoclose))
 	{
 		utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
@@ -876,8 +877,7 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 }
 
 
-static gboolean build_create_shellscript(const gint idx, const gchar *fname, const gchar *cmd,
-											gboolean autoclose)
+static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose)
 {
 	FILE *fp;
 	gchar *str;
