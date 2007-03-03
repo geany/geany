@@ -7,6 +7,8 @@
    Fix memory leak with utils_remove_ext_from_filename().
  * src/build.c:
    Fix memory leak, remove unused build_create_shellscript() argument.
+ * src/build.c:
+   Use UTF-8 for missing executable error message.
 
 
 2007-03-02  Enrico Tröger  <enrico.troeger@uvena.de>

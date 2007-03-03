@@ -547,12 +547,7 @@ static gchar *prepare_run_script(gint idx)
 		// check whether executable exists
 		if (stat(check_executable, &st) != 0)
 		{
-/// TODO why?
-#ifndef G_OS_WIN32
-			utf8_check_executable = g_strdup(check_executable);
-#else
-			utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
-#endif
+			utf8_check_executable = utils_get_utf8_from_locale(check_executable);
 			msgwin_status_add(_("Failed to execute %s (make sure it is already built)"),
 														utf8_check_executable);
 			goto free_strings;
