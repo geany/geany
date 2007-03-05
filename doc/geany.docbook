@@ -1586,7 +1586,8 @@
 											   <programlisting>#	command_example();</programlisting>
 											   </para></example></para>
 											   <note><para>
-													This setting only works for single line comments.
+													This setting only works for single line comments
+													(like '//', '#' or ';').
 											   </para></note>
 										</entry>
 										<entry>comment_use_indent=true</entry>
