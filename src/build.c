@@ -194,12 +194,11 @@ GPid build_view_tex_file(gint idx, gint mode)
 		return (GPid) 1;
 	}
 
-	// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
 	if (! build_create_shellscript(RUN_SCRIPT_CMD, locale_cmd_string, TRUE))
 	{
 		gchar *utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
-		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
+		msgwin_status_add(_("Failed to execute \"%s\" (start-script could not be created)"),
 													utf8_check_executable);
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
 										utf8_check_executable, locale_term_cmd, NULL);
@@ -579,12 +578,11 @@ static gchar *prepare_run_script(gint idx)
 		autoclose = TRUE; // don't wait for user input at the end of script when we are running in VTE
 #endif
 
-	// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
 	if (! build_create_shellscript(RUN_SCRIPT_CMD, cmd, autoclose))
 	{
 		utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
-		msgwin_status_add(_("Failed to execute %s (start-script could not be created)"),
+		msgwin_status_add(_("Failed to execute \"%s\" (start-script could not be created)"),
 													utf8_check_executable);
 	}
 	else
@@ -608,14 +606,57 @@ static gchar *prepare_run_script(gint idx)
 }
 
 
+static gchar *prepare_project_run_script()
+{
+	GeanyProject *project = app->project;
+	gboolean autoclose = FALSE;
+	gchar *working_dir;
+	gchar *cmd;
+
+	if (project == NULL || project->run_cmd == NULL) return NULL;
+	g_return_val_if_fail(project->base_path != NULL, NULL);
+
+	working_dir = utils_get_locale_from_utf8(project->base_path);
+	if (chdir(working_dir) != 0)
+	{
+		msgwin_status_add(_("Failed to change the working directory to %s"), project->base_path);
+		g_free(working_dir);
+		return NULL;
+	}
+
+#ifdef HAVE_VTE
+	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
+		autoclose = TRUE; // don't wait for user input at the end of script when we are running in VTE
+#endif
+	cmd = utils_get_locale_from_utf8(project->run_cmd);
+
+	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
+	if (! build_create_shellscript(RUN_SCRIPT_CMD, cmd, autoclose))
+	{
+		msgwin_status_add(_("Failed to execute \"%s\" (start-script could not be created)"),
+													project->run_cmd);
+		g_free(working_dir);
+		g_free(cmd);
+		return NULL;
+	}
+	g_free(cmd);
+	return working_dir;
+}
+
+
 GPid build_run_cmd(gint idx)
 {
+	GeanyProject *project = app->project;
 	gchar	*working_dir;
 	GError	*error = NULL;
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL) return (GPid) 1;
 
-	working_dir = prepare_run_script(idx);
+	if (project != NULL && project->run_cmd != NULL && *project->run_cmd != 0)
+		working_dir = prepare_project_run_script();
+	else
+		working_dir = prepare_run_script(idx);
+
 	if (working_dir == NULL)
 	{
 		return (GPid) 1;
@@ -872,6 +913,7 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 }
 
 
+// write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
 static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose)
 {
 	FILE *fp;

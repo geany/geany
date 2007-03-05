@@ -34,8 +34,8 @@ struct _GeanyProject
 
 	gchar *file_name; 		// where the project file is stored (in UTF-8)
 
-	gchar *base_path;		// base path of the project directory
-	gchar *executable; 		// name of the project executable
+	gchar *base_path;		// base path of the project directory (in UTF-8)
+	gchar *run_cmd; 		// project run command (in UTF-8)
 	// ...					// fields for build process(run arguments and so on) should be added
 
 	gchar **file_patterns;	// array of filename extension patterns

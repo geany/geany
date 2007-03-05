@@ -1,3 +1,11 @@
+2007-03-05  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c, src/project.c, src/project.h:
+   Add project run command support. Run command is a custom command-line
+   and can include arguments.
+   Make 'Choose project filename' dialog use a Save button.
+
+
 2007-03-03  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c:

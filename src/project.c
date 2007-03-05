@@ -50,6 +50,7 @@ typedef struct _PropertyDialogElements
 	GtkWidget *description;
 	GtkWidget *file_name;
 	GtkWidget *base_path;
+	GtkWidget *run_cmd;
 	GtkWidget *patterns;
 } PropertyDialogElements;
 
@@ -57,8 +58,9 @@ typedef struct _PropertyDialogElements
 
 static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 										  PropertyDialogElements *e);
-static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry);
+static void on_file_save_button_clicked(GtkButton *button, GtkWidget *entry);
 static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry);
+static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry);
 #ifndef G_OS_WIN32
 static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 #endif
@@ -102,7 +104,6 @@ void project_open()
 	{
 		load_config(file);
 		g_free(file);
-		g_free(dir);
 	}
 #else
 
@@ -131,12 +132,13 @@ void project_open()
 	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dir);
-	g_free(dir);
 
 	g_signal_connect ((gpointer) dialog, "response", G_CALLBACK(on_open_dialog_response), NULL);
 
 	gtk_widget_show_all(dialog);
 #endif
+
+	g_free(dir);
 }
 
 
@@ -153,7 +155,7 @@ void project_close()
 	g_free(app->project->description);
 	g_free(app->project->file_name);
 	g_free(app->project->base_path);
-	g_free(app->project->executable);
+	g_free(app->project->run_cmd);
 
 	g_free(app->project);
 	app->project = NULL;
@@ -169,6 +171,7 @@ void project_properties()
 	GtkWidget *bbox;
 	GtkWidget *label;
 	GtkWidget *swin;
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 	PropertyDialogElements *e = g_new(PropertyDialogElements, 1);
 
 	e->dialog = gtk_dialog_new_with_buttons(_("Project properties"), GTK_WINDOW(app->window),
@@ -195,7 +198,7 @@ void project_properties()
 
 	entries_modified = FALSE;
 
-	table = gtk_table_new(5, 2, FALSE);
+	table = gtk_table_new(6, 2, FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
@@ -237,7 +240,7 @@ void project_properties()
 	e->file_name = gtk_entry_new();
 	button = gtk_button_new();
 	g_signal_connect((gpointer) button, "clicked",
-				G_CALLBACK(on_file_open_button_clicked), e->file_name);
+				G_CALLBACK(on_file_save_button_clicked), e->file_name);
 	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(button), image);
 	bbox = gtk_hbox_new(FALSE, 6);
@@ -266,9 +269,32 @@ void project_properties()
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
+	label = gtk_label_new(_("Run command:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	e->run_cmd = gtk_entry_new();
+	gtk_tooltips_set_tip(tooltips, e->run_cmd,
+		_("Command-line to run in the project base directory. "
+		"Options can be appended to the command. "
+		"Leave blank to use the default run command."), NULL);
+	button = gtk_button_new();
+	g_signal_connect((gpointer) button, "clicked",
+				G_CALLBACK(on_file_open_button_clicked), e->run_cmd);
+	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
+	gtk_container_add(GTK_CONTAINER(button), image);
+	bbox = gtk_hbox_new(FALSE, 6);
+	gtk_box_pack_start_defaults(GTK_BOX(bbox), e->run_cmd);
+	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 4, 5,
+					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new(_("File patterns:"));
 	// <small>Separate multiple patterns by a new line</small>
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (GTK_FILL), 0, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
@@ -279,7 +305,7 @@ void project_properties()
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), GTK_WIDGET(e->patterns));
-	gtk_table_attach(GTK_TABLE(table), swin, 1, 2, 4, 5,
+	gtk_table_attach(GTK_TABLE(table), swin, 1, 2, 5, 6,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
@@ -334,6 +360,8 @@ void project_properties()
 
 		gtk_entry_set_text(GTK_ENTRY(e->file_name), p->file_name);
 		gtk_entry_set_text(GTK_ENTRY(e->base_path), p->base_path);
+		if (p->run_cmd != NULL)
+			gtk_entry_set_text(GTK_ENTRY(e->run_cmd), p->run_cmd);
 	}
 
 	gtk_widget_show_all(e->dialog);
@@ -454,6 +482,9 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 		if (p->base_path != NULL) g_free(p->base_path);
 		p->base_path = g_strdup(base_path);
 
+		if (p->run_cmd != NULL) g_free(p->run_cmd);
+		p->run_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(e->run_cmd)));
+
 		{	// get and set the project file patterns
 			GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->patterns));
 			GtkTextIter start, end;
@@ -481,12 +512,14 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 {
 	// set filename in the file chooser dialog
-	gchar *locale_filename = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(entry)));
+	const gchar *utf8_filename = gtk_entry_get_text(GTK_ENTRY(entry));
+	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
 	if (g_path_is_absolute(locale_filename))
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_filename);
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), utf8_filename);
 	else
-		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), locale_filename);
+	if (gtk_file_chooser_get_action(GTK_FILE_CHOOSER(dialog)) != GTK_FILE_CHOOSER_ACTION_OPEN)
+		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), utf8_filename);
 	g_free(locale_filename);
 
 	// run it
@@ -505,7 +538,7 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 #endif
 
 
-static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry)
+static void on_file_save_button_clicked(GtkButton *button, GtkWidget *entry)
 {
 #ifdef G_OS_WIN32
 	gchar *path = win32_show_project_open_dialog(_("Choose project filename"),
@@ -522,7 +555,7 @@ static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry)
 	dialog = gtk_file_chooser_dialog_new(_("Choose project filename"), NULL,
 					GTK_FILE_CHOOSER_ACTION_SAVE,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
@@ -549,6 +582,34 @@ static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry)
 	// initialise the dialog
 	dialog = gtk_file_chooser_dialog_new(_("Choose project base path"), NULL,
 					GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+
+	run_dialog(dialog, entry);
+#endif
+}
+
+
+static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry)
+{
+#ifdef G_OS_WIN32
+	gchar *path = win32_show_project_open_dialog(_("Choose project run command"),
+						gtk_entry_get_text(GTK_ENTRY(entry)), FALSE);
+	if (path != NULL)
+	{
+		gtk_entry_set_text(GTK_ENTRY(entry), path);
+		g_free(path);
+	}
+#else
+	GtkWidget *dialog;
+
+	// initialise the dialog
+	dialog = gtk_file_chooser_dialog_new(_("Choose project run command"), NULL,
+					GTK_FILE_CHOOSER_ACTION_OPEN,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
@@ -657,6 +718,7 @@ static gboolean load_config(const gchar *filename)
 	p->description = utils_get_setting_string(config, "project", "description", "");
 	p->file_name = utils_get_utf8_from_locale(filename);
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
+	p->run_cmd = utils_get_setting_string(config, "project", "run_cmd", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
 	g_key_file_free(config);
@@ -665,12 +727,14 @@ static gboolean load_config(const gchar *filename)
 }
 
 
+// Returns: TRUE if project file was written successfully.
 static gboolean write_config()
 {
 	GeanyProject *p;
 	GKeyFile *config;
 	gchar *filename;
 	gchar *data;
+	gboolean ret = FALSE;
 
 	g_return_val_if_fail(app->project != NULL, FALSE);
 
@@ -684,24 +748,19 @@ static gboolean write_config()
 	g_key_file_set_string(config, "project", "name", p->name);
 	g_key_file_set_string(config, "project", "description", p->description);
 	g_key_file_set_string(config, "project", "base_path", p->base_path);
+	g_key_file_set_string(config, "project", "run_cmd", p->run_cmd);
 	g_key_file_set_string_list(config, "project", "file_patterns",
 		(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
 
 	// write the file
 	data = g_key_file_to_data(config, NULL, NULL);
-	if (utils_write_file(filename, data) != 0)
-	{
-		g_free(data);
-		g_free(filename);
-		g_key_file_free(config);
-		return FALSE;
-	}
+	ret = (utils_write_file(filename, data) == 0);
 
 	g_free(data);
 	g_free(filename);
 	g_key_file_free(config);
 
-	return TRUE;
+	return ret;
 }
 
 
