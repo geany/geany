@@ -197,11 +197,10 @@ GPid build_view_tex_file(gint idx, gint mode)
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
 	if (! build_create_shellscript(RUN_SCRIPT_CMD, locale_cmd_string, TRUE))
 	{
-		gchar *utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
 		msgwin_status_add(_("Failed to execute \"%s\" (start-script could not be created)"),
-													utf8_check_executable);
+													executable);
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										utf8_check_executable, locale_term_cmd, NULL);
+										locale_term_cmd, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
@@ -581,7 +580,7 @@ static gchar *prepare_run_script(gint idx)
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
 	if (! build_create_shellscript(RUN_SCRIPT_CMD, cmd, autoclose))
 	{
-		utf8_check_executable = utils_remove_ext_from_filename(doc_list[idx].file_name);
+		utf8_check_executable = utils_get_utf8_from_locale(check_executable);
 		msgwin_status_add(_("Failed to execute \"%s\" (start-script could not be created)"),
 													utf8_check_executable);
 	}
@@ -1159,7 +1158,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_RUN, item);
-	gtk_tooltips_set_tip(tooltips, item, _("Compiles and view the current file"), NULL);
+	gtk_tooltips_set_tip(tooltips, item, _("Compile and view the current file"), NULL);
 	image = gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
@@ -1172,7 +1171,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	GEANY_ADD_WIDGET_ACCEL(GEANY_KEYS_BUILD_RUN2, item);
-	gtk_tooltips_set_tip(tooltips, item, _("Compiles and view the current file"), NULL);
+	gtk_tooltips_set_tip(tooltips, item, _("Compile and view the current file"), NULL);
 	image = gtk_image_new_from_stock("gtk-find", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
