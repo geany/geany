@@ -574,7 +574,7 @@ gboolean configuration_open_files()
 			if (i < 0) break;
 		}
 	}
-	document_colourise_all();
+	document_colourise_new();
 
 	g_ptr_array_free(session_files, TRUE);
 	if (failure)

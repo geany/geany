@@ -711,9 +711,10 @@ static void set_cursor_position(gint idx, gint pos)
 /* To open a new file, set idx to -1; filename should be locale encoded.
  * To reload a file, set the idx for the document to be reloaded; filename should be NULL.
  * Returns: idx of the opened file or -1 if an error occurred.
- */
-int document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly, filetype *ft,
-					   const gchar *forced_enc)
+ * Note: If opening more than one file, document_delay_colourise() should be used before
+ * and document_colourise_new() after opening to avoid unnecessary recolourising. */
+gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly,
+		filetype *ft, const gchar *forced_enc)
 {
 	gint editor_mode;
 	gboolean reload = (idx == -1) ? FALSE : TRUE;
@@ -859,6 +860,8 @@ void document_open_file_list(const gchar *data, gssize length)
 		default: list = g_strsplit(data, "\n", 0);
 	}
 
+	document_delay_colourise();
+
 	for (i = 0; ; i++)
 	{
 		if (list[i] == NULL) break;
@@ -867,8 +870,26 @@ void document_open_file_list(const gchar *data, gssize length)
 		document_open_file(-1, filename, 0, FALSE, NULL, NULL);
 		g_free(filename);
 	}
+	document_colourise_new();
 
 	g_strfreev(list);
+}
+
+
+/* Takes a linked list of filename URIs and opens each file, ensuring the newly opened
+ * documents and existing documents (if necessary) are only colourised once. */
+void document_open_files(const GSList *filenames, gboolean readonly, filetype *ft,
+		const gchar *forced_enc)
+{
+	const GSList *item;
+
+	document_delay_colourise();
+
+	for (item = filenames; item != NULL; item = g_slist_next(item))
+	{
+		document_open_file(-1, item->data, 0, readonly, ft, forced_enc);
+	}
+	document_colourise_new();
 }
 
 
@@ -1264,7 +1285,7 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	ttf.chrg.cpMin = start;
 	ttf.chrg.cpMax = end;
 	ttf.lpstrText = (gchar*)find_text;
-	
+
 	while (TRUE)
 	{
 		search_pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
@@ -1295,7 +1316,7 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	{	// scroll last match in view, will destroy the existing selection
 		if (scroll_to_match)
 			sci_goto_pos(doc_list[idx].sci, ttf.chrg.cpMin, TRUE);
-		
+
 		return end;
 	}
 	else
@@ -1328,9 +1349,9 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	if (selection_mode == SC_SEL_RECTANGLE && selected_lines > 1)
 	{
 		gint first_line, line, line_start, line_end, tmp;
-		
+
 		sci_start_undo_action(doc_list[idx].sci);
-		
+
 		first_line = sci_get_line_from_position(doc_list[idx].sci, selection_start);
 		// Find the last line with chars selected (not EOL char)
 		last_line = sci_get_line_from_position(doc_list[idx].sci, selection_end - 1);
@@ -1339,7 +1360,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 		{
 			line_start = sci_get_pos_at_line_sel_start(doc_list[idx].sci, line);
 			line_end = sci_get_pos_at_line_sel_end(doc_list[idx].sci, line);
-			
+
 			// skip line if there is no selection
 			if (line_start != INVALID_POSITION)
 			{
@@ -1348,7 +1369,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 												line_start, line_end, escaped_chars, FALSE);
 				if (tmp != -1)
 				{
-					replaced = TRUE;				
+					replaced = TRUE;
 					// this gets the greatest column within the selection after replacing
 					max_column = MAX(max_column,
 						tmp - sci_get_position_from_line(doc_list[idx].sci, line));
@@ -1364,15 +1385,15 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 		if (selection_end != -1)
 			replaced = TRUE;
 	}
-	
+
 	if (replaced)
 	{	// update the selection for the new endpoint
-		
+
 		if (selection_mode == SC_SEL_RECTANGLE && selected_lines > 1)
 		{
 			// now we can scroll to the selection and destroy it because we rebuild it later
 			//sci_goto_pos(doc_list[idx].sci, selection_start, FALSE);
-			
+
 			// Note: the selection will be wrapped to last_line + 1 if max_column is greater than
 			// the highest column on the last line. The wrapped selection is completely different
 			// from the original one, so skip the selection at all
@@ -1388,12 +1409,12 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 				sci_set_selection_mode(doc_list[idx].sci, selection_mode);
 			}
 		}
-		else 
+		else
 		{
 			sci_set_selection_start(doc_list[idx].sci, selection_start);
 			sci_set_selection_end(doc_list[idx].sci, selection_end);
 		}
-	}	
+	}
 	else // no replacements
 		utils_beep();
 }
@@ -1563,7 +1584,9 @@ void document_set_filetype(gint idx, filetype *type)
 	document_update_tag_list(idx, TRUE);
 	if (! delay_colourise)
 	{
-		if (colourise && ! update_type_keywords(doc_list[idx].sci))
+		/* Check if project typename keywords have changed.
+		 * If they haven't, we may need to colourise the document. */
+		if (! update_type_keywords(doc_list[idx].sci) && colourise)
 			sci_colourise(doc_list[idx].sci, 0, -1);
 	}
 }
@@ -2069,31 +2092,67 @@ document *doc(gint idx)
 #endif
 
 
+static GArray *doc_indexes = NULL;
+
+/* Cache the current document indexes and prevent any colourising until
+ * document_colourise_new() is called. */
 void document_delay_colourise()
 {
-	g_return_if_fail(delay_colourise == FALSE);
+	gint n;
 
+	g_return_if_fail(delay_colourise == FALSE);
+	g_return_if_fail(doc_indexes == NULL);
+
+	// make an array containing all the current document indexes
+	doc_indexes = g_array_new(FALSE, FALSE, sizeof(gint));
+	for (n = 0; n < (gint) doc_array->len; n++)
+	{
+		if (DOC_IDX_VALID(n))
+			g_array_append_val(doc_indexes, n);
+	}
 	delay_colourise = TRUE;
 }
 
 
-void document_colourise_all()
+/* Colourise only newly opened documents and existing documents whose project typenames
+ * keywords have changed.
+ * document_delay_colourise() should already have been called. */
+void document_colourise_new()
 {
-	guint n;
+	guint n, i;
+	/* A bitset representing which docs need [re]colourising.
+	 * (use gint8 to save memory because gboolean = gint) */
+	gint8 *doc_set = g_newa(gint8, doc_array->len);
+	gboolean recolour = FALSE;	// whether to recolourise existing typenames
 
 	g_return_if_fail(delay_colourise == TRUE);
+	g_return_if_fail(doc_indexes != NULL);
 
-	// update typenames if necessary
-	update_type_keywords(NULL);
+	// first assume recolourising all docs
+	memset(doc_set, TRUE, doc_array->len * sizeof(gint8));
 
+	// remove existing docs from the set if they don't use typenames or typenames haven't changed
+	recolour = update_type_keywords(NULL);
+	for (i = 0; i < doc_indexes->len; i++)
+	{
+		ScintillaObject *sci;
+
+		n = g_array_index(doc_indexes, gint, i);
+		sci = doc_list[n].sci;
+		if (! recolour || (sci && sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1))
+		{
+			doc_set[n] = FALSE;
+		}
+	}
+	// colourise all in the doc_set
 	for (n = 0; n < doc_array->len; n++)
 	{
-		ScintillaObject *sci = doc_list[n].sci;
-
-		if (sci)
-			sci_colourise(sci, 0, -1);
+		if (doc_set[n] && doc_list[n].is_valid)
+			sci_colourise(doc_list[n].sci, 0, -1);
 	}
 	delay_colourise = FALSE;
+	g_array_free(doc_indexes, TRUE);
+	doc_indexes = NULL;
 }
 
 

@@ -409,6 +409,8 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	{
 		if (strncmp(buf, "open", 4) == 0)
 		{
+			document_delay_colourise();
+
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
 				g_strstrip(buf); // remove \n char
@@ -426,6 +428,8 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 						geany_debug("got data from socket, but it does not look like a filename");
 				}
 			}
+			document_colourise_new();
+
 			gtk_window_deiconify(GTK_WINDOW(app->window));
 #ifdef G_OS_WIN32
 			gtk_window_present(GTK_WINDOW(app->window));
@@ -436,7 +440,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
 				g_strstrip(buf); // remove \n char
-				// on any error we get 0 which should be save enough as fallback
+				// on any error we get 0 which should be safe enough as fallback
 				cl_options.goto_line = atoi(buf);
 			}
 		}
@@ -445,7 +449,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
 			{
 				g_strstrip(buf); // remove \n char
-				// on any error we get 0 which should be save enough as fallback
+				// on any error we get 0 which should be safe enough as fallback
 				cl_options.goto_column = atoi(buf);
 			}
 		}

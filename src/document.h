@@ -116,7 +116,7 @@ void document_init_doclist();
 void document_finalize();
 
 
-void document_set_text_changed(gint);
+void document_set_text_changed(gint idx);
 
 
 // Apply just the prefs that can change in the Preferences dialog
@@ -134,18 +134,22 @@ gboolean document_remove(guint page_num);
 gint document_new_file(const gchar *filename, filetype *ft);
 
 
-/* If idx is set to -1, it creates a new tab, opens the file from filename and
- * set the cursor to pos.
- * If idx is greater than -1, it reloads the file in the tab corresponding to
- * idx and set the cursor to position 0. In this case, filename should be NULL
- * It returns the idx of the opened file or -1 if an error occurred.
- */
-gint document_open_file(gint, const gchar*, gint, gboolean, filetype*, const gchar*);
-
+/* To open a new file, set idx to -1; filename should be locale encoded.
+ * To reload a file, set the idx for the document to be reloaded; filename should be NULL.
+ * Returns: idx of the opened file or -1 if an error occurred.
+ * Note: If opening more than one file, document_delay_colourise() should be used before
+ * and document_colourise_new() after opening to avoid unnecessary recolourising. */
+gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly,
+		filetype *ft, const gchar *forced_enc);
 
 /* Takes a new line separated list of filename URIs and opens each file.
  * length is the length of the string or -1 if it should be detected */
 void document_open_file_list(const gchar *data, gssize length);
+
+/* Takes a linked list of filename URIs and opens each file, ensuring the newly opened
+ * documents and existing documents (if necessary) are only colourised once. */
+void document_open_files(const GSList *filenames, gboolean readonly, filetype *ft,
+		const gchar *forced_enc);
 
 
 gint document_reload_file(gint idx, const gchar *forced_enc);
@@ -170,15 +174,17 @@ gint document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text,
 		gint flags, gboolean escaped_chars);
 
-void document_replace_sel(gint, const gchar*, const gchar*, gint, gboolean);
+void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace_text, gint flags,
+						  gboolean escaped_chars);
 
-void document_set_font(gint, const gchar*, gint);
+void document_set_font(gint idx, const gchar *font_name, gint size);
 
-void document_update_tag_list(gint, gboolean);
+void document_update_tag_list(gint idx, gboolean update);
 
-void document_set_filetype(gint, filetype*);
+/* sets the filetype of the document (sets syntax highlighting and tagging) */
+void document_set_filetype(gint idx, filetype *type);
 
-gchar *document_get_eol_mode(gint);
+gchar *document_get_eol_mode(gint idx);
 
 void document_fold_all(gint idx);
 
@@ -238,6 +244,6 @@ GdkColor *document_get_status(gint idx);
 
 void document_delay_colourise();
 
-void document_colourise_all();
+void document_colourise_new();
 
 #endif

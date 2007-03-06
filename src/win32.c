@@ -311,7 +311,9 @@ gboolean win32_show_file_dialog(gboolean file_open)
 			document_open_file(-1, fname, 0, of.Flags & OFN_READONLY, NULL, NULL);
 		}
 		else
-		{	// open mutiple files
+		{	// open multiple files
+			document_delay_colourise();
+
 			for (; ;)
 			{
 				if (! fname[x])
@@ -323,6 +325,7 @@ gboolean win32_show_file_dialog(gboolean file_open)
 				}
 				x++;
 			}
+			document_colourise_new();
 		}
 	}
 	else

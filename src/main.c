@@ -531,7 +531,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 		}
 		g_free(filename);
 	}
-	document_colourise_all();
+	document_colourise_new();
 	return TRUE;
 }
 

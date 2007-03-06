@@ -780,7 +780,6 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 	if (response == GTK_RESPONSE_ACCEPT || response == GTK_RESPONSE_APPLY)
 	{
 		GSList *filelist;
-		GSList *flist;
 		gint filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
 						lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
 		gint encoding_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
@@ -794,15 +793,10 @@ on_file_open_dialog_response           (GtkDialog *dialog,
 			charset = encodings[encoding_idx].charset;
 
 		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(app->open_filesel));
-		flist = filelist;
-		while (flist != NULL)
+		if (filelist != NULL)
 		{
-			if (g_file_test((gchar*) flist->data, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-			{
-				document_open_file(-1, (gchar*) flist->data, 0, ro, ft, charset);
-			}
-			g_free(flist->data);
-			flist = flist->next;
+			document_open_files(filelist, ro, ft, charset);
+			g_slist_foreach(filelist, (GFunc) g_free, NULL);	// free filenames
 		}
 		g_slist_free(filelist);
 	}

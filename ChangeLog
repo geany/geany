@@ -1,3 +1,13 @@
+2007-03-06  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/win32.c, src/callbacks.c, src/keyfile.c, src/document.c,
+   src/document.h, src/main.c, src/socket.c:
+   Speed up loading multiple C-like files when existing documents are
+   open (by ensuring documents are only colourised once).
+   Add document_open_files(), document_colourise_new().
+   Add some missing function parameter names to document.h.
+
+
 2007-03-05  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook:
