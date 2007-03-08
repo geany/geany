@@ -248,7 +248,8 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				}
 				case ' ':
 				{	// if and for autocompletion
-					if (app->pref_editor_auto_complete_constructs) sci_cb_auto_forif(idx, pos);
+					if (app->pref_editor_auto_complete_constructs)
+						sci_cb_auto_forif(idx, pos);
 					break;
 				}
 				case '[':
@@ -263,7 +264,9 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 				}
 				case '}':
 				{	// closing bracket handling
-					if (doc_list[idx].use_auto_indention) sci_cb_close_block(idx, pos - 1);
+					if (doc_list[idx].use_auto_indention &&
+						app->pref_editor_indention_mode == INDENT_ADVANCED)
+						sci_cb_close_block(idx, pos - 1);
 					break;
 				}
 				default: sci_cb_start_auto_complete(idx, pos, FALSE);
@@ -334,23 +337,27 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 		get_indent(sci, pos, FALSE);
 		sci_add_text(sci, indent);
 
-		// add extra indentation for Python after colon
-		if (doc_list[idx].file_type->id == GEANY_FILETYPES_PYTHON &&
-			sci_get_char_at(sci, pos - 2) == ':' &&
-			sci_get_style_at(sci, pos - 2) == SCE_P_OPERATOR)
-		{	// creates and inserts one tabulator sign or whitespace of the amount of the tab width
-			gchar *text = utils_get_whitespace(app->pref_editor_tab_width);
-			sci_add_text(sci, text);
-			g_free(text);
+		if (app->pref_editor_indention_mode == INDENT_ADVANCED)
+		{
+			// add extra indentation for Python after colon
+			if (doc_list[idx].file_type->id == GEANY_FILETYPES_PYTHON &&
+				sci_get_char_at(sci, pos - 2) == ':' &&
+				sci_get_style_at(sci, pos - 2) == SCE_P_OPERATOR)
+			{
+				// creates and inserts one tabulator sign or whitespace of the amount of the tab width
+				gchar *text = utils_get_whitespace(app->pref_editor_tab_width);
+				sci_add_text(sci, text);
+				g_free(text);
+			}
+
+			/// TODO on which option should auto_multiline() depend? indention vs. auto completion
+			// " * " auto completion in multiline C/C++/D/Java comments
+			auto_multiline(sci, pos);
 		}
 	}
 
 	if (app->pref_editor_auto_complete_constructs)
-	{
-		auto_multiline(sci, pos); // " * " auto completion in multiline C/C++/D/Java comments
-
 		sci_cb_auto_latex(idx, pos);
-	}
 }
 
 
@@ -366,13 +373,14 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 	len = sci_get_line_length(sci, prev_line);
 	linebuf = sci_get_line(sci, prev_line);
 
-	for (i = 0; i < len; i++)
+	for (i = 0; i < len && j <= (sizeof(indent) - 1); i++)
 	{
-		if (j == sizeof(indent) - 1) break;
-		else if (linebuf[i] == ' ' || linebuf[i] == '\t') indent[j++] = linebuf[i];
+		if (linebuf[i] == ' ' || linebuf[i] == '\t')
+			indent[j++] = linebuf[i];
 		// "&& ! use_this_line" to auto-indent only if it is a real new line
 		// and ignore the case of sci_cb_close_block
-		else if (linebuf[i] == '{' && ! use_this_line)
+		else if (linebuf[i] == '{' && ! use_this_line &&
+				 app->pref_editor_indention_mode == INDENT_ADVANCED)
 		{
 			if (app->pref_editor_use_tabs)
 			{
@@ -390,11 +398,15 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 		else
 		{
 			gint k = len - 1;
-			if (use_this_line) break;	// break immediately in the case of sci_cb_close_block
+
+			if (use_this_line)
+				break;	// break immediately in the case of sci_cb_close_block
+
 			while (k > 0 && isspace(linebuf[k])) k--;
+
 			// if last non-whitespace character is a { increase indention by a tab
 			// e.g. for (...) {
-			if (linebuf[k] == '{')
+			if (app->pref_editor_indention_mode == INDENT_ADVANCED && linebuf[k] == '{')
 			{
 				if (app->pref_editor_use_tabs)
 				{
@@ -403,7 +415,7 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 				else
 				{	// insert as many spaces as a tabulator would take
 					gint i;
-					for (i = 0; i < app->pref_editor_use_tabs; i++)
+					for (i = 0; i < app->pref_editor_tab_width; i++)
 						indent[j++] = ' ';
 				}
 			}

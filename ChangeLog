@@ -11,6 +11,12 @@
 2007-03-08  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.glade, src/interface.c: Fixed wrong tooltip.
+ * geany.glade, doc/geany.docbook, src/document.c, src/document.h,
+   src/geany.h, src/interface.c, src/keyfile.c, src/main.c, src/prefs.c,
+   src/sci_cb.c, src/ui_utils.c:
+   Added different auto indention modes to select who should Geany
+   indent new lines (closes #1615605).
+
 
 
 2007-03-06  Nick Treleaven  <nick.treleaven@btinternet.com>

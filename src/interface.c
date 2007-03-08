@@ -2454,7 +2454,10 @@ create_prefs_dialog (void)
   GtkWidget *frame14;
   GtkWidget *alignment17;
   GtkWidget *vbox17;
-  GtkWidget *check_auto_indent;
+  GtkWidget *hbox7;
+  GtkWidget *label183;
+  GtkWidget *eventbox2;
+  GtkWidget *combo_auto_indent_mode;
   GtkWidget *check_line_wrapping;
   GtkWidget *check_folding;
   GtkWidget *check_unfold_children;
@@ -3327,10 +3330,25 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox17);
   gtk_container_add (GTK_CONTAINER (alignment17), vbox17);
 
-  check_auto_indent = gtk_check_button_new_with_mnemonic (_("Auto indentation"));
-  gtk_widget_show (check_auto_indent);
-  gtk_box_pack_start (GTK_BOX (vbox17), check_auto_indent, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_auto_indent, _("Add the same indentation as the previous line after pressing enter"), NULL);
+  hbox7 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_show (hbox7);
+  gtk_box_pack_start (GTK_BOX (vbox17), hbox7, FALSE, FALSE, 0);
+
+  label183 = gtk_label_new (_("Auto indention mode:"));
+  gtk_widget_show (label183);
+  gtk_box_pack_start (GTK_BOX (hbox7), label183, FALSE, FALSE, 0);
+
+  eventbox2 = gtk_event_box_new ();
+  gtk_widget_show (eventbox2);
+  gtk_box_pack_start (GTK_BOX (hbox7), eventbox2, FALSE, TRUE, 5);
+  gtk_tooltips_set_tip (tooltips, eventbox2, _("Selects the indention mode. Use None to disable auto indention completely. Basic indents new lines with the same indention as the previous line. Advanced does the same and indents also curly brackets."), NULL);
+
+  combo_auto_indent_mode = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_auto_indent_mode);
+  gtk_container_add (GTK_CONTAINER (eventbox2), combo_auto_indent_mode);
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Advanced"));
 
   check_line_wrapping = gtk_check_button_new_with_mnemonic (_("Line wrapping"));
   gtk_widget_show (check_line_wrapping);
@@ -3902,7 +3920,10 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame14, "frame14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment17, "alignment17");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox17, "vbox17");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_indent, "check_auto_indent");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox7, "hbox7");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label183, "label183");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox2, "eventbox2");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_auto_indent_mode, "combo_auto_indent_mode");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_line_wrapping, "check_line_wrapping");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_folding, "check_folding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_unfold_children, "check_unfold_children");

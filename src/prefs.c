@@ -232,8 +232,8 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_line_end");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_show_line_endings);
 
-	widget = lookup_widget(app->prefs_dialog, "check_auto_indent");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_use_auto_indention);
+	widget = lookup_widget(app->prefs_dialog, "combo_auto_indent_mode");
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), app->pref_editor_indention_mode);
 
 	widget = lookup_widget(app->prefs_dialog, "check_line_wrapping");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_line_breaking);
@@ -550,8 +550,8 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_line_end");
 		app->pref_editor_show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(app->prefs_dialog, "check_auto_indent");
-		app->pref_editor_use_auto_indention = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		widget = lookup_widget(app->prefs_dialog, "combo_auto_indent_mode");
+		app->pref_editor_indention_mode = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_line_wrapping");
 		app->pref_editor_line_breaking = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -676,12 +676,14 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		// re-colourise all open documents, if tab width or long line settings have changed
 		for (i = 0; i < doc_array->len; i++)
 		{
-			if (doc_list[i].is_valid)
+			if (DOC_IDX_VALID(i))
 			{
-				document_apply_update_prefs(doc_list[i].sci);
-				if (! app->pref_editor_folding) document_unfold_all(i);
+				document_apply_update_prefs(i);
+				if (! app->pref_editor_folding)
+					document_unfold_all(i);
 			}
 		}
+		ui_document_show_hide(-1);
 
 		// store all settings
 		configuration_save();

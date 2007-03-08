@@ -537,15 +537,23 @@ void ui_treeviews_show_hide(G_GNUC_UNUSED gboolean force)
 void ui_document_show_hide(gint idx)
 {
 	gchar *widget_name;
+	GtkWidget *indention;
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (idx == -1)
+		idx = document_get_cur_idx();
+
+	if (! DOC_IDX_VALID(idx))
+		return;
+
 	app->ignore_callback = TRUE;
+
+	indention = lookup_widget(app->window, "menu_use_auto_indention1");
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_breaking1")),
 			doc_list[idx].line_breaking);
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_use_auto_indention1")),
+			GTK_CHECK_MENU_ITEM(indention),
 			doc_list[idx].use_auto_indention);
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "set_file_readonly1")),
@@ -562,6 +570,8 @@ void ui_document_show_hide(gint idx)
 	}
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, widget_name)),
 																					TRUE);
+
+	gtk_widget_set_sensitive(indention, app->pref_editor_indention_mode != INDENT_NONE);
 
 	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
 			encodings_is_unicode_charset(doc_list[idx].encoding));

@@ -5311,17 +5311,60 @@ Bottom
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="check_auto_indent">
+			    <widget class="GtkHBox" id="hbox7">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Add the same indentation as the previous line after pressing enter</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Auto indentation</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">True</property>
-			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
-			      <property name="draw_indicator">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">0</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label183">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Auto indention mode:</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkEventBox" id="eventbox2">
+				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Selects the indention mode. Use None to disable auto indention completely. Basic indents new lines with the same indention as the previous line. Advanced does the same and indents also curly brackets.</property>
+				  <property name="visible_window">True</property>
+				  <property name="above_child">False</property>
+
+				  <child>
+				    <widget class="GtkComboBox" id="combo_auto_indent_mode">
+				      <property name="visible">True</property>
+				      <property name="items" translatable="yes">None
+Basic
+Advanced</property>
+				      <property name="add_tearoffs">False</property>
+				      <property name="focus_on_click">True</property>
+				    </widget>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">5</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>

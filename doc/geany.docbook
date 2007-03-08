@@ -5,7 +5,7 @@
 <!ENTITY appversion "0.11">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "February 18, 2007">
+<!ENTITY date "March 08, 2007">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -378,6 +378,37 @@
 					the mouse button will copy the text instead. This behaviour was
 					changed in <application>Geany</application> 0.11 - before the selected text
 					was copied to the new position.
+				</para>
+			</section>
+			<section id="general_indention">
+				<title>Auto indention</title>
+				<para>
+					<application>Geany</application> knows three types of auto indention:
+					None, Basic and Advanced.
+					<variablelist><title>Auto indention types</title>
+					<varlistentry><term>None</term>
+					<listitem>
+					<para>
+						Disables auto indention completely.
+					</para>
+					</listitem>
+					</varlistentry>
+					<varlistentry><term>Basic</term>
+					<listitem>
+					<para>
+						Adds the same amount of whitespace on a new line as on the last line.
+					</para>
+					</listitem>
+					</varlistentry>
+					<varlistentry><term>Advanced</term>
+					<listitem>
+					<para>
+						Does the same as Basic but also indents curly brackets and adds a tabulator
+						character (or spaces) on a new line after an opening '{' brace.
+					</para>
+					</listitem>
+					</varlistentry>
+					</variablelist>
 				</para>
 			</section>
 			<section id="general_vte">

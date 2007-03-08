@@ -105,7 +105,7 @@ typedef struct MyApp
 	// I know, it is a bit confusing, but this line breaking is globally,
 	// to change the default value at startup, I think
 	gboolean			 pref_editor_line_breaking;
-	gboolean			 pref_editor_use_auto_indention;
+	gint			 	 pref_editor_indention_mode;
 	gboolean			 pref_editor_use_indicators;
 	gboolean			 pref_editor_show_white_space;
 	gboolean			 pref_editor_show_indent_guide;
@@ -214,7 +214,15 @@ enum
 	RIGHT
 };
 
-enum {
+enum
+{
+	INDENT_NONE = 0,
+	INDENT_BASIC,
+	INDENT_ADVANCED
+};
+
+enum
+{
 	KILOBYTE = 1024,
 	MEGABYTE = (KILOBYTE*1024),
 	GIGABYTE = (MEGABYTE*1024)

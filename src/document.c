@@ -194,8 +194,9 @@ void document_set_text_changed(gint idx)
 
 
 // Apply just the prefs that can change in the Preferences dialog
-void document_apply_update_prefs(ScintillaObject *sci)
+void document_apply_update_prefs(gint idx)
 {
+	ScintillaObject *sci = doc_list[idx].sci;
 	sci_set_mark_long_lines(sci, app->long_line_type, app->long_line_column, app->long_line_color);
 
 	sci_set_tab_width(sci, app->pref_editor_tab_width);
@@ -208,6 +209,8 @@ void document_apply_update_prefs(ScintillaObject *sci)
 	sci_set_visible_eols(sci, app->pref_editor_show_line_endings);
 
 	sci_set_folding_margin_visible(sci, app->pref_editor_folding);
+
+	doc_list[idx].use_auto_indention = (app->pref_editor_indention_mode != INDENT_NONE);
 }
 
 
@@ -217,7 +220,7 @@ static void init_doc_struct(document *new_doc)
 {
 	new_doc->is_valid = FALSE;
 	new_doc->has_tags = FALSE;
-	new_doc->use_auto_indention = app->pref_editor_use_auto_indention;
+	new_doc->use_auto_indention = (app->pref_editor_indention_mode != INDENT_NONE);
 	new_doc->line_breaking = app->pref_editor_line_breaking;
 	new_doc->readonly = FALSE;
 	new_doc->tag_store = NULL;
@@ -296,7 +299,7 @@ static gint document_create_new_sci(const gchar *filename)
 	// disable select all to be able to redefine it
 	sci_clear_cmdkey(sci, 'A' | (SCMOD_CTRL << 16));
 
-	document_apply_update_prefs(sci);
+	document_apply_update_prefs(new_idx);
 
 	sci_set_tab_indents(sci, app->use_tab_to_indent);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
@@ -331,7 +334,7 @@ static gint document_create_new_sci(const gchar *filename)
 	this->last_check = time(NULL);
 	this->readonly = FALSE;
 	this->line_breaking = app->pref_editor_line_breaking;
-	this->use_auto_indention = app->pref_editor_use_auto_indention;
+	this->use_auto_indention = (app->pref_editor_indention_mode != INDENT_NONE);
 	this->has_tags = FALSE;
 
 	treeviews_openfiles_add(new_idx);	// sets this->iter

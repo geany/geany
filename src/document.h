@@ -120,7 +120,7 @@ void document_set_text_changed(gint idx);
 
 
 // Apply just the prefs that can change in the Preferences dialog
-void document_apply_update_prefs(ScintillaObject *sci);
+void document_apply_update_prefs(gint idx);
 
 
 /* removes the given notebook tab and clears the related entry in the document list */
