@@ -2672,7 +2672,7 @@ create_prefs_dialog (void)
   check_list_openfiles = gtk_check_button_new_with_mnemonic (_("Show open files list"));
   gtk_widget_show (check_list_openfiles);
   gtk_box_pack_start (GTK_BOX (vbox11), check_list_openfiles, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_list_openfiles, _("Toggle the symbol list on and off"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_list_openfiles, _("Toggle the open files list on and off"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_list_openfiles), FALSE);
 
   label146 = gtk_label_new (_("<b>Sidebar</b>"));

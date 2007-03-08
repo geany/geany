@@ -3288,7 +3288,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_list_openfiles">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Toggle the symbol list on and off</property>
+			      <property name="tooltip" translatable="yes">Toggle the open files list on and off</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Show open files list</property>
 			      <property name="use_underline">True</property>
