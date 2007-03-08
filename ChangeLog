@@ -3,6 +3,9 @@
  * src/document.c:
    Fix not setting existing project typenames for C-like files if they
    don't contain typenames themselves (bug introduced in r1323).
+ * doc/geany.docbook:
+   Updated Templates section for filetype templates and added some
+   subsection titles.
 
 
 2007-03-08  Enrico Tröger  <enrico.troeger@uvena.de>

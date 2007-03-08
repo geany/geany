@@ -1856,14 +1856,23 @@
 		<section id="templates">
 			<title>Templates</title>
 			<para>
-				<application>Geany</application> supports several templates for file headers,
-				function descriptions, a typical ChangeLog entry
-				and a short GPL notice. To use these templates, just open the Edit menu or open the
+				<application>Geany</application> supports the following templates:
+			</para>
+			<itemizedlist>
+				<listitem><para>ChangeLog entry</para></listitem>
+				<listitem><para>File header</para></listitem>
+				<listitem><para>Function description</para></listitem>
+				<listitem><para>Short GPL notice</para></listitem>
+				<listitem><para>Short BSD notice</para></listitem>
+				<listitem><para>Filetype template</para></listitem>
+			</itemizedlist>
+			<para>
+				To use these templates, just open the Edit menu or open the
 				popup menu by right-clicking in the editor widget, and choose "Insert Comments" and
 				insert templates as you want.
 			</para>
 			<para>
-				Some templates (like file header or ChangeLog entry) will always be inserted at the
+				Some templates (like File header or ChangeLog entry) will always be inserted at the
 				top of the file.
 			</para>
 			<para>
@@ -1873,16 +1882,39 @@
 				of a function or the function name cannot be determined, you cannot insert a function
 				description.
 			</para>
+			<section>
+			<title>Filetype templates</title>
 			<para>
-				Each template can be customized to your needs. The templates are in the configuration
-				directory, which is in <filename>~/.geany/templates/</filename> (see <xref linkend="clo"/>
-				for further information about the configuration directory). Just open the desired
-				template with an editor (ideally <application>Geany</application> ;-) ) and edit
-				the template as your needs.	There are some wildcards which will be automatically
-				replaced by <application>Geany</application> at startup.
+				Filetype templates are templates used as the basis of a new file. To use them, choose
+				the <literal>New (with Template)</literal> menu item from the
+				<literal>File</literal> menu. At creation of a new file with a filetype template, the
+				fileheader template is automatically prepended.
 			</para>
 			<para>
-				All wildcards must be enclosed by "{" and "}", e.g. {date}.
+				By default, templates are created for certain filetypes. Other filetype templates can be
+				added by creating the appropriate template file and restarting
+				<application>Geany</application>.
+			</para>
+			<para>
+				Filetype template files are read from the <filename>~/.geany/templates</filename>
+				directory, and are named '<filename>filetype.</filename>'
+				followed by the filetype name, e.g. <filename>filetype.python</filename>,
+				<filename>filetype.sh</filename>. If you are unsure about the filetype name extensions,
+				they are the same as the filetype configuration file extensions, commonly installed
+				in <filename>/usr/share/geany</filename>, with the prefix
+				'<filename>filetypes.</filename>'.
+			</para>
+			<para>
+				There is also a template file <filename>template.none</filename> which is used when
+				the <literal>New</literal> command is used without a filetype. This is empty by
+				default.
+			</para>
+			</section>
+			<section>
+			<title>Template metadata</title>
+			<para>
+				Metadata can be used with all templates, but by default user set metadata is only
+				used for the ChangeLog and File header templates.
 			</para>
 			<para>
 				In the configuration dialog you can find a tab "Templates"
@@ -1890,14 +1922,22 @@
 				will be inserted in the templates. You should restart <application>Geany</application>
 				after making changes, because they are only read at startup.
 			</para>
+			</section>
+			<section>
+			<title>Customizing templates</title>
 			<para>
-				Since <application>Geany</application> 0.3 there are also templates for creating new
-				files. They can be found in <filename>~/.&app_small;/</filename>, too. All template
-				files for creating new files begin with <filename>template.filetype.</filename>
-				followed by the filetype. At creating a new file with a filetype template, the
-				template for the fileheader is automatically prepended.
+				Each template can be customized to your needs. The templates are stored in the
+				<filename>~/.geany/templates/</filename> directory (see <xref linkend="clo"/>
+				for further information about the configuration directory). Just open the desired
+				template with an editor (ideally <application>Geany</application> ;-) ) and edit
+				the template to your needs. There are some wildcards which will be automatically
+				replaced by <application>Geany</application> at startup.
 			</para>
-			<para>&nbsp;</para>
+			<section>
+			<title>Template wildcards</title>
+			<para>
+				All wildcards must be enclosed by "{" and "}", e.g. {date}.
+			</para>
 			<para>
 				<table frame="all">
 					<title>Template wildcards</title>
@@ -2006,6 +2046,8 @@
 				If you need any other wildcards or a special date/time format, please email the
 				author <email>&author_mail;</email>.
 			</para>
+			</section>
+			</section>
 		</section>
 	</chapter>
 
