@@ -1491,8 +1491,12 @@ void document_update_tag_list(gint idx, gboolean update)
 }
 
 
-static GString *get_project_typenames()
+/* Caches the list of project typenames, as a space separated GString.
+ * Returns: TRUE if typenames have changed.
+ * (*types) is set to the list of typenames, or NULL if there are none. */
+static gboolean get_project_typenames(const GString **types)
 {
+	static GString *last_typenames = NULL;
 	GString *s = NULL;
 
 	if (app->tm_workspace)
@@ -1504,51 +1508,70 @@ static GString *get_project_typenames()
 			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK);
 		}
 	}
-	return s;
+
+	if (s && last_typenames && g_string_equal(s, last_typenames))
+	{
+		g_string_free(s, TRUE);
+		*types = last_typenames;
+		return FALSE;	// project typenames haven't changed
+	}
+	// cache typename list for next time
+	if (last_typenames)
+		g_string_free(last_typenames, TRUE);
+	last_typenames = s;
+
+	*types = s;
+	if (s == NULL) return FALSE;
+	return TRUE;
 }
 
 
-/* Returns: TRUE if any scintilla type keywords were updated.
- * sci can be NULL to update if necessary (non-NULL can save time if only one
- * document was changed) */
+/* If sci is NULL, update project typenames for all documents that support typenames,
+ * if typenames have changed.
+ * If sci is not NULL, then if sci supports typenames, project typenames are updated
+ * if necessary, and typename keywords are set for sci.
+ * Returns: TRUE if any scintilla type keywords were updated. */
 static gboolean update_type_keywords(ScintillaObject *sci)
 {
 	gboolean ret = FALSE;
+	guint n;
+	const GString *s;
 
-	if (sci == NULL || sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(sci)) != -1)
-	{
-		guint n;
-		static GString *last_typenames = NULL;
-		GString *s = get_project_typenames();
+	if (sci != NULL && sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
+		return FALSE;
 
-		if (s && last_typenames && g_string_equal(s, last_typenames))
+	if (! get_project_typenames(&s))
+	{	// typenames have not changed
+		if (s != NULL && sci != NULL)
 		{
-			g_string_free(s, TRUE);
-			return FALSE;	// avoid unnecessary recolourising
-		}
-		// keep typename list for next time
-		if (last_typenames)
-			g_string_free(last_typenames, TRUE);
-		last_typenames = s;
-		if (s == NULL) return FALSE;
+			gint keyword_idx = sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(sci));
 
-		for (n = 0; n < doc_array->len; n++)
-		{
-			ScintillaObject *wid = doc_list[n].sci;
-
-			if (wid)
+			sci_set_keywords(sci, keyword_idx, s->str);
+			if (! delay_colourise)
 			{
-				gint keyword_idx = sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(wid));
+				sci_colourise(sci, 0, -1);
+			}
+		}
+		return FALSE;
+	}
+	g_return_val_if_fail(s != NULL, FALSE);
 
-				if (keyword_idx > 0)
+	for (n = 0; n < doc_array->len; n++)
+	{
+		ScintillaObject *wid = doc_list[n].sci;
+
+		if (wid)
+		{
+			gint keyword_idx = sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(wid));
+
+			if (keyword_idx > 0)
+			{
+				sci_set_keywords(wid, keyword_idx, s->str);
+				if (! delay_colourise)
 				{
-					sci_set_keywords(wid, keyword_idx, s->str);
-					if (! delay_colourise)
-					{
-						sci_colourise(wid, 0, -1);
-					}
-					ret = TRUE;
+					sci_colourise(wid, 0, -1);
 				}
+				ret = TRUE;
 			}
 		}
 	}
