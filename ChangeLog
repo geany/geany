@@ -5,6 +5,8 @@
    src/search.c, src/tools.c, src/ui_utils.c, src/utils.c:
    Fixed several compiler warnings (mainly shadowing local variables
    and unreachable code).
+ * src/sci_cb.c: Auto completion of multi line comments is now (again)
+                 configurable with the auto complete constructs option.
 
 
 2007-03-09  Nick Treleaven  <nick.treleaven@btinternet.com>

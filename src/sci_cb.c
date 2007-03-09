@@ -349,15 +349,16 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 				sci_add_text(sci, text);
 				g_free(text);
 			}
-
-			/// TODO on which option should auto_multiline() depend? indention vs. auto completion
-			// " * " auto completion in multiline C/C++/D/Java comments
-			auto_multiline(sci, pos);
 		}
 	}
 
 	if (app->pref_editor_auto_complete_constructs)
+	{
+		// " * " auto completion in multiline C/C++/D/Java comments
+		auto_multiline(sci, pos);
+
 		sci_cb_auto_latex(idx, pos);
+	}
 }
 
 
