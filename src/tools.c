@@ -512,7 +512,7 @@ static void cc_add_command(struct cc_dialog *cc, gint idx)
 	label = gtk_label_new(str);
 
 	entry = gtk_entry_new();
-	if (index >= 0)
+	if (idx >= 0)
 		gtk_entry_set_text(GTK_ENTRY(entry), app->custom_commands[idx]);
 	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
