@@ -676,7 +676,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		// re-colourise all open documents, if tab width or long line settings have changed
 		for (i = 0; i < doc_array->len; i++)
 		{
-			if (DOC_IDX_VALID(i))
+			if (doc_list[i].is_valid)
 			{
 				document_apply_update_prefs(i);
 				if (! app->pref_editor_folding)

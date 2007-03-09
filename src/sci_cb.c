@@ -364,7 +364,8 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 {
 	// very simple indentation algorithm
-	gint i, prev_line, len, j = 0;
+	guint i, len, j = 0;
+	gint prev_line;
 	gchar *linebuf;
 
 	prev_line = sci_get_line_from_position(sci, pos);
@@ -414,8 +415,8 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 				}
 				else
 				{	// insert as many spaces as a tabulator would take
-					gint i;
-					for (i = 0; i < app->pref_editor_tab_width; i++)
+					gint n;
+					for (n = 0; n < app->pref_editor_tab_width; n++)
 						indent[j++] = ' ';
 				}
 			}
