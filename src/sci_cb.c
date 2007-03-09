@@ -389,8 +389,8 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 			}
 			else
 			{	// insert as many spaces as a tabulator would take
-				gint i;
-				for (i = 0; i < app->pref_editor_tab_width; i++)
+				gint k;
+				for (k = 0; k < app->pref_editor_tab_width; k++)
 					indent[j++] = ' ';
 			}
 
@@ -1635,11 +1635,8 @@ void sci_cb_do_comment_toggle(gint idx)
 		if (single_line)
 		{
 			gint a = (first_line_was_comment) ? - co_len : co_len;
-			gint line_start;
 
 			// don't modify sel_start when the selection starts within indentation
-			line_start = sci_get_position_from_line(doc_list[idx].sci,
-										sci_get_line_from_position(doc_list[idx].sci, sel_start));
 			get_indent(doc_list[idx].sci, sel_start, TRUE);
 			if ((sel_start - line_start) <= (gint) strlen(indent))
 				a = 0;

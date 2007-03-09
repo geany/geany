@@ -142,12 +142,12 @@ const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 }
 
 
-const GeanyEncoding *encodings_get_from_index(gint index)
+const GeanyEncoding *encodings_get_from_index(gint idx)
 {
-	g_return_val_if_fail(index >= 0, NULL);
-	g_return_val_if_fail(index < GEANY_ENCODINGS_MAX, NULL);
+	g_return_val_if_fail(idx >= 0, NULL);
+	g_return_val_if_fail(idx < GEANY_ENCODINGS_MAX, NULL);
 
-	return &encodings[index];
+	return &encodings[idx];
 }
 
 

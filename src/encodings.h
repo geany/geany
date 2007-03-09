@@ -59,7 +59,7 @@ typedef struct
 
 
 const GeanyEncoding* encodings_get_from_charset(const gchar *charset);
-const GeanyEncoding* encodings_get_from_index(gint index);
+const GeanyEncoding* encodings_get_from_index(gint idx);
 
 gchar* encodings_to_string(const GeanyEncoding* enc);
 const gchar* encodings_get_charset(const GeanyEncoding* enc);

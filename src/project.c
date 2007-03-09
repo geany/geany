@@ -526,11 +526,11 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+		gchar *tmp_utf8_filename = utils_get_utf8_from_locale(filename);
 
-		gtk_entry_set_text(GTK_ENTRY(entry), utf8_filename);
+		gtk_entry_set_text(GTK_ENTRY(entry), tmp_utf8_filename);
 
-		g_free(utf8_filename);
+		g_free(tmp_utf8_filename);
 		g_free(filename);
 	}
 	gtk_widget_destroy(dialog);

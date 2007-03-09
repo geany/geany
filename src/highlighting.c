@@ -306,14 +306,14 @@ static guint invert(guint icolour)
 }
 
 
-static void set_sci_style(ScintillaObject *sci, gint style, gint filetype, gint styling_index)
+static void set_sci_style(ScintillaObject *sci, gint style, gint ft, gint styling_index)
 {
 	Style *style_ptr;
 
-	if (filetype == GEANY_FILETYPES_ALL)
+	if (ft == GEANY_FILETYPES_ALL)
 		style_ptr = &common_style_set.styling[styling_index];
 	else
-		style_ptr = &style_sets[filetype].styling[styling_index];
+		style_ptr = &style_sets[ft].styling[styling_index];
 
 	SSM(sci, SCI_STYLESETFORE, style,	invert(style_ptr->foreground));
 	SSM(sci, SCI_STYLESETBACK, style,	invert(style_ptr->background));
@@ -571,15 +571,15 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 static void assign_global_and_user_keywords(ScintillaObject *sci, const gchar *user_words)
 {
 	GString *s;
-	
+
 	s = get_global_typenames();
 	if (s == NULL)
 		s = g_string_sized_new(200);
 	else
 		g_string_append_c(s, ' '); // append a space as delimiter to the existing list of words
-	
+
 	g_string_append(s, user_words);
-	
+
 	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) s->str);
 	g_string_free(s, TRUE);
 }
@@ -716,7 +716,7 @@ void styleset_c(ScintillaObject *sci)
 
 	// assign global types, merge them with user defined keywords and set them
 	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_C].keywords[1]);
-	
+
 	styleset_c_like(sci, GEANY_FILETYPES_C);
 
 	if (style_sets[GEANY_FILETYPES_C].styling[20].foreground == 1)

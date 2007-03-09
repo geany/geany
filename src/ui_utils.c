@@ -136,25 +136,25 @@ void ui_update_statusbar(gint idx, gint pos)
 
 
 /* This sets the window title according to the current filename. */
-void ui_set_window_title(gint index)
+void ui_set_window_title(gint idx)
 {
 	gchar *title;
 
-	if (index >= 0)
+	if (idx >= 0)
 	{
-		if (doc_list[index].file_name == NULL)
+		if (doc_list[idx].file_name == NULL)
 		{
 			title = g_strdup_printf("%s%s - Geany",
-					doc_list[index].changed ? "*" : "",
-					DOC_FILENAME(index));
+					doc_list[idx].changed ? "*" : "",
+					DOC_FILENAME(idx));
 		}
 		else
 		{
-			gchar *basename = g_path_get_basename(DOC_FILENAME(index));
-			gchar *dirname = g_path_get_dirname(DOC_FILENAME(index));
+			gchar *basename = g_path_get_basename(DOC_FILENAME(idx));
+			gchar *dirname = g_path_get_dirname(DOC_FILENAME(idx));
 
 			title = g_strdup_printf("%s%s - %s - Geany",
-					doc_list[index].changed ? "*" : "",
+					doc_list[idx].changed ? "*" : "",
 					basename, dirname ? dirname : "");
 			g_free(basename);
 			g_free(dirname);
@@ -215,20 +215,20 @@ void ui_set_fullscreen()
 }
 
 
-void ui_update_popup_reundo_items(gint index)
+void ui_update_popup_reundo_items(gint idx)
 {
 	gboolean enable_undo;
 	gboolean enable_redo;
 
-	if (index == -1)
+	if (idx == -1)
 	{
 		enable_undo = FALSE;
 		enable_redo = FALSE;
 	}
 	else
 	{
-		enable_undo = document_can_undo(index);
-		enable_redo = document_can_redo(index);
+		enable_undo = document_can_undo(idx);
+		enable_redo = document_can_redo(idx);
 	}
 
 	// index 0 is the popup menu, 1 is the menubar, 2 is the toolbar
@@ -242,13 +242,13 @@ void ui_update_popup_reundo_items(gint index)
 }
 
 
-void ui_update_popup_copy_items(gint index)
+void ui_update_popup_copy_items(gint idx)
 {
 	gboolean enable;
 	guint i;
 
-	if (index == -1) enable = FALSE;
-	else enable = sci_can_copy(doc_list[index].sci);
+	if (idx == -1) enable = FALSE;
+	else enable = sci_can_copy(doc_list[idx].sci);
 
 	for(i = 0; i < (sizeof(app->popup_items)/sizeof(GtkWidget*)); i++)
 		gtk_widget_set_sensitive(app->popup_items[i], enable);

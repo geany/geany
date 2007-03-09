@@ -1,3 +1,12 @@
+2007-03-09  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c, src/encodings.c, src/encodings.h, highlighting.c,
+   src/msgwindow.c, src/notebook.c, src/project.c, src/sci_cb.c,
+   src/search.c, src/tools.c, src/ui_utils.c, src/utils.c:
+   Fixed several compiler warnings (mainly shadowing local variables
+   and unreachable code).
+
+
 2007-03-09  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/interface.c, doc/geany.docbook, data/filetypes.*, geany.glade:

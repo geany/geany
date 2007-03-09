@@ -502,7 +502,7 @@ struct cc_dialog
 };
 
 
-static void cc_add_command(struct cc_dialog *cc, gint index)
+static void cc_add_command(struct cc_dialog *cc, gint idx)
 {
 	GtkWidget *label, *entry, *hbox;
 	gchar str[6];
@@ -513,7 +513,7 @@ static void cc_add_command(struct cc_dialog *cc, gint index)
 
 	entry = gtk_entry_new();
 	if (index >= 0)
-		gtk_entry_set_text(GTK_ENTRY(entry), app->custom_commands[index]);
+		gtk_entry_set_text(GTK_ENTRY(entry), app->custom_commands[idx]);
 	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -537,7 +537,7 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 		gint idx = GPOINTER_TO_INT(data);
 		gchar *msg = NULL;
 		GString *str = g_string_sized_new(256);
-		GIOStatus rv;     
+		GIOStatus rv;
 		GError *err = NULL;
 
 		do
@@ -555,8 +555,8 @@ static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 				err = NULL;
 			}
 		} while (rv == G_IO_STATUS_NORMAL || rv == G_IO_STATUS_AGAIN);
-		
-		if (rv == G_IO_STATUS_EOF) 
+
+		if (rv == G_IO_STATUS_EOF)
 		{	// Command completed successfully
 			sci_replace_sel(doc_list[idx].sci, str->str);
 		}
@@ -701,7 +701,7 @@ static void cc_show_dialog_custom_commands()
 		GList *children = gtk_container_get_children(GTK_CONTAINER(cc.box));
 		GList *tmp;
 		GSList *result_list = NULL;
-		gint i = 0;
+		gint j = 0;
 		gint len = 0;
 		gchar **result = NULL;
 		const gchar *text;
@@ -730,10 +730,10 @@ static void cc_show_dialog_custom_commands()
 			result = g_new(gchar*, len + 1);
 			while (result_list != NULL)
 			{
-				result[i] = (gchar*) result_list->data;
+				result[j] = (gchar*) result_list->data;
 
 				result_list = result_list->next;
-				i++;
+				j++;
 			}
 			result[len] = NULL; // null-terminate the array
 		}

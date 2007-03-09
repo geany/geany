@@ -1028,17 +1028,17 @@ toolbar_popup_menu                     (GtkWidget *widget,
 {
 	if (event->button == 3)
 	{
-		GtkWidget *widget;
+		GtkWidget *w;
 
 		ignore_toolbar_toggle = TRUE;
 
 		switch (app->toolbar_icon_style)
 		{
-			case 0: widget = lookup_widget(app->toolbar_menu, "images_only2"); break;
-			case 1: widget = lookup_widget(app->toolbar_menu, "text_only2"); break;
-			default: widget = lookup_widget(app->toolbar_menu, "images_and_text2"); break;
+			case 0: w = lookup_widget(app->toolbar_menu, "images_only2"); break;
+			case 1: w = lookup_widget(app->toolbar_menu, "text_only2"); break;
+			default: w = lookup_widget(app->toolbar_menu, "images_and_text2"); break;
 		}
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
 		switch (app->toolbar_icon_size)
 		{
@@ -1046,7 +1046,7 @@ toolbar_popup_menu                     (GtkWidget *widget,
 					widget = lookup_widget(app->toolbar_menu, "large_icons1"); break;
 			default: widget = lookup_widget(app->toolbar_menu, "small_icons1"); break;
 		}
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
 		ignore_toolbar_toggle = FALSE;
 

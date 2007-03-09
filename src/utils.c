@@ -161,8 +161,6 @@ gboolean utils_isbrace(gchar c)
 		case ']': return TRUE;
 		default:  return FALSE;
 	}
-
-	return FALSE;
 }
 
 
@@ -179,8 +177,6 @@ gboolean utils_is_opening_brace(gchar c)
 		case '[':  return TRUE;
 		default:  return FALSE;
 	}
-
-	return FALSE;
 }
 
 
@@ -524,7 +520,7 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 	// if the document has no changes, get the previous function name from TM
 	if(! doc_list[idx].changed && tm_file != NULL && tm_file->tags_array != NULL)
 	{
-		TMTag *tag = TM_TAG(tm_get_current_function(tm_file->tags_array, line));
+		const TMTag *tag = (const TMTag*) tm_get_current_function(tm_file->tags_array, line);
 
 		if (tag != NULL)
 		{

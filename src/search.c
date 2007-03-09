@@ -875,8 +875,6 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 			case GEANY_RESPONSE_MARK:
 			{
-				gint idx = document_get_cur_idx();
-
 				if (DOC_IDX_VALID(idx))
 					search_mark(idx, search_data.text, search_data.flags);
 				break;
@@ -990,11 +988,11 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			// replace in all documents following notebook tab order
 			for (n = 0; (gint) n < gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); n++)
 			{
-				gint idx = document_get_n_idx(n);
+				gint ix = document_get_n_idx(n);
 
-				if (! doc_list[idx].is_valid) continue;
+				if (! doc_list[ix].is_valid) continue;
 
-				if (document_replace_all(idx, find, replace, search_flags_re,
+				if (document_replace_all(ix, find, replace, search_flags_re,
 					search_replace_escape_re)) count++;
 			}
 			ui_set_statusbar(_("Replaced text in %u files."), count);

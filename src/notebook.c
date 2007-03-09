@@ -49,7 +49,7 @@ static GtkTargetEntry files_drop_targets[] = {
 
 static gboolean
 notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
-	gint x, gint y, guint time, gpointer user_data);
+	gint x, gint y, guint event_time, gpointer user_data);
 
 static void
 notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
@@ -64,7 +64,7 @@ notebook_motion_notify_event_cb(GtkWidget *widget, GdkEventMotion *event,
 static void
 on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
                              gint x, gint y, GtkSelectionData *data, guint info,
-                             guint time, gpointer user_data);
+                             guint event_time, gpointer user_data);
 
 static gint
 notebook_find_tab_num_at_pos(GtkNotebook *notebook, gint x, gint y);
@@ -188,15 +188,14 @@ notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_n
 
 static gboolean
 notebook_drag_motion_cb(GtkWidget *widget, GdkDragContext *dc,
-	gint x, gint y, guint time, gpointer user_data)
+	gint x, gint y, guint event_time, gpointer user_data)
 {
-	GtkNotebook *notebook = GTK_NOTEBOOK(widget);
 	static gint oldx, oldy; // for determining direction of mouse drag
+	GtkNotebook *notebook = GTK_NOTEBOOK(widget);
 	gint ndest = notebook_find_tab_num_at_pos(notebook, x, y);
 	gint ncurr = gtk_notebook_get_current_page(notebook);
 
-	if (ndest >= 0)
-	if (ndest != ncurr)
+	if (ndest >= 0 && ndest != ncurr)
 	{
 		gboolean ok = FALSE;
 		// prevent oscillation between non-homogeneous sized tabs
@@ -379,7 +378,7 @@ void notebook_remove_page(gint page_num)
 static void
 on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
                              gint x, gint y, GtkSelectionData *data, guint target_type,
-                             guint time, gpointer user_data)
+                             guint event_time, gpointer user_data)
 {
 	gboolean success = FALSE;
 
@@ -394,7 +393,7 @@ on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 
 		success = TRUE;
 	}
-	gtk_drag_finish(drag_context, success, FALSE, time);
+	gtk_drag_finish(drag_context, success, FALSE, event_time);
 }
 
 

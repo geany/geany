@@ -129,7 +129,7 @@ static void prepare_msg_tree_view(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
-	GtkTreeSelection *select;
+	GtkTreeSelection *selection;
 	PangoFontDescription *pfd;
 
 	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_INT, GDK_TYPE_COLOR, G_TYPE_STRING);
@@ -150,9 +150,9 @@ static void prepare_msg_tree_view(void)
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_MESSAGE));
 
 	// selection handling
-	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
-	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-	//g_signal_connect(G_OBJECT(select), "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_msg));
+	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
+	//g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);
 }
 
 
@@ -161,7 +161,7 @@ static void prepare_compiler_tree_view(void)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
-	GtkTreeSelection *select;
+	GtkTreeSelection *selection;
 	PangoFontDescription *pfd;
 
 	msgwindow.store_compiler = gtk_list_store_new(2, GDK_TYPE_COLOR, G_TYPE_STRING);
@@ -182,9 +182,9 @@ static void prepare_compiler_tree_view(void)
 					G_CALLBACK(on_msgwin_button_press_event), GINT_TO_POINTER(MSG_COMPILER));
 
 	// selection handling
-	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
-	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-	//g_signal_connect(G_OBJECT(select), "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
+	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
+	//g_signal_connect(G_OBJECT(selection), "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);
 }
 
 
