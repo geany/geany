@@ -1976,6 +1976,11 @@ void styleset_none(ScintillaObject *sci)
 	SSM (sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
+
+	SSM(sci, SCI_STYLESETFORE, STYLE_DEFAULT, invert(0x000000));
+	SSM(sci, SCI_STYLESETBACK, STYLE_DEFAULT, invert(0xffffff));
+
+	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 }
 
 

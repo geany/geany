@@ -7,6 +7,11 @@
    and unreachable code).
  * src/sci_cb.c: Auto completion of multi line comments is now (again)
                  configurable with the auto complete constructs option.
+ * src/highlighting.c:
+   Set default highlighting style for filetype None to get it also
+   inverted if invert_all is set.
+   Reset all previously defined styles when switching filetype to None.
+
 
 
 2007-03-09  Nick Treleaven  <nick.treleaven@btinternet.com>
