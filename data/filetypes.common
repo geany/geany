@@ -1,5 +1,8 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
+# foreground;background;bold;italic - used for filetype All/None
+default=0x000000;0xffffff;false;false
+
 # 3rd selection argument is true to override default foreground
 # 4th selection argument is true to override default background
 selection=0xc0c0c0;0x7f0000;false;false

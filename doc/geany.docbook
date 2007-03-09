@@ -1720,6 +1720,13 @@
 							</thead>
 							<tbody>
 								<row>
+									<entry>default</entry>
+									<entry>This is the default style. It is used for styling files
+										   without a filetype set.
+									</entry>
+									<entry>default=0x000000;0xffffff;false;false</entry>
+								</row>
+								<row>
 									<entry>selection</entry>
 									<entry>
 										The style for colouring selected text.

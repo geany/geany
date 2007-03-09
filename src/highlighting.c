@@ -60,6 +60,7 @@ static StyleSet style_sets[GEANY_MAX_FILE_TYPES - 1];
 
 enum	// Geany common styling
 {
+	GCS_DEFAULT,
 	GCS_SELECTION,
 	GCS_BRACE_GOOD,
 	GCS_BRACE_BAD,
@@ -376,6 +377,8 @@ static void styleset_common_init(void)
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_ALL);
 
+	get_keyfile_hex(config, config_home, "styling", "default",
+		"0x000000", "0xffffff", "false", &common_style_set.styling[GCS_DEFAULT]);
 	get_keyfile_hex(config, config_home, "styling", "selection",
 		"0xc0c0c0", "0x7f0000", "false", &common_style_set.styling[GCS_SELECTION]);
 	get_keyfile_hex(config, config_home, "styling", "brace_good",
@@ -1973,12 +1976,12 @@ void styleset_docbook(ScintillaObject *sci)
 void styleset_none(ScintillaObject *sci)
 {
 	styleset_common(sci, 5);
+
 	SSM (sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
 
-	SSM(sci, SCI_STYLESETFORE, STYLE_DEFAULT, invert(0x000000));
-	SSM(sci, SCI_STYLESETBACK, STYLE_DEFAULT, invert(0xffffff));
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ALL, GCS_DEFAULT);
 
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 }

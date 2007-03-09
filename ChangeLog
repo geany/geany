@@ -11,6 +11,9 @@
    Set default highlighting style for filetype None to get it also
    inverted if invert_all is set.
    Reset all previously defined styles when switching filetype to None.
+ * data/filetypes.common, doc/geany.docbook, src/highlighting.c:
+   Added style "default" to filetypes.common to be able to change the
+   default style for files without a filetype set.
 
 
 
