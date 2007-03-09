@@ -380,16 +380,16 @@
 					was copied to the new position.
 				</para>
 			</section>
-			<section id="general_indention">
-				<title>Auto indention</title>
+			<section id="general_indentation">
+				<title>Auto indentation</title>
 				<para>
-					<application>Geany</application> knows three types of auto indention:
+					<application>Geany</application> knows three types of auto indentation:
 					None, Basic and Advanced.
-					<variablelist><title>Auto indention types</title>
+					<variablelist><title>Auto indentation types</title>
 					<varlistentry><term>None</term>
 					<listitem>
 					<para>
-						Disables auto indention completely.
+						Disables auto indentation completely.
 					</para>
 					</listitem>
 					</varlistentry>

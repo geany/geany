@@ -26,7 +26,7 @@ comment_open=#
 comment_close=
 
 # set to false if a comment character/string should start a column 0 of a line, true uses any
-# indention of the line, e.g. setting to true causes the following on pressing CTRL+d
+# indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
 	#command_example();
 # setting to false would generate this
 #	command_example();

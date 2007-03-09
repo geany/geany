@@ -3334,14 +3334,14 @@ create_prefs_dialog (void)
   gtk_widget_show (hbox7);
   gtk_box_pack_start (GTK_BOX (vbox17), hbox7, FALSE, FALSE, 0);
 
-  label183 = gtk_label_new (_("Auto indention mode:"));
+  label183 = gtk_label_new (_("Auto indentation mode:"));
   gtk_widget_show (label183);
   gtk_box_pack_start (GTK_BOX (hbox7), label183, FALSE, FALSE, 0);
 
   eventbox2 = gtk_event_box_new ();
   gtk_widget_show (eventbox2);
   gtk_box_pack_start (GTK_BOX (hbox7), eventbox2, FALSE, TRUE, 5);
-  gtk_tooltips_set_tip (tooltips, eventbox2, _("Selects the indention mode. Use None to disable auto indention completely. Basic indents new lines with the same indention as the previous line. Advanced does the same and indents also curly brackets."), NULL);
+  gtk_tooltips_set_tip (tooltips, eventbox2, _("Selects the indentation mode. Use None to disable auto indentation completely. Basic indents new lines with the same indentation as the previous line. Advanced does the same and indents also curly brackets."), NULL);
 
   combo_auto_indent_mode = gtk_combo_box_new_text ();
   gtk_widget_show (combo_auto_indent_mode);
