@@ -1,3 +1,11 @@
+2007-03-10  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/project.c:
+   Separate New Project dialog from Project Properties dialog.
+   Make Properties Filename field read-only, below Name field.
+   Capitalize dialog titles.
+
+
 2007-03-09  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c, src/encodings.c, src/encodings.h, highlighting.c,
