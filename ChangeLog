@@ -4,6 +4,12 @@
    Separate New Project dialog from Project Properties dialog.
    Make Properties Filename field read-only, below Name field.
    Capitalize dialog titles.
+ * src/utils.c, src/utils.h, src/project.c:
+   Make New Project dialog create parent directories of the chosen base
+   path if necessary.
+   Prevent warnings when setting open dialog directory to a path whose
+   parent directory doesn't exist.
+   Add create_parent_dirs argument for utils_mkdir().
 
 
 2007-03-09  Enrico Tröger  <enrico.troeger@uvena.de>

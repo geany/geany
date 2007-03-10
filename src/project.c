@@ -500,7 +500,7 @@ static void on_properties_dialog_response(GtkDialog *dialog, gint response,
 				if (dialogs_show_question(
 					_("The specified project base path does not exist. Should it be created?")))
 				{
-					utils_mkdir(locale_path);
+					utils_mkdir(locale_path, TRUE);
 				}
 				else
 				{
@@ -581,10 +581,15 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
 	if (g_path_is_absolute(locale_filename))
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), utf8_filename);
+	{
+		if (g_file_test(locale_filename, G_FILE_TEST_EXISTS))
+			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), utf8_filename);
+	}
 	else
 	if (gtk_file_chooser_get_action(GTK_FILE_CHOOSER(dialog)) != GTK_FILE_CHOOSER_ACTION_OPEN)
+	{
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), utf8_filename);
+	}
 	g_free(locale_filename);
 
 	// run it

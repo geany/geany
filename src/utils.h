@@ -161,6 +161,6 @@ void utils_free_pointers(gpointer first, ...);
  * if first is NULL, NULL is returned. */
 gchar **utils_strv_new(gchar *first, ...);
 
-gint utils_mkdir(const gchar *path);
+gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
 
 #endif

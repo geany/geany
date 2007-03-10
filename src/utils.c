@@ -43,6 +43,8 @@
 # include <sys/types.h>
 #endif
 
+#include <glib/gstdio.h>
+
 #include "support.h"
 #include "document.h"
 #include "sciwrappers.h"
@@ -782,7 +784,7 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 	if (! g_file_test(dir, G_FILE_TEST_EXISTS))
 	{
 		geany_debug("creating config directory %s", dir);
-		error_nr = utils_mkdir(dir);
+		error_nr = utils_mkdir(dir, FALSE);
 	}
 
 	if (error_nr == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
@@ -804,7 +806,7 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 
 		if (! g_file_test(filedefs_dir, G_FILE_TEST_EXISTS))
 		{
-			error_nr = utils_mkdir(filedefs_dir);
+			error_nr = utils_mkdir(filedefs_dir, FALSE);
 		}
 		if (error_nr == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
 		{
@@ -826,7 +828,7 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 
 		if (! g_file_test(templates_dir, G_FILE_TEST_EXISTS))
 		{
-			error_nr = utils_mkdir(templates_dir);
+			error_nr = utils_mkdir(templates_dir, FALSE);
 		}
 		if (error_nr == 0 && ! g_file_test(templates_readme, G_FILE_TEST_EXISTS))
 		{
@@ -1512,15 +1514,94 @@ gchar **utils_strv_new(gchar *first, ...)
 }
 
 
-gint utils_mkdir(const gchar *path)
+#if ! GLIB_CHECK_VERSION(2, 8, 0)
+// Taken from GLib SVN, 2007-03-10
+/**
+ * g_mkdir_with_parents:
+ * @pathname: a pathname in the GLib file name encoding
+ * @mode: permissions to use for newly created directories
+ *
+ * Create a directory if it doesn't already exist. Create intermediate
+ * parent directories as needed, too.
+ *
+ * Returns: 0 if the directory already exists, or was successfully
+ * created. Returns -1 if an error occurred, with errno set.
+ *
+ * Since: 2.8
+ */
+int
+g_mkdir_with_parents (const gchar *pathname,
+		      int          mode)
 {
+  gchar *fn, *p;
+
+  if (pathname == NULL || *pathname == '\0')
+    {
+      errno = EINVAL;
+      return -1;
+    }
+
+  fn = g_strdup (pathname);
+
+  if (g_path_is_absolute (fn))
+    p = (gchar *) g_path_skip_root (fn);
+  else
+    p = fn;
+
+  do
+    {
+      while (*p && !G_IS_DIR_SEPARATOR (*p))
+	p++;
+
+      if (!*p)
+	p = NULL;
+      else
+	*p = '\0';
+
+      if (!g_file_test (fn, G_FILE_TEST_EXISTS))
+	{
+	  if (g_mkdir (fn, mode) == -1)
+	    {
+	      int errno_save = errno;
+	      g_free (fn);
+	      errno = errno_save;
+	      return -1;
+	    }
+	}
+      else if (!g_file_test (fn, G_FILE_TEST_IS_DIR))
+	{
+	  g_free (fn);
+	  errno = ENOTDIR;
+	  return -1;
+	}
+      if (p)
+	{
+	  *p++ = G_DIR_SEPARATOR;
+	  while (*p && G_IS_DIR_SEPARATOR (*p))
+	    p++;
+	}
+    }
+  while (p);
+
+  g_free (fn);
+
+  return 0;
+}
+#endif
+
+
+gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
+{
+	gint mode = 0700;
+	gint result;
+
 	if (path == NULL || strlen(path) == 0)
 		return EFAULT;
 
-#ifdef G_OS_WIN32
-	if (mkdir(path) != 0) return errno;
-#else
-	if (mkdir(path, 0700) != 0) return errno;
-#endif
+	result = (create_parent_dirs) ? g_mkdir_with_parents(path, mode) : g_mkdir(path, mode);
+	if (result != 0)
+		return errno;
 	return 0;
 }
+
+
