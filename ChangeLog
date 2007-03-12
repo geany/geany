@@ -8,6 +8,11 @@
 
  * src/build.c:
    Switch to Compiler window when using Next Error command.
+ * src/utils.c, src/document.c:
+   Update the status bar after setting the document file type, if it
+   has changed.
+   Update the status bar after colourising open files, so the current
+   tag is accurate.
 
 
 2007-03-10  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -1586,13 +1586,15 @@ static gboolean update_type_keywords(ScintillaObject *sci)
 void document_set_filetype(gint idx, filetype *type)
 {
 	gboolean colourise = FALSE;
+	gboolean ft_changed;
 
 	if (type == NULL || ! DOC_IDX_VALID(idx))
 		return;
 
 	geany_debug("%s : %s (%s)",	doc_list[idx].file_name, type->name, doc_list[idx].encoding);
 
-	if (doc_list[idx].file_type != type)	// filetype has changed
+	ft_changed = (doc_list[idx].file_type != type);
+	if (ft_changed)	// filetype has changed
 	{
 		doc_list[idx].file_type = type;
 
@@ -1614,6 +1616,11 @@ void document_set_filetype(gint idx, filetype *type)
 		 * If they haven't, we may need to colourise the document. */
 		if (! update_type_keywords(doc_list[idx].sci) && colourise)
 			sci_colourise(doc_list[idx].sci, 0, -1);
+	}
+	if (ft_changed)
+	{
+		utils_get_current_function(-1, NULL);
+		ui_update_statusbar(idx, -1);
 	}
 }
 
@@ -2179,6 +2186,11 @@ void document_colourise_new()
 	delay_colourise = FALSE;
 	g_array_free(doc_indexes, TRUE);
 	doc_indexes = NULL;
+
+	/* now that the current document is colourised, fold points are now accurate,
+	 * so force an update of the current function/tag. */
+	utils_get_current_function(-1, NULL);
+	ui_update_statusbar(-1, -1);
 }
 
 

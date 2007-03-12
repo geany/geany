@@ -491,13 +491,28 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 }
 
 
+/* Sets *tagname to point at the current function or tag name.
+ * If idx is -1, reset the cached current tag data to ensure it will be reparsed on the next
+ * call to this function.
+ * Returns: line number of the current tag, or -1 if unknown. */
 gint utils_get_current_function(gint idx, const gchar **tagname)
 {
 	static gint tag_line = -1;
 	static gchar *cur_tag = NULL;
 	gint line;
 	gint fold_level;
-	TMWorkObject * tm_file = doc_list[idx].tm_file;
+	TMWorkObject *tm_file;
+
+	if (! DOC_IDX_VALID(idx))	// reset current function
+	{
+		current_function_changed(-1, -1, -1);
+		g_free(cur_tag);
+		cur_tag = g_strdup(_("unknown"));
+		if (tagname != NULL)
+			*tagname = cur_tag;
+		tag_line = -1;
+		return tag_line;
+	}
 
 	line = sci_get_current_line(doc_list[idx].sci, -1);
 	fold_level = sci_get_fold_level(doc_list[idx].sci, line);
@@ -518,6 +533,7 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 		tag_line = -1;
 		return tag_line;
 	}
+	tm_file = doc_list[idx].tm_file;
 
 	// if the document has no changes, get the previous function name from TM
 	if(! doc_list[idx].changed && tm_file != NULL && tm_file->tags_array != NULL)
