@@ -1088,8 +1088,11 @@
 					stopped. This can happen when the process creates more than one child process.
 					Therefore stopping any make actions is not possible because make creates child
 					processes and these child processes creates again child process. There might be
-					some other programs which cannot be stopped correctly, e.g. "Terminal" (the
-					terminal program of Xfce). Xterm is known to work properly.
+					some other programs which cannot be stopped correctly. Xterm is known to work
+					properly. If you are using "Terminal" (the terminal program of Xfce), you
+					should add the command line option "--disable-server" otherwise the started
+					process	cannot be stopped. Just add this option in the preferences dialog on
+					the Tools tab in the terminal field.
 				</para>
 			</section>
 			<section>
