@@ -435,7 +435,7 @@ static gboolean close_open_project()
 	if (app->project != NULL)
 	{
 		gchar *msg =
-			_("The '%s' project is already open."
+			_("The '%s' project is already open. "
 				"Do you want to close it before proceeding?");
 
 		if (dialogs_show_question(msg, app->project->name))
