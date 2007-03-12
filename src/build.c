@@ -1590,8 +1590,12 @@ void
 on_build_next_error                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	if (! ui_tree_view_find_next(GTK_TREE_VIEW(msgwindow.tree_compiler),
+	if (ui_tree_view_find_next(GTK_TREE_VIEW(msgwindow.tree_compiler),
 		msgwin_goto_compiler_file_line))
+	{
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
+	}
+	else
 		ui_set_statusbar(_("No more build errors."));
 }
 
