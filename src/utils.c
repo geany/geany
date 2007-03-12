@@ -385,7 +385,7 @@ static gboolean current_function_changed(gint cur_idx, gint cur_line, gint fold_
 	gboolean ret;
 
 	// check if the cached line and file index have changed since last time:
-	if (cur_idx != old_idx)
+	if (cur_idx < 0 || cur_idx != old_idx)
 		ret = TRUE;
 	else
 	if (cur_line == old_line)
