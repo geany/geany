@@ -1,6 +1,7 @@
 2007-03-13  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/highlighting.c: Fixed wrong margin colours for filetype All/None.
+ * src/highlighting.c: Init the default styles before first usage.
 
 
 2007-03-13  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -1977,6 +1977,9 @@ void styleset_none(ScintillaObject *sci)
 {
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
+	if (style_sets[GEANY_FILETYPES_ALL].styling == NULL)
+		styleset_common_init();
+
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ALL, GCS_DEFAULT);
 
 	styleset_common(sci, 5);
