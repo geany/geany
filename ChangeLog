@@ -4,6 +4,9 @@
    Use tab stops for status bar line, column and selection data to stop
    the other fields being moved so often when browsing code or typing.
    Rearrange status bar statistics to be clearer/more concise.
+ * src/document.c:
+   Count total replacements made when replacing in a rectangular
+   selection.
 
 
 2007-03-12  Enrico Tröger  <enrico.troeger@uvena.de>

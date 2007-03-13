@@ -74,11 +74,6 @@ GArray *doc_array;
 static gboolean delay_colourise = FALSE;
 
 
-/* Returns -1 if no text found or the new range endpoint after replacing. */
-static gint
-document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
-	gint flags, gint start, gint end, gboolean escaped_chars, gboolean scroll_to_match);
-
 static void document_undo_clear(gint idx);
 static void document_redo_add(gint idx, guint type, gpointer data);
 
@@ -1256,33 +1251,39 @@ static void show_replace_summary(gint idx, gint count, const gchar *find_text,
 	{	// escape special characters for showing
 		escaped_find_text = g_strescape(find_text, NULL);
 		escaped_replace_text = g_strescape(replace_text, NULL);
-		msgwin_status_add(_("%s: replaced %d occurrences of \"%s\" with \"%s\"."),
+		msgwin_status_add(_("%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."),
 						filename, count, escaped_find_text, escaped_replace_text);
 		g_free(escaped_find_text);
 		g_free(escaped_replace_text);
 	}
 	else
 	{
-		msgwin_status_add(_("%s: replaced %d occurrences of \"%s\" with \"%s\"."),
+		msgwin_status_add(_("%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."),
 						filename, count, find_text, replace_text);
 	}
 	g_free(filename);
 }
 
 
-/* Returns -1 if no text found or the new range endpoint after replacing. */
-static gint
+/* Replace all text matches in a certain range within document idx.
+ * If not NULL, *new_range_end is set to the new range endpoint after replacing,
+ * or -1 if no text was found.
+ * scroll_to_match is whether to scroll the last replacement in view (which also
+ * clears the selection).
+ * Returns: the number of replacements made. */
+static guint
 document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
-	gint flags, gint start, gint end, gboolean escaped_chars, gboolean scroll_to_match)
+	gint flags, gint start, gint end, gboolean scroll_to_match, gint *new_range_end)
 {
 	gint search_pos;
 	gint count = 0;
 	gint find_len = 0, replace_len = 0;
-	gboolean match_found = FALSE;
 	struct TextToFind ttf;
 
-	g_return_val_if_fail(find_text != NULL && replace_text != NULL, FALSE);
-	if (idx == -1 || ! *find_text) return FALSE;
+	if (new_range_end != NULL)
+		*new_range_end = -1;
+	g_return_val_if_fail(find_text != NULL && replace_text != NULL, 0);
+	if (idx == -1 || ! *find_text) return 0;
 
 	sci_start_undo_action(doc_list[idx].sci);
 	ttf.chrg.cpMin = start;
@@ -1300,7 +1301,6 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 			break; //found text is partly out of range
 		else
 		{
-			match_found = TRUE;
 			sci_target_start(doc_list[idx].sci, search_pos);
 			sci_target_end(doc_list[idx].sci, search_pos + find_len);
 			replace_len = sci_target_replace(doc_list[idx].sci, replace_text,
@@ -1313,17 +1313,15 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	}
 	sci_end_undo_action(doc_list[idx].sci);
 
-	show_replace_summary(idx, count, find_text, replace_text, escaped_chars);
-
-	if (match_found)
+	if (count > 0)
 	{	// scroll last match in view, will destroy the existing selection
 		if (scroll_to_match)
 			sci_goto_pos(doc_list[idx].sci, ttf.chrg.cpMin, TRUE);
 
-		return end;
+		if (new_range_end != NULL)
+			*new_range_end = end;
 	}
-	else
-		return -1; // no text was found
+	return count;
 }
 
 
@@ -1331,7 +1329,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 						  gboolean escaped_chars)
 {
 	gint selection_end, selection_start, selection_mode, selected_lines, last_line;
-	gint max_column = 0;
+	gint max_column = 0, count = 0;
 	gboolean replaced = FALSE;
 
 	g_return_if_fail(find_text != NULL && replace_text != NULL);
@@ -1351,7 +1349,7 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	// handle rectangle, multi line selections (it doesn't matter on a single line)
 	if (selection_mode == SC_SEL_RECTANGLE && selected_lines > 1)
 	{
-		gint first_line, line, line_start, line_end, tmp;
+		gint first_line, line;
 
 		sci_start_undo_action(doc_list[idx].sci);
 
@@ -1361,30 +1359,32 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 		last_line = MAX(first_line, last_line);
 		for (line = first_line; line < (first_line + selected_lines); line++)
 		{
-			line_start = sci_get_pos_at_line_sel_start(doc_list[idx].sci, line);
-			line_end = sci_get_pos_at_line_sel_end(doc_list[idx].sci, line);
+			gint line_start = sci_get_pos_at_line_sel_start(doc_list[idx].sci, line);
+			gint line_end = sci_get_pos_at_line_sel_end(doc_list[idx].sci, line);
 
 			// skip line if there is no selection
 			if (line_start != INVALID_POSITION)
 			{
 				// don't let document_replace_range() scroll to match to keep our selection
-				tmp = document_replace_range(idx, find_text, replace_text, flags,
-												line_start, line_end, escaped_chars, FALSE);
-				if (tmp != -1)
+				gint new_sel_end;
+
+				count += document_replace_range(idx, find_text, replace_text, flags,
+								line_start, line_end, FALSE, &new_sel_end);
+				if (new_sel_end != -1)
 				{
 					replaced = TRUE;
 					// this gets the greatest column within the selection after replacing
 					max_column = MAX(max_column,
-						tmp - sci_get_position_from_line(doc_list[idx].sci, line));
+						new_sel_end - sci_get_position_from_line(doc_list[idx].sci, line));
 				}
 			}
 		}
 		sci_end_undo_action(doc_list[idx].sci);
 	}
-	else
+	else	// handle normal line selection
 	{
-		selection_end = document_replace_range(idx, find_text, replace_text, flags,
-											selection_start, selection_end, escaped_chars, TRUE);
+		count += document_replace_range(idx, find_text, replace_text, flags,
+						selection_start, selection_end, TRUE, &selection_end);
 		if (selection_end != -1)
 			replaced = TRUE;
 	}
@@ -1420,6 +1420,8 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 	}
 	else // no replacements
 		utils_beep();
+
+	show_replace_summary(idx, count, find_text, replace_text, escaped_chars);
 }
 
 
@@ -1427,18 +1429,20 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 gboolean document_replace_all(gint idx, const gchar *find_text, const gchar *replace_text,
 		gint flags, gboolean escaped_chars)
 {
-	gint len;
+	gint len, count;
 	g_return_val_if_fail(find_text != NULL && replace_text != NULL, FALSE);
 	if (idx == -1 || ! *find_text) return FALSE;
 
 	len = sci_get_length(doc_list[idx].sci);
-	if (document_replace_range(
-			idx, find_text, replace_text, flags, 0, len, escaped_chars, TRUE) == -1)
+	count = document_replace_range(
+			idx, find_text, replace_text, flags, 0, len, TRUE, NULL);
+
+	if (count == 0)
 	{
 		utils_beep();
-		return FALSE;
 	}
-	return TRUE;
+	show_replace_summary(idx, count, find_text, replace_text, escaped_chars);
+	return (count > 0);
 }
 
 
