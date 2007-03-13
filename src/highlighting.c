@@ -1975,15 +1975,13 @@ void styleset_docbook(ScintillaObject *sci)
 
 void styleset_none(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
-
-	SSM (sci, SCI_SETLEXER, SCLEX_NULL, 0);
-
-	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
+	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ALL, GCS_DEFAULT);
 
-	SSM(sci, SCI_STYLECLEARALL, 0, 0);
+	styleset_common(sci, 5);
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
 }
 
 

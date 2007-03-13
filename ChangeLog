@@ -1,3 +1,8 @@
+2007-03-13  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/highlighting.c: Fixed wrong margin colours for filetype All/None.
+
+
 2007-03-13  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/ui_utils.c:
@@ -16,6 +21,7 @@
 
  * doc/geany.docbook: Added description for disable-server command line
                       option for Xfce Terminal.
+ * src/project.c: Added missing whitespace (found by Frank).
 
 
 2007-03-12  Nick Treleaven  <nick.treleaven@btinternet.com>
