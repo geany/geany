@@ -1,3 +1,11 @@
+2007-03-13  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/ui_utils.c:
+   Use tab stops for status bar line, column and selection data to stop
+   the other fields being moved so often when browsing code or typing.
+   Rearrange status bar statistics to be clearer/more concise.
+
+
 2007-03-12  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook: Added description for disable-server command line

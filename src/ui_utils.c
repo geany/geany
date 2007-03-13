@@ -113,18 +113,22 @@ void ui_update_statusbar(gint idx, gint pos)
 		else
 			col = 0;
 
-		text = g_strdup_printf(_("%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s %s     filetype: %s"),
-			(doc_list[idx].changed) ? 42 : 32,
+		/* Status bar statistics: col = column, sel = selection, RO = read-only,
+		 * OVR = overwrite/overtype, INS = insert, MOD = modified */
+		text = g_strdup_printf(_("line: %d\t col: %d\t sel: %d\t %s      %s      "
+			"mode: %s      encoding: %s %s      filetype: %s      scope: %s"),
 			(line + 1), col,
 			sci_get_selected_text_length(doc_list[idx].sci) - 1,
-			sci_get_overtype(doc_list[idx].sci) ? _("OVR") : _("INS"),
+			(doc_list[idx].readonly) ? _("RO ") :
+				(sci_get_overtype(doc_list[idx].sci) ? _("OVR") : _("INS")),
+			(doc_list[idx].changed) ? _("MOD") : "   ",
 			document_get_eol_mode(idx),
-			(doc_list[idx].readonly) ? ", read only" : "",
-			cur_tag,
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
 			(encodings_is_unicode_charset(doc_list[idx].encoding)) ?
-				((doc_list[idx].has_bom) ? _("(with BOM)") : _("(without BOM)")) : "",
-			(doc_list[idx].file_type) ? doc_list[idx].file_type->title : _("unknown"));
+				((doc_list[idx].has_bom) ? _("(with BOM)") : "") : "",
+			(doc_list[idx].file_type) ? doc_list[idx].file_type->name :
+				filetypes[GEANY_FILETYPES_ALL]->name,
+			cur_tag);
 		set_statusbar(text, TRUE);	// can be overridden by status messages
 		g_free(text);
 	}
