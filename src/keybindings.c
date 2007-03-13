@@ -92,6 +92,7 @@ static void cb_func_switch_scribble(guint key_id);
 static void cb_func_switch_vte(guint key_id);
 static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
+static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_toggle_sidebar(guint key_id);
 
 // common function for editing keybindings, only valid when scintilla has focus.
@@ -210,6 +211,8 @@ void keybindings_init(void)
 		GDK_Page_Up, GDK_CONTROL_MASK, "switch_tableft", _("Switch to left document"));
 	keys[GEANY_KEYS_SWITCH_TABRIGHT] = fill(cb_func_switch_tabright,
 		GDK_Page_Down, GDK_CONTROL_MASK, "switch_tabright", _("Switch to right document"));
+	keys[GEANY_KEYS_SWITCH_TABLASTUSED] = fill(cb_func_switch_tablastused,
+		GDK_Tab, GDK_CONTROL_MASK, "switch_tablastused", _("Switch to last used document"));
 
 	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit,
 		GDK_g, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
@@ -758,6 +761,15 @@ static void cb_func_switch_tableft(G_GNUC_UNUSED guint key_id)
 static void cb_func_switch_tabright(G_GNUC_UNUSED guint key_id)
 {
 	utils_switch_document(RIGHT);
+}
+
+static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
+{
+	gint last_doc_idx = callbacks_data.last_doc_idx;
+
+	if (DOC_IDX_VALID(last_doc_idx))
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
+			document_get_notebook_page(last_doc_idx));
 }
 
 static void cb_func_toggle_sidebar(G_GNUC_UNUSED guint key_id)

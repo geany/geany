@@ -84,6 +84,8 @@ static gboolean insert_callback_from_menu = FALSE;
 // the selection-changed signal from tv.tree_openfiles
 //static gboolean switch_tv_notebook_page = FALSE;
 
+CallbacksData callbacks_data = {-1};
+
 
 // real exit function
 gint destroyapp(GtkWidget *widget, gpointer gdata)
@@ -705,6 +707,8 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
 {
 	gint idx;
 
+	callbacks_data.last_doc_idx = document_get_cur_idx();
+
 	if (closing_all) return;
 
 	// guint == -1 seems useless, but it isn't!
@@ -749,7 +753,7 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 		utils_check_disk_status(idx, FALSE);
 
 #ifdef HAVE_VTE
-	vte_cwd(doc_list[idx].file_name, FALSE);
+		vte_cwd(doc_list[idx].file_name, FALSE);
 #endif
 	}
 }

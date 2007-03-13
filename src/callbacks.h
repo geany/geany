@@ -21,6 +21,14 @@
  * $Id$
  */
 
+typedef struct
+{
+	gint last_doc_idx;
+} CallbacksData;
+
+extern CallbacksData callbacks_data;
+
+
 gint
 destroyapp                             (GtkWidget *widget, gpointer gdata);
 

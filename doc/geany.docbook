@@ -1407,6 +1407,10 @@
 								<entry>Switches to the next open document.</entry>
 							</row>
 							<row>
+								<entry>Switch to last used document</entry>
+								<entry>Switches to the previously selected open document.</entry>
+							</row>
+							<row>
 								<entry align="left" spanname="hspan">Editing operations</entry>
 							</row>
 							<row>

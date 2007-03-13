@@ -7,6 +7,9 @@
  * src/document.c:
    Count total replacements made when replacing in a rectangular
    selection.
+ * src/keybindings.c, src/keybindings.h, src/callbacks.c,
+   src/callbacks.h, doc/geany.docbook:
+   Add 'Switch to last used document' keybinding.
 
 
 2007-03-12  Enrico Tröger  <enrico.troeger@uvena.de>
