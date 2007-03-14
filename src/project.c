@@ -710,7 +710,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 			name, G_DIR_SEPARATOR_S, NULL);
 		file_name = g_strconcat(
 			GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, G_DIR_SEPARATOR_S,
-			name, G_DIR_SEPARATOR_S, name, "." GEANY_PROJECT_EXT, NULL);
+			name, "." GEANY_PROJECT_EXT, NULL);
 		g_free(name);
 	}
 	else

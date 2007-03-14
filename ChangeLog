@@ -6,6 +6,9 @@
  * src/treeviews.c, src/notebook.c:
    Don't recreate the open files items when DnD reordering tabs, now
    that the open files treeview is sorted alphabetically.
+ * src/project.c:
+   Make suggested New Project filename use the projects/ directory as
+   parent directory, instead of projects/name/.
 
 
 2007-03-13  Enrico Tröger  <enrico.troeger@uvena.de>
