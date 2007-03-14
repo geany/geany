@@ -182,7 +182,9 @@ static void
 notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
 	gpointer user_data)
 {
-	treeviews_openfiles_update_all();
+	/* Not necessary to update open files treeview if it's sorted.
+	 * Note: if enabled, it's best to move the item instead of recreating all items. */
+	//treeviews_openfiles_update_all();
 }
 
 

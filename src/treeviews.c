@@ -234,6 +234,7 @@ void treeviews_openfiles_update(gint idx)
 }
 
 
+#if 0
 void treeviews_openfiles_update_all()
 {
 	guint i;
@@ -248,6 +249,7 @@ void treeviews_openfiles_update_all()
 		treeviews_openfiles_add(idx);
 	}
 }
+#endif
 
 
 void treeviews_remove_document(gint idx)

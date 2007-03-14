@@ -3,6 +3,9 @@
  * src/callbacks.c:
    Delay updating interface items when switching notebook tabs until
    after the page has changed, so it appears to switch pages faster.
+ * src/treeviews.c, src/notebook.c:
+   Don't recreate the open files items when DnD reordering tabs, now
+   that the open files treeview is sorted alphabetically.
 
 
 2007-03-13  Enrico Tröger  <enrico.troeger@uvena.de>
