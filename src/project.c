@@ -87,6 +87,7 @@ void project_new()
 	GtkWidget *button;
 	GtkWidget *bbox;
 	GtkWidget *label;
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 	PropertyDialogElements *e;
 
 	if (! close_open_project()) return;
@@ -154,6 +155,9 @@ void project_new()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->base_path = gtk_entry_new();
+	gtk_tooltips_set_tip(tooltips, e->base_path,
+		_("Base directory of all files that make up the project. "
+		"This can be a new path, or an existing directory tree."), NULL);
 	button = gtk_button_new();
 	g_signal_connect((gpointer) button, "clicked",
 				G_CALLBACK(on_folder_open_button_clicked), e->base_path);
