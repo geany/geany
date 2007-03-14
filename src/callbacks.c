@@ -698,40 +698,17 @@ on_toolbutton15_clicked                (GtkToolButton   *toolbutton,
 }
 
 
-// changes window-title on switching tabs and lots of other things
 void
 on_notebook1_switch_page               (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
                                         guint            page_num,
                                         gpointer         user_data)
 {
-	gint idx;
-
 	callbacks_data.last_doc_idx = document_get_cur_idx();
-
-	if (closing_all) return;
-
-	// guint == -1 seems useless, but it isn't!
-	if (page_num == (guint) -1 && page != NULL)
-		idx = document_find_by_sci(SCINTILLA(page));
-	else
-		idx = document_get_n_idx(page_num);
-
-	if (idx >= 0 && app->opening_session_files == FALSE)
-	{
-		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
-
-		document_set_text_changed(idx);
-		ui_update_popup_reundo_items(idx);
-		ui_document_show_hide(idx); // update the document menu
-		build_menu_update(idx);
-		ui_update_statusbar(idx, -1);
-		ui_set_window_title(idx);
-		treeviews_update_tag_list(idx, FALSE);
-	}
 }
 
 
+// changes window-title on switching tabs and lots of other things
 void
 on_notebook1_switch_page_after         (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
@@ -750,6 +727,14 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 
 	if (idx >= 0 && app->opening_session_files == FALSE)
 	{
+		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
+
+		document_set_text_changed(idx);	// also sets window title and status bar
+		ui_update_popup_reundo_items(idx);
+		ui_document_show_hide(idx); // update the document menu
+		build_menu_update(idx);
+		treeviews_update_tag_list(idx, FALSE);
+
 		utils_check_disk_status(idx, FALSE);
 
 #ifdef HAVE_VTE

@@ -1,3 +1,10 @@
+2007-03-14  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/callbacks.c:
+   Delay updating interface items when switching notebook tabs until
+   after the page has changed, so it appears to switch pages faster.
+
+
 2007-03-13  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/highlighting.c: Fixed wrong margin colours for filetype All/None.
