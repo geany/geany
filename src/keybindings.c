@@ -907,15 +907,15 @@ static void cb_func_edit(guint key_id)
 			on_to_upper_case1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_EDIT_SENDTOCMD1:
-			if (g_strv_length(app->custom_commands) > 0)
+			if (app->custom_commands && g_strv_length(app->custom_commands) > 0)
 				tools_execute_custom_command(idx, app->custom_commands[0]);
 			break;
 		case GEANY_KEYS_EDIT_SENDTOCMD2:
-			if (g_strv_length(app->custom_commands) > 1)
+			if (app->custom_commands && g_strv_length(app->custom_commands) > 1)
 				tools_execute_custom_command(idx, app->custom_commands[1]);
 			break;
 		case GEANY_KEYS_EDIT_SENDTOCMD3:
-			if (g_strv_length(app->custom_commands) > 2)
+			if (app->custom_commands && g_strv_length(app->custom_commands) > 2)
 				tools_execute_custom_command(idx, app->custom_commands[2]);
 			break;
 	}
