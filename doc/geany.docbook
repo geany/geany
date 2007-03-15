@@ -1809,9 +1809,12 @@
 								<row>
 									<entry>current_line</entry>
 									<entry>The style for colouring the background of the current
-										   line. Only the second argument is interpreted.
+										   line. Only the second and third arguments are interpreted.
+										   The second argument is the background colour.
+										   Use the third argument to enable or disable background
+										   highlighting for the current line (has to be true/false).
 									</entry>
-									<entry>current_line=0x0;0xe5e5e5;false;false</entry>
+									<entry>current_line=0x0;0xe5e5e5;true;false</entry>
 								</row>
 								<row>
 									<entry>indent_guide</entry>
