@@ -239,6 +239,12 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit,
 		GDK_less, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_gotomatchingbrace",
 		_("Goto matching brace"));
+	keys[GEANY_KEYS_EDIT_GOTONEXTMARKER] = fill(cb_func_edit,
+		GDK_period, GDK_CONTROL_MASK, "edit_gotonextmarker",
+		_("Goto next marker"));
+	keys[GEANY_KEYS_EDIT_GOTOPREVIOUSMARKER] = fill(cb_func_edit,
+		GDK_comma, GDK_CONTROL_MASK, "edit_gotopreviousmarker",
+		_("Goto previous marker"));
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
 #ifdef G_OS_WIN32
@@ -819,10 +825,13 @@ static void goto_matching_brace(gint idx)
 static void cb_func_edit(guint key_id)
 {
 	gint idx = document_get_cur_idx();
+	gint cur_line;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
 
 	// edit keybindings only valid when scintilla widget has focus
 	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
+
+	cur_line = sci_get_current_line(doc_list[idx].sci, -1);
 
 	switch (key_id)
 	{
@@ -859,6 +868,28 @@ static void cb_func_edit(guint key_id)
 		case GEANY_KEYS_EDIT_GOTOMATCHINGBRACE:
 			goto_matching_brace(idx);
 			break;
+		case GEANY_KEYS_EDIT_GOTONEXTMARKER:
+		{
+			gint mline = sci_marker_next(doc_list[idx].sci, cur_line + 1, 1 << 1, TRUE);
+
+			if (mline != -1)
+			{
+				sci_goto_line(doc_list[idx].sci, mline, TRUE);
+				doc_list[idx].scroll_percent = 0.5F;
+			}
+			break;
+		}
+		case GEANY_KEYS_EDIT_GOTOPREVIOUSMARKER:
+		{
+			gint mline = sci_marker_previous(doc_list[idx].sci, cur_line - 1, 1 << 1, TRUE);
+
+			if (mline != -1)
+			{
+				sci_goto_line(doc_list[idx].sci, mline, TRUE);
+				doc_list[idx].scroll_percent = 0.5F;
+			}
+			break;
+		}
 		case GEANY_KEYS_EDIT_TOLOWERCASE:
 			on_to_lower_case1_activate(NULL, NULL);
 			break;

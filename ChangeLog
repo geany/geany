@@ -1,3 +1,12 @@
+2007-03-15  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c, src/keybindings.h, src/sciwrappers.c,
+   src/sciwrappers.h:
+   Add Goto Previous/Next Marker keybindings (Ctrl-, and Ctrl-.).
+   Make sci_marker_next() and sci_marker_previous() return marker line
+   number.
+
+
 2007-03-14  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c:
