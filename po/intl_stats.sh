@@ -73,6 +73,7 @@ fi
 # do the work
 for lang in $linguas
 do
+	echo -n $lang": "
 	msgfmt --check --statistics $check_accelerators $lang.po;
 done
 
