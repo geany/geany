@@ -5,6 +5,9 @@
    Add Goto Previous/Next Marker keybindings (Ctrl-, and Ctrl-.).
    Make sci_marker_next() and sci_marker_previous() return marker line
    number.
+ * src/keybindings.c, src/keybindings.h, src/sciwrappers.c,
+   src/sci_cb.c:
+   Add Toggle Marker keybinding (Ctrl-M).
 
 
 2007-03-14  Nick Treleaven  <nick.treleaven@btinternet.com>

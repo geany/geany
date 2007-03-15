@@ -239,6 +239,9 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit,
 		GDK_less, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_gotomatchingbrace",
 		_("Goto matching brace"));
+	keys[GEANY_KEYS_EDIT_TOGGLEMARKER] = fill(cb_func_edit,
+		GDK_m, GDK_CONTROL_MASK, "edit_togglemarker",
+		_("Toggle marker"));
 	keys[GEANY_KEYS_EDIT_GOTONEXTMARKER] = fill(cb_func_edit,
 		GDK_period, GDK_CONTROL_MASK, "edit_gotonextmarker",
 		_("Goto next marker"));
@@ -868,6 +871,13 @@ static void cb_func_edit(guint key_id)
 		case GEANY_KEYS_EDIT_GOTOMATCHINGBRACE:
 			goto_matching_brace(idx);
 			break;
+		case GEANY_KEYS_EDIT_TOGGLEMARKER:
+		{
+			gboolean set = sci_is_marker_set_at_line(doc_list[idx].sci, cur_line, 1);
+
+			sci_set_marker_at_line(doc_list[idx].sci, cur_line, ! set, 1);
+			break;
+		}
 		case GEANY_KEYS_EDIT_GOTONEXTMARKER:
 		{
 			gint mline = sci_marker_next(doc_list[idx].sci, cur_line + 1, 1 << 1, TRUE);

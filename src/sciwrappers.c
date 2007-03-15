@@ -326,8 +326,8 @@ gboolean sci_is_marker_set_at_line(ScintillaObject* sci, gint line, gint marker)
 {
 	gint state;
 
-	state = SSM( sci, SCI_MARKERGET, line, marker );
-	return(!(state & (1 << marker)));
+	state = SSM( sci, SCI_MARKERGET, line, 0 );
+	return (state & (1 << marker));
 }
 
 

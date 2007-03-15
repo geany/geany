@@ -135,8 +135,10 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			if (nt->margin == 1)
 			{
 				gint line = sci_get_line_from_position(sci, nt->position);
+				gboolean set = sci_is_marker_set_at_line(sci, line, 1);
+
 				//sci_marker_delete_all(doc_list[idx].sci, 1);
-				sci_set_marker_at_line(sci, line, sci_is_marker_set_at_line(sci, line, 1), 1);
+				sci_set_marker_at_line(sci, line, ! set, 1);	// toggle the marker
 			}
 			// left click on the folding margin to toggle folding state of current line
 			else if (nt->margin == 2 && app->pref_editor_folding)
