@@ -1477,6 +1477,19 @@
 									   first brace.</entry>
 							</row>
 							<row>
+								<entry>Toggle marker</entry>
+								<entry>Set a marker on the current line, or clear the marker if there
+									already is one.</entry>
+							</row>
+							<row>
+								<entry>Goto next marker</entry>
+								<entry>Goto the next marker in the current document.</entry>
+							</row>
+							<row>
+								<entry>Goto previous marker</entry>
+								<entry>Goto the previous marker in the current document.</entry>
+							</row>
+							<row>
 								<entry>Complete word</entry>
 								<entry>Shows auto completion list.</entry>
 							</row>
