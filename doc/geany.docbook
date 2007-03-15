@@ -369,48 +369,6 @@
 					appropriate command line option - see <xref linkend="clo"/>.
 				</para>
 			</section>
-			<section id="general_dnd">
-				<title>Drag and drop of text</title>
-				<para>
-					If you drag selected text in the editor widget of
-					<application>Geany</application> the text is moved to the position where the
-					mouse pointer is when releasing the mouse button. Holding Control when releasing
-					the mouse button will copy the text instead. This behaviour was
-					changed in <application>Geany</application> 0.11 - before the selected text
-					was copied to the new position.
-				</para>
-			</section>
-			<section id="general_indentation">
-				<title>Auto indentation</title>
-				<para>
-					<application>Geany</application> knows three types of auto indentation:
-					None, Basic and Advanced.
-					<variablelist><title>Auto indentation types</title>
-					<varlistentry><term>None</term>
-					<listitem>
-					<para>
-						Disables auto indentation completely.
-					</para>
-					</listitem>
-					</varlistentry>
-					<varlistentry><term>Basic</term>
-					<listitem>
-					<para>
-						Adds the same amount of whitespace on a new line as on the last line.
-					</para>
-					</listitem>
-					</varlistentry>
-					<varlistentry><term>Advanced</term>
-					<listitem>
-					<para>
-						Does the same as Basic but also indents curly brackets and adds a tabulator
-						character (or spaces) on a new line after an opening '{' brace.
-					</para>
-					</listitem>
-					</varlistentry>
-					</variablelist>
-				</para>
-			</section>
 			<section id="general_vte">
 				<title>Virtual terminal emulator widget (VTE)</title>
 				<para>
@@ -451,28 +409,6 @@
 						  <filename>libvte.so</filename>.
 					</para>
 				</note>
-			</section>
-			<section id="general_cc">
-				<title>Send text through definable commands</title>
-				<para>
-					You can define several custom commands in <application>Geany</application> and
-					send the current selection to one of these commands. The output of the command
-					will be used to replace the current selection. So, it is possible to use text
-					formatting tools with Geany in a general way.
-					The selected text will be sent to the standard input of the executed command,
-					so the command should be able to read from it and it should print all results
-					to its standard output which will be read by <application>Geany</application>.
-					To help finding errors in executing the command, the output of the program's
-					standard error will be printed on <application>Geany</application>'s standard
-					output.
-				</para>
-				<para>
-					To add a custom command, just go to the Set Custom Commands dialog in the
-					Format sub menu of the Edit and Popup menu. Then click on Add to get a new
-					text entry and type the command. You can also specify some command line options.
-					To delete a command,  just clear the text entry and press Ok. It will be deleted
-					automatically.
-				</para>
 			</section>
 		</section>
 		<section id="charset">
@@ -564,6 +500,92 @@
 							then it is not important for you and you can safely ignore it.
 						</para>
 					</note>
+				</para>
+			</section>
+		</section>
+		<section id="editing">
+			<title>Editing</title>
+			<section id="editing_text_dnd">
+				<title>Drag and drop of text</title>
+				<para>
+					If you drag selected text in the editor widget of
+					<application>Geany</application> the text is moved to the position where the
+					mouse pointer is when releasing the mouse button. Holding Control when releasing
+					the mouse button will copy the text instead. This behaviour was
+					changed in <application>Geany</application> 0.11 - before the selected text
+					was copied to the new position.
+				</para>
+			</section>
+			<section id="editing_indentation">
+				<title>Auto indentation</title>
+				<para>
+					<application>Geany</application> knows three types of auto indentation:
+					None, Basic and Advanced.
+					<variablelist><title>Auto indentation types</title>
+					<varlistentry><term>None</term>
+					<listitem>
+					<para>
+						Disables auto indentation completely.
+					</para>
+					</listitem>
+					</varlistentry>
+					<varlistentry><term>Basic</term>
+					<listitem>
+					<para>
+						Adds the same amount of whitespace on a new line as on the last line.
+					</para>
+					</listitem>
+					</varlistentry>
+					<varlistentry><term>Advanced</term>
+					<listitem>
+					<para>
+						Does the same as Basic but also indents curly brackets and adds a tabulator
+						character (or spaces) on a new line after an opening '{' brace.
+					</para>
+					</listitem>
+					</varlistentry>
+					</variablelist>
+				</para>
+			</section>
+			<section id="editing_bookmarks">
+				<title>Bookmarks</title>
+				<para>
+				Geany provides a handy bookmarking feature that lets you mark one or more lines in a document, and
+				return the cursor to them using a key combination.
+				</para>
+				<para>
+				To place a mark on a line, either left-mouse-click in the left margin of the editor window, or else
+				use Ctrl-m. Either way, this will produce a small green plus symbol in the margin. You can have as
+				many marks in a document as you like. Click again (or use Ctrl-m again) to remove the bookmark.
+				To remove all the marks in a given document, use "Remove Markers" in the Document menu.
+				</para>
+				<para>
+				To navigate down your document, jumping from one mark to the next, use Ctrl-. (control period).
+				To go in the opposite direction on the page, use Ctrl-, (control comma). Using the bookmarking
+				feature together with the commands to switch from one editor tab to another (Ctrl-PgUp/PgDn and
+				Ctrl-Tab) provides a particularly fast way to navigate around multiple files.
+				</para>
+			</section>
+			<section id="editing_definable_commands">
+				<title>Send text through definable commands</title>
+				<para>
+					You can define several custom commands in <application>Geany</application> and
+					send the current selection to one of these commands. The output of the command
+					will be used to replace the current selection. So, it is possible to use text
+					formatting tools with Geany in a general way.
+					The selected text will be sent to the standard input of the executed command,
+					so the command should be able to read from it and it should print all results
+					to its standard output which will be read by <application>Geany</application>.
+					To help finding errors in executing the command, the output of the program's
+					standard error will be printed on <application>Geany</application>'s standard
+					output.
+				</para>
+				<para>
+					To add a custom command, just go to the Set Custom Commands dialog in the
+					Format sub menu of the Edit and Popup menu. Then click on Add to get a new
+					text entry and type the command. You can also specify some command line options.
+					To delete a command,  just clear the text entry and press Ok. It will be deleted
+					automatically.
 				</para>
 			</section>
 		</section>

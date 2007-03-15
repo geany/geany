@@ -8,6 +8,9 @@
  * src/keybindings.c, src/keybindings.h, src/sciwrappers.c,
    src/sci_cb.c:
    Add Toggle Marker keybinding (Ctrl-M).
+ * THANKS, doc/geany.docbook:
+   Add bookmarks section written by John Gabriele (thanks).
+   Group some subsections into an 'Editing' section.
 
 
 2007-03-14  Nick Treleaven  <nick.treleaven@btinternet.com>
