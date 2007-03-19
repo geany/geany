@@ -1,7 +1,13 @@
+2007-03-20  Frank Lanitz  <frank@frank.uvena.de>
+
+ * it.po: Update of Italian translation (Thanks to M. Baldinelli)
+
+
 2007-03-15  Frank Lanitz  <frank@frank.uvena.de>
 
  * de.po: Small update of German translation and change of language-
    team-entry to geany-i18n@uvena.de
+ * intl_stats.sh: Show language code for stats
 
 
 2007-02-22  Frank Lanitz  <frank@frank.uvena.de>

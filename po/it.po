@@ -3,15 +3,16 @@
 # Copyright (C) 2006 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #  <dario.santomarco@gmail.com>, 2006.
+#  <M.Baldinelli@agora.it>, 2006, 2007
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-03-15 21:47+0100\n"
-"PO-Revision-Date: 2007-03-18 21:52+0100\n"
+"PO-Revision-Date: 2007-03-20 00:37+0100\n"
 "Last-Translator: Max <M.Baldinelli@agora.it>\n"
-"Language-Team:  <dario.santomarco@gmail.com>\n"
+"Language-Team:  <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -85,9 +86,9 @@ msgstr ""
 "terminale nelle preferenze)"
 
 #: src/build.c:200 src/build.c:584 src/build.c:635
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
-msgstr "Esecuzione di %s fallita (impossibile creare script di avvio)"
+msgstr "Esecuzione di \"%s\" fallita (impossibile creare script di avvio)"
 
 #: src/build.c:228 src/build.c:465 src/build.c:733 src/search.c:1150
 #, c-format
@@ -220,7 +221,6 @@ msgid "View DVI File"
 msgstr "Visualizza il file DVI"
 
 #: src/build.c:1161 src/build.c:1174
-#, fuzzy
 msgid "Compile and view the current file"
 msgstr "Compila e visualizza il file corrente"
 
@@ -658,9 +658,9 @@ msgid "File %s closed."
 msgstr "File %s chiuso."
 
 #: src/document.c:460
-#, fuzzy, c-format
+#, c-format
 msgid "New file \"%s\" opened."
-msgstr "Nuovo file aperto."
+msgstr "Nuovo file \"%s\" aperto."
 
 #: src/document.c:613 src/document.c:919
 #, c-format
@@ -751,7 +751,7 @@ msgid "No matches found."
 msgstr "Nessuna corrispondenza trovata."
 
 #: src/document.c:1254 src/document.c:1261
-#, fuzzy, c-format
+#, c-format
 msgid "%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."
 msgstr "%s: sostituite %d occorrenze di \"%s\" con \"%s\"."
 
@@ -1063,7 +1063,7 @@ msgstr "Nessuno"
 
 #: src/filetypes.c:934 src/win32.c:78
 msgid "All Source"
-msgstr ""
+msgstr "Tutti i file sorgente"
 
 #: src/geany.h:50
 msgid "untitled"
@@ -1175,9 +1175,8 @@ msgid "_Decrease Indent"
 msgstr "_Diminuisci Rientro"
 
 #: src/interface.c:522 src/interface.c:2052
-#, fuzzy
 msgid "_Send Selection to"
-msgstr "Nel testo se_lezionato"
+msgstr "_Invia selezione a"
 
 #: src/interface.c:537
 msgid "_Insert \"include <...>\""
@@ -1420,7 +1419,7 @@ msgstr "Espande tutti i blocchi di codice contratti."
 
 #: src/interface.c:857
 msgid "Remove _Markers"
-msgstr ""
+msgstr "Rimuovi i _marcatori"
 
 #: src/interface.c:861
 msgid "Remove Error _Indicators"
@@ -1748,9 +1747,8 @@ msgid "Show open files list"
 msgstr "Mostra la lista dei file aperti"
 
 #: src/interface.c:2678
-#, fuzzy
 msgid "Toggle the open files list on and off"
-msgstr "Mostra/nasconde la lista dei simboli"
+msgstr "Mostra/nasconde la lista dei file aperti"
 
 #: src/interface.c:2681
 msgid "<b>Sidebar</b>"
@@ -2084,9 +2082,8 @@ msgid "<b>Long line marker</b>"
 msgstr "<b>Marcatore di margine destro</b>"
 
 #: src/interface.c:3337
-#, fuzzy
 msgid "Auto indentation mode:"
-msgstr "Rientro automatico"
+msgstr "Modalità rientro automatico:"
 
 #: src/interface.c:3344
 msgid ""
@@ -2094,15 +2091,18 @@ msgid ""
 "completely. Basic indents new lines with the same indentation as the "
 "previous line. Advanced does the same and indents also curly brackets."
 msgstr ""
+"Seleziona la modalità di indentazione. Usare Nessuna per disabilitare "
+"l'indentazione automatica completamente. Semplice indenta le nuove linee con "
+"la stessa indentazione della linea precedente. Avanzata fa lo stesso e "
+"indenta anche le parentesi graffe."
 
 #: src/interface.c:3350
-#, fuzzy
 msgid "Basic"
-msgstr "Baltico"
+msgstr "Semplice"
 
 #: src/interface.c:3351
 msgid "Advanced"
-msgstr ""
+msgstr "Avanzata"
 
 #: src/interface.c:3353
 msgid "Line wrapping"
@@ -2188,7 +2188,6 @@ msgid "Symbol autocompletion"
 msgstr "Completamento automatico del simbolo"
 
 #: src/interface.c:3422
-#, fuzzy
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
@@ -2528,9 +2527,8 @@ msgid "Switch to right document"
 msgstr "Passa al documento di destra"
 
 #: src/keybindings.c:215
-#, fuzzy
 msgid "Switch to last used document"
-msgstr "Passa al documento di sinistra"
+msgstr "Passa all'ultimo documento usato"
 
 #: src/keybindings.c:218
 msgid "Duplicate line or selection"
@@ -2566,33 +2564,31 @@ msgstr "Diminuisci rientro"
 
 #: src/keybindings.c:234
 msgid "Send Selection to custom command 1"
-msgstr ""
+msgstr "Invia la selezione al comando personalizzato 1"
 
 #: src/keybindings.c:236
 msgid "Send Selection to custom command 2"
-msgstr ""
+msgstr "Invia la selezione al comando personalizzato 2"
 
 #: src/keybindings.c:238
 msgid "Send Selection to custom command 3"
-msgstr ""
+msgstr "Invia la selezione al comando personalizzato 3"
 
 #: src/keybindings.c:241
 msgid "Goto matching brace"
 msgstr "Vai alla parentesi corrispondente"
 
 #: src/keybindings.c:244
-#, fuzzy
 msgid "Toggle marker"
-msgstr "Marcatore di righe lunghe:"
+msgstr "Mostra/nascondi marcatore"
 
 #: src/keybindings.c:247
-#, fuzzy
 msgid "Goto next marker"
-msgstr "Marcatore di righe lunghe:"
+msgstr "Vai al marcatore successivo"
 
 #: src/keybindings.c:250
 msgid "Goto previous marker"
-msgstr ""
+msgstr "Vai al marcatore precedente"
 
 #: src/keybindings.c:252
 msgid "Complete word"
@@ -2759,9 +2755,8 @@ msgid "projects"
 msgstr "progetti"
 
 #: src/project.c:98
-#, fuzzy
 msgid "New Project"
-msgstr "_Progetto"
+msgstr "Nuovo progetto"
 
 #: src/project.c:105
 msgid "C_reate"
@@ -2784,9 +2779,10 @@ msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree."
 msgstr ""
+"Cartella base di tutti i file che fanno parte del progetto. Può essere un "
+"nuovo percorso, o una cartella esistente."
 
 #: src/project.c:201 src/project.c:209
-#, fuzzy
 msgid "Open Project"
 msgstr "Apri progetto"
 
@@ -2800,7 +2796,6 @@ msgid "Project \"%s\" closed."
 msgstr "Progetto \"%s\" chiuso."
 
 #: src/project.c:279
-#, fuzzy
 msgid "Project Properties"
 msgstr "Proprietà del progetto"
 
@@ -2809,25 +2804,26 @@ msgid "Description:"
 msgstr "Descrizione:"
 
 #: src/project.c:352
-#, fuzzy
 msgid "Run command:"
-msgstr "Comando di stampa:"
+msgstr "Esegui comando:"
 
 #: src/project.c:360
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
 msgstr ""
+"Comando da eseguire nella directory base del progetto. È possibile passare "
+"delle opzioni al comando. Lasciare vuoto per usare il comando predefinito."
 
 #: src/project.c:375
 msgid "File patterns:"
 msgstr "Modelli dei nomi di file:"
 
 #: src/project.c:442
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The '%s' project is already open. Do you want to close it before proceeding?"
-msgstr "È già aperto il progetto \"%s\". Chiuderlo prima di continuare?"
+msgstr "Il progetto '%s' è già aperto. Chiuderlo prima di continuare?"
 
 #: src/project.c:473
 msgid "The specified project name is too short."
@@ -2867,21 +2863,18 @@ msgstr "Progetto \"%s\" salvato."
 
 #. initialise the dialog
 #: src/project.c:618 src/project.c:629
-#, fuzzy
 msgid "Choose Project Filename"
 msgstr "Scegliere il nome del file di progetto"
 
 #. initialise the dialog
 #: src/project.c:646 src/project.c:657
-#, fuzzy
 msgid "Choose Project Base Path"
-msgstr "Scegliere il percorso base del progetti"
+msgstr "Scegliere il percorso base del progetto"
 
 #. initialise the dialog
 #: src/project.c:674 src/project.c:685
-#, fuzzy
 msgid "Choose Project Run Command"
-msgstr "Scegliere il nome del file di progetto"
+msgstr "Scegliere il comando di esecuzione del progetto"
 
 #: src/project.c:755
 #, c-format
@@ -2959,9 +2952,8 @@ msgid "_Mark"
 msgstr "_Marca"
 
 #: src/search.c:358
-#, fuzzy
 msgid "Mark all matches in the current document."
-msgstr "Rimuove tutti gli indicatori di errore nel documento corrente."
+msgstr "Marca tutte le corrispondenze nel documento corrente."
 
 #: src/search.c:363 src/search.c:503
 msgid "In Sessi_on"
@@ -3056,9 +3048,9 @@ msgstr ""
 "Preferenze."
 
 #: src/search.c:1164
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s (in directory: %s)"
-msgstr "%s (nella cartella: %s)"
+msgstr "%s %s %s %s (nella cartella: %s)"
 
 #: src/search.c:1225
 #, c-format
@@ -3070,9 +3062,9 @@ msgid "Search failed."
 msgstr "Ricerca fallita."
 
 #: src/search.c:1281 src/search.c:1282
-#, fuzzy, c-format
+#, c-format
 msgid "Search completed with %d matches."
-msgstr "Ricerca completata."
+msgstr "Ricerca completata con %d corrispondenze."
 
 #: src/search.c:1363 src/search.c:1364
 #, c-format
@@ -3080,9 +3072,9 @@ msgid "No matches found for '%s'."
 msgstr "Nessuna corrispondenza trovata per '%s'."
 
 #: src/search.c:1370 src/search.c:1371
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d matches for '%s'."
-msgstr "Nessuna corrispondenza trovata per '%s'."
+msgstr "Trovate %d corrispondenze per '%s'."
 
 #: src/support.c:90 src/support.c:114
 #, c-format
@@ -3288,22 +3280,23 @@ msgstr "Caratteri vari"
 #: src/tools.c:609
 #, c-format
 msgid "Passing data and executing custom command: %s"
-msgstr ""
+msgstr "Passaggio di dati ed esecuzione del comando personalizzato: %s"
 
 #: src/tools.c:661 src/tools.c:889
-#, fuzzy
 msgid "Set Custom Commands"
-msgstr "Imposta il formato di data personalizzato"
+msgstr "Imposta i comandi personalizzati"
 
 #: src/tools.c:667
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
 msgstr ""
+"È possibile inviare la selezione corrente a uno qualsiasi di questi comandi, "
+"e l'output del comando rimpiazzerà la selezione corrente."
 
 #: src/tools.c:858 src/tools.c:862
 msgid "No custom commands defined."
-msgstr ""
+msgstr "Non sono stati definiti comandi personalizzati."
 
 # Con tags si riferisce alle stringhe tipiche del codice che mettono in moto il meccanismo di ricerca dei simboli.
 # Teoricamente la stringa viene stampata solo se il file è vuoto o se il codice scritto non contiene riferimenti a funzioni, strutture, etc.
@@ -3327,17 +3320,17 @@ msgstr "Ricarica"
 #. Status bar statistics: col = column, sel = selection, RO = read-only,
 #. * OVR = overwrite/overtype, INS = insert, MOD = modified
 #: src/ui_utils.c:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "line: %d\t col: %d\t sel: %d\t %s      %s      mode: %s      encoding: %s %"
 "s      filetype: %s      scope: %s"
 msgstr ""
-"%c  riga: % 4d colonna: % 3d  selezione: % 4d   %s      modalità: %s%s      "
-"funzione corrente: %s      codifica: %s %s     tipo di file: %s"
+"riga: %d\t colonna: %d\t selezione: %d\t %s      %s      modalità: %s      "
+"codifica: %s %s     tipo di file: %s      funzione corrente: %s"
 
 #: src/ui_utils.c:122
 msgid "RO "
-msgstr ""
+msgstr "RO"
 
 # Ho visto su OpenOffice, li' usa SSC per SovraSCrivi e INS e' uguale
 #: src/ui_utils.c:123
@@ -3350,7 +3343,7 @@ msgstr "INS"
 
 #: src/ui_utils.c:124
 msgid "MOD"
-msgstr ""
+msgstr "MOD"
 
 #: src/ui_utils.c:204
 #, c-format
@@ -3530,9 +3523,8 @@ msgid "Executables"
 msgstr "Eseguibili"
 
 #: src/win32.c:108
-#, fuzzy
 msgid "Geany project files"
-msgstr "File di progetto"
+msgstr "File di progetto di Geany"
 
 #: src/win32.c:500
 msgid "Error"
