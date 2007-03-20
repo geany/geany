@@ -23,6 +23,10 @@ current_line=0x0;0xf0f0f0;true;false
 # colour of the caret(the blinking cursor), only first argument is interpreted
 caret=0x000000;0x0;false;false
 
+# width of the caret(the blinking cursor), only first argument is interpreted
+# width in pixels, use 0 to make it invisible, maximum width is 3
+caret_width=1;0;false;false
+
 # set foreground and background colour of indentation guides
 indent_guide=0xc0c0c0;0xffffff;false;false
 

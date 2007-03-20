@@ -1807,6 +1807,15 @@
 									<entry>caret=0x000000;0x0;false;false</entry>
 								</row>
 								<row>
+									<entry>caret_width</entry>
+									<entry>The width for the caret(the blinking cursor).
+										   Only the first argument is interpreted. The width is
+										   specified in pixels with a maximum of three pixel.
+										   Use the width 0 to make the caret invisible.
+									</entry>
+									<entry>caret=1;0;false;false</entry>
+								</row>
+								<row>
 									<entry>current_line</entry>
 									<entry>The style for colouring the background of the current
 										   line. Only the second and third arguments are interpreted.

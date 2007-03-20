@@ -1,3 +1,9 @@
+2007-03-20  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * data/filetypes.common, doc/geany.docbook, src/highlighting.c:
+   Added option to change the caret width.
+
+
 2007-03-15  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c, src/keybindings.h, src/sciwrappers.c,

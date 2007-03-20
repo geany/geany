@@ -410,6 +410,9 @@ static void styleset_common_init(void)
 		get_keyfile_int(config, config_home, "styling", "folding_horiz_line",
 			0, 0, &tmp_style);
 		common_style_set.folding_style.draw_line = tmp_style.foreground;
+		get_keyfile_int(config, config_home, "styling", "caret_width",
+			1, 0, &tmp_style);
+		common_style_set.styling[GCS_CARET].background = tmp_style.foreground;
 	}
 
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
@@ -435,8 +438,9 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
-	// caret colour
+	// caret colour and width
 	SSM(sci, SCI_SETCARETFORE, invert(common_style_set.styling[GCS_CARET].foreground), 0);
+	SSM(sci, SCI_SETCARETWIDTH, common_style_set.styling[GCS_CARET].background, 0);
 
 	// colourize the current line
 	SSM(sci, SCI_SETCARETLINEBACK, invert(common_style_set.styling[GCS_CURRENT_LINE].background), 0);
