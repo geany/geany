@@ -48,4 +48,6 @@ void symbols_finalize();
 
 gboolean symbols_recreate_tag_list(gint idx);
 
+int symbols_generate_global_tags(int argc, char **argv);
+
 #endif

@@ -87,13 +87,15 @@ static gchar *lib_vte = NULL;
 static gboolean ignore_socket = FALSE;
 #endif
 static gboolean generate_datafiles = FALSE;
+static gboolean generate_tags = FALSE;
 
 static GOptionEntry entries[] =
 {
 	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("use an alternate configuration directory"), NULL },
 	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, N_("runs in debug mode (means being verbose)"), NULL },
-	{ "generate-data-files", 'g', G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, "", NULL },
+	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("generate global tags file (see documentation)"), NULL },
+	{ "generate-data-files", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, "", NULL },
 #ifdef HAVE_SOCKET
 	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &ignore_socket, N_("don't open files in a running instance, force opening a new instance"), NULL },
 #endif
@@ -432,6 +434,12 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		printf("\n");
 
 		exit(0);
+	}
+	if (generate_tags)
+	{
+		gboolean ret = symbols_generate_global_tags(*argc, *argv);
+
+		exit(ret);
 	}
 
 	app->debug_mode = debug_mode;

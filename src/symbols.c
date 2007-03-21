@@ -32,6 +32,7 @@
 
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "symbols.h"
 #include "utils.h"
@@ -685,6 +686,44 @@ gboolean symbols_recreate_tag_list(gint idx)
 	g_object_unref(model);
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(doc_list[idx].tag_tree));
 	return TRUE;
+}
+
+
+/* Adapted from anjuta-2.0.2/global-tags/tm_global_tags.c, thanks.
+ * Needs full path and \" quoting characters around filenames.
+ * Example:
+ * geany -g tagsfile \"/home/nmt/svn/geany/src/d*.h\" */
+int symbols_generate_global_tags(int argc, char **argv)
+{
+	/* -E pre-process, -dD output user macros, -p prof info (?),
+	 * -undef remove builtin macros (seems to be needed with FC5 gcc 4.1.1 */
+	const char pre_process[] = "gcc -E -dD -p -undef";
+
+	if (argc > 2)
+	{
+		/* Create global taglist */
+		int status;
+		char *command;
+		command = g_strdup_printf("%s %s", pre_process,
+								  NVL(getenv("CFLAGS"), ""));
+		//printf(">%s<\n", command);
+		status = tm_workspace_create_global_tags(command,
+												 (const char **) (argv + 2),
+												 argc - 2, argv[1]);
+		g_free(command);
+		if (!status)
+			return 1;
+	}
+	else
+	{
+		fprintf(stderr, "Usage: %s -g <Tag File> <File list>\n\n", argv[0]);
+		fprintf(stderr, "Each file in <File list> must be enclosed in double quotes.\n");
+		fprintf(stderr, "Example:\n"
+			"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags"
+			" \\\"/usr/include/gtk-2.0/gtk/gtk.h\\\"\n", argv[0]);
+		return 1;
+	}
+	return 0;
 }
 
 
