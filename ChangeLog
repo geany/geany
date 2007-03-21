@@ -5,9 +5,12 @@
  * src/main.c, src/symbols.c, src/symbols.h, tagmanager/tm_workspace.c:
    Add option --generate-tags (-g) to generate a global tags file from
    a list of source files. Currently this is only likely to work
-   correctly for C-like source files. Run 'geany -g' for syntax info.
+   correctly for C source files. Run 'geany -g' for syntax info.
    Remove short option for hidden option --generate-data-files.
    Update tm_workspace_create_global_tags() from Anjuta 1.2.4a.
+ * tagmanager/tm_tag.c, tagmanager/include/tm_tag.h
+   Separate alternative PHP/LaTeX global tags parser into
+   tm_tag_init_from_file_alt() (for easier diff with Anjuta).
 
 
 2007-03-20  Enrico Tröger  <enrico.troeger@uvena.de>

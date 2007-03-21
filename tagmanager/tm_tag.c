@@ -202,7 +202,7 @@ TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry)
 	return tag;
 }
 
-gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, gint mode)
+gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 {
 	guchar buf[BUFSIZ];
 	guchar *start, *end;
@@ -211,99 +211,110 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, gint mo
 
 	if ((NULL == fgets((gchar*)buf, BUFSIZ, fp)) || ('\0' == *buf))
 		return FALSE;
-	if (mode == 0 || mode == 1)
+	for (start = end = buf, status = TRUE; (TRUE == status); start = end, ++ end)
 	{
-		for (start = end = buf, status = TRUE; (TRUE == status); start = end, ++ end)
+		while ((*end < TA_NAME) && (*end != '\0') && (*end != '\n'))
+			++ end;
+		if (('\0' == *end) || ('\n' == *end))
+			status = FALSE;
+		changed_char = *end;
+		*end = '\0';
+		if (NULL == tag->name)
 		{
-			while ((*end < TA_NAME) && (*end != '\0') && (*end != '\n'))
-				++ end;
-			if (('\0' == *end) || ('\n' == *end))
-				status = FALSE;
-			changed_char = *end;
-			*end = '\0';
-			if (NULL == tag->name)
-			{
-				if (!isprint(*start))
-					return FALSE;
-				else
-					tag->name = g_strdup((gchar*)start);
-			}
+			if (!isprint(*start))
+				return FALSE;
 			else
-			{
-				switch (*start)
-				{
-					case TA_LINE:
-						tag->atts.entry.line = atol((gchar*)start + 1);
-						break;
-					case TA_LOCAL:
-						tag->atts.entry.local = atoi((gchar*)start + 1);
-						break;
-					case TA_TYPE:
-						tag->type = (TMTagType) atoi((gchar*)start + 1);
-						break;
-					case TA_ARGLIST:
-						tag->atts.entry.arglist = g_strdup((gchar*)start + 1);
-						break;
-					case TA_SCOPE:
-						tag->atts.entry.scope = g_strdup((gchar*)start + 1);
-						break;
-					case TA_POINTER:
-						tag->atts.entry.pointerOrder = atoi((gchar*)start + 1);
-						break;
-					case TA_VARTYPE:
-						tag->atts.entry.var_type = g_strdup((gchar*)start + 1);
-						break;
-					case TA_INHERITS:
-						tag->atts.entry.inheritance = g_strdup((gchar*)start + 1);
-						break;
-					case TA_TIME:
-						if (tm_tag_file_t != tag->type)
-						{
-							g_warning("Got time attribute for non-file tag %s", tag->name);
-							return FALSE;
-						}
-						else
-							tag->atts.file.timestamp = atol((gchar*)start + 1);
-						break;
-					case TA_LANG:
-						if (tm_tag_file_t != tag->type)
-						{
-							g_warning("Got lang attribute for non-file tag %s", tag->name);
-							return FALSE;
-						}
-						else
-							tag->atts.file.lang = atoi((gchar*)start + 1);
-						break;
-					case TA_INACTIVE:
-						if (tm_tag_file_t != tag->type)
-						{
-							g_warning("Got inactive attribute for non-file tag %s", tag->name);
-							return FALSE;
-						}
-						else
-							tag->atts.file.inactive = (gboolean) atoi((gchar*)start + 1);
-						break;
-					case TA_ACCESS:
-						tag->atts.entry.access = *(start + 1);
-						break;
-					case TA_IMPL:
-						tag->atts.entry.impl = *(start + 1);
-						break;
-					default:
-	#ifdef TM_DEBUG
-						g_warning("Unknown attribute %s", start + 1);
-	#endif
-						break;
-				}
-				tag->atts.file.lang = mode;
-			}
-			*end = changed_char;
+				tag->name = g_strdup((gchar*)start);
 		}
+		else
+		{
+			switch (*start)
+			{
+				case TA_LINE:
+					tag->atts.entry.line = atol((gchar*)start + 1);
+					break;
+				case TA_LOCAL:
+					tag->atts.entry.local = atoi((gchar*)start + 1);
+					break;
+				case TA_TYPE:
+					tag->type = (TMTagType) atoi((gchar*)start + 1);
+					break;
+				case TA_ARGLIST:
+					tag->atts.entry.arglist = g_strdup((gchar*)start + 1);
+					break;
+				case TA_SCOPE:
+					tag->atts.entry.scope = g_strdup((gchar*)start + 1);
+					break;
+				case TA_POINTER:
+					tag->atts.entry.pointerOrder = atoi((gchar*)start + 1);
+					break;
+				case TA_VARTYPE:
+					tag->atts.entry.var_type = g_strdup((gchar*)start + 1);
+					break;
+				case TA_INHERITS:
+					tag->atts.entry.inheritance = g_strdup((gchar*)start + 1);
+					break;
+				case TA_TIME:
+					if (tm_tag_file_t != tag->type)
+					{
+						g_warning("Got time attribute for non-file tag %s", tag->name);
+						return FALSE;
+					}
+					else
+						tag->atts.file.timestamp = atol((gchar*)start + 1);
+					break;
+				case TA_LANG:
+					if (tm_tag_file_t != tag->type)
+					{
+						g_warning("Got lang attribute for non-file tag %s", tag->name);
+						return FALSE;
+					}
+					else
+						tag->atts.file.lang = atoi((gchar*)start + 1);
+					break;
+				case TA_INACTIVE:
+					if (tm_tag_file_t != tag->type)
+					{
+						g_warning("Got inactive attribute for non-file tag %s", tag->name);
+						return FALSE;
+					}
+					else
+						tag->atts.file.inactive = (gboolean) atoi((gchar*)start + 1);
+					break;
+				case TA_ACCESS:
+					tag->atts.entry.access = *(start + 1);
+					break;
+				case TA_IMPL:
+					tag->atts.entry.impl = *(start + 1);
+					break;
+				default:
+#ifdef TM_DEBUG
+					g_warning("Unknown attribute %s", start + 1);
+#endif
+					break;
+			}
+		}
+		*end = changed_char;
 	}
-	else
+	if (NULL == tag->name)
+		return FALSE;
+	if (tm_tag_file_t != tag->type)
+		tag->atts.entry.file = file;
+	return TRUE;
+}
+
+// alternative parser for PHP and LaTeX global tags files with the following format
+// tagname|return value|arglist|description\n
+gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
+{
+	guchar buf[BUFSIZ];
+	guchar *start, *end;
+	gboolean status;
+	//guchar changed_char = TA_NAME;
+
+	if ((NULL == fgets((gchar*)buf, BUFSIZ, fp)) || ('\0' == *buf))
+		return FALSE;
 	{
-		// alternative parser for PHP and LaTeX global tags files with the following format
-		// tagname|return value|arglist|description\n
 		gchar **fields;
 		guint field_len;
 		for (start = end = buf, status = TRUE; (TRUE == status); start = end, ++ end)
@@ -324,7 +335,6 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, gint mo
 			else tag->name = NULL;
 			if (field_len >= 2 && fields[1] != NULL) tag->atts.entry.var_type = g_strdup(fields[1]);
 			if (field_len >= 3 && fields[2] != NULL) tag->atts.entry.arglist = g_strdup(fields[2]);
-			tag->atts.file.lang = mode;
 			tag->type = tm_tag_prototype_t;
 			g_strfreev(fields);
 		}
@@ -340,13 +350,21 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, gint mo
 TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode)
 {
 	TMTag *tag;
+	gboolean result;
 
 	TAG_NEW(tag);
-	if (FALSE == tm_tag_init_from_file(tag, file, fp, mode))
+
+	if (mode == 0 || mode == 1)
+		result = tm_tag_init_from_file(tag, file, fp);
+	else
+		result = tm_tag_init_from_file_alt(tag, file, fp);
+
+	if (! result)
 	{
 		TAG_FREE(tag);
 		return NULL;
 	}
+	tag->atts.file.lang = mode;
 	return tag;
 }
 
