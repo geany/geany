@@ -15,7 +15,6 @@ TODO List:
 	o don't override Scintilla keybindings by default (Ctrl-D, Ctrl-L)
 	o allow use of custom global tags files
 	o project management
-	o filetype template support for all filetypes
 	o word wrapping mode to limit chars on a line for e.g. XML content.
 	o common default highlighting for all programming languages
 	o fix parsing command line args after given filenames
