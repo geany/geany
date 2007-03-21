@@ -89,6 +89,7 @@ void project_new()
 	GtkWidget *label;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 	PropertyDialogElements *e;
+	gint response;
 
 	if (! close_open_project()) return;
 
@@ -179,10 +180,10 @@ void project_new()
 
 	g_signal_connect((gpointer) e->file_name, "changed", G_CALLBACK(on_entries_changed), e);
 	g_signal_connect((gpointer) e->base_path, "changed", G_CALLBACK(on_entries_changed), e);
-	g_signal_connect((gpointer) e->dialog, "response",
-				G_CALLBACK(on_properties_dialog_response), e);
 
 	gtk_widget_show_all(e->dialog);
+	response = gtk_dialog_run(GTK_DIALOG(e->dialog));
+	on_properties_dialog_response(GTK_DIALOG(e->dialog), response, e);
 }
 
 
@@ -194,6 +195,7 @@ void project_open()
 #else
 	GtkWidget *dialog;
 	GtkFileFilter *filter;
+	gint response;
 #endif
 	if (! close_open_project()) return;
 
@@ -232,9 +234,9 @@ void project_open()
 
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dir);
 
-	g_signal_connect ((gpointer) dialog, "response", G_CALLBACK(on_open_dialog_response), NULL);
-
 	gtk_widget_show_all(dialog);
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	on_open_dialog_response(GTK_DIALOG(dialog), response, NULL);
 #endif
 
 	g_free(dir);
@@ -273,6 +275,7 @@ void project_properties()
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 	PropertyDialogElements *e = g_new(PropertyDialogElements, 1);
 	GeanyProject *p = app->project;
+	gint response;
 
 	g_return_if_fail(app->project != NULL);
 
@@ -391,9 +394,6 @@ void project_properties()
 
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
-	g_signal_connect((gpointer) e->dialog, "response",
-				G_CALLBACK(on_properties_dialog_response), e);
-
 	// fill the elements with the appropriate data
 	gtk_entry_set_text(GTK_ENTRY(e->name), p->name);
 
@@ -428,6 +428,8 @@ void project_properties()
 		gtk_entry_set_text(GTK_ENTRY(e->run_cmd), p->run_cmd);
 
 	gtk_widget_show_all(e->dialog);
+	response = gtk_dialog_run(GTK_DIALOG(e->dialog));
+	on_properties_dialog_response(GTK_DIALOG(e->dialog), response, e);
 }
 
 

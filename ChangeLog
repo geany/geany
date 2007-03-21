@@ -1,3 +1,9 @@
+2007-03-21  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/project.c:
+   Made all project dialogs modal.
+
+
 2007-03-20  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * data/filetypes.common, doc/geany.docbook, src/highlighting.c:
