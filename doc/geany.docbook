@@ -1510,6 +1510,11 @@
 								</entry>
 							</row>
 							<row>
+								<entry>Select current word</entry>
+								<entry>Selects the current word under the cursor.
+								</entry>
+							</row>
+							<row>
 								<entry>Find Usage</entry>
 								<entry>Finds all occurrences of the current word (near the
 									   keyboard cursor) and displays them in the messages window.

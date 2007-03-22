@@ -2141,3 +2141,28 @@ static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_vi
 	//sci_scroll_caret(sci); // ensure visible (maybe not needed now)
 }
 
+
+void sci_cb_select_word(ScintillaObject *sci)
+{
+	gint pos;
+	gint start;
+	gint end;
+
+	g_return_if_fail(sci != NULL);
+
+	pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
+	start = SSM(sci, SCI_WORDSTARTPOSITION, pos, TRUE);
+	end = SSM(sci, SCI_WORDENDPOSITION, pos, TRUE);
+
+	if (start == end) // caret in whitespaces sequence
+	{
+		// look forward but reverse the selection direction,
+		// so the caret end up stay as near as the original position.
+		end = SSM(sci, SCI_WORDENDPOSITION, pos, FALSE);
+		start = SSM(sci, SCI_WORDENDPOSITION, end, TRUE);
+		if (start == end)
+			return;
+	}
+
+	SSM(sci, SCI_SETSEL, start, end);
+}

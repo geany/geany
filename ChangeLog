@@ -1,3 +1,11 @@
+2007-03-22  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * THANKS, doc/geany.docbook, src/keybindings.c, src/keybindings.h,
+   src/sci_cb.c, src/sci_cb.h:
+   Applied patch from Anh Phạm to add a keybinding for selecting the
+   current word under the cursor (thanks).
+
+
 2007-03-21  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/project.c:

@@ -86,4 +86,6 @@ gint sci_cb_lexer_get_type_keyword_idx(gint lexer);
 
 void sci_cb_insert_multiline_comment(gint idx);
 
+void sci_cb_select_word(ScintillaObject *sci);
+
 #endif

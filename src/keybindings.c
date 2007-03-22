@@ -263,6 +263,9 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_SUPPRESSCOMPLETION] = fill(cb_func_edit,
 		GDK_space, GDK_SHIFT_MASK, "edit_suppresscompletion", _("Suppress auto completion"));
 
+	keys[GEANY_KEYS_EDIT_SELECTWORD] = fill(cb_func_edit,
+		0, 0, "edit_selectword", _("Select current word"));
+
 	keys[GEANY_KEYS_POPUP_FINDUSAGE] = fill(cb_func_current_word,
 		0, 0, "popup_findusage", _("Find Usage"));
 	keys[GEANY_KEYS_POPUP_GOTOTAGDEFINITION] = fill(cb_func_current_word,
@@ -861,6 +864,9 @@ static void cb_func_edit(guint key_id)
 			break;
 		case GEANY_KEYS_EDIT_SUPPRESSCOMPLETION:
 			sci_add_text(doc_list[idx].sci, " ");
+			break;
+		case GEANY_KEYS_EDIT_SELECTWORD:
+			sci_cb_select_word(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_INCREASEINDENT:
 			on_menu_increase_indent1_activate(NULL, NULL);
