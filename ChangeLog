@@ -5,6 +5,9 @@
  * src/keybindings.c, src/keybindings.h, src/dialogs.c, src/dialogs.h,
    src/callbacks.c:
    Move dialogs_show_keyboard_shortcuts() to keybindings.c.
+ * src/keybindings.c, src/prefs.c, src/prefs.h, src/callbacks.c,
+   src/vte.c:
+   Rename dialogs_show_prefs_dialog() to prefs_show_dialog().
 
 
 2007-03-22  Enrico Tröger  <enrico.troeger@uvena.de>

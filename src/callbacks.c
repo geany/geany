@@ -426,7 +426,7 @@ void
 on_preferences1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_prefs_dialog();
+	prefs_show_dialog();
 }
 
 

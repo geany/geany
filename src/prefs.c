@@ -975,7 +975,7 @@ static void on_symbol_auto_completion_toggled(GtkToggleButton *togglebutton, gpo
 }
 
 
-void dialogs_show_prefs_dialog(void)
+void prefs_show_dialog(void)
 {
 	if (app->prefs_dialog == NULL)
 	{

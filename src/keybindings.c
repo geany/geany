@@ -478,7 +478,7 @@ void keybindings_show_shortcuts()
 	{
 		GtkWidget *wid;
 
-		dialogs_show_prefs_dialog();
+		prefs_show_dialog();
 		// select the KB page
 		wid = lookup_widget(app->prefs_dialog, "frame22");
 		if (wid != NULL)

@@ -336,7 +336,7 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		{
 			GtkWidget *notebook;
 
-			dialogs_show_prefs_dialog();
+			prefs_show_dialog();
 
 			notebook = lookup_widget(app->prefs_dialog, "notebook2");
 
