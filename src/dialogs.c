@@ -51,6 +51,7 @@
 #include "ui_utils.h"
 #include "keybindings.h"
 #include "encodings.h"
+#include "prefs.h"
 
 
 #if ! GEANY_USE_WIN32_DIALOG
@@ -1304,10 +1305,12 @@ void dialogs_show_keyboard_shortcuts()
 	GString *text_keys = g_string_sized_new(600);
 	gchar *shortcut;
 	guint i;
-	gint height;
+	gint height, response;
 
 	dialog = gtk_dialog_new_with_buttons(_("Keyboard shortcuts"), GTK_WINDOW(app->window),
-				GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_STOCK_EDIT, GTK_RESPONSE_APPLY,
+				GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
@@ -1348,9 +1351,25 @@ void dialogs_show_keyboard_shortcuts()
 	gtk_box_pack_start(GTK_BOX(vbox), label3, FALSE, FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
 
-	g_signal_connect((gpointer) dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
-
 	gtk_widget_show_all(dialog);
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	if (response == GTK_RESPONSE_APPLY)
+	{
+		GtkWidget *wid;
+
+		dialogs_show_prefs_dialog();
+		// select the KB page
+		wid = lookup_widget(app->prefs_dialog, "frame22");
+		if (wid != NULL)
+		{
+			GtkNotebook *nb = GTK_NOTEBOOK(lookup_widget(app->prefs_dialog, "notebook2"));
+
+			if (nb != NULL)
+				gtk_notebook_set_current_page(nb, gtk_notebook_page_num(nb, wid));
+		}
+	}
+
+	gtk_widget_destroy(dialog);
 
 	g_string_free(text_names, TRUE);
 	g_string_free(text_keys, TRUE);
