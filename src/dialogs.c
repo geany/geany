@@ -51,7 +51,6 @@
 #include "ui_utils.h"
 #include "keybindings.h"
 #include "encodings.h"
-#include "prefs.h"
 
 
 #if ! GEANY_USE_WIN32_DIALOG
@@ -1297,81 +1296,4 @@ gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
 	return ret;
 }
 
-
-void dialogs_show_keyboard_shortcuts()
-{
-	GtkWidget *dialog, *hbox, *label1, *label2, *label3, *swin, *vbox;
-	GString *text_names = g_string_sized_new(600);
-	GString *text_keys = g_string_sized_new(600);
-	gchar *shortcut;
-	guint i;
-	gint height, response;
-
-	dialog = gtk_dialog_new_with_buttons(_("Keyboard shortcuts"), GTK_WINDOW(app->window),
-				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_STOCK_EDIT, GTK_RESPONSE_APPLY,
-				GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_box_set_spacing(GTK_BOX(vbox), 6);
-
-	height = GEANY_WINDOW_MINIMAL_HEIGHT;
-	gtk_window_set_default_size(GTK_WINDOW(dialog), height * 0.8, height);
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
-
-	label3 = gtk_label_new(_("The following keyboard shortcuts are defined:"));
-	gtk_misc_set_alignment(GTK_MISC(label3), 0, 0.5);
-
-	hbox = gtk_hbox_new(FALSE, 6);
-
-	label1 = gtk_label_new(NULL);
-
-	label2 = gtk_label_new(NULL);
-
-	for (i = 0; i < GEANY_MAX_KEYS; i++)
-	{
-		shortcut = gtk_accelerator_get_label(keys[i]->key, keys[i]->mods);
-		g_string_append(text_names, keys[i]->label);
-		g_string_append(text_names, "\n");
-		g_string_append(text_keys, shortcut);
-		g_string_append(text_keys, "\n");
-		g_free(shortcut);
-	}
-
-	gtk_label_set_text(GTK_LABEL(label1), text_names->str);
-	gtk_label_set_text(GTK_LABEL(label2), text_keys->str);
-
-	gtk_container_add(GTK_CONTAINER(hbox), label1);
-	gtk_container_add(GTK_CONTAINER(hbox), label2);
-
-	swin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin), GTK_POLICY_AUTOMATIC,
-		GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), hbox);
-
-	gtk_box_pack_start(GTK_BOX(vbox), label3, FALSE, FALSE, 6);
-	gtk_box_pack_start(GTK_BOX(vbox), swin, TRUE, TRUE, 0);
-
-	gtk_widget_show_all(dialog);
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	if (response == GTK_RESPONSE_APPLY)
-	{
-		GtkWidget *wid;
-
-		dialogs_show_prefs_dialog();
-		// select the KB page
-		wid = lookup_widget(app->prefs_dialog, "frame22");
-		if (wid != NULL)
-		{
-			GtkNotebook *nb = GTK_NOTEBOOK(lookup_widget(app->prefs_dialog, "notebook2"));
-
-			if (nb != NULL)
-				gtk_notebook_set_current_page(nb, gtk_notebook_page_num(nb, wid));
-		}
-	}
-
-	gtk_widget_destroy(dialog);
-
-	g_string_free(text_names, TRUE);
-	g_string_free(text_keys, TRUE);
-}
 

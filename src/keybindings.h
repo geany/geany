@@ -130,6 +130,8 @@ void keybindings_free(void);
 /* just write the content of the keys array to the config file */
 void keybindings_write_to_file(void);
 
+void keybindings_show_shortcuts();
+
 /* central keypress event handler, almost all keypress events go to this function */
 gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 

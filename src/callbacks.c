@@ -1415,7 +1415,7 @@ void
 on_help_shortcuts1_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_keyboard_shortcuts();
+	keybindings_show_shortcuts();
 }
 
 
