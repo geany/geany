@@ -524,6 +524,11 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 {
 	guint i, k;
 
+	if (event->state & GDK_LOCK_MASK)
+		event->state -= GDK_LOCK_MASK;	// ignore caps-lock
+	// ignore numlock key, not necessary but nice
+	if (event->state & GDK_MOD2_MASK) event->state -= GDK_MOD2_MASK;
+
 	if (check_fixed_kb(event)) return TRUE;
 
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
@@ -537,9 +542,6 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 			// raise the keyval
 			if (keys[i]->key >= GDK_a && keys[i]->key <= GDK_z) k = keys[i]->key - 32;
 		}
-
-		// ignore numlock key, not necessary but nice
-		if (event->state & GDK_MOD2_MASK) event->state -= GDK_MOD2_MASK;
 
 		if (event->keyval == k && event->state == keys[i]->mods)
 		{

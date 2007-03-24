@@ -8,6 +8,9 @@
    Move dialogs_show_includes_arguments_*() to build.c.
    Move on_includes_arguments_*dialog_response() to build.c.
    Make several build functions static.
+ * src/keybindings.c:
+   Ignore Caps Lock in keybindings_got_event() (could cause problems
+   with e.g. Shift-F9).
 
 
 2007-03-23  Nick Treleaven  <nick.treleaven@btinternet.com>
