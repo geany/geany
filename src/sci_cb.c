@@ -1159,6 +1159,8 @@ void sci_cb_show_macro_list(ScintillaObject *sci)
 	if (sci == NULL) return;
 
 	words = symbols_get_macro_list();
+	if (words == NULL) return;
+
 	SSM(sci, SCI_USERLISTSHOW, 1, (sptr_t) words->str);
 	g_string_free(words, TRUE);
 }

@@ -200,6 +200,9 @@ GString *symbols_get_macro_list()
 	GPtrArray *ftags;
 	GString *words;
 
+	if (app->tm_workspace->work_objects == NULL)
+		return NULL;
+
 	ftags = g_ptr_array_sized_new(50);
 	words = g_string_sized_new(200);
 
