@@ -44,7 +44,6 @@
 #include "sciwrappers.h"
 #include "utils.h"
 #include "ui_utils.h"
-#include "callbacks.h"
 #include "msgwindow.h"
 #include "keybindings.h"
 
