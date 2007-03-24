@@ -3,6 +3,11 @@
  * src/sci_cb.c, src/symbols.c:
    Fix segfault when pressing ctrl-enter when there are no workspace
    tags (thanks to R8Rooy for reporting).
+ * src/build.c, src/build.h, src/dialogs.c, src/dialogs.h,
+   src/callbacks.c, src/callbacks.h:
+   Move dialogs_show_includes_arguments_*() to build.c.
+   Move on_includes_arguments_*dialog_response() to build.c.
+   Make several build functions static.
 
 
 2007-03-23  Nick Treleaven  <nick.treleaven@btinternet.com>

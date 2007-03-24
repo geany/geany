@@ -63,18 +63,6 @@ typedef struct
 
 void build_finalize();
 
-GPid build_make_file(gint idx, gint build_opts);
-
-GPid build_compile_file(gint idx);
-
-GPid build_link_file(gint idx);
-
-GPid build_compile_tex_file(gint idx, gint mode);
-
-GPid build_view_tex_file(gint idx, gint mode);
-
-GPid build_run_cmd(gint idx);
-
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
 
 void build_menu_update(gint idx);
@@ -100,10 +88,6 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 
 void
 on_build_execute_activate              (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_arguments_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void

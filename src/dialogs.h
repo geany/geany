@@ -45,10 +45,6 @@ void dialogs_show_input(const gchar *title, const gchar *label_text, const gchar
 
 void dialogs_show_goto_line();
 
-void dialogs_show_includes_arguments_gen();
-
-void dialogs_show_includes_arguments_tex();
-
 void dialogs_show_file_properties(gint idx);
 
 gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);

@@ -336,16 +336,6 @@ on_go_to_line_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_includes_arguments_dialog_response  (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data);
-
-void
-on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
-                                            gint response,
-                                            gpointer user_data);
-
-void
 on_goto_line_dialog_response           (GtkDialog *dialog,
                                         gint response,
                                         gpointer user_data);

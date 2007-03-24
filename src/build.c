@@ -87,6 +87,9 @@ static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
 static void set_stop_button(gboolean stop);
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
+static void
+on_build_arguments_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
 
 #ifndef G_OS_WIN32
 static void kill_process(GPid *pid);
@@ -105,7 +108,7 @@ void build_finalize()
 }
 
 
-GPid build_compile_tex_file(gint idx, gint mode)
+static GPid build_compile_tex_file(gint idx, gint mode)
 {
 	const gchar *cmd = NULL;
 
@@ -126,7 +129,7 @@ GPid build_compile_tex_file(gint idx, gint mode)
 }
 
 
-GPid build_view_tex_file(gint idx, gint mode)
+static GPid build_view_tex_file(gint idx, gint mode)
 {
 	gchar **argv, **term_argv;
 	gchar  *executable = NULL;
@@ -274,7 +277,7 @@ static gchar *get_object_filename(gint idx)
 }
 
 
-GPid build_make_file(gint idx, gint build_opts)
+static GPid build_make_file(gint idx, gint build_opts)
 {
 	GString *cmdstr;
 	const gchar *dir = NULL;
@@ -313,7 +316,7 @@ GPid build_make_file(gint idx, gint build_opts)
 }
 
 
-GPid build_compile_file(gint idx)
+static GPid build_compile_file(gint idx)
 {
 	const gchar *cmd;
 
@@ -326,7 +329,7 @@ GPid build_compile_file(gint idx)
 }
 
 
-GPid build_link_file(gint idx)
+static GPid build_link_file(gint idx)
 {
 	GString *cmdstr;
 	GPid pid;
@@ -643,7 +646,7 @@ static gchar *prepare_project_run_script()
 }
 
 
-GPid build_run_cmd(gint idx)
+static GPid build_run_cmd(gint idx)
 {
 	GeanyProject *project = app->project;
 	gchar	*working_dir;
@@ -1206,6 +1209,347 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 }
 
 
+static void
+on_includes_arguments_tex_dialog_response  (GtkDialog *dialog,
+                                            gint response,
+                                            gpointer user_data)
+{
+	filetype *ft = user_data;
+	g_return_if_fail(ft != NULL);
+
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		const gchar *newstr;
+		struct build_programs *programs = ft->programs;
+
+		newstr = gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry1")));
+		if (! utils_str_equal(newstr, programs->compiler))
+		{
+			if (programs->compiler) g_free(programs->compiler);
+			programs->compiler = g_strdup(newstr);
+			programs->modified = TRUE;
+		}
+		newstr = gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry2")));
+		if (! utils_str_equal(newstr, programs->linker))
+		{
+			if (programs->linker) g_free(programs->linker);
+			programs->linker = g_strdup(newstr);
+			programs->modified = TRUE;
+		}
+		newstr = gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry3")));
+		if (! utils_str_equal(newstr, programs->run_cmd))
+		{
+			if (programs->run_cmd) g_free(programs->run_cmd);
+			programs->run_cmd = g_strdup(newstr);
+			programs->modified = TRUE;
+		}
+		newstr = gtk_entry_get_text(
+				GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "tex_entry4")));
+		if (! utils_str_equal(newstr, programs->run_cmd2))
+		{
+			if (programs->run_cmd2) g_free(programs->run_cmd2);
+			programs->run_cmd2 = g_strdup(newstr);
+			programs->modified = TRUE;
+		}
+	}
+}
+
+
+static void show_includes_arguments_tex()
+{
+	GtkWidget *dialog, *label, *entries[4], *vbox, *table;
+	gint idx = document_get_cur_idx();
+	gint response;
+	filetype *ft = NULL;
+
+	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
+	g_return_if_fail(ft != NULL);
+
+	dialog = gtk_dialog_new_with_buttons(_("Set Arguments"), GTK_WINDOW(app->window),
+										GTK_DIALOG_DESTROY_WITH_PARENT,
+										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+
+	label = gtk_label_new(_("Set programs and options for compiling and viewing (La)TeX files."));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_container_add(GTK_CONTAINER(vbox), label);
+
+	table = gtk_table_new(4, 2, FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
+	gtk_container_add(GTK_CONTAINER(vbox), table);
+
+	// LaTeX -> DVI args
+	if (ft->programs->compiler != NULL)
+	{
+		label = gtk_label_new(_("DVI creation:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+
+		entries[0] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
+		if (ft->programs->compiler)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[0]), ft->programs->compiler);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(table), entries[0], 1, 2, 0, 1);
+		g_object_set_data_full(G_OBJECT(dialog), "tex_entry1",
+					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
+	}
+
+	// LaTeX -> PDF args
+	if (ft->programs->linker != NULL)
+	{
+		label = gtk_label_new(_("PDF creation:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+
+		entries[1] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
+		if (ft->programs->linker)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[1]), ft->programs->linker);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(table), entries[1], 1, 2, 1, 2);
+		g_object_set_data_full(G_OBJECT(dialog), "tex_entry2",
+					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
+	}
+
+	// View LaTeX -> DVI args
+	if (ft->programs->run_cmd != NULL)
+	{
+		label = gtk_label_new(_("DVI preview:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+
+		entries[2] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
+		if (ft->programs->run_cmd)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[2]), ft->programs->run_cmd);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(table), entries[2], 1, 2, 2, 3);
+		g_object_set_data_full(G_OBJECT(dialog), "tex_entry3",
+					gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
+	}
+
+	// View LaTeX -> PDF args
+	if (ft->programs->run_cmd2 != NULL)
+	{
+		label = gtk_label_new(_("PDF preview:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+
+		entries[3] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[3]), 30);
+		if (ft->programs->run_cmd2)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[3]), ft->programs->run_cmd2);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(table), entries[3], 1, 2, 3, 4);
+		g_object_set_data_full(G_OBJECT(dialog), "tex_entry4",
+					gtk_widget_ref(entries[3]), (GDestroyNotify)gtk_widget_unref);
+	}
+
+	label = gtk_label_new(_("%f will be replaced by the current filename, e.g. test_file.c\n"
+							"%e will be replaced by the filename without extension, e.g. test_file"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_container_add(GTK_CONTAINER(vbox), label);
+
+	gtk_widget_show_all(dialog);
+	// run modally to prevent user changing idx filetype
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	// call the callback manually
+	on_includes_arguments_tex_dialog_response(GTK_DIALOG(dialog), response, ft);
+
+	gtk_widget_destroy(dialog);
+}
+
+
+static void
+on_includes_arguments_dialog_response  (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data)
+{
+	filetype *ft = user_data;
+
+	g_return_if_fail(ft != NULL);
+
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		const gchar *newstr;
+		struct build_programs *programs = ft->programs;
+
+		if (ft->actions->can_compile)
+		{
+			newstr = gtk_entry_get_text(
+					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry1")));
+			if (! utils_str_equal(newstr, programs->compiler))
+			{
+				if (programs->compiler) g_free(programs->compiler);
+				programs->compiler = g_strdup(newstr);
+				programs->modified = TRUE;
+			}
+		}
+		if (ft->actions->can_link)
+		{
+			newstr = gtk_entry_get_text(
+					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry2")));
+			if (! utils_str_equal(newstr, programs->linker))
+			{
+				if (programs->linker) g_free(programs->linker);
+				programs->linker = g_strdup(newstr);
+				programs->modified = TRUE;
+			}
+		}
+		if (ft->actions->can_exec)
+		{
+			newstr = gtk_entry_get_text(
+					GTK_ENTRY(lookup_widget(GTK_WIDGET(dialog), "includes_entry3")));
+			if (! utils_str_equal(newstr, programs->run_cmd))
+			{
+				if (programs->run_cmd) g_free(programs->run_cmd);
+				programs->run_cmd = g_strdup(newstr);
+				programs->modified = TRUE;
+			}
+		}
+	}
+}
+
+
+static void show_includes_arguments_gen()
+{
+	GtkWidget *dialog, *label, *entries[3], *vbox;
+	GtkWidget *ft_table = NULL;
+	gint row = 0;
+	gint idx = document_get_cur_idx();
+	gint response;
+	filetype *ft = NULL;
+
+	if (DOC_IDX_VALID(idx)) ft = doc_list[idx].file_type;
+	g_return_if_fail(ft != NULL);
+
+	dialog = gtk_dialog_new_with_buttons(_("Set Includes and Arguments"), GTK_WINDOW(app->window),
+										GTK_DIALOG_DESTROY_WITH_PARENT,
+										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+
+	label = gtk_label_new(_("Set the commands for building and running programs."));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_container_add(GTK_CONTAINER(vbox), label);
+
+	if (ft->actions->can_compile || ft->actions->can_link || ft->actions->can_exec)
+	{
+		GtkWidget *align, *frame;
+		gchar *frame_title = g_strconcat(ft->title, _(" commands"), NULL);
+
+		frame = ui_frame_new_with_alignment(frame_title, &align);
+		gtk_container_add(GTK_CONTAINER(vbox), frame);
+		g_free(frame_title);
+
+		ft_table = gtk_table_new(3, 2, FALSE);
+		gtk_table_set_row_spacings(GTK_TABLE(ft_table), 6);
+		gtk_container_add(GTK_CONTAINER(align), ft_table);
+		row = 0;
+	}
+
+	// include-args
+	if (ft->actions->can_compile)
+	{
+		label = gtk_label_new(_("Compile:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(ft_table), label, 0, 1, row, row + 1,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+
+		entries[0] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[0]), 30);
+		if (ft->programs->compiler)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[0]), ft->programs->compiler);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(ft_table), entries[0], 1, 2, row, row + 1);
+		row++;
+
+		g_object_set_data_full(G_OBJECT(dialog), "includes_entry1",
+					gtk_widget_ref(entries[0]), (GDestroyNotify)gtk_widget_unref);
+	}
+
+	// lib-args
+	if (ft->actions->can_link)
+	{
+		label = gtk_label_new(_("Build:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(ft_table), label, 0, 1, row, row + 1,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+
+		entries[1] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[1]), 30);
+		if (ft->programs->linker)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[1]), ft->programs->linker);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(ft_table), entries[1], 1, 2, row, row + 1);
+		row++;
+
+		g_object_set_data_full(G_OBJECT(dialog), "includes_entry2",
+					gtk_widget_ref(entries[1]), (GDestroyNotify)gtk_widget_unref);
+	}
+
+	// program-args
+	if (ft->actions->can_exec)
+	{
+		label = gtk_label_new(_("Execute:"));
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(ft_table), label, 0, 1, row, row + 1,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, 6, 0);
+
+		entries[2] = gtk_entry_new();
+		gtk_entry_set_width_chars(GTK_ENTRY(entries[2]), 30);
+		if (ft->programs->run_cmd)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entries[2]), ft->programs->run_cmd);
+		}
+		gtk_table_attach_defaults(GTK_TABLE(ft_table), entries[2], 1, 2, row, row + 1);
+		row++;
+
+		g_object_set_data_full(G_OBJECT(dialog), "includes_entry3",
+						gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
+	}
+
+	label = gtk_label_new(_("%f will be replaced by the current filename, e.g. test_file.c\n"
+							"%e will be replaced by the filename without extension, e.g. test_file"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_container_add(GTK_CONTAINER(vbox), label);
+
+	gtk_widget_show_all(dialog);
+	// run modally to prevent user changing idx filetype
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	// call the callback manually
+	on_includes_arguments_dialog_response(GTK_DIALOG(dialog), response, ft);
+
+	gtk_widget_destroy(dialog);
+}
+
+
+static void
+on_build_arguments_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	if (user_data && FILETYPE_ID((filetype*) user_data) == GEANY_FILETYPES_LATEX)
+		show_includes_arguments_tex();
+	else
+		show_includes_arguments_gen();
+}
+
+
 static gboolean is_c_header(const gchar *fname)
 {
 	gchar *ext = NULL;
@@ -1520,17 +1864,6 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 			msgwin_status_add(_("Failed to execute the terminal program"));
 		}
 	}
-}
-
-
-void
-on_build_arguments_activate            (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	if (user_data && FILETYPE_ID((filetype*) user_data) == GEANY_FILETYPES_LATEX)
-		dialogs_show_includes_arguments_tex();
-	else
-		dialogs_show_includes_arguments_gen();
 }
 
 
