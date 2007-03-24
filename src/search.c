@@ -815,7 +815,7 @@ on_find_entry_activate(GtkEntry *entry, gpointer user_data)
 static void
 on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	if (response == GTK_RESPONSE_CANCEL)
+	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 		gtk_widget_hide(widgets.find_dialog);
 	else
 	{
@@ -879,8 +879,6 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 					search_mark(idx, search_data.text, search_data.flags);
 				break;
 			}
-
-			// Note: we can get GTK_RESPONSE_DELETE_EVENT responses when ESC is pressed
 		}
 		if (check_close)
 			gtk_widget_hide(widgets.find_dialog);
@@ -907,7 +905,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	gboolean close_window;
 	gchar *find, *replace;
 
-	if (response == GTK_RESPONSE_CANCEL)
+	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 	{
 		gtk_widget_hide(widgets.replace_dialog);
 		return;
@@ -1007,7 +1005,6 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			if (close_window) gtk_widget_hide(widgets.replace_dialog);
 			break;
 		}
-		// Note: we can get GTK_RESPONSE_DELETE_EVENT responses when ESC is pressed
 	}
 	g_free(find);
 	g_free(replace);

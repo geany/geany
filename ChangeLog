@@ -11,6 +11,8 @@
  * src/keybindings.c:
    Ignore Caps Lock in keybindings_got_event() (could cause problems
    with e.g. Shift-F9).
+ * src/search.c:
+   Don't beep when pressing escape to close the Find or Replace dialogs.
 
 
 2007-03-23  Nick Treleaven  <nick.treleaven@btinternet.com>
