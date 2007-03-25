@@ -1449,14 +1449,18 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 /* Returns a string containing whitespace of the amount a according to the
  * setting app->pref_editor_use_tabs filled with simple space characters or with the right amount
  * of tabulator characters (a is filled with tabulators *and* spaces if a isn't a multiple of
- * app->pref_editor_tab_width) */
-gchar *utils_get_whitespace(gint a)
+ * app->pref_editor_tab_width).
+ * If alternative is set to TRUE, it returns the opposite of app->pref_editor_use_tabs. */
+gchar *utils_get_whitespace(gint a, gboolean alternative)
 {
 	gchar *str;
+	gboolean use_tabs;
 
 	g_return_val_if_fail(a > 0, NULL);
 
-	if (app->pref_editor_use_tabs)
+	use_tabs = (alternative) ? ! app->pref_editor_use_tabs : app->pref_editor_use_tabs;
+
+	if (use_tabs)
 	{	// first fill text with tabluators and fill the rest with spaces
 		gint tabs = a / app->pref_editor_tab_width;
 		gint spaces = a % app->pref_editor_tab_width;

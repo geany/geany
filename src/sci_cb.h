@@ -88,4 +88,6 @@ void sci_cb_insert_multiline_comment(gint idx);
 
 void sci_cb_select_word(ScintillaObject *sci);
 
+void sci_cb_insert_alternative_whitespace(ScintillaObject *sci);
+
 #endif

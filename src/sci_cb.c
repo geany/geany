@@ -347,7 +347,7 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 				sci_get_style_at(sci, pos - 2) == SCE_P_OPERATOR)
 			{
 				// creates and inserts one tabulator sign or whitespace of the amount of the tab width
-				gchar *text = utils_get_whitespace(app->pref_editor_tab_width);
+				gchar *text = utils_get_whitespace(app->pref_editor_tab_width, FALSE);
 				sci_add_text(sci, text);
 				g_free(text);
 			}
@@ -993,7 +993,7 @@ void sci_cb_auto_forif(gint idx, gint pos)
 	}
 
 	// get the whitespace for additional indentation
-	space = utils_get_whitespace(app->pref_editor_tab_width);
+	space = utils_get_whitespace(app->pref_editor_tab_width, FALSE);
 	space_len = strlen(space);
 
 	// "pattern", buf + x, y -> x + y = 15, because buf is (pos - 16)...(pos - 1) = 15
@@ -2141,6 +2141,15 @@ static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_vi
 	delta = (line - vis1) - los * percent_of_view;
 	sci_scroll_lines(sci, delta);
 	//sci_scroll_caret(sci); // ensure visible (maybe not needed now)
+}
+
+
+void sci_cb_insert_alternative_whitespace(ScintillaObject *sci)
+{
+	// creates and inserts one tabulator sign or whitespace of the amount of the tab width
+	gchar *text = utils_get_whitespace(app->pref_editor_tab_width, TRUE);
+	sci_add_text(sci, text);
+	g_free(text);
 }
 
 

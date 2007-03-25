@@ -148,8 +148,9 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text);
 /* Returns a string containing whitespace of the amount a according to the
  * setting app->pref_editor_use_tabs filled with simple space characters or with the right amount
  * of tabulator characters (a is filled with tabulators *and* spaces if a isn't a multiple of
- * app->pref_editor_tab_width) */
-gchar *utils_get_whitespace(gint amount);
+ * app->pref_editor_tab_width).
+ * If alternative is set to TRUE, it returns the opposite of app->pref_editor_use_tabs. */
+gchar *utils_get_whitespace(gint amount, gboolean alternative);
 
 /* frees all passed pointers if they are non-NULL, the first argument is nothing special,
  * it will also be freed, the list should be ended with NULL */

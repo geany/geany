@@ -1,3 +1,12 @@
+2007-03-25  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * doc/geany.docbook, src/keybindings.c, src/keybindings.h,
+   src/sci_cb.c, src/sci_cb.h, src/utils.c, src/utils.h:
+   Use Ctrl+Shift+Space always for showing calltips because Alt+Space is
+   used often by window managers (not only under Windows).
+   Added keybinding for inserting alternative whitespace characters.
+
+
 2007-03-24  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c, src/symbols.c:

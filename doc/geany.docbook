@@ -1515,6 +1515,14 @@
 								</entry>
 							</row>
 							<row>
+								<entry>Insert alternative whitespace</entry>
+								<entry>Inserts a tabulator character when spaces should be used for
+									   indentation and inserts space characters of the amount of a
+									   tabulator width when tabulators should be used for
+									   indentation.
+								</entry>
+							</row>
+							<row>
 								<entry>Find Usage</entry>
 								<entry>Finds all occurrences of the current word (near the
 									   keyboard cursor) and displays them in the messages window.

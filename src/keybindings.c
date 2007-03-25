@@ -250,14 +250,8 @@ void keybindings_init(void)
 		_("Goto previous marker"));
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
-#ifdef G_OS_WIN32
-	// on windows alt-space is taken by the window manager
 	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit,
 		GDK_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_calltip", _("Show calltip"));
-#else
-	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit,
-		GDK_space, GDK_MOD1_MASK, "edit_calltip", _("Show calltip"));
-#endif
 	keys[GEANY_KEYS_EDIT_MACROLIST] = fill(cb_func_edit,
 		GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"));
 	keys[GEANY_KEYS_EDIT_SUPPRESSCOMPLETION] = fill(cb_func_edit,
@@ -265,6 +259,9 @@ void keybindings_init(void)
 
 	keys[GEANY_KEYS_EDIT_SELECTWORD] = fill(cb_func_edit,
 		0, 0, "edit_selectword", _("Select current word"));
+
+	keys[GEANY_KEYS_EDIT_INSERTALTWHITESPACE] = fill(cb_func_edit,
+		0, 0, "edit_insertwhitespace", _("Insert alternative whitespace"));
 
 	keys[GEANY_KEYS_POPUP_FINDUSAGE] = fill(cb_func_current_word,
 		0, 0, "popup_findusage", _("Find Usage"));
@@ -947,6 +944,9 @@ static void cb_func_edit(guint key_id)
 			break;
 		case GEANY_KEYS_EDIT_SELECTWORD:
 			sci_cb_select_word(doc_list[idx].sci);
+			break;
+		case GEANY_KEYS_EDIT_INSERTALTWHITESPACE:
+			sci_cb_insert_alternative_whitespace(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_INCREASEINDENT:
 			on_menu_increase_indent1_activate(NULL, NULL);
