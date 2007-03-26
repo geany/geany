@@ -1,3 +1,13 @@
+2007-03-26  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c, TODO:
+   Change comment/uncomment keybinding to Ctrl-G/Ctrl-Shift-G.
+   Change duplicate KB to Ctrl-D (Scintilla default).
+   Change goto line KB to Ctrl-J (so Ctrl-L line cut Sci KB works).
+   Remove default goto matching brace KB (doesn't work on all
+   keyboards).
+
+
 2007-03-25  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook, src/keybindings.c, src/keybindings.h,

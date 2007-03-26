@@ -159,7 +159,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_NEXTMESSAGE] = fill(cb_func_menu_nextmessage,
 		0, 0, "menu_nextmessage", _("Next Message"));
 	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline,
-		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
+		GDK_j, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
 	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser,
 		0, 0, "menu_opencolorchooser", _("Show Colour Chooser"));
 	keys[GEANY_KEYS_MENU_FULLSCREEN] = fill(cb_func_menu_fullscreen,
@@ -215,7 +215,7 @@ void keybindings_init(void)
 		GDK_Tab, GDK_CONTROL_MASK, "switch_tablastused", _("Switch to last used document"));
 
 	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit,
-		GDK_g, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
+		GDK_d, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
 	keys[GEANY_KEYS_EDIT_TOLOWERCASE] = fill(cb_func_edit,
 		GDK_u, GDK_CONTROL_MASK, "edit_tolowercase", _("Convert Selection to lower-case"));
 	keys[GEANY_KEYS_EDIT_TOUPPERCASE] = fill(cb_func_edit,
@@ -223,9 +223,9 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_COMMENTLINETOGGLE] = fill(cb_func_edit,
 		GDK_b, GDK_CONTROL_MASK, "edit_commentlinetoggle", _("Toggle line commentation"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit,
-		GDK_d, GDK_CONTROL_MASK, "edit_commentline", _("Comment line(s)"));
+		GDK_g, GDK_CONTROL_MASK, "edit_commentline", _("Comment line(s)"));
 	keys[GEANY_KEYS_EDIT_UNCOMMENTLINE] = fill(cb_func_edit,
-		GDK_d, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_uncommentline", _("Uncomment line(s)"));
+		GDK_g, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_uncommentline", _("Uncomment line(s)"));
 	keys[GEANY_KEYS_EDIT_INCREASEINDENT] = fill(cb_func_edit,
 		GDK_i, GDK_CONTROL_MASK, "edit_increaseindent", _("Increase indent"));
 	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit,
@@ -237,7 +237,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_SENDTOCMD3] = fill(cb_func_edit,
 		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send Selection to custom command 3"));
 	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit,
-		GDK_less, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_gotomatchingbrace",
+		0, 0, "edit_gotomatchingbrace",
 		_("Goto matching brace"));
 	keys[GEANY_KEYS_EDIT_TOGGLEMARKER] = fill(cb_func_edit,
 		GDK_m, GDK_CONTROL_MASK, "edit_togglemarker",

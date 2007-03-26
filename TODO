@@ -12,7 +12,6 @@ TODO List:
 	o documentation: list and explain filetype modes
 	o documentation: preferences
 	o user-definable construct completion
-	o don't override Scintilla keybindings by default (Ctrl-D, Ctrl-L)
 	o allow use of custom global tags files
 	o project management
 	o word wrapping mode to limit chars on a line for e.g. XML content.
