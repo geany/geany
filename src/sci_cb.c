@@ -742,7 +742,7 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 {	// HTML entities auto completion
 	guint i, j = 0;
 	GString *words;
-	gchar **entities = symbols_get_html_entities();
+	const gchar **entities = symbols_get_html_entities();
 
 	if (*root != '&' || entities == NULL) return FALSE;
 

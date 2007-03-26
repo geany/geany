@@ -6,6 +6,9 @@
    Change goto line KB to Ctrl-J (so Ctrl-L line cut Sci KB works).
    Remove default goto matching brace KB (doesn't work on all
    keyboards).
+ * src/sci_cb.c, src/symbols.c, src/symbols.h:
+   Load HTML-entities when the PHP lexer is first needed, instead of
+   when typing outside of PHP styles.
 
 
 2007-03-25  Enrico Tröger  <enrico.troeger@uvena.de>

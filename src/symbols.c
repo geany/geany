@@ -89,12 +89,16 @@ void symbols_global_tags_loaded(gint file_type_idx)
 
 	switch (file_type_idx)
 	{
+		case GEANY_FILETYPES_PHP:
 		case GEANY_FILETYPES_HTML:
 			html_tags_loaded();
-			return;
+	}
+	switch (file_type_idx)
+	{
 		case GEANY_FILETYPES_CPP:
 			symbols_global_tags_loaded(GEANY_FILETYPES_C);	// load C global tags
-			return;	// no C++ tagfile yet
+			// no C++ tagfile yet
+			return;
 		case GEANY_FILETYPES_C:		tag_type = GTF_C; break;
 		case GEANY_FILETYPES_PASCAL:tag_type = GTF_PASCAL; break;
 		case GEANY_FILETYPES_PHP:	tag_type = GTF_PHP; break;
@@ -268,12 +272,12 @@ TMTag *symbols_find_in_workspace(const gchar *tag_name, gint type)
 }
 
 
-gchar **symbols_get_html_entities()
+const gchar **symbols_get_html_entities()
 {
 	if (html_entities == NULL)
 		html_tags_loaded(); // if not yet created, force creation of the array but shouldn't occur
 
-	return html_entities;
+	return (const gchar **) html_entities;
 }
 
 
