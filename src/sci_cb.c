@@ -99,10 +99,154 @@ on_editor_button_press_event           (GtkWidget *widget,
 }
 
 
+typedef struct SCNotification SCNotification;
+
+static void on_margin_click(ScintillaObject *sci, SCNotification *nt)
+{
+	// left click to marker margin marks the line
+	if (nt->margin == 1)
+	{
+		gint line = sci_get_line_from_position(sci, nt->position);
+		gboolean set = sci_is_marker_set_at_line(sci, line, 1);
+
+		//sci_marker_delete_all(doc_list[idx].sci, 1);
+		sci_set_marker_at_line(sci, line, ! set, 1);	// toggle the marker
+	}
+	// left click on the folding margin to toggle folding state of current line
+	else if (nt->margin == 2 && app->pref_editor_folding)
+	{
+		gint line = SSM(sci, SCI_LINEFROMPOSITION, nt->position, 0);
+
+		SSM(sci, SCI_TOGGLEFOLD, line, 0);
+		if (app->pref_editor_unfold_all_children &&
+			SSM(sci, SCI_GETLINEVISIBLE, line + 1, 0))
+		{	// unfold all children of the current fold point
+			gint last_line = SSM(sci, SCI_GETLASTCHILD, line, -1);
+			gint i;
+
+			for (i = line; i < last_line; i++)
+			{
+				if (! SSM(sci, SCI_GETLINEVISIBLE, i, 0))
+				{
+					SSM(sci, SCI_TOGGLEFOLD, SSM(sci, SCI_GETFOLDPARENT, i, 0), 0);
+				}
+			}
+		}
+	}
+}
+
+
+static void on_update_ui(gint idx, G_GNUC_UNUSED SCNotification *nt)
+{
+	ScintillaObject *sci = doc_list[idx].sci;
+	gint pos = sci_get_current_position(sci);
+
+	// undo / redo menu update
+	ui_update_popup_reundo_items(idx);
+
+	// brace highlighting
+	sci_cb_highlight_braces(sci, pos);
+
+	ui_update_statusbar(idx, pos);
+
+	/* Visible lines are only laid out accurately once [SCN_UPDATEUI] is sent,
+	 * so we need to only call sci_scroll_to_line here, because the document
+	 * may have line wrapping and folding enabled.
+	 * http://scintilla.sourceforge.net/ScintillaDoc.html#LineWrapping */
+	if (doc_list[idx].scroll_percent > 0.0F)
+	{
+		scroll_to_line(sci, -1, doc_list[idx].scroll_percent);
+		doc_list[idx].scroll_percent = -1.0F;	// disable further scrolling
+	}
+#if 0
+	/// experimental code for inverting selections
+	{
+	gint i;
+	for (i = SSM(sci, SCI_GETSELECTIONSTART, 0, 0); i < SSM(sci, SCI_GETSELECTIONEND, 0, 0); i++)
+	{
+		// need to get colour from getstyleat(), but how?
+		SSM(sci, SCI_STYLESETFORE, STYLE_DEFAULT, 0);
+		SSM(sci, SCI_STYLESETBACK, STYLE_DEFAULT, 0);
+	}
+
+	sci_get_style_at(sci, pos);
+	}
+#endif
+}
+
+
+static void on_char_added(gint idx, SCNotification *nt)
+{
+	ScintillaObject *sci = doc_list[idx].sci;
+	gint pos = sci_get_current_position(sci);
+
+	switch (nt->ch)
+	{
+		case '\r':
+		{	// simple indentation (only for CR format)
+			if (sci_get_eol_mode(sci) == SC_EOL_CR)
+				on_new_line_added(sci, idx);
+			break;
+		}
+		case '\n':
+		{	// simple indentation (for CR/LF and LF format)
+			on_new_line_added(sci, idx);
+			break;
+		}
+		case '>':
+		case '/':
+		{	// close xml-tags
+			handle_xml(sci, nt->ch, idx);
+			break;
+		}
+		case '(':
+		{	// show calltips
+			sci_cb_show_calltip(idx, pos);
+			break;
+		}
+		case ')':
+		{	// hide calltips
+			if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0))
+			{
+				SSM(sci, SCI_CALLTIPCANCEL, 0, 0);
+			}
+			g_free(calltip.text);
+			calltip.text = NULL;
+			calltip.set = FALSE;
+			break;
+		}
+		case ' ':
+		{	// if and for autocompletion
+			if (app->pref_editor_auto_complete_constructs)
+				sci_cb_auto_forif(idx, pos);
+			break;
+		}
+		case '[':
+		case '{':
+		{	// Tex auto-closing
+			if (sci_get_lexer(sci) == SCLEX_LATEX)
+			{
+				auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
+				sci_cb_show_calltip(idx, pos);
+			}
+			break;
+		}
+		case '}':
+		{	// closing bracket handling
+			if (doc_list[idx].use_auto_indention &&
+				app->pref_editor_indention_mode == INDENT_ADVANCED)
+				sci_cb_close_block(idx, pos - 1);
+			break;
+		}
+		default: sci_cb_start_auto_complete(idx, pos, FALSE);
+	}
+}
+
+
 // callback func called by all editors when a signal arises
 void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer user_data)
 {
-	struct SCNotification *nt;
+	SCNotification *nt;
 	ScintillaObject *sci;
 	gint idx;
 
@@ -130,76 +274,13 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			break;
 		}
 		case SCN_MARGINCLICK:
-		{
-			// left click to marker margin marks the line
-			if (nt->margin == 1)
-			{
-				gint line = sci_get_line_from_position(sci, nt->position);
-				gboolean set = sci_is_marker_set_at_line(sci, line, 1);
-
-				//sci_marker_delete_all(doc_list[idx].sci, 1);
-				sci_set_marker_at_line(sci, line, ! set, 1);	// toggle the marker
-			}
-			// left click on the folding margin to toggle folding state of current line
-			else if (nt->margin == 2 && app->pref_editor_folding)
-			{
-				gint line = SSM(sci, SCI_LINEFROMPOSITION, nt->position, 0);
-
-				SSM(sci, SCI_TOGGLEFOLD, line, 0);
-				if (app->pref_editor_unfold_all_children &&
-					SSM(sci, SCI_GETLINEVISIBLE, line + 1, 0))
-				{	// unfold all children of the current fold point
-					gint last_line = SSM(sci, SCI_GETLASTCHILD, line, -1);
-					gint i;
-
-					for (i = line; i < last_line; i++)
-					{
-						if (! SSM(sci, SCI_GETLINEVISIBLE, i, 0))
-						{
-							SSM(sci, SCI_TOGGLEFOLD, SSM(sci, SCI_GETFOLDPARENT, i, 0), 0);
-						}
-					}
-				}
-			}
+			on_margin_click(sci, nt);
 			break;
-		}
+
 		case SCN_UPDATEUI:
-		{
-			gint pos = sci_get_current_position(sci);
-
-			// undo / redo menu update
-			ui_update_popup_reundo_items(idx);
-
-			// brace highlighting
-			sci_cb_highlight_braces(sci, pos);
-
-			ui_update_statusbar(idx, pos);
-
-			/* Visible lines are only laid out accurately once [SCN_UPDATEUI] is sent,
-			 * so we need to only call sci_scroll_to_line here, because the document
-			 * may have line wrapping and folding enabled.
-			 * http://scintilla.sourceforge.net/ScintillaDoc.html#LineWrapping */
-			if (doc_list[idx].scroll_percent > 0.0F)
-			{
-				scroll_to_line(sci, -1, doc_list[idx].scroll_percent);
-				doc_list[idx].scroll_percent = -1.0F;	// disable further scrolling
-			}
-#if 0
-			/// experimental code for inverting selections
-			{
-			gint i;
-			for (i = SSM(sci, SCI_GETSELECTIONSTART, 0, 0); i < SSM(sci, SCI_GETSELECTIONEND, 0, 0); i++)
-			{
-				// need to get colour from getstyleat(), but how?
-				SSM(sci, SCI_STYLESETFORE, STYLE_DEFAULT, 0);
-				SSM(sci, SCI_STYLESETBACK, STYLE_DEFAULT, 0);
-			}
-
-			sci_get_style_at(sci, pos);
-			}
-#endif
+			on_update_ui(idx, nt);
 			break;
-		}
+
  		case SCN_MODIFIED:
 		{
 			if (nt->modificationType & SC_STARTACTION && ! app->ignore_callback)
@@ -210,71 +291,9 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			break;
 		}
 		case SCN_CHARADDED:
-		{
-			gint pos = sci_get_current_position(sci);
-
-			switch (nt->ch)
-			{
-				case '\r':
-				{	// simple indentation (only for CR format)
-					if (sci_get_eol_mode(sci) == SC_EOL_CR)
-						on_new_line_added(sci, idx);
-					break;
-				}
-				case '\n':
-				{	// simple indentation (for CR/LF and LF format)
-					on_new_line_added(sci, idx);
-					break;
-				}
-				case '>':
-				case '/':
-				{	// close xml-tags
-					handle_xml(sci, nt->ch, idx);
-					break;
-				}
-				case '(':
-				{	// show calltips
-					sci_cb_show_calltip(idx, pos);
-					break;
-				}
-				case ')':
-				{	// hide calltips
-					if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0))
-					{
-						SSM(sci, SCI_CALLTIPCANCEL, 0, 0);
-					}
-					g_free(calltip.text);
-					calltip.text = NULL;
-					calltip.set = FALSE;
-					break;
-				}
-				case ' ':
-				{	// if and for autocompletion
-					if (app->pref_editor_auto_complete_constructs)
-						sci_cb_auto_forif(idx, pos);
-					break;
-				}
-				case '[':
-				case '{':
-				{	// Tex auto-closing
-					if (sci_get_lexer(sci) == SCLEX_LATEX)
-					{
-						auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
-						sci_cb_show_calltip(idx, pos);
-					}
-					break;
-				}
-				case '}':
-				{	// closing bracket handling
-					if (doc_list[idx].use_auto_indention &&
-						app->pref_editor_indention_mode == INDENT_ADVANCED)
-						sci_cb_close_block(idx, pos - 1);
-					break;
-				}
-				default: sci_cb_start_auto_complete(idx, pos, FALSE);
-			}
+			on_char_added(idx, nt);
 			break;
-		}
+
 		case SCN_USERLISTSELECTION:
 		{
 			if (nt->listType == 1)

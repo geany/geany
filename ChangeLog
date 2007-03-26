@@ -9,6 +9,9 @@
  * src/sci_cb.c, src/symbols.c, src/symbols.h:
    Load HTML-entities when the PHP lexer is first needed, instead of
    when typing outside of PHP styles.
+ * src/sci_cb.c:
+   Separate on_margin_click(), on_update_ui(), on_char_added()
+   Scintilla notifications.
 
 
 2007-03-25  Enrico Tröger  <enrico.troeger@uvena.de>
