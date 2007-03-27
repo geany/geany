@@ -215,12 +215,6 @@ static void on_char_added(gint idx, SCNotification *nt)
 			calltip.set = FALSE;
 			break;
 		}
-		case ' ':
-		{	// if and for autocompletion
-			if (app->pref_editor_auto_complete_constructs)
-				sci_cb_auto_forif(idx, pos);
-			break;
-		}
 		case '[':
 		case '{':
 		{	// Tex auto-closing
@@ -948,101 +942,36 @@ void sci_cb_auto_latex(gint idx, gint pos)
 }
 
 
-static gboolean at_eol(ScintillaObject *sci, gint pos)
+/* This should use a string with the current word instead of buf, but we will replace this
+ * code with user-defined construct completion. */
+static gboolean complete_constructs(gint idx, gint pos, const gchar *buf, const gchar *space,
+		const gchar *eol)
 {
-	gint line = sci_get_line_from_position(sci, pos);
+	gboolean result;
+	gchar *construct = NULL;
+	gint space_len = strlen(space);
+	ScintillaObject *sci = doc_list[idx].sci;
 
-	return (pos == sci_get_line_end_position(sci, line));
-}
-
-
-void sci_cb_auto_forif(gint idx, gint pos)
-{
-	static gchar buf[16];
-	gchar *eol;
-	gchar *space;
-	gchar *construct;
-	gint lexer, style;
-	gint i;
-	gint space_len;
-	ScintillaObject *sci;
-
-	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
-
-	// only for C, C++, D, Ferite, Java, JavaScript, Perl and PHP
-	if (doc_list[idx].file_type->id != GEANY_FILETYPES_PHP &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_C &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_D &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_CPP &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_PERL &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_JAVA &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_JS &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE)
-		return;
-
-	sci = doc_list[idx].sci;
-	// return if we are editing an existing line (chars on right of cursor)
-	if (! at_eol(sci, pos))
-		return;
-
-	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
-	// return, if we are in a comment
-	if (is_comment(lexer, style))
-		return;
-	// never auto complete in a PHP file outside of the <? ?> tags
-	if (lexer == SCLEX_HTML && ! (style >= SCE_HPHP_DEFAULT && style <= SCE_HPHP_OPERATOR))
-		return;
-
-	// get the indentation
-	if (doc_list[idx].use_auto_indention) get_indent(sci, pos, TRUE);
-	eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
-	sci_get_text_range(sci, pos - 16, pos - 1, buf);
-	// check the first 8 characters of buf for whitespace, but only in this line
-	i = 14;
-	while (i >= 0 && isalpha(buf[i])) i--;	// find pos before keyword
-	while (i >= 0 && buf[i] != '\n' && buf[i] != '\r') // we want to stay in this line('\n' check)
-	{
-		if (! isspace(buf[i]))
-		{
-			g_free(eol);
-			return;
-		}
-		i--;
-	}
-
-	// get the whitespace for additional indentation
-	space = utils_get_whitespace(app->pref_editor_tab_width, FALSE);
-	space_len = strlen(space);
-
-	// "pattern", buf + x, y -> x + y = 15, because buf is (pos - 16)...(pos - 1) = 15
+	// "pattern", buf + x, y -> x + y = 15, because buf is (pos - 15)...(pos) = 15
 	if (! strncmp("if", buf + 13, 2))
 	{
 		if (! isspace(*(buf + 12)))
-		{
-			utils_free_pointers(eol, space, NULL);
-			return;
-		}
+			return FALSE;
 
 		construct = g_strdup_printf("()%s{%s%s%s}%s", eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 1, TRUE);
-		g_free(construct);
 	}
 	else if (! strncmp("else", buf + 11, 4))
 	{
 		if (! isspace(*(buf + 10)))
-		{
-			utils_free_pointers(eol, space, NULL);
-			return;
-		}
+			return FALSE;
 
 		construct = g_strdup_printf("%s{%s%s%s}%s", eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
-		g_free(construct);
 	}
 	else if (! strncmp("for", buf + 12, 3))
 	{
@@ -1050,10 +979,7 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		gint contruct_len;
 
 		if (! isspace(*(buf + 11)))
-		{
-			utils_free_pointers(eol, space, NULL);
-			return;
-		}
+			return FALSE;
 
 		if (doc_list[idx].file_type->id == GEANY_FILETYPES_PHP)
 		{
@@ -1075,99 +1001,153 @@ void sci_cb_auto_forif(gint idx, gint pos)
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + contruct_len, TRUE);
 		g_free(var);
-		g_free(construct);
 	}
 	else if (! strncmp("while", buf + 10, 5))
 	{
 		if (! isspace(*(buf + 9)))
-		{
-			utils_free_pointers(eol, space, NULL);
-			return;
-		}
+			return FALSE;
 
 		construct = g_strdup_printf("()%s{%s%s%s}%s", eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 1, TRUE);
-		g_free(construct);
 	}
 	else if (! strncmp("do", buf + 13, 2))
 	{
 		if (! isspace(*(buf + 12)))
-		{
-			utils_free_pointers(eol, space, NULL);
-			return;
-		}
+			return FALSE;
 
 		construct = g_strdup_printf("%s{%s%s%s}%swhile ();%s", eol, eol, space, eol, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
-		g_free(construct);
 	}
 	else if (! strncmp("try", buf + 12, 3))
 	{
 		if (! isspace(*(buf + 11)))
-		{
-			utils_free_pointers(eol, space, NULL);
-			return;
-		}
+			return FALSE;
 
 		construct = g_strdup_printf("%s{%s%s%s}%scatch ()%s{%s%s%s}%s",
 							eol, eol, space, eol, eol, eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
-		g_free(construct);
 	}
 	else if (! strncmp("switch", buf + 9, 6))
 	{
 		if (! isspace(*(buf + 8)))
-		{
-			utils_free_pointers(eol, space, NULL);
-			return;
-		}
+			return FALSE;
 
 		construct = g_strdup_printf("()%s{%s%scase : break;%s%sdefault: %s}%s",
 										eol, eol, space, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 1, TRUE);
-		g_free(construct);
 	}
 	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_FERITE && ! strncmp("iferr", buf + 10, 5))
 	{
-		if (doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE ||
-			! isspace(*(buf + 9)))
-		{
-			utils_free_pointers(eol, space, NULL);
-			return;
-		}
+		if (! isspace(*(buf + 9)))
+			return FALSE;
 
 		construct = g_strdup_printf("%s{%s%s%s}%sfix%s{%s%s%s}%s",
 										eol, eol, space, eol, eol, eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
-		g_free(construct);
 	}
 	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_FERITE && ! strncmp("monitor", buf + 8, 7))
 	{
 		if (! isspace(*(buf + 7)))
-		{
-			utils_free_pointers(eol, space, NULL);
-			return;
-		}
+			return FALSE;
 
 		construct = g_strdup_printf("%s{%s%s%s}%shandle%s{%s%s%s}%s",
 										eol, eol, space, eol, eol, eol, eol, space, eol, eol);
 
 		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
 		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
-		g_free(construct);
+	}
+	result = (construct != NULL);
+	g_free(construct);
+	return result;
+}
+
+
+static gboolean at_eol(ScintillaObject *sci, gint pos)
+{
+	gint line = sci_get_line_from_position(sci, pos);
+
+	return (pos == sci_get_line_end_position(sci, line));
+}
+
+
+gboolean sci_cb_auto_forif(gint idx, gint pos)
+{
+	gboolean result;
+	static gchar buf[16];
+	gchar *eol;
+	gchar *space;
+	gint lexer, style;
+	gint i;
+	ScintillaObject *sci;
+
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return FALSE;
+
+	// only for C, C++, D, Ferite, Java, JavaScript, Perl and PHP
+	if (doc_list[idx].file_type->id != GEANY_FILETYPES_PHP &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_C &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_D &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_CPP &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_PERL &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_JAVA &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_JS &&
+		doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE)
+		return FALSE;
+
+	sci = doc_list[idx].sci;
+	// return if we are editing an existing line (chars on right of cursor)
+	if (! at_eol(sci, pos))
+		return FALSE;
+
+	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
+	// return, if we are in a comment
+	if (is_comment(lexer, style))
+		return FALSE;
+	// never auto complete in a PHP file outside of the <? ?> tags
+	if (lexer == SCLEX_HTML && ! (style >= SCE_HPHP_DEFAULT && style <= SCE_HPHP_OPERATOR))
+		return FALSE;
+
+	sci_get_text_range(sci, pos - 15, pos, buf);
+
+	/* check that the chars before the current word are only whitespace (on this line).
+	 * this prevents completion of '} while ' */
+	i = MIN(strlen(buf) - 1, 15);	// index before \0 char
+	while (i >= 0 && isalpha(buf[i])) i--;	// find pos before keyword
+	while (i >= 0 && buf[i] != '\n' && buf[i] != '\r') // we want to stay in this line('\n' check)
+	{
+		if (! isspace(buf[i]))
+		{
+			return FALSE;
+		}
+		i--;
 	}
 
+	// get the indentation
+	if (doc_list[idx].use_auto_indention) get_indent(sci, pos, TRUE);
+	eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
+
+	// get the whitespace for additional indentation
+	space = utils_get_whitespace(app->pref_editor_tab_width, FALSE);
+
+	sci_insert_text(sci, pos++, " ");	// the construct matching expects a space
+	result = complete_constructs(idx, pos, buf, space, eol);
+	if (! result)
+	{
+		sci_set_current_position(sci, pos, FALSE);
+		SSM(sci, SCI_DELETEBACK, 0, 0);	// cancel the space
+	}
 	utils_free_pointers(eol, space, NULL);
+	return result;
 }
 
 
@@ -2196,3 +2176,5 @@ void sci_cb_select_word(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETSEL, start, end);
 }
+
+

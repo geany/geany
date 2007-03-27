@@ -254,8 +254,10 @@ void keybindings_init(void)
 		GDK_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_calltip", _("Show calltip"));
 	keys[GEANY_KEYS_EDIT_MACROLIST] = fill(cb_func_edit,
 		GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"));
+	keys[GEANY_KEYS_EDIT_COMPLETECONSTRUCT] = fill(NULL,	// has special callback
+		GDK_Tab, 0, "edit_completeconstruct", _("Complete construct"));
 	keys[GEANY_KEYS_EDIT_SUPPRESSCOMPLETION] = fill(cb_func_edit,
-		GDK_space, GDK_SHIFT_MASK, "edit_suppresscompletion", _("Suppress auto completion"));
+		0, 0, "edit_suppresscompletion", _("Suppress construct completion"));
 
 	keys[GEANY_KEYS_EDIT_SELECTWORD] = fill(cb_func_edit,
 		0, 0, "edit_selectword", _("Select current word"));
@@ -516,6 +518,29 @@ static gboolean check_fixed_kb(GdkEventKey *event)
 }
 
 
+/* We have a special case for GEANY_KEYS_EDIT_COMPLETECONSTRUCT, because we need to
+ * return FALSE if no completion occurs, so the tab or space is handled normally. */
+static gboolean check_construct_completion(GdkEventKey *event)
+{
+	const guint i = GEANY_KEYS_EDIT_COMPLETECONSTRUCT;
+
+	if (keys[i]->key == event->keyval && keys[i]->mods == event->state)
+	{
+		gint idx = document_get_cur_idx();
+
+		if (DOC_IDX_VALID(idx))
+		{
+			ScintillaObject *sci = doc_list[idx].sci;
+			gint pos = sci_get_current_position(sci);
+
+			if (app->pref_editor_auto_complete_constructs)
+				return sci_cb_auto_forif(idx, pos);
+		}
+	}
+	return FALSE;
+}
+
+
 /* central keypress event handler, almost all keypress events go to this function */
 gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
@@ -526,7 +551,9 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 	// ignore numlock key, not necessary but nice
 	if (event->state & GDK_MOD2_MASK) event->state -= GDK_MOD2_MASK;
 
+	// special cases
 	if (check_fixed_kb(event)) return TRUE;
+	if (check_construct_completion(event)) return TRUE;
 
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
 	{
@@ -542,8 +569,11 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 
 		if (event->keyval == k && event->state == keys[i]->mods)
 		{
+			if (keys[i]->cb_func == NULL)
+				return FALSE;	// ignore the keybinding
+
 			// call the corresponding callback function for this shortcut
-			if (keys[i]->cb_func != NULL) keys[i]->cb_func(i);
+			keys[i]->cb_func(i);
 			return TRUE;
 		}
 	}
@@ -939,9 +969,21 @@ static void cb_func_edit(guint key_id)
 		case GEANY_KEYS_EDIT_MACROLIST:
 			sci_cb_show_macro_list(doc_list[idx].sci);
 			break;
+
 		case GEANY_KEYS_EDIT_SUPPRESSCOMPLETION:
-			sci_add_text(doc_list[idx].sci, " ");
+			switch (keys[GEANY_KEYS_EDIT_COMPLETECONSTRUCT]->key)
+			{
+				case GDK_space:
+					sci_add_text(doc_list[idx].sci, " ");
+					break;
+				case GDK_Tab:
+					sci_add_text(doc_list[idx].sci, "\t");
+					break;
+				default:
+					break;
+			}
 			break;
+
 		case GEANY_KEYS_EDIT_SELECTWORD:
 			sci_cb_select_word(doc_list[idx].sci);
 			break;

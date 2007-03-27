@@ -1504,9 +1504,22 @@
 								</entry>
 							</row>
 							<row>
-								<entry>Suppress auto completion</entry>
-								<entry>If you type something like if or for and press this key, it
-									   will not be auto completed.
+								<entry>Complete construct</entry>
+								<entry>If you type a construct like <literal>if</literal> or
+									   <literal>for</literal> and press this key, it
+									   will be completed with a matching template.
+								</entry>
+							</row>
+							<row>
+								<entry>Suppress construct completion</entry>
+								<entry>If you type a construct like <literal>if</literal> or
+									   <literal>for</literal> and press this key, it
+									   will not be completed, and a space or tab will be inserted,
+									   depending on what the construct completion keybinding is set to.
+									   For example, if you have set the
+									   construct completion keybinding to <literal>space</literal>,
+									   then setting this to <literal>Shift+space</literal> will
+									   prevent construct completion and insert a space.
 								</entry>
 							</row>
 							<row>

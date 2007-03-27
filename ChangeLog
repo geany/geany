@@ -1,3 +1,11 @@
+2007-03-27  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c, src/keybindings.h, src/sci_cb.c, src/sci_cb.h,
+   doc/geany.docbook:
+   Add keybinding for construct completion, and set the default to tab.
+   Separate complete_constructs() code from sci_cb_auto_forif().
+
+
 2007-03-26  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c, TODO:

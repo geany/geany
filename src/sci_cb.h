@@ -55,7 +55,7 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force);
 
 void sci_cb_close_block(gint idx, gint pos);
 
-void sci_cb_auto_forif(gint idx, gint pos);
+gboolean sci_cb_auto_forif(gint idx, gint pos);
 
 void sci_cb_auto_latex(gint idx, gint pos);
 
