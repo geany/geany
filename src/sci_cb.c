@@ -377,9 +377,48 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 }
 
 
+static gboolean lexer_has_braces(ScintillaObject *sci)
+{
+	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
+
+	switch (lexer)
+	{
+		case SCLEX_CPP:
+		case SCLEX_D:
+		case SCLEX_HTML:	// for PHP & JS
+		case SCLEX_PASCAL:	// for multiline comments?
+		case SCLEX_BASH:
+			return TRUE;
+		default:
+			return FALSE;
+	}
+}
+
+
+// in place indentation of one tab or equivalent spaces
+static void do_indent(gchar *buf, gsize len, guint *index)
+{
+	guint j = *index;
+
+	if (app->pref_editor_use_tabs)
+	{
+		if (j < len - 1)	// leave room for a \0 terminator.
+			buf[j++] = '\t';
+	}
+	else
+	{	// insert as many spaces as a tab would take
+		guint k;
+		for (k = 0; k < (guint) app->pref_editor_tab_width && k < len - 1; k++)
+			buf[j++] = ' ';
+	}
+	*index = j;
+}
+
+
+/* "use_this_line" to auto-indent only if it is a real new line
+ * and ignore the case of sci_cb_close_block */
 static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 {
-	// very simple indentation algorithm
 	guint i, len, j = 0;
 	gint prev_line;
 	gchar *linebuf;
@@ -392,51 +431,36 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 
 	for (i = 0; i < len && j <= (sizeof(indent) - 1); i++)
 	{
-		if (linebuf[i] == ' ' || linebuf[i] == '\t')
+		if (linebuf[i] == ' ' || linebuf[i] == '\t')	// simple indentation
 			indent[j++] = linebuf[i];
-		// "&& ! use_this_line" to auto-indent only if it is a real new line
-		// and ignore the case of sci_cb_close_block
-		else if (linebuf[i] == '{' && ! use_this_line &&
-				 app->pref_editor_indention_mode == INDENT_ADVANCED)
+		else if (app->pref_editor_indention_mode != INDENT_ADVANCED)
+			break;
+		else if (use_this_line)
+			break;
+		else	// sci_cb_close_block
 		{
-			if (app->pref_editor_use_tabs)
+			if (! lexer_has_braces(sci))
+				break;
+
+			if (linebuf[i] == '{')
 			{
-				indent[j++] = '\t';
+				do_indent(indent, sizeof(indent), &j);
+				break;
 			}
 			else
-			{	// insert as many spaces as a tabulator would take
-				gint k;
-				for (k = 0; k < app->pref_editor_tab_width; k++)
-					indent[j++] = ' ';
-			}
-
-			break;
-		}
-		else
-		{
-			gint k = len - 1;
-
-			if (use_this_line)
-				break;	// break immediately in the case of sci_cb_close_block
-
-			while (k > 0 && isspace(linebuf[k])) k--;
-
-			// if last non-whitespace character is a { increase indention by a tab
-			// e.g. for (...) {
-			if (app->pref_editor_indention_mode == INDENT_ADVANCED && linebuf[k] == '{')
 			{
-				if (app->pref_editor_use_tabs)
+				gint k = len - 1;
+
+				while (k > 0 && isspace(linebuf[k])) k--;
+
+				// if last non-whitespace character is a { increase indentation by a tab
+				// e.g. for (...) {
+				if (linebuf[k] == '{')
 				{
-					indent[j++] = '\t';
+					do_indent(indent, sizeof(indent), &j);
 				}
-				else
-				{	// insert as many spaces as a tabulator would take
-					gint n;
-					for (n = 0; n < app->pref_editor_tab_width; n++)
-						indent[j++] = ' ';
-				}
+				break;
 			}
-			break;
 		}
 	}
 	indent[j] = '\0';
@@ -503,7 +527,7 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 void sci_cb_close_block(gint idx, gint pos)
 {
 	gint x = 0, cnt = 0;
-	gint start_brace, line, line_start, line_len, eol_char_len, lexer;
+	gint start_brace, line, line_start, line_len, eol_char_len;
 	gchar *text, *line_buf;
 	ScintillaObject *sci;
 
@@ -511,9 +535,7 @@ void sci_cb_close_block(gint idx, gint pos)
 
 	sci = doc_list[idx].sci;
 
-	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
-	if (lexer != SCLEX_CPP && lexer != SCLEX_HTML && lexer != SCLEX_PASCAL &&
-		lexer != SCLEX_D && lexer != SCLEX_BASH)
+	if (! lexer_has_braces(sci))
 		return;
 
 	start_brace = brace_match(sci, pos);

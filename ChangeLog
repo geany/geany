@@ -1,3 +1,11 @@
+2007-03-28  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sci_cb.c:
+   Don't auto-indent {} braces for filetypes that don't use them.
+   Add lexer_has_braces(), do_indent() for in place buffer indentation.
+   Rewrite some of get_indent().
+
+
 2007-03-27  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c, src/keybindings.h, src/sci_cb.c, src/sci_cb.h,
