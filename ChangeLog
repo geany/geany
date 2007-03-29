@@ -1,3 +1,11 @@
+2007-03-29  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sci_cb.c:
+   Check size of construct completion buffer, remove unneeded static in
+   sci_cb_auto_forif().
+   Reorder some of sci_cb_close_block().
+
+
 2007-03-28  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c:

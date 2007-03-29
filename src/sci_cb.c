@@ -527,7 +527,7 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 void sci_cb_close_block(gint idx, gint pos)
 {
 	gint x = 0, cnt = 0;
-	gint start_brace, line, line_start, line_len, eol_char_len;
+	gint start_brace, line, line_len, eol_char_len;
 	gchar *text, *line_buf;
 	ScintillaObject *sci;
 
@@ -538,9 +538,7 @@ void sci_cb_close_block(gint idx, gint pos)
 	if (! lexer_has_braces(sci))
 		return;
 
-	start_brace = brace_match(sci, pos);
 	line = sci_get_line_from_position(sci, pos);
-	line_start = sci_get_position_from_line(sci, line);
 	line_len = sci_get_line_length(sci, line);
 	// set eol_char_len to 0 if on last line, because there is no EOL char
 	eol_char_len = (line == (SSM(sci, SCI_GETLINECOUNT, 0, 0) - 1)) ? 0 :
@@ -558,10 +556,15 @@ void sci_cb_close_block(gint idx, gint pos)
 
 	if ((line_len - eol_char_len - 1) != cnt) return;
 
+	start_brace = brace_match(sci, pos);	// same as sci_find_bracematch (Document::BraceMatch)?
+
 	if (start_brace >= 0)
 	{
+		gint line_start;
+
 		get_indent(sci, start_brace, TRUE);
 		text = g_strconcat(indent, "}", NULL);
+		line_start = sci_get_position_from_line(sci, line);
 		sci_set_anchor(sci, line_start);
 		SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
 		g_free(text);
@@ -1105,7 +1108,7 @@ static gboolean at_eol(ScintillaObject *sci, gint pos)
 gboolean sci_cb_auto_forif(gint idx, gint pos)
 {
 	gboolean result;
-	static gchar buf[16];
+	gchar buf[16];
 	gchar *eol;
 	gchar *space;
 	gint lexer, style;
@@ -1140,10 +1143,12 @@ gboolean sci_cb_auto_forif(gint idx, gint pos)
 		return FALSE;
 
 	sci_get_text_range(sci, pos - 15, pos, buf);
+	if (sizeof(buf) != strlen(buf) + 1)
+		return FALSE;	// not enough chars in document
 
 	/* check that the chars before the current word are only whitespace (on this line).
 	 * this prevents completion of '} while ' */
-	i = MIN(strlen(buf) - 1, 15);	// index before \0 char
+	i = 14;	// index before \0 char
 	while (i >= 0 && isalpha(buf[i])) i--;	// find pos before keyword
 	while (i >= 0 && buf[i] != '\n' && buf[i] != '\r') // we want to stay in this line('\n' check)
 	{
