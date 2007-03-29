@@ -231,11 +231,11 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit,
 		GDK_i, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_decreaseindent", _("Decrease indent"));
 	keys[GEANY_KEYS_EDIT_SENDTOCMD1] = fill(cb_func_edit,
-		GDK_1, GDK_CONTROL_MASK, "edit_sendtocmd1", _("Send Selection to custom command 1"));
+		GDK_1, GDK_CONTROL_MASK, "edit_sendtocmd1", _("Send to Custom Command 1"));
 	keys[GEANY_KEYS_EDIT_SENDTOCMD2] = fill(cb_func_edit,
-		GDK_2, GDK_CONTROL_MASK, "edit_sendtocmd2", _("Send Selection to custom command 2"));
+		GDK_2, GDK_CONTROL_MASK, "edit_sendtocmd2", _("Send to Custom Command 2"));
 	keys[GEANY_KEYS_EDIT_SENDTOCMD3] = fill(cb_func_edit,
-		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send Selection to custom command 3"));
+		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"));
 	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit,
 		0, 0, "edit_gotomatchingbrace",
 		_("Goto matching brace"));
@@ -418,13 +418,78 @@ void keybindings_free(void)
 }
 
 
+static void get_shortcut_labels_text(GString **text_names_str, GString **text_keys_str)
+{
+	guint i;
+	GString *text_names = g_string_sized_new(600);
+	GString *text_keys = g_string_sized_new(600);
+
+	*text_names_str = text_names;
+	*text_keys_str = text_keys;
+
+	for (i = 0; i < GEANY_MAX_KEYS; i++)
+	{
+		gchar *shortcut;
+
+		switch (i)
+		{
+			case GEANY_KEYS_MENU_NEW:
+				g_string_append(text_names, _("<b>File menu</b>\n"));
+				g_string_append(text_keys, "\n");
+				break;
+			case GEANY_KEYS_MENU_UNDO:
+				g_string_append(text_names, _("\n<b>Edit menu</b>\n"));
+				g_string_append(text_keys, "\n\n");
+				break;
+			case GEANY_KEYS_MENU_FINDNEXT:
+				g_string_append(text_names, _("\n<b>Search menu</b>\n"));
+				g_string_append(text_keys, "\n\n");
+				break;
+			case GEANY_KEYS_MENU_FULLSCREEN:
+				g_string_append(text_names, _("\n<b>View menu</b>\n"));
+				g_string_append(text_keys, "\n\n");
+				break;
+			case GEANY_KEYS_MENU_REPLACETABS:
+				g_string_append(text_names, _("\n<b>Document menu</b>\n"));
+				g_string_append(text_keys, "\n\n");
+				break;
+			case GEANY_KEYS_BUILD_COMPILE:
+				g_string_append(text_names, _("\n<b>Build menu</b>\n"));
+				g_string_append(text_keys, "\n\n");
+				break;
+			case GEANY_KEYS_MENU_OPENCOLORCHOOSER:
+				g_string_append(text_names, _("\n<b>Tools menu</b>\n"));
+				g_string_append(text_keys, "\n\n");
+				break;
+			case GEANY_KEYS_SWITCH_EDITOR:
+				g_string_append(text_names, _("\n<b>Focus commands</b>\n"));
+				g_string_append(text_keys, "\n\n");
+				break;
+			case GEANY_KEYS_EDIT_TOLOWERCASE:
+				g_string_append(text_names, _("\n<b>Editing commands</b>\n"));
+				g_string_append(text_keys, "\n\n");
+				break;
+			case GEANY_KEYS_EDIT_AUTOCOMPLETE:
+				g_string_append(text_names, _("\n<b>Tag commands</b>\n"));
+				g_string_append(text_keys, "\n\n");
+				break;
+		}
+
+		shortcut = gtk_accelerator_get_label(keys[i]->key, keys[i]->mods);
+		g_string_append(text_names, keys[i]->label);
+		g_string_append(text_names, "\n");
+		g_string_append(text_keys, shortcut);
+		g_string_append(text_keys, "\n");
+		g_free(shortcut);
+	}
+}
+
+
 void keybindings_show_shortcuts()
 {
 	GtkWidget *dialog, *hbox, *label1, *label2, *label3, *swin, *vbox;
-	GString *text_names = g_string_sized_new(600);
-	GString *text_keys = g_string_sized_new(600);
-	gchar *shortcut;
-	guint i;
+	GString *text_names;
+	GString *text_keys;
 	gint height, response;
 
 	dialog = gtk_dialog_new_with_buttons(_("Keyboard shortcuts"), GTK_WINDOW(app->window),
@@ -447,18 +512,13 @@ void keybindings_show_shortcuts()
 
 	label2 = gtk_label_new(NULL);
 
-	for (i = 0; i < GEANY_MAX_KEYS; i++)
-	{
-		shortcut = gtk_accelerator_get_label(keys[i]->key, keys[i]->mods);
-		g_string_append(text_names, keys[i]->label);
-		g_string_append(text_names, "\n");
-		g_string_append(text_keys, shortcut);
-		g_string_append(text_keys, "\n");
-		g_free(shortcut);
-	}
+	get_shortcut_labels_text(&text_names, &text_keys);
 
-	gtk_label_set_text(GTK_LABEL(label1), text_names->str);
+	gtk_label_set_markup(GTK_LABEL(label1), text_names->str);
 	gtk_label_set_text(GTK_LABEL(label2), text_keys->str);
+
+	g_string_free(text_names, TRUE);
+	g_string_free(text_keys, TRUE);
 
 	gtk_container_add(GTK_CONTAINER(hbox), label1);
 	gtk_container_add(GTK_CONTAINER(hbox), label2);
@@ -490,9 +550,6 @@ void keybindings_show_shortcuts()
 	}
 
 	gtk_widget_destroy(dialog);
-
-	g_string_free(text_names, TRUE);
-	g_string_free(text_keys, TRUE);
 }
 
 
