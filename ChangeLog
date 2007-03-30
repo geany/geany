@@ -3,6 +3,8 @@
  * geany.desktop.in:
    Added MimeTypes: C++ header, Pascal, Perl, Python, httpd-PHP, XML;
    thanks to Iñaki Rodriguez.
+ * src/search.c:
+   Prevent Find in Files directory combo being vertically stretched.
 
 
 2007-03-30  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -559,7 +559,7 @@ void search_show_find_in_files_dialog()
 	if (widgets.find_in_files_dialog == NULL)
 	{
 		GtkWidget *label, *label1, *checkbox1, *checkbox2, *check_wholeword;
-		GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox, *vbox;
+		GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox, *vbox, *box;
 		GtkSizeGroup *size_group;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
@@ -583,6 +583,10 @@ void search_show_find_in_files_dialog()
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "dir_combo",
 						gtk_widget_ref(dir_combo), (GDestroyNotify)gtk_widget_unref);
 
+		// prevent dir_combo being vertically stretched to the height of dirbtn
+		box = gtk_vbox_new(FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(box), dir_combo, TRUE, FALSE, 0);
+
 		dirbtn = gtk_button_new();
 		openimg = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
 		gtk_container_add(GTK_CONTAINER(dirbtn), openimg);
@@ -591,7 +595,7 @@ void search_show_find_in_files_dialog()
 
 		dbox = gtk_hbox_new(FALSE, 6);
 		gtk_box_pack_start(GTK_BOX(dbox), label1, FALSE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(dbox), dir_combo, TRUE, TRUE, 0);
+		gtk_box_pack_start(GTK_BOX(dbox), box, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(dbox), dirbtn, FALSE, FALSE, 0);
 
 		label = gtk_label_new(_("Search for:"));
