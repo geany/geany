@@ -396,9 +396,9 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 
 
 // in place indentation of one tab or equivalent spaces
-static void do_indent(gchar *buf, gsize len, guint *index)
+static void do_indent(gchar *buf, gsize len, guint *idx)
 {
-	guint j = *index;
+	guint j = *idx;
 
 	if (app->pref_editor_use_tabs)
 	{
@@ -411,7 +411,7 @@ static void do_indent(gchar *buf, gsize len, guint *index)
 		for (k = 0; k < (guint) app->pref_editor_tab_width && k < len - 1; k++)
 			buf[j++] = ' ';
 	}
-	*index = j;
+	*idx = j;
 }
 
 

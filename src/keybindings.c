@@ -90,6 +90,7 @@ static void cb_func_reloadtaglist(guint key_id);
 static void cb_func_switch_editor(guint key_id);
 static void cb_func_switch_scribble(guint key_id);
 static void cb_func_switch_vte(guint key_id);
+static void cb_func_switch_search_bar(guint key_id);
 static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
@@ -207,6 +208,8 @@ void keybindings_init(void)
 		GDK_F6, 0, "switch_scribble", _("Switch to Scribble"));
 	keys[GEANY_KEYS_SWITCH_VTE] = fill(cb_func_switch_vte,
 		GDK_F4, 0, "switch_vte", _("Switch to VTE"));
+	keys[GEANY_KEYS_SWITCH_SEARCH_BAR] = fill(cb_func_switch_search_bar,
+		GDK_F7, 0, "switch_search_bar", _("Switch to Search Bar"));
 	keys[GEANY_KEYS_SWITCH_TABLEFT] = fill(cb_func_switch_tableft,
 		GDK_Page_Up, GDK_CONTROL_MASK, "switch_tableft", _("Switch to left document"));
 	keys[GEANY_KEYS_SWITCH_TABRIGHT] = fill(cb_func_switch_tabright,
@@ -916,6 +919,12 @@ static void cb_func_switch_scribble(G_GNUC_UNUSED guint key_id)
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_SCRATCH);
 	msgwin_show_hide(TRUE);
 	gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
+}
+
+static void cb_func_switch_search_bar(G_GNUC_UNUSED guint key_id)
+{
+	if (app->toolbar_visible && app->pref_toolbar_show_search)
+		gtk_widget_grab_focus(lookup_widget(app->window, "entry1"));
 }
 
 static void cb_func_switch_vte(G_GNUC_UNUSED guint key_id)

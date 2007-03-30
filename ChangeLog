@@ -1,3 +1,11 @@
+2007-03-30  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: Fixed warning about shadowing a local variable.
+ * doc_geany.docbook, src/keybindings.c, src/keybindings.h:
+   Add keybinding for switching to the search bar
+   (as suggested by Nikolas Arend).
+
+
 2007-03-29  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c:
