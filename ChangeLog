@@ -1,3 +1,10 @@
+2007-03-30  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * geany.desktop.in:
+   Added MimeTypes: C++ header, Pascal, Perl, Python, httpd-PHP, XML;
+   thanks to Iñaki Rodriguez.
+
+
 2007-03-30  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Fixed warning about shadowing a local variable.
