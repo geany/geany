@@ -1,3 +1,11 @@
+2007-03-31  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/templates.c, doc/geany.docbook:
+   Make file header optional for filetype templates - use the string
+   '{fileheader}' to mark where the file header should be placed, which
+   can be anywhere in the filetype template.
+
+
 2007-03-30  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * geany.desktop.in:

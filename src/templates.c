@@ -51,7 +51,8 @@ GNU General Public License for more details.\n\
 \n\
 You should have received a copy of the GNU General Public License\n\
 along with this program; if not, write to the Free Software\n\
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,\n\
+MA 02110-1301, USA.\n\
 ";
 
 static const gchar templates_bsd_notice[] = "\
@@ -109,7 +110,7 @@ static const gchar templates_changelog[] = "\
 
 static const gchar templates_filetype_none[] = "";
 
-static const gchar templates_filetype_c[] = "\n\
+static const gchar templates_filetype_c[] = "{fileheader}\n\n\
 #include <stdio.h>\n\
 \n\
 int main(int argc, char** argv)\n\
@@ -119,7 +120,7 @@ int main(int argc, char** argv)\n\
 }\n\
 ";
 
-static const gchar templates_filetype_cpp[] = "\n\
+static const gchar templates_filetype_cpp[] = "{fileheader}\n\n\
 #include <iostream>\n\
 \n\
 int main(int argc, char** argv)\n\
@@ -129,7 +130,7 @@ int main(int argc, char** argv)\n\
 }\n\
 ";
 
-static const gchar templates_filetype_d[] = "\n\
+static const gchar templates_filetype_d[] = "{fileheader}\n\n\
 import std.stdio;\n\
 \n\
 int main(char[][] args)\n\
@@ -139,7 +140,8 @@ int main(char[][] args)\n\
 }\n\
 ";
 
-static const gchar templates_filetype_php[] = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
+static const gchar templates_filetype_php[] = "{fileheader}\n\
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
   \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
 <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\
 \n\
@@ -155,7 +157,8 @@ static const gchar templates_filetype_php[] = "<!DOCTYPE html PUBLIC \"-//W3C//D
 </html>\n\
 ";
 
-static const gchar templates_filetype_html[] = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
+static const gchar templates_filetype_html[] = "{fileheader}\n\
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
   \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
 <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\
 \n\
@@ -171,7 +174,7 @@ static const gchar templates_filetype_html[] = "<!DOCTYPE html PUBLIC \"-//W3C//
 </html>\n\
 ";
 
-static const gchar templates_filetype_pascal[] = "\n\
+static const gchar templates_filetype_pascal[] = "{fileheader}\n\n\
 program {untitled};\n\
 \n\
 uses crt;\n\
@@ -183,7 +186,7 @@ BEGIN\n\
 END.\n\
 ";
 
-static const gchar templates_filetype_java[] = "\n\
+static const gchar templates_filetype_java[] = "{fileheader}\n\n\
 public class {untitled} {\n\
 \n\
 	public static void main (String args[]) {\
@@ -193,8 +196,7 @@ public class {untitled} {\n\
 }\n\
 ";
 
-static const gchar templates_filetype_ruby[] = "\n\
-\n\
+static const gchar templates_filetype_ruby[] = "{fileheader}\n\n\
 class StdClass\n\
 	def initialize\n\
 		\n\
@@ -560,7 +562,6 @@ static gchar *get_file_template(filetype *ft)
 
 gchar *templates_get_template_new_file(filetype *ft)
 {
-	gchar *template = NULL;
 	gchar *ft_template = NULL;
 	gchar *file_header = NULL;
 
@@ -569,10 +570,9 @@ gchar *templates_get_template_new_file(filetype *ft)
 
 	file_header = get_file_header(ft, NULL);	// file template only used for new files
 	ft_template = get_file_template(ft);
-	template = g_strconcat(file_header, "\n", ft_template, NULL);
-	g_free(ft_template);
+	ft_template = utils_str_replace(ft_template, "{fileheader}", file_header);
 	g_free(file_header);
-	return template;
+	return ft_template;
 }
 
 

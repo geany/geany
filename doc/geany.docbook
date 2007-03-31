@@ -2005,17 +2005,29 @@
 				description.
 			</para>
 			<section>
+			<title>Template metadata</title>
+			<para>
+				Metadata can be used with all templates, but by default user set metadata is only
+				used for the ChangeLog and File header templates.
+			</para>
+			<para>
+				In the configuration dialog you can find a tab "Templates"
+				(see <xref linkend="confdialog_templ"/>). You can define the default values which
+				will be inserted in the templates. You should restart <application>Geany</application>
+				after making changes, because they are only read at startup.
+			</para>
+			</section>
+			<section>
 			<title>Filetype templates</title>
 			<para>
 				Filetype templates are templates used as the basis of a new file. To use them, choose
 				the <literal>New (with Template)</literal> menu item from the
-				<literal>File</literal> menu. At creation of a new file with a filetype template, the
-				fileheader template is automatically prepended.
+				<literal>File</literal> menu.
 			</para>
 			<para>
-				By default, templates are created for certain filetypes. Other filetype templates can be
+				By default, templates are created for some filetypes. Other filetype templates can be
 				added by creating the appropriate template file and restarting
-				<application>Geany</application>.
+				<application>Geany</application>. You can also edit the default filetype templates.
 			</para>
 			<para>
 				Filetype template files are read from the <filename>~/.geany/templates</filename>
@@ -2027,22 +2039,14 @@
 				'<filename>filetypes.</filename>'.
 			</para>
 			<para>
+				The file's contents are just the text to place in the document, except for the
+				optional <literal>{fileheader}</literal> template wildcard. This can be placed anywhere,
+				but is usually on the first line of the file, followed by a blank line.
+			</para>
+			<para>
 				There is also a template file <filename>template.none</filename> which is used when
 				the <literal>New</literal> command is used without a filetype. This is empty by
 				default.
-			</para>
-			</section>
-			<section>
-			<title>Template metadata</title>
-			<para>
-				Metadata can be used with all templates, but by default user set metadata is only
-				used for the ChangeLog and File header templates.
-			</para>
-			<para>
-				In the configuration dialog you can find a tab "Templates"
-				(see <xref linkend="confdialog_templ"/>). You can define the default values which
-				will be inserted in the templates. You should restart <application>Geany</application>
-				after making changes, because they are only read at startup.
 			</para>
 			</section>
 			<section>
@@ -2161,6 +2165,13 @@
 									   This wildcard will only be replaced in the function
 									   description template.</entry>
 								<entry>function description</entry>
+							</row>
+							<row>
+								<entry>fileheader</entry>
+								<entry>The file header template.
+									   This wildcard will only be replaced in filetype
+									   templates.</entry>
+								<entry>filetypes</entry>
 							</row>
 						</tbody>
 					</tgroup>
