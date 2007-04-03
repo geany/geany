@@ -65,7 +65,8 @@ typedef enum
 {
 	FIF_CASE_SENSITIVE	= 1 << 0,
 	FIF_WHOLE_WORD		= 1 << 1,
-	FIF_INVERT_MATCH	= 1 << 2
+	FIF_INVERT_MATCH	= 1 << 2,
+	FIF_RECURSIVE		= 1 << 3
 } fif_options;
 
 typedef enum
@@ -558,7 +559,8 @@ void search_show_find_in_files_dialog()
 
 	if (widgets.find_in_files_dialog == NULL)
 	{
-		GtkWidget *label, *label1, *checkbox1, *checkbox2, *check_wholeword;
+		GtkWidget *label, *label1, *checkbox1, *checkbox2, *check_wholeword,
+			*check_recursive;
 		GtkWidget *dbox, *sbox, *cbox, *rbox, *rbtn, *hbox, *vbox, *box;
 		GtkSizeGroup *size_group;
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
@@ -641,6 +643,11 @@ void search_show_find_in_files_dialog()
 		gtk_button_set_focus_on_click(GTK_BUTTON(rbtn), FALSE);
 		gtk_container_add(GTK_CONTAINER(rbox), rbtn);
 
+		check_recursive = gtk_check_button_new_with_mnemonic(_("_Recurse in subfolders"));
+		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_recursive",
+						gtk_widget_ref(check_recursive), (GDestroyNotify)gtk_widget_unref);
+		gtk_button_set_focus_on_click(GTK_BUTTON(check_recursive), FALSE);
+
 		checkbox1 = gtk_check_button_new_with_mnemonic(_("_Case sensitive"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_case",
 						gtk_widget_ref(checkbox1), (GDestroyNotify)gtk_widget_unref);
@@ -660,6 +667,7 @@ void search_show_find_in_files_dialog()
 				_("Invert the sense of matching, to select non-matching lines."), NULL);
 
 		cbox = gtk_vbox_new(FALSE, 0);
+		gtk_container_add(GTK_CONTAINER(cbox), check_recursive);
 		gtk_container_add(GTK_CONTAINER(cbox), checkbox1);
 		gtk_container_add(GTK_CONTAINER(cbox), check_wholeword);
 		gtk_container_add(GTK_CONTAINER(cbox), checkbox2);
@@ -1052,9 +1060,12 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 							lookup_widget(widgets.find_in_files_dialog, "check_case")));
 			gboolean whole_word = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 							lookup_widget(widgets.find_in_files_dialog, "check_wholeword")));
+			gboolean recursive = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+							lookup_widget(widgets.find_in_files_dialog, "check_recursive")));
 			gint opts = (invert ? FIF_INVERT_MATCH : 0) |
 						(case_sens ? FIF_CASE_SENSITIVE : 0) |
-						(whole_word ? FIF_WHOLE_WORD : 0);
+						(whole_word ? FIF_WHOLE_WORD : 0) |
+						(recursive ? FIF_RECURSIVE: 0);
 			gboolean fgrep = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 							lookup_widget(widgets.find_in_files_dialog, "radio_fgrep")));
 			gboolean grep = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
@@ -1086,7 +1097,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, fif_match_type 
 	gchar **argv_prefix;
 	gchar **grep_cmd_argv;
 	gchar **argv;
-	gchar grep_opts[] = "-nHI    ";
+	gchar grep_opts[] = "-nHI     ";
 	GPid child_pid;
 	gint stdout_fd, stdin_fd, grep_cmd_argv_len, i, grep_opts_len = 4;
 	GError *error = NULL;
@@ -1122,23 +1133,36 @@ search_find_in_files(const gchar *search_text, const gchar *dir, fif_match_type 
 		grep_opts[grep_opts_len++] = 'w';
 	if (opts & FIF_INVERT_MATCH)
 		grep_opts[grep_opts_len++] = 'v';
+	if (opts & FIF_RECURSIVE)
+		grep_opts[grep_opts_len++] = 'r';
 	grep_opts[grep_opts_len] = '\0';
 
 	// set grep command and options
-	argv_prefix = g_new0(gchar*, grep_cmd_argv_len + 4);
+	argv_prefix = g_new0(gchar*, grep_cmd_argv_len + 4 + 1);	// +1 for recursive arg
+
 	for (i = 0; i < grep_cmd_argv_len; i++)
 	{
 		argv_prefix[i] = g_strdup(grep_cmd_argv[i]);
 	}
-	argv_prefix[grep_cmd_argv_len] = g_strdup(grep_opts);
-	argv_prefix[grep_cmd_argv_len + 1] = g_strdup("--");
-	argv_prefix[grep_cmd_argv_len + 2] = g_strdup(search_text);
-	argv_prefix[grep_cmd_argv_len + 3] = NULL;
 	g_strfreev(grep_cmd_argv);
 
+	argv_prefix[i++] = g_strdup(grep_opts);
+	argv_prefix[i++] = g_strdup("--");
+	argv_prefix[i++] = g_strdup(search_text);
+
 	// finally add the arguments(files to be searched)
-	argv = search_get_argv((const gchar**)argv_prefix, dir);
-	g_strfreev(argv_prefix);
+	if (opts & FIF_RECURSIVE)
+	{
+		argv_prefix[i++] = g_strdup(".");
+		argv_prefix[i++] = NULL;
+		argv = argv_prefix;
+	}
+	else
+	{
+		argv_prefix[i++] = NULL;
+		argv = search_get_argv((const gchar**)argv_prefix, dir);
+		g_strfreev(argv_prefix);
+	}
 
 	if (argv == NULL) return FALSE;
 
