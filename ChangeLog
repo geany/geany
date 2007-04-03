@@ -2,6 +2,12 @@
 
  * src/search.c:
    Add recursive option to Find in Files dialog.
+ * src/search.c:
+   Add 'Extra options' field and checkbox to FIF dialog.
+   Don't allow arguments appended to Grep command.
+   Prevent warning when using relative paths with open directory button.
+   Refactor FIF options code into get_grep_options(), remove
+   fif_options, fif_match_type.
 
 
 2007-03-31  Nick Treleaven  <nick.treleaven@btinternet.com>
