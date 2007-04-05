@@ -6,6 +6,8 @@
  * doc/geany.docbook:
    Add filtering out version control files with Extra options info to
    Find in Files section.
+ * src/keybindings.c:
+   Only construct-complete when the editor widget has focus.
 
 
 2007-04-03  Nick Treleaven  <nick.treleaven@btinternet.com>

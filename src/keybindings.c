@@ -587,8 +587,10 @@ static gboolean check_construct_completion(GdkEventKey *event)
 	if (keys[i]->key == event->keyval && keys[i]->mods == event->state)
 	{
 		gint idx = document_get_cur_idx();
+		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
 
-		if (DOC_IDX_VALID(idx))
+		// keybinding only valid when scintilla widget has focus
+		if (DOC_IDX_VALID(idx) && focusw == GTK_WIDGET(doc_list[idx].sci))
 		{
 			ScintillaObject *sci = doc_list[idx].sci;
 			gint pos = sci_get_current_position(sci);
