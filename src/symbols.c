@@ -724,10 +724,9 @@ int symbols_generate_global_tags(int argc, char **argv)
 	else
 	{
 		fprintf(stderr, "Usage: %s -g <Tag File> <File list>\n\n", argv[0]);
-		fprintf(stderr, "Each file in <File list> must be enclosed in double quotes.\n");
 		fprintf(stderr, "Example:\n"
 			"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags"
-			" \\\"/usr/include/gtk-2.0/gtk/gtk.h\\\"\n", argv[0]);
+			" /usr/include/gtk-2.0/gtk/gtk.h\n", argv[0]);
 		return 1;
 	}
 	return 0;

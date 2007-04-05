@@ -219,6 +219,8 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 
 #ifdef HAVE_GLOB_H
 	globbuf.gl_offs = 0;
+
+	if (includes[0][0] == '"')	// leading \" char for glob matching
 	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
 	{
  		int dirty_len = strlen(includes[idx_inc]);
@@ -254,7 +256,8 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		globfree(&globbuf);
 		free(clean_path);
   	}
-#else	// no glob support
+  	else
+#endif
 	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
 	{
 		if (!g_hash_table_lookup(includes_files_hash,
@@ -265,8 +268,6 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 								file_name_copy);
 		}
   	}
-#endif
-
 
 	/* Checks for duplicate file entries which would case trouble */
 	g_hash_table_foreach(includes_files_hash, tm_move_entries_to_g_list,

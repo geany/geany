@@ -8,6 +8,10 @@
    Find in Files section.
  * src/keybindings.c:
    Only construct-complete when the editor widget has focus.
+ * src/symbols.c, tagmanager/tm_workspace.c:
+   Make \" filename quoting optional when creating a global tags file
+   (quoting is useful if glob matching is needed). Run geany -g for
+   example usage.
 
 
 2007-04-03  Nick Treleaven  <nick.treleaven@btinternet.com>
