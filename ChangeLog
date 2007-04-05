@@ -1,3 +1,10 @@
+2007-04-05  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * tagmanager/tm_workspace.c:
+   Write tm_tag_enumerator_t and tm_tag_macro_t (e.g. for GTK_STOCK_*)
+   tags when creating a global tags file, and store the pointerOrder.
+
+
 2007-04-03  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/search.c:

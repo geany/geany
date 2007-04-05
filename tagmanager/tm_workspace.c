@@ -294,7 +294,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	includes_files = NULL;
 	fclose(fp);
 
-	/* FIXME: The following grep command it be remove the lines 
+	/* FIXME: The following grep command removes the lines
 	 * G_BEGIN_DECLS and G_END_DECLS from the header files. The reason is
 	 * that in tagmanager, the files are not correctly parsed and the typedefs
 	 * following these lines are incorrectly parsed. The real fix should,
@@ -325,7 +325,8 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		return FALSE;
 	}
 	tags_array = tm_tags_extract(source_file->tags_array, tm_tag_class_t |
-	  tm_tag_typedef_t | tm_tag_prototype_t | tm_tag_enum_t | tm_tag_macro_with_arg_t);
+	  tm_tag_typedef_t | tm_tag_prototype_t | tm_tag_enum_t | tm_tag_enumerator_t |
+	  tm_tag_macro_t | tm_tag_macro_with_arg_t);
 	if ((NULL == tags_array) || (0 == tags_array->len))
 	{
 		if (tags_array)
@@ -343,10 +344,11 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		tm_source_file_free(source_file);
 		return FALSE;
 	}
-	for (i=0; i < tags_array->len; ++i)
+	for (i = 0; i < tags_array->len; ++i)
 	{
 		tm_tag_write(TM_TAG(tags_array->pdata[i]), fp, tm_tag_attr_type_t
-		  | tm_tag_attr_scope_t | tm_tag_attr_arglist_t | tm_tag_attr_vartype_t);
+		  | tm_tag_attr_scope_t | tm_tag_attr_arglist_t | tm_tag_attr_vartype_t
+		  | tm_tag_attr_pointer_t);
 	}
 	fclose(fp);
 	tm_source_file_free(source_file);
