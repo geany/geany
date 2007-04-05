@@ -3,6 +3,9 @@
  * tagmanager/tm_workspace.c:
    Write tm_tag_enumerator_t and tm_tag_macro_t (e.g. for GTK_STOCK_*)
    tags when creating a global tags file, and store the pointerOrder.
+ * doc/geany.docbook:
+   Add filtering out version control files with Extra options info to
+   Find in Files section.
 
 
 2007-04-03  Nick Treleaven  <nick.treleaven@btinternet.com>

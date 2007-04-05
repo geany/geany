@@ -635,12 +635,13 @@
 					The search results are shown in the Messages window.
 				</para>
 			</section>
-			<section>
+			<section id="search_fif">
 				<title>Find in files</title>
 				<para>
 					Find in files is a more powerful version of Find usage that searches all files
 					in a certain directory using the Grep tool. The Grep tool must be correctly set
 					in Preferences to the path of the system's Grep utility.
+					GNU Grep is recommended.
 				</para>
 				<para>
 					<figure>
@@ -648,6 +649,33 @@
 					   <graphic fileref="images/find_in_files_dialog.png"></graphic>
 					</figure>
 				</para>
+				<para>
+					The <emphasis>Extra options</emphasis> field is used to pass any additional
+					arguments to the <literal>grep</literal> tool.
+				</para>
+				<section><title>Filtering out version control files</title>
+				<para>
+					When using the <emphasis>Recurse in subfolders</emphasis> option with a
+					directory that's under version control, you can set the
+					<emphasis>Extra options</emphasis> field to use <literal>grep</literal>'s
+					<literal>--exclude</literal> flag to filter out filenames.
+				</para>
+				<para>
+					SVN Example: <literal>--exclude=*.svn-base</literal>
+				</para>
+				<note>
+					<para>
+						The GNU Grep project added support for excluding directories,
+						using the <literal>--exclude-dir</literal> flag.
+						At the time of writing (April 2007) this is unreleased outside
+						of version control.
+						Check your Grep manual to see if your version supports it.
+					</para>
+					<para>
+						Example: <literal>--exclude-dir=.* --exclude-dir=CVS</literal>
+					</para>
+				</note>
+				</section>
 			</section>
 			<section>
 				<title>Replace</title>
