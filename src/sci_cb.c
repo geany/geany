@@ -1092,6 +1092,10 @@ static gboolean complete_constructs(gint idx, gint pos, const gchar *buf, const 
 		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
 	}
 	result = (construct != NULL);
+	if (result)
+	{
+		sci_insert_text(sci, pos, " ");	// prefix all constructs with a space
+	}
 	g_free(construct);
 	return result;
 }
@@ -1166,13 +1170,10 @@ gboolean sci_cb_auto_forif(gint idx, gint pos)
 	// get the whitespace for additional indentation
 	space = utils_get_whitespace(app->pref_editor_tab_width, FALSE);
 
-	sci_insert_text(sci, pos++, " ");	// the construct matching expects a space
+	sci_start_undo_action(sci);	// needed while we insert a space separately from construct
 	result = complete_constructs(idx, pos, buf, space, eol);
-	if (! result)
-	{
-		sci_set_current_position(sci, pos, FALSE);
-		SSM(sci, SCI_DELETEBACK, 0, 0);	// cancel the space
-	}
+	sci_end_undo_action(sci);
+
 	utils_free_pointers(eol, space, NULL);
 	return result;
 }

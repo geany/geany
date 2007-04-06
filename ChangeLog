@@ -1,3 +1,10 @@
+2007-04-06  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sci_cb.c:
+   Only insert a space if construct completion occurs, to prevent
+   unusual undo history.
+
+
 2007-04-05  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * tagmanager/tm_workspace.c:
