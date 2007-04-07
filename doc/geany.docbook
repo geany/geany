@@ -1128,8 +1128,8 @@
 			<section>
 				<title>Stopping running processes</title>
 				<para>
-					If you started a build action (Compile, Build or Run) the Run button in the
-					toolbar becomes a stop button and you can stop the curent action. This works
+					When there is a running program, the Run button in the
+					toolbar becomes a stop button and you can stop the current action. This works
 					by sending a signal to the process (and its child process(es)) to stop the
 					process. The used signal is SIGQUIT.
 				</para>
@@ -2049,8 +2049,8 @@
 			<title>Filetype templates</title>
 			<para>
 				Filetype templates are templates used as the basis of a new file. To use them, choose
-				the <literal>New (with Template)</literal> menu item from the
-				<literal>File</literal> menu.
+				the <emphasis>New (with Template)</emphasis> menu item from the
+				<emphasis>File</emphasis> menu.
 			</para>
 			<para>
 				By default, templates are created for some filetypes. Other filetype templates can be
@@ -2073,7 +2073,7 @@
 			</para>
 			<para>
 				There is also a template file <filename>template.none</filename> which is used when
-				the <literal>New</literal> command is used without a filetype. This is empty by
+				the <emphasis>New</emphasis> command is used without a filetype. This is empty by
 				default.
 			</para>
 			</section>
