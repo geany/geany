@@ -547,6 +547,26 @@
 					</variablelist>
 				</para>
 			</section>
+			<section id="editing_cc">
+				<title>Construct completion</title>
+				<para>
+					Built-in construct completion is available for C-like languages. By default the
+					<keycap>Tab</keycap> key is used straight after typing the construct keyword.
+				</para>
+				<para>
+					Example: <literal>for</literal>&lt;TAB&gt;
+				</para>
+				<para>
+					typed into a C file expands to:
+				</para>
+				<para>
+					<literallayout><literal>for (i = 0; i &lt; ; i++)
+					{
+
+					}
+					</literal></literallayout>
+				</para>
+			</section>
 			<section id="editing_bookmarks">
 				<title>Bookmarks</title>
 				<para>
@@ -696,7 +716,7 @@
 					see the entry for '\n' in <xref linkend="regexp"/>.
 				</para>
 			</section>
-			<section id="go_to_tag">
+			<section id="search_gototag">
 				<title>Go to tag definition</title>
 				<para>
 					If the current word is the name of a tag definition (like a function body)
@@ -823,6 +843,66 @@
 						is not supported by the Find and Replace dialogs.
 					</para>
 				</note>
+			</section>
+		</section>
+		<section id="tags">
+			<title>Tags</title>
+			<section><title>Workspace tags</title>
+			<para>
+				Tags for each document are parsed whenever a file is loaded or saved. These are
+				shown in the Symbol list in the Sidebar. These tags are also used for autocompletion
+				and calltips in other documents open in the current session.
+			</para>
+			<para>
+				The <emphasis>Go to Tag</emphasis> commands can be used with all workspace tags.
+				See <xref linkend="search_gototag"/>.
+			</para>
+			</section>
+			<section><title>Global tags</title>
+			<para>
+				For some languages, a list of global tags is loaded when the corresponding filetype
+				is first used. Currently these are for:
+				<itemizedlist>
+					<listitem><para>C - GTK+ and GLib</para></listitem>
+					<listitem><para>Pascal</para></listitem>
+					<listitem><para>PHP</para></listitem>
+					<listitem><para>HTML - ampersand, copyright, etc. symbol completion</para></listitem>
+					<listitem><para>LaTeX</para></listitem>
+				</itemizedlist>
+			</para>
+			<section><title>Generating a global tags file</title>
+			<para>
+				<application>Geany</application> currently uses a file <filename>global.tags</filename>
+				for C and C++, commonly installed in <filename>/usr/share/geany</filename>. This
+				file can be replaced with one containing tags parsed from a different set of
+				header files. The following command was used to generate it, from a
+				<filename>bash</filename> shell:
+			</para>
+			<para>
+				<literal>CFLAGS=`pkg-config --cflags libgnomeui-2.0` geany -g global.tags
+				/usr/include/libgnomeui-2.0/gnome.h
+				</literal>
+			</para>
+			<para>
+				You can adapt this command to use CFLAGS and header files appropriate for
+				whichever libraries you want. The format is:
+			</para>
+			<para>
+				geany -g &lt;Tag File&gt; &lt;File list&gt;
+			</para>
+			<para>
+				<filename>gcc</filename> is required, as header files are preprocessed to include
+				any other header files they depend upon. Currently <filename>grep</filename> is
+				also required for tags generation.
+			</para>
+			<para>
+				After creating the file, replace the installed
+				<filename>global.tags</filename> file with it and restart
+				<application>Geany</application>. You should keep a copy of the generated
+				tags file because it will get overwritten when upgrading
+				<application>Geany</application>.
+			</para>
+			</section>
 			</section>
 		</section>
 		<section id="confdialog">
@@ -1578,7 +1658,7 @@
 								<entry>Jump to the definition of the current word (near the
 									   keyboard cursor). If the definition cannot be found (e.g. the
 									   relevant file is not open) <application>Geany</application>
-									   will beep and do nothing. See <xref linkend="go_to_tag"/>.
+									   will beep and do nothing. See <xref linkend="search_gototag"/>.
 								</entry>
 							</row>
 							<row>
@@ -1586,7 +1666,7 @@
 								<entry>Jump to the declaration of the current word (near the
 									   keyboard cursor). If the declaration cannot be found (e.g. the
 									   relevant file is not open) <application>Geany</application>
-									   will beep and do nothing. See <xref linkend="go_to_tag"/>.
+									   will beep and do nothing. See <xref linkend="search_gototag"/>.
 								</entry>
 							</row>
 						</tbody>

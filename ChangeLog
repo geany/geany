@@ -3,6 +3,10 @@
  * src/sci_cb.c:
    Only insert a space if construct completion occurs, to prevent
    unusual undo history.
+ * doc/geany.docbook:
+   Add Construct completion in the Editing section.
+   Add Tags section, including how to generate a replacement global.tags
+   file.
 
 
 2007-04-05  Nick Treleaven  <nick.treleaven@btinternet.com>
