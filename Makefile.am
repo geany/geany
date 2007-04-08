@@ -16,7 +16,7 @@ SYS_DATA_FILES = \
 	data/latex.tags \
 	data/pascal.tags \
 	data/html_entities.tags \
-	data/filetypes.* \
+	$(srcdir)/data/filetypes.* \
 	data/filetype_extensions.conf
 
 EXTRA_DIST = \
@@ -28,6 +28,7 @@ EXTRA_DIST = \
 	HACKING \
 	README.I18N \
 	po/intl_stats.sh \
+	po/LINGUAS \
 	$(SYS_DATA_FILES) \
 	$(WIN32_BUILD_FILES)
 
@@ -46,12 +47,12 @@ install-data-local:
 	  done \
 	fi
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) data/global.tags $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) data/php.tags $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) data/pascal.tags $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) data/latex.tags $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) data/html_entities.tags $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) COPYING $(DESTDIR)$(pkgdatadir)/GPL-2; \
+	$(INSTALL_DATA) $(srcdir)/data/global.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) $(srcdir)/data/php.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) $(srcdir)/data/pascal.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) $(srcdir)/data/latex.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) $(srcdir)/data/html_entities.tags $(DESTDIR)$(pkgdatadir); \
+	$(INSTALL_DATA) $(srcdir)/COPYING $(DESTDIR)$(pkgdatadir)/GPL-2; \
 	for file in $(srcdir)/data/*; do \
 	  if test -f $$file; then \
 	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/; \
@@ -61,7 +62,7 @@ install-data-local:
 dist-hook:
 	if test -d pixmaps; then \
 	  mkdir $(distdir)/pixmaps; \
-	  for pixmap in pixmaps/*; do \
+	  for pixmap in $(srcdir)/pixmaps/*; do \
 	    if test -f $$pixmap; then \
 	      cp -p $$pixmap $(distdir)/pixmaps; \
 	    fi \

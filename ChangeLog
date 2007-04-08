@@ -1,3 +1,10 @@
+2007-04-08  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * configure.in, Makefile.am, doc/Makefile.am, scintilla/Makefile.am,
+   src/Makefile.am, tagmanager/Makefile.am:
+   Made "distcheck" working.
+
+
 2007-04-06  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c:

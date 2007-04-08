@@ -48,7 +48,7 @@ AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -mms-bitfields
 #AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -mms-bitfields -g -O0
 geany_LDFLAGS =	-mwindows
 
-INCLUDES = -I../scintilla/include -I../tagmanager/include -DENABLE_NLS \
+INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include -DENABLE_NLS \
            -I/usr/local/cross-tools/include @PACKAGE_CFLAGS@
 
 geany_windres.res:
@@ -66,11 +66,8 @@ geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @PACKAGE
 
 INCLUDES = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
-	-I../scintilla/include -I../tagmanager/include @PACKAGE_CFLAGS@
+	-I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @PACKAGE_CFLAGS@
 
 clean-local:
 
 endif
-
-#geany_SOURCES = $(SRCS)
-#geany_LDADD = @PACKAGE_LIBS@ -lstdc++ ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a $(INTLLIBS)

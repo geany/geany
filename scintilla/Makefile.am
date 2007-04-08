@@ -52,23 +52,46 @@ WindowAccessor.cxx \
 XPM.cxx \
 AutoComplete.cxx \
 ExternalLexer.cxx \
-*.h \
 PlatGTK.cxx \
 ScintillaGTK.cxx \
+AutoComplete.h \
+CallTip.h \
+CellBuffer.h \
+CharClassify.h \
+ContractionState.h \
+Converter.h \
+DocumentAccessor.h \
+Document.h \
+Editor.h \
+ExternalLexer.h \
+Indicator.h \
+KeyMap.h \
+LineMarker.h \
+Partitioning.h \
+RESearch.h \
+ScintillaBase.h \
+scintilla-marshal.h \
+SplitVector.h \
+StyleContext.h \
+Style.h \
+SVector.h \
+UniConversion.h \
+ViewStyle.h \
+XPM.h \
 $(LEXER_SRCS)
 
 libscintilla_a_SOURCES = $(SRCS)
 
 if MINGW
-INCLUDES=-I$(top_srcdir) -Iinclude -I/usr/local/cross-tools/include @PACKAGE_CFLAGS@
+INCLUDES=-I$(top_srcdir) -I$(srcdir)/include -I/usr/local/cross-tools/include @PACKAGE_CFLAGS@
 else
-INCLUDES=-I$(top_srcdir) -Iinclude @PACKAGE_CFLAGS@
+INCLUDES=-I$(top_srcdir) -I$(srcdir)/include @PACKAGE_CFLAGS@
 endif
 
 libscintilla_a_LIBADD = scintilla-marshal.o
 
 scintilla-marshal.o: scintilla-marshal.c
-	gcc @PACKAGE_CFLAGS@ -c scintilla-marshal.c
+	gcc @PACKAGE_CFLAGS@ -c $(srcdir)/scintilla-marshal.c
 
 marshallers: scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal scintilla-marshal.list --header > scintilla-marshal.h
