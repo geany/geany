@@ -81,6 +81,9 @@ void ui_set_statusbar(const gchar *format, ...)
 	gchar string[512];
 	va_list args;
 
+	if (! app->statusbar_visible)
+		return; // just do nothing if statusbar is not visible
+
 	va_start(args, format);
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
@@ -96,9 +99,12 @@ void ui_update_statusbar(gint idx, gint pos)
 	const gchar *cur_tag;
 	guint line, col;
 
+	if (! app->statusbar_visible)
+		return; // just do nothing if statusbar is not visible
+
 	if (idx == -1) idx = document_get_cur_idx();
 
-	if (idx >= 0 && doc_list[idx].is_valid)
+	if (DOC_IDX_VALID(idx))
 	{
 		utils_get_current_function(idx, &cur_tag);
 

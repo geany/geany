@@ -174,4 +174,6 @@ gint				sci_get_overtype			(ScintillaObject * sci);
 void				sci_set_tab_indents			(ScintillaObject * sci, gboolean set);
 void				sci_set_use_tabs			(ScintillaObject * sci, gboolean set);
 
+void				sci_set_scrollbar_mode		(ScintillaObject * sci, gboolean visible);
+
 #endif

@@ -935,3 +935,9 @@ void sci_set_selection_mode(ScintillaObject *sci, gint mode)
 	SSM(sci, SCI_SETSELECTIONMODE, mode, 0);
 }
 
+void sci_set_scrollbar_mode(ScintillaObject *sci, gboolean visible)
+{
+	SSM(sci, SCI_SETHSCROLLBAR, visible, 0);
+	SSM(sci, SCI_SETVSCROLLBAR, visible, 0);
+}
+

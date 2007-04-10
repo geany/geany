@@ -207,6 +207,12 @@ static void apply_settings(void)
 		gtk_window_set_default_size(GTK_WINDOW(app->window), app->geometry[2], app->geometry[3]);
 	}
 
+	// hide statusbar if desired
+	if (! app->statusbar_visible)
+	{
+		gtk_widget_hide(app->statusbar);
+	}
+
 	app->ignore_callback = TRUE;
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
 				lookup_widget(app->window, "menu_line_breaking1")), app->pref_editor_line_breaking);

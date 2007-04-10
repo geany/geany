@@ -1,3 +1,13 @@
+2007-04-10  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/document.c, src/geany.h, src/interface.c,
+   src/keyfile.c, src/main.c, src/prefs.c, src/ui_utils.c:
+   Added options to show or hide the statusbar as well as the editor
+   scrollbars.
+ * src/sciwrappers.c, src/sciwrappers.h:
+   Added sci_set_scrollbar_mode() to easily show or hide the scrollbars.
+
+
 2007-04-08  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * configure.in, Makefile.am, doc/Makefile.am, scintilla/Makefile.am,

@@ -2363,6 +2363,11 @@ create_prefs_dialog (void)
   GtkWidget *combo_tab_sidebar;
   GtkWidget *combo_tab_editor;
   GtkWidget *label158;
+  GtkWidget *frame23;
+  GtkWidget *alignment26;
+  GtkWidget *vbox22;
+  GtkWidget *check_statusbar_visible;
+  GtkWidget *label187;
   GtkWidget *label157;
   GtkWidget *vbox15;
   GtkWidget *frame12;
@@ -2825,6 +2830,30 @@ create_prefs_dialog (void)
   gtk_widget_show (label158);
   gtk_frame_set_label_widget (GTK_FRAME (frame9), label158);
   gtk_label_set_use_markup (GTK_LABEL (label158), TRUE);
+
+  frame23 = gtk_frame_new (NULL);
+  gtk_widget_show (frame23);
+  gtk_box_pack_start (GTK_BOX (vbox14), frame23, TRUE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame23), GTK_SHADOW_NONE);
+
+  alignment26 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment26);
+  gtk_container_add (GTK_CONTAINER (frame23), alignment26);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment26), 0, 0, 12, 0);
+
+  vbox22 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox22);
+  gtk_container_add (GTK_CONTAINER (alignment26), vbox22);
+
+  check_statusbar_visible = gtk_check_button_new_with_mnemonic (_("Show statusbar"));
+  gtk_widget_show (check_statusbar_visible);
+  gtk_box_pack_start (GTK_BOX (vbox22), check_statusbar_visible, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_statusbar_visible, _("Whether to show the status bar at the bottom of the main window."), NULL);
+
+  label187 = gtk_label_new (_("<b>Miscellaneous</b>"));
+  gtk_widget_show (label187);
+  gtk_frame_set_label_widget (GTK_FRAME (frame23), label187);
+  gtk_label_set_use_markup (GTK_LABEL (label187), TRUE);
 
   label157 = gtk_label_new (_("Interface"));
   gtk_widget_show (label157);
@@ -3836,6 +3865,11 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_tab_sidebar, "combo_tab_sidebar");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_tab_editor, "combo_tab_editor");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label158, "label158");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame23, "frame23");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment26, "alignment26");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox22, "vbox22");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_statusbar_visible, "check_statusbar_visible");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label187, "label187");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label157, "label157");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox15, "vbox15");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame12, "frame12");

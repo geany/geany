@@ -91,6 +91,7 @@ typedef struct MyApp
 	gboolean			 sidebar_symbol_visible;
 	gboolean			 sidebar_openfiles_visible;
 	gboolean			 sidebar_visible;
+	gboolean			 statusbar_visible;
 	gboolean			 msgwindow_visible;
 	gboolean			 fullscreen;
 	gboolean			 beep_on_errors;
@@ -115,6 +116,7 @@ typedef struct MyApp
 	gboolean			 pref_editor_auto_complete_constructs;
 	gboolean			 pref_editor_folding;
 	gboolean			 pref_editor_unfold_all_children;
+	gboolean			 pref_editor_show_scrollbars;
 	gint				 pref_editor_tab_width;
 	gboolean			 pref_editor_use_tabs;
 	gint				 pref_editor_default_encoding;

@@ -103,9 +103,11 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", app->sidebar_symbol_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", app->sidebar_openfiles_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", app->sidebar_visible);
+	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", app->statusbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", app->msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", app->pref_editor_folding);
 	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", app->pref_editor_unfold_all_children);
+	g_key_file_set_boolean(config, PACKAGE, "show_editor_scrollbars", app->pref_editor_show_scrollbars);
 	g_key_file_set_integer(config, PACKAGE, "indention_mode", app->pref_editor_indention_mode);
 	g_key_file_set_boolean(config, PACKAGE, "use_tab_to_indent", app->use_tab_to_indent);
 	g_key_file_set_boolean(config, PACKAGE, "use_indicators", app->pref_editor_use_indicators);
@@ -320,6 +322,7 @@ gboolean configuration_load()
 	app->sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
 	app->sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
 	app->sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
+	app->statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
 	app->msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	app->pref_editor_line_breaking = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); //default is off for better performance
 	app->pref_editor_indention_mode = utils_get_setting_integer(config, PACKAGE, "indention_mode", INDENT_ADVANCED);
@@ -333,6 +336,7 @@ gboolean configuration_load()
 	app->pref_editor_auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
 	app->pref_editor_folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
 	app->pref_editor_unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
+	app->pref_editor_show_scrollbars = utils_get_setting_boolean(config, PACKAGE, "show_editor_scrollbars", FALSE);
 	app->show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
 	app->show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
 	app->fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
