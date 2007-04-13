@@ -203,7 +203,7 @@ static void on_char_added(gint idx, SCNotification *nt)
 		}
 		case '(':
 		{	// show calltips
-			sci_cb_show_calltip(idx, pos);
+			sci_cb_show_calltip(idx, --pos);
 			break;
 		}
 		case ')':
@@ -223,7 +223,7 @@ static void on_char_added(gint idx, SCNotification *nt)
 			if (sci_get_lexer(sci) == SCLEX_LATEX)
 			{
 				auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
-				sci_cb_show_calltip(idx, pos);
+				sci_cb_show_calltip(idx, --pos);
 			}
 			break;
 		}

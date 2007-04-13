@@ -1,3 +1,9 @@
+2007-04-13  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/sci_cb.c: Fixed missing calltip display when using a space after
+                 a symbol name (thanks to Anh Phạm for reporting).
+
+
 2007-04-13  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/sci_cb.c, tagmanager/tm_tag.c, tagmanager/tm_workspace.c:
