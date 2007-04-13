@@ -50,7 +50,9 @@ static struct
 {
 	gchar *text;
 	gboolean set;
-} calltip = {NULL, FALSE};
+	gchar *last_word;
+	guint tag_index;
+} calltip = {NULL, FALSE, NULL, 0};
 
 static gchar indent[100];
 
@@ -333,6 +335,23 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			if (nt->text != NULL)
 			{
 				document_open_file_list(nt->text, -1);
+			}
+			break;
+		}
+		case SCN_CALLTIPCLICK:
+		{
+			if (nt->position > 0)
+			{
+				switch (nt->position)
+				{
+					case 1:	// up arrow
+						if (calltip.tag_index > 0)
+							calltip.tag_index--;
+						break;
+
+					case 2: calltip.tag_index++; break;	// down arrow
+				}
+				sci_cb_show_calltip(idx, -1);
 			}
 			break;
 		}
@@ -645,14 +664,9 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 }
 
 
-static gchar *tag_to_calltip(const TMTag *tag, filetype_id ft_id)
+static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id)
 {
-	GString *str;
-	gchar *result;
-
-	if (! tag->atts.entry.arglist) return NULL;
-
-	str = g_string_new(NULL);
+	if (! tag->atts.entry.arglist) return FALSE;
 
 	if (tag->atts.entry.var_type)
 	{
@@ -676,47 +690,87 @@ static gchar *tag_to_calltip(const TMTag *tag, filetype_id ft_id)
 	g_string_append_c(str, ' ');
 	g_string_append(str, tag->atts.entry.arglist);
 
-	result = str->str;
-	g_string_free(str, FALSE);
-	return result;
+	return TRUE;
 }
 
 
 static gchar *find_calltip(const gchar *word, filetype *ft)
 {
-	TMTag *tag;
 	const GPtrArray *tags;
+	TMTagAttrType *attrs = NULL;
+	TMTag *tag;
+	GString *str = NULL;
+	guint i;
 
 	g_return_val_if_fail(ft && word && *word, NULL);
 
-	tags = tm_workspace_find(word, tm_tag_max_t, NULL, FALSE, ft->lang);
-
+	tags = tm_workspace_find(word, tm_tag_max_t, attrs, FALSE, ft->lang);
 	if (tags->len == 0)
 		return NULL;
 
 	tag = TM_TAG(tags->pdata[0]);
-	if (tag->atts.entry.arglist)
-	{
-		return tag_to_calltip(tag, FILETYPE_ID(ft));
-	}
-	else if (tag->type == tm_tag_class_t && FILETYPE_ID(ft) == GEANY_FILETYPES_D)
-	{
-		TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 
+	if (tag->type == tm_tag_class_t && FILETYPE_ID(ft) == GEANY_FILETYPES_D)
+	{
 		// user typed e.g. 'new Classname(' so lookup D constructor Classname::this()
-		tags = tm_workspace_find_scoped("this", tag->name, tm_tag_function_t | tm_tag_prototype_t,
-			attrs, FALSE, ft->lang, TRUE);
-		if (tags->len != 0)
+		tags = tm_workspace_find_scoped("this", tag->name,
+			tm_tag_function_t | tm_tag_prototype_t, attrs, FALSE, ft->lang, TRUE);
+		if (tags->len == 0)
+			return NULL;
+	}
+
+	// remove tags with no argument list
+	for (i = 0; i < tags->len; i++)
+	{
+		tag = TM_TAG(tags->pdata[i]);
+
+		if (! tag->atts.entry.arglist)
+			tags->pdata[i] = NULL;
+	}
+	tm_tags_prune((GPtrArray *) tags);
+	if (tags->len == 0)
+		return NULL;
+
+	// if the current word has changed since last time, start with the first tag match
+	if (! utils_str_equal(word, calltip.last_word))
+		calltip.tag_index = 0;
+	// cache the current word for next time
+	g_free(calltip.last_word);
+	calltip.last_word = g_strdup(word);
+	calltip.tag_index = MIN(calltip.tag_index, tags->len - 1);	// ensure tag_index is in range
+
+	for (i = calltip.tag_index; i < tags->len; i++)
+	{
+		tag = TM_TAG(tags->pdata[i]);
+
+		if (str == NULL)
 		{
-			tag = TM_TAG(tags->pdata[0]);
-			if (tag->atts.entry.arglist)
-				return tag_to_calltip(tag, FILETYPE_ID(ft));
+			str = g_string_new(NULL);
+			if (calltip.tag_index > 0)
+				g_string_prepend(str, "\001 ");	// up arrow
+			append_calltip(str, tag, FILETYPE_ID(ft));
 		}
+		else // add a down arrow
+		{
+			if (calltip.tag_index > 0)	// already have an up arrow
+				g_string_insert_c(str, 1, '\002');
+			else
+				g_string_prepend(str, "\002 ");
+			break;
+		}
+	}
+	if (str)
+	{
+		gchar *result = str->str;
+
+		g_string_free(str, FALSE);
+		return result;
 	}
 	return NULL;
 }
 
 
+// use pos = -1 to search for the previous unmatched open bracket.
 gboolean sci_cb_show_calltip(gint idx, gint pos)
 {
 	gint orig_pos = pos; // the position for the calltip

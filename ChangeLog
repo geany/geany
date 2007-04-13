@@ -1,3 +1,9 @@
+2007-04-13  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sci_cb.c, tagmanager/tm_tag.c, tagmanager/tm_workspace.c:
+   Show up and down arrows when there are multiple calltip matches.
+
+
 2007-04-10  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.glade, src/document.c, src/geany.h, src/interface.c,

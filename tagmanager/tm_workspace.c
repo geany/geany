@@ -382,7 +382,7 @@ void tm_workspace_recreate_tags_array(void)
 	guint i, j;
 	TMWorkObject *w;
 	TMTagAttrType sort_attrs[] = { tm_tag_attr_name_t, tm_tag_attr_file_t
-		, tm_tag_attr_scope_t, tm_tag_attr_type_t, 0};
+		, tm_tag_attr_scope_t, tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0};
 
 #ifdef TM_DEBUG
 	g_message("Recreating workspace tags array");
@@ -551,7 +551,8 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 		}
 	}
 
-	tm_tags_sort(tags, attrs, TRUE);
+	if (attrs)
+		tm_tags_sort(tags, attrs, TRUE);
 	return tags;
 }
 
@@ -559,7 +560,7 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 /* scope can be NULL.
  * lang can be -1 */
 static int
-fill_find_tags_array (GPtrArray * dst, const GPtrArray * src,
+fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
 					  const char *name, const char *scope, int type, gboolean partial,
 					  gint lang, gboolean first)
 {
@@ -607,12 +608,12 @@ tm_workspace_find_scoped (const char *name, const char *scope, gint type,
 		tags = g_ptr_array_new ();
 
 	fill_find_tags_array (tags, theWorkspace->work_object.tags_array,
-						  name, scope, type, partial, lang, TRUE);
+						  name, scope, type, partial, lang, FALSE);
 	if (global_search)
 	{
 		// for a scoped tag, I think we always want the same language
 		fill_find_tags_array (tags, theWorkspace->global_tags,
-							  name, scope, type, partial, lang, TRUE);
+							  name, scope, type, partial, lang, FALSE);
 	}
 	if (attrs)
 		tm_tags_sort (tags, attrs, TRUE);

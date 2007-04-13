@@ -474,6 +474,14 @@ int tm_tag_compare(const void *ptr1, const void *ptr2)
 				if (0 != (returnval = strcmp(NVL(t1->atts.entry.scope, ""), NVL(t2->atts.entry.scope, ""))))
 					return returnval;
 				break;
+			case tm_tag_attr_arglist_t:
+				if (0 != (returnval = strcmp(NVL(t1->atts.entry.arglist, ""), NVL(t2->atts.entry.arglist, ""))))
+				{
+					int line_diff = (t1->atts.entry.line - t2->atts.entry.line);
+
+					return line_diff ? line_diff : returnval;
+				}
+				break;
 			case tm_tag_attr_vartype_t:
 				if (0 != (returnval = strcmp(NVL(t1->atts.entry.var_type, ""), NVL(t2->atts.entry.var_type, ""))))
 					return returnval;
