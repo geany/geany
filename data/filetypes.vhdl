@@ -43,4 +43,7 @@ comment_close=
 # This setting works only for single line comments
 comment_use_indent=true
 
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
 

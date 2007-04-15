@@ -5,7 +5,7 @@
 <!ENTITY appversion "0.11">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "March 08, 2007">
+<!ENTITY date "April 15, 2007">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -606,6 +606,37 @@
 					text entry and type the command. You can also specify some command line options.
 					To delete a command,  just clear the text entry and press Ok. It will be deleted
 					automatically.
+				</para>
+			</section>
+			<section id="editing_context_actions">
+				<title>Context actions</title>
+				<para>
+					You can execute a specified command on the current word near the cursor
+					position or an available selection and this word is passed as an argument
+					to this command. It can be used for example to open some API documentation
+					in a browser window or open any other external program. To do this,
+					there is an menu entry in the popup menu of the editor widget and also a
+					keyboard shortcut(see <xref linkend="keybindings"/>).
+				</para>
+				<para>
+					The command can be specified in the preferences dialog and additionally for
+					each filetype (see "context_action_cmd" in <xref linkend="filetypes_format"/>).
+					At executing, the filetype specific command is used if available otherwise the
+					command	specified in the preferences dialog is executed.
+				</para>
+				<para>
+					The passed word can be referred with the wildcard "%s" everywhere in the
+					command, before executing it will be replaced by the current word.
+					For example, the command to open the PHP API documentation would be:
+				</para>
+				<para>
+					<command>firefox "http://www.php.net/%s"</command>
+				</para>
+				<para>
+					when executing the command, the %s is substituted by the word near the
+					cursor position or by the current selection. If the cursor is at the word
+					"echo", a browser window will open(assumed your browser is called firefox)
+					and it will open the address: http://www.php.net/echo.
 				</para>
 			</section>
 		</section>
@@ -1649,8 +1680,8 @@
 							</row>
 							<row>
 								<entry>Find Usage</entry>
-								<entry>Finds all occurrences of the current word (near the
-									   keyboard cursor) and displays them in the messages window.
+								<entry>Finds all occurrences of the current word (near the keyboard
+									   cursor) or selection and displays them in the messages window.
 								</entry>
 							</row>
 							<row>
@@ -1667,6 +1698,13 @@
 									   keyboard cursor). If the declaration cannot be found (e.g. the
 									   relevant file is not open) <application>Geany</application>
 									   will beep and do nothing. See <xref linkend="search_gototag"/>.
+								</entry>
+							</row>
+							<row>
+								<entry>Context Action</entry>
+								<entry>Executes a command and passes the current word (near the
+									   cursor postion) or selection as an argument. See
+									   <xref linkend="editing_context_actions"/>.
 								</entry>
 							</row>
 						</tbody>
@@ -1802,6 +1840,31 @@
 											   </para></note>
 										</entry>
 										<entry>comment_use_indent=true</entry>
+									</row>
+									<row>
+										<entry>context_action_cmd</entry>
+										<entry><para>
+											   A command which can be executed on a certain word or
+											   the current selection. Example usage: Open the API
+											   documentation for the current function call at the
+											   cursor position. The command can be set for every
+											   filetype or if not set, a global command will be used.
+											   The command itself can be specified without the full
+											   path, then it is searched in $PATH. But for security
+											   reasons, it is recommended to specify the full path
+											   to the command. The wildcard %s will be replaced
+											   by the current word at the cursor position or by
+											   the current selection.
+											   </para>
+											   <para>
+											   Hint: for PHP files the following could be quite
+											   useful:
+											   <emphasis>
+											   context_action_cmd=firefox "http://www.php.net/%s"
+											   </emphasis>
+											   </para>
+										</entry>
+										<entry>context_action_cmd=devhelp -s "%s"</entry>
 									</row>
 								</tbody>
 							</tgroup>

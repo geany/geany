@@ -755,6 +755,7 @@ void main_quit()
 	g_free(app->tagbar_font);
 	g_free(app->msgwin_font);
 	g_free(app->long_line_color);
+	g_free(app->context_action_cmd);
 	g_free(app->pref_template_developer);
 	g_free(app->pref_template_company);
 	g_free(app->pref_template_mail);

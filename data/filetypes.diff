@@ -18,3 +18,6 @@ added=0x34b034;0xffffff;false;false
 comment_open=
 comment_close=
 
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+

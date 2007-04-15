@@ -782,6 +782,7 @@ void filetypes_free_types()
 			g_free(filetypes[i]->extension);
 			g_free(filetypes[i]->comment_open);
 			g_free(filetypes[i]->comment_close);
+			g_free(filetypes[i]->context_action_cmd);
 			g_free(filetypes[i]->programs->compiler);
 			g_free(filetypes[i]->programs->linker);
 			g_free(filetypes[i]->programs->run_cmd);
@@ -831,6 +832,14 @@ void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 		else filetypes[ft]->comment_use_indent = tmp;
 	}
 	else filetypes[ft]->comment_use_indent = tmp;
+
+	// read context action
+	result = g_key_file_get_string(configh, "settings", "context_action_cmd", NULL);
+	if (result == NULL) result = g_key_file_get_string(config, "settings", "context_action_cmd", NULL);
+	if (result != NULL)
+	{
+		filetypes[ft]->context_action_cmd = result;
+	}
 
 	// read build settings
 	result = g_key_file_get_string(configh, "build_settings", "compiler", NULL);
@@ -951,7 +960,7 @@ GtkFileFilter *filetypes_create_file_filter(filetype *ft)
 	gint i;
 
 	g_return_val_if_fail(ft != NULL, NULL);
-	
+
 	new_filter = gtk_file_filter_new();
 	gtk_file_filter_set_name(new_filter, ft->title);
 

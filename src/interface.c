@@ -1893,20 +1893,20 @@ create_edit_menu1 (void)
   GtkWidget *menu_duplicate_line2;
   GtkWidget *separator31;
   GtkWidget *menu_increase_indent2;
-  GtkWidget *image1669;
+  GtkWidget *image1693;
   GtkWidget *menu_decrease_indent2;
-  GtkWidget *image1670;
+  GtkWidget *image1694;
   GtkWidget *separator38;
   GtkWidget *send_selection_to1;
   GtkWidget *send_selection_to1_menu;
   GtkWidget *invisible12;
   GtkWidget *separator17;
   GtkWidget *insert_include1;
-  GtkWidget *image1671;
+  GtkWidget *image1695;
   GtkWidget *insert_include1_menu;
   GtkWidget *invisible3;
   GtkWidget *comments;
-  GtkWidget *image1672;
+  GtkWidget *image1696;
   GtkWidget *comments_menu;
   GtkWidget *add_changelog_entry2;
   GtkWidget *insert_file_header2;
@@ -1915,17 +1915,18 @@ create_edit_menu1 (void)
   GtkWidget *insert_gpl_notice1;
   GtkWidget *insert_bsd_license_notice1;
   GtkWidget *insert_date2;
-  GtkWidget *image1673;
+  GtkWidget *image1697;
   GtkWidget *insert_date2_menu;
   GtkWidget *invisible10;
   GtkWidget *separator7;
   GtkWidget *find_usage1;
-  GtkWidget *image1674;
+  GtkWidget *image1698;
   GtkWidget *goto_tag_definition1;
   GtkWidget *goto_tag_declaration1;
+  GtkWidget *context_action1;
   GtkWidget *separator15;
   GtkWidget *go_to_line;
-  GtkWidget *image1675;
+  GtkWidget *image1699;
   GtkAccelGroup *accel_group;
   GtkTooltips *tooltips;
 
@@ -2032,17 +2033,17 @@ create_edit_menu1 (void)
   gtk_widget_show (menu_increase_indent2);
   gtk_container_add (GTK_CONTAINER (menu_format2_menu), menu_increase_indent2);
 
-  image1669 = gtk_image_new_from_stock ("gtk-indent", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1669);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_increase_indent2), image1669);
+  image1693 = gtk_image_new_from_stock ("gtk-indent", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1693);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_increase_indent2), image1693);
 
   menu_decrease_indent2 = gtk_image_menu_item_new_with_mnemonic (_("_Decrease Indent"));
   gtk_widget_show (menu_decrease_indent2);
   gtk_container_add (GTK_CONTAINER (menu_format2_menu), menu_decrease_indent2);
 
-  image1670 = gtk_image_new_from_stock ("gtk-unindent", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1670);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_decrease_indent2), image1670);
+  image1694 = gtk_image_new_from_stock ("gtk-unindent", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1694);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_decrease_indent2), image1694);
 
   separator38 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator38);
@@ -2068,9 +2069,9 @@ create_edit_menu1 (void)
   gtk_widget_show (insert_include1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), insert_include1);
 
-  image1671 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1671);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert_include1), image1671);
+  image1695 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1695);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert_include1), image1695);
 
   insert_include1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert_include1), insert_include1_menu);
@@ -2082,9 +2083,9 @@ create_edit_menu1 (void)
   gtk_widget_show (comments);
   gtk_container_add (GTK_CONTAINER (edit_menu1), comments);
 
-  image1672 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1672);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (comments), image1672);
+  image1696 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1696);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (comments), image1696);
 
   comments_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (comments), comments_menu);
@@ -2123,9 +2124,9 @@ create_edit_menu1 (void)
   gtk_widget_show (insert_date2);
   gtk_container_add (GTK_CONTAINER (edit_menu1), insert_date2);
 
-  image1673 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1673);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert_date2), image1673);
+  image1697 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1697);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert_date2), image1697);
 
   insert_date2_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert_date2), insert_date2_menu);
@@ -2142,9 +2143,9 @@ create_edit_menu1 (void)
   gtk_widget_show (find_usage1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), find_usage1);
 
-  image1674 = gtk_image_new_from_stock ("gtk-find", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1674);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (find_usage1), image1674);
+  image1698 = gtk_image_new_from_stock ("gtk-find", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1698);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (find_usage1), image1698);
 
   goto_tag_definition1 = gtk_menu_item_new_with_mnemonic (_("Go to Tag Definition"));
   gtk_widget_show (goto_tag_definition1);
@@ -2153,6 +2154,10 @@ create_edit_menu1 (void)
   goto_tag_declaration1 = gtk_menu_item_new_with_mnemonic (_("Go to Tag Declaration"));
   gtk_widget_show (goto_tag_declaration1);
   gtk_container_add (GTK_CONTAINER (edit_menu1), goto_tag_declaration1);
+
+  context_action1 = gtk_menu_item_new_with_mnemonic (_("Context Action"));
+  gtk_widget_show (context_action1);
+  gtk_container_add (GTK_CONTAINER (edit_menu1), context_action1);
 
   separator15 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator15);
@@ -2164,9 +2169,9 @@ create_edit_menu1 (void)
   gtk_container_add (GTK_CONTAINER (edit_menu1), go_to_line);
   gtk_tooltips_set_tip (tooltips, go_to_line, _("Goto to the entered line"), NULL);
 
-  image1675 = gtk_image_new_from_stock ("gtk-jump-to", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image1675);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (go_to_line), image1675);
+  image1699 = gtk_image_new_from_stock ("gtk-jump-to", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1699);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (go_to_line), image1699);
 
   g_signal_connect ((gpointer) undo1, "activate",
                     G_CALLBACK (on_undo1_activate),
@@ -2243,6 +2248,9 @@ create_edit_menu1 (void)
   g_signal_connect ((gpointer) goto_tag_declaration1, "activate",
                     G_CALLBACK (on_goto_tag_activate),
                     NULL);
+  g_signal_connect ((gpointer) context_action1, "activate",
+                    G_CALLBACK (on_context_action1_activate),
+                    NULL);
   g_signal_connect ((gpointer) go_to_line, "activate",
                     G_CALLBACK (on_go_to_line_activate),
                     NULL);
@@ -2272,20 +2280,20 @@ create_edit_menu1 (void)
   GLADE_HOOKUP_OBJECT (edit_menu1, menu_duplicate_line2, "menu_duplicate_line2");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator31, "separator31");
   GLADE_HOOKUP_OBJECT (edit_menu1, menu_increase_indent2, "menu_increase_indent2");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1669, "image1669");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1693, "image1693");
   GLADE_HOOKUP_OBJECT (edit_menu1, menu_decrease_indent2, "menu_decrease_indent2");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1670, "image1670");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1694, "image1694");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator38, "separator38");
   GLADE_HOOKUP_OBJECT (edit_menu1, send_selection_to1, "send_selection_to1");
   GLADE_HOOKUP_OBJECT (edit_menu1, send_selection_to1_menu, "send_selection_to1_menu");
   GLADE_HOOKUP_OBJECT (edit_menu1, invisible12, "invisible12");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator17, "separator17");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_include1, "insert_include1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1671, "image1671");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1695, "image1695");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_include1_menu, "insert_include1_menu");
   GLADE_HOOKUP_OBJECT (edit_menu1, invisible3, "invisible3");
   GLADE_HOOKUP_OBJECT (edit_menu1, comments, "comments");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1672, "image1672");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1696, "image1696");
   GLADE_HOOKUP_OBJECT (edit_menu1, comments_menu, "comments_menu");
   GLADE_HOOKUP_OBJECT (edit_menu1, add_changelog_entry2, "add_changelog_entry2");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_file_header2, "insert_file_header2");
@@ -2294,17 +2302,18 @@ create_edit_menu1 (void)
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_gpl_notice1, "insert_gpl_notice1");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_bsd_license_notice1, "insert_bsd_license_notice1");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_date2, "insert_date2");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1673, "image1673");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1697, "image1697");
   GLADE_HOOKUP_OBJECT (edit_menu1, insert_date2_menu, "insert_date2_menu");
   GLADE_HOOKUP_OBJECT (edit_menu1, invisible10, "invisible10");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator7, "separator7");
   GLADE_HOOKUP_OBJECT (edit_menu1, find_usage1, "find_usage1");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1674, "image1674");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1698, "image1698");
   GLADE_HOOKUP_OBJECT (edit_menu1, goto_tag_definition1, "goto_tag_definition1");
   GLADE_HOOKUP_OBJECT (edit_menu1, goto_tag_declaration1, "goto_tag_declaration1");
+  GLADE_HOOKUP_OBJECT (edit_menu1, context_action1, "context_action1");
   GLADE_HOOKUP_OBJECT (edit_menu1, separator15, "separator15");
   GLADE_HOOKUP_OBJECT (edit_menu1, go_to_line, "go_to_line");
-  GLADE_HOOKUP_OBJECT (edit_menu1, image1675, "image1675");
+  GLADE_HOOKUP_OBJECT (edit_menu1, image1699, "image1699");
   GLADE_HOOKUP_OBJECT_NO_REF (edit_menu1, tooltips, "tooltips");
 
   gtk_menu_set_accel_group (GTK_MENU (edit_menu1), accel_group);
@@ -2334,6 +2343,12 @@ create_prefs_dialog (void)
   GtkWidget *check_switch_pages;
   GtkWidget *check_ask_suppress_search_dialogs;
   GtkWidget *label178;
+  GtkWidget *frame24;
+  GtkWidget *alignment27;
+  GtkWidget *hbox8;
+  GtkWidget *label189;
+  GtkWidget *entry_contextaction;
+  GtkWidget *label188;
   GtkWidget *label94;
   GtkWidget *vbox14;
   GtkWidget *frame7;
@@ -2648,6 +2663,35 @@ create_prefs_dialog (void)
   gtk_widget_show (label178);
   gtk_frame_set_label_widget (GTK_FRAME (frame19), label178);
   gtk_label_set_use_markup (GTK_LABEL (label178), TRUE);
+
+  frame24 = gtk_frame_new (NULL);
+  gtk_widget_show (frame24);
+  gtk_box_pack_start (GTK_BOX (vbox20), frame24, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame24), GTK_SHADOW_NONE);
+
+  alignment27 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment27);
+  gtk_container_add (GTK_CONTAINER (frame24), alignment27);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment27), 0, 0, 12, 0);
+
+  hbox8 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_show (hbox8);
+  gtk_container_add (GTK_CONTAINER (alignment27), hbox8);
+
+  label189 = gtk_label_new (_("Context Action command:"));
+  gtk_widget_show (label189);
+  gtk_box_pack_start (GTK_BOX (hbox8), label189, FALSE, FALSE, 0);
+
+  entry_contextaction = gtk_entry_new ();
+  gtk_widget_show (entry_contextaction);
+  gtk_box_pack_start (GTK_BOX (hbox8), entry_contextaction, TRUE, TRUE, 0);
+  gtk_tooltips_set_tip (tooltips, entry_contextaction, _("Context action command. The current selected word can be used with %s. It can be everywhere in the given command and will be replaced before execution."), NULL);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry_contextaction), 9679);
+
+  label188 = gtk_label_new (_("<b>Context Action</b>"));
+  gtk_widget_show (label188);
+  gtk_frame_set_label_widget (GTK_FRAME (frame24), label188);
+  gtk_label_set_use_markup (GTK_LABEL (label188), TRUE);
 
   label94 = gtk_label_new (_("General"));
   gtk_widget_show (label94);
@@ -3836,6 +3880,12 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_suppress_search_dialogs, "check_ask_suppress_search_dialogs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label178, "label178");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame24, "frame24");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment27, "alignment27");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox8, "hbox8");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label189, "label189");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_contextaction, "entry_contextaction");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label188, "label188");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label94, "label94");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox14, "vbox14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame7, "frame7");

@@ -144,6 +144,7 @@ typedef struct MyApp
 	gint				 long_line_type;
 	gint				 long_line_column;
 	gchar				*long_line_color;
+	gchar				*context_action_cmd;
 	gchar				*pref_template_developer;
 	gchar				*pref_template_company;
 	gchar				*pref_template_mail;

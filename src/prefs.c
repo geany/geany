@@ -112,6 +112,9 @@ void prefs_init_dialog(void)
 		widget = lookup_widget(app->prefs_dialog, "radio_tab_left");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
+	widget = lookup_widget(app->prefs_dialog, "entry_contextaction");
+	gtk_entry_set_text(GTK_ENTRY(widget), app->context_action_cmd);
+
 
 	// Interface settings
 	widget = lookup_widget(app->prefs_dialog, "check_list_symbol");
@@ -438,6 +441,10 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "check_show_notebook_tabs");
 		app->show_notebook_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "entry_contextaction");
+		g_free(app->context_action_cmd);
+		app->context_action_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 
 		// Interface settings

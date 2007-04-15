@@ -274,6 +274,8 @@ void keybindings_init(void)
 		0, 0, "popup_gototagdefinition", _("Go to tag definition"));
 	keys[GEANY_KEYS_POPUP_GOTOTAGDECLARATION] = fill(cb_func_current_word,
 		0, 0, "popup_gototagdeclaration", _("Go to tag declaration"));
+	keys[GEANY_KEYS_POPUP_CONTEXTACTION] = fill(cb_func_current_word,
+		0, 0, "popup_contextaction", _("Context Action"));
 
 	// now load user defined keys
 	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
@@ -363,6 +365,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_FINDUSAGE, find_usage1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDEFINITION, goto_tag_definition1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDECLARATION, goto_tag_declaration1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_CONTEXTACTION, context_action1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_TOLOWERCASE, to_lower_case1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_TOUPPERCASE, to_upper_case1);
@@ -746,7 +749,6 @@ static void cb_func_menu_findnextsel(G_GNUC_UNUSED guint key_id)
 	on_find_nextsel1_activate(NULL, NULL);
 }
 
-
 static void cb_func_menu_replace(G_GNUC_UNUSED guint key_id)
 {
 	on_replace1_activate(NULL, NULL);
@@ -904,6 +906,10 @@ static void cb_func_current_word(guint key_id)
 			case GEANY_KEYS_POPUP_GOTOTAGDECLARATION:
 			on_goto_tag_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
 				"goto_tag_declaration1")), NULL);
+			break;
+			case GEANY_KEYS_POPUP_CONTEXTACTION:
+			on_context_action1_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
+				"context_action1")), NULL);
 			break;
 		}
 }

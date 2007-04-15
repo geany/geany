@@ -100,6 +100,7 @@ typedef struct filetype
 	gchar	 		 *title;			// will be shown in the file open dialog
 	gchar	 		 *extension;
 	gchar			**pattern;
+	gchar	 		 *context_action_cmd;
 	gchar	 		 *comment_open;
 	gchar	 		 *comment_close;
 	gboolean  		  comment_use_indent;

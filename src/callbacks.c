@@ -2084,3 +2084,52 @@ on_remove_markers1_activate            (GtkMenuItem     *menuitem,
 	sci_marker_delete_all(doc_list[idx].sci, 1);	// delete user markers
 }
 
+
+void
+on_context_action1_activate            (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx;
+	gchar *word, *command;
+	GError *error = NULL;
+
+	idx = document_get_cur_idx();
+	if (! DOC_IDX_VALID(idx)) return;
+
+	if (sci_can_copy(doc_list[idx].sci))
+	{	// take selected text if there is a selection
+		word = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
+		sci_get_selected_text(doc_list[idx].sci, word);
+	}
+	else
+	{
+		word = g_strdup(editor_info.current_word);
+	}
+
+	// use the filetype specific command if available, fallback to global command otherwise
+	if (doc_list[idx].file_type != NULL &&
+		doc_list[idx].file_type->context_action_cmd != NULL &&
+		*doc_list[idx].file_type->context_action_cmd != '\0')
+	{
+		command = g_strdup(doc_list[idx].file_type->context_action_cmd);
+	}
+	else
+	{
+		command = g_strdup(app->context_action_cmd);
+	}
+
+	// substitute the wildcard %s and run the command if it is non empty
+	if (command != NULL && *command != '\0')
+	{
+		command = utils_str_replace(command, "%s", word);
+
+		if (! g_spawn_command_line_async(command, &error))
+		{
+			msgwin_status_add("Context action command failed: %s", error->message);
+			g_error_free(error);
+		}
+	}
+	g_free(word);
+	g_free(command);
+}
+
