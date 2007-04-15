@@ -697,6 +697,8 @@ static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id
 static gchar *find_calltip(const gchar *word, filetype *ft)
 {
 	const GPtrArray *tags;
+	const gint arg_types = tm_tag_function_t | tm_tag_prototype_t |
+		tm_tag_method_t | tm_tag_macro_with_arg_t;
 	TMTagAttrType *attrs = NULL;
 	TMTag *tag;
 	GString *str = NULL;
@@ -704,7 +706,7 @@ static gchar *find_calltip(const gchar *word, filetype *ft)
 
 	g_return_val_if_fail(ft && word && *word, NULL);
 
-	tags = tm_workspace_find(word, tm_tag_max_t, attrs, FALSE, ft->lang);
+	tags = tm_workspace_find(word, arg_types | tm_tag_class_t, attrs, FALSE, ft->lang);
 	if (tags->len == 0)
 		return NULL;
 
@@ -714,7 +716,7 @@ static gchar *find_calltip(const gchar *word, filetype *ft)
 	{
 		// user typed e.g. 'new Classname(' so lookup D constructor Classname::this()
 		tags = tm_workspace_find_scoped("this", tag->name,
-			tm_tag_function_t | tm_tag_prototype_t, attrs, FALSE, ft->lang, TRUE);
+			arg_types, attrs, FALSE, ft->lang, TRUE);
 		if (tags->len == 0)
 			return NULL;
 	}

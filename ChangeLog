@@ -1,3 +1,9 @@
+2007-04-15  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/sci_cb.c:
+   Prevent D module tag lookup for D constructor calltips.
+
+
 2007-04-13  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/sci_cb.c: Fixed missing calltip display when using a space after
