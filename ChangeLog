@@ -4,6 +4,9 @@
    Prevent D module tag lookup for D constructor calltips.
  * tagmanager/tm_workspace.c:
    Allow overloaded argument lists in global tag files.
+ * tagmanager/tm_workspace.c:
+   Add tm_tag_function_t tags in global tags files, so that inline C++
+   methods (and D functions) get parsed.
 
 
 2007-04-13  Enrico Tröger  <enrico.troeger@uvena.de>

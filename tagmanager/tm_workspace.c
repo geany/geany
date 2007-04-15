@@ -326,7 +326,8 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		return FALSE;
 	}
 	tags_array = tm_tags_extract(source_file->tags_array, tm_tag_class_t |
-	  tm_tag_typedef_t | tm_tag_prototype_t | tm_tag_enum_t | tm_tag_enumerator_t |
+	  tm_tag_typedef_t | tm_tag_enum_t | tm_tag_enumerator_t |
+	  tm_tag_prototype_t | tm_tag_function_t | tm_tag_method_t |	// for inline functions
 	  tm_tag_macro_t | tm_tag_macro_with_arg_t);
 	if ((NULL == tags_array) || (0 == tags_array->len))
 	{
