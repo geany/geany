@@ -6,6 +6,9 @@
    src/main.c, src/prefs.c:
    Added context actions to run custom commands on current selection or
    the current word below cursor.
+ * src/document.c, src/keyfile.c:
+   Run print command asynchronously to prevent blocking of the main
+   process (closes #1695786).
 
 
 2007-04-15  Nick Treleaven  <nick.treleaven@btinternet.com>

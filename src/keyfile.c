@@ -470,7 +470,12 @@ gboolean configuration_load()
 	g_free(tmp_string);
 
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
+#ifdef G_OS_WIN32
+	// single quote paths on Win32 for g_spawn_command_line_async
+	tmp_string = g_strconcat("'", tmp_string2, "' '%f'", NULL);
+#else
 	tmp_string = g_strconcat(tmp_string2, " %f", NULL);
+#endif
 	app->tools_print_cmd = utils_get_setting_string(config, "tools", "print_cmd", tmp_string);
 	g_free(tmp_string);
 	g_free(tmp_string2);

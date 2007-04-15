@@ -1329,7 +1329,7 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace_text, gint flags,
 						  gboolean escaped_chars)
 {
-	gint selection_end, selection_start, selection_mode, selected_lines, last_line;
+	gint selection_end, selection_start, selection_mode, selected_lines, last_line = 0;
 	gint max_column = 0, count = 0;
 	gboolean replaced = FALSE;
 
@@ -1735,7 +1735,8 @@ void document_print(gint idx)
 {
 	gchar *cmdline;
 
-	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_name == NULL) return;
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
+		return;
 
 	cmdline = g_strdup(app->tools_print_cmd);
 	cmdline = utils_str_replace(cmdline, "%f", doc_list[idx].file_name);
@@ -1743,19 +1744,29 @@ void document_print(gint idx)
 	if (dialogs_show_question(_("The file \"%s\" will be printed with the following command:\n\n%s"),
 								doc_list[idx].file_name, cmdline))
 	{
-		gint rc;
-		// system() is not the best way, but the only one I found to get the following working:
-		// a2ps -1 --medium=A4 -o - %f | xfprint4
-		rc = system(cmdline);
-		if (rc != 0)
+		GError *error = NULL;
+
+#ifdef G_OS_WIN32
+		gchar *tmp_cmdline = cmdline;
+#else
+		// /bin/sh -c emulates the system() call and makes complex commands possible
+		// but only needed on non-win32 systems due to the lack of win32's shell capabilities
+		gchar *tmp_cmdline = g_strconcat("/bin/sh -c \"", cmdline, "\"", NULL);
+#endif
+
+		if (! g_spawn_command_line_async(tmp_cmdline, &error))
 		{
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Printing of \"%s\" failed (return code: %d)."),
-								doc_list[idx].file_name, rc);
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Printing of \"%s\" failed (return code: %s)."),
+								doc_list[idx].file_name, error->message);
+			g_error_free(error);
 		}
 		else
 		{
 			msgwin_status_add(_("File %s printed."), doc_list[idx].file_name);
 		}
+#ifndef G_OS_WIN32
+		g_free(tmp_cmdline);
+#endif
 	}
 	g_free(cmdline);
 }
