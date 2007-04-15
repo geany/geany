@@ -207,7 +207,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 #endif
 	TMTagAttrType sort_attrs[] = {
 		tm_tag_attr_name_t, tm_tag_attr_scope_t,
-		tm_tag_attr_type_t, 0
+		tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0
 	};
 
 	if (NULL == (fp = fopen(temp_file, "w")))

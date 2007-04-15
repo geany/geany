@@ -2,6 +2,8 @@
 
  * src/sci_cb.c:
    Prevent D module tag lookup for D constructor calltips.
+ * tagmanager/tm_workspace.c:
+   Allow overloaded argument lists in global tag files.
 
 
 2007-04-13  Enrico Tröger  <enrico.troeger@uvena.de>
