@@ -661,10 +661,10 @@ void search_show_find_in_files_dialog()
 				_("Invert the sense of matching, to select non-matching lines."), NULL);
 
 		cbox = gtk_vbox_new(FALSE, 0);
-		gtk_container_add(GTK_CONTAINER(cbox), check_recursive);
 		gtk_container_add(GTK_CONTAINER(cbox), checkbox1);
 		gtk_container_add(GTK_CONTAINER(cbox), check_wholeword);
 		gtk_container_add(GTK_CONTAINER(cbox), checkbox2);
+		gtk_container_add(GTK_CONTAINER(cbox), check_recursive);
 
 		hbox = gtk_hbox_new(FALSE, 6);
 		gtk_container_add(GTK_CONTAINER(hbox), rbox);
@@ -686,6 +686,8 @@ void search_show_find_in_files_dialog()
 						gtk_widget_ref(entry_extra), (GDestroyNotify)gtk_widget_unref);
 		g_signal_connect(G_OBJECT(entry_extra), "key-press-event",
 			G_CALLBACK(on_entry_extra_key_press), check_extra);
+		gtk_tooltips_set_tip(tooltips, entry_extra,
+				_("Other options to pass to Grep"), NULL);
 
 		hbox = gtk_hbox_new(FALSE, 6);
 		gtk_box_pack_start(GTK_BOX(hbox), check_extra, FALSE, FALSE, 0);

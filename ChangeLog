@@ -9,6 +9,9 @@
    methods (and D functions) get parsed.
  * src/keyfile.c, src/search.c, src/search.h:
    Save FIF extra options string in the keyfile.
+ * src/search.c:
+   Move 'Recurse in subfolders' FIF option below the others.
+   Add tooltip for extra options entry.
 
 
 2007-04-13  Enrico Tröger  <enrico.troeger@uvena.de>
