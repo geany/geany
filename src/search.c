@@ -63,6 +63,8 @@ enum {
 
 GeanySearchData search_data;
 
+SearchPrefs search_prefs = {NULL};
+
 static struct
 {
 	GtkWidget	*find_dialog;
@@ -678,6 +680,8 @@ void search_show_find_in_files_dialog()
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_extra), FALSE);
 
 		entry_extra = gtk_entry_new();
+		if (search_prefs.fif_extra_options)
+			gtk_entry_set_text(GTK_ENTRY(entry_extra), search_prefs.fif_extra_options);
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "entry_extra",
 						gtk_widget_ref(entry_extra), (GDestroyNotify)gtk_widget_unref);
 		g_signal_connect(G_OBJECT(entry_extra), "key-press-event",
@@ -1105,6 +1109,11 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 			lookup_widget(widgets.find_in_files_dialog, "dir_combo");
 		const gchar *utf8_dir =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
+
+		// update extra options pref
+		g_free(search_prefs.fif_extra_options);
+		search_prefs.fif_extra_options = g_strdup(gtk_entry_get_text(GTK_ENTRY(
+					lookup_widget(widgets.find_in_files_dialog, "entry_extra"))));
 
 		if (utf8_dir == NULL || utils_str_equal(utf8_dir, ""))
 			ui_set_statusbar(_("Invalid directory for find in files."));

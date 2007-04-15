@@ -36,6 +36,14 @@ typedef struct
 extern GeanySearchData search_data;
 
 
+typedef struct
+{
+	gchar		*fif_extra_options;
+} SearchPrefs;
+
+extern SearchPrefs search_prefs;
+
+
 void search_init();
 
 void search_finalize();

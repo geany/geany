@@ -46,6 +46,7 @@
 #include "vte.h"
 #include "main.h"
 #include "msgwindow.h"
+#include "search.h"
 
 
 static gchar *scribble_text = NULL;
@@ -201,7 +202,9 @@ void configuration_save()
 	g_key_file_set_string(config, "tools", "term_cmd", app->tools_term_cmd ? app->tools_term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", app->tools_browser_cmd ? app->tools_browser_cmd : "");
 	g_key_file_set_string(config, "tools", "print_cmd", app->tools_print_cmd ? app->tools_print_cmd : "");
-	g_key_file_set_string(config, "tools", "grep_cmd", app->tools_grep_cmd? app->tools_grep_cmd: "");
+	g_key_file_set_string(config, "tools", "grep_cmd", app->tools_grep_cmd ? app->tools_grep_cmd : "");
+
+	g_key_file_set_string(config, "search", "fif_extra_options", search_prefs.fif_extra_options ? search_prefs.fif_extra_options : "");
 
 	for (i = 0; i < app->mru_length; i++)
 	{
@@ -473,6 +476,8 @@ gboolean configuration_load()
 	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_GREP);
 	app->tools_grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", tmp_string);
 	g_free(tmp_string);
+
+	search_prefs.fif_extra_options = utils_get_setting_string(config, "search", "fif_extra_options", "");
 
 	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
 	if (recent_files != NULL)
