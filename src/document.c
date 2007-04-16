@@ -614,7 +614,6 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 	if (g_stat(locale_filename, &st) != 0)
 	{
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
-		dialogs_show_msgbox(0, "%s %s", utf8_filename, locale_filename);
 		return FALSE;
 	}
 
