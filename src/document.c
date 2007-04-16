@@ -48,6 +48,8 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#include <glib/gstdio.h>
+
 #include "document.h"
 #include "support.h"
 #include "sciwrappers.h"
@@ -609,19 +611,16 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 	filedata->bom = FALSE;
 	filedata->readonly = FALSE;
 
-	if (stat(locale_filename, &st) != 0)
+	if (g_stat(locale_filename, &st) != 0)
 	{
 		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
+		dialogs_show_msgbox(0, "%s %s", utf8_filename, locale_filename);
 		return FALSE;
 	}
 
 	filedata->mtime = st.st_mtime;
 
-#ifdef G_OS_WIN32
-	if (! g_file_get_contents(utf8_filename, &filedata->data, NULL, &err))
-#else
 	if (! g_file_get_contents(locale_filename, &filedata->data, NULL, &err))
-#endif
 	{
 		msgwin_status_add(err->message);
 		g_error_free(err);
@@ -742,7 +741,11 @@ gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 
 		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
 		locale_filename = g_strdup(filename);
+#ifdef G_OS_WIN32 // on Win32 we only use locale_filename because it is already UTF8. I hope
+		utf8_filename = g_strdup(locale_filename);
+#else
 		utf8_filename = utils_get_utf8_from_locale(locale_filename);
+#endif
 
 		// if file is already open, switch to it and go
 		idx = document_find_by_filename(utf8_filename, FALSE);
@@ -913,9 +916,13 @@ static gboolean document_update_timestamp(gint idx)
 
 	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
 
+#ifdef G_OS_WIN32
+	// don't try to convert the filename on Windows, it should be already in UTF8
+	locale_filename = g_strdup(doc_list[idx].file_name);
+#else
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-
-	if (stat(locale_filename, &st) != 0)
+#endif
+	if (g_stat(locale_filename, &st) != 0)
 	{
 		msgwin_status_add(_("Could not open file %s (%s)"), doc_list[idx].file_name,
 			g_strerror(errno));

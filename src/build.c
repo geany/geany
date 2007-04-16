@@ -33,6 +33,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
+#include <glib/gstdio.h>
 
 #ifdef G_OS_UNIX
 # include <sys/types.h>
@@ -153,7 +154,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	locale_filename = utils_get_locale_from_utf8(view_file);
 
 	// check wether view_file exists
-	if (stat(locale_filename, &st) != 0)
+	if (g_stat(locale_filename, &st) != 0)
 	{
 		msgwin_status_add(_("Failed to view %s (make sure it is already compiled)"), view_file);
 		utils_free_pointers(executable, view_file, locale_filename, NULL);
@@ -354,9 +355,9 @@ static GPid build_link_file(gint idx)
 	object_file = g_strdup_printf("%s.o", executable);
 
 	// check wether object file (file.o) exists
-	if (stat(object_file, &st) == 0)
+	if (g_stat(object_file, &st) == 0)
 	{	// check wether src is newer than object file
-		if (stat(locale_filename, &st2) == 0)
+		if (g_stat(locale_filename, &st2) == 0)
 		{
 			if (st2.st_mtime > st.st_mtime)
 			{
@@ -546,7 +547,7 @@ static gchar *prepare_run_script(gint idx)
 		}
 
 		// check whether executable exists
-		if (stat(check_executable, &st) != 0)
+		if (g_stat(check_executable, &st) != 0)
 		{
 			utf8_check_executable = utils_get_utf8_from_locale(check_executable);
 			msgwin_status_add(_("Failed to execute %s (make sure it is already built)"),

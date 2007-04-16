@@ -1,3 +1,10 @@
+2007-04-16  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/build.c, src/dialogs.c, src/document.c, src/utils.c:
+   Use g_stat() instead of stat() to prevent file read errors on Win32.
+   Prevent unnecessary filename encoding conversions on Win32.
+
+
 2007-04-16  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/filetypes.c:

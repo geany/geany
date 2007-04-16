@@ -39,6 +39,7 @@
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
+#include <glib/gstdio.h>
 
 #include "dialogs.h"
 
@@ -674,8 +675,13 @@ void dialogs_show_file_properties(gint idx)
 
 
 #if defined(HAVE_SYS_STAT_H) && defined(TIME_WITH_SYS_TIME) && defined(HAVE_SYS_TYPES_H)
+#ifdef G_OS_WIN32
+	// don't try to convert the filename on Windows, it should be already in UTF8
+	locale_filename = g_strdup(doc_list[idx].file_name);
+#else
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-	if (stat(locale_filename, &st) == 0)
+#endif
+	if (g_stat(locale_filename, &st) == 0)
 	{
 		// first copy the returned string and the trim it, to not modify the static glibc string
 		// g_strchomp() is used to remove trailing EOL chars, which are there for whatever reason

@@ -332,8 +332,13 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 
 	if (! force && doc_list[idx].last_check > (t - GEANY_CHECK_FILE_DELAY)) return FALSE;
 
+#ifdef G_OS_WIN32
+	// don't try to convert the filename on Windows, it should be already in UTF8
+	locale_filename = g_strdup(doc_list[idx].file_name);
+#else
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-	if (stat(locale_filename, &st) != 0)
+#endif
+	if (g_stat(locale_filename, &st) != 0)
 	{
 		// TODO: warn user file on disk is missing
 	}
@@ -1432,17 +1437,29 @@ gboolean utils_wrap_string(gchar *string, gint wrapstart)
 
 gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
 {
+#ifdef G_OS_WIN32
+	// just do nothing on Windows platforms, this ifdef is just to prevent unwanted conversions
+	// which would result in wrongly converted strings
+	return g_strdup(utf8_text);
+#else
 	gchar *locale_text = g_locale_from_utf8(utf8_text, -1, NULL, NULL, NULL);
 	if (locale_text == NULL) locale_text = g_strdup(utf8_text);
 	return locale_text;
+#endif
 }
 
 
 gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 {
+#ifdef G_OS_WIN32
+	// just do nothing on Windows platforms, this ifdef is just to prevent unwanted conversions
+	// which would result in wrongly converted strings
+	return g_strdup(locale_text);
+#else
 	gchar *utf8_text = g_locale_to_utf8(locale_text, -1, NULL, NULL, NULL);
 	if (utf8_text == NULL) utf8_text = g_strdup(locale_text);
 	return utf8_text;
+#endif
 }
 
 
