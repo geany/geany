@@ -1,3 +1,8 @@
+2007-04-16  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * de.po: Small update of German translation
+
+
 2007-03-20  Frank Lanitz  <frank@frank.uvena.de>
 
  * it.po: Update of Italian translation (Thanks to M. Baldinelli)
@@ -38,7 +43,7 @@
 
 
 2007-01-30  Frank Lanitz  <frank@frank.uvena.de>
- 
+
  * geany.pot: Update of catalog
  * de.po: Update of German translation
  * fi.po: Added Finnish translation (Thanks to Harri Koskinen)
