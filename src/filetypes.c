@@ -686,8 +686,8 @@ filetype *filetypes_get_from_filename(gint idx)
 {
 	GPatternSpec *pattern;
 	filetype *ft;
-	gchar *filename;
-	gchar *base_filename, *utf8_filename;
+	const gchar *utf8_filename;
+	gchar *base_filename;
 	gint i, j;
 
 	if (! DOC_IDX_VALID(idx))
@@ -700,18 +700,10 @@ filetype *filetypes_get_from_filename(gint idx)
 	if (doc_list[idx].file_name == NULL)
 		return filetypes[GEANY_FILETYPES_ALL];
 	else
-		filename = doc_list[idx].file_name;
-
-	// try to get the UTF-8 equivalent for the filename
-	utf8_filename = g_locale_to_utf8(filename, -1, NULL, NULL, NULL);
-	if (utf8_filename == NULL)
-	{
-		return filetypes[GEANY_FILETYPES_ALL];
-	}
+		utf8_filename = doc_list[idx].file_name;
 
 	// to match against the basename of the file(because of Makefile*)
 	base_filename = g_path_get_basename(utf8_filename);
-	g_free(utf8_filename);
 
 	for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
