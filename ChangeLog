@@ -5,6 +5,17 @@
  * src/filetypes.c, src/filetypes.h, src/document.c:
    Split filetypes_get_from_filename() into filetypes_detect_from_file()
    and filetypes_detect_from_filename().
+ * tagmanager/tm_tag.c:
+   Use the usual TM parser for all langTypes except pascal, php, latex
+   when loading global tags files.
+ * tagmanager/tm_workspace.c:
+   Keep tag names with different argument lists when loading global
+   tags.
+   Prevent segfault if using tm_workspace_find_scoped() with global
+   tags.
+ * src/interface.c, src/callbacks.c, src/callbacks.h, src/symbols.c,
+   src/symbols.h, geany.glade:
+   Add Load Tags command in the File menu.
 
 
 2007-04-16  Enrico Tröger  <enrico.troeger@uvena.de>

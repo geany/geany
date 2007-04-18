@@ -40,6 +40,7 @@
 #include "encodings.h"
 #include "document.h"
 #include "support.h"
+#include "msgwindow.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =
@@ -733,3 +734,69 @@ int symbols_generate_global_tags(int argc, char **argv)
 }
 
 
+// fname should be in locale encoding
+static gboolean load_tags_filename(const gchar *fname)
+{
+	gchar *tags_ext;
+	gchar *shortname = g_strdup(fname);
+	gboolean ret = FALSE;
+
+	tags_ext = strstr(shortname, ".tags");
+	if (tags_ext)
+	{
+		gchar *utf8_shortname;
+		filetype *ft;
+
+		*tags_ext = '\0';	// remove .tags extension
+		utf8_shortname = utils_get_utf8_from_locale(shortname);
+		ft = filetypes_detect_from_filename(utf8_shortname);
+		g_free(utf8_shortname);
+
+		if (ft)
+		{
+			ret = tm_workspace_load_global_tags(fname, ft->lang);
+		}
+	}
+	g_free(shortname);
+	return ret;
+}
+
+
+void symbols_show_load_tags_dialog()
+{
+	GtkWidget *dialog;
+	GtkFileFilter *filter;
+
+	dialog = gtk_file_chooser_dialog_new(_("Load Tags"), GTK_WINDOW(app->window),
+		GTK_FILE_CHOOSER_ACTION_OPEN,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_OPEN, GTK_RESPONSE_OK,
+		NULL);
+	filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(filter, _("Geany tag files (*.tags)"));
+	gtk_file_filter_add_pattern(filter, "*.tags");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+	{
+		GSList *flist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
+		GSList *item;
+
+		for (item = flist; item != NULL; item = g_slist_next(item))
+		{
+			gchar *fname = item->data;
+			gchar *utf8_fname;
+			gboolean ok;
+
+			ok = load_tags_filename(fname);
+
+			utf8_fname = utils_get_utf8_from_locale(fname);
+			msgwin_status_add(ok ? _("Loaded tags file '%s'.") :
+				_("Could not load tags file '%s'."), utf8_fname);
+			g_free(utf8_fname);
+			g_free(fname);
+		}
+		g_slist_free(flist);
+	}
+	gtk_widget_destroy(dialog);
+}
