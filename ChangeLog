@@ -1,3 +1,9 @@
+2007-04-18  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * doc/geany.docbook:
+   Update Search section: escape sequences, Find All, Mark, Replace All.
+
+
 2007-04-16  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/build.c, src/dialogs.c, src/document.c, src/utils.c:

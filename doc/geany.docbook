@@ -640,7 +640,7 @@
 				</para>
 			</section>
 		</section>
-		<section id="search_replace">
+		<section id="search">
 			<title>Search, replace and go to</title>
 			<para>
 				This section describes search-related commands from the Search menu and
@@ -661,12 +661,10 @@
 				* These items are available from the editor window's popup menu, or by
 				using a keyboard shortcut (see <xref linkend="keybindings"/>).
 			</para>
-			<section>
+			<section id="search_find">
 				<title>Find</title>
 				<para>
-					The Find dialog is used for finding text within the current document.
-					The syntax for the "Use regular expressions" option is shown in
-					<xref linkend="regexp"/>.
+					The Find dialog is used for finding text in one or more open documents.
 				</para>
 				<para>
 					<figure>
@@ -674,16 +672,58 @@
 					   <graphic fileref="images/find_dialog.png"></graphic>
 					</figure>
 				</para>
+				<section id="search_matchingoptions">
+					<title>Matching options</title>
+					<para>
+						The syntax for the <emphasis>Use regular expressions</emphasis> option is shown in
+						<xref linkend="regexp"/>.
+					</para>
+					<para>
+						The <emphasis>Use escape sequences</emphasis> option will transform
+						any escaped characters into their UTF-8 equivalent. For example,
+						<literal>\t</literal> will be transformed into a tab character. Other
+						recognised symbols are:
+						<literal>\\</literal>, <literal>\n</literal>, <literal>\r</literal>,
+						<literal>\uXXXX</literal> (Unicode chararacters).
+					</para>
+				</section>
+				<section>
+					<title>Find all</title>
+					<para>
+						To find all matches, click on the <emphasis>Find All</emphasis> expander.
+						This will reveal several options:
+						<itemizedlist>
+							<listitem><para>In Document</para></listitem>
+							<listitem><para>In Session</para></listitem>
+							<listitem><para>Mark</para></listitem>
+						</itemizedlist>
+						<emphasis>Find All In Document</emphasis> will show a list of matching lines
+						in the current document in the Messages tab of the Message Window.
+						<emphasis>Find All In Session</emphasis> does the same for all open documents.
+					</para>
+					<para>
+						<emphasis>Mark</emphasis> will set markers for all matching lines in the
+						current document, if the Markers margin is visible.
+						If not, the background colour of matching lines will be highlighted.
+						Markers and highlighting can be removed by selecting the
+						<emphasis>Remove Markers</emphasis> command from the
+						Document menu.
+					</para>
+				</section>
 			</section>
 			<section>
 				<title>Find usage</title>
 				<para>
-					Find usage searches all open files. If there is a selection, then it is used
+					Find usage searches all open files. It is similar to the
+					<emphasis>Find All In Session</emphasis> Find dialog command.
+				</para>
+				<para>
+					If there is a selection, then it is used
 					as the search text; otherwise the current word is used.
 					The current word is either taken from the word nearest the edit cursor, or
 					the word underneath the popup menu click position when the popup menu is
 					used.
-					The search results are shown in the Messages window.
+					The search results are shown in the Messages tab of the Message Window.
 				</para>
 			</section>
 			<section id="search_fif">
@@ -728,12 +768,10 @@
 				</note>
 				</section>
 			</section>
-			<section>
+			<section id="search_replace">
 				<title>Replace</title>
 				<para>
-					The Replace dialog has the same options for finding text as the Find
-					dialog. There is also a "Replace in all files" option, which is used with the
-					Replace All button to perform the replacement for all open files.
+					The Replace dialog is used for replacing text in one or more open documents.
 				</para>
 				<para>
 					<figure>
@@ -742,10 +780,32 @@
 					</figure>
 				</para>
 				<para>
-					The "Use regular expressions" option applies both to the search string and
+					The Replace dialog has the same options for matching text as the Find
+					dialog. See <xref linkend="search_matchingoptions"/>.
+				</para>
+				<para>
+					The <emphasis>Use regular expressions</emphasis> option applies both to the
+					search string and
 					to the replacement text; for the latter back references can be used -
 					see the entry for '\n' in <xref linkend="regexp"/>.
 				</para>
+				<section>
+					<title>Replace all</title>
+					<para>
+						To replace several matches, click on the <emphasis>Replace All</emphasis>
+						expander. This will reveal several options:
+						<itemizedlist>
+							<listitem><para>In Document</para></listitem>
+							<listitem><para>In Session</para></listitem>
+							<listitem><para>In Selection</para></listitem>
+						</itemizedlist>
+						<emphasis>Replace All In Document</emphasis> will replace all matching text
+						in the current document.
+						<emphasis>Replace All In Session</emphasis> does the same for all open documents.
+						<emphasis>Replace All In Selection</emphasis> will replace all matching text
+						in the current selection of the current document.
+					</para>
+				</section>
 			</section>
 			<section id="search_gototag">
 				<title>Go to tag definition</title>
@@ -776,7 +836,7 @@
 				<title>Regular expressions</title>
 				<para>
 					You can use regular expressions in the Find and Replace dialogs by
-					selecting the "Use regular expressions" check box.
+					selecting the <emphasis>Use regular expressions</emphasis> check box.
 					The syntax is POSIX-like, as described below in <xref linkend="regexp"/>.
 					<note><para>
 						Searching backwards with regular expressions is not supported.
