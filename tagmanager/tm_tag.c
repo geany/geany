@@ -354,10 +354,17 @@ TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode)
 
 	TAG_NEW(tag);
 
-	if (mode == 0 || mode == 1)
-		result = tm_tag_init_from_file(tag, file, fp);
-	else
-		result = tm_tag_init_from_file_alt(tag, file, fp);
+	switch (mode)
+	{
+		case 4:	// pascal
+		case 6:	// php
+		case 8:	// latex
+			result = tm_tag_init_from_file_alt(tag, file, fp);
+			break;
+
+		default:
+			result = tm_tag_init_from_file(tag, file, fp);
+	}
 
 	if (! result)
 	{
