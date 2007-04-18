@@ -134,11 +134,16 @@ gboolean tm_workspace_remove_object(TMWorkObject *w, gboolean free)
 	return FALSE;
 }
 
+static TMTagAttrType global_tags_sort_attrs[] =
+{
+	tm_tag_attr_name_t, tm_tag_attr_scope_t,
+	tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0
+};
+
 gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 {
 	FILE *fp;
 	TMTag *tag;
-	TMTagAttrType attr[] = { tm_tag_attr_name_t, 0 };
 
 	if (NULL == (fp = fopen(tags_file, "r")))
 		return FALSE;
@@ -152,7 +157,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 
 	// resort the whole array, because tm_tags_find expects a sorted array and it is not sorted
 	// when global.tags, php.tags and latex.tags are loaded at the same time
-	tm_tags_sort(theWorkspace->global_tags, attr, TRUE);
+	tm_tags_sort(theWorkspace->global_tags, global_tags_sort_attrs, TRUE);
 
 	return TRUE;
 }
@@ -205,10 +210,6 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	char *temp_file = g_strdup_printf("%s/%d_%ld_1.cpp", P_tmpdir, getpid(), time(NULL));
 	char *temp_file2 = g_strdup_printf("%s/%d_%ld_2.cpp", P_tmpdir, getpid(), time(NULL));
 #endif
-	TMTagAttrType sort_attrs[] = {
-		tm_tag_attr_name_t, tm_tag_attr_scope_t,
-		tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0
-	};
 
 	if (NULL == (fp = fopen(temp_file, "w")))
 		return FALSE;
@@ -336,7 +337,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		tm_source_file_free(source_file);
 		return FALSE;
 	}
-	if (FALSE == tm_tags_sort(tags_array, sort_attrs, TRUE))
+	if (FALSE == tm_tags_sort(tags_array, global_tags_sort_attrs, TRUE))
 	{
 		tm_source_file_free(source_file);
 		return FALSE;
@@ -557,6 +558,20 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	return tags;
 }
 
+static gboolean match_langs(gint lang, const TMTag *tag)
+{
+	if (tag->atts.entry.file)
+	{	// workspace tag
+		if (lang == tag->atts.entry.file->lang)
+			return TRUE;
+	}
+	else
+	{	// global tag
+		if (lang == tag->atts.file.lang)
+			return TRUE;
+	}
+	return FALSE;
+}
 
 /* scope can be NULL.
  * lang can be -1 */
@@ -579,8 +594,8 @@ fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
 			if (! scope || (match[tagIter]->atts.entry.scope &&
 				0 == strcmp(match[tagIter]->atts.entry.scope, scope)))
 			{
-				if ((lang == -1 || lang == match[tagIter]->atts.entry.file->lang) &&
-					type & match[tagIter]->type)
+				if (type & match[tagIter]->type)
+				if (lang == -1 || match_langs(lang, match[tagIter]))
 				{
 					g_ptr_array_add (dst, match[tagIter]);
 					if (first)
