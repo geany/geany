@@ -439,7 +439,7 @@ gint document_new_file(const gchar *filename, filetype *ft)
 
 	//document_set_filetype(idx, (ft == NULL) ? filetypes[GEANY_FILETYPES_ALL] : ft);
 	if (ft == NULL && filename != NULL) // guess the filetype from the filename if one is given
-		ft = filetypes_get_from_filename(idx);
+		ft = filetypes_detect_from_file(idx);
 
 	document_set_filetype(idx, ft);	// also clears taglist
 	if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
@@ -807,7 +807,7 @@ gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 		g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
 					G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
 
-		use_ft = (ft != NULL) ? ft : filetypes_get_from_filename(idx);
+		use_ft = (ft != NULL) ? ft : filetypes_detect_from_file(idx);
 	}
 	else
 	{	// reloading
@@ -1058,7 +1058,7 @@ gboolean document_save_file(gint idx, gboolean force)
 
 		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
 		{
-			doc_list[idx].file_type = filetypes_get_from_filename(idx);
+			doc_list[idx].file_type = filetypes_detect_from_file(idx);
 			filetypes_select_radio_item(doc_list[idx].file_type);
 		}
 		document_set_filetype(idx, doc_list[idx].file_type);

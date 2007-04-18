@@ -681,14 +681,10 @@ static filetype *find_shebang(gint idx)
 }
 
 
-/* simple filetype selection based on the filename extension */
-filetype *filetypes_get_from_filename(gint idx)
+/* Detect the filetype for document idx, checking for a shebang, then filename extension. */
+filetype *filetypes_detect_from_file(gint idx)
 {
-	GPatternSpec *pattern;
 	filetype *ft;
-	const gchar *utf8_filename;
-	gchar *base_filename;
-	gint i, j;
 
 	if (! DOC_IDX_VALID(idx))
 		return filetypes[GEANY_FILETYPES_ALL];
@@ -699,8 +695,18 @@ filetype *filetypes_get_from_filename(gint idx)
 
 	if (doc_list[idx].file_name == NULL)
 		return filetypes[GEANY_FILETYPES_ALL];
-	else
-		utf8_filename = doc_list[idx].file_name;
+
+	return filetypes_detect_from_filename(doc_list[idx].file_name);
+}
+
+
+/* Detect filetype based on the filename extension.
+ * utf8_filename can include the full path. */
+filetype *filetypes_detect_from_filename(const gchar *utf8_filename)
+{
+	GPatternSpec *pattern;
+	gchar *base_filename;
+	gint i, j;
 
 	// to match against the basename of the file(because of Makefile*)
 	base_filename = g_path_get_basename(utf8_filename);

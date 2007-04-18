@@ -2,6 +2,9 @@
 
  * doc/geany.docbook:
    Update Search section: escape sequences, Find All, Mark, Replace All.
+ * src/filetypes.c, src/filetypes.h, src/document.c:
+   Split filetypes_get_from_filename() into filetypes_detect_from_file()
+   and filetypes_detect_from_filename().
 
 
 2007-04-16  Enrico Tröger  <enrico.troeger@uvena.de>

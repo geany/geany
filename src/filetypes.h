@@ -119,8 +119,12 @@ filetype *filetypes_get_from_uid(gint uid);
  * and create the filetype menu*/
 void filetypes_init_types();
 
-/* simple filetype selection based on the filename extension */
-filetype *filetypes_get_from_filename(gint idx);
+/* Detect the filetype for document idx, checking for a shebang, then filename extension. */
+filetype *filetypes_detect_from_file(gint idx);
+
+/* Detect filetype based on the filename extension.
+ * utf8_filename can include the full path. */
+filetype *filetypes_detect_from_filename(const gchar *utf8_filename);
 
 /* frees the array and all related pointers */
 void filetypes_free_types();
