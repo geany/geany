@@ -1,3 +1,10 @@
+2007-04-19  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * doc/geany.docbook, src/vte.c:
+   Fixed handling of command line arguments within the shell command for
+   the VTE to enable use of shells as login shells.
+
+
 2007-04-18  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * doc/geany.docbook:

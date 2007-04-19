@@ -394,6 +394,12 @@
 					 pressing the middle mouse button in the VTE (on 2-button mice,
 					 the middle button can often be simulated by pressing both mouse buttons together).
 				</para>
+				<para>
+					In the preferences dialog you can specify a shell which should be started in the
+					VTE. To make the specified shell a login shell just use the appropriate command
+					line options for the shell. These options should be found in the manual page of
+					the shell. For zsh and bash you can use the argument <literal>--login</literal>.
+				</para>
 				<note>
 					<para><application>Geany</application> tries to load <filename>libvte.so</filename>.
 						  If this fails, it tries to load <filename>libvte.so.4</filename>. If this

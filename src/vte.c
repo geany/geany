@@ -233,8 +233,11 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 	{
 		vte_get_working_directory(); // try to keep the working directory when restarting the VTE
 
-		kill(pid, SIGINT);
-		pid = 0;
+		if (pid > 0)
+		{
+			kill(pid, SIGINT);
+			pid = 0;
+		}
 		vf->vte_terminal_reset(VTE_TERMINAL(widget), TRUE, TRUE);
 		vte_start(widget);
 
@@ -249,11 +252,21 @@ static void vte_start(GtkWidget *widget)
 {
 	VteTerminal *vte = VTE_TERMINAL(widget);
 	gchar **env;
+	gchar **argv;
 
-	env = vte_get_child_environment();
-	pid = vf->vte_terminal_fork_command(VTE_TERMINAL(vte), vc->shell, NULL, env,
+	// split the shell command line, so arguments will work too
+	argv = g_strsplit(vc->shell, " ", -1);
+
+	if (argv != NULL)
+	{
+		env = vte_get_child_environment();
+		pid = vf->vte_terminal_fork_command(VTE_TERMINAL(vte), argv[0], argv, env,
 												vte_info.dir, TRUE, TRUE, TRUE);
-	g_strfreev(env);
+		g_strfreev(env);
+		g_strfreev(argv);
+	}
+	else
+		pid = 0; // use 0 as invalid pid
 }
 
 
@@ -405,7 +418,7 @@ const gchar* vte_get_working_directory()
 	gchar *cwd;
 	gint   length;
 
-	if (pid >= 0)
+	if (pid > 0)
 	{
 		file = g_strdup_printf("/proc/%d/cwd", pid);
 		length = readlink(file, buffer, sizeof (buffer));
