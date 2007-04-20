@@ -55,17 +55,92 @@ static gint hpan_position;
 static gint vpan_position;
 
 
+static void save_recent_files(GKeyFile *config)
+{
+	gchar **recent_files = g_new0(gchar*, app->mru_length + 1);
+	guint i;
+
+	for (i = 0; i < app->mru_length; i++)
+	{
+		if (! g_queue_is_empty(app->recent_queue))
+		{
+			// copy the values, this is necessary when this function is called from the
+			// preferences dialog or when quitting is canceled to keep the queue intact
+			recent_files[i] = g_strdup(g_queue_peek_nth(app->recent_queue, i));
+		}
+		else
+		{
+			recent_files[i] = NULL;
+			break;
+		}
+	}
+	// There is a bug in GTK2.6 g_key_file_set_string_list, we must NULL terminate.
+	recent_files[app->mru_length] = NULL;
+	g_key_file_set_string_list(config, "files", "recent_files",
+				(const gchar**)recent_files, app->mru_length);
+	g_strfreev(recent_files);
+}
+
+
+static void save_session_files(GKeyFile *config)
+{
+	gint idx;
+	gboolean have_session_files;
+	gchar *tmp;
+	gchar *entry = g_malloc(14);
+	guint i = 0, j = 0, max;
+
+	if (cl_options.load_session)
+	{
+		// store the filenames to reopen them the next time
+		max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+		for(i = 0; i < max; i++)
+		{
+			idx = document_get_n_idx(i);
+			if (idx >= 0 && doc_list[idx].file_name)
+			{
+				gchar *fname;
+				filetype *ft = doc_list[idx].file_type;
+
+				if (ft == NULL)	// can happen when saving a new file when quitting
+					ft = filetypes[GEANY_FILETYPES_ALL];
+				g_snprintf(entry, 13, "FILE_NAME_%d", j);
+				fname = g_strdup_printf("%d:%d:%s", sci_get_current_position(doc_list[idx].sci),
+					ft->uid, doc_list[idx].file_name);
+				g_key_file_set_string(config, "files", entry, fname);
+				g_free(fname);
+				j++;
+			}
+		}
+		// if open filenames less than saved session files, delete existing entries in the list
+		have_session_files = TRUE;
+		i = j;
+		while (have_session_files)
+		{
+			g_snprintf(entry, 13, "FILE_NAME_%d", i);
+			tmp = g_key_file_get_string(config, "files", entry, NULL);
+			if (tmp == NULL)
+			{
+				have_session_files = FALSE;
+			}
+			else
+			{
+				g_key_file_remove_key(config, "files", entry, NULL);
+				g_free(tmp);
+				i++;
+			}
+		}
+	}
+	g_free(entry);
+}
+
+
 void configuration_save()
 {
-	guint i = 0, j = 0, max;
-	gint idx;
 	gboolean config_exists;
-	gboolean have_session_files;
 	GKeyFile *config = g_key_file_new();
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
-	gchar *data, *tmp;
-	gchar *entry = g_malloc(14);
-	gchar **recent_files = g_new0(gchar*, app->mru_length + 1);
+	gchar *data;
 	GtkTextBuffer *buffer;
 	GtkTextIter start, end;
 
@@ -207,67 +282,9 @@ void configuration_save()
 
 	g_key_file_set_string(config, "search", "fif_extra_options", search_prefs.fif_extra_options ? search_prefs.fif_extra_options : "");
 
-	for (i = 0; i < app->mru_length; i++)
-	{
-		if (! g_queue_is_empty(app->recent_queue))
-		{
-			// copy the values, this is necessary when this function is called from the
-			// preferences dialog or when quitting is canceled to keep the queue intact
-			recent_files[i] = g_strdup(g_queue_peek_nth(app->recent_queue, i));
-		}
-		else
-		{
-			recent_files[i] = NULL;
-			break;
-		}
-	}
-	// There is a bug in GTK2.6 g_key_file_set_string_list, we must NULL terminate.
-	recent_files[app->mru_length] = NULL;
-	g_key_file_set_string_list(config, "files", "recent_files",
-				(const gchar**)recent_files, app->mru_length);
-	g_strfreev(recent_files);
+	save_recent_files(config);
 
-	if (cl_options.load_session)
-	{
-		// store the filenames to reopen them the next time
-		max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-		for(i = 0; i < max; i++)
-		{
-			idx = document_get_n_idx(i);
-			if (idx >= 0 && doc_list[idx].file_name)
-			{
-				gchar *fname;
-				filetype *ft = doc_list[idx].file_type;
-
-				if (ft == NULL)	// can happen when saving a new file when quitting
-					ft = filetypes[GEANY_FILETYPES_ALL];
-				g_snprintf(entry, 13, "FILE_NAME_%d", j);
-				fname = g_strdup_printf("%d:%d:%s", sci_get_current_position(doc_list[idx].sci),
-					ft->uid, doc_list[idx].file_name);
-				g_key_file_set_string(config, "files", entry, fname);
-				g_free(fname);
-				j++;
-			}
-		}
-		// if open filenames less than saved session files, delete existing entries in the list
-		have_session_files = TRUE;
-		i = j;
-		while (have_session_files)
-		{
-			g_snprintf(entry, 13, "FILE_NAME_%d", i);
-			tmp = g_key_file_get_string(config, "files", entry, NULL);
-			if (tmp == NULL)
-			{
-				have_session_files = FALSE;
-			}
-			else
-			{
-				g_key_file_remove_key(config, "files", entry, NULL);
-				g_free(tmp);
-				i++;
-			}
-		}
-	}
+	save_session_files(config);
 
 	// write the file
 	data = g_key_file_to_data(config, NULL, NULL);
@@ -276,7 +293,6 @@ void configuration_save()
 
 	g_key_file_free(config);
 	g_free(configfile);
-	g_free(entry);
 	g_free(scribble_text);
 }
 
