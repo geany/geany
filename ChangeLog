@@ -2,6 +2,10 @@
 
  * doc/geany.docbook:
    Update generating global tags section.
+ * src/keyfile.c:
+   Move save_recent_files(), save_session_files() code out of
+   configuration_save().
+   Move load_file_lists() code out of configuration_load().
 
 
 2007-04-19  Enrico Tröger  <enrico.troeger@uvena.de>

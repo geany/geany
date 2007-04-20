@@ -297,6 +297,47 @@ void configuration_save()
 }
 
 
+static void load_file_lists(GKeyFile *config)
+{
+	gchar **recent_files;
+	guint i;
+	gsize len = 0;
+	gboolean have_session_files;
+	gchar *entry = g_malloc(14);
+	gchar *tmp_string;
+	GError *error = NULL;
+
+	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
+	if (recent_files != NULL)
+	{
+		for (i = 0; (i < len) && (i < app->mru_length); i++)
+		{
+			gchar *filename = g_strdup(recent_files[i]);
+			g_queue_push_tail(app->recent_queue, filename);
+		}
+	}
+	g_strfreev(recent_files);
+
+	session_files = g_ptr_array_new();
+	have_session_files = TRUE;
+	i = 0;
+	while (have_session_files)
+	{
+		g_snprintf(entry, 13, "FILE_NAME_%d", i);
+		tmp_string = g_key_file_get_string(config, "files", entry, &error);
+		if (! tmp_string || error)
+		{
+			g_error_free(error);
+			error = NULL;
+			have_session_files = FALSE;
+		}
+		g_ptr_array_add(session_files, tmp_string);
+		i++;
+	}
+	g_free(entry);
+}
+
+
 #define GEANY_GET_SETTING(propertyname, value, default_value) \
 	if (g_object_class_find_property( \
 		G_OBJECT_GET_CLASS(G_OBJECT(gtk_settings_get_default())), propertyname)) \
@@ -308,16 +349,12 @@ void configuration_save()
 gboolean configuration_load()
 {
 	gboolean config_exists;
-	gboolean have_session_files;
-	guint i, geo_len;
+	guint geo_len;
 	gint *geo;
-	gsize len = 0;
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
-	gchar *entry = g_malloc(14);
 	gchar *tmp_string, *tmp_string2;
 	GKeyFile *config = g_key_file_new();
 	GError *error = NULL;
-	gchar **recent_files;
 
 	config_exists = g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
 
@@ -502,37 +539,10 @@ gboolean configuration_load()
 
 	search_prefs.fif_extra_options = utils_get_setting_string(config, "search", "fif_extra_options", "");
 
-	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
-	if (recent_files != NULL)
-	{
-		for (i = 0; (i < len) && (i < app->mru_length); i++)
-		{
-			gchar *filename = g_strdup(recent_files[i]);
-			g_queue_push_tail(app->recent_queue, filename);
-		}
-	}
-	g_strfreev(recent_files);
-
-	session_files = g_ptr_array_new();
-	have_session_files = TRUE;
-	i = 0;
-	while (have_session_files)
-	{
-		g_snprintf(entry, 13, "FILE_NAME_%d", i);
-		tmp_string = g_key_file_get_string(config, "files", entry, &error);
-		if (! tmp_string || error)
-		{
-			g_error_free(error);
-			error = NULL;
-			have_session_files = FALSE;
-		}
-		g_ptr_array_add(session_files, tmp_string);
-		i++;
-	}
+	load_file_lists(config);
 
 	g_key_file_free(config);
 	g_free(configfile);
-	g_free(entry);
 	g_free(geo);
 	return TRUE;
 }
