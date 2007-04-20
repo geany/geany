@@ -957,6 +957,25 @@
 			</section>
 			<section><title>Global tags</title>
 			<para>
+				Global tags are used to provide autocompletion and calltips without having to open
+				the corresponding source files. This is intended for library APIs, as the tags file
+				only has to be updated when you upgrade the library.
+			</para>
+			<para>
+				You can load a global tags file with the <emphasis>Load Tags</emphasis> command,
+				in the File menu. You can either download these files or generate your own.
+				These tags files have the filename:
+			</para>
+			<para>
+				<filename>libraryname.lang_ext.tags</filename>
+			</para>
+			<para>
+				<emphasis>lang_ext</emphasis> is one of the extensions set for the filetype
+				associated with the tags. See <xref linkend="filetype_extensions"/> for more
+				information.
+			</para>
+			<section><title>Default global tags files</title>
+			<para>
 				For some languages, a list of global tags is loaded when the corresponding filetype
 				is first used. Currently these are for:
 				<itemizedlist>
@@ -967,37 +986,71 @@
 					<listitem><para>LaTeX</para></listitem>
 				</itemizedlist>
 			</para>
-			<section><title>Generating a global tags file</title>
+			</section>
+			<section id="tags_generating"><title>Generating a global tags file</title>
 			<para>
-				<application>Geany</application> currently uses a file <filename>global.tags</filename>
-				for C and C++, commonly installed in <filename>/usr/share/geany</filename>. This
-				file can be replaced with one containing tags parsed from a different set of
-				header files. The following command was used to generate it, from a
-				<filename>bash</filename> shell:
+				<note><title>Filetypes support</title>
+				<para>
+					Currently this is only supported for filetypes that can be pre-processed
+					with <filename>gcc</filename>,
+					i.e. do not use the <literal>#</literal> character outside of strings.
+					Also Pascal, PHP and LaTeX will not work yet.
+				</para>
+				<para>
+					This is known to work with C, C++ and D filetypes.
+				</para>
+				</note>
 			</para>
 			<para>
-				<literal>CFLAGS=`pkg-config --cflags libgnomeui-2.0` geany -g global.tags
-				/usr/include/libgnomeui-2.0/gnome.h
-				</literal>
-			</para>
-			<para>
-				You can adapt this command to use CFLAGS and header files appropriate for
-				whichever libraries you want. The format is:
+				You can generate your own global tags files by parsing a list of source files.
+				The format is:
 			</para>
 			<para>
 				geany -g &lt;Tag File&gt; &lt;File list&gt;
 			</para>
 			<para>
-				<filename>gcc</filename> is required, as header files are preprocessed to include
+				<itemizedlist>
+					<listitem><para><emphasis>Tag File</emphasis> should be in the format described
+						earlier.</para></listitem>
+					<listitem><para><emphasis>File list</emphasis> is a list of filenames, each with
+						a full path.</para></listitem>
+				</itemizedlist>
+			</para>
+			<para>
+				<filename>gcc</filename> is required, as C/C++ header files are preprocessed to include
 				any other header files they depend upon. Currently <filename>grep</filename> is
 				also required for tags generation.
 			</para>
 			<para>
-				After creating the file, replace the installed
-				<filename>global.tags</filename> file with it and restart
-				<application>Geany</application>. You should keep a copy of the generated
+				Example for the wxD library for the D programming language:
+				<programlisting>geany -g wxd.d.tags /home/username/wxd/wx/*.d</programlisting>
+			</para>
+			<para>
+				For C/C++ files, the environment variable CFLAGS should be set with appropriate
+				<literal>-I/path</literal> include paths.
+				The following example works with the <filename>bash</filename> shell, generating
+				tags for the GnomeUI library:
+				<programlisting>CFLAGS=`pkg-config --cflags libgnomeui-2.0` geany -g gnomeui.c.tags
+/usr/include/libgnomeui-2.0/gnome.h</programlisting>
+			</para>
+			<para>
+				You can adapt this command to use CFLAGS and header files appropriate for
+				whichever libraries you want.
+			</para>
+			<para>
+				<note><title>Replacing the default C/C++ tags file</title>
+				<para>
+				<application>Geany</application> currently uses a default global tags file
+				<filename>global.tags</filename>
+				for C and C++, commonly installed in <filename>/usr/share/geany</filename>. This
+				file can be replaced with one containing tags parsed from a different set of
+				header files. When <application>Geany</application> is next started, your custom
+				tags file will be loaded instead of the default <filename>global.tags</filename>.
+				You should keep a copy of the generated
 				tags file because it will get overwritten when upgrading
 				<application>Geany</application>.
+				</para>
+				</note>
 			</para>
 			</section>
 			</section>

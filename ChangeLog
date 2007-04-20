@@ -1,3 +1,9 @@
+2007-04-20  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * doc/geany.docbook:
+   Update generating global tags section.
+
+
 2007-04-19  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook, src/vte.c:
