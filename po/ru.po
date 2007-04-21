@@ -1,16 +1,16 @@
-# Russian po file for geany
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Russian translations for geany package.
+# Copyright (C) 2006,2007 THE geany'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the geany package.
+# brahmann <brahmann@lifec0re.org.ru>, 2006,2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.8\n"
+"Project-Id-Version: geany 0.11svn \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-07-08 16:22+0200\n"
 "PO-Revision-Date: 2006-07-15 11:43-0000\n"
 "Last-Translator: brahmann <brahmann@lifec0re.org.ru>\n"
-"Language-Team: RUSSIAN <ru@li.org>\n"
+"Language-Team: RUSSIAN <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"

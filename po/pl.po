@@ -1,16 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Polish translations for geany package.
+# Copyright (C) 2006,2007 THE geany'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the geany package.
+# Jacek Wolszczak <shutdownrunner@o2.pl, 2006.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 0.6\n"
+"Project-Id-Version: Geany 0.11svn \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-27 00:18+0200\n"
 "PO-Revision-Date: 2006-07-19 14:51+0100\n"
 "Last-Translator: Jacek Wolszczak <shutdownrunner@o2.pl>\n"
-"Language-Team: Gnome Translation Team(gnome.pl) <LL@li.org>\n"
+"Language-Team: Polish <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"

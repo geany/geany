@@ -1,16 +1,16 @@
 # Belarusian translation of geany.
 # Copyright (C) 2006 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Yura Semashko <yurand2@gmail.com>, 2006.
+# Yura Semashko <yurand2@gmail.com>, 2006,2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.10\n"
+"Project-Id-Version: geany 0.11svn \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-12-19 20:42+0100\n"
 "PO-Revision-Date: 2006-06-01 10:55+0200\n"
 "Last-Translator: Yura Semashko <yurand2@gmail.com>\n"
-"Language-Team: Belarusian <yurand2@gmail.com>\n"
+"Language-Team: Belarusian <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"

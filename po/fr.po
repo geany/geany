@@ -1,16 +1,16 @@
 # French translations for geany package.
 # Copyright (C) 2006 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Jean-Philippe Moal <skateinmars@momo.servegame.org>, 2006.
+# Jean-Philippe Moal <skateinmars@momo.servegame.org>, 2006, 2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 0.10svn\n"
+"Project-Id-Version: geany 0.11svn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-02-14 20:21+0100\n"
 "PO-Revision-Date: 2007-02-13 21:46+0100\n"
 "Last-Translator: Moal Jean-Philippe <skateinmars@momo.servegame.org>\n"
-"Language-Team: French <skateinmars@momo.servegame.org>\n"
+"Language-Team: French <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
