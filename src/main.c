@@ -551,6 +551,22 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 }
 
 
+static void load_project_file()
+{
+	gchar *locale_filename;
+
+	g_return_if_fail(project_prefs.session_file != NULL);
+
+	locale_filename = utils_get_locale_from_utf8(project_prefs.session_file);
+
+	if (*locale_filename)
+		project_load_file(locale_filename);
+
+	g_free(locale_filename);
+	g_free(project_prefs.session_file);	// no longer needed
+}
+
+
 gint main(gint argc, gchar **argv)
 {
 	gint idx;
@@ -672,6 +688,9 @@ gint main(gint argc, gchar **argv)
 	{
 		if (app->pref_main_load_session && cl_options.load_session)
 		{
+			load_project_file();
+
+			// load session files
 			if (! configuration_open_files())
 			{
 				ui_update_popup_copy_items(-1);

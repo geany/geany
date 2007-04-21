@@ -35,9 +35,13 @@
 #include "utils.h"
 #include "ui_utils.h"
 #include "msgwindow.h"
+#include "main.h"
 #ifdef G_OS_WIN32
 # include "win32.h"
 #endif
+
+
+ProjectPrefs project_prefs = {NULL};
 
 
 static gboolean entries_modified;
@@ -751,15 +755,17 @@ static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer u
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
 		// try to load the config
-		if (load_config(filename))
+		if (project_load_file(filename))
 		{
 			gtk_widget_destroy(GTK_WIDGET(dialog));
-			msgwin_status_add(_("Project \"%s\" opened."), app->project->name);
 		}
 		else
 		{
-			SHOW_ERR(_("Project file could not be loaded."));
+			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+
+			SHOW_ERR(_("Project file \"%s\" could not be loaded."), utf8_filename);
 			gtk_widget_grab_focus(GTK_WIDGET(dialog));
+			g_free(utf8_filename);
 		}
 		g_free(filename);
 	}
@@ -767,6 +773,26 @@ static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer u
 		gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 #endif
+
+
+gboolean project_load_file(const gchar *locale_file_name)
+{
+	g_return_val_if_fail(locale_file_name != NULL, FALSE);
+
+	if (load_config(locale_file_name))
+	{
+		msgwin_status_add(_("Project \"%s\" opened."), app->project->name);
+		return TRUE;
+	}
+	else
+	{
+		gchar *utf8_filename = utils_get_utf8_from_locale(locale_file_name);
+
+		msgwin_status_add(_("Project file \"%s\" could not be loaded."), utf8_filename);
+		g_free(utf8_filename);
+	}
+	return FALSE;
+}
 
 
 /* Reads the given filename and creates a new project with the data found in the file.
@@ -781,14 +807,14 @@ static gboolean load_config(const gchar *filename)
 	// there should not be an open project
 	g_return_val_if_fail(app->project == NULL && filename != NULL, FALSE);
 
-	p = app->project = g_new0(GeanyProject, 1);
-
 	config = g_key_file_new();
 	if (! g_key_file_load_from_file(config, filename, G_KEY_FILE_KEEP_COMMENTS, NULL))
 	{
 		g_key_file_free(config);
 		return FALSE;
 	}
+
+	p = app->project = g_new0(GeanyProject, 1);
 
 	p->name = utils_get_setting_string(config, "project", "name", GEANY_STRING_UNTITLED);
 	p->description = utils_get_setting_string(config, "project", "description", "");
@@ -852,4 +878,27 @@ const gchar *project_get_make_dir()
 		return NULL;
 }
 
+
+void project_save_prefs(GKeyFile *config)
+{
+	GeanyProject *project = app->project;
+
+	if (cl_options.load_session)
+	{
+		gchar *utf8_filename = (project == NULL) ? "" : project->file_name;
+
+		g_key_file_set_string(config, "project", "session_file", utf8_filename);
+	}
+}
+
+
+void project_load_prefs(GKeyFile *config)
+{
+	if (cl_options.load_session)
+	{
+		g_return_if_fail(project_prefs.session_file == NULL);
+		project_prefs.session_file = utils_get_setting_string(config, "project",
+			"session_file", "");
+	}
+}
 

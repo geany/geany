@@ -47,6 +47,7 @@
 #include "main.h"
 #include "msgwindow.h"
 #include "search.h"
+#include "project.h"
 
 
 static gchar *scribble_text = NULL;
@@ -282,8 +283,8 @@ void configuration_save()
 
 	g_key_file_set_string(config, "search", "fif_extra_options", search_prefs.fif_extra_options ? search_prefs.fif_extra_options : "");
 
+	project_save_prefs(config);	// save project filename, etc.
 	save_recent_files(config);
-
 	save_session_files(config);
 
 	// write the file
@@ -539,6 +540,7 @@ gboolean configuration_load()
 
 	search_prefs.fif_extra_options = utils_get_setting_string(config, "search", "fif_extra_options", "");
 
+	project_load_prefs(config);
 	load_file_lists(config);
 
 	g_key_file_free(config);

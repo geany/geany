@@ -41,6 +41,13 @@ struct _GeanyProject
 	gchar **file_patterns;	// array of filename extension patterns
 };
 
+typedef struct
+{
+	gchar *session_file;
+} ProjectPrefs;
+
+extern ProjectPrefs project_prefs;
+
 
 void project_new();
 
@@ -51,6 +58,13 @@ void project_close();
 void project_properties();
 
 
+gboolean project_load_file(const gchar *locale_file_name);
+
 const gchar *project_get_make_dir();
+
+
+void project_save_prefs(GKeyFile *config);
+
+void project_load_prefs(GKeyFile *config);
 
 #endif

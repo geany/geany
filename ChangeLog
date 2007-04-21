@@ -1,3 +1,9 @@
+2007-04-21  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/project.c, src/project.h, src/keyfile.c, src/main.c:
+   Restore the current project when restarting Geany.
+
+
 2007-04-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * doc/geany.docbook:
