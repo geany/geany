@@ -2,6 +2,9 @@
 
  * src/project.c, src/project.h, src/keyfile.c, src/main.c:
    Restore the current project when restarting Geany.
+ * src/project.c:
+   Fix no response with Project dialogs when the user enters invalid
+   information (oops).
 
 
 2007-04-20  Nick Treleaven  <nick.treleaven@btinternet.com>

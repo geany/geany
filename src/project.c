@@ -60,14 +60,10 @@ typedef struct _PropertyDialogElements
 
 
 
-static void on_properties_dialog_response(GtkDialog *dialog, gint response,
-										  PropertyDialogElements *e);
+static gboolean update_config(const PropertyDialogElements *e);
 static void on_file_save_button_clicked(GtkButton *button, GtkWidget *entry);
 static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry);
 static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry);
-#ifndef G_OS_WIN32
-static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
-#endif
 static gboolean close_open_project();
 static gboolean load_config(const gchar *filename);
 static gboolean write_config();
@@ -186,9 +182,45 @@ void project_new()
 	g_signal_connect((gpointer) e->base_path, "changed", G_CALLBACK(on_entries_changed), e);
 
 	gtk_widget_show_all(e->dialog);
+
+	retry:
 	response = gtk_dialog_run(GTK_DIALOG(e->dialog));
-	on_properties_dialog_response(GTK_DIALOG(e->dialog), response, e);
+	if (response == GTK_RESPONSE_OK)
+		if (! update_config(e))
+			goto retry;
+
+	gtk_widget_destroy(e->dialog);
+	g_free(e);
 }
+
+
+#ifndef G_OS_WIN32
+static void run_open_dialog(GtkDialog *dialog)
+{
+	gint response;
+
+	retry:
+	response = gtk_dialog_run(dialog);
+
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+		// try to load the config
+		if (! project_load_file(filename))
+		{
+			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+
+			SHOW_ERR(_("Project file \"%s\" could not be loaded."), utf8_filename);
+			gtk_widget_grab_focus(GTK_WIDGET(dialog));
+			g_free(utf8_filename);
+			g_free(filename);
+			goto retry;
+		}
+		g_free(filename);
+	}
+}
+#endif
 
 
 void project_open()
@@ -199,7 +231,6 @@ void project_open()
 #else
 	GtkWidget *dialog;
 	GtkFileFilter *filter;
-	gint response;
 #endif
 	if (! close_open_project()) return;
 
@@ -239,8 +270,8 @@ void project_open()
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dir);
 
 	gtk_widget_show_all(dialog);
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
-	on_open_dialog_response(GTK_DIALOG(dialog), response, NULL);
+	run_open_dialog(GTK_DIALOG(dialog));
+	gtk_widget_destroy(GTK_WIDGET(dialog));
 #endif
 
 	g_free(dir);
@@ -432,8 +463,15 @@ void project_properties()
 		gtk_entry_set_text(GTK_ENTRY(e->run_cmd), p->run_cmd);
 
 	gtk_widget_show_all(e->dialog);
+
+	retry:
 	response = gtk_dialog_run(GTK_DIALOG(e->dialog));
-	on_properties_dialog_response(GTK_DIALOG(e->dialog), response, e);
+	if (response == GTK_RESPONSE_OK)
+		if (! update_config(e))
+			goto retry;
+
+	gtk_widget_destroy(e->dialog);
+	g_free(e);
 }
 
 
@@ -461,125 +499,123 @@ static gboolean close_open_project()
 }
 
 
-/* Also used for New Project dialog response. */
-static void on_properties_dialog_response(GtkDialog *dialog, gint response,
-										  PropertyDialogElements *e)
+/* Verifies data for New & Properties dialogs.
+ * Returns: FALSE if the user needs to change any data. */
+static gboolean update_config(const PropertyDialogElements *e)
 {
-	if (response == GTK_RESPONSE_OK && e != NULL)
+	const gchar *name, *file_name, *base_path;
+	gint name_len;
+	gboolean new_project = FALSE;
+	GeanyProject *p;
+
+	g_return_val_if_fail(e != NULL, TRUE);
+
+	name = gtk_entry_get_text(GTK_ENTRY(e->name));
+	name_len = strlen(name);
+	if (name_len == 0)
 	{
-		const gchar *name, *file_name, *base_path;
-		gint name_len;
-		gboolean new_project = FALSE;
-		GeanyProject *p;
-
-		name = gtk_entry_get_text(GTK_ENTRY(e->name));
-		name_len = strlen(name);
-		if (name_len == 0)
-		{
-			SHOW_ERR(_("The specified project name is too short."));
-			gtk_widget_grab_focus(e->name);
-			return;
-		}
-		else if (name_len > MAX_NAME_LEN)
-		{
-			SHOW_ERR(_("The specified project name is too long (max. %d characters)."), MAX_NAME_LEN);
-			gtk_widget_grab_focus(e->name);
-			return;
-		}
-
-		file_name = gtk_entry_get_text(GTK_ENTRY(e->file_name));
-		if (strlen(file_name) == 0)
-		{
-			SHOW_ERR(_("You have specified an invalid project filename."));
-			gtk_widget_grab_focus(e->file_name);
-			return;
-		}
-
-		base_path = gtk_entry_get_text(GTK_ENTRY(e->base_path));
-		if (strlen(base_path) == 0)
-		{
-			SHOW_ERR(_("You have specified an invalid project base path."));
-			gtk_widget_grab_focus(e->base_path);
-			return;
-		}
-		else
-		{	// check whether the given directory actually exists
-			gchar *locale_path = utils_get_locale_from_utf8(base_path);
-			if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
-			{
-				if (dialogs_show_question(
-					_("The specified project base path does not exist. Should it be created?")))
-				{
-					utils_mkdir(locale_path, TRUE);
-				}
-				else
-				{
-					g_free(locale_path);
-					gtk_widget_grab_focus(e->base_path);
-					return;
-				}
-			}
-			g_free(locale_path);
-		}
-
-		// finally test whether the given project file can be written
-		if (utils_write_file(file_name, "") != 0)
-		{
-			SHOW_ERR(_("Project file could not be written."));
-			gtk_widget_grab_focus(e->file_name);
-			return;
-		}
-
-		if (app->project == NULL)
-		{
-			app->project = g_new0(GeanyProject, 1);
-			new_project = TRUE;
-		}
-		p = app->project;
-
-		if (p->name != NULL) g_free(p->name);
-		p->name = g_strdup(name);
-
-		if (p->file_name != NULL) g_free(p->file_name);
-		p->file_name = g_strdup(file_name);
-
-		if (p->base_path != NULL) g_free(p->base_path);
-		p->base_path = g_strdup(base_path);
-
-		if (! new_project)	// save properties specific fields
-		{
-			GtkTextIter start, end;
-			gchar *tmp;
-			GtkTextBuffer *buffer;
-
-			if (p->run_cmd != NULL) g_free(p->run_cmd);
-			p->run_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(e->run_cmd)));
-
-			// get and set the project description
-			buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
-			gtk_text_buffer_get_start_iter(buffer, &start);
-			gtk_text_buffer_get_end_iter(buffer, &end);
-			g_free(p->description);
-			p->description = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-
-			// get and set the project file patterns
-			buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->patterns));
-			gtk_text_buffer_get_start_iter(buffer, &start);
-			gtk_text_buffer_get_end_iter(buffer, &end);
-			tmp = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-			g_strfreev(p->file_patterns);
-			p->file_patterns = g_strsplit(tmp, "\n", -1);
-			g_free(tmp);
-		}
-		write_config();
-		if (new_project)
-			msgwin_status_add(_("Project \"%s\" created."), p->name);
-		else
-			msgwin_status_add(_("Project \"%s\" saved."), p->name);
+		SHOW_ERR(_("The specified project name is too short."));
+		gtk_widget_grab_focus(e->name);
+		return FALSE;
+	}
+	else if (name_len > MAX_NAME_LEN)
+	{
+		SHOW_ERR(_("The specified project name is too long (max. %d characters)."), MAX_NAME_LEN);
+		gtk_widget_grab_focus(e->name);
+		return FALSE;
 	}
 
-	gtk_widget_destroy(GTK_WIDGET(dialog));
-	g_free(e);
+	file_name = gtk_entry_get_text(GTK_ENTRY(e->file_name));
+	if (strlen(file_name) == 0)
+	{
+		SHOW_ERR(_("You have specified an invalid project filename."));
+		gtk_widget_grab_focus(e->file_name);
+		return FALSE;
+	}
+
+	base_path = gtk_entry_get_text(GTK_ENTRY(e->base_path));
+	if (strlen(base_path) == 0)
+	{
+		SHOW_ERR(_("You have specified an invalid project base path."));
+		gtk_widget_grab_focus(e->base_path);
+		return FALSE;
+	}
+	else
+	{	// check whether the given directory actually exists
+		gchar *locale_path = utils_get_locale_from_utf8(base_path);
+		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+		{
+			if (dialogs_show_question(
+				_("The specified project base path does not exist. Should it be created?")))
+			{
+				utils_mkdir(locale_path, TRUE);
+			}
+			else
+			{
+				g_free(locale_path);
+				gtk_widget_grab_focus(e->base_path);
+				return FALSE;
+			}
+		}
+		g_free(locale_path);
+	}
+
+	// finally test whether the given project file can be written
+	if (utils_write_file(file_name, "") != 0)
+	{
+		SHOW_ERR(_("Project file could not be written."));
+		gtk_widget_grab_focus(e->file_name);
+		return FALSE;
+	}
+
+	if (app->project == NULL)
+	{
+		app->project = g_new0(GeanyProject, 1);
+		new_project = TRUE;
+	}
+	p = app->project;
+
+	if (p->name != NULL) g_free(p->name);
+	p->name = g_strdup(name);
+
+	if (p->file_name != NULL) g_free(p->file_name);
+	p->file_name = g_strdup(file_name);
+
+	if (p->base_path != NULL) g_free(p->base_path);
+	p->base_path = g_strdup(base_path);
+
+	if (! new_project)	// save properties specific fields
+	{
+		GtkTextIter start, end;
+		gchar *tmp;
+		GtkTextBuffer *buffer;
+
+		if (p->run_cmd != NULL) g_free(p->run_cmd);
+		p->run_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(e->run_cmd)));
+
+		// get and set the project description
+		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
+		gtk_text_buffer_get_start_iter(buffer, &start);
+		gtk_text_buffer_get_end_iter(buffer, &end);
+		g_free(p->description);
+		p->description = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+
+		// get and set the project file patterns
+		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->patterns));
+		gtk_text_buffer_get_start_iter(buffer, &start);
+		gtk_text_buffer_get_end_iter(buffer, &end);
+		tmp = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+		g_strfreev(p->file_patterns);
+		p->file_patterns = g_strsplit(tmp, "\n", -1);
+		g_free(tmp);
+	}
+	write_config();
+	if (new_project)
+		msgwin_status_add(_("Project \"%s\" created."), p->name);
+	else
+		msgwin_status_add(_("Project \"%s\" saved."), p->name);
+
+	return TRUE;
 }
 
 
@@ -745,34 +781,6 @@ static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 {
 	entries_modified = TRUE;
 }
-
-
-#ifndef G_OS_WIN32
-static void on_open_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
-{
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-
-		// try to load the config
-		if (project_load_file(filename))
-		{
-			gtk_widget_destroy(GTK_WIDGET(dialog));
-		}
-		else
-		{
-			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-
-			SHOW_ERR(_("Project file \"%s\" could not be loaded."), utf8_filename);
-			gtk_widget_grab_focus(GTK_WIDGET(dialog));
-			g_free(utf8_filename);
-		}
-		g_free(filename);
-	}
-	else
-		gtk_widget_destroy(GTK_WIDGET(dialog));
-}
-#endif
 
 
 gboolean project_load_file(const gchar *locale_file_name)
