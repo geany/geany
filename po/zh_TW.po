@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.11svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-08 22:05+0100\n"
+"POT-Creation-Date: 2007-02-14 20:21+0100\n"
 "PO-Revision-Date: 2006-11-16 22:02+0800\n"
 "Last-Translator: KoViCH <kovich.ian@gmail.com>\n"
 "Language-Team: Chinese <geany-i18n@uvena.de>\n"
@@ -18,56 +18,2544 @@ msgstr ""
 "X-Poedit-Language: Chinese\n"
 "X-Poedit-Country: TAIWAN\n"
 
-#: src/main.c:86
+#: src/about.c:122
+msgid "About Geany"
+msgstr "關於Geany"
+
+#: src/about.c:171
+msgid "A fast and lightweight IDE"
+msgstr "一個快速且輕巧的整合開發環境"
+
+#: src/about.c:192
+#, c-format
+msgid "(built on %s)"
+msgstr "(在%s建立)"
+
+#. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
+#: src/about.c:223
+msgid "Info"
+msgstr "資訊"
+
+#: src/about.c:235
+msgid "Developers"
+msgstr "開發者"
+
+#: src/about.c:235
+msgid "Maintainer"
+msgstr "維護者"
+
+#: src/about.c:235
+msgid "developer"
+msgstr "開發者"
+
+#: src/about.c:236
+msgid "translation maintainer"
+msgstr "翻譯維護者"
+
+#: src/about.c:236
+msgid "Translators"
+msgstr "翻譯者"
+
+#: src/about.c:237
+msgid "language"
+msgstr "語言"
+
+#: src/about.c:243
+msgid "Credits"
+msgstr "鳴謝"
+
+#: src/about.c:256
+msgid "License"
+msgstr "授權條款"
+
+#: src/build.c:155
+#, c-format
+msgid "Failed to view %s (make sure it is already compiled)"
+msgstr ""
+
+#: src/build.c:188 src/build.c:584
+#, c-format
+msgid ""
+"Could not find terminal '%s' (check path for Terminal tool setting in "
+"Preferences)"
+msgstr ""
+
+#: src/build.c:202 src/build.c:621
+#, c-format
+msgid "Failed to execute %s (start-script could not be created)"
+msgstr ""
+
+#: src/build.c:230 src/build.c:455 src/build.c:666 src/search.c:1113
+#, c-format
+msgid "Process failed (%s)"
+msgstr "行程(%s)失敗"
+
+#: src/build.c:340 src/build.c:545
+#, fuzzy
+msgid "Command stopped because the current file has no extension."
+msgstr "轉換目前選擇區域的大/小寫"
+
+#: src/build.c:364
+#, c-format
+msgid "Something very strange is occurred, could not stat %s (%s)."
+msgstr ""
+
+#: src/build.c:443
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s(在目錄: %s)"
+
+#: src/build.c:560
+#, c-format
+msgid "Failed to execute %s (make sure it is already built)"
+msgstr ""
+
+#: src/build.c:598
+#, c-format
+msgid "Failed to change the working directory to %s"
+msgstr ""
+
+#: src/build.c:794
+msgid "Compilation failed."
+msgstr "編譯失敗."
+
+#: src/build.c:808
+msgid "Compilation finished successfully."
+msgstr "編譯成功結束."
+
+#. compile the code
+#: src/build.c:913
+msgid "_Compile"
+msgstr "編譯(_C)"
+
+#: src/build.c:916
+msgid "Compiles the current file"
+msgstr "編譯目前檔案"
+
+#. build the code
+#: src/build.c:925 src/interface.c:879
+msgid "_Build"
+msgstr "建立(_B)"
+
+#: src/build.c:929
+msgid "Builds the current file (generate an executable file)"
+msgstr ""
+
+#. build the code with make all
+#: src/build.c:939 src/build.c:1061
+#, fuzzy
+msgid "_Make All"
+msgstr "建立全部"
+
+#: src/build.c:942 src/build.c:1064
+msgid "Builds the current file with the make tool and the default target"
+msgstr "以建立工具和預設目標建構目前檔案"
+
+#. build the code with make custom
+#: src/build.c:950 src/build.c:1072
+#, fuzzy
+msgid "Make Custom _Target"
+msgstr "建立自定義目標(_t)"
+
+#: src/build.c:954 src/build.c:1076
+msgid "Builds the current file with the make tool and the specified target"
+msgstr "以建立工具和指定目標建構目前檔案"
+
+#. build the code with make object
+#: src/build.c:961
+#, fuzzy
+msgid "Make _Object"
+msgstr "建立物件(_o)"
+
+#: src/build.c:965
+msgid "Compiles the current file using the make tool"
+msgstr ""
+
+#. next error
+#: src/build.c:977 src/build.c:1088
+#, fuzzy
+msgid "_Next Error"
+msgstr "錯誤"
+
+#: src/build.c:992 src/interface.c:1007
+msgid "Run or view the current file"
+msgstr ""
+
+#. arguments
+#: src/build.c:1003
+msgid "_Set Includes and Arguments"
+msgstr ""
+
+#: src/build.c:1008
+msgid ""
+"Sets the includes and library paths for the compiler and the program "
+"arguments for execution"
+msgstr ""
+
+#. DVI
+#: src/build.c:1031
+msgid "LaTeX -> DVI"
+msgstr ""
+
+#: src/build.c:1034
+msgid "Compiles the current file into a DVI file"
+msgstr "編譯目前檔案為DVI檔案"
+
+#. PDF
+#: src/build.c:1044
+msgid "LaTeX -> PDF"
+msgstr ""
+
+#: src/build.c:1047
+msgid "Compiles the current file into a PDF file"
+msgstr "編譯目前檔案為PDF檔案"
+
+#. DVI view
+#: src/build.c:1100
+#, fuzzy
+msgid "View DVI File"
+msgstr "檢視DVI檔案"
+
+#: src/build.c:1105 src/build.c:1118
+msgid "Compiles and view the current file"
+msgstr "編譯及檢視目前檔案"
+
+#. PDF view
+#: src/build.c:1114
+#, fuzzy
+msgid "View PDF File"
+msgstr "檢視PDF檔案"
+
+#. arguments
+#: src/build.c:1133 src/dialogs.c:642
+msgid "Set Arguments"
+msgstr "設定參數"
+
+#: src/build.c:1138
+msgid "Sets the program paths and arguments"
+msgstr "設定程式的路徑及參數"
+
+#: src/build.c:1405
+#, fuzzy
+msgid "Make Custom Target"
+msgstr "建立自定義目標(_t)"
+
+#: src/build.c:1406
+msgid ""
+"Enter custom options here, all entered text is passed to the make command."
+msgstr ""
+
+#: src/build.c:1445
+msgid "Failed to execute the view program"
+msgstr "無法執行檢視程式"
+
+#: src/build.c:1464
+msgid "Failed to execute the terminal program"
+msgstr "無法執行終端程式"
+
+#: src/build.c:1523
+#, fuzzy, c-format
+msgid "Process could not be stopped (%s)."
+msgstr "無法建立組態文件目錄(%s)."
+
+#: src/build.c:1539
+msgid "No more build errors."
+msgstr ""
+
+#: src/callbacks.c:175
+msgid "Do you really want to quit?"
+msgstr "您真的想要離開嗎?"
+
+#: src/callbacks.c:491 src/interface.c:334 src/utils.c:347
+msgid "_Reload"
+msgstr "重新載入(_R)"
+
+#: src/callbacks.c:492
+msgid "Any unsaved changes will be lost."
+msgstr ""
+
+#: src/callbacks.c:493
+#, c-format
+msgid "Are you sure you want to reload '%s'?"
+msgstr ""
+
+#: src/callbacks.c:878
+#, c-format
+msgid "The file '%s' already exists. Do you want to overwrite it?"
+msgstr "檔案 '%s' 已存在.是否真要覆寫?"
+
+#: src/callbacks.c:1251
+#, c-format
+msgid "Forward declaration \"%s\" not found."
+msgstr ""
+
+#: src/callbacks.c:1253
+#, c-format
+msgid "Definition of \"%s\" not found."
+msgstr ""
+
+#: src/callbacks.c:1474 src/callbacks.c:1498
+msgid ""
+"Please set the filetype for the current file before using this function."
+msgstr ""
+
+#: src/callbacks.c:1609 src/ui_utils.c:416
+msgid "dd.mm.yyyy"
+msgstr ""
+
+#: src/callbacks.c:1611 src/ui_utils.c:417
+msgid "mm.dd.yyyy"
+msgstr ""
+
+#: src/callbacks.c:1613 src/ui_utils.c:418
+msgid "yyyy/mm/dd"
+msgstr ""
+
+#: src/callbacks.c:1615 src/ui_utils.c:427
+msgid "dd.mm.yyyy hh:mm:ss"
+msgstr ""
+
+#: src/callbacks.c:1617 src/ui_utils.c:428
+msgid "mm.dd.yyyy hh:mm:ss"
+msgstr ""
+
+#: src/callbacks.c:1619 src/ui_utils.c:429
+msgid "yyyy/mm/dd hh:mm:ss"
+msgstr ""
+
+#: src/callbacks.c:1621 src/ui_utils.c:438
+#, fuzzy
+msgid "Use Custom Date Format"
+msgstr "使用自定的日期格式"
+
+#: src/callbacks.c:1632
+#, fuzzy
+msgid "Custom Date Format"
+msgstr "自定日期格式"
+
+#: src/callbacks.c:1633
+msgid ""
+"Enter here a custom date and time format. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function. See \"man "
+"strftime\" for more information."
+msgstr ""
+
+#: src/callbacks.c:1653
+msgid "Date format string could not be converted (possibly too long)."
+msgstr ""
+
+#: src/callbacks.c:2041
+msgid "No more message items."
+msgstr ""
+
+#. initialize the dialog
+#: src/dialogs.c:75 src/prefs.c:1048
+msgid "Open File"
+msgstr "開啟檔案"
+
+#: src/dialogs.c:78 src/interface.c:656
+msgid "_View"
+msgstr "檢視(_V)"
+
+#: src/dialogs.c:80
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+
+#: src/dialogs.c:113
+msgid "Detect by file extension"
+msgstr "以附加檔名偵測"
+
+#: src/dialogs.c:124
+msgid "Detect from file"
+msgstr "從檔案偵測"
+
+#. line 1 with checkbox and encoding combo
+#: src/dialogs.c:170
+msgid "Show _hidden files"
+msgstr "顯示隱藏檔案"
+
+#: src/dialogs.c:182
+msgid "Set encoding:"
+msgstr "設定字元編碼:"
+
+#: src/dialogs.c:192
+msgid ""
+"Explicitly defines an encoding for the file, if it would not be detected. "
+"This is useful when you know that the encoding of a file cannot be detected "
+"correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"encoding."
+msgstr ""
+
+#: src/dialogs.c:212
+msgid "Set filetype:"
+msgstr ""
+
+#: src/dialogs.c:222
+msgid ""
+"Explicitly defines a filetype for the file, if it would not be detected by "
+"filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"filetype."
+msgstr ""
+
+#: src/dialogs.c:261
+msgid "Save File"
+msgstr "儲存檔案"
+
+#: src/dialogs.c:353
+#, c-format
+msgid "The file '%s' is not saved."
+msgstr ""
+
+#: src/dialogs.c:363
+msgid "Do you want to save it before closing?"
+msgstr "離開前您要存檔嗎?"
+
+#: src/dialogs.c:366
+msgid "_Don't save"
+msgstr "不要儲存(_D)"
+
+#: src/dialogs.c:410
+msgid "Choose font"
+msgstr "選擇字型"
+
+#: src/dialogs.c:448
+msgid "Word Count"
+msgstr "計算字數"
+
+#: src/dialogs.c:457
+msgid "selection"
+msgstr "選擇區域"
+
+#: src/dialogs.c:463
+msgid "whole document"
+msgstr "整個文件"
+
+#: src/dialogs.c:472
+#, fuzzy
+msgid "Range:"
+msgstr "改變"
+
+#: src/dialogs.c:484
+#, fuzzy
+msgid "Lines:"
+msgstr "行"
+
+#: src/dialogs.c:498
+msgid "Words:"
+msgstr ""
+
+#: src/dialogs.c:512
+#, fuzzy
+msgid "Characters:"
+msgstr "章節"
+
+#: src/dialogs.c:544 src/interface.c:3208 src/vte.c:552 src/vte.c:559
+msgid "Color Chooser"
+msgstr "顏色選擇程式"
+
+#: src/dialogs.c:611 src/keybindings.c:157
+msgid "Go to line"
+msgstr "前往行數"
+
+#: src/dialogs.c:617
+msgid "Enter the line you want to go to:"
+msgstr "請輸入您想移至的行:"
+
+#: src/dialogs.c:648
+msgid "Set programs and options for compiling and viewing (La)TeX files."
+msgstr ""
+
+#: src/dialogs.c:659
+msgid "DVI creation:"
+msgstr ""
+
+#: src/dialogs.c:678
+msgid "PDF creation:"
+msgstr ""
+
+#: src/dialogs.c:697
+msgid "DVI preview:"
+msgstr ""
+
+#: src/dialogs.c:716
+msgid "PDF preview:"
+msgstr ""
+
+#: src/dialogs.c:732 src/dialogs.c:847
+#, c-format
+msgid ""
+"%f will be replaced by the current filename, e.g. test_file.c\n"
+"%e will be replaced by the filename without extension, e.g. test_file"
+msgstr ""
+
+#: src/dialogs.c:759
+msgid "Set Includes and Arguments"
+msgstr ""
+
+#: src/dialogs.c:765
+msgid "Set the commands for building and running programs."
+msgstr ""
+
+#: src/dialogs.c:772
+msgid " commands"
+msgstr "指令"
+
+#: src/dialogs.c:787
+msgid "Compile:"
+msgstr "編譯:"
+
+#: src/dialogs.c:808
+msgid "Build:"
+msgstr "建構:"
+
+#: src/dialogs.c:829 src/dialogs.c:1101
+msgid "Execute:"
+msgstr "執行:"
+
+#: src/dialogs.c:894
+msgid ""
+"An error occurred or file information could not be retrieved (e.g. from a "
+"new file)."
+msgstr ""
+
+#: src/dialogs.c:913 src/dialogs.c:914 src/dialogs.c:915 src/dialogs.c:921
+#: src/dialogs.c:922 src/dialogs.c:923 src/ui_utils.c:121 src/ui_utils.c:124
+#: src/utils.c:515 src/utils.c:567
+msgid "unknown"
+msgstr "不詳"
+
+#: src/dialogs.c:927
+msgid "Properties"
+msgstr "屬性"
+
+#: src/dialogs.c:955
+msgid "<b>Type:</b>"
+msgstr "<b>類型:</b>"
+
+#: src/dialogs.c:968
+msgid "<b>Size:</b>"
+msgstr "<b>大小:</b>"
+
+#: src/dialogs.c:983
+msgid "<b>Location:</b>"
+msgstr "<b>位置:</b>"
+
+#: src/dialogs.c:996
+msgid "<b>Read-only:</b>"
+msgstr "<b>唯讀:</b>"
+
+#: src/dialogs.c:1003
+msgid "(only inside Geany)"
+msgstr ""
+
+#: src/dialogs.c:1012
+msgid "<b>Encoding:</b>"
+msgstr "<b>編碼:</b>"
+
+#: src/dialogs.c:1022 src/ui_utils.c:123
+msgid "(with BOM)"
+msgstr ""
+
+#: src/dialogs.c:1022 src/ui_utils.c:123
+msgid "(without BOM)"
+msgstr ""
+
+#: src/dialogs.c:1032
+msgid "<b>Modified:</b>"
+msgstr "<b>修改時間:</b>"
+
+#: src/dialogs.c:1045
+msgid "<b>Changed:</b>"
+msgstr "<b>變更:</b>"
+
+#: src/dialogs.c:1058
+msgid "<b>Accessed:</b>"
+msgstr "<b>存取時間:</b>"
+
+#: src/dialogs.c:1079
+msgid "<b>Permissions:</b>"
+msgstr "<b>權限:</b>"
+
+#. Header
+#: src/dialogs.c:1087
+msgid "Read:"
+msgstr "讀取:"
+
+#: src/dialogs.c:1094
+msgid "Write:"
+msgstr "寫入:"
+
+#. Owner
+#: src/dialogs.c:1109
+msgid "Owner:"
+msgstr "擁有者:"
+
+#. Group
+#: src/dialogs.c:1145
+msgid "Group:"
+msgstr "群組:"
+
+#. Other
+#: src/dialogs.c:1181
+msgid "Other:"
+msgstr "其他:"
+
+#: src/dialogs.c:1302
+msgid "Keyboard shortcuts"
+msgstr "捷徑鍵"
+
+#: src/dialogs.c:1311
+msgid "The following keyboard shortcuts are defined:"
+msgstr ""
+
+#: src/document.c:351
+#, c-format
+msgid "File %s closed."
+msgstr ""
+
+#: src/document.c:437
+msgid "New file opened."
+msgstr ""
+
+#: src/document.c:587 src/document.c:872
+#, c-format
+msgid "Could not open file %s (%s)"
+msgstr "無法開啟檔案%s(%s)"
+
+#: src/document.c:610
+#, c-format
+msgid ""
+"The file \"%s\" could not be opened properly and has been truncated. This "
+"can occur if the file contains a NULL byte. Be aware that saving it can "
+"cause data loss.\n"
+"The file was set to read-only."
+msgstr ""
+
+#: src/document.c:634
+#, c-format
+msgid "The file \"%s\" is not valid %s."
+msgstr ""
+
+#: src/document.c:643
+#, c-format
+msgid ""
+"The file \"%s\" does not look like a text file or the file encoding is not "
+"supported."
+msgstr ""
+
+#: src/document.c:711
+msgid "Invalid filename"
+msgstr "無效的檔案名稱"
+
+#: src/document.c:798
+#, c-format
+msgid "File %s reloaded."
+msgstr ""
+
+#: src/document.c:800
+#, c-format
+msgid "File %s opened(%d%s)."
+msgstr ""
+
+#: src/document.c:802
+msgid ", read-only"
+msgstr ",唯讀"
+
+#: src/document.c:900 src/document.c:983
+msgid "Error saving file."
+msgstr "儲存檔案時出現錯誤."
+
+#: src/document.c:947
+#, c-format
+msgid ""
+"An error occurred while converting the file from UTF-8 in \"%s\". The file "
+"remains unsaved.\n"
+"Error message: %s\n"
+msgstr ""
+
+#: src/document.c:971
+#, c-format
+msgid "Error saving file (%s)."
+msgstr "儲存檔案( %s)時出現錯誤."
+
+#: src/document.c:1014
+#, c-format
+msgid "File %s saved."
+msgstr "檔案%s已儲存."
+
+#: src/document.c:1062 src/document.c:1114 src/document.c:1122
+#, c-format
+msgid "\"%s\" was not found."
+msgstr ""
+
+#: src/document.c:1122
+msgid "Wrap search and find again?"
+msgstr ""
+
+#: src/document.c:1197 src/search.c:1232
+msgid "No matches found."
+msgstr "找不到符合的內容."
+
+#: src/document.c:1207 src/document.c:1214
+#, c-format
+msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr ""
+
+#: src/document.c:1468
+msgid "Win (CRLF)"
+msgstr ""
+
+#: src/document.c:1469
+msgid "Mac (CR)"
+msgstr ""
+
+#: src/document.c:1471
+msgid "Unix (LF)"
+msgstr ""
+
+#: src/document.c:1569
+#, c-format
+msgid ""
+"The file \"%s\" will be printed with the following command:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: src/document.c:1578
+#, c-format
+msgid "Printing of \"%s\" failed (return code: %d)."
+msgstr ""
+
+#: src/document.c:1583
+#, c-format
+msgid "File %s printed."
+msgstr ""
+
+#: src/encodings.c:52
+msgid "Celtic"
+msgstr "塞爾特文"
+
+#: src/encodings.c:53 src/encodings.c:54
+msgid "Greek"
+msgstr "希臘文"
+
+#: src/encodings.c:55
+msgid "Nordic"
+msgstr "北歐地區"
+
+#: src/encodings.c:56
+msgid "South European"
+msgstr "南歐語系"
+
+#: src/encodings.c:57 src/encodings.c:58 src/encodings.c:59 src/encodings.c:60
+msgid "Western"
+msgstr "西歐地區"
+
+#: src/encodings.c:62 src/encodings.c:63 src/encodings.c:64
+msgid "Baltic"
+msgstr "波羅的海語"
+
+#: src/encodings.c:65 src/encodings.c:66 src/encodings.c:67
+msgid "Central European"
+msgstr "中歐語系"
+
+#: src/encodings.c:68 src/encodings.c:69 src/encodings.c:70 src/encodings.c:71
+#: src/encodings.c:72
+msgid "Cyrillic"
+msgstr "斯拉夫文"
+
+#: src/encodings.c:73
+msgid "Cyrillic/Russian"
+msgstr "斯拉夫文/俄文"
+
+#: src/encodings.c:74
+msgid "Cyrillic/Ukrainian"
+msgstr "斯拉夫文/烏克蘭文"
+
+#: src/encodings.c:75
+msgid "Romanian"
+msgstr "羅馬尼亞文"
+
+#: src/encodings.c:77 src/encodings.c:78 src/encodings.c:79
+msgid "Arabic"
+msgstr "阿拉伯文"
+
+#: src/encodings.c:80 src/encodings.c:81 src/encodings.c:82
+msgid "Hebrew"
+msgstr "希伯來文"
+
+#: src/encodings.c:83
+msgid "Hebrew Visual"
+msgstr "希伯來文印刷型式"
+
+#: src/encodings.c:85
+msgid "Armenian"
+msgstr "亞美尼亞文"
+
+#: src/encodings.c:86
+msgid "Georgian"
+msgstr "喬治亞文"
+
+#: src/encodings.c:87
+msgid "Thai"
+msgstr "泰文"
+
+#: src/encodings.c:88 src/encodings.c:89 src/encodings.c:90
+msgid "Turkish"
+msgstr "土耳其文"
+
+#: src/encodings.c:91 src/encodings.c:92 src/encodings.c:93
+msgid "Vietnamese"
+msgstr "越南文"
+
+#: src/encodings.c:95 src/encodings.c:96 src/encodings.c:97 src/encodings.c:98
+#: src/encodings.c:99 src/encodings.c:100 src/encodings.c:101
+#: src/encodings.c:102
+msgid "Unicode"
+msgstr "萬國碼"
+
+#: src/encodings.c:104 src/encodings.c:105 src/encodings.c:106
+#: src/encodings.c:107
+msgid "Chinese Simplified"
+msgstr "中文（簡體）"
+
+#: src/encodings.c:108 src/encodings.c:109 src/encodings.c:110
+msgid "Chinese Traditional"
+msgstr "中文（正體）"
+
+#: src/encodings.c:111 src/encodings.c:112 src/encodings.c:113
+msgid "Japanese"
+msgstr "日文"
+
+#: src/encodings.c:114 src/encodings.c:115 src/encodings.c:116
+#: src/encodings.c:117
+msgid "Korean"
+msgstr "韓文"
+
+#: src/encodings.c:119
+msgid "Without encoding"
+msgstr "沒有編碼"
+
+#: src/encodings.c:212
+msgid "_West European"
+msgstr "西歐語系(_W)"
+
+#: src/encodings.c:218
+msgid "_East European"
+msgstr "東歐語系(_E)"
+
+#: src/encodings.c:224
+msgid "East _Asian"
+msgstr "東亞語系(_A)"
+
+#: src/encodings.c:230
+msgid "_SE & SW Asian"
+msgstr "東南亞及西南亞語系(_S)"
+
+#: src/encodings.c:236
+msgid "_Middle Eastern"
+msgstr "中東語系(_M)"
+
+#: src/encodings.c:242
+msgid "_Unicode"
+msgstr "萬國碼(_U)"
+
+#: src/filetypes.c:136
+msgid "C source file"
+msgstr "C 原始檔"
+
+#: src/filetypes.c:156
+msgid "C++ source file"
+msgstr "C++ 原始檔"
+
+#: src/filetypes.c:184
+msgid "D source file"
+msgstr "D原始檔"
+
+#: src/filetypes.c:204
+msgid "Java source file"
+msgstr "Java 原始檔"
+
+#: src/filetypes.c:224
+msgid "Pascal source file"
+msgstr "Pascal原始檔"
+
+#: src/filetypes.c:247
+msgid "Assembler source file"
+msgstr "組合語言原始檔"
+
+#: src/filetypes.c:266
+msgid "Fortran source file (F77)"
+msgstr "Fortran(F77)原始檔"
+
+#: src/filetypes.c:290
+msgid "(O)Caml source file"
+msgstr ""
+
+#: src/filetypes.c:310
+msgid "Perl source file"
+msgstr "Perl 原始檔"
+
+#: src/filetypes.c:332
+msgid "PHP source file"
+msgstr "PHP原始檔"
+
+#: src/filetypes.c:355
+#, fuzzy
+msgid "Javascript source file"
+msgstr "Java 原始檔"
+
+#: src/filetypes.c:374
+msgid "Python source file"
+msgstr "Python 原始檔"
+
+#: src/filetypes.c:394
+msgid "Ruby source file"
+msgstr "Ruby原始檔"
+
+#: src/filetypes.c:414
+msgid "Tcl source file"
+msgstr "Tcl原始檔"
+
+#: src/filetypes.c:435
+#, fuzzy
+msgid "Lua source file"
+msgstr "XML原始檔"
+
+#: src/filetypes.c:454
+msgid "Ferite source file"
+msgstr "Ferite原始檔"
+
+#: src/filetypes.c:473
+msgid "Shell script file"
+msgstr ""
+
+#: src/filetypes.c:498
+msgid "Makefile"
+msgstr ""
+
+#: src/filetypes.c:516
+msgid "XML source file"
+msgstr "XML原始檔"
+
+#: src/filetypes.c:534
+msgid "Docbook source file"
+msgstr ""
+
+#: src/filetypes.c:553
+msgid "HTML source file"
+msgstr ""
+
+#: src/filetypes.c:571
+msgid "Cascading StyleSheet"
+msgstr ""
+
+#: src/filetypes.c:590
+msgid "SQL Dump file"
+msgstr ""
+
+#: src/filetypes.c:609
+msgid "LaTeX source file"
+msgstr ""
+
+#: src/filetypes.c:630
+msgid "O-Matrix source file"
+msgstr ""
+
+#: src/filetypes.c:649
+#, fuzzy
+msgid "VHDL source file"
+msgstr "D原始檔"
+
+#: src/filetypes.c:669
+msgid "Diff file"
+msgstr "差異檔"
+
+#: src/filetypes.c:686
+msgid "Config file"
+msgstr "設定檔"
+
+#: src/filetypes.c:709 src/project.c:109
+msgid "All files"
+msgstr "所有檔案"
+
+#: src/filetypes.c:718
+msgid "None"
+msgstr "無"
+
+#: src/geany.h:50
+msgid "untitled"
+msgstr "未命名"
+
+#: src/interface.c:260 src/interface.c:1508
+msgid "Geany"
+msgstr ""
+
+#: src/interface.c:270
+msgid "_File"
+msgstr "檔案(_F)"
+
+#: src/interface.c:281
+#, fuzzy
+msgid "New (with _Template)"
+msgstr "開新檔案(範例)(_t)"
+
+#: src/interface.c:292 src/interface.c:353 src/interface.c:527
+#: src/interface.c:578 src/interface.c:766 src/interface.c:776
+#: src/interface.c:2022 src/interface.c:2073
+msgid "invisible"
+msgstr "隱藏"
+
+#: src/interface.c:304 src/interface.c:1940
+#, fuzzy
+msgid "Open Selected F_ile"
+msgstr "開啟檔案"
+
+#: src/interface.c:308
+#, fuzzy
+msgid "Recent _Files"
+msgstr "最近開啟的檔案(_f)"
+
+#: src/interface.c:325
+#, fuzzy
+msgid "Save A_ll"
+msgstr "全部儲存(_l)"
+
+#: src/interface.c:328
+msgid "Saves all open files"
+msgstr "儲存所有開啟的檔案"
+
+#: src/interface.c:342
+#, fuzzy
+msgid "R_eload As"
+msgstr "重新載入為(_e)"
+
+#: src/interface.c:373
+msgid "Prints the current file"
+msgstr "列印目前的檔案"
+
+#: src/interface.c:384
+#, fuzzy
+msgid "C_lose All"
+msgstr "全部關閉(_l)"
+
+#: src/interface.c:387
+msgid "Closes all open files"
+msgstr "關閉所有開啟的檔案"
+
+#: src/interface.c:401 src/interface.c:1080
+msgid "Quit Geany"
+msgstr "離開Geany"
+
+#: src/interface.c:403
+msgid "_Edit"
+msgstr "編輯(_E)"
+
+#: src/interface.c:444 src/interface.c:1931
+msgid "Select _All"
+msgstr "全選(_A)"
+
+#: src/interface.c:453 src/interface.c:1949
+msgid "_Format"
+msgstr "格式(_F)"
+
+#: src/interface.c:456
+msgid "Convert the case of the current selection"
+msgstr "轉換目前選擇區域的大/小寫"
+
+#: src/interface.c:461 src/interface.c:1956
+#, fuzzy
+msgid "Convert Selection to _Lower-case"
+msgstr "把選擇區域轉成小寫(_l)"
+
+#: src/interface.c:465 src/interface.c:1960
+#, fuzzy
+msgid "Convert Selection to _Upper-case"
+msgstr "把選擇區域轉成大寫(_u)"
+
+#: src/interface.c:474 src/interface.c:1969
+#, fuzzy
+msgid "_Comment Line(s)"
+msgstr "單行注釋(_C)"
+
+#: src/interface.c:478 src/interface.c:1973
+#, fuzzy
+msgid "U_ncomment Line(s)"
+msgstr "取消單行注釋(_n)"
+
+#: src/interface.c:482 src/interface.c:1977
+#, fuzzy
+msgid "_Toggle Line Commentation"
+msgstr "切換行註譯狀態(_T)"
+
+#: src/interface.c:486 src/interface.c:1981
+#, fuzzy
+msgid "Du_plicate Line or Selection"
+msgstr "複製行或選擇區域"
+
+#: src/interface.c:495 src/interface.c:1990
+msgid "_Increase Indent"
+msgstr "增加縮排(_I)"
+
+#: src/interface.c:503 src/interface.c:1998
+msgid "_Decrease Indent"
+msgstr "減少縮排(_D)"
+
+#: src/interface.c:516
+msgid "_Insert \"include <...>\""
+msgstr "插入\"include <...>\"(_I)"
+
+#: src/interface.c:530
+msgid "I_nsert Comments"
+msgstr "插入註解(_I)"
+
+#: src/interface.c:541 src/interface.c:2036
+#, fuzzy
+msgid "Insert ChangeLog Entry"
+msgstr "插入改變記錄項目"
+
+#: src/interface.c:544 src/interface.c:2039
+msgid "Inserts a typical ChangeLog entry in the current file"
+msgstr "在目前檔案中插入改變記錄項目"
+
+#: src/interface.c:546 src/interface.c:2041
+#, fuzzy
+msgid "Insert File Header"
+msgstr "插入檔案標頭"
+
+#: src/interface.c:549 src/interface.c:2044
+msgid "Inserts a file header at the beginning of the file"
+msgstr "在檔案開頭插入檔案標頭"
+
+#: src/interface.c:551 src/interface.c:2046
+#, fuzzy
+msgid "Insert Function Description"
+msgstr "插入函數描述"
+
+#: src/interface.c:554 src/interface.c:2049
+msgid "Inserts a description before the current function"
+msgstr "在目前函數前插入描述"
+
+#: src/interface.c:556 src/interface.c:2051
+#, fuzzy
+msgid "Insert Multiline Comment"
+msgstr "插入多列註釋"
+
+#: src/interface.c:559 src/interface.c:2054
+msgid "Inserts a multiline comment"
+msgstr "插入多列註釋"
+
+#: src/interface.c:561 src/interface.c:2056
+#, fuzzy
+msgid "Insert GPL Notice"
+msgstr "插入GPL宣告"
+
+#: src/interface.c:564 src/interface.c:2059
+msgid "Inserts a GPL notice (should be done at the beginning of the file)"
+msgstr "插入GPL宣告(應在檔案開頭)"
+
+#: src/interface.c:566
+#, fuzzy
+msgid "Insert BSD License Notice"
+msgstr "插入GPL宣告"
+
+#: src/interface.c:569 src/interface.c:2064
+#, fuzzy
+msgid ""
+"Inserts a BSD licence notice (should be done at the beginning of the file)"
+msgstr "插入GPL宣告(應在檔案開頭)"
+
+#: src/interface.c:571 src/interface.c:2066
+msgid "Insert Dat_e"
+msgstr "插入日期(_e)"
+
+#: src/interface.c:590
+msgid "_Search"
+msgstr "搜尋(_S)"
+
+#: src/interface.c:601
+msgid "Find _Next"
+msgstr "找下一個(_N)"
+
+#: src/interface.c:605
+msgid "Find _Previous"
+msgstr "找上一個(_P)"
+
+#: src/interface.c:609
+#, fuzzy
+msgid "Find in F_iles"
+msgstr "在一系列檔案中尋找(_i)"
+
+#: src/interface.c:613 src/search.c:429
+msgid "_Replace"
+msgstr "取代(_R)"
+
+#: src/interface.c:626
+#, fuzzy
+msgid "Find _Selected"
+msgstr "找下一個(_N)"
+
+#: src/interface.c:630
+msgid "Find Pre_v Selected"
+msgstr ""
+
+#: src/interface.c:639
+#, fuzzy
+msgid "Next _Message"
+msgstr "訊息"
+
+#: src/interface.c:648
+#, fuzzy
+msgid "_Go to Line"
+msgstr "前往行數(_G)"
+
+#: src/interface.c:663
+msgid "Change _Font"
+msgstr "改變字型(_F)"
+
+#: src/interface.c:666
+msgid "Change the default font"
+msgstr "更改預設字型"
+
+#: src/interface.c:677
+msgid "Full_screen"
+msgstr "全螢幕(_s)"
+
+#: src/interface.c:681
+#, fuzzy
+msgid "Show Message _Window"
+msgstr "開啟訊息視窗(_W)"
+
+#: src/interface.c:684
+msgid "Toggle the window with status and compiler messages on and off"
+msgstr ""
+
+#: src/interface.c:687
+msgid "Show _Toolbar"
+msgstr "顯示工具列(_T)"
+
+#: src/interface.c:690
+msgid "Toggle the toolbar on and off"
+msgstr "顯示/關閉工具列"
+
+#: src/interface.c:693
+msgid "Show Side_bar"
+msgstr "顯示側邊欄(_b)"
+
+#: src/interface.c:698
+msgid "Show _Markers Margin"
+msgstr ""
+
+#: src/interface.c:701
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines."
+msgstr ""
+
+#: src/interface.c:704
+msgid "Show _Line Numbers"
+msgstr "顯示行號(_L)"
+
+#: src/interface.c:707
+msgid "Shows or hides the Line Number margin."
+msgstr ""
+
+#: src/interface.c:727
+msgid "_Document"
+msgstr "文件(_D)"
+
+#: src/interface.c:734
+#, fuzzy
+msgid "_Line Wrapping"
+msgstr "自動換行(_L)"
+
+#: src/interface.c:737 src/interface.c:3273
+msgid ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
+msgstr ""
+
+#: src/interface.c:740
+#, fuzzy
+msgid "_Use Auto-indentation"
+msgstr "自動縮排(_U)"
+
+#: src/interface.c:745
+#, fuzzy
+msgid "Read _Only"
+msgstr "唯讀(_o)"
+
+#: src/interface.c:748
+msgid "Treat this file as read-only. No changes can be made."
+msgstr ""
+
+#: src/interface.c:750
+msgid "_Write Unicode BOM"
+msgstr ""
+
+#: src/interface.c:759
+#, fuzzy
+msgid "Set File_type"
+msgstr "設定檔案類型(_t)"
+
+#: src/interface.c:769
+#, fuzzy
+msgid "Set _Encoding"
+msgstr "設定字元編碼(_e)"
+
+#: src/interface.c:779
+#, fuzzy
+msgid "Set Line E_ndings"
+msgstr "設定行結束符號(_n)"
+
+#: src/interface.c:786
+#, fuzzy
+msgid "Convert and Set to _CR/LF (Win)"
+msgstr "設定並轉換為CR/LF(Win)(_C)"
+
+#: src/interface.c:792
+#, fuzzy
+msgid "Convert and Set to _LF (Unix)"
+msgstr "設定並轉換為LF(Unix)(_L)"
+
+#: src/interface.c:798
+#, fuzzy
+msgid "Convert and Set to CR (_Mac)"
+msgstr "設定並轉換為CR(Mac)(_M)"
+
+#: src/interface.c:809
+#, fuzzy
+msgid "_Replace Tabs by Spaces"
+msgstr "置換tab字元為空白(_R)"
+
+#: src/interface.c:812 src/interface.c:3041
+msgid "Replaces all tabs in document by spaces."
+msgstr ""
+
+#: src/interface.c:819
+#, fuzzy
+msgid "_Fold All"
+msgstr "收納全部(_F)"
+
+#: src/interface.c:822
+msgid "Folds all contractible code blocks"
+msgstr "收納全部可以摺疊的源碼區塊"
+
+#: src/interface.c:824
+#, fuzzy
+msgid "_Unfold All"
+msgstr "展開全部(_U)"
+
+#: src/interface.c:827
+msgid "Unfolds all contracted code blocks"
+msgstr "展開全部可以已摺疊的源碼區塊"
+
+#: src/interface.c:834
+msgid "Remove Error _Indicators"
+msgstr ""
+
+#: src/interface.c:837
+msgid "Removes all error indicators in the current document."
+msgstr ""
+
+#: src/interface.c:839
+#, fuzzy
+msgid "_Project"
+msgstr "建立物件(_o)"
+
+#: src/interface.c:846
+#, fuzzy
+msgid "_New"
+msgstr "新增"
+
+#: src/interface.c:854
+#, fuzzy
+msgid "_Open"
+msgstr "開啟"
+
+#: src/interface.c:862
+#, fuzzy
+msgid "_Close"
+msgstr "關閉"
+
+#: src/interface.c:883
+msgid "_Tools"
+msgstr "工具(_T)"
+
+#: src/interface.c:890
+msgid "_Colour Chooser"
+msgstr "顏色選擇程式(_C)"
+
+#: src/interface.c:893 src/interface.c:1018
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette."
+msgstr ""
+
+#: src/interface.c:899
+msgid "_Word Count"
+msgstr "計算字數(_W)"
+
+#: src/interface.c:902
+msgid ""
+"Counts the words and characters in the current selection or the whole "
+"document"
+msgstr ""
+
+#: src/interface.c:904
+msgid "_Insert Special HTML Characters"
+msgstr ""
+
+#: src/interface.c:908
+msgid "_Help"
+msgstr "說明(_H)"
+
+#: src/interface.c:919
+#, fuzzy
+msgid "_Keyboard Shortcuts"
+msgstr "快速捷徑鍵(_K)"
+
+#: src/interface.c:922
+msgid "Shows a list of all keyboard shortcuts for Geany."
+msgstr ""
+
+#: src/interface.c:924
+msgid "_Website"
+msgstr "網站(_W)"
+
+#: src/interface.c:947
+msgid "Create a new file"
+msgstr "建立新檔案"
+
+#: src/interface.c:953
+msgid "Open an existing file"
+msgstr "開啟舊檔"
+
+#: src/interface.c:958
+msgid "Save the current file"
+msgstr "儲存目前檔案"
+
+#: src/interface.c:960 src/keybindings.c:123
+msgid "Save all"
+msgstr "全部儲存"
+
+#: src/interface.c:963
+msgid "Save all open files"
+msgstr "儲存所有開啟的檔案"
+
+#: src/interface.c:972
+msgid "Reload the current file from disk"
+msgstr "從磁碟重新載入目前檔案"
+
+#: src/interface.c:977
+msgid "Close the current file"
+msgstr "關閉目前檔案"
+
+#: src/interface.c:986
+msgid "Undo the last modification"
+msgstr "取消執行上次操作"
+
+#: src/interface.c:991
+msgid "Redo the last modification"
+msgstr "重新執行上次操作"
+
+#: src/interface.c:999 src/keybindings.c:179
+msgid "Compile"
+msgstr "編譯"
+
+#: src/interface.c:1002
+msgid "Compile the current file"
+msgstr "編譯目前檔案"
+
+#: src/interface.c:1015
+msgid "Color"
+msgstr "顏色"
+
+#: src/interface.c:1027
+msgid "Zoom in the text"
+msgstr "放大文字"
+
+#: src/interface.c:1032
+msgid "Zoom out the text"
+msgstr "縮小文字"
+
+#: src/interface.c:1045 src/interface.c:1050
+msgid "Find the entered text in the current file"
+msgstr "在目前檔案中尋找輸入的文字"
+
+#: src/interface.c:1063
+msgid "Enter a line number and jump to it."
+msgstr "輸入欲前往行號"
+
+#: src/interface.c:1070
+msgid "Jump to the entered line number."
+msgstr "跳至指定行號"
+
+#: src/interface.c:1108 src/treeviews.c:73
+msgid "Symbols"
+msgstr "符號"
+
+#: src/interface.c:1121 src/treeviews.c:182
+msgid "Open files"
+msgstr "開啟檔案"
+
+#: src/interface.c:1156
+msgid "Status"
+msgstr "狀態"
+
+#: src/interface.c:1170
+msgid "Compiler"
+msgstr "編譯器"
+
+#: src/interface.c:1184
+msgid "Messages"
+msgstr "訊息"
+
+#: src/interface.c:1197
+msgid "Scribble"
+msgstr ""
+
+#: src/interface.c:1753 src/interface.c:2896
+msgid "Images and text"
+msgstr "圖示及文字"
+
+#: src/interface.c:1759 src/interface.c:2928
+msgid "Images only"
+msgstr "只顯示圖示"
+
+#: src/interface.c:1765 src/interface.c:2920
+msgid "Text only"
+msgstr "只顯示文字"
+
+#: src/interface.c:1776 src/interface.c:2912
+msgid "Large icons"
+msgstr "大型圖示"
+
+#: src/interface.c:1781 src/interface.c:2904
+msgid "Small icons"
+msgstr "小型圖示"
+
+#: src/interface.c:1791
+msgid "Hide toolbar"
+msgstr "隱藏工具列"
+
+#: src/interface.c:2011
+msgid "Insert \"include <...>\""
+msgstr "插入 \"include <...>\""
+
+#: src/interface.c:2025
+msgid "Insert Comments"
+msgstr "插入註解"
+
+#: src/interface.c:2061
+#, fuzzy
+msgid "Insert BSD license Notice"
+msgstr "插入GPL宣告"
+
+#: src/interface.c:2081 src/keybindings.c:245
+msgid "Find Usage"
+msgstr "尋找用法"
+
+#: src/interface.c:2089
+msgid "Go to Tag Definition"
+msgstr ""
+
+#: src/interface.c:2093
+msgid "Go to Tag Declaration"
+msgstr ""
+
+#: src/interface.c:2102
+#, fuzzy
+msgid "Go to Line"
+msgstr "前往行數"
+
+#: src/interface.c:2105
+msgid "Goto to the entered line"
+msgstr "前往輸入的行數"
+
+#: src/interface.c:2477 src/keybindings.c:141
+msgid "Preferences"
+msgstr "偏好設定"
+
+#: src/interface.c:2510
+msgid "Load files from the last session"
+msgstr ""
+
+#: src/interface.c:2514
+msgid "Opens at startup the files from the last session"
+msgstr ""
+
+#: src/interface.c:2517
+msgid "Save window position and geometry"
+msgstr ""
+
+#: src/interface.c:2521
+msgid "Saves the window position and geometry and restores it at the start"
+msgstr ""
+
+#: src/interface.c:2524
+msgid "Load virtual terminal emulation at startup"
+msgstr ""
+
+#: src/interface.c:2526
+msgid ""
+"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
+"Disable it if you do not need it."
+msgstr ""
+
+#: src/interface.c:2529
+msgid "Confirm exit"
+msgstr "確定離開"
+
+#: src/interface.c:2533
+msgid "Shows a confirmation dialog on exit."
+msgstr ""
+
+#: src/interface.c:2536
+msgid "<b>Startup and shutdown</b>"
+msgstr ""
+
+#: src/interface.c:2555
+msgid "Beep on errors or when compilation has finished"
+msgstr ""
+
+#: src/interface.c:2558
+msgid ""
+"Whether to beep if an error occured or when the compilation process has "
+"finished."
+msgstr ""
+
+#: src/interface.c:2561
+msgid "Switch to status message list at new message"
+msgstr ""
+
+#: src/interface.c:2564
+msgid ""
+"Switch to the status message tab (in the notebook window at the bottom) if a "
+"new status message arrives."
+msgstr ""
+
+#: src/interface.c:2567
+msgid "Always wrap search and hide the Find dialog"
+msgstr ""
+
+#: src/interface.c:2571
+msgid ""
+"Always wrap search around the document and hide the Find dialog after "
+"clicking Find Next/Previous"
+msgstr ""
+
+#: src/interface.c:2574
+#, fuzzy
+msgid "<b>Behaviour</b>"
+msgstr "<b>功能</b>"
+
+#: src/interface.c:2579
+msgid "General"
+msgstr "一般"
+
+#: src/interface.c:2601
+msgid "Show symbol list"
+msgstr "顯示符號列表"
+
+#: src/interface.c:2604 src/interface.c:2610
+msgid "Toggle the symbol list on and off"
+msgstr "開啟/關閉符號列表"
+
+#: src/interface.c:2607
+msgid "Show open files list"
+msgstr "顯示開啟檔案列表"
+
+#: src/interface.c:2613
+msgid "<b>Sidebar</b>"
+msgstr "<b>側面欄</b>"
+
+#: src/interface.c:2634
+#, fuzzy
+msgid "Symbol list:"
+msgstr "顯示符號列表"
+
+#: src/interface.c:2641 src/interface.c:2706
+#, fuzzy
+msgid "Message window:"
+msgstr "訊息視窗"
+
+#: src/interface.c:2648 src/interface.c:2713
+#, fuzzy
+msgid "Editor:"
+msgstr "編輯器"
+
+#: src/interface.c:2660
+msgid "Sets the font for the message window"
+msgstr ""
+
+#: src/interface.c:2668
+#, fuzzy
+msgid "Sets the font for the symbol list"
+msgstr "顯示符號列表"
+
+#: src/interface.c:2676
+#, fuzzy
+msgid "Sets the editor font"
+msgstr "編輯器字型"
+
+#: src/interface.c:2678
+msgid "<b>Fonts</b>"
+msgstr "<b>字型</b>"
+
+#: src/interface.c:2699
+#, fuzzy
+msgid "Sidebar:"
+msgstr "側面欄"
+
+#: src/interface.c:2720
+#, fuzzy
+msgid "Show editor tabs"
+msgstr "顯示檔案標籤列"
+
+#: src/interface.c:2731 src/interface.c:2741 src/interface.c:2751
+#: src/interface.c:3088
+msgid "Left"
+msgstr "左邊"
+
+#: src/interface.c:2732 src/interface.c:2742 src/interface.c:2752
+#: src/interface.c:3096
+msgid "Right"
+msgstr "右邊"
+
+#: src/interface.c:2733 src/interface.c:2743 src/interface.c:2753
+msgid "Top"
+msgstr "頂部"
+
+#: src/interface.c:2734 src/interface.c:2744 src/interface.c:2754
+msgid "Bottom"
+msgstr "底部"
+
+#: src/interface.c:2756
+msgid "<b>Tab placement</b>"
+msgstr ""
+
+#: src/interface.c:2761
+msgid "Interface"
+msgstr "介面"
+
+#: src/interface.c:2780
+msgid "Show Toolbar"
+msgstr "顯示工具列"
+
+#: src/interface.c:2805
+msgid "Show file operation buttons"
+msgstr ""
+
+#: src/interface.c:2809
+msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
+msgstr "在工具列顯示新增,開啟,關閉,儲存及重載按鈕"
+
+#: src/interface.c:2812
+msgid "Show Compile and Run"
+msgstr ""
+
+#: src/interface.c:2816
+msgid "Display the Compile and Run buttons in the toolbar"
+msgstr ""
+
+#: src/interface.c:2819
+msgid "Show Colour Chooser button"
+msgstr ""
+
+#: src/interface.c:2823
+msgid "Display the Colour Chooser button in the toolbar"
+msgstr ""
+
+#: src/interface.c:2826
+msgid "Show Zoom In and Zoom Out"
+msgstr "顯示放大及縮小"
+
+#: src/interface.c:2830
+msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
+msgstr ""
+
+#: src/interface.c:2833
+msgid "Show Redo and Undo buttons"
+msgstr ""
+
+#: src/interface.c:2837
+msgid "Display the Redo and Undo buttons in the toolbar"
+msgstr ""
+
+#: src/interface.c:2840
+msgid "Show Search field"
+msgstr ""
+
+#: src/interface.c:2844
+msgid "Display the search field and button in the toolbar"
+msgstr ""
+
+#: src/interface.c:2847
+msgid "Show Goto line field"
+msgstr ""
+
+#: src/interface.c:2851
+msgid "Display the line number field and button in the toolbar"
+msgstr ""
+
+#: src/interface.c:2854
+msgid "Show Quit button"
+msgstr "顯示離開按鈕"
+
+#: src/interface.c:2858
+msgid "Display the quit button in the toolbar"
+msgstr ""
+
+#: src/interface.c:2861
+msgid "<b>Items</b>"
+msgstr "<b>項目</b>"
+
+#: src/interface.c:2882
+#, fuzzy
+msgid "Icon style:"
+msgstr "圖示風格"
+
+#: src/interface.c:2889
+#, fuzzy
+msgid "Icon size:"
+msgstr "圖示大小"
+
+#: src/interface.c:2936
+msgid "<b>Appearance</b>"
+msgstr "<b>外觀</b>"
+
+#: src/interface.c:2941
+msgid "Toolbar"
+msgstr "工具列"
+
+#: src/interface.c:2969
+msgid "Tab Width:"
+msgstr "Tab字符寬度："
+
+#: src/interface.c:2981
+msgid "Sets the default encoding for newly created files."
+msgstr ""
+
+#: src/interface.c:2993
+msgid "The width in chars, which one tab character will take"
+msgstr ""
+
+#: src/interface.c:2998
+msgid "Default encoding:"
+msgstr "預設編碼:"
+
+#: src/interface.c:3004
+msgid "<b>New files</b>"
+msgstr "<b>新的檔案</b>"
+
+#: src/interface.c:3023
+msgid "Strip trailing spaces"
+msgstr ""
+
+#: src/interface.c:3027
+msgid "Removes trailing spaces and tabs and the end of lines"
+msgstr "移除每行結束的空白及tab字元"
+
+#: src/interface.c:3030
+msgid "Ensure new line at file end"
+msgstr ""
+
+#: src/interface.c:3034
+msgid "Ensures that at the end of the file is a new line"
+msgstr ""
+
+#: src/interface.c:3037 src/keybindings.c:171
+msgid "Replace tabs by space"
+msgstr "以空白字元替代tab字元"
+
+#: src/interface.c:3044
+msgid "<b>Saving files</b>"
+msgstr "<b>儲存檔案</b>"
+
+#: src/interface.c:3065
+msgid "Placement of new file tabs:"
+msgstr ""
+
+#: src/interface.c:3078
+msgid ""
+"Specifies the number of files which are stored in the Recent files list."
+msgstr ""
+
+#: src/interface.c:3091
+msgid "File tabs will be placed on the left of the notebook"
+msgstr ""
+
+#: src/interface.c:3099
+msgid "File tabs will be placed on the right of the notebook"
+msgstr ""
+
+#: src/interface.c:3103
+msgid "Recent files list length:"
+msgstr "最近使用檔案清單長度:"
+
+#: src/interface.c:3111
+#, fuzzy
+msgid "<b>Misc.</b>"
+msgstr "<b>顯示</b>"
+
+#: src/interface.c:3116 src/symbols.c:405
+msgid "Files"
+msgstr "檔案"
+
+#: src/interface.c:3138
+msgid "Invert syntax highlighting colours"
+msgstr ""
+
+#: src/interface.c:3140
+msgid "Use white text on a black background."
+msgstr ""
+
+#: src/interface.c:3142
+msgid "Show indentation guides"
+msgstr ""
+
+#: src/interface.c:3145
+msgid "Shows small dotted lines to help you to use the right indentation."
+msgstr ""
+
+#: src/interface.c:3148
+msgid "Show white space"
+msgstr "顯示空白字元"
+
+#: src/interface.c:3151
+msgid "Marks spaces with dots and tabs with arrows."
+msgstr ""
+
+#: src/interface.c:3154
+msgid "Show line endings"
+msgstr "顯示行尾"
+
+#: src/interface.c:3157
+msgid "Show the line ending character"
+msgstr "顯示行結束字元"
+
+#: src/interface.c:3160
+msgid "<b>Display</b>"
+msgstr "<b>顯示</b>"
+
+#: src/interface.c:3181
+msgid "Long line marker:"
+msgstr ""
+
+#: src/interface.c:3188
+msgid "Long line marker color:"
+msgstr ""
+
+#: src/interface.c:3195
+#, fuzzy
+msgid "Type:"
+msgstr "型態"
+
+#: src/interface.c:3207
+msgid "Sets the color of the long line marker"
+msgstr ""
+
+#: src/interface.c:3216
+msgid ""
+"The long line marker is a thin vertical line in the editor. It helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
+msgstr ""
+
+#: src/interface.c:3226
+msgid "Line"
+msgstr "行"
+
+#: src/interface.c:3229
+msgid ""
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)."
+msgstr ""
+
+#: src/interface.c:3233
+msgid "Background"
+msgstr "背景"
+
+#: src/interface.c:3236
+msgid ""
+"The background colour of characters after the given cursor position (see "
+"below) changed to the colour set below. (This is recommended if you use "
+"proportional fonts)"
+msgstr ""
+
+#: src/interface.c:3240
+msgid "Disabled"
+msgstr "已停用"
+
+#: src/interface.c:3246
+msgid "<b>Long line marker</b>"
+msgstr ""
+
+#: src/interface.c:3265
+msgid "Auto indentation"
+msgstr "自動縮排"
+
+#: src/interface.c:3268
+msgid "Add the same indentation as the previous line after pressing enter"
+msgstr ""
+
+#: src/interface.c:3270
+msgid "Line wrapping"
+msgstr "換行"
+
+#: src/interface.c:3275
+msgid "Enable folding"
+msgstr "啟用摺疊功能"
+
+#: src/interface.c:3278
+msgid "Whether to enable folding the code"
+msgstr "要不要啟用程式碼的摺疊功能"
+
+#: src/interface.c:3281
+msgid "Unfold all children of a fold point"
+msgstr ""
+
+#: src/interface.c:3284
+msgid "Unfold all children of a fold point when unfolding it."
+msgstr ""
+
+#: src/interface.c:3287
+msgid "Use indicators to show compile errors"
+msgstr ""
+
+#: src/interface.c:3290
+msgid ""
+"Whether to use indicators (a squiggly underline) to highlight the lines "
+"where the compiler found a warning or an error."
+msgstr ""
+
+#: src/interface.c:3293
+msgid "Disable Drag and Drop"
+msgstr ""
+
+#: src/interface.c:3296
+msgid ""
+"Disable drag and drop completely in the editor window so you can't drag and "
+"drop any selections within or outside of the editor window."
+msgstr ""
+
+#: src/interface.c:3299
+msgid "Use tabulators when inserting whitespace"
+msgstr ""
+
+#: src/interface.c:3302
+msgid ""
+"Whenever some whitespace is inserted by Geany it will use tabulators when "
+"enabled otherwise Geany will use just spaces."
+msgstr ""
+
+#: src/interface.c:3305
+msgid "<b>Features</b>"
+msgstr "<b>功能</b>"
+
+#: src/interface.c:3324
+#, fuzzy
+msgid "Construct autocompletion"
+msgstr "XML標籤自動補完"
+
+#: src/interface.c:3327
+msgid "Automatic completion of often used constructs like if and for"
+msgstr ""
+
+#: src/interface.c:3330
+#, fuzzy
+msgid "XML tag autocompletion"
+msgstr "XML標籤自動補完"
+
+#: src/interface.c:3333
+msgid "Automatic completion of open XML tags (includes HTML tags)"
+msgstr ""
+
+#: src/interface.c:3336
+#, fuzzy
+msgid "Symbol autocompletion"
+msgstr "XML標籤自動補完"
+
+#: src/interface.c:3339
+msgid ""
+"Automatic completion of known symbols in open source file(s) (function, "
+"global variables, ...)"
+msgstr ""
+
+#: src/interface.c:3350
+#, fuzzy
+msgid "Rows of autocompletion list:"
+msgstr "XML標籤自動補完"
+
+#: src/interface.c:3359
+msgid "Number of rows to display in the autocompletion list."
+msgstr ""
+
+#: src/interface.c:3362
+#, fuzzy
+msgid "<b>Autocompletion</b>"
+msgstr "<b>位置:</b>"
+
+#: src/interface.c:3367
+msgid "Editor"
+msgstr "編輯器"
+
+#: src/interface.c:3385
+msgid "Enter tool paths below. Tools you do not need can be left blank."
+msgstr ""
+
+#: src/interface.c:3397
+#, fuzzy
+msgid "Make:"
+msgstr "建立全部"
+
+#: src/interface.c:3404
+#, fuzzy
+msgid "Terminal:"
+msgstr "終端機"
+
+#: src/interface.c:3411
+#, fuzzy
+msgid "Browser:"
+msgstr "瀏覽器"
+
+#: src/interface.c:3423
+msgid "Path and options for the make tool"
+msgstr ""
+
+#: src/interface.c:3430
+msgid ""
+"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
+"-e argument)"
+msgstr ""
+
+#: src/interface.c:3437
+msgid "Path (and possibly additional arguments) to your favorite browser"
+msgstr ""
+
+#: src/interface.c:3469
+#, fuzzy
+msgid "Print command:"
+msgstr "指令"
+
+#: src/interface.c:3481
+#, c-format
+msgid "Path to the command for printing files (use %f for the filename)."
+msgstr ""
+
+#: src/interface.c:3493
+#, fuzzy
+msgid "Grep:"
+msgstr "群組:"
+
+#: src/interface.c:3516
+#, fuzzy
+msgid "<b>Tool paths</b>"
+msgstr "<b>字型</b>"
+
+#: src/interface.c:3521
+msgid "Tools"
+msgstr "工具箱"
+
+#: src/interface.c:3539
+msgid ""
+"Set the information to be used in templates. See the documentation for "
+"details."
+msgstr ""
+
+#: src/interface.c:3557
+msgid "email address of the developer"
+msgstr ""
+
+#: src/interface.c:3564
+msgid "Initials of the developer name"
+msgstr ""
+
+#: src/interface.c:3566
+msgid "Initial Version:"
+msgstr ""
+
+#: src/interface.c:3578
+msgid "Version number, which a new file initially has"
+msgstr ""
+
+#: src/interface.c:3585
+msgid "Company name"
+msgstr "公司名稱"
+
+#: src/interface.c:3587
+#, fuzzy
+msgid "Developer:"
+msgstr "開發者"
+
+#: src/interface.c:3594
+#, fuzzy
+msgid "Company:"
+msgstr "公司"
+
+#: src/interface.c:3601
+#, fuzzy
+msgid "Mail address:"
+msgstr "電子郵件位址"
+
+#: src/interface.c:3608
+msgid "Initials:"
+msgstr ""
+
+#: src/interface.c:3620
+msgid "The name of the developer"
+msgstr "開發者名字"
+
+#: src/interface.c:3622
+msgid ""
+"<i>Notice: For all changes you make here to take effect, you need to restart "
+"Geany.</i>"
+msgstr ""
+
+#: src/interface.c:3629
+#, fuzzy
+msgid "<b>Template data</b>"
+msgstr "<b>功能</b>"
+
+#: src/interface.c:3634
+msgid "Templates"
+msgstr "範本"
+
+#: src/interface.c:3652
+msgid ""
+"Here you can change keyboard shortcuts for various actions. Select one and "
+"press the Change button to enter a new shortcut, or double click on an "
+"action to edit the string representation of the shortcut directly."
+msgstr ""
+
+#: src/interface.c:3675
+msgid "Change"
+msgstr "改變"
+
+#: src/interface.c:3679
+#, fuzzy
+msgid "<b>Keyboard shortcuts</b>"
+msgstr "捷徑鍵"
+
+#: src/interface.c:3684
+msgid "Keybindings"
+msgstr ""
+
+#: src/keybindings.c:113
+msgid "New"
+msgstr "新增"
+
+#: src/keybindings.c:115
+msgid "Open"
+msgstr "開啟"
+
+#: src/keybindings.c:117
+#, fuzzy
+msgid "Open selected file"
+msgstr "開啟檔案"
+
+#: src/keybindings.c:119
+msgid "Save"
+msgstr "儲存"
+
+#: src/keybindings.c:121
+#, fuzzy
+msgid "Save as"
+msgstr "全部儲存"
+
+#: src/keybindings.c:125
+msgid "Print"
+msgstr "列印"
+
+#: src/keybindings.c:127
+msgid "Close"
+msgstr "關閉"
+
+#: src/keybindings.c:129
+msgid "Close all"
+msgstr "全部關閉"
+
+#: src/keybindings.c:131
+msgid "Reload file"
+msgstr "重新載入檔案"
+
+#: src/keybindings.c:133
+msgid "Undo"
+msgstr "復原"
+
+#: src/keybindings.c:135
+msgid "Redo"
+msgstr "取消復原"
+
+#: src/keybindings.c:137
+msgid "Select All"
+msgstr "全部選取"
+
+#: src/keybindings.c:139
+msgid "Insert date"
+msgstr "插入日期/時間"
+
+#: src/keybindings.c:143
+msgid "Find Next"
+msgstr "尋找下一個"
+
+#: src/keybindings.c:145
+msgid "Find Previous"
+msgstr "尋找上一個"
+
+#: src/keybindings.c:147
+#, fuzzy
+msgid "Find Next Selection"
+msgstr "在選擇區域中(_l)"
+
+#: src/keybindings.c:149
+#, fuzzy
+msgid "Find Previous Selection"
+msgstr "尋找上一個"
+
+#: src/keybindings.c:151 src/search.c:420
+msgid "Replace"
+msgstr "取代"
+
+#: src/keybindings.c:153 src/search.c:558
+msgid "Find in files"
+msgstr "在一系列檔案中尋找"
+
+#: src/keybindings.c:155
+#, fuzzy
+msgid "Next Message"
+msgstr "訊息"
+
+#: src/keybindings.c:159
+msgid "Show Colour Chooser"
+msgstr "顯示顏色選擇器"
+
+#: src/keybindings.c:161
+msgid "Fullscreen"
+msgstr "全螢幕"
+
+#: src/keybindings.c:163
+msgid "Toggle Messages Window"
+msgstr "開啟訊息視窗"
+
+#: src/keybindings.c:165
+msgid "Toggle Sidebar"
+msgstr "開啟側邊欄"
+
+#: src/keybindings.c:167
+msgid "Zoom In"
+msgstr "拉近"
+
+#: src/keybindings.c:169
+msgid "Zoom Out"
+msgstr "拉遠"
+
+#: src/keybindings.c:173
+msgid "Fold all"
+msgstr "全部折疊"
+
+#: src/keybindings.c:175
+msgid "Unfold all"
+msgstr "全部展開"
+
+#: src/keybindings.c:177
+msgid "Insert Special HTML Characters"
+msgstr ""
+
+#: src/keybindings.c:181
+msgid "Build"
+msgstr "建構"
+
+#: src/keybindings.c:183
+msgid "Make all"
+msgstr "建立全部"
+
+#: src/keybindings.c:186
+msgid "Make custom target"
+msgstr ""
+
+#: src/keybindings.c:188
+msgid "Make object"
+msgstr "建立物件"
+
+#: src/keybindings.c:190
+msgid "Next error"
+msgstr ""
+
+#: src/keybindings.c:192
+msgid "Run"
+msgstr "執行"
+
+#: src/keybindings.c:194
+msgid "Run (alternative command)"
+msgstr "執行(替代的指令)"
+
+#: src/keybindings.c:196
+msgid "Build options"
+msgstr "建構選項"
+
+#: src/keybindings.c:198
+msgid "Reload symbol list"
+msgstr "重新載入符號表"
+
+#: src/keybindings.c:200
+msgid "Switch to Editor"
+msgstr "切換至編輯器"
+
+#: src/keybindings.c:202
+msgid "Switch to Scribble"
+msgstr ""
+
+#: src/keybindings.c:204
+msgid "Switch to VTE"
+msgstr ""
+
+#: src/keybindings.c:206
+msgid "Switch to left document"
+msgstr "切換到左邊文件"
+
+#: src/keybindings.c:208
+msgid "Switch to right document"
+msgstr "切換到右邊文件"
+
+#: src/keybindings.c:211
+msgid "Duplicate line or selection"
+msgstr "複製行或選擇區域"
+
+#: src/keybindings.c:213
+msgid "Convert Selection to lower-case"
+msgstr "把選擇區域轉成小寫"
+
+#: src/keybindings.c:215
+msgid "Convert Selection to upper-case"
+msgstr "把選擇區域轉成大寫"
+
+#: src/keybindings.c:217
+msgid "Toggle line commentation"
+msgstr "註釋/取消註釋行"
+
+#: src/keybindings.c:219
+#, fuzzy
+msgid "Comment line(s)"
+msgstr "將此行註解"
+
+#: src/keybindings.c:221
+#, fuzzy
+msgid "Uncomment line(s)"
+msgstr "將此行反註解"
+
+#: src/keybindings.c:223
+msgid "Increase indent"
+msgstr "增加縮排"
+
+#: src/keybindings.c:225
+msgid "Decrease indent"
+msgstr "減少縮排"
+
+#: src/keybindings.c:228
+msgid "Goto matching brace"
+msgstr "跳至對應括號"
+
+#: src/keybindings.c:230
+msgid "Complete word"
+msgstr "自動補完文字"
+
+#: src/keybindings.c:234 src/keybindings.c:237
+msgid "Show calltip"
+msgstr ""
+
+#: src/keybindings.c:240
+msgid "Show macro list"
+msgstr "顯示巨集清單"
+
+#: src/keybindings.c:242
+msgid "Suppress auto completion"
+msgstr ""
+
+#: src/keybindings.c:247
+msgid "Go to tag definition"
+msgstr ""
+
+#: src/keybindings.c:249
+msgid "Go to tag declaration"
+msgstr ""
+
+#: src/keyfile.c:71
+#, c-format
+msgid "%s configuration file, edit as you need"
+msgstr ""
+
+#: src/keyfile.c:338
+msgid "Type here what you want, use it as a notice/scratch board"
+msgstr ""
+
+#: src/keyfile.c:567
+#, fuzzy
+msgid "Failed to load one or more session files."
+msgstr "不要載入前一作業階段的檔案"
+
+#: src/main.c:89
+#, fuzzy
+msgid ""
+"set initial column number for the first opened file (useful in conjunction "
+"with --line)"
+msgstr "在第一次開啟的檔案中設置初始行號"
+
+#: src/main.c:90
 msgid "use an alternate configuration directory"
 msgstr "使用替代的組態文件目錄"
 
-#: src/main.c:87
+#: src/main.c:91
 msgid "runs in debug mode (means being verbose)"
 msgstr "運行於偵錯模式(意即有詳細訊息)"
 
-#: src/main.c:90
+#: src/main.c:94
 msgid "don't open files in a running instance, force opening a new instance"
 msgstr "不要在一個運行中的程序中開啟檔案，強制開啟新的程序"
 
-#: src/main.c:92
+#: src/main.c:96
 msgid "set initial line number for the first opened file"
 msgstr "在第一次開啟的檔案中設置初始行號"
 
-#: src/main.c:93
+#: src/main.c:97
 msgid "don't show message window at startup"
 msgstr "啟動時不要顯示訊息視窗"
 
-#: src/main.c:94
+#: src/main.c:98
 msgid "don't load auto completion data (see documentation)"
 msgstr "不要載入自動完成資料(參見文件)"
 
-#: src/main.c:95
+#: src/main.c:99
 msgid "don't load the previous session's files"
 msgstr "不要載入前一作業階段的檔案"
 
-#: src/main.c:97
+#: src/main.c:101
 msgid "don't load terminal support"
 msgstr "不要載入終端機支援"
 
-#: src/main.c:98
+#: src/main.c:102
 msgid "filename of libvte.so"
 msgstr "libvte.so的檔案名字"
 
-#: src/main.c:100
+#: src/main.c:104
 msgid "show version and exit"
 msgstr "顯示版本號並離開"
 
-#: src/main.c:399
+#: src/main.c:411
 msgid " - A fast and lightweight IDE"
 msgstr " - 一個快速又輕巧的整合開發環境"
 
-#: src/main.c:409
+#: src/main.c:421
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(在%s下以GTK %d.%d.%d, GLib %d.%d.%d編譯)"
 
-#: src/main.c:451
+#: src/main.c:466
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -78,2631 +2566,175 @@ msgstr ""
 "如果沒有組態文件目錄Geany可能會發生問題.\n"
 "即使這樣仍然要啟動Geany嗎?"
 
-#: src/main.c:569
+#: src/main.c:509 src/socket.c:136
+#, fuzzy, c-format
+msgid "Could not find file '%s'."
+msgstr "無法開啟檔案%s(%s)"
+
+#: src/main.c:627
 #, c-format
 msgid "This is Geany %s."
 msgstr "這是Geany %s."
 
-#: src/main.c:571
+#: src/main.c:629
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "無法建立組態文件目錄(%s)."
 
-#: src/interface.c:245
-#: src/interface.c:1395
-msgid "Geany"
-msgstr ""
-
-#: src/interface.c:255
-msgid "_File"
-msgstr "檔案(_F)"
-
-#: src/interface.c:266
-msgid "New (with _template)"
-msgstr "開新檔案(範例)(_t)"
-
-#: src/interface.c:277
-#: src/interface.c:296
-#: src/interface.c:340
-#: src/interface.c:514
-#: src/interface.c:560
-#: src/interface.c:731
-#: src/interface.c:741
-#: src/interface.c:1903
-#: src/interface.c:1949
-msgid "invisible"
-msgstr "隱藏"
-
-#: src/interface.c:289
-msgid "Recent _files"
-msgstr "最近開啟的檔案(_f)"
-
-#: src/interface.c:312
-msgid "Save a_ll"
-msgstr "全部儲存(_l)"
-
-#: src/interface.c:315
-msgid "Saves all open files"
-msgstr "儲存所有開啟的檔案"
-
-#: src/interface.c:321
-#: src/callbacks.c:454
-#: src/utils.c:352
-msgid "_Reload"
-msgstr "重新載入(_R)"
-
-#: src/interface.c:329
-msgid "R_eload as"
-msgstr "重新載入為(_e)"
-
-#: src/interface.c:360
-msgid "Prints the current file"
-msgstr "列印目前的檔案"
-
-#: src/interface.c:371
-msgid "C_lose all"
-msgstr "全部關閉(_l)"
-
-#: src/interface.c:374
-msgid "Closes all open files"
-msgstr "關閉所有開啟的檔案"
-
-#: src/interface.c:388
-#: src/interface.c:1001
-msgid "Quit Geany"
-msgstr "離開Geany"
-
-#: src/interface.c:390
-msgid "_Edit"
-msgstr "編輯(_E)"
-
-#: src/interface.c:431
-#: src/interface.c:1804
-msgid "Select _All"
-msgstr "全選(_A)"
-
-#: src/interface.c:440
-#: src/interface.c:1830
-msgid "_Format"
-msgstr "格式(_F)"
-
-#: src/interface.c:443
-msgid "Convert the case of the current selection"
-msgstr "轉換目前選擇區域的大/小寫"
-
-#: src/interface.c:448
-#: src/interface.c:1837
-msgid "Convert Selection to _lower-case"
-msgstr "把選擇區域轉成小寫(_l)"
-
-#: src/interface.c:452
-#: src/interface.c:1841
-msgid "Convert Selection to _upper-case"
-msgstr "把選擇區域轉成大寫(_u)"
-
-#: src/interface.c:461
-#: src/interface.c:1850
-msgid "_Comment Line"
-msgstr "單行注釋(_C)"
-
-#: src/interface.c:465
-#: src/interface.c:1854
-msgid "U_ncomment Line"
-msgstr "取消單行注釋(_n)"
-
-#: src/interface.c:469
-#: src/interface.c:1858
-msgid "_Toggle line commentation"
-msgstr "切換行註譯狀態(_T)"
-
-#: src/interface.c:473
-#: src/interface.c:1862
-msgid "Du_plicate Line"
-msgstr "單行複製(_p)"
-
-#: src/interface.c:482
-#: src/interface.c:1871
-msgid "_Increase Indent"
-msgstr "增加縮排(_I)"
-
-#: src/interface.c:490
-#: src/interface.c:1879
-msgid "_Decrease Indent"
-msgstr "減少縮排(_D)"
-
-#: src/interface.c:503
-msgid "_Insert \"include <...>\""
-msgstr "插入\"include <...>\"(_I)"
-
-#: src/interface.c:517
-msgid "I_nsert Comments"
-msgstr "插入註解(_I)"
-
-#: src/interface.c:528
-#: src/interface.c:1917
-msgid "Insert ChangeLog entry"
-msgstr "插入改變記錄項目"
-
-#: src/interface.c:531
-#: src/interface.c:1920
-msgid "Inserts a typical ChangeLog entry in the current file"
-msgstr "在目前檔案中插入改變記錄項目"
-
-#: src/interface.c:533
-#: src/interface.c:1922
-msgid "Insert file header"
-msgstr "插入檔案標頭"
-
-#: src/interface.c:536
-#: src/interface.c:1925
-msgid "Inserts a file header at the beginning of the file"
-msgstr "在檔案開頭插入檔案標頭"
-
-#: src/interface.c:538
-#: src/interface.c:1927
-msgid "Insert function description"
-msgstr "插入函數描述"
-
-#: src/interface.c:541
-#: src/interface.c:1930
-msgid "Inserts a description before the current function"
-msgstr "在目前函數前插入描述"
-
-#: src/interface.c:543
-#: src/interface.c:1932
-msgid "Insert multiline comment"
-msgstr "插入多列註釋"
-
-#: src/interface.c:546
-#: src/interface.c:1935
-msgid "Inserts a multiline comment"
-msgstr "插入多列註釋"
-
-#: src/interface.c:548
-#: src/interface.c:1937
-msgid "Insert GPL notice"
-msgstr "插入GPL宣告"
-
-#: src/interface.c:551
-#: src/interface.c:1940
-msgid "Inserts a GPL notice (should be done at the beginning of the file)"
-msgstr "插入GPL宣告(應在檔案開頭)"
-
-#: src/interface.c:553
-#: src/interface.c:1942
-msgid "Insert Dat_e"
-msgstr "插入日期(_e)"
-
-#: src/interface.c:572
-msgid "_Search"
-msgstr "搜尋(_S)"
-
-#: src/interface.c:583
-#: src/search.c:270
-msgid "Find _Next"
-msgstr "找下一個(_N)"
-
-#: src/interface.c:587
-#: src/search.c:264
-msgid "Find _Previous"
-msgstr "找上一個(_P)"
-
-#: src/interface.c:591
-#: src/search.c:381
-msgid "_Replace"
-msgstr "取代(_R)"
-
-#: src/interface.c:604
-msgid "Find in f_iles"
-msgstr "在一系列檔案中尋找(_i)"
-
-#: src/interface.c:613
-msgid "_Go to line"
-msgstr "前往行數(_G)"
-
-#: src/interface.c:621
-#: src/dialogs.c:77
-msgid "_View"
-msgstr "檢視(_V)"
-
-#: src/interface.c:628
-msgid "Change _Font"
-msgstr "改變字型(_F)"
-
-#: src/interface.c:631
-msgid "Change the default font"
-msgstr "更改預設字型"
-
-#: src/interface.c:642
-msgid "Full_screen"
-msgstr "全螢幕(_s)"
-
-#: src/interface.c:646
-msgid "Show Messages _Window"
-msgstr "開啟訊息視窗(_W)"
-
-#: src/interface.c:649
-msgid "Toggle the window with status and compiler messages on and off"
-msgstr ""
-
-#: src/interface.c:652
-msgid "Show _Toolbar"
-msgstr "顯示工具列(_T)"
-
-#: src/interface.c:655
-msgid "Toggle the toolbar on and off"
-msgstr "顯示/關閉工具列"
-
-#: src/interface.c:658
-msgid "Show Side_bar"
-msgstr "顯示側邊欄(_b)"
-
-#: src/interface.c:663
-msgid "Show _Markers Margin"
-msgstr ""
-
-#: src/interface.c:666
-msgid "Shows or hides the small margin right of the line numbers, which is used to mark lines."
-msgstr ""
-
-#: src/interface.c:669
-msgid "Show _Line Numbers"
-msgstr "顯示行號(_L)"
-
-#: src/interface.c:672
-msgid "Shows or hides the Line Number margin."
-msgstr ""
-
-#: src/interface.c:692
-msgid "_Document"
-msgstr "文件(_D)"
-
-#: src/interface.c:699
-msgid "_Line wrapping"
-msgstr "自動換行(_L)"
-
-#: src/interface.c:702
-#: src/interface.c:3074
-msgid "Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."
-msgstr ""
-
-#: src/interface.c:705
-msgid "_Use auto indentation"
-msgstr "自動縮排(_U)"
-
-#: src/interface.c:710
-msgid "Read _only"
-msgstr "唯讀(_o)"
-
-#: src/interface.c:713
-msgid "Treat this file as read-only. No changes can be made."
-msgstr ""
-
-#: src/interface.c:715
-msgid "_Write Unicode BOM"
-msgstr ""
-
-#: src/interface.c:724
-msgid "Set file_type"
-msgstr "設定檔案類型(_t)"
-
-#: src/interface.c:734
-msgid "Set _encoding"
-msgstr "設定字元編碼(_e)"
-
-#: src/interface.c:744
-msgid "Set line e_ndings"
-msgstr "設定行結束符號(_n)"
-
-#: src/interface.c:751
-msgid "Convert and set to _CR/LF (Win)"
-msgstr "設定並轉換為CR/LF(Win)(_C)"
-
-#: src/interface.c:757
-msgid "Convert and set to _LF (Unix)"
-msgstr "設定並轉換為LF(Unix)(_L)"
-
-#: src/interface.c:763
-msgid "Convert and set to CR (_Mac)"
-msgstr "設定並轉換為CR(Mac)(_M)"
-
-#: src/interface.c:774
-msgid "_Replace tabs by spaces"
-msgstr "置換tab字元為空白(_R)"
-
-#: src/interface.c:777
-#: src/interface.c:3007
-msgid "Replaces all tabs in document by spaces."
-msgstr ""
-
-#: src/interface.c:784
-msgid "_Fold all"
-msgstr "收納全部(_F)"
-
-#: src/interface.c:787
-msgid "Folds all contractible code blocks"
-msgstr "收納全部可以摺疊的源碼區塊"
-
-#: src/interface.c:789
-msgid "_Unfold all"
-msgstr "展開全部(_U)"
-
-#: src/interface.c:792
-msgid "Unfolds all contracted code blocks"
-msgstr "展開全部可以已摺疊的源碼區塊"
-
-#: src/interface.c:799
-msgid "Remove error _indicators"
-msgstr ""
-
-#: src/interface.c:802
-msgid "Removes all error indicators in the current document."
-msgstr ""
-
-#. build the code
-#: src/interface.c:804
-#: src/build.c:702
-msgid "_Build"
-msgstr "建立(_B)"
-
-#: src/interface.c:808
-msgid "_Tools"
-msgstr "工具(_T)"
-
-#: src/interface.c:815
-msgid "_Colour Chooser"
-msgstr "顏色選擇程式(_C)"
-
-#: src/interface.c:818
-#: src/interface.c:939
-msgid "Open a color chooser dialog, to interactively pick colors from a palette."
-msgstr ""
-
-#: src/interface.c:824
-msgid "_Word Count"
-msgstr "計算字數(_W)"
-
-#: src/interface.c:827
-msgid "Counts the words and characters in the current selection or the whole document"
-msgstr ""
-
-#: src/interface.c:829
-msgid "_Help"
-msgstr "說明(_H)"
-
-#: src/interface.c:840
-msgid "_Keyboard shortcuts"
-msgstr "快速捷徑鍵(_K)"
-
-#: src/interface.c:843
-msgid "Shows a list of all keyboard shortcuts for Geany."
-msgstr ""
-
-#: src/interface.c:845
-msgid "_Website"
-msgstr "網站(_W)"
-
-#: src/interface.c:868
-msgid "Create a new file"
-msgstr "建立新檔案"
-
-#: src/interface.c:874
-msgid "Open an existing file"
-msgstr "開啟舊檔"
-
-#: src/interface.c:879
-msgid "Save the current file"
-msgstr "儲存目前檔案"
-
-#: src/interface.c:881
-#: src/keybindings.c:117
-msgid "Save all"
-msgstr "全部儲存"
-
-#: src/interface.c:884
-msgid "Save all open files"
-msgstr "儲存所有開啟的檔案"
-
-#: src/interface.c:893
-msgid "Reload the current file from disk"
-msgstr "從磁碟重新載入目前檔案"
-
-#: src/interface.c:898
-msgid "Close the current file"
-msgstr "關閉目前檔案"
-
-#: src/interface.c:907
-msgid "Undo the last modification"
-msgstr "取消執行上次操作"
-
-#: src/interface.c:912
-msgid "Redo the last modification"
-msgstr "重新執行上次操作"
-
-#: src/interface.c:920
-#: src/keybindings.c:165
-msgid "Compile"
-msgstr "編譯"
-
-#: src/interface.c:923
-msgid "Compile the current file"
-msgstr "編譯目前檔案"
-
-#: src/interface.c:928
-#: src/build.c:762
-msgid "Run or view the current file"
-msgstr ""
-
-#: src/interface.c:936
-msgid "Color"
-msgstr "顏色"
-
-#: src/interface.c:948
-msgid "Zoom in the text"
-msgstr "放大文字"
-
-#: src/interface.c:953
-msgid "Zoom out the text"
-msgstr "縮小文字"
-
-#: src/interface.c:966
-#: src/interface.c:971
-msgid "Find the entered text in the current file"
-msgstr "在目前檔案中尋找輸入的文字"
-
-#: src/interface.c:984
-msgid "Enter a line number and jump to it."
-msgstr "輸入欲前往行號"
-
-#: src/interface.c:991
-msgid "Jump to the entered line number."
-msgstr "跳至指定行號"
-
-#: src/interface.c:1028
-#: src/treeviews.c:70
-msgid "Symbols"
-msgstr "符號"
-
-#: src/interface.c:1041
-#: src/treeviews.c:280
-msgid "Open files"
-msgstr "開啟檔案"
-
-#: src/interface.c:1076
-msgid "Status"
-msgstr "狀態"
-
-#: src/interface.c:1090
-msgid "Compiler"
-msgstr "編譯器"
-
-#: src/interface.c:1104
-msgid "Messages"
-msgstr "訊息"
-
-#: src/interface.c:1117
-msgid "Scribble"
-msgstr ""
-
-#: src/interface.c:1625
-#: src/interface.c:2848
-msgid "Images and text"
-msgstr "圖示及文字"
-
-#: src/interface.c:1631
-#: src/interface.c:2856
-msgid "Images only"
-msgstr "只顯示圖示"
-
-#: src/interface.c:1637
-#: src/interface.c:2864
-msgid "Text only"
-msgstr "只顯示文字"
-
-#: src/interface.c:1648
-#: src/interface.c:2872
-msgid "Large icons"
-msgstr "大型圖示"
-
-#: src/interface.c:1653
-#: src/interface.c:2880
-msgid "Small icons"
-msgstr "小型圖示"
-
-#: src/interface.c:1663
-msgid "Hide toolbar"
-msgstr "隱藏工具列"
-
-#: src/interface.c:1892
-msgid "Insert \"include <...>\""
-msgstr "插入 \"include <...>\""
-
-#: src/interface.c:1906
-msgid "Insert Comments"
-msgstr "插入註解"
-
-#: src/interface.c:1957
-msgid "Find usage"
-msgstr "尋找用法"
-
-#: src/interface.c:1965
-#: src/keybindings.c:231
-msgid "Go to tag definition"
-msgstr ""
-
-#: src/interface.c:1969
-#: src/keybindings.c:233
-msgid "Go to tag declaration"
-msgstr ""
-
-#: src/interface.c:1978
-#: src/dialogs.c:561
-#: src/keybindings.c:145
-msgid "Go to line"
-msgstr "前往行數"
-
-#: src/interface.c:1981
-msgid "Goto to the entered line"
-msgstr "前往輸入的行數"
-
-#: src/interface.c:2331
-#: src/keybindings.c:135
-msgid "Preferences"
-msgstr "偏好設定"
-
-#: src/interface.c:2360
-msgid "Load files from the last session"
-msgstr ""
-
-#: src/interface.c:2364
-msgid "Opens at startup the files from the last session"
-msgstr ""
-
-#: src/interface.c:2367
-msgid "Save window position and geometry"
-msgstr ""
-
-#: src/interface.c:2371
-msgid "Saves the window position and geometry and restores it at the start"
-msgstr ""
-
-#: src/interface.c:2374
-msgid "Beep on errors or when compilation has finished"
-msgstr ""
-
-#: src/interface.c:2377
-msgid "Whether to beep if an error occured or when the compilation process has finished."
-msgstr ""
-
-#: src/interface.c:2380
-msgid "Switch to status message list at new message"
-msgstr ""
-
-#: src/interface.c:2383
-msgid "Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives."
-msgstr ""
-
-#: src/interface.c:2386
-msgid "Load virtual terminal emulation at startup"
-msgstr ""
-
-#: src/interface.c:2388
-msgid "Whether the virtual terminal emulation(VTE) should be loaded at startup. Disable it if you do not need it."
-msgstr ""
-
-#: src/interface.c:2391
-msgid "Confirm exit"
-msgstr "確定離開"
-
-#: src/interface.c:2395
-msgid "Shows a confirmation dialog on exit."
-msgstr ""
-
-#: src/interface.c:2416
-msgid "Placement of new file tabs: "
-msgstr ""
-
-#: src/interface.c:2420
-#: src/interface.c:2697
-#: src/interface.c:2707
-#: src/interface.c:2717
-msgid "Left"
-msgstr "左邊"
-
-#: src/interface.c:2423
-msgid "New file tabs will be placed to the left of the tab list"
-msgstr ""
-
-#: src/interface.c:2432
-#: src/interface.c:2698
-#: src/interface.c:2708
-#: src/interface.c:2718
-msgid "Right"
-msgstr "右邊"
-
-#: src/interface.c:2435
-msgid "New file tabs will be placed to the right of the tab list"
-msgstr ""
-
-#: src/interface.c:2439
-msgid "Show file tabs"
-msgstr "顯示檔案標籤列"
-
-#: src/interface.c:2447
-msgid "Recent files list length:"
-msgstr "最近使用檔案清單長度:"
-
-#: src/interface.c:2456
-msgid "Specifies the number of files which are stored in the Recent files list."
-msgstr ""
-
-#: src/interface.c:2465
-msgid "General"
-msgstr "一般"
-
-#: src/interface.c:2487
-msgid "Show symbol list"
-msgstr "顯示符號列表"
-
-#: src/interface.c:2490
-#: src/interface.c:2496
-msgid "Toggle the symbol list on and off"
-msgstr "開啟/關閉符號列表"
-
-#: src/interface.c:2493
-msgid "Show open files list"
-msgstr "顯示開啟檔案列表"
-
-#: src/interface.c:2499
-msgid "<b>Sidebar</b>"
-msgstr "<b>側面欄</b>"
-
-#: src/interface.c:2520
-msgid "Symbol list font"
-msgstr "符號列表字型"
-
-#: src/interface.c:2527
-msgid "Message window font"
-msgstr ""
-
-#: src/interface.c:2539
-msgid "Sets the font for the message window"
-msgstr ""
-
-#: src/interface.c:2547
-msgid "Sets the font for symbol list window"
-msgstr ""
-
-#: src/interface.c:2550
-msgid "Editor font"
-msgstr "編輯器字型"
-
-#: src/interface.c:2562
-msgid "Sets the font for the editors windows"
-msgstr ""
-
-#: src/interface.c:2564
-msgid "<b>Fonts</b>"
-msgstr "<b>字型</b>"
-
-#: src/interface.c:2585
-msgid "Long line marker"
-msgstr ""
-
-#: src/interface.c:2592
-msgid "Long line marker color"
-msgstr ""
-
-#: src/interface.c:2605
-msgid "The long line marker is a thin vertical line in the editor. It helps to mark long lines, or as a hint to break the line. Set this value to a value greater than 0 to specify the column where it should appear."
-msgstr ""
-
-#: src/interface.c:2609
-msgid "Type"
-msgstr "型態"
-
-#: src/interface.c:2622
-msgid "Line"
-msgstr "行"
-
-#: src/interface.c:2625
-msgid "Prints a vertical line in the editor window at the given cursor position (see below)."
-msgstr ""
-
-#: src/interface.c:2629
-msgid "Background"
-msgstr "背景"
-
-#: src/interface.c:2632
-msgid "The background colour of characters after the given cursor position (see below) changed to the colour set below. (This is recommended if you use proportional fonts)"
-msgstr ""
-
-#: src/interface.c:2636
-msgid "Disabled"
-msgstr "已停用"
-
-#: src/interface.c:2647
-msgid "Sets the color of the long line marker"
-msgstr ""
-
-#: src/interface.c:2648
-#: src/dialogs.c:494
-#: src/prefs.c:1004
-#: src/prefs.c:1011
-msgid "Color Chooser"
-msgstr "顏色選擇程式"
-
-#: src/interface.c:2650
-msgid "<b>Long line marker</b>"
-msgstr ""
-
-#: src/interface.c:2671
-#: src/interface.c:3120
-msgid "Editor"
-msgstr "編輯器"
-
-#: src/interface.c:2678
-msgid "Message window"
-msgstr "訊息視窗"
-
-#: src/interface.c:2685
-msgid "Sidebar"
-msgstr "側面欄"
-
-#: src/interface.c:2699
-#: src/interface.c:2709
-#: src/interface.c:2719
-msgid "Top"
-msgstr "頂部"
-
-#: src/interface.c:2700
-#: src/interface.c:2710
-#: src/interface.c:2720
-msgid "Bottom"
-msgstr "底部"
-
-#: src/interface.c:2722
-msgid "<b>Tab placement</b>"
-msgstr ""
-
-#: src/interface.c:2727
-msgid "Interface"
-msgstr "介面"
-
-#: src/interface.c:2746
-msgid "Show Toolbar"
-msgstr "顯示工具列"
-
-#: src/interface.c:2771
-msgid "Show file operation buttons"
-msgstr ""
-
-#: src/interface.c:2775
-msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
-msgstr "在工具列顯示新增,開啟,關閉,儲存及重載按鈕"
-
-#: src/interface.c:2778
-msgid "Show Compile and Run"
-msgstr ""
-
-#: src/interface.c:2782
-msgid "Display the Compile and Run buttons in the toolbar"
-msgstr ""
-
-#: src/interface.c:2785
-msgid "Show Colour Chooser button"
-msgstr ""
-
-#: src/interface.c:2789
-msgid "Display the Colour Chooser button in the toolbar"
-msgstr ""
-
-#: src/interface.c:2792
-msgid "Show Zoom In and Zoom Out"
-msgstr "顯示放大及縮小"
-
-#: src/interface.c:2796
-msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
-msgstr ""
-
-#: src/interface.c:2799
-msgid "Show Redo and Undo buttons"
-msgstr ""
-
-#: src/interface.c:2803
-msgid "Display the Redo and Undo buttons in the toolbar"
-msgstr ""
-
-#: src/interface.c:2806
-msgid "Show Search field"
-msgstr ""
-
-#: src/interface.c:2810
-msgid "Display the search field and button in the toolbar"
-msgstr ""
-
-#: src/interface.c:2813
-msgid "Show Goto line field"
-msgstr ""
-
-#: src/interface.c:2817
-msgid "Display the line number field and button in the toolbar"
-msgstr ""
-
-#: src/interface.c:2820
-msgid "Show Quit button"
-msgstr "顯示離開按鈕"
-
-#: src/interface.c:2824
-msgid "Display the quit button in the toolbar"
-msgstr ""
-
-#: src/interface.c:2827
-msgid "<b>Items</b>"
-msgstr "<b>項目</b>"
-
-#: src/interface.c:2888
-msgid "Icon style"
-msgstr "圖示風格"
-
-#: src/interface.c:2895
-msgid "Icon size"
-msgstr "圖示大小"
-
-#: src/interface.c:2902
-msgid "<b>Appearance</b>"
-msgstr "<b>外觀</b>"
-
-#: src/interface.c:2907
-msgid "Toolbar"
-msgstr "工具列"
-
-#: src/interface.c:2935
-msgid "Tab Width:"
-msgstr "Tab字符寬度："
-
-#: src/interface.c:2942
-msgid "Default encoding:"
-msgstr "預設編碼:"
-
-#: src/interface.c:2953
-msgid "Sets the default encoding for newly created files."
-msgstr ""
-
-#: src/interface.c:2965
-msgid "The width in chars, which one tab character will take"
-msgstr ""
-
-#: src/interface.c:2970
-msgid "<b>New files</b>"
-msgstr "<b>新的檔案</b>"
-
-#: src/interface.c:2989
-msgid "Strip trailing spaces"
-msgstr ""
-
-#: src/interface.c:2993
-msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr "移除每行結束的空白及tab字元"
-
-#: src/interface.c:2996
-msgid "Ensure new line at file end"
-msgstr ""
-
-#: src/interface.c:3000
-msgid "Ensures that at the end of the file is a new line"
-msgstr ""
-
-#: src/interface.c:3003
-#: src/keybindings.c:159
-msgid "Replace tabs by space"
-msgstr "以空白字元替代tab字元"
-
-#: src/interface.c:3010
-msgid "<b>Saving files</b>"
-msgstr "<b>儲存檔案</b>"
-
-#: src/interface.c:3029
-msgid "Show indentation guides"
-msgstr ""
-
-#: src/interface.c:3032
-msgid "Shows small dotted lines to help you to use the right indentation."
-msgstr ""
-
-#: src/interface.c:3035
-msgid "Show white space"
-msgstr "顯示空白字元"
-
-#: src/interface.c:3038
-msgid "Marks spaces with dots and tabs with arrows."
-msgstr ""
-
-#: src/interface.c:3041
-msgid "Show line endings"
-msgstr "顯示行尾"
-
-#: src/interface.c:3044
-msgid "Show the line ending character"
-msgstr "顯示行結束字元"
-
-#: src/interface.c:3047
-msgid "<b>Display</b>"
-msgstr "<b>顯示</b>"
-
-#: src/interface.c:3066
-msgid "Auto indentation"
-msgstr "自動縮排"
-
-#: src/interface.c:3069
-msgid "Add the same indentation as the previous line after pressing enter"
-msgstr ""
-
-#: src/interface.c:3071
-msgid "Line wrapping"
-msgstr "換行"
-
-#: src/interface.c:3076
-msgid "Construct auto completion"
-msgstr ""
-
-#: src/interface.c:3079
-msgid "Automatic completion of often used constructs like if and for"
-msgstr ""
-
-#: src/interface.c:3082
-msgid "XML tag auto completion"
-msgstr "XML標籤自動補完"
-
-#: src/interface.c:3085
-msgid "Automatic completion of open XML tags (includes HTML tags)"
-msgstr ""
-
-#: src/interface.c:3088
-msgid "Enable folding"
-msgstr "啟用摺疊功能"
-
-#: src/interface.c:3091
-msgid "Whether to enable folding the code"
-msgstr "要不要啟用程式碼的摺疊功能"
-
-#: src/interface.c:3094
-msgid "Use indicators to show compile errors"
-msgstr ""
-
-#: src/interface.c:3097
-msgid "Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error."
-msgstr ""
-
-#: src/interface.c:3104
-msgid "Rows of auto completion list:"
-msgstr ""
-
-#: src/interface.c:3112
-msgid "Number of rows to display in the auto completion list."
-msgstr ""
-
-#: src/interface.c:3115
-msgid "<b>Features</b>"
-msgstr "<b>功能</b>"
-
-#: src/interface.c:3128
-msgid ""
-"Enter here the paths to the make tool and the compiler\n"
-"(tools you do not need can be let blank)"
-msgstr ""
-
-#: src/interface.c:3139
-msgid "Make"
-msgstr ""
-
-#: src/interface.c:3146
-#: src/prefs.c:1090
-#: src/vte.c:165
-msgid "Terminal"
-msgstr "終端機"
-
-#: src/interface.c:3153
-msgid "Browser"
-msgstr "瀏覽器"
-
-#: src/interface.c:3165
-msgid "Path and options for the make tool"
-msgstr ""
-
-#: src/interface.c:3172
-msgid "A terminal emulator like xterm, gnome-terminal or konsole (should accept the -e argument)"
-msgstr ""
-
-#: src/interface.c:3179
-msgid "Path (and possibly additional arguments) to your favorite browser"
-msgstr ""
-
-#: src/interface.c:3211
-msgid "Print command"
-msgstr ""
-
-#: src/interface.c:3223
-#, c-format
-msgid "Path to the command for printing files (use %f for the filename)."
-msgstr ""
-
-#: src/interface.c:3235
-msgid "Grep"
-msgstr ""
-
-#: src/interface.c:3258
-msgid "Tools"
-msgstr "工具箱"
-
-#: src/interface.c:3266
-msgid ""
-"Specify here information you want to use in templates.\n"
-"See documentation if you don't know how templates work."
-msgstr ""
-
-#: src/interface.c:3282
-msgid "email address of the developer"
-msgstr ""
-
-#: src/interface.c:3289
-msgid "Initials of the developer name"
-msgstr ""
-
-#: src/interface.c:3291
-msgid "Initial Version"
-msgstr ""
-
-#: src/interface.c:3303
-msgid "Version number, which a new file initially has"
-msgstr ""
-
-#: src/interface.c:3310
-msgid "Company name"
-msgstr "公司名稱"
-
-#: src/interface.c:3312
-msgid "Developer"
-msgstr "開發者"
-
-#: src/interface.c:3319
-msgid "Company"
-msgstr "公司"
-
-#: src/interface.c:3326
-msgid "Mail address"
-msgstr "電子郵件位址"
-
-#: src/interface.c:3333
-msgid "Initials"
-msgstr ""
-
-#: src/interface.c:3345
-msgid "The name of the developer"
-msgstr "開發者名字"
-
-#: src/interface.c:3347
-msgid ""
-"Notice: For all changes you make here,\n"
-"you need to restart Geany to take effect."
-msgstr ""
-
-#: src/interface.c:3351
-msgid "Templates"
-msgstr "範本"
-
-#: src/interface.c:3359
-msgid "Here you can change keyboard shortcuts for various actions. Just double click on a action or select one and press the Change button to enter a new shortcut. You can also edit the string representation of the shortcut directly."
-msgstr ""
-
-#: src/interface.c:3382
-msgid "Change"
-msgstr "改變"
-
-#: src/interface.c:3386
-msgid "Keybindings"
-msgstr ""
-
-#: src/callbacks.c:157
-msgid "Do you really want to quit?"
-msgstr "您真的想要離開嗎?"
-
-#: src/callbacks.c:455
-msgid "Any unsaved changes will be lost."
-msgstr ""
-
-#: src/callbacks.c:456
-#, c-format
-msgid "Are you sure you want to reload '%s'?"
-msgstr ""
-
-#: src/callbacks.c:841
-#, c-format
-msgid "The file '%s' already exists. Do you want to overwrite it?"
-msgstr "檔案 '%s' 已存在.是否真要覆寫?"
-
-#: src/callbacks.c:1210
-#, c-format
-msgid "Declaration of \"%s()\" not found"
-msgstr ""
-
-#: src/callbacks.c:1212
-#, c-format
-msgid "Definition of \"%s()\" not found"
-msgstr ""
-
-#. initialize the dialog
-#: src/callbacks.c:1447
-#: src/dialogs.c:74
-msgid "Open File"
-msgstr "開啟檔案"
-
-#: src/callbacks.c:1496
-#: src/callbacks.c:1541
-#: src/callbacks.c:1581
-#: src/callbacks.c:1639
-msgid "Please set the filetype for the current file before using this function."
-msgstr ""
-
-#: src/callbacks.c:1709
-#: src/ui_utils.c:543
-msgid "dd.mm.yyyy"
-msgstr ""
-
-#: src/callbacks.c:1711
-#: src/ui_utils.c:544
-msgid "mm.dd.yyyy"
-msgstr ""
-
-#: src/callbacks.c:1713
-#: src/ui_utils.c:545
-msgid "yyyy/mm/dd"
-msgstr ""
-
-#: src/callbacks.c:1715
-#: src/ui_utils.c:554
-msgid "dd.mm.yyyy hh:mm:ss"
-msgstr ""
-
-#: src/callbacks.c:1717
-#: src/ui_utils.c:555
-msgid "mm.dd.yyyy hh:mm:ss"
-msgstr ""
-
-#: src/callbacks.c:1719
-#: src/ui_utils.c:556
-msgid "yyyy/mm/dd hh:mm:ss"
-msgstr ""
-
-#: src/callbacks.c:1721
-#: src/ui_utils.c:565
-#: src/ui_utils.c:569
-#: src/ui_utils.c:573
-#: src/ui_utils.c:577
-msgid "Use custom date format"
-msgstr "使用自定的日期格式"
-
-#: src/callbacks.c:1728
-msgid "Custom date format"
-msgstr "自定日期格式"
-
-#: src/callbacks.c:1729
-msgid "Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function. See \"man strftime\" for more information."
-msgstr ""
-
-#: src/callbacks.c:1748
-msgid "Date format string could not be converted (possibly too long)."
-msgstr ""
-
-#: src/support.c:90
-#: src/support.c:114
-#, c-format
-msgid "Couldn't find pixmap file: %s"
-msgstr ""
-
-#: src/dialogs.c:79
-msgid "Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."
-msgstr ""
-
-#: src/dialogs.c:112
-msgid "Detect by file extension"
-msgstr "以附加檔名偵測"
-
-#: src/dialogs.c:123
-msgid "Detect from file"
-msgstr "從檔案偵測"
-
-#. line 1 with checkbox and encoding combo
-#: src/dialogs.c:169
-msgid "Show _hidden files"
-msgstr "顯示隱藏檔案"
-
-#: src/dialogs.c:181
-msgid "Set encoding:"
-msgstr "設定字元編碼:"
-
-#: src/dialogs.c:191
-msgid ""
-"Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\n"
-"Note if you choose multiple files, they will all be opened with the chosen encoding."
-msgstr ""
-
-#: src/dialogs.c:211
-msgid "Set filetype:"
-msgstr ""
-
-#: src/dialogs.c:221
-msgid ""
-"Explicitly defines a filetype for the file, if it would not be detected by filename extension.\n"
-"Note if you choose multiple files, they will all be opened with the chosen filetype."
-msgstr ""
-
-#: src/dialogs.c:260
-msgid "Save File"
-msgstr "儲存檔案"
-
-#: src/dialogs.c:346
-#, c-format
-msgid "The file '%s' is not saved."
-msgstr ""
-
-#: src/dialogs.c:356
-msgid "Do you want to save it before closing?"
-msgstr "離開前您要存檔嗎?"
-
-#: src/dialogs.c:360
-msgid "_Don't save"
-msgstr "不要儲存(_D)"
-
-#: src/dialogs.c:414
-msgid "Choose font"
-msgstr "選擇字型"
-
-#: src/dialogs.c:451
-msgid "Word Count"
-msgstr "計算字數"
-
-#: src/dialogs.c:462
-msgid "selection"
-msgstr "選擇區域"
-
-#: src/dialogs.c:470
-msgid "whole document"
-msgstr "整個文件"
-
-#: src/dialogs.c:472
-#, c-format
-msgid ""
-"Range:\t\t%s\n"
-"\n"
-"Lines:\t\t%d\n"
-"Words:\t\t%d\n"
-"Characters:\t%d"
-msgstr ""
-
-#: src/dialogs.c:567
-msgid "Enter the line you want to go to:"
-msgstr "請輸入您想移至的行:"
-
-#. arguments
-#: src/dialogs.c:592
-#: src/build.c:902
-msgid "Set Arguments"
-msgstr "設定參數"
-
-#: src/dialogs.c:598
-msgid "Set programs and options for compiling and viewing (La)TeX files."
-msgstr ""
-
-#: src/dialogs.c:609
-msgid "DVI creation:"
-msgstr ""
-
-#: src/dialogs.c:628
-msgid "PDF creation:"
-msgstr ""
-
-#: src/dialogs.c:647
-msgid "DVI preview:"
-msgstr ""
-
-#: src/dialogs.c:666
-msgid "PDF preview:"
-msgstr ""
-
-#: src/dialogs.c:682
-#: src/dialogs.c:795
-#, c-format
-msgid ""
-"%f will be replaced by the current filename, e.g. test_file.c\n"
-"%e will be replaced by the filename without extension, e.g. test_file"
-msgstr ""
-
-#: src/dialogs.c:709
-msgid "Set Includes and Arguments"
-msgstr ""
-
-#: src/dialogs.c:715
-msgid "Set the commands for building and running programs."
-msgstr ""
-
-#: src/dialogs.c:722
-msgid " commands"
-msgstr "指令"
-
-#: src/dialogs.c:735
-msgid "Compile:"
-msgstr "編譯:"
-
-#: src/dialogs.c:756
-msgid "Build:"
-msgstr "建構:"
-
-#: src/dialogs.c:777
-#: src/dialogs.c:1048
-msgid "Execute:"
-msgstr "執行:"
-
-#: src/dialogs.c:842
-msgid "An error occurred or file information could not be retrieved (e.g. from a new file)."
-msgstr ""
-
-#: src/dialogs.c:861
-#: src/dialogs.c:862
-#: src/dialogs.c:863
-#: src/dialogs.c:869
-#: src/dialogs.c:870
-#: src/dialogs.c:871
-#: src/utils.c:499
-#: src/utils.c:553
-#: src/ui_utils.c:108
-#: src/ui_utils.c:110
-msgid "unknown"
-msgstr "不詳"
-
-#: src/dialogs.c:875
-msgid "Properties"
-msgstr "屬性"
-
-#: src/dialogs.c:903
-msgid "<b>Type:</b>"
-msgstr "<b>類型:</b>"
-
-#: src/dialogs.c:916
-msgid "<b>Size:</b>"
-msgstr "<b>大小:</b>"
-
-#: src/dialogs.c:931
-msgid "<b>Location:</b>"
-msgstr "<b>位置:</b>"
-
-#: src/dialogs.c:944
-msgid "<b>Read-only:</b>"
-msgstr "<b>唯讀:</b>"
-
-#: src/dialogs.c:951
-msgid "(only inside Geany)"
-msgstr ""
-
-#: src/dialogs.c:960
-msgid "<b>Encoding:</b>"
-msgstr "<b>編碼:</b>"
-
-#: src/dialogs.c:969
-#: src/ui_utils.c:109
-msgid "(with BOM)"
-msgstr ""
-
-#: src/dialogs.c:969
-#: src/ui_utils.c:109
-msgid "(without BOM)"
-msgstr ""
-
-#: src/dialogs.c:979
-msgid "<b>Modified:</b>"
-msgstr "<b>修改時間:</b>"
-
-#: src/dialogs.c:992
-msgid "<b>Changed:</b>"
-msgstr "<b>變更:</b>"
-
-#: src/dialogs.c:1005
-msgid "<b>Accessed:</b>"
-msgstr "<b>存取時間:</b>"
-
-#: src/dialogs.c:1026
-msgid "<b>Permissions:</b>"
-msgstr "<b>權限:</b>"
-
-#. Header
-#: src/dialogs.c:1034
-msgid "Read:"
-msgstr "讀取:"
-
-#: src/dialogs.c:1041
-msgid "Write:"
-msgstr "寫入:"
-
-#. Owner
-#: src/dialogs.c:1056
-msgid "Owner:"
-msgstr "擁有者:"
-
-#. Group
-#: src/dialogs.c:1092
-msgid "Group:"
-msgstr "群組:"
-
-#. Other
-#: src/dialogs.c:1128
-msgid "Other:"
-msgstr "其他:"
-
-#: src/dialogs.c:1249
-msgid "Keyboard shortcuts"
-msgstr "捷徑鍵"
-
-#: src/dialogs.c:1258
-msgid "The following keyboard shortcuts are defined:"
-msgstr ""
-
-#: src/document.c:367
-#, c-format
-msgid "File %s closed."
-msgstr ""
-
-#: src/document.c:449
-msgid "New file opened."
-msgstr ""
-
-#: src/document.c:597
-msgid "Invalid filename"
-msgstr "無效的檔案名稱"
-
-#: src/document.c:622
-#, c-format
-msgid "Could not open file %s (%s)"
-msgstr "無法開啟檔案%s(%s)"
-
-#: src/document.c:646
-#, c-format
-msgid ""
-"The file \"%s\" could not opened properly and probably was truncated. Be aware that saving it can cause data loss.\n"
-"The file was set to read-only."
-msgstr ""
-
-#: src/document.c:669
-#, c-format
-msgid "The file \"%s\" is not valid %s."
-msgstr ""
-
-#: src/document.c:680
-#, c-format
-msgid "The file \"%s\" does not look like a text file or the file encoding is not supported."
-msgstr ""
-
-#: src/document.c:751
-#, c-format
-msgid "File %s reloaded."
-msgstr ""
-
-#: src/document.c:753
-#, c-format
-msgid "File %s opened(%d%s)."
-msgstr ""
-
-#: src/document.c:755
-msgid ", read-only"
-msgstr ",唯讀"
-
-#: src/document.c:796
-#: src/document.c:877
-msgid "Error saving file."
-msgstr "儲存檔案時出現錯誤."
-
-#: src/document.c:841
-#, c-format
-msgid ""
-"An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved.\n"
-"Error message: %s\n"
-msgstr ""
-
-#: src/document.c:865
-#, c-format
-msgid "Error saving file (%s)."
-msgstr "儲存檔案( %s)時出現錯誤."
-
-#: src/document.c:904
-#, c-format
-msgid "File %s saved."
-msgstr "檔案%s已儲存."
-
-#: src/document.c:952
-#: src/document.c:1004
-#: src/document.c:1014
-#, c-format
-msgid "\"%s\" was not found."
-msgstr ""
-
-#: src/document.c:1013
-msgid "Wrap search and find again?"
-msgstr ""
-
-#: src/document.c:1126
-#: src/document.c:1133
-#, c-format
-msgid "Replaced %d occurrences of \"%s\" with \"%s\"."
-msgstr ""
-
-#: src/document.c:1304
-msgid "Win (CRLF)"
-msgstr ""
-
-#: src/document.c:1305
-msgid "Mac (CR)"
-msgstr ""
-
-#: src/document.c:1307
-msgid "Unix (LF)"
-msgstr ""
-
-#: src/document.c:1465
-#, c-format
-msgid ""
-"The file \"%s\" will be printed with the following command:\n"
-"\n"
-"%s"
-msgstr ""
-
-#: src/document.c:1474
-#, c-format
-msgid "Printing of \"%s\" failed (return code: %d)."
-msgstr ""
-
-#: src/document.c:1479
-#, c-format
-msgid "File %s printed."
-msgstr ""
-
-#: src/utils.c:353
-msgid "Do you want to reload it?"
-msgstr ""
-
-#: src/utils.c:354
-#, c-format
-msgid ""
-"The file '%s' on the disk is more recent than\n"
-"the current buffer."
-msgstr ""
-
-#: src/ui_utils.c:100
-#, c-format
-msgid "%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. function: %s      encoding: %s %s     filetype: %s"
-msgstr ""
-
-#: src/ui_utils.c:104
-msgid "OVR"
-msgstr "覆寫"
-
-#: src/ui_utils.c:104
-msgid "INS"
-msgstr "插入"
-
-#: src/ui_utils.c:130
-#: src/geany.h:47
-msgid "untitled"
-msgstr "未命名"
-
-#: src/ui_utils.c:131
-msgid "(Unsaved)"
-msgstr "(未儲存)"
-
-#: src/ui_utils.c:170
-#, c-format
-msgid "Font updated (%s)."
-msgstr ""
-
-#: src/ui_utils.c:204
-msgid "No tags found"
-msgstr ""
-
-#: src/ui_utils.c:513
-msgid "C Standard Library"
-msgstr "C標準函式庫"
-
-#: src/ui_utils.c:514
-msgid "ISO C99"
-msgstr ""
-
-#: src/ui_utils.c:515
-msgid "C++ (C Standard Library)"
-msgstr "C++(C標準函式庫)"
-
-#: src/ui_utils.c:516
-msgid "C++ Standard Library"
-msgstr "標準 C++ 函式庫"
-
-#: src/ui_utils.c:517
-msgid "C++ STL"
-msgstr ""
-
-#: src/ui_utils.c:581
-msgid "Set custom date format"
-msgstr "設定自定義日期格式"
-
-#: src/filetypes.c:129
-msgid "C source file"
-msgstr "C 原始檔"
-
-#: src/filetypes.c:149
-msgid "C++ source file"
-msgstr "C++ 原始檔"
-
-#: src/filetypes.c:177
-msgid "D source file"
-msgstr "D原始檔"
-
-#: src/filetypes.c:197
-msgid "Java source file"
-msgstr "Java 原始檔"
-
-#: src/filetypes.c:216
-msgid "Pascal source file"
-msgstr "Pascal原始檔"
-
-#: src/filetypes.c:239
-msgid "Assembler source file"
-msgstr "組合語言原始檔"
-
-#: src/filetypes.c:258
-msgid "Fortran source file (F77)"
-msgstr "Fortran(F77)原始檔"
-
-#: src/filetypes.c:282
-msgid "(O)Caml source file"
-msgstr ""
-
-#: src/filetypes.c:302
-msgid "Perl source file"
-msgstr "Perl 原始檔"
-
-#: src/filetypes.c:324
-msgid "PHP source file"
-msgstr "PHP原始檔"
-
-#: src/filetypes.c:347
-msgid "Python source file"
-msgstr "Python 原始檔"
-
-#: src/filetypes.c:367
-msgid "Ruby source file"
-msgstr "Ruby原始檔"
-
-#: src/filetypes.c:387
-msgid "Tcl source file"
-msgstr "Tcl原始檔"
-
-#: src/filetypes.c:408
-msgid "Ferite source file"
-msgstr "Ferite原始檔"
-
-#: src/filetypes.c:427
-msgid "Shell script file"
-msgstr ""
-
-#: src/filetypes.c:452
-msgid "Makefile"
-msgstr ""
-
-#: src/filetypes.c:473
-msgid "XML source file"
-msgstr "XML原始檔"
-
-#: src/filetypes.c:493
-msgid "Docbook source file"
-msgstr ""
-
-#: src/filetypes.c:512
-msgid "HTML source file"
-msgstr ""
-
-#: src/filetypes.c:537
-msgid "Cascading StyleSheet"
-msgstr ""
-
-#: src/filetypes.c:556
-msgid "SQL Dump file"
-msgstr ""
-
-#: src/filetypes.c:575
-msgid "LaTeX source file"
-msgstr ""
-
-#: src/filetypes.c:596
-msgid "O-Matrix source file"
-msgstr ""
-
-#: src/filetypes.c:615
-msgid "Diff file"
-msgstr "差異檔"
-
-#: src/filetypes.c:635
-msgid "Config file"
-msgstr "設定檔"
-
-#: src/filetypes.c:658
-msgid "All files"
-msgstr "所有檔案"
-
-#: src/filetypes.c:667
-msgid "None"
-msgstr "無"
-
-#: src/win32.c:60
-msgid "Executables"
-msgstr ""
-
-#: src/win32.c:333
-msgid "Error"
-msgstr "錯誤"
-
-#: src/win32.c:339
-#: src/win32.c:380
-msgid "Question"
-msgstr "問題"
-
-#: src/win32.c:345
-msgid "Warning"
-msgstr "警告"
-
-#: src/win32.c:351
-msgid "Information"
-msgstr "資訊"
-
-#: src/keyfile.c:69
-#, c-format
-msgid "%s configuration file, edit as you need"
-msgstr ""
-
-#: src/keyfile.c:327
-msgid "Type here what you want, use it as a notice/scratch board"
-msgstr ""
-
-#: src/msgwindow.c:89
+#: src/msgwindow.c:108
 msgid "Status messages"
 msgstr ""
 
-#: src/build.c:110
-#, c-format
-msgid "Failed to view %s (make sure it is already compiled)"
-msgstr ""
+#: src/msgwindow.c:418
+#, fuzzy
+msgid "_Hide Message Window"
+msgstr "訊息視窗"
 
-#: src/build.c:143
-#: src/build.c:358
-#: src/build.c:526
-#: src/search.c:1036
-#, c-format
-msgid "Process failed (%s)"
-msgstr "行程(%s)失敗"
-
-#: src/build.c:262
-#, c-format
-msgid "Something very strange is occured, could not stat %s (%s)"
-msgstr ""
-
-#: src/build.c:341
-#, c-format
-msgid "%s (in directory: %s)"
-msgstr "%s(在目錄: %s)"
-
-#: src/build.c:444
-#, c-format
-msgid "Failed to execute %s (make sure it is already built)"
-msgstr ""
-
-#: src/build.c:469
-#, c-format
-msgid "Could not find terminal '%s' (check path for Terminal tool setting in Preferences)"
-msgstr ""
-
-#: src/build.c:483
-#, c-format
-msgid "Failed to change the working directory to %s"
-msgstr ""
-
-#: src/build.c:501
-#, c-format
-msgid "Failed to execute %s (start-script could not be created)"
-msgstr ""
-
-#: src/build.c:616
-msgid "Compilation failed."
-msgstr "編譯失敗."
-
-#: src/build.c:621
-msgid "Compilation finished successfully."
-msgstr "編譯成功結束."
-
-#. compile the code
-#: src/build.c:688
-msgid "_Compile"
-msgstr "編譯(_C)"
-
-#: src/build.c:691
-msgid "Compiles the current file"
-msgstr "編譯目前檔案"
-
-#: src/build.c:706
-msgid "Builds the current file (generate an executable file)"
-msgstr ""
-
-#. build the code with make all
-#: src/build.c:720
-#: src/build.c:840
-msgid "_Make all"
-msgstr ""
-
-#: src/build.c:723
-#: src/build.c:843
-msgid "Builds the current file with the make tool and the default target"
-msgstr "以建立工具和預設目標建構目前檔案"
-
-#. build the code with make custom
-#: src/build.c:731
-#: src/build.c:851
-msgid "Make custom _target"
-msgstr "建立自定義目標(_t)"
-
-#: src/build.c:735
-#: src/build.c:855
-msgid "Builds the current file with the make tool and the specified target"
-msgstr "以建立工具和指定目標建構目前檔案"
-
-#. build the code with make object
-#: src/build.c:742
-msgid "Make _object"
-msgstr "建立物件(_o)"
-
-#: src/build.c:746
-msgid "Compiles the current file using the make tool"
-msgstr ""
-
-#: src/build.c:777
-msgid "_Set Includes and Arguments"
-msgstr ""
-
-#: src/build.c:782
-msgid "Sets the includes and library paths for the compiler and the program arguments for execution"
-msgstr ""
-
-#. DVI
-#: src/build.c:807
-msgid "LaTeX -> DVI"
-msgstr ""
-
-#: src/build.c:810
-msgid "Compiles the current file into a DVI file"
-msgstr "編譯目前檔案為DVI檔案"
-
-#. PDF
-#: src/build.c:820
-msgid "LaTeX -> PDF"
-msgstr ""
-
-#: src/build.c:823
-msgid "Compiles the current file into a PDF file"
-msgstr "編譯目前檔案為PDF檔案"
-
-#. DVI view
-#: src/build.c:870
-msgid "View DVI file"
-msgstr "檢視DVI檔案"
-
-#: src/build.c:876
-#: src/build.c:889
-msgid "Compiles and view the current file"
-msgstr "編譯及檢視目前檔案"
-
-#. PDF view
-#: src/build.c:883
-msgid "View PDF file"
-msgstr "檢視PDF檔案"
-
-#: src/build.c:909
-msgid "Sets the program paths and arguments"
-msgstr "設定程式的路徑及參數"
-
-#: src/build.c:1098
-#: src/keybindings.c:172
-msgid "Make custom target"
-msgstr ""
-
-#: src/build.c:1099
-msgid "Enter custom options here, all entered text is passed to the make command."
-msgstr ""
-
-#: src/build.c:1135
-msgid "Failed to execute the view program"
-msgstr "無法執行檢視程式"
-
-#: src/build.c:1153
-msgid "Failed to execute the terminal program"
-msgstr "無法執行終端程式"
-
-#: src/prefs.c:298
+#: src/prefs.c:322
 msgid "Action"
 msgstr "動作"
 
-#: src/prefs.c:303
+#: src/prefs.c:327
 msgid "Shortcut"
 msgstr "捷徑"
 
-#: src/prefs.c:769
+#: src/prefs.c:802
 msgid "Grab key"
 msgstr ""
 
-#: src/prefs.c:773
+#: src/prefs.c:806
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
 msgstr ""
 
-#: src/prefs.c:897
+#: src/prefs.c:930
 #, c-format
-msgid "The combination '%s' is already used for \"%s\". Please choose another one."
+msgid ""
+"The combination '%s' is already used for \"%s\". Please choose another one."
 msgstr ""
 
-#: src/prefs.c:959
-msgid "These are settings for the virtual terminal emulator widget (VTE). They only apply, if the VTE library could be loaded."
+#. "projects" is part of the default project base path so be carefully when translating
+#. please avoid special characters and spaces, look at the source for details or ask Frank
+#: src/project.c:70
+msgid "projects"
 msgstr ""
 
-#: src/prefs.c:975
-msgid "Terminal font"
-msgstr "終端機字型"
-
-#: src/prefs.c:985
-msgid "Sets the font for the terminal widget."
-msgstr ""
-
-#: src/prefs.c:987
-msgid "Foreground color"
-msgstr "前景顏色"
-
-#: src/prefs.c:993
-msgid "Background color"
-msgstr "背景顏色"
-
-#: src/prefs.c:1003
-msgid "Sets the foreground color of the text in the terminal widget."
-msgstr ""
-
-#: src/prefs.c:1010
-msgid "Sets the background color of the text in the terminal widget."
-msgstr ""
-
-#: src/prefs.c:1013
-msgid "Scrollback lines"
-msgstr ""
-
-#: src/prefs.c:1024
-msgid "Specifies the history in lines, which you can scroll back in the terminal widget."
-msgstr ""
-
-#: src/prefs.c:1028
-msgid "Terminal emulation"
-msgstr "終端模擬"
-
-#: src/prefs.c:1038
-msgid "Controls how the terminal emulator should behave. xterm is a good start."
-msgstr ""
-
-#: src/prefs.c:1040
-msgid "Shell"
-msgstr ""
-
-#: src/prefs.c:1050
-msgid "Sets the path to the shell which should be started inside the terminal emulation."
-msgstr ""
-
-#: src/prefs.c:1062
-msgid "Scroll on keystroke"
-msgstr ""
-
-#: src/prefs.c:1066
-msgid "Whether to scroll to the bottom if a key was pressed."
-msgstr ""
-
-#: src/prefs.c:1069
-msgid "Scroll on output"
-msgstr "輸出上捲動"
-
-#: src/prefs.c:1073
-msgid "Whether to scroll to the bottom if an output was generated."
-msgstr ""
-
-#: src/prefs.c:1076
-msgid "Disable menu shortcut key (F10 by default)"
-msgstr "關閉選單捷徑鍵(預設為 F10)"
-
-#: src/prefs.c:1080
-msgid "This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."
-msgstr ""
-
-#: src/prefs.c:1083
-msgid "Follow the path of the current file"
-msgstr ""
-
-#: src/prefs.c:1087
-msgid "Whether to execute \"cd $path\" when you switch between opened files."
-msgstr ""
-
-#: src/about.c:111
-msgid "About Geany"
-msgstr "關於Geany"
-
-#: src/about.c:159
-msgid "A fast and lightweight IDE"
-msgstr "一個快速且輕巧的整合開發環境"
-
-#: src/about.c:180
-#, c-format
-msgid "(built on %s)"
-msgstr "(在%s建立)"
-
-#. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: src/about.c:211
-msgid "Info"
-msgstr "資訊"
-
-#: src/about.c:223
-msgid "Developers"
-msgstr "開發者"
-
-#: src/about.c:223
-msgid "Maintainer"
-msgstr "維護者"
-
-#: src/about.c:223
-msgid "developer"
-msgstr "開發者"
-
-#: src/about.c:224
-msgid "translation maintainer"
-msgstr "翻譯維護者"
-
-#: src/about.c:224
-msgid "Translators"
-msgstr "翻譯者"
-
-#: src/about.c:225
-msgid "language"
-msgstr "語言"
-
-#: src/about.c:231
-msgid "Credits"
-msgstr "鳴謝"
-
-#: src/about.c:244
-msgid "License"
-msgstr "授權條款"
-
-#: src/encodings.c:51
-msgid "Celtic"
-msgstr "塞爾特文"
-
-#: src/encodings.c:52
-#: src/encodings.c:53
-msgid "Greek"
-msgstr "希臘文"
-
-#: src/encodings.c:54
-msgid "Nordic"
-msgstr "北歐地區"
-
-#: src/encodings.c:55
-msgid "South European"
-msgstr "南歐語系"
-
-#: src/encodings.c:56
-#: src/encodings.c:57
-#: src/encodings.c:58
-#: src/encodings.c:59
-msgid "Western"
-msgstr "西歐地區"
-
-#: src/encodings.c:61
-#: src/encodings.c:62
-#: src/encodings.c:63
-msgid "Baltic"
-msgstr "波羅的海語"
-
-#: src/encodings.c:64
-#: src/encodings.c:65
-#: src/encodings.c:66
-msgid "Central European"
-msgstr "中歐語系"
-
-#: src/encodings.c:67
-#: src/encodings.c:68
-#: src/encodings.c:69
-#: src/encodings.c:70
-#: src/encodings.c:71
-msgid "Cyrillic"
-msgstr "斯拉夫文"
-
-#: src/encodings.c:72
-msgid "Cyrillic/Russian"
-msgstr "斯拉夫文/俄文"
-
-#: src/encodings.c:73
-msgid "Cyrillic/Ukrainian"
-msgstr "斯拉夫文/烏克蘭文"
-
-#: src/encodings.c:74
-msgid "Romanian"
-msgstr "羅馬尼亞文"
-
-#: src/encodings.c:76
-#: src/encodings.c:77
-#: src/encodings.c:78
-msgid "Arabic"
-msgstr "阿拉伯文"
-
-#: src/encodings.c:79
-#: src/encodings.c:80
-#: src/encodings.c:81
-msgid "Hebrew"
-msgstr "希伯來文"
-
-#: src/encodings.c:82
-msgid "Hebrew Visual"
-msgstr "希伯來文印刷型式"
-
-#: src/encodings.c:84
-msgid "Armenian"
-msgstr "亞美尼亞文"
-
-#: src/encodings.c:85
-msgid "Georgian"
-msgstr "喬治亞文"
-
-#: src/encodings.c:86
-msgid "Thai"
-msgstr "泰文"
-
-#: src/encodings.c:87
-#: src/encodings.c:88
-#: src/encodings.c:89
-msgid "Turkish"
-msgstr "土耳其文"
-
-#: src/encodings.c:90
-#: src/encodings.c:91
-#: src/encodings.c:92
-msgid "Vietnamese"
-msgstr "越南文"
-
-#: src/encodings.c:94
-#: src/encodings.c:95
-#: src/encodings.c:96
-#: src/encodings.c:97
-#: src/encodings.c:98
-#: src/encodings.c:99
-#: src/encodings.c:100
-#: src/encodings.c:101
-msgid "Unicode"
-msgstr "萬國碼"
-
-#: src/encodings.c:103
-#: src/encodings.c:104
-#: src/encodings.c:105
-#: src/encodings.c:106
-msgid "Chinese Simplified"
-msgstr "中文（簡體）"
-
-#: src/encodings.c:107
-#: src/encodings.c:108
-#: src/encodings.c:109
-msgid "Chinese Traditional"
-msgstr "中文（正體）"
-
-#: src/encodings.c:110
-#: src/encodings.c:111
-#: src/encodings.c:112
-msgid "Japanese"
-msgstr "日文"
-
-#: src/encodings.c:113
-#: src/encodings.c:114
-#: src/encodings.c:115
-#: src/encodings.c:116
-msgid "Korean"
-msgstr "韓文"
-
-#: src/encodings.c:118
-msgid "Without encoding"
-msgstr "沒有編碼"
-
-#: src/encodings.c:211
-msgid "_West European"
-msgstr "西歐語系(_W)"
-
-#: src/encodings.c:217
-msgid "_East European"
-msgstr "東歐語系(_E)"
-
-#: src/encodings.c:223
-msgid "East _Asian"
-msgstr "東亞語系(_A)"
-
-#: src/encodings.c:229
-msgid "_SE & SW Asian"
-msgstr "東南亞及西南亞語系(_S)"
-
-#: src/encodings.c:235
-msgid "_Middle Eastern"
-msgstr "中東語系(_M)"
-
-#: src/encodings.c:241
-msgid "_Unicode"
-msgstr "萬國碼(_U)"
-
-#: src/treeviews.c:107
-msgid "Files"
-msgstr "檔案"
-
-#: src/treeviews.c:113
-msgid "Chapter"
-msgstr "章節"
-
-#: src/treeviews.c:115
-#: src/treeviews.c:137
-msgid "Section"
-msgstr "區塊"
-
-#: src/treeviews.c:117
-msgid "Sect1"
-msgstr ""
-
-#: src/treeviews.c:119
-msgid "Sect2"
-msgstr ""
-
-#: src/treeviews.c:121
-msgid "Sect3"
-msgstr ""
-
-#: src/treeviews.c:123
-msgid "Appendix"
-msgstr "附錄"
-
-#: src/treeviews.c:125
-#: src/treeviews.c:147
-#: src/treeviews.c:235
-#: src/treeviews.c:255
-msgid "Other"
-msgstr "其他"
-
-#: src/treeviews.c:133
-msgid "Command"
-msgstr "指令"
-
-#: src/treeviews.c:135
-msgid "Environment"
-msgstr "系統環境"
-
-#: src/treeviews.c:139
-msgid "Subsection"
-msgstr "子區塊"
-
-#: src/treeviews.c:141
-msgid "Subsubsection"
-msgstr "子子區塊"
-
-#: src/treeviews.c:143
-msgid "Label"
-msgstr "標籤"
-
-#: src/treeviews.c:153
-msgid "Function"
-msgstr "函式"
-
-#: src/treeviews.c:155
-#: src/treeviews.c:218
-msgid "Package"
-msgstr "套件"
-
-#: src/treeviews.c:157
-msgid "My"
-msgstr "我的"
-
-#: src/treeviews.c:159
-msgid "Local"
-msgstr "本地端"
-
-#: src/treeviews.c:161
-msgid "Our"
-msgstr "我們的"
-
-#: src/treeviews.c:174
-#: src/treeviews.c:199
-#: src/treeviews.c:221
-msgid "Methods"
-msgstr "存取方法"
-
-#: src/treeviews.c:176
-#: src/treeviews.c:197
-#: src/treeviews.c:223
-#: src/treeviews.c:243
-msgid "Classes"
-msgstr "類別"
-
-#: src/treeviews.c:178
-msgid "Singletons"
-msgstr ""
-
-#: src/treeviews.c:180
-msgid "Mixins"
-msgstr ""
-
-#: src/treeviews.c:182
-#: src/treeviews.c:249
-msgid "Variables"
-msgstr "變數"
-
-#: src/treeviews.c:184
-#: src/treeviews.c:227
-#: src/treeviews.c:245
-msgid "Members"
-msgstr "成員"
-
-#: src/treeviews.c:195
-#: src/treeviews.c:241
-msgid "Functions"
-msgstr "函式"
-
-#: src/treeviews.c:218
-msgid "Module"
-msgstr "模組"
-
-#: src/treeviews.c:225
-msgid "Interfaces"
-msgstr "介面"
-
-#: src/treeviews.c:247
-msgid "Macros"
-msgstr "巨集"
-
-#: src/treeviews.c:251
-msgid "Namespaces"
-msgstr "命名空間"
-
-#: src/treeviews.c:253
-msgid "Structs / Typedefs"
-msgstr "結構/型態定義"
-
-#: src/treeviews.c:369
-#: src/treeviews.c:421
-msgid "Hide"
-msgstr "隱藏"
-
-#: src/treeviews.c:377
-#: src/treeviews.c:429
-msgid "Hide sidebar"
-msgstr "隱藏側面欄"
-
-#: src/treeviews.c:409
-msgid "Reload"
-msgstr "重新載入"
-
-#: src/vte.c:366
-msgid "_Input Methods"
-msgstr "輸入法(_I)"
-
-#: src/keybindings.c:111
-msgid "New"
-msgstr "新增"
-
-#: src/keybindings.c:113
-msgid "Open"
-msgstr "開啟"
-
-#: src/keybindings.c:115
-msgid "Save"
-msgstr "儲存"
-
-#: src/keybindings.c:119
-msgid "Print"
-msgstr "列印"
-
-#: src/keybindings.c:121
-msgid "Close"
-msgstr "關閉"
-
-#: src/keybindings.c:123
-msgid "Close all"
-msgstr "全部關閉"
-
-#: src/keybindings.c:125
-msgid "Reload file"
-msgstr "重新載入檔案"
-
-#: src/keybindings.c:127
-msgid "Undo"
-msgstr "復原"
-
-#: src/keybindings.c:129
-msgid "Redo"
-msgstr "取消復原"
-
-#: src/keybindings.c:131
-msgid "Select All"
-msgstr "全部選取"
-
-#: src/keybindings.c:133
-msgid "Insert date"
-msgstr "插入日期/時間"
-
-#: src/keybindings.c:137
-msgid "Find Next"
-msgstr "尋找下一個"
-
-#: src/keybindings.c:139
-msgid "Find Previous"
-msgstr "尋找上一個"
-
-#: src/keybindings.c:141
-#: src/search.c:372
-msgid "Replace"
-msgstr "取代"
-
-#: src/keybindings.c:143
-#: src/search.c:507
-msgid "Find in files"
-msgstr "在一系列檔案中尋找"
-
-#: src/keybindings.c:147
-msgid "Show Colour Chooser"
-msgstr "顯示顏色選擇器"
-
-#: src/keybindings.c:149
-msgid "Fullscreen"
-msgstr "全螢幕"
-
-#: src/keybindings.c:151
-msgid "Toggle Messages Window"
-msgstr "開啟訊息視窗"
-
-#: src/keybindings.c:153
-msgid "Toggle Sidebar"
-msgstr "開啟側邊欄"
-
-#: src/keybindings.c:155
-msgid "Zoom In"
-msgstr "拉近"
-
-#: src/keybindings.c:157
-msgid "Zoom Out"
-msgstr "拉遠"
-
-#: src/keybindings.c:161
-msgid "Fold all"
-msgstr "全部折疊"
-
-#: src/keybindings.c:163
-msgid "Unfold all"
-msgstr "全部展開"
-
-#: src/keybindings.c:167
-msgid "Build"
-msgstr "建構"
-
-#: src/keybindings.c:169
-msgid "Make all"
-msgstr "建立全部"
-
-#: src/keybindings.c:174
-msgid "Make object"
+#: src/project.c:94
+#, fuzzy
+msgid "Open project"
 msgstr "建立物件"
 
-#: src/keybindings.c:176
-msgid "Run"
-msgstr "執行"
+#: src/project.c:113
+#, fuzzy
+msgid "Project files"
+msgstr "屬性"
 
-#: src/keybindings.c:178
-msgid "Run (alternative command)"
-msgstr "執行(替代的指令)"
-
-#: src/keybindings.c:180
-msgid "Build options"
-msgstr "建構選項"
-
-#: src/keybindings.c:182
-msgid "Reload symbol list"
-msgstr "重新載入符號表"
-
-#: src/keybindings.c:184
-msgid "Switch to Editor"
-msgstr "切換至編輯器"
-
-#: src/keybindings.c:186
-msgid "Switch to Scribble"
+#: src/project.c:136
+#, c-format
+msgid "Project \"%s\" closed."
 msgstr ""
 
-#: src/keybindings.c:188
-msgid "Switch to VTE"
+#: src/project.c:160
+#, fuzzy
+msgid "Project properties"
+msgstr "屬性"
+
+#: src/project.c:169
+msgid "C_reate"
 msgstr ""
 
-#: src/keybindings.c:190
-msgid "Switch to left document"
-msgstr "切換到左邊文件"
-
-#: src/keybindings.c:192
-msgid "Switch to right document"
-msgstr "切換到右邊文件"
-
-#: src/keybindings.c:195
-msgid "Duplicate line or selection"
-msgstr "複製行或選擇區域"
-
-#: src/keybindings.c:197
-msgid "Convert Selection to lower-case"
-msgstr "把選擇區域轉成小寫"
-
-#: src/keybindings.c:199
-msgid "Convert Selection to upper-case"
-msgstr "把選擇區域轉成大寫"
-
-#: src/keybindings.c:201
-msgid "Toggle line commentation"
-msgstr "註釋/取消註釋行"
-
-#: src/keybindings.c:203
-msgid "Comment line"
-msgstr "將此行註解"
-
-#: src/keybindings.c:205
-msgid "Uncomment line"
-msgstr "將此行反註解"
-
-#: src/keybindings.c:207
-msgid "Increase indent"
-msgstr "增加縮排"
-
-#: src/keybindings.c:209
-msgid "Decrease indent"
-msgstr "減少縮排"
-
-#: src/keybindings.c:212
-msgid "Goto matching brace"
-msgstr "跳至對應括號"
-
-#: src/keybindings.c:214
-msgid "Complete word"
-msgstr "自動補完文字"
-
-#: src/keybindings.c:218
-#: src/keybindings.c:221
-msgid "Show calltip"
+#: src/project.c:188
+msgid "Name:"
 msgstr ""
 
-#: src/keybindings.c:224
-msgid "Show macro list"
-msgstr "顯示巨集清單"
+#: src/project.c:200
+#, fuzzy
+msgid "Description:"
+msgstr "區塊"
 
-#: src/keybindings.c:226
-msgid "Suppress auto completion"
+#: src/project.c:217
+#, fuzzy
+msgid "Filename:"
+msgstr "越南文"
+
+#: src/project.c:236
+msgid "Base path:"
 msgstr ""
 
-#: src/keybindings.c:229
-msgid "Find Usage"
-msgstr "尋找用法"
+#: src/project.c:255
+#, fuzzy
+msgid "File patterns:"
+msgstr "中東語系(_M)"
+
+#: src/project.c:337
+#, fuzzy, c-format
+msgid ""
+"There is already an open project \"%s\". Do you want to close it before "
+"proceed?"
+msgstr "檔案 '%s' 已存在.是否真要覆寫?"
+
+#: src/project.c:366
+msgid "The specified project name is too short."
+msgstr ""
+
+#: src/project.c:372
+#, c-format
+msgid "The specified project name is too long (max. %d characters)."
+msgstr ""
+
+#: src/project.c:380
+msgid "You have specified an invalid project filename."
+msgstr ""
+
+#: src/project.c:388
+msgid "You have specified an invalid project base path."
+msgstr ""
+
+#: src/project.c:398
+msgid "The specified project base path does not exist. Should it be created?"
+msgstr ""
+
+#: src/project.c:415
+msgid "Project file could not be written."
+msgstr ""
+
+#: src/project.c:455
+#, c-format
+msgid "Project \"%s\" created."
+msgstr ""
+
+#: src/project.c:457
+#, fuzzy, c-format
+msgid "Project \"%s\" saved."
+msgstr "檔案%s已儲存."
+
+#. initialise the dialog
+#: src/project.c:500
+msgid "Choose project filename"
+msgstr ""
+
+#. initialise the dialog
+#: src/project.c:523
+msgid "Choose project base path"
+msgstr ""
+
+#: src/project.c:592
+#, c-format
+msgid "Project \"%s\" opened."
+msgstr ""
+
+#: src/project.c:596
+msgid "Project file could not be loaded."
+msgstr ""
 
 #: src/search.c:150
 msgid "_Use regular expressions"
 msgstr "使用正規式(_U)"
 
 #: src/search.c:154
-msgid "Use POSIX-like regular expressions. For detailed information about using regular expressions, please read the documentation."
+msgid ""
+"Use POSIX-like regular expressions. For detailed information about using "
+"regular expressions, please read the documentation."
 msgstr "使用類POSIX正規式. 使用正規式的詳細資訊請參考文件."
 
 #: src/search.c:161
@@ -2715,151 +2747,566 @@ msgstr "使用反斜線跳脫字元"
 
 #: src/search.c:180
 msgid ""
-"Replace \\\\, \\t, \\n"
-", \\r and \\uXXXX (Unicode chararacters) with the corresponding control characters."
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"corresponding control characters."
 msgstr ""
 
-#: src/search.c:189
-#: src/search.c:579
+#: src/search.c:189 src/search.c:631
 msgid "_Case sensitive"
 msgstr "區分大小寫(_C)"
 
-#: src/search.c:194
-#: src/search.c:585
+#: src/search.c:194 src/search.c:637
 msgid "Match only a _whole word"
 msgstr "只符合整個字詞(_w)"
 
 #: src/search.c:199
-msgid "Match only word s_tart"
-msgstr ""
+#, fuzzy
+msgid "Match from s_tart of word"
+msgstr "只符合整個字詞(_w)"
 
-#: src/search.c:258
+#: src/search.c:302
 msgid "Find"
 msgstr "尋找"
 
-#: src/search.c:274
-#: src/search.c:388
-#: src/search.c:536
+#: src/search.c:308
+#, fuzzy
+msgid "_Previous"
+msgstr "找上一個(_P)"
+
+#: src/search.c:314
+#, fuzzy
+msgid "_Next"
+msgstr "找下一個(_N)"
+
+#: src/search.c:318 src/search.c:436 src/search.c:588
 msgid "Search for:"
 msgstr "搜尋:"
 
 #. Now add the multiple match options
-#: src/search.c:300
+#: src/search.c:344
 msgid "Find All"
 msgstr "全部搜尋"
 
-#: src/search.c:304
+#: src/search.c:348
 msgid "_Mark"
 msgstr "標記(_M)"
 
-#: src/search.c:310
-#: src/search.c:445
+#: src/search.c:354 src/search.c:494
 msgid "In Sessi_on"
 msgstr "在作業階段中(_o)"
 
-#: src/search.c:315
-#: src/search.c:450
-msgid "In F_ile"
-msgstr "在檔案中(_i)"
+#: src/search.c:359 src/search.c:499
+#, fuzzy
+msgid "_In Document"
+msgstr "文件(_D)"
 
 #. close window checkbox
-#: src/search.c:321
-#: src/search.c:456
+#: src/search.c:365 src/search.c:505
 msgid "Close _dialog"
 msgstr "關閉對話方塊(_d)"
 
-#: src/search.c:326
-#: src/search.c:461
-msgid "Disable this option to do not close this dialog."
+#: src/search.c:370 src/search.c:510
+msgid "Disable this option to keep the dialog open."
 msgstr ""
 
-#: src/search.c:384
+#: src/search.c:432
 msgid "Re_place & Find"
 msgstr "取代並尋找(_p)"
 
-#: src/search.c:391
+#: src/search.c:439
 msgid "Replace with:"
 msgstr "取代為:"
 
 #. Now add the multiple replace options
-#: src/search.c:435
+#: src/search.c:484
 msgid "Replace All"
 msgstr "全部取代"
 
-#: src/search.c:438
+#: src/search.c:487
 msgid "In Se_lection"
 msgstr "在選擇區域中(_l)"
 
-#: src/search.c:440
+#: src/search.c:489
 msgid "Replace all matches found in the currently selected text"
 msgstr ""
 
-#: src/search.c:516
+#: src/search.c:567
 msgid "Directory:"
 msgstr "目錄:"
 
-#: src/search.c:555
+#: src/search.c:607
 msgid "_Fixed strings"
 msgstr "固定字串(_F)"
 
-#: src/search.c:564
+#: src/search.c:616
 msgid "_Grep regular expressions"
 msgstr ""
 
-#: src/search.c:568
-#: src/search.c:575
+#: src/search.c:620 src/search.c:627
 msgid "See grep's manual page for more information."
 msgstr ""
 
-#: src/search.c:573
+#: src/search.c:625
 msgid "_Extended regular expressions"
 msgstr "擴展正規式"
 
-#: src/search.c:590
+#: src/search.c:642
 msgid "_Invert search results"
 msgstr ""
 
-#: src/search.c:595
+#: src/search.c:647
 msgid "Invert the sense of matching, to select non-matching lines."
 msgstr ""
 
-#: src/search.c:641
+#: src/search.c:703
 msgid "Select folder"
 msgstr "選擇資料夾"
 
-#: src/search.c:931
+#: src/search.c:961
+#, c-format
+msgid "Replaced text in %u files."
+msgstr ""
+
+#: src/search.c:1007
 msgid "Invalid directory for find in files."
 msgstr "在檔案中尋找的目錄不合法."
 
-#: src/search.c:960
+#: src/search.c:1037
 msgid "No text to find."
 msgstr "找不到文字."
 
-#: src/search.c:988
+#: src/search.c:1065
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 
-#: src/search.c:1103
+#: src/search.c:1180
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "無法開啟目錄(%s)"
 
-#: src/search.c:1148
+#: src/search.c:1225
 msgid "Search failed."
 msgstr "搜尋失敗."
 
-#: src/search.c:1154
+#: src/search.c:1231
 msgid "Search completed."
 msgstr "搜尋結束."
 
-#: src/search.c:1155
-msgid "No matches found."
-msgstr "找不到符合的內容."
-
-#: src/search.c:1230
+#: src/search.c:1307
 #, c-format
 msgid "No matches found for '%s'."
 msgstr "找不到符合「%s」的內容."
 
+#: src/support.c:90 src/support.c:114
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr ""
 
+#: src/symbols.c:411 src/symbols.c:443
+msgid "Chapter"
+msgstr "章節"
+
+#: src/symbols.c:413 src/symbols.c:435
+msgid "Section"
+msgstr "區塊"
+
+#: src/symbols.c:415
+msgid "Sect1"
+msgstr ""
+
+#: src/symbols.c:417
+msgid "Sect2"
+msgstr ""
+
+#: src/symbols.c:419
+msgid "Sect3"
+msgstr ""
+
+#: src/symbols.c:421
+msgid "Appendix"
+msgstr "附錄"
+
+#: src/symbols.c:423 src/symbols.c:445 src/symbols.c:549 src/symbols.c:585
+msgid "Other"
+msgstr "其他"
+
+#: src/symbols.c:431
+msgid "Command"
+msgstr "指令"
+
+#: src/symbols.c:433
+msgid "Environment"
+msgstr "系統環境"
+
+#: src/symbols.c:437
+msgid "Subsection"
+msgstr "子區塊"
+
+#: src/symbols.c:439
+msgid "Subsubsection"
+msgstr "子子區塊"
+
+#: src/symbols.c:441
+msgid "Label"
+msgstr "標籤"
+
+#: src/symbols.c:451 src/symbols.c:535
+msgid "Package"
+msgstr "套件"
+
+#: src/symbols.c:453
+msgid "Function"
+msgstr "函式"
+
+#: src/symbols.c:455
+msgid "My"
+msgstr "我的"
+
+#: src/symbols.c:457
+msgid "Local"
+msgstr "本地端"
+
+#: src/symbols.c:459
+msgid "Our"
+msgstr "我們的"
+
+#: src/symbols.c:472 src/symbols.c:493 src/symbols.c:539 src/symbols.c:569
+msgid "Classes"
+msgstr "類別"
+
+#: src/symbols.c:474
+msgid "Singletons"
+msgstr ""
+
+#: src/symbols.c:476
+msgid "Mixins"
+msgstr ""
+
+#: src/symbols.c:478 src/symbols.c:495 src/symbols.c:541
+msgid "Methods"
+msgstr "存取方法"
+
+#: src/symbols.c:480 src/symbols.c:543 src/symbols.c:573
+msgid "Members"
+msgstr "成員"
+
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Constants"), -1);
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Members"), -1);
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
+#.
+#: src/symbols.c:482 src/symbols.c:522 src/symbols.c:583
+msgid "Variables"
+msgstr "變數"
+
+#: src/symbols.c:497 src/symbols.c:514 src/symbols.c:571
+msgid "Functions"
+msgstr "函式"
+
+#: src/symbols.c:537
+msgid "Interfaces"
+msgstr "介面"
+
+#: src/symbols.c:560
+msgid "Module"
+msgstr "模組"
+
+#: src/symbols.c:564
+msgid "Namespaces"
+msgstr "命名空間"
+
+#: src/symbols.c:575
+msgid "Structs / Typedefs"
+msgstr "結構/型態定義"
+
+#: src/symbols.c:580
+msgid "Macros"
+msgstr "巨集"
+
+#: src/tools.c:62
+msgid "Special characters"
+msgstr ""
+
+#: src/tools.c:64
+#, fuzzy
+msgid "_Insert"
+msgstr "插入日期/時間"
+
+#: src/tools.c:72
+msgid ""
+"Choose a special character from the list below and double click on it or use "
+"the button to insert it at the current cursor position."
+msgstr ""
+
+#: src/tools.c:85
+#, fuzzy
+msgid "Character"
+msgstr "章節"
+
+#: src/tools.c:91
+msgid "HTML (name)"
+msgstr ""
+
+#: src/tools.c:128
+msgid "HTML characters"
+msgstr ""
+
+#: src/tools.c:134
+msgid "ISO 8859-1 characters"
+msgstr ""
+
+#: src/tools.c:232
+msgid "Greek characters"
+msgstr ""
+
+#: src/tools.c:287
+msgid "Mathematical characters"
+msgstr ""
+
+#: src/tools.c:328
+msgid "Technical characters"
+msgstr ""
+
+#: src/tools.c:336
+msgid "Arrow characters"
+msgstr ""
+
+#: src/tools.c:349
+msgid "Punctuation characters"
+msgstr ""
+
+#: src/tools.c:365
+msgid "Miscellaneous characters"
+msgstr ""
+
+#: src/treeviews.c:121
+msgid "No tags found"
+msgstr ""
+
+#: src/treeviews.c:271 src/treeviews.c:323
+msgid "Hide"
+msgstr "隱藏"
+
+#: src/treeviews.c:279 src/treeviews.c:331
+msgid "Hide sidebar"
+msgstr "隱藏側面欄"
+
+#: src/treeviews.c:311
+msgid "Reload"
+msgstr "重新載入"
+
+#: src/ui_utils.c:113
+#, c-format
+msgid ""
+"%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. "
+"function: %s      encoding: %s %s     filetype: %s"
+msgstr ""
+
+#: src/ui_utils.c:117
+msgid "OVR"
+msgstr "覆寫"
+
+#: src/ui_utils.c:117
+msgid "INS"
+msgstr "插入"
+
+#: src/ui_utils.c:197
+#, c-format
+msgid "Font updated (%s)."
+msgstr ""
+
+#: src/ui_utils.c:385
+msgid "C Standard Library"
+msgstr "C標準函式庫"
+
+#: src/ui_utils.c:386
+msgid "ISO C99"
+msgstr ""
+
+#: src/ui_utils.c:387
+msgid "C++ (C Standard Library)"
+msgstr "C++(C標準函式庫)"
+
+#: src/ui_utils.c:388
+msgid "C++ Standard Library"
+msgstr "標準 C++ 函式庫"
+
+#: src/ui_utils.c:389
+msgid "C++ STL"
+msgstr ""
+
+#: src/ui_utils.c:455
+#, fuzzy
+msgid "Set Custom Date Format"
+msgstr "設定自定義日期格式"
+
+#: src/utils.c:348
+msgid "Do you want to reload it?"
+msgstr ""
+
+#: src/utils.c:349
+#, c-format
+msgid ""
+"The file '%s' on the disk is more recent than\n"
+"the current buffer."
+msgstr ""
+
+#: src/vte.c:190 src/vte.c:509
+msgid "Terminal"
+msgstr "終端機"
+
+#: src/vte.c:377
+msgid "_Input Methods"
+msgstr "輸入法(_I)"
+
+#: src/vte.c:505
+#, fuzzy
+msgid "Terminal plugin"
+msgstr "終端模擬"
+
+#: src/vte.c:512
+msgid ""
+"These settings for the virtual terminal emulator widget (VTE) only apply if "
+"the VTE library could be loaded."
+msgstr ""
+
+#: src/vte.c:523
+#, fuzzy
+msgid "Terminal font:"
+msgstr "終端機字型"
+
+#: src/vte.c:533
+msgid "Sets the font for the terminal widget."
+msgstr ""
+
+#: src/vte.c:535
+#, fuzzy
+msgid "Foreground color:"
+msgstr "前景顏色"
+
+#: src/vte.c:541
+#, fuzzy
+msgid "Background color:"
+msgstr "背景顏色"
+
+#: src/vte.c:551
+msgid "Sets the foreground color of the text in the terminal widget."
+msgstr ""
+
+#: src/vte.c:558
+msgid "Sets the background color of the text in the terminal widget."
+msgstr ""
+
+#: src/vte.c:561
+msgid "Scrollback lines:"
+msgstr ""
+
+#: src/vte.c:572
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget."
+msgstr ""
+
+#: src/vte.c:576
+#, fuzzy
+msgid "Terminal emulation:"
+msgstr "終端模擬"
+
+#: src/vte.c:586
+msgid ""
+"Controls how the terminal emulator should behave. Do not change this value "
+"unless you know exactly what you are doing."
+msgstr ""
+
+#: src/vte.c:588
+msgid "Shell:"
+msgstr ""
+
+#: src/vte.c:595
+msgid ""
+"Sets the path to the shell which should be started inside the terminal "
+"emulation."
+msgstr ""
+
+#: src/vte.c:612
+msgid "Scroll on keystroke"
+msgstr ""
+
+#: src/vte.c:613
+msgid "Whether to scroll to the bottom if a key was pressed."
+msgstr ""
+
+#: src/vte.c:617
+msgid "Scroll on output"
+msgstr "輸出上捲動"
+
+#: src/vte.c:618
+msgid "Whether to scroll to the bottom when output is generated."
+msgstr ""
+
+#: src/vte.c:622
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr "關閉選單捷徑鍵(預設為 F10)"
+
+#: src/vte.c:623
+msgid ""
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
+"within the VTE."
+msgstr ""
+
+#: src/vte.c:627
+msgid "Follow the path of the current file"
+msgstr ""
+
+#: src/vte.c:628
+msgid "Whether to execute \"cd $path\" when you switch between opened files."
+msgstr ""
+
+#: src/vte.c:632
+msgid "Execute programs in VTE"
+msgstr ""
+
+#: src/vte.c:633
+msgid ""
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped."
+msgstr ""
+
+#: src/win32.c:61
+msgid "Executables"
+msgstr ""
+
+#: src/win32.c:334
+msgid "Error"
+msgstr "錯誤"
+
+#: src/win32.c:340 src/win32.c:381
+msgid "Question"
+msgstr "問題"
+
+#: src/win32.c:346
+msgid "Warning"
+msgstr "警告"
+
+#: src/win32.c:352
+msgid "Information"
+msgstr "資訊"
+
+#~ msgid "Du_plicate Line"
+#~ msgstr "單行複製(_p)"
+
+#~ msgid "Find usage"
+#~ msgstr "尋找用法"
+
+#~ msgid "Symbol list font"
+#~ msgstr "符號列表字型"
+
+#~ msgid "(Unsaved)"
+#~ msgstr "(未儲存)"
+
+#~ msgid "In F_ile"
+#~ msgstr "在檔案中(_i)"

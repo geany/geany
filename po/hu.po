@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.11svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-17 13:26+0100\n"
+"POT-Creation-Date: 2007-02-14 20:21+0100\n"
 "PO-Revision-Date: 2006-12-13 23:15+0100\n"
 "Last-Translator: kilo <kg_kilo@freemail.hu>\n"
 "Language-Team: Hungarian <geany-i18n@uvena.de>\n"
@@ -19,1325 +19,327 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: src/main.c:87
-msgid "use an alternate configuration directory"
-msgstr "másik konfigurációs könyvtár használata"
+#: src/about.c:122
+msgid "About Geany"
+msgstr "Geany verzió"
 
-#: src/main.c:88
-msgid "runs in debug mode (means being verbose)"
-msgstr "hibakereső üzemmódban fut (bőbeszédű)"
+#: src/about.c:171
+msgid "A fast and lightweight IDE"
+msgstr "Gyors és pehelykönnyű IDE"
 
-#: src/main.c:91
-msgid "don't open files in a running instance, force opening a new instance"
-msgstr "ne nyisson meg fájlokat egy már futó példányban, új példányt indítson"
-
-#: src/main.c:93
-msgid "set initial line number for the first opened file"
-msgstr "állítsa a kezdő sorszámot az első megnyitott fájlhoz"
-
-#: src/main.c:94
-msgid "don't show message window at startup"
-msgstr "induláskor ne mutasson üzenetablakot"
-
-#: src/main.c:95
-msgid "don't load auto completion data (see documentation)"
-msgstr "ne töltse be az automatikus kiegészítés adatokat (ld. dokumentáció)"
-
-#: src/main.c:96
-msgid "don't load the previous session's files"
-msgstr "ne töltse be az előző munkamenet fájljait"
-
-#: src/main.c:98
-msgid "don't load terminal support"
-msgstr "ne töltse be a terminál támogatást"
-
-#: src/main.c:99
-msgid "filename of libvte.so"
-msgstr "libvte.so fájlneve"
-
-#: src/main.c:101
-msgid "show version and exit"
-msgstr "verziószám megjelenítése és kilépés"
-
-#: src/main.c:399
-msgid " - A fast and lightweight IDE"
-msgstr " - Egy gyors és pehelykönnyű IDE"
-
-#: src/main.c:409
+#: src/about.c:192
 #, c-format
-msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
-msgstr "(készült %s-on GTK %d.%d.%d, GLib %d.%d.%d verzióval)"
+msgid "(built on %s)"
+msgstr "(készült %s-on)"
 
-#: src/main.c:449
+#. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
+#: src/about.c:223
+msgid "Info"
+msgstr "Információ"
+
+#: src/about.c:235
+msgid "Developers"
+msgstr "Fejlesztők"
+
+#: src/about.c:235
+msgid "Maintainer"
+msgstr "Karbantartó"
+
+#: src/about.c:235
+msgid "developer"
+msgstr "fejlesztő"
+
+#: src/about.c:236
+msgid "translation maintainer"
+msgstr "fordítás karbantartója"
+
+#: src/about.c:236
+msgid "Translators"
+msgstr "Fordítók"
+
+#: src/about.c:237
+msgid "language"
+msgstr "nyelv"
+
+#: src/about.c:243
+msgid "Credits"
+msgstr "Közreműködők"
+
+#: src/about.c:256
+msgid "License"
+msgstr "Licenc"
+
+#: src/build.c:155
+#, c-format
+msgid "Failed to view %s (make sure it is already compiled)"
+msgstr ""
+"Nem sikerült megjeleníteni %s-t (bizonyosodjon meg arról, hogy már le van-e "
+"fordítva)"
+
+#: src/build.c:188 src/build.c:584
 #, c-format
 msgid ""
-"Configuration directory could not be created (%s).\n"
-"There could be some problems using Geany without a configuration directory.\n"
-"Start Geany anyway?"
+"Could not find terminal '%s' (check path for Terminal tool setting in "
+"Preferences)"
 msgstr ""
-"A konfigurációs könyvtárat nem lehetett létrehozni (%s).\n"
-"Problémák léphetnek fel, ha a Geany-t konfigurációs könyvtár nélkül "
-"használja.\n"
-"Mindenképpen elindítja a Geany-t?"
+"'%s' terminált nem található (ellenőrizze a terminál elérési útját a "
+"Beállítások között)"
 
-#: src/main.c:575
+#: src/build.c:202 src/build.c:621
 #, c-format
-msgid "This is Geany %s."
-msgstr "Ez a Geany  %s."
+msgid "Failed to execute %s (start-script could not be created)"
+msgstr ""
+"%s végrehajtása nem sikerült (az indító szkriptet nem lehetett létrehozni)"
 
-#: src/main.c:577
+#: src/build.c:230 src/build.c:455 src/build.c:666 src/search.c:1113
 #, c-format
-msgid "Configuration directory could not be created (%s)."
-msgstr "A konfigurációs könyvtárat nem lehetett létrehozni (%s)."
+msgid "Process failed (%s)"
+msgstr "Folyamat sikertelen (%s)"
 
-#: src/interface.c:245 src/interface.c:1403
-msgid "Geany"
-msgstr "Geany"
-
-#: src/interface.c:255
-msgid "_File"
-msgstr "_Fájl"
-
-#: src/interface.c:266
-msgid "New (with _Template)"
-msgstr "Új (_Sablonból)"
-
-#: src/interface.c:277 src/interface.c:334 src/interface.c:508
-#: src/interface.c:554 src/interface.c:729 src/interface.c:739
-#: src/interface.c:1911 src/interface.c:1957
-msgid "invisible"
-msgstr "láthatatlan"
-
-#: src/interface.c:289
-msgid "Recent _Files"
-msgstr "Legutóbbi _fájlok"
-
-#: src/interface.c:306
-msgid "Save A_ll"
-msgstr "_Mindet menti"
-
-#: src/interface.c:309
-msgid "Saves all open files"
-msgstr "Elment minden megnyitott fájlt"
-
-#: src/interface.c:315 src/callbacks.c:457 src/utils.c:353
-msgid "_Reload"
-msgstr "Ú_jraolvasás"
-
-#: src/interface.c:323
-msgid "R_eload As"
-msgstr "Újr_aolvasás mint"
-
-#: src/interface.c:354
-msgid "Prints the current file"
-msgstr "Kinyomtatja a jelenlegi fájlt"
-
-#: src/interface.c:365
-msgid "C_lose All"
-msgstr "Öss_zeset bezár"
-
-#: src/interface.c:368
-msgid "Closes all open files"
-msgstr "Bezár minden megnyitott fájlt"
-
-#: src/interface.c:382 src/interface.c:1003
-msgid "Quit Geany"
-msgstr "Kilépés a Geany-ből"
-
-#: src/interface.c:384
-msgid "_Edit"
-msgstr "S_zerkesztés"
-
-#: src/interface.c:425 src/interface.c:1812
-msgid "Select _All"
-msgstr "_Mindet kijelöli"
-
-#: src/interface.c:434 src/interface.c:1838
-msgid "_Format"
-msgstr "_Formázás"
-
-#: src/interface.c:437
-msgid "Convert the case of the current selection"
+#: src/build.c:340 src/build.c:545
+#, fuzzy
+msgid "Command stopped because the current file has no extension."
 msgstr "A jelenlegi kiválasztás kis/nagybetűssé tétele"
 
-#: src/interface.c:442 src/interface.c:1845
-msgid "Convert Selection to _Lower-case"
-msgstr "Kivá_lasztás kisbetűssé alakítása"
+#: src/build.c:364
+#, c-format
+msgid "Something very strange is occurred, could not stat %s (%s)."
+msgstr "Valami nagyon furcsa történt, nem sikerült stat %s (%s)."
 
-#: src/interface.c:446 src/interface.c:1849
-msgid "Convert Selection to _Upper-case"
-msgstr "Kiválasztás _nagybetűssé alakítása"
+#: src/build.c:443
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s (%s könyvtárban)"
 
-#: src/interface.c:455 src/interface.c:1858
-msgid "_Comment Line(s)"
-msgstr "Soro_k megjegyzésbe"
-
-#: src/interface.c:459 src/interface.c:1862
-msgid "U_ncomment Line(s)"
-msgstr "Sorok _megjegyzésből kivétele"
-
-#: src/interface.c:463 src/interface.c:1866
-msgid "_Toggle Line Commentation"
-msgstr "So_r megjegyzésbe/vissza"
-
-#: src/interface.c:467 src/interface.c:1870
-msgid "Du_plicate Line or Selection"
-msgstr "So_r vagy kiválasztás másolása"
-
-#: src/interface.c:476 src/interface.c:1879
-msgid "_Increase Indent"
-msgstr "Behúzás _növelése"
-
-#: src/interface.c:484 src/interface.c:1887
-msgid "_Decrease Indent"
-msgstr "Behúzás _csökkentése"
-
-#: src/interface.c:497
-msgid "_Insert \"include <...>\""
-msgstr "\"include <...>\" be_szúrása"
-
-#: src/interface.c:511
-msgid "I_nsert Comments"
-msgstr "_Megjegyzések beszúrása"
-
-#: src/interface.c:522 src/interface.c:1925
-msgid "Insert ChangeLog Entry"
-msgstr "ChangeLog bejegyzés beszúrása"
-
-#: src/interface.c:525 src/interface.c:1928
-msgid "Inserts a typical ChangeLog entry in the current file"
-msgstr "Tipikus ChangeLog megjegyzést illeszt a jelenlegi fájlba"
-
-#: src/interface.c:527 src/interface.c:1930
-msgid "Insert File Header"
-msgstr "Fájl fejléc beszúrása"
-
-#: src/interface.c:530 src/interface.c:1933
-msgid "Inserts a file header at the beginning of the file"
-msgstr "Fájl fejlécet illeszt a fájl elejére"
-
-#: src/interface.c:532 src/interface.c:1935
-msgid "Insert Function Description"
-msgstr "Függvény leírás beszúrása"
-
-#: src/interface.c:535 src/interface.c:1938
-msgid "Inserts a description before the current function"
-msgstr "Függvény leírást illeszt a jelenlegi függvény elé"
-
-#: src/interface.c:537 src/interface.c:1940
-msgid "Insert Multiline Comment"
-msgstr "Többsoros megjegyzés beszúrása"
-
-#: src/interface.c:540 src/interface.c:1943
-msgid "Inserts a multiline comment"
-msgstr "Többsoros megjegyzést illeszt be"
-
-#: src/interface.c:542 src/interface.c:1945
-msgid "Insert GPL Notice"
-msgstr "GPL megjegyzés beszúrása"
-
-#: src/interface.c:545 src/interface.c:1948
-msgid "Inserts a GPL notice (should be done at the beginning of the file)"
-msgstr "GPL megjegyzést illeszt be (a fájl elejére kell kerüljön)"
-
-#: src/interface.c:547 src/interface.c:1950
-msgid "Insert Dat_e"
-msgstr "_Dátum beszúrása"
-
-#: src/interface.c:566
-msgid "_Search"
-msgstr "_Keresés"
-
-#: src/interface.c:577
-msgid "Find _Next"
-msgstr "Kö_vetkező találat"
-
-#: src/interface.c:581
-msgid "Find _Previous"
-msgstr "Elő_ző találat"
-
-#: src/interface.c:585
-msgid "Find in F_iles"
-msgstr "Keresés _fájlokban"
-
-#: src/interface.c:589 src/search.c:385
-msgid "_Replace"
-msgstr "_Csere"
-
-#: src/interface.c:602
-msgid "Next _Message"
-msgstr "_Következő üzenetek"
-
-#: src/interface.c:611
-msgid "_Go to Line"
-msgstr "Ugrá_s sorra"
-
-#: src/interface.c:619 src/dialogs.c:77
-msgid "_View"
-msgstr "_Nézet"
-
-#: src/interface.c:626
-msgid "Change _Font"
-msgstr "_Betűtípus cseréje"
-
-#: src/interface.c:629
-msgid "Change the default font"
-msgstr "Lecseréli az alapértelmezett betűtípust"
-
-#: src/interface.c:640
-msgid "Full_screen"
-msgstr "_Teljes képernyő"
-
-#: src/interface.c:644
-msgid "Show Message _Window"
-msgstr "Üzenet _ablak megjelenítése"
-
-#: src/interface.c:647
-msgid "Toggle the window with status and compiler messages on and off"
+#: src/build.c:560
+#, c-format
+msgid "Failed to execute %s (make sure it is already built)"
 msgstr ""
-"Ki/bekapcsolja az állapotokat és fordítóüzeneteket megjelenítő ablakot "
+"%s végrehajtása nem sikerült (bizonyosodjon meg arról, hogy build megtörtént-"
+"e)"
 
-#: src/interface.c:650
-msgid "Show _Toolbar"
-msgstr "_Eszköztár megjelenítése"
+#: src/build.c:598
+#, c-format
+msgid "Failed to change the working directory to %s"
+msgstr "Nem sikerült a munkakönyvtárat átállítani erre: %s"
 
-#: src/interface.c:653
-msgid "Toggle the toolbar on and off"
-msgstr "Ki/bekapcsolja az eszköztárat"
+#: src/build.c:794
+msgid "Compilation failed."
+msgstr "Fordítás sikertelen."
 
-#: src/interface.c:656
-msgid "Show Side_bar"
-msgstr "Oldal_sáv megjelenítése"
+#: src/build.c:808
+msgid "Compilation finished successfully."
+msgstr "Fordítás sikerrel lezárult."
 
-#: src/interface.c:661
-msgid "Show _Markers Margin"
-msgstr "Jelölő _margó megjelenítése"
+#. compile the code
+#: src/build.c:913
+msgid "_Compile"
+msgstr "_Fordítás"
 
-#: src/interface.c:664
-msgid ""
-"Shows or hides the small margin right of the line numbers, which is used to "
-"mark lines."
-msgstr ""
-"Ki/bekapcsolja a kis margót a sorszámoktól jobbra, ami a sorok megjelölésére "
-"szolgál."
-
-#: src/interface.c:667
-msgid "Show _Line Numbers"
-msgstr "S_orszámok megjelenítése"
-
-#: src/interface.c:670
-msgid "Shows or hides the Line Number margin."
-msgstr "Ki/bekapcsolja a sorszám margót."
-
-#: src/interface.c:690
-msgid "_Document"
-msgstr "_Dokumentum"
-
-#: src/interface.c:697
-msgid "_Line Wrapping"
-msgstr "So_rtörés"
-
-#: src/interface.c:700 src/interface.c:3157
-msgid ""
-"Wrap the line at the window border and continue it on the next line. Note: "
-"line wrapping has a high performance cost for large documents so should be "
-"disabled on slow machines."
-msgstr ""
-"Az ablak szélénél eltöri a sort és a következő sorban folytatja. Figyelem: a "
-"sortörés magas erőforrásigényű nagy dokumentumok esetén, tehát lassú gépeken "
-"ki kellene kapcsolni."
-
-#: src/interface.c:703
-msgid "_Use Auto-indentation"
-msgstr "A_utomatikus behúzás"
-
-#: src/interface.c:708
-msgid "Read _Only"
-msgstr "Csak _olvasható"
-
-#: src/interface.c:711
-msgid "Treat this file as read-only. No changes can be made."
-msgstr ""
-"A fájlt csak olvashatóként kezeli. Nem lehet benne változtatásokat tenni."
-
-#: src/interface.c:713
-msgid "_Write Unicode BOM"
-msgstr "Ír_jon Unicode BOM-ot"
-
-#: src/interface.c:722
-msgid "Set File_type"
-msgstr "Fájl_típus megadása"
-
-#: src/interface.c:732
-msgid "Set _Encoding"
-msgstr "Kódolás m_egadása"
-
-#: src/interface.c:742
-msgid "Set Line E_ndings"
-msgstr "Sorvégek b_eállítása"
-
-#: src/interface.c:749
-msgid "Convert and Set to _CR/LF (Win)"
-msgstr "Beállítás és átalakítás _CR/LF-re (Win)"
-
-#: src/interface.c:755
-msgid "Convert and Set to _LF (Unix)"
-msgstr "Beállítás és átalakítás _LF-re (Unix)"
-
-#: src/interface.c:761
-msgid "Convert and Set to CR (_Mac)"
-msgstr "Beállítás és átalakítás _CR-re (Mac)"
-
-#: src/interface.c:772
-msgid "_Replace Tabs by Spaces"
-msgstr "_Tabulátorok cseréje szóközre"
-
-#: src/interface.c:775 src/interface.c:2925
-msgid "Replaces all tabs in document by spaces."
-msgstr "A dokumentumban az összes tabulátort szóközökre cseréli."
-
-#: src/interface.c:782
-msgid "_Fold All"
-msgstr "_Minden blokk bezárása"
-
-#: src/interface.c:785
-msgid "Folds all contractible code blocks"
-msgstr "Minden kinyitható blokkot bezár"
-
-#: src/interface.c:787
-msgid "_Unfold All"
-msgstr "Minden _blokk kinyitása"
-
-#: src/interface.c:790
-msgid "Unfolds all contracted code blocks"
-msgstr "Minden kinyitható blokkot kinyit"
-
-#: src/interface.c:797
-msgid "Remove Error _Indicators"
-msgstr "H_ibajelölések eltávolítása"
-
-#: src/interface.c:800
-msgid "Removes all error indicators in the current document."
-msgstr "Elrejti az összes hibajelölést a jelenlegi dokumentumban."
+#: src/build.c:916
+msgid "Compiles the current file"
+msgstr "Lefordítja a jelenlegi fájlt"
 
 #. build the code
-#: src/interface.c:802 src/build.c:860
+#: src/build.c:925 src/interface.c:879
 msgid "_Build"
 msgstr "_Build"
 
-#: src/interface.c:806
-msgid "_Tools"
-msgstr "Es_zközök"
+#: src/build.c:929
+msgid "Builds the current file (generate an executable file)"
+msgstr "Build-eli a jelenlegi fájlt (végrehajtható állományt hoz létre)"
 
-#: src/interface.c:813
-msgid "_Colour Chooser"
-msgstr "_Színválasztó"
+#. build the code with make all
+#: src/build.c:939 src/build.c:1061
+msgid "_Make All"
+msgstr "_Make mindet"
 
-#: src/interface.c:816 src/interface.c:941
-msgid ""
-"Open a color chooser dialog, to interactively pick colors from a palette."
+#: src/build.c:942 src/build.c:1064
+msgid "Builds the current file with the make tool and the default target"
 msgstr ""
-"Megnyit egy színválasztó dialógus ablakot, hogy interaktív módon lehessek "
-"egy palettáról színt választani."
+"Build-eli a jelenlegi fájlt a make eszközzel és az alapértelmezett "
+"célállománnyal"
 
-#: src/interface.c:822
-msgid "_Word Count"
-msgstr "_Szószámlálás"
+#. build the code with make custom
+#: src/build.c:950 src/build.c:1072
+msgid "Make Custom _Target"
+msgstr "Egyedi cél készí_tése"
 
-#: src/interface.c:825
-msgid ""
-"Counts the words and characters in the current selection or the whole "
-"document"
+#: src/build.c:954 src/build.c:1076
+msgid "Builds the current file with the make tool and the specified target"
 msgstr ""
-"Megszámolja a szavakat és karaktereket a jelenlegi kijelölésben vagy a "
-"teljes dokumentumban"
+"Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
 
-#: src/interface.c:827
-msgid "_Insert Special HTML Characters"
-msgstr "Spec_iális HTML karakterek beszúrása"
+#. build the code with make object
+#: src/build.c:961
+msgid "Make _Object"
+msgstr "Cél _készítése"
 
-#: src/interface.c:831
-msgid "_Help"
-msgstr "_Súgó"
+#: src/build.c:965
+msgid "Compiles the current file using the make tool"
+msgstr "Lefordítja a jelenlegi fájlt a make eszköz segítségével"
 
-#: src/interface.c:842
-msgid "_Keyboard Shortcuts"
-msgstr "Gyorsbillentyű_k"
+#. next error
+#: src/build.c:977 src/build.c:1088
+msgid "_Next Error"
+msgstr "Kö_vetkező hiba"
 
-#: src/interface.c:845
-msgid "Shows a list of all keyboard shortcuts for Geany."
-msgstr "Megjeleníti a Geany által használt gyorsbillentyűket."
-
-#: src/interface.c:847
-msgid "_Website"
-msgstr "_Honlap"
-
-#: src/interface.c:870
-msgid "Create a new file"
-msgstr "Új fájl létrehozása"
-
-#: src/interface.c:876
-msgid "Open an existing file"
-msgstr "Létező fájl megnyitása"
-
-#: src/interface.c:881
-msgid "Save the current file"
-msgstr "A jelenlegi fájl mentése"
-
-#: src/interface.c:883 src/keybindings.c:114
-msgid "Save all"
-msgstr "Mindet menti"
-
-#: src/interface.c:886
-msgid "Save all open files"
-msgstr "Minden megnyitott fájl mentése"
-
-#: src/interface.c:895
-msgid "Reload the current file from disk"
-msgstr "Újraolvassa a jelenlegi fájlt a lemezről"
-
-#: src/interface.c:900
-msgid "Close the current file"
-msgstr "A jelenlegi fájl bezárása"
-
-#: src/interface.c:909
-msgid "Undo the last modification"
-msgstr "Az utolsó változtatás visszavonása"
-
-#: src/interface.c:914
-msgid "Redo the last modification"
-msgstr "A visszavont változtatás ismételt végrehajtása"
-
-#: src/interface.c:922 src/keybindings.c:166
-msgid "Compile"
-msgstr "Fordítás"
-
-#: src/interface.c:925
-msgid "Compile the current file"
-msgstr "Lefordítja a jelenlegi fájlt"
-
-#: src/interface.c:930 src/build.c:927
+#: src/build.c:992 src/interface.c:1007
 msgid "Run or view the current file"
 msgstr "Futtatja vagy megjeleníti a jelenlegi fájlt"
 
-#: src/interface.c:938
-msgid "Color"
-msgstr "Szín"
+#. arguments
+#: src/build.c:1003
+msgid "_Set Includes and Arguments"
+msgstr "_Include állományok és argumentumok megadása"
 
-#: src/interface.c:950
-msgid "Zoom in the text"
-msgstr "Szöveg nagyítása"
-
-#: src/interface.c:955
-msgid "Zoom out the text"
-msgstr "Szöveg kicsinyítése"
-
-#: src/interface.c:968 src/interface.c:973
-msgid "Find the entered text in the current file"
-msgstr "A megadott szöveg keresése a jelenlegi fájlban"
-
-#: src/interface.c:986
-msgid "Enter a line number and jump to it."
-msgstr "Sor megadása és oda ugrás."
-
-#: src/interface.c:993
-msgid "Jump to the entered line number."
-msgstr "Ugrás a megadott sorra."
-
-#: src/interface.c:1030 src/treeviews.c:71
-msgid "Symbols"
-msgstr "Szimbólumok"
-
-#: src/interface.c:1043 src/treeviews.c:307
-msgid "Open files"
-msgstr "Megnyitott fájlok"
-
-#: src/interface.c:1078
-msgid "Status"
-msgstr "Állapot"
-
-#: src/interface.c:1092
-msgid "Compiler"
-msgstr "Fordító"
-
-#: src/interface.c:1106
-msgid "Messages"
-msgstr "Üzenetek"
-
-#: src/interface.c:1119
-msgid "Scribble"
-msgstr "Firka"
-
-#: src/interface.c:1633 src/interface.c:2780
-msgid "Images and text"
-msgstr "Képek és szöveg"
-
-#: src/interface.c:1639 src/interface.c:2812
-msgid "Images only"
-msgstr "Csak ábrák"
-
-#: src/interface.c:1645 src/interface.c:2804
-msgid "Text only"
-msgstr "Csak felirat"
-
-#: src/interface.c:1656 src/interface.c:2796
-msgid "Large icons"
-msgstr "Nagy ikonok"
-
-#: src/interface.c:1661 src/interface.c:2788
-msgid "Small icons"
-msgstr "Kis ikonok"
-
-#: src/interface.c:1671
-msgid "Hide toolbar"
-msgstr "Eszköztár elrejtése"
-
-#: src/interface.c:1900
-msgid "Insert \"include <...>\""
-msgstr "\"include <...>\" beszúrása"
-
-#: src/interface.c:1914
-msgid "Insert Comments"
-msgstr "Megjegyzések beszúrása"
-
-#: src/interface.c:1965 src/keybindings.c:232
-msgid "Find Usage"
-msgstr "Használat keresése"
-
-#: src/interface.c:1973
-msgid "Go to Tag Definition"
-msgstr "Ugrás a címke definíciójához"
-
-#: src/interface.c:1977
-msgid "Go to Tag Declaration"
-msgstr "Ugrás a címke deklarációjához"
-
-#: src/interface.c:1986
-msgid "Go to Line"
-msgstr "Ugrás sorra"
-
-#: src/interface.c:1989
-msgid "Goto to the entered line"
-msgstr "Ugrás a megadott sorra"
-
-#: src/interface.c:2361 src/keybindings.c:132
-msgid "Preferences"
-msgstr "Beállítások"
-
-#: src/interface.c:2394
-msgid "Load files from the last session"
-msgstr "Legutóbbi munkamenet fájljainak betöltése"
-
-#: src/interface.c:2398
-msgid "Opens at startup the files from the last session"
-msgstr "Induláskor megnyitja a legutóbbi munkamenetben nyitott fájlokat"
-
-#: src/interface.c:2401
-msgid "Save window position and geometry"
-msgstr "Ablakméret és elhelyezkedés mentése"
-
-#: src/interface.c:2405
-msgid "Saves the window position and geometry and restores it at the start"
-msgstr "Elmenti az ablak helyét és méretét, majd induláskor visszaállítja azt"
-
-#: src/interface.c:2408
-msgid "Load virtual terminal emulation at startup"
-msgstr "induláskor töltse be a virtuális terminál emulációt"
-
-#: src/interface.c:2410
+#: src/build.c:1008
 msgid ""
-"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
-"Disable it if you do not need it."
+"Sets the includes and library paths for the compiler and the program "
+"arguments for execution"
 msgstr ""
-"Betöltse-e a virtuális terminál emulációt (VTE) induláskor. Kapcsolja ki, ha "
-"nincs rá szüksége."
+"Megadja az include állományokat és könyvtár elérési utakat a fordítónak, "
+"valamint a végrehajtáshoz szükséges argumentumokat"
 
-#: src/interface.c:2413
-msgid "Confirm exit"
-msgstr "Kilépéskor rákérdez"
+#. DVI
+#: src/build.c:1031
+msgid "LaTeX -> DVI"
+msgstr "LaTeX -> DVI"
 
-#: src/interface.c:2417
-msgid "Shows a confirmation dialog on exit."
-msgstr "Kilépéskor megerősítő ablakot jelenít meg."
+#: src/build.c:1034
+msgid "Compiles the current file into a DVI file"
+msgstr "Lefordítja a jelenlegi fájlt egy DVI fájlba"
 
-#: src/interface.c:2420
-msgid "<b>Startup and shutdown</b>"
-msgstr "<b>Indulás és leállás</b>"
+#. PDF
+#: src/build.c:1044
+msgid "LaTeX -> PDF"
+msgstr "LaTeX -> PDF"
 
-#: src/interface.c:2439
-msgid "Beep on errors or when compilation has finished"
-msgstr "Sípoljon hibáknál vagy a fordítás végén"
+#: src/build.c:1047
+msgid "Compiles the current file into a PDF file"
+msgstr "Lefordítja a jelenlegi fájlt egy PDF fájlba"
 
-#: src/interface.c:2442
+#. DVI view
+#: src/build.c:1100
+msgid "View DVI File"
+msgstr "DVI fájl megtekintése"
+
+#: src/build.c:1105 src/build.c:1118
+msgid "Compiles and view the current file"
+msgstr "Lefordítja és megjeleníti a jelenlegi fájlt"
+
+#. PDF view
+#: src/build.c:1114
+msgid "View PDF File"
+msgstr "PDF fájl megtekintése"
+
+#. arguments
+#: src/build.c:1133 src/dialogs.c:642
+msgid "Set Arguments"
+msgstr "Argumentumok megadása"
+
+#: src/build.c:1138
+msgid "Sets the program paths and arguments"
+msgstr "Megadja a program elérési utakat és argumentumokat"
+
+#: src/build.c:1405
+msgid "Make Custom Target"
+msgstr "Egyedi cél készítése"
+
+#: src/build.c:1406
 msgid ""
-"Whether to beep if an error occured or when the compilation process has "
-"finished."
-msgstr "Sípoljon-e, ha hiba történt vagy befejeződött a fordítási folyamat."
-
-#: src/interface.c:2445
-msgid "Switch to status message list at new message"
-msgstr "Új üzenetnél váltás az állapot üzenetek listájára"
-
-#: src/interface.c:2448
-msgid ""
-"Switch to the status message tab (in the notebook window at the bottom) if a "
-"new status message arrives."
+"Enter custom options here, all entered text is passed to the make command."
 msgstr ""
-"Átváltson-e az állapot üzenetek listájára (a jegyzettömb ablakban odalenn), "
-"ha új állapot üzenet érkezik."
+"Adja meg itt az egyedi opciókat, minden bevitt szöveg átadásra kerül a make "
+"parancs számára."
 
-#: src/interface.c:2451
-msgid "Always wrap search and hide the Find dialog"
-msgstr "Mindig újbóli keresés a fájl elejétől és a Keresés ablak elrejtése"
+#: src/build.c:1445
+msgid "Failed to execute the view program"
+msgstr "Nem sikerült végrehajtani a megjelenítő programot"
 
-#: src/interface.c:2455
-msgid ""
-"Always wrap search around the document and hide the Find dialog after "
-"clicking Find Next/Previous"
-msgstr ""
-"Mindig újból keres a dokumentum elejétől, valamint elrejti a Keresés "
-"dialógusablakot a Következő/Előző keresés gomb lenyomása után"
+#: src/build.c:1464
+msgid "Failed to execute the terminal program"
+msgstr "Nem sikerült végrehajtani a terminál programot"
 
-#: src/interface.c:2458
-msgid "<b>Behaviour</b>"
-msgstr "<b>Viselkedés</b>"
-
-#: src/interface.c:2463
-msgid "General"
-msgstr "Általános"
-
-#: src/interface.c:2485
-msgid "Show symbol list"
-msgstr "Szimbólum lista megjelenítése"
-
-#: src/interface.c:2488 src/interface.c:2494
-msgid "Toggle the symbol list on and off"
-msgstr "Ki/bekapcsolja a szimbólumok listáját"
-
-#: src/interface.c:2491
-msgid "Show open files list"
-msgstr "Megnyitott fájlok listájának megjelenítése"
-
-#: src/interface.c:2497
-msgid "<b>Sidebar</b>"
-msgstr "<b>Oldalsáv</b>"
-
-#: src/interface.c:2518
-msgid "Symbol list:"
-msgstr "Szimbólum lista:"
-
-#: src/interface.c:2525 src/interface.c:2590
-msgid "Message window:"
-msgstr "Üzenet ablak:"
-
-#: src/interface.c:2532 src/interface.c:2597
-msgid "Editor:"
-msgstr "Szerkesztő:"
-
-#: src/interface.c:2544
-msgid "Sets the font for the message window"
-msgstr "Beállítja az üzenet ablakban használt betűtípust"
-
-#: src/interface.c:2552
-msgid "Sets the font for the symbol list"
-msgstr "Beállítja a szimbólum listában használt betűtípust"
-
-#: src/interface.c:2560
-msgid "Sets the editor font"
-msgstr "Beállítja a szerkesztő ablakban használt betűtípust"
-
-#: src/interface.c:2562
-msgid "<b>Fonts</b>"
-msgstr "<b>Betűtípusok</b>"
-
-#: src/interface.c:2583
-msgid "Sidebar:"
-msgstr "Oldalsáv:"
-
-#: src/interface.c:2604
-msgid "Show editor tabs"
-msgstr "Fájl fülek megjelenítése"
-
-#: src/interface.c:2615 src/interface.c:2625 src/interface.c:2635
-#: src/interface.c:2972
-msgid "Left"
-msgstr "Balra"
-
-#: src/interface.c:2616 src/interface.c:2626 src/interface.c:2636
-#: src/interface.c:2980
-msgid "Right"
-msgstr "Jobbra"
-
-#: src/interface.c:2617 src/interface.c:2627 src/interface.c:2637
-msgid "Top"
-msgstr "Fent"
-
-#: src/interface.c:2618 src/interface.c:2628 src/interface.c:2638
-msgid "Bottom"
-msgstr "Lent"
-
-#: src/interface.c:2640
-msgid "<b>Tab placement</b>"
-msgstr "<b>Fül elhelyezkedése</b>"
-
-#: src/interface.c:2645
-msgid "Interface"
-msgstr "Felület"
-
-#: src/interface.c:2664
-msgid "Show Toolbar"
-msgstr "Eszköztár megjelenítése"
-
-#: src/interface.c:2689
-msgid "Show file operation buttons"
-msgstr "Fájlművelet gombok megjelenítése"
-
-#: src/interface.c:2693
-msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
-msgstr ""
-"Megjeleníti az Új, Megnyitás, Bezárás, Mentés és Újraolvasás gombokat az "
-"eszköztáron"
-
-#: src/interface.c:2696
-msgid "Show Compile and Run"
-msgstr "Fordítás és Futtatás megjelenítése"
-
-#: src/interface.c:2700
-msgid "Display the Compile and Run buttons in the toolbar"
-msgstr "Megjeleníti a Fordítás és Futtatás gombokat az eszköztáron"
-
-#: src/interface.c:2703
-msgid "Show Colour Chooser button"
-msgstr "Színválasztó megjelenítése"
-
-#: src/interface.c:2707
-msgid "Display the Colour Chooser button in the toolbar"
-msgstr "Megjeleníti a Színválasztó gombot az eszköztáron"
-
-#: src/interface.c:2710
-msgid "Show Zoom In and Zoom Out"
-msgstr "Nagyítás és Kicsinyítés megjelenítése"
-
-#: src/interface.c:2714
-msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
-msgstr "Megjeleníti a Nagyítás és a Kicsinyítés gombokat az eszköztáron"
-
-#: src/interface.c:2717
-msgid "Show Redo and Undo buttons"
-msgstr "Újra és Visszavonás gombok megjelenítése"
-
-#: src/interface.c:2721
-msgid "Display the Redo and Undo buttons in the toolbar"
-msgstr "Megjeleníti az Újra és a Visszavonás gombokat az eszköztáron"
-
-#: src/interface.c:2724
-msgid "Show Search field"
-msgstr "Keresés mező megjelenítése"
-
-#: src/interface.c:2728
-msgid "Display the search field and button in the toolbar"
-msgstr "Megjeleníti a Keresés mezőt és gombot az eszköztáron"
-
-#: src/interface.c:2731
-msgid "Show Goto line field"
-msgstr "Sorhoz ugrás mező megjelenítése"
-
-#: src/interface.c:2735
-msgid "Display the line number field and button in the toolbar"
-msgstr "Megjeleníti a sorszám mezőt és gombot az eszköztáron"
-
-#: src/interface.c:2738
-msgid "Show Quit button"
-msgstr "Kilépés gomb megjelenítése"
-
-#: src/interface.c:2742
-msgid "Display the quit button in the toolbar"
-msgstr "Megjeleníti a Kilépés gombot az eszköztáron"
-
-#: src/interface.c:2745
-msgid "<b>Items</b>"
-msgstr "<b>Elemek</b>"
-
-#: src/interface.c:2766
-msgid "Icon style:"
-msgstr "Ikon stílus:"
-
-#: src/interface.c:2773
-msgid "Icon size:"
-msgstr "Ikon méret:"
-
-#: src/interface.c:2820
-msgid "<b>Appearance</b>"
-msgstr "<b>Megjelenés</b>"
-
-#: src/interface.c:2825
-msgid "Toolbar"
-msgstr "Eszköztár"
-
-#: src/interface.c:2853
-msgid "Tab Width:"
-msgstr "Tabulátor szélessége:"
-
-#: src/interface.c:2865
-msgid "Sets the default encoding for newly created files."
-msgstr ""
-"Beállítja az alapértelmezett kódolást újonnan létrehozott fájlok esetén."
-
-#: src/interface.c:2877
-msgid "The width in chars, which one tab character will take"
-msgstr "A tabulátor mérete karakterekben"
-
-#: src/interface.c:2882
-msgid "Default encoding:"
-msgstr "Alapértelmezett kódolás:"
-
-#: src/interface.c:2888
-msgid "<b>New files</b>"
-msgstr "<b>Új fájlok</b>"
-
-#: src/interface.c:2907
-msgid "Strip trailing spaces"
-msgstr "Sorvégi szóközök levágása"
-
-#: src/interface.c:2911
-msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr "Levágja a sorvégi szóköz és tabulátor karaktereket"
-
-#: src/interface.c:2914
-msgid "Ensure new line at file end"
-msgstr "Fájl végén legyen új sor"
-
-#: src/interface.c:2918
-msgid "Ensures that at the end of the file is a new line"
-msgstr "Biztosítja, hogy a fájl végén mindig van egy új sor karakter"
-
-#: src/interface.c:2921 src/keybindings.c:158
-msgid "Replace tabs by space"
-msgstr "Tabulátorok cseréje szóközre"
-
-#: src/interface.c:2928
-msgid "<b>Saving files</b>"
-msgstr "<b>Fájlok mentése</b>"
-
-#: src/interface.c:2949
-msgid "Placement of new file tabs:"
-msgstr "Új fájl fülek elhelyezkedése:"
-
-#: src/interface.c:2962
-msgid ""
-"Specifies the number of files which are stored in the Recent files list."
-msgstr "Megadja, hogy hány fájl jelenjen meg a Legutóbbi fájlok listáján."
-
-#: src/interface.c:2975
-msgid "File tabs will be placed on the left of the notebook"
-msgstr "Az új fájl fülek a fülek listáján balra kerülnek"
-
-#: src/interface.c:2983
-msgid "File tabs will be placed on the right of the notebook"
-msgstr "Az új fájl fülek a fülek listáján jobbra kerülnek"
-
-#: src/interface.c:2987
-msgid "Recent files list length:"
-msgstr "Legutóbbi fájlok listájának hossza:"
-
-#: src/interface.c:2995
-msgid "<b>Misc.</b>"
-msgstr "<b>Egyéb</b>"
-
-#: src/interface.c:3000 src/treeviews.c:111
-msgid "Files"
-msgstr "Fájlok"
-
-#: src/interface.c:3022
-msgid "Invert syntax highlighting colours"
-msgstr "Szintaktis jelölő színek átfordítása"
-
-#: src/interface.c:3024
-msgid "Use white text on a black background."
-msgstr "Fehér szöveg használata fekete háttérrel."
-
-#: src/interface.c:3026
-msgid "Show indentation guides"
-msgstr "Behúzás segédvonalak megjelenítése"
-
-#: src/interface.c:3029
-msgid "Shows small dotted lines to help you to use the right indentation."
-msgstr ""
-"Vékony pontvonalakat jelenít meg a helyes behúzás használatának "
-"megkönnyítésére."
-
-#: src/interface.c:3032
-msgid "Show white space"
-msgstr "Szóközök megjelenítése"
-
-#: src/interface.c:3035
-msgid "Marks spaces with dots and tabs with arrows."
-msgstr "A szóközöket pontokkal, a tabulátorokat kis nyilakkal jelöli."
-
-#: src/interface.c:3038
-msgid "Show line endings"
-msgstr "Sorvégek megjelenítése"
-
-#: src/interface.c:3041
-msgid "Show the line ending character"
-msgstr "Megjeleníti a sorvége karaktereket"
-
-#: src/interface.c:3044
-msgid "<b>Display</b>"
-msgstr "<b>Megjelenés</b>"
-
-#: src/interface.c:3065
-msgid "Long line marker:"
-msgstr "Hosszú sor jelölése:"
-
-#: src/interface.c:3072
-msgid "Long line marker color:"
-msgstr "Hosszú sor jelölésének színe:"
-
-#: src/interface.c:3079
-msgid "Type:"
-msgstr "Típus:"
-
-#: src/interface.c:3091
-msgid "Sets the color of the long line marker"
-msgstr "Megadja a hosszú sor jelző színét"
-
-#: src/interface.c:3092 src/dialogs.c:536 src/vte.c:546 src/vte.c:553
-msgid "Color Chooser"
-msgstr "Színválasztó"
-
-#: src/interface.c:3100
-msgid ""
-"The long line marker is a thin vertical line in the editor. It helps to mark "
-"long lines, or as a hint to break the line. Set this value to a value "
-"greater than 0 to specify the column where it should appear."
-msgstr ""
-"A hosszú sor jelző egy vékony függőleges vonal a szerkesztő ablakban. Segít "
-"megjelölni a hosszú sorokat, vagy tippet ad a sortöréshez. Adjon meg egy 0-"
-"nál nagyobb értéket annak meghatározásához, hogy hol jelenjen meg a jelölés."
-
-#: src/interface.c:3110
-msgid "Line"
-msgstr "Sor"
-
-#: src/interface.c:3113
-msgid ""
-"Prints a vertical line in the editor window at the given cursor position "
-"(see below)."
-msgstr ""
-"Függőleges vonalat húz a szerkesztő ablakban a megadott kurzorpozíciónál "
-"(ld. lejjebb)."
-
-#: src/interface.c:3117
-msgid "Background"
-msgstr "Háttér"
-
-#: src/interface.c:3120
-msgid ""
-"The background colour of characters after the given cursor position (see "
-"below) changed to the colour set below. (This is recommended if you use "
-"proportional fonts)"
-msgstr ""
-"A megadott kurzorpozíción (ld. lejjebb) túli karakterek háttérszíne ez a "
-"szín lesz. (Ez akkor ajánlott, ha proporcionális betűtípust használ)"
-
-#: src/interface.c:3124
-msgid "Disabled"
-msgstr "Kikapcsolva"
-
-#: src/interface.c:3130
-msgid "<b>Long line marker</b>"
-msgstr "<b>Hosszú sor jelző</b>"
-
-#: src/interface.c:3149
-msgid "Auto indentation"
-msgstr "Automatikus behúzás"
-
-#: src/interface.c:3152
-msgid "Add the same indentation as the previous line after pressing enter"
-msgstr "Az előző sorral megegyező behúzást alkalmazza az Enter leütése után"
-
-#: src/interface.c:3154
-msgid "Line wrapping"
-msgstr "Sortörés"
-
-#: src/interface.c:3159
-msgid "Enable folding"
-msgstr "Blokkok engedélyezése"
-
-#: src/interface.c:3162
-msgid "Whether to enable folding the code"
-msgstr "Engedélyezi-e a kód blokkokra osztását"
-
-#: src/interface.c:3165
-msgid "Unfold all children of a fold point"
-msgstr "Kinyitja egy blokk összes gyermekét"
-
-#: src/interface.c:3168
-msgid "Unfold all children of a fold point when unfolding it."
-msgstr "A blokk összes gyermekét is kinyitja a blokk  kinyitásakor."
-
-#: src/interface.c:3171
-msgid "Use indicators to show compile errors"
-msgstr "Jelölés használata fordítási hibák kijelzéséhez"
-
-#: src/interface.c:3174
-msgid ""
-"Whether to use indicators (a squiggly underline) to highlight the lines "
-"where the compiler found a warning or an error."
-msgstr ""
-"Használjon-e jelöléseket (cikkcakkos aláhúzást) azon sorok kiemelésére, ahol "
-"a fordító figyelmeztetést vagy hibát talált."
-
-#: src/interface.c:3177
-msgid "<b>Features</b>"
-msgstr "<b>Sajátságok</b>"
-
-#: src/interface.c:3196
-msgid "Construct autocompletion"
-msgstr "Konstrukciók automatikus kiegészítése"
-
-#: src/interface.c:3199
-msgid "Automatic completion of often used constructs like if and for"
-msgstr ""
-"A gyakran használt konstrukciók (mint az if és a for) automatikus "
-"kiegészítése"
-
-#: src/interface.c:3202
-msgid "XML tag autocompletion"
-msgstr "XML címke automatikus kiegészítése"
-
-#: src/interface.c:3205
-msgid "Automatic completion of open XML tags (includes HTML tags)"
-msgstr ""
-"A megnyitott XML címkék (beleértve a HTML címkéket is) automatikus "
-"kiegészítése"
-
-#: src/interface.c:3212
-msgid "Rows of autocompletion list:"
-msgstr "Automatikus kiegészítés sorainak száma:"
-
-#: src/interface.c:3221
-msgid "Number of rows to display in the autocompletion list."
-msgstr "Az automatikus kiegészítésnél megjelenítendő sorok száma."
-
-#: src/interface.c:3224
-msgid "<b>Autocompletion</b>"
-msgstr "<b>Automatikus kiegészítés</b>"
-
-#: src/interface.c:3229
-msgid "Editor"
-msgstr "Szerkesztő"
-
-#: src/interface.c:3247
-msgid "Enter tool paths below. Tools you do not need can be left blank."
-msgstr ""
-"Adja meg az eszközök elérési útját. Amelyik eszközre nincs szüksége, ott "
-"üresen lehet hagyni."
-
-#: src/interface.c:3259
-msgid "Make:"
-msgstr "Make:"
-
-#: src/interface.c:3266
-msgid "Terminal:"
-msgstr "Terminál:"
-
-#: src/interface.c:3273
-msgid "Browser:"
-msgstr "Böngésző:"
-
-#: src/interface.c:3285
-msgid "Path and options for the make tool"
-msgstr "Make eszköz elérési útja és opciói"
-
-#: src/interface.c:3292
-msgid ""
-"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
-"-e argument)"
-msgstr ""
-"Egy terminál emulátor mint az xterm, a gnome-terminal vagy a konsole "
-"(kezelnie kell a -e argumentumot)"
-
-#: src/interface.c:3299
-msgid "Path (and possibly additional arguments) to your favorite browser"
-msgstr "Elérési út (és kiegészítő argumentumok) a kedvenc böngészőjéhez"
-
-#: src/interface.c:3331
-msgid "Print command:"
-msgstr "Nyomtatás parancs:"
-
-#: src/interface.c:3343
+#: src/build.c:1523
 #, c-format
-msgid "Path to the command for printing files (use %f for the filename)."
-msgstr ""
-"Elérési út a fájl nyomtatási parancshoz (használjon %f-et a fájlnév helyén)."
+msgid "Process could not be stopped (%s)."
+msgstr "A folyamatot nem sikerült leállítani (%s)."
 
-#: src/interface.c:3355
-msgid "Grep:"
-msgstr "Grep:"
+#: src/build.c:1539
+msgid "No more build errors."
+msgstr "Nincs több fordítási hiba."
 
-#: src/interface.c:3378
-msgid "<b>Tool paths</b>"
-msgstr "<b>Eszközök elérési útjai</b>"
-
-#: src/interface.c:3383
-msgid "Tools"
-msgstr "Eszközök"
-
-#: src/interface.c:3401
-msgid ""
-"Set the information to be used in templates. See the documentation for "
-"details."
-msgstr ""
-"Adja meg a sablonokban használni kívánt információkat. A részletekhez "
-"tekintse meg a dokumentációt."
-
-#: src/interface.c:3419
-msgid "email address of the developer"
-msgstr "a fejlesztő e-mail címe"
-
-#: src/interface.c:3426
-msgid "Initials of the developer name"
-msgstr "A fejlesztő monogramja"
-
-#: src/interface.c:3428
-msgid "Initial Version:"
-msgstr "Kezdeti verzió:"
-
-#: src/interface.c:3440
-msgid "Version number, which a new file initially has"
-msgstr "Az új fájl kezdeti verziószáma"
-
-#: src/interface.c:3447
-msgid "Company name"
-msgstr "Cégnév"
-
-#: src/interface.c:3449
-msgid "Developer:"
-msgstr "Fejlesztő:"
-
-#: src/interface.c:3456
-msgid "Company:"
-msgstr "Cég:"
-
-#: src/interface.c:3463
-msgid "Mail address:"
-msgstr "E-mail cím:"
-
-#: src/interface.c:3470
-msgid "Initials:"
-msgstr "Kezdőbetűk:"
-
-#: src/interface.c:3482
-msgid "The name of the developer"
-msgstr "A fejlesztő neve"
-
-#: src/interface.c:3484
-msgid ""
-"<i>Notice: For all changes you make here to take effect, you need to restart "
-"Geany.</i>"
-msgstr ""
-"<i>Figyelem: minden itt végzett változtatáséletbe lépéséhez újra kell "
-"indítani a Geany-t.</i>"
-
-#: src/interface.c:3491
-msgid "<b>Template data</b>"
-msgstr "<b>Sablon adatok</b>"
-
-#: src/interface.c:3496
-msgid "Templates"
-msgstr "Sablonok"
-
-#: src/interface.c:3514
-msgid ""
-"Here you can change keyboard shortcuts for various actions. Select one and "
-"press the Change button to enter a new shortcut, or double click on an "
-"action to edit the string representation of the shortcut directly."
-msgstr ""
-"Itt megváltoztathatja az egyes eseményekhez rendelt gyorsbillentyűket. "
-"Válasszon ki egy eseményt, majd nyomja meg a Változtat gombot az új "
-"gyorsbillentyű megadásához. Duplakattintással közvetlentül az eseményhez "
-"rendelt gyorsbillentyű stringet is szerkesztheti."
-
-#: src/interface.c:3537
-msgid "Change"
-msgstr "Változtatás"
-
-#: src/interface.c:3541
-msgid "<b>Keyboard shortcuts</b>"
-msgstr "<b>Gyorsbillentyűk</b>"
-
-#: src/interface.c:3546
-msgid "Keybindings"
-msgstr "Billentyű hozzárendelések"
-
-#: src/callbacks.c:157
+#: src/callbacks.c:175
 msgid "Do you really want to quit?"
 msgstr "Valóban ki szeretne lépni?"
 
-#: src/callbacks.c:458
+#: src/callbacks.c:491 src/interface.c:334 src/utils.c:347
+msgid "_Reload"
+msgstr "Ú_jraolvasás"
+
+#: src/callbacks.c:492
 msgid "Any unsaved changes will be lost."
 msgstr "Minden nem mentett változtatás el fog veszni."
 
-#: src/callbacks.c:459
+#: src/callbacks.c:493
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Biztosan újra akarja olvasni '%s'-t?"
 
-#: src/callbacks.c:844
+#: src/callbacks.c:878
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "A(z) '%s' fájl már létezik. Felülírja?"
 
-#: src/callbacks.c:1214
-#, c-format
-msgid "Declaration of \"%s()\" not found"
+#: src/callbacks.c:1251
+#, fuzzy, c-format
+msgid "Forward declaration \"%s\" not found."
 msgstr "\"%s()\" deklarációja nem található"
 
-#: src/callbacks.c:1216
-#, c-format
-msgid "Definition of \"%s()\" not found"
+#: src/callbacks.c:1253
+#, fuzzy, c-format
+msgid "Definition of \"%s\" not found."
 msgstr "\"%s()\" definíciója nem található"
 
-#: src/callbacks.c:1421 src/callbacks.c:1466
+#: src/callbacks.c:1474 src/callbacks.c:1498
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "Mielőtt ezt a funkciót használná, adja meg a jelenlegi fájl típusát."
 
-#: src/callbacks.c:1578 src/ui_utils.c:557
+#: src/callbacks.c:1609 src/ui_utils.c:416
 msgid "dd.mm.yyyy"
 msgstr "nn.hh.éééé"
 
-#: src/callbacks.c:1580 src/ui_utils.c:558
+#: src/callbacks.c:1611 src/ui_utils.c:417
 msgid "mm.dd.yyyy"
 msgstr "hh.nn.éééé"
 
-#: src/callbacks.c:1582 src/ui_utils.c:559
+#: src/callbacks.c:1613 src/ui_utils.c:418
 msgid "yyyy/mm/dd"
 msgstr "éééé/hh/nn"
 
-#: src/callbacks.c:1584 src/ui_utils.c:568
+#: src/callbacks.c:1615 src/ui_utils.c:427
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "nn.hh.éééé óó:pp:mm"
 
-#: src/callbacks.c:1586 src/ui_utils.c:569
+#: src/callbacks.c:1617 src/ui_utils.c:428
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "hh.nn.éééé óó:pp:mm"
 
-#: src/callbacks.c:1588 src/ui_utils.c:570
+#: src/callbacks.c:1619 src/ui_utils.c:429
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "éééé/hh/nn óó:pp:mm"
 
-#: src/callbacks.c:1590 src/ui_utils.c:579
+#: src/callbacks.c:1621 src/ui_utils.c:438
 msgid "Use Custom Date Format"
 msgstr "Egyedi dátum formátum használata"
 
-#: src/callbacks.c:1601
+#: src/callbacks.c:1632
 msgid "Custom Date Format"
 msgstr "Egyedi dátum formátum"
 
-#: src/callbacks.c:1602
+#: src/callbacks.c:1633
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function. See \"man "
@@ -1347,26 +349,25 @@ msgstr ""
 "jelölés használható, amit az ANSI C strftime függvénnyel használni lehet. "
 "További információkért ld. \"man strftime\"."
 
-#: src/callbacks.c:1621
+#: src/callbacks.c:1653
 msgid "Date format string could not be converted (possibly too long)."
 msgstr ""
 "A dátum formátum stringet nem lehetett átalakítani (feltehetően túl hosszú)."
 
-#: src/callbacks.c:2004
+#: src/callbacks.c:2041
 msgid "No more message items."
 msgstr "Nincs több üzenet."
 
-#: src/support.c:90 src/support.c:114
-#, c-format
-msgid "Couldn't find pixmap file: %s"
-msgstr "Nem található a pixmap fájl: %s"
-
 #. initialize the dialog
-#: src/dialogs.c:74 src/prefs.c:1023
+#: src/dialogs.c:75 src/prefs.c:1048
 msgid "Open File"
 msgstr "Fájl megnyitása"
 
-#: src/dialogs.c:79
+#: src/dialogs.c:78 src/interface.c:656
+msgid "_View"
+msgstr "_Nézet"
+
+#: src/dialogs.c:80
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
@@ -1374,24 +375,24 @@ msgstr ""
 "Csak olvasható módban nyitja meg a fájlt. Ha egynél több fájlt választ "
 "megnyitásra, mind csak olvashatóként nyílik meg."
 
-#: src/dialogs.c:112
+#: src/dialogs.c:113
 msgid "Detect by file extension"
 msgstr "Fájl kiterjesztés alapján megállapít"
 
-#: src/dialogs.c:123
+#: src/dialogs.c:124
 msgid "Detect from file"
 msgstr "Fájlból megállapít"
 
 #. line 1 with checkbox and encoding combo
-#: src/dialogs.c:169
+#: src/dialogs.c:170
 msgid "Show _hidden files"
 msgstr "_Rejtett fájlokat is megjeleníti"
 
-#: src/dialogs.c:181
+#: src/dialogs.c:182
 msgid "Set encoding:"
 msgstr "Kódolás megadása:"
 
-#: src/dialogs.c:191
+#: src/dialogs.c:192
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -1405,11 +406,11 @@ msgstr ""
 "Figyelem: ha több fájlt választ ki, mindegyik a megadott kódolással kerül "
 "megnyitásra."
 
-#: src/dialogs.c:211
+#: src/dialogs.c:212
 msgid "Set filetype:"
 msgstr "Fájltípus megadása:"
 
-#: src/dialogs.c:221
+#: src/dialogs.c:222
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -1421,91 +422,90 @@ msgstr ""
 "Figyelem: ha több fájlt választ ki, mindegyik a megadott fájltípusként kerül "
 "megnyitásra."
 
-#: src/dialogs.c:260
+#: src/dialogs.c:261
 msgid "Save File"
 msgstr "Fájl mentése"
 
-#: src/dialogs.c:346
+#: src/dialogs.c:353
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "A(z) '%s' fájl nem kerül mentésre."
 
-#: src/dialogs.c:356
+#: src/dialogs.c:363
 msgid "Do you want to save it before closing?"
 msgstr "Szeretné menteni, mielőtt bezárja?"
 
-#: src/dialogs.c:359
+#: src/dialogs.c:366
 msgid "_Don't save"
 msgstr "_Ne mentse"
 
-#: src/dialogs.c:403
+#: src/dialogs.c:410
 msgid "Choose font"
 msgstr "Betűtípus választása"
 
-#: src/dialogs.c:440
+#: src/dialogs.c:448
 msgid "Word Count"
 msgstr "Szószámlálás"
 
-#: src/dialogs.c:449
+#: src/dialogs.c:457
 msgid "selection"
 msgstr "kijelölés"
 
-#: src/dialogs.c:455
+#: src/dialogs.c:463
 msgid "whole document"
 msgstr "teljes dokumentum"
 
-#: src/dialogs.c:464
+#: src/dialogs.c:472
 msgid "Range:"
 msgstr "Tartomány:"
 
-#: src/dialogs.c:476
+#: src/dialogs.c:484
 msgid "Lines:"
 msgstr "Sorok:"
 
-#: src/dialogs.c:490
+#: src/dialogs.c:498
 msgid "Words:"
 msgstr "Szavak:"
 
-#: src/dialogs.c:504
+#: src/dialogs.c:512
 msgid "Characters:"
 msgstr "Karakterek:"
 
-#: src/dialogs.c:603 src/keybindings.c:144
+#: src/dialogs.c:544 src/interface.c:3208 src/vte.c:552 src/vte.c:559
+msgid "Color Chooser"
+msgstr "Színválasztó"
+
+#: src/dialogs.c:611 src/keybindings.c:157
 msgid "Go to line"
 msgstr "Ugrás sorra"
 
-#: src/dialogs.c:609
+#: src/dialogs.c:617
 msgid "Enter the line you want to go to:"
 msgstr "Adja meg a sor számát, ahová ugorni szeretne:"
 
-#. arguments
-#: src/dialogs.c:634 src/build.c:1068
-msgid "Set Arguments"
-msgstr "Argumentumok megadása"
-
-#: src/dialogs.c:640
+#: src/dialogs.c:648
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr ""
 "Adja meg a programokat és opciókat a (La)TeX fájlok fordításához és "
 "megtekintéséhez."
 
-#: src/dialogs.c:651
+#: src/dialogs.c:659
 msgid "DVI creation:"
 msgstr "DVI létrehozása:"
 
-#: src/dialogs.c:670
+#: src/dialogs.c:678
 msgid "PDF creation:"
 msgstr "PDF létrehozása:"
 
-#: src/dialogs.c:689
+#: src/dialogs.c:697
 msgid "DVI preview:"
 msgstr "DVI előnézet:"
 
-#: src/dialogs.c:708
+#: src/dialogs.c:716
 msgid "PDF preview:"
 msgstr "PDF előnézet:"
 
-#: src/dialogs.c:724 src/dialogs.c:839
+#: src/dialogs.c:732 src/dialogs.c:847
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
@@ -1514,31 +514,31 @@ msgstr ""
 "%f helyére a jelenlegi fájlnév kerül, pl: test_file.c\n"
 "%e helyére a fájlnév kerül, kiterjesztés nélkül, pl: test:file"
 
-#: src/dialogs.c:751
+#: src/dialogs.c:759
 msgid "Set Includes and Arguments"
 msgstr "Adja meg az include állományokat és az argumentumokat"
 
-#: src/dialogs.c:757
+#: src/dialogs.c:765
 msgid "Set the commands for building and running programs."
 msgstr "Adja meg a programok építéséhez és futtatásához szükséges parancsokat."
 
-#: src/dialogs.c:764
+#: src/dialogs.c:772
 msgid " commands"
 msgstr " parancsok"
 
-#: src/dialogs.c:779
+#: src/dialogs.c:787
 msgid "Compile:"
 msgstr "Fordítás:"
 
-#: src/dialogs.c:800
+#: src/dialogs.c:808
 msgid "Build:"
 msgstr "Build:"
 
-#: src/dialogs.c:821 src/dialogs.c:1092
+#: src/dialogs.c:829 src/dialogs.c:1101
 msgid "Execute:"
 msgstr "Végrehajtás:"
 
-#: src/dialogs.c:886
+#: src/dialogs.c:894
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -1546,131 +546,128 @@ msgstr ""
 "Hiba történt vagy nem lehetett a fájl információkat kinyerni (pl. új fájl "
 "esetén)."
 
-#: src/dialogs.c:905 src/dialogs.c:906 src/dialogs.c:907 src/dialogs.c:913
-#: src/dialogs.c:914 src/dialogs.c:915 src/utils.c:501 src/utils.c:555
-#: src/ui_utils.c:122 src/ui_utils.c:124
+#: src/dialogs.c:913 src/dialogs.c:914 src/dialogs.c:915 src/dialogs.c:921
+#: src/dialogs.c:922 src/dialogs.c:923 src/ui_utils.c:121 src/ui_utils.c:124
+#: src/utils.c:515 src/utils.c:567
 msgid "unknown"
 msgstr "ismeretlen"
 
-#: src/dialogs.c:919
+#: src/dialogs.c:927
 msgid "Properties"
 msgstr "Tulajdonságok"
 
-#: src/dialogs.c:947
+#: src/dialogs.c:955
 msgid "<b>Type:</b>"
 msgstr "<b>Típus:</b>"
 
-#: src/dialogs.c:960
+#: src/dialogs.c:968
 msgid "<b>Size:</b>"
 msgstr "<b>Méret:</b>"
 
-#: src/dialogs.c:975
+#: src/dialogs.c:983
 msgid "<b>Location:</b>"
 msgstr "<b>Hely:</b>"
 
-#: src/dialogs.c:988
+#: src/dialogs.c:996
 msgid "<b>Read-only:</b>"
 msgstr "<b>Csak olvasható:</b>"
 
-#: src/dialogs.c:995
+#: src/dialogs.c:1003
 msgid "(only inside Geany)"
 msgstr "(csak a Geany-n belül)"
 
-#: src/dialogs.c:1004
+#: src/dialogs.c:1012
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kódolás:</b>"
 
-#: src/dialogs.c:1013 src/ui_utils.c:123
+#: src/dialogs.c:1022 src/ui_utils.c:123
 msgid "(with BOM)"
 msgstr "(BOM-mal)"
 
-#: src/dialogs.c:1013 src/ui_utils.c:123
+#: src/dialogs.c:1022 src/ui_utils.c:123
 msgid "(without BOM)"
 msgstr "(BOM nélkül)"
 
-#: src/dialogs.c:1023
+#: src/dialogs.c:1032
 msgid "<b>Modified:</b>"
 msgstr "<b>Javítva:</b>"
 
-#: src/dialogs.c:1036
+#: src/dialogs.c:1045
 msgid "<b>Changed:</b>"
 msgstr "<b>Változott:</b>"
 
-#: src/dialogs.c:1049
+#: src/dialogs.c:1058
 msgid "<b>Accessed:</b>"
 msgstr "<b>Legutóbbi elérés:</b>"
 
-#: src/dialogs.c:1070
+#: src/dialogs.c:1079
 msgid "<b>Permissions:</b>"
 msgstr "<b>Engedélyek:</b>"
 
 #. Header
-#: src/dialogs.c:1078
+#: src/dialogs.c:1087
 msgid "Read:"
 msgstr "Olvasás:"
 
-#: src/dialogs.c:1085
+#: src/dialogs.c:1094
 msgid "Write:"
 msgstr "Írás:"
 
 #. Owner
-#: src/dialogs.c:1100
+#: src/dialogs.c:1109
 msgid "Owner:"
 msgstr "Tulajdonos:"
 
 #. Group
-#: src/dialogs.c:1136
+#: src/dialogs.c:1145
 msgid "Group:"
 msgstr "Csoport:"
 
 #. Other
-#: src/dialogs.c:1172
+#: src/dialogs.c:1181
 msgid "Other:"
 msgstr "Egyéb:"
 
-#: src/dialogs.c:1293
+#: src/dialogs.c:1302
 msgid "Keyboard shortcuts"
 msgstr "Gyorsbillentyűk"
 
-#: src/dialogs.c:1302
+#: src/dialogs.c:1311
 msgid "The following keyboard shortcuts are defined:"
 msgstr "A következő gyorsbillentyűk vannak definiálva:"
 
-#: src/document.c:339
+#: src/document.c:351
 #, c-format
 msgid "File %s closed."
 msgstr "%s fájl bezárva."
 
-#: src/document.c:420
+#: src/document.c:437
 msgid "New file opened."
 msgstr "Új fájl megnyitva."
 
-#: src/document.c:569
-msgid "Invalid filename"
-msgstr "Érvénytelen fájlnév"
-
-#: src/document.c:594 src/document.c:796
+#: src/document.c:587 src/document.c:872
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Nem lehetett megnyitni a(z) %s fájlt (%s)"
 
-#: src/document.c:618
-#, c-format
+#: src/document.c:610
+#, fuzzy, c-format
 msgid ""
-"The file \"%s\" could not opened properly and probably was truncated. Be "
-"aware that saving it can cause data loss.\n"
+"The file \"%s\" could not be opened properly and has been truncated. This "
+"can occur if the file contains a NULL byte. Be aware that saving it can "
+"cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
 "A(z) \"%s\" fájlt nem lehetett sikeresen megnyitni és feltehetőleg csonkolva "
 "lett. Figyeljen arra, hogy ez adatvesztéshez vezethet.\n"
 "A fájlt csak olvashatóvá tettük."
 
-#: src/document.c:641
+#: src/document.c:634
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "A(z) \"%s\" fájl nem érvényes %s."
 
-#: src/document.c:652
+#: src/document.c:643
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -1679,25 +676,29 @@ msgstr ""
 "A(z) \"%s\" fájl nem tűnik szöveges fájlnak, vagy a fájl kódolása nem "
 "támogatott."
 
-#: src/document.c:722
+#: src/document.c:711
+msgid "Invalid filename"
+msgstr "Érvénytelen fájlnév"
+
+#: src/document.c:798
 #, c-format
 msgid "File %s reloaded."
 msgstr "%s fájl újraolvasva."
 
-#: src/document.c:724
+#: src/document.c:800
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "%s fájl megnyitva (%d%s)."
 
-#: src/document.c:726
+#: src/document.c:802
 msgid ", read-only"
 msgstr ", csak olvasható"
 
-#: src/document.c:824 src/document.c:905
+#: src/document.c:900 src/document.c:983
 msgid "Error saving file."
 msgstr "Hiba a fájl mentésekor."
 
-#: src/document.c:869
+#: src/document.c:947
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -1708,43 +709,47 @@ msgstr ""
 "mentésre.\n"
 "Hibaüzenet: %s\n"
 
-#: src/document.c:893
+#: src/document.c:971
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Hiba a fájl mentésekor (%s)."
 
-#: src/document.c:936
+#: src/document.c:1014
 #, c-format
 msgid "File %s saved."
 msgstr "%s fájl elmentve."
 
-#: src/document.c:984 src/document.c:1036 src/document.c:1044
+#: src/document.c:1062 src/document.c:1114 src/document.c:1122
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" nem található."
 
-#: src/document.c:1044
+#: src/document.c:1122
 msgid "Wrap search and find again?"
 msgstr "Újbóli keresés a fájl elejétől?"
 
-#: src/document.c:1165 src/document.c:1172
+#: src/document.c:1197 src/search.c:1232
+msgid "No matches found."
+msgstr "Nincs találat."
+
+#: src/document.c:1207 src/document.c:1214
 #, c-format
 msgid "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr "%s: %d előfordulás cserélve, \"%s\" helyett \"%s\"."
 
-#: src/document.c:1377
+#: src/document.c:1468
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: src/document.c:1378
+#: src/document.c:1469
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: src/document.c:1380
+#: src/document.c:1471
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: src/document.c:1476
+#: src/document.c:1569
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -1755,440 +760,1874 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/document.c:1485
+#: src/document.c:1578
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %d)."
 msgstr "\"%s\" nyomtatása sikertelen (visszatérési érték: %d)."
 
-#: src/document.c:1490
+#: src/document.c:1583
 #, c-format
 msgid "File %s printed."
 msgstr "%s fájl kinyomtatva."
 
-#: src/utils.c:354
-msgid "Do you want to reload it?"
-msgstr "Újra akarja olvasni?"
+#: src/encodings.c:52
+msgid "Celtic"
+msgstr "Kelta"
 
-#: src/utils.c:355
-#, c-format
-msgid ""
-"The file '%s' on the disk is more recent than\n"
-"the current buffer."
-msgstr ""
-"A(z) '%s' fájl a lemezen újabb, mint a\n"
-"pufferben lévő aktuális példány."
+#: src/encodings.c:53 src/encodings.c:54
+msgid "Greek"
+msgstr "Görög"
 
-#: src/ui_utils.c:114
-#, c-format
-msgid ""
-"%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. "
-"function: %s      encoding: %s %s     filetype: %s"
-msgstr ""
-"%c  sor: % 4d oszlop: % 3d  kijelölés: % 4d   %s      mód: %s%s      akt. "
-"függvény: %s      kódolás: %s %s     fájltípus: %s"
+#: src/encodings.c:55
+msgid "Nordic"
+msgstr "Északi"
 
-#: src/ui_utils.c:118
-msgid "OVR"
-msgstr "ÁTÍR"
+#: src/encodings.c:56
+msgid "South European"
+msgstr "Dél-európai"
 
-#: src/ui_utils.c:118
-msgid "INS"
-msgstr "BESZÚR"
+#: src/encodings.c:57 src/encodings.c:58 src/encodings.c:59 src/encodings.c:60
+msgid "Western"
+msgstr "Nyugati"
 
-#: src/ui_utils.c:144
-msgid "(Unsaved)"
-msgstr "(Nincs mentve)"
+#: src/encodings.c:62 src/encodings.c:63 src/encodings.c:64
+msgid "Baltic"
+msgstr "Balti"
 
-#: src/ui_utils.c:183
-#, c-format
-msgid "Font updated (%s)."
-msgstr "Betűtípus frissítve (%s)."
+#: src/encodings.c:65 src/encodings.c:66 src/encodings.c:67
+msgid "Central European"
+msgstr "Közép-európai"
 
-#: src/ui_utils.c:217
-msgid "No tags found"
-msgstr "Nem található címke"
+#: src/encodings.c:68 src/encodings.c:69 src/encodings.c:70 src/encodings.c:71
+#: src/encodings.c:72
+msgid "Cyrillic"
+msgstr "Cirill"
 
-#: src/ui_utils.c:526
-msgid "C Standard Library"
-msgstr "C Standard Library"
+#: src/encodings.c:73
+msgid "Cyrillic/Russian"
+msgstr "Cirill/orosz"
 
-#: src/ui_utils.c:527
-msgid "ISO C99"
-msgstr "ISO C99"
+#: src/encodings.c:74
+msgid "Cyrillic/Ukrainian"
+msgstr "Cirill/ukrán"
 
-#: src/ui_utils.c:528
-msgid "C++ (C Standard Library)"
-msgstr "C++ (C Standard Library)"
+#: src/encodings.c:75
+msgid "Romanian"
+msgstr "Román"
 
-#: src/ui_utils.c:529
-msgid "C++ Standard Library"
-msgstr "C++ Standard Library"
+#: src/encodings.c:77 src/encodings.c:78 src/encodings.c:79
+msgid "Arabic"
+msgstr "Arab"
 
-#: src/ui_utils.c:530
-msgid "C++ STL"
-msgstr "C++ STL"
+#: src/encodings.c:80 src/encodings.c:81 src/encodings.c:82
+msgid "Hebrew"
+msgstr "Héber"
 
-#: src/ui_utils.c:596
-msgid "Set Custom Date Format"
-msgstr "Egyedi dátum formátum megadása"
+#: src/encodings.c:83
+msgid "Hebrew Visual"
+msgstr "Héber (vizuális)"
 
-#: src/filetypes.c:131
+#: src/encodings.c:85
+msgid "Armenian"
+msgstr "Örmény"
+
+#: src/encodings.c:86
+msgid "Georgian"
+msgstr "Grúz"
+
+#: src/encodings.c:87
+msgid "Thai"
+msgstr "Thai"
+
+#: src/encodings.c:88 src/encodings.c:89 src/encodings.c:90
+msgid "Turkish"
+msgstr "Török"
+
+#: src/encodings.c:91 src/encodings.c:92 src/encodings.c:93
+msgid "Vietnamese"
+msgstr "Vietnami"
+
+#: src/encodings.c:95 src/encodings.c:96 src/encodings.c:97 src/encodings.c:98
+#: src/encodings.c:99 src/encodings.c:100 src/encodings.c:101
+#: src/encodings.c:102
+msgid "Unicode"
+msgstr "Unicode"
+
+#: src/encodings.c:104 src/encodings.c:105 src/encodings.c:106
+#: src/encodings.c:107
+msgid "Chinese Simplified"
+msgstr "Egyszerűsített kínai"
+
+#: src/encodings.c:108 src/encodings.c:109 src/encodings.c:110
+msgid "Chinese Traditional"
+msgstr "Hagyományos kínai"
+
+#: src/encodings.c:111 src/encodings.c:112 src/encodings.c:113
+msgid "Japanese"
+msgstr "Japán"
+
+#: src/encodings.c:114 src/encodings.c:115 src/encodings.c:116
+#: src/encodings.c:117
+msgid "Korean"
+msgstr "Koreai"
+
+#: src/encodings.c:119
+msgid "Without encoding"
+msgstr "Kódolás nélkül"
+
+#: src/encodings.c:212
+msgid "_West European"
+msgstr "_Nyugat-európai"
+
+#: src/encodings.c:218
+msgid "_East European"
+msgstr "_Kelet-európai"
+
+#: src/encodings.c:224
+msgid "East _Asian"
+msgstr "Kelet-á_zsiai"
+
+#: src/encodings.c:230
+msgid "_SE & SW Asian"
+msgstr "_DK- & DNy-ázsiai"
+
+#: src/encodings.c:236
+msgid "_Middle Eastern"
+msgstr "Köz_el-keleti"
+
+#: src/encodings.c:242
+msgid "_Unicode"
+msgstr "_Unicode"
+
+#: src/filetypes.c:136
 msgid "C source file"
 msgstr "C forráskód fájl"
 
-#: src/filetypes.c:151
+#: src/filetypes.c:156
 msgid "C++ source file"
 msgstr "C++ forráskód fájl"
 
-#: src/filetypes.c:179
+#: src/filetypes.c:184
 msgid "D source file"
 msgstr "D forráskód fájl"
 
-#: src/filetypes.c:199
+#: src/filetypes.c:204
 msgid "Java source file"
 msgstr "Java forráskód fájl"
 
-#: src/filetypes.c:218
+#: src/filetypes.c:224
 msgid "Pascal source file"
 msgstr "Pascal forráskód fájl"
 
-#: src/filetypes.c:241
+#: src/filetypes.c:247
 msgid "Assembler source file"
 msgstr "Assembler forráskód fájl"
 
-#: src/filetypes.c:260
+#: src/filetypes.c:266
 msgid "Fortran source file (F77)"
 msgstr "Fortran forráskód fájl (F77)"
 
-#: src/filetypes.c:284
+#: src/filetypes.c:290
 msgid "(O)Caml source file"
 msgstr "(O)Caml forráskód fájl"
 
-#: src/filetypes.c:304
+#: src/filetypes.c:310
 msgid "Perl source file"
 msgstr "Perl forráskód fájl"
 
-#: src/filetypes.c:326
+#: src/filetypes.c:332
 msgid "PHP source file"
 msgstr "PHP forráskód fájl"
 
-#: src/filetypes.c:349
+#: src/filetypes.c:355
+#, fuzzy
+msgid "Javascript source file"
+msgstr "Java forráskód fájl"
+
+#: src/filetypes.c:374
 msgid "Python source file"
 msgstr "Python forráskód fájl"
 
-#: src/filetypes.c:369
+#: src/filetypes.c:394
 msgid "Ruby source file"
 msgstr "Ruby forráskód fájl"
 
-#: src/filetypes.c:389
+#: src/filetypes.c:414
 msgid "Tcl source file"
 msgstr "Tcl forráskód fájl"
 
-#: src/filetypes.c:410
+#: src/filetypes.c:435
+#, fuzzy
+msgid "Lua source file"
+msgstr "LaTeX forráskód fájl"
+
+#: src/filetypes.c:454
 msgid "Ferite source file"
 msgstr "Ferite forráskód fájl"
 
-#: src/filetypes.c:429
+#: src/filetypes.c:473
 msgid "Shell script file"
 msgstr "Shell szkript fájl"
 
-#: src/filetypes.c:454
+#: src/filetypes.c:498
 msgid "Makefile"
 msgstr "Make fájl"
 
-#: src/filetypes.c:475
+#: src/filetypes.c:516
 msgid "XML source file"
 msgstr "XML forráskód fájl"
 
-#: src/filetypes.c:495
+#: src/filetypes.c:534
 msgid "Docbook source file"
 msgstr "Docbook forráskód fájl"
 
-#: src/filetypes.c:514
+#: src/filetypes.c:553
 msgid "HTML source file"
 msgstr "HTML forráskód fájl"
 
-#: src/filetypes.c:535
+#: src/filetypes.c:571
 msgid "Cascading StyleSheet"
 msgstr "Cascading StyleSheet"
 
-#: src/filetypes.c:554
+#: src/filetypes.c:590
 msgid "SQL Dump file"
 msgstr "SQL fájl"
 
-#: src/filetypes.c:573
+#: src/filetypes.c:609
 msgid "LaTeX source file"
 msgstr "LaTeX forráskód fájl"
 
-#: src/filetypes.c:594
+#: src/filetypes.c:630
 msgid "O-Matrix source file"
 msgstr "O-Matrix forráskód fájl"
 
-#: src/filetypes.c:613
+#: src/filetypes.c:649
 msgid "VHDL source file"
 msgstr "VHDL forráskód fájl"
 
-#: src/filetypes.c:633
+#: src/filetypes.c:669
 msgid "Diff file"
 msgstr "Diff fájl"
 
-#: src/filetypes.c:653
+#: src/filetypes.c:686
 msgid "Config file"
 msgstr "Config fájl"
 
-#: src/filetypes.c:676
+#: src/filetypes.c:709 src/project.c:109
 msgid "All files"
 msgstr "Minden fájl"
 
-#: src/filetypes.c:685
+#: src/filetypes.c:718
 msgid "None"
 msgstr "Semmi"
 
-#: src/win32.c:60
-msgid "Executables"
-msgstr "Végrehajtható állományok"
+#: src/geany.h:50
+msgid "untitled"
+msgstr "névtelen"
 
-#: src/win32.c:333
-msgid "Error"
-msgstr "Hiba"
+#: src/interface.c:260 src/interface.c:1508
+msgid "Geany"
+msgstr "Geany"
 
-#: src/win32.c:339 src/win32.c:380
-msgid "Question"
-msgstr "Kérdés"
+#: src/interface.c:270
+msgid "_File"
+msgstr "_Fájl"
 
-#: src/win32.c:345
-msgid "Warning"
-msgstr "Figyelmeztetés"
+#: src/interface.c:281
+msgid "New (with _Template)"
+msgstr "Új (_Sablonból)"
 
-#: src/win32.c:351
-msgid "Information"
-msgstr "Információs"
+#: src/interface.c:292 src/interface.c:353 src/interface.c:527
+#: src/interface.c:578 src/interface.c:766 src/interface.c:776
+#: src/interface.c:2022 src/interface.c:2073
+msgid "invisible"
+msgstr "láthatatlan"
 
-#: src/keyfile.c:70
+#: src/interface.c:304 src/interface.c:1940
+#, fuzzy
+msgid "Open Selected F_ile"
+msgstr "Fájl megnyitása"
+
+#: src/interface.c:308
+msgid "Recent _Files"
+msgstr "Legutóbbi _fájlok"
+
+#: src/interface.c:325
+msgid "Save A_ll"
+msgstr "_Mindet menti"
+
+#: src/interface.c:328
+msgid "Saves all open files"
+msgstr "Elment minden megnyitott fájlt"
+
+#: src/interface.c:342
+msgid "R_eload As"
+msgstr "Újr_aolvasás mint"
+
+#: src/interface.c:373
+msgid "Prints the current file"
+msgstr "Kinyomtatja a jelenlegi fájlt"
+
+#: src/interface.c:384
+msgid "C_lose All"
+msgstr "Öss_zeset bezár"
+
+#: src/interface.c:387
+msgid "Closes all open files"
+msgstr "Bezár minden megnyitott fájlt"
+
+#: src/interface.c:401 src/interface.c:1080
+msgid "Quit Geany"
+msgstr "Kilépés a Geany-ből"
+
+#: src/interface.c:403
+msgid "_Edit"
+msgstr "S_zerkesztés"
+
+#: src/interface.c:444 src/interface.c:1931
+msgid "Select _All"
+msgstr "_Mindet kijelöli"
+
+#: src/interface.c:453 src/interface.c:1949
+msgid "_Format"
+msgstr "_Formázás"
+
+#: src/interface.c:456
+msgid "Convert the case of the current selection"
+msgstr "A jelenlegi kiválasztás kis/nagybetűssé tétele"
+
+#: src/interface.c:461 src/interface.c:1956
+msgid "Convert Selection to _Lower-case"
+msgstr "Kivá_lasztás kisbetűssé alakítása"
+
+#: src/interface.c:465 src/interface.c:1960
+msgid "Convert Selection to _Upper-case"
+msgstr "Kiválasztás _nagybetűssé alakítása"
+
+#: src/interface.c:474 src/interface.c:1969
+msgid "_Comment Line(s)"
+msgstr "Soro_k megjegyzésbe"
+
+#: src/interface.c:478 src/interface.c:1973
+msgid "U_ncomment Line(s)"
+msgstr "Sorok _megjegyzésből kivétele"
+
+#: src/interface.c:482 src/interface.c:1977
+msgid "_Toggle Line Commentation"
+msgstr "So_r megjegyzésbe/vissza"
+
+#: src/interface.c:486 src/interface.c:1981
+msgid "Du_plicate Line or Selection"
+msgstr "So_r vagy kiválasztás másolása"
+
+#: src/interface.c:495 src/interface.c:1990
+msgid "_Increase Indent"
+msgstr "Behúzás _növelése"
+
+#: src/interface.c:503 src/interface.c:1998
+msgid "_Decrease Indent"
+msgstr "Behúzás _csökkentése"
+
+#: src/interface.c:516
+msgid "_Insert \"include <...>\""
+msgstr "\"include <...>\" be_szúrása"
+
+#: src/interface.c:530
+msgid "I_nsert Comments"
+msgstr "_Megjegyzések beszúrása"
+
+#: src/interface.c:541 src/interface.c:2036
+msgid "Insert ChangeLog Entry"
+msgstr "ChangeLog bejegyzés beszúrása"
+
+#: src/interface.c:544 src/interface.c:2039
+msgid "Inserts a typical ChangeLog entry in the current file"
+msgstr "Tipikus ChangeLog megjegyzést illeszt a jelenlegi fájlba"
+
+#: src/interface.c:546 src/interface.c:2041
+msgid "Insert File Header"
+msgstr "Fájl fejléc beszúrása"
+
+#: src/interface.c:549 src/interface.c:2044
+msgid "Inserts a file header at the beginning of the file"
+msgstr "Fájl fejlécet illeszt a fájl elejére"
+
+#: src/interface.c:551 src/interface.c:2046
+msgid "Insert Function Description"
+msgstr "Függvény leírás beszúrása"
+
+#: src/interface.c:554 src/interface.c:2049
+msgid "Inserts a description before the current function"
+msgstr "Függvény leírást illeszt a jelenlegi függvény elé"
+
+#: src/interface.c:556 src/interface.c:2051
+msgid "Insert Multiline Comment"
+msgstr "Többsoros megjegyzés beszúrása"
+
+#: src/interface.c:559 src/interface.c:2054
+msgid "Inserts a multiline comment"
+msgstr "Többsoros megjegyzést illeszt be"
+
+#: src/interface.c:561 src/interface.c:2056
+msgid "Insert GPL Notice"
+msgstr "GPL megjegyzés beszúrása"
+
+#: src/interface.c:564 src/interface.c:2059
+msgid "Inserts a GPL notice (should be done at the beginning of the file)"
+msgstr "GPL megjegyzést illeszt be (a fájl elejére kell kerüljön)"
+
+#: src/interface.c:566
+#, fuzzy
+msgid "Insert BSD License Notice"
+msgstr "GPL megjegyzés beszúrása"
+
+#: src/interface.c:569 src/interface.c:2064
+#, fuzzy
+msgid ""
+"Inserts a BSD licence notice (should be done at the beginning of the file)"
+msgstr "GPL megjegyzést illeszt be (a fájl elejére kell kerüljön)"
+
+#: src/interface.c:571 src/interface.c:2066
+msgid "Insert Dat_e"
+msgstr "_Dátum beszúrása"
+
+#: src/interface.c:590
+msgid "_Search"
+msgstr "_Keresés"
+
+#: src/interface.c:601
+msgid "Find _Next"
+msgstr "Kö_vetkező találat"
+
+#: src/interface.c:605
+msgid "Find _Previous"
+msgstr "Elő_ző találat"
+
+#: src/interface.c:609
+msgid "Find in F_iles"
+msgstr "Keresés _fájlokban"
+
+#: src/interface.c:613 src/search.c:429
+msgid "_Replace"
+msgstr "_Csere"
+
+#: src/interface.c:626
+#, fuzzy
+msgid "Find _Selected"
+msgstr "Kö_vetkező találat"
+
+#: src/interface.c:630
+msgid "Find Pre_v Selected"
+msgstr ""
+
+#: src/interface.c:639
+msgid "Next _Message"
+msgstr "_Következő üzenetek"
+
+#: src/interface.c:648
+msgid "_Go to Line"
+msgstr "Ugrá_s sorra"
+
+#: src/interface.c:663
+msgid "Change _Font"
+msgstr "_Betűtípus cseréje"
+
+#: src/interface.c:666
+msgid "Change the default font"
+msgstr "Lecseréli az alapértelmezett betűtípust"
+
+#: src/interface.c:677
+msgid "Full_screen"
+msgstr "_Teljes képernyő"
+
+#: src/interface.c:681
+msgid "Show Message _Window"
+msgstr "Üzenet _ablak megjelenítése"
+
+#: src/interface.c:684
+msgid "Toggle the window with status and compiler messages on and off"
+msgstr ""
+"Ki/bekapcsolja az állapotokat és fordítóüzeneteket megjelenítő ablakot "
+
+#: src/interface.c:687
+msgid "Show _Toolbar"
+msgstr "_Eszköztár megjelenítése"
+
+#: src/interface.c:690
+msgid "Toggle the toolbar on and off"
+msgstr "Ki/bekapcsolja az eszköztárat"
+
+#: src/interface.c:693
+msgid "Show Side_bar"
+msgstr "Oldal_sáv megjelenítése"
+
+#: src/interface.c:698
+msgid "Show _Markers Margin"
+msgstr "Jelölő _margó megjelenítése"
+
+#: src/interface.c:701
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines."
+msgstr ""
+"Ki/bekapcsolja a kis margót a sorszámoktól jobbra, ami a sorok megjelölésére "
+"szolgál."
+
+#: src/interface.c:704
+msgid "Show _Line Numbers"
+msgstr "S_orszámok megjelenítése"
+
+#: src/interface.c:707
+msgid "Shows or hides the Line Number margin."
+msgstr "Ki/bekapcsolja a sorszám margót."
+
+#: src/interface.c:727
+msgid "_Document"
+msgstr "_Dokumentum"
+
+#: src/interface.c:734
+msgid "_Line Wrapping"
+msgstr "So_rtörés"
+
+#: src/interface.c:737 src/interface.c:3273
+msgid ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
+msgstr ""
+"Az ablak szélénél eltöri a sort és a következő sorban folytatja. Figyelem: a "
+"sortörés magas erőforrásigényű nagy dokumentumok esetén, tehát lassú gépeken "
+"ki kellene kapcsolni."
+
+#: src/interface.c:740
+msgid "_Use Auto-indentation"
+msgstr "A_utomatikus behúzás"
+
+#: src/interface.c:745
+msgid "Read _Only"
+msgstr "Csak _olvasható"
+
+#: src/interface.c:748
+msgid "Treat this file as read-only. No changes can be made."
+msgstr ""
+"A fájlt csak olvashatóként kezeli. Nem lehet benne változtatásokat tenni."
+
+#: src/interface.c:750
+msgid "_Write Unicode BOM"
+msgstr "Ír_jon Unicode BOM-ot"
+
+#: src/interface.c:759
+msgid "Set File_type"
+msgstr "Fájl_típus megadása"
+
+#: src/interface.c:769
+msgid "Set _Encoding"
+msgstr "Kódolás m_egadása"
+
+#: src/interface.c:779
+msgid "Set Line E_ndings"
+msgstr "Sorvégek b_eállítása"
+
+#: src/interface.c:786
+msgid "Convert and Set to _CR/LF (Win)"
+msgstr "Beállítás és átalakítás _CR/LF-re (Win)"
+
+#: src/interface.c:792
+msgid "Convert and Set to _LF (Unix)"
+msgstr "Beállítás és átalakítás _LF-re (Unix)"
+
+#: src/interface.c:798
+msgid "Convert and Set to CR (_Mac)"
+msgstr "Beállítás és átalakítás _CR-re (Mac)"
+
+#: src/interface.c:809
+msgid "_Replace Tabs by Spaces"
+msgstr "_Tabulátorok cseréje szóközre"
+
+#: src/interface.c:812 src/interface.c:3041
+msgid "Replaces all tabs in document by spaces."
+msgstr "A dokumentumban az összes tabulátort szóközökre cseréli."
+
+#: src/interface.c:819
+msgid "_Fold All"
+msgstr "_Minden blokk bezárása"
+
+#: src/interface.c:822
+msgid "Folds all contractible code blocks"
+msgstr "Minden kinyitható blokkot bezár"
+
+#: src/interface.c:824
+msgid "_Unfold All"
+msgstr "Minden _blokk kinyitása"
+
+#: src/interface.c:827
+msgid "Unfolds all contracted code blocks"
+msgstr "Minden kinyitható blokkot kinyit"
+
+#: src/interface.c:834
+msgid "Remove Error _Indicators"
+msgstr "H_ibajelölések eltávolítása"
+
+#: src/interface.c:837
+msgid "Removes all error indicators in the current document."
+msgstr "Elrejti az összes hibajelölést a jelenlegi dokumentumban."
+
+#: src/interface.c:839
+msgid "_Project"
+msgstr ""
+
+#: src/interface.c:846
+#, fuzzy
+msgid "_New"
+msgstr "Új"
+
+#: src/interface.c:854
+#, fuzzy
+msgid "_Open"
+msgstr "Megnyit"
+
+#: src/interface.c:862
+#, fuzzy
+msgid "_Close"
+msgstr "Bezár"
+
+#: src/interface.c:883
+msgid "_Tools"
+msgstr "Es_zközök"
+
+#: src/interface.c:890
+msgid "_Colour Chooser"
+msgstr "_Színválasztó"
+
+#: src/interface.c:893 src/interface.c:1018
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette."
+msgstr ""
+"Megnyit egy színválasztó dialógus ablakot, hogy interaktív módon lehessek "
+"egy palettáról színt választani."
+
+#: src/interface.c:899
+msgid "_Word Count"
+msgstr "_Szószámlálás"
+
+#: src/interface.c:902
+msgid ""
+"Counts the words and characters in the current selection or the whole "
+"document"
+msgstr ""
+"Megszámolja a szavakat és karaktereket a jelenlegi kijelölésben vagy a "
+"teljes dokumentumban"
+
+#: src/interface.c:904
+msgid "_Insert Special HTML Characters"
+msgstr "Spec_iális HTML karakterek beszúrása"
+
+#: src/interface.c:908
+msgid "_Help"
+msgstr "_Súgó"
+
+#: src/interface.c:919
+msgid "_Keyboard Shortcuts"
+msgstr "Gyorsbillentyű_k"
+
+#: src/interface.c:922
+msgid "Shows a list of all keyboard shortcuts for Geany."
+msgstr "Megjeleníti a Geany által használt gyorsbillentyűket."
+
+#: src/interface.c:924
+msgid "_Website"
+msgstr "_Honlap"
+
+#: src/interface.c:947
+msgid "Create a new file"
+msgstr "Új fájl létrehozása"
+
+#: src/interface.c:953
+msgid "Open an existing file"
+msgstr "Létező fájl megnyitása"
+
+#: src/interface.c:958
+msgid "Save the current file"
+msgstr "A jelenlegi fájl mentése"
+
+#: src/interface.c:960 src/keybindings.c:123
+msgid "Save all"
+msgstr "Mindet menti"
+
+#: src/interface.c:963
+msgid "Save all open files"
+msgstr "Minden megnyitott fájl mentése"
+
+#: src/interface.c:972
+msgid "Reload the current file from disk"
+msgstr "Újraolvassa a jelenlegi fájlt a lemezről"
+
+#: src/interface.c:977
+msgid "Close the current file"
+msgstr "A jelenlegi fájl bezárása"
+
+#: src/interface.c:986
+msgid "Undo the last modification"
+msgstr "Az utolsó változtatás visszavonása"
+
+#: src/interface.c:991
+msgid "Redo the last modification"
+msgstr "A visszavont változtatás ismételt végrehajtása"
+
+#: src/interface.c:999 src/keybindings.c:179
+msgid "Compile"
+msgstr "Fordítás"
+
+#: src/interface.c:1002
+msgid "Compile the current file"
+msgstr "Lefordítja a jelenlegi fájlt"
+
+#: src/interface.c:1015
+msgid "Color"
+msgstr "Szín"
+
+#: src/interface.c:1027
+msgid "Zoom in the text"
+msgstr "Szöveg nagyítása"
+
+#: src/interface.c:1032
+msgid "Zoom out the text"
+msgstr "Szöveg kicsinyítése"
+
+#: src/interface.c:1045 src/interface.c:1050
+msgid "Find the entered text in the current file"
+msgstr "A megadott szöveg keresése a jelenlegi fájlban"
+
+#: src/interface.c:1063
+msgid "Enter a line number and jump to it."
+msgstr "Sor megadása és oda ugrás."
+
+#: src/interface.c:1070
+msgid "Jump to the entered line number."
+msgstr "Ugrás a megadott sorra."
+
+#: src/interface.c:1108 src/treeviews.c:73
+msgid "Symbols"
+msgstr "Szimbólumok"
+
+#: src/interface.c:1121 src/treeviews.c:182
+msgid "Open files"
+msgstr "Megnyitott fájlok"
+
+#: src/interface.c:1156
+msgid "Status"
+msgstr "Állapot"
+
+#: src/interface.c:1170
+msgid "Compiler"
+msgstr "Fordító"
+
+#: src/interface.c:1184
+msgid "Messages"
+msgstr "Üzenetek"
+
+#: src/interface.c:1197
+msgid "Scribble"
+msgstr "Firka"
+
+#: src/interface.c:1753 src/interface.c:2896
+msgid "Images and text"
+msgstr "Képek és szöveg"
+
+#: src/interface.c:1759 src/interface.c:2928
+msgid "Images only"
+msgstr "Csak ábrák"
+
+#: src/interface.c:1765 src/interface.c:2920
+msgid "Text only"
+msgstr "Csak felirat"
+
+#: src/interface.c:1776 src/interface.c:2912
+msgid "Large icons"
+msgstr "Nagy ikonok"
+
+#: src/interface.c:1781 src/interface.c:2904
+msgid "Small icons"
+msgstr "Kis ikonok"
+
+#: src/interface.c:1791
+msgid "Hide toolbar"
+msgstr "Eszköztár elrejtése"
+
+#: src/interface.c:2011
+msgid "Insert \"include <...>\""
+msgstr "\"include <...>\" beszúrása"
+
+#: src/interface.c:2025
+msgid "Insert Comments"
+msgstr "Megjegyzések beszúrása"
+
+#: src/interface.c:2061
+#, fuzzy
+msgid "Insert BSD license Notice"
+msgstr "GPL megjegyzés beszúrása"
+
+#: src/interface.c:2081 src/keybindings.c:245
+msgid "Find Usage"
+msgstr "Használat keresése"
+
+#: src/interface.c:2089
+msgid "Go to Tag Definition"
+msgstr "Ugrás a címke definíciójához"
+
+#: src/interface.c:2093
+msgid "Go to Tag Declaration"
+msgstr "Ugrás a címke deklarációjához"
+
+#: src/interface.c:2102
+msgid "Go to Line"
+msgstr "Ugrás sorra"
+
+#: src/interface.c:2105
+msgid "Goto to the entered line"
+msgstr "Ugrás a megadott sorra"
+
+#: src/interface.c:2477 src/keybindings.c:141
+msgid "Preferences"
+msgstr "Beállítások"
+
+#: src/interface.c:2510
+msgid "Load files from the last session"
+msgstr "Legutóbbi munkamenet fájljainak betöltése"
+
+#: src/interface.c:2514
+msgid "Opens at startup the files from the last session"
+msgstr "Induláskor megnyitja a legutóbbi munkamenetben nyitott fájlokat"
+
+#: src/interface.c:2517
+msgid "Save window position and geometry"
+msgstr "Ablakméret és elhelyezkedés mentése"
+
+#: src/interface.c:2521
+msgid "Saves the window position and geometry and restores it at the start"
+msgstr "Elmenti az ablak helyét és méretét, majd induláskor visszaállítja azt"
+
+#: src/interface.c:2524
+msgid "Load virtual terminal emulation at startup"
+msgstr "induláskor töltse be a virtuális terminál emulációt"
+
+#: src/interface.c:2526
+msgid ""
+"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
+"Disable it if you do not need it."
+msgstr ""
+"Betöltse-e a virtuális terminál emulációt (VTE) induláskor. Kapcsolja ki, ha "
+"nincs rá szüksége."
+
+#: src/interface.c:2529
+msgid "Confirm exit"
+msgstr "Kilépéskor rákérdez"
+
+#: src/interface.c:2533
+msgid "Shows a confirmation dialog on exit."
+msgstr "Kilépéskor megerősítő ablakot jelenít meg."
+
+#: src/interface.c:2536
+msgid "<b>Startup and shutdown</b>"
+msgstr "<b>Indulás és leállás</b>"
+
+#: src/interface.c:2555
+msgid "Beep on errors or when compilation has finished"
+msgstr "Sípoljon hibáknál vagy a fordítás végén"
+
+#: src/interface.c:2558
+msgid ""
+"Whether to beep if an error occured or when the compilation process has "
+"finished."
+msgstr "Sípoljon-e, ha hiba történt vagy befejeződött a fordítási folyamat."
+
+#: src/interface.c:2561
+msgid "Switch to status message list at new message"
+msgstr "Új üzenetnél váltás az állapot üzenetek listájára"
+
+#: src/interface.c:2564
+msgid ""
+"Switch to the status message tab (in the notebook window at the bottom) if a "
+"new status message arrives."
+msgstr ""
+"Átváltson-e az állapot üzenetek listájára (a jegyzettömb ablakban odalenn), "
+"ha új állapot üzenet érkezik."
+
+#: src/interface.c:2567
+msgid "Always wrap search and hide the Find dialog"
+msgstr "Mindig újbóli keresés a fájl elejétől és a Keresés ablak elrejtése"
+
+#: src/interface.c:2571
+msgid ""
+"Always wrap search around the document and hide the Find dialog after "
+"clicking Find Next/Previous"
+msgstr ""
+"Mindig újból keres a dokumentum elejétől, valamint elrejti a Keresés "
+"dialógusablakot a Következő/Előző keresés gomb lenyomása után"
+
+#: src/interface.c:2574
+msgid "<b>Behaviour</b>"
+msgstr "<b>Viselkedés</b>"
+
+#: src/interface.c:2579
+msgid "General"
+msgstr "Általános"
+
+#: src/interface.c:2601
+msgid "Show symbol list"
+msgstr "Szimbólum lista megjelenítése"
+
+#: src/interface.c:2604 src/interface.c:2610
+msgid "Toggle the symbol list on and off"
+msgstr "Ki/bekapcsolja a szimbólumok listáját"
+
+#: src/interface.c:2607
+msgid "Show open files list"
+msgstr "Megnyitott fájlok listájának megjelenítése"
+
+#: src/interface.c:2613
+msgid "<b>Sidebar</b>"
+msgstr "<b>Oldalsáv</b>"
+
+#: src/interface.c:2634
+msgid "Symbol list:"
+msgstr "Szimbólum lista:"
+
+#: src/interface.c:2641 src/interface.c:2706
+msgid "Message window:"
+msgstr "Üzenet ablak:"
+
+#: src/interface.c:2648 src/interface.c:2713
+msgid "Editor:"
+msgstr "Szerkesztő:"
+
+#: src/interface.c:2660
+msgid "Sets the font for the message window"
+msgstr "Beállítja az üzenet ablakban használt betűtípust"
+
+#: src/interface.c:2668
+msgid "Sets the font for the symbol list"
+msgstr "Beállítja a szimbólum listában használt betűtípust"
+
+#: src/interface.c:2676
+msgid "Sets the editor font"
+msgstr "Beállítja a szerkesztő ablakban használt betűtípust"
+
+#: src/interface.c:2678
+msgid "<b>Fonts</b>"
+msgstr "<b>Betűtípusok</b>"
+
+#: src/interface.c:2699
+msgid "Sidebar:"
+msgstr "Oldalsáv:"
+
+#: src/interface.c:2720
+msgid "Show editor tabs"
+msgstr "Fájl fülek megjelenítése"
+
+#: src/interface.c:2731 src/interface.c:2741 src/interface.c:2751
+#: src/interface.c:3088
+msgid "Left"
+msgstr "Balra"
+
+#: src/interface.c:2732 src/interface.c:2742 src/interface.c:2752
+#: src/interface.c:3096
+msgid "Right"
+msgstr "Jobbra"
+
+#: src/interface.c:2733 src/interface.c:2743 src/interface.c:2753
+msgid "Top"
+msgstr "Fent"
+
+#: src/interface.c:2734 src/interface.c:2744 src/interface.c:2754
+msgid "Bottom"
+msgstr "Lent"
+
+#: src/interface.c:2756
+msgid "<b>Tab placement</b>"
+msgstr "<b>Fül elhelyezkedése</b>"
+
+#: src/interface.c:2761
+msgid "Interface"
+msgstr "Felület"
+
+#: src/interface.c:2780
+msgid "Show Toolbar"
+msgstr "Eszköztár megjelenítése"
+
+#: src/interface.c:2805
+msgid "Show file operation buttons"
+msgstr "Fájlművelet gombok megjelenítése"
+
+#: src/interface.c:2809
+msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
+msgstr ""
+"Megjeleníti az Új, Megnyitás, Bezárás, Mentés és Újraolvasás gombokat az "
+"eszköztáron"
+
+#: src/interface.c:2812
+msgid "Show Compile and Run"
+msgstr "Fordítás és Futtatás megjelenítése"
+
+#: src/interface.c:2816
+msgid "Display the Compile and Run buttons in the toolbar"
+msgstr "Megjeleníti a Fordítás és Futtatás gombokat az eszköztáron"
+
+#: src/interface.c:2819
+msgid "Show Colour Chooser button"
+msgstr "Színválasztó megjelenítése"
+
+#: src/interface.c:2823
+msgid "Display the Colour Chooser button in the toolbar"
+msgstr "Megjeleníti a Színválasztó gombot az eszköztáron"
+
+#: src/interface.c:2826
+msgid "Show Zoom In and Zoom Out"
+msgstr "Nagyítás és Kicsinyítés megjelenítése"
+
+#: src/interface.c:2830
+msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
+msgstr "Megjeleníti a Nagyítás és a Kicsinyítés gombokat az eszköztáron"
+
+#: src/interface.c:2833
+msgid "Show Redo and Undo buttons"
+msgstr "Újra és Visszavonás gombok megjelenítése"
+
+#: src/interface.c:2837
+msgid "Display the Redo and Undo buttons in the toolbar"
+msgstr "Megjeleníti az Újra és a Visszavonás gombokat az eszköztáron"
+
+#: src/interface.c:2840
+msgid "Show Search field"
+msgstr "Keresés mező megjelenítése"
+
+#: src/interface.c:2844
+msgid "Display the search field and button in the toolbar"
+msgstr "Megjeleníti a Keresés mezőt és gombot az eszköztáron"
+
+#: src/interface.c:2847
+msgid "Show Goto line field"
+msgstr "Sorhoz ugrás mező megjelenítése"
+
+#: src/interface.c:2851
+msgid "Display the line number field and button in the toolbar"
+msgstr "Megjeleníti a sorszám mezőt és gombot az eszköztáron"
+
+#: src/interface.c:2854
+msgid "Show Quit button"
+msgstr "Kilépés gomb megjelenítése"
+
+#: src/interface.c:2858
+msgid "Display the quit button in the toolbar"
+msgstr "Megjeleníti a Kilépés gombot az eszköztáron"
+
+#: src/interface.c:2861
+msgid "<b>Items</b>"
+msgstr "<b>Elemek</b>"
+
+#: src/interface.c:2882
+msgid "Icon style:"
+msgstr "Ikon stílus:"
+
+#: src/interface.c:2889
+msgid "Icon size:"
+msgstr "Ikon méret:"
+
+#: src/interface.c:2936
+msgid "<b>Appearance</b>"
+msgstr "<b>Megjelenés</b>"
+
+#: src/interface.c:2941
+msgid "Toolbar"
+msgstr "Eszköztár"
+
+#: src/interface.c:2969
+msgid "Tab Width:"
+msgstr "Tabulátor szélessége:"
+
+#: src/interface.c:2981
+msgid "Sets the default encoding for newly created files."
+msgstr ""
+"Beállítja az alapértelmezett kódolást újonnan létrehozott fájlok esetén."
+
+#: src/interface.c:2993
+msgid "The width in chars, which one tab character will take"
+msgstr "A tabulátor mérete karakterekben"
+
+#: src/interface.c:2998
+msgid "Default encoding:"
+msgstr "Alapértelmezett kódolás:"
+
+#: src/interface.c:3004
+msgid "<b>New files</b>"
+msgstr "<b>Új fájlok</b>"
+
+#: src/interface.c:3023
+msgid "Strip trailing spaces"
+msgstr "Sorvégi szóközök levágása"
+
+#: src/interface.c:3027
+msgid "Removes trailing spaces and tabs and the end of lines"
+msgstr "Levágja a sorvégi szóköz és tabulátor karaktereket"
+
+#: src/interface.c:3030
+msgid "Ensure new line at file end"
+msgstr "Fájl végén legyen új sor"
+
+#: src/interface.c:3034
+msgid "Ensures that at the end of the file is a new line"
+msgstr "Biztosítja, hogy a fájl végén mindig van egy új sor karakter"
+
+#: src/interface.c:3037 src/keybindings.c:171
+msgid "Replace tabs by space"
+msgstr "Tabulátorok cseréje szóközre"
+
+#: src/interface.c:3044
+msgid "<b>Saving files</b>"
+msgstr "<b>Fájlok mentése</b>"
+
+#: src/interface.c:3065
+msgid "Placement of new file tabs:"
+msgstr "Új fájl fülek elhelyezkedése:"
+
+#: src/interface.c:3078
+msgid ""
+"Specifies the number of files which are stored in the Recent files list."
+msgstr "Megadja, hogy hány fájl jelenjen meg a Legutóbbi fájlok listáján."
+
+#: src/interface.c:3091
+msgid "File tabs will be placed on the left of the notebook"
+msgstr "Az új fájl fülek a fülek listáján balra kerülnek"
+
+#: src/interface.c:3099
+msgid "File tabs will be placed on the right of the notebook"
+msgstr "Az új fájl fülek a fülek listáján jobbra kerülnek"
+
+#: src/interface.c:3103
+msgid "Recent files list length:"
+msgstr "Legutóbbi fájlok listájának hossza:"
+
+#: src/interface.c:3111
+msgid "<b>Misc.</b>"
+msgstr "<b>Egyéb</b>"
+
+#: src/interface.c:3116 src/symbols.c:405
+msgid "Files"
+msgstr "Fájlok"
+
+#: src/interface.c:3138
+msgid "Invert syntax highlighting colours"
+msgstr "Szintaktis jelölő színek átfordítása"
+
+#: src/interface.c:3140
+msgid "Use white text on a black background."
+msgstr "Fehér szöveg használata fekete háttérrel."
+
+#: src/interface.c:3142
+msgid "Show indentation guides"
+msgstr "Behúzás segédvonalak megjelenítése"
+
+#: src/interface.c:3145
+msgid "Shows small dotted lines to help you to use the right indentation."
+msgstr ""
+"Vékony pontvonalakat jelenít meg a helyes behúzás használatának "
+"megkönnyítésére."
+
+#: src/interface.c:3148
+msgid "Show white space"
+msgstr "Szóközök megjelenítése"
+
+#: src/interface.c:3151
+msgid "Marks spaces with dots and tabs with arrows."
+msgstr "A szóközöket pontokkal, a tabulátorokat kis nyilakkal jelöli."
+
+#: src/interface.c:3154
+msgid "Show line endings"
+msgstr "Sorvégek megjelenítése"
+
+#: src/interface.c:3157
+msgid "Show the line ending character"
+msgstr "Megjeleníti a sorvége karaktereket"
+
+#: src/interface.c:3160
+msgid "<b>Display</b>"
+msgstr "<b>Megjelenés</b>"
+
+#: src/interface.c:3181
+msgid "Long line marker:"
+msgstr "Hosszú sor jelölése:"
+
+#: src/interface.c:3188
+msgid "Long line marker color:"
+msgstr "Hosszú sor jelölésének színe:"
+
+#: src/interface.c:3195
+msgid "Type:"
+msgstr "Típus:"
+
+#: src/interface.c:3207
+msgid "Sets the color of the long line marker"
+msgstr "Megadja a hosszú sor jelző színét"
+
+#: src/interface.c:3216
+msgid ""
+"The long line marker is a thin vertical line in the editor. It helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
+msgstr ""
+"A hosszú sor jelző egy vékony függőleges vonal a szerkesztő ablakban. Segít "
+"megjelölni a hosszú sorokat, vagy tippet ad a sortöréshez. Adjon meg egy 0-"
+"nál nagyobb értéket annak meghatározásához, hogy hol jelenjen meg a jelölés."
+
+#: src/interface.c:3226
+msgid "Line"
+msgstr "Sor"
+
+#: src/interface.c:3229
+msgid ""
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)."
+msgstr ""
+"Függőleges vonalat húz a szerkesztő ablakban a megadott kurzorpozíciónál "
+"(ld. lejjebb)."
+
+#: src/interface.c:3233
+msgid "Background"
+msgstr "Háttér"
+
+#: src/interface.c:3236
+msgid ""
+"The background colour of characters after the given cursor position (see "
+"below) changed to the colour set below. (This is recommended if you use "
+"proportional fonts)"
+msgstr ""
+"A megadott kurzorpozíción (ld. lejjebb) túli karakterek háttérszíne ez a "
+"szín lesz. (Ez akkor ajánlott, ha proporcionális betűtípust használ)"
+
+#: src/interface.c:3240
+msgid "Disabled"
+msgstr "Kikapcsolva"
+
+#: src/interface.c:3246
+msgid "<b>Long line marker</b>"
+msgstr "<b>Hosszú sor jelző</b>"
+
+#: src/interface.c:3265
+msgid "Auto indentation"
+msgstr "Automatikus behúzás"
+
+#: src/interface.c:3268
+msgid "Add the same indentation as the previous line after pressing enter"
+msgstr "Az előző sorral megegyező behúzást alkalmazza az Enter leütése után"
+
+#: src/interface.c:3270
+msgid "Line wrapping"
+msgstr "Sortörés"
+
+#: src/interface.c:3275
+msgid "Enable folding"
+msgstr "Blokkok engedélyezése"
+
+#: src/interface.c:3278
+msgid "Whether to enable folding the code"
+msgstr "Engedélyezi-e a kód blokkokra osztását"
+
+#: src/interface.c:3281
+msgid "Unfold all children of a fold point"
+msgstr "Kinyitja egy blokk összes gyermekét"
+
+#: src/interface.c:3284
+msgid "Unfold all children of a fold point when unfolding it."
+msgstr "A blokk összes gyermekét is kinyitja a blokk  kinyitásakor."
+
+#: src/interface.c:3287
+msgid "Use indicators to show compile errors"
+msgstr "Jelölés használata fordítási hibák kijelzéséhez"
+
+#: src/interface.c:3290
+msgid ""
+"Whether to use indicators (a squiggly underline) to highlight the lines "
+"where the compiler found a warning or an error."
+msgstr ""
+"Használjon-e jelöléseket (cikkcakkos aláhúzást) azon sorok kiemelésére, ahol "
+"a fordító figyelmeztetést vagy hibát talált."
+
+#: src/interface.c:3293
+msgid "Disable Drag and Drop"
+msgstr ""
+
+#: src/interface.c:3296
+msgid ""
+"Disable drag and drop completely in the editor window so you can't drag and "
+"drop any selections within or outside of the editor window."
+msgstr ""
+
+#: src/interface.c:3299
+msgid "Use tabulators when inserting whitespace"
+msgstr ""
+
+#: src/interface.c:3302
+msgid ""
+"Whenever some whitespace is inserted by Geany it will use tabulators when "
+"enabled otherwise Geany will use just spaces."
+msgstr ""
+
+#: src/interface.c:3305
+msgid "<b>Features</b>"
+msgstr "<b>Sajátságok</b>"
+
+#: src/interface.c:3324
+msgid "Construct autocompletion"
+msgstr "Konstrukciók automatikus kiegészítése"
+
+#: src/interface.c:3327
+msgid "Automatic completion of often used constructs like if and for"
+msgstr ""
+"A gyakran használt konstrukciók (mint az if és a for) automatikus "
+"kiegészítése"
+
+#: src/interface.c:3330
+msgid "XML tag autocompletion"
+msgstr "XML címke automatikus kiegészítése"
+
+#: src/interface.c:3333
+msgid "Automatic completion of open XML tags (includes HTML tags)"
+msgstr ""
+"A megnyitott XML címkék (beleértve a HTML címkéket is) automatikus "
+"kiegészítése"
+
+#: src/interface.c:3336
+#, fuzzy
+msgid "Symbol autocompletion"
+msgstr "Konstrukciók automatikus kiegészítése"
+
+#: src/interface.c:3339
+msgid ""
+"Automatic completion of known symbols in open source file(s) (function, "
+"global variables, ...)"
+msgstr ""
+
+#: src/interface.c:3350
+msgid "Rows of autocompletion list:"
+msgstr "Automatikus kiegészítés sorainak száma:"
+
+#: src/interface.c:3359
+msgid "Number of rows to display in the autocompletion list."
+msgstr "Az automatikus kiegészítésnél megjelenítendő sorok száma."
+
+#: src/interface.c:3362
+msgid "<b>Autocompletion</b>"
+msgstr "<b>Automatikus kiegészítés</b>"
+
+#: src/interface.c:3367
+msgid "Editor"
+msgstr "Szerkesztő"
+
+#: src/interface.c:3385
+msgid "Enter tool paths below. Tools you do not need can be left blank."
+msgstr ""
+"Adja meg az eszközök elérési útját. Amelyik eszközre nincs szüksége, ott "
+"üresen lehet hagyni."
+
+#: src/interface.c:3397
+msgid "Make:"
+msgstr "Make:"
+
+#: src/interface.c:3404
+msgid "Terminal:"
+msgstr "Terminál:"
+
+#: src/interface.c:3411
+msgid "Browser:"
+msgstr "Böngésző:"
+
+#: src/interface.c:3423
+msgid "Path and options for the make tool"
+msgstr "Make eszköz elérési útja és opciói"
+
+#: src/interface.c:3430
+msgid ""
+"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
+"-e argument)"
+msgstr ""
+"Egy terminál emulátor mint az xterm, a gnome-terminal vagy a konsole "
+"(kezelnie kell a -e argumentumot)"
+
+#: src/interface.c:3437
+msgid "Path (and possibly additional arguments) to your favorite browser"
+msgstr "Elérési út (és kiegészítő argumentumok) a kedvenc böngészőjéhez"
+
+#: src/interface.c:3469
+msgid "Print command:"
+msgstr "Nyomtatás parancs:"
+
+#: src/interface.c:3481
+#, c-format
+msgid "Path to the command for printing files (use %f for the filename)."
+msgstr ""
+"Elérési út a fájl nyomtatási parancshoz (használjon %f-et a fájlnév helyén)."
+
+#: src/interface.c:3493
+msgid "Grep:"
+msgstr "Grep:"
+
+#: src/interface.c:3516
+msgid "<b>Tool paths</b>"
+msgstr "<b>Eszközök elérési útjai</b>"
+
+#: src/interface.c:3521
+msgid "Tools"
+msgstr "Eszközök"
+
+#: src/interface.c:3539
+msgid ""
+"Set the information to be used in templates. See the documentation for "
+"details."
+msgstr ""
+"Adja meg a sablonokban használni kívánt információkat. A részletekhez "
+"tekintse meg a dokumentációt."
+
+#: src/interface.c:3557
+msgid "email address of the developer"
+msgstr "a fejlesztő e-mail címe"
+
+#: src/interface.c:3564
+msgid "Initials of the developer name"
+msgstr "A fejlesztő monogramja"
+
+#: src/interface.c:3566
+msgid "Initial Version:"
+msgstr "Kezdeti verzió:"
+
+#: src/interface.c:3578
+msgid "Version number, which a new file initially has"
+msgstr "Az új fájl kezdeti verziószáma"
+
+#: src/interface.c:3585
+msgid "Company name"
+msgstr "Cégnév"
+
+#: src/interface.c:3587
+msgid "Developer:"
+msgstr "Fejlesztő:"
+
+#: src/interface.c:3594
+msgid "Company:"
+msgstr "Cég:"
+
+#: src/interface.c:3601
+msgid "Mail address:"
+msgstr "E-mail cím:"
+
+#: src/interface.c:3608
+msgid "Initials:"
+msgstr "Kezdőbetűk:"
+
+#: src/interface.c:3620
+msgid "The name of the developer"
+msgstr "A fejlesztő neve"
+
+#: src/interface.c:3622
+msgid ""
+"<i>Notice: For all changes you make here to take effect, you need to restart "
+"Geany.</i>"
+msgstr ""
+"<i>Figyelem: minden itt végzett változtatáséletbe lépéséhez újra kell "
+"indítani a Geany-t.</i>"
+
+#: src/interface.c:3629
+msgid "<b>Template data</b>"
+msgstr "<b>Sablon adatok</b>"
+
+#: src/interface.c:3634
+msgid "Templates"
+msgstr "Sablonok"
+
+#: src/interface.c:3652
+msgid ""
+"Here you can change keyboard shortcuts for various actions. Select one and "
+"press the Change button to enter a new shortcut, or double click on an "
+"action to edit the string representation of the shortcut directly."
+msgstr ""
+"Itt megváltoztathatja az egyes eseményekhez rendelt gyorsbillentyűket. "
+"Válasszon ki egy eseményt, majd nyomja meg a Változtat gombot az új "
+"gyorsbillentyű megadásához. Duplakattintással közvetlentül az eseményhez "
+"rendelt gyorsbillentyű stringet is szerkesztheti."
+
+#: src/interface.c:3675
+msgid "Change"
+msgstr "Változtatás"
+
+#: src/interface.c:3679
+msgid "<b>Keyboard shortcuts</b>"
+msgstr "<b>Gyorsbillentyűk</b>"
+
+#: src/interface.c:3684
+msgid "Keybindings"
+msgstr "Billentyű hozzárendelések"
+
+#: src/keybindings.c:113
+msgid "New"
+msgstr "Új"
+
+#: src/keybindings.c:115
+msgid "Open"
+msgstr "Megnyit"
+
+#: src/keybindings.c:117
+#, fuzzy
+msgid "Open selected file"
+msgstr "Megnyitott fájlok"
+
+#: src/keybindings.c:119
+msgid "Save"
+msgstr "Ment"
+
+#: src/keybindings.c:121
+#, fuzzy
+msgid "Save as"
+msgstr "Mindet menti"
+
+#: src/keybindings.c:125
+msgid "Print"
+msgstr "Nyomtat"
+
+#: src/keybindings.c:127
+msgid "Close"
+msgstr "Bezár"
+
+#: src/keybindings.c:129
+msgid "Close all"
+msgstr "Összeset bezár"
+
+#: src/keybindings.c:131
+msgid "Reload file"
+msgstr "Fájl újraolvasása"
+
+#: src/keybindings.c:133
+msgid "Undo"
+msgstr "Visszavonás"
+
+#: src/keybindings.c:135
+msgid "Redo"
+msgstr "Újra"
+
+#: src/keybindings.c:137
+msgid "Select All"
+msgstr "Mindet kijelöli"
+
+#: src/keybindings.c:139
+msgid "Insert date"
+msgstr "Dátum beszúrása"
+
+#: src/keybindings.c:143
+msgid "Find Next"
+msgstr "Következő"
+
+#: src/keybindings.c:145
+msgid "Find Previous"
+msgstr "Előző"
+
+#: src/keybindings.c:147
+#, fuzzy
+msgid "Find Next Selection"
+msgstr "A kije_lölésben"
+
+#: src/keybindings.c:149
+#, fuzzy
+msgid "Find Previous Selection"
+msgstr "Előző"
+
+#: src/keybindings.c:151 src/search.c:420
+msgid "Replace"
+msgstr "Csere"
+
+#: src/keybindings.c:153 src/search.c:558
+msgid "Find in files"
+msgstr "Keresés fájlokban"
+
+#: src/keybindings.c:155
+msgid "Next Message"
+msgstr "Következő üzenetek"
+
+#: src/keybindings.c:159
+msgid "Show Colour Chooser"
+msgstr "Színválasztó megjelenítése"
+
+#: src/keybindings.c:161
+msgid "Fullscreen"
+msgstr "Teljes képernyős"
+
+#: src/keybindings.c:163
+msgid "Toggle Messages Window"
+msgstr "Üzenetablak ki/bekapcsolása"
+
+#: src/keybindings.c:165
+msgid "Toggle Sidebar"
+msgstr "Oldalsáv ki/bekapcsolása"
+
+#: src/keybindings.c:167
+msgid "Zoom In"
+msgstr "Nagyítás"
+
+#: src/keybindings.c:169
+msgid "Zoom Out"
+msgstr "Kicsinyítés"
+
+#: src/keybindings.c:173
+msgid "Fold all"
+msgstr "Minden blokk bezárása"
+
+#: src/keybindings.c:175
+msgid "Unfold all"
+msgstr "Minden blokk kinyitása"
+
+#: src/keybindings.c:177
+msgid "Insert Special HTML Characters"
+msgstr "Speciáls HTML karakterek beszúrása"
+
+#: src/keybindings.c:181
+msgid "Build"
+msgstr "Build"
+
+#: src/keybindings.c:183
+msgid "Make all"
+msgstr "Make mindet"
+
+#: src/keybindings.c:186
+msgid "Make custom target"
+msgstr "Egyedi cél készítése"
+
+#: src/keybindings.c:188
+msgid "Make object"
+msgstr "Make"
+
+#: src/keybindings.c:190
+msgid "Next error"
+msgstr "Következő hiba"
+
+#: src/keybindings.c:192
+msgid "Run"
+msgstr "Futtatás"
+
+#: src/keybindings.c:194
+msgid "Run (alternative command)"
+msgstr "Futtatás (másik paranccsal)"
+
+#: src/keybindings.c:196
+msgid "Build options"
+msgstr "Build opciók"
+
+#: src/keybindings.c:198
+msgid "Reload symbol list"
+msgstr "Szimbólum lista újraolvasása"
+
+#: src/keybindings.c:200
+msgid "Switch to Editor"
+msgstr "Szerkesztő ablakra kapcsol"
+
+#: src/keybindings.c:202
+msgid "Switch to Scribble"
+msgstr "Firka ablakra kapcsol"
+
+#: src/keybindings.c:204
+msgid "Switch to VTE"
+msgstr "VTE-re kapcsol"
+
+#: src/keybindings.c:206
+msgid "Switch to left document"
+msgstr "Baloldali dokumentumra kapcsol"
+
+#: src/keybindings.c:208
+msgid "Switch to right document"
+msgstr "Jobboldali dokumentumra kapcsol"
+
+#: src/keybindings.c:211
+msgid "Duplicate line or selection"
+msgstr "Sor vagy kiválasztás másolása"
+
+#: src/keybindings.c:213
+msgid "Convert Selection to lower-case"
+msgstr "Kiválasztás kisbetűssé alakítása"
+
+#: src/keybindings.c:215
+msgid "Convert Selection to upper-case"
+msgstr "Kiválasztás nagybetűssé alakítása"
+
+#: src/keybindings.c:217
+msgid "Toggle line commentation"
+msgstr "Sor megjegyzésbe/vissza"
+
+#: src/keybindings.c:219
+msgid "Comment line(s)"
+msgstr "Sor(ok) megjegyzésbe"
+
+#: src/keybindings.c:221
+msgid "Uncomment line(s)"
+msgstr "Sor(ok) megjegyzésből kivétele"
+
+#: src/keybindings.c:223
+msgid "Increase indent"
+msgstr "Behúzás növelése"
+
+#: src/keybindings.c:225
+msgid "Decrease indent"
+msgstr "Behúzás csökkentése"
+
+#: src/keybindings.c:228
+msgid "Goto matching brace"
+msgstr "Illeszkedő zárójelhez ugrás"
+
+#: src/keybindings.c:230
+msgid "Complete word"
+msgstr "Szó kiegészítése"
+
+#: src/keybindings.c:234 src/keybindings.c:237
+msgid "Show calltip"
+msgstr "Hívás segítése megjelenítése"
+
+#: src/keybindings.c:240
+msgid "Show macro list"
+msgstr "Makró lista megjelenítése"
+
+#: src/keybindings.c:242
+msgid "Suppress auto completion"
+msgstr "Automatikus kiegészítés felfüggesztése"
+
+#: src/keybindings.c:247
+msgid "Go to tag definition"
+msgstr "Ugrás a címke definíciójához"
+
+#: src/keybindings.c:249
+msgid "Go to tag declaration"
+msgstr "Ugrás a címke deklarációjához"
+
+#: src/keyfile.c:71
 #, c-format
 msgid "%s configuration file, edit as you need"
 msgstr "%s konfigurációs fájl, szerkessze szükség szerint"
 
-#: src/keyfile.c:333
+#: src/keyfile.c:338
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Írjon ide tetszés szerint, használja ezt úgy, mint egy jegyzettömböt/"
 "firkalapot"
 
-#: src/keyfile.c:557
+#: src/keyfile.c:567
 msgid "Failed to load one or more session files."
 msgstr "Nem sikerült betölteni egy vagy több munkamenet fájlt."
 
-#: src/msgwindow.c:107
+#: src/main.c:89
+#, fuzzy
+msgid ""
+"set initial column number for the first opened file (useful in conjunction "
+"with --line)"
+msgstr "állítsa a kezdő sorszámot az első megnyitott fájlhoz"
+
+#: src/main.c:90
+msgid "use an alternate configuration directory"
+msgstr "másik konfigurációs könyvtár használata"
+
+#: src/main.c:91
+msgid "runs in debug mode (means being verbose)"
+msgstr "hibakereső üzemmódban fut (bőbeszédű)"
+
+#: src/main.c:94
+msgid "don't open files in a running instance, force opening a new instance"
+msgstr "ne nyisson meg fájlokat egy már futó példányban, új példányt indítson"
+
+#: src/main.c:96
+msgid "set initial line number for the first opened file"
+msgstr "állítsa a kezdő sorszámot az első megnyitott fájlhoz"
+
+#: src/main.c:97
+msgid "don't show message window at startup"
+msgstr "induláskor ne mutasson üzenetablakot"
+
+#: src/main.c:98
+msgid "don't load auto completion data (see documentation)"
+msgstr "ne töltse be az automatikus kiegészítés adatokat (ld. dokumentáció)"
+
+#: src/main.c:99
+msgid "don't load the previous session's files"
+msgstr "ne töltse be az előző munkamenet fájljait"
+
+#: src/main.c:101
+msgid "don't load terminal support"
+msgstr "ne töltse be a terminál támogatást"
+
+#: src/main.c:102
+msgid "filename of libvte.so"
+msgstr "libvte.so fájlneve"
+
+#: src/main.c:104
+msgid "show version and exit"
+msgstr "verziószám megjelenítése és kilépés"
+
+#: src/main.c:411
+msgid " - A fast and lightweight IDE"
+msgstr " - Egy gyors és pehelykönnyű IDE"
+
+#: src/main.c:421
+#, c-format
+msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
+msgstr "(készült %s-on GTK %d.%d.%d, GLib %d.%d.%d verzióval)"
+
+#: src/main.c:466
+#, c-format
+msgid ""
+"Configuration directory could not be created (%s).\n"
+"There could be some problems using Geany without a configuration directory.\n"
+"Start Geany anyway?"
+msgstr ""
+"A konfigurációs könyvtárat nem lehetett létrehozni (%s).\n"
+"Problémák léphetnek fel, ha a Geany-t konfigurációs könyvtár nélkül "
+"használja.\n"
+"Mindenképpen elindítja a Geany-t?"
+
+#: src/main.c:509 src/socket.c:136
+#, fuzzy, c-format
+msgid "Could not find file '%s'."
+msgstr "Nem található a pixmap fájl: %s"
+
+#: src/main.c:627
+#, c-format
+msgid "This is Geany %s."
+msgstr "Ez a Geany  %s."
+
+#: src/main.c:629
+#, c-format
+msgid "Configuration directory could not be created (%s)."
+msgstr "A konfigurációs könyvtárat nem lehetett létrehozni (%s)."
+
+#: src/msgwindow.c:108
 msgid "Status messages"
 msgstr "Állapot üzenetek"
 
-#: src/msgwindow.c:411
+#: src/msgwindow.c:418
 msgid "_Hide Message Window"
 msgstr "Üzenet ablak el_rejtése"
 
-#: src/build.c:156
-#, c-format
-msgid "Failed to view %s (make sure it is already compiled)"
-msgstr ""
-"Nem sikerült megjeleníteni %s-t (bizonyosodjon meg arról, hogy már le van-e "
-"fordítva)"
-
-#: src/build.c:189 src/build.c:567
-#, c-format
-msgid ""
-"Could not find terminal '%s' (check path for Terminal tool setting in "
-"Preferences)"
-msgstr ""
-"'%s' terminált nem található (ellenőrizze a terminál elérési útját a "
-"Beállítások között)"
-
-#: src/build.c:203 src/build.c:604
-#, c-format
-msgid "Failed to execute %s (start-script could not be created)"
-msgstr ""
-"%s végrehajtása nem sikerült (az indító szkriptet nem lehetett létrehozni)"
-
-#: src/build.c:231 src/build.c:447 src/build.c:649 src/search.c:1070
-#, c-format
-msgid "Process failed (%s)"
-msgstr "Folyamat sikertelen (%s)"
-
-#: src/build.c:356
-#, c-format
-msgid "Something very strange is occurred, could not stat %s (%s)."
-msgstr "Valami nagyon furcsa történt, nem sikerült stat %s (%s)."
-
-#: src/build.c:435
-#, c-format
-msgid "%s (in directory: %s)"
-msgstr "%s (%s könyvtárban)"
-
-#: src/build.c:543
-#, c-format
-msgid "Failed to execute %s (make sure it is already built)"
-msgstr ""
-"%s végrehajtása nem sikerült (bizonyosodjon meg arról, hogy build megtörtént-"
-"e)"
-
-#: src/build.c:581
-#, c-format
-msgid "Failed to change the working directory to %s"
-msgstr "Nem sikerült a munkakönyvtárat átállítani erre: %s"
-
-#: src/build.c:729
-msgid "Compilation failed."
-msgstr "Fordítás sikertelen."
-
-#: src/build.c:743
-msgid "Compilation finished successfully."
-msgstr "Fordítás sikerrel lezárult."
-
-#. compile the code
-#: src/build.c:848
-msgid "_Compile"
-msgstr "_Fordítás"
-
-#: src/build.c:851
-msgid "Compiles the current file"
-msgstr "Lefordítja a jelenlegi fájlt"
-
-#: src/build.c:864
-msgid "Builds the current file (generate an executable file)"
-msgstr "Build-eli a jelenlegi fájlt (végrehajtható állományt hoz létre)"
-
-#. build the code with make all
-#: src/build.c:874 src/build.c:996
-msgid "_Make All"
-msgstr "_Make mindet"
-
-#: src/build.c:877 src/build.c:999
-msgid "Builds the current file with the make tool and the default target"
-msgstr ""
-"Build-eli a jelenlegi fájlt a make eszközzel és az alapértelmezett "
-"célállománnyal"
-
-#. build the code with make custom
-#: src/build.c:885 src/build.c:1007
-msgid "Make Custom _Target"
-msgstr "Egyedi cél készí_tése"
-
-#: src/build.c:889 src/build.c:1011
-msgid "Builds the current file with the make tool and the specified target"
-msgstr ""
-"Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
-
-#. build the code with make object
-#: src/build.c:896
-msgid "Make _Object"
-msgstr "Cél _készítése"
-
-#: src/build.c:900
-msgid "Compiles the current file using the make tool"
-msgstr "Lefordítja a jelenlegi fájlt a make eszköz segítségével"
-
-#. next error
-#: src/build.c:912 src/build.c:1023
-msgid "_Next Error"
-msgstr "Kö_vetkező hiba"
-
-#. arguments
-#: src/build.c:938
-msgid "_Set Includes and Arguments"
-msgstr "_Include állományok és argumentumok megadása"
-
-#: src/build.c:943
-msgid ""
-"Sets the includes and library paths for the compiler and the program "
-"arguments for execution"
-msgstr ""
-"Megadja az include állományokat és könyvtár elérési utakat a fordítónak, "
-"valamint a végrehajtáshoz szükséges argumentumokat"
-
-#. DVI
-#: src/build.c:966
-msgid "LaTeX -> DVI"
-msgstr "LaTeX -> DVI"
-
-#: src/build.c:969
-msgid "Compiles the current file into a DVI file"
-msgstr "Lefordítja a jelenlegi fájlt egy DVI fájlba"
-
-#. PDF
-#: src/build.c:979
-msgid "LaTeX -> PDF"
-msgstr "LaTeX -> PDF"
-
-#: src/build.c:982
-msgid "Compiles the current file into a PDF file"
-msgstr "Lefordítja a jelenlegi fájlt egy PDF fájlba"
-
-#. DVI view
-#: src/build.c:1035
-msgid "View DVI File"
-msgstr "DVI fájl megtekintése"
-
-#: src/build.c:1040 src/build.c:1053
-msgid "Compiles and view the current file"
-msgstr "Lefordítja és megjeleníti a jelenlegi fájlt"
-
-#. PDF view
-#: src/build.c:1049
-msgid "View PDF File"
-msgstr "PDF fájl megtekintése"
-
-#: src/build.c:1073
-msgid "Sets the program paths and arguments"
-msgstr "Megadja a program elérési utakat és argumentumokat"
-
-#: src/build.c:1340
-msgid "Make Custom Target"
-msgstr "Egyedi cél készítése"
-
-#: src/build.c:1341
-msgid ""
-"Enter custom options here, all entered text is passed to the make command."
-msgstr ""
-"Adja meg itt az egyedi opciókat, minden bevitt szöveg átadásra kerül a make "
-"parancs számára."
-
-#: src/build.c:1380
-msgid "Failed to execute the view program"
-msgstr "Nem sikerült végrehajtani a megjelenítő programot"
-
-#: src/build.c:1399
-msgid "Failed to execute the terminal program"
-msgstr "Nem sikerült végrehajtani a terminál programot"
-
-#: src/build.c:1458
-#, c-format
-msgid "Process could not be stopped (%s)."
-msgstr "A folyamatot nem sikerült leállítani (%s)."
-
-#: src/build.c:1493
-msgid "No more build errors."
-msgstr "Nincs több fordítási hiba."
-
-#: src/prefs.c:310
+#: src/prefs.c:322
 msgid "Action"
 msgstr "Parancs"
 
-#: src/prefs.c:315
+#: src/prefs.c:327
 msgid "Shortcut"
 msgstr "Gyorsbillentyű"
 
-#: src/prefs.c:789
+#: src/prefs.c:802
 msgid "Grab key"
 msgstr "Billentyű beolvasása"
 
-#: src/prefs.c:793
+#: src/prefs.c:806
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
 msgstr ""
 "Üsse le a billentyű-kombinációt, amit a(z) \"%s\" parancshoz használni "
 "szeretne"
 
-#: src/prefs.c:917
+#: src/prefs.c:930
 #, c-format
 msgid ""
 "The combination '%s' is already used for \"%s\". Please choose another one."
@@ -2196,671 +2635,123 @@ msgstr ""
 "A '%s' kombináció már használatban van a \"%s\" parancsnál. Válasszon "
 "másikat!"
 
-#: src/about.c:119
-msgid "About Geany"
-msgstr "Geany verzió"
-
-#: src/about.c:168
-msgid "A fast and lightweight IDE"
-msgstr "Gyors és pehelykönnyű IDE"
-
-#: src/about.c:189
-#, c-format
-msgid "(built on %s)"
-msgstr "(készült %s-on)"
-
-#. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: src/about.c:220
-msgid "Info"
-msgstr "Információ"
-
-#: src/about.c:232
-msgid "Developers"
-msgstr "Fejlesztők"
-
-#: src/about.c:232
-msgid "Maintainer"
-msgstr "Karbantartó"
-
-#: src/about.c:232
-msgid "developer"
-msgstr "fejlesztő"
-
-#: src/about.c:233
-msgid "translation maintainer"
-msgstr "fordítás karbantartója"
-
-#: src/about.c:233
-msgid "Translators"
-msgstr "Fordítók"
-
-#: src/about.c:234
-msgid "language"
-msgstr "nyelv"
-
-#: src/about.c:240
-msgid "Credits"
-msgstr "Közreműködők"
-
-#: src/about.c:253
-msgid "License"
-msgstr "Licenc"
-
-#: src/geany.h:47
-msgid "untitled"
-msgstr "névtelen"
-
-#: src/encodings.c:51
-msgid "Celtic"
-msgstr "Kelta"
-
-#: src/encodings.c:52 src/encodings.c:53
-msgid "Greek"
-msgstr "Görög"
-
-#: src/encodings.c:54
-msgid "Nordic"
-msgstr "Északi"
-
-#: src/encodings.c:55
-msgid "South European"
-msgstr "Dél-európai"
-
-#: src/encodings.c:56 src/encodings.c:57 src/encodings.c:58 src/encodings.c:59
-msgid "Western"
-msgstr "Nyugati"
-
-#: src/encodings.c:61 src/encodings.c:62 src/encodings.c:63
-msgid "Baltic"
-msgstr "Balti"
-
-#: src/encodings.c:64 src/encodings.c:65 src/encodings.c:66
-msgid "Central European"
-msgstr "Közép-európai"
-
-#: src/encodings.c:67 src/encodings.c:68 src/encodings.c:69 src/encodings.c:70
-#: src/encodings.c:71
-msgid "Cyrillic"
-msgstr "Cirill"
-
-#: src/encodings.c:72
-msgid "Cyrillic/Russian"
-msgstr "Cirill/orosz"
-
-#: src/encodings.c:73
-msgid "Cyrillic/Ukrainian"
-msgstr "Cirill/ukrán"
-
-#: src/encodings.c:74
-msgid "Romanian"
-msgstr "Román"
-
-#: src/encodings.c:76 src/encodings.c:77 src/encodings.c:78
-msgid "Arabic"
-msgstr "Arab"
-
-#: src/encodings.c:79 src/encodings.c:80 src/encodings.c:81
-msgid "Hebrew"
-msgstr "Héber"
-
-#: src/encodings.c:82
-msgid "Hebrew Visual"
-msgstr "Héber (vizuális)"
-
-#: src/encodings.c:84
-msgid "Armenian"
-msgstr "Örmény"
-
-#: src/encodings.c:85
-msgid "Georgian"
-msgstr "Grúz"
-
-#: src/encodings.c:86
-msgid "Thai"
-msgstr "Thai"
-
-#: src/encodings.c:87 src/encodings.c:88 src/encodings.c:89
-msgid "Turkish"
-msgstr "Török"
-
-#: src/encodings.c:90 src/encodings.c:91 src/encodings.c:92
-msgid "Vietnamese"
-msgstr "Vietnami"
-
-#: src/encodings.c:94 src/encodings.c:95 src/encodings.c:96 src/encodings.c:97
-#: src/encodings.c:98 src/encodings.c:99 src/encodings.c:100
-#: src/encodings.c:101
-msgid "Unicode"
-msgstr "Unicode"
-
-#: src/encodings.c:103 src/encodings.c:104 src/encodings.c:105
-#: src/encodings.c:106
-msgid "Chinese Simplified"
-msgstr "Egyszerűsített kínai"
-
-#: src/encodings.c:107 src/encodings.c:108 src/encodings.c:109
-msgid "Chinese Traditional"
-msgstr "Hagyományos kínai"
-
-#: src/encodings.c:110 src/encodings.c:111 src/encodings.c:112
-msgid "Japanese"
-msgstr "Japán"
-
-#: src/encodings.c:113 src/encodings.c:114 src/encodings.c:115
-#: src/encodings.c:116
-msgid "Korean"
-msgstr "Koreai"
-
-#: src/encodings.c:118
-msgid "Without encoding"
-msgstr "Kódolás nélkül"
-
-#: src/encodings.c:211
-msgid "_West European"
-msgstr "_Nyugat-európai"
-
-#: src/encodings.c:217
-msgid "_East European"
-msgstr "_Kelet-európai"
-
-#: src/encodings.c:223
-msgid "East _Asian"
-msgstr "Kelet-á_zsiai"
-
-#: src/encodings.c:229
-msgid "_SE & SW Asian"
-msgstr "_DK- & DNy-ázsiai"
-
-#: src/encodings.c:235
-msgid "_Middle Eastern"
-msgstr "Köz_el-keleti"
-
-#: src/encodings.c:241
-msgid "_Unicode"
-msgstr "_Unicode"
-
-#: src/treeviews.c:117 src/treeviews.c:149
-msgid "Chapter"
-msgstr "Fejezet"
-
-#: src/treeviews.c:119 src/treeviews.c:141
-msgid "Section"
-msgstr "Alfejezet"
-
-#: src/treeviews.c:121
-msgid "Sect1"
-msgstr "Sect1"
-
-#: src/treeviews.c:123
-msgid "Sect2"
-msgstr "Sect2"
-
-#: src/treeviews.c:125
-msgid "Sect3"
-msgstr "Sect3"
-
-#: src/treeviews.c:127
-msgid "Appendix"
-msgstr "Kiegészítések"
-
-#: src/treeviews.c:129 src/treeviews.c:151 src/treeviews.c:239
-#: src/treeviews.c:280
-msgid "Other"
-msgstr "Egyéb"
-
-#: src/treeviews.c:137
-msgid "Command"
-msgstr "Parancs"
-
-#: src/treeviews.c:139
-msgid "Environment"
-msgstr "Környezet"
-
-#: src/treeviews.c:143
-msgid "Subsection"
-msgstr "Alfejezet"
-
-#: src/treeviews.c:145
-msgid "Subsubsection"
-msgstr "Al-alfejezet"
-
-#: src/treeviews.c:147
-msgid "Label"
-msgstr "Címke"
-
-#: src/treeviews.c:157
-msgid "Function"
-msgstr "Függvény"
-
-#: src/treeviews.c:159 src/treeviews.c:222
-msgid "Package"
-msgstr "Csomag"
-
-#: src/treeviews.c:161
-msgid "My"
-msgstr "Saját"
-
-#: src/treeviews.c:163
-msgid "Local"
-msgstr "Helyi"
-
-#: src/treeviews.c:165
-msgid "Our"
-msgstr "Mienk"
-
-#: src/treeviews.c:178 src/treeviews.c:203 src/treeviews.c:225
-msgid "Methods"
-msgstr "Eljárások"
-
-#: src/treeviews.c:180 src/treeviews.c:201 src/treeviews.c:227
-#: src/treeviews.c:268
-msgid "Classes"
-msgstr "Osztályok"
-
-#: src/treeviews.c:182
-msgid "Singletons"
-msgstr "Singletonok"
-
-#: src/treeviews.c:184
-msgid "Mixins"
-msgstr "Kevert"
-
-#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_class), NULL);
-#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_class), 0, _("Constants"), -1);
-#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_member), NULL);
-#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_member), 0, _("Members"), -1);
-#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv.tag_macro), NULL);
-#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv.tag_macro), 0, _("Macros"), -1);
-#.
-#: src/treeviews.c:186 src/treeviews.c:253 src/treeviews.c:274
-msgid "Variables"
-msgstr "Változók"
-
-#: src/treeviews.c:188 src/treeviews.c:231 src/treeviews.c:270
-msgid "Members"
-msgstr "Tagok"
-
-#: src/treeviews.c:199 src/treeviews.c:245 src/treeviews.c:266
-msgid "Functions"
-msgstr "Függvények"
-
-#: src/treeviews.c:222
-msgid "Module"
-msgstr "Modul"
-
-#: src/treeviews.c:229
-msgid "Interfaces"
-msgstr "Felületek"
-
-#: src/treeviews.c:272
-msgid "Macros"
-msgstr "makrók"
-
-#: src/treeviews.c:276
-msgid "Namespaces"
-msgstr "Névterek"
-
-#: src/treeviews.c:278
-msgid "Structs / Typedefs"
-msgstr "Struktúrák / Típusdefiníciók"
-
-#: src/treeviews.c:385 src/treeviews.c:437
-msgid "Hide"
-msgstr "Elrejtés"
-
-#: src/treeviews.c:393 src/treeviews.c:445
-msgid "Hide sidebar"
-msgstr "Oldalsáv elrejtése"
-
-#: src/treeviews.c:425
-msgid "Reload"
-msgstr "Újraolvasás"
-
-#: src/vte.c:186 src/vte.c:503
-msgid "Terminal"
-msgstr "Terminál"
-
-#: src/vte.c:373
-msgid "_Input Methods"
-msgstr "Bev_iteli eljárások"
-
-#: src/vte.c:499
-msgid "Terminal plugin"
-msgstr "Terminál bővítmény"
-
-#: src/vte.c:506
-msgid ""
-"These settings for the virtual terminal emulator widget (VTE) only apply if "
-"the VTE library could be loaded."
+#. "projects" is part of the default project base path so be carefully when translating
+#. please avoid special characters and spaces, look at the source for details or ask Frank
+#: src/project.c:70
+msgid "projects"
 msgstr ""
-"A virtuális terminál emulátor eszköz (VTE) ezen beállításai csak akkor "
-"lépnek életbe, ha a VTE könyvtárat be sikerült tölteni."
 
-#: src/vte.c:517
-msgid "Terminal font:"
-msgstr "Terminál betűtípus:"
-
-#: src/vte.c:527
-msgid "Sets the font for the terminal widget."
-msgstr "Megadja a terminál eszköz betűtípusát."
-
-#: src/vte.c:529
-msgid "Foreground color:"
-msgstr "Betűszín:"
-
-#: src/vte.c:535
-msgid "Background color:"
-msgstr "Háttérszín:"
-
-#: src/vte.c:545
-msgid "Sets the foreground color of the text in the terminal widget."
-msgstr "Megadja a terminál eszközben használt betűk színét."
-
-#: src/vte.c:552
-msgid "Sets the background color of the text in the terminal widget."
-msgstr "Megadja a terminál eszközben használt betűk háttérszínét."
-
-#: src/vte.c:555
-msgid "Scrollback lines:"
-msgstr "Mentett sorok:"
-
-#: src/vte.c:566
-msgid ""
-"Specifies the history in lines, which you can scroll back in the terminal "
-"widget."
-msgstr ""
-"Megadja a történeti sorok számát, amennyit vissza lehet görgetni a terminál "
-"eszközben."
-
-#: src/vte.c:570
-msgid "Terminal emulation:"
-msgstr "Terminál emuláció:"
-
-#: src/vte.c:580
-msgid ""
-"Controls how the terminal emulator should behave. xterm is a good start."
-msgstr ""
-"A terminál emulátor működését szabályozza. Kezdetnek az xterm jó példa."
-
-#: src/vte.c:582
-msgid "Shell:"
-msgstr "Shell:"
-
-#: src/vte.c:589
-msgid ""
-"Sets the path to the shell which should be started inside the terminal "
-"emulation."
-msgstr ""
-"Megadja a shell elérési útját, amelyet a terminál emulációban indítani "
-"szeretne."
-
-#: src/vte.c:606
-msgid "Scroll on keystroke"
-msgstr "Görgetés billentyű lenyomásakor"
-
-#: src/vte.c:607
-msgid "Whether to scroll to the bottom if a key was pressed."
-msgstr "Az aljára ugorjon-e, ha egy billentyű leütésre került."
-
-#: src/vte.c:611
-msgid "Scroll on output"
-msgstr "Görgetés kimenetnél"
-
-#: src/vte.c:612
-msgid "Whether to scroll to the bottom when output is generated."
-msgstr "Az aljára ugorjon-e, ha kimenetre írás történt."
-
-#: src/vte.c:616
-msgid "Disable menu shortcut key (F10 by default)"
-msgstr "Letiltja a menü gyorsbillentyűt (alapértelmezetten F10)"
-
-#: src/vte.c:617
-msgid ""
-"This option disables the keybinding to popup the menu bar (default is F10). "
-"Disabling it can be useful if you use, for example, Midnight Commander "
-"within the VTE."
-msgstr ""
-"Ez az opció letiltja a gyorsbillentyűt, amelyik a menüt jeleníti meg "
-"(alapértelmezetten az F10). Akkor lehet hasznos letiltani, ha pl. Midnight "
-"Commander-t használ a VTE-n belül."
-
-#: src/vte.c:621
-msgid "Follow the path of the current file"
-msgstr "Az aktuális fájl elérési útjának követése"
-
-#: src/vte.c:622
-msgid "Whether to execute \"cd $path\" when you switch between opened files."
-msgstr ""
-"Végrehajtson-e \"cd $path\" parancsot, amikor átvált megnyitott fájlok "
-"között."
-
-#: src/vte.c:626
-msgid "Execute programs in VTE"
-msgstr "Programok futtatása a VTE-ben"
-
-#: src/vte.c:627
-msgid ""
-"Run programs in VTE instead of opening a terminal emulation window. Please "
-"note, programs executed in VTE cannot be stopped."
-msgstr ""
-"A programokat a VTE-ben futtatja, nem egy külön megnyitott terminál emulátor "
-"ablakban. Figyelem: a VTE-n belül futó programokat nem lehet félbeszakítani."
-
-#: src/keybindings.c:108
-msgid "New"
-msgstr "Új"
-
-#: src/keybindings.c:110
-msgid "Open"
-msgstr "Megnyit"
-
-#: src/keybindings.c:112
-msgid "Save"
-msgstr "Ment"
-
-#: src/keybindings.c:116
-msgid "Print"
-msgstr "Nyomtat"
-
-#: src/keybindings.c:118
-msgid "Close"
-msgstr "Bezár"
-
-#: src/keybindings.c:120
-msgid "Close all"
-msgstr "Összeset bezár"
-
-#: src/keybindings.c:122
-msgid "Reload file"
-msgstr "Fájl újraolvasása"
-
-#: src/keybindings.c:124
-msgid "Undo"
-msgstr "Visszavonás"
-
-#: src/keybindings.c:126
-msgid "Redo"
-msgstr "Újra"
-
-#: src/keybindings.c:128
-msgid "Select All"
-msgstr "Mindet kijelöli"
-
-#: src/keybindings.c:130
-msgid "Insert date"
-msgstr "Dátum beszúrása"
-
-#: src/keybindings.c:134
-msgid "Find Next"
-msgstr "Következő"
-
-#: src/keybindings.c:136
-msgid "Find Previous"
-msgstr "Előző"
-
-#: src/keybindings.c:138 src/search.c:376
-msgid "Replace"
-msgstr "Csere"
-
-#: src/keybindings.c:140 src/search.c:514
-msgid "Find in files"
-msgstr "Keresés fájlokban"
-
-#: src/keybindings.c:142
-msgid "Next Message"
-msgstr "Következő üzenetek"
-
-#: src/keybindings.c:146
-msgid "Show Colour Chooser"
-msgstr "Színválasztó megjelenítése"
-
-#: src/keybindings.c:148
-msgid "Fullscreen"
-msgstr "Teljes képernyős"
-
-#: src/keybindings.c:150
-msgid "Toggle Messages Window"
-msgstr "Üzenetablak ki/bekapcsolása"
-
-#: src/keybindings.c:152
-msgid "Toggle Sidebar"
-msgstr "Oldalsáv ki/bekapcsolása"
-
-#: src/keybindings.c:154
-msgid "Zoom In"
-msgstr "Nagyítás"
-
-#: src/keybindings.c:156
-msgid "Zoom Out"
-msgstr "Kicsinyítés"
-
-#: src/keybindings.c:160
-msgid "Fold all"
-msgstr "Minden blokk bezárása"
-
-#: src/keybindings.c:162
-msgid "Unfold all"
-msgstr "Minden blokk kinyitása"
-
-#: src/keybindings.c:164
-msgid "Insert Special HTML Characters"
-msgstr "Speciáls HTML karakterek beszúrása"
-
-#: src/keybindings.c:168
-msgid "Build"
-msgstr "Build"
-
-#: src/keybindings.c:170
-msgid "Make all"
-msgstr "Make mindet"
-
-#: src/keybindings.c:173
-msgid "Make custom target"
-msgstr "Egyedi cél készítése"
-
-#: src/keybindings.c:175
-msgid "Make object"
+#: src/project.c:94
+#, fuzzy
+msgid "Open project"
 msgstr "Make"
 
-#: src/keybindings.c:177
-msgid "Next error"
-msgstr "Következő hiba"
+#: src/project.c:113
+#, fuzzy
+msgid "Project files"
+msgstr "Tulajdonságok"
 
-#: src/keybindings.c:179
-msgid "Run"
-msgstr "Futtatás"
+#: src/project.c:136
+#, fuzzy, c-format
+msgid "Project \"%s\" closed."
+msgstr "%s fájl bezárva."
 
-#: src/keybindings.c:181
-msgid "Run (alternative command)"
-msgstr "Futtatás (másik paranccsal)"
+#: src/project.c:160
+#, fuzzy
+msgid "Project properties"
+msgstr "Tulajdonságok"
 
-#: src/keybindings.c:183
-msgid "Build options"
-msgstr "Build opciók"
+#: src/project.c:169
+#, fuzzy
+msgid "C_reate"
+msgstr "Karakter"
 
-#: src/keybindings.c:185
-msgid "Reload symbol list"
-msgstr "Szimbólum lista újraolvasása"
+#: src/project.c:188
+#, fuzzy
+msgid "Name:"
+msgstr "Make:"
 
-#: src/keybindings.c:187
-msgid "Switch to Editor"
-msgstr "Szerkesztő ablakra kapcsol"
+#: src/project.c:200
+#, fuzzy
+msgid "Description:"
+msgstr "DVI létrehozása:"
 
-#: src/keybindings.c:189
-msgid "Switch to Scribble"
-msgstr "Firka ablakra kapcsol"
+#: src/project.c:217
+#, fuzzy
+msgid "Filename:"
+msgstr "Vietnami"
 
-#: src/keybindings.c:191
-msgid "Switch to VTE"
-msgstr "VTE-re kapcsol"
+#: src/project.c:236
+msgid "Base path:"
+msgstr ""
 
-#: src/keybindings.c:193
-msgid "Switch to left document"
-msgstr "Baloldali dokumentumra kapcsol"
+#: src/project.c:255
+#, fuzzy
+msgid "File patterns:"
+msgstr "Köz_el-keleti"
 
-#: src/keybindings.c:195
-msgid "Switch to right document"
-msgstr "Jobboldali dokumentumra kapcsol"
+#: src/project.c:337
+#, fuzzy, c-format
+msgid ""
+"There is already an open project \"%s\". Do you want to close it before "
+"proceed?"
+msgstr "A(z) '%s' fájl már létezik. Felülírja?"
 
-#: src/keybindings.c:198
-msgid "Duplicate line or selection"
-msgstr "Sor vagy kiválasztás másolása"
+#: src/project.c:366
+msgid "The specified project name is too short."
+msgstr ""
 
-#: src/keybindings.c:200
-msgid "Convert Selection to lower-case"
-msgstr "Kiválasztás kisbetűssé alakítása"
+#: src/project.c:372
+#, c-format
+msgid "The specified project name is too long (max. %d characters)."
+msgstr ""
 
-#: src/keybindings.c:202
-msgid "Convert Selection to upper-case"
-msgstr "Kiválasztás nagybetűssé alakítása"
+#: src/project.c:380
+msgid "You have specified an invalid project filename."
+msgstr ""
 
-#: src/keybindings.c:204
-msgid "Toggle line commentation"
-msgstr "Sor megjegyzésbe/vissza"
+#: src/project.c:388
+msgid "You have specified an invalid project base path."
+msgstr ""
 
-#: src/keybindings.c:206
-msgid "Comment line(s)"
-msgstr "Sor(ok) megjegyzésbe"
+#: src/project.c:398
+msgid "The specified project base path does not exist. Should it be created?"
+msgstr ""
 
-#: src/keybindings.c:208
-msgid "Uncomment line(s)"
-msgstr "Sor(ok) megjegyzésből kivétele"
+#: src/project.c:415
+#, fuzzy
+msgid "Project file could not be written."
+msgstr "A folyamatot nem sikerült leállítani (%s)."
 
-#: src/keybindings.c:210
-msgid "Increase indent"
-msgstr "Behúzás növelése"
+#: src/project.c:455
+#, c-format
+msgid "Project \"%s\" created."
+msgstr ""
 
-#: src/keybindings.c:212
-msgid "Decrease indent"
-msgstr "Behúzás csökkentése"
+#: src/project.c:457
+#, fuzzy, c-format
+msgid "Project \"%s\" saved."
+msgstr "%s fájl elmentve."
 
-#: src/keybindings.c:215
-msgid "Goto matching brace"
-msgstr "Illeszkedő zárójelhez ugrás"
+#. initialise the dialog
+#: src/project.c:500
+msgid "Choose project filename"
+msgstr ""
 
-#: src/keybindings.c:217
-msgid "Complete word"
-msgstr "Szó kiegészítése"
+#. initialise the dialog
+#: src/project.c:523
+msgid "Choose project base path"
+msgstr ""
 
-#: src/keybindings.c:221 src/keybindings.c:224
-msgid "Show calltip"
-msgstr "Hívás segítése megjelenítése"
+#: src/project.c:592
+#, c-format
+msgid "Project \"%s\" opened."
+msgstr ""
 
-#: src/keybindings.c:227
-msgid "Show macro list"
-msgstr "Makró lista megjelenítése"
-
-#: src/keybindings.c:229
-msgid "Suppress auto completion"
-msgstr "Automatikus kiegészítés felfüggesztése"
-
-#: src/keybindings.c:234
-msgid "Go to tag definition"
-msgstr "Ugrás a címke definíciójához"
-
-#: src/keybindings.c:236
-msgid "Go to tag declaration"
-msgstr "Ugrás a címke deklarációjához"
+#: src/project.c:596
+#, fuzzy
+msgid "Project file could not be loaded."
+msgstr "A folyamatot nem sikerült leállítani (%s)."
 
 #: src/search.c:150
 msgid "_Use regular expressions"
@@ -2890,11 +2781,11 @@ msgstr ""
 "Helyettesítse a \\\\, \\t, \\n, \\r és \\uXXXX (Unicode karakterek) jeleket "
 "a megfelelő vezérlőkarakterekkel."
 
-#: src/search.c:189 src/search.c:587
+#: src/search.c:189 src/search.c:631
 msgid "_Case sensitive"
 msgstr "_Kis/nagybetű számít"
 
-#: src/search.c:194 src/search.c:593
+#: src/search.c:194 src/search.c:637
 msgid "Match only a _whole word"
 msgstr "Csak teljes s_zavak"
 
@@ -2902,154 +2793,278 @@ msgstr "Csak teljes s_zavak"
 msgid "Match from s_tart of word"
 msgstr "S_zóeleji egyezés"
 
-#: src/search.c:258
+#: src/search.c:302
 msgid "Find"
 msgstr "Keresés"
 
-#: src/search.c:264
+#: src/search.c:308
 msgid "_Previous"
 msgstr "Elő_ző"
 
-#: src/search.c:270
+#: src/search.c:314
 msgid "_Next"
 msgstr "Kö_vetkező"
 
-#: src/search.c:274 src/search.c:392 src/search.c:544
+#: src/search.c:318 src/search.c:436 src/search.c:588
 msgid "Search for:"
 msgstr "Keresni:"
 
 #. Now add the multiple match options
-#: src/search.c:300
+#: src/search.c:344
 msgid "Find All"
 msgstr "Minde keresi"
 
-#: src/search.c:304
+#: src/search.c:348
 msgid "_Mark"
 msgstr "_Jelöl"
 
-#: src/search.c:310 src/search.c:450
+#: src/search.c:354 src/search.c:494
 msgid "In Sessi_on"
 msgstr "M_unkamenetben"
 
-#: src/search.c:315 src/search.c:455
+#: src/search.c:359 src/search.c:499
 msgid "_In Document"
 msgstr "_Dokumentumban"
 
 #. close window checkbox
-#: src/search.c:321 src/search.c:461
+#: src/search.c:365 src/search.c:505
 msgid "Close _dialog"
 msgstr "Ablak _bezárása"
 
-#: src/search.c:326 src/search.c:466
+#: src/search.c:370 src/search.c:510
 msgid "Disable this option to keep the dialog open."
 msgstr "Kapcsolja ki ezt az opciót, hogy a dialógusablak ne záruljon be."
 
-#: src/search.c:388
+#: src/search.c:432
 msgid "Re_place & Find"
 msgstr "Cse_re & Keresés"
 
-#: src/search.c:395
+#: src/search.c:439
 msgid "Replace with:"
 msgstr "Csere erre:"
 
 #. Now add the multiple replace options
-#: src/search.c:440
+#: src/search.c:484
 msgid "Replace All"
 msgstr "Mindet cseréli"
 
-#: src/search.c:443
+#: src/search.c:487
 msgid "In Se_lection"
 msgstr "A kije_lölésben"
 
-#: src/search.c:445
+#: src/search.c:489
 msgid "Replace all matches found in the currently selected text"
 msgstr "Minden előfordulást cseréljen le a jelenleg kijelölt szövegben"
 
-#: src/search.c:523
+#: src/search.c:567
 msgid "Directory:"
 msgstr "Könyvtár:"
 
-#: src/search.c:563
+#: src/search.c:607
 msgid "_Fixed strings"
 msgstr "_Fix stringek"
 
-#: src/search.c:572
+#: src/search.c:616
 msgid "_Grep regular expressions"
 msgstr "_Grep reguláris kifejezések"
 
-#: src/search.c:576 src/search.c:583
+#: src/search.c:620 src/search.c:627
 msgid "See grep's manual page for more information."
 msgstr "További információkért ld. a grep kézikönyvet."
 
-#: src/search.c:581
+#: src/search.c:625
 msgid "_Extended regular expressions"
 msgstr "_Kibővített reguláris kifejezések"
 
-#: src/search.c:598
+#: src/search.c:642
 msgid "_Invert search results"
 msgstr "Ke_resési eredmények átfordítása"
 
-#: src/search.c:603
+#: src/search.c:647
 msgid "Invert the sense of matching, to select non-matching lines."
 msgstr ""
 "Az egyezőség feltételének megfordítása, hogy a nem egyező sorok kerüljenek "
 "kiválasztásra."
 
-#: src/search.c:658
+#: src/search.c:703
 msgid "Select folder"
 msgstr "Könyvtár kiválasztása"
 
-#: src/search.c:917
+#: src/search.c:961
 #, c-format
 msgid "Replaced text in %u files."
 msgstr "Szöveg cserélve %u fájlban."
 
-#: src/search.c:964
+#: src/search.c:1007
 msgid "Invalid directory for find in files."
 msgstr "Érvénytelen könyvtár a fájlokban keresésnél."
 
-#: src/search.c:994
+#: src/search.c:1037
 msgid "No text to find."
 msgstr "Nincs keresendő szöveg."
 
-#: src/search.c:1022
+#: src/search.c:1065
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Nem sikerült elindítani a(z) '%s' grep eszközt; ellenőrizze az elérési utat "
 "a Beállítások között."
 
-#: src/search.c:1137
+#: src/search.c:1180
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Nem sikerült megnyitni a könyvtárat (%s)"
 
-#: src/search.c:1182
+#: src/search.c:1225
 msgid "Search failed."
 msgstr "A keresés sikertelen."
 
-#: src/search.c:1188
+#: src/search.c:1231
 msgid "Search completed."
 msgstr "Keresés befejeződött."
 
-#: src/search.c:1189
-msgid "No matches found."
-msgstr "Nincs találat."
-
-#: src/search.c:1264
+#: src/search.c:1307
 #, c-format
 msgid "No matches found for '%s'."
 msgstr "Nincs találat erre: '%s'."
 
-#: src/tools.c:61
+#: src/support.c:90 src/support.c:114
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr "Nem található a pixmap fájl: %s"
+
+#: src/symbols.c:411 src/symbols.c:443
+msgid "Chapter"
+msgstr "Fejezet"
+
+#: src/symbols.c:413 src/symbols.c:435
+msgid "Section"
+msgstr "Alfejezet"
+
+#: src/symbols.c:415
+msgid "Sect1"
+msgstr "Sect1"
+
+#: src/symbols.c:417
+msgid "Sect2"
+msgstr "Sect2"
+
+#: src/symbols.c:419
+msgid "Sect3"
+msgstr "Sect3"
+
+#: src/symbols.c:421
+msgid "Appendix"
+msgstr "Kiegészítések"
+
+#: src/symbols.c:423 src/symbols.c:445 src/symbols.c:549 src/symbols.c:585
+msgid "Other"
+msgstr "Egyéb"
+
+#: src/symbols.c:431
+msgid "Command"
+msgstr "Parancs"
+
+#: src/symbols.c:433
+msgid "Environment"
+msgstr "Környezet"
+
+#: src/symbols.c:437
+msgid "Subsection"
+msgstr "Alfejezet"
+
+#: src/symbols.c:439
+msgid "Subsubsection"
+msgstr "Al-alfejezet"
+
+#: src/symbols.c:441
+msgid "Label"
+msgstr "Címke"
+
+#: src/symbols.c:451 src/symbols.c:535
+msgid "Package"
+msgstr "Csomag"
+
+#: src/symbols.c:453
+msgid "Function"
+msgstr "Függvény"
+
+#: src/symbols.c:455
+msgid "My"
+msgstr "Saját"
+
+#: src/symbols.c:457
+msgid "Local"
+msgstr "Helyi"
+
+#: src/symbols.c:459
+msgid "Our"
+msgstr "Mienk"
+
+#: src/symbols.c:472 src/symbols.c:493 src/symbols.c:539 src/symbols.c:569
+msgid "Classes"
+msgstr "Osztályok"
+
+#: src/symbols.c:474
+msgid "Singletons"
+msgstr "Singletonok"
+
+#: src/symbols.c:476
+msgid "Mixins"
+msgstr "Kevert"
+
+#: src/symbols.c:478 src/symbols.c:495 src/symbols.c:541
+msgid "Methods"
+msgstr "Eljárások"
+
+#: src/symbols.c:480 src/symbols.c:543 src/symbols.c:573
+msgid "Members"
+msgstr "Tagok"
+
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Constants"), -1);
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Members"), -1);
+#. gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
+#. gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
+#.
+#: src/symbols.c:482 src/symbols.c:522 src/symbols.c:583
+msgid "Variables"
+msgstr "Változók"
+
+#: src/symbols.c:497 src/symbols.c:514 src/symbols.c:571
+msgid "Functions"
+msgstr "Függvények"
+
+#: src/symbols.c:537
+msgid "Interfaces"
+msgstr "Felületek"
+
+#: src/symbols.c:560
+msgid "Module"
+msgstr "Modul"
+
+#: src/symbols.c:564
+msgid "Namespaces"
+msgstr "Névterek"
+
+#: src/symbols.c:575
+msgid "Structs / Typedefs"
+msgstr "Struktúrák / Típusdefiníciók"
+
+#: src/symbols.c:580
+msgid "Macros"
+msgstr "makrók"
+
+#: src/tools.c:62
 msgid "Special characters"
 msgstr "Speciális karakterek"
 
-#: src/tools.c:63
+#: src/tools.c:64
 msgid "_Insert"
 msgstr "_Beszúrás"
 
-#: src/tools.c:71
+#: src/tools.c:72
 msgid ""
 "Choose a special character from the list below and double click on it or use "
 "the button to insert it at the current cursor position."
@@ -3066,35 +3081,264 @@ msgstr "Karakter"
 msgid "HTML (name)"
 msgstr "HML (név)"
 
-#: src/tools.c:126
+#: src/tools.c:128
 msgid "HTML characters"
 msgstr "HTML karakterek"
 
-#: src/tools.c:132
+#: src/tools.c:134
 msgid "ISO 8859-1 characters"
 msgstr "ISO 8859-1 karakterek"
 
-#. / TODO add the symbols from http://de.selfhtml.org/html/referenz/zeichen.htm
-#: src/tools.c:230
+#: src/tools.c:232
 msgid "Greek characters"
 msgstr "Görög karakterek"
 
-#: src/tools.c:231
+#: src/tools.c:287
 msgid "Mathematical characters"
 msgstr "Matematikai karakterek"
 
-#: src/tools.c:232
+#: src/tools.c:328
 msgid "Technical characters"
 msgstr "Technikai karakterek"
 
-#: src/tools.c:233
+#: src/tools.c:336
 msgid "Arrow characters"
 msgstr "Nyíl karakterek"
 
-#: src/tools.c:234
+#: src/tools.c:349
 msgid "Punctuation characters"
 msgstr "Elválasztás karakterek"
 
-#: src/tools.c:235
+#: src/tools.c:365
 msgid "Miscellaneous characters"
 msgstr "Egyéb karakterek"
+
+#: src/treeviews.c:121
+msgid "No tags found"
+msgstr "Nem található címke"
+
+#: src/treeviews.c:271 src/treeviews.c:323
+msgid "Hide"
+msgstr "Elrejtés"
+
+#: src/treeviews.c:279 src/treeviews.c:331
+msgid "Hide sidebar"
+msgstr "Oldalsáv elrejtése"
+
+#: src/treeviews.c:311
+msgid "Reload"
+msgstr "Újraolvasás"
+
+#: src/ui_utils.c:113
+#, c-format
+msgid ""
+"%c  line: % 4d column: % 3d  selection: % 4d   %s      mode: %s%s      cur. "
+"function: %s      encoding: %s %s     filetype: %s"
+msgstr ""
+"%c  sor: % 4d oszlop: % 3d  kijelölés: % 4d   %s      mód: %s%s      akt. "
+"függvény: %s      kódolás: %s %s     fájltípus: %s"
+
+#: src/ui_utils.c:117
+msgid "OVR"
+msgstr "ÁTÍR"
+
+#: src/ui_utils.c:117
+msgid "INS"
+msgstr "BESZÚR"
+
+#: src/ui_utils.c:197
+#, c-format
+msgid "Font updated (%s)."
+msgstr "Betűtípus frissítve (%s)."
+
+#: src/ui_utils.c:385
+msgid "C Standard Library"
+msgstr "C Standard Library"
+
+#: src/ui_utils.c:386
+msgid "ISO C99"
+msgstr "ISO C99"
+
+#: src/ui_utils.c:387
+msgid "C++ (C Standard Library)"
+msgstr "C++ (C Standard Library)"
+
+#: src/ui_utils.c:388
+msgid "C++ Standard Library"
+msgstr "C++ Standard Library"
+
+#: src/ui_utils.c:389
+msgid "C++ STL"
+msgstr "C++ STL"
+
+#: src/ui_utils.c:455
+msgid "Set Custom Date Format"
+msgstr "Egyedi dátum formátum megadása"
+
+#: src/utils.c:348
+msgid "Do you want to reload it?"
+msgstr "Újra akarja olvasni?"
+
+#: src/utils.c:349
+#, c-format
+msgid ""
+"The file '%s' on the disk is more recent than\n"
+"the current buffer."
+msgstr ""
+"A(z) '%s' fájl a lemezen újabb, mint a\n"
+"pufferben lévő aktuális példány."
+
+#: src/vte.c:190 src/vte.c:509
+msgid "Terminal"
+msgstr "Terminál"
+
+#: src/vte.c:377
+msgid "_Input Methods"
+msgstr "Bev_iteli eljárások"
+
+#: src/vte.c:505
+msgid "Terminal plugin"
+msgstr "Terminál bővítmény"
+
+#: src/vte.c:512
+msgid ""
+"These settings for the virtual terminal emulator widget (VTE) only apply if "
+"the VTE library could be loaded."
+msgstr ""
+"A virtuális terminál emulátor eszköz (VTE) ezen beállításai csak akkor "
+"lépnek életbe, ha a VTE könyvtárat be sikerült tölteni."
+
+#: src/vte.c:523
+msgid "Terminal font:"
+msgstr "Terminál betűtípus:"
+
+#: src/vte.c:533
+msgid "Sets the font for the terminal widget."
+msgstr "Megadja a terminál eszköz betűtípusát."
+
+#: src/vte.c:535
+msgid "Foreground color:"
+msgstr "Betűszín:"
+
+#: src/vte.c:541
+msgid "Background color:"
+msgstr "Háttérszín:"
+
+#: src/vte.c:551
+msgid "Sets the foreground color of the text in the terminal widget."
+msgstr "Megadja a terminál eszközben használt betűk színét."
+
+#: src/vte.c:558
+msgid "Sets the background color of the text in the terminal widget."
+msgstr "Megadja a terminál eszközben használt betűk háttérszínét."
+
+#: src/vte.c:561
+msgid "Scrollback lines:"
+msgstr "Mentett sorok:"
+
+#: src/vte.c:572
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget."
+msgstr ""
+"Megadja a történeti sorok számát, amennyit vissza lehet görgetni a terminál "
+"eszközben."
+
+#: src/vte.c:576
+msgid "Terminal emulation:"
+msgstr "Terminál emuláció:"
+
+#: src/vte.c:586
+#, fuzzy
+msgid ""
+"Controls how the terminal emulator should behave. Do not change this value "
+"unless you know exactly what you are doing."
+msgstr ""
+"A terminál emulátor működését szabályozza. Kezdetnek az xterm jó példa."
+
+#: src/vte.c:588
+msgid "Shell:"
+msgstr "Shell:"
+
+#: src/vte.c:595
+msgid ""
+"Sets the path to the shell which should be started inside the terminal "
+"emulation."
+msgstr ""
+"Megadja a shell elérési útját, amelyet a terminál emulációban indítani "
+"szeretne."
+
+#: src/vte.c:612
+msgid "Scroll on keystroke"
+msgstr "Görgetés billentyű lenyomásakor"
+
+#: src/vte.c:613
+msgid "Whether to scroll to the bottom if a key was pressed."
+msgstr "Az aljára ugorjon-e, ha egy billentyű leütésre került."
+
+#: src/vte.c:617
+msgid "Scroll on output"
+msgstr "Görgetés kimenetnél"
+
+#: src/vte.c:618
+msgid "Whether to scroll to the bottom when output is generated."
+msgstr "Az aljára ugorjon-e, ha kimenetre írás történt."
+
+#: src/vte.c:622
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr "Letiltja a menü gyorsbillentyűt (alapértelmezetten F10)"
+
+#: src/vte.c:623
+msgid ""
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
+"within the VTE."
+msgstr ""
+"Ez az opció letiltja a gyorsbillentyűt, amelyik a menüt jeleníti meg "
+"(alapértelmezetten az F10). Akkor lehet hasznos letiltani, ha pl. Midnight "
+"Commander-t használ a VTE-n belül."
+
+#: src/vte.c:627
+msgid "Follow the path of the current file"
+msgstr "Az aktuális fájl elérési útjának követése"
+
+#: src/vte.c:628
+msgid "Whether to execute \"cd $path\" when you switch between opened files."
+msgstr ""
+"Végrehajtson-e \"cd $path\" parancsot, amikor átvált megnyitott fájlok "
+"között."
+
+#: src/vte.c:632
+msgid "Execute programs in VTE"
+msgstr "Programok futtatása a VTE-ben"
+
+#: src/vte.c:633
+msgid ""
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped."
+msgstr ""
+"A programokat a VTE-ben futtatja, nem egy külön megnyitott terminál emulátor "
+"ablakban. Figyelem: a VTE-n belül futó programokat nem lehet félbeszakítani."
+
+#: src/win32.c:61
+msgid "Executables"
+msgstr "Végrehajtható állományok"
+
+#: src/win32.c:334
+msgid "Error"
+msgstr "Hiba"
+
+#: src/win32.c:340 src/win32.c:381
+msgid "Question"
+msgstr "Kérdés"
+
+#: src/win32.c:346
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
+#: src/win32.c:352
+msgid "Information"
+msgstr "Információs"
+
+#~ msgid "(Unsaved)"
+#~ msgstr "(Nincs mentve)"

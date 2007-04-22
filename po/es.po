@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.11svn \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-12 22:37+0100\n"
+"POT-Creation-Date: 2007-02-14 20:21+0100\n"
 "PO-Revision-Date: 2006-09-29 00:05+0100\n"
 "Last-Translator: Damián Viano <dviano@fi.uba.ar>\n"
 "Language-Team: Spanish <geany-i18n@uvena.de>\n"
@@ -1505,7 +1505,7 @@ msgstr "Saltar al número de línea ingresado"
 msgid "Symbols"
 msgstr "Símbolos"
 
-#: src/interface.c:1121 src/treeviews.c:171
+#: src/interface.c:1121 src/treeviews.c:182
 msgid "Open files"
 msgstr "Archivos"
 
@@ -2074,7 +2074,7 @@ msgstr ""
 
 #: src/interface.c:3302
 msgid ""
-"Whenever some whitespace is inserted by Geany it will use tabluators when "
+"Whenever some whitespace is inserted by Geany it will use tabulators when "
 "enabled otherwise Geany will use just spaces."
 msgstr ""
 
@@ -3117,19 +3117,19 @@ msgstr "Carácteres de puntuación"
 msgid "Miscellaneous characters"
 msgstr "Carácteres misceláneos"
 
-#: src/treeviews.c:109
+#: src/treeviews.c:121
 msgid "No tags found"
 msgstr "No se encontraron etiquetas"
 
-#: src/treeviews.c:260 src/treeviews.c:312
+#: src/treeviews.c:271 src/treeviews.c:323
 msgid "Hide"
 msgstr "Ocultar"
 
-#: src/treeviews.c:268 src/treeviews.c:320
+#: src/treeviews.c:279 src/treeviews.c:331
 msgid "Hide sidebar"
 msgstr "Ocultar barra lateral"
 
-#: src/treeviews.c:300
+#: src/treeviews.c:311
 msgid "Reload"
 msgstr "Recargar"
 

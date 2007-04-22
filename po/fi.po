@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.11svn \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-12 22:37+0100\n"
+"POT-Creation-Date: 2007-02-14 20:21+0100\n"
 "PO-Revision-Date: 2007-02-12 20:12+0200\n"
 "Last-Translator: Harri Koskinen <geany_fi@fastmonkey.org>\n"
 "Language-Team: Finnish <geany.i18n@uvena.de>\n"
@@ -1466,7 +1466,7 @@ msgstr "Siirry haluamallesi riville."
 msgid "Symbols"
 msgstr "Symbolit"
 
-#: src/interface.c:1121 src/treeviews.c:171
+#: src/interface.c:1121 src/treeviews.c:182
 msgid "Open files"
 msgstr "Avoimet tiedostot"
 
@@ -2009,7 +2009,7 @@ msgstr ""
 
 #: src/interface.c:3302
 msgid ""
-"Whenever some whitespace is inserted by Geany it will use tabluators when "
+"Whenever some whitespace is inserted by Geany it will use tabulators when "
 "enabled otherwise Geany will use just spaces."
 msgstr ""
 
@@ -3012,19 +3012,19 @@ msgstr ""
 msgid "Miscellaneous characters"
 msgstr "Sekalaiset merkit"
 
-#: src/treeviews.c:109
+#: src/treeviews.c:121
 msgid "No tags found"
 msgstr "Tageja ei löytynyt"
 
-#: src/treeviews.c:260 src/treeviews.c:312
+#: src/treeviews.c:271 src/treeviews.c:323
 msgid "Hide"
 msgstr "Piilota"
 
-#: src/treeviews.c:268 src/treeviews.c:320
+#: src/treeviews.c:279 src/treeviews.c:331
 msgid "Hide sidebar"
 msgstr "Piilota sivupalkki"
 
-#: src/treeviews.c:300
+#: src/treeviews.c:311
 msgid "Reload"
 msgstr "Lataa uudelleen"
 
