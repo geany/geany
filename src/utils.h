@@ -152,15 +152,20 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text);
  * If alternative is set to TRUE, it returns the opposite of app->pref_editor_use_tabs. */
 gchar *utils_get_whitespace(gint amount, gboolean alternative);
 
-/* frees all passed pointers if they are non-NULL, the first argument is nothing special,
- * it will also be freed, the list should be ended with NULL */
-void utils_free_pointers(gpointer first, ...);
 
-/* creates a string array deep copy of a series of non-NULL strings.
- * the first argument is nothing special.
- * the list must be ended with NULL.
- * if first is NULL, NULL is returned. */
-gchar **utils_strv_new(gchar *first, ...);
+#if ! GLIB_CHECK_VERSION(2, 8, 0)
+#define G_GNUC_NULL_TERMINATED
+#endif
+
+/* Frees all passed pointers if they are non-NULL, the first argument is nothing special,
+ * it will also be freed, the list should be ended with NULL */
+void utils_free_pointers(gpointer first, ...) G_GNUC_NULL_TERMINATED;
+
+/* Creates a string array deep copy of a series of non-NULL strings.
+ * The first argument is nothing special.
+ * The list must be ended with NULL.
+ * If first is NULL, NULL is returned. */
+gchar **utils_strv_new(gchar *first, ...) G_GNUC_NULL_TERMINATED;
 
 gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
 

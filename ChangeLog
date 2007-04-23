@@ -5,6 +5,9 @@
    documents (should fix #1705374).
  * src/symbols.c:
    Sort symbol list tags also by line number (fixes #1703575).
+ * src/utils.c, src/utils.h:
+   Add G_GNUC_NULL_TERMINATED to ensure variable arglists are NULL
+   terminated (for GLib >= 2.8).
 
 
 2007-04-21  Nick Treleaven  <nick.treleaven@btinternet.com>

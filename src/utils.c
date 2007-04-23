@@ -1496,7 +1496,7 @@ gchar *utils_get_whitespace(gint a, gboolean alternative)
 }
 
 
-/* frees all passed pointers if they are non-NULL, the first argument is nothing special,
+/* Frees all passed pointers if they are non-NULL, the first argument is nothing special,
  * it will also be freed, the list should be ended with NULL */
 void utils_free_pointers(gpointer first, ...)
 {
@@ -1515,10 +1515,10 @@ void utils_free_pointers(gpointer first, ...)
 }
 
 
-/* creates a string array deep copy of a series of non-NULL strings.
- * the first argument is nothing special.
- * the list must be ended with NULL.
- * if first is NULL, NULL is returned. */
+/* Creates a string array deep copy of a series of non-NULL strings.
+ * The first argument is nothing special.
+ * The list must be ended with NULL.
+ * If first is NULL, NULL is returned. */
 gchar **utils_strv_new(gchar *first, ...)
 {
 	gsize strvlen, i;
