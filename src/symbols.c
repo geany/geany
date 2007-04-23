@@ -300,9 +300,16 @@ typedef struct GeanySymbol
 /* wrapper function to let strcmp work with GeanySymbol struct */
 static gint compare_symbol(const GeanySymbol *a, const GeanySymbol *b)
 {
+	gint ret;
+
 	if (a == NULL || b == NULL) return 0;
 
-	return strcmp(a->str, b->str);
+	ret = strcmp(a->str, b->str);
+	if (ret == 0)
+	{
+		return a->line - b->line;
+	}
+	return ret;
 }
 
 
@@ -348,23 +355,20 @@ get_tag_list(gint idx, guint tag_types)
 				if (! doc_is_utf8) utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
 															-1, doc_list[idx].encoding, TRUE);
 				else utf8_name = tag->name;
+
+				symbol = g_new0(GeanySymbol, 1);
 				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
 				{
-					symbol = g_new0(GeanySymbol, 1);
-					symbol->str = g_strdup_printf("%s%s%s [%ld]", tag->atts.entry.scope, cosep,
-																utf8_name, tag->atts.entry.line);
-					symbol->type = tag->type;
-					symbol->line = tag->atts.entry.line;
-					tag_names = g_list_prepend(tag_names, symbol);
+					symbol->str = g_strconcat(tag->atts.entry.scope, cosep, utf8_name, NULL);
 				}
 				else
 				{
-					symbol = g_new0(GeanySymbol, 1);
-					symbol->str = g_strdup_printf("%s [%ld]", utf8_name, tag->atts.entry.line);
-					symbol->type = tag->type;
-					symbol->line = tag->atts.entry.line;
-					tag_names = g_list_prepend(tag_names, symbol);
+					symbol->str = g_strdup(utf8_name);
 				}
+				symbol->type = tag->type;
+				symbol->line = tag->atts.entry.line;
+				tag_names = g_list_prepend(tag_names, symbol);
+
 				if (! doc_is_utf8) g_free(utf8_name);
 			}
 		}
@@ -620,7 +624,10 @@ gboolean symbols_recreate_tag_list(gint idx)
 	init_tag_list(idx);
 	for (tmp = (GList*)tags; tmp; tmp = g_list_next(tmp))
 	{
+		gchar buf[100];
 		const GeanySymbol *symbol = (GeanySymbol*)tmp->data;
+
+		g_snprintf(buf, sizeof(buf), "%s [%d]", symbol->str, symbol->line);
 
 		switch (symbol->type)
 		{
@@ -630,7 +637,7 @@ gboolean symbols_recreate_tag_list(gint idx)
 			{
 				if (tv_iters.tag_function.stamp == -1) break;
 				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_function));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, symbol->str, -1);
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
 				break;
 			}
 			case tm_tag_macro_t:
@@ -638,14 +645,14 @@ gboolean symbols_recreate_tag_list(gint idx)
 			{
 				if (tv_iters.tag_macro.stamp == -1) break;
 				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_macro));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, symbol->str, -1);
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
 				break;
 			}
 			case tm_tag_class_t:
 			{
 				if (tv_iters.tag_class.stamp == -1) break;
 				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_class));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, symbol->str, -1);
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
 				break;
 			}
 			case tm_tag_member_t:
@@ -653,7 +660,7 @@ gboolean symbols_recreate_tag_list(gint idx)
 			{
 				if (tv_iters.tag_member.stamp == -1) break;
 				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_member));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, symbol->str, -1);
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
 				break;
 			}
 			case tm_tag_typedef_t:
@@ -664,14 +671,14 @@ gboolean symbols_recreate_tag_list(gint idx)
 			{
 				if (tv_iters.tag_struct.stamp == -1) break;
 				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_struct));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, symbol->str, -1);
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
 				break;
 			}
 			case tm_tag_variable_t:
 			{
 				if (tv_iters.tag_variable.stamp == -1) break;
 				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_variable));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, symbol->str, -1);
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
 				break;
 			}
 			case tm_tag_namespace_t:
@@ -679,14 +686,14 @@ gboolean symbols_recreate_tag_list(gint idx)
 			{
 				if (tv_iters.tag_namespace.stamp == -1) break;
 				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_namespace));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, symbol->str, -1);
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
 				break;
 			}
 			default:
 			{
 				if (tv_iters.tag_other.stamp == -1) break;
 				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_other));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, symbol->str, -1);
+				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
 			}
 		}
 	}
