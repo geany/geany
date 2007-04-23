@@ -1,3 +1,10 @@
+2007-04-23  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c:
+   When linking (or using Make Custom), remove error indicators in all
+   documents (should fix #1705374).
+
+
 2007-04-21  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/project.c, src/project.h, src/keyfile.c, src/main.c:

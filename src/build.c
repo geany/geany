@@ -407,6 +407,34 @@ static GPid build_link_file(gint idx)
 }
 
 
+/* If linking, clear all error indicators in all documents.
+ * Otherwise, just clear error indicators in document idx. */
+static void clear_errors(gint idx)
+{
+	switch (build_info.type)
+	{
+		case GBO_COMPILE:
+		case GBO_MAKE_OBJECT:
+			document_clear_indicators(idx);
+			break;
+
+		case GBO_BUILD:
+		case GBO_MAKE_ALL:
+		case GBO_MAKE_CUSTOM:
+		{
+			guint i;
+
+			for (i = 0; i < doc_array->len; i++)
+			{
+				if (doc_list[i].is_valid)
+					document_clear_indicators(i);
+			}
+			break;
+		}
+	}
+}
+
+
 /* dir is the UTF-8 working directory to run cmd in. It can be NULL to use the
  * idx document directory */
 static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
@@ -425,7 +453,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 
 	g_return_val_if_fail(DOC_IDX_VALID(idx), (GPid) 1);
 
-	document_clear_indicators(idx);
+	clear_errors(idx);
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	executable = utils_remove_ext_from_filename(locale_filename);
