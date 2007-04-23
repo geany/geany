@@ -53,6 +53,6 @@ gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
 	const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (4, 5);
 
-void dialogs_show_msgbox(gint type, const gchar *text, ...);
+void dialogs_show_msgbox(gint type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
 
 #endif
