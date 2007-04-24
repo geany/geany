@@ -732,6 +732,13 @@ static gchar *find_calltip(const gchar *word, filetype *ft)
 	tm_tags_prune((GPtrArray *) tags);
 	if (tags->len == 0)
 		return NULL;
+	else
+	{	// remove duplicate calltips
+		TMTagAttrType sort_attr[] = {tm_tag_attr_name_t, tm_tag_attr_scope_t,
+			tm_tag_attr_arglist_t, 0};
+
+		tm_tags_sort((GPtrArray *) tags, sort_attr, TRUE);
+	}
 
 	// if the current word has changed since last time, start with the first tag match
 	if (! utils_str_equal(word, calltip.last_word))

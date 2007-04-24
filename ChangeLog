@@ -2,6 +2,8 @@
 
  * src/search.c:
    Disable FIF extra options entry when checkbox is not checked.
+ * src/sci_cb.c:
+   Remove duplicate calltips (e.g. from function def and prototype).
 
 
 2007-04-23  Nick Treleaven  <nick.treleaven@btinternet.com>
