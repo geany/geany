@@ -530,12 +530,11 @@ void search_show_replace_dialog()
 }
 
 
-static gboolean on_entry_extra_key_press(GtkWidget *widget, GdkEventKey *event,
-		gpointer user_data)
+static void on_extra_options_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
-	// enable extra option checkbutton when extra entry is edited
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(user_data), TRUE);
-	return FALSE;
+	// disable extra option entry when checkbutton not checked
+	gtk_widget_set_sensitive(GTK_WIDGET(user_data),
+		gtk_toggle_button_get_active(togglebutton));
 }
 
 
@@ -682,12 +681,15 @@ void search_show_find_in_files_dialog()
 		entry_extra = gtk_entry_new();
 		if (search_prefs.fif_extra_options)
 			gtk_entry_set_text(GTK_ENTRY(entry_extra), search_prefs.fif_extra_options);
+		gtk_widget_set_sensitive(entry_extra, FALSE);
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "entry_extra",
 						gtk_widget_ref(entry_extra), (GDestroyNotify)gtk_widget_unref);
-		g_signal_connect(G_OBJECT(entry_extra), "key-press-event",
-			G_CALLBACK(on_entry_extra_key_press), check_extra);
 		gtk_tooltips_set_tip(tooltips, entry_extra,
 				_("Other options to pass to Grep"), NULL);
+
+		// enable entry_extra when check_extra is checked
+		g_signal_connect(G_OBJECT(check_extra), "toggled",
+			G_CALLBACK(on_extra_options_toggled), entry_extra);
 
 		hbox = gtk_hbox_new(FALSE, 6);
 		gtk_box_pack_start(GTK_BOX(hbox), check_extra, FALSE, FALSE, 0);

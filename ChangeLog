@@ -1,3 +1,9 @@
+2007-04-24  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/search.c:
+   Disable FIF extra options entry when checkbox is not checked.
+
+
 2007-04-23  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c:
