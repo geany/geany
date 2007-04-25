@@ -115,8 +115,10 @@ filetype *filetypes[GEANY_MAX_FILE_TYPES];
 // If uid is valid, return corresponding filetype, otherwise NULL.
 filetype *filetypes_get_from_uid(gint uid);
 
-/* inits the filetype array and fill it with the known filetypes
- * and create the filetype menu*/
+/* Calls filetypes_init_types() and creates the filetype menu. */
+void filetypes_init();
+
+/* Create the filetype array and fill it with the known filetypes. */
 void filetypes_init_types();
 
 /* Detect the filetype for document idx, checking for a shebang, then filename extension. */

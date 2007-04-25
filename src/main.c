@@ -441,12 +441,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 		exit(0);
 	}
-	if (generate_tags)
-	{
-		gboolean ret = symbols_generate_global_tags(*argc, *argv);
-
-		exit(ret);
-	}
 
 	app->debug_mode = debug_mode;
 #ifdef GEANY_DEBUG
@@ -460,6 +454,23 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 	else
 		app->configdir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
+
+#ifdef GEANY_DEBUG
+	if (generate_datafiles)
+	{
+		filetypes_init_types();
+		configuration_generate_data_files();	// currently only filetype_extensions.conf
+		exit(0);
+	}
+#endif
+	if (generate_tags)
+	{
+		gboolean ret;
+
+		ret = symbols_generate_global_tags(*argc, *argv);
+		exit(ret);
+	}
+
 
 #ifdef HAVE_SOCKET
 	socket_info.ignore_socket = ignore_socket;
@@ -639,14 +650,7 @@ gint main(gint argc, gchar **argv)
 	keybindings_init();
 	tools_create_insert_custom_command_menu_items();
 	notebook_init();
-	filetypes_init_types();
-#ifdef GEANY_DEBUG
-	if (generate_datafiles)
-	{
-		configuration_generate_data_files();
-		exit(0);
-	}
-#endif
+	filetypes_init();
 	templates_init();
 	document_init_doclist();
 	configuration_read_filetype_extensions();

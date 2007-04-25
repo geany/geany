@@ -1,3 +1,10 @@
+2007-04-25  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/filetypes.c, src/filetypes.h, src/main.c:
+   Separate filetype menu item creation from filetypes_init_types() so
+   it can be called without initializing GTK (for non-GUI commands).
+
+
 2007-04-24  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/search.c:
