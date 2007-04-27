@@ -123,6 +123,12 @@ gboolean tm_source_file_write(TMWorkObject *source_file, FILE *fp, guint attrs);
 */
 extern guint source_file_class_id;
 
+/*! Gets the name associated with the language index.
+ \param lang The language index.
+ \return The language name, or NULL.
+*/
+const gchar *tm_source_file_get_lang_name(gint lang);
+
 #ifdef __cplusplus
 }
 #endif

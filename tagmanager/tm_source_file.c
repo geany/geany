@@ -200,3 +200,16 @@ gboolean tm_source_file_write(TMWorkObject *source_file, FILE *fp, guint attrs)
 	}
 	return TRUE;
 }
+
+const gchar *tm_source_file_get_lang_name(gint lang)
+{
+	if (NULL == LanguageTable)
+	{
+		initializeParsing();
+		installLanguageMapDefaults();
+		if (NULL == TagEntryFunction)
+			TagEntryFunction = tm_source_file_tags;
+	}
+	return getLanguageName(lang);
+}
+
