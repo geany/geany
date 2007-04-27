@@ -100,10 +100,11 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
  \param includes Include files to process. Wildcards such as '/usr/include/a*.h'
  are allowed.
  \param tags_file The file where the tags will be stored.
+ \param lang The language to use for the tags file.
  \return TRUE on success, FALSE on failure.
 */
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes
-  , int includes_count, const char *tags_file);
+  , int includes_count, const char *tags_file, int lang);
 
 /*! Recreates the tag array of the workspace by collecting the tags of
  all member work objects. You shouldn't have to call this directly since

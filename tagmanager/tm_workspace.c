@@ -187,8 +187,68 @@ static void tm_move_entries_to_g_list(gpointer key, gpointer value, gpointer use
 	*pp_list = g_list_prepend(*pp_list, value);
 }
 
+static void write_includes_file(FILE *fp, GList *includes_files)
+{
+	GList *node;
+
+	node = includes_files;
+	while (node)
+	{
+		char *str = g_strdup_printf("#include \"%s\"\n", (char*)node->data);
+		int str_len = strlen(str);
+
+		fwrite(str, str_len, 1, fp);
+		free(str);
+		node = g_list_next (node);
+	}
+}
+
+
+static void append_to_temp_file(FILE *fp, GList *file_list)
+{
+	GList *node;
+
+	node = file_list;
+	while (node)
+	{
+		const char *fname = node->data;
+		char *contents;
+		size_t length;
+		GError *err = NULL;
+
+		if (! g_file_get_contents(fname, &contents, &length, &err))
+		{
+			fprintf(stderr, "Unable to read file: %s\n", err->message);
+			g_error_free(err);
+		}
+		else
+		{
+			fwrite(contents, length, 1, fp);
+			fwrite("\n", 1, 1, fp);	// in case file doesn't end in newline (e.g. windows).
+			g_free(contents);
+		}
+		node = g_list_next (node);
+	}
+}
+
+static gint get_global_tag_type_mask(gint lang)
+{
+	switch (lang)
+	{
+		case 0:
+		case 1:
+			// C/C++
+			return tm_tag_class_t | tm_tag_typedef_t | tm_tag_enum_t | tm_tag_enumerator_t |
+				tm_tag_prototype_t |
+				tm_tag_function_t | tm_tag_method_t |	// for inline functions
+				tm_tag_macro_t | tm_tag_macro_with_arg_t;
+		default:
+			return tm_tag_max_t;
+	}
+}
+
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes
-  , int includes_count, const char *tags_file)
+  , int includes_count, const char *tags_file, int lang)
 {
 #ifdef HAVE_GLOB_H
 	glob_t globbuf;
@@ -202,7 +262,6 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	GPtrArray *tags_array;
 	GHashTable *includes_files_hash;
 	GList *includes_files = NULL;
-	GList *node;
 #ifdef G_OS_WIN32
 	char *temp_file = g_strdup_printf("%s_%d_%ld_1.cpp", P_tmpdir, getpid(), time(NULL));
 	char *temp_file2 = g_strdup_printf("%s_%d_%ld_2.cpp", P_tmpdir, getpid(), time(NULL));
@@ -259,6 +318,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
   	}
   	else
 #endif
+	// no glob support or globbing not wanted
 	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
 	{
 		if (!g_hash_table_lookup(includes_files_hash,
@@ -279,16 +339,10 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 #ifdef TM_DEBUG
 	g_message ("writing out files to %s\n", temp_file);
 #endif
-	node = includes_files;
-	while (node)
-	{
-		char *str = g_strdup_printf("#include \"%s\"\n", (char*)node->data);
-		int str_len = strlen(str);
-
-		fwrite(str, str_len, 1, fp);
-		free(str);
-		node = g_list_next (node);
-	}
+	if (pre_process != NULL)
+		write_includes_file(fp, includes_files);
+	else
+		append_to_temp_file(fp, includes_files);
 
 	g_list_free (includes_files);
 	g_hash_table_destroy(includes_files_hash);
@@ -302,18 +356,26 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	 * following these lines are incorrectly parsed. The real fix should,
 	 * of course be in tagmanager (c) parser. This is just a temporary fix.
 	 */
-	command = g_strdup_printf("%s %s | grep -v -E '^\\s*(G_BEGIN_DECLS|G_END_DECLS)\\s*$' > %s",
+	if (pre_process != NULL)
+	{
+		command = g_strdup_printf("%s %s | grep -v -E '^\\s*(G_BEGIN_DECLS|G_END_DECLS)\\s*$' > %s",
 							  pre_process, temp_file, temp_file2);
-
 #ifdef TM_DEBUG
-	g_message("Executing: %s", command);
+		g_message("Executing: %s", command);
 #endif
-
-	system(command);
-	g_free(command);
-	unlink(temp_file);
-	g_free(temp_file);
-	source_file = tm_source_file_new(temp_file2, TRUE, NULL);
+		system(command);
+		g_free(command);
+		unlink(temp_file);
+		g_free(temp_file);
+	}
+	else
+	{
+		// no pre-processing needed, so temp_file2 = temp_file
+		g_free(temp_file2);
+		temp_file2 = temp_file;
+		temp_file = NULL;
+	}
+	source_file = tm_source_file_new(temp_file2, TRUE, tm_source_file_get_lang_name(lang));
 	if (NULL == source_file)
 	{
 		unlink(temp_file2);
@@ -326,10 +388,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		tm_source_file_free(source_file);
 		return FALSE;
 	}
-	tags_array = tm_tags_extract(source_file->tags_array, tm_tag_class_t |
-	  tm_tag_typedef_t | tm_tag_enum_t | tm_tag_enumerator_t |
-	  tm_tag_prototype_t | tm_tag_function_t | tm_tag_method_t |	// for inline functions
-	  tm_tag_macro_t | tm_tag_macro_with_arg_t);
+	tags_array = tm_tags_extract(source_file->tags_array, get_global_tag_type_mask(lang));
 	if ((NULL == tags_array) || (0 == tags_array->len))
 	{
 		if (tags_array)

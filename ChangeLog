@@ -1,3 +1,14 @@
+2007-04-26  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * tagmanager/tm_source_file.c, tagmanager/include/tm_source_file.h:
+   Add tm_source_file_get_lang_name() as a wrapper for getLanguageName()
+   in parse.c.
+ * src/main.c, src/symbols.c, tagmanager/tm_workspace.c,
+   tagmanager/include/tm_workspace.h:
+   Add support for generating global tags files for non-C-like
+   filetypes.
+
+
 2007-04-25  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/filetypes.c, src/filetypes.h, src/main.c:

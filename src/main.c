@@ -467,6 +467,8 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	{
 		gboolean ret;
 
+		filetypes_init_types();
+		configuration_read_filetype_extensions();	// needed for *.lang.tags filetype matching
 		ret = symbols_generate_global_tags(*argc, *argv);
 		exit(ret);
 	}

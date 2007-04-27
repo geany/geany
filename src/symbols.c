@@ -704,10 +704,33 @@ gboolean symbols_recreate_tag_list(gint idx)
 }
 
 
+/* Detects a global tags filetype from the *.lang.* language extension.
+ * Returns NULL if there was no matching TM language. */
+static filetype *detect_global_tags_filetype(const gchar *utf8_filename)
+{
+	gchar *tags_ext;
+	gchar *shortname = g_strdup(utf8_filename);
+	filetype *ft = NULL;
+
+	tags_ext = strstr(shortname, ".tags");
+	if (tags_ext)
+	{
+		*tags_ext = '\0';	// remove .tags extension
+		ft = filetypes_detect_from_filename(shortname);
+	}
+	g_free(shortname);
+
+	if (filetypes[FILETYPE_ID(ft)]->lang < 0)
+		return NULL;
+	return ft;
+}
+
+
 /* Adapted from anjuta-2.0.2/global-tags/tm_global_tags.c, thanks.
- * Needs full path and \" quoting characters around filenames.
+ * Needs full paths for filenames, except for C/C++ tag files, when CFLAGS includes
+ * the relevant path.
  * Example:
- * geany -g tagsfile \"/home/nmt/svn/geany/src/d*.h\" */
+ * CFLAGS=-I/home/user/libname-1.x geany -g libname.d.tags libname.h */
 int symbols_generate_global_tags(int argc, char **argv)
 {
 	/* -E pre-process, -dD output user macros, -p prof info (?),
@@ -719,15 +742,34 @@ int symbols_generate_global_tags(int argc, char **argv)
 		/* Create global taglist */
 		int status;
 		char *command;
-		command = g_strdup_printf("%s %s", pre_process,
-								  NVL(getenv("CFLAGS"), ""));
-		//printf(">%s<\n", command);
+		const char *tags_file = argv[1];
+		char *utf8_fname;
+		filetype *ft;
+
+		utf8_fname = utils_get_utf8_from_locale(tags_file);
+		ft = detect_global_tags_filetype(utf8_fname);
+		g_free(utf8_fname);
+
+		if (ft == NULL)
+		{
+			fprintf(stderr, "Unknown filetype extension for \"%s\".\n", tags_file);
+			return 1;
+		}
+		if (ft->lang == 0 || ft->lang == 1)	/* C/C++ */
+			command = g_strdup_printf("%s %s", pre_process, NVL(getenv("CFLAGS"), ""));
+		else
+			command = NULL;	// don't preprocess
+
+		geany_debug("Generating %s tags file.", ft->name);
 		status = tm_workspace_create_global_tags(command,
 												 (const char **) (argv + 2),
-												 argc - 2, argv[1]);
+												 argc - 2, tags_file, ft->lang);
 		g_free(command);
-		if (!status)
+		if (! status)
+		{
+			fprintf(stderr, "Failed to create tags file.\n");
 			return 1;
+		}
 	}
 	else
 	{
@@ -738,34 +780,6 @@ int symbols_generate_global_tags(int argc, char **argv)
 		return 1;
 	}
 	return 0;
-}
-
-
-// fname should be in locale encoding
-static gboolean load_tags_filename(const gchar *fname)
-{
-	gchar *tags_ext;
-	gchar *shortname = g_strdup(fname);
-	gboolean ret = FALSE;
-
-	tags_ext = strstr(shortname, ".tags");
-	if (tags_ext)
-	{
-		gchar *utf8_shortname;
-		filetype *ft;
-
-		*tags_ext = '\0';	// remove .tags extension
-		utf8_shortname = utils_get_utf8_from_locale(shortname);
-		ft = filetypes_detect_from_filename(utf8_shortname);
-		g_free(utf8_shortname);
-
-		if (ft)
-		{
-			ret = tm_workspace_load_global_tags(fname, ft->lang);
-		}
-	}
-	g_free(shortname);
-	return ret;
 }
 
 
@@ -793,13 +807,16 @@ void symbols_show_load_tags_dialog()
 		{
 			gchar *fname = item->data;
 			gchar *utf8_fname;
-			gboolean ok;
-
-			ok = load_tags_filename(fname);
+			filetype *ft;
 
 			utf8_fname = utils_get_utf8_from_locale(fname);
-			msgwin_status_add(ok ? _("Loaded tags file '%s'.") :
-				_("Could not load tags file '%s'."), utf8_fname);
+			ft = detect_global_tags_filetype(utf8_fname);
+
+			if (ft != NULL && tm_workspace_load_global_tags(fname, ft->lang))
+				msgwin_status_add(_("Loaded %s tags file '%s'."), ft->name, utf8_fname);
+			else
+				msgwin_status_add(_("Could not load tags file '%s'."), utf8_fname);
+
 			g_free(utf8_fname);
 			g_free(fname);
 		}
