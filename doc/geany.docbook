@@ -1256,6 +1256,73 @@
 				</para>
 			</section>
 		</section>
+		<section id="project_management">
+			<title>Project Management</title>
+			<para>
+				Project Management is optional in <application>Geany</application>.
+				Currently it can be used for:
+				<itemizedlist>
+					<listitem><para>Running <emphasis>Make</emphasis> from the project's base
+						directory.</para></listitem>
+					<listitem><para>Setting a custom <emphasis>Run</emphasis> command specific to
+						the project.</para></listitem>
+				</itemizedlist>
+			</para>
+			<para>
+				As long as a project is open, the Make and Run commands will use the project's
+				settings, instead of the defaults. These will be used whichever document is
+				currently displayed.
+			</para>
+			<para>
+				The current project's settings are saved when it is closed, or when
+				<application>Geany</application> is shutdown.
+				When restarting <application>Geany</application>, the previously opened project file
+				that was in use at the end of the last session will be reopened.
+			</para>
+			<section>
+				<title>New Project</title>
+				<para>
+				To create a new project, fill in the <emphasis>Name</emphasis> field. By default
+				this will setup a new project file <filename>~/projects/name.geany</filename>.
+				Usually it's best to store all your project files in the same directory
+				(they are independent of any source directory trees).
+				</para>
+				<para>
+				The <emphasis>Base path</emphasis> text field is setup to use
+				<filename>~/projects/name</filename>. This can safely be set to any existing path
+				- it will not touch the file structure contained in it.
+				</para>
+			</section>
+			<section>
+				<title>Project Properties</title>
+				<para>
+				You can set an optional description for the project, but it is not used elsewhere by
+				<application>Geany</application>.
+				</para>
+				<para>
+				The <emphasis>Base path</emphasis> field is used as the directory to run the
+				Make command in.
+				</para>
+				<para>
+				The <emphasis>Run</emphasis> command overrides the default run command. You can
+				set this to the executable or main script file for the project, and append any
+				command-line arguments.
+				</para>
+			</section>
+			<section>
+				<title>Close Project</title>
+				<para>
+				Project file settings are saved when the project is closed.
+				</para>
+			</section>
+			<section>
+				<title>Open Project</title>
+				<para>
+				The <emphasis>Open</emphasis> command displays a standard file chooser, starting
+				in <filename>~/projects</filename>.
+				</para>
+			</section>
+		</section>
 		<section id="build_system">
 			<title>Build system</title>
 			<para>
