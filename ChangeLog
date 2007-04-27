@@ -7,6 +7,9 @@
    tagmanager/include/tm_workspace.h:
    Add support for generating global tags files for non-C-like
    filetypes.
+ * doc/geany.docbook:
+   Update Global Tags section now all filetypes can be generated.
+   Comment out 'should be written' from Preferences section.
 
 
 2007-04-25  Nick Treleaven  <nick.treleaven@btinternet.com>

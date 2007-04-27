@@ -955,7 +955,7 @@
 				See <xref linkend="search_gototag"/>.
 			</para>
 			</section>
-			<section><title>Global tags</title>
+			<section id="tags_global"><title>Global tags</title>
 			<para>
 				Global tags are used to provide autocompletion and calltips without having to open
 				the corresponding source files. This is intended for library APIs, as the tags file
@@ -982,7 +982,8 @@
 					<listitem><para>C - GTK+ and GLib</para></listitem>
 					<listitem><para>Pascal</para></listitem>
 					<listitem><para>PHP</para></listitem>
-					<listitem><para>HTML - ampersand, copyright, etc. symbol completion</para></listitem>
+					<listitem><para>HTML - <literal>&amp;symbol;</literal> completion, e.g.
+					for ampersand, copyright, etc.</para></listitem>
 					<listitem><para>LaTeX</para></listitem>
 				</itemizedlist>
 			</para>
@@ -991,19 +992,13 @@
 			<para>
 				<note><title>Filetypes support</title>
 				<para>
-					Currently this is only supported for filetypes that can be pre-processed
-					with <filename>gcc</filename>,
-					i.e. do not use the <literal>#</literal> character outside of strings.
-					Also Pascal, PHP and LaTeX will not work yet.
-				</para>
-				<para>
-					This is known to work with C, C++ and D filetypes.
+					Currently this is not yet supported for Pascal, PHP and LaTeX filetypes.
 				</para>
 				</note>
 			</para>
 			<para>
 				You can generate your own global tags files by parsing a list of source files.
-				The format is:
+				The command is:
 			</para>
 			<para>
 				geany -g &lt;Tag File&gt; &lt;File list&gt;
@@ -1011,19 +1006,21 @@
 			<para>
 				<itemizedlist>
 					<listitem><para><emphasis>Tag File</emphasis> should be in the format described
-						earlier.</para></listitem>
+						earlier - see <xref linkend="tags_global"/>.</para></listitem>
 					<listitem><para><emphasis>File list</emphasis> is a list of filenames, each with
-						a full path.</para></listitem>
+						a full path (unless you are generating C/C++ tags and have set the CFLAGS
+						environment variable appropriately).</para></listitem>
 				</itemizedlist>
-			</para>
-			<para>
-				<filename>gcc</filename> is required, as C/C++ header files are preprocessed to include
-				any other header files they depend upon. Currently <filename>grep</filename> is
-				also required for tags generation.
 			</para>
 			<para>
 				Example for the wxD library for the D programming language:
 				<programlisting>geany -g wxd.d.tags /home/username/wxd/wx/*.d</programlisting>
+			</para>
+			<section><title>Generating C/C++ tag files</title>
+			<para>
+				For C/C++ tag files, <filename>gcc</filename> and <filename>grep</filename> are
+				required, so that header files can be preprocessed to include
+				any other headers they depend upon.
 			</para>
 			<para>
 				For C/C++ files, the environment variable CFLAGS should be set with appropriate
@@ -1050,15 +1047,18 @@
 				tags file because it will get overwritten when upgrading
 				<application>Geany</application>.
 				</para>
+				<para>This is a temporary solution - in later versions this will be unnecessary.
+				</para>
 				</note>
 			</para>
-			</section>
-			</section>
+			</section><!-- C/C++ -->
+			</section><!-- Generating -->
+			</section><!-- Tags -->
 		</section>
 		<section id="confdialog">
 			<title>Preferences</title>
 			<para>
-				should be written
+				<!-- should be written -->
 				<!-- I know that <mediaobject> is better than <graphic> but <mediaobject> does not work with PDF -->
 				<figure id="confdialog_gen">
 				   <title>General tab in preferences dialog</title>
