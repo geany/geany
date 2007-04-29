@@ -60,7 +60,7 @@
 #else
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm"
 #endif
-#define GEANY_DEFAULT_TOOLS_BROWSER		"mozilla"
+#define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"
 #define GEANY_DEFAULT_MRU_LENGTH		10
