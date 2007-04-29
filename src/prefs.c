@@ -42,6 +42,7 @@
 #include "keybindings.h"
 #include "interface.h"
 #include "encodings.h"
+#include "project.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -100,20 +101,10 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_ask_suppress_search_dialogs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_suppress_search_dialogs);
 
-	widget = lookup_widget(app->prefs_dialog, "check_show_notebook_tabs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->show_notebook_tabs);
-	// disable following setting if notebook tabs are hidden
-	on_show_notebook_tabs_toggled(GTK_TOGGLE_BUTTON(
-					lookup_widget(app->prefs_dialog, "check_show_notebook_tabs")), NULL);
-
-	if (app->tab_order_ltr)
-		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
-	else
-		widget = lookup_widget(app->prefs_dialog, "radio_tab_left");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
-
 	widget = lookup_widget(app->prefs_dialog, "entry_contextaction");
 	gtk_entry_set_text(GTK_ENTRY(widget), app->context_action_cmd);
+
+	project_setup_prefs();	// project files path
 
 
 	// Interface settings
@@ -148,6 +139,12 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "long_line_color");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), color);
 	g_free(color);
+
+	widget = lookup_widget(app->prefs_dialog, "check_show_notebook_tabs");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->show_notebook_tabs);
+	// disable following setting if notebook tabs are hidden
+	on_show_notebook_tabs_toggled(GTK_TOGGLE_BUTTON(
+					lookup_widget(app->prefs_dialog, "check_show_notebook_tabs")), NULL);
 
 	widget = lookup_widget(app->prefs_dialog, "combo_tab_editor");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), app->tab_pos_editor);
@@ -210,6 +207,14 @@ void prefs_init_dialog(void)
 	// disable elements if toolbar is hidden
 	on_toolbar_show_toggled(GTK_TOGGLE_BUTTON(
 					lookup_widget(app->prefs_dialog, "check_toolbar_show")), NULL);
+
+
+	// Files settings
+	if (app->tab_order_ltr)
+		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
+	else
+		widget = lookup_widget(app->prefs_dialog, "radio_tab_left");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
 
 	// Editor settings
@@ -436,15 +441,11 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "check_switch_pages");
 		app->switch_msgwin_pages = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
-		app->tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = lookup_widget(app->prefs_dialog, "check_show_notebook_tabs");
-		app->show_notebook_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
 		widget = lookup_widget(app->prefs_dialog, "entry_contextaction");
 		g_free(app->context_action_cmd);
 		app->context_action_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		project_apply_prefs();	// project file path
 
 
 		// Interface settings
@@ -466,6 +467,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 			}
 		}
 		if (app->long_line_column == 0) app->long_line_type = 2;
+
+		widget = lookup_widget(app->prefs_dialog, "check_show_notebook_tabs");
+		app->show_notebook_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "combo_tab_editor");
 		app->tab_pos_editor = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
@@ -526,6 +530,11 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 			app->toolbar_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 		else
 			app->toolbar_icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
+
+
+		// Files settings
+		widget = lookup_widget(app->prefs_dialog, "radio_tab_right");
+		app->tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
 		// Editor settings

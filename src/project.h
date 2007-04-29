@@ -67,4 +67,8 @@ void project_save_prefs(GKeyFile *config);
 
 void project_load_prefs(GKeyFile *config);
 
+void project_setup_prefs();
+
+void project_apply_prefs();
+
 #endif

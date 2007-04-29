@@ -43,6 +43,11 @@
 
 ProjectPrefs project_prefs = {NULL};
 
+static struct
+{
+	gchar *project_file_path;
+} local_prefs = {NULL};
+
 
 static gboolean entries_modified;
 
@@ -74,7 +79,7 @@ static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 // avoid using __VA_ARGS__ because older gcc 2.x versions probably don't support C99
 #define SHOW_ERR(args...) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
 #define MAX_NAME_LEN 50
-// "projects" is part of the default project base path so be carefully when translating
+// "projects" is part of the default project base path so be careful when translating
 // please avoid special characters and spaces, look at the source for details or ask Frank
 #define PROJECT_DIR _("projects")
 
@@ -225,7 +230,7 @@ static void run_open_dialog(GtkDialog *dialog)
 
 void project_open()
 {
-	gchar *dir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, NULL);
+	const gchar *dir = local_prefs.project_file_path;
 #ifdef G_OS_WIN32
 	gchar *file;
 #else
@@ -273,8 +278,6 @@ void project_open()
 	run_open_dialog(GTK_DIALOG(dialog));
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 #endif
-
-	g_free(dir);
 }
 
 
@@ -744,6 +747,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 	gchar *base_path;
 	gchar *file_name;
 	gchar *name;
+	const gchar *project_dir = local_prefs.project_file_path;
 
 	if (entries_modified)
 		return;
@@ -751,21 +755,17 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 	name = gtk_editable_get_chars(editable, 0, -1);
 	if (name != NULL && strlen(name) > 0)
 	{
-		base_path = g_strconcat(
-			GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, G_DIR_SEPARATOR_S,
+		base_path = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
 			name, G_DIR_SEPARATOR_S, NULL);
-		file_name = g_strconcat(
-			GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, G_DIR_SEPARATOR_S,
+		file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
 			name, "." GEANY_PROJECT_EXT, NULL);
-		g_free(name);
 	}
 	else
 	{
-		base_path = g_strconcat(
-			GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, G_DIR_SEPARATOR_S, NULL);
-		file_name = g_strconcat(
-			GEANY_HOME_DIR, G_DIR_SEPARATOR_S, PROJECT_DIR, G_DIR_SEPARATOR_S, NULL);
+		base_path = g_strconcat(project_dir, G_DIR_SEPARATOR_S, NULL);
+		file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S, NULL);
 	}
+	g_free(name);
 
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), base_path);
 	gtk_entry_set_text(GTK_ENTRY(e->file_name), file_name);
@@ -897,6 +897,8 @@ void project_save_prefs(GKeyFile *config)
 
 		g_key_file_set_string(config, "project", "session_file", utf8_filename);
 	}
+	g_key_file_set_string(config, "project", "project_file_path",
+		NVL(local_prefs.project_file_path, ""));
 }
 
 
@@ -908,5 +910,38 @@ void project_load_prefs(GKeyFile *config)
 		project_prefs.session_file = utils_get_setting_string(config, "project",
 			"session_file", "");
 	}
+	local_prefs.project_file_path = utils_get_setting_string(config, "project",
+		"project_file_path", NULL);
+	if (local_prefs.project_file_path == NULL)
+	{
+		local_prefs.project_file_path = g_strconcat(GEANY_HOME_DIR,
+			G_DIR_SEPARATOR_S, PROJECT_DIR, NULL);
+	}
 }
+
+
+/* Initialize project-related preferences in the Preferences dialog. */
+void project_setup_prefs()
+{
+	GtkWidget *path_entry = lookup_widget(app->prefs_dialog, "project_file_path_entry");
+	GtkWidget *path_btn = lookup_widget(app->prefs_dialog, "project_file_path_button");
+
+	g_return_if_fail(local_prefs.project_file_path != NULL);
+	gtk_entry_set_text(GTK_ENTRY(path_entry), local_prefs.project_file_path);
+	ui_setup_open_button_callback(path_btn, GTK_ENTRY(path_entry),
+		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+}
+
+
+/* Update project-related preferences after using the Preferences dialog. */
+void project_apply_prefs()
+{
+	GtkWidget *path_entry = lookup_widget(app->prefs_dialog, "project_file_path_entry");
+	const gchar *str;
+
+	str = gtk_entry_get_text(GTK_ENTRY(path_entry));
+	g_free(local_prefs.project_file_path);
+	local_prefs.project_file_path = g_strdup(str);
+}
+
 

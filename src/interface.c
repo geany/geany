@@ -2366,6 +2366,14 @@ create_prefs_dialog (void)
   GtkWidget *label189;
   GtkWidget *entry_contextaction;
   GtkWidget *label188;
+  GtkWidget *frame25;
+  GtkWidget *alignment28;
+  GtkWidget *table11;
+  GtkWidget *label191;
+  GtkWidget *project_file_path_entry;
+  GtkWidget *project_file_path_button;
+  GtkWidget *image1741;
+  GtkWidget *label190;
   GtkWidget *label94;
   GtkWidget *vbox14;
   GtkWidget *frame7;
@@ -2697,7 +2705,7 @@ create_prefs_dialog (void)
 
   label189 = gtk_label_new (_("Context Action command:"));
   gtk_widget_show (label189);
-  gtk_box_pack_start (GTK_BOX (hbox8), label189, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox8), label189, FALSE, FALSE, 6);
 
   entry_contextaction = gtk_entry_new ();
   gtk_widget_show (entry_contextaction);
@@ -2709,6 +2717,52 @@ create_prefs_dialog (void)
   gtk_widget_show (label188);
   gtk_frame_set_label_widget (GTK_FRAME (frame24), label188);
   gtk_label_set_use_markup (GTK_LABEL (label188), TRUE);
+
+  frame25 = gtk_frame_new (NULL);
+  gtk_widget_show (frame25);
+  gtk_box_pack_start (GTK_BOX (vbox20), frame25, TRUE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame25), GTK_SHADOW_NONE);
+
+  alignment28 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment28);
+  gtk_container_add (GTK_CONTAINER (frame25), alignment28);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment28), 0, 0, 12, 0);
+
+  table11 = gtk_table_new (1, 3, FALSE);
+  gtk_widget_show (table11);
+  gtk_container_add (GTK_CONTAINER (alignment28), table11);
+  gtk_table_set_col_spacings (GTK_TABLE (table11), 6);
+
+  label191 = gtk_label_new (_("Project files:"));
+  gtk_widget_show (label191);
+  gtk_table_attach (GTK_TABLE (table11), label191, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label191), 0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (label191), 6, 0);
+
+  project_file_path_entry = gtk_entry_new ();
+  gtk_widget_show (project_file_path_entry);
+  gtk_table_attach (GTK_TABLE (table11), project_file_path_entry, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, project_file_path_entry, _("Path to start in when opening project files"), NULL);
+  gtk_entry_set_invisible_char (GTK_ENTRY (project_file_path_entry), 8226);
+
+  project_file_path_button = gtk_button_new ();
+  gtk_widget_show (project_file_path_button);
+  gtk_table_attach (GTK_TABLE (table11), project_file_path_button, 2, 3, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image1741 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image1741);
+  gtk_container_add (GTK_CONTAINER (project_file_path_button), image1741);
+
+  label190 = gtk_label_new (_("<b>Paths</b>"));
+  gtk_widget_show (label190);
+  gtk_frame_set_label_widget (GTK_FRAME (frame25), label190);
+  gtk_label_set_use_markup (GTK_LABEL (label190), TRUE);
 
   label94 = gtk_label_new (_("General"));
   gtk_widget_show (label94);
@@ -3903,6 +3957,14 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label189, "label189");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_contextaction, "entry_contextaction");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label188, "label188");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame25, "frame25");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment28, "alignment28");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table11, "table11");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label191, "label191");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, project_file_path_entry, "project_file_path_entry");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, project_file_path_button, "project_file_path_button");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, image1741, "image1741");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label190, "label190");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label94, "label94");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox14, "vbox14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame7, "frame7");
