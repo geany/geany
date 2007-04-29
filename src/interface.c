@@ -3469,10 +3469,10 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_disable_dnd, _("Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_disable_dnd), FALSE);
 
-  check_use_tabs = gtk_check_button_new_with_mnemonic (_("Use tabulators when inserting whitespace"));
+  check_use_tabs = gtk_check_button_new_with_mnemonic (_("Use tabs when inserting whitespace"));
   gtk_widget_show (check_use_tabs);
   gtk_box_pack_start (GTK_BOX (vbox17), check_use_tabs, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_use_tabs, _("Whenever some whitespace is inserted by Geany it will use tabulators when enabled otherwise Geany will use just spaces."), NULL);
+  gtk_tooltips_set_tip (tooltips, check_use_tabs, _("Whenever some whitespace is inserted by Geany it will use tabs when enabled otherwise Geany will use just spaces."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_use_tabs), FALSE);
 
   label172 = gtk_label_new (_("<b>Features</b>"));
