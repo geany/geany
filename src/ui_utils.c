@@ -958,8 +958,10 @@ GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alig
 
 const gint BUTTON_BOX_BORDER = 5;
 
-/* common convenience function for getting a fixed border for dialogs
- * that doesn't increase the button box border */
+/* Convenience function for getting a fixed border for dialogs that doesn't
+ * increase the button box border.
+ * dialog is the parent container for the vbox.
+ * Returns: the vbox. */
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 {
 	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	// need child vbox to set a separate border.
@@ -1116,6 +1118,98 @@ void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str)
 	pfd = pango_font_description_from_string(str);
 	gtk_widget_modify_font(wid, pfd);
 	pango_font_description_free(pfd);
+}
+
+
+/* Creates a GtkHBox with entry packed into it and an open button which runs a
+ * file chooser, replacing entry text if successful.
+ * entry can be the child of an unparented widget, such as GtkComboBoxEntry.
+ * action is the GtkFileChooser mode to use. */
+GtkWidget *ui_path_box_new(GtkEntry *entry, GtkFileChooserAction action)
+{
+	GtkWidget *vbox, *dirbtn, *openimg, *hbox, *path_entry;
+
+	hbox = gtk_hbox_new(FALSE, 6);
+	path_entry = GTK_WIDGET(entry);
+
+	// prevent path_entry being vertically stretched to the height of dirbtn
+	vbox = gtk_vbox_new(FALSE, 0);
+	if (gtk_widget_get_parent(path_entry))	// entry->parent may be a GtkComboBoxEntry
+	{
+		GtkWidget *parent = gtk_widget_get_parent(path_entry);
+
+		gtk_box_pack_start(GTK_BOX(vbox), parent, TRUE, FALSE, 0);
+	}
+	else
+		gtk_box_pack_start(GTK_BOX(vbox), path_entry, TRUE, FALSE, 0);
+
+	dirbtn = gtk_button_new();
+	openimg = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
+	gtk_container_add(GTK_CONTAINER(dirbtn), openimg);
+	ui_setup_open_button_callback(dirbtn, entry, action);
+
+	gtk_box_pack_end(GTK_BOX(hbox), dirbtn, FALSE, FALSE, 0);
+	gtk_box_pack_end(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
+	return hbox;
+}
+
+
+static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data);
+
+
+/* Setup a GtkButton to run a GtkFileChooser, setting entry text if successful.
+ * action is the file chooser mode to use. */
+void ui_setup_open_button_callback(GtkWidget *open_btn, GtkEntry *entry,
+		GtkFileChooserAction action)
+{
+	GtkWidget *path_entry = GTK_WIDGET(entry);
+
+	g_object_set_data_full(G_OBJECT(open_btn), "entry",
+					gtk_widget_ref(path_entry), (GDestroyNotify)gtk_widget_unref);
+	g_object_set_data(G_OBJECT(open_btn), "action", (gpointer) action);
+	g_signal_connect(G_OBJECT(open_btn), "clicked",
+		G_CALLBACK(ui_path_box_open_clicked), open_btn);
+}
+
+
+static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
+{
+	GtkWidget *path_box = GTK_WIDGET(user_data);
+	GtkFileChooserAction action =
+		(GtkFileChooserAction) g_object_get_data(G_OBJECT(path_box), "action");
+	GtkEntry *entry =
+		(GtkEntry *) g_object_get_data(G_OBJECT(path_box), "entry");
+	const gchar *title = (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER) ?
+		_("Select Folder") : _("Select File");
+	GtkWidget *dialog = gtk_file_chooser_dialog_new(title,
+		GTK_WINDOW(app->window), action,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+	gchar *locale_path;
+	const gchar *utf8_path;
+
+	// TODO: extend for other actions
+	g_return_if_fail(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+
+	utf8_path = gtk_entry_get_text(GTK_ENTRY(entry));
+	locale_path = utils_get_locale_from_utf8(utf8_path);
+	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+	{
+		if (g_path_is_absolute(locale_path) && g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
+	}
+	g_free(locale_path);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+	{
+		gchar *dir_utf8, *dir_locale;
+		dir_locale = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(dialog));
+		dir_utf8 = utils_get_utf8_from_locale(dir_locale);
+		gtk_entry_set_text(GTK_ENTRY(entry), dir_utf8);
+		g_free(dir_utf8);
+		g_free(dir_locale);
+	}
+	gtk_widget_destroy(dialog);
 }
 
 

@@ -2,6 +2,12 @@
 
  * src/interface.c, geany.glade:
    Rename 'tabulators' 'tabs'.
+ * src/ui_utils.h, src/search.c, src/ui_utils.c:
+   Add ui_path_box_new() for creating a path text entry with an open
+   button, which runs a file chooser to set the text entry.
+   Add ui_setup_open_button_callback() for setting up a button callback
+   that behaves like the open button in ui_path_box_new().
+   Use ui_path_box_new() in FIF dialog setup.
 
 
 2007-04-29  Enrico Tröger  <enrico.troeger@uvena.de>
