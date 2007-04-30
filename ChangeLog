@@ -7,6 +7,8 @@
    Allow replacing identical text if case sensitive is not checked.
  * src/document.c:
    Fix reloading of read-only documents.
+ * src/document.c:
+   Make replace all commands report no matches for read-only documents.
 
 
 2007-04-29  Nick Treleaven  <nick.treleaven@btinternet.com>

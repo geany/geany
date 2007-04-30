@@ -1291,7 +1291,7 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	if (new_range_end != NULL)
 		*new_range_end = -1;
 	g_return_val_if_fail(find_text != NULL && replace_text != NULL, 0);
-	if (idx == -1 || ! *find_text) return 0;
+	if (idx == -1 || ! *find_text || doc_list[idx].readonly) return 0;
 
 	sci_start_undo_action(doc_list[idx].sci);
 	ttf.chrg.cpMin = start;
