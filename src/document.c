@@ -776,6 +776,7 @@ gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	sci_empty_undo_buffer(doc_list[idx].sci);
 
 	// add the text to the ScintillaObject
+	sci_set_readonly(doc_list[idx].sci, FALSE);	// to allow replacing text
 	sci_set_text(doc_list[idx].sci, filedata.data);	// NULL terminated data
 
 	// detect & set line endings
