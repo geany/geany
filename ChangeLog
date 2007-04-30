@@ -12,6 +12,8 @@
  * src/search.c:
    Switch to status window when using Replace In Session to show which
    documents had replacements made.
+ * src/search.c:
+   Show number of matches when using Mark command.
 
 
 2007-04-29  Nick Treleaven  <nick.treleaven@btinternet.com>

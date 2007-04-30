@@ -856,11 +856,17 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				break;
 
 			case GEANY_RESPONSE_MARK:
-			{
 				if (DOC_IDX_VALID(idx))
-					search_mark(idx, search_data.text, search_data.flags);
+				{
+					gint count = search_mark(idx, search_data.text, search_data.flags);
+
+					if (count == 0)
+						ui_set_statusbar(_("No matches found for '%s'."), search_data.text);
+					else
+						ui_set_statusbar(_("Found %d matches for '%s'."), count,
+							search_data.text);
+				}
 				break;
-			}
 		}
 		if (check_close)
 			gtk_widget_hide(widgets.find_dialog);
