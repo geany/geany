@@ -752,7 +752,7 @@ int symbols_generate_global_tags(int argc, char **argv)
 
 		if (ft == NULL)
 		{
-			fprintf(stderr, "Unknown filetype extension for \"%s\".\n", tags_file);
+			g_printerr(_("Unknown filetype extension for \"%s\".\n"), tags_file);
 			return 1;
 		}
 		if (ft->lang == 0 || ft->lang == 1)	/* C/C++ */
@@ -767,16 +767,16 @@ int symbols_generate_global_tags(int argc, char **argv)
 		g_free(command);
 		if (! status)
 		{
-			fprintf(stderr, "Failed to create tags file.\n");
+			g_printerr(_("Failed to create tags file.\n"));
 			return 1;
 		}
 	}
 	else
 	{
-		fprintf(stderr, "Usage: %s -g <Tag File> <File list>\n\n", argv[0]);
-		fprintf(stderr, "Example:\n"
+		g_printerr(_("Usage: %s -g <Tag File> <File list>\n\n"), argv[0]);
+		g_printerr(_("Example:\n"
 			"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags"
-			" /usr/include/gtk-2.0/gtk/gtk.h\n", argv[0]);
+			" /usr/include/gtk-2.0/gtk/gtk.h\n"), argv[0]);
 		return 1;
 	}
 	return 0;
