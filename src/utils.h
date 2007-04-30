@@ -25,6 +25,10 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
+// Returns: TRUE if ptr points to a non-zero value.
+#define NZV(ptr) \
+	((ptr) && (ptr)[0])
+
 
 void utils_start_browser(const gchar *uri);
 
