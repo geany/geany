@@ -976,6 +976,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 					search_replace_escape_re)) count++;
 			}
 			ui_set_statusbar(_("Replaced text in %u files."), count);
+			// show which docs had replacements:
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 
 			ui_save_buttons_toggle(doc_list[idx].changed);	// update save all
 			if (close_window) gtk_widget_hide(widgets.replace_dialog);

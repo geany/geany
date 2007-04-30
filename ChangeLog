@@ -9,6 +9,9 @@
    Fix reloading of read-only documents.
  * src/document.c:
    Make replace all commands report no matches for read-only documents.
+ * src/search.c:
+   Switch to status window when using Replace In Session to show which
+   documents had replacements made.
 
 
 2007-04-29  Nick Treleaven  <nick.treleaven@btinternet.com>
