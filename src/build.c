@@ -1551,6 +1551,10 @@ static void show_includes_arguments_gen()
 
 		g_object_set_data_full(G_OBJECT(dialog), "includes_entry3",
 						gtk_widget_ref(entries[2]), (GDestroyNotify)gtk_widget_unref);
+
+		// disable the run command if there is a valid project run command set
+		if (app->project && NZV(app->project->run_cmd))
+			gtk_widget_set_sensitive(entries[2], FALSE);
 	}
 
 	label = gtk_label_new(_("%f will be replaced by the current filename, e.g. test_file.c\n"

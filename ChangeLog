@@ -14,6 +14,11 @@
    documents had replacements made.
  * src/search.c:
    Show number of matches when using Mark command.
+ * src/utils.h:
+   Add NZV() macro for checking a char* points to a non-empty string.
+ * src/build.c:
+   Disable the Build Includes run command field when there is a project
+   open with a valid run command set.
 
 
 2007-04-29  Nick Treleaven  <nick.treleaven@btinternet.com>
