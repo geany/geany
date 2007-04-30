@@ -3,6 +3,8 @@
  * src/symbols.c:
    Use g_printerr (if necessary) when generating global tags to convert
    UTF-8 automatically; mark error messages for translation.
+ * src/search.c:
+   Allow replacing identical text if case sensitive is not checked.
 
 
 2007-04-29  Nick Treleaven  <nick.treleaven@btinternet.com>
