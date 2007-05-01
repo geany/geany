@@ -1,3 +1,10 @@
+2007-05-01  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * geany.gladep:
+   Don't regenerate the support.[hc] files, to prevent unnecessary
+   rebuilding of files dependent on support.h.
+
+
 2007-04-30  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/symbols.c:
