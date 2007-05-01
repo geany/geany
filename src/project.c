@@ -39,6 +39,7 @@
 #ifdef G_OS_WIN32
 # include "win32.h"
 #endif
+#include "build.h"
 
 
 ProjectPrefs project_prefs = {NULL};
@@ -298,6 +299,8 @@ void project_close()
 
 	g_free(app->project);
 	app->project = NULL;
+
+	build_menu_update(-1);
 }
 
 
@@ -474,8 +477,12 @@ void project_properties()
 	retry:
 	response = gtk_dialog_run(GTK_DIALOG(e->dialog));
 	if (response == GTK_RESPONSE_OK)
+	{
 		if (! update_config(e))
 			goto retry;
+		// successfully updated properties
+		build_menu_update(-1);
+	}
 
 	gtk_widget_destroy(e->dialog);
 	g_free(e);
@@ -839,6 +846,7 @@ static gboolean load_config(const gchar *filename)
 
 	g_key_file_free(config);
 
+	build_menu_update(-1);
 	return TRUE;
 }
 

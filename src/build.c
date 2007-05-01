@@ -1600,7 +1600,7 @@ static gboolean is_c_header(const gchar *fname)
 void build_menu_update(gint idx)
 {
 	filetype *ft;
-	gboolean have_path, can_build, can_make, can_run, can_set_args, have_errors;
+	gboolean have_path, can_build, can_make, can_run, can_stop, can_set_args, have_errors;
 	BuildMenuItems *menu_items;
 
 	if (idx == -1)
@@ -1654,13 +1654,20 @@ void build_menu_update(gint idx)
 	if (menu_items->item_make_object)
 		gtk_widget_set_sensitive(menu_items->item_make_object, can_make);
 
-	can_run = have_path && run_info.pid <= (GPid) 1;
-	/* can_run only applies item_exec2
-	 * item_exec is enabled for both run and stop commands */
+	if (app->project && NZV(app->project->run_cmd))
+		can_run = have_path;	// for now run is disabled for all untitled files
+	else
+		can_run = have_path && ft->actions->can_exec;
+
+	can_stop = run_info.pid > (GPid) 1;
+	can_run &= ! can_stop;
+
+	/* item_exec is enabled for both run and stop commands */
 	if (menu_items->item_exec)
-		gtk_widget_set_sensitive(menu_items->item_exec, have_path && ft->actions->can_exec);
+		gtk_widget_set_sensitive(menu_items->item_exec, can_run || can_stop);
+	/* item_exec2 is disabled if there's a running process already */
 	if (menu_items->item_exec2)
-		gtk_widget_set_sensitive(menu_items->item_exec2, can_run && ft->actions->can_exec);
+		gtk_widget_set_sensitive(menu_items->item_exec2, can_run);
 
 	can_set_args =
 		((ft->actions->can_compile ||
@@ -1671,11 +1678,12 @@ void build_menu_update(gint idx)
 		gtk_widget_set_sensitive(menu_items->item_set_args, can_set_args);
 
 	gtk_widget_set_sensitive(app->compile_button, can_build && ft->actions->can_compile);
-	gtk_widget_set_sensitive(app->run_button, have_path && ft->actions->can_exec);
+	gtk_widget_set_sensitive(app->run_button, can_run || can_stop);
 
 	// show the stop command if a program is running, otherwise show run command
-	set_stop_button(run_info.pid > (GPid) 1);
+	set_stop_button(can_stop);
 
+	// simply enable next error command if the compiler window has any items
 	have_errors = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_compiler),
 		NULL) > 0;
 	gtk_widget_set_sensitive(menu_items->item_next_error, have_errors);

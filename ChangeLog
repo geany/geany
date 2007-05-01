@@ -5,6 +5,9 @@
    rebuilding of files dependent on support.h.
  * src/project.c:
    Hide the unused File Patterns field in the project properties dialog.
+ * src/build.c, src/project.c:
+   Allow run for any file (with a path) when a valid project run command
+   is set.
 
 
 2007-04-30  Nick Treleaven  <nick.treleaven@btinternet.com>
