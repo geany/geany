@@ -3,6 +3,8 @@
  * geany.gladep:
    Don't regenerate the support.[hc] files, to prevent unnecessary
    rebuilding of files dependent on support.h.
+ * src/project.c:
+   Hide the unused File Patterns field in the project properties dialog.
 
 
 2007-04-30  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -413,6 +413,7 @@ void project_properties()
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
+#if 0
 	label = gtk_label_new(_("File patterns:"));
 	// <small>Separate multiple patterns by a new line</small>
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
@@ -429,6 +430,7 @@ void project_properties()
 	gtk_table_attach(GTK_TABLE(table), swin, 1, 2, 5, 6,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
+#endif
 
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
@@ -441,6 +443,7 @@ void project_properties()
 		gtk_text_buffer_set_text(buffer, p->description, -1);
 	}
 
+#if 0
 	if (p->file_patterns != NULL)
 	{	// set the file patterns
 		gint i;
@@ -459,6 +462,7 @@ void project_properties()
 		gtk_text_buffer_set_text(buffer, str->str, -1);
 		g_string_free(str, TRUE);
 	}
+#endif
 
 	gtk_entry_set_text(GTK_ENTRY(e->file_name), p->file_name);
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), p->base_path);
@@ -590,7 +594,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 	if (! new_project)	// save properties specific fields
 	{
 		GtkTextIter start, end;
-		gchar *tmp;
+		//gchar *tmp;
 		GtkTextBuffer *buffer;
 
 		if (p->run_cmd != NULL) g_free(p->run_cmd);
@@ -603,6 +607,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		g_free(p->description);
 		p->description = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 
+#if 0
 		// get and set the project file patterns
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->patterns));
 		gtk_text_buffer_get_start_iter(buffer, &start);
@@ -611,6 +616,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		g_strfreev(p->file_patterns);
 		p->file_patterns = g_strsplit(tmp, "\n", -1);
 		g_free(tmp);
+#endif
 	}
 	write_config();
 	if (new_project)
