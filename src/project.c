@@ -381,6 +381,9 @@ void project_properties()
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->base_path = gtk_entry_new();
+	gtk_tooltips_set_tip(tooltips, e->base_path,
+		_("Directory to run Make All from. "
+		"Leave blank to use the default command."), NULL);
 	button = gtk_button_new();
 	g_signal_connect((gpointer) button, "clicked",
 				G_CALLBACK(on_folder_open_button_clicked), e->base_path);
@@ -496,11 +499,9 @@ static gboolean close_open_project()
 {
 	if (app->project != NULL)
 	{
-		gchar *msg =
-			_("The '%s' project is already open. "
-				"Do you want to close it before proceeding?");
-
-		if (dialogs_show_question(msg, app->project->name))
+		if (dialogs_show_question_full(GTK_STOCK_OK, GTK_STOCK_CANCEL,
+			_("Do you want to close it before proceeding?"),
+			_("The '%s' project is already open. "), app->project->name))
 		{
 			project_close();
 			return TRUE;
@@ -548,19 +549,15 @@ static gboolean update_config(const PropertyDialogElements *e)
 	}
 
 	base_path = gtk_entry_get_text(GTK_ENTRY(e->base_path));
-	if (strlen(base_path) == 0)
-	{
-		SHOW_ERR(_("You have specified an invalid project base path."));
-		gtk_widget_grab_focus(e->base_path);
-		return FALSE;
-	}
-	else
+	if (NZV(base_path))
 	{	// check whether the given directory actually exists
 		gchar *locale_path = utils_get_locale_from_utf8(base_path);
 		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
 		{
-			if (dialogs_show_question(
-				_("The specified project base path does not exist. Should it be created?")))
+			if (dialogs_show_question_full(GTK_STOCK_OK, GTK_STOCK_CANCEL,
+				_("Create the project's base path directory?"),
+				_("The path \"%s\" does not exist."),
+				base_path))
 			{
 				utils_mkdir(locale_path, TRUE);
 			}
@@ -894,7 +891,7 @@ static gboolean write_config()
 
 const gchar *project_get_make_dir()
 {
-	if (app->project != NULL)
+	if (app->project != NULL && NZV(app->project->base_path))
 		return app->project->base_path;
 	else
 		return NULL;

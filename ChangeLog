@@ -8,6 +8,9 @@
  * src/build.c, src/project.c:
    Allow run for any file (with a path) when a valid project run command
    is set.
+ * src/project.c:
+   Allow a blank project base path to use the default Make All command.
+   Update the 'project already open' & 'base path not found' dialogs.
 
 
 2007-04-30  Nick Treleaven  <nick.treleaven@btinternet.com>
