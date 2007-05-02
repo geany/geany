@@ -63,7 +63,7 @@ Damián Viano - <language> es\n\t\
 Harri Koskinen  - <language> fi_FI\n\t\
 &lt;harri@fastmonkey.org&gt;\n\n\t\
 Jean-Philippe Moal - <language> fr\n\t\
-&lt;skateinmars@momo.servegame.org&gt;\n\n\t\
+&lt;skateinmars@skateinmars.net&gt;\n\n\t\
 Gabor Kmetyko - <language> hu\n\t\
 &lt;kg_kilo@freemail.hu&gt;\n\n\t\
 M. Baldinelli - <language> it\n\t\
