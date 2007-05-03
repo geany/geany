@@ -53,22 +53,15 @@ const gboolean swap_alt_tab_order = FALSE;
 static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gchar *name,
 		const gchar *label);
 
-static void cb_func_menu_new(guint key_id);
-static void cb_func_menu_open(guint key_id);
-static void cb_func_menu_open_selected(guint key_id);
-static void cb_func_menu_save(guint key_id);
-static void cb_func_menu_saveall(guint key_id);
-static void cb_func_menu_saveas(guint key_id);
-static void cb_func_menu_print(guint key_id);
-static void cb_func_menu_close(guint key_id);
-static void cb_func_menu_closeall(guint key_id);
-static void cb_func_menu_reloadfile(guint key_id);
 static void cb_func_file_action(guint key_id);
+static void cb_func_menu_print(guint key_id);
+
 static void cb_func_menu_undo(guint key_id);
 static void cb_func_menu_redo(guint key_id);
 static void cb_func_menu_selectall(guint key_id);
 static void cb_func_menu_preferences(guint key_id);
 static void cb_func_menu_insert_date(guint key_id);
+
 static void cb_func_menu_findnext(guint key_id);
 static void cb_func_menu_findprevious(guint key_id);
 static void cb_func_menu_findnextsel(guint key_id);
@@ -77,17 +70,22 @@ static void cb_func_menu_replace(guint key_id);
 static void cb_func_menu_findinfiles(guint key_id);
 static void cb_func_menu_nextmessage(guint key_id);
 static void cb_func_menu_gotoline(guint key_id);
-static void cb_func_menu_opencolorchooser(guint key_id);
+
 static void cb_func_menu_fullscreen(guint key_id);
 static void cb_func_menu_messagewindow(guint key_id);
 static void cb_func_menu_zoomin(guint key_id);
 static void cb_func_menu_zoomout(guint key_id);
+
 static void cb_func_menu_replacetabs(guint key_id);
 static void cb_func_menu_foldall(guint key_id);
 static void cb_func_menu_unfoldall(guint key_id);
-static void cb_func_menu_insert_specialchars(guint key_id);
-static void cb_func_build_action(guint key_id);
 static void cb_func_reloadtaglist(guint key_id);
+
+static void cb_func_menu_opencolorchooser(guint key_id);
+static void cb_func_menu_insert_specialchars(guint key_id);
+
+static void cb_func_build_action(guint key_id);
+
 static void cb_func_switch_editor(guint key_id);
 static void cb_func_switch_scribble(guint key_id);
 static void cb_func_switch_vte(guint key_id);
@@ -116,25 +114,25 @@ void keybindings_init(void)
 	GKeyFile *config = g_key_file_new();
 
 	// init all fields of keys with default values
-	keys[GEANY_KEYS_MENU_NEW] = fill(cb_func_menu_new,
+	keys[GEANY_KEYS_MENU_NEW] = fill(cb_func_file_action,
 		GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"));
-	keys[GEANY_KEYS_MENU_OPEN] = fill(cb_func_menu_open,
+	keys[GEANY_KEYS_MENU_OPEN] = fill(cb_func_file_action,
 		GDK_o, GDK_CONTROL_MASK, "menu_open", _("Open"));
-	keys[GEANY_KEYS_MENU_OPENSELECTED] = fill(cb_func_menu_open_selected,
+	keys[GEANY_KEYS_MENU_OPENSELECTED] = fill(cb_func_file_action,
 		GDK_o, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_open_selected", _("Open selected file"));
-	keys[GEANY_KEYS_MENU_SAVE] = fill(cb_func_menu_save,
+	keys[GEANY_KEYS_MENU_SAVE] = fill(cb_func_file_action,
 		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"));
-	keys[GEANY_KEYS_MENU_SAVEAS] = fill(cb_func_menu_saveas,
+	keys[GEANY_KEYS_MENU_SAVEAS] = fill(cb_func_file_action,
 		0, 0, "menu_saveas", _("Save as"));
-	keys[GEANY_KEYS_MENU_SAVEALL] = fill(cb_func_menu_saveall,
+	keys[GEANY_KEYS_MENU_SAVEALL] = fill(cb_func_file_action,
 		GDK_S, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_saveall", _("Save all"));
 	keys[GEANY_KEYS_MENU_PRINT] = fill(cb_func_menu_print,
 		GDK_p, GDK_CONTROL_MASK, "menu_print", _("Print"));
-	keys[GEANY_KEYS_MENU_CLOSE] = fill(cb_func_menu_close,
+	keys[GEANY_KEYS_MENU_CLOSE] = fill(cb_func_file_action,
 		GDK_w, GDK_CONTROL_MASK, "menu_close", _("Close"));
-	keys[GEANY_KEYS_MENU_CLOSEALL] = fill(cb_func_menu_closeall,
+	keys[GEANY_KEYS_MENU_CLOSEALL] = fill(cb_func_file_action,
 		GDK_w, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_closeall", _("Close all"));
-	keys[GEANY_KEYS_MENU_RELOADFILE] = fill(cb_func_menu_reloadfile,
+	keys[GEANY_KEYS_MENU_RELOADFILE] = fill(cb_func_file_action,
 		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"));
 	keys[GEANY_KEYS_MENU_PROJECTPROPERTIES] = fill(cb_func_file_action,
 		0, 0, "project_properties", _("Project properties"));
@@ -677,56 +675,38 @@ static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gcha
 /* These are the callback functions, either each group or each shortcut has it's
  * own function. */
 
-static void cb_func_menu_new(G_GNUC_UNUSED guint key_id)
-{
-	document_new_file(NULL, NULL);
-}
-
-static void cb_func_menu_open(G_GNUC_UNUSED guint key_id)
-{
-	on_open1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_open_selected(G_GNUC_UNUSED guint key_id)
-{
-	on_menu_open_selected_file1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_save(G_GNUC_UNUSED guint key_id)
-{
-	on_save1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_saveall(G_GNUC_UNUSED guint key_id)
-{
-	on_save_all1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_saveas(G_GNUC_UNUSED guint key_id)
-{
-	on_save_as1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_close(G_GNUC_UNUSED guint key_id)
-{
-	on_close1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_closeall(G_GNUC_UNUSED guint key_id)
-{
-	on_close_all1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_reloadfile(G_GNUC_UNUSED guint key_id)
-{
-	on_toolbutton23_clicked(NULL, NULL);
-}
-
 
 static void cb_func_file_action(guint key_id)
 {
 	switch (key_id)
 	{
+		case GEANY_KEYS_MENU_NEW:
+			document_new_file(NULL, NULL);
+			break;
+		case GEANY_KEYS_MENU_OPEN:
+			on_open1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_MENU_OPENSELECTED:
+			on_menu_open_selected_file1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_MENU_SAVE:
+			on_save1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_MENU_SAVEAS:
+			on_save_as1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_MENU_SAVEALL:
+			on_save_all1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_MENU_CLOSE:
+			on_close1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_MENU_CLOSEALL:
+			on_close_all1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_MENU_RELOADFILE:
+			on_toolbutton23_clicked(NULL, NULL);
+			break;
 		case GEANY_KEYS_MENU_PROJECTPROPERTIES:
 			if (app->project)
 				on_project_properties1_activate(NULL, NULL);
@@ -734,6 +714,13 @@ static void cb_func_file_action(guint key_id)
 	}
 }
 
+
+static void cb_func_menu_print(G_GNUC_UNUSED guint key_id)
+{
+	gint idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	document_print(idx);
+}
 
 static void cb_func_menu_undo(G_GNUC_UNUSED guint key_id)
 {
@@ -1153,13 +1140,6 @@ static void cb_func_edit(guint key_id)
 static void cb_func_menu_replacetabs(G_GNUC_UNUSED guint key_id)
 {
 	on_replace_tabs_activate(NULL, NULL);
-}
-
-static void cb_func_menu_print(G_GNUC_UNUSED guint key_id)
-{
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	document_print(idx);
 }
 
 static void cb_func_menu_insert_date(G_GNUC_UNUSED guint key_id)

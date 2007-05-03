@@ -1,6 +1,14 @@
+2007-05-03  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/keybindings.c, src/keybindings.h:
+   Add keybinding to show project properties dialog.
+ * src/keybindings.c:
+   Merge file menu keybinding callbacks into cb_func_file_action().
+
+
 2007-05-02  Frank Lanitz  <frank@frank.uvena.de>
 
- * THANKS, src/about.c: Update of e-mail of Jean-Philippe Moal. 
+ * THANKS, src/about.c: Update of e-mail of Jean-Philippe Moal.
 
 
 2007-05-01  Nick Treleaven  <nick.treleaven@btinternet.com>
