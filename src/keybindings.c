@@ -63,6 +63,7 @@ static void cb_func_menu_print(guint key_id);
 static void cb_func_menu_close(guint key_id);
 static void cb_func_menu_closeall(guint key_id);
 static void cb_func_menu_reloadfile(guint key_id);
+static void cb_func_file_action(guint key_id);
 static void cb_func_menu_undo(guint key_id);
 static void cb_func_menu_redo(guint key_id);
 static void cb_func_menu_selectall(guint key_id);
@@ -119,7 +120,7 @@ void keybindings_init(void)
 		GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"));
 	keys[GEANY_KEYS_MENU_OPEN] = fill(cb_func_menu_open,
 		GDK_o, GDK_CONTROL_MASK, "menu_open", _("Open"));
-	keys[GEANY_KEYS_MENU_OPEN_SELECTED] = fill(cb_func_menu_open_selected,
+	keys[GEANY_KEYS_MENU_OPENSELECTED] = fill(cb_func_menu_open_selected,
 		GDK_o, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "menu_open_selected", _("Open selected file"));
 	keys[GEANY_KEYS_MENU_SAVE] = fill(cb_func_menu_save,
 		GDK_s, GDK_CONTROL_MASK, "menu_save", _("Save"));
@@ -135,6 +136,9 @@ void keybindings_init(void)
 		GDK_w, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_closeall", _("Close all"));
 	keys[GEANY_KEYS_MENU_RELOADFILE] = fill(cb_func_menu_reloadfile,
 		GDK_r, GDK_CONTROL_MASK, "menu_reloadfile", _("Reload file"));
+	keys[GEANY_KEYS_MENU_PROJECTPROPERTIES] = fill(cb_func_file_action,
+		0, 0, "project_properties", _("Project properties"));
+
 	keys[GEANY_KEYS_MENU_UNDO] = fill(cb_func_menu_undo,
 		GDK_z, GDK_CONTROL_MASK, "menu_undo", _("Undo"));
 	keys[GEANY_KEYS_MENU_REDO] = fill(cb_func_menu_redo,
@@ -145,6 +149,7 @@ void keybindings_init(void)
 		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"));
 	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences,
 		0, 0, "menu_preferences", _("Preferences"));
+
 	keys[GEANY_KEYS_MENU_FINDNEXT] = fill(cb_func_menu_findnext,
 		GDK_F3, 0, "menu_findnext", _("Find Next"));
 	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious,
@@ -161,8 +166,7 @@ void keybindings_init(void)
 		0, 0, "menu_nextmessage", _("Next Message"));
 	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline,
 		GDK_j, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
-	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser,
-		0, 0, "menu_opencolorchooser", _("Show Colour Chooser"));
+
 	keys[GEANY_KEYS_MENU_FULLSCREEN] = fill(cb_func_menu_fullscreen,
 		GDK_F11, 0, "menu_fullscreen", _("Fullscreen"));
 	keys[GEANY_KEYS_MENU_MESSAGEWINDOW] = fill(cb_func_menu_messagewindow,
@@ -173,14 +177,21 @@ void keybindings_init(void)
 		GDK_plus, GDK_CONTROL_MASK, "menu_zoomin", _("Zoom In"));
 	keys[GEANY_KEYS_MENU_ZOOMOUT] = fill(cb_func_menu_zoomout,
 		GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"));
+
+	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser,
+		0, 0, "menu_opencolorchooser", _("Show Colour Chooser"));
+	keys[GEANY_KEYS_MENU_INSERTSPECIALCHARS] = fill(cb_func_menu_insert_specialchars,
+		0, 0, "menu_insert_specialchars", _("Insert Special HTML Characters"));
+
 	keys[GEANY_KEYS_MENU_REPLACETABS] = fill(cb_func_menu_replacetabs,
 		0, 0, "menu_replacetabs", _("Replace tabs by space"));
 	keys[GEANY_KEYS_MENU_FOLDALL] = fill(cb_func_menu_foldall,
 		0, 0, "menu_foldall", _("Fold all"));
 	keys[GEANY_KEYS_MENU_UNFOLDALL] = fill(cb_func_menu_unfoldall,
 		0, 0, "menu_unfoldall", _("Unfold all"));
-	keys[GEANY_KEYS_MENU_INSERTSPECIALCHARS] = fill(cb_func_menu_insert_specialchars,
-		0, 0, "menu_insert_specialchars", _("Insert Special HTML Characters"));
+	keys[GEANY_KEYS_RELOADTAGLIST] = fill(cb_func_reloadtaglist,
+		GDK_r, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "reloadtaglist", _("Reload symbol list"));
+
 	keys[GEANY_KEYS_BUILD_COMPILE] = fill(cb_func_build_action,
 		GDK_F8, 0, "build_compile", _("Compile"));
 	keys[GEANY_KEYS_BUILD_LINK] = fill(cb_func_build_action,
@@ -200,8 +211,7 @@ void keybindings_init(void)
 		0, 0, "build_run2", _("Run (alternative command)"));
 	keys[GEANY_KEYS_BUILD_OPTIONS] = fill(cb_func_build_action,
 		0, 0, "build_options", _("Build options"));
-	keys[GEANY_KEYS_RELOADTAGLIST] = fill(cb_func_reloadtaglist,
-		GDK_r, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "reloadtaglist", _("Reload symbol list"));
+
 	keys[GEANY_KEYS_SWITCH_EDITOR] = fill(cb_func_switch_editor,
 		GDK_F2, 0, "switch_editor", _("Switch to Editor"));
 	keys[GEANY_KEYS_SWITCH_SCRIBBLE] = fill(cb_func_switch_scribble,
@@ -251,6 +261,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_GOTOPREVIOUSMARKER] = fill(cb_func_edit,
 		GDK_comma, GDK_CONTROL_MASK, "edit_gotopreviousmarker",
 		_("Goto previous marker"));
+
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));
 	keys[GEANY_KEYS_EDIT_CALLTIP] = fill(cb_func_edit,
@@ -319,7 +330,7 @@ static void keybindings_add_accels()
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 
 	// apply the settings
-	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPEN_SELECTED, menu_open_selected_file1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPENSELECTED, menu_open_selected_file1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEALL, menu_save_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SAVEAS, menu_save_as1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PRINT, print1);
@@ -361,7 +372,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_REDO, redo1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_SELECTALL, menu_select_all2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_INSERTDATE, insert_date_custom2);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_OPEN_SELECTED, menu_open_selected_file2);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_OPENSELECTED, menu_open_selected_file2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_FINDUSAGE, find_usage1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDEFINITION, goto_tag_definition1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDECLARATION, goto_tag_declaration1);
@@ -663,7 +674,9 @@ static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gcha
 }
 
 
-/* these are the callback functions, each shortcut has its own function, this is only for clear code */
+/* These are the callback functions, either each group or each shortcut has it's
+ * own function. */
+
 static void cb_func_menu_new(G_GNUC_UNUSED guint key_id)
 {
 	document_new_file(NULL, NULL);
@@ -708,6 +721,19 @@ static void cb_func_menu_reloadfile(G_GNUC_UNUSED guint key_id)
 {
 	on_toolbutton23_clicked(NULL, NULL);
 }
+
+
+static void cb_func_file_action(guint key_id)
+{
+	switch (key_id)
+	{
+		case GEANY_KEYS_MENU_PROJECTPROPERTIES:
+			if (app->project)
+				on_project_properties1_activate(NULL, NULL);
+			break;
+	}
+}
+
 
 static void cb_func_menu_undo(G_GNUC_UNUSED guint key_id)
 {
