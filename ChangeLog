@@ -1,3 +1,10 @@
+2007-05-04  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * doc/geany.docbook, src/main.c, src/prefs.c:
+   Set widget names for the main widgets to allow users to define custom
+   styles in .gtkrc-2.0.
+
+
 2007-05-03  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c, src/keybindings.h:

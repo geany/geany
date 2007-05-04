@@ -416,6 +416,56 @@
 					</para>
 				</note>
 			</section>
+			<section id="general_userstyles">
+				<title>Defining own widget styles using .gtkrc-2.0</title>
+				<para>
+					You can  define your widget style for many of <application>Geany</application>'s
+					GUI parts. To do this, just edit your <filename>.gtkrc-2.0</filename> (usually
+					found in your home directory on UNIX-like systems and in the etc subdirecory
+					of your <application>Geany</application> installation on Windows).
+				</para>
+				<para>
+					To get a defined style get noticed by <application>Geany</application> you must
+					it assign to one of <application>Geany</application>'s widgets. To do so,
+					use the following line:
+				</para>
+				<para>
+					<command>widget "Geany*" style "geany_style"</command>
+				</para>
+				<para>
+					This would assign your already defined style "geany_style" to all
+					<application>Geany</application> widgets. You can also assign styles only to
+					specific widgets. At the moment you can use the following widgets:
+					<orderedlist numeration="arabic">
+						<listitem>
+							<para>GeanyMainWindow</para>
+						</listitem>
+						<listitem>
+							<para>GeanyEditMenu</para>
+						</listitem>
+						<listitem>
+							<para>GeanyToolbarMenu</para>
+						</listitem>
+						<listitem>
+							<para>GeanyPrefsDialog</para>
+						</listitem>
+					</orderedlist>
+				</para>
+				<para>Example of a simple .gtkrc-2.0:
+					<programlisting>style "geanyStyle"
+{
+	font_name="Sans 12"
+}
+widget "GeanyMainWindow" style "geanyStyle"
+
+style "geanyStyle"
+{
+	font_name="Sans 10"
+}
+widget "GeanyPrefsDialog" style "geanyStyle"
+</programlisting>
+				</para>
+			</section>
 		</section>
 		<section id="charset">
 			<title>Character sets and Unicode Byte-Order-Mark (BOM)</title>

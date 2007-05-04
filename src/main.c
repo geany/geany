@@ -339,6 +339,11 @@ static void main_init(void)
 	app->undo_items[0] = lookup_widget(app->popup_menu, "undo1");
 	app->undo_items[1] = lookup_widget(app->window, "menu_undo2");
 	app->undo_items[2] = lookup_widget(app->window, "toolbutton_undo");
+
+	// set widget names for matching with .gtkrc-2.0
+	gtk_widget_set_name(app->window, "GeanyMainWindow");
+	gtk_widget_set_name(app->toolbar_menu, "GeanyToolbarMenu");
+	gtk_widget_set_name(app->popup_menu, "GeanyEditMenu");
 }
 
 

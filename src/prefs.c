@@ -1014,6 +1014,7 @@ void prefs_show_dialog(void)
 		gchar *encoding_string;
 
 		app->prefs_dialog = create_prefs_dialog();
+		gtk_widget_set_name(app->prefs_dialog, "GeanyPrefsDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(app->prefs_dialog), GTK_WINDOW(app->window));
 
 		// init the default file encoding combo box
