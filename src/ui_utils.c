@@ -1212,4 +1212,14 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 	gtk_widget_destroy(dialog);
 }
 
-
+void ui_statusbar_showhide(gboolean state)
+{
+	// handle statusbar visibility
+	if (state)
+	{
+		gtk_widget_show(app->statusbar);
+		ui_update_statusbar(-1, -1);
+	}
+	else
+		gtk_widget_hide(app->statusbar);
+}

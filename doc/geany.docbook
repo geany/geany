@@ -1713,6 +1713,11 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 								<entry>Shows or hides the sidebar.</entry>
 							</row>
 							<row>
+								<entry>Hide and show all additional widgets</entry>
+								<entry>Hide and show all additional widgets like the sidebar, the
+									   toolbar, the messages window and the statusbar.</entry>
+							</row>
+							<row>
 								<entry>Zoom In</entry>
 								<entry>Zooms in the text</entry>
 							</row>

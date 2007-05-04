@@ -94,6 +94,7 @@ static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_toggle_sidebar(guint key_id);
+static void cb_func_hide_show_all(guint key_id);
 
 // common function for editing keybindings, only valid when scintilla has focus.
 static void cb_func_edit(guint key_id);
@@ -171,6 +172,8 @@ void keybindings_init(void)
 		0, 0, "menu_messagewindow", _("Toggle Messages Window"));
 	keys[GEANY_KEYS_MENU_SIDEBAR] = fill(cb_func_toggle_sidebar,
 		0, 0, "toggle_sidebar", _("Toggle Sidebar"));
+	keys[GEANY_KEYS_MENU_HIDESHOWALL] = fill(cb_func_hide_show_all,
+		0, 0, "hide_show_all", _("Hide and show all additional widgets"));
 	keys[GEANY_KEYS_MENU_ZOOMIN] = fill(cb_func_menu_zoomin,
 		GDK_plus, GDK_CONTROL_MASK, "menu_zoomin", _("Zoom In"));
 	keys[GEANY_KEYS_MENU_ZOOMOUT] = fill(cb_func_menu_zoomout,
@@ -999,6 +1002,44 @@ static void cb_func_toggle_sidebar(G_GNUC_UNUSED guint key_id)
 
 	ui_treeviews_show_hide(TRUE);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->treeview_notebook), active_page);
+}
+
+
+static void cb_func_hide_show_all(G_GNUC_UNUSED guint key_id)
+{
+	static gint hide_all = FALSE;
+	GtkCheckMenuItem *msgw = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1"));
+	GtkCheckMenuItem *toolbari = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_toolbar1"));
+
+	hide_all = ! hide_all;
+
+	if (hide_all)
+	{
+		if (gtk_check_menu_item_get_active(msgw))
+			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
+
+		if (app->sidebar_visible)
+			cb_func_toggle_sidebar(key_id);
+
+		ui_statusbar_showhide(FALSE);
+
+		if (gtk_check_menu_item_get_active(toolbari))
+			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
+	}
+	else
+	{
+
+		if (! gtk_check_menu_item_get_active(msgw))
+			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
+
+		if (! app->sidebar_visible)
+			cb_func_toggle_sidebar(key_id);
+
+		ui_statusbar_showhide(TRUE);
+
+		if (! gtk_check_menu_item_get_active(toolbari))
+			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
+	}
 }
 
 

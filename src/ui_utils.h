@@ -115,4 +115,6 @@ gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb);
 
 void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);
 
+void ui_statusbar_showhide(gboolean state);
+
 #endif

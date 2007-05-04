@@ -3,6 +3,10 @@
  * doc/geany.docbook, src/main.c, src/prefs.c:
    Set widget names for the main widgets to allow users to define custom
    styles in .gtkrc-2.0.
+ * doc/geany.docbook, src/keybindings.c, src/keybindings.h, src/prefs.c,
+   src/ui_utils.c, src/ui_utils.h:
+   Added keybinding to show and hide all additional widgets(statusbar,
+   toolbar, sidebar and messages window).
 
 
 2007-05-03  Nick Treleaven  <nick.treleaven@btinternet.com>

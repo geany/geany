@@ -685,19 +685,12 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 #endif
 
 		// apply the changes made
+		ui_statusbar_showhide(app->statusbar_visible);
 		ui_update_toolbar_items();
 		ui_update_toolbar_icons(app->toolbar_icon_size);
 		gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), app->toolbar_icon_style);
 		ui_treeviews_show_hide(FALSE);
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), app->show_notebook_tabs);
-		// handle statusbar visibility
-		if (app->statusbar_visible)
-		{
-			gtk_widget_show(app->statusbar);
-			ui_update_statusbar(-1, -1);
-		}
-		else
-			gtk_widget_hide(app->statusbar);
 
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), app->tab_pos_editor);
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), app->tab_pos_msgwin);
