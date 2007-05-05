@@ -99,6 +99,9 @@ static void cb_func_hide_show_all(guint key_id);
 // common function for editing keybindings, only valid when scintilla has focus.
 static void cb_func_edit(guint key_id);
 
+// common function for global editing keybindings.
+static void cb_func_edit_global(guint key_id);
+
 // common function for keybindings using current word
 static void cb_func_current_word(guint key_id);
 
@@ -250,16 +253,16 @@ void keybindings_init(void)
 		GDK_2, GDK_CONTROL_MASK, "edit_sendtocmd2", _("Send to Custom Command 2"));
 	keys[GEANY_KEYS_EDIT_SENDTOCMD3] = fill(cb_func_edit,
 		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"));
-	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit,
+	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit_global,
 		0, 0, "edit_gotomatchingbrace",
 		_("Goto matching brace"));
-	keys[GEANY_KEYS_EDIT_TOGGLEMARKER] = fill(cb_func_edit,
+	keys[GEANY_KEYS_EDIT_TOGGLEMARKER] = fill(cb_func_edit_global,
 		GDK_m, GDK_CONTROL_MASK, "edit_togglemarker",
 		_("Toggle marker"));
-	keys[GEANY_KEYS_EDIT_GOTONEXTMARKER] = fill(cb_func_edit,
+	keys[GEANY_KEYS_EDIT_GOTONEXTMARKER] = fill(cb_func_edit_global,
 		GDK_period, GDK_CONTROL_MASK, "edit_gotonextmarker",
 		_("Goto next marker"));
-	keys[GEANY_KEYS_EDIT_GOTOPREVIOUSMARKER] = fill(cb_func_edit,
+	keys[GEANY_KEYS_EDIT_GOTOPREVIOUSMARKER] = fill(cb_func_edit_global,
 		GDK_comma, GDK_CONTROL_MASK, "edit_gotopreviousmarker",
 		_("Goto previous marker"));
 
@@ -844,43 +847,34 @@ static void cb_func_build_action(guint key_id)
 	switch (key_id)
 	{
 		case GEANY_KEYS_BUILD_COMPILE:
-		item = menu_items->item_compile;
-		break;
-
+			item = menu_items->item_compile;
+			break;
 		case GEANY_KEYS_BUILD_LINK:
-		item = menu_items->item_link;
-		break;
-
+			item = menu_items->item_link;
+			break;
 		case GEANY_KEYS_BUILD_MAKE:
-		item = menu_items->item_make_all;
-		break;
-
+			item = menu_items->item_make_all;
+			break;
 		case GEANY_KEYS_BUILD_MAKEOWNTARGET:
-		item = menu_items->item_make_custom;
-		break;
-
+			item = menu_items->item_make_custom;
+			break;
 		case GEANY_KEYS_BUILD_MAKEOBJECT:
-		item = menu_items->item_make_object;
-		break;
-
+			item = menu_items->item_make_object;
+			break;
 		case GEANY_KEYS_BUILD_NEXTERROR:
-		item = menu_items->item_next_error;
-		break;
-
+			item = menu_items->item_next_error;
+			break;
 		case GEANY_KEYS_BUILD_RUN:
-		item = menu_items->item_exec;
-		break;
-
+			item = menu_items->item_exec;
+			break;
 		case GEANY_KEYS_BUILD_RUN2:
-		item = menu_items->item_exec2;
-		break;
-
+			item = menu_items->item_exec2;
+			break;
 		case GEANY_KEYS_BUILD_OPTIONS:
-		item = menu_items->item_set_args;
-		break;
-
+			item = menu_items->item_set_args;
+			break;
 		default:
-		item = NULL;
+			item = NULL;
 	}
 	if (item && GTK_WIDGET_IS_SENSITIVE(item))
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
@@ -913,20 +907,20 @@ static void cb_func_current_word(guint key_id)
 		switch (key_id)
 		{
 			case GEANY_KEYS_POPUP_FINDUSAGE:
-			on_find_usage1_activate(NULL, NULL);
-			break;
+				on_find_usage1_activate(NULL, NULL);
+				break;
 			case GEANY_KEYS_POPUP_GOTOTAGDEFINITION:
-			on_goto_tag_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
-				"goto_tag_definition1")), NULL);
-			break;
+				on_goto_tag_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
+					"goto_tag_definition1")), NULL);
+				break;
 			case GEANY_KEYS_POPUP_GOTOTAGDECLARATION:
-			on_goto_tag_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
-				"goto_tag_declaration1")), NULL);
-			break;
+				on_goto_tag_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
+					"goto_tag_declaration1")), NULL);
+				break;
 			case GEANY_KEYS_POPUP_CONTEXTACTION:
-			on_context_action1_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
-				"context_action1")), NULL);
-			break;
+				on_context_action1_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
+					"context_action1")), NULL);
+				break;
 		}
 }
 
@@ -1062,17 +1056,63 @@ static void goto_matching_brace(gint idx)
 }
 
 
+/* Common function for editing keybindings that don't change any text, and are
+ * useful even when sci doesn't have focus. */
+static void cb_func_edit_global(guint key_id)
+{
+	gint idx = document_get_cur_idx();
+	gint cur_line;
+
+	if (! DOC_IDX_VALID(idx)) return;
+
+	cur_line = sci_get_current_line(doc_list[idx].sci, -1);
+
+	switch (key_id)
+	{
+		case GEANY_KEYS_EDIT_GOTOMATCHINGBRACE:
+			goto_matching_brace(idx);
+			break;
+		case GEANY_KEYS_EDIT_TOGGLEMARKER:
+		{
+			gboolean set = sci_is_marker_set_at_line(doc_list[idx].sci, cur_line, 1);
+
+			sci_set_marker_at_line(doc_list[idx].sci, cur_line, ! set, 1);
+			break;
+		}
+		case GEANY_KEYS_EDIT_GOTONEXTMARKER:
+		{
+			gint mline = sci_marker_next(doc_list[idx].sci, cur_line + 1, 1 << 1, TRUE);
+
+			if (mline != -1)
+			{
+				sci_goto_line(doc_list[idx].sci, mline, TRUE);
+				doc_list[idx].scroll_percent = 0.5F;
+			}
+			break;
+		}
+		case GEANY_KEYS_EDIT_GOTOPREVIOUSMARKER:
+		{
+			gint mline = sci_marker_previous(doc_list[idx].sci, cur_line - 1, 1 << 1, TRUE);
+
+			if (mline != -1)
+			{
+				sci_goto_line(doc_list[idx].sci, mline, TRUE);
+				doc_list[idx].scroll_percent = 0.5F;
+			}
+			break;
+		}
+	}
+}
+
+
 // common function for editing keybindings, only valid when scintilla has focus.
 static void cb_func_edit(guint key_id)
 {
 	gint idx = document_get_cur_idx();
-	gint cur_line;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
 
 	// edit keybindings only valid when scintilla widget has focus
 	if (! DOC_IDX_VALID(idx) || focusw != GTK_WIDGET(doc_list[idx].sci)) return;
-
-	cur_line = sci_get_current_line(doc_list[idx].sci, -1);
 
 	switch (key_id)
 	{
@@ -1124,38 +1164,6 @@ static void cb_func_edit(guint key_id)
 		case GEANY_KEYS_EDIT_DECREASEINDENT:
 			on_menu_decrease_indent1_activate(NULL, NULL);
 			break;
-		case GEANY_KEYS_EDIT_GOTOMATCHINGBRACE:
-			goto_matching_brace(idx);
-			break;
-		case GEANY_KEYS_EDIT_TOGGLEMARKER:
-		{
-			gboolean set = sci_is_marker_set_at_line(doc_list[idx].sci, cur_line, 1);
-
-			sci_set_marker_at_line(doc_list[idx].sci, cur_line, ! set, 1);
-			break;
-		}
-		case GEANY_KEYS_EDIT_GOTONEXTMARKER:
-		{
-			gint mline = sci_marker_next(doc_list[idx].sci, cur_line + 1, 1 << 1, TRUE);
-
-			if (mline != -1)
-			{
-				sci_goto_line(doc_list[idx].sci, mline, TRUE);
-				doc_list[idx].scroll_percent = 0.5F;
-			}
-			break;
-		}
-		case GEANY_KEYS_EDIT_GOTOPREVIOUSMARKER:
-		{
-			gint mline = sci_marker_previous(doc_list[idx].sci, cur_line - 1, 1 << 1, TRUE);
-
-			if (mline != -1)
-			{
-				sci_goto_line(doc_list[idx].sci, mline, TRUE);
-				doc_list[idx].scroll_percent = 0.5F;
-			}
-			break;
-		}
 		case GEANY_KEYS_EDIT_TOLOWERCASE:
 			on_to_lower_case1_activate(NULL, NULL);
 			break;
