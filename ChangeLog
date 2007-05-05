@@ -3,6 +3,8 @@
  * src/keybindings.c:
    Make marker and matching brace keybindings global.
    (Also indent some case statement bodies).
+ * src/sci_cb.c:
+   Add brace indenting support for Perl and TCL.
 
 
 2007-05-05  Enrico Tröger  <enrico.troeger@uvena.de>
