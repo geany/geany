@@ -1108,40 +1108,87 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 		<section id="confdialog">
 			<title>Preferences</title>
 			<para>
+				You may adjust Geany's settings using the Edit --> Preferences dialog. Any
+				changes you make there can be applied by hitting either the Apply or the Ok
+				button. These settings will persist between Geany sessions. Note that most
+				settings here have descriptive popup bubble help -- just hover the mouse
+				over the item in question to get help on it.
+			</para>
+			<para>
+				You may also adjust some View settings (under the View menu) that persist
+				between Geany sessions. The settings under the Document menu, however, are
+				only for the current document and revert to defaults when restarting Geany.
+			</para>
+			<para>
+				Note, in the paragraphs that follow, the text describing a dialog tab
+				(if present) comes after the screenshot of that tab.
+			</para>
+
+			<para>
 				<!-- should be written -->
 				<!-- I know that <mediaobject> is better than <graphic> but <mediaobject> does not work with PDF -->
+			</para>
+			<para>
 				<figure id="confdialog_gen">
 				   <title>General tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_gen.png"></graphic>
 				</figure>
+				<emphasis>The "Context Activation" setting needs to be documented.</emphasis>
+			</para>
+			<para>
 				<figure>
 				   <title>Interface tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_interface.png"></graphic>
 				</figure>
+				The open files list and the editor tabs are two different ways to switch
+				between documents using the mouse. When you hit the key combination to
+				move between tabs, the order is determined by the tab order, not alphabetical
+				as shown in the open files list (regardless whether or not editor tabs are
+				visible).
+			</para>
+			<para>
 				<figure>
 				   <title>Toolbar tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_toolbar.png"></graphic>
 				</figure>
+			</para>
+			<para>
 				<figure>
 				   <title>Files tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_files.png"></graphic>
 				</figure>
+			</para>
+			<para>
 				<figure>
 				   <title>Editor tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_edit.png"></graphic>
 				</figure>
+				Line wrapping refers to the display of the text in the editor. Currently,
+				there is no setting to have Geany automatically insert newlines into your
+				document while you type.
+			</para>
+			<para>
 				<figure>
 				   <title>Tools tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_tools.png"></graphic>
 				</figure>
+			</para>
+			<para>
 				<figure id="confdialog_templ">
 				   <title>Template tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_templ.png"></graphic>
 				</figure>
+			</para>
+			<para>
 				<figure id="confdialog_keys">
 				   <title>Keybinding tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_keys.png"></graphic>
 				</figure>
+				There are some handy commands in here that are not, by default, bound to a key
+				combination, and may in fact not even be available as a menu item (for example, the
+				very handy "Hide and show all additional widgets").
+			</para>
+			<para>
 			   <note>
 					<para>For more information see <xref linkend="keybindings"/>.</para>
 			   </note>
