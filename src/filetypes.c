@@ -244,7 +244,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_PERL]->name = g_strdup("Perl");
 	filetypes[GEANY_FILETYPES_PERL]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_PERL]->title = g_strdup(_("Perl source file"));
-	filetypes[GEANY_FILETYPES_PERL]->extension = g_strdup("perl");
+	filetypes[GEANY_FILETYPES_PERL]->extension = g_strdup("pl");
 	filetypes[GEANY_FILETYPES_PERL]->pattern = utils_strv_new("*.pl", "*.perl", "*.pm", "*.agi",
 		"*.pod", NULL);
 	filetypes[GEANY_FILETYPES_PERL]->comment_open = g_strdup("#");
