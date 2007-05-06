@@ -71,6 +71,7 @@ static void cb_func_menu_findinfiles(guint key_id);
 static void cb_func_menu_nextmessage(guint key_id);
 static void cb_func_menu_gotoline(guint key_id);
 
+static void cb_func_menu_toggle_all(guint key_id);
 static void cb_func_menu_fullscreen(guint key_id);
 static void cb_func_menu_messagewindow(guint key_id);
 static void cb_func_menu_zoomin(guint key_id);
@@ -94,7 +95,6 @@ static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_toggle_sidebar(guint key_id);
-static void cb_func_hide_show_all(guint key_id);
 
 // common function for editing keybindings, only valid when scintilla has focus.
 static void cb_func_edit(guint key_id);
@@ -169,14 +169,14 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline,
 		GDK_j, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
 
+	keys[GEANY_KEYS_MENU_TOGGLEALL] = fill(cb_func_menu_toggle_all,
+		0, 0, "menu_toggleall", _("Toggle all additional widgets"));
 	keys[GEANY_KEYS_MENU_FULLSCREEN] = fill(cb_func_menu_fullscreen,
 		GDK_F11, 0, "menu_fullscreen", _("Fullscreen"));
 	keys[GEANY_KEYS_MENU_MESSAGEWINDOW] = fill(cb_func_menu_messagewindow,
 		0, 0, "menu_messagewindow", _("Toggle Messages Window"));
 	keys[GEANY_KEYS_MENU_SIDEBAR] = fill(cb_func_toggle_sidebar,
 		0, 0, "toggle_sidebar", _("Toggle Sidebar"));
-	keys[GEANY_KEYS_MENU_HIDESHOWALL] = fill(cb_func_hide_show_all,
-		0, 0, "hide_show_all", _("Hide and show all additional widgets"));
 	keys[GEANY_KEYS_MENU_ZOOMIN] = fill(cb_func_menu_zoomin,
 		GDK_plus, GDK_CONTROL_MASK, "menu_zoomin", _("Zoom In"));
 	keys[GEANY_KEYS_MENU_ZOOMOUT] = fill(cb_func_menu_zoomout,
@@ -354,8 +354,10 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDINFILES, find_in_files1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_NEXTMESSAGE, next_message1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_TOGGLEALL, menu_toggle_all_additional_widgets1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FULLSCREEN, menu_fullscreen1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_MESSAGEWINDOW, menu_show_messages_window1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SIDEBAR, menu_show_sidebar1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPENCOLORCHOOSER, menu_choose_color1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_ZOOMIN, menu_zoom_in1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_ZOOMOUT, menu_zoom_out1);
@@ -466,7 +468,7 @@ static void get_shortcut_labels_text(GString **text_names_str, GString **text_ke
 				g_string_append(text_names, _("\n<b>Search menu</b>\n"));
 				g_string_append(text_keys, "\n\n");
 				break;
-			case GEANY_KEYS_MENU_FULLSCREEN:
+			case GEANY_KEYS_MENU_TOGGLEALL:
 				g_string_append(text_names, _("\n<b>View menu</b>\n"));
 				g_string_append(text_keys, "\n\n");
 				break;
@@ -977,63 +979,13 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_toggle_sidebar(G_GNUC_UNUSED guint key_id)
 {
-	static gint active_page = -1;
-
-	if (app->sidebar_visible)
-	{
-		// to remember the active page because GTK (e.g. 2.8.18) doesn't do it and shows always
-		// the last page (for unknown reason, with GTK 2.6.4 it works)
-		active_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->treeview_notebook));
-	}
-
-	app->sidebar_visible = ! app->sidebar_visible;
-
-	if ((! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible))
-	{
-		app->sidebar_openfiles_visible = TRUE;
-		app->sidebar_symbol_visible = TRUE;
-	}
-
-	ui_treeviews_show_hide(TRUE);
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->treeview_notebook), active_page);
+	on_menu_show_sidebar1_toggled(NULL, NULL);
 }
 
 
-static void cb_func_hide_show_all(G_GNUC_UNUSED guint key_id)
+static void cb_func_menu_toggle_all(G_GNUC_UNUSED guint key_id)
 {
-	static gint hide_all = FALSE;
-	GtkCheckMenuItem *msgw = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1"));
-	GtkCheckMenuItem *toolbari = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_toolbar1"));
-
-	hide_all = ! hide_all;
-
-	if (hide_all)
-	{
-		if (gtk_check_menu_item_get_active(msgw))
-			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
-
-		if (app->sidebar_visible)
-			cb_func_toggle_sidebar(key_id);
-
-		ui_statusbar_showhide(FALSE);
-
-		if (gtk_check_menu_item_get_active(toolbari))
-			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
-	}
-	else
-	{
-
-		if (! gtk_check_menu_item_get_active(msgw))
-			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
-
-		if (! app->sidebar_visible)
-			cb_func_toggle_sidebar(key_id);
-
-		ui_statusbar_showhide(TRUE);
-
-		if (! gtk_check_menu_item_get_active(toolbari))
-			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
-	}
+	on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
 }
 
 

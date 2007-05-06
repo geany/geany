@@ -1766,15 +1766,27 @@ void
 on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
+	static gint active_page = -1;
+
 	if (app->ignore_callback) return;
 
-	app->sidebar_visible = ! app->sidebar_visible;
-	if (! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible)
+	if (app->sidebar_visible)
 	{
-		app->sidebar_symbol_visible = TRUE;
-		app->sidebar_openfiles_visible = TRUE;
+		// to remember the active page because GTK (e.g. 2.8.18) doesn't do it and shows always
+		// the last page (for unknown reason, with GTK 2.6.4 it works)
+		active_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->treeview_notebook));
 	}
+
+	app->sidebar_visible = ! app->sidebar_visible;
+
+	if ((! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible))
+	{
+		app->sidebar_openfiles_visible = TRUE;
+		app->sidebar_symbol_visible = TRUE;
+	}
+
 	ui_treeviews_show_hide(TRUE);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->treeview_notebook), active_page);
 }
 
 
@@ -2139,5 +2151,59 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	}
 	g_free(word);
 	g_free(command);
+}
+
+
+void
+on_menu_toggle_all_additional_widgets1_activate
+                                        (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	static gint hide_all = -1;
+	GtkCheckMenuItem *msgw = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1"));
+	GtkCheckMenuItem *toolbari = GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_toolbar1"));
+
+	// get the initial state (necessary if Geany was closed with hide_all = TRUE)
+	if (hide_all == -1)
+	{
+		if (! gtk_check_menu_item_get_active(msgw) &&
+			! app->sidebar_visible &&
+			! gtk_check_menu_item_get_active(toolbari))
+		{
+			hide_all = TRUE;
+		}
+		else
+			hide_all = FALSE;
+	}
+
+	hide_all = ! hide_all; // toggle
+
+	if (hide_all)
+	{
+		if (gtk_check_menu_item_get_active(msgw))
+			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
+
+		if (app->sidebar_visible)
+			on_menu_show_sidebar1_toggled(NULL, NULL);
+
+		ui_statusbar_showhide(FALSE);
+
+		if (gtk_check_menu_item_get_active(toolbari))
+			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
+	}
+	else
+	{
+
+		if (! gtk_check_menu_item_get_active(msgw))
+			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
+
+		if (! app->sidebar_visible)
+			on_menu_show_sidebar1_toggled(NULL, NULL);
+
+		ui_statusbar_showhide(TRUE);
+
+		if (! gtk_check_menu_item_get_active(toolbari))
+			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
+	}
 }
 
