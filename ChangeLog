@@ -1,3 +1,12 @@
+2007-05-06  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * data/filetypes.haskell, scintilla/KeyWords.cxx,
+   scintilla/LexHaskell.cxx, scintilla/Makefile.am,
+   scintilla/makefile.win32, src/filetypes.c, src/filetypes.h,
+   src/highlighting.c, src/highlighting.h, src/sci_cb.c, THANKS:
+   Added new filetype Haskell (patch by Guillaume Hoffmann, thanks).
+
+
 2007-05-05  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/keybindings.c:

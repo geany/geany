@@ -2102,6 +2102,17 @@ static gboolean is_comment(gint lexer, gint style)
 				result = TRUE;
 			break;
 		}
+		case SCLEX_HASKELL:
+		{
+			if (style == SCE_HA_COMMENTLINE ||
+				style == SCE_HA_COMMENTBLOCK ||
+				style == SCE_HA_COMMENTBLOCK2 ||
+				style == SCE_HA_COMMENTBLOCK3 ||
+				style == SCE_HA_CHARACTER ||
+				style == SCE_HA_STRING)
+				result = TRUE;
+			break;
+		}
 		case SCLEX_HTML:
 		{
 			if (style == SCE_HPHP_SIMPLESTRING ||

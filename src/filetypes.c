@@ -70,7 +70,8 @@ enum
 	FILETYPE_UID_HTML,		// 25
 	FILETYPE_UID_VHDL,		// 26
 	FILETYPE_UID_JS,		// 27
-	FILETYPE_UID_LUA		// 28
+	FILETYPE_UID_LUA,		// 28
+	FILETYPE_UID_HASKELL	// 29
 };
 
 
@@ -113,6 +114,7 @@ filetype *filetypes_get_from_uid(gint uid)
 		case FILETYPE_UID_VHDL:		return filetypes[GEANY_FILETYPES_VHDL];
 		case FILETYPE_UID_JS:		return filetypes[GEANY_FILETYPES_JS];
 		case FILETYPE_UID_LUA:		return filetypes[GEANY_FILETYPES_LUA];
+		case FILETYPE_UID_HASKELL:	return filetypes[GEANY_FILETYPES_HASKELL];
 		default: 					return NULL;
 	}
 }
@@ -342,6 +344,19 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_FERITE]->style_func_ptr = styleset_ferite;
 	filetypes[GEANY_FILETYPES_FERITE]->comment_open = g_strdup("/*");
 	filetypes[GEANY_FILETYPES_FERITE]->comment_close = g_strdup("*/");
+
+#define HASKELL
+	filetypes[GEANY_FILETYPES_HASKELL]->id = GEANY_FILETYPES_HASKELL;
+	filetypes[GEANY_FILETYPES_HASKELL]->uid = FILETYPE_UID_HASKELL;
+	filetypes[GEANY_FILETYPES_HASKELL]->lang = -2;
+	filetypes[GEANY_FILETYPES_HASKELL]->name = g_strdup("Haskell");
+	filetypes[GEANY_FILETYPES_HASKELL]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_HASKELL]->title = g_strdup(_("Haskell source file"));
+	filetypes[GEANY_FILETYPES_HASKELL]->extension = g_strdup("hs");
+	filetypes[GEANY_FILETYPES_HASKELL]->pattern = utils_strv_new("*.hs", "*.lhs", NULL);
+	filetypes[GEANY_FILETYPES_HASKELL]->style_func_ptr = styleset_haskell;
+	filetypes[GEANY_FILETYPES_HASKELL]->comment_open = g_strdup("--");
+	filetypes[GEANY_FILETYPES_HASKELL]->comment_close = NULL;
 
 #define SH
 	filetypes[GEANY_FILETYPES_SH]->id = GEANY_FILETYPES_SH;

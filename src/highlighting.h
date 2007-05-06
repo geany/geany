@@ -77,6 +77,8 @@ void styleset_sql(ScintillaObject *sci);
 
 void styleset_caml(ScintillaObject *sci);
 
+void styleset_haskell(ScintillaObject *sci);
+
 void styleset_oms(ScintillaObject *sci);
 
 void styleset_tcl(ScintillaObject *sci);

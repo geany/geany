@@ -2379,6 +2379,79 @@ void styleset_sql(ScintillaObject *sci)
 }
 
 
+static void styleset_haskell_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+
+	load_keyfiles(config, config_home, GEANY_FILETYPES_HASKELL);
+
+	new_style_array(GEANY_FILETYPES_HASKELL, 17);
+
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "commentline", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "commentblock", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "commentblock2", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "commentblock3", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "keyword", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_HASKELL].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "import", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "character", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "class", "0x0000d0", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "instance", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "capital", "0x635b00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[14]);
+	get_keyfile_hex(config, config_home, "styling", "module", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[15]);
+	get_keyfile_hex(config, config_home, "styling", "data", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_HASKELL].styling[16]);
+
+	style_sets[GEANY_FILETYPES_HASKELL].keywords = g_new(gchar*, 2);
+	get_keyfile_keywords(config, config_home, "keywords", "keywords", GEANY_FILETYPES_HASKELL, 0,
+			"as case class data deriving do else if import in infixl infixr instance let module of primitive qualified then type where");
+	style_sets[GEANY_FILETYPES_HASKELL].keywords[1] = NULL;
+
+	get_keyfile_wordchars(config, config_home, &style_sets[GEANY_FILETYPES_HASKELL].wordchars);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_HASKELL);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+}
+
+
+void styleset_haskell(ScintillaObject *sci)
+{
+	styleset_common(sci, 5);
+	if (style_sets[GEANY_FILETYPES_HASKELL].styling == NULL) styleset_haskell_init();
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HASKELL].wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_HASKELL, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HASKELL].keywords[0]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_HASKELL, 0);
+	set_sci_style(sci, SCE_HA_DEFAULT, GEANY_FILETYPES_HASKELL, 0);
+	set_sci_style(sci, SCE_HA_COMMENTLINE, GEANY_FILETYPES_HASKELL, 1);
+	set_sci_style(sci, SCE_HA_COMMENTBLOCK, GEANY_FILETYPES_HASKELL, 2);
+	set_sci_style(sci, SCE_HA_COMMENTBLOCK2, GEANY_FILETYPES_HASKELL, 3);
+	set_sci_style(sci, SCE_HA_COMMENTBLOCK3, GEANY_FILETYPES_HASKELL, 4);
+	set_sci_style(sci, SCE_HA_NUMBER, GEANY_FILETYPES_HASKELL, 5);
+	set_sci_style(sci, SCE_HA_KEYWORD, GEANY_FILETYPES_HASKELL, 6);
+	set_sci_style(sci, SCE_HA_IMPORT, GEANY_FILETYPES_HASKELL, 7);
+	set_sci_style(sci, SCE_HA_STRING, GEANY_FILETYPES_HASKELL, 8);
+	set_sci_style(sci, SCE_HA_CHARACTER, GEANY_FILETYPES_HASKELL, 9);
+	set_sci_style(sci, SCE_HA_CLASS, GEANY_FILETYPES_HASKELL, 10);
+	set_sci_style(sci, SCE_HA_OPERATOR, GEANY_FILETYPES_HASKELL, 11);
+	set_sci_style(sci, SCE_HA_IDENTIFIER, GEANY_FILETYPES_HASKELL, 12);
+	set_sci_style(sci, SCE_HA_INSTANCE, GEANY_FILETYPES_HASKELL, 13);
+	set_sci_style(sci, SCE_HA_CAPITAL, GEANY_FILETYPES_HASKELL, 14);
+	set_sci_style(sci, SCE_HA_MODULE, GEANY_FILETYPES_HASKELL, 15);
+	set_sci_style(sci, SCE_HA_DATA, GEANY_FILETYPES_HASKELL, 16);
+}
+
+
 static void styleset_caml_init(void)
 {
 	GKeyFile *config = g_key_file_new();
@@ -2450,6 +2523,8 @@ void styleset_caml(ScintillaObject *sci)
 	set_sci_style(sci, SCE_CAML_TAGNAME, GEANY_FILETYPES_CAML, 12);
 	set_sci_style(sci, SCE_CAML_LINENUM, GEANY_FILETYPES_CAML, 13);
 }
+
+
 
 
 static void styleset_oms_init(void)
