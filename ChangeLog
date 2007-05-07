@@ -1,6 +1,9 @@
 2007-05-07  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * data/filetypes.haskell: Added build instructions.
+ * geany.nsi: Prevent installation in a directory without proper
+              write permissions under Windows.
+              Display an error message instead.
 
 
 2007-05-06  Enrico Tröger  <enrico.troeger@uvena.de>

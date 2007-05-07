@@ -20,7 +20,7 @@
 !define RESOURCEDIR "geany-${PRODUCT_VERSION}"
 
 ; only used when embedding GTK+ installer
-!define GTK_INSTALLER "gtk+-2.8.18-setup-1.exe"
+!define GTK_INSTALLER "gtk+-2.10.6-1-setup.exe"
 
 SetCompressor /SOLID lzma
 XPStyle on
@@ -89,6 +89,7 @@ FunctionEnd
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
+!define MUI_PAGE_CUSTOMFUNCTION_LEAVE OnDirLeave
 !insertmacro MUI_PAGE_DIRECTORY
 ; Start menu page
 var ICONS_GROUP
@@ -145,7 +146,7 @@ SectionEnd
 
 Section "Documentation" SEC03
   SectionIn 1
-  SetOverwrite try
+  SetOverwrite ifnewer
   SetOutPath "$INSTDIR"
   File /r "${RESOURCEDIR}\doc"
 
@@ -169,7 +170,7 @@ SectionEnd
 
 ; Include GTK runtime library but only if desired from command line
 !ifdef INCLUDE_GTK
-Section "GTK 2.8 Runtime Environment" SEC05
+Section "GTK 2.10 Runtime Environment" SEC05
   SectionIn 1
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
@@ -241,6 +242,23 @@ FunctionEnd
 Function un.onInit
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
   Abort
+FunctionEnd
+
+Function OnDirLeave
+  ClearErrors
+  SetOutPath "$INSTDIR" ; what about IfError creating $INSTDIR?
+  GetTempFileName $1 "$INSTDIR" ; creates tmp file (or fails)
+  FileOpen $0 "$1" "w" ; error to open?
+  FileWriteByte $0 "0"
+  IfErrors notPossible possible
+
+notPossible:
+  RMDir "$INSTDIR" ; removes folder if empty
+  MessageBox MB_OK "The given directory is not writeable. Please choose another one!"
+  Abort
+possible:
+  FileClose $0
+  Delete "$1"
 FunctionEnd
 
 Section Uninstall
