@@ -1,3 +1,8 @@
+2007-05-07  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * data/filetypes.haskell: Added build instructions.
+
+
 2007-05-06  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * data/filetypes.haskell, scintilla/KeyWords.cxx,
@@ -5,6 +10,10 @@
    scintilla/makefile.win32, src/filetypes.c, src/filetypes.h,
    src/highlighting.c, src/highlighting.h, src/sci_cb.c, THANKS:
    Added new filetype Haskell (patch by Guillaume Hoffmann, thanks).
+ * geany.glade, doc/geany.docbook, src/callbacks.c, src/callbacks.h,
+   src/interface.c, src/keybindings.c, src/keybindings.h:
+   Added menu item to hide or show all additional widgets and renamed
+   keybinding to menu_toggleall.
 
 
 2007-05-05  Nick Treleaven  <nick.treleaven@btinternet.com>
