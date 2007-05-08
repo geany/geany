@@ -363,8 +363,6 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 {
 	gint pos = sci_get_current_position(sci);
 
-	if (doc_list[idx].file_type == NULL) return;
-
 	// simple indentation
 	if (doc_list[idx].use_auto_indention)
 	{
@@ -374,7 +372,7 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 		if (app->pref_editor_indention_mode == INDENT_ADVANCED)
 		{
 			// add extra indentation for Python after colon
-			if (doc_list[idx].file_type->id == GEANY_FILETYPES_PYTHON &&
+			if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_PYTHON &&
 				sci_get_char_at(sci, pos - 2) == ':' &&
 				sci_get_style_at(sci, pos - 2) == SCE_P_OPERATOR)
 			{
