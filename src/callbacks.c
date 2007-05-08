@@ -1863,7 +1863,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (! DOC_IDX_VALID(idx)) return;
 
 	if (sci_get_lines_selected(doc_list[idx].sci) > 1)
 	{
@@ -1871,16 +1871,18 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 	}
 	else
 	{
-		gint line, ind_pos, old_pos;
+		gint line, ind_pos, old_pos, new_pos, step;
 
 		old_pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_current_line(doc_list[idx].sci, old_pos);
 		ind_pos = sci_get_line_indent_position(doc_list[idx].sci, line);
+		// when using tabs increase cur pos by 1, when using space increase it by tab_width
+		step = (app->pref_editor_use_tabs) ? 1 : app->pref_editor_tab_width;
+		new_pos = (old_pos > ind_pos) ? old_pos + step : old_pos;
 
 		sci_set_current_position(doc_list[idx].sci, ind_pos, TRUE);
 		sci_cmd(doc_list[idx].sci, SCI_TAB);
-		sci_set_current_position(doc_list[idx].sci,
-			(old_pos > ind_pos) ? old_pos + 1 : old_pos, TRUE);
+		sci_set_current_position(doc_list[idx].sci, new_pos, TRUE);
 	}
 }
 
@@ -1890,7 +1892,7 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (! DOC_IDX_VALID(idx)) return;
 
 	if (sci_get_lines_selected(doc_list[idx].sci) > 1)
 	{
@@ -1898,18 +1900,25 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 	}
 	else
 	{
-		gint line, ind_pos, old_pos;
+		gint line, ind_pos, old_pos, new_pos, step, indent;
 
 		old_pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_current_line(doc_list[idx].sci, old_pos);
 		ind_pos = sci_get_line_indent_position(doc_list[idx].sci, line);
+		step = (app->pref_editor_use_tabs) ? 1 : app->pref_editor_tab_width;
+		new_pos = (old_pos >= ind_pos) ? old_pos - step : old_pos;
 
 		if (ind_pos == sci_get_position_from_line(doc_list[idx].sci, line))
 			return;
+
 		sci_set_current_position(doc_list[idx].sci, ind_pos, TRUE);
-		sci_cmd(doc_list[idx].sci, SCI_BACKTAB);
-		sci_set_current_position(doc_list[idx].sci,
-			(old_pos >= ind_pos) ? old_pos - 1 : old_pos, TRUE);
+		indent = sci_get_line_indentation(doc_list[idx].sci, line);
+		indent -= app->pref_editor_tab_width;
+		if (indent < 0)
+			indent = 0;
+		sci_set_line_indentation(doc_list[idx].sci, line, indent);
+
+		sci_set_current_position(doc_list[idx].sci, new_pos, TRUE);
 	}
 }
 

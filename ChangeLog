@@ -1,3 +1,11 @@
+2007-05-08  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/sciwrappers.c, src/sciwrappers.h:
+   Added sci_get_line_indentation() and sci_set_line_indentation().
+ * src/callbacks.c: Fixed broken increase/decrease indentation when
+                    using only spaces for indentation.
+
+
 2007-05-07  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * data/filetypes.haskell: Added build instructions.

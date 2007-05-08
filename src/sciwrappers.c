@@ -941,3 +941,13 @@ void sci_set_scrollbar_mode(ScintillaObject *sci, gboolean visible)
 	SSM(sci, SCI_SETVSCROLLBAR, visible, 0);
 }
 
+void sci_set_line_indentation(ScintillaObject *sci, gint line, gint indent)
+{
+	SSM(sci, SCI_SETLINEINDENTATION, line, indent);
+}
+
+int sci_get_line_indentation(ScintillaObject *sci, gint line)
+{
+	return SSM(sci, SCI_GETLINEINDENTATION, line, 0);
+}
+
