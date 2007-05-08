@@ -1,3 +1,9 @@
+2007-05-08  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.pot: Update of catalog
+ * *.po: Issued make update-po and edited version string
+
+
 2007-05-02  Frank Lanitz  <frank@frank.uvena.de>
 
  * fr.po: Update of French translation (Thanks to Jean-Philippe Moal)
