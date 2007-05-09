@@ -197,7 +197,10 @@ void document_apply_update_prefs(gint idx)
 	sci_set_mark_long_lines(sci, app->long_line_type, app->long_line_column, app->long_line_color);
 
 	sci_set_tab_width(sci, app->pref_editor_tab_width);
+
 	sci_set_use_tabs(sci, app->pref_editor_use_tabs);
+	if (! app->pref_editor_use_tabs)
+		SSM(sci, SCI_SETBACKSPACEUNINDENTS, TRUE, 0);	// remove indent spaces on backspace
 
 	sci_set_autoc_max_height(sci, app->autocompletion_max_height);
 
