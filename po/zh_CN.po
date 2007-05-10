@@ -10,13 +10,12 @@ msgstr ""
 "Project-Id-Version: geany 0.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-08 18:32+0200\n"
-"PO-Revision-Date: 2006-12-14 22:25+0800\n"
+"PO-Revision-Date: 2007-05-09 23:05+0800\n"
 "Last-Translator: Dormouse Young <dormouse.young@gmail.com>\n"
 "Language-Team: Chinese Simplified <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: src/about.c:126
 msgid "About Geany"
@@ -81,7 +80,7 @@ msgid ""
 msgstr "无法找到虚拟终端 '%s' (请检查在首选项中的设置)"
 
 #: src/build.c:204 src/build.c:616 src/build.c:667
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "执行 %s 失败(开始代码无法创建)"
 
@@ -91,9 +90,8 @@ msgid "Process failed (%s)"
 msgstr "进程失败(%s)"
 
 #: src/build.c:349 src/build.c:572
-#, fuzzy
 msgid "Command stopped because the current file has no extension."
-msgstr "选中文字大小写转换"
+msgstr "命令中止因为当前文件没有扩展名。"
 
 #: src/build.c:373
 #, c-format
@@ -212,7 +210,6 @@ msgid "View DVI File"
 msgstr "查看DVI文件"
 
 #: src/build.c:1193 src/build.c:1206
-#, fuzzy
 msgid "Compile and view the current file"
 msgstr "编译并查看当前文件"
 
@@ -332,14 +329,14 @@ msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "文件 '%s' 已存在。您要覆盖吗？"
 
 #: src/callbacks.c:1218
-#, fuzzy, c-format
+#, c-format
 msgid "Forward declaration \"%s\" not found."
-msgstr " \"%s()\" 的声明未找到"
+msgstr " \"%s()\" 的声明未找到。"
 
 #: src/callbacks.c:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Definition of \"%s\" not found."
-msgstr " \"%s()\" 的定义未找到"
+msgstr " \"%s()\" 的定义未找到。"
 
 #: src/callbacks.c:1441 src/callbacks.c:1465
 msgid ""
@@ -607,9 +604,9 @@ msgid "File %s closed."
 msgstr "文件 %s 已关闭。"
 
 #: src/document.c:463
-#, fuzzy, c-format
+#, c-format
 msgid "New file \"%s\" opened."
-msgstr "新文件已打开。"
+msgstr "新文件\"%s\"已打开。"
 
 #: src/document.c:616 src/document.c:927
 #, c-format
@@ -617,15 +614,15 @@ msgid "Could not open file %s (%s)"
 msgstr "无法打开文件 %s (%s)"
 
 #: src/document.c:635
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
 "can occur if the file contains a NULL byte. Be aware that saving it can "
 "cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"文件 \"%s\" 无法正确打开，如果保存该文件会导致数据丢失。\n"
-"文件被设置为只读。"
+"文件\"%s\"无法正确打开并已被截短。可以因为文件含有空字节。保存文件会导致数据丢失。\n"
+"文件被设置为只读状态。"
 
 #: src/document.c:659
 #, c-format
@@ -695,7 +692,7 @@ msgid "No matches found."
 msgstr "未找到匹配项。"
 
 #: src/document.c:1262 src/document.c:1269
-#, fuzzy, c-format
+#, c-format
 msgid "%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."
 msgstr "%s:替换了 %d 处，由\"%s\" 变为 \"%s\"。"
 
@@ -723,9 +720,9 @@ msgstr ""
 "%s"
 
 #: src/document.c:1766
-#, fuzzy, c-format
+#, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "打印 \"%s\" 失败 (返回代码: %d)."
+msgstr "打印 \"%s\" 失败 (返回代码: %s)。"
 
 #: src/document.c:1772
 #, c-format
@@ -902,9 +899,8 @@ msgid "PHP source file"
 msgstr "PHP 源文件"
 
 #: src/filetypes.c:276
-#, fuzzy
 msgid "Javascript source file"
-msgstr "Java 源文件"
+msgstr "Javascript 源文件"
 
 #: src/filetypes.c:289
 msgid "Python source file"
@@ -919,18 +915,16 @@ msgid "Tcl source file"
 msgstr "Tcl 源文件"
 
 #: src/filetypes.c:328
-#, fuzzy
 msgid "Lua source file"
-msgstr "LaTeX 源文件"
+msgstr "Lua 源文件"
 
 #: src/filetypes.c:341
 msgid "Ferite source file"
 msgstr "Ferite 源文件"
 
 #: src/filetypes.c:354
-#, fuzzy
 msgid "Haskell source file"
-msgstr "Pascal 源文件"
+msgstr "Haskell 源文件"
 
 #: src/filetypes.c:367
 msgid "Shell script file"
@@ -990,7 +984,7 @@ msgstr "没有"
 
 #: src/filetypes.c:857 src/win32.c:78
 msgid "All Source"
-msgstr ""
+msgstr "所有源文件"
 
 #: src/geany.h:50
 msgid "untitled"
@@ -1016,9 +1010,8 @@ msgid "invisible"
 msgstr "不可见"
 
 #: src/interface.c:313 src/interface.c:2010
-#, fuzzy
 msgid "Open Selected F_ile"
-msgstr "打开文件"
+msgstr "打开选择的文件(_I)"
 
 #: src/interface.c:317
 msgid "Recent _Files"
@@ -1038,11 +1031,11 @@ msgstr "重新载入为(_E)"
 
 #: src/interface.c:370
 msgid "Load Ta_gs"
-msgstr ""
+msgstr "载入标记文件(_G)"
 
 #: src/interface.c:373
 msgid "Load global tags file"
-msgstr ""
+msgstr "载入全局标记文件"
 
 #: src/interface.c:392
 msgid "Prints the current file"
@@ -1109,9 +1102,8 @@ msgid "_Decrease Indent"
 msgstr "减少缩进(_D)"
 
 #: src/interface.c:535 src/interface.c:2081
-#, fuzzy
 msgid "_Send Selection to"
-msgstr "在选中的文字中(_L)"
+msgstr "发送选中的文字到(_S)"
 
 #: src/interface.c:550
 msgid "_Insert \"include <...>\""
@@ -1162,15 +1154,13 @@ msgid "Inserts a GPL notice (should be done at the beginning of the file)"
 msgstr "插入GPL告知(在文件头部)"
 
 #: src/interface.c:600
-#, fuzzy
 msgid "Insert BSD License Notice"
-msgstr "插入GPL告知"
+msgstr "插入BSD许可公告"
 
 #: src/interface.c:603 src/interface.c:2149
-#, fuzzy
 msgid ""
 "Inserts a BSD licence notice (should be done at the beginning of the file)"
-msgstr "插入GPL告知(在文件头部)"
+msgstr "插入BSD许可公告(在文件头部)"
 
 #: src/interface.c:605 src/interface.c:2151
 msgid "Insert Dat_e"
@@ -1186,7 +1176,7 @@ msgstr "查找下一个(_N)"
 
 #: src/interface.c:643
 msgid "Find _Previous"
-msgstr "查找上一个(_P_)"
+msgstr "查找上一个(_P)"
 
 #: src/interface.c:647
 msgid "Find in F_iles"
@@ -1197,13 +1187,12 @@ msgid "_Replace"
 msgstr "替换(_R)"
 
 #: src/interface.c:664
-#, fuzzy
 msgid "Find _Selected"
-msgstr "查找下一个(_N)"
+msgstr "查找选择的(_S)"
 
 #: src/interface.c:668
 msgid "Find Pre_v Selected"
-msgstr ""
+msgstr "查找前一个选择的(_V)"
 
 #: src/interface.c:677
 msgid "Next _Message"
@@ -1223,7 +1212,7 @@ msgstr "修改缺省字体"
 
 #: src/interface.c:715 src/keybindings.c:173
 msgid "Toggle all additional widgets"
-msgstr ""
+msgstr "开头所有附加组件"
 
 #: src/interface.c:719
 msgid "Full_screen"
@@ -1350,7 +1339,7 @@ msgstr "展开全部缩进的代码"
 
 #: src/interface.c:876
 msgid "Remove _Markers"
-msgstr ""
+msgstr "去除记号(_M)"
 
 #: src/interface.c:880
 msgid "Remove Error _Indicators"
@@ -1362,22 +1351,19 @@ msgstr "去除文件中所有出错指示"
 
 #: src/interface.c:885
 msgid "_Project"
-msgstr ""
+msgstr "项目(_P)"
 
 #: src/interface.c:892
-#, fuzzy
 msgid "_New"
-msgstr "新建"
+msgstr "新建(_N)"
 
 #: src/interface.c:900
-#, fuzzy
 msgid "_Open"
-msgstr "打开"
+msgstr "打开(_O)"
 
 #: src/interface.c:908
-#, fuzzy
 msgid "_Close"
-msgstr "关闭"
+msgstr "关闭(_C)"
 
 #: src/interface.c:929
 msgid "_Tools"
@@ -1547,9 +1533,8 @@ msgid "Insert Comments"
 msgstr "插入注释"
 
 #: src/interface.c:2146
-#, fuzzy
 msgid "Insert BSD license Notice"
-msgstr "插入GPL告知"
+msgstr "插入BSD许可公告"
 
 #: src/interface.c:2170 src/keybindings.c:287
 msgid "Find Usage"
@@ -1564,9 +1549,8 @@ msgid "Go to Tag Declaration"
 msgstr "跳转到标记说明"
 
 #: src/interface.c:2186 src/keybindings.c:293
-#, fuzzy
 msgid "Context Action"
-msgstr "在选中的文字中(_L)"
+msgstr "背景运行"
 
 #: src/interface.c:2195
 msgid "Go to Line"
@@ -1654,33 +1638,30 @@ msgstr "<b>行为</b>"
 
 #: src/interface.c:2717
 msgid "Context Action command:"
-msgstr ""
+msgstr "背景运行命令:"
 
 #: src/interface.c:2724
 #, c-format
 msgid ""
 "Context action command. The current selected word can be used with %s. It "
 "can be everywhere in the given command and will be replaced before execution."
-msgstr ""
+msgstr "背景运行命令。当前选中的文字可以和%s一起使用。它可以在给出的命令的任何地方，并且在执行前会被替换。"
 
 #: src/interface.c:2727
-#, fuzzy
 msgid "<b>Context Action</b>"
-msgstr "<b>位置:</b>"
+msgstr "<b>背景运行</b>"
 
 #: src/interface.c:2747
-#, fuzzy
 msgid "Project files:"
-msgstr "属性"
+msgstr "项目路径:"
 
 #: src/interface.c:2760
 msgid "Path to start in when opening project files"
-msgstr ""
+msgstr "当打开项目时的路径"
 
 #: src/interface.c:2773
-#, fuzzy
 msgid "<b>Paths</b>"
-msgstr "<b>工具路径</b>"
+msgstr "<b>路径</b>"
 
 #: src/interface.c:2778
 msgid "General"
@@ -1699,9 +1680,8 @@ msgid "Show open files list"
 msgstr "显示打开的文件的列表"
 
 #: src/interface.c:2809
-#, fuzzy
 msgid "Toggle the open files list on and off"
-msgstr "开关标记列表"
+msgstr "开关打开文件列表"
 
 #: src/interface.c:2812
 msgid "<b>Sidebar</b>"
@@ -1766,16 +1746,14 @@ msgid "<b>Tab placement</b>"
 msgstr "<b>标签位置</b>"
 
 #: src/interface.c:2974
-#, fuzzy
 msgid "Show statusbar"
-msgstr "显示工具栏"
+msgstr "显示状态栏"
 
 #: src/interface.c:2977
 msgid "Whether to show the status bar at the bottom of the main window."
-msgstr ""
+msgstr "是否在主窗口底部显示状态栏"
 
 #: src/interface.c:2979
-#, fuzzy
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>杂项</b>"
 
@@ -2035,25 +2013,23 @@ msgid "<b>Long line marker</b>"
 msgstr "<b>长行标志</b>"
 
 #: src/interface.c:3492
-#, fuzzy
 msgid "Auto indentation mode:"
-msgstr "自动缩进"
+msgstr "自动缩进模式:"
 
 #: src/interface.c:3499
 msgid ""
 "Selects the indentation mode. Use None to disable auto indentation "
 "completely. Basic indents new lines with the same indentation as the "
 "previous line. Advanced does the same and indents also curly brackets."
-msgstr ""
+msgstr "选择缩进模式。“禁用”表示不自动缩进；“基本”表示新的一行使用上一行缩进；“高级”表示更智能的缩进，会根据括号来缩进。"
 
 #: src/interface.c:3505
-#, fuzzy
 msgid "Basic"
-msgstr "波罗的海语系"
+msgstr "基本"
 
 #: src/interface.c:3506
 msgid "Advanced"
-msgstr ""
+msgstr "高级"
 
 #: src/interface.c:3508
 msgid "Line wrapping"
@@ -2087,23 +2063,23 @@ msgstr "使用指示器显示编译错误"
 
 #: src/interface.c:3531
 msgid "Disable Drag and Drop"
-msgstr ""
+msgstr "禁用拖放"
 
 #: src/interface.c:3534
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window."
-msgstr ""
+msgstr "在编辑窗口完全禁用拖放。"
 
 #: src/interface.c:3537
 msgid "Use tabs when inserting whitespace"
-msgstr ""
+msgstr "插入空白时使用tab"
 
 #: src/interface.c:3540
 msgid ""
 "Whenever some whitespace is inserted by Geany it will use tabs when enabled "
 "otherwise Geany will use just spaces."
-msgstr ""
+msgstr "插入空白时用tab代替"
 
 #: src/interface.c:3543
 msgid "<b>Features</b>"
@@ -2126,15 +2102,14 @@ msgid "Automatic completion of open XML tags (includes HTML tags)"
 msgstr "XML标记自动完成(包括HTML标记)"
 
 #: src/interface.c:3574
-#, fuzzy
 msgid "Symbol autocompletion"
-msgstr "结构自动完成"
+msgstr "符号自动完成"
 
 #: src/interface.c:3577
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
-msgstr ""
+msgstr "在打开的文件中用已知的符号自动自动补全(函数名、全局变量等等)"
 
 #: src/interface.c:3588
 msgid "Rows of autocompletion list:"
@@ -2293,18 +2268,16 @@ msgid "Open"
 msgstr "打开"
 
 #: src/keybindings.c:126
-#, fuzzy
 msgid "Open selected file"
-msgstr "已打开文件"
+msgstr "打开选择的文件"
 
 #: src/keybindings.c:128
 msgid "Save"
 msgstr "保存"
 
 #: src/keybindings.c:130
-#, fuzzy
 msgid "Save as"
-msgstr "全部保存"
+msgstr "另存为"
 
 #: src/keybindings.c:134
 msgid "Print"
@@ -2323,9 +2296,8 @@ msgid "Reload file"
 msgstr "重新载入文件"
 
 #: src/keybindings.c:142
-#, fuzzy
 msgid "Project properties"
-msgstr "属性"
+msgstr "项目属性"
 
 #: src/keybindings.c:145
 msgid "Undo"
@@ -2352,14 +2324,12 @@ msgid "Find Previous"
 msgstr "查找上一个"
 
 #: src/keybindings.c:160
-#, fuzzy
 msgid "Find Next Selection"
-msgstr "在选中的文字中(_L)"
+msgstr "查找下一个选择"
 
 #: src/keybindings.c:162
-#, fuzzy
 msgid "Find Previous Selection"
-msgstr "查找上一个"
+msgstr "查找上一个选择"
 
 #: src/keybindings.c:164 src/search.c:413
 msgid "Replace"
@@ -2458,9 +2428,8 @@ msgid "Switch to VTE"
 msgstr "切换到虚拟终端"
 
 #: src/keybindings.c:226
-#, fuzzy
 msgid "Switch to Search Bar"
-msgstr "切换到便签"
+msgstr "切换到查找栏"
 
 #: src/keybindings.c:228
 msgid "Switch to left document"
@@ -2471,9 +2440,8 @@ msgid "Switch to right document"
 msgstr "切换到右文档"
 
 #: src/keybindings.c:232
-#, fuzzy
 msgid "Switch to last used document"
-msgstr "切换到左文档"
+msgstr "切换到上次使用的文楼"
 
 #: src/keybindings.c:235
 msgid "Duplicate line or selection"
@@ -2508,37 +2476,32 @@ msgid "Decrease indent"
 msgstr "减小缩进"
 
 #: src/keybindings.c:251
-#, fuzzy
 msgid "Send to Custom Command 1"
-msgstr "设置自定义日期格式"
+msgstr "发送自定义命令 1"
 
 #: src/keybindings.c:253
-#, fuzzy
 msgid "Send to Custom Command 2"
-msgstr "设置自定义日期格式"
+msgstr "发送自定义命令 2"
 
 #: src/keybindings.c:255
-#, fuzzy
 msgid "Send to Custom Command 3"
-msgstr "设置自定义日期格式"
+msgstr "发送自定义命令 3"
 
 #: src/keybindings.c:258
 msgid "Goto matching brace"
 msgstr "跳转到对应花括号"
 
 #: src/keybindings.c:261
-#, fuzzy
 msgid "Toggle marker"
-msgstr "长行标志:"
+msgstr "开关记号"
 
 #: src/keybindings.c:264
-#, fuzzy
 msgid "Goto next marker"
-msgstr "长行标志:"
+msgstr "到下一个记号"
 
 #: src/keybindings.c:267
 msgid "Goto previous marker"
-msgstr ""
+msgstr "回到前一个记号"
 
 #: src/keybindings.c:270
 msgid "Complete word"
@@ -2554,23 +2517,20 @@ msgstr "显示宏列表"
 
 #. has special callback
 #: src/keybindings.c:276
-#, fuzzy
 msgid "Complete construct"
-msgstr "自动完成"
+msgstr "完成结构"
 
 #: src/keybindings.c:278
-#, fuzzy
 msgid "Suppress construct completion"
-msgstr "禁止自动完成"
+msgstr "禁止完成结构"
 
 #: src/keybindings.c:281
-#, fuzzy
 msgid "Select current word"
-msgstr "保存文件"
+msgstr "选择当前词"
 
 #: src/keybindings.c:284
 msgid "Insert alternative whitespace"
-msgstr ""
+msgstr "插入可选择的空白"
 
 #: src/keybindings.c:289
 msgid "Go to tag definition"
@@ -2581,71 +2541,80 @@ msgid "Go to tag declaration"
 msgstr "跳转到标记说明"
 
 #: src/keybindings.c:460
-#, fuzzy
 msgid "<b>File menu</b>\n"
-msgstr "<b>标签位置</b>"
+msgstr "<b>文件菜单</b>\n"
 
 #: src/keybindings.c:464
-#, fuzzy
 msgid ""
 "\n"
 "<b>Edit menu</b>\n"
-msgstr "<b>编码:</b>"
+msgstr ""
+"\n"
+"<b>编辑菜单</b>\n"
 
 #: src/keybindings.c:468
-#, fuzzy
 msgid ""
 "\n"
 "<b>Search menu</b>\n"
-msgstr "<b>外观</b>"
+msgstr ""
+"\n"
+"<b>查找菜单</b>\n"
 
 #: src/keybindings.c:472
-#, fuzzy
 msgid ""
 "\n"
 "<b>View menu</b>\n"
-msgstr "<b>新建文件</b>"
+msgstr ""
+"\n"
+"<b>视图菜单</b>\n"
 
 #: src/keybindings.c:476
-#, fuzzy
 msgid ""
 "\n"
 "<b>Document menu</b>\n"
-msgstr "<b>自动完成</b>"
+msgstr ""
+"\n"
+"<b>文档菜单</b>\n"
 
 #: src/keybindings.c:480
-#, fuzzy
 msgid ""
 "\n"
 "<b>Build menu</b>\n"
-msgstr "<b>边栏</b>"
+msgstr ""
+"\n"
+"<b>生成菜单</b>\n"
 
 #: src/keybindings.c:484
-#, fuzzy
 msgid ""
 "\n"
 "<b>Tools menu</b>\n"
-msgstr "<b>工具路径</b>"
+msgstr ""
+"\n"
+"<b>工具菜单</b>\n"
 
 #: src/keybindings.c:488
-#, fuzzy
 msgid ""
 "\n"
 "<b>Focus commands</b>\n"
-msgstr "<b>字体</b>"
+msgstr ""
+"\n"
+"<b>焦点命令</b>\n"
 
 #: src/keybindings.c:492
 msgid ""
 "\n"
 "<b>Editing commands</b>\n"
 msgstr ""
+"\n"
+"<b>编辑命令</b>\n"
 
 #: src/keybindings.c:496
-#, fuzzy
 msgid ""
 "\n"
 "<b>Tag commands</b>\n"
-msgstr "<b>标签位置</b>"
+msgstr ""
+"\n"
+"<b>标记命令</b>\n"
 
 #: src/keybindings.c:518
 msgid "Keyboard shortcuts"
@@ -2669,11 +2638,10 @@ msgid "Failed to load one or more session files."
 msgstr "打开一个或多个上次会话的文件失败。"
 
 #: src/main.c:94
-#, fuzzy
 msgid ""
 "set initial column number for the first opened file (useful in conjunction "
 "with --line)"
-msgstr "设置第一个打开的文件的初始行号"
+msgstr "设置第一个打开的文件的初始列（用于以--联结的行）"
 
 #: src/main.c:95
 msgid "use an alternate configuration directory"
@@ -2684,9 +2652,8 @@ msgid "runs in debug mode (means being verbose)"
 msgstr "在DEBUG模式下运行"
 
 #: src/main.c:97
-#, fuzzy
 msgid "generate global tags file (see documentation)"
-msgstr "不要载入自动完成数据"
+msgstr "生成全局标记文件(参见文档)"
 
 #: src/main.c:100
 msgid "don't open files in a running instance, force opening a new instance"
@@ -2741,9 +2708,9 @@ msgstr ""
 "不管他，继续使用？"
 
 #: src/main.c:559 src/socket.c:143
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find file '%s'."
-msgstr "无法找到名为%s的pixmap文件"
+msgstr "无法找到 '%s'文件。"
 
 #: src/main.c:688
 #, c-format
@@ -2790,155 +2757,142 @@ msgstr "按键组合'%s'已用于\"%s\"，请选另一个。"
 #. please avoid special characters and spaces, look at the source for details or ask Frank
 #: src/project.c:85
 msgid "projects"
-msgstr ""
+msgstr "projects"
 
 #: src/project.c:105
-#, fuzzy
 msgid "New Project"
-msgstr "生成目标"
+msgstr "新项目"
 
 #: src/project.c:112
-#, fuzzy
 msgid "C_reate"
-msgstr "字符"
+msgstr "创建(_R)"
 
 #: src/project.c:126 src/project.c:336
-#, fuzzy
 msgid "Name:"
-msgstr "生成:"
+msgstr "名称:"
 
 #: src/project.c:138 src/project.c:348
-#, fuzzy
 msgid "Filename:"
-msgstr "越南语"
+msgstr "文件名:"
 
 #: src/project.c:158 src/project.c:377
 msgid "Base path:"
-msgstr ""
+msgstr "根路径:"
 
 #: src/project.c:166
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree."
-msgstr ""
+msgstr "组成项目的所有文件的根路径，可以是一个新路径或一个已存在的路径。"
 
 #: src/project.c:220 src/project.c:809
-#, fuzzy, c-format
+#, c-format
 msgid "Project file \"%s\" could not be loaded."
-msgstr "进程无法停止(%s)"
+msgstr "项目文件 \"%s\" 无法载入。"
 
 #: src/project.c:244 src/project.c:252
-#, fuzzy
 msgid "Open Project"
-msgstr "生成目标"
+msgstr "打开项目"
 
 #: src/project.c:271
-#, fuzzy
 msgid "Project files"
-msgstr "属性"
+msgstr "项目文件"
 
 #: src/project.c:292
-#, fuzzy, c-format
+#, c-format
 msgid "Project \"%s\" closed."
-msgstr "文件 %s 已关闭。"
+msgstr "项目 %s 已关闭。"
 
 #: src/project.c:323
-#, fuzzy
 msgid "Project Properties"
-msgstr "属性"
+msgstr "项目属性"
 
 #: src/project.c:360
-#, fuzzy
 msgid "Description:"
-msgstr "DVI生成:"
+msgstr "描述:"
 
 #: src/project.c:385
 msgid "Directory to run Make All from. Leave blank to use the default command."
-msgstr ""
+msgstr "Make All的目录。留空则使用缺省命令。"
 
 #: src/project.c:399
-#, fuzzy
 msgid "Run command:"
-msgstr "打印命令:"
+msgstr "运行命令:"
 
 #: src/project.c:407
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
-msgstr ""
+msgstr "在项目根目录中运行的命令行。可以给命令添加参数。留空则使用缺省的运行命令。"
 
 #: src/project.c:423
-#, fuzzy
 msgid "File patterns:"
-msgstr "中东语系(_M)"
+msgstr "文件模式:"
 
 #: src/project.c:503
-#, fuzzy
 msgid "Do you want to close it before proceeding?"
-msgstr "您要在关闭文件前保存吗？"
+msgstr "您要在执行前关闭文件吗？"
 
 #: src/project.c:504
 #, c-format
 msgid "The '%s' project is already open. "
-msgstr ""
+msgstr "'%s'项目已经打开。"
 
 #: src/project.c:532
 msgid "The specified project name is too short."
-msgstr ""
+msgstr "定义的项目名称太短。"
 
 #: src/project.c:538
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
-msgstr ""
+msgstr "定义的项目名称太短。(最大%d个字符)。"
 
 #: src/project.c:546
 msgid "You have specified an invalid project filename."
-msgstr ""
+msgstr "项目文件名非法。"
 
 #: src/project.c:558
 msgid "Create the project's base path directory?"
-msgstr ""
+msgstr "创建项目根目录？"
 
 #: src/project.c:559
-#, fuzzy, c-format
+#, c-format
 msgid "The path \"%s\" does not exist."
-msgstr "文件 \"%s\" 是非法的 %s."
+msgstr "路径 \"%s\" 不存在。"
 
 #: src/project.c:577
-#, fuzzy
 msgid "Project file could not be written."
-msgstr "进程无法停止(%s)"
+msgstr "项目文件无法写入。"
 
 #: src/project.c:627
 #, c-format
 msgid "Project \"%s\" created."
-msgstr ""
+msgstr "项目\"%s\"已创建。"
 
 #: src/project.c:629
-#, fuzzy, c-format
+#, c-format
 msgid "Project \"%s\" saved."
-msgstr "文件 %s 已保存。"
+msgstr "项目 \"%s\" 已保存。"
 
 #. initialise the dialog
 #: src/project.c:673 src/project.c:684
-#, fuzzy
 msgid "Choose Project Filename"
-msgstr "属性"
+msgstr "选择项目文件名"
 
 #. initialise the dialog
 #: src/project.c:701 src/project.c:712
 msgid "Choose Project Base Path"
-msgstr ""
+msgstr "选择项目根目录"
 
 #. initialise the dialog
 #: src/project.c:729 src/project.c:740
 msgid "Choose Project Run Command"
-msgstr ""
+msgstr "选择项目运行命令"
 
 #: src/project.c:802
 #, c-format
 msgid "Project \"%s\" opened."
-msgstr ""
+msgstr "项目\"%s\"已打开。"
 
 #: src/search.c:139
 msgid "_Use regular expressions"
@@ -3002,9 +2956,8 @@ msgid "_Mark"
 msgstr "标记(_M)"
 
 #: src/search.c:342
-#, fuzzy
 msgid "Mark all matches in the current document."
-msgstr "去除文件中所有出错指示"
+msgstr "在当前文档中标记所有匹配项。"
 
 #: src/search.c:347 src/search.c:487
 msgid "In Sessi_on"
@@ -3066,7 +3019,7 @@ msgstr "扩展正则表达式"
 
 #: src/search.c:624
 msgid "_Recurse in subfolders"
-msgstr ""
+msgstr "搜索子目录(_R)"
 
 #: src/search.c:640
 msgid "_Invert search results"
@@ -3078,11 +3031,11 @@ msgstr "反转查找结果以选择不匹配的行"
 
 #: src/search.c:661
 msgid "E_xtra options:"
-msgstr ""
+msgstr "额外的参数:"
 
 #: src/search.c:673
 msgid "Other options to pass to Grep"
-msgstr ""
+msgstr "传给Grep的其它参数"
 
 #: src/search.c:864 src/search.c:1388 src/search.c:1389
 #, c-format
@@ -3090,9 +3043,9 @@ msgid "No matches found for '%s'."
 msgstr "未找到匹配项'%s'。"
 
 #: src/search.c:866 src/search.c:1395 src/search.c:1396
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d matches for '%s'."
-msgstr "未找到匹配项'%s'。"
+msgstr "找到 %d 个 '%s'的匹配项。"
 
 #: src/search.c:984
 #, c-format
@@ -3113,9 +3066,9 @@ msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr "无法执行grep工具 '%s'，请检查首选项中的设置。"
 
 #: src/search.c:1189
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s -- %s (in directory: %s)"
-msgstr "%s (在目录%s中)"
+msgstr "%s %s -- %s (在目录 %s中)"
 
 #: src/search.c:1250
 #, c-format
@@ -3127,9 +3080,9 @@ msgid "Search failed."
 msgstr "搜索失败。"
 
 #: src/search.c:1306 src/search.c:1307
-#, fuzzy, c-format
+#, c-format
 msgid "Search completed with %d matches."
-msgstr "搜索完成。"
+msgstr "搜索完成，找到 %d 个匹配项。"
 
 #: src/support.c:90 src/support.c:114
 #, c-format
@@ -3262,12 +3215,12 @@ msgstr "宏"
 #: src/symbols.c:755
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
-msgstr ""
+msgstr "\"%s\"是未知的文件类型。\n"
 
 #: src/symbols.c:770
 #, c-format
 msgid "Failed to create tags file.\n"
-msgstr ""
+msgstr "创建标记文件失败。\n"
 
 #: src/symbols.c:776
 #, c-format
@@ -3275,6 +3228,8 @@ msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
 "\n"
 msgstr ""
+"用法: %s -g <标记文件> <文件列表>\n"
+"\n"
 
 #: src/symbols.c:777
 #, c-format
@@ -3283,24 +3238,27 @@ msgid ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 msgstr ""
+"示例:\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
+"gtk/gtk.h\n"
 
 #: src/symbols.c:791
 msgid "Load Tags"
-msgstr ""
+msgstr "载入标记"
 
 #: src/symbols.c:797
 msgid "Geany tag files (*.tags)"
-msgstr ""
+msgstr "Geany 标记文件 (*.tags)"
 
 #: src/symbols.c:816
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %s tags file '%s'."
-msgstr "无法找到名为%s的pixmap文件"
+msgstr "载入 %s 标记文件 '%s'。"
 
 #: src/symbols.c:818
-#, fuzzy, c-format
+#, c-format
 msgid "Could not load tags file '%s'."
-msgstr "无法找到名为%s的pixmap文件"
+msgstr "无法载入标记文件 '%s'。"
 
 #: src/tools.c:81
 msgid "Special characters"
@@ -3361,22 +3319,22 @@ msgstr "其他字符"
 #: src/tools.c:608
 #, c-format
 msgid "Passing data and executing custom command: %s"
-msgstr ""
+msgstr "传送数据并执行自定义命令: %s"
 
 #: src/tools.c:660 src/tools.c:888
-#, fuzzy
 msgid "Set Custom Commands"
-msgstr "设置自定义日期格式"
+msgstr "设置自定义命令"
 
 #: src/tools.c:666
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
 msgstr ""
+"你可以发送当前选择给这些命令中的任一个，命令的输出替换当前选择。"
 
 #: src/tools.c:857 src/tools.c:861
 msgid "No custom commands defined."
-msgstr ""
+msgstr "没有自定义命令被定义。"
 
 #: src/treeviews.c:126
 msgid "No tags found"
@@ -3397,29 +3355,29 @@ msgstr "重新载入"
 #. Status bar statistics: col = column, sel = selection, RO = read-only,
 #. * OVR = overwrite/overtype, INS = insert, MOD = modified
 #: src/ui_utils.c:124
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "line: %d\t col: %d\t sel: %d\t %s      %s      mode: %s      encoding: %s %"
 "s      filetype: %s      scope: %s"
 msgstr ""
-"%c  行: % 4d 列: % 3d  选中: % 4d   %s      模式: %s%s      当前函数: %"
-"s      编码: %s %s     文件类型: %s"
+"行: %d\t 列: %d\t 选择: %d\t %s      %s      模式: %s      编码: %s %"
+"s      文件类型: %s      范围: %s"
 
 #: src/ui_utils.c:128
 msgid "RO "
-msgstr ""
+msgstr "只读 "
 
 #: src/ui_utils.c:129
 msgid "OVR"
-msgstr "OVR"
+msgstr "覆盖"
 
 #: src/ui_utils.c:129
 msgid "INS"
-msgstr "INS"
+msgstr "插入"
 
 #: src/ui_utils.c:130
 msgid "MOD"
-msgstr ""
+msgstr "已修改"
 
 #: src/ui_utils.c:210
 #, c-format
@@ -3451,14 +3409,12 @@ msgid "Set Custom Date Format"
 msgstr "设置自定义日期格式"
 
 #: src/ui_utils.c:1183
-#, fuzzy
 msgid "Select Folder"
 msgstr "选择目录"
 
 #: src/ui_utils.c:1183
-#, fuzzy
 msgid "Select File"
-msgstr "全选"
+msgstr "选择文件"
 
 #: src/utils.c:354
 msgid "Do you want to reload it?"
@@ -3530,11 +3486,10 @@ msgid "Terminal emulation:"
 msgstr "虚拟终端:"
 
 #: src/vte.c:603
-#, fuzzy
 msgid ""
 "Controls how the terminal emulator should behave. Do not change this value "
 "unless you know exactly what you are doing."
-msgstr "定义终端行为，如Xterm就是一个好的例子。"
+msgstr "控制终端行为，不知道如何使用就不要更改。"
 
 #: src/vte.c:605
 msgid "Shell:"
@@ -3599,9 +3554,8 @@ msgid "Executables"
 msgstr "可执行"
 
 #: src/win32.c:108
-#, fuzzy
 msgid "Geany project files"
-msgstr "属性"
+msgstr "Geany 项目文件"
 
 #: src/win32.c:500
 msgid "Error"
