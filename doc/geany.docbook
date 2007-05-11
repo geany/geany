@@ -344,7 +344,7 @@
 				<para>
 					At startup, <application>Geany</application> loads all files from the last time
 					<application>Geany</application> was launched. You can disable this feature in the
-					preferences dialog(see <xref linkend="confdialog_gen"/>). If you specify some files on
+					preferences dialog(see <xref linkend="prefs_gen"/>). If you specify some files on
 					the command line, only these files will be opened, but you can find the files from the
 					last session in the file menu under the "Recent files" item. By default this contains
 					the last 10 recently opened files. You can change the amount of recently opened
@@ -1115,7 +1115,7 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 			</section><!-- Generating -->
 			</section><!-- Tags -->
 		</section>
-		<section id="confdialog">
+		<section id="prefs">
 			<title>Preferences</title>
 			<para>
 				You may adjust Geany's settings using the Edit --> Preferences dialog. Any
@@ -1139,7 +1139,7 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 				<!-- I know that <mediaobject> is better than <graphic> but <mediaobject> does not work with PDF -->
 			</para>
 			<para>
-				<figure id="confdialog_gen">
+				<figure id="prefs_gen">
 				   <title>General tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_gen.png"></graphic>
 				</figure>
@@ -1184,13 +1184,13 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 				</figure>
 			</para>
 			<para>
-				<figure id="confdialog_templ">
+				<figure id="prefs_templ">
 				   <title>Template tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_templ.png"></graphic>
 				</figure>
 			</para>
 			<para>
-				<figure id="confdialog_keys">
+				<figure id="prefs_keys">
 				   <title>Keybinding tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_keys.png"></graphic>
 				</figure>
@@ -1202,166 +1202,11 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 			   <note>
 					<para>For more information see <xref linkend="keybindings"/>.</para>
 			   </note>
-				<figure id="confdialog_vte">
+				<figure id="prefs_vte">
 				   <title>VTE tab in preferences dialog</title>
 				   <graphic fileref="images/pref_dialog_vte.png"></graphic>
 				</figure>
 			</para>
-			<section id="cto">
-				<title>Compile time options</title>
-				<para>
-					There are some options which can only be changed at compile time. To change these
-					options, edit the file <filename>src/geany.h</filename>.
-					Look for a block of lines starting with <quote>#define GEANY_*</quote>.
-					Any definitions which are not listed here should not be changed.
-					<table frame="all">
-						<title>Compile time options</title>
-						<tgroup cols="3">
-							<?dbhtml cellpadding="4" ?>
-							<?dbhtml cellspacing="0" ?>
-							<colspec colnum="1" colname="col1"/>
-							<colspec colnum="2" colname="col2"/>
-							<colspec colnum="3" colname="col3"/>
-							<spanspec spanname="hspan" namest="col1" nameend="col3" align="left"/>
-							<thead>
-								<row>
-									<entry>Option</entry>
-									<entry>Description</entry>
-									<entry>Default</entry>
-								</row>
-							</thead>
-							<tbody>
-								<row>
-									<entry>GEANY_WORDCHARS</entry>
-									<entry>
-										These characters define word boundaries when
-										making selections and searching using word matching
-										options.
-									</entry>
-									<entry>(look at sourcecode)</entry>
-								</row>
-								<row>
-									<entry>GEANY_MAX_AUTOCOMPLETE_WORDS</entry>
-									<entry>How many auto completion suggestions should
-										   <application>Geany</application> provide.
-									</entry>
-									<entry>30</entry>
-								</row>
-								<row>
-									<entry>GEANY_MAX_AUTOCOMPLETE_HEIGHT</entry>
-									<entry>How many suggestions should be visible in the auto completion list.</entry>
-									<entry>10</entry>
-								</row>
-								<row>
-									<entry>GEANY_PROJECT_EXT</entry>
-									<entry>The default filename extension for Geany project files.
-										   It is used when creating new projects and as filter mask
-										   for the project open dialog.</entry>
-									<entry>geany</entry>
-								</row>
-								<row>
-									<entry>GEANY_STRING_UNTITLED</entry>
-									<entry>A string used as the default name for new files. Be aware
-										   that the string can be translated,
-										   so change it only if you know what you are doing.</entry>
-									<entry>untitled</entry>
-								</row>
-								<row>
-									<entry>GEANY_CHECK_FILE_DELAY</entry>
-									<entry>Time in seconds between checking a file for external
-										   changes.</entry>
-									<entry>30</entry>
-								</row>
-								<row>
-									<entry>GEANY_WINDOW_MINIMAL_WIDTH</entry>
-									<entry>The minimal width of the main window.</entry>
-									<entry>620</entry>
-								</row>
-								<row>
-									<entry>GEANY_WINDOW_MINIMAL_HEIGHT</entry>
-									<entry>The minimal height of the main window.</entry>
-									<entry>440</entry>
-								</row>
-								<row>
-									<entry>GEANY_WINDOW_DEFAULT_WIDTH</entry>
-									<entry>The default width of the main window at the first start.</entry>
-									<entry>900</entry>
-								</row>
-								<row>
-									<entry>GEANY_WINDOW_DEFAULT_HEIGHT</entry>
-									<entry>The default height of the main window at the first start.</entry>
-									<entry>600</entry>
-								</row>
-								<row>
-									<entry align="left" spanname="hspan">Default values</entry>
-								</row>
-								<row>
-									<entry>GEANY_DEFAULT_TOOLS_MAKE</entry>
-									<entry>The make tool. This can also include a path.</entry>
-									<entry>"make"</entry>
-								</row>
-								<row>
-									<entry>GEANY_DEFAULT_TOOLS_TERMINAL</entry>
-									<entry>A terminal emulator. It has to accept the command line
-										   option "-e". This can also include a path.</entry>
-									<entry>"xterm"</entry>
-								</row>
-								<row>
-									<entry>GEANY_DEFAULT_TOOLS_BROWSER</entry>
-									<entry>A web browser. This can also include a path.</entry>
-									<entry>"mozilla"</entry>
-								</row>
-								<row>
-									<entry>GEANY_DEFAULT_TOOLS_PRINTCMD</entry>
-									<entry>A printing tool. It should be able to accept and process
-										   plain text files. This can also include a path.</entry>
-									<entry>"lpr"</entry>
-								</row>
-								<row>
-									<entry>GEANY_DEFAULT_TOOLS_GREP</entry>
-									<entry>A grep tool. It should be compatible with GNU grep.
-										   This can also include a path.</entry>
-									<entry>"grep"</entry>
-								</row>
-								<row>
-									<entry>GEANY_DEFAULT_MRU_LENGHTH</entry>
-									<entry>The length of the "Recent files" list.</entry>
-									<entry>"10"</entry>
-								</row>
-								<row>
-									<entry>GEANY_DEFAULT_FONT_SYMBOL_LIST</entry>
-									<entry>The font used in sidebar to show symbols and open files.
-									</entry>
-									<entry>"Sans 9"</entry>
-								</row>
-								<row>
-									<entry>GEANY_DEFAULT_FONT_MSG_WINDOW</entry>
-									<entry>The font used in the messages window.</entry>
-									<entry>"Sans 9"</entry>
-								</row>
-								<row>
-									<entry>GEANY_DEFAULT_FONT_EDITOR</entry>
-									<entry>The font used in the editor window.</entry>
-									<entry>"Monospace 10"</entry>
-								</row>
-								<row>
-									<entry align="left" spanname="hspan">Windows specific</entry>
-								</row>
-								<row>
-									<entry>GEANY_USE_WIN32_DIALOG</entry>
-									<entry>Set this to 1 if you want to use the default Windows
-										   file open dialog instead GTK's file open dialog. The default
-										   Windows file open dialog is missing some nice features like
-										   choosing a filetype or an encoding. Do not touch this
-										   setting when building on a non-Win32 system.</entry>
-									<entry>0</entry>
-								</row>
-							</tbody>
-						</tgroup>
-					</table>
-
-				</para>
-			</section>
 		</section>
 		<section id="project_management">
 			<title>Project Management</title>
@@ -2481,7 +2326,7 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 			</para>
 			<para>
 				In the configuration dialog you can find a tab "Templates"
-				(see <xref linkend="confdialog_templ"/>). You can define the default values which
+				(see <xref linkend="prefs_templ"/>). You can define the default values which
 				will be inserted in the templates. You should restart <application>Geany</application>
 				after making changes, because they are only read at startup.
 			</para>
@@ -2678,6 +2523,164 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 	<!-- Sci default keys appendix -->
 	<appendix id="scikeybinding">
 	&scikeybinding;
+	</appendix>
+
+	<appendix id="cto">
+		<title>Compile time options</title>
+		<para>
+			There are some options which can only be changed at compile time. To change these
+			options, edit the file <filename>src/geany.h</filename>.
+			Look for a block of lines starting with <quote>#define GEANY_*</quote>.
+			Any definitions which are not listed here should not be changed.
+			<note>
+				<para>Most users should not need to change these options.</para>
+			</note>
+			<table frame="all">
+				<title>Compile time options</title>
+				<tgroup cols="3">
+					<?dbhtml cellpadding="4" ?>
+					<?dbhtml cellspacing="0" ?>
+					<colspec colnum="1" colname="col1"/>
+					<colspec colnum="2" colname="col2"/>
+					<colspec colnum="3" colname="col3"/>
+					<spanspec spanname="hspan" namest="col1" nameend="col3" align="left"/>
+					<thead>
+						<row>
+							<entry>Option</entry>
+							<entry>Description</entry>
+							<entry>Default</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>GEANY_WORDCHARS</entry>
+							<entry>
+								These characters define word boundaries when
+								making selections and searching using word matching
+								options.
+							</entry>
+							<entry>(look at sourcecode)</entry>
+						</row>
+						<row>
+							<entry>GEANY_MAX_AUTOCOMPLETE_WORDS</entry>
+							<entry>How many auto completion suggestions should
+								   <application>Geany</application> provide.
+							</entry>
+							<entry>30</entry>
+						</row>
+						<row>
+							<entry>GEANY_MAX_AUTOCOMPLETE_HEIGHT</entry>
+							<entry>How many suggestions should be visible in the auto completion list.</entry>
+							<entry>10</entry>
+						</row>
+						<row>
+							<entry>GEANY_PROJECT_EXT</entry>
+							<entry>The default filename extension for Geany project files.
+								   It is used when creating new projects and as filter mask
+								   for the project open dialog.</entry>
+							<entry>geany</entry>
+						</row>
+						<row>
+							<entry>GEANY_STRING_UNTITLED</entry>
+							<entry>A string used as the default name for new files. Be aware
+								   that the string can be translated,
+								   so change it only if you know what you are doing.</entry>
+							<entry>untitled</entry>
+						</row>
+						<row>
+							<entry>GEANY_CHECK_FILE_DELAY</entry>
+							<entry>Time in seconds between checking a file for external
+								   changes.</entry>
+							<entry>30</entry>
+						</row>
+						<row>
+							<entry>GEANY_WINDOW_MINIMAL_WIDTH</entry>
+							<entry>The minimal width of the main window.</entry>
+							<entry>620</entry>
+						</row>
+						<row>
+							<entry>GEANY_WINDOW_MINIMAL_HEIGHT</entry>
+							<entry>The minimal height of the main window.</entry>
+							<entry>440</entry>
+						</row>
+						<row>
+							<entry>GEANY_WINDOW_DEFAULT_WIDTH</entry>
+							<entry>The default width of the main window at the first start.</entry>
+							<entry>900</entry>
+						</row>
+						<row>
+							<entry>GEANY_WINDOW_DEFAULT_HEIGHT</entry>
+							<entry>The default height of the main window at the first start.</entry>
+							<entry>600</entry>
+						</row>
+						<row>
+							<entry align="left" spanname="hspan">Default values</entry>
+						</row>
+						<row>
+							<entry>GEANY_DEFAULT_TOOLS_MAKE</entry>
+							<entry>The make tool. This can also include a path.</entry>
+							<entry>"make"</entry>
+						</row>
+						<row>
+							<entry>GEANY_DEFAULT_TOOLS_TERMINAL</entry>
+							<entry>A terminal emulator. It has to accept the command line
+								   option "-e". This can also include a path.</entry>
+							<entry>"xterm"</entry>
+						</row>
+						<row>
+							<entry>GEANY_DEFAULT_TOOLS_BROWSER</entry>
+							<entry>A web browser. This can also include a path.</entry>
+							<entry>"mozilla"</entry>
+						</row>
+						<row>
+							<entry>GEANY_DEFAULT_TOOLS_PRINTCMD</entry>
+							<entry>A printing tool. It should be able to accept and process
+								   plain text files. This can also include a path.</entry>
+							<entry>"lpr"</entry>
+						</row>
+						<row>
+							<entry>GEANY_DEFAULT_TOOLS_GREP</entry>
+							<entry>A grep tool. It should be compatible with GNU grep.
+								   This can also include a path.</entry>
+							<entry>"grep"</entry>
+						</row>
+						<row>
+							<entry>GEANY_DEFAULT_MRU_LENGHTH</entry>
+							<entry>The length of the "Recent files" list.</entry>
+							<entry>"10"</entry>
+						</row>
+						<row>
+							<entry>GEANY_DEFAULT_FONT_SYMBOL_LIST</entry>
+							<entry>The font used in sidebar to show symbols and open files.
+							</entry>
+							<entry>"Sans 9"</entry>
+						</row>
+						<row>
+							<entry>GEANY_DEFAULT_FONT_MSG_WINDOW</entry>
+							<entry>The font used in the messages window.</entry>
+							<entry>"Sans 9"</entry>
+						</row>
+						<row>
+							<entry>GEANY_DEFAULT_FONT_EDITOR</entry>
+							<entry>The font used in the editor window.</entry>
+							<entry>"Monospace 10"</entry>
+						</row>
+						<row>
+							<entry align="left" spanname="hspan">Windows specific</entry>
+						</row>
+						<row>
+							<entry>GEANY_USE_WIN32_DIALOG</entry>
+							<entry>Set this to 1 if you want to use the default Windows
+								   file open dialog instead GTK's file open dialog. The default
+								   Windows file open dialog is missing some nice features like
+								   choosing a filetype or an encoding. Do not touch this
+								   setting when building on a non-Win32 system.</entry>
+							<entry>0</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</para>
 	</appendix>
 
 	<!-- GPL appendix -->

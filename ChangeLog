@@ -6,6 +6,10 @@
    Load global tag files stored in ~/.geany/tags when needed.
  * doc/geany.docbook:
    Update docs for loading user tags at startup.
+ * doc/geany.docbook:
+   Rename 'confdialog' to 'prefs'.
+   Move compile time options section into an appendix (most users
+   shouldn't change these options).
 
 
 2007-05-10  Nick Treleaven  <nick.treleaven@btinternet.com>
