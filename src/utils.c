@@ -1038,13 +1038,19 @@ void utils_switch_document(gint direction)
 	gint page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
 
-	if (direction == LEFT && cur_page > 0)
+	if (direction == LEFT)
 	{
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), cur_page - 1);
+		if (cur_page > 0)
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), cur_page - 1);
+		else
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page_count - 1);
 	}
-	else if (direction == RIGHT && cur_page < page_count)
+	else if (direction == RIGHT)
 	{
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), cur_page + 1);
+		if (cur_page < page_count - 1)
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), cur_page + 1);
+		else
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);
 	}
 }
 

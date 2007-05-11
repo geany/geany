@@ -21,6 +21,8 @@
    Add optional title parameter for open dialog with ui_path_box_new()
    and ui_setup_open_button_callback().
    Use Windows folder dialog in ui_path_box_open_clicked().
+ * src/utils.c:
+   Wrap notebook pages when switching tabs.
 
 
 2007-05-10  Nick Treleaven  <nick.treleaven@btinternet.com>
