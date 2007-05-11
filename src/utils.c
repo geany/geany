@@ -1642,3 +1642,40 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 }
 
 
+/* Gets a sorted list of files in the specified directory.
+ * The list and the data in the list should be freed after use.
+ * Returns: The list or NULL if no files found.
+ * length will point to the number of non-NULL data items in the list, unless NULL.
+ * error is the location for storing a possible error, or NULL. */
+GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
+{
+	GSList *list = NULL;
+	guint len = 0;
+	GDir *dir;
+
+	if (error)
+		*error = NULL;
+	if (length)
+		*length = 0;
+	g_return_val_if_fail(path != NULL, NULL);
+
+	dir = g_dir_open(path, 0, error);
+	if (NZV(error))
+		return NULL;
+
+	while (1)
+	{
+		const gchar *filename = g_dir_read_name(dir);
+		if (filename == NULL) break;
+
+		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) strcmp);
+		len++;
+	}
+	g_dir_close(dir);
+
+	if (length)
+		*length = len;
+	return list;
+}
+
+

@@ -171,6 +171,10 @@ void utils_free_pointers(gpointer first, ...) G_GNUC_NULL_TERMINATED;
  * If first is NULL, NULL is returned. */
 gchar **utils_strv_new(gchar *first, ...) G_GNUC_NULL_TERMINATED;
 
+
 gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
+
+/* Gets a sorted list of files in the specified directory. */
+GSList *utils_get_file_list(const gchar *path, guint *length, GError **error);
 
 #endif

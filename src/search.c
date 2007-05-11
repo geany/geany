@@ -81,8 +81,6 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data);
 
 static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir);
 
-static GSList *search_get_file_list(const gchar *path, guint *length);
-
 
 static void
 on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -1206,11 +1204,18 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 	guint prefix_len, list_len, i, j;
 	gchar **argv;
 	GSList *list, *item;
+	GError *error = NULL;
 
 	g_return_val_if_fail(dir != NULL, NULL);
 
 	prefix_len = g_strv_length((gchar**)argv_prefix);
-	list = search_get_file_list(dir, &list_len);
+	list = utils_get_file_list(dir, &list_len, &error);
+	if (error)
+	{
+		msgwin_status_add(_("Could not open directory (%s)"), error->message);
+		g_error_free(error);
+		return NULL;
+	}
 	if (list == NULL) return NULL;
 
 	argv = g_new(gchar*, prefix_len + list_len + 1);
@@ -1228,43 +1233,6 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 
 	g_slist_free(list);
 	return argv;
-}
-
-
-/* Gets a sorted list of files in the current directory.
- * The list and the data in the list should be freed after use.
- * Returns: The list or NULL if no files found.
- * *length is set to the number of non-NULL data items in the list. */
-static GSList *search_get_file_list(const gchar *path, guint *length)
-{
-	GError *error = NULL;
-	GSList *list = NULL;
-	guint len = 0;
-	GDir *dir;
-
-	g_return_val_if_fail(path != NULL, NULL);
-
-	dir = g_dir_open(path, 0, &error);
-	if (error)
-	{
-		msgwin_status_add(_("Could not open directory (%s)"), error->message);
-		g_error_free(error);
-		*length = 0;
-		return NULL;
-	}
-
-	while (1)
-	{
-		const gchar *filename = g_dir_read_name(dir);
-		if (filename == NULL) break;
-
-		list = g_slist_insert_sorted(list, g_strdup(filename), (GCompareFunc) strcmp);
-		len++;
-	}
-	g_dir_close(dir);
-
-	*length = len;
-	return list;
 }
 
 

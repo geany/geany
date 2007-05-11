@@ -1,3 +1,9 @@
+2007-05-11  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/utils.h, src/search.c:
+   Move search_get_file_list() to utils.c.
+
+
 2007-05-10  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * data/global.tags:
