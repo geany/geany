@@ -76,8 +76,11 @@ static TagFileInfo tag_file_info[GTF_MAX] =
 	{FALSE, "latex.tags"}
 };
 
+static gchar *user_tags_dir;
+
 
 static void html_tags_loaded();
+static void load_user_tags(filetype_id ft_id);
 
 
 // Ensure that the global tags file for the file_type_idx filetype is loaded.
@@ -87,6 +90,8 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	gint tag_type;
 
 	if (app->ignore_global_tags) return;
+
+	load_user_tags(file_type_idx);
 
 	switch (file_type_idx)
 	{
@@ -824,3 +829,83 @@ void symbols_show_load_tags_dialog()
 	}
 	gtk_widget_destroy(dialog);
 }
+
+
+/* Fills a hash table with filetype keys that hold a linked list of filenames. */
+static GHashTable *get_tagfile_hash(const GSList *file_list)
+{
+	const GSList *node;
+	GHashTable *hash = g_hash_table_new(NULL, NULL);
+
+	for (node = file_list; node != NULL; node = g_slist_next(node))
+	{
+		GList *fnames;
+		gchar *fname = node->data;
+		gchar *utf8_fname = utils_get_utf8_from_locale(fname);
+		filetype *ft = detect_global_tags_filetype(utf8_fname);
+
+		g_free(utf8_fname);
+
+		if (FILETYPE_ID(ft) < GEANY_FILETYPES_ALL)
+		{
+			fnames = g_hash_table_lookup(hash, ft);	// may be NULL
+			fnames = g_list_append(fnames, fname);
+			g_hash_table_insert(hash, ft, fnames);
+		}
+		else
+			geany_debug("Unknown filetype for file '%s'.", fname);
+	}
+	return hash;
+}
+
+
+static GHashTable *init_user_tags()
+{
+	GSList *file_list;
+	GHashTable *lang_hash;
+
+	user_tags_dir = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "tags", NULL);
+	file_list = utils_get_file_list(user_tags_dir, NULL, NULL);
+	lang_hash = get_tagfile_hash(file_list);
+
+	// don't need to delete list contents because they are now used for hash contents
+	g_slist_free(file_list);
+	return lang_hash;
+}
+
+
+static void load_user_tags(filetype_id ft_id)
+{
+	static guchar tags_loaded[GEANY_FILETYPES_ALL] = {0};
+	static GHashTable *lang_hash = NULL;
+	GList *fnames;
+	const GList *node;
+	const filetype *ft = filetypes[ft_id];
+
+	g_return_if_fail(ft_id < GEANY_FILETYPES_ALL);
+
+	if (tags_loaded[ft_id])
+		return;
+	tags_loaded[ft_id] = TRUE;	// prevent reloading
+
+	if (lang_hash == NULL)
+		lang_hash = init_user_tags();
+
+	fnames = g_hash_table_lookup(lang_hash, ft);
+
+	for (node = fnames; node != NULL; node = g_list_next(node))
+	{
+		const gint tm_lang = ft->lang;
+		gchar *fname;
+
+		fname = g_strconcat(user_tags_dir, G_DIR_SEPARATOR_S, node->data, NULL);
+		tm_workspace_load_global_tags(fname, tm_lang);
+		geany_debug("Loaded %s (%s).", fname, ft->name);
+		g_free(fname);
+	}
+	g_list_foreach(fnames, (GFunc) g_free, NULL);
+	g_list_free(fnames);
+	g_hash_table_remove(lang_hash, (gpointer) ft);
+}
+
+

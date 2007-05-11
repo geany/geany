@@ -35,8 +35,6 @@
 
 void styleset_free_styles(void);
 
-void styleset_common(ScintillaObject *sci, gint style_bits);
-
 void styleset_c(ScintillaObject *sci);
 
 void styleset_cpp(ScintillaObject *sci);

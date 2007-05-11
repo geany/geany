@@ -423,7 +423,7 @@ static void styleset_common_init(void)
 }
 
 
-void styleset_common(ScintillaObject *sci, gint style_bits)
+static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id ft_id)
 {
 	static gboolean common_style_set_valid = FALSE;
 
@@ -435,6 +435,10 @@ void styleset_common(ScintillaObject *sci, gint style_bits)
 		init_styles();
 		common_style_set_valid = TRUE;
 	}
+
+	// load global tags file for autocompletion, calltips, etc.
+	if (ft_id < GEANY_FILETYPES_ALL)
+		symbols_global_tags_loaded(ft_id);
 
 	SSM(sci, SCI_STYLECLEARALL, 0, 0);
 
@@ -699,15 +703,14 @@ static void styleset_c_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
-
-	// load global tags file for C autocompletion
-	symbols_global_tags_loaded(GEANY_FILETYPES_C);
 }
 
 
 void styleset_c(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_C;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_C].styling == NULL) styleset_c_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_C].wordchars);
@@ -759,15 +762,14 @@ static void styleset_cpp_init(void)
 
 	g_key_file_free(config);
 	g_key_file_free(config_home);
-
-	// load global tags file for C autocompletion
-	symbols_global_tags_loaded(GEANY_FILETYPES_CPP);
 }
 
 
 void styleset_cpp(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_CPP;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_CPP].styling == NULL) styleset_cpp_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CPP].wordchars);
@@ -826,9 +828,6 @@ static void styleset_pascal_init(void)
 		&style_sets[GEANY_FILETYPES_PASCAL].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PASCAL);
 
-	// load global tags file for PASCAL autocompletion
-	symbols_global_tags_loaded(GEANY_FILETYPES_PASCAL);
-
 	g_key_file_free(config);
 	g_key_file_free(config_home);
 }
@@ -836,7 +835,9 @@ static void styleset_pascal_init(void)
 
 void styleset_pascal(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_PASCAL;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_PASCAL].styling == NULL) styleset_pascal_init();
 
 	SSM (sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_PASCAL].wordchars);
@@ -893,7 +894,9 @@ static void styleset_makefile_init(void)
 
 void styleset_makefile(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_MAKE;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_MAKE].styling == NULL) styleset_makefile_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_MAKEFILE, 0);
@@ -939,7 +942,9 @@ static void styleset_diff_init(void)
 
 void styleset_diff(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_DIFF;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_DIFF].styling == NULL) styleset_diff_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_DIFF, 0);
@@ -979,9 +984,6 @@ static void styleset_latex_init(void)
 		&style_sets[GEANY_FILETYPES_LATEX].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_LATEX);
 
-	// load global tags file for LaTeX autocompletion
-	symbols_global_tags_loaded(GEANY_FILETYPES_LATEX);
-
 	g_key_file_free(config);
 	g_key_file_free(config_home);
 }
@@ -989,7 +991,9 @@ static void styleset_latex_init(void)
 
 void styleset_latex(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_LATEX;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_LATEX].styling == NULL) styleset_latex_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_LATEX, 0);
@@ -1020,9 +1024,6 @@ static void styleset_php_init(void)
 		&style_sets[GEANY_FILETYPES_PHP].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_PHP);
 
-	// load global tags file for PHP autocompletion
-	symbols_global_tags_loaded(GEANY_FILETYPES_PHP);
-
 	g_key_file_free(config);
 	g_key_file_free(config_home);
 }
@@ -1030,7 +1031,9 @@ static void styleset_php_init(void)
 
 void styleset_php(ScintillaObject *sci)
 {
-	styleset_common(sci, 7);
+	const filetype_id ft_id = GEANY_FILETYPES_PHP;
+
+	styleset_common(sci, 7, ft_id);
 	// PHP doesn't have its own styling, so check wordchars to see if init was run
 	if (style_sets[GEANY_FILETYPES_PHP].wordchars == NULL) styleset_php_init();
 
@@ -1060,9 +1063,6 @@ static void styleset_html_init(void)
 		&style_sets[GEANY_FILETYPES_HTML].wordchars);
 	filetypes_get_config(config, config_home, GEANY_FILETYPES_HTML);
 
-	// load global tags file for HTML entities autocompletion
-	symbols_global_tags_loaded(GEANY_FILETYPES_HTML);
-
 	g_key_file_free(config);
 	g_key_file_free(config_home);
 }
@@ -1070,7 +1070,9 @@ static void styleset_html_init(void)
 
 void styleset_html(ScintillaObject *sci)
 {
-	styleset_common(sci, 7);
+	const filetype_id ft_id = GEANY_FILETYPES_HTML;
+
+	styleset_common(sci, 7, ft_id);
 	// HTML doesn't have its own styling, so check wordchars to see if init was run
 	if (style_sets[GEANY_FILETYPES_HTML].wordchars == NULL) styleset_html_init();
 
@@ -1427,7 +1429,9 @@ static void styleset_java_init(void)
 
 void styleset_java(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_JAVA;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_JAVA].styling == NULL) styleset_java_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_CPP, 0);
@@ -1527,7 +1531,9 @@ static void styleset_perl_init(void)
 
 void styleset_perl(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_PERL;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_PERL].styling == NULL) styleset_perl_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_PERL, 0);
@@ -1611,7 +1617,9 @@ static void styleset_python_init(void)
 
 void styleset_python(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_PYTHON;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_PYTHON].styling == NULL) styleset_python_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_PYTHON, 0);
@@ -1697,7 +1705,9 @@ static void styleset_ruby_init(void)
 
 void styleset_ruby(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_RUBY;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_RUBY].styling == NULL) styleset_ruby_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_RUBY, 0);
@@ -1777,7 +1787,9 @@ static void styleset_sh_init(void)
 
 void styleset_sh(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_SH;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_SH].styling == NULL) styleset_sh_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_BASH, 0);
@@ -1806,7 +1818,9 @@ void styleset_sh(ScintillaObject *sci)
 
 void styleset_xml(ScintillaObject *sci)
 {
-	styleset_common(sci, 7);
+	const filetype_id ft_id = SCLEX_XML;
+
+	styleset_common(sci, 7, ft_id);
 
 	SSM (sci, SCI_SETLEXER, SCLEX_XML, 0);
 
@@ -1926,7 +1940,9 @@ static void styleset_docbook_init(void)
 
 void styleset_docbook(ScintillaObject *sci)
 {
-	styleset_common(sci, 7);
+	const filetype_id ft_id = GEANY_FILETYPES_DOCBOOK;
+
+	styleset_common(sci, 7, ft_id);
 	if (style_sets[GEANY_FILETYPES_DOCBOOK].styling == NULL) styleset_docbook_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_XML, 0);
@@ -1979,6 +1995,8 @@ void styleset_docbook(ScintillaObject *sci)
 
 void styleset_none(ScintillaObject *sci)
 {
+	const filetype_id ft_id = GEANY_FILETYPES_ALL;
+
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
 	if (style_sets[GEANY_FILETYPES_ALL].styling == NULL)
@@ -1986,7 +2004,7 @@ void styleset_none(ScintillaObject *sci)
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ALL, GCS_DEFAULT);
 
-	styleset_common(sci, 5);
+	styleset_common(sci, 5, ft_id);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
 }
@@ -2057,7 +2075,9 @@ static void styleset_css_init(void)
 
 void styleset_css(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_CSS;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_CSS].styling == NULL) styleset_css_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CSS].wordchars);
@@ -2117,7 +2137,9 @@ static void styleset_conf_init(void)
 
 void styleset_conf(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_CONF;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_CONF].styling == NULL) styleset_conf_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_PROPERTIES, 0);
@@ -2178,7 +2200,9 @@ static void styleset_asm_init(void)
 
 void styleset_asm(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_ASM;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_ASM].styling == NULL) styleset_asm_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_ASM].wordchars);
@@ -2252,7 +2276,9 @@ static void styleset_fortran_init(void)
 
 void styleset_fortran(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_FORTRAN;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_FORTRAN].styling == NULL) styleset_fortran_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_FORTRAN].wordchars);
@@ -2350,7 +2376,9 @@ static void styleset_sql_init(void)
 
 void styleset_sql(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_SQL;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_SQL].styling == NULL) styleset_sql_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_SQL].wordchars);
@@ -2421,7 +2449,9 @@ static void styleset_haskell_init(void)
 
 void styleset_haskell(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_HASKELL;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_HASKELL].styling == NULL) styleset_haskell_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HASKELL].wordchars);
@@ -2496,7 +2526,9 @@ static void styleset_caml_init(void)
 
 void styleset_caml(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_CAML;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_CAML].styling == NULL) styleset_caml_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_CAML].wordchars);
@@ -2566,7 +2598,9 @@ static void styleset_oms_init(void)
 
 void styleset_oms(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_OMS;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_OMS].styling == NULL) styleset_oms_init();
 
 	SSM (sci, SCI_SETLEXER, SCLEX_OMS, 0);
@@ -2637,7 +2671,9 @@ static void styleset_tcl_init(void)
 
 void styleset_tcl(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_TCL;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_TCL].styling == NULL) styleset_tcl_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_TCL].wordchars);
@@ -2727,7 +2763,9 @@ static void styleset_d_init(void)
 
 void styleset_d(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_D;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_D].styling == NULL) styleset_d_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_D].wordchars);
@@ -2789,7 +2827,9 @@ static void styleset_ferite_init(void)
 
 void styleset_ferite(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_FERITE;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_FERITE].styling == NULL) styleset_ferite_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_FERITE].wordchars);
@@ -2874,7 +2914,9 @@ static void styleset_vhdl_init(void)
 
 void styleset_vhdl(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_VHDL;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_VHDL].styling == NULL) styleset_vhdl_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_VHDL].wordchars);
@@ -2939,7 +2981,9 @@ static void styleset_js_init(void)
 
 void styleset_js(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_JS;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_JS].styling == NULL) styleset_js_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_JS].wordchars);
@@ -3034,7 +3078,9 @@ static void styleset_lua_init(void)
 
 void styleset_lua(ScintillaObject *sci)
 {
-	styleset_common(sci, 5);
+	const filetype_id ft_id = GEANY_FILETYPES_LUA;
+
+	styleset_common(sci, 5, ft_id);
 	if (style_sets[GEANY_FILETYPES_LUA].styling == NULL) styleset_lua_init();
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_LUA].wordchars);

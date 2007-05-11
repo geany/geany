@@ -2,6 +2,8 @@
 
  * src/utils.c, src/utils.h, src/search.c:
    Move search_get_file_list() to utils.c.
+ * src/highlighting.c, src/highlighting.h, src/symbols.c:
+   Load global tag files stored in ~/.geany/tags when needed.
 
 
 2007-05-10  Nick Treleaven  <nick.treleaven@btinternet.com>
