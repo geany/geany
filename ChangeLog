@@ -23,6 +23,8 @@
    Use Windows folder dialog in ui_path_box_open_clicked().
  * src/utils.c:
    Wrap notebook pages when switching tabs.
+ * src/utils.c:
+   Fix bug when directory doesn't exist in utils_get_file_list().
 
 
 2007-05-10  Nick Treleaven  <nick.treleaven@btinternet.com>

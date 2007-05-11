@@ -1666,7 +1666,7 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 	g_return_val_if_fail(path != NULL, NULL);
 
 	dir = g_dir_open(path, 0, error);
-	if (NZV(error))
+	if (dir == NULL)
 		return NULL;
 
 	while (1)
