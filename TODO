@@ -12,9 +12,7 @@ TODO List:
 	o documentation: list and explain filetype modes
 	o documentation: preferences
 	o user-definable construct completion
-	o allow use of custom global tags files
-	o project management
-	o word wrapping mode to limit chars on a line for e.g. XML content.
+	o line breaking mode to limit words on a line for e.g. XML content.
 	o common default highlighting for all programming languages
 	o fix parsing command line args after given filenames
 	o (DBUS)
