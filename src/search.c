@@ -573,7 +573,8 @@ void search_show_find_in_files_dialog()
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "dir_combo",
 						gtk_widget_ref(dir_combo), (GDestroyNotify)gtk_widget_unref);
 
-		dbox = ui_path_box_new(GTK_ENTRY(entry), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+		dbox = ui_path_box_new(NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+			GTK_ENTRY(entry));
 		gtk_box_pack_start(GTK_BOX(dbox), label1, FALSE, FALSE, 0);
 
 		label = gtk_label_new(_("Search for:"));

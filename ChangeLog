@@ -14,6 +14,13 @@
    Prevent double loading of common styles when filetype none is used
    before other filetypes.
    Replace init_styles() with direct initialization of style_sets.
+ * src/ui_utils.h, src/project.c, src/search.c, src/ui_utils.c:
+   Use open folder dialog for project base path instead of create folder
+   dialog (better for choosing existing directories, and can still
+   create new folders).
+   Add optional title parameter for open dialog with ui_path_box_new()
+   and ui_setup_open_button_callback().
+   Use Windows folder dialog in ui_path_box_open_clicked().
 
 
 2007-05-10  Nick Treleaven  <nick.treleaven@btinternet.com>

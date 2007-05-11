@@ -1124,8 +1124,8 @@ void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str)
 /* Creates a GtkHBox with entry packed into it and an open button which runs a
  * file chooser, replacing entry text if successful.
  * entry can be the child of an unparented widget, such as GtkComboBoxEntry.
- * action is the GtkFileChooser mode to use. */
-GtkWidget *ui_path_box_new(GtkEntry *entry, GtkFileChooserAction action)
+ * See ui_setup_open_button_callback() for details. */
+GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry)
 {
 	GtkWidget *vbox, *dirbtn, *openimg, *hbox, *path_entry;
 
@@ -1146,7 +1146,7 @@ GtkWidget *ui_path_box_new(GtkEntry *entry, GtkFileChooserAction action)
 	dirbtn = gtk_button_new();
 	openimg = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(dirbtn), openimg);
-	ui_setup_open_button_callback(dirbtn, entry, action);
+	ui_setup_open_button_callback(dirbtn, title, action, entry);
 
 	gtk_box_pack_end(GTK_BOX(hbox), dirbtn, FALSE, FALSE, 0);
 	gtk_box_pack_end(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
@@ -1158,40 +1158,35 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data);
 
 
 /* Setup a GtkButton to run a GtkFileChooser, setting entry text if successful.
+ * title can be NULL.
  * action is the file chooser mode to use. */
-void ui_setup_open_button_callback(GtkWidget *open_btn, GtkEntry *entry,
-		GtkFileChooserAction action)
+void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
+		GtkFileChooserAction action, GtkEntry *entry)
 {
 	GtkWidget *path_entry = GTK_WIDGET(entry);
 
-	g_object_set_data_full(G_OBJECT(open_btn), "entry",
-					gtk_widget_ref(path_entry), (GDestroyNotify)gtk_widget_unref);
+	if (title)
+		g_object_set_data_full(G_OBJECT(open_btn), "title",
+			g_strdup(title), (GDestroyNotify) g_free);
 	g_object_set_data(G_OBJECT(open_btn), "action", (gpointer) action);
+	g_object_set_data_full(G_OBJECT(open_btn), "entry",
+		gtk_widget_ref(path_entry), (GDestroyNotify) gtk_widget_unref);
 	g_signal_connect(G_OBJECT(open_btn), "clicked",
 		G_CALLBACK(ui_path_box_open_clicked), open_btn);
 }
 
 
-static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
+#ifndef G_OS_WIN32
+static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
+		const gchar *utf8_path)
 {
-	GtkWidget *path_box = GTK_WIDGET(user_data);
-	GtkFileChooserAction action =
-		(GtkFileChooserAction) g_object_get_data(G_OBJECT(path_box), "action");
-	GtkEntry *entry =
-		(GtkEntry *) g_object_get_data(G_OBJECT(path_box), "entry");
-	const gchar *title = (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER) ?
-		_("Select Folder") : _("Select File");
 	GtkWidget *dialog = gtk_file_chooser_dialog_new(title,
 		GTK_WINDOW(app->window), action,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
 	gchar *locale_path;
-	const gchar *utf8_path;
+	gchar *ret_path = NULL;
 
-	// TODO: extend for other actions
-	g_return_if_fail(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-
-	utf8_path = gtk_entry_get_text(GTK_ENTRY(entry));
 	locale_path = utils_get_locale_from_utf8(utf8_path);
 	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{
@@ -1202,15 +1197,49 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
 	{
-		gchar *dir_utf8, *dir_locale;
+		gchar *dir_locale;
+
 		dir_locale = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(dialog));
-		dir_utf8 = utils_get_utf8_from_locale(dir_locale);
-		gtk_entry_set_text(GTK_ENTRY(entry), dir_utf8);
-		g_free(dir_utf8);
+		ret_path = utils_get_utf8_from_locale(dir_locale);
 		g_free(dir_locale);
 	}
 	gtk_widget_destroy(dialog);
+	return ret_path;
 }
+#endif
+
+
+static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
+{
+	GtkWidget *path_box = GTK_WIDGET(user_data);
+	GtkFileChooserAction action =
+		(GtkFileChooserAction) g_object_get_data(G_OBJECT(path_box), "action");
+	GtkEntry *entry =
+		(GtkEntry *) g_object_get_data(G_OBJECT(path_box), "entry");
+	const gchar *title = g_object_get_data(G_OBJECT(path_box), "title");
+	gchar *utf8_path;
+
+	// TODO: extend for other actions
+	g_return_if_fail(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+
+	if (title == NULL)
+		title = (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER) ?
+			_("Select Folder") : _("Select File");
+
+#ifdef G_OS_WIN32
+	utf8_path = win32_show_project_folder_dialog(title,
+						gtk_entry_get_text(GTK_ENTRY(entry)));
+#else
+	utf8_path = run_file_chooser(title, action, gtk_entry_get_text(GTK_ENTRY(entry)));
+#endif
+
+	if (utf8_path != NULL)
+	{
+		gtk_entry_set_text(GTK_ENTRY(entry), utf8_path);
+		g_free(utf8_path);
+	}
+}
+
 
 void ui_statusbar_showhide(gboolean state)
 {

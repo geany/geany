@@ -68,7 +68,6 @@ typedef struct _PropertyDialogElements
 
 static gboolean update_config(const PropertyDialogElements *e);
 static void on_file_save_button_clicked(GtkButton *button, GtkWidget *entry);
-static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry);
 static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry);
 static gboolean close_open_project();
 static gboolean load_config(const gchar *filename);
@@ -165,14 +164,8 @@ void project_new()
 	gtk_tooltips_set_tip(tooltips, e->base_path,
 		_("Base directory of all files that make up the project. "
 		"This can be a new path, or an existing directory tree."), NULL);
-	button = gtk_button_new();
-	g_signal_connect((gpointer) button, "clicked",
-				G_CALLBACK(on_folder_open_button_clicked), e->base_path);
-	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
-	gtk_container_add(GTK_CONTAINER(button), image);
-	bbox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start_defaults(GTK_BOX(bbox), e->base_path);
-	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+	bbox = ui_path_box_new(_("Choose Project Base Path"),
+		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 2, 3,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -384,14 +377,8 @@ void project_properties()
 	gtk_tooltips_set_tip(tooltips, e->base_path,
 		_("Directory to run Make All from. "
 		"Leave blank to use the default command."), NULL);
-	button = gtk_button_new();
-	g_signal_connect((gpointer) button, "clicked",
-				G_CALLBACK(on_folder_open_button_clicked), e->base_path);
-	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
-	gtk_container_add(GTK_CONTAINER(button), image);
-	bbox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start_defaults(GTK_BOX(bbox), e->base_path);
-	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+	bbox = ui_path_box_new(_("Choose Project Base Path"),
+		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 3, 4,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
@@ -695,34 +682,6 @@ static void on_file_save_button_clicked(GtkButton *button, GtkWidget *entry)
 }
 
 
-static void on_folder_open_button_clicked(GtkButton *button, GtkWidget *entry)
-{
-#ifdef G_OS_WIN32
-	gchar *path = win32_show_project_folder_dialog(_("Choose Project Base Path"),
-						gtk_entry_get_text(GTK_ENTRY(entry)));
-	if (path != NULL)
-	{
-		gtk_entry_set_text(GTK_ENTRY(entry), path);
-		g_free(path);
-	}
-#else
-	GtkWidget *dialog;
-
-	// initialise the dialog
-	dialog = gtk_file_chooser_dialog_new(_("Choose Project Base Path"), NULL,
-					GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
-
-	run_dialog(dialog, entry);
-#endif
-}
-
-
 static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry)
 {
 #ifdef G_OS_WIN32
@@ -939,8 +898,8 @@ void project_setup_prefs()
 
 	g_return_if_fail(local_prefs.project_file_path != NULL);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), local_prefs.project_file_path);
-	ui_setup_open_button_callback(path_btn, GTK_ENTRY(path_entry),
-		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+	ui_setup_open_button_callback(path_btn, NULL,
+		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(path_entry));
 }
 
 
