@@ -48,14 +48,13 @@ typedef struct
 
 typedef struct
 {
-	Style	 *styling;	// array of styles, NULL if not used
+	Style	 *styling;		// array of styles, NULL if not used or uninitialised
 	gchar	**keywords;
-	gchar	 *wordchars;
+	gchar	 *wordchars;	// NULL used for style sets with no styles
 } StyleSet;
 
-// After styleset_common_init, each style_sets[...].* is set to NULL in styleset_init_styles.
 // each filetype has a styleset except GEANY_FILETYPE_ALL
-static StyleSet style_sets[GEANY_MAX_FILE_TYPES - 1];
+static StyleSet style_sets[GEANY_MAX_FILE_TYPES - 1] = {{NULL, NULL, NULL}};
 
 
 enum	// Geany common styling
@@ -323,20 +322,6 @@ static void set_sci_style(ScintillaObject *sci, gint style, gint ft, gint stylin
 }
 
 
-// called from styleset_common
-static void init_styles()
-{
-	gint i;
-
-	for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
-	{
-		style_sets[i].styling = NULL;	// styling == NULL used to check init was run for most style sets
-		style_sets[i].keywords = NULL;
-		style_sets[i].wordchars = NULL;	// wordchars == NULL used for style sets with no styles
-	}
-}
-
-
 void styleset_free_styles()
 {
 	gint i;
@@ -370,6 +355,7 @@ static GString *get_global_typenames()
 }
 
 
+/* This should only be called from styleset_common(). */
 static void styleset_common_init(void)
 {
 	GKeyFile *config = g_key_file_new();
@@ -430,9 +416,6 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 	if (! common_style_set_valid)
 	{
 		styleset_common_init();
-		// As styleset_common is called first for all file types before they are used,
-		// we can init their pointers to NULL here.
-		init_styles();
 		common_style_set_valid = TRUE;
 	}
 
@@ -1999,12 +1982,9 @@ void styleset_none(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
-	if (style_sets[GEANY_FILETYPES_ALL].styling == NULL)
-		styleset_common_init();
+	styleset_common(sci, 5, ft_id);
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ALL, GCS_DEFAULT);
-
-	styleset_common(sci, 5, ft_id);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
 }

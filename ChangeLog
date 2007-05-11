@@ -10,6 +10,10 @@
    Rename 'confdialog' to 'prefs'.
    Move compile time options section into an appendix (most users
    shouldn't change these options).
+ * src/highlighting.c:
+   Prevent double loading of common styles when filetype none is used
+   before other filetypes.
+   Replace init_styles() with direct initialization of style_sets.
 
 
 2007-05-10  Nick Treleaven  <nick.treleaven@btinternet.com>
