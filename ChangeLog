@@ -4,6 +4,8 @@
    Move search_get_file_list() to utils.c.
  * src/highlighting.c, src/highlighting.h, src/symbols.c:
    Load global tag files stored in ~/.geany/tags when needed.
+ * doc/geany.docbook:
+   Update docs for loading user tags at startup.
 
 
 2007-05-10  Nick Treleaven  <nick.treleaven@btinternet.com>

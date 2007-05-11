@@ -5,7 +5,7 @@
 <!ENTITY appversion "0.11">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
-<!ENTITY date "April 15, 2007">
+<!ENTITY date "May 11, 2007">
 <!ENTITY legal SYSTEM "geany_gpl.docbook">
 <!ENTITY scikeybinding SYSTEM "scikeybinding.docbook">
 ]>
@@ -1012,9 +1012,19 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 				only has to be updated when you upgrade the library.
 			</para>
 			<para>
-				You can load a global tags file with the <emphasis>Load Tags</emphasis> command,
-				in the File menu. You can either download these files or generate your own.
-				These tags files have the filename:
+				You can load a custom global tags file in two ways:
+				<itemizedlist>
+					<listitem><para>Using the <emphasis>Load Tags</emphasis> command in the File menu.
+						</para></listitem>
+					<listitem><para>By creating a directory <filename>~/.geany/tags</filename>,
+						and moving or symlinking the tags files there before starting
+						<application>Geany</application>.
+						</para></listitem>
+				</itemizedlist>
+			</para>
+			<para>
+				You can either download these files or generate your own.
+				They have the format:
 			</para>
 			<para>
 				<filename>libraryname.lang_ext.tags</filename>
