@@ -544,7 +544,7 @@ getNextChar:
 			break;
 		    else
 			fileUngetc (c);
-		} while (c != '\0');
+		} while (c != EOF && c != '\0');
 		goto getNextChar;
 	    }
 	    break;
