@@ -548,6 +548,21 @@ void filetypes_init()
 		filetype *ft = filetypes[ft_id];
 		const gchar *title = (ft_id == GEANY_FILETYPES_ALL) ? _("None") : ft->title;
 
+		// insert separators for different filetype groups
+		switch (ft_id)
+		{
+			case GEANY_FILETYPES_PERL:	// scripts
+			case GEANY_FILETYPES_XML:	// text documents
+			case GEANY_FILETYPES_ALL:	// none
+			{
+				GtkWidget *sep = gtk_separator_menu_item_new();
+
+				gtk_widget_show(sep);
+				gtk_container_add(GTK_CONTAINER(filetype_menu), sep);
+			}
+			default:
+				break;
+		}
 		ft->item = NULL;
 		filetypes_create_menu_item(filetype_menu, title, ft);
 	}
