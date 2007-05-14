@@ -3,6 +3,8 @@
  * src/filetypes.c, src/filetypes.h:
    Add some menu separators to group filetype menu items.
    Reorder Haskell, O-Matrix, VHDL filetypes.
+ * src/document.c:
+   Fix removing indent spaces after switching back to tab indenting.
 
 
 2007-05-12  Nick Treleaven  <nick.treleaven@btinternet.com>
