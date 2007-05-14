@@ -5,6 +5,9 @@
    Reorder Haskell, O-Matrix, VHDL filetypes.
  * src/document.c:
    Fix removing indent spaces after switching back to tab indenting.
+ * scintilla/LexHTML.cxx:
+   Hopefully fix #1718532 - 'Crashes when open a special file';
+   backported from Scintilla 1.73.
 
 
 2007-05-12  Nick Treleaven  <nick.treleaven@btinternet.com>
