@@ -307,12 +307,18 @@ GdkAtom ScintillaGTK::atomString = 0;
 GdkAtom ScintillaGTK::atomUriList = 0;
 GdkAtom ScintillaGTK::atomDROPFILES_DND = 0;
 
-static const GtkTargetEntry clipboardTargets[] = {
+static const GtkTargetEntry clipboardCopyTargets[] = {
+	{ "UTF8_STRING", 0, TARGET_UTF8_STRING },
+	{ "STRING", 0, TARGET_STRING },
+};
+static const gint nClipboardCopyTargets = sizeof(clipboardCopyTargets) / sizeof(clipboardCopyTargets[0]);
+
+static const GtkTargetEntry clipboardPasteTargets[] = {
 	{ "text/uri-list", 0, TARGET_URI },
 	{ "UTF8_STRING", 0, TARGET_UTF8_STRING },
 	{ "STRING", 0, TARGET_STRING },
 };
-static const gint nClipboardTargets = sizeof(clipboardTargets) / sizeof(clipboardTargets[0]);
+static const gint nClipboardPasteTargets = sizeof(clipboardPasteTargets) / sizeof(clipboardPasteTargets[0]);
 
 static GtkWidget *PWidget(Window &w) {
 	return reinterpret_cast<GtkWidget *>(w.GetID());
@@ -760,15 +766,15 @@ void ScintillaGTK::Initialise() {
 	gtk_widget_grab_focus(PWidget(wMain));
 
 	gtk_selection_add_targets(GTK_WIDGET(PWidget(wMain)), GDK_SELECTION_PRIMARY,
-	                          clipboardTargets, nClipboardTargets);
+	                          clipboardPasteTargets, nClipboardPasteTargets);
 
 #ifndef USE_GTK_CLIPBOARD
 	gtk_selection_add_targets(GTK_WIDGET(PWidget(wMain)), atomClipboard,
-	                          clipboardTargets, nClipboardTargets);
+	                          clipboardPasteTargets, nClipboardPasteTargets);
 #endif
 
 	gtk_drag_dest_set(GTK_WIDGET(PWidget(wMain)),
-	                  GTK_DEST_DEFAULT_ALL, clipboardTargets, nClipboardTargets,
+	                  GTK_DEST_DEFAULT_ALL, clipboardPasteTargets, nClipboardPasteTargets,
 	                  static_cast<GdkDragAction>(GDK_ACTION_COPY | GDK_ACTION_MOVE));
 
 	SetTicking(true);
@@ -788,12 +794,7 @@ void ScintillaGTK::DisplayCursor(Window::Cursor c) {
 
 void ScintillaGTK::StartDrag() {
 	dragWasDropped = false;
-	static const GtkTargetEntry targets[] = {
-	    { "UTF8_STRING", 0, TARGET_UTF8_STRING },
-	    { "STRING", 0, TARGET_STRING },
-	};
-	static const gint n_targets = sizeof(targets) / sizeof(targets[0]);
-	GtkTargetList *tl = gtk_target_list_new(targets, n_targets);
+	GtkTargetList *tl = gtk_target_list_new(clipboardCopyTargets, nClipboardCopyTargets);
 	gtk_drag_begin(GTK_WIDGET(PWidget(wMain)),
 	               tl,
 	               static_cast<GdkDragAction>(GDK_ACTION_COPY | GDK_ACTION_MOVE),
@@ -1268,7 +1269,7 @@ void ScintillaGTK::CopyToClipboard(const SelectionText &selectedText) {
 	SelectionText *clipText = new SelectionText();
 	clipText->Copy(selectedText);
 
-	gtk_clipboard_set_with_data(clipBoard, clipboardTargets, nClipboardTargets,
+	gtk_clipboard_set_with_data(clipBoard, clipboardCopyTargets, nClipboardCopyTargets,
 				    ClipboardGetSelection, ClipboardClearSelection, clipText);
 
 #endif
@@ -1290,7 +1291,7 @@ void ScintillaGTK::Copy() {
 		SelectionText *clipText = new SelectionText();
 		CopySelectionRange(clipText);
 
-		gtk_clipboard_set_with_data(clipBoard, clipboardTargets, nClipboardTargets,
+		gtk_clipboard_set_with_data(clipBoard, clipboardCopyTargets, nClipboardCopyTargets,
 					    ClipboardGetSelection, ClipboardClearSelection, clipText);
 
 #endif
