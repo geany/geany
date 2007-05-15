@@ -1616,8 +1616,8 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 							</row>
 							<row>
 								<entry>Toggle all additional widgets</entry>
-								<entry>Hide and show all additional widgets like the sidebar, the
-									   toolbar, the messages window and the statusbar.</entry>
+								<entry>Hide and show all additional widgets like the notebook tabs,
+									   the toolbar, the messages window and the statusbar.</entry>
 							</row>
 							<row>
 								<entry>Zoom In</entry>

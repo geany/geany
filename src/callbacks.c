@@ -2176,7 +2176,7 @@ on_menu_toggle_all_additional_widgets1_activate
 	if (hide_all == -1)
 	{
 		if (! gtk_check_menu_item_get_active(msgw) &&
-			! app->sidebar_visible &&
+			! app->show_notebook_tabs &&
 			! gtk_check_menu_item_get_active(toolbari))
 		{
 			hide_all = TRUE;
@@ -2192,8 +2192,8 @@ on_menu_toggle_all_additional_widgets1_activate
 		if (gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		if (app->sidebar_visible)
-			on_menu_show_sidebar1_toggled(NULL, NULL);
+		app->show_notebook_tabs = FALSE;
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), app->show_notebook_tabs);
 
 		ui_statusbar_showhide(FALSE);
 
@@ -2206,8 +2206,8 @@ on_menu_toggle_all_additional_widgets1_activate
 		if (! gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		if (! app->sidebar_visible)
-			on_menu_show_sidebar1_toggled(NULL, NULL);
+		app->show_notebook_tabs = TRUE;
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), app->show_notebook_tabs);
 
 		ui_statusbar_showhide(TRUE);
 

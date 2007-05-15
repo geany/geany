@@ -2,6 +2,9 @@
 
  * scintilla/ScintillaGTK.cxx:
    Fixed wrong clipboard target (closes #1711483).
+ * doc/geany.docbook, src/callbacks.c:
+   Hide notebooks tabs instead of sidebar when toggling additional
+   widgets.
 
 
 2007-05-14  Nick Treleaven  <nick.treleaven@btinternet.com>
