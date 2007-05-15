@@ -521,6 +521,7 @@ void keybindings_show_shortcuts()
 				GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
+	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	height = GEANY_WINDOW_MINIMAL_HEIGHT;
 	gtk_window_set_default_size(GTK_WINDOW(dialog), height * 0.8, height);

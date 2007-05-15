@@ -1302,6 +1302,7 @@ static void show_includes_arguments_tex()
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	label = gtk_label_new(_("Set programs and options for compiling and viewing (La)TeX files."));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -1470,6 +1471,7 @@ static void show_includes_arguments_gen()
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	label = gtk_label_new(_("Set the commands for building and running programs."));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);

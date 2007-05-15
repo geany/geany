@@ -421,7 +421,7 @@
 				<para>
 					You can  define your widget style for many of <application>Geany</application>'s
 					GUI parts. To do this, just edit your <filename>.gtkrc-2.0</filename> (usually
-					found in your home directory on UNIX-like systems and in the etc subdirecory
+					found in your home directory on UNIX-like systems and in the etc subdirectory
 					of your <application>Geany</application> installation on Windows).
 				</para>
 				<para>
@@ -447,7 +447,16 @@
 							<para>GeanyToolbarMenu</para>
 						</listitem>
 						<listitem>
-							<para>GeanyPrefsDialog</para>
+							<para>GeanyDialog</para>
+						</listitem>
+						<listitem>
+							<para>GeanyDialogPrefs</para>
+						</listitem>
+						<listitem>
+							<para>GeanyDialogProject</para>
+						</listitem>
+						<listitem>
+							<para>GeanyDialogSearch</para>
 						</listitem>
 					</orderedlist>
 				</para>

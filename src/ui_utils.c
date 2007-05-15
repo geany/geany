@@ -1187,6 +1187,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	gchar *locale_path;
 	gchar *ret_path = NULL;
 
+	gtk_widget_set_name(dialog, "GeanyDialog");
 	locale_path = utils_get_locale_from_utf8(utf8_path);
 	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{

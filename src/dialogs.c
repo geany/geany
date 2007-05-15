@@ -84,6 +84,7 @@ void dialogs_show_open_file ()
 		gtk_tooltips_set_tip(tooltips, viewbtn,
 			_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."), NULL);
 		gtk_widget_show(viewbtn);
+		gtk_widget_set_name(app->open_filesel, "GeanyDialog");
 		gtk_dialog_add_action_widget(GTK_DIALOG(app->open_filesel),
 			viewbtn, GTK_RESPONSE_APPLY);
 		gtk_dialog_add_buttons(GTK_DIALOG(app->open_filesel),
@@ -274,6 +275,7 @@ gboolean dialogs_show_save_as()
 		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(app->save_filesel), TRUE);
 		gtk_window_set_type_hint(GTK_WINDOW(app->save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
 		gtk_dialog_set_default_response(GTK_DIALOG(app->save_filesel), GTK_RESPONSE_ACCEPT);
+		gtk_widget_set_name(app->save_filesel, "GeanyDialog");
 
 		g_signal_connect((gpointer) app->save_filesel, "delete_event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
@@ -334,6 +336,7 @@ void dialogs_show_msgbox(gint type, const gchar *text, ...)
 #else
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
                                   type, GTK_BUTTONS_OK, "%s", string);
+	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 #endif
@@ -421,6 +424,7 @@ void dialogs_show_open_font()
 		gtk_window_set_destroy_with_parent(GTK_WINDOW(app->open_fontsel), TRUE);
 		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(app->open_fontsel), TRUE);
 		gtk_window_set_type_hint(GTK_WINDOW(app->open_fontsel), GDK_WINDOW_TYPE_HINT_DIALOG);
+		gtk_widget_set_name(app->open_fontsel, "GeanyDialog");
 
 		gtk_widget_show(GTK_FONT_SELECTION_DIALOG(app->open_fontsel)->apply_button);
 
@@ -457,6 +461,7 @@ void dialogs_show_word_count()
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	if (sci_can_copy(doc_list[idx].sci))
 	{
@@ -550,6 +555,7 @@ void dialogs_show_color(gchar *colour)
 	if (app->open_colorsel == NULL)
 	{
 		app->open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
+		gtk_widget_set_name(app->open_colorsel, "GeanyDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(app->open_colorsel), GTK_WINDOW(app->window));
 
 		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->cancel_button, "clicked",
@@ -589,6 +595,7 @@ void dialogs_show_input(const gchar *title, const gchar *label_text, const gchar
 						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
 	label = gtk_label_new(label_text);
@@ -621,6 +628,7 @@ void dialogs_show_goto_line()
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	label = gtk_label_new(_("Enter the line you want to go to:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -712,6 +720,7 @@ void dialogs_show_file_properties(gint idx)
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	g_free(title);
+	gtk_widget_set_name(dialog, "GeanyDialog");
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 
 	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
@@ -1023,12 +1032,13 @@ show_question(const gchar *yes_btn, const gchar *no_btn, const gchar *question_t
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window),
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
 		GTK_BUTTONS_NONE, "%s", question_text);
+	gtk_widget_set_name(dialog, "GeanyDialog");
 	// question_text will be in bold if optional extra_text used
 	if (extra_text != NULL)
 		gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 			"%s", extra_text);
 
-	// For a cancel button, use cancel reponse so user can press escape to cancel
+	// For a cancel button, use cancel response so user can press escape to cancel
 	gtk_dialog_add_button(GTK_DIALOG(dialog), no_btn,
 		utils_str_equal(no_btn, GTK_STOCK_CANCEL) ? GTK_RESPONSE_CANCEL : GTK_RESPONSE_NO);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), yes_btn, GTK_RESPONSE_YES);

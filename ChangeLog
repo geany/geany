@@ -5,6 +5,10 @@
  * doc/geany.docbook, src/callbacks.c:
    Hide notebooks tabs instead of sidebar when toggling additional
    widgets.
+ * doc/geany.docbook, src/about.c, src/build.c, src/dialogs.c,
+   src/keybindings.c, src/project.c, src/symbols.c, src/tools.c,
+   src/ui_utils.c: Added many widget names to different dialogs for use
+                   with custom styles. Menu items still don't work.
 
 
 2007-05-14  Nick Treleaven  <nick.treleaven@btinternet.com>

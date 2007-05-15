@@ -83,6 +83,7 @@ void tools_show_dialog_insert_special_chars()
 					_("_Insert"), GTK_RESPONSE_OK, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(sc_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 6);
+		gtk_widget_set_name(sc_dialog, "GeanyDialog");
 
 		height = GEANY_WINDOW_MINIMAL_HEIGHT;
 		gtk_window_set_default_size(GTK_WINDOW(sc_dialog), height * 0.8, height);
@@ -662,6 +663,7 @@ static void cc_show_dialog_custom_commands()
 						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
+	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	label = gtk_label_new(_("You can send the current selection to any of these commands and the output of the command replaces the current selection."));
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
