@@ -556,7 +556,7 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 	// bold = common whitespace settings enabled
 	SSM(sci, SCI_SETWHITESPACEFORE, common_style_set.styling[GCS_WHITE_SPACE].bold,
 		invert(common_style_set.styling[GCS_WHITE_SPACE].foreground));
-	SSM(sci, SCI_SETWHITESPACEBACK, common_style_set.styling[GCS_WHITE_SPACE].bold,
+	SSM(sci, SCI_SETWHITESPACEBACK, common_style_set.styling[GCS_WHITE_SPACE].italic,
 		invert(common_style_set.styling[GCS_WHITE_SPACE].background));
 }
 

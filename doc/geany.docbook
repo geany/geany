@@ -2190,10 +2190,12 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 									<entry>The style for colouring the white space if it is shown.
 										   The first both arguments define the foreground and
 										   background colours, the third argument sets whether to use
-										   the defined colours or to use the colours defined by each
-										   filetype for the white space.
+										   the defined foreground colour or to use the colour
+										   defined by each filetype for the white space.
+										   The fourth argument defines whether to use the background
+										   colour.
 									</entry>
-									<entry>white_space=0xc0c0c0;0xffffff;true;false</entry>
+									<entry>white_space=0xc0c0c0;0xffffff;true;true</entry>
 								</row>
 								<row>
 									<entry>folding_style</entry>

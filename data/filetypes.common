@@ -30,8 +30,9 @@ caret_width=1;0;false;false
 # set foreground and background colour of indentation guides
 indent_guide=0xc0c0c0;0xffffff;false;false
 
-# the third argument defines whether to use these values or use the default values defined by the filetypes
-white_space=0xc0c0c0;0xffffff;true;false
+# the third argument defines whether to use the foreground colour or use the default value defined by the filetypes
+# the fourth argument defines whether to use the background colour or use the default value defined by the filetypes
+white_space=0xc0c0c0;0xffffff;true;true
 
 # style of folding icons, only first and second arguments are used, valid values are:
 # first argument:  1 for boxes, 2 for circles
