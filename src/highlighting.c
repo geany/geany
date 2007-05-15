@@ -394,7 +394,7 @@ static void styleset_common_init(void)
 			0, 0, &tmp_style);
 		common_style_set.invert_all = tmp_style.foreground;
 		get_keyfile_int(config, config_home, "styling", "folding_horiz_line",
-			0, 0, &tmp_style);
+			2, 0, &tmp_style);
 		common_style_set.folding_style.draw_line = tmp_style.foreground;
 		get_keyfile_int(config, config_home, "styling", "caret_width",
 			1, 0, &tmp_style);
