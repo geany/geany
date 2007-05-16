@@ -2,6 +2,8 @@
 
  * src/highlighting.c:
    Fix bug when loading custom filetypes.common styles.
+ * src/sci_cb.c:
+   Add workaround for PHP/TCL closing brace de-indenting.
 
 
 2007-05-15  Nick Treleaven  <nick.treleaven@btinternet.com>

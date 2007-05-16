@@ -543,6 +543,7 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 }
 
 
+/* Called after typing '}', if pref_editor_indention_mode is INDENT_ADVANCED. */
 void sci_cb_close_block(gint idx, gint pos)
 {
 	gint x = 0, cnt = 0;
@@ -587,6 +588,19 @@ void sci_cb_close_block(gint idx, gint pos)
 		sci_set_anchor(sci, line_start);
 		SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
 		g_free(text);
+	}
+	else
+	if (sci_get_lexer(sci) == SCLEX_HTML || sci_get_lexer(sci) == SCLEX_TCL)
+	{	/* For TCL & PHP brace_match doesn't work here (maybe lexer bugs?),
+		 * so this is a simple workaround. */
+		gint indent = sci_get_line_indentation(sci, line);
+		gint last_indent = sci_get_line_indentation(sci, line - 1);
+
+		if (indent < last_indent)
+			return;
+		indent -= app->pref_editor_tab_width;
+		indent = MAX(0, indent);
+		sci_set_line_indentation(sci, line, indent);
 	}
 }
 
