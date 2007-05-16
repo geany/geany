@@ -1,3 +1,9 @@
+2007-05-16  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/highlighting.c:
+   Fix bug when loading custom filetypes.common styles.
+
+
 2007-05-15  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/highlighting.c, data/filetypes.common:

@@ -355,11 +355,18 @@ static GString *get_global_typenames()
 }
 
 
-/* This should only be called from styleset_common(). */
 static void styleset_common_init(void)
 {
-	GKeyFile *config = g_key_file_new();
-	GKeyFile *config_home = g_key_file_new();
+	GKeyFile *config;
+	GKeyFile *config_home;
+	static gboolean common_style_set_valid = FALSE;
+
+	if (common_style_set_valid)
+		return;
+	common_style_set_valid = TRUE;	// ensure filetypes.common is only loaded once
+
+	config = g_key_file_new();
+	config_home = g_key_file_new();
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_ALL);
 
@@ -411,13 +418,7 @@ static void styleset_common_init(void)
 
 static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id ft_id)
 {
-	static gboolean common_style_set_valid = FALSE;
-
-	if (! common_style_set_valid)
-	{
-		styleset_common_init();
-		common_style_set_valid = TRUE;
-	}
+	styleset_common_init();
 
 	// load global tags file for autocompletion, calltips, etc.
 	if (ft_id < GEANY_FILETYPES_ALL)
@@ -1982,9 +1983,12 @@ void styleset_none(ScintillaObject *sci)
 
 	SSM(sci, SCI_SETLEXER, SCLEX_NULL, 0);
 
-	styleset_common(sci, 5, ft_id);
+	if (style_sets[GEANY_FILETYPES_ALL].styling == NULL)
+		styleset_common_init();
 
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_ALL, GCS_DEFAULT);
+
+	styleset_common(sci, 5, ft_id);
 
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) common_style_set.wordchars);
 }
