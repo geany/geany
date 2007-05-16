@@ -294,6 +294,7 @@ void search_show_find_dialog()
 			GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(widgets.find_dialog));
+		gtk_widget_set_name(widgets.find_dialog, "GeanyDialogSearch");
 		gtk_box_set_spacing(GTK_BOX(vbox), 9);
 
 		button = ui_button_new_with_image(GTK_STOCK_GO_BACK, _("_Previous"));
@@ -413,6 +414,7 @@ void search_show_replace_dialog()
 			GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(widgets.replace_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 9);
+		gtk_widget_set_name(widgets.replace_dialog, "GeanyDialogSearch");
 
 		button = gtk_button_new_from_stock(GTK_STOCK_FIND);
 		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.replace_dialog), button,
@@ -558,6 +560,7 @@ void search_show_find_in_files_dialog()
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(widgets.find_in_files_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 9);
+		gtk_widget_set_name(widgets.find_in_files_dialog, "GeanyDialogSearch");
 
 		gtk_dialog_add_button(GTK_DIALOG(widgets.find_in_files_dialog), "gtk-find", GTK_RESPONSE_ACCEPT);
 		gtk_dialog_set_default_response(GTK_DIALOG(widgets.find_in_files_dialog),
