@@ -593,14 +593,14 @@ void sci_cb_close_block(gint idx, gint pos)
 	if (sci_get_lexer(sci) == SCLEX_HTML || sci_get_lexer(sci) == SCLEX_TCL)
 	{	/* For TCL & PHP brace_match doesn't work here (maybe lexer bugs?),
 		 * so this is a simple workaround. */
-		gint indent = sci_get_line_indentation(sci, line);
+		gint line_indent = sci_get_line_indentation(sci, line);
 		gint last_indent = sci_get_line_indentation(sci, line - 1);
 
-		if (indent < last_indent)
+		if (line_indent < last_indent)
 			return;
-		indent -= app->pref_editor_tab_width;
-		indent = MAX(0, indent);
-		sci_set_line_indentation(sci, line, indent);
+		line_indent -= app->pref_editor_tab_width;
+		line_indent = MAX(0, line_indent);
+		sci_set_line_indentation(sci, line, line_indent);
 	}
 }
 
