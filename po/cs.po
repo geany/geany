@@ -1,67 +1,67 @@
 # Czech translations for geany package.
-# Copyright (C) 2006 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006-07 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-# Petr Messner <messa@messa.cz>, 2006.
+# Petr Messner <messa@messa.cz>, 2006-2007.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-08 18:32+0200\n"
-"PO-Revision-Date: 2006-12-19 21:19+0100\n"
-"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
+"POT-Creation-Date: 2007-05-19 12:57+0200\n"
+"PO-Revision-Date: 2007-05-19 15:00+0200\n"
+"Last-Translator: Petr Messner <messa@messa.cz>\n"
 "Language-Team: Czech <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/about.c:126
+#: src/about.c:128
 msgid "About Geany"
 msgstr "O Geany"
 
-#: src/about.c:175
+#: src/about.c:178
 msgid "A fast and lightweight IDE"
 msgstr "Rychlé a lehké IDE"
 
-#: src/about.c:196
+#: src/about.c:199
 #, c-format
 msgid "(built on %s)"
 msgstr "(sestaveno %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: src/about.c:227
+#: src/about.c:230
 msgid "Info"
 msgstr "Informace"
 
-#: src/about.c:239
+#: src/about.c:242
 msgid "Developers"
 msgstr "Vývojáři"
 
-#: src/about.c:239
+#: src/about.c:242
 msgid "Maintainer"
 msgstr "správce"
 
-#: src/about.c:239
+#: src/about.c:242
 msgid "developer"
 msgstr "vývojář"
 
-#: src/about.c:240
+#: src/about.c:243
 msgid "translation maintainer"
 msgstr "správce překladu"
 
-#: src/about.c:240
+#: src/about.c:243
 msgid "Translators"
 msgstr "Překladatelé"
 
-#: src/about.c:241
+#: src/about.c:244
 msgid "language"
 msgstr "jazyk"
 
-#: src/about.c:247
+#: src/about.c:250
 msgid "Credits"
-msgstr "Kredity"
+msgstr "Autoři"
 
-#: src/about.c:260
+#: src/about.c:263
 msgid "License"
 msgstr "Licence"
 
@@ -80,24 +80,23 @@ msgstr ""
 "Nastavení)"
 
 #: src/build.c:204 src/build.c:616 src/build.c:667
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
-msgstr "Selhalo spuštění %s (start-script nemohl být vytvořen)"
+msgstr "Selhalo spuštění \"%s\" (startovací skript nemohl být vytvořen)"
 
-#: src/build.c:232 src/build.c:497 src/build.c:765 src/search.c:1175
+#: src/build.c:232 src/build.c:497 src/build.c:765 src/search.c:1177
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Proces selhal (%s)"
 
 #: src/build.c:349 src/build.c:572
-#, fuzzy
 msgid "Command stopped because the current file has no extension."
-msgstr "Převedení velikosti písmen aktuálně označeného textu"
+msgstr "Přikaz byl přerušen, protože aktuální soubor nemá příponu."
 
 #: src/build.c:373
 #, c-format
 msgid "Something very strange is occurred, could not stat %s (%s)."
-msgstr "Stalo se něco podivného, nemohl být proveden stat %s (%s)."
+msgstr "Stalo se něco podivného, nemohl být proveden příkaz stat %s (%s)."
 
 #: src/build.c:484
 #, c-format
@@ -134,11 +133,11 @@ msgstr "Přeložit aktuální soubor"
 #. build the code
 #: src/build.c:1013 src/interface.c:925
 msgid "_Build"
-msgstr "_Sestavit"
+msgstr "S_estavit"
 
 #: src/build.c:1017
 msgid "Builds the current file (generate an executable file)"
-msgstr "Sestaví aktuální soubor (vytvoří spustitelný soubor)"
+msgstr "Sestavení aktuálního souboru (vytvoření spustitelného souboru)"
 
 #. build the code with make all
 #: src/build.c:1027 src/build.c:1149
@@ -147,7 +146,7 @@ msgstr "_Make All"
 
 #: src/build.c:1030 src/build.c:1152
 msgid "Builds the current file with the make tool and the default target"
-msgstr "Sestaví aktuální soubor nástrojem make a výchozím cílem"
+msgstr "Sestavení aktuálního souboru nástrojem make a s výchozím cílem"
 
 #. build the code with make custom
 #: src/build.c:1038 src/build.c:1160
@@ -156,38 +155,38 @@ msgstr "Make _vlastní cíl"
 
 #: src/build.c:1042 src/build.c:1164
 msgid "Builds the current file with the make tool and the specified target"
-msgstr "Sestaví aktuální soubor nástrojem make a specifikovaným cílem"
+msgstr "Sestavení aktuálního souboru nástrojem make a se specifikovaným cílem"
 
 #. build the code with make object
 #: src/build.c:1049
 msgid "Make _Object"
-msgstr "Make objekt"
+msgstr "Make _objekt"
 
 #: src/build.c:1053
 msgid "Compiles the current file using the make tool"
-msgstr "Přeloží aktuální soubor nástrojem make"
+msgstr "Přeložení aktuálního souboru nástrojem make"
 
 #. next error
 #: src/build.c:1065 src/build.c:1176
 msgid "_Next Error"
-msgstr "Další chyba"
+msgstr "_Další chyba"
 
 #: src/build.c:1080 src/interface.c:1053
 msgid "Run or view the current file"
-msgstr "Spustit aktální soubor"
+msgstr "Spuštění aktálního souboru"
 
 #. arguments
 #: src/build.c:1091
 msgid "_Set Includes and Arguments"
-msgstr "Na_stavit Includes a argumenty"
+msgstr "Nastavit _Include a argumenty"
 
 #: src/build.c:1096
 msgid ""
 "Sets the includes and library paths for the compiler and the program "
 "arguments for execution"
 msgstr ""
-"Nastavení cest knihoven a include pro kompiler a nastavení argumentů při "
-"spuštění programu"
+"Nastavení cest ke knihovnám a hlavičkovým souborům pro kompiler a nastavení "
+"argumentů pro spuštění programu"
 
 #. DVI
 #: src/build.c:1119
@@ -196,7 +195,7 @@ msgstr "LaTeX -> DVI"
 
 #: src/build.c:1122
 msgid "Compiles the current file into a DVI file"
-msgstr "Přeloží aktuální soubor na soubor DVI"
+msgstr "Přeložení aktuálního souboru na soubor DVI"
 
 #. PDF
 #: src/build.c:1132
@@ -205,7 +204,7 @@ msgstr "LaTeX -> PDF"
 
 #: src/build.c:1135
 msgid "Compiles the current file into a PDF file"
-msgstr "Přeloží aktuální soubor na soubor PDF"
+msgstr "Přeložení aktuálního souboru na soubor PDF"
 
 #. DVI view
 #: src/build.c:1188
@@ -213,9 +212,8 @@ msgid "View DVI File"
 msgstr "Zobrazit soubor DVI"
 
 #: src/build.c:1193 src/build.c:1206
-#, fuzzy
 msgid "Compile and view the current file"
-msgstr "Přeloží a zobrazí aktuální soubor"
+msgstr "Přeložení a zobrazení aktuálního souboru"
 
 #. PDF view
 #: src/build.c:1202
@@ -225,89 +223,89 @@ msgstr "Zobrazit PDF soubor"
 #. arguments
 #: src/build.c:1221 src/build.c:1300
 msgid "Set Arguments"
-msgstr "Nastavení argumentů"
+msgstr "Nastavit argumenty"
 
 #: src/build.c:1226
 msgid "Sets the program paths and arguments"
 msgstr "Nastavení cest a voleb programu"
 
-#: src/build.c:1306
+#: src/build.c:1307
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr "Nastavte program a volby pro přeložení a zobrazení (La)TeX souborů."
 
-#: src/build.c:1317
+#: src/build.c:1318
 msgid "DVI creation:"
 msgstr "Tvorba DVI:"
 
-#: src/build.c:1336
+#: src/build.c:1337
 msgid "PDF creation:"
 msgstr "Tvorba PDF:"
 
-#: src/build.c:1355
+#: src/build.c:1356
 msgid "DVI preview:"
 msgstr "Náhled DVI:"
 
-#: src/build.c:1374
+#: src/build.c:1375
 msgid "PDF preview:"
 msgstr "Náhled PDF:"
 
-#: src/build.c:1390 src/build.c:1560
+#: src/build.c:1391 src/build.c:1562
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
 "%e will be replaced by the filename without extension, e.g. test_file"
 msgstr ""
-"%f bude nahrazeno kompletním názvem souboru, např. test_file.c\n"
+"%f bude nahrazeno celým názvem souboru, např. test_file.c\n"
 "%e bude nahrazeno názvem souboru bez přípony, např. test_file"
 
-#: src/build.c:1468
+#: src/build.c:1469
 msgid "Set Includes and Arguments"
-msgstr "Nastavení include a argumentů"
+msgstr "Nastavení Include a argumentů"
 
-#: src/build.c:1474
+#: src/build.c:1476
 msgid "Set the commands for building and running programs."
-msgstr "Nastavení příkazů pro sestavení a spouštění programů."
+msgstr "Nastavte příkazy pro sestavení a spouštění programů."
 
-#: src/build.c:1481
+#: src/build.c:1483
 msgid " commands"
 msgstr " příkazy"
 
-#: src/build.c:1496
+#: src/build.c:1498
 msgid "Compile:"
 msgstr "Přeložit:"
 
-#: src/build.c:1517
+#: src/build.c:1519
 msgid "Build:"
 msgstr "Sestavit:"
 
-#: src/build.c:1538 src/dialogs.c:884
+#: src/build.c:1540 src/dialogs.c:893
 msgid "Execute:"
 msgstr "Spustit"
 
-#: src/build.c:1846
+#: src/build.c:1848
 msgid "Make Custom Target"
 msgstr "Make vlastní cíl"
 
-#: src/build.c:1847
+#: src/build.c:1849
 msgid ""
 "Enter custom options here, all entered text is passed to the make command."
 msgstr ""
 "Zadejte zde vlastní volby, všechen zadaný text bude předán příkazu make."
 
-#: src/build.c:1886
+#: src/build.c:1888
 msgid "Failed to execute the view program"
 msgstr "Selhalo spuštění zobrazovacího programu."
 
-#: src/build.c:1905
+#: src/build.c:1907
 msgid "Failed to execute the terminal program"
 msgstr "Selhalo spuštění terminálu."
 
-#: src/build.c:1953
+#: src/build.c:1955
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Proces nemohl být přerušen (%s)."
 
-#: src/build.c:1973
+#: src/build.c:1975
 msgid "No more build errors."
 msgstr "Žádné další chyby sestavení."
 
@@ -334,14 +332,14 @@ msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Soubor '%s' již existuje. Chcete ho přepsat?"
 
 #: src/callbacks.c:1218
-#, fuzzy, c-format
+#, c-format
 msgid "Forward declaration \"%s\" not found."
-msgstr "Deklarace \"%s()\" nebyla nalezena."
+msgstr "Deklarace \"%s\" nebyla nalezena."
 
 #: src/callbacks.c:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Definition of \"%s\" not found."
-msgstr "Definice \"%s()\" nebyla nalezena."
+msgstr "Definice \"%s\" nebyla nalezena."
 
 #: src/callbacks.c:1441 src/callbacks.c:1465
 msgid ""
@@ -405,34 +403,34 @@ msgstr "Otevřít soubor"
 
 #: src/dialogs.c:83 src/interface.c:694
 msgid "_View"
-msgstr "_Zobrazit"
+msgstr "Zo_brazit"
 
 #: src/dialogs.c:85
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
 msgstr ""
-"Otevře soubory v režimu pouze pro čtení. Pokud vyberete pro otevření více "
-"než jeden soubor, všechny budou otevřeny jen pro čtení."
+"Otevře soubor v režimu pouze pro čtení. Pokud vyberete pro otevření více než "
+"jeden soubor, všechny budou otevřeny jen pro čtení."
 
-#: src/dialogs.c:121
+#: src/dialogs.c:122
 msgid "Detect by file extension"
 msgstr "Zjistit podle přípony souboru"
 
-#: src/dialogs.c:132
+#: src/dialogs.c:133
 msgid "Detect from file"
 msgstr "Zjistit podle souboru"
 
 #. line 1 with checkbox and encoding combo
-#: src/dialogs.c:178
+#: src/dialogs.c:179
 msgid "Show _hidden files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: src/dialogs.c:190
+#: src/dialogs.c:191
 msgid "Set encoding:"
-msgstr "Nastavit _kódování:"
+msgstr "Nastavit kódování:"
 
-#: src/dialogs.c:200
+#: src/dialogs.c:201
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -440,15 +438,14 @@ msgid ""
 "Note if you choose multiple files, they will all be opened with the chosen "
 "encoding."
 msgstr ""
-"Nastavení typu souboru, pokud nebude zjišťěn automaticky.\n"
-"Pokud otevřete více souborů, všechny budou otevřeny se zvoleným typem "
-"souboru,"
+"Nastavení kódování souboru, pokud nebude zjišťěno automaticky.\n"
+"Pokud otevřete více souborů, všechny budou otevřeny ve zvoleném kódování."
 
-#: src/dialogs.c:220
+#: src/dialogs.c:221
 msgid "Set filetype:"
 msgstr "Typ souboru:"
 
-#: src/dialogs.c:230
+#: src/dialogs.c:231
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -457,70 +454,70 @@ msgid ""
 msgstr ""
 "Nastavení typu souboru, pokud typ nebude zjišťěn podle přípony.\n"
 "Pokud otevřete více souborů, všechny budou otevřeny se zvoleným typem "
-"souboru,"
+"souboru."
 
-#: src/dialogs.c:269
+#: src/dialogs.c:270
 msgid "Save File"
 msgstr "Uložit soubor"
 
-#: src/dialogs.c:361
+#: src/dialogs.c:364
 #, c-format
 msgid "The file '%s' is not saved."
-msgstr "Soubor \"%s\" není uložen."
+msgstr "Soubor '%s' není uložen."
 
-#: src/dialogs.c:371
+#: src/dialogs.c:374
 msgid "Do you want to save it before closing?"
 msgstr "Chcete ho před zavřením uložit?"
 
-#: src/dialogs.c:374
+#: src/dialogs.c:377
 msgid "_Don't save"
 msgstr "_Neukládat"
 
-#: src/dialogs.c:418
+#: src/dialogs.c:421
 msgid "Choose font"
 msgstr "Vybrat písmo"
 
-#: src/dialogs.c:456
+#: src/dialogs.c:460
 msgid "Word Count"
 msgstr "Počet slov"
 
-#: src/dialogs.c:465
+#: src/dialogs.c:470
 msgid "selection"
 msgstr "výběr"
 
-#: src/dialogs.c:471
+#: src/dialogs.c:476
 msgid "whole document"
 msgstr "celý dokument"
 
-#: src/dialogs.c:480
+#: src/dialogs.c:485
 msgid "Range:"
 msgstr "Rozsah:"
 
-#: src/dialogs.c:492
+#: src/dialogs.c:497
 msgid "Lines:"
 msgstr "Řádky:"
 
-#: src/dialogs.c:506
+#: src/dialogs.c:511
 msgid "Words:"
 msgstr "Slova:"
 
-#: src/dialogs.c:520
+#: src/dialogs.c:525
 msgid "Characters:"
 msgstr "Znaky:"
 
-#: src/dialogs.c:552 src/interface.c:3431 src/vte.c:569 src/vte.c:576
+#: src/dialogs.c:557 src/interface.c:3431 src/vte.c:569 src/vte.c:576
 msgid "Color Chooser"
 msgstr "Výběr barvy"
 
-#: src/dialogs.c:619 src/keybindings.c:170
+#: src/dialogs.c:626 src/keybindings.c:170
 msgid "Go to line"
 msgstr "Přejít na řádek..."
 
-#: src/dialogs.c:625
+#: src/dialogs.c:633
 msgid "Enter the line you want to go to:"
 msgstr "Zadejte číslo řádku, na který chcete jít:"
 
-#: src/dialogs.c:672
+#: src/dialogs.c:680
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -528,121 +525,123 @@ msgstr ""
 "Nastala chyba nebo informace o souboru nemohla být získána (např. z prázného "
 "souboru)."
 
-#: src/dialogs.c:696 src/dialogs.c:697 src/dialogs.c:698 src/dialogs.c:704
-#: src/dialogs.c:705 src/dialogs.c:706 src/ui_utils.c:132 src/utils.c:515
+#: src/dialogs.c:704 src/dialogs.c:705 src/dialogs.c:706 src/dialogs.c:712
+#: src/dialogs.c:713 src/dialogs.c:714 src/ui_utils.c:132 src/utils.c:515
 #: src/utils.c:536 src/utils.c:589
 msgid "unknown"
 msgstr "neznámý"
 
-#: src/dialogs.c:710
+#: src/dialogs.c:718
 msgid "Properties"
 msgstr "Vlastnosti"
 
-#: src/dialogs.c:738
+#: src/dialogs.c:747
 msgid "<b>Type:</b>"
 msgstr "<b>Typ:</b>"
 
-#: src/dialogs.c:751
+#: src/dialogs.c:760
 msgid "<b>Size:</b>"
 msgstr "<b>Velikost:</b>"
 
-#: src/dialogs.c:766
+#: src/dialogs.c:775
 msgid "<b>Location:</b>"
 msgstr "<b>Umístění:</b>"
 
-#: src/dialogs.c:779
+#: src/dialogs.c:788
 msgid "<b>Read-only:</b>"
 msgstr "<b>Jen pro čtení:</b>"
 
-#: src/dialogs.c:786
+#: src/dialogs.c:795
 msgid "(only inside Geany)"
 msgstr "(pouze pro Geany)"
 
-#: src/dialogs.c:795
+#: src/dialogs.c:804
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kódování:</b>"
 
-#: src/dialogs.c:805 src/ui_utils.c:134
+#: src/dialogs.c:814 src/ui_utils.c:134
 msgid "(with BOM)"
 msgstr "(s BOM)"
 
-#: src/dialogs.c:805
+#: src/dialogs.c:814
 msgid "(without BOM)"
 msgstr "(bez BOM)"
 
-#: src/dialogs.c:815
+#: src/dialogs.c:824
 msgid "<b>Modified:</b>"
 msgstr "<b>Upraveno:</b>"
 
-#: src/dialogs.c:828
+#: src/dialogs.c:837
 msgid "<b>Changed:</b>"
 msgstr "<b>Změněno:</b>"
 
-#: src/dialogs.c:841
+#: src/dialogs.c:850
 msgid "<b>Accessed:</b>"
 msgstr "<b>Poslední přístup:</b>"
 
-#: src/dialogs.c:862
+#: src/dialogs.c:871
 msgid "<b>Permissions:</b>"
 msgstr "<b>Oprávnění:</b>"
 
 #. Header
-#: src/dialogs.c:870
+#: src/dialogs.c:879
 msgid "Read:"
 msgstr "Číst"
 
-#: src/dialogs.c:877
+#: src/dialogs.c:886
 msgid "Write:"
 msgstr "Zapisovat"
 
 #. Owner
-#: src/dialogs.c:892
+#: src/dialogs.c:901
 msgid "Owner:"
 msgstr "Vlastník:"
 
 #. Group
-#: src/dialogs.c:928
+#: src/dialogs.c:937
 msgid "Group:"
 msgstr "Skupina:"
 
 #. Other
-#: src/dialogs.c:964
+#: src/dialogs.c:973
 msgid "Other:"
 msgstr "Ostatní:"
 
-#: src/document.c:372
+#: src/document.c:375
 #, c-format
 msgid "File %s closed."
-msgstr "Soubor %s zavřen."
+msgstr "Soubor %s uzavřen."
 
-#: src/document.c:463
-#, fuzzy, c-format
+#: src/document.c:466
+#, c-format
 msgid "New file \"%s\" opened."
-msgstr "Otevřen nový soubor."
+msgstr "Nový soubor \"%s\" otevřen."
 
-#: src/document.c:616 src/document.c:927
+#: src/document.c:619 src/document.c:930
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Soubor %s nemohl být otevřen (%s)"
 
-#: src/document.c:635
-#, fuzzy, c-format
+#: src/document.c:638
+#, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
 "can occur if the file contains a NULL byte. Be aware that saving it can "
 "cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"Soubor \"%s\" nemohl být správně otevřen a byl pravděpodobně zkrácen. Při "
-"ukládání buďte opatrní, mohlo by dojít k ztrátě dat.\n"
+"Soubor '%s' nemohl být správně otevřen a byl pravděpodobně zkrácen. To mohlo "
+"být způsobeno znakem NULL obsaženým v souboru. Při ukládání buďte opatrní, "
+"mohlo by dojít k ztrátě dat.\n"
+"\n"
 "Soubor byl označen jako pouze pro čtení."
 
-#: src/document.c:659
+#: src/document.c:662
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Soubor \"%s\" není platné %s."
 
-#: src/document.c:668
+#: src/document.c:671
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -651,29 +650,29 @@ msgstr ""
 "Soubor \"%s\" nevypadá jako textový soubor nebo není podporováno jeho "
 "kódování."
 
-#: src/document.c:737
+#: src/document.c:740
 msgid "Invalid filename"
 msgstr "Neplatný název souboru"
 
-#: src/document.c:829
+#: src/document.c:832
 #, c-format
 msgid "File %s reloaded."
 msgstr "Soubor %s znovu načten."
 
-#: src/document.c:831
+#: src/document.c:834
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Otevřen soubor %s (%d%s)."
 
-#: src/document.c:833
+#: src/document.c:836
 msgid ", read-only"
 msgstr ", jen pro čtení"
 
-#: src/document.c:955 src/document.c:1038
+#: src/document.c:958 src/document.c:1041
 msgid "Error saving file."
 msgstr "Chyba při ukládání souboru."
 
-#: src/document.c:1002
+#: src/document.c:1005
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -683,47 +682,47 @@ msgstr ""
 "Nastala chyba při konverzi z UTF-8 do \"%s\". Soubor nebyl uložen.\n"
 "Zpráva o chybě: %s\n"
 
-#: src/document.c:1026
+#: src/document.c:1029
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Chyba při ukládání souboru (%s)."
 
-#: src/document.c:1069
+#: src/document.c:1072
 #, c-format
 msgid "File %s saved."
 msgstr "Soubor %s uložen."
 
-#: src/document.c:1117 src/document.c:1169 src/document.c:1177
+#: src/document.c:1120 src/document.c:1172 src/document.c:1180
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" nebyl nalezen."
 
-#: src/document.c:1177
+#: src/document.c:1180
 msgid "Wrap search and find again?"
 msgstr "Rozšířit hledání na celý dokument a hledat znovu?"
 
-#: src/document.c:1252 src/search.c:1311
+#: src/document.c:1255 src/search.c:1283
 msgid "No matches found."
 msgstr "Žádné výskyty nebyly nalezeny."
 
-#: src/document.c:1262 src/document.c:1269
-#, fuzzy, c-format
+#: src/document.c:1265 src/document.c:1272
+#, c-format
 msgid "%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."
 msgstr "%s: nahrazeno %d výskytů \"%s\" za \"%s\"."
 
-#: src/document.c:1646
+#: src/document.c:1649
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: src/document.c:1647
+#: src/document.c:1650
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: src/document.c:1649
+#: src/document.c:1652
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: src/document.c:1751
+#: src/document.c:1754
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -734,12 +733,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/document.c:1766
-#, fuzzy, c-format
+#: src/document.c:1769
+#, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "Tisk souboru \"%s\" selhal (návratový kód: %d)."
+msgstr "Tisk souboru \"%s\" selhal (návratový kód: %s)."
 
-#: src/document.c:1772
+#: src/document.c:1775
 #, c-format
 msgid "File %s printed."
 msgstr "Soubor %s byl vytištěn."
@@ -914,9 +913,8 @@ msgid "PHP source file"
 msgstr "PHP zdrojový kód"
 
 #: src/filetypes.c:276
-#, fuzzy
 msgid "Javascript source file"
-msgstr "Java zdrojový kód"
+msgstr "Javaskript zdrojový kód"
 
 #: src/filetypes.c:289
 msgid "Python source file"
@@ -931,18 +929,16 @@ msgid "Tcl source file"
 msgstr "Tcl zdrojový kód"
 
 #: src/filetypes.c:328
-#, fuzzy
 msgid "Lua source file"
-msgstr "LaTeX soubor"
+msgstr "Lua zdrojový kód"
 
 #: src/filetypes.c:341
 msgid "Ferite source file"
 msgstr "Ferite zdrojový kód"
 
 #: src/filetypes.c:354
-#, fuzzy
 msgid "Haskell source file"
-msgstr "Pascal zdrojový kód"
+msgstr "Haskell zdrojový kód"
 
 #: src/filetypes.c:367
 msgid "Shell script file"
@@ -992,7 +988,7 @@ msgstr "Diff soubor"
 msgid "Config file"
 msgstr "Konfigurační soubor"
 
-#: src/filetypes.c:528 src/project.c:267
+#: src/filetypes.c:528 src/project.c:262
 msgid "All files"
 msgstr "Všechny soubory"
 
@@ -1000,9 +996,9 @@ msgstr "Všechny soubory"
 msgid "None"
 msgstr "Žádné"
 
-#: src/filetypes.c:857 src/win32.c:78
+#: src/filetypes.c:872 src/win32.c:78
 msgid "All Source"
-msgstr ""
+msgstr "Všechny soubory se zdrojovým kódem"
 
 #: src/geany.h:50
 msgid "untitled"
@@ -1028,9 +1024,8 @@ msgid "invisible"
 msgstr "neviditelný"
 
 #: src/interface.c:313 src/interface.c:2010
-#, fuzzy
 msgid "Open Selected F_ile"
-msgstr "Otevřít soubor"
+msgstr "Otevřít označený soubor"
 
 #: src/interface.c:317
 msgid "Recent _Files"
@@ -1050,11 +1045,11 @@ msgstr "Znovu načíst s kódování_m"
 
 #: src/interface.c:370
 msgid "Load Ta_gs"
-msgstr ""
+msgstr "Načíst ta_gy"
 
 #: src/interface.c:373
 msgid "Load global tags file"
-msgstr ""
+msgstr "Načtení globálního souboru tagů"
 
 #: src/interface.c:392
 msgid "Prints the current file"
@@ -1121,9 +1116,8 @@ msgid "_Decrease Indent"
 msgstr "Z_rušit odsazení"
 
 #: src/interface.c:535 src/interface.c:2081
-#, fuzzy
 msgid "_Send Selection to"
-msgstr "_Ve výběru"
+msgstr "Po_slat výběr do"
 
 #: src/interface.c:550
 msgid "_Insert \"include <...>\""
@@ -1174,15 +1168,13 @@ msgid "Inserts a GPL notice (should be done at the beginning of the file)"
 msgstr "Vloží poznámku o GPL (měla by být na začátku souboru)"
 
 #: src/interface.c:600
-#, fuzzy
 msgid "Insert BSD License Notice"
-msgstr "Vložit poznámku o GPL"
+msgstr "Vložit poznámku o BSD licenci"
 
 #: src/interface.c:603 src/interface.c:2149
-#, fuzzy
 msgid ""
 "Inserts a BSD licence notice (should be done at the beginning of the file)"
-msgstr "Vloží poznámku o GPL (měla by být na začátku souboru)"
+msgstr "Vloží poznámku o BSD licenci (měla by být na začátku souboru)"
 
 #: src/interface.c:605 src/interface.c:2151
 msgid "Insert Dat_e"
@@ -1209,13 +1201,12 @@ msgid "_Replace"
 msgstr "_Nahradit"
 
 #: src/interface.c:664
-#, fuzzy
 msgid "Find _Selected"
-msgstr "Najít _další"
+msgstr "Najít _označené"
 
 #: src/interface.c:668
 msgid "Find Pre_v Selected"
-msgstr ""
+msgstr "Najít př_edchozí označené"
 
 #: src/interface.c:677
 msgid "Next _Message"
@@ -1223,7 +1214,7 @@ msgstr "Další zprávy"
 
 #: src/interface.c:686
 msgid "_Go to Line"
-msgstr "Jít na _řádek.."
+msgstr "Jít na _řádek..."
 
 #: src/interface.c:701
 msgid "Change _Font"
@@ -1235,7 +1226,7 @@ msgstr "Změní výchozí písmo"
 
 #: src/interface.c:715 src/keybindings.c:173
 msgid "Toggle all additional widgets"
-msgstr ""
+msgstr "Skrýt/zobrazit všechny panely"
 
 #: src/interface.c:719
 msgid "Full_screen"
@@ -1247,7 +1238,7 @@ msgstr "Okno _zpráv"
 
 #: src/interface.c:726
 msgid "Toggle the window with status and compiler messages on and off"
-msgstr "Zobrazení nebo skrytí okna se stavovými zprávami."
+msgstr "Zobrazení nebo skrytí okna se stavovými zprávami"
 
 #: src/interface.c:729
 msgid "Show _Toolbar"
@@ -1255,7 +1246,7 @@ msgstr "_Lišta nástrojů"
 
 #: src/interface.c:732
 msgid "Toggle the toolbar on and off"
-msgstr "Zobrazení nebo skrytí nástrojové lišty."
+msgstr "Zobrazení nebo skrytí nástrojové lišty"
 
 #: src/interface.c:735
 msgid "Show Side_bar"
@@ -1271,7 +1262,7 @@ msgid ""
 "mark lines."
 msgstr ""
 "Zobrazení nebo skrytí malého okraje vpravo od čísel řádků, který se používá "
-"k označování řádků."
+"k označování řádků"
 
 #: src/interface.c:746
 msgid "Show _Line Numbers"
@@ -1279,7 +1270,7 @@ msgstr "Čísla _řádků"
 
 #: src/interface.c:749
 msgid "Shows or hides the Line Number margin."
-msgstr "Zobrazení nebo skrytí okraje s čísly řádků."
+msgstr "Zobrazení nebo skrytí okraje s čísly řádků"
 
 #: src/interface.c:769
 msgid "_Document"
@@ -1345,7 +1336,7 @@ msgstr "Nahradit tabelátory za _mezery"
 
 #: src/interface.c:854 src/interface.c:3264
 msgid "Replaces all tabs in document by spaces."
-msgstr "Nahradí všechny tabelátory v dokumentu mezerami."
+msgstr "Nahrazení všech tabelátorů v dokumentu mezerami"
 
 #: src/interface.c:861
 msgid "_Fold All"
@@ -1353,7 +1344,7 @@ msgstr "_Složit vše"
 
 #: src/interface.c:864
 msgid "Folds all contractible code blocks"
-msgstr "Složí všechny složitelné bloky kódu"
+msgstr "Složení všech složitelných bloků kódu"
 
 #: src/interface.c:866
 msgid "_Unfold All"
@@ -1361,11 +1352,11 @@ msgstr "_Rozložit vše"
 
 #: src/interface.c:869
 msgid "Unfolds all contracted code blocks"
-msgstr "Rozloží všechny složené bloky kódu"
+msgstr "Rozložení všech složených bloků kódu"
 
 #: src/interface.c:876
 msgid "Remove _Markers"
-msgstr ""
+msgstr "Odstranit _značky"
 
 #: src/interface.c:880
 msgid "Remove Error _Indicators"
@@ -1373,26 +1364,23 @@ msgstr "Odstranit _indikátory chyb"
 
 #: src/interface.c:883
 msgid "Removes all error indicators in the current document."
-msgstr "Odstraní všechny indikátory chyb v aktuálním dokumentu."
+msgstr "Odstranění všech indikátorů chyb v aktuálním dokumentu"
 
 #: src/interface.c:885
 msgid "_Project"
-msgstr ""
+msgstr "_Projekt"
 
 #: src/interface.c:892
-#, fuzzy
 msgid "_New"
-msgstr "Nový"
+msgstr "_Nový"
 
 #: src/interface.c:900
-#, fuzzy
 msgid "_Open"
-msgstr "Otevřít"
+msgstr "_Otevřít"
 
 #: src/interface.c:908
-#, fuzzy
 msgid "_Close"
-msgstr "Zavřít"
+msgstr "_Zavřít"
 
 #: src/interface.c:929
 msgid "_Tools"
@@ -1406,8 +1394,7 @@ msgstr "_Výběr barvy"
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette."
 msgstr ""
-"Otevření okna výběru barev, ve kterém si můžete vybrat barvu z barevné "
-"palety."
+"Otevření okna výběru barev, ve kterém si můžete vybrat barvu z barevné palety"
 
 #: src/interface.c:945
 msgid "_Word Count"
@@ -1417,7 +1404,7 @@ msgstr "_Počet slov"
 msgid ""
 "Counts the words and characters in the current selection or the whole "
 "document"
-msgstr "Spočítání slov a znaků ve výběru nebo v celém dokumentu."
+msgstr "Spočítání slov a znaků ve výběru nebo v celém dokumentu"
 
 #: src/interface.c:950
 msgid "_Insert Special HTML Characters"
@@ -1433,7 +1420,7 @@ msgstr "_Klávesové zkratky"
 
 #: src/interface.c:968
 msgid "Shows a list of all keyboard shortcuts for Geany."
-msgstr "Zobrazí seznam všech klávesových zkratek v Geany."
+msgstr "Zobrazí seznam všech klávesových zkratek v Geany"
 
 #: src/interface.c:970
 msgid "_Website"
@@ -1497,15 +1484,15 @@ msgstr "Zmenšit text"
 
 #: src/interface.c:1091 src/interface.c:1096
 msgid "Find the entered text in the current file"
-msgstr "Hledat zadaný řetězec v aktuálním souboru."
+msgstr "Hledat zadaný řetězec v aktuálním souboru"
 
 #: src/interface.c:1109
 msgid "Enter a line number and jump to it."
-msgstr "Zadejte číslo řádku, na který přejít."
+msgstr "Zadejte číslo řádku, na který chcete přejít"
 
 #: src/interface.c:1116
 msgid "Jump to the entered line number."
-msgstr "Přejít na zadané číslo řádku."
+msgstr "Přejít na zadané číslo řádku"
 
 #: src/interface.c:1154 src/treeviews.c:77
 msgid "Symbols"
@@ -1564,9 +1551,8 @@ msgid "Insert Comments"
 msgstr "Vložit komentář"
 
 #: src/interface.c:2146
-#, fuzzy
 msgid "Insert BSD license Notice"
-msgstr "Vložit poznámku o GPL"
+msgstr "Vložit poznámku o BSD licenci"
 
 #: src/interface.c:2170 src/keybindings.c:287
 msgid "Find Usage"
@@ -1581,9 +1567,8 @@ msgid "Go to Tag Declaration"
 msgstr "Přejít na deklaraci"
 
 #: src/interface.c:2186 src/keybindings.c:293
-#, fuzzy
 msgid "Context Action"
-msgstr "_Ve výběru"
+msgstr "Kontextová akce"
 
 #: src/interface.c:2195
 msgid "Go to Line"
@@ -1611,7 +1596,7 @@ msgstr "Uložit pozici a rozměry okna"
 
 #: src/interface.c:2645
 msgid "Saves the window position and geometry and restores it at the start"
-msgstr "Uloží pozici a rozměry okna a použije je při příštím spuštění."
+msgstr "Uloží pozici a rozměry okna a použije je při příštím spuštění"
 
 #: src/interface.c:2648
 msgid "Load virtual terminal emulation at startup"
@@ -1631,7 +1616,7 @@ msgstr "Potvrzovat ukončení"
 
 #: src/interface.c:2657
 msgid "Shows a confirmation dialog on exit."
-msgstr "Zobrazí potvrzovací okno při ukončení."
+msgstr "Zobrazí potvrzovací okno při ukončení"
 
 #: src/interface.c:2660
 msgid "<b>Startup and shutdown</b>"
@@ -1679,7 +1664,7 @@ msgstr "<b>Chování</b>"
 
 #: src/interface.c:2717
 msgid "Context Action command:"
-msgstr ""
+msgstr "Příkaz kontextové akce:"
 
 #: src/interface.c:2724
 #, c-format
@@ -1687,25 +1672,24 @@ msgid ""
 "Context action command. The current selected word can be used with %s. It "
 "can be everywhere in the given command and will be replaced before execution."
 msgstr ""
+"Příkaz kontextové akce. Aktuálně označené slovo může být vloženo přes %s. "
+"Může být použito kdekoli v daném příkazu a bude nahrazeno před spuštěním."
 
 #: src/interface.c:2727
-#, fuzzy
 msgid "<b>Context Action</b>"
-msgstr "<b>Umístění:</b>"
+msgstr "<b>Kontextová akce</b>"
 
 #: src/interface.c:2747
-#, fuzzy
 msgid "Project files:"
-msgstr "Vlastnosti"
+msgstr "Soubory projektu:"
 
 #: src/interface.c:2760
 msgid "Path to start in when opening project files"
-msgstr ""
+msgstr "Cesta, kde začít při otevírání souborů projektu"
 
 #: src/interface.c:2773
-#, fuzzy
 msgid "<b>Paths</b>"
-msgstr "<b>Cesty k nástrojům</b>"
+msgstr "<b>Cesty</b>"
 
 #: src/interface.c:2778
 msgid "General"
@@ -1724,9 +1708,8 @@ msgid "Show open files list"
 msgstr "Zobrazovat seznam otevřených souborů"
 
 #: src/interface.c:2809
-#, fuzzy
 msgid "Toggle the open files list on and off"
-msgstr "Zapne nebo vypne zobrazování seznamu symbolů"
+msgstr "Zapne nebo vypne zobrazování seznamu souborů"
 
 #: src/interface.c:2812
 msgid "<b>Sidebar</b>"
@@ -1791,16 +1774,14 @@ msgid "<b>Tab placement</b>"
 msgstr "<b>Umístění záložek</b>"
 
 #: src/interface.c:2974
-#, fuzzy
 msgid "Show statusbar"
-msgstr "Zobrazovat lištu nástrojů"
+msgstr "Zobrazovat stavový řádek"
 
 #: src/interface.c:2977
 msgid "Whether to show the status bar at the bottom of the main window."
-msgstr ""
+msgstr "Zobrazení nebo skrytí stavového řádku u spodní hrany okna"
 
 #: src/interface.c:2979
-#, fuzzy
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Různé</b>"
 
@@ -1974,7 +1955,7 @@ msgstr "Délka seznamu nedávných souborů:"
 msgid "<b>Misc.</b>"
 msgstr "<b>Různé</b>"
 
-#: src/interface.c:3339 src/symbols.c:422
+#: src/interface.c:3339 src/symbols.c:427
 msgid "Files"
 msgstr "Soubory"
 
@@ -2073,9 +2054,8 @@ msgid "<b>Long line marker</b>"
 msgstr "<b>Pravý okraj</b>"
 
 #: src/interface.c:3492
-#, fuzzy
 msgid "Auto indentation mode:"
-msgstr "Automatické odsazování"
+msgstr "Mód automatického odsazování:"
 
 #: src/interface.c:3499
 msgid ""
@@ -2083,15 +2063,17 @@ msgid ""
 "completely. Basic indents new lines with the same indentation as the "
 "previous line. Advanced does the same and indents also curly brackets."
 msgstr ""
+"Volba módu odsazování. Použijte Žádné pro úplné vypnutí automatického "
+"odsazování. Základní mód odsazuje nové řádky stejně jako předchozí řádek. "
+"Rozšířený mód navíc odsazuje složené závorky."
 
 #: src/interface.c:3505
-#, fuzzy
 msgid "Basic"
-msgstr "Baltské"
+msgstr "Základní"
 
 #: src/interface.c:3506
 msgid "Advanced"
-msgstr ""
+msgstr "Pokročilý"
 
 #: src/interface.c:3508
 msgid "Line wrapping"
@@ -2127,23 +2109,27 @@ msgstr ""
 
 #: src/interface.c:3531
 msgid "Disable Drag and Drop"
-msgstr ""
+msgstr "Vypnout Drag and Drop"
 
 #: src/interface.c:3534
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window."
 msgstr ""
+"Úplné vypnutí drag and drop v okně editoru, takže nebude možné přesunovat "
+"text myší."
 
 #: src/interface.c:3537
 msgid "Use tabs when inserting whitespace"
-msgstr ""
+msgstr "Použít tabulátor při vkládání mezer"
 
 #: src/interface.c:3540
 msgid ""
 "Whenever some whitespace is inserted by Geany it will use tabs when enabled "
 "otherwise Geany will use just spaces."
 msgstr ""
+"Při zapnutí této volby bude Geany vkládat tabulátory, při vypnutí této volby "
+"pouze mezery."
 
 #: src/interface.c:3543
 msgid "<b>Features</b>"
@@ -2166,15 +2152,16 @@ msgid "Automatic completion of open XML tags (includes HTML tags)"
 msgstr "Automatická kompletace otevřených XML tagů (včetně HTML tagů)"
 
 #: src/interface.c:3574
-#, fuzzy
 msgid "Symbol autocompletion"
-msgstr "Používat autokompletaci"
+msgstr "Autokompletace symbolů"
 
 #: src/interface.c:3577
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
 msgstr ""
+"Automatická kompletace známých symbolů v otevřených souborech (názvy funkcí, "
+"globální proměnné, ...)"
 
 #: src/interface.c:3588
 msgid "Rows of autocompletion list:"
@@ -2342,18 +2329,16 @@ msgid "Open"
 msgstr "Otevřít"
 
 #: src/keybindings.c:126
-#, fuzzy
 msgid "Open selected file"
-msgstr "Otevřené soubory"
+msgstr "Otevřít zvolený soubor"
 
 #: src/keybindings.c:128
 msgid "Save"
 msgstr "Uložit"
 
 #: src/keybindings.c:130
-#, fuzzy
 msgid "Save as"
-msgstr "Uložit vše"
+msgstr "Uložit jako"
 
 #: src/keybindings.c:134
 msgid "Print"
@@ -2372,9 +2357,8 @@ msgid "Reload file"
 msgstr "Znovu načíst soubor"
 
 #: src/keybindings.c:142
-#, fuzzy
 msgid "Project properties"
-msgstr "Vlastnosti"
+msgstr "Vlastnosti projektu"
 
 #: src/keybindings.c:145
 msgid "Undo"
@@ -2401,16 +2385,14 @@ msgid "Find Previous"
 msgstr "Najít předchozí"
 
 #: src/keybindings.c:160
-#, fuzzy
 msgid "Find Next Selection"
-msgstr "_Ve výběru"
+msgstr "Najít další výběr"
 
 #: src/keybindings.c:162
-#, fuzzy
 msgid "Find Previous Selection"
-msgstr "Najít předchozí"
+msgstr "Najít předchozí výběr"
 
-#: src/keybindings.c:164 src/search.c:413
+#: src/keybindings.c:164 src/search.c:412
 msgid "Replace"
 msgstr "Nahradit"
 
@@ -2507,9 +2489,8 @@ msgid "Switch to VTE"
 msgstr "Přepnout do terminálu"
 
 #: src/keybindings.c:226
-#, fuzzy
 msgid "Switch to Search Bar"
-msgstr "Přepnout na Poznámky"
+msgstr "Přepnout na Vyhledávání"
 
 #: src/keybindings.c:228
 msgid "Switch to left document"
@@ -2520,9 +2501,8 @@ msgid "Switch to right document"
 msgstr "Přejít do pravého dokumentu"
 
 #: src/keybindings.c:232
-#, fuzzy
 msgid "Switch to last used document"
-msgstr "Přejít do levého dokumentu"
+msgstr "Přejít do předchozího dokumentu"
 
 #: src/keybindings.c:235
 msgid "Duplicate line or selection"
@@ -2530,11 +2510,11 @@ msgstr "Zduplikovat řádek nebo výběr"
 
 #: src/keybindings.c:237
 msgid "Convert Selection to lower-case"
-msgstr "Převést výběr na _malá písmena"
+msgstr "Převést výběr na malá písmena"
 
 #: src/keybindings.c:239
 msgid "Convert Selection to upper-case"
-msgstr "Převést výběr na _velká písmena"
+msgstr "Převést výběr na velká písmena"
 
 #: src/keybindings.c:241
 msgid "Toggle line commentation"
@@ -2557,37 +2537,32 @@ msgid "Decrease indent"
 msgstr "Zrušit odsazení"
 
 #: src/keybindings.c:251
-#, fuzzy
 msgid "Send to Custom Command 1"
-msgstr "Nastavit vlastní formát data"
+msgstr "Použít Vlastní příkaz 1"
 
 #: src/keybindings.c:253
-#, fuzzy
 msgid "Send to Custom Command 2"
-msgstr "Nastavit vlastní formát data"
+msgstr "Použít Vlastní příkaz 2"
 
 #: src/keybindings.c:255
-#, fuzzy
 msgid "Send to Custom Command 3"
-msgstr "Nastavit vlastní formát data"
+msgstr "Použít Vlastní příkaz 3"
 
 #: src/keybindings.c:258
 msgid "Goto matching brace"
 msgstr "Přejít na odpovídající závorku"
 
 #: src/keybindings.c:261
-#, fuzzy
 msgid "Toggle marker"
-msgstr "Označení pravého okraje:"
+msgstr "Označit řádek"
 
 #: src/keybindings.c:264
-#, fuzzy
 msgid "Goto next marker"
-msgstr "Označení pravého okraje:"
+msgstr "Přejít na další značku"
 
 #: src/keybindings.c:267
 msgid "Goto previous marker"
-msgstr ""
+msgstr "Přejít na předchozí značku"
 
 #: src/keybindings.c:270
 msgid "Complete word"
@@ -2603,23 +2578,20 @@ msgstr "Zobrazit seznam maker"
 
 #. has special callback
 #: src/keybindings.c:276
-#, fuzzy
 msgid "Complete construct"
-msgstr "Dokončit slovo"
+msgstr "Kompletovat konstrukci"
 
 #: src/keybindings.c:278
-#, fuzzy
 msgid "Suppress construct completion"
-msgstr "Zakázat autokompletaci"
+msgstr "Zakázat kompletaci konstrukce"
 
 #: src/keybindings.c:281
-#, fuzzy
 msgid "Select current word"
-msgstr "Uložit aktuální soubor"
+msgstr "Vybrat aktuální slovo"
 
 #: src/keybindings.c:284
 msgid "Insert alternative whitespace"
-msgstr ""
+msgstr "Vložit alternativní bílé znaky"
 
 #: src/keybindings.c:289
 msgid "Go to tag definition"
@@ -2630,77 +2602,86 @@ msgid "Go to tag declaration"
 msgstr "Přejít na deklaraci"
 
 #: src/keybindings.c:460
-#, fuzzy
 msgid "<b>File menu</b>\n"
-msgstr "<b>Umístění záložek</b>"
+msgstr "<b>Menu Soubor</b>\n"
 
 #: src/keybindings.c:464
-#, fuzzy
 msgid ""
 "\n"
 "<b>Edit menu</b>\n"
-msgstr "<b>Kódování:</b>"
+msgstr ""
+"\n"
+"<b>Menu Upravit</b>\n"
 
 #: src/keybindings.c:468
-#, fuzzy
 msgid ""
 "\n"
 "<b>Search menu</b>\n"
-msgstr "<b>Vzhled</b>"
+msgstr ""
+"\n"
+"<b>Menu Hledat</b>\n"
 
 #: src/keybindings.c:472
-#, fuzzy
 msgid ""
 "\n"
 "<b>View menu</b>\n"
-msgstr "<b>Nové soubory</b>"
+msgstr ""
+"\n"
+"<b>Menu Zobrazit</b>\n"
 
 #: src/keybindings.c:476
-#, fuzzy
 msgid ""
 "\n"
 "<b>Document menu</b>\n"
-msgstr "<b>Autokompletace</b>"
+msgstr ""
+"\n"
+"<b>Menu Dokument</b>\n"
 
 #: src/keybindings.c:480
-#, fuzzy
 msgid ""
 "\n"
 "<b>Build menu</b>\n"
-msgstr "<b>Postranní panel</b>"
+msgstr ""
+"\n"
+"<b>Menu Sestavit</b>\n"
 
 #: src/keybindings.c:484
-#, fuzzy
 msgid ""
 "\n"
 "<b>Tools menu</b>\n"
-msgstr "<b>Cesty k nástrojům</b>"
+msgstr ""
+"\n"
+"<b>Menu Nástroje</b>\n"
 
 #: src/keybindings.c:488
-#, fuzzy
 msgid ""
 "\n"
 "<b>Focus commands</b>\n"
-msgstr "<b>Písma</b>"
+msgstr ""
+"\n"
+"<b>Příkazy přepnutí</b>\n"
 
 #: src/keybindings.c:492
 msgid ""
 "\n"
 "<b>Editing commands</b>\n"
 msgstr ""
+"\n"
+"<b>Příkazy úprav</b>\n"
 
 #: src/keybindings.c:496
-#, fuzzy
 msgid ""
 "\n"
 "<b>Tag commands</b>\n"
-msgstr "<b>Umístění záložek</b>"
+msgstr ""
+"\n"
+"<b>Příkazy tagů</b>\n"
 
 #: src/keybindings.c:518
 msgid "Keyboard shortcuts"
 msgstr "Klávesové zkratky"
 
-#: src/keybindings.c:529
+#: src/keybindings.c:530
 msgid "The following keyboard shortcuts are defined:"
 msgstr "Jsou definovány následující klávesové zkratky:"
 
@@ -2718,11 +2699,12 @@ msgid "Failed to load one or more session files."
 msgstr "Chyba při otevírání jednoho či více souborů sezení."
 
 #: src/main.c:94
-#, fuzzy
 msgid ""
 "set initial column number for the first opened file (useful in conjunction "
 "with --line)"
-msgstr "nastavit výchozí počet řádek pro poprvé otevřené soubory"
+msgstr ""
+"nastavit výchozí počet sloupců pro poprvé otevřené soubory (užitečné ve "
+"spojení s --line)"
 
 #: src/main.c:95
 msgid "use an alternate configuration directory"
@@ -2733,9 +2715,8 @@ msgid "runs in debug mode (means being verbose)"
 msgstr "spuštění v debug módu (upovídaný režim)"
 
 #: src/main.c:97
-#, fuzzy
 msgid "generate global tags file (see documentation)"
-msgstr "nenahrávat autokompletační data (viz dokumentace)"
+msgstr "generovat globální soubor tagů (viz dokumentaci)"
 
 #: src/main.c:100
 msgid "don't open files in a running instance, force opening a new instance"
@@ -2769,16 +2750,16 @@ msgstr "název souboru libvte.so"
 msgid "show version and exit"
 msgstr "vypsat číslo verze a ukončit"
 
-#: src/main.c:432
+#: src/main.c:434
 msgid " - A fast and lightweight IDE"
 msgstr " - Rychlé a lehké IDE"
 
-#: src/main.c:442
+#: src/main.c:444
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(sestaveno %s s GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: src/main.c:506
+#: src/main.c:508
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -2789,17 +2770,17 @@ msgstr ""
 "Mohly by se vyskytnout problémy při používání Geany bez tohoto adresáře.\n"
 "Chcete přesto spustit Geany?"
 
-#: src/main.c:559 src/socket.c:143
-#, fuzzy, c-format
+#: src/main.c:561 src/socket.c:143
+#, c-format
 msgid "Could not find file '%s'."
-msgstr "Soubor \"%s\" nebyl nalezen.\n"
+msgstr "Soubor \"%s\" nebyl nalezen."
 
-#: src/main.c:688
+#: src/main.c:690
 #, c-format
 msgid "This is Geany %s."
 msgstr "Vítejte v Geany %s."
 
-#: src/main.c:690
+#: src/main.c:692
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigurační adresář nemohl být vytvořen (%s)."
@@ -2837,163 +2818,155 @@ msgstr "Kombinace '%s' je již použita pro \"%s\". Prosím vyberte jinou."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. please avoid special characters and spaces, look at the source for details or ask Frank
-#: src/project.c:85
+#: src/project.c:84
 msgid "projects"
-msgstr ""
+msgstr "projekty"
 
-#: src/project.c:105
-#, fuzzy
+#: src/project.c:104
 msgid "New Project"
-msgstr "Make objekt"
+msgstr "Nový projekt"
 
 #: src/project.c:112
-#, fuzzy
 msgid "C_reate"
-msgstr "Znak"
+msgstr "_Vytvořit"
 
-#: src/project.c:126 src/project.c:336
-#, fuzzy
+#: src/project.c:126 src/project.c:332
 msgid "Name:"
-msgstr "Make:"
+msgstr "Název:"
 
-#: src/project.c:138 src/project.c:348
-#, fuzzy
+#: src/project.c:138 src/project.c:344
 msgid "Filename:"
-msgstr "Vietnamské"
+msgstr "Souboru projektu:"
 
-#: src/project.c:158 src/project.c:377
+#: src/project.c:158 src/project.c:373
 msgid "Base path:"
-msgstr ""
+msgstr "Základní cesta:"
 
 #: src/project.c:166
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree."
 msgstr ""
+"Základní adresář pro všechny soubory obsažené v projektu. Může se jednat o "
+"novou cestu nebo o již existující strom adresářů."
 
-#: src/project.c:220 src/project.c:809
-#, fuzzy, c-format
+#: src/project.c:168 src/project.c:383
+msgid "Choose Project Base Path"
+msgstr "Zvolte základní cestu projektu"
+
+#: src/project.c:214 src/project.c:773
+#, c-format
 msgid "Project file \"%s\" could not be loaded."
-msgstr "Proces nemohl být přerušen (%s)."
+msgstr "Soubor projektu \"%s\" nemohl být načten."
 
-#: src/project.c:244 src/project.c:252
-#, fuzzy
+#: src/project.c:238 src/project.c:246
 msgid "Open Project"
-msgstr "Make objekt"
+msgstr "Otevřít projekt"
 
-#: src/project.c:271
-#, fuzzy
+#: src/project.c:266
 msgid "Project files"
-msgstr "Vlastnosti"
+msgstr "Soubory projektu"
 
-#: src/project.c:292
-#, fuzzy, c-format
+#: src/project.c:287
+#, c-format
 msgid "Project \"%s\" closed."
-msgstr "Soubor %s zavřen."
+msgstr "Projekt \"%s\" zavřen."
 
-#: src/project.c:323
-#, fuzzy
+#: src/project.c:318
 msgid "Project Properties"
-msgstr "Vlastnosti"
+msgstr "Vlastnosti projektu"
 
-#: src/project.c:360
-#, fuzzy
+#: src/project.c:356
 msgid "Description:"
-msgstr "Tvorba DVI:"
+msgstr "Popis:"
 
-#: src/project.c:385
+#: src/project.c:381
 msgid "Directory to run Make All from. Leave blank to use the default command."
 msgstr ""
+"Adresář, ve kterém se má spustit příkaz make all. Ponechejte prázdné pro "
+"výchozí hodnotu."
 
-#: src/project.c:399
-#, fuzzy
+#: src/project.c:389
 msgid "Run command:"
-msgstr "Tiskový příkaz:"
+msgstr "Příkaz pro spuštění:"
 
-#: src/project.c:407
+#: src/project.c:397
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
 msgstr ""
+"Příkaz pro spuštění v adresáři projektu. K příkazu mohou být připojeny "
+"argumenty. Ponechejte prázdné pro výchozí hodnotu."
 
-#: src/project.c:423
-#, fuzzy
+#: src/project.c:413
 msgid "File patterns:"
-msgstr "_Střední Východ"
+msgstr "Vzor souborů:"
 
-#: src/project.c:503
-#, fuzzy
+#: src/project.c:493
 msgid "Do you want to close it before proceeding?"
-msgstr "Chcete ho před zavřením uložit?"
+msgstr "Chcete ho před pokačováním zavřít?"
 
-#: src/project.c:504
+#: src/project.c:494
 #, c-format
 msgid "The '%s' project is already open. "
-msgstr ""
+msgstr "Projekt '%s' je již otevřen."
 
-#: src/project.c:532
+#: src/project.c:522
 msgid "The specified project name is too short."
-msgstr ""
+msgstr "Zadaný název projektu je příliš krátký."
 
-#: src/project.c:538
+#: src/project.c:528
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
-msgstr ""
+msgstr "Zadaný název projektu je příliš dlouhý (max. %d znaků)."
 
-#: src/project.c:546
+#: src/project.c:536
 msgid "You have specified an invalid project filename."
-msgstr ""
+msgstr "Zadali jste neplatný název souboru projektu."
 
-#: src/project.c:558
+#: src/project.c:548
 msgid "Create the project's base path directory?"
-msgstr ""
+msgstr "Vytvořit adresář projektu?"
 
-#: src/project.c:559
-#, fuzzy, c-format
+#: src/project.c:549
+#, c-format
 msgid "The path \"%s\" does not exist."
-msgstr "Soubor \"%s\" není platné %s."
+msgstr "Cesta \"%s\" neexistuje."
 
-#: src/project.c:577
-#, fuzzy
+#: src/project.c:567
 msgid "Project file could not be written."
-msgstr "Proces nemohl být přerušen (%s)."
+msgstr "Soubor projektu nemohl být zapsán."
 
-#: src/project.c:627
+#: src/project.c:617
 #, c-format
 msgid "Project \"%s\" created."
-msgstr ""
+msgstr "Projekt \"%s\" vytvořen."
 
-#: src/project.c:629
-#, fuzzy, c-format
+#: src/project.c:619
+#, c-format
 msgid "Project \"%s\" saved."
-msgstr "Soubor %s uložen."
+msgstr "Project \"%s\" uložen."
 
 #. initialise the dialog
-#: src/project.c:673 src/project.c:684
-#, fuzzy
+#: src/project.c:663 src/project.c:674
 msgid "Choose Project Filename"
-msgstr "Vlastnosti"
+msgstr "Zvolte soubor projektu"
 
 #. initialise the dialog
-#: src/project.c:701 src/project.c:712
-msgid "Choose Project Base Path"
-msgstr ""
-
-#. initialise the dialog
-#: src/project.c:729 src/project.c:740
+#: src/project.c:692 src/project.c:703
 msgid "Choose Project Run Command"
-msgstr ""
+msgstr "Zvolte příkaz pro spuštění projektu"
 
-#: src/project.c:802
+#: src/project.c:766
 #, c-format
 msgid "Project \"%s\" opened."
-msgstr ""
+msgstr "Projekt \"%s\" otevřen."
 
-#: src/search.c:139
+#: src/search.c:137
 msgid "_Use regular expressions"
 msgstr "Použít _regulární výrazy"
 
-#: src/search.c:143
+#: src/search.c:141
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
@@ -3001,77 +2974,76 @@ msgstr ""
 "Použití POSIXových regulárních výrazů. Pro detailní informace o jejich "
 "použití nahlédněte do dokumentace."
 
-#: src/search.c:150
+#: src/search.c:148
 msgid "_Search backwards"
 msgstr "Hledat zpě_tně"
 
-#: src/search.c:164
+#: src/search.c:162
 msgid "Use _escape sequences"
 msgstr "Použít _escape sekcence"
 
-#: src/search.c:169
+#: src/search.c:167
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters."
 msgstr ""
 "Nahradí \\\\, \\t, \\n, \\r a \\uXXXX (Unicode znaky) odpovídajícími znaky."
 
-#: src/search.c:178 src/search.c:629
+#: src/search.c:176 src/search.c:631
 msgid "_Case sensitive"
 msgstr "Rozlišovat _velikost písmen"
 
-#: src/search.c:183 src/search.c:635
+#: src/search.c:181 src/search.c:637
 msgid "Match only a _whole word"
 msgstr "Hledat pouze _celé slovo"
 
-#: src/search.c:188
+#: src/search.c:186
 msgid "Match from s_tart of word"
 msgstr "Hledat od začátku slova"
 
-#: src/search.c:295
+#: src/search.c:293
 msgid "Find"
 msgstr "Najít"
 
-#: src/search.c:301
+#: src/search.c:300
 msgid "_Previous"
 msgstr "_Předchozí"
 
-#: src/search.c:307
+#: src/search.c:306
 msgid "_Next"
 msgstr "_Následující"
 
-#: src/search.c:311 src/search.c:429 src/search.c:581
+#: src/search.c:310 src/search.c:429 src/search.c:583
 msgid "Search for:"
 msgstr "Hledat:"
 
 #. Now add the multiple match options
-#: src/search.c:337
+#: src/search.c:336
 msgid "Find All"
 msgstr "Najít vše"
 
-#: src/search.c:340
+#: src/search.c:339
 msgid "_Mark"
 msgstr "Označit"
 
-#: src/search.c:342
-#, fuzzy
+#: src/search.c:341
 msgid "Mark all matches in the current document."
-msgstr "Odstraní všechny indikátory chyb v aktuálním dokumentu."
+msgstr "Označit všechny výskyty v aktuálním dokumentu."
 
-#: src/search.c:347 src/search.c:487
+#: src/search.c:346 src/search.c:487
 msgid "In Sessi_on"
 msgstr "Ve všech _otevřených souborech"
 
-#: src/search.c:352 src/search.c:492
+#: src/search.c:351 src/search.c:492
 msgid "_In Document"
 msgstr "V _dokumentu"
 
 #. close window checkbox
-#: src/search.c:358 src/search.c:498
+#: src/search.c:357 src/search.c:498
 msgid "Close _dialog"
 msgstr "Z_avřít okno"
 
-#: src/search.c:363 src/search.c:503
+#: src/search.c:362 src/search.c:503
 msgid "Disable this option to keep the dialog open."
 msgstr "Vypněte tuto volbu pro zachování tohoto okna otevřeného."
 
@@ -3086,7 +3058,7 @@ msgstr "Nahradit za:"
 #. Now add the multiple replace options
 #: src/search.c:477
 msgid "Replace All"
-msgstr "N_ahradit vše"
+msgstr "Nahradit vše"
 
 #: src/search.c:480
 msgid "In Se_lection"
@@ -3096,184 +3068,184 @@ msgstr "_Ve výběru"
 msgid "Replace all matches found in the currently selected text"
 msgstr "Nahradí všechny výskyty v aktuálně označeném textu"
 
-#: src/search.c:568
+#: src/search.c:569
 msgid "Directory:"
 msgstr "Adresář:"
 
-#: src/search.c:600
+#: src/search.c:602
 msgid "_Fixed strings"
-msgstr "Opravené řetězce"
+msgstr "_Opravené řetězce"
 
-#: src/search.c:609
+#: src/search.c:611
 msgid "_Grep regular expressions"
-msgstr "_Regulární výrazy grepu"
+msgstr "Regulární výrazy _grepu"
 
-#: src/search.c:613 src/search.c:620
+#: src/search.c:615 src/search.c:622
 msgid "See grep's manual page for more information."
 msgstr "Pro více informací viz manuál programu grep."
 
-#: src/search.c:618
+#: src/search.c:620
 msgid "_Extended regular expressions"
 msgstr "Rozšířené _regulární výrazy"
 
-#: src/search.c:624
+#: src/search.c:626
 msgid "_Recurse in subfolders"
-msgstr ""
+msgstr "_Rekurzivně v podadresářích"
 
-#: src/search.c:640
+#: src/search.c:642
 msgid "_Invert search results"
 msgstr "_Obrátit výsledky hledání"
 
-#: src/search.c:645
+#: src/search.c:647
 msgid "Invert the sense of matching, to select non-matching lines."
 msgstr "Obrácení smyslu hledání, k označení nevyhovujících řádků."
 
-#: src/search.c:661
+#: src/search.c:663
 msgid "E_xtra options:"
-msgstr ""
+msgstr "_Dodatečné volby:"
 
-#: src/search.c:673
+#: src/search.c:675
 msgid "Other options to pass to Grep"
-msgstr ""
+msgstr "Další volby grepu"
 
-#: src/search.c:864 src/search.c:1388 src/search.c:1389
+#: src/search.c:866 src/search.c:1360 src/search.c:1361
 #, c-format
 msgid "No matches found for '%s'."
 msgstr "Nebyly nalezeny žádné výskyty '%s'."
 
-#: src/search.c:866 src/search.c:1395 src/search.c:1396
-#, fuzzy, c-format
+#: src/search.c:868 src/search.c:1367 src/search.c:1368
+#, c-format
 msgid "Found %d matches for '%s'."
-msgstr "Nebyly nalezeny žádné výskyty '%s'."
+msgstr "Nalezeno %d výskytů '%s'."
 
-#: src/search.c:984
+#: src/search.c:986
 #, c-format
 msgid "Replaced text in %u files."
 msgstr "Text nahrazen v %u souborech."
 
-#: src/search.c:1085
+#: src/search.c:1087
 msgid "Invalid directory for find in files."
 msgstr "Neplatný adresář pro hledání souborů."
 
-#: src/search.c:1103
+#: src/search.c:1105
 msgid "No text to find."
 msgstr "Žádný text k prohledání."
 
-#: src/search.c:1124
+#: src/search.c:1126
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Nemohu spustit nástroj grep '%s'; zkontrolujte nastavení cest v Nastavení."
 
-#: src/search.c:1189
-#, fuzzy, c-format
+#: src/search.c:1191
+#, c-format
 msgid "%s %s -- %s (in directory: %s)"
-msgstr "%s (v adresáři: %s)"
+msgstr "%s %s --%s (v adresáři: %s)"
 
-#: src/search.c:1250
+#: src/search.c:1219
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Adresář nemohl být otevřen (%s)"
 
-#: src/search.c:1295
+#: src/search.c:1267
 msgid "Search failed."
 msgstr "Hledání selhalo."
 
-#: src/search.c:1306 src/search.c:1307
-#, fuzzy, c-format
+#: src/search.c:1278 src/search.c:1279
+#, c-format
 msgid "Search completed with %d matches."
-msgstr "Hledání dokončeno."
+msgstr "Hledání dokončeno s %d nalezenými výskyty."
 
 #: src/support.c:90 src/support.c:114
 #, c-format
 msgid "Couldn't find pixmap file: %s"
 msgstr "Nebyl nalezen soubor pixmap: %s"
 
-#: src/symbols.c:428 src/symbols.c:460
+#: src/symbols.c:433 src/symbols.c:465
 msgid "Chapter"
 msgstr "Chapter"
 
-#: src/symbols.c:430 src/symbols.c:452
+#: src/symbols.c:435 src/symbols.c:457
 msgid "Section"
 msgstr "Section"
 
-#: src/symbols.c:432
+#: src/symbols.c:437
 msgid "Sect1"
 msgstr "Sect1"
 
-#: src/symbols.c:434
+#: src/symbols.c:439
 msgid "Sect2"
 msgstr "Sect2"
 
-#: src/symbols.c:436
+#: src/symbols.c:441
 msgid "Sect3"
 msgstr "Sect3"
 
-#: src/symbols.c:438
+#: src/symbols.c:443
 msgid "Appendix"
 msgstr "Appendix"
 
-#: src/symbols.c:440 src/symbols.c:462 src/symbols.c:566 src/symbols.c:602
+#: src/symbols.c:445 src/symbols.c:467 src/symbols.c:571 src/symbols.c:607
 msgid "Other"
 msgstr "Ostatní"
 
-#: src/symbols.c:448
+#: src/symbols.c:453
 msgid "Command"
 msgstr "Příkaz"
 
-#: src/symbols.c:450
+#: src/symbols.c:455
 msgid "Environment"
 msgstr "Prostředí"
 
-#: src/symbols.c:454
+#: src/symbols.c:459
 msgid "Subsection"
 msgstr "Subsection"
 
-#: src/symbols.c:456
+#: src/symbols.c:461
 msgid "Subsubsection"
 msgstr "Subsubsection"
 
-#: src/symbols.c:458
+#: src/symbols.c:463
 msgid "Label"
 msgstr "Label"
 
-#: src/symbols.c:468 src/symbols.c:552
+#: src/symbols.c:473 src/symbols.c:557
 msgid "Package"
 msgstr "Balíček"
 
-#: src/symbols.c:470
+#: src/symbols.c:475
 msgid "Function"
 msgstr "Funkce"
 
-#: src/symbols.c:472
+#: src/symbols.c:477
 msgid "My"
 msgstr "My"
 
-#: src/symbols.c:474
+#: src/symbols.c:479
 msgid "Local"
 msgstr "Local"
 
-#: src/symbols.c:476
+#: src/symbols.c:481
 msgid "Our"
 msgstr "Our"
 
-#: src/symbols.c:489 src/symbols.c:510 src/symbols.c:556 src/symbols.c:586
+#: src/symbols.c:494 src/symbols.c:515 src/symbols.c:561 src/symbols.c:591
 msgid "Classes"
 msgstr "Třídy"
 
-#: src/symbols.c:491
+#: src/symbols.c:496
 msgid "Singletons"
 msgstr "Singletons"
 
-#: src/symbols.c:493
+#: src/symbols.c:498
 msgid "Mixins"
 msgstr "Mixins"
 
-#: src/symbols.c:495 src/symbols.c:512 src/symbols.c:558
+#: src/symbols.c:500 src/symbols.c:517 src/symbols.c:563
 msgid "Methods"
 msgstr "Metody"
 
-#: src/symbols.c:497 src/symbols.c:560 src/symbols.c:590
+#: src/symbols.c:502 src/symbols.c:565 src/symbols.c:595
 msgid "Members"
 msgstr "Members"
 
@@ -3284,76 +3256,81 @@ msgstr "Members"
 #. gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
 #. gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
 #.
-#: src/symbols.c:499 src/symbols.c:539 src/symbols.c:600
+#: src/symbols.c:504 src/symbols.c:544 src/symbols.c:605
 msgid "Variables"
 msgstr "Proměnné"
 
-#: src/symbols.c:514 src/symbols.c:531 src/symbols.c:588
+#: src/symbols.c:519 src/symbols.c:536 src/symbols.c:593
 msgid "Functions"
 msgstr "Funkce"
 
-#: src/symbols.c:554
+#: src/symbols.c:559
 msgid "Interfaces"
 msgstr "Rozhraní"
 
-#: src/symbols.c:577
+#: src/symbols.c:582
 msgid "Module"
 msgstr "Moduly"
 
-#: src/symbols.c:581
+#: src/symbols.c:586
 msgid "Namespaces"
 msgstr "Namespaces"
 
-#: src/symbols.c:592
+#: src/symbols.c:597
 msgid "Structs / Typedefs"
 msgstr "Structs / Typedefs"
 
-#: src/symbols.c:597
+#: src/symbols.c:602
 msgid "Macros"
 msgstr "Makra"
 
-#: src/symbols.c:755
+#: src/symbols.c:760
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
-msgstr ""
+msgstr "Neznámý tep souboru pro příponu \"%s\".\n"
 
-#: src/symbols.c:770
+#: src/symbols.c:775
 #, c-format
 msgid "Failed to create tags file.\n"
-msgstr ""
+msgstr "Selhalo vytvoření souboru tagů.\n"
 
-#: src/symbols.c:776
+#: src/symbols.c:781
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
 "\n"
 msgstr ""
+"Použití: %s -g <soubor tagů> <seznam souborů>\n"
+"\n"
 
-#: src/symbols.c:777
+#: src/symbols.c:782
 #, c-format
 msgid ""
 "Example:\n"
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 msgstr ""
+"Příklad:\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
+"gtk/gtk.h\n"
 
-#: src/symbols.c:791
+#: src/symbols.c:796
 msgid "Load Tags"
-msgstr ""
+msgstr "Načíst tagy"
 
-#: src/symbols.c:797
+#: src/symbols.c:803
 msgid "Geany tag files (*.tags)"
-msgstr ""
+msgstr "Geany soubor tagů (*.tags)"
 
-#: src/symbols.c:816
-#, fuzzy, c-format
+#: src/symbols.c:822
+#, c-format
 msgid "Loaded %s tags file '%s'."
-msgstr "Soubor \"%s\" nebyl nalezen.\n"
+msgstr "Načten soubor %s tagů '%s'."
 
-#: src/symbols.c:818
-#, fuzzy, c-format
+#: src/symbols.c:824
+#, c-format
 msgid "Could not load tags file '%s'."
-msgstr "Soubor \"%s\" nebyl nalezen.\n"
+msgstr "Nemohl být načten soubor tagů \"%s\"."
 
 #: src/tools.c:81
 msgid "Special characters"
@@ -3363,7 +3340,7 @@ msgstr "Speciální znaky"
 msgid "_Insert"
 msgstr "Vlož_it"
 
-#: src/tools.c:91
+#: src/tools.c:92
 msgid ""
 "Choose a special character from the list below and double click on it or use "
 "the button to insert it at the current cursor position."
@@ -3371,65 +3348,66 @@ msgstr ""
 "Vyberte speciální znak ze seznamu a dvakrát na něj klikněte nebo použitje "
 "tlačítko pro vložení znaku na aktuální pozici kurzoru."
 
-#: src/tools.c:104
+#: src/tools.c:105
 msgid "Character"
 msgstr "Znak"
 
-#: src/tools.c:110
+#: src/tools.c:111
 msgid "HTML (name)"
 msgstr "HTML (entita)"
 
-#: src/tools.c:147
+#: src/tools.c:148
 msgid "HTML characters"
 msgstr "HTML znaky"
 
-#: src/tools.c:153
+#: src/tools.c:154
 msgid "ISO 8859-1 characters"
 msgstr "ISO 8859-1 znaky"
 
-#: src/tools.c:251
+#: src/tools.c:252
 msgid "Greek characters"
 msgstr "Řecké znaky"
 
-#: src/tools.c:306
+#: src/tools.c:307
 msgid "Mathematical characters"
 msgstr "Matematické symboly"
 
-#: src/tools.c:347
+#: src/tools.c:348
 msgid "Technical characters"
 msgstr "Technické symboly"
 
-#: src/tools.c:355
+#: src/tools.c:356
 msgid "Arrow characters"
 msgstr "Šipky"
 
-#: src/tools.c:368
+#: src/tools.c:369
 msgid "Punctuation characters"
 msgstr "Interpunkce"
 
-#: src/tools.c:384
+#: src/tools.c:385
 msgid "Miscellaneous characters"
 msgstr "Různé znaky"
 
-#: src/tools.c:608
+#: src/tools.c:609
 #, c-format
 msgid "Passing data and executing custom command: %s"
-msgstr ""
+msgstr "Předávám data a provádím vlastní příkaz: %s"
 
-#: src/tools.c:660 src/tools.c:888
-#, fuzzy
+#: src/tools.c:661 src/tools.c:890
 msgid "Set Custom Commands"
-msgstr "Nastavit vlastní formát data"
+msgstr "Nastavit vlastní příkazy"
 
-#: src/tools.c:666
+#: src/tools.c:668
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
 msgstr ""
+"Můžete poslat aktuálně vybraný text jakémukoli z těchto příkazů, výstup "
+"příkazu nahradí aktuální výběr."
 
-#: src/tools.c:857 src/tools.c:861
+#: src/tools.c:859 src/tools.c:863
 msgid "No custom commands defined."
-msgstr ""
+msgstr "Žádné vlastní příkazy nejsou definovány."
 
 #: src/treeviews.c:126
 msgid "No tags found"
@@ -3450,13 +3428,13 @@ msgstr "Znovu načíst"
 #. Status bar statistics: col = column, sel = selection, RO = read-only,
 #. * OVR = overwrite/overtype, INS = insert, MOD = modified
 #: src/ui_utils.c:124
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "line: %d\t col: %d\t sel: %d\t %s      %s      mode: %s      encoding: %s %"
 "s      filetype: %s      scope: %s"
 msgstr ""
-"%c  řádek: % 4d sloupec: % 3d  výběr: % 4d   %s      mód: %s%s      aktuální "
-"funkce: %s      kódování: %s %s     typ souboru: %s"
+"řádek: %d\t sloupec: %d\t výběr: %d\t %s      %s      mód: %s      kódování: "
+"%s %s      typ souboru: %s      rámec: %s"
 
 #: src/ui_utils.c:128
 msgid "RO "
@@ -3503,15 +3481,13 @@ msgstr "C++ STL"
 msgid "Set Custom Date Format"
 msgstr "Nastavit vlastní formát data"
 
-#: src/ui_utils.c:1183
-#, fuzzy
+#: src/ui_utils.c:1228
 msgid "Select Folder"
 msgstr "Vybrat složku"
 
-#: src/ui_utils.c:1183
-#, fuzzy
+#: src/ui_utils.c:1228
 msgid "Select File"
-msgstr "Vybrat vše"
+msgstr "Vybrat soubor"
 
 #: src/utils.c:354
 msgid "Do you want to reload it?"
@@ -3585,11 +3561,12 @@ msgid "Terminal emulation:"
 msgstr "Emulátor terminálu:"
 
 #: src/vte.c:603
-#, fuzzy
 msgid ""
 "Controls how the terminal emulator should behave. Do not change this value "
 "unless you know exactly what you are doing."
-msgstr "Způsob chování emulátoru terminálu; xterm je pro začátek dobrý."
+msgstr ""
+"Způsob chování emulátoru terminálu; neměňte tuto hodnotu, pokud nevíte, co "
+"přesně děláte.."
 
 #: src/vte.c:605
 msgid "Shell:"
@@ -3657,9 +3634,8 @@ msgid "Executables"
 msgstr "Spustitelné"
 
 #: src/win32.c:108
-#, fuzzy
 msgid "Geany project files"
-msgstr "Vlastnosti"
+msgstr "Geany soubor projektu"
 
 #: src/win32.c:500
 msgid "Error"
