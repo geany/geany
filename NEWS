@@ -56,8 +56,8 @@ Geany 0.11 (TBA)
     * Add Toggle Marker keybinding (Ctrl-M).
     * Add keybinding for construct completion, and set the default to
       Tab.
-    * Added MimeTypes: C++ header, Pascal, Perl, Python, httpd-PHP, XML
-      (thanks to Iñaki Rodriguez).
+    * Add MimeType associatiations for: C++ header, Pascal, Perl,
+      Python, httpd-PHP and XML files (thanks to Iñaki Rodriguez).
     * Add brace indenting support for Perl and TCL.
     * Make backspace unindent when using spaces for indentation.
     * Wrap notebook pages when switching tabs.
