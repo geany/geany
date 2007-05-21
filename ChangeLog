@@ -4,6 +4,8 @@
    doc/geany.docbook, doc/geany.txt, doc/images/*, doc/html/*:
    Updated for Geany 0.11.
  * New release: Geany 0.11 "Bandor".
+ * configure.in, geany.nsi, geany_private.rc, win32-config.h,
+   src/geany.h: Post-release version bump.
 
 
 2007-05-16  Enrico Tröger  <enrico.troeger@uvena.de>
