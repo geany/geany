@@ -1,3 +1,75 @@
+Geany 0.11 (TBA)
+
+    Notes for existing users:
+    * Tab is now used for construct completion (for, if, etc.), but it
+      is configurable with the new 'Complete construct' keybinding.
+    * Template files are now stored in ~/.geany/templates/ and the
+      'template.' filename prefix is no longer used. You will need to
+      move any custom template files you have.
+    * Inserting a file header is now optional for filetype templates.
+      Use the string '{fileheader}' to mark where the file header should
+      be placed.
+
+    Bugs fixed:
+    * Fix segfault when pressing Ctrl-Enter when there are no workspace
+      tags.
+    * Remove error indicators in all documents when linking (#1705374).
+    * Sort symbol list tags also by line number (#1703575).
+    * Fix #1717418, Hang on SQL file load.
+    * Fix #1718532 - Crash when opening a special HTML file.
+    * Add workaround for PHP closing brace de-indenting.
+    * Fix reloading of read-only documents.
+
+    Project Management:
+    * Add keybinding to show project properties dialog.
+    * Add project Run command support.
+    * Run Make All and Make Custom from the project base directory.
+
+    Custom Global Tags:
+    * Update C global tags for GTK+ 2.10 and it's dependencies.
+    * Add option --generate-tags (-g) to generate a global tags file
+      from a list of source files (see docs).
+    * Load global tag files stored in ~/.geany/tags at startup #.
+    * Add Load Tags command in the File menu #.
+    # This is not supported for Pascal, PHP or LaTeX files yet.
+
+    Calltips (for C-like files):
+    * Show up and down arrows when there are multiple calltip matches.
+    * Show classname in calltips.
+    * Parse pointers in function return type.
+    * Add calltip support for D constructors.
+
+    Other changes:
+    * Parse 'Entering directory' Make messages so opening files from
+      error messages works for subdirectories (thanks to Josef Whiter).
+    * Make Go to Tag Definition/Declaration work for all tags.
+    * Support filetype templates for all filetypes (see docs).
+    * Make file header optional for filetype templates.
+    * Add 'Find Selected' and 'Find Prev Selected' search commands and
+      keybindings (thanks to Jeff Pohlmeyer).
+    * Add Mark button to the Find dialog, and a Remove Markers item to
+      the Document menu.
+    * Add 'Recurse in subfolders' and 'Extra options' checkboxes to the
+      Find in Files dialog.
+    * Add 'Switch to last used document' keybinding (Ctrl-Tab).
+    * Add Goto Previous/Next Marker keybindings (Ctrl-, and Ctrl-.).
+    * Add Toggle Marker keybinding (Ctrl-M).
+    * Add keybinding for construct completion, and set the default to
+      Tab.
+    * Added MimeTypes: C++ header, Pascal, Perl, Python, httpd-PHP, XML
+      (thanks to Iñaki Rodriguez).
+    * Add brace indenting support for Perl and TCL.
+    * Make backspace unindent when using spaces for indentation.
+    * Wrap notebook pages when switching tabs.
+    * Speed up loading multiple C-like files slightly.
+
+    Documentation:
+    * Add Project Management, Global Tags, Construct Completion
+      sections.
+    * Add Bookmarks section (thanks to John Gabriele).
+    * Update Filetype Templates, Search sections.
+
+
 Geany 0.10.2 (February 25, 2007)
 
     Bugs fixed:
