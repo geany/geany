@@ -44,7 +44,7 @@ geany_SOURCES = $(SRCS) win32.c win32.h
 geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a -lstdc++ @PACKAGE_LIBS@ \
 			$(INTLLIBS) -lgdi32 -limm32 -lshell32 -lole32 -luuid -liberty -lcomdlg32 -lcomctl32 \
 			geany_private.res
-AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -mms-bitfields
+AM_CFLAGS = -Wall -pipe -mms-bitfields
 #AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -mms-bitfields -g -O0
 geany_LDFLAGS =	-mwindows
 
@@ -59,7 +59,7 @@ clean-local:
 
 else
 # build Geany for all other platforms
-AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe
+AM_CFLAGS = -Wall -pipe
 #AM_CFLAGS = -DGEANY_DEBUG -Wall -pipe -g -O0
 geany_SOURCES = $(SRCS) vte.c vte.h
 geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @PACKAGE_LIBS@ -lstdc++ $(INTLLIBS)
