@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 4. Configuration files</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="Geany 0.10"><link rel="up" href="index.html" title="Geany 0.10"><link rel="prev" href="ch03s09.html" title="Keybindings"><link rel="next" href="ch04s02.html" title="Filetype extensions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Configuration files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s09.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch04s02.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="config_files"></a>Chapter 4. Configuration files</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch04.html#filetypes">Filetype definition files</a></span></dt><dd><dl><dt><span class="section"><a href="ch04.html#filetypes_format">Format</a></span></dt><dt><span class="section"><a href="ch04.html#filetypes_common">Special file filetypes.common</a></span></dt></dl></dd><dt><span class="section"><a href="ch04s02.html">Filetype extensions</a></span></dt><dt><span class="section"><a href="ch04s03.html">Templates</a></span></dt></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="filetypes"></a>Filetype definition files</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 4. Configuration files</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Geany 0.11"><link rel="up" href="index.html" title="Geany 0.11"><link rel="prev" href="ch03s12.html" title="Keybindings"><link rel="next" href="ch04s02.html" title="Filetype extensions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 4. Configuration files</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s12.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch04s02.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="config_files"></a>Chapter 4. Configuration files</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="ch04.html#filetypes">Filetype definition files</a></span></dt><dd><dl><dt><span class="section"><a href="ch04.html#filetypes_format">Format</a></span></dt><dt><span class="section"><a href="ch04.html#filetypes_common">Special file filetypes.common</a></span></dt></dl></dd><dt><span class="section"><a href="ch04s02.html">Filetype extensions</a></span></dt><dt><span class="section"><a href="ch04s03.html">Templates</a></span></dt><dd><dl><dt><span class="section"><a href="ch04s03.html#id2814807">Template metadata</a></span></dt><dt><span class="section"><a href="ch04s03.html#id2814839">Filetype templates</a></span></dt><dt><span class="section"><a href="ch04s03.html#id2814943">Customizing templates</a></span></dt></dl></dd></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="filetypes"></a>Filetype definition files</h2></div></div></div><p>
 				All colour definitions and other filetype specific settings are stored in the
 				filetype definition files. Those settings are colours for syntax highlighting,
 				general settings like comment characters or word delimiter characters as well as
@@ -27,7 +27,7 @@
 				 <code class="filename">~/.geany/filedefs/filetypes.X</code> and add only these settings you
 				 want to change. All missing settings will be read from the corresponding global
 				 definition file in <code class="filename">$prefix/share/geany</code>.
-			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="filetypes_format"></a>Format</h3></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2796800"></a>[styling] Section</h4></div></div></div><p>
+			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="filetypes_format"></a>Format</h3></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2813862"></a>[styling] Section</h4></div></div></div><p>
 						In this section the colours for syntax highlighting are defined.
 						The format is always:
 						<code class="constant">key=forground_colour;background_colour;bold;italic</code>
@@ -37,14 +37,14 @@
 						but it is a good idea to use small letters. Bold and italic are flags and
 						should only be "true" or "false". If their value is something other than
 						"true" or "false", "false" is assumed.
-					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2796825"></a>[keywords] Section</h4></div></div></div><p>
+					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2813887"></a>[keywords] Section</h4></div></div></div><p>
 						This section contains keys for different keyword lists specific	to the
 						filetype. Some filetypes do not support keywords, so adding a new key will
 						not work. You can only add or remove keywords to/from an existing list.
 						</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Important</h3><p>The keywords list must be in one line without line ending
 						characters.</p></div><p>
-					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2796845"></a>[settings] Section</h4></div></div></div><p>
-						</p><div class="table"><a name="id2796853"></a><p class="title"><b>Table 4.1. General settings</b></p><div class="table-contents"><table summary="General settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>wordchars</td><td>
+					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2813907"></a>[settings] Section</h4></div></div></div><p>
+						</p><div class="table"><a name="id2813915"></a><p class="title"><b>Table 4.1. General settings</b></p><div class="table-contents"><table summary="General settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>wordchars</td><td>
 											These characters define word boundaries when
 											making selections and searching using word matching
 											options.
@@ -56,7 +56,7 @@
 										</td><td>comment_close=*/</td></tr><tr><td>comment_use_indent</td><td>Set this to false if a comment character or string
 											   should start at column 0 of a line. If set to true
 											   it uses any indentation of the line.
-											   <div class="example"><a name="id2796950"></a><p class="title"><b>Example 4.1. Comment indentation</b></p><div class="example-contents"><p>
+											   <div class="example"><a name="id2814014"></a><p class="title"><b>Example 4.1. Comment indentation</b></p><div class="example-contents"><p>
 											   comment_use_indent=true would generate this if a line
 											   is commented (e.g. with
 											   <span><strong class="keycap">Ctrl</strong></span>-<span><strong class="keycap">D</strong></span>)
@@ -64,14 +64,35 @@
 											   comment_use_indent=false would generate this if a line
 											   is commented (e.g. with
 											   <span><strong class="keycap">Ctrl</strong></span>-<span><strong class="keycap">D</strong></span>)
-											   </p><pre class="programlisting">#command_example();</pre><p>
+											   </p><pre class="programlisting">#	command_example();</pre><p>
 											   </p></div></div><p><br class="example-break"></p>
 											   <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
-													This setting only works for single line comments.
+													This setting only works for single line comments
+													(like '//', '#' or ';').
 											   </p></div>
-										</td><td>comment_use_indent=true</td></tr></tbody></table></div></div><p><br class="table-break">
-					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2797019"></a>[build_settings] Section</h4></div></div></div><p>
-						</p><div class="table"><a name="id2797027"></a><p class="title"><b>Table 4.2. Build settings</b></p><div class="table-contents"><table summary="Build settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>compiler</td><td>
+										</td><td>comment_use_indent=true</td></tr><tr><td>context_action_cmd</td><td><p>
+											   A command which can be executed on a certain word or
+											   the current selection. Example usage: Open the API
+											   documentation for the current function call at the
+											   cursor position. The command can be set for every
+											   filetype or if not set, a global command will be used.
+											   The command itself can be specified without the full
+											   path, then it is searched in $PATH. But for security
+											   reasons, it is recommended to specify the full path
+											   to the command. The wildcard %s will be replaced
+											   by the current word at the cursor position or by
+											   the current selection.
+											   </p>
+											   <p>
+											   Hint: for PHP files the following could be quite
+											   useful:
+											   <span class="emphasis"><em>
+											   context_action_cmd=firefox "http://www.php.net/%s"
+											   </em></span>
+											   </p>
+										</td><td>context_action_cmd=devhelp -s "%s"</td></tr></tbody></table></div></div><p><br class="table-break">
+					</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2814121"></a>[build_settings] Section</h4></div></div></div><p>
+						</p><div class="table"><a name="id2814129"></a><p class="title"><b>Table 4.2. Build settings</b></p><div class="table-contents"><table summary="Build settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>compiler</td><td>
 											   This item specifies the command to compile source code
 											   files. But it is also possible to use it with
 											   interpreted languages like Perl or Python. With these
@@ -107,7 +128,9 @@
 					  <code class="filename">filetypes.common</code>. This file defines some general
 					  non-filetype-specific settings.
 				</p><p>
-					</p><div class="table"><a name="id2797181"></a><p class="title"><b>Table 4.3. General settings</b></p><div class="table-contents"><table summary="General settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>selection</td><td>
+					</p><div class="table"><a name="id2814282"></a><p class="title"><b>Table 4.3. General settings</b></p><div class="table-contents"><table summary="General settings" cellspacing="0" cellpadding="4" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Key</th><th>Description</th><th>Example</th></tr></thead><tbody><tr><td>default</td><td>This is the default style. It is used for styling files
+										   without a filetype set.
+									</td><td>default=0x000000;0xffffff;false;false</td></tr><tr><td>selection</td><td>
 										The style for colouring selected text.
 										The format is:
 										<div class="itemizedlist"><ul type="disc"><li><p>Foreground colour</p></li><li><p>Background colour</p></li><li><p>Use foreground colour</p></li><li><p>Use background colour</p></li></ul></div>
@@ -120,16 +143,25 @@
 										   matching brace was found.
 									</td><td>brace_bad=0x0000ff;0xFFFFFF;true;false</td></tr><tr><td>caret</td><td>The style for colouring the caret(the blinking cursor).
 										   Only the first argument is interpreted.
-									</td><td>caret=0x000000;0x0;false;false</td></tr><tr><td>current_line</td><td>The style for colouring the background of the current
-										   line. Only the second argument is interpreted.
-									</td><td>current_line=0x0;0xe5e5e5;false;false</td></tr><tr><td>indent_guide</td><td>The style for colouring the indentation guides.
+									</td><td>caret=0x000000;0x0;false;false</td></tr><tr><td>caret_width</td><td>The width for the caret(the blinking cursor).
+										   Only the first argument is interpreted. The width is
+										   specified in pixels with a maximum of three pixel.
+										   Use the width 0 to make the caret invisible.
+									</td><td>caret=1;0;false;false</td></tr><tr><td>current_line</td><td>The style for colouring the background of the current
+										   line. Only the second and third arguments are interpreted.
+										   The second argument is the background colour.
+										   Use the third argument to enable or disable background
+										   highlighting for the current line (has to be true/false).
+									</td><td>current_line=0x0;0xe5e5e5;true;false</td></tr><tr><td>indent_guide</td><td>The style for colouring the indentation guides.
 										   Only the first and second arguments are interpreted.
 									</td><td>indent_guide=0xc0c0c0;0xffffff;false;false</td></tr><tr><td>white_space</td><td>The style for colouring the white space if it is shown.
 										   The first both arguments define the foreground and
 										   background colours, the third argument sets whether to use
-										   the defined colours or to use the colours defined by each
-										   filetype for the white space.
-									</td><td>white_space=0xc0c0c0;0xffffff;true;false</td></tr><tr><td>folding_style</td><td>The style of folding icons. Only first and second
+										   the defined foreground colour or to use the colour
+										   defined by each filetype for the white space.
+										   The fourth argument defines whether to use the background
+										   colour.
+									</td><td>white_space=0xc0c0c0;0xffffff;true;true</td></tr><tr><td>folding_style</td><td>The style of folding icons. Only first and second
 										   arguments are used.
 										   <p>
 											Valid values for the first argument are:
@@ -168,4 +200,4 @@
 												 invert all colours.
 										   </p>
 									</td><td>invert_all=0;0;false;false</td></tr></tbody></table></div></div><p><br class="table-break">
-				</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s09.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch04s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Keybindings </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Filetype extensions</td></tr></table></div></body></html>
+				</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s12.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch04s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Keybindings </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Filetype extensions</td></tr></table></div></body></html>

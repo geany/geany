@@ -1,99 +1,77 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Build system</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.71.0"><link rel="start" href="index.html" title="Geany 0.10"><link rel="up" href="ch03.html" title="Chapter 3. Usage"><link rel="prev" href="ch03s06.html" title="Preferences"><link rel="next" href="ch03s08.html" title="Printing support"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Build system</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s06.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s08.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="build_system"></a>Build system</h2></div></div></div><p>
-				<span class="application">Geany</span> has an integrated build system.
-				Firstly this means that the current source file will be saved before
-				it is processed. This is for convenience so that you don't need to keep saving
-				small changes to the current file before building.
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Tags</title><link rel="stylesheet" href="geany.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Geany 0.11"><link rel="up" href="ch03.html" title="Chapter 3. Usage"><link rel="prev" href="ch03s06.html" title="Search, replace and go to"><link rel="next" href="ch03s08.html" title="Preferences"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Tags</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s06.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Usage</th><td width="20%" align="right"> <a accesskey="n" href="ch03s08.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tags"></a>Tags</h2></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2811464"></a>Workspace tags</h3></div></div></div><p>
+				Tags for each document are parsed whenever a file is loaded or saved. These are
+				shown in the Symbol list in the Sidebar. These tags are also used for autocompletion
+				and calltips in other documents open in the current session.
 			</p><p>
-				Secondly the output for Compile, Build and Make actions will be captured
-				in the Compiler notebook tab of the messages window (assuming you have it visible).
-				If there are any warnings or errors with line numbers shown in the Compiler output tab,
-				you can double click on them and <span class="application">Geany</span> will switch to
-				the relevant source file (if it is open) and mark the line number so the problem
-				can be corrected. <span class="application">Geany</span> will also set indicators for
-				warnings or errors with line numbers.
+				The <span class="emphasis"><em>Go to Tag</em></span> commands can be used with all workspace tags.
+				See <a href="ch03s06.html#search_gototag" title="Go to tag definition">the section called “Go to tag definition”</a>.
+			</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="tags_global"></a>Global tags</h3></div></div></div><p>
+				Global tags are used to provide autocompletion and calltips without having to open
+				the corresponding source files. This is intended for library APIs, as the tags file
+				only has to be updated when you upgrade the library.
 			</p><p>
-				Depending on the current file's filetype, the Build menu will contain the following
-				items:
-				</p><div class="itemizedlist"><ul type="disc"><li><p>Compile</p></li><li><p>Build</p></li><li><p>Make all</p></li><li><p>Make custom target</p></li><li><p>Make object</p></li><li><p>Execute</p></li><li><p>Set Includes and Arguments</p></li></ul></div><p>
-			</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2795368"></a>Compile</h3></div></div></div><p>
-					The Compile command has different uses for different kinds of files.
-				</p><p>
-					For compilable languages such as C and C++, the Compile command is setup
-					to compile the current source file into a binary object file.
-				</p><p>
-					Java source files will be compiled to class file bytecode.
-					Interpreted languages such as Perl, Python, Ruby will
-					compile to bytecode if the language supports it, or will run a syntax check,
-					or failing that will run the file in its language interpreter.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2795393"></a>Build</h3></div></div></div><p>
-					For compilable languages such as C and C++, the Build command will link the
-					current source file's equivalent object file into an executable. If the object
-					file does not exist, the source will be compiled and linked in one step,
-					producing just the executable binary.
-				</p><p>
-					Interpreted languages do not use the Build command.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2795412"></a>Make all</h3></div></div></div><p>
-					This effectively runs "make all" in the same directory as the current file.
-					</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
-						For each of the Make commands, The Make tool path must be correctly set
-						in the Tools tab of the Preferences dialog.
-					</p></div><p>
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2795431"></a>Make custom target</h3></div></div></div><p>
-					This is similar to running 'Make all' but you will be prompted
-					for the make target name to be passed to the Make tool. For example,
-					typing 'clean' in the dialog prompt will run "make clean".
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2795444"></a>Make object</h3></div></div></div><p>
-					Make object will run "make current_file.o" in the same directory as the current
-					file, using its prefix for 'current_file'. It is useful for compiling just the
-					current file without building the whole project.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2795458"></a>Execute</h3></div></div></div><p>
-					Execute will run the corresponding executable file, shell script or interpreted
-					script in a terminal window. Note that the Terminal tool path must be correctly
-					set in the Tools tab of the Preferences dialog - you can use any terminal
-					program that runs a Bourne compatible shell and accept the "-e" command line
-					argument to start a command.
-				</p><p>
-					After your program or script has finished executing, you will be prompted to
-					press the return key. This allows you to review any text output from the program
-					before the terminal window is closed.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2795481"></a>Stopping running processes</h3></div></div></div><p>
-					If you started a build action (Compile, Build or Run) the Run button in the
-					toolbar becomes a stop button and you can stop the curent action. This works
-					by sending a signal to the process (and its child process(es)) to stop the
-					process. The used signal is SIGQUIT.
-				</p><p>
-					Depending on the process you started it might occur that the process cannot be
-					stopped. This can happen when the process creates more than one child process.
-					Therefore stopping any make actions is not possible because make creates child
-					processes and these child processes creates again child process. There might be
-					some other programs which cannot be stopped correctly, e.g. "Terminal" (the
-					terminal program of Xfce). Xterm is known to work properly.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2745299"></a>Set Includes and Arguments</h3></div></div></div><p>
-					By default the Compile and Build commands invoke the compiler and linker with
-					only the basic arguments needed by all programs.
-					Using Set Includes and Arguments you can add any include
-					paths and compile flags for the compiler, any library names and paths for the
-					linker, and any arguments you want to use when running Execute.
-				</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
-					If you are using the Build command to compile and link in one step, you will need
-					to set both the compiler arguments and the linker arguments in the linker
-					command setting.
+				You can load a custom global tags file in two ways:
+				</p><div class="itemizedlist"><ul type="disc"><li><p>Using the <span class="emphasis"><em>Load Tags</em></span> command in the File menu.
+						</p></li><li><p>By creating a directory <code class="filename">~/.geany/tags</code>,
+						and moving or symlinking the tags files there before starting
+						<span class="application">Geany</span>.
+						</p></li></ul></div><p>
+			</p><p>
+				You can either download these files or generate your own.
+				They have the format:
+			</p><p>
+				<code class="filename">libraryname.lang_ext.tags</code>
+			</p><p>
+				<span class="emphasis"><em>lang_ext</em></span> is one of the extensions set for the filetype
+				associated with the tags. See <a href="ch04s02.html" title="Filetype extensions">the section called “Filetype extensions”</a> for more
+				information.
+			</p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2811571"></a>Default global tags files</h4></div></div></div><p>
+				For some languages, a list of global tags is loaded when the corresponding filetype
+				is first used. Currently these are for:
+				</p><div class="itemizedlist"><ul type="disc"><li><p>C - GTK+ and GLib</p></li><li><p>Pascal</p></li><li><p>PHP</p></li><li><p>HTML - <code class="literal">&amp;symbol;</code> completion, e.g.
+					for ampersand, copyright, etc.</p></li><li><p>LaTeX</p></li></ul></div><p>
+			</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="tags_generating"></a>Generating a global tags file</h4></div></div></div><p>
+				</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Filetypes support</h3><p>
+					Currently this is not yet supported for Pascal, PHP and LaTeX filetypes.
 				</p></div><p>
-					These settings are not saved when <span class="application">Geany</span> is shut
-					down. See below for how to set permanent arguments.
-				</p><p>
-					If you need complex settings for your build system, or several different
-					settings, then writing a Makefile and using the Make commands is recommended.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2745340"></a>Indicators</h3></div></div></div><p>
-					Indicators are red squiggly underlines which are used to highlight errors which
-					occured while compiling the current file. So you can easily see where your code
-					failed to compile. To remove the indicators, just click on
-					"Remove all indicators" in the document file menu.
-				</p><p>
-					If you do not like this feature, you can disable it in the preferences dialog.
-				</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2745360"></a>File type configuration settings</h3></div></div></div><p>
-					You can set the commands to run for compiling, building or executing
-					by opening the relevant <code class="filename">filetypes.*</code> configuration file,
-					and checking the [build_settings] section. See <a href="ch04.html#filetypes" title="Filetype definition files">the section called “Filetype definition files”</a> for more
-					information.
-				</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s06.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Preferences </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Printing support</td></tr></table></div></body></html>
+			</p><p>
+				You can generate your own global tags files by parsing a list of source files.
+				The command is:
+			</p><p>
+				geany -g &lt;Tag File&gt; &lt;File list&gt;
+			</p><p>
+				</p><div class="itemizedlist"><ul type="disc"><li><p><span class="emphasis"><em>Tag File</em></span> should be in the format described
+						earlier - see <a href="ch03s07.html#tags_global" title="Global tags">the section called “Global tags”</a>.</p></li><li><p><span class="emphasis"><em>File list</em></span> is a list of filenames, each with
+						a full path (unless you are generating C/C++ tags and have set the CFLAGS
+						environment variable appropriately).</p></li></ul></div><p>
+			</p><p>
+				Example for the wxD library for the D programming language:
+				</p><pre class="programlisting">geany -g wxd.d.tags /home/username/wxd/wx/*.d</pre><p>
+			</p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="id2811688"></a>Generating C/C++ tag files</h5></div></div></div><p>
+				For C/C++ tag files, <code class="filename">gcc</code> and <code class="filename">grep</code> are
+				required, so that header files can be preprocessed to include
+				any other headers they depend upon.
+			</p><p>
+				For C/C++ files, the environment variable CFLAGS should be set with appropriate
+				<code class="literal">-I/path</code> include paths.
+				The following example works with the <code class="filename">bash</code> shell, generating
+				tags for the GnomeUI library:
+				</p><pre class="programlisting">CFLAGS=`pkg-config --cflags libgnomeui-2.0` geany -g gnomeui.c.tags
+/usr/include/libgnomeui-2.0/gnome.h</pre><p>
+			</p><p>
+				You can adapt this command to use CFLAGS and header files appropriate for
+				whichever libraries you want.
+			</p><p>
+				</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Replacing the default C/C++ tags file</h3><p>
+				<span class="application">Geany</span> currently uses a default global tags file
+				<code class="filename">global.tags</code>
+				for C and C++, commonly installed in <code class="filename">/usr/share/geany</code>. This
+				file can be replaced with one containing tags parsed from a different set of
+				header files. When <span class="application">Geany</span> is next started, your custom
+				tags file will be loaded instead of the default <code class="filename">global.tags</code>.
+				You should keep a copy of the generated
+				tags file because it will get overwritten when upgrading
+				<span class="application">Geany</span>.
+				</p><p>This is a temporary solution - in later versions this will be unnecessary.
+				</p></div><p>
+			</p></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s06.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s08.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Search, replace and go to </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Preferences</td></tr></table></div></body></html>

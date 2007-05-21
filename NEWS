@@ -1,4 +1,4 @@
-Geany 0.11 (TBA)
+Geany 0.11 (May 21, 2007)
 
     Notes for existing users:
     * Tab is now used for construct completion (for, if, etc.), but it
@@ -9,6 +9,8 @@ Geany 0.11 (TBA)
     * Inserting a file header is now optional for filetype templates.
       Use the string '{fileheader}' to mark where the file header should
       be placed.
+    * Drag'n'Drop of text inside the editor widget will now move the
+      text instead of copying it.
 
     Bugs fixed:
     * Fix segfault when pressing Ctrl-Enter when there are no workspace
@@ -62,12 +64,32 @@ Geany 0.11 (TBA)
     * Make backspace unindent when using spaces for indentation.
     * Wrap notebook pages when switching tabs.
     * Speed up loading multiple C-like files slightly.
+    * New filetypes: JavaScript, Lua and Haskell.
+    * Set several widget names to allow users to define custom styles
+      in .gtkrc-2.0.
+    * Add context actions to run custom commands on current selection
+      or the current word below cursor.
+    * Add different auto indention modes.
+    * Improve replacing in rectangle selections.
+    * Add custom commands to send selected text through some definable
+      commands and replace the selection with the output.
+    * Add command line option --column to allow setting the initial
+      column for the first opened file on command line.
+    * Improve the auto scrolling of documents.
+    * Improve loading of the VTE library.
+    * Add an option for using spaces or tabulators when inserting some
+      whitespace.
+    * Add an option to disable Drag'n'Drop in the editor widget.
 
     Documentation:
     * Add Project Management, Global Tags, Construct Completion
       sections.
     * Add Bookmarks section (thanks to John Gabriele).
     * Update Filetype Templates, Search sections.
+
+    Internationalisation:
+    * New translations: bg.
+    * Updated translations: ca, cs, de, es, fr, zh_CN.
 
 
 Geany 0.10.2 (February 25, 2007)

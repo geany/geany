@@ -1,3 +1,10 @@
+2007-05-21  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * NEWS, geany_private.rc, win32-config.h, doc/geany.1.in,
+   doc/geany.docbook, doc/geany.txt, doc/images/*, doc/html/*:
+   Updated for Geany 0.11.
+
+
 2007-05-16  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * THANKS, src/about.c, po/LINGUAS, po/bg.po:
@@ -681,7 +688,7 @@
  * geany.glade, doc/geany.docbook, src/document.c, src/document.h,
    src/geany.h, src/interface.c, src/keyfile.c, src/main.c, src/prefs.c,
    src/sci_cb.c, src/ui_utils.c:
-   Added different auto indention modes to select who should Geany
+   Added different auto indention modes to select how should Geany
    indent new lines (closes #1615605).
 
 

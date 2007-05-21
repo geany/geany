@@ -286,7 +286,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Version number of package */
-#define VERSION "0.10"
+#define VERSION "0.11"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
