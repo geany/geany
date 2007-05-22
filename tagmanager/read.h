@@ -41,14 +41,6 @@
 #define isLanguage(lang)	(boolean)((lang) == File.source.language)
 #define isHeaderFile()		File.source.isHeader
 
-/*  Is the character valid as a character of a C identifier?
- */
-boolean isident(int c);
-
-/*  Is the character valid as the first character of a C identifier?
- */
-boolean isident1(int c);
-
 /*
 *   DATA DECLARATIONS
 */

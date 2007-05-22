@@ -15,7 +15,21 @@
 */
 #include "general.h"	/* must always come first */
 
-#include "ctags.h"	/* to define langType */
+#include "ctags.h"  /* to define langType */
+
+/*
+*   MACROS
+*/
+/*  Is the character valid as a character of a C identifier?
+ *  VMS allows '$' in identifiers.
+ */
+#define isident(c)  (isalnum(c) || (c) == '_' || (c) == '$')
+
+/*  Is the character valid as the first character of a C identifier?
+ *  C++ allows '~' in destructors.
+ *  VMS allows '$' in identifiers.
+ */
+#define isident1(c)  (isalpha(c) || (c) == '_' || (c) == '~' || (c) == '$')
 
 /*
 *   FUNCTION PROTOTYPES

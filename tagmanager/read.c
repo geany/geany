@@ -45,21 +45,6 @@ extern void freeSourceFileResources (void)
  *   Source file access functions
  */
 
-boolean isident(int c)
-{
-	return (boolean) (((c >= 'A') && (c <= 'Z')) ||
-	  ((c >= 'a') && (c <= 'z')) ||
-	  ((c >= '0') && (c <= '9')) ||
-	  (c == '_') || (c == '$'));
-}
-
-boolean isident1(int c)
-{
-	return (boolean) (((c >= 'A') && (c <= 'Z')) ||
-	  ((c >= 'a') && (c <= 'z')) ||
-	  (c == '_') || (c == '~') || (c == '$'));
-}
-
 static void setInputFileName (const char *const fileName)
 {
     const char *const head = fileName;

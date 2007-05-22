@@ -1,3 +1,9 @@
+2007-05-22  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * tagmanager/read.c, tagmanager/read.h, tagmanager/get.h:
+   Move C-only isident(), isident1() functions to get.h.
+
+
 2007-05-21  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * NEWS, geany_private.rc, win32-config.h, doc/geany.1.in,
