@@ -1118,7 +1118,7 @@ msgstr "Kommentierung _umschalten"
 
 #: src/interface.c:505 src/interface.c:2051
 msgid "Du_plicate Line or Selection"
-msgstr "Zeile oder Auswahl kopieren"
+msgstr "_Zeile oder Auswahl kopieren"
 
 #: src/interface.c:514 src/interface.c:2060
 msgid "_Increase Indent"
@@ -2824,7 +2824,7 @@ msgstr "Meldungen"
 
 #: src/msgwindow.c:435
 msgid "_Hide Message Window"
-msgstr "Meldungsfenster ausblenden"
+msgstr "Meldungs_fenster ausblenden"
 
 #: src/prefs.c:336
 msgid "Action"
@@ -3086,7 +3086,7 @@ msgstr "Diese Option deaktivieren, um den Dialog nicht zu schließen."
 
 #: src/search.c:425
 msgid "Re_place & Find"
-msgstr "Ersetzen und Finden"
+msgstr "Ersetzen und _Finden"
 
 #: src/search.c:432
 msgid "Replace with:"
@@ -3475,7 +3475,7 @@ msgid ""
 "s      filetype: %s      scope: %s"
 msgstr ""
 "Zeile: %d\t Spalte: %d\t Auswahl: %d\t %s      %s      Modus: %s      "
-"Zeichekodierung: %s %s      Dateityp: %s      Bereich: %s"
+"Zeichenkodierung: %s %s      Dateityp: %s      Bereich: %s"
 
 #: src/ui_utils.c:128
 msgid "RO "
@@ -3549,7 +3549,7 @@ msgstr "Terminal"
 
 #: src/vte.c:394
 msgid "_Input Methods"
-msgstr "_Eingabemethoden"
+msgstr "Eingabe_methoden"
 
 #: src/vte.c:522
 msgid "Terminal plugin"
