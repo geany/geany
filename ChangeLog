@@ -1,8 +1,9 @@
 2007-05-23  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/vte.c: Add popup menu item: Change current working directory.
- * geany.glade, src/dialogs.c, src/geany.h, src/interface.c, src/main.c,
-   src/prefs.c: Add default startup directory option (closes #1704988).
+ * geany.glade, src/dialogs.c, src/geany.h, src/interface.c,
+   src/keyfile.c, src/main.c, src/prefs.c:
+   Add default startup directory option (closes #1704988).
 
 
 2007-05-23  Nick Treleaven  <nick.treleaven@btinternet.com>
