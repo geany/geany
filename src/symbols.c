@@ -416,20 +416,19 @@ static void init_tag_iters()
 /* Adds symbol list groups in (iter*, title) pairs.
  * The list must be ended with NULL. */
 static void G_GNUC_NULL_TERMINATED
-tag_list_add_groups(gint idx, ...)
+tag_list_add_groups(GtkTreeStore *tree_store, ...)
 {
 	va_list args;
 	GtkTreeIter *iter;
 
-    va_start(args, idx);
+    va_start(args, tree_store);
     for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
     {
 		gchar *title = va_arg(args, gchar*);
 
-    	if (title == NULL)
-			break;
-		gtk_tree_store_append(doc_list[idx].tag_store, iter, NULL);
-		gtk_tree_store_set(doc_list[idx].tag_store, iter, 0, title, -1);
+    	g_assert(title != NULL);
+		gtk_tree_store_append(tree_store, iter, NULL);
+		gtk_tree_store_set(tree_store, iter, 0, title, -1);
 	}
 	va_end(args);
 }
@@ -438,6 +437,7 @@ tag_list_add_groups(gint idx, ...)
 static void init_tag_list(gint idx)
 {
 	filetype_id ft_id = doc_list[idx].file_type->id;
+	GtkTreeStore *tag_store = doc_list[idx].tag_store;
 
 	init_tag_iters();
 
@@ -445,32 +445,25 @@ static void init_tag_list(gint idx)
 	{
 		case GEANY_FILETYPES_DIFF:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Files"), -1);
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_function), _("Files"), NULL);
 			break;
 		}
 		case GEANY_FILETYPES_DOCBOOK:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Chapter"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Section"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Sect1"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Sect2"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Sect3"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Appendix"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
-			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
-			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Other"), -1);
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_function), _("Chapter"),
+				&(tv_iters.tag_class), _("Section"),
+				&(tv_iters.tag_member), _("Sect1"),
+				&(tv_iters.tag_macro), _("Sect2"),
+				&(tv_iters.tag_variable), _("Sect3"),
+				&(tv_iters.tag_struct), _("Appendix"),
+				&(tv_iters.tag_other), _("Other"), NULL);
+			//	&(tv_iters.tag_namespace), _("Other"), NULL);
 			break;
 		}
 		case GEANY_FILETYPES_HASKELL:
-			tag_list_add_groups(idx,
+			tag_list_add_groups(tag_store,
 				&tv_iters.tag_namespace, _("Module"),
 				&tv_iters.tag_struct, _("Types"),
 				&tv_iters.tag_macro, _("Type constructors"),
@@ -479,162 +472,105 @@ static void init_tag_list(gint idx)
 			break;
 		case GEANY_FILETYPES_LATEX:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Command"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Environment"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Section"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Subsection"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Subsubsection"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Label"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Chapter"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_function), _("Command"),
+				&(tv_iters.tag_class), _("Environment"),
+				&(tv_iters.tag_member), _("Section"),
+				&(tv_iters.tag_macro), _("Subsection"),
+				&(tv_iters.tag_variable), _("Subsubsection"),
+				&(tv_iters.tag_struct), _("Label"),
+				&(tv_iters.tag_namespace), _("Chapter"),
+				&(tv_iters.tag_other), _("Other"), NULL);
 			break;
 		}
 		case GEANY_FILETYPES_PERL:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Package"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Functions"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("My"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Local"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Our"), -1);
-/*			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Label"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Begin"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
-*/
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_class), _("Package"),
+				&(tv_iters.tag_function), _("Functions"),
+				&(tv_iters.tag_member), _("My"),
+				&(tv_iters.tag_macro), _("Local"),
+				&(tv_iters.tag_variable), _("Our"), NULL);
+				//&(tv_iters.tag_struct), _("Label"),
+				//&(tv_iters.tag_namespace), _("Begin"),
+				//&(tv_iters.tag_other), _("Other"), NULL);
 			break;
 		}
 		case GEANY_FILETYPES_RUBY:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Classes"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Singletons"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Mixins"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Methods"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Members"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
-/*			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Begin"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
-*/
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_class), _("Classes"),
+				&(tv_iters.tag_member), _("Singletons"),
+				&(tv_iters.tag_macro), _("Mixins"),
+				&(tv_iters.tag_function), _("Methods"),
+				&(tv_iters.tag_struct), _("Members"),
+				&(tv_iters.tag_variable), _("Variables"), NULL);
+				//&(tv_iters.tag_namespace), _("Begin"),
+				//&(tv_iters.tag_other), _("Other"), NULL);
 			break;
 		}
 		case GEANY_FILETYPES_PYTHON:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Classes"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Methods"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Functions"), -1);
-/*			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Mixin"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Members"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Begin"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
-*/
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_class), _("Classes"),
+				&(tv_iters.tag_member), _("Methods"),
+				&(tv_iters.tag_function), _("Functions"), NULL);
+				//&(tv_iters.tag_macro), _("Mixin"),
+				//&(tv_iters.tag_variable), _("Variables"),
+				//&(tv_iters.tag_struct), _("Members"),
+				//&(tv_iters.tag_namespace), _("Begin"),
+				//&(tv_iters.tag_other), _("Other"), NULL);
 			break;
 		}
 		case GEANY_FILETYPES_VHDL:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Functions"), -1);
-/*			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Constants"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Members"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
-*/			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
-/*			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Namespaces"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Signals"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
-*/
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_function), _("Functions"),
+				//&(tv_iters.tag_class), _("Constants"),
+				//&(tv_iters.tag_member), _("Members"),
+				//&(tv_iters.tag_macro), _("Macros"),
+				&(tv_iters.tag_variable), _("Variables"), NULL);
+				//&(tv_iters.tag_namespace), _("Namespaces"),
+				//&(tv_iters.tag_struct), _("Signals"),
+				//&(tv_iters.tag_other), _("Other"), NULL);
 			break;
 		}
 		case GEANY_FILETYPES_JAVA:
 		{
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Package"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Interfaces"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Classes"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Methods"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Members"), -1);
-			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
-			//gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Package"),
+				&(tv_iters.tag_struct), _("Interfaces"),
+				&(tv_iters.tag_class), _("Classes"),
+				&(tv_iters.tag_function), _("Methods"),
+				&(tv_iters.tag_member), _("Members"),
+			//	&(tv_iters.tag_macro), _("Macros"),
+			//	&(tv_iters.tag_variable), _("Variables"),
+				&(tv_iters.tag_other), _("Other"), NULL);
 			break;
 		}
 		case GEANY_FILETYPES_D:
 		default:
 		{
-			gchar *namespace_name;
+			gchar *namespace_name = _("Namespaces");
 
-			switch (ft_id)
-			{
-				case GEANY_FILETYPES_D:
+			if (ft_id == GEANY_FILETYPES_D)
 				namespace_name = _("Module");	// one file can only belong to one module
-				break;
 
-				default:
-				namespace_name = _("Namespaces");
-			}
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_namespace), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, namespace_name, -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Classes"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Functions"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Members"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_struct), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_struct), 0, _("Structs / Typedefs"), -1);
-			// TODO: maybe D Mixins could be parsed instead of macros
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), namespace_name,
+				&(tv_iters.tag_class), _("Classes"),
+				&(tv_iters.tag_function), _("Functions"),
+				&(tv_iters.tag_member), _("Members"),
+				&(tv_iters.tag_struct), _("Structs / Typedefs"), NULL);
+
 			if (ft_id != GEANY_FILETYPES_D)
 			{
-				gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-				gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
+				tag_list_add_groups(tag_store,
+					&(tv_iters.tag_macro), _("Macros"), NULL);
 			}
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_variable), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_variable), 0, _("Variables"), -1);
-			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_other), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_other), 0, _("Other"), -1);
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_variable), _("Variables"),
+				&(tv_iters.tag_other), _("Other"), NULL);
 		}
 	}
 }

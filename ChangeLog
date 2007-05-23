@@ -20,6 +20,8 @@
    tagmanager/Makefile.am:
    Add Haskell tags support from CTags patch on sf.net written by Peter
    Strand (thanks).
+ * src/symbols.c:
+   Use tag_list_add_groups() in init_tag_list().
 
 
 2007-05-22  Nick Treleaven  <nick.treleaven@btinternet.com>
