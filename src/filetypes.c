@@ -348,9 +348,9 @@ void filetypes_init_types()
 #define HASKELL
 	filetypes[GEANY_FILETYPES_HASKELL]->id = GEANY_FILETYPES_HASKELL;
 	filetypes[GEANY_FILETYPES_HASKELL]->uid = FILETYPE_UID_HASKELL;
-	filetypes[GEANY_FILETYPES_HASKELL]->lang = -2;
+	filetypes[GEANY_FILETYPES_HASKELL]->lang = 24;
 	filetypes[GEANY_FILETYPES_HASKELL]->name = g_strdup("Haskell");
-	filetypes[GEANY_FILETYPES_HASKELL]->has_tags = FALSE;
+	filetypes[GEANY_FILETYPES_HASKELL]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_HASKELL]->title = g_strdup(_("Haskell source file"));
 	filetypes[GEANY_FILETYPES_HASKELL]->extension = g_strdup("hs");
 	filetypes[GEANY_FILETYPES_HASKELL]->pattern = utils_strv_new("*.hs", "*.lhs", NULL);

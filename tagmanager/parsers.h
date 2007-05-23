@@ -38,7 +38,8 @@
     DiffParser, \
     VhdlParser, \
     LuaParser, \
-    JavaScriptParser
+    JavaScriptParser, \
+    HaskellParser
 
 /*
 langType of each parser
@@ -66,6 +67,7 @@ langType of each parser
 21	VhdlParser
 22	LuaParser
 23	JavaScriptParser
+24	HaskellParser
 */
 #endif	/* _PARSERS_H */
 

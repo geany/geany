@@ -413,6 +413,28 @@ static void init_tag_iters()
 }
 
 
+/* Adds symbol list groups in (iter*, title) pairs.
+ * The list must be ended with NULL. */
+static void G_GNUC_NULL_TERMINATED
+tag_list_add_groups(gint idx, ...)
+{
+	va_list args;
+	GtkTreeIter *iter;
+
+    va_start(args, idx);
+    for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
+    {
+		gchar *title = va_arg(args, gchar*);
+
+    	if (title == NULL)
+			break;
+		gtk_tree_store_append(doc_list[idx].tag_store, iter, NULL);
+		gtk_tree_store_set(doc_list[idx].tag_store, iter, 0, title, -1);
+	}
+	va_end(args);
+}
+
+
 static void init_tag_list(gint idx)
 {
 	filetype_id ft_id = doc_list[idx].file_type->id;
@@ -447,6 +469,14 @@ static void init_tag_list(gint idx)
 			//gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_namespace), 0, _("Other"), -1);
 			break;
 		}
+		case GEANY_FILETYPES_HASKELL:
+			tag_list_add_groups(idx,
+				&tv_iters.tag_namespace, _("Module"),
+				&tv_iters.tag_struct, _("Types"),
+				&tv_iters.tag_macro, _("Type constructors"),
+				&tv_iters.tag_function, _("Functions"),
+				NULL);
+			break;
 		case GEANY_FILETYPES_LATEX:
 		{
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
@@ -472,7 +502,7 @@ static void init_tag_list(gint idx)
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Package"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_function), NULL);
-			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Function"), -1);
+			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_function), 0, _("Functions"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
 			gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("My"), -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
@@ -616,6 +646,8 @@ gboolean symbols_recreate_tag_list(gint idx)
 	const GList *tags;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
+
+	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
 
 	tags = get_tag_list(idx, tm_tag_max_t);
 	if (doc_list[idx].tm_file == NULL || tags == NULL) return FALSE;
