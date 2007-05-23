@@ -28,6 +28,7 @@ Slava Semushin <slava(dot)semushin(at)gmail(dot)com> - patch to improve SVN chec
 John Gabriele <jmg3000(at)gmail(dot)com> - documentation patches
 Anh Phạm <cs(dot)phamtuananh(at)gmail(dot)com> - various patches
 Guillaume Hoffmann <guillaumh(at)gmail(dot)com> - Haskell filetype patch
+Peter Strand <peter(at)zarquon(dot)se> - Haskell CTags patch
 
 Translators:
 ----------------------------------
