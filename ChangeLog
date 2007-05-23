@@ -4,6 +4,11 @@
  * geany.glade, src/dialogs.c, src/geany.h, src/interface.c,
    src/keyfile.c, src/main.c, src/prefs.c:
    Add default startup directory option (closes #1704988).
+ * tagmanager/ruby.c, tagmanager/strlist.c, tagmanager/strlist.h:
+   Backport changes from CTags SVN to fix parse problems in the Ruby
+   parser.
+ * data/filetype_extensions.conf, src/filetypes.c:
+   Add filetype extension "*.ruby".
 
 
 2007-05-23  Nick Treleaven  <nick.treleaven@btinternet.com>

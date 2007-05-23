@@ -301,7 +301,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_RUBY]->has_tags = TRUE;
 	filetypes[GEANY_FILETYPES_RUBY]->title = g_strdup(_("Ruby source file"));
 	filetypes[GEANY_FILETYPES_RUBY]->extension = g_strdup("rb");
-	filetypes[GEANY_FILETYPES_RUBY]->pattern = utils_strv_new("*.rb", "*.rhtml", NULL);
+	filetypes[GEANY_FILETYPES_RUBY]->pattern = utils_strv_new("*.rb", "*.rhtml", "*.ruby", NULL);
 	filetypes[GEANY_FILETYPES_RUBY]->style_func_ptr = styleset_ruby;
 	filetypes[GEANY_FILETYPES_RUBY]->comment_open = g_strdup("#");
 	filetypes[GEANY_FILETYPES_RUBY]->comment_close = NULL;
