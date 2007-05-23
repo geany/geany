@@ -766,7 +766,7 @@ void ScintillaGTK::Initialise() {
 	gtk_widget_grab_focus(PWidget(wMain));
 
 	gtk_selection_add_targets(GTK_WIDGET(PWidget(wMain)), GDK_SELECTION_PRIMARY,
-	                          clipboardPasteTargets, nClipboardPasteTargets);
+	                          clipboardCopyTargets, nClipboardCopyTargets);
 
 #ifndef USE_GTK_CLIPBOARD
 	gtk_selection_add_targets(GTK_WIDGET(PWidget(wMain)), atomClipboard,

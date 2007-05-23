@@ -9,6 +9,8 @@
    parser.
  * data/filetype_extensions.conf, src/filetypes.c:
    Add filetype extension "*.ruby".
+ * scintilla/ScintillaGTK.cxx:
+   Fix wrong target list for PRIMARY clipboard.
 
 
 2007-05-23  Nick Treleaven  <nick.treleaven@btinternet.com>
