@@ -156,6 +156,7 @@ typedef struct MyApp
 	gchar				*configdir;
 	gchar				*datadir;
 	gchar				*docdir;
+	gchar				*default_open_path;
 	gchar				*custom_date_format;
 	gchar				**custom_commands;
 	gchar				*tools_browser_cmd;

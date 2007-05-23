@@ -2381,9 +2381,13 @@ create_prefs_dialog (void)
   GtkWidget *alignment28;
   GtkWidget *table11;
   GtkWidget *label191;
+  GtkWidget *startup_path_entry;
+  GtkWidget *startup_path_button;
+  GtkWidget *image1741;
+  GtkWidget *label192;
   GtkWidget *project_file_path_entry;
   GtkWidget *project_file_path_button;
-  GtkWidget *image1741;
+  GtkWidget *image1775;
   GtkWidget *label190;
   GtkWidget *label94;
   GtkWidget *vbox14;
@@ -2739,12 +2743,12 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (frame25), alignment28);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment28), 0, 0, 12, 0);
 
-  table11 = gtk_table_new (1, 3, FALSE);
+  table11 = gtk_table_new (2, 3, FALSE);
   gtk_widget_show (table11);
   gtk_container_add (GTK_CONTAINER (alignment28), table11);
   gtk_table_set_col_spacings (GTK_TABLE (table11), 6);
 
-  label191 = gtk_label_new (_("Project files:"));
+  label191 = gtk_label_new (_("Startup path:"));
   gtk_widget_show (label191);
   gtk_table_attach (GTK_TABLE (table11), label191, 0, 1, 0, 1,
                     (GtkAttachOptions) (GTK_FILL),
@@ -2752,9 +2756,35 @@ create_prefs_dialog (void)
   gtk_misc_set_alignment (GTK_MISC (label191), 0, 0.5);
   gtk_misc_set_padding (GTK_MISC (label191), 6, 0);
 
+  startup_path_entry = gtk_entry_new ();
+  gtk_widget_show (startup_path_entry);
+  gtk_table_attach (GTK_TABLE (table11), startup_path_entry, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, startup_path_entry, _("Path to start when opening or saving files. Must be an absolute path. Leave blank to use the current working directory."), NULL);
+  gtk_entry_set_invisible_char (GTK_ENTRY (startup_path_entry), 8226);
+
+  startup_path_button = gtk_button_new ();
+  gtk_widget_show (startup_path_button);
+  gtk_table_attach (GTK_TABLE (table11), startup_path_button, 2, 3, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image1741 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image1741);
+  gtk_container_add (GTK_CONTAINER (startup_path_button), image1741);
+
+  label192 = gtk_label_new (_("Project files:"));
+  gtk_widget_show (label192);
+  gtk_table_attach (GTK_TABLE (table11), label192, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label192), 0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (label192), 6, 0);
+
   project_file_path_entry = gtk_entry_new ();
   gtk_widget_show (project_file_path_entry);
-  gtk_table_attach (GTK_TABLE (table11), project_file_path_entry, 1, 2, 0, 1,
+  gtk_table_attach (GTK_TABLE (table11), project_file_path_entry, 1, 2, 1, 2,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, project_file_path_entry, _("Path to start in when opening project files"), NULL);
@@ -2762,13 +2792,13 @@ create_prefs_dialog (void)
 
   project_file_path_button = gtk_button_new ();
   gtk_widget_show (project_file_path_button);
-  gtk_table_attach (GTK_TABLE (table11), project_file_path_button, 2, 3, 0, 1,
+  gtk_table_attach (GTK_TABLE (table11), project_file_path_button, 2, 3, 1, 2,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
 
-  image1741 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_BUTTON);
-  gtk_widget_show (image1741);
-  gtk_container_add (GTK_CONTAINER (project_file_path_button), image1741);
+  image1775 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image1775);
+  gtk_container_add (GTK_CONTAINER (project_file_path_button), image1775);
 
   label190 = gtk_label_new (_("<b>Paths</b>"));
   gtk_widget_show (label190);
@@ -3972,9 +4002,13 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment28, "alignment28");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table11, "table11");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label191, "label191");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, startup_path_entry, "startup_path_entry");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, startup_path_button, "startup_path_button");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, image1741, "image1741");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label192, "label192");
   GLADE_HOOKUP_OBJECT (prefs_dialog, project_file_path_entry, "project_file_path_entry");
   GLADE_HOOKUP_OBJECT (prefs_dialog, project_file_path_button, "project_file_path_button");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, image1741, "image1741");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, image1775, "image1775");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label190, "label190");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label94, "label94");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox14, "vbox14");

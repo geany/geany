@@ -156,6 +156,14 @@ void dialogs_show_open_file ()
 		g_free(initdir);
 		g_free(locale_filename);
 	}
+	// use default startup directory(if set) if no files are open
+	/// TODO should it only be used when initally open the dialog and not on every show?
+	else if (app->default_open_path != NULL && *app->default_open_path != '\0')
+	{
+		if (g_path_is_absolute(app->default_open_path))
+			gtk_file_chooser_set_current_folder(
+				GTK_FILE_CHOOSER(app->open_filesel), app->default_open_path);
+	}
 
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(app->open_filesel));
 	gtk_widget_show(app->open_filesel);
@@ -309,6 +317,14 @@ gboolean dialogs_show_save_as()
 
 		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(app->save_filesel));
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(app->save_filesel), fname);
+
+		// use default startup directory(if set) if no files are open
+		if (app->default_open_path != NULL && *app->default_open_path != '\0')
+		{
+			if (g_path_is_absolute(app->default_open_path))
+				gtk_file_chooser_set_current_folder(
+					GTK_FILE_CHOOSER(app->save_filesel), app->default_open_path);
+		}
 		g_free(fname);
 	}
 

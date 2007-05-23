@@ -104,6 +104,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "entry_contextaction");
 	gtk_entry_set_text(GTK_ENTRY(widget), app->context_action_cmd);
 
+	widget = lookup_widget(app->prefs_dialog, "startup_path_entry");
+	gtk_entry_set_text(GTK_ENTRY(widget), app->default_open_path);
+
 	project_setup_prefs();	// project files path
 
 
@@ -444,6 +447,10 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "entry_contextaction");
 		g_free(app->context_action_cmd);
 		app->context_action_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		widget = lookup_widget(app->prefs_dialog, "startup_path_entry");
+		g_free(app->default_open_path);
+		app->default_open_path = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		project_apply_prefs();	// project file path
 
@@ -1028,6 +1035,10 @@ void prefs_show_dialog(void)
 			G_CALLBACK(on_prefs_button_clicked), NULL);
 		g_signal_connect((gpointer) app->prefs_dialog, "delete_event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+
+		ui_setup_open_button_callback(lookup_widget(app->prefs_dialog, "startup_path_button"), NULL,
+			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(lookup_widget(app->prefs_dialog, "startup_path_entry")));
+
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "tagbar_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "msgwin_font"),

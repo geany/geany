@@ -780,6 +780,7 @@ void main_quit()
 	g_free(app->configdir);
 	g_free(app->datadir);
 	g_free(app->docdir);
+	g_free(app->default_open_path);
 	g_free(app->custom_date_format);
 	g_free(app->editor_font);
 	g_free(app->tagbar_font);
