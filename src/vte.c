@@ -39,6 +39,7 @@
 #include "prefs.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "document.h"
 
 
 VteInfo vte_info;
@@ -65,6 +66,14 @@ static void vte_register_symbols(GModule *module);
 static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *vte_create_popup_menu(void);
 
+
+enum
+{
+	POPUP_COPY,
+	POPUP_PASTE,
+	POPUP_CHANGEPATH,
+	POPUP_PREFERENCES
+};
 
 /* taken from anjuta, thanks */
 static gchar **vte_get_child_environment(void)
@@ -334,18 +343,25 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 {
 	switch (GPOINTER_TO_INT(user_data))
 	{
-		case 0:
+		case POPUP_COPY:
 		{
 			if (vf->vte_terminal_get_has_selection(VTE_TERMINAL(vc->vte)))
 				vf->vte_terminal_copy_clipboard(VTE_TERMINAL(vc->vte));
 			break;
 		}
-		case 1:
+		case POPUP_PASTE:
 		{
 			vf->vte_terminal_paste_clipboard(VTE_TERMINAL(vc->vte));
 			break;
 		}
-		case 2:
+		case POPUP_CHANGEPATH:
+		{
+			gint idx = document_get_cur_idx();
+			if (DOC_IDX_VALID(idx))
+				vte_cwd(doc_list[idx].file_name, TRUE);
+			break;
+		}
+		case POPUP_PREFERENCES:
 		{
 			GtkWidget *notebook;
 
@@ -369,12 +385,17 @@ static GtkWidget *vte_create_popup_menu(void)
 	item = gtk_image_menu_item_new_from_stock("gtk-copy", NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(0));
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_COPY));
 
 	item = gtk_image_menu_item_new_from_stock("gtk-paste", NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(1));
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PASTE));
+
+	item = gtk_image_menu_item_new_with_label("Change current working directory");
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_CHANGEPATH));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -383,7 +404,7 @@ static GtkWidget *vte_create_popup_menu(void)
 	item = gtk_image_menu_item_new_from_stock("gtk-preferences", NULL);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(2));
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);

@@ -1,3 +1,8 @@
+2007-05-23  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/vte.c: Added popup menu item: Change current working directory.
+
+
 2007-05-23  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/filetypes.c, src/symbols.c, tagmanager/parsers.h,
