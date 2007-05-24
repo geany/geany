@@ -523,33 +523,24 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 }
 
 
-// Returns: NULL if there was an error, or the working directory the script was created in.
-static gchar *prepare_run_script(gint idx)
+/* Checks if the executable file corresponding to document idx exists.
+ * Returns the name part of the filename, without extension.
+ * Returns NULL if executable file doesn't exist. */
+static gchar *get_build_executable(gint idx, const gchar *locale_filename)
 {
-	gchar	*long_executable = NULL;
-	gchar	*check_executable = NULL;
-	gchar	*utf8_check_executable = NULL;
-	gchar	*locale_filename = NULL;
-	gchar	*cmd = NULL;
-	gchar	*executable = NULL;
-	gchar	*working_dir = NULL;
-	gboolean autoclose = FALSE;
+	gchar *long_executable = NULL;
 	struct stat st;
-	gboolean result = FALSE;
-	gchar	*tmp;
-
-	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 	long_executable = utils_remove_ext_from_filename(locale_filename);
 #ifdef G_OS_WIN32
-	tmp = long_executable;
-	long_executable = g_strconcat(long_executable, ".exe", NULL);
-	g_free(tmp);
+	setptr(long_executable, g_strconcat(long_executable, ".exe", NULL));
 #endif
 
 	// only check for existing executable, if executable is required by %e
 	if (strstr(doc_list[idx].file_type->programs->run_cmd, "%e") != NULL)
 	{
+		gchar *check_executable = NULL;
+
 		// add .class extension for JAVA source files (only for stat)
 		if (doc_list[idx].file_type->id == GEANY_FILETYPES_JAVA)
 		{
@@ -571,30 +562,61 @@ static gchar *prepare_run_script(gint idx)
 		{
 			msgwin_status_add(_("Command stopped because the current file has no extension."));
 			utils_beep();
-			goto free_strings;
+			g_free(check_executable);
+			return NULL;
 		}
 
 		// check whether executable exists
 		if (g_stat(check_executable, &st) != 0)
 		{
-			utf8_check_executable = utils_get_utf8_from_locale(check_executable);
+			gchar *utf8_check_executable = utils_get_utf8_from_locale(check_executable);
+
 			msgwin_status_add(_("Failed to execute %s (make sure it is already built)"),
 														utf8_check_executable);
-			goto free_strings;
+			g_free(utf8_check_executable);
+			g_free(check_executable);
+			return NULL;
 		}
 	}
 
-	executable = g_path_get_basename(long_executable);
+	// remove path
+	setptr(long_executable, g_path_get_basename(long_executable));
+	return long_executable;
+}
+
+
+// Returns: NULL if there was an error, or the working directory the script was created in.
+static gchar *prepare_run_script(gint idx)
+{
+	gchar	*locale_filename = NULL;
+	gchar	*cmd = NULL;
+	gchar	*executable = NULL;
+	gchar	*working_dir = NULL;
+	gboolean autoclose = FALSE;
+	gboolean result = FALSE;
+	gchar	*tmp;
+
+	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+
+	executable = get_build_executable(idx, locale_filename);
+	if (executable == NULL)
+	{
+		g_free(locale_filename);
+		return NULL;
+	}
 
 	working_dir = g_path_get_dirname(locale_filename);
 	if (chdir(working_dir) != 0)
 	{
-		gchar *utf8_working_dir = NULL;
-		utf8_working_dir = utils_get_utf8_from_locale(working_dir);
+		gchar *utf8_working_dir =
+			utils_get_utf8_from_locale(working_dir);
 
 		msgwin_status_add(_("Failed to change the working directory to %s"), utf8_working_dir);
 		g_free(utf8_working_dir);
-		goto free_strings;
+		g_free(working_dir);
+		g_free(executable);
+		g_free(locale_filename);
+		return NULL;
 	}
 
 	// replace %f and %e in the run_cmd string
@@ -610,24 +632,19 @@ static gchar *prepare_run_script(gint idx)
 #endif
 
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
-	if (! build_create_shellscript(RUN_SCRIPT_CMD, cmd, autoclose))
+	result = build_create_shellscript(RUN_SCRIPT_CMD, cmd, autoclose);
+	if (! result)
 	{
-		utf8_check_executable = utils_get_utf8_from_locale(check_executable);
+		gchar *utf8_cmd = utils_get_utf8_from_locale(cmd);
+
 		msgwin_status_add(_("Failed to execute \"%s\" (start-script could not be created)"),
-													utf8_check_executable);
-	}
-	else
-	{
-		result = TRUE;
+			utf8_cmd);
+		g_free(utf8_cmd);
 	}
 
-	free_strings:
 	g_free(executable);
 	g_free(cmd);
 	g_free(locale_filename);
-	g_free(utf8_check_executable);
-	g_free(check_executable);
-	g_free(long_executable);
 
 	if (result)
 		return working_dir;

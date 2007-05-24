@@ -2,6 +2,8 @@
 
  * src/utils.h:
    Add setptr() macro to free data and reassign to the same pointer.
+ * src/build.c:
+   Use get_build_executable() in prepare_run_script().
 
 
 2007-05-24  Enrico Tröger  <enrico.troeger@uvena.de>
