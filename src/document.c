@@ -473,6 +473,7 @@ gint document_new_file(const gchar *filename, filetype *ft)
 typedef struct
 {
 	gchar		*data;	// null-terminated file data
+	gsize		 size;	// actual file size on disk
 	gsize		 len;	// string length of data
 	gchar		*enc;
 	gboolean	 bom;
@@ -509,7 +510,7 @@ handle_forced_encoding(FileData *filedata, const gchar *forced_enc)
 			filedata->len = strlen(converted_text);
 		}
 	}
-	enc_idx = encodings_scan_unicode_bom(filedata->data, filedata->len, NULL);
+	enc_idx = encodings_scan_unicode_bom(filedata->data, filedata->size, NULL);
 	filedata->bom = (enc_idx == GEANY_ENCODING_UTF_8);
 	filedata->enc = g_strdup(forced_enc);
 	return TRUE;
@@ -523,16 +524,17 @@ handle_encoding(FileData *filedata)
 	g_return_val_if_fail(filedata->enc == NULL, FALSE);
 	g_return_val_if_fail(filedata->bom == FALSE, FALSE);
 
-	if (filedata->len == 0)
+	if (filedata->size == 0)
 	{
-		// we have no data so assume UTF-8
+		// we have no data so assume UTF-8, filedata->len can be 0 even we have an empty
+		// e.g. UTF32 file with a BOM(so size is 4, len is 0)
 		filedata->enc = g_strdup("UTF-8");
 	}
 	else
 	{
 		// first check for a BOM
 		GeanyEncodingIndex enc_idx =
-			encodings_scan_unicode_bom(filedata->data, filedata->len, NULL);
+			encodings_scan_unicode_bom(filedata->data, filedata->size, NULL);
 
 		if (enc_idx != GEANY_ENCODING_NONE)
 		{
@@ -542,7 +544,7 @@ handle_encoding(FileData *filedata)
 			if (enc_idx != GEANY_ENCODING_UTF_8) // the BOM indicated something else than UTF-8
 			{
 				gchar *converted_text = encodings_convert_to_utf8_from_charset(
-										filedata->data, filedata->len, filedata->enc, FALSE);
+										filedata->data, filedata->size, filedata->enc, FALSE);
 				if (converted_text != NULL)
 				{
 					g_free(filedata->data);
@@ -570,7 +572,7 @@ handle_encoding(FileData *filedata)
 			{
 				// detect the encoding
 				gchar *converted_text = encodings_convert_to_utf8(filedata->data,
-					filedata->len, &filedata->enc);
+					filedata->size, &filedata->enc);
 
 				if (converted_text == NULL)
 				{
@@ -591,9 +593,10 @@ handle_bom(FileData *filedata)
 {
 	guint bom_len;
 
-	encodings_scan_unicode_bom(filedata->data, filedata->len, &bom_len);
+	encodings_scan_unicode_bom(filedata->data, filedata->size, &bom_len);
 	g_return_if_fail(bom_len != 0);
 
+	// use filedata->len here because the contents are already converted into UTF-8
 	filedata->len -= bom_len;
 	// overwrite the BOM with the remainder of the file contents, plus the NULL terminator.
 	g_memmove(filedata->data, filedata->data + bom_len, filedata->len + 1);
@@ -607,6 +610,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 {
 	GError *err = NULL;
 	struct stat st;
+	GeanyEncodingIndex tmp_enc_idx;
 
 	filedata->data = NULL;
 	filedata->len = 0;
@@ -630,10 +634,18 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 	}
 
 	// use strlen to check for null chars
+	filedata->size = (gsize) st.st_size;
 	filedata->len = strlen(filedata->data);
 
+	// temporarily retrieve the encoding idx based on the BOM to suppress the following warning
+	// if we have a BOM
+	tmp_enc_idx = encodings_scan_unicode_bom(filedata->data, filedata->size, NULL);
+
 	/* check whether the size of the loaded data is equal to the size of the file in the filesystem */
-	if (filedata->len != (gsize) st.st_size)
+	if (filedata->len != filedata->size && (
+		tmp_enc_idx == GEANY_ENCODING_UTF_8 || // tmp_enc_idx can be UTF-7/8/16/32, UCS and None
+		tmp_enc_idx == GEANY_ENCODING_UTF_7 || // filter out UTF-7/8 and None where no NULL bytes
+		tmp_enc_idx == GEANY_ENCODING_NONE))   // are allowed
 	{
 		gchar *warn_msg = _("The file \"%s\" could not be opened properly and has been truncated. "
 				"This can occur if the file contains a NULL byte. "

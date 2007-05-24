@@ -1,3 +1,8 @@
+2007-05-24  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/document.c: Fix loading of UTF-16/32 encoded files with a BOM.
+
+
 2007-05-23  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/vte.c: Add popup menu item: Change current working directory.
