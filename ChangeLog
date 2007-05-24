@@ -1,3 +1,9 @@
+2007-05-24  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.h:
+   Add setptr() macro to free data and reassign to the same pointer.
+
+
 2007-05-24  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c: Fix loading of UTF-16/32 encoded files with a BOM.

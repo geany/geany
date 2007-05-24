@@ -29,6 +29,16 @@
 #define NZV(ptr) \
 	((ptr) && (ptr)[0])
 
+/* Free's ptr (if not NULL), then assigns result to it.
+ * result can be an expression using the 'old' value of ptr.
+ * It prevents a memory leak compared with: ptr = func(ptr); */
+#define setptr(ptr, result)\
+	{\
+		gpointer tmp = ptr;\
+		ptr = result;\
+		g_free(tmp);\
+	}
+
 
 void utils_start_browser(const gchar *uri);
 
