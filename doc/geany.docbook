@@ -1262,13 +1262,31 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 				</para>
 				<para>
 				The <emphasis>Base path</emphasis> field is used as the directory to run the
-				Make command in.
+				Make and Make custom commands in.
+				</para>
+				<section><title>Run command</title>
+				<para>
+					The <emphasis>Run</emphasis> command overrides the default run command. You can
+					set this to the executable or main script file for the project, and append any
+					command-line arguments.
 				</para>
 				<para>
-				The <emphasis>Run</emphasis> command overrides the default run command. You can
-				set this to the executable or main script file for the project, and append any
-				command-line arguments.
+					The following variables can be used:
 				</para>
+				<para>
+				   <itemizedlist>
+					<listitem><para>
+						%f - complete filename without path
+					</para></listitem>
+					<listitem><para>
+						%e - filename without path and without extension
+					</para></listitem>
+				   </itemizedlist>
+				</para>
+				<para>
+					See <xref linkend="filetypes_build_settings"/> for details.
+				</para>
+				</section>
 			</section>
 			<section>
 				<title>Close Project</title>
@@ -1417,19 +1435,35 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 					paths and compile flags for the compiler, any library names and paths for the
 					linker, and any arguments you want to use when running Execute.
 				</para>
-				<note><para>
-					If you are using the Build command to compile and link in one step, you will need
-					to set both the compiler arguments and the linker arguments in the linker
-					command setting.
-				</para></note>
 				<para>
 					These settings are saved automatically when <application>Geany</application>
 					is shut down.
 				</para>
 				<para>
+					The following variables can be used:
+				</para>
+				<para>
+				   <itemizedlist>
+					<listitem><para>
+						%f - complete filename without path
+					</para></listitem>
+					<listitem><para>
+						%e - filename without path and without extension
+					</para></listitem>
+				   </itemizedlist>
+				</para>
+				<para>
+					See <xref linkend="filetypes_build_settings"/> for details.
+				</para>
+				<para>
 					If you need complex settings for your build system, or several different
 					settings, then writing a Makefile and using the Make commands is recommended.
 				</para>
+				<note><title>One step compilation</title><para>
+					If you are using the Build command to compile and link in one step, you will need
+					to set both the compiler arguments and the linker arguments in the linker
+					command setting.
+				</para></note>
 			</section>
 			<section>
 				<title>Indicators</title>
@@ -2022,7 +2056,7 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 				<section>
 					<title>[build_settings] Section</title>
 					<para>
-						<table frame="all">
+						<table frame="all" id="filetypes_build_settings">
 							<title>Build settings</title>
 							<tgroup cols="3">
 								<?dbhtml cellpadding="4" ?>

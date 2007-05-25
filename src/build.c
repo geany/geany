@@ -526,7 +526,8 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 /* Checks if the executable file corresponding to document idx exists.
  * Returns the name part of the filename, without extension.
  * Returns NULL if executable file doesn't exist. */
-static gchar *get_build_executable(gint idx, const gchar *locale_filename)
+static gchar *get_build_executable(const gchar *locale_filename, gboolean check_exists,
+		filetype_id ft_id)
 {
 	gchar *long_executable = NULL;
 	struct stat st;
@@ -536,13 +537,12 @@ static gchar *get_build_executable(gint idx, const gchar *locale_filename)
 	setptr(long_executable, g_strconcat(long_executable, ".exe", NULL));
 #endif
 
-	// only check for existing executable, if executable is required by %e
-	if (strstr(doc_list[idx].file_type->programs->run_cmd, "%e") != NULL)
+	if (check_exists)
 	{
 		gchar *check_executable = NULL;
 
 		// add .class extension for JAVA source files (only for stat)
-		if (doc_list[idx].file_type->id == GEANY_FILETYPES_JAVA)
+		if (ft_id == GEANY_FILETYPES_JAVA)
 		{
 #ifdef G_OS_WIN32
 			gchar *tmp;
@@ -589,6 +589,10 @@ static gchar *get_build_executable(gint idx, const gchar *locale_filename)
 static gchar *prepare_run_script(gint idx)
 {
 	gchar	*locale_filename = NULL;
+	gboolean have_project;
+	GeanyProject *project = app->project;
+	filetype *ft = doc_list[idx].file_type;
+	gboolean check_exists;
 	gchar	*cmd = NULL;
 	gchar	*executable = NULL;
 	gchar	*working_dir = NULL;
@@ -598,14 +602,24 @@ static gchar *prepare_run_script(gint idx)
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
-	executable = get_build_executable(idx, locale_filename);
+	have_project = (project != NULL && NZV(project->run_cmd));
+	cmd = (have_project) ?
+		project->run_cmd :
+		ft->programs->run_cmd;
+
+	// only check for existing executable, if executable is required by %e
+	check_exists = (strstr(cmd, "%e") != NULL);
+	executable = get_build_executable(locale_filename, check_exists, FILETYPE_ID(ft));
 	if (executable == NULL)
 	{
 		g_free(locale_filename);
 		return NULL;
 	}
 
-	working_dir = g_path_get_dirname(locale_filename);
+	working_dir = (have_project) ?
+		utils_get_locale_from_utf8(project->base_path) :
+		g_path_get_dirname(locale_filename);
+
 	if (chdir(working_dir) != 0)
 	{
 		gchar *utf8_working_dir =
@@ -620,7 +634,7 @@ static gchar *prepare_run_script(gint idx)
 	}
 
 	// replace %f and %e in the run_cmd string
-	cmd = g_strdup(doc_list[idx].file_type->programs->run_cmd);
+	cmd = g_strdup(cmd);
 	tmp = g_path_get_basename(locale_filename);
 	cmd = utils_str_replace(cmd, "%f", tmp);
 	g_free(tmp);
@@ -642,8 +656,8 @@ static gchar *prepare_run_script(gint idx)
 		g_free(utf8_cmd);
 	}
 
-	g_free(executable);
 	g_free(cmd);
+	g_free(executable);
 	g_free(locale_filename);
 
 	if (result)
@@ -654,57 +668,15 @@ static gchar *prepare_run_script(gint idx)
 }
 
 
-static gchar *prepare_project_run_script()
-{
-	GeanyProject *project = app->project;
-	gboolean autoclose = FALSE;
-	gchar *working_dir;
-	gchar *cmd;
-
-	if (project == NULL || project->run_cmd == NULL) return NULL;
-	g_return_val_if_fail(project->base_path != NULL, NULL);
-
-	working_dir = utils_get_locale_from_utf8(project->base_path);
-	if (chdir(working_dir) != 0)
-	{
-		msgwin_status_add(_("Failed to change the working directory to %s"), project->base_path);
-		g_free(working_dir);
-		return NULL;
-	}
-
-#ifdef HAVE_VTE
-	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
-		autoclose = TRUE; // don't wait for user input at the end of script when we are running in VTE
-#endif
-	cmd = utils_get_locale_from_utf8(project->run_cmd);
-
-	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
-	if (! build_create_shellscript(RUN_SCRIPT_CMD, cmd, autoclose))
-	{
-		msgwin_status_add(_("Failed to execute \"%s\" (start-script could not be created)"),
-													project->run_cmd);
-		g_free(working_dir);
-		g_free(cmd);
-		return NULL;
-	}
-	g_free(cmd);
-	return working_dir;
-}
-
-
 static GPid build_run_cmd(gint idx)
 {
-	GeanyProject *project = app->project;
 	gchar	*working_dir;
 	GError	*error = NULL;
 
-	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL) return (GPid) 1;
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
+		return (GPid) 1;
 
-	if (project != NULL && project->run_cmd != NULL && *project->run_cmd != 0)
-		working_dir = prepare_project_run_script();
-	else
-		working_dir = prepare_run_script(idx);
-
+	working_dir = prepare_run_script(idx);
 	if (working_dir == NULL)
 	{
 		return (GPid) 1;

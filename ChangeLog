@@ -1,3 +1,12 @@
+2007-05-25  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * doc/geany.docbook:
+   Comment out stopping make process.
+   Remove note about editing build commands manually.
+ * src/build.c, doc/geany.docbook:
+   Add support for %e, %f in project run command.
+
+
 2007-05-24  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.h:
