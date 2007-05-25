@@ -3,6 +3,9 @@
  * data/filetype_extensions.conf, src/filetypes.c, tagmanager/sh.c:
    Add *.ash and *.bash as filetype entensions for filetype SH.
    Add ash and wish to the shebang patterns.
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/geany.h,
+   src/interface.c, src/main.c, src/ui_utils.c:
+   Improve sensitivity of recent files sub menus.
 
 
 2007-05-25  Nick Treleaven  <nick.treleaven@btinternet.com>

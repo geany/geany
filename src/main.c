@@ -221,11 +221,9 @@ static void apply_settings(void)
 				(app->pref_editor_indention_mode != INDENT_NONE));
 	app->ignore_callback = FALSE;
 
-	// connect the toolbar dropdown menus
+	// connect the toolbar dropdown menu for the new button
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
 			lookup_widget(app->window, "menutoolbutton1")), app->new_file_menu);
-	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
-			lookup_widget(app->window, "toolbutton9")), app->recent_files_toolbar);
 
 	// set the tab placements of the notebooks
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), app->tab_pos_editor);
@@ -261,9 +259,10 @@ static void main_init(void)
 	app->window = create_window1();
 	app->new_file_menu = gtk_menu_new();
 	app->recent_files_toolbar = gtk_menu_new();
+	app->recent_files_menuitem = lookup_widget(app->window, "recent_files1");
 	app->recent_files_menubar = gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "recent_files1")),
-		app->recent_files_menubar);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(app->recent_files_menuitem),
+							app->recent_files_menubar);
 
 	// store important pointers in the MyApp structure
 	app->toolbar = lookup_widget(app->window, "toolbar1");

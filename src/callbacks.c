@@ -286,6 +286,15 @@ on_quit1_activate                      (GtkMenuItem     *menuitem,
 }
 
 
+void
+on_file1_activate                      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gtk_widget_set_sensitive(app->recent_files_menuitem,
+						g_queue_get_length(app->recent_queue) > 0);
+}
+
+
 // edit actions, c&p & co, from menu bar and from popup menu
 void
 on_edit1_activate                      (GtkMenuItem     *menuitem,
@@ -2215,4 +2224,5 @@ on_menu_toggle_all_additional_widgets1_activate
 			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
 	}
 }
+
 

@@ -724,11 +724,10 @@ void ui_create_recent_menu()
 	guint i;
 	gchar *filename;
 
-	if (g_queue_get_length(app->recent_queue) == 0)
+	if (g_queue_get_length(app->recent_queue) > 0)
 	{
-		gtk_widget_set_sensitive(app->recent_files_menubar, FALSE);
-		gtk_widget_set_sensitive(app->recent_files_toolbar, FALSE);
-		return;
+		gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
+				lookup_widget(app->window, "toolbutton9")), app->recent_files_toolbar);
 	}
 
 	for (i = 0; i < MIN(app->mru_length, g_queue_get_length(app->recent_queue)); i++)
@@ -852,19 +851,17 @@ static void recent_file_loaded(const gchar *utf8_filename)
 
 static void update_recent_menu()
 {
-	GtkWidget *recent_files_item = lookup_widget(app->window, "recent_files1");
 	GtkWidget *tmp;
+	static GtkMenuToolButton *menu = NULL;
 	gchar *filename;
 	GList *children, *item;
 
-	if (g_queue_get_length(app->recent_queue) == 0)
+	if (menu == NULL)
+		menu = GTK_MENU_TOOL_BUTTON(lookup_widget(app->window, "toolbutton9"));
+
+	if (gtk_menu_tool_button_get_menu(menu) == NULL)
 	{
-		gtk_widget_set_sensitive(recent_files_item, FALSE);
-		return;
-	}
-	else if (! GTK_WIDGET_SENSITIVE(recent_files_item))
-	{
-		gtk_widget_set_sensitive(recent_files_item, TRUE);
+		gtk_menu_tool_button_set_menu(menu, app->recent_files_toolbar);
 	}
 
 	// clean the MRU list before adding an item (menubar)

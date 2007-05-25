@@ -608,3 +608,7 @@ void
 on_menu_toggle_all_additional_widgets1_activate
                                         (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_file1_activate                      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

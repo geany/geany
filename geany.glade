@@ -33,10 +33,11 @@
 	  <property name="visible">True</property>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="menuitem1">
+	    <widget class="GtkMenuItem" id="file1">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_File</property>
 	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_file1_activate" last_modification_time="Fri, 25 May 2007 13:28:40 GMT"/>
 
 	      <child>
 		<widget class="GtkMenu" id="menuitem1_menu">

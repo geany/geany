@@ -177,6 +177,7 @@ typedef struct MyApp
 	GtkWidget			*popup_menu;
 	GtkWidget			*toolbar_menu;
 	GtkWidget			*new_file_menu;
+	GtkWidget			*recent_files_menuitem;
 	GtkWidget			*recent_files_menubar;
 	GtkWidget			*recent_files_toolbar;
 	GtkWidget			*menu_insert_include_item[2];

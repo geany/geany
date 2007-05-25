@@ -33,7 +33,7 @@ create_window1 (void)
   AtkObject *atko;
   GtkWidget *vbox1;
   GtkWidget *menubar1;
-  GtkWidget *menuitem1;
+  GtkWidget *file1;
   GtkWidget *menuitem1_menu;
   GtkWidget *menu_new1;
   GtkWidget *menu_new_with_template1;
@@ -276,12 +276,12 @@ create_window1 (void)
   gtk_widget_show (menubar1);
   gtk_box_pack_start (GTK_BOX (vbox1), menubar1, FALSE, FALSE, 0);
 
-  menuitem1 = gtk_menu_item_new_with_mnemonic (_("_File"));
-  gtk_widget_show (menuitem1);
-  gtk_container_add (GTK_CONTAINER (menubar1), menuitem1);
+  file1 = gtk_menu_item_new_with_mnemonic (_("_File"));
+  gtk_widget_show (file1);
+  gtk_container_add (GTK_CONTAINER (menubar1), file1);
 
   menuitem1_menu = gtk_menu_new ();
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem1), menuitem1_menu);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (file1), menuitem1_menu);
 
   menu_new1 = gtk_image_menu_item_new_from_stock ("gtk-new", accel_group);
   gtk_widget_show (menu_new1);
@@ -1252,6 +1252,9 @@ create_window1 (void)
   gtk_widget_show (statusbar);
   gtk_box_pack_start (GTK_BOX (hbox1), statusbar, TRUE, TRUE, 0);
 
+  g_signal_connect ((gpointer) file1, "activate",
+                    G_CALLBACK (on_file1_activate),
+                    NULL);
   g_signal_connect ((gpointer) menu_new1, "activate",
                     G_CALLBACK (on_new1_activate),
                     NULL);
@@ -1567,7 +1570,7 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT_NO_REF (window1, window1, "window1");
   GLADE_HOOKUP_OBJECT (window1, vbox1, "vbox1");
   GLADE_HOOKUP_OBJECT (window1, menubar1, "menubar1");
-  GLADE_HOOKUP_OBJECT (window1, menuitem1, "menuitem1");
+  GLADE_HOOKUP_OBJECT (window1, file1, "file1");
   GLADE_HOOKUP_OBJECT (window1, menuitem1_menu, "menuitem1_menu");
   GLADE_HOOKUP_OBJECT (window1, menu_new1, "menu_new1");
   GLADE_HOOKUP_OBJECT (window1, menu_new_with_template1, "menu_new_with_template1");
