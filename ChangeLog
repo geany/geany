@@ -6,7 +6,7 @@
  * geany.glade, src/callbacks.c, src/callbacks.h, src/geany.h,
    src/interface.c, src/main.c, src/ui_utils.c:
    Improve sensitivity of recent files sub menus.
- * src/filetypes.c: Add shebank-like detection for XML files.
+ * src/filetypes.c: Add shebang-like detection for XML files.
 
 
 2007-05-25  Nick Treleaven  <nick.treleaven@btinternet.com>
@@ -16,6 +16,10 @@
    Remove note about editing build commands manually.
  * src/build.c, doc/geany.docbook:
    Add support for %e, %f in project run command.
+ * src/about.c:
+   Show SVN revision as '>=' because 'svn up' may not have caused a
+   re-run of configure.
+   Show build date as 'on or after' compilation of about.o.
 
 
 2007-05-24  Nick Treleaven  <nick.treleaven@btinternet.com>
