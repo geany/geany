@@ -1394,14 +1394,19 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 				<para>
 					Depending on the process you started it might occur that the process cannot be
 					stopped. This can happen when the process creates more than one child process.
+					<!-- Make shouldn't be run from the Run command.
 					Therefore stopping any make actions is not possible because make creates child
 					processes and these child processes creates again child process. There might be
-					some other programs which cannot be stopped correctly. Xterm is known to work
+					some other programs which cannot be stopped correctly.
+					-->
+				</para>
+				<note><title>Terminal emulators</title><para>
+					Xterm is known to work
 					properly. If you are using "Terminal" (the terminal program of Xfce), you
 					should add the command line option "--disable-server" otherwise the started
 					process	cannot be stopped. Just add this option in the preferences dialog on
 					the Tools tab in the terminal field.
-				</para>
+				</para></note>
 			</section>
 			<section>
 				<title>Set Includes and Arguments</title>
@@ -1418,8 +1423,8 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 					command setting.
 				</para></note>
 				<para>
-					These settings are not saved when <application>Geany</application> is shut
-					down. See below for how to set permanent arguments.
+					These settings are saved automatically when <application>Geany</application>
+					is shut down.
 				</para>
 				<para>
 					If you need complex settings for your build system, or several different
@@ -1436,15 +1441,6 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 				</para>
 				<para>
 					If you do not like this feature, you can disable it in the preferences dialog.
-				</para>
-			</section>
-			<section>
-				<title>File type configuration settings</title>
-				<para>
-					You can set the commands to run for compiling, building or executing
-					by opening the relevant <filename>filetypes.*</filename> configuration file,
-					and checking the [build_settings] section. See <xref linkend="filetypes"/> for more
-					information.
 				</para>
 			</section>
 		</section>
