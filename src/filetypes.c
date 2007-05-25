@@ -574,7 +574,7 @@ static filetype *find_shebang(gint idx)
 	gchar *line = sci_get_line(doc_list[idx].sci, 0);
 	filetype *ft = NULL;
 
-	if (strlen(line) > 2 && line[0] == '#' && line[1]=='!')
+	if (strlen(line) > 2 && line[0] == '#' && line[1] == '!')
 	{
 		/// TODO does g_path_get_basename() also work under Win32 for Unix filenames?
 		gchar *basename_interpreter = g_path_get_basename(line + 2);
@@ -609,6 +609,20 @@ static filetype *find_shebang(gint idx)
 
 		g_free(basename_interpreter);
 	}
+	// detect XML files
+	if (strncmp(line, "<?xml", 5) == 0)
+	{
+		// HTML and DocBook files might also start with <?xml, so detect them based on filename
+		// extension and use the detected filetype, else assume XML
+		ft = filetypes_detect_from_filename(doc_list[idx].file_name);
+		if (FILETYPE_ID(ft) != GEANY_FILETYPES_HTML &&
+			FILETYPE_ID(ft) != GEANY_FILETYPES_DOCBOOK &&
+			FILETYPE_ID(ft) != GEANY_FILETYPES_PERL &&	// Perl, Python and PHP only to be safe
+			FILETYPE_ID(ft) != GEANY_FILETYPES_PHP &&
+			FILETYPE_ID(ft) != GEANY_FILETYPES_PYTHON)
+
+			ft = filetypes[GEANY_FILETYPES_XML];
+	}
 
 	g_free(line);
 	return ft;
@@ -624,6 +638,7 @@ filetype *filetypes_detect_from_file(gint idx)
 		return filetypes[GEANY_FILETYPES_ALL];
 
 	// try to find a shebang and if found use it prior to the filename extension
+	// also checks for <?xml
 	ft = find_shebang(idx);
 	if (ft != NULL) return ft;
 

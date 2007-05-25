@@ -6,6 +6,7 @@
  * geany.glade, src/callbacks.c, src/callbacks.h, src/geany.h,
    src/interface.c, src/main.c, src/ui_utils.c:
    Improve sensitivity of recent files sub menus.
+ * src/filetypes.c: Add shebank-like detection for XML files.
 
 
 2007-05-25  Nick Treleaven  <nick.treleaven@btinternet.com>
