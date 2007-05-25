@@ -367,7 +367,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_SH]->title = g_strdup(_("Shell script file"));
 	filetypes[GEANY_FILETYPES_SH]->extension = g_strdup("sh");
 	filetypes[GEANY_FILETYPES_SH]->pattern = utils_strv_new("*.sh", "configure", "configure.in",
-		"configure.in.in", "configure.ac", "*.ksh", "*.zsh", NULL);
+		"configure.in.in", "configure.ac", "*.ksh", "*.zsh", "*.ash", "*.bash", NULL);
 	filetypes[GEANY_FILETYPES_SH]->style_func_ptr = styleset_sh;
 	filetypes[GEANY_FILETYPES_SH]->comment_open = g_strdup("#");
 	filetypes[GEANY_FILETYPES_SH]->comment_close = NULL;
@@ -599,8 +599,12 @@ static filetype *find_shebang(gint idx)
 			ft = filetypes[GEANY_FILETYPES_SH];
 		else if (strncmp(basename_interpreter, "csh", 3) == 0)
 			ft = filetypes[GEANY_FILETYPES_SH];
+		else if (strncmp(basename_interpreter, "ash", 3) == 0)
+			ft = filetypes[GEANY_FILETYPES_SH];
 		else if (strncmp(basename_interpreter, "dmd", 3) == 0)
 			ft = filetypes[GEANY_FILETYPES_D];
+		else if (strncmp(basename_interpreter, "wish", 4) == 0)
+			ft = filetypes[GEANY_FILETYPES_TCL];
 		// what else to add?
 
 		g_free(basename_interpreter);
