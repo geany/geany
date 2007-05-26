@@ -39,6 +39,7 @@
 #include "encodings.h"
 #include "images.c"
 #include "treeviews.h"
+#include "win32.h"
 
 
 static gchar *menu_item_get_text(GtkMenuItem *menu_item);
