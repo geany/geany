@@ -900,6 +900,8 @@ GtkFileFilter *filetypes_create_file_filter(filetype *ft)
 // Indicates whether there is a tag parser for the filetype or not.
 gboolean filetype_has_tags(filetype *ft)
 {
+	g_return_val_if_fail(ft != NULL, FALSE);
+
 	return ft->lang >= 0;
 }
 

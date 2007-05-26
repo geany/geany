@@ -693,7 +693,7 @@ static filetype *detect_global_tags_filetype(const gchar *utf8_filename)
 	}
 	g_free(shortname);
 
-	if (filetypes[FILETYPE_ID(ft)]->lang < 0)
+	if (ft == NULL || ! filetype_has_tags(ft))
 		return NULL;
 	return ft;
 }
