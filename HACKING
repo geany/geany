@@ -52,3 +52,27 @@ Geany was started. It's source code parsing is mostly taken from Exuberant Ctags
 http://ctags.sf.net).
 
 
+NOTES
+=====
+
+Adding a TagManager parser
+--------------------------
+This assumes the Geany filetype already exists.
+
+First write or find a CTags compatible parser, foo.c. Note that there are
+some unapplied language patches for CTags at:
+http://sf.net/projects/ctags - see the tracker.
+
+Add foo.c to Makefile.am.
+Add foo.o to makefile.win32.
+Add Foo to parsers.h & fill in comment with parser number for foo.
+
+In foo.c:
+Edit FooKinds 3rd column to match a s_tag_type_names string in tm_tag.c.
+
+In filetypes.c, filetypes_init_types():
+set filetypes[GEANY_FILETYPES_FOO].lang = foo's parser number.
+
+In symbols.c:
+Update init_tag_list() for foo, listing the tm_tag_* types corresponding
+to the s_tag_type_names strings used in foo.c for FooKinds.
