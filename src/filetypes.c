@@ -654,11 +654,16 @@ filetype *filetypes_detect_from_file(gint idx)
 filetype *filetypes_detect_from_filename(const gchar *utf8_filename)
 {
 	GPatternSpec *pattern;
-	gchar *base_filename;
 	gint i, j;
 
 	// to match against the basename of the file(because of Makefile*)
-	base_filename = g_path_get_basename(utf8_filename);
+#ifdef G_OS_WIN32
+	gchar *tmp = g_path_get_basename(utf8_filename);
+	gchar *base_filename = g_utf8_strdown(tmp, -1);
+	g_free(tmp);
+#else
+	gchar *base_filename = g_path_get_basename(utf8_filename);
+#endif
 
 	for(i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{

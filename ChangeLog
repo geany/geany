@@ -1,3 +1,9 @@
+2007-05-26  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/filetypes.c: Ignore case of filename extensions on Windows.
+ * src/ui_utils.c: Add missing header file.
+
+
 2007-05-25  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * data/filetype_extensions.conf, src/filetypes.c, tagmanager/sh.c:
