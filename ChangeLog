@@ -8,6 +8,14 @@
 
  * src/filetypes.c: Ignore case of filename extensions on Windows.
  * src/ui_utils.c: Add missing header file.
+ * src/keyfile.c:
+   Use current locale as default encoding for new files.
+   Don't keep comments in configuration file to work around a bug in
+   newer GLib versions.
+   If config file doesn't exist, try to load a global one from
+   $prefix/share/geany/.
+ * src/utils.c:
+   Don't create an empty geany.conf as write test, use access() instead.
 
 
 2007-05-25  Enrico Tröger  <enrico.troeger@uvena.de>

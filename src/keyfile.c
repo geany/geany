@@ -138,21 +138,13 @@ static void save_session_files(GKeyFile *config)
 
 void configuration_save()
 {
-	gboolean config_exists;
 	GKeyFile *config = g_key_file_new();
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	gchar *data;
 	GtkTextBuffer *buffer;
 	GtkTextIter start, end;
 
-	config_exists = g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
-
-	if (!config_exists)
-	{
-		gchar *start_comm = g_strdup_printf(_("%s configuration file, edit as you need"), PACKAGE);
-		g_key_file_set_comment(config, NULL, NULL, start_comm, NULL);
-		g_free(start_comm);
-	}
+	g_key_file_load_from_file(config, configfile, 0, NULL);
 
 	// gets the text from the scribble textview
 	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(app->window, "textview_scribble")));
@@ -350,15 +342,22 @@ static void load_file_lists(GKeyFile *config)
 
 gboolean configuration_load()
 {
-	gboolean config_exists;
 	guint geo_len;
 	gint *geo;
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	gchar *tmp_string, *tmp_string2;
+	const gchar *default_charset = NULL;
 	GKeyFile *config = g_key_file_new();
 	GError *error = NULL;
 
-	config_exists = g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	{	// config file does not (yet) exist, so try to load a global config file which may be
+		// created by distributors
+		geany_debug("No config file found, try to use global configuration.");
+		setptr(configfile, g_strconcat(app->datadir, G_DIR_SEPARATOR_S "geany.conf", NULL));
+	}
+
+	g_key_file_load_from_file(config, configfile, 0, NULL);
 
 	app->toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
 	{
@@ -435,8 +434,10 @@ gboolean configuration_load()
 
 	app->pref_editor_tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
 	app->pref_editor_use_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_use_tabs", TRUE);
+	// use current locale encoding as default for new files (should be in most cases UTF-8)
+	g_get_charset(&default_charset);
 	tmp_string = utils_get_setting_string(config, PACKAGE, "pref_editor_default_encoding",
-											encodings[GEANY_ENCODING_UTF_8].charset);
+																			default_charset);
 	if (tmp_string)
 	{
 		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);

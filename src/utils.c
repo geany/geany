@@ -810,13 +810,7 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 
 	if (error_nr == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
 	{	// try to write geany.conf
-		error_nr = utils_write_file(conf_file, "");
-
- 		if (error_nr == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
-		{ // check whether write test was successful, otherwise directory is not writable
-			geany_debug("The chosen configuration directory is not writable.");
-			errno = EPERM;
-		}
+		error_nr = access(app->configdir, W_OK);
 	}
 
 	// make subdir for filetype definitions
