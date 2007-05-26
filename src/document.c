@@ -1488,7 +1488,7 @@ void document_update_tag_list(gint idx, gboolean update)
 {
 	// if the filetype doesn't have a tag parser or it is a new file
 	if (idx == -1 || doc_list[idx].file_type == NULL ||
-		! doc_list[idx].file_type->has_tags || ! doc_list[idx].file_name)
+		! filetype_has_tags(doc_list[idx].file_type) || ! doc_list[idx].file_name)
 	{
 		// set the default (empty) tag list
 		treeviews_update_tag_list(idx, FALSE);

@@ -103,7 +103,6 @@ typedef struct filetype
 	langType 		  lang;				// represents the langType of tagmanager(see the table
 										// in tagmanager/parsers.h), -1 represents all, -2 none
 	gchar	 		 *name;				// will be used as name for tagmanager
-	gboolean 		  has_tags;			// indicates whether there is a tag parser for it or not
 	gchar	 		 *title;			// will be shown in the file open dialog
 	gchar	 		 *extension;
 	gchar			**pattern;
@@ -149,5 +148,7 @@ GtkFileFilter *filetypes_create_file_filter(filetype *ft);
 GtkFileFilter *filetypes_create_file_filter_all_source();
 
 gchar *filetypes_get_conf_extension(gint filetype_idx);
+
+gboolean filetype_has_tags(filetype *ft);
 
 #endif

@@ -133,7 +133,8 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 	}
 
 	// show default empty tag tree if there are no tags
-	if (idx == -1 || doc_list[idx].file_type == NULL || ! doc_list[idx].file_type->has_tags)
+	if (idx == -1 || doc_list[idx].file_type == NULL ||
+		! filetype_has_tags(doc_list[idx].file_type))
 	{
 		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
 		return;
