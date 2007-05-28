@@ -36,7 +36,7 @@
 #include "callbacks.h"
 #include "prefs.h"
 #include "msgwindow.h"
-#include "sci_cb.h"
+#include "editor.h"
 #include "sciwrappers.h"
 #include "build.h"
 #include "tools.h"
@@ -617,7 +617,7 @@ static gboolean check_construct_completion(GdkEventKey *event)
 			gint pos = sci_get_current_position(sci);
 
 			if (app->pref_editor_auto_complete_constructs)
-				return sci_cb_auto_forif(idx, pos);
+				return editor_auto_forif(idx, pos);
 		}
 	}
 	return FALSE;
@@ -901,7 +901,7 @@ static void cb_func_current_word(guint key_id)
 
 	pos = sci_get_current_position(doc_list[idx].sci);
 
-	sci_cb_find_current_word(doc_list[idx].sci, pos,
+	editor_find_current_word(doc_list[idx].sci, pos,
 		editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
 
 	if (*editor_info.current_word == 0)
@@ -1082,13 +1082,13 @@ static void cb_func_edit(guint key_id)
 			on_menu_uncomment_line1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_EDIT_AUTOCOMPLETE:
-			sci_cb_start_auto_complete(idx, sci_get_current_position(doc_list[idx].sci), TRUE);
+			editor_start_auto_complete(idx, sci_get_current_position(doc_list[idx].sci), TRUE);
 			break;
 		case GEANY_KEYS_EDIT_CALLTIP:
-			sci_cb_show_calltip(idx, -1);
+			editor_show_calltip(idx, -1);
 			break;
 		case GEANY_KEYS_EDIT_MACROLIST:
-			sci_cb_show_macro_list(doc_list[idx].sci);
+			editor_show_macro_list(doc_list[idx].sci);
 			break;
 
 		case GEANY_KEYS_EDIT_SUPPRESSCOMPLETION:
@@ -1106,10 +1106,10 @@ static void cb_func_edit(guint key_id)
 			break;
 
 		case GEANY_KEYS_EDIT_SELECTWORD:
-			sci_cb_select_word(doc_list[idx].sci);
+			editor_select_word(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_INSERTALTWHITESPACE:
-			sci_cb_insert_alternative_whitespace(doc_list[idx].sci);
+			editor_insert_alternative_whitespace(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_INCREASEINDENT:
 			on_menu_increase_indent1_activate(NULL, NULL);

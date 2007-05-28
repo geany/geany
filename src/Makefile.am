@@ -23,7 +23,7 @@ SRCS = \
 	notebook.c notebook.h \
 	prefs.c prefs.h \
 	project.c project.h \
-	sci_cb.c sci_cb.h \
+	editor.c editor.h \
 	sciwrappers.c sciwrappers.h \
 	search.c search.h \
 	socket.c socket.h \

@@ -41,7 +41,7 @@
 #include "keyfile.h"
 #include "document.h"
 #include "sciwrappers.h"
-#include "sci_cb.h"
+#include "editor.h"
 #include "ui_utils.h"
 #include "utils.h"
 #include "dialogs.h"
@@ -1249,7 +1249,7 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 	if (idx == -1 || ! doc_list[idx].is_valid)
 		return;
 
-	sci_cb_find_current_word(doc_list[idx].sci, pos, colour, sizeof colour, NULL);
+	editor_find_current_word(doc_list[idx].sci, pos, colour, sizeof colour, NULL);
 	dialogs_show_color(colour);
 }
 
@@ -1477,7 +1477,7 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 
 	verify_click_pos(idx); // make sure that the click_pos is valid
 
-	sci_cb_insert_multiline_comment(idx);
+	editor_insert_multiline_comment(idx);
 }
 
 
@@ -1829,7 +1829,7 @@ on_menu_comment_line1_activate         (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_do_comment(idx, -1, FALSE);
+	editor_do_comment(idx, -1, FALSE);
 }
 
 
@@ -1839,7 +1839,7 @@ on_menu_uncomment_line1_activate       (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_do_uncomment(idx, -1);
+	editor_do_uncomment(idx, -1);
 }
 
 
@@ -1850,7 +1850,7 @@ on_menu_toggle_line_commentation1_activate
 {
 	gint idx = document_get_cur_idx();
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	sci_cb_do_comment_toggle(idx);
+	editor_do_comment_toggle(idx);
 }
 
 
@@ -2067,7 +2067,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 	{	// use the word at current cursor position
 		gchar word[GEANY_MAX_WORD_LENGTH];
 
-		sci_cb_find_current_word(doc_list[idx].sci, -1, word, sizeof(word), GEANY_WORDCHARS"./");
+		editor_find_current_word(doc_list[idx].sci, -1, word, sizeof(word), GEANY_WORDCHARS"./");
 		if (word[0] != '\0')
 			filename = g_strdup(word);
 	}

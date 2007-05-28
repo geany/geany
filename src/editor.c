@@ -1,5 +1,5 @@
 /*
- *      sci_cb.c - this file is part of Geany, a fast and lightweight IDE
+ *      editor.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
  *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
@@ -34,7 +34,7 @@
 #include "SciLexer.h"
 #include "geany.h"
 
-#include "sci_cb.h"
+#include "editor.h"
 #include "document.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
@@ -87,7 +87,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 
 	if (event->button == 3)
 	{
-		sci_cb_find_current_word(doc_list[idx].sci, editor_info.click_pos,
+		editor_find_current_word(doc_list[idx].sci, editor_info.click_pos,
 			current_word, sizeof current_word, NULL);
 
 		ui_update_popup_goto_items((current_word[0] != '\0') ? TRUE : FALSE);
@@ -147,7 +147,7 @@ static void on_update_ui(gint idx, G_GNUC_UNUSED SCNotification *nt)
 	ui_update_popup_reundo_items(idx);
 
 	// brace highlighting
-	sci_cb_highlight_braces(sci, pos);
+	editor_highlight_braces(sci, pos);
 
 	ui_update_statusbar(idx, pos);
 
@@ -203,7 +203,7 @@ static void on_char_added(gint idx, SCNotification *nt)
 		}
 		case '(':
 		{	// show calltips
-			sci_cb_show_calltip(idx, --pos);
+			editor_show_calltip(idx, --pos);
 			break;
 		}
 		case ')':
@@ -223,7 +223,7 @@ static void on_char_added(gint idx, SCNotification *nt)
 			if (sci_get_lexer(sci) == SCLEX_LATEX)
 			{
 				auto_close_bracket(sci, pos, nt->ch);	// Tex auto-closing
-				sci_cb_show_calltip(idx, --pos);
+				editor_show_calltip(idx, --pos);
 			}
 			break;
 		}
@@ -231,10 +231,10 @@ static void on_char_added(gint idx, SCNotification *nt)
 		{	// closing bracket handling
 			if (doc_list[idx].use_auto_indention &&
 				app->pref_editor_indention_mode == INDENT_ADVANCED)
-				sci_cb_close_block(idx, pos - 1);
+				editor_close_block(idx, pos - 1);
 			break;
 		}
-		default: sci_cb_start_auto_complete(idx, pos, FALSE);
+		default: editor_start_auto_complete(idx, pos, FALSE);
 	}
 }
 
@@ -351,7 +351,7 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 
 					case 2: calltip.tag_index++; break;	// down arrow
 				}
-				sci_cb_show_calltip(idx, -1);
+				editor_show_calltip(idx, -1);
 			}
 			break;
 		}
@@ -389,7 +389,7 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 		// " * " auto completion in multiline C/C++/D/Java comments
 		auto_multiline(sci, pos);
 
-		sci_cb_auto_latex(idx, pos);
+		editor_auto_latex(idx, pos);
 	}
 }
 
@@ -435,7 +435,7 @@ static void do_indent(gchar *buf, gsize len, guint *idx)
 
 
 /* "use_this_line" to auto-indent only if it is a real new line
- * and ignore the case of sci_cb_close_block */
+ * and ignore the case of editor_close_block */
 static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 {
 	guint i, len, j = 0;
@@ -456,7 +456,7 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 			break;
 		else if (use_this_line)
 			break;
-		else	// sci_cb_close_block
+		else	// editor_close_block
 		{
 			if (! lexer_has_braces(sci))
 				break;
@@ -506,7 +506,7 @@ static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
 
 /* Finds a corresponding matching brace to the given pos
  * (this is taken from Scintilla Editor.cxx,
- * fit to work with sci_cb_close_block) */
+ * fit to work with editor_close_block) */
 static gint brace_match(ScintillaObject *sci, gint pos)
 {
 	gchar chBrace = sci_get_char_at(sci, pos);
@@ -544,7 +544,7 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 
 
 /* Called after typing '}', if pref_editor_indention_mode is INDENT_ADVANCED. */
-void sci_cb_close_block(gint idx, gint pos)
+void editor_close_block(gint idx, gint pos)
 {
 	gint x = 0, cnt = 0;
 	gint start_brace, line, line_len, eol_char_len;
@@ -609,7 +609,7 @@ void sci_cb_close_block(gint idx, gint pos)
  * NULL terminated in any case, even when the word is truncated because wordlen is too small.
  * position can be -1, then the current position is used.
  * wc are the wordchars to use, if NULL, GEANY_WORDCHARS will be used */
-void sci_cb_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen,
+void editor_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen,
 							  const gchar *wc)
 {
 	gint line, line_start, startword, endword;
@@ -794,7 +794,7 @@ static gchar *find_calltip(const gchar *word, filetype *ft)
 
 
 // use pos = -1 to search for the previous unmatched open bracket.
-gboolean sci_cb_show_calltip(gint idx, gint pos)
+gboolean editor_show_calltip(gint idx, gint pos)
 {
 	gint orig_pos = pos; // the position for the calltip
 	gint lexer;
@@ -827,7 +827,7 @@ gboolean sci_cb_show_calltip(gint idx, gint pos)
 		return FALSE;
 
 	word[0] = '\0';
-	sci_cb_find_current_word(sci, pos - 1, word, sizeof word, NULL);
+	editor_find_current_word(sci, pos - 1, word, sizeof word, NULL);
 	if (word[0] == '\0') return FALSE;
 
 	str = find_calltip(word, doc_list[idx].file_type);
@@ -908,7 +908,7 @@ autocomplete_tags(gint idx, gchar *root, gsize rootlen)
 }
 
 
-gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
+gboolean editor_start_auto_complete(gint idx, gint pos, gboolean force)
 {
 	gint line, line_start, line_len, line_pos, current, rootlen, startword, lexer, style;
 	gchar *linebuf, *root;
@@ -969,7 +969,7 @@ gboolean sci_cb_start_auto_complete(gint idx, gint pos, gboolean force)
 }
 
 
-void sci_cb_auto_latex(gint idx, gint pos)
+void editor_auto_latex(gint idx, gint pos)
 {
 	ScintillaObject *sci;
 
@@ -1186,7 +1186,7 @@ static gboolean at_eol(ScintillaObject *sci, gint pos)
 }
 
 
-gboolean sci_cb_auto_forif(gint idx, gint pos)
+gboolean editor_auto_forif(gint idx, gint pos)
 {
 	gboolean result;
 	gchar buf[16];
@@ -1256,7 +1256,7 @@ gboolean sci_cb_auto_forif(gint idx, gint pos)
 }
 
 
-void sci_cb_show_macro_list(ScintillaObject *sci)
+void editor_show_macro_list(ScintillaObject *sci)
 {
 	GString *words;
 
@@ -1347,7 +1347,7 @@ static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx)
 		if (ch == '>')
 		{
 			SSM(sci, SCI_SETSEL, pos, pos);
-			if (utils_str_equal(str_found, "table")) sci_cb_auto_table(sci, pos);
+			if (utils_str_equal(str_found, "table")) editor_auto_table(sci, pos);
 		}
 		sci_end_undo_action(sci);
 		g_free(to_insert);
@@ -1361,7 +1361,7 @@ static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx)
 }
 
 
-void sci_cb_auto_table(ScintillaObject *sci, gint pos)
+void editor_auto_table(ScintillaObject *sci, gint pos)
 {
 	gchar *table;
 	gint indent_pos;
@@ -1450,7 +1450,7 @@ static void real_uncomment_multiline(gint idx)
 }
 
 
-void sci_cb_do_uncomment(gint idx, gint line)
+void editor_do_uncomment(gint idx, gint line)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len;
@@ -1591,7 +1591,7 @@ void sci_cb_do_uncomment(gint idx, gint line)
 }
 
 
-void sci_cb_do_comment_toggle(gint idx)
+void editor_do_comment_toggle(gint idx)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len;
@@ -1665,7 +1665,7 @@ void sci_cb_do_comment_toggle(gint idx)
 						if (sel[x] == co[0])
 						{
 							do_continue = TRUE;
-							sci_cb_do_uncomment(idx, i);
+							editor_do_uncomment(idx, i);
 							count_uncommented++;
 						}
 						break;
@@ -1673,7 +1673,7 @@ void sci_cb_do_comment_toggle(gint idx)
 						if (sel[x] == co[0] && sel[x+1] == co[1])
 						{
 							do_continue = TRUE;
-							sci_cb_do_uncomment(idx, i);
+							editor_do_uncomment(idx, i);
 							count_uncommented++;
 						}
 						break;
@@ -1681,7 +1681,7 @@ void sci_cb_do_comment_toggle(gint idx)
 						if (sel[x] == co[0] && sel[x+1] == co[1] && sel[x+2] == co[2])
 						{
 							do_continue = TRUE;
-							sci_cb_do_uncomment(idx, i);
+							editor_do_uncomment(idx, i);
 							count_uncommented++;
 						}
 						break;
@@ -1691,7 +1691,7 @@ void sci_cb_do_comment_toggle(gint idx)
 				if (do_continue) continue;
 
 				// we are still here, so the above lines were not already comments, so comment it
-				sci_cb_do_comment(idx, i, FALSE);
+				editor_do_comment(idx, i, FALSE);
 				count_commented++;
 			}
 			// use multi line comment
@@ -1777,7 +1777,7 @@ void sci_cb_do_comment_toggle(gint idx)
 }
 
 
-void sci_cb_do_comment(gint idx, gint line, gboolean allow_empty_lines)
+void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len;
@@ -1907,7 +1907,7 @@ void sci_cb_do_comment(gint idx, gint line, gboolean allow_empty_lines)
 }
 
 
-void sci_cb_highlight_braces(ScintillaObject *sci, gint cur_pos)
+void editor_highlight_braces(ScintillaObject *sci, gint cur_pos)
 {
 	gint brace_pos = cur_pos - 1;
 	gint end_pos;
@@ -2148,7 +2148,7 @@ static gboolean is_comment(gint lexer, gint style)
 
 
 #if 0
-gboolean sci_cb_lexer_is_c_like(gint lexer)
+gboolean editor_lexer_is_c_like(gint lexer)
 {
 	switch (lexer)
 	{
@@ -2164,7 +2164,7 @@ gboolean sci_cb_lexer_is_c_like(gint lexer)
 
 
 // Returns: -1 if lexer doesn't support type keywords
-gint sci_cb_lexer_get_type_keyword_idx(gint lexer)
+gint editor_lexer_get_type_keyword_idx(gint lexer)
 {
 	switch (lexer)
 	{
@@ -2179,7 +2179,7 @@ gint sci_cb_lexer_get_type_keyword_idx(gint lexer)
 
 
 // inserts a three-line comment at one line above current cursor position
-void sci_cb_insert_multiline_comment(gint idx)
+void editor_insert_multiline_comment(gint idx)
 {
 	gchar *text;
 	gint text_len;
@@ -2217,7 +2217,7 @@ void sci_cb_insert_multiline_comment(gint idx)
 	sci_set_selection_start(doc_list[idx].sci, pos);
 	sci_set_selection_end(doc_list[idx].sci, pos + text_len);
 
-	sci_cb_do_comment(idx, -1, TRUE);
+	editor_do_comment(idx, -1, TRUE);
 
 	// set the current position to the start of the first inserted line
 	pos += strlen(doc_list[idx].file_type->comment_open);
@@ -2259,7 +2259,7 @@ static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_vi
 }
 
 
-void sci_cb_insert_alternative_whitespace(ScintillaObject *sci)
+void editor_insert_alternative_whitespace(ScintillaObject *sci)
 {
 	// creates and inserts one tabulator sign or whitespace of the amount of the tab width
 	gchar *text = utils_get_whitespace(app->pref_editor_tab_width, TRUE);
@@ -2268,7 +2268,7 @@ void sci_cb_insert_alternative_whitespace(ScintillaObject *sci)
 }
 
 
-void sci_cb_select_word(ScintillaObject *sci)
+void editor_select_word(ScintillaObject *sci)
 {
 	gint pos;
 	gint start;

@@ -4,6 +4,11 @@
    Show current project name in window title.
  * configure.in, src/Makefile.am:
    Force debug mode for a SVN working copy.
+ * src/highlighting.c, src/keybindings.c, src/makefile.win32,
+   src/callbacks.c, src/sci_cb.c, src/sci_cb.h, src/search.c,
+   src/document.c, src/main.c, src/editor.c, src/Makefile.am,
+   src/editor.h, po/POTFILES.in:
+   Rename sci_cb.[hc] editor.[hc].
 
 
 2007-05-26  Nick Treleaven  <nick.treleaven@btinternet.com>

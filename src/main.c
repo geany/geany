@@ -52,7 +52,7 @@
 #include "treeviews.h"
 #include "notebook.h"
 #include "keybindings.h"
-#include "sci_cb.h"
+#include "editor.h"
 #include "search.h"
 #include "build.h"
 #include "highlighting.h"

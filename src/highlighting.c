@@ -30,7 +30,7 @@
 #include "SciLexer.h"
 #include "geany.h"
 #include "highlighting.h"
-#include "sci_cb.h"
+#include "editor.h"
 #include "utils.h"
 #include "filetypes.h"
 #include "symbols.h"

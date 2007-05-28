@@ -18,7 +18,7 @@ src/msgwindow.c
 src/notebook.c
 src/prefs.c
 src/project.c
-src/sci_cb.c
+src/editor.c
 src/sciwrappers.c
 src/search.c
 src/socket.c

@@ -53,7 +53,7 @@
 #include "document.h"
 #include "support.h"
 #include "sciwrappers.h"
-#include "sci_cb.h"
+#include "editor.h"
 #include "dialogs.h"
 #include "msgwindow.h"
 #include "templates.h"
@@ -1571,14 +1571,14 @@ static gboolean update_type_keywords(ScintillaObject *sci)
 	guint n;
 	const GString *s;
 
-	if (sci != NULL && sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
+	if (sci != NULL && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
 		return FALSE;
 
 	if (! get_project_typenames(&s))
 	{	// typenames have not changed
 		if (s != NULL && sci != NULL)
 		{
-			gint keyword_idx = sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(sci));
+			gint keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(sci));
 
 			sci_set_keywords(sci, keyword_idx, s->str);
 			if (! delay_colourise)
@@ -1596,7 +1596,7 @@ static gboolean update_type_keywords(ScintillaObject *sci)
 
 		if (wid)
 		{
-			gint keyword_idx = sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(wid));
+			gint keyword_idx = editor_lexer_get_type_keyword_idx(sci_get_lexer(wid));
 
 			if (keyword_idx > 0)
 			{
@@ -2214,7 +2214,7 @@ void document_colourise_new()
 
 		n = g_array_index(doc_indexes, gint, i);
 		sci = doc_list[n].sci;
-		if (! recolour || (sci && sci_cb_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1))
+		if (! recolour || (sci && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1))
 		{
 			doc_set[n] = FALSE;
 		}

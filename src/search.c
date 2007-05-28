@@ -36,7 +36,7 @@
 #include "document.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
-#include "sci_cb.h"
+#include "editor.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -220,7 +220,7 @@ static gchar *get_default_text(gint idx)
 	{	// use the word at current cursor position
 		gchar word[GEANY_MAX_WORD_LENGTH];
 
-		sci_cb_find_current_word(doc_list[idx].sci, -1, word, sizeof(word), NULL);
+		editor_find_current_word(doc_list[idx].sci, -1, word, sizeof(word), NULL);
 		if (word[0] != '\0') s = g_strdup(word);
 	}
 	return s;
