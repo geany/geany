@@ -2,6 +2,8 @@
 
  * src/project.c, src/document.c, src/ui_utils.c:
    Show current project name in window title.
+ * configure.in, src/Makefile.am:
+   Force debug mode for a SVN working copy.
 
 
 2007-05-26  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -59,6 +59,8 @@ SVN=`which svn 2>/dev/null`
 if test -d ".svn" -a "x${SVN}" != "x" -a -x "${SVN}"
 then
 	REVISION=r`$SVN info|grep 'Last Changed Rev'|cut -d' ' -f4`
+	# force debug mode for a SVN working copy
+	CFLAGS="-g -DGEANY_DEBUG $CFLAGS"
 else
 	REVISION="-1"
 fi
