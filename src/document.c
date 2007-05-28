@@ -148,12 +148,16 @@ gint document_get_n_idx(guint page_num)
 gint document_get_cur_idx()
 {
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
-	ScintillaObject *sci = (ScintillaObject*)gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->notebook), cur_page);
 
 	if (cur_page == -1)
 		return -1;
 	else
+	{
+		ScintillaObject *sci = (ScintillaObject*)
+			gtk_notebook_get_nth_page(GTK_NOTEBOOK(app->notebook), cur_page);
+
 		return document_find_by_sci(sci);
+	}
 }
 
 

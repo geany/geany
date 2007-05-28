@@ -277,6 +277,14 @@ void project_open()
 }
 
 
+// Called when opening, closing and updating projects.
+static void update_ui()
+{
+	ui_set_window_title(-1);
+	build_menu_update(-1);
+}
+
+
 void project_close()
 {
 	g_return_if_fail(app->project != NULL);
@@ -295,7 +303,7 @@ void project_close()
 	g_free(app->project);
 	app->project = NULL;
 
-	build_menu_update(-1);
+	update_ui();
 }
 
 
@@ -474,7 +482,7 @@ void project_properties()
 		if (! update_config(e))
 			goto retry;
 		// successfully updated properties
-		build_menu_update(-1);
+		update_ui();
 	}
 
 	gtk_widget_destroy(e->dialog);
@@ -807,7 +815,7 @@ static gboolean load_config(const gchar *filename)
 
 	g_key_file_free(config);
 
-	build_menu_update(-1);
+	update_ui();
 	return TRUE;
 }
 

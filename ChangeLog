@@ -1,7 +1,15 @@
+2007-05-28  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/project.c, src/document.c, src/ui_utils.c:
+   Show current project name in window title.
+
+
 2007-05-26  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/treeviews.c, src/filetypes.c, src/filetypes.h, src/document.c:
    Replace filetype::has_tags member with filetype_has_tags().
+ * HACKING:
+   Add note about Adding a TagManager parser.
 
 
 2007-05-26  Enrico Tröger  <enrico.troeger@uvena.de>

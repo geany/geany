@@ -40,6 +40,7 @@
 #include "images.c"
 #include "treeviews.h"
 #include "win32.h"
+#include "project.h"
 
 
 static gchar *menu_item_get_text(GtkMenuItem *menu_item);
@@ -149,32 +150,42 @@ void ui_update_statusbar(gint idx, gint pos)
 /* This sets the window title according to the current filename. */
 void ui_set_window_title(gint idx)
 {
-	gchar *title;
+	GString *str;
+	GeanyProject *project = app->project;
+
+	if (idx < 0)
+		idx = document_get_cur_idx();
+
+	str = g_string_new(NULL);
 
 	if (idx >= 0)
 	{
+		g_string_append(str, doc_list[idx].changed ? "*" : "");
+
 		if (doc_list[idx].file_name == NULL)
-		{
-			title = g_strdup_printf("%s%s - Geany",
-					doc_list[idx].changed ? "*" : "",
-					DOC_FILENAME(idx));
-		}
+			g_string_append(str, DOC_FILENAME(idx));
 		else
 		{
 			gchar *basename = g_path_get_basename(DOC_FILENAME(idx));
 			gchar *dirname = g_path_get_dirname(DOC_FILENAME(idx));
 
-			title = g_strdup_printf("%s%s - %s - Geany",
-					doc_list[idx].changed ? "*" : "",
-					basename, dirname ? dirname : "");
+			g_string_append(str, basename);
+			g_string_append(str, " - ");
+			g_string_append(str, dirname ? dirname : "");
 			g_free(basename);
 			g_free(dirname);
 		}
-		gtk_window_set_title(GTK_WINDOW(app->window), title);
-		g_free(title);
+		g_string_append(str, " - ");
 	}
-	else
-		gtk_window_set_title(GTK_WINDOW(app->window), "Geany");
+	if (project)
+	{
+		g_string_append_c(str, '[');
+		g_string_append(str, project->name);
+		g_string_append(str, "] - ");
+	}
+	g_string_append(str, "Geany");
+	gtk_window_set_title(GTK_WINDOW(app->window), str->str);
+	g_string_free(str, TRUE);
 }
 
 
