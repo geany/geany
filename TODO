@@ -6,9 +6,9 @@ TODO List:
 	Next version or later:
 
 	o fix bug that prevents UTF-16, UTF-32 files from being loaded.
+	o tagmanager fails on UTF-16/32
 	o make calltips show full function signature for C-like files (e.g.
 	  return type with const, [] for D, etc.)
-	o Go to xxx - definable command
 	o documentation: list and explain filetype modes
 	o documentation: preferences
 	o user-definable construct completion

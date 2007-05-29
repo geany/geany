@@ -1,3 +1,10 @@
+2007-05-29  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * doc/geany.docbook:
+   Removed app_small entity.
+   Added description for global configuration file.
+
+
 2007-05-28  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/project.c, src/document.c, src/ui_utils.c:

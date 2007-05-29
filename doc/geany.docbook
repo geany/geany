@@ -1,8 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
         "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
-<!ENTITY app_small "geany">
-<!ENTITY appversion "0.11">
+<!ENTITY appversion "0.12">
 <!ENTITY appurl "http://geany.uvena.de">
 <!ENTITY author_mail "enrico.troeger@uvena.de">
 <!ENTITY date "May 21, 2007">
@@ -148,38 +147,10 @@
 		</section>
 		<section id="binary_packages">
 			<title>Binary packages</title>
-			<section>
-				<title>Fedora</title>
-				<para>
-					You can use the Fedora Core 4 repository from
-					<ulink url="http://naturidentisch.de/packages/fc4/">http://naturidentisch.de/packages/fc4/</ulink>.
-				</para>
-				<para>
-					You can also use the Fedora Core 5 repository from
-					<ulink url="http://naturidentisch.de/packages/fc5/">http://naturidentisch.de/packages/fc5/</ulink>.
-				</para>
-			</section>
-			<section>
-				<title>Debian</title>
-				<para>
-					<application>Geany</application> is available through the official Debian archives.
-				</para>
-				<para>
-					<command>apt-get install geany</command>
-				</para>
-			</section>
-			<section>
-				<title>SuSE</title>
-				<para>
-					Packages for SuSE are not yet available.
-				</para>
-			</section>
-			<section>
-				<title>Gentoo</title>
-				<para>
-					An ebuild for Gentoo can be found on <ulink url="https://bugs.gentoo.org/show_bug.cgi?id=114815">http://bugs.gentoo.de</ulink>.
-				</para>
-			</section>
+			<para>
+				There are many binary packages available. For an up to date but maybe incomplete
+				list see <ulink url="&appurl;/Download/Releases">&appurl;/Download/Releases</ulink>.
+			</para>
 		</section>
 	</chapter>
 
@@ -210,7 +181,7 @@
 							To start <application>Geany</application> from a command line, type the following
 							and press <keycap>Return</keycap>:
 							<screen>
-								<prompt>%</prompt> <userinput><command>&app_small;</command></userinput></screen>
+								<prompt>%</prompt> <userinput><command>geany</command></userinput></screen>
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -245,8 +216,8 @@
 								<entry>-c dir_name</entry>
 								<entry>--config=directory_name</entry>
 								<entry>Use an alternate configuration directory. Default
-									   configuration directory is <filename>~/.&app_small;/</filename>
-									   and there resides <filename>&app_small;.conf</filename> and
+									   configuration directory is <filename>~/.geany/</filename>
+									   and there resides <filename>geany.conf</filename> and
 									   other configuration files.
 								</entry>
 							</row>
@@ -1898,6 +1869,31 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 
 	<chapter id="config_files">
 		<title>Configuration files</title>
+		<section id="global_config">
+			<title>Global configuration file</title>
+			<para>
+				You can use a global configuration file for <application>Geany</application> which
+				will be used if the user starts <application>Geany</application> for the first
+				time and an user's configuration file was not yet created or in case an user
+				deleted the configuration file to use default values.
+			</para>
+			<para>
+				The global configuration file is read from
+				<filename>$prefix/share/geany/geany.conf</filename> (where $prefix is the path where
+				<application>Geany</application> is	installed) when starting
+				<application>Geany</application> and an user configuration file does not exist. It
+				can contain any settings which are found in the usual configuration file created by
+				<application>Geany</application> but does not have to contain all settings.
+			</para>
+			<note>
+				<para>
+					This feature is mainly intended for package maintainers or system admins who
+					want to set up <application>Geany</application> in a multi user environment
+					and set some sane default values for this environment. Usual users won't need
+					to do that.
+				</para>
+			</note>
+		</section>
 		<section id="filetypes">
 			<title>Filetype definition files</title>
 			<para>
