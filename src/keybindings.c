@@ -616,7 +616,7 @@ static gboolean check_construct_completion(GdkEventKey *event)
 			ScintillaObject *sci = doc_list[idx].sci;
 			gint pos = sci_get_current_position(sci);
 
-			if (app->pref_editor_auto_complete_constructs)
+			if (editor_prefs.auto_complete_constructs)
 				return editor_auto_forif(idx, pos);
 		}
 	}

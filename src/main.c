@@ -215,10 +215,10 @@ static void apply_settings(void)
 
 	app->ignore_callback = TRUE;
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
-				lookup_widget(app->window, "menu_line_breaking1")), app->pref_editor_line_breaking);
+				lookup_widget(app->window, "menu_line_breaking1")), editor_prefs.line_breaking);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
 				lookup_widget(app->window, "menu_use_auto_indention1")),
-				(app->pref_editor_indention_mode != INDENT_NONE));
+				(editor_prefs.indention_mode != INDENT_NONE));
 	app->ignore_callback = FALSE;
 
 	// connect the toolbar dropdown menu for the new button

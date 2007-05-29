@@ -50,6 +50,7 @@
 #include "keybindings.h"
 #include "vte.h"
 #include "project.h"
+#include "editor.h"
 
 
 BuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_ALL, NULL};
@@ -797,7 +798,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 				dir = tmp;
 			}
 
-			if (app->pref_editor_use_indicators)
+			if (editor_prefs.use_indicators)
 			{
 				gchar *filename;
 				gint line;

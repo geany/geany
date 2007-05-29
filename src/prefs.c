@@ -43,6 +43,7 @@
 #include "interface.h"
 #include "encodings.h"
 #include "project.h"
+#include "editor.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -222,61 +223,61 @@ void prefs_init_dialog(void)
 
 	// Editor settings
 	widget = lookup_widget(app->prefs_dialog, "spin_tab_width");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->pref_editor_tab_width);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.tab_width);
 
 	widget = lookup_widget(app->prefs_dialog, "combo_encoding");
 	// luckily the index of the combo box items match the index of the encodings array
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), app->pref_editor_default_encoding);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.default_encoding);
 
 	widget = lookup_widget(app->prefs_dialog, "check_trailing_spaces");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_trail_space);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.trail_space);
 
 	widget = lookup_widget(app->prefs_dialog, "check_new_line");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_new_line);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.new_line);
 
 	widget = lookup_widget(app->prefs_dialog, "check_replace_tabs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_replace_tabs);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.replace_tabs);
 
 	widget = lookup_widget(app->prefs_dialog, "check_indent");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_show_indent_guide);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_indent_guide);
 
 	widget = lookup_widget(app->prefs_dialog, "check_white_space");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_show_white_space);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_white_space);
 
 	widget = lookup_widget(app->prefs_dialog, "check_line_end");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_show_line_endings);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_line_endings);
 
 	widget = lookup_widget(app->prefs_dialog, "combo_auto_indent_mode");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), app->pref_editor_indention_mode);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.indention_mode);
 
 	widget = lookup_widget(app->prefs_dialog, "check_line_wrapping");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_line_breaking);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.line_breaking);
 
 	widget = lookup_widget(app->prefs_dialog, "check_auto_complete");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_auto_complete_constructs);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_complete_constructs);
 
 	widget = lookup_widget(app->prefs_dialog, "check_xmltag");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_auto_close_xml_tags);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_close_xml_tags);
 
 	widget = lookup_widget(app->prefs_dialog, "check_folding");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_folding);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.folding);
 
 	widget = lookup_widget(app->prefs_dialog, "check_unfold_children");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_unfold_all_children);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.unfold_all_children);
 	on_use_folding_toggled(GTK_TOGGLE_BUTTON(
 					lookup_widget(app->prefs_dialog, "check_folding")), NULL);
 
 	widget = lookup_widget(app->prefs_dialog, "check_disable_dnd");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_disable_dnd);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.disable_dnd);
 
 	widget = lookup_widget(app->prefs_dialog, "check_use_tabs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_use_tabs);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.use_tabs);
 
 	widget = lookup_widget(app->prefs_dialog, "check_indicators");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_use_indicators);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.use_indicators);
 
 	widget = lookup_widget(app->prefs_dialog, "check_symbol_auto_completion");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_editor_auto_complete_symbols);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_complete_symbols);
 	on_symbol_auto_completion_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
 
 	widget = lookup_widget(app->prefs_dialog, "spin_autocheight");
@@ -546,62 +547,62 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		// Editor settings
 		widget = lookup_widget(app->prefs_dialog, "spin_tab_width");
-		app->pref_editor_tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+		editor_prefs.tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "combo_encoding");
-		app->pref_editor_default_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+		editor_prefs.default_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_trailing_spaces");
-		app->pref_editor_trail_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.trail_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_new_line");
-		app->pref_editor_new_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.new_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_replace_tabs");
-		app->pref_editor_replace_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.replace_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "spin_long_line");
 		app->long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_folding");
-		app->pref_editor_folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 		ui_update_fold_items();
 
 		widget = lookup_widget(app->prefs_dialog, "check_unfold_children");
-		app->pref_editor_unfold_all_children = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.unfold_all_children = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_indent");
-		app->pref_editor_show_indent_guide = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.show_indent_guide = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_white_space");
-		app->pref_editor_show_white_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.show_white_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_line_end");
-		app->pref_editor_show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "combo_auto_indent_mode");
-		app->pref_editor_indention_mode = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+		editor_prefs.indention_mode = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_line_wrapping");
-		app->pref_editor_line_breaking = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.line_breaking = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_auto_complete");
-		app->pref_editor_auto_complete_constructs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.auto_complete_constructs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_xmltag");
-		app->pref_editor_auto_close_xml_tags = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.auto_close_xml_tags = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_indicators");
-		app->pref_editor_use_indicators = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.use_indicators = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_disable_dnd");
-		app->pref_editor_disable_dnd = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.disable_dnd = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_use_tabs");
-		app->pref_editor_use_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.use_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_symbol_auto_completion");
-		app->pref_editor_auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "spin_autocheight");
 		app->autocompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
@@ -709,7 +710,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 			if (doc_list[i].is_valid)
 			{
 				document_apply_update_prefs(i);
-				if (! app->pref_editor_folding)
+				if (! editor_prefs.folding)
 					document_unfold_all(i);
 			}
 		}

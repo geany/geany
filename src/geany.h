@@ -103,27 +103,6 @@ typedef struct MyApp
 	gboolean			 brace_match_ltgt;
 	gboolean			 use_tab_to_indent;
 	gboolean			 main_window_realized;
-	// I know, it is a bit confusing, but this line breaking is globally,
-	// to change the default value at startup, I think
-	gboolean			 pref_editor_line_breaking;
-	gint			 	 pref_editor_indention_mode;
-	gboolean			 pref_editor_use_indicators;
-	gboolean			 pref_editor_show_white_space;
-	gboolean			 pref_editor_show_indent_guide;
-	gboolean			 pref_editor_show_line_endings;
-	gboolean			 pref_editor_auto_complete_symbols;
-	gboolean			 pref_editor_auto_close_xml_tags;
-	gboolean			 pref_editor_auto_complete_constructs;
-	gboolean			 pref_editor_folding;
-	gboolean			 pref_editor_unfold_all_children;
-	gboolean			 pref_editor_show_scrollbars;
-	gint				 pref_editor_tab_width;
-	gboolean			 pref_editor_use_tabs;
-	gint				 pref_editor_default_encoding;
-	gboolean			 pref_editor_new_line;
-	gboolean			 pref_editor_replace_tabs;
-	gboolean			 pref_editor_trail_space;
-	gboolean			 pref_editor_disable_dnd;
 	gboolean			 pref_main_load_session;
 	gboolean			 pref_main_save_winpos;
 	gboolean			 pref_main_confirm_exit;
@@ -217,13 +196,6 @@ enum
 	DOWN,
 	LEFT,
 	RIGHT
-};
-
-enum
-{
-	INDENT_NONE = 0,
-	INDENT_BASIC,
-	INDENT_ADVANCED
 };
 
 enum

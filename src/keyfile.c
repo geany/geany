@@ -48,6 +48,7 @@
 #include "msgwindow.h"
 #include "search.h"
 #include "project.h"
+#include "editor.h"
 
 
 static gchar *scribble_text = NULL;
@@ -174,26 +175,26 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", app->sidebar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", app->statusbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", app->msgwindow_visible);
-	g_key_file_set_boolean(config, PACKAGE, "use_folding", app->pref_editor_folding);
-	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", app->pref_editor_unfold_all_children);
-	g_key_file_set_boolean(config, PACKAGE, "show_editor_scrollbars", app->pref_editor_show_scrollbars);
-	g_key_file_set_integer(config, PACKAGE, "indention_mode", app->pref_editor_indention_mode);
+	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
+	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", editor_prefs.unfold_all_children);
+	g_key_file_set_boolean(config, PACKAGE, "show_editor_scrollbars", editor_prefs.show_scrollbars);
+	g_key_file_set_integer(config, PACKAGE, "indention_mode", editor_prefs.indention_mode);
 	g_key_file_set_boolean(config, PACKAGE, "use_tab_to_indent", app->use_tab_to_indent);
-	g_key_file_set_boolean(config, PACKAGE, "use_indicators", app->pref_editor_use_indicators);
-	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", app->pref_editor_show_indent_guide);
-	g_key_file_set_boolean(config, PACKAGE, "show_white_space", app->pref_editor_show_white_space);
+	g_key_file_set_boolean(config, PACKAGE, "use_indicators", editor_prefs.use_indicators);
+	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
+	g_key_file_set_boolean(config, PACKAGE, "show_white_space", editor_prefs.show_white_space);
 	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", app->show_markers_margin);
 	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", app->show_linenumber_margin);
-	g_key_file_set_boolean(config, PACKAGE, "line_breaking", app->pref_editor_line_breaking);
-	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", app->pref_editor_show_line_endings);
+	g_key_file_set_boolean(config, PACKAGE, "line_breaking", editor_prefs.line_breaking);
+	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", app->fullscreen);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", app->tab_order_ltr);
 	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", app->show_notebook_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "brace_match_ltgt", app->brace_match_ltgt);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", app->switch_msgwin_pages);
-	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", app->pref_editor_auto_close_xml_tags);
-	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", app->pref_editor_auto_complete_constructs);
-	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", app->pref_editor_auto_complete_symbols);
+	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", editor_prefs.auto_close_xml_tags);
+	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", editor_prefs.auto_complete_constructs);
+	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", editor_prefs.auto_complete_symbols);
 #ifdef HAVE_VTE
 	g_key_file_set_boolean(config, "VTE", "load_vte", vte_info.load_vte);
 	if (vte_info.load_vte && vc != NULL)
@@ -239,8 +240,8 @@ void configuration_save()
 		gtk_window_get_size(GTK_WINDOW(app->window), &app->geometry[2], &app->geometry[3]);
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", app->geometry, 4);
 	}
-	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", app->pref_editor_tab_width);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", app->pref_editor_use_tabs);
+	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", editor_prefs.tab_width);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", editor_prefs.use_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", app->pref_main_confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", app->pref_main_suppress_search_dialogs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", app->pref_main_load_session);
@@ -256,11 +257,11 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_quit", app->pref_toolbar_show_quit);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", app->toolbar_icon_style);
 	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", app->toolbar_icon_size);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", app->pref_editor_new_line);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", app->pref_editor_replace_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", app->pref_editor_trail_space);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", app->pref_editor_disable_dnd);
-	g_key_file_set_string(config, PACKAGE, "pref_editor_default_encoding", encodings[app->pref_editor_default_encoding].charset);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", editor_prefs.new_line);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", editor_prefs.replace_tabs);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", editor_prefs.trail_space);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
+	g_key_file_set_string(config, PACKAGE, "pref_editor_default_encoding", encodings[editor_prefs.default_encoding].charset);
 	g_key_file_set_string(config, PACKAGE, "pref_template_developer", app->pref_template_developer);
 	g_key_file_set_string(config, PACKAGE, "pref_template_company", app->pref_template_company);
 	g_key_file_set_string(config, PACKAGE, "pref_template_mail", app->pref_template_mail);
@@ -382,19 +383,19 @@ gboolean configuration_load()
 	app->sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	app->statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
 	app->msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
-	app->pref_editor_line_breaking = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); //default is off for better performance
-	app->pref_editor_indention_mode = utils_get_setting_integer(config, PACKAGE, "indention_mode", INDENT_ADVANCED);
+	editor_prefs.line_breaking = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); //default is off for better performance
+	editor_prefs.indention_mode = utils_get_setting_integer(config, PACKAGE, "indention_mode", INDENT_ADVANCED);
 	app->use_tab_to_indent = utils_get_setting_boolean(config, PACKAGE, "use_tab_to_indent", FALSE);
-	app->pref_editor_use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
-	app->pref_editor_show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
-	app->pref_editor_show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
-	app->pref_editor_show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
-	app->pref_editor_auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
-	app->pref_editor_auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
-	app->pref_editor_auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
-	app->pref_editor_folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
-	app->pref_editor_unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
-	app->pref_editor_show_scrollbars = utils_get_setting_boolean(config, PACKAGE, "show_editor_scrollbars", TRUE);
+	editor_prefs.use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
+	editor_prefs.show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
+	editor_prefs.show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
+	editor_prefs.show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
+	editor_prefs.auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
+	editor_prefs.auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
+	editor_prefs.auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
+	editor_prefs.folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
+	editor_prefs.unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
+	editor_prefs.show_scrollbars = utils_get_setting_boolean(config, PACKAGE, "show_editor_scrollbars", TRUE);
 	app->show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
 	app->show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
 	app->fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
@@ -432,8 +433,8 @@ gboolean configuration_load()
 				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
 
 
-	app->pref_editor_tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
-	app->pref_editor_use_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_use_tabs", TRUE);
+	editor_prefs.tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
+	editor_prefs.use_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_use_tabs", TRUE);
 	// use current locale encoding as default for new files (should be in most cases UTF-8)
 	g_get_charset(&default_charset);
 	tmp_string = utils_get_setting_string(config, PACKAGE, "pref_editor_default_encoding",
@@ -442,9 +443,9 @@ gboolean configuration_load()
 	{
 		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);
 		if (enc != NULL)
-			app->pref_editor_default_encoding = enc->idx;
+			editor_prefs.default_encoding = enc->idx;
 		else
-			app->pref_editor_default_encoding = GEANY_ENCODING_UTF_8;
+			editor_prefs.default_encoding = GEANY_ENCODING_UTF_8;
 
 		g_free(tmp_string);
 	}
@@ -509,10 +510,10 @@ gboolean configuration_load()
 	g_free(tmp_string);
 	g_free(tmp_string2);
 
-	app->pref_editor_replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
-	app->pref_editor_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
-	app->pref_editor_trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
-	app->pref_editor_disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
+	editor_prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
+	editor_prefs.new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
+	editor_prefs.trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
+	editor_prefs.disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
 
 	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_MAKE);
 	app->tools_make_cmd = utils_get_setting_string(config, "tools", "make_cmd", tmp_string);

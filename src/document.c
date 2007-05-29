@@ -200,21 +200,21 @@ void document_apply_update_prefs(gint idx)
 	ScintillaObject *sci = doc_list[idx].sci;
 	sci_set_mark_long_lines(sci, app->long_line_type, app->long_line_column, app->long_line_color);
 
-	sci_set_tab_width(sci, app->pref_editor_tab_width);
+	sci_set_tab_width(sci, editor_prefs.tab_width);
 
-	sci_set_use_tabs(sci, app->pref_editor_use_tabs);
+	sci_set_use_tabs(sci, editor_prefs.use_tabs);
 	// remove indent spaces on backspace, if using spaces to indent
-	SSM(sci, SCI_SETBACKSPACEUNINDENTS, ! app->pref_editor_use_tabs, 0);
+	SSM(sci, SCI_SETBACKSPACEUNINDENTS, ! editor_prefs.use_tabs, 0);
 
 	sci_set_autoc_max_height(sci, app->autocompletion_max_height);
 
-	sci_set_indentionguides(sci, app->pref_editor_show_indent_guide);
-	sci_set_visible_white_spaces(sci, app->pref_editor_show_white_space);
-	sci_set_visible_eols(sci, app->pref_editor_show_line_endings);
+	sci_set_indentionguides(sci, editor_prefs.show_indent_guide);
+	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);
+	sci_set_visible_eols(sci, editor_prefs.show_line_endings);
 
-	sci_set_folding_margin_visible(sci, app->pref_editor_folding);
+	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 
-	doc_list[idx].use_auto_indention = (app->pref_editor_indention_mode != INDENT_NONE);
+	doc_list[idx].use_auto_indention = (editor_prefs.indention_mode != INDENT_NONE);
 }
 
 
@@ -224,8 +224,8 @@ static void init_doc_struct(document *new_doc)
 {
 	new_doc->is_valid = FALSE;
 	new_doc->has_tags = FALSE;
-	new_doc->use_auto_indention = (app->pref_editor_indention_mode != INDENT_NONE);
-	new_doc->line_breaking = app->pref_editor_line_breaking;
+	new_doc->use_auto_indention = (editor_prefs.indention_mode != INDENT_NONE);
+	new_doc->line_breaking = editor_prefs.line_breaking;
 	new_doc->readonly = FALSE;
 	new_doc->tag_store = NULL;
 	new_doc->tag_tree = NULL;
@@ -308,8 +308,8 @@ static gint document_create_new_sci(const gchar *filename)
 	sci_set_tab_indents(sci, app->use_tab_to_indent);
 	sci_set_symbol_margin(sci, app->show_markers_margin);
 	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
-	sci_set_lines_wrapped(sci, app->pref_editor_line_breaking);
-	sci_set_scrollbar_mode(sci, app->pref_editor_show_scrollbars);
+	sci_set_lines_wrapped(sci, editor_prefs.line_breaking);
+	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
 
 	// signal for insert-key(works without too, but to update the right status bar)
 	//g_signal_connect((GtkWidget*) sci, "key-press-event",
@@ -338,8 +338,8 @@ static gint document_create_new_sci(const gchar *filename)
 	this->changed = FALSE;
 	this->last_check = time(NULL);
 	this->readonly = FALSE;
-	this->line_breaking = app->pref_editor_line_breaking;
-	this->use_auto_indention = (app->pref_editor_indention_mode != INDENT_NONE);
+	this->line_breaking = editor_prefs.line_breaking;
+	this->use_auto_indention = (editor_prefs.indention_mode != INDENT_NONE);
 	this->has_tags = FALSE;
 
 	treeviews_openfiles_add(new_idx);	// sets this->iter
@@ -440,7 +440,7 @@ gint document_new_file(const gchar *filename, filetype *ft)
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 	sci_empty_undo_buffer(doc_list[idx].sci);
 
-	doc_list[idx].encoding = g_strdup(encodings[app->pref_editor_default_encoding].charset);
+	doc_list[idx].encoding = g_strdup(encodings[editor_prefs.default_encoding].charset);
 	// store the opened encoding for undo/redo
 	store_saved_encoding(idx);
 
@@ -977,11 +977,11 @@ gboolean document_save_file(gint idx, gboolean force)
 	}
 
 	// replaces tabs by spaces
-	if (app->pref_editor_replace_tabs) document_replace_tabs(idx);
+	if (editor_prefs.replace_tabs) document_replace_tabs(idx);
 	// strip trailing spaces
-	if (app->pref_editor_trail_space) document_strip_trailing_spaces(idx);
+	if (editor_prefs.trail_space) document_strip_trailing_spaces(idx);
 	// ensure the file has a newline at the end
-	if (app->pref_editor_new_line) document_ensure_final_newline(idx);
+	if (editor_prefs.new_line) document_ensure_final_newline(idx);
 	// ensure there a really the same EOL chars
 	sci_convert_eols(doc_list[idx].sci, sci_get_eol_mode(doc_list[idx].sci));
 

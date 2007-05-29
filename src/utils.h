@@ -25,6 +25,10 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
+#if ! GLIB_CHECK_VERSION(2, 8, 0)
+#define G_GNUC_NULL_TERMINATED
+#endif
+
 // Returns: TRUE if ptr points to a non-zero value.
 #define NZV(ptr) \
 	((ptr) && (ptr)[0])
@@ -159,17 +163,6 @@ gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
 /* Simple wrapper for g_locale_to_utf8; returns a copy of locale_text on failure. */
 gchar *utils_get_utf8_from_locale(const gchar *locale_text);
 
-/* Returns a string containing whitespace of the amount a according to the
- * setting app->pref_editor_use_tabs filled with simple space characters or with the right amount
- * of tabulator characters (a is filled with tabulators *and* spaces if a isn't a multiple of
- * app->pref_editor_tab_width).
- * If alternative is set to TRUE, it returns the opposite of app->pref_editor_use_tabs. */
-gchar *utils_get_whitespace(gint amount, gboolean alternative);
-
-
-#if ! GLIB_CHECK_VERSION(2, 8, 0)
-#define G_GNUC_NULL_TERMINATED
-#endif
 
 /* Frees all passed pointers if they are non-NULL, the first argument is nothing special,
  * it will also be freed, the list should be ended with NULL */

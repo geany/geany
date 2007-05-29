@@ -41,6 +41,7 @@
 #include "treeviews.h"
 #include "win32.h"
 #include "project.h"
+#include "editor.h"
 
 
 static gchar *menu_item_get_text(GtkMenuItem *menu_item);
@@ -325,8 +326,8 @@ void ui_update_insert_include_item(gint idx, gint item)
 
 void ui_update_fold_items()
 {
-	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_fold_all1"), app->pref_editor_folding);
-	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_unfold_all1"), app->pref_editor_folding);
+	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_fold_all1"), editor_prefs.folding);
+	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_unfold_all1"), editor_prefs.folding);
 }
 
 
@@ -593,7 +594,7 @@ void ui_document_show_hide(gint idx)
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, widget_name)),
 																					TRUE);
 
-	gtk_widget_set_sensitive(indention, app->pref_editor_indention_mode != INDENT_NONE);
+	gtk_widget_set_sensitive(indention, editor_prefs.indention_mode != INDENT_NONE);
 
 	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
 			encodings_is_unicode_charset(doc_list[idx].encoding));

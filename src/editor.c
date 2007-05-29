@@ -44,6 +44,9 @@
 
 static gchar current_word[GEANY_MAX_WORD_LENGTH];	// holds word under the mouse or keyboard cursor
 
+// Initialised in keyfile.c.
+EditorPrefs editor_prefs;
+
 EditorInfo editor_info = {current_word, -1};
 
 static struct
@@ -77,7 +80,7 @@ on_editor_button_press_event           (GtkWidget *widget,
 
 	if (event->button == 1)
 	{
-		if (GDK_BUTTON_PRESS==event->type && app->pref_editor_disable_dnd)
+		if (GDK_BUTTON_PRESS == event->type && editor_prefs.disable_dnd)
 		{
 			gint ss = sci_get_selection_start(doc_list[idx].sci);
 			sci_set_selection_end(doc_list[idx].sci, ss);
@@ -115,12 +118,12 @@ static void on_margin_click(ScintillaObject *sci, SCNotification *nt)
 		sci_set_marker_at_line(sci, line, ! set, 1);	// toggle the marker
 	}
 	// left click on the folding margin to toggle folding state of current line
-	else if (nt->margin == 2 && app->pref_editor_folding)
+	else if (nt->margin == 2 && editor_prefs.folding)
 	{
 		gint line = SSM(sci, SCI_LINEFROMPOSITION, nt->position, 0);
 
 		SSM(sci, SCI_TOGGLEFOLD, line, 0);
-		if (app->pref_editor_unfold_all_children &&
+		if (editor_prefs.unfold_all_children &&
 			SSM(sci, SCI_GETLINEVISIBLE, line + 1, 0))
 		{	// unfold all children of the current fold point
 			gint last_line = SSM(sci, SCI_GETLASTCHILD, line, -1);
@@ -230,7 +233,7 @@ static void on_char_added(gint idx, SCNotification *nt)
 		case '}':
 		{	// closing bracket handling
 			if (doc_list[idx].use_auto_indention &&
-				app->pref_editor_indention_mode == INDENT_ADVANCED)
+				editor_prefs.indention_mode == INDENT_ADVANCED)
 				editor_close_block(idx, pos - 1);
 			break;
 		}
@@ -359,6 +362,40 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 }
 
 
+/* Returns a string containing width chars of whitespace according to the
+ * setting editor_prefs.use_tabs filled with simple space characters or with the right number
+ * of tab characters. (Result is filled with tabs *and* spaces if width isn't a multiple of
+ * editor_prefs.tab_width).
+ * If alternative is set to TRUE, it uses the opposite of editor_prefs.use_tabs. */
+static gchar *
+get_whitespace(gint width, gboolean alternative)
+{
+	gchar *str;
+	gboolean use_tabs;
+
+	g_return_val_if_fail(width > 0, NULL);
+
+	use_tabs = (alternative) ? ! editor_prefs.use_tabs : editor_prefs.use_tabs;
+
+	if (use_tabs)
+	{	// first fill text with tabluators and fill the rest with spaces
+		gint tabs = width / editor_prefs.tab_width;
+		gint spaces = width % editor_prefs.tab_width;
+		gint len = tabs + spaces;
+
+		str = g_malloc(len + 1);
+
+		memset(str, '\t', tabs);
+		memset(str + tabs, ' ', spaces);
+		str[len] = '\0';
+ 	}
+	else
+		str = g_strnfill(width, ' ');
+
+	return str;
+}
+
+
 static void on_new_line_added(ScintillaObject *sci, gint idx)
 {
 	gint pos = sci_get_current_position(sci);
@@ -369,7 +406,7 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 		get_indent(sci, pos, FALSE);
 		sci_add_text(sci, indent);
 
-		if (app->pref_editor_indention_mode == INDENT_ADVANCED)
+		if (editor_prefs.indention_mode == INDENT_ADVANCED)
 		{
 			// add extra indentation for Python after colon
 			if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_PYTHON &&
@@ -377,14 +414,14 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 				sci_get_style_at(sci, pos - 2) == SCE_P_OPERATOR)
 			{
 				// creates and inserts one tabulator sign or whitespace of the amount of the tab width
-				gchar *text = utils_get_whitespace(app->pref_editor_tab_width, FALSE);
+				gchar *text = get_whitespace(editor_prefs.tab_width, FALSE);
 				sci_add_text(sci, text);
 				g_free(text);
 			}
 		}
 	}
 
-	if (app->pref_editor_auto_complete_constructs)
+	if (editor_prefs.auto_complete_constructs)
 	{
 		// " * " auto completion in multiline C/C++/D/Java comments
 		auto_multiline(sci, pos);
@@ -419,7 +456,7 @@ static void do_indent(gchar *buf, gsize len, guint *idx)
 {
 	guint j = *idx;
 
-	if (app->pref_editor_use_tabs)
+	if (editor_prefs.use_tabs)
 	{
 		if (j < len - 1)	// leave room for a \0 terminator.
 			buf[j++] = '\t';
@@ -427,7 +464,7 @@ static void do_indent(gchar *buf, gsize len, guint *idx)
 	else
 	{	// insert as many spaces as a tab would take
 		guint k;
-		for (k = 0; k < (guint) app->pref_editor_tab_width && k < len - 1; k++)
+		for (k = 0; k < (guint) editor_prefs.tab_width && k < len - 1; k++)
 			buf[j++] = ' ';
 	}
 	*idx = j;
@@ -452,7 +489,7 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 	{
 		if (linebuf[i] == ' ' || linebuf[i] == '\t')	// simple indentation
 			indent[j++] = linebuf[i];
-		else if (app->pref_editor_indention_mode != INDENT_ADVANCED)
+		else if (editor_prefs.indention_mode != INDENT_ADVANCED)
 			break;
 		else if (use_this_line)
 			break;
@@ -489,7 +526,7 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 
 static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
 {
-	if (! app->pref_editor_auto_complete_constructs || SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_LATEX)
+	if (! editor_prefs.auto_complete_constructs || SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_LATEX)
 		return;
 
 	if (c == '[')
@@ -598,7 +635,7 @@ void editor_close_block(gint idx, gint pos)
 
 		if (line_indent < last_indent)
 			return;
-		line_indent -= app->pref_editor_tab_width;
+		line_indent -= editor_prefs.tab_width;
 		line_indent = MAX(0, line_indent);
 		sci_set_line_indentation(sci, line, line_indent);
 	}
@@ -917,7 +954,7 @@ gboolean editor_start_auto_complete(gint idx, gint pos, gboolean force)
 	gchar *wordchars;
 	filetype *ft;
 
-	if ((! app->pref_editor_auto_complete_symbols && ! force) ||
+	if ((! editor_prefs.auto_complete_symbols && ! force) ||
 		! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
 		return FALSE;
 
@@ -1245,7 +1282,7 @@ gboolean editor_auto_forif(gint idx, gint pos)
 	eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
 
 	// get the whitespace for additional indentation
-	space = utils_get_whitespace(app->pref_editor_tab_width, FALSE);
+	space = get_whitespace(editor_prefs.tab_width, FALSE);
 
 	sci_start_undo_action(sci);	// needed while we insert a space separately from construct
 	result = complete_constructs(idx, pos, buf, space, eol);
@@ -1284,7 +1321,7 @@ static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx)
 
 	// If the user has turned us off, quit now.
 	// This may make sense only in certain languages
-	if (! app->pref_editor_auto_close_xml_tags || (lexer != SCLEX_HTML && lexer != SCLEX_XML))
+	if (! editor_prefs.auto_close_xml_tags || (lexer != SCLEX_HTML && lexer != SCLEX_XML))
 		return FALSE;
 
 	pos = sci_get_current_position(sci);
@@ -1970,7 +2007,7 @@ static void auto_multiline(ScintillaObject *sci, gint pos)
 
 			/* if there is one too many spaces, delete the last space,
 			 * to return to the indent used before the multiline comment was started. */
-			if (indent_len % app->pref_editor_tab_width == 1)
+			if (indent_len % editor_prefs.tab_width == 1)
 				SSM(sci, SCI_DELETEBACKNOTLINE, 0, 0);	// remove whitespace indent
 			g_free(previous_line);
 			return;
@@ -2262,7 +2299,7 @@ static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_vi
 void editor_insert_alternative_whitespace(ScintillaObject *sci)
 {
 	// creates and inserts one tabulator sign or whitespace of the amount of the tab width
-	gchar *text = utils_get_whitespace(app->pref_editor_tab_width, TRUE);
+	gchar *text = get_whitespace(editor_prefs.tab_width, TRUE);
 	sci_add_text(sci, text);
 	g_free(text);
 }

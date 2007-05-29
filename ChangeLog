@@ -1,3 +1,14 @@
+2007-05-29  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/build.c, src/utils.c, src/utils.h, src/keybindings.c,
+   src/prefs.c, src/geany.h, src/callbacks.c, src/keyfile.c,
+   src/document.c, src/main.c, src/editor.c, src/editor.h,
+   src/ui_utils.c:
+   Move MyApp::pref_editor_* to editor.h, using editor_prefs struct.
+   Move INDENT_* enums to editor.h.
+   Move utils_get_whitespace() to editor.c.
+
+
 2007-05-29  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook:

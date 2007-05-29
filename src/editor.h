@@ -34,6 +34,41 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
+enum
+{
+	INDENT_NONE = 0,
+	INDENT_BASIC,
+	INDENT_ADVANCED
+};
+
+/* These are the default prefs when creating a new editor window.
+ * Some of these can be overridden per document. */
+typedef struct
+{
+	gboolean	line_breaking;
+	gint		indention_mode;
+	gboolean	use_indicators;
+	gboolean	show_white_space;
+	gboolean	show_indent_guide;
+	gboolean	show_line_endings;
+	gboolean	auto_complete_symbols;
+	gboolean	auto_close_xml_tags;
+	gboolean	auto_complete_constructs;
+	gboolean	folding;
+	gboolean	unfold_all_children;
+	gboolean	show_scrollbars;
+	gint		tab_width;
+	gboolean	use_tabs;
+	gint		default_encoding;
+	gboolean	new_line;
+	gboolean	replace_tabs;
+	gboolean	trail_space;
+	gboolean	disable_dnd;
+} EditorPrefs;
+
+extern EditorPrefs editor_prefs;
+
+
 typedef struct
 {
 	gchar *current_word;	// holds word under the mouse or keyboard cursor
