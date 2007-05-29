@@ -2667,7 +2667,7 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 						<row>
 							<entry>GEANY_DEFAULT_TOOLS_BROWSER</entry>
 							<entry>A web browser. This can also include a path.</entry>
-							<entry>"mozilla"</entry>
+							<entry>"firefox"</entry>
 						</row>
 						<row>
 							<entry>GEANY_DEFAULT_TOOLS_PRINTCMD</entry>
