@@ -412,6 +412,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 			break;
 		}
 
+		case GEANY_FILETYPES_HASKELL:
 		case GEANY_FILETYPES_VHDL:
 		case GEANY_FILETYPES_LUA:
 		{

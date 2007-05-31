@@ -1,3 +1,8 @@
+2007-05-31  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/templates.c: Add Haskell to make_comment_block().
+
+
 2007-05-29  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/utils.c, src/utils.h, src/keybindings.c,
@@ -12,8 +17,8 @@
 2007-05-29  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook:
-   Removed app_small entity.
-   Added description for global configuration file.
+   Remove app_small entity.
+   Add description for global configuration file.
 
 
 2007-05-28  Nick Treleaven  <nick.treleaven@btinternet.com>
