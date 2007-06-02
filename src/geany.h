@@ -110,6 +110,7 @@ typedef struct MyApp
 	gboolean			 pref_toolbar_show_search;
 	gboolean			 pref_toolbar_show_goto;
 	gboolean			 pref_toolbar_show_undo;
+	gboolean			 pref_toolbar_show_navigation;
 	gboolean			 pref_toolbar_show_compile;
 	gboolean			 pref_toolbar_show_zoom;
 	gboolean			 pref_toolbar_show_colour;
@@ -167,6 +168,7 @@ typedef struct MyApp
 	GtkWidget			*undo_items[3];
 	GtkWidget			*save_buttons[4];
 	GtkWidget			*sensitive_buttons[39];
+	GtkWidget			*navigation_buttons[2];
 	GtkWidget			*open_colorsel;
 	GtkWidget			*open_fontsel;
 	GtkWidget			*open_filesel;

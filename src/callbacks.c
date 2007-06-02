@@ -58,6 +58,7 @@
 #include "symbols.h"
 #include "tools.h"
 #include "project.h"
+#include "navqueue.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -77,7 +78,6 @@ static gboolean ignore_toolbar_toggle = FALSE;
 
 // flag to indicate that an insert callback was triggered from the file menu,
 // so we need to store the current cursor position in editor_info.click_pos.
-/// TODO rename me
 static gboolean insert_callback_from_menu = FALSE;
 
 // represents the state at switching a notebook page(in the left treeviews widget), to not emit
@@ -1216,10 +1216,20 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 	tmtag = symbols_find_in_workspace(editor_info.current_word, type);
 	if (tmtag != NULL)
 	{
+		gint old_idx = document_get_cur_idx(); // get idx before switching the file
+
 		if (utils_goto_file_line(
 			tmtag->atts.entry.file->work_object.file_name,
 			TRUE, tmtag->atts.entry.line))
+		{
+			// first add old file as old position
+			navqueue_new_position(doc_list[old_idx].tm_file->file_name,
+				sci_get_line_from_position(doc_list[old_idx].sci, editor_info.click_pos) + 1);
+
+			navqueue_new_position(tmtag->atts.entry.file->work_object.file_name,
+				tmtag->atts.entry.line);
 			return;
+		}
 	}
 	// if we are here, there was no match and we are beeping ;-)
 	utils_beep();
@@ -2225,4 +2235,19 @@ on_menu_toggle_all_additional_widgets1_activate
 	}
 }
 
+
+void
+on_forward_activate                    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	navqueue_go_forward();
+}
+
+
+void
+on_back_activate                       (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	navqueue_go_back();
+}
 

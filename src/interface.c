@@ -213,6 +213,9 @@ create_window1 (void)
   GtkWidget *toolbutton_undo;
   GtkWidget *toolbutton_redo;
   GtkWidget *separatortoolitem9;
+  GtkWidget *toolbutton_back;
+  GtkWidget *toolbutton_forward;
+  GtkWidget *separatortoolitem10;
   GtkWidget *tmp_image;
   GtkWidget *toolbutton13;
   GtkWidget *toolbutton26;
@@ -230,6 +233,7 @@ create_window1 (void)
   GtkWidget *entry_goto_line;
   GtkWidget *toolbutton25;
   GtkWidget *separatortoolitem8;
+  GtkWidget *separatortoolitem1;
   GtkWidget *toolbutton19;
   GtkWidget *vpaned1;
   GtkWidget *hpaned1;
@@ -983,7 +987,7 @@ create_window1 (void)
   toolbar1 = gtk_toolbar_new ();
   gtk_widget_show (toolbar1);
   gtk_box_pack_start (GTK_BOX (vbox1), toolbar1, FALSE, FALSE, 0);
-  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar1), GTK_TOOLBAR_BOTH);
+  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar1), GTK_TOOLBAR_ICONS);
   tmp_toolbar_icon_size = gtk_toolbar_get_icon_size (GTK_TOOLBAR (toolbar1));
 
   menutoolbutton1 = (GtkWidget*) gtk_menu_tool_button_new_from_stock ("gtk-new");
@@ -1039,6 +1043,22 @@ create_window1 (void)
   separatortoolitem9 = (GtkWidget*) gtk_separator_tool_item_new ();
   gtk_widget_show (separatortoolitem9);
   gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem9);
+
+  toolbutton_back = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-go-back");
+  gtk_widget_show (toolbutton_back);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton_back);
+  gtk_widget_set_sensitive (toolbutton_back, FALSE);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton_back), tooltips, _("Navigate back a location"), NULL);
+
+  toolbutton_forward = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-go-forward");
+  gtk_widget_show (toolbutton_forward);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton_forward);
+  gtk_widget_set_sensitive (toolbutton_forward, FALSE);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton_forward), tooltips, _("Navigate forward a location"), NULL);
+
+  separatortoolitem10 = (GtkWidget*) gtk_separator_tool_item_new ();
+  gtk_widget_show (separatortoolitem10);
+  gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem10);
 
   tmp_image = gtk_image_new_from_stock ("gtk-convert", tmp_toolbar_icon_size);
   gtk_widget_show (tmp_image);
@@ -1119,6 +1139,11 @@ create_window1 (void)
   gtk_widget_show (separatortoolitem8);
   gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem8);
   gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM (separatortoolitem8), FALSE);
+
+  separatortoolitem1 = (GtkWidget*) gtk_separator_tool_item_new ();
+  gtk_widget_show (separatortoolitem1);
+  gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem1);
+  gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM (separatortoolitem1), FALSE);
 
   toolbutton19 = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-quit");
   gtk_widget_show (toolbutton19);
@@ -1519,6 +1544,12 @@ create_window1 (void)
   g_signal_connect ((gpointer) toolbutton_redo, "clicked",
                     G_CALLBACK (on_redo1_activate),
                     NULL);
+  g_signal_connect ((gpointer) toolbutton_back, "clicked",
+                    G_CALLBACK (on_back_activate),
+                    NULL);
+  g_signal_connect ((gpointer) toolbutton_forward, "clicked",
+                    G_CALLBACK (on_forward_activate),
+                    NULL);
   g_signal_connect ((gpointer) toolbutton13, "clicked",
                     G_CALLBACK (on_compile_button_clicked),
                     NULL);
@@ -1748,6 +1779,9 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, toolbutton_undo, "toolbutton_undo");
   GLADE_HOOKUP_OBJECT (window1, toolbutton_redo, "toolbutton_redo");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem9, "separatortoolitem9");
+  GLADE_HOOKUP_OBJECT (window1, toolbutton_back, "toolbutton_back");
+  GLADE_HOOKUP_OBJECT (window1, toolbutton_forward, "toolbutton_forward");
+  GLADE_HOOKUP_OBJECT (window1, separatortoolitem10, "separatortoolitem10");
   GLADE_HOOKUP_OBJECT (window1, toolbutton13, "toolbutton13");
   GLADE_HOOKUP_OBJECT (window1, toolbutton26, "toolbutton26");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem6, "separatortoolitem6");
@@ -1764,6 +1798,7 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, entry_goto_line, "entry_goto_line");
   GLADE_HOOKUP_OBJECT (window1, toolbutton25, "toolbutton25");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem8, "separatortoolitem8");
+  GLADE_HOOKUP_OBJECT (window1, separatortoolitem1, "separatortoolitem1");
   GLADE_HOOKUP_OBJECT (window1, toolbutton19, "toolbutton19");
   GLADE_HOOKUP_OBJECT (window1, vpaned1, "vpaned1");
   GLADE_HOOKUP_OBJECT (window1, hpaned1, "hpaned1");
@@ -2436,10 +2471,11 @@ create_prefs_dialog (void)
   GtkWidget *alignment14;
   GtkWidget *vbox16;
   GtkWidget *check_toolbar_fileops;
+  GtkWidget *check_toolbar_undo;
+  GtkWidget *check_toolbar_navigation;
   GtkWidget *check_toolbar_compile;
   GtkWidget *check_toolbar_colour;
   GtkWidget *check_toolbar_zoom;
-  GtkWidget *check_toolbar_undo;
   GtkWidget *check_toolbar_search;
   GtkWidget *check_toolbar_goto;
   GtkWidget *check_toolbar_quit;
@@ -3065,7 +3101,21 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_toolbar_fileops, _("Display the New, Open, Close, Save and Reload buttons in the toolbar"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_fileops), FALSE);
 
-  check_toolbar_compile = gtk_check_button_new_with_mnemonic (_("Show Compile and Run"));
+  check_toolbar_undo = gtk_check_button_new_with_mnemonic (_("Show Redo and Undo buttons"));
+  gtk_widget_show (check_toolbar_undo);
+  gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_undo, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_toolbar_undo, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_toolbar_undo, _("Display the Redo and Undo buttons in the toolbar"), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_undo), FALSE);
+
+  check_toolbar_navigation = gtk_check_button_new_with_mnemonic (_("Show Back and Forward buttons"));
+  gtk_widget_show (check_toolbar_navigation);
+  gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_navigation, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_toolbar_navigation, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_toolbar_navigation, _("Display the Back and Forward buttons in the toolbar used for code navigation"), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_navigation), FALSE);
+
+  check_toolbar_compile = gtk_check_button_new_with_mnemonic (_("Show Compile and Run buttons"));
   gtk_widget_show (check_toolbar_compile);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_compile, FALSE, FALSE, 0);
   GTK_WIDGET_UNSET_FLAGS (check_toolbar_compile, GTK_CAN_FOCUS);
@@ -3079,19 +3129,12 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_toolbar_colour, _("Display the Colour Chooser button in the toolbar"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_colour), FALSE);
 
-  check_toolbar_zoom = gtk_check_button_new_with_mnemonic (_("Show Zoom In and Zoom Out"));
+  check_toolbar_zoom = gtk_check_button_new_with_mnemonic (_("Show Zoom In and Zoom Out buttons"));
   gtk_widget_show (check_toolbar_zoom);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_zoom, FALSE, FALSE, 0);
   GTK_WIDGET_UNSET_FLAGS (check_toolbar_zoom, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_zoom, _("Display the Zoom In and Zoom Out buttons in the toolbar"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_zoom), FALSE);
-
-  check_toolbar_undo = gtk_check_button_new_with_mnemonic (_("Show Redo and Undo buttons"));
-  gtk_widget_show (check_toolbar_undo);
-  gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_undo, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_toolbar_undo, GTK_CAN_FOCUS);
-  gtk_tooltips_set_tip (tooltips, check_toolbar_undo, _("Display the Redo and Undo buttons in the toolbar"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_undo), FALSE);
 
   check_toolbar_search = gtk_check_button_new_with_mnemonic (_("Show Search field"));
   gtk_widget_show (check_toolbar_search);
@@ -4057,10 +4100,11 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment14, "alignment14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox16, "vbox16");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_fileops, "check_toolbar_fileops");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_undo, "check_toolbar_undo");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_navigation, "check_toolbar_navigation");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_compile, "check_toolbar_compile");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_colour, "check_toolbar_colour");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_zoom, "check_toolbar_zoom");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_undo, "check_toolbar_undo");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_search, "check_toolbar_search");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_goto, "check_toolbar_goto");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_quit, "check_toolbar_quit");

@@ -182,6 +182,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_toolbar_undo");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_undo);
 
+	widget = lookup_widget(app->prefs_dialog, "check_toolbar_navigation");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_navigation);
+
 	widget = lookup_widget(app->prefs_dialog, "check_toolbar_colour");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_toolbar_show_colour);
 
@@ -507,6 +510,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_undo");
 		app->pref_toolbar_show_undo = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_toolbar_navigation");
+		app->pref_toolbar_show_navigation = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_toolbar_compile");
 		app->pref_toolbar_show_compile = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

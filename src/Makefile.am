@@ -20,6 +20,7 @@ SRCS = \
 	keyfile.c keyfile.h \
 	main.c main.h geany.h \
 	msgwindow.c msgwindow.h \
+	navqueue.c navqueue.h \
 	notebook.c notebook.h \
 	prefs.c prefs.h \
 	project.c project.h \

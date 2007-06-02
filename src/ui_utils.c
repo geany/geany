@@ -673,6 +673,10 @@ void ui_update_toolbar_items()
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_undo"), app->pref_toolbar_show_undo);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_redo"), app->pref_toolbar_show_undo);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem9"), app->pref_toolbar_show_undo);
+	// navigation
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_back"), app->pref_toolbar_show_navigation);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_forward"), app->pref_toolbar_show_navigation);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem10"), app->pref_toolbar_show_navigation);
 	// quit
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton19"), app->pref_toolbar_show_quit);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem8"), app->pref_toolbar_show_quit);

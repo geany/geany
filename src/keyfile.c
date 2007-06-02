@@ -145,7 +145,7 @@ void configuration_save()
 	GtkTextBuffer *buffer;
 	GtkTextIter start, end;
 
-	g_key_file_load_from_file(config, configfile, 0, NULL);
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	// gets the text from the scribble textview
 	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(app->window, "textview_scribble")));
@@ -251,6 +251,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_goto", app->pref_toolbar_show_goto);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_zoom", app->pref_toolbar_show_zoom);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_undo", app->pref_toolbar_show_undo);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_navigation", app->pref_toolbar_show_navigation);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", app->pref_toolbar_show_compile);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", app->pref_toolbar_show_colour);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_fileops", app->pref_toolbar_show_fileops);
@@ -358,7 +359,7 @@ gboolean configuration_load()
 		setptr(configfile, g_strconcat(app->datadir, G_DIR_SEPARATOR_S "geany.conf", NULL));
 	}
 
-	g_key_file_load_from_file(config, configfile, 0, NULL);
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	app->toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
 	{
@@ -458,6 +459,7 @@ gboolean configuration_load()
 	app->pref_toolbar_show_zoom = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_zoom", FALSE);
 	app->pref_toolbar_show_compile = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_compile", TRUE);
 	app->pref_toolbar_show_undo = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_undo", FALSE);
+	app->pref_toolbar_show_navigation = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_navigation", TRUE);
 	app->pref_toolbar_show_colour = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_colour", TRUE);
 	app->pref_toolbar_show_fileops = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_fileops", TRUE);
 	app->pref_toolbar_show_quit = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_quit", TRUE);

@@ -59,6 +59,7 @@
 #include "symbols.h"
 #include "project.h"
 #include "tools.h"
+#include "navqueue.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -332,6 +333,8 @@ static void main_init(void)
 	app->sensitive_buttons[36] = lookup_widget(app->window, "menu_format1");
 	app->sensitive_buttons[37] = lookup_widget(app->window, "menu_open_selected_file1");
 	app->sensitive_buttons[38] = lookup_widget(app->window, "menu_insert_special_chars1");
+	app->navigation_buttons[0] = lookup_widget(app->window, "toolbutton_back");
+	app->navigation_buttons[1] = lookup_widget(app->window, "toolbutton_forward");
 	app->redo_items[0] = lookup_widget(app->popup_menu, "redo1");
 	app->redo_items[1] = lookup_widget(app->window, "menu_redo2");
 	app->redo_items[2] = lookup_widget(app->window, "toolbutton_redo");
@@ -721,6 +724,7 @@ gint main(gint argc, gchar **argv)
 	gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
 	build_menu_update(idx);
 	treeviews_update_tag_list(idx, FALSE);
+	navqueue_init();
 
 #ifdef G_OS_WIN32
 	// hide "Build" menu item, at least until it is available for Windows
@@ -763,6 +767,7 @@ void main_quit()
 	socket_finalize();
 #endif
 
+	navqueue_free();
 	keybindings_free();
 	filetypes_save_commands();
 	filetypes_free_types();
