@@ -2,6 +2,8 @@
 
  * doc/geany.docbook, src/keybindings.c, src/keybindings.h:
    Add keybindings for forward/back code navigation.
+ * src/navqueue.c, src/navqueue.h:
+   Add $Id$ keyword and short file description.
 
 
 2007-06-02  Enrico Tröger  <enrico.troeger@uvena.de>
@@ -9,7 +11,7 @@
  * geany.glade, src/callbacks.c, src/callbacks.h, src/geany.h,
    src/interface.c, src/keyfile.c, src/main.c, src/Makefile.am,
    src/navqueue.h, src/navqueue.c, src/prefs.c, src/ui_utils.c:
-   Applied patch from Dave Moore to add simple code navigation
+   Apply patch from Dave Moore to add simple code navigation
    (thank you).
 
 
