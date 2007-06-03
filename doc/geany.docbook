@@ -1729,6 +1729,14 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 								<entry>Switches to the previously selected open document.</entry>
 							</row>
 							<row>
+								<entry>Navigate forward a location</entry>
+								<entry>Switches to the next location in the navigation history.</entry>
+							</row>
+							<row>
+								<entry>Navigate back a location</entry>
+								<entry>Switches to the previous location in the navigation history.</entry>
+							</row>
+							<row>
 								<entry align="left" spanname="hspan">Editing operations</entry>
 							</row>
 							<row>

@@ -40,6 +40,7 @@
 #include "sciwrappers.h"
 #include "build.h"
 #include "tools.h"
+#include "navqueue.h"
 // include vte.h on non-Win32 systems, else define fake vte_init
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -94,6 +95,8 @@ static void cb_func_switch_search_bar(guint key_id);
 static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
+static void cb_func_nav_back(guint key_id);
+static void cb_func_nav_forward(guint key_id);
 static void cb_func_toggle_sidebar(guint key_id);
 
 // common function for editing keybindings, only valid when scintilla has focus.
@@ -230,6 +233,10 @@ void keybindings_init(void)
 		GDK_Page_Down, GDK_CONTROL_MASK, "switch_tabright", _("Switch to right document"));
 	keys[GEANY_KEYS_SWITCH_TABLASTUSED] = fill(cb_func_switch_tablastused,
 		GDK_Tab, GDK_CONTROL_MASK, "switch_tablastused", _("Switch to last used document"));
+	keys[GEANY_KEYS_NAV_BACK] = fill(cb_func_nav_back,
+		0, 0, "nav_back", _("Navigate back a location"));
+	keys[GEANY_KEYS_NAV_FORWARD] = fill(cb_func_nav_forward,
+		0, 0, "nav_forward", _("Navigate forward a location"));
 
 	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit,
 		GDK_d, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
@@ -1154,3 +1161,12 @@ static void cb_func_menu_insert_specialchars(G_GNUC_UNUSED guint key_id)
 	on_menu_insert_special_chars1_activate(NULL, NULL);
 }
 
+static void cb_func_nav_back(G_GNUC_UNUSED guint key_id)
+{
+	navqueue_go_back();
+}
+
+static void cb_func_nav_forward(G_GNUC_UNUSED guint key_id)
+{
+	navqueue_go_forward();
+}

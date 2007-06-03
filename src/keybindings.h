@@ -32,7 +32,7 @@ typedef struct binding
 {
 	guint key;
 	GdkModifierType mods;
-	// at the moment only needed as keys for the configuration file because indices or tranlatable
+	// at the moment only needed as keys for the configuration file because indices or translatable
 	// strings as keys are not very useful
 	const gchar *name;
 	const gchar *label;
@@ -107,6 +107,8 @@ enum
 	GEANY_KEYS_SWITCH_TABLEFT,
 	GEANY_KEYS_SWITCH_TABRIGHT,
 	GEANY_KEYS_SWITCH_TABLASTUSED,
+	GEANY_KEYS_NAV_FORWARD,
+	GEANY_KEYS_NAV_BACK,
 
 	GEANY_KEYS_EDIT_TOLOWERCASE,
 	GEANY_KEYS_EDIT_TOUPPERCASE,

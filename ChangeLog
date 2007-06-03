@@ -1,3 +1,18 @@
+2007-06-03  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * doc/geany.docbook, src/keybindings.c, src/keybindings.h:
+   Add keybindings for forward/back code navigation.
+
+
+2007-06-02  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/geany.h,
+   src/interface.c, src/keyfile.c, src/main.c, src/Makefile.am,
+   src/navqueue.h, src/navqueue.c, src/prefs.c, src/ui_utils.c:
+   Applied patch from Dave Moore to add simple code navigation
+   (thank you).
+
+
 2007-05-31  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/templates.c: Add Haskell to make_comment_block().
