@@ -1,5 +1,7 @@
 2007-06-04  Enrico Tröger  <enrico.troeger@uvena.de>
 
+ * src/main.c: Add rpl_malloc() for better compatibility with non-GNU
+               systems (thanks to Harri Koskinen for reporting).
  * po/POTFILES.in: Add navqueue.c.
  * po/intl_stats.sh: Add revision time to the output.
  * src/callbacks.c, src/callbacks.h:
@@ -8,14 +10,10 @@
    Re-maximize the main window on startup when closed in maximized state
    (closes #1730369).
  * src/geany.h, src/keyfile.c, src/main.c:
-   Improved code to avoid hiding the messages window
+   Improve code to avoid hiding the messages window
    (caused by last commit).
-
-
-2007-06-04  Enrico Tröger  <enrico.troeger@uvena.de>
-
- * src/main.c: Add rpl_malloc() for better compatibility with non-GNU
-               systems (thanks to Harri Koskinen for reporting).
+ * tagmanager/sort.c, tagmanager/tm_workspace.c:
+   Replace malloc() by g_malloc().
 
 
 2007-06-03  Enrico Tröger  <enrico.troeger@uvena.de>

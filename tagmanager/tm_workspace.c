@@ -114,7 +114,7 @@ gboolean tm_workspace_add_object(TMWorkObject *work_object)
 	return TRUE;
 }
 
-gboolean tm_workspace_remove_object(TMWorkObject *w, gboolean free)
+gboolean tm_workspace_remove_object(TMWorkObject *w, gboolean do_free)
 {
 	guint i;
 	if ((NULL == theWorkspace) || (NULL == theWorkspace->work_objects)
@@ -124,7 +124,7 @@ gboolean tm_workspace_remove_object(TMWorkObject *w, gboolean free)
 	{
 		if (theWorkspace->work_objects->pdata[i] == w)
 		{
-			if (free)
+			if (do_free)
 				tm_work_object_free(w);
 			g_ptr_array_remove_index_fast(theWorkspace->work_objects, i);
 			tm_workspace_update(TM_WORK_OBJECT(theWorkspace), TRUE, FALSE, FALSE);
@@ -284,7 +284,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
 	{
  		int dirty_len = strlen(includes[idx_inc]);
-		char *clean_path = malloc(dirty_len - 1);
+		char *clean_path = g_malloc(dirty_len - 1);
 		strncpy(clean_path, includes[idx_inc] + 1, dirty_len - 1);
 		clean_path[dirty_len - 2] = 0;
 
