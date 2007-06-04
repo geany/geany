@@ -237,7 +237,14 @@ void configuration_save()
 	if (app->pref_main_save_winpos && ! app->fullscreen)
 	{
 		gtk_window_get_position(GTK_WINDOW(app->window), &app->geometry[0], &app->geometry[1]);
-		gtk_window_get_size(GTK_WINDOW(app->window), &app->geometry[2], &app->geometry[3]);
+		if (gdk_window_get_state(app->window->window) & GDK_WINDOW_STATE_MAXIMIZED)
+		{	// use -1 for width and height if the window is maximized
+			app->geometry[2] = -1;
+			app->geometry[3] = -1;
+		}
+		else
+			gtk_window_get_size(GTK_WINDOW(app->window), &app->geometry[2], &app->geometry[3]);
+
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", app->geometry, 4);
 	}
 	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", editor_prefs.tab_width);

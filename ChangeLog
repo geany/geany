@@ -2,6 +2,11 @@
 
  * po/POTFILES.in: Add navqueue.c.
  * po/intl_stats.sh: Add revision time to the output.
+ * src/callbacks.c, src/callbacks.h:
+   Removed unneeded function destroyapp.
+ * src/keyfile.c, src/main.c:
+   Re-maximize the main window on startup when closed in maximized state
+   (closes #1730369).
 
 
 2007-06-04  Enrico Tröger  <enrico.troeger@uvena.de>

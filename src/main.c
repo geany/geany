@@ -205,7 +205,11 @@ static void apply_settings(void)
 	if (app->pref_main_save_winpos && app->geometry[0] != -1)
 	{
 		gtk_window_move(GTK_WINDOW(app->window), app->geometry[0], app->geometry[1]);
-		gtk_window_set_default_size(GTK_WINDOW(app->window), app->geometry[2], app->geometry[3]);
+		if (app->geometry[2] == -1 && app->geometry[3] == -1)
+			gtk_window_maximize(GTK_WINDOW(app->window));
+		else
+			gtk_window_set_default_size(GTK_WINDOW(app->window), app->geometry[2], app->geometry[3]);
+
 	}
 
 	// hide statusbar if desired

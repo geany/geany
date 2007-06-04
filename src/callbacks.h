@@ -29,9 +29,6 @@ typedef struct
 extern CallbacksData callbacks_data;
 
 
-gint
-destroyapp                             (GtkWidget *widget, gpointer gdata);
-
 gboolean
 on_exit_clicked                        (GtkWidget *widget, gpointer gdata);
 

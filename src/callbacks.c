@@ -87,14 +87,6 @@ static gboolean insert_callback_from_menu = FALSE;
 CallbacksData callbacks_data = {-1};
 
 
-// real exit function
-gint destroyapp(GtkWidget *widget, gpointer gdata)
-{
-	main_quit();
-	return (FALSE);
-}
-
-
 static gboolean check_no_unsaved()
 {
 	guint i;
@@ -157,7 +149,7 @@ static void quit_app()
 	}
 	on_close_all1_activate(NULL, NULL);
 
-	destroyapp(NULL, NULL);
+	main_quit();
 }
 
 
