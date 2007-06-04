@@ -1,5 +1,11 @@
 2007-06-04  Enrico Tröger  <enrico.troeger@uvena.de>
 
+ * po/POTFILES.in: Add navqueue.c.
+ * po/intl_stats.sh: Add revision time to the output.
+
+
+2007-06-04  Enrico Tröger  <enrico.troeger@uvena.de>
+
  * src/main.c: Add rpl_malloc() for better compatibility with non-GNU
                systems (thanks to Harri Koskinen for reporting).
 

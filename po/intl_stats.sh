@@ -2,7 +2,10 @@
 
 # Little shell script to display some basic statistics about Geany's translation
 # files. It also checks the menu accelerators.
-
+#
+# Copyright 2007 Enrico Tröger <enrico.troeger@uvena.de>
+# Copyright 2007 Frank Lanitz <frank@frank.uvena.de>
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -63,18 +66,35 @@ done
 
 
 
-# if no languages where specified on the command line, take all mentioned languages in LINGUAS
+# if no languages where specified on the command line, take all listed languages in LINGUAS
 if [ -z "$linguas" ]
 then
 	linguas=`sed -e '/^#/d' LINGUAS`
 fi
 
+# dash and zsh don't need the -e switch to echo, bash does
+# maybe there is a better way to detect whether we are running on a bash
+eswitch=""
+if [ "$BASH" ]
+then
+	eswitch="-e"
+fi
 
 # do the work
-for lang in $linguas
-do
-	echo -n $lang": "
-	msgfmt --check --statistics $check_accelerators $lang.po;
-done
+if [ $check_accelerators ]
+then
+   for lang in $linguas
+   do
+     msgfmt --check --statistics $check_accelerators $lang.po;
+   done
+else
+   for lang in $linguas
+   do
+     # maybe the regexp can be optimized, regexps are not my best friends
+     creationdate=`grep "PO-Revision-Date:" $lang.po | sed 's/.*: \([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}[+|-][0-9]\{4\}\).*/\1/'`
+     echo -n $eswitch $lang"\t("$creationdate"):\t"
+     msgfmt --check --statistics $lang.po;
+   done
+fi
 
 
