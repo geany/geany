@@ -237,11 +237,6 @@ void
 on_fullscreen1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
-gboolean
-on_window_configure_event              (GtkWidget *widget,
-                                        GdkEventConfigure *event,
-                                        gpointer user_data);
-
 void
 on_show_toolbar1_toggled               (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);

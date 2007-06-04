@@ -78,8 +78,8 @@ typedef struct _GeanyProject GeanyProject;
 typedef struct MyApp
 {
 	gint			 	 toolbar_icon_style;
-	// 0:x, 1:y, 2:width, 3:height
-	gint				 geometry[4];
+	// 0:x, 1:y, 2:width, 3:height, flag for maximized state
+	gint				 geometry[5];
 	gboolean			 debug_mode;
 	// represents the state at startup while opening session files
 	gboolean			 opening_session_files;

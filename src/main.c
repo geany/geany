@@ -205,11 +205,9 @@ static void apply_settings(void)
 	if (app->pref_main_save_winpos && app->geometry[0] != -1)
 	{
 		gtk_window_move(GTK_WINDOW(app->window), app->geometry[0], app->geometry[1]);
-		if (app->geometry[2] == -1 && app->geometry[3] == -1)
+		gtk_window_set_default_size(GTK_WINDOW(app->window), app->geometry[2], app->geometry[3]);
+		if (app->geometry[4] == 1)
 			gtk_window_maximize(GTK_WINDOW(app->window));
-		else
-			gtk_window_set_default_size(GTK_WINDOW(app->window), app->geometry[2], app->geometry[3]);
-
 	}
 
 	// hide statusbar if desired
@@ -679,7 +677,6 @@ gint main(gint argc, gchar **argv)
 
 	// registering some basic events
 	g_signal_connect(G_OBJECT(app->window), "delete_event", G_CALLBACK(on_exit_clicked), NULL);
-	g_signal_connect(G_OBJECT(app->window), "configure-event", G_CALLBACK(on_window_configure_event), NULL);
 	g_signal_connect(G_OBJECT(app->window), "key-press-event", G_CALLBACK(on_window_key_press_event), NULL);
 	g_signal_connect(G_OBJECT(app->toolbar), "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
 

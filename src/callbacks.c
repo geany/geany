@@ -946,20 +946,6 @@ on_color_ok_button_clicked             (GtkButton       *button,
 
 
 gboolean
-on_window_configure_event              (GtkWidget *widget,
-                                        GdkEventConfigure *event,
-                                        gpointer user_data)
-{
-	app->geometry[0] = event->x;
-	app->geometry[1] = event->y;
-	app->geometry[2] = event->width;
-	app->geometry[3] = event->height;
-
-	return FALSE;
-}
-
-
-gboolean
 on_window_key_press_event              (GtkWidget *widget,
                                         GdkEventKey *event,
                                         gpointer user_data)

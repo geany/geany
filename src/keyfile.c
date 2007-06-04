@@ -237,15 +237,13 @@ void configuration_save()
 	if (app->pref_main_save_winpos && ! app->fullscreen)
 	{
 		gtk_window_get_position(GTK_WINDOW(app->window), &app->geometry[0], &app->geometry[1]);
+		gtk_window_get_size(GTK_WINDOW(app->window), &app->geometry[2], &app->geometry[3]);
 		if (gdk_window_get_state(app->window->window) & GDK_WINDOW_STATE_MAXIMIZED)
-		{	// use -1 for width and height if the window is maximized
-			app->geometry[2] = -1;
-			app->geometry[3] = -1;
-		}
+			app->geometry[4] = 1;
 		else
-			gtk_window_get_size(GTK_WINDOW(app->window), &app->geometry[2], &app->geometry[3]);
+			app->geometry[4] = 0;
 
-		g_key_file_set_integer_list(config, PACKAGE, "geometry", app->geometry, 4);
+		g_key_file_set_integer_list(config, PACKAGE, "geometry", app->geometry, 5);
 	}
 	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", editor_prefs.tab_width);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", editor_prefs.use_tabs);
@@ -351,7 +349,6 @@ static void load_file_lists(GKeyFile *config)
 
 gboolean configuration_load()
 {
-	guint geo_len;
 	gint *geo;
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	gchar *tmp_string, *tmp_string2;
@@ -421,7 +418,7 @@ gboolean configuration_load()
 	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
 				_("Type here what you want, use it as a notice/scratch board"));
 
-	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", &geo_len, &error);
+	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", NULL, &error);
 	if (error)
 	{
 		app->geometry[0] = -1;
@@ -434,6 +431,7 @@ gboolean configuration_load()
 		app->geometry[1] = geo[1];
 		app->geometry[2] = geo[2];
 		app->geometry[3] = geo[3];
+		app->geometry[4] = geo[4];
 	}
 	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
 	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
