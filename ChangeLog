@@ -1,9 +1,15 @@
+2007-06-04  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/main.c: Add rpl_malloc() for better compatibility with non-GNU
+               systems (thanks to Harri Koskinen for reporting).
+
+
 2007-06-03  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook, src/keybindings.c, src/keybindings.h:
    Add keybindings for forward/back code navigation.
  * src/navqueue.c, src/navqueue.h:
-   Add $Id$ keyword and short file description.
+   Add Id SVN keyword and short file description.
 
 
 2007-06-02  Enrico Tröger  <enrico.troeger@uvena.de>
