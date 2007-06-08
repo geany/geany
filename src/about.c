@@ -78,6 +78,8 @@ Jacek Wolszczak - <language> pl_PL\n\t\
 &lt;shutdownrunner@o2.pl&gt;\n\n\t\
 Alexandre Moreira - <language> pt_BR\n\t\
 &lt;alexandream@gmail.com&gt;\n\n\t\
+Adrovane Marques Kade - <language> pt_BR\n\t\
+&lt;adrovane@gmail.com&gt;\n\n\t\
 brahmann_ - <language> ru_RU\n\t\
 &lt;brahmann@mthr.net.ru&gt;\n\n\t\
 Clytie Siddall - <language> vi_VN\n\t\
