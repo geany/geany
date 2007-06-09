@@ -442,7 +442,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 
 		case GEANY_FILETYPES_PHP:
 		{
-			frame_start = "<?\n/*\n";
+			frame_start = "<?php\n/*\n";
 			frame_end = " */\n?>\n";
 			line_prefix = " *";
 			break;

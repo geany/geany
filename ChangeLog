@@ -3,6 +3,7 @@
  * THANKS, src/document.c:
    Apply from François Cami and Guillaume Duviol to improve replacement
    of tabs by spaces (thank you).
+ * src/templates.c: Change PHP short open tag to the full open tag.
 
 
 2007-06-08  Frank Lanitz  <frank@frank.uvena.de>
