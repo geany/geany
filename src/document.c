@@ -1800,7 +1800,7 @@ void document_print(gint idx)
 
 void document_replace_tabs(gint idx)
 {
-	gint search_pos;
+	gint search_pos, pos_in_line, current_tab_true_length;
 	gint tab_len;
 	gchar *tab_str;
 	struct TextToFind ttf;
@@ -1811,22 +1811,25 @@ void document_replace_tabs(gint idx)
 	tab_len = sci_get_tab_width(doc_list[idx].sci);
 	ttf.chrg.cpMin = 0;
 	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
-	ttf.lpstrText = (gchar*)"\t";
-	tab_str = g_strnfill(tab_len, ' ');
+	ttf.lpstrText = (gchar*) "\t";
 
 	while (TRUE)
 	{
 		search_pos = sci_find_text(doc_list[idx].sci, SCFIND_MATCHCASE, &ttf);
-		if (search_pos == -1) break;
+		if (search_pos == -1)
+			break;
 
+		pos_in_line = sci_get_col_from_position(doc_list[idx].sci,search_pos);
+		current_tab_true_length = tab_len - (pos_in_line % tab_len);
+		tab_str = g_strnfill(current_tab_true_length, ' ');
 		sci_target_start(doc_list[idx].sci, search_pos);
 		sci_target_end(doc_list[idx].sci, search_pos + 1);
 		sci_target_replace(doc_list[idx].sci, tab_str, FALSE);
-		ttf.chrg.cpMin = search_pos + tab_len - 1;	// next search starts after replacement
-		ttf.chrg.cpMax += tab_len - 1;	// update end of range now text has changed
+		ttf.chrg.cpMin = search_pos + current_tab_true_length - 1;	// next search starts after replacement
+		ttf.chrg.cpMax += current_tab_true_length - 1;	// update end of range now text has changed
+		g_free(tab_str);
 	}
 	sci_end_undo_action(doc_list[idx].sci);
-	g_free(tab_str);
 }
 
 

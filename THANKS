@@ -30,6 +30,7 @@ Anh Phạm <cs(dot)phamtuananh(at)gmail(dot)com> - various patches
 Guillaume Hoffmann <guillaumh(at)gmail(dot)com> - Haskell filetype patch
 Peter Strand <peter(at)zarquon(dot)se> - Haskell CTags patch
 Dave Moore <wrex006(at)gmail(dot)com> - code navigation patch
+François Cami <francois.cami(at)free(dot)fr>, Guillaume Duviol - tab replacement patch
 
 Translators:
 ----------------------------------
