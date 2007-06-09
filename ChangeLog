@@ -4,6 +4,8 @@
    Apply from François Cami and Guillaume Duviol to improve replacement
    of tabs by spaces (thank you).
  * src/templates.c: Change PHP short open tag to the full open tag.
+ * src/document.c: Prevent hang if searching for a regular expression
+                   fails (closes #1733676).
 
 
 2007-06-08  Frank Lanitz  <frank@frank.uvena.de>

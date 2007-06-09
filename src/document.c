@@ -1320,9 +1320,9 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	while (TRUE)
 	{
 		search_pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
-		if (search_pos == -1)
-			break;
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
+		if (search_pos == -1 || find_len == 0)
+			break;
 
 		if (search_pos + find_len > end)
 			break; //found text is partly out of range
