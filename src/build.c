@@ -1045,7 +1045,6 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_build_make_activate),
 		GINT_TO_POINTER(GBO_MAKE_OBJECT));
 	menu_items->item_make_object = item;
-#endif
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -1062,6 +1061,7 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
+#endif
 
 	// execute the code
 	item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
@@ -1160,7 +1160,6 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-#endif
 
 	// next error
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Next Error"));
@@ -1173,6 +1172,7 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
+#endif
 
 	// DVI view
 #define LATEX_VIEW_DVI_LABEL _("View DVI File") // used later again
@@ -1303,7 +1303,7 @@ static void show_includes_arguments_tex()
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 
 	// LaTeX -> DVI args
-	if (ft->programs->compiler != NULL)
+	if (ft->programs->compiler != NULL && ft->actions->can_compile)
 	{
 		label = gtk_label_new(_("DVI creation:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -1322,7 +1322,7 @@ static void show_includes_arguments_tex()
 	}
 
 	// LaTeX -> PDF args
-	if (ft->programs->linker != NULL)
+	if (ft->programs->linker != NULL && ft->actions->can_link)
 	{
 		label = gtk_label_new(_("PDF creation:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
