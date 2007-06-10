@@ -59,7 +59,7 @@ enum
 static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpointer data);
 static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data);
-static void on_taglist_tree_selection_changed(GtkTreeSelection *selection, gpointer data);
+static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection);
 static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButton *event,
 																			gpointer user_data);
 
@@ -91,8 +91,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	// selection handling
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-	g_signal_connect(G_OBJECT(select), "changed",
-				G_CALLBACK(on_taglist_tree_selection_changed), NULL);
+	// callback for changed selection not necessary, will be handled by button-press-event
 }
 
 
@@ -452,7 +451,7 @@ static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_d
 }
 
 
-static void on_taglist_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
+static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -468,19 +467,19 @@ static void on_taglist_tree_selection_changed(GtkTreeSelection *selection, gpoin
 			g_free(string);
 		}
 	}
+	return FALSE;
 }
 
 
 static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButton *event,
 																			gpointer user_data)
 {
-	if (event->button == 1)
-	{
-		if (GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
-		{	// allow reclicking of taglist treeview item
-			GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
-			on_taglist_tree_selection_changed(select, NULL);
-		}
+	if (event->button == 1 && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
+	{ // allow reclicking of taglist treeview item
+		GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+		// delay the query of selection state because this callback is executed before GTK
+		// changes the selection (g_signal_connect_after would be better but it doesn't work)
+		g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, select);
 	}
 
 	if (event->button == 3)

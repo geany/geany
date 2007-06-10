@@ -1,3 +1,9 @@
+2007-06-10  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/treeviews.c: Prevent double jump to line when clicking on a
+                    symbol list item.
+
+
 2007-06-09  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * THANKS, src/document.c:
