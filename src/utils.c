@@ -812,6 +812,11 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 	{	// try to write geany.conf
 		error_nr = access(app->configdir, W_OK);
 	}
+#ifdef G_OS_WIN32
+# define DIR_SEP "\\" // on Windows we need an additional dir separator
+#else
+# define DIR_SEP ""
+#endif
 
 	// make subdir for filetype definitions
 	if (error_nr == 0)
@@ -828,7 +833,7 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 			gchar *text = g_strconcat(
 "Copy files from ", data_dir, " to this directory to overwrite "
 "them. To use the defaults, just delete the file in this directory.\nFor more information read "
-"the documentation (in ", doc_dir, "index.html or visit " GEANY_HOMEPAGE ").", NULL);
+"the documentation (in ", doc_dir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").", NULL);
 			utils_write_file(filedefs_readme, text);
 			g_free(text);
 		}
@@ -849,7 +854,7 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 		{
 			gchar *text = g_strconcat(
 "There are several template files in this directory. For these templates you can use wildcards.\n\
-For more information read the documentation (in ", doc_dir, "index.html or visit " GEANY_HOMEPAGE ").",
+For more information read the documentation (in ", doc_dir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").",
 					NULL);
 			utils_write_file(templates_readme, text);
 			g_free(text);

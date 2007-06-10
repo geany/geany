@@ -4,13 +4,15 @@
                     symbol list item.
  * src/build.c: Hide Next Error menu item and unnecessary separator from
                 build menu on Windows.
+ * src/callbacks.c: Fix broken help menu item on Windows.
+ * src/utils.c: Add additional directory separator to generated READMEs.
 
 
 2007-06-09  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * THANKS, src/document.c:
-   Apply from François Cami and Guillaume Duviol to improve replacement
-   of tabs by spaces (thank you).
+   Apply patch from François Cami and Guillaume Duviol to improve
+   replacement of tabs by spaces (thank you).
  * src/templates.c: Change PHP short open tag to the full open tag.
  * src/document.c: Prevent hang if searching for a regular expression
                    fails (closes #1733676).
