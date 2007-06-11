@@ -2407,6 +2407,7 @@ create_prefs_dialog (void)
   GtkWidget *vbox21;
   GtkWidget *check_beep;
   GtkWidget *check_switch_pages;
+  GtkWidget *check_auto_focus;
   GtkWidget *check_ask_suppress_search_dialogs;
   GtkWidget *label178;
   GtkWidget *frame24;
@@ -2730,6 +2731,12 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox21), check_switch_pages, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_switch_pages, _("Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_switch_pages), FALSE);
+
+  check_auto_focus = gtk_check_button_new_with_mnemonic (_("Auto focus widgets (focus follows mouse)"));
+  gtk_widget_show (check_auto_focus);
+  gtk_box_pack_start (GTK_BOX (vbox21), check_auto_focus, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_auto_focus, _("Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_auto_focus), FALSE);
 
   check_ask_suppress_search_dialogs = gtk_check_button_new_with_mnemonic (_("Always wrap search and hide the Find dialog"));
   gtk_widget_show (check_ask_suppress_search_dialogs);
@@ -4036,6 +4043,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox21, "vbox21");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_beep, "check_beep");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_focus, "check_auto_focus");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_suppress_search_dialogs, "check_ask_suppress_search_dialogs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label178, "label178");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame24, "frame24");

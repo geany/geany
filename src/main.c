@@ -679,6 +679,12 @@ gint main(gint argc, gchar **argv)
 	g_signal_connect(G_OBJECT(app->window), "delete_event", G_CALLBACK(on_exit_clicked), NULL);
 	g_signal_connect(G_OBJECT(app->window), "key-press-event", G_CALLBACK(on_window_key_press_event), NULL);
 	g_signal_connect(G_OBJECT(app->toolbar), "button-press-event", G_CALLBACK(toolbar_popup_menu), NULL);
+	g_signal_connect(G_OBJECT(lookup_widget(app->window, "textview_scribble")),
+							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+	g_signal_connect(G_OBJECT(lookup_widget(app->window, "entry1")),
+							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+	g_signal_connect(G_OBJECT(lookup_widget(app->window, "entry_goto_line")),
+							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
 	treeviews_prepare_openfiles();
 	treeviews_create_taglist_popup_menu();

@@ -66,6 +66,7 @@
 #include "vte.h"
 #include "build.h"
 #include "symbols.h"
+#include "callbacks.h"
 
 
 /* dynamic array of document elements to hold all information of the notebook tabs */
@@ -315,8 +316,9 @@ static gint document_create_new_sci(const gchar *filename)
 	//g_signal_connect((GtkWidget*) sci, "key-press-event",
 					//G_CALLBACK(keybindings_got_event), GINT_TO_POINTER(new_idx));
 	// signal for the popup menu
-	g_signal_connect((GtkWidget*) sci, "button-press-event",
+	g_signal_connect(G_OBJECT(sci), "button-press-event",
 					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
+	g_signal_connect(G_OBJECT(sci), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
 	pfd = pango_font_description_from_string(app->editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));

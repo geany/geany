@@ -2235,3 +2235,12 @@ on_back_activate                       (GtkMenuItem     *menuitem,
 	navqueue_go_back();
 }
 
+
+gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
+{
+	if (app->auto_focus && ! GTK_WIDGET_HAS_FOCUS(widget))
+		gtk_widget_grab_focus(widget);
+
+	return FALSE;
+}
+

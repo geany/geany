@@ -40,6 +40,7 @@
 #include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
+#include "callbacks.h"
 
 
 VteInfo vte_info;
@@ -194,6 +195,7 @@ void vte_init(void)
 	g_signal_connect(G_OBJECT(vte), "child-exited", G_CALLBACK(vte_start), NULL);
 	g_signal_connect(G_OBJECT(vte), "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
 	g_signal_connect(G_OBJECT(vte), "event", G_CALLBACK(vte_keypress), NULL);
+	g_signal_connect(G_OBJECT(vte), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 	//g_signal_connect(G_OBJECT(vte), "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 	//g_signal_connect(G_OBJECT(vte), "drag-drop", G_CALLBACK(vte_drag_drop), NULL);
 

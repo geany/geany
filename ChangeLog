@@ -1,3 +1,10 @@
+2007-06-11  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/document.c,
+   src/geany.h, src/interface.c, src/keyfile.c, src/main.c, src/prefs.c,
+   src/vte.c: Add auto focus (to auto focus widgets below mouse cursor).
+
+
 2007-06-10  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/treeviews.c: Prevent double jump to line when clicking on a

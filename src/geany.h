@@ -96,6 +96,7 @@ typedef struct MyApp
 	gboolean			 fullscreen;
 	gboolean			 beep_on_errors;
 	gboolean			 switch_msgwin_pages;
+	gboolean			 auto_focus;
 	gboolean			 show_notebook_tabs;
 	gboolean			 tab_order_ltr;
 	gboolean			 show_markers_margin;

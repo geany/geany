@@ -192,6 +192,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", app->show_notebook_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "brace_match_ltgt", app->brace_match_ltgt);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", app->switch_msgwin_pages);
+	g_key_file_set_boolean(config, PACKAGE, "auto_focus", app->auto_focus);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", editor_prefs.auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", editor_prefs.auto_complete_constructs);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", editor_prefs.auto_complete_symbols);
@@ -408,6 +409,7 @@ gboolean configuration_load()
 	app->show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
 	app->brace_match_ltgt = utils_get_setting_boolean(config, PACKAGE, "brace_match_ltgt", FALSE);
 	app->switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
+	app->auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
 	app->custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
 	app->context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 	app->default_open_path = utils_get_setting_string(config, PACKAGE, "default_open_path", "");

@@ -611,3 +611,8 @@ on_forward_activate                    (GtkMenuItem     *menuitem,
 void
 on_file1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+gboolean
+on_motion_event                        (GtkWidget       *widget,
+                                        GdkEventMotion  *event,
+                                        gpointer         user_data);
