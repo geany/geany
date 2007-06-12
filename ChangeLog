@@ -1,3 +1,10 @@
+2007-06-12  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c, src/dialogs.c:
+   Add "Open file in a new tab" and "Rename file" to the "Save as"
+   dialog for more control over saved file.
+
+
 2007-06-12  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/interface.c, src/sciwrappers.c, src/sciwrappers.h, src/prefs.c,

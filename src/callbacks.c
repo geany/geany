@@ -32,6 +32,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
+#include <glib/gstdio.h>
 #include <time.h>
 
 #include "callbacks.h"
@@ -849,34 +850,82 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 	{
 		gint idx = document_get_cur_idx();
 		gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app->save_filesel));
+		gchar *utf8_filename;
+		gboolean open_new_tab = gtk_toggle_button_get_active(
+				GTK_TOGGLE_BUTTON(lookup_widget(app->save_filesel, "check_open_new_tab")));
+		gboolean rename_file = gtk_toggle_button_get_active(
+				GTK_TOGGLE_BUTTON(lookup_widget(app->save_filesel, "check_rename")));
+
+		utf8_filename = utils_get_utf8_from_locale(new_filename);
 
 		// check if file exists and ask whether to overwrite or not
 		if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
 		{
 			if (dialogs_show_question(
-						_("The file '%s' already exists. Do you want to overwrite it?"),
-						new_filename) == FALSE) return;
+				_("The file '%s' already exists. Do you want to overwrite it?"),
+				utf8_filename) == FALSE)
+				return;
 		}
-		gtk_widget_hide(app->save_filesel);
 
-		if (doc_list[idx].file_name)
-		{	// create a new tm_source_file object otherwise tagmanager won't work correctly
-			tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
-			doc_list[idx].tm_file = NULL;
-			g_free(doc_list[idx].file_name);
+		if (open_new_tab)
+		{	// "open" the saved file in a new tab
+			// (actually create a new file and copy file content and properties)
+			gint len, old_idx;
+			gchar *data;
+
+			old_idx = idx;
+
+			// use old file type (or maybe NULL for auto detect would be better?)
+			idx = document_new_file(utf8_filename, doc_list[idx].file_type);
+
+			len = sci_get_length(doc_list[old_idx].sci) + 1;
+			data = (gchar*) g_malloc(len);
+			sci_get_text(doc_list[old_idx].sci, len, data);
+
+			sci_set_text(doc_list[idx].sci, data);
+
+			// copy file properties
+			doc_list[idx].line_breaking = doc_list[old_idx].line_breaking;
+			doc_list[idx].readonly = doc_list[old_idx].readonly;
+			doc_list[idx].has_bom = doc_list[old_idx].has_bom;
+			document_set_encoding(idx, doc_list[old_idx].encoding);
+			sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_breaking);
+			sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
+
+			ui_document_show_hide(idx);
+
+			g_free(data);
+			g_free(utf8_filename);
 		}
-		doc_list[idx].file_name = utils_get_utf8_from_locale(new_filename);
-		g_free(new_filename);
+		else
+		{
+			if (rename_file)
+			{	// delete the previous file name
+				gchar *old_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+				g_unlink(old_filename);
+				g_free(old_filename);
+			}
 
+			if (doc_list[idx].file_name != NULL)
+			{	// create a new tm_source_file object otherwise tagmanager won't work correctly
+				tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+				doc_list[idx].tm_file = NULL;
+				g_free(doc_list[idx].file_name);
+			}
+			doc_list[idx].file_name = utf8_filename;
+		}
 		utils_replace_filename(idx);
 		document_save_file(idx, TRUE);
 
-		build_menu_update(idx);
+		if (! open_new_tab)
+			build_menu_update(idx);
 
 		// finally add current file to recent files menu
 		ui_add_recent_file(doc_list[idx].file_name);
+
+		g_free(new_filename);
 	}
-	else gtk_widget_hide(app->save_filesel);
+	gtk_widget_hide(app->save_filesel);
 }
 
 

@@ -57,6 +57,7 @@
 #if ! GEANY_USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget();
 #endif
+static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
 
 /* This shows the file selection dialog to open a file. */
@@ -275,6 +276,8 @@ gboolean dialogs_show_save_as()
 
 	if (app->save_filesel == NULL)
 	{
+		GtkWidget *vbox, *check_open_new_tab, *check_rename;
+
 		app->save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(app->window),
 					GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
@@ -284,6 +287,25 @@ gboolean dialogs_show_save_as()
 		gtk_window_set_type_hint(GTK_WINDOW(app->save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
 		gtk_dialog_set_default_response(GTK_DIALOG(app->save_filesel), GTK_RESPONSE_ACCEPT);
 		gtk_widget_set_name(app->save_filesel, "GeanyDialog");
+
+		vbox = gtk_vbox_new(FALSE, 0);
+		check_open_new_tab = gtk_check_button_new_with_mnemonic("_Open file in a new tab");
+		check_rename = gtk_check_button_new_with_mnemonic("R_ename file");
+		gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(vbox), check_rename, FALSE, TRUE, 0);
+		gtk_widget_show_all(vbox);
+		gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(app->save_filesel), vbox);
+
+		g_signal_connect(check_open_new_tab, "toggled",
+					G_CALLBACK(on_save_as_new_tab_toggled), check_rename);
+
+		g_signal_connect(check_rename, "toggled",
+					G_CALLBACK(on_save_as_new_tab_toggled), check_open_new_tab);
+
+		g_object_set_data_full(G_OBJECT(app->save_filesel), "check_open_new_tab",
+					gtk_widget_ref(check_open_new_tab), (GDestroyNotify) gtk_widget_unref);
+		g_object_set_data_full(G_OBJECT(app->save_filesel), "check_rename",
+					gtk_widget_ref(check_rename), (GDestroyNotify) gtk_widget_unref);
 
 		g_signal_connect((gpointer) app->save_filesel, "delete_event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
@@ -1099,3 +1121,8 @@ gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
 }
 
 
+static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	if (gtk_toggle_button_get_active(togglebutton))
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(user_data), FALSE);
+}
