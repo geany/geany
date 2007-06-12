@@ -560,7 +560,7 @@ void ui_treeviews_show_hide(G_GNUC_UNUSED gboolean force)
 void ui_document_show_hide(gint idx)
 {
 	gchar *widget_name;
-	GtkWidget *indention;
+	GtkWidget *check_indent;
 
 	if (idx == -1)
 		idx = document_get_cur_idx();
@@ -570,14 +570,14 @@ void ui_document_show_hide(gint idx)
 
 	app->ignore_callback = TRUE;
 
-	indention = lookup_widget(app->window, "menu_use_auto_indention1");
+	check_indent = lookup_widget(app->window, "menu_use_auto_indentation1");
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_breaking1")),
 			doc_list[idx].line_breaking);
 	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(indention),
-			doc_list[idx].use_auto_indention);
+			GTK_CHECK_MENU_ITEM(check_indent),
+			doc_list[idx].auto_indent);
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "set_file_readonly1")),
 			doc_list[idx].readonly);
@@ -594,7 +594,7 @@ void ui_document_show_hide(gint idx)
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, widget_name)),
 																					TRUE);
 
-	gtk_widget_set_sensitive(indention, editor_prefs.indention_mode != INDENT_NONE);
+	gtk_widget_set_sensitive(check_indent, editor_prefs.indent_mode != INDENT_NONE);
 
 	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
 			encodings_is_unicode_charset(doc_list[idx].encoding));
@@ -603,7 +603,6 @@ void ui_document_show_hide(gint idx)
 	filetypes_select_radio_item(doc_list[idx].file_type);
 
 	app->ignore_callback = FALSE;
-
 }
 
 

@@ -122,7 +122,7 @@ void				sci_set_tab_width			(ScintillaObject * sci, gint width);
 gint				sci_get_tab_width			(ScintillaObject * sci);
 gchar				sci_get_char_at				(ScintillaObject * sci, gint pos);
 void				sci_set_savepoint			(ScintillaObject * sci);
-void				sci_set_indentionguides		(ScintillaObject * sci, gboolean enable);
+void				sci_set_indentation_guides	(ScintillaObject * sci, gboolean enable);
 void				sci_use_popup				(ScintillaObject * sci, gboolean enable);
 void				sci_goto_pos				(ScintillaObject * sci, gint pos, gboolean unfold);
 void				sci_set_search_anchor		(ScintillaObject * sci);

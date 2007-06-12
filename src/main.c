@@ -220,8 +220,8 @@ static void apply_settings(void)
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
 				lookup_widget(app->window, "menu_line_breaking1")), editor_prefs.line_breaking);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
-				lookup_widget(app->window, "menu_use_auto_indention1")),
-				(editor_prefs.indention_mode != INDENT_NONE));
+				lookup_widget(app->window, "menu_use_auto_indentation1")),
+				(editor_prefs.indent_mode != INDENT_NONE));
 	app->ignore_callback = FALSE;
 
 	// connect the toolbar dropdown menu for the new button
@@ -317,7 +317,7 @@ static void main_init(void)
 	app->sensitive_buttons[18] = lookup_widget(app->window, "menu_undo2");
 	app->sensitive_buttons[19] = lookup_widget(app->window, "preferences2");
 	app->sensitive_buttons[20] = lookup_widget(app->window, "menu_reload1");
-	app->sensitive_buttons[21] = lookup_widget(app->window, "menu_item4");
+	app->sensitive_buttons[21] = lookup_widget(app->window, "menu_document1");
 	app->sensitive_buttons[22] = lookup_widget(app->window, "menu_markers_margin1");
 	app->sensitive_buttons[23] = lookup_widget(app->window, "menu_linenumber_margin1");
 	app->sensitive_buttons[24] = lookup_widget(app->window, "menu_choose_color1");

@@ -634,7 +634,7 @@ void sci_set_savepoint(ScintillaObject *sci)
 }
 
 
-void sci_set_indentionguides(ScintillaObject *sci, gboolean enable)
+void sci_set_indentation_guides(ScintillaObject *sci, gboolean enable)
 {
 	SSM(sci, SCI_SETINDENTATIONGUIDES, enable, 0);
 }

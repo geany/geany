@@ -439,7 +439,7 @@ on_show_line_numbers1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
 
 void
-on_use_auto_indention1_toggled         (GtkCheckMenuItem *checkmenuitem,
+on_use_auto_indentation1_toggled       (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data);
 
 

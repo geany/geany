@@ -232,8 +232,8 @@ static void on_char_added(gint idx, SCNotification *nt)
 		}
 		case '}':
 		{	// closing bracket handling
-			if (doc_list[idx].use_auto_indention &&
-				editor_prefs.indention_mode == INDENT_ADVANCED)
+			if (doc_list[idx].auto_indent &&
+				editor_prefs.indent_mode == INDENT_ADVANCED)
 				editor_close_block(idx, pos - 1);
 			break;
 		}
@@ -401,12 +401,12 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 	gint pos = sci_get_current_position(sci);
 
 	// simple indentation
-	if (doc_list[idx].use_auto_indention)
+	if (doc_list[idx].auto_indent)
 	{
 		get_indent(sci, pos, FALSE);
 		sci_add_text(sci, indent);
 
-		if (editor_prefs.indention_mode == INDENT_ADVANCED)
+		if (editor_prefs.indent_mode == INDENT_ADVANCED)
 		{
 			// add extra indentation for Python after colon
 			if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_PYTHON &&
@@ -489,7 +489,7 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 	{
 		if (linebuf[i] == ' ' || linebuf[i] == '\t')	// simple indentation
 			indent[j++] = linebuf[i];
-		else if (editor_prefs.indention_mode != INDENT_ADVANCED)
+		else if (editor_prefs.indent_mode != INDENT_ADVANCED)
 			break;
 		else if (use_this_line)
 			break;
@@ -580,7 +580,7 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 }
 
 
-/* Called after typing '}', if pref_editor_indention_mode is INDENT_ADVANCED. */
+/* Called after typing '}', if editor_prefs.indent_mode is INDENT_ADVANCED. */
 void editor_close_block(gint idx, gint pos)
 {
 	gint x = 0, cnt = 0;
@@ -1063,8 +1063,8 @@ void editor_auto_latex(gint idx, gint pos)
 				}
 			}
 
-			// get the indention
-			if (doc_list[idx].use_auto_indention) get_indent(sci, pos, TRUE);
+			// get the indentation
+			if (doc_list[idx].auto_indent) get_indent(sci, pos, TRUE);
 			eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
 
 			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
@@ -1278,7 +1278,7 @@ gboolean editor_auto_forif(gint idx, gint pos)
 	}
 
 	// get the indentation
-	if (doc_list[idx].use_auto_indention) get_indent(sci, pos, TRUE);
+	if (doc_list[idx].auto_indent) get_indent(sci, pos, TRUE);
 	eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
 
 	// get the whitespace for additional indentation
@@ -2232,9 +2232,9 @@ void editor_insert_multiline_comment(gint idx)
 	line = sci_get_line_from_position(doc_list[idx].sci, editor_info.click_pos);
 	pos = sci_get_position_from_line(doc_list[idx].sci, line);
 
-	// use the indentation on the current line but only when comment indention is used
+	// use the indent on the current line but only when comment indentation is used
 	// and we don't have multi line comment characters
-	if (doc_list[idx].use_auto_indention && ! have_multiline_comment &&
+	if (doc_list[idx].auto_indent && ! have_multiline_comment &&
 		doc_list[idx].file_type->comment_use_indent)
 	{
 		get_indent(doc_list[idx].sci, editor_info.click_pos, TRUE);

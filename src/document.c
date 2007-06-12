@@ -209,13 +209,13 @@ void document_apply_update_prefs(gint idx)
 
 	sci_set_autoc_max_height(sci, app->autocompletion_max_height);
 
-	sci_set_indentionguides(sci, editor_prefs.show_indent_guide);
+	sci_set_indentation_guides(sci, editor_prefs.show_indent_guide);
 	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);
 	sci_set_visible_eols(sci, editor_prefs.show_line_endings);
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 
-	doc_list[idx].use_auto_indention = (editor_prefs.indention_mode != INDENT_NONE);
+	doc_list[idx].auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
 }
 
 
@@ -225,7 +225,7 @@ static void init_doc_struct(document *new_doc)
 {
 	new_doc->is_valid = FALSE;
 	new_doc->has_tags = FALSE;
-	new_doc->use_auto_indention = (editor_prefs.indention_mode != INDENT_NONE);
+	new_doc->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
 	new_doc->line_breaking = editor_prefs.line_breaking;
 	new_doc->readonly = FALSE;
 	new_doc->tag_store = NULL;
@@ -341,7 +341,7 @@ static gint document_create_new_sci(const gchar *filename)
 	this->last_check = time(NULL);
 	this->readonly = FALSE;
 	this->line_breaking = editor_prefs.line_breaking;
-	this->use_auto_indention = (editor_prefs.indention_mode != INDENT_NONE);
+	this->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
 	this->has_tags = FALSE;
 
 	treeviews_openfiles_add(new_idx);	// sets this->iter

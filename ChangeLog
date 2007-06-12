@@ -1,3 +1,13 @@
+2007-06-12  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/interface.c, src/sciwrappers.c, src/sciwrappers.h, src/prefs.c,
+   src/callbacks.c, src/callbacks.h, src/keyfile.c, src/document.c,
+   src/document.h, src/main.c, src/editor.c, src/editor.h,
+   src/ui_utils.c, geany.glade:
+   Rename some menubar widget names.
+   Use indentation spelling in variable names.
+
+
 2007-06-11  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.glade, src/callbacks.c, src/callbacks.h, src/document.c,

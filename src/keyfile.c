@@ -178,7 +178,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
 	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", editor_prefs.unfold_all_children);
 	g_key_file_set_boolean(config, PACKAGE, "show_editor_scrollbars", editor_prefs.show_scrollbars);
-	g_key_file_set_integer(config, PACKAGE, "indention_mode", editor_prefs.indention_mode);
+	g_key_file_set_integer(config, PACKAGE, "indent_mode", editor_prefs.indent_mode);
 	g_key_file_set_boolean(config, PACKAGE, "use_tab_to_indent", app->use_tab_to_indent);
 	g_key_file_set_boolean(config, PACKAGE, "use_indicators", editor_prefs.use_indicators);
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
@@ -390,7 +390,7 @@ gboolean configuration_load()
 	app->statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
 	app->msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	editor_prefs.line_breaking = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); //default is off for better performance
-	editor_prefs.indention_mode = utils_get_setting_integer(config, PACKAGE, "indention_mode", INDENT_ADVANCED);
+	editor_prefs.indent_mode = utils_get_setting_integer(config, PACKAGE, "indent_mode", INDENT_ADVANCED);
 	app->use_tab_to_indent = utils_get_setting_boolean(config, PACKAGE, "use_tab_to_indent", FALSE);
 	editor_prefs.use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
 	editor_prefs.show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);

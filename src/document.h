@@ -63,7 +63,7 @@ typedef struct document
 	gboolean		 readonly;
 	gboolean		 changed;
 	gboolean		 line_breaking;
-	gboolean		 use_auto_indention;
+	gboolean		 auto_indent;
 	gfloat			 scroll_percent;	// % to scroll view by on paint, if positive.
 	time_t			 last_check;	// to remember the last disk check
 	time_t			 mtime;

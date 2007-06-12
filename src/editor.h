@@ -34,19 +34,19 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
-enum
+typedef enum
 {
 	INDENT_NONE = 0,
 	INDENT_BASIC,
 	INDENT_ADVANCED
-};
+} IndentMode;
 
 /* These are the default prefs when creating a new editor window.
  * Some of these can be overridden per document. */
 typedef struct
 {
 	gboolean	line_breaking;
-	gint		indention_mode;
+	IndentMode	indent_mode;
 	gboolean	use_indicators;
 	gboolean	show_white_space;
 	gboolean	show_indent_guide;

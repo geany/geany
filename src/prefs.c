@@ -254,7 +254,7 @@ void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_line_endings);
 
 	widget = lookup_widget(app->prefs_dialog, "combo_auto_indent_mode");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.indention_mode);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.indent_mode);
 
 	widget = lookup_widget(app->prefs_dialog, "check_line_wrapping");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.line_breaking);
@@ -593,7 +593,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		editor_prefs.show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "combo_auto_indent_mode");
-		editor_prefs.indention_mode = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+		editor_prefs.indent_mode = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_line_wrapping");
 		editor_prefs.line_breaking = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
