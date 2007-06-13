@@ -1240,7 +1240,11 @@ GIOChannel *utils_set_up_io_channel(
 	GIOChannel *ioc;
 	//const gchar *encoding;
 
+	#ifdef G_OS_WIN32
+	ioc = g_io_channel_win32_new_fd(fd);
+	#else
 	ioc = g_io_channel_unix_new(fd);
+	#endif
 
 	if (nblock)
 		g_io_channel_set_flags(ioc, G_IO_FLAG_NONBLOCK, NULL);

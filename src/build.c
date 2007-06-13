@@ -89,9 +89,7 @@ static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
 static void set_stop_button(gboolean stop);
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
-static void
-on_build_arguments_activate            (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
+static void on_build_arguments_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 #ifndef G_OS_WIN32
 static void kill_process(GPid *pid);
