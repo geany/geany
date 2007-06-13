@@ -4,6 +4,9 @@
    Use g_io_channel_win32_new_fd() as recommended in GLib docs for
    utils_set_up_io_channel() on Windows. (Unlikely to change behaviour
    though).
+ * src/callbacks.c:
+   Fix segfault when attempting to rename a new file from the Save As
+   dialog.
 
 
 2007-06-12  Enrico Tröger  <enrico.troeger@uvena.de>

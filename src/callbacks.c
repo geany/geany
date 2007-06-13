@@ -899,15 +899,16 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		}
 		else
 		{
-			if (rename_file)
-			{	// delete the previous file name
-				gchar *old_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-				g_unlink(old_filename);
-				g_free(old_filename);
-			}
-
 			if (doc_list[idx].file_name != NULL)
-			{	// create a new tm_source_file object otherwise tagmanager won't work correctly
+			{
+				if (rename_file)
+				{	// delete the previous file name
+					gchar *old_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+
+					g_unlink(old_filename);
+					g_free(old_filename);
+				}
+				// create a new tm_source_file object otherwise tagmanager won't work correctly
 				tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
 				doc_list[idx].tm_file = NULL;
 				g_free(doc_list[idx].file_name);
