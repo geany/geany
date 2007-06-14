@@ -1081,7 +1081,7 @@ void tools_show_dialog_create_class(gint type)
 		g_signal_connect(G_OBJECT(cc_dlg->create_constructor_box), "toggled",
 				G_CALLBACK(on_set_sensitive_toggled), (gpointer)hbox);
 
-		label = gtk_label_new(_("GTK+ constructor type"));
+		label = gtk_label_new(_("Gtk+ constructor type"));
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 		gtk_widget_show(label);
 
