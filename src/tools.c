@@ -84,7 +84,7 @@ static void sc_on_tree_row_activated
 static void sc_fill_store(GtkTreeStore *store);
 static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter);
 
-static void on_set_sensetive_toggled(GtkWidget *toggle_button, GtkWidget *target_widget);
+static void on_set_sensitive_toggled(GtkWidget *toggle_button, GtkWidget *target_widget);
 static void on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
 static void on_base_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
 static void on_create_class(CreateClassDialog *cc_dlg);
@@ -1079,7 +1079,7 @@ void tools_show_dialog_create_class(gint type)
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
 		gtk_widget_show(hbox);
 		g_signal_connect(G_OBJECT(cc_dlg->create_constructor_box), "toggled",
-				G_CALLBACK(on_set_sensetive_toggled), (gpointer)hbox);
+				G_CALLBACK(on_set_sensitive_toggled), (gpointer)hbox);
 
 		label = gtk_label_new(_("GTK+ constructor type"));
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -1109,7 +1109,7 @@ void tools_show_dialog_create_class(gint type)
 	gtk_widget_show(cc_dlg->dialog);
 }
 
-static void on_set_sensetive_toggled(GtkWidget *toggle_button, GtkWidget *target_widget)
+static void on_set_sensitive_toggled(GtkWidget *toggle_button, GtkWidget *target_widget)
 {
 	g_return_if_fail(toggle_button != NULL);
 	g_return_if_fail(GTK_IS_TOGGLE_BUTTON(toggle_button));
