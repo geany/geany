@@ -1,3 +1,9 @@
+2007-06-14  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: Avoid creation of unwanted undo action when opening
+                    a saved-as file in a new tab.
+
+
 2007-06-14  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/templates.c, src/interface.c, src/templates.h, src/tools.c,
