@@ -20,7 +20,7 @@ Kevin Ellwood <kellwood(at)ameritech(dot)net>
 Stefan Oltmanns <stefan(dot)oltmanns(at)abi2006(dot)gymnasium-achim(dot)de> - escape sequences patch
 Bob Doan <bdoan(at)sicom(dot)com> - some patches
 Rob van der Linde <robvdl(at)paradise(dot)net(dot)nz> - fixed wrong vte height on some systems
-Josef Whiter <josef(at)toxicpanda(dot)com> - parse 'Entering directory' build messages.
+Josef Whiter <josef(at)toxicpanda(dot)com> - parse 'Entering directory' build messages
 Jeff Pohlmeyer <yetanothergeek(at)gmail(dot)com> - "Allow DnD", "Use tabs" and other great patches
 Tomás Vírseda <kaskaras(at)gmail(dot)com> - sort open files patch
 Dirk Weber <dietrich-weber(at)web(dot)de>
@@ -31,6 +31,7 @@ Guillaume Hoffmann <guillaumh(at)gmail(dot)com> - Haskell filetype patch
 Peter Strand <peter(at)zarquon(dot)se> - Haskell CTags patch
 Dave Moore <wrex006(at)gmail(dot)com> - code navigation patch
 François Cami <francois.cami(at)free(dot)fr>, Guillaume Duviol - tab replacement patch
+Alexander Rodin <rodin(dot)alexander(at)gmail(dot)com> - class builder patch
 
 Translators:
 ----------------------------------

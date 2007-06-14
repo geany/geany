@@ -2294,3 +2294,19 @@ gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user
 	return FALSE;
 }
 
+
+void
+on_menu_create_cpp_class_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	tools_show_dialog_create_class(GEANY_CLASS_TYPE_CPP);
+}
+
+
+void
+on_menu_create_gtk_class_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	tools_show_dialog_create_class(GEANY_CLASS_TYPE_GTK);
+}
+

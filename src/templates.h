@@ -26,6 +26,8 @@
 
 #include "filetypes.h"
 
+typedef struct _ClassInfo	ClassInfo;
+
 void templates_init(void);
 
 gchar *templates_get_template_fileheader(gint idx);
@@ -40,8 +42,11 @@ gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name
 
 gchar *templates_get_template_licence(gint filetype_idx, gint licence_type);
 
-void templates_free_templates(void);
+gchar *templates_get_template_class_header(ClassInfo *class_info);
 
+gchar *templates_get_template_class_source(ClassInfo *class_info);
+
+void templates_free_templates(void);
 
 enum
 {
@@ -53,5 +58,30 @@ enum
 	GEANY_MAX_TEMPLATES
 };
 
+enum
+{
+	GEANY_CLASS_TYPE_CPP,
+	GEANY_CLASS_TYPE_GTK
+};
+
+struct _ClassInfo
+{
+	gint type;
+	gchar *class_name;
+	gchar *class_name_up;
+	gchar *class_name_low;
+	gchar *base_name;
+	gchar *base_gtype;
+	gchar *header;
+	gchar *header_guard;
+	gchar *base_include;
+	gchar *base_decl;
+	gchar *constructor_decl;
+	gchar *destructor_decl;
+	gchar *source;
+	gchar *constructor_impl;
+	gchar *destructor_impl;
+	gchar *gtk_destructor_registration;
+};
 
 #endif

@@ -616,3 +616,11 @@ gboolean
 on_motion_event                        (GtkWidget       *widget,
                                         GdkEventMotion  *event,
                                         gpointer         user_data);
+
+void
+on_menu_create_cpp_class_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_menu_create_gtk_class_activate      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

@@ -193,6 +193,11 @@ create_window1 (void)
   GtkWidget *image1792;
   GtkWidget *menu_count_words1;
   GtkWidget *menu_insert_special_chars1;
+  GtkWidget *menu_create_class1;
+  GtkWidget *image1861;
+  GtkWidget *menu_create_class1_menu;
+  GtkWidget *menu_create_cpp_class;
+  GtkWidget *menu_create_gtk_class;
   GtkWidget *menu_help1;
   GtkWidget *menu_item5_menu;
   GtkWidget *help1;
@@ -955,6 +960,25 @@ create_window1 (void)
   gtk_widget_show (menu_insert_special_chars1);
   gtk_container_add (GTK_CONTAINER (tools1_menu), menu_insert_special_chars1);
 
+  menu_create_class1 = gtk_image_menu_item_new_with_mnemonic (_("Create cla_ss"));
+  gtk_widget_show (menu_create_class1);
+  gtk_container_add (GTK_CONTAINER (tools1_menu), menu_create_class1);
+
+  image1861 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image1861);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_create_class1), image1861);
+
+  menu_create_class1_menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_create_class1), menu_create_class1_menu);
+
+  menu_create_cpp_class = gtk_menu_item_new_with_mnemonic (_("C++ class"));
+  gtk_widget_show (menu_create_cpp_class);
+  gtk_container_add (GTK_CONTAINER (menu_create_class1_menu), menu_create_cpp_class);
+
+  menu_create_gtk_class = gtk_menu_item_new_with_mnemonic (_("Gtk+ class"));
+  gtk_widget_show (menu_create_gtk_class);
+  gtk_container_add (GTK_CONTAINER (menu_create_class1_menu), menu_create_gtk_class);
+
   menu_help1 = gtk_menu_item_new_with_mnemonic (_("_Help"));
   gtk_widget_show (menu_help1);
   gtk_container_add (GTK_CONTAINER (menubar1), menu_help1);
@@ -1508,6 +1532,12 @@ create_window1 (void)
   g_signal_connect ((gpointer) menu_insert_special_chars1, "activate",
                     G_CALLBACK (on_menu_insert_special_chars1_activate),
                     NULL);
+  g_signal_connect ((gpointer) menu_create_cpp_class, "activate",
+                    G_CALLBACK (on_menu_create_cpp_class_activate),
+                    NULL);
+  g_signal_connect ((gpointer) menu_create_gtk_class, "activate",
+                    G_CALLBACK (on_menu_create_gtk_class_activate),
+                    NULL);
   g_signal_connect ((gpointer) help1, "activate",
                     G_CALLBACK (on_help1_activate),
                     NULL);
@@ -1760,6 +1790,11 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, image1792, "image1792");
   GLADE_HOOKUP_OBJECT (window1, menu_count_words1, "menu_count_words1");
   GLADE_HOOKUP_OBJECT (window1, menu_insert_special_chars1, "menu_insert_special_chars1");
+  GLADE_HOOKUP_OBJECT (window1, menu_create_class1, "menu_create_class1");
+  GLADE_HOOKUP_OBJECT (window1, image1861, "image1861");
+  GLADE_HOOKUP_OBJECT (window1, menu_create_class1_menu, "menu_create_class1_menu");
+  GLADE_HOOKUP_OBJECT (window1, menu_create_cpp_class, "menu_create_cpp_class");
+  GLADE_HOOKUP_OBJECT (window1, menu_create_gtk_class, "menu_create_gtk_class");
   GLADE_HOOKUP_OBJECT (window1, menu_help1, "menu_help1");
   GLADE_HOOKUP_OBJECT (window1, menu_item5_menu, "menu_item5_menu");
   GLADE_HOOKUP_OBJECT (window1, help1, "help1");

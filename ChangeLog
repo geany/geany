@@ -1,3 +1,10 @@
+2007-06-14  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/templates.c, src/interface.c, src/templates.h, src/tools.c,
+   src/tools.h, src/callbacks.c, src/callbacks.h, geany.glade, THANKS:
+   Apply class builder patch from Alexander Rodin (thanks).
+
+
 2007-06-13  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/build.c, src/utils.c:

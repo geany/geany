@@ -31,4 +31,6 @@ void tools_create_insert_custom_command_menu_items();
 
 void tools_execute_custom_command(gint idx, const gchar *command);
 
+void tools_show_dialog_create_class(gint type);
+
 #endif

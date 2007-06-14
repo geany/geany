@@ -46,6 +46,7 @@
 #include "ui_utils.h"
 #include "msgwindow.h"
 #include "keybindings.h"
+#include "templates.h"
 
 
 enum
@@ -54,6 +55,23 @@ enum
 	COLUMN_HTML_NAME,
 	N_COLUMNS
 };
+
+typedef struct _CreateClassDialog
+{
+	gint class_type;
+	GtkWidget *dialog;
+	GtkWidget *class_name_entry;
+	GtkWidget *header_entry;
+	GtkWidget *source_entry;
+	GtkWidget *base_name_entry;
+	GtkWidget *base_header_entry;
+	GtkWidget *base_header_global_box;
+	GtkWidget *base_gtype_entry;
+	GtkWidget *create_constructor_box;
+	GtkWidget *create_destructor_box;
+	GtkWidget *gtk_constructor_type_entry;
+}
+CreateClassDialog;
 
 static GtkWidget *sc_dialog = NULL;
 static GtkTreeStore *sc_store = NULL;
@@ -66,7 +84,10 @@ static void sc_on_tree_row_activated
 static void sc_fill_store(GtkTreeStore *store);
 static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter);
 
-
+static void on_set_sensetive_toggled(GtkWidget *toggle_button, GtkWidget *target_widget);
+static void on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
+static void on_base_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
+static void on_create_class(CreateClassDialog *cc_dlg);
 
 void tools_show_dialog_insert_special_chars()
 {
@@ -897,6 +918,405 @@ void tools_create_insert_custom_command_menu_items()
 					"activate", G_CALLBACK(cc_on_custom_command_menu_activate), menu_edit);
 		signal_set = TRUE;
 	}
+}
+
+
+void tools_show_dialog_create_class(gint type)
+{
+	CreateClassDialog *cc_dlg;
+	GtkWidget *main_box;
+	GtkWidget *frame;
+	GtkWidget *vbox;
+	GtkWidget *hbox;
+	GtkWidget *label;
+	GtkWidget *action_area;
+	GtkWidget *cancel_button;
+	GtkWidget *ok_button;
+
+	cc_dlg = g_malloc(sizeof(CreateClassDialog));
+	cc_dlg->class_type = type;
+
+	cc_dlg->dialog = gtk_dialog_new();
+	gtk_window_set_title(GTK_WINDOW(cc_dlg->dialog), _("Create class"));
+	gtk_container_set_border_width(GTK_CONTAINER(cc_dlg->dialog), 5);
+	g_signal_connect_swapped(G_OBJECT(cc_dlg->dialog), "destroy",
+			G_CALLBACK(g_free), (gpointer)cc_dlg);
+
+	main_box = GTK_DIALOG(cc_dlg->dialog)->vbox;
+	gtk_box_set_spacing(GTK_BOX(main_box), 10);
+
+	frame = gtk_frame_new(_("Class"));
+	gtk_container_add(GTK_CONTAINER(main_box), frame);
+	gtk_widget_show(frame);
+
+	vbox = gtk_vbox_new(FALSE, 10);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
+	gtk_container_add(GTK_CONTAINER(frame), vbox);
+	gtk_widget_show(vbox);
+
+	hbox = gtk_hbox_new(FALSE, 10);
+	gtk_container_add(GTK_CONTAINER(vbox), hbox);
+	gtk_widget_show(hbox);
+
+	label = gtk_label_new(_("Class name:"));
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	gtk_widget_show(label);
+
+	cc_dlg->class_name_entry = gtk_entry_new();
+	gtk_box_pack_start(GTK_BOX(hbox), cc_dlg->class_name_entry, TRUE, TRUE, 0);
+	gtk_widget_show(cc_dlg->class_name_entry);
+	g_signal_connect(G_OBJECT(cc_dlg->class_name_entry), "changed",
+			G_CALLBACK(on_class_name_entry_changed), cc_dlg);
+
+	hbox = gtk_hbox_new(FALSE, 10);
+	gtk_container_add(GTK_CONTAINER(vbox), hbox);
+	gtk_widget_show(hbox);
+
+	label = gtk_label_new(_("Header file:"));
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	gtk_widget_show(label);
+
+	cc_dlg->header_entry = gtk_entry_new();
+	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->header_entry);
+	gtk_widget_show(cc_dlg->header_entry);
+
+	hbox = gtk_hbox_new(FALSE, 10);
+	gtk_container_add(GTK_CONTAINER(vbox), hbox);
+	gtk_widget_show(hbox);
+
+	label = gtk_label_new(_("Source file:"));
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	gtk_widget_show(label);
+
+	cc_dlg->source_entry = gtk_entry_new();
+	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->source_entry);
+	gtk_widget_show(cc_dlg->source_entry);
+
+	frame = gtk_frame_new(_("Inheritance"));
+	gtk_container_add(GTK_CONTAINER(main_box), frame);
+	gtk_widget_show(frame);
+
+	vbox = gtk_vbox_new(FALSE, 10);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
+	gtk_container_add(GTK_CONTAINER(frame), vbox);
+	gtk_widget_show(vbox);
+
+	hbox = gtk_hbox_new(FALSE, 10);
+	gtk_container_add(GTK_CONTAINER(vbox), hbox);
+	gtk_widget_show(hbox);
+
+	label = gtk_label_new(_("Base class:"));
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	gtk_widget_show(label);
+
+	cc_dlg->base_name_entry = gtk_entry_new();
+	if (type == GEANY_CLASS_TYPE_GTK)
+		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_name_entry), "GtkObject");
+	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_name_entry);
+	gtk_widget_show(cc_dlg->base_name_entry);
+	g_signal_connect(G_OBJECT(cc_dlg->base_name_entry), "changed",
+			G_CALLBACK(on_base_name_entry_changed), (gpointer)cc_dlg);
+
+	hbox = gtk_hbox_new(FALSE, 10);
+	gtk_container_add(GTK_CONTAINER(vbox), hbox);
+	gtk_widget_show(hbox);
+
+	label = gtk_label_new(_("Base header:"));
+	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	gtk_widget_show(label);
+
+	cc_dlg->base_header_entry = gtk_entry_new();
+	if (type == GEANY_CLASS_TYPE_GTK)
+		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_header_entry), "gtk/gtkobject.h");
+	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_header_entry);
+	gtk_widget_show(cc_dlg->base_header_entry);
+
+	cc_dlg->base_header_global_box = gtk_check_button_new_with_label(_("Global"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(cc_dlg->base_header_global_box), TRUE);
+	gtk_box_pack_end(GTK_BOX(hbox), cc_dlg->base_header_global_box, FALSE, FALSE, 0);
+	gtk_widget_show(cc_dlg->base_header_global_box);
+
+	if (type == GEANY_CLASS_TYPE_GTK)
+	{
+		hbox = gtk_hbox_new(FALSE, 10);
+		gtk_container_add(GTK_CONTAINER(vbox), hbox);
+		gtk_widget_show(hbox);
+
+		label = gtk_label_new(_("Base GType:"));
+		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+		gtk_widget_show(label);
+
+		cc_dlg->base_gtype_entry = gtk_entry_new();
+		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_gtype_entry), "GTK_TYPE_OBJECT");
+		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_gtype_entry);
+		gtk_widget_show(cc_dlg->base_gtype_entry);
+	}
+
+	frame = gtk_frame_new(_("Options"));
+	gtk_container_add(GTK_CONTAINER(main_box), frame);
+	gtk_widget_show(frame);
+
+	vbox = gtk_vbox_new(FALSE, 10);
+	gtk_container_add(GTK_CONTAINER(frame), vbox);
+	gtk_widget_show(vbox);
+
+	hbox = gtk_hbox_new(FALSE, 10);
+	gtk_container_add(GTK_CONTAINER(vbox), hbox);
+	gtk_widget_show(hbox);
+
+	cc_dlg->create_constructor_box = gtk_check_button_new_with_label(_("Create constructor"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box), TRUE);
+	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_constructor_box);
+	gtk_widget_show(cc_dlg->create_constructor_box);
+
+	cc_dlg->create_destructor_box = gtk_check_button_new_with_label(_("Create destructor"));
+	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_destructor_box);
+	gtk_widget_show(cc_dlg->create_destructor_box);
+
+	if (type == GEANY_CLASS_TYPE_GTK)
+	{
+		hbox = gtk_hbox_new(FALSE, 10);
+		gtk_container_add(GTK_CONTAINER(vbox), hbox);
+		gtk_widget_show(hbox);
+		g_signal_connect(G_OBJECT(cc_dlg->create_constructor_box), "toggled",
+				G_CALLBACK(on_set_sensetive_toggled), (gpointer)hbox);
+
+		label = gtk_label_new(_("GTK+ constructor type"));
+		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+		gtk_widget_show(label);
+
+		cc_dlg->gtk_constructor_type_entry = gtk_entry_new();
+		gtk_entry_set_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry), "GtkObject");
+		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->gtk_constructor_type_entry);
+		gtk_widget_show(cc_dlg->gtk_constructor_type_entry);
+	}
+
+	action_area = GTK_DIALOG(cc_dlg->dialog)->action_area;
+
+	cancel_button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	gtk_container_add(GTK_CONTAINER(action_area), cancel_button);
+	gtk_widget_show(cancel_button);
+
+	g_signal_connect_swapped(G_OBJECT(cancel_button), "clicked",
+			G_CALLBACK(gtk_object_destroy), (gpointer)cc_dlg->dialog);
+
+	ok_button = gtk_button_new_from_stock(GTK_STOCK_OK);
+	gtk_container_add(GTK_CONTAINER(action_area), ok_button);
+	gtk_widget_show(ok_button);
+	g_signal_connect_swapped(G_OBJECT(ok_button), "clicked",
+			G_CALLBACK(on_create_class), (gpointer)cc_dlg);
+
+	gtk_widget_show(cc_dlg->dialog);
+}
+
+static void on_set_sensetive_toggled(GtkWidget *toggle_button, GtkWidget *target_widget)
+{
+	g_return_if_fail(toggle_button != NULL);
+	g_return_if_fail(GTK_IS_TOGGLE_BUTTON(toggle_button));
+	g_return_if_fail(target_widget != NULL);
+	g_return_if_fail(GTK_IS_WIDGET(target_widget));
+
+	gtk_widget_set_sensitive(target_widget,
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle_button)));
+}
+
+static void on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg)
+{
+	gchar *class_name_down;
+	gchar *class_header;
+	gchar *class_source;
+
+	g_return_if_fail(entry != NULL);
+	g_return_if_fail(GTK_IS_ENTRY(entry));
+	g_return_if_fail(cc_dlg != NULL);
+
+	class_name_down = g_ascii_strdown(gtk_entry_get_text(GTK_ENTRY(entry)), -1);
+	class_header = g_strconcat(class_name_down, ".h", NULL);
+	if (cc_dlg->class_type == GEANY_CLASS_TYPE_CPP)
+		class_source = g_strconcat(class_name_down, ".cpp", NULL);
+	else
+		class_source = g_strconcat(class_name_down, ".c", NULL);
+
+	gtk_entry_set_text(GTK_ENTRY(cc_dlg->header_entry), class_header);
+	gtk_entry_set_text(GTK_ENTRY(cc_dlg->source_entry), class_source);
+
+	g_free(class_name_down);
+	g_free(class_header);
+	g_free(class_source);
+}
+
+static gchar* str_case_split(const gchar *str, char splitter)
+{
+	GString *result;
+
+	g_return_val_if_fail(str != NULL, NULL);
+	if (*str == '\0')
+		return g_strdup("");
+
+	result = g_string_new(NULL);
+	g_string_append_c(result, *str);
+	while (*(++str) != '\0')
+	{
+		if (g_ascii_isupper(*str) && g_ascii_islower(result->str[result->len - 1]))
+			g_string_append_c(result, splitter);
+		g_string_append_c(result, *str);
+	}
+	return g_string_free(result, FALSE);
+}
+
+static void on_base_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg)
+{
+	gchar *base_name_splitted;
+	gchar *base_header;
+	gchar *base_gtype = NULL;
+
+	g_return_if_fail(entry != NULL);
+	g_return_if_fail(GTK_IS_ENTRY(entry));
+	g_return_if_fail(cc_dlg != NULL);
+
+	base_name_splitted = str_case_split(gtk_entry_get_text(GTK_ENTRY(entry)), '_');
+	base_header = g_strdup_printf("%s%s.h",
+		g_ascii_strncasecmp(gtk_entry_get_text(GTK_ENTRY(entry)), "gtk", 3) ? "": "gtk/",
+		gtk_entry_get_text(GTK_ENTRY(entry)));
+	g_strdown(base_header);
+
+	gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_header_entry), base_header);
+
+	if (cc_dlg->class_type == GEANY_CLASS_TYPE_GTK)
+	{
+		if (! g_ascii_strncasecmp(gtk_entry_get_text(GTK_ENTRY(entry)), "gtk", 3))
+		{
+			base_gtype = g_strdup_printf("%.3s_TYPE%s",
+					base_name_splitted,
+					base_name_splitted + 3);
+		}
+		else
+			base_gtype = g_strconcat(base_name_splitted, "_TYPE", NULL);
+		g_strup(base_gtype);
+		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_gtype_entry), base_gtype);
+	}
+
+	g_free(base_name_splitted);
+	g_free(base_header);
+	g_free(base_gtype);
+}
+
+static void on_create_class(CreateClassDialog *cc_dlg)
+{
+	ClassInfo *class_info;
+	gint idx;
+	gchar *text;
+
+	g_return_if_fail(cc_dlg != NULL);
+
+	class_info = g_malloc0(sizeof(ClassInfo));
+	class_info->type = cc_dlg->class_type;
+	class_info->class_name = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_name_entry)));
+	class_info->class_name_up = str_case_split(class_info->class_name, '_');
+	g_strup(class_info->class_name_up);
+	class_info->class_name_low = g_ascii_strdown(class_info->class_name_up, -1);
+	if (*gtk_entry_get_text(GTK_ENTRY(cc_dlg->base_name_entry)) != '\0')
+	{
+		class_info->base_name = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->base_name_entry)));
+		class_info->base_include = g_strdup_printf("\n#include %c%s%c\n",
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->base_header_global_box)) ?
+				'<' : '\"',
+			gtk_entry_get_text(GTK_ENTRY(cc_dlg->base_header_entry)),
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->base_header_global_box)) ?
+				'>' : '\"');
+	}
+	class_info->header = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->header_entry)));
+	class_info->header_guard = g_ascii_strup(class_info->header, -1);
+	g_strdelimit(class_info->header_guard, ".", '_');
+	switch (class_info->type)
+	{
+		case GEANY_CLASS_TYPE_CPP:
+		{
+			class_info->source = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->source_entry)));
+			if (class_info->base_name != NULL)
+				class_info->base_decl = g_strdup_printf(": public %s", class_info->base_name);
+			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)))
+			{
+				gchar *base_constructor;
+
+				if (class_info->base_name == NULL)
+					base_constructor = g_strdup("");
+				else
+					base_constructor = g_strdup_printf("\t: %s()\n", class_info->base_name);
+				class_info->constructor_decl = g_strdup_printf("%s();\n", class_info->class_name);
+				class_info->constructor_impl = g_strdup_printf("\n%s::%s()\n%s{\n\t\n}\n",
+					class_info->class_name, class_info->class_name, base_constructor);
+				g_free(base_constructor);
+			}
+			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_destructor_box)))
+			{
+				class_info->destructor_decl =
+						g_strdup_printf("virtual ~%s();\n", class_info->class_name);
+				class_info->destructor_impl = g_strdup_printf("\n%s::~%s()\n{\n\t\n}\n",
+					class_info->class_name, class_info->class_name);
+			}
+			break;
+		}
+		case GEANY_CLASS_TYPE_GTK:
+		{
+			class_info->base_gtype = g_strdup(gtk_entry_get_text(
+					GTK_ENTRY(cc_dlg->base_gtype_entry)));
+			class_info->source = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->source_entry)));
+			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box)))
+			{
+				class_info->constructor_decl = g_strdup_printf("%s*\t%s_new\t\t\t(void);\n",
+						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
+						class_info->class_name_low);
+				class_info->constructor_impl = g_strdup_printf("\n"
+						"%s* %s_new(void)\n"
+						"{\n"
+						"\treturn (%s*)g_object_new(%s_TYPE, NULL);\n"
+						"}\n",
+						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
+						class_info->class_name_low,
+						gtk_entry_get_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry)),
+						class_info->class_name_up);
+			}
+			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(cc_dlg->create_destructor_box)))
+			{
+				class_info->gtk_destructor_registration =
+						g_strdup_printf("GtkObjectClass *object_class;\n\n"
+						"\tobject_class = (GtkObjectClass*)klass;\n\n"
+						"\tobject_class->destroy = %s_destroy;\n",
+						class_info->class_name_low);
+				class_info->destructor_decl =
+						g_strdup_printf("static void %s_destroy\t\t\t(GtkObject *object);\n",
+						class_info->class_name_low);
+				class_info->destructor_impl = g_strdup_printf("\n"
+						"void %s_destroy(GtkObject *object)\n"
+						"{\n"
+						"\t%s *self;\n\n"
+						"\tg_return_if_fail(object != NULL);\n"
+						"\tg_return_if_fail(IS_%s(object));\n\n"
+						"\tself = %s(object);\n\n"
+						"\tif (GTK_OBJECT_CLASS(parent_class)->destroy)\n"
+						"\t\t(* GTK_OBJECT_CLASS(parent_class)->destroy)(object);\n"
+						"}\n",
+						class_info->class_name_low,
+						class_info->class_name,
+						class_info->class_name_up,
+						class_info->class_name_up);
+			}
+			break;
+		}
+	}
+
+	text = templates_get_template_class_source(class_info);
+	idx = document_new_file(class_info->source, NULL);
+	sci_set_text(doc_list[idx].sci, text);
+	g_free(text);
+
+	text = templates_get_template_class_header(class_info);
+	idx = document_new_file(class_info->header, NULL);
+	sci_set_text(doc_list[idx].sci, text);
+	g_free(text);
+
+	gtk_object_destroy(GTK_OBJECT(cc_dlg->dialog));
 }
 
 
