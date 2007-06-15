@@ -1,6 +1,11 @@
 2007-06-15  Enrico Tröger  <enrico.troeger@uvena.de>
 
- * geany.glade, src/interface.c, src/tools.c: Fixed spelling of GTK.
+ * geany.glade, src/interface.c, src/tools.c: Fix spelling of GTK.
+ * src/tools.c:
+   Fix bug when reopening the Insert special characters dialog after it
+   was closed by a delete event.
+   Fix creation of class files with an empty name and some code
+   reformatting.
 
 
 2007-06-14  Frank Lanitz  <frank@frank.uvena.de>

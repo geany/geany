@@ -70,8 +70,7 @@ typedef struct _CreateClassDialog
 	GtkWidget *create_constructor_box;
 	GtkWidget *create_destructor_box;
 	GtkWidget *gtk_constructor_type_entry;
-}
-CreateClassDialog;
+} CreateClassDialog;
 
 static GtkWidget *sc_dialog = NULL;
 static GtkTreeStore *sc_store = NULL;
@@ -88,6 +87,7 @@ static void on_set_sensitive_toggled(GtkWidget *toggle_button, GtkWidget *target
 static void on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
 static void on_base_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
 static void on_create_class(CreateClassDialog *cc_dlg);
+
 
 void tools_show_dialog_insert_special_chars()
 {
@@ -146,6 +146,9 @@ void tools_show_dialog_insert_special_chars()
 
 		g_signal_connect((gpointer) sc_dialog, "response",
 					G_CALLBACK(sc_on_tools_show_dialog_insert_special_chars_response), NULL);
+
+		g_signal_connect((gpointer) sc_dialog, "delete_event",
+					G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		sc_fill_store(sc_store);
 
@@ -933,7 +936,7 @@ void tools_show_dialog_create_class(gint type)
 	GtkWidget *cancel_button;
 	GtkWidget *ok_button;
 
-	cc_dlg = g_malloc(sizeof(CreateClassDialog));
+	cc_dlg = g_new0(CreateClassDialog, 1);
 	cc_dlg->class_type = type;
 
 	cc_dlg->dialog = gtk_dialog_new();
@@ -1109,6 +1112,7 @@ void tools_show_dialog_create_class(gint type)
 	gtk_widget_show(cc_dlg->dialog);
 }
 
+
 static void on_set_sensitive_toggled(GtkWidget *toggle_button, GtkWidget *target_widget)
 {
 	g_return_if_fail(toggle_button != NULL);
@@ -1119,6 +1123,7 @@ static void on_set_sensitive_toggled(GtkWidget *toggle_button, GtkWidget *target
 	gtk_widget_set_sensitive(target_widget,
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle_button)));
 }
+
 
 static void on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg)
 {
@@ -1145,7 +1150,8 @@ static void on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_
 	g_free(class_source);
 }
 
-static gchar* str_case_split(const gchar *str, char splitter)
+
+static gchar* str_case_split(const gchar *str, gchar splitter)
 {
 	GString *result;
 
@@ -1163,6 +1169,7 @@ static gchar* str_case_split(const gchar *str, char splitter)
 	}
 	return g_string_free(result, FALSE);
 }
+
 
 static void on_base_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg)
 {
@@ -1201,6 +1208,7 @@ static void on_base_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_d
 	g_free(base_gtype);
 }
 
+
 static void on_create_class(CreateClassDialog *cc_dlg)
 {
 	ClassInfo *class_info;
@@ -1209,7 +1217,10 @@ static void on_create_class(CreateClassDialog *cc_dlg)
 
 	g_return_if_fail(cc_dlg != NULL);
 
-	class_info = g_malloc0(sizeof(ClassInfo));
+	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_name_entry)), ""))
+		return;
+
+	class_info = g_new0(ClassInfo, 1);
 	class_info->type = cc_dlg->class_type;
 	class_info->class_name = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_name_entry)));
 	class_info->class_name_up = str_case_split(class_info->class_name, '_');
@@ -1318,6 +1329,4 @@ static void on_create_class(CreateClassDialog *cc_dlg)
 
 	gtk_object_destroy(GTK_OBJECT(cc_dlg->dialog));
 }
-
-
 
