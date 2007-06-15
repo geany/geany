@@ -1410,7 +1410,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="menu_create_gtk_class">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Gtk+ class</property>
+			      <property name="label" translatable="yes">GTK+ class</property>
 			      <property name="use_underline">True</property>
 			      <signal name="activate" handler="on_menu_create_gtk_class_activate" last_modification_time="Mon, 11 Jun 2007 10:50:17 GMT"/>
 			    </widget>

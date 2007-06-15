@@ -975,7 +975,7 @@ create_window1 (void)
   gtk_widget_show (menu_create_cpp_class);
   gtk_container_add (GTK_CONTAINER (menu_create_class1_menu), menu_create_cpp_class);
 
-  menu_create_gtk_class = gtk_menu_item_new_with_mnemonic (_("Gtk+ class"));
+  menu_create_gtk_class = gtk_menu_item_new_with_mnemonic (_("GTK+ class"));
   gtk_widget_show (menu_create_gtk_class);
   gtk_container_add (GTK_CONTAINER (menu_create_class1_menu), menu_create_gtk_class);
 
