@@ -42,6 +42,7 @@ static GtkWidget *gb_window = NULL;
 #define COPYRIGHT "Copyright (c)  2005-2007\nEnrico Tröger\nNick Treleaven\nFrank Lanitz\nAll rights reserved."
 #define CREDITS \
 "<span size=\"larger\" weight=\"bold\">%s</span>\n\t\
+\
 Enrico Tröger - %s\n\t\
 &lt;enrico.troeger@uvena.de&gt;\n\n\t\
 Nick Treleaven - %s\n\t\
@@ -50,44 +51,27 @@ Frank Lanitz - %s\n\t\
 &lt;frank@frank.uvena.de&gt;\n\n\t\
 \n<span size=\"larger\" weight=\"bold\">%s</span>\n\t\
 \
-Yura Semashko - <language> be_BY\n\t\
-&lt;yurand2@gmail.com&gt;\n\n\t\
-Dilyan Rusev - <language> bg\n\t\
-&lt;dilyanrusev@gmail.com&gt;\n\n\t\
-Toni Garcia-Navarro - <language> ca_ES\n\t\
-&lt;topi@elpiset.net&gt;\n\n\t\
-Petr Messner - <language> cs_CZ \n\t\
-&lt;messa@messa.cz&gt;\n\n\t\
-Frank Lanitz - <language> de_DE\n\t\
-&lt;frank@frank.uvena.de&gt;\n\n\t\
-Damián Viano - <language> es\n\t\
-&lt;debian@damianv.com.ar&gt;\n\n\t\
-Harri Koskinen  - <language> fi_FI\n\t\
-&lt;harri@fastmonkey.org&gt;\n\n\t\
-Jean-Philippe Moal - <language> fr\n\t\
-&lt;skateinmars@skateinmars.net&gt;\n\n\t\
-Gabor Kmetyko - <language> hu\n\t\
-&lt;kg_kilo@freemail.hu&gt;\n\n\t\
-M. Baldinelli - <language> it\n\t\
-&lt;m.baldinelli@agora.it&gt;\n\n\t\
-Dario Santomarco - <language> it\n\t\
-&lt;dariello@yahoo.it&gt;\n\n\t\
-Kurt De Bree - <language> nl\n\t\
-&lt;kdebree@telenet.be&gt;\n\n\t\
-Jacek Wolszczak - <language> pl_PL\n\t\
-&lt;shutdownrunner@o2.pl&gt;\n\n\t\
-Alexandre Moreira - <language> pt_BR\n\t\
-&lt;alexandream@gmail.com&gt;\n\n\t\
-Adrovane Marques Kade - <language> pt_BR\n\t\
-&lt;adrovane@gmail.com&gt;\n\n\t\
-brahmann_ - <language> ru_RU\n\t\
-&lt;brahmann@mthr.net.ru&gt;\n\n\t\
-Clytie Siddall - <language> vi_VN\n\t\
-&lt;clytie@riverland.net.au&gt;\n\n\t\
-Dormouse Young - <language> zh_CN\n\t\
-&lt;dormouse.young@gmail.com&gt;\n\n\t\
-KoViCH - <language> zh_TW\n\t\
-&lt;kovich.ian@gmail.com&gt;\n\n\t"
+be_BY\t Yura Semashko &lt;yurand2@gmail.com&gt;\n\n\t\
+bg\t Dilyan Rusev &lt;dilyanrusev@gmail.com&gt;\n\n\t\
+ca_ES\t Toni Garcia-Navarro &lt;topi@elpiset.net&gt;\n\n\t\
+cs_CZ\t Petr Messner &lt;messa@messa.cz&gt;\n\n\t\
+de_DE\t Enrico Tröger &lt;enrico.troeger@uvena.de&gt;\n\t\
+\t Frank Lanitz &lt;frank@frank.uvena.de&gt;\n\n\t\
+es\t Damián Viano &lt;debian@damianv.com.ar&gt;\n\t\
+\t Nacho Cabanes &lt;ncabanes@gmail.com&gt;\n\n\t\
+fi_FI\t Harri Koskinen &lt;harri@fastmonkey.org&gt;\n\n\t\
+fr\t Jean-Philippe Moal &lt;skateinmars@skateinmars.net&gt;\n\n\t\
+hu\t Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;\n\n\t\
+it\t Max Baldinelli &lt;m.baldinelli@agora.it&gt;\n\t\
+\t Dario Santomarco &lt;dariello@yahoo.it&gt;\n\n\t\
+nl\t Kurt De Bree &lt;kdebree@telenet.be&gt;\n\n\t\
+pl_PL\t Jacek Wolszczak &lt;shutdownrunnter@02.pl&gt;\n\n\t\
+pt_BR\t Alexandra Moreire &lt;alexandream@gmail.com&gt;\n\t\
+\t Adrovane Marques Kade &lt;adrovane@gmail.com&gt;\n\n\t\
+ru_RU\t brahmann_ &lt;brahmann@mthr.net.ru&gt;\n\n\t\
+vi_VN\t Clytie Siddall &lt;clytie@riverland.net.au&gt;\n\n\t\
+zh_CN\t Dormouse Young &lt;dormouse.young@gmail.com&gt;\n\n\t\
+zh_TW\t KoViCH &lt;kovich.ian@gmail.com&gt;\n\n\t"
 
 static void header_eventbox_style_set(GtkWidget *widget);
 static void header_label_style_set(GtkWidget *widget);
@@ -242,7 +226,7 @@ static GtkWidget *create_dialog(void)
 	credits_label = gtk_label_new(NULL);
 	gtk_label_set_selectable(GTK_LABEL(credits_label), TRUE);
 	gtk_label_set_use_markup(GTK_LABEL(credits_label), TRUE);
-	credits = g_strdup_printf(CREDITS, _("Developers"), _("Maintainer"), _("developer"),
+	credits = g_strdup_printf(CREDITS, _("Developers"), _("maintainer"), _("developer"),
 							 _("translation maintainer"), _("Translators"));
 	credits = utils_str_replace(credits, "<language>", _("language"));
 	gtk_label_set_markup(GTK_LABEL(credits_label), credits);
