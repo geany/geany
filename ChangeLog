@@ -1,6 +1,6 @@
 2007-06-15  Frank Lanitz  <frank@frank.uvena.de>
 
- * src/about.c: Update of About-dialog.
+ * src/about.c: Update of about dialog.
  * THANKS: Added Spanish translator Nacho Cabanes.
 
 
@@ -12,6 +12,11 @@
    was closed by a delete event.
    Fix creation of class files with an empty name and some code
    reformatting.
+ * src/utils.c: Fix sanity checks in utils_str_replace().
+ * src/tools.c:
+   Fix several memleaks.
+   Avoid using broken functions g_strdown() and g_strup().
+   Only create header and source files if filename is not empty.
 
 
 2007-06-14  Frank Lanitz  <frank@frank.uvena.de>

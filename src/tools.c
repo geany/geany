@@ -1175,37 +1175,41 @@ static void on_base_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_d
 {
 	gchar *base_name_splitted;
 	gchar *base_header;
-	gchar *base_gtype = NULL;
+	gchar *tmp;
 
 	g_return_if_fail(entry != NULL);
 	g_return_if_fail(GTK_IS_ENTRY(entry));
 	g_return_if_fail(cc_dlg != NULL);
 
 	base_name_splitted = str_case_split(gtk_entry_get_text(GTK_ENTRY(entry)), '_');
-	base_header = g_strdup_printf("%s%s.h",
+	tmp = g_strdup_printf("%s%s.h",
 		g_ascii_strncasecmp(gtk_entry_get_text(GTK_ENTRY(entry)), "gtk", 3) ? "": "gtk/",
 		gtk_entry_get_text(GTK_ENTRY(entry)));
-	g_strdown(base_header);
+	base_header = g_ascii_strdown(tmp, -1);
+	g_free(tmp);
 
 	gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_header_entry), base_header);
 
 	if (cc_dlg->class_type == GEANY_CLASS_TYPE_GTK)
 	{
+		gchar *base_gtype;
 		if (! g_ascii_strncasecmp(gtk_entry_get_text(GTK_ENTRY(entry)), "gtk", 3))
 		{
-			base_gtype = g_strdup_printf("%.3s_TYPE%s",
+			tmp = g_strdup_printf("%.3s_TYPE%s",
 					base_name_splitted,
 					base_name_splitted + 3);
 		}
 		else
-			base_gtype = g_strconcat(base_name_splitted, "_TYPE", NULL);
-		g_strup(base_gtype);
+			tmp = g_strconcat(base_name_splitted, "_TYPE", NULL);
+		base_gtype = g_ascii_strup(tmp, -1);
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_gtype_entry), base_gtype);
+
+		g_free(base_gtype);
+		g_free(tmp);
 	}
 
 	g_free(base_name_splitted);
 	g_free(base_header);
-	g_free(base_gtype);
 }
 
 
@@ -1214,6 +1218,7 @@ static void on_create_class(CreateClassDialog *cc_dlg)
 	ClassInfo *class_info;
 	gint idx;
 	gchar *text;
+	gchar *tmp;
 
 	g_return_if_fail(cc_dlg != NULL);
 
@@ -1223,8 +1228,8 @@ static void on_create_class(CreateClassDialog *cc_dlg)
 	class_info = g_new0(ClassInfo, 1);
 	class_info->type = cc_dlg->class_type;
 	class_info->class_name = g_strdup(gtk_entry_get_text(GTK_ENTRY(cc_dlg->class_name_entry)));
-	class_info->class_name_up = str_case_split(class_info->class_name, '_');
-	g_strup(class_info->class_name_up);
+	tmp = str_case_split(class_info->class_name, '_');
+	class_info->class_name_up = g_ascii_strup(tmp, -1);
 	class_info->class_name_low = g_ascii_strdown(class_info->class_name_up, -1);
 	if (*gtk_entry_get_text(GTK_ENTRY(cc_dlg->base_name_entry)) != '\0')
 	{
@@ -1317,16 +1322,30 @@ static void on_create_class(CreateClassDialog *cc_dlg)
 		}
 	}
 
-	text = templates_get_template_class_source(class_info);
-	idx = document_new_file(class_info->source, NULL);
-	sci_set_text(doc_list[idx].sci, text);
-	g_free(text);
+	// only create the files if the filename is not empty
+	if (*class_info->source != '\0')
+	{
+		text = templates_get_template_class_source(class_info);
+		idx = document_new_file(class_info->source, NULL);
+		sci_set_text(doc_list[idx].sci, text);
+		g_free(text);
+	}
 
-	text = templates_get_template_class_header(class_info);
-	idx = document_new_file(class_info->header, NULL);
-	sci_set_text(doc_list[idx].sci, text);
-	g_free(text);
+	if (*class_info->header != '\0')
+	{
+		text = templates_get_template_class_header(class_info);
+		idx = document_new_file(class_info->header, NULL);
+		sci_set_text(doc_list[idx].sci, text);
+		g_free(text);
+	}
 
 	gtk_object_destroy(GTK_OBJECT(cc_dlg->dialog));
+
+	utils_free_pointers(tmp, class_info->class_name, class_info->class_name_up,
+		class_info->base_name, class_info->class_name_low, class_info->base_include,
+		class_info->header, class_info->header_guard, class_info->source, class_info->base_decl,
+		class_info->constructor_decl, class_info->constructor_impl,
+		class_info->gtk_destructor_registration, class_info->destructor_decl,
+		class_info->destructor_impl, class_info->base_gtype, class_info, NULL);
 }
 

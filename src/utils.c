@@ -881,12 +881,20 @@ gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *repl
 	gchar *result;
 	GString *str;
 
-	if (haystack == NULL) return NULL;
+	if (haystack == NULL)
+		return NULL;
+
+	if (needle == NULL || replacement == NULL)
+		return haystack;
+
+	if (utils_str_equal(needle, replacement))
+		return haystack;
 
 	start = strstr(haystack, needle);
 	lt_pos = utils_strpos(haystack, needle);
 
-	if (start == NULL || lt_pos == -1) return haystack;
+	if (start == NULL || lt_pos == -1)
+		return haystack;
 
 	// substitute by copying
 	str = g_string_sized_new(strlen(haystack));
