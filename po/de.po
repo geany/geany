@@ -947,7 +947,7 @@ msgstr "Lua Quelldatei"
 
 #: src/filetypes.c:325
 msgid "Ferite source file"
-msgstr "Ferite Qulldatei"
+msgstr "Ferite Quelldatei"
 
 #: src/filetypes.c:337
 msgid "Haskell source file"
