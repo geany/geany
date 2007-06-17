@@ -33,6 +33,8 @@ gboolean configuration_open_files();
 
 void configuration_read_filetype_extensions();
 
+void configuration_read_autocompletions();
+
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */
 void configuration_apply_settings();

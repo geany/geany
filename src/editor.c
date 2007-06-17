@@ -1081,137 +1081,119 @@ void editor_auto_latex(gint idx, gint pos)
 }
 
 
-/* This should use a string with the current word instead of buf, but we will replace this
- * code with user-defined construct completion. */
-static gboolean complete_constructs(gint idx, gint pos, const gchar *buf, const gchar *space,
-		const gchar *eol)
+static gchar *ac_find_completion_by_name(const gchar *type, const gchar *name)
 {
-	gboolean result;
-	gchar *construct = NULL;
-	gint space_len = strlen(space);
+	gchar *result = NULL;
+	GHashTable *tmp;
+
+	g_return_val_if_fail(type != NULL && name != NULL, NULL);
+
+	tmp = g_hash_table_lookup(editor_prefs.auto_completions, type);
+	if (tmp != NULL)
+	{
+		result = g_hash_table_lookup(tmp, name);
+	}
+	// whether nothing is set for the current filetype(tmp is NULL) or
+	// the particular completion for this filetype is not set (result is NULL)
+	if (tmp == NULL || result == NULL)
+	{
+		tmp = g_hash_table_lookup(editor_prefs.auto_completions, "Default");
+		if (tmp != NULL)
+		{
+			result = g_hash_table_lookup(tmp, name);
+		}
+	}
+	// if result is still NULL here, no completion could be found
+
+	// result is owned by the hash table and will be freed when the table will destroyed
+	return g_strdup(result);
+}
+
+
+/* This is very ugly but passing the pattern to ac_replace_specials() doesn't work because it is
+ * modified when replacing a completion but the foreach function still passes the old pointer
+ * to ac_replace_specials, so we use a global pointer outside of ac_replace_specials and
+ * ac_complete_constructs. Any hints to improve this are welcome. */
+static gchar *global_pattern = NULL;
+
+void ac_replace_specials(gpointer key, gpointer value, gpointer user_data)
+{
+	gchar *needle;
+
+	if (key == NULL || value == NULL)
+		return;
+
+	needle = g_strconcat("%", (gchar*) key, "%", NULL);
+
+	global_pattern = utils_str_replace(global_pattern, needle, (gchar*) value);
+	g_free(needle);
+}
+
+
+static gboolean ac_complete_constructs(gint idx, gint pos, const gchar *word)
+{
+	gchar *str;
+	gchar *pattern;
+	gchar *lindent;
+	gchar *whitespace;
+	gint step, str_len;
+	GHashTable *specials;
 	ScintillaObject *sci = doc_list[idx].sci;
 
-	// "pattern", buf + x, y -> x + y = 15, because buf is (pos - 15)...(pos) = 15
-	if (! strncmp("if", buf + 13, 2))
+	str = g_strdup(word);
+	g_strstrip(str);
+
+	pattern = ac_find_completion_by_name(doc_list[idx].file_type->name, str);
+	if (pattern == NULL || pattern[0] == '\0')
 	{
-		if (! isspace(*(buf + 12)))
-			return FALSE;
-
-		construct = g_strdup_printf("()%s{%s%s%s}%s", eol, eol, space, eol, eol);
-
-		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 1, TRUE);
+		utils_free_pointers(str, pattern, NULL); // free pattern in case it is ""
+		return FALSE;
 	}
-	else if (! strncmp("else", buf + 11, 4))
+
+	get_indent(sci, pos, TRUE);
+	lindent = g_strconcat(utils_get_eol_char(idx), indent, NULL);
+	whitespace = get_whitespace(editor_prefs.tab_width, FALSE);
+
+	// remove the typed word, it will be added again by the used auto completion
+	// (not really necessary but this makes the auto completion more flexible,
+	//  e.g. with a completion like hi=hello, so typing "hi<TAB>" will result in "hello")
+	str_len = strlen(str);
+	sci_set_selection_start(sci, pos - str_len);
+	sci_set_selection_end(sci, pos);
+	sci_replace_sel(sci, "");
+	pos -= str_len; // pos has changed while deleting
+
+	// replace 'special' completions
+	specials = g_hash_table_lookup(editor_prefs.auto_completions, "Special");
+	if (specials != NULL)
 	{
-		if (! isspace(*(buf + 10)))
-			return FALSE;
-
-		construct = g_strdup_printf("%s{%s%s%s}%s", eol, eol, space, eol, eol);
-
-		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
+		// ugly hack using global_pattern
+		global_pattern = pattern;
+		g_hash_table_foreach(specials, ac_replace_specials, NULL);
+		pattern = global_pattern;
 	}
-	else if (! strncmp("for", buf + 12, 3))
-	{
-		gchar *var;
-		gint contruct_len;
 
-		if (! isspace(*(buf + 11)))
-			return FALSE;
+	// replace line breaks and whitespaces
+	pattern = utils_str_replace(pattern, "\n", "%newline%"); // to avoid endless replacing of \n
+	pattern = utils_str_replace(pattern, "%newline%", lindent);
 
-		if (doc_list[idx].file_type->id == GEANY_FILETYPES_PHP)
-		{
-			var = g_strdup("$i");
-			contruct_len = 14;
-		}
-		else
-		{
-			var = g_strdup("i");
-			contruct_len = 12;
-		}
-		construct = g_strdup_printf("(%s%s = 0; %s < ; %s++)%s{%s%s%s}%s",
-						(doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? "int " : "",
-						var, var, var, eol, eol, space, eol, eol);
+	pattern = utils_str_replace(pattern, "\t", "%ws%"); // to avoid endless replacing of \t
+	pattern = utils_str_replace(pattern, "%ws%", whitespace);
 
-		// add 4 characters because of "int " in C++ mode
-		contruct_len += (doc_list[idx].file_type->id == GEANY_FILETYPES_CPP) ? 4 : 0;
+	// find the %cursor% pos (has to be done after all other operations)
+	step = utils_strpos(pattern, "%cursor%");
+	if (step != -1)
+		pattern = utils_str_replace(pattern, "%cursor%", "");
 
-		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + contruct_len, TRUE);
-		g_free(var);
-	}
-	else if (! strncmp("while", buf + 10, 5))
-	{
-		if (! isspace(*(buf + 9)))
-			return FALSE;
+	// finally insert the text and set the cursor
+	SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) pattern);
+	if (step != -1)
+		sci_goto_pos(sci, pos + step, TRUE);
+	else
+		sci_goto_pos(sci, pos + strlen(pattern), TRUE);
 
-		construct = g_strdup_printf("()%s{%s%s%s}%s", eol, eol, space, eol, eol);
-
-		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 1, TRUE);
-	}
-	else if (! strncmp("do", buf + 13, 2))
-	{
-		if (! isspace(*(buf + 12)))
-			return FALSE;
-
-		construct = g_strdup_printf("%s{%s%s%s}%swhile ();%s", eol, eol, space, eol, eol, eol);
-
-		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
-	}
-	else if (! strncmp("try", buf + 12, 3))
-	{
-		if (! isspace(*(buf + 11)))
-			return FALSE;
-
-		construct = g_strdup_printf("%s{%s%s%s}%scatch ()%s{%s%s%s}%s",
-							eol, eol, space, eol, eol, eol, eol, space, eol, eol);
-
-		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
-	}
-	else if (! strncmp("switch", buf + 9, 6))
-	{
-		if (! isspace(*(buf + 8)))
-			return FALSE;
-
-		construct = g_strdup_printf("()%s{%s%scase : break;%s%sdefault: %s}%s",
-										eol, eol, space, eol, space, eol, eol);
-
-		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 1, TRUE);
-	}
-	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_FERITE && ! strncmp("iferr", buf + 10, 5))
-	{
-		if (! isspace(*(buf + 9)))
-			return FALSE;
-
-		construct = g_strdup_printf("%s{%s%s%s}%sfix%s{%s%s%s}%s",
-										eol, eol, space, eol, eol, eol, eol, space, eol, eol);
-
-		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
-	}
-	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_FERITE && ! strncmp("monitor", buf + 8, 7))
-	{
-		if (! isspace(*(buf + 7)))
-			return FALSE;
-
-		construct = g_strdup_printf("%s{%s%s%s}%shandle%s{%s%s%s}%s",
-										eol, eol, space, eol, eol, eol, eol, space, eol, eol);
-
-		SSM(sci, SCI_INSERTTEXT, pos, (sptr_t) construct);
-		sci_goto_pos(sci, pos + 3 + space_len + (2 * strlen(indent)), TRUE);
-	}
-	result = (construct != NULL);
-	if (result)
-	{
-		sci_insert_text(sci, pos, " ");	// prefix all constructs with a space
-	}
-	g_free(construct);
-	return result;
+	utils_free_pointers(pattern, whitespace, lindent, str, NULL);
+ 	return TRUE;
 }
 
 
@@ -1226,24 +1208,12 @@ static gboolean at_eol(ScintillaObject *sci, gint pos)
 gboolean editor_auto_forif(gint idx, gint pos)
 {
 	gboolean result;
-	gchar buf[16];
-	gchar *eol;
-	gchar *space;
+	gchar *word;
 	gint lexer, style;
 	gint i;
 	ScintillaObject *sci;
 
-	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return FALSE;
-
-	// only for C, C++, D, Ferite, Java, JavaScript, Perl and PHP
-	if (doc_list[idx].file_type->id != GEANY_FILETYPES_PHP &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_C &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_D &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_CPP &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_PERL &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_JAVA &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_JS &&
-		doc_list[idx].file_type->id != GEANY_FILETYPES_FERITE)
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
 		return FALSE;
 
 	sci = doc_list[idx].sci;
@@ -1260,35 +1230,30 @@ gboolean editor_auto_forif(gint idx, gint pos)
 	if (lexer == SCLEX_HTML && ! (style >= SCE_HPHP_DEFAULT && style <= SCE_HPHP_OPERATOR))
 		return FALSE;
 
-	sci_get_text_range(sci, pos - 15, pos, buf);
-	if (sizeof(buf) != strlen(buf) + 1)
-		return FALSE;	// not enough chars in document
+	// get the current line contents
+	word = sci_get_line(sci, SSM(sci, SCI_LINEFROMPOSITION, pos, 0));
 
 	/* check that the chars before the current word are only whitespace (on this line).
 	 * this prevents completion of '} while ' */
-	i = 14;	// index before \0 char
-	while (i >= 0 && isalpha(buf[i])) i--;	// find pos before keyword
-	while (i >= 0 && buf[i] != '\n' && buf[i] != '\r') // we want to stay in this line('\n' check)
+	i = strlen(word) - 1;
+	while (i >= 0 && isspace(word[i])) i--;	// skip trailing whitespace
+	while (i >= 0 && isalpha(word[i])) i--;	// find pos before keyword
+	while (i >= 0 && word[i] != '\n' && word[i] != '\r') // we want to stay in this line('\n' check)
 	{
-		if (! isspace(buf[i]))
-		{
+		if (! isspace(word[i]))
 			return FALSE;
-		}
 		i--;
 	}
 
 	// get the indentation
-	if (doc_list[idx].auto_indent) get_indent(sci, pos, TRUE);
-	eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
+	if (doc_list[idx].auto_indent)
+		get_indent(sci, pos, TRUE);
 
-	// get the whitespace for additional indentation
-	space = get_whitespace(editor_prefs.tab_width, FALSE);
-
-	sci_start_undo_action(sci);	// needed while we insert a space separately from construct
-	result = complete_constructs(idx, pos, buf, space, eol);
+	sci_start_undo_action(sci);	// needed because we insert a space separately from construct
+	result = ac_complete_constructs(idx, pos, word);
 	sci_end_undo_action(sci);
 
-	utils_free_pointers(eol, space, NULL);
+	utils_free_pointers(word, NULL);
 	return result;
 }
 
@@ -2331,3 +2296,9 @@ void editor_select_word(ScintillaObject *sci)
 }
 
 
+void editor_finalize()
+{
+	g_hash_table_destroy(editor_prefs.auto_completions);
+
+	scintilla_release_resources();
+}

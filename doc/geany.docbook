@@ -229,6 +229,13 @@
 								</entry>
 							</row>
 							<row>
+								<entry></entry>
+								<entry>--ft-names</entry>
+								<entry>Print a list of <application>Geany</application>'s internal
+									   filetype names (useful for the auto completion list).
+								</entry>
+							</row>
+							<row>
 								<entry>-i</entry>
 								<entry>--new-instance</entry>
 								<entry>Do not open files in a running instance, force opening a
@@ -583,26 +590,6 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 					</variablelist>
 				</para>
 			</section>
-			<section id="editing_cc">
-				<title>Construct completion</title>
-				<para>
-					Built-in construct completion is available for C-like languages. By default the
-					<keycap>Tab</keycap> key is used straight after typing the construct keyword.
-				</para>
-				<para>
-					Example: <literal>for</literal>&lt;TAB&gt;
-				</para>
-				<para>
-					typed into a C file expands to:
-				</para>
-				<para>
-					<literallayout><literal>for (i = 0; i &lt; ; i++)
-					{
-
-					}
-					</literal></literallayout>
-				</para>
-			</section>
 			<section id="editing_bookmarks">
 				<title>Bookmarks</title>
 				<para>
@@ -673,6 +660,108 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 					cursor position or by the current selection. If the cursor is at the word
 					"echo", a browser window will open(assumed your browser is called firefox)
 					and it will open the address: http://www.php.net/echo.
+				</para>
+			</section>
+			<section id="editing_cc">
+				<title>User-definable auto completion</title>
+				<para>
+					Geany can complete pre-defined constructs and often used strings automatically.
+					To know what to complete or replace Geany reads a configuration file called
+					<filename>autocomplete.conf</filename> at startup.
+				</para>
+				<para>
+					The system-wide configuration file can be found in
+					<filename>$prefix/share/geany</filename>, where $prefix is the path where
+					<application>Geany</application> is	installed (commonly
+					<filename>/usr/local</filename>). It is not recommended to edit the system-wide
+					file, because it will be overridden when <application>Geany</application> is
+					updated.
+				</para>
+				<para>
+					To change the settings, copy the file from
+					<filename>$prefix/share/geany</filename> in your configuration directory
+					(usually <filename>~/.geany/</filename>).
+				</para>
+				<para>
+					 For example:
+					 <screen><prompt>%</prompt> <userinput><command>cp /usr/local/share/geany/autocomplete.conf /home/username/.geany/</command></userinput></screen>
+					 Then you can edit the file and the changes are also available after an update of
+					 <application>Geany</application> because the file resides in your configuration
+					 directory. Alternatively, you can create a file
+					 <filename>~/.geany/autocomplete.conf</filename> and add only these settings
+					 you want to change. All missing settings will be read from the global auto
+					 completion file in <filename>$prefix/share/geany</filename>.
+				</para>
+				<para>
+					The file autocomplete.conf may contain several sections for each filetype. It
+					also contains two additional sections "Default" and "Special".
+					Default contains all completions which are available for every filetype. You
+					may define another section for a certain filetype(e.g. C++) containing the same
+					completions. Then when using such a completion in a C++ file the completion
+					defined in the C++ section will be used. In any other file the completion
+					defined in the Default section will be used unless a section for the current
+					filetype exists and the used completion is defined in this section.
+					The section "Special" contains special completions which can only be used in
+					other completions. So you can define often used parts of completions and just
+					use the special completion as a placeholder (see the autocomplete.conf for
+					details).
+				</para>
+				<para>
+					To define completions you can use several special characters which will be
+					replaced when using the completion:
+					<table frame="all" id="completion_wildcards">
+						<title>Wildcards for auto completion</title>
+						<tgroup cols="2">
+							<?dbhtml cellpadding="4" ?>
+							<?dbhtml cellspacing="0" ?>
+							<colspec colnum="1" colname="col1"/>
+							<colspec colnum="2" colname="col2"/>
+							<tbody>
+								<row>
+									<entry>\n or %newline%</entry>
+									<entry>Insert a new line (it will be replaced by the used
+										   EOL char(s) - LF, CR/LF, CR).</entry>
+								</row>
+								<row>
+									<entry>\t ot %ws%</entry>
+									<entry>Insert an indentation step, if using only spaces for
+										   indentation only spaces will be used.</entry>
+								</row>
+								<row>
+									<entry>\s</entry>
+									<entry>\s to force whitespace at beginning or end of a value
+										   ('key= value' won't work, use 'key=\svalue')</entry>
+								</row>
+								<row>
+									<entry>%cursor%</entry>
+									<entry>Place the cursor at this position after completion has
+										   been done.</entry>
+								</row>
+								<row>
+									<entry>%...%</entry>
+									<entry>... means the name of a key in the "Special" section.
+										   If you have defined a key "brace_open" in the "Special"
+										   section you can use %brace_open" in any other completion.
+									</entry>
+								</row>
+							</tbody>
+						</tgroup>
+					</table>
+				</para>
+				<para>
+					Defined completions must not contain spaces otherwise they won't work
+					correctly. But beside that you can define almost everything string as a
+					completion and use it later in Geany. It is not limited to existing contructs
+					of certain programming languages(like if, for, switch). Define whatever you
+					need.
+				</para>
+				<para>
+					Maybe you need to often type your name, so define a completion like this:
+					<literallayout><literal>[Default]
+					myname=Enrico Tröger</literal></literallayout>
+					Everytime you write <literal>myname</literal>&lt;TAB&gt; in Geany, it will
+					replace "myname" by "Enrico Tröger". The key to start auto completion can
+					be changed in the preferences dialog, by default it is TAB.
 				</para>
 			</section>
 		</section>

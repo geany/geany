@@ -2,6 +2,13 @@
 
  * src/templates.c, src/tools.c: Apply patch from Alexander Rodin to
                                  improve the class builder code(thanks).
+ * Makefile.am, TODO, data/autocomplete.conf, doc/geany.1.in,
+   doc/geany.docbook, src/editor.c, src/editor.h, src/keyfile.c,
+   src/keyfile.h, src/main.c:
+   Add new command line option --ft-names to get a list of supported
+   filetype names.
+   Complete rewrite of auto completion to make it user-definable and
+   much more flexible.
 
 
 2007-06-15  Frank Lanitz  <frank@frank.uvena.de>

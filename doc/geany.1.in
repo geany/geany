@@ -1,4 +1,4 @@
-.TH "GEANY" "1" "May 21, 2007" "@PACKAGE@ @VERSION@" ""
+.TH "GEANY" "1" "June 17, 2007" "@PACKAGE@ @VERSION@" ""
 .SH "NAME"
 Geany \(em a small and lightweight IDE
 .SH "SYNOPSIS"
@@ -20,6 +20,8 @@ Use an alternate configuration directory. Default configuration directory is
 ~/.geany/ and there resides geany.conf and some template files.
 .IP "\fB-d\fP           \fB\-\-debug\fP         " 10
 Run Geany in debug mode, which means being verbose and printing lots of information.
+.IP "\fB\fP             \fB\-\-ft\-names\fP         " 10
+Print a list of Geany's internal filetype names (useful for the auto completion list).
 .IP "\fB-i\fP           \fB\-\-new-instance\fP         " 10
 Don't open files in a running instance, force opening a new instance.
 Only available if Geany was compiled with support for Sockets.

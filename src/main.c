@@ -89,12 +89,14 @@ static gboolean ignore_socket = FALSE;
 #endif
 static gboolean generate_datafiles = FALSE;
 static gboolean generate_tags = FALSE;
+static gboolean ft_names = FALSE;
 
 static GOptionEntry entries[] =
 {
 	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("use an alternate configuration directory"), NULL },
 	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, N_("runs in debug mode (means being verbose)"), NULL },
+	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("generate global tags file (see documentation)"), NULL },
 	{ "generate-data-files", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, "", NULL },
 #ifdef HAVE_SOCKET
@@ -482,6 +484,19 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		exit(ret);
 	}
 
+	if (ft_names)
+	{
+		int i;
+
+		printf("Geany's internal filetype names:\n");
+		filetypes_init_types();
+		for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+		{
+			printf("%s\n", filetypes[i]->name);
+		}
+		filetypes_free_types();
+		exit(0);
+	}
 
 #ifdef HAVE_SOCKET
 	socket_info.ignore_socket = ignore_socket;
@@ -665,6 +680,7 @@ gint main(gint argc, gchar **argv)
 	templates_init();
 	document_init_doclist();
 	configuration_read_filetype_extensions();
+	configuration_read_autocompletions();
 
 	// set window icon
 	{
@@ -785,6 +801,7 @@ void main_quit()
 	build_finalize();
 	document_finalize();
 	symbols_finalize();
+	editor_finalize();
 	if (app->project != NULL) project_close();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
@@ -825,7 +842,6 @@ void main_quit()
 		g_object_unref(app->default_tag_tree);
 		gtk_widget_destroy(app->default_tag_tree);
 	}
-	scintilla_release_resources();
 #ifdef HAVE_VTE
 	if (vte_info.have_vte) vte_close();
 	g_free(vte_info.lib_vte);

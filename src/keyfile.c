@@ -771,3 +771,79 @@ void configuration_read_filetype_extensions()
 	g_key_file_free(sysconfig);
 	g_key_file_free(userconfig);
 }
+
+
+void configuration_read_autocompletions()
+{
+	gsize i, j, len = 0, len_keys = 0;
+	gchar *sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S,
+		"autocomplete.conf", NULL);
+	gchar *userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
+		"autocomplete.conf", NULL);
+	gchar **groups_user, **groups_sys;
+	gchar **keys_user, **keys_sys;
+	gchar *value;
+	GKeyFile *sysconfig = g_key_file_new();
+	GKeyFile *userconfig = g_key_file_new();
+	GHashTable *tmp;
+
+	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
+
+	// keys are strings, values are GHashTables, so use g_free and g_hash_table_destroy
+	editor_prefs.auto_completions =
+		g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify) g_hash_table_destroy);
+
+	// first read all globally defined auto completions
+	groups_sys = g_key_file_get_groups(sysconfig, &len);
+	for (i = 0; i < len; i++)
+	{
+		keys_sys = g_key_file_get_keys(sysconfig, groups_sys[i], &len_keys, NULL);
+		// create new hash table for the read section (=> filetype)
+		tmp = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+		g_hash_table_insert(editor_prefs.auto_completions, g_strdup(groups_sys[i]), tmp);
+
+		for (j = 0; j < len_keys; j++)
+		{
+			g_hash_table_insert(tmp, g_strdup(keys_sys[j]),
+						utils_get_setting_string(sysconfig, groups_sys[i], keys_sys[j], ""));
+		}
+		g_strfreev(keys_sys);
+	}
+
+	// now read defined completions in user's configuration directory and add / replace them
+	groups_user = g_key_file_get_groups(userconfig, &len);
+	for (i = 0; i < len; i++)
+	{
+		keys_user = g_key_file_get_keys(userconfig, groups_user[i], &len_keys, NULL);
+
+		tmp = g_hash_table_lookup(editor_prefs.auto_completions, groups_user[i]);
+		if (tmp == NULL)
+		{	// new key found, create hash table
+			tmp = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+			g_hash_table_insert(editor_prefs.auto_completions, g_strdup(groups_user[i]), tmp);
+		}
+		for (j = 0; j < len_keys; j++)
+		{
+			value = g_hash_table_lookup(tmp, keys_user[j]);
+			if (value == NULL)
+			{	// value = NULL means the key doesn't yet exist, so insert
+				g_hash_table_insert(tmp, g_strdup(keys_user[j]),
+						utils_get_setting_string(userconfig, groups_user[i], keys_user[j], ""));
+			}
+			else
+			{	// old key and value will be freed by destroy function (g_free)
+				g_hash_table_replace(tmp, g_strdup(keys_user[j]),
+						utils_get_setting_string(userconfig, groups_user[i], keys_user[j], ""));
+			}
+		}
+		g_strfreev(keys_user);
+	}
+
+	g_free(sysconfigfile);
+	g_free(userconfigfile);
+	g_strfreev(groups_sys);
+	g_strfreev(groups_user);
+	g_key_file_free(sysconfig);
+	g_key_file_free(userconfig);
+}

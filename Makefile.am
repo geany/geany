@@ -17,7 +17,8 @@ SYS_DATA_FILES = \
 	data/pascal.tags \
 	data/html_entities.tags \
 	$(srcdir)/data/filetypes.* \
-	data/filetype_extensions.conf
+	data/filetype_extensions.conf \
+	data/autocomplete.conf
 
 EXTRA_DIST = \
 	autogen.sh \
