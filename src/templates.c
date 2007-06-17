@@ -315,7 +315,7 @@ GType {class_name_low}_get_type(void)\n\
 static void {class_name_low}_class_init({class_name}Class *klass)\n\
 {\n\
 	{gtk_destructor_registration}\n\
-	parent_class = gtk_type_class({base_gtype});\n\
+	parent_class = ({base_name}Class*)g_type_class_peek({base_gtype});\n\
 	g_type_class_add_private((gpointer)klass, sizeof({class_name}Private));\n\
 }\n\
 \n\
