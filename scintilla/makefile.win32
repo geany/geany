@@ -74,6 +74,7 @@ $(COMPLIB): DocumentAccessor.o WindowAccessor.o KeyWords.o StyleContext.o Docume
 	ScintillaBase.o ContractionState.o Editor.o ExternalLexer.o PropSet.o PlatGTK.o \
 	KeyMap.o LineMarker.o ScintillaGTK.o CellBuffer.o ViewStyle.o \
 	RESearch.o Style.o Indicator.o AutoComplete.o UniConversion.o CharClassify.o XPM.o \
+	RunStyles.o Decoration.o PositionCache.o \
 	$(MARSHALLER) $(LEXOBJS)
 	$(AR) rc $@ $^
 	$(RANLIB) $@

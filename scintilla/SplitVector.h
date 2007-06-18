@@ -49,9 +49,7 @@ protected:
 		}
 	}
 
-public:
-	/// Construct a split buffer.
-	SplitVector() {
+	void Init() {
 		body = NULL;
 		growSize = 8;
 		size = 0;
@@ -60,12 +58,16 @@ public:
 		gapLength = 0;
 	}
 
-	~SplitVector() {
-		delete []body;
-		body = NULL;
+public:
+	/// Construct a split buffer.
+	SplitVector() {
+		Init();
 	}
 
-	void Create(int initialLength_, int growSize_);
+	~SplitVector() {
+		delete []body;
+		body = 0;
+	}
 
 	int GetGrowSize() const {
 		return growSize;
@@ -83,7 +85,7 @@ public:
 			// Move the gap to the end
 			GapTo(lengthBody);
 			T *newBody = new T[newSize];
-			if ((size != 0) && (body != NULL)) {
+			if ((size != 0) && (body != 0)) {
 				memmove(newBody, body, sizeof(T) * lengthBody);
 				delete []body;
 			}
@@ -212,7 +214,11 @@ public:
 		if ((position < 0) || ((position + deleteLength) > lengthBody)) {
 			return;
 		}
-		if (deleteLength > 0) {
+		if ((position == 0) && (deleteLength == lengthBody)) {
+			// Full deallocation returns storage and is faster
+			delete []body;
+			Init();
+		} else if (deleteLength > 0) {
 			GapTo(position);
 			lengthBody -= deleteLength;
 			gapLength += deleteLength;

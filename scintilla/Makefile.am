@@ -35,6 +35,7 @@ CallTip.cxx \
 CellBuffer.cxx \
 CharClassify.cxx \
 ContractionState.cxx \
+Decoration.cxx \
 DocumentAccessor.cxx \
 Document.cxx \
 Editor.cxx \
@@ -42,8 +43,10 @@ Indicator.cxx \
 KeyMap.cxx \
 KeyWords.cxx \
 LineMarker.cxx \
+PositionCache.cxx \
 PropSet.cxx \
 RESearch.cxx \
+RunStyles.cxx \
 ScintillaBase.cxx \
 StyleContext.cxx \
 Style.cxx \
@@ -59,8 +62,10 @@ AutoComplete.h \
 CallTip.h \
 CellBuffer.h \
 CharClassify.h \
+CharacterSet.h \
 ContractionState.h \
 Converter.h \
+Decoration.h \
 DocumentAccessor.h \
 Document.h \
 Editor.h \
@@ -69,7 +74,9 @@ Indicator.h \
 KeyMap.h \
 LineMarker.h \
 Partitioning.h \
+PositionCache.h \
 RESearch.h \
+RunStyles.h \
 ScintillaBase.h \
 scintilla-marshal.h \
 SplitVector.h \

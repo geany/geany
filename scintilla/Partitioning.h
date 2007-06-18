@@ -86,7 +86,7 @@ public:
 
 	~Partitioning() {
 		delete body;
-		body = NULL;
+		body = 0;
 	}
 
 	int Partitions() {

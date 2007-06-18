@@ -98,7 +98,7 @@ static bool keywordIsModifier(const char *word,
                               Accessor &styler);
 
 static int ClassifyWordRb(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler, char *prevWord) {
-	char s[100];
+	char s[MAX_KEYWORD_LENGTH];
     unsigned int i, j;
 	unsigned int lim = end - start + 1; // num chars to copy
 	if (lim >= MAX_KEYWORD_LENGTH) {

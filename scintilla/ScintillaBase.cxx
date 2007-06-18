@@ -24,6 +24,7 @@
 #include "SVector.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
+#include "RunStyles.h"
 #include "CellBuffer.h"
 #include "CallTip.h"
 #include "KeyMap.h"
@@ -34,9 +35,15 @@
 #include "ViewStyle.h"
 #include "AutoComplete.h"
 #include "CharClassify.h"
+#include "Decoration.h"
 #include "Document.h"
+#include "PositionCache.h"
 #include "Editor.h"
 #include "ScintillaBase.h"
+
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
 
 ScintillaBase::ScintillaBase() {
 	displayPopupMenu = true;

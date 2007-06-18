@@ -39,8 +39,11 @@
 #include "Style.h"
 #include "AutoComplete.h"
 #include "ViewStyle.h"
+#include "RunStyles.h"
+#include "Decoration.h"
 #include "CharClassify.h"
 #include "Document.h"
+#include "PositionCache.h"
 #include "Editor.h"
 #include "SString.h"
 #include "ScintillaBase.h"
@@ -154,6 +157,7 @@ private:
 	virtual void Initialise();
 	virtual void Finalise();
 	virtual void DisplayCursor(Window::Cursor c);
+	virtual bool DragThreshold(Point ptStart, Point ptNow);
 	virtual void StartDrag();
 	int TargetAsUTF8(char *text);
 	int EncodedFromUTF8(char *utf8, char *encoded);
@@ -257,8 +261,9 @@ private:
 	static gint SelectionNotify(GtkWidget *widget, GdkEventSelection *selection_event);
 #endif
 	static void DragBegin(GtkWidget *widget, GdkDragContext *context);
+	gboolean DragMotionThis(GdkDragContext *context, gint x, gint y, guint dragtime);
 	static gboolean DragMotion(GtkWidget *widget, GdkDragContext *context,
-	                           gint x, gint y, guint time);
+	                           gint x, gint y, guint dragtime);
 	static void DragLeave(GtkWidget *widget, GdkDragContext *context,
 	                      guint time);
 	static void DragEnd(GtkWidget *widget, GdkDragContext *context);
@@ -777,6 +782,26 @@ void ScintillaGTK::Initialise() {
 	                  GTK_DEST_DEFAULT_ALL, clipboardPasteTargets, nClipboardPasteTargets,
 	                  static_cast<GdkDragAction>(GDK_ACTION_COPY | GDK_ACTION_MOVE));
 
+#if GLIB_MAJOR_VERSION >= 2
+	// Set caret period based on GTK settings
+	gboolean blinkOn = false;
+	if (g_object_class_find_property(G_OBJECT_GET_CLASS(
+			G_OBJECT(gtk_settings_get_default())), "gtk-cursor-blink")) {
+		g_object_get(G_OBJECT(
+			gtk_settings_get_default()), "gtk-cursor-blink", &blinkOn, NULL);
+	}
+	if (blinkOn &&
+		g_object_class_find_property(G_OBJECT_GET_CLASS(
+			G_OBJECT(gtk_settings_get_default())), "gtk-cursor-blink-time")) {
+		gint value;
+		g_object_get(G_OBJECT(
+			gtk_settings_get_default()), "gtk-cursor-blink-time", &value, NULL);
+		caret.period = gint(value / 1.75);
+	} else {
+		caret.period = 0;
+	}
+#endif
+
 	SetTicking(true);
 }
 
@@ -792,8 +817,18 @@ void ScintillaGTK::DisplayCursor(Window::Cursor c) {
 		wText.SetCursor(static_cast<Window::Cursor>(cursorMode));
 }
 
+bool ScintillaGTK::DragThreshold(Point ptStart, Point ptNow) {
+#if GTK_MAJOR_VERSION < 2
+	return Editor::DragThreshold(ptStart, ptNow);
+#else
+	return gtk_drag_check_threshold(GTK_WIDGET(PWidget(wMain)),
+		ptStart.x, ptStart.y, ptNow.x, ptNow.y);
+#endif
+}
+
 void ScintillaGTK::StartDrag() {
 	dragWasDropped = false;
+	inDragDrop = ddDragging;
 	GtkTargetList *tl = gtk_target_list_new(clipboardCopyTargets, nClipboardCopyTargets);
 	gtk_drag_begin(GTK_WIDGET(PWidget(wMain)),
 	               tl,
@@ -2345,19 +2380,28 @@ void ScintillaGTK::DragBegin(GtkWidget *, GdkDragContext *) {
 	//Platform::DebugPrintf("DragBegin\n");
 }
 
-gboolean ScintillaGTK::DragMotion(GtkWidget *widget, GdkDragContext *context,
+gboolean ScintillaGTK::DragMotionThis(GdkDragContext *context,
                                  gint x, gint y, guint dragtime) {
-	ScintillaGTK *sciThis = ScintillaFromWidget(widget);
 	Point npt(x, y);
-	sciThis->inDragDrop = true;
-	sciThis->SetDragPosition(sciThis->PositionFromLocation(npt));
+	SetDragPosition(PositionFromLocation(npt));
 	GdkDragAction preferredAction = context->suggested_action;
-	if (context->actions == static_cast<GdkDragAction>
+	int pos = PositionFromLocation(npt);
+	if ((inDragDrop == ddDragging) && (0 == PositionInSelection(pos))) {
+		// Avoid dragging selection onto itself as that produces a move
+		// with no real effect but which creates undo actions.
+		preferredAction = static_cast<GdkDragAction>(0);
+	} else if (context->actions == static_cast<GdkDragAction>
 		(GDK_ACTION_COPY | GDK_ACTION_MOVE)) {
 		preferredAction = GDK_ACTION_MOVE;
 	}
 	gdk_drag_status(context, preferredAction, dragtime);
 	return FALSE;
+}
+
+gboolean ScintillaGTK::DragMotion(GtkWidget *widget, GdkDragContext *context,
+                                 gint x, gint y, guint dragtime) {
+	ScintillaGTK *sciThis = ScintillaFromWidget(widget);
+	return sciThis->DragMotionThis(context, x, y, dragtime);
 }
 
 void ScintillaGTK::DragLeave(GtkWidget *widget, GdkDragContext * /*context*/, guint) {
@@ -2373,6 +2417,7 @@ void ScintillaGTK::DragEnd(GtkWidget *widget, GdkDragContext * /*context*/) {
 		sciThis->SetEmptySelection(sciThis->posDrag);
 	sciThis->SetDragPosition(invalidPosition);
 	//Platform::DebugPrintf("DragEnd %x %d\n", sciThis, sciThis->dragWasDropped);
+	sciThis->inDragDrop = ddNone;
 }
 
 gboolean ScintillaGTK::Drop(GtkWidget *widget, GdkDragContext * /*context*/,

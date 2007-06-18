@@ -21,6 +21,10 @@
 #include "SciLexer.h"
 #include "StyleContext.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 static void getRange(unsigned int start,
 		unsigned int end,
 		Accessor &styler,
@@ -192,6 +196,7 @@ static void ColourisePascalDoc(unsigned int startPos, int length, int initStyle,
 			if ((!iswordchar(ch) && ch != '$' && ch != '#' && (ch != '@' || !bInAsm)) || bDoublePoint || bSinglePoint) {
 				if (bDoublePoint) i--;
 				int lStateChange = classifyWordPascal(styler.GetStartSegment(), i - 1, keywordlists, styler, bInClassDefinition, bInAsm);
+
 				if(lStateChange == 1) {
 					styler.SetLineState(currentLine, 1);
 					bInClassDefinition = true;
@@ -290,7 +295,7 @@ static void FoldPascalDoc(unsigned int startPos, int length, int initStyle, Word
 		styleNext = styler.StyleAt(i + 1);
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 
-		if (stylePrev == SCE_C_DEFAULT && style == SCE_C_WORD)
+		if (stylePrev != SCE_C_WORD && style == SCE_C_WORD)
 		{
 			// Store last word start point.
 			lastStart = i;

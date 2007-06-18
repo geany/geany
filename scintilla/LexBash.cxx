@@ -28,6 +28,10 @@
 
 #define HERE_DELIM_MAX 256
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 static inline int translateBashDigit(char ch) {
 	if (ch >= '0' && ch <= '9') {
 		return ch - '0';

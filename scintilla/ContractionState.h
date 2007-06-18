@@ -8,6 +8,10 @@
 #ifndef CONTRACTIONSTATE_H
 #define CONTRACTIONSTATE_H
 
+#ifdef SCI_NAMESPACE
+namespace Scintilla {
+#endif
+
 /**
  */
 class OneLine {
@@ -61,5 +65,9 @@ public:
 
 	void ShowAll();
 };
+
+#ifdef SCI_NAMESPACE
+}
+#endif
 
 #endif

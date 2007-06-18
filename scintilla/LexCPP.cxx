@@ -19,45 +19,11 @@
 #include "KeyWords.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
+#include "CharacterSet.h"
 
-#define SET_LOWER "abcdefghijklmnopqrstuvwxyz"
-#define SET_UPPER "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-#define SET_DIGITS "0123456789"
-
-class SetOfCharacters {
-	int size;
-	bool valueAfter;
-	bool *bset;
-public:
-	SetOfCharacters(const char *setOfCharacters, int size_=0x80, bool valueAfter_=false) {
-		size = size_;
-		valueAfter = valueAfter_;
-		bset = new bool[size];
-		for (int i=0; i < size; i++) {
-			bset[i] = false;
-		}
-		for (const char *cp=setOfCharacters; *cp; cp++) {
-			int val = static_cast<unsigned char>(*cp);
-			PLATFORM_ASSERT(val >= 0);
-			PLATFORM_ASSERT(val < size);
-			bset[val] = true;
-		}
-	}
-	~SetOfCharacters() {
-		delete []bset;
-		bset = 0;
-		size = 0;
-	}
-	void Add(int val) {
-		PLATFORM_ASSERT(val >= 0);
-		PLATFORM_ASSERT(val < size);
-		bset[val] = true;
-	}
-	bool Contains(int val) {
-		PLATFORM_ASSERT(val >= 0);
-		return (val < size) ? bset[val] : valueAfter;
-	}
-};
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
 
 static bool IsSpaceEquiv(int state) {
 	return (state <= SCE_C_COMMENTDOC) ||
@@ -76,12 +42,12 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 
 	bool stylingWithinPreprocessor = styler.GetPropertyInt("styling.within.preprocessor") != 0;
 
-	SetOfCharacters setOKBeforeRE("(=,");
+	CharacterSet setOKBeforeRE(CharacterSet::setNone, "(=,");
 
-	SetOfCharacters setDoxygen("$@\\&<>#{}[]" SET_LOWER);
+	CharacterSet setDoxygen(CharacterSet::setLower, "$@\\&<>#{}[]");
 
-	SetOfCharacters setWordStart("_" SET_LOWER SET_UPPER, 0x80, true);
-	SetOfCharacters setWord("._" SET_LOWER SET_UPPER SET_DIGITS, 0x80, true);
+	CharacterSet setWordStart(CharacterSet::setAlpha, "_", 0x80, true);
+	CharacterSet setWord(CharacterSet::setAlphaNum, "._", 0x80, true);
 	if (styler.GetPropertyInt("lexer.cpp.allow.dollars", 1) != 0) {
 		setWordStart.Add('$');
 		setWord.Add('$');

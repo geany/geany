@@ -20,6 +20,10 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 static bool Is0To9(char ch) {
 	return (ch >= '0') && (ch <= '9');
 }
@@ -722,6 +726,12 @@ static void ColouriseMakeLine(
 	int lastNonSpace = -1;
 	unsigned int state = SCE_MAKE_DEFAULT;
 	bool bSpecial = false;
+
+	// check for a tab character in column 0 indicating a command
+	bool bCommand = false;
+	if ((lengthLine > 0) && (lineBuffer[0] == '\t'))
+		bCommand = true;
+
 	// Skip initial spaces
 	while ((i < lengthLine) && isspacechar(lineBuffer[i])) {
 		i++;
@@ -742,14 +752,24 @@ static void ColouriseMakeLine(
 			styler.ColourTo(startLine + i, state);
 			state = SCE_MAKE_DEFAULT;
 		}
-		if (!bSpecial) {
+
+		// skip identifier and target styling if this is a command line
+		if (!bSpecial && !bCommand) {
 			if (lineBuffer[i] == ':') {
-				// We should check that no colouring was made since the beginning of the line,
-				// to avoid colouring stuff like /OUT:file
-				if (lastNonSpace >= 0)
-					styler.ColourTo(startLine + lastNonSpace, SCE_MAKE_TARGET);
-				styler.ColourTo(startLine + i - 1, SCE_MAKE_DEFAULT);
-				styler.ColourTo(startLine + i, SCE_MAKE_OPERATOR);
+				if (((i + 1) < lengthLine) && (lineBuffer[i + 1] == '=')) {
+					// it's a ':=', so style as an identifier
+					if (lastNonSpace >= 0)
+						styler.ColourTo(startLine + lastNonSpace, SCE_MAKE_IDENTIFIER);
+					styler.ColourTo(startLine + i - 1, SCE_MAKE_DEFAULT);
+					styler.ColourTo(startLine + i + 1, SCE_MAKE_OPERATOR);
+				} else {
+					// We should check that no colouring was made since the beginning of the line,
+					// to avoid colouring stuff like /OUT:file
+					if (lastNonSpace >= 0)
+						styler.ColourTo(startLine + lastNonSpace, SCE_MAKE_TARGET);
+					styler.ColourTo(startLine + i - 1, SCE_MAKE_DEFAULT);
+					styler.ColourTo(startLine + i, SCE_MAKE_OPERATOR);
+				}
 				bSpecial = true;	// Only react to the first ':' of the line
 				state = SCE_MAKE_DEFAULT;
 			} else if (lineBuffer[i] == '=') {

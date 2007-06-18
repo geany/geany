@@ -20,6 +20,10 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 #define PERLNUM_BINARY 1    // order is significant: 1-4 cannot have a dot
 #define PERLNUM_HEX 2
 #define PERLNUM_OCTAL 3

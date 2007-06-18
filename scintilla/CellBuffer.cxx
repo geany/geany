@@ -18,6 +18,10 @@
 #include "Partitioning.h"
 #include "CellBuffer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 MarkerHandleSet::MarkerHandleSet() {
 	root = 0;
 }

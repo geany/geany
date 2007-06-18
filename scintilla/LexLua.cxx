@@ -22,6 +22,10 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 // Extended to accept accented characters
 static inline bool IsAWordChar(int ch) {
 	return ch >= 0x80 ||
@@ -167,8 +171,6 @@ static void ColouriseLuaDoc(
 					sc.ChangeState(SCE_LUA_WORD4);
 				} else if (keywords5.InList(s)) {
 					sc.ChangeState(SCE_LUA_WORD5);
-				} else if (keywords6.InList(s)) {
-					sc.ChangeState(SCE_LUA_WORD6);
 				} else if (keywords6.InList(s)) {
 					sc.ChangeState(SCE_LUA_WORD6);
 				} else if (keywords7.InList(s)) {

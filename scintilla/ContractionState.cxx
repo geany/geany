@@ -9,6 +9,10 @@
 
 #include "ContractionState.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 OneLine::OneLine() {
 	displayLine = 0;
 	//docLine = 0;

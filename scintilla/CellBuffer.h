@@ -8,6 +8,10 @@
 #ifndef CELLBUFFER_H
 #define CELLBUFFER_H
 
+#ifdef SCI_NAMESPACE
+namespace Scintilla {
+#endif
+
 /**
  * This holds the marker identifier and the marker type to display.
  * MarkerHandleNumbers are members of lists.
@@ -227,5 +231,9 @@ public:
 	int GetLevel(int line);
 	void ClearLevels();
 };
+
+#ifdef SCI_NAMESPACE
+}
+#endif
 
 #endif

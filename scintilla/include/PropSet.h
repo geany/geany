@@ -13,6 +13,10 @@ bool EqualCaseInsensitive(const char *a, const char *b);
 
 bool isprefix(const char *target, const char *prefix);
 
+#ifdef SCI_NAMESPACE
+namespace Scintilla {
+#endif
+
 struct Property {
 	unsigned int hash;
 	char *key;
@@ -104,6 +108,9 @@ inline bool IsAlphabetic(unsigned int ch) {
 	return ((ch >= 'A') && (ch <= 'Z')) || ((ch >= 'a') && (ch <= 'z'));
 }
 
+#ifdef SCI_NAMESPACE
+}
+#endif
 
 #ifdef _MSC_VER
 // Visual C++ doesn't like the private copy idiom for disabling

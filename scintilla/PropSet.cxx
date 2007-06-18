@@ -15,6 +15,10 @@
 
 #include "PropSet.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 // The comparison and case changing functions here assume ASCII
 // or extended ASCII such as the normal Windows code page.
 
@@ -1056,10 +1060,13 @@ const char *WordList::GetNearestWord(const char *wordStart, int searchLen, bool 
  * counted in the length.
  */
 static unsigned int LengthWord(const char *word, char otherSeparator) {
-	// Find a '('. If that fails go to the end of the string.
-	const char *endWord = strchr(word, '(');
-	if (!endWord && otherSeparator)
+	const char *endWord = 0;
+	// Find an otherSeparator
+	if (otherSeparator)
 		endWord = strchr(word, otherSeparator);
+	// Find a '('. If that fails go to the end of the string.
+	if (!endWord)
+		endWord = strchr(word, '(');
 	if (!endWord)
 		endWord = word + strlen(word);
 	// Last case always succeeds so endWord != 0

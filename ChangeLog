@@ -1,3 +1,8 @@
+2007-06-18  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * scintilla/*, scintilla/include/*: Updated Scintilla to version 1.74.
+
+
 2007-06-17  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/templates.c, src/tools.c: Apply patch from Alexander Rodin to

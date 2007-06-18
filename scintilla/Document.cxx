@@ -16,10 +16,16 @@
 #include "SVector.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
+#include "RunStyles.h"
 #include "CellBuffer.h"
 #include "CharClassify.h"
+#include "Decoration.h"
 #include "Document.h"
 #include "RESearch.h"
+
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
 
 // This is ASCII specific but is safe with chars >= 0x80
 static inline bool isspacechar(unsigned char ch) {
@@ -55,7 +61,8 @@ Document::Document() {
 	stylingMask = 0;
 	endStyled = 0;
 	styleClock = 0;
-	enteredCount = 0;
+	enteredModification = 0;
+	enteredStyling = 0;
 	enteredReadOnlyCount = 0;
 	tabInChars = 8;
 	indentInChars = 0;
@@ -263,7 +270,9 @@ int Document::LenChar(int pos) {
 		if (ch < 0x80)
 			return 1;
 		int len = 2;
-		if (ch >= (0x80 + 0x40 + 0x20))
+		if (ch >= (0x80 + 0x40 + 0x20 + 0x10))
+			len = 4;
+		else if (ch >= (0x80 + 0x40 + 0x20))
 			len = 3;
 		int lengthDoc = Length();
 		if ((pos + len) > lengthDoc)
@@ -369,10 +378,10 @@ bool Document::DeleteChars(int pos, int len) {
 	if ((pos + len) > Length())
 		return false;
 	CheckReadOnly();
-	if (enteredCount != 0) {
+	if (enteredModification != 0) {
 		return false;
 	} else {
-		enteredCount++;
+		enteredModification++;
 		if (!cb.IsReadOnly()) {
 			NotifyModified(
 			    DocModification(
@@ -395,7 +404,7 @@ bool Document::DeleteChars(int pos, int len) {
 			        pos, len,
 			        LinesTotal() - prevLinesTotal, text));
 		}
-		enteredCount--;
+		enteredModification--;
 	}
 	return !cb.IsReadOnly();
 }
@@ -408,10 +417,10 @@ bool Document::InsertString(int position, const char *s, int insertLength) {
 		return false;
 	}
 	CheckReadOnly();
-	if (enteredCount != 0) {
+	if (enteredModification != 0) {
 		return false;
 	} else {
-		enteredCount++;
+		enteredModification++;
 		if (!cb.IsReadOnly()) {
 			NotifyModified(
 			    DocModification(
@@ -431,7 +440,7 @@ bool Document::InsertString(int position, const char *s, int insertLength) {
 			        position, insertLength,
 			        LinesTotal() - prevLinesTotal, text));
 		}
-		enteredCount--;
+		enteredModification--;
 	}
 	return !cb.IsReadOnly();
 }
@@ -439,8 +448,8 @@ bool Document::InsertString(int position, const char *s, int insertLength) {
 int Document::Undo() {
 	int newPos = -1;
 	CheckReadOnly();
-	if (enteredCount == 0) {
-		enteredCount++;
+	if (enteredModification == 0) {
+		enteredModification++;
 		if (!cb.IsReadOnly()) {
 			bool startSavePoint = cb.IsSavePoint();
 			bool multiLine = false;
@@ -487,7 +496,7 @@ int Document::Undo() {
 			if (startSavePoint != endSavePoint)
 				NotifySavePoint(endSavePoint);
 		}
-		enteredCount--;
+		enteredModification--;
 	}
 	return newPos;
 }
@@ -495,8 +504,8 @@ int Document::Undo() {
 int Document::Redo() {
 	int newPos = -1;
 	CheckReadOnly();
-	if (enteredCount == 0) {
-		enteredCount++;
+	if (enteredModification == 0) {
+		enteredModification++;
 		if (!cb.IsReadOnly()) {
 			bool startSavePoint = cb.IsSavePoint();
 			bool multiLine = false;
@@ -541,7 +550,7 @@ int Document::Redo() {
 			if (startSavePoint != endSavePoint)
 				NotifySavePoint(endSavePoint);
 		}
-		enteredCount--;
+		enteredModification--;
 	}
 	return newPos;
 }
@@ -671,7 +680,7 @@ int Document::GetColumn(int pos) {
 				return column;
 			} else {
 				column++;
-				i = MovePositionOutsideChar(i + 1, 1);
+				i = MovePositionOutsideChar(i + 1, 1, false);
 			}
 		}
 	}
@@ -693,7 +702,7 @@ int Document::FindColumn(int line, int column) {
 				return position;
 			} else {
 				columnCurrent++;
-				position = MovePositionOutsideChar(position + 1, 1);
+				position = MovePositionOutsideChar(position + 1, 1, false);
 			}
 		}
 	}
@@ -1275,10 +1284,10 @@ void Document::StartStyling(int position, char mask) {
 }
 
 bool Document::SetStyleFor(int length, char style) {
-	if (enteredCount != 0) {
+	if (enteredStyling != 0) {
 		return false;
 	} else {
-		enteredCount++;
+		enteredStyling++;
 		style &= stylingMask;
 		int prevEndStyled = endStyled;
 		if (cb.SetStyleFor(endStyled, length, style, stylingMask)) {
@@ -1287,16 +1296,16 @@ bool Document::SetStyleFor(int length, char style) {
 			NotifyModified(mh);
 		}
 		endStyled += length;
-		enteredCount--;
+		enteredStyling--;
 		return true;
 	}
 }
 
 bool Document::SetStyles(int length, char *styles) {
-	if (enteredCount != 0) {
+	if (enteredStyling != 0) {
 		return false;
 	} else {
-		enteredCount++;
+		enteredStyling++;
 		bool didChange = false;
 		int startMod = 0;
 		int endMod = 0;
@@ -1315,26 +1324,33 @@ bool Document::SetStyles(int length, char *styles) {
 			                   startMod, endMod - startMod + 1);
 			NotifyModified(mh);
 		}
-		enteredCount--;
+		enteredStyling--;
 		return true;
 	}
 }
 
-bool Document::EnsureStyledTo(int pos) {
-	if (pos > GetEndStyled()) {
+void Document::EnsureStyledTo(int pos) {
+	if ((enteredStyling == 0) && (pos > GetEndStyled())) {
 		IncrementStyleClock();
 		// Ask the watchers to style, and stop as soon as one responds.
 		for (int i = 0; pos > GetEndStyled() && i < lenWatchers; i++) {
 			watchers[i].watcher->NotifyStyleNeeded(this, watchers[i].userData, pos);
 		}
 	}
-	return pos <= GetEndStyled();
 }
 
 void Document::IncrementStyleClock() {
 	styleClock++;
 	if (styleClock > 0x100000) {
 		styleClock = 0;
+	}
+}
+
+void Document::DecorationFillRange(int position, int value, int fillLength) {
+	if (decorations.FillRange(position, value, fillLength)) {
+		DocModification mh(SC_MOD_CHANGEINDICATOR | SC_PERFORMED_USER,
+							position, fillLength);
+		NotifyModified(mh);
 	}
 }
 
