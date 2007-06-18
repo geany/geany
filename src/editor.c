@@ -1207,7 +1207,7 @@ static gboolean at_eol(ScintillaObject *sci, gint pos)
 
 gboolean editor_auto_forif(gint idx, gint pos)
 {
-	gboolean result;
+	gboolean result = FALSE;
 	gchar *word;
 	gint lexer, style;
 	gint i;
@@ -1241,17 +1241,20 @@ gboolean editor_auto_forif(gint idx, gint pos)
 	while (i >= 0 && word[i] != '\n' && word[i] != '\r') // we want to stay in this line('\n' check)
 	{
 		if (! isspace(word[i]))
+		{
+			g_free(word);
 			return FALSE;
+		}
 		i--;
 	}
 
-	// get the indentation
-	if (doc_list[idx].auto_indent)
-		get_indent(sci, pos, TRUE);
-
-	sci_start_undo_action(sci);	// needed because we insert a space separately from construct
-	result = ac_complete_constructs(idx, pos, word);
-	sci_end_undo_action(sci);
+	// prevent completion of "for "
+	if (! isspace(sci_get_char_at(sci, pos - 1))) // pos points to the line end char so use pos -1
+	{
+		sci_start_undo_action(sci);	// needed because we insert a space separately from construct
+		result = ac_complete_constructs(idx, pos, word);
+		sci_end_undo_action(sci);
+	}
 
 	utils_free_pointers(word, NULL);
 	return result;

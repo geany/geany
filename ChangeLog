@@ -1,6 +1,8 @@
 2007-06-18  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * scintilla/*, scintilla/include/*: Updated Scintilla to version 1.74.
+ * src/editor.c: Fix mem leak in auto completion and prevent completion
+                 of words with trailing spaces.
 
 
 2007-06-17  Enrico Tröger  <enrico.troeger@uvena.de>
