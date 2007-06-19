@@ -1,3 +1,8 @@
+About this file
+---------------
+This file contains information for anyone wanting to work on the Geany codebase.
+You should be aware of the licenses used - see the README file or the documentation.
+
 Patches
 -------
 We are happy to receive patches, but it's best to check with us by email or mailing list whether a
@@ -8,6 +13,11 @@ $ svn diff > fix-some-bug.patch
 
 If you're not using SVN, you can use the diff command:
 $ diff -u originalpath modifiedpath > new-feature.patch
+
+For Windows:
+Subversion (SVN): http://subversion.tigris.org/
+diff, grep, etc: http://mingw.org/ or http://unxutils.sourceforge.net/.
+See also the 'Building on Windows' document on the website.
 
 File organization
 -----------------
@@ -54,24 +64,40 @@ http://ctags.sf.net).
 
 NOTES
 =====
+Some of these notes below are brief (or maybe incomplete) - please contact
+the mailing list for more information.
+
+Adding a file foo.[hc] in src/
+------------------------------
+Add foo.c, foo.h to SRCS in src/Makefile.am.
+Add foo.o to OBJS in src/makefile.win32.
+Add src/foo.c to po/POTFILES.in (for string translation).
+
+Adding a filetype
+-----------------
+For syntax highlighting, you will need to find (or write) a Scintilla lexer, LexFoo.cxx.
+For tag parsing (e.g. for the symbol list), see 'Adding a TagManager parser' below.
+Add GEANY_FILETYPES_FOO and initialize it in filetypes.[hc].
 
 Adding a TagManager parser
 --------------------------
 This assumes the Geany filetype already exists.
 
 First write or find a CTags compatible parser, foo.c. Note that there are
-some unapplied language patches for CTags at:
+some language patches for CTags at:
 http://sf.net/projects/ctags - see the tracker.
 
-Add foo.c to Makefile.am.
-Add foo.o to makefile.win32.
+(You can also try the Anjuta project's tagmanager codebase.)
+
+Add foo.c to SRCS in Makefile.am.
+Add foo.o to OBJS in makefile.win32.
 Add Foo to parsers.h & fill in comment with parser number for foo.
 
 In foo.c:
 Edit FooKinds 3rd column to match a s_tag_type_names string in tm_tag.c.
 
 In filetypes.c, filetypes_init_types():
-set filetypes[GEANY_FILETYPES_FOO].lang = foo's parser number.
+Set filetypes[GEANY_FILETYPES_FOO].lang = foo's parser number.
 
 In symbols.c:
 Update init_tag_list() for foo, listing the tm_tag_* types corresponding

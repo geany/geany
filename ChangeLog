@@ -1,3 +1,11 @@
+2007-06-19  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * HACKING:
+   Added 'About this file' and links for some Windows developer tools.
+   Added notes on adding a source file to src/ and brief notes on adding
+   a filetype.
+
+
 2007-06-18  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * scintilla/*, scintilla/include/*: Updated Scintilla to version 1.74.
