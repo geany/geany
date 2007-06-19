@@ -4,6 +4,9 @@
    Added 'About this file' and links for some Windows developer tools.
    Added notes on adding a source file to src/ and brief notes on adding
    a filetype.
+ * src/build.c:
+   Hopefully fix gtk_widget_set_sensitive assertion failed warning on
+   Windows.
 
 
 2007-06-18  Enrico Tröger  <enrico.troeger@uvena.de>

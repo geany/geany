@@ -1676,7 +1676,8 @@ void build_menu_update(gint idx)
 	// simply enable next error command if the compiler window has any items
 	have_errors = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_compiler),
 		NULL) > 0;
-	gtk_widget_set_sensitive(menu_items->item_next_error, have_errors);
+	if (menu_items->item_next_error)
+		gtk_widget_set_sensitive(menu_items->item_next_error, have_errors);
 }
 
 
