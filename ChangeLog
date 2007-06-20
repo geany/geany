@@ -1,3 +1,9 @@
+2007-06-20  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/callbacks.c:
+   Prevent segfault when using goto tag from an untitled file.
+
+
 2007-06-19  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * HACKING:

@@ -1255,8 +1255,9 @@ on_goto_tag_activate                   (GtkMenuItem     *menuitem,
 			TRUE, tmtag->atts.entry.line))
 		{
 			// first add old file as old position
-			navqueue_new_position(doc_list[old_idx].tm_file->file_name,
-				sci_get_line_from_position(doc_list[old_idx].sci, editor_info.click_pos) + 1);
+			if (doc_list[old_idx].tm_file)
+				navqueue_new_position(doc_list[old_idx].tm_file->file_name,
+					sci_get_line_from_position(doc_list[old_idx].sci, editor_info.click_pos) + 1);
 
 			navqueue_new_position(tmtag->atts.entry.file->work_object.file_name,
 				tmtag->atts.entry.line);
