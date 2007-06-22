@@ -781,6 +781,68 @@ void styleset_cpp(ScintillaObject *sci)
 }
 
 
+static void styleset_cs_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+
+	load_keyfiles(config, config_home, GEANY_FILETYPES_CS);
+
+	new_style_array(GEANY_FILETYPES_CS, 21);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_CS);
+	get_keyfile_int(config, config_home, "styling", "styling_within_preprocessor",
+		1, 0, &style_sets[GEANY_FILETYPES_CS].styling[20]);
+
+	style_sets[GEANY_FILETYPES_CS].keywords = g_new(gchar*, 4);
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_CS, 0, "\
+			abstract as base bool break byte case catch char checked class \
+			const continue decimal default delegate do double else enum \
+			event explicit extern false finally fixed float for foreach goto if \
+			implicit in int interface internal is lock long namespace new null \
+			object operator out override params private protected public \
+			readonly ref return sbyte sealed short sizeof stackalloc static \
+			string struct switch this throw true try typeof uint ulong \
+			unchecked unsafe ushort using virtual void volatile while");
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_CS, 1, "");
+	get_keyfile_keywords(config, config_home, "keywords", "docComment", GEANY_FILETYPES_CS, 2, "");
+	style_sets[GEANY_FILETYPES_CS].keywords[3] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_CS].wordchars);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_CS);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+}
+
+
+void styleset_cs(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_CS;
+
+	styleset_common(sci, 5, ft_id);
+	if (style_sets[ft_id].styling == NULL) styleset_cs_init();
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[ft_id].wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
+
+	//SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[ft_id].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[ft_id].keywords[2]);
+
+	// assign global types, merge them with user defined keywords and set them
+	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1]);
+
+	styleset_c_like(sci, ft_id);
+
+	if (style_sets[ft_id].styling[20].foreground == 1)
+		SSM(sci, ft_id, (sptr_t) "styling.within.preprocessor", (sptr_t) "1");
+}
+
+
 static void styleset_pascal_init(void)
 {
 	GKeyFile *config = g_key_file_new();
@@ -3102,4 +3164,101 @@ void styleset_lua(ScintillaObject *sci)
 	set_sci_style(sci, SCE_LUA_WORD6, GEANY_FILETYPES_LUA, 17);
 	set_sci_style(sci, SCE_LUA_WORD7, GEANY_FILETYPES_LUA, 18);
 	set_sci_style(sci, SCE_LUA_WORD8, GEANY_FILETYPES_LUA, 19);
+}
+
+
+static void styleset_basic_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+
+	load_keyfiles(config, config_home, GEANY_FILETYPES_BASIC);
+
+	new_style_array(GEANY_FILETYPES_BASIC, 19);
+
+	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[0]);
+	get_keyfile_hex(config, config_home, "styling", "comment", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[1]);
+	get_keyfile_hex(config, config_home, "styling", "number", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[2]);
+	get_keyfile_hex(config, config_home, "styling", "word", "0x00007f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_BASIC].styling[3]);
+	get_keyfile_hex(config, config_home, "styling", "string", "0xff901e", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[4]);
+	get_keyfile_hex(config, config_home, "styling", "preprocessor", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[5]);
+	get_keyfile_hex(config, config_home, "styling", "operator", "0x301010", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[6]);
+	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[7]);
+	get_keyfile_hex(config, config_home, "styling", "date", "0x1a6500", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[8]);
+	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[9]);
+	get_keyfile_hex(config, config_home, "styling", "word2", "0x007f7f", "0xffffff", "true", &style_sets[GEANY_FILETYPES_BASIC].styling[10]);
+	get_keyfile_hex(config, config_home, "styling", "word3", "0x991111", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[11]);
+	get_keyfile_hex(config, config_home, "styling", "word4", "0x0000d0", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[12]);
+	get_keyfile_hex(config, config_home, "styling", "constant", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "asm", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[14]);
+	get_keyfile_hex(config, config_home, "styling", "label", "0x007f7f", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[15]);
+	get_keyfile_hex(config, config_home, "styling", "error", "0xd00000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[16]);
+	get_keyfile_hex(config, config_home, "styling", "hexnumber", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[17]);
+	get_keyfile_hex(config, config_home, "styling", "binnumber", "0x007f00", "0xffffff", "false", &style_sets[GEANY_FILETYPES_BASIC].styling[18]);
+
+	style_sets[GEANY_FILETYPES_BASIC].keywords = g_new(gchar*, 5);
+	get_keyfile_keywords(config, config_home, "keywords", "keywords", GEANY_FILETYPES_BASIC, 0,
+			"as asm bit bitreset bitset byte case cint close cls color const \
+			 continue cshort csign csng cubyte cuint culngint custom data \
+			 dim do double  else elseif end enum environ eof err error exec exit exp \
+			 export extern field fix for function get gosub goto hex hibyte hiword if iif imp \
+			 input instr int integer is kill left len let lobyte loc local locate lof log long \
+			 longint loop loword lset mklongint mks mkshort mod next not on once open or out \
+			 pointer pos preserve preset private public put read redim rem reset restore return \
+			 sizeof sleep space static step stop str string sub then time timer to type ubound \
+			 ubyte ucase uinteger ulongint union unsigned until ushort using val val64 valint \
+			 wait while with xor");
+	get_keyfile_keywords(config, config_home, "keywords", "preprocessor", GEANY_FILETYPES_BASIC, 1,
+			"#define defined #dynamic #else #endif #endmacro #error #if #ifdef #ifndef #inclib #include \
+			 #libpath #line #macro #print #undef");
+	get_keyfile_keywords(config, config_home, "keywords", "user1", GEANY_FILETYPES_BASIC, 2, "");
+	get_keyfile_keywords(config, config_home, "keywords", "user2", GEANY_FILETYPES_BASIC, 3, "");
+	style_sets[GEANY_FILETYPES_BASIC].keywords[4] = NULL;
+
+	get_keyfile_wordchars(config, config_home,
+		&style_sets[GEANY_FILETYPES_BASIC].wordchars);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_BASIC);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+}
+
+
+void styleset_basic(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_BASIC;
+
+	styleset_common(sci, 5, ft_id);
+	if (style_sets[GEANY_FILETYPES_BASIC].styling == NULL) styleset_basic_init();
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_BASIC].wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_FREEBASIC, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_BASIC].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_BASIC].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_BASIC].keywords[2]);
+	SSM(sci, SCI_SETKEYWORDS, 3, (sptr_t) style_sets[GEANY_FILETYPES_BASIC].keywords[3]);
+
+	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_BASIC, 0);
+	set_sci_style(sci, SCE_B_DEFAULT, GEANY_FILETYPES_BASIC, 0);
+	set_sci_style(sci, SCE_B_COMMENT, GEANY_FILETYPES_BASIC, 1);
+	set_sci_style(sci, SCE_B_NUMBER, GEANY_FILETYPES_BASIC, 2);
+	set_sci_style(sci, SCE_B_KEYWORD, GEANY_FILETYPES_BASIC, 3);
+	set_sci_style(sci, SCE_B_STRING, GEANY_FILETYPES_BASIC, 4);
+	set_sci_style(sci, SCE_B_PREPROCESSOR, GEANY_FILETYPES_BASIC, 5);
+	set_sci_style(sci, SCE_B_OPERATOR, GEANY_FILETYPES_BASIC, 6);
+	set_sci_style(sci, SCE_B_IDENTIFIER, GEANY_FILETYPES_BASIC, 7);
+	set_sci_style(sci, SCE_B_DATE, GEANY_FILETYPES_BASIC, 8);
+	set_sci_style(sci, SCE_B_STRINGEOL, GEANY_FILETYPES_BASIC, 9);
+	set_sci_style(sci, SCE_B_KEYWORD2, GEANY_FILETYPES_BASIC, 10);
+	set_sci_style(sci, SCE_B_KEYWORD3, GEANY_FILETYPES_BASIC, 11);
+	set_sci_style(sci, SCE_B_KEYWORD4, GEANY_FILETYPES_BASIC, 12);
+	set_sci_style(sci, SCE_B_CONSTANT, GEANY_FILETYPES_BASIC, 13);
+	set_sci_style(sci, SCE_B_ASM, GEANY_FILETYPES_BASIC, 14); // (still?) unused by the lexer
+	set_sci_style(sci, SCE_B_LABEL, GEANY_FILETYPES_BASIC, 15);
+	set_sci_style(sci, SCE_B_ERROR, GEANY_FILETYPES_BASIC, 16);
+	set_sci_style(sci, SCE_B_HEXNUMBER, GEANY_FILETYPES_BASIC, 17);
+	set_sci_style(sci, SCE_B_BINNUMBER, GEANY_FILETYPES_BASIC, 18);
 }

@@ -1,3 +1,18 @@
+2007-06-22  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * tagmanager/c.c, tagmanager/get.c, tagmanager/get.h:
+   Use get.c and get.h from CTags SVN.
+   Merged CSharp parser support into from CTags SVN.
+ * data/filetype_extensions.conf, data/filetypes.cs,
+   data/filetypes.freebasic, scintilla/KeyWords.cxx,
+   scintilla/LexBasic.cxx, scintilla/Makefile.am, src/editor.c,
+   scintilla/makefile.win32, src/filetypes.c, src/filetypes.h,
+   src/highlighting.c, src/highlighting.h, src/msgwindow.c,
+   src/templates.c, tagmanager/basic.c, tagmanager/Makefile.am,
+   tagmanager/makefile.win32, tagmanager/parsers.h:
+   Add new filetypes CSharp and FreeBasic.
+
+
 2007-06-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c:

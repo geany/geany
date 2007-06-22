@@ -2130,6 +2130,13 @@ static gboolean is_comment(gint lexer, gint style)
 				result = TRUE;
 			break;
 		}
+		case SCLEX_FREEBASIC:
+		{
+			if (style == SCE_B_COMMENT ||
+				style == SCE_B_STRING)
+				result = TRUE;
+			break;
+		}
 		case SCLEX_HTML:
 		{
 			if (style == SCE_HPHP_SIMPLESTRING ||

@@ -553,6 +553,12 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 			break;
 		}
 
+		case GEANY_FILETYPES_BASIC:
+		{
+			line_prefix = "'";
+			break;
+		}
+
 		case GEANY_FILETYPES_PASCAL:
 		{
 			frame_start = "{\n";

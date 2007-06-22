@@ -39,7 +39,9 @@
     VhdlParser, \
     LuaParser, \
     JavaScriptParser, \
-    HaskellParser
+    HaskellParser, \
+    CsharpParser, \
+    FreeBasicParser
 
 /*
 langType of each parser
@@ -68,6 +70,8 @@ langType of each parser
 22	LuaParser
 23	JavaScriptParser
 24	HaskellParser
+25	CsharpParser
+26	FreeBasicParser
 */
 #endif	/* _PARSERS_H */
 

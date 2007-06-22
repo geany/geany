@@ -651,8 +651,10 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 			data.file_idx = 2;
 			break;
 		}
+		case GEANY_FILETYPES_BASIC:
 		case GEANY_FILETYPES_PASCAL:
 		{
+			// getdrive.bas(52) error 18: Syntax error in '? GetAllDrives'
 			// bandit.pas(149,3) Fatal: Syntax error, ";" expected but "ELSE" found
 			data.pattern = "(";
 			data.min_fields = 2;

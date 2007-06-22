@@ -71,7 +71,9 @@ enum
 	FILETYPE_UID_VHDL,		// 26
 	FILETYPE_UID_JS,		// 27
 	FILETYPE_UID_LUA,		// 28
-	FILETYPE_UID_HASKELL	// 29
+	FILETYPE_UID_HASKELL,	// 29
+	FILETYPE_UID_CS,		// 30
+	FILETYPE_UID_BASIC		// 31
 };
 
 
@@ -115,6 +117,8 @@ filetype *filetypes_get_from_uid(gint uid)
 		case FILETYPE_UID_JS:		return filetypes[GEANY_FILETYPES_JS];
 		case FILETYPE_UID_LUA:		return filetypes[GEANY_FILETYPES_LUA];
 		case FILETYPE_UID_HASKELL:	return filetypes[GEANY_FILETYPES_HASKELL];
+		case FILETYPE_UID_CS:		return filetypes[GEANY_FILETYPES_CS];
+		case FILETYPE_UID_BASIC:	return filetypes[GEANY_FILETYPES_BASIC];
 		default: 					return NULL;
 	}
 }
@@ -156,6 +160,18 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_CPP]->style_func_ptr = styleset_cpp;
 	filetypes[GEANY_FILETYPES_CPP]->comment_open = g_strdup("//");
 	filetypes[GEANY_FILETYPES_CPP]->comment_close = NULL;
+
+#define CS
+	filetypes[GEANY_FILETYPES_CS]->id = GEANY_FILETYPES_CS;
+	filetypes[GEANY_FILETYPES_CS]->uid = FILETYPE_UID_CS;
+	filetypes[GEANY_FILETYPES_CS]->lang = 25;
+	filetypes[GEANY_FILETYPES_CS]->name = g_strdup("C#");
+	filetypes[GEANY_FILETYPES_CS]->title = g_strdup(_("C# source file"));
+	filetypes[GEANY_FILETYPES_CS]->extension = g_strdup("cs");
+	filetypes[GEANY_FILETYPES_CS]->pattern = utils_strv_new("*.cs", NULL);
+	filetypes[GEANY_FILETYPES_CS]->style_func_ptr = styleset_cs;
+	filetypes[GEANY_FILETYPES_CS]->comment_open = g_strdup("//");
+	filetypes[GEANY_FILETYPES_CS]->comment_close = NULL;
 
 #define D
 	filetypes[GEANY_FILETYPES_D]->id = GEANY_FILETYPES_D;
@@ -205,6 +221,18 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_ASM]->style_func_ptr = styleset_asm;
 	filetypes[GEANY_FILETYPES_ASM]->comment_open = g_strdup(";");
 	filetypes[GEANY_FILETYPES_ASM]->comment_close = NULL;
+
+#define BASIC
+	filetypes[GEANY_FILETYPES_BASIC]->id = GEANY_FILETYPES_BASIC;
+	filetypes[GEANY_FILETYPES_BASIC]->uid = FILETYPE_UID_BASIC;
+	filetypes[GEANY_FILETYPES_BASIC]->lang = 26;
+	filetypes[GEANY_FILETYPES_BASIC]->name = g_strdup("FreeBasic");
+	filetypes[GEANY_FILETYPES_BASIC]->title = g_strdup(_("FreeBasic source file"));
+	filetypes[GEANY_FILETYPES_BASIC]->extension = g_strdup("bas");
+	filetypes[GEANY_FILETYPES_BASIC]->pattern = utils_strv_new("*.bas", "*.bi", NULL);
+	filetypes[GEANY_FILETYPES_BASIC]->style_func_ptr = styleset_basic;
+	filetypes[GEANY_FILETYPES_BASIC]->comment_open = g_strdup("'");
+	filetypes[GEANY_FILETYPES_BASIC]->comment_close = NULL;
 
 #define FORTRAN
 	filetypes[GEANY_FILETYPES_FORTRAN]->id = GEANY_FILETYPES_FORTRAN;
@@ -800,17 +828,17 @@ void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 
 gchar *filetypes_get_conf_extension(gint filetype_idx)
 {
-	gchar *result, *tmp = g_strdup(filetypes[filetype_idx]->name);
+	gchar *result;
 
 	// Handle any special extensions different from lowercase filetype->name
 	switch (filetype_idx)
 	{
 		case GEANY_FILETYPES_CPP: result = g_strdup("cpp"); break;
+		case GEANY_FILETYPES_CS: result = g_strdup("cs"); break;
 		case GEANY_FILETYPES_MAKE: result = g_strdup("makefile"); break;
 		case GEANY_FILETYPES_OMS: result = g_strdup("oms"); break;
-		default: result = g_ascii_strdown(tmp, -1); break;
+		default: result = g_ascii_strdown(filetypes[filetype_idx]->name, -1); break;
 	}
-	g_free(tmp);
 	return result;
 }
 

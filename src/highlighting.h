@@ -95,4 +95,8 @@ void styleset_js(ScintillaObject *sci);
 
 void styleset_lua(ScintillaObject *sci);
 
+void styleset_cs(ScintillaObject *sci);
+
+void styleset_basic(ScintillaObject *sci);
+
 #endif
