@@ -57,39 +57,48 @@ typedef enum eException {
 /*  Used to specify type of keyword.
  */
 typedef enum eKeywordId {
-    KEYWORD_NONE,
-    KEYWORD_ATTRIBUTE, KEYWORD_ABSTRACT,
-    KEYWORD_BOOLEAN, KEYWORD_BYTE,
-    KEYWORD_CATCH, KEYWORD_CHAR, KEYWORD_CLASS, KEYWORD_CONST,
-    KEYWORD_DOUBLE,
-    KEYWORD_ENUM, KEYWORD_EXPLICIT, KEYWORD_EXTERN, KEYWORD_EXTENDS,
-    KEYWORD_FINAL, KEYWORD_FLOAT, KEYWORD_FRIEND,
-    KEYWORD_IMPLEMENTS, KEYWORD_IMPORT, KEYWORD_INLINE, KEYWORD_INT,
-    KEYWORD_INTERFACE,
-    KEYWORD_LONG,
-	KEYWORD_MODULE,
-    KEYWORD_MUTABLE,
-    KEYWORD_NAMESPACE, KEYWORD_NEW, KEYWORD_NATIVE,
-    KEYWORD_OPERATOR, KEYWORD_OVERLOAD,
-    KEYWORD_PACKAGE, KEYWORD_PRIVATE, KEYWORD_PROTECTED, KEYWORD_PUBLIC,
-    KEYWORD_REGISTER,
-    KEYWORD_SHORT, KEYWORD_SIGNED, KEYWORD_STATIC, KEYWORD_STRUCT,
-    KEYWORD_SYNCHRONIZED,
-    KEYWORD_TEMPLATE, KEYWORD_THROW, KEYWORD_THROWS, KEYWORD_TRANSIENT,
-    KEYWORD_TRY, KEYWORD_TYPEDEF, KEYWORD_TYPENAME,
-    KEYWORD_UNION, KEYWORD_UNSIGNED, KEYWORD_USES, KEYWORD_USING,
-    KEYWORD_VIRTUAL, KEYWORD_VOID, KEYWORD_VOLATILE,
-    KEYWORD_WCHAR_T, KEYWORD_AUTO, KEYWORD_RESTRICT, KEYWORD_SIZE_T,
-    KEYWORD_BOOL
+	KEYWORD_NONE,
+	KEYWORD_ATTRIBUTE, KEYWORD_ABSTRACT,
+	KEYWORD_BOOLEAN, KEYWORD_BYTE, KEYWORD_BAD_STATE, KEYWORD_BAD_TRANS,
+	KEYWORD_BIND, KEYWORD_BIND_VAR, KEYWORD_BIT,
+	KEYWORD_CASE, KEYWORD_CATCH, KEYWORD_CHAR, KEYWORD_CLASS, KEYWORD_CONST,
+	KEYWORD_CONSTRAINT, KEYWORD_COVERAGE_BLOCK, KEYWORD_COVERAGE_DEF,
+	KEYWORD_DEFAULT, KEYWORD_DELEGATE, KEYWORD_DELETE, KEYWORD_DO,
+	KEYWORD_DOUBLE,
+	KEYWORD_ELSE, KEYWORD_ENUM, KEYWORD_EXPLICIT, KEYWORD_EXTERN,
+	KEYWORD_EXTENDS, KEYWORD_EVENT,
+	KEYWORD_FINAL, KEYWORD_FLOAT, KEYWORD_FOR, KEYWORD_FRIEND, KEYWORD_FUNCTION,
+	KEYWORD_GOTO,
+	KEYWORD_IF, KEYWORD_IMPLEMENTS, KEYWORD_IMPORT, KEYWORD_INLINE, KEYWORD_INT,
+	KEYWORD_INOUT, KEYWORD_INPUT, KEYWORD_INTEGER, KEYWORD_INTERFACE,
+	KEYWORD_INTERNAL,
+	KEYWORD_LOCAL, KEYWORD_LONG,
+	KEYWORD_M_BAD_STATE, KEYWORD_M_BAD_TRANS, KEYWORD_M_STATE, KEYWORD_M_TRANS,
+	KEYWORD_MODULE, KEYWORD_MUTABLE,
+	KEYWORD_NAMESPACE, KEYWORD_NEW, KEYWORD_NEWCOV, KEYWORD_NATIVE,
+	KEYWORD_OPERATOR, KEYWORD_OUTPUT, KEYWORD_OVERLOAD, KEYWORD_OVERRIDE,
+	KEYWORD_PACKED, KEYWORD_PORT, KEYWORD_PACKAGE, KEYWORD_PRIVATE,
+	KEYWORD_PROGRAM, KEYWORD_PROTECTED, KEYWORD_PUBLIC,
+	KEYWORD_REGISTER, KEYWORD_RETURN,
+	KEYWORD_SHADOW, KEYWORD_STATE,
+	KEYWORD_SHORT, KEYWORD_SIGNED, KEYWORD_SIZE_T, KEYWORD_STATIC, KEYWORD_STRING,
+	KEYWORD_STRUCT, KEYWORD_SWITCH, KEYWORD_SYNCHRONIZED,
+	KEYWORD_TASK, KEYWORD_TEMPLATE, KEYWORD_THIS, KEYWORD_THROW,
+	KEYWORD_THROWS, KEYWORD_TRANSIENT, KEYWORD_TRANS, KEYWORD_TRANSITION,
+	KEYWORD_TRY, KEYWORD_TYPEDEF, KEYWORD_TYPENAME,
+	KEYWORD_UINT, KEYWORD_ULONG, KEYWORD_UNION, KEYWORD_UNSIGNED, KEYWORD_USHORT,
+	KEYWORD_USING,
+	KEYWORD_VIRTUAL, KEYWORD_VOID, KEYWORD_VOLATILE,
+	KEYWORD_WCHAR_T, KEYWORD_WHILE
 } keywordId;
 
 /*  Used to determine whether keyword is valid for the current language and
  *  what its ID is.
  */
 typedef struct sKeywordDesc {
-    const char *name;
-    keywordId id;
-    short isValid [3]; /* indicates languages for which kw is valid */
+	const char *name;
+	keywordId id;
+	short isValid [5]; /* indicates languages for which kw is valid */
 } keywordDesc;
 
 /*  Used for reporting the type of object parsed by nextToken ().
@@ -127,6 +136,7 @@ typedef enum eDeclaration {
     DECL_BASE,			/* base type (default) */
     DECL_CLASS,
     DECL_ENUM,
+	DECL_EVENT,
     DECL_FUNCTION,
     DECL_IGNORE,		/* non-taggable "declaration" */
     DECL_INTERFACE,
@@ -218,6 +228,9 @@ typedef enum eTagType {
     TAG_VARIABLE,		/* variable definition */
     TAG_EXTERN_VAR,		/* external variable declaration */
 	TAG_MACRO,			/* #define s */
+	TAG_EVENT,       	/* event */
+	TAG_LOCAL,       	/* local variable definition */
+	TAG_PROPERTY,    	/* property name */
     TAG_COUNT			/* must be last */
 } tagType;
 
@@ -239,6 +252,7 @@ static jmp_buf Exception;
 
 static langType Lang_c;
 static langType Lang_cpp;
+static langType Lang_csharp;
 static langType Lang_java;
 static langType Lang_d;
 static langType Lang_ferite;
@@ -283,69 +297,137 @@ static kindOption JavaKinds [] = {
     { TRUE,  'p', "package", "packages"},
 };
 
-static const keywordDesc KeywordTable [] = {
-    /* 						    C++		*/
-    /* 					     ANSI C  |  Java	*/
-    /* keyword		keyword ID		 \   |   /  	*/
-    { "__attribute__",	KEYWORD_ATTRIBUTE,	{ 1, 1, 0 } },
-    { "abstract",	KEYWORD_ABSTRACT,	{ 0, 0, 1 } },
-    { "boolean",	KEYWORD_BOOLEAN,	{ 0, 0, 1 } },
-    { "byte",		KEYWORD_BYTE,		{ 0, 0, 1 } },
-    { "catch",		KEYWORD_CATCH,		{ 0, 1, 0 } },
-    { "char",		KEYWORD_CHAR,		{ 1, 1, 1 } },
-    { "class",		KEYWORD_CLASS,		{ 0, 1, 1 } },
-    { "const",		KEYWORD_CONST,		{ 1, 1, 1 } },
-    { "double",		KEYWORD_DOUBLE,		{ 1, 1, 1 } },
-    { "enum",		KEYWORD_ENUM,		{ 1, 1, 0 } },
-    { "explicit",	KEYWORD_EXPLICIT,	{ 0, 1, 0 } },
-    { "extends",	KEYWORD_EXTENDS,	{ 0, 0, 1 } },
-    { "extern",		KEYWORD_EXTERN,		{ 1, 1, 0 } },
-    { "final",		KEYWORD_FINAL,		{ 0, 0, 1 } },
-    { "float",		KEYWORD_FLOAT,		{ 1, 1, 1 } },
-    { "friend",		KEYWORD_FRIEND,		{ 0, 1, 0 } },
-    { "implements",	KEYWORD_IMPLEMENTS,	{ 0, 0, 1 } },
-    { "import",		KEYWORD_IMPORT,		{ 0, 0, 1 } },
-    { "inline",		KEYWORD_INLINE,		{ 0, 1, 0 } },
-    { "int",		KEYWORD_INT,		{ 1, 1, 1 } },
-    { "interface",	KEYWORD_INTERFACE,	{ 0, 0, 1 } },
-    { "long",		KEYWORD_LONG,		{ 1, 1, 1 } },
-    { "module",		KEYWORD_MODULE,		{ 0, 1, 0 } },
-    { "mutable",	KEYWORD_MUTABLE,	{ 0, 1, 0 } },
-    { "namespace",	KEYWORD_NAMESPACE,	{ 0, 1, 0 } },
-    { "native",		KEYWORD_NATIVE,		{ 0, 0, 1 } },
-    { "new",		KEYWORD_NEW,		{ 0, 1, 1 } },
-    { "operator",	KEYWORD_OPERATOR,	{ 0, 1, 0 } },
-    { "overload",	KEYWORD_OVERLOAD,	{ 0, 1, 0 } },
-    { "package",	KEYWORD_PACKAGE,	{ 0, 0, 1 } },
-    { "private",	KEYWORD_PRIVATE,	{ 0, 1, 1 } },
-    { "protected",	KEYWORD_PROTECTED,	{ 0, 1, 1 } },
-    { "public",		KEYWORD_PUBLIC,		{ 0, 1, 1 } },
-    { "register",	KEYWORD_REGISTER,	{ 1, 1, 0 } },
-    { "short",		KEYWORD_SHORT,		{ 1, 1, 1 } },
-    { "signed",		KEYWORD_SIGNED,		{ 1, 1, 0 } },
-    { "static",		KEYWORD_STATIC,		{ 1, 1, 1 } },
-    { "struct",		KEYWORD_STRUCT,		{ 1, 1, 0 } },
-    { "synchronized",	KEYWORD_SYNCHRONIZED,	{ 0, 0, 1 } },
-    { "template",	KEYWORD_TEMPLATE,	{ 0, 1, 0 } },
-    { "throw",		KEYWORD_THROW,		{ 0, 1, 1 } },
-    { "throws",		KEYWORD_THROWS,		{ 0, 0, 1 } },
-    { "transient",	KEYWORD_TRANSIENT,	{ 0, 0, 1 } },
-    { "try",		KEYWORD_TRY,		{ 0, 1, 0 } },
-    { "typedef",	KEYWORD_TYPEDEF,	{ 1, 1, 0 } },
-    { "typename",	KEYWORD_TYPENAME,	{ 0, 1, 0 } },
-    { "union",		KEYWORD_UNION,		{ 1, 1, 0 } },
-    { "unsigned",	KEYWORD_UNSIGNED,	{ 1, 1, 0 } },
-    { "uses",		KEYWORD_USES,		{ 0, 1, 0 } },
-    { "using",		KEYWORD_USING,		{ 0, 1, 0 } },
-    { "virtual",	KEYWORD_VIRTUAL,	{ 0, 1, 0 } },
-    { "void",		KEYWORD_VOID,		{ 1, 1, 1 } },
-    { "volatile",	KEYWORD_VOLATILE,	{ 1, 1, 1 } },
-    { "wchar_t",	KEYWORD_WCHAR_T,	{ 1, 1, 0 } },
-    { "auto",		KEYWORD_AUTO,		{ 1, 1, 0 } },
-    { "restrict",	KEYWORD_RESTRICT,	{ 1, 0, 0 } },
-    { "size_t",	KEYWORD_SIZE_T,		{ 1, 1, 0 } },
-    { "bool",		KEYWORD_BOOL,		{ 0, 1, 0 } }
+typedef enum {
+	CSK_UNDEFINED = -1,
+	CSK_CLASS, CSK_DEFINE, CSK_ENUMERATOR, CSK_EVENT, CSK_FIELD,
+	CSK_ENUMERATION, CSK_INTERFACE, CSK_LOCAL, CSK_METHOD,
+	CSK_NAMESPACE, CSK_PROPERTY, CSK_STRUCT, CSK_TYPEDEF
+} csharpKind;
+
+static kindOption CsharpKinds [] = {
+	{ TRUE,  'c', "class",      "classes"},
+	{ TRUE,  'd', "macro",      "macro definitions"},
+	{ TRUE,  'e', "enumerator", "enumerators (values inside an enumeration)"},
+	{ TRUE,  'E', "event",      "events"},
+	{ TRUE,  'f', "field",      "fields"},
+	{ TRUE,  'g', "enum",       "enumeration names"},
+	{ TRUE,  'i', "interface",  "interfaces"},
+	{ FALSE, 'l', "local",      "local variables"},
+	{ TRUE,  'm', "method",     "methods"},
+	{ TRUE,  'n', "namespace",  "namespaces"},
+	{ TRUE,  'p', "property",   "properties"},
+	{ TRUE,  's', "struct",     "structure names"},
+	{ TRUE,  't', "typedef",    "typedefs"},
 };
+
+static const keywordDesc KeywordTable [] = {
+	/*                                              C++            */
+	/*                                       ANSI C  |  C# Java    */
+	/*                                            |  |  |  |  Vera */
+	/* keyword          keyword ID                |  |  |  |  |    */
+	{ "__attribute__",  KEYWORD_ATTRIBUTE,      { 1, 1, 1, 0, 0 } },
+	{ "abstract",       KEYWORD_ABSTRACT,       { 0, 0, 1, 1, 0 } },
+	{ "bad_state",      KEYWORD_BAD_STATE,      { 0, 0, 0, 0, 1 } },
+	{ "bad_trans",      KEYWORD_BAD_TRANS,      { 0, 0, 0, 0, 1 } },
+	{ "bind",           KEYWORD_BIND,           { 0, 0, 0, 0, 1 } },
+	{ "bind_var",       KEYWORD_BIND_VAR,       { 0, 0, 0, 0, 1 } },
+	{ "bit",            KEYWORD_BIT,            { 0, 0, 0, 0, 1 } },
+	{ "boolean",        KEYWORD_BOOLEAN,        { 0, 0, 0, 1, 0 } },
+	{ "byte",           KEYWORD_BYTE,           { 0, 0, 0, 1, 0 } },
+	{ "case",           KEYWORD_CASE,           { 1, 1, 1, 1, 0 } },
+	{ "catch",          KEYWORD_CATCH,          { 0, 1, 1, 0, 0 } },
+	{ "char",           KEYWORD_CHAR,           { 1, 1, 1, 1, 0 } },
+	{ "class",          KEYWORD_CLASS,          { 0, 1, 1, 1, 1 } },
+	{ "const",          KEYWORD_CONST,          { 1, 1, 1, 1, 0 } },
+	{ "constraint",     KEYWORD_CONSTRAINT,     { 0, 0, 0, 0, 1 } },
+	{ "coverage_block", KEYWORD_COVERAGE_BLOCK, { 0, 0, 0, 0, 1 } },
+	{ "coverage_def",   KEYWORD_COVERAGE_DEF,   { 0, 0, 0, 0, 1 } },
+	{ "do",             KEYWORD_DO,             { 1, 1, 1, 1, 0 } },
+	{ "default",        KEYWORD_DEFAULT,        { 1, 1, 1, 1, 0 } },
+	{ "delegate",       KEYWORD_DELEGATE,       { 0, 0, 1, 0, 0 } },
+	{ "delete",         KEYWORD_DELETE,         { 0, 1, 0, 0, 0 } },
+	{ "double",         KEYWORD_DOUBLE,         { 1, 1, 1, 1, 0 } },
+	{ "else",           KEYWORD_ELSE,           { 1, 1, 0, 1, 0 } },
+	{ "enum",           KEYWORD_ENUM,           { 1, 1, 1, 1, 1 } },
+	{ "event",          KEYWORD_EVENT,          { 0, 0, 1, 0, 1 } },
+	{ "explicit",       KEYWORD_EXPLICIT,       { 0, 1, 1, 0, 0 } },
+	{ "extends",        KEYWORD_EXTENDS,        { 0, 0, 0, 1, 1 } },
+	{ "extern",         KEYWORD_EXTERN,         { 1, 1, 1, 0, 1 } },
+	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0 } },
+	{ "float",          KEYWORD_FLOAT,          { 1, 1, 1, 1, 0 } },
+	{ "for",            KEYWORD_FOR,            { 1, 1, 1, 1, 0 } },
+	{ "friend",         KEYWORD_FRIEND,         { 0, 1, 0, 0, 0 } },
+	{ "function",       KEYWORD_FUNCTION,       { 0, 0, 0, 0, 1 } },
+	{ "goto",           KEYWORD_GOTO,           { 1, 1, 1, 1, 0 } },
+	{ "if",             KEYWORD_IF,             { 1, 1, 1, 1, 0 } },
+	{ "implements",     KEYWORD_IMPLEMENTS,     { 0, 0, 0, 1, 0 } },
+	{ "import",         KEYWORD_IMPORT,         { 0, 0, 0, 1, 0 } },
+	{ "inline",         KEYWORD_INLINE,         { 0, 1, 0, 0, 0 } },
+	{ "inout",          KEYWORD_INOUT,          { 0, 0, 0, 0, 1 } },
+	{ "input",          KEYWORD_INPUT,          { 0, 0, 0, 0, 1 } },
+	{ "int",            KEYWORD_INT,            { 1, 1, 1, 1, 0 } },
+	{ "integer",        KEYWORD_INTEGER,        { 0, 0, 0, 0, 1 } },
+	{ "interface",      KEYWORD_INTERFACE,      { 0, 0, 1, 1, 1 } },
+	{ "internal",       KEYWORD_INTERNAL,       { 0, 0, 1, 0, 0 } },
+	{ "local",          KEYWORD_LOCAL,          { 0, 0, 0, 0, 1 } },
+	{ "long",           KEYWORD_LONG,           { 1, 1, 1, 1, 0 } },
+	{ "m_bad_state",    KEYWORD_M_BAD_STATE,    { 0, 0, 0, 0, 1 } },
+	{ "m_bad_trans",    KEYWORD_M_BAD_TRANS,    { 0, 0, 0, 0, 1 } },
+	{ "m_state",        KEYWORD_M_STATE,        { 0, 0, 0, 0, 1 } },
+	{ "m_trans",        KEYWORD_M_TRANS,        { 0, 0, 0, 0, 1 } },
+	{ "mutable",        KEYWORD_MUTABLE,        { 0, 1, 0, 0, 0 } },
+	{ "module",         KEYWORD_MODULE,         { 0, 1, 0, 0, 0 } },
+	{ "namespace",      KEYWORD_NAMESPACE,      { 0, 1, 1, 0, 0 } },
+	{ "native",         KEYWORD_NATIVE,         { 0, 0, 0, 1, 0 } },
+	{ "new",            KEYWORD_NEW,            { 0, 1, 1, 1, 0 } },
+	{ "newcov",         KEYWORD_NEWCOV,         { 0, 0, 0, 0, 1 } },
+	{ "operator",       KEYWORD_OPERATOR,       { 0, 1, 1, 0, 0 } },
+	{ "output",         KEYWORD_OUTPUT,         { 0, 0, 0, 0, 1 } },
+	{ "overload",       KEYWORD_OVERLOAD,       { 0, 1, 0, 0, 0 } },
+	{ "override",       KEYWORD_OVERRIDE,       { 0, 0, 1, 0, 0 } },
+	{ "package",        KEYWORD_PACKAGE,        { 0, 0, 0, 1, 0 } },
+	{ "packed",         KEYWORD_PACKED,         { 0, 0, 0, 0, 1 } },
+	{ "port",           KEYWORD_PORT,           { 0, 0, 0, 0, 1 } },
+	{ "private",        KEYWORD_PRIVATE,        { 0, 1, 1, 1, 0 } },
+	{ "program",        KEYWORD_PROGRAM,        { 0, 0, 0, 0, 1 } },
+	{ "protected",      KEYWORD_PROTECTED,      { 0, 1, 1, 1, 1 } },
+	{ "public",         KEYWORD_PUBLIC,         { 0, 1, 1, 1, 1 } },
+	{ "register",       KEYWORD_REGISTER,       { 1, 1, 0, 0, 0 } },
+	{ "return",         KEYWORD_RETURN,         { 1, 1, 1, 1, 0 } },
+	{ "shadow",         KEYWORD_SHADOW,         { 0, 0, 0, 0, 1 } },
+	{ "short",          KEYWORD_SHORT,          { 1, 1, 1, 1, 0 } },
+	{ "signed",         KEYWORD_SIGNED,         { 1, 1, 0, 0, 0 } },
+	{ "size_t",         KEYWORD_SIZE_T,         { 1, 1, 0, 0, 0 } },
+	{ "state",          KEYWORD_STATE,          { 0, 0, 0, 0, 1 } },
+	{ "static",         KEYWORD_STATIC,         { 1, 1, 1, 1, 1 } },
+	{ "string",         KEYWORD_STRING,         { 0, 0, 1, 0, 1 } },
+	{ "struct",         KEYWORD_STRUCT,         { 1, 1, 1, 0, 0 } },
+	{ "switch",         KEYWORD_SWITCH,         { 1, 1, 1, 1, 0 } },
+	{ "synchronized",   KEYWORD_SYNCHRONIZED,   { 0, 0, 0, 1, 0 } },
+	{ "task",           KEYWORD_TASK,           { 0, 0, 0, 0, 1 } },
+	{ "template",       KEYWORD_TEMPLATE,       { 0, 1, 0, 0, 0 } },
+	{ "this",           KEYWORD_THIS,           { 0, 1, 1, 1, 0 } },
+	{ "throw",          KEYWORD_THROW,          { 0, 1, 1, 1, 0 } },
+	{ "throws",         KEYWORD_THROWS,         { 0, 0, 0, 1, 0 } },
+	{ "trans",          KEYWORD_TRANS,          { 0, 0, 0, 0, 1 } },
+	{ "transition",     KEYWORD_TRANSITION,     { 0, 0, 0, 0, 1 } },
+	{ "transient",      KEYWORD_TRANSIENT,      { 0, 0, 0, 1, 0 } },
+	{ "try",            KEYWORD_TRY,            { 0, 1, 1, 0, 0 } },
+	{ "typedef",        KEYWORD_TYPEDEF,        { 1, 1, 1, 0, 1 } },
+	{ "typename",       KEYWORD_TYPENAME,       { 0, 1, 0, 0, 0 } },
+	{ "uint",           KEYWORD_UINT,           { 0, 0, 1, 0, 0 } },
+	{ "ulong",          KEYWORD_ULONG,          { 0, 0, 1, 0, 0 } },
+	{ "union",          KEYWORD_UNION,          { 1, 1, 0, 0, 0 } },
+	{ "unsigned",       KEYWORD_UNSIGNED,       { 1, 1, 1, 0, 0 } },
+	{ "ushort",         KEYWORD_USHORT,         { 0, 0, 1, 0, 0 } },
+	{ "using",          KEYWORD_USING,          { 0, 1, 1, 0, 0 } },
+	{ "virtual",        KEYWORD_VIRTUAL,        { 0, 1, 1, 0, 1 } },
+	{ "void",           KEYWORD_VOID,           { 1, 1, 1, 1, 1 } },
+	{ "volatile",       KEYWORD_VOLATILE,       { 1, 1, 1, 1, 0 } },
+	{ "wchar_t",        KEYWORD_WCHAR_T,        { 1, 1, 1, 0, 0 } },
+	{ "while",          KEYWORD_WHILE,          { 1, 1, 1, 1, 0 } }
+};
+
 
 /*
 *   FUNCTION PROTOTYPES
@@ -630,7 +712,6 @@ static boolean isDataTypeKeyword (const tokenInfo *const token)
       case KEYWORD_VOID:
       case KEYWORD_WCHAR_T:
       case KEYWORD_SIZE_T:
-      case KEYWORD_BOOL:
          return TRUE;
       default: return FALSE;
     }
@@ -645,8 +726,6 @@ static boolean isVariableKeyword (const tokenInfo *const token)
       case KEYWORD_EXTERN:
       case KEYWORD_REGISTER:
       case KEYWORD_STATIC:
-      case KEYWORD_AUTO:
-      case KEYWORD_RESTRICT:
       case KEYWORD_VIRTUAL:
       case KEYWORD_SIGNED:
       case KEYWORD_UNSIGNED:
@@ -826,6 +905,29 @@ static cKind cTagKind (const tagType type)
     return result;
 }
 
+static csharpKind csharpTagKind (const tagType type)
+{
+	csharpKind result = CSK_UNDEFINED;
+	switch (type)
+	{
+		case TAG_CLASS:      result = CSK_CLASS;           break;
+		case TAG_ENUM:       result = CSK_ENUMERATION;     break;
+		case TAG_ENUMERATOR: result = CSK_ENUMERATOR;      break;
+		case TAG_EVENT:      result = CSK_EVENT;           break;
+		case TAG_FIELD:      result = CSK_FIELD ;          break;
+		case TAG_INTERFACE:  result = CSK_INTERFACE;       break;
+		case TAG_LOCAL:      result = CSK_LOCAL;           break;
+		case TAG_METHOD:     result = CSK_METHOD;          break;
+		case TAG_NAMESPACE:  result = CSK_NAMESPACE;       break;
+		case TAG_PROPERTY:   result = CSK_PROPERTY;        break;
+		case TAG_STRUCT:     result = CSK_STRUCT;          break;
+		case TAG_TYPEDEF:    result = CSK_TYPEDEF;         break;
+
+		default: Assert ("Bad C# tag type" == NULL); break;
+	}
+	return result;
+}
+
 static javaKind javaTagKind (const tagType type)
 {
     javaKind result = JK_UNDEFINED;
@@ -846,9 +948,11 @@ static const char *tagName (const tagType type)
 {
     const char* result;
     if (isLanguage (Lang_java))
-	result = JavaKinds [javaTagKind (type)].name;
+		result = JavaKinds [javaTagKind (type)].name;
+	else if (isLanguage (Lang_csharp))
+		result = CsharpKinds [csharpTagKind (type)].name;
     else
-	result = CKinds [cTagKind (type)].name;
+		result = CKinds [cTagKind (type)].name;
     return result;
 }
 
@@ -856,9 +960,11 @@ static int tagLetter (const tagType type)
 {
     int result;
     if (isLanguage (Lang_java))
-	result = JavaKinds [javaTagKind (type)].letter;
+		result = JavaKinds [javaTagKind (type)].letter;
+    if (isLanguage (Lang_csharp))
+		result = CsharpKinds [csharpTagKind (type)].letter;
     else
-	result = CKinds [cTagKind (type)].letter;
+		result = CKinds [cTagKind (type)].letter;
     return result;
 }
 
@@ -929,42 +1035,34 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 	case TAG_STRUCT:
 	case TAG_TYPEDEF:
 	case TAG_UNION:
-	    if (isMember (st) &&
-		! (type == TAG_ENUMERATOR  &&  vStringLength (scope) == 0))
-	    {
-			if (isType (st->context, TOKEN_NAME))
-		    	tag->extensionFields.scope [0] = tagName (TAG_CLASS);
-			else
-		    	tag->extensionFields.scope [0] =
-					tagName (declToTagType (parentDecl (st)));
-			tag->extensionFields.scope [1] = vStringValue (scope);
-	    }
-	    if ((type == TAG_CLASS  ||  type == TAG_INTERFACE  ||
-		 type == TAG_STRUCT) && vStringLength (st->parentClasses) > 0)
-	    {
-
-			tag->extensionFields.inheritance =
-				vStringValue (st->parentClasses);
-	    }
-	    if (st->implementation != IMP_DEFAULT &&
-		(isLanguage (Lang_cpp) || isLanguage (Lang_java) ||
-		 isLanguage (Lang_d) || isLanguage (Lang_ferite)))
-	    {
-			tag->extensionFields.implementation =
-				implementationString (st->implementation);
-	    }
-	    if (isMember (st))
-	    {
-			tag->extensionFields.access = accessField (st);
-	    }
-		if ((TRUE == st->gotArgs) && (TRUE == Option.extensionFields.argList) &&
-			((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type))) {
-
-			if (1) {
-				tag->extensionFields.arglist = getArglistFromPos(
-				  tag->filePosition, tag->name);
+			if (vStringLength (scope) > 0  &&
+				(isMember (st) || st->parent->declaration == DECL_NAMESPACE))
+			{
+				if (isType (st->context, TOKEN_NAME))
+					tag->extensionFields.scope [0] = tagName (TAG_CLASS);
+				else
+					tag->extensionFields.scope [0] =
+						tagName (declToTagType (parentDecl (st)));
+				tag->extensionFields.scope [1] = vStringValue (scope);
 			}
-		}
+			if ((type == TAG_CLASS  ||  type == TAG_INTERFACE  ||
+				 type == TAG_STRUCT) && vStringLength (st->parentClasses) > 0)
+			{
+
+				tag->extensionFields.inheritance =
+						vStringValue (st->parentClasses);
+			}
+			if (st->implementation != IMP_DEFAULT &&
+				(isLanguage (Lang_cpp) || isLanguage (Lang_csharp) ||
+				 isLanguage (Lang_java)))
+			{
+				tag->extensionFields.implementation =
+						implementationString (st->implementation);
+			}
+			if (isMember (st))
+			{
+				tag->extensionFields.access = accessField (st);
+			}
 	    break;
     }
 
@@ -984,7 +1082,7 @@ static void addContextSeparator (vString *const scope)
     if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp))
 	vStringCatS (scope, "::");
     else if (isLanguage (Lang_java) ||
-		isLanguage (Lang_d) || isLanguage (Lang_ferite))
+		isLanguage (Lang_d) || isLanguage (Lang_ferite) || isLanguage (Lang_csharp))
 	vStringCatS (scope, ".");
 }
 
@@ -1152,7 +1250,8 @@ static void qualifyFunctionTag (const statementInfo *const st,
 {
     if (isType (nameToken, TOKEN_NAME))
     {
-	const tagType type = isLanguage (Lang_java) ? TAG_METHOD : TAG_FUNCTION;
+	const tagType type = (isLanguage (Lang_java) || isLanguage (Lang_csharp))
+								? TAG_METHOD : TAG_FUNCTION;
 	const boolean isFileScope =
 			(boolean) (st->member.access == ACCESS_PRIVATE ||
 			(!isMember (st)  &&  st->scope == SCOPE_STATIC));
@@ -1166,12 +1265,12 @@ static void qualifyFunctionDeclTag (const statementInfo *const st,
 {
     if (! isType (nameToken, TOKEN_NAME))
 	;
-    else if (isLanguage (Lang_java))
-	qualifyFunctionTag (st, nameToken);
+    else if (isLanguage (Lang_java) || isLanguage (Lang_csharp))
+		qualifyFunctionTag (st, nameToken);
     else if (st->scope == SCOPE_TYPEDEF)
-	makeTag (nameToken, st, TRUE, TAG_TYPEDEF);
-    else if (isValidTypeSpecifier (st->declaration))
-	makeTag (nameToken, st, TRUE, TAG_PROTOTYPE);
+		makeTag (nameToken, st, TRUE, TAG_TYPEDEF);
+    else if (isValidTypeSpecifier (st->declaration) && ! isLanguage (Lang_csharp))
+		makeTag (nameToken, st, TRUE, TAG_PROTOTYPE);
 }
 
 static void qualifyCompoundTag (const statementInfo *const st,
@@ -1182,7 +1281,7 @@ static void qualifyCompoundTag (const statementInfo *const st,
 	const tagType type = declToTagType (st->declaration);
 
 	if (type != TAG_UNDEFINED)
-	    makeTag (nameToken, st, (boolean) (! isLanguage (Lang_java)), type);
+	    makeTag (nameToken, st, (boolean) (! isLanguage (Lang_java) && ! isLanguage (Lang_csharp)), type);
     }
 }
 
@@ -1224,7 +1323,7 @@ static void qualifyVariableTag (const statementInfo *const st,
     {
 	if (isMember (st))
 	{
-	    if (isLanguage (Lang_java))
+	    if (isLanguage (Lang_java) || isLanguage (Lang_csharp))
 		makeTag (nameToken, st,
 			(boolean) (st->member.access == ACCESS_PRIVATE),
 			TAG_FIELD);
@@ -1245,6 +1344,15 @@ static void qualifyVariableTag (const statementInfo *const st,
 /*
 *   Parsing functions
 */
+
+static int skipToOneOf (const char *const chars)
+{
+	int c;
+	do
+		c = cppGetc ();
+	while (c != EOF  &&  c != '\0'  &&  strchr (chars, c) == NULL);
+	return c;
+}
 
 /*  Skip to the next non-white character.
  */
@@ -1415,6 +1523,27 @@ static void readPackageName (tokenInfo *const token, const int firstChar)
     }
     vStringTerminate (name);
     cppUngetc (c);		/* unget non-package character */
+}
+
+static void readPackageOrNamespace (statementInfo *const st, const declType declaration)
+{
+	st->declaration = declaration;
+
+	if (declaration == DECL_NAMESPACE && !isLanguage (Lang_csharp))
+	{
+		/* In C++ a namespace is specified one level at a time. */
+		return;
+	}
+	else
+	{
+		/* In C#, a namespace can also be specified like a Java package name. */
+		tokenInfo *const token = activeToken (st);
+		Assert (isType (token, TOKEN_KEYWORD));
+		readPackageName (token, skipToNonWhite ());
+		token->type = TOKEN_NAME;
+		st->gotName = TRUE;
+		st->haveQualifyingName = TRUE;
+	}
 }
 
 static void readPackage (statementInfo *const st)
@@ -1611,8 +1740,6 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 	case KEYWORD_CHAR:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_CLASS:	st->declaration = DECL_CLASS;		break;
 	case KEYWORD_CONST:	st->declaration = DECL_BASE;		break;
-	case KEYWORD_AUTO:	st->declaration = DECL_BASE;		break;
-	case KEYWORD_RESTRICT: st->declaration = DECL_BASE;		break;
 	case KEYWORD_DOUBLE:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_ENUM:	st->declaration = DECL_ENUM;		break;
 	case KEYWORD_EXTENDS:	readParents (st, '.');
@@ -1623,15 +1750,13 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 				setToken (st, TOKEN_NONE);		break;
 	case KEYWORD_IMPORT:	st->declaration = DECL_IGNORE;		break;
 	case KEYWORD_INT:	st->declaration = DECL_BASE;		break;
-	case KEYWORD_BOOL:	st->declaration = DECL_BASE;		break;
+	case KEYWORD_BOOLEAN:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_WCHAR_T:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_SIZE_T:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_INTERFACE: st->declaration = DECL_INTERFACE;	break;
 	case KEYWORD_LONG:	st->declaration = DECL_BASE;		break;
-	case KEYWORD_NAMESPACE: st->declaration = DECL_NAMESPACE;	break;
 	case KEYWORD_OPERATOR:	readOperator (st);			break;
 	case KEYWORD_MODULE:	readPackage (st);			break;
-	case KEYWORD_PACKAGE:	readPackage (st);			break;
 	case KEYWORD_PRIVATE:	setAccess (st, ACCESS_PRIVATE);		break;
 	case KEYWORD_PROTECTED:	setAccess (st, ACCESS_PROTECTED);	break;
 	case KEYWORD_PUBLIC:	setAccess (st, ACCESS_PUBLIC);		break;
@@ -1647,16 +1772,30 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 	case KEYWORD_VOLATILE:	st->declaration = DECL_BASE;		break;
 	case KEYWORD_VIRTUAL:	st->implementation = IMP_VIRTUAL;	break;
 
+	case KEYWORD_NAMESPACE: readPackageOrNamespace (st, DECL_NAMESPACE); break;
+	case KEYWORD_PACKAGE:   readPackageOrNamespace (st, DECL_PACKAGE);   break;
+	case KEYWORD_EVENT:
+		if (isLanguage (Lang_csharp))
+			st->declaration = DECL_EVENT;
+		break;
+
 	case KEYWORD_EXTERN:
-	    st->scope = SCOPE_EXTERN;
-	    st->declaration = DECL_BASE;
-	    break;
+		if (! isLanguage (Lang_csharp) || !st->gotName)
+		{
+			//reinitStatement (st, FALSE);
+			st->scope = SCOPE_EXTERN;
+			st->declaration = DECL_BASE;
+		}
+		break;
 
 	case KEYWORD_STATIC:
-	    if (! isLanguage (Lang_java))
-		st->scope = SCOPE_STATIC;
-	    st->declaration = DECL_BASE;
-	    break;
+		if (! isLanguage (Lang_java) && ! isLanguage (Lang_csharp))
+		{
+			//reinitStatement (st, FALSE);
+			st->scope = SCOPE_STATIC;
+			st->declaration = DECL_BASE;
+		}
+		break;
     }
 }
 
@@ -2097,7 +2236,7 @@ static void addContext (statementInfo *const st, const tokenInfo* const token)
 	    if (isLanguage (Lang_c)  ||  isLanguage (Lang_cpp))
 		vStringCatS (st->context->name, "::");
 	    else if (isLanguage (Lang_java) ||
-			isLanguage (Lang_d) || isLanguage (Lang_ferite))
+			isLanguage (Lang_d) || isLanguage (Lang_ferite) || isLanguage (Lang_csharp))
 		vStringCatS (st->context->name, ".");
 	}
 	vStringCat (st->context->name, token->name);
@@ -2105,25 +2244,52 @@ static void addContext (statementInfo *const st, const tokenInfo* const token)
     }
 }
 
+static boolean inheritingDeclaration (declType decl)
+{
+	return (boolean) (
+		decl == DECL_CLASS ||
+		decl == DECL_STRUCT ||
+		decl == DECL_INTERFACE);
+}
+
 static void processColon (statementInfo *const st)
 {
-    const int c = skipToNonWhite ();
-    const boolean doubleColon = (boolean) (c == ':');
+	int c = skipToNonWhite ();
+	const boolean doubleColon = (boolean) (c == ':');
 
-    if (doubleColon)
-    {
-	setToken (st, TOKEN_DOUBLE_COLON);
-	st->haveQualifyingName = FALSE;
-    }
-    else
-    {
-	cppUngetc (c);
-	if ((isLanguage (Lang_cpp) || isLanguage (Lang_d) || isLanguage (Lang_ferite))  && (
-	    st->declaration == DECL_CLASS  ||  st->declaration == DECL_STRUCT))
+	if (doubleColon)
 	{
-	    readParents (st, ':');
+		setToken (st, TOKEN_DOUBLE_COLON);
+		st->haveQualifyingName = FALSE;
 	}
-    }
+	else
+	{
+		cppUngetc (c);
+		if ((isLanguage (Lang_cpp) || isLanguage (Lang_csharp))  &&
+			inheritingDeclaration (st->declaration))
+		{
+			readParents (st, ':');
+		}
+		else if (parentDecl (st) == DECL_STRUCT)
+		{
+			c = skipToOneOf (",;");
+			if (c == ',')
+				setToken (st, TOKEN_COMMA);
+			else if (c == ';')
+				setToken (st, TOKEN_SEMICOLON);
+		}
+		else
+		{
+			const tokenInfo *const prev  = prevToken (st, 1);
+			const tokenInfo *const prev2 = prevToken (st, 2);
+			if (prev->keyword == KEYWORD_DEFAULT ||
+				prev2->keyword == KEYWORD_CASE ||
+				st->parent != NULL)
+			{
+				reinitStatement (st, FALSE);
+			}
+		}
+	}
 }
 
 /*  Skips over any initializing value which may follow an '=' character in a
@@ -2314,7 +2480,7 @@ static boolean isStatementEnd (const statementInfo *const st)
 		/* Java, D, C# do not require semicolons to end a block. Neither do C++
 		 * namespaces. All other blocks require a semicolon to terminate them.
 		 */
-		isEnd = (boolean) (isLanguage (Lang_java) || isLanguage (Lang_d) ||
+		isEnd = (boolean) (isLanguage (Lang_java) || isLanguage (Lang_d) || isLanguage (Lang_csharp) ||
 				! isContextualStatement (st));
     else
 		isEnd = FALSE;
@@ -2426,6 +2592,8 @@ static void tagCheck (statementInfo *const st)
 		{
 		    copyToken (st->blockName, name_token);
 		}
+		else if (isLanguage (Lang_csharp))
+				makeTag (prev, st, FALSE, TAG_PROPERTY);
 		else
 		{
 		    tokenInfo *contextual_token = (tokenInfo *)prev;
@@ -2538,7 +2706,7 @@ static boolean findCTags (const unsigned int passCount)
     boolean retry;
 
     Assert (passCount < 3);
-    cppInit ((boolean) (passCount > 1));
+    cppInit ((boolean) (passCount > 1), isLanguage (Lang_csharp));
 
     exception = (exception_t) setjmp (Exception);
     retry = FALSE;
@@ -2591,7 +2759,7 @@ static void initializeJavaParser (const langType language)
 {
     contextual_fake_count = 0;
     Lang_java = language;
-    buildKeywordHash (language, 2);
+    buildKeywordHash (language, 3);
 }
 
 static void initializeDParser (const langType language)
@@ -2606,6 +2774,13 @@ static void initializeFeriteParser (const langType language)
     contextual_fake_count = 0;
     Lang_ferite = language;
     buildKeywordHash (language, 1);
+}
+
+static void initializeCsharpParser (const langType language)
+{
+    contextual_fake_count = 0;
+	Lang_csharp = language;
+	buildKeywordHash (language, 2);
 }
 
 extern parserDefinition* CParser (void)
@@ -2675,4 +2850,15 @@ extern parserDefinition* FeriteParser (void)
     return def;
 }
 
+extern parserDefinition* CsharpParser (void)
+{
+    static const char *const extensions [] = { "cs", NULL };
+    parserDefinition* def = parserNew ("C#");
+    def->kinds      = CsharpKinds;
+    def->kindCount  = KIND_COUNT (CsharpKinds);
+    def->extensions = extensions;
+    def->parser2    = findCTags;
+    def->initialize = initializeCsharpParser;
+    return def;
+}
 /* vi:set tabstop=8 shiftwidth=4: */

@@ -1,6 +1,7 @@
 /*
+*   $Id$
 *
-*   Copyright (c) 1998-2001, Darren Hiebert
+*   Copyright (c) 1998-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
@@ -13,7 +14,7 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"  /* must always come first */
 
 #include "ctags.h"  /* to define langType */
 
@@ -36,14 +37,14 @@
 */
 extern boolean isBraceFormat (void);
 extern unsigned int getDirectiveNestLevel (void);
-extern void cppInit (const boolean state);
+extern void cppInit (const boolean state, const boolean hasAtLiteralStrings);
 extern void cppTerminate (void);
 extern void cppBeginStatement (void);
 extern void cppEndStatement (void);
 extern void cppUngetc (const int c);
 extern int cppGetc (void);
-extern char *getArglistFromPos(fpos_t startPosition, const char *tokenName);
-extern char *getArglistFromStr(char *buf, const char *name);
-#endif	/* _GET_H */
+extern int skipOverCComment (void);
 
-/* vi:set tabstop=8 shiftwidth=4: */
+#endif  /* _GET_H */
+
+/* vi:set tabstop=4 shiftwidth=4: */
