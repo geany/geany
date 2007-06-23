@@ -3416,7 +3416,7 @@
 			  <child>
 			    <widget class="GtkEntry" id="entry_contextaction">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Context action command. The current selected word can be used with %s. It can be everywhere in the given command and will be replaced before execution.</property>
+			      <property name="tooltip" translatable="yes">Context action command. The currently selected word can be used with %s. It can appear anywhere in the given command and will be replaced before execution.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>

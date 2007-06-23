@@ -1,6 +1,8 @@
 2007-06-23  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * tagmanager/basic.c: Merge recent changes from CTags SVN.
+ * geany.glade, src/interface.c:
+   Apply patch from Gabor Kmetyko to improve wording (thanks).
 
 
 2007-06-22  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -2806,7 +2806,7 @@ create_prefs_dialog (void)
   entry_contextaction = gtk_entry_new ();
   gtk_widget_show (entry_contextaction);
   gtk_box_pack_start (GTK_BOX (hbox8), entry_contextaction, TRUE, TRUE, 0);
-  gtk_tooltips_set_tip (tooltips, entry_contextaction, _("Context action command. The current selected word can be used with %s. It can be everywhere in the given command and will be replaced before execution."), NULL);
+  gtk_tooltips_set_tip (tooltips, entry_contextaction, _("Context action command. The currently selected word can be used with %s. It can appear anywhere in the given command and will be replaced before execution."), NULL);
   gtk_entry_set_invisible_char (GTK_ENTRY (entry_contextaction), 9679);
 
   label188 = gtk_label_new (_("<b>Context Action</b>"));
