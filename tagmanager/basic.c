@@ -38,6 +38,7 @@ typedef enum {
 typedef struct {
 	char const *token;
 	BasicKind kind;
+	int skip;
 } KeyWord;
 
 static kindOption BasicKinds[] = {
@@ -50,37 +51,38 @@ static kindOption BasicKinds[] = {
 };
 
 static KeyWord blitzbasic_keywords[] = {
-	{"const", K_CONST},
-	{"global", K_VARIABLE},
-	{"dim", K_VARIABLE},
-	{"function", K_FUNCTION},
-	{"type", K_TYPE},
-	{NULL, 0}
+	{"const", K_CONST, 0},
+	{"global", K_VARIABLE, 0},
+	{"dim", K_VARIABLE, 0},
+	{"function", K_FUNCTION, 0},
+	{"type", K_TYPE, 0},
+	{NULL, 0, 0}
 };
 
 static KeyWord purebasic_keywords[] = {
-	{"newlist", K_VARIABLE},
-	{"global", K_VARIABLE},
-	{"dim", K_VARIABLE},
-	{"procedure", K_FUNCTION},
-	{"interface", K_TYPE},
-	{"structure", K_TYPE},
-	{NULL, 0}
+	{"newlist", K_VARIABLE, 0},
+	{"global", K_VARIABLE, 0},
+	{"dim", K_VARIABLE, 0},
+	{"procedure", K_FUNCTION, 0},
+	{"interface", K_TYPE, 0},
+	{"structure", K_TYPE, 0},
+	{NULL, 0, 0}
 };
 
 static KeyWord freebasic_keywords[] = {
-	{"const", K_CONST},
-	{"dim", K_VARIABLE},
-	{"common", K_VARIABLE},
-	{"function", K_FUNCTION},
-	{"sub", K_FUNCTION},
-	{"private sub", K_FUNCTION},
-	{"public sub", K_FUNCTION},
-	{"private function", K_FUNCTION},
-	{"public function", K_FUNCTION},
-	{"type", K_TYPE},
-	{"enum", K_ENUM},
-	{NULL, 0}
+	{"const", K_CONST, 0},
+	{"dim as", K_VARIABLE, 1},
+	{"dim", K_VARIABLE, 0},
+	{"common", K_VARIABLE, 0},
+	{"function", K_FUNCTION, 0},
+	{"sub", K_FUNCTION, 0},
+	{"private sub", K_FUNCTION, 0},
+	{"public sub", K_FUNCTION, 0},
+	{"private function", K_FUNCTION, 0},
+	{"public function", K_FUNCTION, 0},
+	{"type", K_TYPE, 0},
+	{"enum", K_ENUM, 0},
+	{NULL, 0, 0}
 };
 
 /*
@@ -88,7 +90,7 @@ static KeyWord freebasic_keywords[] = {
  */
 
 /* Match the name of a tag (function, variable, type, ...) starting at pos. */
-static void extract_name (char const *pos, vString * name)
+static char const *extract_name (char const *pos, vString * name)
 {
 	while (isspace (*pos))
 		pos++;
@@ -96,29 +98,29 @@ static void extract_name (char const *pos, vString * name)
 	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ','; pos++)
 		vStringPut (name, *pos);
 	vStringTerminate (name);
+	return pos;
 }
 
 /* Match a keyword starting at p (case insensitive). */
-static void match_keyword (const char *p, const char *keyword, BasicKind kind)
+static int match_keyword (const char *p, KeyWord const *kw)
 {
 	vString *name;
 	size_t i;
-	for (i = 0; i < strlen (keyword); i++)
+	int j;
+	for (i = 0; i < strlen (kw->token); i++)
 	{
-		if (tolower (p[i]) != keyword[i])
-			return;
+		if (tolower (p[i]) != kw->token[i])
+			return 0;
 	}
 	name = vStringNew ();
-	extract_name (p + i, name);
-	// if we have "DIM AS STRING str" we should skip "AS STRING" - eht16
-	if (strcmp(keyword, "dim") == 0 && strncasecmp (name->buffer, "as", 2) == 0)
+	p += i;
+	for (j = 0; j < 1 + kw->skip; j++)
 	{
-		char *new_start = strchr (p + i + 4, ' '); // + 4 skips " AS "
-		if (new_start != NULL)
-			extract_name (new_start + 1, name);
-	}
-	makeSimpleTag (name, BasicKinds, kind);
+    	p = extract_name (p, name);
+    }
+	makeSimpleTag (name, BasicKinds, kw->kind);
 	vStringDelete (name);
+	return 1;
 }
 
 /* Match a "label:" style label. */
@@ -167,7 +169,7 @@ static void findBasicTags (KeyWord const keywords[],
 
 		/* In Basic, keywords always are at the start of the line. */
 		for (kw = keywords; kw->token; kw++)
-			match_keyword (p, kw->token, kw->kind);
+			if (match_keyword (p, kw)) break;
 
 		/* Is it a label? */
 		label (p);

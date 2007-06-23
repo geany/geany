@@ -1,3 +1,8 @@
+2007-06-23  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * tagmanager/basic.c: Merge recent changes from CTags SVN.
+
+
 2007-06-22  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * tagmanager/c.c, tagmanager/get.c, tagmanager/get.h:
