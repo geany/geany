@@ -130,6 +130,7 @@ Section "!Program Files" SEC01
   File "${RESOURCEDIR}\data\GPL-2"
   File "${RESOURCEDIR}\data\file*"
 
+  SetOutPath "$INSTDIR"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Geany.lnk" "$INSTDIR\Geany.exe"

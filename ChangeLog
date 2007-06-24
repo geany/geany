@@ -1,3 +1,8 @@
+2007-06-24  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.nsi: Fix wrong working directory in generated shortcuts.
+
+
 2007-06-23  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * tagmanager/basic.c: Merge recent changes from CTags SVN.
