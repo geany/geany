@@ -1,3 +1,9 @@
+2007-06-25  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/main.c: Use setlocale to enable translation of strings before
+               GLib command line parser gets active.
+
+
 2007-06-24  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.nsi: Fix wrong working directory in generated shortcuts.

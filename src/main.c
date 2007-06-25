@@ -35,6 +35,10 @@
 
 #include "geany.h"
 
+#if HAVE_LOCALE_H
+# include <locale.h>
+#endif
+
 #include "main.h"
 #include "interface.h"
 #include "support.h"
@@ -69,8 +73,9 @@
 # include "vte.h"
 #endif
 
-#define N_(String) (String)
-
+#ifndef N_
+# define N_(String) (String)
+#endif
 
 
 CommandLineOptions cl_options;	// fields initialised in parse_command_line_options
@@ -405,7 +410,12 @@ static void setup_paths()
 
 static void locale_init()
 {
+#ifdef ENABLE_NLS
 	gchar *locale_dir = NULL;
+
+#if HAVE_LOCALE_H
+	setlocale(LC_ALL, "");
+#endif
 
 #ifdef G_OS_WIN32
 	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
@@ -416,12 +426,11 @@ static void locale_init()
 	locale_dir = g_strdup(PACKAGE_LOCALE_DIR);
 #endif
 
-#ifdef ENABLE_NLS
 	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 	textdomain(GETTEXT_PACKAGE);
-#endif
 	g_free(locale_dir);
+#endif
 }
 
 
@@ -435,7 +444,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	cl_options.goto_line = -1;
 	cl_options.goto_column = -1;
 
-	context = g_option_context_new(_(" - A fast and lightweight IDE"));
+	context = g_option_context_new(_("[FILES...]"));
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
 	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
 	g_option_context_add_group(context, gtk_get_option_group(TRUE));
