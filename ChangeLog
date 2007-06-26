@@ -1,3 +1,16 @@
+2007-06-26  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * plugins/demoplugin.c, plugins/Makefile.am, configure.in,
+   src/makefile.win32, src/plugindata.h, src/plugins.c, src/main.c,
+   src/plugins.h, src/Makefile.am, win32-config.h, HACKING, Makefile.am,
+   po/POTFILES.in:
+   Added very basic plugin support - any plugins found in
+   $prefix/lib/geany are loaded at startup. Windows support will be
+   added later.
+   Added Demo plugin (currently installed by default), which adds an
+   item in the Tools menu.
+
+
 2007-06-26  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * geany.glade, src/document.c, src/editor.h, src/interface.c,
@@ -43,7 +56,7 @@
 2007-06-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/callbacks.c:
-   Prevent segfault when using goto tag from an untitled file.
+   Prevent segfault when using Goto Tag from an untitled file.
 
 
 2007-06-19  Nick Treleaven  <nick.treleaven@btinternet.com>

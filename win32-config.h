@@ -137,6 +137,9 @@
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 /* #undef HAVE_NDIR_H */
 
+/* Define if plugins are enabled. */
+//#define HAVE_PLUGINS 1
+
 /* Define to 1 if you have the `putenv' function. */
 #define HAVE_PUTENV 1
 

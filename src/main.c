@@ -64,6 +64,7 @@
 #include "project.h"
 #include "tools.h"
 #include "navqueue.h"
+#include "plugins.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -769,6 +770,11 @@ gint main(gint argc, gchar **argv)
 	}
 #endif
 
+#ifdef HAVE_PLUGINS
+	// load any enabled plugins just before we draw the main window
+	plugins_init();
+#endif
+
 	// finally realize the window to show the user what we have done
 	gtk_widget_show(app->window);
 	app->main_window_realized = TRUE;
@@ -799,6 +805,9 @@ void main_quit()
 	socket_finalize();
 #endif
 
+#ifdef HAVE_PLUGINS
+	plugins_free();
+#endif
 	navqueue_free();
 	keybindings_free();
 	filetypes_save_commands();

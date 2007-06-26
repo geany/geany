@@ -5,6 +5,7 @@ src/build.c
 src/callbacks.c
 src/dialogs.c
 src/document.c
+src/editor.c
 src/encodings.c
 src/filetypes.c
 src/geany.h
@@ -17,9 +18,9 @@ src/main.c
 src/msgwindow.c
 src/navqueue.c
 src/notebook.c
+src/plugins.c
 src/prefs.c
 src/project.c
-src/editor.c
 src/sciwrappers.c
 src/search.c
 src/socket.c

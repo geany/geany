@@ -102,3 +102,37 @@ Set filetypes[GEANY_FILETYPES_FOO].lang = foo's parser number.
 In symbols.c:
 Update init_tag_list() for foo, listing the tm_tag_* types corresponding
 to the s_tag_type_names strings used in foo.c for FooKinds.
+
+
+PLUGINS
+=======
+
+See plugins/demoplugin.c for a very basic example plugin.
+src/plugindata.h contains the plugin API data types.
+src/plugins.c loads and unloads plugins.
+
+Loading a plugin from GDB
+-------------------------
+This is useful so you can load plugins without installing them first.
+Alternatively you can use a symlink to $prefix/lib/geany/myplugin.so, (where
+$prefix is /usr/local by default).
+
+The gdb session below was run from the toplevel Geany source directory.
+Start normally with e.g. "gdb src/geany".
+Type 'r' to run.
+Press Ctrl-C from the gdb window to interrupt program execution.
+
+Program received signal SIGINT, Interrupt.
+0x00d16402 in __kernel_vsyscall ()
+(gdb) call plugin_new("./plugins/.libs/demoplugin.so")
+** INFO: Loaded:   ./plugins/.libs/demoplugin.so (Demo)
+$1 = (Plugin *) 0x905a890
+(gdb) c
+Continuing.
+
+Program received signal SIGINT, Interrupt.
+0x00d16402 in __kernel_vsyscall ()
+(gdb) call plugin_free(0x905a890)
+** INFO: Unloaded: ./plugins/.libs/demoplugin.so
+(gdb) c
+Continuing.

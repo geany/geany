@@ -1,0 +1,46 @@
+# Adapted from Pidgin's plugins/Makefile.am, thanks
+
+#EXTRA_DIST = \
+	#makefile.win32
+
+AM_CFLAGS = -Wall
+
+plugindir = $(libdir)/geany
+
+demoplugin_la_LDFLAGS    = -module -avoid-version
+
+if PLUGINS
+
+# Plugins to be installed
+plugin_LTLIBRARIES = \
+	demoplugin.la
+
+# Plugins not to be installed
+#noinst_LTLIBRARIES = \
+	#demoplugin.la
+
+demoplugin_la_SOURCES    = demoplugin.c
+
+demoplugin_la_LIBADD    = $(PACKAGE_LIBS)
+
+endif # PLUGINS
+
+AM_CPPFLAGS = \
+	-DDATADIR=\"$(datadir)\" \
+	-I$(top_builddir)/src \
+	-I$(top_srcdir)/tagmanager/include \
+	-I$(top_srcdir)/scintilla/include \
+	$(PACKAGE_CFLAGS) \
+	$(PLUGIN_CFLAGS)
+
+#
+# This part allows people to build their own plugins in here.
+# Yes, it's a mess.
+#
+SUFFIXES = .c .so
+.c.so:
+	$(LIBTOOL) --mode=compile $(CC) -DHAVE_CONFIG_H -I$(top_srcdir) $(AM_CPPFLAGS) $(CFLAGS) -c $< -o tmp$@.lo $(PLUGIN_CFLAGS)
+	$(LIBTOOL) --mode=link    $(CC) $(CFLAGS) -o libtmp$@.la -rpath $(plugindir) tmp$@.lo $(LIBS) $(LDFLAGS) -module -avoid-version $(PLUGIN_LIBS)
+	@rm -f tmp$@.lo tmp$@.o libtmp$@.la
+	@cp .libs/libtmp$@.so* $@
+	@rm -f .libs/libtmp$@.*

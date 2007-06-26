@@ -2,7 +2,7 @@
 # $Id$
 
 
-EXTRA_DIST = images.c gb.c win32.c win32.h
+EXTRA_DIST = images.c gb.c win32.c win32.h plugindata.h
 
 bin_PROGRAMS = geany
 
@@ -12,6 +12,7 @@ SRCS = \
 	callbacks.c callbacks.h \
 	dialogs.c dialogs.h \
 	document.c document.h \
+	editor.c editor.h \
 	encodings.c encodings.h \
 	filetypes.c filetypes.h \
 	highlighting.c highlighting.h \
@@ -22,9 +23,9 @@ SRCS = \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
+	plugins.c plugins.h \
 	prefs.c prefs.h \
 	project.c project.h \
-	editor.c editor.h \
 	sciwrappers.c sciwrappers.h \
 	search.c search.h \
 	socket.c socket.h \
