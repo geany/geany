@@ -268,7 +268,11 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", editor_prefs.replace_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", editor_prefs.trail_space);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
-	g_key_file_set_string(config, PACKAGE, "pref_editor_default_encoding", encodings[editor_prefs.default_encoding].charset);
+	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[editor_prefs.default_new_encoding].charset);
+	if (editor_prefs.default_open_encoding == -1)
+		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
+	else
+		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", encodings[editor_prefs.default_open_encoding].charset);
 	g_key_file_set_string(config, PACKAGE, "pref_template_developer", app->pref_template_developer);
 	g_key_file_set_string(config, PACKAGE, "pref_template_company", app->pref_template_company);
 	g_key_file_set_string(config, PACKAGE, "pref_template_mail", app->pref_template_mail);
@@ -443,17 +447,28 @@ gboolean configuration_load()
 
 	editor_prefs.tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
 	editor_prefs.use_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_use_tabs", TRUE);
-	// use current locale encoding as default for new files (should be in most cases UTF-8)
+	// use current locale encoding as default for new files (should be UTF-8 in most cases)
 	g_get_charset(&default_charset);
-	tmp_string = utils_get_setting_string(config, PACKAGE, "pref_editor_default_encoding",
+	tmp_string = utils_get_setting_string(config, PACKAGE, "pref_editor_default_new_encoding",
 																			default_charset);
 	if (tmp_string)
 	{
 		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);
 		if (enc != NULL)
-			editor_prefs.default_encoding = enc->idx;
+			editor_prefs.default_new_encoding = enc->idx;
 		else
-			editor_prefs.default_encoding = GEANY_ENCODING_UTF_8;
+			editor_prefs.default_new_encoding = GEANY_ENCODING_UTF_8;
+
+		g_free(tmp_string);
+	}
+	tmp_string = utils_get_setting_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
+	if (tmp_string)
+	{
+		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);
+		if (enc != NULL)
+			editor_prefs.default_open_encoding = enc->idx;
+		else
+			editor_prefs.default_open_encoding = -1;
 
 		g_free(tmp_string);
 	}

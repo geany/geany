@@ -61,7 +61,8 @@ typedef struct
 	gint		tab_width;
 	gint		caret_blink_time;
 	gboolean	use_tabs;
-	gint		default_encoding;
+	gint		default_new_encoding;
+	gint		default_open_encoding;
 	gboolean	new_line;
 	gboolean	replace_tabs;
 	gboolean	trail_space;

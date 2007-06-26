@@ -1,3 +1,11 @@
+2007-06-26  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/document.c, src/editor.h, src/interface.c,
+   src/keyfile.c, src/prefs.c:
+   Add option to set a default encoding when opening files and disable
+   auto detection of the file encoding.
+
+
 2007-06-25  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/main.c: Use setlocale to enable translation of strings before

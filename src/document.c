@@ -442,7 +442,7 @@ gint document_new_file(const gchar *filename, filetype *ft)
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 	sci_empty_undo_buffer(doc_list[idx].sci);
 
-	doc_list[idx].encoding = g_strdup(encodings[editor_prefs.default_encoding].charset);
+	doc_list[idx].encoding = g_strdup(encodings[editor_prefs.default_new_encoding].charset);
 	// store the opened encoding for undo/redo
 	store_saved_encoding(idx);
 
@@ -782,6 +782,10 @@ gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 			return idx;
 		}
 	}
+
+	// if default encoding for opening files is set, use it if no forced encoding is set
+	if (editor_prefs.default_open_encoding >= 0 && forced_enc == NULL)
+		forced_enc = encodings[editor_prefs.default_open_encoding].charset;
 
 	if (! load_text_file(locale_filename, utf8_filename, &filedata, forced_enc))
 	{

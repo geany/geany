@@ -70,6 +70,7 @@ static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_symbol_auto_completion_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
 
 void prefs_init_dialog(void)
@@ -231,9 +232,22 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "spin_tab_width");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.tab_width);
 
-	widget = lookup_widget(app->prefs_dialog, "combo_encoding");
+	widget = lookup_widget(app->prefs_dialog, "combo_new_encoding");
 	// luckily the index of the combo box items match the index of the encodings array
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.default_encoding);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.default_new_encoding);
+
+	widget = lookup_widget(app->prefs_dialog, "check_open_encoding");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+			(editor_prefs.default_open_encoding >= 0) ? TRUE : FALSE);
+	on_open_encoding_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
+
+	widget = lookup_widget(app->prefs_dialog, "combo_open_encoding");
+	if (editor_prefs.default_open_encoding >= 0)
+	{
+		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.default_open_encoding);
+	}
+	else
+		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), GEANY_ENCODING_UTF_8);
 
 	widget = lookup_widget(app->prefs_dialog, "check_trailing_spaces");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.trail_space);
@@ -561,8 +575,17 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "spin_tab_width");
 		editor_prefs.tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-		widget = lookup_widget(app->prefs_dialog, "combo_encoding");
-		editor_prefs.default_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+		widget = lookup_widget(app->prefs_dialog, "combo_new_encoding");
+		editor_prefs.default_new_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_open_encoding");
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+		{
+			widget = lookup_widget(app->prefs_dialog, "combo_open_encoding");
+			editor_prefs.default_open_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+		}
+		else
+			editor_prefs.default_open_encoding = -1;
 
 		widget = lookup_widget(app->prefs_dialog, "check_trailing_spaces");
 		editor_prefs.trail_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1018,11 +1041,20 @@ static void on_symbol_auto_completion_toggled(GtkToggleButton *togglebutton, gpo
 }
 
 
+static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gboolean sens = gtk_toggle_button_get_active(togglebutton);
+
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "eventbox3"), sens);
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "label_open_encoding"), sens);
+}
+
+
 void prefs_show_dialog(void)
 {
 	if (app->prefs_dialog == NULL)
 	{
-		GtkWidget *combo;
+		GtkWidget *combo_new, *combo_open;
 		guint i;
 		gchar *encoding_string;
 
@@ -1031,12 +1063,15 @@ void prefs_show_dialog(void)
 		gtk_window_set_transient_for(GTK_WINDOW(app->prefs_dialog), GTK_WINDOW(app->window));
 
 		// init the default file encoding combo box
-		combo = lookup_widget(app->prefs_dialog, "combo_encoding");
-		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
+		combo_new = lookup_widget(app->prefs_dialog, "combo_new_encoding");
+		combo_open = lookup_widget(app->prefs_dialog, "combo_open_encoding");
+		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_new), 3);
+		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo_open), 3);
 		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 		{
 			encoding_string = encodings_to_string(&encodings[i]);
-			gtk_combo_box_append_text(GTK_COMBO_BOX(combo), encoding_string);
+			gtk_combo_box_append_text(GTK_COMBO_BOX(combo_new), encoding_string);
+			gtk_combo_box_append_text(GTK_COMBO_BOX(combo_open), encoding_string);
 			g_free(encoding_string);
 		}
 
@@ -1080,6 +1115,8 @@ void prefs_show_dialog(void)
 				"toggled", G_CALLBACK(on_use_folding_toggled), NULL);
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_symbol_auto_completion"),
 				"toggled", G_CALLBACK(on_symbol_auto_completion_toggled), NULL);
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_open_encoding"),
+				"toggled", G_CALLBACK(on_open_encoding_toggled), NULL);
 	}
 
 	prefs_init_dialog();

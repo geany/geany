@@ -2535,12 +2535,16 @@ create_prefs_dialog (void)
   GtkWidget *alignment7;
   GtkWidget *vbox8;
   GtkWidget *table5;
-  GtkWidget *label116;
   GtkWidget *eventbox1;
-  GtkWidget *combo_encoding;
+  GtkWidget *combo_new_encoding;
+  GtkWidget *label153;
+  GtkWidget *label116;
   GtkObject *spin_tab_width_adj;
   GtkWidget *spin_tab_width;
-  GtkWidget *label153;
+  GtkWidget *label_open_encoding;
+  GtkWidget *check_open_encoding;
+  GtkWidget *eventbox3;
+  GtkWidget *combo_open_encoding;
   GtkWidget *label109;
   GtkWidget *frame2;
   GtkWidget *alignment3;
@@ -3301,18 +3305,11 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox8);
   gtk_container_add (GTK_CONTAINER (alignment7), vbox8);
 
-  table5 = gtk_table_new (2, 2, FALSE);
+  table5 = gtk_table_new (4, 2, FALSE);
   gtk_widget_show (table5);
   gtk_box_pack_start (GTK_BOX (vbox8), table5, FALSE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table5), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table5), 25);
-
-  label116 = gtk_label_new (_("Tab Width:"));
-  gtk_widget_show (label116);
-  gtk_table_attach (GTK_TABLE (table5), label116, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label116), 0, 0.5);
 
   eventbox1 = gtk_event_box_new ();
   gtk_widget_show (eventbox1);
@@ -3321,26 +3318,60 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   gtk_tooltips_set_tip (tooltips, eventbox1, _("Sets the default encoding for newly created files."), NULL);
 
-  combo_encoding = gtk_combo_box_new_text ();
-  gtk_widget_show (combo_encoding);
-  gtk_container_add (GTK_CONTAINER (eventbox1), combo_encoding);
+  combo_new_encoding = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_new_encoding);
+  gtk_container_add (GTK_CONTAINER (eventbox1), combo_new_encoding);
+
+  label153 = gtk_label_new (_("Default encoding (new files):"));
+  gtk_widget_show (label153);
+  gtk_table_attach (GTK_TABLE (table5), label153, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label153), 0, 0.5);
+
+  label116 = gtk_label_new (_("Tab Width:"));
+  gtk_widget_show (label116);
+  gtk_table_attach (GTK_TABLE (table5), label116, 0, 1, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label116), 0, 0.5);
 
   spin_tab_width_adj = gtk_adjustment_new (-1, 1, 99, 1, 10, 10);
   spin_tab_width = gtk_spin_button_new (GTK_ADJUSTMENT (spin_tab_width_adj), 1, 0);
   gtk_widget_show (spin_tab_width);
-  gtk_table_attach (GTK_TABLE (table5), spin_tab_width, 1, 2, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
+  gtk_table_attach (GTK_TABLE (table5), spin_tab_width, 1, 2, 3, 4,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, spin_tab_width, _("The width in chars, which one tab character will take"), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
   gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_tab_width), GTK_UPDATE_IF_VALID);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
 
-  label153 = gtk_label_new (_("Default encoding:"));
-  gtk_widget_show (label153);
-  gtk_table_attach (GTK_TABLE (table5), label153, 0, 1, 0, 1,
+  label_open_encoding = gtk_label_new (_("Default encoding (existing files):"));
+  gtk_widget_show (label_open_encoding);
+  gtk_table_attach (GTK_TABLE (table5), label_open_encoding, 0, 1, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label_open_encoding), 0, 0.5);
+
+  check_open_encoding = gtk_check_button_new_with_mnemonic (_("Use fixed encoding when opening files"));
+  gtk_widget_show (check_open_encoding);
+  gtk_table_attach (GTK_TABLE (table5), check_open_encoding, 0, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_open_encoding, _("This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_open_encoding), FALSE);
+
+  eventbox3 = gtk_event_box_new ();
+  gtk_widget_show (eventbox3);
+  gtk_table_attach (GTK_TABLE (table5), eventbox3, 1, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+  gtk_tooltips_set_tip (tooltips, eventbox3, _("Sets the default encoding for opening existing files."), NULL);
+
+  combo_open_encoding = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_open_encoding);
+  gtk_container_add (GTK_CONTAINER (eventbox3), combo_open_encoding);
 
   label109 = gtk_label_new (_("<b>New files</b>"));
   gtk_widget_show (label109);
@@ -4169,11 +4200,15 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment7, "alignment7");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox8, "vbox8");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table5, "table5");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label116, "label116");
   GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox1, "eventbox1");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_encoding, "combo_encoding");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_tab_width, "spin_tab_width");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_new_encoding, "combo_new_encoding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label153, "label153");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label116, "label116");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_tab_width, "spin_tab_width");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label_open_encoding, "label_open_encoding");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_open_encoding, "check_open_encoding");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox3, "eventbox3");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_open_encoding, "combo_open_encoding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label109, "label109");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame2, "frame2");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment3, "alignment3");
