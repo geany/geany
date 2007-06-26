@@ -21,7 +21,7 @@ plugin_LTLIBRARIES = \
 
 demoplugin_la_SOURCES    = demoplugin.c
 
-demoplugin_la_LIBADD    = $(PACKAGE_LIBS)
+demoplugin_la_LIBADD    = $(GTK_LIBS)
 
 endif # PLUGINS
 
@@ -30,7 +30,7 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/src \
 	-I$(top_srcdir)/tagmanager/include \
 	-I$(top_srcdir)/scintilla/include \
-	$(PACKAGE_CFLAGS) \
+	$(GTK_CFLAGS) \
 	$(PLUGIN_CFLAGS)
 
 #

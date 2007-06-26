@@ -43,14 +43,14 @@ if MINGW
 WINDRES = /usr/local/cross-tools/bin/i386-mingw32msvc-windres
 
 geany_SOURCES = $(SRCS) win32.c win32.h
-geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a -lstdc++ @PACKAGE_LIBS@ \
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a -lstdc++ @GTK_LIBS@ \
 			$(INTLLIBS) -lgdi32 -limm32 -lshell32 -lole32 -luuid -liberty -lcomdlg32 -lcomctl32 \
 			geany_private.res
 AM_CFLAGS = -Wall -pipe -mms-bitfields
 geany_LDFLAGS =	-mwindows
 
 INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include -DENABLE_NLS \
-           -I/usr/local/cross-tools/include @PACKAGE_CFLAGS@
+           -I/usr/local/cross-tools/include @GTK_CFLAGS@
 
 geany_windres.res:
 	$(WINDRES) -i ../geany_private.rc --input-format=rc -o geany_private.res -O coff;
@@ -62,11 +62,11 @@ else
 # build Geany for all other platforms
 AM_CFLAGS = -Wall -pipe
 geany_SOURCES = $(SRCS) vte.c vte.h
-geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @PACKAGE_LIBS@ -lstdc++ $(INTLLIBS)
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ -lstdc++ $(INTLLIBS)
 
 INCLUDES = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
-	-I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @PACKAGE_CFLAGS@
+	-I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@
 
 clean-local:
 

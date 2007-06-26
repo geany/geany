@@ -18,6 +18,10 @@
    Add option to set a default encoding when opening files and disable
    auto detection of the file encoding.
  * geany.nsi: Change file encoding from ISO-8859-1 to UTF-8.
+ * configure.in, plugins/Makefile.am, scintilla/Makefile.am,
+   src/Makefile.am, tagmanager/Makefile.am:
+   Change label of GTK check in configure.in from PACKAGE to GTK
+   (only cosmetic).
 
 
 2007-06-25  Enrico Tröger  <enrico.troeger@uvena.de>
