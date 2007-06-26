@@ -10,7 +10,7 @@
 !define PRODUCT_NAME "Geany"
 !define PRODUCT_VERSION "0.12svn"
 !define PRODUCT_VERSION_ID "0.11.9.0"
-!define PRODUCT_PUBLISHER "Enrico Tröger"
+!define PRODUCT_PUBLISHER "Enrico TrÃ¶ger"
 !define PRODUCT_WEB_SITE "http://geany.uvena.de"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Geany.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -42,7 +42,7 @@ VIProductVersion "${PRODUCT_VERSION_ID}"
 VIAddVersionKey "ProductName" "${PRODUCT_NAME}"
 VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
-VIAddVersionKey "LegalCopyright" "Copyright 2005-2007 by Enrico Tröger"
+VIAddVersionKey "LegalCopyright" "Copyright 2005-2007 by Enrico TrÃ¶ger"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
 
 ;;;;;;;;;;;;;;;;
