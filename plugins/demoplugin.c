@@ -38,12 +38,15 @@ static struct
 local_data;
 
 
-/* This performs runtime checks that try to ensure:
- * 1. Geany ABI data types are compatible with this plugin.
- * 2. Geany sources provide the required API for this plugin. */
-VERSION_CHECK(1)
+/* Check that Geany supports plugin API version 2 or later, and check
+ * for binary compatibility. */
+VERSION_CHECK(2)
+
+/* All plugins must set name and description */
+PLUGIN_INFO(_("Demo"), _("Example plugin."))
 
 
+/* Callback when the menu item is clicked */
 static void
 item_activate(GtkMenuItem *menuitem, gpointer gdata)
 {
@@ -56,28 +59,35 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 		GTK_BUTTONS_OK,
 		_("Hello World!"));
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-		_("(From the %s plugin)"), my_data->name);
+		_("(From the %s plugin)"), info()->name);
 
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 }
 
 
+/* Called by Geany to initialize the plugin */
 void init(PluginData *data)
 {
-	my_data = data;
-	my_data->name = g_strdup("Demo");
+	GtkWidget *demo_item;
 
-	local_data.menu_item = gtk_menu_item_new_with_mnemonic(_("_Demo Plugin"));
-	gtk_widget_show(local_data.menu_item);
-	gtk_container_add(GTK_CONTAINER(my_data->tools_menu), local_data.menu_item);
-	g_signal_connect(G_OBJECT(local_data.menu_item), "activate", G_CALLBACK(item_activate), NULL);
+	my_data = data;	// keep a pointer to the main application fields & functions
+
+	// Add an item to the Tools menu
+	demo_item = gtk_menu_item_new_with_mnemonic(_("_Demo Plugin"));
+	gtk_widget_show(demo_item);
+	gtk_container_add(GTK_CONTAINER(my_data->tools_menu), demo_item);
+	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
+
+	// keep a pointer to the menu item, so we can remove it when the plugin is unloaded
+	local_data.menu_item = demo_item;
 }
 
 
+/* Called by Geany before unloading the plugin.
+ * Here any UI changes should be removed, memory freed and any other finalization done */
 void cleanup()
 {
+	// remove the menu item added in init()
 	gtk_widget_destroy(local_data.menu_item);
-
-	g_free(my_data->name);
 }

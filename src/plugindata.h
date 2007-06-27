@@ -27,14 +27,16 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 1;
+static const gint api_version = 2;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 1;
+static const gint abi_version = 2;
 
-
+/* This performs runtime checks that try to ensure:
+ * 1. Geany ABI data types are compatible with this plugin.
+ * 2. Geany sources provide the required API for this plugin. */
 /* TODO: if possible, the API version should be checked at compile time, not runtime. */
 #define VERSION_CHECK(api_required) \
 	gint version_check(gint abi_ver) \
@@ -47,18 +49,37 @@ static const gint abi_version = 1;
 	}
 
 
-typedef struct PluginData PluginData;
-
-struct PluginData
+typedef struct PluginInfo
 {
 	gchar	*name;			// name of plugin
 	gchar	*description;	// description of plugin
+}
+PluginInfo;
 
+/* Sets the plugin name and a brief description of what it is. */
+#define PLUGIN_INFO(p_name, p_description) \
+	PluginInfo *info() \
+	{ \
+		static PluginInfo p_info; \
+		 \
+		p_info.name = (p_name); \
+		p_info.description = (p_description); \
+		return &p_info; \
+	}
+
+
+/* These are fields and functions owned by Geany.
+ * Fields will be appended when needed by plugin authors.
+ * Note: Remember to increment api_version (and abi_version if necessary) when
+ * making changes. */
+typedef struct PluginData
+{
 	MyApp	*app;	// Geany application data fields
 
 	/*  Almost all plugins should add menu items to the Tools menu only */
 	GtkWidget	*tools_menu;
-};
+}
+PluginData;
 
 
 #endif

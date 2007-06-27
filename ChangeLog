@@ -1,3 +1,12 @@
+2007-06-27  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * plugins/demoplugin.c, src/plugindata.h, src/plugins.c:
+   Move plugin name and description into a separate struct, which is set
+   by calling the PLUGIN_INFO() macro - this can be read before the
+   plugin is initialized.
+   Added more comments for plugin authors.
+
+
 2007-06-26  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * plugins/demoplugin.c, plugins/Makefile.am, configure.in,

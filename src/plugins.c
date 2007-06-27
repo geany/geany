@@ -42,6 +42,7 @@ struct Plugin
 	gchar	*filename;		// plugin filename (/path/libname.so)
 	PluginData data;
 
+	PluginInfo* (*info) ();	/* Returns plugin name, description */
 	void (*init) (PluginData *data);	/* Called when the plugin is enabled */
 	void (*cleanup) ();		/* Called when the plugin is disabled or when Geany exits */
 };
@@ -102,6 +103,7 @@ plugin_new(const gchar *fname)
 {
 	Plugin *plugin;
 	GModule *module;
+	PluginInfo* (*info)();
 
 	g_return_val_if_fail(fname, NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
@@ -129,7 +131,20 @@ plugin_new(const gchar *fname)
 		return NULL;
 	}
 
+	g_module_symbol(module, "info", (void *) &info);
+	if (info == NULL)
+	{
+		geany_debug("Unknown plugin info for \"%s\"!", fname);
+
+		if (! g_module_close(module))
+			g_warning("%s: %s", fname, g_module_error());
+		return NULL;
+	}
+	geany_debug("Initializing plugin '%s' (%s)",
+		info()->name, info()->description);
+
 	plugin = g_new0(Plugin, 1);
+	plugin->info = info;
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
 
@@ -143,7 +158,7 @@ plugin_new(const gchar *fname)
 		plugin->init(&plugin->data);
 
 	geany_debug("Loaded:   %s (%s)", fname,
-		NVL(plugin->data.name, "<Unknown>"));
+		NVL(plugin->info()->name, "<Unknown>"));
 	return plugin;
 }
 
