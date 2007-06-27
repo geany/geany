@@ -4,6 +4,11 @@
    Add palette to Colour Chooser Dialog.
    Fix picking colours starting with '#'.
    Replace existing selection with chosen colour.
+ * src/callbacks.c, src/document.c, src/document.h, src/sciwrappers.c,
+   src/sciwrappers.h, src/win32.c:
+   Change signature of sci_replace_sel() to take a const gchar*.
+   Move code to insert a colour to document.c
+   Let the code also work on Windows (untested).
 
 
 2007-06-27  Nick Treleaven  <nick.treleaven@btinternet.com>

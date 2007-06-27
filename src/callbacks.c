@@ -994,27 +994,7 @@ on_color_ok_button_clicked             (GtkButton       *button,
 			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &color);
 
 	hex = utils_get_hex_from_color(&color);
-	// add the selected colour into the doc, prefer #... format unless there is a selection
-	// starting with 0x...
-	if (sci_can_copy(doc_list[idx].sci))
-	{
-		gint start = sci_get_selection_start(doc_list[idx].sci);
-		gchar *replacement = hex;
-
-		if (sci_get_char_at(doc_list[idx].sci, start) == '0' &&
-			sci_get_char_at(doc_list[idx].sci, start + 1) == 'x')
-		{
-			sci_set_selection_start(doc_list[idx].sci, start + 2);
-			replacement++; // skip the leading '#'
-		}
-		else if (sci_get_char_at(doc_list[idx].sci, start - 1) == '#')
-		{	// double clicking something like #00ffff may only select 00ffff because of wordchars
-			replacement++; // so skip the '#' to only replace the colour value
-		}
-		sci_replace_sel(doc_list[idx].sci, replacement);
-	}
-	else
-		sci_add_text(doc_list[idx].sci, hex);
+	document_insert_colour(idx, hex);
 	g_free(hex);
 }
 

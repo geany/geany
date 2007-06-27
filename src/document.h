@@ -246,4 +246,6 @@ void document_delay_colourise();
 
 void document_colourise_new();
 
+void document_insert_colour(gint idx, const gchar *colour);
+
 #endif

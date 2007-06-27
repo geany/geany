@@ -2245,3 +2245,29 @@ void document_colourise_new()
 }
 
 
+/* Inserts the given colour (format should be #...), if there is a selection starting with 0x...
+ * the replacement starts also with 0x... */
+void document_insert_colour(gint idx, const gchar *colour)
+{
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	if (sci_can_copy(doc_list[idx].sci))
+	{
+		gint start = sci_get_selection_start(doc_list[idx].sci);
+		const gchar *replacement = colour;
+
+		if (sci_get_char_at(doc_list[idx].sci, start) == '0' &&
+			sci_get_char_at(doc_list[idx].sci, start + 1) == 'x')
+		{
+			sci_set_selection_start(doc_list[idx].sci, start + 2);
+			replacement++; // skip the leading '#'
+		}
+		else if (sci_get_char_at(doc_list[idx].sci, start - 1) == '#')
+		{	// double clicking something like #00ffff may only select 00ffff because of wordchars
+			replacement++; // so skip the '#' to only replace the colour value
+		}
+		sci_replace_sel(doc_list[idx].sci, replacement);
+	}
+	else
+		sci_add_text(doc_list[idx].sci, colour);
+}

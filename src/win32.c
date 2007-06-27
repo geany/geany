@@ -397,7 +397,7 @@ void win32_show_color_dialog(const gchar *colour)
 	      (guint) (utils_scale_round(GetGValue(rgb_current), 255)),
 	      (guint) (utils_scale_round(GetBValue(rgb_current), 255)));
 
-		sci_add_text(doc_list[idx].sci, hex);
+		document_insert_colour(idx, hex);
 	}
 	g_free(hex);
 }

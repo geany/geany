@@ -466,7 +466,7 @@ gint sci_get_selection_end(ScintillaObject* sci)
 }
 
 
-void sci_replace_sel(ScintillaObject* sci, gchar* text)
+void sci_replace_sel(ScintillaObject* sci, const gchar* text)
 {
 	SSM(sci, SCI_REPLACESEL,0, (sptr_t) text);
 }

@@ -79,7 +79,7 @@ void 				sci_clear					(ScintillaObject* sci);
 
 gint				sci_get_selection_start		(ScintillaObject* sci);
 gint				sci_get_selection_end		(ScintillaObject* sci);
-void 				sci_replace_sel				(ScintillaObject* sci, gchar* text);
+void 				sci_replace_sel				(ScintillaObject* sci, const gchar* text);
 gint				sci_get_selection_mode		(ScintillaObject* sci);
 void				sci_set_selection_mode		(ScintillaObject* sci, gint mode);
 gint				sci_get_pos_at_line_sel_start(ScintillaObject*sci, gint line);
