@@ -3,6 +3,7 @@
  * src/callbacks.c, src/dialogs.c:
    Add palette to Colour Chooser Dialog.
    Fix picking colours starting with '#'.
+   Replace existing selection with chosen colour.
 
 
 2007-06-27  Nick Treleaven  <nick.treleaven@btinternet.com>
