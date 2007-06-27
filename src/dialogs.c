@@ -595,6 +595,8 @@ void dialogs_show_color(gchar *colour)
 		app->open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
 		gtk_widget_set_name(app->open_colorsel, "GeanyDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(app->open_colorsel), GTK_WINDOW(app->window));
+		gtk_color_selection_set_has_palette(
+			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), TRUE);
 
 		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->cancel_button, "clicked",
 						G_CALLBACK(on_color_cancel_button_clicked), NULL);

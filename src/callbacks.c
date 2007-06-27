@@ -1292,7 +1292,7 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 	if (idx == -1 || ! doc_list[idx].is_valid)
 		return;
 
-	editor_find_current_word(doc_list[idx].sci, pos, colour, sizeof colour, NULL);
+	editor_find_current_word(doc_list[idx].sci, pos, colour, sizeof colour, GEANY_WORDCHARS"#");
 	dialogs_show_color(colour);
 }
 
