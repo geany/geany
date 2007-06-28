@@ -863,9 +863,9 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 					gint count = search_mark(idx, search_data.text, search_data.flags);
 
 					if (count == 0)
-						ui_set_statusbar(_("No matches found for '%s'."), search_data.text);
+						ui_set_statusbar(_("No matches found for \"%s\"."), search_data.text);
 					else
-						ui_set_statusbar(_("Found %d matches for '%s'."), count,
+						ui_set_statusbar(_("Found %d matches for \"%s\"."), count,
 							search_data.text);
 				}
 				break;
@@ -1297,35 +1297,38 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 static gint find_document_usage(gint idx, const gchar *search_text, gint flags)
 {
 	gchar *buffer, *short_file_name;
-	gint pos, line, count = 0;
 	struct TextToFind ttf;
+	gint count = 0;
 
 	g_return_val_if_fail(DOC_IDX_VALID(idx), 0);
+
+	short_file_name = g_path_get_basename(DOC_FILENAME(idx));
 
 	ttf.chrg.cpMin = 0;
 	ttf.chrg.cpMax = sci_get_length(doc_list[idx].sci);
 	ttf.lpstrText = (gchar *)search_text;
 	while (1)
 	{
-		pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
-		if (pos == -1) break;
+		gint pos, line, start, find_len;
 
+		pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
+		if (pos == -1)
+			break;	// no more matches
+		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
+		if (find_len == 0)
+			break;	// Ignore regex ^ or $
+
+		count++;
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
 		buffer = sci_get_line(doc_list[idx].sci, line);
-
-		if (doc_list[idx].file_name == NULL)
-			short_file_name = g_strdup(GEANY_STRING_UNTITLED);
-		else
-			short_file_name = g_path_get_basename(doc_list[idx].file_name);
-
 		msgwin_msg_add_fmt(line + 1, idx,
 			"%s:%d : %s", short_file_name, line + 1, g_strstrip(buffer));
-
 		g_free(buffer);
-		g_free(short_file_name);
-		ttf.chrg.cpMin = ttf.chrgText.cpMax + 1;
-		count++;
+
+		start = ttf.chrgText.cpMax + 1;
+		ttf.chrg.cpMin = start;
 	}
+	g_free(short_file_name);
 	return count;
 }
 
@@ -1357,15 +1360,15 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 
 	if (! found) // no matches were found
 	{
-		ui_set_statusbar(_("No matches found for '%s'."), search_text);
-		msgwin_msg_add_fmt(-1, -1, _("No matches found for '%s'."), search_text);
+		ui_set_statusbar(_("No matches found for \"%s\"."), search_text);
+		msgwin_msg_add_fmt(-1, -1, _("No matches found for \"%s\"."), search_text);
 	}
 	else
 	{
 		gint count = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_msg), NULL);
 
-		ui_set_statusbar(_("Found %d matches for '%s'."), count, search_text);
-		msgwin_msg_add_fmt(-1, -1, _("Found %d matches for '%s'."), count, search_text);
+		ui_set_statusbar(_("Found %d matches for \"%s\"."), count, search_text);
+		msgwin_msg_add_fmt(-1, -1, _("Found %d matches for \"%s\"."), count, search_text);
 	}
 }
 

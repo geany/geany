@@ -1274,7 +1274,7 @@ static void show_replace_summary(gint idx, gint count, const gchar *find_text,
 
 	if (count == 0)
 	{
-		ui_set_statusbar("%s", _("No matches found."));
+		ui_set_statusbar(_("No matches found for \"%s\"."), find_text);
 		return;
 	}
 
@@ -1327,21 +1327,30 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 	{
 		search_pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
-		if (search_pos == -1 || find_len == 0)
-			break;
+		if (search_pos == -1)
+			break;	// no more matches
+		if (find_len == 0 && ! NZV(replace_text))
+			break;	// nothing to do
 
 		if (search_pos + find_len > end)
-			break; //found text is partly out of range
+			break;	// found text is partly out of range
 		else
 		{
 			sci_target_start(doc_list[idx].sci, search_pos);
 			sci_target_end(doc_list[idx].sci, search_pos + find_len);
 			replace_len = sci_target_replace(doc_list[idx].sci, replace_text,
 				flags & SCFIND_REGEXP);
-			ttf.chrg.cpMin = search_pos + replace_len; //next search starts after replacement
-			end += replace_len - find_len; //update end of range now text has changed
-			ttf.chrg.cpMax = end;
 			count++;
+			if (search_pos == end)
+				break;	// Prevent hang when replacing regex $
+
+			// make the next search start after the replaced text
+			start = search_pos + replace_len;
+			if (find_len == 0 && replace_len == 0)
+				start++;	// skip past ^ or $ for regexes (prevents rematching)
+			ttf.chrg.cpMin = start;
+			end += replace_len - find_len;	// update end of range now text has changed
+			ttf.chrg.cpMax = end;
 		}
 	}
 	sci_end_undo_action(doc_list[idx].sci);
