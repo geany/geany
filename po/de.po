@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.12svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-15 17:47+0200\n"
-"PO-Revision-Date: 2007-06-15 17:47+0100\n"
+"POT-Creation-Date: 2007-06-29 11:02+0200\n"
+"PO-Revision-Date: 2007-06-29 11:06+0100\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -74,30 +74,30 @@ msgstr "Lizenz"
 msgid "Failed to view %s (make sure it is already compiled)"
 msgstr "Konnte %s nicht anzeigen (die Datei muss bereits erzeugt worden sein)"
 
-#: src/build.c:191 src/build.c:728
+#: src/build.c:191
+#: src/build.c:728
 #, c-format
-msgid ""
-"Could not find terminal '%s' (check path for Terminal tool setting in "
-"Preferences)"
-msgstr ""
-"Konnte das Terminalprogramm '%s' nicht finden (Pfad zum Terminalprogramm in "
-"den Einstellungen überprüfen)"
+msgid "Could not find terminal '%s' (check path for Terminal tool setting in Preferences)"
+msgstr "Konnte das Terminalprogramm '%s' nicht finden (Pfad zum Terminalprogramm in den Einstellungen überprüfen)"
 
-#: src/build.c:203 src/build.c:653
+#: src/build.c:203
+#: src/build.c:653
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Konnte %s nicht ausführen (Start-Script konnte nicht erzeugt werden)"
 
-#: src/build.c:231 src/build.c:496 src/build.c:753 src/search.c:1177
+#: src/build.c:231
+#: src/build.c:496
+#: src/build.c:753
+#: src/search.c:1177
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prozess fehlgeschlagen (%s)"
 
-#: src/build.c:348 src/build.c:562
+#: src/build.c:348
+#: src/build.c:562
 msgid "Command stopped because the current file has no extension."
-msgstr ""
-"Die Ausführung des Kommandos wurde unterbrochen, da die Datei keine "
-"Dateiendung besitzt."
+msgstr "Die Ausführung des Kommandos wurde unterbrochen, da die Datei keine Dateiendung besitzt."
 
 #: src/build.c:372
 #, c-format
@@ -137,7 +137,8 @@ msgid "Compiles the current file"
 msgstr "Kompiliert die aktuelle Datei"
 
 #. build the code
-#: src/build.c:1001 src/interface.c:934
+#: src/build.c:1001
+#: src/interface.c:934
 msgid "_Build"
 msgstr "_Erstellen"
 
@@ -146,20 +147,24 @@ msgid "Builds the current file (generate an executable file)"
 msgstr "Erstellt die aktuelle Datei (erzeugt eine ausführbare Datei)"
 
 #. build the code with make all
-#: src/build.c:1015 src/build.c:1137
+#: src/build.c:1015
+#: src/build.c:1137
 msgid "_Make All"
 msgstr "_Make all"
 
-#: src/build.c:1018 src/build.c:1140
+#: src/build.c:1018
+#: src/build.c:1140
 msgid "Builds the current file with the make tool and the default target"
 msgstr "Erstellt die aktuelle Datei mit \"make\" und dem Default-Target"
 
 #. build the code with make custom
-#: src/build.c:1026 src/build.c:1148
+#: src/build.c:1026
+#: src/build.c:1148
 msgid "Make Custom _Target"
 msgstr "Make (eigenes _Target)"
 
-#: src/build.c:1030 src/build.c:1152
+#: src/build.c:1030
+#: src/build.c:1152
 msgid "Builds the current file with the make tool and the specified target"
 msgstr "Erstellt die aktuelle Datei mit \"make\" und dem angegebenem Target"
 
@@ -173,11 +178,13 @@ msgid "Compiles the current file using the make tool"
 msgstr "Kompiliert die aktuelle Datei mittels make "
 
 #. next error
-#: src/build.c:1052 src/build.c:1163
+#: src/build.c:1052
+#: src/build.c:1163
 msgid "_Next Error"
 msgstr "Nächster _Fehler"
 
-#: src/build.c:1068 src/interface.c:1097
+#: src/build.c:1068
+#: src/interface.c:1097
 msgid "Run or view the current file"
 msgstr "Aktuelle Datei anzeigen oder ausführen"
 
@@ -187,11 +194,8 @@ msgid "_Set Includes and Arguments"
 msgstr "_Programm-Parameter angeben"
 
 #: src/build.c:1084
-msgid ""
-"Sets the includes and library paths for the compiler and the program "
-"arguments for execution"
-msgstr ""
-"Include-Dateien und Bibliotheken-Pfade sowie Programmparameter festlegen"
+msgid "Sets the includes and library paths for the compiler and the program arguments for execution"
+msgstr "Include-Dateien und Bibliotheken-Pfade sowie Programmparameter festlegen"
 
 #. DVI
 #: src/build.c:1107
@@ -216,7 +220,8 @@ msgstr "Kompiliert die aktuelle Datei als PDF-Datei."
 msgid "View DVI File"
 msgstr "DVI-Datei anzeigen"
 
-#: src/build.c:1181 src/build.c:1194
+#: src/build.c:1181
+#: src/build.c:1194
 msgid "Compile and view the current file"
 msgstr "Kompiliert und zeigt die aktuelle Datei an"
 
@@ -226,7 +231,8 @@ msgid "View PDF File"
 msgstr "PDF-Datei anzeigen"
 
 #. arguments
-#: src/build.c:1209 src/build.c:1288
+#: src/build.c:1209
+#: src/build.c:1288
 msgid "Set Arguments"
 msgstr "Programm-Parameter angeben"
 
@@ -237,10 +243,8 @@ msgstr "Programm-Parameter angeben"
 #: src/build.c:1295
 msgid "Set programs and options for compiling and viewing (La)TeX files."
 msgstr ""
-"Setzt Programme und deren Optionen zum Kompilieren bzw. Betrachten von (La)"
-"TeX-Dateien.\n"
-"Der jeweilige Dateiname wird bei einem Aufruf automatisch an das Ende "
-"angefügt."
+"Setzt Programme und deren Optionen zum Kompilieren bzw. Betrachten von (La)TeX-Dateien.\n"
+"Der jeweilige Dateiname wird bei einem Aufruf automatisch an das Ende angefügt."
 
 #: src/build.c:1306
 msgid "DVI creation:"
@@ -258,16 +262,15 @@ msgstr "DVI-Vorschau:"
 msgid "PDF preview:"
 msgstr "PDF-Vorschau:"
 
-#: src/build.c:1379 src/build.c:1550
+#: src/build.c:1379
+#: src/build.c:1550
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
 "%e will be replaced by the filename without extension, e.g. test_file"
 msgstr ""
-"%f wird durch den aktuellen Dateinamen ersetzt. Zum Beispiel: meine_Datei."
-"c \n"
-"%e wird durch den Dateinamen ohne Dateiendung ersetzt. Zum Beispiel "
-"meine_Datei "
+"%f wird durch den aktuellen Dateinamen ersetzt. Zum Beispiel: meine_Datei.c \n"
+"%e wird durch den Dateinamen ohne Dateiendung ersetzt. Zum Beispiel meine_Datei "
 
 #: src/build.c:1457
 msgid "Set Includes and Arguments"
@@ -289,33 +292,33 @@ msgstr "Kompilieren:"
 msgid "Build:"
 msgstr "Erstellen:"
 
-#: src/build.c:1528 src/dialogs.c:931
+#: src/build.c:1528
+#: src/dialogs.c:933
 msgid "Execute:"
 msgstr "Ausführen:"
 
-#: src/build.c:1836
+#: src/build.c:1837
 msgid "Make Custom Target"
 msgstr "Make (eigenes Target)"
 
-#: src/build.c:1837
-msgid ""
-"Enter custom options here, all entered text is passed to the make command."
+#: src/build.c:1838
+msgid "Enter custom options here, all entered text is passed to the make command."
 msgstr "Alles was Sie hier angeben, wird direkt an \"make\" übergeben."
 
-#: src/build.c:1876
+#: src/build.c:1877
 msgid "Failed to execute the view program"
 msgstr "Konnte das Anzeigeprogramm nicht ausführen."
 
-#: src/build.c:1895
+#: src/build.c:1896
 msgid "Failed to execute the terminal program"
 msgstr "Konnte das Terminal-Programm nicht ausführen."
 
-#: src/build.c:1943
+#: src/build.c:1944
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Der Prozess konnte nicht angehalten werden (%s)."
 
-#: src/build.c:1963
+#: src/build.c:1964
 msgid "No more build errors."
 msgstr "Keine weiteren Fehlermeldungen."
 
@@ -323,7 +326,9 @@ msgstr "Keine weiteren Fehlermeldungen."
 msgid "Do you really want to quit?"
 msgstr "Möchten Sie wirklich beenden?"
 
-#: src/callbacks.c:490 src/interface.c:352 src/utils.c:353
+#: src/callbacks.c:490
+#: src/interface.c:352
+#: src/utils.c:353
 msgid "_Reload"
 msgstr "_Neu laden"
 
@@ -341,88 +346,86 @@ msgstr "Wollen Sie %s wirklich neu laden?"
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Die Datei '%s' existiert bereits. Möchten Sie sie überschreiben?"
 
-#: src/callbacks.c:1269
+#: src/callbacks.c:1270
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "(Vorwärts-)Deklaration von \"%s\" nicht gefunden."
 
-#: src/callbacks.c:1271
+#: src/callbacks.c:1272
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definition von \"%s\" nicht gefunden."
 
-#: src/callbacks.c:1498 src/callbacks.c:1522
-msgid ""
-"Please set the filetype for the current file before using this function."
+#: src/callbacks.c:1499
+#: src/callbacks.c:1523
+msgid "Please set the filetype for the current file before using this function."
 msgstr "Bitte legen Sie den Dateityp fest, bevor Sie diese Funktion benutzen."
 
-#: src/callbacks.c:1633 src/ui_utils.c:442
+#: src/callbacks.c:1634
+#: src/ui_utils.c:442
 msgid "dd.mm.yyyy"
 msgstr "TT.MM.JJ"
 
-#: src/callbacks.c:1635 src/ui_utils.c:443
+#: src/callbacks.c:1636
+#: src/ui_utils.c:443
 msgid "mm.dd.yyyy"
 msgstr "MM.TT.JJ"
 
-#: src/callbacks.c:1637 src/ui_utils.c:444
+#: src/callbacks.c:1638
+#: src/ui_utils.c:444
 msgid "yyyy/mm/dd"
 msgstr "JJJJ/MM/TT"
 
-#: src/callbacks.c:1639 src/ui_utils.c:453
+#: src/callbacks.c:1640
+#: src/ui_utils.c:453
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "TT.MM.JJJJ Stunden:Minuten:Sekunden"
 
-#: src/callbacks.c:1641 src/ui_utils.c:454
+#: src/callbacks.c:1642
+#: src/ui_utils.c:454
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "MM.TT.JJJJ Stunden:Minuten:Sekunden"
 
-#: src/callbacks.c:1643 src/ui_utils.c:455
+#: src/callbacks.c:1644
+#: src/ui_utils.c:455
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "JJJJ/MM/TT Stunden:Minuten:Sekunden"
 
-#: src/callbacks.c:1645 src/ui_utils.c:464
+#: src/callbacks.c:1646
+#: src/ui_utils.c:464
 msgid "Use Custom Date Format"
 msgstr "Benutze selbst erstelltes Zeitformat"
 
-#: src/callbacks.c:1656
+#: src/callbacks.c:1657
 msgid "Custom Date Format"
 msgstr "Benutzerdefiniertes Datumsformat"
 
-#: src/callbacks.c:1657
-msgid ""
-"Enter here a custom date and time format. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function. See \"man "
-"strftime\" for more information."
-msgstr ""
-"Hier kann ein benutzerdefiniertes Datumsformat eingegeben werden. Dabei "
-"können alle Platzhalter verwendet werden, die auch in ANSI C strftime zum "
-"Einsatz kommen."
+#: src/callbacks.c:1658
+msgid "Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function. See \"man strftime\" for more information."
+msgstr "Hier kann ein benutzerdefiniertes Datumsformat eingegeben werden. Dabei können alle Platzhalter verwendet werden, die auch in ANSI C strftime zum Einsatz kommen."
 
-#: src/callbacks.c:1677
+#: src/callbacks.c:1678
 msgid "Date format string could not be converted (possibly too long)."
-msgstr ""
-"Das Datenformat konnte nicht umgewandelt werden. Eventuell ist es zu lang."
+msgstr "Das Datenformat konnte nicht umgewandelt werden. Eventuell ist es zu lang."
 
-#: src/callbacks.c:1989
+#: src/callbacks.c:1990
 msgid "No more message items."
 msgstr "Keine weiteren Nachrichten."
 
 #. initialize the dialog
-#: src/dialogs.c:81 src/prefs.c:1101
+#: src/dialogs.c:81
+#: src/prefs.c:1138
 msgid "Open File"
 msgstr "Datei öffnen"
 
-#: src/dialogs.c:84 src/interface.c:703
+#: src/dialogs.c:84
+#: src/interface.c:703
 msgid "_View"
 msgstr "_Ansicht"
 
 #: src/dialogs.c:86
-msgid ""
-"Opens the file in read-only mode. If you choose more than one file to open, "
-"all files will be opened read-only."
-msgstr ""
-"Öffnet die Datei schreibgeschützt. Wenn Sie mehrere Dateien wählen, werden "
-"alle schreibgeschützt geöffnet."
+msgid "Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."
+msgstr "Öffnet die Datei schreibgeschützt. Wenn Sie mehrere Dateien wählen, werden alle schreibgeschützt geöffnet."
 
 #: src/dialogs.c:123
 msgid "Detect by file extension"
@@ -443,16 +446,11 @@ msgstr "Zeichenkodierung festlegen:"
 
 #: src/dialogs.c:210
 msgid ""
-"Explicitly defines an encoding for the file, if it would not be detected. "
-"This is useful when you know that the encoding of a file cannot be detected "
-"correctly by Geany.\n"
-"Note if you choose multiple files, they will all be opened with the chosen "
-"encoding."
+"Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen encoding."
 msgstr ""
-"Definiert explizit eine bestimmte Zeichenkodierung, wenn sie nicht "
-"automatisch erkannt werden kann.\n"
-"Beachten Sie, wenn Sie mehrere Dateien auswählen, werden alle mit der "
-"gewählten Zeichenkodierung geöffnet."
+"Definiert explizit eine bestimmte Zeichenkodierung, wenn sie nicht automatisch erkannt werden kann.\n"
+"Beachten Sie, wenn Sie mehrere Dateien auswählen, werden alle mit der gewählten Zeichenkodierung geöffnet."
 
 #: src/dialogs.c:230
 msgid "Set filetype:"
@@ -460,15 +458,11 @@ msgstr "Dateityp festlegen:"
 
 #: src/dialogs.c:240
 msgid ""
-"Explicitly defines a filetype for the file, if it would not be detected by "
-"filename extension.\n"
-"Note if you choose multiple files, they will all be opened with the chosen "
-"filetype."
+"Explicitly defines a filetype for the file, if it would not be detected by filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen filetype."
 msgstr ""
-"Definiert explizit einen bestimmten Dateityp, wenn er nicht durch die "
-"Dateiendung erkannt wird.\n"
-"Beachten Sie, wenn Sie mehrere Dateien auswählen, werden alle mit dem "
-"gewählten Dateityp geöffnet."
+"Definiert explizit einen bestimmten Dateityp, wenn er nicht durch die Dateiendung erkannt wird.\n"
+"Beachten Sie, wenn Sie mehrere Dateien auswählen, werden alle mit dem gewählten Dateityp geöffnet."
 
 #: src/dialogs.c:281
 msgid "Save File"
@@ -519,105 +513,113 @@ msgstr "Wörter: "
 msgid "Characters:"
 msgstr "Buchstaben:"
 
-#: src/dialogs.c:595 src/interface.c:3549 src/vte.c:592 src/vte.c:599
+#: src/dialogs.c:595
+#: src/interface.c:3580
+#: src/vte.c:592
+#: src/vte.c:599
 msgid "Color Chooser"
 msgstr "Farbwähler"
 
-#: src/dialogs.c:664 src/keybindings.c:173
+#: src/dialogs.c:666
+#: src/keybindings.c:173
 msgid "Go to line"
 msgstr "Gehe zu Zeile"
 
-#: src/dialogs.c:671
+#: src/dialogs.c:673
 msgid "Enter the line you want to go to:"
 msgstr "Geben Sie die Zeile an, zu der Sie springen möchten:"
 
-#: src/dialogs.c:718
-msgid ""
-"An error occurred or file information could not be retrieved (e.g. from a "
-"new file)."
-msgstr ""
-"Es ist ein Fehler aufgetreten oder Datei-Informationen konnten nicht gelesen "
-"werden(z.B. bei einer neuen, ungespeicherten Datei)."
+#: src/dialogs.c:720
+msgid "An error occurred or file information could not be retrieved (e.g. from a new file)."
+msgstr "Es ist ein Fehler aufgetreten oder Datei-Informationen konnten nicht gelesen werden(z.B. bei einer neuen, ungespeicherten Datei)."
 
-#: src/dialogs.c:742 src/dialogs.c:743 src/dialogs.c:744 src/dialogs.c:750
-#: src/dialogs.c:751 src/dialogs.c:752 src/ui_utils.c:135 src/utils.c:515
-#: src/utils.c:536 src/utils.c:589
+#: src/dialogs.c:744
+#: src/dialogs.c:745
+#: src/dialogs.c:746
+#: src/dialogs.c:752
+#: src/dialogs.c:753
+#: src/dialogs.c:754
+#: src/ui_utils.c:135
+#: src/utils.c:515
+#: src/utils.c:536
+#: src/utils.c:589
 msgid "unknown"
 msgstr "unbekannt"
 
-#: src/dialogs.c:756
+#: src/dialogs.c:758
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: src/dialogs.c:785
+#: src/dialogs.c:787
 msgid "<b>Type:</b>"
 msgstr "<b>Dateityp:</b>"
 
-#: src/dialogs.c:798
+#: src/dialogs.c:800
 msgid "<b>Size:</b>"
 msgstr "<b>Größe:</b>"
 
-#: src/dialogs.c:813
+#: src/dialogs.c:815
 msgid "<b>Location:</b>"
 msgstr "<b>Ort:</b>"
 
-#: src/dialogs.c:826
+#: src/dialogs.c:828
 msgid "<b>Read-only:</b>"
 msgstr "<b>Schreibgeschützt:</b>"
 
-#: src/dialogs.c:833
+#: src/dialogs.c:835
 msgid "(only inside Geany)"
 msgstr "(nur innerhalb von Geany)"
 
-#: src/dialogs.c:842
+#: src/dialogs.c:844
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kodierung:</b>"
 
-#: src/dialogs.c:852 src/ui_utils.c:137
+#: src/dialogs.c:854
+#: src/ui_utils.c:137
 msgid "(with BOM)"
 msgstr "(mit BOM)"
 
-#: src/dialogs.c:852
+#: src/dialogs.c:854
 msgid "(without BOM)"
 msgstr "(ohne BOM)"
 
-#: src/dialogs.c:862
+#: src/dialogs.c:864
 msgid "<b>Modified:</b>"
 msgstr "<b>Modifiziert:</b>"
 
-#: src/dialogs.c:875
+#: src/dialogs.c:877
 msgid "<b>Changed:</b>"
 msgstr "<b>Geändert:</b>"
 
-#: src/dialogs.c:888
+#: src/dialogs.c:890
 msgid "<b>Accessed:</b>"
 msgstr "<b>Zugriff:</b>"
 
-#: src/dialogs.c:909
+#: src/dialogs.c:911
 msgid "<b>Permissions:</b>"
 msgstr "<b>Berechtigungen:</b>"
 
 #. Header
-#: src/dialogs.c:917
+#: src/dialogs.c:919
 msgid "Read:"
 msgstr "Lesen:"
 
-#: src/dialogs.c:924
+#: src/dialogs.c:926
 msgid "Write:"
 msgstr "Schreiben:"
 
 #. Owner
-#: src/dialogs.c:939
+#: src/dialogs.c:941
 msgid "Owner:"
 msgstr "Eigentümer:"
 
 #. Group
-#: src/dialogs.c:975
+#: src/dialogs.c:977
 msgid "Group:"
 msgstr "Gruppe:"
 
 #. Other
-#: src/dialogs.c:1011
+#: src/dialogs.c:1013
 msgid "Other:"
 msgstr "Andere:"
 
@@ -631,7 +633,8 @@ msgstr "Datei %s wurde geschlossen."
 msgid "New file \"%s\" opened."
 msgstr "Neue Datei \"%s\" geöffnet."
 
-#: src/document.c:629 src/document.c:948
+#: src/document.c:629
+#: src/document.c:952
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Konnte Datei '%s' nicht öffnen(%s)."
@@ -639,13 +642,10 @@ msgstr "Konnte Datei '%s' nicht öffnen(%s)."
 #: src/document.c:656
 #, c-format
 msgid ""
-"The file \"%s\" could not be opened properly and has been truncated. This "
-"can occur if the file contains a NULL byte. Be aware that saving it can "
-"cause data loss.\n"
+"The file \"%s\" could not be opened properly and has been truncated. This can occur if the file contains a NULL byte. Be aware that saving it can cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"Die Datei »%s« konnte nicht ordnungsgemäß geladen werden und wurde evtl.  "
-"abgeschnitten. Die kann zu Datenverlust beim Speichern führen!\n"
+"Die Datei »%s« konnte nicht ordnungsgemäß geladen werden und wurde evtl.  abgeschnitten. Die kann zu Datenverlust beim Speichern führen!\n"
 "Die Datei wird schreibgeschützt geöffnet."
 
 #: src/document.c:680
@@ -655,87 +655,89 @@ msgstr "Die Datei \"%s\" ist kein gültiges %s."
 
 #: src/document.c:689
 #, c-format
-msgid ""
-"The file \"%s\" does not look like a text file or the file encoding is not "
-"supported."
-msgstr ""
-"Die Datei \"%s\" scheint keine Textdatei zu sein, oder das Format wird nicht "
-"unterstützt."
+msgid "The file \"%s\" does not look like a text file or the file encoding is not supported."
+msgstr "Die Datei \"%s\" scheint keine Textdatei zu sein, oder das Format wird nicht unterstützt."
 
 #: src/document.c:758
 msgid "Invalid filename"
 msgstr "Ungültiger Dateiname"
 
-#: src/document.c:850
+#: src/document.c:854
 #, c-format
 msgid "File %s reloaded."
 msgstr "Datei %s neu geladen."
 
-#: src/document.c:852
+#: src/document.c:856
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Datei %s geöffnet(%d%s)."
 
-#: src/document.c:854
+#: src/document.c:858
 msgid ", read-only"
 msgstr ", schreibgeschützt"
 
-#: src/document.c:976 src/document.c:1059
+#: src/document.c:980
+#: src/document.c:1063
 msgid "Error saving file."
 msgstr "Fehler beim Speichern der Datei."
 
-#: src/document.c:1023
+#: src/document.c:1027
 #, c-format
 msgid ""
-"An error occurred while converting the file from UTF-8 in \"%s\". The file "
-"remains unsaved.\n"
+"An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved.\n"
 "Error message: %s\n"
 msgstr ""
-"Beim Konvertieren der Datei von UTF-8 in \"%s\" ist ein Fehler aufgetreten. "
-"Die Datei bleibt ungespeichert.\n"
+"Beim Konvertieren der Datei von UTF-8 in \"%s\" ist ein Fehler aufgetreten. Die Datei bleibt ungespeichert.\n"
 "Fehlermeldung: %s\n"
 
-#: src/document.c:1047
+#: src/document.c:1051
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Fehler beim Speichern der Datei (%s)."
 
-#: src/document.c:1090
+#: src/document.c:1094
 #, c-format
 msgid "File %s saved."
 msgstr "Datei %s wurde gespeichert."
 
-#: src/document.c:1138 src/document.c:1190 src/document.c:1198
+#: src/document.c:1142
+#: src/document.c:1194
+#: src/document.c:1202
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" wurde nicht gefunden."
 
-#: src/document.c:1198
+#: src/document.c:1202
 msgid "Wrap search and find again?"
 msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
 
-#: src/document.c:1273 src/search.c:1283
-msgid "No matches found."
-msgstr "Keine Treffer gefunden."
+#: src/document.c:1277
+#: src/search.c:866
+#: src/search.c:1363
+#: src/search.c:1364
+#, c-format
+msgid "No matches found for \"%s\"."
+msgstr "Keine Treffer für \"%s\" gefunden."
 
-#: src/document.c:1283 src/document.c:1290
+#: src/document.c:1287
+#: src/document.c:1294
 #, c-format
 msgid "%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."
 msgstr "%s: %d mal wurde \"%s\" mit \"%s\" ersetzt."
 
-#: src/document.c:1667
+#: src/document.c:1680
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: src/document.c:1668
+#: src/document.c:1681
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: src/document.c:1670
+#: src/document.c:1683
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: src/document.c:1772
+#: src/document.c:1785
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -746,12 +748,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/document.c:1787
+#: src/document.c:1800
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Drucken der Datei \"%s\" ist fehlgeschlagen (Rückgabewert: %s)."
 
-#: src/document.c:1793
+#: src/document.c:1806
 #, c-format
 msgid "File %s printed."
 msgstr "Datei %s wurde gedruckt."
@@ -760,7 +762,8 @@ msgstr "Datei %s wurde gedruckt."
 msgid "Celtic"
 msgstr "Keltisch"
 
-#: src/encodings.c:56 src/encodings.c:57
+#: src/encodings.c:56
+#: src/encodings.c:57
 msgid "Greek"
 msgstr "Griechisch"
 
@@ -772,19 +775,29 @@ msgstr "Nordisch"
 msgid "South European"
 msgstr "Südeuropäisch"
 
-#: src/encodings.c:60 src/encodings.c:61 src/encodings.c:62 src/encodings.c:63
+#: src/encodings.c:60
+#: src/encodings.c:61
+#: src/encodings.c:62
+#: src/encodings.c:63
 msgid "Western"
 msgstr "Westlich"
 
-#: src/encodings.c:65 src/encodings.c:66 src/encodings.c:67
+#: src/encodings.c:65
+#: src/encodings.c:66
+#: src/encodings.c:67
 msgid "Baltic"
 msgstr "Baltisch"
 
-#: src/encodings.c:68 src/encodings.c:69 src/encodings.c:70
+#: src/encodings.c:68
+#: src/encodings.c:69
+#: src/encodings.c:70
 msgid "Central European"
 msgstr "Mitteleuropäisch"
 
-#: src/encodings.c:71 src/encodings.c:72 src/encodings.c:73 src/encodings.c:74
+#: src/encodings.c:71
+#: src/encodings.c:72
+#: src/encodings.c:73
+#: src/encodings.c:74
 #: src/encodings.c:75
 msgid "Cyrillic"
 msgstr "Kyrillisch"
@@ -801,11 +814,15 @@ msgstr "Kyrillisch/Ukrainisch"
 msgid "Romanian"
 msgstr "Rumänisch"
 
-#: src/encodings.c:80 src/encodings.c:81 src/encodings.c:82
+#: src/encodings.c:80
+#: src/encodings.c:81
+#: src/encodings.c:82
 msgid "Arabic"
 msgstr "Arabisch"
 
-#: src/encodings.c:83 src/encodings.c:84 src/encodings.c:85
+#: src/encodings.c:83
+#: src/encodings.c:84
+#: src/encodings.c:85
 msgid "Hebrew"
 msgstr "Hebräisch"
 
@@ -825,34 +842,51 @@ msgstr "Georgian"
 msgid "Thai"
 msgstr "Thai"
 
-#: src/encodings.c:91 src/encodings.c:92 src/encodings.c:93
+#: src/encodings.c:91
+#: src/encodings.c:92
+#: src/encodings.c:93
 msgid "Turkish"
 msgstr "Türkisch"
 
-#: src/encodings.c:94 src/encodings.c:95 src/encodings.c:96
+#: src/encodings.c:94
+#: src/encodings.c:95
+#: src/encodings.c:96
 msgid "Vietnamese"
 msgstr "Vietnamesisch"
 
-#: src/encodings.c:98 src/encodings.c:99 src/encodings.c:100
-#: src/encodings.c:101 src/encodings.c:102 src/encodings.c:103
-#: src/encodings.c:104 src/encodings.c:105
+#: src/encodings.c:98
+#: src/encodings.c:99
+#: src/encodings.c:100
+#: src/encodings.c:101
+#: src/encodings.c:102
+#: src/encodings.c:103
+#: src/encodings.c:104
+#: src/encodings.c:105
 msgid "Unicode"
 msgstr "Unicode"
 
-#: src/encodings.c:107 src/encodings.c:108 src/encodings.c:109
+#: src/encodings.c:107
+#: src/encodings.c:108
+#: src/encodings.c:109
 #: src/encodings.c:110
 msgid "Chinese Simplified"
 msgstr "Chinesisch vereinfacht"
 
-#: src/encodings.c:111 src/encodings.c:112 src/encodings.c:113
+#: src/encodings.c:111
+#: src/encodings.c:112
+#: src/encodings.c:113
 msgid "Chinese Traditional"
 msgstr "Chinesisch traditionell"
 
-#: src/encodings.c:114 src/encodings.c:115 src/encodings.c:116
+#: src/encodings.c:114
+#: src/encodings.c:115
+#: src/encodings.c:116
 msgid "Japanese"
 msgstr "Japanisch"
 
-#: src/encodings.c:117 src/encodings.c:118 src/encodings.c:119
+#: src/encodings.c:117
+#: src/encodings.c:118
+#: src/encodings.c:119
 #: src/encodings.c:120
 msgid "Korean"
 msgstr "Koreanisch"
@@ -885,131 +919,142 @@ msgstr "_Nahöstlich"
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: src/filetypes.c:140
+#: src/filetypes.c:144
 msgid "C source file"
 msgstr "C Quelldatei"
 
-#: src/filetypes.c:152
+#: src/filetypes.c:156
 msgid "C++ source file"
 msgstr "C++ Quelldatei"
 
-#: src/filetypes.c:165
+#: src/filetypes.c:169
+msgid "C# source file"
+msgstr "C# Quelldatei"
+
+#: src/filetypes.c:181
 msgid "D source file"
 msgstr "D Quelldatei"
 
-#: src/filetypes.c:177
+#: src/filetypes.c:193
 msgid "Java source file"
 msgstr "Java Quelldatei"
 
-#: src/filetypes.c:189
+#: src/filetypes.c:205
 msgid "Pascal source file"
 msgstr "Pascal Quelldatei"
 
-#: src/filetypes.c:202
+#: src/filetypes.c:218
 msgid "Assembler source file"
 msgstr "Assembler Quelldatei"
 
-#: src/filetypes.c:214
+#: src/filetypes.c:230
+msgid "FreeBasic source file"
+msgstr "FreeBasic Quelldatei"
+
+#: src/filetypes.c:242
 msgid "Fortran source file (F77)"
 msgstr "Fortran (F77) Quelldatei"
 
-#: src/filetypes.c:227
+#: src/filetypes.c:255
 msgid "(O)Caml source file"
 msgstr "(O)Caml Quelldatei"
 
-#: src/filetypes.c:239
+#: src/filetypes.c:267
 msgid "Perl source file"
 msgstr "Perl Quelldatei"
 
-#: src/filetypes.c:252
+#: src/filetypes.c:280
 msgid "PHP source file"
 msgstr "PHP Quelldatei"
 
-#: src/filetypes.c:265
+#: src/filetypes.c:293
 msgid "Javascript source file"
 msgstr "Javascript Quelldatei"
 
-#: src/filetypes.c:277
+#: src/filetypes.c:305
 msgid "Python source file"
 msgstr "Python Quelldatei"
 
-#: src/filetypes.c:289
+#: src/filetypes.c:317
 msgid "Ruby source file"
 msgstr "Ruby Quelldatei"
 
-#: src/filetypes.c:301
+#: src/filetypes.c:329
 msgid "Tcl source file"
 msgstr "Tcl Quelldatei"
 
-#: src/filetypes.c:313
+#: src/filetypes.c:341
 msgid "Lua source file"
 msgstr "Lua Quelldatei"
 
-#: src/filetypes.c:325
+#: src/filetypes.c:353
 msgid "Ferite source file"
 msgstr "Ferite Quelldatei"
 
-#: src/filetypes.c:337
+#: src/filetypes.c:365
 msgid "Haskell source file"
 msgstr "Haskell Quelldatei"
 
-#: src/filetypes.c:349
+#: src/filetypes.c:377
 msgid "Shell script file"
 msgstr "Shellskript Datei"
 
-#: src/filetypes.c:362
+#: src/filetypes.c:390
 msgid "Makefile"
 msgstr "Makefile"
 
-#: src/filetypes.c:375
+#: src/filetypes.c:403
 msgid "XML source file"
 msgstr "XML Quelldatei"
 
-#: src/filetypes.c:388
+#: src/filetypes.c:416
 msgid "Docbook source file"
 msgstr "Docbook Quelldatei"
 
-#: src/filetypes.c:400
+#: src/filetypes.c:428
 msgid "HTML source file"
 msgstr "HTML Quelldatei"
 
-#: src/filetypes.c:413
+#: src/filetypes.c:441
 msgid "Cascading StyleSheet"
 msgstr "Cascading StyleSheet"
 
-#: src/filetypes.c:425
+#: src/filetypes.c:453
 msgid "SQL Dump file"
 msgstr "SQL-Dump Datei"
 
-#: src/filetypes.c:437
+#: src/filetypes.c:465
 msgid "LaTeX source file"
 msgstr "LaTeX Quelldatei"
 
-#: src/filetypes.c:449
+#: src/filetypes.c:477
 msgid "O-Matrix source file"
 msgstr "O-Matrix Quelldatei"
 
-#: src/filetypes.c:461
+#: src/filetypes.c:489
 msgid "VHDL source file"
 msgstr "VHDL Quelldatei"
 
-#: src/filetypes.c:473
+#: src/filetypes.c:501
 msgid "Diff file"
 msgstr "Diff Daten"
 
-#: src/filetypes.c:485
+#: src/filetypes.c:513
 msgid "Config file"
 msgstr "Konfigurationsdatei"
 
-#: src/filetypes.c:498 src/project.c:262
+#: src/filetypes.c:526
+#: src/project.c:262
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: src/filetypes.c:519 src/interface.c:3622
+#: src/filetypes.c:547
+#: src/interface.c:3653
 msgid "None"
 msgstr "Keiner"
 
-#: src/filetypes.c:865 src/win32.c:78
+#: src/filetypes.c:893
+#: src/win32.c:78
 msgid "All Source"
 msgstr "Alle Quellen"
 
@@ -1017,7 +1062,8 @@ msgstr "Alle Quellen"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: src/interface.c:278 src/interface.c:1627
+#: src/interface.c:278
+#: src/interface.c:1627
 msgid "Geany"
 msgstr "Geany"
 
@@ -1029,14 +1075,21 @@ msgstr "_Datei"
 msgid "New (with _Template)"
 msgstr "Neu (aus _Vorlage)"
 
-#: src/interface.c:310 src/interface.c:371 src/interface.c:551
-#: src/interface.c:570 src/interface.c:625 src/interface.c:817
-#: src/interface.c:827 src/interface.c:2161 src/interface.c:2180
+#: src/interface.c:310
+#: src/interface.c:371
+#: src/interface.c:551
+#: src/interface.c:570
+#: src/interface.c:625
+#: src/interface.c:817
+#: src/interface.c:827
+#: src/interface.c:2161
+#: src/interface.c:2180
 #: src/interface.c:2235
 msgid "invisible"
 msgstr "unsichtbar"
 
-#: src/interface.c:322 src/interface.c:2083
+#: src/interface.c:322
+#: src/interface.c:2083
 msgid "Open Selected F_ile"
 msgstr "_Markierte Datei öffnen"
 
@@ -1076,7 +1129,8 @@ msgstr "_Alle schließen"
 msgid "Closes all open files"
 msgstr "Schließt alle offenen Dateien"
 
-#: src/interface.c:429 src/interface.c:1175
+#: src/interface.c:429
+#: src/interface.c:1175
 msgid "Quit Geany"
 msgstr "Geany beenden"
 
@@ -1084,11 +1138,13 @@ msgstr "Geany beenden"
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: src/interface.c:472 src/interface.c:2074
+#: src/interface.c:472
+#: src/interface.c:2074
 msgid "Select _All"
 msgstr "A_lles auswählen"
 
-#: src/interface.c:481 src/interface.c:2092
+#: src/interface.c:481
+#: src/interface.c:2092
 msgid "_Format"
 msgstr "_Format"
 
@@ -1096,39 +1152,48 @@ msgstr "_Format"
 msgid "Convert the case of the current selection"
 msgstr "Ändert die Großschreibung der aktuellen Auswahl"
 
-#: src/interface.c:489 src/interface.c:2099
+#: src/interface.c:489
+#: src/interface.c:2099
 msgid "Convert Selection to _Lower-case"
 msgstr "Auswahl in _Kleinbuchstaben umwandeln"
 
-#: src/interface.c:493 src/interface.c:2103
+#: src/interface.c:493
+#: src/interface.c:2103
 msgid "Convert Selection to _Upper-case"
 msgstr "Auswahl in _Großbuchstaben umwandeln"
 
-#: src/interface.c:502 src/interface.c:2112
+#: src/interface.c:502
+#: src/interface.c:2112
 msgid "_Comment Line(s)"
 msgstr "Zeile(n) _auskommentieren"
 
-#: src/interface.c:506 src/interface.c:2116
+#: src/interface.c:506
+#: src/interface.c:2116
 msgid "U_ncomment Line(s)"
 msgstr "Zeile(n) _einkommentieren"
 
-#: src/interface.c:510 src/interface.c:2120
+#: src/interface.c:510
+#: src/interface.c:2120
 msgid "_Toggle Line Commentation"
 msgstr "Kommentierung _umschalten"
 
-#: src/interface.c:514 src/interface.c:2124
+#: src/interface.c:514
+#: src/interface.c:2124
 msgid "Du_plicate Line or Selection"
 msgstr "_Zeile oder Auswahl kopieren"
 
-#: src/interface.c:523 src/interface.c:2133
+#: src/interface.c:523
+#: src/interface.c:2133
 msgid "_Increase Indent"
 msgstr "Einzug _erhöhen"
 
-#: src/interface.c:531 src/interface.c:2141
+#: src/interface.c:531
+#: src/interface.c:2141
 msgid "_Decrease Indent"
 msgstr "Einzug _verringern"
 
-#: src/interface.c:544 src/interface.c:2154
+#: src/interface.c:544
+#: src/interface.c:2154
 msgid "_Send Selection to"
 msgstr "_Auswahl senden an"
 
@@ -1140,60 +1205,67 @@ msgstr "\"include <...>\" ei_nfügen"
 msgid "I_nsert Comments"
 msgstr "K_ommentare einfügen"
 
-#: src/interface.c:584 src/interface.c:2194
+#: src/interface.c:584
+#: src/interface.c:2194
 msgid "Insert ChangeLog Entry"
 msgstr "ChangeLog-Eintrag hinzufügen"
 
-#: src/interface.c:587 src/interface.c:2197
+#: src/interface.c:587
+#: src/interface.c:2197
 msgid "Inserts a typical ChangeLog entry in the current file"
 msgstr "Fügt einen typischen ChangeLog-Eintrag an den Anfang der Datei ein."
 
-#: src/interface.c:589 src/interface.c:2199
+#: src/interface.c:589
+#: src/interface.c:2199
 msgid "Insert File Header"
 msgstr "Dateikopf einfügen"
 
-#: src/interface.c:592 src/interface.c:2202
+#: src/interface.c:592
+#: src/interface.c:2202
 msgid "Inserts a file header at the beginning of the file"
 msgstr "Fügt einen Dateikopf am Anfang einer neu erzeugten Datei ein."
 
-#: src/interface.c:594 src/interface.c:2204
+#: src/interface.c:594
+#: src/interface.c:2204
 msgid "Insert Function Description"
 msgstr "Funktionsbeschreibung einfügen"
 
-#: src/interface.c:597 src/interface.c:2207
+#: src/interface.c:597
+#: src/interface.c:2207
 msgid "Inserts a description before the current function"
 msgstr "Fügt eine Funktionsbeschreibung vor der Funktion ein."
 
-#: src/interface.c:599 src/interface.c:2209
+#: src/interface.c:599
+#: src/interface.c:2209
 msgid "Insert Multiline Comment"
 msgstr "Mehrzeiligen Kommentar einfügen"
 
-#: src/interface.c:602 src/interface.c:2212
+#: src/interface.c:602
+#: src/interface.c:2212
 msgid "Inserts a multiline comment"
 msgstr "Fügt einen mehrzeiligen Kommentar ein."
 
-#: src/interface.c:604 src/interface.c:2214
+#: src/interface.c:604
+#: src/interface.c:2214
 msgid "Insert GPL Notice"
 msgstr "GPL-Hinweis einfügen"
 
-#: src/interface.c:607 src/interface.c:2217
+#: src/interface.c:607
+#: src/interface.c:2217
 msgid "Inserts a GPL notice (should be done at the beginning of the file)"
-msgstr ""
-"Fügt einen kurzen Lizenz-Hinweis auf die GPL ein (sollte am Anfang einer "
-"Datei sein)."
+msgstr "Fügt einen kurzen Lizenz-Hinweis auf die GPL ein (sollte am Anfang einer Datei sein)."
 
 #: src/interface.c:609
 msgid "Insert BSD License Notice"
 msgstr "BSD-Lizenz-Hinweis einfügen"
 
-#: src/interface.c:612 src/interface.c:2222
-msgid ""
-"Inserts a BSD licence notice (should be done at the beginning of the file)"
-msgstr ""
-"Fügt einen kurzen Lizenz-Hinweis auf die BSD-Lizenz ein (sollte am Anfang "
-"einer Datei sein)."
+#: src/interface.c:612
+#: src/interface.c:2222
+msgid "Inserts a BSD licence notice (should be done at the beginning of the file)"
+msgstr "Fügt einen kurzen Lizenz-Hinweis auf die BSD-Lizenz ein (sollte am Anfang einer Datei sein)."
 
-#: src/interface.c:614 src/interface.c:2224
+#: src/interface.c:614
+#: src/interface.c:2224
 msgid "Insert Dat_e"
 msgstr "_Datum einfügen"
 
@@ -1213,7 +1285,8 @@ msgstr "_Vorheriges"
 msgid "Find in F_iles"
 msgstr "In _Dateien suchen"
 
-#: src/interface.c:660 src/search.c:422
+#: src/interface.c:660
+#: src/search.c:422
 msgid "_Replace"
 msgstr "_Ersetzen"
 
@@ -1241,7 +1314,8 @@ msgstr "_Schriftart ändern"
 msgid "Change the default font"
 msgstr "Ändert die Standardschriftart für das Editor-Fenster"
 
-#: src/interface.c:724 src/keybindings.c:176
+#: src/interface.c:724
+#: src/keybindings.c:176
 msgid "Toggle all additional widgets"
 msgstr "Zusätzliche Infofenster ausblenden"
 
@@ -1255,8 +1329,7 @@ msgstr "_Meldungsfenster anzeigen"
 
 #: src/interface.c:735
 msgid "Toggle the window with status and compiler messages on and off"
-msgstr ""
-"Schaltet das Meldungsfenster (beinhaltet auch Compiler-Ausgaben) ein und aus."
+msgstr "Schaltet das Meldungsfenster (beinhaltet auch Compiler-Ausgaben) ein und aus."
 
 #: src/interface.c:738
 msgid "Show _Toolbar"
@@ -1275,12 +1348,8 @@ msgid "Show _Markers Margin"
 msgstr "M_arkierungsrand anzeigen"
 
 #: src/interface.c:752
-msgid ""
-"Shows or hides the small margin right of the line numbers, which is used to "
-"mark lines."
-msgstr ""
-"Zeigt oder versteckt den kleinen Rand rechts von den Zeilennummern, der zum "
-"Anzeigen von Markierungen genutzt wird."
+msgid "Shows or hides the small margin right of the line numbers, which is used to mark lines."
+msgstr "Zeigt oder versteckt den kleinen Rand rechts von den Zeilennummern, der zum Anzeigen von Markierungen genutzt wird."
 
 #: src/interface.c:755
 msgid "Show _Line Numbers"
@@ -1298,15 +1367,10 @@ msgstr "D_okument"
 msgid "_Line Wrapping"
 msgstr "_Zeilenumbruch"
 
-#: src/interface.c:788 src/interface.c:3629
-msgid ""
-"Wrap the line at the window border and continue it on the next line. Note: "
-"line wrapping has a high performance cost for large documents so should be "
-"disabled on slow machines."
-msgstr ""
-"Bricht lange Zeilen am Fensterrand um und setzt sie auf der nächsten Zeile "
-"fort. Achtung: Bei großen Dokumenten erfordert der Zeilenumbruch viel "
-"Rechenleistung und sollte daher auf langsameren Rechnern deaktiviert werden."
+#: src/interface.c:788
+#: src/interface.c:3660
+msgid "Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."
+msgstr "Bricht lange Zeilen am Fensterrand um und setzt sie auf der nächsten Zeile fort. Achtung: Bei großen Dokumenten erfordert der Zeilenumbruch viel Rechenleistung und sollte daher auf langsameren Rechnern deaktiviert werden."
 
 #: src/interface.c:791
 msgid "_Use Auto-indentation"
@@ -1352,7 +1416,8 @@ msgstr "Auf CR setzen und umwandeln (_Mac)"
 msgid "_Replace Tabs by Spaces"
 msgstr "_Tabulatoren durch Leerzeichen ersetzen"
 
-#: src/interface.c:863 src/interface.c:3382
+#: src/interface.c:863
+#: src/interface.c:3413
 msgid "Replaces all tabs in document by spaces."
 msgstr "Ersetzt alle Tabulatoren im Dokument durch Leerzeichen"
 
@@ -1382,8 +1447,7 @@ msgstr "Alle _Fehlermarkierungen entfernen"
 
 #: src/interface.c:892
 msgid "Removes all error indicators in the current document."
-msgstr ""
-"Entfernt alle gesetzten (Fehler)-Markierungen innerhalb des Dokumentes."
+msgstr "Entfernt alle gesetzten (Fehler)-Markierungen innerhalb des Dokumentes."
 
 #: src/interface.c:894
 msgid "_Project"
@@ -1409,23 +1473,18 @@ msgstr "_Werkzeuge"
 msgid "_Colour Chooser"
 msgstr "_Farbwähler"
 
-#: src/interface.c:948 src/interface.c:1108
-msgid ""
-"Open a color chooser dialog, to interactively pick colors from a palette."
-msgstr ""
-"Öffnet einen Farbauswahl-Dialog zum Auswählen einer Farbe von einer Palette."
+#: src/interface.c:948
+#: src/interface.c:1108
+msgid "Open a color chooser dialog, to interactively pick colors from a palette."
+msgstr "Öffnet einen Farbauswahl-Dialog zum Auswählen einer Farbe von einer Palette."
 
 #: src/interface.c:954
 msgid "_Word Count"
 msgstr "_Wörter zählen"
 
 #: src/interface.c:957
-msgid ""
-"Counts the words and characters in the current selection or the whole "
-"document"
-msgstr ""
-"Zählt die Wörter und Zeichen in der aktuellen Auswahl bzw. dem aktuellen "
-"Dokument."
+msgid "Counts the words and characters in the current selection or the whole document"
+msgstr "Zählt die Wörter und Zeichen in der aktuellen Auswahl bzw. dem aktuellen Dokument."
 
 #: src/interface.c:959
 msgid "_Insert Special HTML Characters"
@@ -1471,7 +1530,8 @@ msgstr "Öffnet eine existierende Datei"
 msgid "Save the current file"
 msgstr "Speichert die aktuelle Datei"
 
-#: src/interface.c:1034 src/keybindings.c:135
+#: src/interface.c:1034
+#: src/keybindings.c:135
 msgid "Save all"
 msgstr "Alle speichern"
 
@@ -1495,15 +1555,18 @@ msgstr "Macht die letzte Änderung rückgängig."
 msgid "Redo the last modification"
 msgstr "Wiederholt die letzte Änderung."
 
-#: src/interface.c:1075 src/keybindings.c:237
+#: src/interface.c:1075
+#: src/keybindings.c:237
 msgid "Navigate back a location"
 msgstr ""
 
-#: src/interface.c:1081 src/keybindings.c:239
+#: src/interface.c:1081
+#: src/keybindings.c:239
 msgid "Navigate forward a location"
 msgstr ""
 
-#: src/interface.c:1089 src/keybindings.c:203
+#: src/interface.c:1089
+#: src/keybindings.c:203
 msgid "Compile"
 msgstr "Kompilieren"
 
@@ -1523,7 +1586,8 @@ msgstr "Text vergrößern"
 msgid "Zoom out the text"
 msgstr "Text verkleinern"
 
-#: src/interface.c:1135 src/interface.c:1140
+#: src/interface.c:1135
+#: src/interface.c:1140
 msgid "Find the entered text in the current file"
 msgstr "Findet den eingegebenen Text im aktuellen Dokument"
 
@@ -1535,11 +1599,13 @@ msgstr "Geben Sie die Zeile an, zu der Sie springen möchten."
 msgid "Jump to the entered line number."
 msgstr "Springe zu angegebener Zeile"
 
-#: src/interface.c:1203 src/treeviews.c:77
+#: src/interface.c:1203
+#: src/treeviews.c:77
 msgid "Symbols"
 msgstr "Symbole"
 
-#: src/interface.c:1216 src/treeviews.c:189
+#: src/interface.c:1216
+#: src/treeviews.c:189
 msgid "Open files"
 msgstr "Geöffnete Dateien"
 
@@ -1559,23 +1625,28 @@ msgstr "Meldungen"
 msgid "Scribble"
 msgstr "Notizen"
 
-#: src/interface.c:1890 src/interface.c:3237
+#: src/interface.c:1890
+#: src/interface.c:3241
 msgid "Images and text"
 msgstr "Icons und Text"
 
-#: src/interface.c:1896 src/interface.c:3269
+#: src/interface.c:1896
+#: src/interface.c:3273
 msgid "Images only"
 msgstr "Nur Icons"
 
-#: src/interface.c:1902 src/interface.c:3261
+#: src/interface.c:1902
+#: src/interface.c:3265
 msgid "Text only"
 msgstr "Nur Text"
 
-#: src/interface.c:1913 src/interface.c:3253
+#: src/interface.c:1913
+#: src/interface.c:3257
 msgid "Large icons"
 msgstr "Große Symbole"
 
-#: src/interface.c:1918 src/interface.c:3245
+#: src/interface.c:1918
+#: src/interface.c:3249
 msgid "Small icons"
 msgstr "Kleine Symbole"
 
@@ -1595,7 +1666,8 @@ msgstr "Kommentare einfügen"
 msgid "Insert BSD license Notice"
 msgstr "BSD-Lizenz-Hinweis einfügen"
 
-#: src/interface.c:2243 src/keybindings.c:294
+#: src/interface.c:2243
+#: src/keybindings.c:294
 msgid "Find Usage"
 msgstr "Auftreten finden"
 
@@ -1607,7 +1679,8 @@ msgstr "Gehe zu Tag Definition"
 msgid "Go to Tag Declaration"
 msgstr "Gehe zu Tag Deklaration"
 
-#: src/interface.c:2259 src/keybindings.c:300
+#: src/interface.c:2259
+#: src/keybindings.c:300
 msgid "Context Action"
 msgstr "Kontextaktion"
 
@@ -1619,791 +1692,715 @@ msgstr "Gehe zu Zeile"
 msgid "Goto to the entered line"
 msgstr "Springe zu angegebener Zeile"
 
-#: src/interface.c:2680 src/keybindings.c:156
+#: src/interface.c:2684
+#: src/keybindings.c:156
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: src/interface.c:2713
+#: src/interface.c:2717
 msgid "Load files from the last session"
 msgstr "Dateien aus der letzten Sitzung laden"
 
-#: src/interface.c:2717
+#: src/interface.c:2721
 msgid "Opens at startup the files from the last session"
 msgstr "Lädt die geöffneten Dateien aus der letzten Sitzung"
 
-#: src/interface.c:2720
+#: src/interface.c:2724
 msgid "Save window position and geometry"
 msgstr "Fensterposition und -größe speichern"
 
-#: src/interface.c:2724
+#: src/interface.c:2728
 msgid "Saves the window position and geometry and restores it at the start"
 msgstr "Speichert die Fensterposition und -größe"
 
-#: src/interface.c:2727
+#: src/interface.c:2731
 msgid "Load virtual terminal emulation at startup"
 msgstr "Starte die Virtual Terminal Emulation beim Starten"
 
-#: src/interface.c:2729
-msgid ""
-"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
-"Disable it if you do not need it."
-msgstr ""
-"Stellt ein, ob die Virtual Terminal Emulation beim Starten geladen werden "
-"soll oder nicht. Wenn sie nicht benötigt wird, sollte dieser Punkt "
-"deaktiviert werden."
+#: src/interface.c:2733
+msgid "Whether the virtual terminal emulation(VTE) should be loaded at startup. Disable it if you do not need it."
+msgstr "Stellt ein, ob die Virtual Terminal Emulation beim Starten geladen werden soll oder nicht. Wenn sie nicht benötigt wird, sollte dieser Punkt deaktiviert werden."
 
-#: src/interface.c:2732
+#: src/interface.c:2736
 msgid "Confirm exit"
 msgstr "Beenden bestätigen"
 
-#: src/interface.c:2736
+#: src/interface.c:2740
 msgid "Shows a confirmation dialog on exit."
 msgstr "Zeigt einen Bestätigungsdialog vor dem Beenden."
 
-#: src/interface.c:2739
+#: src/interface.c:2743
 msgid "<b>Startup and shutdown</b>"
 msgstr "<b>Start und Beenden </b>"
 
-#: src/interface.c:2758
+#: src/interface.c:2762
 msgid "Beep on errors or when compilation has finished"
 msgstr "Bei Fehlern oder beendeter Kompilierung Piepton ausgeben"
 
-#: src/interface.c:2761
-msgid ""
-"Whether to beep if an error occured or when the compilation process has "
-"finished."
-msgstr ""
-"Legt fest, ob bei einem Fehler oder bei beendeter Kompilierung ein Piepton "
-"ausgegeben werden soll."
+#: src/interface.c:2765
+msgid "Whether to beep if an error occured or when the compilation process has finished."
+msgstr "Legt fest, ob bei einem Fehler oder bei beendeter Kompilierung ein Piepton ausgegeben werden soll."
 
-#: src/interface.c:2764
+#: src/interface.c:2768
 msgid "Switch to status message list at new message"
 msgstr "Wechsele zum Statusmeldungsfenster bei neuer Meldung"
 
-#: src/interface.c:2767
-msgid ""
-"Switch to the status message tab (in the notebook window at the bottom) if a "
-"new status message arrives."
-msgstr ""
-"Automatisch zu dem Statusmeldungs-Reiter im unteren Fenster wechseln, wenn "
-"eine neue Statusmeldung vorliegt."
+#: src/interface.c:2771
+msgid "Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives."
+msgstr "Automatisch zu dem Statusmeldungs-Reiter im unteren Fenster wechseln, wenn eine neue Statusmeldung vorliegt."
 
-#: src/interface.c:2770
+#: src/interface.c:2774
 msgid "Auto focus widgets (focus follows mouse)"
 msgstr "Autofokus (Der Fokus folgt der Maus)"
 
-#: src/interface.c:2773
-msgid ""
-"Gives the focus automatically to widgets below the mouse cursor. Works for "
-"the main editor widget, the scribble, the toolbar search and goto line "
-"fields and the VTE."
-msgstr ""
-"Wenn diese Option aktiviert ist, gibt Geany dem Fenster den Fokus, über dem "
-"sich im Moment der Zeiger der Maus befindet.  Diese Option funktioniert für "
-"das Hauptfenster, das Notizbuch, den Such- und Springe-zu-Feldern in der "
-"Werkzeugliste sowie für das Terminal."
+#: src/interface.c:2777
+msgid "Gives the focus automatically to widgets below the mouse cursor. Works for the main editor widget, the scribble, the toolbar search and goto line fields and the VTE."
+msgstr "Wenn diese Option aktiviert ist, gibt Geany dem Fenster den Fokus, über dem sich im Moment der Zeiger der Maus befindet.  Diese Option funktioniert für das Hauptfenster, das Notizbuch, den Such- und Springe-zu-Feldern in der Werkzeugliste sowie für das Terminal."
 
-#: src/interface.c:2776
+#: src/interface.c:2780
 msgid "Always wrap search and hide the Find dialog"
 msgstr "Das vollständige Dokument durchsuchen und den Suchen-Dialog schließen"
 
-#: src/interface.c:2780
-msgid ""
-"Always wrap search around the document and hide the Find dialog after "
-"clicking Find Next/Previous"
-msgstr ""
-"Immer das vollständige Dokument durchsuchen und den Suchen-Dialog nach "
-"Klicken auf Nächstes/Vorheriges schließen."
+#: src/interface.c:2784
+msgid "Always wrap search around the document and hide the Find dialog after clicking Find Next/Previous"
+msgstr "Immer das vollständige Dokument durchsuchen und den Suchen-Dialog nach Klicken auf Nächstes/Vorheriges schließen."
 
 # Denke trifft es besser als »Eigenschaften«
-#: src/interface.c:2783
+#: src/interface.c:2787
 msgid "<b>Behaviour</b>"
 msgstr "<b>Funktionen</b>"
 
-#: src/interface.c:2802
+#: src/interface.c:2806
 msgid "Context Action command:"
 msgstr "Befehl für Kontextaktion:"
 
-#: src/interface.c:2809
+#: src/interface.c:2813
 #, c-format
-msgid ""
-"Context action command. The current selected word can be used with %s. It "
-"can be everywhere in the given command and will be replaced before execution."
-msgstr ""
-"Der aktuell markierte Text kann mit %s angegeben werden. Es darf überall in "
-"der Kommandozeile vorkommen und wird vor dem Ausführen ersetzt."
+msgid "Context action command. The currently selected word can be used with %s. It can appear anywhere in the given command and will be replaced before execution."
+msgstr "Der aktuell markierte Text kann mit %s angegeben werden. Es darf überall in der Kommandozeile vorkommen und wird vor dem Ausführen ersetzt."
 
-#: src/interface.c:2812
+#: src/interface.c:2816
 msgid "<b>Context Action</b>"
 msgstr "<b>Kontextaktion</b>"
 
-#: src/interface.c:2832
+#: src/interface.c:2836
 msgid "Startup path:"
 msgstr "Startpfad:"
 
-#: src/interface.c:2845
-msgid ""
-"Path to start when opening or saving files. Must be an absolute path. Leave "
-"blank to use the current working directory."
-msgstr ""
-"Startpfad, wenn Dateien geöffnet oder gespeichert werden soll. Der Pfad muss "
-"ein absoluter Pfad sein. Um das aktuelle Arbeitsverzeichnis zu benutzen, "
-"keinen Pfad eintragen. "
+#: src/interface.c:2849
+msgid "Path to start when opening or saving files. Must be an absolute path. Leave blank to use the current working directory."
+msgstr "Startpfad, wenn Dateien geöffnet oder gespeichert werden soll. Der Pfad muss ein absoluter Pfad sein. Um das aktuelle Arbeitsverzeichnis zu benutzen, keinen Pfad eintragen. "
 
-#: src/interface.c:2858
+#: src/interface.c:2862
 msgid "Project files:"
 msgstr "Projektdateien:"
 
-#: src/interface.c:2871
+#: src/interface.c:2875
 msgid "Path to start in when opening project files"
 msgstr "Pfad zum Öffnen von Projektdateien."
 
-#: src/interface.c:2884
+#: src/interface.c:2888
 msgid "<b>Paths</b>"
 msgstr "<b>Pfade</b>"
 
-#: src/interface.c:2889
+#: src/interface.c:2893
 msgid "General"
 msgstr "Allgemein"
 
-#: src/interface.c:2911
+#: src/interface.c:2915
 msgid "Show symbol list"
 msgstr "Symbol-Ansicht anzeigen"
 
-#: src/interface.c:2914
+#: src/interface.c:2918
 msgid "Toggle the symbol list on and off"
 msgstr "Schaltet die Symbol-Ansicht ein und aus."
 
-#: src/interface.c:2917
+#: src/interface.c:2921
 msgid "Show open files list"
 msgstr "Zeige Liste mit geöffneten Dateien"
 
-#: src/interface.c:2920
+#: src/interface.c:2924
 msgid "Toggle the open files list on and off"
 msgstr "Schaltet die Anzeige der geöffneten Dateien an und aus."
 
-#: src/interface.c:2923
+#: src/interface.c:2927
 msgid "<b>Sidebar</b>"
 msgstr "<b>Seitenleiste</b>"
 
-#: src/interface.c:2944
+#: src/interface.c:2948
 msgid "Symbol list:"
 msgstr "Symbol-Liste:"
 
-#: src/interface.c:2951 src/interface.c:3016
+#: src/interface.c:2955
+#: src/interface.c:3020
 msgid "Message window:"
 msgstr "Meldungsfenster:"
 
-#: src/interface.c:2958 src/interface.c:3023
+#: src/interface.c:2962
+#: src/interface.c:3027
 msgid "Editor:"
 msgstr "Editor:"
 
-#: src/interface.c:2970
+#: src/interface.c:2974
 msgid "Sets the font for the message window"
 msgstr "Ändert die Schriftart für das Meldungsfenster"
 
-#: src/interface.c:2978
+#: src/interface.c:2982
 msgid "Sets the font for the symbol list"
 msgstr "Legt die Schriftart für die Symbol-Ansicht fest."
 
-#: src/interface.c:2986
+#: src/interface.c:2990
 msgid "Sets the editor font"
 msgstr "Legt die Schriftart des Editorfensters fest."
 
-#: src/interface.c:2988
+#: src/interface.c:2992
 msgid "<b>Fonts</b>"
 msgstr "<b>Schriftarten</b>"
 
-#: src/interface.c:3009
+#: src/interface.c:3013
 msgid "Sidebar:"
 msgstr "Seitenleiste:"
 
-#: src/interface.c:3030
+#: src/interface.c:3034
 msgid "Show editor tabs"
 msgstr "Zeige Liste mit geöffneten Dateien"
 
-#: src/interface.c:3041 src/interface.c:3051 src/interface.c:3061
-#: src/interface.c:3429
+#: src/interface.c:3045
+#: src/interface.c:3055
+#: src/interface.c:3065
+#: src/interface.c:3460
 msgid "Left"
 msgstr "Links"
 
-#: src/interface.c:3042 src/interface.c:3052 src/interface.c:3062
-#: src/interface.c:3437
+#: src/interface.c:3046
+#: src/interface.c:3056
+#: src/interface.c:3066
+#: src/interface.c:3468
 msgid "Right"
 msgstr "Rechts"
 
-#: src/interface.c:3043 src/interface.c:3053 src/interface.c:3063
+#: src/interface.c:3047
+#: src/interface.c:3057
+#: src/interface.c:3067
 msgid "Top"
 msgstr "Oben"
 
-#: src/interface.c:3044 src/interface.c:3054 src/interface.c:3064
+#: src/interface.c:3048
+#: src/interface.c:3058
+#: src/interface.c:3068
 msgid "Bottom"
 msgstr "Unten"
 
-#: src/interface.c:3066
+#: src/interface.c:3070
 msgid "<b>Tab placement</b>"
 msgstr "<b>Tab-Platzierung:</b>"
 
-#: src/interface.c:3085
+#: src/interface.c:3089
 msgid "Show statusbar"
 msgstr "Statusleiste anzeigen"
 
-#: src/interface.c:3088
+#: src/interface.c:3092
 msgid "Whether to show the status bar at the bottom of the main window."
-msgstr ""
-"Legt fest, ob die Statuszeile an der unteren Seite des Fensters angezeigt "
-"werden soll oder nicht. "
+msgstr "Legt fest, ob die Statuszeile an der unteren Seite des Fensters angezeigt werden soll oder nicht. "
 
-#: src/interface.c:3090
+#: src/interface.c:3094
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Sonstiges</b>"
 
-#: src/interface.c:3095
+#: src/interface.c:3099
 msgid "Interface"
 msgstr "Schnittstelle"
 
-#: src/interface.c:3114
+#: src/interface.c:3118
 msgid "Show Toolbar"
 msgstr "Werkzeugleiste anzeigen"
 
-#: src/interface.c:3139
+#: src/interface.c:3143
 msgid "Show file operation buttons"
 msgstr "Dateioperationssymbole anzeigen"
 
-#: src/interface.c:3143
+#: src/interface.c:3147
 msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
-msgstr ""
-"Zeigt Symbole für Neu, Öffnen, Schließen und Neuladen in der Werkzeugleiste."
+msgstr "Zeigt Symbole für Neu, Öffnen, Schließen und Neuladen in der Werkzeugleiste."
 
-#: src/interface.c:3146
+#: src/interface.c:3150
 msgid "Show Redo and Undo buttons"
 msgstr "Rückgängig und Wiederholen anzeigen"
 
-#: src/interface.c:3150
+#: src/interface.c:3154
 msgid "Display the Redo and Undo buttons in the toolbar"
-msgstr ""
-"Zeigt die Symbole zum Rückgängigmachen und Wiederholen in der Werkzeugleiste."
+msgstr "Zeigt die Symbole zum Rückgängigmachen und Wiederholen in der Werkzeugleiste."
 
-#: src/interface.c:3153
+#: src/interface.c:3157
 msgid "Show Back and Forward buttons"
 msgstr "Schaltflächen zur Vorwärts- und Rückwärtsnavigation anzeigen"
 
-#: src/interface.c:3157
-msgid ""
-"Display the Back and Forward buttons in the toolbar used for code navigation"
-msgstr ""
-"Zeigt die Schaltflächen zur Vorwärts- und Rückwärtsnavigation innerhalb des "
-"Quellcodes in der Werkzeugliste an"
+#: src/interface.c:3161
+msgid "Display the Back and Forward buttons in the toolbar used for code navigation"
+msgstr "Zeigt die Schaltflächen zur Vorwärts- und Rückwärtsnavigation innerhalb des Quellcodes in der Werkzeugliste an"
 
-#: src/interface.c:3160
+#: src/interface.c:3164
 msgid "Show Compile and Run buttons"
 msgstr "Schaltflächen zum Kompilieren und Ausführen anzeigen"
 
-#: src/interface.c:3164
+#: src/interface.c:3168
 msgid "Display the Compile and Run buttons in the toolbar"
 msgstr "Zeigt die Symbole zum Kompilieren und Ausführen in der Werkzeugleiste."
 
-#: src/interface.c:3167
+#: src/interface.c:3171
 msgid "Show Colour Chooser button"
 msgstr "Farbwähler anzeigen"
 
-#: src/interface.c:3171
+#: src/interface.c:3175
 msgid "Display the Colour Chooser button in the toolbar"
 msgstr "Zeigt das Farbwählersymbol in der Werkzeugleiste."
 
-#: src/interface.c:3174
+#: src/interface.c:3178
 msgid "Show Zoom In and Zoom Out buttons"
 msgstr "Schaltflächen zum Heran- und Wegzoomen anzeigen"
 
-#: src/interface.c:3178
+#: src/interface.c:3182
 msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
 msgstr "Zeigt die Symbole zum Heran- und Herauszoomen in der Werkzeugleiste."
 
-#: src/interface.c:3181
+#: src/interface.c:3185
 msgid "Show Search field"
 msgstr "Suchfeld anzeigen"
 
-#: src/interface.c:3185
+#: src/interface.c:3189
 msgid "Display the search field and button in the toolbar"
 msgstr "Zeige das Suchfeld in der Werkzeugleiste"
 
-#: src/interface.c:3188
+#: src/interface.c:3192
 msgid "Show Goto line field"
 msgstr "Zeilennummereingabefeld anzeigen"
 
-#: src/interface.c:3192
+#: src/interface.c:3196
 msgid "Display the line number field and button in the toolbar"
 msgstr "Zeige das Zeilennummereingabefeld in der Werkzeugleiste"
 
-#: src/interface.c:3195
+#: src/interface.c:3199
 msgid "Show Quit button"
 msgstr "Icon zum Beenden anzeigen"
 
-#: src/interface.c:3199
+#: src/interface.c:3203
 msgid "Display the quit button in the toolbar"
 msgstr "Zeigt das Icon zum Beenden von Geany in der Werkzeugleiste an."
 
-#: src/interface.c:3202
+#: src/interface.c:3206
 msgid "<b>Items</b>"
 msgstr "<b>Symbole</b>"
 
-#: src/interface.c:3223
+#: src/interface.c:3227
 msgid "Icon style:"
 msgstr "Symbolstil:"
 
-#: src/interface.c:3230
+#: src/interface.c:3234
 msgid "Icon size:"
 msgstr "Symbolgröße:"
 
-#: src/interface.c:3277
+#: src/interface.c:3281
 msgid "<b>Appearance</b>"
 msgstr "<b>Aussehen</b>"
 
-#: src/interface.c:3282
+#: src/interface.c:3286
 msgid "Toolbar"
 msgstr "Werkzeugleiste"
 
-#: src/interface.c:3310
-msgid "Tab Width:"
-msgstr "Tabulatorbreite"
-
-#: src/interface.c:3322
+#: src/interface.c:3319
 msgid "Sets the default encoding for newly created files."
 msgstr "Setzt die Zeichenkodierung für neu erstellte Dateien"
 
-#: src/interface.c:3334
+#: src/interface.c:3325
+msgid "Default encoding (new files):"
+msgstr "Standardzeichenkodierung (neue Dateien):"
+
+#: src/interface.c:3332
+msgid "Tab Width:"
+msgstr "Tabulatorbreite"
+
+#: src/interface.c:3345
 msgid "The width in chars, which one tab character will take"
 msgstr "Die Breite in Zeichen, die ein Tabalutar-Zeichen einnimmt"
 
-#: src/interface.c:3339
-msgid "Default encoding:"
-msgstr "Standardkodierung:"
+#: src/interface.c:3350
+msgid "Default encoding (existing files):"
+msgstr "Standardzeichenkodierung (existierende Dateien):"
 
-#: src/interface.c:3345
+#: src/interface.c:3357
+msgid "Use fixed encoding when opening files"
+msgstr "Benutze feststehende Kodierung beim Öffnen neuer Dateien"
+
+#: src/interface.c:3362
+msgid "This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)."
+msgstr "Diese Option deaktiviert die automatische Erkennung der Zeichenkodierung und öffnet die ausgewählten Dateien mit der angegebenen Kodierung."
+
+#: src/interface.c:3370
+msgid "Sets the default encoding for opening existing files."
+msgstr "Setzt die Standardzeichenkodierung für zu öffnende Dateien"
+
+#: src/interface.c:3376
 msgid "<b>New files</b>"
 msgstr "<b>Neue Dateien</b>"
 
-#: src/interface.c:3364
+#: src/interface.c:3395
 msgid "Strip trailing spaces"
 msgstr "Leerzeichen am Zeilenende entfernen"
 
-#: src/interface.c:3368
+#: src/interface.c:3399
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Entfernt Leerzeichen an Zeilenenden"
 
-#: src/interface.c:3371
+#: src/interface.c:3402
 msgid "Ensure new line at file end"
 msgstr "Neue Zeile am Dateiende"
 
-#: src/interface.c:3375
+#: src/interface.c:3406
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Fügt am Dateiende eine neue Zeile an (wenn keine vorhanden ist)"
 
-#: src/interface.c:3378 src/keybindings.c:194
+#: src/interface.c:3409
+#: src/keybindings.c:194
 msgid "Replace tabs by space"
 msgstr "Tabulatoren durch Leerzeichen ersetzen"
 
-#: src/interface.c:3385
+#: src/interface.c:3416
 msgid "<b>Saving files</b>"
 msgstr "<b>Speichern</b>"
 
-#: src/interface.c:3406
+#: src/interface.c:3437
 msgid "Placement of new file tabs:"
 msgstr "Platzierung neuer Dateien:"
 
-#: src/interface.c:3419
-msgid ""
-"Specifies the number of files which are stored in the Recent files list."
+#: src/interface.c:3450
+msgid "Specifies the number of files which are stored in the Recent files list."
 msgstr "Gibt die Länge der Liste von Dateien an, die zuletzt geöffnet wurden."
 
-#: src/interface.c:3432
+#: src/interface.c:3463
 msgid "File tabs will be placed on the left of the notebook"
 msgstr "Neue Dateien werden links von der Datei-Liste platziert."
 
-#: src/interface.c:3440
+#: src/interface.c:3471
 msgid "File tabs will be placed on the right of the notebook"
 msgstr "Neue Dateien werden rechts von der Datei-Liste platziert."
 
-#: src/interface.c:3444
+#: src/interface.c:3475
 msgid "Recent files list length:"
 msgstr "Anzahl der \"Zuletzt geöffneten\" Dateien"
 
-#: src/interface.c:3452
+#: src/interface.c:3483
 msgid "<b>Misc.</b>"
 msgstr "<b>Sonstiges</b>"
 
-#: src/interface.c:3457 src/symbols.c:449
+#: src/interface.c:3488
+#: src/symbols.c:449
 msgid "Files"
 msgstr "Dateien"
 
-#: src/interface.c:3479
+#: src/interface.c:3510
 msgid "Invert syntax highlighting colours"
 msgstr "Invertiere Syntax-Hervorhebungen  "
 
-#: src/interface.c:3481
+#: src/interface.c:3512
 msgid "Use white text on a black background."
 msgstr "Benutze weiße Schrift auf einem schwarzem Hintergrund"
 
-#: src/interface.c:3483
+#: src/interface.c:3514
 msgid "Show indentation guides"
 msgstr "Zeige Einrückungshinweise"
 
-#: src/interface.c:3486
+#: src/interface.c:3517
 msgid "Shows small dotted lines to help you to use the right indentation."
 msgstr "Blendet punktierte Linien ein, um die Einrückung zu erleichtern."
 
-#: src/interface.c:3489
+#: src/interface.c:3520
 msgid "Show white space"
 msgstr "Zeige Leerzeichen"
 
-#: src/interface.c:3492
+#: src/interface.c:3523
 msgid "Marks spaces with dots and tabs with arrows."
 msgstr "Markiert Leerzeichen mit Punkten und Tabulatoren mit kleinen Pfeilen."
 
-#: src/interface.c:3495
+#: src/interface.c:3526
 msgid "Show line endings"
 msgstr "Zeilenenden anzeigen"
 
-#: src/interface.c:3498
+#: src/interface.c:3529
 msgid "Show the line ending character"
 msgstr "Zeilenende-Zeichen anzeigen"
 
-#: src/interface.c:3501
+#: src/interface.c:3532
 msgid "<b>Display</b>"
 msgstr "<b>Anzeige</b>"
 
-#: src/interface.c:3522
+#: src/interface.c:3553
 msgid "Long line marker:"
 msgstr "Markierung für statischen Zeilenumbruch:"
 
-#: src/interface.c:3529
+#: src/interface.c:3560
 msgid "Long line marker color:"
 msgstr "Farbe der Markierung für statischen Zeilenumbruch:"
 
-#: src/interface.c:3536
+#: src/interface.c:3567
 msgid "Type:"
 msgstr "Typ:"
 
-#: src/interface.c:3548
+#: src/interface.c:3579
 msgid "Sets the color of the long line marker"
 msgstr "Stellt die Farbe des \"long line markers\" ein."
 
-#: src/interface.c:3557
-msgid ""
-"The long line marker is a thin vertical line in the editor. It helps to mark "
-"long lines, or as a hint to break the line. Set this value to a value "
-"greater than 0 to specify the column where it should appear."
-msgstr ""
-"Die Markierung für statischen Zeilenumbruch ist eine dünne Linie im "
-"Editorfenster. Sie hilft dabei, lange Zeilen zu markieren und dabei auf "
-"einen eventuell notwendigen Zeilenumbruch hinzuweisen. Werte größer als 0 "
-"geben die Spalte an, in der die Linie angezeigt werden soll."
+#: src/interface.c:3588
+msgid "The long line marker is a thin vertical line in the editor. It helps to mark long lines, or as a hint to break the line. Set this value to a value greater than 0 to specify the column where it should appear."
+msgstr "Die Markierung für statischen Zeilenumbruch ist eine dünne Linie im Editorfenster. Sie hilft dabei, lange Zeilen zu markieren und dabei auf einen eventuell notwendigen Zeilenumbruch hinzuweisen. Werte größer als 0 geben die Spalte an, in der die Linie angezeigt werden soll."
 
-#: src/interface.c:3567
+#: src/interface.c:3598
 msgid "Line"
 msgstr "Linie"
 
-#: src/interface.c:3570
-msgid ""
-"Prints a vertical line in the editor window at the given cursor position "
-"(see below)."
-msgstr ""
-"Zeichnet eine vertikale Linie im Editorfenster an der angegebenen Cursor-"
-"Position (nur sinnvoll mit Festbreitenschriften)."
+#: src/interface.c:3601
+msgid "Prints a vertical line in the editor window at the given cursor position (see below)."
+msgstr "Zeichnet eine vertikale Linie im Editorfenster an der angegebenen Cursor-Position (nur sinnvoll mit Festbreitenschriften)."
 
-#: src/interface.c:3574
+#: src/interface.c:3605
 msgid "Background"
 msgstr "Hintergrund"
 
-#: src/interface.c:3577
-msgid ""
-"The background colour of characters after the given cursor position (see "
-"below) changed to the colour set below. (This is recommended if you use "
-"proportional fonts)"
-msgstr ""
-"Die Hintergrundfarbe der Zeichen, die hinter der angegebenen Cursor-Position"
-"(siehe unten) stehen, wird auf die unten angegebene Farbe geändert (das ist "
-"nützlich für proportionale Schriftarten)."
+#: src/interface.c:3608
+msgid "The background colour of characters after the given cursor position (see below) changed to the colour set below. (This is recommended if you use proportional fonts)"
+msgstr "Die Hintergrundfarbe der Zeichen, die hinter der angegebenen Cursor-Position(siehe unten) stehen, wird auf die unten angegebene Farbe geändert (das ist nützlich für proportionale Schriftarten)."
 
-#: src/interface.c:3581
+#: src/interface.c:3612
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: src/interface.c:3587
+#: src/interface.c:3618
 msgid "<b>Long line marker</b>"
 msgstr "<b>Markierung für statischen Zeilenumbruch</b>"
 
-#: src/interface.c:3610
+#: src/interface.c:3641
 msgid "Auto indentation mode:"
 msgstr "Modus für automatische Einrückung:"
 
-#: src/interface.c:3617
-msgid ""
-"Selects the indentation mode. Use None to disable auto indentation "
-"completely. Basic indents new lines with the same indentation as the "
-"previous line. Advanced does the same and indents also curly brackets."
-msgstr ""
-"Wählt den Einrückungsmodus aus. Wählen Sie Keiner um automatische Einrückung "
-"zu deaktivieren. Einfach rückt neue Zeilen automatisch genauso weit ein wie "
-"die vorherige Zeile. Fortgeschritten rückt zusätzlich geschweifte Klammern "
-"automatisch ein."
+#: src/interface.c:3648
+msgid "Selects the indentation mode. Use None to disable auto indentation completely. Basic indents new lines with the same indentation as the previous line. Advanced does the same and indents also curly brackets."
+msgstr "Wählt den Einrückungsmodus aus. Wählen Sie Keiner um automatische Einrückung zu deaktivieren. Einfach rückt neue Zeilen automatisch genauso weit ein wie die vorherige Zeile. Fortgeschritten rückt zusätzlich geschweifte Klammern automatisch ein."
 
-#: src/interface.c:3623
+#: src/interface.c:3654
 msgid "Basic"
 msgstr "Einfach"
 
-#: src/interface.c:3624
+#: src/interface.c:3655
 msgid "Advanced"
 msgstr "Fortgeschritten"
 
-#: src/interface.c:3626
+#: src/interface.c:3657
 msgid "Line wrapping"
 msgstr "Zeilenumbruch"
 
-#: src/interface.c:3631
+#: src/interface.c:3662
 msgid "Enable folding"
 msgstr "Quellcode-Ausblendung aktivieren"
 
-#: src/interface.c:3634
+#: src/interface.c:3665
 msgid "Whether to enable folding the code"
 msgstr "Legt fest, ob es möglich sein soll, Teile des Quellcodes auszublenden."
 
-#: src/interface.c:3637
+#: src/interface.c:3668
 msgid "Unfold all children of a fold point"
 msgstr "Alle untergeordneten Codeblöcke ebenfalls ausklappen"
 
-#: src/interface.c:3640
+#: src/interface.c:3671
 msgid "Unfold all children of a fold point when unfolding it."
-msgstr ""
-"Klappt alle ausgeblendeten Codeblöcke einer Stelle im Quellcode mit aus."
+msgstr "Klappt alle ausgeblendeten Codeblöcke einer Stelle im Quellcode mit aus."
 
-#: src/interface.c:3643
+#: src/interface.c:3674
 msgid "Use indicators to show compile errors"
 msgstr "Benutzt Markierungen, um Probleme beim Kompilieren anzuzeigen."
 
-#: src/interface.c:3646
-msgid ""
-"Whether to use indicators (a squiggly underline) to highlight the lines "
-"where the compiler found a warning or an error."
-msgstr ""
-"Legt fest, ob Markierungen (wellige Unterstreichungen) benutzt werden "
-"sollen, um Zeilen mit Fehlern beim Kompiliervorgang zu markieren"
+#: src/interface.c:3677
+msgid "Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error."
+msgstr "Legt fest, ob Markierungen (wellige Unterstreichungen) benutzt werden sollen, um Zeilen mit Fehlern beim Kompiliervorgang zu markieren"
 
-#: src/interface.c:3649
+#: src/interface.c:3680
 msgid "Disable Drag and Drop"
 msgstr "Drag and Drop deaktivieren"
 
-#: src/interface.c:3652
-msgid ""
-"Disable drag and drop completely in the editor window so you can't drag and "
-"drop any selections within or outside of the editor window."
+#: src/interface.c:3683
+msgid "Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window."
 msgstr "Deaktiviert Drag and Drop für das komplette Editorfenster."
 
-#: src/interface.c:3655
+#: src/interface.c:3686
 msgid "Use tabs when inserting whitespace"
 msgstr "Benutze Tabulatoren, um Leerzeichen einzufügen."
 
-#: src/interface.c:3658
-msgid ""
-"Whenever some whitespace is inserted by Geany it will use tabs when enabled "
-"otherwise Geany will use just spaces."
-msgstr ""
-"Wenn diese Option aktiviert ist, werden immer, wenn Leerzeichen in Geany "
-"eingefügt werden, Tabulatoren benutzt."
+#: src/interface.c:3689
+msgid "Whenever some whitespace is inserted by Geany it will use tabs when enabled otherwise Geany will use just spaces."
+msgstr "Wenn diese Option aktiviert ist, werden immer, wenn Leerzeichen in Geany eingefügt werden, Tabulatoren benutzt."
 
-#: src/interface.c:3661
+#: src/interface.c:3692
 msgid "<b>Features</b>"
 msgstr "<b>Funktionen</b>"
 
-#: src/interface.c:3680
+#: src/interface.c:3711
 msgid "Construct autocompletion"
 msgstr "Autovervollständigung von Konstrukten"
 
-#: src/interface.c:3683
+#: src/interface.c:3714
 msgid "Automatic completion of often used constructs like if and for"
-msgstr ""
-"Autovervollständigung von häufig benutzten Konstrukten wie if, for und "
-"switch."
+msgstr "Autovervollständigung von häufig benutzten Konstrukten wie if, for und switch."
 
-#: src/interface.c:3686
+#: src/interface.c:3717
 msgid "XML tag autocompletion"
 msgstr "XML-Tag Autovervollständigung"
 
-#: src/interface.c:3689
+#: src/interface.c:3720
 msgid "Automatic completion of open XML tags (includes HTML tags)"
 msgstr "Autovervollständigung von offenen XML-Tags, einschließlich HTML-Tags"
 
-#: src/interface.c:3692
+#: src/interface.c:3723
 msgid "Symbol autocompletion"
 msgstr "Autovervollständigung von Variablen "
 
-#: src/interface.c:3695
-msgid ""
-"Automatic completion of known symbols in open files (function names, global "
-"variables, ...)"
-msgstr ""
-"Automatische Vervollständigung von bekannten Variablen und Funktionsnamen "
-"geöffneter Dateien."
+#: src/interface.c:3726
+msgid "Automatic completion of known symbols in open files (function names, global variables, ...)"
+msgstr "Automatische Vervollständigung von bekannten Variablen und Funktionsnamen geöffneter Dateien."
 
-#: src/interface.c:3706
+#: src/interface.c:3737
 msgid "Rows of autocompletion list:"
 msgstr "Anzahl der Zeilen der Autovervollständigungsliste: "
 
-#: src/interface.c:3715
+#: src/interface.c:3746
 msgid "Number of rows to display in the autocompletion list."
-msgstr ""
-"Anzahl der Zeilen, die maximal angezeigt werden sollen, wenn die "
-"Autovervollständigungsliste angezeigt wird."
+msgstr "Anzahl der Zeilen, die maximal angezeigt werden sollen, wenn die Autovervollständigungsliste angezeigt wird."
 
-#: src/interface.c:3718
+#: src/interface.c:3749
 msgid "<b>Autocompletion</b>"
 msgstr "<b>Autovervollständigung</b>"
 
-#: src/interface.c:3723
+#: src/interface.c:3754
 msgid "Editor"
 msgstr "Editor"
 
-#: src/interface.c:3741
+#: src/interface.c:3772
 msgid "Enter tool paths below. Tools you do not need can be left blank."
-msgstr ""
-"Geben Sie hier die Pfade zu den einzelnen Werkzeugen an (Programme, die "
-"nicht benötigt werden, können freigelassen werden)."
+msgstr "Geben Sie hier die Pfade zu den einzelnen Werkzeugen an (Programme, die nicht benötigt werden, können freigelassen werden)."
 
-#: src/interface.c:3753
+#: src/interface.c:3784
 msgid "Make:"
 msgstr "Make:"
 
-#: src/interface.c:3760
+#: src/interface.c:3791
 msgid "Terminal:"
 msgstr "Terminal:"
 
-#: src/interface.c:3767
+#: src/interface.c:3798
 msgid "Browser:"
 msgstr "Browser:"
 
-#: src/interface.c:3779
+#: src/interface.c:3810
 msgid "Path and options for the make tool"
 msgstr "Pfad und spezielle Optionen und / oder Targets für \"make\" angeben."
 
-#: src/interface.c:3786
-msgid ""
-"A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
-"-e argument)"
-msgstr ""
-"Eine Terminal-Emulation wie z.B. xterm, gnome-terminal oder konsole (sie "
-"sollte die Option -e akzeptieren)."
+#: src/interface.c:3817
+msgid "A terminal emulator like xterm, gnome-terminal or konsole (should accept the -e argument)"
+msgstr "Eine Terminal-Emulation wie z.B. xterm, gnome-terminal oder konsole (sie sollte die Option -e akzeptieren)."
 
-#: src/interface.c:3793
+#: src/interface.c:3824
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Pfad und evtl. Argumente zu Ihrem Lieblingsbrowser"
 
-#: src/interface.c:3825
+#: src/interface.c:3856
 msgid "Print command:"
 msgstr "Druckbefehl:"
 
-#: src/interface.c:3837
+#: src/interface.c:3868
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)."
 msgstr "Pfad zum Druckbefehl (benutzen Sie %f für den Dateinamen)."
 
-#: src/interface.c:3849
+#: src/interface.c:3880
 msgid "Grep:"
 msgstr "Grep:"
 
-#: src/interface.c:3872
+#: src/interface.c:3903
 msgid "<b>Tool paths</b>"
 msgstr "<b>Pfade zu den Werkzeugen</b>"
 
-#: src/interface.c:3877
+#: src/interface.c:3908
 msgid "Tools"
 msgstr "Werkzeuge"
 
-#: src/interface.c:3895
-msgid ""
-"Set the information to be used in templates. See the documentation for "
-"details."
+#: src/interface.c:3926
+msgid "Set the information to be used in templates. See the documentation for details."
 msgstr ""
-"Geben Sie hier die Informationen an, die in den Vorlagen benutzt werden "
-"sollen.\n"
-"Konsultieren Sie die Dokumentation, um mehr über die Arbeitsweise der "
-"Vorlagen zu erfahren."
+"Geben Sie hier die Informationen an, die in den Vorlagen benutzt werden sollen.\n"
+"Konsultieren Sie die Dokumentation, um mehr über die Arbeitsweise der Vorlagen zu erfahren."
 
-#: src/interface.c:3913
+#: src/interface.c:3944
 msgid "email address of the developer"
 msgstr "eMail-Adresse des Entwicklers"
 
-#: src/interface.c:3920
+#: src/interface.c:3951
 msgid "Initials of the developer name"
 msgstr "Initialen des Entwicklernames"
 
-#: src/interface.c:3922
+#: src/interface.c:3953
 msgid "Initial Version:"
 msgstr "Anfangsversion:"
 
-#: src/interface.c:3934
+#: src/interface.c:3965
 msgid "Version number, which a new file initially has"
 msgstr "Versionsnummer, die eine neue Datei zu Beginn hat"
 
-#: src/interface.c:3941
+#: src/interface.c:3972
 msgid "Company name"
 msgstr "Firmenname"
 
-#: src/interface.c:3943
+#: src/interface.c:3974
 msgid "Developer:"
 msgstr "Entwickler:"
 
-#: src/interface.c:3950
+#: src/interface.c:3981
 msgid "Company:"
 msgstr "Firma:"
 
-#: src/interface.c:3957
+#: src/interface.c:3988
 msgid "Mail address:"
 msgstr "Mail-Adresse:"
 
-#: src/interface.c:3964
+#: src/interface.c:3995
 msgid "Initials:"
 msgstr "Initialen:"
 
-#: src/interface.c:3976
+#: src/interface.c:4007
 msgid "The name of the developer"
 msgstr "Der Name des Entwicklers"
 
-#: src/interface.c:3978
-msgid ""
-"<i>Notice: For all changes you make here to take effect, you need to restart "
-"Geany.</i>"
-msgstr ""
-"<i>Damit hier gemachte Eigenschaftsänderungen wirksam werden, muss Geany neu "
-"gestartet werden</i>"
+#: src/interface.c:4009
+msgid "<i>Notice: For all changes you make here to take effect, you need to restart Geany.</i>"
+msgstr "<i>Damit hier gemachte Eigenschaftsänderungen wirksam werden, muss Geany neu gestartet werden</i>"
 
-#: src/interface.c:3985
+#: src/interface.c:4016
 msgid "<b>Template data</b>"
 msgstr "<b>Daten für Vorlagen:</b>"
 
-#: src/interface.c:3990
+#: src/interface.c:4021
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: src/interface.c:4008
-msgid ""
-"Here you can change keyboard shortcuts for various actions. Select one and "
-"press the Change button to enter a new shortcut, or double click on an "
-"action to edit the string representation of the shortcut directly."
-msgstr ""
-"Hier können die Tastenkombinationen für verschiedene Aktionen innerhalb von "
-"Geany festgelegt bzw. verändert werden. Um eine Tastenkombination zu ändern, "
-"einfach Doppelklicken oder markieren und auf Ändern klicken. Zudem können "
-"die Tastenkombinationen auch direkt eingegeben werden."
+#: src/interface.c:4039
+msgid "Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."
+msgstr "Hier können die Tastenkombinationen für verschiedene Aktionen innerhalb von Geany festgelegt bzw. verändert werden. Um eine Tastenkombination zu ändern, einfach Doppelklicken oder markieren und auf Ändern klicken. Zudem können die Tastenkombinationen auch direkt eingegeben werden."
 
-#: src/interface.c:4031
+#: src/interface.c:4062
 msgid "Change"
 msgstr "Ändern"
 
-#: src/interface.c:4035
+#: src/interface.c:4066
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Tastaturkürzel</b>"
 
-#: src/interface.c:4040
+#: src/interface.c:4071
 msgid "Keybindings"
 msgstr "Tastenkürzel"
 
@@ -2479,11 +2476,13 @@ msgstr "Auswahl vorwärts im Dokument finden "
 msgid "Find Previous Selection"
 msgstr "Auswahl rückwärts im Dokument finden"
 
-#: src/keybindings.c:167 src/search.c:412
+#: src/keybindings.c:167
+#: src/search.c:412
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: src/keybindings.c:169 src/search.c:559
+#: src/keybindings.c:169
+#: src/search.c:559
 msgid "Find in files"
 msgstr "In Dateien suchen"
 
@@ -2772,81 +2771,76 @@ msgstr "Tastaturkürzel"
 msgid "The following keyboard shortcuts are defined:"
 msgstr "Folgende Tastenkürzel sind definiert: "
 
-#: src/keyfile.c:421
+#: src/keyfile.c:425
 msgid "Type here what you want, use it as a notice/scratch board"
-msgstr ""
-"Schreiben Sie hier rein, was sie möchten. Sie können es als Notizbuch nutzen."
+msgstr "Schreiben Sie hier rein, was sie möchten. Sie können es als Notizbuch nutzen."
 
-#: src/keyfile.c:638
+#: src/keyfile.c:653
 msgid "Failed to load one or more session files."
-msgstr ""
-"Eine oder mehre Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
-"werden."
+msgstr "Eine oder mehre Datei(en) aus der letzten Sitzung konnte(n) nicht geladen werden."
 
-#: src/main.c:95
-msgid ""
-"set initial column number for the first opened file (useful in conjunction "
-"with --line)"
-msgstr ""
-"Setzt die Spaltennummer in der zuerst geöffneten Datei. Sinnvoll in "
-"Kombination mit der Option -l oder --line."
+#: src/main.c:102
+msgid "set initial column number for the first opened file (useful in conjunction with --line)"
+msgstr "Setzt die Spaltennummer in der zuerst geöffneten Datei. Sinnvoll nur in Kombination mit der Option -l oder --line."
 
-#: src/main.c:96
+#: src/main.c:103
 msgid "use an alternate configuration directory"
 msgstr "Benutzt ein anderes Verzeichnis für die Konfigurationsdateien"
 
-#: src/main.c:97
+#: src/main.c:104
 msgid "runs in debug mode (means being verbose)"
 msgstr "Geany im Debug-Modus ausführen (Gesprächig!)"
 
-#: src/main.c:98
+#: src/main.c:105
+msgid "print internal filetype names"
+msgstr "Listet die unterstützen Dateitypen auf"
+
+#: src/main.c:106
 msgid "generate global tags file (see documentation)"
 msgstr "Autovervollständigungsdatei generieren"
 
-#: src/main.c:101
+#: src/main.c:109
 msgid "don't open files in a running instance, force opening a new instance"
-msgstr ""
-"Dateien nicht in einer bereits laufenden Instanz, sondern in einer neuen "
-"Instanz öffnen."
+msgstr "Dateien nicht in einer bereits laufenden Instanz, sondern in einer neuen Instanz öffnen."
 
-#: src/main.c:103
+#: src/main.c:111
 msgid "set initial line number for the first opened file"
 msgstr "Setzt die Zeilennummer in der zuerst geöffneten Datei"
 
-#: src/main.c:104
+#: src/main.c:112
 msgid "don't show message window at startup"
 msgstr "Kein Meldungsfenster beim Starten anzeigen"
 
-#: src/main.c:105
+#: src/main.c:113
 msgid "don't load auto completion data (see documentation)"
 msgstr "Autovervollständigungsdaten nicht laden"
 
-#: src/main.c:106
+#: src/main.c:114
 msgid "don't load the previous session's files"
 msgstr "Dateien aus der letzten Sitzung nicht laden"
 
-#: src/main.c:108
+#: src/main.c:116
 msgid "don't load terminal support"
 msgstr "Die virtual terminal emulation (VTE) nicht starten"
 
-#: src/main.c:109
+#: src/main.c:117
 msgid "filename of libvte.so"
 msgstr "Name der libvte.so"
 
-#: src/main.c:111
+#: src/main.c:119
 msgid "show version and exit"
 msgstr "Versionsinformation anzeigen und Programm beenden"
 
-#: src/main.c:436
-msgid " - A fast and lightweight IDE"
-msgstr " - Eine kleine und schnelle Entwicklungsumgebung"
+#: src/main.c:448
+msgid "[FILES...]"
+msgstr "[Dateien...]"
 
-#: src/main.c:446
+#: src/main.c:458
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(kompiliert am %s mit GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: src/main.c:510
+#: src/main.c:535
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -2857,17 +2851,18 @@ msgstr ""
 "Es könnte zu Problemen bei der Verwendung von Geany kommen.\n"
 "Geany trotzdem starten?"
 
-#: src/main.c:563 src/socket.c:143
+#: src/main.c:588
+#: src/socket.c:143
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnte die Datei %s nicht finden."
 
-#: src/main.c:697
+#: src/main.c:723
 #, c-format
 msgid "This is Geany %s."
 msgstr "Willkommen zu Geany %s."
 
-#: src/main.c:699
+#: src/main.c:725
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigurationsverzeichnis konnte nicht erstellt werden (%s)."
@@ -2880,30 +2875,27 @@ msgstr "Meldungen"
 msgid "_Hide Message Window"
 msgstr "Meldungs_fenster ausblenden"
 
-#: src/prefs.c:346
+#: src/prefs.c:360
 msgid "Action"
 msgstr "Aktion"
 
-#: src/prefs.c:351
+#: src/prefs.c:365
 msgid "Shortcut"
 msgstr "Tastenkürzel"
 
-#: src/prefs.c:850
+#: src/prefs.c:873
 msgid "Grab key"
 msgstr "Tasten festlegen"
 
-#: src/prefs.c:854
+#: src/prefs.c:877
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
 msgstr "Welche Tastenkomination soll für \"%s\" benutzt werden?"
 
-#: src/prefs.c:978
+#: src/prefs.c:1001
 #, c-format
-msgid ""
-"The combination '%s' is already used for \"%s\". Please choose another one."
-msgstr ""
-"Die Tastenkombination '%s' wird bereits für \"%s\" verwendet. Bitte wählen "
-"Sie eine andere Tastenkombination."
+msgid "The combination '%s' is already used for \"%s\". Please choose another one."
+msgstr "Die Tastenkombination '%s' wird bereits für \"%s\" verwendet. Bitte wählen Sie eine andere Tastenkombination."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. please avoid special characters and spaces, look at the source for details or ask Frank
@@ -2919,36 +2911,38 @@ msgstr "Neue Projekt erstellen"
 msgid "C_reate"
 msgstr "_Erstellen"
 
-#: src/project.c:126 src/project.c:340
+#: src/project.c:126
+#: src/project.c:340
 msgid "Name:"
 msgstr "Name:"
 
-#: src/project.c:138 src/project.c:352
+#: src/project.c:138
+#: src/project.c:352
 msgid "Filename:"
 msgstr "Dateiname:"
 
-#: src/project.c:158 src/project.c:381
+#: src/project.c:158
+#: src/project.c:381
 msgid "Base path:"
 msgstr "Basispfad:"
 
 #: src/project.c:166
-msgid ""
-"Base directory of all files that make up the project. This can be a new "
-"path, or an existing directory tree."
-msgstr ""
-"Basispfad aller Dateien, die zu einem Projekt gehören. Es kann sowohl ein "
-"bereits existierender, als auch ein neuer Pfad sein."
+msgid "Base directory of all files that make up the project. This can be a new path, or an existing directory tree."
+msgstr "Basispfad aller Dateien, die zu einem Projekt gehören. Es kann sowohl ein bereits existierender, als auch ein neuer Pfad sein."
 
-#: src/project.c:168 src/project.c:391
+#: src/project.c:168
+#: src/project.c:391
 msgid "Choose Project Base Path"
 msgstr "Auswahl der Projektbasispfades"
 
-#: src/project.c:214 src/project.c:781
+#: src/project.c:214
+#: src/project.c:781
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Die Projektdatei \"%s\" konnte nicht geladen werden."
 
-#: src/project.c:238 src/project.c:246
+#: src/project.c:238
+#: src/project.c:246
 msgid "Open Project"
 msgstr "Projekt öffnen"
 
@@ -2971,22 +2965,15 @@ msgstr "Beschreibung:"
 
 #: src/project.c:389
 msgid "Directory to run Make All from. Leave blank to use the default command."
-msgstr ""
-"Verzeichnis, in dem ein Make All durchgeführt werden soll. Um die "
-"Standardeinstellungen zu benutzen, dieses Feld leer lassen. "
+msgstr "Verzeichnis, in dem ein Make All durchgeführt werden soll. Um die Standardeinstellungen zu benutzen, dieses Feld leer lassen. "
 
 #: src/project.c:397
 msgid "Run command:"
 msgstr "Kommando ausführen:"
 
 #: src/project.c:405
-msgid ""
-"Command-line to run in the project base directory. Options can be appended "
-"to the command. Leave blank to use the default run command."
-msgstr ""
-"Kommando, das im Projekt-Basisverzeichnis ausgeführt werden kann. Parameter "
-"können hinter dem Befehl folgen. Lassen Sie das Feld leer, um den "
-"Standardbefehl zu verwenden."
+msgid "Command-line to run in the project base directory. Options can be appended to the command. Leave blank to use the default run command."
+msgstr "Kommando, das im Projekt-Basisverzeichnis ausgeführt werden kann. Parameter können hinter dem Befehl folgen. Lassen Sie das Feld leer, um den Standardbefehl zu verwenden."
 
 #: src/project.c:421
 msgid "File patterns:"
@@ -3038,12 +3025,14 @@ msgid "Project \"%s\" saved."
 msgstr "Projekt \"%s\" gespeichert."
 
 #. initialise the dialog
-#: src/project.c:671 src/project.c:682
+#: src/project.c:671
+#: src/project.c:682
 msgid "Choose Project Filename"
 msgstr "Auswahl des Projektdateinamens"
 
 #. initialise the dialog
-#: src/project.c:700 src/project.c:711
+#: src/project.c:700
+#: src/project.c:711
 msgid "Choose Project Run Command"
 msgstr "Wählen Sie das Kommando zum Ausführen des Projektes."
 
@@ -3057,12 +3046,8 @@ msgid "_Use regular expressions"
 msgstr "Reguläre Ausdrücke _benutzen"
 
 #: src/search.c:141
-msgid ""
-"Use POSIX-like regular expressions. For detailed information about using "
-"regular expressions, please read the documentation."
-msgstr ""
-"Benutze POSIX-ähnliche reguläre Ausdrücke. Für weitere Informationen über "
-"reguläre Ausdrücke lesen Sie bitte die Dokumentation."
+msgid "Use POSIX-like regular expressions. For detailed information about using regular expressions, please read the documentation."
+msgstr "Benutze POSIX-ähnliche reguläre Ausdrücke. Für weitere Informationen über reguläre Ausdrücke lesen Sie bitte die Dokumentation."
 
 #: src/search.c:148
 msgid "_Search backwards"
@@ -3074,17 +3059,19 @@ msgstr "Sonderzeichen _maskieren"
 
 #: src/search.c:167
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
-"corresponding control characters."
+"Replace \\\\, \\t, \\n"
+", \\r and \\uXXXX (Unicode chararacters) with the corresponding control characters."
 msgstr ""
-"Ersetzt \\\\, \\t, \\n, \\r und \\uXXXX (Unicode-Zeichen) mit den "
-"entsprechenden Sonderzeichen."
+"Ersetzt \\\\, \\t, \\n"
+", \\r und \\uXXXX (Unicode-Zeichen) mit den entsprechenden Sonderzeichen."
 
-#: src/search.c:176 src/search.c:631
+#: src/search.c:176
+#: src/search.c:631
 msgid "_Case sensitive"
 msgstr "_Groß- / Kleinschreibung beachten"
 
-#: src/search.c:181 src/search.c:637
+#: src/search.c:181
+#: src/search.c:637
 msgid "Match only a _whole word"
 msgstr "Nur g_anze Wörter finden"
 
@@ -3104,7 +3091,9 @@ msgstr "_Vorheriges"
 msgid "_Next"
 msgstr "_Nächstes"
 
-#: src/search.c:310 src/search.c:429 src/search.c:583
+#: src/search.c:310
+#: src/search.c:429
+#: src/search.c:583
 msgid "Search for:"
 msgstr "Suchen nach:"
 
@@ -3121,20 +3110,24 @@ msgstr "_Markieren"
 msgid "Mark all matches in the current document."
 msgstr "Markiert alle Treffer innerhalb des Dokumentes."
 
-#: src/search.c:346 src/search.c:487
+#: src/search.c:346
+#: src/search.c:487
 msgid "In Sessi_on"
 msgstr "In Sessi_on finden"
 
-#: src/search.c:351 src/search.c:492
+#: src/search.c:351
+#: src/search.c:492
 msgid "_In Document"
 msgstr "_Im Dokument"
 
 #. close window checkbox
-#: src/search.c:357 src/search.c:498
+#: src/search.c:357
+#: src/search.c:498
 msgid "Close _dialog"
 msgstr "Diesen Dialog _schließen."
 
-#: src/search.c:362 src/search.c:503
+#: src/search.c:362
+#: src/search.c:503
 msgid "Disable this option to keep the dialog open."
 msgstr "Diese Option deaktivieren, um den Dialog nicht zu schließen."
 
@@ -3171,10 +3164,10 @@ msgstr "_Liste von Zeichenketten"
 msgid "_Grep regular expressions"
 msgstr "Reguläre Ausdrücke _benutzen (grep)"
 
-#: src/search.c:615 src/search.c:622
+#: src/search.c:615
+#: src/search.c:622
 msgid "See grep's manual page for more information."
-msgstr ""
-"Schlagen Sie in der Dokumentation zu »grep« für mehr Informationen nach."
+msgstr "Schlagen Sie in der Dokumentation zu »grep« für mehr Informationen nach."
 
 #: src/search.c:620
 msgid "_Extended regular expressions"
@@ -3200,15 +3193,12 @@ msgstr "_Zus. Optionen:"
 msgid "Other options to pass to Grep"
 msgstr "Andere Argumente, die an grep übergeben werden sollen"
 
-#: src/search.c:866 src/search.c:1360 src/search.c:1361
+#: src/search.c:868
+#: src/search.c:1370
+#: src/search.c:1371
 #, c-format
-msgid "No matches found for '%s'."
-msgstr "Keine Treffer für '%s' gefunden."
-
-#: src/search.c:868 src/search.c:1367 src/search.c:1368
-#, c-format
-msgid "Found %d matches for '%s'."
-msgstr "%d Treffer für '%s' gefunden gefunden."
+msgid "Found %d matches for \"%s\"."
+msgstr "%d Treffer für \"%s\" gefunden."
 
 #: src/search.c:986
 #, c-format
@@ -3226,9 +3216,7 @@ msgstr "Kein Text zum Suchen angegeben."
 #: src/search.c:1126
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
-msgstr ""
-"Konnte das grep Kommando '%s' nicht finden (Pfad zum Grep Kommando in den "
-"Einstellungen überprüfen)."
+msgstr "Konnte das grep Kommando '%s' nicht finden (Pfad zum Grep Kommando in den Einstellungen überprüfen)."
 
 #: src/search.c:1191
 #, c-format
@@ -3244,21 +3232,29 @@ msgstr "Konnte Verzeichnis nicht öffnen (%s)."
 msgid "Search failed."
 msgstr "Suche schlug fehl."
 
-#: src/search.c:1278 src/search.c:1279
+#: src/search.c:1278
+#: src/search.c:1279
 #, c-format
 msgid "Search completed with %d matches."
 msgstr "Such mit %d Treffern abgeschlossen."
 
-#: src/support.c:90 src/support.c:114
+#: src/search.c:1283
+msgid "No matches found."
+msgstr "Keine Treffer gefunden."
+
+#: src/support.c:90
+#: src/support.c:114
 #, c-format
 msgid "Couldn't find pixmap file: %s"
 msgstr "Konnte PixMap %s nicht finden."
 
-#: src/symbols.c:455 src/symbols.c:482
+#: src/symbols.c:455
+#: src/symbols.c:482
 msgid "Chapter"
 msgstr "Kapitel"
 
-#: src/symbols.c:456 src/symbols.c:478
+#: src/symbols.c:456
+#: src/symbols.c:478
 msgid "Section"
 msgstr "Section"
 
@@ -3280,11 +3276,15 @@ msgstr "Anhang"
 
 #. &(tv_iters.tag_macro), _("Macros"),
 #. &(tv_iters.tag_variable), _("Variables"),
-#: src/symbols.c:461 src/symbols.c:483 src/symbols.c:548 src/symbols.c:573
+#: src/symbols.c:461
+#: src/symbols.c:483
+#: src/symbols.c:548
+#: src/symbols.c:573
 msgid "Other"
 msgstr "Sonstiges"
 
-#: src/symbols.c:467 src/symbols.c:557
+#: src/symbols.c:467
+#: src/symbols.c:557
 msgid "Module"
 msgstr "Modul"
 
@@ -3296,7 +3296,10 @@ msgstr "Typen"
 msgid "Type constructors"
 msgstr "Typkonstruktoren"
 
-#: src/symbols.c:470 src/symbols.c:490 src/symbols.c:517 src/symbols.c:528
+#: src/symbols.c:470
+#: src/symbols.c:490
+#: src/symbols.c:517
+#: src/symbols.c:528
 #: src/symbols.c:562
 msgid "Functions"
 msgstr "Funktionen"
@@ -3321,7 +3324,8 @@ msgstr "Subsubsection"
 msgid "Label"
 msgstr "Label"
 
-#: src/symbols.c:489 src/symbols.c:541
+#: src/symbols.c:489
+#: src/symbols.c:541
 msgid "Package"
 msgstr "Package"
 
@@ -3337,7 +3341,10 @@ msgstr "Lokal"
 msgid "Our"
 msgstr "Our"
 
-#: src/symbols.c:502 src/symbols.c:515 src/symbols.c:543 src/symbols.c:561
+#: src/symbols.c:502
+#: src/symbols.c:515
+#: src/symbols.c:543
+#: src/symbols.c:561
 msgid "Classes"
 msgstr "Klassen"
 
@@ -3349,18 +3356,24 @@ msgstr "Singletons"
 msgid "Mixins"
 msgstr "Mixins"
 
-#: src/symbols.c:505 src/symbols.c:516 src/symbols.c:544
+#: src/symbols.c:505
+#: src/symbols.c:516
+#: src/symbols.c:544
 msgid "Methods"
 msgstr "Methoden"
 
-#: src/symbols.c:506 src/symbols.c:545 src/symbols.c:563
+#: src/symbols.c:506
+#: src/symbols.c:545
+#: src/symbols.c:563
 msgid "Members"
 msgstr "Instanzvariablen"
 
 #. &(tv_iters.tag_class), _("Constants"),
 #. &(tv_iters.tag_member), _("Members"),
 #. &(tv_iters.tag_macro), _("Macros"),
-#: src/symbols.c:507 src/symbols.c:532 src/symbols.c:572
+#: src/symbols.c:507
+#: src/symbols.c:532
+#: src/symbols.c:572
 msgid "Variables"
 msgstr "Variablen"
 
@@ -3403,12 +3416,10 @@ msgstr ""
 #, c-format
 msgid ""
 "Example:\n"
-"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
-"gtk/gtk.h\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h\n"
 msgstr ""
 "Beispiel:\n"
-"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
-"gtk/gtk.h\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h\n"
 
 #: src/symbols.c:764
 msgid "Load Tags"
@@ -3437,13 +3448,8 @@ msgid "_Insert"
 msgstr "_Einfügen"
 
 #: src/tools.c:113
-msgid ""
-"Choose a special character from the list below and double click on it or use "
-"the button to insert it at the current cursor position."
-msgstr ""
-"Wählen Sie das gesuchte Sonderzeichen aus der Liste aus und fügen Sie es mit "
-"einem Doppelklick oder über die Button »Einfügen« in Ihre aktuelles Dokument "
-"ein."
+msgid "Choose a special character from the list below and double click on it or use the button to insert it at the current cursor position."
+msgstr "Wählen Sie das gesuchte Sonderzeichen aus der Liste aus und fügen Sie es mit einem Doppelklick oder über die Button »Einfügen« in Ihre aktuelles Dokument ein."
 
 #: src/tools.c:126
 msgid "Character"
@@ -3453,112 +3459,110 @@ msgstr "Zeichen"
 msgid "HTML (name)"
 msgstr "HTML (Name)"
 
-#: src/tools.c:169
+#: src/tools.c:172
 msgid "HTML characters"
 msgstr "Zeichen für HTML"
 
-#: src/tools.c:175
+#: src/tools.c:178
 msgid "ISO 8859-1 characters"
 msgstr "Zeichen nach ISO 8859-1 "
 
-#: src/tools.c:273
+#: src/tools.c:276
 msgid "Greek characters"
 msgstr "Griechische Buchstaben"
 
-#: src/tools.c:328
+#: src/tools.c:331
 msgid "Mathematical characters"
 msgstr "Mathematische Symbole"
 
-#: src/tools.c:369
+#: src/tools.c:372
 msgid "Technical characters"
 msgstr "Technische Symbole"
 
-#: src/tools.c:377
+#: src/tools.c:380
 msgid "Arrow characters"
 msgstr "Pfeil-Symbole"
 
-#: src/tools.c:390
+#: src/tools.c:393
 msgid "Punctuation characters"
 msgstr "Zeichen für Interpunktion"
 
-#: src/tools.c:406
+#: src/tools.c:409
 msgid "Miscellaneous characters"
 msgstr "Sonstige Zeichen"
 
-#: src/tools.c:630
+#: src/tools.c:633
 #, c-format
 msgid "Passing data and executing custom command: %s"
 msgstr "Führe benutzerdefiniertes Kommando aus: %s"
 
-#: src/tools.c:682 src/tools.c:911
+#: src/tools.c:685
+#: src/tools.c:914
 msgid "Set Custom Commands"
 msgstr "Benutzerdefiniertes Kommandos einstellen"
 
-#: src/tools.c:689
-msgid ""
-"You can send the current selection to any of these commands and the output "
-"of the command replaces the current selection."
-msgstr ""
-"Sie können die aktuelle Auswahl an ein benutzerdefiniertes Kommando setzen. "
-"Die aktuelle Auswahl wird durch die Ausgabe des Kommandos ersetzt."
+#: src/tools.c:692
+msgid "You can send the current selection to any of these commands and the output of the command replaces the current selection."
+msgstr "Sie können die aktuelle Auswahl an ein benutzerdefiniertes Kommando setzen. Die aktuelle Auswahl wird durch die Ausgabe des Kommandos ersetzt."
 
-#: src/tools.c:880 src/tools.c:884
+#: src/tools.c:883
+#: src/tools.c:887
 msgid "No custom commands defined."
 msgstr "Keine Kommandos definiert."
 
-#: src/tools.c:940
+#: src/tools.c:939
 msgid "Create class"
 msgstr "Klasse erstellen"
 
-#: src/tools.c:948
+#: src/tools.c:952
 msgid "Class"
 msgstr "Klasse"
 
-#: src/tools.c:961
+#: src/tools.c:965
 msgid "Class name:"
 msgstr "Klassenname:"
 
-#: src/tools.c:975
+#: src/tools.c:979
 msgid "Header file:"
 msgstr "Header-Datei"
 
-#: src/tools.c:987
+#: src/tools.c:991
 msgid "Source file:"
 msgstr "Quelldatei"
 
-#: src/tools.c:995
+#: src/tools.c:999
 msgid "Inheritance"
 msgstr "Typ der Vererbung:"
 
-#: src/tools.c:1008
+#: src/tools.c:1012
 msgid "Base class:"
 msgstr "Basisklasse:"
 
-#: src/tools.c:1024
+#: src/tools.c:1028
 msgid "Base header:"
 msgstr "Basis Header-Datei::"
 
-#: src/tools.c:1034
+#: src/tools.c:1038
 msgid "Global"
 msgstr "Global"
 
-#: src/tools.c:1045
+#: src/tools.c:1049
 msgid "Base GType:"
 msgstr "Basis GType:"
 
-#: src/tools.c:1055
+#: src/tools.c:1059
 msgid "Options"
 msgstr "Optionen"
 
-#: src/tools.c:1067
+#: src/tools.c:1071
 msgid "Create constructor"
 msgstr "Konstruktor erstellen"
 
-#: src/tools.c:1072
+#: src/tools.c:1076
 msgid "Create destructor"
 msgstr "Dekonstruktor erstellen"
 
-#: src/tools.c:1084
+#: src/tools.c:1088
 msgid "GTK+ constructor type"
 msgstr "GTK+-Konstruktor Typ"
 
@@ -3566,11 +3570,13 @@ msgstr "GTK+-Konstruktor Typ"
 msgid "No tags found"
 msgstr "Keine Symbole gefunden."
 
-#: src/treeviews.c:280 src/treeviews.c:332
+#: src/treeviews.c:280
+#: src/treeviews.c:332
 msgid "Hide"
 msgstr "Verbergen"
 
-#: src/treeviews.c:288 src/treeviews.c:340
+#: src/treeviews.c:288
+#: src/treeviews.c:340
 msgid "Hide sidebar"
 msgstr "Seitenleiste verbergen"
 
@@ -3583,12 +3589,8 @@ msgstr "Neu laden"
 #. * OVR = overwrite/overtype, INS = insert, MOD = modified
 #: src/ui_utils.c:127
 #, c-format
-msgid ""
-"line: %d\t col: %d\t sel: %d\t %s      %s      mode: %s      encoding: %s %"
-"s      filetype: %s      scope: %s"
-msgstr ""
-"Zeile: %d\t Spalte: %d\t Auswahl: %d\t %s      %s      Modus: %s      "
-"Zeichenkodierung: %s %s      Dateityp: %s      Bereich: %s"
+msgid "line: %d\t col: %d\t sel: %d\t %s      %s      mode: %s      encoding: %s %s      filetype: %s      scope: %s"
+msgstr "Zeile: %d\t Spalte: %d\t Auswahl: %d\t %s      %s      Modus: %s      Zeichenkodierung: %s %s      Dateityp: %s      Bereich: %s"
 
 #: src/ui_utils.c:131
 msgid "RO "
@@ -3652,11 +3654,10 @@ msgstr "Möchten Sie die Datei neu laden?"
 msgid ""
 "The file '%s' on the disk is more recent than\n"
 "the current buffer."
-msgstr ""
-"Die Datei '%s' auf dem Datenträger ist aktueller als die momentan geöffnete "
-"Version."
+msgstr "Die Datei '%s' auf dem Datenträger ist aktueller als die momentan geöffnete Version."
 
-#: src/vte.c:205 src/vte.c:549
+#: src/vte.c:205
+#: src/vte.c:549
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -3669,12 +3670,8 @@ msgid "Terminal plugin"
 msgstr "Terminalplugin"
 
 #: src/vte.c:552
-msgid ""
-"These settings for the virtual terminal emulator widget (VTE) only apply if "
-"the VTE library could be loaded."
-msgstr ""
-"Die Einstellungen für VTE werden nur wirksam, wenn die VTE-Bibliothek "
-"erfolgreich geladen werden konnte."
+msgid "These settings for the virtual terminal emulator widget (VTE) only apply if the VTE library could be loaded."
+msgstr "Die Einstellungen für VTE werden nur wirksam, wenn die VTE-Bibliothek erfolgreich geladen werden konnte."
 
 #: src/vte.c:563
 msgid "Terminal font:"
@@ -3705,9 +3702,7 @@ msgid "Scrollback lines:"
 msgstr "Zeilen zum Zurückrollen:"
 
 #: src/vte.c:612
-msgid ""
-"Specifies the history in lines, which you can scroll back in the terminal "
-"widget."
+msgid "Specifies the history in lines, which you can scroll back in the terminal widget."
 msgstr "Gibt die Zeilen an, die man im Terminal zurückrollen kann."
 
 #: src/vte.c:616
@@ -3715,21 +3710,15 @@ msgid "Terminal emulation:"
 msgstr "Terminalemulation:"
 
 #: src/vte.c:626
-msgid ""
-"Controls how the terminal emulator should behave. Do not change this value "
-"unless you know exactly what you are doing."
-msgstr ""
-"Steuert, wie sich die Terminal Emulation verhalten soll . Ändern Sie diese "
-"Werte nur, wenn sie wissen, was Sie tun."
+msgid "Controls how the terminal emulator should behave. Do not change this value unless you know exactly what you are doing."
+msgstr "Steuert, wie sich die Terminal Emulation verhalten soll . Ändern Sie diese Werte nur, wenn sie wissen, was Sie tun."
 
 #: src/vte.c:628
 msgid "Shell:"
 msgstr "Shell:"
 
 #: src/vte.c:635
-msgid ""
-"Sets the path to the shell which should be started inside the terminal "
-"emulation."
+msgid "Sets the path to the shell which should be started inside the terminal emulation."
 msgstr "Setzt den Pfad zu der Shell, die in der VTE benutzt werden soll."
 
 #: src/vte.c:652
@@ -3738,9 +3727,7 @@ msgstr "Bei Tastendruck scrollen"
 
 #: src/vte.c:653
 msgid "Whether to scroll to the bottom if a key was pressed."
-msgstr ""
-"Legt fest, ob das Fenster bei einem Tastendruck bis zum Ende gescrollt "
-"werden soll."
+msgstr "Legt fest, ob das Fenster bei einem Tastendruck bis zum Ende gescrollt werden soll."
 
 #: src/vte.c:657
 msgid "Scroll on output"
@@ -3755,14 +3742,8 @@ msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Me_nütastenkombination deaktivieren (Vorgabe ist F10)"
 
 #: src/vte.c:663
-msgid ""
-"This option disables the keybinding to popup the menu bar (default is F10). "
-"Disabling it can be useful if you use, for example, Midnight Commander "
-"within the VTE."
-msgstr ""
-"Diese Option deaktiviert bestimmte Tastenkombinationen des Menüs. Eine "
-"Deaktivierung kann sinnvoll sein, wenn Sie zum Beispiel den Midnight "
-"Commander in der VTE benutzen möchten."
+msgid "This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."
+msgstr "Diese Option deaktiviert bestimmte Tastenkombinationen des Menüs. Eine Deaktivierung kann sinnvoll sein, wenn Sie zum Beispiel den Midnight Commander in der VTE benutzen möchten."
 
 #: src/vte.c:667
 msgid "Follow the path of the current file"
@@ -3770,22 +3751,15 @@ msgstr "Pfad der aktuellen Datei setzen"
 
 #: src/vte.c:668
 msgid "Whether to execute \"cd $path\" when you switch between opened files."
-msgstr ""
-"Legt fest, ob \"cd $path\" in der VTE ausgeführt werden soll, wenn Sie "
-"zwischen geöffneten Dateien wechseln."
+msgstr "Legt fest, ob \"cd $path\" in der VTE ausgeführt werden soll, wenn Sie zwischen geöffneten Dateien wechseln."
 
 #: src/vte.c:672
 msgid "Execute programs in VTE"
 msgstr "Führe Programme in der VTE aus"
 
 #: src/vte.c:673
-msgid ""
-"Run programs in VTE instead of opening a terminal emulation window. Please "
-"note, programs executed in VTE cannot be stopped."
-msgstr ""
-"Führt Programme in der VTE aus, anstatt ein neues Terminalfenster zu öffnen. "
-"Achtung: Programme die in der VTE ausgeführt werden, können nicht gestoppt "
-"werden."
+msgid "Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped."
+msgstr "Führt Programme in der VTE aus, anstatt ein neues Terminalfenster zu öffnen. Achtung: Programme die in der VTE ausgeführt werden, können nicht gestoppt werden."
 
 #: src/win32.c:102
 msgid "Executables"
@@ -3799,7 +3773,8 @@ msgstr "Geany Projektdateien"
 msgid "Error"
 msgstr "Fehler"
 
-#: src/win32.c:506 src/win32.c:547
+#: src/win32.c:506
+#: src/win32.c:547
 msgid "Question"
 msgstr "Frage"
 
@@ -3811,9 +3786,10 @@ msgstr "Warnung"
 msgid "Information"
 msgstr "Information"
 
+#~ msgid " - A fast and lightweight IDE"
+#~ msgstr " - Eine kleine und schnelle Entwicklungsumgebung"
 #~ msgid "%s configuration file, edit as you need"
 #~ msgstr "%s Konfigurationsdatei. Bei Bedarf anpassen."
-
 #~ msgid "Function"
 #~ msgstr "Funktion"
 
@@ -3824,10 +3800,8 @@ msgstr "Information"
 #~ msgstr ""
 #~ "Es ist schon ein Projekt \"%s\" geöffnet. Soll es vor dem Weiterarbeiten "
 #~ "geschlossen werden?"
-
 #~ msgid "You have specified an invalid project base path."
 #~ msgstr "Sie haben einen ungültigen Projektbasispfad angegeben."
-
 #~ msgid ""
 #~ "The specified project base path does not exist. Should it be created?"
 #~ msgstr ""
@@ -3836,9 +3810,8 @@ msgstr "Information"
 #, fuzzy
 #~ msgid "Search completed."
 #~ msgstr "Suche schlug fehl."
-
 #~ msgid "Send Selection to custom command 2"
 #~ msgstr "Sende Auswahl an Kommando 2"
-
 #~ msgid "Send Selection to custom command 3"
 #~ msgstr "Sende Auswahl an Kommando 3"
+
