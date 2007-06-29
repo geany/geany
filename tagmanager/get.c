@@ -16,6 +16,7 @@
 #include "general.h"  /* must always come first */
 
 #include <string.h>
+#include <glib.h>
 
 #include "entry.h"
 #include "get.h"
