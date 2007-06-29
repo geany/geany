@@ -145,7 +145,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 
 	if (dialog != GTK_DIALOG(widgets.find_dialog))
 	{
-		check_back = gtk_check_button_new_with_mnemonic(_("_Search backwards"));
+		check_back = gtk_check_button_new_with_mnemonic(_("Search _backwards"));
 		g_object_set_data_full(G_OBJECT(dialog), "check_back",
 						gtk_widget_ref(check_back), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_back), FALSE);
@@ -173,7 +173,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	gtk_container_add(GTK_CONTAINER(fbox), checkbox7);
 	gtk_container_add(GTK_CONTAINER(fbox), check_back);
 
-	checkbox1 = gtk_check_button_new_with_mnemonic(_("_Case sensitive"));
+	checkbox1 = gtk_check_button_new_with_mnemonic(_("C_ase sensitive"));
 	g_object_set_data_full(G_OBJECT(dialog), "check_case",
 					gtk_widget_ref(checkbox1), (GDestroyNotify)gtk_widget_unref);
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox1), FALSE);
@@ -307,10 +307,11 @@ void search_show_find_dialog()
 		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.find_dialog), button,
 			GEANY_RESPONSE_FIND);
 
-		label = gtk_label_new(_("Search for:"));
+		label = gtk_label_new_with_mnemonic(_("_Search for:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 		entry = gtk_combo_box_entry_new_text();
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
 		gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 248);
 		gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
 		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(entry)->child), sel);
@@ -422,17 +423,18 @@ void search_show_replace_dialog()
 		button = gtk_button_new_with_mnemonic(_("_Replace"));
 		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.replace_dialog), button,
 			GEANY_RESPONSE_REPLACE);
-		button = gtk_button_new_with_mnemonic(_("Re_place & Find"));
+		button = gtk_button_new_with_mnemonic(_("Replace & Fi_nd"));
 		gtk_dialog_add_action_widget(GTK_DIALOG(widgets.replace_dialog), button,
 			GEANY_RESPONSE_REPLACE_AND_FIND);
 
-		label_find = gtk_label_new(_("Search for:"));
+		label_find = gtk_label_new_with_mnemonic(_("_Search for:"));
 		gtk_misc_set_alignment(GTK_MISC(label_find), 0, 0.5);
 
-		label_replace = gtk_label_new(_("Replace with:"));
+		label_replace = gtk_label_new_with_mnemonic(_("Re_place with:"));
 		gtk_misc_set_alignment(GTK_MISC(label_replace), 0, 0.5);
 
 		entry_find = gtk_combo_box_entry_new_text();
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label_find), entry_find);
 		gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 248);
 		gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 50);
 		if (sel) gtk_entry_set_text(GTK_ENTRY(GTK_BIN(entry_find)->child), sel);
@@ -440,6 +442,7 @@ void search_show_replace_dialog()
 						gtk_widget_ref(entry_find), (GDestroyNotify)gtk_widget_unref);
 
 		entry_replace = gtk_combo_box_entry_new_text();
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label_replace), entry_replace);
 		gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 248);
 		gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 50);
 		g_object_set_data_full(G_OBJECT(widgets.replace_dialog), "entry_replace",
@@ -566,11 +569,12 @@ void search_show_find_in_files_dialog()
 		gtk_dialog_set_default_response(GTK_DIALOG(widgets.find_in_files_dialog),
 			GTK_RESPONSE_ACCEPT);
 
-		label1 = gtk_label_new(_("Directory:"));
+		label1 = gtk_label_new_with_mnemonic(_("_Directory:"));
 		gtk_misc_set_alignment(GTK_MISC(label1), 0, 0.5);
 
 		dir_combo = gtk_combo_box_entry_new_text();
 		entry = gtk_bin_get_child(GTK_BIN(dir_combo));
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label1), entry);
 		gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
 		gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "dir_combo",
@@ -580,11 +584,12 @@ void search_show_find_in_files_dialog()
 			GTK_ENTRY(entry));
 		gtk_box_pack_start(GTK_BOX(dbox), label1, FALSE, FALSE, 0);
 
-		label = gtk_label_new(_("Search for:"));
+		label = gtk_label_new_with_mnemonic(_("_Search for:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 		combo = gtk_combo_box_entry_new_text();
 		entry = gtk_bin_get_child(GTK_BIN(combo));
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
 		gtk_entry_set_max_length(GTK_ENTRY(entry), 248);
 		gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
 		gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
@@ -628,7 +633,7 @@ void search_show_find_in_files_dialog()
 						gtk_widget_ref(check_recursive), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_recursive), FALSE);
 
-		checkbox1 = gtk_check_button_new_with_mnemonic(_("_Case sensitive"));
+		checkbox1 = gtk_check_button_new_with_mnemonic(_("C_ase sensitive"));
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "check_case",
 						gtk_widget_ref(checkbox1), (GDestroyNotify)gtk_widget_unref);
 		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox1), FALSE);

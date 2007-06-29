@@ -6,6 +6,8 @@
    Re-add previously removed code to fix broken calltips.
    Merge some minor bugfixes to C/C++ parser from CTags SVN and
    remove compiler warning.
+ * src/search.c: Improve many mnemonics in the Search, Find in Files and
+                 Replace dialogs.
 
 
 2007-06-28  Nick Treleaven  <nick.treleaven@btinternet.com>
