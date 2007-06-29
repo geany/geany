@@ -618,6 +618,8 @@ void dialogs_show_color(gchar *colour)
 		gdk_color_parse(colour, &gc);
 		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(
 							GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &gc);
+		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(
+							GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &gc);
 	}
 
 	// We make sure the dialog is visible.
