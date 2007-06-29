@@ -29,9 +29,7 @@
 /*
 *   MACROS
 */
-#define MaxFields   6
 
-#define stringValue(a)		#a
 #define activeToken(st)		((st)->token [(int) (st)->tokenIndex])
 #define parentDecl(st)		((st)->parent == NULL ? \
 				DECL_NONE : (st)->parent->declaration)
@@ -578,14 +576,14 @@ static void deleteToken (tokenInfo *const token)
     }
 }
 
-static const char *accessString (const accessType access)
+static const char *accessString (const accessType laccess)
 {
     static const char *const names [] ={
 	"?", "private", "protected", "public", "default"
     };
     Assert (sizeof (names) / sizeof (names [0]) == ACCESS_COUNT);
-    Assert ((int) access < ACCESS_COUNT);
-    return names [(int) access];
+    Assert ((int) laccess < ACCESS_COUNT);
+    return names [(int) laccess];
 }
 
 static const char *implementationString (const impType imp)
@@ -715,7 +713,6 @@ static boolean isDataTypeKeyword (const tokenInfo *const token)
          return TRUE;
       default: return FALSE;
     }
-    return FALSE;
 }
 
 static boolean isVariableKeyword (const tokenInfo *const token)
@@ -790,7 +787,6 @@ static void initMemberInfo (statementInfo *const st)
     {
 	case DECL_ENUM:
 	case DECL_NAMESPACE:
-	case DECL_UNION:
 	    accessDefault = ACCESS_UNDEFINED;
 	    break;
 
@@ -803,6 +799,7 @@ static void initMemberInfo (statementInfo *const st)
 
 	case DECL_INTERFACE:
 	case DECL_STRUCT:
+	case DECL_UNION:
 	    accessDefault = ACCESS_PUBLIC;
 	    break;
 
@@ -1054,7 +1051,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 			}
 			if (st->implementation != IMP_DEFAULT &&
 				(isLanguage (Lang_cpp) || isLanguage (Lang_csharp) ||
-				 isLanguage (Lang_java)))
+				 isLanguage (Lang_java) || isLanguage (Lang_d) || isLanguage (Lang_ferite)))
 			{
 				tag->extensionFields.implementation =
 						implementationString (st->implementation);
@@ -1063,7 +1060,11 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 			{
 				tag->extensionFields.access = accessField (st);
 			}
-	    break;
+            if ((TRUE == st->gotArgs) && (TRUE == Option.extensionFields.argList) &&
+			 ((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type))) {
+				tag->extensionFields.arglist = getArglistFromPos(tag->filePosition, tag->name);
+			}
+		break;
     }
 
 	if ((TAG_FIELD == tag->type) || (TAG_MEMBER == tag->type) ||
@@ -1498,6 +1499,14 @@ static void readIdentifier (tokenInfo *const token, const int firstChar)
 
     initToken (token);
 
+   /* Bug #1585745 (CTags): strangely, C++ destructors allow whitespace between
+    * the ~ and the class name. */
+	if (isLanguage (Lang_cpp) && firstChar == '~')
+	{
+		vStringPut (name, c);
+		c = skipToNonWhite ();
+	}
+
     do
     {
 	vStringPut (name, c);
@@ -1650,7 +1659,7 @@ static void copyToken (tokenInfo *const dest, const tokenInfo *const src)
     vStringCopy (dest->name, src->name);
 }
 
-static void setAccess (statementInfo *const st, const accessType access)
+static void setAccess (statementInfo *const st, const accessType laccess)
 {
     if (isMember (st))
     {
@@ -1663,9 +1672,9 @@ static void setAccess (statementInfo *const st, const accessType access)
 	    else
 		cppUngetc (c);
 
-	    st->member.accessDefault = access;
+	    st->member.accessDefault = laccess;
 	}
-	st->member.access = access;
+	st->member.access = laccess;
     }
 }
 
@@ -2346,7 +2355,7 @@ static void processInitializer (statementInfo *const st)
 	setToken (st, TOKEN_SEMICOLON);
     else if (c == ',')
 	setToken (st, TOKEN_COMMA);
-    else if ('}'  &&  inEnumBody)
+    else if (c == '}'  &&  inEnumBody)
     {
 	cppUngetc (c);
 	setToken (st, TOKEN_COMMA);
@@ -2629,7 +2638,7 @@ static void tagCheck (statementInfo *const st)
 	    else if (isType (prev, TOKEN_NAME))
 	    {
 		if (isContextualKeyword (prev2))
-		    st->scope = SCOPE_EXTERN;
+		    makeTag (prev, st, TRUE, TAG_EXTERN_VAR);
 		else
 		{
 		    if (!isLanguage (Lang_java))

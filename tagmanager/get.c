@@ -662,4 +662,141 @@ process:
 	return c;
 }
 
+extern char *getArglistFromPos(fpos_t startPosition, const char *tokenName)
+{
+	fpos_t originalPosition;
+	char *result = NULL;
+	char *arglist = NULL;
+	long pos1, pos2 = ftell(File.fp);
+
+	fgetpos(File.fp, &originalPosition);
+	fsetpos(File.fp, &startPosition);
+	pos1 = ftell(File.fp);
+	if (pos2 > pos1)
+	{
+		result = (char *) g_malloc(sizeof(char ) * (pos2 - pos1 + 2));
+		if (result != NULL)
+		{
+			fread(result, sizeof(char), pos2 - pos1 + 1, File.fp);
+			result[pos2-pos1+1] = '\0';
+			arglist = getArglistFromStr(result, tokenName);
+			free(result);
+		}
+	}
+	fsetpos(File.fp, &originalPosition);
+	return arglist;
+}
+
+typedef enum
+{
+	st_none_t,
+	st_escape_t,
+	st_c_comment_t,
+	st_cpp_comment_t,
+	st_double_quote_t,
+	st_single_quote_t
+} ParseState;
+
+static void stripCodeBuffer(char *buf)
+{
+	int i = 0, pos = 0;
+	ParseState state = st_none_t, prev_state = st_none_t;
+
+	while (buf[i] != '\0')
+	{
+		switch(buf[i])
+		{
+			case '/':
+				if (st_none_t == state)
+				{
+					/* Check if this is the start of a comment */
+					if (buf[i+1] == '*') /* C comment */
+						state = st_c_comment_t;
+					else if (buf[i+1] == '/') /* C++ comment */
+						state = st_cpp_comment_t;
+					else /* Normal character */
+						buf[pos++] = '/';
+				}
+				else if (st_c_comment_t == state)
+				{
+					/* Check if this is the end of a C comment */
+					if (buf[i-1] == '*')
+					{
+						if ((pos > 0) && (buf[pos-1] != ' '))
+							buf[pos++] = ' ';
+						state = st_none_t;
+					}
+				}
+				break;
+			case '"':
+				if (st_none_t == state)
+					state = st_double_quote_t;
+				else if (st_double_quote_t == state)
+					state = st_none_t;
+				break;
+			case '\'':
+				if (st_none_t == state)
+					state = st_single_quote_t;
+				else if (st_single_quote_t == state)
+					state = st_none_t;
+				break;
+			default:
+				if ((buf[i] == '\\') && (st_escape_t != state))
+				{
+					prev_state = state;
+					state = st_escape_t;
+				}
+				else if (st_escape_t == state)
+				{
+					state = prev_state;
+					prev_state = st_none_t;
+				}
+				else if ((buf[i] == '\n') && (st_cpp_comment_t == state))
+				{
+					if ((pos > 0) && (buf[pos-1] != ' '))
+						buf[pos++] = ' ';
+					state = st_none_t;
+				}
+				else if (st_none_t == state)
+				{
+					if (isspace(buf[i]))
+					{
+						if ((pos > 0) && (buf[pos-1] != ' '))
+							buf[pos++] = ' ';
+					}
+					else
+						buf[pos++] = buf[i];
+				}
+				break;
+		}
+		++i;
+	}
+	buf[pos] = '\0';
+	return;
+}
+
+extern char *getArglistFromStr(char *buf, const char *name)
+{
+	char *start, *end;
+	int level;
+	if ((NULL == buf) || (NULL == name) || ('\0' == name[0]))
+		return NULL;
+	stripCodeBuffer(buf);
+	if (NULL == (start = strstr(buf, name)))
+		return NULL;
+	if (NULL == (start = strchr(start, '(')))
+		return NULL;
+	for (level = 1, end = start + 1; level > 0; ++end)
+	{
+		if ('\0' == *end)
+			break;
+		else if ('(' == *end)
+			++ level;
+		else if (')' == *end)
+			-- level;
+	}
+	*end = '\0';
+	return strdup(start);
+}
+
 /* vi:set tabstop=4 shiftwidth=4: */
