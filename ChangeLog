@@ -1,3 +1,15 @@
+2007-07-02  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/symbols.c, tagmanager/conf.c:
+   Parse also sections in configuration files.
+   Allow whitespace in keys and section names.
+ * scintilla/makefile.win32, scintilla/KeyWords.cxx,
+   scintilla/LexConf.cxx, scintilla/Makefile.am:
+   Remove unused LexConf.cxx.
+ * scintilla/LexOthers.cxx:
+   Highlight also space separated key value pairs.
+
+
 2007-06-29  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/dialogs.c:

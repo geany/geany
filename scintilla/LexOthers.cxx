@@ -594,7 +594,8 @@ static void ColourisePropsLine(
 	while ((i < lengthLine) && isspacechar(lineBuffer[i]))	// Skip initial spaces
 		i++;
 	if (i < lengthLine) {
-		if (lineBuffer[i] == '#' || lineBuffer[i] == '!' || lineBuffer[i] == ';') {
+		if (lineBuffer[i] == '#' || lineBuffer[i] == '!' || lineBuffer[i] == ';' ||
+			(i < (lengthLine - 1) && lineBuffer[i] == '/' && lineBuffer[i+1] == '/')) {
 			styler.ColourTo(endPos, SCE_PROPS_COMMENT);
 		} else if (lineBuffer[i] == '[') {
 			styler.ColourTo(endPos, SCE_PROPS_SECTION);
@@ -605,9 +606,9 @@ static void ColourisePropsLine(
 			styler.ColourTo(endPos, SCE_PROPS_DEFAULT);
 		} else {
 			// Search for the '=' character
-			while ((i < lengthLine) && (lineBuffer[i] != '='))
+			while ((i < lengthLine) && ! (lineBuffer[i] == '=' || isspacechar(lineBuffer[i])))
 				i++;
-			if ((i < lengthLine) && (lineBuffer[i] == '=')) {
+			if ((i < lengthLine) && (lineBuffer[i] == '=' || isspacechar(lineBuffer[i]))) {
 				styler.ColourTo(startLine + i - 1, SCE_PROPS_KEY);
 				styler.ColourTo(startLine + i, SCE_PROPS_ASSIGNMENT);
 				styler.ColourTo(endPos, SCE_PROPS_DEFAULT);

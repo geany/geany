@@ -470,6 +470,12 @@ static void init_tag_list(gint idx)
 				&tv_iters.tag_function, _("Functions"),
 				NULL);
 			break;
+		case GEANY_FILETYPES_CONF:
+			tag_list_add_groups(tag_store,
+				&tv_iters.tag_namespace, _("Sections"),
+				&tv_iters.tag_macro, _("Keys"),
+				NULL);
+			break;
 		case GEANY_FILETYPES_LATEX:
 		{
 			tag_list_add_groups(tag_store,

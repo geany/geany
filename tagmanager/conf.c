@@ -23,11 +23,13 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
+    K_NAMESPACE,
     K_MACRO
-} shKind;
+} confKind;
 
 static kindOption ConfKinds [] = {
-    { TRUE, 'm', "macro", "macros"}
+    { TRUE, 'n', "namespace",  "sections"},
+    { TRUE, 'm', "macro", "keys"}
 };
 
 /*
@@ -36,7 +38,8 @@ static kindOption ConfKinds [] = {
 
 static boolean isIdentifier (int c)
 {
-    return (boolean)(isalnum (c)  ||  c == '_');
+    // allow whitespace within keys and sections
+    return (boolean)(isalnum (c) || isspace (c) ||  c == '_');
 }
 
 static void findConfTags (void)
@@ -46,42 +49,54 @@ static void findConfTags (void)
 
     while ((line = fileReadLine ()) != NULL)
     {
-	const unsigned char* cp = line;
-	boolean possible = TRUE;
+		const unsigned char* cp = line;
+		boolean possible = TRUE;
 
-	while (isspace ((int) *cp))
-	    ++cp;
-	if (*cp == '#')
-	    continue;
-
-	while (*cp != '\0')
-	{
-	    /*  We look for any sequence of identifier characters following
-	     *  either a white space or a colon and followed by either = or :=
-	     */
-	    if (possible && isIdentifier ((int) *cp))
-	    {
-		while (isIdentifier ((int) *cp))
-		{
-		    vStringPut (name, (int) *cp);
-		    ++cp;
-		}
-		vStringTerminate (name);
 		while (isspace ((int) *cp))
-		    ++cp;
-		if ( *cp == ':')
-		    ++cp;
-		if ( *cp == '=')
-		    makeSimpleTag (name, ConfKinds, K_MACRO);
-		vStringClear (name);
-	    }
-	    else if (isspace ((int) *cp) ||  *cp == ':')
-		possible = TRUE;
-	    else
-		possible = FALSE;
-	    if (*cp != '\0')
-		++cp;
-	}
+			++cp;
+		if (*cp == '#' || (*cp != '\0' && *cp == '/' && *(cp+1) == '/'))
+			continue;
+
+		/* look for a section */
+		if (*cp != '\0' && *cp == '[')
+		{
+			++cp;
+			while (*cp != '\0' && *cp != ']')
+			{
+				vStringPut (name, (int) *cp);
+				++cp;
+			}
+			vStringTerminate (name);
+			makeSimpleTag (name, ConfKinds, K_NAMESPACE);
+			vStringClear (name);
+			continue;
+		}
+
+		while (*cp != '\0')
+		{
+			/*  We look for any sequence of identifier characters following a white space */
+			if (possible && isIdentifier ((int) *cp))
+			{
+				while (isIdentifier ((int) *cp))
+				{
+					vStringPut (name, (int) *cp);
+					++cp;
+				}
+				vStringTerminate (name);
+				while (isspace ((int) *cp))
+					++cp;
+				if (*cp == '=')
+					makeSimpleTag (name, ConfKinds, K_MACRO);
+				vStringClear (name);
+			}
+			else if (isspace ((int) *cp))
+				possible = TRUE;
+			else
+				possible = FALSE;
+
+			if (*cp != '\0')
+				++cp;
+		}
     }
     vStringDelete (name);
 }

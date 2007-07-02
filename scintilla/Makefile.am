@@ -14,7 +14,6 @@ LexBash.cxx \
 LexOMS.cxx \
 LexCPP.cxx \
 LexCaml.cxx \
-LexConf.cxx \
 LexCrontab.cxx \
 LexCSS.cxx \
 LexD.cxx \
