@@ -8,6 +8,8 @@
    Remove unused LexConf.cxx.
  * scintilla/LexOthers.cxx:
    Highlight also space separated key value pairs.
+ * src/win32.c:
+   Fix crash when trying to open the Save As dialog on Windows.
 
 
 2007-06-29  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -60,14 +60,14 @@ static gchar *win32_get_file_filters()
 	GString *all_patterns = g_string_sized_new(100);
 	gchar *tmp;
 
-	for (i = 0; filetypes[i] != NULL; i++)
+	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
 		tmp = g_strjoinv(";", filetypes[i]->pattern);
 		g_string_append_printf(str, "%s\t%s\t", filetypes[i]->title, tmp);
 		g_free(tmp);
 	}
 	// create meta file filter "All Source"
-	for (i = 0; filetypes[i] != NULL; i++)
+	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
 	{
 		for (j = 0; filetypes[i]->pattern[j] != NULL; j++)
 		{
