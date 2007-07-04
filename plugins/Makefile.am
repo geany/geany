@@ -8,20 +8,24 @@ AM_CFLAGS = -Wall
 plugindir = $(libdir)/geany
 
 demoplugin_la_LDFLAGS    = -module -avoid-version
+classbuilder_la_LDFLAGS  = -module -avoid-version
 
 if PLUGINS
 
 # Plugins to be installed
 plugin_LTLIBRARIES = \
-	demoplugin.la
+	demoplugin.la \
+	classbuilder.la
 
 # Plugins not to be installed
 #noinst_LTLIBRARIES = \
 	#demoplugin.la
 
 demoplugin_la_SOURCES    = demoplugin.c
+classbuilder_la_SOURCES  = classbuilder.c
 
 demoplugin_la_LIBADD    = $(GTK_LIBS)
+classbuilder_la_LIBADD  = $(GTK_LIBS)
 
 endif # PLUGINS
 

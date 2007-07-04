@@ -206,128 +206,6 @@ end\n\
 x = StdClass.new\n\
 ";
 
-static const gchar templates_cpp_class_header[] = "{fileheader}\n\n\
-#ifndef {header_guard}\n\
-#define {header_guard}\n\
-{base_include}\n\
-class {class_name}{base_decl}\n\
-{\n\
-	public:\n\
-		{constructor_decl}\
-		{destructor_decl}\
-	\n\
-	private:\n\
-		// add your private declarations\n\
-};\n\
-\n\
-#endif // {header_guard}\n\
-";
-
-static const gchar templates_cpp_class_source[] = "{fileheader}\n\n\
-#include \"{header}\"\n\
-\n\
-{constructor_impl}\n\
-{destructor_impl}\n\
-";
-
-static const gchar templates_gtk_class_header[] = "{fileheader}\n\n\
-#ifndef __{header_guard}__\n\
-#define __{header_guard}__\n\
-{base_include}\n\
-G_BEGIN_DECLS\n\
-\n\
-#define {class_name_up}_TYPE				({class_name_low}_get_type())\n\
-#define {class_name_up}(obj)				(G_TYPE_CHECK_INSTANCE_CAST((obj),\\\n\
-		{class_name_up}_TYPE, {class_name}))\n\
-#define {class_name_up}_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST((klass),\\\n\
-		{class_name_up}_TYPE, {class_name}Class))\n\
-#define IS_{class_name_up}(obj)				(G_TYPE_CHECK_INSTANCE_TYPE((obj),\\\n\
-		{class_name_up}_TYPE))\n\
-#define IS_{class_name_up}_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE((klass),\\\n\
-		{class_name_up}_TYPE))\n\
-\n\
-typedef struct _{class_name}				{class_name};\n\
-typedef struct _{class_name}Class			{class_name}Class;\n\
-\n\
-struct _{class_name}\n\
-{\n\
-	{base_name} parent;\n\
-	/* add your public declarations here */\n\
-};\n\
-\n\
-struct _{class_name}Class\n\
-{\n\
-	{base_name}Class parent_class;\n\
-};\n\
-\n\
-GType		{class_name_low}_get_type	(void);\n\
-{constructor_decl}\
-\n\
-G_END_DECLS\n\
-\n\
-#endif /* __{header_guard}__ */\n\
-";
-
-static const gchar templates_gtk_class_source[] = "{fileheader}\n\
-#include \"{header}\"\n\
-\n\
-typedef struct _{class_name}Private				{class_name}Private;\n\
-\n\
-#define {class_name_up}_GET_PRIVATE(obj)		(G_TYPE_INSTANCE_GET_PRIVATE((obj),\\\n\
-		{class_name_up}_TYPE, {class_name}Private))\n\
-\n\
-struct _{class_name}Private\n\
-{\n\
-	/* add your private declarations here */\n\
-};\n\
-\n\
-static void {class_name_low}_class_init			({class_name}Class *klass);\n\
-static void {class_name_low}_init				({class_name} *self);\n\
-{destructor_decl}\
-\n\
-/* Local data */\n\
-static {base_name}Class *parent_class = NULL;\n\
-\n\
-GType {class_name_low}_get_type(void)\n\
-{\n\
-	static GType self_type = 0;\n\
-	if (! self_type)\n\
-	{\n\
-		static const GTypeInfo self_info = \n\
-		{\n\
-			sizeof({class_name}Class),\n\
-			NULL, /* base_init */\n\
-			NULL, /* base_finalize */\n\
-			(GClassInitFunc){class_name_low}_class_init,\n\
-			NULL, /* class_finalize */\n\
-			NULL, /* class_data */\n\
-			sizeof({class_name}),\n\
-			0,\n\
-			(GInstanceInitFunc){class_name_low}_init,\n\
-		};\n\
-		\n\
-		self_type = g_type_register_static({base_gtype}, \"{class_name}\", &self_info, 0);\
-	}\n\
-	\n\
-	return self_type;\n\
-}\n\
-\n\
-static void {class_name_low}_class_init({class_name}Class *klass)\n\
-{\n\
-	{gtk_destructor_registration}\n\
-	parent_class = ({base_name}Class*)g_type_class_peek({base_gtype});\n\
-	g_type_class_add_private((gpointer)klass, sizeof({class_name}Private));\n\
-}\n\
-\n\
-static void {class_name_low}_init({class_name} *self)\n\
-{\n\
-	\n\
-}\n\
-\n\
-{constructor_impl}\n\
-{destructor_impl}\n\
-";
-
 static gchar *templates[GEANY_MAX_TEMPLATES];
 static gchar *ft_templates[GEANY_MAX_FILE_TYPES] = {NULL};
 
@@ -633,16 +511,18 @@ gchar *templates_get_template_licence(gint filetype_idx, gint licence_type)
 }
 
 
-static gchar *get_file_header(filetype *ft, const gchar *fname)
+gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 {
 	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FILEHEADER]);
 	gchar *shortname;
 	gchar *result;
 	gchar *date = utils_get_date_time();
+	filetype_id ft_id = filetype_idx;
+	filetype *ft = filetypes[ft_id];
 
 	if (fname == NULL)
 	{
-		if (FILETYPE_ID(ft) == GEANY_FILETYPES_ALL)
+		if (ft_id == GEANY_FILETYPES_ALL)
 			shortname = g_strdup(GEANY_STRING_UNTITLED);
 		else
 			shortname = g_strconcat(GEANY_STRING_UNTITLED, ".", ft->extension, NULL);
@@ -658,25 +538,12 @@ static gchar *get_file_header(filetype *ft, const gchar *fname)
 
 	template = utils_str_replace(template, "{datetime}", date);
 
-	result = make_comment_block(template, FILETYPE_ID(ft), 8);
+	result = make_comment_block(template, ft_id, 8);
 
 	g_free(template);
 	g_free(shortname);
 	g_free(date);
 	return result;
-}
-
-
-gchar *templates_get_template_fileheader(gint idx)
-{
-	gchar *fname;
-	filetype *ft;
-
-	g_return_val_if_fail(DOC_IDX_VALID(idx), NULL);
-	ft = doc_list[idx].file_type;
-	fname = doc_list[idx].file_name;
-
-	return get_file_header(ft, fname);
 }
 
 
@@ -688,7 +555,7 @@ static gchar *get_file_template(filetype *ft)
 }
 
 
-gchar *templates_get_template_new_file(filetype *ft)
+gchar *templates_get_template_new_file(struct filetype *ft)
 {
 	gchar *ft_template = NULL;
 	gchar *file_header = NULL;
@@ -696,7 +563,7 @@ gchar *templates_get_template_new_file(filetype *ft)
 	if (FILETYPE_ID(ft) == GEANY_FILETYPES_ALL)
 		return get_file_template(ft);
 
-	file_header = get_file_header(ft, NULL);	// file template only used for new files
+	file_header = templates_get_template_fileheader(ft->id, NULL);	// file template only used for new files
 	ft_template = get_file_template(ft);
 	ft_template = utils_str_replace(ft_template, "{fileheader}", file_header);
 	g_free(file_header);
@@ -764,104 +631,5 @@ static gchar *templates_replace_all(gchar *text, const gchar *year, const gchar 
 	text = utils_str_replace(text, "{geanyversion}", "Geany " VERSION);
 
 	return text;
-}
-
-gchar* templates_get_template_class_header(ClassInfo *class_info)
-{
-	switch (class_info->type)
-	{
-		case GEANY_CLASS_TYPE_CPP:
-		{
-			gchar *fileheader = NULL;
-			gchar *template;
-
-			fileheader = get_file_header(filetypes[GEANY_FILETYPES_C], class_info->header);
-			template = g_strdup(templates_cpp_class_header);
-			template = utils_str_replace(template, "{fileheader}", fileheader);
-			template = utils_str_replace(template, "{header_guard}", class_info->header_guard);
-			template = utils_str_replace(template, "{base_include}", class_info->base_include);
-			template = utils_str_replace(template, "{class_name}", class_info->class_name);
-			template = utils_str_replace(template, "{base_decl}", class_info->base_decl);
-			template = utils_str_replace(template, "{constructor_decl}",
-					class_info->constructor_decl);
-			template = utils_str_replace(template, "{destructor_decl}",
-					class_info->destructor_decl);
-
-			return template;
-		}
-		case GEANY_CLASS_TYPE_GTK:
-		{
-			gchar *fileheader = NULL;
-			gchar *template;
-
-			fileheader = get_file_header(filetypes[GEANY_FILETYPES_C], class_info->header);
-			template = g_strdup(templates_gtk_class_header);
-			template = utils_str_replace(template, "{fileheader}", fileheader);
-			template = utils_str_replace(template, "{header_guard}", class_info->header_guard);
-			template = utils_str_replace(template, "{base_include}", class_info->base_include);
-			template = utils_str_replace(template, "{class_name}", class_info->class_name);
-			template = utils_str_replace(template, "{class_name_up}", class_info->class_name_up);
-			template = utils_str_replace(template, "{class_name_low}", class_info->class_name_low);
-			template = utils_str_replace(template, "{base_name}", class_info->base_name);
-			template = utils_str_replace(template, "{constructor_decl}",
-					class_info->constructor_decl);
-
-			return template;
-		}
-	}
-
-	return NULL;
-}
-
-gchar* templates_get_template_class_source(ClassInfo *class_info)
-{
-	switch (class_info->type)
-	{
-		case GEANY_CLASS_TYPE_CPP:
-		{
-			gchar *fileheader = NULL;
-			gchar *template;
-
-			fileheader = get_file_header(filetypes[GEANY_FILETYPES_C], class_info->source);
-			template = g_strdup(templates_cpp_class_source);
-			template = utils_str_replace(template, "{fileheader}", fileheader);
-			template = utils_str_replace(template, "{header}", class_info->header);
-			template = utils_str_replace(template, "{class_name}", class_info->class_name);
-			template = utils_str_replace(template, "{base_include}", class_info->base_include);
-			template = utils_str_replace(template, "{base_name}", class_info->base_name);
-			template = utils_str_replace(template, "{constructor_impl}",
-					class_info->constructor_impl);
-			template = utils_str_replace(template, "{destructor_impl}",
-					class_info->destructor_impl);
-
-			return template;
-		}
-		case GEANY_CLASS_TYPE_GTK:
-		{
-			gchar *fileheader = NULL;
-			gchar *template;
-
-			fileheader = get_file_header(filetypes[GEANY_FILETYPES_C], class_info->source);
-			template = g_strdup(templates_gtk_class_source);
-			template = utils_str_replace(template, "{fileheader}", fileheader);
-			template = utils_str_replace(template, "{header}", class_info->header);
-			template = utils_str_replace(template, "{class_name}", class_info->class_name);
-			template = utils_str_replace(template, "{class_name_up}", class_info->class_name_up);
-			template = utils_str_replace(template, "{class_name_low}", class_info->class_name_low);
-			template = utils_str_replace(template, "{base_name}", class_info->base_name);
-			template = utils_str_replace(template, "{base_gtype}", class_info->base_gtype);
-			template = utils_str_replace(template, "{destructor_decl}", class_info->destructor_decl);
-			template = utils_str_replace(template, "{constructor_impl}",
-					class_info->constructor_impl);
-			template = utils_str_replace(template, "{destructor_impl}",
-					class_info->destructor_impl);
-			template = utils_str_replace(template, "{gtk_destructor_registration}",
-					class_info->gtk_destructor_registration);
-
-			return template;
-		}
-	}
-
-	return NULL;
 }
 

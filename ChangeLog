@@ -1,3 +1,19 @@
+2007-07-04  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/utils.c, src/utils.h:
+   Add comment for utils_free_pointers() warning not to use it if any
+   pointers may be NULL.
+ * plugins/Makefile.am, plugins/classbuilder.c, src/templates.c,
+   src/interface.c, src/templates.h, src/tools.c, src/tools.h,
+   src/plugindata.h, src/callbacks.c, src/callbacks.h, src/plugins.c,
+   po/POTFILES.in, geany.glade:
+   Make Class Builder into a plugin.
+   Add some function pointers to the plugin API (for the class builder).
+   Don't use G_MODULE_BIND_LAZY when loading plugins otherwise we can
+   potentially get unresolved symbols at runtime, causing a segfault.
+   Capitalize 2 menu item labels.
+
+
 2007-07-02  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/symbols.c, tagmanager/conf.c:

@@ -27,7 +27,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 2;
+static const gint api_version = 3;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -68,6 +68,11 @@ PluginInfo;
 	}
 
 
+typedef struct DocumentFuncs	DocumentFuncs;
+typedef struct ScintillaFuncs	ScintillaFuncs;
+typedef struct TemplateFuncs	TemplateFuncs;
+typedef struct UtilsFuncs		UtilsFuncs;
+
 /* These are fields and functions owned by Geany.
  * Fields will be appended when needed by plugin authors.
  * Note: Remember to increment api_version (and abi_version if necessary) when
@@ -76,10 +81,41 @@ typedef struct PluginData
 {
 	MyApp	*app;	// Geany application data fields
 
-	/*  Almost all plugins should add menu items to the Tools menu only */
-	GtkWidget	*tools_menu;
+	GtkWidget	*tools_menu;	// Almost all plugins should add menu items to the Tools menu only
+
+	GArray		*doc_array;	// array of document pointers
+
+	DocumentFuncs	*document;
+	ScintillaFuncs	*sci;
+	TemplateFuncs	*templates;
+	UtilsFuncs		*utils;
 }
 PluginData;
 
+
+struct filetype;
+
+struct DocumentFuncs
+{
+	gint (*new_file) (const gchar *filename, struct filetype *ft);
+};
+
+struct _ScintillaObject;
+
+struct ScintillaFuncs
+{
+	void (*set_text) (struct _ScintillaObject *sci, const gchar *text);
+};
+
+struct TemplateFuncs
+{
+	gchar* (*get_template_fileheader) (gint filetype_idx, const gchar *fname);
+};
+
+struct UtilsFuncs
+{
+	gboolean (*str_equal) (const gchar *a, const gchar *b);
+	gchar* (*str_replace) (gchar *haystack, const gchar *needle, const gchar *replacement);
+};
 
 #endif

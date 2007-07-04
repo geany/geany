@@ -32,11 +32,12 @@
 #include "plugindata.h"
 #include "support.h"
 #include "utils.h"
+#include "document.h"
+#include "templates.h"
+#include "sciwrappers.h"
 
 
-typedef struct Plugin Plugin;
-
-struct Plugin
+typedef struct Plugin
 {
 	GModule *module;
 	gchar	*filename;		// plugin filename (/path/libname.so)
@@ -45,10 +46,45 @@ struct Plugin
 	PluginInfo* (*info) ();	/* Returns plugin name, description */
 	void (*init) (PluginData *data);	/* Called when the plugin is enabled */
 	void (*cleanup) ();		/* Called when the plugin is disabled or when Geany exits */
-};
+}
+Plugin;
 
+
+static DocumentFuncs	doc_funcs;
+static ScintillaFuncs	sci_funcs;
+static TemplateFuncs	template_funcs;
+static UtilsFuncs		utils_funcs;
 
 static GList *plugin_list = NULL;
+
+
+static void
+init_function_pointers()
+{
+	doc_funcs.new_file = &document_new_file;
+
+	template_funcs.get_template_fileheader = &templates_get_template_fileheader;
+
+	sci_funcs.set_text = &sci_set_text;
+
+	utils_funcs.str_equal = &utils_str_equal;
+	utils_funcs.str_replace = &utils_str_replace;
+}
+
+
+static void
+init_plugin_data(PluginData *data)
+{
+	data->app = app;
+	data->tools_menu = lookup_widget(app->window, "tools1_menu");
+	data->doc_array = doc_array;
+
+	data->document = &doc_funcs;
+	data->sci = &sci_funcs;
+	data->templates = &template_funcs;
+	data->utils = &utils_funcs;
+}
+
 
 /* Prevent the same plugin filename being loaded more than once.
  * Note: g_module_name always returns the .so name, even when Plugin::filename
@@ -108,7 +144,10 @@ plugin_new(const gchar *fname)
 	g_return_val_if_fail(fname, NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
 
-	module = g_module_open(fname, G_MODULE_BIND_LAZY);
+	/* Don't use G_MODULE_BIND_LAZY otherwise we can get unresolved symbols at runtime,
+	 * causing a segfault.
+	 * Without that flag the module will safely fail to load. */
+	module = g_module_open(fname, 0);
 	if (! module)
 	{
 		g_warning("%s", g_module_error());
@@ -148,8 +187,7 @@ plugin_new(const gchar *fname)
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
 
-	plugin->data.app = app;
-	plugin->data.tools_menu = lookup_widget(app->window, "tools1_menu");
+	init_plugin_data(&plugin->data);
 
 	g_module_symbol(module, "init", (void *) &plugin->init);
 	g_module_symbol(module, "cleanup", (void *) &plugin->cleanup);
@@ -191,6 +229,8 @@ void plugins_init()
 {
 	const gchar *path = LIBDIR;
 	GSList *list, *item;
+
+	init_function_pointers();
 
 	list = utils_get_file_list(path, NULL, NULL);
 

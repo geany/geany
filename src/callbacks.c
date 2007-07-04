@@ -1587,8 +1587,14 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 	gchar *text;
+	gchar *fname;
+	filetype *ft;
 
-	text = templates_get_template_fileheader(idx);
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	ft = doc_list[idx].file_type;
+	fname = doc_list[idx].file_name;
+	text = templates_get_template_fileheader(FILETYPE_ID(ft), fname);
 
 	sci_insert_text(doc_list[idx].sci, 0, text);
 	sci_goto_pos(doc_list[idx].sci, 0, FALSE);
@@ -2299,19 +2305,4 @@ gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user
 	return FALSE;
 }
 
-
-void
-on_menu_create_cpp_class_activate      (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	tools_show_dialog_create_class(GEANY_CLASS_TYPE_CPP);
-}
-
-
-void
-on_menu_create_gtk_class_activate      (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	tools_show_dialog_create_class(GEANY_CLASS_TYPE_GTK);
-}
 
