@@ -845,6 +845,12 @@ static GHashTable *init_user_tags()
 
 	// don't need to delete list contents because they are now used for hash contents
 	g_slist_free(file_list);
+
+	// create the tags dir for next time if it doesn't exist
+	if (! g_file_test(user_tags_dir, G_FILE_TEST_IS_DIR))
+	{
+		utils_mkdir(user_tags_dir, FALSE);
+	}
 	return lang_hash;
 }
 

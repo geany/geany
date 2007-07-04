@@ -14,6 +14,9 @@
    Capitalize 2 menu item labels.
  * plugins/classbuilder.c:
    Make Class Builder dialog close when pressing escape.
+ * src/symbols.c:
+   Create $configdir/tags directory if it doesn't exist when loading
+   global tags.
 
 
 2007-07-02  Enrico Tröger  <enrico.troeger@uvena.de>
