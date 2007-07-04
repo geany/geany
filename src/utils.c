@@ -1480,8 +1480,10 @@ gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 }
 
 
-/* Frees all passed pointers if they are non-NULL, the first argument is nothing special,
- * it will also be freed, the list should be ended with NULL */
+/* Frees all passed pointers if they are *ALL* non-NULL.
+ * Do not use if any pointers may be NULL.
+ * The first argument is nothing special, it will also be freed.
+ * The list must be ended with NULL. */
 void utils_free_pointers(gpointer first, ...)
 {
 	va_list a;
