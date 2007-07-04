@@ -50,8 +50,8 @@ void dialogs_show_file_properties(gint idx);
 gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 
 /* extra_text can be NULL; otherwise it is displayed below main_text. */
-gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
-	const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (4, 5);
+gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
+	const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (5, 6);
 
 void dialogs_show_msgbox(gint type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
 

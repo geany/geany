@@ -170,7 +170,7 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 	}
 	else
 	if (! app->pref_main_confirm_exit ||
-		dialogs_show_question_full(GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
+		dialogs_show_question_full(NULL, GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
 			_("Do you really want to quit?")))
 	{
 		quit_app();
@@ -487,7 +487,7 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 	}
 
 	basename = g_path_get_basename(doc_list[idx].file_name);
-	if (dialogs_show_question_full(_("_Reload"), GTK_STOCK_CANCEL,
+	if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
 		_("Any unsaved changes will be lost."),
 		_("Are you sure you want to reload '%s'?"), basename))
 	{
@@ -1322,7 +1322,7 @@ on_find_next1_activate                 (GtkMenuItem     *menuitem,
 	if (search_data.text)
 	{
 		document_find_text(idx, search_data.text, search_data.flags,
-			search_data.backwards, TRUE);
+			search_data.backwards, TRUE, NULL);
 	}
 }
 
@@ -1340,7 +1340,7 @@ on_find_previous1_activate             (GtkMenuItem     *menuitem,
 	else
 	{
 		document_find_text(idx, search_data.text, search_data.flags,
-			!search_data.backwards, TRUE);
+			!search_data.backwards, TRUE, NULL);
 	}
 }
 

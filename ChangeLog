@@ -1,7 +1,12 @@
 2007-07-04  Enrico Tröger  <enrico.troeger@uvena.de>
 
- * geany.glade, src/interface.c, src/keybindings.c, src/keybindings.h:
+ * geany.glade, doc/geany.docbook, src/interface.c, src/keybindings.c,
+   src/keybindings.h:
    Change Help shortcut to F1, use Ctrl-H for Replace.
+ * src/callbacks.c, src/dialogs.c, src/dialogs.h, src/document.c,
+   src/document.h, src/editor.c, src/project.c, src/search.c,
+   src/utils.c, src/win32.c, src/win32.h:
+   Fix focus problem when using the Find dialog.
 
 
 2007-07-04  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -370,7 +370,7 @@ void dialogs_show_msgbox(gint type, const gchar *text, ...)
 	va_end(args);
 
 #ifdef G_OS_WIN32
-	win32_message_dialog(type, string);
+	win32_message_dialog(NULL, type, string);
 #else
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
                                   type, GTK_BUTTONS_OK, "%s", string);
@@ -1057,21 +1057,23 @@ void dialogs_show_file_properties(gint idx)
 }
 
 
-static gboolean
-show_question(const gchar *yes_btn, const gchar *no_btn, const gchar *question_text,
-	const gchar *extra_text)
+static gboolean show_question(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
+	const gchar *question_text,	const gchar *extra_text)
 {
 	gboolean ret = FALSE;
 #ifdef G_OS_WIN32
 	gchar *string = (extra_text == NULL) ? g_strdup(question_text) :
 		g_strconcat(question_text, "\n\n", extra_text, NULL);
 
-	ret = win32_message_dialog(GTK_MESSAGE_QUESTION, string);
+	ret = win32_message_dialog(parent, GTK_MESSAGE_QUESTION, string);
 	g_free(string);
 #else
 	GtkWidget *dialog;
 
-	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window),
+	if (parent == NULL)
+		parent = app->window;
+
+	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
 		GTK_BUTTONS_NONE, "%s", question_text);
 	gtk_widget_set_name(dialog, "GeanyDialog");
@@ -1102,14 +1104,15 @@ gboolean dialogs_show_question(const gchar *text, ...)
 	va_start(args, text);
 	g_vsnprintf(string, 511, text, args);
 	va_end(args);
-	ret = show_question(GTK_STOCK_YES, GTK_STOCK_NO, string, NULL);
+	ret = show_question(app->window, GTK_STOCK_YES, GTK_STOCK_NO, string, NULL);
 	g_free(string);
 	return ret;
 }
 
 
-/* extra_text can be NULL; otherwise it is displayed below main_text. */
-gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
+/* extra_text can be NULL; otherwise it is displayed below main_text.
+ * if parent is NULL, app->window will be used */
+gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
 	const gchar *extra_text, const gchar *main_text, ...)
 {
 	gboolean ret = FALSE;
@@ -1119,7 +1122,7 @@ gboolean dialogs_show_question_full(const gchar *yes_btn, const gchar *no_btn,
 	va_start(args, main_text);
 	g_vsnprintf(string, 511, main_text, args);
 	va_end(args);
-	ret = show_question(yes_btn, no_btn, string, extra_text);
+	ret = show_question(parent, yes_btn, no_btn, string, extra_text);
 	g_free(string);
 	return ret;
 }

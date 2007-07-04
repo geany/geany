@@ -497,7 +497,7 @@ static gboolean close_open_project()
 {
 	if (app->project != NULL)
 	{
-		if (dialogs_show_question_full(GTK_STOCK_OK, GTK_STOCK_CANCEL,
+		if (dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL,
 			_("Do you want to close it before proceeding?"),
 			_("The '%s' project is already open. "), app->project->name))
 		{
@@ -552,7 +552,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		gchar *locale_path = utils_get_locale_from_utf8(base_path);
 		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
 		{
-			if (dialogs_show_question_full(GTK_STOCK_OK, GTK_STOCK_CANCEL,
+			if (dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL,
 				_("Create the project's base path directory?"),
 				_("The path \"%s\" does not exist."),
 				base_path))

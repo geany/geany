@@ -924,7 +924,7 @@ gint document_reload_file(gint idx, const gchar *forced_enc)
 {
 	gint pos = 0;
 
-	if (idx < 0 || ! doc_list[idx].is_valid)
+	if (! DOC_IDX_VALID(idx))
 		return -1;
 
 	// try to set the cursor to the position before reloading
@@ -1151,7 +1151,7 @@ void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean 
  * Returns -1 on failure or the start position of the matching text.
  * Will skip past any selection, ignoring it. */
 gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards,
-		gboolean scroll)
+		gboolean scroll, GtkWidget *parent)
 {
 	gint selection_end, selection_start, search_pos, first_visible_line;
 
@@ -1198,13 +1198,13 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 
 		// we searched only part of the document, so ask whether to wraparound.
 		if (app->pref_main_suppress_search_dialogs ||
-			dialogs_show_question_full(GTK_STOCK_FIND, GTK_STOCK_CANCEL,
+			dialogs_show_question_full(parent, GTK_STOCK_FIND, GTK_STOCK_CANCEL,
 				_("Wrap search and find again?"), _("\"%s\" was not found."), text))
 		{
 			gint ret;
 
 			sci_set_current_position(doc_list[idx].sci, (search_backwards) ? sci_len : 0, FALSE);
-			ret = document_find_text(idx, text, flags, search_backwards, scroll);
+			ret = document_find_text(idx, text, flags, search_backwards, scroll, parent);
 			if (ret == -1)
 			{	// return to original cursor position if not found
 				sci_set_current_position(doc_list[idx].sci, selection_start, FALSE);
@@ -1234,7 +1234,7 @@ gint document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 	if (selection_end == selection_start)
 	{
 		// no selection so just find the next match
-		document_find_text(idx, find_text, flags, search_backwards, TRUE);
+		document_find_text(idx, find_text, flags, search_backwards, TRUE, NULL);
 		return -1;
 	}
 	// there's a selection so go to the start before finding to search through it
@@ -1244,7 +1244,7 @@ gint document_replace_text(gint idx, const gchar *find_text, const gchar *replac
 	else
 		sci_goto_pos(doc_list[idx].sci, selection_start, TRUE);
 
-	search_pos = document_find_text(idx, find_text, flags, search_backwards, TRUE);
+	search_pos = document_find_text(idx, find_text, flags, search_backwards, TRUE, NULL);
 	// return if the original selected text did not match (at the start of the selection)
 	if (search_pos != selection_start) return -1;
 
@@ -1782,8 +1782,9 @@ void document_print(gint idx)
 	cmdline = g_strdup(app->tools_print_cmd);
 	cmdline = utils_str_replace(cmdline, "%f", doc_list[idx].file_name);
 
-	if (dialogs_show_question(_("The file \"%s\" will be printed with the following command:\n\n%s"),
-								doc_list[idx].file_name, cmdline))
+	if (dialogs_show_question(
+			_("The file \"%s\" will be printed with the following command:\n\n%s"),
+			doc_list[idx].file_name, cmdline))
 	{
 		GError *error = NULL;
 

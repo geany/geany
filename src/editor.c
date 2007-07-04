@@ -1428,7 +1428,7 @@ static void real_uncomment_multiline(gint idx)
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
 
 	// remove comment open chars
-	pos = document_find_text(idx, doc_list[idx].file_type->comment_open, 0, TRUE, FALSE);
+	pos = document_find_text(idx, doc_list[idx].file_type->comment_open, 0, TRUE, FALSE, NULL);
 	SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
 
 	// check whether the line is empty and can be deleted
@@ -1441,7 +1441,7 @@ static void real_uncomment_multiline(gint idx)
 	g_free(linebuf);
 
 	// remove comment close chars
-	pos = document_find_text(idx, doc_list[idx].file_type->comment_close, 0, FALSE, FALSE);
+	pos = document_find_text(idx, doc_list[idx].file_type->comment_close, 0, FALSE, FALSE, NULL);
 	SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
 
 	// check whether the line is empty and can be deleted

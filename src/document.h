@@ -166,7 +166,7 @@ void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean 
 /* General search function, used from the find dialog.
  * Returns -1 on failure or the start position of the matching text. */
 gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards,
-	gboolean scroll);
+	gboolean scroll, GtkWidget *parent);
 
 gint document_replace_text(gint idx, const gchar *find_text, const gchar *replace_text,
 	gint flags, gboolean search_backwards);

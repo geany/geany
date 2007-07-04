@@ -350,7 +350,7 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	{
 		gchar *basename = g_path_get_basename(doc_list[idx].file_name);
 
-		if (dialogs_show_question_full(_("_Reload"), GTK_STOCK_CANCEL,
+		if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
 			_("Do you want to reload it?"),
 			_("The file '%s' on the disk is more recent than\n"
 				"the current buffer."), basename))

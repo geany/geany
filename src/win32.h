@@ -36,7 +36,7 @@ void win32_show_color_dialog(const gchar *colour);
 /* Creates a native Windows message box of the given type and returns always TRUE
  * or FALSE representing th pressed Yes or No button.
  * If type is not GTK_MESSAGE_QUESTION, it returns always TRUE. */
-gboolean win32_message_dialog(GtkMessageType type, const gchar *msg);
+gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gchar *msg);
 
 /* Special dialog to ask for an action when closing an unsaved file */
 gint win32_message_dialog_unsaved(const gchar *msg);

@@ -234,7 +234,7 @@ gchar *win32_show_project_open_dialog(const gchar *title, const gchar *initial_d
 		{
 			gchar *error;
 			error = g_strdup_printf("File dialog box error (%x)", (int)CommDlgExtendedError());
-			win32_message_dialog(GTK_MESSAGE_ERROR, error);
+			win32_message_dialog(NULL, GTK_MESSAGE_ERROR, error);
 			g_free(error);
 		}
 		g_free(fname);
@@ -294,7 +294,7 @@ gboolean win32_show_file_dialog(gboolean file_open)
 		{
 			gchar error[100];
 			snprintf(error, sizeof error, "File dialog box error (%x)", (int)CommDlgExtendedError());
-			win32_message_dialog(GTK_MESSAGE_ERROR, error);
+			win32_message_dialog(NULL, GTK_MESSAGE_ERROR, error);
 		}
 		g_free(fname);
 		return FALSE;
@@ -453,7 +453,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 		{
 			gchar error[100];
 			snprintf(error, sizeof error, "File dialog box error (%x)", (int)CommDlgExtendedError());
-			win32_message_dialog(GTK_MESSAGE_ERROR, error);
+			win32_message_dialog(NULL, GTK_MESSAGE_ERROR, error);
 		}
 		g_strfreev(field);
 		g_free(fname);
@@ -483,7 +483,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 /* Creates a native Windows message box of the given type and returns always TRUE
  * or FALSE representing th pressed Yes or No button.
  * If type is not GTK_MESSAGE_QUESTION, it returns always TRUE. */
-gboolean win32_message_dialog(GtkMessageType type, const gchar *msg)
+gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gchar *msg)
 {
 	gboolean ret = TRUE;
 	gint rc;
@@ -526,7 +526,10 @@ gboolean win32_message_dialog(GtkMessageType type, const gchar *msg)
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
 
 	// display the message box
-	rc = MessageBoxW(GDK_WINDOW_HWND(app->window->window), w_msg, w_title, t);
+	if (parent == NULL)
+		parent = app->window;
+
+	rc = MessageBoxW(GDK_WINDOW_HWND(parent->window), w_msg, w_title, t);
 
 	if (type == GTK_MESSAGE_QUESTION && rc != IDYES)
 		ret = FALSE;

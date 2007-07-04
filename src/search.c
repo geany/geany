@@ -269,7 +269,7 @@ void search_find_selection(gint idx, gboolean search_backwards)
 	if (s)
 	{
 		setup_find_next(s);	// allow find next/prev
-		document_find_text(idx, s, 0, search_backwards, TRUE);
+		document_find_text(idx, s, 0, search_backwards, TRUE, NULL);
 		g_free(s);
 	}
 }
@@ -848,7 +848,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			case GEANY_RESPONSE_FIND:
 			case GEANY_RESPONSE_FIND_PREVIOUS:
 				document_find_text(idx, search_data.text, search_data.flags,
-					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE);
+					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE, GTK_WIDGET(dialog));
 				check_close = FALSE;
 				if (app->pref_main_suppress_search_dialogs)
 					check_close = TRUE;
@@ -954,7 +954,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				search_backwards_re);
 			if (rep != -1)
 				document_find_text(idx, find, search_flags_re, search_backwards_re,
-					TRUE);
+					TRUE, NULL);
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE:
@@ -965,7 +965,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 		case GEANY_RESPONSE_FIND:
 		{
-			document_find_text(idx, find, search_flags_re, search_backwards_re, TRUE);
+			document_find_text(idx, find, search_flags_re, search_backwards_re, TRUE,
+							   GTK_WIDGET(dialog));
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE_IN_FILE:
