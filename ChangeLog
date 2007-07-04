@@ -12,6 +12,8 @@
    Don't use G_MODULE_BIND_LAZY when loading plugins otherwise we can
    potentially get unresolved symbols at runtime, causing a segfault.
    Capitalize 2 menu item labels.
+ * plugins/classbuilder.c:
+   Make Class Builder dialog close when pressing escape.
 
 
 2007-07-02  Enrico Tröger  <enrico.troeger@uvena.de>

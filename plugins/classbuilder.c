@@ -369,7 +369,7 @@ void show_dialog_create_class(gint type)
 	cc_dlg->dialog = gtk_dialog_new_with_buttons(_("Create class"),
 			GTK_WINDOW(plugin_data->app->window),
 			GTK_DIALOG_MODAL,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OK, GTK_RESPONSE_OK,
 			NULL);
 	gtk_container_set_border_width(GTK_CONTAINER(cc_dlg->dialog), 5);
