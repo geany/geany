@@ -60,6 +60,7 @@ static void cb_func_menu_print(guint key_id);
 static void cb_func_menu_undo(guint key_id);
 static void cb_func_menu_redo(guint key_id);
 static void cb_func_menu_selectall(guint key_id);
+static void cb_func_menu_help(guint key_id);
 static void cb_func_menu_preferences(guint key_id);
 static void cb_func_menu_insert_date(guint key_id);
 
@@ -164,7 +165,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_FINDPREVSEL] = fill(cb_func_menu_findprevsel,
 		0, 0, "menu_findprevsel", _("Find Previous Selection"));
 	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace,
-		GDK_e, GDK_CONTROL_MASK, "menu_replace", _("Replace"));
+		GDK_h, GDK_CONTROL_MASK, "menu_replace", _("Replace"));
 	keys[GEANY_KEYS_MENU_FINDINFILES] = fill(cb_func_menu_findinfiles, GDK_f,
 		GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findinfiles", _("Find in files"));
 	keys[GEANY_KEYS_MENU_NEXTMESSAGE] = fill(cb_func_menu_nextmessage,
@@ -218,6 +219,9 @@ void keybindings_init(void)
 		0, 0, "build_run2", _("Run (alternative command)"));
 	keys[GEANY_KEYS_BUILD_OPTIONS] = fill(cb_func_build_action,
 		0, 0, "build_options", _("Build options"));
+
+	keys[GEANY_KEYS_MENU_HELP] = fill(cb_func_menu_help,
+		GDK_F1, 0, "menu_help", _("Help"));
 
 	keys[GEANY_KEYS_SWITCH_EDITOR] = fill(cb_func_switch_editor,
 		GDK_F2, 0, "switch_editor", _("Switch to Editor"));
@@ -353,6 +357,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SELECTALL, menu_select_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTDATE, insert_date_custom1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PREFERENCES, preferences1);
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_HELP, help1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDNEXT, find_next1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDNEXTSEL, find_nextsel1);
@@ -489,6 +494,10 @@ static void get_shortcut_labels_text(GString **text_names_str, GString **text_ke
 				break;
 			case GEANY_KEYS_MENU_OPENCOLORCHOOSER:
 				g_string_append(text_names, _("\n<b>Tools menu</b>\n"));
+				g_string_append(text_keys, "\n\n");
+				break;
+			case GEANY_KEYS_MENU_HELP:
+				g_string_append(text_names, _("\n<b>Help menu</b>\n"));
 				g_string_append(text_keys, "\n\n");
 				break;
 			case GEANY_KEYS_SWITCH_EDITOR:
@@ -756,6 +765,11 @@ static void cb_func_menu_selectall(G_GNUC_UNUSED guint key_id)
 static void cb_func_menu_preferences(G_GNUC_UNUSED guint key_id)
 {
 	on_preferences1_activate(NULL, NULL);
+}
+
+static void cb_func_menu_help(G_GNUC_UNUSED guint key_id)
+{
+	on_help1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_findnext(G_GNUC_UNUSED guint key_id)

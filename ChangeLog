@@ -1,3 +1,9 @@
+2007-07-04  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * geany.glade, src/interface.c, src/keybindings.c, src/keybindings.h:
+   Change Help shortcut to F1, use Ctrl-H for Replace.
+
+
 2007-07-04  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/utils.c, src/utils.h:
