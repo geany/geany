@@ -7,6 +7,8 @@
    src/document.h, src/editor.c, src/project.c, src/search.c,
    src/utils.c, src/win32.c, src/win32.h:
    Fix focus problem when using the Find dialog.
+ * src/socket.c: Use a unique mutex name on Windows to be able to load
+                 multiple instances like on non-Windows systems.
 
 
 2007-07-04  Nick Treleaven  <nick.treleaven@btinternet.com>

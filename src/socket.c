@@ -157,9 +157,13 @@ gint socket_init(gint argc, gchar **argv)
 
 #ifdef G_OS_WIN32
 	HANDLE hmutex;
+	// we need a mutex name which is unique for the used configuration dir,
+	// but we can't use the whole path, so build a hash on the configdir and use it
+	gchar *mutex_name = g_strdup_printf("Geany%d", g_str_hash(app->configdir));
 
 	socket_init_win32();
-	hmutex = CreateMutexA(NULL, FALSE, "Geany");
+	hmutex = CreateMutexA(NULL, FALSE, mutex_name);
+	g_free(mutex_name);
 	if (! hmutex)
 	{
 		geany_debug("cannot create Mutex\n");
