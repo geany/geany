@@ -96,7 +96,9 @@ static gboolean ignore_socket = FALSE;
 static gboolean generate_datafiles = FALSE;
 static gboolean generate_tags = FALSE;
 static gboolean ft_names = FALSE;
+static gboolean no_plugins = FALSE;
 
+// in alphabetical order of short options
 static GOptionEntry entries[] =
 {
 	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
@@ -111,6 +113,7 @@ static GOptionEntry entries[] =
 	{ "line", 'l', 0, G_OPTION_ARG_INT, &cl_options.goto_line, N_("set initial line number for the first opened file"), NULL },
 	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, N_("don't show message window at startup"), NULL },
 	{ "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, N_("don't load auto completion data (see documentation)"), NULL },
+	{ "no-plugins", 'p', 0, G_OPTION_ARG_NONE, &no_plugins, N_("don't load plugins"), NULL },
 	{ "no-session", 's', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &cl_options.load_session, N_("don't load the previous session's files"), NULL },
 #ifdef HAVE_VTE
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, N_("don't load terminal support"), NULL },
@@ -772,7 +775,8 @@ gint main(gint argc, gchar **argv)
 
 #ifdef HAVE_PLUGINS
 	// load any enabled plugins just before we draw the main window
-	plugins_init();
+	if (! no_plugins)
+		plugins_init();
 #endif
 
 	// finally realize the window to show the user what we have done
@@ -806,7 +810,8 @@ void main_quit()
 #endif
 
 #ifdef HAVE_PLUGINS
-	plugins_free();
+	if (! no_plugins)
+		plugins_free();
 #endif
 	navqueue_free();
 	keybindings_free();

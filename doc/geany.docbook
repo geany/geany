@@ -264,9 +264,15 @@
 								</entry>
 							</row>
 							<row>
+								<entry>-p</entry>
+								<entry>--no-plugins</entry>
+								<entry>Do not load plugins or plugin support.
+								</entry>
+							</row>
+							<row>
 								<entry>-s</entry>
 								<entry>--no-session</entry>
-								<entry>Don't load the previous session's files.
+								<entry>Do not load the previous session's files.
 								</entry>
 							</row>
 							<row>
