@@ -848,7 +848,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			case GEANY_RESPONSE_FIND:
 			case GEANY_RESPONSE_FIND_PREVIOUS:
 				document_find_text(idx, search_data.text, search_data.flags,
-					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE, GTK_WIDGET(dialog));
+					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE, GTK_WIDGET(widgets.find_dialog));
 				check_close = FALSE;
 				if (app->pref_main_suppress_search_dialogs)
 					check_close = TRUE;
