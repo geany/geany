@@ -120,9 +120,9 @@ gboolean editor_show_calltip(gint idx, gint pos);
 
 void editor_do_comment_toggle(gint idx);
 
-void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines);
+void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines, gboolean toggle);
 
-void editor_do_uncomment(gint idx, gint line);
+gint editor_do_uncomment(gint idx, gint line, gboolean toggle);
 
 void editor_highlight_braces(ScintillaObject *sci, gint cur_pos);
 

@@ -1,6 +1,12 @@
 2007-07-05  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/search.c: Fix usage of wrong dialog pointer.
+ * src/callbacks.c, src/editor.c, src/editor.h, src/geany.h,
+   src/keybindings.c:
+   Change comment toggle shortcut to Ctrl-E, undefine shortcuts for
+   comment/uncomment.
+   Improve some selection issues when using comment/uncomment.
+   Improve comment toggling by adding an additional character to mark.
 
 
 2007-07-05  Nick Treleaven  <nick.treleaven@btinternet.com>

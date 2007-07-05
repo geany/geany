@@ -1455,17 +1455,22 @@ static void real_uncomment_multiline(gint idx)
 }
 
 
-void editor_do_uncomment(gint idx, gint line)
+/* set toggle to TRUE if the caller is the toggle function, FALSE otherwise
+ * returns the amount of uncommented single comment lines, in case of multi line uncomment
+ * it returns just 1 */
+gint editor_do_uncomment(gint idx, gint line, gboolean toggle)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len;
 	gint sel_start, sel_end;
+	gint count = 0;
 	gsize co_len;
 	gchar sel[256], *co, *cc;
 	gboolean break_loop = FALSE, single_line = FALSE;
 	filetype *ft;
 
-	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
+		return 0;
 
 	if (line < 0)
 	{	// use selection or current line
@@ -1496,10 +1501,12 @@ void editor_do_uncomment(gint idx, gint line)
 
 	co = ft->comment_open;
 	cc = ft->comment_close;
-	if (co == NULL) return;
+	if (co == NULL)
+		return 0;
 
 	co_len = strlen(co);
-	if (co_len == 0) return;
+	if (co_len == 0)
+		return 0;
 
 	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
 
@@ -1529,17 +1536,38 @@ void editor_do_uncomment(gint idx, gint line)
 
 				single_line = TRUE;
 
-				switch (co_len)
+				if (toggle)
 				{
-					case 1: if (sel[x] != co[0]) continue; break;
-					case 2: if (sel[x] != co[0] || sel[x+1] != co[1]) continue; break;
-					case 3: if (sel[x] != co[0] || sel[x+1] != co[1] || sel[x+2] != co[2])
-								continue; break;
-					default: continue;
+					co_len++;
+					switch (co_len)
+					{
+						case 2: if (sel[x] != co[0] || sel[x+1] != GEANY_TOGGLE_MARK) continue; break;
+						case 3: if (sel[x] != co[0] || sel[x+1] != co[1] ||
+									sel[x+2] != GEANY_TOGGLE_MARK)
+									continue; break;
+						case 4: if (sel[x] != co[0] || sel[x+1] != co[1] || sel[x+2] != co[2] ||
+									sel[x+3] != GEANY_TOGGLE_MARK)
+									continue; break;
+						default: continue;
+					}
+				}
+				else
+				{
+					switch (co_len)
+					{
+						case 1: if (sel[x] != co[0])
+									continue; break;
+						case 2: if (sel[x] != co[0] || sel[x+1] != co[1])
+									continue; break;
+						case 3: if (sel[x] != co[0] || sel[x+1] != co[1] || sel[x+2] != co[2])
+									continue; break;
+						default: continue;
+					}
 				}
 
 				SSM(doc_list[idx].sci, SCI_GOTOPOS, line_start + x + co_len, 0);
 				for (j = 0; j < co_len; j++) SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
+				count++;
 			}
 			// use multi line comment
 			else
@@ -1568,6 +1596,7 @@ void editor_do_uncomment(gint idx, gint line)
 				if (sci_get_style_at(doc_list[idx].sci, line_start + x) == style_comment)
 				{
 					real_uncomment_multiline(idx);
+					count = 1;
 				}
 
 				// break because we are already on the last line
@@ -1579,20 +1608,23 @@ void editor_do_uncomment(gint idx, gint line)
 	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
 
 	// restore selection if there is one
-	if (sel_start < sel_end)
+	// but don't touch the selection if caller is editor_do_comment_toggle
+	if (! toggle && sel_start < sel_end)
 	{
 		if (single_line)
 		{
 			sci_set_selection_start(doc_list[idx].sci, sel_start - co_len);
-			sci_set_selection_end(doc_list[idx].sci, sel_end - ((i - first_line) * co_len));
+			sci_set_selection_end(doc_list[idx].sci, sel_end - (count * co_len));
 		}
 		else
 		{
-			gint eol_len = (sci_get_eol_mode(doc_list[idx].sci) == SC_EOL_CRLF) ? 2 : 1;
+			gint eol_len = utils_get_eol_char_len(idx);
 			sci_set_selection_start(doc_list[idx].sci, sel_start - co_len - eol_len);
 			sci_set_selection_end(doc_list[idx].sci, sel_end - co_len - eol_len);
 		}
 	}
+
+	return count;
 }
 
 
@@ -1607,7 +1639,8 @@ void editor_do_comment_toggle(gint idx)
 	gboolean first_line_was_comment = FALSE;
 	filetype *ft;
 
-	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
+		return;
 
 	sel_start = sci_get_selection_start(doc_list[idx].sci);
 	sel_end = sci_get_selection_end(doc_list[idx].sci);
@@ -1632,10 +1665,12 @@ void editor_do_comment_toggle(gint idx)
 
 	co = ft->comment_open;
 	cc = ft->comment_close;
-	if (co == NULL) return;
+	if (co == NULL)
+		return;
 
 	co_len = strlen(co);
-	if (co_len == 0) return;
+	if (co_len == 0)
+		return;
 
 	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
 
@@ -1670,33 +1705,31 @@ void editor_do_comment_toggle(gint idx)
 						if (sel[x] == co[0])
 						{
 							do_continue = TRUE;
-							editor_do_uncomment(idx, i);
-							count_uncommented++;
 						}
 						break;
 					case 2:
 						if (sel[x] == co[0] && sel[x+1] == co[1])
 						{
 							do_continue = TRUE;
-							editor_do_uncomment(idx, i);
-							count_uncommented++;
 						}
 						break;
 					case 3:
 						if (sel[x] == co[0] && sel[x+1] == co[1] && sel[x+2] == co[2])
 						{
 							do_continue = TRUE;
-							editor_do_uncomment(idx, i);
-							count_uncommented++;
 						}
 						break;
 					default: return;
 				}
 				if (do_continue && i == first_line) first_line_was_comment = TRUE;
-				if (do_continue) continue;
+				if (do_continue)
+				{
+					count_uncommented += editor_do_uncomment(idx, i, TRUE);
+					continue;
+				}
 
 				// we are still here, so the above lines were not already comments, so comment it
-				editor_do_comment(idx, i, FALSE);
+				editor_do_comment(idx, i, FALSE, TRUE);
 				count_commented++;
 			}
 			// use multi line comment
@@ -1761,7 +1794,7 @@ void editor_do_comment_toggle(gint idx)
 		}
 		else
 		{
-			gint eol_len = (sci_get_eol_mode(doc_list[idx].sci) == SC_EOL_CRLF) ? 2 : 1;
+			gint eol_len = utils_get_eol_char_len(idx);
 			if (count_uncommented > 0)
 			{
 				sci_set_selection_start(doc_list[idx].sci, sel_start - co_len - eol_len);
@@ -1776,13 +1809,14 @@ void editor_do_comment_toggle(gint idx)
 	}
 	else if (count_uncommented > 0)
 	{
-		gint eol_len = (sci_get_eol_mode(doc_list[idx].sci) == SC_EOL_CRLF) ? 2 : 1;
+		gint eol_len = utils_get_eol_char_len(idx);
 		sci_set_current_position(doc_list[idx].sci, sel_start - co_len - eol_len, TRUE);
 	}
 }
 
 
-void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines)
+/* set toggle to TRUE if the caller is the toggle function, FALSE otherwise */
+void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines, gboolean toggle)
 {
 	gint first_line, last_line;
 	gint x, i, line_start, line_len;
@@ -1791,7 +1825,7 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines)
 	gboolean break_loop = FALSE, single_line = FALSE;
 	filetype *ft;
 
-	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL) return;
 
 	if (line < 0)
 	{	// use selection or current line
@@ -1822,10 +1856,12 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines)
 
 	co = ft->comment_open;
 	cc = ft->comment_close;
-	if (co == NULL) return;
+	if (co == NULL)
+		return;
 
 	co_len = strlen(co);
-	if (co_len == 0) return;
+	if (co_len == 0)
+		return;
 
 	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
 
@@ -1851,12 +1887,20 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines)
 			// use single line comment
 			if (cc == NULL || strlen(cc) == 0)
 			{
+				gint start = line_start;
 				single_line = TRUE;
 
 				if (ft->comment_use_indent)
-					sci_insert_text(doc_list[idx].sci, line_start + x, co);
+					start = line_start + x;
+
+				if (toggle)
+				{
+					gchar *text = g_strdup_printf("%s%c", co, GEANY_TOGGLE_MARK);
+					sci_insert_text(doc_list[idx].sci, start, text);
+					g_free(text);
+				}
 				else
-					sci_insert_text(doc_list[idx].sci, line_start, co);
+					sci_insert_text(doc_list[idx].sci, start, co);
 			}
 			// use multi line comment
 			else
@@ -1895,7 +1939,8 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines)
 	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
 
 	// restore selection if there is one
-	if (sel_start < sel_end)
+	// but don't touch the selection if caller is editor_do_comment_toggle
+	if (! toggle && sel_start < sel_end)
 	{
 		if (single_line)
 		{
@@ -1904,7 +1949,7 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines)
 		}
 		else
 		{
-			gint eol_len = (sci_get_eol_mode(doc_list[idx].sci) == SC_EOL_CRLF) ? 2 : 1;
+			gint eol_len = utils_get_eol_char_len(idx);
 			sci_set_selection_start(doc_list[idx].sci, sel_start + co_len + eol_len);
 			sci_set_selection_end(doc_list[idx].sci, sel_end + co_len + eol_len);
 		}
@@ -2229,7 +2274,7 @@ void editor_insert_multiline_comment(gint idx)
 	sci_set_selection_start(doc_list[idx].sci, pos);
 	sci_set_selection_end(doc_list[idx].sci, pos + text_len);
 
-	editor_do_comment(idx, -1, TRUE);
+	editor_do_comment(idx, -1, TRUE, FALSE);
 
 	// set the current position to the start of the first inserted line
 	pos += strlen(doc_list[idx].file_type->comment_open);

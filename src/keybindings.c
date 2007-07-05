@@ -249,11 +249,11 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_TOUPPERCASE] = fill(cb_func_edit,
 		GDK_u, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_touppercase", _("Convert Selection to upper-case"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINETOGGLE] = fill(cb_func_edit,
-		GDK_b, GDK_CONTROL_MASK, "edit_commentlinetoggle", _("Toggle line commentation"));
+		GDK_e, GDK_CONTROL_MASK, "edit_commentlinetoggle", _("Toggle line commentation"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit,
-		GDK_g, GDK_CONTROL_MASK, "edit_commentline", _("Comment line(s)"));
+		0, 0, "edit_commentline", _("Comment line(s)"));
 	keys[GEANY_KEYS_EDIT_UNCOMMENTLINE] = fill(cb_func_edit,
-		GDK_g, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_uncommentline", _("Uncomment line(s)"));
+		0, 0 | GDK_CONTROL_MASK, "edit_uncommentline", _("Uncomment line(s)"));
 	keys[GEANY_KEYS_EDIT_INCREASEINDENT] = fill(cb_func_edit,
 		GDK_i, GDK_CONTROL_MASK, "edit_increaseindent", _("Increase indent"));
 	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit,
