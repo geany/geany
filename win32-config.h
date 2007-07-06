@@ -322,7 +322,7 @@
    code using `volatile' can become incorrect without. Disable with care. */
 /* #undef volatile */
 
-#define REVISION "SVN"
+#define REVISION "-1"
 
 /* Define if you want to detect a running instance */
 #define HAVE_SOCKET 1
