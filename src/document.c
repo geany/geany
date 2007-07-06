@@ -969,7 +969,9 @@ gboolean document_save_file(gint idx, gboolean force)
 	gchar *data;
 	FILE *fp;
 	gint bytes_written, len;
+#ifndef G_OS_WIN32
 	gchar *locale_filename = NULL;
+#endif
 
 	if (! DOC_IDX_VALID(idx)) return FALSE;
 	// the changed flag should exclude the readonly flag, but check it anyway for safety
@@ -1043,12 +1045,16 @@ gboolean document_save_file(gint idx, gboolean force)
 	{
 		len = strlen(data);
 	}
+#ifdef G_OS_WIN32
+	fp = fopen(doc_list[idx].file_name, "wb"); // this should fix the windows \n problem
+#else
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-	fp = fopen(locale_filename, "wb"); // this should fix the windows \n problem
+	fp = fopen(locale_filename, "w");
 	g_free(locale_filename);
+#endif
 	if (fp == NULL)
 	{
-		msgwin_status_add(_("Error saving file (%s)."), strerror(errno));
+		msgwin_status_add(_("Error saving file (%s)."), g_strerror(errno));
 		utils_beep();
 		g_free(data);
 		return FALSE;

@@ -2821,10 +2821,10 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 						<row>
 							<entry>GEANY_USE_WIN32_DIALOG</entry>
 							<entry>Set this to 1 if you want to use the default Windows
-								   file open dialog instead GTK's file open dialog. The default
-								   Windows file open dialog is missing some nice features like
-								   choosing a filetype or an encoding. Do not touch this
-								   setting when building on a non-Win32 system.</entry>
+								   file open and save dialogs instead GTK's file open and save
+								   dialogs. The default Windows file dialogs are missing some nice
+								   features like choosing a filetype or an encoding. Do not touch
+								   this setting when building on a non-Win32 system.</entry>
 							<entry>0</entry>
 						</row>
 					</tbody>

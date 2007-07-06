@@ -2,6 +2,9 @@
 
  * doc/geany.docbook, src/editor.c, src/editor.h, src/keybindings.c,
    src/keybindings.h: Add keybinding for select current paragraph.
+ * doc/geany.docbook, src/callbacks.c, src/dialogs.c, src/document.c:
+   Use the default GTK file save dialog on Windows.
+   Prevent some (probably) unnecessary filename encoding conversions.
 
 
 2007-07-05  Enrico Tröger  <enrico.troeger@uvena.de>

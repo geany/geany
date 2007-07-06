@@ -856,8 +856,11 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		gboolean rename_file = gtk_toggle_button_get_active(
 				GTK_TOGGLE_BUTTON(lookup_widget(app->save_filesel, "check_rename")));
 
+#ifdef G_OS_WIN32
+		utf8_filename = g_strdup(new_filename);
+#else
 		utf8_filename = utils_get_utf8_from_locale(new_filename);
-
+#endif
 		// check if file exists and ask whether to overwrite or not
 		if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
 		{
@@ -907,10 +910,14 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 			{
 				if (rename_file)
 				{	// delete the previous file name
+#ifdef G_OS_WIN32
+					g_unlink(doc_list[idx].file_name);
+#else
 					gchar *old_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 					g_unlink(old_filename);
 					g_free(old_filename);
+#endif
 				}
 				// create a new tm_source_file object otherwise tagmanager won't work correctly
 				tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);

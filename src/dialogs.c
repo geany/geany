@@ -56,8 +56,8 @@
 
 #if ! GEANY_USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget();
-#endif
 static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+#endif
 
 
 /* This shows the file selection dialog to open a file. */
@@ -269,7 +269,7 @@ static GtkWidget *add_file_open_extra_widget()
  * the file was saved. */
 gboolean dialogs_show_save_as()
 {
-#ifdef G_OS_WIN32
+#if GEANY_USE_WIN32_DIALOG
 	return win32_show_file_dialog(FALSE);
 #else
 	gint idx = document_get_cur_idx(), resp;
@@ -318,13 +318,18 @@ gboolean dialogs_show_save_as()
 	// If the current document has a filename we use that as the default.
 	if (doc_list[idx].file_name != NULL)
 	{
+#ifdef G_OS_WIN32
+		gchar *locale_filename = doc_list[idx].file_name;
+#else
 		gchar *locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-
+#endif
 		if (g_path_is_absolute(locale_filename))
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->save_filesel), locale_filename);
 		else
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(app->save_filesel), locale_filename);
+#ifndef G_OS_WIN32
 		g_free(locale_filename);
+#endif
 	}
 	else
 	{
@@ -344,8 +349,16 @@ gboolean dialogs_show_save_as()
 		if (app->default_open_path != NULL && *app->default_open_path != '\0')
 		{
 			if (g_path_is_absolute(app->default_open_path))
+			{
+#ifdef G_OS_WIN32
 				gtk_file_chooser_set_current_folder(
 					GTK_FILE_CHOOSER(app->save_filesel), app->default_open_path);
+#else
+				gchar *def_path = utils_get_locale_from_utf8(app->default_open_path);
+				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(app->save_filesel), def_path);
+				g_free(def_path);
+#endif
+			}
 		}
 		g_free(fname);
 	}
