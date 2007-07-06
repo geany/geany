@@ -1,3 +1,9 @@
+2007-07-06  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * doc/geany.docbook, src/editor.c, src/editor.h, src/keybindings.c,
+   src/keybindings.h: Add keybinding for select current paragraph.
+
+
 2007-07-05  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/search.c: Fix usage of wrong dialog pointer.

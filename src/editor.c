@@ -2351,6 +2351,84 @@ void editor_select_word(ScintillaObject *sci)
 }
 
 
+/* find the start or end of a paragraph by searching all lines in direction (UP or DOWN)
+ * starting at the given line and return the found line or return -1 if called on an empty line */
+static gint find_paragraph_stop(ScintillaObject *sci, gint line, gint direction)
+{
+	gboolean found_end = FALSE;
+	gint step;
+	gchar *line_buf, *x;
+
+	// first check current line and return -1 if it is empty to skip creating of a selection
+	line_buf = x = sci_get_line(sci, line);
+	while (isspace(*x))
+		x++;
+	if (*x == '\0')
+	{
+		g_free(line_buf);
+		return -1;
+	}
+
+	if (direction == UP)
+		step = -1;
+	else
+		step = 1;
+
+	while (! found_end)
+	{
+		line += step;
+
+		// sci_get_line checks for sanity of the given line, sci_get_line always return a string
+		// containing at least '\0' so no need to check for NULL
+		line_buf = x = sci_get_line(sci, line);
+
+		// check whether after skipping all whitespace we are at end of line and if so, assume
+		// this line as end of paragraph
+		while (isspace(*x))
+			x++;
+		if (*x == '\0')
+		{
+			found_end = TRUE;
+			if (line == -1)
+				// called on the first line but there is no previous line so return line 0
+				line = 0;
+		}
+		g_free(line_buf);
+	}
+	return line;
+}
+
+
+void editor_select_paragraph(ScintillaObject *sci)
+{
+	gint pos_start, pos_end, line_start, line_found;
+
+	g_return_if_fail(sci != NULL);
+
+	line_start = SSM(sci, SCI_LINEFROMPOSITION, SSM(sci, SCI_GETCURRENTPOS, 0, 0), 0);
+
+	line_found = find_paragraph_stop(sci, line_start, UP);
+	if (line_found == -1)
+		return;
+
+	// find_paragraph_stop returns the emtpy line(previous to the real start of the paragraph),
+	// so use the next line for selection start
+	if (line_found > 0)
+		line_found++;
+
+	pos_start = SSM(sci, SCI_POSITIONFROMLINE, line_found, 0);
+
+	line_found = find_paragraph_stop(sci, line_start, DOWN);
+	pos_end = SSM(sci, SCI_POSITIONFROMLINE, line_found, 0);
+
+	// if not on the last line of the document, end the selection on the previous line
+	if (line_found < (SSM(sci, SCI_GETLINECOUNT, 0, 0) -1))
+		pos_end--;
+
+	SSM(sci, SCI_SETSEL, pos_start, pos_end);
+}
+
+
 void editor_finalize()
 {
 	g_hash_table_destroy(editor_prefs.auto_completions);

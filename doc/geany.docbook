@@ -1931,6 +1931,12 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 								</entry>
 							</row>
 							<row>
+								<entry>Select current paragraph</entry>
+								<entry>Selects the current paragraph under the cursor which is
+									   defined by two empty lines around it.
+								</entry>
+							</row>
+							<row>
 								<entry>Insert alternative whitespace</entry>
 								<entry>Inserts a tabulator character when spaces should be used for
 									   indentation and inserts space characters of the amount of a

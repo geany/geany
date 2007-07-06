@@ -289,7 +289,9 @@ void keybindings_init(void)
 		0, 0, "edit_suppresscompletion", _("Suppress construct completion"));
 
 	keys[GEANY_KEYS_EDIT_SELECTWORD] = fill(cb_func_edit,
-		0, 0, "edit_selectword", _("Select current word"));
+		GDK_w, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectword", _("Select current word"));
+	keys[GEANY_KEYS_EDIT_SELECTPARAGRAPH] = fill(cb_func_edit,
+		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("Select current paragraph"));
 
 	keys[GEANY_KEYS_EDIT_INSERTALTWHITESPACE] = fill(cb_func_edit,
 		0, 0, "edit_insertwhitespace", _("Insert alternative whitespace"));
@@ -1128,6 +1130,9 @@ static void cb_func_edit(guint key_id)
 
 		case GEANY_KEYS_EDIT_SELECTWORD:
 			editor_select_word(doc_list[idx].sci);
+			break;
+		case GEANY_KEYS_EDIT_SELECTPARAGRAPH:
+			editor_select_paragraph(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_INSERTALTWHITESPACE:
 			editor_insert_alternative_whitespace(doc_list[idx].sci);
