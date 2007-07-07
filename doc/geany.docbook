@@ -2399,6 +2399,17 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 									</entry>
 									<entry>invert_all=0;0;false;false</entry>
 								</row>
+								<row>
+									<entry>whitespace_chars</entry>
+									<entry>Characters to treat as whitespace.
+										These characters are ignored when moving, selecting and deleting
+										across word boundaries (see <xref linkend="scikeybinding"/>).
+										<para>This should include space (\s) and tab (\t).
+										</para>
+									</entry>
+									<entry>whitespace_chars=\s\t!\"#$%&amp;'()*+,-./:;&lt;=&gt;?@[\\]^`{|}~
+									</entry>
+								</row>
 							</tbody>
 						</tgroup>
 					</table>

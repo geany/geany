@@ -1,3 +1,13 @@
+2007-07-07  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * scintilla/ScintillaGTK.cxx, src/highlighting.c, doc/geany.docbook,
+   data/filetypes.common:
+   Make Scintilla's move to word commands use the word end boundaries
+   when moving to the right (like e.g. GtkEntry).
+   Treat punctuation chars as whitespace.
+   Add filetypes.common setting: whitespace_chars.
+
+
 2007-07-06  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.docbook, src/editor.c, src/editor.h, src/keybindings.c,
