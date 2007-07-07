@@ -1533,36 +1533,22 @@ gint editor_do_uncomment(gint idx, gint line, gboolean toggle)
 			if (cc == NULL || strlen(cc) == 0)
 			{
 				guint j;
+				gsize tm_len = strlen(GEANY_TOGGLE_MARK);
 
 				single_line = TRUE;
 
 				if (toggle)
 				{
-					co_len++;
-					switch (co_len)
-					{
-						case 2: if (sel[x] != co[0] || sel[x+1] != GEANY_TOGGLE_MARK) continue; break;
-						case 3: if (sel[x] != co[0] || sel[x+1] != co[1] ||
-									sel[x+2] != GEANY_TOGGLE_MARK)
-									continue; break;
-						case 4: if (sel[x] != co[0] || sel[x+1] != co[1] || sel[x+2] != co[2] ||
-									sel[x+3] != GEANY_TOGGLE_MARK)
-									continue; break;
-						default: continue;
-					}
+					if (strncmp(sel + x, co, co_len) != 0 ||
+						strncmp(sel + x + co_len, GEANY_TOGGLE_MARK, tm_len) != 0)
+						continue;
+
+					co_len += tm_len;
 				}
 				else
 				{
-					switch (co_len)
-					{
-						case 1: if (sel[x] != co[0])
-									continue; break;
-						case 2: if (sel[x] != co[0] || sel[x+1] != co[1])
-									continue; break;
-						case 3: if (sel[x] != co[0] || sel[x+1] != co[1] || sel[x+2] != co[2])
-									continue; break;
-						default: continue;
-					}
+					if (strncmp(sel + x, co, co_len) != 0)
+						continue;
 				}
 
 				SSM(doc_list[idx].sci, SCI_GOTOPOS, line_start + x + co_len, 0);
@@ -1631,12 +1617,14 @@ gint editor_do_uncomment(gint idx, gint line, gboolean toggle)
 void editor_do_comment_toggle(gint idx)
 {
 	gint first_line, last_line;
-	gint x, i, line_start, line_len;
-	gint sel_start, sel_end, co_len;
+	gint x, i, line_start, line_len, first_line_start;
+	gint sel_start, sel_end;
 	gint count_commented = 0, count_uncommented = 0;
 	gchar sel[256], *co, *cc;
 	gboolean break_loop = FALSE, single_line = FALSE;
 	gboolean first_line_was_comment = FALSE;
+	gsize co_len;
+	gsize tm_len = strlen(GEANY_TOGGLE_MARK);
 	filetype *ft;
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
@@ -1655,11 +1643,11 @@ void editor_do_comment_toggle(gint idx)
 	last_line = MAX(first_line, last_line);
 
 	// detection of HTML vs PHP code, if non-PHP set filetype to XML
-	line_start = sci_get_position_from_line(doc_list[idx].sci, first_line);
+	first_line_start = sci_get_position_from_line(doc_list[idx].sci, first_line);
 	if (ft->id == GEANY_FILETYPES_PHP)
 	{
-		if (sci_get_style_at(doc_list[idx].sci, line_start) < 118 ||
-			sci_get_style_at(doc_list[idx].sci, line_start) > 127)
+		if (sci_get_style_at(doc_list[idx].sci, first_line_start) < 118 ||
+			sci_get_style_at(doc_list[idx].sci, first_line_start) > 127)
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
 
@@ -1683,98 +1671,82 @@ void editor_do_comment_toggle(gint idx)
 		x = 0;
 
 		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
-		if (buf_len <= 0)
+		if (buf_len < 0)
 			continue;
 		sci_get_text_range(doc_list[idx].sci, line_start, line_start + buf_len, sel);
 		sel[buf_len] = '\0';
 
 		while (isspace(sel[x])) x++;
 
-		// to skip blank lines
-		if (x < line_len && sel[x] != '\0')
+		// use single line comment
+		if (cc == NULL || strlen(cc) == 0)
 		{
-			// use single line comment
-			if (cc == NULL || strlen(cc) == 0)
+			gboolean do_continue = FALSE;
+			single_line = TRUE;
+
+			if (strncmp(sel + x, co, co_len) == 0 &&
+				strncmp(sel + x + co_len, GEANY_TOGGLE_MARK, tm_len) == 0)
 			{
-				gboolean do_continue = FALSE;
-				single_line = TRUE;
-
-				switch (co_len)
-				{
-					case 1:
-						if (sel[x] == co[0])
-						{
-							do_continue = TRUE;
-						}
-						break;
-					case 2:
-						if (sel[x] == co[0] && sel[x+1] == co[1])
-						{
-							do_continue = TRUE;
-						}
-						break;
-					case 3:
-						if (sel[x] == co[0] && sel[x+1] == co[1] && sel[x+2] == co[2])
-						{
-							do_continue = TRUE;
-						}
-						break;
-					default: return;
-				}
-				if (do_continue && i == first_line) first_line_was_comment = TRUE;
-				if (do_continue)
-				{
-					count_uncommented += editor_do_uncomment(idx, i, TRUE);
-					continue;
-				}
-
-				// we are still here, so the above lines were not already comments, so comment it
-				editor_do_comment(idx, i, FALSE, TRUE);
-				count_commented++;
+				do_continue = TRUE;
 			}
-			// use multi line comment
+
+			if (do_continue && i == first_line)
+				first_line_was_comment = TRUE;
+
+			if (do_continue)
+			{
+				count_uncommented += editor_do_uncomment(idx, i, TRUE);
+				continue;
+			}
+
+			// we are still here, so the above lines were not already comments, so comment it
+			editor_do_comment(idx, i, TRUE, TRUE);
+			count_commented++;
+		}
+		// use multi line comment
+		else
+		{
+			gint style_comment;
+			gint lexer = SSM(doc_list[idx].sci, SCI_GETLEXER, 0, 0);
+
+			// skip lines which are already comments
+			switch (lexer)
+			{	// I will list only those lexers which support multi line comments
+				case SCLEX_XML:
+				case SCLEX_HTML:
+				{
+					if (sci_get_style_at(doc_list[idx].sci, line_start) >= 118 &&
+						sci_get_style_at(doc_list[idx].sci, line_start) <= 127)
+						style_comment = SCE_HPHP_COMMENT;
+					else style_comment = SCE_H_COMMENT;
+					break;
+				}
+				case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
+				case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
+				case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
+				case SCLEX_D: style_comment = SCE_D_COMMENT; break;
+				default: style_comment = SCE_C_COMMENT;
+			}
+			if (sci_get_style_at(doc_list[idx].sci, line_start + x) == style_comment)
+			{
+				real_uncomment_multiline(idx);
+				count_uncommented++;
+			}
 			else
 			{
-				gint style_comment;
-				gint lexer = SSM(doc_list[idx].sci, SCI_GETLEXER, 0, 0);
-
-				// skip lines which are already comments
-				switch (lexer)
-				{	// I will list only those lexers which support multi line comments
-					case SCLEX_XML:
-					case SCLEX_HTML:
-					{
-						if (sci_get_style_at(doc_list[idx].sci, line_start) >= 118 &&
-							sci_get_style_at(doc_list[idx].sci, line_start) <= 127)
-							style_comment = SCE_HPHP_COMMENT;
-						else style_comment = SCE_H_COMMENT;
-						break;
-					}
-					case SCLEX_CSS: style_comment = SCE_CSS_COMMENT; break;
-					case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
-					case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
-					case SCLEX_D: style_comment = SCE_D_COMMENT; break;
-					default: style_comment = SCE_C_COMMENT;
-				}
-				if (sci_get_style_at(doc_list[idx].sci, line_start + x) == style_comment)
-				{
-					real_uncomment_multiline(idx);
-					count_uncommented++;
-				}
-				else
-				{
-					real_comment_multiline(idx, line_start, last_line);
-					count_commented++;
-				}
-
-				// break because we are already on the last line
-				break_loop = TRUE;
-				break;
+				real_comment_multiline(idx, line_start, last_line);
+				count_commented++;
 			}
+
+			// break because we are already on the last line
+			break_loop = TRUE;
+			break;
 		}
 	}
 
 	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
+
+	co_len += tm_len;
 
 	// restore selection if there is one
 	if (sel_start < sel_end)
@@ -1785,7 +1757,7 @@ void editor_do_comment_toggle(gint idx)
 
 			// don't modify sel_start when the selection starts within indentation
 			get_indent(doc_list[idx].sci, sel_start, TRUE);
-			if ((sel_start - line_start) <= (gint) strlen(indent))
+			if ((sel_start - first_line_start) <= (gint) strlen(indent))
 				a = 0;
 
 			sci_set_selection_start(doc_list[idx].sci, sel_start + a);
@@ -1809,8 +1781,7 @@ void editor_do_comment_toggle(gint idx)
 	}
 	else if (count_uncommented > 0)
 	{
-		gint eol_len = utils_get_eol_char_len(idx);
-		sci_set_current_position(doc_list[idx].sci, sel_start - co_len - eol_len, TRUE);
+		sci_set_current_position(doc_list[idx].sci, sel_start - co_len, TRUE);
 	}
 }
 
@@ -1874,7 +1845,7 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines, gboolean
 		x = 0;
 
 		buf_len = MIN((gint)sizeof(sel) - 1, line_len - 1);
-		if (buf_len <= 0)
+		if (buf_len < 0)
 			continue;
 		sci_get_text_range(doc_list[idx].sci, line_start, line_start + buf_len, sel);
 		sel[buf_len] = '\0';
@@ -1895,7 +1866,7 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines, gboolean
 
 				if (toggle)
 				{
-					gchar *text = g_strdup_printf("%s%c", co, GEANY_TOGGLE_MARK);
+					gchar *text = g_strconcat(co, GEANY_TOGGLE_MARK, NULL);
 					sci_insert_text(doc_list[idx].sci, start, text);
 					g_free(text);
 				}

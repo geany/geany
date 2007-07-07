@@ -7,6 +7,11 @@
    Add keybinding for Select, Transpose, Cut, Copy and Delete line.
  * src/keybindings.c: Change default shortcut for Find Next/Previous to
                       Ctrl-G and Ctrl-Shift-G.
+ * src/editor.c, src/geany.h:
+   Use an extra space after comment toggle mark.
+   Also comment blank lines when using toggle comment.
+   Also comment already commented lines when using toggle comment.
+   Fix some selection issues when using toggle comment.
 
 
 2007-07-07  Nick Treleaven  <nick.treleaven@btinternet.com>
