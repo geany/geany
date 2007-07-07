@@ -2421,10 +2421,6 @@ void editor_select_paragraph(ScintillaObject *sci)
 	line_found = find_paragraph_stop(sci, line_start, DOWN);
 	pos_end = SSM(sci, SCI_POSITIONFROMLINE, line_found, 0);
 
-	// if not on the last line of the document, end the selection on the previous line
-	if (line_found < (SSM(sci, SCI_GETLINECOUNT, 0, 0) -1))
-		pos_end--;
-
 	SSM(sci, SCI_SETSEL, pos_start, pos_end);
 }
 

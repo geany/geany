@@ -1,3 +1,9 @@
+2007-07-07  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/editor.c:
+   Include new line character(s) when selecting a paragraph.
+
+
 2007-07-07  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * scintilla/ScintillaGTK.cxx, src/highlighting.c, doc/geany.docbook,
