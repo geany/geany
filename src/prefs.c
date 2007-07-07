@@ -1102,10 +1102,14 @@ void prefs_show_dialog(void)
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_com_term"));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_browser"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_browser"));
-		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_print"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_print"));
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_grep"),
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_grep"));
+
+		// tools commands
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_print"),
+				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_print"));
+		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "button_contextaction"),
+				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(app->prefs_dialog, "entry_contextaction"));
 
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "check_toolbar_show"),
 				"toggled", G_CALLBACK(on_toolbar_show_toggled), NULL);

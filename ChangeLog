@@ -19,6 +19,8 @@
    Add filetypes.common setting: whitespace_chars.
  * src/highlighting.c, data/filetypes.python:
    Add decorator (and word2) styling for Python.
+ * src/interface.c, src/prefs.c, geany.glade:
+   Move Context Action command to Tools tab, group with Print command.
 
 
 2007-07-06  Enrico Tröger  <enrico.troeger@uvena.de>

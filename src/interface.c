@@ -2416,12 +2416,6 @@ create_prefs_dialog (void)
   GtkWidget *check_auto_focus;
   GtkWidget *check_ask_suppress_search_dialogs;
   GtkWidget *label178;
-  GtkWidget *frame24;
-  GtkWidget *alignment27;
-  GtkWidget *hbox8;
-  GtkWidget *label189;
-  GtkWidget *entry_contextaction;
-  GtkWidget *label188;
   GtkWidget *frame25;
   GtkWidget *alignment28;
   GtkWidget *table11;
@@ -2588,6 +2582,7 @@ create_prefs_dialog (void)
   GtkWidget *spin_autocheight;
   GtkWidget *label177;
   GtkWidget *label95;
+  GtkWidget *vbox23;
   GtkWidget *frame20;
   GtkWidget *alignment23;
   GtkWidget *vbox2;
@@ -2605,15 +2600,23 @@ create_prefs_dialog (void)
   GtkWidget *image286;
   GtkWidget *button_browser;
   GtkWidget *image287;
-  GtkWidget *label154;
-  GtkWidget *entry_print;
-  GtkWidget *button_print;
-  GtkWidget *image763;
   GtkWidget *label171;
   GtkWidget *entry_grep;
   GtkWidget *button_grep;
   GtkWidget *image808;
   GtkWidget *label179;
+  GtkWidget *frame26;
+  GtkWidget *alignment29;
+  GtkWidget *table12;
+  GtkWidget *entry_print;
+  GtkWidget *button_print;
+  GtkWidget *image763;
+  GtkWidget *label154;
+  GtkWidget *entry_contextaction;
+  GtkWidget *label189;
+  GtkWidget *button_contextaction;
+  GtkWidget *image1919;
+  GtkWidget *label193;
   GtkWidget *label96;
   GtkWidget *frame21;
   GtkWidget *alignment24;
@@ -2760,35 +2763,6 @@ create_prefs_dialog (void)
   gtk_frame_set_label_widget (GTK_FRAME (frame19), label178);
   gtk_label_set_use_markup (GTK_LABEL (label178), TRUE);
 
-  frame24 = gtk_frame_new (NULL);
-  gtk_widget_show (frame24);
-  gtk_box_pack_start (GTK_BOX (vbox20), frame24, FALSE, TRUE, 0);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame24), GTK_SHADOW_NONE);
-
-  alignment27 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment27);
-  gtk_container_add (GTK_CONTAINER (frame24), alignment27);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment27), 0, 0, 12, 0);
-
-  hbox8 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_show (hbox8);
-  gtk_container_add (GTK_CONTAINER (alignment27), hbox8);
-
-  label189 = gtk_label_new (_("Context Action command:"));
-  gtk_widget_show (label189);
-  gtk_box_pack_start (GTK_BOX (hbox8), label189, FALSE, FALSE, 6);
-
-  entry_contextaction = gtk_entry_new ();
-  gtk_widget_show (entry_contextaction);
-  gtk_box_pack_start (GTK_BOX (hbox8), entry_contextaction, TRUE, TRUE, 0);
-  gtk_tooltips_set_tip (tooltips, entry_contextaction, _("Context action command. The currently selected word can be used with %s. It can appear anywhere in the given command and will be replaced before execution."), NULL);
-  gtk_entry_set_invisible_char (GTK_ENTRY (entry_contextaction), 9679);
-
-  label188 = gtk_label_new (_("<b>Context Action</b>"));
-  gtk_widget_show (label188);
-  gtk_frame_set_label_widget (GTK_FRAME (frame24), label188);
-  gtk_label_set_use_markup (GTK_LABEL (label188), TRUE);
-
   frame25 = gtk_frame_new (NULL);
   gtk_widget_show (frame25);
   gtk_box_pack_start (GTK_BOX (vbox20), frame25, TRUE, TRUE, 0);
@@ -2802,7 +2776,8 @@ create_prefs_dialog (void)
   table11 = gtk_table_new (2, 3, FALSE);
   gtk_widget_show (table11);
   gtk_container_add (GTK_CONTAINER (alignment28), table11);
-  gtk_table_set_col_spacings (GTK_TABLE (table11), 6);
+  gtk_table_set_row_spacings (GTK_TABLE (table11), 2);
+  gtk_table_set_col_spacings (GTK_TABLE (table11), 5);
 
   label191 = gtk_label_new (_("Startup path:"));
   gtk_widget_show (label191);
@@ -3726,9 +3701,13 @@ create_prefs_dialog (void)
   gtk_widget_show (label95);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 4), label95);
 
+  vbox23 = gtk_vbox_new (FALSE, 10);
+  gtk_widget_show (vbox23);
+  gtk_container_add (GTK_CONTAINER (notebook2), vbox23);
+
   frame20 = gtk_frame_new (NULL);
   gtk_widget_show (frame20);
-  gtk_container_add (GTK_CONTAINER (notebook2), frame20);
+  gtk_box_pack_start (GTK_BOX (vbox23), frame20, FALSE, TRUE, 0);
   gtk_frame_set_shadow_type (GTK_FRAME (frame20), GTK_SHADOW_NONE);
 
   alignment23 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -3746,10 +3725,10 @@ create_prefs_dialog (void)
   gtk_misc_set_alignment (GTK_MISC (label17), 0, 0.5);
   gtk_misc_set_padding (GTK_MISC (label17), 0, 6);
 
-  table1 = gtk_table_new (5, 3, FALSE);
+  table1 = gtk_table_new (4, 3, FALSE);
   gtk_widget_show (table1);
   gtk_box_pack_start (GTK_BOX (vbox2), table1, FALSE, TRUE, 0);
-  gtk_table_set_row_spacings (GTK_TABLE (table1), 7);
+  gtk_table_set_row_spacings (GTK_TABLE (table1), 2);
   gtk_table_set_col_spacings (GTK_TABLE (table1), 5);
 
   label11 = gtk_label_new (_("Make:"));
@@ -3824,46 +3803,22 @@ create_prefs_dialog (void)
   gtk_widget_show (image287);
   gtk_container_add (GTK_CONTAINER (button_browser), image287);
 
-  label154 = gtk_label_new (_("Print command:"));
-  gtk_widget_show (label154);
-  gtk_table_attach (GTK_TABLE (table1), label154, 0, 1, 3, 4,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label154), 0, 0.5);
-
-  entry_print = gtk_entry_new ();
-  gtk_widget_show (entry_print);
-  gtk_table_attach (GTK_TABLE (table1), entry_print, 1, 2, 3, 4,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, entry_print, _("Path to the command for printing files (use %f for the filename)."), NULL);
-
-  button_print = gtk_button_new ();
-  gtk_widget_show (button_print);
-  gtk_table_attach (GTK_TABLE (table1), button_print, 2, 3, 3, 4,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-
-  image763 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_BUTTON);
-  gtk_widget_show (image763);
-  gtk_container_add (GTK_CONTAINER (button_print), image763);
-
   label171 = gtk_label_new (_("Grep:"));
   gtk_widget_show (label171);
-  gtk_table_attach (GTK_TABLE (table1), label171, 0, 1, 4, 5,
+  gtk_table_attach (GTK_TABLE (table1), label171, 0, 1, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label171), 0, 0.5);
 
   entry_grep = gtk_entry_new ();
   gtk_widget_show (entry_grep);
-  gtk_table_attach (GTK_TABLE (table1), entry_grep, 1, 2, 4, 5,
+  gtk_table_attach (GTK_TABLE (table1), entry_grep, 1, 2, 3, 4,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
 
   button_grep = gtk_button_new ();
   gtk_widget_show (button_grep);
-  gtk_table_attach (GTK_TABLE (table1), button_grep, 2, 3, 4, 5,
+  gtk_table_attach (GTK_TABLE (table1), button_grep, 2, 3, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
 
@@ -3875,6 +3830,75 @@ create_prefs_dialog (void)
   gtk_widget_show (label179);
   gtk_frame_set_label_widget (GTK_FRAME (frame20), label179);
   gtk_label_set_use_markup (GTK_LABEL (label179), TRUE);
+
+  frame26 = gtk_frame_new (NULL);
+  gtk_widget_show (frame26);
+  gtk_box_pack_start (GTK_BOX (vbox23), frame26, TRUE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame26), GTK_SHADOW_NONE);
+
+  alignment29 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment29);
+  gtk_container_add (GTK_CONTAINER (frame26), alignment29);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment29), 0, 0, 12, 0);
+
+  table12 = gtk_table_new (2, 3, FALSE);
+  gtk_widget_show (table12);
+  gtk_container_add (GTK_CONTAINER (alignment29), table12);
+  gtk_table_set_row_spacings (GTK_TABLE (table12), 2);
+  gtk_table_set_col_spacings (GTK_TABLE (table12), 5);
+
+  entry_print = gtk_entry_new ();
+  gtk_widget_show (entry_print);
+  gtk_table_attach (GTK_TABLE (table12), entry_print, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, entry_print, _("Path to the command for printing files (use %f for the filename)."), NULL);
+
+  button_print = gtk_button_new ();
+  gtk_widget_show (button_print);
+  gtk_table_attach (GTK_TABLE (table12), button_print, 2, 3, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image763 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image763);
+  gtk_container_add (GTK_CONTAINER (button_print), image763);
+
+  label154 = gtk_label_new (_("Print:"));
+  gtk_widget_show (label154);
+  gtk_table_attach (GTK_TABLE (table12), label154, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label154), 0, 0.5);
+
+  entry_contextaction = gtk_entry_new ();
+  gtk_widget_show (entry_contextaction);
+  gtk_table_attach (GTK_TABLE (table12), entry_contextaction, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, entry_contextaction, _("Context action command. The currently selected word can be used with %s. It can appear anywhere in the given command and will be replaced before execution."), NULL);
+  gtk_entry_set_invisible_char (GTK_ENTRY (entry_contextaction), 9679);
+
+  label189 = gtk_label_new (_("Context action:"));
+  gtk_widget_show (label189);
+  gtk_table_attach (GTK_TABLE (table12), label189, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  button_contextaction = gtk_button_new ();
+  gtk_widget_show (button_contextaction);
+  gtk_table_attach (GTK_TABLE (table12), button_contextaction, 2, 3, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  image1919 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image1919);
+  gtk_container_add (GTK_CONTAINER (button_contextaction), image1919);
+
+  label193 = gtk_label_new (_("<b>Commands</b>"));
+  gtk_widget_show (label193);
+  gtk_frame_set_label_widget (GTK_FRAME (frame26), label193);
+  gtk_label_set_use_markup (GTK_LABEL (label193), TRUE);
 
   label96 = gtk_label_new (_("Tools"));
   gtk_widget_show (label96);
@@ -4083,12 +4107,6 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_focus, "check_auto_focus");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_suppress_search_dialogs, "check_ask_suppress_search_dialogs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label178, "label178");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame24, "frame24");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment27, "alignment27");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox8, "hbox8");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label189, "label189");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_contextaction, "entry_contextaction");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label188, "label188");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame25, "frame25");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment28, "alignment28");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table11, "table11");
@@ -4247,6 +4265,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_autocheight, "spin_autocheight");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label177, "label177");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label95, "label95");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox23, "vbox23");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame20, "frame20");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment23, "alignment23");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox2, "vbox2");
@@ -4264,15 +4283,23 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, image286, "image286");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button_browser, "button_browser");
   GLADE_HOOKUP_OBJECT (prefs_dialog, image287, "image287");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label154, "label154");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_print, "entry_print");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, button_print, "button_print");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, image763, "image763");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label171, "label171");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_grep, "entry_grep");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button_grep, "button_grep");
   GLADE_HOOKUP_OBJECT (prefs_dialog, image808, "image808");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label179, "label179");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame26, "frame26");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment29, "alignment29");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table12, "table12");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_print, "entry_print");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, button_print, "button_print");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, image763, "image763");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label154, "label154");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, entry_contextaction, "entry_contextaction");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label189, "label189");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, button_contextaction, "button_contextaction");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, image1919, "image1919");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label193, "label193");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label96, "label96");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame21, "frame21");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment24, "alignment24");
