@@ -171,7 +171,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_NEXTMESSAGE] = fill(cb_func_menu_nextmessage,
 		0, 0, "menu_nextmessage", _("Next Message"));
 	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline,
-		GDK_j, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
+		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
 
 	keys[GEANY_KEYS_MENU_TOGGLEALL] = fill(cb_func_menu_toggle_all,
 		0, 0, "menu_toggleall", _("Toggle all additional widgets"));
@@ -244,6 +244,14 @@ void keybindings_init(void)
 
 	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit,
 		GDK_d, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
+	keys[GEANY_KEYS_EDIT_DELETELINE] = fill(cb_func_edit,
+		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("Delete current line"));
+	keys[GEANY_KEYS_EDIT_COPYLINE] = fill(cb_func_edit,
+		GDK_k, GDK_MOD1_MASK | GDK_SHIFT_MASK, "edit_copyline", _("Copy current line"));
+	keys[GEANY_KEYS_EDIT_CUTLINE] = fill(cb_func_edit,
+		GDK_k, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("Cut current line"));
+	keys[GEANY_KEYS_EDIT_TRANSPOSELINE] = fill(cb_func_edit,
+		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("Transpose current line"));
 	keys[GEANY_KEYS_EDIT_TOLOWERCASE] = fill(cb_func_edit,
 		GDK_u, GDK_CONTROL_MASK, "edit_tolowercase", _("Convert Selection to lower-case"));
 	keys[GEANY_KEYS_EDIT_TOUPPERCASE] = fill(cb_func_edit,
@@ -290,6 +298,8 @@ void keybindings_init(void)
 
 	keys[GEANY_KEYS_EDIT_SELECTWORD] = fill(cb_func_edit,
 		GDK_w, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectword", _("Select current word"));
+	keys[GEANY_KEYS_EDIT_SELECTLINE] = fill(cb_func_edit,
+		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("Select current line"));
 	keys[GEANY_KEYS_EDIT_SELECTPARAGRAPH] = fill(cb_func_edit,
 		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("Select current paragraph"));
 
@@ -1095,6 +1105,15 @@ static void cb_func_edit(guint key_id)
 		case GEANY_KEYS_EDIT_DUPLICATELINE:
 			on_menu_duplicate_line1_activate(NULL, NULL);
 			break;
+		case GEANY_KEYS_EDIT_DELETELINE:
+			sci_cmd(doc_list[idx].sci, SCI_LINEDELETE);
+			break;
+		case GEANY_KEYS_EDIT_CUTLINE:
+			sci_cmd(doc_list[idx].sci, SCI_LINECUT);
+			break;
+		case GEANY_KEYS_EDIT_TRANSPOSELINE:
+			sci_cmd(doc_list[idx].sci, SCI_LINETRANSPOSE);
+			break;
 		case GEANY_KEYS_EDIT_COMMENTLINETOGGLE:
 			on_menu_toggle_line_commentation1_activate(NULL, NULL);
 			break;
@@ -1130,6 +1149,9 @@ static void cb_func_edit(guint key_id)
 
 		case GEANY_KEYS_EDIT_SELECTWORD:
 			editor_select_word(doc_list[idx].sci);
+			break;
+		case GEANY_KEYS_EDIT_SELECTLINE:
+			editor_select_line(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_SELECTPARAGRAPH:
 			editor_select_paragraph(doc_list[idx].sci);

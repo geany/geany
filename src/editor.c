@@ -2351,6 +2351,22 @@ void editor_select_word(ScintillaObject *sci)
 }
 
 
+void editor_select_line(ScintillaObject *sci)
+{
+	gint pos, line, start, end;
+
+	g_return_if_fail(sci != NULL);
+
+	pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
+	line = SSM(sci, SCI_LINEFROMPOSITION, pos, 0);
+
+	start = SSM(sci, SCI_POSITIONFROMLINE, line, TRUE);
+	end = SSM(sci, SCI_POSITIONFROMLINE, line + 1, TRUE);
+
+	SSM(sci, SCI_SETSEL, start, end);
+}
+
+
 /* find the start or end of a paragraph by searching all lines in direction (UP or DOWN)
  * starting at the given line and return the found line or return -1 if called on an empty line */
 static gint find_paragraph_stop(ScintillaObject *sci, gint line, gint direction)

@@ -1851,6 +1851,26 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 								<entry>Duplicates the current line or selection.</entry>
 							</row>
 							<row>
+								<entry>Delete current line</entry>
+								<entry>Deletes the current line.
+								</entry>
+							</row>
+							<row>
+								<entry>Cut current line</entry>
+								<entry>Cuts the current line.
+								</entry>
+							</row>
+							<row>
+								<entry>Copy current line</entry>
+								<entry>Copies the current line into the clipboard.
+								</entry>
+							</row>
+							<row>
+								<entry>Transpose current line</entry>
+								<entry>Transposes the current line with the previous one.
+								</entry>
+							</row>
+							<row>
 								<entry>Comment line</entry>
 								<entry>Comments current line or selection.</entry>
 							</row>
@@ -1934,6 +1954,11 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 								<entry>Select current paragraph</entry>
 								<entry>Selects the current paragraph under the cursor which is
 									   defined by two empty lines around it.
+								</entry>
+							</row>
+							<row>
+								<entry>Select current line</entry>
+								<entry>Selects the current line under the cursor..
 								</entry>
 							</row>
 							<row>

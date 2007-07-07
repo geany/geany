@@ -2,6 +2,9 @@
 
  * src/editor.c:
    Include new line character(s) when selecting a paragraph.
+ * doc/geany.docbook, src/document.c, src/editor.c, src/editor.h,
+   src/keybindings.c, src/keybindings.h:
+   Add keybinding for Select, Transpose, Cut, Copy and Delete line.
 
 
 2007-07-07  Nick Treleaven  <nick.treleaven@btinternet.com>
