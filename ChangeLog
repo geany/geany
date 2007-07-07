@@ -5,6 +5,8 @@
  * doc/geany.docbook, src/document.c, src/editor.c, src/editor.h,
    src/keybindings.c, src/keybindings.h:
    Add keybinding for Select, Transpose, Cut, Copy and Delete line.
+ * src/keybindings.c: Change default shortcut for Find Next/Previous to
+                      Ctrl-G and Ctrl-Shift-G.
 
 
 2007-07-07  Nick Treleaven  <nick.treleaven@btinternet.com>

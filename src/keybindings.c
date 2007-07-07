@@ -157,9 +157,9 @@ void keybindings_init(void)
 		0, 0, "menu_preferences", _("Preferences"));
 
 	keys[GEANY_KEYS_MENU_FINDNEXT] = fill(cb_func_menu_findnext,
-		GDK_F3, 0, "menu_findnext", _("Find Next"));
+		GDK_g, GDK_CONTROL_MASK, "menu_findnext", _("Find Next"));
 	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious,
-		GDK_F3, GDK_SHIFT_MASK, "menu_findprevious", _("Find Previous"));
+		GDK_g, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findprevious", _("Find Previous"));
 	keys[GEANY_KEYS_MENU_FINDNEXTSEL] = fill(cb_func_menu_findnextsel,
 		0, 0, "menu_findnextsel", _("Find Next Selection"));
 	keys[GEANY_KEYS_MENU_FINDPREVSEL] = fill(cb_func_menu_findprevsel,
