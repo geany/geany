@@ -1672,7 +1672,7 @@ static void styleset_python_init(void)
 
 	load_keyfiles(config, config_home, GEANY_FILETYPES_PYTHON);
 
-	new_style_array(GEANY_FILETYPES_PYTHON, 14);
+	new_style_array(GEANY_FILETYPES_PYTHON, 16);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[0]);
 	get_keyfile_hex(config, config_home, "styling", "commentline", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "number", "0x400080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[2]);
@@ -1687,6 +1687,8 @@ static void styleset_python_init(void)
 	get_keyfile_hex(config, config_home, "styling", "identifier", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[11]);
 	get_keyfile_hex(config, config_home, "styling", "commentblock", "0x808080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[12]);
 	get_keyfile_hex(config, config_home, "styling", "stringeol", "0x000000", "0xe0c0e0", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[13]);
+	get_keyfile_hex(config, config_home, "styling", "word2", "0x800060", "0xffffff", "true", &style_sets[GEANY_FILETYPES_PYTHON].styling[14]);
+	get_keyfile_hex(config, config_home, "styling", "decorator", "0x808000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_PYTHON].styling[15]);
 
 	style_sets[GEANY_FILETYPES_PYTHON].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_PYTHON, 0, "and as assert break class continue def del elif else except exec finally for from global if import in is lambda not or pass print raise return try while with yield False None True");
@@ -1728,6 +1730,8 @@ void styleset_python(ScintillaObject *sci)
 	set_sci_style(sci, SCE_P_IDENTIFIER, GEANY_FILETYPES_PYTHON, 11);
 	set_sci_style(sci, SCE_P_COMMENTBLOCK, GEANY_FILETYPES_PYTHON, 12);
 	set_sci_style(sci, SCE_P_STRINGEOL, GEANY_FILETYPES_PYTHON, 13);
+	set_sci_style(sci, SCE_P_WORD2, GEANY_FILETYPES_PYTHON, 14);
+	set_sci_style(sci, SCE_P_DECORATOR, GEANY_FILETYPES_PYTHON, 15);
 
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.comment.python", (sptr_t) "1");
 	SSM(sci, SCI_SETPROPERTY, (sptr_t) "fold.quotes.python", (sptr_t) "1");
