@@ -400,7 +400,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 #ifndef G_OS_WIN32
 	GtkWidget *dialog, *button;
 #endif
-	gchar *msg, *short_fn = NULL;
+	gchar *msg, *msg2, *short_fn = NULL;
 	gint ret;
 
 	// display the file tab to remind the user of the document
@@ -414,15 +414,16 @@ gboolean dialogs_show_unsaved_file(gint idx)
 
 	msg = g_strdup_printf(_("The file '%s' is not saved."),
 		(short_fn != NULL) ? short_fn : GEANY_STRING_UNTITLED);
+	msg2 = _("Do you want to save it before closing?");
 	g_free(short_fn);
 
 #ifdef G_OS_WIN32
+	setptr(msg, g_strconcat(msg, "\n", msg2, NULL));
 	ret = win32_message_dialog_unsaved(msg);
 #else
 	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
                                   GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", msg);
-	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-		"%s", _("Do you want to save it before closing?"));
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", msg2);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
 	button = ui_button_new_with_image(GTK_STOCK_CLEAR, _("_Don't save"));

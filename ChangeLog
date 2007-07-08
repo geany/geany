@@ -1,3 +1,9 @@
+2007-07-08  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/dialogs.c: Fix missing descriptive text in message box when
+                  closing an unsaved file on Windows.
+
+
 2007-07-07  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/editor.c:
