@@ -1,3 +1,10 @@
+2007-07-09  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/filetypes.c, src/filetypes.h:
+   Change name of XML filetype to "XML document".
+   Add sub menus to "Set Filetype" menu.
+
+
 2007-07-08  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/dialogs.c: Fix missing descriptive text in message box when

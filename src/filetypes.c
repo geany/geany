@@ -400,7 +400,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_XML]->uid = FILETYPE_UID_XML;
 	filetypes[GEANY_FILETYPES_XML]->lang = -2;
 	filetypes[GEANY_FILETYPES_XML]->name = g_strdup("XML");
-	filetypes[GEANY_FILETYPES_XML]->title = g_strdup(_("XML source file"));
+	filetypes[GEANY_FILETYPES_XML]->title = g_strdup(_("XML document"));
 	filetypes[GEANY_FILETYPES_XML]->extension = g_strdup("xml");
 	filetypes[GEANY_FILETYPES_XML]->pattern = utils_strv_new(
 		"*.xml", "*.sgml", "*.xsl", "*.xslt", "*.xsd", NULL);
@@ -532,37 +532,69 @@ void filetypes_init_types()
 }
 
 
+#define create_sub_menu(menu, item, title) \
+	(menu) = gtk_menu_new(); \
+	(item) = gtk_menu_item_new_with_mnemonic((title)); \
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM((item)), (menu)); \
+	gtk_container_add(GTK_CONTAINER(filetype_menu), (item)); \
+	gtk_widget_show((item));
+
+
 /* Calls filetypes_init_types() and creates the filetype menu. */
 void filetypes_init()
 {
 	filetype_id ft_id;
 	GtkWidget *filetype_menu = lookup_widget(app->window, "set_filetype1_menu");
+	GtkWidget *sub_menu;
+	GtkWidget *sub_menu_programming, *sub_menu_scripts, *sub_menu_markup, *sub_menu_misc;
+	GtkWidget *sub_item_programming, *sub_item_scripts, *sub_item_markup, *sub_item_misc;
 
 	filetypes_init_types();
+
+	create_sub_menu(sub_menu_programming, sub_item_programming, _("_Programming Languages"));
+	create_sub_menu(sub_menu_scripts, sub_item_scripts, _("_Scripting Languages"));
+	create_sub_menu(sub_menu_markup, sub_item_markup, _("_Markup Languages"));
+	create_sub_menu(sub_menu_misc, sub_item_misc, _("M_iscellaneous Languages"));
 
 	// Append all filetypes to the filetype menu
 	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
 	{
 		filetype *ft = filetypes[ft_id];
-		const gchar *title = (ft_id == GEANY_FILETYPES_ALL) ? _("None") : ft->title;
+		const gchar *title = ft->title;
 
 		// insert separators for different filetype groups
 		switch (ft_id)
 		{
+			case GEANY_FILETYPES_C:		// programming
+			{
+				sub_menu = sub_menu_programming;
+				break;
+			}
 			case GEANY_FILETYPES_PERL:	// scripts
-			case GEANY_FILETYPES_XML:	// text documents
+			{
+				sub_menu = sub_menu_scripts;
+				break;
+			}
+			case GEANY_FILETYPES_XML:	// markup
+			{	// (include also CSS, not really markup but fit quite well to HTML)
+				sub_menu = sub_menu_markup;
+				break;
+			}
+			case GEANY_FILETYPES_SQL:	// misc
+			{
+				sub_menu = sub_menu_misc;
+				break;
+			}
 			case GEANY_FILETYPES_ALL:	// none
 			{
-				GtkWidget *sep = gtk_separator_menu_item_new();
-
-				gtk_widget_show(sep);
-				gtk_container_add(GTK_CONTAINER(filetype_menu), sep);
-			}
-			default:
+				sub_menu = filetype_menu;
+				title = _("None");
 				break;
+			}
+			default: break;
 		}
 		ft->item = NULL;
-		filetypes_create_menu_item(filetype_menu, title, ft);
+		filetypes_create_menu_item(sub_menu, title, ft);
 	}
 }
 
