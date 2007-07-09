@@ -55,7 +55,8 @@
 
 
 gchar *dialog_key_name;
-static GtkListStore *store = NULL;
+GtkTreeIter g_iter;
+static GtkTreeStore *store = NULL;
 static GtkTreeView *tree = NULL;
 GtkWidget *dialog_label;
 static gboolean edited = FALSE;
@@ -77,9 +78,6 @@ void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
 	GdkColor *color;
-	GtkTreeIter iter;
-	guint i;
-	gchar *key_string;
 
 	// General settings
 	widget = lookup_widget(app->prefs_dialog, "spin_mru");
@@ -353,7 +351,7 @@ void prefs_init_dialog(void)
 		tree = GTK_TREE_VIEW(lookup_widget(app->prefs_dialog, "treeview7"));
 		//g_object_set(tree, "vertical-separator", 6, NULL);
 
-		store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+		store = gtk_tree_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
 		gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 
 		renderer = gtk_cell_renderer_text_new();
@@ -378,14 +376,26 @@ void prefs_init_dialog(void)
 					G_CALLBACK(on_tree_view_button_press_event), NULL);
 	}
 
-	for (i = 0; i < GEANY_MAX_KEYS; i++)
 	{
-		key_string = gtk_accelerator_name(keys[i]->key, keys[i]->mods);
-		gtk_list_store_append(store, &iter);
-		gtk_list_store_set(store, &iter, 0, keys[i]->label, 1, key_string, -1);
-		g_free(key_string);
-	}
+		GtkTreeIter parent, iter;
+		gint i;
+		gchar *key_string;
 
+		for (i = 0; i < GEANY_MAX_KEYS; i++)
+		{
+			if (keys[i]->section != NULL)
+			{
+				gtk_tree_store_append(store, &parent, NULL);
+				gtk_tree_store_set(store, &parent, 0, keys[i]->section, -1);
+			}
+
+			key_string = gtk_accelerator_name(keys[i]->key, keys[i]->mods);
+			gtk_tree_store_append(store, &iter, &parent);
+			gtk_tree_store_set(store, &iter, 0, keys[i]->label, 1, key_string, -1);
+			g_free(key_string);
+		}
+	}
+	gtk_tree_view_expand_all(GTK_TREE_VIEW(tree));
 
 #ifdef HAVE_VTE
 	// make VTE switch visible only when VTE is compiled in, it is hidden by default
@@ -757,7 +767,7 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 	if (response != GTK_RESPONSE_APPLY)
 	{
-		gtk_list_store_clear(store);
+		gtk_tree_store_clear(store);
 		gtk_widget_hide(GTK_WIDGET(dialog));
 	}
 }
@@ -852,18 +862,31 @@ void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 static gboolean on_tree_view_button_press_event(
 						GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
 	gchar *name;
 
 	// discard click events in the tree unless it is a double click
-	if (widget == (GtkWidget*)tree && event->type != GDK_2BUTTON_PRESS) return FALSE;
+	if (widget == (GtkWidget*)tree && event->type != GDK_2BUTTON_PRESS)
+		return FALSE;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
-	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	if (gtk_tree_selection_get_selected(selection, &model, &g_iter))
 	{
-		gtk_tree_model_get(model, &iter, 0, &name, -1);
+		if (gtk_tree_model_iter_has_child(model, &g_iter))
+		{	// double click on a section to expand or collapse it
+			GtkTreePath *path = gtk_tree_model_get_path(model, &g_iter);
+
+			if (gtk_tree_view_row_expanded(tree, path))
+				gtk_tree_view_collapse_row(tree, path);
+			else
+				gtk_tree_view_expand_row(tree, path, FALSE);
+
+			gtk_tree_path_free(path);
+			return TRUE;
+		}
+
+		gtk_tree_model_get(model, &g_iter, 0, &name, -1);
 		if (name != NULL)
 		{
 			GtkWidget *dialog;
@@ -874,7 +897,8 @@ static gboolean on_tree_view_button_press_event(
 					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 
-			str = g_strdup_printf(_("Type the combination of the keys you want to use for \"%s\""), name);
+			str = g_strdup_printf(
+					_("Type the combination of the keys you want to use for \"%s\""), name);
 			label = gtk_label_new(str);
 			gtk_misc_set_padding(GTK_MISC(label), 5, 10);
 			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
@@ -883,7 +907,8 @@ static gboolean on_tree_view_button_press_event(
 			gtk_misc_set_padding(GTK_MISC(dialog_label), 5, 10);
 			gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), dialog_label);
 
-			g_signal_connect(G_OBJECT(dialog), "key-press-event", G_CALLBACK(on_keytype_dialog_response), NULL);
+			g_signal_connect(G_OBJECT(dialog), "key-press-event",
+								G_CALLBACK(on_keytype_dialog_response), NULL);
 			g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(on_dialog_response), NULL);
 			g_signal_connect(G_OBJECT(dialog), "close", G_CALLBACK(gtk_widget_destroy), NULL);
 
@@ -911,19 +936,24 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 
 		// get the index of the shortcut
 		idx = strtol(path, &test, 10);
-		if (test == path) return;
+		if (test == path)
+			return;
+
+		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
+		if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(store), &iter))
+			return;
 
 		gtk_accelerator_parse(new_text, &lkey, &lmods);
 
-		if (find_duplicate(idx, lkey, lmods, new_text)) return;
+		if (find_duplicate(idx, lkey, lmods, new_text))
+			return;
 
 		// set the values here, because of the above check, setting it in gtk_accelerator_parse would
 		// return a wrong key combination if it is duplicate
 		keys[idx]->key = lkey;
 		keys[idx]->mods = lmods;
 
-		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
-		gtk_list_store_set(store, &iter, 1, new_text, -1);
+		gtk_tree_store_set(store, &iter, 1, new_text, -1);
 
 		edited = TRUE;
 	}
@@ -946,15 +976,13 @@ static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event
 }
 
 
-static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_data)
+static void on_dialog_response(GtkWidget *dialog, gint response, gpointer iter)
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		GtkTreeIter iter;
 		guint idx;
 		guint lkey;
 		GdkModifierType lmods;
-		gchar path[3];
 
 		for (idx = 0; idx < GEANY_MAX_KEYS; idx++)
 		{
@@ -963,17 +991,17 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer user_d
 
 		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);
 
-		if (find_duplicate(idx, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label)))) return;
+		if (find_duplicate(idx, lkey, lmods, gtk_label_get_text(GTK_LABEL(dialog_label))))
+			return;
 
 		// set the values here, because of the above check, setting it in gtk_accelerator_parse would
 		// return a wrong key combination if it is duplicate
 		keys[idx]->key = lkey;
 		keys[idx]->mods = lmods;
 
-		// generate the path, it is exactly the index
-		g_snprintf(path, 3, "%d", idx);
-		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
-		gtk_list_store_set(store, &iter, 1, gtk_label_get_text(GTK_LABEL(dialog_label)), -1);
+		gtk_tree_store_set(store, &g_iter,
+				1, gtk_label_get_text(GTK_LABEL(dialog_label)), -1);
+
 		g_free(dialog_key_name);
 		dialog_key_name = NULL;
 

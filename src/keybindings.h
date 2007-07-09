@@ -39,6 +39,9 @@ typedef struct binding
 	// function pointer to a callback function, just to keep the code in keypress event
 	// callback function clear
 	KBCallback cb_func;
+	// string to use as a section name in the preferences dialog in keybinding treeview as well as
+	// in the keybinding help dialog, set only for the first binding in the section
+	gchar *section;
 } binding;
 
 

@@ -331,6 +331,19 @@ void keybindings_init(void)
 		}
 	}
 
+	// set section name
+	keys[GEANY_KEYS_MENU_NEW]->section = _("File menu");
+	keys[GEANY_KEYS_MENU_UNDO]->section = _("Edit menu");
+	keys[GEANY_KEYS_MENU_FINDNEXT]->section = _("Search menu");
+	keys[GEANY_KEYS_MENU_TOGGLEALL]->section = _("View menu");
+	keys[GEANY_KEYS_MENU_REPLACETABS]->section = _("Document menu");
+	keys[GEANY_KEYS_BUILD_COMPILE]->section = _("Build menu");
+	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER]->section = _("Tools menu");
+	keys[GEANY_KEYS_MENU_HELP]->section = _("Help menu");
+	keys[GEANY_KEYS_SWITCH_EDITOR]->section = _("Focus menu");
+	keys[GEANY_KEYS_EDIT_TOLOWERCASE]->section = _("Editing menu");
+	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE]->section = _("Tag menu");
+
 	g_free(configfile);
 	g_key_file_free(config);
 
@@ -478,52 +491,18 @@ static void get_shortcut_labels_text(GString **text_names_str, GString **text_ke
 	{
 		gchar *shortcut;
 
-		switch (i)
+		if (keys[i]->section != NULL)
 		{
-			case GEANY_KEYS_MENU_NEW:
-				g_string_append(text_names, _("<b>File menu</b>\n"));
+			if (i == GEANY_KEYS_MENU_NEW)
+			{
+				g_string_append_printf(text_names, "<b>%s</b>\n", keys[i]->section);
 				g_string_append(text_keys, "\n");
-				break;
-			case GEANY_KEYS_MENU_UNDO:
-				g_string_append(text_names, _("\n<b>Edit menu</b>\n"));
+			}
+			else
+			{
+				g_string_append_printf(text_names, "\n<b>%s</b>\n", keys[i]->section);
 				g_string_append(text_keys, "\n\n");
-				break;
-			case GEANY_KEYS_MENU_FINDNEXT:
-				g_string_append(text_names, _("\n<b>Search menu</b>\n"));
-				g_string_append(text_keys, "\n\n");
-				break;
-			case GEANY_KEYS_MENU_TOGGLEALL:
-				g_string_append(text_names, _("\n<b>View menu</b>\n"));
-				g_string_append(text_keys, "\n\n");
-				break;
-			case GEANY_KEYS_MENU_REPLACETABS:
-				g_string_append(text_names, _("\n<b>Document menu</b>\n"));
-				g_string_append(text_keys, "\n\n");
-				break;
-			case GEANY_KEYS_BUILD_COMPILE:
-				g_string_append(text_names, _("\n<b>Build menu</b>\n"));
-				g_string_append(text_keys, "\n\n");
-				break;
-			case GEANY_KEYS_MENU_OPENCOLORCHOOSER:
-				g_string_append(text_names, _("\n<b>Tools menu</b>\n"));
-				g_string_append(text_keys, "\n\n");
-				break;
-			case GEANY_KEYS_MENU_HELP:
-				g_string_append(text_names, _("\n<b>Help menu</b>\n"));
-				g_string_append(text_keys, "\n\n");
-				break;
-			case GEANY_KEYS_SWITCH_EDITOR:
-				g_string_append(text_names, _("\n<b>Focus commands</b>\n"));
-				g_string_append(text_keys, "\n\n");
-				break;
-			case GEANY_KEYS_EDIT_TOLOWERCASE:
-				g_string_append(text_names, _("\n<b>Editing commands</b>\n"));
-				g_string_append(text_keys, "\n\n");
-				break;
-			case GEANY_KEYS_EDIT_AUTOCOMPLETE:
-				g_string_append(text_names, _("\n<b>Tag commands</b>\n"));
-				g_string_append(text_keys, "\n\n");
-				break;
+			}
 		}
 
 		shortcut = gtk_accelerator_get_label(keys[i]->key, keys[i]->mods);
@@ -704,6 +683,7 @@ static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gcha
 	result->key = key;
 	result->mods = mod;
 	result->cb_func = func;
+	result->section = NULL;
 
 	return result;
 }

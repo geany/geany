@@ -4,6 +4,9 @@
    Change name of XML filetype to "XML document".
    Add sub menus to "Set Filetype" menu.
  * src/editor.c: Always show calltip for PHP files.
+ * src/keybindings.c, src/keybindings.h, src/prefs.c:
+   Use a TreeView for keybinding list in the preferences dialog and add
+   descriptive sections for better usability.
 
 
 2007-07-08  Enrico Tröger  <enrico.troeger@uvena.de>
