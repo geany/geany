@@ -859,9 +859,6 @@ gboolean editor_show_calltip(gint idx, gint pos)
 	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
 	if (is_comment(lexer, style))
 		return FALSE;
-	// never show a calltip in a PHP file outside of the <? ?> tags
-	if (lexer == SCLEX_HTML && ! (style >= SCE_HPHP_DEFAULT && style <= SCE_HPHP_OPERATOR))
-		return FALSE;
 
 	word[0] = '\0';
 	editor_find_current_word(sci, pos - 1, word, sizeof word, NULL);

@@ -3,6 +3,7 @@
  * src/filetypes.c, src/filetypes.h:
    Change name of XML filetype to "XML document".
    Add sub menus to "Set Filetype" menu.
+ * src/editor.c: Always show calltip for PHP files.
 
 
 2007-07-08  Enrico Tröger  <enrico.troeger@uvena.de>
