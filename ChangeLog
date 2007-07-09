@@ -8,6 +8,9 @@
    Use a TreeView for keybinding list in the preferences dialog and add
    descriptive sections for better usability.
  * src/keybindings.c: Use Ctrl-B for Goto matching brace.
+ * src/symbols.c, tagmanager/php.c:
+   Use CTags SVN version of PHP parser.
+   Use only supported symbol types in the symbol view for PHP.
 
 
 2007-07-08  Enrico Tröger  <enrico.troeger@uvena.de>

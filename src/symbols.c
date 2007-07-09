@@ -502,6 +502,18 @@ static void init_tag_list(gint idx)
 				//&(tv_iters.tag_other), _("Other"), NULL);
 			break;
 		}
+		case GEANY_FILETYPES_PHP:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_class), _("Classes"),
+				&(tv_iters.tag_function), _("Functions"),
+				&(tv_iters.tag_macro), _("Constants"),
+				&(tv_iters.tag_variable), _("Variables"), NULL);
+				//&(tv_iters.tag_struct), _("Label"),
+				//&(tv_iters.tag_namespace), _("Begin"),
+				//&(tv_iters.tag_other), _("Other"), NULL);
+			break;
+		}
 		case GEANY_FILETYPES_RUBY:
 		{
 			tag_list_add_groups(tag_store,
