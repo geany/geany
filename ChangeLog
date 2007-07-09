@@ -7,6 +7,7 @@
  * src/keybindings.c, src/keybindings.h, src/prefs.c:
    Use a TreeView for keybinding list in the preferences dialog and add
    descriptive sections for better usability.
+ * src/keybindings.c: Use Ctrl-B for Goto matching brace.
 
 
 2007-07-08  Enrico Tröger  <enrico.troeger@uvena.de>

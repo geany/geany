@@ -273,7 +273,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_SENDTOCMD3] = fill(cb_func_edit,
 		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"));
 	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit_global,
-		0, 0, "edit_gotomatchingbrace",
+		GDK_b, GDK_CONTROL_MASK, "edit_gotomatchingbrace",
 		_("Goto matching brace"));
 	keys[GEANY_KEYS_EDIT_TOGGLEMARKER] = fill(cb_func_edit_global,
 		GDK_m, GDK_CONTROL_MASK, "edit_togglemarker",
