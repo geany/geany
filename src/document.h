@@ -160,8 +160,7 @@ gint document_reload_file(gint idx, const gchar *forced_enc);
  * It returns whether the file could be saved or not. */
 gboolean document_save_file(gint idx, gboolean force);
 
-/* special search function, used from the find entry in the toolbar */
-void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc);
+gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc);
 
 /* General search function, used from the find dialog.
  * Returns -1 on failure or the start position of the matching text. */

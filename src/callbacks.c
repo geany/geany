@@ -566,6 +566,23 @@ on_toolbutton10_clicked                (GtkToolButton   *toolbutton,
 }
 
 
+static void set_search_bar_background(GtkWidget *widget, gboolean success)
+{
+	const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
+	const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
+	static gboolean old_value = TRUE;
+
+	// only update if really needed
+	if (old_value != success)
+	{
+		gtk_widget_modify_base(widget, GTK_STATE_NORMAL, success ? NULL : &red);
+		gtk_widget_modify_text(widget, GTK_STATE_NORMAL, success ? NULL : &white);
+
+		old_value = success;
+	}
+}
+
+
 // store text, clear search flags so we can use Search->Find Next/Previous
 static void setup_find_next(GtkEditable *editable)
 {
@@ -582,9 +599,11 @@ on_entry1_activate                     (GtkEntry        *entry,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	gboolean result;
 
 	setup_find_next(GTK_EDITABLE(entry));
-	document_search_bar_find(idx, search_data.text, 0, FALSE);
+	result = document_search_bar_find(idx, search_data.text, 0, FALSE);
+	set_search_bar_background(GTK_WIDGET(entry), result);
 }
 
 
@@ -594,9 +613,11 @@ on_entry1_changed                      (GtkEditable     *editable,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	gboolean result;
 
 	setup_find_next(editable);
-	document_search_bar_find(idx, search_data.text, 0, TRUE);
+	result = document_search_bar_find(idx, search_data.text, 0, TRUE);
+	set_search_bar_background(GTK_WIDGET(editable), result);
 }
 
 
@@ -607,10 +628,12 @@ on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
 {
 	//on_entry1_changed(NULL, NULL);
 	gint idx = document_get_cur_idx();
+	gboolean result;
 	GtkWidget *entry = lookup_widget(GTK_WIDGET(app->window), "entry1");
 
 	setup_find_next(GTK_EDITABLE(entry));
-	document_search_bar_find(idx, search_data.text, 0, FALSE);
+	result = document_search_bar_find(idx, search_data.text, 0, FALSE);
+	set_search_bar_background(entry, result);
 }
 
 

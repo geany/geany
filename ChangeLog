@@ -13,6 +13,9 @@
    Use only supported symbol types in the symbol view for PHP.
  * src/treeviews.c: Focus the editor widget after switching between
                     files with the open files list.
+ * src/callbacks.c, src/document.c, src/document.h:
+   Change the background colour of the search bar in the toolbar
+   according to the search result.
 
 
 2007-07-08  Enrico Tröger  <enrico.troeger@uvena.de>

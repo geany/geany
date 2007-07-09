@@ -1113,14 +1113,19 @@ gboolean document_save_file(gint idx, gboolean force)
 }
 
 
-/* special search function, used from the find entry in the toolbar */
-void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc)
+/* special search function, used from the find entry in the toolbar
+ * return TRUE if text was found otherwise FALSE
+ * return also TRUE if text is empty  */
+gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc)
 {
 	gint start_pos, search_pos;
 	struct TextToFind ttf;
 
-	g_return_if_fail(text != NULL);
-	if (! DOC_IDX_VALID(idx) || ! *text) return;
+	g_return_val_if_fail(text != NULL, FALSE);
+	if (! DOC_IDX_VALID(idx))
+		return FALSE;
+	if (! *text)
+		return TRUE;
 
 	start_pos = (inc) ? sci_get_selection_start(doc_list[idx].sci) :
 		sci_get_selection_end(doc_list[idx].sci);	// equal if no selection
@@ -1144,6 +1149,7 @@ void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean 
 		sci_set_selection_start(doc_list[idx].sci, ttf.chrgText.cpMin);
 		sci_set_selection_end(doc_list[idx].sci, ttf.chrgText.cpMax);
 		doc_list[idx].scroll_percent = 0.3F;
+		return TRUE;
 	}
 	else
 	{
@@ -1153,6 +1159,7 @@ void document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean 
 		}
 		utils_beep();
 		sci_goto_pos(doc_list[idx].sci, start_pos, FALSE);	// clear selection
+		return FALSE;
 	}
 }
 
