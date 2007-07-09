@@ -11,6 +11,8 @@
  * src/symbols.c, tagmanager/php.c:
    Use CTags SVN version of PHP parser.
    Use only supported symbol types in the symbol view for PHP.
+ * src/treeviews.c: Focus the editor widget after switching between
+                    files with the open files list.
 
 
 2007-07-08  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -414,6 +414,13 @@ static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user
 }
 
 
+static gboolean change_focus(GtkWidget *widget)
+{
+	gtk_widget_grab_focus(widget);
+	return FALSE;
+}
+
+
 static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpointer data)
 {
 	GtkTreeIter iter;
@@ -427,6 +434,7 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
 					(GtkWidget*) doc_list[idx].sci));
+		g_idle_add((GSourceFunc) change_focus, GTK_WIDGET(doc_list[idx].sci));
 	}
 }
 
