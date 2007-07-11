@@ -1,3 +1,11 @@
+2007-07-11  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * THANKS, configure.in, plugins/Makefile.am, scintilla/Makefile.am,
+   src/Makefile.am, tagmanager/Makefile.am:
+   Apply patch from Shiv to make build system more compatible with other
+   compilers than gcc.
+
+
 2007-07-11  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/highlighting.c:

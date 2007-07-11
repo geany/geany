@@ -3,7 +3,11 @@
 #EXTRA_DIST = \
 	#makefile.win32
 
-AM_CFLAGS = -Wall
+if IS_COMPILER_GCC
+    AM_CFLAGS = -Wall -pipe
+else
+    AM_CFLAGS =
+endif
 
 plugindir = $(libdir)/geany
 

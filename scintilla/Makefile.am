@@ -3,7 +3,7 @@ SUBDIRS = include
 
 noinst_LIBRARIES=libscintilla.a
 
-CC=g++
+CC = @CC@
 
 AM_CXXFLAGS = -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE
 
@@ -99,7 +99,7 @@ endif
 libscintilla_a_LIBADD = scintilla-marshal.o
 
 scintilla-marshal.o: scintilla-marshal.c
-	gcc @GTK_CFLAGS@ -c $(srcdir)/scintilla-marshal.c
+	$(CC) @GTK_CFLAGS@ -c $(srcdir)/scintilla-marshal.c
 
 marshallers: scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal scintilla-marshal.list --header > scintilla-marshal.h

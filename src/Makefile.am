@@ -60,14 +60,25 @@ clean-local:
 
 else
 # build Geany for all other platforms
-AM_CFLAGS = -Wall -pipe
+if IS_COMPILER_GCC
+    AM_CFLAGS = -Wall -pipe
+else
+    AM_CFLAGS =
+endif
+
 geany_SOURCES = $(SRCS) vte.c vte.h
-geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ -lstdc++ $(INTLLIBS)
+
+if IS_COMPILER_GCC
+    geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ -lstdc++ $(INTLLIBS)
+else
+    geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ -lCrun $(INTLLIBS)
+endif
 
 INCLUDES = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@
 
 clean-local:
+
 
 endif

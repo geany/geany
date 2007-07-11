@@ -32,6 +32,7 @@ Peter Strand <peter(at)zarquon(dot)se> - Haskell CTags patch
 Dave Moore <wrex006(at)gmail(dot)com> - code navigation patch
 François Cami <francois.cami(at)free(dot)fr>, Guillaume Duviol - tab replacement patch
 Alexander Rodin <rodin(dot)alexander(at)gmail(dot)com> - class builder patch
+Shiv <shivakumar(dot)gn(at)gmail(dot)com> - Sun Studio compiler compatibility patch
 
 Translators:
 ----------------------------------
