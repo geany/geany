@@ -12,6 +12,16 @@
    Add custom wordchars and whitespace_chars support for Python & Ruby.
    Group setting lexer, wordchars, autocompletion height together in
    apply_filetype_properties().
+ * src/interface.c, src/prefs.c, geany.glade:
+   Rearrange some of the Prefs dialog:
+   Add Indentation frame on Editor tab, with tab width setting.
+   Add Display tab for visual editor settings.
+   Move Files tab below Editor tab (not needed so often).
+   Add frame for toolbar page.
+   Change some spacing to multiples of 3 (Gnome HIG recommends multiples
+   of 6).
+   Minor reordering of some checkbox groups.
+   Add mnemonic for Keybindings 'Change' button.
 
 
 2007-07-09  Enrico Tröger  <enrico.troeger@uvena.de>

@@ -372,7 +372,7 @@ void prefs_init_dialog(void)
 		g_signal_connect(G_OBJECT(renderer), "edited", G_CALLBACK(on_cell_edited), NULL);
 		g_signal_connect(G_OBJECT(tree), "button-press-event",
 					G_CALLBACK(on_tree_view_button_press_event), NULL);
-		g_signal_connect(G_OBJECT(lookup_widget(app->prefs_dialog, "button2")), "button-press-event",
+		g_signal_connect(G_OBJECT(lookup_widget(app->prefs_dialog, "button2")), "clicked",
 					G_CALLBACK(on_tree_view_button_press_event), NULL);
 	}
 

@@ -2464,10 +2464,10 @@ create_prefs_dialog (void)
   GtkWidget *label187;
   GtkWidget *label157;
   GtkWidget *vbox15;
-  GtkWidget *frame12;
-  GtkWidget *alignment15;
+  GtkWidget *frame28;
+  GtkWidget *alignment31;
   GtkWidget *check_toolbar_show;
-  GtkWidget *label166;
+  GtkWidget *label196;
   GtkWidget *frame11;
   GtkWidget *alignment14;
   GtkWidget *vbox16;
@@ -2495,43 +2495,7 @@ create_prefs_dialog (void)
   GtkWidget *radio_toolbar_image;
   GtkWidget *label167;
   GtkWidget *label164;
-  GtkWidget *vbox18;
-  GtkWidget *frame6;
-  GtkWidget *alignment7;
-  GtkWidget *vbox8;
-  GtkWidget *table5;
-  GtkWidget *eventbox1;
-  GtkWidget *combo_new_encoding;
-  GtkWidget *label153;
-  GtkWidget *label116;
-  GtkObject *spin_tab_width_adj;
-  GtkWidget *spin_tab_width;
-  GtkWidget *label_open_encoding;
-  GtkWidget *check_open_encoding;
-  GtkWidget *eventbox3;
-  GtkWidget *combo_open_encoding;
-  GtkWidget *label109;
-  GtkWidget *frame2;
-  GtkWidget *alignment3;
-  GtkWidget *vbox6;
-  GtkWidget *check_trailing_spaces;
-  GtkWidget *check_new_line;
-  GtkWidget *check_replace_tabs;
-  GtkWidget *label19;
-  GtkWidget *frame17;
-  GtkWidget *alignment20;
-  GtkWidget *table10;
-  GtkWidget *label150;
-  GtkObject *spin_mru_adj;
-  GtkWidget *spin_mru;
-  GtkWidget *hbox3;
-  GtkWidget *radio_tab_left;
-  GSList *radio_tab_left_group = NULL;
-  GtkWidget *radio_tab_right;
-  GtkWidget *label147;
-  GtkWidget *label176;
-  GtkWidget *label174;
-  GtkWidget *vbox5;
+  GtkWidget *vbox24;
   GtkWidget *frame5;
   GtkWidget *alignment6;
   GtkWidget *vbox12;
@@ -2555,19 +2519,27 @@ create_prefs_dialog (void)
   GtkWidget *radio_long_line_background;
   GtkWidget *radio_long_line_disabled;
   GtkWidget *label155;
+  GtkWidget *label194;
+  GtkWidget *vbox5;
+  GtkWidget *frame27;
+  GtkWidget *alignment30;
+  GtkWidget *vbox25;
+  GtkWidget *check_use_tabs;
+  GtkWidget *table13;
+  GtkWidget *label116;
+  GtkWidget *label183;
+  GtkObject *spin_tab_width_adj;
+  GtkWidget *spin_tab_width;
+  GtkWidget *combo_auto_indent_mode;
+  GtkWidget *label195;
   GtkWidget *frame14;
   GtkWidget *alignment17;
   GtkWidget *vbox17;
-  GtkWidget *hbox7;
-  GtkWidget *label183;
-  GtkWidget *eventbox2;
-  GtkWidget *combo_auto_indent_mode;
   GtkWidget *check_line_wrapping;
+  GtkWidget *check_disable_dnd;
   GtkWidget *check_folding;
   GtkWidget *check_unfold_children;
   GtkWidget *check_indicators;
-  GtkWidget *check_disable_dnd;
-  GtkWidget *check_use_tabs;
   GtkWidget *label172;
   GtkWidget *frame18;
   GtkWidget *alignment21;
@@ -2576,12 +2548,44 @@ create_prefs_dialog (void)
   GtkWidget *check_xmltag;
   GtkWidget *check_symbol_auto_completion;
   GtkWidget *hbox6;
-  GtkWidget *label182;
   GtkWidget *label173;
   GtkObject *spin_autocheight_adj;
   GtkWidget *spin_autocheight;
   GtkWidget *label177;
   GtkWidget *label95;
+  GtkWidget *vbox18;
+  GtkWidget *frame6;
+  GtkWidget *alignment7;
+  GtkWidget *vbox8;
+  GtkWidget *table5;
+  GtkWidget *eventbox1;
+  GtkWidget *combo_new_encoding;
+  GtkWidget *label153;
+  GtkWidget *check_open_encoding;
+  GtkWidget *label_open_encoding;
+  GtkWidget *eventbox3;
+  GtkWidget *combo_open_encoding;
+  GtkWidget *label109;
+  GtkWidget *frame2;
+  GtkWidget *alignment3;
+  GtkWidget *vbox6;
+  GtkWidget *check_new_line;
+  GtkWidget *check_trailing_spaces;
+  GtkWidget *check_replace_tabs;
+  GtkWidget *label19;
+  GtkWidget *frame17;
+  GtkWidget *alignment20;
+  GtkWidget *table10;
+  GtkWidget *label150;
+  GtkObject *spin_mru_adj;
+  GtkWidget *spin_mru;
+  GtkWidget *hbox3;
+  GtkWidget *radio_tab_left;
+  GSList *radio_tab_left_group = NULL;
+  GtkWidget *radio_tab_right;
+  GtkWidget *label147;
+  GtkWidget *label176;
+  GtkWidget *label174;
   GtkWidget *vbox23;
   GtkWidget *frame20;
   GtkWidget *alignment23;
@@ -2776,8 +2780,8 @@ create_prefs_dialog (void)
   table11 = gtk_table_new (2, 3, FALSE);
   gtk_widget_show (table11);
   gtk_container_add (GTK_CONTAINER (alignment28), table11);
-  gtk_table_set_row_spacings (GTK_TABLE (table11), 2);
-  gtk_table_set_col_spacings (GTK_TABLE (table11), 5);
+  gtk_table_set_row_spacings (GTK_TABLE (table11), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table11), 6);
 
   label191 = gtk_label_new (_("Startup path:"));
   gtk_widget_show (label191);
@@ -2785,7 +2789,6 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label191), 0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label191), 6, 0);
 
   startup_path_entry = gtk_entry_new ();
   gtk_widget_show (startup_path_entry);
@@ -2811,7 +2814,6 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label192), 0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label192), 6, 0);
 
   project_file_path_entry = gtk_entry_new ();
   gtk_widget_show (project_file_path_entry);
@@ -3050,27 +3052,26 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox15);
   gtk_container_add (GTK_CONTAINER (notebook2), vbox15);
 
-  frame12 = gtk_frame_new (NULL);
-  gtk_widget_show (frame12);
-  gtk_box_pack_start (GTK_BOX (vbox15), frame12, FALSE, FALSE, 0);
-  gtk_frame_set_label_align (GTK_FRAME (frame12), 0.5, 0.5);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame12), GTK_SHADOW_NONE);
+  frame28 = gtk_frame_new (NULL);
+  gtk_widget_show (frame28);
+  gtk_box_pack_start (GTK_BOX (vbox15), frame28, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame28), GTK_SHADOW_NONE);
 
-  alignment15 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment15);
-  gtk_container_add (GTK_CONTAINER (frame12), alignment15);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment15), 0, 0, 12, 0);
+  alignment31 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment31);
+  gtk_container_add (GTK_CONTAINER (frame28), alignment31);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment31), 0, 0, 12, 0);
 
   check_toolbar_show = gtk_check_button_new_with_mnemonic (_("Show Toolbar"));
   gtk_widget_show (check_toolbar_show);
-  gtk_container_add (GTK_CONTAINER (alignment15), check_toolbar_show);
+  gtk_container_add (GTK_CONTAINER (alignment31), check_toolbar_show);
   GTK_WIDGET_UNSET_FLAGS (check_toolbar_show, GTK_CAN_FOCUS);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_show), FALSE);
 
-  label166 = gtk_label_new ("");
-  gtk_widget_show (label166);
-  gtk_frame_set_label_widget (GTK_FRAME (frame12), label166);
-  gtk_label_set_use_markup (GTK_LABEL (label166), TRUE);
+  label196 = gtk_label_new (_("<b>Toolbar</b>"));
+  gtk_widget_show (label196);
+  gtk_frame_set_label_widget (GTK_FRAME (frame28), label196);
+  gtk_label_set_use_markup (GTK_LABEL (label196), TRUE);
 
   frame11 = gtk_frame_new (NULL);
   gtk_widget_show (frame11);
@@ -3233,215 +3234,13 @@ create_prefs_dialog (void)
   gtk_widget_show (label164);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 2), label164);
 
-  vbox18 = gtk_vbox_new (FALSE, 10);
-  gtk_widget_show (vbox18);
-  gtk_container_add (GTK_CONTAINER (notebook2), vbox18);
-
-  frame6 = gtk_frame_new (NULL);
-  gtk_widget_show (frame6);
-  gtk_box_pack_start (GTK_BOX (vbox18), frame6, FALSE, TRUE, 0);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame6), GTK_SHADOW_NONE);
-
-  alignment7 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment7);
-  gtk_container_add (GTK_CONTAINER (frame6), alignment7);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment7), 0, 0, 12, 0);
-
-  vbox8 = gtk_vbox_new (FALSE, 3);
-  gtk_widget_show (vbox8);
-  gtk_container_add (GTK_CONTAINER (alignment7), vbox8);
-
-  table5 = gtk_table_new (4, 2, FALSE);
-  gtk_widget_show (table5);
-  gtk_box_pack_start (GTK_BOX (vbox8), table5, FALSE, TRUE, 0);
-  gtk_table_set_row_spacings (GTK_TABLE (table5), 3);
-  gtk_table_set_col_spacings (GTK_TABLE (table5), 25);
-
-  eventbox1 = gtk_event_box_new ();
-  gtk_widget_show (eventbox1);
-  gtk_table_attach (GTK_TABLE (table5), eventbox1, 1, 2, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
-  gtk_tooltips_set_tip (tooltips, eventbox1, _("Sets the default encoding for newly created files."), NULL);
-
-  combo_new_encoding = gtk_combo_box_new_text ();
-  gtk_widget_show (combo_new_encoding);
-  gtk_container_add (GTK_CONTAINER (eventbox1), combo_new_encoding);
-
-  label153 = gtk_label_new (_("Default encoding (new files):"));
-  gtk_widget_show (label153);
-  gtk_table_attach (GTK_TABLE (table5), label153, 0, 1, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label153), 0, 0.5);
-
-  label116 = gtk_label_new (_("Tab Width:"));
-  gtk_widget_show (label116);
-  gtk_table_attach (GTK_TABLE (table5), label116, 0, 1, 3, 4,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label116), 0, 0.5);
-
-  spin_tab_width_adj = gtk_adjustment_new (-1, 1, 99, 1, 10, 10);
-  spin_tab_width = gtk_spin_button_new (GTK_ADJUSTMENT (spin_tab_width_adj), 1, 0);
-  gtk_widget_show (spin_tab_width);
-  gtk_table_attach (GTK_TABLE (table5), spin_tab_width, 1, 2, 3, 4,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_tab_width, _("The width in chars, which one tab character will take"), NULL);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
-  gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_tab_width), GTK_UPDATE_IF_VALID);
-  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
-
-  label_open_encoding = gtk_label_new (_("Default encoding (existing files):"));
-  gtk_widget_show (label_open_encoding);
-  gtk_table_attach (GTK_TABLE (table5), label_open_encoding, 0, 1, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label_open_encoding), 0, 0.5);
-
-  check_open_encoding = gtk_check_button_new_with_mnemonic (_("Use fixed encoding when opening files"));
-  gtk_widget_show (check_open_encoding);
-  gtk_table_attach (GTK_TABLE (table5), check_open_encoding, 0, 2, 1, 2,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, check_open_encoding, _("This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_open_encoding), FALSE);
-
-  eventbox3 = gtk_event_box_new ();
-  gtk_widget_show (eventbox3);
-  gtk_table_attach (GTK_TABLE (table5), eventbox3, 1, 2, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
-  gtk_tooltips_set_tip (tooltips, eventbox3, _("Sets the default encoding for opening existing files."), NULL);
-
-  combo_open_encoding = gtk_combo_box_new_text ();
-  gtk_widget_show (combo_open_encoding);
-  gtk_container_add (GTK_CONTAINER (eventbox3), combo_open_encoding);
-
-  label109 = gtk_label_new (_("<b>New files</b>"));
-  gtk_widget_show (label109);
-  gtk_frame_set_label_widget (GTK_FRAME (frame6), label109);
-  gtk_label_set_use_markup (GTK_LABEL (label109), TRUE);
-
-  frame2 = gtk_frame_new (NULL);
-  gtk_widget_show (frame2);
-  gtk_box_pack_start (GTK_BOX (vbox18), frame2, FALSE, TRUE, 0);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame2), GTK_SHADOW_NONE);
-
-  alignment3 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment3);
-  gtk_container_add (GTK_CONTAINER (frame2), alignment3);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment3), 0, 0, 12, 0);
-
-  vbox6 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_show (vbox6);
-  gtk_container_add (GTK_CONTAINER (alignment3), vbox6);
-
-  check_trailing_spaces = gtk_check_button_new_with_mnemonic (_("Strip trailing spaces"));
-  gtk_widget_show (check_trailing_spaces);
-  gtk_box_pack_start (GTK_BOX (vbox6), check_trailing_spaces, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_trailing_spaces, GTK_CAN_FOCUS);
-  gtk_tooltips_set_tip (tooltips, check_trailing_spaces, _("Removes trailing spaces and tabs and the end of lines"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_trailing_spaces), FALSE);
-
-  check_new_line = gtk_check_button_new_with_mnemonic (_("Ensure new line at file end"));
-  gtk_widget_show (check_new_line);
-  gtk_box_pack_start (GTK_BOX (vbox6), check_new_line, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_new_line, GTK_CAN_FOCUS);
-  gtk_tooltips_set_tip (tooltips, check_new_line, _("Ensures that at the end of the file is a new line"), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_new_line), FALSE);
-
-  check_replace_tabs = gtk_check_button_new_with_mnemonic (_("Replace tabs by space"));
-  gtk_widget_show (check_replace_tabs);
-  gtk_box_pack_start (GTK_BOX (vbox6), check_replace_tabs, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_replace_tabs, GTK_CAN_FOCUS);
-  gtk_tooltips_set_tip (tooltips, check_replace_tabs, _("Replaces all tabs in document by spaces."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_replace_tabs), FALSE);
-
-  label19 = gtk_label_new (_("<b>Saving files</b>"));
-  gtk_widget_show (label19);
-  gtk_frame_set_label_widget (GTK_FRAME (frame2), label19);
-  gtk_label_set_use_markup (GTK_LABEL (label19), TRUE);
-
-  frame17 = gtk_frame_new (NULL);
-  gtk_widget_show (frame17);
-  gtk_box_pack_start (GTK_BOX (vbox18), frame17, FALSE, TRUE, 0);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame17), GTK_SHADOW_NONE);
-
-  alignment20 = gtk_alignment_new (0.5, 0.5, 1, 1);
-  gtk_widget_show (alignment20);
-  gtk_container_add (GTK_CONTAINER (frame17), alignment20);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment20), 0, 0, 12, 0);
-
-  table10 = gtk_table_new (2, 2, FALSE);
-  gtk_widget_show (table10);
-  gtk_container_add (GTK_CONTAINER (alignment20), table10);
-  gtk_table_set_row_spacings (GTK_TABLE (table10), 3);
-  gtk_table_set_col_spacings (GTK_TABLE (table10), 25);
-
-  label150 = gtk_label_new (_("Placement of new file tabs:"));
-  gtk_widget_show (label150);
-  gtk_table_attach (GTK_TABLE (table10), label150, 0, 1, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label150), 0, 0.5);
-
-  spin_mru_adj = gtk_adjustment_new (4, 1, 50, 1, 10, 10);
-  spin_mru = gtk_spin_button_new (GTK_ADJUSTMENT (spin_mru_adj), 1, 0);
-  gtk_widget_show (spin_mru);
-  gtk_table_attach (GTK_TABLE (table10), spin_mru, 1, 2, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_mru, _("Specifies the number of files which are stored in the Recent files list."), NULL);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_mru), TRUE);
-  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_mru), TRUE);
-
-  hbox3 = gtk_hbox_new (FALSE, 12);
-  gtk_widget_show (hbox3);
-  gtk_table_attach (GTK_TABLE (table10), hbox3, 1, 2, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
-
-  radio_tab_left = gtk_radio_button_new_with_mnemonic (NULL, _("Left"));
-  gtk_widget_show (radio_tab_left);
-  gtk_box_pack_start (GTK_BOX (hbox3), radio_tab_left, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, radio_tab_left, _("File tabs will be placed on the left of the notebook"), NULL);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_tab_left), radio_tab_left_group);
-  radio_tab_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_tab_left));
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_tab_left), TRUE);
-
-  radio_tab_right = gtk_radio_button_new_with_mnemonic (NULL, _("Right"));
-  gtk_widget_show (radio_tab_right);
-  gtk_box_pack_start (GTK_BOX (hbox3), radio_tab_right, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, radio_tab_right, _("File tabs will be placed on the right of the notebook"), NULL);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_tab_right), radio_tab_left_group);
-  radio_tab_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_tab_right));
-
-  label147 = gtk_label_new (_("Recent files list length:"));
-  gtk_widget_show (label147);
-  gtk_table_attach (GTK_TABLE (table10), label147, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label147), 0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label147), 0, 7);
-
-  label176 = gtk_label_new (_("<b>Misc.</b>"));
-  gtk_widget_show (label176);
-  gtk_frame_set_label_widget (GTK_FRAME (frame17), label176);
-  gtk_label_set_use_markup (GTK_LABEL (label176), TRUE);
-
-  label174 = gtk_label_new (_("Files"));
-  gtk_widget_show (label174);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 3), label174);
-
-  vbox5 = gtk_vbox_new (FALSE, 10);
-  gtk_widget_show (vbox5);
-  gtk_container_add (GTK_CONTAINER (notebook2), vbox5);
+  vbox24 = gtk_vbox_new (FALSE, 10);
+  gtk_widget_show (vbox24);
+  gtk_container_add (GTK_CONTAINER (notebook2), vbox24);
 
   frame5 = gtk_frame_new (NULL);
   gtk_widget_show (frame5);
-  gtk_box_pack_start (GTK_BOX (vbox5), frame5, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox24), frame5, FALSE, TRUE, 0);
   gtk_frame_set_shadow_type (GTK_FRAME (frame5), GTK_SHADOW_NONE);
 
   alignment6 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -3482,7 +3281,7 @@ create_prefs_dialog (void)
 
   frame8 = gtk_frame_new (NULL);
   gtk_widget_show (frame8);
-  gtk_box_pack_start (GTK_BOX (vbox5), frame8, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox24), frame8, TRUE, TRUE, 0);
   gtk_frame_set_shadow_type (GTK_FRAME (frame8), GTK_SHADOW_NONE);
 
   alignment11 = gtk_alignment_new (0.5, 0.5, 1, 1);
@@ -3566,6 +3365,78 @@ create_prefs_dialog (void)
   gtk_frame_set_label_widget (GTK_FRAME (frame8), label155);
   gtk_label_set_use_markup (GTK_LABEL (label155), TRUE);
 
+  label194 = gtk_label_new (_("Display"));
+  gtk_widget_show (label194);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 3), label194);
+
+  vbox5 = gtk_vbox_new (FALSE, 10);
+  gtk_widget_show (vbox5);
+  gtk_container_add (GTK_CONTAINER (notebook2), vbox5);
+
+  frame27 = gtk_frame_new (NULL);
+  gtk_widget_show (frame27);
+  gtk_box_pack_start (GTK_BOX (vbox5), frame27, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame27), GTK_SHADOW_NONE);
+
+  alignment30 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment30);
+  gtk_container_add (GTK_CONTAINER (frame27), alignment30);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment30), 0, 0, 12, 0);
+
+  vbox25 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox25);
+  gtk_container_add (GTK_CONTAINER (alignment30), vbox25);
+
+  check_use_tabs = gtk_check_button_new_with_mnemonic (_("Use tabs when inserting whitespace"));
+  gtk_widget_show (check_use_tabs);
+  gtk_box_pack_start (GTK_BOX (vbox25), check_use_tabs, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_use_tabs, _("Whenever some whitespace is inserted by Geany it will use tabs when enabled otherwise Geany will use just spaces."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_use_tabs), FALSE);
+
+  table13 = gtk_table_new (2, 2, FALSE);
+  gtk_widget_show (table13);
+  gtk_box_pack_start (GTK_BOX (vbox25), table13, FALSE, TRUE, 0);
+  gtk_table_set_row_spacings (GTK_TABLE (table13), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table13), 25);
+
+  label116 = gtk_label_new (_("Tab Width:"));
+  gtk_widget_show (label116);
+  gtk_table_attach (GTK_TABLE (table13), label116, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label116), 0, 0.5);
+
+  label183 = gtk_label_new (_("Auto indentation mode:"));
+  gtk_widget_show (label183);
+  gtk_table_attach (GTK_TABLE (table13), label183, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  spin_tab_width_adj = gtk_adjustment_new (1, 1, 99, 1, 10, 10);
+  spin_tab_width = gtk_spin_button_new (GTK_ADJUSTMENT (spin_tab_width_adj), 1, 0);
+  gtk_widget_show (spin_tab_width);
+  gtk_table_attach (GTK_TABLE (table13), spin_tab_width, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_tab_width, _("The width in chars, which one tab character will take"), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
+  gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_tab_width), GTK_UPDATE_IF_VALID);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
+
+  combo_auto_indent_mode = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_auto_indent_mode);
+  gtk_table_attach (GTK_TABLE (table13), combo_auto_indent_mode, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Advanced"));
+
+  label195 = gtk_label_new (_("<b>Indentation</b>"));
+  gtk_widget_show (label195);
+  gtk_frame_set_label_widget (GTK_FRAME (frame27), label195);
+  gtk_label_set_use_markup (GTK_LABEL (label195), TRUE);
+
   frame14 = gtk_frame_new (NULL);
   gtk_widget_show (frame14);
   gtk_box_pack_start (GTK_BOX (vbox5), frame14, FALSE, TRUE, 0);
@@ -3580,30 +3451,16 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox17);
   gtk_container_add (GTK_CONTAINER (alignment17), vbox17);
 
-  hbox7 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_show (hbox7);
-  gtk_box_pack_start (GTK_BOX (vbox17), hbox7, FALSE, FALSE, 0);
-
-  label183 = gtk_label_new (_("Auto indentation mode:"));
-  gtk_widget_show (label183);
-  gtk_box_pack_start (GTK_BOX (hbox7), label183, FALSE, FALSE, 0);
-
-  eventbox2 = gtk_event_box_new ();
-  gtk_widget_show (eventbox2);
-  gtk_box_pack_start (GTK_BOX (hbox7), eventbox2, FALSE, TRUE, 5);
-  gtk_tooltips_set_tip (tooltips, eventbox2, _("Selects the indentation mode. Use None to disable auto indentation completely. Basic indents new lines with the same indentation as the previous line. Advanced does the same and indents also curly brackets."), NULL);
-
-  combo_auto_indent_mode = gtk_combo_box_new_text ();
-  gtk_widget_show (combo_auto_indent_mode);
-  gtk_container_add (GTK_CONTAINER (eventbox2), combo_auto_indent_mode);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Advanced"));
-
   check_line_wrapping = gtk_check_button_new_with_mnemonic (_("Line wrapping"));
   gtk_widget_show (check_line_wrapping);
   gtk_box_pack_start (GTK_BOX (vbox17), check_line_wrapping, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_line_wrapping, _("Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."), NULL);
+
+  check_disable_dnd = gtk_check_button_new_with_mnemonic (_("Disable Drag and Drop"));
+  gtk_widget_show (check_disable_dnd);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_disable_dnd, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_disable_dnd, _("Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_disable_dnd), FALSE);
 
   check_folding = gtk_check_button_new_with_mnemonic (_("Enable folding"));
   gtk_widget_show (check_folding);
@@ -3622,18 +3479,6 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox17), check_indicators, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_indicators, _("Whether to use indicators (a squiggly underline) to highlight the lines where the compiler found a warning or an error."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_indicators), FALSE);
-
-  check_disable_dnd = gtk_check_button_new_with_mnemonic (_("Disable Drag and Drop"));
-  gtk_widget_show (check_disable_dnd);
-  gtk_box_pack_start (GTK_BOX (vbox17), check_disable_dnd, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_disable_dnd, _("Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_disable_dnd), FALSE);
-
-  check_use_tabs = gtk_check_button_new_with_mnemonic (_("Use tabs when inserting whitespace"));
-  gtk_widget_show (check_use_tabs);
-  gtk_box_pack_start (GTK_BOX (vbox17), check_use_tabs, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_use_tabs, _("Whenever some whitespace is inserted by Geany it will use tabs when enabled otherwise Geany will use just spaces."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_use_tabs), FALSE);
 
   label172 = gtk_label_new (_("<b>Features</b>"));
   gtk_widget_show (label172);
@@ -3672,13 +3517,9 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_symbol_auto_completion, _("Automatic completion of known symbols in open files (function names, global variables, ...)"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_symbol_auto_completion), FALSE);
 
-  hbox6 = gtk_hbox_new (FALSE, 20);
+  hbox6 = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox6);
   gtk_box_pack_start (GTK_BOX (vbox19), hbox6, FALSE, FALSE, 0);
-
-  label182 = gtk_label_new ("");
-  gtk_widget_show (label182);
-  gtk_box_pack_start (GTK_BOX (hbox6), label182, FALSE, FALSE, 0);
 
   label173 = gtk_label_new (_("Rows of autocompletion list:"));
   gtk_widget_show (label173);
@@ -3688,7 +3529,7 @@ create_prefs_dialog (void)
   spin_autocheight_adj = gtk_adjustment_new (10, 1, 99, 1, 10, 10);
   spin_autocheight = gtk_spin_button_new (GTK_ADJUSTMENT (spin_autocheight_adj), 1, 0);
   gtk_widget_show (spin_autocheight);
-  gtk_box_pack_start (GTK_BOX (hbox6), spin_autocheight, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox6), spin_autocheight, FALSE, TRUE, 0);
   gtk_tooltips_set_tip (tooltips, spin_autocheight, _("Number of rows to display in the autocompletion list."), NULL);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_autocheight), TRUE);
 
@@ -3700,6 +3541,190 @@ create_prefs_dialog (void)
   label95 = gtk_label_new (_("Editor"));
   gtk_widget_show (label95);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 4), label95);
+
+  vbox18 = gtk_vbox_new (FALSE, 10);
+  gtk_widget_show (vbox18);
+  gtk_container_add (GTK_CONTAINER (notebook2), vbox18);
+
+  frame6 = gtk_frame_new (NULL);
+  gtk_widget_show (frame6);
+  gtk_box_pack_start (GTK_BOX (vbox18), frame6, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame6), GTK_SHADOW_NONE);
+
+  alignment7 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment7);
+  gtk_container_add (GTK_CONTAINER (frame6), alignment7);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment7), 0, 0, 12, 0);
+
+  vbox8 = gtk_vbox_new (FALSE, 3);
+  gtk_widget_show (vbox8);
+  gtk_container_add (GTK_CONTAINER (alignment7), vbox8);
+
+  table5 = gtk_table_new (3, 2, FALSE);
+  gtk_widget_show (table5);
+  gtk_box_pack_start (GTK_BOX (vbox8), table5, FALSE, TRUE, 0);
+  gtk_table_set_row_spacings (GTK_TABLE (table5), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table5), 12);
+
+  eventbox1 = gtk_event_box_new ();
+  gtk_widget_show (eventbox1);
+  gtk_table_attach (GTK_TABLE (table5), eventbox1, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+  gtk_tooltips_set_tip (tooltips, eventbox1, _("Sets the default encoding for newly created files."), NULL);
+
+  combo_new_encoding = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_new_encoding);
+  gtk_container_add (GTK_CONTAINER (eventbox1), combo_new_encoding);
+
+  label153 = gtk_label_new (_("Default encoding (new files):"));
+  gtk_widget_show (label153);
+  gtk_table_attach (GTK_TABLE (table5), label153, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label153), 0, 0.5);
+
+  check_open_encoding = gtk_check_button_new_with_mnemonic (_("Use fixed encoding when opening files"));
+  gtk_widget_show (check_open_encoding);
+  gtk_table_attach (GTK_TABLE (table5), check_open_encoding, 0, 2, 2, 3,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_open_encoding, _("This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_open_encoding), FALSE);
+
+  label_open_encoding = gtk_label_new (_("Default encoding (existing files):"));
+  gtk_widget_show (label_open_encoding);
+  gtk_table_attach (GTK_TABLE (table5), label_open_encoding, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label_open_encoding), 0, 0.5);
+
+  eventbox3 = gtk_event_box_new ();
+  gtk_widget_show (eventbox3);
+  gtk_table_attach (GTK_TABLE (table5), eventbox3, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+  gtk_tooltips_set_tip (tooltips, eventbox3, _("Sets the default encoding for opening existing files."), NULL);
+
+  combo_open_encoding = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_open_encoding);
+  gtk_container_add (GTK_CONTAINER (eventbox3), combo_open_encoding);
+
+  label109 = gtk_label_new (_("<b>New files</b>"));
+  gtk_widget_show (label109);
+  gtk_frame_set_label_widget (GTK_FRAME (frame6), label109);
+  gtk_label_set_use_markup (GTK_LABEL (label109), TRUE);
+
+  frame2 = gtk_frame_new (NULL);
+  gtk_widget_show (frame2);
+  gtk_box_pack_start (GTK_BOX (vbox18), frame2, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame2), GTK_SHADOW_NONE);
+
+  alignment3 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment3);
+  gtk_container_add (GTK_CONTAINER (frame2), alignment3);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment3), 0, 0, 12, 0);
+
+  vbox6 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox6);
+  gtk_container_add (GTK_CONTAINER (alignment3), vbox6);
+
+  check_new_line = gtk_check_button_new_with_mnemonic (_("Ensure new line at file end"));
+  gtk_widget_show (check_new_line);
+  gtk_box_pack_start (GTK_BOX (vbox6), check_new_line, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_new_line, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_new_line, _("Ensures that at the end of the file is a new line"), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_new_line), FALSE);
+
+  check_trailing_spaces = gtk_check_button_new_with_mnemonic (_("Strip trailing spaces"));
+  gtk_widget_show (check_trailing_spaces);
+  gtk_box_pack_start (GTK_BOX (vbox6), check_trailing_spaces, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_trailing_spaces, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_trailing_spaces, _("Removes trailing spaces and tabs and the end of lines"), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_trailing_spaces), FALSE);
+
+  check_replace_tabs = gtk_check_button_new_with_mnemonic (_("Replace tabs by space"));
+  gtk_widget_show (check_replace_tabs);
+  gtk_box_pack_start (GTK_BOX (vbox6), check_replace_tabs, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_replace_tabs, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_replace_tabs, _("Replaces all tabs in document by spaces."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_replace_tabs), FALSE);
+
+  label19 = gtk_label_new (_("<b>Saving files</b>"));
+  gtk_widget_show (label19);
+  gtk_frame_set_label_widget (GTK_FRAME (frame2), label19);
+  gtk_label_set_use_markup (GTK_LABEL (label19), TRUE);
+
+  frame17 = gtk_frame_new (NULL);
+  gtk_widget_show (frame17);
+  gtk_box_pack_start (GTK_BOX (vbox18), frame17, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame17), GTK_SHADOW_NONE);
+
+  alignment20 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment20);
+  gtk_container_add (GTK_CONTAINER (frame17), alignment20);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment20), 0, 0, 12, 0);
+
+  table10 = gtk_table_new (2, 2, FALSE);
+  gtk_widget_show (table10);
+  gtk_container_add (GTK_CONTAINER (alignment20), table10);
+  gtk_table_set_row_spacings (GTK_TABLE (table10), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table10), 25);
+
+  label150 = gtk_label_new (_("Placement of new file tabs:"));
+  gtk_widget_show (label150);
+  gtk_table_attach (GTK_TABLE (table10), label150, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label150), 0, 0.5);
+
+  spin_mru_adj = gtk_adjustment_new (4, 1, 50, 1, 10, 10);
+  spin_mru = gtk_spin_button_new (GTK_ADJUSTMENT (spin_mru_adj), 1, 0);
+  gtk_widget_show (spin_mru);
+  gtk_table_attach (GTK_TABLE (table10), spin_mru, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_mru, _("Specifies the number of files which are stored in the Recent files list."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_mru), TRUE);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_mru), TRUE);
+
+  hbox3 = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox3);
+  gtk_table_attach (GTK_TABLE (table10), hbox3, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+
+  radio_tab_left = gtk_radio_button_new_with_mnemonic (NULL, _("Left"));
+  gtk_widget_show (radio_tab_left);
+  gtk_box_pack_start (GTK_BOX (hbox3), radio_tab_left, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radio_tab_left, _("File tabs will be placed on the left of the notebook"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_tab_left), radio_tab_left_group);
+  radio_tab_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_tab_left));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_tab_left), TRUE);
+
+  radio_tab_right = gtk_radio_button_new_with_mnemonic (NULL, _("Right"));
+  gtk_widget_show (radio_tab_right);
+  gtk_box_pack_start (GTK_BOX (hbox3), radio_tab_right, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radio_tab_right, _("File tabs will be placed on the right of the notebook"), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_tab_right), radio_tab_left_group);
+  radio_tab_left_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_tab_right));
+
+  label147 = gtk_label_new (_("Recent files list length:"));
+  gtk_widget_show (label147);
+  gtk_table_attach (GTK_TABLE (table10), label147, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label147), 0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (label147), 0, 7);
+
+  label176 = gtk_label_new (_("<b>Misc.</b>"));
+  gtk_widget_show (label176);
+  gtk_frame_set_label_widget (GTK_FRAME (frame17), label176);
+  gtk_label_set_use_markup (GTK_LABEL (label176), TRUE);
+
+  label174 = gtk_label_new (_("Files"));
+  gtk_widget_show (label174);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 5), label174);
 
   vbox23 = gtk_vbox_new (FALSE, 10);
   gtk_widget_show (vbox23);
@@ -3728,7 +3753,7 @@ create_prefs_dialog (void)
   table1 = gtk_table_new (4, 3, FALSE);
   gtk_widget_show (table1);
   gtk_box_pack_start (GTK_BOX (vbox2), table1, FALSE, TRUE, 0);
-  gtk_table_set_row_spacings (GTK_TABLE (table1), 2);
+  gtk_table_set_row_spacings (GTK_TABLE (table1), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table1), 5);
 
   label11 = gtk_label_new (_("Make:"));
@@ -3844,7 +3869,7 @@ create_prefs_dialog (void)
   table12 = gtk_table_new (2, 3, FALSE);
   gtk_widget_show (table12);
   gtk_container_add (GTK_CONTAINER (alignment29), table12);
-  gtk_table_set_row_spacings (GTK_TABLE (table12), 2);
+  gtk_table_set_row_spacings (GTK_TABLE (table12), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table12), 5);
 
   entry_print = gtk_entry_new ();
@@ -3902,7 +3927,7 @@ create_prefs_dialog (void)
 
   label96 = gtk_label_new (_("Tools"));
   gtk_widget_show (label96);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 5), label96);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 6), label96);
 
   frame21 = gtk_frame_new (NULL);
   gtk_widget_show (frame21);
@@ -3928,8 +3953,8 @@ create_prefs_dialog (void)
   table6 = gtk_table_new (5, 2, FALSE);
   gtk_widget_show (table6);
   gtk_box_pack_start (GTK_BOX (vbox9), table6, FALSE, TRUE, 0);
-  gtk_table_set_row_spacings (GTK_TABLE (table6), 7);
-  gtk_table_set_col_spacings (GTK_TABLE (table6), 5);
+  gtk_table_set_row_spacings (GTK_TABLE (table6), 6);
+  gtk_table_set_col_spacings (GTK_TABLE (table6), 6);
 
   entry_template_mail = gtk_entry_new ();
   gtk_widget_show (entry_template_mail);
@@ -3945,7 +3970,7 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, entry_template_initial, _("Initials of the developer name"), NULL);
 
-  label126 = gtk_label_new (_("Initial Version:"));
+  label126 = gtk_label_new (_("Initial version:"));
   gtk_widget_show (label126);
   gtk_table_attach (GTK_TABLE (table6), label126, 0, 1, 4, 5,
                     (GtkAttachOptions) (GTK_FILL),
@@ -4015,7 +4040,7 @@ create_prefs_dialog (void)
 
   label119 = gtk_label_new (_("Templates"));
   gtk_widget_show (label119);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 6), label119);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 7), label119);
 
   frame22 = gtk_frame_new (NULL);
   gtk_widget_show (frame22);
@@ -4054,7 +4079,7 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox13), alignment10, FALSE, FALSE, 0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment10), 0, 5, 0, 0);
 
-  button2 = gtk_button_new_with_mnemonic (_("Change"));
+  button2 = gtk_button_new_with_mnemonic (_("C_hange"));
   gtk_widget_show (button2);
   gtk_container_add (GTK_CONTAINER (alignment10), button2);
 
@@ -4065,7 +4090,7 @@ create_prefs_dialog (void)
 
   label151 = gtk_label_new (_("Keybindings"));
   gtk_widget_show (label151);
-  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 7), label151);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook2), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook2), 8), label151);
 
   dialog_action_area3 = GTK_DIALOG (prefs_dialog)->action_area;
   gtk_widget_show (dialog_action_area3);
@@ -4155,10 +4180,10 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label187, "label187");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label157, "label157");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox15, "vbox15");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame12, "frame12");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment15, "alignment15");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame28, "frame28");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment31, "alignment31");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_show, "check_toolbar_show");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label166, "label166");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label196, "label196");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame11, "frame11");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment14, "alignment14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox16, "vbox16");
@@ -4184,40 +4209,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_toolbar_image, "radio_toolbar_image");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label167, "label167");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label164, "label164");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox18, "vbox18");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame6, "frame6");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment7, "alignment7");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox8, "vbox8");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, table5, "table5");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox1, "eventbox1");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_new_encoding, "combo_new_encoding");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label153, "label153");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label116, "label116");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_tab_width, "spin_tab_width");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label_open_encoding, "label_open_encoding");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_open_encoding, "check_open_encoding");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox3, "eventbox3");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_open_encoding, "combo_open_encoding");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label109, "label109");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame2, "frame2");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment3, "alignment3");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox6, "vbox6");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_trailing_spaces, "check_trailing_spaces");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_new_line, "check_new_line");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_replace_tabs, "check_replace_tabs");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label19, "label19");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, frame17, "frame17");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment20, "alignment20");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, table10, "table10");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label150, "label150");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_mru, "spin_mru");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox3, "hbox3");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_left, "radio_tab_left");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_right, "radio_tab_right");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label147, "label147");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label176, "label176");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label174, "label174");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox5, "vbox5");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox24, "vbox24");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame5, "frame5");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment6, "alignment6");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox12, "vbox12");
@@ -4239,19 +4231,26 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_long_line_background, "radio_long_line_background");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_long_line_disabled, "radio_long_line_disabled");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label155, "label155");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label194, "label194");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox5, "vbox5");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame27, "frame27");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment30, "alignment30");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox25, "vbox25");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_use_tabs, "check_use_tabs");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table13, "table13");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label116, "label116");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label183, "label183");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_tab_width, "spin_tab_width");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_auto_indent_mode, "combo_auto_indent_mode");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label195, "label195");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame14, "frame14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment17, "alignment17");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox17, "vbox17");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox7, "hbox7");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label183, "label183");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox2, "eventbox2");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_auto_indent_mode, "combo_auto_indent_mode");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_line_wrapping, "check_line_wrapping");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_disable_dnd, "check_disable_dnd");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_folding, "check_folding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_unfold_children, "check_unfold_children");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_indicators, "check_indicators");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_disable_dnd, "check_disable_dnd");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_use_tabs, "check_use_tabs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label172, "label172");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame18, "frame18");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment21, "alignment21");
@@ -4260,11 +4259,41 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_xmltag, "check_xmltag");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_symbol_auto_completion, "check_symbol_auto_completion");
   GLADE_HOOKUP_OBJECT (prefs_dialog, hbox6, "hbox6");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label182, "label182");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label173, "label173");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_autocheight, "spin_autocheight");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label177, "label177");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label95, "label95");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox18, "vbox18");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame6, "frame6");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment7, "alignment7");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox8, "vbox8");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table5, "table5");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox1, "eventbox1");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_new_encoding, "combo_new_encoding");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label153, "label153");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_open_encoding, "check_open_encoding");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label_open_encoding, "label_open_encoding");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox3, "eventbox3");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_open_encoding, "combo_open_encoding");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label109, "label109");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame2, "frame2");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment3, "alignment3");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox6, "vbox6");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_new_line, "check_new_line");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_trailing_spaces, "check_trailing_spaces");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_replace_tabs, "check_replace_tabs");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label19, "label19");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame17, "frame17");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment20, "alignment20");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table10, "table10");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label150, "label150");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_mru, "spin_mru");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox3, "hbox3");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_left, "radio_tab_left");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_right, "radio_tab_right");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label147, "label147");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label176, "label176");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label174, "label174");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox23, "vbox23");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame20, "frame20");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment23, "alignment23");
