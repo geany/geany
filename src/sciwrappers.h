@@ -177,5 +177,7 @@ void				sci_set_tab_indents			(ScintillaObject * sci, gboolean set);
 void				sci_set_use_tabs			(ScintillaObject * sci, gboolean set);
 
 void				sci_set_scrollbar_mode		(ScintillaObject * sci, gboolean visible);
+void				sci_set_caret_policy_x		(ScintillaObject * sci, gint policy, gint slop);
+void				sci_set_caret_policy_y		(ScintillaObject * sci, gint policy, gint slop);
 
 #endif

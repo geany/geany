@@ -4,6 +4,8 @@
    src/Makefile.am, tagmanager/Makefile.am:
    Apply patch from Shiv to make build system more compatible with other
    compilers than gcc.
+ * src/document.c, src/editor.c, src/sciwrappers.c, src/sciwrappers.h:
+   Experimental change of scrolling to get horizontal scrolling working.
 
 
 2007-07-11  Nick Treleaven  <nick.treleaven@btinternet.com>

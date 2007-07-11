@@ -951,3 +951,13 @@ int sci_get_line_indentation(ScintillaObject *sci, gint line)
 	return SSM(sci, SCI_GETLINEINDENTATION, line, 0);
 }
 
+void sci_set_caret_policy_x(ScintillaObject *sci, gint policy, gint slop)
+{
+	SSM(sci, SCI_SETXCARETPOLICY, policy, slop);
+}
+
+void sci_set_caret_policy_y(ScintillaObject *sci, gint policy, gint slop)
+{
+	SSM(sci, SCI_SETYCARETPOLICY, policy, slop);
+}
+

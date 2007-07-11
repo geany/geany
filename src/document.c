@@ -315,6 +315,8 @@ static gint document_create_new_sci(const gchar *filename)
 	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, editor_prefs.line_breaking);
 	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
+	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
+	sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);
 
 	// signal for insert-key(works without too, but to update the right status bar)
 	//g_signal_connect((GtkWidget*) sci, "key-press-event",

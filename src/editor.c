@@ -2275,12 +2275,14 @@ static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_vi
 	// sci 'visible line' != doc line number because of folding and line wrapping
 	/* calling SCI_VISIBLEFROMDOCLINE for line is more accurate than calling
 	 * SCI_DOCLINEFROMVISIBLE for vis1. */
+/*
 	line = SSM(sci, SCI_VISIBLEFROMDOCLINE, line, 0);
 	vis1 = SSM(sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
 	los = SSM(sci, SCI_LINESONSCREEN, 0, 0);
 	delta = (line - vis1) - los * percent_of_view;
 	sci_scroll_lines(sci, delta);
-	//sci_scroll_caret(sci); // ensure visible (maybe not needed now)
+*/
+	sci_scroll_caret(sci); // ensure visible (maybe not needed now)
 }
 
 
