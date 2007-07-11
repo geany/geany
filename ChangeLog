@@ -6,6 +6,9 @@
    compilers than gcc.
  * src/document.c, src/editor.c, src/sciwrappers.c, src/sciwrappers.h:
    Experimental change of scrolling to get horizontal scrolling working.
+ * src/callbacks.c, src/search.c, src/search.h:
+   Also change background colour of search bar when using find
+   next/previous after using the search bar.
 
 
 2007-07-11  Nick Treleaven  <nick.treleaven@btinternet.com>

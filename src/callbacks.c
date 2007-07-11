@@ -573,7 +573,7 @@ static void set_search_bar_background(GtkWidget *widget, gboolean success)
 	static gboolean old_value = TRUE;
 
 	// only update if really needed
-	if (old_value != success)
+	if (search_data.search_bar && old_value != success)
 	{
 		gtk_widget_modify_base(widget, GTK_STATE_NORMAL, success ? NULL : &red);
 		gtk_widget_modify_text(widget, GTK_STATE_NORMAL, success ? NULL : &white);
@@ -590,6 +590,7 @@ static void setup_find_next(GtkEditable *editable)
 	search_data.text = gtk_editable_get_chars(editable, 0, -1);
 	search_data.flags = 0;
 	search_data.backwards = FALSE;
+	search_data.search_bar = TRUE;
 }
 
 
@@ -1351,8 +1352,10 @@ on_find_next1_activate                 (GtkMenuItem     *menuitem,
 
 	if (search_data.text)
 	{
-		document_find_text(idx, search_data.text, search_data.flags,
+		gint result = document_find_text(idx, search_data.text, search_data.flags,
 			search_data.backwards, TRUE, NULL);
+		// app->sensitive_buttons[3] points to the entry widget within the toolbar
+		set_search_bar_background(app->sensitive_buttons[3], (result > -1) ? TRUE : FALSE);
 	}
 }
 
@@ -1369,8 +1372,9 @@ on_find_previous1_activate             (GtkMenuItem     *menuitem,
 		utils_beep(); //Can't reverse search order for a regex (find next ignores search backwards)
 	else
 	{
-		document_find_text(idx, search_data.text, search_data.flags,
+		gint result = document_find_text(idx, search_data.text, search_data.flags,
 			!search_data.backwards, TRUE, NULL);
+		set_search_bar_background(app->sensitive_buttons[3], (result > -1) ? TRUE : FALSE);
 	}
 }
 

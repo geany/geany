@@ -25,12 +25,15 @@
 #ifndef GEANY_SEARCH_H
 #define GEANY_SEARCH_H 1
 
-// the flags given in the search dialog for "find next"
+// the flags given in the search dialog for "find next", also used by the search bar
 typedef struct
 {
 	gchar		*text;
 	gint		flags;
 	gboolean	backwards;
+	// set to TRUE when text was set by a search bar callback to keep track of
+	// search bar background colour
+	gboolean	search_bar;
 } GeanySearchData;
 
 extern GeanySearchData search_data;

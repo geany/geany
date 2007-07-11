@@ -234,6 +234,7 @@ static void setup_find_next(const gchar *text)
 	search_data.text = g_strdup(text);
 	search_data.flags = 0;
 	search_data.backwards = FALSE;
+	search_data.search_bar = FALSE;
 }
 
 
@@ -824,6 +825,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		search_replace_escape = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_escape")));
 		search_data.backwards = FALSE;
+		search_data.search_bar = FALSE;
 
 		if (! DOC_IDX_VALID(idx)) return;
 
