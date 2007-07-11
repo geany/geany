@@ -1,3 +1,11 @@
+2007-07-11  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/highlighting.c:
+   Add custom wordchars and whitespace_chars support for Python & Ruby.
+   Group setting lexer, wordchars, autocompletion height together in
+   apply_filetype_properties().
+
+
 2007-07-09  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/filetypes.c, src/filetypes.h:
