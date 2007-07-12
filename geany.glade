@@ -5484,6 +5484,26 @@ Advanced</property>
 			  </child>
 
 			  <child>
+			    <widget class="GtkCheckButton" id="check_smart_home">
+			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">When &quot;smart&quot; home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position.</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Enable &quot;smart&quot; home key</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">False</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
 			    <widget class="GtkCheckButton" id="check_disable_dnd">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Disable drag and drop completely in the editor window so you can't drag and drop any selections within or outside of the editor window.</property>

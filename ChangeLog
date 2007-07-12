@@ -4,6 +4,10 @@
    Make Escape close the 'Grab Key' dialog.
  * src/keybindings.c, src/tools.c, src/dialogs.c, src/search.c
    Capitalize some dialog titles.
+ * src/interface.c, src/prefs.c, src/keyfile.c, src/document.c,
+   src/editor.h, geany.glade:
+   Apply patch from Jeff Pohlmeyer to add a preference for whether to
+   use 'smart' home key behaviour (thanks).
 
 
 2007-07-11  Enrico Tröger  <enrico.troeger@uvena.de>

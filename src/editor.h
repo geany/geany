@@ -67,6 +67,7 @@ typedef struct
 	gboolean	replace_tabs;
 	gboolean	trail_space;
 	gboolean	disable_dnd;
+	gboolean	smart_home_key;
 	GHashTable	*auto_completions;
 } EditorPrefs;
 

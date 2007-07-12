@@ -216,6 +216,10 @@ void document_apply_update_prefs(gint idx)
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 
 	doc_list[idx].auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
+
+	sci_assign_cmdkey(sci, SCK_HOME,
+		editor_prefs.smart_home_key ? SCI_VCHOMEWRAP : SCI_HOMEWRAP);
+	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
 }
 
 
@@ -299,8 +303,6 @@ static gint document_create_new_sci(const gchar *filename)
 	//SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);
 	// disable scintilla provided popup menu
 	sci_use_popup(sci, FALSE);
-	sci_assign_cmdkey(sci, SCK_HOME, SCI_VCHOMEWRAP);
-	sci_assign_cmdkey(sci, SCK_END,  SCI_LINEENDWRAP);
 	// disable some Scintilla keybinsings to be able to redefine it
 	sci_clear_cmdkey(sci, 'A' | (SCMOD_CTRL << 16)); // select all
 	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16)); // line transpose

@@ -2536,6 +2536,7 @@ create_prefs_dialog (void)
   GtkWidget *alignment17;
   GtkWidget *vbox17;
   GtkWidget *check_line_wrapping;
+  GtkWidget *check_smart_home;
   GtkWidget *check_disable_dnd;
   GtkWidget *check_folding;
   GtkWidget *check_unfold_children;
@@ -3456,6 +3457,12 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox17), check_line_wrapping, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_line_wrapping, _("Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."), NULL);
 
+  check_smart_home = gtk_check_button_new_with_mnemonic (_("Enable \"smart\" home key"));
+  gtk_widget_show (check_smart_home);
+  gtk_box_pack_start (GTK_BOX (vbox17), check_smart_home, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_smart_home, _("When \"smart\" home is enabled, the HOME key will move the caret to the first non-blank character of the line, unless it is already there, it moves to the very beginning of the line. When this feature is disabled, the HOME key always moves the caret to the start of the current line, regardless of its current position."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_smart_home), FALSE);
+
   check_disable_dnd = gtk_check_button_new_with_mnemonic (_("Disable Drag and Drop"));
   gtk_widget_show (check_disable_dnd);
   gtk_box_pack_start (GTK_BOX (vbox17), check_disable_dnd, FALSE, FALSE, 0);
@@ -4247,6 +4254,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment17, "alignment17");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox17, "vbox17");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_line_wrapping, "check_line_wrapping");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_smart_home, "check_smart_home");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_disable_dnd, "check_disable_dnd");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_folding, "check_folding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_unfold_children, "check_unfold_children");

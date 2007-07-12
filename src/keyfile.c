@@ -268,6 +268,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", editor_prefs.replace_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", editor_prefs.trail_space);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_smart_home_key", editor_prefs.smart_home_key);
 	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[editor_prefs.default_new_encoding].charset);
 	if (editor_prefs.default_open_encoding == -1)
 		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
@@ -538,6 +539,7 @@ gboolean configuration_load()
 	editor_prefs.new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
 	editor_prefs.trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
 	editor_prefs.disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
+	editor_prefs.smart_home_key = utils_get_setting_boolean(config, PACKAGE, "pref_editor_smart_home_key", TRUE);
 
 	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_MAKE);
 	app->tools_make_cmd = utils_get_setting_string(config, "tools", "make_cmd", tmp_string);

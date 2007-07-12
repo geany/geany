@@ -289,6 +289,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_disable_dnd");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.disable_dnd);
 
+	widget = lookup_widget(app->prefs_dialog, "check_smart_home");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.smart_home_key);
+
 	widget = lookup_widget(app->prefs_dialog, "check_use_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.use_tabs);
 
@@ -643,6 +646,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "check_disable_dnd");
 		editor_prefs.disable_dnd = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_smart_home");
+		editor_prefs.smart_home_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_use_tabs");
 		editor_prefs.use_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
