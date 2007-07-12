@@ -3,6 +3,8 @@
  * src/document.c, src/editor.c:
    Use again the usual, previous way of line scrolling and use
    SCI_SETXCARETPOLICY for horizontal scrolling.
+ * src/filetypes.c:
+   Add shebang-like detection for PHP files starting with "<?php".
 
 
 2007-07-12  Nick Treleaven  <nick.treleaven@btinternet.com>

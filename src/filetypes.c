@@ -653,6 +653,10 @@ static filetype *find_shebang(gint idx)
 
 			ft = filetypes[GEANY_FILETYPES_XML];
 	}
+	else if (strncmp(line, "<?php", 5) == 0)
+	{
+		ft = filetypes[GEANY_FILETYPES_PHP];
+	}
 
 	g_free(line);
 	return ft;
