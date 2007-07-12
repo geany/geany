@@ -27,6 +27,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "geany.h"
 
@@ -893,9 +894,10 @@ static gboolean on_tree_view_button_press_event(
 			GtkWidget *label;
 			gchar *str;
 
-			dialog = gtk_dialog_new_with_buttons(_("Grab key"), GTK_WINDOW(app->prefs_dialog),
+			dialog = gtk_dialog_new_with_buttons(_("Grab Key"), GTK_WINDOW(app->prefs_dialog),
 					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 
 			str = g_strdup_printf(
 					_("Type the combination of the keys you want to use for \"%s\""), name);
@@ -910,7 +912,6 @@ static gboolean on_tree_view_button_press_event(
 			g_signal_connect(G_OBJECT(dialog), "key-press-event",
 								G_CALLBACK(on_keytype_dialog_response), NULL);
 			g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(on_dialog_response), NULL);
-			g_signal_connect(G_OBJECT(dialog), "close", G_CALLBACK(gtk_widget_destroy), NULL);
 
 			// copy name to global variable to hold it, will be freed in on_dialog_response()
 			dialog_key_name = g_strdup(name);
@@ -963,6 +964,9 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 static gboolean on_keytype_dialog_response(GtkWidget *dialog, GdkEventKey *event, gpointer user_data)
 {
 	gchar *str;
+
+	if (event->state == 0 && event->keyval == GDK_Escape)
+		return FALSE;	// close the dialog, don't allow escape when detecting keybindings.
 
 	// ignore numlock key, not necessary but nice
 	if (event->state & GDK_MOD2_MASK) event->state -= GDK_MOD2_MASK;
