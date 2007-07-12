@@ -2,6 +2,8 @@
 
  * src/prefs.c:
    Make Escape close the 'Grab Key' dialog.
+ * src/keybindings.c, src/tools.c, src/dialogs.c, src/search.c
+   Capitalize some dialog titles.
 
 
 2007-07-11  Enrico Tröger  <enrico.troeger@uvena.de>

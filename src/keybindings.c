@@ -522,7 +522,7 @@ void keybindings_show_shortcuts()
 	GString *text_keys;
 	gint height, response;
 
-	dialog = gtk_dialog_new_with_buttons(_("Keyboard shortcuts"), GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(_("Keyboard Shortcuts"), GTK_WINDOW(app->window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_STOCK_EDIT, GTK_RESPONSE_APPLY,
 				GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);

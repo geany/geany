@@ -560,7 +560,7 @@ void search_show_find_in_files_dialog()
 		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 		widgets.find_in_files_dialog = gtk_dialog_new_with_buttons(
-			_("Find in files"), GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+			_("Find in Files"), GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(widgets.find_in_files_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 9);

@@ -78,7 +78,7 @@ void tools_show_dialog_insert_special_chars()
 		GtkWidget *swin, *vbox, *label;
 
 		sc_dialog = gtk_dialog_new_with_buttons(
-					_("Special characters"), GTK_WINDOW(app->window),
+					_("Special Characters"), GTK_WINDOW(app->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					_("_Insert"), GTK_RESPONSE_OK, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(sc_dialog));

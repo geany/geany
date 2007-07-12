@@ -679,7 +679,7 @@ void dialogs_show_goto_line()
 {
 	GtkWidget *dialog, *label, *entry, *vbox;
 
-	dialog = gtk_dialog_new_with_buttons(_("Go to line"), GTK_WINDOW(app->window),
+	dialog = gtk_dialog_new_with_buttons(_("Go to Line"), GTK_WINDOW(app->window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
