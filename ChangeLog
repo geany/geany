@@ -13,6 +13,13 @@
    remove some unnecessary border width.
    Add ui->dialog_vbox_new() and ui->frame_new_with_alignment()
    functions to the plugin API.
+ * src/ui_utils.h, src/utils.h, src/project.c, src/geany.h,
+   src/ui_utils.c:
+   Add ui_table_add_row() for easily adding widgets to a GtkTable, and
+   use it in project_new().
+   Group 'generic' functions related to GTK+ together at the top of
+   ui_utils.h.
+   Make sure G_GNUC_NULL_TERMINATED is defined in geany.h.
 
 
 2007-07-12  Enrico Tröger  <enrico.troeger@uvena.de>

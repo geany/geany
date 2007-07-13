@@ -25,10 +25,6 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
-#if ! GLIB_CHECK_VERSION(2, 8, 0)
-#define G_GNUC_NULL_TERMINATED
-#endif
-
 // Returns: TRUE if ptr points to a non-zero value.
 #define NZV(ptr) \
 	((ptr) && (ptr)[0])

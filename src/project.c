@@ -124,21 +124,14 @@ void project_new()
 	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
 
 	label = gtk_label_new(_("Name:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->name = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
-	gtk_table_attach(GTK_TABLE(table), e->name, 1, 2, 0, 1,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
+
+	ui_table_add_row(GTK_TABLE(table), 0, label, e->name, NULL);
 
 	label = gtk_label_new(_("Filename:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->file_name = gtk_entry_new();
@@ -151,14 +144,10 @@ void project_new()
 	bbox = gtk_hbox_new(FALSE, 6);
 	gtk_box_pack_start_defaults(GTK_BOX(bbox), e->file_name);
 	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 1, 2,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
+
+	ui_table_add_row(GTK_TABLE(table), 1, label, bbox, NULL);
 
 	label = gtk_label_new(_("Base path:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
 	e->base_path = gtk_entry_new();
@@ -167,9 +156,8 @@ void project_new()
 		"This can be a new path, or an existing directory tree."), NULL);
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
-	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 2, 3,
-					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
+
+	ui_table_add_row(GTK_TABLE(table), 2, label, bbox, NULL);
 
 	gtk_container_add(GTK_CONTAINER(vbox), table);
 

@@ -24,6 +24,33 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+/* The following block of functions are more generic functions and closely related to
+ * certain GTK+ widgets. */
+
+void ui_widget_show_hide(GtkWidget *widget, gboolean show);
+
+void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);
+
+GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment);
+
+GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
+
+GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
+
+void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
+
+void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text);
+
+GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
+
+void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
+		GtkFileChooserAction action, GtkEntry *entry);
+
+void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
+
+/* End of 'generic' functions */
+
+
 // Display text on the statusbar without logging it to the Status window.
 void ui_set_statusbar(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 
@@ -62,8 +89,6 @@ void ui_save_buttons_toggle(gboolean enable);
 void ui_close_buttons_toggle();
 
 
-void ui_widget_show_hide(GtkWidget *widget, gboolean show);
-
 void ui_treeviews_show_hide(gboolean force);
 
 void ui_document_show_hide(gint idx);
@@ -89,22 +114,6 @@ void ui_show_markers_margin();
 void ui_show_linenumber_margin();
 
 
-GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment);
-
-GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
-
-GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
-
-void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
-
-void ui_combo_box_add_to_history(GtkComboBox *combo, const gchar *text);
-
-GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
-
-void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
-		GtkFileChooserAction action, GtkEntry *entry);
-
-
 void ui_update_tab_status(gint idx);
 
 
@@ -112,8 +121,6 @@ typedef gboolean TVMatchCallback();
 
 gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb);
 
-
-void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);
 
 void ui_statusbar_showhide(gboolean state);
 
