@@ -35,6 +35,7 @@
 #include "document.h"
 #include "templates.h"
 #include "sciwrappers.h"
+#include "ui_utils.h"
 
 
 typedef struct Plugin
@@ -54,20 +55,25 @@ static GList *plugin_list = NULL;
 
 static DocumentFuncs doc_funcs = {
 	&document_new_file
-	};
+};
 
 static ScintillaFuncs sci_funcs = {
 	&sci_set_text
-	};
+};
 
 static TemplateFuncs template_funcs = {
 	&templates_get_template_fileheader
-	};
+};
 
 static UtilsFuncs utils_funcs = {
 	&utils_str_equal,
 	&utils_str_replace
-	};
+};
+
+static UIUtilsFuncs uiutils_funcs = {
+	&ui_dialog_vbox_new,
+	&ui_frame_new_with_alignment
+};
 
 
 static void
@@ -81,6 +87,7 @@ init_plugin_data(PluginData *data)
 	data->sci = &sci_funcs;
 	data->templates = &template_funcs;
 	data->utils = &utils_funcs;
+	data->ui = &uiutils_funcs;
 }
 
 

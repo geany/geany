@@ -85,6 +85,7 @@ static PluginData *plugin_data;
 #define scintilla	plugin_data->sci
 #define templates	plugin_data->templates
 #define utils		plugin_data->utils
+#define ui			plugin_data->ui
 
 
 static struct
@@ -223,7 +224,7 @@ static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialo
 static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg);
 
 
-VERSION_CHECK(3)
+VERSION_CHECK(4)
 
 PLUGIN_INFO(_("Class Builder"), _("Creates source files for new class types."))
 
@@ -359,6 +360,7 @@ void show_dialog_create_class(gint type)
 	CreateClassDialog *cc_dlg;
 	GtkWidget *main_box;
 	GtkWidget *frame;
+	GtkWidget *align;
 	GtkWidget *vbox;
 	GtkWidget *hbox;
 	GtkWidget *label;
@@ -366,165 +368,131 @@ void show_dialog_create_class(gint type)
 	cc_dlg = g_new0(CreateClassDialog, 1);
 	cc_dlg->class_type = type;
 
-	cc_dlg->dialog = gtk_dialog_new_with_buttons(_("Create class"),
+	cc_dlg->dialog = gtk_dialog_new_with_buttons(_("Create Class"),
 			GTK_WINDOW(plugin_data->app->window),
 			GTK_DIALOG_MODAL,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OK, GTK_RESPONSE_OK,
 			NULL);
-	gtk_container_set_border_width(GTK_CONTAINER(cc_dlg->dialog), 5);
 	g_signal_connect_swapped(G_OBJECT(cc_dlg->dialog), "destroy",
 			G_CALLBACK(g_free), (gpointer)cc_dlg);
 
-	main_box = GTK_DIALOG(cc_dlg->dialog)->vbox;
-	gtk_box_set_spacing(GTK_BOX(main_box), 10);
+	main_box = ui->dialog_vbox_new(GTK_DIALOG(cc_dlg->dialog));
 
-	frame = gtk_frame_new(_("Class"));
+	frame = ui->frame_new_with_alignment(_("Class"), &align);
 	gtk_container_add(GTK_CONTAINER(main_box), frame);
-	gtk_widget_show(frame);
 
 	vbox = gtk_vbox_new(FALSE, 10);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
-	gtk_container_add(GTK_CONTAINER(frame), vbox);
-	gtk_widget_show(vbox);
+	gtk_container_add(GTK_CONTAINER(align), vbox);
 
 	hbox = gtk_hbox_new(FALSE, 10);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-	gtk_widget_show(hbox);
 
 	label = gtk_label_new(_("Class name:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-	gtk_widget_show(label);
 
 	cc_dlg->class_name_entry = gtk_entry_new();
 	gtk_box_pack_start(GTK_BOX(hbox), cc_dlg->class_name_entry, TRUE, TRUE, 0);
-	gtk_widget_show(cc_dlg->class_name_entry);
 	g_signal_connect(G_OBJECT(cc_dlg->class_name_entry), "changed",
 			G_CALLBACK(cc_dlg_on_class_name_entry_changed), cc_dlg);
 
 	hbox = gtk_hbox_new(FALSE, 10);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-	gtk_widget_show(hbox);
 
 	label = gtk_label_new(_("Header file:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-	gtk_widget_show(label);
 
 	cc_dlg->header_entry = gtk_entry_new();
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->header_entry);
-	gtk_widget_show(cc_dlg->header_entry);
 
 	hbox = gtk_hbox_new(FALSE, 10);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-	gtk_widget_show(hbox);
 
 	label = gtk_label_new(_("Source file:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-	gtk_widget_show(label);
 
 	cc_dlg->source_entry = gtk_entry_new();
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->source_entry);
-	gtk_widget_show(cc_dlg->source_entry);
 
-	frame = gtk_frame_new(_("Inheritance"));
+	frame = ui->frame_new_with_alignment(_("Inheritance"), &align);
 	gtk_container_add(GTK_CONTAINER(main_box), frame);
-	gtk_widget_show(frame);
 
 	vbox = gtk_vbox_new(FALSE, 10);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
-	gtk_container_add(GTK_CONTAINER(frame), vbox);
-	gtk_widget_show(vbox);
+	gtk_container_add(GTK_CONTAINER(align), vbox);
 
 	hbox = gtk_hbox_new(FALSE, 10);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-	gtk_widget_show(hbox);
 
 	label = gtk_label_new(_("Base class:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-	gtk_widget_show(label);
 
 	cc_dlg->base_name_entry = gtk_entry_new();
 	if (type == GEANY_CLASS_TYPE_GTK)
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_name_entry), "GObject");
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_name_entry);
-	gtk_widget_show(cc_dlg->base_name_entry);
 	g_signal_connect(G_OBJECT(cc_dlg->base_name_entry), "changed",
 			G_CALLBACK(cc_dlg_on_base_name_entry_changed), (gpointer)cc_dlg);
 
 	hbox = gtk_hbox_new(FALSE, 10);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-	gtk_widget_show(hbox);
 
 	label = gtk_label_new(_("Base header:"));
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-	gtk_widget_show(label);
 
 	cc_dlg->base_header_entry = gtk_entry_new();
 	if (type == GEANY_CLASS_TYPE_GTK)
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_header_entry), "glib-object.h");
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_header_entry);
-	gtk_widget_show(cc_dlg->base_header_entry);
 
 	cc_dlg->base_header_global_box = gtk_check_button_new_with_label(_("Global"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(cc_dlg->base_header_global_box), TRUE);
 	gtk_box_pack_end(GTK_BOX(hbox), cc_dlg->base_header_global_box, FALSE, FALSE, 0);
-	gtk_widget_show(cc_dlg->base_header_global_box);
 
 	if (type == GEANY_CLASS_TYPE_GTK)
 	{
 		hbox = gtk_hbox_new(FALSE, 10);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-		gtk_widget_show(hbox);
 
 		label = gtk_label_new(_("Base GType:"));
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-		gtk_widget_show(label);
 
 		cc_dlg->base_gtype_entry = gtk_entry_new();
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->base_gtype_entry), "GTK_TYPE_OBJECT");
 		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->base_gtype_entry);
-		gtk_widget_show(cc_dlg->base_gtype_entry);
 	}
 
-	frame = gtk_frame_new(_("Options"));
+	frame = ui->frame_new_with_alignment(_("Options"), &align);
 	gtk_container_add(GTK_CONTAINER(main_box), frame);
-	gtk_widget_show(frame);
 
 	vbox = gtk_vbox_new(FALSE, 10);
-	gtk_container_add(GTK_CONTAINER(frame), vbox);
-	gtk_widget_show(vbox);
+	gtk_container_add(GTK_CONTAINER(align), vbox);
 
 	hbox = gtk_hbox_new(FALSE, 10);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
-	gtk_widget_show(hbox);
 
 	cc_dlg->create_constructor_box = gtk_check_button_new_with_label(_("Create constructor"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box), TRUE);
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_constructor_box);
-	gtk_widget_show(cc_dlg->create_constructor_box);
 
 	cc_dlg->create_destructor_box = gtk_check_button_new_with_label(_("Create destructor"));
 	gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->create_destructor_box);
-	gtk_widget_show(cc_dlg->create_destructor_box);
 
 	if (type == GEANY_CLASS_TYPE_GTK)
 	{
 		hbox = gtk_hbox_new(FALSE, 10);
 		gtk_container_add(GTK_CONTAINER(vbox), hbox);
-		gtk_widget_show(hbox);
 		g_signal_connect(G_OBJECT(cc_dlg->create_constructor_box), "toggled",
 				G_CALLBACK(cc_dlg_on_set_sensitive_toggled), (gpointer)hbox);
 
 		label = gtk_label_new(_("GTK+ constructor type"));
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-		gtk_widget_show(label);
 
 		cc_dlg->gtk_constructor_type_entry = gtk_entry_new();
 		gtk_entry_set_text(GTK_ENTRY(cc_dlg->gtk_constructor_type_entry), "GObject");
 		gtk_container_add(GTK_CONTAINER(hbox), cc_dlg->gtk_constructor_type_entry);
-		gtk_widget_show(cc_dlg->gtk_constructor_type_entry);
 	}
 
+	gtk_widget_show_all(cc_dlg->dialog);
 	if (gtk_dialog_run(GTK_DIALOG(cc_dlg->dialog)) == GTK_RESPONSE_OK)
 		cc_dlg_on_create_class(cc_dlg);
 

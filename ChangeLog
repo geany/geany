@@ -8,6 +8,11 @@
    session files.
  * src/plugins.c:
    Remove init_function_pointers(), use static initializers.
+ * plugins/classbuilder.c, src/plugindata.h, src/plugins.c:
+   Make Class Builder 'Create Class' dialog use Glade-style frames and
+   remove some unnecessary border width.
+   Add ui->dialog_vbox_new() and ui->frame_new_with_alignment()
+   functions to the plugin API.
 
 
 2007-07-12  Enrico Tröger  <enrico.troeger@uvena.de>

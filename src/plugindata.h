@@ -27,7 +27,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 3;
+static const gint api_version = 4;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -72,6 +72,7 @@ typedef struct DocumentFuncs	DocumentFuncs;
 typedef struct ScintillaFuncs	ScintillaFuncs;
 typedef struct TemplateFuncs	TemplateFuncs;
 typedef struct UtilsFuncs		UtilsFuncs;
+typedef struct UIUtilsFuncs		UIUtilsFuncs;
 
 /* These are fields and functions owned by Geany.
  * Fields will be appended when needed by plugin authors.
@@ -89,9 +90,13 @@ typedef struct PluginData
 	ScintillaFuncs	*sci;
 	TemplateFuncs	*templates;
 	UtilsFuncs		*utils;
+	UIUtilsFuncs	*ui;
 }
 PluginData;
 
+
+/* For more info about these functions, see the main source code.
+ * E.g. for PluginData::document->new_file(), see document_new_file() in document.[hc]. */
 
 struct filetype;
 
@@ -104,18 +109,24 @@ struct _ScintillaObject;
 
 struct ScintillaFuncs
 {
-	void (*set_text) (struct _ScintillaObject *sci, const gchar *text);
+	void	(*set_text) (struct _ScintillaObject *sci, const gchar *text);
 };
 
 struct TemplateFuncs
 {
-	gchar* (*get_template_fileheader) (gint filetype_idx, const gchar *fname);
+	gchar*	(*get_template_fileheader) (gint filetype_idx, const gchar *fname);
 };
 
 struct UtilsFuncs
 {
-	gboolean (*str_equal) (const gchar *a, const gchar *b);
-	gchar* (*str_replace) (gchar *haystack, const gchar *needle, const gchar *replacement);
+	gboolean	(*str_equal) (const gchar *a, const gchar *b);
+	gchar*		(*str_replace) (gchar *haystack, const gchar *needle, const gchar *replacement);
+};
+
+struct UIUtilsFuncs
+{
+	GtkWidget*	(*dialog_vbox_new) (GtkDialog *dialog);
+	GtkWidget*	(*frame_new_with_alignment) (const gchar *label_text, GtkWidget **alignment);
 };
 
 #endif
