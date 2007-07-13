@@ -414,9 +414,17 @@ static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user
 }
 
 
-static gboolean change_focus(GtkWidget *widget)
+static gboolean change_focus(gpointer data)
 {
-	gtk_widget_grab_focus(widget);
+	gint idx = (gint) data;
+
+	// idx might not be valid e.g. if user closed a tab whilst Geany is opening files
+	if (DOC_IDX_VALID(idx))
+	{
+		GtkWidget *widget = GTK_WIDGET(doc_list[idx].sci);
+
+		gtk_widget_grab_focus(widget);
+	}
 	return FALSE;
 }
 
@@ -434,7 +442,7 @@ static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpo
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 					gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook),
 					(GtkWidget*) doc_list[idx].sci));
-		g_idle_add((GSourceFunc) change_focus, GTK_WIDGET(doc_list[idx].sci));
+		g_idle_add((GSourceFunc) change_focus, (gpointer) idx);
 	}
 }
 

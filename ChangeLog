@@ -1,3 +1,10 @@
+2007-07-13  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/treeviews.c:
+   Prevent warning when closing files when Geany is busy (e.g. pressing
+   Ctrl-W when opening files).
+
+
 2007-07-12  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c, src/editor.c:
