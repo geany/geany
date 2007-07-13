@@ -513,6 +513,8 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 #ifdef HAVE_SOCKET
 	socket_info.ignore_socket = ignore_socket;
+	if (ignore_socket)
+		cl_options.load_session = FALSE;
 #endif
 #ifdef HAVE_VTE
 	vte_info.lib_vte = lib_vte;
