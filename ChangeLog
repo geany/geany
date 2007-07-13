@@ -6,6 +6,8 @@
  * src/main.c:
    If -i, --new-instance options are passed, disable loading & saving of
    session files.
+ * src/plugins.c:
+   Remove init_function_pointers(), use static initializers.
 
 
 2007-07-12  Enrico Tröger  <enrico.troeger@uvena.de>

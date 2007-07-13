@@ -49,27 +49,25 @@ typedef struct Plugin
 }
 Plugin;
 
-
-static DocumentFuncs	doc_funcs;
-static ScintillaFuncs	sci_funcs;
-static TemplateFuncs	template_funcs;
-static UtilsFuncs		utils_funcs;
-
 static GList *plugin_list = NULL;
 
 
-static void
-init_function_pointers()
-{
-	doc_funcs.new_file = &document_new_file;
+static DocumentFuncs doc_funcs = {
+	&document_new_file
+	};
 
-	template_funcs.get_template_fileheader = &templates_get_template_fileheader;
+static ScintillaFuncs sci_funcs = {
+	&sci_set_text
+	};
 
-	sci_funcs.set_text = &sci_set_text;
+static TemplateFuncs template_funcs = {
+	&templates_get_template_fileheader
+	};
 
-	utils_funcs.str_equal = &utils_str_equal;
-	utils_funcs.str_replace = &utils_str_replace;
-}
+static UtilsFuncs utils_funcs = {
+	&utils_str_equal,
+	&utils_str_replace
+	};
 
 
 static void
@@ -229,8 +227,6 @@ void plugins_init()
 {
 	const gchar *path = LIBDIR;
 	GSList *list, *item;
-
-	init_function_pointers();
 
 	list = utils_get_file_list(path, NULL, NULL);
 
