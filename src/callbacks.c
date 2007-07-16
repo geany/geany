@@ -862,6 +862,41 @@ on_file_open_selection_changed         (GtkFileChooser  *filechooser,
 }
 
 
+static gint
+clone_document(gint old_idx, const gchar *utf8_filename)
+{
+	// create a new file and copy file content and properties
+	gint len, idx;
+	gchar *data;
+
+	// use old file type (or maybe NULL for auto detect would be better?)
+	idx = document_new_file(utf8_filename, doc_list[idx].file_type);
+
+	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
+	sci_empty_undo_buffer(doc_list[idx].sci);
+
+	len = sci_get_length(doc_list[old_idx].sci) + 1;
+	data = (gchar*) g_malloc(len);
+	sci_get_text(doc_list[old_idx].sci, len, data);
+
+	sci_set_text(doc_list[idx].sci, data);
+
+	// copy file properties
+	doc_list[idx].line_breaking = doc_list[old_idx].line_breaking;
+	doc_list[idx].readonly = doc_list[old_idx].readonly;
+	doc_list[idx].has_bom = doc_list[old_idx].has_bom;
+	document_set_encoding(idx, doc_list[old_idx].encoding);
+	sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_breaking);
+	sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
+	sci_set_undo_collection(doc_list[idx].sci, TRUE);
+
+	ui_document_show_hide(idx);
+
+	g_free(data);
+	return idx;
+}
+
+
 /*
  * save dialog callbacks
  */
@@ -870,96 +905,74 @@ on_file_save_dialog_response           (GtkDialog *dialog,
                                         gint response,
                                         gpointer user_data)
 {
-	if (response == GTK_RESPONSE_ACCEPT)
+	gboolean rename_file = FALSE;
+
+	switch (response)
 	{
-		gint idx = document_get_cur_idx();
-		gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app->save_filesel));
-		gchar *utf8_filename;
-		gboolean open_new_tab = gtk_toggle_button_get_active(
-				GTK_TOGGLE_BUTTON(lookup_widget(app->save_filesel, "check_open_new_tab")));
-		gboolean rename_file = gtk_toggle_button_get_active(
-				GTK_TOGGLE_BUTTON(lookup_widget(app->save_filesel, "check_rename")));
+		case GTK_RESPONSE_APPLY:
+			rename_file = TRUE;
+			// fall through
+
+		case GTK_RESPONSE_ACCEPT:
+		{
+			gint idx = document_get_cur_idx();
+			gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app->save_filesel));
+			gchar *utf8_filename;
+			gboolean open_new_tab = gtk_toggle_button_get_active(
+					GTK_TOGGLE_BUTTON(lookup_widget(app->save_filesel, "check_open_new_tab")));
 
 #ifdef G_OS_WIN32
-		utf8_filename = g_strdup(new_filename);
+			utf8_filename = g_strdup(new_filename);
 #else
-		utf8_filename = utils_get_utf8_from_locale(new_filename);
+			utf8_filename = utils_get_utf8_from_locale(new_filename);
 #endif
-		// check if file exists and ask whether to overwrite or not
-		if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
-		{
-			if (dialogs_show_question(
-				_("The file '%s' already exists. Do you want to overwrite it?"),
-				utf8_filename) == FALSE)
-				return;
-		}
-
-		if (open_new_tab)
-		{	// "open" the saved file in a new tab
-			// (actually create a new file and copy file content and properties)
-			gint len, old_idx;
-			gchar *data;
-
-			old_idx = idx;
-
-			// use old file type (or maybe NULL for auto detect would be better?)
-			idx = document_new_file(utf8_filename, doc_list[idx].file_type);
-
-			sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
-			sci_empty_undo_buffer(doc_list[idx].sci);
-
-			len = sci_get_length(doc_list[old_idx].sci) + 1;
-			data = (gchar*) g_malloc(len);
-			sci_get_text(doc_list[old_idx].sci, len, data);
-
-			sci_set_text(doc_list[idx].sci, data);
-
-			// copy file properties
-			doc_list[idx].line_breaking = doc_list[old_idx].line_breaking;
-			doc_list[idx].readonly = doc_list[old_idx].readonly;
-			doc_list[idx].has_bom = doc_list[old_idx].has_bom;
-			document_set_encoding(idx, doc_list[old_idx].encoding);
-			sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_breaking);
-			sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
-			sci_set_undo_collection(doc_list[idx].sci, TRUE);
-
-			ui_document_show_hide(idx);
-
-			g_free(data);
-			g_free(utf8_filename);
-		}
-		else
-		{
-			if (doc_list[idx].file_name != NULL)
+			// check if file exists and ask whether to overwrite or not
+			if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
 			{
-				if (rename_file)
-				{	// delete the previous file name
-#ifdef G_OS_WIN32
-					g_unlink(doc_list[idx].file_name);
-#else
-					gchar *old_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-
-					g_unlink(old_filename);
-					g_free(old_filename);
-#endif
-				}
-				// create a new tm_source_file object otherwise tagmanager won't work correctly
-				tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
-				doc_list[idx].tm_file = NULL;
-				g_free(doc_list[idx].file_name);
+				if (dialogs_show_question(
+					_("The file '%s' already exists. Do you want to overwrite it?"),
+					utf8_filename) == FALSE)
+					return;
 			}
-			doc_list[idx].file_name = utf8_filename;
+
+			if (open_new_tab)
+			{	// "open" the saved file in a new tab
+				idx = clone_document(idx, utf8_filename);
+				g_free(utf8_filename);
+			}
+			else
+			{
+				if (doc_list[idx].file_name != NULL)
+				{
+					if (rename_file)
+					{	// delete the previous file name
+#ifdef G_OS_WIN32
+						g_unlink(doc_list[idx].file_name);
+#else
+						gchar *old_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+
+						g_unlink(old_filename);
+						g_free(old_filename);
+#endif
+					}
+					// create a new tm_source_file object otherwise tagmanager won't work correctly
+					tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+					doc_list[idx].tm_file = NULL;
+					g_free(doc_list[idx].file_name);
+				}
+				doc_list[idx].file_name = utf8_filename;
+			}
+			utils_replace_filename(idx);
+			document_save_file(idx, TRUE);
+
+			if (! open_new_tab)
+				build_menu_update(idx);
+
+			// finally add current file to recent files menu
+			ui_add_recent_file(doc_list[idx].file_name);
+
+			g_free(new_filename);
 		}
-		utils_replace_filename(idx);
-		document_save_file(idx, TRUE);
-
-		if (! open_new_tab)
-			build_menu_update(idx);
-
-		// finally add current file to recent files menu
-		ui_add_recent_file(doc_list[idx].file_name);
-
-		g_free(new_filename);
 	}
 	gtk_widget_hide(app->save_filesel);
 }

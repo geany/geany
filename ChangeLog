@@ -1,3 +1,10 @@
+2007-07-16  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/dialogs.c, src/callbacks.c:
+   Use Rename button instead of checkbox for Save As dialog.
+   Add tooltips for Save As dialog's other options.
+
+
 2007-07-13  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/treeviews.c:

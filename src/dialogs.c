@@ -80,18 +80,18 @@ void dialogs_show_open_file ()
 
 		app->open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->window),
 				GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
+		gtk_widget_set_name(app->open_filesel, "GeanyDialog");
 
 		viewbtn = gtk_button_new_with_mnemonic(_("_View"));
 		gtk_tooltips_set_tip(tooltips, viewbtn,
 			_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."), NULL);
 		gtk_widget_show(viewbtn);
-		gtk_widget_set_name(app->open_filesel, "GeanyDialog");
 		gtk_dialog_add_action_widget(GTK_DIALOG(app->open_filesel),
 			viewbtn, GTK_RESPONSE_APPLY);
+
 		gtk_dialog_add_buttons(GTK_DIALOG(app->open_filesel),
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-		// set default Open, so pressing enter can open multiple files
 		gtk_dialog_set_default_response(GTK_DIALOG(app->open_filesel),
 			GTK_RESPONSE_ACCEPT);
 
@@ -276,36 +276,43 @@ gboolean dialogs_show_save_as()
 
 	if (app->save_filesel == NULL)
 	{
-		GtkWidget *vbox, *check_open_new_tab, *check_rename;
+		GtkWidget *vbox, *check_open_new_tab, *rename_btn;
+		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
 
 		app->save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(app->window),
-					GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+					GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
 		gtk_window_set_modal(GTK_WINDOW(app->save_filesel), TRUE);
 		gtk_window_set_destroy_with_parent(GTK_WINDOW(app->save_filesel), TRUE);
 		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(app->save_filesel), TRUE);
 		gtk_window_set_type_hint(GTK_WINDOW(app->save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
-		gtk_dialog_set_default_response(GTK_DIALOG(app->save_filesel), GTK_RESPONSE_ACCEPT);
 		gtk_widget_set_name(app->save_filesel, "GeanyDialog");
 
+		rename_btn = gtk_button_new_with_mnemonic(_("R_ename"));
+		gtk_tooltips_set_tip(tooltips, rename_btn,
+			_("Save the file and rename it."), NULL);
+		gtk_widget_show(rename_btn);
+		gtk_dialog_add_action_widget(GTK_DIALOG(app->save_filesel),
+			rename_btn, GTK_RESPONSE_APPLY);
+
+		gtk_dialog_add_buttons(GTK_DIALOG(app->save_filesel),
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+		gtk_dialog_set_default_response(GTK_DIALOG(app->save_filesel), GTK_RESPONSE_ACCEPT);
+
 		vbox = gtk_vbox_new(FALSE, 0);
-		check_open_new_tab = gtk_check_button_new_with_mnemonic("_Open file in a new tab");
-		check_rename = gtk_check_button_new_with_mnemonic("R_ename file");
+		check_open_new_tab = gtk_check_button_new_with_mnemonic(_("_Open file in a new tab"));
+		gtk_tooltips_set_tip(tooltips, check_open_new_tab,
+			_("Keep the current unsaved document open"
+			" and open the newly saved file in a new tab."), NULL);
 		gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
-		gtk_box_pack_start(GTK_BOX(vbox), check_rename, FALSE, TRUE, 0);
 		gtk_widget_show_all(vbox);
 		gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(app->save_filesel), vbox);
 
 		g_signal_connect(check_open_new_tab, "toggled",
-					G_CALLBACK(on_save_as_new_tab_toggled), check_rename);
-
-		g_signal_connect(check_rename, "toggled",
-					G_CALLBACK(on_save_as_new_tab_toggled), check_open_new_tab);
+					G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);
 
 		g_object_set_data_full(G_OBJECT(app->save_filesel), "check_open_new_tab",
 					gtk_widget_ref(check_open_new_tab), (GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->save_filesel), "check_rename",
-					gtk_widget_ref(check_rename), (GDestroyNotify) gtk_widget_unref);
 
 		g_signal_connect((gpointer) app->save_filesel, "delete_event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
@@ -1144,6 +1151,6 @@ gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, con
 
 static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
-	if (gtk_toggle_button_get_active(togglebutton))
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(user_data), FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(user_data),
+		! gtk_toggle_button_get_active(togglebutton));
 }
