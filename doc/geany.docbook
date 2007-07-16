@@ -1885,12 +1885,27 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 							</row>
 							<row>
 								<entry>Increase indent</entry>
-								<entry>Indents the current line or selection by one tabulator.</entry>
+								<entry>Indents the current line or selection by one tabulator or
+									   by spaces in the amount of the tab width setting.</entry>
 							</row>
 							<row>
 								<entry>Decrease indent</entry>
-								<entry>Removes one tabulator from the indentation of the current
-									   line or selection.</entry>
+								<entry>Removes one tabulator or the amount fo spaces of the tab
+									   width setting from the indentation of the current line or
+									   selection.</entry>
+							</row>
+							<row>
+								<entry>Increase indent by one space</entry>
+								<entry>Indents the current line or selection by one space.</entry>
+							</row>
+							<row>
+								<entry>Decrease indent by one space</entry>
+								<entry>Deindents the current line or selection by one space.</entry>
+							</row>
+							<row>
+								<entry>Smart line indent</entry>
+								<entry>Indents the current line or all selected lines with the same
+									   intentation as the previous line.</entry>
 							</row>
 							<row>
 								<entry>Goto matching brace</entry>

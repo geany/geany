@@ -1476,7 +1476,8 @@ gint editor_do_uncomment(gint idx, gint line, gboolean toggle)
 
 		first_line = sci_get_line_from_position(doc_list[idx].sci, sel_start);
 		// Find the last line with chars selected (not EOL char)
-		last_line = sci_get_line_from_position(doc_list[idx].sci, sel_end - 1);
+		last_line = sci_get_line_from_position(doc_list[idx].sci,
+			sel_end - utils_get_eol_char_len(idx));
 		last_line = MAX(first_line, last_line);
 	}
 	else
@@ -1636,7 +1637,7 @@ void editor_do_comment_toggle(gint idx)
 		sci_get_selection_start(doc_list[idx].sci));
 	// Find the last line with chars selected (not EOL char)
 	last_line = sci_get_line_from_position(doc_list[idx].sci,
-		sci_get_selection_end(doc_list[idx].sci) - 1);
+		sci_get_selection_end(doc_list[idx].sci) - utils_get_eol_char_len(idx));
 	last_line = MAX(first_line, last_line);
 
 	// detection of HTML vs PHP code, if non-PHP set filetype to XML
@@ -1802,7 +1803,8 @@ void editor_do_comment(gint idx, gint line, gboolean allow_empty_lines, gboolean
 
 		first_line = sci_get_line_from_position(doc_list[idx].sci, sel_start);
 		// Find the last line with chars selected (not EOL char)
-		last_line = sci_get_line_from_position(doc_list[idx].sci, sel_end - 1);
+		last_line = sci_get_line_from_position(doc_list[idx].sci,
+			sel_end - utils_get_eol_char_len(idx));
 		last_line = MAX(first_line, last_line);
 	}
 	else
@@ -2406,6 +2408,124 @@ void editor_select_paragraph(ScintillaObject *sci)
 	pos_end = SSM(sci, SCI_POSITIONFROMLINE, line_found, 0);
 
 	SSM(sci, SCI_SETSEL, pos_start, pos_end);
+}
+
+
+// simple auto indentation to indent the current line with the same indent as the previous one
+void editor_auto_line_indentation(gint idx, gint pos)
+{
+	gint i, first_line, last_line;
+	gint first_sel_start, first_sel_end, sel_start, sel_end;
+
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	first_sel_start = sci_get_selection_start(doc_list[idx].sci);
+	first_sel_end = sci_get_selection_end(doc_list[idx].sci);
+
+	first_line = sci_get_line_from_position(doc_list[idx].sci, first_sel_start);
+	// Find the last line with chars selected (not EOL char)
+	last_line = sci_get_line_from_position(doc_list[idx].sci,
+		first_sel_end - utils_get_eol_char_len(idx));
+	last_line = MAX(first_line, last_line);
+
+	if (pos == -1)
+		pos = first_sel_start;
+
+	// get previous line and use it for get_indent to use that line
+	// (otherwise it would fail on a line only containing "{" in advanced indentation mode)
+	get_indent(doc_list[idx].sci,
+		sci_get_position_from_line(doc_list[idx].sci, first_line - 1), TRUE);
+	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
+
+	for (i = first_line; i <= last_line; i++)
+	{
+		// skip the first line or if the indentation of the previous and current line are equal
+		if (i == 0 ||
+			SSM(doc_list[idx].sci, SCI_GETLINEINDENTATION, i - 1, 0) ==
+			SSM(doc_list[idx].sci, SCI_GETLINEINDENTATION, i, 0))
+			continue;
+
+		sel_start = SSM(doc_list[idx].sci, SCI_POSITIONFROMLINE, i, 0);
+		sel_end = SSM(doc_list[idx].sci, SCI_GETLINEINDENTPOSITION, i, 0);
+		if (sel_start < sel_end)
+		{
+			SSM(doc_list[idx].sci, SCI_SETSEL, sel_start, sel_end);
+			SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
+		}
+		sci_insert_text(doc_list[idx].sci, sel_start, indent);
+	}
+
+	// set cursor position if there was no selection
+	/// TODO implement selection handling if there was a selection
+	if (first_sel_start == first_sel_end)
+		sci_set_current_position(doc_list[idx].sci,
+			pos - (sel_end - sel_start) + strlen(indent), FALSE);
+
+	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
+}
+
+
+// increase / decrease current line or selection by one space
+void editor_indentation_by_one_space(gint idx, gint pos, gboolean decrease)
+{
+	gint i, first_line, last_line, line_start, indentation_end, count = 0;
+	gint sel_start, sel_end, first_line_offset = 0;
+
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	sel_start = sci_get_selection_start(doc_list[idx].sci);
+	sel_end = sci_get_selection_end(doc_list[idx].sci);
+
+	first_line = sci_get_line_from_position(doc_list[idx].sci, sel_start);
+	// Find the last line with chars selected (not EOL char)
+	last_line = sci_get_line_from_position(doc_list[idx].sci,
+		sel_end - utils_get_eol_char_len(idx));
+	last_line = MAX(first_line, last_line);
+
+	if (pos == -1)
+		pos = sel_start;
+
+	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
+
+	for (i = first_line; i <= last_line; i++)
+	{
+		indentation_end = SSM(doc_list[idx].sci, SCI_GETLINEINDENTPOSITION, i, 0);
+		if (decrease)
+		{
+			line_start = SSM(doc_list[idx].sci, SCI_POSITIONFROMLINE, i, 0);
+			// searching backwards for a space to remove
+			while (sci_get_char_at(doc_list[idx].sci, indentation_end) != ' ' &&
+				   indentation_end > line_start)
+				indentation_end--;
+
+			if (sci_get_char_at(doc_list[idx].sci, indentation_end) == ' ')
+			{
+				sci_set_current_position(doc_list[idx].sci, indentation_end + 1, FALSE);
+				SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
+				count--;
+				if (i == first_line)
+					first_line_offset = -1;
+			}
+		}
+		else
+		{
+			sci_insert_text(doc_list[idx].sci, indentation_end, " ");
+			count++;
+			if (i == first_line)
+				first_line_offset = 1;
+		}
+	}
+
+	// set cursor position
+	if (sel_start < sel_end)
+	{
+		sci_set_selection_start(doc_list[idx].sci, sel_start + first_line_offset);
+		sci_set_selection_end(doc_list[idx].sci, sel_end + count);
+	}
+	else
+		sci_set_current_position(doc_list[idx].sci, pos + count, FALSE);
+
+	SSM(doc_list[idx].sci, SCI_ENDUNDOACTION, 0, 0);
 }
 
 

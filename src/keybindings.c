@@ -266,6 +266,12 @@ void keybindings_init(void)
 		GDK_i, GDK_CONTROL_MASK, "edit_increaseindent", _("Increase indent"));
 	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit,
 		GDK_i, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_decreaseindent", _("Decrease indent"));
+	keys[GEANY_KEYS_EDIT_INCREASEINDENTBYSPACE] = fill(cb_func_edit,
+		0, 0, "edit_increaseindentbyspace", _("Increase indent by one space"));
+	keys[GEANY_KEYS_EDIT_DECREASEINDENTBYSPACE] = fill(cb_func_edit,
+		0, 0, "edit_decreaseindentbyspace", _("Decrease indent by one space"));
+	keys[GEANY_KEYS_EDIT_AUTOINDENT] = fill(cb_func_edit,
+		0, 0, "edit_autoindent", _("Smart line indent"));
 	keys[GEANY_KEYS_EDIT_SENDTOCMD1] = fill(cb_func_edit,
 		GDK_1, GDK_CONTROL_MASK, "edit_sendtocmd1", _("Send to Custom Command 1"));
 	keys[GEANY_KEYS_EDIT_SENDTOCMD2] = fill(cb_func_edit,
@@ -1144,6 +1150,15 @@ static void cb_func_edit(guint key_id)
 			break;
 		case GEANY_KEYS_EDIT_DECREASEINDENT:
 			on_menu_decrease_indent1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_EDIT_INCREASEINDENTBYSPACE:
+			editor_indentation_by_one_space(idx, -1, FALSE);
+			break;
+		case GEANY_KEYS_EDIT_DECREASEINDENTBYSPACE:
+			editor_indentation_by_one_space(idx, -1, TRUE);
+			break;
+		case GEANY_KEYS_EDIT_AUTOINDENT:
+			editor_auto_line_indentation(idx, -1);
 			break;
 		case GEANY_KEYS_EDIT_TOLOWERCASE:
 			on_to_lower_case1_activate(NULL, NULL);

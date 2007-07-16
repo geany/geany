@@ -143,6 +143,10 @@ void editor_select_paragraph(ScintillaObject *sci);
 
 void editor_insert_alternative_whitespace(ScintillaObject *sci);
 
+void editor_auto_line_indentation(gint idx, gint pos);
+
+void editor_indentation_by_one_space(gint idx, gint pos, gboolean decrease);
+
 void editor_finalize();
 
 #endif

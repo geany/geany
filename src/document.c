@@ -1418,7 +1418,8 @@ void document_replace_sel(gint idx, const gchar *find_text, const gchar *replace
 
 		first_line = sci_get_line_from_position(doc_list[idx].sci, selection_start);
 		// Find the last line with chars selected (not EOL char)
-		last_line = sci_get_line_from_position(doc_list[idx].sci, selection_end - 1);
+		last_line = sci_get_line_from_position(doc_list[idx].sci,
+			selection_end - utils_get_eol_char_len(idx));
 		last_line = MAX(first_line, last_line);
 		for (line = first_line; line < (first_line + selected_lines); line++)
 		{
