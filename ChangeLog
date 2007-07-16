@@ -6,6 +6,8 @@
  * doc/geany.docbook, src/editor.c, src/editor.h, src/keybindings.c,
    src/keybindings.h:
    Add keybindings for smart indent and indent/deindent by one space.
+ * configure.in:
+   Fix failing linking on some systems (needs to be solved cleanly).
 
 
 2007-07-16  Nick Treleaven  <nick.treleaven@btinternet.com>
