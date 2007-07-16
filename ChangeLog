@@ -3,6 +3,8 @@
  * src/dialogs.c, src/callbacks.c:
    Use Rename button instead of checkbox for Save As dialog.
    Add tooltips for Save As dialog's other options.
+ * src/callbacks.c:
+   Fix segfault (oops).
 
 
 2007-07-13  Nick Treleaven  <nick.treleaven@btinternet.com>

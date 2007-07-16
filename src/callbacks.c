@@ -870,7 +870,7 @@ clone_document(gint old_idx, const gchar *utf8_filename)
 	gchar *data;
 
 	// use old file type (or maybe NULL for auto detect would be better?)
-	idx = document_new_file(utf8_filename, doc_list[idx].file_type);
+	idx = document_new_file(utf8_filename, doc_list[old_idx].file_type);
 
 	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
 	sci_empty_undo_buffer(doc_list[idx].sci);
