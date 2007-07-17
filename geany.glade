@@ -3222,7 +3222,7 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_beep">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Whether to beep if an error occured or when the compilation process has finished.</property>
+			      <property name="tooltip" translatable="yes">Whether to beep if an error occurred or when the compilation process has finished.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Beep on errors or when compilation has finished</property>
 			      <property name="use_underline">True</property>

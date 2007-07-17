@@ -2741,7 +2741,7 @@ create_prefs_dialog (void)
   check_beep = gtk_check_button_new_with_mnemonic (_("Beep on errors or when compilation has finished"));
   gtk_widget_show (check_beep);
   gtk_box_pack_start (GTK_BOX (vbox21), check_beep, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_beep, _("Whether to beep if an error occured or when the compilation process has finished."), NULL);
+  gtk_tooltips_set_tip (tooltips, check_beep, _("Whether to beep if an error occurred or when the compilation process has finished."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_beep), FALSE);
 
   check_switch_pages = gtk_check_button_new_with_mnemonic (_("Switch to status message list at new message"));
