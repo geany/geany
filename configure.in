@@ -4,10 +4,10 @@ dnl $Id$
 AC_INIT(configure.in)
 AM_INIT_AUTOMAKE(geany, 0.12)
 
-
 AM_CONFIG_HEADER(config.h)
+# AC_USE_SYSTEM_EXTENSIONS combines AC_MINIX, AC_AIX and AC_GNU_SOURCE
+AC_USE_SYSTEM_EXTENSIONS
 
-AC_ISC_POSIX
 AC_PROG_CC
 AM_CONDITIONAL(IS_COMPILER_GCC,test x$SSC == x)
 
@@ -15,10 +15,11 @@ AM_PROG_CC_STDC
 AC_HEADER_STDC
 AC_PROG_CXX
 AC_PROG_CPP
-AC_PROG_RANLIB
+#AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
+AC_PROG_INTLTOOL
 
 # for plugins
 AC_DISABLE_STATIC
@@ -78,6 +79,10 @@ pkg_modules="gtk+-2.0 >= 2.6.0"
 PKG_CHECK_MODULES(GTK, [$pkg_modules])
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
+
+# --disable-deprecated switch for GTK2 purification
+AC_ARG_ENABLE(deprecated, [  --disable-deprecated    Disable deprecated GTK functions. ],
+			  [GTK_CFLAGS="$GTK_CFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"], [])
 
 # socket support
 AC_ARG_ENABLE(socket, AC_HELP_STRING([--enable-socket],[enable if you want to detect a running instance [[default=yes]]]),
@@ -181,7 +186,7 @@ po/Makefile.in
 doc/Makefile
 doc/geany.1
 geany.spec
-geany.desktop
+geany.desktop.in
 ])
 
 echo "----------------------------------------"

@@ -30,8 +30,17 @@ EXTRA_DIST = \
 	README.I18N \
 	po/intl_stats.sh \
 	po/LINGUAS \
+	intltool-extract.in \
+	intltool-merge.in \
+	intltool-update.in \
 	$(SYS_DATA_FILES) \
 	$(WIN32_BUILD_FILES)
+
+DISTCLEANFILES = \
+	geany.desktop \
+	intltool-extract \
+	intltool-merge \
+	intltool-update
 
 uninstall-local:
 	rm -rf $(DESTDIR)$(pkgdatadir);
@@ -87,3 +96,8 @@ rpm: dist
 Applicationsdir = $(datadir)/applications
 Applications_DATA = geany.desktop
 logodir = $(datadir)/pixmaps
+
+desktopdir = $(datadir)/applications
+desktop_in_files = geany.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@

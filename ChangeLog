@@ -7,6 +7,14 @@
  * src/callbacks.c, src/ui_utils.c, src/utils.c:
    Fix warnings about shadowing local variables.
  * geany.glade, src/interface.c: Fix typo.
+ * configure.in, geany.desktop.in.in, Makefile.am, po/Makefile.in.in,
+   po/POTFILES.in:
+   Add --disable-deprecated option to configure to build without
+   deprecated GLib and GTK code.
+   Use intltool to make geany.desktop translatable
+   Rename geany.desktop.in to geany.desktop.in.in.
+   Add Makefile.in.in in po/ to get translation status from msgfmt
+   when running make.
 
 
 2007-07-16  Enrico Tröger  <enrico.troeger@uvena.de>

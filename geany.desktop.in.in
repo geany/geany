@@ -1,10 +1,7 @@
 [Desktop Entry]
-Name=Geany
-GenericName=Integrated Development Environment
-GenericName[de]=Integrierte Entwicklungsumgebung
-Comment=A fast and lightweight IDE using GTK2
-Comment[de]=Eine kleine und schnelle integrierte Entwicklungsumgebung
-Comment[pl]=Szybkie i lekkie IDE korzystające z GTK+2
+_Name=Geany
+_GenericName=Integrated Development Environment
+_Comment=A fast and lightweight IDE using GTK2
 Exec=geany %F
 Icon=@GEANY_PIXMAPS_DIR@/geany.png
 Terminal=false

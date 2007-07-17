@@ -1,5 +1,6 @@
 # List of source files containing translatable strings.
 
+geany.desktop.in
 src/about.c
 src/build.c
 src/callbacks.c
