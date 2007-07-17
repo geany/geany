@@ -203,6 +203,7 @@ gint utils_get_local_tag(gint idx, const gchar *qual_name)
 }
 
 
+// line is counted with 1 as the first line, not 0
 gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line)
 {
 	gint file_idx = document_find_by_filename(file, is_tm_filename);
@@ -213,6 +214,7 @@ gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint l
 }
 
 
+// line is counted with 1 as the first line, not 0
 gboolean utils_goto_line(gint idx, gint line)
 {
 	gint page_num;

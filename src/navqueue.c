@@ -35,10 +35,10 @@
 // for the navigation history queue
 typedef struct
 {
-	gchar *file;
+	gchar *file;	// this is the tagmanager filename, not document::file_name
 	/// TODO maybe it is better to work on positions than on lines to be more accurate when
 	/// switching back or forward, sci_get_position_from_line() could be used for tm_tag lines
-	gint line;
+	gint line;	// line is counted with 1 as the first line, not 0
 } filepos;
 
 GQueue *navigation_queue;
@@ -86,13 +86,29 @@ static void adjust_buttons()
 }
 
 
-void navqueue_new_position(gchar *file, gint line)
+static gboolean
+queue_pos_matches(guint queue_pos, const gchar *fname, gint line)
+{
+	if (queue_pos < g_queue_get_length(navigation_queue))
+	{
+		filepos *fpos = g_queue_peek_nth(navigation_queue, queue_pos);
+
+		return (utils_str_equal(fpos->file, fname) && fpos->line == line);
+	}
+	return FALSE;
+}
+
+
+void navqueue_new_position(gchar *tm_filename, gint line)
 {
 	filepos *npos;
 	guint i;
 
+	if (queue_pos_matches(nav_queue_pos, tm_filename, line))
+		return;	// prevent duplicates
+
 	npos = g_new0(filepos, 1);
-	npos->file = file;
+	npos->file = tm_filename;
 	npos->line = line;
 
 	// if we've jumped to a new position from
@@ -108,6 +124,30 @@ void navqueue_new_position(gchar *file, gint line)
 	/// TODO add check to not add an entry if "Go To Defintion" on a definition is used
 	g_queue_push_head(navigation_queue, npos);
 	adjust_buttons();
+}
+
+
+/* line is counted with 1 as the first line, not 0. */
+gboolean navqueue_append(gint new_idx, gint line)
+{
+	gint old_idx = document_get_cur_idx();
+
+	g_return_val_if_fail(DOC_IDX_VALID(old_idx), FALSE);
+	g_return_val_if_fail(DOC_IDX_VALID(new_idx), FALSE);
+	g_return_val_if_fail(line >= 1, FALSE);
+
+	// first add old file as old position
+	if (doc_list[old_idx].tm_file)
+	{
+		gint cur_line = sci_get_current_line(doc_list[old_idx].sci, -1);
+
+		navqueue_new_position(doc_list[old_idx].tm_file->file_name, cur_line + 1);
+	}
+
+	g_return_val_if_fail(doc_list[new_idx].tm_file, FALSE);
+
+	navqueue_new_position(doc_list[new_idx].tm_file->file_name, line);
+	return TRUE;
 }
 
 

@@ -35,6 +35,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 #include "symbols.h"
+#include "navqueue.h"
 
 
 enum
@@ -479,7 +480,10 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 		if (string && (strlen(string) > 0))
 		{
 			gint idx = document_get_cur_idx();
-			utils_goto_line(idx, utils_get_local_tag(idx, string));
+			gint line = utils_get_local_tag(idx, string);
+
+			navqueue_append(idx, line);
+			utils_goto_line(idx, line);
 			g_free(string);
 		}
 	}

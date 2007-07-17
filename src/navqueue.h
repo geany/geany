@@ -29,7 +29,11 @@ void navqueue_init();
 
 void navqueue_free();
 
-void navqueue_new_position(gchar *file, gint line);
+
+void navqueue_new_position(gchar *tm_filename, gint line);
+
+gboolean navqueue_append(gint new_idx, gint line);
+
 
 void navqueue_go_back();
 

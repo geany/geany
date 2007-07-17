@@ -4,6 +4,11 @@
    src/document.h:
    Move font & file open/save dialog callbacks to dialogs.c.
    Add document_clone() in document.c (for Save As open in new tab).
+ * src/utils.c, src/navqueue.c, src/navqueue.h, src/treeviews.c:
+   Add a navigation queue position when clicking on symbol list items.
+   Prevent duplicates in the navigation queue.
+   Add navqueue_append() which adds the current document position to the
+   queue before adding the new position.
 
 
 2007-07-17  Enrico Tröger  <enrico.troeger@uvena.de>
