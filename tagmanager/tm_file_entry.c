@@ -62,7 +62,7 @@ static TMFileType tm_file_entry_type(const char *path)
 	struct stat s;
 
 #ifndef G_OS_WIN32
-	if (0 != lstat(path, &s))
+	if (0 != g_lstat(path, &s))
 		return tm_file_unknown_t;
 #endif
 	if S_ISDIR(s.st_mode)
@@ -163,7 +163,7 @@ TMFileEntry *tm_file_entry_new(const char *path, TMFileEntry *parent
 				return NULL;
 			}
 			g_snprintf(file_name, PATH_MAX, "%s/CVS/Entries", entry->path);
-			if (0 == stat(file_name, &s))
+			if (0 == g_stat(file_name, &s))
 			{
 				if (S_ISREG(s.st_mode))
 				{

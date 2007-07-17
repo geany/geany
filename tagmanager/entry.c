@@ -248,7 +248,7 @@ static long unsigned int updatePseudoTags (FILE *const fp)
 static boolean isTagFile (const char *const filename)
 {
     boolean ok = FALSE;			/* we assume not unless confirmed */
-    FILE *const fp = fopen (filename, "rb");
+    FILE *const fp = g_fopen (filename, "rb");
 
     if (fp == NULL  &&  errno == ENOENT)
 	ok = TRUE;
@@ -284,12 +284,12 @@ extern void copyBytes (FILE* const fromFp, FILE* const toFp, const long size)
 
 extern void copyFile (const char *const from, const char *const to, const long size)
 {
-    FILE* const fromFp = fopen (from, "rb");
+    FILE* const fromFp = g_fopen (from, "rb");
     if (fromFp == NULL)
 	error (FATAL | PERROR, "cannot open file to copy");
     else
     {
-	FILE* const toFp = fopen (to, "wb");
+	FILE* const toFp = g_fopen (to, "wb");
 	if (toFp == NULL)
 	    error (FATAL | PERROR, "cannot open copy destination");
 	else
@@ -327,17 +327,17 @@ extern void openTagFile (void)
 
     if (Option.append  &&  fileExists)
     {
-	TagFile.fp = fopen (TagFile.name, "r+");
+	TagFile.fp = g_fopen (TagFile.name, "r+");
 	if (TagFile.fp != NULL)
 	{
 	    TagFile.numTags.prev = updatePseudoTags (TagFile.fp);
 	    fclose (TagFile.fp);
-	    TagFile.fp = fopen (TagFile.name, "a+");
+	    TagFile.fp = g_fopen (TagFile.name, "a+");
 	}
     }
     else
     {
-	TagFile.fp = fopen (TagFile.name, "w");
+	TagFile.fp = g_fopen (TagFile.name, "w");
 	if (TagFile.fp != NULL)
 	    addPseudoTags ();
     }

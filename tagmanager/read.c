@@ -250,7 +250,7 @@ extern boolean fileOpen (const char *const fileName, const langType language)
 	File.fp = NULL;
     }
 
-    File.fp = fopen (fileName, openMode);
+    File.fp = g_fopen (fileName, openMode);
     if (File.fp == NULL)
 	error (WARNING | PERROR, "cannot open \"%s\"", fileName);
     else

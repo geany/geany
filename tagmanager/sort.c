@@ -36,7 +36,7 @@
 
 extern void catFile (const char *const name)
 {
-    FILE *const fp = fopen (name, "r");
+    FILE *const fp = g_fopen (name, "r");
 
     if (fp != NULL)
     {
@@ -135,7 +135,7 @@ static void writeSortedTags (char **const table, const size_t numTags,
 	fp = stdout;
     else
     {
-	fp = fopen (tagFileName (), "w");
+	fp = g_fopen (tagFileName (), "w");
 	if (fp == NULL)
 	    failedSort (fp, NULL);
     }
@@ -173,7 +173,7 @@ extern void internalSortTags (const boolean toStdout)
 
     /*	Open the tag file and place its lines into allocated buffers.
      */
-    fp = fopen (tagFileName (), "r");
+    fp = g_fopen (tagFileName (), "r");
     if (fp == NULL)
 	failedSort (fp, NULL);
     for (i = 0  ;  i < numTags  &&  ! feof (fp)  ;  )

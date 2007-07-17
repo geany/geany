@@ -145,7 +145,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 	FILE *fp;
 	TMTag *tag;
 
-	if (NULL == (fp = fopen(tags_file, "r")))
+	if (NULL == (fp = g_fopen(tags_file, "r")))
 		return FALSE;
 	if (NULL == theWorkspace)
 		tm_create_workspace();
@@ -166,7 +166,7 @@ static guint tm_file_inode_hash(gconstpointer key)
 {
 	struct stat file_stat;
 	const char *filename = (const char*)key;
-	if (stat(filename, &file_stat) == 0)
+	if (g_stat(filename, &file_stat) == 0)
 	{
 #ifdef TM_DEBUG
 		g_message ("Hash for '%s' is '%d'\n", filename, file_stat.st_ino);
@@ -270,7 +270,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	char *temp_file2 = g_strdup_printf("%s/%d_%ld_2.cpp", P_tmpdir, getpid(), time(NULL));
 #endif
 
-	if (NULL == (fp = fopen(temp_file, "w")))
+	if (NULL == (fp = g_fopen(temp_file, "w")))
 		return FALSE;
 
 	includes_files_hash = g_hash_table_new_full (tm_file_inode_hash,
@@ -401,7 +401,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		tm_source_file_free(source_file);
 		return FALSE;
 	}
-	if (NULL == (fp = fopen(tags_file, "w")))
+	if (NULL == (fp = g_fopen(tags_file, "w")))
 	{
 		tm_source_file_free(source_file);
 		return FALSE;

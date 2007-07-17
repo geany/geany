@@ -941,7 +941,7 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 	gchar *tmp;
 #endif
 
-	fp = fopen(fname, "w");
+	fp = g_fopen(fname, "w");
 	if (! fp) return FALSE;
 
 #ifdef G_OS_WIN32

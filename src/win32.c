@@ -29,6 +29,8 @@
 
 #ifdef G_OS_WIN32
 
+#define VC_EXTRALEAN
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <commdlg.h>
 #include <shlobj.h>

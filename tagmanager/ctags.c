@@ -427,7 +427,7 @@ extern long unsigned int getFileSize (const char *const name)
     struct stat fileStatus;
     unsigned long size = 0;
 
-    if (stat (name, &fileStatus) == 0)
+    if (g_stat (name, &fileStatus) == 0)
 	size = fileStatus.st_size;
 
     return size;
@@ -442,7 +442,7 @@ static boolean isSymbolicLink (const char *const name)
     struct stat fileStatus;
     boolean result = FALSE;
 
-    if (lstat (name, &fileStatus) == 0)
+    if (g_lstat (name, &fileStatus) == 0)
 	result = (boolean) (S_ISLNK (fileStatus.st_mode));
 
     return result;
@@ -454,7 +454,7 @@ static boolean isNormalFile (const char *const name)
     struct stat fileStatus;
     boolean result = FALSE;
 
-    if (stat (name, &fileStatus) == 0)
+    if (g_stat (name, &fileStatus) == 0)
 	result = (boolean) (S_ISREG (fileStatus.st_mode));
 
     return result;
@@ -466,7 +466,7 @@ extern boolean isExecutable (const char *const name)
     struct stat fileStatus;
     boolean result = FALSE;
 
-    if (stat (name, &fileStatus) == 0)
+    if (g_stat (name, &fileStatus) == 0)
 	result = (boolean) ((fileStatus.st_mode & (S_IXUSR|S_IXGRP|S_IXOTH)) != 0);
 
     return result;
@@ -478,7 +478,7 @@ extern boolean isSameFile (const char *const name1, const char *const name2)
 #ifdef HAVE_STAT_ST_INO
     struct stat stat1, stat2;
 
-    if (stat (name1, &stat1) == 0  &&  stat (name2, &stat2) == 0)
+    if (g_stat (name1, &stat1) == 0  &&  g_stat (name2, &stat2) == 0)
 	result = (boolean) (stat1.st_ino == stat2.st_ino);
 #endif
     return result;
@@ -494,7 +494,7 @@ static boolean isSetUID (const char *const name)
     struct stat fileStatus;
     boolean result = FALSE;
 
-    if (stat (name, &fileStatus) == 0)
+    if (g_stat (name, &fileStatus) == 0)
 	result = (boolean) ((fileStatus.st_mode & S_ISUID) != 0);
 
     return result;
@@ -525,7 +525,7 @@ static boolean isDirectory (const char *const name)
 #else
     struct stat fileStatus;
 
-    if (stat (name, &fileStatus) == 0)
+    if (g_stat (name, &fileStatus) == 0)
 	result = (boolean) S_ISDIR (fileStatus.st_mode);
 #endif
     return result;
@@ -536,7 +536,7 @@ extern boolean doesFileExist (const char *const fileName)
 {
     struct stat fileStatus;
 
-    return (boolean) (stat (fileName, &fileStatus) == 0);
+    return (boolean) (g_stat (fileName, &fileStatus) == 0);
 }
 
 //#ifndef HAVE_FGETPOS
@@ -1194,7 +1194,7 @@ static boolean createTagsFromListFile (const char* const fileName)
 	resize = createTagsFromFileInput (stdin, FALSE);
     else
     {
-	FILE* const fp = fopen (fileName, "r");
+	FILE* const fp = g_fopen (fileName, "r");
 	if (fp == NULL)
 	    error (FATAL | PERROR, "cannot open list file \"%s\"", fileName);
 	resize = createTagsFromFileInput (fp, FALSE);

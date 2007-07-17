@@ -72,7 +72,7 @@ gboolean tm_project_init(TMProject *project, const char *dir
 		  , tm_project_find_file);
 	}
 
-	if ((0 != stat(dir, &s)) || (!S_ISDIR(s.st_mode)))
+	if ((0 != g_stat(dir, &s)) || (!S_ISDIR(s.st_mode)))
 	{
 		g_warning("%s: Not a valid directory", dir);
 		return FALSE;
@@ -88,7 +88,7 @@ gboolean tm_project_init(TMProject *project, const char *dir
 		project->ignore = s_ignore;
 	project->file_list = NULL;
 	g_snprintf(path, PATH_MAX, "%s/%s", project->dir, TM_FILE_NAME);
-	if ((0 != stat(path, &s)) || (0 == s.st_size))
+	if ((0 != g_stat(path, &s)) || (0 == s.st_size))
 		force = TRUE;
 	if (FALSE == tm_work_object_init(&(project->work_object),
 		  project_class_id, path, force))
@@ -352,7 +352,7 @@ static void tm_project_set_ignorelist(TMProject *project)
 {
 	struct stat s;
 	char *ignore_file = g_strconcat(project->dir, "/", IGNORE_FILE, NULL);
-	if (0 == stat(ignore_file, &s))
+	if (0 == g_stat(ignore_file, &s))
 	{
 		if (NULL != Option.ignore)
 			stringListClear(Option.ignore);
@@ -373,7 +373,7 @@ gboolean tm_project_open(TMProject *project, gboolean force)
 	g_message("Opening project %s", project->work_object.file_name);
 #endif
 	tm_project_set_ignorelist(project);
-	if (NULL == (fp = fopen(project->work_object.file_name, "r")))
+	if (NULL == (fp = g_fopen(project->work_object.file_name, "r")))
 		return FALSE;
 	while (NULL != (tag = tm_tag_new_from_file(source_file, fp, 0)))
 	{
@@ -443,7 +443,7 @@ gboolean tm_project_save(TMProject *project)
 
 	if (!project)
 		return FALSE;
-	if (NULL == (fp = fopen(project->work_object.file_name, "w")))
+	if (NULL == (fp = g_fopen(project->work_object.file_name, "w")))
 	{
 		g_warning("Unable to save project %s", project->work_object.file_name);
 		return FALSE;

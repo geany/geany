@@ -14,11 +14,42 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#ifdef G_OS_WIN32
+# define VC_EXTRALEAN
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h> /* for GetFullPathName */
+#endif
 
 #include "tm_tag.h"
 #include "tm_work_object.h"
 
 static GPtrArray *s_work_object_subclasses = NULL;
+
+#ifdef G_OS_WIN32
+/* realpath implementation for Windows found at http://bugzilla.gnome.org/show_bug.cgi?id=342926
+ * this one is better than e.g. liberty's lrealpath because this one uses Win32 API and works
+ * with special chars within the filename */
+static char *realpath (const char *pathname, char resolved_path[PATH_MAX])
+{
+  int size;
+
+  if (resolved_path != NULL)
+  {
+    size = GetFullPathNameA (pathname, PATH_MAX, resolved_path, NULL);
+    if (size > PATH_MAX)
+      return NULL;
+    else
+      return resolved_path;
+  }
+  else
+  {
+    size = GetFullPathNameA (pathname, 0, NULL, NULL);
+    resolved_path = g_new0 (char, size);
+    GetFullPathNameA (pathname, size, resolved_path, NULL);
+    return resolved_path;
+  }
+}
+#endif
 
 gchar *tm_get_real_path(const gchar *file_name)
 {
@@ -26,11 +57,7 @@ gchar *tm_get_real_path(const gchar *file_name)
 	{
 		gchar path[PATH_MAX+1];
 		memset(path, '\0', PATH_MAX+1);
-#ifdef G_OS_WIN32
-		return lrealpath(file_name);
-#else
 		realpath(file_name, path);
-#endif
 		return g_strdup(path);
 	}
 	else
@@ -63,18 +90,18 @@ gboolean tm_work_object_init(TMWorkObject *work_object, guint type, const char *
 	struct stat s;
 	int status;
 
-	if (0 != (status = stat(file_name, &s)))
+	if (0 != (status = g_stat(file_name, &s)))
 	{
 		if (create)
 		{
 			FILE *f;
-			if (NULL == (f = fopen(file_name, "a+")))
+			if (NULL == (f = g_fopen(file_name, "a+")))
 			{
 				g_warning("Unable to create file %s", file_name);
 				return FALSE;
 			}
 			fclose(f);
-			status = stat(file_name, &s);
+			status = g_stat(file_name, &s);
 		}
 	}
 	if (0 != status)
@@ -106,7 +133,7 @@ time_t tm_get_file_timestamp(const char *file_name)
 
 	g_return_val_if_fail(file_name, 0);
 
-	if (0 != stat(file_name, &s))
+	if (0 != g_stat(file_name, &s))
 	{
 		/*g_warning("Unable to stat %s", file_name);*/
 		return (time_t) 0;

@@ -372,7 +372,7 @@ static void processLanguageRegex (const langType language,
     else
     {
 	const char* regexfile = parameter + 1;
-	FILE* const fp = fopen (regexfile, "r");
+	FILE* const fp = g_fopen (regexfile, "r");
 	if (fp == NULL)
 	    error (WARNING | PERROR, regexfile);
 	else

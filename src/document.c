@@ -1054,10 +1054,10 @@ gboolean document_save_file(gint idx, gboolean force)
 		len = strlen(data);
 	}
 #ifdef G_OS_WIN32
-	fp = fopen(doc_list[idx].file_name, "wb"); // this should fix the windows \n problem
+	fp = g_fopen(doc_list[idx].file_name, "wb"); // this should fix the windows \n problem
 #else
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-	fp = fopen(locale_filename, "w");
+	fp = g_fopen(locale_filename, "w");
 	g_free(locale_filename);
 #endif
 	if (fp == NULL)
@@ -1538,10 +1538,15 @@ void document_update_tag_list(gint idx, gboolean update)
 
 	if (doc_list[idx].tm_file == NULL)
 	{
+#ifdef GEANY_OS_WIN32
+		doc_list[idx].tm_file = tm_source_file_new(
+				doc_list[idx].file_name, FALSE, doc_list[idx].file_type->name);
+#else
 		gchar *locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-		doc_list[idx].tm_file = tm_source_file_new(locale_filename, FALSE,
-												   doc_list[idx].file_type->name);
+		doc_list[idx].tm_file = tm_source_file_new(
+				locale_filename, FALSE, doc_list[idx].file_type->name);
 		g_free(locale_filename);
+#endif
 		if (! doc_list[idx].tm_file) return;
 		tm_workspace_add_object(doc_list[idx].tm_file);
 		if (update)

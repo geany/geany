@@ -17,6 +17,16 @@
    when running make.
  * src/win32.c: Fix creation of wrong hex colours when inserting colours
                 from the colour chooser dialog.
+ * tagmanager/ctags.c, tagmanager/entry.c, tagmanager/tm_source_file.c,
+   tagmanager/strlist.c, tagmanager/tm_project.c, tagmanager/sort.c,
+   tagmanager/tm_work_object.c, tagmanager/read.c, tagmanager/regex.c,
+   tagmanager/tm_workspace.c, tagmanager/parse.c,
+   tagmanager/tm_file_entry.c, src/build.c, src/document.c, src/utils.c:
+   Always use g_fopen() and g_stat() instead of fopen() and stat() to
+   fix several problems with filenames containing special characters on
+   Windows.
+   Use GetFullPathName() instead of lrealpath() to get Tagmanager
+   working on files containing special characters on Windows.
 
 
 2007-07-16  Enrico Tröger  <enrico.troeger@uvena.de>

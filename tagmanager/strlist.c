@@ -91,7 +91,7 @@ extern stringList* stringListNewFromArgv (const char* const* const argv)
 extern stringList* stringListNewFromFile (const char* const fileName)
 {
 	stringList* result = NULL;
-	FILE* const fp = fopen (fileName, "r");
+	FILE* const fp = g_fopen (fileName, "r");
 	if (fp != NULL)
 	{
 		result = stringListNew ();

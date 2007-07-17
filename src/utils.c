@@ -249,7 +249,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 
 	len = strlen(text);
 
-	fp = fopen(filename, "w");
+	fp = g_fopen(filename, "w");
 	if (fp != NULL)
 	{
 		bytes_written = fwrite(text, sizeof (gchar), len, fp);
