@@ -18,6 +18,7 @@
 #ifdef HAVE_FNMATCH_H
 # include <fnmatch.h>
 #endif
+#include <glib/gstdio.h>
 
 
 #include "options.h"

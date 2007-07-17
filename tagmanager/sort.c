@@ -19,6 +19,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #include "entry.h"
 #include "main.h"

@@ -16,6 +16,7 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <glib/gstdio.h>
 
 #define FILE_WRITE
 #include "read.h"

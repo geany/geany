@@ -17,6 +17,7 @@
 #include <ctype.h>	/* to define isspace () */
 #include <errno.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #if defined (HAVE_SYS_TYPES_H)
 # include <sys/types.h>	    /* to declare off_t on some hosts */

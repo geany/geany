@@ -1085,7 +1085,7 @@ gboolean document_save_file(gint idx, gboolean force)
 	// ignore the following things if we are quitting
 	if (! app->quitting)
 	{
-		gchar *basename = g_path_get_basename(doc_list[idx].file_name);
+		gchar *base_name = g_path_get_basename(doc_list[idx].file_name);
 
 		// set line numbers again, to reset the margin width, if
 		// there are more lines than before
@@ -1103,11 +1103,11 @@ gboolean document_save_file(gint idx, gboolean force)
 		}
 		document_set_filetype(idx, doc_list[idx].file_type);
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
-		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), basename);
-		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), basename);
+		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), base_name);
+		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), base_name);
 		msgwin_status_add(_("File %s saved."), doc_list[idx].file_name);
 		ui_update_statusbar(idx, -1);
-		g_free(basename);
+		g_free(base_name);
 #ifdef HAVE_VTE
 		vte_cwd(doc_list[idx].file_name, FALSE);
 #endif

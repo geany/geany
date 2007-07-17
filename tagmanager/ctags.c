@@ -21,6 +21,7 @@
 */
 #include "general.h"	/* must always come first */
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #ifdef HAVE_STDLIB_H
 # include <stdlib.h>		/* to declare malloc (), realloc () */

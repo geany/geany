@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <glib/gstdio.h>
 #ifdef G_OS_WIN32
 # define VC_EXTRALEAN
 # define WIN32_LEAN_AND_MEAN

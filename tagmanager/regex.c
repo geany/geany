@@ -27,6 +27,7 @@
 # endif
 # include "regex.h"
 #endif
+#include <glib/gstdio.h>
 
 #include "entry.h"
 #include "main.h"

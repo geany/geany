@@ -19,6 +19,7 @@
 #ifdef HAVE_GLOB_H
 # include <glob.h>
 #endif
+#include <glib/gstdio.h>
 // handling of P_tmpdir, should be something like /tmp, take the root directory under Win32,
 // and assume /tmp on non-Win32 systems where P_tmpdir is not set
 #ifndef P_tmpdir

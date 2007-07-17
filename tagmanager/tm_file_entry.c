@@ -22,6 +22,7 @@
 #ifdef HAVE_FNMATCH_H
 # include <fnmatch.h>
 #endif
+#include <glib/gstdio.h>
 
 #include "tm_work_object.h"
 #include "tm_file_entry.h"
