@@ -133,6 +133,8 @@ gboolean document_remove(guint page_num);
    filename is expected in UTF-8 encoding. */
 gint document_new_file(const gchar *filename, filetype *ft);
 
+gint document_clone(gint old_idx, const gchar *utf8_filename);
+
 
 /* To open a new file, set idx to -1; filename should be locale encoded.
  * To reload a file, set the idx for the document to be reloaded; filename should be NULL.
@@ -159,6 +161,7 @@ gint document_reload_file(gint idx, const gchar *forced_enc);
  * When force is set then it is always saved, even if it is unchanged(useful when using Save As)
  * It returns whether the file could be saved or not. */
 gboolean document_save_file(gint idx, gboolean force);
+
 
 gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gboolean inc);
 

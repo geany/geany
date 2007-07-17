@@ -52,11 +52,106 @@
 #include "ui_utils.h"
 #include "keybindings.h"
 #include "encodings.h"
+#include "build.h"
 
 
 #if ! GEANY_USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget();
-static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+#endif
+
+
+#if ! GEANY_USE_WIN32_DIALOG
+static void
+on_file_open_dialog_response           (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data)
+{
+	gtk_widget_hide(app->open_filesel);
+
+	if (response == GTK_RESPONSE_ACCEPT || response == GTK_RESPONSE_APPLY)
+	{
+		GSList *filelist;
+		gint filetype_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
+						lookup_widget(GTK_WIDGET(dialog), "filetype_combo")));
+		gint encoding_idx = gtk_combo_box_get_active(GTK_COMBO_BOX(
+						lookup_widget(GTK_WIDGET(dialog), "encoding_combo")));
+		filetype *ft = NULL;
+		gchar *charset = NULL;
+		gboolean ro = (response == GTK_RESPONSE_APPLY);	// View clicked
+
+		if (filetype_idx >= 0 && filetype_idx < GEANY_FILETYPES_ALL) ft = filetypes[filetype_idx];
+		if (encoding_idx >= 0 && encoding_idx < GEANY_ENCODINGS_MAX)
+			charset = encodings[encoding_idx].charset;
+
+		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(app->open_filesel));
+		if (filelist != NULL)
+		{
+			document_open_files(filelist, ro, ft, charset);
+			g_slist_foreach(filelist, (GFunc) g_free, NULL);	// free filenames
+		}
+		g_slist_free(filelist);
+	}
+}
+#endif
+
+
+#if ! GEANY_USE_WIN32_DIALOG
+// callback for the text entry for typing in filename
+static void
+on_file_open_entry_activate            (GtkEntry        *entry,
+                                        gpointer         user_data)
+{
+	gchar *locale_filename = utils_get_locale_from_utf8(gtk_entry_get_text(entry));
+
+	if (g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
+	{
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
+	}
+	else if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	{
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->open_filesel), locale_filename);
+		on_file_open_dialog_response(GTK_DIALOG(app->open_filesel), GTK_RESPONSE_ACCEPT, NULL);
+	}
+
+	g_free(locale_filename);
+}
+#endif
+
+
+#if ! GEANY_USE_WIN32_DIALOG
+static void
+on_file_open_selection_changed         (GtkFileChooser  *filechooser,
+                                        gpointer         user_data)
+{
+	gchar *filename = gtk_file_chooser_get_filename(filechooser);
+	gboolean is_on = gtk_file_chooser_get_show_hidden(filechooser);
+
+	if (filename)
+	{
+		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
+		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+
+		gtk_entry_set_text(GTK_ENTRY(lookup_widget(
+				GTK_WIDGET(filechooser), "file_entry")), utf8_filename);
+		g_free(utf8_filename);
+		g_free(filename);
+	}
+
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
+			lookup_widget(GTK_WIDGET(filechooser), "check_hidden")), is_on);
+}
+#endif
+
+
+#if ! GEANY_USE_WIN32_DIALOG
+static void
+on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
+                                        gpointer         user_data)
+{
+	gboolean is_on = gtk_toggle_button_get_active(togglebutton);
+
+	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(app->open_filesel), is_on);
+}
 #endif
 
 
@@ -172,7 +267,7 @@ void dialogs_show_open_file ()
 }
 
 
-#ifndef USE_WIN32_DIALOG
+#if ! GEANY_USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget()
 {
 	GtkWidget *vbox, *table, *file_entry, *check_hidden;
@@ -261,6 +356,95 @@ static GtkWidget *add_file_open_extra_widget()
 				gtk_widget_ref(encoding_combo), (GDestroyNotify)gtk_widget_unref);
 
 	return vbox;
+}
+#endif
+
+
+#if ! GEANY_USE_WIN32_DIALOG
+static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gtk_widget_set_sensitive(GTK_WIDGET(user_data),
+		! gtk_toggle_button_get_active(togglebutton));
+}
+#endif
+
+
+#if ! GEANY_USE_WIN32_DIALOG
+static void
+on_file_save_dialog_response           (GtkDialog *dialog,
+                                        gint response,
+                                        gpointer user_data)
+{
+	gboolean rename_file = FALSE;
+
+	switch (response)
+	{
+		case GTK_RESPONSE_APPLY:
+			rename_file = TRUE;
+			// fall through
+
+		case GTK_RESPONSE_ACCEPT:
+		{
+			gint idx = document_get_cur_idx();
+			gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app->save_filesel));
+			gchar *utf8_filename;
+			gboolean open_new_tab = gtk_toggle_button_get_active(
+					GTK_TOGGLE_BUTTON(lookup_widget(app->save_filesel, "check_open_new_tab")));
+
+#ifdef G_OS_WIN32
+			utf8_filename = g_strdup(new_filename);
+#else
+			utf8_filename = utils_get_utf8_from_locale(new_filename);
+#endif
+			// check if file exists and ask whether to overwrite or not
+			if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
+			{
+				if (dialogs_show_question(
+					_("The file '%s' already exists. Do you want to overwrite it?"),
+					utf8_filename) == FALSE)
+					return;
+			}
+
+			if (open_new_tab)
+			{	// "open" the saved file in a new tab
+				idx = document_clone(idx, utf8_filename);
+				g_free(utf8_filename);
+			}
+			else
+			{
+				if (doc_list[idx].file_name != NULL)
+				{
+					if (rename_file)
+					{	// delete the previous file name
+#ifdef G_OS_WIN32
+						g_unlink(doc_list[idx].file_name);
+#else
+						gchar *old_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+
+						g_unlink(old_filename);
+						g_free(old_filename);
+#endif
+					}
+					// create a new tm_source_file object otherwise tagmanager won't work correctly
+					tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+					doc_list[idx].tm_file = NULL;
+					g_free(doc_list[idx].file_name);
+				}
+				doc_list[idx].file_name = utf8_filename;
+			}
+			utils_replace_filename(idx);
+			document_save_file(idx, TRUE);
+
+			if (! open_new_tab)
+				build_menu_update(idx);
+
+			// finally add current file to recent files menu
+			ui_add_recent_file(doc_list[idx].file_name);
+
+			g_free(new_filename);
+		}
+	}
+	gtk_widget_hide(app->save_filesel);
 }
 #endif
 
@@ -465,6 +649,37 @@ gboolean dialogs_show_unsaved_file(gint idx)
 	}
 
 	return (gboolean) ret;
+}
+
+
+static void
+on_font_apply_button_clicked           (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	gchar *fontname;
+
+	fontname = gtk_font_selection_dialog_get_font_name(
+		GTK_FONT_SELECTION_DIALOG(app->open_fontsel));
+	ui_set_editor_font(fontname);
+	g_free(fontname);
+}
+
+
+static void
+on_font_ok_button_clicked              (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	// We do the same thing as apply, but we close the dialog after.
+	on_font_apply_button_clicked(button, NULL);
+	gtk_widget_hide(app->open_fontsel);
+}
+
+
+static void
+on_font_cancel_button_clicked         (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	gtk_widget_hide(app->open_fontsel);
 }
 
 
@@ -1149,8 +1364,3 @@ gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, con
 }
 
 
-static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer user_data)
-{
-	gtk_widget_set_sensitive(GTK_WIDGET(user_data),
-		! gtk_toggle_button_get_active(togglebutton));
-}

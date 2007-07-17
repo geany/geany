@@ -2308,3 +2308,39 @@ void document_insert_colour(gint idx, const gchar *colour)
 	else
 		sci_add_text(doc_list[idx].sci, colour);
 }
+
+
+gint document_clone(gint old_idx, const gchar *utf8_filename)
+{
+	// create a new file and copy file content and properties
+	gint len, idx;
+	gchar *data;
+
+	// use old file type (or maybe NULL for auto detect would be better?)
+	idx = document_new_file(utf8_filename, doc_list[old_idx].file_type);
+
+	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
+	sci_empty_undo_buffer(doc_list[idx].sci);
+
+	len = sci_get_length(doc_list[old_idx].sci) + 1;
+	data = (gchar*) g_malloc(len);
+	sci_get_text(doc_list[old_idx].sci, len, data);
+
+	sci_set_text(doc_list[idx].sci, data);
+
+	// copy file properties
+	doc_list[idx].line_breaking = doc_list[old_idx].line_breaking;
+	doc_list[idx].readonly = doc_list[old_idx].readonly;
+	doc_list[idx].has_bom = doc_list[old_idx].has_bom;
+	document_set_encoding(idx, doc_list[old_idx].encoding);
+	sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_breaking);
+	sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
+	sci_set_undo_collection(doc_list[idx].sci, TRUE);
+
+	ui_document_show_hide(idx);
+
+	g_free(data);
+	return idx;
+}
+
+

@@ -1,3 +1,11 @@
+2007-07-17  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/dialogs.c, src/callbacks.c, src/callbacks.h, src/document.c,
+   src/document.h:
+   Move font & file open/save dialog callbacks to dialogs.c.
+   Add document_clone() in document.c (for Save As open in new tab).
+
+
 2007-07-17  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/editor.c:

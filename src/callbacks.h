@@ -89,20 +89,10 @@ on_toolbutton23_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
 
 void
-on_file_open_dialog_response           (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data);
-
-void
 on_notebook1_switch_page               (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
                                         guint            page_num,
                                         gpointer         user_data);
-
-void
-on_file_save_dialog_response           (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data);
 
 void
 on_color_ok_button_clicked             (GtkButton       *button,
@@ -113,23 +103,11 @@ on_color_cancel_button_clicked         (GtkButton       *button,
                                         gpointer         user_data);
 
 void
-on_font_cancel_button_clicked          (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
 on_save_all1_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
 on_close1_activate                     (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_font_ok_button_clicked              (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-on_font_apply_button_clicked           (GtkButton       *button,
                                         gpointer         user_data);
 
 gboolean
@@ -391,14 +369,6 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void
-on_file_open_selection_changed         (GtkFileChooser  *filechooser,
-                                        gpointer         user_data);
-
-void
-on_file_open_entry_activate            (GtkEntry        *entry,
-                                        gpointer         user_data);
-
-void
 on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
@@ -408,10 +378,6 @@ on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
 
 void
 on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
-                                        gpointer         user_data);
-
-void
-on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
                                         gpointer         user_data);
 
 void
