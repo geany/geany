@@ -41,6 +41,9 @@
    Use GetFullPathName() instead of lrealpath() to get Tagmanager
    working on files containing special characters on Windows.
  * configure.in: Fix broken configure when using autoconf < 2.60.
+ * doc/geany.docbook, src/editor.c, src/editor.h, src/keybindings.c,
+   src/keybindings.h:
+   Add keybinding for scroll to current line.
 
 
 2007-07-16  Enrico Tröger  <enrico.troeger@uvena.de>

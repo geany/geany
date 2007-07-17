@@ -160,7 +160,7 @@ static void on_update_ui(gint idx, G_GNUC_UNUSED SCNotification *nt)
 	 * http://scintilla.sourceforge.net/ScintillaDoc.html#LineWrapping */
 	if (doc_list[idx].scroll_percent > 0.0F)
 	{
-		scroll_to_line(sci, -1, doc_list[idx].scroll_percent);
+		editor_scroll_to_line(sci, -1, doc_list[idx].scroll_percent);
 		doc_list[idx].scroll_percent = -1.0F;	// disable further scrolling
 	}
 #if 0
@@ -2262,7 +2262,7 @@ void editor_insert_multiline_comment(gint idx)
 
 /* Scroll the view to make line appear at percent_of_view.
  * line can be -1 to use the current position. */
-static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view)
+void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view)
 {
 	gint vis1, los, delta;
 	GtkWidget *wid = GTK_WIDGET(sci);

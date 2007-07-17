@@ -147,6 +147,8 @@ void editor_auto_line_indentation(gint idx, gint pos);
 
 void editor_indentation_by_one_space(gint idx, gint pos, gboolean decrease);
 
+void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view);
+
 void editor_finalize();
 
 #endif

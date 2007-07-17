@@ -1973,7 +1973,14 @@ widget "GeanyPrefsDialog" style "geanyStyle"
 							</row>
 							<row>
 								<entry>Select current line</entry>
-								<entry>Selects the current line under the cursor..
+								<entry>Selects the current line under the cursor.
+								</entry>
+							</row>
+							<row>
+								<entry>Scroll to current line</entry>
+								<entry>Scrolls the current line into the centre of the view.
+									   The cursor position and or an existing selection will not
+									   be changed.
 								</entry>
 							</row>
 							<row>

@@ -308,6 +308,8 @@ void keybindings_init(void)
 		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("Select current line"));
 	keys[GEANY_KEYS_EDIT_SELECTPARAGRAPH] = fill(cb_func_edit,
 		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("Select current paragraph"));
+	keys[GEANY_KEYS_EDIT_SCROLLTOLINE] = fill(cb_func_edit,
+		GDK_l, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_scrolltoline", _("Scroll to current line"));
 
 	keys[GEANY_KEYS_EDIT_INSERTALTWHITESPACE] = fill(cb_func_edit,
 		0, 0, "edit_insertwhitespace", _("Insert alternative whitespace"));
@@ -1088,6 +1090,9 @@ static void cb_func_edit(guint key_id)
 
 	switch (key_id)
 	{
+		case GEANY_KEYS_EDIT_SCROLLTOLINE:
+			editor_scroll_to_line(doc_list[idx].sci, -1, 0.5F);
+			break;
 		case GEANY_KEYS_EDIT_DUPLICATELINE:
 			on_menu_duplicate_line1_activate(NULL, NULL);
 			break;
