@@ -1,3 +1,11 @@
+2007-07-17  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/editor.c:
+   Improve selection handling when decreasing indent by one space.
+   Avoid using SCI_DELETEBACK for simple text removal.
+   Fix a typo in is_doc_comment_char().
+
+
 2007-07-16  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/document.c, src/editor.c:

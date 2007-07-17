@@ -1549,8 +1549,8 @@ gint editor_do_uncomment(gint idx, gint line, gboolean toggle)
 						continue;
 				}
 
-				SSM(doc_list[idx].sci, SCI_GOTOPOS, line_start + x + co_len, 0);
-				for (j = 0; j < co_len; j++) SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
+				SSM(doc_list[idx].sci, SCI_SETSEL, line_start + x, line_start + x + co_len);
+				sci_replace_sel(doc_list[idx].sci, "");
 				count++;
 			}
 			// use multi line comment
@@ -1952,7 +1952,7 @@ void editor_highlight_braces(ScintillaObject *sci, gint cur_pos)
 
 static gboolean is_doc_comment_char(gchar c, gint lexer)
 {
-	if (c == '*' && (lexer = SCLEX_HTML || lexer == SCLEX_CPP))
+	if (c == '*' && (lexer == SCLEX_HTML || lexer == SCLEX_CPP))
 		return TRUE;
 	else if ((c == '*' || c == '+') && lexer == SCLEX_D)
 		return TRUE;
@@ -2415,7 +2415,7 @@ void editor_select_paragraph(ScintillaObject *sci)
 void editor_auto_line_indentation(gint idx, gint pos)
 {
 	gint i, first_line, last_line;
-	gint first_sel_start, first_sel_end, sel_start, sel_end;
+	gint first_sel_start, first_sel_end, sel_start = 0, sel_end = 0;
 
 	g_return_if_fail(DOC_IDX_VALID(idx));
 
@@ -2450,7 +2450,7 @@ void editor_auto_line_indentation(gint idx, gint pos)
 		if (sel_start < sel_end)
 		{
 			SSM(doc_list[idx].sci, SCI_SETSEL, sel_start, sel_end);
-			SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
+			sci_replace_sel(doc_list[idx].sci, "");
 		}
 		sci_insert_text(doc_list[idx].sci, sel_start, indent);
 	}
@@ -2500,8 +2500,8 @@ void editor_indentation_by_one_space(gint idx, gint pos, gboolean decrease)
 
 			if (sci_get_char_at(doc_list[idx].sci, indentation_end) == ' ')
 			{
-				sci_set_current_position(doc_list[idx].sci, indentation_end + 1, FALSE);
-				SSM(doc_list[idx].sci, SCI_DELETEBACK, 0, 0);
+				SSM(doc_list[idx].sci, SCI_SETSEL, indentation_end, indentation_end + 1);
+				sci_replace_sel(doc_list[idx].sci, "");
 				count--;
 				if (i == first_line)
 					first_line_offset = -1;
@@ -2519,7 +2519,12 @@ void editor_indentation_by_one_space(gint idx, gint pos, gboolean decrease)
 	// set cursor position
 	if (sel_start < sel_end)
 	{
-		sci_set_selection_start(doc_list[idx].sci, sel_start + first_line_offset);
+		gint start = sel_start + first_line_offset;
+		if (first_line_offset < 0)
+			start = MAX(sel_start + first_line_offset,
+						SSM(doc_list[idx].sci, SCI_POSITIONFROMLINE, first_line, 0));
+
+		sci_set_selection_start(doc_list[idx].sci, start);
 		sci_set_selection_end(doc_list[idx].sci, sel_end + count);
 	}
 	else
