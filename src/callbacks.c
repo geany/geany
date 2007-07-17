@@ -474,7 +474,7 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	gchar *basename;
+	gchar *base_name;
 	gint i = GPOINTER_TO_INT(user_data);
 	gchar *charset = NULL;
 
@@ -486,16 +486,16 @@ on_reload_as_activate                  (GtkMenuItem     *menuitem,
 		charset = encodings[i].charset;
 	}
 
-	basename = g_path_get_basename(doc_list[idx].file_name);
+	base_name = g_path_get_basename(doc_list[idx].file_name);
 	if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
 		_("Any unsaved changes will be lost."),
-		_("Are you sure you want to reload '%s'?"), basename))
+		_("Are you sure you want to reload '%s'?"), base_name))
 	{
 		document_reload_file(idx, charset);
 		if (charset != NULL)
 			ui_update_statusbar(idx, -1);
 	}
-	g_free(basename);
+	g_free(base_name);
 }
 
 

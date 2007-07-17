@@ -4,6 +4,8 @@
    Improve selection handling when decreasing indent by one space.
    Avoid using SCI_DELETEBACK for simple text removal.
    Fix a typo in is_doc_comment_char().
+ * src/callbacks.c, src/ui_utils.c, src/utils.c:
+   Fix warnings about shadowing local variables.
 
 
 2007-07-16  Enrico Tröger  <enrico.troeger@uvena.de>

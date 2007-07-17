@@ -348,12 +348,12 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 	}
 	else if (doc_list[idx].mtime < st.st_mtime)
 	{
-		gchar *basename = g_path_get_basename(doc_list[idx].file_name);
+		gchar *base_name = g_path_get_basename(doc_list[idx].file_name);
 
 		if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
 			_("Do you want to reload it?"),
 			_("The file '%s' on the disk is more recent than\n"
-				"the current buffer."), basename))
+				"the current buffer."), base_name))
 		{
 			document_reload_file(idx, NULL);
 			doc_list[idx].last_check = t;
@@ -361,7 +361,7 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 		else
 			doc_list[idx].mtime = st.st_mtime;
 
-		g_free(basename);
+		g_free(base_name);
 		ret = TRUE; // file has changed
 	}
 	g_free(locale_filename);

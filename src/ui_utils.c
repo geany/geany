@@ -167,13 +167,13 @@ void ui_set_window_title(gint idx)
 			g_string_append(str, DOC_FILENAME(idx));
 		else
 		{
-			gchar *basename = g_path_get_basename(DOC_FILENAME(idx));
+			gchar *base_name = g_path_get_basename(DOC_FILENAME(idx));
 			gchar *dirname = g_path_get_dirname(DOC_FILENAME(idx));
 
-			g_string_append(str, basename);
+			g_string_append(str, base_name);
 			g_string_append(str, " - ");
 			g_string_append(str, dirname ? dirname : "");
-			g_free(basename);
+			g_free(base_name);
 			g_free(dirname);
 		}
 		g_string_append(str, " - ");
