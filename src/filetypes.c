@@ -545,7 +545,7 @@ void filetypes_init()
 {
 	filetype_id ft_id;
 	GtkWidget *filetype_menu = lookup_widget(app->window, "set_filetype1_menu");
-	GtkWidget *sub_menu;
+	GtkWidget *sub_menu = filetype_menu;
 	GtkWidget *sub_menu_programming, *sub_menu_scripts, *sub_menu_markup, *sub_menu_misc;
 	GtkWidget *sub_item_programming, *sub_item_scripts, *sub_item_markup, *sub_item_misc;
 

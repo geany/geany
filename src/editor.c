@@ -1530,7 +1530,6 @@ gint editor_do_uncomment(gint idx, gint line, gboolean toggle)
 			// use single line comment
 			if (cc == NULL || strlen(cc) == 0)
 			{
-				guint j;
 				gsize tm_len = strlen(GEANY_TOGGLE_MARK);
 
 				single_line = TRUE;
