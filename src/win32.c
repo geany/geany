@@ -392,7 +392,7 @@ void win32_show_color_dialog(const gchar *colour)
 	if (ChooseColor(&cc))
 	{
 		rgb_current = cc.rgbResult;
-		g_snprintf(hex, 11, "#%2X%2X%2X",
+		g_snprintf(hex, 11, "#%02X%02X%02X",
 	      (guint) (utils_scale_round(GetRValue(rgb_current), 255)),
 	      (guint) (utils_scale_round(GetGValue(rgb_current), 255)),
 	      (guint) (utils_scale_round(GetBValue(rgb_current), 255)));

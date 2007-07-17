@@ -15,6 +15,8 @@
    Rename geany.desktop.in to geany.desktop.in.in.
    Add Makefile.in.in in po/ to get translation status from msgfmt
    when running make.
+ * src/win32.c: Fix creation of wrong hex colours when inserting colours
+                from the colour chooser dialog.
 
 
 2007-07-16  Enrico Tröger  <enrico.troeger@uvena.de>
