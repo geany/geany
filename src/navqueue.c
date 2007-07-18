@@ -180,7 +180,7 @@ void navqueue_go_forward()
 	filepos *fnext;
 
 	if (nav_queue_pos < 1 ||
-		nav_queue_pos > g_queue_get_length(navigation_queue))
+		nav_queue_pos >= g_queue_get_length(navigation_queue))
 		return;
 
 	// jump forward
