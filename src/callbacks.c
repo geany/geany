@@ -622,6 +622,20 @@ on_entry1_changed                      (GtkEditable     *editable,
 }
 
 
+gboolean
+on_entry1_key_press_event              (GtkWidget       *widget,
+                                        GdkEventKey     *event,
+                                        gpointer         user_data)
+{
+	if (event->keyval == GDK_Escape)
+	{
+		keybindings_cmd(GEANY_KEYS_SWITCH_EDITOR);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 // search text
 void
 on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
@@ -1245,6 +1259,15 @@ on_entry_goto_line_activate            (GtkEntry        *entry,
                                         gpointer         user_data)
 {
 	on_goto_line_dialog_response(NULL, GTK_RESPONSE_ACCEPT, entry);
+}
+
+
+gboolean
+on_entry_goto_line_key_press_event     (GtkWidget       *widget,
+                                        GdkEventKey     *event,
+                                        gpointer         user_data)
+{
+	return on_entry1_key_press_event(widget, event, user_data);
 }
 
 
@@ -2109,5 +2132,4 @@ gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user
 
 	return FALSE;
 }
-
 

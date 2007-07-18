@@ -45,7 +45,7 @@ typedef struct binding
 } binding;
 
 
-enum
+typedef enum
 {
 	GEANY_KEYS_MENU_NEW = 0,
 	GEANY_KEYS_MENU_OPEN,
@@ -149,15 +149,17 @@ enum
 	GEANY_KEYS_EDIT_COMPLETECONSTRUCT,
 	GEANY_KEYS_EDIT_SUPPRESSCOMPLETION,
 	GEANY_MAX_KEYS
-};
+}
+GeanyKeyCommand;
 
 binding	*keys[GEANY_MAX_KEYS];
-
 
 
 void keybindings_init(void);
 
 void keybindings_free(void);
+
+void keybindings_cmd(GeanyKeyCommand cmd_id);
 
 /* just write the content of the keys array to the config file */
 void keybindings_write_to_file(void);

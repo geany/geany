@@ -697,6 +697,13 @@ static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gcha
 }
 
 
+/* Mimic a keybinding action */
+void keybindings_cmd(GeanyKeyCommand cmd_id)
+{
+	keys[cmd_id]->cb_func(cmd_id);
+}
+
+
 /* These are the callback functions, either each group or each shortcut has it's
  * own function. */
 
@@ -1211,3 +1218,4 @@ static void cb_func_nav_forward(G_GNUC_UNUSED guint key_id)
 {
 	navqueue_go_forward();
 }
+

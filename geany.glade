@@ -1823,6 +1823,7 @@
 		  <property name="activates_default">False</property>
 		  <signal name="activate" handler="on_entry1_activate" last_modification_time="Sat, 30 Apr 2005 23:58:03 GMT"/>
 		  <signal name="changed" handler="on_entry1_changed" last_modification_time="Tue, 03 May 2005 09:18:59 GMT"/>
+		  <signal name="key_press_event" handler="on_entry1_key_press_event" last_modification_time="Wed, 18 Jul 2007 14:55:05 GMT"/>
 		</widget>
 	      </child>
 	    </widget>
@@ -1882,6 +1883,7 @@
 		  <property name="activates_default">False</property>
 		  <property name="width_chars">8</property>
 		  <signal name="activate" handler="on_entry_goto_line_activate" last_modification_time="Sun, 26 Feb 2006 17:07:52 GMT"/>
+		  <signal name="key_press_event" handler="on_entry_goto_line_key_press_event" last_modification_time="Wed, 18 Jul 2007 15:09:25 GMT"/>
 		</widget>
 	      </child>
 	    </widget>

@@ -1576,11 +1576,17 @@ create_window1 (void)
   g_signal_connect ((gpointer) entry1, "changed",
                     G_CALLBACK (on_entry1_changed),
                     NULL);
+  g_signal_connect ((gpointer) entry1, "key_press_event",
+                    G_CALLBACK (on_entry1_key_press_event),
+                    NULL);
   g_signal_connect ((gpointer) toolbutton18, "clicked",
                     G_CALLBACK (on_toolbutton18_clicked),
                     NULL);
   g_signal_connect ((gpointer) entry_goto_line, "activate",
                     G_CALLBACK (on_entry_goto_line_activate),
+                    NULL);
+  g_signal_connect ((gpointer) entry_goto_line, "key_press_event",
+                    G_CALLBACK (on_entry_goto_line_key_press_event),
                     NULL);
   g_signal_connect ((gpointer) toolbutton25, "clicked",
                     G_CALLBACK (on_toolbutton_goto_clicked),

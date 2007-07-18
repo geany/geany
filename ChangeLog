@@ -5,6 +5,11 @@
  * src/navqueue.c:
    Fix possible segfault when a file is closed and using go forward.
    Fix 2 possible memory leaks when files have been closed.
+ * src/interface.c, src/keybindings.c, src/keybindings.h,
+   src/callbacks.c, src/callbacks.h, geany.glade:
+   Make pressing escape focus the editor when using incremental search
+   or the Goto Line entries.
+   Add keybindings_cmd() to mimic a keybinding action.
 
 
 2007-07-17  Nick Treleaven  <nick.treleaven@btinternet.com>
