@@ -65,7 +65,6 @@ static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx);
 static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
 static void auto_multiline(ScintillaObject *sci, gint pos);
 static gboolean is_comment(gint lexer, gint style);
-static void scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view);
 static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
 
 
@@ -2260,7 +2259,8 @@ void editor_insert_multiline_comment(gint idx)
 }
 
 
-/* Scroll the view to make line appear at percent_of_view.
+/* Note: If the editor is pending a redraw, set document::scroll_percent instead.
+ * Scroll the view to make line appear at percent_of_view.
  * line can be -1 to use the current position. */
 void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view)
 {
