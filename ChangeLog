@@ -2,6 +2,9 @@
 
  * src/editor.c:
    Fix gcc warning, add comment for editor_scroll_to_line().
+ * src/navqueue.c:
+   Fix possible segfault when a file is closed and using go forward.
+   Fix 2 possible memory leaks when files have been closed.
 
 
 2007-07-17  Nick Treleaven  <nick.treleaven@btinternet.com>

@@ -121,13 +121,13 @@ void navqueue_new_position(gchar *tm_filename, gint line)
 		}
 		nav_queue_pos = 0;
 	}
-	/// TODO add check to not add an entry if "Go To Defintion" on a definition is used
 	g_queue_push_head(navigation_queue, npos);
 	adjust_buttons();
 }
 
 
-/* line is counted with 1 as the first line, not 0. */
+/* Adds the current document position to the queue before adding the new position.
+ * line is counted with 1 as the first line, not 0. */
 gboolean navqueue_append(gint new_idx, gint line)
 {
 	gint old_idx = document_get_cur_idx();
@@ -169,7 +169,7 @@ void navqueue_go_back()
 	else
 	{
 		/// TODO: add option to re open the file
-		g_queue_pop_nth(navigation_queue, nav_queue_pos + 1);
+		g_free(g_queue_pop_nth(navigation_queue, nav_queue_pos + 1));
 	}
 	adjust_buttons();
 }
@@ -179,7 +179,8 @@ void navqueue_go_forward()
 {
 	filepos *fnext;
 
-	if (nav_queue_pos < 1 || g_queue_get_length(navigation_queue) < 2)
+	if (nav_queue_pos < 1 ||
+		nav_queue_pos > g_queue_get_length(navigation_queue))
 		return;
 
 	// jump forward
@@ -191,7 +192,7 @@ void navqueue_go_forward()
 	else
 	{
 		/// TODO: add option to re open the file
-		g_queue_pop_nth(navigation_queue, nav_queue_pos - 1);
+		g_free(g_queue_pop_nth(navigation_queue, nav_queue_pos - 1));
 	}
 
 	adjust_buttons();
