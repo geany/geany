@@ -67,7 +67,7 @@ typedef enum
 	GEANY_FILETYPES_DOCBOOK,
 	GEANY_FILETYPES_HTML,
 	GEANY_FILETYPES_CSS,
-	
+
 	// miscellaneous languages
 	GEANY_FILETYPES_SQL,
 	GEANY_FILETYPES_LATEX,
@@ -119,7 +119,7 @@ typedef struct filetype
 	void (*style_func_ptr) (ScintillaObject*);
 } filetype;
 
-filetype *filetypes[GEANY_MAX_FILE_TYPES];
+extern filetype *filetypes[GEANY_MAX_FILE_TYPES];
 
 
 // If uid is valid, return corresponding filetype, otherwise NULL.

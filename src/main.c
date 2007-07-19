@@ -79,7 +79,10 @@
 #endif
 
 
+MyApp *app;
+
 CommandLineOptions cl_options;	// fields initialised in parse_command_line_options
+
 
 static gboolean debug_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;

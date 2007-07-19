@@ -38,6 +38,9 @@
 #include "sciwrappers.h"
 
 
+filetype *filetypes[GEANY_MAX_FILE_TYPES];
+
+
 /* This is the order of unique ids used in the config file.
  * The order must not be changed but can be appended to. */
 enum

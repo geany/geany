@@ -2,6 +2,10 @@
 
  * src/treeviews.c:
    Prevent warning when clicking on symbol list parent items.
+ * src/geany.h, src/filetypes.c, src/filetypes.h, src/main.c:
+   Use extern 'app' and 'filetypes' global variables in headers, so that
+   G_MODULE_BIND_LOCAL can later be used when loading plugins to detect
+   any unresolved symbols.
 
 
 2007-07-18  Nick Treleaven  <nick.treleaven@btinternet.com>

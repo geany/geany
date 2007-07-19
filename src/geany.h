@@ -182,7 +182,7 @@ typedef struct MyApp
 	GeanyProject		*project; // currently active project or NULL if none is open
 } MyApp;
 
-MyApp *app;
+extern MyApp *app;
 
 
 enum
