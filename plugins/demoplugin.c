@@ -29,7 +29,7 @@
 #include "plugindata.h"
 
 
-static PluginData *my_data;
+static PluginData *plugin_data;
 
 static struct
 {
@@ -53,7 +53,7 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 	GtkWidget *dialog;
 
 	dialog = gtk_message_dialog_new(
-		GTK_WINDOW(my_data->app->window),
+		GTK_WINDOW(plugin_data->app->window),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_INFO,
 		GTK_BUTTONS_OK,
@@ -71,12 +71,12 @@ void init(PluginData *data)
 {
 	GtkWidget *demo_item;
 
-	my_data = data;	// keep a pointer to the main application fields & functions
+	plugin_data = data;	// keep a pointer to the main application fields & functions
 
 	// Add an item to the Tools menu
 	demo_item = gtk_menu_item_new_with_mnemonic(_("_Demo Plugin"));
 	gtk_widget_show(demo_item);
-	gtk_container_add(GTK_CONTAINER(my_data->tools_menu), demo_item);
+	gtk_container_add(GTK_CONTAINER(plugin_data->tools_menu), demo_item);
 	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
 
 	// keep a pointer to the menu item, so we can remove it when the plugin is unloaded

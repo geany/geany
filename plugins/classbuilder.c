@@ -32,6 +32,29 @@
 #include "document.h"
 
 
+static PluginData *plugin_data;
+
+#define doc_array	plugin_data->doc_array
+// can't use document as a macro because it's currently a typename
+#define documents	plugin_data->document
+#define scintilla	plugin_data->sci
+#define templates	plugin_data->templates
+#define utils		plugin_data->utils
+#define ui			plugin_data->ui
+
+
+static struct
+{
+	GtkWidget *menu_item;
+}
+local_data;
+
+
+VERSION_CHECK(4)
+
+PLUGIN_INFO(_("Class Builder"), _("Creates source files for new class types."))
+
+
 enum
 {
 	GEANY_CLASS_TYPE_CPP,
@@ -75,24 +98,6 @@ typedef struct _CreateClassDialog
 	GtkWidget *create_destructor_box;
 	GtkWidget *gtk_constructor_type_entry;
 } CreateClassDialog;
-
-
-static PluginData *plugin_data;
-
-#define doc_array	plugin_data->doc_array
-// can't use document as a macro because it's currently a typename
-#define documents	plugin_data->document
-#define scintilla	plugin_data->sci
-#define templates	plugin_data->templates
-#define utils		plugin_data->utils
-#define ui			plugin_data->ui
-
-
-static struct
-{
-	GtkWidget *menu_item;
-}
-local_data;
 
 
 static const gchar templates_cpp_class_header[] = "{fileheader}\n\n\
@@ -222,11 +227,6 @@ static void cc_dlg_on_set_sensitive_toggled(GtkWidget *toggle_button, GtkWidget 
 static void cc_dlg_on_class_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
 static void cc_dlg_on_base_name_entry_changed(GtkWidget *entry, CreateClassDialog *cc_dlg);
 static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg);
-
-
-VERSION_CHECK(4)
-
-PLUGIN_INFO(_("Class Builder"), _("Creates source files for new class types."))
 
 
 /* I don't want this to be in the plugin API because it can cause leaks if any pointers
