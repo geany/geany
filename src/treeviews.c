@@ -477,15 +477,18 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
 		gtk_tree_model_get(model, &iter, 0, &string, -1);
-		if (string && (strlen(string) > 0))
+		if (NZV(string))
 		{
 			gint idx = document_get_cur_idx();
 			gint line = utils_get_local_tag(idx, string);
 
-			navqueue_append(idx, line);
-			utils_goto_line(idx, line);
-			g_free(string);
+			if (line != -1)
+			{
+				navqueue_append(idx, line);
+				utils_goto_line(idx, line);
+			}
 		}
+		g_free(string);
 	}
 	return FALSE;
 }

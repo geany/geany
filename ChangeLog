@@ -1,3 +1,9 @@
+2007-07-19  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/treeviews.c:
+   Prevent warning when clicking on symbol list parent items.
+
+
 2007-07-18  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/editor.c:
