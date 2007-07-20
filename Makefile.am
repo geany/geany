@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = tagmanager scintilla src plugins po doc
+SUBDIRS = tagmanager scintilla src plugins icons po doc
 
 WIN32_BUILD_FILES = \
 	geany_private.rc \

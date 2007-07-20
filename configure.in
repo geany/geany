@@ -178,6 +178,8 @@ AC_SUBST(GEANY_DATA_DIR)
 
 AC_OUTPUT([
 Makefile
+icons/Makefile
+icons/16x16/Makefile
 tagmanager/Makefile
 tagmanager/include/Makefile
 scintilla/Makefile

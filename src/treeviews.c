@@ -69,13 +69,24 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 /* the prepare_* functions are document-related, but I think they fit better here than in document.c */
 static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 {
-	GtkCellRenderer *renderer;
+	GtkCellRenderer *text_renderer, *icon_renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
 	PangoFontDescription *pfd;
 
-	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(_("Symbols"), renderer, "text", 0, NULL);
+	text_renderer = gtk_cell_renderer_text_new();
+	icon_renderer = gtk_cell_renderer_pixbuf_new();
+    column = gtk_tree_view_column_new();
+
+    gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
+  	gtk_tree_view_column_set_attributes(column, icon_renderer, "pixbuf", SYMBOLS_COLUMN_ICON, NULL);
+  	g_object_set(icon_renderer, "xalign", 0.0, NULL);
+
+  	gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
+  	gtk_tree_view_column_set_attributes(column, text_renderer, "text", SYMBOLS_COLUMN_NAME, NULL);
+  	g_object_set(text_renderer, "yalign", 0.5, NULL);
+  	gtk_tree_view_column_set_title(column, _("Symbols"));
+
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
@@ -144,7 +155,7 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 	{	// updating the tag list in the left tag window
 		if (doc_list[idx].tag_tree == NULL)
 		{
-			doc_list[idx].tag_store = gtk_tree_store_new(1, G_TYPE_STRING);
+			doc_list[idx].tag_store = gtk_tree_store_new(SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING);
 			doc_list[idx].tag_tree = gtk_tree_view_new();
 			prepare_taglist(doc_list[idx].tag_tree, doc_list[idx].tag_store);
 			gtk_widget_show(doc_list[idx].tag_tree);
@@ -476,7 +487,7 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
-		gtk_tree_model_get(model, &iter, 0, &string, -1);
+		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_NAME, &string, -1);
 		if (NZV(string))
 		{
 			gint idx = document_get_cur_idx();

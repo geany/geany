@@ -41,7 +41,7 @@
 #include "document.h"
 #include "support.h"
 #include "msgwindow.h"
-
+#include "treeviews.h"
 
 const guint TM_GLOBAL_TYPE_MASK =
 	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
@@ -49,7 +49,6 @@ const guint TM_GLOBAL_TYPE_MASK =
 
 
 static gchar **html_entities = NULL;
-
 
 typedef struct
 {
@@ -425,10 +424,27 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
     for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
     {
 		gchar *title = va_arg(args, gchar*);
+		gchar *icon_name = va_arg(args, gchar *);
+		GdkPixbuf *icon = NULL;
+
+		if (icon_name) {
+  			GtkIconTheme *icon_theme;
+  			gint x, y;
+
+			gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
+  			icon_theme = gtk_icon_theme_get_default();
+			icon = gtk_icon_theme_load_icon (icon_theme, icon_name, x, 0, NULL);
+		}
 
     	g_assert(title != NULL);
 		gtk_tree_store_append(tree_store, iter, NULL);
-		gtk_tree_store_set(tree_store, iter, 0, title, -1);
+
+		if (G_IS_OBJECT (icon)) {
+			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon,
+			                   SYMBOLS_COLUMN_NAME, title, -1);
+			g_object_unref (icon);
+		} else
+			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
 	}
 	va_end(args);
 }
@@ -446,69 +462,73 @@ static void init_tag_list(gint idx)
 		case GEANY_FILETYPES_DIFF:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Files"), NULL);
+				&(tv_iters.tag_function), _("Files"), NULL, NULL);
 			break;
 		}
 		case GEANY_FILETYPES_DOCBOOK:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Chapter"),
-				&(tv_iters.tag_class), _("Section"),
-				&(tv_iters.tag_member), _("Sect1"),
-				&(tv_iters.tag_macro), _("Sect2"),
-				&(tv_iters.tag_variable), _("Sect3"),
-				&(tv_iters.tag_struct), _("Appendix"),
-				&(tv_iters.tag_other), _("Other"), NULL);
-			//	&(tv_iters.tag_namespace), _("Other"), NULL);
+				&(tv_iters.tag_function), _("Chapter"), NULL,
+				&(tv_iters.tag_class), _("Section"), NULL,
+				&(tv_iters.tag_member), _("Sect1"), NULL,
+				&(tv_iters.tag_macro), _("Sect2"), NULL,
+				&(tv_iters.tag_variable), _("Sect3"), NULL,
+				&(tv_iters.tag_struct), _("Appendix"), NULL,
+				&(tv_iters.tag_other), _("Other"), NULL,
+				NULL);
+			//	&(tv_iters.tag_namespace), _("Other"), NULL, NULL);
 			break;
 		}
 		case GEANY_FILETYPES_HASKELL:
 			tag_list_add_groups(tag_store,
-				&tv_iters.tag_namespace, _("Module"),
-				&tv_iters.tag_struct, _("Types"),
-				&tv_iters.tag_macro, _("Type constructors"),
-				&tv_iters.tag_function, _("Functions"),
+				&tv_iters.tag_namespace, _("Module"), NULL,
+				&tv_iters.tag_struct, _("Types"), NULL,
+				&tv_iters.tag_macro, _("Type constructors"), NULL,
+				&tv_iters.tag_function, _("Functions"), "classviewer-method",
 				NULL);
 			break;
 		case GEANY_FILETYPES_CONF:
 			tag_list_add_groups(tag_store,
-				&tv_iters.tag_namespace, _("Sections"),
-				&tv_iters.tag_macro, _("Keys"),
+				&tv_iters.tag_namespace, _("Sections"), NULL,
+				&tv_iters.tag_macro, _("Keys"), NULL,
 				NULL);
 			break;
 		case GEANY_FILETYPES_LATEX:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Command"),
-				&(tv_iters.tag_class), _("Environment"),
-				&(tv_iters.tag_member), _("Section"),
-				&(tv_iters.tag_macro), _("Subsection"),
-				&(tv_iters.tag_variable), _("Subsubsection"),
-				&(tv_iters.tag_struct), _("Label"),
-				&(tv_iters.tag_namespace), _("Chapter"),
-				&(tv_iters.tag_other), _("Other"), NULL);
+				&(tv_iters.tag_function), _("Command"), NULL,
+				&(tv_iters.tag_class), _("Environment"), NULL,
+				&(tv_iters.tag_member), _("Section"), NULL,
+				&(tv_iters.tag_macro), _("Subsection"), NULL,
+				&(tv_iters.tag_variable), _("Subsubsection"), NULL,
+				&(tv_iters.tag_struct), _("Label"), NULL,
+				&(tv_iters.tag_namespace), _("Chapter"), NULL,
+				&(tv_iters.tag_other), _("Other"), NULL,
+				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_PERL:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Package"),
-				&(tv_iters.tag_function), _("Functions"),
-				&(tv_iters.tag_member), _("My"),
-				&(tv_iters.tag_macro), _("Local"),
-				&(tv_iters.tag_variable), _("Our"), NULL);
-				//&(tv_iters.tag_struct), _("Label"),
-				//&(tv_iters.tag_namespace), _("Begin"),
-				//&(tv_iters.tag_other), _("Other"), NULL);
+				&(tv_iters.tag_class), _("Package"), NULL,
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_member), _("My"), NULL,
+				&(tv_iters.tag_macro), _("Local"), NULL,
+				&(tv_iters.tag_variable), _("Our"), NULL,
+				NULL);
+				//&(tv_iters.tag_struct), _("Label"), NULL,
+				//&(tv_iters.tag_namespace), _("Begin"), NULL,
+				//&(tv_iters.tag_other), _("Other"), NULL, NULL);
 			break;
 		}
 		case GEANY_FILETYPES_PHP:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Classes"),
-				&(tv_iters.tag_function), _("Functions"),
-				&(tv_iters.tag_macro), _("Constants"),
-				&(tv_iters.tag_variable), _("Variables"), NULL);
+				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_macro), _("Constants"), NULL,
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				NULL);
 				//&(tv_iters.tag_struct), _("Label"),
 				//&(tv_iters.tag_namespace), _("Begin"),
 				//&(tv_iters.tag_other), _("Other"), NULL);
@@ -517,12 +537,13 @@ static void init_tag_list(gint idx)
 		case GEANY_FILETYPES_RUBY:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Classes"),
-				&(tv_iters.tag_member), _("Singletons"),
-				&(tv_iters.tag_macro), _("Mixins"),
-				&(tv_iters.tag_function), _("Methods"),
-				&(tv_iters.tag_struct), _("Members"),
-				&(tv_iters.tag_variable), _("Variables"), NULL);
+				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
+				&(tv_iters.tag_member), _("Singletons"), NULL,
+				&(tv_iters.tag_macro), _("Mixins"), NULL,
+				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
+				&(tv_iters.tag_struct), _("Members"), "classviewer-member",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				NULL);
 				//&(tv_iters.tag_namespace), _("Begin"),
 				//&(tv_iters.tag_other), _("Other"), NULL);
 			break;
@@ -530,9 +551,10 @@ static void init_tag_list(gint idx)
 		case GEANY_FILETYPES_PYTHON:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Classes"),
-				&(tv_iters.tag_member), _("Methods"),
-				&(tv_iters.tag_function), _("Functions"), NULL);
+				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
+				&(tv_iters.tag_member), _("Methods"), "classviewer-member",
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				NULL);
 				//&(tv_iters.tag_macro), _("Mixin"),
 				//&(tv_iters.tag_variable), _("Variables"),
 				//&(tv_iters.tag_struct), _("Members"),
@@ -543,11 +565,12 @@ static void init_tag_list(gint idx)
 		case GEANY_FILETYPES_VHDL:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"),
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				//&(tv_iters.tag_class), _("Constants"),
 				//&(tv_iters.tag_member), _("Members"),
 				//&(tv_iters.tag_macro), _("Macros"),
-				&(tv_iters.tag_variable), _("Variables"), NULL);
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				NULL);
 				//&(tv_iters.tag_namespace), _("Namespaces"),
 				//&(tv_iters.tag_struct), _("Signals"),
 				//&(tv_iters.tag_other), _("Other"), NULL);
@@ -556,39 +579,42 @@ static void init_tag_list(gint idx)
 		case GEANY_FILETYPES_JAVA:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Package"),
-				&(tv_iters.tag_struct), _("Interfaces"),
-				&(tv_iters.tag_class), _("Classes"),
-				&(tv_iters.tag_function), _("Methods"),
-				&(tv_iters.tag_member), _("Members"),
+				&(tv_iters.tag_namespace), _("Package"), NULL,
+				&(tv_iters.tag_struct), _("Interfaces"), NULL,
+				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
+				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
+				&(tv_iters.tag_member), _("Members"), "classviewer-member",
 			//	&(tv_iters.tag_macro), _("Macros"),
 			//	&(tv_iters.tag_variable), _("Variables"),
-				&(tv_iters.tag_other), _("Other"), NULL);
+				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_D:
 		default:
 		{
-			gchar *namespace_name = _("Namespaces");
-
 			if (ft_id == GEANY_FILETYPES_D)
-				namespace_name = _("Module");	// one file can only belong to one module
+				tag_list_add_groups(tag_store,
+					&(tv_iters.tag_namespace), _("Module"), NULL, NULL);
+			else
+				tag_list_add_groups(tag_store,
+					&(tv_iters.tag_namespace), _("Namespaces"), "classviewer-namespace", NULL);
 
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), namespace_name,
-				&(tv_iters.tag_class), _("Classes"),
-				&(tv_iters.tag_function), _("Functions"),
-				&(tv_iters.tag_member), _("Members"),
-				&(tv_iters.tag_struct), _("Structs / Typedefs"), NULL);
+				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_member), _("Members"), "classviewer-member",
+				&(tv_iters.tag_struct), _("Structs / Typedefs"), "classviewer-struct",
+				NULL);
 
 			if (ft_id != GEANY_FILETYPES_D)
 			{
 				tag_list_add_groups(tag_store,
-					&(tv_iters.tag_macro), _("Macros"), NULL);
+					&(tv_iters.tag_macro), _("Macros"), "classviewer-macro", NULL);
 			}
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_variable), _("Variables"),
-				&(tv_iters.tag_other), _("Other"), NULL);
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_other), _("Other"), "classviewer-other", NULL);
 		}
 	}
 }
@@ -617,6 +643,8 @@ gboolean symbols_recreate_tag_list(gint idx)
 	{
 		gchar buf[100];
 		const GeanySymbol *symbol = (GeanySymbol*)tmp->data;
+		GtkTreeIter *parent = NULL;
+		GdkPixbuf *icon = NULL;
 
 		g_snprintf(buf, sizeof(buf), "%s [%d]", symbol->str, symbol->line);
 
@@ -627,31 +655,27 @@ gboolean symbols_recreate_tag_list(gint idx)
 			case tm_tag_function_t:
 			{
 				if (tv_iters.tag_function.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_function));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
+				parent = &(tv_iters.tag_function);
 				break;
 			}
 			case tm_tag_macro_t:
 			case tm_tag_macro_with_arg_t:
 			{
 				if (tv_iters.tag_macro.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_macro));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
+				parent = &(tv_iters.tag_macro);
 				break;
 			}
 			case tm_tag_class_t:
 			{
 				if (tv_iters.tag_class.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_class));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
+				parent = &(tv_iters.tag_class);
 				break;
 			}
 			case tm_tag_member_t:
 			case tm_tag_field_t:
 			{
 				if (tv_iters.tag_member.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_member));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
+				parent = &(tv_iters.tag_member);
 				break;
 			}
 			case tm_tag_typedef_t:
@@ -661,31 +685,39 @@ gboolean symbols_recreate_tag_list(gint idx)
 			case tm_tag_interface_t:
 			{
 				if (tv_iters.tag_struct.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_struct));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
+				parent = &(tv_iters.tag_struct);
 				break;
 			}
 			case tm_tag_variable_t:
 			{
 				if (tv_iters.tag_variable.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_variable));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
+				parent = &(tv_iters.tag_variable);
 				break;
 			}
 			case tm_tag_namespace_t:
 			case tm_tag_package_t:
 			{
 				if (tv_iters.tag_namespace.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_namespace));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
+				parent = &(tv_iters.tag_namespace);
 				break;
 			}
 			default:
 			{
 				if (tv_iters.tag_other.stamp == -1) break;
-				gtk_tree_store_append(doc_list[idx].tag_store, &iter, &(tv_iters.tag_other));
-				gtk_tree_store_set(doc_list[idx].tag_store, &iter, 0, buf, -1);
+				parent = &(tv_iters.tag_other);
 			}
+		}
+
+		if (parent) {
+			gtk_tree_model_get(GTK_TREE_MODEL(doc_list[idx].tag_store), parent,
+		 	                   SYMBOLS_COLUMN_ICON, &icon, -1);
+			gtk_tree_store_append(doc_list[idx].tag_store, &iter, parent);
+			gtk_tree_store_set(doc_list[idx].tag_store, &iter,
+		 	                  SYMBOLS_COLUMN_ICON, icon,
+                              SYMBOLS_COLUMN_NAME, buf, -1);
+
+			if (G_LIKELY(G_IS_OBJECT(icon)))
+				g_object_unref(icon);
 		}
 	}
 	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), model); // Re-attach model to view

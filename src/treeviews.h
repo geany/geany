@@ -35,6 +35,12 @@ struct SidebarTreeviews
 	GtkWidget		*popup_openfiles;
 } tv;
 
+enum
+{
+	SYMBOLS_COLUMN_ICON,
+	SYMBOLS_COLUMN_NAME,
+	SYMBOLS_N_COLUMNS,
+};
 
 void treeviews_update_tag_list(gint idx, gboolean update);
 

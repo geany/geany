@@ -5,6 +5,17 @@
    Rename ui_close_buttons_toggle() ui_document_buttons_update().
    Move app->sensitive_buttons to ui_utils.c for easier maintenance,
    rename to document_buttons.
+ * configure.in, src/treeviews.c, src/treeviews.h,
+   src/symbols.c, THANKS, Makefile.am, icons, icons/16x16,
+   icons/16x16/classviewer-member.png, icons/16x16/classviewer-var.png,
+   icons/16x16/classviewer-namespace.png,
+   icons/16x16/classviewer-method.png, icons/16x16/Makefile.am,
+   icons/16x16/classviewer-macro.png, icons/16x16/classviewer-other.png,
+   icons/16x16/classviewer-struct.png,
+   icons/16x16/classviewer-class.png, icons/Makefile.am:
+   Apply patch to add symbol list icons from Jean-François Wauthy
+   (thanks). Also thanks to KDevelop for the icons.
+   Add list of projects to THANKS.
 
 
 2007-07-19  Nick Treleaven  <nick.treleaven@btinternet.com>
