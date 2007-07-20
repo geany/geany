@@ -566,11 +566,12 @@ on_toolbutton10_clicked                (GtkToolButton   *toolbutton,
 }
 
 
-static void set_search_bar_background(GtkWidget *widget, gboolean success)
+static void set_search_bar_background(gboolean success)
 {
 	const GdkColor red   = {0, 0xffff, 0x6666, 0x6666};
 	const GdkColor white = {0, 0xffff, 0xffff, 0xffff};
 	static gboolean old_value = TRUE;
+	GtkWidget *widget = lookup_widget(app->window, "entry1");
 
 	// only update if really needed
 	if (search_data.search_bar && old_value != success)
@@ -604,7 +605,7 @@ on_entry1_activate                     (GtkEntry        *entry,
 
 	setup_find_next(GTK_EDITABLE(entry));
 	result = document_search_bar_find(idx, search_data.text, 0, FALSE);
-	set_search_bar_background(GTK_WIDGET(entry), result);
+	set_search_bar_background(result);
 }
 
 
@@ -618,7 +619,7 @@ on_entry1_changed                      (GtkEditable     *editable,
 
 	setup_find_next(editable);
 	result = document_search_bar_find(idx, search_data.text, 0, TRUE);
-	set_search_bar_background(GTK_WIDGET(editable), result);
+	set_search_bar_background(result);
 }
 
 
@@ -648,7 +649,7 @@ on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
 
 	setup_find_next(GTK_EDITABLE(entry));
 	result = document_search_bar_find(idx, search_data.text, 0, FALSE);
-	set_search_bar_background(entry, result);
+	set_search_bar_background(result);
 }
 
 
@@ -1149,8 +1150,8 @@ on_find_next1_activate                 (GtkMenuItem     *menuitem,
 	{
 		gint result = document_find_text(idx, search_data.text, search_data.flags,
 			search_data.backwards, TRUE, NULL);
-		// app->sensitive_buttons[3] points to the entry widget within the toolbar
-		set_search_bar_background(app->sensitive_buttons[3], (result > -1) ? TRUE : FALSE);
+
+		set_search_bar_background((result > -1) ? TRUE : FALSE);
 	}
 }
 
@@ -1169,7 +1170,8 @@ on_find_previous1_activate             (GtkMenuItem     *menuitem,
 	{
 		gint result = document_find_text(idx, search_data.text, search_data.flags,
 			!search_data.backwards, TRUE, NULL);
-		set_search_bar_background(app->sensitive_buttons[3], (result > -1) ? TRUE : FALSE);
+
+		set_search_bar_background((result > -1) ? TRUE : FALSE);
 	}
 }
 

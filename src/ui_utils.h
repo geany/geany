@@ -51,6 +51,9 @@ void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 /* End of 'generic' functions */
 
 
+void ui_init();
+
+
 // Display text on the statusbar without logging it to the Status window.
 void ui_set_statusbar(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 
@@ -86,7 +89,7 @@ void ui_create_insert_date_menu_items();
 
 void ui_save_buttons_toggle(gboolean enable);
 
-void ui_close_buttons_toggle();
+void ui_document_buttons_update();
 
 
 void ui_treeviews_show_hide(gboolean force);

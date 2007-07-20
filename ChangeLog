@@ -1,3 +1,12 @@
+2007-07-20  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/ui_utils.h, src/geany.h, src/callbacks.c, src/document.c,
+   src/main.c, src/ui_utils.c:
+   Rename ui_close_buttons_toggle() ui_document_buttons_update().
+   Move app->sensitive_buttons to ui_utils.c for easier maintenance,
+   rename to document_buttons.
+
+
 2007-07-19  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/treeviews.c:

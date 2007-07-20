@@ -365,7 +365,7 @@ static gint document_create_new_sci(const gchar *filename)
 		gtk_tree_selection_select_iter(sel, &this->iter);
 	}
 
-	ui_close_buttons_toggle();
+	ui_document_buttons_update();
 
 	this->is_valid = TRUE;	// do this last to prevent UI updating with NULL items.
 	g_assert(doc_list[new_idx].sci == sci);
@@ -407,7 +407,7 @@ gboolean document_remove(guint page_num)
 			//on_notebook1_switch_page(GTK_NOTEBOOK(app->notebook), NULL, 0, NULL);
 			ui_set_window_title(-1);
 			ui_save_buttons_toggle(FALSE);
-			ui_close_buttons_toggle();
+			ui_document_buttons_update();
 			build_menu_update(-1);
 		}
 	}

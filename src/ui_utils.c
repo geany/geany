@@ -44,6 +44,13 @@
 #include "editor.h"
 
 
+static struct
+{
+	GtkWidget *document_buttons[39];	// widgets only sensitive when there is at least one document
+}
+widgets;
+
+
 static gchar *menu_item_get_text(GtkMenuItem *menu_item);
 
 static void update_recent_menu();
@@ -504,13 +511,59 @@ void ui_save_buttons_toggle(gboolean enable)
 }
 
 
-void ui_close_buttons_toggle()
+static void init_document_widgets()
+{
+	/* Cache the document-sensitive widgets so we don't have to keep looking them up
+	 * when using ui_document_buttons_update(). */
+	widgets.document_buttons[0] = lookup_widget(app->window, "menu_close1");
+	widgets.document_buttons[1] = lookup_widget(app->window, "toolbutton15");
+	widgets.document_buttons[2] = lookup_widget(app->window, "menu_change_font1");
+	widgets.document_buttons[3] = lookup_widget(app->window, "entry1");
+	widgets.document_buttons[4] = lookup_widget(app->window, "toolbutton18");
+	widgets.document_buttons[5] = lookup_widget(app->window, "toolbutton20");
+	widgets.document_buttons[6] = lookup_widget(app->window, "toolbutton21");
+	widgets.document_buttons[7] = lookup_widget(app->window, "menu_close_all1");
+	widgets.document_buttons[8] = lookup_widget(app->window, "menu_save_all1");
+	widgets.document_buttons[9] = lookup_widget(app->window, "toolbutton22");
+	widgets.document_buttons[10] = app->compile_button;
+	widgets.document_buttons[11] = lookup_widget(app->window, "menu_save_as1");
+	widgets.document_buttons[12] = lookup_widget(app->window, "toolbutton23");
+	widgets.document_buttons[13] = lookup_widget(app->window, "menu_count_words1");
+	widgets.document_buttons[14] = lookup_widget(app->window, "menu_build1");
+	widgets.document_buttons[15] = lookup_widget(app->window, "add_comments1");
+	widgets.document_buttons[16] = lookup_widget(app->window, "search1");
+	widgets.document_buttons[17] = lookup_widget(app->window, "menu_paste1");
+	widgets.document_buttons[18] = lookup_widget(app->window, "menu_undo2");
+	widgets.document_buttons[19] = lookup_widget(app->window, "preferences2");
+	widgets.document_buttons[20] = lookup_widget(app->window, "menu_reload1");
+	widgets.document_buttons[21] = lookup_widget(app->window, "menu_document1");
+	widgets.document_buttons[22] = lookup_widget(app->window, "menu_markers_margin1");
+	widgets.document_buttons[23] = lookup_widget(app->window, "menu_linenumber_margin1");
+	widgets.document_buttons[24] = lookup_widget(app->window, "menu_choose_color1");
+	widgets.document_buttons[25] = lookup_widget(app->window, "menu_zoom_in1");
+	widgets.document_buttons[26] = lookup_widget(app->window, "menu_zoom_out1");
+	widgets.document_buttons[27] = lookup_widget(app->window, "normal_size1");
+	widgets.document_buttons[28] = lookup_widget(app->window, "toolbutton24");
+	widgets.document_buttons[29] = lookup_widget(app->window, "toolbutton25");
+	widgets.document_buttons[30] = lookup_widget(app->window, "entry_goto_line");
+	widgets.document_buttons[31] = lookup_widget(app->window, "treeview6");
+	widgets.document_buttons[32] = lookup_widget(app->window, "print1");
+	widgets.document_buttons[33] = lookup_widget(app->window, "menu_reload_as1");
+	widgets.document_buttons[34] = lookup_widget(app->window, "menu_select_all1");
+	widgets.document_buttons[35] = lookup_widget(app->window, "insert_date1");
+	widgets.document_buttons[36] = lookup_widget(app->window, "menu_format1");
+	widgets.document_buttons[37] = lookup_widget(app->window, "menu_open_selected_file1");
+	widgets.document_buttons[38] = lookup_widget(app->window, "menu_insert_special_chars1");
+}
+
+
+void ui_document_buttons_update()
 {
 	guint i;
 	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) ? TRUE : FALSE;
 
-	for(i = 0; i < (sizeof(app->sensitive_buttons)/sizeof(GtkWidget*)); i++)
-			gtk_widget_set_sensitive(app->sensitive_buttons[i], enable);
+	for (i = 0; i < G_N_ELEMENTS(widgets.document_buttons); i++)
+		gtk_widget_set_sensitive(widgets.document_buttons[i], enable);
 }
 
 
@@ -1289,3 +1342,7 @@ void ui_table_add_row(GtkTable *table, gint row, ...)
 }
 
 
+void ui_init()
+{
+	init_document_widgets();
+}

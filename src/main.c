@@ -310,45 +310,6 @@ static void main_init(void)
 	app->save_buttons[1] = lookup_widget(app->window, "toolbutton10");
 	app->save_buttons[2] = lookup_widget(app->window, "menu_save_all1");
 	app->save_buttons[3] = lookup_widget(app->window, "toolbutton22");
-	app->sensitive_buttons[0] = lookup_widget(app->window, "menu_close1");
-	app->sensitive_buttons[1] = lookup_widget(app->window, "toolbutton15");
-	app->sensitive_buttons[2] = lookup_widget(app->window, "menu_change_font1");
-	app->sensitive_buttons[3] = lookup_widget(app->window, "entry1");
-	app->sensitive_buttons[4] = lookup_widget(app->window, "toolbutton18");
-	app->sensitive_buttons[5] = lookup_widget(app->window, "toolbutton20");
-	app->sensitive_buttons[6] = lookup_widget(app->window, "toolbutton21");
-	app->sensitive_buttons[7] = lookup_widget(app->window, "menu_close_all1");
-	app->sensitive_buttons[8] = lookup_widget(app->window, "menu_save_all1");
-	app->sensitive_buttons[9] = lookup_widget(app->window, "toolbutton22");
-	app->sensitive_buttons[10] = app->compile_button;
-	app->sensitive_buttons[11] = lookup_widget(app->window, "menu_save_as1");
-	app->sensitive_buttons[12] = lookup_widget(app->window, "toolbutton23");
-	app->sensitive_buttons[13] = lookup_widget(app->window, "menu_count_words1");
-	app->sensitive_buttons[14] = lookup_widget(app->window, "menu_build1");
-	app->sensitive_buttons[15] = lookup_widget(app->window, "add_comments1");
-	app->sensitive_buttons[16] = lookup_widget(app->window, "search1");
-	app->sensitive_buttons[17] = lookup_widget(app->window, "menu_paste1");
-	app->sensitive_buttons[18] = lookup_widget(app->window, "menu_undo2");
-	app->sensitive_buttons[19] = lookup_widget(app->window, "preferences2");
-	app->sensitive_buttons[20] = lookup_widget(app->window, "menu_reload1");
-	app->sensitive_buttons[21] = lookup_widget(app->window, "menu_document1");
-	app->sensitive_buttons[22] = lookup_widget(app->window, "menu_markers_margin1");
-	app->sensitive_buttons[23] = lookup_widget(app->window, "menu_linenumber_margin1");
-	app->sensitive_buttons[24] = lookup_widget(app->window, "menu_choose_color1");
-	app->sensitive_buttons[25] = lookup_widget(app->window, "menu_zoom_in1");
-	app->sensitive_buttons[26] = lookup_widget(app->window, "menu_zoom_out1");
-	app->sensitive_buttons[27] = lookup_widget(app->window, "normal_size1");
-	app->sensitive_buttons[28] = lookup_widget(app->window, "toolbutton24");
-	app->sensitive_buttons[29] = lookup_widget(app->window, "toolbutton25");
-	app->sensitive_buttons[30] = lookup_widget(app->window, "entry_goto_line");
-	app->sensitive_buttons[31] = lookup_widget(app->window, "treeview6");
-	app->sensitive_buttons[32] = lookup_widget(app->window, "print1");
-	app->sensitive_buttons[33] = lookup_widget(app->window, "menu_reload_as1");
-	app->sensitive_buttons[34] = lookup_widget(app->window, "menu_select_all1");
-	app->sensitive_buttons[35] = lookup_widget(app->window, "insert_date1");
-	app->sensitive_buttons[36] = lookup_widget(app->window, "menu_format1");
-	app->sensitive_buttons[37] = lookup_widget(app->window, "menu_open_selected_file1");
-	app->sensitive_buttons[38] = lookup_widget(app->window, "menu_insert_special_chars1");
 	app->navigation_buttons[0] = lookup_widget(app->window, "toolbutton_back");
 	app->navigation_buttons[1] = lookup_widget(app->window, "toolbutton_forward");
 	app->redo_items[0] = lookup_widget(app->popup_menu, "redo1");
@@ -357,6 +318,8 @@ static void main_init(void)
 	app->undo_items[0] = lookup_widget(app->popup_menu, "undo1");
 	app->undo_items[1] = lookup_widget(app->window, "menu_undo2");
 	app->undo_items[2] = lookup_widget(app->window, "toolbutton_undo");
+
+	ui_init();
 
 	// set widget names for matching with .gtkrc-2.0
 	gtk_widget_set_name(app->window, "GeanyMainWindow");
@@ -757,7 +720,7 @@ gint main(gint argc, gchar **argv)
 	// open a new file if no other file was opened
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)	document_new_file(NULL, NULL);
 
-	ui_close_buttons_toggle();
+	ui_document_buttons_update();
 	ui_save_buttons_toggle(FALSE);
 
 	idx = document_get_cur_idx();
