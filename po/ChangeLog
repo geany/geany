@@ -1,3 +1,9 @@
+2007-07-20  Frank Lanitz  <frank@frank.uvena.de>
+
+ * LINGUAS, en_GB.po: Added British English translation 
+   (Thanks to Jeff Bailes)
+
+
 2007-07-16  Frank Lanitz  <frank@frank.uvena.de>
 
  * fi.po: Minor update of Finnish translation (Thanks to Harri Koskinen)

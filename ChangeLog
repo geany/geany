@@ -1,3 +1,9 @@
+2007-07-20  Frank Lanitz  <frank@frank.uvena.de>
+
+ * THANKS,po/LINGUAS,po/en_GB.po: 
+   Added British English translation (Thanks to Jeff Bailes).
+
+
 2007-07-20  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/ui_utils.h, src/geany.h, src/callbacks.c, src/document.c,
