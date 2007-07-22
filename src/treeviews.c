@@ -155,7 +155,8 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 	{	// updating the tag list in the left tag window
 		if (doc_list[idx].tag_tree == NULL)
 		{
-			doc_list[idx].tag_store = gtk_tree_store_new(SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING);
+			doc_list[idx].tag_store = gtk_tree_store_new(
+				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_INT);
 			doc_list[idx].tag_tree = gtk_tree_view_new();
 			prepare_taglist(doc_list[idx].tag_tree, doc_list[idx].tag_store);
 			gtk_widget_show(doc_list[idx].tag_tree);
@@ -483,23 +484,18 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
-	gchar *string;
+	gint line = 0;
 
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
-		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_NAME, &string, -1);
-		if (NZV(string))
+		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_LINE, &line, -1);
+		if (line > 0)
 		{
 			gint idx = document_get_cur_idx();
-			gint line = utils_get_local_tag(idx, string);
 
-			if (line != -1)
-			{
-				navqueue_append(idx, line);
-				utils_goto_line(idx, line);
-			}
+			navqueue_append(idx, line);
+			utils_goto_line(idx, line);
 		}
-		g_free(string);
 	}
 	return FALSE;
 }

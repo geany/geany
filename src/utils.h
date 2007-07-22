@@ -49,8 +49,6 @@ gboolean utils_isbrace(gchar c);
 
 gboolean utils_is_opening_brace(gchar c);
 
-gint utils_get_local_tag(gint idx, const gchar *qual_name);
-
 gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line);
 
 gboolean utils_goto_line(gint idx, gint line);

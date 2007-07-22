@@ -182,27 +182,6 @@ gboolean utils_is_opening_brace(gchar c)
 }
 
 
-/* returns the line of the given tag */
-gint utils_get_local_tag(gint idx, const gchar *qual_name)
-{
-	guint line;
-	gchar *spos;
-
-	g_return_val_if_fail((doc_list[idx].sci && qual_name), -1);
-
-	spos = strchr(qual_name, '[');
-	if (spos && strchr(spos+1, ']'))
-	{
-		line = atol(spos + 1);
-		if (line > 0)
-		{
-			return line;
-		}
-	}
-	return -1;
-}
-
-
 // line is counted with 1 as the first line, not 0
 gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line)
 {

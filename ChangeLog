@@ -1,6 +1,17 @@
+2007-07-22  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/symbols.c, src/treeviews.c, src/treeviews.h, src/utils.c,
+   src/utils.h:
+   Extend icon search path to get symbol list icons working when using
+   a non-standard installation prefix.
+   Query default icon theme only once to improve startup speed.
+   Store the line number separately in the tree store.
+   Remove utils_get_local_tag().
+
+
 2007-07-20  Frank Lanitz  <frank@frank.uvena.de>
 
- * THANKS,po/LINGUAS,po/en_GB.po: 
+ * THANKS,po/LINGUAS,po/en_GB.po:
    Added British English translation (Thanks to Jeff Bailes).
 
 

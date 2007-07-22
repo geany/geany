@@ -419,6 +419,15 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 {
 	va_list args;
 	GtkTreeIter *iter;
+	static GtkIconTheme *icon_theme = NULL;
+	static gint x, y;
+
+	if (icon_theme == NULL)
+	{
+		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
+		icon_theme = gtk_icon_theme_get_default();
+		gtk_icon_theme_append_search_path(icon_theme, PACKAGE_DATA_DIR G_DIR_SEPARATOR_S "icons");
+	}
 
     va_start(args, tree_store);
     for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
@@ -427,22 +436,18 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 		gchar *icon_name = va_arg(args, gchar *);
 		GdkPixbuf *icon = NULL;
 
-		if (icon_name) {
-  			GtkIconTheme *icon_theme;
-  			gint x, y;
-
-			gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
-  			icon_theme = gtk_icon_theme_get_default();
-			icon = gtk_icon_theme_load_icon (icon_theme, icon_name, x, 0, NULL);
+		if (icon_name)
+		{
+			icon = gtk_icon_theme_load_icon(icon_theme, icon_name, x, 0, NULL);
 		}
 
     	g_assert(title != NULL);
 		gtk_tree_store_append(tree_store, iter, NULL);
 
-		if (G_IS_OBJECT (icon)) {
+		if (G_IS_OBJECT(icon)) {
 			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon,
 			                   SYMBOLS_COLUMN_NAME, title, -1);
-			g_object_unref (icon);
+			g_object_unref(icon);
 		} else
 			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
 	}
@@ -708,13 +713,15 @@ gboolean symbols_recreate_tag_list(gint idx)
 			}
 		}
 
-		if (parent) {
+		if (parent)
+		{
 			gtk_tree_model_get(GTK_TREE_MODEL(doc_list[idx].tag_store), parent,
 		 	                   SYMBOLS_COLUMN_ICON, &icon, -1);
 			gtk_tree_store_append(doc_list[idx].tag_store, &iter, parent);
 			gtk_tree_store_set(doc_list[idx].tag_store, &iter,
 		 	                  SYMBOLS_COLUMN_ICON, icon,
-                              SYMBOLS_COLUMN_NAME, buf, -1);
+                              SYMBOLS_COLUMN_NAME, buf,
+                              SYMBOLS_COLUMN_LINE, symbol->line, -1);
 
 			if (G_LIKELY(G_IS_OBJECT(icon)))
 				g_object_unref(icon);
