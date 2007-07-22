@@ -7,6 +7,7 @@
    Query default icon theme only once to improve startup speed.
    Store the line number separately in the tree store.
    Remove utils_get_local_tag().
+ * data/filetypes.common: Clarified description of white_space setting.
 
 
 2007-07-20  Frank Lanitz  <frank@frank.uvena.de>
