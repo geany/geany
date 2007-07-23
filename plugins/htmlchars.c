@@ -530,7 +530,8 @@ void init(PluginData *data)
 /* Destroy static widgets */
 void cleanup()
 {
-	gtk_widget_destroy(sc_dialog);
+	if (sc_dialog != NULL)
+		gtk_widget_destroy(sc_dialog);
 }
 
 
