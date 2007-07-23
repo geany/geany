@@ -426,7 +426,11 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 	{
 		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
 		icon_theme = gtk_icon_theme_get_default();
-		gtk_icon_theme_append_search_path(icon_theme, PACKAGE_DATA_DIR G_DIR_SEPARATOR_S "icons");
+#ifdef G_OS_WIN32
+		gtk_icon_theme_append_search_path(icon_theme, "share\\icons");
+#else
+		gtk_icon_theme_append_search_path(icon_theme, PACKAGE_DATA_DIR "/icons");
+#endif
 	}
 
     va_start(args, tree_store);

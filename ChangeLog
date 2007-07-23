@@ -1,3 +1,8 @@
+2007-07-23  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/symbols.c: Adjust symbol list icon path on Windows.
+
+
 2007-07-22  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/symbols.c, src/treeviews.c, src/treeviews.h, src/utils.c,
