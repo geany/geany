@@ -40,13 +40,14 @@
 
 typedef struct Plugin
 {
-	GModule *module;
-	gchar	*filename;		// plugin filename (/path/libname.so)
-	PluginData data;
+	GModule 	*module;
+	gchar		*filename;		// plugin filename (/path/libname.so)
+	PluginData		data;
+	PluginFields	fields;
 
-	PluginInfo* (*info) ();	/* Returns plugin name, description */
-	void (*init) (PluginData *data);	/* Called when the plugin is enabled */
-	void (*cleanup) ();		/* Called when the plugin is disabled or when Geany exits */
+	PluginInfo*	(*info) ();	/* Returns plugin name, description */
+	void	(*init) (PluginData *data);	/* Called when the plugin is enabled */
+	void	(*cleanup) ();		/* Called when the plugin is disabled or when Geany exits */
 }
 Plugin;
 
@@ -54,11 +55,14 @@ static GList *plugin_list = NULL;
 
 
 static DocumentFuncs doc_funcs = {
-	&document_new_file
+	&document_new_file,
+	&document_get_cur_idx
 };
 
 static ScintillaFuncs sci_funcs = {
-	&sci_set_text
+	&sci_set_text,
+	&sci_insert_text,
+	&sci_get_current_position
 };
 
 static TemplateFuncs template_funcs = {
@@ -145,14 +149,17 @@ plugin_new(const gchar *fname)
 	Plugin *plugin;
 	GModule *module;
 	PluginInfo* (*info)();
+	PluginFields **plugin_fields;
 
 	g_return_val_if_fail(fname, NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
 
 	/* Don't use G_MODULE_BIND_LAZY otherwise we can get unresolved symbols at runtime,
-	 * causing a segfault.
-	 * Without that flag the module will safely fail to load. */
-	module = g_module_open(fname, 0);
+	 * causing a segfault. Without that flag the module will safely fail to load.
+	 * G_MODULE_BIND_LOCAL also helps find undefined symbols e.g. app when it would
+	 * otherwise not be detected due to the shadowing of Geany's app variable.
+	 * Also without G_MODULE_BIND_LOCAL calling info() in a plugin will be shadowed. */
+	module = g_module_open(fname, G_MODULE_BIND_LOCAL);
 	if (! module)
 	{
 		g_warning("%s", g_module_error());
@@ -194,11 +201,21 @@ plugin_new(const gchar *fname)
 
 	init_plugin_data(&plugin->data);
 
+	g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
+	if (plugin_fields)
+		*plugin_fields = &plugin->fields;
+
 	g_module_symbol(module, "init", (void *) &plugin->init);
 	g_module_symbol(module, "cleanup", (void *) &plugin->cleanup);
 
 	if (plugin->init)
 		plugin->init(&plugin->data);
+
+	if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
+	{
+		gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) ? TRUE : FALSE;
+		gtk_widget_set_sensitive(plugin->fields.menu_item, enable);
+	}
 
 	geany_debug("Loaded:   %s (%s)", fname,
 		NVL(plugin->info()->name, "<Unknown>"));
@@ -214,6 +231,11 @@ plugin_free(Plugin *plugin)
 
 	if (plugin->cleanup)
 		plugin->cleanup();
+
+	if (plugin->fields.menu_item != NULL)
+	{
+		gtk_widget_destroy(plugin->fields.menu_item);
+	}
 
 	if (! g_module_close(plugin->module))
 		g_warning("%s: %s", plugin->filename, g_module_error());
@@ -264,5 +286,18 @@ void plugins_free()
 	}
 }
 
+
+void plugins_update_document_sensitive(gboolean enabled)
+{
+	GList *item;
+
+	for (item = plugin_list; item != NULL; item = g_list_next(item))
+	{
+		Plugin *plugin = item->data;
+
+		if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
+			gtk_widget_set_sensitive(plugin->fields.menu_item, enabled);
+	}
+}
 
 #endif

@@ -1828,18 +1828,6 @@ on_next_message1_activate              (GtkMenuItem     *menuitem,
 
 
 void
-on_menu_insert_special_chars1_activate (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	// refuse opening the dialog if we don't have an active tab
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-
-	tools_show_dialog_insert_special_chars();
-}
-
-
-void
 on_menu_comments_multiline_activate    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {

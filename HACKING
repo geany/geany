@@ -67,11 +67,11 @@ NOTES
 Some of these notes below are brief (or maybe incomplete) - please contact
 the mailing list for more information.
 
-Adding a file foo.[hc] in src/
-------------------------------
-Add foo.c, foo.h to SRCS in src/Makefile.am.
-Add foo.o to OBJS in src/makefile.win32.
-Add src/foo.c to po/POTFILES.in (for string translation).
+Adding a file foo.[hc] in src/ or plugins/
+------------------------------------------
+Add foo.c, foo.h to SRCS in path/Makefile.am.
+Add foo.o to OBJS in path/makefile.win32.
+Add path/foo.c to po/POTFILES.in (for string translation).
 
 Adding a filetype
 -----------------
@@ -107,8 +107,8 @@ to the s_tag_type_names strings used in foo.c for FooKinds.
 PLUGINS
 =======
 
+src/plugindata.h contains the plugin API data types and some notes.
 See plugins/demoplugin.c for a very basic example plugin.
-src/plugindata.h contains the plugin API data types.
 src/plugins.c loads and unloads plugins.
 
 Loading a plugin from GDB

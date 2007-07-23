@@ -1,3 +1,19 @@
+2007-07-23  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * plugins/htmlchars.c, plugins/Makefile.am, src/interface.c,
+   src/keybindings.c, src/tools.c, src/tools.h, src/plugindata.h,
+   src/callbacks.c, src/callbacks.h, src/plugins.c, src/plugins.h,
+   src/ui_utils.c, HACKING, geany.glade:
+   Convert 'Insert Special HTML Characters' tool into a plugin;
+   keybinding support will be added later.
+   Add plugin functions for inserting text into the current document.
+   Add plugin support for disabling a menu item when no documents are
+   open.
+   Destroy plugin_fields->menu_item on unloading if set by a plugin.
+   Use G_MODULE_BIND_LOCAL for plugins to prevent symbol shadowing by
+   other modules, and to help detect unresolved symbols at loading time.
+
+
 2007-07-23  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/symbols.c: Adjust symbol list icon path on Windows.

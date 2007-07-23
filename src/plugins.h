@@ -32,6 +32,9 @@ void plugins_init();
 
 void plugins_free();
 
+
+void plugins_update_document_sensitive(gboolean enabled);
+
 #endif
 
 #endif

@@ -25,9 +25,29 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
+/**
+ * Public symbols supported:
+ *
+ * version_check()
+ * 	Use VERSION_CHECK() macro instead. Required by Geany.
+ *
+ * PluginInfo* info()
+ * 	Use PLUGIN_INFO() macro to define it. Required by Geany.
+ *
+ * PluginFields* plugin_fields
+ * 	Plugin owned fields, including flags.
+ *
+ * void init(PluginData *data)
+ * 	Called after loading the plugin.
+ *
+ * void cleanup()
+ * 	Called before unloading the plugin.
+ */
+
+
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 4;
+static const gint api_version = 5;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -68,6 +88,21 @@ PluginInfo;
 	}
 
 
+typedef enum
+{
+	PLUGIN_IS_DOCUMENT_SENSITIVE	= 1 << 0	// if menu_item should be disabled when there are no documents
+}
+PluginFlags;
+
+/* Fields set and owned by the plugin */
+typedef struct PluginFields
+{
+	PluginFlags	flags;
+	GtkWidget	*menu_item;	// (optional) widget to be destroyed after unloading the plugin
+}
+PluginFields;
+
+
 typedef struct DocumentFuncs	DocumentFuncs;
 typedef struct ScintillaFuncs	ScintillaFuncs;
 typedef struct TemplateFuncs	TemplateFuncs;
@@ -80,10 +115,8 @@ typedef struct UIUtilsFuncs		UIUtilsFuncs;
  * making changes. */
 typedef struct PluginData
 {
-	MyApp	*app;	// Geany application data fields
-
+	MyApp		*app;	// Geany application data fields
 	GtkWidget	*tools_menu;	// Almost all plugins should add menu items to the Tools menu only
-
 	GArray		*doc_array;	// array of document pointers
 
 	DocumentFuncs	*document;
@@ -103,6 +136,7 @@ struct filetype;
 struct DocumentFuncs
 {
 	gint (*new_file) (const gchar *filename, struct filetype *ft);
+	gint (*get_cur_idx) ();
 };
 
 struct _ScintillaObject;
@@ -110,6 +144,8 @@ struct _ScintillaObject;
 struct ScintillaFuncs
 {
 	void	(*set_text) (struct _ScintillaObject *sci, const gchar *text);
+	void	(*insert_text) (struct _ScintillaObject *sci, gint pos, const gchar *text);
+	gint	(*get_current_position) (struct _ScintillaObject *sci);
 };
 
 struct TemplateFuncs

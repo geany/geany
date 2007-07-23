@@ -499,10 +499,6 @@ on_next_message1_activate              (GtkMenuItem     *menuitem,
 
 
 void
-on_menu_insert_special_chars1_activate (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
 on_menu_comments_multiline_activate    (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 

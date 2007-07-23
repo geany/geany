@@ -409,7 +409,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACETABS, menu_replace_tabs);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FOLDALL, menu_fold_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNFOLDALL, menu_unfold_all1);
-	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTSPECIALCHARS, menu_insert_special_chars1);
+	//~ GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTSPECIALCHARS, menu_insert_special_chars1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOLOWERCASE, menu_to_lower_case2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOUPPERCASE, menu_to_upper_case2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line1);
@@ -1206,7 +1206,8 @@ static void cb_func_menu_insert_date(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_menu_insert_specialchars(G_GNUC_UNUSED guint key_id)
 {
-	on_menu_insert_special_chars1_activate(NULL, NULL);
+	// TODO: add plugin keybinding support
+	//~ on_menu_insert_special_chars1_activate(NULL, NULL);
 }
 
 static void cb_func_nav_back(G_GNUC_UNUSED guint key_id)

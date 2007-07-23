@@ -25,8 +25,6 @@
 #ifndef GEANY_TOOLS_H
 #define GEANY_TOOLS_H 1
 
-void tools_show_dialog_insert_special_chars();
-
 void tools_create_insert_custom_command_menu_items();
 
 void tools_execute_custom_command(gint idx, const gchar *command);
