@@ -1329,24 +1329,28 @@ static guint
 document_replace_range(gint idx, const gchar *find_text, const gchar *replace_text,
 	gint flags, gint start, gint end, gboolean scroll_to_match, gint *new_range_end)
 {
-	gint search_pos;
 	gint count = 0;
-	gint find_len = 0, replace_len = 0;
 	struct TextToFind ttf;
+	ScintillaObject *sci;
 
 	if (new_range_end != NULL)
 		*new_range_end = -1;
 	g_return_val_if_fail(find_text != NULL && replace_text != NULL, 0);
 	if (idx == -1 || ! *find_text || doc_list[idx].readonly) return 0;
 
-	sci_start_undo_action(doc_list[idx].sci);
+	sci = doc_list[idx].sci;
+
+	sci_start_undo_action(sci);
 	ttf.chrg.cpMin = start;
 	ttf.chrg.cpMax = end;
 	ttf.lpstrText = (gchar*)find_text;
 
 	while (TRUE)
 	{
-		search_pos = sci_find_text(doc_list[idx].sci, flags, &ttf);
+		gint search_pos;
+		gint find_len = 0, replace_len = 0;
+
+		search_pos = sci_find_text(sci, flags, &ttf);
 		find_len = ttf.chrgText.cpMax - ttf.chrgText.cpMin;
 		if (search_pos == -1)
 			break;	// no more matches
@@ -1357,29 +1361,39 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 			break;	// found text is partly out of range
 		else
 		{
-			sci_target_start(doc_list[idx].sci, search_pos);
-			sci_target_end(doc_list[idx].sci, search_pos + find_len);
-			replace_len = sci_target_replace(doc_list[idx].sci, replace_text,
+			gint movepastEOL = 0;
+
+			sci_target_start(sci, search_pos);
+			sci_target_end(sci, search_pos + find_len);
+
+			if (find_len <= 0)
+			{
+				gchar chNext = sci_get_char_at(sci, SSM(sci, SCI_GETTARGETEND, 0, 0));
+				if (chNext == '\r' || chNext == '\n') {
+					movepastEOL = 1;
+				}
+			}
+			replace_len = sci_target_replace(sci, replace_text,
 				flags & SCFIND_REGEXP);
 			count++;
 			if (search_pos == end)
 				break;	// Prevent hang when replacing regex $
 
 			// make the next search start after the replaced text
-			start = search_pos + replace_len;
-			if (find_len == 0 && replace_len == 0)
-				start++;	// skip past ^ or $ for regexes (prevents rematching)
+			start = search_pos + replace_len + movepastEOL;
+			if (find_len == 0)
+				start = SSM(sci, SCI_POSITIONAFTER, start, 0);	// prevent '[ ]*' regex rematching part of replaced text
 			ttf.chrg.cpMin = start;
 			end += replace_len - find_len;	// update end of range now text has changed
 			ttf.chrg.cpMax = end;
 		}
 	}
-	sci_end_undo_action(doc_list[idx].sci);
+	sci_end_undo_action(sci);
 
 	if (count > 0)
 	{	// scroll last match in view, will destroy the existing selection
 		if (scroll_to_match)
-			sci_goto_pos(doc_list[idx].sci, ttf.chrg.cpMin, TRUE);
+			sci_goto_pos(sci, ttf.chrg.cpMin, TRUE);
 
 		if (new_range_end != NULL)
 			*new_range_end = end;

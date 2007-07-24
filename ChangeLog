@@ -3,6 +3,8 @@
  * src/plugindata.h, src/plugins.c:
    Apply patch from Jeff Pohlmeyer to add plugin functions for getting
    a file list and modifying scintilla text selections (thanks).
+ * src/document.c:
+   Fix hang when replacing all '[ ]*' regex matches (closes #1757748).
 
 
 2007-07-24  Enrico Tröger  <enrico.troeger@uvena.de>
