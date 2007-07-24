@@ -1,3 +1,10 @@
+2007-07-24  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/plugindata.h, src/plugins.c:
+   Apply patch from Jeff Pohlmeyer to add plugin functions for getting
+   a file list and modifying scintilla text selections (thanks).
+
+
 2007-07-24  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * Makefile.am, doc/Makefile.am, icons/Makefile.am, plugins/Makefile.am,

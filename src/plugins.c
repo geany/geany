@@ -56,13 +56,19 @@ static GList *plugin_list = NULL;
 
 static DocumentFuncs doc_funcs = {
 	&document_new_file,
-	&document_get_cur_idx
+	&document_get_cur_idx,
+	&document_get_current
 };
 
 static ScintillaFuncs sci_funcs = {
 	&sci_set_text,
 	&sci_insert_text,
-	&sci_get_current_position
+	&sci_get_current_position,
+	&sci_get_text,
+	&sci_get_length,
+	&sci_replace_sel,
+	&sci_get_selected_text,
+	&sci_get_selected_text_length
 };
 
 static TemplateFuncs template_funcs = {
@@ -71,7 +77,8 @@ static TemplateFuncs template_funcs = {
 
 static UtilsFuncs utils_funcs = {
 	&utils_str_equal,
-	&utils_str_replace
+	&utils_str_replace,
+	&utils_get_file_list
 };
 
 static UIUtilsFuncs uiutils_funcs = {

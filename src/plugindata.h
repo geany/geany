@@ -135,8 +135,9 @@ struct filetype;
 
 struct DocumentFuncs
 {
-	gint (*new_file) (const gchar *filename, struct filetype *ft);
-	gint (*get_cur_idx) ();
+	gint	(*new_file) (const gchar *filename, struct filetype *ft);
+	gint	(*get_cur_idx) ();
+	struct document*	(*get_current) ();
 };
 
 struct _ScintillaObject;
@@ -146,6 +147,11 @@ struct ScintillaFuncs
 	void	(*set_text) (struct _ScintillaObject *sci, const gchar *text);
 	void	(*insert_text) (struct _ScintillaObject *sci, gint pos, const gchar *text);
 	gint	(*get_current_position) (struct _ScintillaObject *sci);
+	void	(*get_text) (struct _ScintillaObject *sci, gint len, gchar* text);
+	gint	(*get_length) (struct _ScintillaObject *sci);
+	void	(*replace_sel) (struct _ScintillaObject* sci, const gchar* text);
+	void	(*get_selected_text) (struct _ScintillaObject* sci, gchar* text);
+	gint	(*get_selected_text_length) (struct _ScintillaObject* sci);
 };
 
 struct TemplateFuncs
@@ -157,6 +163,7 @@ struct UtilsFuncs
 {
 	gboolean	(*str_equal) (const gchar *a, const gchar *b);
 	gchar*		(*str_replace) (gchar *haystack, const gchar *needle, const gchar *replacement);
+	GSList*		(*get_file_list) (const gchar *path, guint *length, GError **error);
 };
 
 struct UIUtilsFuncs
