@@ -10,7 +10,8 @@ pdf:
 	mv doc/geany.pdf geany-$(VERSION).pdf
 
 geany.txt:
-	jw -b txt $(srcdir)/doc/geany.docbook
+	echo $(srcdir)
+	jw -b txt $(srcdir)/geany.docbook
 
 htmldoc: geany.docbook
 	if [ geany.docbook -nt "./html/index.html" ]; then \

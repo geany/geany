@@ -39,7 +39,7 @@ endif # PLUGINS
 
 AM_CPPFLAGS = \
 	-DDATADIR=\"$(datadir)\" \
-	-I$(top_builddir)/src \
+	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/tagmanager/include \
 	-I$(top_srcdir)/scintilla/include \
 	$(GTK_CFLAGS) \

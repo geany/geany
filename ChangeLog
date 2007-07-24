@@ -1,3 +1,10 @@
+2007-07-24  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * Makefile.am, doc/Makefile.am, icons/Makefile.am, plugins/Makefile.am,
+   scintilla/include/Makefile.am, src/Makefile.am:
+   Fix make distcheck.
+
+
 2007-07-23  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * plugins/htmlchars.c, plugins/Makefile.am, src/interface.c,

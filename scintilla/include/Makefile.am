@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-scintilla_INCLUDES = \
+noinst_HEADERS = \
 	Accessor.h \
 	KeyWords.h \
 	Platform.h \

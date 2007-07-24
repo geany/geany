@@ -37,6 +37,11 @@ SRCS = \
 	ui_utils.c ui_utils.h \
 	utils.c utils.h
 
+# just to make "make distcheck" happy
+noinst_HEADERS = \
+	geany.h \
+	support.h \
+	plugindata.h
 
 if MINGW
 # build Geany for Windows

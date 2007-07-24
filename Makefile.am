@@ -29,7 +29,6 @@ EXTRA_DIST = \
 	HACKING \
 	README.I18N \
 	po/intl_stats.sh \
-	po/LINGUAS \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in \
@@ -44,7 +43,8 @@ DISTCLEANFILES = \
 
 uninstall-local:
 	rm -rf $(DESTDIR)$(pkgdatadir);
-	rm $(DESTDIR)$(datadir)/pixmaps/geany.png;
+	rm -f $(DESTDIR)$(datadir)/pixmaps/geany.png;
+	rm -f $(DESTDIR)$(datadir)/pixmaps/geany.ico;
 
 install-data-local:
 	@$(NORMAL_INSTALL)
