@@ -35,3 +35,4 @@ src/utils.c
 src/vte.c
 src/win32.c
 plugins/classbuilder.c
+plugins/htmlchars.c
