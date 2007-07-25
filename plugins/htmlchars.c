@@ -521,15 +521,17 @@ void init(PluginData *data)
 	gtk_container_add(GTK_CONTAINER(plugin_data->tools_menu), demo_item);
 	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
 
-	// let Geany remove the menu item when the plugin is unloaded
+	// disable menu_item when there are no documents open
 	plugin_fields->menu_item = demo_item;
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
 }
 
 
-/* Destroy static widgets */
+/* Destroy widgets */
 void cleanup()
 {
+	gtk_widget_destroy(plugin_fields->menu_item);
+
 	if (sc_dialog != NULL)
 		gtk_widget_destroy(sc_dialog);
 }

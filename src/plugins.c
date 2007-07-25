@@ -214,6 +214,12 @@ plugin_new(const gchar *fname)
 
 	g_module_symbol(module, "init", (void *) &plugin->init);
 	g_module_symbol(module, "cleanup", (void *) &plugin->cleanup);
+	if (plugin->init != NULL && plugin->cleanup == NULL)
+	{
+		if (app->debug_mode)
+			g_warning("Plugin '%s' has no cleanup() function - there may be memory leaks!",
+				info()->name);
+	}
 
 	if (plugin->init)
 		plugin->init(&plugin->data);
@@ -238,11 +244,6 @@ plugin_free(Plugin *plugin)
 
 	if (plugin->cleanup)
 		plugin->cleanup();
-
-	if (plugin->fields.menu_item != NULL)
-	{
-		gtk_widget_destroy(plugin->fields.menu_item);
-	}
 
 	if (! g_module_close(plugin->module))
 		g_warning("%s: %s", plugin->filename, g_module_error());

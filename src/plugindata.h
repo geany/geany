@@ -41,7 +41,8 @@
  * 	Called after loading the plugin.
  *
  * void cleanup()
- * 	Called before unloading the plugin.
+ * 	Called before unloading the plugin. Required for normal plugins - it should undo
+ * 	everything done in init() - e.g. destroy menu items, free memory.
  */
 
 
@@ -98,7 +99,7 @@ PluginFlags;
 typedef struct PluginFields
 {
 	PluginFlags	flags;
-	GtkWidget	*menu_item;	// (optional) widget to be destroyed after unloading the plugin
+	GtkWidget	*menu_item;	// required if using PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise
 }
 PluginFields;
 

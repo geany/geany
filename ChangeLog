@@ -4,6 +4,12 @@
    Translate the HTML Characters plugin.
  * src/main.c:
    Set app->debug_mode when GEANY_DEBUG is defined.
+ * plugins/htmlchars.c, src/plugindata.h, src/plugins.c:
+   Don't destroy plugin_fields->menu_item automatically - plugin_fields
+   should be owned by the plugin, so the plugin is responsible for
+   destroying it, and any other memory it allocated.
+   Print a warning message in debug mode if a plugin has no cleanup()
+   function.
 
 
 2007-07-25  Enrico Tröger  <enrico.troeger@uvena.de>
