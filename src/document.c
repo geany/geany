@@ -2297,7 +2297,7 @@ void document_colourise_new()
 
 
 /* Inserts the given colour (format should be #...), if there is a selection starting with 0x...
- * the replacement starts also with 0x... */
+ * the replacement will also start with 0x... */
 void document_insert_colour(gint idx, const gchar *colour)
 {
 	g_return_if_fail(DOC_IDX_VALID(idx));
@@ -2311,7 +2311,8 @@ void document_insert_colour(gint idx, const gchar *colour)
 			sci_get_char_at(doc_list[idx].sci, start + 1) == 'x')
 		{
 			sci_set_selection_start(doc_list[idx].sci, start + 2);
-			replacement++; // skip the leading '#'
+			sci_set_selection_end(doc_list[idx].sci, start + 8);
+			replacement++; // skip the leading "0x"
 		}
 		else if (sci_get_char_at(doc_list[idx].sci, start - 1) == '#')
 		{	// double clicking something like #00ffff may only select 00ffff because of wordchars
