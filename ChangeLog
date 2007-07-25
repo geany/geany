@@ -2,6 +2,8 @@
 
  * po/POTFILES.in:
    Translate the HTML Characters plugin.
+ * src/main.c:
+   Set app->debug_mode when GEANY_DEBUG is defined.
 
 
 2007-07-25  Enrico Tröger  <enrico.troeger@uvena.de>

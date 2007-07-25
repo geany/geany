@@ -432,9 +432,11 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		exit(0);
 	}
 
-	app->debug_mode = debug_mode;
 #ifdef GEANY_DEBUG
+	app->debug_mode = TRUE;
 	geany_debug("debug mode built in (can't be disabled)");
+#else
+	app->debug_mode = debug_mode;
 #endif
 
 	if (alternate_config)
