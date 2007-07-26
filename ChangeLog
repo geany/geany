@@ -1,3 +1,13 @@
+2007-07-26  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * THANKS, data/filetype_extensions.conf, data/filetypes.haxe,
+   tagmanager/haxe.c, tagmanager/parsers.h, tagmanager/makefile.win32,
+   tagmanager/Makefile.am, src/templates.c, src/highlighting.c,
+   src/highlighting.h, src/callbacks.c, src/filetypes.c,
+   src/filetypes.h, src/symbols.c:
+   Add filetype Haxe (patch by blackdog, thank you).
+
+
 2007-07-25  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * po/POTFILES.in:

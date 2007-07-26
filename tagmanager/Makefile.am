@@ -54,6 +54,7 @@ libtagmanager_a_SOURCES =\
 	sh.c\
 	vhdl.c\
 	ctags.c\
+	haxe.c\
 	entry.c\
 	get.c\
 	keyword.c\

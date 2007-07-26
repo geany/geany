@@ -400,6 +400,7 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 		}
 
 		case GEANY_FILETYPES_JS:
+		case GEANY_FILETYPES_HAXE:
 		{
 			line_prefix = "//";
 			break;

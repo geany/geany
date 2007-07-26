@@ -3225,3 +3225,66 @@ void styleset_basic(ScintillaObject *sci)
 	set_sci_style(sci, SCE_B_HEXNUMBER, GEANY_FILETYPES_BASIC, 17);
 	set_sci_style(sci, SCE_B_BINNUMBER, GEANY_FILETYPES_BASIC, 18);
 }
+
+static void styleset_haxe_init(void)
+{
+	GKeyFile *config = g_key_file_new();
+	GKeyFile *config_home = g_key_file_new();
+
+	load_keyfiles(config, config_home, GEANY_FILETYPES_HAXE);
+
+	new_style_array(GEANY_FILETYPES_HAXE, 20);
+	styleset_c_like_init(config, config_home, GEANY_FILETYPES_HAXE);
+
+	style_sets[GEANY_FILETYPES_HAXE].keywords = g_new(gchar*, 4);
+
+	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_HAXE, 0, "\
+			abstract break case catch class \
+			continue default do else enum external extends \
+			finally float for function goto if implements import in \
+			interface new package protected public \
+			return static super switch this throw throws \
+			try type var while");
+
+	get_keyfile_keywords(config, config_home, "keywords", "secondary", GEANY_FILETYPES_HAXE, 1, "\
+			Bool Enum Float Int Null Void Dynamic String");
+
+	get_keyfile_keywords(config, config_home, "keywords", "classes", GEANY_FILETYPES_HAXE, 2, "\
+			Array ArrayAccess Class Date DateTools \
+			EReg Enum Hash IntHash IntIter \
+			Iterable Iterator Lambda List Math Protected \
+			Reflect Std  StringBuf StringTools Type \
+			UInt ValueType Void Xml XmlType");
+
+	style_sets[GEANY_FILETYPES_HAXE].keywords[3] = NULL;
+
+	get_keyfile_wordchars(config, config_home, &style_sets[GEANY_FILETYPES_HAXE].wordchars);
+	filetypes_get_config(config, config_home, GEANY_FILETYPES_HAXE);
+
+	g_key_file_free(config);
+	g_key_file_free(config_home);
+}
+
+
+void styleset_haxe(ScintillaObject *sci)
+{
+	const filetype_id ft_id = GEANY_FILETYPES_HAXE;
+
+	styleset_common(sci, 5,ft_id);
+	if (style_sets[GEANY_FILETYPES_HAXE].styling == NULL) styleset_haxe_init();
+
+	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].wordchars);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+
+	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
+
+	SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
+
+	SSM(sci, SCI_SETKEYWORDS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[0]);
+	SSM(sci, SCI_SETKEYWORDS, 1, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[1]);
+	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].keywords[2]);
+
+	styleset_c_like(sci, GEANY_FILETYPES_HAXE);
+}
+
+

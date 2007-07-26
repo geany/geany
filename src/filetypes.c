@@ -76,7 +76,8 @@ enum
 	FILETYPE_UID_LUA,		// 28
 	FILETYPE_UID_HASKELL,	// 29
 	FILETYPE_UID_CS,		// 30
-	FILETYPE_UID_BASIC		// 31
+	FILETYPE_UID_BASIC,		// 31
+	FILETYPE_UID_HAXE		// 32
 };
 
 
@@ -122,6 +123,7 @@ filetype *filetypes_get_from_uid(gint uid)
 		case FILETYPE_UID_HASKELL:	return filetypes[GEANY_FILETYPES_HASKELL];
 		case FILETYPE_UID_CS:		return filetypes[GEANY_FILETYPES_CS];
 		case FILETYPE_UID_BASIC:	return filetypes[GEANY_FILETYPES_BASIC];
+		case FILETYPE_UID_HAXE:		return filetypes[GEANY_FILETYPES_HAXE];
 		default: 					return NULL;
 	}
 }
@@ -520,6 +522,18 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_CONF]->style_func_ptr = styleset_conf;
 	filetypes[GEANY_FILETYPES_CONF]->comment_open = g_strdup("#");
 	filetypes[GEANY_FILETYPES_CONF]->comment_close = NULL;
+
+#define HAXE
+	filetypes[GEANY_FILETYPES_HAXE]->id = GEANY_FILETYPES_HAXE;
+	filetypes[GEANY_FILETYPES_HAXE]->uid = FILETYPE_UID_HAXE;
+	filetypes[GEANY_FILETYPES_HAXE]->lang = 27;
+	filetypes[GEANY_FILETYPES_HAXE]->name = g_strdup("Haxe");
+	filetypes[GEANY_FILETYPES_HAXE]->title = g_strdup(_("Haxe source file"));
+	filetypes[GEANY_FILETYPES_HAXE]->extension = g_strdup("hx");
+	filetypes[GEANY_FILETYPES_HAXE]->pattern = utils_strv_new("*.hx", NULL);
+	filetypes[GEANY_FILETYPES_HAXE]->style_func_ptr = styleset_haxe;
+	filetypes[GEANY_FILETYPES_HAXE]->comment_open = g_strdup("//");
+	filetypes[GEANY_FILETYPES_HAXE]->comment_close = NULL;
 
 #define ALL
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;

@@ -99,4 +99,6 @@ void styleset_cs(ScintillaObject *sci);
 
 void styleset_basic(ScintillaObject *sci);
 
+void styleset_haxe(ScintillaObject *sci);
+
 #endif

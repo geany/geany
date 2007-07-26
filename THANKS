@@ -35,6 +35,7 @@ François Cami <francois.cami(at)free(dot)fr>, Guillaume Duviol - tab replacemen
 Alexander Rodin <rodin(dot)alexander(at)gmail(dot)com> - class builder patch
 Shiv <shivakumar(dot)gn(at)gmail(dot)com> - Sun Studio compiler compatibility patch
 Jean-François Wauthy <pollux(at)xfce(dot)org> - Symbol list icons patch
+blackdog  <blackdog(at)ipowerhouse(dot)com> - Haxe filetype patch
 
 Translators:
 ------------

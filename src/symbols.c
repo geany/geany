@@ -599,6 +599,17 @@ static void init_tag_list(gint idx)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_HAXE:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_struct), _("Interfaces"), NULL,
+				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
+				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				NULL);
+
+			break;
+		}
 		case GEANY_FILETYPES_D:
 		default:
 		{
