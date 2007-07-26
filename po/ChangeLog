@@ -1,218 +1,218 @@
-2007-07-21  Frank Lanitz  <frank@frank.uvena.de>
+2007-07-21  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * pl.po: Update of Polish translation (Thanks to Jarosław Foksa)
 
 
-2007-07-20  Frank Lanitz  <frank@frank.uvena.de>
+2007-07-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * LINGUAS, en_GB.po: Added British English translation 
-   (Thanks to Jeff Bailes)
+ * LINGUAS, en_GB.po: Added British English translation
+                      (Thanks to Jeff Bailes)
 
 
-2007-07-16  Frank Lanitz  <frank@frank.uvena.de>
+2007-07-16  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * fi.po: Minor update of Finnish translation (Thanks to Harri Koskinen)
 
 
-2007-06-29  Frank Lanitz  <frank@frank.uvena.de>
+2007-06-29  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
 
 
-2007-06-17  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-06-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * de.po: Fix typo
 
 
-2007-06-15  Frank Lanitz  <frank@frank.uvena.de>
+2007-06-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
  * ChangeLog: A few fixes
 
 
-2007-06-14  Frank Lanitz  <frank@frank.uvena.de>
+2007-06-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
  * pt_BR.po: Update of Brasilian Portuguese translation
              (Thanks to Adrovane Marques Kade)
 
 
-2007-06-11  Frank Lanitz  <frank@frank.uvena.de>
+2007-06-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * geany.pot: Update of catalog
  * de.po: Small update of German translation
 
 
-2007-06-08  Frank Lanitz  <frank@frank.uvena.de>
+2007-06-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * pt_BR.po: Update of Brasilian Portuguese translation
              (Thanks to Adrovane Marques Kade)
 
 
-2007-06-03  Frank Lanitz  <frank@frank.uvena.de>
+2007-06-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ChangeLog: Update of ChangeLog
 
 
-2007-05-31 Clytie Siddall  <clytie@riverland.net.au>
+2007-05-31 Clytie Siddall  <clytie(at)riverland(dot)net(dot)au>
 
  * vi.po: Updated Vietnamese translation
 
 
-2007-05-22  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-05-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * de.po: Fixed typo and improved accelerators
 
 
-2007-05-21  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-05-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * it.po: Update of Italian translation (Thanks to M. Baldinelli)
 
 
-2007-05-20  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-05-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * cs.po: Update of Czech translation (Thanks to Petr Messner)
 
 
-2007-05-19  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-05-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * de.po: Update of German translation
 
 
-2007-05-18  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-05-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * ca.po: Update of Catalan translation (Thanks to Toni Garcia-Navarro)
 
 
-2007-05-18  Frank Lanitz  <frank@frank.uvena.de>
+2007-05-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * fr.po: Update of French translation (Thanks to Jean-Philippe Moal)
 
 
-2007-05-16  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-05-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * LINGUAS, bg.po: Added Bulgarian translation (Thanks to Dilyan Rusev)
 
 
-2007-05-10  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-05-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * es.po: Update of Spanish translation (Thanks to Damián Viano)
  * zh_CN.po: Update of simply Chinese translation
              (Thanks to Dormouse Young)
 
 
-2007-05-08  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-05-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.pot: Update of catalog
  * *.po: Issued make update-po and edited version string
 
 
-2007-05-02  Frank Lanitz  <frank@frank.uvena.de>
+2007-05-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * fr.po: Update of French translation (Thanks to Jean-Philippe Moal)
 
 
-2007-04-21  Frank Lanitz  <frank@frank.uvena.de>
+2007-04-21  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * *.po: Change of language-team-entry to geany-i18n@uvena.de
+ * *.po: Change of language-team-entry to geany-i18n(at)uvena(dot)de
  * geany.pot: Update of catalog
 
 
-2007-04-16  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-04-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * de.po: Small update of German translation
 
 
-2007-03-20  Frank Lanitz  <frank@frank.uvena.de>
+2007-03-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * it.po: Update of Italian translation (Thanks to M. Baldinelli)
 
 
-2007-03-15  Frank Lanitz  <frank@frank.uvena.de>
+2007-03-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Small update of German translation and change of language-
-          team-entry to geany-i18n@uvena.de
+          team-entry to geany-i18n(at)uvena(dot)de
  * intl_stats.sh: Show language code for stats
 
 
-2007-02-22  Frank Lanitz  <frank@frank.uvena.de>
+2007-02-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
 
 
-2007-02-14  Frank Lanitz  <frank@frank.uvena.de>
+2007-02-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * fr.po: Update of French translation (Thanks to Jean-Philippe Moal)
  * geany.pot: Update of catalog
 
 
-2007-02-12  Frank Lanitz  <frank@frank.uvena.de>
+2007-02-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * es.po: Update of Spanish translation (Thanks to Damián Viano)
  * fi.po: Update of Finnish translation (Thanks to Harri Koskinen)
 
 
-2007-02-08  Frank Lanitz  <frank@frank.uvena.de>
+2007-02-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * it.po: Update of Italian translation (Thanks to M. Baldinelli)
 
 
-2007-02-03  Frank Lanitz  <frank@frank.uvena.de>
+2007-02-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
 
 
-2007-01-30  Frank Lanitz  <frank@frank.uvena.de>
+2007-01-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * geany.pot: Update of catalog
  * de.po: Update of German translation
  * fi.po: Added Finnish translation (Thanks to Harri Koskinen)
 
 
-2007-01-21  Frank Lanitz  <frank@frank.uvena.de>
+2007-01-21  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
 
 
-2007-01-21  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-01-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * de.po: Update of German translation
 
 
-2007-01-20  Frank Lanitz  <frank@frank.uvena.de>
+2007-01-20  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
 
 
-2007-01-06  Frank Lanitz  <frank@frank.uvena.de>
+2007-01-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
  * fr.po: Update of French translation (Thanks to Jean-Philippe Moal)
 
 
-2007-01-05  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-01-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * de.po: Fixed a wrong translated string
 
 
-2007-01-03  Frank Lanitz  <frank@frank.uvena.de>
+2007-01-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * it.po: Update of Italian translation (Thanks to M. Baldinelli)
 
 
-2006-12-21  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-12-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * vi.po: Update of Vietnamese translation (Thanks to Clytie Siddall)
 
 
-2006-12-19  Frank Lanitz  <frank@frank.uvena.de>
+2006-12-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * be.po: Update of Belarusian translation (Thanks to Yura Semashko)
  * cs.po: Update of Czech translation (Thanks to Petr Messner)
  * geany.pot: Update of catalog
 
 
-2006-12-18  Frank Lanitz  <frank@frank.uvena.de>
+2006-12-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Fixed a typo (Thanks to Enrico for reporting)
  * es.po: Update of Spanish translation (Thanks to Damián Viano and
@@ -220,7 +220,7 @@
  * vi.po: Update of Vietnamese translation (Thanks to Clytie Siddall)
 
 
-2006-12-17  Frank Lanitz  <frank@frank.uvena.de>
+2006-12-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ca.po, fr.po, hu.po: Small updates
  * de.po: Update of German translation
@@ -228,7 +228,7 @@
           Nacho Cabanes)
 
 
-2006-12-14  Frank Lanitz  <frank@frank.uvena.de>
+2006-12-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ca.po: Update of Catalan translation (Thanks to Toni Garcia-Navarro)
  * hu.po: Update of Hungarian translation (Thanks to Gabor Kmetyko)
@@ -236,47 +236,47 @@
              (Thanks to Dormouse Young)
 
 
-2006-12-13  Frank Lanitz  <frank@frank.uvena.de>
+2006-12-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * fr.po: Update of French translation (Thanks to Jean-Philippe Moal)
  * geany.pot: Update of catalog
 
 
-2006-12-07  Frank Lanitz  <frank@frank.uvena.de>
+2006-12-07  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
  * fr.po: Added French translation (Thanks to Jean-Philippe Moal)
 
 
-2006-11-28  Frank Lanitz  <frank@frank.uvena.de>
+2006-11-28  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Small update of German translation
 
 
-2006-11-23  Frank Lanitz  <frank@frank.uvena.de>
+2006-11-23  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation (Thanks to Christoph Berg for
           support)
 
 
-2006-11-22  Frank Lanitz  <frank@frank.uvena.de>
+2006-11-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * hu.po: Added Hungarian translation
-          (Thanks to Gabor Kmetyko aka kilo <kg_kilo@freemail.hu>)
+          (Thanks to Gabor Kmetyko aka kilo <kg_kilo(at)freemail(dot)hu>)
 
 
-2006-11-19  Frank Lanitz  <frank@frank.uvena.de>
+2006-11-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * zh_TW.po: Update of traditionel Chinese translation
-             (Thanks to Kovich <kovich.ian@gmail.com>)
+             (Thanks to Kovich <kovich.ian(at)gmail(dot)com>)
 
 
-2006-11-17  Frank Lanitz  <frank@frank.uvena.de>
+2006-11-17  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * it.po: Update of Italian translation (thanks to M. Baldinelli)
 
 
-2006-11-15  Frank Lanitz  <frank@frank.uvena.de>
+2006-11-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
  * geany.pot: Update of catalog
@@ -284,60 +284,60 @@
  * zh_TW.po: Added traditionel Chinese translation
 
 
-2006-11-14  Frank Lanitz  <frank@frank.uvena.de>
+2006-11-14  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Small update of German translation
  * zh_CN.po: Added simple Chinese (zh_CN) translation
-   (Thanks to  Dormouse Young <mouselinux@163.com>)
+             (Thanks to Dormouse Young <mouselinux(at)163(dot)com>)
 
 
-2006-11-09  Frank Lanitz  <frank@frank.uvena.de>
+2006-11-09  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po, Changelog: Fixed some typos (thanks to Enrico for doing this)
 
 
-2006-11-08  Frank Lanitz  <frank@frank.uvena.de>
+2006-11-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
  * geany.pot: Update of catalog
  * it.po: Update of Italian translation (thanks to M. Baldinelli)
 
 
-2006-10-17  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-10-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * it.po: Added Italian translation (thanks to M. Baldinelli and
           Dario Santomarco)
 
 
-2006-09-30  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-09-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * be.po: Update of Belarusian translation (thanks to Yura Semashko)
 
 
-2006-09-29  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-09-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * ca.po: Update of Catalan translation (thanks to topi)
 
 
-2006-09-29  Frank Lanitz  <frank@frank.uvena.de>
+2006-09-29  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * cs.po: Update of Czech translation (Thanks to Petr Messner)
  * es.po: Small fixes
  * nl.po: Update of Dutch translation (Thanks to Kurt De Bree)
 
 
-2006-09-28  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-09-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * es.po: Removed fuzzy mark
 
 
-2006-09-27  Frank Lanitz  <frank@frank.uvena.de>
+2006-09-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
  * nl.po: Update of Dutch translation (Thanks to Kurt De Bree)
 
 
-2006-09-26  Frank Lanitz  <frank@frank.uvena.de>
+2006-09-26  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * es.po: Update of Spanish translation(thanks to Damián Viano)
  * geany.pot: Update of catalog
@@ -345,158 +345,159 @@
  * vi.po: Update of Vietnamese translation (Thanks Clytie Siddall)
 
 
-2006-09-18  Frank Lanitz  <frank@frank.uvena.de>
+2006-09-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Small update of German translation
  * geany.pot: Update of catalog
 
 
-2006-09-13  Frank Lanitz  <frank@frank.uvena.de>
+2006-09-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Fixed wrong translation
 
 
-2006-09-12  Frank Lanitz  <frank@frank.uvena.de>
+2006-09-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update fo German translation. Fixed a big number of
    missing accelerators »_«
  * geany.pot: Update of catalog
 
 
-2006-09-04  Frank Lanitz  <frank@frank.uvena.de>
+2006-09-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
  * geany.pot: Update of catalog
 
 
-2006-09-01  Frank Lanitz  <frank@frank.uvena.de>
+2006-09-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * vi.po: Added Vietnamese translation (Thanks Clytie Siddall)
  * geany.pot: Update of catalog
 
 
-2006-08-27  Frank Lanitz  <frank@frank.uvena.de>
+2006-08-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * cs.po: Added Czech translation (Thanks to Petr Messner)
  * geany.pot: Update of catalog
 
 
-2006-08-22  Frank Lanitz  <frank@frank.uvena.de>
+2006-08-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * geany.pot: Update of catalog
  * de.po: Update of German translation
 
 
-2006-08-06  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-08-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * de.po: Fixed small mnemonic error in German translation.
  * ca.po: Update of Catalan translation(thanks to topi)
 
 
-2006-08-02  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-08-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.pot: Update of catalog
  * es.po: Update of Spanish translation(thanks to Damián Viano)
  * de.po: Update of German translation
 
 
-2006-07-29  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-07-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.pot: Update of catalog
  * POTFILES.in: Added search.c and notebook.c
 
 
-2006-07-22  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-07-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * es.po: Update of Spanish translation
 
 
-2006-07-20  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-07-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * be.po: Update of Belarusian translation
 
 
-2006-07-19  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-07-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.pot: Update of catalog
  * de.po: Update of German translation
  * pl.po: Update of Polish translation
 
 
-2006-07-15  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-07-15  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * ru.po: Update of Russian translation by brahmann
-          <brahmann@lifelogs.org.ru>
+          <brahmann(at)lifelogs(dot)org(dot)ru>
 
 
-2006-07-08  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-07-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.pot: Update of catalog
  * de.po: Update of German translation
  * ru.po: Update of Russian translation by brahmann
-          <brahmann@lifelogs.org.ru>
+          <brahmann(at)lifelogs(dot)org(dot)ru>
 
 
-2006-07-02  Enrico Tröger  <enrico.troeger@uvena.de>
+2006-07-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * pt_BR.po: Added new translation for pt_BR (thanks Alexandre Moreira)
 
 
-2006-06-27  Frank Lanitz  <frank@frank.uvena.de>
+2006-06-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ChangeLog: Correction of format
  * de.po: Minor update and a few small corrections
  * geany.pot: Update of catalog
 
 
-2006-06-27  Frank Lanitz  <frank@frank.uvena.de>
+2006-06-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ru.po: Minor update, Thanks brahmann for it
 
 
-2006-06-19  Frank Lanitz  <frank@frank.uvena.de>
+2006-06-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * geany.pot: Update of catalog
  * de.po: Update of German translation
  * es.po: Adding Spanish translation contributed by
-          Damián Viano <dviano@fi.uba.ar>
+          Damián Viano <dviano(at)fi(dot)uba(dot)ar>
  * ru.po: Update of Russian translation by brahmann
-          <brahmann@lifelogs.org.ru>
+          <brahmann(at)lifelogs(dot)org(dot)ru>
 
 
-2006-06-13  Frank Lanitz  <frank@frank.uvena.de>
+2006-06-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * be.po: Updated fuzzy entries, fixed a lot of errors, added
-          missing translations by Yura Semashko <yurand2@gmail.com>
+          missing translations by
+          Yura Semashko <yurand2(at)gmail(dot)com>
  * de.po: Update, mostly Strings for shortcuts
  * geany.pot: Update of catalog
  * ru.po: Minor update
 
 
-2006-06-12  Frank Lanitz  <frank@frank.uvena.de>
+2006-06-12  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * be.po: Added Belarusian language support contributed by
-          Yura Semashko <yurand2@gmail.com>
+          Yura Semashko <yurand2(at)gmail(dot)com>
  * ru.po: Added Russian language support contributed by
-          brahmann <brahmann@lifelogs.org.ru>
+          brahmann <brahmann(at)lifelogs(dot)org(dot)ru>
  * de.po: Minor update of new strings
  * geany.pot: Update of catalog
 
 
-2006-06-06  Frank Lanitz  <frank@frank.uvena.de>
+2006-06-06  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Minor update
  * geany.pot: Minor update of strings
 
 
-2006-06-01  Frank Lanitz  <frank@frank.uvena.de>
+2006-06-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update for final release of geany 0.7
  * ca.po: Update for final release of geany 0.7 contributed by
-          topi <topi@phreaker.net>
+          topi <topi(at)phreaker(dot)net>
 
 
-2006-05-29  Frank Lanitz  <frank@frank.uvena.de>
+2006-05-29  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * pl.po: Added Polish language support contributed by
           Jacek Wolszczak

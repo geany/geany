@@ -48,7 +48,7 @@ For more configuration details run
 $ ./configure --help
 
 If there are any errors during compilation, check your build environment and
-try to find the error, otherwise contact the author at <enrico.troeger@uvena.de>.
+try to find the error, otherwise contact one of the authors.
 
 
 Usage
@@ -87,9 +87,11 @@ Ideas, questions, patches and bug reports
 -----------------------------------------
 See http://geany.uvena.de
 If you add something, or fix a bug, please send a patch (in 'diff -u'
-format) to the mailing list, enrico.troeger@uvena.de or nick.treleaven@btinternet.com.
+format) to the mailing list or one of the authors.
 
 
 --
 2005-2007 by Enrico Tröger, Nick Treleaven and Frank Lanitz
-enrico.troeger@uvena.de
+enrico.troeger(at)uvena(dot)de
+nick(dot)treleaven(at)btinternet(dot)com
+frank(at)frank(dot)uvena(dot)de
