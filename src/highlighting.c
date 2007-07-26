@@ -3273,10 +3273,7 @@ void styleset_haxe(ScintillaObject *sci)
 	styleset_common(sci, 5,ft_id);
 	if (style_sets[GEANY_FILETYPES_HAXE].styling == NULL) styleset_haxe_init();
 
-	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) style_sets[GEANY_FILETYPES_HAXE].wordchars);
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
-
-	SSM(sci, SCI_SETLEXER, SCLEX_CPP, 0);
+	apply_filetype_properties(sci, SCLEX_CPP, ft_id);
 
 	SSM(sci, SCI_SETCONTROLCHARSYMBOL, 32, 0);
 

@@ -1,3 +1,9 @@
+2007-07-26  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * src/highlighting.c:
+   Ignore whitespace_chars for Haxe.
+
+
 2007-07-26  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * THANKS, data/filetype_extensions.conf, data/filetypes.haxe,
