@@ -42,7 +42,6 @@ typedef struct Plugin
 {
 	GModule 	*module;
 	gchar		*filename;		// plugin filename (/path/libname.so)
-	PluginData		data;
 	PluginFields	fields;
 
 	PluginInfo*	(*info) ();	/* Returns plugin name, description */
@@ -86,19 +85,25 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_frame_new_with_alignment
 };
 
+static PluginData geany_data = {
+	NULL,
+	NULL,
+	NULL,
+
+	&doc_funcs,
+	&sci_funcs,
+	&template_funcs,
+	&utils_funcs,
+	&uiutils_funcs,
+};
+
 
 static void
-init_plugin_data(PluginData *data)
+geany_data_init()
 {
-	data->app = app;
-	data->tools_menu = lookup_widget(app->window, "tools1_menu");
-	data->doc_array = doc_array;
-
-	data->document = &doc_funcs;
-	data->sci = &sci_funcs;
-	data->templates = &template_funcs;
-	data->utils = &utils_funcs;
-	data->ui = &uiutils_funcs;
+	geany_data.app = app;
+	geany_data.tools_menu = lookup_widget(app->window, "tools1_menu");
+	geany_data.doc_array = doc_array;
 }
 
 
@@ -206,8 +211,6 @@ plugin_new(const gchar *fname)
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
 
-	init_plugin_data(&plugin->data);
-
 	g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
 	if (plugin_fields)
 		*plugin_fields = &plugin->fields;
@@ -222,7 +225,7 @@ plugin_new(const gchar *fname)
 	}
 
 	if (plugin->init)
-		plugin->init(&plugin->data);
+		plugin->init(&geany_data);
 
 	if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
 	{
@@ -260,7 +263,8 @@ plugin_free(Plugin *plugin)
 	PACKAGE_DATA_DIR G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S "lib" \
 		G_DIR_SEPARATOR_S PACKAGE
 
-void plugins_init()
+static void
+load_plugins()
 {
 	const gchar *path = LIBDIR;
 	GSList *list, *item;
@@ -282,6 +286,13 @@ void plugins_init()
 
 	g_slist_foreach(list, (GFunc) g_free, NULL);
 	g_slist_free(list);
+}
+
+
+void plugins_init()
+{
+	geany_data_init();
+	load_plugins();
 }
 
 
