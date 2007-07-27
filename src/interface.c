@@ -937,7 +937,7 @@ create_window1 (void)
   tools1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (tools1), tools1_menu);
 
-  menu_choose_color1 = gtk_image_menu_item_new_with_mnemonic (_("_Colour Chooser"));
+  menu_choose_color1 = gtk_image_menu_item_new_with_mnemonic (_("_Color Chooser"));
   gtk_widget_show (menu_choose_color1);
   gtk_container_add (GTK_CONTAINER (tools1_menu), menu_choose_color1);
   gtk_tooltips_set_tip (tooltips, menu_choose_color1, _("Open a color chooser dialog, to interactively pick colors from a palette."), NULL);
@@ -3113,11 +3113,11 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_toolbar_compile, _("Display the Compile and Run buttons in the toolbar"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_compile), FALSE);
 
-  check_toolbar_colour = gtk_check_button_new_with_mnemonic (_("Show Colour Chooser button"));
+  check_toolbar_colour = gtk_check_button_new_with_mnemonic (_("Show Color Chooser button"));
   gtk_widget_show (check_toolbar_colour);
   gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_colour, FALSE, FALSE, 0);
   GTK_WIDGET_UNSET_FLAGS (check_toolbar_colour, GTK_CAN_FOCUS);
-  gtk_tooltips_set_tip (tooltips, check_toolbar_colour, _("Display the Colour Chooser button in the toolbar"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_toolbar_colour, _("Display the Color Chooser button in the toolbar"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_colour), FALSE);
 
   check_toolbar_zoom = gtk_check_button_new_with_mnemonic (_("Show Zoom In and Zoom Out buttons"));
@@ -3250,7 +3250,7 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox12);
   gtk_container_add (GTK_CONTAINER (alignment6), vbox12);
 
-  checkbutton1 = gtk_check_button_new_with_mnemonic (_("Invert syntax highlighting colours"));
+  checkbutton1 = gtk_check_button_new_with_mnemonic (_("Invert syntax highlighting colors"));
   gtk_box_pack_start (GTK_BOX (vbox12), checkbutton1, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, checkbutton1, _("Use white text on a black background."), NULL);
 
@@ -3348,7 +3348,7 @@ create_prefs_dialog (void)
   radio_long_line_background = gtk_radio_button_new_with_mnemonic (NULL, _("Background"));
   gtk_widget_show (radio_long_line_background);
   gtk_box_pack_start (GTK_BOX (hbox5), radio_long_line_background, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, radio_long_line_background, _("The background colour of characters after the given cursor position (see below) changed to the colour set below. (This is recommended if you use proportional fonts)"), NULL);
+  gtk_tooltips_set_tip (tooltips, radio_long_line_background, _("The background color of characters after the given cursor position (see below) changed to the color set below. (This is recommended if you use proportional fonts)"), NULL);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_long_line_background), radio_long_line_line_group);
   radio_long_line_line_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_long_line_background));
 

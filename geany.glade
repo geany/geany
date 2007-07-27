@@ -1340,7 +1340,7 @@
 		    <widget class="GtkImageMenuItem" id="menu_choose_color1">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Open a color chooser dialog, to interactively pick colors from a palette.</property>
-		      <property name="label" translatable="yes">_Colour Chooser</property>
+		      <property name="label" translatable="yes">_Color Chooser</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
@@ -4408,8 +4408,8 @@ Bottom
 			  <child>
 			    <widget class="GtkCheckButton" id="check_toolbar_colour">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Display the Colour Chooser button in the toolbar</property>
-			      <property name="label" translatable="yes">Show Colour Chooser button</property>
+			      <property name="tooltip" translatable="yes">Display the Color Chooser button in the toolbar</property>
+			      <property name="label" translatable="yes">Show Color Chooser button</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>
@@ -4829,7 +4829,7 @@ Bottom
 			    <widget class="GtkCheckButton" id="checkbutton1">
 			      <property name="tooltip" translatable="yes">Use white text on a black background.</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Invert syntax highlighting colours</property>
+			      <property name="label" translatable="yes">Invert syntax highlighting colors</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -5121,7 +5121,7 @@ Bottom
 			      <child>
 				<widget class="GtkRadioButton" id="radio_long_line_background">
 				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">The background colour of characters after the given cursor position (see below) changed to the colour set below. (This is recommended if you use proportional fonts)</property>
+				  <property name="tooltip" translatable="yes">The background color of characters after the given cursor position (see below) changed to the color set below. (This is recommended if you use proportional fonts)</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Background</property>
 				  <property name="use_underline">True</property>

@@ -187,7 +187,7 @@ void keybindings_init(void)
 		GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"));
 
 	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER] = fill(cb_func_menu_opencolorchooser,
-		0, 0, "menu_opencolorchooser", _("Show Colour Chooser"));
+		0, 0, "menu_opencolorchooser", _("Show Color Chooser"));
 	keys[GEANY_KEYS_MENU_INSERTSPECIALCHARS] = fill(cb_func_menu_insert_specialchars,
 		0, 0, "menu_insert_specialchars", _("Insert Special HTML Characters"));
 
