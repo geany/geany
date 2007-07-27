@@ -10,6 +10,8 @@
  * src/utils.c, src/utils.h, src/tools.c, src/tools.h, src/dialogs.c,
    src/callbacks.c, src/callbacks.h:
    Move Color Chooser and Word Count tools to tools.c.
+ * src/plugins.c:
+   Add separator between built-in Tools menu items and plugins.
 
 
 2007-07-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

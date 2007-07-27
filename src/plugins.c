@@ -296,7 +296,14 @@ load_plugins()
 
 void plugins_init()
 {
+	GtkWidget *widget;
+
 	geany_data_init();
+
+	widget = gtk_separator_menu_item_new();
+	gtk_widget_show(widget);
+	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), widget);
+
 	load_plugins();
 }
 
