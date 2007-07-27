@@ -78,8 +78,6 @@ gchar *utils_btoa(gboolean sbool);
 
 gboolean utils_atob(const gchar *str);
 
-void utils_wordcount(gchar *text, guint *chars, guint *lines, guint *words);
-
 gboolean utils_is_absolute_path(const gchar *path);
 
 gdouble utils_scale_round(gdouble val, gdouble factor);

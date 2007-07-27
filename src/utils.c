@@ -617,57 +617,6 @@ gboolean utils_atob(const gchar *str)
 }
 
 
-/* (stolen from bluefish, thanks)
- * Returns number of characters, lines and words in the supplied gchar*.
- * Handles UTF-8 correctly. Input must be properly encoded UTF-8.
- * Words are defined as any characters grouped, separated with spaces.
- */
-void utils_wordcount(gchar *text, guint *chars, guint *lines, guint *words)
-{
-	guint in_word = 0;
-	gunichar utext;
-
-	if (!text) return; // politely refuse to operate on NULL
-
-	*chars = *words = *lines = 0;
-	while (*text != '\0')
-	{
-		(*chars)++;
-
-		switch (*text)
-		{
-			case '\n':
-				(*lines)++;
-			case '\r':
-			case '\f':
-			case '\t':
-			case ' ':
-			case '\v':
-				mb_word_separator:
-				if (in_word)
-				{
-					in_word = 0;
-					(*words)++;
-				}
-				break;
-			default:
-				utext = g_utf8_get_char_validated(text, 2); // This might be an utf-8 char
-				if (g_unichar_isspace(utext)) // Unicode encoded space?
-					goto mb_word_separator;
-				if (g_unichar_isgraph(utext)) // Is this something printable?
-					in_word = 1;
-				break;
-		}
-		text = g_utf8_next_char(text); // Even if the current char is 2 bytes, this will iterate correctly.
-	}
-
-	// Capture last word, if there's no whitespace at the end of the file.
-	if (in_word) (*words)++;
-	// We start counting line numbers from 1
-	if (*chars > 0) (*lines)++;
-}
-
-
 /* currently unused */
 gboolean utils_is_absolute_path(const gchar *path)
 {

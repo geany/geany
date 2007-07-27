@@ -795,37 +795,6 @@ on_tv_notebook_switch_page             (GtkNotebook     *notebook,
 }
 
 
-/*
- * color dialog callbacks
- */
-void
-on_color_cancel_button_clicked         (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	gtk_widget_hide(app->open_colorsel);
-}
-
-
-void
-on_color_ok_button_clicked             (GtkButton       *button,
-                                        gpointer         user_data)
-{
-	GdkColor color;
-	gint idx = document_get_cur_idx();
-	gchar *hex;
-
-	gtk_widget_hide(app->open_colorsel);
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-
-	gtk_color_selection_get_current_color(
-			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &color);
-
-	hex = utils_get_hex_from_color(&color);
-	document_insert_colour(idx, hex);
-	g_free(hex);
-}
-
-
 gboolean
 on_window_key_press_event              (GtkWidget *widget,
                                         GdkEventKey *event,
@@ -1104,7 +1073,7 @@ void
 on_count_words1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	dialogs_show_word_count();
+	tools_word_count();
 }
 
 
@@ -1120,7 +1089,7 @@ on_show_color_chooser1_activate        (GtkMenuItem     *menuitem,
 		return;
 
 	editor_find_current_word(doc_list[idx].sci, pos, colour, sizeof colour, GEANY_WORDCHARS"#");
-	dialogs_show_color(colour);
+	tools_color_chooser(colour);
 }
 
 

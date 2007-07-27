@@ -22,7 +22,8 @@
  */
 
 /*
- * Miscellaneous code for the Tools menu items.
+ * Miscellaneous code for the built-in Tools menu items, and custom command code.
+ * For Plugins code see plugins.c.
  */
 
 #include "geany.h"
@@ -453,4 +454,231 @@ void tools_create_insert_custom_command_menu_items()
 		signal_set = TRUE;
 	}
 }
+
+
+/* (stolen from bluefish, thanks)
+ * Returns number of characters, lines and words in the supplied gchar*.
+ * Handles UTF-8 correctly. Input must be properly encoded UTF-8.
+ * Words are defined as any characters grouped, separated with spaces.
+ */
+static void
+word_count(gchar *text, guint *chars, guint *lines, guint *words)
+{
+	guint in_word = 0;
+	gunichar utext;
+
+	if (!text) return; // politely refuse to operate on NULL
+
+	*chars = *words = *lines = 0;
+	while (*text != '\0')
+	{
+		(*chars)++;
+
+		switch (*text)
+		{
+			case '\n':
+				(*lines)++;
+			case '\r':
+			case '\f':
+			case '\t':
+			case ' ':
+			case '\v':
+				mb_word_separator:
+				if (in_word)
+				{
+					in_word = 0;
+					(*words)++;
+				}
+				break;
+			default:
+				utext = g_utf8_get_char_validated(text, 2); // This might be an utf-8 char
+				if (g_unichar_isspace(utext)) // Unicode encoded space?
+					goto mb_word_separator;
+				if (g_unichar_isgraph(utext)) // Is this something printable?
+					in_word = 1;
+				break;
+		}
+		text = g_utf8_next_char(text); // Even if the current char is 2 bytes, this will iterate correctly.
+	}
+
+	// Capture last word, if there's no whitespace at the end of the file.
+	if (in_word) (*words)++;
+	// We start counting line numbers from 1
+	if (*chars > 0) (*lines)++;
+}
+
+
+void tools_word_count()
+{
+	GtkWidget *dialog, *label, *vbox, *table;
+	gint idx;
+	guint chars = 0, lines = 0, words = 0;
+	gchar *text, *range;
+
+	idx = document_get_cur_idx();
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	dialog = gtk_dialog_new_with_buttons(_("Word Count"), GTK_WINDOW(app->window),
+										 GTK_DIALOG_DESTROY_WITH_PARENT,
+										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
+
+	if (sci_can_copy(doc_list[idx].sci))
+	{
+		text = g_malloc0(sci_get_selected_text_length(doc_list[idx].sci) + 1);
+		sci_get_selected_text(doc_list[idx].sci, text);
+		range = _("selection");
+	}
+	else
+	{
+		text = g_malloc(sci_get_length(doc_list[idx].sci) + 1);
+		sci_get_text(doc_list[idx].sci, sci_get_length(doc_list[idx].sci) + 1 , text);
+		range = _("whole document");
+	}
+	word_count(text, &chars, &lines, &words);
+	g_free(text);
+
+	table = gtk_table_new(4, 2, FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
+	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
+
+	label = gtk_label_new(_("Range:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	label = gtk_label_new(range);
+	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 20, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+
+	label = gtk_label_new(_("Lines:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	text = g_strdup_printf("%d", lines);
+	label = gtk_label_new(text);
+	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 1, 2,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 20, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	g_free(text);
+
+	label = gtk_label_new(_("Words:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	text = g_strdup_printf("%d", words);
+	label = gtk_label_new(text);
+	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 20, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	g_free(text);
+
+	label = gtk_label_new(_("Characters:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	text = g_strdup_printf("%d", chars);
+	label = gtk_label_new(text);
+	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 3, 4,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 20, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	g_free(text);
+
+	gtk_container_add(GTK_CONTAINER(vbox), table);
+
+	g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_destroy), dialog);
+	g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_destroy), dialog);
+
+	gtk_widget_show_all(dialog);
+}
+
+
+/*
+ * color dialog callbacks
+ */
+static void
+on_color_cancel_button_clicked         (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	gtk_widget_hide(app->open_colorsel);
+}
+
+
+static void
+on_color_ok_button_clicked             (GtkButton       *button,
+                                        gpointer         user_data)
+{
+	GdkColor color;
+	gint idx = document_get_cur_idx();
+	gchar *hex;
+
+	gtk_widget_hide(app->open_colorsel);
+	if (idx == -1 || ! doc_list[idx].is_valid) return;
+
+	gtk_color_selection_get_current_color(
+			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &color);
+
+	hex = utils_get_hex_from_color(&color);
+	document_insert_colour(idx, hex);
+	g_free(hex);
+}
+
+
+/* This shows the color selection dialog to choose a color. */
+void tools_color_chooser(gchar *color)
+{
+#ifdef G_OS_WIN32
+	win32_show_color_dialog(color);
+#else
+
+	if (app->open_colorsel == NULL)
+	{
+		app->open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
+		gtk_widget_set_name(app->open_colorsel, "GeanyDialog");
+		gtk_window_set_transient_for(GTK_WINDOW(app->open_colorsel), GTK_WINDOW(app->window));
+		gtk_color_selection_set_has_palette(
+			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), TRUE);
+
+		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->cancel_button, "clicked",
+						G_CALLBACK(on_color_cancel_button_clicked), NULL);
+		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->ok_button, "clicked",
+						G_CALLBACK(on_color_ok_button_clicked), NULL);
+		g_signal_connect(app->open_colorsel, "delete_event",
+						G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+	}
+	// if color is non-NULL set it in the dialog as preselected color
+	if (color != NULL && (color[0] == '0' || color[0] == '#'))
+	{
+		GdkColor gc;
+
+		if (color[0] == '0' && color[1] == 'x')
+		{	// we have a string of the format "0x00ff00" and we need it to "#00ff00"
+			color[1] = '#';
+			color++;
+		}
+		gdk_color_parse(color, &gc);
+		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(
+							GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &gc);
+		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(
+							GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &gc);
+	}
+
+	// We make sure the dialog is visible.
+	gtk_window_present(GTK_WINDOW(app->open_colorsel));
+#endif
+}
+
 

@@ -95,14 +95,6 @@ on_notebook1_switch_page               (GtkNotebook     *notebook,
                                         gpointer         user_data);
 
 void
-on_color_ok_button_clicked             (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-on_color_cancel_button_clicked         (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
 on_save_all1_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
