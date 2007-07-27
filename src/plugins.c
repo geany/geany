@@ -45,7 +45,7 @@ typedef struct Plugin
 	PluginFields	fields;
 
 	PluginInfo*	(*info) ();	/* Returns plugin name, description */
-	void	(*init) (PluginData *data);	/* Called when the plugin is enabled */
+	void	(*init) (GeanyData *data);	/* Called when the plugin is enabled */
 	void	(*cleanup) ();		/* Called when the plugin is disabled or when Geany exits */
 }
 Plugin;
@@ -85,7 +85,8 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_frame_new_with_alignment
 };
 
-static PluginData geany_data = {
+
+static GeanyData geany_data = {
 	NULL,
 	NULL,
 	NULL,
@@ -162,6 +163,7 @@ plugin_new(const gchar *fname)
 	GModule *module;
 	PluginInfo* (*info)();
 	PluginFields **plugin_fields;
+	GeanyData **p_geany_data;
 
 	g_return_val_if_fail(fname, NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
@@ -211,6 +213,9 @@ plugin_new(const gchar *fname)
 	plugin->filename = g_strdup(fname);
 	plugin->module = module;
 
+	g_module_symbol(module, "geany_data", (void *) &p_geany_data);
+	if (p_geany_data)
+		*p_geany_data = &geany_data;
 	g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
 	if (plugin_fields)
 		*plugin_fields = &plugin->fields;

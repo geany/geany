@@ -34,11 +34,14 @@
  * PluginInfo* info()
  * 	Use PLUGIN_INFO() macro to define it. Required by Geany.
  *
+ * GeanyData* geany_data
+ * 	Geany owned fields and functions.
+ *
  * PluginFields* plugin_fields
  * 	Plugin owned fields, including flags.
  *
- * void init(PluginData *data)
- * 	Called after loading the plugin.
+ * void init(GeanyData *data)
+ * 	Called after loading the plugin. data is the same as geany_data.
  *
  * void cleanup()
  * 	Called before unloading the plugin. Required for normal plugins - it should undo
@@ -48,7 +51,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 6;
+static const gint api_version = 7;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -95,7 +98,9 @@ typedef enum
 }
 PluginFlags;
 
-/* Fields set and owned by the plugin */
+/* Fields set and owned by the plugin.
+ * Note: Remember to increment api_version (and abi_version if necessary) when
+ * making changes. */
 typedef struct PluginFields
 {
 	PluginFlags	flags;
@@ -111,10 +116,10 @@ typedef struct UtilsFuncs		UtilsFuncs;
 typedef struct UIUtilsFuncs		UIUtilsFuncs;
 
 /* These are fields and functions owned by Geany.
- * Fields will be appended when needed by plugin authors.
+ * Fields and functions will be appended when needed by plugin authors.
  * Note: Remember to increment api_version (and abi_version if necessary) when
  * making changes. */
-typedef struct PluginData
+typedef struct GeanyData
 {
 	MyApp		*app;	// Geany application data fields
 	GtkWidget	*tools_menu;	// Almost all plugins should add menu items to the Tools menu only
@@ -126,11 +131,13 @@ typedef struct PluginData
 	UtilsFuncs		*utils;
 	UIUtilsFuncs	*ui;
 }
-PluginData;
+GeanyData;
+
+typedef GeanyData PluginData;	// for compatibility with API < 7
 
 
 /* For more info about these functions, see the main source code.
- * E.g. for PluginData::document->new_file(), see document_new_file() in document.[hc]. */
+ * E.g. for GeanyData::document->new_file(), see document_new_file() in document.[hc]. */
 
 struct filetype;
 

@@ -32,25 +32,19 @@
 #include "document.h"
 
 
-static PluginData *plugin_data;
+PluginFields	*plugin_fields;
+GeanyData		*geany_data;
 
-#define doc_array	plugin_data->doc_array
+#define doc_array	geany_data->doc_array
 // can't use document as a macro because it's currently a typename
-#define documents	plugin_data->document
-#define scintilla	plugin_data->sci
-#define templates	plugin_data->templates
-#define utils		plugin_data->utils
-#define ui			plugin_data->ui
+#define documents	geany_data->document
+#define scintilla	geany_data->sci
+#define templates	geany_data->templates
+#define utils		geany_data->utils
+#define ui			geany_data->ui
 
 
-static struct
-{
-	GtkWidget *menu_item;
-}
-local_data;
-
-
-VERSION_CHECK(4)
+VERSION_CHECK(7)
 
 PLUGIN_INFO(_("Class Builder"), _("Creates source files for new class types."))
 
@@ -369,7 +363,7 @@ void show_dialog_create_class(gint type)
 	cc_dlg->class_type = type;
 
 	cc_dlg->dialog = gtk_dialog_new_with_buttons(_("Create Class"),
-			GTK_WINDOW(plugin_data->app->window),
+			GTK_WINDOW(geany_data->app->window),
 			GTK_DIALOG_MODAL,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OK, GTK_RESPONSE_OK,
@@ -783,15 +777,13 @@ on_menu_create_gtk_class_activate      (GtkMenuItem     *menuitem,
 }
 
 
-void init(PluginData *data)
+void init(GeanyData *data)
 {
 	GtkWidget *menu_create_class1;
 	GtkWidget *image1861;
 	GtkWidget *menu_create_class1_menu;
 	GtkWidget *menu_create_cpp_class;
 	GtkWidget *menu_create_gtk_class;
-
-	plugin_data = data;
 
 	menu_create_class1 = gtk_image_menu_item_new_with_mnemonic (_("Create Cla_ss"));
 	gtk_container_add (GTK_CONTAINER (data->tools_menu), menu_create_class1);
@@ -817,11 +809,11 @@ void init(PluginData *data)
 
 	gtk_widget_show_all(menu_create_class1);
 
-	local_data.menu_item = menu_create_class1;
+	plugin_fields->menu_item = menu_create_class1;
 }
 
 
 void cleanup()
 {
-	gtk_widget_destroy(local_data.menu_item);
+	gtk_widget_destroy(plugin_fields->menu_item);
 }

@@ -29,18 +29,13 @@
 #include "plugindata.h"
 
 
-static PluginData *plugin_data;
-
-static struct
-{
-	GtkWidget *menu_item;
-}
-local_data;
+PluginFields	*plugin_fields;
+GeanyData		*geany_data;
 
 
 /* Check that Geany supports plugin API version 2 or later, and check
  * for binary compatibility. */
-VERSION_CHECK(2)
+VERSION_CHECK(7)
 
 /* All plugins must set name and description */
 PLUGIN_INFO(_("Demo"), _("Example plugin."))
@@ -53,7 +48,7 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 	GtkWidget *dialog;
 
 	dialog = gtk_message_dialog_new(
-		GTK_WINDOW(plugin_data->app->window),
+		GTK_WINDOW(geany_data->app->window),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_INFO,
 		GTK_BUTTONS_OK,
@@ -67,20 +62,18 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 
 
 /* Called by Geany to initialize the plugin */
-void init(PluginData *data)
+void init(GeanyData *data)
 {
 	GtkWidget *demo_item;
-
-	plugin_data = data;	// keep a pointer to the main application fields & functions
 
 	// Add an item to the Tools menu
 	demo_item = gtk_menu_item_new_with_mnemonic(_("_Demo Plugin"));
 	gtk_widget_show(demo_item);
-	gtk_container_add(GTK_CONTAINER(plugin_data->tools_menu), demo_item);
+	gtk_container_add(GTK_CONTAINER(geany_data->tools_menu), demo_item);
 	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
 
 	// keep a pointer to the menu item, so we can remove it when the plugin is unloaded
-	local_data.menu_item = demo_item;
+	plugin_fields->menu_item = demo_item;
 }
 
 
@@ -89,5 +82,5 @@ void init(PluginData *data)
 void cleanup()
 {
 	// remove the menu item added in init()
-	gtk_widget_destroy(local_data.menu_item);
+	gtk_widget_destroy(plugin_fields->menu_item);
 }

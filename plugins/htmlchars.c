@@ -30,18 +30,17 @@
 #include "document.h"
 
 
-PluginFields *plugin_fields;
+PluginFields	*plugin_fields;
+GeanyData		*geany_data;
 
-static PluginData *plugin_data;
-
-#define doc_array	plugin_data->doc_array
+#define doc_array	geany_data->doc_array
 // can't use document as a macro because it's currently a typename
-#define documents	plugin_data->document
-#define scintilla	plugin_data->sci
-#define ui			plugin_data->ui
+#define documents	geany_data->document
+#define scintilla	geany_data->sci
+#define ui			geany_data->ui
 
 
-VERSION_CHECK(5)
+VERSION_CHECK(7)
 
 PLUGIN_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."))
 
@@ -76,7 +75,7 @@ static void tools_show_dialog_insert_special_chars()
 		GtkWidget *swin, *vbox, *label;
 
 		sc_dialog = gtk_dialog_new_with_buttons(
-					_("Special Characters"), GTK_WINDOW(plugin_data->app->window),
+					_("Special Characters"), GTK_WINDOW(geany_data->app->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					_("_Insert"), GTK_RESPONSE_OK, NULL);
 		vbox = ui->dialog_vbox_new(GTK_DIALOG(sc_dialog));
@@ -509,16 +508,14 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 
 
 /* Called by Geany to initialize the plugin */
-void init(PluginData *data)
+void init(GeanyData *data)
 {
 	GtkWidget *demo_item;
-
-	plugin_data = data;	// keep a pointer to the main application fields & functions
 
 	// Add an item to the Tools menu
 	demo_item = gtk_menu_item_new_with_mnemonic(_("_Insert Special HTML Characters"));
 	gtk_widget_show(demo_item);
-	gtk_container_add(GTK_CONTAINER(plugin_data->tools_menu), demo_item);
+	gtk_container_add(GTK_CONTAINER(geany_data->tools_menu), demo_item);
 	g_signal_connect(G_OBJECT(demo_item), "activate", G_CALLBACK(item_activate), NULL);
 
 	// disable menu_item when there are no documents open

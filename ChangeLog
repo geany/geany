@@ -1,3 +1,14 @@
+2007-07-27  Nick Treleaven  <nick.treleaven@btinternet.com>
+
+ * plugins/demoplugin.c, plugins/htmlchars.c, plugins/classbuilder.c,
+   src/plugindata.h, src/plugins.c:
+   Add GeanyData* geany_data symbol for plugins so they don't have to
+   keep a copy of the init() argument.
+   Rename PluginData GeanyData (but use a typedef for backward
+   compatibility).
+   Update plugins to use newer API symbols.
+
+
 2007-07-26  Nick Treleaven  <nick.treleaven@btinternet.com>
 
  * src/highlighting.c:
