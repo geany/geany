@@ -1,4 +1,4 @@
-2007-07-27  Nick Treleaven  <nick.treleaven@btinternet.com>
+2007-07-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/demoplugin.c, plugins/htmlchars.c, plugins/classbuilder.c,
    src/plugindata.h, src/plugins.c:
@@ -9,7 +9,7 @@
    Update plugins to use newer API symbols.
 
 
-2007-07-26  Nick Treleaven  <nick.treleaven@btinternet.com>
+2007-07-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c:
    Ignore whitespace_chars for Haxe.
