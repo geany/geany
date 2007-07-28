@@ -1133,13 +1133,15 @@ static gboolean ac_complete_constructs(gint idx, gint pos, const gchar *word)
 	gchar *lindent;
 	gchar *whitespace;
 	gint step, str_len;
+	gint ft_id = FILETYPE_ID(doc_list[idx].file_type);
 	GHashTable *specials;
 	ScintillaObject *sci = doc_list[idx].sci;
 
 	str = g_strdup(word);
 	g_strstrip(str);
 
-	pattern = ac_find_completion_by_name(doc_list[idx].file_type->name, str);
+	pattern = ac_find_completion_by_name(filetypes[ft_id]->name, str);
+	geany_debug("-%s- -%s-", word, pattern);
 	if (pattern == NULL || pattern[0] == '\0')
 	{
 		utils_free_pointers(str, pattern, NULL); // free pattern in case it is ""
@@ -1201,15 +1203,13 @@ static gboolean at_eol(ScintillaObject *sci, gint pos)
 }
 
 
-gboolean editor_auto_forif(gint idx, gint pos)
+gboolean editor_auto_complete(gint idx, gint pos)
 {
 	gboolean result = FALSE;
-	gchar *word;
 	gint lexer, style;
-	gint i;
 	ScintillaObject *sci;
 
-	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
+	if (! DOC_IDX_VALID(idx))
 		return FALSE;
 
 	sci = doc_list[idx].sci;
@@ -1219,40 +1219,17 @@ gboolean editor_auto_forif(gint idx, gint pos)
 
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
-	// return, if we are in a comment
-	if (is_comment(lexer, style))
-		return FALSE;
-	// never auto complete in a PHP file outside of the <? ?> tags
-	if (lexer == SCLEX_HTML && ! (style >= SCE_HPHP_DEFAULT && style <= SCE_HPHP_OPERATOR))
-		return FALSE;
 
-	// get the current line contents
-	word = sci_get_line(sci, SSM(sci, SCI_LINEFROMPOSITION, pos, 0));
-
-	/* check that the chars before the current word are only whitespace (on this line).
-	 * this prevents completion of '} while ' */
-	i = strlen(word) - 1;
-	while (i >= 0 && isspace(word[i])) i--;	// skip trailing whitespace
-	while (i >= 0 && isalpha(word[i])) i--;	// find pos before keyword
-	while (i >= 0 && word[i] != '\n' && word[i] != '\r') // we want to stay in this line('\n' check)
-	{
-		if (! isspace(word[i]))
-		{
-			g_free(word);
-			return FALSE;
-		}
-		i--;
-	}
+	editor_find_current_word(sci, pos, current_word, sizeof current_word, NULL);
 
 	// prevent completion of "for "
 	if (! isspace(sci_get_char_at(sci, pos - 1))) // pos points to the line end char so use pos -1
 	{
 		sci_start_undo_action(sci);	// needed because we insert a space separately from construct
-		result = ac_complete_constructs(idx, pos, word);
+		result = ac_complete_constructs(idx, pos, current_word);
 		sci_end_undo_action(sci);
 	}
 
-	utils_free_pointers(word, NULL);
 	return result;
 }
 

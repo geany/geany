@@ -632,7 +632,7 @@ static gboolean check_construct_completion(GdkEventKey *event)
 			gint pos = sci_get_current_position(sci);
 
 			if (editor_prefs.auto_complete_constructs)
-				return editor_auto_forif(idx, pos);
+				return editor_auto_complete(idx, pos);
 		}
 	}
 	return FALSE;

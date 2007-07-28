@@ -104,7 +104,7 @@ gboolean editor_start_auto_complete(gint idx, gint pos, gboolean force);
 
 void editor_close_block(gint idx, gint pos);
 
-gboolean editor_auto_forif(gint idx, gint pos);
+gboolean editor_auto_complete(gint idx, gint pos);
 
 void editor_auto_latex(gint idx, gint pos);
 
