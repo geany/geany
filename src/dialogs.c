@@ -652,6 +652,7 @@ gboolean dialogs_show_unsaved_file(gint idx)
 }
 
 
+#ifndef G_OS_WIN32
 static void
 on_font_apply_button_clicked           (GtkButton       *button,
                                         gpointer         user_data)
@@ -681,6 +682,7 @@ on_font_cancel_button_clicked         (GtkButton       *button,
 {
 	gtk_widget_hide(app->open_fontsel);
 }
+#endif
 
 
 /* This shows the font selection dialog to choose a font. */

@@ -23,6 +23,7 @@ RM = del
 all: check-tools config.h
 	cd tagmanager && make -f makefile.win32 && cd ..
 	cd scintilla && make -f makefile.win32 && cd ..
+	cd plugins && make -f makefile.win32 && cd ..
 	cd src && make -f makefile.win32 && cd ..
 
 # first check the required tools are installed
@@ -35,7 +36,7 @@ config.h: win32-config.h
 	$(CP) $< $@
 
 deps:
-	-$(RM) tagmanager\deps.mak scintilla\deps.mak src\deps.mak
+	-$(RM) tagmanager\deps.mak scintilla\deps.mak plugins\deps.mak src\deps.mak
 
 # used by src/makefile.win32 to avoid del ../file which is an error
 clean-local:
@@ -44,4 +45,5 @@ clean-local:
 clean: deps
 	cd tagmanager && make -f makefile.win32 clean && cd ..
 	cd scintilla && make -f makefile.win32 clean && cd ..
+	cd plugins && make -f makefile.win32 clean && cd ..
 	cd src && make -f makefile.win32 clean && cd ..

@@ -11,6 +11,8 @@
    Use PACKAGE_LIB_DIR.
    Load plugins in ~/.geany/plugins/ prior to the default location.
  * src/symbols.c: Hide empty symbol types in the symbol list.
+ * makefile.win32, win32-config.h, plugins/makefile.win32,
+   src/plugins.c:  Make plugins working and compiling on Windows.
 
 
 2007-07-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

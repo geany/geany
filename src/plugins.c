@@ -28,6 +28,8 @@
 
 #ifdef HAVE_PLUGINS
 
+#include <string.h>
+
 #include "plugins.h"
 #include "plugindata.h"
 #include "support.h"
@@ -36,6 +38,12 @@
 #include "templates.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
+
+#ifdef G_OS_WIN32
+# define PLUGIN_EXT "dll"
+#else
+# define PLUGIN_EXT "so"
+#endif
 
 
 typedef struct Plugin
@@ -267,14 +275,18 @@ static void
 load_plugins(const gchar *path)
 {
 	GSList *list, *item;
+	gchar *fname, *tmp;
+	Plugin *plugin;
 
 	list = utils_get_file_list(path, NULL, NULL);
 
 	for (item = list; item != NULL; item = g_slist_next(item))
 	{
-		gchar *fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
-		Plugin *plugin;
+		tmp = strrchr(item->data, '.');
+		if (tmp == NULL || strcasecmp(tmp, "." PLUGIN_EXT) != 0)
+			continue;
 
+		fname = g_strconcat(path, G_DIR_SEPARATOR_S, item->data, NULL);
 		plugin = plugin_new(fname);
 		if (plugin != NULL)
 		{
@@ -288,25 +300,43 @@ load_plugins(const gchar *path)
 }
 
 
+#ifdef G_OS_WIN32
+static gchar *get_plugin_path()
+{
+	gchar *install_dir = g_win32_get_package_installation_directory("geany", NULL);
+	gchar *path;
+
+	path = g_strconcat(install_dir, "\\plugins", NULL);
+
+	return path;
+}
+#endif
+
+
 void plugins_init()
 {
 	GtkWidget *widget;
-	gchar *path_user;
+	gchar *path;
 
 	geany_data_init();
 
 	widget = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), widget);
 
-	path_user = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
 	// first load plugins in ~/.geany/plugins/, then in $prefix/lib/geany
-	load_plugins(path_user);
+	load_plugins(path);
+#ifdef G_OS_WIN32
+	g_free(path);
+	path = get_plugin_path();
+	load_plugins(path);
+#else
 	load_plugins(PACKAGE_LIB_DIR G_DIR_SEPARATOR_S "geany");
-
+#endif
 	if (g_list_length(plugin_list) > 0)
 		gtk_widget_show(widget);
 
-	g_free(path_user);
+	g_free(path);
 }
 
 

@@ -1,0 +1,58 @@
+# Adapted from Pidgin's plugins/Makefile.am, thanks
+
+CC = gcc
+CXX = g++
+PREFIX = C:\libs
+RM = del
+-include ../localwin32.mk
+.SUFFIXES:
+.SUFFIXES: .c .dll
+
+GTK_INCLUDES= \
+	-I$(PREFIX)/include/gtk-2.0 \
+	-I$(PREFIX)/lib/gtk-2.0/include \
+	-I$(PREFIX)/include/atk-1.0 \
+	-I$(PREFIX)/include/pango-1.0 \
+	-I$(PREFIX)/include/cairo \
+	-I$(PREFIX)/include/glib-2.0 \
+	-I$(PREFIX)/lib/glib-2.0/include \
+	-I$(PREFIX)/include/gettext \
+	-I$(PREFIX)/include
+
+INCLUDEDIRS=  -I.. \
+              -I../src \
+              -I../scintilla/include \
+              -I../tagmanager/include \
+              $(GTK_INCLUDES)
+
+ALL_GTK_LIBS= \
+	-L"$(PREFIX)/lib" \
+	-lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 \
+	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -liconv
+
+CCFLAGS=-Wall -O2 -mms-bitfields
+
+.PHONY: all clean plugins
+
+all: plugins
+
+.c.dll:
+	$(CC) $(CCFLAGS) $(DEFINES) $(INCLUDEDIRS) -o $@.o -c $<
+	$(CC) -shared $@.o $(ALL_GTK_LIBS) $(DLL_LD_FLAGS) -o $@
+
+plugins: \
+		htmlchars.dll \
+		demoplugin.dll \
+		classbuilder.dll
+
+clean:
+	-$(RM) deps.mak *.o *.dll
+
+deps.mak:
+	$(CC) -MM $(CCFLAGS) $(DEFINES) $(INCLUDEDIRS) *.c >deps.mak
+
+# Generate header dependencies with "make deps.mak"
+include deps.mak
+
+..\localwin32.mk:
+	echo # Set local variables here >$@
