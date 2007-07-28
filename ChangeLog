@@ -10,6 +10,7 @@
    if there are any plugins.
    Use PACKAGE_LIB_DIR.
    Load plugins in ~/.geany/plugins/ prior to the default location.
+ * src/symbols.c: Hide empty symbol types in the symbol list.
 
 
 2007-07-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

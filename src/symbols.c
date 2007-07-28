@@ -43,6 +43,9 @@
 #include "msgwindow.h"
 #include "treeviews.h"
 
+
+#define MAX_SYMBOL_TYPES 8 // amount of types in the symbol list (currently max. 8 are used)
+
 const guint TM_GLOBAL_TYPE_MASK =
 	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
 	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t;
@@ -640,6 +643,34 @@ static void init_tag_list(gint idx)
 }
 
 
+/* the following code surely can be improved, at the moment it collects some iters
+ * for removal and after that the actual removal is done. I didn't find a way to find and remove
+ * an empty row in one loop (next iter fails then) */
+static void hide_empty_rows(GtkTreeModel *model, GtkTreeStore *store)
+{
+	GtkTreeIter iter, *iters[MAX_SYMBOL_TYPES] = { NULL };
+	gint i = 0;
+
+	if (! gtk_tree_model_get_iter_first(model, &iter))
+		return; // stop when first iter is invalid, i.e. no elements
+
+	do // first collect the iters we need to delete empty rows
+	{
+		if (! gtk_tree_model_iter_has_child(model, &iter))
+			iters[i++] = gtk_tree_iter_copy(&iter);
+	} while (gtk_tree_model_iter_next(model, &iter));
+
+	// now actually delete the collected iters
+	for (i = 0; i < MAX_SYMBOL_TYPES; i++)
+	{
+		if (iters[i] == NULL)
+			break;
+		gtk_tree_store_remove(store, iters[i]);
+		gtk_tree_iter_free(iters[i]);
+	}
+}
+
+
 gboolean symbols_recreate_tag_list(gint idx)
 {
 	GList *tmp;
@@ -742,6 +773,7 @@ gboolean symbols_recreate_tag_list(gint idx)
 				g_object_unref(icon);
 		}
 	}
+	hide_empty_rows(model, doc_list[idx].tag_store);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(doc_list[idx].tag_tree), model); // Re-attach model to view
 	g_object_unref(model);
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(doc_list[idx].tag_tree));
