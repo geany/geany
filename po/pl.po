@@ -5,10 +5,11 @@
 #
 # Jacek Wolszczak <shutdownrunner@o2.pl>, 2006.
 # Jaroslaw Foksa <jfoksa@gmail.com>, 2007.
-
+msgid ""
+msgstr ""
 "Project-Id-Version: geany 0.12svn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-28 18:43+0200\n"
+"POT-Creation-Date: 2007-07-28 19:58+0200\n"
 "PO-Revision-Date: 2007-07-28 18:16+0000\n"
 "Last-Translator: Jaroslaw Foksa <jfoksa@gmail.com>\n"
 "Language-Team: polski <geany-i18n@uvena.de>\n"
@@ -301,7 +302,7 @@ msgstr "Skompiluj:"
 msgid "Build:"
 msgstr "Buduj:"
 
-#: ../src/build.c:1528 ../src/dialogs.c:1028
+#: ../src/build.c:1528 ../src/dialogs.c:1030
 msgid "Execute:"
 msgstr "Wykonaj:"
 
@@ -519,19 +520,19 @@ msgstr "Czy chcesz go zapisać przed zamknięciem programu?"
 msgid "_Don't save"
 msgstr "_Nie zapisuj"
 
-#: ../src/dialogs.c:695
+#: ../src/dialogs.c:697
 msgid "Choose font"
 msgstr "Wybór czcionki"
 
-#: ../src/dialogs.c:761 ../src/interface.c:2236
+#: ../src/dialogs.c:763 ../src/interface.c:2236
 msgid "Go to Line"
 msgstr "Przejdź do wiersza"
 
-#: ../src/dialogs.c:768
+#: ../src/dialogs.c:770
 msgid "Enter the line you want to go to:"
 msgstr "Wprowadź numer wiersza do którego chcesz przejść:"
 
-#: ../src/dialogs.c:815
+#: ../src/dialogs.c:817
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -539,86 +540,86 @@ msgstr ""
 "Wystąpił błąd lub pobieranie informacji o pliku nie powiodło się (czy plik "
 "został zapisany?)"
 
-#: ../src/dialogs.c:839 ../src/dialogs.c:840 ../src/dialogs.c:841
-#: ../src/dialogs.c:847 ../src/dialogs.c:848 ../src/dialogs.c:849
+#: ../src/dialogs.c:841 ../src/dialogs.c:842 ../src/dialogs.c:843
+#: ../src/dialogs.c:849 ../src/dialogs.c:850 ../src/dialogs.c:851
 #: ../src/ui_utils.c:143 ../src/utils.c:496 ../src/utils.c:517
 #: ../src/utils.c:570
 msgid "unknown"
 msgstr "nieznany"
 
-#: ../src/dialogs.c:853
+#: ../src/dialogs.c:855
 msgid "Properties"
 msgstr "Właściwości"
 
-#: ../src/dialogs.c:882
+#: ../src/dialogs.c:884
 msgid "<b>Type:</b>"
 msgstr "<b>Typ:</b>"
 
-#: ../src/dialogs.c:895
+#: ../src/dialogs.c:897
 msgid "<b>Size:</b>"
 msgstr "<b>Rozmiar:</b>"
 
-#: ../src/dialogs.c:910
+#: ../src/dialogs.c:912
 msgid "<b>Location:</b>"
 msgstr "<b>Położenie:</b>"
 
-#: ../src/dialogs.c:923
+#: ../src/dialogs.c:925
 msgid "<b>Read-only:</b>"
 msgstr "<b>Tylko do odczytu:</b>"
 
-#: ../src/dialogs.c:930
+#: ../src/dialogs.c:932
 msgid "(only inside Geany)"
 msgstr "(tylko wewnątrz Geany)"
 
-#: ../src/dialogs.c:939
+#: ../src/dialogs.c:941
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kodowanie:</b>"
 
-#: ../src/dialogs.c:949 ../src/ui_utils.c:145
+#: ../src/dialogs.c:951 ../src/ui_utils.c:145
 msgid "(with BOM)"
 msgstr "(z BOM)"
 
-#: ../src/dialogs.c:949
+#: ../src/dialogs.c:951
 msgid "(without BOM)"
 msgstr "(bez BOM)"
 
-#: ../src/dialogs.c:959
+#: ../src/dialogs.c:961
 msgid "<b>Modified:</b>"
 msgstr "<b>Ostatnia modyfikacja:</b>"
 
-#: ../src/dialogs.c:972
+#: ../src/dialogs.c:974
 msgid "<b>Changed:</b>"
 msgstr "<b>Ostatnia zmiana:</b>"
 
-#: ../src/dialogs.c:985
+#: ../src/dialogs.c:987
 msgid "<b>Accessed:</b>"
 msgstr "<b>Ostatni dostęp:</b>"
 
-#: ../src/dialogs.c:1006
+#: ../src/dialogs.c:1008
 msgid "<b>Permissions:</b>"
 msgstr "<b>Uprawnienia:</b>"
 
 #. Header
-#: ../src/dialogs.c:1014
+#: ../src/dialogs.c:1016
 msgid "Read:"
 msgstr "Odczyt:"
 
-#: ../src/dialogs.c:1021
+#: ../src/dialogs.c:1023
 msgid "Write:"
 msgstr "Zapis:"
 
 #. Owner
-#: ../src/dialogs.c:1036
+#: ../src/dialogs.c:1038
 msgid "Owner:"
 msgstr "Właściciel:"
 
 #. Group
-#: ../src/dialogs.c:1072
+#: ../src/dialogs.c:1074
 msgid "Group:"
 msgstr "Grupa:"
 
 #. Other
-#: ../src/dialogs.c:1108
+#: ../src/dialogs.c:1110
 msgid "Other:"
 msgstr "Inni:"
 
