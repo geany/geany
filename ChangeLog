@@ -5,6 +5,11 @@
    Allow using auto completion in PHP files outside of the PHP tags,
    generally in comments, for news files without filetype and on
    non-empty lines.
+ * src/Makefile.am, src/plugins.c:
+   Only show the separator between built-in Tools menu items and plugins
+   if there are any plugins.
+   Use PACKAGE_LIB_DIR.
+   Load plugins in ~/.geany/plugins/ prior to the default location.
 
 
 2007-07-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

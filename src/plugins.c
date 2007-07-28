@@ -263,15 +263,9 @@ plugin_free(Plugin *plugin)
 }
 
 
-// TODO: Pass -DLIBDIR=\"$(libdir)/geany\" in Makefile.am
-#define LIBDIR \
-	PACKAGE_DATA_DIR G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S "lib" \
-		G_DIR_SEPARATOR_S PACKAGE
-
 static void
-load_plugins()
+load_plugins(const gchar *path)
 {
-	const gchar *path = LIBDIR;
 	GSList *list, *item;
 
 	list = utils_get_file_list(path, NULL, NULL);
@@ -297,14 +291,22 @@ load_plugins()
 void plugins_init()
 {
 	GtkWidget *widget;
+	gchar *path_user;
 
 	geany_data_init();
 
 	widget = gtk_separator_menu_item_new();
-	gtk_widget_show(widget);
 	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), widget);
 
-	load_plugins();
+	path_user = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
+	// first load plugins in ~/.geany/plugins/, then in $prefix/lib/geany
+	load_plugins(path_user);
+	load_plugins(PACKAGE_LIB_DIR G_DIR_SEPARATOR_S "geany");
+
+	if (g_list_length(plugin_list) > 0)
+		gtk_widget_show(widget);
+
+	g_free(path_user);
 }
 
 

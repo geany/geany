@@ -80,7 +80,8 @@ else
 endif
 
 INCLUDES = \
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\" -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\" -DPACKAGE_LIB_DIR=\""$(libdir)"\" \
+	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@
 
 clean-local:
