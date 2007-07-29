@@ -10,7 +10,6 @@ pdf:
 	mv doc/geany.pdf geany-$(VERSION).pdf
 
 geany.txt:
-	echo $(srcdir)
 	jw -b txt $(srcdir)/geany.docbook
 
 htmldoc: geany.docbook
