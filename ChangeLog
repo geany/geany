@@ -3,6 +3,7 @@
  * scintilla/LexHTML.cxx, scintilla/Makefile.am:
    Backport of LexHTML from Scintilla CVS to fix #1759166.
    Disable debug build of Scintilla and use -Os.
+ * src/about.c: Rework credits page to fix some display issues.
 
 
 2007-07-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

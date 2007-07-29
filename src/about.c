@@ -40,42 +40,45 @@ static GtkWidget *gb_window = NULL;
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
 #define COPYRIGHT "Copyright (c)  2005-2007\nEnrico Tröger\nNick Treleaven\nFrank Lanitz\nAll rights reserved."
-#define CREDITS \
-"<span size=\"larger\" weight=\"bold\">%s</span>\n\t\
-\
-Enrico Tröger - %s\n\t\
-&lt;enrico.troeger@uvena.de&gt;\n\n\t\
-Nick Treleaven - %s\n\t\
-&lt;nick.treleaven@btinternet.com&gt;\n\n\t\
-Frank Lanitz - %s\n\t\
-&lt;frank@frank.uvena.de&gt;\n\n\t\
-\n<span size=\"larger\" weight=\"bold\">%s</span>\n\t\
-\
-be_BY\t Yura Semashko &lt;yurand2@gmail.com&gt;\n\n\t\
-bg\t Dilyan Rusev &lt;dilyanrusev@gmail.com&gt;\n\n\t\
-ca_ES\t Toni Garcia-Navarro &lt;topi@elpiset.net&gt;\n\n\t\
-cs_CZ\t Petr Messner &lt;messa@messa.cz&gt;\n\n\t\
-de_DE\t Enrico Tröger &lt;enrico.troeger@uvena.de&gt;\n\t\
-\t Frank Lanitz &lt;frank@frank.uvena.de&gt;\n\n\t\
-es\t Damián Viano &lt;debian@damianv.com.ar&gt;\n\t\
-\t Nacho Cabanes &lt;ncabanes@gmail.com&gt;\n\n\t\
-fi_FI\t Harri Koskinen &lt;harri@fastmonkey.org&gt;\n\n\t\
-fr\t Jean-Philippe Moal &lt;skateinmars@skateinmars.net&gt;\n\n\t\
-hu\t Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;\n\n\t\
-it\t Max Baldinelli &lt;m.baldinelli@agora.it&gt;\n\t\
-\t Dario Santomarco &lt;dariello@yahoo.it&gt;\n\n\t\
-nl\t Kurt De Bree &lt;kdebree@telenet.be&gt;\n\n\t\
-pl_PL\t Jacek Wolszczak &lt;shutdownrunnter@02.pl&gt;\n\n\t\
-pt_BR\t Alexandra Moreire &lt;alexandream@gmail.com&gt;\n\t\
-\t Adrovane Marques Kade &lt;adrovane@gmail.com&gt;\n\n\t\
-ru_RU\t brahmann_ &lt;brahmann@mthr.net.ru&gt;\n\n\t\
-vi_VN\t Clytie Siddall &lt;clytie@riverland.net.au&gt;\n\n\t\
-zh_CN\t Dormouse Young &lt;dormouse.young@gmail.com&gt;\n\n\t\
-zh_TW\t KoViCH &lt;kovich.ian@gmail.com&gt;\n\n\t"
+
+const gchar *translators[][2] = {
+	{ "be_BY", "Yura Semashko &lt;yurand2@gmail.com&gt;" },
+	{ "bg", "Dilyan Rusev &lt;dilyanrusev@gmail.com&gt;" },
+	{ "ca_ES", "Toni Garcia-Navarro &lt;topi@elpiset.net&gt;" },
+	{ "cs_CZ", "Petr Messner &lt;messa@messa.cz&gt;" },
+	{ "de_DE", "Enrico Tröger &lt;enrico.troeger@uvena.de&gt;\nFrank Lanitz &lt;frank@frank.uvena.de&gt;" },
+	{ "es", "Damián Viano &lt;debian@damianv.com.ar&gt;\nNacho Cabanes &lt;ncabanes@gmail.com&gt;" },
+	{ "fi_FI", "Harri Koskinen &lt;harri@fastmonkey.org&gt;" },
+	{ "fr", "Jean-Philippe Moal &lt;skateinmars@skateinmars.net&gt;" },
+	{ "hu", "Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;" },
+	{ "it", "Max Baldinelli &lt;m.baldinelli@agora.it&gt;,\nDario Santomarco &lt;dariello@yahoo.it&gt;" },
+	{ "nl", "Kurt De Bree &lt;kdebree@telenet.be&gt;" },
+	{ "pl_PL", "Jarosław Foksa &lt;jfoksa@gmail.com&gt;" },
+	{ "pt_BR", "Alexandra Moreire &lt;alexandream@gmail.com&gt;\nAdrovane Marques Kade &lt;adrovane@gmail.com&gt;" },
+	{ "ru_RU", "brahmann_ &lt;brahmann@mthr.net.ru&gt;" },
+	{ "vi_VN", "Clytie Siddall &lt;clytie@riverland.net.au&gt;" },
+	{ "zh_CN", "Dormouse Young &lt;dormouse.young@gmail.com&gt;" },
+	{ "zh_TW", "KoViCH &lt;kovich.ian@gmail.com&gt;" }
+};
+static const gint translators_len = sizeof(translators) / sizeof(translators[0]);
+
+const gchar *prev_translators[][2] = {
+	{ "pl_PL", "Jacek Wolszczak &lt;shutdownrunnter@02.pl&gt;" },
+};
+static const gint prev_translators_len = sizeof(prev_translators) / sizeof(prev_translators[0]);
+
 
 static void header_eventbox_style_set(GtkWidget *widget);
 static void header_label_style_set(GtkWidget *widget);
 static void homepage_clicked(GtkButton *button, gpointer data);
+
+
+#define ROW(text, row, col, x_align, y_padding) \
+	label = gtk_label_new((text)); \
+	gtk_table_attach(GTK_TABLE(table), label, (col), (col) + 1, (row), (row) + 1, \
+			(GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (GTK_FILL), 0, (y_padding)); \
+	gtk_label_set_use_markup(GTK_LABEL(label), TRUE); \
+	gtk_misc_set_alignment(GTK_MISC(label), (x_align), 0);
 
 
 static GtkWidget *create_dialog(void)
@@ -89,11 +92,11 @@ static GtkWidget *create_dialog(void)
 	GtkWidget *url_button;
 	GtkWidget *cop_label;
 	GtkWidget *label;
-	GtkWidget *credits_label;
 	GtkWidget *license_textview;
 	GtkWidget *notebook;
 	GtkWidget *box;
 	GtkWidget *credits_scrollwin;
+	GtkWidget *table;
 	GtkWidget *license_scrollwin;
 	GtkWidget *info_box;
 	GtkWidget *button;
@@ -104,7 +107,7 @@ static GtkWidget *create_dialog(void)
 	gchar *license_text = NULL;
 	gchar buffer[512];
 	gchar buffer2[128];
-	gchar *credits;
+	gint i, row = 0;
 
 	dialog = gtk_dialog_new();
 
@@ -222,18 +225,87 @@ static GtkWidget *create_dialog(void)
 	// create "Credits" tab
 	credits_scrollwin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_container_set_border_width(GTK_CONTAINER(credits_scrollwin), 6);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(credits_scrollwin), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	credits_label = gtk_label_new(NULL);
-	gtk_label_set_selectable(GTK_LABEL(credits_label), TRUE);
-	gtk_label_set_use_markup(GTK_LABEL(credits_label), TRUE);
-	credits = g_strdup_printf(CREDITS, _("Developers"), _("maintainer"), _("developer"),
-							 _("translation maintainer"), _("Translators"));
-	credits = utils_str_replace(credits, "<language>", _("language"));
-	gtk_label_set_markup(GTK_LABEL(credits_label), credits);
-	gtk_misc_set_alignment(GTK_MISC(credits_label), 0.0, 0.0);
-	gtk_widget_show(credits_label);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(credits_scrollwin), credits_label);
-	gtk_viewport_set_shadow_type(GTK_VIEWPORT(gtk_widget_get_parent(credits_label)), GTK_SHADOW_NONE);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(credits_scrollwin),
+		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+
+	table = gtk_table_new(14 + translators_len + prev_translators_len, 3, FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
+
+	row = 0;
+	g_snprintf(buffer, sizeof(buffer),
+		"<span size=\"larger\" weight=\"bold\">%s</span>", _("Developers"));
+	label = gtk_label_new(buffer);
+	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 5);
+	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	row++;
+
+	g_snprintf(buffer, sizeof(buffer), "Enrico Tröger - %s", _("maintainer"));
+	ROW(buffer, row, 1, 0, 0);
+	row++;
+	ROW("&lt;enrico.troeger@uvena.de&gt;", row, 1, 0, 0);
+	row++;
+	ROW("", row, 0, 0, 0);
+	row++;
+
+	g_snprintf(buffer, sizeof(buffer), "Nick Treleaven - %s", _("developer"));
+	ROW(buffer, row, 1, 0, 0);
+	row++;
+	ROW("&lt;nick.treleaven@btinternet.com&gt;", row, 1, 0, 0);
+	row++;
+	ROW("", row, 0, 0, 0);
+	row++;
+
+	g_snprintf(buffer, sizeof(buffer), "Frank Lanitz - %s", _("translation maintainer"));
+	ROW(buffer, 7, 1, 0, 0);
+	row++;
+	ROW("&lt;frank@frank.uvena.de&gt;", row, 1, 0, 0);
+	row++;
+	ROW("", row, 0, 0, 0);
+	row++;
+
+	g_snprintf(buffer, sizeof(buffer),
+		"<span size=\"larger\" weight=\"bold\">%s</span>", _("Translators"));
+	label = gtk_label_new(buffer);
+	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 5);
+	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	row++;
+
+	for (i = 0; i < translators_len; i++)
+	{
+		ROW(translators[i][0], row, 0, 1, 4);
+		ROW(translators[i][1], row, 1, 0, 4);
+		row++;
+	}
+
+	ROW("", row, 0, 0, 0);
+	row++;
+
+	g_snprintf(buffer, sizeof(buffer),
+		"<span size=\"larger\" weight=\"bold\">%s</span>", _("Previous Translators"));
+	label = gtk_label_new(buffer);
+	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 5);
+	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	row++;
+
+	for (i = 0; i < prev_translators_len; i++)
+	{
+		ROW(prev_translators[i][0], row, 0, 1, 4);
+		ROW(prev_translators[i][1], row, 1, 0, 4);
+		row++;
+	}
+
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(credits_scrollwin), table);
+	gtk_viewport_set_shadow_type(GTK_VIEWPORT(gtk_widget_get_parent(table)), GTK_SHADOW_NONE);
+	gtk_widget_show_all(table);
 	label = gtk_label_new(_("Credits"));
 	gtk_widget_show(label);
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), credits_scrollwin, label);
@@ -241,7 +313,8 @@ static GtkWidget *create_dialog(void)
 	// create "License" tab
 	license_scrollwin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_container_set_border_width(GTK_CONTAINER(license_scrollwin), 6);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(license_scrollwin), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(license_scrollwin),
+		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	license_textview = gtk_text_view_new();
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(license_textview), FALSE);
 	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(license_textview), FALSE);
@@ -255,12 +328,12 @@ static GtkWidget *create_dialog(void)
 	g_file_get_contents(buffer, &license_text, NULL, NULL);
 	if (license_text == NULL)
 	{
-		license_text = g_strdup("License text could not be found, please google for GPLv2");
+		license_text = g_strdup(
+			_("License text could not be found, please search the web for GPLv2"));
 	}
 	tb = gtk_text_view_get_buffer(GTK_TEXT_VIEW(license_textview));
 	gtk_text_buffer_set_text(tb, license_text, strlen(license_text));
 
-	g_free(credits);
 	g_free(license_text);
 
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), license_scrollwin, label);
