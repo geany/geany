@@ -139,13 +139,20 @@ Section "!Program Files" SEC01
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
-Section "Language Files" SEC02
+Section "Plugins" SEC02
+  SectionIn 1
+  SetOverwrite ifnewer
+  SetOutPath "$INSTDIR"
+  File /r "${RESOURCEDIR}\plugins"
+SectionEnd
+
+Section "Language Files" SEC03
   SectionIn 1
   SetOutPath "$INSTDIR"
   File /r "${RESOURCEDIR}\lib"
 SectionEnd
 
-Section "Documentation" SEC03
+Section "Documentation" SEC04
   SectionIn 1
   SetOverwrite ifnewer
   SetOutPath "$INSTDIR"
@@ -158,7 +165,7 @@ Section "Documentation" SEC03
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
-Section "Autocompletion Tags" SEC04
+Section "Autocompletion Tags" SEC05
   SectionIn 1
   SetOutPath "$INSTDIR\data"
   SetOverwrite ifnewer
@@ -171,7 +178,7 @@ SectionEnd
 
 ; Include GTK runtime library but only if desired from command line
 !ifdef INCLUDE_GTK
-Section "GTK 2.10 Runtime Environment" SEC05
+Section "GTK 2.10 Runtime Environment" SEC06
   SectionIn 1
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
@@ -189,7 +196,7 @@ Section "GTK 2.10 Runtime Environment" SEC05
 SectionEnd
 !endif
 
-Section "Context menus" SEC06
+Section "Context menus" SEC07
   SectionIn 1
   WriteRegStr HKCR "*\shell\OpenWithGeany" "" "Open with Geany"
   WriteRegStr HKCR "*\shell\OpenWithGeany\command" "" '$INSTDIR\geany.exe "%1"'
@@ -221,13 +228,14 @@ SectionEnd
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Required program files. You cannot skip these files."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} ""
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Manual in Text and HTML format."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Symbol lists necessary for auto completion of symbols."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Available plugins like 'Class Builder' and 'Insert Special Characters'."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Various translations of Geany's interface."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Manual in Text and HTML format."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} "Symbol lists necessary for auto completion of symbols."
 !ifdef INCLUDE_GTK
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} "You need this files to run Geany. If you have already installed a GTK Runtime Environment (2.6 or higher), you can skip it."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "You need this files to run Geany. If you have already installed a GTK Runtime Environment (2.6 or higher), you can skip it."
 !endif
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "Add context menu item 'Open With Geany'"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC07} "Add context menu item 'Open With Geany'"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -306,6 +314,7 @@ Section Uninstall
 
   RMDir "$SMPROGRAMS\$ICONS_GROUP"
   RMDir /r "$INSTDIR\doc"
+  RMDir /r "$INSTDIR\plugins"
   RMDir /r "$INSTDIR\data"
   RMDir /r "$INSTDIR\etc"
   RMDir /r "$INSTDIR\lib"
