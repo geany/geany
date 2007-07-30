@@ -180,7 +180,7 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 
 		// get selection
 		len = sci_get_selected_text_length(doc_list[idx].sci);
-		sel = g_malloc0(len);
+		sel = g_malloc0(len + 1);
 		sci_get_selected_text(doc_list[idx].sci, sel);
 
 		// write data to the command

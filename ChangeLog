@@ -1,3 +1,9 @@
+2007-07-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/tools.c, src/sciwrappers.c, src/callbacks.c, src/search.c:
+   Add allocation for NULL-terminated selection ends.
+
+
 2007-07-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * scintilla/LexHTML.cxx, scintilla/Makefile.am:

@@ -1902,7 +1902,9 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 
 	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
 	{
-		filename = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
+		gint len = sci_get_selected_text_length(doc_list[idx].sci);
+
+		filename = g_malloc(len + 1);
 		sci_get_selected_text(doc_list[idx].sci, filename);
 	}
 	else if (sci_get_lines_selected(doc_list[idx].sci) == 0)

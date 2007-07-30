@@ -509,6 +509,8 @@ void sci_get_text(ScintillaObject* sci, gint len, gchar* text)
 }
 
 
+/* Text must be allocated sci_get_selected_text_length() + 1, because
+ * the selection will be NULL-terminated. */
 void sci_get_selected_text(ScintillaObject* sci, gchar* text)
 {
 	SSM( sci, SCI_GETSELTEXT, 0, (sptr_t) text);

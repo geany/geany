@@ -213,7 +213,9 @@ static gchar *get_default_text(gint idx)
 
 	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
 	{
-		s = g_malloc(sci_get_selected_text_length(doc_list[idx].sci));
+		gint len = sci_get_selected_text_length(doc_list[idx].sci);
+
+		s = g_malloc(len + 1);
 		sci_get_selected_text(doc_list[idx].sci, s);
 	}
 	else if (sci_get_lines_selected(doc_list[idx].sci) == 0)
