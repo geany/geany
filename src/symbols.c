@@ -348,8 +348,11 @@ get_tag_list(gint idx, guint tag_types)
 			tag_names = NULL;
 		}
 
-		// do this comparison only once
-		if (utils_str_equal(doc_list[idx].encoding, "UTF-8")) doc_is_utf8 = TRUE;
+		// encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
+		// for None at this point completely
+		if (utils_str_equal(doc_list[idx].encoding, "UTF-8") ||
+			utils_str_equal(doc_list[idx].encoding, "None"))
+			doc_is_utf8 = TRUE;
 
 		for (i = 0; i < (doc_list[idx].tm_file)->tags_array->len; ++i)
 		{
@@ -362,6 +365,9 @@ get_tag_list(gint idx, guint tag_types)
 				if (! doc_is_utf8) utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
 															-1, doc_list[idx].encoding, TRUE);
 				else utf8_name = tag->name;
+
+				if (utf8_name == NULL)
+					continue;
 
 				symbol = g_new0(GeanySymbol, 1);
 				if ((tag->atts.entry.scope != NULL) && isalpha(tag->atts.entry.scope[0]))
