@@ -51,12 +51,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 7;
+static const gint api_version = 8;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 2;
+static const gint abi_version = 3;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
@@ -124,12 +124,15 @@ typedef struct GeanyData
 	MyApp		*app;	// Geany application data fields
 	GtkWidget	*tools_menu;	// Almost all plugins should add menu items to the Tools menu only
 	GArray		*doc_array;	// array of document pointers
+	struct filetype		**filetypes;
+	struct EditorPrefs	*editor_prefs;
 
 	DocumentFuncs	*document;
 	ScintillaFuncs	*sci;
 	TemplateFuncs	*templates;
 	UtilsFuncs		*utils;
 	UIUtilsFuncs	*ui;
+	struct SupportFuncs	*support;
 }
 GeanyData;
 
@@ -152,14 +155,38 @@ struct _ScintillaObject;
 
 struct ScintillaFuncs
 {
+	long int	(*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
+		long unsigned int wParam, long int lParam);
+	void	(*send_command) (struct _ScintillaObject* sci, gint cmd);
+
+	void	(*start_undo_action) (struct _ScintillaObject* sci);
+	void	(*end_undo_action) (struct _ScintillaObject* sci);
 	void	(*set_text) (struct _ScintillaObject *sci, const gchar *text);
 	void	(*insert_text) (struct _ScintillaObject *sci, gint pos, const gchar *text);
-	gint	(*get_current_position) (struct _ScintillaObject *sci);
 	void	(*get_text) (struct _ScintillaObject *sci, gint len, gchar* text);
 	gint	(*get_length) (struct _ScintillaObject *sci);
+	gint	(*get_current_position) (struct _ScintillaObject *sci);
+	void	(*set_current_position) (struct _ScintillaObject* sci, gint position, gboolean scroll_to_caret);
+	gint	(*get_col_from_position) (struct _ScintillaObject* sci, gint position);
+	gint	(*get_line_from_position) (struct _ScintillaObject* sci, gint position);
+	gint	(*get_position_from_line) (struct _ScintillaObject* sci, gint line);
 	void	(*replace_sel) (struct _ScintillaObject* sci, const gchar* text);
 	void	(*get_selected_text) (struct _ScintillaObject* sci, gchar* text);
 	gint	(*get_selected_text_length) (struct _ScintillaObject* sci);
+	gint	(*get_selection_start) (struct _ScintillaObject* sci);
+	gint	(*get_selection_end) (struct _ScintillaObject* sci);
+	gint	(*get_selection_mode) (struct _ScintillaObject* sci);
+	void	(*set_selection_mode) (struct _ScintillaObject* sci, gint mode);
+	void	(*set_selection_start) (struct _ScintillaObject* sci, gint position);
+	void	(*set_selection_end) (struct _ScintillaObject* sci, gint position);
+	void	(*get_text_range) (struct _ScintillaObject* sci, gint start, gint end, gchar*text);
+	gchar*	(*get_line) (struct _ScintillaObject* sci, gint line_num);
+	gint	(*get_line_length) (struct _ScintillaObject* sci, gint line);
+	gint	(*get_line_count) (struct _ScintillaObject* sci);
+	gboolean	(*get_line_is_visible) (struct _ScintillaObject* sci, gint line);
+	void	(*ensure_line_is_visible) (struct _ScintillaObject* sci, gint line);
+	void	(*scroll_caret) (struct _ScintillaObject* sci);
+	gint	(*find_bracematch) (struct _ScintillaObject* sci, gint pos);
 };
 
 struct TemplateFuncs
@@ -179,5 +206,11 @@ struct UIUtilsFuncs
 	GtkWidget*	(*dialog_vbox_new) (GtkDialog *dialog);
 	GtkWidget*	(*frame_new_with_alignment) (const gchar *label_text, GtkWidget **alignment);
 };
+
+typedef struct SupportFuncs
+{
+	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);
+}
+SupportFuncs;
 
 #endif

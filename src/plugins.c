@@ -30,6 +30,13 @@
 
 #include <string.h>
 
+#ifndef PLAT_GTK
+#   define PLAT_GTK 1   // needed for ScintillaWidget.h
+#endif
+
+#include "Scintilla.h"
+#include "ScintillaWidget.h"
+
 #include "plugins.h"
 #include "plugindata.h"
 #include "support.h"
@@ -38,6 +45,7 @@
 #include "templates.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"
+#include "editor.h"
 
 #ifdef G_OS_WIN32
 # define PLUGIN_EXT "dll"
@@ -68,14 +76,36 @@ static DocumentFuncs doc_funcs = {
 };
 
 static ScintillaFuncs sci_funcs = {
+	&scintilla_send_message,
+	&sci_cmd,
+	&sci_start_undo_action,
+	&sci_end_undo_action,
 	&sci_set_text,
 	&sci_insert_text,
-	&sci_get_current_position,
 	&sci_get_text,
 	&sci_get_length,
+	&sci_get_current_position,
+	&sci_set_current_position,
+	&sci_get_col_from_position,
+	&sci_get_line_from_position,
+	&sci_get_position_from_line,
 	&sci_replace_sel,
 	&sci_get_selected_text,
-	&sci_get_selected_text_length
+	&sci_get_selected_text_length,
+	&sci_get_selection_start,
+	&sci_get_selection_end,
+	&sci_get_selection_mode,
+	&sci_set_selection_mode,
+	&sci_set_selection_start,
+	&sci_set_selection_end,
+	&sci_get_text_range,
+	&sci_get_line,
+	&sci_get_line_length,
+	&sci_get_line_count,
+	&sci_get_line_is_visible,
+	&sci_ensure_line_is_visible,
+	&sci_scroll_caret,
+	&sci_find_bracematch
 };
 
 static TemplateFuncs template_funcs = {
@@ -93,8 +123,14 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_frame_new_with_alignment
 };
 
+static SupportFuncs support_funcs = {
+	&lookup_widget
+};
+
 
 static GeanyData geany_data = {
+	NULL,
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -104,6 +140,7 @@ static GeanyData geany_data = {
 	&template_funcs,
 	&utils_funcs,
 	&uiutils_funcs,
+	&support_funcs
 };
 
 
@@ -113,6 +150,8 @@ geany_data_init()
 	geany_data.app = app;
 	geany_data.tools_menu = lookup_widget(app->window, "tools1_menu");
 	geany_data.doc_array = doc_array;
+	geany_data.filetypes = filetypes;
+	geany_data.editor_prefs = &editor_prefs;
 }
 
 

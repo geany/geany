@@ -1,3 +1,13 @@
+2007-08-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h, src/plugins.c, src/editor.h, HACKING:
+   Add filetypes, editor_prefs fields to plugin API.
+   Wrap scintilla_send_message(), sci_cmd(), lookup_widget().
+   Apply patch from Jeff Pohlmeyer to add more common scintilla wrappers
+   to the plugin API (thanks).
+   Increment plugin ABI version.
+
+
 2007-07-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * po/Makefile.in.in: Removed.

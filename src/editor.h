@@ -44,7 +44,7 @@ typedef enum
 
 /* These are the default prefs when creating a new editor window.
  * Some of these can be overridden per document. */
-typedef struct
+typedef struct EditorPrefs
 {
 	gboolean	line_breaking;
 	IndentMode	indent_mode;

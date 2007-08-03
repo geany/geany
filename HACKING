@@ -67,6 +67,12 @@ NOTES
 Some of these notes below are brief (or maybe incomplete) - please contact
 the mailing list for more information.
 
+Modifying data types
+--------------------
+When reordering or changing existing elements of structs that are used as part of the
+plugin API, you should increment abi_version in plugindata.h (and api_version if changing
+elements). This is not needed if you're just appending fields to structs.
+
 Adding a file foo.[hc] in src/ or plugins/
 ------------------------------------------
 Add foo.c, foo.h to SRCS in path/Makefile.am.
