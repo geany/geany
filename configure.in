@@ -175,6 +175,11 @@ AC_SUBST(GEANY_PIXMAPS_DIR)
 GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
 AC_SUBST(GEANY_DATA_DIR)
 
+# intltool hack to define install_sh on Debian/Ubuntu systems
+if test "x$install_sh" = "x"; then
+	install_sh="`pwd`/install-sh"
+	AC_SUBST(install_sh)
+fi
 
 AC_OUTPUT([
 Makefile
