@@ -161,16 +161,24 @@ geany_data_init()
 static gboolean
 plugin_loaded(GModule *module)
 {
-	const gchar *fname = g_module_name(module);
+	gchar *basename_module, *basename_loaded;
 	GList *item;
 
+	basename_module = g_path_get_basename(g_module_name(module));
 	for (item = plugin_list; item != NULL; item = g_list_next(item))
 	{
-		Plugin *p = item->data;
+		basename_loaded = g_path_get_basename(
+			g_module_name(((Plugin*)item->data)->module));
 
-		if (utils_str_equal(fname, g_module_name(p->module)))
+		if (utils_str_equal(basename_module, basename_loaded))
+		{
+			g_free(basename_loaded);
+			g_free(basename_module);
 			return TRUE;
+		}
+		g_free(basename_loaded);
 	}
+	g_free(basename_module);
 	return FALSE;
 }
 

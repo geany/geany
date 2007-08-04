@@ -2,6 +2,7 @@
 
  * configure.in: Fix error in "make install" caused by old automake
                  versions and intltool.
+ * src/plugins.c: Prevent loading the same plugin in different paths.
 
 
 2007-08-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
