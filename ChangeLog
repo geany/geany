@@ -3,6 +3,8 @@
  * geany.glade, src/geany.h, src/interface.c, src/keyfile.c,
    src/msgwindow.c, src/prefs.c, src/ui_utils.c:
    Add option to suppress messages in the status bar.
+ * src/dialogs.c: Use UTF-8 filename in Save As dialog when setting
+                  non-existing filename.
 
 
 2007-08-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

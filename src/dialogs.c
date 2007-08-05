@@ -517,7 +517,8 @@ gboolean dialogs_show_save_as()
 		if (g_path_is_absolute(locale_filename))
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(app->save_filesel), locale_filename);
 		else
-			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(app->save_filesel), locale_filename);
+			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(app->save_filesel),
+				doc_list[idx].file_name);
 #ifndef G_OS_WIN32
 		g_free(locale_filename);
 #endif
