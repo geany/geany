@@ -2410,6 +2410,7 @@ create_prefs_dialog (void)
   GtkWidget *vbox21;
   GtkWidget *check_beep;
   GtkWidget *check_switch_pages;
+  GtkWidget *check_suppress_status_msgs;
   GtkWidget *check_auto_focus;
   GtkWidget *check_ask_suppress_search_dialogs;
   GtkWidget *label178;
@@ -2746,6 +2747,12 @@ create_prefs_dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox21), check_switch_pages, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_switch_pages, _("Switch to the status message tab (in the notebook window at the bottom) if a new status message arrives."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_switch_pages), FALSE);
+
+  check_suppress_status_msgs = gtk_check_button_new_with_mnemonic (_("Suppress status messages in the status bar"));
+  gtk_widget_show (check_suppress_status_msgs);
+  gtk_box_pack_start (GTK_BOX (vbox21), check_suppress_status_msgs, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_suppress_status_msgs, _("Removes all messages from the status bar. The messages are still displayed in the status messages window."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_suppress_status_msgs), FALSE);
 
   check_auto_focus = gtk_check_button_new_with_mnemonic (_("Auto focus widgets (focus follows mouse)"));
   gtk_widget_show (check_auto_focus);
@@ -4133,6 +4140,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox21, "vbox21");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_beep, "check_beep");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_switch_pages, "check_switch_pages");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_suppress_status_msgs, "check_suppress_status_msgs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_auto_focus, "check_auto_focus");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_suppress_search_dialogs, "check_ask_suppress_search_dialogs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label178, "label178");

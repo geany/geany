@@ -109,6 +109,7 @@ typedef struct MyApp
 	gboolean			 pref_main_save_winpos;
 	gboolean			 pref_main_confirm_exit;
 	gboolean			 pref_main_suppress_search_dialogs;
+	gboolean			 pref_main_suppress_status_messages;
 	gboolean			 pref_toolbar_show_search;
 	gboolean			 pref_toolbar_show_goto;
 	gboolean			 pref_toolbar_show_undo;

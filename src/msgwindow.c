@@ -291,7 +291,8 @@ void msgwin_status_add(const gchar *format, ...)
 	va_end(args);
 
 	// display status message in status bar
-	ui_set_statusbar("%s", string);
+	if (! app->pref_main_suppress_status_messages)
+		ui_set_statusbar("%s", string);
 
 	// add a timestamp to status messages
 	time_str = utils_get_current_time_string();

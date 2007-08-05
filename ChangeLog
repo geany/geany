@@ -1,3 +1,10 @@
+2007-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, src/geany.h, src/interface.c, src/keyfile.c,
+   src/msgwindow.c, src/prefs.c, src/ui_utils.c:
+   Add option to suppress messages in the status bar.
+
+
 2007-08-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * configure.in: Fix error in "make install" caused by old automake

@@ -86,7 +86,8 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 }
 
 
-// Display text on the statusbar (without logging it to the Status window).
+/* Display text on the statusbar or log it to the Status window if
+ * app->pref_main_suppress_status_messages is set */
 void ui_set_statusbar(const gchar *format, ...)
 {
 	gchar string[512];
@@ -99,7 +100,10 @@ void ui_set_statusbar(const gchar *format, ...)
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
-	set_statusbar(string, FALSE);
+	if (app->pref_main_suppress_status_messages)
+		msgwin_status_add("%s", string);
+	else
+		set_statusbar(string, FALSE);
 }
 
 

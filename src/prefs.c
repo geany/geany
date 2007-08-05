@@ -96,6 +96,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "check_switch_pages");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->switch_msgwin_pages);
 
+	widget = lookup_widget(app->prefs_dialog, "check_suppress_status_msgs");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_suppress_status_messages);
+
 	widget = lookup_widget(app->prefs_dialog, "check_auto_focus");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->auto_focus);
 
@@ -478,6 +481,9 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 
 		widget = lookup_widget(app->prefs_dialog, "check_switch_pages");
 		app->switch_msgwin_pages = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(app->prefs_dialog, "check_suppress_status_msgs");
+		app->pref_main_suppress_status_messages = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_auto_focus");
 		app->auto_focus = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

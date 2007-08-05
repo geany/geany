@@ -250,6 +250,7 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", editor_prefs.use_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", app->pref_main_confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", app->pref_main_suppress_search_dialogs);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", app->pref_main_suppress_status_messages);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", app->pref_main_load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", app->pref_main_save_winpos);
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", app->toolbar_visible);
@@ -475,6 +476,7 @@ gboolean configuration_load()
 	}
 	app->pref_main_confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
 	app->pref_main_suppress_search_dialogs = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", FALSE);
+	app->pref_main_suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
 	app->pref_main_load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	app->pref_main_save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
 	app->pref_toolbar_show_search = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_search", TRUE);
