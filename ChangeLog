@@ -1,3 +1,10 @@
+2007-08-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/symbols.c, tagmanager/python.c:
+   Parse Python global variables and class variables from assignment
+   statements; assignment to a tuple literal ('x, y =') not supported.
+
+
 2007-08-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, src/geany.h, src/interface.c, src/keyfile.c,

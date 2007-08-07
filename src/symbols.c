@@ -572,6 +572,7 @@ static void init_tag_list(gint idx)
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_member), _("Methods"), "classviewer-member",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				NULL);
 				//&(tv_iters.tag_macro), _("Mixin"),
 				//&(tv_iters.tag_variable), _("Variables"),
