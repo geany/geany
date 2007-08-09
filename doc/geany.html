@@ -1,0 +1,2862 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<title>Geany</title>
+<meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz" />
+<meta name="date" content="2007-05-31" />
+<style type="text/css">
+
+/*
+:Author: Enrico Troeger
+:Contact: enrico(dot)troeger(at)uvena(dot)de
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for use with Docutils based on a version of John Gabriele.
+*/
+
+/*@import url(html4css1.css);*/
+
+body {
+    background-color: #f2f2f2;
+    color: #404040;
+	margin-left: 0.4em;
+    width: 60em;
+    font-size: 90%;
+}
+
+a {
+    color: #990000;
+}
+
+a:visited {
+    color: #7E558E;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+h1 {
+    border-top: 1px dotted;
+    margin-top: 2em;
+}
+
+h1, h2, h3 {
+    font-family: sans-serif;
+    color: #5D0606;
+}
+
+h1.title {
+  text-align: left }
+
+h2 {
+    margin-top: 30px;
+}
+
+h2.subtitle {
+  text-align: left }
+
+h3 {
+    padding-left: 3px;
+}
+
+blockquote, pre {
+    border: 1px solid;
+    padding: 0.4em;
+}
+
+blockquote {
+    font-family: sans-serif;
+    background-color: #DBEDD5;
+    border: 1px dotted;
+    border-left: 4px solid;
+    border-color: #9FD98C;
+}
+
+pre {
+    background-color: #ECDFCE;
+    border: 1px dotted;
+    border-left: 4px solid;
+    border-color: #D9BE9A;
+}
+
+tt, pre, code {
+    color: #6D4212;
+}
+
+table {
+    border: 1px solid #D9BE9A;
+}
+
+th {
+    background-color: #ECDFCE;
+    border: 1px dotted #D9BE9A;
+}
+
+td {
+    border: 1px dotted #D9BE9A;
+}
+
+.docinfo-name {
+	color: #5D0606;
+}
+
+p.admonition-title {
+	color: #990000;
+	font-weight: bold;
+}
+
+div.note {
+	margin: 1em 3em;
+	padding: 0em;
+}
+
+dt {
+	font-style: italic;
+}
+
+</style>
+</head>
+<body>
+<div class="document" id="geany">
+<h1 class="title">Geany</h1>
+<h2 class="subtitle" id="a-fast-light-gtk-ide">A fast, light, GTK+ IDE</h2>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Authors:</th>
+<td>Enrico Tröger
+<br />Nick Treleaven
+<br />Frank Lanitz</td></tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>2007-05-31</td></tr>
+<tr><th class="docinfo-name">Version:</th>
+<td>0.12</td></tr>
+</tbody>
+</table>
+<p>Copyright © 2005-2007</p>
+<p>This document is distributed under the terms of the GNU General Public
+License as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version. A copy of this
+license can be found in the file COPYING included with the source code
+of this program, and also in the chapter <a class="reference" href="#gnu-general-public-license">GNU General Public License</a>.</p>
+<div class="contents topic">
+<p class="topic-title first"><a id="contents" name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#introduction" id="id2" name="id2">Introduction</a><ul>
+<li><a class="reference" href="#about-geany" id="id3" name="id3">About Geany</a></li>
+<li><a class="reference" href="#about-this-document" id="id4" name="id4">About this document</a></li>
+<li><a class="reference" href="#where-to-get-it" id="id5" name="id5">Where to get it</a></li>
+<li><a class="reference" href="#license" id="id6" name="id6">License</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#installation" id="id7" name="id7">Installation</a><ul>
+<li><a class="reference" href="#requirements" id="id8" name="id8">Requirements</a></li>
+<li><a class="reference" href="#source-compilation" id="id9" name="id9">Source compilation</a></li>
+<li><a class="reference" href="#binary-packages" id="id10" name="id10">Binary packages</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#usage" id="id11" name="id11">Usage</a><ul>
+<li><a class="reference" href="#getting-started" id="id12" name="id12">Getting started</a></li>
+<li><a class="reference" href="#command-line-options" id="id13" name="id13">Command line options</a></li>
+<li><a class="reference" href="#general" id="id14" name="id14">General</a><ul>
+<li><a class="reference" href="#startup" id="id15" name="id15">Startup</a></li>
+<li><a class="reference" href="#opening-files-from-the-command-line-in-a-running-instance" id="id16" name="id16">Opening files from the command-line in a running instance</a></li>
+<li><a class="reference" href="#virtual-terminal-emulator-widget-vte" id="id17" name="id17">Virtual terminal emulator widget (VTE)</a></li>
+<li><a class="reference" href="#defining-own-widget-styles-using-gtkrc-2-0" id="id18" name="id18">Defining own widget styles using .gtkrc-2.0</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#character-sets-and-unicode-byte-order-mark-bom" id="id19" name="id19">Character sets and Unicode Byte-Order-Mark (BOM)</a><ul>
+<li><a class="reference" href="#using-character-sets" id="id20" name="id20">Using character sets</a></li>
+<li><a class="reference" href="#special-encoding-none" id="id21" name="id21">Special encoding &quot;None&quot;</a></li>
+<li><a class="reference" href="#unicode-byte-order-mark-bom" id="id22" name="id22">Unicode Byte-Order-Mark (BOM)</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#editing" id="id23" name="id23">Editing</a><ul>
+<li><a class="reference" href="#drag-and-drop-of-text" id="id24" name="id24">Drag and drop of text</a></li>
+<li><a class="reference" href="#auto-indentation" id="id25" name="id25">Auto indentation</a></li>
+<li><a class="reference" href="#bookmarks" id="id26" name="id26">Bookmarks</a></li>
+<li><a class="reference" href="#send-text-through-definable-commands" id="id27" name="id27">Send text through definable commands</a></li>
+<li><a class="reference" href="#context-actions" id="id28" name="id28">Context actions</a></li>
+<li><a class="reference" href="#user-definable-auto-completion" id="id29" name="id29">User-definable auto completion</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#search-replace-and-go-to" id="id30" name="id30">Search, replace and go to</a><ul>
+<li><a class="reference" href="#find" id="id31" name="id31">Find</a><ul>
+<li><a class="reference" href="#matching-options" id="id32" name="id32">Matching options</a></li>
+<li><a class="reference" href="#find-all" id="id33" name="id33">Find all</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#find-usage" id="id34" name="id34">Find usage</a></li>
+<li><a class="reference" href="#find-in-files" id="id35" name="id35">Find in files</a><ul>
+<li><a class="reference" href="#filtering-out-version-control-files" id="id36" name="id36">Filtering out version control files</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#replace" id="id37" name="id37">Replace</a><ul>
+<li><a class="reference" href="#replace-all" id="id38" name="id38">Replace all</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#go-to-tag-definition" id="id39" name="id39">Go to tag definition</a></li>
+<li><a class="reference" href="#go-to-tag-declaration" id="id40" name="id40">Go to tag declaration</a></li>
+<li><a class="reference" href="#go-to-line" id="id41" name="id41">Go to line</a></li>
+<li><a class="reference" href="#regular-expressions" id="id42" name="id42">Regular expressions</a><ul>
+<li><a class="reference" href="#partial-posix-compatibility" id="id43" name="id43">Partial POSIX compatibility</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#tags" id="id44" name="id44">Tags</a><ul>
+<li><a class="reference" href="#workspace-tags" id="id45" name="id45">Workspace tags</a></li>
+<li><a class="reference" href="#global-tags" id="id46" name="id46">Global tags</a><ul>
+<li><a class="reference" href="#default-global-tags-files" id="id47" name="id47">Default global tags files</a></li>
+<li><a class="reference" href="#generating-a-global-tags-file" id="id48" name="id48">Generating a global tags file</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#preferences" id="id49" name="id49">Preferences</a><ul>
+<li><a class="reference" href="#general-tab-in-preferences-dialog" id="id50" name="id50">General tab in preferences dialog</a></li>
+<li><a class="reference" href="#interface-tab-in-preferences-dialog" id="id51" name="id51">Interface tab in preferences dialog</a></li>
+<li><a class="reference" href="#toolbar-tab-in-preferences-dialog" id="id52" name="id52">Toolbar tab in preferences dialog</a></li>
+<li><a class="reference" href="#files-tab-in-preferences-dialog" id="id53" name="id53">Files tab in preferences dialog</a></li>
+<li><a class="reference" href="#editor-tab-in-preferences-dialog" id="id54" name="id54">Editor tab in preferences dialog</a></li>
+<li><a class="reference" href="#tools-tab-in-preferences-dialog" id="id55" name="id55">Tools tab in preferences dialog</a></li>
+<li><a class="reference" href="#template-tab-in-preferences-dialog" id="id56" name="id56">Template tab in preferences dialog</a></li>
+<li><a class="reference" href="#keybinding-tab-in-preferences-dialog" id="id57" name="id57">Keybinding tab in preferences dialog</a></li>
+<li><a class="reference" href="#vte-tab-in-preferences-dialog" id="id58" name="id58">VTE tab in preferences dialog</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#project-management" id="id59" name="id59">Project Management</a><ul>
+<li><a class="reference" href="#new-project" id="id60" name="id60">New Project</a></li>
+<li><a class="reference" href="#project-properties" id="id61" name="id61">Project Properties</a><ul>
+<li><a class="reference" href="#run-command" id="id62" name="id62">Run command</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#close-project" id="id63" name="id63">Close Project</a></li>
+<li><a class="reference" href="#open-project" id="id64" name="id64">Open Project</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#build-system" id="id65" name="id65">Build system</a><ul>
+<li><a class="reference" href="#compile" id="id66" name="id66">Compile</a></li>
+<li><a class="reference" href="#build" id="id67" name="id67">Build</a></li>
+<li><a class="reference" href="#make-all" id="id68" name="id68">Make all</a></li>
+<li><a class="reference" href="#make-custom-target" id="id69" name="id69">Make custom target</a></li>
+<li><a class="reference" href="#make-object" id="id70" name="id70">Make object</a></li>
+<li><a class="reference" href="#execute" id="id71" name="id71">Execute</a></li>
+<li><a class="reference" href="#stopping-running-processes" id="id72" name="id72">Stopping running processes</a><ul>
+<li><a class="reference" href="#terminal-emulators" id="id73" name="id73">Terminal emulators</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#set-includes-and-arguments" id="id74" name="id74">Set Includes and Arguments</a><ul>
+<li><a class="reference" href="#one-step-compilation" id="id75" name="id75">One step compilation</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#indicators" id="id76" name="id76">Indicators</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#printing-support" id="id77" name="id77">Printing support</a></li>
+<li><a class="reference" href="#keybindings" id="id78" name="id78">Keybindings</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#configuration-files" id="id79" name="id79">Configuration files</a><ul>
+<li><a class="reference" href="#global-configuration-file" id="id80" name="id80">Global configuration file</a></li>
+<li><a class="reference" href="#filetype-definition-files" id="id81" name="id81">Filetype definition files</a><ul>
+<li><a class="reference" href="#format" id="id82" name="id82">Format</a><ul>
+<li><a class="reference" href="#styling-section" id="id83" name="id83">[styling] Section</a></li>
+<li><a class="reference" href="#keywords-section" id="id84" name="id84">[keywords] Section</a></li>
+<li><a class="reference" href="#settings-section" id="id85" name="id85">[settings] Section</a></li>
+<li><a class="reference" href="#build-settings-section" id="id86" name="id86">[build_settings] Section</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#special-file-filetypes-common" id="id87" name="id87">Special file filetypes.common</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#filetype-extensions" id="id88" name="id88">Filetype extensions</a></li>
+<li><a class="reference" href="#templates" id="id89" name="id89">Templates</a><ul>
+<li><a class="reference" href="#template-metadata" id="id90" name="id90">Template metadata</a></li>
+<li><a class="reference" href="#filetype-templates" id="id91" name="id91">Filetype templates</a></li>
+<li><a class="reference" href="#customizing-templates" id="id92" name="id92">Customizing templates</a><ul>
+<li><a class="reference" href="#template-wildcards" id="id93" name="id93">Template wildcards</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#contributing-to-this-document" id="id94" name="id94">Contributing to this document</a></li>
+<li><a class="reference" href="#scintilla-keyboard-commands" id="id95" name="id95">Scintilla keyboard commands</a><ul>
+<li><a class="reference" href="#keyboard-commands" id="id96" name="id96">Keyboard commands</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#compile-time-options" id="id97" name="id97">Compile-time options</a></li>
+<li><a class="reference" href="#gnu-general-public-license" id="id98" name="id98">GNU General Public License</a></li>
+<li><a class="reference" href="#license-for-scintilla-and-scite" id="id99" name="id99">License for Scintilla and SciTE</a></li>
+</ul>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id2" id="introduction" name="introduction">Introduction</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id3" id="about-geany" name="about-geany">About Geany</a></h2>
+<p>Geany is a small and lightweight Integrated Development Environment. It
+was developed to provide a small and fast IDE, which has only a few
+dependencies from other packages. Another goal was to be as independent
+as possible from a special Desktop Environment like KDE or GNOME,
+so Geany only requires the GTK2 toolkit and therefore you only need
+the GTK2 runtime libraries installed to run it.</p>
+<p>Some basic features of Geany are:</p>
+<ul class="simple">
+<li>Syntax highlighting</li>
+<li>Code completion</li>
+<li>Auto completion of often-used constructs like &quot;if&quot;, &quot;for&quot; and &quot;while&quot;</li>
+<li>Auto completion of XML and HTML tags</li>
+<li>Call tips</li>
+<li>Many supported filetypes including C, Java, PHP, HTML, Python, Perl,
+Pascal, and others</li>
+<li>Tag/Symbol lists</li>
+</ul>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id4" id="about-this-document" name="about-this-document">About this document</a></h2>
+<p>This documentation is available in various formats like HTML, text and
+PDF. The latest version is always available at <a class="reference" href="http://geany.uvena.de">http://geany.uvena.de</a>.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id5" id="where-to-get-it" name="where-to-get-it">Where to get it</a></h2>
+<p>You can obtain Geany from <a class="reference" href="http://geany.uvena.de">http://geany.uvena.de</a> or perhaps also from
+your distributor.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id6" id="license" name="license">License</a></h2>
+<p>Geany is distributed under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2 of
+the License, or (at your option) any later version. A copy of this
+license can be found in the file COPYING included with the source
+code of this program or in the chapter, <a class="reference" href="#gnu-general-public-license">GNU General Public License</a>.</p>
+<p>The included Scintilla library (found in the subdirectory
+<tt class="docutils literal"><span class="pre">scintilla/</span></tt>) has its own license, which can be found in the chapter,
+<a class="reference" href="#license-for-scintilla-and-scite">License for Scintilla and SciTE</a>.</p>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id7" id="installation" name="installation">Installation</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id8" id="requirements" name="requirements">Requirements</a></h2>
+<p>For compiling Geany yourself, you will need the GTK (&gt;= 2.6.0)
+libraries and header files. You will also need the Pango, Glib and
+ATK libraries and header files. All these files are available at
+<a class="reference" href="http://www.gtk.org">http://www.gtk.org</a>.</p>
+<p>Furthermore you need, of course, a C compiler and the Make tool; a
+C++ compiler is also required for the included Scintilla library. The
+GNU versions of these tools are recommended.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id9" id="source-compilation" name="source-compilation">Source compilation</a></h2>
+<p>Compiling Geany is quite easy. The following should do it:</p>
+<pre class="literal-block">
+% ./configure
+% make
+% make install
+</pre>
+<p>The configure script supports several common options, for a detailed
+list, type:</p>
+<pre class="literal-block">
+% ./configure --help
+</pre>
+<p>There also some compile time options which can be found in
+<tt class="docutils literal"><span class="pre">src/geany.h</span></tt>. Please see <a class="reference" href="#compile-time-options">Compile-time options</a> for more
+information.</p>
+<p>In the case that your system lacks dynamic linking loader support, you
+probably want to pass the option <tt class="docutils literal"><span class="pre">--disable-vte</span></tt> to the <tt class="docutils literal"><span class="pre">configure</span></tt>
+script. This prevents compiling Geany with dynamic linking loader
+support to automatically load <tt class="docutils literal"><span class="pre">libvte.so.4</span></tt> if available.</p>
+<p>Geany has been successfully compiled and tested under Debian 3.1
+Sarge, Debian 4.0 Etch, Fedora Core 3/4/5, LinuxFromScratch and
+FreeBSD 6.0. It also compiles under Microsoft Windows™.</p>
+<p>If there are any errors during compilation, check your build
+environment and try to find the error, otherwise contact the author
+at &lt;enrico(dot)troeger(at)uvena(dot)de&gt;.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id10" id="binary-packages" name="binary-packages">Binary packages</a></h2>
+<p>There are many binary packages available. For an up to date but maybe
+incomplete list see <a class="reference" href="http://geany.uvena.de/Download/Releases">http://geany.uvena.de/Download/Releases</a>.</p>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id11" id="usage" name="usage">Usage</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id12" id="getting-started" name="getting-started">Getting started</a></h2>
+<p>You can start Geany in the following ways:</p>
+<ul>
+<li><p class="first">From the Desktop Environment menu:</p>
+<p>Choose in your application menu of your used Desktop Environment:
+Development --&gt; Geany.</p>
+</li>
+<li><p class="first">From the command line:</p>
+<p>To start Geany from a command line, type the following and press
+Return:</p>
+<pre class="literal-block">
+% geany
+</pre>
+</li>
+</ul>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id13" id="command-line-options" name="command-line-options">Command line options</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="24%" />
+<col width="63%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Short option</th>
+<th class="head">Long option</th>
+<th class="head">Function</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><em>none</em></td>
+<td>--column</td>
+<td>Set initial column number for the first opened file.</td>
+</tr>
+<tr><td>-c dir_name</td>
+<td>--config=directory_name</td>
+<td>Use an alternate configuration directory. Default
+configuration directory is ~/.geany/ and there resides
+<tt class="docutils literal"><span class="pre">geany.conf</span></tt> and other configuration files.</td>
+</tr>
+<tr><td>-d</td>
+<td>--debug</td>
+<td>Run Geany in debug mode, which means being verbose
+and printing lots of information.</td>
+</tr>
+<tr><td><em>none</em></td>
+<td>--ft-names</td>
+<td>Print a list of Geany's internal filetype names (useful
+for the auto completion list).</td>
+</tr>
+<tr><td>-i</td>
+<td>--new-instance</td>
+<td>Do not open files in a running instance, force opening a
+new instance. Only available if Geany was compiled with
+support for Sockets.</td>
+</tr>
+<tr><td>-l</td>
+<td>--line</td>
+<td>Set initial line number for the first opened file.</td>
+</tr>
+<tr><td>-m</td>
+<td>--no-msgwin</td>
+<td>Do not show the message window. Use this option if you
+do not need compiler messages or VTE support.</td>
+</tr>
+<tr><td>-n</td>
+<td>--no-ctags</td>
+<td>Do not load auto completion and call tip data. Use this
+option if you do not want to use them.</td>
+</tr>
+<tr><td>-p</td>
+<td>--no-plugins</td>
+<td>Do not load plugins or plugin support.</td>
+</tr>
+<tr><td>-s</td>
+<td>--no-session</td>
+<td>Do not load the previous session's files.</td>
+</tr>
+<tr><td>-t</td>
+<td>--no-terminal</td>
+<td>Do not load terminal support. Use this option if you do
+not want to load the virtual terminal emulator widget at
+startup. If you do not have libvte.so.4 installed, then
+terminal-support is automatically disabled. Only available
+if Geany was compiled with support for VTE.</td>
+</tr>
+<tr><td><em>none</em></td>
+<td>--vte-lib</td>
+<td>Specify explicitly the path including filename or only
+the filename to the VTE library, e.g. <tt class="docutils literal"><span class="pre">/usr/lib/libvte.so</span></tt>
+or <tt class="docutils literal"><span class="pre">libvte.so</span></tt>. This option is only needed when the
+autodetection does not work. Only available if Geany was
+compiled with support for VTE.</td>
+</tr>
+<tr><td>-v</td>
+<td>--version</td>
+<td>Show version information and exit.</td>
+</tr>
+<tr><td>-?</td>
+<td>--help</td>
+<td>Show help information and exit.</td>
+</tr>
+<tr><td><em>none</em></td>
+<td>[files ...]</td>
+<td>Open all given files at startup. This option causes Geany
+to ignore loading stored files from the last session (if
+enabled).</td>
+</tr>
+</tbody>
+</table>
+<p>Geany supports all generic GTK options, a list is available on the help screen.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id14" id="general" name="general">General</a></h2>
+<div class="section">
+<h3><a class="toc-backref" href="#id15" id="startup" name="startup">Startup</a></h3>
+<p>At startup, Geany loads all files from the last time Geany was
+launched. You can disable this feature in the preferences dialog
+(see <a class="reference" href="#general-tab-in-preferences-dialog">General tab in preferences dialog</a>). If you specify some
+files on the command line, only these files will be opened, but you
+can find the files from the last session in the file menu under the
+&quot;Recent files&quot; item. By default this contains the last 10 recently
+opened files. You can change the amount of recently opened files in
+the preferences dialog.</p>
+<p>You can start several instances of Geany, but only the first will
+load files from the last session. To run a second instance of Geany,
+do not specify any filenames on the command-line, or disable opening
+files in a running instance using the appropriate command line option.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id16" id="opening-files-from-the-command-line-in-a-running-instance" name="opening-files-from-the-command-line-in-a-running-instance">Opening files from the command-line in a running instance</a></h3>
+<p>Geany detects an already running instance of itself and opens files
+from the command-line in the already running instance. So, Geany can
+be used to view and edit files by opening them from other programs
+such as a file manager. If you do not like this for some reason, you
+can disable using the first instance by using the appropriate command
+line option -- see the section called <a class="reference" href="#command-line-options">Command line options</a>.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id17" id="virtual-terminal-emulator-widget-vte" name="virtual-terminal-emulator-widget-vte">Virtual terminal emulator widget (VTE)</a></h3>
+<p>If you have installed <tt class="docutils literal"><span class="pre">libvte.so</span></tt> in your system, it is loaded
+automatically by Geany, and you will have a terminal widget in the
+notebook at the bottom.</p>
+<p>If Geany cannot find <tt class="docutils literal"><span class="pre">libvte.so</span></tt> at startup, the terminal widget will
+not be loaded. So there is no need to install the package containing
+this file in order to run Geany. Additionally, you can disable the use
+of the terminal widget by command line option, for more information
+see the section called <a class="reference" href="#command-line-options">Command line options</a>.</p>
+<p>You can use this terminal (from now on called VTE) nearly as an usual
+terminal program like xterm. There is basic clipboard support. You
+can paste the contents of the clipboard by pressing the right mouse
+button to open the popup menu and choosing Paste. To copy text from
+the VTE, just select the desired text and then press the right mouse
+button and choose Copy from the popup menu. On systems running the
+X Window System you can paste the last selected text by pressing the
+middle mouse button in the VTE (on 2-button mice, the middle button
+can often be simulated by pressing both mouse buttons together).</p>
+<p>In the preferences dialog you can specify a shell which should be
+started in the VTE. To make the specified shell a login shell just
+use the appropriate command line options for the shell. These options
+should be found in the manual page of the shell. For zsh and bash
+you can use the argument <tt class="docutils literal"><span class="pre">--login</span></tt>.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Geany tries to load <tt class="docutils literal"><span class="pre">libvte.so</span></tt>. If this fails, it tries to load
+<tt class="docutils literal"><span class="pre">libvte.so.4</span></tt>. If this fails too, you should check whether you
+installed libvte correctly. Again, Geany also runs without this
+library.</p>
+</div>
+<p>It could be, that the library is called something else than
+<tt class="docutils literal"><span class="pre">libvte.so.4</span></tt> (e.g. on FreeBSD 6.0 it is called <tt class="docutils literal"><span class="pre">libvte.so.8</span></tt>). So
+please set a link to the correct file (as root):</p>
+<pre class="literal-block">
+# ln -s /usr/lib/libvte.so.X /usr/lib/libvte.so.4
+</pre>
+<p>Obviously, you have to adjust the paths and set X to the number of your
+<tt class="docutils literal"><span class="pre">libvte.so</span></tt>.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id18" id="defining-own-widget-styles-using-gtkrc-2-0" name="defining-own-widget-styles-using-gtkrc-2-0">Defining own widget styles using .gtkrc-2.0</a></h3>
+<p>You can define your widget style for many of Geany's GUI parts. To
+do this, just edit your <tt class="docutils literal"><span class="pre">.gtkrc-2.0</span></tt> (usually found in your home
+directory on UNIX-like systems and in the etc subdirectory of your
+Geany installation on Windows).</p>
+<p>To get a defined style get noticed by Geany you must it assign to
+one of Geany's widgets. To do so, use the following line:</p>
+<pre class="literal-block">
+widget &quot;Geany*&quot; style &quot;geany_style&quot;
+</pre>
+<p>This would assign your already defined style &quot;geany_style&quot; to all Geany
+widgets. You can also assign styles only to specific widgets. At the
+moment you can use the following widgets:</p>
+<ul class="simple">
+<li>GeanyMainWindow</li>
+<li>GeanyEditMenu</li>
+<li>GeanyToolbarMenu</li>
+<li>GeanyDialog</li>
+<li>GeanyDialogPrefs</li>
+<li>GeanyDialogProject</li>
+<li>GeanyDialogSearch</li>
+</ul>
+<p>Example of a simple <tt class="docutils literal"><span class="pre">.gtkrc-2.0</span></tt>:</p>
+<pre class="literal-block">
+style &quot;geanyStyle&quot;
+{
+    font_name=&quot;Sans 12&quot;
+}
+widget &quot;GeanyMainWindow&quot; style &quot;geanyStyle&quot;
+
+style &quot;geanyStyle&quot;
+{
+    font_name=&quot;Sans 10&quot;
+}
+widget &quot;GeanyPrefsDialog&quot; style &quot;geanyStyle&quot;
+</pre>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id19" id="character-sets-and-unicode-byte-order-mark-bom" name="character-sets-and-unicode-byte-order-mark-bom">Character sets and Unicode Byte-Order-Mark (BOM)</a></h2>
+<div class="section">
+<h3><a class="toc-backref" href="#id20" id="using-character-sets" name="using-character-sets">Using character sets</a></h3>
+<p>Geany provides support for detecting and converting character sets. So
+you can open and save files in different character sets and even
+can convert a file from a character set to another one. To do this,
+Geany uses the character conversion capabilities of the GLib.</p>
+<p>Only text files are supported, i.e. opening files which contain
+NUL-bytes may fail. Geany will try to open the file anyway but it is
+likely that the file will be truncated because it can only opened up
+to the first occurrence of the first NUL-byte. All characters after
+this position are lost and are not written when you save the file.</p>
+<p>Geany tries to detect the encoding of a file while opening it. It
+might be that the encoding of a file cannot be detected correctly so
+you have to set manually the encoding of the file in order to display
+it correctly. You can this in the file open dialog by selecting
+an encoding in the drop down box or by reloading the file with the
+file menu item &quot;Reload as&quot;. The auto detection works well for most
+encodings but there are also some encodings known where auto detection
+has its problems. Auto detecting the encoding of a file is not easy
+and sometimes an encoding might be detected not correctly.</p>
+<p>There are different ways to use different encodings in Geany:</p>
+<ul>
+<li><p class="first">Using the file open dialog</p>
+<p>This opens the file with the encoding specified in the encoding drop
+down box. If the encoding is set to &quot;Detect from file&quot; auto detection
+will be used. If the encoding is set to &quot;Without encoding (None)&quot; the
+file will be opened without any character conversion and Geany will
+not try to auto detect the encoding(see below for more information).</p>
+</li>
+<li><p class="first">Using the &quot;Reload as&quot; menu item</p>
+<p>This item reloads the current file with the specified encoding. It can
+help if you opened a file and found out that a wrong encoding was used.</p>
+</li>
+<li><p class="first">Using the &quot;Set encoding&quot; menu item</p>
+<p>In contrary to the above two options, this will not change or reload
+the current file unless you save it. It is useful when you want to
+change the encoding of the file.</p>
+</li>
+</ul>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id21" id="special-encoding-none" name="special-encoding-none">Special encoding &quot;None&quot;</a></h3>
+<p>There is a special encoding &quot;None&quot; which is actually no real
+encoding. It is useful when you know that Geany cannot auto detect
+the encoding of a file and it is not displayed correctly. Especially
+when the file contains NUL-bytes this can be useful to skip auto
+detection and open the file properly at least until the occurrence
+of the first NUL-byte. Using this encoding opens the file as it is
+without any character conversion.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id22" id="unicode-byte-order-mark-bom" name="unicode-byte-order-mark-bom">Unicode Byte-Order-Mark (BOM)</a></h3>
+<p>Furthermore, Geany detects an Unicode Byte Order Mark (see
+<a class="reference" href="http://en.wikipedia.org/wiki/Byte_Order_Mark">http://en.wikipedia.org/wiki/Byte_Order_Mark</a> for details). Of course,
+this feature is only available if the opened file is in an unicode
+encoding. The Byte Order Mark helps to detect the encoding of a file,
+e.g. whether it is UTF-16LE or UTF-16BE and so on. On Unix-like systems
+using a Byte Order Mark could cause some problems, e.g. the gcc stops
+with stray errors, PHP does not parse a script containing a BOM and
+script files starting with a she-bang maybe cannot be started. In the
+status bar you can easily see whether the file starts with a BOM or
+not. If you want to set a BOM for a file or if you want to remove it
+from a file, just use the document menu and toggle the checkbox.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are unsure what a BOM is or if you do not understand where
+to use it, then it is not important for you and you can safely
+ignore it.</p>
+</div>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id23" id="editing" name="editing">Editing</a></h2>
+<div class="section">
+<h3><a class="toc-backref" href="#id24" id="drag-and-drop-of-text" name="drag-and-drop-of-text">Drag and drop of text</a></h3>
+<p>If you drag selected text in the editor widget of Geany the text is
+moved to the position where the mouse pointer is when releasing the
+mouse button. Holding Control when releasing the mouse button will
+copy the text instead. This behaviour was changed in Geany 0.11 -
+before the selected text was copied to the new position.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id25" id="auto-indentation" name="auto-indentation">Auto indentation</a></h3>
+<p>Geany knows three types of auto indentation: None, Basic and Advanced.</p>
+<p>Auto indentation types:</p>
+<dl class="docutils">
+<dt>None</dt>
+<dd>Disables auto indentation completely.</dd>
+<dt>Basic</dt>
+<dd>Adds the same amount of whitespace on a new line as on the last line.</dd>
+<dt>Advanced</dt>
+<dd>Does the same as Basic but also indents curly brackets and adds a
+tabulator character (or spaces) on a new line after an opening '{'
+brace.</dd>
+</dl>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id26" id="bookmarks" name="bookmarks">Bookmarks</a></h3>
+<p>Geany provides a handy bookmarking feature that lets you mark one
+or more lines in a document, and return the cursor to them using a
+key combination.</p>
+<p>To place a mark on a line, either left-mouse-click in the left margin
+of the editor window, or else use Ctrl-m. Either way, this will
+produce a small green plus symbol in the margin. You can have as many
+marks in a document as you like. Click again (or use Ctrl-m again)
+to remove the bookmark. To remove all the marks in a given document,
+use &quot;Remove Markers&quot; in the Document menu.</p>
+<p>To navigate down your document, jumping from one mark to the next,
+use Ctrl-. (control period). To go in the opposite direction on
+the page, use Ctrl-, (control comma). Using the bookmarking feature
+together with the commands to switch from one editor tab to another
+(Ctrl-PgUp/PgDn and Ctrl-Tab) provides a particularly fast way to
+navigate around multiple files.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id27" id="send-text-through-definable-commands" name="send-text-through-definable-commands">Send text through definable commands</a></h3>
+<p>You can define several custom commands in Geany and send the current
+selection to one of these commands. The output of the command will be
+used to replace the current selection. So, it is possible to use text
+formatting tools with Geany in a general way. The selected text will
+be sent to the standard input of the executed command, so the command
+should be able to read from it and it should print all results to its
+standard output which will be read by Geany. To help finding errors
+in executing the command, the output of the program's standard error
+will be printed on Geany's standard output.</p>
+<p>To add a custom command, just go to the Set Custom Commands dialog
+in the Format sub menu of the Edit and Popup menu. Then click on Add
+to get a new text entry and type the command. You can also specify
+some command line options. To delete a command, just clear the text
+entry and press Ok. It will be deleted automatically.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id28" id="context-actions" name="context-actions">Context actions</a></h3>
+<p>You can execute a specified command on the current word near the
+cursor position or an available selection and this word is passed
+as an argument to this command. It can be used for example to open
+some API documentation in a browser window or open any other external
+program. To do this, there is an menu entry in the popup menu of the
+editor widget and also a keyboard shortcut(see the section called
+<a class="reference" href="#keybindings">Keybindings</a>).</p>
+<p>The command can be specified in the preferences dialog and additionally
+for each filetype (see &quot;context_action_cmd&quot; in the section called
+<a class="reference" href="#format">Format</a>). At executing, the filetype specific command is used if
+available otherwise the command specified in the preferences dialog
+is executed.</p>
+<p>The passed word can be referred with the wildcard &quot;%s&quot; everywhere
+in the command, before executing it will be replaced by the current
+word. For example, the command to open the PHP API documentation
+would be:</p>
+<pre class="literal-block">
+firefox &quot;http://www.php.net/%s&quot;
+</pre>
+<p>when executing the command, the %s is substituted by the word near
+the cursor position or by the current selection. If the cursor is at
+the word &quot;echo&quot;, a browser window will open(assumed your browser is
+called firefox) and it will open the address: <a class="reference" href="http://www.php.net/echo">http://www.php.net/echo</a>.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id29" id="user-definable-auto-completion" name="user-definable-auto-completion">User-definable auto completion</a></h3>
+<p>Geany can complete pre-defined constructs and often used strings
+automatically. To know what to complete or replace Geany reads a
+configuration file called <tt class="docutils literal"><span class="pre">autocomplete.conf</span></tt> at startup.</p>
+<p>The system-wide configuration file can be found in
+<tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>, where <tt class="docutils literal"><span class="pre">$prefix</span></tt> is the path where Geany is
+installed (commonly <tt class="docutils literal"><span class="pre">/usr/local</span></tt>). It is not recommended to edit the
+system-wide file, because it will be overridden when Geany is updated.</p>
+<p>To change the settings, copy the file from <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>
+in your configuration directory (usually <tt class="docutils literal"><span class="pre">~/.geany/</span></tt>).</p>
+<p>For example:</p>
+<pre class="literal-block">
+% cp /usr/local/share/geany/autocomplete.conf /home/username/.geany/
+</pre>
+<p>Then you can edit the file and the changes are also available
+after an update of Geany because the file resides in your
+configuration directory. Alternatively, you can create a file
+<tt class="docutils literal"><span class="pre">~/.geany/autocomplete.conf</span></tt> and add only these settings you want
+to change. All missing settings will be read from the global auto
+completion file in <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>.</p>
+<p>The file <tt class="docutils literal"><span class="pre">autocomplete.conf</span></tt> may contain several sections for each
+filetype. It also contains two additional sections &quot;Default&quot; and
+&quot;Special&quot;. Default contains all completions which are available
+for every filetype. You may define another section for a certain
+filetype(e.g. C++) containing the same completions. Then when using
+such a completion in a C++ file the completion defined in the C++
+section will be used. In any other file the completion defined in the
+Default section will be used unless a section for the current filetype
+exists and the used completion is defined in this section. The section
+&quot;Special&quot; contains special completions which can only be used in other
+completions. So you can define often used parts of completions and just
+use the special completion as a placeholder (see the <tt class="docutils literal"><span class="pre">autocomplete.conf</span></tt>
+for details).</p>
+<p>To define completions you can use several special characters which
+will be replaced when using the completion:</p>
+<p><strong>Wildcards for auto completion</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>\n or %newline%</td>
+<td>Insert a new line (it will be replaced by the used EOL
+char(s): LF, CR/LF, or CR).</td>
+</tr>
+<tr><td>\t or %ws%</td>
+<td>Insert an indentation step, if using only spaces for
+indentation only spaces will be used.</td>
+</tr>
+<tr><td>\s</td>
+<td>\s to force whitespace at beginning or end of a value
+('key= value' won't work, use 'key=\svalue')</td>
+</tr>
+<tr><td>%cursor%</td>
+<td>Place the cursor at this position after completion has
+been done.</td>
+</tr>
+<tr><td>%...%</td>
+<td>&quot;...&quot; means the name of a key in the &quot;Special&quot; section.
+If you have defined a key &quot;brace_open&quot; in the &quot;Special&quot;
+section you can use %brace_open&quot; in any other completion.</td>
+</tr>
+</tbody>
+</table>
+<p>Defined completions must not contain spaces otherwise they won't
+work correctly. But beside that you can define almost everything
+string as a completion and use it later in Geany. It is not limited
+to existing contructs of certain programming languages(like <tt class="docutils literal"><span class="pre">if</span></tt>,
+<tt class="docutils literal"><span class="pre">for</span></tt>, <tt class="docutils literal"><span class="pre">switch</span></tt>). Define whatever you need.</p>
+<p>Maybe you need to often type your name, so define a completion
+like this:</p>
+<pre class="literal-block">
+[Default]
+myname=Enrico Tröger
+</pre>
+<p>Everytime you write <tt class="docutils literal"><span class="pre">myname</span></tt> &lt;TAB&gt; in Geany, it will replace &quot;myname&quot;
+with &quot;Enrico Tröger&quot;. The key to start auto completion can be changed
+in the preferences dialog, by default it is TAB.</p>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id30" id="search-replace-and-go-to" name="search-replace-and-go-to">Search, replace and go to</a></h2>
+<p>This section describes search-related commands from the Search menu
+and the editor window's popup menu:</p>
+<ul class="simple">
+<li>Find</li>
+<li>Find usage *</li>
+<li>Find in files</li>
+<li>Replace</li>
+<li>Go to tag definition *</li>
+<li>Go to tag declaration *</li>
+<li>Go to line</li>
+</ul>
+<p>* These items are available from the editor window's popup menu, or by
+using a keyboard shortcut (see the section called <a class="reference" href="#keybindings">Keybindings</a>).</p>
+<div class="section">
+<h3><a class="toc-backref" href="#id31" id="find" name="find">Find</a></h3>
+<p>The Find dialog is used for finding text in one or more open documents.</p>
+<img alt="./images/find_dialog.png" src="./images/find_dialog.png" />
+<div class="section">
+<h4><a class="toc-backref" href="#id32" id="matching-options" name="matching-options">Matching options</a></h4>
+<p>The syntax for the Use regular expressions option is shown in
+<a class="reference" href="#regular-expressions">Regular expressions</a>.</p>
+<p>The Use escape sequences option will transform any escaped characters
+into their UTF-8 equivalent. For example, \t will be transformed into
+a tab character. Other recognised symbols are: \\, \n, \r, \uXXXX
+(Unicode chararacters).</p>
+</div>
+<div class="section">
+<h4><a class="toc-backref" href="#id33" id="find-all" name="find-all">Find all</a></h4>
+<p>To find all matches, click on the Find All expander. This will reveal
+several options:</p>
+<ul class="simple">
+<li>In Document</li>
+<li>In Session</li>
+<li>Mark</li>
+</ul>
+<p>Find All In Document will show a list of matching lines in the
+current document in the Messages tab of the Message Window. <em>Find All
+In Session</em> does the same for all open documents.</p>
+<p>Mark will set markers for all matching lines in the current document,
+if the Markers margin is visible. If not, the background colour of
+matching lines will be highlighted. Markers and highlighting can be
+removed by selecting the Remove Markers command from the Document menu.</p>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id34" id="find-usage" name="find-usage">Find usage</a></h3>
+<p>Find usage searches all open files. It is similar to the Find All In
+Session Find dialog command.</p>
+<p>If there is a selection, then it is used as the search text; otherwise
+the current word is used. The current word is either taken from the
+word nearest the edit cursor, or the word underneath the popup menu
+click position when the popup menu is used. The search results are
+shown in the Messages tab of the Message Window.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id35" id="find-in-files" name="find-in-files">Find in files</a></h3>
+<p>Find in files is a more powerful version of Find usage that searches
+all files in a certain directory using the Grep tool. The Grep tool
+must be correctly set in Preferences to the path of the system's Grep
+utility. GNU Grep is recommended.</p>
+<img alt="./images/find_in_files_dialog.png" src="./images/find_in_files_dialog.png" />
+<p>The Extra options field is used to pass any additional arguments to
+the grep tool.</p>
+<div class="section">
+<h4><a class="toc-backref" href="#id36" id="filtering-out-version-control-files" name="filtering-out-version-control-files">Filtering out version control files</a></h4>
+<p>When using the <em>Recurse in subfolders</em> option with a directory that's
+under version control, you can set the <em>Extra options</em> field to use
+grep's <tt class="docutils literal"><span class="pre">--exclude</span></tt> flag to filter out filenames.</p>
+<p>SVN Example: <tt class="docutils literal"><span class="pre">--exclude=*.svn-base</span></tt></p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">The GNU Grep project added support for excluding directories, using
+the --exclude-dir flag. At the time of writing (April 2007) this is
+unreleased outside of version control. Check your Grep manual to
+see if your version supports it.</p>
+</div>
+<p>CVS Example: <tt class="docutils literal"><span class="pre">--exclude-dir=.*</span> <span class="pre">--exclude-dir=CVS</span></tt></p>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id37" id="replace" name="replace">Replace</a></h3>
+<p>The Replace dialog is used for replacing text in one or more open
+documents.</p>
+<img alt="./images/replace_dialog.png" src="./images/replace_dialog.png" />
+<p>The Replace dialog has the same options for matching text as the Find
+dialog. See the section called <a class="reference" href="#matching-options">Matching options</a>.</p>
+<p>The <em>Use regular expressions</em> option applies both to the search string
+and to the replacement text; for the latter back references can be
+used -- see the entry for '\n' in <a class="reference" href="#regular-expressions">Regular expressions</a>.</p>
+<div class="section">
+<h4><a class="toc-backref" href="#id38" id="replace-all" name="replace-all">Replace all</a></h4>
+<p>To replace several matches, click on the <em>Replace All</em> expander. This
+will reveal several options:</p>
+<ul class="simple">
+<li>In Document</li>
+<li>In Session</li>
+<li>In Selection</li>
+</ul>
+<p><em>Replace All In Document</em> will replace all matching text in the
+current document. <em>Replace All In Session</em> does the same for all open
+documents. <em>Replace All In Selection</em> will replace all matching text
+in the current selection of the current document.</p>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id39" id="go-to-tag-definition" name="go-to-tag-definition">Go to tag definition</a></h3>
+<p>If the current word is the name of a tag definition (like a function
+body) and the file containing the tag definition is open, this command
+will switch to that file and go to the corresponding line number. The
+current word is either taken from the word nearest the edit cursor,
+or the word underneath the popup menu click position when the popup
+menu is used.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id40" id="go-to-tag-declaration" name="go-to-tag-declaration">Go to tag declaration</a></h3>
+<p>Like Go to tag definition, but for a forward declaration such as a
+function prototype or <tt class="docutils literal"><span class="pre">extern</span></tt> declaration instead of a function
+body.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id41" id="go-to-line" name="go-to-line">Go to line</a></h3>
+<p>Go to a particular line number in the current file.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id42" id="regular-expressions" name="regular-expressions">Regular expressions</a></h3>
+<p>You can use regular expressions in the Find and Replace dialogs
+by selecting the Use regular expressions check box. The syntax is
+POSIX-like, as described below in <a class="reference" href="#regular-expressions">Regular expressions</a>.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Searching backwards with regular expressions is not supported.</p>
+</div>
+<p><strong>In a regular expression, the following characters are interpreted:</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<tbody valign="top">
+<tr><td>.</td>
+<td>Matches any character.</td>
+</tr>
+<tr><td>(</td>
+<td>This marks the start of a region for tagging a match.</td>
+</tr>
+<tr><td>)</td>
+<td>This marks the end of a tagged region.</td>
+</tr>
+<tr><td>\n</td>
+<td>Where n is 1 through 9 refers to the first through ninth tagged
+region when replacing. For example, if the search string was
+Fred([1-9])XXX and the replace string was Sam\1YYY, when applied
+to Fred2XXX this would generate Sam2YYY.</td>
+</tr>
+<tr><td>\&lt;</td>
+<td>This matches the start of a word.</td>
+</tr>
+<tr><td>\&gt;</td>
+<td>This matches the end of a word.</td>
+</tr>
+<tr><td>\x</td>
+<td>This allows you to use a character x that would otherwise have
+a special meaning. For example, \[ would be interpreted as [
+and not as the start of a character set. Use \\ for a literal
+backslash.</td>
+</tr>
+<tr><td>[...]</td>
+<td>This indicates a set of characters, for example, [abc] means
+any of the characters a, b or c. You can also use ranges, for
+example [a-z] for any lower case character.</td>
+</tr>
+<tr><td>[^...]</td>
+<td>The complement of the characters in the set. For example,
+[^A-Za-z] means any character except an alphabetic character.</td>
+</tr>
+<tr><td>^</td>
+<td>This matches the start of a line (unless used inside a set, see
+above).</td>
+</tr>
+<tr><td>$</td>
+<td>This matches the end of a line.</td>
+</tr>
+<tr><td>*</td>
+<td>This matches 0 or more times. For example, Sa*m matches Sm, Sam,
+Saam, Saaam and so on.</td>
+</tr>
+<tr><td>+</td>
+<td>This matches 1 or more times. For example, Sa+m matches Sam,
+Saam, Saaam and so on.</td>
+</tr>
+</tbody>
+</table>
+<div class="section">
+<h4><a class="toc-backref" href="#id43" id="partial-posix-compatibility" name="partial-posix-compatibility">Partial POSIX compatibility</a></h4>
+<p>Note that the POSIX '?' regular expression character for optional
+matching is not supported by the Find and Replace dialogs.</p>
+</div>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id44" id="tags" name="tags">Tags</a></h2>
+<div class="section">
+<h3><a class="toc-backref" href="#id45" id="workspace-tags" name="workspace-tags">Workspace tags</a></h3>
+<p>Tags for each document are parsed whenever a file is loaded or
+saved. These are shown in the Symbol list in the Sidebar. These tags
+are also used for autocompletion and calltips in other documents open
+in the current session.</p>
+<p>The <em>Go to Tag</em> commands can be used with all workspace tags. See
+<a class="reference" href="#go-to-tag-definition">Go to tag definition</a>.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id46" id="global-tags" name="global-tags">Global tags</a></h3>
+<p>Global tags are used to provide autocompletion and calltips without
+having to open the corresponding source files. This is intended for
+library APIs, as the tags file only has to be updated when you upgrade
+the library.</p>
+<p>You can load a custom global tags file in two ways:</p>
+<ul class="simple">
+<li>Using the <em>Load Tags</em> command in the File menu.</li>
+<li>By creating a directory <tt class="docutils literal"><span class="pre">~/.geany/tags</span></tt>, and moving or symlinking
+the tags files there before starting Geany.</li>
+</ul>
+<p>You can either download these files or generate your own. They have
+the format:</p>
+<pre class="literal-block">
+libraryname.lang_ext.tags
+</pre>
+<p><em>lang_ext</em> is one of the extensions set for the filetype associated
+with the tags. See the section called <a class="reference" href="#filetype-extensions">Filetype extensions</a> for
+more information.</p>
+<div class="section">
+<h4><a class="toc-backref" href="#id47" id="default-global-tags-files" name="default-global-tags-files">Default global tags files</a></h4>
+<p>For some languages, a list of global tags is loaded when the
+corresponding filetype is first used. Currently these are for:</p>
+<ul class="simple">
+<li>C -- GTK+ and GLib</li>
+<li>Pascal</li>
+<li>PHP</li>
+<li>HTML -- &amp;symbol; completion, e.g. for ampersand, copyright, etc.</li>
+<li>LaTeX</li>
+</ul>
+</div>
+<div class="section">
+<h4><a class="toc-backref" href="#id48" id="generating-a-global-tags-file" name="generating-a-global-tags-file">Generating a global tags file</a></h4>
+<p><em>Filetypes support:</em></p>
+<p>Currently this is not yet supported for Pascal, PHP and LaTeX
+filetypes.</p>
+<p>You can generate your own global tags files by parsing a list of
+source files. The command is:</p>
+<pre class="literal-block">
+geany -g &lt;Tag File&gt; &lt;File list&gt;
+</pre>
+<ul class="simple">
+<li>Tag File should be in the format described earlier -- see the
+section called <a class="reference" href="#global-tags">Global tags</a>.</li>
+<li>File list is a list of filenames, each with a full path (unless
+you are generating C/C++ tags and have set the CFLAGS environment
+variable appropriately).</li>
+</ul>
+<p>Example for the wxD library for the D programming language:</p>
+<pre class="literal-block">
+geany -g wxd.d.tags /home/username/wxd/wx/*.d
+</pre>
+<p><em>Generating C/C++ tag files:</em></p>
+<p>For C/C++ tag files, gcc and grep are required, so that header files
+can be preprocessed to include any other headers they depend upon.</p>
+<p>For C/C++ files, the environment variable CFLAGS should be set with
+appropriate <tt class="docutils literal"><span class="pre">-I/path</span></tt> include paths. The following example works with
+the bash shell, generating tags for the GnomeUI library:</p>
+<pre class="literal-block">
+CFLAGS=`pkg-config --cflags libgnomeui-2.0` geany -g gnomeui.c.tags \\
+/usr/include/libgnomeui-2.0/gnome.h
+</pre>
+<p>You can adapt this command to use CFLAGS and header files appropriate
+for whichever libraries you want.</p>
+<p><em>Replacing the default C/C++ tags file:</em></p>
+<p>Geany currently uses a default global tags file global.tags for
+C and C++, commonly installed in /usr/share/geany. This file can
+be replaced with one containing tags parsed from a different set
+of header files. When Geany is next started, your custom tags file
+will be loaded instead of the default global.tags. You should keep a
+copy of the generated tags file because it will get overwritten when
+upgrading Geany.</p>
+<p>This is a temporary solution -- in later versions this will be
+unnecessary.</p>
+</div>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id49" id="preferences" name="preferences">Preferences</a></h2>
+<p>You may adjust Geany's settings using the Edit --&gt; Preferences
+dialog. Any changes you make there can be applied by hitting either
+the Apply or the Ok button. These settings will persist between Geany
+sessions. Note that most settings here have descriptive popup bubble
+help -- just hover the mouse over the item in question to get help
+on it.</p>
+<p>You may also adjust some View settings (under the View menu) that
+persist between Geany sessions. The settings under the Document menu,
+however, are only for the current document and revert to defaults
+when restarting Geany.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">In the paragraphs that follow, the text describing a dialog tab
+(if present) comes after the screenshot of that tab.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id50" id="general-tab-in-preferences-dialog" name="general-tab-in-preferences-dialog">General tab in preferences dialog</a></h3>
+<p>General tab in preferences dialog</p>
+<img alt="./images/pref_dialog_gen.png" src="./images/pref_dialog_gen.png" />
+<p><em>The &quot;Context Activation&quot; setting needs to be documented.</em></p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id51" id="interface-tab-in-preferences-dialog" name="interface-tab-in-preferences-dialog">Interface tab in preferences dialog</a></h3>
+<p>Interface tab in preferences dialog</p>
+<img alt="./images/pref_dialog_interface.png" src="./images/pref_dialog_interface.png" />
+<p>The open files list and the editor tabs are two different ways
+to switch between documents using the mouse. When you hit the key
+combination to move between tabs, the order is determined by the tab
+order, not alphabetical as shown in the open files list (regardless
+whether or not editor tabs are visible).</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id52" id="toolbar-tab-in-preferences-dialog" name="toolbar-tab-in-preferences-dialog">Toolbar tab in preferences dialog</a></h3>
+<p>Toolbar tab in preferences dialog</p>
+<img alt="./images/pref_dialog_toolbar.png" src="./images/pref_dialog_toolbar.png" />
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id53" id="files-tab-in-preferences-dialog" name="files-tab-in-preferences-dialog">Files tab in preferences dialog</a></h3>
+<p>Files tab in preferences dialog</p>
+<img alt="./images/pref_dialog_files.png" src="./images/pref_dialog_files.png" />
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id54" id="editor-tab-in-preferences-dialog" name="editor-tab-in-preferences-dialog">Editor tab in preferences dialog</a></h3>
+<p>Editor tab in preferences dialog</p>
+<img alt="./images/pref_dialog_edit.png" src="./images/pref_dialog_edit.png" />
+<p>Line wrapping refers to the display of the text in the
+editor. Currently, there is no setting to have Geany automatically
+insert newlines into your document while you type.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id55" id="tools-tab-in-preferences-dialog" name="tools-tab-in-preferences-dialog">Tools tab in preferences dialog</a></h3>
+<p>Tools tab in preferences dialog</p>
+<img alt="./images/pref_dialog_tools.png" src="./images/pref_dialog_tools.png" />
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id56" id="template-tab-in-preferences-dialog" name="template-tab-in-preferences-dialog">Template tab in preferences dialog</a></h3>
+<p>Template tab in preferences dialog</p>
+<img alt="./images/pref_dialog_templ.png" src="./images/pref_dialog_templ.png" />
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id57" id="keybinding-tab-in-preferences-dialog" name="keybinding-tab-in-preferences-dialog">Keybinding tab in preferences dialog</a></h3>
+<p>Keybinding tab in preferences dialog</p>
+<img alt="./images/pref_dialog_keys.png" src="./images/pref_dialog_keys.png" />
+<p>There are some handy commands in here that are not, by default,
+bound to a key combination, and may in fact not even be available as
+a menu item (for example, the very handy &quot;Hide and show all additional
+widgets&quot;).</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">For more information see the section called <a class="reference" href="#keybindings">Keybindings</a>.</p>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id58" id="vte-tab-in-preferences-dialog" name="vte-tab-in-preferences-dialog">VTE tab in preferences dialog</a></h3>
+<p>VTE tab in preferences dialog</p>
+<img alt="./images/pref_dialog_vte.png" src="./images/pref_dialog_vte.png" />
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id59" id="project-management" name="project-management">Project Management</a></h2>
+<p>Project Management is optional in Geany. Currently it can be used for:</p>
+<ul class="simple">
+<li>Running <em>Make</em> from the project's base directory.</li>
+<li>Setting a custom <em>Run</em> command specific to the project.</li>
+</ul>
+<p>As long as a project is open, the Make and Run commands will use
+the project's settings, instead of the defaults. These will be used
+whichever document is currently displayed.</p>
+<p>The current project's settings are saved when it is closed, or when
+Geany is shutdown. When restarting Geany, the previously opened project
+file that was in use at the end of the last session will be reopened.</p>
+<div class="section">
+<h3><a class="toc-backref" href="#id60" id="new-project" name="new-project">New Project</a></h3>
+<p>To create a new project, fill in the <em>Name</em> field. By default this
+will setup a new project file <tt class="docutils literal"><span class="pre">~/projects/name.geany</span></tt>. Usually it's
+best to store all your project files in the same directory (they are
+independent of any source directory trees).</p>
+<p>The Base path text field is setup to use <tt class="docutils literal"><span class="pre">~/projects/name</span></tt>. This
+can safely be set to any existing path -- it will not touch the file
+structure contained in it.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id61" id="project-properties" name="project-properties">Project Properties</a></h3>
+<p>You can set an optional description for the project, but it is not
+used elsewhere by Geany.</p>
+<p>The <em>Base path</em> field is used as the directory to run the Make and Make
+custom commands in.</p>
+<div class="section">
+<h4><a class="toc-backref" href="#id62" id="run-command" name="run-command">Run command</a></h4>
+<p>The Run command overrides the default run command. You can set this
+to the executable or main script file for the project, and append
+any command-line arguments.</p>
+<p>The following variables can be used:</p>
+<ul class="simple">
+<li>%f -- complete filename without path</li>
+<li>%e -- filename without path and without extension</li>
+</ul>
+<p>See <a class="reference" href="#build-settings-section">[build_settings] Section</a> for details.</p>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id63" id="close-project" name="close-project">Close Project</a></h3>
+<p>Project file settings are saved when the project is closed.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id64" id="open-project" name="open-project">Open Project</a></h3>
+<p>The Open command displays a standard file chooser, starting in
+<tt class="docutils literal"><span class="pre">~/projects</span></tt>.</p>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id65" id="build-system" name="build-system">Build system</a></h2>
+<p>Geany has an integrated build system. Firstly this means that the
+current source file will be saved before it is processed. This is
+for convenience so that you don't need to keep saving small changes
+to the current file before building.</p>
+<p>Secondly the output for Compile, Build and Make actions will be
+captured in the Compiler notebook tab of the messages window (assuming
+you have it visible). If there are any warnings or errors with line
+numbers shown in the Compiler output tab, you can double click on
+them and Geany will switch to the relevant source file (if it is open)
+and mark the line number so the problem can be corrected. Geany will
+also set indicators for warnings or errors with line numbers.</p>
+<p>Depending on the current file's filetype, the Build menu will contain
+the following items:</p>
+<ul class="simple">
+<li>Compile</li>
+<li>Build</li>
+<li>Make all</li>
+<li>Make custom target</li>
+<li>Make object</li>
+<li>Execute</li>
+<li>Set Includes and Arguments</li>
+</ul>
+<div class="section">
+<h3><a class="toc-backref" href="#id66" id="compile" name="compile">Compile</a></h3>
+<p>The Compile command has different uses for different kinds of files.</p>
+<p>For compilable languages such as C and C++, the Compile command is
+setup to compile the current source file into a binary object file.</p>
+<p>Java source files will be compiled to class file bytecode. Interpreted
+languages such as Perl, Python, Ruby will compile to bytecode if the
+language supports it, or will run a syntax check, or failing that
+will run the file in its language interpreter.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id67" id="build" name="build">Build</a></h3>
+<p>For compilable languages such as C and C++, the Build command will link
+the current source file's equivalent object file into an executable. If
+the object file does not exist, the source will be compiled and linked
+in one step, producing just the executable binary.</p>
+<p>Interpreted languages do not use the Build command.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id68" id="make-all" name="make-all">Make all</a></h3>
+<p>This effectively runs &quot;make all&quot; in the same directory as the
+current file.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">For each of the Make commands, The Make tool path must be correctly
+set in the Tools tab of the Preferences dialog.</p>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id69" id="make-custom-target" name="make-custom-target">Make custom target</a></h3>
+<p>This is similar to running 'Make all' but you will be prompted for
+the make target name to be passed to the Make tool. For example,
+typing 'clean' in the dialog prompt will run &quot;make clean&quot;.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id70" id="make-object" name="make-object">Make object</a></h3>
+<p>Make object will run &quot;make current_file.o&quot; in the same directory as
+the current file, using its prefix for 'current_file'. It is useful
+for compiling just the current file without building the whole project.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id71" id="execute" name="execute">Execute</a></h3>
+<p>Execute will run the corresponding executable file, shell script or
+interpreted script in a terminal window. Note that the Terminal tool
+path must be correctly set in the Tools tab of the Preferences dialog -
+you can use any terminal program that runs a Bourne compatible shell
+and accept the &quot;-e&quot; command line argument to start a command.</p>
+<p>After your program or script has finished executing, you will be
+prompted to press the return key. This allows you to review any text
+output from the program before the terminal window is closed.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id72" id="stopping-running-processes" name="stopping-running-processes">Stopping running processes</a></h3>
+<p>When there is a running program, the Run button in the toolbar
+becomes a stop button and you can stop the current action. This
+works by sending a signal to the process (and its child process(es))
+to stop the process. The used signal is SIGQUIT.</p>
+<p>Depending on the process you started it might occur that the process
+cannot be stopped. This can happen when the process creates more than
+one child process.</p>
+<div class="section">
+<h4><a class="toc-backref" href="#id73" id="terminal-emulators" name="terminal-emulators">Terminal emulators</a></h4>
+<p>Xterm is known to work properly. If you are using &quot;Terminal&quot;
+(the terminal program of Xfce), you should add the command line
+option <tt class="docutils literal"><span class="pre">--disable-server</span></tt> otherwise the started process cannot be
+stopped. Just add this option in the preferences dialog on the Tools
+tab in the terminal field.</p>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id74" id="set-includes-and-arguments" name="set-includes-and-arguments">Set Includes and Arguments</a></h3>
+<p>By default the Compile and Build commands invoke the compiler and
+linker with only the basic arguments needed by all programs. Using
+Set Includes and Arguments you can add any include paths and compile
+flags for the compiler, any library names and paths for the linker,
+and any arguments you want to use when running Execute.</p>
+<p>These settings are saved automatically when Geany is shut down.</p>
+<p>The following variables can be used:</p>
+<ul class="simple">
+<li>%f -- complete filename without path</li>
+<li>%e -- filename without path and without extension</li>
+</ul>
+<p>See <a class="reference" href="#build-settings-section">[build_settings] Section</a> for details.</p>
+<p>If you need complex settings for your build system, or several
+different settings, then writing a Makefile and using the Make commands
+is recommended.</p>
+<div class="section">
+<h4><a class="toc-backref" href="#id75" id="one-step-compilation" name="one-step-compilation">One step compilation</a></h4>
+<p>If you are using the Build command to compile and link in one step,
+you will need to set both the compiler arguments and the linker
+arguments in the linker command setting.</p>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id76" id="indicators" name="indicators">Indicators</a></h3>
+<p>Indicators are red squiggly underlines which are used to highlight
+errors which occured while compiling the current file. So you can
+easily see where your code failed to compile. To remove the indicators,
+just click on &quot;Remove all indicators&quot; in the document file menu.</p>
+<p>If you do not like this feature, you can disable it in the preferences
+dialog.</p>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id77" id="printing-support" name="printing-support">Printing support</a></h2>
+<p>Geany has basic printing support. This means you can print a file by
+passing the filename of the current file to a command which actually
+prints the file. However, the printed document contains no syntax
+highlighting. You can adjust the command to which the filename is
+passed in the preferences dialog. The default command is:</p>
+<pre class="literal-block">
+% lpr %f
+</pre>
+<p><tt class="docutils literal"><span class="pre">%f</span></tt> will be substituted by the filename of the current file. Geany
+will not show errors from the command itself, so you should make
+sure that it works before(e.g. by trying to execute it from the
+command line).</p>
+<p>A nicer example, which I prefer is:</p>
+<pre class="literal-block">
+% a2ps -1 --medium=A4 -o - %f | xfprint4
+</pre>
+<p>But this depends on a2ps and xfprint4. As a replacement for xfprint4,
+gtklp or similar programs can be used.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">The printing support of Geany will be improved in the future. With GTK
+2.10, better printing (including syntax highlighting) will be possible.</p>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id78" id="keybindings" name="keybindings">Keybindings</a></h2>
+<p>Geany supports the default keyboard shortcuts for the Scintilla
+editing widget. For a list of these commands, see <a class="reference" href="#scintilla-keyboard-commands">Scintilla
+keyboard commands</a>. The Scintilla keyboard shortcuts will be overridden
+by any custom keybindings with the same keyboard shortcut.</p>
+<p>For all actions listed below you can define your own keybindings. Open
+the Preferences dialog, select the desired action and click on
+change. In the opening dialog you can press any key combination you
+want and it will be saved when you press OK. You can define only one
+key combination for one action.</p>
+<p>Some of the default key combinations cannot be changed, e.g. menu_new
+or menu_open. These are set by GTK and should be kept, but you can
+still add other key combinations for these actions. For example to
+execute menu_open by default Ctrl-O is set, but you can also define
+Alt-O, so that the file open dialog is shown by pressing either Ctrl-O
+or Alt-O.</p>
+<p>The following table lists all customizable keyboard shortcuts.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Action</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><strong>Menu items</strong></td>
+<td>...</td>
+</tr>
+<tr><td>New</td>
+<td>Creates a new file.</td>
+</tr>
+<tr><td>Open</td>
+<td>Opens a file.</td>
+</tr>
+<tr><td>Save</td>
+<td>Saves the current file.</td>
+</tr>
+<tr><td>Save As</td>
+<td>Saves the current file under a new name.</td>
+</tr>
+<tr><td>Save all</td>
+<td>Saves all open files.</td>
+</tr>
+<tr><td>Close all</td>
+<td>Closes all open files.</td>
+</tr>
+<tr><td>Close</td>
+<td>Closes the current file.</td>
+</tr>
+<tr><td>Reload file</td>
+<td>Reloads the current file. All unsaved changes
+will be lost.</td>
+</tr>
+<tr><td>Print</td>
+<td>Prints the current file.</td>
+</tr>
+<tr><td>Undo</td>
+<td>Un-does the last action.</td>
+</tr>
+<tr><td>Redo</td>
+<td>Re-does the last action.</td>
+</tr>
+<tr><td>Select all</td>
+<td>Makes a selection of all text in the current
+document.</td>
+</tr>
+<tr><td>Insert date</td>
+<td>Inserts a customisable date.</td>
+</tr>
+<tr><td>Preferences</td>
+<td>Opens preferences dialog.</td>
+</tr>
+<tr><td>Help</td>
+<td>Opens the manual.</td>
+</tr>
+<tr><td>Find Next</td>
+<td>Finds next result.</td>
+</tr>
+<tr><td>Find Previous</td>
+<td>Finds previous result.</td>
+</tr>
+<tr><td>Replace</td>
+<td>Opens the Replace dialog.</td>
+</tr>
+<tr><td>Find in files</td>
+<td>Opens the Find in files dialog.</td>
+</tr>
+<tr><td>Next message</td>
+<td>Jumps to the line with the next message from
+the last call to Find usage.</td>
+</tr>
+<tr><td>Go to line</td>
+<td>Opens the Go to line dialog.</td>
+</tr>
+<tr><td>Show Colour Chooser</td>
+<td>Opens the Colour Chooser dialog.</td>
+</tr>
+<tr><td>Fullscreen</td>
+<td>Switches to fullscreen mode.</td>
+</tr>
+<tr><td>Toggle Messages Window</td>
+<td>Toggles the message window (status and compiler
+messages) on and off.</td>
+</tr>
+<tr><td>Toggle Sidebar</td>
+<td>Shows or hides the sidebar.</td>
+</tr>
+<tr><td>Toggle all additional widgets</td>
+<td>Hide and show all additional widgets like the
+notebook tabs, the toolbar, the messages window
+and the statusbar.</td>
+</tr>
+<tr><td>Zoom In</td>
+<td>Zooms in the text</td>
+</tr>
+<tr><td>Zoom Out</td>
+<td>Zooms out the text</td>
+</tr>
+<tr><td>Replace tabs by space</td>
+<td>Replaces all tabs with the right amount of spaces.</td>
+</tr>
+<tr><td>Fold all</td>
+<td>Folds all contractible code blocks.</td>
+</tr>
+<tr><td>Unfold all</td>
+<td>Unfolds all contracted code blocks.</td>
+</tr>
+<tr><td><strong>Build options</strong></td>
+<td>...</td>
+</tr>
+<tr><td>Compile</td>
+<td>Compiles the current file.</td>
+</tr>
+<tr><td>Build</td>
+<td>Builds (compiles if necessary and links) the
+current file.</td>
+</tr>
+<tr><td>Make all</td>
+<td>Builds the current file with the Make tool.</td>
+</tr>
+<tr><td>Make custom target</td>
+<td>Builds the current file with the Make tool and a
+given target.</td>
+</tr>
+<tr><td>Make object</td>
+<td>Compiles the current file with the Make tool.</td>
+</tr>
+<tr><td>Next error</td>
+<td>Jumps to the line with the next error from the
+last build process.</td>
+</tr>
+<tr><td>Run</td>
+<td>Executes the current file in a terminal emulation.</td>
+</tr>
+<tr><td>Run (alternative command)</td>
+<td>Executes the current file in a terminal emulation.</td>
+</tr>
+<tr><td>Build options</td>
+<td>Opens the build options dialog.</td>
+</tr>
+<tr><td><strong>Miscellaneous</strong></td>
+<td>...</td>
+</tr>
+<tr><td>Reload symbol list</td>
+<td>Reloads the tag/symbol list.</td>
+</tr>
+<tr><td>Switch to Editor</td>
+<td>Switches to editor widget.</td>
+</tr>
+<tr><td>Switch to Scribble</td>
+<td>Switches to scribble widget.</td>
+</tr>
+<tr><td>Switch to VTE</td>
+<td>Switches to VTE widget.</td>
+</tr>
+<tr><td>Switch to Search Bar</td>
+<td>Switches to the search bar in the toolbar (if
+visible).</td>
+</tr>
+<tr><td>Switch to left document</td>
+<td>Switches to the previous open document.</td>
+</tr>
+<tr><td>Switch to right document</td>
+<td>Switches to the next open document.</td>
+</tr>
+<tr><td>Switch to last used document</td>
+<td>Switches to the previously selected open document.</td>
+</tr>
+<tr><td>Navigate forward a location</td>
+<td>Switches to the next location in the navigation
+history.</td>
+</tr>
+<tr><td>Navigate back a location</td>
+<td>Switches to the previous location in the navigation
+history.</td>
+</tr>
+<tr><td><strong>Editing operations</strong></td>
+<td>...</td>
+</tr>
+<tr><td>Convert selection to lower case</td>
+<td>Converts the current selection to lower case.</td>
+</tr>
+<tr><td>Convert selection to upper case</td>
+<td>Converts the current selection to upper case.</td>
+</tr>
+<tr><td>Duplicate line or selection</td>
+<td>Duplicates the current line or selection.</td>
+</tr>
+<tr><td>Delete current line</td>
+<td>Deletes the current line.</td>
+</tr>
+<tr><td>Cut current line</td>
+<td>Cuts the current line.</td>
+</tr>
+<tr><td>Copy current line</td>
+<td>Copies the current line into the clipboard.</td>
+</tr>
+<tr><td>Transpose current line</td>
+<td>Transposes the current line with the previous one.</td>
+</tr>
+<tr><td>Comment line</td>
+<td>Comments current line or selection.</td>
+</tr>
+<tr><td>Uncomment line</td>
+<td>Uncomments current line or selection.</td>
+</tr>
+<tr><td>Toggle line commentation</td>
+<td>Comments a line if it is not commented or removes
+a comment if the line is commented.</td>
+</tr>
+<tr><td>Increase indent</td>
+<td>Indents the current line or selection by one tab
+or by spaces in the amount of the tab width setting.</td>
+</tr>
+<tr><td>Decrease indent</td>
+<td>Removes one tabulator or the amount fo spaces of the
+tab width setting from the indentation of the current
+line or selection.</td>
+</tr>
+<tr><td>Increase indent by one space</td>
+<td>Indents the current line or selection by one space.</td>
+</tr>
+<tr><td>Decrease indent by one space</td>
+<td>Deindents the current line or selection by one space.</td>
+</tr>
+<tr><td>Smart line indent</td>
+<td>Indents the current line or all selected lines with
+the same intentation as the previous line.</td>
+</tr>
+<tr><td>Goto matching brace</td>
+<td>If the cursor is ahead or behind a brace, then it is
+moved to the brace which belongs to the current one.
+If this keyboard shortcut is pressed again, the cursor
+is moved back to the first brace.</td>
+</tr>
+<tr><td>Toggle marker</td>
+<td>Set a marker on the current line, or clear the marker
+if there already is one.</td>
+</tr>
+<tr><td>Goto next marker</td>
+<td>Goto the next marker in the current document.</td>
+</tr>
+<tr><td>Goto previous marker</td>
+<td>Goto the previous marker in the current document.</td>
+</tr>
+<tr><td>Complete word</td>
+<td>Shows auto completion list.</td>
+</tr>
+<tr><td>Show calltip</td>
+<td>Shows call tips for the current function or method.</td>
+</tr>
+<tr><td>Show macro list</td>
+<td>Shows a list of available macros and variables in the
+workspace.</td>
+</tr>
+<tr><td>Complete construct</td>
+<td>If you type a construct like if or for and press this
+key, it will be completed with a matching template.</td>
+</tr>
+<tr><td>Suppress construct completion</td>
+<td>If you type a construct like if or for and press this
+key, it will not be completed, and a space or tab will
+be inserted, depending on what the construct completion
+keybinding is set to. For example, if you have set the
+construct completion keybinding to space, then setting
+this to Shift+space will prevent construct completion
+and insert a space.</td>
+</tr>
+<tr><td>Select current word</td>
+<td>Selects the current word under the cursor.</td>
+</tr>
+<tr><td>Select current paragraph</td>
+<td>Selects the current paragraph under the cursor which is
+defined by two empty lines around it.</td>
+</tr>
+<tr><td>Select current line</td>
+<td>Selects the current line under the cursor.</td>
+</tr>
+<tr><td>Scroll to current line</td>
+<td>Scrolls the current line into the centre of the view.
+The cursor position and or an existing selection will not
+be changed.</td>
+</tr>
+<tr><td>Insert alternative whitespace</td>
+<td>Inserts a tabulator character when spaces should be used
+for indentation and inserts space characters of the amount
+of a tabulator width when tabulators should be used for
+indentation.</td>
+</tr>
+<tr><td>Find Usage</td>
+<td>Finds all occurrences of the current word (near the keyboard
+cursor) or selection and displays them in the messages window.</td>
+</tr>
+<tr><td>Go to tag definition</td>
+<td>Jump to the definition of the current word (near the keyboard
+cursor). If the definition cannot be found (e.g. the relevant
+file is not open) Geany will beep and do nothing. See the
+section called <a class="reference" href="#go-to-tag-definition">Go to tag definition</a>.</td>
+</tr>
+<tr><td>Go to tag declaration</td>
+<td>Jump to the declaration of the current word (near the keyboard
+cursor). If the declaration cannot be found (e.g. the relevant
+file is not open) Geany will beep and do nothing. See the section
+called <a class="reference" href="#go-to-tag-definition">Go to tag definition</a>.</td>
+</tr>
+<tr><td>Context Action</td>
+<td>Executes a command and passes the current word (near the cursor
+postion) or selection as an argument. See the section called
+<a class="reference" href="#context-actions">Context actions</a>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id79" id="configuration-files" name="configuration-files">Configuration files</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="#id80" id="global-configuration-file" name="global-configuration-file">Global configuration file</a></h2>
+<p>You can use a global configuration file for Geany which will be used if
+the user starts Geany for the first time and an user's configuration
+file was not yet created or in case an user deleted the configuration
+file to use default values.</p>
+<p>The global configuration file is read from
+<tt class="docutils literal"><span class="pre">$prefix/share/geany/geany.conf</span></tt> (where <tt class="docutils literal"><span class="pre">$prefix</span></tt> is the path where
+Geany is installed) when starting Geany and an user configuration
+file does not exist. It can contain any settings which are found in
+the usual configuration file created by Geany but does not have to
+contain all settings.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">This feature is mainly intended for package maintainers or system
+admins who want to set up Geany in a multi user environment and set
+some sane default values for this environment. Usual users won't need
+to do that.</p>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id81" id="filetype-definition-files" name="filetype-definition-files">Filetype definition files</a></h2>
+<p>All colour definitions and other filetype specific settings are
+stored in the filetype definition files. Those settings are colours
+for syntax highlighting, general settings like comment characters or
+word delimiter characters as well as compiler and linker settings.</p>
+<p>The system-wide configuration files can be found in
+<tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt> and are called <tt class="docutils literal"><span class="pre">filetypes.$ext</span></tt>,
+where <tt class="docutils literal"><span class="pre">$prefix</span></tt> is the path where Geany is installed (commonly
+<tt class="docutils literal"><span class="pre">/usr/local</span></tt>) and $ext is the name of the filetype. For every
+filetype there is a corresponding definition file. There is one
+exception: <tt class="docutils literal"><span class="pre">filetypes.common</span></tt> -- this file is for general settings,
+which are not specific to a certain filetype. It is not recommended
+to edit the system-wide files, because they will be overridden when
+Geany is updated.</p>
+<p>To change the settings, copy a file from <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt> to
+the subdirectory filedefs in your configuration directory (usually
+<tt class="docutils literal"><span class="pre">~/.geany/</span></tt>).</p>
+<p>For example:</p>
+<pre class="literal-block">
+% cp /usr/local/share/geany/filetypes.c /home/username/.geany/filedefs/
+</pre>
+<p>Then you can edit the file and the changes are also
+available after an update of Geany because they reside in your
+configuration directory. Alternatively, you can create a file
+<tt class="docutils literal"><span class="pre">~/.geany/filedefs/filetypes.X</span></tt> and add only these settings you want
+to change. All missing settings will be read from the corresponding
+global definition file in <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>.</p>
+<div class="section">
+<h3><a class="toc-backref" href="#id82" id="format" name="format">Format</a></h3>
+<div class="section">
+<h4><a class="toc-backref" href="#id83" id="styling-section" name="styling-section">[styling] Section</a></h4>
+<p>In this section the colours for syntax highlighting are defined. The
+format is always: key=forground_colour;background_colour;bold;italic</p>
+<p>Colours have to be specified as RGB hex values prefixed by
+0x. For example red is 0xff0000, blue is 0x0000ff. The values are
+case-insensitive, but it is a good idea to use small letters. Bold
+and italic are flags and should only be &quot;true&quot; or &quot;false&quot;. If their
+value is something other than &quot;true&quot; or &quot;false&quot;, &quot;false&quot; is assumed.</p>
+</div>
+<div class="section">
+<h4><a class="toc-backref" href="#id84" id="keywords-section" name="keywords-section">[keywords] Section</a></h4>
+<p>This section contains keys for different keyword lists specific to
+the filetype. Some filetypes do not support keywords, so adding a
+new key will not work. You can only add or remove keywords to/from
+an existing list.</p>
+<div class="important">
+<p class="first admonition-title">Important</p>
+<p class="last">The keywords list must be in one line without line ending characters.</p>
+</div>
+</div>
+<div class="section">
+<h4><a class="toc-backref" href="#id85" id="settings-section" name="settings-section">[settings] Section</a></h4>
+<dl class="docutils">
+<dt>wordchars</dt>
+<dd><p class="first">These characters define word boundaries when making selections
+and searching using word matching options.</p>
+<p class="last"><em>Example:</em> (look at system filetypes.* files)</p>
+</dd>
+<dt>comment_open</dt>
+<dd><p class="first">A character or string which is used to comment code. If you want to use
+multiline comments, also set comment_close, otherwise leave it empty.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">comment_open=/*</span></tt></p>
+</dd>
+<dt>comment_close</dt>
+<dd><p class="first">If multiline comments are used, this is the character or string to
+close the comment.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">comment_close=*/</span></tt></p>
+</dd>
+<dt>comment_use_indent</dt>
+<dd><p class="first">Set this to false if a comment character or string should start at
+column 0 of a line. If set to true it uses any indentation of the line.</p>
+<p>Note: Comment indentation</p>
+<p><tt class="docutils literal"><span class="pre">comment_use_indent=true</span></tt> would generate this if a line is commented
+(e.g. with Ctrl-D):</p>
+<pre class="literal-block">
+#command_example();
+</pre>
+<p><tt class="docutils literal"><span class="pre">comment_use_indent=false</span></tt> would generate this if a line is commented
+(e.g. with Ctrl-D):</p>
+<pre class="literal-block">
+#   command_example();
+</pre>
+<p>Note: This setting only works for single line comments (like '//', '#'
+or ';').</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">comment_use_indent=true</span></tt></p>
+</dd>
+<dt>context_action_cmd</dt>
+<dd><p class="first">A command which can be executed on a certain word or the current
+selection. Example usage: Open the API documentation for the current
+function call at the cursor position. The command can be set for every
+filetype or if not set, a global command will be used. The command
+itself can be specified without the full path, then it is searched
+in $PATH. But for security reasons, it is recommended to specify the
+full path to the command. The wildcard %s will be replaced by the
+current word at the cursor position or by the current selection.</p>
+<p>Hint: for PHP files the following could be quite useful:
+context_action_cmd=firefox &quot;<a class="reference" href="http://www.php.net/%s">http://www.php.net/%s</a>&quot;</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">context_action_cmd=devhelp</span> <span class="pre">-s</span> <span class="pre">&quot;%s&quot;</span></tt></p>
+</dd>
+</dl>
+</div>
+<div class="section">
+<h4><a class="toc-backref" href="#id86" id="build-settings-section" name="build-settings-section">[build_settings] Section</a></h4>
+<dl class="docutils">
+<dt>compiler</dt>
+<dd><p class="first">This item specifies the command to compile source code files. But
+it is also possible to use it with interpreted languages like Perl
+or Python. With these filetypes you can use this option as a kind of
+syntax parser, which sends output to the compiler message window.</p>
+<p>You should quote the filename to also support filenames with
+spaces. The following wildcards for filenames are available:</p>
+<ul class="simple">
+<li>%f -- complete filename without path</li>
+<li>%e -- filename without path and without extension</li>
+</ul>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">compiler=gcc</span> <span class="pre">-Wall</span> <span class="pre">-c</span> <span class="pre">&quot;%f&quot;</span></tt></p>
+</dd>
+<dt>linker</dt>
+<dd><p class="first">This item specifies the command to link the file. If the file is not
+already compiled, it will be compiled while linking. The -o option
+is automatically added by Geany. This item works well with GNU gcc,
+but may be problematic with other compilers (esp. with the linker).</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">linker=gcc</span> <span class="pre">-Wall</span> <span class="pre">&quot;%f&quot;</span></tt></p>
+</dd>
+<dt>run_cmd</dt>
+<dd><p class="first">Use this item to execute your file. It has to have been built
+already. Use the %e wildcard to have only the name of the executable
+(i.e. without extension) or use the %f wildcard if you need the
+complete filename, e.g. for shell scripts.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">run_cmd=&quot;./%e&quot;</span></tt></p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id87" id="special-file-filetypes-common" name="special-file-filetypes-common">Special file filetypes.common</a></h3>
+<p>There is a special filetype definition file called
+filetypes.common. This file defines some general non-filetype-specific
+settings.</p>
+<dl class="docutils">
+<dt>default</dt>
+<dd><p class="first">This is the default style. It is used for styling files without a
+filetype set.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">default=0x000000;0xffffff;false;false</span></tt></p>
+</dd>
+<dt>selection</dt>
+<dd><p class="first">The style for colouring selected text. The format is:</p>
+<ul class="simple">
+<li>Foreground colour</li>
+<li>Background colour</li>
+<li>Use foreground colour</li>
+<li>Use background colour</li>
+</ul>
+<p>The colours are only set if the 3rd or 4th argument is true. When
+the colours are not overridden, the default is a dark grey background
+with syntax highlighted foreground text.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">selection=0xc0c0c0;0x00007F;true;true</span></tt></p>
+</dd>
+<dt>brace_good</dt>
+<dd><p class="first">The style for brace highlighting when a matching brace was found.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">brace_good=0xff0000;0xFFFFFF;true;false</span></tt></p>
+</dd>
+<dt>brace_bad</dt>
+<dd><p class="first">The style for brace highlighting when no matching brace was found.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">brace_bad=0x0000ff;0xFFFFFF;true;false</span></tt></p>
+</dd>
+<dt>caret</dt>
+<dd><p class="first">The style for colouring the caret(the blinking cursor). Only the
+first argument is interpreted.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">caret=0x000000;0x0;false;false</span></tt></p>
+</dd>
+<dt>caret_width</dt>
+<dd><p class="first">The width for the caret(the blinking cursor). Only the first argument
+is interpreted. The width is specified in pixels with a maximum of
+three pixel. Use the width 0 to make the caret invisible.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">caret=1;0;false;false</span></tt></p>
+</dd>
+<dt>current_line</dt>
+<dd><p class="first">The style for colouring the background of the current line. Only
+the second and third arguments are interpreted. The second argument
+is the background colour. Use the third argument to enable or
+disable background highlighting for the current line (has to be
+true/false).</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">current_line=0x0;0xe5e5e5;true;false</span></tt></p>
+</dd>
+<dt>indent_guide</dt>
+<dd><p class="first">The style for colouring the indentation guides. Only the first and
+second arguments are interpreted.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">indent_guide=0xc0c0c0;0xffffff;false;false</span></tt></p>
+</dd>
+<dt>white_space</dt>
+<dd><p class="first">The style for colouring the white space if it is shown. The first
+both arguments define the foreground and background colours, the
+third argument sets whether to use the defined foreground colour
+or to use the colour defined by each filetype for the white space.
+The fourth argument defines whether to use the background colour.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">white_space=0xc0c0c0;0xffffff;true;true</span></tt></p>
+</dd>
+<dt>folding_style</dt>
+<dd><p class="first">The style of folding icons. Only first and second arguments are used.</p>
+<p>Valid values for the first argument are:</p>
+<ul class="simple">
+<li>1 -- for boxes</li>
+<li>2 -- for circles</li>
+</ul>
+<p>Valid values for the second argument are:</p>
+<ul class="simple">
+<li>1 -- for straight lines</li>
+<li>2 -- for curved lines</li>
+</ul>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">folding_style=1;1;false;false</span></tt></p>
+</dd>
+<dt>folding_horiz_line</dt>
+<dd><p class="first">Draw a thin horizontal line at the line where text is folded. Only
+first argument is used.</p>
+<p>Valid values for the first argument are:</p>
+<ul class="simple">
+<li>0 -- disable, do not draw a line</li>
+<li>1 -- draw the line above folded text</li>
+<li>2 -- draw the line below folded text</li>
+</ul>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">folding_horiz_line=0;0;false;false</span></tt></p>
+</dd>
+<dt>invert_all</dt>
+<dd><p class="first">Whether to invert all defined colours. This is useful if you like a
+dark background colour(e.g. black) and do not want to change every
+single line. Please note, at time of writing this was only tested
+with the C syntax highlighting.</p>
+<p>Only first argument is interpreted. Set it to 1 to invert all colours.</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">invert_all=0;0;false;false</span></tt></p>
+</dd>
+<dt>whitespace_chars</dt>
+<dd><p class="first">Characters to treat as whitespace. These characters are ignored
+when moving, selecting and deleting across word boundaries
+(see <a class="reference" href="#scintilla-keyboard-commands">Scintilla keyboard commands</a>).</p>
+<p>This should include space (\s) and tab (\t).</p>
+<p class="last"><em>Example:</em> <tt class="docutils literal"><span class="pre">whitespace_chars=\s\t!\&quot;#$%&amp;'()*+,-./:;&lt;=&gt;?&#64;[\\]^`{|}~</span></tt></p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id88" id="filetype-extensions" name="filetype-extensions">Filetype extensions</a></h2>
+<p>You can override the default extensions that Geany uses for each
+filetype using the <tt class="docutils literal"><span class="pre">filetype_extensions.conf</span></tt> file.</p>
+<p>To override the system-wide configuration file, copy it from
+<tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt> to your configuration directory, usually
+<tt class="docutils literal"><span class="pre">~/.geany/</span></tt>. <tt class="docutils literal"><span class="pre">$prefix</span></tt> is the path where Geany is installed
+(commonly <tt class="docutils literal"><span class="pre">/usr/local</span></tt>).</p>
+<p>For example:</p>
+<pre class="literal-block">
+% cp /usr/local/share/geany/filetype_extensions.conf /home/username/.geany/
+</pre>
+<p>Then edit it and remove all the lines for filetype extensions that
+you do not want to override. The remaining lines can be edited after
+the <tt class="docutils literal"><span class="pre">=</span></tt> sign, using a semi-colon separated list of patterns which
+should be matched for that filetype.</p>
+<p>For example, to set the filetype extensions for Make, the
+<tt class="docutils literal"><span class="pre">/home/username/.geany/filetype_extensions.conf</span></tt> file should
+look like:</p>
+<pre class="literal-block">
+[Extensions]
+Make=Makefile*;*.mk;Buildfile;
+</pre>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id89" id="templates" name="templates">Templates</a></h2>
+<p>Geany supports the following templates:</p>
+<ul class="simple">
+<li>ChangeLog entry</li>
+<li>File header</li>
+<li>Function description</li>
+<li>Short GPL notice</li>
+<li>Short BSD notice</li>
+<li>Filetype template</li>
+</ul>
+<p>To use these templates, just open the Edit menu or open the popup menu
+by right-clicking in the editor widget, and choose &quot;Insert Comments&quot;
+and insert templates as you want.</p>
+<p>Some templates (like File header or ChangeLog entry) will always be
+inserted at the top of the file.</p>
+<p>To insert a function description, the cursor must be inside
+of the function, so that the function name can be determined
+automatically. The description will be positioned correctly one line
+above the function, just check it out. If the cursor is not inside
+of a function or the function name cannot be determined, you cannot
+insert a function description.</p>
+<div class="section">
+<h3><a class="toc-backref" href="#id90" id="template-metadata" name="template-metadata">Template metadata</a></h3>
+<p>Metadata can be used with all templates, but by default user set
+metadata is only used for the ChangeLog and File header templates.</p>
+<p>In the configuration dialog you can find a tab &quot;Templates&quot; (see
+<a class="reference" href="#template-tab-in-preferences-dialog">Template tab in preferences dialog</a>). You can define the
+default values which will be inserted in the templates. You should
+restart Geany after making changes, because they are only read
+at startup.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id91" id="filetype-templates" name="filetype-templates">Filetype templates</a></h3>
+<p>Filetype templates are templates used as the basis of a new file. To
+use them, choose the <em>New (with Template)</em> menu item from the <em>File</em>
+menu.</p>
+<p>By default, templates are created for some filetypes. Other filetype
+templates can be added by creating the appropriate template file and
+restarting Geany. You can also edit the default filetype templates.</p>
+<p>Filetype template files are read from the <tt class="docutils literal"><span class="pre">~/.geany/templates</span></tt>
+directory, and are named &quot;filetype.&quot; followed by the filetype
+name, e.g. &quot;filetype.python&quot;, &quot;filetype.sh&quot;, etc. If you are
+unsure about the filetype name extensions, they are the same as
+the filetype configuration file extensions, commonly installed in
+<tt class="docutils literal"><span class="pre">/usr/share/geany</span></tt>, with the prefix &quot;filetypes.&quot;.</p>
+<p>The file's contents are just the text to place in the document,
+except for the optional <tt class="docutils literal"><span class="pre">{fileheader}</span></tt> template wildcard. This can
+be placed anywhere, but is usually on the first line of the file,
+followed by a blank line.</p>
+<p>There is also a template file <tt class="docutils literal"><span class="pre">template.none</span></tt> which is used when
+the New command is used without a filetype. This is empty by default.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="#id92" id="customizing-templates" name="customizing-templates">Customizing templates</a></h3>
+<p>Each template can be customized to your needs. The templates are stored
+in the <tt class="docutils literal"><span class="pre">~/.geany/templates/</span></tt> directory (see the section called <a class="reference" href="#command-line-options">Command
+line options</a> for further information about the configuration
+directory). Just open the desired template with an editor (ideally,
+Geany ;-) ) and edit the template to your needs. There are some
+wildcards which will be automatically replaced by Geany at startup.</p>
+<div class="section">
+<h4><a class="toc-backref" href="#id93" id="template-wildcards" name="template-wildcards">Template wildcards</a></h4>
+<p>All wildcards must be enclosed by &quot;{&quot; and &quot;}&quot;, e.g. {date}.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="35%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Wildcard</th>
+<th class="head">Description</th>
+<th class="head">Available in</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>developer</td>
+<td>The name of the developer.</td>
+<td><em>filetypes, file header, function description, ChangeLog entry, bsd, gpl</em></td>
+</tr>
+<tr><td>initial</td>
+<td>The developer's initials, e.g. &quot;ET&quot; for Enrico
+Tröger or &quot;JFD&quot; for John Foobar Doe.</td>
+<td><em>filetypes, file header, function description, ChangeLog entry, bsd, gpl</em></td>
+</tr>
+<tr><td>mail</td>
+<td>The email address of the developer.</td>
+<td><em>file header, function description, ChangeLog entry, bsd, gpl</em></td>
+</tr>
+<tr><td>company</td>
+<td>The company the developer is working for.</td>
+<td><em>filetypes, file header, function description, ChangeLog entry, bsd, gpl</em>)</td>
+</tr>
+<tr><td>year</td>
+<td>The current year in the format: YYYY.</td>
+<td><em>filetypes, file header, function description, ChangeLog entry, bsd, gpl</em>)</td>
+</tr>
+<tr><td>version</td>
+<td>The initial version of a new file.</td>
+<td><em>filetypes, file header, function description, ChangeLog entry, bsd, gpl</em>)</td>
+</tr>
+<tr><td>date</td>
+<td>The current date in the format: YYYY-MM-DD.</td>
+<td><em>filetypes, file header, function description, ChangeLog entry, bsd, gpl</em>)</td>
+</tr>
+<tr><td>untitled</td>
+<td>The string &quot;untitled&quot; (this will be translated
+to your locale), used in filetype templates.</td>
+<td><em>filetypes, file header, function description, ChangeLog entry, bsd, gpl</em>)</td>
+</tr>
+<tr><td>geanyversion</td>
+<td>The actual Geany version, e.g.
+&quot;Geany 0.12&quot;.</td>
+<td><em>filetypes, file header, function description, ChangeLog entry, bsd, gpl</em>)</td>
+</tr>
+<tr><td>datetime</td>
+<td>The current date and time in the format:
+DD.MM.YYYY HH:mm:ss ZZZZ.</td>
+<td><em>file header, function description</em></td>
+</tr>
+<tr><td>filename</td>
+<td>The filename of the current file.</td>
+<td><em>file header</em></td>
+</tr>
+<tr><td>gpl</td>
+<td>This wildcard inserts a short GPL notice.</td>
+<td><em>file header</em></td>
+</tr>
+<tr><td>bsd</td>
+<td>This wildcard inserts a BSD licence notice.</td>
+<td><em>file header</em></td>
+</tr>
+<tr><td>functionname</td>
+<td>The function name of the function at the
+cursor position. This wildcard will only be
+replaced in the function description template.</td>
+<td><em>function description</em></td>
+</tr>
+<tr><td>fileheader</td>
+<td>The file header template. This wildcard will
+only be replaced in filetype templates.</td>
+<td><em>filetypes</em></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id94" id="contributing-to-this-document" name="contributing-to-this-document">Contributing to this document</a></h1>
+<p>This document (<tt class="docutils literal"><span class="pre">geany.txt</span></tt>) is written in <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>
+(or &quot;reST&quot;). The source file for it is located in Geany's &quot;doc&quot;
+subdirectory.  If you intend on making changes, you should grab the
+source right from SVN to make sure you've got the newest version. After
+editing the file, to build the html docs to see how your changes
+look, run &quot;make doc&quot; in the subdirectory &quot;doc&quot; of Geany's source
+directory. Your updated HTML docs will end up in the <tt class="docutils literal"><span class="pre">./html</span></tt>
+directory. To generate a PDF file, use the command &quot;make pdf&quot; which
+should generate a file called geany-0.12.pdf.</p>
+<p>After you are happy with your changes, create a patch:</p>
+<pre class="literal-block">
+% svn diff geany.txt &gt; foo.patch
+</pre>
+<p>and then submit that file to the mailing list for review.</p>
+<p>Note, you will need the Python docutils software package installed
+to build the docs. The package is named &quot;python-docutils&quot; on Debian
+and Fedora systems.</p>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id95" id="scintilla-keyboard-commands" name="scintilla-keyboard-commands">Scintilla keyboard commands</a></h1>
+<p>Copyright © 1998, 2006 Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
+<p>This appendix is distributed under the terms of the License for
+Scintilla and SciTE. A copy of this license can be found in the file
+<tt class="docutils literal"><span class="pre">scintilla/License.txt</span></tt> included with the source code of this
+program and in the appendix of this document. See <a class="reference" href="#license-for-scintilla-and-scite">License for
+Scintilla and SciTE</a>.</p>
+<p>20 June 2006</p>
+<div class="section">
+<h2><a class="toc-backref" href="#id96" id="keyboard-commands" name="keyboard-commands">Keyboard commands</a></h2>
+<p>Keyboard commands for Scintilla mostly follow common Windows and GTK+
+conventions. All move keys (arrows, page up/down, home and end)
+allows to extend or reduce the stream selection when holding the
+Shift key, and the rectangular selection when holding the Shift and
+Alt keys. Some keys may not be available with some national keyboards
+or because they are taken by the system such as by a window manager
+on GTK+. Keyboard equivalents of menu commands are listed in the
+menus. Some less common commands with no menu equivalent are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="67%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Action</th>
+<th class="head">Shortcut key</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Magnify text size.</td>
+<td>Ctrl+Keypad+</td>
+</tr>
+<tr><td>Reduce text size.</td>
+<td>Ctrl+Keypad-</td>
+</tr>
+<tr><td>Restore text size to normal.</td>
+<td>Ctrl+Keypad/</td>
+</tr>
+<tr><td>Indent block.</td>
+<td>Tab</td>
+</tr>
+<tr><td>Dedent block.</td>
+<td>Shift+Tab</td>
+</tr>
+<tr><td>Delete to start of word.</td>
+<td>Ctrl+BackSpace</td>
+</tr>
+<tr><td>Delete to end of word.</td>
+<td>Ctrl+Delete</td>
+</tr>
+<tr><td>Delete to start of line.</td>
+<td>Ctrl+Shift+BackSpace</td>
+</tr>
+<tr><td>Delete to end of line.</td>
+<td>Ctrl+Shift+Delete</td>
+</tr>
+<tr><td>Go to start of document.</td>
+<td>Ctrl+Home</td>
+</tr>
+<tr><td>Extend selection to start of document.</td>
+<td>Ctrl+Shift+Home</td>
+</tr>
+<tr><td>Go to start of display line.</td>
+<td>Alt+Home</td>
+</tr>
+<tr><td>Extend selection to start of display line.</td>
+<td>Alt+Shift+Home</td>
+</tr>
+<tr><td>Go to end of document.</td>
+<td>Ctrl+End</td>
+</tr>
+<tr><td>Extend selection to end of document.</td>
+<td>Ctrl+Shift+End</td>
+</tr>
+<tr><td>Go to end of display line.</td>
+<td>Alt+End</td>
+</tr>
+<tr><td>Extend selection to end of display line.</td>
+<td>Alt+Shift+End</td>
+</tr>
+<tr><td>Scroll up.</td>
+<td>Ctrl+Up</td>
+</tr>
+<tr><td>Scroll down.</td>
+<td>Ctrl+Down</td>
+</tr>
+<tr><td>Line cut.</td>
+<td>Ctrl+L</td>
+</tr>
+<tr><td>Line copy.</td>
+<td>Ctrl+Shift+T</td>
+</tr>
+<tr><td>Line delete.</td>
+<td>Ctrl+Shift+L</td>
+</tr>
+<tr><td>Line transpose with previous.</td>
+<td>Ctrl+T</td>
+</tr>
+<tr><td>Selection duplicate.</td>
+<td>Ctrl+D</td>
+</tr>
+<tr><td>Previous paragraph. Shift extends selection.</td>
+<td>Ctrl+[</td>
+</tr>
+<tr><td>Next paragraph. Shift extends selection.</td>
+<td>Ctrl+]</td>
+</tr>
+<tr><td>Previous word. Shift extends selection.</td>
+<td>Ctrl+Left</td>
+</tr>
+<tr><td>Next word. Shift extends selection.</td>
+<td>Ctrl+Right</td>
+</tr>
+<tr><td>Previous word part. Shift extends selection</td>
+<td>Ctrl+/</td>
+</tr>
+<tr><td>Next word part. Shift extends selection.</td>
+<td>Ctrl+\</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id97" id="compile-time-options" name="compile-time-options">Compile-time options</a></h1>
+<p>There are some options which can only be changed at compile time. To
+change these options, edit the file src/geany.h. Look for a block of
+lines starting with <tt class="docutils literal"><span class="pre">#define</span> <span class="pre">GEANY_*</span></tt>. Any definitions which are
+not listed here should not be changed.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Most users should not need to change these options.</p>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="47%" />
+<col width="21%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Option</th>
+<th class="head">Description</th>
+<th class="head">Default</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>GEANY_WORDCHARS</td>
+<td>These characters define word boundaries when
+making selections and searching using word
+matching options.</td>
+<td><em>look at sourcecode</em></td>
+</tr>
+<tr><td>GEANY_MAX_AUTOCOMPLETE_WORDS</td>
+<td>How many auto completion suggestions should
+Geany provide.</td>
+<td><em>30</em></td>
+</tr>
+<tr><td>GEANY_MAX_AUTOCOMPLETE_HEIGHT</td>
+<td>How many suggestions should be visible in
+the auto completion list.</td>
+<td><em>10</em></td>
+</tr>
+<tr><td>GEANY_PROJECT_EXT</td>
+<td>The default filename extension for Geany
+project files. It is used when creating new
+projects and as filter mask for the project
+open dialog.</td>
+<td><em>geany</em></td>
+</tr>
+<tr><td>GEANY_STRING_UNTITLED</td>
+<td>A string used as the default name for new
+files. Be aware that the string can be
+translated, so change it only if you know
+what you are doing.</td>
+<td><em>untitled</em></td>
+</tr>
+<tr><td>GEANY_CHECK_FILE_DELAY</td>
+<td>Time in seconds between checking a file for
+external changes.</td>
+<td><em>30</em></td>
+</tr>
+<tr><td>GEANY_TOGGLE_MARK</td>
+<td>A string which is used to mark a toggled
+comment.
+external changes.</td>
+<td><em>&quot;~ &quot;</em></td>
+</tr>
+<tr><td>GEANY_WINDOW_MINIMAL_WIDTH</td>
+<td>The minimal width of the main window.</td>
+<td><em>620</em></td>
+</tr>
+<tr><td>GEANY_WINDOW_MINIMAL_HEIGHT</td>
+<td>The minimal height of the main window.</td>
+<td><em>440</em></td>
+</tr>
+<tr><td>GEANY_WINDOW_DEFAULT_WIDTH</td>
+<td>The default width of the main window at the
+first start.</td>
+<td><em>900</em></td>
+</tr>
+<tr><td>GEANY_WINDOW_DEFAULT_HEIGHT</td>
+<td>The default height of the main window at the
+first start.</td>
+<td><em>600</em></td>
+</tr>
+<tr><td><strong>Default values</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>GEANY_DEFAULT_TOOLS_MAKE</td>
+<td>The make tool. This can also include a path.</td>
+<td><em>&quot;make&quot;</em></td>
+</tr>
+<tr><td>GEANY_DEFAULT_TOOLS_TERMINAL</td>
+<td>A terminal emulator. It has to accept the
+command line option &quot;-e&quot;. This can also
+include a path.</td>
+<td><em>&quot;xterm&quot;</em></td>
+</tr>
+<tr><td>GEANY_DEFAULT_TOOLS_BROWSER</td>
+<td>A web browser. This can also include a path.</td>
+<td><em>&quot;firefox&quot;</em></td>
+</tr>
+<tr><td>GEANY_DEFAULT_TOOLS_PRINTCMD</td>
+<td>A printing tool. It should be able to accept
+and process plain text files. This can also
+include a path.</td>
+<td><em>&quot;lpr&quot;</em></td>
+</tr>
+<tr><td>GEANY_DEFAULT_TOOLS_GREP</td>
+<td>A grep tool. It should be compatible with
+GNU grep. This can also include a path.</td>
+<td><em>&quot;grep&quot;</em></td>
+</tr>
+<tr><td>GEANY_DEFAULT_MRU_LENGHTH</td>
+<td>The length of the &quot;Recent files&quot; list.</td>
+<td><em>10</em></td>
+</tr>
+<tr><td>GEANY_DEFAULT_FONT_SYMBOL_LIST</td>
+<td>The font used in sidebar to show symbols and
+open files.</td>
+<td><em>&quot;Sans 9&quot;</em></td>
+</tr>
+<tr><td>GEANY_DEFAULT_FONT_MSG_WINDOW</td>
+<td>he font used in the messages window.</td>
+<td><em>&quot;Sans 9&quot;</em></td>
+</tr>
+<tr><td>GEANY_DEFAULT_FONT_EDITOR</td>
+<td>The font used in the editor window.</td>
+<td><em>&quot;Monospace 10&quot;</em></td>
+</tr>
+<tr><td><strong>Windows specific</strong></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td>GEANY_USE_WIN32_DIALOG</td>
+<td>Set this to 1 if you want to use the default
+Windows file open and save dialogs instead
+GTK's file open and save dialogs. The
+default Windows file dialogs are missing
+some nice features like choosing a filetype
+or an encoding. <em>Do not touch this setting
+when building on a non-Win32 system.</em></td>
+<td><em>0</em></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id98" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
+<pre class="literal-block">
+            GNU GENERAL PUBLIC LICENSE
+               Version 2, June 1991
+
+ Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+    51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+                Preamble
+
+  The licenses for most software are designed to take away your
+freedom to share and change it.  By contrast, the GNU General Public
+License is intended to guarantee your freedom to share and change free
+software--to make sure the software is free for all its users.  This
+General Public License applies to most of the Free Software
+Foundation's software and to any other program whose authors commit to
+using it.  (Some other Free Software Foundation software is covered by
+the GNU Library General Public License instead.)  You can apply it to
+your programs, too.
+
+  When we speak of free software, we are referring to freedom, not
+price.  Our General Public Licenses are designed to make sure that you
+have the freedom to distribute copies of free software (and charge for
+this service if you wish), that you receive source code or can get it
+if you want it, that you can change the software or use pieces of it
+in new free programs; and that you know you can do these things.
+
+  To protect your rights, we need to make restrictions that forbid
+anyone to deny you these rights or to ask you to surrender the rights.
+These restrictions translate to certain responsibilities for you if you
+distribute copies of the software, or if you modify it.
+
+  For example, if you distribute copies of such a program, whether
+gratis or for a fee, you must give the recipients all the rights that
+you have.  You must make sure that they, too, receive or can get the
+source code.  And you must show them these terms so they know their
+rights.
+
+  We protect your rights with two steps: (1) copyright the software, and
+(2) offer you this license which gives you legal permission to copy,
+distribute and/or modify the software.
+
+  Also, for each author's protection and ours, we want to make certain
+that everyone understands that there is no warranty for this free
+software.  If the software is modified by someone else and passed on, we
+want its recipients to know that what they have is not the original, so
+that any problems introduced by others will not reflect on the original
+authors' reputations.
+
+  Finally, any free program is threatened constantly by software
+patents.  We wish to avoid the danger that redistributors of a free
+program will individually obtain patent licenses, in effect making the
+program proprietary.  To prevent this, we have made it clear that any
+patent must be licensed for everyone's free use or not licensed at all.
+
+  The precise terms and conditions for copying, distribution and
+modification follow.
+
+            GNU GENERAL PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  0. This License applies to any program or other work which contains
+a notice placed by the copyright holder saying it may be distributed
+under the terms of this General Public License.  The &quot;Program&quot;, below,
+refers to any such program or work, and a &quot;work based on the Program&quot;
+means either the Program or any derivative work under copyright law:
+that is to say, a work containing the Program or a portion of it,
+either verbatim or with modifications and/or translated into another
+language.  (Hereinafter, translation is included without limitation in
+the term &quot;modification&quot;.)  Each licensee is addressed as &quot;you&quot;.
+
+Activities other than copying, distribution and modification are not
+covered by this License; they are outside its scope.  The act of
+running the Program is not restricted, and the output from the Program
+is covered only if its contents constitute a work based on the
+Program (independent of having been made by running the Program).
+Whether that is true depends on what the Program does.
+
+  1. You may copy and distribute verbatim copies of the Program's
+source code as you receive it, in any medium, provided that you
+conspicuously and appropriately publish on each copy an appropriate
+copyright notice and disclaimer of warranty; keep intact all the
+notices that refer to this License and to the absence of any warranty;
+and give any other recipients of the Program a copy of this License
+along with the Program.
+
+You may charge a fee for the physical act of transferring a copy, and
+you may at your option offer warranty protection in exchange for a fee.
+
+  2. You may modify your copy or copies of the Program or any portion
+of it, thus forming a work based on the Program, and copy and
+distribute such modifications or work under the terms of Section 1
+above, provided that you also meet all of these conditions:
+
+    a) You must cause the modified files to carry prominent notices
+    stating that you changed the files and the date of any change.
+
+    b) You must cause any work that you distribute or publish, that in
+    whole or in part contains or is derived from the Program or any
+    part thereof, to be licensed as a whole at no charge to all third
+    parties under the terms of this License.
+
+    c) If the modified program normally reads commands interactively
+    when run, you must cause it, when started running for such
+    interactive use in the most ordinary way, to print or display an
+    announcement including an appropriate copyright notice and a
+    notice that there is no warranty (or else, saying that you provide
+    a warranty) and that users may redistribute the program under
+    these conditions, and telling the user how to view a copy of this
+    License.  (Exception: if the Program itself is interactive but
+    does not normally print such an announcement, your work based on
+    the Program is not required to print an announcement.)
+
+These requirements apply to the modified work as a whole.  If
+identifiable sections of that work are not derived from the Program,
+and can be reasonably considered independent and separate works in
+themselves, then this License, and its terms, do not apply to those
+sections when you distribute them as separate works.  But when you
+distribute the same sections as part of a whole which is a work based
+on the Program, the distribution of the whole must be on the terms of
+this License, whose permissions for other licensees extend to the
+entire whole, and thus to each and every part regardless of who wrote it.
+
+Thus, it is not the intent of this section to claim rights or contest
+your rights to work written entirely by you; rather, the intent is to
+exercise the right to control the distribution of derivative or
+collective works based on the Program.
+
+In addition, mere aggregation of another work not based on the Program
+with the Program (or with a work based on the Program) on a volume of
+a storage or distribution medium does not bring the other work under
+the scope of this License.
+
+  3. You may copy and distribute the Program (or a work based on it,
+under Section 2) in object code or executable form under the terms of
+Sections 1 and 2 above provided that you also do one of the following:
+
+    a) Accompany it with the complete corresponding machine-readable
+    source code, which must be distributed under the terms of Sections
+    1 and 2 above on a medium customarily used for software interchange; or,
+
+    b) Accompany it with a written offer, valid for at least three
+    years, to give any third party, for a charge no more than your
+    cost of physically performing source distribution, a complete
+    machine-readable copy of the corresponding source code, to be
+    distributed under the terms of Sections 1 and 2 above on a medium
+    customarily used for software interchange; or,
+
+    c) Accompany it with the information you received as to the offer
+    to distribute corresponding source code.  (This alternative is
+    allowed only for noncommercial distribution and only if you
+    received the program in object code or executable form with such
+    an offer, in accord with Subsection b above.)
+
+The source code for a work means the preferred form of the work for
+making modifications to it.  For an executable work, complete source
+code means all the source code for all modules it contains, plus any
+associated interface definition files, plus the scripts used to
+control compilation and installation of the executable.  However, as a
+special exception, the source code distributed need not include
+anything that is normally distributed (in either source or binary
+form) with the major components (compiler, kernel, and so on) of the
+operating system on which the executable runs, unless that component
+itself accompanies the executable.
+
+If distribution of executable or object code is made by offering
+access to copy from a designated place, then offering equivalent
+access to copy the source code from the same place counts as
+distribution of the source code, even though third parties are not
+compelled to copy the source along with the object code.
+
+  4. You may not copy, modify, sublicense, or distribute the Program
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense or distribute the Program is
+void, and will automatically terminate your rights under this License.
+However, parties who have received copies, or rights, from you under
+this License will not have their licenses terminated so long as such
+parties remain in full compliance.
+
+  5. You are not required to accept this License, since you have not
+signed it.  However, nothing else grants you permission to modify or
+distribute the Program or its derivative works.  These actions are
+prohibited by law if you do not accept this License.  Therefore, by
+modifying or distributing the Program (or any work based on the
+Program), you indicate your acceptance of this License to do so, and
+all its terms and conditions for copying, distributing or modifying
+the Program or works based on it.
+
+  6. Each time you redistribute the Program (or any work based on the
+Program), the recipient automatically receives a license from the
+original licensor to copy, distribute or modify the Program subject to
+these terms and conditions.  You may not impose any further
+restrictions on the recipients' exercise of the rights granted herein.
+You are not responsible for enforcing compliance by third parties to
+this License.
+
+  7. If, as a consequence of a court judgment or allegation of patent
+infringement or for any other reason (not limited to patent issues),
+conditions are imposed on you (whether by court order, agreement or
+otherwise) that contradict the conditions of this License, they do not
+excuse you from the conditions of this License.  If you cannot
+distribute so as to satisfy simultaneously your obligations under this
+License and any other pertinent obligations, then as a consequence you
+may not distribute the Program at all.  For example, if a patent
+license would not permit royalty-free redistribution of the Program by
+all those who receive copies directly or indirectly through you, then
+the only way you could satisfy both it and this License would be to
+refrain entirely from distribution of the Program.
+
+If any portion of this section is held invalid or unenforceable under
+any particular circumstance, the balance of the section is intended to
+apply and the section as a whole is intended to apply in other
+circumstances.
+
+It is not the purpose of this section to induce you to infringe any
+patents or other property right claims or to contest validity of any
+such claims; this section has the sole purpose of protecting the
+integrity of the free software distribution system, which is
+implemented by public license practices.  Many people have made
+generous contributions to the wide range of software distributed
+through that system in reliance on consistent application of that
+system; it is up to the author/donor to decide if he or she is willing
+to distribute software through any other system and a licensee cannot
+impose that choice.
+
+This section is intended to make thoroughly clear what is believed to
+be a consequence of the rest of this License.
+
+  8. If the distribution and/or use of the Program is restricted in
+certain countries either by patents or by copyrighted interfaces, the
+original copyright holder who places the Program under this License
+may add an explicit geographical distribution limitation excluding
+those countries, so that distribution is permitted only in or among
+countries not thus excluded.  In such case, this License incorporates
+the limitation as if written in the body of this License.
+
+  9. The Free Software Foundation may publish revised and/or new versions
+of the General Public License from time to time.  Such new versions will
+be similar in spirit to the present version, but may differ in detail to
+address new problems or concerns.
+
+Each version is given a distinguishing version number.  If the Program
+specifies a version number of this License which applies to it and &quot;any
+later version&quot;, you have the option of following the terms and conditions
+either of that version or of any later version published by the Free
+Software Foundation.  If the Program does not specify a version number of
+this License, you may choose any version ever published by the Free Software
+Foundation.
+
+  10. If you wish to incorporate parts of the Program into other free
+programs whose distribution conditions are different, write to the author
+to ask for permission.  For software which is copyrighted by the Free
+Software Foundation, write to the Free Software Foundation; we sometimes
+make exceptions for this.  Our decision will be guided by the two goals
+of preserving the free status of all derivatives of our free software and
+of promoting the sharing and reuse of software generally.
+
+                NO WARRANTY
+
+  11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
+OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+PROVIDE THE PROGRAM &quot;AS IS&quot; WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
+OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS
+TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE
+PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
+REPAIR OR CORRECTION.
+
+  12. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
+INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING
+OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED
+TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY
+YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER
+PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGES.
+
+             END OF TERMS AND CONDITIONS
+
+        How to Apply These Terms to Your New Programs
+
+  If you develop a new program, and you want it to be of the greatest
+possible use to the public, the best way to achieve this is to make it
+free software which everyone can redistribute and change under these terms.
+
+  To do so, attach the following notices to the program.  It is safest
+to attach them to the start of each source file to most effectively
+convey the exclusion of warranty; and each file should have at least
+the &quot;copyright&quot; line and a pointer to where the full notice is found.
+
+    &lt;one line to give the program's name and a brief idea of what it does.&gt;
+    Copyright (C) &lt;year&gt;  &lt;name of author&gt;
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+
+Also add information on how to contact you by electronic and paper mail.
+
+If the program is interactive, make it output a short notice like this
+when it starts in an interactive mode:
+
+    Gnomovision version 69, Copyright (C) year  name of author
+    Gnomovision comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+    This is free software, and you are welcome to redistribute it
+    under certain conditions; type `show c' for details.
+
+The hypothetical commands `show w' and `show c' should show the appropriate
+parts of the General Public License.  Of course, the commands you use may
+be called something other than `show w' and `show c'; they could even be
+mouse-clicks or menu items--whatever suits your program.
+
+You should also get your employer (if you work as a programmer) or your
+school, if any, to sign a &quot;copyright disclaimer&quot; for the program, if
+necessary.  Here is a sample; alter the names:
+
+  Yoyodyne, Inc., hereby disclaims all copyright interest in the program
+  `Gnomovision' (which makes passes at compilers) written by James Hacker.
+
+  &lt;signature of Ty Coon&gt;, 1 April 1989
+  Ty Coon, President of Vice
+
+This General Public License does not permit incorporating your program into
+proprietary programs.  If your program is a subroutine library, you may
+consider it more useful to permit linking proprietary applications with the
+library.  If this is what you want to do, use the GNU Library General
+Public License instead of this License.
+</pre>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="#id99" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
+<p>Copyright 1998-2003 by Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
+<p>All Rights Reserved</p>
+<p>Permission to use, copy, modify, and distribute this software and
+its documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and
+that both that copyright notice and this permission notice appear in
+supporting documentation.</p>
+<p>NEIL HODGSON DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN
+NO EVENT SHALL NEIL HODGSON BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
+OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
+USE OR PERFORMANCE OF THIS SOFTWARE.</p>
+</div>
+</div>
+<div class="footer">
+<hr class="footer" />
+<a class="reference" href="geany.txt">View document source</a>.
+Generated on: 2007-08-09 09:53 UTC.
+Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+
+</div>
+</body>
+</html>

@@ -1,97 +1,108 @@
-body address
-{
-  line-height: 1.3;
-  margin: .6em 0;
+/*
+:Author: Enrico Troeger
+:Contact: enrico(dot)troeger(at)uvena(dot)de
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for Geany's documentation based on a version of John Gabriele.
+*/
+
+/*@import url(html4css1.css);*/
+
+body {
+    background-color: #f2f2f2;
+    color: #404040;
+	margin-left: 0.4em;
+    width: 60em;
+    font-size: 90%;
 }
 
-body blockquote
-{
-  margin-top: .75em;
-  line-height: 1.5;
-  margin-bottom: .75em;
+a {
+    color: #990000;
 }
 
-html body
-{
-  margin: 1em 2% 1em 2%;
-  line-height: 1.2;
-  background-color: #ffffff;
+a:visited {
+    color: #7E558E;
 }
 
-body pre
-{
-  margin: .75em 0;
-  line-height: 1.3;
-  color: #4f3f3f;
-  font-weight: bold;
+a:hover {
+    text-decoration: none;
 }
 
-body div
-{
-  margin: 0;
+h1 {
+    border-top: 1px dotted;
+    margin-top: 2em;
 }
 
-dl
-{
-  margin: .4em 0;
-  line-height: 1.2;
+h1, h2, h3 {
+    font-family: sans-serif;
+    color: #5D0606;
 }
 
-.legalnotice
-{
-  font-size: small;
+h1.title {
+  text-align: left }
+
+h2 {
+    margin-top: 30px;
 }
 
-h1,h2,h3,h4,h5,h6,
-div.example p b,
-.question,
-div.table p b,
-div.procedure p b
-{
-  color: #990000;
+h2.subtitle {
+  text-align: left }
+
+h3 {
+    padding-left: 3px;
 }
 
-.option
-{
-  color: #0000ca;
-  font-weight: bold;
+blockquote, pre {
+    border: 1px solid;
+    padding: 0.4em;
 }
 
-.parameter
-{
-  color: #007a00;
-  font-weight: bold;
+blockquote {
+    font-family: sans-serif;
+    background-color: #DBEDD5;
+    border: 1px dotted;
+    border-left: 4px solid;
+    border-color: #9FD98C;
 }
 
-a
-{
-  color: #000000;
+pre {
+    background-color: #ECDFCE;
+    border: 1px dotted;
+    border-left: 4px solid;
+    border-color: #D9BE9A;
 }
 
-a:hover
-{
-  color: #3c3c3c;
-  border-bottom: 1px solid #dc0000;
+tt, pre, code {
+    color: #6D4212;
 }
 
-hr
-{
-  background-color: #9c9c9c;
-  border-style: none;
-  height: 1px;
+table {
+    border: 1px solid #D9BE9A;
 }
 
-li
-{
-  list-style-type: square;
+th {
+    background-color: #ECDFCE;
+    border: 1px dotted #D9BE9A;
 }
 
-.programlisting, .screen
-{
-  background-color: #F8F9FD;
-  border-color: #907777;
-  border-width: 1px;
-  border-style: solid;
-  padding: 0.5em;
+td {
+    border: 1px dotted #D9BE9A;
 }
 
+.docinfo-name {
+	color: #5D0606;
+}
+
+p.admonition-title {
+	color: #990000;
+	font-weight: bold;
+}
+
+div.note {
+	margin: 1em 3em;
+	padding: 0em;
+}
+
+dt {
+	font-style: italic;
+}
