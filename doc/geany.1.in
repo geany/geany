@@ -22,6 +22,8 @@ Use an alternate configuration directory. Default configuration directory is
 Run Geany in debug mode, which means being verbose and printing lots of information.
 .IP "\fB\fP             \fB\-\-ft\-names\fP         " 10
 Print a list of Geany's internal filetype names (useful for the auto completion list).
+.IP "\fB-g\fP           \fB\-\-generate\-tags\fP         " 10
+Generate global tags file (see documentation).
 .IP "\fB-i\fP           \fB\-\-new-instance\fP         " 10
 Don't open files in a running instance, force opening a new instance.
 Only available if Geany was compiled with support for Sockets.
@@ -33,8 +35,10 @@ or VTE support.
 .IP "\fB-n\fP           \fB\-\-no-ctags\fP         " 10
 Don't load auto completion and call tip data. Use this option, if you don't want to use them.
 For more information please see documentation.
+.IP "\fB-p\fP           \fB\-\-no-plugins\fP         " 10
+Don't load plugin support.
 .IP "\fB-s\fP           \fB\-\-no-session\fP         " 10
-Don't load the previous session's files
+Don't load the previous session's files.
 .IP "\fB-t\fP           \fB\-\-no-terminal\fP         " 10
 Don't load terminal support. Use this option, if you don't want to load the virtual terminal
 emulator widget at startup. If you don't have libvte.so.4 installed, then terminal-support is

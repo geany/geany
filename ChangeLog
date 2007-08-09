@@ -3,6 +3,11 @@
  * plugins/classbuilder.c:
    Fix missing GTypeInfo field initializer when generating
    'objectname'_get_type() for GObject classes.
+ * doc/geany.txt, doc/geany.html:
+   Move 'About this document' section to end of Introduction.
+   Update 'Contributing to this document' section.
+ * doc/geany.1.in:
+   Update for -g and -p options.
 
 
 2007-08-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
