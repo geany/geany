@@ -192,6 +192,7 @@ GType {class_name_low}_get_type(void)\n\
 			sizeof({class_name}),\n\
 			0,\n\
 			(GInstanceInitFunc){class_name_low}_init,\n\
+			NULL /* value_table */\n\
 		};\n\
 		\n\
 		self_type = g_type_register_static({base_gtype}, \"{class_name}\", &self_info, 0);\

@@ -1,3 +1,10 @@
+2007-08-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/classbuilder.c:
+   Fix missing GTypeInfo field initializer when generating
+   'objectname'_get_type() for GObject classes.
+
+
 2007-08-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/*, doc/html/*:
