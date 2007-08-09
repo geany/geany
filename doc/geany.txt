@@ -54,14 +54,6 @@ Some basic features of Geany are:
 
 
 
-About this document
--------------------
-
-This documentation is available in various formats like HTML, text and
-PDF. The latest version is always available at http://geany.uvena.de.
-
-
-
 Where to get it
 ---------------
 
@@ -82,6 +74,16 @@ code of this program or in the chapter, `GNU General Public License`_.
 The included Scintilla library (found in the subdirectory
 ``scintilla/``) has its own license, which can be found in the chapter,
 `License for Scintilla and SciTE`_.
+
+
+
+About this document
+-------------------
+
+This documentation is available in various formats like HTML, text and
+PDF. The latest version is always available at http://geany.uvena.de.
+
+If you want to contribute to it, see `Contributing to this document`_.
 
 
 
@@ -2013,14 +2015,14 @@ Contributing to this document
 =============================
 
 This document (``geany.txt``) is written in `reStructuredText`__
-(or "reST"). The source file for it is located in Geany's "doc"
+(or "reST"). The source file for it is located in Geany's ``doc``
 subdirectory.  If you intend on making changes, you should grab the
 source right from SVN to make sure you've got the newest version. After
-editing the file, to build the html docs to see how your changes
-look, run "make doc" in the subdirectory "doc" of Geany's source
-directory. Your updated HTML docs will end up in the ``./html``
-directory. To generate a PDF file, use the command "make pdf" which
-should generate a file called geany-|(version)|.pdf.
+editing the file, to build the HTML document to see how your changes
+look, run "``make doc``" in the subdirectory ``doc`` of Geany's source
+directory. This regenerates the ``geany.html`` file. To generate a PDF
+file, use the command "``make pdf``" which should generate a file called
+geany-|(version)|.pdf.
 
 __ http://docutils.sourceforge.net/rst.html
 
@@ -2031,7 +2033,7 @@ After you are happy with your changes, create a patch::
 and then submit that file to the mailing list for review.
 
 Note, you will need the Python docutils software package installed
-to build the docs. The package is named "python-docutils" on Debian
+to build the docs. The package is named ``python-docutils`` on Debian
 and Fedora systems.
 
 
