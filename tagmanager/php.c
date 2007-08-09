@@ -114,10 +114,11 @@ static void findPhpTags (void)
 			makeSimpleTag (name, PhpKinds, K_FUNCTION);
 			vStringClear (name);
 		}
-		else if (strncmp ((const char*) cp, "class", (size_t) 5) == 0 &&
-				 isspace ((int) cp [5]))
+		else if ((f = strstr ((const char*) cp, "class")) != NULL &&
+			(f == (const char*) cp || isspace ((int) f [-1])) &&
+			isspace ((int) f [5]))
 		{
-			cp += 5;
+			cp = ((const unsigned char *) f) + 5;
 
 			while (isspace ((int) *cp))
 				++cp;
