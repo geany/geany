@@ -1,7 +1,7 @@
 man_MANS=geany.1
 DOCDIR = $(DESTDIR)/$(datadir)/doc/@PACKAGE@
 IMAGE_FILES = images/*.png
-EXTRA_DIST = geany.html geany.css make_webable.sh geany.txt geany.1 \
+EXTRA_DIST = geany.html geany.css geany.txt geany.1 \
 			 $(srcdir)/$(IMAGE_FILES)
 
 pdf: geany.txt
