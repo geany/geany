@@ -11,6 +11,8 @@
  * data/autocomplete.conf:
    Add %cursor% for default 'else' completion.
    Add space before while for 'do' completion.
+ * src/keybindings.c:
+   Prevent warning when trying to focus non-existent VTE.
 
 
 2007-08-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

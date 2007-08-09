@@ -979,6 +979,8 @@ static void cb_func_switch_search_bar(G_GNUC_UNUSED guint key_id)
 static void cb_func_switch_vte(G_GNUC_UNUSED guint key_id)
 {
 #ifdef HAVE_VTE
+	if (!vte_info.have_vte)
+		return;
 	msgwin_show_hide(TRUE);
 	/* the msgwin must be visible before we switch to the VTE page so that
 	 * the font settings are applied on realization */
