@@ -1470,11 +1470,11 @@ Convert selection to upper case Converts the current selection to upper case.
 
 Duplicate line or selection     Duplicates the current line or selection.
 
-Delete current line             Deletes the current line.
+Delete current line(s)          Deletes the current line (and any lines with a selection).
 
-Cut current line                Cuts the current line.
+Cut current line(s)             Cuts the current line (and any lines with a selection) to the clipboard.
 
-Copy current line               Copies the current line into the clipboard.
+Copy current line(s)            Copies the current line (and any lines with a selection) to the clipboard.
 
 Transpose current line          Transposes the current line with the previous one.
 
@@ -1534,7 +1534,7 @@ Select current word             Selects the current word under the cursor.
 Select current paragraph        Selects the current paragraph under the cursor which is
                                 defined by two empty lines around it.
 
-Select current line             Selects the current line under the cursor.
+Select current line(s)          Selects the current line under the cursor (and any partially selected lines).
 
 Scroll to current line          Scrolls the current line into the centre of the view.
                                 The cursor position and or an existing selection will not
