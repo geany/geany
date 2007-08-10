@@ -2297,17 +2297,18 @@ void editor_select_word(ScintillaObject *sci)
 }
 
 
-void editor_select_line(ScintillaObject *sci)
+void editor_select_lines(ScintillaObject *sci)
 {
-	gint pos, line, start, end;
+	gint start, end;
 
 	g_return_if_fail(sci != NULL);
 
-	pos = SSM(sci, SCI_GETCURRENTPOS, 0, 0);
-	line = SSM(sci, SCI_LINEFROMPOSITION, pos, 0);
-
-	start = SSM(sci, SCI_POSITIONFROMLINE, line, TRUE);
-	end = SSM(sci, SCI_POSITIONFROMLINE, line + 1, TRUE);
+	start = sci_get_selection_start(sci);
+	start = sci_get_line_from_position(sci, start);
+	start = sci_get_position_from_line(sci, start);
+	end = sci_get_selection_end(sci);
+	end = sci_get_line_from_position(sci, end);
+	end = sci_get_position_from_line(sci, end + 1);
 
 	SSM(sci, SCI_SETSEL, start, end);
 }

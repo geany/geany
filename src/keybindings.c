@@ -245,11 +245,11 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_DUPLICATELINE] = fill(cb_func_edit,
 		GDK_d, GDK_CONTROL_MASK, "edit_duplicateline", _("Duplicate line or selection"));
 	keys[GEANY_KEYS_EDIT_DELETELINE] = fill(cb_func_edit,
-		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("Delete current line"));
+		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("Delete current line(s)"));
 	keys[GEANY_KEYS_EDIT_COPYLINE] = fill(cb_func_edit,
-		GDK_k, GDK_MOD1_MASK | GDK_SHIFT_MASK, "edit_copyline", _("Copy current line"));
+		GDK_k, GDK_MOD1_MASK | GDK_SHIFT_MASK, "edit_copyline", _("Copy current line(s)"));
 	keys[GEANY_KEYS_EDIT_CUTLINE] = fill(cb_func_edit,
-		GDK_k, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("Cut current line"));
+		GDK_k, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("Cut current line(s)"));
 	keys[GEANY_KEYS_EDIT_TRANSPOSELINE] = fill(cb_func_edit,
 		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("Transpose current line"));
 	keys[GEANY_KEYS_EDIT_TOLOWERCASE] = fill(cb_func_edit,
@@ -305,7 +305,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_SELECTWORD] = fill(cb_func_edit,
 		GDK_w, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectword", _("Select current word"));
 	keys[GEANY_KEYS_EDIT_SELECTLINE] = fill(cb_func_edit,
-		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("Select current line"));
+		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("Select current line(s)"));
 	keys[GEANY_KEYS_EDIT_SELECTPARAGRAPH] = fill(cb_func_edit,
 		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("Select current paragraph"));
 	keys[GEANY_KEYS_EDIT_SCROLLTOLINE] = fill(cb_func_edit,
@@ -1106,7 +1106,12 @@ static void cb_func_edit(guint key_id)
 			on_menu_duplicate_line1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_EDIT_DELETELINE:
-			sci_cmd(doc_list[idx].sci, SCI_LINEDELETE);
+			// SCI_LINEDELETE only does 1 line
+			editor_select_lines(doc_list[idx].sci);
+			sci_clear(doc_list[idx].sci);
+			break;
+		case GEANY_KEYS_EDIT_COPYLINE:
+			sci_cmd(doc_list[idx].sci, SCI_LINECOPY);
 			break;
 		case GEANY_KEYS_EDIT_CUTLINE:
 			sci_cmd(doc_list[idx].sci, SCI_LINECUT);
@@ -1151,7 +1156,7 @@ static void cb_func_edit(guint key_id)
 			editor_select_word(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_SELECTLINE:
-			editor_select_line(doc_list[idx].sci);
+			editor_select_lines(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_SELECTPARAGRAPH:
 			editor_select_paragraph(doc_list[idx].sci);

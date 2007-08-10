@@ -137,7 +137,7 @@ void editor_insert_multiline_comment(gint idx);
 
 void editor_select_word(ScintillaObject *sci);
 
-void editor_select_line(ScintillaObject *sci);
+void editor_select_lines(ScintillaObject *sci);
 
 void editor_select_paragraph(ScintillaObject *sci);
 

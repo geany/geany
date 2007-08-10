@@ -1,3 +1,11 @@
+2007-08-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/editor.c, src/editor.h:
+   Make 'Delete current line' and 'Select current line' work for all
+   lines that have a selection.
+   Implement 'Copy current line'.
+
+
 2007-08-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/php.c: Fix parsing classes with modifiers like 'final'.
