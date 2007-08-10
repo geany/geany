@@ -109,12 +109,6 @@ typedef struct PluginFields
 PluginFields;
 
 
-typedef struct DocumentFuncs	DocumentFuncs;
-typedef struct ScintillaFuncs	ScintillaFuncs;
-typedef struct TemplateFuncs	TemplateFuncs;
-typedef struct UtilsFuncs		UtilsFuncs;
-typedef struct UIUtilsFuncs		UIUtilsFuncs;
-
 /* These are fields and functions owned by Geany.
  * Fields and functions will be appended when needed by plugin authors.
  * Note: Remember to increment api_version (and abi_version if necessary) when
@@ -127,12 +121,12 @@ typedef struct GeanyData
 	struct filetype		**filetypes;
 	struct EditorPrefs	*editor_prefs;
 
-	DocumentFuncs	*document;
-	ScintillaFuncs	*sci;
-	TemplateFuncs	*templates;
-	UtilsFuncs		*utils;
-	UIUtilsFuncs	*ui;
-	struct SupportFuncs	*support;
+	struct DocumentFuncs	*document;
+	struct ScintillaFuncs	*sci;
+	struct TemplateFuncs	*templates;
+	struct UtilsFuncs		*utils;
+	struct UIUtilsFuncs		*ui;
+	struct SupportFuncs		*support;
 }
 GeanyData;
 
@@ -144,16 +138,17 @@ typedef GeanyData PluginData;	// for compatibility with API < 7
 
 struct filetype;
 
-struct DocumentFuncs
+typedef struct DocumentFuncs
 {
 	gint	(*new_file) (const gchar *filename, struct filetype *ft);
 	gint	(*get_cur_idx) ();
 	struct document*	(*get_current) ();
-};
+}
+DocumentFuncs;
 
 struct _ScintillaObject;
 
-struct ScintillaFuncs
+typedef struct ScintillaFuncs
 {
 	long int	(*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
 		long unsigned int wParam, long int lParam);
@@ -187,25 +182,29 @@ struct ScintillaFuncs
 	void	(*ensure_line_is_visible) (struct _ScintillaObject* sci, gint line);
 	void	(*scroll_caret) (struct _ScintillaObject* sci);
 	gint	(*find_bracematch) (struct _ScintillaObject* sci, gint pos);
-};
+}
+ScintillaFuncs;
 
-struct TemplateFuncs
+typedef struct TemplateFuncs
 {
 	gchar*	(*get_template_fileheader) (gint filetype_idx, const gchar *fname);
-};
+}
+TemplateFuncs;
 
-struct UtilsFuncs
+typedef struct UtilsFuncs
 {
 	gboolean	(*str_equal) (const gchar *a, const gchar *b);
 	gchar*		(*str_replace) (gchar *haystack, const gchar *needle, const gchar *replacement);
 	GSList*		(*get_file_list) (const gchar *path, guint *length, GError **error);
-};
+}
+UtilsFuncs;
 
-struct UIUtilsFuncs
+typedef struct UIUtilsFuncs
 {
 	GtkWidget*	(*dialog_vbox_new) (GtkDialog *dialog);
 	GtkWidget*	(*frame_new_with_alignment) (const gchar *label_text, GtkWidget **alignment);
-};
+}
+UIUtilsFuncs;
 
 typedef struct SupportFuncs
 {
