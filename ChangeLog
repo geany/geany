@@ -8,6 +8,11 @@
    Update selected line(s) keybindings.
  * src/plugindata.h:
    Tidy up struct typedefs.
+ * src/geanyobject.c, src/plugindata.h, src/geanyobject.h,
+   src/document.c, src/plugins.c, src/main.c, src/Makefile.am:
+   Add plugin symbol geany_callbacks (see plugindata.h for details).
+   Add GeanyObject type with "document-new", "document-open",
+   "document-save" signals.
 
 
 2007-08-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

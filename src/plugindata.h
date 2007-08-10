@@ -40,6 +40,10 @@
  * PluginFields* plugin_fields
  * 	Plugin owned fields, including flags.
  *
+ * GeanyCallback geany_callbacks[]
+ * 	An array for connecting GeanyObject events, which should be terminated with
+ * 	{NULL, NULL, FALSE, NULL}. See signals below.
+ *
  * void init(GeanyData *data)
  * 	Called after loading the plugin. data is the same as geany_data.
  *
@@ -48,10 +52,23 @@
  * 	everything done in init() - e.g. destroy menu items, free memory.
  */
 
+/**
+ * Signals:
+ *
+ * "document-new"
+ * 	Sent when a new document is created.
+ *
+ * "document-open"
+ * 	Sent when a file is opened.
+ *
+ * "document-save"
+ * 	Sent when a file is saved.
+ */
+
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 8;
+static const gint api_version = 9;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -211,5 +228,15 @@ typedef struct SupportFuncs
 	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);
 }
 SupportFuncs;
+
+
+typedef struct GeanyCallback
+{
+	gchar		*signal_name;
+	GCallback	callback;
+	gboolean	after;
+	gpointer	user_data;
+}
+GeanyCallback;
 
 #endif

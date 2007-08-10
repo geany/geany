@@ -67,6 +67,7 @@
 #include "build.h"
 #include "symbols.h"
 #include "callbacks.h"
+#include "geanyobject.h"
 
 
 /* dynamic array of document elements to hold all information of the notebook tabs */
@@ -459,7 +460,8 @@ gint document_new_file(const gchar *filename, filetype *ft)
 		ft = filetypes_detect_from_file(idx);
 
 	document_set_filetype(idx, ft);	// also clears taglist
-	if (ft == NULL) filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
+	if (ft == NULL)
+		filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
 	ui_set_window_title(idx);
 	build_menu_update(idx);
 
@@ -476,6 +478,11 @@ gint document_new_file(const gchar *filename, filetype *ft)
 	// "the" SCI signal (connect after initial setup(i.e. adding text))
 	g_signal_connect((GtkWidget*) doc_list[idx].sci, "sci-notify",
 				G_CALLBACK(on_editor_notification), GINT_TO_POINTER(idx));
+
+	if (geany_object)
+	{
+		g_signal_emit_by_name(geany_object, "document-new", idx);
+	}
 
 	msgwin_status_add(_("New file \"%s\" opened."),
 		(doc_list[idx].file_name != NULL) ? doc_list[idx].file_name : GEANY_STRING_UNTITLED);
@@ -854,9 +861,12 @@ gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	document_set_text_changed(idx);	// also updates tab state
 	ui_document_show_hide(idx);	// update the document menu
 
-
 	// finally add current file to recent files menu, but not the files from the last session
-	if (! app->opening_session_files) ui_add_recent_file(utf8_filename);
+	if (! app->opening_session_files)
+		ui_add_recent_file(utf8_filename);
+
+	if (! reload && geany_object)
+		g_signal_emit_by_name(geany_object, "document-open", idx);
 
 	if (reload)
 		msgwin_status_add(_("File %s reloaded."), utf8_filename);
@@ -1096,7 +1106,7 @@ gboolean document_save_file(gint idx, gboolean force)
 		 * timestamp can be ahead of time(NULL) */
 		document_update_timestamp(idx);
 
-		if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->id == GEANY_FILETYPES_ALL)
+		if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_ALL)
 		{
 			doc_list[idx].file_type = filetypes_detect_from_file(idx);
 			filetypes_select_radio_item(doc_list[idx].file_type);
@@ -1111,7 +1121,10 @@ gboolean document_save_file(gint idx, gboolean force)
 #ifdef HAVE_VTE
 		vte_cwd(doc_list[idx].file_name, FALSE);
 #endif
-
+	}
+	if (geany_object)
+	{
+		g_signal_emit_by_name(geany_object, "document-save", idx);
 	}
 	return TRUE;
 }

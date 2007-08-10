@@ -15,6 +15,7 @@ SRCS = \
 	editor.c editor.h \
 	encodings.c encodings.h \
 	filetypes.c filetypes.h \
+	geanyobject.c geanyobject.h \
 	highlighting.c highlighting.h \
 	interface.c interface.h \
 	keybindings.c keybindings.h \

@@ -701,6 +701,12 @@ gint main(gint argc, gchar **argv)
 	// apply all configuration options
 	apply_settings();
 
+#ifdef HAVE_PLUGINS
+	// load any enabled plugins before we open any documents
+	if (! no_plugins)
+		plugins_init();
+#endif
+
 	// load any command line files or session files
 	app->opening_session_files = TRUE;
 	if (! open_cl_files(argc, argv))
@@ -720,7 +726,8 @@ gint main(gint argc, gchar **argv)
 	app->opening_session_files = FALSE;
 
 	// open a new file if no other file was opened
-	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)	document_new_file(NULL, NULL);
+	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
+		document_new_file(NULL, NULL);
 
 	ui_document_buttons_update();
 	ui_save_buttons_toggle(FALSE);
@@ -741,12 +748,6 @@ gint main(gint argc, gchar **argv)
 			gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER));
 		gtk_widget_set_sensitive(compiler_tab, FALSE);
 	}
-#endif
-
-#ifdef HAVE_PLUGINS
-	// load any enabled plugins just before we draw the main window
-	if (! no_plugins)
-		plugins_init();
 #endif
 
 	// finally realize the window to show the user what we have done

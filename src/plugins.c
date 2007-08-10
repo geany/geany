@@ -46,6 +46,7 @@
 #include "sciwrappers.h"
 #include "ui_utils.h"
 #include "editor.h"
+#include "geanyobject.h"
 
 #ifdef G_OS_WIN32
 # define PLUGIN_EXT "dll"
@@ -211,6 +212,27 @@ plugin_check_version(GModule *module)
 }
 
 
+// TODO: disconnect the callbacks when the plugin is unloaded.
+static void add_callbacks(GeanyCallback *callbacks)
+{
+	GeanyCallback *cb;
+	guint i = 0;
+
+	do
+	{
+		cb = &callbacks[i];
+		if (!cb->signal_name || !cb->callback)
+			break;
+
+		if (cb->after)
+			g_signal_connect_after(geany_object, cb->signal_name, cb->callback, cb->user_data);
+		else
+			g_signal_connect(geany_object, cb->signal_name, cb->callback, cb->user_data);
+		i++;
+	} while (TRUE);
+}
+
+
 static Plugin*
 plugin_new(const gchar *fname)
 {
@@ -219,6 +241,7 @@ plugin_new(const gchar *fname)
 	PluginInfo* (*info)();
 	PluginFields **plugin_fields;
 	GeanyData **p_geany_data;
+	GeanyCallback *callbacks;
 
 	g_return_val_if_fail(fname, NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
@@ -293,6 +316,10 @@ plugin_new(const gchar *fname)
 		gtk_widget_set_sensitive(plugin->fields.menu_item, enable);
 	}
 
+	g_module_symbol(module, "geany_callbacks", (void *) &callbacks);
+	if (callbacks)
+		add_callbacks(callbacks);
+
 	geany_debug("Loaded:   %s (%s)", fname,
 		NVL(plugin->info()->name, "<Unknown>"));
 	return plugin;
@@ -360,15 +387,9 @@ static gchar *get_plugin_path()
 #endif
 
 
-void plugins_init()
+static void load_plugin_paths()
 {
-	GtkWidget *widget;
 	gchar *path;
-
-	geany_data_init();
-
-	widget = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), widget);
 
 	path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
 	// first load plugins in ~/.geany/plugins/, then in $prefix/lib/geany
@@ -380,15 +401,32 @@ void plugins_init()
 #else
 	load_plugins(PACKAGE_LIB_DIR G_DIR_SEPARATOR_S "geany");
 #endif
-	if (g_list_length(plugin_list) > 0)
-		gtk_widget_show(widget);
 
 	g_free(path);
 }
 
 
+void plugins_init()
+{
+	GtkWidget *widget;
+
+	geany_data_init();
+	geany_object = geany_object_new();
+
+	widget = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), widget);
+
+	load_plugin_paths();
+
+	if (g_list_length(plugin_list) > 0)
+		gtk_widget_show(widget);
+}
+
+
 void plugins_free()
 {
+	g_object_unref(geany_object);
+
 	if (plugin_list != NULL)
 	{
 		g_list_foreach(plugin_list, (GFunc) plugin_free, NULL);
