@@ -1,7 +1,8 @@
 2007-08-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
- * data/filetypes.freebasic: Add many keywords
+ * data/filetypes.freebasic: Add many keywordsGeanyObjectPrivate
                              (patch by Arthur Skowronek, thanks).
+ * geanyobject.c: Fix a runtime warning.
 
 
 2007-08-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
