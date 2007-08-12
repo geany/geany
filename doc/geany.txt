@@ -1,7 +1,7 @@
 .. |(version)| replace:: 0.12
 
 =======
-Geany
+ Geany
 =======
 
 -------------------------
@@ -189,9 +189,9 @@ Short option  Long option              Function
 *none*        --ft-names               Print a list of Geany's internal filetype names (useful
                                        for the auto completion list).
 
--i            --new-instance           Do not open files in a running instance, force opening a
-                                       new instance. Only available if Geany was compiled with
-                                       support for Sockets.
+-i            --new-instance           Do not open files in a running instance, force opening
+                                       a new instance. Only available if Geany was compiled
+                                       with support for Sockets.
 
 -l            --line                   Set initial line number for the first opened file.
 
@@ -206,27 +206,28 @@ Short option  Long option              Function
 -s            --no-session             Do not load the previous session's files.
 
 -t            --no-terminal            Do not load terminal support. Use this option if you do
-                                       not want to load the virtual terminal emulator widget at
-                                       startup. If you do not have libvte.so.4 installed, then
-                                       terminal-support is automatically disabled. Only available
-                                       if Geany was compiled with support for VTE.
+                                       not want to load the virtual terminal emulator widget
+                                       at startup. If you do not have libvte.so.4 installed,
+                                       then terminal-support is automatically disabled. Only
+                                       available if Geany was compiled with support for VTE.
 
 *none*        --vte-lib                Specify explicitly the path including filename or only
-                                       the filename to the VTE library, e.g. ``/usr/lib/libvte.so``
-                                       or ``libvte.so``. This option is only needed when the
-                                       autodetection does not work. Only available if Geany was
-                                       compiled with support for VTE.
+                                       the filename to the VTE library, e.g.
+                                       ``/usr/lib/libvte.so`` or ``libvte.so``. This option is
+                                       only needed when the autodetection does not work. Only
+                                       available if Geany was compiled with support for VTE.
 
 -v            --version                Show version information and exit.
 
 -?            --help                   Show help information and exit.
 
-*none*        [files ...]              Open all given files at startup. This option causes Geany
-                                       to ignore loading stored files from the last session (if
-                                       enabled).
+*none*        [files ...]              Open all given files at startup. This option causes
+                                       Geany to ignore loading stored files from the last
+                                       session (if enabled).
 ============  =======================  =================================================
 
-Geany supports all generic GTK options, a list is available on the help screen.
+Geany supports all generic GTK options, a list is available on the
+help screen.
 
 
 
@@ -450,9 +451,7 @@ before the selected text was copied to the new position.
 Auto indentation
 ^^^^^^^^^^^^^^^^
 
-Geany knows three types of auto indentation: None, Basic and Advanced.
-
-Auto indentation types:
+Geany knows three types of auto indentation:
 
 None
     Disables auto indentation completely.
@@ -926,7 +925,7 @@ For C/C++ files, the environment variable CFLAGS should be set with
 appropriate ``-I/path`` include paths. The following example works with
 the bash shell, generating tags for the GnomeUI library::
 
-    CFLAGS=`pkg-config --cflags libgnomeui-2.0` geany -g gnomeui.c.tags \\
+    CFLAGS=`pkg-config --cflags libgnomeui-2.0` geany -g gnomeui.c.tags \
     /usr/include/libgnomeui-2.0/gnome.h
 
 You can adapt this command to use CFLAGS and header files appropriate
@@ -1058,6 +1057,7 @@ VTE tab in preferences dialog
 VTE tab in preferences dialog
 
 .. image:: ./images/pref_dialog_vte.png
+
 
 
 Project Management
@@ -1313,8 +1313,9 @@ But this depends on a2ps and xfprint4. As a replacement for xfprint4,
 gtklp or similar programs can be used.
 
 .. note::
-    The printing support of Geany will be improved in the future. With GTK
-    2.10, better printing (including syntax highlighting) will be possible.
+    The printing support of Geany will be improved in the future. With
+    GTK 2.10, better printing (including syntax highlighting) will be
+    possible.
 
 
 
@@ -1344,7 +1345,7 @@ The following table lists all customizable keyboard shortcuts.
 =============================== =========================================
 Action                          Description
 =============================== =========================================
-**Menu items**                  ...
+**Menu items**
 
 New                             Creates a new file.
 
@@ -1414,7 +1415,7 @@ Fold all                        Folds all contractible code blocks.
 
 Unfold all                      Unfolds all contracted code blocks.
 
-**Build options**               ...
+**Build options**
 
 Compile                         Compiles the current file.
 
@@ -1437,7 +1438,7 @@ Run (alternative command)       Executes the current file in a terminal emulatio
 
 Build options                   Opens the build options dialog.
 
-**Miscellaneous**               ...
+**Miscellaneous**
 
 Reload symbol list              Reloads the tag/symbol list.
 
@@ -1459,10 +1460,10 @@ Switch to last used document    Switches to the previously selected open documen
 Navigate forward a location     Switches to the next location in the navigation
                                 history.
 
-Navigate back a location        Switches to the previous location in the navigation
-                                history.
+Navigate back a location        Switches to the previous location in the
+                                navigation history.
 
-**Editing operations**          ...
+**Editing operations**
 
 Convert selection to lower case Converts the current selection to lower case.
 
@@ -1470,11 +1471,14 @@ Convert selection to upper case Converts the current selection to upper case.
 
 Duplicate line or selection     Duplicates the current line or selection.
 
-Delete current line(s)          Deletes the current line (and any lines with a selection).
+Delete current line(s)          Deletes the current line (and any lines with a
+                                selection).
 
-Cut current line(s)             Cuts the current line (and any lines with a selection) to the clipboard.
+Cut current line(s)             Cuts the current line (and any lines with a
+                                selection) to the clipboard.
 
-Copy current line(s)            Copies the current line (and any lines with a selection) to the clipboard.
+Copy current line(s)            Copies the current line (and any lines with a
+                                selection) to the clipboard.
 
 Transpose current line          Transposes the current line with the previous one.
 
@@ -1486,26 +1490,29 @@ Toggle line commentation        Comments a line if it is not commented or remove
                                 a comment if the line is commented.
 
 Increase indent                 Indents the current line or selection by one tab
-                                or by spaces in the amount of the tab width setting.
+                                or by spaces in the amount of the tab width
+                                setting.
 
-Decrease indent                 Removes one tabulator or the amount fo spaces of the
-                                tab width setting from the indentation of the current
-                                line or selection.
+Decrease indent                 Removes one tabulator or the amount fo spaces of
+                                the tab width setting from the indentation of the
+                                current line or selection.
 
-Increase indent by one space    Indents the current line or selection by one space.
+Increase indent by one space    Indents the current line or selection by one
+                                space.
 
-Decrease indent by one space    Deindents the current line or selection by one space.
+Decrease indent by one space    Deindents the current line or selection by one
+                                space.
 
-Smart line indent               Indents the current line or all selected lines with
-                                the same intentation as the previous line.
+Smart line indent               Indents the current line or all selected lines
+                                with the same intentation as the previous line.
 
-Goto matching brace             If the cursor is ahead or behind a brace, then it is
-                                moved to the brace which belongs to the current one.
-                                If this keyboard shortcut is pressed again, the cursor
-                                is moved back to the first brace.
+Goto matching brace             If the cursor is ahead or behind a brace, then it
+                                is moved to the brace which belongs to the current
+                                one. If this keyboard shortcut is pressed again,
+                                the cursor is moved back to the first brace.
 
-Toggle marker                   Set a marker on the current line, or clear the marker
-                                if there already is one.
+Toggle marker                   Set a marker on the current line, or clear the
+                                marker if there already is one.
 
 Goto next marker                Goto the next marker in the current document.
 
@@ -1513,54 +1520,62 @@ Goto previous marker            Goto the previous marker in the current document
 
 Complete word                   Shows auto completion list.
 
-Show calltip                    Shows call tips for the current function or method.
+Show calltip                    Shows call tips for the current function or
+                                method.
 
-Show macro list                 Shows a list of available macros and variables in the
-                                workspace.
+Show macro list                 Shows a list of available macros and variables in
+                                the workspace.
 
-Complete construct              If you type a construct like if or for and press this
-                                key, it will be completed with a matching template.
+Complete construct              If you type a construct like if or for and press
+                                this key, it will be completed with a matching
+                                template.
 
-Suppress construct completion   If you type a construct like if or for and press this
-                                key, it will not be completed, and a space or tab will
-                                be inserted, depending on what the construct completion
-                                keybinding is set to. For example, if you have set the
-                                construct completion keybinding to space, then setting
-                                this to Shift+space will prevent construct completion
-                                and insert a space.
+Suppress construct completion   If you type a construct like if or for and press
+                                this key, it will not be completed, and a space or
+                                tab will be inserted, depending on what the
+                                construct completion keybinding is set to. For
+                                example, if you have set the construct completion
+                                keybinding to space, then setting this to
+                                Shift+space will prevent construct completion and
+                                insert a space.
 
 Select current word             Selects the current word under the cursor.
 
-Select current paragraph        Selects the current paragraph under the cursor which is
-                                defined by two empty lines around it.
+Select current paragraph        Selects the current paragraph under the cursor
+                                which is defined by two empty lines around it.
 
-Select current line(s)          Selects the current line under the cursor (and any partially selected lines).
+Select current line(s)          Selects the current line under the cursor (and any
+                                partially selected lines).
 
-Scroll to current line          Scrolls the current line into the centre of the view.
-                                The cursor position and or an existing selection will not
-                                be changed.
+Scroll to current line          Scrolls the current line into the centre of the
+                                view. The cursor position and or an existing
+                                selection will not be changed.
 
-Insert alternative whitespace   Inserts a tabulator character when spaces should be used
-                                for indentation and inserts space characters of the amount
-                                of a tabulator width when tabulators should be used for
-                                indentation.
+Insert alternative whitespace   Inserts a tabulator character when spaces should
+                                be used for indentation and inserts space
+                                characters of the amount of a tabulator width when
+                                tabulators should be used for indentation.
 
-Find Usage                      Finds all occurrences of the current word (near the keyboard
-                                cursor) or selection and displays them in the messages window.
+Find Usage                      Finds all occurrences of the current word (near
+                                the keyboard cursor) or selection and displays
+                                them in the messages window.
 
-Go to tag definition            Jump to the definition of the current word (near the keyboard
-                                cursor). If the definition cannot be found (e.g. the relevant
-                                file is not open) Geany will beep and do nothing. See the
-                                section called `Go to tag definition`_.
+Go to tag definition            Jump to the definition of the current word (near
+                                the keyboard cursor). If the definition cannot be
+                                found (e.g. the relevant file is not open) Geany
+                                will beep and do nothing. See the section called
+                                `Go to tag definition`_.
 
-Go to tag declaration           Jump to the declaration of the current word (near the keyboard
-                                cursor). If the declaration cannot be found (e.g. the relevant
-                                file is not open) Geany will beep and do nothing. See the section
-                                called `Go to tag definition`_.
+Go to tag declaration           Jump to the declaration of the current word (near
+                                the keyboard cursor). If the declaration cannot be
+                                found (e.g. the relevant file is not open) Geany
+                                will beep and do nothing. See the section called
+                                `Go to tag definition`_.
 
-Context Action                  Executes a command and passes the current word (near the cursor
-                                postion) or selection as an argument. See the section called
-                                `Context actions`_.
+Context Action                  Executes a command and passes the current word
+                                (near the cursor postion) or selection as an
+                                argument. See the section called `Context
+                                actions`_.
 =============================== =========================================
 
 
@@ -1587,9 +1602,9 @@ contain all settings.
 
 .. note::
     This feature is mainly intended for package maintainers or system
-    admins who want to set up Geany in a multi user environment and set
-    some sane default values for this environment. Usual users won't need
-    to do that.
+    admins who want to set up Geany in a multi user environment and
+    set some sane default values for this environment. Usual users won't
+    need to do that.
 
 
 
@@ -1666,8 +1681,9 @@ wordchars
     *Example:* (look at system filetypes.\* files)
 
 comment_open
-    A character or string which is used to comment code. If you want to use
-    multiline comments, also set comment_close, otherwise leave it empty.
+    A character or string which is used to comment code. If you want to
+    use multiline comments, also set comment_close, otherwise leave it
+    empty.
 
     *Example:* ``comment_open=/*``
 
@@ -1679,35 +1695,37 @@ comment_close
 
 comment_use_indent
     Set this to false if a comment character or string should start at
-    column 0 of a line. If set to true it uses any indentation of the line.
+    column 0 of a line. If set to true it uses any indentation of the
+    line.
 
     Note: Comment indentation
 
-    ``comment_use_indent=true`` would generate this if a line is commented
-    (e.g. with Ctrl-D)::
+    ``comment_use_indent=true`` would generate this if a line is
+    commented (e.g. with Ctrl-D)::
 
         #command_example();
 
-    ``comment_use_indent=false`` would generate this if a line is commented
-    (e.g. with Ctrl-D)::
+    ``comment_use_indent=false`` would generate this if a line is
+    commented (e.g. with Ctrl-D)::
 
         #   command_example();
 
 
-    Note: This setting only works for single line comments (like '//', '#'
-    or ';').
+    Note: This setting only works for single line comments (like '//',
+    '#' or ';').
 
     *Example:* ``comment_use_indent=true``
 
 context_action_cmd
     A command which can be executed on a certain word or the current
-    selection. Example usage: Open the API documentation for the current
-    function call at the cursor position. The command can be set for every
-    filetype or if not set, a global command will be used. The command
-    itself can be specified without the full path, then it is searched
-    in $PATH. But for security reasons, it is recommended to specify the
-    full path to the command. The wildcard %s will be replaced by the
-    current word at the cursor position or by the current selection.
+    selection. Example usage: Open the API documentation for the
+    current function call at the cursor position. The command can
+    be set for every filetype or if not set, a global command will
+    be used. The command itself can be specified without the full
+    path, then it is searched in $PATH. But for security reasons,
+    it is recommended to specify the full path to the command. The
+    wildcard %s will be replaced by the current word at the cursor
+    position or by the current selection.
 
     Hint: for PHP files the following could be quite useful:
     context_action_cmd=firefox "http://www.php.net/%s"
@@ -1771,8 +1789,8 @@ selection
     * Use background colour
 
     The colours are only set if the 3rd or 4th argument is true. When
-    the colours are not overridden, the default is a dark grey background
-    with syntax highlighted foreground text.
+    the colours are not overridden, the default is a dark grey
+    background with syntax highlighted foreground text.
 
     *Example:* ``selection=0xc0c0c0;0x00007F;true;true``
 
@@ -1793,9 +1811,10 @@ caret
     *Example:* ``caret=0x000000;0x0;false;false``
 
 caret_width
-    The width for the caret(the blinking cursor). Only the first argument
-    is interpreted. The width is specified in pixels with a maximum of
-    three pixel. Use the width 0 to make the caret invisible.
+    The width for the caret(the blinking cursor). Only the first
+    argument is interpreted. The width is specified in pixels with
+    a maximum of three pixel. Use the width 0 to make the caret
+    invisible.
 
     *Example:* ``caret=1;0;false;false``
 
@@ -1824,7 +1843,8 @@ white_space
     *Example:* ``white_space=0xc0c0c0;0xffffff;true;true``
 
 folding_style
-    The style of folding icons. Only first and second arguments are used.
+    The style of folding icons. Only first and second arguments are
+    used.
 
     Valid values for the first argument are:
 
@@ -1856,7 +1876,8 @@ invert_all
     single line. Please note, at time of writing this was only tested
     with the C syntax highlighting.
 
-    Only first argument is interpreted. Set it to 1 to invert all colours.
+    Only first argument is interpreted. Set it to 1 to invert all
+    colours.
 
     *Example:* ``invert_all=0;0;false;false``
 
@@ -1970,44 +1991,76 @@ the New command is used without a filetype. This is empty by default.
 Customizing templates
 ^^^^^^^^^^^^^^^^^^^^^
 
-Each template can be customized to your needs. The templates are stored
-in the ``~/.geany/templates/`` directory (see the section called `Command
-line options`_ for further information about the configuration
+Each template can be customized to your needs. The templates are
+stored in the ``~/.geany/templates/`` directory (see the section called
+`Command line options`_ for further information about the configuration
 directory). Just open the desired template with an editor (ideally,
 Geany ;-) ) and edit the template to your needs. There are some
 wildcards which will be automatically replaced by Geany at startup.
+
 
 Template wildcards
 ``````````````````
 
 All wildcards must be enclosed by "{" and "}", e.g. {date}.
 
-============== =============================================== ==============
-Wildcard       Description                                     Available in
-============== =============================================== ==============
-developer      The name of the developer.                      *filetypes, file header, function description, ChangeLog entry, bsd, gpl*
-initial        The developer's initials, e.g. "ET" for Enrico  *filetypes, file header, function description, ChangeLog entry, bsd, gpl*
-               Tröger or "JFD" for John Foobar Doe.
-mail           The email address of the developer.             *file header, function description, ChangeLog entry, bsd, gpl*
-company        The company the developer is working for.       *filetypes, file header, function description, ChangeLog entry, bsd, gpl*)
-year           The current year in the format: YYYY.           *filetypes, file header, function description, ChangeLog entry, bsd, gpl*)
-version        The initial version of a new file.              *filetypes, file header, function description, ChangeLog entry, bsd, gpl*)
-date           The current date in the format: YYYY-MM-DD.     *filetypes, file header, function description, ChangeLog entry, bsd, gpl*)
-untitled       The string "untitled" (this will be translated  *filetypes, file header, function description, ChangeLog entry, bsd, gpl*)
-               to your locale), used in filetype templates.
-geanyversion   The actual Geany version, e.g.                  *filetypes, file header, function description, ChangeLog entry, bsd, gpl*)
-               "Geany |(version)|".
-datetime       The current date and time in the format:        *file header, function description*
+============== ============================================= ==============
+Wildcard       Description                                   Available in
+============== ============================================= ==============
+developer      The name of the developer.                    filetypes, file header, function
+                                                             description, ChangeLog entry, bsd,
+                                                             gpl
+
+initial        The developer's initials, e.g. "ET" for       filetypes, file header, function
+               Enrico Tröger or "JFD" for John Foobar Doe.   description, ChangeLog entry, bsd,
+                                                             gpl
+
+mail           The email address of the developer.           file header, function description,
+                                                             ChangeLog entry, bsd, gpl
+
+company        The company the developer is working for.     filetypes, file header, function
+                                                             description, ChangeLog entry, bsd,
+                                                             gpl
+
+year           The current year in the format: YYYY.         filetypes, file header, function
+                                                             description, ChangeLog entry, bsd,
+                                                             gpl
+
+version        The initial version of a new file.            filetypes, file header, function
+                                                             description, ChangeLog entry, bsd,
+                                                             gpl
+
+date           The current date in the format: YYYY-MM-DD.   filetypes, file header, function
+                                                             description, ChangeLog entry, bsd,
+                                                             gpl
+
+untitled       The string "untitled" (this will be           filetypes, file header, function
+               translated to your locale), used in           description, ChangeLog entry, bsd,
+               filetype templates.                           gpl
+
+geanyversion   The actual Geany version, e.g.                filetypes, file header, function
+               "Geany |(version)|".                          description, ChangeLog entry, bsd,
+                                                             gpl
+
+datetime       The current date and time in the format:      file header, function description
                DD.MM.YYYY HH:mm:ss ZZZZ.
-filename       The filename of the current file.               *file header*
-gpl            This wildcard inserts a short GPL notice.       *file header*
-bsd            This wildcard inserts a BSD licence notice.     *file header*
-functionname   The function name of the function at the        *function description*
+
+filename       The filename of the current file.             file header
+
+gpl            This wildcard inserts a short GPL notice.     file header
+
+bsd            This wildcard inserts a BSD licence notice.   file header
+
+functionname   The function name of the function at the      function description
                cursor position. This wildcard will only be
-               replaced in the function description template.
-fileheader     The file header template. This wildcard will    *filetypes*
-               only be replaced in filetype templates.
-============== =============================================== ==============
+               replaced in the function description
+               template.
+
+fileheader     The file header template. This wildcard       filetypes
+               will only be replaced in filetype
+               templates.
+============== ============================================= ==============
+
 
 
 
@@ -2115,60 +2168,60 @@ not listed here should not be changed.
 .. note::
     Most users should not need to change these options.
 
-============================== ============================================ =======
-Option                         Description                                  Default
-============================== ============================================ =======
-GEANY_WORDCHARS                These characters define word boundaries when *look at sourcecode*
-                               making selections and searching using word
-                               matching options.
-GEANY_MAX_AUTOCOMPLETE_WORDS   How many auto completion suggestions should  *30*
-                               Geany provide.
-GEANY_MAX_AUTOCOMPLETE_HEIGHT  How many suggestions should be visible in    *10*
-                               the auto completion list.
-GEANY_PROJECT_EXT              The default filename extension for Geany     *geany*
-                               project files. It is used when creating new
-                               projects and as filter mask for the project
-                               open dialog.
-GEANY_STRING_UNTITLED          A string used as the default name for new    *untitled*
-                               files. Be aware that the string can be
-                               translated, so change it only if you know
-                               what you are doing.
-GEANY_CHECK_FILE_DELAY         Time in seconds between checking a file for  *30*
-                               external changes.
-GEANY_TOGGLE_MARK              A string which is used to mark a toggled     *"~ "*
-                               comment.
-                               external changes.
-GEANY_WINDOW_MINIMAL_WIDTH     The minimal width of the main window.        *620*
-GEANY_WINDOW_MINIMAL_HEIGHT    The minimal height of the main window.       *440*
-GEANY_WINDOW_DEFAULT_WIDTH     The default width of the main window at the  *900*
-                               first start.
-GEANY_WINDOW_DEFAULT_HEIGHT    The default height of the main window at the *600*
-                               first start.
+==============================  ============================================  ==================
+Option                          Description                                   Default
+==============================  ============================================  ==================
+GEANY_WORDCHARS                 These characters define word boundaries when  *look at sourcecode*
+                                making selections and searching using word
+                                matching options.
+GEANY_MAX_AUTOCOMPLETE_WORDS    How many auto completion suggestions should   30
+                                Geany provide.
+GEANY_MAX_AUTOCOMPLETE_HEIGHT   How many suggestions should be visible in     10
+                                the auto completion list.
+GEANY_PROJECT_EXT               The default filename extension for Geany      geany
+                                project files. It is used when creating new
+                                projects and as filter mask for the project
+                                open dialog.
+GEANY_STRING_UNTITLED           A string used as the default name for new     untitled
+                                files. Be aware that the string can be
+                                translated, so change it only if you know
+                                what you are doing.
+GEANY_CHECK_FILE_DELAY          Time in seconds between checking a file for   30
+                                external changes.
+GEANY_TOGGLE_MARK               A string which is used to mark a toggled      "~ "
+                                comment.
+                                external changes.
+GEANY_WINDOW_MINIMAL_WIDTH      The minimal width of the main window.         620
+GEANY_WINDOW_MINIMAL_HEIGHT     The minimal height of the main window.        440
+GEANY_WINDOW_DEFAULT_WIDTH      The default width of the main window at the   900
+                                first start.
+GEANY_WINDOW_DEFAULT_HEIGHT     The default height of the main window at the  600
+                                first start.
  **Default values**
-GEANY_DEFAULT_TOOLS_MAKE       The make tool. This can also include a path. *"make"*
-GEANY_DEFAULT_TOOLS_TERMINAL   A terminal emulator. It has to accept the    *"xterm"*
-                               command line option "-e". This can also
-                               include a path.
-GEANY_DEFAULT_TOOLS_BROWSER    A web browser. This can also include a path. *"firefox"*
-GEANY_DEFAULT_TOOLS_PRINTCMD   A printing tool. It should be able to accept *"lpr"*
-                               and process plain text files. This can also
-                               include a path.
-GEANY_DEFAULT_TOOLS_GREP       A grep tool. It should be compatible with    *"grep"*
-                               GNU grep. This can also include a path.
-GEANY_DEFAULT_MRU_LENGHTH      The length of the "Recent files" list.       *10*
-GEANY_DEFAULT_FONT_SYMBOL_LIST The font used in sidebar to show symbols and *"Sans 9"*
-                               open files.
-GEANY_DEFAULT_FONT_MSG_WINDOW  he font used in the messages window.         *"Sans 9"*
-GEANY_DEFAULT_FONT_EDITOR      The font used in the editor window.          *"Monospace 10"*
+GEANY_DEFAULT_TOOLS_MAKE        The make tool. This can also include a path.  "make"
+GEANY_DEFAULT_TOOLS_TERMINAL    A terminal emulator. It has to accept the     "xterm"
+                                command line option "-e". This can also
+                                include a path.
+GEANY_DEFAULT_TOOLS_BROWSER     A web browser. This can also include a path.  "firefox"
+GEANY_DEFAULT_TOOLS_PRINTCMD    A printing tool. It should be able to accept  "lpr"
+                                and process plain text files. This can also
+                                include a path.
+GEANY_DEFAULT_TOOLS_GREP        A grep tool. It should be compatible with     "grep"
+                                GNU grep. This can also include a path.
+GEANY_DEFAULT_MRU_LENGHTH       The length of the "Recent files" list.        10
+GEANY_DEFAULT_FONT_SYMBOL_LIST  The font used in sidebar to show symbols and  "Sans 9"
+                                open files.
+GEANY_DEFAULT_FONT_MSG_WINDOW   The font used in the messages window.         "Sans 9"
+GEANY_DEFAULT_FONT_EDITOR       The font used in the editor window.           "Monospace 10"
  **Windows specific**
-GEANY_USE_WIN32_DIALOG         Set this to 1 if you want to use the default *0*
-                               Windows file open and save dialogs instead
-                               GTK's file open and save dialogs. The
-                               default Windows file dialogs are missing
-                               some nice features like choosing a filetype
-                               or an encoding. *Do not touch this setting
-                               when building on a non-Win32 system.*
-============================== ============================================ =======
+GEANY_USE_WIN32_DIALOG          Set this to 1 if you want to use the default  0
+                                Windows file open and save dialogs instead
+                                GTK's file open and save dialogs. The
+                                default Windows file dialogs are missing
+                                some nice features like choosing a filetype
+                                or an encoding. *Do not touch this setting
+                                when building on a non-Win32 system.*
+==============================  ============================================  ==================
 
 
 

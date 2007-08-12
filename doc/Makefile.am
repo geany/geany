@@ -5,13 +5,13 @@ EXTRA_DIST = geany.html geany.css geany.txt geany.1 \
 			 $(srcdir)/$(IMAGE_FILES)
 
 pdf: geany.txt
-	rst2latex -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $(srcdir)/geany.txt >geany.tex
+	rst2latex -stg --documentoptions="10pt,a4paper" --output-encoding=utf8 $(srcdir)/geany.txt geany.tex
 	pdflatex geany.tex
 	rm -f geany.tex geany.aux geany.log geany.out
 	mv $(srcdir)/geany.pdf geany-$(VERSION).pdf
 
 doc: geany.txt
-	rst2html -stg --stylesheet=geany.css $(srcdir)/geany.txt >geany.html
+	rst2html -stg --stylesheet=geany.css $(srcdir)/geany.txt geany.html
 
 doc-clean:
 	rm -f geany.html

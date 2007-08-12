@@ -3,6 +3,10 @@
  * data/filetypes.freebasic: Add many keywordsGeanyObjectPrivate
                              (patch by Arthur Skowronek, thanks).
  * geanyobject.c: Fix a runtime warning.
+ * doc/Makefile.am, doc/geany.txt, doc/geany.html:
+   Don't use output redirection since the reST tools accept output
+   filenames.
+   Apply patch from John Gabriele to add some tweaks/fixes (thanks).
 
 
 2007-08-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
