@@ -73,9 +73,9 @@ static void header_label_style_set(GtkWidget *widget);
 static void homepage_clicked(GtkButton *button, gpointer data);
 
 
-#define ROW(text, row, col, x_align, y_padding) \
+#define ROW(text, row, col, x_align, y_padding, col_span) \
 	label = gtk_label_new((text)); \
-	gtk_table_attach(GTK_TABLE(table), label, (col), (col) + 1, (row), (row) + 1, \
+	gtk_table_attach(GTK_TABLE(table), label, (col), (col) + (col_span) + 1, (row), (row) + 1, \
 			(GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (GTK_FILL), 0, (y_padding)); \
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE); \
 	gtk_misc_set_alignment(GTK_MISC(label), (x_align), 0);
@@ -158,7 +158,7 @@ static GtkWidget *create_dialog(void)
 
 	// create "Info" tab
 	info_box = gtk_vbox_new(FALSE, 0);
-	//gtk_container_set_border_width(GTK_CONTAINER(info_box), 6);
+	gtk_container_set_border_width(GTK_CONTAINER(info_box), 6);
 	gtk_widget_show(info_box);
 
 	label_info = gtk_label_new(NULL);
@@ -224,7 +224,7 @@ static GtkWidget *create_dialog(void)
 
 	// create "Credits" tab
 	credits_scrollwin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_container_set_border_width(GTK_CONTAINER(credits_scrollwin), 6);
+	gtk_container_set_border_width(GTK_CONTAINER(credits_scrollwin), 10);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(credits_scrollwin),
 		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
@@ -243,27 +243,27 @@ static GtkWidget *create_dialog(void)
 	row++;
 
 	g_snprintf(buffer, sizeof(buffer), "Enrico Tröger - %s", _("maintainer"));
-	ROW(buffer, row, 1, 0, 0);
+	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
-	ROW("&lt;enrico.troeger@uvena.de&gt;", row, 1, 0, 0);
+	ROW("&lt;enrico.troeger@uvena.de&gt;", row, 0, 0, 0, 1);
 	row++;
-	ROW("", row, 0, 0, 0);
+	ROW("", row, 0, 0, 0, 0);
 	row++;
 
 	g_snprintf(buffer, sizeof(buffer), "Nick Treleaven - %s", _("developer"));
-	ROW(buffer, row, 1, 0, 0);
+	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
-	ROW("&lt;nick.treleaven@btinternet.com&gt;", row, 1, 0, 0);
+	ROW("&lt;nick.treleaven@btinternet.com&gt;", row, 0, 0, 0, 1);
 	row++;
-	ROW("", row, 0, 0, 0);
+	ROW("", row, 0, 0, 0, 0);
 	row++;
 
 	g_snprintf(buffer, sizeof(buffer), "Frank Lanitz - %s", _("translation maintainer"));
-	ROW(buffer, 7, 1, 0, 0);
+	ROW(buffer, 7, 0, 0, 0, 1);
 	row++;
-	ROW("&lt;frank@frank.uvena.de&gt;", row, 1, 0, 0);
+	ROW("&lt;frank@frank.uvena.de&gt;", row, 0, 0, 0, 1);
 	row++;
-	ROW("", row, 0, 0, 0);
+	ROW("", row, 0, 0, 0, 0);
 	row++;
 
 	g_snprintf(buffer, sizeof(buffer),
@@ -278,12 +278,12 @@ static GtkWidget *create_dialog(void)
 
 	for (i = 0; i < translators_len; i++)
 	{
-		ROW(translators[i][0], row, 0, 1, 4);
-		ROW(translators[i][1], row, 1, 0, 4);
+		ROW(translators[i][0], row, 0, 1, 4, 0);
+		ROW(translators[i][1], row, 1, 0, 4, 0);
 		row++;
 	}
 
-	ROW("", row, 0, 0, 0);
+	ROW("", row, 0, 0, 0, 0);
 	row++;
 
 	g_snprintf(buffer, sizeof(buffer),
@@ -298,8 +298,8 @@ static GtkWidget *create_dialog(void)
 
 	for (i = 0; i < prev_translators_len; i++)
 	{
-		ROW(prev_translators[i][0], row, 0, 1, 4);
-		ROW(prev_translators[i][1], row, 1, 0, 4);
+		ROW(prev_translators[i][0], row, 0, 1, 4, 0);
+		ROW(prev_translators[i][1], row, 1, 0, 4, 0);
 		row++;
 	}
 
