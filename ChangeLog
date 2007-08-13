@@ -2,6 +2,8 @@
 
  * src/about.c: Increase border space in credits tab and align developer
                 names left.
+ * src/keyfile.c: Fix wrong debug message if a session file couldn't be
+                  loaded.
 
 
 2007-08-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

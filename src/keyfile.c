@@ -621,7 +621,6 @@ gboolean configuration_open_files()
 
 			// try to get the locale equivalent for the filename, fallback to filename if error
 			locale_filename = utils_get_locale_from_utf8(file);
-			g_strfreev(array);
 
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 			{
@@ -635,6 +634,7 @@ gboolean configuration_open_files()
 				geany_debug("Could not find file '%s'.", file);
 			}
 
+			g_strfreev(array);
 			g_free(locale_filename);
 		}
 		g_free(tmp);
