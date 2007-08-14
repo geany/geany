@@ -6,6 +6,9 @@
    Add reStructuredText filetype and parser.
  * src/filetypes.c, src/filetypes.h:
    Sort filetype groups alphabetically.
+ * src/keyfile.c, src/filetypes.c, data/filetype_extensions.conf:
+   Add comment about generating filetype_extensions.conf.
+   Update filetype_extensions.conf.
 
 
 2007-08-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

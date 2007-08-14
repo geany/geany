@@ -174,7 +174,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_CS]->name = g_strdup("C#");
 	filetypes[GEANY_FILETYPES_CS]->title = g_strdup(_("C# source file"));
 	filetypes[GEANY_FILETYPES_CS]->extension = g_strdup("cs");
-	filetypes[GEANY_FILETYPES_CS]->pattern = utils_strv_new("*.cs", NULL);
+	filetypes[GEANY_FILETYPES_CS]->pattern = utils_strv_new("*.cs", "*.lala", NULL);
 	filetypes[GEANY_FILETYPES_CS]->style_func_ptr = styleset_cs;
 	filetypes[GEANY_FILETYPES_CS]->comment_open = g_strdup("//");
 	filetypes[GEANY_FILETYPES_CS]->comment_close = NULL;
