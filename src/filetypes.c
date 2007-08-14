@@ -595,22 +595,22 @@ void filetypes_init()
 		// insert separators for different filetype groups
 		switch (ft_id)
 		{
-			case GEANY_FILETYPES_C:		// programming
+			case GEANY_FILETYPES_GROUP_COMPILED:	// programming
 			{
 				sub_menu = sub_menu_programming;
 				break;
 			}
-			case GEANY_FILETYPES_PERL:	// scripts
+			case GEANY_FILETYPES_GROUP_SCRIPT:	// scripts
 			{
 				sub_menu = sub_menu_scripts;
 				break;
 			}
-			case GEANY_FILETYPES_XML:	// markup
+			case GEANY_FILETYPES_GROUP_MARKUP:	// markup
 			{	// (include also CSS, not really markup but fit quite well to HTML)
 				sub_menu = sub_menu_markup;
 				break;
 			}
-			case GEANY_FILETYPES_SQL:	// misc
+			case GEANY_FILETYPES_GROUP_MISC:	// misc
 			{
 				sub_menu = sub_menu_misc;
 				break;

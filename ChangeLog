@@ -4,6 +4,8 @@
    tagmanager/parsers.h, tagmanager/makefile.win32, tagmanager/rest.c,
    tagmanager/Makefile.am:
    Add reStructuredText filetype and parser.
+ * src/filetypes.c, src/filetypes.h:
+   Sort filetype groups alphabetically.
 
 
 2007-08-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
