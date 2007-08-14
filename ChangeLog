@@ -11,6 +11,9 @@
    Update filetype_extensions.conf.
  * src/filetypes.c:
    Rewrite filetypes_get_from_uid() for easier maintenance.
+ * HACKING:
+   Add more information for adding a filetype.
+   2 minor edits.
 
 
 2007-08-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

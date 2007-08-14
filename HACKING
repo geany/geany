@@ -1,7 +1,7 @@
 About this file
 ---------------
 This file contains information for anyone wanting to work on the Geany codebase.
-You should be aware of the licenses used - see the README file or the documentation.
+You should be aware of the open source licenses used - see the README file or the documentation.
 
 Patches
 -------
@@ -81,9 +81,26 @@ Add path/foo.c to po/POTFILES.in (for string translation).
 
 Adding a filetype
 -----------------
-For syntax highlighting, you will need to find (or write) a Scintilla lexer, LexFoo.cxx.
+You can add a filetype without syntax highlighting or tag parsing, but check to see if those
+features have been written elsewhere.
+
+For syntax highlighting, it may be possible to use an existing Scintilla lexer in the scintilla/
+subdirectory - if not, you will need to find (or write) one, LexFoo.cxx. Try the Scintilla project
+first. Remember to update scintilla/Makefile.am and scintilla/makefile.win32.
+
 For tag parsing (e.g. for the symbol list), see 'Adding a TagManager parser' below.
-Add GEANY_FILETYPES_FOO and initialize it in filetypes.[hc].
+
+Add GEANY_FILETYPES_FOO to filetypes.h.
+Initialize GEANY_FILETYPES_FOO in filetypes_init_types() of filetypes.c.
+Rebuild Geany.
+From your geany/ directory, run:
+src/geany --generate-data-files
+
+(The src/ prefix may be different, depending on where the binary is generated.)
+This will update data/filetype_extensions.conf. Note that you need GEANY_DEBUG to be defined when
+building Geany for the --generate-data-files argument to work - this is always defined in the SVN
+version.
+
 
 Adding a TagManager parser
 --------------------------
@@ -120,7 +137,7 @@ src/plugins.c loads and unloads plugins.
 Loading a plugin from GDB
 -------------------------
 This is useful so you can load plugins without installing them first.
-Alternatively you can use a symlink to $prefix/lib/geany/myplugin.so, (where
+Alternatively you can use a symlink in ~/.geany/plugins or $prefix/lib/geany (where
 $prefix is /usr/local by default).
 
 The gdb session below was run from the toplevel Geany source directory.
