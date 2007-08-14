@@ -42,7 +42,8 @@
     HaskellParser, \
     CsharpParser, \
     FreeBasicParser,\
-    HaxeParser
+    HaxeParser,\
+    RestParser
 
 /*
 langType of each parser
@@ -73,7 +74,8 @@ langType of each parser
 24	HaskellParser
 25	CsharpParser
 26	FreeBasicParser
-27  Haxe
+27  HaxeParser
+28  RestParser
 */
 #endif	/* _PARSERS_H */
 

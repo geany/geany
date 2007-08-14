@@ -38,6 +38,7 @@ libtagmanager_a_SOURCES =\
 	docbook.c\
 	fortran.c\
 	haskell.c\
+	haxe.c\
 	js.c\
 	lua.c\
 	make.c\
@@ -45,6 +46,7 @@ libtagmanager_a_SOURCES =\
 	latex.c\
 	pascal.c\
 	perl.c\
+	rest.c\
 	ruby.c\
 	sql.c\
 	php.c\
@@ -54,7 +56,6 @@ libtagmanager_a_SOURCES =\
 	sh.c\
 	vhdl.c\
 	ctags.c\
-	haxe.c\
 	entry.c\
 	get.c\
 	keyword.c\

@@ -77,7 +77,8 @@ enum
 	FILETYPE_UID_HASKELL,	// 29
 	FILETYPE_UID_CS,		// 30
 	FILETYPE_UID_BASIC,		// 31
-	FILETYPE_UID_HAXE		// 32
+	FILETYPE_UID_HAXE,		// 32
+	FILETYPE_UID_REST		// 33
 };
 
 
@@ -534,6 +535,18 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_HAXE]->style_func_ptr = styleset_haxe;
 	filetypes[GEANY_FILETYPES_HAXE]->comment_open = g_strdup("//");
 	filetypes[GEANY_FILETYPES_HAXE]->comment_close = NULL;
+
+#define REST
+	filetypes[GEANY_FILETYPES_REST]->id = GEANY_FILETYPES_REST;
+	filetypes[GEANY_FILETYPES_REST]->uid = FILETYPE_UID_REST;
+	filetypes[GEANY_FILETYPES_REST]->lang = 28;
+	filetypes[GEANY_FILETYPES_REST]->name = g_strdup("reStructuredText");
+	filetypes[GEANY_FILETYPES_REST]->title = g_strdup(_("reStructuredText file"));
+	filetypes[GEANY_FILETYPES_REST]->extension = g_strdup("rest");
+	filetypes[GEANY_FILETYPES_REST]->pattern = utils_strv_new("*.rest", "*.reST", NULL);
+	filetypes[GEANY_FILETYPES_REST]->style_func_ptr = styleset_none;
+	filetypes[GEANY_FILETYPES_REST]->comment_open = NULL;
+	filetypes[GEANY_FILETYPES_REST]->comment_close = NULL;
 
 #define ALL
 	filetypes[GEANY_FILETYPES_ALL]->id = GEANY_FILETYPES_ALL;
