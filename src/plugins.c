@@ -73,7 +73,9 @@ static GList *plugin_list = NULL;
 static DocumentFuncs doc_funcs = {
 	&document_new_file,
 	&document_get_cur_idx,
-	&document_get_current
+	&document_get_current,
+	&document_save_file,
+	&document_open_file
 };
 
 static ScintillaFuncs sci_funcs = {
