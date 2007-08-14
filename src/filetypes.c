@@ -87,49 +87,6 @@ static GtkWidget *radio_items[GEANY_MAX_FILE_TYPES];
 static void filetypes_create_menu_item(GtkWidget *menu, const gchar *label, filetype *ftype);
 
 
-// If uid is valid, return corresponding filetype, otherwise NULL.
-filetype *filetypes_get_from_uid(gint uid)
-{
-	switch (uid)
-	{
-		case FILETYPE_UID_C:		return filetypes[GEANY_FILETYPES_C];
-		case FILETYPE_UID_CPP:		return filetypes[GEANY_FILETYPES_CPP];
-		case FILETYPE_UID_JAVA:		return filetypes[GEANY_FILETYPES_JAVA];
-		case FILETYPE_UID_PERL:		return filetypes[GEANY_FILETYPES_PERL];
-		case FILETYPE_UID_PHP:		return filetypes[GEANY_FILETYPES_PHP];
-		case FILETYPE_UID_XML:		return filetypes[GEANY_FILETYPES_XML];
-		case FILETYPE_UID_DOCBOOK:	return filetypes[GEANY_FILETYPES_DOCBOOK];
-		case FILETYPE_UID_PYTHON:	return filetypes[GEANY_FILETYPES_PYTHON];
-		case FILETYPE_UID_LATEX:	return filetypes[GEANY_FILETYPES_LATEX];
-		case FILETYPE_UID_PASCAL:	return filetypes[GEANY_FILETYPES_PASCAL];
-		case FILETYPE_UID_SH:		return filetypes[GEANY_FILETYPES_SH];
-		case FILETYPE_UID_MAKE:		return filetypes[GEANY_FILETYPES_MAKE];
-		case FILETYPE_UID_CSS:		return filetypes[GEANY_FILETYPES_CSS];
-		case FILETYPE_UID_CONF:		return filetypes[GEANY_FILETYPES_CONF];
-		case FILETYPE_UID_ASM:		return filetypes[GEANY_FILETYPES_ASM];
-		case FILETYPE_UID_SQL:		return filetypes[GEANY_FILETYPES_SQL];
-		case FILETYPE_UID_CAML:		return filetypes[GEANY_FILETYPES_CAML];
-		case FILETYPE_UID_OMS:		return filetypes[GEANY_FILETYPES_OMS];
-		case FILETYPE_UID_RUBY:		return filetypes[GEANY_FILETYPES_RUBY];
-		case FILETYPE_UID_TCL:		return filetypes[GEANY_FILETYPES_TCL];
-		case FILETYPE_UID_ALL:		return filetypes[GEANY_FILETYPES_ALL];
-		case FILETYPE_UID_D:		return filetypes[GEANY_FILETYPES_D];
-		case FILETYPE_UID_FORTRAN:	return filetypes[GEANY_FILETYPES_FORTRAN];
-		case FILETYPE_UID_DIFF:		return filetypes[GEANY_FILETYPES_DIFF];
-		case FILETYPE_UID_FERITE:	return filetypes[GEANY_FILETYPES_FERITE];
-		case FILETYPE_UID_HTML:		return filetypes[GEANY_FILETYPES_HTML];
-		case FILETYPE_UID_VHDL:		return filetypes[GEANY_FILETYPES_VHDL];
-		case FILETYPE_UID_JS:		return filetypes[GEANY_FILETYPES_JS];
-		case FILETYPE_UID_LUA:		return filetypes[GEANY_FILETYPES_LUA];
-		case FILETYPE_UID_HASKELL:	return filetypes[GEANY_FILETYPES_HASKELL];
-		case FILETYPE_UID_CS:		return filetypes[GEANY_FILETYPES_CS];
-		case FILETYPE_UID_BASIC:	return filetypes[GEANY_FILETYPES_BASIC];
-		case FILETYPE_UID_HAXE:		return filetypes[GEANY_FILETYPES_HAXE];
-		default: 					return NULL;
-	}
-}
-
-
 /* Create the filetype array and fill it with the known filetypes. */
 void filetypes_init_types()
 {
@@ -626,6 +583,22 @@ void filetypes_init()
 		ft->item = NULL;
 		filetypes_create_menu_item(sub_menu, title, ft);
 	}
+}
+
+
+// If uid is valid, return corresponding filetype, otherwise NULL.
+filetype *filetypes_get_from_uid(gint uid)
+{
+	gint i;
+
+	for (i = 0; i < GEANY_MAX_FILE_TYPES; i++)
+	{
+		filetype *ft = filetypes[i];
+
+		if (ft->uid == (guint) uid)
+			return ft;
+	}
+	return NULL;
 }
 
 
