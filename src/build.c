@@ -47,6 +47,7 @@
 #include "dialogs.h"
 #include "msgwindow.h"
 #include "document.h"
+#include "filetypes.h"
 #include "keybindings.h"
 #include "vte.h"
 #include "project.h"

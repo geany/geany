@@ -33,6 +33,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 #include "document.h"
+#include "filetypes.h"
 #include "callbacks.h"
 #include "prefs.h"
 #include "msgwindow.h"

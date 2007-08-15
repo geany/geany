@@ -30,10 +30,6 @@
 
 #include <string.h>
 
-#ifndef PLAT_GTK
-#   define PLAT_GTK 1   // needed for ScintillaWidget.h
-#endif
-
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
@@ -42,6 +38,7 @@
 #include "support.h"
 #include "utils.h"
 #include "document.h"
+#include "filetypes.h"
 #include "templates.h"
 #include "sciwrappers.h"
 #include "ui_utils.h"

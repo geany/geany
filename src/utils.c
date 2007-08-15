@@ -47,6 +47,7 @@
 
 #include "support.h"
 #include "document.h"
+#include "filetypes.h"
 #include "sciwrappers.h"
 #include "dialogs.h"
 #include "win32.h"

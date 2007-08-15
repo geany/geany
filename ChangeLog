@@ -7,6 +7,15 @@
  * src/plugins.c:
    Disconnect plugin callback signals when unloading plugins, to prevent
    a segfault when emitting signals.
+ * src/templates.c, src/build.c, src/utils.c,
+   src/keybindings.c, src/highlighting.h, src/sciwrappers.h,
+   src/dialogs.c, src/geany.h, src/treeviews.c, src/msgwindow.c,
+   src/callbacks.c, src/keyfile.c, src/filetypes.h, src/document.c,
+   src/plugins.c, src/document.h, src/main.c, src/editor.c,
+   src/symbols.c, src/editor.h, src/symbols.h, src/ui_utils.c
+   Move #define PLAT_GTK to geany.h.
+   Move filetype typedef to geany.h.
+   Don't #include any src/*.h files from headers.
 
 
 2007-08-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

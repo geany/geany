@@ -36,6 +36,7 @@
 #include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
+#include "filetypes.h"
 #include "build.h"
 
 #include <string.h>

@@ -25,10 +25,6 @@
 #ifndef GEANY_FILETYPES_H
 #define GEANY_FILETYPES_H 1
 
-#ifndef PLAT_GTK
-#   define PLAT_GTK 1	// needed for ScintillaWidget.h
-#endif
-
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
@@ -106,7 +102,7 @@ struct build_programs
 	gboolean modified;
 };
 
-typedef struct filetype
+struct filetype
 {
 	filetype_id		  id;
 	guint	 		  uid;				// unique id as reference for saved filetype in config file
@@ -124,7 +120,7 @@ typedef struct filetype
 	struct build_programs	*programs;
 	struct build_actions	*actions;
 	void (*style_func_ptr) (ScintillaObject*);
-} filetype;
+};
 
 extern filetype *filetypes[GEANY_MAX_FILE_TYPES];
 

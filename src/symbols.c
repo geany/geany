@@ -179,7 +179,7 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types)
 }
 
 
-const gchar *symbols_get_context_separator(filetype_id ft_id)
+const gchar *symbols_get_context_separator(gint ft_id)
 {
 	gchar *cosep;
 

@@ -41,6 +41,7 @@
 
 #include "keyfile.h"
 #include "document.h"
+#include "filetypes.h"
 #include "sciwrappers.h"
 #include "editor.h"
 #include "ui_utils.h"

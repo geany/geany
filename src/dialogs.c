@@ -45,6 +45,7 @@
 
 #include "callbacks.h"
 #include "document.h"
+#include "filetypes.h"
 #include "win32.h"
 #include "sciwrappers.h"
 #include "support.h"

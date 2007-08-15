@@ -51,6 +51,7 @@
 #include <glib/gstdio.h>
 
 #include "document.h"
+#include "filetypes.h"
 #include "support.h"
 #include "sciwrappers.h"
 #include "editor.h"

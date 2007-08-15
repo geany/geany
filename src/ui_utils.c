@@ -32,6 +32,7 @@
 #include "ui_utils.h"
 #include "sciwrappers.h"
 #include "document.h"
+#include "filetypes.h"
 #include "support.h"
 #include "msgwindow.h"
 #include "utils.h"

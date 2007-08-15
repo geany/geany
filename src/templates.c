@@ -35,6 +35,7 @@
 #include "support.h"
 #include "utils.h"
 #include "document.h"
+#include "filetypes.h"
 
 
 // default templates, only for initial tempate file creation on first start of Geany

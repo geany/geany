@@ -25,9 +25,6 @@
 #define GEANY_SCIWRAPPERS_H 1
 
 #include "Scintilla.h"
-#ifndef PLAT_GTK
-#   define PLAT_GTK 1
-#endif
 #include "ScintillaWidget.h"
 
 

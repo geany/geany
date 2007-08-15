@@ -47,6 +47,7 @@
 #include "ui_utils.h"
 #include "utils.h"
 #include "document.h"
+#include "filetypes.h"
 #include "keyfile.h"
 #include "win32.h"
 #include "msgwindow.h"

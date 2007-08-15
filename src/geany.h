@@ -32,6 +32,10 @@
 
 #include "tm_tagmanager.h"
 
+#ifndef PLAT_GTK
+#   define PLAT_GTK 1	// needed when including ScintillaWidget.h
+#endif
+
 
 // for detailed description look in the documentation, things are not
 // listed in the documentation should not be changed ;-)
@@ -71,7 +75,8 @@
 
 
 
-// simple forward declaration to avoid unnecessary inclusion of project.h
+// useful forward declarations
+typedef struct filetype filetype;
 typedef struct _GeanyProject GeanyProject;
 
 

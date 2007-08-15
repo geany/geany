@@ -25,15 +25,8 @@
 #ifndef GEANY_DOCUMENT_H
 #define GEANY_DOCUMENT_H 1
 
-#ifndef PLAT_GTK
-#   define PLAT_GTK 1	// needed for ScintillaWidget.h
-#endif
-
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
-
-#include "geany.h"
-#include "filetypes.h"
 
 
 typedef struct FileEncoding
