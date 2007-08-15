@@ -75,7 +75,9 @@ static DocumentFuncs doc_funcs = {
 	&document_get_cur_idx,
 	&document_get_current,
 	&document_save_file,
-	&document_open_file
+	&document_open_file,
+	&document_open_files,
+	&document_remove
 };
 
 static ScintillaFuncs sci_funcs = {

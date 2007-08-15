@@ -1,3 +1,11 @@
+2007-08-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h, src/plugins.c:
+   Apply patch from Jeff Pohlmeyer to add document_remove() to the
+   plugin API (thanks).
+   Add document_open_files() to plugin API.
+
+
 2007-08-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/filetypes.c, src/filetypes.h, src/symbols.c,
