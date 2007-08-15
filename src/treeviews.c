@@ -52,6 +52,8 @@ enum
 	OPENFILES_ACTION_RELOAD,
 	OPENFILES_ACTION_HIDE,
 	OPENFILES_ACTION_HIDE_ALL,
+	SYMBOL_ACTION_SORT_BY_NAME,
+	SYMBOL_ACTION_SORT_BY_APPEARANCE,
 	SYMBOL_ACTION_HIDE,
 	SYMBOL_ACTION_HIDE_ALL
 };
@@ -164,7 +166,7 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 			g_object_ref((gpointer)doc_list[idx].tag_tree);	// to hold it after removing
 		}
 
-		doc_list[idx].has_tags = symbols_recreate_tag_list(idx);
+		doc_list[idx].has_tags = symbols_recreate_tag_list(idx, TRUE); // sort by name by default
 	}
 
 	if (doc_list[idx].has_tags)
@@ -290,6 +292,24 @@ void treeviews_create_taglist_popup_menu()
 	GtkWidget *item;
 
 	tv.popup_taglist = gtk_menu_new();
+
+	item = gtk_menu_item_new_with_label(_("Sort by name"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_taglist_tree_popup_clicked),
+				GINT_TO_POINTER(SYMBOL_ACTION_SORT_BY_NAME));
+
+	item = gtk_menu_item_new_with_label(_("Sort by appearance"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
+	g_signal_connect((gpointer) item, "activate",
+				G_CALLBACK(on_taglist_tree_popup_clicked),
+				GINT_TO_POINTER(SYMBOL_ACTION_SORT_BY_APPEARANCE));
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
 
 	item = gtk_image_menu_item_new_with_label(_("Hide"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
@@ -465,6 +485,20 @@ static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_d
 {
 	switch (GPOINTER_TO_INT(user_data))
 	{
+		case SYMBOL_ACTION_SORT_BY_NAME:
+		{
+			gint idx = document_get_cur_idx();
+			if (DOC_IDX_VALID(idx))
+				doc_list[idx].has_tags = symbols_recreate_tag_list(idx, TRUE);
+			break;
+		}
+		case SYMBOL_ACTION_SORT_BY_APPEARANCE:
+		{
+			gint idx = document_get_cur_idx();
+			if (DOC_IDX_VALID(idx))
+				doc_list[idx].has_tags = symbols_recreate_tag_list(idx, FALSE);
+			break;
+		}
 		case SYMBOL_ACTION_HIDE:
 		{
 			app->sidebar_symbol_visible = FALSE;

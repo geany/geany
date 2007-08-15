@@ -44,9 +44,9 @@ const gchar **symbols_get_html_entities();
 
 void symbols_finalize();
 
-gboolean symbols_recreate_tag_list(gint idx);
+gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name);
 
-int symbols_generate_global_tags(int argc, char **argv);
+gint symbols_generate_global_tags(gint argc, gchar **argv);
 
 void symbols_show_load_tags_dialog();
 

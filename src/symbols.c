@@ -320,8 +320,7 @@ static gint compare_symbol(const GeanySymbol *a, const GeanySymbol *b)
 }
 
 
-static const GList *
-get_tag_list(gint idx, guint tag_types)
+static const GList *get_tag_list(gint idx, guint tag_types, gboolean sort_by_name)
 {
 	static GList *tag_names = NULL;
 
@@ -385,7 +384,9 @@ get_tag_list(gint idx, guint tag_types)
 				if (! doc_is_utf8) g_free(utf8_name);
 			}
 		}
-		tag_names = g_list_sort(tag_names, (GCompareFunc) compare_symbol);
+		if (sort_by_name)
+			tag_names = g_list_sort(tag_names, (GCompareFunc) compare_symbol);
+
 		return tag_names;
 	}
 	else
@@ -688,7 +689,7 @@ static void hide_empty_rows(GtkTreeModel *model, GtkTreeStore *store)
 }
 
 
-gboolean symbols_recreate_tag_list(gint idx)
+gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name)
 {
 	GList *tmp;
 	const GList *tags;
@@ -697,8 +698,9 @@ gboolean symbols_recreate_tag_list(gint idx)
 
 	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
 
-	tags = get_tag_list(idx, tm_tag_max_t);
-	if (doc_list[idx].tm_file == NULL || tags == NULL) return FALSE;
+	tags = get_tag_list(idx, tm_tag_max_t, sort_by_name);
+	if (doc_list[idx].tm_file == NULL || tags == NULL)
+		return FALSE;
 
 	gtk_tree_store_clear(doc_list[idx].tag_store);
 	// unref the store to speed up the filling(from TreeView Tutorial)
