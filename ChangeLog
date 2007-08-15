@@ -16,6 +16,8 @@
    Move #define PLAT_GTK to geany.h.
    Move filetype typedef to geany.h.
    Don't #include any src/*.h files from headers.
+ * src/msgwindow.c:
+   Add support for Java Apache Ant compiler error messages.
 
 
 2007-08-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

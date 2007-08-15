@@ -742,6 +742,17 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 				data.file_idx = 0;
 				break;
 			}
+			if (build_info.file_type_id == GEANY_FILETYPES_JAVA &&
+				strncmp(string, "[javac]", 7) == 0)
+			{
+				/* Java Apache Ant.
+				 * [javac] <Full Path to File + extension>:<line n°>: <error> */
+				data.pattern = " :";
+				data.min_fields = 3;
+				data.line_idx = 2;
+				data.file_idx = 1;
+				break;
+			}
 		}
 	}
 
