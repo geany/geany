@@ -28,7 +28,6 @@
 
 #include "geany.h"
 #include "geanyobject.h"
-#include "plugindata.h"
 
 GObject	*geany_object;
 
