@@ -60,6 +60,8 @@ typedef struct Plugin
 	GModule 	*module;
 	gchar		*filename;		// plugin filename (/path/libname.so)
 	PluginFields	fields;
+	gulong		*signal_ids;		// signal IDs to disconnect when unloading
+	gsize		signal_ids_len;
 
 	PluginInfo*	(*info) ();	/* Returns plugin name, description */
 	void	(*init) (GeanyData *data);	/* Called when the plugin is enabled */
@@ -216,24 +218,32 @@ plugin_check_version(GModule *module)
 }
 
 
-// TODO: disconnect the callbacks when the plugin is unloaded.
-static void add_callbacks(GeanyCallback *callbacks)
+static void add_callbacks(Plugin *plugin, GeanyCallback *callbacks)
 {
 	GeanyCallback *cb;
-	guint i = 0;
+	guint i, len = 0;
 
-	do
+	while (TRUE)
 	{
-		cb = &callbacks[i];
+		cb = &callbacks[len];
 		if (!cb->signal_name || !cb->callback)
 			break;
+		len++;
+	}
+	if (len == 0)
+		return;
 
-		if (cb->after)
-			g_signal_connect_after(geany_object, cb->signal_name, cb->callback, cb->user_data);
-		else
+	plugin->signal_ids_len = len;
+	plugin->signal_ids = g_new(gulong, len);
+
+	for (i = 0; i < len; i++)
+	{
+		cb = &callbacks[i];
+
+		plugin->signal_ids[i] = (cb->after) ?
+			g_signal_connect_after(geany_object, cb->signal_name, cb->callback, cb->user_data) :
 			g_signal_connect(geany_object, cb->signal_name, cb->callback, cb->user_data);
-		i++;
-	} while (TRUE);
+	}
 }
 
 
@@ -322,11 +332,24 @@ plugin_new(const gchar *fname)
 
 	g_module_symbol(module, "geany_callbacks", (void *) &callbacks);
 	if (callbacks)
-		add_callbacks(callbacks);
+		add_callbacks(plugin, callbacks);
 
 	geany_debug("Loaded:   %s (%s)", fname,
 		NVL(plugin->info()->name, "<Unknown>"));
 	return plugin;
+}
+
+
+static void remove_callbacks(Plugin *plugin)
+{
+	guint i;
+
+	if (plugin->signal_ids == NULL)
+		return;
+
+	for (i = 0; i < plugin->signal_ids_len; i++)
+		g_signal_handler_disconnect(geany_object, plugin->signal_ids[i]);
+	g_free(plugin->signal_ids);
 }
 
 
@@ -344,6 +367,7 @@ plugin_free(Plugin *plugin)
 	else
 		geany_debug("Unloaded: %s", plugin->filename);
 
+	remove_callbacks(plugin);
 	g_free(plugin->filename);
 	g_free(plugin);
 }

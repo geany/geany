@@ -4,6 +4,9 @@
    Apply patch from Jeff Pohlmeyer to add document_remove() to the
    plugin API (thanks).
    Add document_open_files() to plugin API.
+ * src/plugins.c:
+   Disconnect plugin callback signals when unloading plugins, to prevent
+   a segfault when emitting signals.
 
 
 2007-08-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
