@@ -35,6 +35,14 @@ typedef struct
 extern CommandLineOptions cl_options;
 
 
+typedef struct
+{
+	gboolean load_plugins;
+} MainPrefs;
+
+extern MainPrefs main_prefs;
+
+
 gchar *get_argv_filename(const gchar *filename);
 
 void main_quit();

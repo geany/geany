@@ -289,7 +289,11 @@ void configuration_save()
 	g_key_file_set_string(config, "tools", "print_cmd", app->tools_print_cmd ? app->tools_print_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", app->tools_grep_cmd ? app->tools_grep_cmd : "");
 
+	// search
 	g_key_file_set_string(config, "search", "fif_extra_options", search_prefs.fif_extra_options ? search_prefs.fif_extra_options : "");
+
+	// startup
+	g_key_file_set_boolean(config, "startup", "load_plugins", main_prefs.load_plugins);
 
 	project_save_prefs(config);	// save project filename, etc.
 	save_recent_files(config);
@@ -571,7 +575,11 @@ gboolean configuration_load()
 	app->tools_grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", tmp_string);
 	g_free(tmp_string);
 
+	// search
 	search_prefs.fif_extra_options = utils_get_setting_string(config, "search", "fif_extra_options", "");
+
+	// startup
+	main_prefs.load_plugins = utils_get_setting_boolean(config, "startup", "load_plugins", TRUE);
 
 	project_load_prefs(config);
 	load_file_lists(config);

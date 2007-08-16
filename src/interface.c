@@ -2401,8 +2401,9 @@ create_prefs_dialog (void)
   GtkWidget *alignment13;
   GtkWidget *vbox4;
   GtkWidget *check_load_session;
-  GtkWidget *check_save_win_pos;
   GtkWidget *check_vte;
+  GtkWidget *check_plugins;
+  GtkWidget *check_save_win_pos;
   GtkWidget *check_ask_for_quit;
   GtkWidget *label162;
   GtkWidget *frame19;
@@ -2698,17 +2699,21 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_load_session, _("Opens at startup the files from the last session"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_load_session), FALSE);
 
+  check_vte = gtk_check_button_new_with_mnemonic (_("Load virtual terminal support"));
+  gtk_box_pack_start (GTK_BOX (vbox4), check_vte, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, check_vte, _("Whether the virtual terminal emulation (VTE) should be loaded at startup. Disable it if you do not need it."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_vte), FALSE);
+
+  check_plugins = gtk_check_button_new_with_mnemonic (_("Enable plugin support"));
+  gtk_widget_show (check_plugins);
+  gtk_box_pack_start (GTK_BOX (vbox4), check_plugins, FALSE, FALSE, 0);
+
   check_save_win_pos = gtk_check_button_new_with_mnemonic (_("Save window position and geometry"));
   gtk_widget_show (check_save_win_pos);
   gtk_box_pack_start (GTK_BOX (vbox4), check_save_win_pos, FALSE, FALSE, 0);
   GTK_WIDGET_UNSET_FLAGS (check_save_win_pos, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_save_win_pos, _("Saves the window position and geometry and restores it at the start"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_save_win_pos), FALSE);
-
-  check_vte = gtk_check_button_new_with_mnemonic (_("Load virtual terminal emulation at startup"));
-  gtk_box_pack_start (GTK_BOX (vbox4), check_vte, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_vte, _("Whether the virtual terminal emulation(VTE) should be loaded at startup. Disable it if you do not need it."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_vte), FALSE);
 
   check_ask_for_quit = gtk_check_button_new_with_mnemonic (_("Confirm exit"));
   gtk_widget_show (check_ask_for_quit);
@@ -2800,7 +2805,7 @@ create_prefs_dialog (void)
   gtk_table_attach (GTK_TABLE (table11), startup_path_entry, 1, 2, 0, 1,
                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, startup_path_entry, _("Path to start when opening or saving files. Must be an absolute path. Leave blank to use the current working directory."), NULL);
+  gtk_tooltips_set_tip (tooltips, startup_path_entry, _("Path to start in when opening or saving files. Must be an absolute path. Leave blank to use the current working directory."), NULL);
   gtk_entry_set_invisible_char (GTK_ENTRY (startup_path_entry), 8226);
 
   startup_path_button = gtk_button_new ();
@@ -4131,8 +4136,9 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment13, "alignment13");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox4, "vbox4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_load_session, "check_load_session");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_save_win_pos, "check_save_win_pos");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_vte, "check_vte");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_plugins, "check_plugins");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_save_win_pos, "check_save_win_pos");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_for_quit, "check_ask_for_quit");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label162, "label162");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame19, "frame19");

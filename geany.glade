@@ -3097,10 +3097,10 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="check_save_win_pos">
-			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Saves the window position and geometry and restores it at the start</property>
-			      <property name="label" translatable="yes">Save window position and geometry</property>
+			    <widget class="GtkCheckButton" id="check_vte">
+			      <property name="tooltip" translatable="yes">Whether the virtual terminal emulation (VTE) should be loaded at startup. Disable it if you do not need it.</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Load virtual terminal support</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>
@@ -3116,10 +3116,29 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="check_vte">
-			      <property name="tooltip" translatable="yes">Whether the virtual terminal emulation(VTE) should be loaded at startup. Disable it if you do not need it.</property>
+			    <widget class="GtkCheckButton" id="check_plugins">
+			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Load virtual terminal emulation at startup</property>
+			      <property name="label" translatable="yes">Enable plugin support</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckButton" id="check_save_win_pos">
+			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Saves the window position and geometry and restores it at the start</property>
+			      <property name="label" translatable="yes">Save window position and geometry</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>
@@ -3404,7 +3423,7 @@
 			  <child>
 			    <widget class="GtkEntry" id="startup_path_entry">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Path to start when opening or saving files. Must be an absolute path. Leave blank to use the current working directory.</property>
+			      <property name="tooltip" translatable="yes">Path to start in when opening or saving files. Must be an absolute path. Leave blank to use the current working directory.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>

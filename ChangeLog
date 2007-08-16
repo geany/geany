@@ -3,6 +3,10 @@
  * src/msgwindow.c:
    Apply patch from Jon Senior to fix parsing Apache Ant compiler
    error messages (thanks).
+ * src/interface.c, src/prefs.c, src/keyfile.c, src/main.c, src/main.h,
+   geany.glade:
+   Add 'Enable plugin support' Prefs checkbox.
+   Minor edit of load VTE option text.
 
 
 2007-08-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

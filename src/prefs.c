@@ -45,6 +45,7 @@
 #include "encodings.h"
 #include "project.h"
 #include "editor.h"
+#include "main.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -84,12 +85,20 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(app->prefs_dialog, "spin_mru");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), app->mru_length);
 
+	// startup
 	widget = lookup_widget(app->prefs_dialog, "check_load_session");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_load_session);
 
 	widget = lookup_widget(app->prefs_dialog, "check_save_win_pos");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_save_winpos);
 
+	widget = lookup_widget(app->prefs_dialog, "check_plugins");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), main_prefs.load_plugins);
+
+	widget = lookup_widget(app->prefs_dialog, "check_ask_for_quit");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_confirm_exit);
+
+	// behaviour
 	widget = lookup_widget(app->prefs_dialog, "check_beep");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->beep_on_errors);
 
@@ -101,9 +110,6 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(app->prefs_dialog, "check_auto_focus");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->auto_focus);
-
-	widget = lookup_widget(app->prefs_dialog, "check_ask_for_quit");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_confirm_exit);
 
 	widget = lookup_widget(app->prefs_dialog, "check_ask_suppress_search_dialogs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), app->pref_main_suppress_search_dialogs);
@@ -404,6 +410,10 @@ void prefs_init_dialog(void)
 	}
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(tree));
 
+#ifndef HAVE_PLUGINS
+	gtk_widget_set_sensitive(lookup_widget(app->prefs_dialog, "check_plugins"), FALSE);
+#endif
+
 #ifdef HAVE_VTE
 	// make VTE switch visible only when VTE is compiled in, it is hidden by default
 	widget = lookup_widget(app->prefs_dialog, "check_vte");
@@ -464,17 +474,22 @@ void on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_dat
 		widget = lookup_widget(app->prefs_dialog, "spin_mru");
 		app->mru_length = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
+		// startup
 		widget = lookup_widget(app->prefs_dialog, "check_load_session");
 		app->pref_main_load_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_save_win_pos");
 		app->pref_main_save_winpos = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(app->prefs_dialog, "check_beep");
-		app->beep_on_errors = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		widget = lookup_widget(app->prefs_dialog, "check_plugins");
+		main_prefs.load_plugins = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_ask_for_quit");
 		app->pref_main_confirm_exit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		// behaviour
+		widget = lookup_widget(app->prefs_dialog, "check_beep");
+		app->beep_on_errors = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(app->prefs_dialog, "check_ask_suppress_search_dialogs");
 		app->pref_main_suppress_search_dialogs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1123,13 +1138,13 @@ void prefs_show_dialog(void)
 		vte_append_preferences_tab();
 #endif
 
+		ui_setup_open_button_callback(lookup_widget(app->prefs_dialog, "startup_path_button"), NULL,
+			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(lookup_widget(app->prefs_dialog, "startup_path_entry")));
+
 		g_signal_connect((gpointer) app->prefs_dialog, "response",
 			G_CALLBACK(on_prefs_button_clicked), NULL);
 		g_signal_connect((gpointer) app->prefs_dialog, "delete_event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-
-		ui_setup_open_button_callback(lookup_widget(app->prefs_dialog, "startup_path_button"), NULL,
-			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(lookup_widget(app->prefs_dialog, "startup_path_entry")));
 
 		g_signal_connect((gpointer) lookup_widget(app->prefs_dialog, "tagbar_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));

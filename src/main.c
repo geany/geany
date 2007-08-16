@@ -84,7 +84,11 @@ MyApp *app;
 
 CommandLineOptions cl_options;	// fields initialised in parse_command_line_options
 
+MainPrefs main_prefs;
 
+static gboolean want_plugins;
+
+// command-line options
 static gboolean debug_mode = FALSE;
 static gboolean ignore_global_tags = FALSE;
 static gboolean no_msgwin = FALSE;
@@ -588,6 +592,19 @@ static void load_project_file()
 }
 
 
+static void load_settings()
+{
+	configuration_load();
+	// let cmdline options overwrite configuration settings
+#ifdef HAVE_VTE
+	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
+#endif
+	if (no_msgwin) app->msgwindow_visible = FALSE;
+
+	want_plugins = main_prefs.load_plugins && !no_plugins;
+}
+
+
 gint main(gint argc, gchar **argv)
 {
 	gint idx;
@@ -646,12 +663,7 @@ gint main(gint argc, gchar **argv)
 	gtk_window_set_default_size(GTK_WINDOW(app->window), GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 	encodings_init();
 
-	configuration_load();
-	// do this here to let cmdline options overwrite configuration settings
-#ifdef HAVE_VTE
-	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
-#endif
-	if (no_msgwin) app->msgwindow_visible = FALSE;
+	load_settings();
 
 	msgwin_init();
 	search_init();
@@ -704,7 +716,7 @@ gint main(gint argc, gchar **argv)
 
 #ifdef HAVE_PLUGINS
 	// load any enabled plugins before we open any documents
-	if (! no_plugins)
+	if (want_plugins)
 		plugins_init();
 #endif
 
@@ -782,7 +794,7 @@ void main_quit()
 #endif
 
 #ifdef HAVE_PLUGINS
-	if (! no_plugins)
+	if (want_plugins)
 		plugins_free();
 #endif
 	navqueue_free();
