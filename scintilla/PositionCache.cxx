@@ -341,7 +341,7 @@ void LineLayoutCache::Dispose(LineLayout *ll) {
 }
 
 void BreakFinder::Insert(int val) {
-	if (val > nextBreak) {
+	if (val >= nextBreak) {
 		for (unsigned int j = 0; j<saeLen; j++) {
 			if (val == selAndEdge[j]) {
 				return;
