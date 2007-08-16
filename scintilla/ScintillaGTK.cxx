@@ -285,9 +285,6 @@ private:
 
 	static sptr_t DirectFunction(ScintillaGTK *sciThis,
 	                             unsigned int iMessage, uptr_t wParam, sptr_t lParam);
-
-protected:
-	virtual int KeyCommand(unsigned int iMessage);
 };
 
 enum {
@@ -2722,33 +2719,4 @@ void scintilla_set_id(ScintillaObject *sci, uptr_t id) {
 
 void scintilla_release_resources(void) {
 	Platform_Finalise();
-}
-
-int ScintillaGTK::KeyCommand(unsigned int iMessage) {
-	switch (iMessage) {
-	/* Try to act more like a GtkWidget, e.g. GtkEntry.
-	 * The container app should also call SCI_SETWHITESPACECHARS to include punctuation
-	 * chars as whitespace. */
-	case SCI_WORDRIGHT:
-		MovePositionTo(MovePositionSoVisible(pdoc->NextWordEnd(currentPos, 1), 1));
-		SetLastXChosen();
-		break;
-	case SCI_WORDRIGHTEXTEND:
-		MovePositionTo(MovePositionSoVisible(pdoc->NextWordEnd(currentPos, 1), 1), selStream);
-		SetLastXChosen();
-		break;
-	case SCI_DELWORDRIGHT: {
-			int endWord = pdoc->NextWordEnd(currentPos, 1);
-			pdoc->DeleteChars(currentPos, endWord - currentPos);
-		}
-		break;
-	default:
-		return ScintillaBase::KeyCommand(iMessage);
-	}
-	/* Mimic what ScintillaBase::KeyCommand would do as we're overriding it. */
-	if (ac.Active())
-		ac.Cancel();
-	if (ct.inCallTipMode)
-		ct.CallTipCancel();
-	return 0;
 }

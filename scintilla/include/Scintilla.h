@@ -499,6 +499,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_ZOOMOUT 2334
 #define SCI_DELWORDLEFT 2335
 #define SCI_DELWORDRIGHT 2336
+#define SCI_DELWORDRIGHTEND 2518
 #define SCI_LINECUT 2337
 #define SCI_LINEDELETE 2338
 #define SCI_LINETRANSPOSE 2339

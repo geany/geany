@@ -7,6 +7,12 @@
    geany.glade:
    Add 'Enable plugin support' Prefs checkbox.
    Minor edit of load VTE option text.
+ * scintilla/include/Scintilla.h, scintilla/Editor.cxx,
+   scintilla/ScintillaGTK.cxx, src/document.c, doc/geany.txt:
+   Use sci_assign_cmdkey() to set GtkEntry-like word boundary handling.
+   Clear unnecessary default Scintilla Ctrl-D duplicate keybinding.
+   Add SCI_DELWORDRIGHTEND command (patch sent to Scintilla ML).
+   Remove previous ScintillaGTK::KeyCommand override.
 
 
 2007-08-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

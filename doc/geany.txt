@@ -2141,11 +2141,6 @@ Go to end of display line.                      Alt+End
 Extend selection to end of display line.        Alt+Shift+End
 Scroll up.                                      Ctrl+Up
 Scroll down.                                    Ctrl+Down
-Line cut.                                       Ctrl+L
-Line copy.                                      Ctrl+Shift+T
-Line delete.                                    Ctrl+Shift+L
-Line transpose with previous.                   Ctrl+T
-Selection duplicate.                            Ctrl+D
 Previous paragraph. Shift extends selection.    Ctrl+[
 Next paragraph. Shift extends selection.        Ctrl+]
 Previous word. Shift extends selection.         Ctrl+Left

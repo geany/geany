@@ -265,6 +265,23 @@ static gint document_get_new_idx()
 }
 
 
+static void setup_sci_keys(ScintillaObject *sci)
+{
+	// disable some Scintilla keybindings to be able to redefine them cleanly
+	sci_clear_cmdkey(sci, 'A' | (SCMOD_CTRL << 16)); // select all
+	sci_clear_cmdkey(sci, 'D' | (SCMOD_CTRL << 16)); // duplicate
+	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16)); // line transpose
+	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); // line copy
+	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16)); // line cut
+	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); // line delete
+
+	// use GtkEntry-like word boundaries
+	sci_assign_cmdkey(sci, SCK_RIGHT | (SCMOD_CTRL << 16), SCI_WORDRIGHTEND);
+	sci_assign_cmdkey(sci, SCK_RIGHT | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16), SCI_WORDRIGHTENDEXTEND);
+	sci_assign_cmdkey(sci, SCK_DELETE | (SCMOD_CTRL << 16), SCI_DELWORDRIGHTEND);
+}
+
+
 /* creates a new tab in the notebook and does all related stuff
  * finally it returns the index of the created document */
 static gint document_create_new_sci(const gchar *filename)
@@ -305,12 +322,8 @@ static gint document_create_new_sci(const gchar *filename)
 	//SSM(sci, SCI_SETWRAPSTARTINDENT, 4, 0);
 	// disable scintilla provided popup menu
 	sci_use_popup(sci, FALSE);
-	// disable some Scintilla keybinsings to be able to redefine it
-	sci_clear_cmdkey(sci, 'A' | (SCMOD_CTRL << 16)); // select all
-	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16)); // line transpose
-	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16)); // line cut
-	sci_clear_cmdkey(sci, 'L' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); // line delete
-	sci_clear_cmdkey(sci, 'T' | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16)); // line copy
+
+	setup_sci_keys(sci);
 
 	document_apply_update_prefs(new_idx);
 
