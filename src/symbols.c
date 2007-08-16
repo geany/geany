@@ -304,7 +304,7 @@ typedef struct GeanySymbol
 } GeanySymbol;
 
 
-/* wrapper function to let strcmp work with GeanySymbol struct */
+/* sort by name, line */
 static gint compare_symbol(const GeanySymbol *a, const GeanySymbol *b)
 {
 	gint ret;
@@ -317,6 +317,15 @@ static gint compare_symbol(const GeanySymbol *a, const GeanySymbol *b)
 		return a->line - b->line;
 	}
 	return ret;
+}
+
+
+/* sort by line only */
+static gint compare_symbol_lines(const GeanySymbol *a, const GeanySymbol *b)
+{
+	if (a == NULL || b == NULL) return 0;
+
+	return a->line - b->line;
 }
 
 
@@ -386,6 +395,8 @@ static const GList *get_tag_list(gint idx, guint tag_types, gboolean sort_by_nam
 		}
 		if (sort_by_name)
 			tag_names = g_list_sort(tag_names, (GCompareFunc) compare_symbol);
+		else
+			tag_names = g_list_sort(tag_names, (GCompareFunc) compare_symbol_lines);
 
 		return tag_names;
 	}
