@@ -64,8 +64,8 @@ static void findRestTags (void)
 
     while ((line = fileReadLine ()) != NULL)
     {
-		if (strlen((const char*) line) > 3 && vStringLength(name) > 0)
-		if (! strstr((const char*) line, " "))
+		if (strlen((const char*) line) > 3 && vStringLength(name) > 0 &&
+			! strstr((const char*) line, " "))
 		{
 			if (strncmp((const char*) line, "===", 3) == 0)
 			{
