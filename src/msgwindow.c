@@ -733,6 +733,17 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 		case GEANY_FILETYPES_ALL:
 		default:	// The default is a GNU gcc type error
 		{
+			if (build_info.file_type_id == GEANY_FILETYPES_JAVA &&
+				strncmp(string, "[javac]", 7) == 0)
+			{
+				/* Java Apache Ant.
+				 * [javac] <Full Path to File + extension>:<line n°>: <error> */
+				data.pattern = " :";
+				data.min_fields = 4;
+				data.line_idx = 2;
+				data.file_idx = 1;
+				break;
+			}
 			// don't accidently find libtool versions x:y:x and think it is a file name
 			if (strstr(string, "libtool --mode=link") == NULL)
 			{
@@ -740,17 +751,6 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir, gch
 				data.min_fields = 3;
 				data.line_idx = 1;
 				data.file_idx = 0;
-				break;
-			}
-			if (build_info.file_type_id == GEANY_FILETYPES_JAVA &&
-				strncmp(string, "[javac]", 7) == 0)
-			{
-				/* Java Apache Ant.
-				 * [javac] <Full Path to File + extension>:<line n°>: <error> */
-				data.pattern = " :";
-				data.min_fields = 3;
-				data.line_idx = 2;
-				data.file_idx = 1;
 				break;
 			}
 		}

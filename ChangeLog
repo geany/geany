@@ -1,3 +1,10 @@
+2007-08-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/msgwindow.c:
+   Apply patch from Jon Senior to fix parsing Apache Ant compiler
+   error messages (thanks).
+
+
 2007-08-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * scintilla/PositionCache.cxx:
