@@ -296,7 +296,7 @@ static boolean popConditional (void)
 	return isIgnore ();
 }
 
-static void makeDefineTag (const char *const name)
+static void makeDefineTag (const char *const name, boolean parameterized)
 {
 	const boolean isFileScope = (boolean) (! isHeaderFile ());
 
@@ -304,23 +304,36 @@ static void makeDefineTag (const char *const name)
 		(! isFileScope  ||  Option.include.fileScope))
 	{
 		tagEntryInfo e;
+
 		initTagEntry (&e, name);
+
 		e.lineNumberEntry = (boolean) (Option.locate != EX_PATTERN);
 		e.isFileScope  = isFileScope;
 		e.truncateLine = TRUE;
 		e.kindName     = "macro";
 		e.kind         = 'd';
+		if (parameterized)
+			e.extensionFields.arglist = getArglistFromPos(getInputFilePosition()
+				, e.name);
 		makeTagEntry (&e);
+		if (parameterized)
+			free((char *) e.extensionFields.arglist);
 	}
 }
 
 static void directiveDefine (const int c)
 {
+	boolean parameterized;
+	int nc;
+
 	if (isident1 (c))
 	{
 		readIdentifier (c, Cpp.directive.name);
+		nc = fileGetc ();
+		fileUngetc (nc);
+		parameterized = (boolean) (nc == '(');
 		if (! isIgnore ())
-			makeDefineTag (vStringValue (Cpp.directive.name));
+			makeDefineTag (vStringValue (Cpp.directive.name), parameterized);
 	}
 	Cpp.directive.state = DRCTV_NONE;
 }
@@ -340,7 +353,7 @@ static void directivePragma (int c)
 			if (isident1 (c))
 			{
 				readIdentifier (c, Cpp.directive.name);
-				makeDefineTag (vStringValue (Cpp.directive.name));
+				makeDefineTag (vStringValue (Cpp.directive.name), FALSE);
 			}
 		}
 	}
