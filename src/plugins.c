@@ -450,13 +450,13 @@ void plugins_init()
 
 void plugins_free()
 {
-	g_object_unref(geany_object);
 
 	if (plugin_list != NULL)
 	{
 		g_list_foreach(plugin_list, (GFunc) plugin_free, NULL);
 		g_list_free(plugin_list);
 	}
+	g_object_unref(geany_object);
 }
 
 

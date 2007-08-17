@@ -1,3 +1,10 @@
+2007-08-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugins.c:
+   Apply patch from Jeff Pohlmeyer to fix warning when unloading plugins
+   that use signals when quitting (thanks).
+
+
 2007-08-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/msgwindow.c:
