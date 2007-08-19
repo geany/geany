@@ -43,7 +43,8 @@ all: plugins
 plugins: \
 		htmlchars.dll \
 		demoplugin.dll \
-		classbuilder.dll
+		classbuilder.dll \
+		export.dll
 
 clean:
 	-$(RM) deps.mak *.o *.dll

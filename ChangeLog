@@ -1,3 +1,11 @@
+2007-08-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/export.c, plugins/Makefile.am, plugins/makefile.win32,
+   po/POTFILES.in, src/plugins.c, src/plugindata.h:
+   New plugin: Export as HTML and LaTeX.
+   Add some functions to the plugin API needed by the Export plugin.
+
+
 2007-08-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugins.c:

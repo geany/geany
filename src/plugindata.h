@@ -68,7 +68,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 11;
+static const gint api_version = 12;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -144,6 +144,8 @@ typedef struct GeanyData
 	struct UtilsFuncs		*utils;
 	struct UIUtilsFuncs		*ui;
 	struct SupportFuncs		*support;
+	struct DialogFuncs		*dialogs;
+	struct MsgWinFuncs		*msgwindow;
 }
 GeanyData;
 
@@ -205,6 +207,9 @@ typedef struct ScintillaFuncs
 	void	(*ensure_line_is_visible) (struct _ScintillaObject* sci, gint line);
 	void	(*scroll_caret) (struct _ScintillaObject* sci);
 	gint	(*find_bracematch) (struct _ScintillaObject* sci, gint pos);
+	gint	(*get_style_at) (struct _ScintillaObject *sci, gint position);
+	gchar	(*get_char_at) (struct _ScintillaObject *sci, gint pos);
+	gint	(*get_zoom) (struct _ScintillaObject * sci);
 }
 ScintillaFuncs;
 
@@ -219,6 +224,10 @@ typedef struct UtilsFuncs
 	gboolean	(*str_equal) (const gchar *a, const gchar *b);
 	gchar*		(*str_replace) (gchar *haystack, const gchar *needle, const gchar *replacement);
 	GSList*		(*get_file_list) (const gchar *path, guint *length, GError **error);
+	gint		(*write_file) (const gchar *filename, const gchar *text);
+	gchar*		(*get_locale_from_utf8) (const gchar *utf8_text);
+	gchar*		(*get_utf8_from_locale) (const gchar *locale_text);
+	gchar*		(*remove_ext_from_filename) (const gchar *filename);
 }
 UtilsFuncs;
 
@@ -229,11 +238,25 @@ typedef struct UIUtilsFuncs
 }
 UIUtilsFuncs;
 
+typedef struct DialogFuncs
+{
+	gboolean	(*show_question) (const gchar *text, ...);
+	void		(*show_msgbox) (gint type, const gchar *text, ...);
+}
+DialogFuncs;
+
 typedef struct SupportFuncs
 {
 	GtkWidget*	(*lookup_widget) (GtkWidget *widget, const gchar *widget_name);
 }
 SupportFuncs;
+
+
+typedef struct MsgWinFuncs
+{
+	void		(*status_add) (const gchar *format, ...);
+}
+MsgWinFuncs;
 
 
 typedef struct GeanyCallback

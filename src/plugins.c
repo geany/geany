@@ -43,6 +43,8 @@
 #include "sciwrappers.h"
 #include "ui_utils.h"
 #include "editor.h"
+#include "dialogs.h"
+#include "msgwindow.h"
 #include "geanyobject.h"
 
 #ifdef G_OS_WIN32
@@ -109,7 +111,10 @@ static ScintillaFuncs sci_funcs = {
 	&sci_get_line_is_visible,
 	&sci_ensure_line_is_visible,
 	&sci_scroll_caret,
-	&sci_find_bracematch
+	&sci_find_bracematch,
+	&sci_get_style_at,
+	&sci_get_char_at,
+	&sci_get_zoom
 };
 
 static TemplateFuncs template_funcs = {
@@ -119,7 +124,11 @@ static TemplateFuncs template_funcs = {
 static UtilsFuncs utils_funcs = {
 	&utils_str_equal,
 	&utils_str_replace,
-	&utils_get_file_list
+	&utils_get_file_list,
+	&utils_write_file,
+	&utils_get_locale_from_utf8,
+	&utils_get_utf8_from_locale,
+	&utils_remove_ext_from_filename
 };
 
 static UIUtilsFuncs uiutils_funcs = {
@@ -127,8 +136,17 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_frame_new_with_alignment
 };
 
+static DialogFuncs dialog_funcs = {
+	&dialogs_show_question,
+	&dialogs_show_msgbox
+};
+
 static SupportFuncs support_funcs = {
 	&lookup_widget
+};
+
+static MsgWinFuncs msgwin_funcs = {
+	&msgwin_status_add
 };
 
 
@@ -144,7 +162,9 @@ static GeanyData geany_data = {
 	&template_funcs,
 	&utils_funcs,
 	&uiutils_funcs,
-	&support_funcs
+	&support_funcs,
+	&dialog_funcs,
+	&msgwin_funcs
 };
 
 
