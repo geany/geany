@@ -4,6 +4,8 @@
    po/POTFILES.in, src/plugins.c, src/plugindata.h:
    New plugin: Export as HTML and LaTeX.
    Add some functions to the plugin API needed by the Export plugin.
+ * src/utils.c: Include error code string in the debug message if a file
+                could not be written.
 
 
 2007-08-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
