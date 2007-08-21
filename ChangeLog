@@ -1,3 +1,8 @@
+2007-08-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.h: Remove unused struct.
+
+
 2007-08-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/export.c, plugins/Makefile.am, plugins/makefile.win32,

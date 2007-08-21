@@ -79,13 +79,6 @@ typedef struct
 extern EditorInfo editor_info;
 
 
-typedef struct
-{
-	gchar *type;	// represents in most cases the filetype(two exceptions: default and special)
-	gchar *name;	// name of the key in config file, represents the entered text to complete
-	gchar *value;
-} AutoCompletion;
-
 
 
 gboolean
