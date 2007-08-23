@@ -107,6 +107,15 @@ static void create_signals(GObjectClass *g_object_class)
 		gtk_marshal_NONE__INT,
 		G_TYPE_NONE, 1,
 		G_TYPE_INT);
+	geany_object_signals[GCB_DOCUMENT_ACTIVATE] = g_signal_new (
+		"document-activate",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, document_activate),
+		NULL, NULL,
+		gtk_marshal_NONE__INT,
+		G_TYPE_NONE, 1,
+		G_TYPE_INT);
 }
 
 

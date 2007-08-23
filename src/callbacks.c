@@ -62,6 +62,8 @@
 #include "project.h"
 #include "navqueue.h"
 
+#include "geanyobject.h"
+
 #ifdef HAVE_VTE
 # include "vte.h"
 #endif
@@ -781,6 +783,11 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 #ifdef HAVE_VTE
 		vte_cwd(doc_list[idx].file_name, FALSE);
 #endif
+
+		if (geany_object)
+		{
+			g_signal_emit_by_name(geany_object, "document-activate", idx);
+		}
 	}
 }
 

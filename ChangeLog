@@ -25,6 +25,10 @@
    Make utils_isbrace() and utils_is_opening_brace() take an
    'include_angles' argument (to separate from editor_prefs).
    Make 'Goto matching brace' keybinding include <> angle brackets.
+ * src/geanyobject.c, src/plugindata.h, src/geanyobject.h,
+   src/callbacks.c:
+   Apply patch from blackdog to add "document-activate" plugin signal,
+   which is sent when switching notebook pages (thanks).
 
 
 2007-08-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

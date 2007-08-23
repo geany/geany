@@ -63,12 +63,15 @@
  *
  * "document-save"
  * 	Sent when a file is saved.
+ *
+ * "document-activate"
+ * 	Sent when switching notebook pages.
  */
 
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 13;
+static const gint api_version = 14;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields

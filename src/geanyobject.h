@@ -37,6 +37,7 @@ typedef enum
 	GCB_DOCUMENT_NEW,
 	GCB_DOCUMENT_OPEN,
 	GCB_DOCUMENT_SAVE,
+	GCB_DOCUMENT_ACTIVATE,
 	GCB_MAX
 } GeanyCallbackId;
 
@@ -69,6 +70,7 @@ struct _GeanyObjectClass
 	void (*document_new)(gint idx);
 	void (*document_open)(gint idx);
 	void (*document_save)(gint idx);
+	void (*document_activate)(gint idx);
 };
 
 GType		geany_object_get_type	(void);
