@@ -1,3 +1,10 @@
+2007-08-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c: Fix invalid filetype setting when using Save All and
+                   files with filetype None (thanks to Omair Eshkenazi
+                   for reporting).
+
+
 2007-08-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/export.c, src/templates.c, src/build.c, src/utils.c,

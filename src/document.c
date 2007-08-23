@@ -1023,7 +1023,7 @@ gboolean document_save_file(gint idx, gboolean force)
 	if (editor_prefs.trail_space) document_strip_trailing_spaces(idx);
 	// ensure the file has a newline at the end
 	if (editor_prefs.new_line) document_ensure_final_newline(idx);
-	// ensure there a really the same EOL chars
+	// ensure there are really the same EOL chars
 	sci_convert_eols(doc_list[idx].sci, sci_get_eol_mode(doc_list[idx].sci));
 
 	len = sci_get_length(doc_list[idx].sci) + 1;
@@ -1124,7 +1124,12 @@ gboolean document_save_file(gint idx, gboolean force)
 		if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_ALL)
 		{
 			doc_list[idx].file_type = filetypes_detect_from_file(idx);
-			filetypes_select_radio_item(doc_list[idx].file_type);
+			if (document_get_cur_idx() == idx)
+			{
+				app->ignore_callback = TRUE;
+				filetypes_select_radio_item(doc_list[idx].file_type);
+				app->ignore_callback = FALSE;
+			}
 		}
 		document_set_filetype(idx, doc_list[idx].file_type);
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
