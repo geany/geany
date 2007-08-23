@@ -579,10 +579,10 @@ void keybindings_show_shortcuts()
 
 		prefs_show_dialog();
 		// select the KB page
-		wid = lookup_widget(app->prefs_dialog, "frame22");
+		wid = lookup_widget(ui_widgets.prefs_dialog, "frame22");
 		if (wid != NULL)
 		{
-			GtkNotebook *nb = GTK_NOTEBOOK(lookup_widget(app->prefs_dialog, "notebook2"));
+			GtkNotebook *nb = GTK_NOTEBOOK(lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
 
 			if (nb != NULL)
 				gtk_notebook_set_current_page(nb, gtk_notebook_page_num(nb, wid));
@@ -605,7 +605,7 @@ static gboolean check_fixed_kb(GdkEventKey *event)
 		if (event->keyval == GDK_0)
 			page = npages - 1;
 		// invert the order if tabs are added on the other side
-		if (swap_alt_tab_order && ! app->tab_order_ltr)
+		if (swap_alt_tab_order && ! prefs.tab_order_ltr)
 			page = (npages - 1) - page;
 
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page);
@@ -973,7 +973,7 @@ static void cb_func_switch_scribble(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_switch_search_bar(G_GNUC_UNUSED guint key_id)
 {
-	if (app->toolbar_visible && app->pref_toolbar_show_search)
+	if (prefs.toolbar_visible && prefs.toolbar_show_search)
 		gtk_widget_grab_focus(lookup_widget(app->window, "entry1"));
 }
 
@@ -1028,7 +1028,7 @@ static void goto_matching_brace(gint idx)
 	if (! DOC_IDX_VALID(idx)) return;
 
 	pos = sci_get_current_position(doc_list[idx].sci);
-	if (! utils_isbrace(sci_get_char_at(doc_list[idx].sci, pos)))
+	if (! utils_isbrace(sci_get_char_at(doc_list[idx].sci, pos), TRUE))
 		pos--; // set pos to the brace
 
 	new_pos = sci_find_bracematch(doc_list[idx].sci, pos);
@@ -1187,16 +1187,16 @@ static void cb_func_edit(guint key_id)
 			on_to_upper_case1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_EDIT_SENDTOCMD1:
-			if (app->custom_commands && g_strv_length(app->custom_commands) > 0)
-				tools_execute_custom_command(idx, app->custom_commands[0]);
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 0)
+				tools_execute_custom_command(idx, ui_prefs.custom_commands[0]);
 			break;
 		case GEANY_KEYS_EDIT_SENDTOCMD2:
-			if (app->custom_commands && g_strv_length(app->custom_commands) > 1)
-				tools_execute_custom_command(idx, app->custom_commands[1]);
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 1)
+				tools_execute_custom_command(idx, ui_prefs.custom_commands[1]);
 			break;
 		case GEANY_KEYS_EDIT_SENDTOCMD3:
-			if (app->custom_commands && g_strv_length(app->custom_commands) > 2)
-				tools_execute_custom_command(idx, app->custom_commands[2]);
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 2)
+				tools_execute_custom_command(idx, ui_prefs.custom_commands[2]);
 			break;
 	}
 }

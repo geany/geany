@@ -894,8 +894,8 @@ void project_load_prefs(GKeyFile *config)
 /* Initialize project-related preferences in the Preferences dialog. */
 void project_setup_prefs()
 {
-	GtkWidget *path_entry = lookup_widget(app->prefs_dialog, "project_file_path_entry");
-	GtkWidget *path_btn = lookup_widget(app->prefs_dialog, "project_file_path_button");
+	GtkWidget *path_entry = lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry");
+	GtkWidget *path_btn = lookup_widget(ui_widgets.prefs_dialog, "project_file_path_button");
 
 	g_return_if_fail(local_prefs.project_file_path != NULL);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), local_prefs.project_file_path);
@@ -907,7 +907,7 @@ void project_setup_prefs()
 /* Update project-related preferences after using the Preferences dialog. */
 void project_apply_prefs()
 {
-	GtkWidget *path_entry = lookup_widget(app->prefs_dialog, "project_file_path_entry");
+	GtkWidget *path_entry = lookup_widget(ui_widgets.prefs_dialog, "project_file_path_entry");
 	const gchar *str;
 
 	str = gtk_entry_get_text(GTK_ENTRY(path_entry));

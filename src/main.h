@@ -27,20 +27,24 @@
 
 typedef struct
 {
-	gboolean load_session;
-	gint goto_line;
-	gint goto_column;
+	gboolean	load_session;
+	gint		goto_line;
+	gint		goto_column;
+	gboolean	ignore_global_tags;
 } CommandLineOptions;
 
 extern CommandLineOptions cl_options;
 
 
-typedef struct
+typedef struct GeanyStatus
 {
-	gboolean load_plugins;
-} MainPrefs;
+	gboolean	opening_session_files;	// state at startup while opening session files
+	gboolean	quitting;	// state when Geany is quitting completely
+	gboolean	main_window_realized;
+}
+GeanyStatus;
 
-extern MainPrefs main_prefs;
+extern GeanyStatus main_status;
 
 
 gchar *get_argv_filename(const gchar *filename);

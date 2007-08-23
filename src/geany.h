@@ -21,6 +21,9 @@
  * $Id$
  */
 
+/* Main header - should be included first in all source files.
+ * externs and function prototypes are implemented in main.c. */
+
 #ifndef GEANY_H
 #define GEANY_H
 
@@ -80,114 +83,29 @@ typedef struct filetype filetype;
 typedef struct _GeanyProject GeanyProject;
 
 
-/* store some pointers and variables for frequently used widgets  */
-typedef struct MyApp
+/* Commonly used items.
+ * Remember to increment abi_version in plugindata.h when changing items. */
+typedef struct GeanyApp
 {
-	gint			 	 toolbar_icon_style;
-	// 0:x, 1:y, 2:width, 3:height, flag for maximized state
-	gint				 geometry[5];
-	gboolean			 debug_mode;
-	// represents the state at startup while opening session files
-	gboolean			 opening_session_files;
-	// represents the state when Geany is quitting completely
-	gboolean			 quitting;
-	gboolean			 ignore_callback;
-	gboolean			 ignore_global_tags;
-	gboolean			 toolbar_visible;
-	gboolean			 sidebar_symbol_visible;
-	gboolean			 sidebar_openfiles_visible;
-	gboolean			 sidebar_visible;
-	gboolean			 statusbar_visible;
-	gboolean			 msgwindow_visible;
-	gboolean			 fullscreen;
-	gboolean			 beep_on_errors;
-	gboolean			 switch_msgwin_pages;
-	gboolean			 auto_focus;
-	gboolean			 show_notebook_tabs;
-	gboolean			 tab_order_ltr;
-	gboolean			 show_markers_margin;
-	gboolean			 show_linenumber_margin;
-	gboolean			 brace_match_ltgt;
-	gboolean			 use_tab_to_indent;
-	gboolean			 main_window_realized;
-	gboolean			 pref_main_load_session;
-	gboolean			 pref_main_save_winpos;
-	gboolean			 pref_main_confirm_exit;
-	gboolean			 pref_main_suppress_search_dialogs;
-	gboolean			 pref_main_suppress_status_messages;
-	gboolean			 pref_toolbar_show_search;
-	gboolean			 pref_toolbar_show_goto;
-	gboolean			 pref_toolbar_show_undo;
-	gboolean			 pref_toolbar_show_navigation;
-	gboolean			 pref_toolbar_show_compile;
-	gboolean			 pref_toolbar_show_zoom;
-	gboolean			 pref_toolbar_show_colour;
-	gboolean			 pref_toolbar_show_fileops;
-	gboolean			 pref_toolbar_show_quit;
-	gint				 tab_pos_editor;
-	gint				 tab_pos_msgwin;
-	gint				 tab_pos_sidebar;
-	guint				 mru_length;
-	gint				 autocompletion_max_height;
-	gint				 long_line_type;
-	gint				 long_line_column;
-	gchar				*long_line_color;
-	gchar				*context_action_cmd;
-	gchar				*pref_template_developer;
-	gchar				*pref_template_company;
-	gchar				*pref_template_mail;
-	gchar				*pref_template_initial;
-	gchar				*pref_template_version;
-	gchar				*editor_font;
-	gchar				*tagbar_font;
-	gchar				*msgwin_font;
+	gboolean			debug_mode;
 	gchar				*configdir;
 	gchar				*datadir;
 	gchar				*docdir;
-	gchar				*default_open_path;
-	gchar				*custom_date_format;
-	gchar				**custom_commands;
-	gchar				*tools_browser_cmd;
-	gchar				*tools_make_cmd;
-	gchar				*tools_term_cmd;
-	gchar				*tools_print_cmd;
-	gchar				*tools_grep_cmd;
-	GtkIconSize			 toolbar_icon_size;
+	const TMWorkspace	*tm_workspace;
+	GeanyProject		*project;	// currently active project or NULL if none is open
+	gboolean			ignore_callback;	// should not be used in new code (use clicked instead of toggled signal)
+
+	/* Important widgets */
+	GtkWidget			*window;
 	GtkWidget			*toolbar;
-	GtkWidget			*run_button;
-	GtkWidget			*compile_button;
-	GtkWidget			*compile_button_image;
-	GtkWidget			*tagbar;
 	GtkWidget			*treeview_notebook;
 	GtkWidget			*notebook;
-	GtkWidget			*statusbar;
-	GtkWidget			*window;
+	GtkWidget			*statusbar;	// use ui_set_statusbar() or msgwin_status_add() to set
 	GtkWidget			*popup_menu;
-	GtkWidget			*toolbar_menu;
-	GtkWidget			*new_file_menu;
-	GtkWidget			*recent_files_menuitem;
-	GtkWidget			*recent_files_menubar;
-	GtkWidget			*recent_files_toolbar;
-	GtkWidget			*menu_insert_include_item[2];
-	GtkWidget			*popup_goto_items[3];
-	GtkWidget			*popup_items[5];
-	GtkWidget			*menu_copy_items[5];
-	GtkWidget			*redo_items[3];
-	GtkWidget			*undo_items[3];
-	GtkWidget			*save_buttons[4];
-	GtkWidget			*navigation_buttons[2];
-	GtkWidget			*open_colorsel;
-	GtkWidget			*open_fontsel;
-	GtkWidget			*open_filesel;
-	GtkWidget			*save_filesel;
-	GtkWidget			*prefs_dialog;
-	GtkWidget			*default_tag_tree;
-	const TMWorkspace	*tm_workspace;
-	GQueue				*recent_queue;
-	GeanyProject		*project; // currently active project or NULL if none is open
-} MyApp;
+}
+GeanyApp;
 
-extern MyApp *app;
+extern GeanyApp *app;
 
 
 enum
@@ -221,7 +139,7 @@ enum
 #endif
 
 
-// implementation in main.c; prototype is here so that all files can use it.
+// prototype is here so that all files can use it.
 void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 
 #endif

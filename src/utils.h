@@ -45,9 +45,9 @@ void utils_start_browser(const gchar *uri);
 /* taken from anjuta, to determine the EOL mode of the file */
 gint utils_get_line_endings(gchar* buffer, glong size);
 
-gboolean utils_isbrace(gchar c);
+gboolean utils_isbrace(gchar c, gboolean include_angles);
 
-gboolean utils_is_opening_brace(gchar c);
+gboolean utils_is_opening_brace(gchar c, gboolean include_angles);
 
 gboolean utils_goto_file_line(const gchar *file, gboolean is_tm_filename, gint line);
 

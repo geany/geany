@@ -41,6 +41,7 @@
 # include <signal.h>
 #endif
 
+#include "prefs.h"
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
@@ -82,6 +83,14 @@ static BuildMenuItems latex_menu_items =
 	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 
+static struct
+{
+	GtkWidget	*run_button;
+	GtkWidget	*compile_button;
+}
+widgets;
+
+
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose);
 static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir);
@@ -91,6 +100,14 @@ static void set_stop_button(gboolean stop);
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void on_build_arguments_activate(GtkMenuItem *menuitem, gpointer user_data);
+
+static void on_build_compile_activate(GtkMenuItem *menuitem, gpointer user_data);
+static void on_build_tex_activate(GtkMenuItem *menuitem, gpointer user_data);
+static void on_build_build_activate(GtkMenuItem *menuitem, gpointer user_data);
+static void on_build_make_activate(GtkMenuItem *menuitem, gpointer user_data);
+static void on_build_execute_activate(GtkMenuItem *menuitem, gpointer user_data);
+static void on_build_next_error(GtkMenuItem *menuitem, gpointer user_data);
+
 
 #ifndef G_OS_WIN32
 static void kill_process(GPid *pid);
@@ -173,7 +190,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	locale_cmd_string = utils_get_locale_from_utf8(cmd_string);
 
 	/* get the terminal path */
-	locale_term_cmd = utils_get_locale_from_utf8(app->tools_term_cmd);
+	locale_term_cmd = utils_get_locale_from_utf8(prefs.tools_term_cmd);
 	// split the term_cmd, so arguments will work too
 	term_argv = g_strsplit(locale_term_cmd, " ", -1);
 	term_argv_len = g_strv_length(term_argv);
@@ -190,7 +207,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	{
 		msgwin_status_add(
 			_("Could not find terminal '%s' "
-				"(check path for Terminal tool setting in Preferences)"), app->tools_term_cmd);
+				"(check path for Terminal tool setting in Preferences)"), prefs.tools_term_cmd);
 
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
 										locale_term_cmd, NULL);
@@ -286,7 +303,7 @@ static GPid build_make_file(gint idx, gint build_opts)
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
 
-	cmdstr = g_string_new(app->tools_make_cmd);
+	cmdstr = g_string_new(prefs.tools_make_cmd);
 	g_string_append_c(cmdstr, ' ');
 
 	if (build_opts == GBO_MAKE_OBJECT)
@@ -710,7 +727,7 @@ static GPid build_run_cmd(gint idx)
 		gchar  **argv = NULL;
 
 		/* get the terminal path */
-		locale_term_cmd = utils_get_locale_from_utf8(app->tools_term_cmd);
+		locale_term_cmd = utils_get_locale_from_utf8(prefs.tools_term_cmd);
 		// split the term_cmd, so arguments will work too
 		term_argv = g_strsplit(locale_term_cmd, " ", -1);
 		term_argv_len = g_strv_length(term_argv);
@@ -727,7 +744,7 @@ static GPid build_run_cmd(gint idx)
 		{
 			msgwin_status_add(
 				_("Could not find terminal '%s' "
-					"(check path for Terminal tool setting in Preferences)"), app->tools_term_cmd);
+					"(check path for Terminal tool setting in Preferences)"), prefs.tools_term_cmd);
 			run_info.pid = (GPid) 1;
 			goto free_strings;
 		}
@@ -871,7 +888,7 @@ static void show_build_result_message(gboolean failure)
 		msg = _("Compilation failed.");
 		msgwin_compiler_add(COLOR_DARK_RED, msg);
 		// If msgwindow is hidden, user will want to display it to see the error
-		if (! app->msgwindow_visible)
+		if (! ui_prefs.msgwindow_visible)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
 			msgwin_show_hide(TRUE);
@@ -884,7 +901,7 @@ static void show_build_result_message(gboolean failure)
 	{
 		msg = _("Compilation finished successfully.");
 		msgwin_compiler_add(COLOR_BLUE, msg);
-		if (! app->msgwindow_visible ||
+		if (! ui_prefs.msgwindow_visible ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
 				ui_set_statusbar("%s", msg);
 	}
@@ -1602,8 +1619,8 @@ void build_menu_update(gint idx)
 	{
 		gtk_widget_set_sensitive(lookup_widget(app->window, "menu_build1"), FALSE);
 		gtk_menu_item_remove_submenu(GTK_MENU_ITEM(lookup_widget(app->window, "menu_build1")));
-		gtk_widget_set_sensitive(app->compile_button, FALSE);
-		gtk_widget_set_sensitive(app->run_button, FALSE);
+		gtk_widget_set_sensitive(widgets.compile_button, FALSE);
+		gtk_widget_set_sensitive(widgets.run_button, FALSE);
 		return;
 	}
 	else
@@ -1668,8 +1685,8 @@ void build_menu_update(gint idx)
 	if (menu_items->item_set_args)
 		gtk_widget_set_sensitive(menu_items->item_set_args, can_set_args);
 
-	gtk_widget_set_sensitive(app->compile_button, can_build && ft->actions->can_compile);
-	gtk_widget_set_sensitive(app->run_button, can_run || can_stop);
+	gtk_widget_set_sensitive(widgets.compile_button, can_build && ft->actions->can_compile);
+	gtk_widget_set_sensitive(widgets.run_button, can_run || can_stop);
 
 	// show the stop command if a program is running, otherwise show run command
 	set_stop_button(can_stop);
@@ -1690,14 +1707,14 @@ static void set_stop_button(gboolean stop)
 		build_get_menu_items(run_info.file_type_id)->item_exec;
 
 	if (stop && utils_str_equal(
-		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(app->run_button)), "gtk-stop")) return;
+		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(widgets.run_button)), "gtk-stop")) return;
 	if (! stop && utils_str_equal(
-		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(app->run_button)), "gtk-execute")) return;
+		gtk_tool_button_get_stock_id(GTK_TOOL_BUTTON(widgets.run_button)), "gtk-execute")) return;
 
 	// use the run button also as stop button
 	if (stop)
 	{
-		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->run_button), "gtk-stop");
+		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(widgets.run_button), "gtk-stop");
 
 		if (menuitem != NULL)
 		{
@@ -1710,7 +1727,7 @@ static void set_stop_button(gboolean stop)
 	}
 	else
 	{
-		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(app->run_button), "gtk-execute");
+		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(widgets.run_button), "gtk-execute");
 
 		if (menuitem != NULL)
 		{
@@ -1768,7 +1785,7 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx)
 }
 
 
-void
+static void
 on_build_compile_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -1785,7 +1802,7 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
 }
 
 
-void
+static void
 on_build_tex_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -1805,7 +1822,7 @@ on_build_tex_activate                  (GtkMenuItem     *menuitem,
 }
 
 
-void
+static void
 on_build_build_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -1822,7 +1839,7 @@ on_build_build_activate                (GtkMenuItem     *menuitem,
 }
 
 
-void
+static void
 on_build_make_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -1855,7 +1872,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 }
 
 
-void
+static void
 on_build_execute_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -1952,7 +1969,7 @@ static void kill_process(GPid *pid)
 #endif
 
 
-void
+static void
 on_build_next_error                    (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -1966,3 +1983,19 @@ on_build_next_error                    (GtkMenuItem     *menuitem,
 }
 
 
+void build_init()
+{
+	widgets.compile_button = lookup_widget(app->window, "toolbutton13");
+	widgets.run_button = lookup_widget(app->window, "toolbutton26");
+
+#ifdef G_OS_WIN32
+	// hide build support items, at least until they are available for Windows
+	gtk_widget_hide(widgets.compile_button);
+	{
+		GtkWidget *compiler_tab;
+		compiler_tab = gtk_notebook_get_tab_label(GTK_NOTEBOOK(msgwindow.notebook),
+			gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER));
+		gtk_widget_set_sensitive(compiler_tab, FALSE);
+	}
+#endif
+}

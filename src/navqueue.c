@@ -30,6 +30,7 @@
 #include "sciwrappers.h"
 #include "document.h"
 #include "utils.h"
+#include "support.h"
 
 
 // for the navigation history queue
@@ -41,14 +42,20 @@ typedef struct
 	gint line;	// line is counted with 1 as the first line, not 0
 } filepos;
 
-GQueue *navigation_queue;
-guint nav_queue_pos;
+static GQueue *navigation_queue;
+static guint nav_queue_pos;
+
+static GtkWidget *navigation_buttons[2];
+
 
 
 void navqueue_init()
 {
 	navigation_queue = g_queue_new();
 	nav_queue_pos = 0;
+
+	navigation_buttons[0] = lookup_widget(app->window, "toolbutton_back");
+	navigation_buttons[1] = lookup_widget(app->window, "toolbutton_forward");
 }
 
 
@@ -66,23 +73,23 @@ static void adjust_buttons()
 {
 	if (g_queue_get_length(navigation_queue) < 2)
 	{
-		gtk_widget_set_sensitive(app->navigation_buttons[0], FALSE);
-		gtk_widget_set_sensitive(app->navigation_buttons[1], FALSE);
+		gtk_widget_set_sensitive(navigation_buttons[0], FALSE);
+		gtk_widget_set_sensitive(navigation_buttons[1], FALSE);
 		return;
 	}
 	if (nav_queue_pos == 0)
 	{
-		gtk_widget_set_sensitive(app->navigation_buttons[0], TRUE);
-		gtk_widget_set_sensitive(app->navigation_buttons[1], FALSE);
+		gtk_widget_set_sensitive(navigation_buttons[0], TRUE);
+		gtk_widget_set_sensitive(navigation_buttons[1], FALSE);
 		return;
 	}
 	// forward should be sensitive since where not at the start
-	gtk_widget_set_sensitive(app->navigation_buttons[1], TRUE);
+	gtk_widget_set_sensitive(navigation_buttons[1], TRUE);
 
 	// back should be sensitive if there's a place to go back to
 	(nav_queue_pos < g_queue_get_length(navigation_queue) - 1) ?
-		gtk_widget_set_sensitive(app->navigation_buttons[0], TRUE) :
-			gtk_widget_set_sensitive(app->navigation_buttons[0], FALSE);
+		gtk_widget_set_sensitive(navigation_buttons[0], TRUE) :
+			gtk_widget_set_sensitive(navigation_buttons[0], FALSE);
 }
 
 

@@ -556,7 +556,7 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 
 	styBrace = sci_get_style_at(sci, pos);
 
-	if (utils_is_opening_brace(chBrace))
+	if (utils_is_opening_brace(chBrace, editor_prefs.brace_match_ltgt))
 		direction = 1;
 
 	pos = pos + direction;
@@ -690,7 +690,8 @@ static gint find_previous_brace(ScintillaObject *sci, gint pos)
 	{
 		c = SSM(sci, SCI_GETCHARAT, pos, 0);
 		pos--;
-		if (utils_is_opening_brace(c)) return pos;
+		if (utils_is_opening_brace(c, editor_prefs.brace_match_ltgt))
+			return pos;
 	}
 	return -1;
 }
@@ -1908,10 +1909,10 @@ void editor_highlight_braces(ScintillaObject *sci, gint cur_pos)
 	gint brace_pos = cur_pos - 1;
 	gint end_pos;
 
-	if (! utils_isbrace(sci_get_char_at(sci, brace_pos)))
+	if (! utils_isbrace(sci_get_char_at(sci, brace_pos), editor_prefs.brace_match_ltgt))
 	{
 		brace_pos++;
-		if (! utils_isbrace(sci_get_char_at(sci, brace_pos)))
+		if (! utils_isbrace(sci_get_char_at(sci, brace_pos), editor_prefs.brace_match_ltgt))
 		{
 			SSM(sci, SCI_BRACEBADLIGHT, -1, 0);
 			return;

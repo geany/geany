@@ -619,7 +619,7 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 	// have to set whitespace after setting wordchars
 	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
 
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, app->autocompletion_max_height, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, editor_prefs.autocompletion_max_height, 0);
 }
 
 

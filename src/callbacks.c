@@ -159,7 +159,7 @@ static void quit_app()
 gboolean
 on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 {
-	app->quitting = TRUE;
+	main_status.quitting = TRUE;
 
 	if (! check_no_unsaved())
 	{
@@ -170,7 +170,7 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 		}
 	}
 	else
-	if (! app->pref_main_confirm_exit ||
+	if (! prefs.confirm_exit ||
 		dialogs_show_question_full(NULL, GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
 			_("Do you really want to quit?")))
 	{
@@ -178,7 +178,7 @@ on_exit_clicked                        (GtkWidget *widget, gpointer gdata)
 		return FALSE;
 	}
 
-	app->quitting = FALSE;
+	main_status.quitting = FALSE;
 	return TRUE;
 }
 
@@ -284,8 +284,8 @@ void
 on_file1_activate                      (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gtk_widget_set_sensitive(app->recent_files_menuitem,
-						g_queue_get_length(app->recent_queue) > 0);
+	gtk_widget_set_sensitive(ui_widgets.recent_files_menuitem,
+						g_queue_get_length(ui_prefs.recent_queue) > 0);
 }
 
 
@@ -507,7 +507,7 @@ on_images_and_text2_activate           (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_BOTH);
-	app->toolbar_icon_style = GTK_TOOLBAR_BOTH;
+	prefs.toolbar_icon_style = GTK_TOOLBAR_BOTH;
 }
 
 
@@ -518,7 +518,7 @@ on_images_only2_activate               (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_ICONS);
-	app->toolbar_icon_style = GTK_TOOLBAR_ICONS;
+	prefs.toolbar_icon_style = GTK_TOOLBAR_ICONS;
 }
 
 
@@ -529,7 +529,7 @@ on_text_only2_activate                 (GtkMenuItem     *menuitem,
 	if (ignore_toolbar_toggle) return;
 
 	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), GTK_TOOLBAR_TEXT);
-	app->toolbar_icon_style = GTK_TOOLBAR_TEXT;
+	prefs.toolbar_icon_style = GTK_TOOLBAR_TEXT;
 }
 
 
@@ -660,7 +660,7 @@ on_toolbar_large_icons1_activate       (GtkMenuItem     *menuitem,
 {
 	if (ignore_toolbar_toggle) return;
 
-	app->toolbar_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
+	prefs.toolbar_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 	ui_update_toolbar_icons(GTK_ICON_SIZE_LARGE_TOOLBAR);
 }
 
@@ -671,7 +671,7 @@ on_toolbar_small_icons1_activate       (GtkMenuItem     *menuitem,
 {
 	if (ignore_toolbar_toggle) return;
 
-	app->toolbar_icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
+	prefs.toolbar_icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
 	ui_update_toolbar_icons(GTK_ICON_SIZE_SMALL_TOOLBAR);
 }
 
@@ -696,7 +696,7 @@ on_zoom_in1_activate                   (GtkMenuItem     *menuitem,
 
 	if (idx >= 0 && doc_list[idx].is_valid)
 	{
-		if (done++ % 3 == 0) sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin,
+		if (done++ % 3 == 0) sci_set_line_numbers(doc_list[idx].sci, editor_prefs.show_linenumber_margin,
 				(sci_get_zoom(doc_list[idx].sci) / 2));
 		sci_zoom_in(doc_list[idx].sci);
 	}
@@ -711,7 +711,7 @@ on_zoom_out1_activate                   (GtkMenuItem     *menuitem,
 	if (idx >= 0 && doc_list[idx].is_valid)
 	{
 		if (sci_get_zoom(doc_list[idx].sci) == 0)
-			sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
+			sci_set_line_numbers(doc_list[idx].sci, editor_prefs.show_linenumber_margin, 0);
 		sci_zoom_out(doc_list[idx].sci);
 	}
 }
@@ -725,7 +725,7 @@ on_normal_size1_activate               (GtkMenuItem     *menuitem,
 	if (idx >= 0 && doc_list[idx].is_valid)
 	{
 		sci_zoom_off(doc_list[idx].sci);
-		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
+		sci_set_line_numbers(doc_list[idx].sci, editor_prefs.show_linenumber_margin, 0);
 	}
 }
 
@@ -767,10 +767,9 @@ on_notebook1_switch_page_after         (GtkNotebook     *notebook,
 	else
 		idx = document_get_n_idx(page_num);
 
-	if (idx >= 0 && app->opening_session_files == FALSE)
+	if (idx >= 0 && main_status.opening_session_files == FALSE)
 	{
-		gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
-
+		treeviews_select_openfiles_item(idx);
 		document_set_text_changed(idx);	// also sets window title and status bar
 		ui_update_popup_reundo_items(idx);
 		ui_document_show_hide(idx); // update the document menu
@@ -859,25 +858,25 @@ toolbar_popup_menu                     (GtkWidget *widget,
 
 		ignore_toolbar_toggle = TRUE;
 
-		switch (app->toolbar_icon_style)
+		switch (prefs.toolbar_icon_style)
 		{
-			case 0: w = lookup_widget(app->toolbar_menu, "images_only2"); break;
-			case 1: w = lookup_widget(app->toolbar_menu, "text_only2"); break;
-			default: w = lookup_widget(app->toolbar_menu, "images_and_text2"); break;
+			case 0: w = lookup_widget(ui_widgets.toolbar_menu, "images_only2"); break;
+			case 1: w = lookup_widget(ui_widgets.toolbar_menu, "text_only2"); break;
+			default: w = lookup_widget(ui_widgets.toolbar_menu, "images_and_text2"); break;
 		}
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
-		switch (app->toolbar_icon_size)
+		switch (prefs.toolbar_icon_size)
 		{
 			case GTK_ICON_SIZE_LARGE_TOOLBAR:
-					widget = lookup_widget(app->toolbar_menu, "large_icons1"); break;
-			default: widget = lookup_widget(app->toolbar_menu, "small_icons1"); break;
+					widget = lookup_widget(ui_widgets.toolbar_menu, "large_icons1"); break;
+			default: widget = lookup_widget(ui_widgets.toolbar_menu, "small_icons1"); break;
 		}
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
 
 		ignore_toolbar_toggle = FALSE;
 
-		gtk_menu_popup(GTK_MENU(app->toolbar_menu), NULL, NULL, NULL, NULL, event->button, event->time);
+		gtk_menu_popup(GTK_MENU(ui_widgets.toolbar_menu), NULL, NULL, NULL, NULL, event->button, event->time);
 
 		return TRUE;
 	}
@@ -915,8 +914,8 @@ on_show_toolbar1_toggled               (GtkCheckMenuItem *checkmenuitem,
 {
 	if (app->ignore_callback) return;
 
-	app->toolbar_visible = (app->toolbar_visible) ? FALSE : TRUE;;
-	ui_widget_show_hide(GTK_WIDGET(app->toolbar), app->toolbar_visible);
+	prefs.toolbar_visible = (prefs.toolbar_visible) ? FALSE : TRUE;;
+	ui_widget_show_hide(GTK_WIDGET(app->toolbar), prefs.toolbar_visible);
 }
 
 
@@ -924,7 +923,7 @@ void
 on_fullscreen1_toggled                 (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	app->fullscreen = (app->fullscreen) ? FALSE : TRUE;
+	ui_prefs.fullscreen = (ui_prefs.fullscreen) ? FALSE : TRUE;
 	ui_set_fullscreen();
 }
 
@@ -935,8 +934,8 @@ on_show_messages_window1_toggled       (GtkCheckMenuItem *checkmenuitem,
 {
 	if (app->ignore_callback) return;
 
-	app->msgwindow_visible = (app->msgwindow_visible) ? FALSE : TRUE;
-	ui_widget_show_hide(lookup_widget(app->window, "scrolledwindow1"), app->msgwindow_visible);
+	ui_prefs.msgwindow_visible = (ui_prefs.msgwindow_visible) ? FALSE : TRUE;
+	ui_widget_show_hide(lookup_widget(app->window, "scrolledwindow1"), ui_prefs.msgwindow_visible);
 }
 
 
@@ -944,7 +943,7 @@ void
 on_markers_margin1_toggled             (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	app->show_markers_margin = (app->show_markers_margin) ? FALSE : TRUE;
+	editor_prefs.show_markers_margin = (editor_prefs.show_markers_margin) ? FALSE : TRUE;
 	ui_show_markers_margin();
 }
 
@@ -953,7 +952,7 @@ void
 on_show_line_numbers1_toggled          (GtkCheckMenuItem *checkmenuitem,
                                         gpointer         user_data)
 {
-	app->show_linenumber_margin = (app->show_linenumber_margin) ? FALSE : TRUE;
+	editor_prefs.show_linenumber_margin = (editor_prefs.show_linenumber_margin) ? FALSE : TRUE;
 	ui_show_linenumber_margin();
 }
 
@@ -1098,7 +1097,7 @@ void
 on_compile_button_clicked              (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	on_build_compile_activate(NULL, NULL);
+	keybindings_cmd(GEANY_KEYS_BUILD_COMPILE);
 }
 
 
@@ -1385,7 +1384,7 @@ on_comments_changelog_activate         (GtkMenuItem     *menuitem,
 	sci_insert_text(doc_list[idx].sci, 0, text);
 	// sets the cursor to the right position to type the changelog text,
 	// the template has 21 chars + length of name and email
-	sci_goto_pos(doc_list[idx].sci, 21 + strlen(app->pref_template_developer) + strlen(app->pref_template_mail), TRUE);
+	sci_goto_pos(doc_list[idx].sci, 21 + strlen(prefs.template_developer) + strlen(prefs.template_mail), TRUE);
 
 	g_free(text);
 }
@@ -1419,8 +1418,8 @@ on_custom_date_dialog_response         (GtkDialog *dialog,
 {
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		g_free(app->custom_date_format);
-		app->custom_date_format = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
+		g_free(ui_prefs.custom_date_format);
+		ui_prefs.custom_date_format = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
 	}
 	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
@@ -1460,19 +1459,19 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 	else if (utils_str_equal(_("yyyy/mm/dd hh:mm:ss"), (gchar*) user_data))
 		format = "%Y/%m/%d %H:%M:%S";
 	else if (utils_str_equal(_("Use Custom Date Format"), (gchar*) user_data))
-		format = app->custom_date_format;
+		format = ui_prefs.custom_date_format;
 	else
 	{
 		// set default value
-		if (utils_str_equal("", app->custom_date_format))
+		if (utils_str_equal("", ui_prefs.custom_date_format))
 		{
-			g_free(app->custom_date_format);
-			app->custom_date_format = g_strdup("%d.%m.%Y");
+			g_free(ui_prefs.custom_date_format);
+			ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
 		}
 
 		dialogs_show_input(_("Custom Date Format"),
 			_("Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function. See \"man strftime\" for more information."),
-			app->custom_date_format,
+			ui_prefs.custom_date_format,
 			G_CALLBACK(on_custom_date_dialog_response),
 			G_CALLBACK(on_custom_date_entry_activate));
 		return;
@@ -1558,7 +1557,7 @@ void
 on_run_button_clicked                  (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	on_build_execute_activate(NULL, NULL);
+	keybindings_cmd(GEANY_KEYS_BUILD_RUN);
 }
 
 
@@ -1634,19 +1633,19 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 
 	if (app->ignore_callback) return;
 
-	if (app->sidebar_visible)
+	if (ui_prefs.sidebar_visible)
 	{
 		// to remember the active page because GTK (e.g. 2.8.18) doesn't do it and shows always
 		// the last page (for unknown reason, with GTK 2.6.4 it works)
 		active_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->treeview_notebook));
 	}
 
-	app->sidebar_visible = ! app->sidebar_visible;
+	ui_prefs.sidebar_visible = ! ui_prefs.sidebar_visible;
 
-	if ((! app->sidebar_openfiles_visible && ! app->sidebar_symbol_visible))
+	if ((! prefs.sidebar_openfiles_visible && ! prefs.sidebar_symbol_visible))
 	{
-		app->sidebar_openfiles_visible = TRUE;
-		app->sidebar_symbol_visible = TRUE;
+		prefs.sidebar_openfiles_visible = TRUE;
+		prefs.sidebar_symbol_visible = TRUE;
 	}
 
 	ui_treeviews_show_hide(TRUE);
@@ -1998,7 +1997,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 	}
 	else
 	{
-		command = g_strdup(app->context_action_cmd);
+		command = g_strdup(prefs.context_action_cmd);
 	}
 
 	// substitute the wildcard %s and run the command if it is non empty
@@ -2030,7 +2029,7 @@ on_menu_toggle_all_additional_widgets1_activate
 	if (hide_all == -1)
 	{
 		if (! gtk_check_menu_item_get_active(msgw) &&
-			! app->show_notebook_tabs &&
+			! prefs.show_notebook_tabs &&
 			! gtk_check_menu_item_get_active(toolbari))
 		{
 			hide_all = TRUE;
@@ -2046,8 +2045,8 @@ on_menu_toggle_all_additional_widgets1_activate
 		if (gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		app->show_notebook_tabs = FALSE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), app->show_notebook_tabs);
+		prefs.show_notebook_tabs = FALSE;
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), prefs.show_notebook_tabs);
 
 		ui_statusbar_showhide(FALSE);
 
@@ -2060,8 +2059,8 @@ on_menu_toggle_all_additional_widgets1_activate
 		if (! gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		app->show_notebook_tabs = TRUE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), app->show_notebook_tabs);
+		prefs.show_notebook_tabs = TRUE;
+		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), prefs.show_notebook_tabs);
 
 		ui_statusbar_showhide(TRUE);
 
@@ -2089,7 +2088,7 @@ on_back_activate                       (GtkMenuItem     *menuitem,
 
 gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
 {
-	if (app->auto_focus && ! GTK_WIDGET_HAS_FOCUS(widget))
+	if (prefs.auto_focus && ! GTK_WIDGET_HAS_FOCUS(widget))
 		gtk_widget_grab_focus(widget);
 
 	return FALSE;

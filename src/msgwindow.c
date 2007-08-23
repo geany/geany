@@ -31,6 +31,7 @@
 #include "geany.h"
 
 #include "support.h"
+#include "prefs.h"
 #include "callbacks.h"
 #include "msgwindow.h"
 #include "ui_utils.h"
@@ -38,6 +39,7 @@
 #include "document.h"
 #include "filetypes.h"
 #include "build.h"
+#include "main.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -115,7 +117,7 @@ static void prepare_status_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_status), FALSE);
 
-	pfd = pango_font_description_from_string(app->msgwin_font);
+	pfd = pango_font_description_from_string(prefs.msgwin_font);
 	gtk_widget_modify_font(msgwindow.tree_status, pfd);
 	pango_font_description_free(pfd);
 
@@ -142,7 +144,7 @@ static void prepare_msg_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
 
-	pfd = pango_font_description_from_string(app->msgwin_font);
+	pfd = pango_font_description_from_string(prefs.msgwin_font);
 	gtk_widget_modify_font(msgwindow.tree_msg, pfd);
 	pango_font_description_free(pfd);
 
@@ -174,7 +176,7 @@ static void prepare_compiler_tree_view(void)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
 
-	pfd = pango_font_description_from_string(app->msgwin_font);
+	pfd = pango_font_description_from_string(prefs.msgwin_font);
 	gtk_widget_modify_font(msgwindow.tree_compiler, pfd);
 	pango_font_description_free(pfd);
 
@@ -224,7 +226,7 @@ void msgwin_compiler_add(gint msg_color, const gchar *msg)
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
 	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, msg, -1);
 
-	if (app->msgwindow_visible)
+	if (ui_prefs.msgwindow_visible)
 	{
 		path = gtk_tree_model_get_path(
 			gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_compiler)), &iter);
@@ -239,7 +241,7 @@ void msgwin_compiler_add(gint msg_color, const gchar *msg)
 
 void msgwin_show_hide(gboolean show)
 {
-	app->msgwindow_visible = show;
+	ui_prefs.msgwindow_visible = show;
 	app->ignore_callback = TRUE;
 	gtk_check_menu_item_set_active(
 		GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1")),
@@ -268,7 +270,7 @@ void msgwin_msg_add(gint line, gint idx, const gchar *string)
 	GtkTreeIter iter;
 	static gint state = 0;
 
-	if (! app->msgwindow_visible) msgwin_show_hide(TRUE);
+	if (! ui_prefs.msgwindow_visible) msgwin_show_hide(TRUE);
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
 	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2,
@@ -292,7 +294,7 @@ void msgwin_status_add(const gchar *format, ...)
 	va_end(args);
 
 	// display status message in status bar
-	if (! app->pref_main_suppress_status_messages)
+	if (! prefs.suppress_status_messages)
 		ui_set_statusbar("%s", string);
 
 	// add a timestamp to status messages
@@ -309,12 +311,12 @@ void msgwin_status_add(const gchar *format, ...)
 		((state++ % 2) == 0) ? &white : &dark, 1, statusmsg, -1);
 	g_free(statusmsg);
 
-	if (app->main_window_realized)
+	if (main_status.main_window_realized)
 	{
 		GtkTreePath *path = gtk_tree_model_get_path(gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_status)), &iter);
 
 		gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(msgwindow.tree_status), path, NULL, FALSE, 0.0, 0.0);
-		if (app->switch_msgwin_pages) gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
+		if (prefs.switch_msgwin_pages) gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 		gtk_tree_path_free(path);
 	}
 }

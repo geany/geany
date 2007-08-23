@@ -1,5 +1,5 @@
 /*
- *      treeviws.h
+ *      treeviews.h - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
  *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
@@ -27,13 +27,15 @@
 #define GEANY_TREEVIEWS_H 1
 
 
-struct SidebarTreeviews
+typedef struct SidebarTreeviews
 {
-	GtkListStore	*store_openfiles;
 	GtkWidget		*tree_openfiles;
+	GtkWidget		*default_tag_tree;
 	GtkWidget		*popup_taglist;
 	GtkWidget		*popup_openfiles;
-} tv;
+} SidebarTreeviews;
+
+extern SidebarTreeviews tv;
 
 enum
 {
@@ -43,9 +45,9 @@ enum
 	SYMBOLS_N_COLUMNS,
 };
 
-void treeviews_update_tag_list(gint idx, gboolean update);
+void treeviews_init();
 
-void treeviews_prepare_openfiles();
+void treeviews_update_tag_list(gint idx, gboolean update);
 
 void treeviews_openfiles_add(gint idx);
 
@@ -53,15 +55,8 @@ void treeviews_openfiles_update(gint idx);
 
 void treeviews_openfiles_update_all();
 
+void treeviews_select_openfiles_item(gint idx);
+
 void treeviews_remove_document(gint idx);
-
-void treeviews_create_openfiles_popup_menu();
-
-void treeviews_create_taglist_popup_menu();
-
-/* compares the given data (GINT_TO_PONTER(idx)) with the idx from the selected row of openfiles
- * treeview, in case of a match the row is selected and TRUE is returned
- * (called indirectly from gtk_tree_model_foreach()) */
-gboolean treeviews_find_node(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data);
 
 #endif

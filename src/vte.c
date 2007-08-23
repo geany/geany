@@ -327,7 +327,7 @@ static void vte_register_symbols(GModule *mod)
 
 void vte_apply_user_settings(void)
 {
-	if (! app->msgwindow_visible) return;
+	if (! ui_prefs.msgwindow_visible) return;
 	//if (! GTK_WIDGET_REALIZED(vc->vte)) gtk_widget_realize(vc->vte);
 	vf->vte_terminal_set_scrollback_lines(VTE_TERMINAL(vc->vte), vc->scrollback_lines);
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
@@ -369,7 +369,7 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 
 			prefs_show_dialog();
 
-			notebook = lookup_widget(app->prefs_dialog, "notebook2");
+			notebook = lookup_widget(ui_widgets.prefs_dialog, "notebook2");
 
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), vte_prefs_tab_num);
 			break;
@@ -539,8 +539,8 @@ void vte_append_preferences_tab()
 		GtkTooltips *tooltips;
 		GtkObject *spin_scrollback_adj;
 
-		tooltips = GTK_TOOLTIPS(lookup_widget(app->prefs_dialog, "tooltips"));
-		notebook = lookup_widget(app->prefs_dialog, "notebook2");
+		tooltips = GTK_TOOLTIPS(lookup_widget(ui_widgets.prefs_dialog, "tooltips"));
+		notebook = lookup_widget(ui_widgets.prefs_dialog, "notebook2");
 
 		frame = ui_frame_new_with_alignment(_("Terminal plugin"), &alignment);
 		vbox = gtk_vbox_new(FALSE, 12);
@@ -676,27 +676,27 @@ void vte_append_preferences_tab()
 
 		gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
 
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "font_term",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "font_term",
 				gtk_widget_ref(font_term),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "color_fore",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "color_fore",
 				gtk_widget_ref(color_fore),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "color_back",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "color_back",
 				gtk_widget_ref(color_back),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "spin_scrollback",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "spin_scrollback",
 				gtk_widget_ref(spin_scrollback),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "entry_emulation",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "entry_emulation",
 				gtk_widget_ref(entry_emulation),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "entry_shell",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "entry_shell",
 				gtk_widget_ref(entry_shell),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_key",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_key",
 				gtk_widget_ref(check_scroll_key),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_scroll_out",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_out",
 				gtk_widget_ref(check_scroll_out),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_ignore_menu_key",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_ignore_menu_key",
 				gtk_widget_ref(check_ignore_menu_key),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_follow_path",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_follow_path",
 				gtk_widget_ref(check_follow_path),	(GDestroyNotify) gtk_widget_unref);
-		g_object_set_data_full(G_OBJECT(app->prefs_dialog), "check_run_in_vte",
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_run_in_vte",
 				gtk_widget_ref(check_run_in_vte),	(GDestroyNotify) gtk_widget_unref);
 
 		gtk_widget_show_all(frame);

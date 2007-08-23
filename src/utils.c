@@ -45,6 +45,7 @@
 
 #include <glib/gstdio.h>
 
+#include "prefs.h"
 #include "support.h"
 #include "document.h"
 #include "filetypes.h"
@@ -62,7 +63,7 @@ void utils_start_browser(const gchar *uri)
 #else
 	const gchar *argv[3];
 
-	argv[0] = app->tools_browser_cmd;
+	argv[0] = prefs.tools_browser_cmd;
 	argv[1] = uri;
 	argv[2] = NULL;
 
@@ -147,14 +148,13 @@ gint utils_get_line_endings(gchar* buffer, glong size)
 }
 
 
-gboolean utils_isbrace(gchar c)
+gboolean utils_isbrace(gchar c, gboolean include_angles)
 {
 	switch (c)
 	{
-		// match < and > only if desired, because I don't like it, but some people do
 		case '<':
 		case '>':
-		return app->brace_match_ltgt;
+		return include_angles;
 
 		case '(':
 		case ')':
@@ -167,13 +167,12 @@ gboolean utils_isbrace(gchar c)
 }
 
 
-gboolean utils_is_opening_brace(gchar c)
+gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 {
 	switch (c)
 	{
-		// match < only if desired, because I don't like it, but some people do
 		case '<':
-		return app->brace_match_ltgt;
+		return include_angles;
 
 		case '(':
 		case '{':
@@ -1063,7 +1062,7 @@ gchar *utils_get_current_file_dir()
 /* very simple convenience function */
 void utils_beep()
 {
-	if (app->beep_on_errors) gdk_beep();
+	if (prefs.beep_on_errors) gdk_beep();
 }
 
 

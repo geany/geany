@@ -24,6 +24,54 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+/* User Interface settings not shown in the Prefs dialog. */
+typedef struct UIPrefs
+{
+	/* State of the main window when Geany was closed */
+	gint		geometry[5];	// 0:x, 1:y, 2:width, 3:height, flag for maximized state
+	gboolean	fullscreen;
+	gboolean	sidebar_visible;
+	gboolean	msgwindow_visible;
+
+	/* Menu-item related data */
+	GQueue		*recent_queue;
+	gchar		*custom_date_format;
+	gchar		**custom_commands;
+}
+UIPrefs;
+
+extern UIPrefs ui_prefs;
+
+
+/* Less commonly used widgets */
+typedef struct UIWidgets
+{
+	/* menu widgets */
+	GtkWidget	*toolbar_menu;
+	GtkWidget	*new_file_menu;
+	GtkWidget	*recent_files_menuitem;
+	GtkWidget	*recent_files_menubar;
+	GtkWidget	*recent_files_toolbar;
+	GtkWidget	*menu_insert_include_items[2];
+	GtkWidget	*popup_goto_items[3];
+	GtkWidget	*popup_items[5];
+	GtkWidget	*menu_copy_items[5];
+	GtkWidget	*redo_items[3];
+	GtkWidget	*undo_items[3];
+	GtkWidget	*save_buttons[4];
+
+	/* dialogs */
+	GtkWidget	*open_colorsel;
+	GtkWidget	*open_fontsel;
+	GtkWidget	*open_filesel;
+	GtkWidget	*save_filesel;
+	GtkWidget	*prefs_dialog;
+}
+UIWidgets;
+
+extern UIWidgets ui_widgets;
+
+
 /* The following block of functions are more generic functions and closely related to
  * certain GTK+ widgets. */
 

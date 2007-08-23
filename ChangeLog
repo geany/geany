@@ -1,3 +1,32 @@
+2007-08-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/export.c, src/templates.c, src/build.c, src/utils.c,
+   src/ui_utils.h, src/build.h, src/utils.h, src/highlighting.c,
+   src/keybindings.c, src/tools.c, src/prefs.c, src/dialogs.c,
+   src/prefs.h, src/navqueue.c, src/plugindata.h, src/geany.h,
+   src/treeviews.c, src/msgwindow.c, src/callbacks.c, src/notebook.c,
+   src/treeviews.h, src/keyfile.c, src/vte.c, src/search.c,
+   src/document.c, src/plugins.c, src/main.c, src/editor.c,
+   src/symbols.c, src/main.h, src/editor.h, src/ui_utils.c:
+   Rename MyApp -> GeanyApp.
+   Move most GeanyApp fields into:
+   GeanyPrefs for (most) Preferences dialog fields;
+   UIPrefs for non-Prefs dialog visual settings;
+   UIWidgets for less commonly used widgets such as menuitems and
+   dialogs;
+   GeanyStatus for various states the application can be in.
+   Move some GeanyApp fields into EditorPrefs (and one into each of
+   CommandLineOptions and SidebarTreeviews).
+   Add plugin API prefs field.
+   Move disabling build widgets on Windows to build_init().
+   Make build callbacks static.
+   Add treeviews_init() to prepare popup menus and open files treeview.
+   Replace treeviews_find_node() with treeviews_select_openfiles_item().
+   Make utils_isbrace() and utils_is_opening_brace() take an
+   'include_angles' argument (to separate from editor_prefs).
+   Make 'Goto matching brace' keybinding include <> angle brackets.
+
+
 2007-08-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/export.c:

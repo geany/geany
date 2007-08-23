@@ -27,6 +27,7 @@
 
 #include "geany.h"
 #include "notebook.h"
+#include "prefs.h"
 #include "document.h"
 #include "ui_utils.h"
 #include "treeviews.h"
@@ -335,7 +336,7 @@ gint notebook_new_tab(gint doc_idx)
 	this->tabmenu_label = gtk_label_new(title);
 	gtk_misc_set_alignment(GTK_MISC(this->tabmenu_label), 0.0, 0);
 
-	if (app->tab_order_ltr)
+	if (prefs.tab_order_ltr)
 		tabnum = gtk_notebook_append_page_menu(GTK_NOTEBOOK(app->notebook), page,
 			hbox, this->tabmenu_label);
 	else

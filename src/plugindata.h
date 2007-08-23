@@ -68,12 +68,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 12;
+static const gint api_version = 13;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 3;
+static const gint abi_version = 4;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
@@ -132,10 +132,11 @@ PluginFields;
  * making changes. */
 typedef struct GeanyData
 {
-	MyApp		*app;	// Geany application data fields
+	GeanyApp	*app;	// Geany application data fields
 	GtkWidget	*tools_menu;	// Almost all plugins should add menu items to the Tools menu only
 	GArray		*doc_array;	// array of document pointers
 	struct filetype		**filetypes;
+	struct GeanyPrefs	*prefs;
 	struct EditorPrefs	*editor_prefs;
 
 	struct DocumentFuncs	*document;

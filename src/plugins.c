@@ -45,6 +45,7 @@
 #include "editor.h"
 #include "dialogs.h"
 #include "msgwindow.h"
+#include "prefs.h"
 #include "geanyobject.h"
 
 #ifdef G_OS_WIN32
@@ -156,6 +157,7 @@ static GeanyData geany_data = {
 	NULL,
 	NULL,
 	NULL,
+	NULL,
 
 	&doc_funcs,
 	&sci_funcs,
@@ -175,6 +177,7 @@ geany_data_init()
 	geany_data.tools_menu = lookup_widget(app->window, "tools1_menu");
 	geany_data.doc_array = doc_array;
 	geany_data.filetypes = filetypes;
+	geany_data.prefs = &prefs;
 	geany_data.editor_prefs = &editor_prefs;
 }
 

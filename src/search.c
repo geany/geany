@@ -30,6 +30,7 @@
 
 #include "geany.h"
 #include "search.h"
+#include "prefs.h"
 #include "support.h"
 #include "utils.h"
 #include "msgwindow.h"
@@ -854,7 +855,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				document_find_text(idx, search_data.text, search_data.flags,
 					(response == GEANY_RESPONSE_FIND_PREVIOUS), TRUE, GTK_WIDGET(widgets.find_dialog));
 				check_close = FALSE;
-				if (app->pref_main_suppress_search_dialogs)
+				if (prefs.suppress_search_dialogs)
 					check_close = TRUE;
 				break;
 
@@ -1131,10 +1132,10 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 
 	if (! search_text || ! *search_text || ! dir) return TRUE;
 
-	if (! g_file_test(app->tools_grep_cmd, G_FILE_TEST_IS_EXECUTABLE))
+	if (! g_file_test(prefs.tools_grep_cmd, G_FILE_TEST_IS_EXECUTABLE))
 	{
 		msgwin_status_add(_("Cannot execute grep tool '%s';"
-			" check the path setting in Preferences."), app->tools_grep_cmd);
+			" check the path setting in Preferences."), prefs.tools_grep_cmd);
 		return FALSE;
 	}
 
@@ -1144,14 +1145,14 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 	// set grep command and options
 	argv_prefix = g_new0(gchar*, 1 + opts_argv_len + 3 + 1);	// last +1 for recursive arg
 
-	argv_prefix[0] = g_strdup(app->tools_grep_cmd);
+	argv_prefix[0] = g_strdup(prefs.tools_grep_cmd);
 	for (i = 0; i < opts_argv_len; i++)
 	{
 		argv_prefix[i + 1] = g_strdup(opts_argv[i]);
 	}
 	g_strfreev(opts_argv);
 
-	i++;	// correct for app->tools_grep_cmd
+	i++;	// correct for prefs.tools_grep_cmd
 	argv_prefix[i++] = g_strdup("--");
 	argv_prefix[i++] = g_strdup(search_text);
 
@@ -1199,7 +1200,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 		g_child_watch_add(child_pid, search_close_pid, NULL);
 
 		str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
-			app->tools_grep_cmd, opts, search_text, dir);
+			prefs.tools_grep_cmd, opts, search_text, dir);
 		utf8_str = utils_get_utf8_from_locale(str);
 		msgwin_msg_add(-1, -1, utf8_str);
 		utils_free_pointers(str, utf8_str, NULL);

@@ -40,6 +40,7 @@
 #endif
 
 #include "main.h"
+#include "prefs.h"
 #include "interface.h"
 #include "support.h"
 #include "callbacks.h"
@@ -80,11 +81,11 @@
 #endif
 
 
-MyApp *app;
+GeanyApp *app;
 
+GeanyStatus	 main_status;
 CommandLineOptions cl_options;	// fields initialised in parse_command_line_options
 
-MainPrefs main_prefs;
 
 static gboolean want_plugins;
 
@@ -155,21 +156,21 @@ static void apply_settings(void)
 	ui_update_fold_items();
 
 	// toolbar, message window and sidebar are by default visible, so don't change it if it is true
-	if (! app->toolbar_visible)
+	if (! prefs.toolbar_visible)
 	{
 		app->ignore_callback = TRUE;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_toolbar1")), FALSE);
 		gtk_widget_hide(app->toolbar);
 		app->ignore_callback = FALSE;
 	}
-	if (! app->msgwindow_visible)
+	if (! ui_prefs.msgwindow_visible)
 	{
 		app->ignore_callback = TRUE;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_messages_window1")), FALSE);
 		gtk_widget_hide(lookup_widget(app->window, "scrolledwindow1"));
 		app->ignore_callback = FALSE;
 	}
-	if (! app->sidebar_visible)
+	if (! ui_prefs.sidebar_visible)
 	{
 		app->ignore_callback = TRUE;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_show_sidebar1")), FALSE);
@@ -177,60 +178,60 @@ static void apply_settings(void)
 	}
 	ui_treeviews_show_hide(TRUE);
 	// sets the icon style of the toolbar
-	switch (app->toolbar_icon_style)
+	switch (prefs.toolbar_icon_style)
 	{
 		case GTK_TOOLBAR_BOTH:
 		{
 			//gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "images_and_text1")), TRUE);
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->toolbar_menu, "images_and_text2")), TRUE);
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "images_and_text2")), TRUE);
 			break;
 		}
 		case GTK_TOOLBAR_ICONS:
 		{
 			//gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "images_only1")), TRUE);
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->toolbar_menu, "images_only2")), TRUE);
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "images_only2")), TRUE);
 			break;
 		}
 		case GTK_TOOLBAR_TEXT:
 		{
 			//gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "text_only1")), TRUE);
-			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->toolbar_menu, "text_only2")), TRUE);
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(ui_widgets.toolbar_menu, "text_only2")), TRUE);
 			break;
 		}
 	}
-	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), app->toolbar_icon_style);
+	gtk_toolbar_set_style(GTK_TOOLBAR(app->toolbar), prefs.toolbar_icon_style);
 
 	// sets the icon size of the toolbar, use user preferences (.gtkrc) if not set
-	if (app->toolbar_icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
-		app->toolbar_icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR)
+	if (prefs.toolbar_icon_size == GTK_ICON_SIZE_SMALL_TOOLBAR ||
+		prefs.toolbar_icon_size == GTK_ICON_SIZE_LARGE_TOOLBAR)
 	{
-		gtk_toolbar_set_icon_size(GTK_TOOLBAR(app->toolbar), app->toolbar_icon_size);
+		gtk_toolbar_set_icon_size(GTK_TOOLBAR(app->toolbar), prefs.toolbar_icon_size);
 	}
-	ui_update_toolbar_icons(app->toolbar_icon_size);
+	ui_update_toolbar_icons(prefs.toolbar_icon_size);
 
 	// line number and markers margin are by default enabled
-	if (! app->show_markers_margin)
+	if (! editor_prefs.show_markers_margin)
 	{
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_markers_margin1")), FALSE);
-		app->show_markers_margin = FALSE;
+		editor_prefs.show_markers_margin = FALSE;
 	}
-	if (! app->show_linenumber_margin)
+	if (! editor_prefs.show_linenumber_margin)
 	{
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_linenumber_margin1")), FALSE);
-		app->show_linenumber_margin = FALSE;
+		editor_prefs.show_linenumber_margin = FALSE;
 	}
 
 	// interprets the saved window geometry
-	if (app->pref_main_save_winpos && app->geometry[0] != -1)
+	if (prefs.save_winpos && ui_prefs.geometry[0] != -1)
 	{
-		gtk_window_move(GTK_WINDOW(app->window), app->geometry[0], app->geometry[1]);
-		gtk_window_set_default_size(GTK_WINDOW(app->window), app->geometry[2], app->geometry[3]);
-		if (app->geometry[4] == 1)
+		gtk_window_move(GTK_WINDOW(app->window), ui_prefs.geometry[0], ui_prefs.geometry[1]);
+		gtk_window_set_default_size(GTK_WINDOW(app->window), ui_prefs.geometry[2], ui_prefs.geometry[3]);
+		if (ui_prefs.geometry[4] == 1)
 			gtk_window_maximize(GTK_WINDOW(app->window));
 	}
 
 	// hide statusbar if desired
-	if (! app->statusbar_visible)
+	if (! prefs.statusbar_visible)
 	{
 		gtk_widget_hide(app->statusbar);
 	}
@@ -245,17 +246,17 @@ static void apply_settings(void)
 
 	// connect the toolbar dropdown menu for the new button
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(
-			lookup_widget(app->window, "menutoolbutton1")), app->new_file_menu);
+			lookup_widget(app->window, "menutoolbutton1")), ui_widgets.new_file_menu);
 
 	// set the tab placements of the notebooks
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), app->tab_pos_editor);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), app->tab_pos_msgwin);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), app->tab_pos_sidebar);
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->notebook), prefs.tab_pos_editor);
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), prefs.tab_pos_msgwin);
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(app->treeview_notebook), prefs.tab_pos_sidebar);
 
 	ui_update_toolbar_items();
 
 	// whether to show notebook tabs or not
-	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), app->show_notebook_tabs);
+	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(app->notebook), prefs.show_notebook_tabs);
 }
 
 
@@ -264,71 +265,66 @@ static void main_init(void)
 	// inits
 	app->window				= NULL;
 	app->project			= NULL;
-	app->open_fontsel		= NULL;
-	app->open_colorsel		= NULL;
-	app->open_filesel		= NULL;
-	app->save_filesel		= NULL;
-	app->prefs_dialog		= NULL;
-	app->default_tag_tree	= NULL;
-	app->main_window_realized= FALSE;
-	app->tab_order_ltr		= FALSE;
-	app->quitting			= FALSE;
+	ui_widgets.open_fontsel		= NULL;
+	ui_widgets.open_colorsel		= NULL;
+	ui_widgets.open_filesel		= NULL;
+	ui_widgets.save_filesel		= NULL;
+	ui_widgets.prefs_dialog		= NULL;
+	tv.default_tag_tree	= NULL;
+	main_status.main_window_realized= FALSE;
+	prefs.tab_order_ltr		= FALSE;
+	main_status.quitting			= FALSE;
 	app->ignore_callback	= FALSE;
 	app->tm_workspace				= tm_get_workspace();
-	app->recent_queue				= g_queue_new();
-	app->opening_session_files		= FALSE;
+	ui_prefs.recent_queue				= g_queue_new();
+	main_status.opening_session_files		= FALSE;
 
 	app->window = create_window1();
-	app->new_file_menu = gtk_menu_new();
-	app->recent_files_toolbar = gtk_menu_new();
-	app->recent_files_menuitem = lookup_widget(app->window, "recent_files1");
-	app->recent_files_menubar = gtk_menu_new();
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(app->recent_files_menuitem),
-							app->recent_files_menubar);
+	ui_widgets.new_file_menu = gtk_menu_new();
+	ui_widgets.recent_files_toolbar = gtk_menu_new();
+	ui_widgets.recent_files_menuitem = lookup_widget(app->window, "recent_files1");
+	ui_widgets.recent_files_menubar = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
+							ui_widgets.recent_files_menubar);
 
-	// store important pointers in the MyApp structure
+	// store important pointers in the GeanyApp structure
 	app->toolbar = lookup_widget(app->window, "toolbar1");
-	app->tagbar = lookup_widget(app->window, "scrolledwindow2");
 	app->treeview_notebook = lookup_widget(app->window, "notebook3");
 	app->notebook = lookup_widget(app->window, "notebook1");
 	app->statusbar = lookup_widget(app->window, "statusbar");
 	app->popup_menu = create_edit_menu1();
-	app->toolbar_menu = create_toolbar_popup_menu1();
-	app->compile_button = lookup_widget(app->window, "toolbutton13");
-	app->run_button = lookup_widget(app->window, "toolbutton26");
-	app->popup_goto_items[0] = lookup_widget(app->popup_menu, "goto_tag_definition1");
-	app->popup_goto_items[1] = lookup_widget(app->popup_menu, "goto_tag_declaration1");
-	app->popup_goto_items[2] = lookup_widget(app->popup_menu, "find_usage1");
-	app->popup_items[0] = lookup_widget(app->popup_menu, "cut1");
-	app->popup_items[1] = lookup_widget(app->popup_menu, "copy1");
-	app->popup_items[2] = lookup_widget(app->popup_menu, "delete1");
-	app->popup_items[3] = lookup_widget(app->popup_menu, "to_lower_case1");
-	app->popup_items[4] = lookup_widget(app->popup_menu, "to_upper_case1");
-	app->menu_copy_items[0] = lookup_widget(app->window, "menu_cut1");
-	app->menu_copy_items[1] = lookup_widget(app->window, "menu_copy1");
-	app->menu_copy_items[2] = lookup_widget(app->window, "menu_delete1");
-	app->menu_copy_items[3] = lookup_widget(app->window, "menu_to_lower_case2");
-	app->menu_copy_items[4] = lookup_widget(app->window, "menu_to_upper_case2");
-	app->menu_insert_include_item[0] = lookup_widget(app->popup_menu, "insert_include1");
-	app->menu_insert_include_item[1] = lookup_widget(app->window, "insert_include2");
-	app->save_buttons[0] = lookup_widget(app->window, "menu_save1");
-	app->save_buttons[1] = lookup_widget(app->window, "toolbutton10");
-	app->save_buttons[2] = lookup_widget(app->window, "menu_save_all1");
-	app->save_buttons[3] = lookup_widget(app->window, "toolbutton22");
-	app->navigation_buttons[0] = lookup_widget(app->window, "toolbutton_back");
-	app->navigation_buttons[1] = lookup_widget(app->window, "toolbutton_forward");
-	app->redo_items[0] = lookup_widget(app->popup_menu, "redo1");
-	app->redo_items[1] = lookup_widget(app->window, "menu_redo2");
-	app->redo_items[2] = lookup_widget(app->window, "toolbutton_redo");
-	app->undo_items[0] = lookup_widget(app->popup_menu, "undo1");
-	app->undo_items[1] = lookup_widget(app->window, "menu_undo2");
-	app->undo_items[2] = lookup_widget(app->window, "toolbutton_undo");
+	ui_widgets.toolbar_menu = create_toolbar_popup_menu1();
+	ui_widgets.popup_goto_items[0] = lookup_widget(app->popup_menu, "goto_tag_definition1");
+	ui_widgets.popup_goto_items[1] = lookup_widget(app->popup_menu, "goto_tag_declaration1");
+	ui_widgets.popup_goto_items[2] = lookup_widget(app->popup_menu, "find_usage1");
+	ui_widgets.popup_items[0] = lookup_widget(app->popup_menu, "cut1");
+	ui_widgets.popup_items[1] = lookup_widget(app->popup_menu, "copy1");
+	ui_widgets.popup_items[2] = lookup_widget(app->popup_menu, "delete1");
+	ui_widgets.popup_items[3] = lookup_widget(app->popup_menu, "to_lower_case1");
+	ui_widgets.popup_items[4] = lookup_widget(app->popup_menu, "to_upper_case1");
+	ui_widgets.menu_copy_items[0] = lookup_widget(app->window, "menu_cut1");
+	ui_widgets.menu_copy_items[1] = lookup_widget(app->window, "menu_copy1");
+	ui_widgets.menu_copy_items[2] = lookup_widget(app->window, "menu_delete1");
+	ui_widgets.menu_copy_items[3] = lookup_widget(app->window, "menu_to_lower_case2");
+	ui_widgets.menu_copy_items[4] = lookup_widget(app->window, "menu_to_upper_case2");
+	ui_widgets.menu_insert_include_items[0] = lookup_widget(app->popup_menu, "insert_include1");
+	ui_widgets.menu_insert_include_items[1] = lookup_widget(app->window, "insert_include2");
+	ui_widgets.save_buttons[0] = lookup_widget(app->window, "menu_save1");
+	ui_widgets.save_buttons[1] = lookup_widget(app->window, "toolbutton10");
+	ui_widgets.save_buttons[2] = lookup_widget(app->window, "menu_save_all1");
+	ui_widgets.save_buttons[3] = lookup_widget(app->window, "toolbutton22");
+	ui_widgets.redo_items[0] = lookup_widget(app->popup_menu, "redo1");
+	ui_widgets.redo_items[1] = lookup_widget(app->window, "menu_redo2");
+	ui_widgets.redo_items[2] = lookup_widget(app->window, "toolbutton_redo");
+	ui_widgets.undo_items[0] = lookup_widget(app->popup_menu, "undo1");
+	ui_widgets.undo_items[1] = lookup_widget(app->window, "menu_undo2");
+	ui_widgets.undo_items[2] = lookup_widget(app->window, "toolbutton_undo");
 
 	ui_init();
 
 	// set widget names for matching with .gtkrc-2.0
 	gtk_widget_set_name(app->window, "GeanyMainWindow");
-	gtk_widget_set_name(app->toolbar_menu, "GeanyToolbarMenu");
+	gtk_widget_set_name(ui_widgets.toolbar_menu, "GeanyToolbarMenu");
 	gtk_widget_set_name(app->popup_menu, "GeanyEditMenu");
 }
 
@@ -343,7 +339,7 @@ gchar *get_argv_filename(const gchar *filename)
 		result = g_strdup(filename);
 	else
 	{
-		//use current dir
+		// use current dir
 		gchar *cur_dir = g_get_current_dir();
 
 		result = g_strjoin(
@@ -492,7 +488,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 #ifdef HAVE_VTE
 	vte_info.lib_vte = lib_vte;
 #endif
-	app->ignore_global_tags = ignore_global_tags;
+	cl_options.ignore_global_tags = ignore_global_tags;
 }
 
 
@@ -599,9 +595,9 @@ static void load_settings()
 #ifdef HAVE_VTE
 	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
 #endif
-	if (no_msgwin) app->msgwindow_visible = FALSE;
+	if (no_msgwin) ui_prefs.msgwindow_visible = FALSE;
 
-	want_plugins = main_prefs.load_plugins && !no_plugins;
+	want_plugins = prefs.load_plugins && !no_plugins;
 }
 
 
@@ -610,7 +606,11 @@ gint main(gint argc, gchar **argv)
 	gint idx;
 	gint config_dir_result;
 
-	app = g_new0(MyApp, 1);
+	app = g_new0(GeanyApp, 1);
+	memset(&main_status, 0, sizeof(GeanyStatus));
+	memset(&prefs, 0, sizeof(GeanyPrefs));
+	memset(&ui_prefs, 0, sizeof(UIPrefs));
+	memset(&ui_widgets, 0, sizeof(UIWidgets));
 
 	setup_paths();
 	locale_init();
@@ -666,6 +666,7 @@ gint main(gint argc, gchar **argv)
 	load_settings();
 
 	msgwin_init();
+	build_init();
 	search_init();
 	ui_create_insert_menu_items();
 	ui_create_insert_date_menu_items();
@@ -674,7 +675,9 @@ gint main(gint argc, gchar **argv)
 	notebook_init();
 	filetypes_init();
 	templates_init();
+	navqueue_init();
 	document_init_doclist();
+	treeviews_init();
 	configuration_read_filetype_extensions();
 	configuration_read_autocompletions();
 
@@ -698,9 +701,6 @@ gint main(gint argc, gchar **argv)
 	g_signal_connect(G_OBJECT(lookup_widget(app->window, "entry_goto_line")),
 							"motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
-	treeviews_prepare_openfiles();
-	treeviews_create_taglist_popup_menu();
-	treeviews_create_openfiles_popup_menu();
 #ifdef HAVE_VTE
 	vte_init();
 #endif
@@ -721,10 +721,10 @@ gint main(gint argc, gchar **argv)
 #endif
 
 	// load any command line files or session files
-	app->opening_session_files = TRUE;
+	main_status.opening_session_files = TRUE;
 	if (! open_cl_files(argc, argv))
 	{
-		if (app->pref_main_load_session && cl_options.load_session)
+		if (prefs.load_session && cl_options.load_session)
 		{
 			load_project_file();
 
@@ -736,7 +736,7 @@ gint main(gint argc, gchar **argv)
 			}
 		}
 	}
-	app->opening_session_files = FALSE;
+	main_status.opening_session_files = FALSE;
 
 	// open a new file if no other file was opened
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
@@ -747,25 +747,13 @@ gint main(gint argc, gchar **argv)
 
 	idx = document_get_cur_idx();
 	gtk_widget_grab_focus(GTK_WIDGET(doc_list[idx].sci));
-	gtk_tree_model_foreach(GTK_TREE_MODEL(tv.store_openfiles), treeviews_find_node, GINT_TO_POINTER(idx));
+	treeviews_select_openfiles_item(idx);
 	build_menu_update(idx);
 	treeviews_update_tag_list(idx, FALSE);
-	navqueue_init();
-
-#ifdef G_OS_WIN32
-	// hide "Build" menu item, at least until it is available for Windows
-	gtk_widget_hide(app->compile_button);
-	{
-		GtkWidget *compiler_tab;
-		compiler_tab = gtk_notebook_get_tab_label(GTK_NOTEBOOK(msgwindow.notebook),
-			gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER));
-		gtk_widget_set_sensitive(compiler_tab, FALSE);
-	}
-#endif
 
 	// finally realize the window to show the user what we have done
 	gtk_widget_show(app->window);
-	app->main_window_realized = TRUE;
+	main_status.main_window_realized = TRUE;
 
 	configuration_apply_settings();
 
@@ -815,39 +803,39 @@ void main_quit()
 	g_free(app->configdir);
 	g_free(app->datadir);
 	g_free(app->docdir);
-	g_free(app->default_open_path);
-	g_free(app->custom_date_format);
-	g_free(app->editor_font);
-	g_free(app->tagbar_font);
-	g_free(app->msgwin_font);
-	g_free(app->long_line_color);
-	g_free(app->context_action_cmd);
-	g_free(app->pref_template_developer);
-	g_free(app->pref_template_company);
-	g_free(app->pref_template_mail);
-	g_free(app->pref_template_initial);
-	g_free(app->pref_template_version);
-	g_free(app->tools_make_cmd);
-	g_free(app->tools_term_cmd);
-	g_free(app->tools_browser_cmd);
-	g_free(app->tools_print_cmd);
-	g_free(app->tools_grep_cmd);
-	g_strfreev(app->custom_commands);
-	while (! g_queue_is_empty(app->recent_queue))
+	g_free(prefs.default_open_path);
+	g_free(ui_prefs.custom_date_format);
+	g_free(prefs.editor_font);
+	g_free(prefs.tagbar_font);
+	g_free(prefs.msgwin_font);
+	g_free(editor_prefs.long_line_color);
+	g_free(prefs.context_action_cmd);
+	g_free(prefs.template_developer);
+	g_free(prefs.template_company);
+	g_free(prefs.template_mail);
+	g_free(prefs.template_initial);
+	g_free(prefs.template_version);
+	g_free(prefs.tools_make_cmd);
+	g_free(prefs.tools_term_cmd);
+	g_free(prefs.tools_browser_cmd);
+	g_free(prefs.tools_print_cmd);
+	g_free(prefs.tools_grep_cmd);
+	g_strfreev(ui_prefs.custom_commands);
+	while (! g_queue_is_empty(ui_prefs.recent_queue))
 	{
-		g_free(g_queue_pop_tail(app->recent_queue));
+		g_free(g_queue_pop_tail(ui_prefs.recent_queue));
 	}
-	g_queue_free(app->recent_queue);
+	g_queue_free(ui_prefs.recent_queue);
 
-	if (app->prefs_dialog && GTK_IS_WIDGET(app->prefs_dialog)) gtk_widget_destroy(app->prefs_dialog);
-	if (app->save_filesel && GTK_IS_WIDGET(app->save_filesel)) gtk_widget_destroy(app->save_filesel);
-	if (app->open_filesel && GTK_IS_WIDGET(app->open_filesel)) gtk_widget_destroy(app->open_filesel);
-	if (app->open_fontsel && GTK_IS_WIDGET(app->open_fontsel)) gtk_widget_destroy(app->open_fontsel);
-	if (app->open_colorsel && GTK_IS_WIDGET(app->open_colorsel)) gtk_widget_destroy(app->open_colorsel);
-	if (app->default_tag_tree && GTK_IS_WIDGET(app->default_tag_tree))
+	if (ui_widgets.prefs_dialog && GTK_IS_WIDGET(ui_widgets.prefs_dialog)) gtk_widget_destroy(ui_widgets.prefs_dialog);
+	if (ui_widgets.save_filesel && GTK_IS_WIDGET(ui_widgets.save_filesel)) gtk_widget_destroy(ui_widgets.save_filesel);
+	if (ui_widgets.open_filesel && GTK_IS_WIDGET(ui_widgets.open_filesel)) gtk_widget_destroy(ui_widgets.open_filesel);
+	if (ui_widgets.open_fontsel && GTK_IS_WIDGET(ui_widgets.open_fontsel)) gtk_widget_destroy(ui_widgets.open_fontsel);
+	if (ui_widgets.open_colorsel && GTK_IS_WIDGET(ui_widgets.open_colorsel)) gtk_widget_destroy(ui_widgets.open_colorsel);
+	if (tv.default_tag_tree && GTK_IS_WIDGET(tv.default_tag_tree))
 	{
-		g_object_unref(app->default_tag_tree);
-		gtk_widget_destroy(app->default_tag_tree);
+		g_object_unref(tv.default_tag_tree);
+		gtk_widget_destroy(tv.default_tag_tree);
 	}
 #ifdef HAVE_VTE
 	if (vte_info.have_vte) vte_close();
@@ -859,8 +847,8 @@ void main_quit()
 	// destroy popup menus
 	if (app->popup_menu && GTK_IS_WIDGET(app->popup_menu))
 					gtk_widget_destroy(app->popup_menu);
-	if (app->toolbar_menu && GTK_IS_WIDGET(app->toolbar_menu))
-					gtk_widget_destroy(app->toolbar_menu);
+	if (ui_widgets.toolbar_menu && GTK_IS_WIDGET(ui_widgets.toolbar_menu))
+					gtk_widget_destroy(ui_widgets.toolbar_menu);
 	if (tv.popup_taglist && GTK_IS_WIDGET(tv.popup_taglist))
 					gtk_widget_destroy(tv.popup_taglist);
 	if (tv.popup_openfiles && GTK_IS_WIDGET(tv.popup_openfiles))

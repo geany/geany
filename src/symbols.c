@@ -42,6 +42,7 @@
 #include "support.h"
 #include "msgwindow.h"
 #include "treeviews.h"
+#include "main.h"
 
 
 #define MAX_SYMBOL_TYPES 8 // amount of types in the symbol list (currently max. 8 are used)
@@ -91,7 +92,7 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	TagFileInfo *tfi;
 	gint tag_type;
 
-	if (app->ignore_global_tags) return;
+	if (cl_options.ignore_global_tags) return;
 
 	load_user_tags(file_type_idx);
 
@@ -134,7 +135,7 @@ static void html_tags_loaded()
 {
 	TagFileInfo *tfi;
 
-	if (app->ignore_global_tags) return;
+	if (cl_options.ignore_global_tags) return;
 
 	tfi = &tag_file_info[GTF_HTML_ENTITIES];
 	if (! tfi->tags_loaded)

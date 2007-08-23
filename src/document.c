@@ -51,6 +51,7 @@
 #include <glib/gstdio.h>
 
 #include "document.h"
+#include "prefs.h"
 #include "filetypes.h"
 #include "support.h"
 #include "sciwrappers.h"
@@ -187,7 +188,7 @@ void document_finalize()
 
 void document_set_text_changed(gint idx)
 {
-	if (DOC_IDX_VALID(idx) && ! app->quitting)
+	if (DOC_IDX_VALID(idx) && ! main_status.quitting)
 	{
 		ui_update_tab_status(idx);
 		ui_save_buttons_toggle(doc_list[idx].changed);
@@ -201,7 +202,7 @@ void document_set_text_changed(gint idx)
 void document_apply_update_prefs(gint idx)
 {
 	ScintillaObject *sci = doc_list[idx].sci;
-	sci_set_mark_long_lines(sci, app->long_line_type, app->long_line_column, app->long_line_color);
+	sci_set_mark_long_lines(sci, editor_prefs.long_line_type, editor_prefs.long_line_column, editor_prefs.long_line_color);
 
 	sci_set_tab_width(sci, editor_prefs.tab_width);
 
@@ -209,7 +210,7 @@ void document_apply_update_prefs(gint idx)
 	// remove indent spaces on backspace, if using spaces to indent
 	SSM(sci, SCI_SETBACKSPACEUNINDENTS, ! editor_prefs.use_tabs, 0);
 
-	sci_set_autoc_max_height(sci, app->autocompletion_max_height);
+	sci_set_autoc_max_height(sci, editor_prefs.autocompletion_max_height);
 
 	sci_set_indentation_guides(sci, editor_prefs.show_indent_guide);
 	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);
@@ -327,9 +328,9 @@ static gint document_create_new_sci(const gchar *filename)
 
 	document_apply_update_prefs(new_idx);
 
-	sci_set_tab_indents(sci, app->use_tab_to_indent);
-	sci_set_symbol_margin(sci, app->show_markers_margin);
-	sci_set_line_numbers(sci, app->show_linenumber_margin, 0);
+	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
+	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
+	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin, 0);
 	sci_set_lines_wrapped(sci, editor_prefs.line_breaking);
 	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
@@ -343,7 +344,7 @@ static gint document_create_new_sci(const gchar *filename)
 					G_CALLBACK(on_editor_button_press_event), GINT_TO_POINTER(new_idx));
 	g_signal_connect(G_OBJECT(sci), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
-	pfd = pango_font_description_from_string(app->editor_font);
+	pfd = pango_font_description_from_string(prefs.editor_font);
 	fname = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
 	document_set_font(new_idx, fname, pango_font_description_get_size(pfd) / PANGO_SCALE);
 	pango_font_description_free(pfd);
@@ -486,7 +487,7 @@ gint document_new_file(const gchar *filename, filetype *ft)
 	document_set_text_changed(idx);
 	ui_document_show_hide(idx); // update the document menu
 
-	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
+	sci_set_line_numbers(doc_list[idx].sci, editor_prefs.show_linenumber_margin, 0);
 	sci_goto_pos(doc_list[idx].sci, 0, TRUE);
 
 	// "the" SCI signal (connect after initial setup(i.e. adding text))
@@ -686,7 +687,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 				"This can occur if the file contains a NULL byte. "
 				"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
 
-		if (app->main_window_realized)
+		if (main_status.main_window_realized)
 			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
 
 		msgwin_status_add(warn_msg, utf8_filename);
@@ -851,7 +852,7 @@ gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
 
 	// update line number margin width
-	sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
+	sci_set_line_numbers(doc_list[idx].sci, editor_prefs.show_linenumber_margin, 0);
 
 	// set the cursor position according to pos, cl_options.goto_line and cl_options.goto_column
 	set_cursor_position(idx, pos);
@@ -876,7 +877,7 @@ gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	ui_document_show_hide(idx);	// update the document menu
 
 	// finally add current file to recent files menu, but not the files from the last session
-	if (! app->opening_session_files)
+	if (! main_status.opening_session_files)
 		ui_add_recent_file(utf8_filename);
 
 	if (! reload && geany_object)
@@ -1107,13 +1108,13 @@ gboolean document_save_file(gint idx, gboolean force)
 	store_saved_encoding(idx);
 
 	// ignore the following things if we are quitting
-	if (! app->quitting)
+	if (! main_status.quitting)
 	{
 		gchar *base_name = g_path_get_basename(doc_list[idx].file_name);
 
 		// set line numbers again, to reset the margin width, if
 		// there are more lines than before
-		sci_set_line_numbers(doc_list[idx].sci, app->show_linenumber_margin, 0);
+		sci_set_line_numbers(doc_list[idx].sci, editor_prefs.show_linenumber_margin, 0);
 		sci_set_savepoint(doc_list[idx].sci);
 
 		/* stat the file to get the timestamp, otherwise on Windows the actual
@@ -1245,7 +1246,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 		}
 
 		// we searched only part of the document, so ask whether to wraparound.
-		if (app->pref_main_suppress_search_dialogs ||
+		if (prefs.suppress_search_dialogs ||
 			dialogs_show_question_full(parent, GTK_STOCK_FIND, GTK_STOCK_CANCEL,
 				_("Wrap search and find again?"), _("\"%s\" was not found."), text))
 		{
@@ -1847,7 +1848,7 @@ void document_print(gint idx)
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
 		return;
 
-	cmdline = g_strdup(app->tools_print_cmd);
+	cmdline = g_strdup(prefs.tools_print_cmd);
 	cmdline = utils_str_replace(cmdline, "%f", doc_list[idx].file_name);
 
 	if (dialogs_show_question(
@@ -2030,7 +2031,7 @@ void document_undo_clear(gint idx)
 	doc_list[idx].redo_actions = NULL;
 
 	doc_list[idx].changed = FALSE;
-	if (! app->quitting) document_set_text_changed(idx);
+	if (! main_status.quitting) document_set_text_changed(idx);
 
 	//geany_debug("%s: new undo stack height: %d, new redo stack height: %d", __func__,
 				//g_trash_stack_height(&doc_list[idx].undo_actions), g_trash_stack_height(&doc_list[idx].redo_actions));

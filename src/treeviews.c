@@ -1,5 +1,5 @@
 /*
- *      treeviews.c
+ *      treeviews.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2005-2007 Enrico Tröger <enrico.troeger@uvena.de>
  *      Copyright 2006-2007 Nick Treleaven <nick.treleaven@btinternet.com>
@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "geany.h"
+#include "prefs.h"
 #include "support.h"
 #include "callbacks.h"
 #include "treeviews.h"
@@ -38,6 +39,8 @@
 #include "symbols.h"
 #include "navqueue.h"
 
+
+SidebarTreeviews tv;
 
 enum
 {
@@ -59,6 +62,10 @@ enum
 };
 
 
+static GtkListStore	*store_openfiles;
+static GtkWidget *tag_window;	// scrolled window that holds the symbol list GtkTreeView
+
+
 /* callback prototypes */
 static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpointer data);
@@ -66,7 +73,6 @@ static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user
 static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection);
 static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButton *event,
 																			gpointer user_data);
-
 
 
 /* the prepare_* functions are document-related, but I think they fit better here than in document.c */
@@ -93,7 +99,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
-	pfd = pango_font_description_from_string(app->tagbar_font);
+	pfd = pango_font_description_from_string(prefs.tagbar_font);
 	gtk_widget_modify_font(tree, pfd);
 	pango_font_description_free(pfd);
 
@@ -125,32 +131,32 @@ on_default_tag_tree_button_press_event(GtkWidget *widget, GdkEventButton *event,
 // update = rescan the tags for document[idx].filename
 void treeviews_update_tag_list(gint idx, gboolean update)
 {
-	if (gtk_bin_get_child(GTK_BIN(app->tagbar)))
-		gtk_container_remove(GTK_CONTAINER(app->tagbar), gtk_bin_get_child(GTK_BIN(app->tagbar)));
+	if (gtk_bin_get_child(GTK_BIN(tag_window)))
+		gtk_container_remove(GTK_CONTAINER(tag_window), gtk_bin_get_child(GTK_BIN(tag_window)));
 
-	if (app->default_tag_tree == NULL)
+	if (tv.default_tag_tree == NULL)
 	{
-		GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW(app->tagbar);
+		GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW(tag_window);
 		GtkWidget *label;
 
 		// default_tag_tree is a GtkViewPort with a GtkLabel inside it
-		app->default_tag_tree = gtk_viewport_new(
+		tv.default_tag_tree = gtk_viewport_new(
 			gtk_scrolled_window_get_hadjustment(scrolled_window),
 			gtk_scrolled_window_get_vadjustment(scrolled_window));
 		label = gtk_label_new(_("No tags found"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0.1, 0.01);
-		gtk_container_add(GTK_CONTAINER(app->default_tag_tree), label);
-		gtk_widget_show_all(app->default_tag_tree);
-		g_signal_connect(G_OBJECT(app->default_tag_tree), "button-press-event",
+		gtk_container_add(GTK_CONTAINER(tv.default_tag_tree), label);
+		gtk_widget_show_all(tv.default_tag_tree);
+		g_signal_connect(G_OBJECT(tv.default_tag_tree), "button-press-event",
 			G_CALLBACK(on_default_tag_tree_button_press_event), NULL);
-		g_object_ref((gpointer)app->default_tag_tree);	// to hold it after removing
+		g_object_ref((gpointer)tv.default_tag_tree);	// to hold it after removing
 	}
 
 	// show default empty tag tree if there are no tags
 	if (idx == -1 || doc_list[idx].file_type == NULL ||
 		! filetype_has_tags(doc_list[idx].file_type))
 	{
-		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
+		gtk_container_add(GTK_CONTAINER(tag_window), tv.default_tag_tree);
 		return;
 	}
 
@@ -171,17 +177,17 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 
 	if (doc_list[idx].has_tags)
 	{
-		gtk_container_add(GTK_CONTAINER(app->tagbar), doc_list[idx].tag_tree);
+		gtk_container_add(GTK_CONTAINER(tag_window), doc_list[idx].tag_tree);
 	}
 	else
 	{
-		gtk_container_add(GTK_CONTAINER(app->tagbar), app->default_tag_tree);
+		gtk_container_add(GTK_CONTAINER(tag_window), tv.default_tag_tree);
 	}
 }
 
 
 /* does some preparing things to the open files list widget */
-void treeviews_prepare_openfiles()
+static void prepare_openfiles()
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -192,8 +198,8 @@ void treeviews_prepare_openfiles()
 	tv.tree_openfiles = lookup_widget(app->window, "treeview6");
 
 	// store the short filename to show, and the index as reference
-	tv.store_openfiles = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_INT, GDK_TYPE_COLOR);
-	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(tv.store_openfiles));
+	store_openfiles = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_INT, GDK_TYPE_COLOR);
+	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(store_openfiles));
 
 	// set policy settings for the scolledwindow around the treeview again, because glade
 	// doesn't keep the settings
@@ -210,10 +216,10 @@ void treeviews_prepare_openfiles()
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
 
 	// sort opened filenames in the store_openfiles treeview
-	sortable = GTK_TREE_SORTABLE(GTK_TREE_MODEL(tv.store_openfiles));
+	sortable = GTK_TREE_SORTABLE(GTK_TREE_MODEL(store_openfiles));
 	gtk_tree_sortable_set_sort_column_id(sortable, 0, GTK_SORT_ASCENDING);
 
-	pfd = pango_font_description_from_string(app->tagbar_font);
+	pfd = pango_font_description_from_string(prefs.tagbar_font);
 	gtk_widget_modify_font(tv.tree_openfiles, pfd);
 	pango_font_description_free(pfd);
 
@@ -233,7 +239,7 @@ void treeviews_openfiles_add(gint idx)
 {
 	GtkTreeIter *iter = &doc_list[idx].iter;
 
-	gtk_list_store_append(tv.store_openfiles, iter);
+	gtk_list_store_append(store_openfiles, iter);
 	treeviews_openfiles_update(idx);
 }
 
@@ -244,7 +250,7 @@ void treeviews_openfiles_update(gint idx)
 	GdkColor *color = document_get_status(idx);
 
 	basename = g_path_get_basename(DOC_FILENAME(idx));
-	gtk_list_store_set(tv.store_openfiles, &doc_list[idx].iter,
+	gtk_list_store_set(store_openfiles, &doc_list[idx].iter,
 		0, basename, 1, idx, 2, color, -1);
 	g_free(basename);
 }
@@ -256,7 +262,7 @@ void treeviews_openfiles_update_all()
 	guint i;
 	gint idx;
 
-	gtk_list_store_clear(tv.store_openfiles);
+	gtk_list_store_clear(store_openfiles);
 	for (i = 0; i < (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)); i++)
 	{
 		idx = document_get_n_idx(i);
@@ -272,7 +278,7 @@ void treeviews_remove_document(gint idx)
 {
 	GtkTreeIter *iter = &doc_list[idx].iter;
 
-	gtk_list_store_remove(tv.store_openfiles, iter);
+	gtk_list_store_remove(store_openfiles, iter);
 
 	if (GTK_IS_WIDGET(doc_list[idx].tag_tree))
 	{
@@ -287,7 +293,7 @@ void treeviews_remove_document(gint idx)
 }
 
 
-void treeviews_create_taglist_popup_menu()
+static void create_taglist_popup_menu()
 {
 	GtkWidget *item;
 
@@ -329,7 +335,7 @@ void treeviews_create_taglist_popup_menu()
 }
 
 
-void treeviews_create_openfiles_popup_menu()
+static void create_openfiles_popup_menu()
 {
 	GtkWidget *item;
 
@@ -384,11 +390,12 @@ void treeviews_create_openfiles_popup_menu()
 /* compares the given data (GINT_TO_PONTER(idx)) with the idx from the selected row of openfiles
  * treeview, in case of a match the row is selected and TRUE is returned
  * (called indirectly from gtk_tree_model_foreach()) */
-gboolean treeviews_find_node(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
+static gboolean tree_model_find_node(GtkTreeModel *model, GtkTreePath *path,
+		GtkTreeIter *iter, gpointer data)
 {
 	gint idx = -1;
 
-	gtk_tree_model_get(GTK_TREE_MODEL(tv.store_openfiles), iter, 1, &idx, -1);
+	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, 1, &idx, -1);
 
 	if (idx == GPOINTER_TO_INT(data))
 	{
@@ -396,6 +403,13 @@ gboolean treeviews_find_node(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter
 		return TRUE;
 	}
 	else return FALSE;
+}
+
+
+void treeviews_select_openfiles_item(gint idx)
+{
+	gtk_tree_model_foreach(GTK_TREE_MODEL(store_openfiles), tree_model_find_node,
+		GINT_TO_POINTER(idx));
 }
 
 
@@ -432,13 +446,13 @@ static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user
 				}
 				case OPENFILES_ACTION_HIDE:
 				{
-					app->sidebar_openfiles_visible = FALSE;
+					prefs.sidebar_openfiles_visible = FALSE;
 					ui_treeviews_show_hide(FALSE);
 					break;
 				}
 				case OPENFILES_ACTION_HIDE_ALL:
 				{
-					app->sidebar_visible = FALSE;
+					ui_prefs.sidebar_visible = FALSE;
 					ui_treeviews_show_hide(TRUE);
 					break;
 				}
@@ -501,13 +515,13 @@ static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_d
 		}
 		case SYMBOL_ACTION_HIDE:
 		{
-			app->sidebar_symbol_visible = FALSE;
+			prefs.sidebar_symbol_visible = FALSE;
 			ui_treeviews_show_hide(FALSE);
 			break;
 		}
 		case SYMBOL_ACTION_HIDE_ALL:
 		{
-			app->sidebar_visible = FALSE;
+			ui_prefs.sidebar_visible = FALSE;
 			ui_treeviews_show_hide(TRUE);
 			break;
 		}
@@ -561,3 +575,16 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 	}
 	return FALSE;
 }
+
+
+void treeviews_init()
+{
+	tv.default_tag_tree = NULL;
+	tag_window = lookup_widget(app->window, "scrolledwindow2");
+
+	prepare_openfiles();
+	create_taglist_popup_menu();
+	create_openfiles_popup_menu();
+}
+
+

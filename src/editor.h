@@ -65,6 +65,14 @@ typedef struct EditorPrefs
 	gboolean	disable_dnd;
 	gboolean	smart_home_key;
 	GHashTable	*auto_completions;
+	gboolean	brace_match_ltgt;	// whether to highlight < and > chars
+	gboolean	use_tab_to_indent;
+	gint		autocompletion_max_height;
+	gint		long_line_type;
+	gint		long_line_column;
+	gchar		*long_line_color;
+	gboolean	show_markers_margin;
+	gboolean	show_linenumber_margin;
 } EditorPrefs;
 
 extern EditorPrefs editor_prefs;
@@ -72,8 +80,8 @@ extern EditorPrefs editor_prefs;
 
 typedef struct
 {
-	gchar *current_word;	// holds word under the mouse or keyboard cursor
-	gint click_pos;			// text position where the mouse was clicked
+	gchar	*current_word;	// holds word under the mouse or keyboard cursor
+	gint	click_pos;		// text position where the mouse was clicked
 } EditorInfo;
 
 extern EditorInfo editor_info;
@@ -81,12 +89,9 @@ extern EditorInfo editor_info;
 
 
 
-gboolean
-on_editor_button_press_event           (GtkWidget *widget,
-                                        GdkEventButton *event,
-                                        gpointer user_data);
+gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *event,
+	gpointer user_data);
 
-// callback func called by all editors when a signal arises
 void on_editor_notification(GtkWidget* editor, gint scn, gpointer lscn, gpointer user_data);
 
 gboolean editor_start_auto_complete(gint idx, gint pos, gboolean force);
@@ -99,12 +104,8 @@ void editor_auto_latex(gint idx, gint pos);
 
 void editor_show_macro_list(ScintillaObject *sci);
 
-/* Reads the word at given cursor position and writes it into the given buffer. The buffer will be
- * NULL terminated in any case, even when the word is truncated because wordlen is too small.
- * position can be -1, then the current position is used.
- * wc are the wordchars to use, if NULL, GEANY_WORDCHARS will be used */
 void editor_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen,
-							  const gchar *wc);
+	const gchar *wc);
 
 gboolean editor_show_calltip(gint idx, gint pos);
 

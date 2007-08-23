@@ -61,7 +61,10 @@ typedef struct
 
 
 
+void build_init();
+
 void build_finalize();
+
 
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
 
@@ -69,29 +72,5 @@ void build_menu_update(gint idx);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
-
-void
-on_build_compile_activate              (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_tex_activate                  (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_build_activate                (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_make_activate                 (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_execute_activate              (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_build_next_error                    (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
 
 #endif

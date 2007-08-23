@@ -32,10 +32,12 @@
 #include "geany.h"
 
 #include "templates.h"
+#include "prefs.h"
 #include "support.h"
 #include "utils.h"
 #include "document.h"
 #include "filetypes.h"
+#include "ui_utils.h"
 
 
 // default templates, only for initial tempate file creation on first start of Geany
@@ -330,7 +332,7 @@ static void create_new_menu_items()
 		gtk_widget_show(tmp_menu);
 		gtk_widget_show(tmp_button);
 		gtk_container_add(GTK_CONTAINER(template_menu), tmp_menu);
-		gtk_container_add(GTK_CONTAINER(app->new_file_menu), tmp_button);
+		gtk_container_add(GTK_CONTAINER(ui_widgets.new_file_menu), tmp_button);
 		g_signal_connect((gpointer) tmp_menu, "activate",
 			G_CALLBACK(on_new_with_template), (gpointer) ft);
 		g_signal_connect((gpointer) tmp_button, "activate",
@@ -624,11 +626,11 @@ static gchar *templates_replace_all(gchar *text, const gchar *year, const gchar 
 {
 	text = utils_str_replace(text, "{year}", year);
 	text = utils_str_replace(text, "{date}", date);
-	text = utils_str_replace(text, "{version}", app->pref_template_version);
-	text = utils_str_replace(text, "{initial}", app->pref_template_initial);
-	text = utils_str_replace(text, "{developer}", app->pref_template_developer);
-	text = utils_str_replace(text, "{mail}", app->pref_template_mail);
-	text = utils_str_replace(text, "{company}", app->pref_template_company);
+	text = utils_str_replace(text, "{version}", prefs.template_version);
+	text = utils_str_replace(text, "{initial}", prefs.template_initial);
+	text = utils_str_replace(text, "{developer}", prefs.template_developer);
+	text = utils_str_replace(text, "{mail}", prefs.template_mail);
+	text = utils_str_replace(text, "{company}", prefs.template_company);
 	text = utils_str_replace(text, "{untitled}", GEANY_STRING_UNTITLED);
 	text = utils_str_replace(text, "{geanyversion}", "Geany " VERSION);
 

@@ -70,7 +70,7 @@ static void cc_add_command(struct cc_dialog *cc, gint idx)
 
 	entry = gtk_entry_new();
 	if (idx >= 0)
-		gtk_entry_set_text(GTK_ENTRY(entry), app->custom_commands[idx]);
+		gtk_entry_set_text(GTK_ENTRY(entry), ui_prefs.custom_commands[idx]);
 	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -231,15 +231,15 @@ static void cc_show_dialog_custom_commands()
 	cc.box = gtk_vbox_new(FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(vbox), cc.box);
 
-	if (app->custom_commands == NULL || g_strv_length(app->custom_commands) == 0)
+	if (ui_prefs.custom_commands == NULL || g_strv_length(ui_prefs.custom_commands) == 0)
 	{
 		cc_add_command(&cc, -1);
 	}
 	else
 	{
-		for (i = 0; i < g_strv_length(app->custom_commands); i++)
+		for (i = 0; i < g_strv_length(ui_prefs.custom_commands); i++)
 		{
-			if (app->custom_commands[i][0] == '\0')
+			if (ui_prefs.custom_commands[i][0] == '\0')
 				continue; // skip empty fields
 
 			cc_add_command(&cc, i);
@@ -296,8 +296,8 @@ static void cc_show_dialog_custom_commands()
 			result[len] = NULL; // null-terminate the array
 		}
 		// set the new array
-		g_strfreev(app->custom_commands);
-		app->custom_commands = result;
+		g_strfreev(ui_prefs.custom_commands);
+		ui_prefs.custom_commands = result;
 		// rebuild the menu items
 		tools_create_insert_custom_command_menu_items();
 
@@ -318,7 +318,7 @@ static void cc_on_custom_command_menu_activate(GtkMenuItem *menuitem, gpointer u
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	enable = sci_can_copy(doc_list[idx].sci) && (app->custom_commands != NULL);
+	enable = sci_can_copy(doc_list[idx].sci) && (ui_prefs.custom_commands != NULL);
 
 	children = gtk_container_get_children(GTK_CONTAINER(user_data));
 	len = g_list_length(children);
@@ -344,8 +344,8 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 
 	command_idx = GPOINTER_TO_INT(user_data);
 
-	if (app->custom_commands == NULL ||
-		command_idx < 0 || command_idx > (gint) g_strv_length(app->custom_commands))
+	if (ui_prefs.custom_commands == NULL ||
+		command_idx < 0 || command_idx > (gint) g_strv_length(ui_prefs.custom_commands))
 	{
 		cc_show_dialog_custom_commands();
 		return;
@@ -353,7 +353,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 
 	// send it through the command and when the command returned the output the current selection
 	// will be replaced
-	tools_execute_custom_command(idx, app->custom_commands[command_idx]);
+	tools_execute_custom_command(idx, ui_prefs.custom_commands[command_idx]);
 }
 
 
@@ -411,7 +411,7 @@ void tools_create_insert_custom_command_menu_items()
 	}
 
 
-	if (app->custom_commands == NULL || g_strv_length(app->custom_commands) == 0)
+	if (ui_prefs.custom_commands == NULL || g_strv_length(ui_prefs.custom_commands) == 0)
 	{
 		item = gtk_menu_item_new_with_label(_("No custom commands defined."));
 		gtk_container_add(GTK_CONTAINER(menu_edit), item);
@@ -426,11 +426,11 @@ void tools_create_insert_custom_command_menu_items()
 	{
 		guint i;
 		gint idx = 0;
-		for (i = 0; i < g_strv_length(app->custom_commands); i++)
+		for (i = 0; i < g_strv_length(ui_prefs.custom_commands); i++)
 		{
-			if (app->custom_commands[i][0] != '\0') // skip empty fields
+			if (ui_prefs.custom_commands[i][0] != '\0') // skip empty fields
 			{
-				cc_insert_custom_command_items(menu_edit, menu_popup, app->custom_commands[i], idx);
+				cc_insert_custom_command_items(menu_edit, menu_popup, ui_prefs.custom_commands[i], idx);
 				idx++;
 			}
 		}
@@ -615,7 +615,7 @@ static void
 on_color_cancel_button_clicked         (GtkButton       *button,
                                         gpointer         user_data)
 {
-	gtk_widget_hide(app->open_colorsel);
+	gtk_widget_hide(ui_widgets.open_colorsel);
 }
 
 
@@ -627,11 +627,11 @@ on_color_ok_button_clicked             (GtkButton       *button,
 	gint idx = document_get_cur_idx();
 	gchar *hex;
 
-	gtk_widget_hide(app->open_colorsel);
+	gtk_widget_hide(ui_widgets.open_colorsel);
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
 	gtk_color_selection_get_current_color(
-			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &color);
+			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &color);
 
 	hex = utils_get_hex_from_color(&color);
 	document_insert_colour(idx, hex);
@@ -647,19 +647,19 @@ void tools_color_chooser(gchar *color)
 	win32_show_color_dialog(color);
 #else
 
-	if (app->open_colorsel == NULL)
+	if (ui_widgets.open_colorsel == NULL)
 	{
-		app->open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
-		gtk_widget_set_name(app->open_colorsel, "GeanyDialog");
-		gtk_window_set_transient_for(GTK_WINDOW(app->open_colorsel), GTK_WINDOW(app->window));
+		ui_widgets.open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
+		gtk_widget_set_name(ui_widgets.open_colorsel, "GeanyDialog");
+		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_colorsel), GTK_WINDOW(app->window));
 		gtk_color_selection_set_has_palette(
-			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), TRUE);
+			GTK_COLOR_SELECTION(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), TRUE);
 
-		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->cancel_button, "clicked",
+		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->cancel_button, "clicked",
 						G_CALLBACK(on_color_cancel_button_clicked), NULL);
-		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->ok_button, "clicked",
+		g_signal_connect(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->ok_button, "clicked",
 						G_CALLBACK(on_color_ok_button_clicked), NULL);
-		g_signal_connect(app->open_colorsel, "delete_event",
+		g_signal_connect(ui_widgets.open_colorsel, "delete_event",
 						G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	}
 	// if color is non-NULL set it in the dialog as preselected color
@@ -674,13 +674,13 @@ void tools_color_chooser(gchar *color)
 		}
 		gdk_color_parse(color, &gc);
 		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(
-							GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &gc);
+							GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &gc);
 		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(
-							GTK_COLOR_SELECTION_DIALOG(app->open_colorsel)->colorsel), &gc);
+							GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel)->colorsel), &gc);
 	}
 
 	// We make sure the dialog is visible.
-	gtk_window_present(GTK_WINDOW(app->open_colorsel));
+	gtk_window_present(GTK_WINDOW(ui_widgets.open_colorsel));
 #endif
 }
 
