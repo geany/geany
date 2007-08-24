@@ -151,11 +151,10 @@ gboolean sci_get_visible_eols(ScintillaObject* sci)
 
 void sci_set_visible_white_spaces(ScintillaObject* sci, gboolean set )
 {
-	if(set){
+	if (set)
 		SSM(sci,SCI_SETVIEWWS,SCWS_VISIBLEALWAYS,0);
-	}else{
+	else
 		SSM(sci,SCI_SETVIEWWS,SCWS_INVISIBLE,0);
-	}
 }
 
 gboolean sci_get_visible_white_spaces(ScintillaObject* sci)
@@ -165,12 +164,13 @@ gboolean sci_get_visible_white_spaces(ScintillaObject* sci)
 
 void sci_set_lines_wrapped(ScintillaObject* sci, gboolean set )
 {
-	if( set ){
+	if (set)
+	{
 		SSM(sci,SCI_SETWRAPMODE,SC_WRAP_WORD,0);
 		SSM(sci, SCI_SETWRAPVISUALFLAGS, SC_WRAPVISUALFLAG_END, 0);
-	}else{
-		SSM(sci,SCI_SETWRAPMODE,SC_WRAP_NONE,0);
 	}
+	else
+		SSM(sci,SCI_SETWRAPMODE,SC_WRAP_NONE,0);
 }
 
 gboolean sci_get_lines_wrapped(ScintillaObject* sci)
@@ -231,9 +231,10 @@ gboolean sci_can_redo( ScintillaObject* sci )
 
 void sci_undo( ScintillaObject* sci )
 {
-	if( sci_can_undo(sci) ){
+	if( sci_can_undo(sci) )
 		SSM( sci, SCI_UNDO, 0, 0);
-	}else{ // change it to a document function
+	else
+	{ // change it to a document function
 
 	}
 }
@@ -241,9 +242,10 @@ void sci_undo( ScintillaObject* sci )
 
 void sci_redo( ScintillaObject* sci )
 {
-	if( sci_can_redo( sci ) ){
+	if( sci_can_redo( sci ) )
 		SSM( sci, SCI_REDO,0,0);
-	}else{// change it to a document function
+	else
+	{ // change it to a document function
 
 	}
 }

@@ -103,7 +103,8 @@ gint utils_get_line_endings(gchar* buffer, glong size)
 
 	for ( i = 0; i < size ; i++ )
 	{
-		if ( buffer[i] == 0x0a ){
+		if ( buffer[i] == 0x0a )
+		{
 			// LF
 			lf++;
 		}
@@ -114,7 +115,9 @@ gint utils_get_line_endings(gchar* buffer, glong size)
 				// Last char
 				// CR
 				cr++;
-			} else {
+			}
+			else
+			{
 				if (buffer[i+1] != 0x0a)
 				{
 					// CR
@@ -133,16 +136,17 @@ gint utils_get_line_endings(gchar* buffer, glong size)
 	/* Vote for the maximum */
 	mode = SC_EOL_LF;
 	max_mode = lf;
-	if (crlf > max_mode) {
+	if (crlf > max_mode)
+	{
 		mode = SC_EOL_CRLF;
 		max_mode = crlf;
 	}
-	if (cr > max_mode) {
+	if (cr > max_mode)
+	{
 		mode = SC_EOL_CR;
 		max_mode = cr;
 	}
 	//geany_debug("EOL chars: LF = %d, CR = %d, CRLF = %d", lf, cr, crlf);
-
 
 	return mode;
 }
@@ -265,7 +269,8 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag)
 	gchar *result = g_malloc(max_tag_size);
 	const gchar *begin, *cur;
 
-	if (size < 3) {
+	if (size < 3)
+	{
 		// Smallest tag is "<p>" which is 3 characters
 		return result;
 	}

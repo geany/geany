@@ -470,11 +470,13 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
     	g_assert(title != NULL);
 		gtk_tree_store_append(tree_store, iter, NULL);
 
-		if (G_IS_OBJECT(icon)) {
+		if (G_IS_OBJECT(icon))
+		{
 			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon,
 			                   SYMBOLS_COLUMN_NAME, title, -1);
 			g_object_unref(icon);
-		} else
+		}
+		else
 			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
 	}
 	va_end(args);

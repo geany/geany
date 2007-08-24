@@ -1318,7 +1318,8 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords)
 //~ #define SCE_HB_START 70
 
 	// Show the whole section of VBScript
-/*	for (bstyle=SCE_HB_DEFAULT; bstyle<=SCE_HB_STRINGEOL; bstyle++) {
+/*	for (bstyle=SCE_HB_DEFAULT; bstyle<=SCE_HB_STRINGEOL; bstyle++)
+	{
 		SSM(sci, SCI_STYLESETBACK, bstyle, 0xf5f5f5);
 		// This call extends the backround colour of the last style on the line to the edge of the window
 		SSM(sci, SCI_STYLESETEOLFILLED, bstyle, 1);

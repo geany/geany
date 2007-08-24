@@ -3,6 +3,9 @@
  * src/dialogs.c, src/callbacks.c:
    Fix saving the wrong document when using Save All with unnamed
    documents.
+ * src/utils.c, src/highlighting.c, src/sciwrappers.c, src/document.c,
+   src/symbols.c:
+   Fix wrong brace formatting.
 
 
 2007-08-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

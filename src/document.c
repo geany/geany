@@ -1402,9 +1402,9 @@ document_replace_range(gint idx, const gchar *find_text, const gchar *replace_te
 			if (find_len <= 0)
 			{
 				gchar chNext = sci_get_char_at(sci, SSM(sci, SCI_GETTARGETEND, 0, 0));
-				if (chNext == '\r' || chNext == '\n') {
+
+				if (chNext == '\r' || chNext == '\n')
 					movepastEOL = 1;
-				}
 			}
 			replace_len = sci_target_replace(sci, replace_text,
 				flags & SCFIND_REGEXP);
