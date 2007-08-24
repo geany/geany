@@ -139,44 +139,36 @@ static void save_session_files(GKeyFile *config)
 }
 
 
-void configuration_save()
+static void save_dialog_prefs(GKeyFile *config)
 {
-	GKeyFile *config = g_key_file_new();
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
-	gchar *data;
-	GtkTextBuffer *buffer;
-	GtkTextIter start, end;
+	// general
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
+	g_key_file_set_boolean(config, PACKAGE, "load_plugins", prefs.load_plugins);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", prefs.suppress_search_dialogs);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
+	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", prefs.beep_on_errors);
+	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
+	g_key_file_set_string(config, PACKAGE, "default_open_path", prefs.default_open_path);
 
-	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
-
-	// gets the text from the scribble textview
-	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(app->window, "textview_scribble")));
-	gtk_text_buffer_get_bounds(buffer, &start, &end);
-	scribble_text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-
-	// store basic settings
-	if (prefs.save_winpos)
-	{
-		g_key_file_set_integer(config, PACKAGE, "treeview_position",
-				gtk_paned_get_position(GTK_PANED(lookup_widget(app->window, "hpaned1"))));
-		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",
-				gtk_paned_get_position(GTK_PANED(lookup_widget(app->window, "vpaned1"))));
-	}
-
-	g_key_file_set_integer(config, PACKAGE, "mru_length", prefs.mru_length);
-	g_key_file_set_integer(config, PACKAGE, "long_line_type", editor_prefs.long_line_type);
+	// interface
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", prefs.tab_pos_editor);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", prefs.tab_pos_msgwin);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_sidebar", prefs.tab_pos_sidebar);
+	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", prefs.sidebar_symbol_visible);
+	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", prefs.sidebar_openfiles_visible);
+	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", prefs.show_notebook_tabs);
+	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_msgwin_pages);
+	g_key_file_set_string(config, PACKAGE, "editor_font", prefs.editor_font);
+	g_key_file_set_string(config, PACKAGE, "tagbar_font", prefs.tagbar_font);
+	g_key_file_set_string(config, PACKAGE, "msgwin_font", prefs.msgwin_font);
+
+	/* editor_prefs */
+	g_key_file_set_integer(config, PACKAGE, "long_line_type", editor_prefs.long_line_type);
 	g_key_file_set_integer(config, PACKAGE, "autocompletion_max_height", editor_prefs.autocompletion_max_height);
 	g_key_file_set_integer(config, PACKAGE, "long_line_column", editor_prefs.long_line_column);
 	g_key_file_set_string(config, PACKAGE, "long_line_color", editor_prefs.long_line_color);
-	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", prefs.beep_on_errors);
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", prefs.sidebar_symbol_visible);
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", prefs.sidebar_openfiles_visible);
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", prefs.statusbar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
 	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", editor_prefs.unfold_all_children);
 	g_key_file_set_boolean(config, PACKAGE, "show_editor_scrollbars", editor_prefs.show_scrollbars);
@@ -189,15 +181,57 @@ void configuration_save()
 	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", editor_prefs.show_linenumber_margin);
 	g_key_file_set_boolean(config, PACKAGE, "line_breaking", editor_prefs.line_breaking);
 	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
-	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
-	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", prefs.tab_order_ltr);
-	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", prefs.show_notebook_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
-	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_msgwin_pages);
-	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", editor_prefs.auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", editor_prefs.auto_complete_constructs);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", editor_prefs.auto_complete_symbols);
+	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", editor_prefs.tab_width);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", editor_prefs.use_tabs);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", editor_prefs.new_line);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", editor_prefs.replace_tabs);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", editor_prefs.trail_space);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_smart_home_key", editor_prefs.smart_home_key);
+	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[editor_prefs.default_new_encoding].charset);
+	if (editor_prefs.default_open_encoding == -1)
+		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
+	else
+		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", encodings[editor_prefs.default_open_encoding].charset);
+
+	// files
+	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", prefs.tab_order_ltr);
+	g_key_file_set_integer(config, PACKAGE, "mru_length", prefs.mru_length);
+
+	// toolbar
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", prefs.toolbar_visible);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_search", prefs.toolbar_show_search);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_goto", prefs.toolbar_show_goto);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_zoom", prefs.toolbar_show_zoom);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_undo", prefs.toolbar_show_undo);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_navigation", prefs.toolbar_show_navigation);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", prefs.toolbar_show_compile);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", prefs.toolbar_show_colour);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_fileops", prefs.toolbar_show_fileops);
+	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_quit", prefs.toolbar_show_quit);
+	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", prefs.toolbar_icon_style);
+	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", prefs.toolbar_icon_size);
+
+	// templates
+	g_key_file_set_string(config, PACKAGE, "pref_template_developer", prefs.template_developer);
+	g_key_file_set_string(config, PACKAGE, "pref_template_company", prefs.template_company);
+	g_key_file_set_string(config, PACKAGE, "pref_template_mail", prefs.template_mail);
+	g_key_file_set_string(config, PACKAGE, "pref_template_initial", prefs.template_initial);
+	g_key_file_set_string(config, PACKAGE, "pref_template_version", prefs.template_version);
+
+	// tools settings
+	g_key_file_set_string(config, "tools", "make_cmd", prefs.tools_make_cmd ? prefs.tools_make_cmd : "");
+	g_key_file_set_string(config, "tools", "term_cmd", prefs.tools_term_cmd ? prefs.tools_term_cmd : "");
+	g_key_file_set_string(config, "tools", "browser_cmd", prefs.tools_browser_cmd ? prefs.tools_browser_cmd : "");
+	g_key_file_set_string(config, "tools", "print_cmd", prefs.tools_print_cmd ? prefs.tools_print_cmd : "");
+	g_key_file_set_string(config, "tools", "grep_cmd", prefs.tools_grep_cmd ? prefs.tools_grep_cmd : "");
+	g_key_file_set_string(config, PACKAGE, "context_action_cmd", prefs.context_action_cmd);
+
+	// VTE
 #ifdef HAVE_VTE
 	g_key_file_set_boolean(config, "VTE", "load_vte", vte_info.load_vte);
 	if (vte_info.load_vte && vc != NULL)
@@ -224,19 +258,36 @@ void configuration_save()
 		g_key_file_set_string(config, "VTE", "last_dir", vte_info.dir);
 	}
 #endif
-	g_key_file_set_string(config, PACKAGE, "default_open_path", prefs.default_open_path);
-	g_key_file_set_string(config, PACKAGE, "custom_date_format", ui_prefs.custom_date_format);
-	g_key_file_set_string(config, PACKAGE, "context_action_cmd", prefs.context_action_cmd);
-	if (ui_prefs.custom_commands != NULL)
+}
+
+
+static void save_ui_prefs(GKeyFile *config)
+{
+	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
+	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", prefs.statusbar_visible);
+	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
+	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
+
+	// get the text from the scribble textview
 	{
-		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
-				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
+		GtkTextBuffer *buffer;
+		GtkTextIter start, end;
+
+		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(lookup_widget(app->window, "textview_scribble")));
+		gtk_text_buffer_get_bounds(buffer, &start, &end);
+		scribble_text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+		g_key_file_set_string(config, PACKAGE, "scribble_text", scribble_text);
+		g_free(scribble_text);
 	}
 
-	g_key_file_set_string(config, PACKAGE, "editor_font", prefs.editor_font);
-	g_key_file_set_string(config, PACKAGE, "tagbar_font", prefs.tagbar_font);
-	g_key_file_set_string(config, PACKAGE, "msgwin_font", prefs.msgwin_font);
-	g_key_file_set_string(config, PACKAGE, "scribble_text", scribble_text);
+	if (prefs.save_winpos)
+	{
+		g_key_file_set_integer(config, PACKAGE, "treeview_position",
+				gtk_paned_get_position(GTK_PANED(lookup_widget(app->window, "hpaned1"))));
+		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",
+				gtk_paned_get_position(GTK_PANED(lookup_widget(app->window, "vpaned1"))));
+	}
+
 	if (prefs.save_winpos && ! ui_prefs.fullscreen)
 	{
 		gtk_window_get_position(GTK_WINDOW(app->window), &ui_prefs.geometry[0], &ui_prefs.geometry[1]);
@@ -248,54 +299,29 @@ void configuration_save()
 
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", ui_prefs.geometry, 5);
 	}
-	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", editor_prefs.tab_width);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", editor_prefs.use_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", prefs.suppress_search_dialogs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", prefs.toolbar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_search", prefs.toolbar_show_search);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_goto", prefs.toolbar_show_goto);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_zoom", prefs.toolbar_show_zoom);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_undo", prefs.toolbar_show_undo);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_navigation", prefs.toolbar_show_navigation);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_compile", prefs.toolbar_show_compile);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_colour", prefs.toolbar_show_colour);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_fileops", prefs.toolbar_show_fileops);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show_quit", prefs.toolbar_show_quit);
-	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", prefs.toolbar_icon_style);
-	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", prefs.toolbar_icon_size);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", editor_prefs.new_line);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", editor_prefs.replace_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", editor_prefs.trail_space);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_smart_home_key", editor_prefs.smart_home_key);
-	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[editor_prefs.default_new_encoding].charset);
-	if (editor_prefs.default_open_encoding == -1)
-		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
-	else
-		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", encodings[editor_prefs.default_open_encoding].charset);
-	g_key_file_set_string(config, PACKAGE, "pref_template_developer", prefs.template_developer);
-	g_key_file_set_string(config, PACKAGE, "pref_template_company", prefs.template_company);
-	g_key_file_set_string(config, PACKAGE, "pref_template_mail", prefs.template_mail);
-	g_key_file_set_string(config, PACKAGE, "pref_template_initial", prefs.template_initial);
-	g_key_file_set_string(config, PACKAGE, "pref_template_version", prefs.template_version);
 
-	// store tools settings
-	g_key_file_set_string(config, "tools", "make_cmd", prefs.tools_make_cmd ? prefs.tools_make_cmd : "");
-	g_key_file_set_string(config, "tools", "term_cmd", prefs.tools_term_cmd ? prefs.tools_term_cmd : "");
-	g_key_file_set_string(config, "tools", "browser_cmd", prefs.tools_browser_cmd ? prefs.tools_browser_cmd : "");
-	g_key_file_set_string(config, "tools", "print_cmd", prefs.tools_print_cmd ? prefs.tools_print_cmd : "");
-	g_key_file_set_string(config, "tools", "grep_cmd", prefs.tools_grep_cmd ? prefs.tools_grep_cmd : "");
+	g_key_file_set_string(config, PACKAGE, "custom_date_format", ui_prefs.custom_date_format);
+	if (ui_prefs.custom_commands != NULL)
+	{
+		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
+				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
+	}
 
 	// search
 	g_key_file_set_string(config, "search", "fif_extra_options", search_prefs.fif_extra_options ? search_prefs.fif_extra_options : "");
+}
 
-	// startup
-	g_key_file_set_boolean(config, "startup", "load_plugins", prefs.load_plugins);
 
+void configuration_save()
+{
+	GKeyFile *config = g_key_file_new();
+	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	gchar *data;
+
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+
+	save_dialog_prefs(config);
+	save_ui_prefs(config);
 	project_save_prefs(config);	// save project filename, etc.
 	save_recent_files(config);
 	save_session_files(config);
@@ -307,7 +333,6 @@ void configuration_save()
 
 	g_key_file_free(config);
 	g_free(configfile);
-	g_free(scribble_text);
 }
 
 
@@ -484,6 +509,7 @@ gboolean configuration_load()
 	prefs.suppress_search_dialogs = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_search_dialogs", FALSE);
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
 	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
+	prefs.load_plugins = utils_get_setting_boolean(config, PACKAGE, "load_plugins", TRUE);
 	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
 	prefs.toolbar_show_search = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_search", TRUE);
 	prefs.toolbar_show_goto = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show_goto", TRUE);
@@ -578,9 +604,6 @@ gboolean configuration_load()
 
 	// search
 	search_prefs.fif_extra_options = utils_get_setting_string(config, "search", "fif_extra_options", "");
-
-	// startup
-	prefs.load_plugins = utils_get_setting_boolean(config, "startup", "load_plugins", TRUE);
 
 	project_load_prefs(config);
 	load_file_lists(config);
