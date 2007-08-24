@@ -978,8 +978,8 @@ on_line_breaking1_toggled              (GtkCheckMenuItem *checkmenuitem,
 	{
 		gint idx = document_get_cur_idx();
 		if (idx == -1 || ! doc_list[idx].is_valid) return;
-		doc_list[idx].line_breaking = ! doc_list[idx].line_breaking;
-		sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_breaking);
+		doc_list[idx].line_wrapping = ! doc_list[idx].line_wrapping;
+		sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_wrapping);
 	}
 }
 

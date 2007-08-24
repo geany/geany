@@ -11,6 +11,11 @@
  * src/keyfile.c:
    Refactor configuration_save() to group new struct settings together.
    Move 'Enable plugin support' keyfile pref to the 'geany' group.
+ * src/prefs.c, src/prefs.h, src/plugindata.h, src/callbacks.c,
+   src/keyfile.c, src/document.c, src/document.h, src/main.c,
+   src/editor.h, src/ui_utils.c:
+   Move file-related fields from EditorPrefs -> GeanyPrefs.
+   Rename line_breaking -> line_wrapping for EditorPrefs and document.
 
 
 2007-08-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

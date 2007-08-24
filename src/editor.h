@@ -39,40 +39,38 @@ typedef enum
 } IndentMode;
 
 /* These are the default prefs when creating a new editor window.
- * Some of these can be overridden per document. */
+ * Some of these can be overridden per document.
+ * Remember to increment abi_version in plugindata.h when changing items. */
 typedef struct EditorPrefs
 {
-	gboolean	line_breaking;
-	IndentMode	indent_mode;
-	gboolean	use_indicators;
+	// display
 	gboolean	show_white_space;
 	gboolean	show_indent_guide;
 	gboolean	show_line_endings;
-	gboolean	auto_complete_symbols;
-	gboolean	auto_close_xml_tags;
-	gboolean	auto_complete_constructs;
-	gboolean	folding;
-	gboolean	unfold_all_children;
-	gboolean	show_scrollbars;
-	gint		tab_width;
-	gint		caret_blink_time;
-	gboolean	use_tabs;
-	gint		default_new_encoding;
-	gint		default_open_encoding;
-	gboolean	new_line;
-	gboolean	replace_tabs;
-	gboolean	trail_space;
-	gboolean	disable_dnd;
-	gboolean	smart_home_key;
-	GHashTable	*auto_completions;
-	gboolean	brace_match_ltgt;	// whether to highlight < and > chars
-	gboolean	use_tab_to_indent;
-	gint		autocompletion_max_height;
 	gint		long_line_type;
 	gint		long_line_column;
 	gchar		*long_line_color;
-	gboolean	show_markers_margin;
-	gboolean	show_linenumber_margin;
+	gboolean	show_markers_margin;	// view menu
+	gboolean	show_linenumber_margin;	// view menu
+	gboolean	show_scrollbars;	// hidden pref
+
+	// behaviour
+	gboolean	line_wrapping;
+	gboolean	use_indicators;
+	gboolean	folding;
+	gboolean	unfold_all_children;
+	gint		tab_width;
+	gboolean	use_tabs;
+	gboolean	use_tab_to_indent;	// hidden pref
+	IndentMode	indent_mode;
+	gboolean	disable_dnd;
+	gboolean	smart_home_key;
+	gboolean	auto_complete_symbols;
+	gboolean	auto_close_xml_tags;
+	gboolean	auto_complete_constructs;
+	gint		autocompletion_max_height;
+	GHashTable	*auto_completions;
+	gboolean	brace_match_ltgt;	// whether to highlight < and > chars (hidden pref)
 } EditorPrefs;
 
 extern EditorPrefs editor_prefs;

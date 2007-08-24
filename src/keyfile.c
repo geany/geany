@@ -179,7 +179,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "show_white_space", editor_prefs.show_white_space);
 	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", editor_prefs.show_markers_margin);
 	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", editor_prefs.show_linenumber_margin);
-	g_key_file_set_boolean(config, PACKAGE, "line_breaking", editor_prefs.line_breaking);
+	g_key_file_set_boolean(config, PACKAGE, "line_breaking", editor_prefs.line_wrapping);
 	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
 	g_key_file_set_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", editor_prefs.auto_close_xml_tags);
@@ -187,16 +187,16 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", editor_prefs.auto_complete_symbols);
 	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", editor_prefs.tab_width);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", editor_prefs.use_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", editor_prefs.new_line);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", editor_prefs.replace_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", editor_prefs.trail_space);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", prefs.final_new_line);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", prefs.replace_tabs);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", prefs.strip_trailing_spaces);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_smart_home_key", editor_prefs.smart_home_key);
-	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[editor_prefs.default_new_encoding].charset);
-	if (editor_prefs.default_open_encoding == -1)
+	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[prefs.default_new_encoding].charset);
+	if (prefs.default_open_encoding == -1)
 		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
 	else
-		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", encodings[editor_prefs.default_open_encoding].charset);
+		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", encodings[prefs.default_open_encoding].charset);
 
 	// files
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", prefs.tab_order_ltr);
@@ -426,7 +426,7 @@ gboolean configuration_load()
 	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	prefs.statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
 	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
-	editor_prefs.line_breaking = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); // default is off for better performance
+	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); // default is off for better performance
 	editor_prefs.indent_mode = utils_get_setting_integer(config, PACKAGE, "indent_mode", INDENT_ADVANCED);
 	editor_prefs.use_tab_to_indent = utils_get_setting_boolean(config, PACKAGE, "use_tab_to_indent", FALSE);
 	editor_prefs.use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
@@ -488,9 +488,9 @@ gboolean configuration_load()
 	{
 		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);
 		if (enc != NULL)
-			editor_prefs.default_new_encoding = enc->idx;
+			prefs.default_new_encoding = enc->idx;
 		else
-			editor_prefs.default_new_encoding = GEANY_ENCODING_UTF_8;
+			prefs.default_new_encoding = GEANY_ENCODING_UTF_8;
 
 		g_free(tmp_string);
 	}
@@ -499,9 +499,9 @@ gboolean configuration_load()
 	{
 		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);
 		if (enc != NULL)
-			editor_prefs.default_open_encoding = enc->idx;
+			prefs.default_open_encoding = enc->idx;
 		else
-			editor_prefs.default_open_encoding = -1;
+			prefs.default_open_encoding = -1;
 
 		g_free(tmp_string);
 	}
@@ -569,9 +569,9 @@ gboolean configuration_load()
 	g_free(tmp_string);
 	g_free(tmp_string2);
 
-	editor_prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
-	editor_prefs.new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
-	editor_prefs.trail_space = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
+	prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
+	prefs.final_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
+	prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
 	editor_prefs.disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
 	editor_prefs.smart_home_key = utils_get_setting_boolean(config, PACKAGE, "pref_editor_smart_home_key", TRUE);
 

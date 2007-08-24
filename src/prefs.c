@@ -245,29 +245,29 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 	// luckily the index of the combo box items match the index of the encodings array
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.default_new_encoding);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), prefs.default_new_encoding);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-			(editor_prefs.default_open_encoding >= 0) ? TRUE : FALSE);
+			(prefs.default_open_encoding >= 0) ? TRUE : FALSE);
 	on_open_encoding_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
-	if (editor_prefs.default_open_encoding >= 0)
+	if (prefs.default_open_encoding >= 0)
 	{
-		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.default_open_encoding);
+		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), prefs.default_open_encoding);
 	}
 	else
 		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), GEANY_ENCODING_UTF_8);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.trail_space);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.strip_trailing_spaces);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.new_line);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.final_new_line);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.replace_tabs);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.replace_tabs);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_indent");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_indent_guide);
@@ -282,7 +282,7 @@ void prefs_init_dialog(void)
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.indent_mode);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.line_breaking);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.line_wrapping);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_complete");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_complete_constructs);
@@ -615,25 +615,25 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		editor_prefs.tab_width = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
-		editor_prefs.default_new_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+		prefs.default_new_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		{
 			widget = lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
-			editor_prefs.default_open_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+			prefs.default_open_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 		}
 		else
-			editor_prefs.default_open_encoding = -1;
+			prefs.default_open_encoding = -1;
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
-		editor_prefs.trail_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		prefs.strip_trailing_spaces = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
-		editor_prefs.new_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		prefs.final_new_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
-		editor_prefs.replace_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		prefs.replace_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
 		editor_prefs.long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
@@ -658,7 +658,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		editor_prefs.indent_mode = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
-		editor_prefs.line_breaking = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		editor_prefs.line_wrapping = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_complete");
 		editor_prefs.auto_complete_constructs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

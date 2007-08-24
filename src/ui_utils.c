@@ -638,7 +638,7 @@ void ui_document_show_hide(gint idx)
 
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_breaking1")),
-			doc_list[idx].line_breaking);
+			doc_list[idx].line_wrapping);
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(check_indent),
 			doc_list[idx].auto_indent);

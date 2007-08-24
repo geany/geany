@@ -233,7 +233,7 @@ static void init_doc_struct(document *new_doc)
 	new_doc->is_valid = FALSE;
 	new_doc->has_tags = FALSE;
 	new_doc->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
-	new_doc->line_breaking = editor_prefs.line_breaking;
+	new_doc->line_wrapping = editor_prefs.line_wrapping;
 	new_doc->readonly = FALSE;
 	new_doc->tag_store = NULL;
 	new_doc->tag_tree = NULL;
@@ -331,7 +331,7 @@ static gint document_create_new_sci(const gchar *filename)
 	sci_set_tab_indents(sci, editor_prefs.use_tab_to_indent);
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
 	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin, 0);
-	sci_set_lines_wrapped(sci, editor_prefs.line_breaking);
+	sci_set_lines_wrapped(sci, editor_prefs.line_wrapping);
 	sci_set_scrollbar_mode(sci, editor_prefs.show_scrollbars);
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
 	//sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);
@@ -364,7 +364,7 @@ static gint document_create_new_sci(const gchar *filename)
 	this->changed = FALSE;
 	this->last_check = time(NULL);
 	this->readonly = FALSE;
-	this->line_breaking = editor_prefs.line_breaking;
+	this->line_wrapping = editor_prefs.line_wrapping;
 	this->auto_indent = (editor_prefs.indent_mode != INDENT_NONE);
 	this->has_tags = FALSE;
 
@@ -466,7 +466,7 @@ gint document_new_file(const gchar *filename, filetype *ft)
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 	sci_empty_undo_buffer(doc_list[idx].sci);
 
-	doc_list[idx].encoding = g_strdup(encodings[editor_prefs.default_new_encoding].charset);
+	doc_list[idx].encoding = g_strdup(encodings[prefs.default_new_encoding].charset);
 	// store the opened encoding for undo/redo
 	store_saved_encoding(idx);
 
@@ -821,8 +821,8 @@ gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	}
 
 	// if default encoding for opening files is set, use it if no forced encoding is set
-	if (editor_prefs.default_open_encoding >= 0 && forced_enc == NULL)
-		forced_enc = encodings[editor_prefs.default_open_encoding].charset;
+	if (prefs.default_open_encoding >= 0 && forced_enc == NULL)
+		forced_enc = encodings[prefs.default_open_encoding].charset;
 
 	if (! load_text_file(locale_filename, utf8_filename, &filedata, forced_enc))
 	{
@@ -1025,11 +1025,11 @@ gboolean document_save_file(gint idx, gboolean force)
 	}
 
 	// replaces tabs by spaces
-	if (editor_prefs.replace_tabs) document_replace_tabs(idx);
+	if (prefs.replace_tabs) document_replace_tabs(idx);
 	// strip trailing spaces
-	if (editor_prefs.trail_space) document_strip_trailing_spaces(idx);
+	if (prefs.strip_trailing_spaces) document_strip_trailing_spaces(idx);
 	// ensure the file has a newline at the end
-	if (editor_prefs.new_line) document_ensure_final_newline(idx);
+	if (prefs.final_new_line) document_ensure_final_newline(idx);
 	// ensure there are really the same EOL chars
 	sci_convert_eols(doc_list[idx].sci, sci_get_eol_mode(doc_list[idx].sci));
 
@@ -2384,11 +2384,11 @@ gint document_clone(gint old_idx, const gchar *utf8_filename)
 	sci_set_text(doc_list[idx].sci, data);
 
 	// copy file properties
-	doc_list[idx].line_breaking = doc_list[old_idx].line_breaking;
+	doc_list[idx].line_wrapping = doc_list[old_idx].line_wrapping;
 	doc_list[idx].readonly = doc_list[old_idx].readonly;
 	doc_list[idx].has_bom = doc_list[old_idx].has_bom;
 	document_set_encoding(idx, doc_list[old_idx].encoding);
-	sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_breaking);
+	sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_wrapping);
 	sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 

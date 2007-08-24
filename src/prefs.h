@@ -68,6 +68,11 @@ typedef struct GeanyPrefs
 	gint			toolbar_icon_style;
 
 	/* files */
+	gint			default_new_encoding;
+	gint			default_open_encoding;
+	gboolean		final_new_line;
+	gboolean		strip_trailing_spaces;
+	gboolean		replace_tabs;
 	gboolean		tab_order_ltr;
 	guint			mru_length;
 
