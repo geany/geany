@@ -758,9 +758,16 @@ static void set_cursor_position(gint idx, gint pos)
 
 /* To open a new file, set idx to -1; filename should be locale encoded.
  * To reload a file, set the idx for the document to be reloaded; filename should be NULL.
+ * pos is the cursor position, which can be overridden by --line and --column.
  * Returns: idx of the opened file or -1 if an error occurred.
- * Note: If opening more than one file, document_delay_colourise() should be used before
- * and document_colourise_new() after opening to avoid unnecessary recolourising. */
+ *
+ * When opening more than one file, either:
+ * 1. Use document_open_files().
+ * 2. Call document_delay_colourise() before document_open_file() and
+ *    document_colourise_new() after opening all files.
+ *
+ * This avoids unnecessary recolourising, saving significant processing when a lot of files
+ * are open of a filetype that supports user typenames, e.g. C. */
 gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly,
 		filetype *ft, const gchar *forced_enc)
 {
