@@ -1147,7 +1147,7 @@ on_find_previous1_activate             (GtkMenuItem     *menuitem,
 	if (search_data.text == NULL) return;
 
 	if (search_data.flags & SCFIND_REGEXP)
-		utils_beep(); //Can't reverse search order for a regex (find next ignores search backwards)
+		utils_beep(); // Can't reverse search order for a regex (find next ignores search backwards)
 	else
 	{
 		gint result = document_find_text(idx, search_data.text, search_data.flags,
