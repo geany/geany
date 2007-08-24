@@ -451,8 +451,8 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 #endif
 
 
-/* This shows the file selection dialog to save a file, returning TRUE if
- * the file was saved. */
+/* Show the Save As dialog for the current notebook page.
+ * Returns: TRUE if the file was saved. */
 gboolean dialogs_show_save_as()
 {
 #if GEANY_USE_WIN32_DIALOG

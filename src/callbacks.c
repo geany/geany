@@ -228,12 +228,18 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 {
 	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 	gint cur_idx = document_get_cur_idx();
-	for(i = 0; i < max; i++)
+
+	for (i = 0; i < max; i++)
 	{
 		idx = document_get_n_idx(i);
 		if (! doc_list[idx].changed) continue;
 		if (doc_list[idx].file_name == NULL)
+		{
+			// display unnamed document
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
+				document_get_notebook_page(idx));
 			dialogs_show_save_as();
+		}
 		else
 			document_save_file(idx, FALSE);
 	}
