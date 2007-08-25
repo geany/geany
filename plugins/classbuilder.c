@@ -46,7 +46,7 @@ GeanyData		*geany_data;
 
 VERSION_CHECK(7)
 
-PLUGIN_INFO(_("Class Builder"), _("Creates source files for new class types."))
+PLUGIN_INFO(_("Class Builder"), _("Creates source files for new class types."), "0.1")
 
 
 enum

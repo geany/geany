@@ -71,12 +71,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 14;
+static const gint api_version = 15;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 5;
+static const gint abi_version = 6;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
@@ -97,17 +97,21 @@ typedef struct PluginInfo
 {
 	gchar	*name;			// name of plugin
 	gchar	*description;	// description of plugin
+	gchar	*version;		// version of plugin
+	gpointer reserved1;		// reserved for later use
+	gpointer reserved2;		// reserved for later use
 }
 PluginInfo;
 
 /* Sets the plugin name and a brief description of what it is. */
-#define PLUGIN_INFO(p_name, p_description) \
+#define PLUGIN_INFO(p_name, p_description, p_version) \
 	PluginInfo *info() \
 	{ \
 		static PluginInfo p_info; \
 		 \
 		p_info.name = (p_name); \
 		p_info.description = (p_description); \
+		p_info.version = (p_version); \
 		return &p_info; \
 	}
 

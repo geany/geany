@@ -42,7 +42,7 @@ GeanyData		*geany_data;
 
 VERSION_CHECK(7)
 
-PLUGIN_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."))
+PLUGIN_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), "0.1")
 
 
 enum

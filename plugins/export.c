@@ -38,7 +38,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
 VERSION_CHECK(12)
-PLUGIN_INFO(_("Export"), _("Exports the current file into different formats."))
+PLUGIN_INFO(_("Export"), _("Exports the current file into different formats."), "0.1")
 
 #define doc_array	geany_data->doc_array
 #define scintilla	geany_data->sci
@@ -78,10 +78,11 @@ PLUGIN_INFO(_("Export"), _("Exports the current file into different formats."))
 \\usepackage[utf8x]{inputenc}\n\
 \\usepackage[T1]{fontenc}\n\
 \\usepackage{color}\n\
+\\setlength{\\parindent}{0em}\n\
+\\setlength{\\parskip}{2ex plus1ex minus0.5ex}\n\
 {export_styles}\n\
 \\begin{document}\
 \n\
-\\noindent\n\
 \\ttfamily\n\
 \\setlength{\\fboxrule}{0pt}\n\
 \\setlength{\\fboxsep}{0pt}\n\

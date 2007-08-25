@@ -2448,13 +2448,14 @@ create_prefs_dialog (void)
   GtkWidget *frame9;
   GtkWidget *alignment12;
   GtkWidget *table8;
-  GtkWidget *label161;
-  GtkWidget *label160;
-  GtkWidget *label159;
   GtkWidget *check_show_notebook_tabs;
+  GtkWidget *label160;
   GtkWidget *combo_tab_msgwin;
+  GtkWidget *label161;
   GtkWidget *combo_tab_sidebar;
+  GtkWidget *label159;
   GtkWidget *combo_tab_editor;
+  GtkWidget *check_show_tab_cross;
   GtkWidget *label158;
   GtkWidget *frame23;
   GtkWidget *alignment26;
@@ -2577,13 +2578,13 @@ create_prefs_dialog (void)
   GtkWidget *alignment20;
   GtkWidget *table10;
   GtkWidget *label150;
-  GtkObject *spin_mru_adj;
-  GtkWidget *spin_mru;
   GtkWidget *hbox3;
   GtkWidget *radio_tab_left;
   GSList *radio_tab_left_group = NULL;
   GtkWidget *radio_tab_right;
   GtkWidget *label147;
+  GtkObject *spin_mru_adj;
+  GtkWidget *spin_mru;
   GtkWidget *label176;
   GtkWidget *label174;
   GtkWidget *vbox23;
@@ -2962,32 +2963,11 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (frame9), alignment12);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment12), 0, 0, 12, 0);
 
-  table8 = gtk_table_new (4, 2, FALSE);
+  table8 = gtk_table_new (5, 2, FALSE);
   gtk_widget_show (table8);
   gtk_container_add (GTK_CONTAINER (alignment12), table8);
   gtk_table_set_row_spacings (GTK_TABLE (table8), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table8), 25);
-
-  label161 = gtk_label_new (_("Sidebar:"));
-  gtk_widget_show (label161);
-  gtk_table_attach (GTK_TABLE (table8), label161, 0, 1, 2, 3,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label161), 0, 0.5);
-
-  label160 = gtk_label_new (_("Message window:"));
-  gtk_widget_show (label160);
-  gtk_table_attach (GTK_TABLE (table8), label160, 0, 1, 3, 4,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label160), 0, 0.5);
-
-  label159 = gtk_label_new (_("Editor:"));
-  gtk_widget_show (label159);
-  gtk_table_attach (GTK_TABLE (table8), label159, 0, 1, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label159), 0, 0.5);
 
   check_show_notebook_tabs = gtk_check_button_new_with_mnemonic (_("Show editor tabs"));
   gtk_widget_show (check_show_notebook_tabs);
@@ -2995,9 +2975,16 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
 
+  label160 = gtk_label_new (_("Message window:"));
+  gtk_widget_show (label160);
+  gtk_table_attach (GTK_TABLE (table8), label160, 0, 1, 4, 5,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label160), 0, 0.5);
+
   combo_tab_msgwin = gtk_combo_box_new_text ();
   gtk_widget_show (combo_tab_msgwin);
-  gtk_table_attach (GTK_TABLE (table8), combo_tab_msgwin, 1, 2, 3, 4,
+  gtk_table_attach (GTK_TABLE (table8), combo_tab_msgwin, 1, 2, 4, 5,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_msgwin), _("Left"));
@@ -3005,9 +2992,16 @@ create_prefs_dialog (void)
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_msgwin), _("Top"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_msgwin), _("Bottom"));
 
+  label161 = gtk_label_new (_("Sidebar:"));
+  gtk_widget_show (label161);
+  gtk_table_attach (GTK_TABLE (table8), label161, 0, 1, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label161), 0, 0.5);
+
   combo_tab_sidebar = gtk_combo_box_new_text ();
   gtk_widget_show (combo_tab_sidebar);
-  gtk_table_attach (GTK_TABLE (table8), combo_tab_sidebar, 1, 2, 2, 3,
+  gtk_table_attach (GTK_TABLE (table8), combo_tab_sidebar, 1, 2, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_sidebar), _("Left"));
@@ -3015,15 +3009,31 @@ create_prefs_dialog (void)
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_sidebar), _("Top"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_sidebar), _("Bottom"));
 
+  label159 = gtk_label_new (_("Editor:"));
+  gtk_widget_show (label159);
+  gtk_table_attach (GTK_TABLE (table8), label159, 0, 1, 2, 3,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label159), 0, 0.5);
+
   combo_tab_editor = gtk_combo_box_new_text ();
   gtk_widget_show (combo_tab_editor);
-  gtk_table_attach (GTK_TABLE (table8), combo_tab_editor, 1, 2, 1, 2,
+  gtk_table_attach (GTK_TABLE (table8), combo_tab_editor, 1, 2, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_editor), _("Left"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_editor), _("Right"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_editor), _("Top"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_tab_editor), _("Bottom"));
+
+  check_show_tab_cross = gtk_check_button_new_with_mnemonic (_("Show small cross symbol in the file tabs"));
+  gtk_widget_show (check_show_tab_cross);
+  gtk_table_attach (GTK_TABLE (table8), check_show_tab_cross, 0, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_show_tab_cross, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_show_tab_cross, _("Shows a small cross symbol in the file tabs to easily close files by clicking on it (requires restart of Geany)."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_show_tab_cross), FALSE);
 
   label158 = gtk_label_new (_("<b>Tab placement</b>"));
   gtk_widget_show (label158);
@@ -3681,7 +3691,7 @@ create_prefs_dialog (void)
   gtk_container_add (GTK_CONTAINER (frame17), alignment20);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment20), 0, 0, 12, 0);
 
-  table10 = gtk_table_new (2, 2, FALSE);
+  table10 = gtk_table_new (3, 2, FALSE);
   gtk_widget_show (table10);
   gtk_container_add (GTK_CONTAINER (alignment20), table10);
   gtk_table_set_row_spacings (GTK_TABLE (table10), 3);
@@ -3693,16 +3703,6 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label150), 0, 0.5);
-
-  spin_mru_adj = gtk_adjustment_new (4, 1, 50, 1, 10, 10);
-  spin_mru = gtk_spin_button_new (GTK_ADJUSTMENT (spin_mru_adj), 1, 0);
-  gtk_widget_show (spin_mru);
-  gtk_table_attach (GTK_TABLE (table10), spin_mru, 1, 2, 1, 2,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, spin_mru, _("Specifies the number of files which are stored in the Recent files list."), NULL);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_mru), TRUE);
-  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_mru), TRUE);
 
   hbox3 = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox3);
@@ -3732,6 +3732,16 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label147), 0, 0.5);
   gtk_misc_set_padding (GTK_MISC (label147), 0, 7);
+
+  spin_mru_adj = gtk_adjustment_new (4, 1, 50, 1, 10, 10);
+  spin_mru = gtk_spin_button_new (GTK_ADJUSTMENT (spin_mru_adj), 1, 0);
+  gtk_widget_show (spin_mru);
+  gtk_table_attach (GTK_TABLE (table10), spin_mru, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_mru, _("Specifies the number of files which are stored in the Recent files list."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_mru), TRUE);
+  gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_mru), TRUE);
 
   label176 = gtk_label_new (_("<b>Misc.</b>"));
   gtk_widget_show (label176);
@@ -4183,13 +4193,14 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame9, "frame9");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment12, "alignment12");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table8, "table8");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label161, "label161");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label160, "label160");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label159, "label159");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_show_notebook_tabs, "check_show_notebook_tabs");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label160, "label160");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_tab_msgwin, "combo_tab_msgwin");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label161, "label161");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_tab_sidebar, "combo_tab_sidebar");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label159, "label159");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_tab_editor, "combo_tab_editor");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_show_tab_cross, "check_show_tab_cross");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label158, "label158");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame23, "frame23");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment26, "alignment26");
@@ -4306,11 +4317,11 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment20, "alignment20");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table10, "table10");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label150, "label150");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_mru, "spin_mru");
   GLADE_HOOKUP_OBJECT (prefs_dialog, hbox3, "hbox3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_left, "radio_tab_left");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_tab_right, "radio_tab_right");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label147, "label147");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_mru, "spin_mru");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label176, "label176");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label174, "label174");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox23, "vbox23");

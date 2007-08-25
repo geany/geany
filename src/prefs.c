@@ -165,6 +165,9 @@ void prefs_init_dialog(void)
 	on_show_notebook_tabs_toggled(GTK_TOGGLE_BUTTON(
 					lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs")), NULL);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.show_tab_cross);
+
 	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), prefs.tab_pos_editor);
 
@@ -540,6 +543,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 		prefs.show_notebook_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
+		prefs.show_tab_cross = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
 		prefs.tab_pos_editor = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
@@ -1085,6 +1091,7 @@ static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointe
 
 	// tab placement only enabled when tabs are visible
 	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor"), sens);
+	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross"), sens);
 }
 
 

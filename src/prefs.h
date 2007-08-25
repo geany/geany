@@ -74,6 +74,7 @@ typedef struct GeanyPrefs
 	gboolean		strip_trailing_spaces;
 	gboolean		replace_tabs;
 	gboolean		tab_order_ltr;
+	gboolean		show_tab_cross;
 	guint			mru_length;
 
 	/* tools */

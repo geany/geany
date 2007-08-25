@@ -319,18 +319,28 @@ gint notebook_new_tab(gint doc_idx)
 	this->tab_label = gtk_label_new(title);
 
 	hbox = gtk_hbox_new(FALSE, 0);
-	but = gtk_button_new();
-	gtk_container_add(GTK_CONTAINER(but),
-		ui_new_image_from_inline(GEANY_IMAGE_SMALL_CROSS, FALSE));
-	gtk_container_set_border_width(GTK_CONTAINER(but), 0);
-	gtk_widget_set_size_request(but, 19, 18);
-
-	align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
-	gtk_container_add(GTK_CONTAINER(align), but);
-
-	gtk_button_set_relief(GTK_BUTTON(but), GTK_RELIEF_NONE);
 	gtk_box_pack_start(GTK_BOX(hbox), this->tab_label, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
+
+	if (prefs.show_tab_cross)
+	{
+		but = gtk_button_new();
+		gtk_container_add(GTK_CONTAINER(but),
+			ui_new_image_from_inline(GEANY_IMAGE_SMALL_CROSS, FALSE));
+		gtk_container_set_border_width(GTK_CONTAINER(but), 0);
+		gtk_widget_set_size_request(but, 19, 18);
+
+		align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
+		gtk_container_add(GTK_CONTAINER(align), but);
+
+		gtk_button_set_relief(GTK_BUTTON(but), GTK_RELIEF_NONE);
+		gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
+
+		g_signal_connect(G_OBJECT(but), "clicked",
+			G_CALLBACK(notebook_tab_close_clicked_cb), page);
+	}
+	else
+		gtk_widget_set_size_request(hbox, -1, 18); // keep the familiar tab height
+
 	gtk_widget_show_all(hbox);
 
 	this->tabmenu_label = gtk_label_new(title);
@@ -344,10 +354,6 @@ gint notebook_new_tab(gint doc_idx)
 			hbox, this->tabmenu_label, 0);
 
 	tab_count_changed();
-
-	// signal for clicking the tab-close button
-	g_signal_connect(G_OBJECT(but), "clicked",
-		G_CALLBACK(notebook_tab_close_clicked_cb), page);
 
 	// This is where tab DnD is enabled for GTK 2.10 and higher
 #if GTK_CHECK_VERSION(2, 10, 0)
