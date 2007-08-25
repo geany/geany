@@ -23,8 +23,7 @@ msgstr ""
 #: ../geany.desktop.in.h:1
 msgid "A fast and lightweight IDE using GTK2"
 msgstr ""
-"Geany - szybkie i lekkie\n"
-"środowisko programistyczne"
+"Geany - szybkie i lekki środowisko programistyczne"
 
 #: ../geany.desktop.in.h:2 ../src/interface.c:273 ../src/interface.c:1600
 msgid "Geany"
