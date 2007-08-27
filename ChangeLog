@@ -1,3 +1,12 @@
+2007-08-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, geany.glade:
+   Add Prefs dialog 'Editor tabs' frame in Interface tab and group
+   related preferences.
+   Change some table spacing to multiples of 3.
+   Rename Misc., Behaviour -> Miscellaneous.
+
+
 2007-08-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, plugins/classbuilder.c, plugins/demoplugin.c,
