@@ -5,6 +5,8 @@
    related preferences.
    Change some table spacing to multiples of 3.
    Rename Misc., Behaviour -> Miscellaneous.
+ * src/plugindata.h:
+   Clear PluginInfo fields in PLUGIN_INFO macro for future extensions.
 
 
 2007-08-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

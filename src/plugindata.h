@@ -103,12 +103,15 @@ typedef struct PluginInfo
 }
 PluginInfo;
 
+#include <string.h>
+
 /* Sets the plugin name and a brief description of what it is. */
 #define PLUGIN_INFO(p_name, p_description, p_version) \
 	PluginInfo *info() \
 	{ \
 		static PluginInfo p_info; \
-		 \
+		\
+		memset(&p_info, 0, sizeof(PluginInfo)); \
 		p_info.name = (p_name); \
 		p_info.description = (p_description); \
 		p_info.version = (p_version); \
