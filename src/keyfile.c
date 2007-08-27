@@ -390,23 +390,10 @@ static void load_file_lists(GKeyFile *config)
 	else \
 		value = default_value;
 
-gboolean configuration_load()
+static void load_dialog_prefs(GKeyFile *config)
 {
-	gint *geo;
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
-	GKeyFile *config = g_key_file_new();
-	GError *error = NULL;
-
-	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-	{	// config file does not (yet) exist, so try to load a global config file which may be
-		// created by distributors
-		geany_debug("No config file found, try to use global configuration.");
-		setptr(configfile, g_strconcat(app->datadir, G_DIR_SEPARATOR_S "geany.conf", NULL));
-	}
-
-	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	prefs.toolbar_visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
 	{
@@ -428,9 +415,7 @@ gboolean configuration_load()
 	prefs.tab_pos_sidebar = utils_get_setting_integer(config, PACKAGE, "tab_pos_sidebar", GTK_POS_TOP);
 	prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
 	prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
-	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	prefs.statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
-	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); // default is off for better performance
 	editor_prefs.indent_mode = utils_get_setting_integer(config, PACKAGE, "indent_mode", INDENT_ADVANCED);
 	editor_prefs.use_tab_to_indent = utils_get_setting_boolean(config, PACKAGE, "use_tab_to_indent", FALSE);
@@ -446,43 +431,17 @@ gboolean configuration_load()
 	editor_prefs.show_scrollbars = utils_get_setting_boolean(config, PACKAGE, "show_editor_scrollbars", TRUE);
 	editor_prefs.show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
 	editor_prefs.show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
-	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
 	prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
 	prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
 	editor_prefs.brace_match_ltgt = utils_get_setting_boolean(config, PACKAGE, "brace_match_ltgt", FALSE);
 	prefs.switch_msgwin_pages = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
-	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
 	prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 	prefs.default_open_path = utils_get_setting_string(config, PACKAGE, "default_open_path", "");
-	ui_prefs.custom_commands = g_key_file_get_string_list(config, PACKAGE, "custom_commands", NULL, NULL);
 	prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
-	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
-				_("Type here what you want, use it as a notice/scratch board"));
-
-	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", NULL, &error);
-	if (error)
-	{
-		ui_prefs.geometry[0] = -1;
-		g_error_free(error);
-		error = NULL;
-	}
-	else
-	{
-		ui_prefs.geometry[0] = geo[0];
-		ui_prefs.geometry[1] = geo[1];
-		ui_prefs.geometry[2] = geo[2];
-		ui_prefs.geometry[3] = geo[3];
-		ui_prefs.geometry[4] = geo[4];
-	}
-	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
-	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
-				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) :
-				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
-
 
 	editor_prefs.tab_width = utils_get_setting_integer(config, PACKAGE, "pref_editor_tab_width", 4);
 	editor_prefs.use_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_use_tabs", TRUE);
@@ -607,16 +566,71 @@ gboolean configuration_load()
 	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_GREP);
 	prefs.tools_grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", tmp_string);
 	g_free(tmp_string);
+}
+
+
+static void load_ui_prefs(GKeyFile *config)
+{
+	gint *geo;
+	GError *error = NULL;
+
+	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
+	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
+	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
+	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
+	ui_prefs.custom_commands = g_key_file_get_string_list(config, PACKAGE, "custom_commands", NULL, NULL);
+
+	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
+				_("Type here what you want, use it as a notice/scratch board"));
+
+	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", NULL, &error);
+	if (error)
+	{
+		ui_prefs.geometry[0] = -1;
+		g_error_free(error);
+		error = NULL;
+	}
+	else
+	{
+		ui_prefs.geometry[0] = geo[0];
+		ui_prefs.geometry[1] = geo[1];
+		ui_prefs.geometry[2] = geo[2];
+		ui_prefs.geometry[3] = geo[3];
+		ui_prefs.geometry[4] = geo[4];
+	}
+	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
+	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
+				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) :
+				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
+
+	g_free(geo);
 
 	// search
 	search_prefs.fif_extra_options = utils_get_setting_string(config, "search", "fif_extra_options", "");
+}
 
+
+gboolean configuration_load()
+{
+	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	GKeyFile *config = g_key_file_new();
+
+	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+	{	// config file does not (yet) exist, so try to load a global config file which may be
+		// created by distributors
+		geany_debug("No config file found, try to use global configuration.");
+		setptr(configfile, g_strconcat(app->datadir, G_DIR_SEPARATOR_S "geany.conf", NULL));
+	}
+
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+
+	load_dialog_prefs(config);
+	load_ui_prefs(config);
 	project_load_prefs(config);
 	load_file_lists(config);
 
 	g_key_file_free(config);
 	g_free(configfile);
-	g_free(geo);
 	return TRUE;
 }
 
