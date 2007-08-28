@@ -71,6 +71,7 @@ typedef struct EditorPrefs
 	gint		autocompletion_max_height;
 	GHashTable	*auto_completions;
 	gboolean	brace_match_ltgt;	// whether to highlight < and > chars (hidden pref)
+	gboolean	use_gtk_word_boundaries;	// hidden pref
 } EditorPrefs;
 
 extern EditorPrefs editor_prefs;
