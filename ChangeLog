@@ -6,6 +6,8 @@
    doc/geany.html:
    Add hidden editor preference 'use_gtk_word_boundaries'.
    Add docs appendix 'Hidden preferences'.
+ * HACKING:
+   Add more complete information for adding a filetype.
 
 
 2007-08-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

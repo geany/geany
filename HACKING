@@ -82,7 +82,7 @@ Add path/foo.c to po/POTFILES.in (for string translation).
 Adding a filetype
 -----------------
 You can add a filetype without syntax highlighting or tag parsing, but check to see if those
-features have been written elsewhere.
+features have been written in other projects first.
 
 For syntax highlighting, it may be possible to use an existing Scintilla lexer in the scintilla/
 subdirectory - if not, you will need to find (or write) one, LexFoo.cxx. Try the Scintilla project
@@ -92,6 +92,10 @@ For tag parsing (e.g. for the symbol list), see 'Adding a TagManager parser' bel
 
 Add GEANY_FILETYPES_FOO to filetypes.h.
 Initialize GEANY_FILETYPES_FOO in filetypes_init_types() of filetypes.c.
+The filetype::style_func_ptr is a callback for setting up styling information. The callback,
+styleset_foo(), should be added in highlighting.c. The first time it is called, the configuration
+should be loaded in styleset_foo_init(). For more details, see styleset_c(). If there isn't a
+Scintilla lexer, use styleset_none().
 Rebuild Geany.
 From your geany/ directory, run:
 src/geany --generate-data-files
@@ -99,7 +103,28 @@ src/geany --generate-data-files
 (The src/ prefix may be different, depending on where the binary is generated.)
 This will update data/filetype_extensions.conf. Note that you need GEANY_DEBUG to be defined when
 building Geany for the --generate-data-files argument to work - this is always defined in the SVN
-version.
+version. Alternatively, edit the file by hand.
+
+Most languages will also need a data/filetypes.foo configuration file. See data/filetypes.c
+for an example. For languages with a Scintilla lexer, there should be a [styling] section, to
+correspond to the styles used in styleset_foo().
+
+Programming languages should have:
+[keywords] if the lexer supports it.
+[settings] mostly for comment settings.
+[build_settings] for commands to run.
+
+Error message parsing is done in msgwin_parse_compiler_error_line() of msgwindow.c. See the
+ParseData typedef for more information. (In future this may be done with a regex).
+
+For brace indentation, see lexer_has_braces() in editor.c; other indentation is done from
+on_new_line_added().
+
+If the lexer has comment styles, you should add them in is_comment() in editor.c. For now,
+this prevents calltips and autocompletion when typing in a comment.
+
+If the Scintilla lexer supports user type keywords (e.g. SCLEX_CPP), see
+editor_lexer_get_type_keyword_idx() in editor.c.
 
 
 Adding a TagManager parser
