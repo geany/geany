@@ -1,3 +1,9 @@
+2007-08-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c:
+   Group settings in load_dialog_prefs() by dialog tab.
+
+
 2007-08-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c, src/callbacks.h, src/keybindings.c, src/main.c:
