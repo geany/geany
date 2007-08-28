@@ -37,7 +37,7 @@ GeanyData		*geany_data;
  * for binary compatibility. */
 VERSION_CHECK(7)
 
-/* All plugins must set name and description */
+/* All plugins must set name, description and version */
 PLUGIN_INFO(_("Demo"), _("Example plugin."), "0.1")
 
 
