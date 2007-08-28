@@ -453,7 +453,7 @@ void keybindings_write_to_file(void)
 	guint i;
 	GKeyFile *config = g_key_file_new();
 
-	// add comment if the file is newly created
+ 	// add comment if the file is newly created
 	if (! g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
 	{
 		g_key_file_set_comment(config, NULL, NULL, "Keybindings for Geany\nThe format looks like \"<Control>a\" or \"<Shift><Alt>F1\".\nBut you can also change the keys in Geany's preferences dialog.", NULL);
@@ -645,14 +645,21 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 {
 	guint i, k;
 
+	if (event->keyval == 0)
+		return FALSE;
+
+	// ignore caps-lock
 	if (event->state & GDK_LOCK_MASK)
-		event->state -= GDK_LOCK_MASK;	// ignore caps-lock
+		event->state -= GDK_LOCK_MASK;
 	// ignore numlock key, not necessary but nice
-	if (event->state & GDK_MOD2_MASK) event->state -= GDK_MOD2_MASK;
+	if (event->state & GDK_MOD2_MASK)
+		event->state -= GDK_MOD2_MASK;
 
 	// special cases
-	if (check_fixed_kb(event)) return TRUE;
-	if (check_construct_completion(event)) return TRUE;
+	if (check_fixed_kb(event))
+		return TRUE;
+	if (check_construct_completion(event))
+		return TRUE;
 
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
 	{

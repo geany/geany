@@ -808,15 +808,6 @@ on_tv_notebook_switch_page             (GtkNotebook     *notebook,
 }
 
 
-gboolean
-on_window_key_press_event              (GtkWidget *widget,
-                                        GdkEventKey *event,
-                                        gpointer user_data)
-{
-	return event->keyval == 0 ? FALSE : keybindings_got_event(widget, event, user_data);
-}
-
-
 void
 on_crlf_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)

@@ -378,11 +378,6 @@ on_tv_notebook_switch_page             (GtkNotebook     *notebook,
                                         guint            page_num,
                                         gpointer         user_data);
 
-gboolean
-on_window_key_press_event              (GtkWidget *widget,
-                                        GdkEventKey *event,
-                                        gpointer user_data);
-
 void
 on_help_shortcuts1_activate            (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
