@@ -9,6 +9,8 @@
  * doc/geany.txt, doc/geany.html:
    Added 'Inserting unicode characters' Editing section, adapted from
    a patch by John Gabriele (thanks).
+ * plugins/Makefile.am:
+   Don't install Demo plugin.
 
 
 2007-08-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

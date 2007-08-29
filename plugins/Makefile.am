@@ -20,14 +20,13 @@ if PLUGINS
 
 # Plugins to be installed
 plugin_LTLIBRARIES = \
-	demoplugin.la \
 	classbuilder.la \
 	htmlchars.la \
 	export.la
 
 # Plugins not to be installed
-#noinst_LTLIBRARIES = \
-	#demoplugin.la
+noinst_LTLIBRARIES = \
+	demoplugin.la
 
 demoplugin_la_SOURCES    = demoplugin.c
 classbuilder_la_SOURCES  = classbuilder.c
