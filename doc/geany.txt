@@ -451,16 +451,19 @@ before the selected text was copied to the new position.
 Auto indentation
 ^^^^^^^^^^^^^^^^
 
-Geany knows three types of auto indentation:
+Geany knows four types of auto indentation:
 
 None
     Disables auto indentation completely.
 Basic
     Adds the same amount of whitespace on a new line as on the last line.
-Advanced
-    Does the same as Basic but also indents curly brackets and adds a
-    tabulator character (or spaces) on a new line after an opening '{'
-    brace.
+Current chars
+    Does the same as *Basic* but also indents a new line after an opening
+    brace '{', and de-indents when typing a closing brace '}'. For Python,
+    a new line will be indented after typing ':' at the end of a line.
+Match braces
+    Similar to *Current chars* but the closing brace will be aligned to
+    match the indentation of the line with the opening brace.
 
 
 Bookmarks
@@ -1043,9 +1046,7 @@ Keybinding tab in preferences dialog
 .. image:: ./images/pref_dialog_keys.png
 
 There are some handy commands in here that are not, by default,
-bound to a key combination, and may in fact not even be available as
-a menu item (for example, the very handy "Hide and show all additional
-widgets").
+bound to a key combination, and may not be available as a menu item.
 
 .. note::
     For more information see the section called `Keybindings`_.

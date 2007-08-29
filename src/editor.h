@@ -35,7 +35,8 @@ typedef enum
 {
 	INDENT_NONE = 0,
 	INDENT_BASIC,
-	INDENT_ADVANCED
+	INDENT_CURRENTCHARS,
+	INDENT_MATCHBRACES
 } IndentMode;
 
 /* These are the default prefs when creating a new editor window.

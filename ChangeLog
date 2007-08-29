@@ -1,3 +1,13 @@
+2007-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c, src/editor.c, src/editor.h, doc/geany.txt,
+   doc/geany.html:
+   Add 'Current chars' indentation mode, rename 'Advanced' indentation
+   to 'Match braces' (closes #1726880).
+   For 'Match braces' indentation, if a brace could not be matched,
+   fall back to 'Current chars' indentation.
+
+
 2007-08-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keyfile.c:

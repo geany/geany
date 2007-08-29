@@ -3493,7 +3493,8 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
   gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Advanced"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Current chars"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Match braces"));
 
   label195 = gtk_label_new (_("<b>Indentation</b>"));
   gtk_widget_show (label195);

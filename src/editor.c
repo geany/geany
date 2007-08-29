@@ -232,8 +232,7 @@ static void on_char_added(gint idx, SCNotification *nt)
 		}
 		case '}':
 		{	// closing bracket handling
-			if (doc_list[idx].auto_indent &&
-				editor_prefs.indent_mode == INDENT_ADVANCED)
+			if (doc_list[idx].auto_indent)
 				editor_close_block(idx, pos - 1);
 			break;
 		}
@@ -406,7 +405,7 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 		get_indent(sci, pos, FALSE);
 		sci_add_text(sci, indent);
 
-		if (editor_prefs.indent_mode == INDENT_ADVANCED)
+		if (editor_prefs.indent_mode > INDENT_BASIC)
 		{
 			// add extra indentation for Python after colon
 			if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_PYTHON &&
@@ -489,7 +488,7 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 	{
 		if (linebuf[i] == ' ' || linebuf[i] == '\t')	// simple indentation
 			indent[j++] = linebuf[i];
-		else if (editor_prefs.indent_mode != INDENT_ADVANCED)
+		else if (editor_prefs.indent_mode <= INDENT_BASIC)
 			break;
 		else if (use_this_line)
 			break;
@@ -580,15 +579,19 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 }
 
 
-/* Called after typing '}', if editor_prefs.indent_mode is INDENT_ADVANCED. */
+/* Called after typing '}'. */
 void editor_close_block(gint idx, gint pos)
 {
 	gint x = 0, cnt = 0;
-	gint start_brace, line, line_len, eol_char_len;
+	gint line, line_len, eol_char_len;
 	gchar *text, *line_buf;
 	ScintillaObject *sci;
+	gint line_indent, last_indent;
 
-	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;
+	if (editor_prefs.indent_mode < INDENT_CURRENTCHARS)
+		return;
+	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL)
+		return;
 
 	sci = doc_list[idx].sci;
 
@@ -611,34 +614,37 @@ void editor_close_block(gint idx, gint pos)
 	}
 	g_free(line_buf);
 
-	if ((line_len - eol_char_len - 1) != cnt) return;
+	if ((line_len - eol_char_len - 1) != cnt)
+		return;
 
-	start_brace = brace_match(sci, pos);	// same as sci_find_bracematch (Document::BraceMatch)?
-
-	if (start_brace >= 0)
+	if (editor_prefs.indent_mode == INDENT_MATCHBRACES)
 	{
-		gint line_start;
+		gint start_brace = brace_match(sci, pos);
 
-		get_indent(sci, start_brace, TRUE);
-		text = g_strconcat(indent, "}", NULL);
-		line_start = sci_get_position_from_line(sci, line);
-		sci_set_anchor(sci, line_start);
-		SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
-		g_free(text);
-	}
-	else
-	if (sci_get_lexer(sci) == SCLEX_HTML || sci_get_lexer(sci) == SCLEX_TCL)
-	{	/* For TCL & PHP brace_match doesn't work here (maybe lexer bugs?),
-		 * so this is a simple workaround. */
-		gint line_indent = sci_get_line_indentation(sci, line);
-		gint last_indent = sci_get_line_indentation(sci, line - 1);
+		if (start_brace >= 0)
+		{
+			gint line_start;
 
-		if (line_indent < last_indent)
+			get_indent(sci, start_brace, TRUE);
+			text = g_strconcat(indent, "}", NULL);
+			line_start = sci_get_position_from_line(sci, line);
+			sci_set_anchor(sci, line_start);
+			SSM(sci, SCI_REPLACESEL, 0, (sptr_t) text);
+			g_free(text);
 			return;
-		line_indent -= editor_prefs.tab_width;
-		line_indent = MAX(0, line_indent);
-		sci_set_line_indentation(sci, line, line_indent);
+		}
+		// fall through - unmatched brace (possibly because of TCL, PHP lexer bugs)
 	}
+
+	// INDENT_CURRENTCHARS
+	line_indent = sci_get_line_indentation(sci, line);
+	last_indent = sci_get_line_indentation(sci, line - 1);
+
+	if (line_indent < last_indent)
+		return;
+	line_indent -= editor_prefs.tab_width;
+	line_indent = MAX(0, line_indent);
+	sci_set_line_indentation(sci, line, line_indent);
 }
 
 
