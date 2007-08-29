@@ -618,6 +618,25 @@ with "Enrico Tröger". The key to start auto completion can be changed
 in the preferences dialog, by default it is TAB.
 
 
+Inserting unicode characters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+With GTK 2.10 and above, you can hit Ctrl-Shift-u, then still holding
+Ctrl-Shift, type some hex digits representing the code point for the
+character you want, then let go of Ctrl-Shift and hit a key such as
+the right arrow.
+
+For this to work in Geany, you'll need to first unbind Ctrl-Shift-u
+in the `keybinding tab in preferences dialog`_, then restart Geany.
+Note that it works slightly differently from other GTK applications,
+in that you'll need to continue to hold down the Ctrl and Shift keys
+while typing the code point hex digits.
+
+For GTK < 2.10, it is also possible, but typing the first Ctrl-Shift-u
+is not necessary. One problem is that you may find the alphabetic
+keys conflict with other Geany keybindings.
+
+
 
 Search, replace and go to
 -------------------------

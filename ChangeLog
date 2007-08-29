@@ -6,6 +6,9 @@
    to 'Match braces' (closes #1726880).
    For 'Match braces' indentation, if a brace could not be matched,
    fall back to 'Current chars' indentation.
+ * doc/geany.txt, doc/geany.html:
+   Added 'Inserting unicode characters' Editing section, adapted from
+   a patch by John Gabriele (thanks).
 
 
 2007-08-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
