@@ -349,9 +349,9 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_BUILD_COMPILE]->section = _("Build menu");
 	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER]->section = _("Tools menu");
 	keys[GEANY_KEYS_MENU_HELP]->section = _("Help menu");
-	keys[GEANY_KEYS_SWITCH_EDITOR]->section = _("Focus menu");
-	keys[GEANY_KEYS_EDIT_TOLOWERCASE]->section = _("Editing menu");
-	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE]->section = _("Tag menu");
+	keys[GEANY_KEYS_SWITCH_EDITOR]->section = _("Focus commands");
+	keys[GEANY_KEYS_EDIT_TOLOWERCASE]->section = _("Editing commands");
+	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE]->section = _("Tag commands");
 
 	g_free(configfile);
 	g_key_file_free(config);

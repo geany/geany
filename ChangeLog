@@ -5,6 +5,8 @@
  * doc/geany.txt, doc/geany.html:
    Add Plugins section, describe using a second instance to edit
    geany.conf in 'Hidden preferences' appendix.
+ * src/keybindings.c:
+   Rename non-menu keybinding titles, e.g. Tags menu -> Tags commands.
 
 
 2007-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
