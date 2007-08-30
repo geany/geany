@@ -2,6 +2,9 @@
 
  * src/interface.c, src/keybindings.c, geany.glade:
    Change 'Goto' to 'Go to' everywhere.
+ * doc/geany.txt, doc/geany.html:
+   Add Plugins section, describe using a second instance to edit
+   geany.conf in 'Hidden preferences' appendix.
 
 
 2007-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

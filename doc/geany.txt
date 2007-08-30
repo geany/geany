@@ -1339,6 +1339,26 @@ gtklp or similar programs can be used.
 
 
 
+Plugins
+-------
+
+Plugins are loaded at startup, if the *Enable plugin support*
+general preference is set. There is also a command-line option,
+``-p``, which prevents plugins being loaded. Plugins are scanned in
+the following directories:
+
+*	``$prefix/lib/geany`` (``$prefix`` is usually ``/usr/local`` or
+	``/usr``)
+*	``~/.geany/plugins``
+
+Most plugins add menu items to the *Tools* menu when they are loaded.
+
+In future, there will be a plugin management dialog to load and unload
+plugins, but for now any unwanted plugin library files can be deleted
+after installation of Geany.
+
+
+
 Keybindings
 -----------
 
@@ -2175,11 +2195,11 @@ Next word part. Shift extends selection.        Ctrl+\\
 Hidden preferences
 ==================
 
-There are some uncommon preferences that are not shown in the Preferences
-dialog. These can be set by using a different editor to edit
-``~/.geany/geany.conf`` when Geany is closed, or by using a different (or
-temporary) configuration directory for Geany. Otherwise, the configuration
-file changes are overwritten when Geany is closed.
+There are some uncommon preferences that are not shown in the
+Preferences dialog. These can be set by using a second instance of
+Geany to edit ``~/.geany/geany.conf``. After saving the file, restart
+the first instance, and the new settings will be used. Otherwise,
+the configuration file changes are overwritten when Geany is closed.
 
 The table below refers to the key names in the configuration file, under the
 ``[geany]`` group.

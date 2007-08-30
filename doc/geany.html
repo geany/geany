@@ -260,43 +260,44 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 </ul>
 </li>
 <li><a class="reference" href="#printing-support" id="id78" name="id78">Printing support</a></li>
-<li><a class="reference" href="#keybindings" id="id79" name="id79">Keybindings</a></li>
+<li><a class="reference" href="#plugins" id="id79" name="id79">Plugins</a></li>
+<li><a class="reference" href="#keybindings" id="id80" name="id80">Keybindings</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#configuration-files" id="id80" name="id80">Configuration files</a><ul>
-<li><a class="reference" href="#global-configuration-file" id="id81" name="id81">Global configuration file</a></li>
-<li><a class="reference" href="#filetype-definition-files" id="id82" name="id82">Filetype definition files</a><ul>
-<li><a class="reference" href="#format" id="id83" name="id83">Format</a><ul>
-<li><a class="reference" href="#styling-section" id="id84" name="id84">[styling] Section</a></li>
-<li><a class="reference" href="#keywords-section" id="id85" name="id85">[keywords] Section</a></li>
-<li><a class="reference" href="#settings-section" id="id86" name="id86">[settings] Section</a></li>
-<li><a class="reference" href="#build-settings-section" id="id87" name="id87">[build_settings] Section</a></li>
+<li><a class="reference" href="#configuration-files" id="id81" name="id81">Configuration files</a><ul>
+<li><a class="reference" href="#global-configuration-file" id="id82" name="id82">Global configuration file</a></li>
+<li><a class="reference" href="#filetype-definition-files" id="id83" name="id83">Filetype definition files</a><ul>
+<li><a class="reference" href="#format" id="id84" name="id84">Format</a><ul>
+<li><a class="reference" href="#styling-section" id="id85" name="id85">[styling] Section</a></li>
+<li><a class="reference" href="#keywords-section" id="id86" name="id86">[keywords] Section</a></li>
+<li><a class="reference" href="#settings-section" id="id87" name="id87">[settings] Section</a></li>
+<li><a class="reference" href="#build-settings-section" id="id88" name="id88">[build_settings] Section</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#special-file-filetypes-common" id="id88" name="id88">Special file filetypes.common</a></li>
+<li><a class="reference" href="#special-file-filetypes-common" id="id89" name="id89">Special file filetypes.common</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#filetype-extensions" id="id89" name="id89">Filetype extensions</a></li>
-<li><a class="reference" href="#templates" id="id90" name="id90">Templates</a><ul>
-<li><a class="reference" href="#template-metadata" id="id91" name="id91">Template metadata</a></li>
-<li><a class="reference" href="#filetype-templates" id="id92" name="id92">Filetype templates</a></li>
-<li><a class="reference" href="#customizing-templates" id="id93" name="id93">Customizing templates</a><ul>
-<li><a class="reference" href="#template-wildcards" id="id94" name="id94">Template wildcards</a></li>
+<li><a class="reference" href="#filetype-extensions" id="id90" name="id90">Filetype extensions</a></li>
+<li><a class="reference" href="#templates" id="id91" name="id91">Templates</a><ul>
+<li><a class="reference" href="#template-metadata" id="id92" name="id92">Template metadata</a></li>
+<li><a class="reference" href="#filetype-templates" id="id93" name="id93">Filetype templates</a></li>
+<li><a class="reference" href="#customizing-templates" id="id94" name="id94">Customizing templates</a><ul>
+<li><a class="reference" href="#template-wildcards" id="id95" name="id95">Template wildcards</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference" href="#contributing-to-this-document" id="id95" name="id95">Contributing to this document</a></li>
-<li><a class="reference" href="#scintilla-keyboard-commands" id="id96" name="id96">Scintilla keyboard commands</a><ul>
-<li><a class="reference" href="#keyboard-commands" id="id97" name="id97">Keyboard commands</a></li>
+<li><a class="reference" href="#contributing-to-this-document" id="id96" name="id96">Contributing to this document</a></li>
+<li><a class="reference" href="#scintilla-keyboard-commands" id="id97" name="id97">Scintilla keyboard commands</a><ul>
+<li><a class="reference" href="#keyboard-commands" id="id98" name="id98">Keyboard commands</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#hidden-preferences" id="id98" name="id98">Hidden preferences</a></li>
-<li><a class="reference" href="#compile-time-options" id="id99" name="id99">Compile-time options</a></li>
-<li><a class="reference" href="#gnu-general-public-license" id="id100" name="id100">GNU General Public License</a></li>
-<li><a class="reference" href="#license-for-scintilla-and-scite" id="id101" name="id101">License for Scintilla and SciTE</a></li>
+<li><a class="reference" href="#hidden-preferences" id="id99" name="id99">Hidden preferences</a></li>
+<li><a class="reference" href="#compile-time-options" id="id100" name="id100">Compile-time options</a></li>
+<li><a class="reference" href="#gnu-general-public-license" id="id101" name="id101">GNU General Public License</a></li>
+<li><a class="reference" href="#license-for-scintilla-and-scite" id="id102" name="id102">License for Scintilla and SciTE</a></li>
 </ul>
 </div>
 <div class="section">
@@ -1444,7 +1445,23 @@ possible.</p>
 </div>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id79" id="keybindings" name="keybindings">Keybindings</a></h2>
+<h2><a class="toc-backref" href="#id79" id="plugins" name="plugins">Plugins</a></h2>
+<p>Plugins are loaded at startup, if the <em>Enable plugin support</em>
+general preference is set. There is also a command-line option,
+<tt class="docutils literal"><span class="pre">-p</span></tt>, which prevents plugins being loaded. Plugins are scanned in
+the following directories:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">$prefix/lib/geany</span></tt> (<tt class="docutils literal"><span class="pre">$prefix</span></tt> is usually <tt class="docutils literal"><span class="pre">/usr/local</span></tt> or
+<tt class="docutils literal"><span class="pre">/usr</span></tt>)</li>
+<li><tt class="docutils literal"><span class="pre">~/.geany/plugins</span></tt></li>
+</ul>
+<p>Most plugins add menu items to the <em>Tools</em> menu when they are loaded.</p>
+<p>In future, there will be a plugin management dialog to load and unload
+plugins, but for now any unwanted plugin library files can be deleted
+after installation of Geany.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id80" id="keybindings" name="keybindings">Keybindings</a></h2>
 <p>Geany supports the default keyboard shortcuts for the Scintilla
 editing widget. For a list of these commands, see <a class="reference" href="#scintilla-keyboard-commands">Scintilla
 keyboard commands</a>. The Scintilla keyboard shortcuts will be overridden
@@ -1796,9 +1813,9 @@ actions</a>.</td>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id80" id="configuration-files" name="configuration-files">Configuration files</a></h1>
+<h1><a class="toc-backref" href="#id81" id="configuration-files" name="configuration-files">Configuration files</a></h1>
 <div class="section">
-<h2><a class="toc-backref" href="#id81" id="global-configuration-file" name="global-configuration-file">Global configuration file</a></h2>
+<h2><a class="toc-backref" href="#id82" id="global-configuration-file" name="global-configuration-file">Global configuration file</a></h2>
 <p>You can use a global configuration file for Geany which will be used if
 the user starts Geany for the first time and an user's configuration
 file was not yet created or in case an user deleted the configuration
@@ -1818,7 +1835,7 @@ need to do that.</p>
 </div>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id82" id="filetype-definition-files" name="filetype-definition-files">Filetype definition files</a></h2>
+<h2><a class="toc-backref" href="#id83" id="filetype-definition-files" name="filetype-definition-files">Filetype definition files</a></h2>
 <p>All colour definitions and other filetype specific settings are
 stored in the filetype definition files. Those settings are colours
 for syntax highlighting, general settings like comment characters or
@@ -1846,9 +1863,9 @@ configuration directory. Alternatively, you can create a file
 to change. All missing settings will be read from the corresponding
 global definition file in <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>.</p>
 <div class="section">
-<h3><a class="toc-backref" href="#id83" id="format" name="format">Format</a></h3>
+<h3><a class="toc-backref" href="#id84" id="format" name="format">Format</a></h3>
 <div class="section">
-<h4><a class="toc-backref" href="#id84" id="styling-section" name="styling-section">[styling] Section</a></h4>
+<h4><a class="toc-backref" href="#id85" id="styling-section" name="styling-section">[styling] Section</a></h4>
 <p>In this section the colours for syntax highlighting are defined. The
 format is always: key=forground_colour;background_colour;bold;italic</p>
 <p>Colours have to be specified as RGB hex values prefixed by
@@ -1858,7 +1875,7 @@ and italic are flags and should only be &quot;true&quot; or &quot;false&quot;. I
 value is something other than &quot;true&quot; or &quot;false&quot;, &quot;false&quot; is assumed.</p>
 </div>
 <div class="section">
-<h4><a class="toc-backref" href="#id85" id="keywords-section" name="keywords-section">[keywords] Section</a></h4>
+<h4><a class="toc-backref" href="#id86" id="keywords-section" name="keywords-section">[keywords] Section</a></h4>
 <p>This section contains keys for different keyword lists specific to
 the filetype. Some filetypes do not support keywords, so adding a
 new key will not work. You can only add or remove keywords to/from
@@ -1869,7 +1886,7 @@ an existing list.</p>
 </div>
 </div>
 <div class="section">
-<h4><a class="toc-backref" href="#id86" id="settings-section" name="settings-section">[settings] Section</a></h4>
+<h4><a class="toc-backref" href="#id87" id="settings-section" name="settings-section">[settings] Section</a></h4>
 <dl class="docutils">
 <dt>wordchars</dt>
 <dd><p class="first">These characters define word boundaries when making selections
@@ -1923,7 +1940,7 @@ context_action_cmd=firefox &quot;<a class="reference" href="http://www.php.net/%
 </dl>
 </div>
 <div class="section">
-<h4><a class="toc-backref" href="#id87" id="build-settings-section" name="build-settings-section">[build_settings] Section</a></h4>
+<h4><a class="toc-backref" href="#id88" id="build-settings-section" name="build-settings-section">[build_settings] Section</a></h4>
 <dl class="docutils">
 <dt>compiler</dt>
 <dd><p class="first">This item specifies the command to compile source code files. But
@@ -1956,7 +1973,7 @@ complete filename, e.g. for shell scripts.</p>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id88" id="special-file-filetypes-common" name="special-file-filetypes-common">Special file filetypes.common</a></h3>
+<h3><a class="toc-backref" href="#id89" id="special-file-filetypes-common" name="special-file-filetypes-common">Special file filetypes.common</a></h3>
 <p>There is a special filetype definition file called
 filetypes.common. This file defines some general non-filetype-specific
 settings.</p>
@@ -2066,7 +2083,7 @@ when moving, selecting and deleting across word boundaries
 </div>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id89" id="filetype-extensions" name="filetype-extensions">Filetype extensions</a></h2>
+<h2><a class="toc-backref" href="#id90" id="filetype-extensions" name="filetype-extensions">Filetype extensions</a></h2>
 <p>You can override the default extensions that Geany uses for each
 filetype using the <tt class="docutils literal"><span class="pre">filetype_extensions.conf</span></tt> file.</p>
 <p>To override the system-wide configuration file, copy it from
@@ -2090,7 +2107,7 @@ Make=Makefile*;*.mk;Buildfile;
 </pre>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id90" id="templates" name="templates">Templates</a></h2>
+<h2><a class="toc-backref" href="#id91" id="templates" name="templates">Templates</a></h2>
 <p>Geany supports the following templates:</p>
 <ul class="simple">
 <li>ChangeLog entry</li>
@@ -2112,7 +2129,7 @@ above the function, just check it out. If the cursor is not inside
 of a function or the function name cannot be determined, you cannot
 insert a function description.</p>
 <div class="section">
-<h3><a class="toc-backref" href="#id91" id="template-metadata" name="template-metadata">Template metadata</a></h3>
+<h3><a class="toc-backref" href="#id92" id="template-metadata" name="template-metadata">Template metadata</a></h3>
 <p>Metadata can be used with all templates, but by default user set
 metadata is only used for the ChangeLog and File header templates.</p>
 <p>In the configuration dialog you can find a tab &quot;Templates&quot; (see
@@ -2122,7 +2139,7 @@ restart Geany after making changes, because they are only read
 at startup.</p>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id92" id="filetype-templates" name="filetype-templates">Filetype templates</a></h3>
+<h3><a class="toc-backref" href="#id93" id="filetype-templates" name="filetype-templates">Filetype templates</a></h3>
 <p>Filetype templates are templates used as the basis of a new file. To
 use them, choose the <em>New (with Template)</em> menu item from the <em>File</em>
 menu.</p>
@@ -2143,7 +2160,7 @@ followed by a blank line.</p>
 the New command is used without a filetype. This is empty by default.</p>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id93" id="customizing-templates" name="customizing-templates">Customizing templates</a></h3>
+<h3><a class="toc-backref" href="#id94" id="customizing-templates" name="customizing-templates">Customizing templates</a></h3>
 <p>Each template can be customized to your needs. The templates are
 stored in the <tt class="docutils literal"><span class="pre">~/.geany/templates/</span></tt> directory (see the section called
 <a class="reference" href="#command-line-options">Command line options</a> for further information about the configuration
@@ -2151,7 +2168,7 @@ directory). Just open the desired template with an editor (ideally,
 Geany ;-) ) and edit the template to your needs. There are some
 wildcards which will be automatically replaced by Geany at startup.</p>
 <div class="section">
-<h4><a class="toc-backref" href="#id94" id="template-wildcards" name="template-wildcards">Template wildcards</a></h4>
+<h4><a class="toc-backref" href="#id95" id="template-wildcards" name="template-wildcards">Template wildcards</a></h4>
 <p>All wildcards must be enclosed by &quot;{&quot; and &quot;}&quot;, e.g. {date}.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -2260,7 +2277,7 @@ templates.</td>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id95" id="contributing-to-this-document" name="contributing-to-this-document">Contributing to this document</a></h1>
+<h1><a class="toc-backref" href="#id96" id="contributing-to-this-document" name="contributing-to-this-document">Contributing to this document</a></h1>
 <p>This document (<tt class="docutils literal"><span class="pre">geany.txt</span></tt>) is written in <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>
 (or &quot;reST&quot;). The source file for it is located in Geany's <tt class="docutils literal"><span class="pre">doc</span></tt>
 subdirectory.  If you intend on making changes, you should grab the
@@ -2280,7 +2297,7 @@ to build the docs. The package is named <tt class="docutils literal"><span class
 and Fedora systems.</p>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id96" id="scintilla-keyboard-commands" name="scintilla-keyboard-commands">Scintilla keyboard commands</a></h1>
+<h1><a class="toc-backref" href="#id97" id="scintilla-keyboard-commands" name="scintilla-keyboard-commands">Scintilla keyboard commands</a></h1>
 <p>Copyright © 1998, 2006 Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>This appendix is distributed under the terms of the License for
 Scintilla and SciTE. A copy of this license can be found in the file
@@ -2289,7 +2306,7 @@ program and in the appendix of this document. See <a class="reference" href="#li
 Scintilla and SciTE</a>.</p>
 <p>20 June 2006</p>
 <div class="section">
-<h2><a class="toc-backref" href="#id97" id="keyboard-commands" name="keyboard-commands">Keyboard commands</a></h2>
+<h2><a class="toc-backref" href="#id98" id="keyboard-commands" name="keyboard-commands">Keyboard commands</a></h2>
 <p>Keyboard commands for Scintilla mostly follow common Windows and GTK+
 conventions. All move keys (arrows, page up/down, home and end)
 allows to extend or reduce the stream selection when holding the
@@ -2389,12 +2406,12 @@ menus. Some less common commands with no menu equivalent are:</p>
 </div>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id98" id="hidden-preferences" name="hidden-preferences">Hidden preferences</a></h1>
-<p>There are some uncommon preferences that are not shown in the Preferences
-dialog. These can be set by using a different editor to edit
-<tt class="docutils literal"><span class="pre">~/.geany/geany.conf</span></tt> when Geany is closed, or by using a different (or
-temporary) configuration directory for Geany. Otherwise, the configuration
-file changes are overwritten when Geany is closed.</p>
+<h1><a class="toc-backref" href="#id99" id="hidden-preferences" name="hidden-preferences">Hidden preferences</a></h1>
+<p>There are some uncommon preferences that are not shown in the
+Preferences dialog. These can be set by using a second instance of
+Geany to edit <tt class="docutils literal"><span class="pre">~/.geany/geany.conf</span></tt>. After saving the file, restart
+the first instance, and the new settings will be used. Otherwise,
+the configuration file changes are overwritten when Geany is closed.</p>
 <p>The table below refers to the key names in the configuration file, under the
 <tt class="docutils literal"><span class="pre">[geany]</span></tt> group.</p>
 <table border="1" class="docutils">
@@ -2435,7 +2452,7 @@ commands</a>).</td>
 </table>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id99" id="compile-time-options" name="compile-time-options">Compile-time options</a></h1>
+<h1><a class="toc-backref" href="#id100" id="compile-time-options" name="compile-time-options">Compile-time options</a></h1>
 <p>There are some options which can only be changed at compile time. To
 change these options, edit the file src/geany.h. Look for a block of
 lines starting with <tt class="docutils literal"><span class="pre">#define</span> <span class="pre">GEANY_*</span></tt>. Any definitions which are
@@ -2580,7 +2597,7 @@ when building on a non-Win32 system.</em></td>
 </table>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id100" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
+<h1><a class="toc-backref" href="#id101" id="gnu-general-public-license" name="gnu-general-public-license">GNU General Public License</a></h1>
 <pre class="literal-block">
             GNU GENERAL PUBLIC LICENSE
                Version 2, June 1991
@@ -2925,7 +2942,7 @@ Public License instead of this License.
 </pre>
 </div>
 <div class="section">
-<h1><a class="toc-backref" href="#id101" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
+<h1><a class="toc-backref" href="#id102" id="license-for-scintilla-and-scite" name="license-for-scintilla-and-scite">License for Scintilla and SciTE</a></h1>
 <p>Copyright 1998-2003 by Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>All Rights Reserved</p>
 <p>Permission to use, copy, modify, and distribute this software and
@@ -2945,7 +2962,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2007-08-29 15:51 UTC.
+Generated on: 2007-08-30 10:25 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
