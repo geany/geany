@@ -2660,7 +2660,7 @@
 	      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1894">
+		<widget class="GtkImage" id="image1938">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-indent</property>
 		  <property name="icon_size">1</property>
@@ -2681,7 +2681,7 @@
 	      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:31:38 GMT"/>
 
 	      <child internal-child="image">
-		<widget class="GtkImage" id="image1895">
+		<widget class="GtkImage" id="image1939">
 		  <property name="visible">True</property>
 		  <property name="stock">gtk-unindent</property>
 		  <property name="icon_size">1</property>
@@ -2737,7 +2737,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1896">
+	<widget class="GtkImage" id="image1940">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2769,7 +2769,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1897">
+	<widget class="GtkImage" id="image1941">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2854,7 +2854,7 @@
       <property name="use_underline">True</property>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1898">
+	<widget class="GtkImage" id="image1942">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-add</property>
 	  <property name="icon_size">1</property>
@@ -2893,7 +2893,7 @@
       <signal name="activate" handler="on_find_usage1_activate" last_modification_time="Fri, 27 May 2005 21:55:12 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1899">
+	<widget class="GtkImage" id="image1943">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-find</property>
 	  <property name="icon_size">1</property>
@@ -2942,13 +2942,13 @@
   <child>
     <widget class="GtkImageMenuItem" id="go_to_line">
       <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Goto to the entered line</property>
+      <property name="tooltip" translatable="yes">Go to the entered line</property>
       <property name="label" translatable="yes">Go to Line</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_go_to_line_activate" last_modification_time="Sat, 16 Jul 2005 11:20:32 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1900">
+	<widget class="GtkImage" id="image1944">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-jump-to</property>
 	  <property name="icon_size">1</property>
@@ -4651,7 +4651,7 @@ Bottom
 			    <widget class="GtkCheckButton" id="check_toolbar_goto">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the line number field and button in the toolbar</property>
-			      <property name="label" translatable="yes">Show Goto line field</property>
+			      <property name="label" translatable="yes">Show Go to Line field</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>

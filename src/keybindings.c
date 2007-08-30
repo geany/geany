@@ -281,16 +281,16 @@ void keybindings_init(void)
 		GDK_3, GDK_CONTROL_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"));
 	keys[GEANY_KEYS_EDIT_GOTOMATCHINGBRACE] = fill(cb_func_edit_global,
 		GDK_b, GDK_CONTROL_MASK, "edit_gotomatchingbrace",
-		_("Goto matching brace"));
+		_("Go to matching brace"));
 	keys[GEANY_KEYS_EDIT_TOGGLEMARKER] = fill(cb_func_edit_global,
 		GDK_m, GDK_CONTROL_MASK, "edit_togglemarker",
 		_("Toggle marker"));
 	keys[GEANY_KEYS_EDIT_GOTONEXTMARKER] = fill(cb_func_edit_global,
 		GDK_period, GDK_CONTROL_MASK, "edit_gotonextmarker",
-		_("Goto next marker"));
+		_("Go to next marker"));
 	keys[GEANY_KEYS_EDIT_GOTOPREVIOUSMARKER] = fill(cb_func_edit_global,
 		GDK_comma, GDK_CONTROL_MASK, "edit_gotopreviousmarker",
-		_("Goto previous marker"));
+		_("Go to previous marker"));
 
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE] = fill(cb_func_edit,
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"));

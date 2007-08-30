@@ -1,3 +1,9 @@
+2007-08-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, src/keybindings.c, geany.glade:
+   Change 'Goto' to 'Go to' everywhere.
+
+
 2007-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keyfile.c, src/editor.c, src/editor.h, doc/geany.txt,
