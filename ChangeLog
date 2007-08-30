@@ -13,6 +13,9 @@
    Only focus the current document after switching pages if the open
    files treeview currently has focus (otherwise focus commands can be
    overridden, e.g. when pressing F4 during opening several files).
+ * src/editor.c:
+   Prevent calltip after typing '(' when in a comment or string.
+   Allow forced autocompletion in a comment or string.
 
 
 2007-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

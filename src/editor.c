@@ -863,7 +863,7 @@ gboolean editor_show_calltip(gint idx, gint pos)
 		if (pos == -1) return FALSE;
 	}
 
-	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
+	style = SSM(sci, SCI_GETSTYLEAT, pos - 1, 0);	// the style 1 before the brace (which may be highlighted)
 	if (is_comment(lexer, style))
 		return FALSE;
 
@@ -975,7 +975,7 @@ gboolean editor_start_auto_complete(gint idx, gint pos, gboolean force)
 	style = SSM(sci, SCI_GETSTYLEAT, pos, 0);
 
 	 // don't autocomplete in comments and strings
-	 if (is_comment(lexer, style))
+	 if (!force && is_comment(lexer, style))
 		return FALSE;
 
 	linebuf = sci_get_line(sci, line);
