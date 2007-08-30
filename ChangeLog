@@ -7,6 +7,8 @@
    geany.conf in 'Hidden preferences' appendix.
  * src/keybindings.c:
    Rename non-menu keybinding titles, e.g. Tags menu -> Tags commands.
+ * src/keybindings.c:
+   Fix Ctrl-Shift bindings not working when caps lock is on.
 
 
 2007-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

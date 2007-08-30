@@ -643,12 +643,16 @@ static gboolean check_construct_completion(GdkEventKey *event)
 /* central keypress event handler, almost all keypress events go to this function */
 gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-	guint i, k;
+	guint i, keyval = event->keyval;
 
-	if (event->keyval == 0)
+	if (keyval == 0)
 		return FALSE;
 
-	// ignore caps-lock
+	// hack to get around that CTRL+Shift+r results in GDK_R not GDK_r
+	if (event->state & GDK_SHIFT_MASK || event->state & GDK_LOCK_MASK)
+		if (keyval >= GDK_A && keyval <= GDK_Z)
+			keyval += GDK_a - GDK_A;
+	// now ignore caps-lock
 	if (event->state & GDK_LOCK_MASK)
 		event->state -= GDK_LOCK_MASK;
 	// ignore numlock key, not necessary but nice
@@ -663,17 +667,7 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
 	{
-		// ugly hack to get around that CTRL+Shift+r results in 'R' not 'r'
-		k = keys[i]->key;
-		if (event->state & GDK_SHIFT_MASK)
-		{
-			// skip entries which don't include SHIFT
-			if (! (keys[i]->mods & GDK_SHIFT_MASK)) continue;
-			// raise the keyval
-			if (keys[i]->key >= GDK_a && keys[i]->key <= GDK_z) k = keys[i]->key - 32;
-		}
-
-		if (event->keyval == k && event->state == keys[i]->mods)
+		if (keyval == keys[i]->key && event->state == keys[i]->mods)
 		{
 			if (keys[i]->cb_func == NULL)
 				return FALSE;	// ignore the keybinding
