@@ -469,9 +469,11 @@ static gboolean change_focus(gpointer data)
 	// idx might not be valid e.g. if user closed a tab whilst Geany is opening files
 	if (DOC_IDX_VALID(idx))
 	{
-		GtkWidget *widget = GTK_WIDGET(doc_list[idx].sci);
+		GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(app->window));
+		GtkWidget *sci = GTK_WIDGET(doc_list[idx].sci);
 
-		gtk_widget_grab_focus(widget);
+		if (focusw == tv.tree_openfiles)
+			gtk_widget_grab_focus(sci);
 	}
 	return FALSE;
 }

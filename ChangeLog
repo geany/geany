@@ -9,6 +9,10 @@
    Rename non-menu keybinding titles, e.g. Tags menu -> Tags commands.
  * src/keybindings.c:
    Fix Ctrl-Shift bindings not working when caps lock is on.
+ * src/treeviews.c:
+   Only focus the current document after switching pages if the open
+   files treeview currently has focus (otherwise focus commands can be
+   overridden, e.g. when pressing F4 during opening several files).
 
 
 2007-08-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
