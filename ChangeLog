@@ -1,3 +1,10 @@
+2007-08-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/highlighting.c, doc/geany.txt, doc/geany.html,
+   data/filetypes.common:
+   Include \n\r newline chars in Scintilla whitespace chars.
+
+
 2007-08-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, src/keybindings.c, geany.glade:

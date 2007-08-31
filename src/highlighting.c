@@ -37,7 +37,7 @@
 
 
 /* Whitespace has to be set after setting wordchars. */
-#define GEANY_WHITESPACE_CHARS " \t" "!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~"
+#define GEANY_WHITESPACE_CHARS " \t\n\r" "!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~"
 
 static gchar *whitespace_chars;
 

@@ -1928,7 +1928,7 @@ whitespace_chars
 
     This should include space (\\s) and tab (\\t).
 
-    *Example:* ``whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~``
+    *Example:* ``whitespace_chars=\s\t\n\r!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~``
 
 
 
