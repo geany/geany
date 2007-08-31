@@ -52,4 +52,4 @@ invert_all=0;0;false;false
 [settings]
 # which characters should be skipped when moving (or included when deleting) to word boundaries
 # should always include space and tab (\s\t)
-whitespace_chars=\s\t\n\r!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~
+whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~

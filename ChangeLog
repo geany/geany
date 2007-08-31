@@ -3,6 +3,9 @@
  * src/highlighting.c, doc/geany.txt, doc/geany.html,
    data/filetypes.common:
    Include \n\r newline chars in Scintilla whitespace chars.
+ * data/filetypes.common:
+   Undo last commit, because it makes selecting text with the mouse
+   include all trailing lines with no wordchars on them.
 
 
 2007-08-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
