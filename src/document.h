@@ -120,20 +120,13 @@ void document_apply_update_prefs(gint idx);
 gboolean document_remove(guint page_num);
 
 
-/* This creates a new document, by clearing the text widget and setting the
-   current filename to filename or NULL. If ft is NULL and filename is not NULL, then the filetype
-   will be guessed from the given filename.
-   filename is expected in UTF-8 encoding. */
-gint document_new_file(const gchar *filename, filetype *ft);
+/* See document.c. */
+gint document_new_file(const gchar *filename, filetype *ft, const gchar *text);
 
 gint document_clone(gint old_idx, const gchar *utf8_filename);
 
 
-/* To open a new file, set idx to -1; filename should be locale encoded.
- * To reload a file, set the idx for the document to be reloaded; filename should be NULL.
- * Returns: idx of the opened file or -1 if an error occurred.
- * Note: If opening more than one file, document_delay_colourise() should be used before
- * and document_colourise_new() after opening to avoid unnecessary recolourising. */
+/* See document.c. */
 gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly,
 		filetype *ft, const gchar *forced_enc);
 

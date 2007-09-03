@@ -3,6 +3,14 @@
  * src/keybindings.c:
    Set copy lines default KB to Ctrl-Shift-C.
    Set cut lines default KB to Ctrl-Shift-X.
+ * plugins/classbuilder.c, src/templates.c, src/keybindings.c,
+   src/plugindata.h, src/callbacks.c, src/document.c, src/document.h,
+   src/main.c, src/socket.c:
+   Add text argument for document_new_file(), so that it's independent
+   from filetype templates.
+   Make File->New create a blank document, rather than using the None
+   filetype template.
+   Add None option for the 'New with Template' menu commands.
 
 
 2007-08-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

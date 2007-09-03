@@ -76,7 +76,7 @@ static const gint api_version = 15;
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 6;
+static const gint abi_version = 7;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
@@ -170,7 +170,7 @@ struct filetype;
 
 typedef struct DocumentFuncs
 {
-	gint	(*new_file) (const gchar *filename, struct filetype *ft);
+	gint	(*new_file) (const gchar *filename, struct filetype *ft, const gchar *text);
 	gint	(*get_cur_idx) ();
 	struct document*	(*get_current) ();
 	gboolean (*save_file)(gint idx, gboolean force);

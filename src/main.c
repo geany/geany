@@ -553,7 +553,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 		{	// create new file if it doesn't exist
 			gint idx;
 
-			idx = document_new_file(filename, NULL);
+			idx = document_new_file(filename, NULL, NULL);
 			if (DOC_IDX_VALID(idx))
 				ui_add_recent_file(doc_list[idx].file_name);
 		}
@@ -740,7 +740,7 @@ gint main(gint argc, gchar **argv)
 
 	// open a new file if no other file was opened
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
-		document_new_file(NULL, NULL);
+		document_new_file(NULL, NULL, NULL);
 
 	ui_document_buttons_update();
 	ui_save_buttons_toggle(FALSE);

@@ -307,7 +307,11 @@ static void
 on_new_with_template                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	document_new_file(NULL, (filetype*) user_data);
+	filetype *ft = user_data;
+	gchar *template = templates_get_template_new_file(ft);
+
+	document_new_file(NULL, ft, template);
+	g_free(template);
 }
 
 
@@ -317,16 +321,16 @@ static void create_new_menu_items()
 	GtkWidget *template_menu = lookup_widget(app->window, "menu_new_with_template1_menu");
 	filetype_id ft_id;
 
-	for (ft_id = 0; ft_id < GEANY_FILETYPES_ALL; ft_id++)
+	for (ft_id = 0; ft_id < GEANY_MAX_FILE_TYPES; ft_id++)
 	{
 		GtkWidget *tmp_menu, *tmp_button;
 		filetype *ft = filetypes[ft_id];
 		const gchar *label = ft->title;
 
 		if (ft_templates[ft_id] == NULL)
-		{
 			continue;
-		}
+		if (ft_id == GEANY_FILETYPES_ALL)
+			label = _("None");
 		tmp_menu = gtk_menu_item_new_with_label(label);
 		tmp_button = gtk_menu_item_new_with_label(label);
 		gtk_widget_show(tmp_menu);

@@ -740,7 +740,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 	if (! utils->str_equal(class_info->source, ""))
 	{
 		text = get_template_class_source(class_info);
-		idx = documents->new_file(class_info->source, NULL);
+		idx = documents->new_file(class_info->source, NULL, NULL);
 		scintilla->set_text(doc_list[idx].sci, text);
 		g_free(text);
 	}
@@ -748,7 +748,7 @@ static void cc_dlg_on_create_class(CreateClassDialog *cc_dlg)
 	if (! utils->str_equal(class_info->header, ""))
 	{
 		text = get_template_class_header(class_info);
-		idx = documents->new_file(class_info->header, NULL);
+		idx = documents->new_file(class_info->header, NULL, NULL);
 		scintilla->set_text(doc_list[idx].sci, text);
 		g_free(text);
 	}

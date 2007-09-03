@@ -193,7 +193,7 @@ void
 on_new1_activate                       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	document_new_file(NULL, NULL);
+	document_new_file(NULL, NULL, NULL);
 }
 
 
@@ -554,7 +554,7 @@ void
 on_toolbutton8_clicked                 (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	document_new_file(NULL, NULL);
+	document_new_file(NULL, NULL, NULL);
 }
 
 // open file
@@ -1185,7 +1185,7 @@ void
 on_toolbutton_new_clicked              (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	document_new_file(NULL, NULL);
+	document_new_file(NULL, NULL, NULL);
 }
 
 

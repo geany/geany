@@ -445,21 +445,23 @@ static void store_saved_encoding(gint idx)
 }
 
 
-/* This creates a new document, by clearing the text widget and setting the
-   current filename to filename or NULL. If ft is NULL and filename is not NULL, then the filetype
-   will be guessed from the given filename.
-   filename is expected in UTF-8 encoding. */
-gint document_new_file(const gchar *filename, filetype *ft)
+/* Create a new document.
+ * filename is either the UTF-8 file name, or NULL.
+ * If ft is NULL and filename is not NULL, then the filetype will be guessed
+ * from the given filename.
+ * text is the contents of the new file, or NULL.
+ * Returns: idx of new file in doc_list. */
+gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 {
 	gint idx = document_create_new_sci(filename);
-	gchar *template = templates_get_template_new_file(ft);
 
 	g_assert(idx != -1);
 
 	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
-	sci_clear_all(doc_list[idx].sci);
-	sci_set_text(doc_list[idx].sci, template);
-	g_free(template);
+	if (text)
+		sci_set_text(doc_list[idx].sci, text);
+	else
+		sci_clear_all(doc_list[idx].sci);
 
 #ifdef G_OS_WIN32
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_CRLF);
@@ -468,6 +470,9 @@ gint document_new_file(const gchar *filename, filetype *ft)
 #endif
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 	sci_empty_undo_buffer(doc_list[idx].sci);
+
+	doc_list[idx].mtime = time(NULL);
+	doc_list[idx].changed = FALSE;
 
 	doc_list[idx].encoding = g_strdup(encodings[prefs.default_new_encoding].charset);
 	// store the opened encoding for undo/redo
@@ -482,10 +487,6 @@ gint document_new_file(const gchar *filename, filetype *ft)
 		filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
 	ui_set_window_title(idx);
 	build_menu_update(idx);
-
-	doc_list[idx].mtime = time(NULL);
-	doc_list[idx].changed = FALSE;
-
 	document_update_tag_list(idx, FALSE);
 	document_set_text_changed(idx);
 	ui_document_show_hide(idx); // update the document menu
@@ -2372,19 +2373,14 @@ gint document_clone(gint old_idx, const gchar *utf8_filename)
 {
 	// create a new file and copy file content and properties
 	gint len, idx;
-	gchar *data;
-
-	// use old file type (or maybe NULL for auto detect would be better?)
-	idx = document_new_file(utf8_filename, doc_list[old_idx].file_type);
-
-	sci_set_undo_collection(doc_list[idx].sci, FALSE); // avoid creation of an undo action
-	sci_empty_undo_buffer(doc_list[idx].sci);
+	gchar *text;
 
 	len = sci_get_length(doc_list[old_idx].sci) + 1;
-	data = (gchar*) g_malloc(len);
-	sci_get_text(doc_list[old_idx].sci, len, data);
-
-	sci_set_text(doc_list[idx].sci, data);
+	text = (gchar*) g_malloc(len);
+	sci_get_text(doc_list[old_idx].sci, len, text);
+	// use old file type (or maybe NULL for auto detect would be better?)
+	idx = document_new_file(utf8_filename, doc_list[old_idx].file_type, text);
+	g_free(text);
 
 	// copy file properties
 	doc_list[idx].line_wrapping = doc_list[old_idx].line_wrapping;
@@ -2393,11 +2389,8 @@ gint document_clone(gint old_idx, const gchar *utf8_filename)
 	document_set_encoding(idx, doc_list[old_idx].encoding);
 	sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_wrapping);
 	sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
-	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 
 	ui_document_show_hide(idx);
-
-	g_free(data);
 	return idx;
 }
 

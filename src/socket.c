@@ -425,7 +425,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 				{	// create new file if it doesn't exist
 					gint idx;
 
-					idx = document_new_file(buf, NULL);
+					idx = document_new_file(buf, NULL, NULL);
 					if (DOC_IDX_VALID(idx))
 						ui_add_recent_file(doc_list[idx].file_name);
 					else

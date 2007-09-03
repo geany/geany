@@ -715,7 +715,7 @@ static void cb_func_file_action(guint key_id)
 	switch (key_id)
 	{
 		case GEANY_KEYS_MENU_NEW:
-			document_new_file(NULL, NULL);
+			document_new_file(NULL, NULL, NULL);
 			break;
 		case GEANY_KEYS_MENU_OPEN:
 			on_open1_activate(NULL, NULL);
