@@ -574,7 +574,9 @@ void ui_document_buttons_update()
 	for (i = 0; i < G_N_ELEMENTS(widgets.document_buttons); i++)
 		gtk_widget_set_sensitive(widgets.document_buttons[i], enable);
 
+#ifdef HAVE_PLUGINS
 	plugins_update_document_sensitive(enable);
+#endif
 }
 
 

@@ -50,6 +50,7 @@
 #include "ui_utils.h"
 #include "sciwrappers.h"
 #include "dialogs.h"
+#include "filetypes.h"
 
 
 

@@ -44,10 +44,10 @@ ALL_GTK_LIBS= \
 
 CCFLAGS=-Wall -O2 -g -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
 
-OBJS = treeviews.o templates.o encodings.o about.o prefs.o win32.o build.o msgwindow.o dialogs.o \
-	filetypes.o interface.o main.o support.o callbacks.o utils.o ui_utils.o socket.o \
-	highlighting.o editor.o document.o sciwrappers.o keyfile.o keybindings.o search.o notebook.o \
-	symbols.o tools.o project.o navqueue.o plugins.o
+OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o filetypes.o \
+		geanyobject.o highlighting.o interface.o keybindings.o keyfile.o main.o msgwindow.o \
+		navqueue.o notebook.o plugins.o prefs.o project.o sciwrappers.o search.o socket.o  \
+		support.o symbols.o templates.o treeviews.o tools.o ui_utils.o utils.o win32.o
 
 .c.o:
 	$(CC) $(CCFLAGS) -c $<
