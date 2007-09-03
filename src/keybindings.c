@@ -248,9 +248,9 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_DELETELINE] = fill(cb_func_edit,
 		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("Delete current line(s)"));
 	keys[GEANY_KEYS_EDIT_COPYLINE] = fill(cb_func_edit,
-		GDK_k, GDK_MOD1_MASK | GDK_SHIFT_MASK, "edit_copyline", _("Copy current line(s)"));
+		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_copyline", _("Copy current line(s)"));
 	keys[GEANY_KEYS_EDIT_CUTLINE] = fill(cb_func_edit,
-		GDK_k, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("Cut current line(s)"));
+		GDK_x, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("Cut current line(s)"));
 	keys[GEANY_KEYS_EDIT_TRANSPOSELINE] = fill(cb_func_edit,
 		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("Transpose current line"));
 	keys[GEANY_KEYS_EDIT_TOLOWERCASE] = fill(cb_func_edit,

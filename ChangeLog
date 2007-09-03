@@ -1,3 +1,10 @@
+2007-09-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c:
+   Set copy lines default KB to Ctrl-Shift-C.
+   Set cut lines default KB to Ctrl-Shift-X.
+
+
 2007-08-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/highlighting.c, doc/geany.txt, doc/geany.html,
