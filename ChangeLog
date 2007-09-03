@@ -11,6 +11,8 @@
    Make File->New create a blank document, rather than using the None
    filetype template.
    Add None option for the 'New with Template' menu commands.
+ * src/interface.c, geany.glade:
+   Move 'Insert #include' menu item below other insert menu items.
 
 
 2007-08-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
