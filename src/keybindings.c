@@ -543,7 +543,7 @@ void keybindings_show_shortcuts()
 	gtk_window_set_default_size(GTK_WINDOW(dialog), height * 0.8, height);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
-	label3 = gtk_label_new(_("The following keyboard shortcuts are defined:"));
+	label3 = gtk_label_new(_("The following keyboard shortcuts are configurable:"));
 	gtk_misc_set_alignment(GTK_MISC(label3), 0, 0.5);
 
 	hbox = gtk_hbox_new(FALSE, 6);
