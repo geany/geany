@@ -1181,7 +1181,8 @@ gboolean document_save_file(gint idx, gboolean force)
 
 		if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_ALL)
 		{
-			doc_list[idx].file_type = filetypes_detect_from_file(idx);
+			filetype *ft = filetypes_detect_from_file(idx);
+			document_set_filetype(idx, ft);
 			if (document_get_cur_idx() == idx)
 			{
 				app->ignore_callback = TRUE;
@@ -1189,7 +1190,9 @@ gboolean document_save_file(gint idx, gboolean force)
 				app->ignore_callback = FALSE;
 			}
 		}
-		document_set_filetype(idx, doc_list[idx].file_type);
+		else
+			document_set_filetype(idx, doc_list[idx].file_type);
+
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), base_name);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), base_name);
