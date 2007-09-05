@@ -1149,7 +1149,6 @@ static gboolean ac_complete_constructs(gint idx, gint pos, const gchar *word)
 	g_strstrip(str);
 
 	pattern = ac_find_completion_by_name(filetypes[ft_id]->name, str);
-	geany_debug("-%s- -%s-", word, pattern);
 	if (pattern == NULL || pattern[0] == '\0')
 	{
 		utils_free_pointers(str, pattern, NULL); // free pattern in case it is ""
