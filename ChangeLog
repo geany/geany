@@ -3,6 +3,9 @@
  * src/document.c: Fix missing syntax colouring when saving new files.
  * src/document.c, src/keybindings.c, src/keybindings.h:
    Make keybinding for scrolling by one line changeable.
+ * src/prefs.c: Store the index of a keybinding in the treeview store
+                to fix problems getting the correct index when editing
+                a cell of the treeview.
 
 
 2007-09-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -370,7 +370,7 @@ void prefs_init_dialog(void)
 		tree = GTK_TREE_VIEW(lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
 		//g_object_set(tree, "vertical-separator", 6, NULL);
 
-		store = gtk_tree_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+		store = gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
 		gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 
 		renderer = gtk_cell_renderer_text_new();
@@ -410,7 +410,7 @@ void prefs_init_dialog(void)
 
 			key_string = gtk_accelerator_name(keys[i]->key, keys[i]->mods);
 			gtk_tree_store_append(store, &iter, &parent);
-			gtk_tree_store_set(store, &iter, 0, keys[i]->label, 1, key_string, -1);
+			gtk_tree_store_set(store, &iter, 0, keys[i]->label, 1, key_string, 2, i, -1);
 			g_free(key_string);
 		}
 	}
@@ -969,13 +969,7 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 		guint idx;
 		guint lkey;
 		GdkModifierType lmods;
-		gchar *test;
 		GtkTreeIter iter;
-
-		// get the index of the shortcut
-		idx = strtol(path, &test, 10);
-		if (test == path)
-			return;
 
 		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(store), &iter, path);
 		if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(store), &iter))
@@ -985,6 +979,9 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 
 		if (find_duplicate(idx, lkey, lmods, new_text))
 			return;
+
+		// get index
+		gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 2, &idx, -1);
 
 		// set the values here, because of the above check, setting it in gtk_accelerator_parse would
 		// return a wrong key combination if it is duplicate
@@ -1025,10 +1022,8 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer iter)
 		guint lkey;
 		GdkModifierType lmods;
 
-		for (idx = 0; idx < GEANY_MAX_KEYS; idx++)
-		{
-			if (utils_str_equal(dialog_key_name, keys[idx]->label)) break;
-		}
+		// get index
+		gtk_tree_model_get(GTK_TREE_MODEL(store), &g_iter, 2, &idx, -1);
 
 		gtk_accelerator_parse(gtk_label_get_text(GTK_LABEL(dialog_label)), &lkey, &lmods);
 
