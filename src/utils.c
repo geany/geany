@@ -623,7 +623,6 @@ gboolean utils_atob(const gchar *str)
 }
 
 
-/* currently unused */
 gboolean utils_is_absolute_path(const gchar *path)
 {
 	if (! path || *path == '\0')

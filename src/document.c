@@ -86,27 +86,78 @@ static void document_redo_add(gint idx, guint type, gpointer data);
 static gboolean update_type_keywords(ScintillaObject *sci);
 
 
-/* returns the document index which has the given filename.
- * is_tm_filename is needed when passing TagManager filenames because they are
- * dereferenced, and would not match the link filename. */
-gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
+// ignore the case of filenames and paths under WIN32, causes errors if not
+#ifdef G_OS_WIN32
+#define filenamecmp(a,b)	strcasecmp((a), (b))
+#else
+#define filenamecmp(a,b)	strcmp((a), (b))
+#endif
+
+static gint find_by_tm_filename(const gchar *filename)
 {
 	guint i;
 
-	if (! filename) return -1;
-
-	for(i = 0; i < doc_array->len; i++)
+	for (i = 0; i < doc_array->len; i++)
 	{
-		gchar *dl_fname = (is_tm_filename && doc_list[i].tm_file) ?
-							doc_list[i].tm_file->file_name : doc_list[i].file_name;
-#ifdef G_OS_WIN32
-		// ignore the case of filenames and paths under WIN32, causes errors if not
-		if (dl_fname && ! strcasecmp(dl_fname, filename)) return i;
-#else
-		if (dl_fname && utils_str_equal(dl_fname, filename)) return i;
-#endif
+		TMWorkObject *tm_file = doc_list[i].tm_file;
+
+		if (tm_file == NULL || tm_file->file_name == NULL) continue;
+
+		if (filenamecmp(filename, tm_file->file_name) == 0)
+			return i;
 	}
 	return -1;
+}
+
+
+static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
+{
+	gchar *locale_name = utils_get_locale_from_utf8(utf8_filename);
+	gchar *realname = tm_get_real_path(locale_name);
+
+	g_free(locale_name);
+	return realname;
+}
+
+
+/* filename is in UTF-8 for non-TagManager filenames.
+ * is_tm_filename should only be used when passing a TagManager filename,
+ * which is therefore locale-encoded and already a realpath().
+ * Returns: the document index which has the given filename. */
+gint document_find_by_filename(const gchar *filename, gboolean is_tm_filename)
+{
+	guint i;
+	gint ret = -1;
+	gchar *realname;
+
+	if (! filename) return -1;
+
+	if (is_tm_filename)
+		return find_by_tm_filename(filename);	// more efficient
+
+	realname = get_real_path_from_utf8(filename);	// dereference symlinks, /../ junk in path
+	if (! realname) return -1;
+
+	for (i = 0; i < doc_array->len; i++)
+	{
+		document *doc = &doc_list[i];
+		gchar *docname;
+
+		if (doc->file_name == NULL) continue;
+
+		docname = get_real_path_from_utf8(doc->file_name);
+		if (! docname) continue;
+
+		if (filenamecmp(realname, docname) == 0)
+		{
+			ret = i;
+			g_free(docname);
+			break;
+		}
+		g_free(docname);
+	}
+	g_free(realname);
+	return ret;
 }
 
 
@@ -793,20 +844,16 @@ gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean read
 	}
 	else
 	{
-		// filename must not be NULL when it is a new file
+		// filename must not be NULL when opening a file
 		if (filename == NULL)
 		{
 			ui_set_statusbar(_("Invalid filename"));
 			return -1;
 		}
 
-		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
 		locale_filename = g_strdup(filename);
-#ifdef G_OS_WIN32 // on Win32 we only use locale_filename because it is already UTF8. I hope
-		utf8_filename = g_strdup(locale_filename);
-#else
+		// try to get the UTF-8 equivalent for the filename, fallback to filename if error
 		utf8_filename = utils_get_utf8_from_locale(locale_filename);
-#endif
 
 		// if file is already open, switch to it and go
 		idx = document_find_by_filename(utf8_filename, FALSE);

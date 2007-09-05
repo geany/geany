@@ -1,3 +1,10 @@
+2007-09-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/utils.c, src/document.c:
+   Rewrite document_find_by_filename() to work when the filename
+   argument contains relative path elements or symlinks.
+
+
 2007-09-03  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/makefile.win32, src/ui_utils.c, src/win32.c,
