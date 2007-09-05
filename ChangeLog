@@ -1,6 +1,8 @@
 2007-09-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c: Fix missing syntax colouring when saving new files.
+ * src/document.c, src/keybindings.c, src/keybindings.h:
+   Make keybinding for scrolling by one line changeable.
 
 
 2007-09-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
