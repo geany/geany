@@ -329,7 +329,7 @@ static GtkWidget *create_dialog(void)
 	if (license_text == NULL)
 	{
 		license_text = g_strdup(
-			_("License text could not be found, please search the web for GPLv2"));
+			_("License text could not be found, please visit http://www.gnu.org/licenses/gpl-2.0.txt to view it online."));
 	}
 	tb = gtk_text_view_get_buffer(GTK_TEXT_VIEW(license_textview));
 	gtk_text_buffer_set_text(tb, license_text, strlen(license_text));

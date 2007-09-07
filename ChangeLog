@@ -5,6 +5,8 @@
    src/utils.h, src/ui_utils.h:
    Remove convert to lower-/upper-case keybindings.
    Add toggle case keybinding and change shortcut to Ctrl-Alt-U.
+ * src/about.c: Improved error message if license text could not be
+                found (thanks Frank).
 
 
 2007-09-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
