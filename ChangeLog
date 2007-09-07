@@ -1,3 +1,13 @@
+2007-09-07  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/keybindings.h, doc/geany.txt, doc/geany.html:
+   Add 'Move document left' and 'Move document right' keybindings.
+   Make fixed keybindings overridable.
+   Add fixed keybindings for switching to leftmost/rightmost document,
+   Ctrl-Shift-{PageUp,PageDown}.
+   Docs: Add 'Switching documents' keybindings section.
+
+
 2007-09-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c: Fix missing syntax colouring when saving new files.

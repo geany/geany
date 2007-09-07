@@ -1347,9 +1347,9 @@ general preference is set. There is also a command-line option,
 ``-p``, which prevents plugins being loaded. Plugins are scanned in
 the following directories:
 
-*	``$prefix/lib/geany`` (``$prefix`` is usually ``/usr/local`` or
-	``/usr``)
-*	``~/.geany/plugins``
+*   ``$prefix/lib/geany`` (``$prefix`` is usually ``/usr/local`` or
+    ``/usr``)
+*   ``~/.geany/plugins``
 
 Most plugins add menu items to the *Tools* menu when they are loaded.
 
@@ -1367,6 +1367,26 @@ editing widget. For a list of these commands, see `Scintilla
 keyboard commands`_. The Scintilla keyboard shortcuts will be overridden
 by any custom keybindings with the same keyboard shortcut.
 
+
+Switching documents
+^^^^^^^^^^^^^^^^^^^
+
+There are a few non-configurable bindings to switch between documents,
+listed below. These can also be overridden by custom keybindings.
+
+=============== ==================================
+Key             Action
+=============== ==================================
+Alt-[1-9]       Select left-most tab, from 1 to 9.
+Alt-0           Select right-most tab.
+Ctrl-Shift-PgUp Select left-most tab.
+Ctrl-Shift-PgDn Select right-most tab.
+=============== ==================================
+
+
+Configurable keybindings
+^^^^^^^^^^^^^^^^^^^^^^^^
+
 For all actions listed below you can define your own keybindings. Open
 the Preferences dialog, select the desired action and click on
 change. In the opening dialog you can press any key combination you
@@ -1376,9 +1396,9 @@ key combination for one action.
 Some of the default key combinations cannot be changed, e.g. menu_new
 or menu_open. These are set by GTK and should be kept, but you can
 still add other key combinations for these actions. For example to
-execute menu_open by default Ctrl-O is set, but you can also define
-Alt-O, so that the file open dialog is shown by pressing either Ctrl-O
-or Alt-O.
+execute menu_open by default *Ctrl-O* is set, but you can also define
+*Alt-O*, so that the file open dialog is shown by pressing either
+*Ctrl-O* or *Alt-O*.
 
 The following table lists all customizable keyboard shortcuts.
 
@@ -2181,12 +2201,12 @@ Go to end of display line.                      Alt+End
 Extend selection to end of display line.        Alt+Shift+End
 Scroll up.                                      Ctrl+Up
 Scroll down.                                    Ctrl+Down
-Previous paragraph. Shift extends selection.    Ctrl+[
-Next paragraph. Shift extends selection.        Ctrl+]
+Previous paragraph.                             Ctrl+[
+Next paragraph.                                 Ctrl+]
 Previous word. Shift extends selection.         Ctrl+Left
 Next word. Shift extends selection.             Ctrl+Right
-Previous word part. Shift extends selection     Ctrl+/
-Next word part. Shift extends selection.        Ctrl+\\
+Previous word part.                             Ctrl+/
+Next word part.                                 Ctrl+\\
 =============================================   ======================
 
 

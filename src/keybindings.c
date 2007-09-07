@@ -97,6 +97,7 @@ static void cb_func_switch_search_bar(guint key_id);
 static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
+static void cb_func_move_tab(guint key_id);
 static void cb_func_nav_back(guint key_id);
 static void cb_func_nav_forward(guint key_id);
 static void cb_func_toggle_sidebar(guint key_id);
@@ -238,6 +239,10 @@ void keybindings_init(void)
 		GDK_Page_Down, GDK_CONTROL_MASK, "switch_tabright", _("Switch to right document"));
 	keys[GEANY_KEYS_SWITCH_TABLASTUSED] = fill(cb_func_switch_tablastused,
 		GDK_Tab, GDK_CONTROL_MASK, "switch_tablastused", _("Switch to last used document"));
+	keys[GEANY_KEYS_MOVE_TABLEFT] = fill(cb_func_move_tab,
+		GDK_Page_Up, GDK_MOD1_MASK, "move_tableft", _("Move document left"));
+	keys[GEANY_KEYS_MOVE_TABRIGHT] = fill(cb_func_move_tab,
+		GDK_Page_Down, GDK_MOD1_MASK, "move_tabright", _("Move document right"));
 	keys[GEANY_KEYS_NAV_BACK] = fill(cb_func_nav_back,
 		0, 0, "nav_back", _("Navigate back a location"));
 	keys[GEANY_KEYS_NAV_FORWARD] = fill(cb_func_nav_forward,
@@ -615,6 +620,19 @@ static gboolean check_fixed_kb(GdkEventKey *event)
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), page);
 		return TRUE;
 	}
+	if (event->keyval == GDK_Page_Up || event->keyval == GDK_Page_Down)
+	{
+		// switch to first or last document
+		if (event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
+		{
+			if (event->keyval == GDK_Page_Up)
+				gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);
+			if (event->keyval == GDK_Page_Down)
+				gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
+					gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) - 1);
+			return TRUE;
+		}
+	}
 	return FALSE;
 }
 
@@ -663,9 +681,7 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 	if (event->state & GDK_MOD2_MASK)
 		event->state -= GDK_MOD2_MASK;
 
-	// special cases
-	if (check_fixed_kb(event))
-		return TRUE;
+	// special case
 	if (check_construct_completion(event))
 		return TRUE;
 
@@ -681,6 +697,9 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 			return TRUE;
 		}
 	}
+	// fixed keybindings can be overridden by user bindings
+	if (check_fixed_kb(event))
+		return TRUE;
 	return FALSE;
 }
 
@@ -1012,6 +1031,32 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 	if (DOC_IDX_VALID(last_doc_idx))
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook),
 			document_get_notebook_page(last_doc_idx));
+}
+
+// move document left/right
+static void cb_func_move_tab(guint key_id)
+{
+	gint idx = document_get_cur_idx();
+	GtkWidget *sci = GTK_WIDGET(doc_list[idx].sci);
+	GtkNotebook *nb = GTK_NOTEBOOK(app->notebook);
+	gint cur_page = gtk_notebook_get_current_page(nb);
+
+	if (! DOC_IDX_VALID(idx))
+		return;
+
+	if (key_id == GEANY_KEYS_MOVE_TABLEFT)
+	{
+		gtk_notebook_reorder_child(nb, sci, cur_page - 1);	// notebook wraps around by default
+	}
+	else if (key_id == GEANY_KEYS_MOVE_TABRIGHT)
+	{
+		gint npage = cur_page + 1;
+
+		if (npage == gtk_notebook_get_n_pages(nb))
+			npage = 0;	// wraparound
+		gtk_notebook_reorder_child(nb, sci, npage);
+	}
+	return;
 }
 
 static void cb_func_toggle_sidebar(G_GNUC_UNUSED guint key_id)
