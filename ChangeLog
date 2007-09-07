@@ -6,6 +6,9 @@
    Add fixed keybindings for switching to leftmost/rightmost document,
    Ctrl-Shift-{PageUp,PageDown}.
    Docs: Add 'Switching documents' keybindings section.
+ * src/interface.c, src/prefs.c, geany.glade:
+   Replace 'Use tabs...' preference checkbox with Tabs, Spaces radio
+   buttons (should be a bit clearer).
 
 
 2007-09-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

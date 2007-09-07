@@ -307,8 +307,11 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_smart_home");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.smart_home_key);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_use_tabs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.use_tabs);
+	if (editor_prefs.use_tabs)
+		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_indent_tabs");
+	else
+		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_indent_spaces");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_indicators");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.use_indicators);
@@ -681,7 +684,7 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_smart_home");
 		editor_prefs.smart_home_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_use_tabs");
+		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_indent_tabs");
 		editor_prefs.use_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");

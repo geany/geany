@@ -2533,7 +2533,10 @@ create_prefs_dialog (void)
   GtkWidget *frame27;
   GtkWidget *alignment30;
   GtkWidget *vbox25;
-  GtkWidget *check_use_tabs;
+  GtkWidget *hbox8;
+  GtkWidget *radio_indent_tabs;
+  GSList *radio_indent_tabs_group = NULL;
+  GtkWidget *radio_indent_spaces;
   GtkWidget *table13;
   GtkWidget *label116;
   GtkWidget *label183;
@@ -3450,11 +3453,22 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox25);
   gtk_container_add (GTK_CONTAINER (alignment30), vbox25);
 
-  check_use_tabs = gtk_check_button_new_with_mnemonic (_("Use tabs when inserting whitespace"));
-  gtk_widget_show (check_use_tabs);
-  gtk_box_pack_start (GTK_BOX (vbox25), check_use_tabs, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_use_tabs, _("Whenever some whitespace is inserted by Geany it will use tabs when enabled otherwise Geany will use just spaces."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_use_tabs), FALSE);
+  hbox8 = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox8);
+  gtk_box_pack_start (GTK_BOX (vbox25), hbox8, FALSE, FALSE, 0);
+
+  radio_indent_tabs = gtk_radio_button_new_with_mnemonic (NULL, _("Tabs"));
+  gtk_widget_show (radio_indent_tabs);
+  gtk_box_pack_start (GTK_BOX (hbox8), radio_indent_tabs, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radio_indent_tabs, _("Whenever some whitespace is inserted by Geany it will use tabs when enabled otherwise Geany will use just spaces."), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_tabs), radio_indent_tabs_group);
+  radio_indent_tabs_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_tabs));
+
+  radio_indent_spaces = gtk_radio_button_new_with_mnemonic (NULL, _("Spaces"));
+  gtk_widget_show (radio_indent_spaces);
+  gtk_box_pack_start (GTK_BOX (hbox8), radio_indent_spaces, FALSE, FALSE, 0);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_spaces), radio_indent_tabs_group);
+  radio_indent_tabs_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_spaces));
 
   table13 = gtk_table_new (2, 2, FALSE);
   gtk_widget_show (table13);
@@ -4289,7 +4303,9 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame27, "frame27");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment30, "alignment30");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox25, "vbox25");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_use_tabs, "check_use_tabs");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox8, "hbox8");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_indent_tabs, "radio_indent_tabs");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, radio_indent_spaces, "radio_indent_spaces");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table13, "table13");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label116, "label116");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label183, "label183");
