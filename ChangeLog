@@ -9,6 +9,8 @@
  * src/interface.c, src/prefs.c, geany.glade:
    Replace 'Use tabs...' preference checkbox with Tabs, Spaces radio
    buttons (should be a bit clearer).
+ * doc/geany.txt, doc/geany.html:
+   Minor update of Preferences dialog section.
 
 
 2007-09-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

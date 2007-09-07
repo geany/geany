@@ -984,6 +984,8 @@ persist between Geany sessions. The settings under the Document menu,
 however, are only for the current document and revert to defaults
 when restarting Geany.
 
+There are also some rarer `Hidden preferences`_.
+
 .. note::
     In the paragraphs that follow, the text describing a dialog tab
     (if present) comes after the screenshot of that tab.
@@ -995,8 +997,6 @@ General tab in preferences dialog
 General tab in preferences dialog
 
 .. image:: ./images/pref_dialog_gen.png
-
-*The "Context Activation" setting needs to be documented.*
 
 
 Interface tab in preferences dialog
@@ -1021,12 +1021,12 @@ Toolbar tab in preferences dialog
 .. image:: ./images/pref_dialog_toolbar.png
 
 
-Files tab in preferences dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Display tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Files tab in preferences dialog
+This is for visual elements displayed in the editor window.
 
-.. image:: ./images/pref_dialog_files.png
+.. Display tab in preferences dialog (TODO)
 
 
 Editor tab in preferences dialog
@@ -1037,8 +1037,16 @@ Editor tab in preferences dialog
 .. image:: ./images/pref_dialog_edit.png
 
 Line wrapping refers to the display of the text in the
-editor. Currently, there is no setting to have Geany automatically
-insert newlines into your document while you type.
+editor. (Currently, there is no setting to have Geany automatically
+insert newlines into your document while you type.)
+
+
+Files tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Files tab in preferences dialog
+
+.. image:: ./images/pref_dialog_files.png
 
 
 Tools tab in preferences dialog
