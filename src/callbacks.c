@@ -889,26 +889,32 @@ toolbar_popup_menu                     (GtkWidget *widget,
 
 
 void
-on_to_lower_case1_activate             (GtkMenuItem     *menuitem,
+on_toggle_case1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	gchar *text;
 
-	if (idx < 0 || ! doc_list[idx].is_valid) return;
+	if (! DOC_IDX_VALID(idx))
+		return;
 
-	sci_cmd(doc_list[idx].sci, SCI_LOWERCASE);
-}
+	if (sci_can_copy(doc_list[idx].sci))
+	{
+		gchar *result;
 
+		text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
+		sci_get_selected_text(doc_list[idx].sci, text);
 
-void
-on_to_upper_case1_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
-{
-	gint idx = document_get_cur_idx();
+		if (utils_str_has_upper(text))
+			result = g_utf8_strdown(text, -1);
+		else
+			result = g_utf8_strup(text, -1);
 
-	if (idx < 0 || ! doc_list[idx].is_valid) return;
+		sci_replace_sel(doc_list[idx].sci, result);
 
-	sci_cmd(doc_list[idx].sci, SCI_UPPERCASE);
+		g_free(result);
+		g_free(text);
+	}
 }
 
 

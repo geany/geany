@@ -196,11 +196,7 @@ on_entry1_changed                      (GtkEditable     *editable,
                                         gpointer         user_data);
 
 void
-on_to_lower_case1_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data);
-
-void
-on_to_upper_case1_activate             (GtkMenuItem     *menuitem,
+on_toggle_case1_activate               (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
 
 void

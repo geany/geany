@@ -174,4 +174,6 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
 /* Gets a sorted list of files in the specified directory. */
 GSList *utils_get_file_list(const gchar *path, guint *length, GError **error);
 
+gboolean utils_str_has_upper(const gchar *str);
+
 #endif

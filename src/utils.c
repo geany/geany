@@ -1600,3 +1600,21 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 }
 
 
+/* returns TRUE if any letter in str is a capital, FALSE otherwise. Should be Unicode safe. */
+gboolean utils_str_has_upper(const gchar *str)
+{
+	gunichar c;
+
+	if (str == NULL || *str == '\0' || ! g_utf8_validate(str, -1, NULL))
+		return FALSE;
+
+	while (*str != '\0')
+	{
+		c = g_utf8_get_char(str);
+		// check only letters and stop once the first non-capital was found
+		if (g_unichar_isalpha(c) && g_unichar_isupper(c))
+			return TRUE;
+		str = g_utf8_next_char(str);
+	}
+	return FALSE;
+}

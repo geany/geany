@@ -258,10 +258,8 @@ void keybindings_init(void)
 		GDK_x, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("Cut current line(s)"));
 	keys[GEANY_KEYS_EDIT_TRANSPOSELINE] = fill(cb_func_edit,
 		GDK_t, GDK_CONTROL_MASK, "edit_transposeline", _("Transpose current line"));
-	keys[GEANY_KEYS_EDIT_TOLOWERCASE] = fill(cb_func_edit,
-		GDK_u, GDK_CONTROL_MASK, "edit_tolowercase", _("Convert Selection to lower-case"));
-	keys[GEANY_KEYS_EDIT_TOUPPERCASE] = fill(cb_func_edit,
-		GDK_u, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_touppercase", _("Convert Selection to upper-case"));
+	keys[GEANY_KEYS_EDIT_TOGGLECASE] = fill(cb_func_edit,
+		GDK_u, GDK_CONTROL_MASK | GDK_MOD1_MASK, "edit_togglecase", _("Toggle Case of Selection"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINETOGGLE] = fill(cb_func_edit,
 		GDK_e, GDK_CONTROL_MASK, "edit_commentlinetoggle", _("Toggle line commentation"));
 	keys[GEANY_KEYS_EDIT_COMMENTLINE] = fill(cb_func_edit,
@@ -359,7 +357,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER]->section = _("Tools menu");
 	keys[GEANY_KEYS_MENU_HELP]->section = _("Help menu");
 	keys[GEANY_KEYS_SWITCH_EDITOR]->section = _("Focus commands");
-	keys[GEANY_KEYS_EDIT_TOLOWERCASE]->section = _("Editing commands");
+	keys[GEANY_KEYS_EDIT_TOGGLECASE]->section = _("Editing commands");
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE]->section = _("Tag commands");
 
 	g_free(configfile);
@@ -420,8 +418,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FOLDALL, menu_fold_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNFOLDALL, menu_unfold_all1);
 	//~ GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTSPECIALCHARS, menu_insert_special_chars1);
-	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOLOWERCASE, menu_to_lower_case2);
-	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOUPPERCASE, menu_to_upper_case2);
+	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOGGLECASE, menu_toggle_case2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_UNCOMMENTLINE, menu_uncomment_line1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_COMMENTLINETOGGLE, menu_toggle_line_commentation1);
@@ -439,8 +436,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_GOTOTAGDECLARATION, goto_tag_declaration1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_POPUP_CONTEXTACTION, context_action1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_TOLOWERCASE, to_lower_case1);
-	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_TOUPPERCASE, to_upper_case1);
+	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_TOGGLECASE, toggle_case1);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_UNCOMMENTLINE, menu_uncomment_line2);
 	GEANY_ADD_POPUP_ACCEL(GEANY_KEYS_EDIT_COMMENTLINETOGGLE, menu_toggle_line_commentation2);
@@ -1236,11 +1232,8 @@ static void cb_func_edit(guint key_id)
 		case GEANY_KEYS_EDIT_AUTOINDENT:
 			editor_auto_line_indentation(idx, -1);
 			break;
-		case GEANY_KEYS_EDIT_TOLOWERCASE:
-			on_to_lower_case1_activate(NULL, NULL);
-			break;
-		case GEANY_KEYS_EDIT_TOUPPERCASE:
-			on_to_upper_case1_activate(NULL, NULL);
+		case GEANY_KEYS_EDIT_TOGGLECASE:
+			on_toggle_case1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_EDIT_SENDTOCMD1:
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 0)

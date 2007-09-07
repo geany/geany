@@ -1533,9 +1533,11 @@ Navigate back a location        Switches to the previous location in the
 
 **Editing operations**
 
-Convert selection to lower case Converts the current selection to lower case.
-
-Convert selection to upper case Converts the current selection to upper case.
+Toggle case of selection        Changes the case of the selection. A lowercase
+                                selection will be changed into uppercase and vice
+                                versa. If the selection contains lower- and
+                                uppercase characters, all will be converted to
+                                lowercase.
 
 Duplicate line or selection     Duplicates the current line or selection.
 
