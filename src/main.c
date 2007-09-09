@@ -300,13 +300,11 @@ static void main_init(void)
 	ui_widgets.popup_items[0] = lookup_widget(app->popup_menu, "cut1");
 	ui_widgets.popup_items[1] = lookup_widget(app->popup_menu, "copy1");
 	ui_widgets.popup_items[2] = lookup_widget(app->popup_menu, "delete1");
-	ui_widgets.popup_items[3] = lookup_widget(app->popup_menu, "to_lower_case1");
-	ui_widgets.popup_items[4] = lookup_widget(app->popup_menu, "to_upper_case1");
+	ui_widgets.popup_items[3] = lookup_widget(app->popup_menu, "toggle_case1");
 	ui_widgets.menu_copy_items[0] = lookup_widget(app->window, "menu_cut1");
 	ui_widgets.menu_copy_items[1] = lookup_widget(app->window, "menu_copy1");
 	ui_widgets.menu_copy_items[2] = lookup_widget(app->window, "menu_delete1");
-	ui_widgets.menu_copy_items[3] = lookup_widget(app->window, "menu_to_lower_case2");
-	ui_widgets.menu_copy_items[4] = lookup_widget(app->window, "menu_to_upper_case2");
+	ui_widgets.menu_copy_items[3] = lookup_widget(app->window, "menu_toggle_case2");
 	ui_widgets.menu_insert_include_items[0] = lookup_widget(app->popup_menu, "insert_include1");
 	ui_widgets.menu_insert_include_items[1] = lookup_widget(app->window, "insert_include2");
 	ui_widgets.save_buttons[0] = lookup_widget(app->window, "menu_save1");
