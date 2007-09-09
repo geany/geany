@@ -3,6 +3,9 @@
  * src/build.c, src/callbacks.c: Change quotes in some error messages to
                                  be more consistent (thanks Frank).
  * doc/geany.txt: Add notice about code navigation history.
+ * src/geany.nsi:
+   Install symbol list icons with the installer.
+   Use Geany's icon for the installer.
 
 
 2007-09-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

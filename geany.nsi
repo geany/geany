@@ -78,8 +78,8 @@ FunctionEnd
 !include "MUI.nsh"
 
 !define MUI_ABORTWARNING
-#!define MUI_ICON "pixmaps\geany.ico"
-#!define MUI_UNICON "pixmaps\win-uninstall.ico"
+!define MUI_ICON "pixmaps\geany.ico"
+!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall-full.ico"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -129,6 +129,9 @@ Section "!Program Files" SEC01
   SetOutPath "$INSTDIR\data"
   File "${RESOURCEDIR}\data\GPL-2"
   File "${RESOURCEDIR}\data\file*"
+
+  SetOutPath "$INSTDIR\share"
+  File /r "${RESOURCEDIR}\share\*"
 
   SetOutPath "$INSTDIR"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
