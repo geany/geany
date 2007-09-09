@@ -2,6 +2,7 @@
 
  * src/build.c, src/callbacks.c: Change quotes in some error messages to
                                  be more consistent (thanks Frank).
+ * doc/geany.txt: Add notice about code navigation history.
 
 
 2007-09-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

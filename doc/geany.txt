@@ -488,6 +488,21 @@ together with the commands to switch from one editor tab to another
 navigate around multiple files.
 
 
+Code Navigation History
+^^^^^^^^^^^^^^^^^^^^^^^
+
+To ease navigation in source files and especially between different files, Geany
+let you jump between different navigation points. Currently, this works when using
+the `Go to tag declaration`_, `Go to tag definition`_ commands and when clicking
+on symbol list items.
+
+When using one of these actions, Geany remembers your current position and jumps
+to the new one. If you decide to go back to your previous position in the file,
+just use "Navigate back a location". To get back to the new position again, just
+use "Navigate forward a location". This makes it easier to navigate in e.g.
+foreign code and between different files.
+
+
 Send text through definable commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1526,10 +1541,12 @@ Switch to right document        Switches to the next open document.
 Switch to last used document    Switches to the previously selected open document.
 
 Navigate forward a location     Switches to the next location in the navigation
-                                history.
+                                history. See the section called `Code Navigation
+                                History`_.
 
 Navigate back a location        Switches to the previous location in the
-                                navigation history.
+                                navigation history. See the section called
+                                `Code Navigation History`_.
 
 **Editing operations**
 
@@ -1640,7 +1657,7 @@ Go to tag declaration           Jump to the declaration of the current word (nea
                                 the keyboard cursor). If the declaration cannot be
                                 found (e.g. the relevant file is not open) Geany
                                 will beep and do nothing. See the section called
-                                `Go to tag definition`_.
+                                `Go to tag declaration`_.
 
 Context Action                  Executes a command and passes the current word
                                 (near the cursor postion) or selection as an
