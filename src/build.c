@@ -206,7 +206,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	if (term_argv[0] == NULL)
 	{
 		msgwin_status_add(
-			_("Could not find terminal '%s' "
+			_("Could not find terminal \"%s\" "
 				"(check path for Terminal tool setting in Preferences)"), prefs.tools_term_cmd);
 
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
@@ -588,7 +588,7 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 		{
 			gchar *utf8_check_executable = utils_get_utf8_from_locale(check_executable);
 
-			msgwin_status_add(_("Failed to execute %s (make sure it is already built)"),
+			msgwin_status_add(_("Failed to execute \"%s\" (make sure it is already built)"),
 														utf8_check_executable);
 			g_free(utf8_check_executable);
 			g_free(check_executable);
@@ -642,7 +642,7 @@ static gchar *prepare_run_script(gint idx)
 		gchar *utf8_working_dir =
 			utils_get_utf8_from_locale(working_dir);
 
-		msgwin_status_add(_("Failed to change the working directory to %s"), utf8_working_dir);
+		msgwin_status_add(_("Failed to change the working directory to \"%s\""), utf8_working_dir);
 		g_free(utf8_working_dir);
 		g_free(working_dir);
 		g_free(executable);
@@ -743,7 +743,7 @@ static GPid build_run_cmd(gint idx)
 		if (term_argv[0] == NULL)
 		{
 			msgwin_status_add(
-				_("Could not find terminal '%s' "
+				_("Could not find terminal \"%s\" "
 					"(check path for Terminal tool setting in Preferences)"), prefs.tools_term_cmd);
 			run_info.pid = (GPid) 1;
 			goto free_strings;
@@ -1486,7 +1486,8 @@ static void show_includes_arguments_gen()
 	if (ft->actions->can_compile || ft->actions->can_link || ft->actions->can_exec)
 	{
 		GtkWidget *align, *frame;
-		gchar *frame_title = g_strconcat(ft->title, _(" commands"), NULL);
+		// in-dialog heading for the "Set Includes and Arguments" dialog
+		gchar *frame_title = g_strdup_printf(_("%s commands"), ft->title);
 
 		frame = ui_frame_new_with_alignment(frame_title, &align);
 		gtk_container_add(GTK_CONTAINER(vbox), frame);

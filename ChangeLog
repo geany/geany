@@ -1,8 +1,14 @@
+2007-09-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c, src/callbacks.c: Change quotes in some error messages to
+                                 be more consistent (thanks Frank).
+
+
 2007-09-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, doc/geany.txt, src/callbacks.c, src/callbacks.h,
-   src/interface.c, src/keybindings.c, src/keybindings.h, src/utils.c,
-   src/utils.h, src/ui_utils.h:
+   src/interface.c, src/keybindings.c, src/keybindings.h, src/main.c,
+   src/utils.c, src/utils.h, src/ui_utils.h:
    Remove convert to lower-/upper-case keybindings.
    Add toggle case keybinding and change shortcut to Ctrl-Alt-U.
  * src/about.c: Improved error message if license text could not be
