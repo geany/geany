@@ -574,7 +574,7 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 	// take the zoom level also into account
 	font_size = scintilla->send_message(doc_list[idx].sci, SCI_STYLEGETSIZE, 0, 0);
 	if (use_zoom)
-		font_size += scintilla->get_zoom(doc_list[idx].sci);
+		font_size += scintilla->send_message(doc_list[idx].sci, SCI_GETZOOM, 0, 0);
 
 	// read the document and write the HTML body
 	body = g_string_new("");

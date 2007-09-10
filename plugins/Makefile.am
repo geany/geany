@@ -1,7 +1,7 @@
 # Adapted from Pidgin's plugins/Makefile.am, thanks
 
-#EXTRA_DIST = \
-	#makefile.win32
+EXTRA_DIST = \
+	makefile.win32
 
 if IS_COMPILER_GCC
     AM_CFLAGS = -Wall -pipe

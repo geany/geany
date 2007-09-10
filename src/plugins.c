@@ -114,8 +114,7 @@ static ScintillaFuncs sci_funcs = {
 	&sci_scroll_caret,
 	&sci_find_bracematch,
 	&sci_get_style_at,
-	&sci_get_char_at,
-	&sci_get_zoom
+	&sci_get_char_at
 };
 
 static TemplateFuncs template_funcs = {
