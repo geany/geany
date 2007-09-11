@@ -143,7 +143,7 @@ void document_open_files(const GSList *filenames, gboolean readonly, filetype *f
 		const gchar *forced_enc);
 
 
-gint document_reload_file(gint idx, const gchar *forced_enc);
+gboolean document_reload_file(gint idx, const gchar *forced_enc);
 
 
 /* This saves the file.

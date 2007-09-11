@@ -825,6 +825,7 @@ static void set_cursor_position(gint idx, gint pos)
 /* To open a new file, set idx to -1; filename should be locale encoded.
  * To reload a file, set the idx for the document to be reloaded; filename should be NULL.
  * pos is the cursor position, which can be overridden by --line and --column.
+ * forced_enc can be NULL to detect the file encoding.
  * Returns: idx of the opened file or -1 if an error occurred.
  *
  * When opening more than one file, either:
@@ -1022,17 +1023,21 @@ void document_open_files(const GSList *filenames, gboolean readonly, filetype *f
 }
 
 
-gint document_reload_file(gint idx, const gchar *forced_enc)
+/* Reload document with index idx.
+ * forced_enc can be NULL to detect the file encoding.
+ * Returns: TRUE if successful. */
+gboolean document_reload_file(gint idx, const gchar *forced_enc)
 {
 	gint pos = 0;
 
 	if (! DOC_IDX_VALID(idx))
-		return -1;
+		return FALSE;
 
 	// try to set the cursor to the position before reloading
 	pos = sci_get_current_position(doc_list[idx].sci);
-	return document_open_file_full(idx, NULL, pos, doc_list[idx].readonly,
+	idx = document_open_file_full(idx, NULL, pos, doc_list[idx].readonly,
 					doc_list[idx].file_type, forced_enc);
+	return (idx != -1);
 }
 
 

@@ -79,7 +79,8 @@ static DocumentFuncs doc_funcs = {
 	&document_save_file,
 	&document_open_file,
 	&document_open_files,
-	&document_remove
+	&document_remove,
+	&document_reload_file
 };
 
 static ScintillaFuncs sci_funcs = {
