@@ -1270,7 +1270,7 @@ on_help1_activate                      (GtkMenuItem     *menuitem,
 
 #ifdef G_OS_WIN32
 	skip = 8;
-	uri = g_strconcat("file:///", app->docdir, "/index.html", NULL);
+	uri = g_strconcat("file:///", app->docdir, "/Manual.html", NULL);
 	g_strdelimit(uri, "\\", '/'); // replace '\\' by '/'
 #else
 	skip = 7;

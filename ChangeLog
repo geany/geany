@@ -1,3 +1,9 @@
+2007-09-11  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/callbacks.c: HTML manual is called Manual.html on Windows, so
+                    open this file.
+
+
 2007-09-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/export.c, plugins/classbuilder.c, src/utils.c, src/win32.c,
