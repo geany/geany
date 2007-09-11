@@ -1,3 +1,16 @@
+2007-09-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/export.c, plugins/classbuilder.c, src/utils.c, src/win32.c,
+   src/utils.h, src/plugindata.h, src/msgwindow.c, src/callbacks.c,
+   src/keyfile.c, src/document.c, src/plugins.c, src/document.h,
+   src/main.c, src/socket.c, src/ui_utils.c:
+   Neaten up the plugin API:
+   Make document_open_file() now wrap document_open_file_full(),
+   without the idx for reloading or pos arguments.
+   Replace str_replace() with string_replace_all() in the plugin API.
+   Add utils_string_replace_all(), taking a GString argument.
+
+
 2007-09-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * THANKS, pixmaps/geany.ico, pixmaps/geany.png:

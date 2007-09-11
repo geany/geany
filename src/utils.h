@@ -99,9 +99,13 @@ gchar *utils_get_hostname();
 
 gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gchar *doc_dir);
 
+
+gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar *replace);
+
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement);
 
 gint utils_strpos(const gchar* haystack, const gchar * needle);
+
 
 gchar *utils_get_date_time();
 

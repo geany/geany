@@ -251,102 +251,97 @@ utils_free_pointers(gpointer first, ...)
 static gchar*
 get_template_class_header(ClassInfo *class_info)
 {
+	gchar *fileheader = NULL;
+	GString *template = NULL;
+
 	switch (class_info->type)
 	{
 		case GEANY_CLASS_TYPE_CPP:
-		{
-			gchar *fileheader = NULL;
-			gchar *template;
-
-			fileheader = templates->get_template_fileheader(GEANY_FILETYPES_C, class_info->header);
-			template = g_strdup(templates_cpp_class_header);
-			template = utils->str_replace(template, "{fileheader}", fileheader);
-			template = utils->str_replace(template, "{header_guard}", class_info->header_guard);
-			template = utils->str_replace(template, "{base_include}", class_info->base_include);
-			template = utils->str_replace(template, "{class_name}", class_info->class_name);
-			template = utils->str_replace(template, "{base_decl}", class_info->base_decl);
-			template = utils->str_replace(template, "{constructor_decl}",
+			fileheader = templates->get_template_fileheader(GEANY_FILETYPES_CPP, class_info->header);
+			template = g_string_new(templates_cpp_class_header);
+			utils->string_replace_all(template, "{fileheader}", fileheader);
+			utils->string_replace_all(template, "{header_guard}", class_info->header_guard);
+			utils->string_replace_all(template, "{base_include}", class_info->base_include);
+			utils->string_replace_all(template, "{class_name}", class_info->class_name);
+			utils->string_replace_all(template, "{base_decl}", class_info->base_decl);
+			utils->string_replace_all(template, "{constructor_decl}",
 					class_info->constructor_decl);
-			template = utils->str_replace(template, "{destructor_decl}",
+			utils->string_replace_all(template, "{destructor_decl}",
 					class_info->destructor_decl);
+			break;
 
-			return template;
-		}
 		case GEANY_CLASS_TYPE_GTK:
-		{
-			gchar *fileheader = NULL;
-			gchar *template;
-
 			fileheader = templates->get_template_fileheader(GEANY_FILETYPES_C, class_info->header);
-			template = g_strdup(templates_gtk_class_header);
-			template = utils->str_replace(template, "{fileheader}", fileheader);
-			template = utils->str_replace(template, "{header_guard}", class_info->header_guard);
-			template = utils->str_replace(template, "{base_include}", class_info->base_include);
-			template = utils->str_replace(template, "{class_name}", class_info->class_name);
-			template = utils->str_replace(template, "{class_name_up}", class_info->class_name_up);
-			template = utils->str_replace(template, "{class_name_low}", class_info->class_name_low);
-			template = utils->str_replace(template, "{base_name}", class_info->base_name);
-			template = utils->str_replace(template, "{constructor_decl}",
+			template = g_string_new(templates_gtk_class_header);
+			utils->string_replace_all(template, "{fileheader}", fileheader);
+			utils->string_replace_all(template, "{header_guard}", class_info->header_guard);
+			utils->string_replace_all(template, "{base_include}", class_info->base_include);
+			utils->string_replace_all(template, "{class_name}", class_info->class_name);
+			utils->string_replace_all(template, "{class_name_up}", class_info->class_name_up);
+			utils->string_replace_all(template, "{class_name_low}", class_info->class_name_low);
+			utils->string_replace_all(template, "{base_name}", class_info->base_name);
+			utils->string_replace_all(template, "{constructor_decl}",
 					class_info->constructor_decl);
-
-			return template;
-		}
+			break;
 	}
 
-	return NULL;
+	g_free(fileheader);
+
+	if (template)
+		return g_string_free(template, FALSE);
+	else
+		return NULL;
 }
+
 
 static gchar*
 get_template_class_source(ClassInfo *class_info)
 {
+	gchar *fileheader = NULL;
+	GString *template = NULL;
+
 	switch (class_info->type)
 	{
 		case GEANY_CLASS_TYPE_CPP:
-		{
-			gchar *fileheader = NULL;
-			gchar *template;
-
-			fileheader = templates->get_template_fileheader(GEANY_FILETYPES_C, class_info->source);
-			template = g_strdup(templates_cpp_class_source);
-			template = utils->str_replace(template, "{fileheader}", fileheader);
-			template = utils->str_replace(template, "{header}", class_info->header);
-			template = utils->str_replace(template, "{class_name}", class_info->class_name);
-			template = utils->str_replace(template, "{base_include}", class_info->base_include);
-			template = utils->str_replace(template, "{base_name}", class_info->base_name);
-			template = utils->str_replace(template, "{constructor_impl}",
+			fileheader = templates->get_template_fileheader(GEANY_FILETYPES_CPP, class_info->source);
+			template = g_string_new(templates_cpp_class_source);
+			utils->string_replace_all(template, "{fileheader}", fileheader);
+			utils->string_replace_all(template, "{header}", class_info->header);
+			utils->string_replace_all(template, "{class_name}", class_info->class_name);
+			utils->string_replace_all(template, "{base_include}", class_info->base_include);
+			utils->string_replace_all(template, "{base_name}", class_info->base_name);
+			utils->string_replace_all(template, "{constructor_impl}",
 					class_info->constructor_impl);
-			template = utils->str_replace(template, "{destructor_impl}",
+			utils->string_replace_all(template, "{destructor_impl}",
 					class_info->destructor_impl);
+			break;
 
-			return template;
-		}
 		case GEANY_CLASS_TYPE_GTK:
-		{
-			gchar *fileheader = NULL;
-			gchar *template;
-
 			fileheader = templates->get_template_fileheader(GEANY_FILETYPES_C, class_info->source);
-			template = g_strdup(templates_gtk_class_source);
-			template = utils->str_replace(template, "{fileheader}", fileheader);
-			template = utils->str_replace(template, "{header}", class_info->header);
-			template = utils->str_replace(template, "{class_name}", class_info->class_name);
-			template = utils->str_replace(template, "{class_name_up}", class_info->class_name_up);
-			template = utils->str_replace(template, "{class_name_low}", class_info->class_name_low);
-			template = utils->str_replace(template, "{base_name}", class_info->base_name);
-			template = utils->str_replace(template, "{base_gtype}", class_info->base_gtype);
-			template = utils->str_replace(template, "{destructor_decl}", class_info->destructor_decl);
-			template = utils->str_replace(template, "{constructor_impl}",
+			template = g_string_new(templates_gtk_class_source);
+			utils->string_replace_all(template, "{fileheader}", fileheader);
+			utils->string_replace_all(template, "{header}", class_info->header);
+			utils->string_replace_all(template, "{class_name}", class_info->class_name);
+			utils->string_replace_all(template, "{class_name_up}", class_info->class_name_up);
+			utils->string_replace_all(template, "{class_name_low}", class_info->class_name_low);
+			utils->string_replace_all(template, "{base_name}", class_info->base_name);
+			utils->string_replace_all(template, "{base_gtype}", class_info->base_gtype);
+			utils->string_replace_all(template, "{destructor_decl}", class_info->destructor_decl);
+			utils->string_replace_all(template, "{constructor_impl}",
 					class_info->constructor_impl);
-			template = utils->str_replace(template, "{destructor_impl}",
+			utils->string_replace_all(template, "{destructor_impl}",
 					class_info->destructor_impl);
-			template = utils->str_replace(template, "{gtk_destructor_registration}",
+			utils->string_replace_all(template, "{gtk_destructor_registration}",
 					class_info->gtk_destructor_registration);
-
-			return template;
-		}
+			break;
 	}
 
-	return NULL;
+	g_free(fileheader);
+
+	if (template)
+		return g_string_free(template, FALSE);
+	else
+		return NULL;
 }
 
 

@@ -127,7 +127,10 @@ gint document_clone(gint old_idx, const gchar *utf8_filename);
 
 
 /* See document.c. */
-gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly,
+gint document_open_file(const gchar *locale_filename, gboolean readonly,
+		filetype *ft, const gchar *forced_enc);
+
+gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean readonly,
 		filetype *ft, const gchar *forced_enc);
 
 /* Takes a new line separated list of filename URIs and opens each file.

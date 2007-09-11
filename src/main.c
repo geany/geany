@@ -542,7 +542,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 		{
 			gint idx;
 
-			idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
+			idx = document_open_file(filename, FALSE, NULL, NULL);
 			// add recent file manually because opening_session_files is set
 			if (DOC_IDX_VALID(idx))
 				ui_add_recent_file(doc_list[idx].file_name);

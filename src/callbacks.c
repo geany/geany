@@ -1947,7 +1947,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 		}
 
 		locale_filename = utils_get_locale_from_utf8(filename);
-		document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL);
+		document_open_file(locale_filename, FALSE, NULL, NULL);
 
 		g_free(filename);
 		g_free(locale_filename);

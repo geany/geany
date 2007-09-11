@@ -838,7 +838,7 @@ recent_file_activate_cb                (GtkMenuItem     *menuitem,
 	gchar *utf8_filename = menu_item_get_text(menuitem);
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
-	if (document_open_file(-1, locale_filename, 0, FALSE, NULL, NULL) > -1)
+	if (document_open_file(locale_filename, FALSE, NULL, NULL) > -1)
 		recent_file_loaded(utf8_filename);
 
 	g_free(locale_filename);

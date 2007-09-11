@@ -805,8 +805,9 @@ For more information read the documentation (in ", doc_dir, DIR_SEP "index.html 
 }
 
 
-/* replaces all occurrences of needle in haystack with replacement
- * all strings have to NULL-terminated and needle and replacement have to be different,
+/* Replaces all occurrences of needle in haystack with replacement.
+ * New code should use utils_string_replace_all() instead.
+ * All strings have to be NULL-terminated and needle and replacement have to be different,
  * e.g. needle "%" and replacement "%%" causes an endless loop */
 gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *replacement)
 {
@@ -1618,3 +1619,33 @@ gboolean utils_str_has_upper(const gchar *str)
 	}
 	return FALSE;
 }
+
+
+/* Replaces all occurrences of needle in str with replace.
+ * Currently this is not safe if replace matches needle.
+ * Returns: TRUE if needle was found. */
+gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar *replace)
+{
+	const gchar *c;
+	gssize pos = -1;
+
+	g_return_val_if_fail(NZV(needle), FALSE);
+	g_return_val_if_fail(! NZV(replace) || strstr(replace, needle) == NULL, FALSE);
+
+	while (1)
+	{
+		c = strstr(str->str, needle);
+		if (c == NULL)
+			break;
+		else
+		{
+			pos = c - str->str;
+			g_string_erase(str, pos, strlen(needle));
+			if (replace)
+				g_string_insert(str, pos, replace);
+		}
+	}
+	return (pos != -1);
+}
+
+

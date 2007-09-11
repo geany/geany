@@ -311,7 +311,7 @@ gboolean win32_show_file_dialog(gboolean file_open)
 		x = of.nFileOffset - 1;
 		if (x != strlen(fname))
 		{	// open a single file
-			document_open_file(-1, fname, 0, of.Flags & OFN_READONLY, NULL, NULL);
+			document_open_file(fname, of.Flags & OFN_READONLY, NULL, NULL);
 		}
 		else
 		{	// open multiple files
@@ -324,7 +324,7 @@ gboolean win32_show_file_dialog(gboolean file_open)
 					if (! fname[x+1]) break;
 
 					g_snprintf(file_name, 254, "%s\\%s", fname, fname + x + 1);
-					document_open_file(-1, file_name, 0, of.Flags & OFN_READONLY, NULL, NULL);
+					document_open_file(file_name, of.Flags & OFN_READONLY, NULL, NULL);
 				}
 				x++;
 			}

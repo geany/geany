@@ -514,7 +514,7 @@ gboolean msgwin_goto_compiler_file_line()
 				g_free(utf8_filename);
 
 				if (idx < 0)	// file not already open
-					idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
+					idx = document_open_file(filename, FALSE, NULL, NULL);
 
 				if (idx >= 0 && doc_list[idx].is_valid)
 				{
@@ -788,7 +788,7 @@ gboolean msgwin_goto_messages_file_line()
 			if (filename != NULL && line > -1)
 			{
 				// use document_open_file to find an already open file, or open it in place
-				idx = document_open_file(-1, filename, 0, FALSE, NULL, NULL);
+				idx = document_open_file(filename, FALSE, NULL, NULL);
 				// utils_goto_file_line will check valid filename.
 				ret = utils_goto_file_line(filename, FALSE, line);
 			}

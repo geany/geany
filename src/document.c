@@ -563,6 +563,15 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 }
 
 
+/* This is a wrapper for document_open_file_full(), see that function for details.
+ * Do not use this when opening multiple files (unless using document_delay_colourise()). */
+gint document_open_file(const gchar *locale_filename, gboolean readonly,
+		filetype *ft, const gchar *forced_enc)
+{
+	return document_open_file_full(-1, locale_filename, 0, readonly, ft, forced_enc);
+}
+
+
 typedef struct
 {
 	gchar		*data;	// null-terminated file data
@@ -825,7 +834,7 @@ static void set_cursor_position(gint idx, gint pos)
  *
  * This avoids unnecessary recolourising, saving significant processing when a lot of files
  * are open of a filetype that supports user typenames, e.g. C. */
-gint document_open_file(gint idx, const gchar *filename, gint pos, gboolean readonly,
+gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean readonly,
 		filetype *ft, const gchar *forced_enc)
 {
 	gint editor_mode;
@@ -987,7 +996,7 @@ void document_open_file_list(const gchar *data, gssize length)
 		if (list[i] == NULL) break;
 		filename = g_filename_from_uri(list[i], NULL, NULL);
 		if (filename == NULL) continue;
-		document_open_file(-1, filename, 0, FALSE, NULL, NULL);
+		document_open_file(filename, FALSE, NULL, NULL);
 		g_free(filename);
 	}
 	document_colourise_new();
@@ -1007,7 +1016,7 @@ void document_open_files(const GSList *filenames, gboolean readonly, filetype *f
 
 	for (item = filenames; item != NULL; item = g_slist_next(item))
 	{
-		document_open_file(-1, item->data, 0, readonly, ft, forced_enc);
+		document_open_file(item->data, readonly, ft, forced_enc);
 	}
 	document_colourise_new();
 }
@@ -1022,7 +1031,7 @@ gint document_reload_file(gint idx, const gchar *forced_enc)
 
 	// try to set the cursor to the position before reloading
 	pos = sci_get_current_position(doc_list[idx].sci);
-	return document_open_file(idx, NULL, pos, doc_list[idx].readonly,
+	return document_open_file_full(idx, NULL, pos, doc_list[idx].readonly,
 					doc_list[idx].file_type, forced_enc);
 }
 

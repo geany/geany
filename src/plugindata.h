@@ -71,12 +71,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 16;
+static const gint api_version = 17;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 8;
+static const gint abi_version = 9;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
@@ -174,7 +174,7 @@ typedef struct DocumentFuncs
 	gint	(*get_cur_idx) ();
 	struct document*	(*get_current) ();
 	gboolean (*save_file)(gint idx, gboolean force);
-	gboolean (*open_file)(gint idx, const gchar *filename, gint pos, gboolean readonly,
+	gboolean (*open_file)(const gchar *locale_filename, gboolean readonly,
 		struct filetype *ft, const gchar *forced_enc);
 	void	(*open_files)(const GSList *filenames, gboolean readonly, struct filetype *ft,
 			const gchar *forced_enc);
@@ -232,7 +232,8 @@ TemplateFuncs;
 typedef struct UtilsFuncs
 {
 	gboolean	(*str_equal) (const gchar *a, const gchar *b);
-	gchar*		(*str_replace) (gchar *haystack, const gchar *needle, const gchar *replacement);
+	gboolean	(*string_replace_all) (GString *haystack, const gchar *needle,
+			const gchar *replacement);
 	GSList*		(*get_file_list) (const gchar *path, guint *length, GError **error);
 	gint		(*write_file) (const gchar *filename, const gchar *text);
 	gchar*		(*get_locale_from_utf8) (const gchar *utf8_text);

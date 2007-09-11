@@ -693,7 +693,7 @@ gboolean configuration_open_files()
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 			{
 				filetype *ft = filetypes_get_from_uid(uid);
-				document_open_file(-1, locale_filename, pos, FALSE, ft, NULL);
+				document_open_file_full(-1, locale_filename, pos, FALSE, ft, NULL);
 				ret = TRUE;
 			}
 			else

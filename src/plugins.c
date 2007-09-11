@@ -123,7 +123,7 @@ static TemplateFuncs template_funcs = {
 
 static UtilsFuncs utils_funcs = {
 	&utils_str_equal,
-	&utils_str_replace,
+	&utils_string_replace_all,
 	&utils_get_file_list,
 	&utils_write_file,
 	&utils_get_locale_from_utf8,

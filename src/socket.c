@@ -420,7 +420,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 				g_strstrip(buf); // remove \n char
 
 				if (g_file_test(buf, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
-					document_open_file(-1, buf, 0, FALSE, NULL, NULL);
+					document_open_file(buf, FALSE, NULL, NULL);
 				else
 				{	// create new file if it doesn't exist
 					gint idx;

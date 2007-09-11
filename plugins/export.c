@@ -275,7 +275,7 @@ static void write_data(const gchar *filename, const gchar *data)
 }
 
 
-static gchar *get_date(gint type)
+static const gchar *get_date(gint type)
 {
 	static gchar str[128];
 	gchar *format;
@@ -346,10 +346,10 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 	gchar c, c_next, *tmp;
 	// 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1)
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
-	gchar *latex;
 	gboolean block_open = FALSE;
 	GString *body;
 	GString *cmds;
+	GString *latex;
 
 	// first read all styles from Scintilla
 	for (i = 0; i <= STYLE_MAX; i++)
@@ -526,20 +526,20 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 	}
 
 	// write all
-	latex = g_strdup(TEMPLATE_LATEX);
-	latex = utils->str_replace(latex, "{export_content}", body->str);
-	latex = utils->str_replace(latex, "{export_styles}", cmds->str);
-	latex = utils->str_replace(latex, "{export_date}", get_date(DATE_TYPE_DEFAULT));
+	latex = g_string_new(TEMPLATE_LATEX);
+	utils->string_replace_all(latex, "{export_content}", body->str);
+	utils->string_replace_all(latex, "{export_styles}", cmds->str);
+	utils->string_replace_all(latex, "{export_date}", get_date(DATE_TYPE_DEFAULT));
 	if (doc_list[idx].file_name == NULL)
-		latex = utils->str_replace(latex, "{export_filename}", GEANY_STRING_UNTITLED);
+		utils->string_replace_all(latex, "{export_filename}", GEANY_STRING_UNTITLED);
 	else
-		latex = utils->str_replace(latex, "{export_filename}", doc_list[idx].file_name);
+		utils->string_replace_all(latex, "{export_filename}", doc_list[idx].file_name);
 
-	write_data(filename, latex);
+	write_data(filename, latex->str);
 
 	g_string_free(body, TRUE);
 	g_string_free(cmds, TRUE);
-	g_free(latex);
+	g_string_free(latex, TRUE);
 }
 
 
@@ -550,12 +550,12 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 	// 0 - fore, 1 - back, 2 - bold, 3 - italic, 4 - font size, 5 - used(0/1)
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
 	gboolean span_open = FALSE;
-	gchar *html;
 	const gchar *font_name;
 	gint font_size;
 	PangoFontDescription *font_desc;
 	GString *body;
 	GString *css;
+	GString *html;
 
 	// first read all styles from Scintilla
 	for (i = 0; i <= STYLE_MAX; i++)
@@ -677,21 +677,21 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 	}
 
 	// write all
-	html = g_strdup(TEMPLATE_HTML);
-	html = utils->str_replace(html, "{export_date}", get_date(DATE_TYPE_HTML));
-	html = utils->str_replace(html, "{export_content}", body->str);
-	html = utils->str_replace(html, "{export_styles}", css->str);
+	html = g_string_new(TEMPLATE_HTML);
+	utils->string_replace_all(html, "{export_date}", get_date(DATE_TYPE_HTML));
+	utils->string_replace_all(html, "{export_content}", body->str);
+	utils->string_replace_all(html, "{export_styles}", css->str);
 	if (doc_list[idx].file_name == NULL)
-		html = utils->str_replace(html, "{export_filename}", GEANY_STRING_UNTITLED);
+		utils->string_replace_all(html, "{export_filename}", GEANY_STRING_UNTITLED);
 	else
-		html = utils->str_replace(html, "{export_filename}", doc_list[idx].file_name);
+		utils->string_replace_all(html, "{export_filename}", doc_list[idx].file_name);
 
-	write_data(filename, html);
+	write_data(filename, html->str);
 
 	pango_font_description_free(font_desc);
 	g_string_free(body, TRUE);
 	g_string_free(css, TRUE);
-	g_free(html);
+	g_string_free(html, TRUE);
 }
 
 
