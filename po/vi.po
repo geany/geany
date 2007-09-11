@@ -3,10 +3,10 @@
 # Clytie Siddall <clytie@riverland.net.au>, 2006-2007.
 # 
 msgid ""
-""
-msgstr "Project-Id-Version: geany 0.11\n"
+msgstr ""
+"Project-Id-Version: geany 0.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-08 18:32+0200\n"
+"POT-Creation-Date: 2007-09-11 21:25+0200\n"
 "PO-Revision-Date: 2007-06-01 13:41+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -16,3774 +16,4221 @@ msgstr "Project-Id-Version: geany 0.11\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: LocFactoryEditor 1.6.3b1\n"
 
-#: src/about.c:126
+#: ../geany.desktop.in.h:1
+#, fuzzy
+msgid "A fast and lightweight IDE using GTK2"
+msgstr "Một IDE nhanh và nhẹ nhàng"
+
+# Name: don't translate/Tên: đừng dịch
+#: ../geany.desktop.in.h:2 ../src/interface.c:272 ../src/interface.c:1592
+msgid "Geany"
+msgstr "Geany"
+
+#: ../geany.desktop.in.h:3
+msgid "Integrated Development Environment"
+msgstr ""
+
+#: ../src/about.c:117
 msgid "About Geany"
 msgstr "Giới thiệu Geany"
 
-#: src/about.c:175
+#: ../src/about.c:168
 msgid "A fast and lightweight IDE"
 msgstr "Một IDE nhanh và nhẹ nhàng"
 
-#: src/about.c:196
-#, c-format
-msgid "(built on %s)"
+#: ../src/about.c:189
+#, fuzzy, c-format
+msgid "(built on or after %s)"
 msgstr "(xây dựng vào %s)"
 
-#.gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: src/about.c:227
+#. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
+#: ../src/about.c:220
 msgid "Info"
 msgstr "Thông tin"
 
-#: src/about.c:239
+#: ../src/about.c:236
 msgid "Developers"
 msgstr "Nhà phát triển"
 
-#: src/about.c:239
-msgid "Maintainer"
+#: ../src/about.c:245
+#, fuzzy
+msgid "maintainer"
 msgstr "Nhà duy trì"
 
-#: src/about.c:239
+#: ../src/about.c:253
 msgid "developer"
 msgstr "nhà phát triển"
 
-#: src/about.c:240
+#: ../src/about.c:261
 msgid "translation maintainer"
 msgstr "nhà duy trì bản dịch"
 
-#: src/about.c:240
+#: ../src/about.c:270
 msgid "Translators"
 msgstr "Dịch giả"
 
-#: src/about.c:241
-msgid "language"
-msgstr "ngôn ngữ"
+#: ../src/about.c:290
+#, fuzzy
+msgid "Previous Translators"
+msgstr "Dịch giả"
 
-#: src/about.c:247
+#: ../src/about.c:309
 msgid "Credits"
 msgstr "Công trạng"
 
-#: src/about.c:260
+#: ../src/about.c:323
 msgid "License"
 msgstr "Giấy Phép"
 
-#: src/build.c:159
+#: ../src/about.c:332
+msgid ""
+"License text could not be found, please visit http://www.gnu.org/licenses/"
+"gpl-2.0.txt to view it online."
+msgstr ""
+
+#: ../src/build.c:176
 #, c-format
 msgid "Failed to view %s (make sure it is already compiled)"
 msgstr "Lỗi xem %s (kiểm tra xem nó đã được biên dịch chưa)"
 
-#: src/build.c:192
-#: src/build.c:740
-#, c-format
+#: ../src/build.c:209 ../src/build.c:746
+#, fuzzy, c-format
 msgid ""
-"Could not find terminal '%s' (check path for Terminal tool setting in "
+"Could not find terminal \"%s\" (check path for Terminal tool setting in "
 "Preferences)"
-msgstr "Không tìm thấy thiết bị cuối « %s » (kiểm tra đường dẫn đến công cụ Thiết bị "
+msgstr ""
+"Không tìm thấy thiết bị cuối « %s » (kiểm tra đường dẫn đến công cụ Thiết bị "
 "cuối trong Tùy thích)"
 
-#: src/build.c:204
-#: src/build.c:616
-#: src/build.c:667
+#: ../src/build.c:221 ../src/build.c:671
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Lỗi thực hiện « %s » (không thể tạo văn lệnh khởi chạy)"
 
-#: src/build.c:232
-#: src/build.c:497
-#: src/build.c:765
-#: src/search.c:1175
+#: ../src/build.c:249 ../src/build.c:514 ../src/build.c:771
+#: ../src/search.c:1188
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Tiến trình bị lỗi (%s)"
 
-#: src/build.c:349
-#: src/build.c:572
+#: ../src/build.c:366 ../src/build.c:580
 msgid "Command stopped because the current file has no extension."
 msgstr "Lệnh bị thôi vì tập tin hiện thời không có phần mở rộng."
 
-#: src/build.c:373
+#: ../src/build.c:390
 #, c-format
 msgid "Something very strange is occurred, could not stat %s (%s)."
 msgstr "Xảy ra rất lạ: không thể lấy các thông tin về %s (%s)."
 
-#: src/build.c:484
+#: ../src/build.c:501
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (trong thư mục: %s)"
 
-#: src/build.c:581
-#, c-format
-msgid "Failed to execute %s (make sure it is already built)"
+#: ../src/build.c:591
+#, fuzzy, c-format
+msgid "Failed to execute \"%s\" (make sure it is already built)"
 msgstr "Lỗi thực hiện %s (kiểm tra xem nó đã được xây dựng chưa)"
 
-#: src/build.c:595
-#: src/build.c:653
-#, c-format
-msgid "Failed to change the working directory to %s"
+#: ../src/build.c:645
+#, fuzzy, c-format
+msgid "Failed to change the working directory to \"%s\""
 msgstr "Lỗi chuyển đổi thư mục hoạt động sang %s"
 
-#: src/build.c:882
+#: ../src/build.c:888
 msgid "Compilation failed."
 msgstr "Lỗi biên dịch."
 
-#: src/build.c:896
+#: ../src/build.c:902
 msgid "Compilation finished successfully."
 msgstr "Mới biên dịch xong."
 
-#.compile the code
-#: src/build.c:1001
+#. compile the code
+#: ../src/build.c:1007
 msgid "_Compile"
 msgstr "Biên dị_ch"
 
-#: src/build.c:1004
+#: ../src/build.c:1010
 msgid "Compiles the current file"
 msgstr "Biên dịch tập tin hiện thời"
 
-#.build the code
-#: src/build.c:1013
-#: src/interface.c:925
+#. build the code
+#: ../src/build.c:1019 ../src/interface.c:924
 msgid "_Build"
 msgstr "_Xây dựng"
 
-#: src/build.c:1017
+#: ../src/build.c:1023
 msgid "Builds the current file (generate an executable file)"
 msgstr "Xây dựng tập tin hiện thời (tạo ra một tập tin có khả năng thực hiện)"
 
 # Literal: don't translate/Nghĩa chữ : đừng dịch
-#.build the code with make all
-#: src/build.c:1027
-#: src/build.c:1149
+#. build the code with make all
+#: ../src/build.c:1033 ../src/build.c:1155
 msgid "_Make All"
 msgstr "_Make All"
 
-#: src/build.c:1030
-#: src/build.c:1152
+#: ../src/build.c:1036 ../src/build.c:1158
 msgid "Builds the current file with the make tool and the default target"
 msgstr "Xây dựng tập tin hiện thời, dùng công cụ make và đích mặc định"
 
-#.build the code with make custom
-#: src/build.c:1038
-#: src/build.c:1160
+#. build the code with make custom
+#: ../src/build.c:1044 ../src/build.c:1166
 msgid "Make Custom _Target"
 msgstr "Make đích _riêng"
 
-#: src/build.c:1042
-#: src/build.c:1164
+#: ../src/build.c:1048 ../src/build.c:1170
 msgid "Builds the current file with the make tool and the specified target"
 msgstr "Xây dựng tập tin hiện thời, dùng công cụ make và đích đã xác định"
 
-#.build the code with make object
-#: src/build.c:1049
+#. build the code with make object
+#: ../src/build.c:1055
 msgid "Make _Object"
 msgstr "Make đố_i tượng"
 
-#: src/build.c:1053
+#: ../src/build.c:1059
 msgid "Compiles the current file using the make tool"
 msgstr "Biên dịch tập tin hiện thời, dùng công cụ make"
 
-#.next error
-#: src/build.c:1065
-#: src/build.c:1176
+#. next error
+#: ../src/build.c:1070 ../src/build.c:1181
 msgid "_Next Error"
 msgstr "Lỗi _kế"
 
-#: src/build.c:1080
-#: src/interface.c:1053
+#: ../src/build.c:1086 ../src/interface.c:1068
 msgid "Run or view the current file"
 msgstr "Chạy hay xem tập tin hiện thời"
 
-#.arguments
-#: src/build.c:1091
+#. arguments
+#: ../src/build.c:1097
 msgid "_Set Includes and Arguments"
 msgstr "Đặt _Gồm và Đối số"
 
-#: src/build.c:1096
+#: ../src/build.c:1102
 msgid ""
 "Sets the includes and library paths for the compiler and the program "
 "arguments for execution"
-msgstr "Đặt các phần bao gồm (include) và đường dẫn thư viện cho bộ biên dịch và các "
+msgstr ""
+"Đặt các phần bao gồm (include) và đường dẫn thư viện cho bộ biên dịch và các "
 "đối số chương trình để thực hiện"
 
-#.DVI
-#: src/build.c:1119
+#. DVI
+#: ../src/build.c:1125
 msgid "LaTeX -> DVI"
 msgstr "LaTeX → DVI"
 
-#: src/build.c:1122
+#: ../src/build.c:1128
 msgid "Compiles the current file into a DVI file"
 msgstr "Biên dịch tập tin hiện thời sang tập tin DVI"
 
-#.PDF
-#: src/build.c:1132
+#. PDF
+#: ../src/build.c:1138
 msgid "LaTeX -> PDF"
 msgstr "LaTeX → PDF"
 
-#: src/build.c:1135
+#: ../src/build.c:1141
 msgid "Compiles the current file into a PDF file"
 msgstr "Biên dịch tập tin hiện thời sang tập tin PDF"
 
-#.DVI view
-#: src/build.c:1188
+#. DVI view
+#: ../src/build.c:1194
 msgid "View DVI File"
 msgstr "Xem tập tin DVI"
 
-#: src/build.c:1193
-#: src/build.c:1206
+#: ../src/build.c:1199 ../src/build.c:1212
 msgid "Compile and view the current file"
 msgstr "Biên dịch và xem tập tin hiện thời"
 
-#.PDF view
-#: src/build.c:1202
+#. PDF view
+#: ../src/build.c:1208
 msgid "View PDF File"
 msgstr "Xem tập tin PDF"
 
-#.arguments
-#: src/build.c:1221
-#: src/build.c:1300
+#. arguments
+#: ../src/build.c:1227 ../src/build.c:1306
 msgid "Set Arguments"
 msgstr "Đặt đối số"
 
-#: src/build.c:1226
+#: ../src/build.c:1232
 msgid "Sets the program paths and arguments"
 msgstr "Đặt các đường dẫn và đối số của chương trình"
 
-#: src/build.c:1306
+#: ../src/build.c:1313
 msgid "Set programs and options for compiling and viewing (La)TeX files."
-msgstr "Đặt các chương trình và tùy chọn để biên dịch và xem tập tin kiểu (La)TeX."
+msgstr ""
+"Đặt các chương trình và tùy chọn để biên dịch và xem tập tin kiểu (La)TeX."
 
-#: src/build.c:1317
+#: ../src/build.c:1324
 msgid "DVI creation:"
 msgstr "Tạo DVI:"
 
-#: src/build.c:1336
+#: ../src/build.c:1343
 msgid "PDF creation:"
 msgstr "Tạo PDF:"
 
-#: src/build.c:1355
+#: ../src/build.c:1362
 msgid "DVI preview:"
 msgstr "Xem thử DVI:"
 
-#: src/build.c:1374
+#: ../src/build.c:1381
 msgid "PDF preview:"
 msgstr "Xem thử PDF:"
 
-#: src/build.c:1390
-#: src/build.c:1560
+#: ../src/build.c:1397 ../src/build.c:1569
 #, c-format
 msgid ""
 "%f will be replaced by the current filename, e.g. test_file.c\n"
 "%e will be replaced by the filename without extension, e.g. test_file"
-msgstr "%f\tsẽ được thay thế bằng tên tập tin hoàn toàn (v.d. tập_tin_thử.c)\n"
+msgstr ""
+"%f\tsẽ được thay thế bằng tên tập tin hoàn toàn (v.d. tập_tin_thử.c)\n"
 "%e\tsẽ được thay thế bằng tập tin không có phần mở rộng (v.d. tập_tin_thử)"
 
-#: src/build.c:1468
+#: ../src/build.c:1475
 msgid "Set Includes and Arguments"
 msgstr "Đặt đồ gồm và đối số"
 
-#: src/build.c:1474
+#: ../src/build.c:1482
 msgid "Set the commands for building and running programs."
 msgstr "Đặt các lệnh để xây dựng và chạy chương trình."
 
-#: src/build.c:1481
-msgid " commands"
+#. in-dialog heading for the "Set Includes and Arguments" dialog
+#: ../src/build.c:1490
+#, fuzzy, c-format
+msgid "%s commands"
 msgstr " lệnh"
 
-#: src/build.c:1496
+#: ../src/build.c:1505
 msgid "Compile:"
 msgstr "Biên dịch:"
 
-#: src/build.c:1517
+#: ../src/build.c:1526
 msgid "Build:"
 msgstr "Xây dựng:"
 
-#: src/build.c:1538
-#: src/dialogs.c:884
+#: ../src/build.c:1547 ../src/dialogs.c:1033
 msgid "Execute:"
 msgstr "Thực hiện:"
 
-#: src/build.c:1846
+#: ../src/build.c:1856
 msgid "Make Custom Target"
 msgstr "Make đích riêng"
 
-#: src/build.c:1847
+#: ../src/build.c:1857
 msgid ""
 "Enter custom options here, all entered text is passed to the make command."
-msgstr "Ở đây hãy nhập các tùy chọn riêng, toàn bộ đoạn đã nhập được gởi qua cho "
+msgstr ""
+"Ở đây hãy nhập các tùy chọn riêng, toàn bộ đoạn đã nhập được gởi qua cho "
 "lệnh « make »."
 
-#: src/build.c:1886
+#: ../src/build.c:1896
 msgid "Failed to execute the view program"
 msgstr "Lỗi thực thi chương trình xem"
 
-#: src/build.c:1905
+#: ../src/build.c:1915
 msgid "Failed to execute the terminal program"
 msgstr "Lỗi thực thi chương trình thiết bị cuối"
 
-#: src/build.c:1953
+#: ../src/build.c:1963
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Tiến trình không dừng chạy được (%s)."
 
-#: src/build.c:1973
+#: ../src/build.c:1983
 msgid "No more build errors."
 msgstr "Không có lỗi xây dựng nào nữa."
 
-#: src/callbacks.c:181
+#: ../src/callbacks.c:177
 msgid "Do you really want to quit?"
 msgstr "Bạn thật sự muốn thoát không?"
 
-#: src/callbacks.c:488
-#: src/interface.c:343
-#: src/utils.c:353
+#: ../src/callbacks.c:499 ../src/interface.c:346 ../src/utils.c:340
 msgid "_Reload"
 msgstr "Tải _lại"
 
-#: src/callbacks.c:489
+#: ../src/callbacks.c:500
 msgid "Any unsaved changes will be lost."
 msgstr "Các thay đổi chưa lưu sẽ bị mất."
 
-#: src/callbacks.c:490
+#: ../src/callbacks.c:501
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Bạn có chắc muốn tải lại « %s » không?"
 
-#: src/callbacks.c:856
-#, c-format
-msgid "The file '%s' already exists. Do you want to overwrite it?"
-msgstr "Tập tin « %s » đã có. Bạn có muốn ghi đè lên không?"
-
-#: src/callbacks.c:1218
+#: ../src/callbacks.c:1076
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Không tìm thấy lời tuyên bố tới « %s »."
 
-#: src/callbacks.c:1220
+#: ../src/callbacks.c:1078
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Không tìm thấy lời xác định « %s »."
 
-#: src/callbacks.c:1441
-#: src/callbacks.c:1465
+#: ../src/callbacks.c:1318 ../src/callbacks.c:1342
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "Hãy đặt kiểu tập tin cho tập tin hiện thời, trước khi sử dụng hàm này."
 
-#: src/callbacks.c:1576
-#: src/ui_utils.c:429
+#: ../src/callbacks.c:1459 ../src/ui_utils.c:459
 msgid "dd.mm.yyyy"
 msgstr "nn.tt.NNNN"
 
-#: src/callbacks.c:1578
-#: src/ui_utils.c:430
+#: ../src/callbacks.c:1461 ../src/ui_utils.c:460
 msgid "mm.dd.yyyy"
 msgstr "tt.nn.NNNN"
 
-#: src/callbacks.c:1580
-#: src/ui_utils.c:431
+#: ../src/callbacks.c:1463 ../src/ui_utils.c:461
 msgid "yyyy/mm/dd"
 msgstr "NNNN/tt/nn"
 
-#: src/callbacks.c:1582
-#: src/ui_utils.c:440
+#: ../src/callbacks.c:1465 ../src/ui_utils.c:470
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "nn.tt.NNNN GG:pp:gg"
 
-#: src/callbacks.c:1584
-#: src/ui_utils.c:441
+#: ../src/callbacks.c:1467 ../src/ui_utils.c:471
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "tt.nn.NNNN GG:pp:gg"
 
-#: src/callbacks.c:1586
-#: src/ui_utils.c:442
+#: ../src/callbacks.c:1469 ../src/ui_utils.c:472
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "NNNN/tt/nn GG:pp:gg"
 
-#: src/callbacks.c:1588
-#: src/ui_utils.c:451
+#: ../src/callbacks.c:1471 ../src/ui_utils.c:481
 msgid "Use Custom Date Format"
 msgstr "Dùng định dạng ngày riêng"
 
-#: src/callbacks.c:1599
+#: ../src/callbacks.c:1482
 msgid "Custom Date Format"
 msgstr "Định dạng ngày riêng"
 
-#: src/callbacks.c:1600
+#: ../src/callbacks.c:1483
+#, fuzzy
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function. See \"man "
-"strftime\" for more information."
-msgstr "Ở đây hãy nhập định dạng ngày tháng và giờ. Bạn có khả năng sử dụng bất cứ "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Ở đây hãy nhập định dạng ngày tháng và giờ. Bạn có khả năng sử dụng bất cứ "
 "đặc tả chuyển đổi nào dùng được với hàm strftime kiểu C ANSI. Xem « man "
 "strftime » để tìm thêm thông tin."
 
-#: src/callbacks.c:1620
+#: ../src/callbacks.c:1503
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Không thể chuyển đổi chuỗi định dạng ngày tháng (có thể quá dài)."
 
-#: src/callbacks.c:1932
+#: ../src/callbacks.c:1805
 msgid "No more message items."
 msgstr "Không có mục thông điệp nào nữa."
 
-#.initialize the dialog
-#: src/dialogs.c:80
-#: src/prefs.c:1077
+#. initialize the dialog
+#: ../src/dialogs.c:178 ../src/prefs.c:1210
 msgid "Open File"
 msgstr "Mở tập tin"
 
-#: src/dialogs.c:83
-#: src/interface.c:694
+#: ../src/dialogs.c:182 ../src/interface.c:693
 msgid "_View"
 msgstr "_Xem"
 
-#: src/dialogs.c:85
+#: ../src/dialogs.c:184
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
-msgstr "Mở tập tin trong chế độ chỉ đọc. Nếu bạn chọn mở nhiều tập tin, tất cả các "
+msgstr ""
+"Mở tập tin trong chế độ chỉ đọc. Nếu bạn chọn mở nhiều tập tin, tất cả các "
 "tập tin đó sẽ được mở chỉ-đọc."
 
-#: src/dialogs.c:121
+#: ../src/dialogs.c:220
 msgid "Detect by file extension"
 msgstr "Phát hiện theo phần mở rộng tập tin"
 
-#: src/dialogs.c:132
+#: ../src/dialogs.c:231
 msgid "Detect from file"
 msgstr "Phát hiện từ tập tin"
 
-#.line 1 with checkbox and encoding combo
-#: src/dialogs.c:178
+#. line 1 with checkbox and encoding combo
+#: ../src/dialogs.c:285
 msgid "Show _hidden files"
 msgstr "_Hiện tập tin ẩn"
 
-#: src/dialogs.c:190
+#: ../src/dialogs.c:297
 msgid "Set encoding:"
 msgstr "Đặt bảng mã:"
 
-#: src/dialogs.c:200
+#: ../src/dialogs.c:307
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
 "correctly by Geany.\n"
 "Note if you choose multiple files, they will all be opened with the chosen "
 "encoding."
-msgstr "Xác định dứt khoát bảng mã cho tập tin, nếu nó sẽ không được phát hiện. Có "
+msgstr ""
+"Xác định dứt khoát bảng mã cho tập tin, nếu nó sẽ không được phát hiện. Có "
 "ích khi bạn biết rằng trình Geany sẽ không phát hiện được bảng mã của tập "
 "tin đó.\n"
 "Ghi chú rằng nếu bạn chọn nhiều tập tin, tất cả các chúng đều sẽ được mở với "
 "bảng mã đã chọn."
 
-#: src/dialogs.c:220
+#: ../src/dialogs.c:327
 msgid "Set filetype:"
 msgstr "Đặt kiểu tập tin:"
 
-#: src/dialogs.c:230
+#: ../src/dialogs.c:337
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
 "Note if you choose multiple files, they will all be opened with the chosen "
 "filetype."
-msgstr "Xác định dứt khoát kiểu tập tin cho tập tin, nếu nó sẽ không được phát hiện "
+msgstr ""
+"Xác định dứt khoát kiểu tập tin cho tập tin, nếu nó sẽ không được phát hiện "
 "theo phần mở rộng tập tin.\n"
 "Ghi chú rằng nếu bạn chọn nhiều tập tin, tất cả các chúng sẽ được mở với "
 "kiểu tập tin đã chọn."
 
-#: src/dialogs.c:269
+#: ../src/dialogs.c:405 ../plugins/export.c:328
+#, c-format
+msgid "The file '%s' already exists. Do you want to overwrite it?"
+msgstr "Tập tin « %s » đã có. Bạn có muốn ghi đè lên không?"
+
+#: ../src/dialogs.c:468
 msgid "Save File"
 msgstr "Lưu tập tin"
 
-#: src/dialogs.c:361
+#: ../src/dialogs.c:476
+#, fuzzy
+msgid "R_ename"
+msgstr "Tên tập tin:"
+
+#: ../src/dialogs.c:478
+msgid "Save the file and rename it."
+msgstr ""
+
+#: ../src/dialogs.c:489
+msgid "_Open file in a new tab"
+msgstr ""
+
+#: ../src/dialogs.c:491
+msgid ""
+"Keep the current unsaved document open and open the newly saved file in a "
+"new tab."
+msgstr ""
+
+#: ../src/dialogs.c:609
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "Tập tin « %s » chưa được lưu."
 
-#: src/dialogs.c:371
+#: ../src/dialogs.c:611
 msgid "Do you want to save it before closing?"
 msgstr "Bạn có muốn lưu nó trước khi đóng không?"
 
-#: src/dialogs.c:374
+#: ../src/dialogs.c:623
 msgid "_Don't save"
 msgstr "_Không lưu"
 
-#: src/dialogs.c:418
+#: ../src/dialogs.c:700
 msgid "Choose font"
 msgstr "Chọn phông"
 
-#: src/dialogs.c:456
-msgid "Word Count"
-msgstr "Tổng từ"
-
-#: src/dialogs.c:465
-msgid "selection"
-msgstr "vùng chọn"
-
-#: src/dialogs.c:471
-msgid "whole document"
-msgstr "toàn tài liệu"
-
-#: src/dialogs.c:480
-msgid "Range:"
-msgstr "Phạm vị:"
-
-#: src/dialogs.c:492
-msgid "Lines:"
-msgstr "Dòng:"
-
-#: src/dialogs.c:506
-msgid "Words:"
-msgstr "Từ :"
-
-#: src/dialogs.c:520
-msgid "Characters:"
-msgstr "Ký tự :"
-
-#: src/dialogs.c:552
-#: src/interface.c:3431
-#: src/vte.c:569
-#: src/vte.c:576
-msgid "Color Chooser"
-msgstr "Bộ chọn màu"
-
-#: src/dialogs.c:619
-#: src/keybindings.c:170
-msgid "Go to line"
+#: ../src/dialogs.c:766 ../src/interface.c:2222
+msgid "Go to Line"
 msgstr "Tới dòng"
 
-#: src/dialogs.c:625
+#: ../src/dialogs.c:773
 msgid "Enter the line you want to go to:"
 msgstr "Nhập dòng cần tới:"
 
-#: src/dialogs.c:672
+#: ../src/dialogs.c:820
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
 msgstr "Gặp lỗi hoặc không thể lấy thông tin về tập tin (v.d. từ tập tin mới)."
 
-#: src/dialogs.c:696
-#: src/dialogs.c:697
-#: src/dialogs.c:698
-#: src/dialogs.c:704
-#: src/dialogs.c:705
-#: src/dialogs.c:706
-#: src/ui_utils.c:132
-#: src/utils.c:515
-#: src/utils.c:536
-#: src/utils.c:589
+#: ../src/dialogs.c:844 ../src/dialogs.c:845 ../src/dialogs.c:846
+#: ../src/dialogs.c:852 ../src/dialogs.c:853 ../src/dialogs.c:854
+#: ../src/ui_utils.c:152 ../src/utils.c:502 ../src/utils.c:523
+#: ../src/utils.c:576
 msgid "unknown"
 msgstr "không rõ"
 
-#: src/dialogs.c:710
+#: ../src/dialogs.c:858
 msgid "Properties"
 msgstr "Tài sản"
 
-#: src/dialogs.c:738
+#: ../src/dialogs.c:887
 msgid "<b>Type:</b>"
 msgstr "<b>Kiểu :</b>"
 
-#: src/dialogs.c:751
+#: ../src/dialogs.c:900
 msgid "<b>Size:</b>"
 msgstr "<b>Cỡ :</b>"
 
-#: src/dialogs.c:766
+#: ../src/dialogs.c:915
 msgid "<b>Location:</b>"
 msgstr "<b>Vị trí:</b>"
 
-#: src/dialogs.c:779
+#: ../src/dialogs.c:928
 msgid "<b>Read-only:</b>"
 msgstr "<b>Chỉ đọc:</b>"
 
-#: src/dialogs.c:786
+#: ../src/dialogs.c:935
 msgid "(only inside Geany)"
 msgstr "(chỉ bên trong Geany)"
 
-#: src/dialogs.c:795
+#: ../src/dialogs.c:944
 msgid "<b>Encoding:</b>"
 msgstr "<b>Bảng mã:</b>"
 
-#: src/dialogs.c:805
-#: src/ui_utils.c:134
+#: ../src/dialogs.c:954 ../src/ui_utils.c:154
 msgid "(with BOM)"
 msgstr "(có BOM)"
 
-#: src/dialogs.c:805
+#: ../src/dialogs.c:954
 msgid "(without BOM)"
 msgstr "(không có BOM)"
 
-#: src/dialogs.c:815
+#: ../src/dialogs.c:964
 msgid "<b>Modified:</b>"
 msgstr "<b>Sửa đổi:</b>"
 
-#: src/dialogs.c:828
+#: ../src/dialogs.c:977
 msgid "<b>Changed:</b>"
 msgstr "<b>Đổi:</b>"
 
-#: src/dialogs.c:841
+#: ../src/dialogs.c:990
 msgid "<b>Accessed:</b>"
 msgstr "<b>Truy cập:</b>"
 
-#: src/dialogs.c:862
+#: ../src/dialogs.c:1011
 msgid "<b>Permissions:</b>"
 msgstr "<b>Quyền hạn:</b>"
 
-#.Header
-#: src/dialogs.c:870
+#. Header
+#: ../src/dialogs.c:1019
 msgid "Read:"
 msgstr "Đọc:"
 
-#: src/dialogs.c:877
+#: ../src/dialogs.c:1026
 msgid "Write:"
 msgstr "Ghi:"
 
-#.Owner
-#: src/dialogs.c:892
+#. Owner
+#: ../src/dialogs.c:1041
 msgid "Owner:"
 msgstr "Sở hữu :"
 
-#.Group
-#: src/dialogs.c:928
+#. Group
+#: ../src/dialogs.c:1077
 msgid "Group:"
 msgstr "Nhóm:"
 
-#.Other
-#: src/dialogs.c:964
+#. Other
+#: ../src/dialogs.c:1113
 msgid "Other:"
 msgstr "Khác:"
 
-#: src/document.c:372
+#: ../src/document.c:461
 #, c-format
 msgid "File %s closed."
 msgstr "Tập tin %s đã được đóng."
 
-#: src/document.c:463
+#: ../src/document.c:559
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Tập tin mới « %s » đã được mở."
 
-#: src/document.c:616
-#: src/document.c:927
+#: ../src/document.c:725 ../src/document.c:1059
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Không thể mở tập tin: %s (%s)"
 
-#: src/document.c:635
+#: ../src/document.c:752
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
 "can occur if the file contains a NULL byte. Be aware that saving it can "
 "cause data loss.\n"
 "The file was set to read-only."
-msgstr "Tập tin « %s » không thể mở được, cũng bị cắt ngắn. Trường hợp này có thể xảy ra nếu tập tin chứa byte vô giá trị (NULL). Ghi chú rằng việc lưu tập tin này có thể gây ra dữ liệu bị mất.\n"
+msgstr ""
+"Tập tin « %s » không thể mở được, cũng bị cắt ngắn. Trường hợp này có thể "
+"xảy ra nếu tập tin chứa byte vô giá trị (NULL). Ghi chú rằng việc lưu tập "
+"tin này có thể gây ra dữ liệu bị mất.\n"
 "Tập tin đã được đặt thành tình trạng chỉ đọc."
 
-#: src/document.c:659
+#: ../src/document.c:776
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Tập tin « %s » không phải là %s hợp lệ."
 
-#: src/document.c:668
+#: ../src/document.c:785
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
-msgstr "Tập tin « %s » có vẻ không phải là tập tin văn bản, hoặc bảng mã tập tin "
+msgstr ""
+"Tập tin « %s » có vẻ không phải là tập tin văn bản, hoặc bảng mã tập tin "
 "không được hỗ trợ."
 
-#: src/document.c:737
+#: ../src/document.c:862
 msgid "Invalid filename"
 msgstr "Tên tập tin không hợp lệ"
 
-#: src/document.c:829
+#: ../src/document.c:957
 #, c-format
 msgid "File %s reloaded."
 msgstr "Tập tin %s đã được tải lại."
 
-#: src/document.c:831
+#: ../src/document.c:959
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Tập tin %s đã được mở (%d%s)."
 
-#: src/document.c:833
+#: ../src/document.c:961
 msgid ", read-only"
 msgstr ", chỉ đọc"
 
-#: src/document.c:955
-#: src/document.c:1038
+#: ../src/document.c:1089 ../src/document.c:1176
 msgid "Error saving file."
 msgstr "Gặp lỗi khi lưu tập tin."
 
-#: src/document.c:1002
+#: ../src/document.c:1136
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved.\n"
 "Error message: %s\n"
-msgstr "Gặp lỗi khi chuyển đổi tập tin từ UTF-8 trong « %s ». Tập tin chưa được "
+msgstr ""
+"Gặp lỗi khi chuyển đổi tập tin từ UTF-8 trong « %s ». Tập tin chưa được "
 "lưu.\n"
 "Thông điệp lỗi: %s\n"
 
-#: src/document.c:1026
+#: ../src/document.c:1164
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Gặp lỗi khi lưu tập tin (%s)."
 
-#: src/document.c:1069
+#: ../src/document.c:1215
 #, c-format
 msgid "File %s saved."
 msgstr "Tập tin %s đã được lưu."
 
-#: src/document.c:1117
-#: src/document.c:1169
-#: src/document.c:1177
+#: ../src/document.c:1272 ../src/document.c:1325 ../src/document.c:1333
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "Không tìm thấy « %s »."
 
-#: src/document.c:1177
+#: ../src/document.c:1333
 msgid "Wrap search and find again?"
 msgstr "Cuộn qua việc tìm và tìm lại không?"
 
-#: src/document.c:1252
-#: src/search.c:1311
-msgid "No matches found."
-msgstr "Không tìm thấy."
+#: ../src/document.c:1408 ../src/search.c:876 ../src/search.c:1374
+#: ../src/search.c:1375
+#, fuzzy, c-format
+msgid "No matches found for \"%s\"."
+msgstr "Không tìm thấy điều khớp với « %s »."
 
-#: src/document.c:1262
-#: src/document.c:1269
+#: ../src/document.c:1418 ../src/document.c:1425
 #, c-format
 msgid "%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."
 msgstr "%s: mới thay thế %d lần gặp « %s » bằng « %s »."
 
 # Literal: don't translate/Nghĩa chữ : đừng dịch
-#: src/document.c:1646
+#: ../src/document.c:1831
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
 # Literal: don't translate/Nghĩa chữ : đừng dịch
-#: src/document.c:1647
+#: ../src/document.c:1832
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
 # Literal: don't translate/Nghĩa chữ : đừng dịch
-#: src/document.c:1649
+#: ../src/document.c:1834
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: src/document.c:1751
+#: ../src/document.c:1937
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
 "\n"
 "%s"
-msgstr "Tập tin « %s » sẽ được lưu bằng lệnh này:\n"
+msgstr ""
+"Tập tin « %s » sẽ được lưu bằng lệnh này:\n"
 "\n"
 "%s"
 
-#: src/document.c:1766
+#: ../src/document.c:1952
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Lỗi in « %s » (mã trả lại: %s)."
 
-#: src/document.c:1772
+#: ../src/document.c:1958
 #, c-format
 msgid "File %s printed."
 msgstr "Tập tin %s đã được in."
 
-#: src/encodings.c:55
+#: ../src/encodings.c:55
 msgid "Celtic"
 msgstr "Xen-tơ"
 
-#: src/encodings.c:56
-#: src/encodings.c:57
+#: ../src/encodings.c:56 ../src/encodings.c:57
 msgid "Greek"
 msgstr "Hy Lạp"
 
-#: src/encodings.c:58
+#: ../src/encodings.c:58
 msgid "Nordic"
 msgstr "Bắc Âu"
 
-#: src/encodings.c:59
+#: ../src/encodings.c:59
 msgid "South European"
 msgstr "Vùng Nam Âu"
 
-#: src/encodings.c:60
-#: src/encodings.c:61
-#: src/encodings.c:62
-#: src/encodings.c:63
+#: ../src/encodings.c:60 ../src/encodings.c:61 ../src/encodings.c:62
+#: ../src/encodings.c:63
 msgid "Western"
 msgstr "Phương Tây"
 
-#: src/encodings.c:65
-#: src/encodings.c:66
-#: src/encodings.c:67
+#: ../src/encodings.c:65 ../src/encodings.c:66 ../src/encodings.c:67
 msgid "Baltic"
 msgstr "Ban-tích"
 
-#: src/encodings.c:68
-#: src/encodings.c:69
-#: src/encodings.c:70
+#: ../src/encodings.c:68 ../src/encodings.c:69 ../src/encodings.c:70
 msgid "Central European"
 msgstr "Vùng Trung Âu"
 
-#: src/encodings.c:71
-#: src/encodings.c:72
-#: src/encodings.c:73
-#: src/encodings.c:74
-#: src/encodings.c:75
+#: ../src/encodings.c:71 ../src/encodings.c:72 ../src/encodings.c:73
+#: ../src/encodings.c:74 ../src/encodings.c:75
 msgid "Cyrillic"
 msgstr "Ki-rin"
 
-#: src/encodings.c:76
+#: ../src/encodings.c:76
 msgid "Cyrillic/Russian"
 msgstr "Ki-rin/Nga"
 
-#: src/encodings.c:77
+#: ../src/encodings.c:77
 msgid "Cyrillic/Ukrainian"
 msgstr "Ki-rin/U-cợ-rainh"
 
-#: src/encodings.c:78
+#: ../src/encodings.c:78
 msgid "Romanian"
 msgstr "Lỗ-má-ni"
 
-#: src/encodings.c:80
-#: src/encodings.c:81
-#: src/encodings.c:82
+#: ../src/encodings.c:80 ../src/encodings.c:81 ../src/encodings.c:82
 msgid "Arabic"
 msgstr "Ả Rập"
 
-#: src/encodings.c:83
-#: src/encodings.c:84
-#: src/encodings.c:85
+#: ../src/encodings.c:83 ../src/encodings.c:84 ../src/encodings.c:85
 msgid "Hebrew"
 msgstr "Do Thái"
 
-#: src/encodings.c:86
+#: ../src/encodings.c:86
 msgid "Hebrew Visual"
 msgstr "Do Thái trực quan"
 
-#: src/encodings.c:88
+#: ../src/encodings.c:88
 msgid "Armenian"
 msgstr "Ác-mê-ni"
 
-#: src/encodings.c:89
+#: ../src/encodings.c:89
 msgid "Georgian"
 msgstr "Gi-oa-gi-a"
 
-#: src/encodings.c:90
+#: ../src/encodings.c:90
 msgid "Thai"
 msgstr "Thái"
 
-#: src/encodings.c:91
-#: src/encodings.c:92
-#: src/encodings.c:93
+#: ../src/encodings.c:91 ../src/encodings.c:92 ../src/encodings.c:93
 msgid "Turkish"
 msgstr "Thổ Nhĩ Kỳ"
 
-#: src/encodings.c:94
-#: src/encodings.c:95
-#: src/encodings.c:96
+#: ../src/encodings.c:94 ../src/encodings.c:95 ../src/encodings.c:96
 msgid "Vietnamese"
 msgstr "Việt"
 
 # Name: don't translate / Tên: đừng dịch
-#: src/encodings.c:98
-#: src/encodings.c:99
-#: src/encodings.c:100
-#: src/encodings.c:101
-#: src/encodings.c:102
-#: src/encodings.c:103
-#: src/encodings.c:104
-#: src/encodings.c:105
+#: ../src/encodings.c:98 ../src/encodings.c:99 ../src/encodings.c:100
+#: ../src/encodings.c:101 ../src/encodings.c:102 ../src/encodings.c:103
+#: ../src/encodings.c:104 ../src/encodings.c:105
 msgid "Unicode"
 msgstr "Unicode"
 
-#: src/encodings.c:107
-#: src/encodings.c:108
-#: src/encodings.c:109
-#: src/encodings.c:110
+#: ../src/encodings.c:107 ../src/encodings.c:108 ../src/encodings.c:109
+#: ../src/encodings.c:110
 msgid "Chinese Simplified"
 msgstr "Tiếng Hoa phổ thông"
 
-#: src/encodings.c:111
-#: src/encodings.c:112
-#: src/encodings.c:113
+#: ../src/encodings.c:111 ../src/encodings.c:112 ../src/encodings.c:113
 msgid "Chinese Traditional"
 msgstr "Tiếng Hoa truyền thống"
 
-#: src/encodings.c:114
-#: src/encodings.c:115
-#: src/encodings.c:116
+#: ../src/encodings.c:114 ../src/encodings.c:115 ../src/encodings.c:116
 msgid "Japanese"
 msgstr "Nhật"
 
-#: src/encodings.c:117
-#: src/encodings.c:118
-#: src/encodings.c:119
-#: src/encodings.c:120
+#: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
+#: ../src/encodings.c:120
 msgid "Korean"
 msgstr "Triều Tiên"
 
-#: src/encodings.c:122
+#: ../src/encodings.c:122
 msgid "Without encoding"
 msgstr "Không có bảng mã"
 
-#: src/encodings.c:215
+#: ../src/encodings.c:215
 msgid "_West European"
 msgstr "Vùng Tâ_y Âu"
 
-#: src/encodings.c:221
+#: ../src/encodings.c:221
 msgid "_East European"
 msgstr "Vùng Đôn_g Âu"
 
-#: src/encodings.c:227
+#: ../src/encodings.c:227
 msgid "East _Asian"
 msgstr "_Vùng Đông Á"
 
-#: src/encodings.c:233
+#: ../src/encodings.c:233
 msgid "_SE & SW Asian"
 msgstr "Vùng _Nam Đông và Nam Tay Á"
 
-#: src/encodings.c:239
+#: ../src/encodings.c:239
 msgid "_Middle Eastern"
 msgstr "Vùng T_rung Đông"
 
 # Name: don't translate / Tên: đừng dịch
-#: src/encodings.c:245
+#: ../src/encodings.c:245
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: src/filetypes.c:141
+#: ../src/filetypes.c:107
 msgid "C source file"
 msgstr "Tập tin mã nguồn C"
 
-#: src/filetypes.c:154
+#: ../src/filetypes.c:119
 msgid "C++ source file"
 msgstr "Tập tin mã nguồn C++"
 
-#: src/filetypes.c:168
+#: ../src/filetypes.c:132
+#, fuzzy
+msgid "C# source file"
+msgstr "Tập tin mã nguồn C"
+
+#: ../src/filetypes.c:144
 msgid "D source file"
 msgstr "Tập tin mã nguồn D"
 
-#: src/filetypes.c:181
+#: ../src/filetypes.c:156
 msgid "Java source file"
 msgstr "Tập tin mã nguồn Java"
 
-#: src/filetypes.c:194
+#: ../src/filetypes.c:168
 msgid "Pascal source file"
 msgstr "Tập tin mã nguồn Pascal"
 
-#: src/filetypes.c:208
+#: ../src/filetypes.c:181
 msgid "Assembler source file"
 msgstr "Tập tin mã nguồn Assembler"
 
-#: src/filetypes.c:221
+#: ../src/filetypes.c:193
+#, fuzzy
+msgid "FreeBasic source file"
+msgstr "Tập tin mã nguồn Pascal"
+
+#: ../src/filetypes.c:205
 msgid "Fortran source file (F77)"
 msgstr "Tập tin mã nguồn Fortran (F77)"
 
-#: src/filetypes.c:235
+#: ../src/filetypes.c:218
 msgid "(O)Caml source file"
 msgstr "Tập tin mã nguồn (O)Caml"
 
-#: src/filetypes.c:248
+#: ../src/filetypes.c:230
 msgid "Perl source file"
 msgstr "Tập tin mã nguồn Perl"
 
-#: src/filetypes.c:262
+#: ../src/filetypes.c:243
 msgid "PHP source file"
 msgstr "Tập tin mã nguồn PHP"
 
-#: src/filetypes.c:276
+#: ../src/filetypes.c:256
 msgid "Javascript source file"
 msgstr "Tập tin mã nguồn Javascript"
 
-#: src/filetypes.c:289
+#: ../src/filetypes.c:268
 msgid "Python source file"
 msgstr "Tập tin mã nguồn Python"
 
-#: src/filetypes.c:302
+#: ../src/filetypes.c:280
 msgid "Ruby source file"
 msgstr "Tập tin mã nguồn Ruby"
 
-#: src/filetypes.c:315
+#: ../src/filetypes.c:292
 msgid "Tcl source file"
 msgstr "Tập tin mã nguồn Tcl"
 
-#: src/filetypes.c:328
+#: ../src/filetypes.c:304
 msgid "Lua source file"
 msgstr "Tập tin mã nguồn Lua"
 
-#: src/filetypes.c:341
+#: ../src/filetypes.c:316
 msgid "Ferite source file"
 msgstr "Tập tin mã nguồn Ferite"
 
-#: src/filetypes.c:354
+#: ../src/filetypes.c:328
 msgid "Haskell source file"
 msgstr "Tập tin mã nguồn Haskell"
 
-#: src/filetypes.c:367
+#: ../src/filetypes.c:340
 msgid "Shell script file"
 msgstr "Tập tin tập lệnh trình bao"
 
-#: src/filetypes.c:381
+#: ../src/filetypes.c:353
 msgid "Makefile"
 msgstr "Tập tin tạo ứng dụng (Makefile)"
 
-#: src/filetypes.c:395
-msgid "XML source file"
-msgstr "Tập tin mã nguồn XML"
+#: ../src/filetypes.c:366
+#, fuzzy
+msgid "XML document"
+msgstr "toàn tài liệu"
 
-#: src/filetypes.c:409
+#: ../src/filetypes.c:379
 msgid "Docbook source file"
 msgstr "Tập tin mã nguồn Docbook"
 
-#: src/filetypes.c:422
+#: ../src/filetypes.c:391
 msgid "HTML source file"
 msgstr "Tập tin mã nguồn HTML"
 
-#: src/filetypes.c:436
+#: ../src/filetypes.c:404
 msgid "Cascading StyleSheet"
 msgstr "Tờ kiểu dáng tầng xếp (CSS)"
 
-#: src/filetypes.c:449
+#: ../src/filetypes.c:416
 msgid "SQL Dump file"
 msgstr "Tập tin đổ SQL"
 
-#: src/filetypes.c:462
+#: ../src/filetypes.c:428
 msgid "LaTeX source file"
 msgstr "Tập tin mã nguồn LaTeX"
 
-#: src/filetypes.c:475
+#: ../src/filetypes.c:440
 msgid "O-Matrix source file"
 msgstr "Tập tin mã nguồn O-Matrix"
 
-#: src/filetypes.c:488
+#: ../src/filetypes.c:452
 msgid "VHDL source file"
 msgstr "Tập tin mã nguồn VHDL"
 
-#: src/filetypes.c:501
+#: ../src/filetypes.c:464
 msgid "Diff file"
 msgstr "Tập tin khác biệt"
 
-#: src/filetypes.c:514
+#: ../src/filetypes.c:476
 msgid "Config file"
 msgstr "Tập tin cấu hình"
 
-#: src/filetypes.c:528
-#: src/project.c:267
+#: ../src/filetypes.c:489
+#, fuzzy
+msgid "Haxe source file"
+msgstr "Tập tin mã nguồn Haskell"
+
+#: ../src/filetypes.c:501
+msgid "reStructuredText file"
+msgstr ""
+
+#: ../src/filetypes.c:513 ../src/project.c:250
 msgid "All files"
 msgstr "Mọi tập tin"
 
-#: src/filetypes.c:549
-#: src/interface.c:3504
+#: ../src/filetypes.c:541
+msgid "_Programming Languages"
+msgstr ""
+
+#: ../src/filetypes.c:542
+msgid "_Scripting Languages"
+msgstr ""
+
+#: ../src/filetypes.c:543
+msgid "_Markup Languages"
+msgstr ""
+
+#: ../src/filetypes.c:544
+#, fuzzy
+msgid "M_iscellaneous Languages"
+msgstr "Ký tự lặt vặt"
+
+#: ../src/filetypes.c:578 ../src/interface.c:3490 ../src/templates.c:333
 msgid "None"
 msgstr "Không có"
 
-#: src/filetypes.c:857
-#: src/win32.c:78
+#: ../src/filetypes.c:932 ../src/win32.c:81
 msgid "All Source"
 msgstr "Mọi mã nguồn"
 
-#: src/geany.h:50
+#: ../src/geany.h:58
 msgid "untitled"
 msgstr "không tên"
 
-# Name: don't translate/Tên: đừng dịch
-#: src/interface.c:269
-#: src/interface.c:1563
-msgid "Geany"
-msgstr "Geany"
-
-#: src/interface.c:279
+#: ../src/interface.c:282
 msgid "_File"
 msgstr "_Tập tin"
 
-#: src/interface.c:290
+#: ../src/interface.c:293
 msgid "New (with _Template)"
 msgstr "Mới (dùng Mẫ_u)"
 
-#: src/interface.c:301
-#: src/interface.c:362
-#: src/interface.c:542
-#: src/interface.c:561
-#: src/interface.c:616
-#: src/interface.c:808
-#: src/interface.c:818
-#: src/interface.c:2088
-#: src/interface.c:2107
-#: src/interface.c:2162
+#: ../src/interface.c:304 ../src/interface.c:365 ../src/interface.c:541
+#: ../src/interface.c:601 ../src/interface.c:615 ../src/interface.c:807
+#: ../src/interface.c:817 ../src/interface.c:2115 ../src/interface.c:2175
+#: ../src/interface.c:2189
 msgid "invisible"
 msgstr "vô hình"
 
-#: src/interface.c:313
-#: src/interface.c:2010
+#: ../src/interface.c:316 ../src/interface.c:2041
 msgid "Open Selected F_ile"
 msgstr "Mở tập t_in đã chọn"
 
-#: src/interface.c:317
+#: ../src/interface.c:320
 msgid "Recent _Files"
 msgstr "Tập tin _gần đây"
 
-#: src/interface.c:334
+#: ../src/interface.c:337
 msgid "Save A_ll"
 msgstr "Lưu tất _cả"
 
-#: src/interface.c:337
+#: ../src/interface.c:340
 msgid "Saves all open files"
 msgstr "Lưu mọi tập tin đang mở"
 
-#: src/interface.c:351
+#: ../src/interface.c:354
 msgid "R_eload As"
 msgstr "Tải lại _dạng"
 
-#: src/interface.c:370
+#: ../src/interface.c:373
 msgid "Load Ta_gs"
 msgstr "Nạ_p thẻ"
 
-#: src/interface.c:373
+#: ../src/interface.c:376
 msgid "Load global tags file"
 msgstr "Nạp tập tin thẻ toàn cục"
 
-#: src/interface.c:392
+#: ../src/interface.c:395
 msgid "Prints the current file"
 msgstr "In tập tin hiện có"
 
-#: src/interface.c:403
+#: ../src/interface.c:406
 msgid "C_lose All"
 msgstr "Đóng tất _cả"
 
-#: src/interface.c:406
+#: ../src/interface.c:409
 msgid "Closes all open files"
 msgstr "Đóng mọi tập tin đang mở"
 
-#: src/interface.c:420
-#: src/interface.c:1126
+#: ../src/interface.c:423 ../src/interface.c:1146
 msgid "Quit Geany"
 msgstr "Thoát Geany"
 
-#: src/interface.c:422
+#: ../src/interface.c:425
 msgid "_Edit"
 msgstr "_Sửa"
 
-#: src/interface.c:463
-#: src/interface.c:2001
+#: ../src/interface.c:466 ../src/interface.c:2032
 msgid "Select _All"
 msgstr "Chọn tất _cả"
 
-#: src/interface.c:472
-#: src/interface.c:2019
+#: ../src/interface.c:475 ../src/interface.c:2050
 msgid "_Format"
 msgstr "Định _dạng"
 
-#: src/interface.c:475
+#: ../src/interface.c:478
 msgid "Convert the case of the current selection"
 msgstr "Chuyển đổi chữ hoa/thường của vùng chọn hiện thời"
 
-#: src/interface.c:480
-#: src/interface.c:2026
-msgid "Convert Selection to _Lower-case"
-msgstr "Chuyển đổi _vùng chọn sang chữ thường"
+#: ../src/interface.c:483 ../src/interface.c:2057
+#, fuzzy
+msgid "T_oggle Case of Selection"
+msgstr "_Nhân đôi dòng hay vùng chọn"
 
-#: src/interface.c:484
-#: src/interface.c:2030
-msgid "Convert Selection to _Upper-case"
-msgstr "Ch_uyển đổi vùng chọn sang chữ hoa"
-
-#: src/interface.c:493
-#: src/interface.c:2039
+#: ../src/interface.c:492 ../src/interface.c:2066
 msgid "_Comment Line(s)"
 msgstr "Ghi _chú dòng"
 
-#: src/interface.c:497
-#: src/interface.c:2043
+#: ../src/interface.c:496 ../src/interface.c:2070
 msgid "U_ncomment Line(s)"
 msgstr "Hủy ghi chú dò_ng"
 
-#: src/interface.c:501
-#: src/interface.c:2047
+#: ../src/interface.c:500 ../src/interface.c:2074
 msgid "_Toggle Line Commentation"
 msgstr "Bật/_tắt ghi chú dòng"
 
-#: src/interface.c:505
-#: src/interface.c:2051
+#: ../src/interface.c:504 ../src/interface.c:2078
 msgid "Du_plicate Line or Selection"
 msgstr "_Nhân đôi dòng hay vùng chọn"
 
-#: src/interface.c:514
-#: src/interface.c:2060
+#: ../src/interface.c:513 ../src/interface.c:2087
 msgid "_Increase Indent"
 msgstr "_Tăng canh lề"
 
-#: src/interface.c:522
-#: src/interface.c:2068
+#: ../src/interface.c:521 ../src/interface.c:2095
 msgid "_Decrease Indent"
 msgstr "_Giảm canh lề"
 
-#: src/interface.c:535
-#: src/interface.c:2081
+#: ../src/interface.c:534 ../src/interface.c:2108
 msgid "_Send Selection to"
 msgstr "_Gửi vùng chọn cho"
 
-#: src/interface.c:550
-msgid "_Insert \"include <...>\""
-msgstr "Chèn \"_include <...>\""
-
-#: src/interface.c:564
+#: ../src/interface.c:549
 msgid "I_nsert Comments"
 msgstr "Chè_n chú thích"
 
-#: src/interface.c:575
-#: src/interface.c:2121
+#: ../src/interface.c:560 ../src/interface.c:2134
 msgid "Insert ChangeLog Entry"
 msgstr "Chèn mục ghi thay đổi"
 
-#: src/interface.c:578
-#: src/interface.c:2124
+#: ../src/interface.c:563 ../src/interface.c:2137
 msgid "Inserts a typical ChangeLog entry in the current file"
 msgstr "Chèn một mục ghi thay đổi (ChangeLog) chuẩn vào tập tin hiện thời"
 
-#: src/interface.c:580
-#: src/interface.c:2126
+#: ../src/interface.c:565 ../src/interface.c:2139
 msgid "Insert File Header"
 msgstr "Chèn phần đầu tập tin"
 
-#: src/interface.c:583
-#: src/interface.c:2129
+#: ../src/interface.c:568 ../src/interface.c:2142
 msgid "Inserts a file header at the beginning of the file"
 msgstr "Chèn một phần đầu tập tin vào đầu của tập tin"
 
-#: src/interface.c:585
-#: src/interface.c:2131
+#: ../src/interface.c:570 ../src/interface.c:2144
 msgid "Insert Function Description"
 msgstr "Chèn mô tả hàm"
 
-#: src/interface.c:588
-#: src/interface.c:2134
+#: ../src/interface.c:573 ../src/interface.c:2147
 msgid "Inserts a description before the current function"
 msgstr "Chèn mô tả trước hàm hiện thời"
 
-#: src/interface.c:590
-#: src/interface.c:2136
+#: ../src/interface.c:575 ../src/interface.c:2149
 msgid "Insert Multiline Comment"
 msgstr "Chèn chú thích đa dòng"
 
-#: src/interface.c:593
-#: src/interface.c:2139
+#: ../src/interface.c:578 ../src/interface.c:2152
 msgid "Inserts a multiline comment"
 msgstr "Chèn chú thích đa dòng"
 
-#: src/interface.c:595
-#: src/interface.c:2141
+#: ../src/interface.c:580 ../src/interface.c:2154
 msgid "Insert GPL Notice"
 msgstr "Chèn thông báo GPL"
 
-#: src/interface.c:598
-#: src/interface.c:2144
+#: ../src/interface.c:583 ../src/interface.c:2157
 msgid "Inserts a GPL notice (should be done at the beginning of the file)"
 msgstr "Chèn thông báo Giấy Phép Công Cộng GNU (nên nằm tại đầu của tập tin)"
 
-#: src/interface.c:600
+#: ../src/interface.c:585 ../src/interface.c:2159
 msgid "Insert BSD License Notice"
 msgstr "Chèn thông báo giấy phép BSD"
 
-#: src/interface.c:603
-#: src/interface.c:2149
+#: ../src/interface.c:588 ../src/interface.c:2162
 msgid ""
 "Inserts a BSD licence notice (should be done at the beginning of the file)"
 msgstr "Chèn thông báo Giấy Phép BSD (nên nằm tại đầu của tập tin)"
 
-#: src/interface.c:605
-#: src/interface.c:2151
+#: ../src/interface.c:590 ../src/interface.c:2164
 msgid "Insert Dat_e"
 msgstr "Chèn ngà_y"
 
-#: src/interface.c:628
+#: ../src/interface.c:604
+msgid "_Insert \"include <...>\""
+msgstr "Chèn \"_include <...>\""
+
+#: ../src/interface.c:627
 msgid "_Search"
 msgstr "_Tìm"
 
-#: src/interface.c:639
+#: ../src/interface.c:638
 msgid "Find _Next"
 msgstr "Tìm _kế"
 
-#: src/interface.c:643
+#: ../src/interface.c:642
 msgid "Find _Previous"
 msgstr "Tìm t_rước"
 
-#: src/interface.c:647
+#: ../src/interface.c:646
 msgid "Find in F_iles"
 msgstr "Tìm trong tập t_in"
 
-#: src/interface.c:651
-#: src/search.c:422
+#: ../src/interface.c:650 ../src/search.c:427
 msgid "_Replace"
 msgstr "Tha_y thế"
 
-#: src/interface.c:664
+#: ../src/interface.c:663
 msgid "Find _Selected"
 msgstr "Tìm đã _chọn"
 
-#: src/interface.c:668
+#: ../src/interface.c:667
 msgid "Find Pre_v Selected"
 msgstr "Tìm đã chọn t_rước"
 
-#: src/interface.c:677
+#: ../src/interface.c:676
 msgid "Next _Message"
 msgstr "Thông điệp _kế"
 
-#: src/interface.c:686
+#: ../src/interface.c:685
 msgid "_Go to Line"
 msgstr "Tới dòn_g"
 
-#: src/interface.c:701
+#: ../src/interface.c:700
 msgid "Change _Font"
 msgstr "Đổi _phông"
 
-#: src/interface.c:704
+#: ../src/interface.c:703
 msgid "Change the default font"
 msgstr "Thay đổi phông chữ mặc định"
 
-#: src/interface.c:715
-#: src/keybindings.c:173
-msgid "Toggle all additional widgets"
+#: ../src/interface.c:714
+#, fuzzy
+msgid "Toggle All Additional Widgets"
 msgstr "Bật/tắt mọi ô điều khiển thêm"
 
-#: src/interface.c:719
+#: ../src/interface.c:718
 msgid "Full_screen"
 msgstr "T_oàn màn hình"
 
-#: src/interface.c:723
+#: ../src/interface.c:722
 msgid "Show Message _Window"
 msgstr "Hiện cửa _sổ thông điệp"
 
-#: src/interface.c:726
+#: ../src/interface.c:725
 msgid "Toggle the window with status and compiler messages on and off"
 msgstr "Bật/tắt hiển thị thông điệp trạng thái hay bộ biên dịch trong cửa sổ"
 
-#: src/interface.c:729
+#: ../src/interface.c:728
 msgid "Show _Toolbar"
 msgstr "Hiện _thanh công cụ"
 
-#: src/interface.c:732
+#: ../src/interface.c:731
 msgid "Toggle the toolbar on and off"
 msgstr "Hiện/ẩn thông công cụ"
 
-#: src/interface.c:735
+#: ../src/interface.c:734
 msgid "Show Side_bar"
 msgstr "Hiện khung _lề"
 
-#: src/interface.c:740
+#: ../src/interface.c:739
 msgid "Show _Markers Margin"
 msgstr "Hiện lề đánh _dấu"
 
-#: src/interface.c:743
+#: ../src/interface.c:742
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
 "mark lines."
 msgstr "Hiện/ẩn lề nhỏ bên phải các số hiệu dòng, được dùng để đánh dấu dòng."
 
-#: src/interface.c:746
+#: ../src/interface.c:745
 msgid "Show _Line Numbers"
 msgstr "Hiện _số hiệu dòng"
 
-#: src/interface.c:749
+#: ../src/interface.c:748
 msgid "Shows or hides the Line Number margin."
 msgstr "Hiện/ẩn lề số hiệu dòng."
 
-#: src/interface.c:769
+#: ../src/interface.c:768
 msgid "_Document"
 msgstr "_Tài liệu"
 
-#: src/interface.c:776
+#: ../src/interface.c:775
 msgid "_Line Wrapping"
 msgstr "N_gắt dòng"
 
-#: src/interface.c:779
-#: src/interface.c:3511
+#: ../src/interface.c:778 ../src/interface.c:3517
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
 "disabled on slow machines."
-msgstr "Ngắt dòng tại viền cửa sổ, rồi tiếp tục nó trên dòng kế tiếp. Ghi chú : khả "
+msgstr ""
+"Ngắt dòng tại viền cửa sổ, rồi tiếp tục nó trên dòng kế tiếp. Ghi chú : khả "
 "năng ngắt dòng trong tài liệu lớn chiếm hiệu suất nhiều, vì vậy nó nên bị "
 "tắt trên máy chạy chậm."
 
-#: src/interface.c:782
+#: ../src/interface.c:781
 msgid "_Use Auto-indentation"
 msgstr "_Tự động thụt lề"
 
-#: src/interface.c:787
+#: ../src/interface.c:786
 msgid "Read _Only"
 msgstr "_Chỉ đọc"
 
-#: src/interface.c:790
+#: ../src/interface.c:789
 msgid "Treat this file as read-only. No changes can be made."
 msgstr "Đặt tập tin này là chỉ-đọc. Không cho phép ai thay đổi nó."
 
-#: src/interface.c:792
+#: ../src/interface.c:791
 msgid "_Write Unicode BOM"
 msgstr "Ghi _BOM Unicode"
 
-#: src/interface.c:801
+#: ../src/interface.c:800
 msgid "Set File_type"
 msgstr "Đặt kiểu _tập tin"
 
-#: src/interface.c:811
+#: ../src/interface.c:810
 msgid "Set _Encoding"
 msgstr "Đặt _bảng mã"
 
-#: src/interface.c:821
+#: ../src/interface.c:820
 msgid "Set Line E_ndings"
 msgstr "Đặt kết thúc dò_ng"
 
-#: src/interface.c:828
+#: ../src/interface.c:827
 msgid "Convert and Set to _CR/LF (Win)"
 msgstr "Chuyển đổi và đặt thành _CR/LF (Win)"
 
-#: src/interface.c:834
+#: ../src/interface.c:833
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Chuyển đổi và đặt thành _LF (Unix)"
 
-#: src/interface.c:840
+#: ../src/interface.c:839
 msgid "Convert and Set to CR (_Mac)"
 msgstr "Chuyển đổi và đặt thành CR (_Mac)"
 
-#: src/interface.c:851
+#: ../src/interface.c:850
 msgid "_Replace Tabs by Spaces"
 msgstr "Tha_y thế các tab bằng dấu cách"
 
-#: src/interface.c:854
-#: src/interface.c:3264
+#: ../src/interface.c:853 ../src/interface.c:3716
 msgid "Replaces all tabs in document by spaces."
 msgstr "Thay thế các tab trong tài liệu bằng dấu cách."
 
-#: src/interface.c:861
+#: ../src/interface.c:860
 msgid "_Fold All"
 msgstr "_Gấp tất cả"
 
-#: src/interface.c:864
+#: ../src/interface.c:863
 msgid "Folds all contractible code blocks"
 msgstr "Gấp lại mọi khối mã có khả năng co lại"
 
-#: src/interface.c:866
+#: ../src/interface.c:865
 msgid "_Unfold All"
 msgstr "_Mở lại tất cả"
 
-#: src/interface.c:869
+#: ../src/interface.c:868
 msgid "Unfolds all contracted code blocks"
 msgstr "Mở lại mọi khối mã đã co lại"
 
-#: src/interface.c:876
+#: ../src/interface.c:875
 msgid "Remove _Markers"
 msgstr "Bỏ _dấu"
 
-#: src/interface.c:880
+#: ../src/interface.c:879
 msgid "Remove Error _Indicators"
 msgstr "Bỏ mọi cá_i chỉ lỗi"
 
-#: src/interface.c:883
+#: ../src/interface.c:882
 msgid "Removes all error indicators in the current document."
 msgstr "Gỡ bỏ mọi cái chỉ lỗi khỏi tài liệu hiện thời."
 
-#: src/interface.c:885
+#: ../src/interface.c:884
 msgid "_Project"
 msgstr "_Dự án"
 
-#: src/interface.c:892
+#: ../src/interface.c:891
 msgid "_New"
 msgstr "Mớ_i"
 
-#: src/interface.c:900
+#: ../src/interface.c:899
 msgid "_Open"
 msgstr "_Mở"
 
-#: src/interface.c:908
+#: ../src/interface.c:907
 msgid "_Close"
 msgstr "Đón_g"
 
-#: src/interface.c:929
+#: ../src/interface.c:928
 msgid "_Tools"
 msgstr "_Công cụ"
 
-#: src/interface.c:936
-msgid "_Colour Chooser"
+#: ../src/interface.c:935
+#, fuzzy
+msgid "_Color Chooser"
 msgstr "Bộ _chọn màu"
 
-#: src/interface.c:939
-#: src/interface.c:1064
+#: ../src/interface.c:938 ../src/interface.c:1079
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette."
 msgstr "Mở hộp thoại chọn màu sắc, để kén tương tác màu trong bảng chọn."
 
-#: src/interface.c:945
+#: ../src/interface.c:944
 msgid "_Word Count"
 msgstr "_Tổng từ"
 
-#: src/interface.c:948
+#: ../src/interface.c:947
 msgid ""
 "Counts the words and characters in the current selection or the whole "
 "document"
-msgstr "Đếm tất cả các từ và ký tự trong vùng chọn hiện thời hay toàn bộ tài liệu"
+msgstr ""
+"Đếm tất cả các từ và ký tự trong vùng chọn hiện thời hay toàn bộ tài liệu"
 
-#: src/interface.c:950
-msgid "_Insert Special HTML Characters"
-msgstr "Chèn ký tự HTML đặc b_iệt"
-
-#: src/interface.c:954
+#: ../src/interface.c:949 ../src/interface.c:956
 msgid "_Help"
 msgstr "Trợ _giúp"
 
-#: src/interface.c:965
+#: ../src/interface.c:964
 msgid "_Keyboard Shortcuts"
 msgstr "_Phím tắt"
 
-#: src/interface.c:968
+#: ../src/interface.c:967
 msgid "Shows a list of all keyboard shortcuts for Geany."
 msgstr "Hiển thị danh sách các phím tắt cho trình Geany."
 
-#: src/interface.c:970
+#: ../src/interface.c:969
 msgid "_Website"
 msgstr "Chỗ _Mạng"
 
-#: src/interface.c:993
+#: ../src/interface.c:992
 msgid "Create a new file"
 msgstr "Tạo tập tin mới"
 
-#: src/interface.c:999
+#: ../src/interface.c:998
 msgid "Open an existing file"
 msgstr "Mở tập tin đã có"
 
-#: src/interface.c:1004
+#: ../src/interface.c:1003
 msgid "Save the current file"
 msgstr "Lưu tập tin hiện thời"
 
-#: src/interface.c:1006
-#: src/keybindings.c:132
+#: ../src/interface.c:1005 ../src/keybindings.c:138
 msgid "Save all"
 msgstr "Lưu tất cả"
 
-#: src/interface.c:1009
+#: ../src/interface.c:1008
 msgid "Save all open files"
 msgstr "Lưu mọi tập tin đang mở"
 
-#: src/interface.c:1018
+#: ../src/interface.c:1017
 msgid "Reload the current file from disk"
 msgstr "Tải lại tập tin hiện thời từ đĩa"
 
-#: src/interface.c:1023
+#: ../src/interface.c:1022
 msgid "Close the current file"
 msgstr "Đóng tập tin hiện thời"
 
-#: src/interface.c:1032
+#: ../src/interface.c:1031
 msgid "Undo the last modification"
 msgstr "Hủy bước sự sửa đổi cuối cùng"
 
-#: src/interface.c:1037
+#: ../src/interface.c:1036
 msgid "Redo the last modification"
 msgstr "Bước lại sự sửa đổi cuối cùng"
 
-#: src/interface.c:1045
-#: src/keybindings.c:200
+#: ../src/interface.c:1046 ../src/keybindings.c:247
+msgid "Navigate back a location"
+msgstr ""
+
+#: ../src/interface.c:1052 ../src/keybindings.c:249
+msgid "Navigate forward a location"
+msgstr ""
+
+#: ../src/interface.c:1060 ../src/keybindings.c:206
 msgid "Compile"
 msgstr "Biên dịch"
 
-#: src/interface.c:1048
+#: ../src/interface.c:1063
 msgid "Compile the current file"
 msgstr "Biên dịch tập tin hiện thời"
 
-#: src/interface.c:1061
+#: ../src/interface.c:1076
 msgid "Color"
 msgstr "Màu"
 
-#: src/interface.c:1073
+#: ../src/interface.c:1088
 msgid "Zoom in the text"
 msgstr "Phóng to đoạn"
 
-#: src/interface.c:1078
+#: ../src/interface.c:1093
 msgid "Zoom out the text"
 msgstr "Thu nhỏ đoạn"
 
-#: src/interface.c:1091
-#: src/interface.c:1096
+#: ../src/interface.c:1106 ../src/interface.c:1111
 msgid "Find the entered text in the current file"
 msgstr "Tìm đoạn đã nhập trong tập tin hiện thời"
 
-#: src/interface.c:1109
+#: ../src/interface.c:1124
 msgid "Enter a line number and jump to it."
 msgstr "Nhập số hiệu dòng và nhảy tới nó."
 
-#: src/interface.c:1116
+#: ../src/interface.c:1131
 msgid "Jump to the entered line number."
 msgstr "Nhảy tới số hiệu dòng đã nhập."
 
-#: src/interface.c:1154
-#: src/treeviews.c:77
+#: ../src/interface.c:1174 ../src/treeviews.c:97
 msgid "Symbols"
 msgstr "Ký hiệu"
 
-#: src/interface.c:1167
-#: src/treeviews.c:189
+#: ../src/interface.c:1187 ../src/treeviews.c:211
 msgid "Open files"
 msgstr "Tập tin mở"
 
-#: src/interface.c:1202
+#: ../src/interface.c:1222
 msgid "Status"
 msgstr "Trạng thái"
 
-#: src/interface.c:1216
+#: ../src/interface.c:1236
 msgid "Compiler"
 msgstr "Bộ biên dịch"
 
-#: src/interface.c:1230
+#: ../src/interface.c:1250
 msgid "Messages"
 msgstr "Thông điệp"
 
-#: src/interface.c:1243
+#: ../src/interface.c:1263
 msgid "Scribble"
 msgstr "Viết tháu"
 
-#: src/interface.c:1817
-#: src/interface.c:3119
+#: ../src/interface.c:1849 ../src/interface.c:3236
 msgid "Images and text"
 msgstr "Ảnh và nhãn"
 
-#: src/interface.c:1823
-#: src/interface.c:3151
+#: ../src/interface.c:1855 ../src/interface.c:3268
 msgid "Images only"
 msgstr "Chỉ ảnh"
 
-#: src/interface.c:1829
-#: src/interface.c:3143
+#: ../src/interface.c:1861 ../src/interface.c:3260
 msgid "Text only"
 msgstr "Chỉ nhãn"
 
-#: src/interface.c:1840
-#: src/interface.c:3135
+#: ../src/interface.c:1872 ../src/interface.c:3252
 msgid "Large icons"
 msgstr "Biểu tượng lớn"
 
-#: src/interface.c:1845
-#: src/interface.c:3127
+#: ../src/interface.c:1877 ../src/interface.c:3244
 msgid "Small icons"
 msgstr "Biểu tượng nhỏ"
 
-#: src/interface.c:1855
+#: ../src/interface.c:1887
 msgid "Hide toolbar"
 msgstr "Ẩn thanh công cụ"
 
-#: src/interface.c:2096
-msgid "Insert \"include <...>\""
-msgstr "Chèn \"include <...>\""
-
-#: src/interface.c:2110
+#: ../src/interface.c:2123
 msgid "Insert Comments"
 msgstr "Chèn chú thích"
 
-#: src/interface.c:2146
-msgid "Insert BSD license Notice"
-msgstr "Chèn thông báo giấy phép BSD"
+#: ../src/interface.c:2178
+msgid "Insert \"include <...>\""
+msgstr "Chèn \"include <...>\""
 
-#: src/interface.c:2170
-#: src/keybindings.c:287
+#: ../src/interface.c:2197 ../src/keybindings.c:326
 msgid "Find Usage"
 msgstr "Tìm cách sử dụng"
 
-#: src/interface.c:2178
+#: ../src/interface.c:2205
 msgid "Go to Tag Definition"
 msgstr "Tới lời xác định thẻ"
 
-#: src/interface.c:2182
+#: ../src/interface.c:2209
 msgid "Go to Tag Declaration"
 msgstr "Tới lời tuyên bố thẻ"
 
-#: src/interface.c:2186
-#: src/keybindings.c:293
+#: ../src/interface.c:2213 ../src/keybindings.c:332
 msgid "Context Action"
 msgstr "Hành động ngữ cảnh"
 
-#: src/interface.c:2195
-msgid "Go to Line"
-msgstr "Tới dòng"
-
-#: src/interface.c:2198
-msgid "Goto to the entered line"
+#: ../src/interface.c:2225
+#, fuzzy
+msgid "Go to the entered line"
 msgstr "Tới dòng đã nhập"
 
-#: src/interface.c:2601
-#: src/keybindings.c:153
+#: ../src/interface.c:2652 ../src/keybindings.c:159
 msgid "Preferences"
 msgstr "Tùy thích"
 
-#: src/interface.c:2634
+#: ../src/interface.c:2685
 msgid "Load files from the last session"
 msgstr "Tải các tập tin từ phiên chạy trước"
 
-#: src/interface.c:2638
+#: ../src/interface.c:2689
 msgid "Opens at startup the files from the last session"
 msgstr "Khi khởi chạy, mở những tập tin từ phiên chạy cuối cùng"
 
-#: src/interface.c:2641
+#: ../src/interface.c:2692
+#, fuzzy
+msgid "Load virtual terminal support"
+msgstr "Tải mô phỏng thiết bị cuối ảo khi khởi chạy"
+
+#: ../src/interface.c:2694
+#, fuzzy
+msgid ""
+"Whether the virtual terminal emulation (VTE) should be loaded at startup. "
+"Disable it if you do not need it."
+msgstr ""
+"Khả năng mô phỏng thiết bị cuối ảo (VTE) có nên được tải khi khởi chạy hay "
+"không. Tắt nó nếu bạn không cần sử dụng nó."
+
+#: ../src/interface.c:2697
+msgid "Enable plugin support"
+msgstr ""
+
+#: ../src/interface.c:2701
 msgid "Save window position and geometry"
 msgstr "Lưu vị trí và dạng hình cửa sổ"
 
-#: src/interface.c:2645
+#: ../src/interface.c:2705
 msgid "Saves the window position and geometry and restores it at the start"
 msgstr "Lư vị trí và dạng hình của cửa sổ, và phục hồi lại khi khởi chạy"
 
-#: src/interface.c:2648
-msgid "Load virtual terminal emulation at startup"
-msgstr "Tải mô phỏng thiết bị cuối ảo khi khởi chạy"
-
-#: src/interface.c:2650
-msgid ""
-"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
-"Disable it if you do not need it."
-msgstr "Khả năng mô phỏng thiết bị cuối ảo (VTE) có nên được tải khi khởi chạy hay "
-"không. Tắt nó nếu bạn không cần sử dụng nó."
-
-#: src/interface.c:2653
+#: ../src/interface.c:2708
 msgid "Confirm exit"
 msgstr "Xác nhận thoát"
 
-#: src/interface.c:2657
+#: ../src/interface.c:2712
 msgid "Shows a confirmation dialog on exit."
 msgstr "Hiển thị hộp thoại xác nhận khi thoát."
 
-#: src/interface.c:2660
+#: ../src/interface.c:2715
 msgid "<b>Startup and shutdown</b>"
 msgstr "<b>Khởi chạy và tắt</b>"
 
-#: src/interface.c:2679
+#: ../src/interface.c:2734
 msgid "Beep on errors or when compilation has finished"
 msgstr "Bíp khi gặp lỗi, hay khi biên dịch xong"
 
-#: src/interface.c:2682
+#: ../src/interface.c:2737
+#, fuzzy
 msgid ""
-"Whether to beep if an error occured or when the compilation process has "
+"Whether to beep if an error occurred or when the compilation process has "
 "finished."
 msgstr "Có nên kêu bíp nếu gặp lỗi, hay khi tiến trình biên dịch mới hoàn tất."
 
-#: src/interface.c:2685
+#: ../src/interface.c:2740
 msgid "Switch to status message list at new message"
-msgstr "Chuyển đổi sang danh sách thông điệp trạng thái khi nhận thông điệp mới"
+msgstr ""
+"Chuyển đổi sang danh sách thông điệp trạng thái khi nhận thông điệp mới"
 
-#: src/interface.c:2688
+#: ../src/interface.c:2743
 msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
 "new status message arrives."
-msgstr "Chuyển đổi sang thanh thông điệp trạng thái (trong cửa sổ cuốn vở, bên dưới) "
+msgstr ""
+"Chuyển đổi sang thanh thông điệp trạng thái (trong cửa sổ cuốn vở, bên dưới) "
 "khi nhận thông điệp trạng thái mới."
 
-#: src/interface.c:2691
+#: ../src/interface.c:2746
+msgid "Suppress status messages in the status bar"
+msgstr ""
+
+#: ../src/interface.c:2749
+msgid ""
+"Removes all messages from the status bar. The messages are still displayed "
+"in the status messages window."
+msgstr ""
+
+#: ../src/interface.c:2752
+msgid "Auto focus widgets (focus follows mouse)"
+msgstr ""
+
+#: ../src/interface.c:2755
+msgid ""
+"Gives the focus automatically to widgets below the mouse cursor. Works for "
+"the main editor widget, the scribble, the toolbar search and goto line "
+"fields and the VTE."
+msgstr ""
+
+#: ../src/interface.c:2758
 msgid "Always wrap search and hide the Find dialog"
 msgstr "Luôn luôn cuộn việc tìm và ẩn hộp thoại Tìm"
 
-#: src/interface.c:2695
+#: ../src/interface.c:2762
 msgid ""
 "Always wrap search around the document and hide the Find dialog after "
 "clicking Find Next/Previous"
-msgstr "Luôn luôn cuộn việc tìm qua toàn bộ tài liệu và ẩn hộp thoại Tìm sau khi "
+msgstr ""
+"Luôn luôn cuộn việc tìm qua toàn bộ tài liệu và ẩn hộp thoại Tìm sau khi "
 "nhấn vào mục Tìm kế/trước"
 
-#: src/interface.c:2698
-msgid "<b>Behaviour</b>"
-msgstr "<b>Ứng xử</b>"
-
-#: src/interface.c:2717
-msgid "Context Action command:"
-msgstr "Lệnh hành động ngữ cảnh:"
-
-#: src/interface.c:2724
-#, c-format
-msgid ""
-"Context action command. The current selected word can be used with %s. It "
-"can be everywhere in the given command and will be replaced before execution."
-msgstr "Lệnh hành động ngữ cảnh. Từ được chọn hiện thời có thể được dùng cùng với %s. Nó có thể nằm ở mọi nơi trong lệnh đã cho, cũng sẽ được thay thế trước khi thực hiện."
-
-#: src/interface.c:2727
-msgid "<b>Context Action</b>"
-msgstr "<b>Hành động ngữ cảnh</b>"
-
-#: src/interface.c:2747
-msgid "Project files:"
-msgstr "Tập tin dự án:"
-
-#: src/interface.c:2760
-msgid "Path to start in when opening project files"
-msgstr "Đường dẫn trong đó cần bắt đầu khi mở tập tin dự án"
-
-#: src/interface.c:2773
-msgid "<b>Paths</b>"
-msgstr "<b>Đường dẫn</b>"
-
-#: src/interface.c:2778
-msgid "General"
-msgstr "Chung"
-
-#: src/interface.c:2800
-msgid "Show symbol list"
-msgstr "Hiện danh sách ký hiệu"
-
-#: src/interface.c:2803
-msgid "Toggle the symbol list on and off"
-msgstr "Hiện/ẩn danh sách ký hiệu"
-
-#: src/interface.c:2806
-msgid "Show open files list"
-msgstr "Hiện danh sách tập tin mở"
-
-#: src/interface.c:2809
-msgid "Toggle the open files list on and off"
-msgstr "Bật/tắt danh sách tập tin mở"
-
-#: src/interface.c:2812
-msgid "<b>Sidebar</b>"
-msgstr "<b>Khung lề</b>"
-
-#: src/interface.c:2833
-msgid "Symbol list:"
-msgstr "Danh sách ký hiệu :"
-
-#: src/interface.c:2840
-#: src/interface.c:2905
-msgid "Message window:"
-msgstr "Cửa sổ thông điệp:"
-
-#: src/interface.c:2847
-#: src/interface.c:2912
-msgid "Editor:"
-msgstr "Bộ soạn thảo :"
-
-#: src/interface.c:2859
-msgid "Sets the font for the message window"
-msgstr "Đặt phông chữ cho cửa sổ thông điệp"
-
-#: src/interface.c:2867
-msgid "Sets the font for the symbol list"
-msgstr "Đặt phông chữ cho danh sách các ký hiệu"
-
-#: src/interface.c:2875
-msgid "Sets the editor font"
-msgstr "Đặt phông soạn thảo"
-
-#: src/interface.c:2877
-msgid "<b>Fonts</b>"
-msgstr "<b>Phông</b>"
-
-#: src/interface.c:2898
-msgid "Sidebar:"
-msgstr "Khung lề:"
-
-#: src/interface.c:2919
-msgid "Show editor tabs"
-msgstr "Hiện các thanh soạn thảo"
-
-#: src/interface.c:2930
-#: src/interface.c:2940
-#: src/interface.c:2950
-#: src/interface.c:3311
-msgid "Left"
-msgstr "Trái"
-
-#: src/interface.c:2931
-#: src/interface.c:2941
-#: src/interface.c:2951
-#: src/interface.c:3319
-msgid "Right"
-msgstr "Phải"
-
-#: src/interface.c:2932
-#: src/interface.c:2942
-#: src/interface.c:2952
-msgid "Top"
-msgstr "Trên"
-
-#: src/interface.c:2933
-#: src/interface.c:2943
-#: src/interface.c:2953
-msgid "Bottom"
-msgstr "Dưới"
-
-#: src/interface.c:2955
-msgid "<b>Tab placement</b>"
-msgstr "<b>Vị trí thẻ</b>"
-
-#: src/interface.c:2974
-msgid "Show statusbar"
-msgstr "Hiện thanh trạng thái"
-
-#: src/interface.c:2977
-msgid "Whether to show the status bar at the bottom of the main window."
-msgstr "Có nên hiển thị thanh trạng thái ở dưới cửa sổ chính hay không."
-
-#: src/interface.c:2979
+#: ../src/interface.c:2765 ../src/interface.c:3090 ../src/interface.c:3758
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Lặt vặt</b>"
 
-#: src/interface.c:2984
-msgid "Interface"
-msgstr "Giao diện"
+#: ../src/interface.c:2786
+#, fuzzy
+msgid "Startup path:"
+msgstr "Đường dẫn cơ bản:"
 
-#: src/interface.c:3003
-msgid "Show Toolbar"
-msgstr "Hiện thanh công cụ"
+#: ../src/interface.c:2798
+msgid ""
+"Path to start in when opening or saving files. Must be an absolute path. "
+"Leave blank to use the current working directory."
+msgstr ""
 
-#: src/interface.c:3028
-msgid "Show file operation buttons"
-msgstr "Hiện nút thao tác tập tin"
+#: ../src/interface.c:2811
+msgid "Project files:"
+msgstr "Tập tin dự án:"
 
-#: src/interface.c:3032
-msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
-msgstr "Hiển thị trên thanh công cụ những cái nút Mới, Mở, Đóng, Lưu và Tải lại"
+#: ../src/interface.c:2823
+msgid "Path to start in when opening project files"
+msgstr "Đường dẫn trong đó cần bắt đầu khi mở tập tin dự án"
 
-#: src/interface.c:3035
-msgid "Show Compile and Run"
-msgstr "HIện Biên dịch và Chạy"
+#: ../src/interface.c:2836
+msgid "<b>Paths</b>"
+msgstr "<b>Đường dẫn</b>"
 
-#: src/interface.c:3039
-msgid "Display the Compile and Run buttons in the toolbar"
-msgstr "Hiển thị trên thanh công cụ hai cái nút Biên dịch và Chạy"
+#: ../src/interface.c:2841
+msgid "General"
+msgstr "Chung"
 
-#: src/interface.c:3042
-msgid "Show Colour Chooser button"
+#: ../src/interface.c:2863
+msgid "Show symbol list"
+msgstr "Hiện danh sách ký hiệu"
+
+#: ../src/interface.c:2866
+msgid "Toggle the symbol list on and off"
+msgstr "Hiện/ẩn danh sách ký hiệu"
+
+#: ../src/interface.c:2869
+msgid "Show open files list"
+msgstr "Hiện danh sách tập tin mở"
+
+#: ../src/interface.c:2872
+msgid "Toggle the open files list on and off"
+msgstr "Bật/tắt danh sách tập tin mở"
+
+#: ../src/interface.c:2875
+msgid "<b>Sidebar</b>"
+msgstr "<b>Khung lề</b>"
+
+#: ../src/interface.c:2896
+msgid "Symbol list:"
+msgstr "Danh sách ký hiệu :"
+
+#: ../src/interface.c:2903 ../src/interface.c:3015
+msgid "Message window:"
+msgstr "Cửa sổ thông điệp:"
+
+#: ../src/interface.c:2910 ../src/interface.c:3049
+msgid "Editor:"
+msgstr "Bộ soạn thảo :"
+
+#: ../src/interface.c:2922
+msgid "Sets the font for the message window"
+msgstr "Đặt phông chữ cho cửa sổ thông điệp"
+
+#: ../src/interface.c:2930
+msgid "Sets the font for the symbol list"
+msgstr "Đặt phông chữ cho danh sách các ký hiệu"
+
+#: ../src/interface.c:2938
+msgid "Sets the editor font"
+msgstr "Đặt phông soạn thảo"
+
+#: ../src/interface.c:2940
+msgid "<b>Fonts</b>"
+msgstr "<b>Phông</b>"
+
+#: ../src/interface.c:2959
+msgid "Show editor tabs"
+msgstr "Hiện các thanh soạn thảo"
+
+#: ../src/interface.c:2963
+#, fuzzy
+msgid "Show close buttons"
 msgstr "Hiện nút Bộ chọn màu"
 
-#: src/interface.c:3046
-msgid "Display the Colour Chooser button in the toolbar"
-msgstr "Hiển thị trên thanh công cụ cái nút Bộ chọn màu"
+#: ../src/interface.c:2967
+msgid ""
+"Shows a small cross button in the file tabs to easily close files when "
+"clicking on it (requires restart of Geany)."
+msgstr ""
 
-#: src/interface.c:3049
-msgid "Show Zoom In and Zoom Out"
-msgstr "Hiện Phóng to và Thu nhỏ"
-
-#: src/interface.c:3053
-msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
-msgstr "Hiển thị trên thanh công cụ hai cái nút Phóng to và Thu nhỏ"
-
-#: src/interface.c:3056
-msgid "Show Redo and Undo buttons"
-msgstr "Hiện nút Hủy bước và Bước lại"
-
-#: src/interface.c:3060
-msgid "Display the Redo and Undo buttons in the toolbar"
-msgstr "Hiển thị trên thanh công cụ hai cái nút Hủy bước và Bước lại"
-
-#: src/interface.c:3063
-msgid "Show Search field"
-msgstr "Hiện trường Tìm"
-
-#: src/interface.c:3067
-msgid "Display the search field and button in the toolbar"
-msgstr "Hiển thị trên thanh công cụ trường Tìm"
-
-#: src/interface.c:3070
-msgid "Show Goto line field"
-msgstr "Hiện trường Tới dòng"
-
-#: src/interface.c:3074
-msgid "Display the line number field and button in the toolbar"
-msgstr "Hiển thị trên thanh công cụ cái nút và trường số hiệu dòng"
-
-#: src/interface.c:3077
-msgid "Show Quit button"
-msgstr "Hiện nút Thoát"
-
-#: src/interface.c:3081
-msgid "Display the quit button in the toolbar"
-msgstr "Hiển thị cái nút Thoát trên thanh công cụ"
-
-#: src/interface.c:3084
-msgid "<b>Items</b>"
-msgstr "<b>Mục</b>"
-
-#: src/interface.c:3105
-msgid "Icon style:"
-msgstr "Kiểu biểu tượng:"
-
-#: src/interface.c:3112
-msgid "Icon size:"
-msgstr "Cỡ biểu tượng:"
-
-#: src/interface.c:3159
-msgid "<b>Appearance</b>"
-msgstr "<b>Diện mạo</b>"
-
-#: src/interface.c:3164
-msgid "Toolbar"
-msgstr "Thanh công cụ"
-
-#: src/interface.c:3192
-msgid "Tab Width:"
-msgstr "Rộng tab:"
-
-#: src/interface.c:3204
-msgid "Sets the default encoding for newly created files."
-msgstr "Xác định bộ ký tự mặc định cho tập tin mới tạo."
-
-#: src/interface.c:3216
-msgid "The width in chars, which one tab character will take"
-msgstr "Độ rộng theo ký tự của một ký tự tab"
-
-#: src/interface.c:3221
-msgid "Default encoding:"
-msgstr "Bộ ký tự mặc định:"
-
-#: src/interface.c:3227
-msgid "<b>New files</b>"
-msgstr "<b>Tập tin mới</b>"
-
-#: src/interface.c:3246
-msgid "Strip trailing spaces"
-msgstr "Bỏ dấu cách theo sau"
-
-#: src/interface.c:3250
-msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr "Gỡ bỏ các dấu cách theo sau, tab, và kết thúc dòng"
-
-#: src/interface.c:3253
-msgid "Ensure new line at file end"
-msgstr "Đảm bảo có ký tự dòng mới tại kết thúc tập tin"
-
-#: src/interface.c:3257
-msgid "Ensures that at the end of the file is a new line"
-msgstr "Đảm bảo có ký tự dòng mới tại kết thúc tập tin"
-
-#: src/interface.c:3260
-#: src/keybindings.c:191
-msgid "Replace tabs by space"
-msgstr "Thay thế các tab bằng dấu cách"
-
-#: src/interface.c:3267
-msgid "<b>Saving files</b>"
-msgstr "<b>Lưu tập tin</b>"
-
-#: src/interface.c:3288
+#: ../src/interface.c:2974
 msgid "Placement of new file tabs:"
 msgstr "Vị trí thanh tập tin mới:"
 
-#: src/interface.c:3301
-msgid ""
-"Specifies the number of files which are stored in the Recent files list."
-msgstr "Xác định số tối đa các tập tin được giữ trong danh sách « Tập tin gần đây»."
+#: ../src/interface.c:2979 ../src/interface.c:3027 ../src/interface.c:3044
+#: ../src/interface.c:3061
+msgid "Left"
+msgstr "Trái"
 
-#: src/interface.c:3314
+#: ../src/interface.c:2982
 msgid "File tabs will be placed on the left of the notebook"
 msgstr "Các thanh tập tin mới sẽ nằm bên trái cuốn vở"
 
-#: src/interface.c:3322
+#: ../src/interface.c:2987 ../src/interface.c:3028 ../src/interface.c:3045
+#: ../src/interface.c:3062
+msgid "Right"
+msgstr "Phải"
+
+#: ../src/interface.c:2990
 msgid "File tabs will be placed on the right of the notebook"
 msgstr "Các thanh tập tin mới sẽ nằm bên phải cuốn vở"
 
-#: src/interface.c:3326
-msgid "Recent files list length:"
-msgstr "Độ dài danh sách tập tin gần đây:"
+#: ../src/interface.c:2994
+#, fuzzy
+msgid "<b>Editor tabs</b>"
+msgstr "<b>Phông</b>"
 
-#: src/interface.c:3334
-msgid "<b>Misc.</b>"
-msgstr "<b>Lặt vặt</b>"
+#: ../src/interface.c:3029 ../src/interface.c:3046 ../src/interface.c:3063
+msgid "Top"
+msgstr "Trên"
 
-#: src/interface.c:3339
-#: src/symbols.c:422
-msgid "Files"
-msgstr "Tập tin"
+#: ../src/interface.c:3030 ../src/interface.c:3047 ../src/interface.c:3064
+msgid "Bottom"
+msgstr "Dưới"
 
-#: src/interface.c:3361
-msgid "Invert syntax highlighting colours"
+#: ../src/interface.c:3032
+msgid "Sidebar:"
+msgstr "Khung lề:"
+
+#: ../src/interface.c:3066
+#, fuzzy
+msgid "<b>Tab positions</b>"
+msgstr "<b>Vị trí:</b>"
+
+#: ../src/interface.c:3085
+#, fuzzy
+msgid "Show status bar"
+msgstr "Hiện thanh trạng thái"
+
+#: ../src/interface.c:3088
+msgid "Whether to show the status bar at the bottom of the main window."
+msgstr "Có nên hiển thị thanh trạng thái ở dưới cửa sổ chính hay không."
+
+#: ../src/interface.c:3095
+msgid "Interface"
+msgstr "Giao diện"
+
+#: ../src/interface.c:3113
+msgid "Show Toolbar"
+msgstr "Hiện thanh công cụ"
+
+#: ../src/interface.c:3119
+#, fuzzy
+msgid "<b>Toolbar</b>"
+msgstr "<b>Đường dẫn công cụ</b>"
+
+#: ../src/interface.c:3138
+msgid "Show file operation buttons"
+msgstr "Hiện nút thao tác tập tin"
+
+#: ../src/interface.c:3142
+msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
+msgstr ""
+"Hiển thị trên thanh công cụ những cái nút Mới, Mở, Đóng, Lưu và Tải lại"
+
+#: ../src/interface.c:3145
+msgid "Show Redo and Undo buttons"
+msgstr "Hiện nút Hủy bước và Bước lại"
+
+#: ../src/interface.c:3149
+msgid "Display the Redo and Undo buttons in the toolbar"
+msgstr "Hiển thị trên thanh công cụ hai cái nút Hủy bước và Bước lại"
+
+#: ../src/interface.c:3152
+#, fuzzy
+msgid "Show Back and Forward buttons"
+msgstr "Hiện nút Hủy bước và Bước lại"
+
+#: ../src/interface.c:3156
+#, fuzzy
+msgid ""
+"Display the Back and Forward buttons in the toolbar used for code navigation"
+msgstr "Hiển thị trên thanh công cụ hai cái nút Hủy bước và Bước lại"
+
+#: ../src/interface.c:3159
+#, fuzzy
+msgid "Show Compile and Run buttons"
+msgstr "HIện Biên dịch và Chạy"
+
+#: ../src/interface.c:3163
+msgid "Display the Compile and Run buttons in the toolbar"
+msgstr "Hiển thị trên thanh công cụ hai cái nút Biên dịch và Chạy"
+
+#: ../src/interface.c:3166
+#, fuzzy
+msgid "Show Color Chooser button"
+msgstr "Hiện nút Bộ chọn màu"
+
+#: ../src/interface.c:3170
+#, fuzzy
+msgid "Display the Color Chooser button in the toolbar"
+msgstr "Hiển thị trên thanh công cụ cái nút Bộ chọn màu"
+
+#: ../src/interface.c:3173
+#, fuzzy
+msgid "Show Zoom In and Zoom Out buttons"
+msgstr "Hiện Phóng to và Thu nhỏ"
+
+#: ../src/interface.c:3177
+msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
+msgstr "Hiển thị trên thanh công cụ hai cái nút Phóng to và Thu nhỏ"
+
+#: ../src/interface.c:3180
+msgid "Show Search field"
+msgstr "Hiện trường Tìm"
+
+#: ../src/interface.c:3184
+msgid "Display the search field and button in the toolbar"
+msgstr "Hiển thị trên thanh công cụ trường Tìm"
+
+#: ../src/interface.c:3187
+#, fuzzy
+msgid "Show Go to Line field"
+msgstr "Hiện trường Tới dòng"
+
+#: ../src/interface.c:3191
+msgid "Display the line number field and button in the toolbar"
+msgstr "Hiển thị trên thanh công cụ cái nút và trường số hiệu dòng"
+
+#: ../src/interface.c:3194
+msgid "Show Quit button"
+msgstr "Hiện nút Thoát"
+
+#: ../src/interface.c:3198
+msgid "Display the quit button in the toolbar"
+msgstr "Hiển thị cái nút Thoát trên thanh công cụ"
+
+#: ../src/interface.c:3201
+msgid "<b>Items</b>"
+msgstr "<b>Mục</b>"
+
+#: ../src/interface.c:3222
+msgid "Icon style:"
+msgstr "Kiểu biểu tượng:"
+
+#: ../src/interface.c:3229
+msgid "Icon size:"
+msgstr "Cỡ biểu tượng:"
+
+#: ../src/interface.c:3276
+msgid "<b>Appearance</b>"
+msgstr "<b>Diện mạo</b>"
+
+#: ../src/interface.c:3281
+msgid "Toolbar"
+msgstr "Thanh công cụ"
+
+#: ../src/interface.c:3303
+#, fuzzy
+msgid "Invert syntax highlighting colors"
 msgstr "Đảo ngược màu sắc tô sáng cú pháp"
 
-#: src/interface.c:3363
+#: ../src/interface.c:3305
 msgid "Use white text on a black background."
 msgstr "Hiện chữ màu trắng trên nền màu đen."
 
-#: src/interface.c:3365
+#: ../src/interface.c:3307
 msgid "Show indentation guides"
 msgstr "Hiện các nét dẫn thụt lề"
 
-#: src/interface.c:3368
+#: ../src/interface.c:3310
 msgid "Shows small dotted lines to help you to use the right indentation."
 msgstr "Hiển thị đường nhỏ chấm chấm để giúp đỡ bạn thụt lề đúng."
 
-#: src/interface.c:3371
+#: ../src/interface.c:3313
 msgid "Show white space"
 msgstr "Hiện khoảng trắng"
 
-#: src/interface.c:3374
+#: ../src/interface.c:3316
 msgid "Marks spaces with dots and tabs with arrows."
 msgstr "Nhãn dấu cách bằng chấm và tab bằng mũi tên."
 
-#: src/interface.c:3377
+#: ../src/interface.c:3319
 msgid "Show line endings"
 msgstr "Hiện kết thúc dòng"
 
-#: src/interface.c:3380
+#: ../src/interface.c:3322
 msgid "Show the line ending character"
 msgstr "Hiện ký tự kết thúc dòng"
 
-#: src/interface.c:3383
+#: ../src/interface.c:3325
 msgid "<b>Display</b>"
 msgstr "<b>Hiển thị</b>"
 
-#: src/interface.c:3404
+#: ../src/interface.c:3346
 msgid "Long line marker:"
 msgstr "Dấu dòng dài:"
 
-#: src/interface.c:3411
+#: ../src/interface.c:3353
 msgid "Long line marker color:"
 msgstr "Màu dấu dòng dài:"
 
-#: src/interface.c:3418
+#: ../src/interface.c:3360
 msgid "Type:"
 msgstr "Kiểu :"
 
-#: src/interface.c:3430
+#: ../src/interface.c:3372
 msgid "Sets the color of the long line marker"
 msgstr "Đặt màu của dấu dòng dài"
 
-#: src/interface.c:3439
+#: ../src/interface.c:3373 ../src/tools.c:652 ../src/vte.c:592
+#: ../src/vte.c:599
+msgid "Color Chooser"
+msgstr "Bộ chọn màu"
+
+#: ../src/interface.c:3381
 msgid ""
 "The long line marker is a thin vertical line in the editor. It helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
 "greater than 0 to specify the column where it should appear."
-msgstr "Dấu dòng dài là một đường mảnh nằm dọc trong trình soạn thảo. Nó giúp đỡ "
+msgstr ""
+"Dấu dòng dài là một đường mảnh nằm dọc trong trình soạn thảo. Nó giúp đỡ "
 "đánh dấu dòng dài, nhắc nhở bạn ngắt dòng đó. Hãy đặt giá trị này thành giá "
 "trị hơn 0 để xác định cột nơi nó nên xuất hiện."
 
-#: src/interface.c:3449
+#: ../src/interface.c:3391
 msgid "Line"
 msgstr "Dòng"
 
-#: src/interface.c:3452
+#: ../src/interface.c:3394
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)."
-msgstr "In ra một đường nằm dọc trong cửa sổ trình soạn thảo tại vị trí con trỏ đã "
+msgstr ""
+"In ra một đường nằm dọc trong cửa sổ trình soạn thảo tại vị trí con trỏ đã "
 "cho (xem dưới)."
 
-#: src/interface.c:3456
+#: ../src/interface.c:3398
 msgid "Background"
 msgstr "Nền"
 
-#: src/interface.c:3459
+#: ../src/interface.c:3401
+#, fuzzy
 msgid ""
-"The background colour of characters after the given cursor position (see "
-"below) changed to the colour set below. (This is recommended if you use "
+"The background color of characters after the given cursor position (see "
+"below) changed to the color set below. (This is recommended if you use "
 "proportional fonts)"
-msgstr "Màu nền của các ký tự nằm sau vị trí con trỏ đã cho (xem dưới) được thay đổi "
+msgstr ""
+"Màu nền của các ký tự nằm sau vị trí con trỏ đã cho (xem dưới) được thay đổi "
 "thành màu được đặt bên dưới. (Khuyến khích nếu bạn sử dụng phông chữ kiểu co "
 "dãn.)"
 
-#: src/interface.c:3463
+#: ../src/interface.c:3405
 msgid "Disabled"
 msgstr "Bị tắt"
 
-#: src/interface.c:3469
+#: ../src/interface.c:3411
 msgid "<b>Long line marker</b>"
 msgstr "<b>Dấu dòng dài</b>"
 
-#: src/interface.c:3492
-msgid "Auto indentation mode:"
-msgstr "Chế độ tự động thụt lề:"
+#: ../src/interface.c:3416
+#, fuzzy
+msgid "Display"
+msgstr "<b>Hiển thị</b>"
 
-#: src/interface.c:3499
-msgid ""
-"Selects the indentation mode. Use None to disable auto indentation "
-"completely. Basic indents new lines with the same indentation as the "
-"previous line. Advanced does the same and indents also curly brackets."
-msgstr "Chọn chế độ thụt lề. Hãy dùng « Không có » để tắt hoàn toàn khả năng tự động thụt lề. « Cơ bản » thì thụt lề dòng mới một cách trùng với dòng trước. « Cấp cao » cũng vậy và thụt lề {dấu ngoặc móc}."
+#: ../src/interface.c:3442
+msgid "Tabs"
+msgstr ""
 
-#: src/interface.c:3505
-msgid "Basic"
-msgstr "Cơ bản"
-
-#: src/interface.c:3506
-msgid "Advanced"
-msgstr "Cấp cao"
-
-#: src/interface.c:3508
-msgid "Line wrapping"
-msgstr "Ngắt dòng"
-
-#: src/interface.c:3513
-msgid "Enable folding"
-msgstr "Bật gấp lại"
-
-#: src/interface.c:3516
-msgid "Whether to enable folding the code"
-msgstr "Có nên bật gấp lại mã hay không"
-
-#: src/interface.c:3519
-msgid "Unfold all children of a fold point"
-msgstr "Mở lại tất cả các điều con của điểm gấp"
-
-#: src/interface.c:3522
-msgid "Unfold all children of a fold point when unfolding it."
-msgstr "Mở lại tất cả các điều con của điểm gấp khi mở lại nó."
-
-#: src/interface.c:3525
-msgid "Use indicators to show compile errors"
-msgstr "Dùng cái chỉ để hiển thị lỗi biên dịch"
-
-#: src/interface.c:3528
-msgid ""
-"Whether to use indicators (a squiggly underline) to highlight the lines "
-"where the compiler found a warning or an error."
-msgstr "Có nên dùng cái chỉ (dấu gạch chân vặn vẹo) để tô sáng những dòng nơi bộ "
-"biên dịch đã tìm cảnh báo hay lỗi."
-
-#: src/interface.c:3531
-msgid "Disable Drag and Drop"
-msgstr "Tắt Kéo và Thả"
-
-#: src/interface.c:3534
-msgid ""
-"Disable drag and drop completely in the editor window so you can't drag and "
-"drop any selections within or outside of the editor window."
-msgstr "Tắt hoàn toàn khả năng Kéo và Thả trong cửa sổ sửa đổi nên không thể kéo và thả vùng chọn nào bên trong hay bên ngoài cửa sổ sửa đổi."
-
-#: src/interface.c:3537
-msgid "Use tabs when inserting whitespace"
-msgstr "Dùng thanh khi chèn khoảng trắng"
-
-#: src/interface.c:3540
+#: ../src/interface.c:3445
 msgid ""
 "Whenever some whitespace is inserted by Geany it will use tabs when enabled "
 "otherwise Geany will use just spaces."
-msgstr "Khi nào khoảng trắng được chèn bởi Geany, nó sẽ dùng hanh khi được bật; không thì Geany chỉ dùng dấu cách."
+msgstr ""
+"Khi nào khoảng trắng được chèn bởi Geany, nó sẽ dùng hanh khi được bật; "
+"không thì Geany chỉ dùng dấu cách."
 
-#: src/interface.c:3543
+#: ../src/interface.c:3449
+#, fuzzy
+msgid "Spaces"
+msgstr "Miền tên"
+
+#: ../src/interface.c:3461
+msgid "Tab Width:"
+msgstr "Rộng tab:"
+
+#: ../src/interface.c:3468
+msgid "Auto indentation mode:"
+msgstr "Chế độ tự động thụt lề:"
+
+#: ../src/interface.c:3480
+msgid "The width in chars, which one tab character will take"
+msgstr "Độ rộng theo ký tự của một ký tự tab"
+
+#: ../src/interface.c:3491
+msgid "Basic"
+msgstr "Cơ bản"
+
+#: ../src/interface.c:3492
+msgid "Current chars"
+msgstr ""
+
+#: ../src/interface.c:3493
+#, fuzzy
+msgid "Match braces"
+msgstr "Tới dấu ngoặc móc khớp"
+
+#: ../src/interface.c:3495
+#, fuzzy
+msgid "<b>Indentation</b>"
+msgstr "<b>Hành động ngữ cảnh</b>"
+
+#: ../src/interface.c:3514
+msgid "Line wrapping"
+msgstr "Ngắt dòng"
+
+#: ../src/interface.c:3519
+msgid "Enable \"smart\" home key"
+msgstr ""
+
+#: ../src/interface.c:3522
+msgid ""
+"When \"smart\" home is enabled, the HOME key will move the caret to the "
+"first non-blank character of the line, unless it is already there, it moves "
+"to the very beginning of the line. When this feature is disabled, the HOME "
+"key always moves the caret to the start of the current line, regardless of "
+"its current position."
+msgstr ""
+
+#: ../src/interface.c:3525
+msgid "Disable Drag and Drop"
+msgstr "Tắt Kéo và Thả"
+
+#: ../src/interface.c:3528
+msgid ""
+"Disable drag and drop completely in the editor window so you can't drag and "
+"drop any selections within or outside of the editor window."
+msgstr ""
+"Tắt hoàn toàn khả năng Kéo và Thả trong cửa sổ sửa đổi nên không thể kéo và "
+"thả vùng chọn nào bên trong hay bên ngoài cửa sổ sửa đổi."
+
+#: ../src/interface.c:3531
+msgid "Enable folding"
+msgstr "Bật gấp lại"
+
+#: ../src/interface.c:3534
+msgid "Whether to enable folding the code"
+msgstr "Có nên bật gấp lại mã hay không"
+
+#: ../src/interface.c:3537
+msgid "Unfold all children of a fold point"
+msgstr "Mở lại tất cả các điều con của điểm gấp"
+
+#: ../src/interface.c:3540
+msgid "Unfold all children of a fold point when unfolding it."
+msgstr "Mở lại tất cả các điều con của điểm gấp khi mở lại nó."
+
+#: ../src/interface.c:3543
+msgid "Use indicators to show compile errors"
+msgstr "Dùng cái chỉ để hiển thị lỗi biên dịch"
+
+#: ../src/interface.c:3546
+msgid ""
+"Whether to use indicators (a squiggly underline) to highlight the lines "
+"where the compiler found a warning or an error."
+msgstr ""
+"Có nên dùng cái chỉ (dấu gạch chân vặn vẹo) để tô sáng những dòng nơi bộ "
+"biên dịch đã tìm cảnh báo hay lỗi."
+
+#: ../src/interface.c:3549
 msgid "<b>Features</b>"
 msgstr "<b>Tính năng</b>"
 
-#: src/interface.c:3562
+#: ../src/interface.c:3568
 msgid "Construct autocompletion"
 msgstr "Tự động gõ xong bộ tạo dựng"
 
-#: src/interface.c:3565
+#: ../src/interface.c:3571
 msgid "Automatic completion of often used constructs like if and for"
 msgstr "Gõ xong tự động các bộ tạo dựng thường dùng như « if » và « for »"
 
-#: src/interface.c:3568
+#: ../src/interface.c:3574
 msgid "XML tag autocompletion"
 msgstr "Tự động gõ xong thẻ XML"
 
-#: src/interface.c:3571
+#: ../src/interface.c:3577
 msgid "Automatic completion of open XML tags (includes HTML tags)"
 msgstr "Tự động gõ xong các thể XML mở (gồm thẻ HTML)"
 
-#: src/interface.c:3574
+#: ../src/interface.c:3580
 msgid "Symbol autocompletion"
 msgstr "Tự động gõ xong ký hiệu"
 
-#: src/interface.c:3577
+#: ../src/interface.c:3583
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
-msgstr "Tự động gõ xong các ký hiệu đã biết trong tập tin được mở (tên hàm, biến toàn cục v.v.)"
+msgstr ""
+"Tự động gõ xong các ký hiệu đã biết trong tập tin được mở (tên hàm, biến "
+"toàn cục v.v.)"
 
-#: src/interface.c:3588
+#: ../src/interface.c:3590
 msgid "Rows of autocompletion list:"
 msgstr "Hàng trong danh sách tự động gõ xong:"
 
-#: src/interface.c:3597
+#: ../src/interface.c:3599
 msgid "Number of rows to display in the autocompletion list."
 msgstr "Tổng sổ hàng cần hiển thị trong danh sách tự động gõ xong."
 
-#: src/interface.c:3600
+#: ../src/interface.c:3602
 msgid "<b>Autocompletion</b>"
 msgstr "<b>Tự động gõ xong</b>"
 
-#: src/interface.c:3605
+#: ../src/interface.c:3607
 msgid "Editor"
 msgstr "Trình soạn thảo"
 
-#: src/interface.c:3623
+#: ../src/interface.c:3640
+msgid "Sets the default encoding for newly created files."
+msgstr "Xác định bộ ký tự mặc định cho tập tin mới tạo."
+
+#: ../src/interface.c:3646
+#, fuzzy
+msgid "Default encoding (new files):"
+msgstr "Bộ ký tự mặc định:"
+
+#: ../src/interface.c:3653
+msgid "Use fixed encoding when opening files"
+msgstr ""
+
+#: ../src/interface.c:3658
+msgid ""
+"This option disables the automatic detection of the file encoding when "
+"opening files and opens the file with the specified encoding (usually not "
+"needed)."
+msgstr ""
+
+#: ../src/interface.c:3661
+#, fuzzy
+msgid "Default encoding (existing files):"
+msgstr "Bộ ký tự mặc định:"
+
+#: ../src/interface.c:3673
+#, fuzzy
+msgid "Sets the default encoding for opening existing files."
+msgstr "Xác định bộ ký tự mặc định cho tập tin mới tạo."
+
+#: ../src/interface.c:3679
+msgid "<b>New files</b>"
+msgstr "<b>Tập tin mới</b>"
+
+#: ../src/interface.c:3698
+msgid "Ensure new line at file end"
+msgstr "Đảm bảo có ký tự dòng mới tại kết thúc tập tin"
+
+#: ../src/interface.c:3702
+msgid "Ensures that at the end of the file is a new line"
+msgstr "Đảm bảo có ký tự dòng mới tại kết thúc tập tin"
+
+#: ../src/interface.c:3705
+msgid "Strip trailing spaces"
+msgstr "Bỏ dấu cách theo sau"
+
+#: ../src/interface.c:3709
+msgid "Removes trailing spaces and tabs and the end of lines"
+msgstr "Gỡ bỏ các dấu cách theo sau, tab, và kết thúc dòng"
+
+#: ../src/interface.c:3712 ../src/keybindings.c:197
+msgid "Replace tabs by space"
+msgstr "Thay thế các tab bằng dấu cách"
+
+#: ../src/interface.c:3719
+msgid "<b>Saving files</b>"
+msgstr "<b>Lưu tập tin</b>"
+
+#: ../src/interface.c:3740
+msgid "Recent files list length:"
+msgstr "Độ dài danh sách tập tin gần đây:"
+
+#: ../src/interface.c:3754
+msgid ""
+"Specifies the number of files which are stored in the Recent files list."
+msgstr ""
+"Xác định số tối đa các tập tin được giữ trong danh sách « Tập tin gần đây»."
+
+#: ../src/interface.c:3763 ../src/symbols.c:498
+msgid "Files"
+msgstr "Tập tin"
+
+#: ../src/interface.c:3785
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr "Hãy nhập bên dưới những đường dẫn công; bỏ trống công cụ không cần."
 
 # Name: don't translate/Tên: đừng dịch
-#: src/interface.c:3635
+#: ../src/interface.c:3797
 msgid "Make:"
 msgstr "Make:"
 
-#: src/interface.c:3642
+#: ../src/interface.c:3804
 msgid "Terminal:"
 msgstr "Thiết bị cuối:"
 
-#: src/interface.c:3649
+#: ../src/interface.c:3811
 msgid "Browser:"
 msgstr "Bộ duyệt:"
 
-#: src/interface.c:3661
+#: ../src/interface.c:3823
 msgid "Path and options for the make tool"
 msgstr "Đường dẫn và tùy chọn cho công cụ « make »"
 
-#: src/interface.c:3668
+#: ../src/interface.c:3830
 msgid ""
 "A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
 "-e argument)"
-msgstr "Mô phỏng thiết bị cuối như xterm, gnome-terminal hay konsole (nên chấp nhận "
+msgstr ""
+"Mô phỏng thiết bị cuối như xterm, gnome-terminal hay konsole (nên chấp nhận "
 "đối số « -e »)"
 
-#: src/interface.c:3675
+#: ../src/interface.c:3837
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Đường dẫn (có thể thêm đối số) đến bộ duyệt ưa thích của bạn"
 
-#: src/interface.c:3707
-msgid "Print command:"
-msgstr "Lệnh in:"
+# Name: don't translate/Tên: đừng dịch
+#: ../src/interface.c:3869
+msgid "Grep:"
+msgstr "Grep:"
 
-#: src/interface.c:3719
+#: ../src/interface.c:3892
+msgid "<b>Tool paths</b>"
+msgstr "<b>Đường dẫn công cụ</b>"
+
+#: ../src/interface.c:3918
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)."
 msgstr "Đường dẫn tới lệnh để in tập tin (dùng bộ giữ chỗ %f cho tên tập tin)."
 
-# Name: don't translate/Tên: đừng dịch
-#: src/interface.c:3731
-msgid "Grep:"
-msgstr "Grep:"
+#: ../src/interface.c:3930
+#, fuzzy
+msgid "Print:"
+msgstr "In"
 
-#: src/interface.c:3754
-msgid "<b>Tool paths</b>"
-msgstr "<b>Đường dẫn công cụ</b>"
+#: ../src/interface.c:3942
+#, fuzzy, c-format
+msgid ""
+"Context action command. The currently selected word can be used with %s. It "
+"can appear anywhere in the given command and will be replaced before "
+"execution."
+msgstr ""
+"Lệnh hành động ngữ cảnh. Từ được chọn hiện thời có thể được dùng cùng với %"
+"s. Nó có thể nằm ở mọi nơi trong lệnh đã cho, cũng sẽ được thay thế trước "
+"khi thực hiện."
 
-#: src/interface.c:3759
+#: ../src/interface.c:3945
+#, fuzzy
+msgid "Context action:"
+msgstr "Hành động ngữ cảnh"
+
+#: ../src/interface.c:3961
+#, fuzzy
+msgid "<b>Commands</b>"
+msgstr ""
+"\n"
+"<b>Lệnh Thẻ</b>\n"
+
+#: ../src/interface.c:3966
 msgid "Tools"
 msgstr "Công cụ"
 
-#: src/interface.c:3777
+#: ../src/interface.c:3984
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
-msgstr "Ở đây hãy xác định thông tin cần dùng trong mẫu. Xem tài liệu hướng dẫn để "
+msgstr ""
+"Ở đây hãy xác định thông tin cần dùng trong mẫu. Xem tài liệu hướng dẫn để "
 "tìm chi tiết."
 
-#: src/interface.c:3795
+#: ../src/interface.c:4002
 msgid "email address of the developer"
 msgstr "địa chỉ thư của nhà phát triển"
 
-#: src/interface.c:3802
+#: ../src/interface.c:4009
 msgid "Initials of the developer name"
 msgstr "Tên tắt của nhà phát triển"
 
-#: src/interface.c:3804
-msgid "Initial Version:"
+#: ../src/interface.c:4011
+#, fuzzy
+msgid "Initial version:"
 msgstr "Phiên bản đầu tiên:"
 
-#: src/interface.c:3816
+#: ../src/interface.c:4023
 msgid "Version number, which a new file initially has"
 msgstr "Số hiệu phiên bản đầu tiên của tập tin mới"
 
-#: src/interface.c:3823
+#: ../src/interface.c:4030
 msgid "Company name"
 msgstr "Tên công ty"
 
-#: src/interface.c:3825
+#: ../src/interface.c:4032
 msgid "Developer:"
 msgstr "Nhà phát triển:"
 
-#: src/interface.c:3832
+#: ../src/interface.c:4039
 msgid "Company:"
 msgstr "Công ty:"
 
-#: src/interface.c:3839
+#: ../src/interface.c:4046
 msgid "Mail address:"
 msgstr "Địa chỉ bưu điện:"
 
-#: src/interface.c:3846
+#: ../src/interface.c:4053
 msgid "Initials:"
 msgstr "Tên tắt:"
 
-#: src/interface.c:3858
+#: ../src/interface.c:4065
 msgid "The name of the developer"
 msgstr "Tên của nhà phát triển"
 
-#: src/interface.c:3860
+#: ../src/interface.c:4067
 msgid ""
 "<i>Notice: For all changes you make here to take effect, you need to restart "
 "Geany.</i>"
-msgstr "<i>Ghi chú : cần phải khởi chạy lại Geany để các thay đổi có tác dụng.</i>"
+msgstr ""
+"<i>Ghi chú : cần phải khởi chạy lại Geany để các thay đổi có tác dụng.</i>"
 
-#: src/interface.c:3867
+#: ../src/interface.c:4074
 msgid "<b>Template data</b>"
 msgstr "<b>Dữ liệu mẫu</b>"
 
-#: src/interface.c:3872
+#: ../src/interface.c:4079
 msgid "Templates"
 msgstr "Biểu mẫu"
 
-#: src/interface.c:3890
+#: ../src/interface.c:4097
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
 "action to edit the string representation of the shortcut directly."
-msgstr "Ở đây bạn có khả năng sửa đổi phím tắt cho hành động khác nhau. Hãy chọn một "
+msgstr ""
+"Ở đây bạn có khả năng sửa đổi phím tắt cho hành động khác nhau. Hãy chọn một "
 "điều rồi bấm cái nút Đổi để nhập phím tắt mới, hoặc nhấn đôi vào hành động "
 "nào để chỉnh sửa trực tiếp chuỗi đại diện phím tắt đó."
 
-#: src/interface.c:3913
-msgid "Change"
+#: ../src/interface.c:4120
+#, fuzzy
+msgid "C_hange"
 msgstr "Đổi"
 
-#: src/interface.c:3917
+#: ../src/interface.c:4124
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Phím tắt</b>"
 
-#: src/interface.c:3922
+#: ../src/interface.c:4129
 msgid "Keybindings"
 msgstr "Tổ hợp phím"
 
-#: src/keybindings.c:122
+#: ../src/keybindings.c:128
 msgid "New"
 msgstr "Mới"
 
-#: src/keybindings.c:124
+#: ../src/keybindings.c:130
 msgid "Open"
 msgstr "Mở"
 
-#: src/keybindings.c:126
+#: ../src/keybindings.c:132
 msgid "Open selected file"
 msgstr "Mở tập tin đã chọn"
 
-#: src/keybindings.c:128
+#: ../src/keybindings.c:134
 msgid "Save"
 msgstr "Lưu"
 
-#: src/keybindings.c:130
+#: ../src/keybindings.c:136
 msgid "Save as"
 msgstr "Lưu dạng"
 
-#: src/keybindings.c:134
+#: ../src/keybindings.c:140
 msgid "Print"
 msgstr "In"
 
-#: src/keybindings.c:136
+#: ../src/keybindings.c:142
 msgid "Close"
 msgstr "Đóng"
 
-#: src/keybindings.c:138
+#: ../src/keybindings.c:144
 msgid "Close all"
 msgstr "Đóng tất cả"
 
-#: src/keybindings.c:140
+#: ../src/keybindings.c:146
 msgid "Reload file"
 msgstr "Tải lại tập tin"
 
-#: src/keybindings.c:142
+#: ../src/keybindings.c:148
 msgid "Project properties"
 msgstr "Tài sản dự án"
 
-#: src/keybindings.c:145
+#: ../src/keybindings.c:151
 msgid "Undo"
 msgstr "Hủy bước"
 
-#: src/keybindings.c:147
+#: ../src/keybindings.c:153
 msgid "Redo"
 msgstr "Bước lại"
 
-#: src/keybindings.c:149
+#: ../src/keybindings.c:155
 msgid "Select All"
 msgstr "Chọn tất cả"
 
-#: src/keybindings.c:151
+#: ../src/keybindings.c:157
 msgid "Insert date"
 msgstr "Chèn ngày"
 
-#: src/keybindings.c:156
+#: ../src/keybindings.c:162
 msgid "Find Next"
 msgstr "Tìm kế"
 
-#: src/keybindings.c:158
+#: ../src/keybindings.c:164
 msgid "Find Previous"
 msgstr "Tìm trước"
 
-#: src/keybindings.c:160
+#: ../src/keybindings.c:166
 msgid "Find Next Selection"
 msgstr "Tìm vùng chọn kế"
 
-#: src/keybindings.c:162
+#: ../src/keybindings.c:168
 msgid "Find Previous Selection"
 msgstr "Tìm vùng chọn trước"
 
-#: src/keybindings.c:164
-#: src/search.c:413
+#: ../src/keybindings.c:170 ../src/search.c:417
 msgid "Replace"
 msgstr "Thay thế"
 
-#: src/keybindings.c:166
-#: src/search.c:559
+#: ../src/keybindings.c:172
 msgid "Find in files"
 msgstr "Tìm trong tập tin"
 
-#: src/keybindings.c:168
+#: ../src/keybindings.c:174
 msgid "Next Message"
 msgstr "Thông điệp kế"
 
-#: src/keybindings.c:175
+#: ../src/keybindings.c:176
+msgid "Go to line"
+msgstr "Tới dòng"
+
+#: ../src/keybindings.c:179
+msgid "Toggle all additional widgets"
+msgstr "Bật/tắt mọi ô điều khiển thêm"
+
+#: ../src/keybindings.c:181
 msgid "Fullscreen"
 msgstr "Toàn màn hình"
 
-#: src/keybindings.c:177
+#: ../src/keybindings.c:183
 msgid "Toggle Messages Window"
 msgstr "Hiện/ẩn cửa sổ thông điệp"
 
-#: src/keybindings.c:179
+#: ../src/keybindings.c:185
 msgid "Toggle Sidebar"
 msgstr "Hiện/ẩn khung lề"
 
-#: src/keybindings.c:181
+#: ../src/keybindings.c:187
 msgid "Zoom In"
 msgstr "Phóng to"
 
-#: src/keybindings.c:183
+#: ../src/keybindings.c:189
 msgid "Zoom Out"
 msgstr "Thu nhỏ"
 
-#: src/keybindings.c:186
-msgid "Show Colour Chooser"
+#: ../src/keybindings.c:192
+#, fuzzy
+msgid "Show Color Chooser"
 msgstr "HIện bộ chọn màu"
 
-#: src/keybindings.c:188
+#: ../src/keybindings.c:194
 msgid "Insert Special HTML Characters"
 msgstr "Chèn ký tự HTML đặc biệt"
 
-#: src/keybindings.c:193
+#: ../src/keybindings.c:199
 msgid "Fold all"
 msgstr "Gấp tất cả"
 
-#: src/keybindings.c:195
+#: ../src/keybindings.c:201
 msgid "Unfold all"
 msgstr "Mở lại tất cả"
 
-#: src/keybindings.c:197
+#: ../src/keybindings.c:203
 msgid "Reload symbol list"
 msgstr "Tải lại danh sách ký hiệu"
 
-#: src/keybindings.c:202
+#: ../src/keybindings.c:208
 msgid "Build"
 msgstr "Xây dựng"
 
-#: src/keybindings.c:204
+#: ../src/keybindings.c:210
 msgid "Make all"
 msgstr "Make all"
 
-#: src/keybindings.c:207
+#: ../src/keybindings.c:213
 msgid "Make custom target"
 msgstr "Make đích riêng"
 
-#: src/keybindings.c:209
+#: ../src/keybindings.c:215
 msgid "Make object"
 msgstr "Make đối tượng"
 
-#: src/keybindings.c:211
+#: ../src/keybindings.c:217
 msgid "Next error"
 msgstr "Lỗi kế"
 
-#: src/keybindings.c:213
+#: ../src/keybindings.c:219
 msgid "Run"
 msgstr "Chạy"
 
-#: src/keybindings.c:215
+#: ../src/keybindings.c:221
 msgid "Run (alternative command)"
 msgstr "Chạy (lệnh xen kẽ)"
 
-#: src/keybindings.c:217
+#: ../src/keybindings.c:223
 msgid "Build options"
 msgstr "Tùy chọn xây dựng"
 
-#: src/keybindings.c:220
+#: ../src/keybindings.c:226
+#, fuzzy
+msgid "Help"
+msgstr "Trợ _giúp"
+
+#: ../src/keybindings.c:229
 msgid "Switch to Editor"
 msgstr "Chuyển sang bộ soạn thảo"
 
-#: src/keybindings.c:222
+#: ../src/keybindings.c:231
 msgid "Switch to Scribble"
 msgstr "Chuyển sang Viết tháu"
 
-#: src/keybindings.c:224
+#: ../src/keybindings.c:233
 msgid "Switch to VTE"
 msgstr "Chuyển sang VTE"
 
-#: src/keybindings.c:226
+#: ../src/keybindings.c:235
 msgid "Switch to Search Bar"
 msgstr "Chuyển sang Thanh tìm"
 
-#: src/keybindings.c:228
+#: ../src/keybindings.c:237
 msgid "Switch to left document"
 msgstr "Chuyển dang tài liệu bên trái"
 
-#: src/keybindings.c:230
+#: ../src/keybindings.c:239
 msgid "Switch to right document"
 msgstr "Chuyển dang tài liệu bên phải"
 
-#: src/keybindings.c:232
+#: ../src/keybindings.c:241
 msgid "Switch to last used document"
 msgstr "Chuyển sang tài liệu dùng cuối"
 
-#: src/keybindings.c:235
+#: ../src/keybindings.c:243
+#, fuzzy
+msgid "Move document left"
+msgstr "toàn tài liệu"
+
+#: ../src/keybindings.c:245
+#, fuzzy
+msgid "Move document right"
+msgstr "toàn tài liệu"
+
+#: ../src/keybindings.c:252
 msgid "Duplicate line or selection"
 msgstr "Nhân đôi dòng hay vùng chọn"
 
-#: src/keybindings.c:237
-msgid "Convert Selection to lower-case"
-msgstr "Chuyển đổi vùng chọn sang chữ thường"
+#: ../src/keybindings.c:254
+#, fuzzy
+msgid "Delete current line(s)"
+msgstr "Đóng tập tin hiện thời"
 
-#: src/keybindings.c:239
-msgid "Convert Selection to upper-case"
-msgstr "Chuyển đổi vùng chọn sang chữ hoa"
+#: ../src/keybindings.c:256
+#, fuzzy
+msgid "Copy current line(s)"
+msgstr "Biên dịch tập tin hiện thời"
 
-#: src/keybindings.c:241
+#: ../src/keybindings.c:258
+#, fuzzy
+msgid "Cut current line(s)"
+msgstr "Đóng tập tin hiện thời"
+
+#: ../src/keybindings.c:260
+#, fuzzy
+msgid "Transpose current line"
+msgstr "In tập tin hiện có"
+
+#: ../src/keybindings.c:262
+#, fuzzy
+msgid "Toggle Case of Selection"
+msgstr "Bật/tắt ghi chú dòng"
+
+#: ../src/keybindings.c:264
 msgid "Toggle line commentation"
 msgstr "Bật/tắt ghi chú dòng"
 
-#: src/keybindings.c:243
+#: ../src/keybindings.c:266
 msgid "Comment line(s)"
 msgstr "Ghi chú dòng"
 
-#: src/keybindings.c:245
+#: ../src/keybindings.c:268
 msgid "Uncomment line(s)"
 msgstr "Hủy ghi chú dòng"
 
-#: src/keybindings.c:247
+#: ../src/keybindings.c:270
 msgid "Increase indent"
 msgstr "Tăng thụt lề"
 
-#: src/keybindings.c:249
+#: ../src/keybindings.c:272
 msgid "Decrease indent"
 msgstr "Giảm thụt lề"
 
-#: src/keybindings.c:251
+#: ../src/keybindings.c:274
+#, fuzzy
+msgid "Increase indent by one space"
+msgstr "Tăng thụt lề"
+
+#: ../src/keybindings.c:276
+#, fuzzy
+msgid "Decrease indent by one space"
+msgstr "Giảm thụt lề"
+
+#: ../src/keybindings.c:278
+msgid "Smart line indent"
+msgstr ""
+
+#: ../src/keybindings.c:280
 msgid "Send to Custom Command 1"
 msgstr "Gửi cho Lệnh riêng 1"
 
-#: src/keybindings.c:253
+#: ../src/keybindings.c:282
 msgid "Send to Custom Command 2"
 msgstr "Gửi cho Lệnh riêng 1"
 
-#: src/keybindings.c:255
+#: ../src/keybindings.c:284
 msgid "Send to Custom Command 3"
 msgstr "Gửi cho Lệnh riêng 3"
 
-#: src/keybindings.c:258
-msgid "Goto matching brace"
+#: ../src/keybindings.c:287
+#, fuzzy
+msgid "Go to matching brace"
 msgstr "Tới dấu ngoặc móc khớp"
 
-#: src/keybindings.c:261
+#: ../src/keybindings.c:290
 msgid "Toggle marker"
 msgstr "Dấu bật/tắt"
 
-#: src/keybindings.c:264
-msgid "Goto next marker"
+#: ../src/keybindings.c:293
+#, fuzzy
+msgid "Go to next marker"
 msgstr "Tới dấu kế"
 
-#: src/keybindings.c:267
-msgid "Goto previous marker"
+#: ../src/keybindings.c:296
+#, fuzzy
+msgid "Go to previous marker"
 msgstr "Về dấu trước"
 
-#: src/keybindings.c:270
+#: ../src/keybindings.c:299
 msgid "Complete word"
 msgstr "Gõ xong từ"
 
-#: src/keybindings.c:272
+#: ../src/keybindings.c:301
 msgid "Show calltip"
 msgstr "Hiện mẹo gọi"
 
-#: src/keybindings.c:274
+#: ../src/keybindings.c:303
 msgid "Show macro list"
 msgstr "Hiện danh sách vĩ lệnh"
 
-#.has special callback
-#: src/keybindings.c:276
+#. has special callback
+#: ../src/keybindings.c:305
 msgid "Complete construct"
 msgstr "Làm xong bộ tạo dựng"
 
-#: src/keybindings.c:278
+#: ../src/keybindings.c:307
 msgid "Suppress construct completion"
 msgstr "Thu hồi khả năng làm xong bộ tạo dựng"
 
-#: src/keybindings.c:281
+#: ../src/keybindings.c:310
 msgid "Select current word"
 msgstr "Chọn từ hiện thời"
 
-#: src/keybindings.c:284
+#: ../src/keybindings.c:312
+#, fuzzy
+msgid "Select current line(s)"
+msgstr "Chọn từ hiện thời"
+
+#: ../src/keybindings.c:314
+#, fuzzy
+msgid "Select current paragraph"
+msgstr "Chọn từ hiện thời"
+
+#: ../src/keybindings.c:316
+#, fuzzy
+msgid "Scroll to current line"
+msgstr "Biên dịch tập tin hiện thời"
+
+#: ../src/keybindings.c:318
+#, fuzzy
+msgid "Scroll up the view by one line"
+msgstr "Biên dịch tập tin hiện thời"
+
+#: ../src/keybindings.c:320
+msgid "Scroll down the view by one line"
+msgstr ""
+
+#: ../src/keybindings.c:323
 msgid "Insert alternative whitespace"
 msgstr "Chèn khoảng trắng xen kẽ"
 
-#: src/keybindings.c:289
+#: ../src/keybindings.c:328
 msgid "Go to tag definition"
 msgstr "Tới lời xác định thẻ"
 
-#: src/keybindings.c:291
+#: ../src/keybindings.c:330
 msgid "Go to tag declaration"
 msgstr "Tới lời tuyên bố thẻ"
 
-#: src/keybindings.c:460
-msgid "<b>File menu</b>\n"
+#. set section name
+#: ../src/keybindings.c:351
+#, fuzzy
+msgid "File menu"
 msgstr "<b>Trình đơn Tập tin</b>\n"
 
-#: src/keybindings.c:464
-msgid ""
+#: ../src/keybindings.c:352
+#, fuzzy
+msgid "Edit menu"
+msgstr ""
 "\n"
-"<b>Edit menu</b>\n"
-msgstr "\n"
 "<b>Trình đơn Sửa</b>\n"
 
-#: src/keybindings.c:468
-msgid ""
+#: ../src/keybindings.c:353
+#, fuzzy
+msgid "Search menu"
+msgstr ""
 "\n"
-"<b>Search menu</b>\n"
-msgstr "\n"
 "<b>Trình đơn Tìm</b>\n"
 
-#: src/keybindings.c:472
-msgid ""
+#: ../src/keybindings.c:354
+#, fuzzy
+msgid "View menu"
+msgstr ""
 "\n"
-"<b>View menu</b>\n"
-msgstr "\n"
 "<b>Trình đơn Xem</b>\n"
 
-#: src/keybindings.c:476
-msgid ""
+#: ../src/keybindings.c:355
+#, fuzzy
+msgid "Document menu"
+msgstr ""
 "\n"
-"<b>Document menu</b>\n"
-msgstr "\n"
 "<b>Trình đơn Tài liệu</b>\n"
 
-#: src/keybindings.c:480
-msgid ""
+#: ../src/keybindings.c:356
+#, fuzzy
+msgid "Build menu"
+msgstr ""
 "\n"
-"<b>Build menu</b>\n"
-msgstr "\n"
 "<b>Trình đơn Xây dựng</b>\n"
 
-#: src/keybindings.c:484
-msgid ""
+#: ../src/keybindings.c:357
+#, fuzzy
+msgid "Tools menu"
+msgstr ""
 "\n"
-"<b>Tools menu</b>\n"
-msgstr "\n"
 "<b>Trình đơn Công cụ</b>\n"
 
-#: src/keybindings.c:488
-msgid ""
-"\n"
-"<b>Focus commands</b>\n"
-msgstr "\n"
-"<b>Lệnh Tập trung</b>\n"
+#: ../src/keybindings.c:358
+msgid "Help menu"
+msgstr ""
 
-#: src/keybindings.c:492
-msgid ""
+#: ../src/keybindings.c:359
+#, fuzzy
+msgid "Focus commands"
+msgstr " lệnh"
+
+#: ../src/keybindings.c:360
+#, fuzzy
+msgid "Editing commands"
+msgstr ""
 "\n"
-"<b>Editing commands</b>\n"
-msgstr "\n"
 "<b>Lệnh Sửa</b>\n"
 
-#: src/keybindings.c:496
-msgid ""
-"\n"
-"<b>Tag commands</b>\n"
-msgstr "\n"
-"<b>Lệnh Thẻ</b>\n"
+#: ../src/keybindings.c:361
+#, fuzzy
+msgid "Tag commands"
+msgstr " lệnh"
 
-#: src/keybindings.c:518
-msgid "Keyboard shortcuts"
-msgstr "Phím tắt"
+#: ../src/keybindings.c:539
+#, fuzzy
+msgid "Keyboard Shortcuts"
+msgstr "_Phím tắt"
 
-#: src/keybindings.c:529
-msgid "The following keyboard shortcuts are defined:"
+#: ../src/keybindings.c:551
+#, fuzzy
+msgid "The following keyboard shortcuts are configurable:"
 msgstr "Những phím tắt theo đây đã được xác định:"
 
-#: src/keyfile.c:152
-#, c-format
-msgid "%s configuration file, edit as you need"
-msgstr "Tập tin cấu hình %s, hiệu chỉnh theo nhu cầu"
-
-#: src/keyfile.c:412
+#: ../src/keyfile.c:599
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Gõ bất cứ đoạn nào vào đây: dùng nó là bảng thông báo/viết tháu"
 
-#: src/keyfile.c:625
+#: ../src/keyfile.c:725
 msgid "Failed to load one or more session files."
 msgstr "Lỗi nạp một hay nhiều tập tin phiên chạy."
 
-#: src/main.c:94
+#: ../src/main.c:113
+#, fuzzy
 msgid ""
-"set initial column number for the first opened file (useful in conjunction "
+"Set initial column number for the first opened file (useful in conjunction "
 "with --line)"
-msgstr "đặt số hiệu cột đầu tiên cho tập tin được mở ban đầu (có ích cùng với « -line »)"
+msgstr ""
+"đặt số hiệu cột đầu tiên cho tập tin được mở ban đầu (có ích cùng với « -"
+"line »)"
 
-#: src/main.c:95
-msgid "use an alternate configuration directory"
+#: ../src/main.c:114
+#, fuzzy
+msgid "Use an alternate configuration directory"
 msgstr "dùng tập tin cấu hình xen kẽ"
 
-#: src/main.c:96
-msgid "runs in debug mode (means being verbose)"
+#: ../src/main.c:115
+#, fuzzy
+msgid "Runs in debug mode (means being verbose)"
 msgstr "chạy bằng chế độ gỡ lỗi (thì xuất chi tiết)"
 
-#: src/main.c:97
-msgid "generate global tags file (see documentation)"
+#: ../src/main.c:116
+msgid "Print internal filetype names"
+msgstr ""
+
+#: ../src/main.c:117
+#, fuzzy
+msgid "Generate global tags file (see documentation)"
 msgstr "tạo ra tập tin thẻ toàn cục (xem tài liệu)"
 
-#: src/main.c:100
-msgid "don't open files in a running instance, force opening a new instance"
+#: ../src/main.c:120
+#, fuzzy
+msgid "Don't open files in a running instance, force opening a new instance"
 msgstr "không mở tập tin trong tức thời đang chạy: buộc mở một tức thời mới"
 
-#: src/main.c:102
-msgid "set initial line number for the first opened file"
+#: ../src/main.c:122
+#, fuzzy
+msgid "Set initial line number for the first opened file"
 msgstr "đặt số hiệu dòng đầu tiên cho tập tin được mở ban đầu"
 
-#: src/main.c:103
-msgid "don't show message window at startup"
+#: ../src/main.c:123
+#, fuzzy
+msgid "Don't show message window at startup"
 msgstr "không hiển thị cửa sổ thông điệp khi khởi chạy"
 
-#: src/main.c:104
-msgid "don't load auto completion data (see documentation)"
+#: ../src/main.c:124
+#, fuzzy
+msgid "Don't load auto completion data (see documentation)"
 msgstr "không tải dữ liệu gõ xong tự động (xem tài liệu)"
 
-#: src/main.c:105
+#: ../src/main.c:125
+msgid "Don't load plugins"
+msgstr ""
+
+#: ../src/main.c:126
 msgid "don't load the previous session's files"
 msgstr "đừng nạp các tập tin của phiên bản trước"
 
-#: src/main.c:107
-msgid "don't load terminal support"
+#: ../src/main.c:128
+#, fuzzy
+msgid "Don't load terminal support"
 msgstr "không tải khả năng hỗ trợ thiết bị cuối"
 
-#: src/main.c:108
-msgid "filename of libvte.so"
+#: ../src/main.c:129
+#, fuzzy
+msgid "Filename of libvte.so"
 msgstr "tên tập tin của « libvte.so »"
 
-#: src/main.c:110
-msgid "show version and exit"
+#: ../src/main.c:131
+#, fuzzy
+msgid "Show version and exit"
 msgstr "hiện phiên bản rồi thoát"
 
-#: src/main.c:432
-msgid " - A fast and lightweight IDE"
-msgstr " — một IDE nhanh và nhẹ nhàng"
+#: ../src/main.c:416
+msgid "[FILES...]"
+msgstr ""
 
-#: src/main.c:442
+#: ../src/main.c:426
 #, c-format
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(xây dựng trên %s dùng GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: src/main.c:506
+#: ../src/main.c:507
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
 "There could be some problems using Geany without a configuration directory.\n"
 "Start Geany anyway?"
-msgstr "Không thể tạo thư mục cấu hình (%s).\n"
+msgstr ""
+"Không thể tạo thư mục cấu hình (%s).\n"
 "Có thể gặp lỗi khi sử dụng Geany mà không có thư mục cấu hình.\n"
 "Vẫn khởi chạy Geany không?"
 
-#: src/main.c:559
-#: src/socket.c:143
+#: ../src/main.c:560 ../src/socket.c:143
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Không tìm thấy tập tin « %s »."
 
-#: src/main.c:688
+#: ../src/main.c:707
 #, c-format
 msgid "This is Geany %s."
 msgstr "Đây là Geany %s."
 
-#: src/main.c:690
+#: ../src/main.c:709
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Không thể tạo thư mục cấu hình (%s)."
 
-#: src/msgwindow.c:112
+#: ../src/msgwindow.c:115
 msgid "Status messages"
 msgstr "Thông điệp trạng thái"
 
-#: src/msgwindow.c:435
+#: ../src/msgwindow.c:439
 msgid "_Hide Message Window"
 msgstr "Ẩn cửa sổ t_hông điệp"
 
-#: src/prefs.c:336
+#: ../src/prefs.c:380
 msgid "Action"
 msgstr "Hành động"
 
-#: src/prefs.c:341
+#: ../src/prefs.c:385
 msgid "Shortcut"
 msgstr "Phím tắt"
 
-#: src/prefs.c:830
-msgid "Grab key"
+#: ../src/prefs.c:937
+#, fuzzy
+msgid "Grab Key"
 msgstr "Bắt phím"
 
-#: src/prefs.c:834
+#: ../src/prefs.c:943
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
 msgstr "Gõ tổ hợp phím bạn muốn dùng cho « %s »"
 
-#: src/prefs.c:958
+#: ../src/prefs.c:1068
 #, c-format
 msgid ""
 "The combination '%s' is already used for \"%s\". Please choose another one."
 msgstr "Tổ hợp « %s » đã được dùng cho « %s ». Hãy chọn điều khác."
 
-#."projects" is part of the default project base path so be careful when translating
-#.please avoid special characters and spaces, look at the source for details or ask Frank
-#: src/project.c:85
+#. "projects" is part of the default project base path so be careful when translating
+#. please avoid special characters and spaces, look at the source for details or ask Frank
+#: ../src/project.c:84
 msgid "projects"
 msgstr "dự án"
 
-#: src/project.c:105
+#: ../src/project.c:104
 msgid "New Project"
 msgstr "Dự án mới"
 
-#: src/project.c:112
+#: ../src/project.c:112
 msgid "C_reate"
 msgstr "Tạ_o"
 
 # Name: don't translate/Tên: đừng dịch
-#: src/project.c:126
-#: src/project.c:336
+#: ../src/project.c:126 ../src/project.c:328
 msgid "Name:"
 msgstr "Tên:"
 
-#: src/project.c:138
-#: src/project.c:348
+#: ../src/project.c:134 ../src/project.c:340
 msgid "Filename:"
 msgstr "Tên tập tin:"
 
-#: src/project.c:158
-#: src/project.c:377
+#: ../src/project.c:150 ../src/project.c:369
 msgid "Base path:"
 msgstr "Đường dẫn cơ bản:"
 
-#: src/project.c:166
+#: ../src/project.c:155
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree."
-msgstr "Thư mục cơ bản của tất cả các tập tin làm dự án đó. Đường dẫn mới hay cây thư mục tồn tại cũng được."
+msgstr ""
+"Thư mục cơ bản của tất cả các tập tin làm dự án đó. Đường dẫn mới hay cây "
+"thư mục tồn tại cũng được."
 
-#: src/project.c:220
-#: src/project.c:809
+#: ../src/project.c:157 ../src/project.c:379
+msgid "Choose Project Base Path"
+msgstr "Chọn đường dẫn cơ bản dự án"
+
+#: ../src/project.c:202 ../src/project.c:769
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Không thể nạp tập tin dự án « %s »."
 
-#: src/project.c:244
-#: src/project.c:252
+#: ../src/project.c:226 ../src/project.c:234
 msgid "Open Project"
 msgstr "Mở dự án"
 
-#: src/project.c:271
+#: ../src/project.c:254
 msgid "Project files"
 msgstr "Tập tin dự án"
 
-#: src/project.c:292
+#: ../src/project.c:283
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Dự án « %s » đã được đóng."
 
-#: src/project.c:323
+#: ../src/project.c:314
 msgid "Project Properties"
 msgstr "Tài sản dự án"
 
-#: src/project.c:360
+#: ../src/project.c:352
 msgid "Description:"
 msgstr "Mô tả:"
 
-#: src/project.c:385
+#: ../src/project.c:377
 msgid "Directory to run Make All from. Leave blank to use the default command."
 msgstr "Thư mục từ đó cần chạy « Make All ». Bỏ rỗng để dùng lệnh mặc định."
 
-#: src/project.c:399
+#: ../src/project.c:385
 msgid "Run command:"
 msgstr "Chạy lệnh:"
 
-#: src/project.c:407
+#: ../src/project.c:393
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
-msgstr "Chuỗi dòng lệnh cần chạy trong thư mục cơ bản của dự án. Cũng có thể phụ thêm tùy chọn vào lệnh này. Bỏ rỗng để dùng lệnh chạy mặc định."
+msgstr ""
+"Chuỗi dòng lệnh cần chạy trong thư mục cơ bản của dự án. Cũng có thể phụ "
+"thêm tùy chọn vào lệnh này. Bỏ rỗng để dùng lệnh chạy mặc định."
 
-#: src/project.c:423
+#: ../src/project.c:409
 msgid "File patterns:"
 msgstr "Mẫu tâp tin:"
 
-#: src/project.c:503
+#: ../src/project.c:489
 msgid "Do you want to close it before proceeding?"
 msgstr "Bạn có muốn đóng nó trước khi tiếp tục không?"
 
-#: src/project.c:504
+#: ../src/project.c:490
 #, c-format
 msgid "The '%s' project is already open. "
 msgstr "Dự án « %s » đã mở. "
 
-#: src/project.c:532
+#: ../src/project.c:518
 msgid "The specified project name is too short."
 msgstr "Bạn đã ghi rõ một tên dự án quá ngắn."
 
-#: src/project.c:538
+#: ../src/project.c:524
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Bạn đã ghi rõ một tên dự án quá dài (tối đa %d ký tự)."
 
-#: src/project.c:546
+#: ../src/project.c:532
 msgid "You have specified an invalid project filename."
 msgstr "Bạn đã ghi rõ một tên dự án không hợp lệ."
 
-#: src/project.c:558
+#: ../src/project.c:544
 msgid "Create the project's base path directory?"
 msgstr "Tạo thư mục cơ bản của dự án không?"
 
-#: src/project.c:559
+#: ../src/project.c:545
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Đường dẫn « %s » không tồn tại."
 
-#: src/project.c:577
+#: ../src/project.c:563
 msgid "Project file could not be written."
 msgstr "Không thể ghi tập tin dự án."
 
-#: src/project.c:627
+#: ../src/project.c:613
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Dự án « %s » đã được tạo."
 
-#: src/project.c:629
+#: ../src/project.c:615
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Dự án « %s » đã được lưu."
 
-#.initialise the dialog
-#: src/project.c:673
-#: src/project.c:684
+#. initialise the dialog
+#: ../src/project.c:659 ../src/project.c:670
 msgid "Choose Project Filename"
 msgstr "Chọn tên tập tin dự án"
 
-#.initialise the dialog
-#: src/project.c:701
-#: src/project.c:712
-msgid "Choose Project Base Path"
-msgstr "Chọn đường dẫn cơ bản dự án"
-
-#.initialise the dialog
-#: src/project.c:729
-#: src/project.c:740
+#. initialise the dialog
+#: ../src/project.c:688 ../src/project.c:699
 msgid "Choose Project Run Command"
 msgstr "Chọn lệnh chạy dự án"
 
-#: src/project.c:802
+#: ../src/project.c:762
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Dự án « %s » đã được mở."
 
-#: src/search.c:139
+#: ../src/search.c:138
 msgid "_Use regular expressions"
 msgstr "Dùng biể_u thức chính quy"
 
-#: src/search.c:143
+#: ../src/search.c:142
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
-msgstr "Dùng biểu thức chính quy kiểu POSIX. Để tìm thông tin chi tiết về cách sử "
+msgstr ""
+"Dùng biểu thức chính quy kiểu POSIX. Để tìm thông tin chi tiết về cách sử "
 "dụng regex, xem tài liệu hướng dẫn."
 
-#: src/search.c:150
-msgid "_Search backwards"
+#: ../src/search.c:149
+#, fuzzy
+msgid "Search _backwards"
 msgstr "Tìm n_gược"
 
-#: src/search.c:164
+#: ../src/search.c:163
 msgid "Use _escape sequences"
 msgstr "Dùng chuỗi t_hoát"
 
-#: src/search.c:169
+#: ../src/search.c:168
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters."
-msgstr "Thay thế dãy « \\\\ », « \\t », « \\n », « \\r » và « \\uXXXX » (ký tự "
+msgstr ""
+"Thay thế dãy « \\\\ », « \\t », « \\n », « \\r » và « \\uXXXX » (ký tự "
 "Unicode) bằng ký tự điều khiển tương ứng. "
 
-#: src/search.c:178
-#: src/search.c:629
-msgid "_Case sensitive"
+#: ../src/search.c:177 ../src/search.c:640
+#, fuzzy
+msgid "C_ase sensitive"
 msgstr "_Phân biệt hoa/thường"
 
-#: src/search.c:183
-#: src/search.c:635
+#: ../src/search.c:182 ../src/search.c:646
 msgid "Match only a _whole word"
 msgstr "Khớp chỉ t_oàn từ"
 
-#: src/search.c:188
+#: ../src/search.c:187
 msgid "Match from s_tart of word"
 msgstr "Khớp _từ đầu từ"
 
-#: src/search.c:295
+#: ../src/search.c:297
 msgid "Find"
 msgstr "Tìm"
 
-#: src/search.c:301
+#: ../src/search.c:304
 msgid "_Previous"
 msgstr "T_rước"
 
-#: src/search.c:307
+#: ../src/search.c:310
 msgid "_Next"
 msgstr "_Kế"
 
-#: src/search.c:311
-#: src/search.c:429
-#: src/search.c:581
-msgid "Search for:"
+#: ../src/search.c:314 ../src/search.c:434 ../src/search.c:591
+#, fuzzy
+msgid "_Search for:"
 msgstr "Tìm kiếm:"
 
-#.Now add the multiple match options
-#: src/search.c:337
+#. Now add the multiple match options
+#: ../src/search.c:341
 msgid "Find All"
 msgstr "Tìm tất cả"
 
 # Name: don't translate/Tên: đừng dịch
-#: src/search.c:340
+#: ../src/search.c:344
 msgid "_Mark"
 msgstr "_Mark"
 
-#: src/search.c:342
+#: ../src/search.c:346
 msgid "Mark all matches in the current document."
 msgstr "Nhãn mọi mục khớp trong tài liệu hiện thời."
 
-#: src/search.c:347
-#: src/search.c:487
+#: ../src/search.c:351 ../src/search.c:494
 msgid "In Sessi_on"
 msgstr "Tr_ong phiên chạy"
 
-#: src/search.c:352
-#: src/search.c:492
+#: ../src/search.c:356 ../src/search.c:499
 msgid "_In Document"
 msgstr "Trong tà_i liệu"
 
-#.close window checkbox
-#: src/search.c:358
-#: src/search.c:498
+#. close window checkbox
+#: ../src/search.c:362 ../src/search.c:505
 msgid "Close _dialog"
 msgstr "Đóng _hộp thoại"
 
-#: src/search.c:363
-#: src/search.c:503
+#: ../src/search.c:367 ../src/search.c:510
 msgid "Disable this option to keep the dialog open."
 msgstr "Tắt tùy chọn này để duy trì hộp thoại mở."
 
-#: src/search.c:425
-msgid "Re_place & Find"
+#: ../src/search.c:430
+#, fuzzy
+msgid "Replace & Fi_nd"
 msgstr "Tha_y thế và Tìm:"
 
-#: src/search.c:432
-msgid "Replace with:"
+#: ../src/search.c:437
+#, fuzzy
+msgid "Re_place with:"
 msgstr "Thay thế bằng:"
 
-#.Now add the multiple replace options
-#: src/search.c:477
+#. Now add the multiple replace options
+#: ../src/search.c:484
 msgid "Replace All"
 msgstr "Thay thế tất cả"
 
-#: src/search.c:480
+#: ../src/search.c:487
 msgid "In Se_lection"
 msgstr "Trong _vùng chọn"
 
-#: src/search.c:482
+#: ../src/search.c:489
 msgid "Replace all matches found in the currently selected text"
 msgstr "Thay thế mọi điều khớp nằm trong đoạn đã chọn hiện thời"
 
-#: src/search.c:568
-msgid "Directory:"
+#: ../src/search.c:566
+#, fuzzy
+msgid "Find in Files"
+msgstr "Tìm trong tập t_in"
+
+#: ../src/search.c:576
+#, fuzzy
+msgid "_Directory:"
 msgstr "Thư mục:"
 
-#: src/search.c:600
+#: ../src/search.c:611
 msgid "_Fixed strings"
 msgstr "Chuỗi đã _sửa chữa"
 
-#: src/search.c:609
+#: ../src/search.c:620
 msgid "_Grep regular expressions"
 msgstr "Biểu thức chính quy kiểu _grep"
 
-#: src/search.c:613
-#: src/search.c:620
+#: ../src/search.c:624 ../src/search.c:631
 msgid "See grep's manual page for more information."
 msgstr "Dùng lệnh « man grep » để tìm thông tin thêm."
 
-#: src/search.c:618
+#: ../src/search.c:629
 msgid "_Extended regular expressions"
 msgstr "Biểu thức chính quy đã _mở rộng"
 
-#: src/search.c:624
+#: ../src/search.c:635
 msgid "_Recurse in subfolders"
 msgstr "Đệ qui t_rong thư mục con"
 
-#: src/search.c:640
+#: ../src/search.c:651
 msgid "_Invert search results"
 msgstr "Đảo kết quả tìm k_iếm"
 
-#: src/search.c:645
+#: ../src/search.c:656
 msgid "Invert the sense of matching, to select non-matching lines."
 msgstr "Đảo điều cần khớp, để chọn các dòng không khớp."
 
-#: src/search.c:661
+#: ../src/search.c:672
 msgid "E_xtra options:"
 msgstr "Tù_y chọn thêm:"
 
-#: src/search.c:673
+#: ../src/search.c:684
 msgid "Other options to pass to Grep"
 msgstr "Tùy chọn khác cần gửi cho Grep"
 
-#: src/search.c:864
-#: src/search.c:1388
-#: src/search.c:1389
-#, c-format
-msgid "No matches found for '%s'."
-msgstr "Không tìm thấy điều khớp với « %s »."
-
-#: src/search.c:866
-#: src/search.c:1395
-#: src/search.c:1396
-#, c-format
-msgid "Found %d matches for '%s'."
+#: ../src/search.c:878 ../src/search.c:1381 ../src/search.c:1382
+#, fuzzy, c-format
+msgid "Found %d matches for \"%s\"."
 msgstr "Tìm %d mục khớp với « %s »."
 
-#: src/search.c:984
+#: ../src/search.c:997
 #, c-format
 msgid "Replaced text in %u files."
 msgstr "Mới thay thế văn bản trong %u tập tin."
 
-#: src/search.c:1085
+#: ../src/search.c:1098
 msgid "Invalid directory for find in files."
 msgstr "Thư mục không hợp lệ để tìm trong tập tin."
 
-#: src/search.c:1103
+#: ../src/search.c:1116
 msgid "No text to find."
 msgstr "Không có đoạn cần tìm."
 
-#: src/search.c:1124
+#: ../src/search.c:1137
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
-msgstr "Không thể thực hiện công cụ grep « %s »: kiểm tra xem thiết lập đường dẫn là "
+msgstr ""
+"Không thể thực hiện công cụ grep « %s »: kiểm tra xem thiết lập đường dẫn là "
 "đúng trong Tùy thích."
 
-#: src/search.c:1189
+#: ../src/search.c:1202
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (trong thư mục: %s)"
 
-#: src/search.c:1250
+#: ../src/search.c:1230
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Không thể mở thư mục (%s)"
 
-#: src/search.c:1295
+#: ../src/search.c:1278
 msgid "Search failed."
 msgstr "Lỗi tìm kiếm."
 
-#: src/search.c:1306
-#: src/search.c:1307
+#: ../src/search.c:1289 ../src/search.c:1290
 #, c-format
 msgid "Search completed with %d matches."
 msgstr "Mới tìm kiếm xong: khớp %d mục."
 
-#: src/support.c:90
-#: src/support.c:114
+#: ../src/search.c:1294
+msgid "No matches found."
+msgstr "Không tìm thấy."
+
+#: ../src/support.c:90 ../src/support.c:114
 #, c-format
 msgid "Couldn't find pixmap file: %s"
 msgstr "Không tìm thấy tập tin sơ đồ điểm ảnh: %s"
 
-#: src/symbols.c:428
-#: src/symbols.c:460
+#: ../src/symbols.c:504 ../src/symbols.c:538 ../src/symbols.c:573
 msgid "Chapter"
 msgstr "Chương"
 
-#: src/symbols.c:430
-#: src/symbols.c:452
+#: ../src/symbols.c:505 ../src/symbols.c:534 ../src/symbols.c:574
 msgid "Section"
 msgstr "Phần"
 
-#: src/symbols.c:432
+#: ../src/symbols.c:506
 msgid "Sect1"
 msgstr "Phần 1"
 
-#: src/symbols.c:434
+#: ../src/symbols.c:507
 msgid "Sect2"
 msgstr "Phần 2"
 
-#: src/symbols.c:436
+#: ../src/symbols.c:508
 msgid "Sect3"
 msgstr "Phần 3"
 
-#: src/symbols.c:438
+#: ../src/symbols.c:509
 msgid "Appendix"
 msgstr "Phụ lục"
 
-#: src/symbols.c:440
-#: src/symbols.c:462
-#: src/symbols.c:566
-#: src/symbols.c:602
+#. &(tv_iters.tag_macro), _("Macros"),
+#. &(tv_iters.tag_variable), _("Variables"),
+#: ../src/symbols.c:510 ../src/symbols.c:539 ../src/symbols.c:633
+#: ../src/symbols.c:672
 msgid "Other"
 msgstr "Khác"
 
-#: src/symbols.c:448
-msgid "Command"
-msgstr "Lệnh"
-
-#: src/symbols.c:450
-msgid "Environment"
-msgstr "Môi trường"
-
-#: src/symbols.c:454
-msgid "Subsection"
-msgstr "Phần phụ"
-
-#: src/symbols.c:456
-msgid "Subsubsection"
-msgstr "Phần phụ con"
-
-#: src/symbols.c:458
-msgid "Label"
-msgstr "Nhãn"
-
-#: src/symbols.c:468
-#: src/symbols.c:552
-msgid "Package"
-msgstr "Gói"
-
-#: src/symbols.c:470
-msgid "Function"
-msgstr "Hàm"
-
-#: src/symbols.c:472
-msgid "My"
-msgstr "Tôi"
-
-#: src/symbols.c:474
-msgid "Local"
-msgstr "Cục bộ"
-
-#: src/symbols.c:476
-msgid "Our"
-msgstr "Chúng ta"
-
-#: src/symbols.c:489
-#: src/symbols.c:510
-#: src/symbols.c:556
-#: src/symbols.c:586
-msgid "Classes"
-msgstr "Hạng"
-
-#: src/symbols.c:491
-msgid "Singletons"
-msgstr "Vật đơn"
-
-#: src/symbols.c:493
-msgid "Mixins"
-msgstr "Mixin"
-
-#: src/symbols.c:495
-#: src/symbols.c:512
-#: src/symbols.c:558
-msgid "Methods"
-msgstr "Phương pháp"
-
-#: src/symbols.c:497
-#: src/symbols.c:560
-#: src/symbols.c:590
-msgid "Members"
-msgstr "Bộ phạn"
-
-#.gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_class), NULL);
-#.gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_class), 0, _("Constants"), -1);
-#.gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_member), NULL);
-#.gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_member), 0, _("Members"), -1);
-#.gtk_tree_store_append(doc_list[idx].tag_store, &(tv_iters.tag_macro), NULL);
-#.gtk_tree_store_set(doc_list[idx].tag_store, &(tv_iters.tag_macro), 0, _("Macros"), -1);
-#.
-#: src/symbols.c:499
-#: src/symbols.c:539
-#: src/symbols.c:600
-msgid "Variables"
-msgstr "Biến"
-
-#: src/symbols.c:514
-#: src/symbols.c:531
-#: src/symbols.c:588
-msgid "Functions"
-msgstr "Hàm"
-
-#: src/symbols.c:554
-msgid "Interfaces"
-msgstr "Giao diện"
-
-#: src/symbols.c:577
+#: ../src/symbols.c:517 ../src/symbols.c:653
 msgid "Module"
 msgstr "Mô-đun"
 
-#: src/symbols.c:581
+#: ../src/symbols.c:518
+#, fuzzy
+msgid "Types"
+msgstr "Kiểu :"
+
+#: ../src/symbols.c:519
+#, fuzzy
+msgid "Type constructors"
+msgstr "Làm xong bộ tạo dựng"
+
+#: ../src/symbols.c:520 ../src/symbols.c:547 ../src/symbols.c:561
+#: ../src/symbols.c:599 ../src/symbols.c:612 ../src/symbols.c:660
+msgid "Functions"
+msgstr "Hàm"
+
+#: ../src/symbols.c:525
+#, fuzzy
+msgid "Sections"
+msgstr "Phần"
+
+#: ../src/symbols.c:526
+msgid "Keys"
+msgstr ""
+
+#: ../src/symbols.c:532
+msgid "Command"
+msgstr "Lệnh"
+
+#: ../src/symbols.c:533
+msgid "Environment"
+msgstr "Môi trường"
+
+#: ../src/symbols.c:535 ../src/symbols.c:575
+msgid "Subsection"
+msgstr "Phần phụ"
+
+#: ../src/symbols.c:536 ../src/symbols.c:576
+msgid "Subsubsection"
+msgstr "Phần phụ con"
+
+#: ../src/symbols.c:537
+msgid "Label"
+msgstr "Nhãn"
+
+#: ../src/symbols.c:546 ../src/symbols.c:626
+msgid "Package"
+msgstr "Gói"
+
+#: ../src/symbols.c:548
+msgid "My"
+msgstr "Tôi"
+
+#: ../src/symbols.c:549
+msgid "Local"
+msgstr "Cục bộ"
+
+#: ../src/symbols.c:550
+msgid "Our"
+msgstr "Chúng ta"
+
+#: ../src/symbols.c:560 ../src/symbols.c:583 ../src/symbols.c:597
+#: ../src/symbols.c:628 ../src/symbols.c:641 ../src/symbols.c:659
+msgid "Classes"
+msgstr "Hạng"
+
+#: ../src/symbols.c:562
+msgid "Constants"
+msgstr ""
+
+#. &(tv_iters.tag_class), _("Constants"),
+#. &(tv_iters.tag_member), _("Members"),
+#. &(tv_iters.tag_macro), _("Macros"),
+#: ../src/symbols.c:563 ../src/symbols.c:588 ../src/symbols.c:600
+#: ../src/symbols.c:616 ../src/symbols.c:643 ../src/symbols.c:671
+msgid "Variables"
+msgstr "Biến"
+
+#: ../src/symbols.c:584
+msgid "Singletons"
+msgstr "Vật đơn"
+
+#: ../src/symbols.c:585
+msgid "Mixins"
+msgstr "Mixin"
+
+#: ../src/symbols.c:586 ../src/symbols.c:598 ../src/symbols.c:629
+#: ../src/symbols.c:642
+msgid "Methods"
+msgstr "Phương pháp"
+
+#: ../src/symbols.c:587 ../src/symbols.c:630 ../src/symbols.c:661
+msgid "Members"
+msgstr "Bộ phạn"
+
+#: ../src/symbols.c:627 ../src/symbols.c:640
+msgid "Interfaces"
+msgstr "Giao diện"
+
+#: ../src/symbols.c:656
 msgid "Namespaces"
 msgstr "Miền tên"
 
-#: src/symbols.c:592
+#: ../src/symbols.c:662
 msgid "Structs / Typedefs"
 msgstr "Tạo dựng/Xác định kiểu"
 
-#: src/symbols.c:597
+#: ../src/symbols.c:668
 msgid "Macros"
 msgstr "Vĩ lệnh"
 
-#: src/symbols.c:755
+#: ../src/symbols.c:865
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Gặp phần mở rộng kiểu tập tin lạ cho « %s ».\n"
 
-#: src/symbols.c:770
-#, c-format
+#: ../src/symbols.c:880
 msgid "Failed to create tags file.\n"
 msgstr "Lỗi tạo tập tin thẻ.\n"
 
-#: src/symbols.c:776
+#: ../src/symbols.c:886
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
 "\n"
-msgstr "Cách sử dụng: %s -g <tập tin thẻ> <danh sách tập tin>\n"
+msgstr ""
+"Cách sử dụng: %s -g <tập tin thẻ> <danh sách tập tin>\n"
 "\n"
 
-#: src/symbols.c:777
+#: ../src/symbols.c:887
 #, c-format
 msgid ""
 "Example:\n"
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
-msgstr "Thí dụ :\n"
+msgstr ""
+"Thí dụ :\n"
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: src/symbols.c:791
+#: ../src/symbols.c:901
 msgid "Load Tags"
 msgstr "Nạp thẻ"
 
-#: src/symbols.c:797
+#: ../src/symbols.c:908
 msgid "Geany tag files (*.tags)"
 msgstr "Tập tin thẻ Geany (*.tags)"
 
-#: src/symbols.c:816
+#: ../src/symbols.c:927
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Mới nạp tập tin thẻ %s « %s »."
 
-#: src/symbols.c:818
+#: ../src/symbols.c:929
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Không thể nạp tập tin thẻ « %s »."
 
-#: src/tools.c:81
-msgid "Special characters"
-msgstr "Ký tự đặc biệt"
-
-#: src/tools.c:83
-msgid "_Insert"
-msgstr "C_hèn"
-
-#: src/tools.c:91
-msgid ""
-"Choose a special character from the list below and double click on it or use "
-"the button to insert it at the current cursor position."
-msgstr "Hãy chọn một ký tự đặc biệt trong danh sách bên dưới, rồi nhấn đôi vào nó, "
-"hoặc bấm cái nút để chèn nó vào vị trí con trỏ hiện thời."
-
-#: src/tools.c:104
-msgid "Character"
-msgstr "Ký tự"
-
-#: src/tools.c:110
-msgid "HTML (name)"
-msgstr "HTML (tên)"
-
-#: src/tools.c:147
-msgid "HTML characters"
-msgstr "Ký tự HTML"
-
-#: src/tools.c:153
-msgid "ISO 8859-1 characters"
-msgstr "Ký tự ISO 8859-1"
-
-#: src/tools.c:251
-msgid "Greek characters"
-msgstr "Ký tự Hy-lạp"
-
-#: src/tools.c:306
-msgid "Mathematical characters"
-msgstr "Ký tự toán học"
-
-#: src/tools.c:347
-msgid "Technical characters"
-msgstr "Ký tự kỹ thuật"
-
-#: src/tools.c:355
-msgid "Arrow characters"
-msgstr "Ký tự mũi tên"
-
-#: src/tools.c:368
-msgid "Punctuation characters"
-msgstr "Ký tự dấu chấm câu"
-
-#: src/tools.c:384
-msgid "Miscellaneous characters"
-msgstr "Ký tự lặt vặt"
-
-#: src/tools.c:608
+#: ../src/tools.c:166
 #, c-format
 msgid "Passing data and executing custom command: %s"
 msgstr "Đang gửi dữ liệu qua và thực hiện lệnh riêng: %s"
 
-#: src/tools.c:660
-#: src/tools.c:888
+#: ../src/tools.c:218 ../src/tools.c:447
 msgid "Set Custom Commands"
 msgstr "Đặt lệnh riêng"
 
-#: src/tools.c:666
+#: ../src/tools.c:225
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
-msgstr "Bạn có khả năng đặt vùng chọn hiện thời thành bất cứ lệnh nào trong những lệnh này: dữ liệu xuất lệnh sẽ thay thế vùng chọn hiện thời."
+msgstr ""
+"Bạn có khả năng đặt vùng chọn hiện thời thành bất cứ lệnh nào trong những "
+"lệnh này: dữ liệu xuất lệnh sẽ thay thế vùng chọn hiện thời."
 
-#: src/tools.c:857
-#: src/tools.c:861
+#: ../src/tools.c:416 ../src/tools.c:420
 msgid "No custom commands defined."
 msgstr "Chưa xác định lệnh riêng nào."
 
-#: src/treeviews.c:126
+#: ../src/tools.c:522
+msgid "Word Count"
+msgstr "Tổng từ"
+
+#: ../src/tools.c:532
+msgid "selection"
+msgstr "vùng chọn"
+
+#: ../src/tools.c:538
+msgid "whole document"
+msgstr "toàn tài liệu"
+
+#: ../src/tools.c:547
+msgid "Range:"
+msgstr "Phạm vị:"
+
+#: ../src/tools.c:559
+msgid "Lines:"
+msgstr "Dòng:"
+
+#: ../src/tools.c:573
+msgid "Words:"
+msgstr "Từ :"
+
+#: ../src/tools.c:587
+msgid "Characters:"
+msgstr "Ký tự :"
+
+#: ../src/treeviews.c:146
 msgid "No tags found"
 msgstr "Không tìm thấy thẻ"
 
-#: src/treeviews.c:280
-#: src/treeviews.c:332
+#: ../src/treeviews.c:302
+msgid "Sort by name"
+msgstr ""
+
+#: ../src/treeviews.c:309
+msgid "Sort by appearance"
+msgstr ""
+
+#: ../src/treeviews.c:320 ../src/treeviews.c:372
 msgid "Hide"
 msgstr "Ẩn"
 
-#: src/treeviews.c:288
-#: src/treeviews.c:340
+#: ../src/treeviews.c:328 ../src/treeviews.c:380
 msgid "Hide sidebar"
 msgstr "Ẩn khung lề"
 
-#: src/treeviews.c:320
+#: ../src/treeviews.c:360
 msgid "Reload"
 msgstr "Tải lại"
 
-#.Status bar statistics: col = column, sel = selection, RO = read-only,
-#.* OVR = overwrite/overtype, INS = insert, MOD = modified
-#: src/ui_utils.c:124
+#. Status bar statistics: col = column, sel = selection, RO = read-only,
+#. * OVR = overwrite/overtype, INS = insert, MOD = modified
+#: ../src/ui_utils.c:144
 #, c-format
 msgid ""
 "line: %d\t col: %d\t sel: %d\t %s      %s      mode: %s      encoding: %s %"
 "s      filetype: %s      scope: %s"
-msgstr "dòng: %d\t cột: %d\t chọn: %d\t %s      %s      chế độ : %s      mã hoá: %s %"
+msgstr ""
+"dòng: %d\t cột: %d\t chọn: %d\t %s      %s      chế độ : %s      mã hoá: %s %"
 "s      kiểu tệp: %s      phạm vị: %s"
 
-#: src/ui_utils.c:128
+#: ../src/ui_utils.c:148
 msgid "RO "
 msgstr "CĐ "
 
-#: src/ui_utils.c:129
+#: ../src/ui_utils.c:149
 msgid "OVR"
 msgstr "ĐÈ"
 
-#: src/ui_utils.c:129
+#: ../src/ui_utils.c:149
 msgid "INS"
 msgstr "CHÈN"
 
-#: src/ui_utils.c:130
+#: ../src/ui_utils.c:150
 msgid "MOD"
 msgstr "SỬA"
 
-#: src/ui_utils.c:210
+#: ../src/ui_utils.c:240
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Phông chữ đã được cập nhật (%s)."
 
-#: src/ui_utils.c:398
+#: ../src/ui_utils.c:428
 msgid "C Standard Library"
 msgstr "Thư Viện Chuẩn C"
 
 # Name: don't translate/Tên: đừng dịch
-#: src/ui_utils.c:399
+#: ../src/ui_utils.c:429
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: src/ui_utils.c:400
+#: ../src/ui_utils.c:430
 msgid "C++ (C Standard Library)"
 msgstr "C++ (Thư Viện Chuẩn C)"
 
-#: src/ui_utils.c:401
+#: ../src/ui_utils.c:431
 msgid "C++ Standard Library"
 msgstr "Thư Viện Chuẩn C++"
 
 # Name: don't translate/Tên: đừng dịch
-#: src/ui_utils.c:402
+#: ../src/ui_utils.c:432
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: src/ui_utils.c:468
+#: ../src/ui_utils.c:498
 msgid "Set Custom Date Format"
 msgstr "Đặt định dạng ngày riêng"
 
-#: src/ui_utils.c:1183
+#: ../src/ui_utils.c:1307
 msgid "Select Folder"
 msgstr "Chọn thư mục"
 
-#: src/ui_utils.c:1183
+#: ../src/ui_utils.c:1307
 msgid "Select File"
 msgstr "Chọn tập tin"
 
-#: src/utils.c:354
+#: ../src/utils.c:341
 msgid "Do you want to reload it?"
 msgstr "Bạn có muốn tải lại nó không?"
 
-#: src/utils.c:355
+#: ../src/utils.c:342
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
 "the current buffer."
-msgstr "Tập tin « %s » nằm trên đĩa là mới hơn\n"
+msgstr ""
+"Tập tin « %s » nằm trên đĩa là mới hơn\n"
 "bộ đệm hiện thời."
 
-#: src/vte.c:194
-#: src/vte.c:526
+#: ../src/vte.c:205 ../src/vte.c:549
 msgid "Terminal"
 msgstr "Thiết bị cuối"
 
-#: src/vte.c:394
+#: ../src/vte.c:417
 msgid "_Input Methods"
 msgstr "K_iểu nhập"
 
-#: src/vte.c:522
+#: ../src/vte.c:545
 msgid "Terminal plugin"
 msgstr "Bổ sung thiết bị cuối"
 
-#: src/vte.c:529
+#: ../src/vte.c:552
 msgid ""
 "These settings for the virtual terminal emulator widget (VTE) only apply if "
 "the VTE library could be loaded."
-msgstr "Những thiết lập này cho ô điều khiển mô phỏng thiết bị cuối ảo (VTE) chỉ "
+msgstr ""
+"Những thiết lập này cho ô điều khiển mô phỏng thiết bị cuối ảo (VTE) chỉ "
 "hoạt động nếu thư viện VTE nạp được."
 
-#: src/vte.c:540
+#: ../src/vte.c:563
 msgid "Terminal font:"
 msgstr "Phông dòng lệnh:"
 
-#: src/vte.c:550
+#: ../src/vte.c:573
 msgid "Sets the font for the terminal widget."
 msgstr "Đặt phông chữ cho ô điều khiển thiết bị cuối."
 
-#: src/vte.c:552
+#: ../src/vte.c:575
 msgid "Foreground color:"
 msgstr "Màu cảnh gần:"
 
-#: src/vte.c:558
+#: ../src/vte.c:581
 msgid "Background color:"
 msgstr "Màu nền:"
 
-#: src/vte.c:568
+#: ../src/vte.c:591
 msgid "Sets the foreground color of the text in the terminal widget."
 msgstr "Đặt màu cảnh gần của đoạn chữ trong ô điều khiển thiết bị cuối."
 
-#: src/vte.c:575
+#: ../src/vte.c:598
 msgid "Sets the background color of the text in the terminal widget."
 msgstr "Đặt màu nền của đoạn chữ trong ô điều khiển thiết bị cuối."
 
-#: src/vte.c:578
+#: ../src/vte.c:601
 msgid "Scrollback lines:"
 msgstr "Dòng cuộn ngược:"
 
-#: src/vte.c:589
+#: ../src/vte.c:612
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget."
-msgstr "Xác định lịch sử theo dòng, mà bạn có thể cuộn ngược trong ô điều khiển "
+msgstr ""
+"Xác định lịch sử theo dòng, mà bạn có thể cuộn ngược trong ô điều khiển "
 "thiết bị cuối."
 
-#: src/vte.c:593
+#: ../src/vte.c:616
 msgid "Terminal emulation:"
 msgstr "Mô phỏng thiết bị cuối:"
 
-#: src/vte.c:603
+#: ../src/vte.c:626
 msgid ""
 "Controls how the terminal emulator should behave. Do not change this value "
 "unless you know exactly what you are doing."
-msgstr "Điều khiển ứng xử của mô phỏng thiết bị cuối. Đừng thay đổi giá trị nếu bạn không hiểu được trường hợp này."
+msgstr ""
+"Điều khiển ứng xử của mô phỏng thiết bị cuối. Đừng thay đổi giá trị nếu bạn "
+"không hiểu được trường hợp này."
 
-#: src/vte.c:605
+#: ../src/vte.c:628
 msgid "Shell:"
 msgstr "Trình bao :"
 
-#: src/vte.c:612
+#: ../src/vte.c:635
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation."
-msgstr "Đặt đường dẫn tới trình bao mà nên được khởi chạy bên trong mô phỏng thiết "
+msgstr ""
+"Đặt đường dẫn tới trình bao mà nên được khởi chạy bên trong mô phỏng thiết "
 "bị cuối."
 
-#: src/vte.c:629
+#: ../src/vte.c:652
 msgid "Scroll on keystroke"
 msgstr "Cuộn khi ấn phím"
 
-#: src/vte.c:630
+#: ../src/vte.c:653
 msgid "Whether to scroll to the bottom if a key was pressed."
 msgstr "Có nên cuộn đến đáy khi được ấn phím hay không."
 
-#: src/vte.c:634
+#: ../src/vte.c:657
 msgid "Scroll on output"
 msgstr "Cuộn kết xuất"
 
-#: src/vte.c:635
+#: ../src/vte.c:658
 msgid "Whether to scroll to the bottom when output is generated."
 msgstr "Có nên cuộn đến đáy khi kết xuất được tạo ra hay không."
 
-#: src/vte.c:639
+#: ../src/vte.c:662
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Tắt phím tắt trình đơn (mặc định F10)"
 
-#: src/vte.c:640
+#: ../src/vte.c:663
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
 "within the VTE."
-msgstr "Tùy chọn này tắt tổ hợp phím bật lên thanh trình đơn (mặc định là phím chức "
+msgstr ""
+"Tùy chọn này tắt tổ hợp phím bật lên thanh trình đơn (mặc định là phím chức "
 "năng F10). Việc tắt nó có ích nếu, chẳng hạn, bạn dùng Midnight Commander "
 "bên trong VTE."
 
-#: src/vte.c:644
+#: ../src/vte.c:667
 msgid "Follow the path of the current file"
 msgstr "Theo đường dẫn đến tập tin hiện thời"
 
-#: src/vte.c:645
+#: ../src/vte.c:668
 msgid "Whether to execute \"cd $path\" when you switch between opened files."
-msgstr "Có nên thực hiện lệnh « cd $path » khi bạn chuyển đổi giữa các tập tin được "
+msgstr ""
+"Có nên thực hiện lệnh « cd $path » khi bạn chuyển đổi giữa các tập tin được "
 "mở hay không."
 
-#: src/vte.c:649
+#: ../src/vte.c:672
 msgid "Execute programs in VTE"
 msgstr "Thực hiện chương trình trong VTE"
 
-#: src/vte.c:650
+#: ../src/vte.c:673
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped."
-msgstr "Chạy chương trình trong VTE thay vào việc mở cửa sổ mô phỏng thiết bị cuối. "
+msgstr ""
+"Chạy chương trình trong VTE thay vào việc mở cửa sổ mô phỏng thiết bị cuối. "
 "Ghi chú rằng chương trình được thực hiện trong VTE thì không dừng chạy được."
 
-#: src/win32.c:102
+#: ../src/win32.c:105
 msgid "Executables"
 msgstr "Tập tin có thể chạy"
 
-#: src/win32.c:108
+#: ../src/win32.c:111
 msgid "Geany project files"
 msgstr "Tập tin dự án Geany"
 
-#: src/win32.c:500
+#: ../src/win32.c:503
 msgid "Error"
 msgstr "Lỗi"
 
-#: src/win32.c:506
-#: src/win32.c:547
+#: ../src/win32.c:509 ../src/win32.c:553
 msgid "Question"
 msgstr "Câu hỏi"
 
-#: src/win32.c:512
+#: ../src/win32.c:515
 msgid "Warning"
 msgstr "Cảnh báo"
 
-#: src/win32.c:518
+#: ../src/win32.c:521
 msgid "Information"
 msgstr "Thông tin"
+
+#: ../plugins/classbuilder.c:49
+#, fuzzy
+msgid "Class Builder"
+msgstr "Hạng"
+
+#: ../plugins/classbuilder.c:49
+msgid "Creates source files for new class types."
+msgstr ""
+
+#: ../plugins/classbuilder.c:361
+#, fuzzy
+msgid "Create Class"
+msgstr "Tạ_o"
+
+#: ../plugins/classbuilder.c:372
+#, fuzzy
+msgid "Class"
+msgstr "Hạng"
+
+#: ../plugins/classbuilder.c:381
+#, fuzzy
+msgid "Class name:"
+msgstr "Hạng"
+
+#: ../plugins/classbuilder.c:392
+#, fuzzy
+msgid "Header file:"
+msgstr "Tải lại tập tin"
+
+#: ../plugins/classbuilder.c:401
+#, fuzzy
+msgid "Source file:"
+msgstr "Tập tin mã nguồn C"
+
+#: ../plugins/classbuilder.c:407
+#, fuzzy
+msgid "Inheritance"
+msgstr "Giao diện"
+
+#: ../plugins/classbuilder.c:416
+#, fuzzy
+msgid "Base class:"
+msgstr "Đường dẫn cơ bản:"
+
+#: ../plugins/classbuilder.c:429
+#, fuzzy
+msgid "Base header:"
+msgstr "Đường dẫn cơ bản:"
+
+#: ../plugins/classbuilder.c:437
+msgid "Global"
+msgstr ""
+
+#: ../plugins/classbuilder.c:446
+#, fuzzy
+msgid "Base GType:"
+msgstr "Đường dẫn cơ bản:"
+
+#: ../plugins/classbuilder.c:454
+#, fuzzy
+msgid "Options"
+msgstr "Hàm"
+
+#: ../plugins/classbuilder.c:463
+#, fuzzy
+msgid "Create constructor"
+msgstr "Làm xong bộ tạo dựng"
+
+#: ../plugins/classbuilder.c:467
+#, fuzzy
+msgid "Create destructor"
+msgstr "Làm xong bộ tạo dựng"
+
+#: ../plugins/classbuilder.c:477
+msgid "GTK+ constructor type"
+msgstr ""
+
+#: ../plugins/classbuilder.c:784
+#, fuzzy
+msgid "Create Cla_ss"
+msgstr "Tạ_o"
+
+#: ../plugins/classbuilder.c:793
+#, fuzzy
+msgid "C++ class"
+msgstr "Hạng"
+
+#: ../plugins/classbuilder.c:796
+msgid "GTK+ class"
+msgstr ""
+
+#: ../plugins/htmlchars.c:45
+#, fuzzy
+msgid "HTML Characters"
+msgstr "Ký tự HTML"
+
+#: ../plugins/htmlchars.c:45
+msgid "Inserts HTML character entities like '&amp;'."
+msgstr ""
+
+#: ../plugins/htmlchars.c:78
+#, fuzzy
+msgid "Special Characters"
+msgstr "Ký tự đặc biệt"
+
+#: ../plugins/htmlchars.c:80
+msgid "_Insert"
+msgstr "C_hèn"
+
+#: ../plugins/htmlchars.c:89
+msgid ""
+"Choose a special character from the list below and double click on it or use "
+"the button to insert it at the current cursor position."
+msgstr ""
+"Hãy chọn một ký tự đặc biệt trong danh sách bên dưới, rồi nhấn đôi vào nó, "
+"hoặc bấm cái nút để chèn nó vào vị trí con trỏ hiện thời."
+
+#: ../plugins/htmlchars.c:102
+msgid "Character"
+msgstr "Ký tự"
+
+#: ../plugins/htmlchars.c:108
+msgid "HTML (name)"
+msgstr "HTML (tên)"
+
+#: ../plugins/htmlchars.c:148
+msgid "HTML characters"
+msgstr "Ký tự HTML"
+
+#: ../plugins/htmlchars.c:154
+msgid "ISO 8859-1 characters"
+msgstr "Ký tự ISO 8859-1"
+
+#: ../plugins/htmlchars.c:252
+msgid "Greek characters"
+msgstr "Ký tự Hy-lạp"
+
+#: ../plugins/htmlchars.c:307
+msgid "Mathematical characters"
+msgstr "Ký tự toán học"
+
+#: ../plugins/htmlchars.c:348
+msgid "Technical characters"
+msgstr "Ký tự kỹ thuật"
+
+#: ../plugins/htmlchars.c:356
+msgid "Arrow characters"
+msgstr "Ký tự mũi tên"
+
+#: ../plugins/htmlchars.c:369
+msgid "Punctuation characters"
+msgstr "Ký tự dấu chấm câu"
+
+#: ../plugins/htmlchars.c:385
+msgid "Miscellaneous characters"
+msgstr "Ký tự lặt vặt"
+
+#. Add an item to the Tools menu
+#: ../plugins/htmlchars.c:516
+msgid "_Insert Special HTML Characters"
+msgstr "Chèn ký tự HTML đặc b_iệt"
+
+#: ../plugins/export.c:41
+msgid "Export"
+msgstr ""
+
+#: ../plugins/export.c:41
+#, fuzzy
+msgid "Exports the current file into different formats."
+msgstr "Biên dịch tập tin hiện thời sang tập tin DVI"
+
+#: ../plugins/export.c:174
+#, fuzzy
+msgid "Export File"
+msgstr "Mở tập tin"
+
+#: ../plugins/export.c:191
+msgid "_Use current zoom level"
+msgstr ""
+
+#: ../plugins/export.c:193
+msgid ""
+"Renders the font size of the document together with the current zoom level."
+msgstr ""
+
+#: ../plugins/export.c:269
+#, c-format
+msgid "Document successfully exported as '%s'."
+msgstr ""
+
+#: ../plugins/export.c:271
+#, fuzzy, c-format
+msgid "File '%s' could not be written (%s)."
+msgstr "Không thể ghi tập tin dự án."
+
+#: ../plugins/export.c:705
+msgid "_Export"
+msgstr ""
+
+#. HTML
+#: ../plugins/export.c:712
+msgid "As HTML"
+msgstr ""
+
+#. LaTeX
+#: ../plugins/export.c:719
+msgid "As LaTeX"
+msgstr ""
+
+#~ msgid "Convert Selection to _Lower-case"
+#~ msgstr "Chuyển đổi _vùng chọn sang chữ thường"
+
+#~ msgid "Convert Selection to _Upper-case"
+#~ msgstr "Ch_uyển đổi vùng chọn sang chữ hoa"
+
+#~ msgid "Use tabs when inserting whitespace"
+#~ msgstr "Dùng thanh khi chèn khoảng trắng"
+
+#~ msgid "Convert Selection to lower-case"
+#~ msgstr "Chuyển đổi vùng chọn sang chữ thường"
+
+#~ msgid "Convert Selection to upper-case"
+#~ msgstr "Chuyển đổi vùng chọn sang chữ hoa"
+
+#~ msgid "Advanced"
+#~ msgstr "Cấp cao"
+
+#, fuzzy
+#~ msgid "Focus menu"
+#~ msgstr "_Tài liệu"
+
+#, fuzzy
+#~ msgid "Editing menu"
+#~ msgstr ""
+#~ "\n"
+#~ "<b>Trình đơn Sửa</b>\n"
+
+#~ msgid "<b>Behaviour</b>"
+#~ msgstr "<b>Ứng xử</b>"
+
+#~ msgid "<b>Tab placement</b>"
+#~ msgstr "<b>Vị trí thẻ</b>"
+
+#~ msgid "<b>Misc.</b>"
+#~ msgstr "<b>Lặt vặt</b>"
+
+#~ msgid "language"
+#~ msgstr "ngôn ngữ"
+
+#~ msgid "XML source file"
+#~ msgstr "Tập tin mã nguồn XML"
+
+#~ msgid "Insert BSD license Notice"
+#~ msgstr "Chèn thông báo giấy phép BSD"
+
+#~ msgid "Context Action command:"
+#~ msgstr "Lệnh hành động ngữ cảnh:"
+
+#~ msgid ""
+#~ "Selects the indentation mode. Use None to disable auto indentation "
+#~ "completely. Basic indents new lines with the same indentation as the "
+#~ "previous line. Advanced does the same and indents also curly brackets."
+#~ msgstr ""
+#~ "Chọn chế độ thụt lề. Hãy dùng « Không có » để tắt hoàn toàn khả năng tự "
+#~ "động thụt lề. « Cơ bản » thì thụt lề dòng mới một cách trùng với dòng "
+#~ "trước. « Cấp cao » cũng vậy và thụt lề {dấu ngoặc móc}."
+
+#~ msgid "Print command:"
+#~ msgstr "Lệnh in:"
+
+#~ msgid ""
+#~ "\n"
+#~ "<b>Focus commands</b>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "<b>Lệnh Tập trung</b>\n"
+
+#~ msgid "Keyboard shortcuts"
+#~ msgstr "Phím tắt"
+
+#~ msgid "%s configuration file, edit as you need"
+#~ msgstr "Tập tin cấu hình %s, hiệu chỉnh theo nhu cầu"
+
+#~ msgid " - A fast and lightweight IDE"
+#~ msgstr " — một IDE nhanh và nhẹ nhàng"
+
+#~ msgid "Function"
+#~ msgstr "Hàm"
 
 #~ msgid "Add the same indentation as the previous line after pressing enter"
 #~ msgstr "Việc ấn phím Enter thụt lề theo độ rộng của thụt lề dòng trước"
@@ -3791,7 +4238,8 @@ msgstr "Thông tin"
 #~ msgid ""
 #~ "There is already an open project \"%s\". Do you want to close it before "
 #~ "proceed?"
-#~ msgstr "Đã có dự án mở « %s ». Bạn có muốn đóng nó trước khi tiếp tục không?"
+#~ msgstr ""
+#~ "Đã có dự án mở « %s ». Bạn có muốn đóng nó trước khi tiếp tục không?"
 
 #~ msgid "(Unsaved)"
 #~ msgstr "(Chưa lưu)"
@@ -3799,7 +4247,8 @@ msgstr "Thông tin"
 #~ msgid ""
 #~ "You have opened too many files. There is a limit of %d concurrent open "
 #~ "files."
-#~ msgstr "Bạn đã mở quá nhiều tập tin. Số tối đa tập tin được mở đồng thời là %d."
+#~ msgstr ""
+#~ "Bạn đã mở quá nhiều tập tin. Số tối đa tập tin được mở đồng thời là %d."
 
 #~ msgid "Du_plicate Line"
 #~ msgstr "_Nhân đôi dòng"
@@ -3831,7 +4280,8 @@ msgstr "Thông tin"
 #~ "Lines:\t\t%d\n"
 #~ "Words:\t\t%d\n"
 #~ "Characters:\t%d\n"
-#~ msgstr "Phạm vị:\t\t%s\n"
+#~ msgstr ""
+#~ "Phạm vị:\t\t%s\n"
 #~ "\n"
 #~ "Dòng:\t\t%d\n"
 #~ "Từ :\t\t%d\n"
@@ -3847,16 +4297,19 @@ msgstr "Thông tin"
 
 #~ msgid ""
 #~ "Enter here the (La)TeX command (for DVI preview) and some useful options."
-#~ msgstr "Nhập vào đây lệnh (La)TeX (để xem thử DVI) và một số tùy chọn có ích."
+#~ msgstr ""
+#~ "Nhập vào đây lệnh (La)TeX (để xem thử DVI) và một số tùy chọn có ích."
 
 #~ msgid ""
 #~ "Enter here the (La)TeX command (for PDF preview) and some useful options."
-#~ msgstr "Nhập vào đây lệnh (La)TeX (để xem thử PDF) và một số tùy chọn có ích."
+#~ msgstr ""
+#~ "Nhập vào đây lệnh (La)TeX (để xem thử PDF) và một số tùy chọn có ích."
 
 #~ msgid ""
 #~ "The document has been searched completely but the match \"%s\" was not "
 #~ "found. Wrap search around the document?"
-#~ msgstr "Mới tìm kiếm qua toàn bộ tài liệu, nhưng chưa khớp « %s ». Cuộn việc tìm "
+#~ msgstr ""
+#~ "Mới tìm kiếm qua toàn bộ tài liệu, nhưng chưa khớp « %s ». Cuộn việc tìm "
 #~ "kiếm vòng tài liệu không?"
 
 #~ msgid "Begin"
@@ -3868,7 +4321,8 @@ msgstr "Thông tin"
 #~ msgid ""
 #~ "Replaces the search text in all opened files. This option is only useful"
 #~ "(and used) if you click on \"Replace All\"."
-#~ msgstr "Thay thế đoạn tìm kiếm trong mọi tập tin được mở. Tùy chọn này có ích (và "
+#~ msgstr ""
+#~ "Thay thế đoạn tìm kiếm trong mọi tập tin được mở. Tùy chọn này có ích (và "
 #~ "được dùng) chỉ nếu bạn nhấn vào nút « Thay thế tất cả »."
 
 #~ msgid "_Don't close this dialog"
@@ -3886,7 +4340,8 @@ msgstr "Thông tin"
 #~ msgid ""
 #~ "Sets the includes and library paths for the compiler and the program "
 #~ "arguments for execution\n"
-#~ msgstr "Đặt các đồ bao gồm và đường dẫn thư viện cho bộ biên dịch, và các đối số "
+#~ msgstr ""
+#~ "Đặt các đồ bao gồm và đường dẫn thư viện cho bộ biên dịch, và các đối số "
 #~ "chương trình để thực hiện\n"
 
 #~ msgid "Enter here arguments to your compiler."

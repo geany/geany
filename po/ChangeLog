@@ -1,3 +1,14 @@
+2007-09-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * *.po: Update of all po-file because of string freeze for 
+   Geany 0.12 
+
+
+2007-09-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * *.po: Versionstring updated to Geany 0.12
+
+
 2007-08-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * de.po: Update of German translation
