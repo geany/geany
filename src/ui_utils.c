@@ -290,8 +290,8 @@ void ui_update_popup_copy_items(gint idx)
 	if (idx == -1) enable = FALSE;
 	else enable = sci_can_copy(doc_list[idx].sci);
 
-	for(i = 0; i < (sizeof(ui_widgets.popup_items)/sizeof(GtkWidget*)); i++)
-		gtk_widget_set_sensitive(ui_widgets.popup_items[i], enable);
+	for(i = 0; i < (sizeof(ui_widgets.popup_copy_items)/sizeof(GtkWidget*)); i++)
+		gtk_widget_set_sensitive(ui_widgets.popup_copy_items[i], enable);
 }
 
 

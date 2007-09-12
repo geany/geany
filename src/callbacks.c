@@ -888,32 +888,42 @@ toolbar_popup_menu                     (GtkWidget *widget,
 }
 
 
-void
-on_toggle_case1_activate             (GtkMenuItem     *menuitem,
-                                        gpointer         user_data)
+void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	gint idx = document_get_cur_idx();
+	ScintillaObject *sci = doc_list[idx].sci;
 	gchar *text;
+	gboolean keep_sel = TRUE;
 
 	if (! DOC_IDX_VALID(idx))
 		return;
 
-	if (sci_can_copy(doc_list[idx].sci))
+	if (! sci_can_copy(sci))
+	{
+		keybindings_cmd(GEANY_KEYS_EDIT_SELECTWORD);
+		keep_sel = FALSE;
+	}
+
+	if (sci_can_copy(sci))
 	{
 		gchar *result;
+		gint text_len = sci_get_selected_text_length(sci);
 
-		text = g_malloc(sci_get_selected_text_length(doc_list[idx].sci) + 1);
-		sci_get_selected_text(doc_list[idx].sci, text);
+		text = g_malloc(text_len + 1);
+		sci_get_selected_text(sci, text);
 
 		if (utils_str_has_upper(text))
 			result = g_utf8_strdown(text, -1);
 		else
 			result = g_utf8_strup(text, -1);
 
-		sci_replace_sel(doc_list[idx].sci, result);
+		sci_replace_sel(sci, result);
 
 		g_free(result);
 		g_free(text);
+
+		if (keep_sel)
+			sci_set_selection_start(sci, sci_get_current_position(sci) - text_len + 1);
 	}
 }
 

@@ -11,6 +11,10 @@
    doc/geany.html:
    Allow autocompletion on a line with trailing whitespace.
    Add auto_complete_whilst_editing hidden preference.
+ * src/ui_utils.h, src/callbacks.c, src/main.c, src/ui_utils.c:
+   Make Toggle Case use the current word if there's no selection.
+   Make Toggle Case keep an existing selection.
+   Rename ui_widgets.popup_items to popup_copy_items.
 
 
 2007-09-11  Enrico Tröger  <enrico.troeger@uvena.de>
