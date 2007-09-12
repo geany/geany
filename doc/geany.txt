@@ -2255,13 +2255,19 @@ Hidden preferences
 ==================
 
 There are some uncommon preferences that are not shown in the
-Preferences dialog. These can be set by using a second instance of
-Geany to edit ``~/.geany/geany.conf``. After saving the file, restart
-the first instance, and the new settings will be used. Otherwise,
-the configuration file changes are overwritten when Geany is closed.
+Preferences dialog. These can be set in two ways:
 
-The table below refers to the key names in the configuration file, under the
-``[geany]`` group.
+1. By quitting all instances of Geany and using another editor to edit
+   ``~/.geany/geany.conf``.
+2. By using Geany to edit ``~/.geany/geany.conf``, then after saving
+   the file, start a second instance of Geany, and the new settings
+   will be used. Make sure to then quit the first instance.
+
+Otherwise, the configuration file changes are overwritten when Geany
+is closed.
+
+The table below refers to the key names in the configuration file,
+under the ``[geany]`` group.
 
 ==============================  ============================================    ==================
 Option                          Description                                     Default
