@@ -7,6 +7,10 @@
    Apply patch from John Gabriele for an overview in the Tags section
    (thanks).
    (Format paragraph with fmt -w72).
+ * src/keyfile.c, src/editor.c, src/editor.h, doc/geany.txt,
+   doc/geany.html:
+   Allow autocompletion on a line with trailing whitespace.
+   Add auto_complete_whilst_editing hidden preference.
 
 
 2007-09-11  Enrico Tröger  <enrico.troeger@uvena.de>

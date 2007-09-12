@@ -196,6 +196,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_smart_home_key", editor_prefs.smart_home_key);
 	g_key_file_set_boolean(config, PACKAGE, "use_gtk_word_boundaries", editor_prefs.use_gtk_word_boundaries);
+	g_key_file_set_boolean(config, PACKAGE, "auto_complete_whilst_editing", editor_prefs.auto_complete_whilst_editing);
 
 	// files
 	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[prefs.default_new_encoding].charset);
@@ -448,6 +449,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
 	editor_prefs.smart_home_key = utils_get_setting_boolean(config, PACKAGE, "pref_editor_smart_home_key", TRUE);
 	editor_prefs.use_gtk_word_boundaries = utils_get_setting_boolean(config, PACKAGE, "use_gtk_word_boundaries", TRUE);
+	editor_prefs.auto_complete_whilst_editing = utils_get_setting_boolean(config, PACKAGE, "auto_complete_whilst_editing", FALSE);
 
 	// Files
 	// use current locale encoding as default for new files (should be UTF-8 in most cases)

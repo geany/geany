@@ -73,6 +73,7 @@ typedef struct EditorPrefs
 	GHashTable	*auto_completions;
 	gboolean	brace_match_ltgt;	// whether to highlight < and > chars (hidden pref)
 	gboolean	use_gtk_word_boundaries;	// hidden pref
+	gboolean	auto_complete_whilst_editing;	// hidden pref
 } EditorPrefs;
 
 extern EditorPrefs editor_prefs;

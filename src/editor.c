@@ -1205,6 +1205,17 @@ static gboolean ac_complete_constructs(gint idx, gint pos, const gchar *word)
 static gboolean at_eol(ScintillaObject *sci, gint pos)
 {
 	gint line = sci_get_line_from_position(sci, pos);
+	gchar c;
+
+	// skip any trailing spaces
+	while (TRUE)
+	{
+		c = sci_get_char_at(sci, pos);
+		if (c == ' ' || c == '\t')
+			pos++;
+		else
+			break;
+	}
 
 	return (pos == sci_get_line_end_position(sci, line));
 }
@@ -1221,7 +1232,7 @@ gboolean editor_auto_complete(gint idx, gint pos)
 
 	sci = doc_list[idx].sci;
 	// return if we are editing an existing line (chars on right of cursor)
-	if (! at_eol(sci, pos))
+	if (! editor_prefs.auto_complete_whilst_editing && ! at_eol(sci, pos))
 		return FALSE;
 
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);

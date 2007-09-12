@@ -2263,19 +2263,21 @@ the configuration file changes are overwritten when Geany is closed.
 The table below refers to the key names in the configuration file, under the
 ``[geany]`` group.
 
-==============================  ============================================  ==================
-Option                          Description                                   Default
-==============================  ============================================  ==================
-brace_match_ltgt                Whether to highlight <, > angle brackets.     false
-show_editor_scrollbars          Whether to display scrollbars when the        true
+==============================  ============================================    ==================
+Option                          Description                                     Default
+==============================  ============================================    ==================
+brace_match_ltgt                Whether to highlight <, > angle brackets.       false
+show_editor_scrollbars          Whether to display scrollbars when the          true
                                 editor window is bigger than the display.
-use_tab_to_indent               Whether pressing tab when a line is selected  true
+use_tab_to_indent               Whether pressing tab when a line is selected    true
                                 will indent the line.
-use_gtk_word_boundaries         Whether to look for the end of a word when    true
+use_gtk_word_boundaries         Whether to look for the end of a word when      true
                                 using word-boundary related Scintilla
                                 commands (see `Scintilla keyboard
                                 commands`_).
-==============================  ============================================  ==================
+auto_complete_whilst_editing    Whether to allow autocompletion when editing    false
+                                an existing line.
+==============================  ============================================    ==================
 
 
 Compile-time options
