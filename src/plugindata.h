@@ -172,10 +172,10 @@ typedef struct DocumentFuncs
 {
 	gint	(*new_file) (const gchar *filename, struct filetype *ft, const gchar *text);
 	gint	(*get_cur_idx) ();
-	struct document*	(*get_current) ();
+	struct document* (*get_current) ();
 	gboolean (*save_file)(gint idx, gboolean force);
-	gboolean (*open_file)(const gchar *locale_filename, gboolean readonly,
-		struct filetype *ft, const gchar *forced_enc);
+	gint	(*open_file)(const gchar *locale_filename, gboolean readonly,
+			struct filetype *ft, const gchar *forced_enc);
 	void	(*open_files)(const GSList *filenames, gboolean readonly, struct filetype *ft,
 			const gchar *forced_enc);
 	gboolean (*remove)(guint page_num);
@@ -187,8 +187,8 @@ struct _ScintillaObject;
 
 typedef struct ScintillaFuncs
 {
-	long int	(*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
-		long unsigned int wParam, long int lParam);
+	long int (*send_message) (struct _ScintillaObject* sci, unsigned int iMessage,
+			long unsigned int wParam, long int lParam);
 	void	(*send_command) (struct _ScintillaObject* sci, gint cmd);
 
 	void	(*start_undo_action) (struct _ScintillaObject* sci);
@@ -215,7 +215,7 @@ typedef struct ScintillaFuncs
 	gchar*	(*get_line) (struct _ScintillaObject* sci, gint line_num);
 	gint	(*get_line_length) (struct _ScintillaObject* sci, gint line);
 	gint	(*get_line_count) (struct _ScintillaObject* sci);
-	gboolean	(*get_line_is_visible) (struct _ScintillaObject* sci, gint line);
+	gboolean (*get_line_is_visible) (struct _ScintillaObject* sci, gint line);
 	void	(*ensure_line_is_visible) (struct _ScintillaObject* sci, gint line);
 	void	(*scroll_caret) (struct _ScintillaObject* sci);
 	gint	(*find_bracematch) (struct _ScintillaObject* sci, gint pos);

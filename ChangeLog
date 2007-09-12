@@ -1,3 +1,10 @@
+2007-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/plugindata.h:
+   Fix return type for document->open_files().
+   (Tidy up field name indentation).
+
+
 2007-09-11  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/callbacks.c: HTML manual is called Manual.html on Windows, so
