@@ -1,8 +1,12 @@
 2007-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h:
-   Fix return type for document->open_files().
+   Fix return type for document->open_file().
    (Tidy up field name indentation).
+ * doc/geany.txt, doc/geany.html:
+   Apply patch from John Gabriele for an overview in the Tags section
+   (thanks).
+   (Format paragraph with fmt -w72).
 
 
 2007-09-11  Enrico Tröger  <enrico.troeger@uvena.de>

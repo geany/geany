@@ -491,16 +491,18 @@ navigate around multiple files.
 Code Navigation History
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-To ease navigation in source files and especially between different files, Geany
-let you jump between different navigation points. Currently, this works when using
-the `Go to tag declaration`_, `Go to tag definition`_ commands and when clicking
-on symbol list items.
+To ease navigation in source files and especially between
+different files, Geany lets you jump between different navigation
+points. Currently, this works when using the `Go to tag declaration`_,
+`Go to tag definition`_ commands and when clicking on symbol list
+items.
 
-When using one of these actions, Geany remembers your current position and jumps
-to the new one. If you decide to go back to your previous position in the file,
-just use "Navigate back a location". To get back to the new position again, just
-use "Navigate forward a location". This makes it easier to navigate in e.g.
-foreign code and between different files.
+When using one of these actions, Geany remembers your current position
+and jumps to the new one. If you decide to go back to your previous
+position in the file, just use "Navigate back a location". To
+get back to the new position again, just use "Navigate forward a
+location". This makes it easier to navigate in e.g.  foreign code
+and between different files.
 
 
 Send text through definable commands
@@ -878,14 +880,24 @@ matching is not supported by the Find and Replace dialogs.
 Tags
 ----
 
+Geany has built-in functionality for generating tag information (aka
+"workspace tags") for supported filetypes when you open a file.  You
+can also have Geany automatically load external tag files (aka "global
+tags files") from its ``~/.geany/tags`` directory upon startup, or
+manually using *File --> Load Tags*.
+
+Geany uses its own tag file format, similar to what ``ctags`` uses
+(but is incompatible with ctags). You use Geany to generate global
+tags files, as described below.
+
 
 Workspace tags
 ^^^^^^^^^^^^^^
 
 Tags for each document are parsed whenever a file is loaded or
 saved. These are shown in the Symbol list in the Sidebar. These tags
-are also used for autocompletion and calltips in other documents open
-in the current session.
+are also used for autocompletion and calltips for all documents open
+in the current session that have the same filetype.
 
 The *Go to Tag* commands can be used with all workspace tags. See
 `Go to tag definition`_.
@@ -908,7 +920,7 @@ You can load a custom global tags file in two ways:
 You can either download these files or generate your own. They have
 the format::
 
-    libraryname.lang_ext.tags
+    name.lang_ext.tags
 
 *lang_ext* is one of the extensions set for the filetype associated
 with the tags. See the section called `Filetype extensions`_ for
