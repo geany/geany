@@ -525,8 +525,8 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 
 	// convert the Unicode chars to wide chars
 	/// TODO test if LANG == C then possibly skip conversion => g_win32_getlocale()
-	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0]));
-	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
+	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, G_N_ELEMENTS(w_msg));
+	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
 	// display the message box
 	if (parent == NULL)
@@ -549,8 +549,8 @@ gint win32_message_dialog_unsaved(const gchar *msg)
 	gint ret;
 
 	// convert the Unicode chars to wide chars
-	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, sizeof(w_msg)/sizeof(w_msg[0]));
-	MultiByteToWideChar(CP_UTF8, 0, _("Question"), -1, w_title, sizeof(w_title)/sizeof(w_title[0]));
+	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, G_N_ELEMENTS(w_msg));
+	MultiByteToWideChar(CP_UTF8, 0, _("Question"), -1, w_title, G_N_ELEMENTS(w_title));
 
 	ret = MessageBoxW(GDK_WINDOW_HWND(app->window->window), w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
 	switch(ret)

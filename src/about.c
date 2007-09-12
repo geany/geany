@@ -60,12 +60,12 @@ const gchar *translators[][2] = {
 	{ "zh_CN", "Dormouse Young &lt;dormouse.young@gmail.com&gt;" },
 	{ "zh_TW", "KoViCH &lt;kovich.ian@gmail.com&gt;" }
 };
-static const gint translators_len = sizeof(translators) / sizeof(translators[0]);
+static const gint translators_len = G_N_ELEMENTS(translators);
 
 const gchar *prev_translators[][2] = {
-	{ "pl_PL", "Jacek Wolszczak &lt;shutdownrunnter@02.pl&gt;" },
+	{ "pl_PL", "Jacek Wolszczak &lt;shutdownrunner@o2.pl&gt;" },
 };
-static const gint prev_translators_len = sizeof(prev_translators) / sizeof(prev_translators[0]);
+static const gint prev_translators_len = G_N_ELEMENTS(prev_translators);
 
 
 static void header_eventbox_style_set(GtkWidget *widget);

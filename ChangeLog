@@ -17,6 +17,9 @@
    Rename ui_widgets.popup_items to popup_copy_items.
  * doc/geany.txt, doc/geany.html:
    Edit how to manually edit geany.conf hidden prefs.
+ * src/win32.c, src/about.c, src/ui_utils.c:
+   Use G_N_ELEMENTS(arr) instead of sizeof(arr) / sizeof(arr[0]).
+   Correct prev_translators email address.
 
 
 2007-09-11  Enrico Tröger  <enrico.troeger@uvena.de>

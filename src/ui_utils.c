@@ -290,7 +290,7 @@ void ui_update_popup_copy_items(gint idx)
 	if (idx == -1) enable = FALSE;
 	else enable = sci_can_copy(doc_list[idx].sci);
 
-	for(i = 0; i < (sizeof(ui_widgets.popup_copy_items)/sizeof(GtkWidget*)); i++)
+	for (i = 0; i < G_N_ELEMENTS(ui_widgets.popup_copy_items); i++)
 		gtk_widget_set_sensitive(ui_widgets.popup_copy_items[i], enable);
 }
 
@@ -322,7 +322,7 @@ void ui_update_menu_copy_items(gint idx)
 		enable = gtk_text_buffer_get_selection_bounds(buffer, NULL, NULL);
 	}
 
-	for(i = 0; i < (sizeof(ui_widgets.menu_copy_items)/sizeof(GtkWidget*)); i++)
+	for (i = 0; i < G_N_ELEMENTS(ui_widgets.menu_copy_items); i++)
 		gtk_widget_set_sensitive(ui_widgets.menu_copy_items[i], enable);
 }
 
