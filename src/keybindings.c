@@ -315,9 +315,9 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_SCROLLTOLINE] = fill(cb_func_edit,
 		GDK_l, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_scrolltoline", _("Scroll to current line"));
 	keys[GEANY_KEYS_EDIT_SCROLLLINEUP] = fill(cb_func_edit,
-		GDK_Up, GDK_CONTROL_MASK, "edit_scrolllineup", _("Scroll up the view by one line"));
+		GDK_Up, GDK_MOD1_MASK, "edit_scrolllineup", _("Scroll up the view by one line"));
 	keys[GEANY_KEYS_EDIT_SCROLLLINEDOWN] = fill(cb_func_edit,
-		GDK_Down, GDK_CONTROL_MASK, "edit_scrolllinedown", _("Scroll down the view by one line"));
+		GDK_Down, GDK_MOD1_MASK, "edit_scrolllinedown", _("Scroll down the view by one line"));
 
 	keys[GEANY_KEYS_EDIT_INSERTALTWHITESPACE] = fill(cb_func_edit,
 		0, 0, "edit_insertwhitespace", _("Insert alternative whitespace"));

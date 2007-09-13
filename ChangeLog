@@ -3,6 +3,10 @@
  * src/callbacks.c:
    Speed up Save All for C-like files by avoiding unnecessary
    recolourising after user typenames have changed.
+ * src/keybindings.c, src/document.c, doc/geany.txt, doc/geany.html:
+   Change scroll by line default keybindings to Alt-{Up, Down}.
+   Change Previous/Next Paragraph Scintilla commands to Ctrl-{Up, Down}.
+   Adding Shift extends selection by paragraph.
 
 
 2007-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
