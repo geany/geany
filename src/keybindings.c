@@ -65,14 +65,7 @@ static void cb_func_menu_help(guint key_id);
 static void cb_func_menu_preferences(guint key_id);
 static void cb_func_menu_insert_date(guint key_id);
 
-static void cb_func_menu_findnext(guint key_id);
-static void cb_func_menu_findprevious(guint key_id);
-static void cb_func_menu_findnextsel(guint key_id);
-static void cb_func_menu_findprevsel(guint key_id);
-static void cb_func_menu_replace(guint key_id);
-static void cb_func_menu_findinfiles(guint key_id);
-static void cb_func_menu_nextmessage(guint key_id);
-static void cb_func_menu_gotoline(guint key_id);
+static void cb_func_menu_search(guint key_id);
 
 static void cb_func_menu_toggle_all(guint key_id);
 static void cb_func_menu_fullscreen(guint key_id);
@@ -158,21 +151,24 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences,
 		0, 0, "menu_preferences", _("Preferences"));
 
-	keys[GEANY_KEYS_MENU_FINDNEXT] = fill(cb_func_menu_findnext,
+	// search
+	keys[GEANY_KEYS_MENU_FIND] = fill(cb_func_menu_search,
+		GDK_f, GDK_CONTROL_MASK, "menu_find", _("Find"));
+	keys[GEANY_KEYS_MENU_FINDNEXT] = fill(cb_func_menu_search,
 		GDK_g, GDK_CONTROL_MASK, "menu_findnext", _("Find Next"));
-	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_findprevious,
+	keys[GEANY_KEYS_MENU_FINDPREVIOUS] = fill(cb_func_menu_search,
 		GDK_g, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findprevious", _("Find Previous"));
-	keys[GEANY_KEYS_MENU_FINDNEXTSEL] = fill(cb_func_menu_findnextsel,
+	keys[GEANY_KEYS_MENU_FINDNEXTSEL] = fill(cb_func_menu_search,
 		0, 0, "menu_findnextsel", _("Find Next Selection"));
-	keys[GEANY_KEYS_MENU_FINDPREVSEL] = fill(cb_func_menu_findprevsel,
+	keys[GEANY_KEYS_MENU_FINDPREVSEL] = fill(cb_func_menu_search,
 		0, 0, "menu_findprevsel", _("Find Previous Selection"));
-	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_replace,
+	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_search,
 		GDK_h, GDK_CONTROL_MASK, "menu_replace", _("Replace"));
-	keys[GEANY_KEYS_MENU_FINDINFILES] = fill(cb_func_menu_findinfiles, GDK_f,
+	keys[GEANY_KEYS_MENU_FINDINFILES] = fill(cb_func_menu_search, GDK_f,
 		GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findinfiles", _("Find in files"));
-	keys[GEANY_KEYS_MENU_NEXTMESSAGE] = fill(cb_func_menu_nextmessage,
+	keys[GEANY_KEYS_MENU_NEXTMESSAGE] = fill(cb_func_menu_search,
 		0, 0, "menu_nextmessage", _("Next Message"));
-	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_gotoline,
+	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_search,
 		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
 
 	keys[GEANY_KEYS_MENU_TOGGLEALL] = fill(cb_func_menu_toggle_all,
@@ -350,7 +346,7 @@ void keybindings_init(void)
 	// set section name
 	keys[GEANY_KEYS_MENU_NEW]->section = _("File menu");
 	keys[GEANY_KEYS_MENU_UNDO]->section = _("Edit menu");
-	keys[GEANY_KEYS_MENU_FINDNEXT]->section = _("Search menu");
+	keys[GEANY_KEYS_MENU_FIND]->section = _("Search menu");
 	keys[GEANY_KEYS_MENU_TOGGLEALL]->section = _("View menu");
 	keys[GEANY_KEYS_MENU_REPLACETABS]->section = _("Document menu");
 	keys[GEANY_KEYS_BUILD_COMPILE]->section = _("Build menu");
@@ -399,6 +395,8 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTDATE, insert_date_custom1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PREFERENCES, preferences1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_HELP, help1);
+
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FIND, find1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDNEXT, find_next1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDPREVIOUS, find_previous1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDNEXTSEL, find_nextsel1);
@@ -407,6 +405,7 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FINDINFILES, find_in_files1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_NEXTMESSAGE, next_message1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_GOTOLINE, go_to_line1);
+
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_TOGGLEALL, menu_toggle_all_additional_widgets1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FULLSCREEN, menu_fullscreen1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_MESSAGEWINDOW, menu_show_messages_window1);
@@ -800,44 +799,29 @@ static void cb_func_menu_help(G_GNUC_UNUSED guint key_id)
 	on_help1_activate(NULL, NULL);
 }
 
-static void cb_func_menu_findnext(G_GNUC_UNUSED guint key_id)
+static void cb_func_menu_search(guint key_id)
 {
-	on_find_next1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_findprevious(G_GNUC_UNUSED guint key_id)
-{
-	on_find_previous1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_findprevsel(G_GNUC_UNUSED guint key_id)
-{
-	on_find_prevsel1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_findnextsel(G_GNUC_UNUSED guint key_id)
-{
-	on_find_nextsel1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_replace(G_GNUC_UNUSED guint key_id)
-{
-	on_replace1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_findinfiles(G_GNUC_UNUSED guint key_id)
-{
-	on_find_in_files1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_nextmessage(guint key_id)
-{
-	on_next_message1_activate(NULL, NULL);
-}
-
-static void cb_func_menu_gotoline(G_GNUC_UNUSED guint key_id)
-{
-	on_go_to_line1_activate(NULL, NULL);
+	switch (key_id)
+	{
+		case GEANY_KEYS_MENU_FIND:
+			on_find1_activate(NULL, NULL); break;
+		case GEANY_KEYS_MENU_FINDNEXT:
+			on_find_next1_activate(NULL, NULL); break;
+		case GEANY_KEYS_MENU_FINDPREVIOUS:
+			on_find_previous1_activate(NULL, NULL); break;
+		case GEANY_KEYS_MENU_FINDPREVSEL:
+			on_find_prevsel1_activate(NULL, NULL); break;
+		case GEANY_KEYS_MENU_FINDNEXTSEL:
+			on_find_nextsel1_activate(NULL, NULL); break;
+		case GEANY_KEYS_MENU_REPLACE:
+			on_replace1_activate(NULL, NULL); break;
+		case GEANY_KEYS_MENU_FINDINFILES:
+			on_find_in_files1_activate(NULL, NULL); break;
+		case GEANY_KEYS_MENU_NEXTMESSAGE:
+			on_next_message1_activate(NULL, NULL); break;
+		case GEANY_KEYS_MENU_GOTOLINE:
+			on_go_to_line1_activate(NULL, NULL); break;
+	}
 }
 
 static void cb_func_menu_opencolorchooser(G_GNUC_UNUSED guint key_id)

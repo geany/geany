@@ -1440,7 +1440,7 @@ The following table lists all customizable keyboard shortcuts.
 =============================== =========================================
 Action                          Description
 =============================== =========================================
-**Menu items**
+**File menu**
 
 New                             Creates a new file.
 
@@ -1461,6 +1461,8 @@ Reload file                     Reloads the current file. All unsaved changes
 
 Print                           Prints the current file.
 
+**Edit menu**
+
 Undo                            Un-does the last action.
 
 Redo                            Re-does the last action.
@@ -1472,7 +1474,9 @@ Insert date                     Inserts a customisable date.
 
 Preferences                     Opens preferences dialog.
 
-Help                            Opens the manual.
+**Search menu**
+
+Find                            Opens the Find dialog.
 
 Find Next                       Finds next result.
 
@@ -1487,7 +1491,7 @@ Next message                    Jumps to the line with the next message from
 
 Go to line                      Opens the Go to line dialog.
 
-Show Colour Chooser             Opens the Colour Chooser dialog.
+**View menu**
 
 Fullscreen                      Switches to fullscreen mode.
 
@@ -1500,6 +1504,8 @@ Toggle all additional widgets   Hide and show all additional widgets like the
                                 notebook tabs, the toolbar, the messages window
                                 and the statusbar.
 
+**Document menu**
+
 Zoom In                         Zooms in the text
 
 Zoom Out                        Zooms out the text
@@ -1510,7 +1516,7 @@ Fold all                        Folds all contractible code blocks.
 
 Unfold all                      Unfolds all contracted code blocks.
 
-**Build options**
+**Build menu**
 
 Compile                         Compiles the current file.
 
@@ -1532,6 +1538,14 @@ Run                             Executes the current file in a terminal emulatio
 Run (alternative command)       Executes the current file in a terminal emulation.
 
 Build options                   Opens the build options dialog.
+
+**Tools menu**
+
+Show Colour Chooser             Opens the Colour Chooser dialog.
+
+**Help menu**
+
+Help                            Opens the manual.
 
 **Miscellaneous**
 
@@ -1654,6 +1668,8 @@ Insert alternative whitespace   Inserts a tabulator character when spaces should
                                 be used for indentation and inserts space
                                 characters of the amount of a tabulator width when
                                 tabulators should be used for indentation.
+
+**Popup menu**
 
 Find Usage                      Finds all occurrences of the current word (near
                                 the keyboard cursor) or selection and displays

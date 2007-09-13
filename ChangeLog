@@ -7,6 +7,10 @@
    Change scroll by line default keybindings to Alt-{Up, Down}.
    Change Previous/Next Paragraph Scintilla commands to Ctrl-{Up, Down}.
    Adding Shift extends selection by paragraph.
+ * src/keybindings.c, src/keybindings.h, doc/geany.txt, doc/geany.html:
+   Add Find keybinding (re-uses existing string).
+   Group search-related callbacks together.
+   Docs: Add table headings to group related keybindings together.
 
 
 2007-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
