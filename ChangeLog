@@ -1,3 +1,10 @@
+2007-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/callbacks.c:
+   Speed up Save All for C-like files by avoiding unnecessary
+   recolourising after user typenames have changed.
+
+
 2007-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/plugindata.h:

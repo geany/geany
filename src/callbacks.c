@@ -229,6 +229,8 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 	gint cur_idx = document_get_cur_idx();
 
+	document_delay_colourise();	// avoid recolourising all C files after each save
+
 	for (i = 0; i < max; i++)
 	{
 		idx = document_get_n_idx(i);
@@ -243,6 +245,7 @@ on_save_all1_activate                  (GtkMenuItem     *menuitem,
 		else
 			document_save_file(idx, FALSE);
 	}
+	document_colourise_new();
 	treeviews_update_tag_list(cur_idx, TRUE);
 	ui_set_window_title(cur_idx);
 }
