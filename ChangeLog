@@ -13,6 +13,9 @@
    Docs: Add table headings to group related keybindings together.
  * src/keybindings.c:
    Make some keybinding titles use existing string capitalization.
+ * src/images.c:
+   Apply patch from Christoph Berg to update main window icon and
+   About dialog icon (thanks).
 
 
 2007-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
