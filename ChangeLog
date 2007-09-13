@@ -11,6 +11,8 @@
    Add Find keybinding (re-uses existing string).
    Group search-related callbacks together.
    Docs: Add table headings to group related keybindings together.
+ * src/keybindings.c:
+   Make some keybinding titles use existing string capitalization.
 
 
 2007-09-12  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

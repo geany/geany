@@ -165,11 +165,11 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_MENU_REPLACE] = fill(cb_func_menu_search,
 		GDK_h, GDK_CONTROL_MASK, "menu_replace", _("Replace"));
 	keys[GEANY_KEYS_MENU_FINDINFILES] = fill(cb_func_menu_search, GDK_f,
-		GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findinfiles", _("Find in files"));
+		GDK_CONTROL_MASK | GDK_SHIFT_MASK, "menu_findinfiles", _("Find in Files"));
 	keys[GEANY_KEYS_MENU_NEXTMESSAGE] = fill(cb_func_menu_search,
 		0, 0, "menu_nextmessage", _("Next Message"));
 	keys[GEANY_KEYS_MENU_GOTOLINE] = fill(cb_func_menu_search,
-		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to line"));
+		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to Line"));
 
 	keys[GEANY_KEYS_MENU_TOGGLEALL] = fill(cb_func_menu_toggle_all,
 		0, 0, "menu_toggleall", _("Toggle all additional widgets"));
@@ -321,9 +321,9 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_POPUP_FINDUSAGE] = fill(cb_func_current_word,
 		0, 0, "popup_findusage", _("Find Usage"));
 	keys[GEANY_KEYS_POPUP_GOTOTAGDEFINITION] = fill(cb_func_current_word,
-		0, 0, "popup_gototagdefinition", _("Go to tag definition"));
+		0, 0, "popup_gototagdefinition", _("Go to Tag Definition"));
 	keys[GEANY_KEYS_POPUP_GOTOTAGDECLARATION] = fill(cb_func_current_word,
-		0, 0, "popup_gototagdeclaration", _("Go to tag declaration"));
+		0, 0, "popup_gototagdeclaration", _("Go to Tag Declaration"));
 	keys[GEANY_KEYS_POPUP_CONTEXTACTION] = fill(cb_func_current_word,
 		0, 0, "popup_contextaction", _("Context Action"));
 
