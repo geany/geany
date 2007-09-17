@@ -42,6 +42,7 @@ typedef enum {
 	HXTAG_ENUM,
 	HXTAG_VARIABLE,
 	HXTAG_INTERFACE,
+	HXTAG_TYPEDEF,
 	HXTAG_COUNT
 } hxKind;
 
@@ -50,7 +51,8 @@ static kindOption HxKinds [] = {
 	{ TRUE,  'c', "class",		  "classes"			   },
 	{ TRUE,  'e', "enums",		  "enumerations"			   },
 	{ TRUE,  'v', "variable",	  "variables"	   },
-	{ TRUE,  'i', "interface",	  "interfaces"	   }
+	{ TRUE,  'i', "interface",	  "interfaces"	   },
+	{ TRUE,  't', "typedef",	  "typedefs"	   },
 
 };
 
@@ -186,12 +188,25 @@ another:
 	    vStringTerminate (name);
 	    makeSimpleTag (name, HxKinds, HXTAG_INTERFACE);
 	    vStringClear (name);
-	 }
+	} else if (strncmp ((const char *) cp,"typedef",(size_t) 7) == 0 && isspace(((int) cp[7]))) {
+	 	cp += 7;
+
+	    while (isspace ((int) *cp))
+			++cp;
+	    vStringClear (name);
+	    while (isalnum ((int) *cp)  ||  *cp == '_') {
+			vStringPut (name, (int) *cp);
+			++cp;
+	    }
+	    vStringTerminate (name);
+	    makeSimpleTag (name, HxKinds, HXTAG_TYPEDEF);
+	    vStringClear (name);
+	}
 
 
     }
 
-    vStringDelete (name);
+    vStringDelete(name);
     vStringDelete(clsName);
     vStringDelete(scope2);
     vStringDelete(laccess);
@@ -214,5 +229,6 @@ extern parserDefinition* HaxeParser (void)
 	//def->initialize = initialize;
 	return def;
 }
+
 
 

@@ -3,6 +3,10 @@
  * src/build.h, src/plugindata.h, src/plugins.c:
    Apply patch from blackdog to add build_info and
    msgwindow->compiler_add() to the plugin API (thanks).
+ * src/symbols.c, tagmanager/haxe.c:
+   Apply code from blackdog to parse Haxe typedef tags (thanks).
+   Show Haxe typedefs in the symbol list.
+   Add tag_type treeview iter.
 
 
 2007-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

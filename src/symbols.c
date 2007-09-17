@@ -45,8 +45,6 @@
 #include "main.h"
 
 
-#define MAX_SYMBOL_TYPES 8 // amount of types in the symbol list (currently max. 8 are used)
-
 const guint TM_GLOBAL_TYPE_MASK =
 	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
 	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t;
@@ -406,6 +404,9 @@ static const GList *get_tag_list(gint idx, guint tag_types, gboolean sort_by_nam
 }
 
 
+// amount of types in the symbol list (currently max. 8 are used)
+#define MAX_SYMBOL_TYPES	(sizeof(tv_iters) / sizeof(GtkTreeIter))
+
 struct TreeviewSymbols
 {
 	GtkTreeIter		 tag_function;
@@ -415,6 +416,7 @@ struct TreeviewSymbols
 	GtkTreeIter		 tag_variable;
 	GtkTreeIter		 tag_namespace;
 	GtkTreeIter		 tag_struct;
+	GtkTreeIter		 tag_type;
 	GtkTreeIter		 tag_other;
 } tv_iters;
 
@@ -430,6 +432,7 @@ static void init_tag_iters()
 	tv_iters.tag_variable.stamp = -1;
 	tv_iters.tag_namespace.stamp = -1;
 	tv_iters.tag_struct.stamp = -1;
+	tv_iters.tag_type.stamp = -1;
 	tv_iters.tag_other.stamp = -1;
 }
 
@@ -637,12 +640,13 @@ static void init_tag_list(gint idx)
 		case GEANY_FILETYPES_HAXE:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_struct), _("Interfaces"), NULL,
+				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
+				&(tv_iters.tag_type), _("Types"), NULL,
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
-
 			break;
 		}
 		case GEANY_FILETYPES_D:
@@ -681,7 +685,7 @@ static void init_tag_list(gint idx)
 static void hide_empty_rows(GtkTreeModel *model, GtkTreeStore *store)
 {
 	GtkTreeIter iter, *iters[MAX_SYMBOL_TYPES] = { NULL };
-	gint i = 0;
+	guint i = 0;
 
 	if (! gtk_tree_model_get_iter_first(model, &iter))
 		return; // stop when first iter is invalid, i.e. no elements
@@ -709,6 +713,7 @@ gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name)
 	const GList *tags;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
+	filetype_id ft_id = FILETYPE_ID(doc_list[idx].file_type);
 
 	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
 
@@ -764,6 +769,15 @@ gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name)
 			}
 			case tm_tag_typedef_t:
 			case tm_tag_enum_t:
+			{
+				// TODO: separate C-like types here also
+				if (ft_id == GEANY_FILETYPES_HAXE)
+				{
+					if (tv_iters.tag_type.stamp == -1) break;
+					parent = &(tv_iters.tag_type);
+					break;
+				}
+			}
 			case tm_tag_union_t:
 			case tm_tag_struct_t:
 			case tm_tag_interface_t:
