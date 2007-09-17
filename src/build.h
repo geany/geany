@@ -34,7 +34,7 @@ typedef enum	// Geany Build Options
 	GBO_MAKE_OBJECT
 } build_type;
 
-typedef struct
+typedef struct BuildInfo
 {
 	build_type	type;	// current action(one of the above enumeration)
 	GPid		pid;	// process id of the spawned process
@@ -45,7 +45,8 @@ typedef struct
 
 extern BuildInfo build_info;
 
-typedef struct
+
+typedef struct BuildMenuItems
 {
 	GtkWidget		*menu;
 	GtkWidget		*item_compile;

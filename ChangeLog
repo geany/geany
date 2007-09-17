@@ -1,3 +1,10 @@
+2007-09-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.h, src/plugindata.h, src/plugins.c:
+   Apply patch from blackdog to add build_info and
+   msgwindow->compiler_add() to the plugin API (thanks).
+
+
 2007-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/callbacks.c:

@@ -71,12 +71,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 18;
+static const gint api_version = 19;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 9;
+static const gint abi_version = 10;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
@@ -148,6 +148,7 @@ typedef struct GeanyData
 	struct filetype		**filetypes;
 	struct GeanyPrefs	*prefs;
 	struct EditorPrefs	*editor_prefs;
+	struct BuildInfo	*build_info;
 
 	struct DocumentFuncs	*document;
 	struct ScintillaFuncs	*sci;
@@ -226,7 +227,7 @@ ScintillaFuncs;
 
 typedef struct TemplateFuncs
 {
-	gchar*	(*get_template_fileheader) (gint filetype_idx, const gchar *fname);
+	gchar*		(*get_template_fileheader) (gint filetype_idx, const gchar *fname);
 }
 TemplateFuncs;
 
@@ -267,6 +268,7 @@ SupportFuncs;
 typedef struct MsgWinFuncs
 {
 	void		(*status_add) (const gchar *format, ...);
+	void		(*compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 }
 MsgWinFuncs;
 

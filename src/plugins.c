@@ -47,6 +47,8 @@
 #include "msgwindow.h"
 #include "prefs.h"
 #include "geanyobject.h"
+#include "build.h"
+
 
 #ifdef G_OS_WIN32
 # define PLUGIN_EXT "dll"
@@ -147,11 +149,13 @@ static SupportFuncs support_funcs = {
 };
 
 static MsgWinFuncs msgwin_funcs = {
-	&msgwin_status_add
+	&msgwin_status_add,
+	&msgwin_compiler_add_fmt
 };
 
 
 static GeanyData geany_data = {
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -179,6 +183,7 @@ geany_data_init()
 	geany_data.filetypes = filetypes;
 	geany_data.prefs = &prefs;
 	geany_data.editor_prefs = &editor_prefs;
+	geany_data.build_info = &build_info;
 }
 
 
