@@ -135,11 +135,14 @@ static void prepare_msg_tree_view(void)
 	GtkTreeSelection *selection;
 	PangoFontDescription *pfd;
 
-	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_INT, GDK_TYPE_COLOR, G_TYPE_STRING);
+	// doc idx, line, bg, fg, str
+	msgwindow.store_msg = gtk_list_store_new(5, G_TYPE_INT, G_TYPE_INT,
+		GDK_TYPE_COLOR, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
 
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(NULL, renderer, "background-gdk", 2, "text", 3, NULL);
+	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
+		"background-gdk", 2, "foreground-gdk", 3, "text", 4, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
@@ -193,6 +196,22 @@ static void prepare_compiler_tree_view(void)
 
 static const GdkColor color_error = {0, 65535, 0, 0};
 
+static const GdkColor *get_color(gint msg_color)
+{
+	static const GdkColor dark_red = {0, 65535 / 2, 0, 0};
+	static const GdkColor blue = {0, 0, 0, 0xD000};	// not too bright ;-)
+	static const GdkColor black = {0, 0, 0, 0};
+
+	switch (msg_color)
+	{
+		case COLOR_RED: return &color_error;
+		case COLOR_DARK_RED: return &dark_red;
+		case COLOR_BLUE: return &blue;
+		default: return &black;
+	}
+}
+
+
 void msgwin_compiler_add_fmt(gint msg_color, const gchar *format, ...)
 {
 	gchar string[512];
@@ -210,18 +229,7 @@ void msgwin_compiler_add(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
 	GtkTreePath *path;
-	const GdkColor *color;
-	const GdkColor dark_red = {0, 65535 / 2, 0, 0};
-	const GdkColor blue = {0, 0, 0, 0xD000};	// not too bright ;-)
-	const GdkColor black = {0, 0, 0, 0};
-
-	switch (msg_color)
-	{
-		case COLOR_RED: color = &color_error; break;
-		case COLOR_DARK_RED: color = &dark_red; break;
-		case COLOR_BLUE: color = &blue; break;
-		default: color = &black;
-	}
+	const GdkColor *color = get_color(msg_color);
 
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
 	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, msg, -1);
@@ -251,7 +259,7 @@ void msgwin_show_hide(gboolean show)
 }
 
 
-void msgwin_msg_add_fmt(gint line, gint idx, const gchar *format, ...)
+void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format, ...)
 {
 	gchar string[512];
 	va_list args;
@@ -260,21 +268,22 @@ void msgwin_msg_add_fmt(gint line, gint idx, const gchar *format, ...)
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
-	msgwin_msg_add(line, idx, string);
+	msgwin_msg_add(msg_color, line, idx, string);
 }
 
 
 // adds string to the msg treeview
-void msgwin_msg_add(gint line, gint idx, const gchar *string)
+void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 {
 	GtkTreeIter iter;
 	static gint state = 0;
+	const GdkColor *color = get_color(msg_color);
 
 	if (! ui_prefs.msgwindow_visible) msgwin_show_hide(TRUE);
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
 	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2,
-		((state++ % 2) == 0) ? &white : &dark, 3, string, -1);
+		((state++ % 2) == 0) ? &white : &dark, 3, color, 4, string, -1);
 
 	gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), TRUE);
 }
@@ -776,7 +785,7 @@ gboolean msgwin_goto_messages_file_line()
 		gint idx, line;
 		gchar *string;
 
-		gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, 3, &string, -1);
+		gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, 4, &string, -1);
 		if (line >= 0 && idx >= 0)
 		{
 			ret = utils_goto_line(idx, line);	// checks valid idx

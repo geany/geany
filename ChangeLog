@@ -9,6 +9,8 @@
    Add tag_type treeview iter.
  * tagmanager/haxe.c:
    Show Haxe enum types in the symbol list.
+ * src/msgwindow.c, src/msgwindow.h, src/search.c:
+   Add foreground colouring to messages items.
 
 
 2007-09-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
