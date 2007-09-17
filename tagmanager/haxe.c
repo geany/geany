@@ -47,13 +47,12 @@ typedef enum {
 } hxKind;
 
 static kindOption HxKinds [] = {
-	{ TRUE,  'm', "method",	  "methods"			   },
-	{ TRUE,  'c', "class",		  "classes"			   },
-	{ TRUE,  'e', "enums",		  "enumerations"			   },
-	{ TRUE,  'v', "variable",	  "variables"	   },
-	{ TRUE,  'i', "interface",	  "interfaces"	   },
-	{ TRUE,  't', "typedef",	  "typedefs"	   },
-
+	{ TRUE,  'm', "method",		"methods" },
+	{ TRUE,  'c', "class",		"classes" },
+	{ TRUE,  'e', "enum",		"enumerations" },
+	{ TRUE,  'v', "variable",	"variables" },
+	{ TRUE,  'i', "interface",	"interfaces" },
+	{ TRUE,  't', "typedef",	"typedefs" },
 };
 
 static void findHxTags (void)
