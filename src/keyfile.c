@@ -55,6 +55,7 @@
 
 static gchar *scribble_text = NULL;
 static GPtrArray *session_files = NULL;
+static gint session_notebook_page;
 static gint hpan_position;
 static gint vpan_position;
 
@@ -88,54 +89,54 @@ static void save_recent_files(GKeyFile *config)
 
 static void save_session_files(GKeyFile *config)
 {
-	gint idx;
-	gboolean have_session_files;
+	gint idx, npage;
 	gchar *tmp;
-	gchar *entry = g_malloc(14);
+	gchar entry[14];
 	guint i = 0, j = 0, max;
 
-	if (cl_options.load_session)
-	{
-		// store the filenames to reopen them the next time
-		max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
-		for(i = 0; i < max; i++)
-		{
-			idx = document_get_n_idx(i);
-			if (idx >= 0 && doc_list[idx].file_name)
-			{
-				gchar *fname;
-				filetype *ft = doc_list[idx].file_type;
+	if (! cl_options.load_session)
+		return;
 
-				if (ft == NULL)	// can happen when saving a new file when quitting
-					ft = filetypes[GEANY_FILETYPES_ALL];
-				g_snprintf(entry, 13, "FILE_NAME_%d", j);
-				fname = g_strdup_printf("%d:%d:%s", sci_get_current_position(doc_list[idx].sci),
-					ft->uid, doc_list[idx].file_name);
-				g_key_file_set_string(config, "files", entry, fname);
-				g_free(fname);
-				j++;
-			}
-		}
-		// if open filenames less than saved session files, delete existing entries in the list
-		have_session_files = TRUE;
-		i = j;
-		while (have_session_files)
+	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
+	g_key_file_set_integer(config, "files", "current_page", npage);
+
+	// store the filenames to reopen them the next time
+	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+	for (i = 0; i < max; i++)
+	{
+		idx = document_get_n_idx(i);
+		if (idx >= 0 && doc_list[idx].file_name)
 		{
-			g_snprintf(entry, 13, "FILE_NAME_%d", i);
-			tmp = g_key_file_get_string(config, "files", entry, NULL);
-			if (tmp == NULL)
-			{
-				have_session_files = FALSE;
-			}
-			else
-			{
-				g_key_file_remove_key(config, "files", entry, NULL);
-				g_free(tmp);
-				i++;
-			}
+			gchar *fname;
+			filetype *ft = doc_list[idx].file_type;
+
+			if (ft == NULL)	// can happen when saving a new file when quitting
+				ft = filetypes[GEANY_FILETYPES_ALL];
+			g_snprintf(entry, 13, "FILE_NAME_%d", j);
+			fname = g_strdup_printf("%d:%d:%s", sci_get_current_position(doc_list[idx].sci),
+				ft->uid, doc_list[idx].file_name);
+			g_key_file_set_string(config, "files", entry, fname);
+			g_free(fname);
+			j++;
 		}
 	}
-	g_free(entry);
+	// if open filenames less than saved session files, delete existing entries in the list
+	i = j;
+	while (TRUE)
+	{
+		g_snprintf(entry, 13, "FILE_NAME_%d", i);
+		tmp = g_key_file_get_string(config, "files", entry, NULL);
+		if (tmp == NULL)
+		{
+			break;
+		}
+		else
+		{
+			g_key_file_remove_key(config, "files", entry, NULL);
+			g_free(tmp);
+			i++;
+		}
+	}
 }
 
 
@@ -349,9 +350,11 @@ static void load_file_lists(GKeyFile *config)
 	guint i;
 	gsize len = 0;
 	gboolean have_session_files;
-	gchar *entry = g_malloc(14);
+	gchar entry[14];
 	gchar *tmp_string;
 	GError *error = NULL;
+
+	session_notebook_page = utils_get_setting_integer(config, "files", "current_page", -1);
 
 	recent_files = g_key_file_get_string_list(config, "files", "recent_files", &len, NULL);
 	if (recent_files != NULL)
@@ -380,7 +383,6 @@ static void load_file_lists(GKeyFile *config)
 		g_ptr_array_add(session_files, tmp_string);
 		i++;
 	}
-	g_free(entry);
 }
 
 
@@ -652,6 +654,7 @@ gboolean configuration_load()
 }
 
 
+// open session files
 gboolean configuration_open_files()
 {
 	gint i;
@@ -723,8 +726,11 @@ gboolean configuration_open_files()
 	document_colourise_new();
 
 	g_ptr_array_free(session_files, TRUE);
+
 	if (failure)
 		msgwin_status_add(_("Failed to load one or more session files."));
+	else if (session_notebook_page >= 0)
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), session_notebook_page);
 	return ret;
 }
 

@@ -1,3 +1,9 @@
+2007-09-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c:
+   Save and restore the current notebook page when quitting.
+
+
 2007-09-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.h, src/plugindata.h, src/plugins.c:
