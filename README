@@ -29,12 +29,13 @@ The basic features of Geany are:
 Requirements
 ------------
 For compiling Geany yourself, you will need the GTK (>= 2.6.0) libraries
-and header files. You will also need the Pango, Glib and ATK libraries and
-header files. All these files are available at http://www.gtk.org.
+and header files. You will also need its dependency libraries and header
+files, such as Pango, Glib and ATK. All these files are available at
+http://www.gtk.org.
 
-Furthermore you need, of course, a C compiler and the Make tool; a C++ compiler
-is also required for the included Scintilla library. The GNU versions of these
-tools are recommended.
+Furthermore you need, of course, a C compiler and the Make tool; a C++
+compiler is also needed for the required Scintilla library included. The
+GNU versions of these tools are recommended.
 
 
 Installation
@@ -47,8 +48,8 @@ $ make install
 For more configuration details run
 $ ./configure --help
 
-If there are any errors during compilation, check your build environment and
-try to find the error, otherwise contact one of the authors.
+If there are any errors during compilation, check your build environment
+and try to find the error, otherwise contact one of the authors.
 
 
 Usage
@@ -59,35 +60,37 @@ on a console or use the applications menu from your desktop environment.
 There a few command line options. See the manual page of Geany or run
 $ geany --help
 for details. Or look into the documention in the doc/ directory.
-The most important option probably is -c or --config, wherewith you can specify an alternate
-configuration directory.
+The most important option probably is -c or --config, where you can
+specify an alternate configuration directory.
 
 
 Windows
 -------
-Geany runs also under Windows. To download the binary with all necessary files,
-visit Geany's homepage. But you should know, that the Windows version is not yet
-well tested and there are some features missing:
+Geany runs also under Windows. To download the binary with all necessary
+files, visit Geany's homepage. But you should know, that the Windows
+version is not yet well tested and there are some features missing:
 - build support (perhaps will be added later, Run command is working)
 - embedded terminal emulation (VTE)
 
 
 License
 -------
-Geany is distributed under the terms of the GNU General Public License as published by the Free
-Software Foundation; either version 2 of the License, or (at your option) any later version.
-A copy of this license can be found in the file COPYING included with the source code of this
+Geany is distributed under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2 of the
+License, or (at your option) any later version.  A copy of this license
+can be found in the file COPYING included with the source code of this
 program.
-The included Scintilla library (found in the subdirectory scintilla/) has its own license, which
-can be found in the file scintilla/License.txt included with the source code of this
-program.
+The included Scintilla library (found in the subdirectory scintilla/)
+has its own license, which can be found in the file scintilla/License.txt
+included with the source code of this program.
 
 
 Ideas, questions, patches and bug reports
 -----------------------------------------
 See http://geany.uvena.de
 If you add something, or fix a bug, please send a patch (in 'diff -u'
-format) to the mailing list or one of the authors.
+format) to the mailing list or one of the authors. Also see the HACKING
+file.
 
 
 --
