@@ -1,14 +1,17 @@
 About this file
 ---------------
-This file contains information for anyone wanting to work on the Geany codebase.
-You should be aware of the open source licenses used - see the README file or the documentation.
+This file contains information for anyone wanting to work on the Geany
+codebase. You should be aware of the open source licenses used - see
+the README file or the documentation.
 
 Patches
 -------
-We are happy to receive patches, but it's best to check with us by email or mailing list whether a
-new feature is appropriate, and whether someone is already working on similar code.
+We are happy to receive patches, but it's best to check with us by email
+or mailing list whether a new feature is appropriate, and whether someone
+is already working on similar code.
 
-In general it's best to work from the current SVN, but we accept patches against other releases.
+In general it's best to work from the current SVN, but we accept patches
+against other releases.
 $ svn diff > fix-some-bug.patch
 
 If you're not using SVN, you can use the diff command:
@@ -27,51 +30,62 @@ See the src/*.c files for descriptions.
 
 Glade
 -----
-Use the code generation features of Glade instead of editing interface.c or support.c.
-Glade 2.10 is recommended as long as we support GTK+ 2.6, because later versions of Glade are not
-100% compatible with GTK+ 2.6 (e.g. they may use functions added in GTK+ 2.8).
+Use the code generation features of Glade instead of editing interface.c
+or support.c. Glade 2.10 is recommended as long as we support GTK+ 2.6,
+because later versions of Glade are not 100% compatible with GTK+ 2.6
+(e.g. they may use functions added in GTK+ 2.8).
+
+You can build Glade 2.10 and run the binary in place, without installing
+it - this should work fine even if you have another version of Glade
+installed on the system.
 
 Coding
 ------
 Use static functions where possible.
-Try to use GLib types and functions - e.g. g_free instead of free and try to use only GLib 2.6 and
-GTK 2.6 functions. At least for the moment, we want to keep the minimum requirement for GTK at 2.6.
-We currently try to support the old GCC 2.9.x compiler, so we always declare variables before
-statements. You can use -Wdeclaration-after-statement in your ./configure CFLAGS to warn about
-this.
+Try to use GLib types and functions - e.g. g_free instead of free and
+try to use only GLib 2.6 and GTK 2.6 functions. At least for the moment,
+we want to keep the minimum requirement for GTK at 2.6. We currently try
+to support the old GCC 2.9.x compiler, so we always declare variables
+before statements. You can use -Wdeclaration-after-statement in your
+./configure CFLAGS to warn about this.
 
 Style
 -----
 We use a tab width of 4 and indent completely with tabs not spaces.
-To comment small blocks of code we use the C++ // comments and for functions descriptions or longer
-explanations of code, the multiline comment /* */ should be used. In any case, the more comments
-are in your code the better.
-Lines should not be longer than about 100 characters and after 100 characters the lines should be
-wrapped and more indented than the first line to highlight that the line is continued.
-We avoid putting spaces between function names and the opening brace for argument lists.
-Try to fit in with the existing code brace indenting style, comments, operator spacing etc. It's
-not required but it makes our lives easier ;-)
+To comment small blocks of code we use the C++ // comments and for
+functions descriptions or longer explanations of code, the multiline
+comment /* */ should be used. In any case, the more comments are in your
+code the better.
+Lines should not be longer than about 100 characters and after 100
+characters the lines should be wrapped and more indented than the first
+line to highlight that the line is continued. We avoid putting spaces
+between function names and the opening brace for argument lists. Try to
+fit in with the existing code brace indenting style, comments, operator
+spacing etc. It's not required but it makes our lives easier ;-)
 
 Libraries
 ---------
-We prefer to use an unmodified version of Scintilla - any changes should be passed on to the
-maintainers at http://scintilla.org.
-Tagmanager was originally taken from Anjuta 1.2.2, and parts of it (notably c.c) have been merged
-from later versions of Anjuta. The independent Tagmanager library itself ceased development before
-Geany was started. It's source code parsing is mostly taken from Exuberant Ctags (see
-http://ctags.sf.net).
+We prefer to use an unmodified version of Scintilla - any changes should
+be passed on to the maintainers at http://scintilla.org.
+
+Tagmanager was originally taken from Anjuta 1.2.2, and parts of it
+(notably c.c) have been merged from later versions of Anjuta and
+CTags. The independent Tagmanager library itself ceased development
+before Geany was started. It's source code parsing is mostly taken from
+Exuberant CTags (see http://ctags.sf.net).
 
 
 NOTES
 =====
-Some of these notes below are brief (or maybe incomplete) - please contact
-the mailing list for more information.
+Some of these notes below are brief (or maybe incomplete) - please
+contact the mailing list for more information.
 
 Modifying data types
 --------------------
-When reordering or changing existing elements of structs that are used as part of the
-plugin API, you should increment abi_version in plugindata.h (and api_version if changing
-elements). This is not needed if you're just appending fields to structs.
+When reordering or changing existing elements of structs that are used as
+part of the plugin API, you should increment abi_version in plugindata.h
+(and api_version if changing elements). This is not needed if you're
+just appending fields to structs.
 
 Adding a file foo.[hc] in src/ or plugins/
 ------------------------------------------
@@ -81,58 +95,66 @@ Add path/foo.c to po/POTFILES.in (for string translation).
 
 Adding a filetype
 -----------------
-You can add a filetype without syntax highlighting or tag parsing, but check to see if those
-features have been written in other projects first.
+You can add a filetype without syntax highlighting or tag parsing, but
+check to see if those features have been written in other projects first.
 
-For syntax highlighting, it may be possible to use an existing Scintilla lexer in the scintilla/
-subdirectory - if not, you will need to find (or write) one, LexFoo.cxx. Try the Scintilla project
-first. Remember to update scintilla/Makefile.am and scintilla/makefile.win32.
+For syntax highlighting, it may be possible to use an existing Scintilla
+lexer in the scintilla/ subdirectory - if not, you will need to find
+(or write) one, LexFoo.cxx. Try the Scintilla project first. Remember
+to update scintilla/Makefile.am and scintilla/makefile.win32.
 
-For tag parsing (e.g. for the symbol list), see 'Adding a TagManager parser' below.
+For tag parsing (e.g. for the symbol list), see 'Adding a TagManager
+parser' below.
 
 Add GEANY_FILETYPES_FOO to filetypes.h.
 Initialize GEANY_FILETYPES_FOO in filetypes_init_types() of filetypes.c.
-The filetype::style_func_ptr is a callback for setting up styling information. The callback,
-styleset_foo(), should be added in highlighting.c. The first time it is called, the configuration
-should be loaded in styleset_foo_init(). For more details, see styleset_c(). If there isn't a
-Scintilla lexer, use styleset_none().
+The filetype::style_func_ptr is a callback for setting up styling
+information. The callback, styleset_foo(), should be added in
+highlighting.c. The first time it is called, the configuration should
+be loaded in styleset_foo_init(). For more details, see styleset_c(). If
+there isn't a Scintilla lexer, use styleset_none().
 Rebuild Geany.
 From your geany/ directory, run:
 src/geany --generate-data-files
 
-(The src/ prefix may be different, depending on where the binary is generated.)
-This will update data/filetype_extensions.conf. Note that you need GEANY_DEBUG to be defined when
-building Geany for the --generate-data-files argument to work - this is always defined in the SVN
-version. Alternatively, edit the file by hand.
+(The src/ prefix may be different, depending on where the binary is
+generated.)
+This will update data/filetype_extensions.conf. Note that
+you need GEANY_DEBUG to be defined when building Geany for the
+--generate-data-files argument to work - this is always defined in the
+SVN version. Alternatively, edit the file by hand.
 
-Most languages will also need a data/filetypes.foo configuration file. See data/filetypes.c
-for an example. For languages with a Scintilla lexer, there should be a [styling] section, to
-correspond to the styles used in styleset_foo().
+Most languages will also need a data/filetypes.foo configuration file. See
+data/filetypes.c for an example. For languages with a Scintilla lexer,
+there should be a [styling] section, to correspond to the styles used
+in styleset_foo().
 
 Programming languages should have:
 [keywords] if the lexer supports it.
 [settings] mostly for comment settings.
 [build_settings] for commands to run.
 
-Error message parsing is done in msgwin_parse_compiler_error_line() of msgwindow.c. See the
-ParseData typedef for more information. (In future this may be done with a regex).
+Error message parsing is done in msgwin_parse_compiler_error_line() of
+msgwindow.c. See the ParseData typedef for more information. (In future
+this may be done with a regex).
 
-For brace indentation, see lexer_has_braces() in editor.c; other indentation is done from
-on_new_line_added().
+For brace indentation, see lexer_has_braces() in editor.c; other
+indentation is done from on_new_line_added().
 
-If the lexer has comment styles, you should add them in is_comment() in editor.c. For now,
-this prevents calltips and autocompletion when typing in a comment.
+If the lexer has comment styles, you should add them in is_comment()
+in editor.c. For now, this prevents calltips and autocompletion when
+typing in a comment.
 
-If the Scintilla lexer supports user type keywords (e.g. SCLEX_CPP), see
-editor_lexer_get_type_keyword_idx() in editor.c.
+If the Scintilla lexer supports user type keywords (e.g. SCLEX_CPP),
+see editor_lexer_get_type_keyword_idx() in editor.c.
 
 
 Adding a TagManager parser
 --------------------------
 This assumes the Geany filetype already exists.
 
-First write or find a CTags compatible parser, foo.c. Note that there are
-some language patches for CTags at:
+First write or find a CTags compatible parser, foo.c. Note that there
+are some language patches for CTags at:
 http://sf.net/projects/ctags - see the tracker.
 
 (You can also try the Anjuta project's tagmanager codebase.)
@@ -162,8 +184,8 @@ src/plugins.c loads and unloads plugins.
 Loading a plugin from GDB
 -------------------------
 This is useful so you can load plugins without installing them first.
-Alternatively you can use a symlink in ~/.geany/plugins or $prefix/lib/geany (where
-$prefix is /usr/local by default).
+Alternatively you can use a symlink in ~/.geany/plugins or
+$prefix/lib/geany (where $prefix is /usr/local by default).
 
 The gdb session below was run from the toplevel Geany source directory.
 Start normally with e.g. "gdb src/geany".
