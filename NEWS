@@ -1,3 +1,65 @@
+Geany 0.12 (TBA)
+
+    Bugs fixed:
+    * Fixed opening the same file twice from the message window/command-line.
+    * Fixed Ctrl-Shift keybindings not working when caps lock is on.
+    * Fixed saving the wrong document when using Save All with unnamed
+      documents.
+    * Fixed replacing with '^' or '$' regex chars.
+    * Fixed hang with Find All/Find Usage with '^' or '$' regex chars.
+    * Fixed hang when replacing all '[ ]*' regex matches (closes #1757748).
+
+    Filetypes:
+    * Added reStructuredText filetype and parser.
+    * Added Haskell tags support (thanks to Peter Strand).
+    * Added decorator styling for Python.
+    * Parse Python global variables and class variables.
+    * Added support for Java Apache Ant compiler error messages (thanks to
+      Jon Senior).
+
+    Plugins:
+    * Added basic plugin support (developers: see the HACKING file).
+    * Added 'Enable plugin support' preference and -p, --no-plugins options.
+    * Added Class Builder plugin (thanks to Alexander Rodin).
+
+    Keyboard shorcuts:
+    * Added 'Move document left' and 'Move document right' keybindings.
+    * Added Find keybinding.
+    * Made fixed keybindings overridable.
+    * Added fixed keybindings for switching to leftmost/rightmost document,
+      Ctrl-Shift-{PageUp,PageDown}.
+    * Change Previous/Next Paragraph fixed commands to Ctrl-{Up,Down};
+      adding Shift extends selection by paragraph. (Scroll by line is now
+      Alt-{Up,Down}).
+    * Made pressing escape focus the editor when using incremental search
+      or Goto Line toolbar fields.
+
+    General:
+    * Added preference for 'smart' home key behaviour (thanks to Jeff
+      Pohlmeyer).
+    * Added symbol list icons (thanks to Jean-François Wauthy, and KDevelop
+      for the icons).
+    * Added 'Current chars' indentation mode (closes #1726880).
+    * Save and restore the current notebook page when quitting.
+    * Added support for %e, %f in project run command.
+    * Ignore punctuation chars when moving by word, and use word end
+      boundaries when moving by word to the right (like most GTK+ widgets).
+    * Added hidden editor preference 'use_gtk_word_boundaries'.
+    * Added auto_complete_whilst_editing hidden preference.
+    * Speed up Save All for C-like files.
+    Thanks also to Christoph Berg for updating the main window icon.
+
+    Docs:
+    * Added Plugins section.
+    * Added 'Inserting unicode characters' Editing section (thanks to
+      John Gabriele).
+    * Added 'Hidden preferences' appendix.
+    * Added 'Switching documents' keybindings section.
+
+    HACKING:
+    * Added notes on adding a filetype.
+
+
 Geany 0.11 (May 21, 2007)
 
     Notes for existing users:
