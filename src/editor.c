@@ -2324,10 +2324,14 @@ void editor_select_lines(ScintillaObject *sci)
 	start = sci_get_selection_start(sci);
 	start = sci_get_line_from_position(sci, start);
 	start = sci_get_position_from_line(sci, start);
-	end = sci_get_selection_end(sci);
-	end = sci_get_line_from_position(sci, end);
-	end = sci_get_position_from_line(sci, end + 1);
 
+	end = sci_get_selection_end(sci);
+	if (start == end || sci_get_col_from_position(sci, end) > 0)	// partially selected line
+	{
+		gint line = sci_get_line_from_position(sci, end);
+
+		end = sci_get_position_from_line(sci, line + 1);
+	}
 	SSM(sci, SCI_SETSEL, start, end);
 }
 

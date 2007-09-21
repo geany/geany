@@ -1,3 +1,10 @@
+2007-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/editor.c:
+   Make 'Delete lines' not include an extra line when whole lines are
+   selected.
+
+
 2007-09-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keyfile.c:
