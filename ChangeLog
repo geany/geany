@@ -3,6 +3,9 @@
  * src/editor.c:
    Make 'Delete lines' not include an extra line when whole lines are
    selected.
+ * src/keybindings.c, src/callbacks.c:
+   Make 'Duplicate lines' work for whole lines when more than one line
+   has a selection.
 
 
 2007-09-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -1735,12 +1735,7 @@ void
 on_menu_duplicate_line1_activate       (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	if (sci_can_copy(doc_list[idx].sci))
-		sci_selection_duplicate(doc_list[idx].sci);
-	else
-		sci_line_duplicate(doc_list[idx].sci);
+	keybindings_cmd(GEANY_KEYS_EDIT_DUPLICATELINE);
 }
 
 

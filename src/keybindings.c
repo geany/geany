@@ -1119,6 +1119,20 @@ static void cb_func_edit_global(guint key_id)
 }
 
 
+static void duplicate_line(ScintillaObject *sci)
+{
+	if (sci_get_lines_selected(sci) > 1)
+	{
+		editor_select_lines(sci);
+		sci_selection_duplicate(sci);
+	}
+	else if (sci_can_copy(sci))
+		sci_selection_duplicate(sci);
+	else
+		sci_line_duplicate(sci);
+}
+
+
 // common function for editing keybindings, only valid when scintilla has focus.
 static void cb_func_edit(guint key_id)
 {
@@ -1140,7 +1154,7 @@ static void cb_func_edit(guint key_id)
 			sci_cmd(doc_list[idx].sci, SCI_LINESCROLLDOWN);
 			break;
 		case GEANY_KEYS_EDIT_DUPLICATELINE:
-			on_menu_duplicate_line1_activate(NULL, NULL);
+			duplicate_line(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_DELETELINE:
 			// SCI_LINEDELETE only does 1 line
