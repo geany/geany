@@ -1,6 +1,15 @@
-2007-09-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+2007-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/editor.c:
+   Undo r1891 so that 'Delete lines' again includes the cursor line
+   even when at the start of a line - like Cut/Copy lines do.
+
+
+2007-09-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/editor.c:
+   Make 'Select lines' not include an extra line when whole lines are
+   selected.
    Make 'Delete lines' not include an extra line when whole lines are
    selected.
  * src/keybindings.c, src/callbacks.c:

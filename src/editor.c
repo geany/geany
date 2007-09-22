@@ -2317,21 +2317,24 @@ void editor_select_word(ScintillaObject *sci)
 
 void editor_select_lines(ScintillaObject *sci)
 {
-	gint start, end;
+	gint start, end, line;
 
 	g_return_if_fail(sci != NULL);
 
 	start = sci_get_selection_start(sci);
-	start = sci_get_line_from_position(sci, start);
-	start = sci_get_position_from_line(sci, start);
-
 	end = sci_get_selection_end(sci);
-	if (start == end || sci_get_col_from_position(sci, end) > 0)	// partially selected line
-	{
-		gint line = sci_get_line_from_position(sci, end);
 
-		end = sci_get_position_from_line(sci, line + 1);
-	}
+	if (start != end &&
+		sci_get_col_from_position(sci, start) == 0 &&
+		sci_get_col_from_position(sci, end) == 0)
+			return;	// whole lines already selected
+
+	line = sci_get_line_from_position(sci, start);
+	start = sci_get_position_from_line(sci, line);
+
+	line = sci_get_line_from_position(sci, end);
+	end = sci_get_position_from_line(sci, line + 1);
+
 	SSM(sci, SCI_SETSEL, start, end);
 }
 
