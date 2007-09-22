@@ -1,7 +1,14 @@
+2007-09-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * ca.po, es.po, zh_CN.po:
+   Update of Catalan, Spanish and Chinese Simplified translation
+   (thanks Toni Garcia-Navarro, Damián Viano and Dormouse Young)
+
+
 2007-09-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * *.po: Update of all po-file because of string freeze for 
-   Geany 0.12 
+         Geany 0.12 
 
 
 2007-09-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
