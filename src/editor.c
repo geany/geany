@@ -2315,7 +2315,9 @@ void editor_select_word(ScintillaObject *sci)
 }
 
 
-void editor_select_lines(ScintillaObject *sci)
+/* extra_line is for selecting the cursor line or anchor line at the bottom of a selection,
+ * when those lines have no selection. */
+void editor_select_lines(ScintillaObject *sci, gboolean extra_line)
 {
 	gint start, end, line;
 
@@ -2324,10 +2326,11 @@ void editor_select_lines(ScintillaObject *sci)
 	start = sci_get_selection_start(sci);
 	end = sci_get_selection_end(sci);
 
-	if (start != end &&
+	// check if whole lines are already selected
+	if (! extra_line && start != end &&
 		sci_get_col_from_position(sci, start) == 0 &&
 		sci_get_col_from_position(sci, end) == 0)
-			return;	// whole lines already selected
+			return;
 
 	line = sci_get_line_from_position(sci, start);
 	start = sci_get_position_from_line(sci, line);

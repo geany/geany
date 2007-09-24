@@ -1,3 +1,10 @@
+2007-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/editor.c, src/editor.h:
+   Fix bug with 'Delete lines' when cursor is at the start of a
+   multi-line selection.
+
+
 2007-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/editor.c:

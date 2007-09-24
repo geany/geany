@@ -1123,7 +1123,7 @@ static void duplicate_lines(ScintillaObject *sci)
 {
 	if (sci_get_lines_selected(sci) > 1)
 	{
-		editor_select_lines(sci);
+		editor_select_lines(sci, FALSE);	// ignore extra_line because of selecting lines from the line number column
 		sci_selection_duplicate(sci);
 	}
 	else if (sci_can_copy(sci))
@@ -1135,11 +1135,8 @@ static void duplicate_lines(ScintillaObject *sci)
 
 static void delete_lines(ScintillaObject *sci)
 {
-	// include last line (like cut lines, copy lines do):
-	sci_set_selection_end(sci, sci_get_selection_end(sci) + 1);
-
-	editor_select_lines(sci);
-	sci_clear(sci);	// SCI_LINEDELETE only does 1 line
+	editor_select_lines(sci, TRUE); // include last line (like cut lines, copy lines do)
+	sci_clear(sci);	// (SCI_LINEDELETE only does 1 line)
 }
 
 
@@ -1215,7 +1212,7 @@ static void cb_func_edit(guint key_id)
 			editor_select_word(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_SELECTLINE:
-			editor_select_lines(doc_list[idx].sci);
+			editor_select_lines(doc_list[idx].sci, FALSE);
 			break;
 		case GEANY_KEYS_EDIT_SELECTPARAGRAPH:
 			editor_select_paragraph(doc_list[idx].sci);
