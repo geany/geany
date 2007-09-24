@@ -3,6 +3,8 @@
  * src/keybindings.c, src/editor.c, src/editor.h:
    Fix bug with 'Delete lines' when cursor is at the start of a
    multi-line selection.
+ * src/keybindings.c, src/msgwindow.c, src/msgwindow.h:
+   Add msgwin_switch_tab(), msgwin_clear_tab() functions.
 
 
 2007-09-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

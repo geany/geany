@@ -42,10 +42,6 @@
 #include "build.h"
 #include "tools.h"
 #include "navqueue.h"
-// include vte.h on non-Win32 systems, else define fake vte_init
-#ifdef HAVE_VTE
-# include "vte.h"
-#endif
 
 
 const gboolean swap_alt_tab_order = FALSE;
@@ -970,9 +966,7 @@ static void cb_func_switch_editor(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_switch_scribble(G_GNUC_UNUSED guint key_id)
 {
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_SCRATCH);
-	msgwin_show_hide(TRUE);
-	gtk_widget_grab_focus(lookup_widget(app->window, "textview_scribble"));
+	msgwin_switch_tab(MSG_SCRATCH, TRUE);
 }
 
 static void cb_func_switch_search_bar(G_GNUC_UNUSED guint key_id)
@@ -983,15 +977,7 @@ static void cb_func_switch_search_bar(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_switch_vte(G_GNUC_UNUSED guint key_id)
 {
-#ifdef HAVE_VTE
-	if (!vte_info.have_vte)
-		return;
-	msgwin_show_hide(TRUE);
-	/* the msgwin must be visible before we switch to the VTE page so that
-	 * the font settings are applied on realization */
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
-	gtk_widget_grab_focus(vc->vte);
-#endif
+	msgwin_switch_tab(MSG_VTE, TRUE);
 }
 
 static void cb_func_switch_tableft(G_GNUC_UNUSED guint key_id)

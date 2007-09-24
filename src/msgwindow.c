@@ -40,6 +40,7 @@
 #include "filetypes.h"
 #include "build.h"
 #include "main.h"
+#include "vte.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -335,24 +336,9 @@ static void
 on_message_treeview_clear_activate     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	GtkListStore *store;
+	gint tabnum = GPOINTER_TO_INT(user_data);
 
-	switch (GPOINTER_TO_INT(user_data))
-	{
-		case MSG_MESSAGE:
-		gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), FALSE);
-		store = msgwindow.store_msg;
-		break;
-
-		case MSG_COMPILER:
-		gtk_widget_set_sensitive(build_get_menu_items(-1)->item_next_error, FALSE);
-		store = msgwindow.store_compiler;
-		break;
-
-		default: // MSG_STATUS
-		store = msgwindow.store_status;
-	}
-	gtk_list_store_clear(store);
+	msgwin_clear_tab(tabnum);
 }
 
 
@@ -882,6 +868,54 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 		}
 	}
 	return FALSE;
+}
+
+
+void msgwin_switch_tab(MessageWindowTabNum tabnum, gboolean show)
+{
+	GtkWidget *widget = NULL;	// widget to focus
+
+	switch (tabnum)
+	{
+		case MSG_SCRATCH: widget = lookup_widget(app->window, "textview_scribble"); break;
+#ifdef HAVE_VTE
+		case MSG_VTE: widget = (vte_info.have_vte) ? vc->vte : NULL; break;
+#endif
+		default: break;
+	}
+
+	/* the msgwin must be visible before we switch to the VTE page so that
+	 * the font settings are applied on realization */
+	if (show)
+		msgwin_show_hide(TRUE);
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), tabnum);
+	if (show && widget)
+		gtk_widget_grab_focus(widget);
+}
+
+
+void msgwin_clear_tab(MessageWindowTabNum tabnum)
+{
+	GtkListStore *store = NULL;
+
+	switch (tabnum)
+	{
+		case MSG_MESSAGE:
+			gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), FALSE);
+			store = msgwindow.store_msg;
+			break;
+
+		case MSG_COMPILER:
+			gtk_widget_set_sensitive(build_get_menu_items(-1)->item_next_error, FALSE);
+			store = msgwindow.store_compiler;
+			break;
+
+		case MSG_STATUS: store = msgwindow.store_status; break;
+		default: return;
+	}
+	if (store == NULL)
+		return;
+	gtk_list_store_clear(store);
 }
 
 

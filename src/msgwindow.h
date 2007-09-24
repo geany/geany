@@ -34,14 +34,14 @@ enum
 	COLOR_BLUE
 };
 
-enum
+typedef enum
 {
 	MSG_STATUS = 0, // force it to start at 0 to keep in sync with the notebook page numbers
 	MSG_COMPILER,
 	MSG_MESSAGE,
 	MSG_SCRATCH,
 	MSG_VTE,
-};
+} MessageWindowTabNum;
 
 
 
@@ -68,6 +68,10 @@ void msgwin_init();
 void msgwin_finalize();
 
 void msgwin_show_hide(gboolean show);
+
+void msgwin_switch_tab(MessageWindowTabNum tabnum, gboolean show);
+
+void msgwin_clear_tab(MessageWindowTabNum tabnum);
 
 
 void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format, ...) G_GNUC_PRINTF (4, 5);
