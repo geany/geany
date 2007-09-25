@@ -71,7 +71,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 19;
+static const gint api_version = 20;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -248,6 +248,9 @@ typedef struct UIUtilsFuncs
 {
 	GtkWidget*	(*dialog_vbox_new) (GtkDialog *dialog);
 	GtkWidget*	(*frame_new_with_alignment) (const gchar *label_text, GtkWidget **alignment);
+
+	/* set_statusbar() also appends to the message window status tab if log is TRUE. */
+	void		(*set_statusbar) (gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 }
 UIUtilsFuncs;
 
@@ -267,6 +270,7 @@ SupportFuncs;
 
 typedef struct MsgWinFuncs
 {
+	/* status_add() does not set the status bar - use ui->set_statusbar() instead. */
 	void		(*status_add) (const gchar *format, ...);
 	void		(*compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 }

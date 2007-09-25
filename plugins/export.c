@@ -37,7 +37,7 @@
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
-VERSION_CHECK(12)
+VERSION_CHECK(20)
 PLUGIN_INFO(_("Export"), _("Exports the current file into different formats."), "0.1")
 
 #define doc_array	geany_data->doc_array
@@ -45,7 +45,7 @@ PLUGIN_INFO(_("Export"), _("Exports the current file into different formats."), 
 #define utils		geany_data->utils
 #define support		geany_data->support
 #define dialogs		geany_data->dialogs
-#define msgwin		geany_data->msgwindow
+#define ui			geany_data->ui
 
 #define ROTATE_RGB(color) \
 	(((color) & 0xFF0000) >> 16) + ((color) & 0x00FF00) + (((color) & 0x0000FF) << 16)
@@ -266,9 +266,9 @@ static void write_data(const gchar *filename, const gchar *data)
 	gchar *utf8_filename = utils->get_utf8_from_locale(filename);
 
 	if (error_nr == 0)
-		msgwin->status_add(_("Document successfully exported as '%s'."), utf8_filename);
+		ui->set_statusbar(TRUE, _("Document successfully exported as '%s'."), utf8_filename);
 	else
-		msgwin->status_add(_("File '%s' could not be written (%s)."),
+		ui->set_statusbar(TRUE, _("File '%s' could not be written (%s)."),
 			utf8_filename, g_strerror(error_nr));
 
 	g_free(utf8_filename);

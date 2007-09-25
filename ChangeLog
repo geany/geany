@@ -9,6 +9,12 @@
  * TODO:
    Updated for project and plugins improvements, and others.
    Added wishlist items (which are unlikely to be worked on).
+ * plugins/export.c, src/plugindata.h, src/plugins.c:
+   Add ui->set_statusbar() to the plugin API.
+   Make plugin function msgwin->status_add() not set the statusbar - but
+   ui->set_statusbar() can now be used to do both with the log argument.
+   After Geany 0.12 this is how the core versions of those functions
+   will work, so the status window can be set independently.
 
 
 2007-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
