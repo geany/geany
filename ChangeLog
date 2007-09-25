@@ -1,3 +1,13 @@
+2007-09-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c, src/navqueue.c, src/navqueue.h, src/treeviews.c,
+   src/callbacks.c, src/symbols.c, src/symbols.h:
+   Fix bug when using Navigate backwards after using the keyboard to
+   set the cursor position on the current word.
+   Add symbols_goto_tag().
+   Replace navqueue_append() with navqueue_goto_line().
+
+
 2007-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/editor.c, src/editor.h:

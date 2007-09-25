@@ -38,8 +38,6 @@ const GList *symbols_get_tag_list(gint idx, guint tag_types);
 
 GString *symbols_get_macro_list();
 
-TMTag *symbols_find_in_workspace(const gchar *tag_name, gint type);
-
 const gchar **symbols_get_html_entities();
 
 void symbols_finalize();
@@ -49,5 +47,7 @@ gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name);
 gint symbols_generate_global_tags(gint argc, gchar **argv);
 
 void symbols_show_load_tags_dialog();
+
+gboolean symbols_goto_tag(const gchar *name, gboolean definition);
 
 #endif

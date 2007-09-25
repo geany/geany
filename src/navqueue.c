@@ -106,7 +106,7 @@ queue_pos_matches(guint queue_pos, const gchar *fname, gint line)
 }
 
 
-void navqueue_new_position(gchar *tm_filename, gint line)
+static void add_new_position(gchar *tm_filename, gint line)
 {
 	filepos *npos;
 	guint i;
@@ -135,12 +135,13 @@ void navqueue_new_position(gchar *tm_filename, gint line)
 
 /* Adds the current document position to the queue before adding the new position.
  * line is counted with 1 as the first line, not 0. */
-gboolean navqueue_append(gint new_idx, gint line)
+gboolean navqueue_goto_line(gint new_idx, gint line)
 {
 	gint old_idx = document_get_cur_idx();
 
 	g_return_val_if_fail(DOC_IDX_VALID(old_idx), FALSE);
 	g_return_val_if_fail(DOC_IDX_VALID(new_idx), FALSE);
+	g_return_val_if_fail(doc_list[new_idx].tm_file, FALSE);
 	g_return_val_if_fail(line >= 1, FALSE);
 
 	// first add old file as old position
@@ -148,13 +149,11 @@ gboolean navqueue_append(gint new_idx, gint line)
 	{
 		gint cur_line = sci_get_current_line(doc_list[old_idx].sci, -1);
 
-		navqueue_new_position(doc_list[old_idx].tm_file->file_name, cur_line + 1);
+		add_new_position(doc_list[old_idx].tm_file->file_name, cur_line + 1);
 	}
 
-	g_return_val_if_fail(doc_list[new_idx].tm_file, FALSE);
-
-	navqueue_new_position(doc_list[new_idx].tm_file->file_name, line);
-	return TRUE;
+	add_new_position(doc_list[new_idx].tm_file->file_name, line);
+	return utils_goto_line(new_idx, line);
 }
 
 

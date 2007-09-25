@@ -42,6 +42,7 @@
 #include "build.h"
 #include "tools.h"
 #include "navqueue.h"
+#include "symbols.h"
 
 
 const gboolean swap_alt_tab_order = FALSE;
@@ -942,12 +943,10 @@ static void cb_func_current_word(guint key_id)
 				on_find_usage1_activate(NULL, NULL);
 				break;
 			case GEANY_KEYS_POPUP_GOTOTAGDEFINITION:
-				on_goto_tag_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
-					"goto_tag_definition1")), NULL);
+				symbols_goto_tag(editor_info.current_word, TRUE);
 				break;
 			case GEANY_KEYS_POPUP_GOTOTAGDECLARATION:
-				on_goto_tag_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,
-					"goto_tag_declaration1")), NULL);
+				symbols_goto_tag(editor_info.current_word, FALSE);
 				break;
 			case GEANY_KEYS_POPUP_CONTEXTACTION:
 				on_context_action1_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu,

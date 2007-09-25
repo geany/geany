@@ -1054,41 +1054,14 @@ void
 on_goto_tag_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	const gint forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
-	gint type;
-	TMTag *tmtag;
+	gboolean definition = (menuitem ==
+		GTK_MENU_ITEM(lookup_widget(app->popup_menu, "goto_tag_definition1")));
+	document *doc = document_get_current();
 
-	// goto tag definition: all except prototypes / forward declarations / externs
-	if (menuitem == GTK_MENU_ITEM(lookup_widget(app->popup_menu, "goto_tag_definition1")))
-		type = tm_tag_max_t - forward_types;
-	else
-		type = forward_types;
+	g_return_if_fail(doc);
 
-	tmtag = symbols_find_in_workspace(editor_info.current_word, type);
-	if (tmtag != NULL)
-	{
-		gint old_idx = document_get_cur_idx(); // get idx before switching the file
-
-		if (utils_goto_file_line(
-			tmtag->atts.entry.file->work_object.file_name,
-			TRUE, tmtag->atts.entry.line))
-		{
-			// first add old file as old position
-			if (doc_list[old_idx].tm_file)
-				navqueue_new_position(doc_list[old_idx].tm_file->file_name,
-					sci_get_line_from_position(doc_list[old_idx].sci, editor_info.click_pos) + 1);
-
-			navqueue_new_position(tmtag->atts.entry.file->work_object.file_name,
-				tmtag->atts.entry.line);
-			return;
-		}
-	}
-	// if we are here, there was no match and we are beeping ;-)
-	utils_beep();
-	if (type == forward_types)
-		ui_set_statusbar(_("Forward declaration \"%s\" not found."), editor_info.current_word);
-	else
-		ui_set_statusbar(_("Definition of \"%s\" not found."), editor_info.current_word);
+	sci_set_current_position(doc->sci, editor_info.click_pos, FALSE);
+	symbols_goto_tag(editor_info.current_word, definition);
 }
 
 

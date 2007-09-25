@@ -43,6 +43,8 @@
 #include "msgwindow.h"
 #include "treeviews.h"
 #include "main.h"
+#include "navqueue.h"
+#include "ui_utils.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =
@@ -255,7 +257,7 @@ symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
 }
 
 
-TMTag *symbols_find_in_workspace(const gchar *tag_name, gint type)
+static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
 {
 	guint j;
 	const GPtrArray *tags;
@@ -1032,6 +1034,34 @@ static void load_user_tags(filetype_id ft_id)
 	g_list_foreach(fnames, (GFunc) g_free, NULL);
 	g_list_free(fnames);
 	g_hash_table_remove(lang_hash, (gpointer) ft);
+}
+
+
+gboolean symbols_goto_tag(const gchar *name, gboolean definition)
+{
+	const gint forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
+	gint type;
+	TMTag *tmtag;
+
+	// goto tag definition: all except prototypes / forward declarations / externs
+	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
+
+	tmtag = find_workspace_tag(name, type);
+	if (tmtag != NULL)
+	{
+		gint new_idx = document_find_by_filename(
+			tmtag->atts.entry.file->work_object.file_name, TRUE);
+
+		if (navqueue_goto_line(new_idx, tmtag->atts.entry.line))
+			return TRUE;
+	}
+	// if we are here, there was no match and we are beeping ;-)
+	utils_beep();
+	if (type == forward_types)
+		ui_set_statusbar(_("Forward declaration \"%s\" not found."), name);
+	else
+		ui_set_statusbar(_("Definition of \"%s\" not found."), name);
+	return FALSE;
 }
 
 
