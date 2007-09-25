@@ -59,6 +59,10 @@ Geany 0.12 (TBA)
     HACKING:
     * Added notes on adding a filetype.
 
+    Internationalisation:
+    * New translations: en_GB.
+    * Updated translations: ca, de, es, fi, fr, hu, zh_CN.
+
 
 Geany 0.11 (May 21, 2007)
 
