@@ -15,6 +15,12 @@
    ui->set_statusbar() can now be used to do both with the log argument.
    After Geany 0.12 this is how the core versions of those functions
    will work, so the status window can be set independently.
+ * src/utils.c, src/keybindings.c, src/sciwrappers.c, src/sciwrappers.h,
+   src/navqueue.c, src/callbacks.c, src/editor.c:
+   Remove pos argument from sci_get_current_line(), because
+   sci_get_line_from_position() can be used instead and it's clearer.
+   Remove unused sci_get_line_end_styled() - it's also the same as
+   sci_get_line_from_position().
 
 
 2007-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

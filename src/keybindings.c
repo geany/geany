@@ -1064,7 +1064,7 @@ static void cb_func_edit_global(guint key_id)
 
 	if (! DOC_IDX_VALID(idx)) return;
 
-	cur_line = sci_get_current_line(doc_list[idx].sci, -1);
+	cur_line = sci_get_current_line(doc_list[idx].sci);
 
 	switch (key_id)
 	{

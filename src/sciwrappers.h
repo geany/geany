@@ -114,7 +114,6 @@ void				sci_colourise				(ScintillaObject* sci, gint start, gint end);
 void				sci_set_lexer				(ScintillaObject * sci, gint lexer);
 void				sci_clear_all				(ScintillaObject * sci);
 gint				sci_get_end_styled			(ScintillaObject * sci);
-gint				sci_get_line_end_styled		(ScintillaObject * sci, gint end_styled);
 void				sci_set_tab_width			(ScintillaObject * sci, gint width);
 gint				sci_get_tab_width			(ScintillaObject * sci);
 gchar				sci_get_char_at				(ScintillaObject * sci, gint pos);
@@ -156,7 +155,7 @@ gboolean			sci_get_readonly			(ScintillaObject * sci);
 gint				sci_get_zoom				(ScintillaObject * sci);
 void				sci_cmd						(ScintillaObject * sci, gint cmd);
 
-gint				sci_get_current_line		(ScintillaObject * sci, gint pos);
+gint				sci_get_current_line		(ScintillaObject * sci);
 gint				sci_get_lines_selected		(ScintillaObject * sci);
 gint				sci_get_first_visible_line	(ScintillaObject * sci);
 

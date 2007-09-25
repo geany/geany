@@ -1977,7 +1977,7 @@ static void auto_multiline(ScintillaObject *sci, gint pos)
 		while (i >= 0 && isspace(previous_line[i])) i--;
 		if (i >= 1 && is_doc_comment_char(previous_line[i - 1], lexer) && previous_line[i] == '/')
 		{
-			gint cur_line = sci_get_current_line(sci, -1);
+			gint cur_line = sci_get_current_line(sci);
 			gint indent_pos = sci_get_line_indent_position(sci, cur_line);
 			gint indent_len = sci_get_col_from_position(sci, indent_pos);
 
@@ -2266,7 +2266,7 @@ void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_vi
 		return;	// prevent gdk_window_scroll warning
 
 	if (line == -1)
-		line = sci_get_current_line(sci, -1);
+		line = sci_get_current_line(sci);
 
 	// sci 'visible line' != doc line number because of folding and line wrapping
 	/* calling SCI_VISIBLEFROMDOCLINE for line is more accurate than calling

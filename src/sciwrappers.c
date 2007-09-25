@@ -608,12 +608,6 @@ gint sci_get_end_styled(ScintillaObject * sci)
 }
 
 
-gint sci_get_line_end_styled(ScintillaObject * sci, gint end_styled)
-{
-	return SSM(sci,SCI_LINEFROMPOSITION, end_styled,0);
-}
-
-
 void sci_set_tab_width(ScintillaObject * sci, gint width)
 {
 	SSM(sci, SCI_SETTABWIDTH, width, 0);
@@ -840,16 +834,9 @@ gboolean sci_get_readonly(ScintillaObject *sci)
 }
 
 
-gint sci_get_current_line(ScintillaObject *sci, gint pos)
+gint sci_get_current_line(ScintillaObject *sci)
 {
-	if (pos >= 0)
-	{
-		return SSM(sci, SCI_LINEFROMPOSITION, pos, 0);
-	}
-	else
-	{
-		return SSM(sci, SCI_LINEFROMPOSITION, SSM(sci, SCI_GETCURRENTPOS, 0, 0), 0);
-	}
+	return SSM(sci, SCI_LINEFROMPOSITION, SSM(sci, SCI_GETCURRENTPOS, 0, 0), 0);
 }
 
 /* Get number of lines partially or fully selected.

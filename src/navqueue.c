@@ -147,7 +147,7 @@ gboolean navqueue_goto_line(gint new_idx, gint line)
 	// first add old file as old position
 	if (doc_list[old_idx].tm_file)
 	{
-		gint cur_line = sci_get_current_line(doc_list[old_idx].sci, -1);
+		gint cur_line = sci_get_current_line(doc_list[old_idx].sci);
 
 		add_new_position(doc_list[old_idx].tm_file->file_name, cur_line + 1);
 	}

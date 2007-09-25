@@ -506,7 +506,7 @@ gint utils_get_current_function(gint idx, const gchar **tagname)
 		return tag_line;
 	}
 
-	line = sci_get_current_line(doc_list[idx].sci, -1);
+	line = sci_get_current_line(doc_list[idx].sci);
 	fold_level = sci_get_fold_level(doc_list[idx].sci, line);
 	// check if the cached line and file index have changed since last time:
 	if (! current_function_changed(idx, line, fold_level))

@@ -1728,7 +1728,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 		gint line, ind_pos, old_pos, new_pos, step;
 
 		old_pos = sci_get_current_position(doc_list[idx].sci);
-		line = sci_get_current_line(doc_list[idx].sci, old_pos);
+		line = sci_get_line_from_position(doc_list[idx].sci, old_pos);
 		ind_pos = sci_get_line_indent_position(doc_list[idx].sci, line);
 		// when using tabs increase cur pos by 1, when using space increase it by tab_width
 		step = (editor_prefs.use_tabs) ? 1 : editor_prefs.tab_width;
@@ -1757,7 +1757,7 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 		gint line, ind_pos, old_pos, new_pos, step, indent;
 
 		old_pos = sci_get_current_position(doc_list[idx].sci);
-		line = sci_get_current_line(doc_list[idx].sci, old_pos);
+		line = sci_get_line_from_position(doc_list[idx].sci, old_pos);
 		ind_pos = sci_get_line_indent_position(doc_list[idx].sci, line);
 		step = (editor_prefs.use_tabs) ? 1 : editor_prefs.tab_width;
 		new_pos = (old_pos >= ind_pos) ? old_pos - step : old_pos;
