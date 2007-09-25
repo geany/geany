@@ -2,11 +2,12 @@ TODO List:
 ----------
 (features included in () have lower priority)
 
+	Fix bugs:
+	o fix bug that prevents UTF-16, UTF-32 files from being loaded.
+	o tagmanager fails on UTF-16/32
 
 	Next version or later:
 
-	o fix bug that prevents UTF-16, UTF-32 files from being loaded.
-	o tagmanager fails on UTF-16/32
 	o make calltips show full function signature for C-like files (e.g.
 	  return type with const, [] for D, etc.)
 	o documentation: list and explain filetype modes
@@ -14,8 +15,29 @@ TODO List:
 	o line breaking mode to limit words on a line for e.g. XML content.
 	o common default highlighting for all programming languages
 	o fix parsing command line args after given filenames
+	o project session support
+	o project indentation settings support
+	o plugin management
+	o plugin keybindings
+	o file chooser sidebar plugin
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines  - Scintilla issue)
 	o (folder tree in the sidebar)
 	o (improved Windows support)
+	o (macro support)
+	o (better regex support)
+	o (better tags support for popular languages? - this is a moving
+	  target...)
+
+
+Wishlist
+--------
+Note: These items might not get worked on.
+
+	o Some kind of support for ctags files.
+	o Scope resolution for object members.
+	o Multiline regex support (requires work on Scintilla)
+	o Python scripting plugin? (not as efficient as Lua, but perhaps
+	  more widely known)
+	o Split window editing.

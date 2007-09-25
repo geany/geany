@@ -6,6 +6,9 @@
    set the cursor position on the current word.
    Add symbols_goto_tag().
    Replace navqueue_append() with navqueue_goto_line().
+ * TODO:
+   Updated for project and plugins improvements, and others.
+   Added wishlist items (which are unlikely to be worked on).
 
 
 2007-09-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
