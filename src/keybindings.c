@@ -43,6 +43,7 @@
 #include "tools.h"
 #include "navqueue.h"
 #include "symbols.h"
+#include "vte.h"
 
 
 const gboolean swap_alt_tab_order = FALSE;
@@ -654,6 +655,59 @@ static gboolean check_construct_completion(GdkEventKey *event)
 }
 
 
+static gboolean set_sensitive(gpointer widget)
+{
+	gtk_widget_set_sensitive(GTK_WIDGET(widget), TRUE);
+	return FALSE;
+}
+
+
+static gboolean check_vte(GdkEventKey *event, guint keyval)
+{
+#ifndef HAVE_VTE
+	return FALSE;
+#else
+	GtkWidget *menubar;
+
+	if (! vte_info.have_vte)
+		return FALSE;
+	if (gtk_window_get_focus(GTK_WINDOW(app->window)) != vc->vte)
+		return FALSE;
+	if (event->state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK) &&
+		(keyval == GDK_c || keyval == GDK_v))	// copy/paste
+		return TRUE;
+	if (event->state != GDK_CONTROL_MASK)
+		return FALSE;
+
+	// Check Ctrl-[a-z] terminal shortcuts
+	switch (keyval)
+	{
+		case GDK_a:
+		case GDK_c:
+		case GDK_d:
+		case GDK_e:
+		case GDK_k:
+		case GDK_q:
+		case GDK_r:
+		case GDK_s:
+		case GDK_u:
+		case GDK_w:
+		case GDK_z:
+			break;
+		default:
+			return FALSE;
+	}
+	/* Temporarily disable the menubar to prevent conflicting menu accelerators.
+	 * Ideally we would just somehow disable the menubar without redrawing it,
+	 * but maybe that's not possible. */
+	menubar = lookup_widget(app->window, "menubar1");
+	gtk_widget_set_sensitive(menubar, FALSE);
+	g_idle_add(&set_sensitive, (gpointer) menubar);
+	return TRUE;
+#endif
+}
+
+
 /* central keypress event handler, almost all keypress events go to this function */
 gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
@@ -673,7 +727,9 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 	if (event->state & GDK_MOD2_MASK)
 		event->state -= GDK_MOD2_MASK;
 
-	// special case
+	// special cases
+	if (check_vte(event, keyval))
+		return FALSE;
 	if (check_construct_completion(event))
 		return TRUE;
 

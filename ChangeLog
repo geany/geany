@@ -2,6 +2,9 @@
 
  * src/keybindings.c:
    Fix selecting text with Shift-{PageUp,PageDown} (closes #1801315).
+ * src/keybindings.c, src/vte.c:
+   Make common bash Ctrl-[a-z] keyboard shortcuts work in the VTE.
+   (Not sure why Ctrl-Shift-[cv] copy/paste shortcuts still don't work).
 
 
 2007-09-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

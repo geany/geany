@@ -60,6 +60,7 @@ static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
 #define VTE_TERMINAL(obj) (GTK_CHECK_CAST((obj), VTE_TYPE_TERMINAL, VteTerminal))
 #define VTE_TYPE_TERMINAL (vf->vte_terminal_get_type())
 
+static void create_vte();
 static void vte_start(GtkWidget *widget);
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
 static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
@@ -75,6 +76,7 @@ enum
 	POPUP_CHANGEPATH,
 	POPUP_PREFERENCES
 };
+
 
 /* taken from anjuta, thanks */
 static gchar **vte_get_child_environment(void)
@@ -133,9 +135,6 @@ static void override_menu_key()
 
 void vte_init(void)
 {
-
-	GtkWidget *vte, *scrollbar, *hbox, *frame;
-
 	if (vte_info.have_vte == FALSE)
 	{	// app->have_vte can be false, even if VTE is compiled in, think of command line option
 		geany_debug("Disabling terminal support");
@@ -170,6 +169,17 @@ void vte_init(void)
 		vf = g_new0(struct VteFunctions, 1);
 		vte_register_symbols(module);
 	}
+
+	create_vte();
+
+	// setup the f10 menu override (so it works before the widget is first realized).
+	override_menu_key();
+}
+
+
+static void create_vte()
+{
+	GtkWidget *vte, *scrollbar, *hbox, *frame;
 
 	vte = vf->vte_terminal_new();
 	vc->vte = vte;
@@ -206,9 +216,6 @@ void vte_init(void)
 
 	// the vte widget has to be realised before color changes take effect
 	g_signal_connect(G_OBJECT(vte), "realize", G_CALLBACK(vte_apply_user_settings), NULL);
-
-	// setup the f10 menu override (so it works before the widget is first realized).
-	override_menu_key();
 }
 
 
@@ -240,7 +247,8 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		event->keyval == GDK_d ||
 		event->keyval == GDK_C ||
 		event->keyval == GDK_D) &&
-		event->state & GDK_CONTROL_MASK)
+		event->state & GDK_CONTROL_MASK &&
+		! (event->state & GDK_SHIFT_MASK) && ! (event->state & GDK_MOD1_MASK))
 	{
 		vte_get_working_directory(); // try to keep the working directory when restarting the VTE
 
@@ -254,7 +262,6 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 		return TRUE;
 	}
-
 	return FALSE;
 }
 

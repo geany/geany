@@ -3,6 +3,7 @@ Geany 0.12 (TBA)
     Bugs fixed:
     * Fixed opening the same file twice from the message window/command-line.
     * Fixed Ctrl-Shift keybindings not working when caps lock is on.
+    * Fixed common bash Ctrl-[a-z] keyboard shortcuts not working in the VTE.
     * Fixed saving the wrong document when using Save All with unnamed
       documents.
     * Fixed replacing with '^' or '$' regex chars.
