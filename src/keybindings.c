@@ -615,7 +615,7 @@ static gboolean check_fixed_kb(GdkEventKey *event)
 	if (event->keyval == GDK_Page_Up || event->keyval == GDK_Page_Down)
 	{
 		// switch to first or last document
-		if (event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
+		if (event->state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
 		{
 			if (event->keyval == GDK_Page_Up)
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), 0);

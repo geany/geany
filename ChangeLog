@@ -1,3 +1,9 @@
+2007-09-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c:
+   Fix selecting text with Shift-{PageUp,PageDown} (closes #1801315).
+
+
 2007-09-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/navqueue.c, src/navqueue.h, src/treeviews.c,
