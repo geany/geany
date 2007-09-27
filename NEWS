@@ -9,6 +9,8 @@ Geany 0.12 (TBA)
     * Fixed replacing with '^' or '$' regex chars.
     * Fixed hang with Find All/Find Usage with '^' or '$' regex chars.
     * Fixed hang when replacing all '[ ]*' regex matches (closes #1757748).
+    * Fixed displaying error indicators with Make after entering a
+      subdirectory.
 
     Filetypes:
     * Added reStructuredText filetype and parser.

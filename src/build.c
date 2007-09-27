@@ -57,6 +57,8 @@
 
 BuildInfo build_info = {GBO_COMPILE, 0, NULL, GEANY_FILETYPES_ALL, NULL};
 
+static gchar *current_dir_entered = NULL;
+
 static struct
 {
 	GPid pid;
@@ -471,6 +473,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	g_return_val_if_fail(DOC_IDX_VALID(idx), (GPid) 1);
 
 	clear_errors(idx);
+	setptr(current_dir_entered, NULL);
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	executable = utils_remove_ext_from_filename(locale_filename);
@@ -796,7 +799,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 	if (cond & (G_IO_IN | G_IO_PRI))
 	{
 		//GIOStatus s;
-		gchar *msg, *dir = NULL;
+		gchar *msg;
 
 		while (g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL) && msg)
 		{
@@ -809,9 +812,7 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 
 			if (build_parse_make_dir(msg, &tmp))
 			{
-				if (dir != NULL)
-					g_free(dir);
-				dir = tmp;
+				setptr(current_dir_entered, tmp);
 			}
 
 			if (editor_prefs.use_indicators)
@@ -819,10 +820,12 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 				gchar *filename;
 				gint line;
 
-				msgwin_parse_compiler_error_line(msg, dir, &filename, &line);
+				msgwin_parse_compiler_error_line(msg, current_dir_entered,
+					&filename, &line);
 				if (line != -1 && filename != NULL)
 				{
 					gint idx = document_find_by_filename(filename, FALSE);
+
 					document_set_indicator(idx, line - 1);	// will check valid idx
 					color = COLOR_RED;	// error message parsed on the line
 				}
@@ -832,9 +835,6 @@ static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
 
 			g_free(msg);
 		}
-
-		if (dir != NULL)
-			g_free(dir);
 	}
 	if (cond & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
 		return FALSE;
