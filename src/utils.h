@@ -34,9 +34,9 @@
  * It prevents a memory leak compared with: ptr = func(ptr); */
 #define setptr(ptr, result)\
 	{\
-		gpointer tmp = ptr;\
+		gpointer setptr_tmp = ptr;\
 		ptr = result;\
-		g_free(tmp);\
+		g_free(setptr_tmp);\
 	}
 
 
