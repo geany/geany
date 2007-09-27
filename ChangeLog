@@ -1,3 +1,10 @@
+2007-09-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c:
+   Add enable_vte_bash_keys keybindings.conf hidden pref in [Settings].
+   Refactor keybindings_init().
+
+
 2007-09-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:

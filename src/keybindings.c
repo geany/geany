@@ -46,7 +46,8 @@
 #include "vte.h"
 
 
-const gboolean swap_alt_tab_order = FALSE;
+static const gboolean swap_alt_tab_order = FALSE;
+static gboolean enable_vte_bash_keys;
 
 
 /* simple convenience function to allocate and fill the struct */
@@ -105,15 +106,8 @@ static void cb_func_current_word(guint key_id);
 static void keybindings_add_accels();
 
 
-void keybindings_init(void)
+static void init_default_kb()
 {
-	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "keybindings.conf", NULL);
-	gchar *val;
-	guint i;
-	guint key;
-	GdkModifierType mods;
-	GKeyFile *config = g_key_file_new();
-
 	// init all fields of keys with default values
 	keys[GEANY_KEYS_MENU_NEW] = fill(cb_func_file_action,
 		GDK_n, GDK_CONTROL_MASK, "menu_new", _("New"));
@@ -324,6 +318,17 @@ void keybindings_init(void)
 		0, 0, "popup_gototagdeclaration", _("Go to Tag Declaration"));
 	keys[GEANY_KEYS_POPUP_CONTEXTACTION] = fill(cb_func_current_word,
 		0, 0, "popup_contextaction", _("Context Action"));
+}
+
+
+static void load_user_kb()
+{
+	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "keybindings.conf", NULL);
+	gchar *val;
+	guint i;
+	guint key;
+	GdkModifierType mods;
+	GKeyFile *config = g_key_file_new();
 
 	// now load user defined keys
 	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
@@ -340,6 +345,17 @@ void keybindings_init(void)
 			g_free(val);
 		}
 	}
+	enable_vte_bash_keys =
+		utils_get_setting_boolean(config, "Settings", "enable_vte_bash_keys", TRUE);
+	g_free(configfile);
+	g_key_file_free(config);
+}
+
+
+void keybindings_init(void)
+{
+	init_default_kb();
+	load_user_kb();
 
 	// set section name
 	keys[GEANY_KEYS_MENU_NEW]->section = _("File menu");
@@ -353,9 +369,6 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_SWITCH_EDITOR]->section = _("Focus commands");
 	keys[GEANY_KEYS_EDIT_TOGGLECASE]->section = _("Editing commands");
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE]->section = _("Tag commands");
-
-	g_free(configfile);
-	g_key_file_free(config);
 
 	keybindings_add_accels();
 }
@@ -728,7 +741,7 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 		event->state -= GDK_MOD2_MASK;
 
 	// special cases
-	if (check_vte(event, keyval))
+	if (enable_vte_bash_keys && check_vte(event, keyval))
 		return FALSE;
 	if (check_construct_completion(event))
 		return TRUE;
