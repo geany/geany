@@ -80,6 +80,8 @@ GArray *doc_array;
 static gboolean delay_colourise = FALSE;
 
 
+void msgwin_status_add_new(const gchar *format, ...) G_GNUC_PRINTF(1, 2);	// temporary for v0.12
+
 static void document_undo_clear(gint idx);
 static void document_redo_add(gint idx, guint type, gpointer data);
 
@@ -464,7 +466,7 @@ gboolean document_remove(guint page_num)
 		}
 		notebook_remove_page(page_num);
 		treeviews_remove_document(idx);
-		msgwin_status_add(_("File %s closed."), DOC_FILENAME(idx));
+		msgwin_status_add_new(_("File %s closed."), DOC_FILENAME(idx));
 		g_free(doc_list[idx].encoding);
 		g_free(doc_list[idx].saved_encoding.encoding);
 		g_free(doc_list[idx].file_name);
@@ -562,7 +564,7 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 		g_signal_emit_by_name(geany_object, "document-new", idx);
 	}
 
-	msgwin_status_add(_("New file \"%s\" opened."),
+	msgwin_status_add_new(_("New file \"%s\" opened."),
 		(doc_list[idx].file_name != NULL) ? doc_list[idx].file_name : GEANY_STRING_UNTITLED);
 
 	return idx;
@@ -962,7 +964,7 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	if (reload)
 		msgwin_status_add(_("File %s reloaded."), utf8_filename);
 	else
-		msgwin_status_add(_("File %s opened(%d%s)."),
+		msgwin_status_add_new(_("File %s opened(%d%s)."),
 				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
 				(readonly) ? _(", read-only") : "");
 
@@ -1218,7 +1220,7 @@ gboolean document_save_file(gint idx, gboolean force)
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), base_name);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), base_name);
-		msgwin_status_add(_("File %s saved."), doc_list[idx].file_name);
+		msgwin_status_add_new(_("File %s saved."), doc_list[idx].file_name);
 		ui_update_statusbar(idx, -1);
 		g_free(base_name);
 #ifdef HAVE_VTE

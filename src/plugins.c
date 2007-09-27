@@ -168,27 +168,10 @@ static SupportFuncs support_funcs = {
 };
 
 
-/* This is a temporary function for the plugin API for Geany 0.12.
- * In future, msgwin_status_add() will act like this. */
-static void plugin_msgwin_status_add(const gchar *format, ...)
-{
-	gchar string[512];
-	va_list args;
-	gboolean suppress;
-
-	va_start(args, format);
-	g_vsnprintf(string, 512, format, args);
-	va_end(args);
-
-	// hack to prevent setting the status bar
-	suppress = prefs.suppress_status_messages;
-	prefs.suppress_status_messages = TRUE;
-	msgwin_status_add("%s", string);
-	prefs.suppress_status_messages = suppress;
-}
+void msgwin_status_add_new(const gchar *format, ...) G_GNUC_PRINTF(1, 2);	// temporary for v0.12
 
 static MsgWinFuncs msgwin_funcs = {
-	&plugin_msgwin_status_add,
+	&msgwin_status_add_new,
 	&msgwin_compiler_add_fmt
 };
 

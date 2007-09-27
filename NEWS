@@ -48,7 +48,8 @@ Geany 0.12 (TBA)
     * Added hidden editor preference 'use_gtk_word_boundaries'.
     * Added auto_complete_whilst_editing hidden preference.
     * Speed up Save All for C-like files.
-    Thanks also to Christoph Berg for updating the main window icon.
+    * Don't show file opened/saved/closed messages on the status bar.
+    (Thanks also to Christoph Berg for updating the icon code).
 
     Docs:
     * Added Plugins section.

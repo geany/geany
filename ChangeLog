@@ -9,6 +9,10 @@
  * src/keybindings.c:
    Add enable_vte_bash_keys keybindings.conf hidden pref in [Settings].
    Refactor keybindings_init().
+ * src/msgwindow.c, src/document.c, src/plugins.c, NEWS:
+   Don't show file opened/saved/closed messages on the status bar.
+   Add temporary function msgwin_status_add_new() for v0.12 (to avoid
+   many code changes updating msgwin_status_add() before the release).
 
 
 2007-09-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
