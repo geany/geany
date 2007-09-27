@@ -611,11 +611,20 @@ static void load_ui_prefs(GKeyFile *config)
 	}
 	else
 	{
+		gint i;
+
 		ui_prefs.geometry[0] = geo[0];
 		ui_prefs.geometry[1] = geo[1];
 		ui_prefs.geometry[2] = geo[2];
 		ui_prefs.geometry[3] = geo[3];
 		ui_prefs.geometry[4] = geo[4];
+
+		// don't use insane values
+		for (i = 0; i < 4; i++)
+		{
+			if (ui_prefs.geometry[i] < -1)
+				ui_prefs.geometry[i] = -1;
+		}		
 	}
 	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
 	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?

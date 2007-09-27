@@ -1,3 +1,9 @@
+2007-09-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keyfile.c:
+   Don't load invalid window geometry data from the config file.
+
+
 2007-09-27  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:
