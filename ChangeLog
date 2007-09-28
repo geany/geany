@@ -11,6 +11,11 @@
    Add documentation for --no-preprocessing option.
  * src/keybindings.c:
    Add Project Properties menu accelerator.
+ * tagmanager/vstring.h, tagmanager/vstring.c:
+   Fix a possible segfault with vStringPut() - backported from CTags
+   5.7. This appears to fix a segfault on Windows 2000 when loading
+   tagmanager/c.c.
+   It also adds vStringChop() - chop last character from string.
 
 
 2007-09-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

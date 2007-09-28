@@ -1,6 +1,6 @@
 /*
 *
-*   Copyright (c) 1998-2001, Darren Hiebert
+*   Copyright (c) 1998-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
@@ -58,7 +58,7 @@ extern void vStringClear (vString *const string)
 {
     string->length = 0;
     string->buffer [0] = '\0';
-    DebugStatement ( clearString (string->buffer, string->size); )
+	DebugStatement ( memset (string->buffer, 0, string->size); )
 }
 
 extern void vStringDelete (vString *const string)
@@ -84,26 +84,35 @@ extern vString *vStringNew (void)
     return string;
 }
 
+#ifndef VSTRING_PUTC_MACRO
 extern void vStringPut (vString *const string, const int c)
 {
-    if (string->length == string->size)		/*  check for buffer overflow */
-	vStringAutoResize (string);
+	if (string->length + 1 == string->size)  /*  check for buffer overflow */
+		vStringAutoResize (string);
 
     string->buffer [string->length] = c;
     if (c != '\0')
-	string->length++;
+		string->buffer [++string->length] = '\0';
 }
+#endif
 
 extern void vStringCatS (vString *const string, const char *const s)
 {
+#if 1
+	const size_t len = strlen (s);
+	while (string->length + len + 1 >= string->size)/*  check for buffer overflow */
+		vStringAutoResize (string);
+	strcpy (string->buffer + string->length, s);
+	string->length += len;
+#else
     const char *p = s;
-
     do
-	vStringPut (string, *p);
+		vStringPut (string, *p);
     while (*p++ != '\0');
+#endif
 }
 
-extern vString *vStringNewCopy (vString *const string)
+extern vString *vStringNewCopy (const vString *const string)
 {
     vString *vs = vStringNew ();
     vStringCatS (vs, string->buffer);
@@ -117,8 +126,8 @@ extern vString *vStringNewInit (const char *const s)
     return vs;
 }
 
-extern void vStringNCatS (vString *const string, const char *const s,
-			  const size_t length)
+extern void vStringNCatS (
+		vString *const string, const char *const s, const size_t length)
 {
     const char *p = s;
     size_t remain = length;
@@ -170,20 +179,31 @@ extern void vStringStripTrailing (vString *const string)
     }
 }
 
+/*  Chop last character from string.
+ */
+extern void vStringChop (vString *const string)
+{
+	if (string->length > 0)
+	{
+		--string->length;
+		string->buffer [string->length] = '\0';
+	}
+}
+
 extern void vStringCopyS (vString *const string, const char *const s)
 {
     vStringClear (string);
     vStringCatS (string, s);
 }
 
-extern void vStringNCopyS (vString *const string, const char *const s,
-			   const size_t length)
+extern void vStringNCopyS (
+		vString *const string, const char *const s, const size_t length)
 {
     vStringClear (string);
     vStringNCatS (string, s, length);
 }
 
-extern void vStringCopyToLower (vString *const dest, vString *const src)
+extern void vStringCopyToLower (vString *const dest, const vString *const src)
 {
     const size_t length = src->length;
     const char *s = src->buffer;
@@ -207,4 +227,4 @@ extern void vStringSetLength (vString *const string)
     string->length = strlen (string->buffer);
 }
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */
