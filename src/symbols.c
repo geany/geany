@@ -857,7 +857,7 @@ static filetype *detect_global_tags_filetype(const gchar *utf8_filename)
  * the relevant path.
  * Example:
  * CFLAGS=-I/home/user/libname-1.x geany -g libname.d.tags libname.h */
-int symbols_generate_global_tags(int argc, char **argv)
+int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess)
 {
 	/* -E pre-process, -dD output user macros, -p prof info (?),
 	 * -undef remove builtin macros (seems to be needed with FC5 gcc 4.1.1 */
@@ -881,7 +881,7 @@ int symbols_generate_global_tags(int argc, char **argv)
 			g_printerr(_("Unknown filetype extension for \"%s\".\n"), tags_file);
 			return 1;
 		}
-		if (ft->lang == 0 || ft->lang == 1)	/* C/C++ */
+		if (want_preprocess && (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP))
 			command = g_strdup_printf("%s %s", pre_process, NVL(getenv("CFLAGS"), ""));
 		else
 			command = NULL;	// don't preprocess

@@ -104,6 +104,7 @@ static gboolean ignore_socket = FALSE;
 #endif
 static gboolean generate_datafiles = FALSE;
 static gboolean generate_tags = FALSE;
+static gboolean no_preprocessing = FALSE;
 static gboolean ft_names = FALSE;
 static gboolean no_plugins = FALSE;
 
@@ -115,7 +116,8 @@ static GOptionEntry entries[] =
 	{ "debug", 'd', 0, G_OPTION_ARG_NONE, &debug_mode, N_("Runs in debug mode (means being verbose)"), NULL },
 	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("Print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
-	{ "generate-data-files", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, "", NULL },
+	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, NULL, NULL },
+	{ "generate-data-files", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &generate_datafiles, NULL, NULL },
 #ifdef HAVE_SOCKET
 	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &ignore_socket, N_("Don't open files in a running instance, force opening a new instance"), NULL },
 #endif
@@ -458,7 +460,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 		filetypes_init_types();
 		configuration_read_filetype_extensions();	// needed for *.lang.tags filetype matching
-		ret = symbols_generate_global_tags(*argc, *argv);
+		ret = symbols_generate_global_tags(*argc, *argv, ! no_preprocessing);
 		exit(ret);
 	}
 

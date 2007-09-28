@@ -44,7 +44,7 @@ void symbols_finalize();
 
 gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name);
 
-gint symbols_generate_global_tags(gint argc, gchar **argv);
+gint symbols_generate_global_tags(gint argc, gchar **argv, gboolean want_preprocess);
 
 void symbols_show_load_tags_dialog();
 

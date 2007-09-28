@@ -4,6 +4,9 @@
    Also ignore Ctrl-L for VTE bash command.
    Allow 'Switch to editor' command to override any bash commands.
    Also disable the popup menu to avoid VTE bash conflicts.
+ * src/main.c, src/symbols.c, src/symbols.h:
+   Add --no-preprocessing, -P option when generating tags files to
+   disable preprocessing of C/C++ source files.
 
 
 2007-09-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
