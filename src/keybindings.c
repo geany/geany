@@ -103,7 +103,7 @@ static void cb_func_edit_global(guint key_id);
 // common function for keybindings using current word
 static void cb_func_current_word(guint key_id);
 
-static void keybindings_add_accels();
+static void add_menu_accels();
 
 
 static void init_default_kb()
@@ -370,7 +370,7 @@ void keybindings_init(void)
 	keys[GEANY_KEYS_EDIT_TOGGLECASE]->section = _("Editing commands");
 	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE]->section = _("Tag commands");
 
-	keybindings_add_accels();
+	add_menu_accels();
 }
 
 
@@ -388,7 +388,7 @@ void keybindings_init(void)
 			"activate", accel_group, keys[(gkey)]->key, keys[(gkey)]->mods, \
 			GTK_ACCEL_VISIBLE)
 
-static void keybindings_add_accels()
+static void add_menu_accels()
 {
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
 
@@ -421,13 +421,18 @@ static void keybindings_add_accels()
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FULLSCREEN, menu_fullscreen1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_MESSAGEWINDOW, menu_show_messages_window1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_SIDEBAR, menu_show_sidebar1);
-	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPENCOLORCHOOSER, menu_choose_color1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_ZOOMIN, menu_zoom_in1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_ZOOMOUT, menu_zoom_out1);
+
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_REPLACETABS, menu_replace_tabs);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_FOLDALL, menu_fold_all1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_UNFOLDALL, menu_unfold_all1);
+
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_PROJECTPROPERTIES, project_properties1);
+
+	GEANY_ADD_ACCEL(GEANY_KEYS_MENU_OPENCOLORCHOOSER, menu_choose_color1);
 	//~ GEANY_ADD_ACCEL(GEANY_KEYS_MENU_INSERTSPECIALCHARS, menu_insert_special_chars1);
+
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_TOGGLECASE, menu_toggle_case2);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_COMMENTLINE, menu_comment_line1);
 	GEANY_ADD_ACCEL(GEANY_KEYS_EDIT_UNCOMMENTLINE, menu_uncomment_line1);
