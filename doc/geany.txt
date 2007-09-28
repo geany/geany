@@ -180,7 +180,7 @@ Short option  Long option              Function
 *none*        --column                 Set initial column number for the first opened file.
 
 -c dir_name   --config=directory_name  Use an alternate configuration directory. Default
-                                       configuration directory is ~/.geany/ and there resides
+                                       configuration directory is ``~/.geany/`` and there resides
                                        ``geany.conf`` and other configuration files.
 
 -d            --debug                  Run Geany in debug mode, which means being verbose
@@ -188,6 +188,11 @@ Short option  Long option              Function
 
 *none*        --ft-names               Print a list of Geany's internal filetype names (useful
                                        for the auto completion list).
+
+-g            --generate-tags          Generate a global tags file (see
+                                       `Generating a global tags file`_).
+
+-P            --no-preprocessing       Don't preprocess C/C++ files when generating tags.
 
 -i            --new-instance           Do not open files in a running instance, force opening
                                        a new instance. Only available if Geany was compiled
@@ -207,7 +212,7 @@ Short option  Long option              Function
 
 -t            --no-terminal            Do not load terminal support. Use this option if you do
                                        not want to load the virtual terminal emulator widget
-                                       at startup. If you do not have libvte.so.4 installed,
+                                       at startup. If you do not have ``libvte.so.4`` installed,
                                        then terminal-support is automatically disabled. Only
                                        available if Geany was compiled with support for VTE.
 
@@ -952,13 +957,18 @@ filetypes.
 You can generate your own global tags files by parsing a list of
 source files. The command is::
 
-    geany -g <Tag File> <File list>
+    geany -g [-P] <Tag File> <File list>
 
 * Tag File should be in the format described earlier -- see the
   section called `Global tags`_.
 * File list is a list of filenames, each with a full path (unless
   you are generating C/C++ tags and have set the CFLAGS environment
   variable appropriately).
+* ``-P`` or ``--no-preprocessing`` disables using the C pre-processor
+  to process ``#include`` directives for C/C++ source files. Use this
+  option if you want to specify each source file on the command-line
+  instead of using a 'master' header file. Also can be useful if you
+  don't want to specify the CFLAGS environment variable.
 
 Example for the wxD library for the D programming language::
 
@@ -990,9 +1000,6 @@ of header files. When Geany is next started, your custom tags file
 will be loaded instead of the default global.tags. You should keep a
 copy of the generated tags file because it will get overwritten when
 upgrading Geany.
-
-This is a temporary solution -- in later versions this will be
-unnecessary.
 
 
 

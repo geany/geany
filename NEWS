@@ -51,6 +51,8 @@ Geany 0.12 (TBA)
     * Added auto_complete_whilst_editing hidden preference.
     * Speed up Save All for C-like files.
     * Don't show file opened/saved/closed messages on the status bar.
+    * Added --no-preprocessing, -P option when generating tags files to
+      disable preprocessing of C/C++ source files.
     (Thanks also to Christoph Berg for updating the icon code).
 
     Docs:

@@ -7,6 +7,8 @@
  * src/main.c, src/symbols.c, src/symbols.h:
    Add --no-preprocessing, -P option when generating tags files to
    disable preprocessing of C/C++ source files.
+ * doc/geany.txt, doc/geany.html, doc/geany.1.in, NEWS:
+   Add documentation for --no-preprocessing option.
 
 
 2007-09-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

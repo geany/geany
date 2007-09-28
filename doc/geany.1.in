@@ -23,7 +23,9 @@ Run Geany in debug mode, which means being verbose and printing lots of informat
 .IP "\fB\fP             \fB\-\-ft\-names\fP         " 10
 Print a list of Geany's internal filetype names (useful for the auto completion list).
 .IP "\fB-g\fP           \fB\-\-generate\-tags\fP         " 10
-Generate global tags file (see documentation).
+Generate a global tags file (see documentation).
+.IP "\fB-P\fP           \fB\-\-no\-preprocessing\fP         " 10
+Don't preprocess C/C++ files when generating tags.
 .IP "\fB-i\fP           \fB\-\-new-instance\fP         " 10
 Don't open files in a running instance, force opening a new instance.
 Only available if Geany was compiled with support for Sockets.
