@@ -680,7 +680,7 @@ static gboolean check_vte(GdkEventKey *event, guint keyval)
 #ifndef HAVE_VTE
 	return FALSE;
 #else
-	GtkWidget *menubar;
+	GtkWidget *widget;
 
 	if (! vte_info.have_vte)
 		return FALSE;
@@ -699,6 +699,7 @@ static gboolean check_vte(GdkEventKey *event, guint keyval)
 		case GDK_c:
 		case GDK_d:
 		case GDK_e:
+		case GDK_l:
 		case GDK_k:
 		case GDK_q:
 		case GDK_r:
@@ -710,12 +711,20 @@ static gboolean check_vte(GdkEventKey *event, guint keyval)
 		default:
 			return FALSE;
 	}
-	/* Temporarily disable the menubar to prevent conflicting menu accelerators.
+	if (event->state == keys[GEANY_KEYS_SWITCH_EDITOR]->mods &&
+		keyval == keys[GEANY_KEYS_SWITCH_EDITOR]->key)
+		return FALSE;	// make switch to editor override any bash commands
+
+	/* Temporarily disable the menus to prevent conflicting menu accelerators
+	 * from overriding the VTE bash shortcuts.
 	 * Ideally we would just somehow disable the menubar without redrawing it,
 	 * but maybe that's not possible. */
-	menubar = lookup_widget(app->window, "menubar1");
-	gtk_widget_set_sensitive(menubar, FALSE);
-	g_idle_add(&set_sensitive, (gpointer) menubar);
+	widget = lookup_widget(app->window, "menubar1");
+	gtk_widget_set_sensitive(widget, FALSE);
+	g_idle_add(&set_sensitive, (gpointer) widget);
+	widget = app->popup_menu;
+	gtk_widget_set_sensitive(widget, FALSE);
+	g_idle_add(&set_sensitive, (gpointer) widget);
 	return TRUE;
 #endif
 }
