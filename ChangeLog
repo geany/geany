@@ -2,6 +2,8 @@
 
  * tagmanager/python.c:
    Show parent class for inner classes.
+ * src/notebook.c:
+   Use stock close image for notebook tab close buttons.
 
 
 2007-09-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

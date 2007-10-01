@@ -304,8 +304,7 @@ static void tab_count_changed()
 /* Returns page number of notebook page, or -1 on error */
 gint notebook_new_tab(gint doc_idx)
 {
-	GtkWidget *hbox, *but;
-	GtkWidget *align;
+	GtkWidget *hbox;
 	gint tabnum;
 	gchar *title;
 	document *this = &(doc_list[doc_idx]);
@@ -318,24 +317,30 @@ gint notebook_new_tab(gint doc_idx)
 
 	this->tab_label = gtk_label_new(title);
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_hbox_new(FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(hbox), this->tab_label, FALSE, FALSE, 0);
 
 	if (prefs.show_tab_cross)
 	{
-		but = gtk_button_new();
-		gtk_container_add(GTK_CONTAINER(but),
-			ui_new_image_from_inline(GEANY_IMAGE_SMALL_CROSS, FALSE));
-		gtk_container_set_border_width(GTK_CONTAINER(but), 0);
-		gtk_widget_set_size_request(but, 19, 18);
+		GtkWidget *image, *btn, *align;
+
+		btn = gtk_button_new();
+		gtk_button_set_relief(GTK_BUTTON(btn), GTK_RELIEF_NONE);
+
+		/* don't allow focus on the close button */
+		gtk_button_set_focus_on_click(GTK_BUTTON(btn), FALSE);
+
+		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+		gtk_container_add(GTK_CONTAINER(btn), image);
+		gtk_container_set_border_width(GTK_CONTAINER(btn), 0);
+		gtk_widget_set_size_request(btn, 19, 18);
 
 		align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
-		gtk_container_add(GTK_CONTAINER(align), but);
+		gtk_container_add(GTK_CONTAINER(align), btn);
 
-		gtk_button_set_relief(GTK_BUTTON(but), GTK_RELIEF_NONE);
 		gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
 
-		g_signal_connect(G_OBJECT(but), "clicked",
+		g_signal_connect(G_OBJECT(btn), "clicked",
 			G_CALLBACK(notebook_tab_close_clicked_cb), page);
 	}
 	else
