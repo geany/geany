@@ -177,7 +177,11 @@ static void findPythonTags (void)
 				newclass->name = g_strdup(vStringValue(name));
 				newclass->indent = indent;
 				parents = g_list_append(parents, newclass);
-				makeSimpleTag (name, PythonKinds, K_CLASS);
+				if (lastclass == NULL)
+					makeSimpleTag (name, PythonKinds, K_CLASS);
+				else
+					makeSimpleScopedTag (name, PythonKinds, K_CLASS,
+						PythonKinds[K_CLASS].name, lastclass->name, "public");
 				vStringClear (name);
 
 				lastclass = newclass;

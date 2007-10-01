@@ -1,3 +1,9 @@
+2007-10-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/python.c:
+   Show parent class for inner classes.
+
+
 2007-09-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:
