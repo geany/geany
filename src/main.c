@@ -650,7 +650,8 @@ gint main(gint argc, gchar **argv)
 	}
 #endif
 
-	geany_debug("GTK+ %u.%u.%u, GLib %u.%u.%u",
+	geany_debug("Geany %s, GTK+ %u.%u.%u, GLib %u.%u.%u",
+		VERSION,
 		gtk_major_version, gtk_minor_version, gtk_micro_version,
 		glib_major_version, glib_minor_version, glib_micro_version);
 	gtk_init(&argc, &argv);

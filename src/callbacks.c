@@ -654,7 +654,6 @@ void
 on_toolbutton18_clicked                (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-	//on_entry1_changed(NULL, NULL);
 	gint idx = document_get_cur_idx();
 	gboolean result;
 	GtkWidget *entry = lookup_widget(GTK_WIDGET(app->window), "entry1");

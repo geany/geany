@@ -1268,9 +1268,16 @@ gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gbool
 
 	if (search_pos != -1)
 	{
+		// unfold maybe folded results
+		sci_ensure_line_is_visible(doc_list[idx].sci,
+			sci_get_line_from_position(doc_list[idx].sci, ttf.chrgText.cpMin));
+		
 		sci_set_selection_start(doc_list[idx].sci, ttf.chrgText.cpMin);
 		sci_set_selection_end(doc_list[idx].sci, ttf.chrgText.cpMax);
-		doc_list[idx].scroll_percent = 0.3F;
+		
+		// we need to force scrolling in case the cursor is outside of the current visible area
+		// doc_list[].scroll_percent doesn't work because sci isn't always updated while searching
+		editor_scroll_to_line(doc_list[idx].sci, -1, 0.3F);
 		return TRUE;
 	}
 	else
@@ -1292,14 +1299,12 @@ gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gbool
 gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search_backwards,
 		gboolean scroll, GtkWidget *parent)
 {
-	gint selection_end, selection_start, search_pos, first_visible_line;
+	gint selection_end, selection_start, search_pos;
 
 	g_return_val_if_fail(text != NULL, -1);
 	if (idx == -1 || ! *text) return -1;
 	// Sci doesn't support searching backwards with a regex
 	if (flags & SCFIND_REGEXP) search_backwards = FALSE;
-
-	first_visible_line = sci_get_first_visible_line(doc_list[idx].sci);
 
 	selection_start = sci_get_selection_start(doc_list[idx].sci);
 	selection_end = sci_get_selection_end(doc_list[idx].sci);
@@ -1319,6 +1324,9 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 
 	if (search_pos != -1)
 	{
+		// unfold maybe folded results
+		sci_ensure_line_is_visible(doc_list[idx].sci,
+			sci_get_line_from_position(doc_list[idx].sci, search_pos));
 		if (scroll)
 			doc_list[idx].scroll_percent = 0.3F;
 	}
