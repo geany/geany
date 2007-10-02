@@ -47,7 +47,6 @@
 
 
 static const gboolean swap_alt_tab_order = FALSE;
-static gboolean enable_vte_bash_keys;
 
 
 /* simple convenience function to allocate and fill the struct */
@@ -345,8 +344,6 @@ static void load_user_kb()
 			g_free(val);
 		}
 	}
-	enable_vte_bash_keys =
-		utils_get_setting_boolean(config, "Settings", "enable_vte_bash_keys", TRUE);
 	g_free(configfile);
 	g_key_file_free(config);
 }
@@ -680,14 +677,12 @@ static gboolean set_sensitive(gpointer widget)
 }
 
 
+#ifdef HAVE_VTE
 static gboolean check_vte(GdkEventKey *event, guint keyval)
 {
-#ifndef HAVE_VTE
-	return FALSE;
-#else
 	GtkWidget *widget;
 
-	if (! vte_info.have_vte)
+	if (! vc->enable_bash_keys)
 		return FALSE;
 	if (gtk_window_get_focus(GTK_WINDOW(app->window)) != vc->vte)
 		return FALSE;
@@ -731,8 +726,8 @@ static gboolean check_vte(GdkEventKey *event, guint keyval)
 	gtk_widget_set_sensitive(widget, FALSE);
 	g_idle_add(&set_sensitive, (gpointer) widget);
 	return TRUE;
-#endif
 }
+#endif
 
 
 /* central keypress event handler, almost all keypress events go to this function */
@@ -755,8 +750,10 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 		event->state -= GDK_MOD2_MASK;
 
 	// special cases
-	if (enable_vte_bash_keys && check_vte(event, keyval))
+#ifdef HAVE_VTE
+	if (vte_info.have_vte && check_vte(event, keyval))
 		return FALSE;
+#endif
 	if (check_construct_completion(event))
 		return TRUE;
 

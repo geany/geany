@@ -3,7 +3,6 @@ Geany 0.12 (TBA)
     Bugs fixed:
     * Fixed opening the same file twice from the message window/command-line.
     * Fixed Ctrl-Shift keybindings not working when caps lock is on.
-    * Fixed common bash Ctrl-[a-z] keyboard shortcuts not working in the VTE.
     * Fixed saving the wrong document when using Save All with unnamed
       documents.
     * Fixed replacing with '^' or '$' regex chars.
@@ -11,6 +10,7 @@ Geany 0.12 (TBA)
     * Fixed hang when replacing all '[ ]*' regex matches (closes #1757748).
     * Fixed displaying error indicators with Make after entering a
       subdirectory.
+    * Fixed a possible segfault when parsing tags (a vString bug).
 
     Filetypes:
     * Added reStructuredText filetype and parser.
@@ -26,6 +26,8 @@ Geany 0.12 (TBA)
     * Added Class Builder plugin (thanks to Alexander Rodin).
 
     Keyboard shorcuts:
+    * Common bash Ctrl-[a-z] keyboard shortcuts now work when the VTE is
+      focused, and there is an 'enable_bash_keys' hidden preference.
     * Added 'Move document left' and 'Move document right' keybindings.
     * Added Find keybinding.
     * Made fixed keybindings overridable.

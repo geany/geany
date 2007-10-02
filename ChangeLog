@@ -4,6 +4,10 @@
    Attempt to fix problem with tab close button size.
  * src/keyfile.c, doc/geany.txt, doc/geany.html:
    Don't overwrite hidden prefs when quitting unless they are missing.
+ * src/keybindings.c, src/keyfile.c, src/vte.h, doc/geany.txt,
+   doc/geany.html, NEWS:
+   Move and rename the bash shortcuts hidden preference - it's now in
+   geany.conf, [VTE] section, called 'enable_bash_keys'.
 
 
 2007-10-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

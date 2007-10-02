@@ -327,6 +327,10 @@ static void save_hidden_prefs(GKeyFile *config)
 	write_hidden_pref_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
 	write_hidden_pref_boolean(config, PACKAGE, "use_gtk_word_boundaries", editor_prefs.use_gtk_word_boundaries);
 	write_hidden_pref_boolean(config, PACKAGE, "auto_complete_whilst_editing", editor_prefs.auto_complete_whilst_editing);
+#ifdef HAVE_VTE
+	if (vte_info.have_vte)
+		write_hidden_pref_boolean(config, "VTE", "enable_bash_keys", vc->enable_bash_keys);
+#endif
 }
 
 
@@ -541,6 +545,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
+		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		vc->colour_fore = g_new0(GdkColor, 1);
 		vc->colour_back = g_new0(GdkColor, 1);
