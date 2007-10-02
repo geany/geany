@@ -2278,22 +2278,16 @@ Hidden preferences
 ==================
 
 There are some uncommon preferences that are not shown in the
-Preferences dialog. These can be set in two ways:
+Preferences dialog. These can be set by editing ``~/.geany/geany.conf``,
+then restarting Geany. Search for the key name, then edit the value. Example:
 
-1. By quitting all instances of Geany and using another editor to edit
-   ``~/.geany/geany.conf``.
-2. By using Geany to edit ``~/.geany/geany.conf``, then after saving
-   the file, start a second instance of Geany, and the new settings
-   will be used. Make sure to then quit the first instance.
-
-Otherwise, the configuration file changes are overwritten when Geany
-is closed.
+	``brace_match_ltgt=true``
 
 The table below refers to the key names in the configuration file,
 under the ``[geany]`` group.
 
 ==============================  ============================================    ==================
-Option                          Description                                     Default
+Key                             Description                                     Default
 ==============================  ============================================    ==================
 brace_match_ltgt                Whether to highlight <, > angle brackets.       false
 show_editor_scrollbars          Whether to display scrollbars when the          true

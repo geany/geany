@@ -175,7 +175,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
 	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", editor_prefs.show_markers_margin);
 	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", editor_prefs.show_linenumber_margin);
-	g_key_file_set_boolean(config, PACKAGE, "show_editor_scrollbars", editor_prefs.show_scrollbars);
 	g_key_file_set_integer(config, PACKAGE, "long_line_type", editor_prefs.long_line_type);
 	g_key_file_set_integer(config, PACKAGE, "long_line_column", editor_prefs.long_line_column);
 	g_key_file_set_string(config, PACKAGE, "long_line_color", editor_prefs.long_line_color);
@@ -185,10 +184,8 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
 	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", editor_prefs.unfold_all_children);
 	g_key_file_set_integer(config, PACKAGE, "indent_mode", editor_prefs.indent_mode);
-	g_key_file_set_boolean(config, PACKAGE, "use_tab_to_indent", editor_prefs.use_tab_to_indent);
 	g_key_file_set_boolean(config, PACKAGE, "use_indicators", editor_prefs.use_indicators);
 	g_key_file_set_boolean(config, PACKAGE, "line_breaking", editor_prefs.line_wrapping);
-	g_key_file_set_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", editor_prefs.auto_close_xml_tags);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", editor_prefs.auto_complete_constructs);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", editor_prefs.auto_complete_symbols);
@@ -196,8 +193,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", editor_prefs.use_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_smart_home_key", editor_prefs.smart_home_key);
-	g_key_file_set_boolean(config, PACKAGE, "use_gtk_word_boundaries", editor_prefs.use_gtk_word_boundaries);
-	g_key_file_set_boolean(config, PACKAGE, "auto_complete_whilst_editing", editor_prefs.auto_complete_whilst_editing);
 
 	// files
 	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[prefs.default_new_encoding].charset);
@@ -320,6 +315,21 @@ static void save_ui_prefs(GKeyFile *config)
 }
 
 
+// hidden prefs (don't overwrite them so users can edit them manually)
+#define write_hidden_pref_boolean(conf, pkg, key, val) \
+		if (! g_key_file_has_key((conf), (pkg), (key), NULL)) \
+			g_key_file_set_boolean((conf), (pkg), (key), (val));
+
+static void save_hidden_prefs(GKeyFile *config)
+{
+	write_hidden_pref_boolean(config, PACKAGE, "show_editor_scrollbars", editor_prefs.show_scrollbars);
+	write_hidden_pref_boolean(config, PACKAGE, "use_tab_to_indent", editor_prefs.use_tab_to_indent);
+	write_hidden_pref_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
+	write_hidden_pref_boolean(config, PACKAGE, "use_gtk_word_boundaries", editor_prefs.use_gtk_word_boundaries);
+	write_hidden_pref_boolean(config, PACKAGE, "auto_complete_whilst_editing", editor_prefs.auto_complete_whilst_editing);
+}
+
+
 void configuration_save()
 {
 	GKeyFile *config = g_key_file_new();
@@ -329,6 +339,7 @@ void configuration_save()
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	save_dialog_prefs(config);
+	save_hidden_prefs(config);
 	save_ui_prefs(config);
 	project_save_prefs(config);	// save project filename, etc.
 	save_recent_files(config);
