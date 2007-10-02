@@ -323,6 +323,8 @@ gint notebook_new_tab(gint doc_idx)
 	if (prefs.show_tab_cross)
 	{
 		GtkWidget *image, *btn, *align;
+		GtkRcStyle *rcstyle;
+		GtkRequisition size;
 
 		btn = gtk_button_new();
 		gtk_button_set_relief(GTK_BUTTON(btn), GTK_RELIEF_NONE);
@@ -330,10 +332,16 @@ gint notebook_new_tab(gint doc_idx)
 		/* don't allow focus on the close button */
 		gtk_button_set_focus_on_click(GTK_BUTTON(btn), FALSE);
 
+		/* make it as small as possible */
+		rcstyle = gtk_rc_style_new();
+		rcstyle->xthickness = rcstyle->ythickness = 0;
+		gtk_widget_modify_style(btn, rcstyle);
+		gtk_rc_style_unref(rcstyle);
+
 		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+		gtk_widget_size_request(image, &size);
+		gtk_widget_set_size_request(btn, size.width, size.height);
 		gtk_container_add(GTK_CONTAINER(btn), image);
-		gtk_container_set_border_width(GTK_CONTAINER(btn), 0);
-		gtk_widget_set_size_request(btn, 19, 18);
 
 		align = gtk_alignment_new(1.0, 0.0, 0.0, 0.0);
 		gtk_container_add(GTK_CONTAINER(align), btn);
