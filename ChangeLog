@@ -3,6 +3,9 @@
  * src/prefs.c:
    Fix segfault when manually editing a keybinding and selecting another
    item.
+ * src/vte.c:
+   Don't reset the VTE when pressing Ctrl-[CD] if bash keys are enabled,
+   because they are now sent to the VTE.
 
 
 2007-10-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

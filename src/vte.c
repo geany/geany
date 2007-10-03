@@ -240,7 +240,7 @@ void vte_close(void)
 
 static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	if (event->type != GDK_KEY_RELEASE)
+	if (event->type != GDK_KEY_RELEASE || vc->enable_bash_keys)
 		return FALSE;
 
 	if ((event->keyval == GDK_c ||
