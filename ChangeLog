@@ -1,3 +1,10 @@
+2007-10-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/prefs.c:
+   Fix segfault when manually editing a keybinding and selecting another
+   item.
+
+
 2007-10-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/notebook.c:

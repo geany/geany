@@ -980,11 +980,11 @@ static void on_cell_edited(GtkCellRendererText *cellrenderertext, gchar *path, g
 
 		gtk_accelerator_parse(new_text, &lkey, &lmods);
 
-		if (find_duplicate(idx, lkey, lmods, new_text))
-			return;
-
 		// get index
 		gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 2, &idx, -1);
+
+		if (find_duplicate(idx, lkey, lmods, new_text))
+			return;
 
 		// set the values here, because of the above check, setting it in gtk_accelerator_parse would
 		// return a wrong key combination if it is duplicate
