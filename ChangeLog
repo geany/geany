@@ -1,3 +1,11 @@
+2007-10-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/callbacks.c, src/keybindings.c:
+   Fix wrong insert position of Insert Date function when using keyboard
+   shortcut and place the cursor behind the inserted date.
+ * src/treeviews.c: Enable horizontal scrollbar for the Open Files list.
+
+
 2007-10-03  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/prefs.c:

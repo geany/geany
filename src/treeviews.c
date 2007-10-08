@@ -205,7 +205,7 @@ static void prepare_openfiles()
 	// doesn't keep the settings
 	gtk_scrolled_window_set_policy(
 			GTK_SCROLLED_WINDOW(lookup_widget(app->window, "scrolledwindow7")),
-			GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Open files"), renderer,

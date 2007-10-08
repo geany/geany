@@ -1480,6 +1480,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 		verify_click_pos(idx); // make sure that the click_pos is valid
 
 		sci_insert_text(doc_list[idx].sci, editor_info.click_pos, time_str);
+		sci_goto_pos(doc_list[idx].sci, editor_info.click_pos + strlen(time_str), FALSE);
 	}
 	else
 	{

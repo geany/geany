@@ -1326,7 +1326,7 @@ static void cb_func_menu_replacetabs(G_GNUC_UNUSED guint key_id)
 
 static void cb_func_menu_insert_date(G_GNUC_UNUSED guint key_id)
 {
-	gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(app->popup_menu, "insert_date_custom2")));
+	gtk_menu_item_activate(GTK_MENU_ITEM(lookup_widget(app->window, "insert_date_custom1")));
 }
 
 static void cb_func_menu_insert_specialchars(G_GNUC_UNUSED guint key_id)
