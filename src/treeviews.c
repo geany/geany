@@ -186,6 +186,34 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 }
 
 
+#if GTK_CHECK_VERSION(2, 12, 0)
+gboolean on_treeviews_tooltip_queried(GtkWidget *widget, gint x, gint y, gboolean keyboard_mode,
+									  GtkTooltip *tooltip, gpointer user_data)
+{
+	GtkTreePath *path;
+
+	if (gtk_tree_view_get_path_at_pos(
+			GTK_TREE_VIEW(tv.tree_openfiles), x, y, &path, NULL, NULL, NULL))
+	{
+		GtkTreeIter iter;
+		gchar *file_name = NULL;
+
+		gtk_tree_model_get_iter(GTK_TREE_MODEL(store_openfiles), &iter, path);
+		gtk_tree_path_free(path);
+		gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), &iter, 3, &file_name, -1);
+		if (file_name != NULL)
+		{
+			gtk_tooltip_set_text(tooltip, file_name);
+			g_free(file_name);
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+#endif
+
+
 /* does some preparing things to the open files list widget */
 static void prepare_openfiles()
 {
@@ -193,12 +221,17 @@ static void prepare_openfiles()
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *select;
 	PangoFontDescription *pfd;
-	GtkTreeSortable    *sortable;
+	GtkTreeSortable *sortable;
 
 	tv.tree_openfiles = lookup_widget(app->window, "treeview6");
 
-	// store the short filename to show, and the index as reference
+	// store the short filename to show, and the index as reference,
+	// the colour (black/red/green) and the full name for the tooltip
+#if GTK_CHECK_VERSION(2, 12, 0)
+	store_openfiles = gtk_list_store_new(4, G_TYPE_STRING, G_TYPE_INT, GDK_TYPE_COLOR, G_TYPE_STRING);
+#else
 	store_openfiles = gtk_list_store_new(3, G_TYPE_STRING, G_TYPE_INT, GDK_TYPE_COLOR);
+#endif
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(store_openfiles));
 
 	// set policy settings for the scolledwindow around the treeview again, because glade
@@ -222,6 +255,13 @@ static void prepare_openfiles()
 	pfd = pango_font_description_from_string(prefs.tagbar_font);
 	gtk_widget_modify_font(tv.tree_openfiles, pfd);
 	pango_font_description_free(pfd);
+
+#if GTK_CHECK_VERSION(2, 12, 0)
+	// GTK 2.12 tooltips
+	gtk_widget_set_has_tooltip(tv.tree_openfiles, TRUE);
+	g_signal_connect(G_OBJECT(tv.tree_openfiles), "query-tooltip",
+						G_CALLBACK(on_treeviews_tooltip_queried), NULL);
+#endif
 
 	g_signal_connect(G_OBJECT(tv.tree_openfiles), "button-press-event",
 						G_CALLBACK(on_treeviews_button_press_event), GINT_TO_POINTER(TREEVIEW_OPENFILES));
@@ -251,7 +291,11 @@ void treeviews_openfiles_update(gint idx)
 
 	basename = g_path_get_basename(DOC_FILENAME(idx));
 	gtk_list_store_set(store_openfiles, &doc_list[idx].iter,
+#if GTK_CHECK_VERSION(2, 12, 0)
+		0, basename, 1, idx, 2, color, 3, DOC_FILENAME(idx), -1);
+#else
 		0, basename, 1, idx, 2, color, -1);
+#endif
 	g_free(basename);
 }
 

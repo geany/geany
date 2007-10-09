@@ -3,6 +3,8 @@
  * src/document.c, src/highlighting.c, src/symbols.c, src/symbols.h:
    Fix wrong colouring of type keywords of tags from different
    filetypes.
+ * src/treeviews.c: Add full file name as tooltip in the open files list
+                    (only for GTK 2.12 and above).
 
 
 2007-10-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
