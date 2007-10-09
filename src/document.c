@@ -85,7 +85,7 @@ void msgwin_status_add_new(const gchar *format, ...) G_GNUC_PRINTF(1, 2);	// tem
 static void document_undo_clear(gint idx);
 static void document_redo_add(gint idx, guint type, gpointer data);
 
-static gboolean update_type_keywords(ScintillaObject *sci);
+static gboolean update_type_keywords(ScintillaObject *sci, gint lang);
 
 
 // ignore the case of filenames and paths under WIN32, causes errors if not
@@ -1271,10 +1271,10 @@ gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gbool
 		// unfold maybe folded results
 		sci_ensure_line_is_visible(doc_list[idx].sci,
 			sci_get_line_from_position(doc_list[idx].sci, ttf.chrgText.cpMin));
-		
+
 		sci_set_selection_start(doc_list[idx].sci, ttf.chrgText.cpMin);
 		sci_set_selection_end(doc_list[idx].sci, ttf.chrgText.cpMax);
-		
+
 		// we need to force scrolling in case the cursor is outside of the current visible area
 		// doc_list[].scroll_percent doesn't work because sci isn't always updated while searching
 		editor_scroll_to_line(doc_list[idx].sci, -1, 0.3F);
@@ -1710,7 +1710,7 @@ void document_update_tag_list(gint idx, gboolean update)
 /* Caches the list of project typenames, as a space separated GString.
  * Returns: TRUE if typenames have changed.
  * (*types) is set to the list of typenames, or NULL if there are none. */
-static gboolean get_project_typenames(const GString **types)
+static gboolean get_project_typenames(const GString **types, gint lang)
 {
 	static GString *last_typenames = NULL;
 	GString *s = NULL;
@@ -1721,7 +1721,7 @@ static gboolean get_project_typenames(const GString **types)
 
 		if (tags_array)
 		{
-			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK);
+			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK, lang);
 		}
 	}
 
@@ -1747,7 +1747,7 @@ static gboolean get_project_typenames(const GString **types)
  * If sci is not NULL, then if sci supports typenames, project typenames are updated
  * if necessary, and typename keywords are set for sci.
  * Returns: TRUE if any scintilla type keywords were updated. */
-static gboolean update_type_keywords(ScintillaObject *sci)
+static gboolean update_type_keywords(ScintillaObject *sci, gint lang)
 {
 	gboolean ret = FALSE;
 	guint n;
@@ -1756,7 +1756,7 @@ static gboolean update_type_keywords(ScintillaObject *sci)
 	if (sci != NULL && editor_lexer_get_type_keyword_idx(sci_get_lexer(sci)) == -1)
 		return FALSE;
 
-	if (! get_project_typenames(&s))
+	if (! get_project_typenames(&s, lang))
 	{	// typenames have not changed
 		if (s != NULL && sci != NULL)
 		{
@@ -1827,7 +1827,7 @@ void document_set_filetype(gint idx, filetype *type)
 	{
 		/* Check if project typename keywords have changed.
 		 * If they haven't, we may need to colourise the document. */
-		if (! update_type_keywords(doc_list[idx].sci) && colourise)
+		if (! update_type_keywords(doc_list[idx].sci, type->lang) && colourise)
 			sci_colourise(doc_list[idx].sci, 0, -1);
 	}
 	if (ft_changed)
@@ -2393,7 +2393,7 @@ void document_colourise_new()
 	memset(doc_set, TRUE, doc_array->len * sizeof(gint8));
 
 	// remove existing docs from the set if they don't use typenames or typenames haven't changed
-	recolour = update_type_keywords(NULL);
+	recolour = update_type_keywords(NULL, -2);
 	for (i = 0; i < doc_indexes->len; i++)
 	{
 		ScintillaObject *sci;

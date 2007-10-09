@@ -149,9 +149,10 @@ static void html_tags_loaded()
 }
 
 
-GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types)
+GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gint lang)
 {
 	guint j;
+	TMTag *tag;
 	GString *s = NULL;
 	GPtrArray *typedefs;
 
@@ -164,13 +165,22 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types)
 		s = g_string_sized_new(typedefs->len * 10);
 		for (j = 0; j < typedefs->len; ++j)
 		{
-			if (!(TM_TAG(typedefs->pdata[j])->atts.entry.scope))
+			tag = TM_TAG(typedefs->pdata[j]);
+			if (!(tag->atts.entry.scope))
 			{
-				if (TM_TAG(typedefs->pdata[j])->name)
+				// tag->atts.file.lang contains (for some reason) the line of the tag if
+				// tag->atts.entry.file is not NULL
+				gint tag_lang =
+					(tag->atts.entry.file) ? tag->atts.entry.file->lang : tag->atts.file.lang;
+
+				// the check for tag_lang == lang is necessary to avoid wrong type colouring of
+				// e.g. PHP classes in C++ files
+				// lang = -2 disables the check
+				if (tag->name && (tag_lang == lang || lang == -2))
 				{
 					if (j != 0)
 						g_string_append_c(s, ' ');
-					g_string_append(s, TM_TAG(typedefs->pdata[j])->name);
+					g_string_append(s, tag->name);
 				}
 			}
 		}

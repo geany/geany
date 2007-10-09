@@ -30,7 +30,7 @@ extern const guint TM_GLOBAL_TYPE_MASK;
 
 void symbols_global_tags_loaded(gint file_type_idx);
 
-GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types);
+GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gint lang);
 
 const gchar *symbols_get_context_separator(gint ft_id);
 

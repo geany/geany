@@ -1,3 +1,10 @@
+2007-10-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c, src/highlighting.c, src/symbols.c, src/symbols.h:
+   Fix wrong colouring of type keywords of tags from different
+   filetypes.
+
+
 2007-10-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c:

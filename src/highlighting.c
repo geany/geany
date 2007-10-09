@@ -344,7 +344,7 @@ void styleset_free_styles()
 }
 
 
-static GString *get_global_typenames()
+static GString *get_global_typenames(gint lang)
 {
 	GString *s = NULL;
 
@@ -354,7 +354,7 @@ static GString *get_global_typenames()
 
 		if (tags_array)
 		{
-			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK);
+			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK, lang);
 		}
 	}
 	return s;
@@ -592,11 +592,12 @@ static void styleset_common(ScintillaObject *sci, gint style_bits, filetype_id f
 
 
 /* Assign global typedefs and user secondary keywords */
-static void assign_global_and_user_keywords(ScintillaObject *sci, const gchar *user_words)
+static void assign_global_and_user_keywords(ScintillaObject *sci,
+											const gchar *user_words, gint lang)
 {
 	GString *s;
 
-	s = get_global_typenames();
+	s = get_global_typenames(lang);
 	if (s == NULL)
 		s = g_string_sized_new(200);
 	else
@@ -749,7 +750,8 @@ void styleset_c(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_C].keywords[2]);
 
 	// assign global types, merge them with user defined keywords and set them
-	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_C].keywords[1]);
+	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_C].keywords[1],
+		filetypes[ft_id]->lang);
 
 	styleset_c_like(sci, GEANY_FILETYPES_C);
 
@@ -805,7 +807,8 @@ void styleset_cpp(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[GEANY_FILETYPES_CPP].keywords[2]);
 
 	// assign global types, merge them with user defined keywords and set them
-	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_CPP].keywords[1]);
+	assign_global_and_user_keywords(sci, style_sets[GEANY_FILETYPES_CPP].keywords[1],
+		filetypes[ft_id]->lang);
 
 	styleset_c_like(sci, GEANY_FILETYPES_CPP);
 
@@ -868,7 +871,7 @@ void styleset_cs(ScintillaObject *sci)
 	SSM(sci, SCI_SETKEYWORDS, 2, (sptr_t) style_sets[ft_id].keywords[2]);
 
 	// assign global types, merge them with user defined keywords and set them
-	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1]);
+	assign_global_and_user_keywords(sci, style_sets[ft_id].keywords[1], filetypes[ft_id]->lang);
 
 	styleset_c_like(sci, ft_id);
 
