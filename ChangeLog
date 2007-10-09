@@ -1,3 +1,10 @@
+2007-10-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c:
+   Fix inserting spaces instead of tab when using 'Suppress construct
+   completion' and spaces are used for indentation.
+
+
 2007-10-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c, src/keybindings.c:

@@ -1266,7 +1266,7 @@ static void cb_func_edit(guint key_id)
 					sci_add_text(doc_list[idx].sci, " ");
 					break;
 				case GDK_Tab:
-					sci_add_text(doc_list[idx].sci, "\t");
+					sci_cmd(doc_list[idx].sci, SCI_TAB);
 					break;
 				default:
 					break;
