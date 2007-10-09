@@ -1,3 +1,8 @@
+2007-10-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * cs.po: Update of Czech translation (Thanks to Petr Messner)
+
+
 2007-10-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * pt_BR.po: Update of Brasilian Portuguese translation
@@ -43,8 +48,8 @@
 
 2007-09-11  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
- * *.po: Update of all po-file because of string freeze for 
-         Geany 0.12 
+ * *.po: Update of all po-file because of string freeze for
+         Geany 0.12
 
 
 2007-09-08  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
