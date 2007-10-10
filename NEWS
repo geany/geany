@@ -1,4 +1,4 @@
-Geany 0.12 (TBA)
+Geany 0.12 (October 10, 2007)
 
     Bugs fixed:
     * Fixed opening the same file twice from the message window/command-line.
@@ -11,6 +11,11 @@ Geany 0.12 (TBA)
     * Fixed displaying error indicators with Make after entering a
       subdirectory.
     * Fixed a possible segfault when parsing tags (a vString bug).
+    * Fixed clipboard problems with some applications.
+    * Fixed crash when trying to open the Save As dialog on Windows.
+    * Fixed crash when saving a file after setting encoding "None".
+    * Fixed scrolling bugs when searching text and the cursor is outside of
+      the current visible area.
 
     Filetypes:
     * Added reStructuredText filetype and parser.
@@ -19,11 +24,14 @@ Geany 0.12 (TBA)
     * Parse Python global variables and class variables.
     * Added support for Java Apache Ant compiler error messages (thanks to
       Jon Senior).
+    * Added new filetypes CSharp and FreeBasic.
+    * Added filetype Haxe (patch by blackdog, thank you).
 
     Plugins:
     * Added basic plugin support (developers: see the HACKING file).
     * Added 'Enable plugin support' preference and -p, --no-plugins options.
     * Added Class Builder plugin (thanks to Alexander Rodin).
+    * Added Export plugin to export current file as HTML or LaTeX.
 
     Keyboard shorcuts:
     * Common bash Ctrl-[a-z] keyboard shortcuts now work when the VTE is
@@ -38,6 +46,10 @@ Geany 0.12 (TBA)
       Alt-{Up,Down}).
     * Made pressing escape focus the editor when using incremental search
       or Goto Line toolbar fields.
+    * Added keybinding for select current paragraph.
+    * Added keybindings for smart indent and indent/deindent by one space.
+    * Removed convert to lower-/upper-case keybindings.
+    * Added toggle case keybinding and change shortcut to Ctrl-Alt-U.
 
     General:
     * Added preference for 'smart' home key behaviour (thanks to Jeff
@@ -55,9 +67,26 @@ Geany 0.12 (TBA)
     * Don't show file opened/saved/closed messages on the status bar.
     * Added --no-preprocessing, -P option when generating tags files to
       disable preprocessing of C/C++ source files.
+    * Added default startup directory option (closes #1704988).
+    * Use current locale as default encoding for new files.
+    * Added simple code navigation (thanks to Dave Moore).
+    * Re-maximize the main window on startup when closed in maximized state
+      (closes #1730369).
+    * Added auto focus (to auto focus widgets below mouse cursor).
+    * Complete rewrite of auto completion to make it user-definable and
+      much more flexible (please read documentation).
+    * Added option to set a default encoding when opening files and disable
+      auto detection of the file encoding.
+    * Improved comment toggling by adding an additional character to mark.
+    * Changed the background colour of the search bar in the toolbar
+      according to the search result.
+    * Use intltool to make geany.desktop translatable
+    * Replace Geany's icon by a new one by Sebastian Kraft (thanks).
     (Thanks also to Christoph Berg for updating the icon code).
 
     Docs:
+    * Changed documentation generation tools from DocBook to reST
+      (thanks to John Gabriele for his great work on this).
     * Added Plugins section.
     * Added 'Inserting unicode characters' Editing section (thanks to
       John Gabriele).
@@ -69,7 +98,7 @@ Geany 0.12 (TBA)
 
     Internationalisation:
     * New translations: en_GB.
-    * Updated translations: ca, de, es, fi, fr, hu, it, pl, pt_BR, zh_CN.
+    * Updated translations: ca, cs, de, es, fi, fr, hu, it, pl, pt_BR, zh_CN.
 
 
 Geany 0.11 (May 21, 2007)

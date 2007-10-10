@@ -1,3 +1,8 @@
+2007-10-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * NEWS, doc/geany.1.in: Update for 0.12.
+
+
 2007-10-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c, src/highlighting.c, src/symbols.c, src/symbols.h:
