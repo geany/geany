@@ -1,6 +1,9 @@
 2007-10-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * NEWS, doc/geany.1.in: Update for 0.12.
+ * New release: Geany 0.12 "Delurin".
+ * configure.in, geany.nsi, geany_private.rc, win32-config.h,
+   src/geany.h: Post-release version bump.
 
 
 2007-10-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

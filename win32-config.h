@@ -289,7 +289,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Version number of package */
-#define VERSION "0.12svn"
+#define VERSION "0.13"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

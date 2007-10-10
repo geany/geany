@@ -45,7 +45,7 @@
 #define GEANY_HOME_DIR					g_get_home_dir()
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
-#define GEANY_CODENAME					"Delurin"
+#define GEANY_CODENAME					"Vensell"
 #define GEANY_HOMEPAGE					"http://geany.uvena.de/"
 #define GEANY_PROJECT_EXT				"geany"
 #define GEANY_USE_WIN32_DIALOG			0
