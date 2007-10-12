@@ -30,6 +30,8 @@ TODO List:
 	o (better regex support)
 	o (better tags support for popular languages? - this is a moving
 	  target...)
+	o (tango-like icons for the symbol list)
+	o (GTK+ 2.10 printing support)
 
 
 Wishlist
