@@ -159,6 +159,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	// interface
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", prefs.sidebar_symbol_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", prefs.sidebar_openfiles_visible);
+	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_fullpath", prefs.sidebar_openfiles_fullpath);
 	g_key_file_set_string(config, PACKAGE, "editor_font", prefs.editor_font);
 	g_key_file_set_string(config, PACKAGE, "tagbar_font", prefs.tagbar_font);
 	g_key_file_set_string(config, PACKAGE, "msgwin_font", prefs.msgwin_font);
@@ -432,6 +433,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.tab_pos_sidebar = utils_get_setting_integer(config, PACKAGE, "tab_pos_sidebar", GTK_POS_TOP);
 	prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
 	prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
+	prefs.sidebar_openfiles_fullpath = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_fullpath", FALSE);
 	prefs.statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
 	prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
 	prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);

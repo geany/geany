@@ -44,6 +44,7 @@ typedef struct GeanyPrefs
 	/* interface */
 	gboolean		sidebar_symbol_visible;
 	gboolean		sidebar_openfiles_visible;
+	gboolean		sidebar_openfiles_fullpath;
 	gchar			*editor_font;
 	gchar			*tagbar_font;
 	gchar			*msgwin_font;

@@ -33,6 +33,7 @@ typedef struct SidebarTreeviews
 	GtkWidget		*default_tag_tree;
 	GtkWidget		*popup_taglist;
 	GtkWidget		*popup_openfiles;
+	GtkWidget		*popup_openfiles_fullpath;
 } SidebarTreeviews;
 
 extern SidebarTreeviews tv;

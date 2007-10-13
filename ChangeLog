@@ -1,3 +1,11 @@
+2007-10-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, src/interface.c, src/keyfile.c, src/plugindata.h,
+   src/prefs.c, src/prefs.h, src/treeviews.c, src/treeviews.h:
+   Add menu accelerators to the symbol and open files list popup menus.
+   Add option to display full path name in the open files list.
+
+
 2007-10-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * NEWS, doc/geany.1.in: Update for 0.12.
