@@ -1453,7 +1453,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 		format = "%m.%d.%Y %H:%M:%S";
 	else if (utils_str_equal(_("yyyy/mm/dd hh:mm:ss"), (gchar*) user_data))
 		format = "%Y/%m/%d %H:%M:%S";
-	else if (utils_str_equal(_("Use Custom Date Format"), (gchar*) user_data))
+	else if (utils_str_equal(_("_Use Custom Date Format"), (gchar*) user_data))
 		format = ui_prefs.custom_date_format;
 	else
 	{

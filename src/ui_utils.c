@@ -437,12 +437,12 @@ static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
 {
 	GtkWidget *item;
 
-	item = gtk_menu_item_new_with_label(label);
+	item = gtk_menu_item_new_with_mnemonic(label);
 	gtk_container_add(GTK_CONTAINER(me), item);
 	gtk_widget_show(item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_menu_insert_date_activate), label);
 
-	item = gtk_menu_item_new_with_label(label);
+	item = gtk_menu_item_new_with_mnemonic(label);
 	gtk_container_add(GTK_CONTAINER(mp), item);
 	gtk_widget_show(item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate), label);
@@ -478,8 +478,8 @@ void ui_create_insert_date_menu_items()
 	gtk_container_add(GTK_CONTAINER(menu_popup), item);
 	gtk_widget_show(item);
 
-	str = _("Use Custom Date Format");
-	item = gtk_menu_item_new_with_label(str);
+	str = _("_Use Custom Date Format");
+	item = gtk_menu_item_new_with_mnemonic(str);
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
 	gtk_widget_show(item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_menu_insert_date_activate),
@@ -487,7 +487,7 @@ void ui_create_insert_date_menu_items()
 	g_object_set_data_full(G_OBJECT(app->window), "insert_date_custom1", gtk_widget_ref(item),
 													(GDestroyNotify)gtk_widget_unref);
 
-	item = gtk_menu_item_new_with_label(str);
+	item = gtk_menu_item_new_with_mnemonic(str);
 	gtk_container_add(GTK_CONTAINER(menu_popup), item);
 	gtk_widget_show(item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_insert_date_activate),
@@ -495,7 +495,7 @@ void ui_create_insert_date_menu_items()
 	g_object_set_data_full(G_OBJECT(app->popup_menu), "insert_date_custom2", gtk_widget_ref(item),
 													(GDestroyNotify)gtk_widget_unref);
 
-	insert_date_items(menu_edit, menu_popup, _("Set Custom Date Format"));
+	insert_date_items(menu_edit, menu_popup, _("_Set Custom Date Format"));
 }
 
 
