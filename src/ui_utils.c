@@ -850,6 +850,15 @@ void ui_add_recent_file(const gchar *utf8_filename)
 {
 	if (g_queue_find_custom(ui_prefs.recent_queue, utf8_filename, (GCompareFunc) strcmp) == NULL)
 	{
+#if GTK_CHECK_VERSION(2, 10, 0)
+		GtkRecentManager *manager = gtk_recent_manager_get_default();
+		gchar *uri = g_filename_to_uri(utf8_filename, NULL, NULL);
+		if (uri != NULL)
+		{
+			gtk_recent_manager_add_item(manager, uri);
+			g_free(uri);
+		}
+#endif
 		g_queue_push_head(ui_prefs.recent_queue, g_strdup(utf8_filename));
 		if (g_queue_get_length(ui_prefs.recent_queue) > prefs.mru_length)
 		{
