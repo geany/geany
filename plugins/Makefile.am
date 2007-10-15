@@ -15,6 +15,7 @@ demoplugin_la_LDFLAGS    = -module -avoid-version
 classbuilder_la_LDFLAGS  = -module -avoid-version
 htmlchars_la_LDFLAGS     = -module -avoid-version
 export_la_LDFLAGS        = -module -avoid-version
+svndiff_la_LDFLAGS       = -module -avoid-version
 
 if PLUGINS
 
@@ -22,7 +23,8 @@ if PLUGINS
 plugin_LTLIBRARIES = \
 	classbuilder.la \
 	htmlchars.la \
-	export.la
+	export.la \
+	svndiff.la
 
 # Plugins not to be installed
 noinst_LTLIBRARIES = \
@@ -32,11 +34,13 @@ demoplugin_la_SOURCES    = demoplugin.c
 classbuilder_la_SOURCES  = classbuilder.c
 htmlchars_la_SOURCES     = htmlchars.c
 export_la_SOURCES        = export.c
+svndiff_la_SOURCES       = svndiff.c
 
 demoplugin_la_LIBADD    = $(GTK_LIBS)
 classbuilder_la_LIBADD  = $(GTK_LIBS)
 htmlchars_la_LIBADD     = $(GTK_LIBS)
 export_la_LIBADD        = $(GTK_LIBS)
+svndiff_la_LIBADD       = $(GTK_LIBS)
 
 endif # PLUGINS
 
