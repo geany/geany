@@ -44,7 +44,8 @@ plugins: \
 		htmlchars.dll \
 		demoplugin.dll \
 		classbuilder.dll \
-		export.dll
+		export.dll \
+		svndiff.dll
 
 clean:
 	-$(RM) deps.mak *.o *.dll
