@@ -21,10 +21,8 @@
 
 /* SVNdiff plugin */
 /* This small plugin uses svn to generate a diff against the current
- * version inside svn. Keep in mind, that it uses the last saved
- * version of workingcopy and _NOT_ the unsaved version, you might be
- * working on. */
-
+ * version inside svn. Keep in mind, that it saves your version you currently working
+ * on and some changes may get lost by accident. */
 
 #include "geany.h"
 #include "support.h"
@@ -42,7 +40,7 @@ GeanyData		*geany_data;
 
 VERSION_CHECK(21)
 
-PLUGIN_INFO(_("SVNdiff"), _("Plugin to create a patch of a file against svn"), "0.0.1")
+PLUGIN_INFO(_("SVNdiff"), _("Plugin to create a patch of a file against svn"), "0.0.2")
 
 
 /* Callback if menu item was acitvated */
@@ -65,6 +63,12 @@ static void item_activated(GtkMenuItem *menuitem, gpointer gdata)
 		gchar *short_name = utils->remove_ext_from_filename(base_name);
 		gchar *locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
 
+
+		if (! geany_data->document->save_file(idx, TRUE))
+		{
+			geany_data->msgwindow->status_add(_("File %s couldn't be saved."
+			"Will go on with last saved version."),base_name);
+		}
 		// use '' quotation for Windows compatibility
 		command = g_strdup_printf("svn diff --non-interactive '%s'", locale_filename);
 
@@ -107,8 +111,7 @@ static void item_activated(GtkMenuItem *menuitem, gpointer gdata)
 	else
 	{
 		geany_data->msgwindow->status_add(
-			_("It looks like file doesn't have a suitable name. "
-			  "Maybe it's better to stop here and do nothing."));
+			_("File seems to don't have a name. Can't go on with processing."));
 	}
 	g_free(std_output);
 	g_free(std_err);
