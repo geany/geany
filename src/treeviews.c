@@ -418,7 +418,7 @@ static void create_openfiles_popup_menu()
 	tv.popup_openfiles_fullpath = gtk_check_menu_item_new_with_mnemonic(_("Show _full path name"));
 	gtk_widget_show(tv.popup_openfiles_fullpath);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), tv.popup_openfiles_fullpath);
-	g_signal_connect((gpointer) tv.popup_openfiles_fullpath, "activate",
+	g_signal_connect((gpointer) tv.popup_openfiles_fullpath, "toggled",
 			G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(OPENFILES_ACTION_FULLPATH));
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Hide"));
