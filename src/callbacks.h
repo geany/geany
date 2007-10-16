@@ -572,3 +572,9 @@ gboolean
 on_entry_goto_line_key_press_event     (GtkWidget       *widget,
                                         GdkEventKey     *event,
                                         gpointer         user_data);
+
+void
+on_tv_notebook_switch_page_after       (GtkNotebook     *notebook,
+                                        GtkNotebookPage *page,
+                                        guint            page_num,
+                                        gpointer         user_data);

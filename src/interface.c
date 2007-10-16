@@ -1581,6 +1581,9 @@ create_window1 (void)
   g_signal_connect ((gpointer) notebook3, "switch_page",
                     G_CALLBACK (on_tv_notebook_switch_page),
                     NULL);
+  g_signal_connect_after ((gpointer) notebook3, "switch_page",
+                          G_CALLBACK (on_tv_notebook_switch_page_after),
+                          NULL);
   g_signal_connect ((gpointer) notebook1, "switch_page",
                     G_CALLBACK (on_notebook1_switch_page),
                     NULL);

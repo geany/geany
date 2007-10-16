@@ -1,3 +1,10 @@
+2007-10-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, src/callbacks.c, src/callbacks.h, src/interface.c:
+   Suppress selection changed signal when switching between open files
+   and symbol list.
+
+
 2007-10-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * plugins/svndiff.c, plugins/Makefile.am, plugins/makefile.win32,

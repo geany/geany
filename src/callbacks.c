@@ -61,6 +61,7 @@
 #include "tools.h"
 #include "project.h"
 #include "navqueue.h"
+#include "printing.h"
 
 #include "geanyobject.h"
 
@@ -806,7 +807,18 @@ on_tv_notebook_switch_page             (GtkNotebook     *notebook,
                                         guint            page_num,
                                         gpointer         user_data)
 {
-	//switch_tv_notebook_page = TRUE;
+	// suppress selection changed signal when switching to the open files list
+	app->ignore_callback = TRUE;
+}
+
+
+void
+on_tv_notebook_switch_page_after       (GtkNotebook     *notebook,
+                                        GtkNotebookPage *page,
+                                        guint            page_num,
+                                        gpointer         user_data)
+{
+	app->ignore_callback = FALSE;
 }
 
 
@@ -1604,7 +1616,9 @@ on_print1_activate                     (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-
+	if (! DOC_IDX_VALID(idx))
+		return;
+	//printing_print_doc(idx);
 	document_print(idx);
 }
 

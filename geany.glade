@@ -1962,6 +1962,7 @@
 		  <property name="scrollable">True</property>
 		  <property name="enable_popup">False</property>
 		  <signal name="switch_page" handler="on_tv_notebook_switch_page" last_modification_time="Sun, 20 Nov 2005 00:41:15 GMT"/>
+		  <signal name="switch_page" handler="on_tv_notebook_switch_page_after" after="yes" last_modification_time="Tue, 16 Oct 2007 07:03:41 GMT"/>
 
 		  <child>
 		    <widget class="GtkScrolledWindow" id="scrolledwindow2">
