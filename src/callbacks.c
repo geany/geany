@@ -61,7 +61,7 @@
 #include "tools.h"
 #include "project.h"
 #include "navqueue.h"
-#include "printing.h"
+//#include "printing.h"
 
 #include "geanyobject.h"
 
