@@ -3,6 +3,10 @@
  * geany.glade, src/callbacks.c, src/callbacks.h, src/interface.c:
    Suppress selection changed signal when switching between open files
    and symbol list.
+ * src/plugins.c, src/plugindata.h, plugins/export.c:
+   Add dialogs_show_save_as() to the plugin API.
+   Fix wrong callback signatures in Export plugin and make menu item
+   document sensitive.
 
 
 2007-10-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

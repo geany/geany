@@ -71,12 +71,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified. */
-static const gint api_version = 21;
+static const gint api_version = 22;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 11;
+static const gint abi_version = 12;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
@@ -235,7 +235,7 @@ typedef struct UtilsFuncs
 {
 	gboolean	(*str_equal) (const gchar *a, const gchar *b);
 	gboolean	(*string_replace_all) (GString *haystack, const gchar *needle,
-			const gchar *replacement);
+				 const gchar *replacement);
 	GSList*		(*get_file_list) (const gchar *path, guint *length, GError **error);
 	gint		(*write_file) (const gchar *filename, const gchar *text);
 	gchar*		(*get_locale_from_utf8) (const gchar *utf8_text);
@@ -258,6 +258,7 @@ typedef struct DialogFuncs
 {
 	gboolean	(*show_question) (const gchar *text, ...);
 	void		(*show_msgbox) (gint type, const gchar *text, ...);
+	gboolean	(*show_save_as) (void);
 }
 DialogFuncs;
 

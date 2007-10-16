@@ -160,7 +160,8 @@ static UIUtilsFuncs uiutils_funcs = {
 
 static DialogFuncs dialog_funcs = {
 	&dialogs_show_question,
-	&dialogs_show_msgbox
+	&dialogs_show_msgbox,
+	&dialogs_show_save_as
 };
 
 static SupportFuncs support_funcs = {

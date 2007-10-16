@@ -38,7 +38,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
 VERSION_CHECK(20)
-PLUGIN_INFO(_("Export"), _("Exports the current file into different formats."), "0.1")
+PLUGIN_INFO(_("Export"), _("Exports the current file into different formats."), "0.2")
 
 #define doc_array	geany_data->doc_array
 #define scintilla	geany_data->sci
@@ -248,13 +248,13 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 }
 
 
-static void on_menu_create_latex_activate(gint idx, const gchar *filename, gboolean use_zoom)
+static void on_menu_create_latex_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	create_file_save_as_dialog(".tex", write_latex_file, FALSE);
 }
 
 
-static void on_menu_create_html_activate(gint idx, const gchar *filename, gboolean use_zoom)
+static void on_menu_create_html_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	create_file_save_as_dialog(".html", write_html_file, TRUE);
 }
@@ -722,9 +722,11 @@ void init(GeanyData *data)
 	g_signal_connect((gpointer) menu_create_latex, "activate",
 		G_CALLBACK(on_menu_create_latex_activate), NULL);
 
-	gtk_widget_show_all(menu_export);
-
+	// disable menu_item when there are no documents open
 	plugin_fields->menu_item = menu_export;
+	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+
+	gtk_widget_show_all(menu_export);
 }
 
 
