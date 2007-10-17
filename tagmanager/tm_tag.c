@@ -137,7 +137,7 @@ gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_ent
 		tag->name = g_strdup(tag_entry->name);
 		tag->type = get_tag_type(tag_entry->kindName);
 		tag->atts.entry.local = tag_entry->isFileScope;
-		tag->atts.entry.pointerOrder = tag_entry->pointerOrder;
+		tag->atts.entry.pointerOrder = 0;	/* backward compatibility (use var_type instead) */
 		tag->atts.entry.line = tag_entry->lineNumber;
 		if (NULL != tag_entry->extensionFields.arglist)
 			tag->atts.entry.arglist = g_strdup(tag_entry->extensionFields.arglist);

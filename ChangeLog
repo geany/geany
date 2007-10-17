@@ -1,3 +1,11 @@
+2007-10-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/tm_tag.c, tagmanager/c.c, TODO:
+   Parse arrays, const and pointers in C-like function return types
+   (and store in varType).
+   Fix some indentation.
+
+
 2007-10-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, src/callbacks.c, src/callbacks.h, src/interface.c:

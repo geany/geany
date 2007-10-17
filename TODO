@@ -8,8 +8,6 @@ TODO List:
 
 	Next version or later:
 
-	o make calltips show full function signature for C-like files (e.g.
-	  return type with const, [] for D, etc.)
 	o documentation: list and explain filetype modes
 	o documentation: preferences
 	o line breaking mode to limit words on a line for e.g. XML content.

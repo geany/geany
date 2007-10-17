@@ -45,7 +45,7 @@
 *   DATA DECLARATIONS
 */
 
-enum { NumTokens = 8 };
+enum { NumTokens = 12 };
 
 typedef enum eException {
     ExceptionNone, ExceptionEOF, ExceptionFormattingError,
@@ -114,7 +114,8 @@ typedef enum eTokenType {
     TOKEN_PAREN_NAME,	/* a single name in parentheses */
     TOKEN_SEMICOLON,	/* the semicolon character */
     TOKEN_SPEC,		/* a storage class specifier, qualifier, type, etc. */
-    TOKEN_STAR,   /* pointer detection */
+    TOKEN_STAR,		/* pointer detection */
+    TOKEN_ARRAY,	/* array detection */
     TOKEN_COUNT
 } tokenType;
 
@@ -432,6 +433,7 @@ static const keywordDesc KeywordTable [] = {
 */
 static void createTags (const unsigned int nestLevel, statementInfo *const parent);
 static void copyToken (tokenInfo *const dest, const tokenInfo *const src);
+static const char *getVarType (const statementInfo *const st);
 
 /*
 *   FUNCTION DEFINITIONS
@@ -441,7 +443,7 @@ static void copyToken (tokenInfo *const dest, const tokenInfo *const src);
 #if DEBUG_C
 static char *tokenTypeName[] = {
     "none", "args", "'}'", "'{'", "','", "'::'", "keyword", "name",
-    "package", "paren-name", "';'",	"spec", "*","count"
+    "package", "paren-name", "';'",	"spec", "*", "[]", "count"
 };
 
 static char *tagScopeNames[] = {
@@ -608,7 +610,7 @@ static const char *tokenString (const tokenType type)
 {
     static const char *const names [] = {
 	"none", "args", "}", "{", "comma", "double colon", "keyword", "name",
-	"package", "paren-name", "semicolon", "specifier", "*","count"
+	"package", "paren-name", "semicolon", "specifier", "*", "[]", "count"
     };
     Assert (sizeof (names) / sizeof (names [0]) == TOKEN_COUNT);
     Assert ((int) type < TOKEN_COUNT);
@@ -1074,8 +1076,48 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 	{
 		if (((TOKEN_NAME == st->firstToken->type) || isDataTypeKeyword(st->firstToken))
 			  && (0 != strcmp(vStringValue(st->firstToken->name), tag->name)))
-				tag->extensionFields.varType = vStringValue(st->firstToken->name);
+				tag->extensionFields.varType = getVarType(st);
 	}
+}
+
+static const char *getVarType (const statementInfo *const st)
+{
+	static vString *vt = NULL;
+	unsigned int i;
+
+	if (! st->gotArgs)
+		return vStringValue(st->firstToken->name);	/* ignore non-functions */
+
+	if (vt == NULL)
+		vt = vStringNew();
+	else
+		vStringClear(vt);
+
+	for (i = 0; i < st->tokenIndex; i++)
+	{
+		tokenInfo *t = st->token[i];
+
+		switch (t->type)
+		{
+			case TOKEN_NAME:	/* user typename */
+				if (strcmp(vStringValue(t->name), vStringValue(st->firstToken->name)) != 0)
+					continue;
+				break;
+			case TOKEN_KEYWORD:
+				if (t->keyword != KEYWORD_EXTERN && t->keyword != KEYWORD_STATIC)	/* uninteresting keywords */
+					break;
+				continue;
+			case TOKEN_STAR: vStringCatS(vt, " *"); continue;
+			case TOKEN_ARRAY: vStringCatS(vt, "[]"); continue;
+			default: continue;
+		}
+		if (vStringLength(vt) > 0)
+			if (isalpha(vStringValue(vt)[vStringLength(vt) - 1]))
+				vStringPut(vt, ' ');
+		vStringCat(vt, t->name);
+	}
+	vStringTerminate(vt);
+	return vStringValue(vt);
 }
 
 static void addContextSeparator (vString *const scope)
@@ -1251,13 +1293,13 @@ static void qualifyFunctionTag (const statementInfo *const st,
 {
     if (isType (nameToken, TOKEN_NAME))
     {
-	const tagType type = (isLanguage (Lang_java) || isLanguage (Lang_csharp))
-								? TAG_METHOD : TAG_FUNCTION;
-	const boolean isFileScope =
-			(boolean) (st->member.access == ACCESS_PRIVATE ||
-			(!isMember (st)  &&  st->scope == SCOPE_STATIC));
+		const tagType type = (isLanguage (Lang_java) || isLanguage (Lang_csharp))
+									? TAG_METHOD : TAG_FUNCTION;
+		const boolean isFileScope =
+				(boolean) (st->member.access == ACCESS_PRIVATE ||
+				(!isMember (st)  &&  st->scope == SCOPE_STATIC));
 
-	makeTag (nameToken, st, isFileScope, type);
+		makeTag (nameToken, st, isFileScope, type);
     }
 }
 
@@ -1265,7 +1307,7 @@ static void qualifyFunctionDeclTag (const statementInfo *const st,
 				    const tokenInfo *const nameToken)
 {
     if (! isType (nameToken, TOKEN_NAME))
-	;
+		;
     else if (isLanguage (Lang_java) || isLanguage (Lang_csharp))
 		qualifyFunctionTag (st, nameToken);
     else if (st->scope == SCOPE_TYPEDEF)
@@ -2413,7 +2455,7 @@ static void nextToken (statementInfo *const st)
 		    case ';': setToken (st, TOKEN_SEMICOLON);			break;
 		    case '<': skipToMatch ("<>");				break;
 	    	case '=': processInitializer (st);				break;
-		    case '[': skipToMatch ("[]");				break;
+		    case '[': setToken (st, TOKEN_ARRAY); skipToMatch ("[]");	break;
 		    case '{': setToken (st, TOKEN_BRACE_OPEN);			break;
 	    	case '}': setToken (st, TOKEN_BRACE_CLOSE);			break;
 	    	default:  parseGeneralToken (st, c);				break;
@@ -2581,72 +2623,72 @@ static void tagCheck (statementInfo *const st)
 	case TOKEN_BRACE_OPEN:
 	    if (isType (prev, TOKEN_ARGS))
 	    {
-		if (st->haveQualifyingName)
-		{
-		    st->declaration = DECL_FUNCTION;
-		    if (isType (prev2, TOKEN_NAME))
-			copyToken (st->blockName, prev2);
+			if (st->haveQualifyingName)
+			{
+				st->declaration = DECL_FUNCTION;
+				if (isType (prev2, TOKEN_NAME))
+				copyToken (st->blockName, prev2);
 
-		    if (!isLanguage (Lang_java))
-		    {
-			((tokenInfo *)prev2)->pointerOrder = getTokenPointerOrder (st, 3);
-		    }
-		    qualifyFunctionTag (st, prev2);
-		}
+				if (!isLanguage (Lang_java))
+				{
+					((tokenInfo *)prev2)->pointerOrder = getTokenPointerOrder (st, 3);
+				}
+				qualifyFunctionTag (st, prev2);
+			}
 	    }
 	    else if (isContextualStatement (st))
 	    {
-		tokenInfo *name_token = (tokenInfo *)prev;
-		if (isType (name_token, TOKEN_NAME))
-		{
-		    copyToken (st->blockName, name_token);
-		}
-		else if (isLanguage (Lang_csharp))
-				makeTag (prev, st, FALSE, TAG_PROPERTY);
-		else
-		{
-		    tokenInfo *contextual_token = (tokenInfo *)prev;
-		    if(isContextualKeyword (contextual_token))
-		    {
-				char buffer[64];
-
-				name_token = newToken ();
-				copyToken (name_token, contextual_token);
-
-				sprintf(buffer, "anon_%s_%d", name_token->name->buffer, contextual_fake_count++);
-				vStringClear(name_token->name);
-				vStringCatS(name_token->name, buffer);
-
-				name_token->type = TOKEN_NAME;
-				name_token->keyword	= KEYWORD_NONE;
-
-				advanceToken (st);
-				contextual_token = activeToken (st);
-				copyToken (contextual_token, token);
-				copyToken ((tokenInfo *const)token, name_token);
+			tokenInfo *name_token = (tokenInfo *)prev;
+			if (isType (name_token, TOKEN_NAME))
+			{
 				copyToken (st->blockName, name_token);
-				copyToken (st->firstToken, name_token);
-		    }
-		}
-		qualifyBlockTag (st, name_token);
+			}
+			else if (isLanguage (Lang_csharp))
+					makeTag (prev, st, FALSE, TAG_PROPERTY);
+			else
+			{
+				tokenInfo *contextual_token = (tokenInfo *)prev;
+				if(isContextualKeyword (contextual_token))
+				{
+					char buffer[64];
+
+					name_token = newToken ();
+					copyToken (name_token, contextual_token);
+
+					sprintf(buffer, "anon_%s_%d", name_token->name->buffer, contextual_fake_count++);
+					vStringClear(name_token->name);
+					vStringCatS(name_token->name, buffer);
+
+					name_token->type = TOKEN_NAME;
+					name_token->keyword	= KEYWORD_NONE;
+
+					advanceToken (st);
+					contextual_token = activeToken (st);
+					copyToken (contextual_token, token);
+					copyToken ((tokenInfo *const)token, name_token);
+					copyToken (st->blockName, name_token);
+					copyToken (st->firstToken, name_token);
+				}
+			}
+			qualifyBlockTag (st, name_token);
 	    }
 	    break;
 	case TOKEN_SEMICOLON:
 	case TOKEN_COMMA:
 	    if (insideEnumBody (st))
-		;
+			;
 	    else if (isType (prev, TOKEN_NAME))
 	    {
-		if (isContextualKeyword (prev2))
-		    makeTag (prev, st, TRUE, TAG_EXTERN_VAR);
-		else
-		{
-		    if (!isLanguage (Lang_java))
-		    {
-			((tokenInfo *)prev)->pointerOrder = getTokenPointerOrder (st, 2);
-		    }
-			qualifyVariableTag (st, prev);
-	    }
+			if (isContextualKeyword (prev2))
+				makeTag (prev, st, TRUE, TAG_EXTERN_VAR);
+			else
+			{
+				if (!isLanguage (Lang_java))
+				{
+					((tokenInfo *)prev)->pointerOrder = getTokenPointerOrder (st, 2);
+				}
+				qualifyVariableTag (st, prev);
+			}
 	    }
 	    else if (isType (prev, TOKEN_ARGS)  &&  isType (prev2, TOKEN_NAME))
 	    {
