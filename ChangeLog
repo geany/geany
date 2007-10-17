@@ -4,6 +4,14 @@
    Parse arrays, const and pointers in C-like function return types
    (and store in varType).
    Fix some indentation.
+ * src/interface.c, src/keybindings.c, src/prefs.c, src/callbacks.c,
+   src/callbacks.h, src/keyfile.c, src/document.c, src/document.h,
+   src/editor.c, src/editor.h, src/ui_utils.c, geany.glade:
+   Add Indent Type option in the Document menu.
+   Add 'Detect from file' Editor indentation pref.
+   Show TAB or SP for current document's indent type.
+   Minor editing of Document menu and editor Indentation prefs group.
+   Use GString for statusbar statistics.
 
 
 2007-10-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

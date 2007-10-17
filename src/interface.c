@@ -37,7 +37,7 @@ create_window1 (void)
   GtkWidget *file1_menu;
   GtkWidget *menu_new1;
   GtkWidget *menu_new_with_template1;
-  GtkWidget *image2010;
+  GtkWidget *image2248;
   GtkWidget *menu_new_with_template1_menu;
   GtkWidget *invisible2;
   GtkWidget *separator12;
@@ -48,11 +48,11 @@ create_window1 (void)
   GtkWidget *menu_save1;
   GtkWidget *menu_save_as1;
   GtkWidget *menu_save_all1;
-  GtkWidget *image2011;
+  GtkWidget *image2249;
   GtkWidget *menu_reload1;
-  GtkWidget *image2012;
+  GtkWidget *image2250;
   GtkWidget *menu_reload_as1;
-  GtkWidget *image2013;
+  GtkWidget *image2251;
   GtkWidget *menu_reload_as1_menu;
   GtkWidget *invisible7;
   GtkWidget *separator21;
@@ -64,7 +64,7 @@ create_window1 (void)
   GtkWidget *separator14;
   GtkWidget *menu_close1;
   GtkWidget *menu_close_all1;
-  GtkWidget *image2014;
+  GtkWidget *image2252;
   GtkWidget *menu_separatormenuitem1;
   GtkWidget *menu_quit1;
   GtkWidget *edit1;
@@ -89,16 +89,16 @@ create_window1 (void)
   GtkWidget *menu_duplicate_line1;
   GtkWidget *separator29;
   GtkWidget *menu_increase_indent1;
-  GtkWidget *image2015;
+  GtkWidget *image2253;
   GtkWidget *menu_decrease_indent1;
-  GtkWidget *image2016;
+  GtkWidget *image2254;
   GtkWidget *separator37;
   GtkWidget *send_selection_to2;
   GtkWidget *send_selection_to2_menu;
   GtkWidget *invisible13;
   GtkWidget *separator18;
   GtkWidget *add_comments1;
-  GtkWidget *image2017;
+  GtkWidget *image2255;
   GtkWidget *add_comments1_menu;
   GtkWidget *menu_add_changelog_entry1;
   GtkWidget *insert_file_header1;
@@ -107,11 +107,11 @@ create_window1 (void)
   GtkWidget *insert_gpl_notice2;
   GtkWidget *insert_bsd_license_notice2;
   GtkWidget *insert_date1;
-  GtkWidget *image2018;
+  GtkWidget *image2256;
   GtkWidget *insert_date1_menu;
   GtkWidget *invisible8;
   GtkWidget *insert_include2;
-  GtkWidget *image2019;
+  GtkWidget *image2257;
   GtkWidget *insert_include2_menu;
   GtkWidget *invisible4;
   GtkWidget *separator9;
@@ -123,7 +123,7 @@ create_window1 (void)
   GtkWidget *find_previous1;
   GtkWidget *find_in_files1;
   GtkWidget *replace1;
-  GtkWidget *image2020;
+  GtkWidget *image2258;
   GtkWidget *separator33;
   GtkWidget *find_nextsel1;
   GtkWidget *find_prevsel1;
@@ -131,11 +131,11 @@ create_window1 (void)
   GtkWidget *next_message1;
   GtkWidget *separator32;
   GtkWidget *go_to_line1;
-  GtkWidget *image2021;
+  GtkWidget *image2259;
   GtkWidget *menu_view1;
   GtkWidget *menu_view1_menu;
   GtkWidget *menu_change_font1;
-  GtkWidget *image2022;
+  GtkWidget *image2260;
   GtkWidget *menu_separator4;
   GtkWidget *menu_toggle_all_additional_widgets1;
   GtkWidget *menu_fullscreen1;
@@ -152,9 +152,15 @@ create_window1 (void)
   GtkWidget *menu_document1_menu;
   GtkWidget *menu_line_breaking1;
   GtkWidget *menu_use_auto_indentation1;
+  GtkWidget *indent_type1;
+  GtkWidget *indent_type1_menu;
+  GSList *tabs1_group = NULL;
+  GtkWidget *tabs1;
+  GtkWidget *spaces1;
+  GtkWidget *separator45;
   GtkWidget *set_file_readonly1;
   GtkWidget *menu_write_unicode_bom1;
-  GtkWidget *separator10;
+  GtkWidget *separator46;
   GtkWidget *set_filetype1;
   GtkWidget *set_filetype1_menu;
   GtkWidget *invisible1;
@@ -178,23 +184,23 @@ create_window1 (void)
   GtkWidget *menu_project1;
   GtkWidget *menu_project1_menu;
   GtkWidget *project_new1;
-  GtkWidget *image2023;
+  GtkWidget *image2261;
   GtkWidget *project_open1;
-  GtkWidget *image2024;
+  GtkWidget *image2262;
   GtkWidget *project_close1;
-  GtkWidget *image2025;
+  GtkWidget *image2263;
   GtkWidget *separator34;
   GtkWidget *project_properties1;
   GtkWidget *menu_build1;
   GtkWidget *tools1;
   GtkWidget *tools1_menu;
   GtkWidget *menu_choose_color1;
-  GtkWidget *image2026;
+  GtkWidget *image2264;
   GtkWidget *menu_count_words1;
   GtkWidget *menu_help1;
   GtkWidget *menu_help1_menu;
   GtkWidget *help1;
-  GtkWidget *image2027;
+  GtkWidget *image2265;
   GtkWidget *keyboard_shortcuts1;
   GtkWidget *website1;
   GtkWidget *separator16;
@@ -294,9 +300,9 @@ create_window1 (void)
   gtk_widget_show (menu_new_with_template1);
   gtk_container_add (GTK_CONTAINER (file1_menu), menu_new_with_template1);
 
-  image2010 = gtk_image_new_from_stock ("gtk-new", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2010);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_new_with_template1), image2010);
+  image2248 = gtk_image_new_from_stock ("gtk-new", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2248);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_new_with_template1), image2248);
 
   menu_new_with_template1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_new_with_template1), menu_new_with_template1_menu);
@@ -339,25 +345,25 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (file1_menu), menu_save_all1);
   gtk_tooltips_set_tip (tooltips, menu_save_all1, _("Saves all open files"), NULL);
 
-  image2011 = gtk_image_new_from_stock ("gtk-save", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2011);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_save_all1), image2011);
+  image2249 = gtk_image_new_from_stock ("gtk-save", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2249);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_save_all1), image2249);
 
   menu_reload1 = gtk_image_menu_item_new_with_mnemonic (_("_Reload"));
   gtk_widget_show (menu_reload1);
   gtk_container_add (GTK_CONTAINER (file1_menu), menu_reload1);
 
-  image2012 = gtk_image_new_from_stock ("gtk-revert-to-saved", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2012);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_reload1), image2012);
+  image2250 = gtk_image_new_from_stock ("gtk-revert-to-saved", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2250);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_reload1), image2250);
 
   menu_reload_as1 = gtk_image_menu_item_new_with_mnemonic (_("R_eload As"));
   gtk_widget_show (menu_reload_as1);
   gtk_container_add (GTK_CONTAINER (file1_menu), menu_reload_as1);
 
-  image2013 = gtk_image_new_from_stock ("gtk-revert-to-saved", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2013);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_reload_as1), image2013);
+  image2251 = gtk_image_new_from_stock ("gtk-revert-to-saved", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2251);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_reload_as1), image2251);
 
   menu_reload_as1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_reload_as1), menu_reload_as1_menu);
@@ -408,9 +414,9 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (file1_menu), menu_close_all1);
   gtk_tooltips_set_tip (tooltips, menu_close_all1, _("Closes all open files"), NULL);
 
-  image2014 = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2014);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_close_all1), image2014);
+  image2252 = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2252);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_close_all1), image2252);
 
   menu_separatormenuitem1 = gtk_separator_menu_item_new ();
   gtk_widget_show (menu_separatormenuitem1);
@@ -514,17 +520,17 @@ create_window1 (void)
   gtk_widget_show (menu_increase_indent1);
   gtk_container_add (GTK_CONTAINER (menu_format1_menu), menu_increase_indent1);
 
-  image2015 = gtk_image_new_from_stock ("gtk-indent", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2015);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_increase_indent1), image2015);
+  image2253 = gtk_image_new_from_stock ("gtk-indent", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2253);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_increase_indent1), image2253);
 
   menu_decrease_indent1 = gtk_image_menu_item_new_with_mnemonic (_("_Decrease Indent"));
   gtk_widget_show (menu_decrease_indent1);
   gtk_container_add (GTK_CONTAINER (menu_format1_menu), menu_decrease_indent1);
 
-  image2016 = gtk_image_new_from_stock ("gtk-unindent", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2016);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_decrease_indent1), image2016);
+  image2254 = gtk_image_new_from_stock ("gtk-unindent", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2254);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_decrease_indent1), image2254);
 
   separator37 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator37);
@@ -550,9 +556,9 @@ create_window1 (void)
   gtk_widget_show (add_comments1);
   gtk_container_add (GTK_CONTAINER (edit1_menu), add_comments1);
 
-  image2017 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2017);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (add_comments1), image2017);
+  image2255 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2255);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (add_comments1), image2255);
 
   add_comments1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (add_comments1), add_comments1_menu);
@@ -591,9 +597,9 @@ create_window1 (void)
   gtk_widget_show (insert_date1);
   gtk_container_add (GTK_CONTAINER (edit1_menu), insert_date1);
 
-  image2018 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2018);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert_date1), image2018);
+  image2256 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2256);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert_date1), image2256);
 
   insert_date1_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert_date1), insert_date1_menu);
@@ -605,9 +611,9 @@ create_window1 (void)
   gtk_widget_show (insert_include2);
   gtk_container_add (GTK_CONTAINER (edit1_menu), insert_include2);
 
-  image2019 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2019);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert_include2), image2019);
+  image2257 = gtk_image_new_from_stock ("gtk-add", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2257);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (insert_include2), image2257);
 
   insert_include2_menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (insert_include2), insert_include2_menu);
@@ -651,9 +657,9 @@ create_window1 (void)
   gtk_widget_show (replace1);
   gtk_container_add (GTK_CONTAINER (search1_menu), replace1);
 
-  image2020 = gtk_image_new_from_stock ("gtk-find-and-replace", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2020);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (replace1), image2020);
+  image2258 = gtk_image_new_from_stock ("gtk-find-and-replace", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2258);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (replace1), image2258);
 
   separator33 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator33);
@@ -686,9 +692,9 @@ create_window1 (void)
   gtk_widget_show (go_to_line1);
   gtk_container_add (GTK_CONTAINER (search1_menu), go_to_line1);
 
-  image2021 = gtk_image_new_from_stock ("gtk-jump-to", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2021);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (go_to_line1), image2021);
+  image2259 = gtk_image_new_from_stock ("gtk-jump-to", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2259);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (go_to_line1), image2259);
 
   menu_view1 = gtk_menu_item_new_with_mnemonic (_("_View"));
   gtk_widget_show (menu_view1);
@@ -702,9 +708,9 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (menu_view1_menu), menu_change_font1);
   gtk_tooltips_set_tip (tooltips, menu_change_font1, _("Change the default font"), NULL);
 
-  image2022 = gtk_image_new_from_stock ("gtk-select-font", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2022);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_change_font1), image2022);
+  image2260 = gtk_image_new_from_stock ("gtk-select-font", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2260);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_change_font1), image2260);
 
   menu_separator4 = gtk_separator_menu_item_new ();
   gtk_widget_show (menu_separator4);
@@ -778,10 +784,33 @@ create_window1 (void)
   gtk_tooltips_set_tip (tooltips, menu_line_breaking1, _("Wrap the line at the window border and continue it on the next line. Note: line wrapping has a high performance cost for large documents so should be disabled on slow machines."), NULL);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_line_breaking1), TRUE);
 
-  menu_use_auto_indentation1 = gtk_check_menu_item_new_with_mnemonic (_("_Use Auto-indentation"));
+  menu_use_auto_indentation1 = gtk_check_menu_item_new_with_mnemonic (_("_Auto-indentation"));
   gtk_widget_show (menu_use_auto_indentation1);
   gtk_container_add (GTK_CONTAINER (menu_document1_menu), menu_use_auto_indentation1);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_use_auto_indentation1), TRUE);
+
+  indent_type1 = gtk_menu_item_new_with_mnemonic (_("In_dent Type"));
+  gtk_widget_show (indent_type1);
+  gtk_container_add (GTK_CONTAINER (menu_document1_menu), indent_type1);
+
+  indent_type1_menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (indent_type1), indent_type1_menu);
+
+  tabs1 = gtk_radio_menu_item_new_with_mnemonic (tabs1_group, _("Tabs"));
+  tabs1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (tabs1));
+  gtk_widget_show (tabs1);
+  gtk_container_add (GTK_CONTAINER (indent_type1_menu), tabs1);
+
+  spaces1 = gtk_radio_menu_item_new_with_mnemonic (tabs1_group, _("Spaces"));
+  tabs1_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (spaces1));
+  gtk_widget_show (spaces1);
+  gtk_container_add (GTK_CONTAINER (indent_type1_menu), spaces1);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (spaces1), TRUE);
+
+  separator45 = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator45);
+  gtk_container_add (GTK_CONTAINER (menu_document1_menu), separator45);
+  gtk_widget_set_sensitive (separator45, FALSE);
 
   set_file_readonly1 = gtk_check_menu_item_new_with_mnemonic (_("Read _Only"));
   gtk_widget_show (set_file_readonly1);
@@ -792,10 +821,10 @@ create_window1 (void)
   gtk_widget_show (menu_write_unicode_bom1);
   gtk_container_add (GTK_CONTAINER (menu_document1_menu), menu_write_unicode_bom1);
 
-  separator10 = gtk_separator_menu_item_new ();
-  gtk_widget_show (separator10);
-  gtk_container_add (GTK_CONTAINER (menu_document1_menu), separator10);
-  gtk_widget_set_sensitive (separator10, FALSE);
+  separator46 = gtk_separator_menu_item_new ();
+  gtk_widget_show (separator46);
+  gtk_container_add (GTK_CONTAINER (menu_document1_menu), separator46);
+  gtk_widget_set_sensitive (separator46, FALSE);
 
   set_filetype1 = gtk_menu_item_new_with_mnemonic (_("Set File_type"));
   gtk_widget_show (set_filetype1);
@@ -828,13 +857,11 @@ create_window1 (void)
   crlf_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (crlf));
   gtk_widget_show (crlf);
   gtk_container_add (GTK_CONTAINER (menu_line_endings1_menu), crlf);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (crlf), TRUE);
 
   lf = gtk_radio_menu_item_new_with_mnemonic (crlf_group, _("Convert and Set to _LF (Unix)"));
   crlf_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (lf));
   gtk_widget_show (lf);
   gtk_container_add (GTK_CONTAINER (menu_line_endings1_menu), lf);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (lf), TRUE);
 
   cr = gtk_radio_menu_item_new_with_mnemonic (crlf_group, _("Convert and Set to CR (_Mac)"));
   crlf_group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (cr));
@@ -892,25 +919,25 @@ create_window1 (void)
   gtk_widget_show (project_new1);
   gtk_container_add (GTK_CONTAINER (menu_project1_menu), project_new1);
 
-  image2023 = gtk_image_new_from_stock ("gtk-new", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2023);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (project_new1), image2023);
+  image2261 = gtk_image_new_from_stock ("gtk-new", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2261);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (project_new1), image2261);
 
   project_open1 = gtk_image_menu_item_new_with_mnemonic (_("_Open"));
   gtk_widget_show (project_open1);
   gtk_container_add (GTK_CONTAINER (menu_project1_menu), project_open1);
 
-  image2024 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2024);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (project_open1), image2024);
+  image2262 = gtk_image_new_from_stock ("gtk-open", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2262);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (project_open1), image2262);
 
   project_close1 = gtk_image_menu_item_new_with_mnemonic (_("_Close"));
   gtk_widget_show (project_close1);
   gtk_container_add (GTK_CONTAINER (menu_project1_menu), project_close1);
 
-  image2025 = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2025);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (project_close1), image2025);
+  image2263 = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2263);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (project_close1), image2263);
 
   separator34 = gtk_separator_menu_item_new ();
   gtk_widget_show (separator34);
@@ -937,9 +964,9 @@ create_window1 (void)
   gtk_container_add (GTK_CONTAINER (tools1_menu), menu_choose_color1);
   gtk_tooltips_set_tip (tooltips, menu_choose_color1, _("Open a color chooser dialog, to interactively pick colors from a palette."), NULL);
 
-  image2026 = gtk_image_new_from_stock ("gtk-select-color", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2026);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_choose_color1), image2026);
+  image2264 = gtk_image_new_from_stock ("gtk-select-color", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2264);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_choose_color1), image2264);
 
   menu_count_words1 = gtk_menu_item_new_with_mnemonic (_("_Word Count"));
   gtk_widget_show (menu_count_words1);
@@ -957,9 +984,9 @@ create_window1 (void)
   gtk_widget_show (help1);
   gtk_container_add (GTK_CONTAINER (menu_help1_menu), help1);
 
-  image2027 = gtk_image_new_from_stock ("gtk-help", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image2027);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (help1), image2027);
+  image2265 = gtk_image_new_from_stock ("gtk-help", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image2265);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (help1), image2265);
 
   keyboard_shortcuts1 = gtk_menu_item_new_with_mnemonic (_("_Keyboard Shortcuts"));
   gtk_widget_show (keyboard_shortcuts1);
@@ -1446,6 +1473,12 @@ create_window1 (void)
   g_signal_connect ((gpointer) menu_use_auto_indentation1, "toggled",
                     G_CALLBACK (on_use_auto_indentation1_toggled),
                     NULL);
+  g_signal_connect ((gpointer) tabs1, "activate",
+                    G_CALLBACK (on_tabs1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) spaces1, "activate",
+                    G_CALLBACK (on_spaces1_activate),
+                    NULL);
   g_signal_connect ((gpointer) set_file_readonly1, "toggled",
                     G_CALLBACK (on_set_file_readonly1_toggled),
                     NULL);
@@ -1603,7 +1636,7 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, file1_menu, "file1_menu");
   GLADE_HOOKUP_OBJECT (window1, menu_new1, "menu_new1");
   GLADE_HOOKUP_OBJECT (window1, menu_new_with_template1, "menu_new_with_template1");
-  GLADE_HOOKUP_OBJECT (window1, image2010, "image2010");
+  GLADE_HOOKUP_OBJECT (window1, image2248, "image2248");
   GLADE_HOOKUP_OBJECT (window1, menu_new_with_template1_menu, "menu_new_with_template1_menu");
   GLADE_HOOKUP_OBJECT (window1, invisible2, "invisible2");
   GLADE_HOOKUP_OBJECT (window1, separator12, "separator12");
@@ -1614,11 +1647,11 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, menu_save1, "menu_save1");
   GLADE_HOOKUP_OBJECT (window1, menu_save_as1, "menu_save_as1");
   GLADE_HOOKUP_OBJECT (window1, menu_save_all1, "menu_save_all1");
-  GLADE_HOOKUP_OBJECT (window1, image2011, "image2011");
+  GLADE_HOOKUP_OBJECT (window1, image2249, "image2249");
   GLADE_HOOKUP_OBJECT (window1, menu_reload1, "menu_reload1");
-  GLADE_HOOKUP_OBJECT (window1, image2012, "image2012");
+  GLADE_HOOKUP_OBJECT (window1, image2250, "image2250");
   GLADE_HOOKUP_OBJECT (window1, menu_reload_as1, "menu_reload_as1");
-  GLADE_HOOKUP_OBJECT (window1, image2013, "image2013");
+  GLADE_HOOKUP_OBJECT (window1, image2251, "image2251");
   GLADE_HOOKUP_OBJECT (window1, menu_reload_as1_menu, "menu_reload_as1_menu");
   GLADE_HOOKUP_OBJECT (window1, invisible7, "invisible7");
   GLADE_HOOKUP_OBJECT (window1, separator21, "separator21");
@@ -1630,7 +1663,7 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, separator14, "separator14");
   GLADE_HOOKUP_OBJECT (window1, menu_close1, "menu_close1");
   GLADE_HOOKUP_OBJECT (window1, menu_close_all1, "menu_close_all1");
-  GLADE_HOOKUP_OBJECT (window1, image2014, "image2014");
+  GLADE_HOOKUP_OBJECT (window1, image2252, "image2252");
   GLADE_HOOKUP_OBJECT (window1, menu_separatormenuitem1, "menu_separatormenuitem1");
   GLADE_HOOKUP_OBJECT (window1, menu_quit1, "menu_quit1");
   GLADE_HOOKUP_OBJECT (window1, edit1, "edit1");
@@ -1655,16 +1688,16 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, menu_duplicate_line1, "menu_duplicate_line1");
   GLADE_HOOKUP_OBJECT (window1, separator29, "separator29");
   GLADE_HOOKUP_OBJECT (window1, menu_increase_indent1, "menu_increase_indent1");
-  GLADE_HOOKUP_OBJECT (window1, image2015, "image2015");
+  GLADE_HOOKUP_OBJECT (window1, image2253, "image2253");
   GLADE_HOOKUP_OBJECT (window1, menu_decrease_indent1, "menu_decrease_indent1");
-  GLADE_HOOKUP_OBJECT (window1, image2016, "image2016");
+  GLADE_HOOKUP_OBJECT (window1, image2254, "image2254");
   GLADE_HOOKUP_OBJECT (window1, separator37, "separator37");
   GLADE_HOOKUP_OBJECT (window1, send_selection_to2, "send_selection_to2");
   GLADE_HOOKUP_OBJECT (window1, send_selection_to2_menu, "send_selection_to2_menu");
   GLADE_HOOKUP_OBJECT (window1, invisible13, "invisible13");
   GLADE_HOOKUP_OBJECT (window1, separator18, "separator18");
   GLADE_HOOKUP_OBJECT (window1, add_comments1, "add_comments1");
-  GLADE_HOOKUP_OBJECT (window1, image2017, "image2017");
+  GLADE_HOOKUP_OBJECT (window1, image2255, "image2255");
   GLADE_HOOKUP_OBJECT (window1, add_comments1_menu, "add_comments1_menu");
   GLADE_HOOKUP_OBJECT (window1, menu_add_changelog_entry1, "menu_add_changelog_entry1");
   GLADE_HOOKUP_OBJECT (window1, insert_file_header1, "insert_file_header1");
@@ -1673,11 +1706,11 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, insert_gpl_notice2, "insert_gpl_notice2");
   GLADE_HOOKUP_OBJECT (window1, insert_bsd_license_notice2, "insert_bsd_license_notice2");
   GLADE_HOOKUP_OBJECT (window1, insert_date1, "insert_date1");
-  GLADE_HOOKUP_OBJECT (window1, image2018, "image2018");
+  GLADE_HOOKUP_OBJECT (window1, image2256, "image2256");
   GLADE_HOOKUP_OBJECT (window1, insert_date1_menu, "insert_date1_menu");
   GLADE_HOOKUP_OBJECT (window1, invisible8, "invisible8");
   GLADE_HOOKUP_OBJECT (window1, insert_include2, "insert_include2");
-  GLADE_HOOKUP_OBJECT (window1, image2019, "image2019");
+  GLADE_HOOKUP_OBJECT (window1, image2257, "image2257");
   GLADE_HOOKUP_OBJECT (window1, insert_include2_menu, "insert_include2_menu");
   GLADE_HOOKUP_OBJECT (window1, invisible4, "invisible4");
   GLADE_HOOKUP_OBJECT (window1, separator9, "separator9");
@@ -1689,7 +1722,7 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, find_previous1, "find_previous1");
   GLADE_HOOKUP_OBJECT (window1, find_in_files1, "find_in_files1");
   GLADE_HOOKUP_OBJECT (window1, replace1, "replace1");
-  GLADE_HOOKUP_OBJECT (window1, image2020, "image2020");
+  GLADE_HOOKUP_OBJECT (window1, image2258, "image2258");
   GLADE_HOOKUP_OBJECT (window1, separator33, "separator33");
   GLADE_HOOKUP_OBJECT (window1, find_nextsel1, "find_nextsel1");
   GLADE_HOOKUP_OBJECT (window1, find_prevsel1, "find_prevsel1");
@@ -1697,11 +1730,11 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, next_message1, "next_message1");
   GLADE_HOOKUP_OBJECT (window1, separator32, "separator32");
   GLADE_HOOKUP_OBJECT (window1, go_to_line1, "go_to_line1");
-  GLADE_HOOKUP_OBJECT (window1, image2021, "image2021");
+  GLADE_HOOKUP_OBJECT (window1, image2259, "image2259");
   GLADE_HOOKUP_OBJECT (window1, menu_view1, "menu_view1");
   GLADE_HOOKUP_OBJECT (window1, menu_view1_menu, "menu_view1_menu");
   GLADE_HOOKUP_OBJECT (window1, menu_change_font1, "menu_change_font1");
-  GLADE_HOOKUP_OBJECT (window1, image2022, "image2022");
+  GLADE_HOOKUP_OBJECT (window1, image2260, "image2260");
   GLADE_HOOKUP_OBJECT (window1, menu_separator4, "menu_separator4");
   GLADE_HOOKUP_OBJECT (window1, menu_toggle_all_additional_widgets1, "menu_toggle_all_additional_widgets1");
   GLADE_HOOKUP_OBJECT (window1, menu_fullscreen1, "menu_fullscreen1");
@@ -1718,9 +1751,14 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, menu_document1_menu, "menu_document1_menu");
   GLADE_HOOKUP_OBJECT (window1, menu_line_breaking1, "menu_line_breaking1");
   GLADE_HOOKUP_OBJECT (window1, menu_use_auto_indentation1, "menu_use_auto_indentation1");
+  GLADE_HOOKUP_OBJECT (window1, indent_type1, "indent_type1");
+  GLADE_HOOKUP_OBJECT (window1, indent_type1_menu, "indent_type1_menu");
+  GLADE_HOOKUP_OBJECT (window1, tabs1, "tabs1");
+  GLADE_HOOKUP_OBJECT (window1, spaces1, "spaces1");
+  GLADE_HOOKUP_OBJECT (window1, separator45, "separator45");
   GLADE_HOOKUP_OBJECT (window1, set_file_readonly1, "set_file_readonly1");
   GLADE_HOOKUP_OBJECT (window1, menu_write_unicode_bom1, "menu_write_unicode_bom1");
-  GLADE_HOOKUP_OBJECT (window1, separator10, "separator10");
+  GLADE_HOOKUP_OBJECT (window1, separator46, "separator46");
   GLADE_HOOKUP_OBJECT (window1, set_filetype1, "set_filetype1");
   GLADE_HOOKUP_OBJECT (window1, set_filetype1_menu, "set_filetype1_menu");
   GLADE_HOOKUP_OBJECT (window1, invisible1, "invisible1");
@@ -1743,23 +1781,23 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, menu_project1, "menu_project1");
   GLADE_HOOKUP_OBJECT (window1, menu_project1_menu, "menu_project1_menu");
   GLADE_HOOKUP_OBJECT (window1, project_new1, "project_new1");
-  GLADE_HOOKUP_OBJECT (window1, image2023, "image2023");
+  GLADE_HOOKUP_OBJECT (window1, image2261, "image2261");
   GLADE_HOOKUP_OBJECT (window1, project_open1, "project_open1");
-  GLADE_HOOKUP_OBJECT (window1, image2024, "image2024");
+  GLADE_HOOKUP_OBJECT (window1, image2262, "image2262");
   GLADE_HOOKUP_OBJECT (window1, project_close1, "project_close1");
-  GLADE_HOOKUP_OBJECT (window1, image2025, "image2025");
+  GLADE_HOOKUP_OBJECT (window1, image2263, "image2263");
   GLADE_HOOKUP_OBJECT (window1, separator34, "separator34");
   GLADE_HOOKUP_OBJECT (window1, project_properties1, "project_properties1");
   GLADE_HOOKUP_OBJECT (window1, menu_build1, "menu_build1");
   GLADE_HOOKUP_OBJECT (window1, tools1, "tools1");
   GLADE_HOOKUP_OBJECT (window1, tools1_menu, "tools1_menu");
   GLADE_HOOKUP_OBJECT (window1, menu_choose_color1, "menu_choose_color1");
-  GLADE_HOOKUP_OBJECT (window1, image2026, "image2026");
+  GLADE_HOOKUP_OBJECT (window1, image2264, "image2264");
   GLADE_HOOKUP_OBJECT (window1, menu_count_words1, "menu_count_words1");
   GLADE_HOOKUP_OBJECT (window1, menu_help1, "menu_help1");
   GLADE_HOOKUP_OBJECT (window1, menu_help1_menu, "menu_help1_menu");
   GLADE_HOOKUP_OBJECT (window1, help1, "help1");
-  GLADE_HOOKUP_OBJECT (window1, image2027, "image2027");
+  GLADE_HOOKUP_OBJECT (window1, image2265, "image2265");
   GLADE_HOOKUP_OBJECT (window1, keyboard_shortcuts1, "keyboard_shortcuts1");
   GLADE_HOOKUP_OBJECT (window1, website1, "website1");
   GLADE_HOOKUP_OBJECT (window1, separator16, "separator16");
@@ -2519,16 +2557,18 @@ create_prefs_dialog (void)
   GtkWidget *frame27;
   GtkWidget *alignment30;
   GtkWidget *vbox25;
+  GtkWidget *table13;
+  GtkWidget *label183;
+  GtkWidget *combo_auto_indent_mode;
+  GtkObject *spin_tab_width_adj;
+  GtkWidget *spin_tab_width;
+  GtkWidget *label116;
   GtkWidget *hbox8;
   GtkWidget *radio_indent_tabs;
   GSList *radio_indent_tabs_group = NULL;
   GtkWidget *radio_indent_spaces;
-  GtkWidget *table13;
-  GtkWidget *label116;
-  GtkWidget *label183;
-  GtkObject *spin_tab_width_adj;
-  GtkWidget *spin_tab_width;
-  GtkWidget *combo_auto_indent_mode;
+  GtkWidget *label200;
+  GtkWidget *check_detect_indent;
   GtkWidget *label195;
   GtkWidget *frame14;
   GtkWidget *alignment17;
@@ -3444,46 +3484,32 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox25);
   gtk_container_add (GTK_CONTAINER (alignment30), vbox25);
 
-  hbox8 = gtk_hbox_new (FALSE, 12);
-  gtk_widget_show (hbox8);
-  gtk_box_pack_start (GTK_BOX (vbox25), hbox8, FALSE, FALSE, 0);
-
-  radio_indent_tabs = gtk_radio_button_new_with_mnemonic (NULL, _("Tabs"));
-  gtk_widget_show (radio_indent_tabs);
-  gtk_box_pack_start (GTK_BOX (hbox8), radio_indent_tabs, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, radio_indent_tabs, _("Whenever some whitespace is inserted by Geany it will use tabs when enabled otherwise Geany will use just spaces."), NULL);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_tabs), radio_indent_tabs_group);
-  radio_indent_tabs_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_tabs));
-
-  radio_indent_spaces = gtk_radio_button_new_with_mnemonic (NULL, _("Spaces"));
-  gtk_widget_show (radio_indent_spaces);
-  gtk_box_pack_start (GTK_BOX (hbox8), radio_indent_spaces, FALSE, FALSE, 0);
-  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_spaces), radio_indent_tabs_group);
-  radio_indent_tabs_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_spaces));
-
-  table13 = gtk_table_new (2, 2, FALSE);
+  table13 = gtk_table_new (4, 2, FALSE);
   gtk_widget_show (table13);
   gtk_box_pack_start (GTK_BOX (vbox25), table13, FALSE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table13), 3);
   gtk_table_set_col_spacings (GTK_TABLE (table13), 24);
 
-  label116 = gtk_label_new (_("Tab Width:"));
-  gtk_widget_show (label116);
-  gtk_table_attach (GTK_TABLE (table13), label116, 0, 1, 0, 1,
-                    (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_misc_set_alignment (GTK_MISC (label116), 0, 0.5);
-
-  label183 = gtk_label_new (_("Auto indentation mode:"));
+  label183 = gtk_label_new (_("Auto-indent mode:"));
   gtk_widget_show (label183);
-  gtk_table_attach (GTK_TABLE (table13), label183, 0, 1, 1, 2,
+  gtk_table_attach (GTK_TABLE (table13), label183, 0, 1, 3, 4,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
+
+  combo_auto_indent_mode = gtk_combo_box_new_text ();
+  gtk_widget_show (combo_auto_indent_mode);
+  gtk_table_attach (GTK_TABLE (table13), combo_auto_indent_mode, 1, 2, 3, 4,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_FILL), 0, 0);
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Current chars"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Match braces"));
 
   spin_tab_width_adj = gtk_adjustment_new (1, 1, 99, 1, 10, 10);
   spin_tab_width = gtk_spin_button_new (GTK_ADJUSTMENT (spin_tab_width_adj), 1, 0);
   gtk_widget_show (spin_tab_width);
-  gtk_table_attach (GTK_TABLE (table13), spin_tab_width, 1, 2, 0, 1,
+  gtk_table_attach (GTK_TABLE (table13), spin_tab_width, 1, 2, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, spin_tab_width, _("The width in chars, which one tab character will take"), NULL);
@@ -3491,15 +3517,46 @@ create_prefs_dialog (void)
   gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_tab_width), GTK_UPDATE_IF_VALID);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spin_tab_width), TRUE);
 
-  combo_auto_indent_mode = gtk_combo_box_new_text ();
-  gtk_widget_show (combo_auto_indent_mode);
-  gtk_table_attach (GTK_TABLE (table13), combo_auto_indent_mode, 1, 2, 1, 2,
+  label116 = gtk_label_new (_("Tab width:"));
+  gtk_widget_show (label116);
+  gtk_table_attach (GTK_TABLE (table13), label116, 0, 1, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
-                    (GtkAttachOptions) (GTK_FILL), 0, 0);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("None"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Basic"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Current chars"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_auto_indent_mode), _("Match braces"));
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label116), 0, 0.5);
+
+  hbox8 = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox8);
+  gtk_table_attach (GTK_TABLE (table13), hbox8, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+
+  radio_indent_tabs = gtk_radio_button_new_with_mnemonic (NULL, _("Tabs"));
+  gtk_widget_show (radio_indent_tabs);
+  gtk_box_pack_start (GTK_BOX (hbox8), radio_indent_tabs, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radio_indent_tabs, _("Whether to use tabs or spaces when indentation is inserted."), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_tabs), radio_indent_tabs_group);
+  radio_indent_tabs_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_tabs));
+
+  radio_indent_spaces = gtk_radio_button_new_with_mnemonic (NULL, _("Spaces"));
+  gtk_widget_show (radio_indent_spaces);
+  gtk_box_pack_start (GTK_BOX (hbox8), radio_indent_spaces, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radio_indent_spaces, _("Whether to use tabs or spaces when indentation is inserted."), NULL);
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_indent_spaces), radio_indent_tabs_group);
+  radio_indent_tabs_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_indent_spaces));
+
+  label200 = gtk_label_new (_("Type:"));
+  gtk_widget_show (label200);
+  gtk_table_attach (GTK_TABLE (table13), label200, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label200), 0, 0.5);
+
+  check_detect_indent = gtk_check_button_new_with_mnemonic (_("Detect from file"));
+  gtk_widget_show (check_detect_indent);
+  gtk_table_attach (GTK_TABLE (table13), check_detect_indent, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_detect_indent, _("Whether to detect the indentation type from file contents when a file is opened."), NULL);
 
   label195 = gtk_label_new (_("<b>Indentation</b>"));
   gtk_widget_show (label195);
@@ -4295,14 +4352,16 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame27, "frame27");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment30, "alignment30");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox25, "vbox25");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table13, "table13");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label183, "label183");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_auto_indent_mode, "combo_auto_indent_mode");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_tab_width, "spin_tab_width");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label116, "label116");
   GLADE_HOOKUP_OBJECT (prefs_dialog, hbox8, "hbox8");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_indent_tabs, "radio_indent_tabs");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_indent_spaces, "radio_indent_spaces");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, table13, "table13");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label116, "label116");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label183, "label183");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_tab_width, "spin_tab_width");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, combo_auto_indent_mode, "combo_auto_indent_mode");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label200, "label200");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_detect_indent, "check_detect_indent");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label195, "label195");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame14, "frame14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment17, "alignment17");

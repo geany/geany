@@ -74,6 +74,7 @@ typedef struct EditorPrefs
 	gboolean	brace_match_ltgt;	// whether to highlight < and > chars (hidden pref)
 	gboolean	use_gtk_word_boundaries;	// hidden pref
 	gboolean	auto_complete_whilst_editing;	// hidden pref
+	gboolean	detect_tab_mode;
 } EditorPrefs;
 
 extern EditorPrefs editor_prefs;
@@ -118,8 +119,6 @@ gint editor_do_uncomment(gint idx, gint line, gboolean toggle);
 
 void editor_highlight_braces(ScintillaObject *sci, gint cur_pos);
 
-void editor_auto_table(ScintillaObject *sci, gint pos);
-
 gboolean editor_lexer_is_c_like(gint lexer);
 
 gint editor_lexer_get_type_keyword_idx(gint lexer);
@@ -132,7 +131,7 @@ void editor_select_lines(ScintillaObject *sci, gboolean extra_line);
 
 void editor_select_paragraph(ScintillaObject *sci);
 
-void editor_insert_alternative_whitespace(ScintillaObject *sci);
+void editor_insert_alternative_whitespace(gint idx);
 
 void editor_auto_line_indentation(gint idx, gint pos);
 

@@ -115,10 +115,6 @@ void ui_set_statusbar(const gchar *format, ...)
 /* updates the status bar document statistics */
 void ui_update_statusbar(gint idx, gint pos)
 {
-	gchar *text;
-	const gchar *cur_tag;
-	guint line, col;
-
 	if (! prefs.statusbar_visible)
 		return; // just do nothing if statusbar is not visible
 
@@ -126,7 +122,13 @@ void ui_update_statusbar(gint idx, gint pos)
 
 	if (DOC_IDX_VALID(idx))
 	{
-		utils_get_current_function(idx, &cur_tag);
+		static GString *stats_str = NULL;
+		const gchar sp[] = "      ";
+		guint line, col;
+		const gchar *cur_tag;
+
+		if (stats_str == NULL)
+			stats_str = g_string_sized_new(120);
 
 		if (pos == -1) pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_line_from_position(doc_list[idx].sci, pos);
@@ -139,26 +141,43 @@ void ui_update_statusbar(gint idx, gint pos)
 		else
 			col = 0;
 
-		/* Status bar statistics: col = column, sel = selection, RO = read-only,
-		 * OVR = overwrite/overtype, INS = insert, MOD = modified */
-		text = g_strdup_printf(_("line: %d\t col: %d\t sel: %d\t %s      %s      "
-			"mode: %s      encoding: %s %s      filetype: %s      scope: %s"),
+		/* Status bar statistics: col = column, sel = selection. */
+		g_string_printf(stats_str, _("line: %d\t col: %d\t sel: %d\t "),
 			(line + 1), col,
-			sci_get_selected_text_length(doc_list[idx].sci) - 1,
-			(doc_list[idx].readonly) ? _("RO ") :
-				(sci_get_overtype(doc_list[idx].sci) ? _("OVR") : _("INS")),
-			(doc_list[idx].changed) ? _("MOD") : "   ",
-			document_get_eol_mode(idx),
+			sci_get_selected_text_length(doc_list[idx].sci) - 1);
+
+		g_string_append(stats_str,
+			(doc_list[idx].readonly) ? _("RO ") :	// RO = read-only
+				(sci_get_overtype(doc_list[idx].sci) ? _("OVR") : _("INS")));	// OVR = overwrite/overtype, INS = insert
+		g_string_append(stats_str, sp);
+		g_string_append(stats_str,
+			(doc_list[idx].use_tabs) ? _("TAB") : _("SP "));	// SP = space
+		g_string_append(stats_str, sp);
+		g_string_append_printf(stats_str, "mode: %s",
+			document_get_eol_mode(idx));
+		g_string_append(stats_str, sp);
+		g_string_append_printf(stats_str, "encoding: %s %s",
 			(doc_list[idx].encoding) ? doc_list[idx].encoding : _("unknown"),
 			(encodings_is_unicode_charset(doc_list[idx].encoding)) ?
-				((doc_list[idx].has_bom) ? _("(with BOM)") : "") : "",
+				((doc_list[idx].has_bom) ? _("(with BOM)") : "") : "");	// BOM = byte order mark
+		g_string_append(stats_str, sp);
+		g_string_append_printf(stats_str, "filetype: %s",
 			(doc_list[idx].file_type) ? doc_list[idx].file_type->name :
-				filetypes[GEANY_FILETYPES_ALL]->name,
+				filetypes[GEANY_FILETYPES_ALL]->name);
+		g_string_append(stats_str, sp);
+		if (doc_list[idx].changed)
+		{
+			g_string_append(stats_str, _("MOD"));	// MOD = modified
+			g_string_append(stats_str, sp);
+		}
+
+		utils_get_current_function(idx, &cur_tag);
+		g_string_append_printf(stats_str, "scope: %s",
 			cur_tag);
-		set_statusbar(text, TRUE);	// can be overridden by status messages
-		g_free(text);
+
+		set_statusbar(stats_str->str, TRUE);	// can be overridden by status messages
 	}
-	else
+	else	// no documents
 	{
 		set_statusbar("", TRUE);	// can be overridden by status messages
 	}
@@ -626,7 +645,7 @@ void ui_treeviews_show_hide(G_GNUC_UNUSED gboolean force)
 void ui_document_show_hide(gint idx)
 {
 	gchar *widget_name;
-	GtkWidget *check_indent;
+	GtkWidget *item;
 
 	if (idx == -1)
 		idx = document_get_cur_idx();
@@ -636,20 +655,27 @@ void ui_document_show_hide(gint idx)
 
 	app->ignore_callback = TRUE;
 
-	check_indent = lookup_widget(app->window, "menu_use_auto_indentation1");
-
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_line_breaking1")),
 			doc_list[idx].line_wrapping);
-	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(check_indent),
-			doc_list[idx].auto_indent);
+
+	item = lookup_widget(app->window, "menu_use_auto_indentation1");
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
+		doc_list[idx].auto_indent);
+	gtk_widget_set_sensitive(item, editor_prefs.indent_mode != INDENT_NONE);
+
+	item = lookup_widget(app->window,
+		doc_list[idx].use_tabs ? "tabs1" : "spaces1");
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), TRUE);
+
 	gtk_check_menu_item_set_active(
 			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "set_file_readonly1")),
 			doc_list[idx].readonly);
-	gtk_check_menu_item_set_active(
-			GTK_CHECK_MENU_ITEM(lookup_widget(app->window, "menu_write_unicode_bom1")),
-			doc_list[idx].has_bom);
+
+	item = lookup_widget(app->window, "menu_write_unicode_bom1");
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
+		doc_list[idx].has_bom);
+	gtk_widget_set_sensitive(item, encodings_is_unicode_charset(doc_list[idx].encoding));
 
 	switch (sci_get_eol_mode(doc_list[idx].sci))
 	{
@@ -657,13 +683,8 @@ void ui_document_show_hide(gint idx)
 		case SC_EOL_LF: widget_name = "lf"; break;
 		default: widget_name = "crlf"; break;
 	}
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(lookup_widget(app->window, widget_name)),
-																					TRUE);
-
-	gtk_widget_set_sensitive(check_indent, editor_prefs.indent_mode != INDENT_NONE);
-
-	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_write_unicode_bom1"),
-			encodings_is_unicode_charset(doc_list[idx].encoding));
+	gtk_check_menu_item_set_active(
+		GTK_CHECK_MENU_ITEM(lookup_widget(app->window, widget_name)), TRUE);
 
 	encodings_select_radio_item(doc_list[idx].encoding);
 	filetypes_select_radio_item(doc_list[idx].file_type);

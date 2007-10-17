@@ -251,17 +251,27 @@ void document_set_text_changed(gint idx)
 }
 
 
+void document_set_use_tabs(gint idx, gboolean use_tabs)
+{
+	document *doc = &doc_list[idx];
+
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	doc->use_tabs = use_tabs;
+	sci_set_use_tabs(doc->sci, use_tabs);
+	// remove indent spaces on backspace, if using spaces to indent
+	SSM(doc->sci, SCI_SETBACKSPACEUNINDENTS, ! use_tabs, 0);
+}
+
+
 // Apply just the prefs that can change in the Preferences dialog
 void document_apply_update_prefs(gint idx)
 {
 	ScintillaObject *sci = doc_list[idx].sci;
+
 	sci_set_mark_long_lines(sci, editor_prefs.long_line_type, editor_prefs.long_line_column, editor_prefs.long_line_color);
 
 	sci_set_tab_width(sci, editor_prefs.tab_width);
-
-	sci_set_use_tabs(sci, editor_prefs.use_tabs);
-	// remove indent spaces on backspace, if using spaces to indent
-	SSM(sci, SCI_SETBACKSPACEUNINDENTS, ! editor_prefs.use_tabs, 0);
 
 	sci_set_autoc_max_height(sci, editor_prefs.autocompletion_max_height);
 
@@ -529,6 +539,7 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 #else
 	sci_set_eol_mode(doc_list[idx].sci, SC_EOL_LF);
 #endif
+	document_set_use_tabs(idx, editor_prefs.use_tabs);
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 	sci_empty_undo_buffer(doc_list[idx].sci);
 
@@ -830,6 +841,38 @@ static void set_cursor_position(gint idx, gint pos)
 }
 
 
+static gboolean detect_use_tabs(ScintillaObject *sci)
+{
+	gint line;
+	gsize tabs = 0, spaces = 0;
+
+	for (line = 0; line < sci_get_line_count(sci); line++)
+	{
+		gint pos = sci_get_position_from_line(sci, line);
+		gchar c;
+
+		c = sci_get_char_at(sci, pos);
+		if (c == '\t')
+			tabs++;
+		else
+		if (c == ' ')
+		{
+			// check at least 2 spaces
+			if (sci_get_char_at(sci, pos + 1) == ' ')
+				spaces++;
+		}
+	}
+	if (spaces == 0 && tabs == 0)
+		return editor_prefs.use_tabs;
+
+	// Skew comparison by a factor of 2 in favour of default editor pref
+	if (editor_prefs.use_tabs)
+		return ! (spaces > tabs * 2);
+	else
+		return (tabs > spaces * 2);
+}
+
+
 /* To open a new file, set idx to -1; filename should be locale encoded.
  * To reload a file, set the idx for the document to be reloaded; filename should be NULL.
  * pos is the cursor position, which can be overridden by --line and --column.
@@ -916,6 +959,21 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 	editor_mode = utils_get_line_endings(filedata.data, filedata.len);
 	sci_set_eol_mode(doc_list[idx].sci, editor_mode);
 	g_free(filedata.data);
+
+	if (reload)
+		document_set_use_tabs(idx, doc_list[idx].use_tabs); // resetup sci
+	else
+	if (! editor_prefs.detect_tab_mode)
+		document_set_use_tabs(idx, editor_prefs.use_tabs);
+	else
+	{	// detect & set tabs/spaces
+		gboolean use_tabs = detect_use_tabs(doc_list[idx].sci);
+
+		if (use_tabs != editor_prefs.use_tabs)
+			msgwin_status_add(_("Setting %s indentation mode."),
+				(use_tabs) ? _("Tabs") : _("Spaces"));
+		document_set_use_tabs(idx, use_tabs);
+	}
 
 	sci_set_undo_collection(doc_list[idx].sci, TRUE);
 

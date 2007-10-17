@@ -58,7 +58,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2010">
+			<widget class="GtkImage" id="image2248">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -148,7 +148,7 @@
 		      <signal name="activate" handler="on_save_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2011">
+			<widget class="GtkImage" id="image2249">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -169,7 +169,7 @@
 		      <signal name="activate" handler="on_toolbutton23_clicked" last_modification_time="Mon, 24 Jul 2006 19:26:04 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2012">
+			<widget class="GtkImage" id="image2250">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -189,7 +189,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2013">
+			<widget class="GtkImage" id="image2251">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-revert-to-saved</property>
 			  <property name="icon_size">1</property>
@@ -285,7 +285,7 @@
 		      <signal name="activate" handler="on_close_all1_activate" last_modification_time="Thu, 02 Jun 2005 14:15:30 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2014">
+			<widget class="GtkImage" id="image2252">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -484,7 +484,7 @@
 			      <signal name="activate" handler="on_menu_increase_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image2015">
+				<widget class="GtkImage" id="image2253">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-indent</property>
 				  <property name="icon_size">1</property>
@@ -505,7 +505,7 @@
 			      <signal name="activate" handler="on_menu_decrease_indent1_activate" last_modification_time="Tue, 01 Aug 2006 10:28:54 GMT"/>
 
 			      <child internal-child="image">
-				<widget class="GtkImage" id="image2016">
+				<widget class="GtkImage" id="image2254">
 				  <property name="visible">True</property>
 				  <property name="stock">gtk-unindent</property>
 				  <property name="icon_size">1</property>
@@ -561,7 +561,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2017">
+			<widget class="GtkImage" id="image2255">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -646,7 +646,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2018">
+			<widget class="GtkImage" id="image2256">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -678,7 +678,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2019">
+			<widget class="GtkImage" id="image2257">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -775,7 +775,7 @@
 		      <signal name="activate" handler="on_replace1_activate" last_modification_time="Sun, 23 Oct 2005 13:22:36 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2020">
+			<widget class="GtkImage" id="image2258">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-find-and-replace</property>
 			  <property name="icon_size">1</property>
@@ -841,7 +841,7 @@
 		      <signal name="activate" handler="on_go_to_line1_activate" last_modification_time="Tue, 23 May 2006 17:10:49 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2021">
+			<widget class="GtkImage" id="image2259">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-jump-to</property>
 			  <property name="icon_size">1</property>
@@ -876,7 +876,7 @@
 		      <signal name="activate" handler="on_change_font1_activate" last_modification_time="Fri, 22 Apr 2005 18:58:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2022">
+			<widget class="GtkImage" id="image2260">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-font</property>
 			  <property name="icon_size">1</property>
@@ -1028,10 +1028,50 @@
 		  <child>
 		    <widget class="GtkCheckMenuItem" id="menu_use_auto_indentation1">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Use Auto-indentation</property>
+		      <property name="label" translatable="yes">_Auto-indentation</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">True</property>
 		      <signal name="toggled" handler="on_use_auto_indentation1_toggled" last_modification_time="Tue, 29 May 2007 17:05:42 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="indent_type1">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">In_dent Type</property>
+		      <property name="use_underline">True</property>
+
+		      <child>
+			<widget class="GtkMenu" id="indent_type1_menu">
+
+			  <child>
+			    <widget class="GtkRadioMenuItem" id="tabs1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">Tabs</property>
+			      <property name="use_underline">True</property>
+			      <property name="active">False</property>
+			      <signal name="activate" handler="on_tabs1_activate" last_modification_time="Thu, 04 Oct 2007 16:07:51 GMT"/>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkRadioMenuItem" id="spaces1">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">Spaces</property>
+			      <property name="use_underline">True</property>
+			      <property name="active">True</property>
+			      <property name="group">tabs1</property>
+			      <signal name="activate" handler="on_spaces1_activate" last_modification_time="Thu, 04 Oct 2007 16:07:51 GMT"/>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="separator45">
+		      <property name="visible">True</property>
 		    </widget>
 		  </child>
 
@@ -1057,7 +1097,7 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkSeparatorMenuItem" id="separator10">
+		    <widget class="GtkSeparatorMenuItem" id="separator46">
 		      <property name="visible">True</property>
 		    </widget>
 		  </child>
@@ -1116,7 +1156,7 @@
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Convert and Set to _CR/LF (Win)</property>
 			      <property name="use_underline">True</property>
-			      <property name="active">True</property>
+			      <property name="active">False</property>
 			      <signal name="activate" handler="on_crlf_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
 			  </child>
@@ -1126,7 +1166,7 @@
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Convert and Set to _LF (Unix)</property>
 			      <property name="use_underline">True</property>
-			      <property name="active">True</property>
+			      <property name="active">False</property>
 			      <property name="group">crlf</property>
 			      <signal name="activate" handler="on_lf_activate" last_modification_time="Thu, 28 Apr 2005 16:27:24 GMT"/>
 			    </widget>
@@ -1236,7 +1276,7 @@
 		      <signal name="activate" handler="on_project_new1_activate" last_modification_time="Thu, 18 Jan 2007 22:16:24 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2023">
+			<widget class="GtkImage" id="image2261">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -1257,7 +1297,7 @@
 		      <signal name="activate" handler="on_project_open1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2024">
+			<widget class="GtkImage" id="image2262">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -1278,7 +1318,7 @@
 		      <signal name="activate" handler="on_project_close1_activate" last_modification_time="Mon, 15 Jan 2007 17:34:17 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2025">
+			<widget class="GtkImage" id="image2263">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -1336,7 +1376,7 @@
 		      <signal name="activate" handler="on_show_color_chooser1_activate" last_modification_time="Wed, 22 Jun 2005 18:10:21 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2026">
+			<widget class="GtkImage" id="image2264">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-select-color</property>
 			  <property name="icon_size">1</property>
@@ -1380,7 +1420,7 @@
 		      <signal name="activate" handler="on_help1_activate" last_modification_time="Sun, 24 Jul 2005 15:23:11 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image2027">
+			<widget class="GtkImage" id="image2265">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-help</property>
 			  <property name="icon_size">1</property>
@@ -5451,71 +5491,173 @@ Bottom
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkHBox" id="hbox8">
-			      <property name="visible">True</property>
-			      <property name="homogeneous">False</property>
-			      <property name="spacing">12</property>
-
-			      <child>
-				<widget class="GtkRadioButton" id="radio_indent_tabs">
-				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">Whenever some whitespace is inserted by Geany it will use tabs when enabled otherwise Geany will use just spaces.</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Tabs</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkRadioButton" id="radio_indent_spaces">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Spaces</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <property name="group">radio_indent_tabs</property>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
-				</packing>
-			      </child>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">False</property>
-			    </packing>
-			  </child>
-
-			  <child>
 			    <widget class="GtkTable" id="table13">
 			      <property name="visible">True</property>
-			      <property name="n_rows">2</property>
+			      <property name="n_rows">4</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
 			      <property name="row_spacing">3</property>
 			      <property name="column_spacing">24</property>
 
 			      <child>
+				<widget class="GtkLabel" id="label183">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Auto-indent mode:</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="left_attach">0</property>
+				  <property name="right_attach">1</property>
+				  <property name="top_attach">3</property>
+				  <property name="bottom_attach">4</property>
+				  <property name="x_options">fill</property>
+				  <property name="y_options"></property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkComboBox" id="combo_auto_indent_mode">
+				  <property name="visible">True</property>
+				  <property name="items" translatable="yes">None
+Basic
+Current chars
+Match braces</property>
+				  <property name="add_tearoffs">False</property>
+				  <property name="focus_on_click">True</property>
+				</widget>
+				<packing>
+				  <property name="left_attach">1</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">3</property>
+				  <property name="bottom_attach">4</property>
+				  <property name="x_options">fill</property>
+				  <property name="y_options">fill</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkSpinButton" id="spin_tab_width">
+				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">The width in chars, which one tab character will take</property>
+				  <property name="can_focus">True</property>
+				  <property name="climb_rate">1</property>
+				  <property name="digits">0</property>
+				  <property name="numeric">True</property>
+				  <property name="update_policy">GTK_UPDATE_IF_VALID</property>
+				  <property name="snap_to_ticks">False</property>
+				  <property name="wrap">True</property>
+				  <property name="adjustment">1 1 99 1 10 10</property>
+				</widget>
+				<packing>
+				  <property name="left_attach">1</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">2</property>
+				  <property name="bottom_attach">3</property>
+				  <property name="x_options">fill</property>
+				  <property name="y_options"></property>
+				</packing>
+			      </child>
+
+			      <child>
 				<widget class="GtkLabel" id="label116">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Tab Width:</property>
+				  <property name="label" translatable="yes">Tab width:</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="left_attach">0</property>
+				  <property name="right_attach">1</property>
+				  <property name="top_attach">2</property>
+				  <property name="bottom_attach">3</property>
+				  <property name="x_options">fill</property>
+				  <property name="y_options"></property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHBox" id="hbox8">
+				  <property name="visible">True</property>
+				  <property name="homogeneous">False</property>
+				  <property name="spacing">12</property>
+
+				  <child>
+				    <widget class="GtkRadioButton" id="radio_indent_tabs">
+				      <property name="visible">True</property>
+				      <property name="tooltip" translatable="yes">Whether to use tabs or spaces when indentation is inserted.</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">Tabs</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">True</property>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">False</property>
+				      <property name="fill">False</property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkRadioButton" id="radio_indent_spaces">
+				      <property name="visible">True</property>
+				      <property name="tooltip" translatable="yes">Whether to use tabs or spaces when indentation is inserted.</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">Spaces</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">True</property>
+				      <property name="group">radio_indent_tabs</property>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">False</property>
+				      <property name="fill">False</property>
+				    </packing>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="left_attach">1</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">0</property>
+				  <property name="bottom_attach">1</property>
+				  <property name="x_options">fill</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="label200">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Type:</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5541,65 +5683,17 @@ Bottom
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="label183">
+				<widget class="GtkCheckButton" id="check_detect_indent">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Auto indentation mode:</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				  <property name="width_chars">-1</property>
-				  <property name="single_line_mode">False</property>
-				  <property name="angle">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
-				  <property name="x_options">fill</property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="spin_tab_width">
-				  <property name="visible">True</property>
-				  <property name="tooltip" translatable="yes">The width in chars, which one tab character will take</property>
+				  <property name="tooltip" translatable="yes">Whether to detect the indentation type from file contents when a file is opened.</property>
 				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_IF_VALID</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">True</property>
-				  <property name="adjustment">1 1 99 1 10 10</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="x_options">fill</property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkComboBox" id="combo_auto_indent_mode">
-				  <property name="visible">True</property>
-				  <property name="items" translatable="yes">None
-Basic
-Current chars
-Match braces</property>
-				  <property name="add_tearoffs">False</property>
+				  <property name="label" translatable="yes">Detect from file</property>
+				  <property name="use_underline">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -5607,7 +5701,7 @@ Match braces</property>
 				  <property name="top_attach">1</property>
 				  <property name="bottom_attach">2</property>
 				  <property name="x_options">fill</property>
-				  <property name="y_options">fill</property>
+				  <property name="y_options"></property>
 				</packing>
 			      </child>
 			    </widget>

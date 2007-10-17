@@ -1745,7 +1745,7 @@ on_menu_increase_indent1_activate      (GtkMenuItem     *menuitem,
 		line = sci_get_line_from_position(doc_list[idx].sci, old_pos);
 		ind_pos = sci_get_line_indent_position(doc_list[idx].sci, line);
 		// when using tabs increase cur pos by 1, when using space increase it by tab_width
-		step = (editor_prefs.use_tabs) ? 1 : editor_prefs.tab_width;
+		step = (doc_list[idx].use_tabs) ? 1 : editor_prefs.tab_width;
 		new_pos = (old_pos > ind_pos) ? old_pos + step : old_pos;
 
 		sci_set_current_position(doc_list[idx].sci, ind_pos, TRUE);
@@ -1773,7 +1773,7 @@ on_menu_decrease_indent1_activate      (GtkMenuItem     *menuitem,
 		old_pos = sci_get_current_position(doc_list[idx].sci);
 		line = sci_get_line_from_position(doc_list[idx].sci, old_pos);
 		ind_pos = sci_get_line_indent_position(doc_list[idx].sci, line);
-		step = (editor_prefs.use_tabs) ? 1 : editor_prefs.tab_width;
+		step = (doc_list[idx].use_tabs) ? 1 : editor_prefs.tab_width;
 		new_pos = (old_pos >= ind_pos) ? old_pos - step : old_pos;
 
 		if (ind_pos == sci_get_position_from_line(doc_list[idx].sci, line))
@@ -2097,5 +2097,27 @@ gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user
 		gtk_widget_grab_focus(widget);
 
 	return FALSE;
+}
+
+
+void
+on_tabs1_activate                      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	document_set_use_tabs(idx, TRUE);
+	ui_update_statusbar(idx, -1);
+}
+
+
+void
+on_spaces1_activate                    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	document_set_use_tabs(idx, FALSE);
+	ui_update_statusbar(idx, -1);
 }
 

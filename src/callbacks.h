@@ -578,3 +578,12 @@ on_tv_notebook_switch_page_after       (GtkNotebook     *notebook,
                                         GtkNotebookPage *page,
                                         guint            page_num,
                                         gpointer         user_data);
+
+void
+on_tabs1_activate                      (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+
+void
+on_spaces1_activate                    (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);
+

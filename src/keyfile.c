@@ -185,6 +185,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
 	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", editor_prefs.unfold_all_children);
 	g_key_file_set_integer(config, PACKAGE, "indent_mode", editor_prefs.indent_mode);
+	g_key_file_set_integer(config, PACKAGE, "check_detect_indent", editor_prefs.detect_tab_mode);
 	g_key_file_set_boolean(config, PACKAGE, "use_indicators", editor_prefs.use_indicators);
 	g_key_file_set_boolean(config, PACKAGE, "line_breaking", editor_prefs.line_wrapping);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", editor_prefs.auto_close_xml_tags);
@@ -449,6 +450,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.autocompletion_max_height = utils_get_setting_integer(config, PACKAGE, "autocompletion_max_height", GEANY_MAX_AUTOCOMPLETE_HEIGHT);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); // default is off for better performance
 	editor_prefs.indent_mode = utils_get_setting_integer(config, PACKAGE, "indent_mode", INDENT_CURRENTCHARS);
+	editor_prefs.detect_tab_mode = utils_get_setting_integer(config, PACKAGE, "check_detect_indent", FALSE);
 	editor_prefs.use_tab_to_indent = utils_get_setting_boolean(config, PACKAGE, "use_tab_to_indent", FALSE);
 	editor_prefs.use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
 	editor_prefs.show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);

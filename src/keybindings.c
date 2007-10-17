@@ -1283,7 +1283,7 @@ static void cb_func_edit(guint key_id)
 			editor_select_paragraph(doc_list[idx].sci);
 			break;
 		case GEANY_KEYS_EDIT_INSERTALTWHITESPACE:
-			editor_insert_alternative_whitespace(doc_list[idx].sci);
+			editor_insert_alternative_whitespace(idx);
 			break;
 		case GEANY_KEYS_EDIT_INCREASEINDENT:
 			on_menu_increase_indent1_activate(NULL, NULL);

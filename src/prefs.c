@@ -289,6 +289,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "combo_auto_indent_mode");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), editor_prefs.indent_mode);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.detect_tab_mode);
+
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.line_wrapping);
 
@@ -693,7 +696,25 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		editor_prefs.smart_home_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_indent_tabs");
-		editor_prefs.use_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		{
+			gboolean use_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+			// override each document setting only if the default has changed
+			if (editor_prefs.use_tabs != use_tabs)
+			{
+				guint i;
+
+				editor_prefs.use_tabs = use_tabs;
+				for (i = 0; i < doc_array->len; i++)
+				{
+					if (doc_list[i].is_valid)
+						document_set_use_tabs(i, editor_prefs.use_tabs);
+				}
+			}
+		}
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_detect_indent");
+		editor_prefs.detect_tab_mode = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
 		editor_prefs.auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

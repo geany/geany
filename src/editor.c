@@ -61,12 +61,13 @@ static struct
 static gchar indent[100];
 
 
-static void on_new_line_added(ScintillaObject *sci, gint idx);
-static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx);
-static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line);
+static void on_new_line_added(gint idx);
+static gboolean handle_xml(gint idx, gchar ch);
+static void get_indent(document *doc, gint pos, gboolean use_this_line);
 static void auto_multiline(ScintillaObject *sci, gint pos);
 static gboolean is_comment(gint lexer, gint style);
 static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c);
+static void editor_auto_table(document *doc, gint pos);
 
 
 // calls the edit popup menu in the editor
@@ -190,18 +191,18 @@ static void on_char_added(gint idx, SCNotification *nt)
 		case '\r':
 		{	// simple indentation (only for CR format)
 			if (sci_get_eol_mode(sci) == SC_EOL_CR)
-				on_new_line_added(sci, idx);
+				on_new_line_added(idx);
 			break;
 		}
 		case '\n':
 		{	// simple indentation (for CR/LF and LF format)
-			on_new_line_added(sci, idx);
+			on_new_line_added(idx);
 			break;
 		}
 		case '>':
 		case '/':
 		{	// close xml-tags
-			handle_xml(sci, nt->ch, idx);
+			handle_xml(idx, nt->ch);
 			break;
 		}
 		case '(':
@@ -361,23 +362,19 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 }
 
 
-/* Returns a string containing width chars of whitespace according to the
- * setting editor_prefs.use_tabs filled with simple space characters or with the right number
- * of tab characters. (Result is filled with tabs *and* spaces if width isn't a multiple of
- * editor_prefs.tab_width).
- * If alternative is set to TRUE, it uses the opposite of editor_prefs.use_tabs. */
+/* Returns a string containing width chars of whitespace, filled with simple space
+ * characters or with the right number of tab characters, according to the
+ * use_tabs setting. (Result is filled with tabs *and* spaces if width isn't a multiple of
+ * editor_prefs.tab_width). */
 static gchar *
-get_whitespace(gint width, gboolean alternative)
+get_whitespace(gint width, gboolean use_tabs)
 {
 	gchar *str;
-	gboolean use_tabs;
 
 	g_return_val_if_fail(width > 0, NULL);
 
-	use_tabs = (alternative) ? ! editor_prefs.use_tabs : editor_prefs.use_tabs;
-
 	if (use_tabs)
-	{	// first fill text with tabluators and fill the rest with spaces
+	{	// first fill text with tabs and fill the rest with spaces
 		gint tabs = width / editor_prefs.tab_width;
 		gint spaces = width % editor_prefs.tab_width;
 		gint len = tabs + spaces;
@@ -395,14 +392,15 @@ get_whitespace(gint width, gboolean alternative)
 }
 
 
-static void on_new_line_added(ScintillaObject *sci, gint idx)
+static void on_new_line_added(gint idx)
 {
+	ScintillaObject *sci = doc_list[idx].sci;
 	gint pos = sci_get_current_position(sci);
 
 	// simple indentation
 	if (doc_list[idx].auto_indent)
 	{
-		get_indent(sci, pos, FALSE);
+		get_indent(&doc_list[idx], pos, FALSE);
 		sci_add_text(sci, indent);
 
 		if (editor_prefs.indent_mode > INDENT_BASIC)
@@ -413,7 +411,7 @@ static void on_new_line_added(ScintillaObject *sci, gint idx)
 				sci_get_style_at(sci, pos - 2) == SCE_P_OPERATOR)
 			{
 				// creates and inserts one tabulator sign or whitespace of the amount of the tab width
-				gchar *text = get_whitespace(editor_prefs.tab_width, FALSE);
+				gchar *text = get_whitespace(editor_prefs.tab_width, doc_list[idx].use_tabs);
 				sci_add_text(sci, text);
 				g_free(text);
 			}
@@ -451,11 +449,11 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 
 
 // in place indentation of one tab or equivalent spaces
-static void do_indent(gchar *buf, gsize len, guint *idx)
+static void do_indent(gchar *buf, gsize len, guint *idx, gboolean use_tabs)
 {
 	guint j = *idx;
 
-	if (editor_prefs.use_tabs)
+	if (use_tabs)
 	{
 		if (j < len - 1)	// leave room for a \0 terminator.
 			buf[j++] = '\t';
@@ -472,8 +470,9 @@ static void do_indent(gchar *buf, gsize len, guint *idx)
 
 /* "use_this_line" to auto-indent only if it is a real new line
  * and ignore the case of editor_close_block */
-static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
+static void get_indent(document *doc, gint pos, gboolean use_this_line)
 {
+	ScintillaObject *sci = doc->sci;
 	guint i, len, j = 0;
 	gint prev_line;
 	gchar *linebuf;
@@ -499,7 +498,7 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 
 			if (linebuf[i] == '{')
 			{
-				do_indent(indent, sizeof(indent), &j);
+				do_indent(indent, sizeof(indent), &j, doc->use_tabs);
 				break;
 			}
 			else
@@ -512,7 +511,7 @@ static void get_indent(ScintillaObject *sci, gint pos, gboolean use_this_line)
 				// e.g. for (...) {
 				if (linebuf[k] == '{')
 				{
-					do_indent(indent, sizeof(indent), &j);
+					do_indent(indent, sizeof(indent), &j, doc->use_tabs);
 				}
 				break;
 			}
@@ -625,7 +624,7 @@ void editor_close_block(gint idx, gint pos)
 		{
 			gint line_start;
 
-			get_indent(sci, start_brace, TRUE);
+			get_indent(&doc_list[idx], start_brace, TRUE);
 			text = g_strconcat(indent, "}", NULL);
 			line_start = sci_get_position_from_line(sci, line);
 			sci_set_anchor(sci, line_start);
@@ -1068,7 +1067,7 @@ void editor_auto_latex(gint idx, gint pos)
 			}
 
 			// get the indentation
-			if (doc_list[idx].auto_indent) get_indent(sci, pos, TRUE);
+			if (doc_list[idx].auto_indent) get_indent(&doc_list[idx], pos, TRUE);
 			eol = g_strconcat(utils_get_eol_char(idx), indent, NULL);
 
 			construct = g_strdup_printf("%s\\end%s{%s}", eol, full_cmd, env);
@@ -1155,9 +1154,9 @@ static gboolean ac_complete_constructs(gint idx, gint pos, const gchar *word)
 		return FALSE;
 	}
 
-	get_indent(sci, pos, TRUE);
+	get_indent(&doc_list[idx], pos, TRUE);
 	lindent = g_strconcat(utils_get_eol_char(idx), indent, NULL);
-	whitespace = get_whitespace(editor_prefs.tab_width, FALSE);
+	whitespace = get_whitespace(editor_prefs.tab_width, doc_list[idx].use_tabs);
 
 	// remove the typed word, it will be added again by the used auto completion
 	// (not really necessary but this makes the auto completion more flexible,
@@ -1272,8 +1271,9 @@ void editor_show_macro_list(ScintillaObject *sci)
  * @param ch The character we are dealing with, currently only works with the '>' character
  * @return True if handled, false otherwise
  */
-static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx)
+static gboolean handle_xml(gint idx, gchar ch)
 {
+	ScintillaObject *sci = doc_list[idx].sci;
 	gint lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	gint pos, min;
 	gchar *str_found, sel[512];
@@ -1343,7 +1343,8 @@ static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx)
 		if (ch == '>')
 		{
 			SSM(sci, SCI_SETSEL, pos, pos);
-			if (utils_str_equal(str_found, "table")) editor_auto_table(sci, pos);
+			if (utils_str_equal(str_found, "table"))
+				editor_auto_table(&doc_list[idx], pos);
 		}
 		sci_end_undo_action(sci);
 		g_free(to_insert);
@@ -1357,14 +1358,15 @@ static gboolean handle_xml(ScintillaObject *sci, gchar ch, gint idx)
 }
 
 
-void editor_auto_table(ScintillaObject *sci, gint pos)
+static void editor_auto_table(document *doc, gint pos)
 {
+	ScintillaObject *sci = doc->sci;
 	gchar *table;
 	gint indent_pos;
 
 	if (SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_HTML) return;
 
-	get_indent(sci, pos, TRUE);
+	get_indent(doc, pos, TRUE);
 	indent_pos = sci_get_line_indent_position(sci, sci_get_line_from_position(sci, pos));
 	if ((pos - 7) != indent_pos) // 7 == strlen("<table>")
 	{
@@ -1747,7 +1749,7 @@ void editor_do_comment_toggle(gint idx)
 			gint a = (first_line_was_comment) ? - co_len : co_len;
 
 			// don't modify sel_start when the selection starts within indentation
-			get_indent(doc_list[idx].sci, sel_start, TRUE);
+			get_indent(&doc_list[idx], sel_start, TRUE);
 			if ((sel_start - first_line_start) <= (gint) strlen(indent))
 				a = 0;
 
@@ -2220,7 +2222,7 @@ void editor_insert_multiline_comment(gint idx)
 	if (doc_list[idx].auto_indent && ! have_multiline_comment &&
 		doc_list[idx].file_type->comment_use_indent)
 	{
-		get_indent(doc_list[idx].sci, editor_info.click_pos, TRUE);
+		get_indent(&doc_list[idx], editor_info.click_pos, TRUE);
 		text = g_strdup_printf("%s\n%s\n%s\n", indent, indent, indent);
 		text_len = strlen(text);
 	}
@@ -2280,11 +2282,11 @@ void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_vi
 }
 
 
-void editor_insert_alternative_whitespace(ScintillaObject *sci)
+void editor_insert_alternative_whitespace(gint idx)
 {
 	// creates and inserts one tabulator sign or whitespace of the amount of the tab width
-	gchar *text = get_whitespace(editor_prefs.tab_width, TRUE);
-	sci_add_text(sci, text);
+	gchar *text = get_whitespace(editor_prefs.tab_width, ! doc_list[idx].use_tabs);
+	sci_add_text(doc_list[idx].sci, text);
 	g_free(text);
 }
 
@@ -2438,7 +2440,7 @@ void editor_auto_line_indentation(gint idx, gint pos)
 
 	// get previous line and use it for get_indent to use that line
 	// (otherwise it would fail on a line only containing "{" in advanced indentation mode)
-	get_indent(doc_list[idx].sci,
+	get_indent(&doc_list[idx],
 		sci_get_position_from_line(doc_list[idx].sci, first_line - 1), TRUE);
 	SSM(doc_list[idx].sci, SCI_BEGINUNDOACTION, 0, 0);
 

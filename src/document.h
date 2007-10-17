@@ -36,7 +36,7 @@ typedef struct FileEncoding
 } FileEncoding;
 
 
-/* structure for representing an open tab with all its related stuff. */
+/* Structure for representing an open tab with all its related stuff. */
 typedef struct document
 {
 	gboolean		 is_valid;
@@ -52,7 +52,7 @@ typedef struct document
 	GtkWidget		*tabmenu_label;
 	GtkWidget		*tag_tree;
 	GtkTreeStore	*tag_store;
-	GtkTreeIter		 iter;
+	GtkTreeIter		 iter;	// open files item for this document
 	gboolean		 readonly;
 	gboolean		 changed;
 	gboolean		 line_wrapping;
@@ -63,6 +63,7 @@ typedef struct document
 	GTrashStack		*undo_actions;
 	GTrashStack		*redo_actions;
 	FileEncoding	 saved_encoding;
+	gboolean		 use_tabs;
 } document;
 
 
@@ -238,5 +239,7 @@ void document_delay_colourise();
 void document_colourise_new();
 
 void document_insert_colour(gint idx, const gchar *colour);
+
+void document_set_use_tabs(gint idx, gboolean use_tabs);
 
 #endif
