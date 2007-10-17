@@ -28,6 +28,8 @@ TODO List:
 	o (improved Windows support)
 	o (macro support)
 	o (better regex support)
+	o (calltip support for non-C-like languages that use
+	  function_name(arguments) syntax)
 	o (better tags support for popular languages? - this is a moving
 	  target...)
 	o (tango-like icons for the symbol list)
