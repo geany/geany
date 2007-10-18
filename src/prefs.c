@@ -708,8 +708,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 			// override each document setting only if the default has changed
 			if (editor_prefs.use_tabs != use_tabs)
 			{
-				guint i;
-
 				editor_prefs.use_tabs = use_tabs;
 				for (i = 0; i < doc_array->len; i++)
 				{
