@@ -48,6 +48,7 @@
 #include "prefs.h"
 #include "geanyobject.h"
 #include "build.h"
+#include "encodings.h"
 
 
 #ifdef G_OS_WIN32
@@ -82,7 +83,8 @@ static DocumentFuncs doc_funcs = {
 	&document_open_file,
 	&document_open_files,
 	&document_remove,
-	&document_reload_file
+	&document_reload_file,
+	&document_set_encoding
 };
 
 static ScintillaFuncs sci_funcs = {
@@ -177,6 +179,12 @@ static MsgWinFuncs msgwin_funcs = {
 };
 
 
+static EncodingFuncs encoding_funcs = {
+	&encodings_convert_to_utf8,
+	&encodings_convert_to_utf8_from_charset
+};
+
+
 static GeanyData geany_data = {
 	NULL,
 	NULL,
@@ -193,7 +201,8 @@ static GeanyData geany_data = {
 	&uiutils_funcs,
 	&support_funcs,
 	&dialog_funcs,
-	&msgwin_funcs
+	&msgwin_funcs,
+	&encoding_funcs
 };
 
 

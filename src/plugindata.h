@@ -71,7 +71,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 24;
+static const gint api_version = 25;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -158,6 +158,7 @@ typedef struct GeanyData
 	struct SupportFuncs		*support;
 	struct DialogFuncs		*dialogs;
 	struct MsgWinFuncs		*msgwindow;
+	struct EncodingFuncs	*encoding;
 }
 GeanyData;
 
@@ -181,6 +182,7 @@ typedef struct DocumentFuncs
 			const gchar *forced_enc);
 	gboolean (*remove)(guint page_num);
 	gboolean (*reload_file)(gint idx, const gchar *forced_enc);
+	void	(*set_encoding)(gint idx, const gchar *new_encoding);
 }
 DocumentFuncs;
 
@@ -276,6 +278,15 @@ typedef struct MsgWinFuncs
 	void		(*compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 }
 MsgWinFuncs;
+
+
+typedef struct EncodingFuncs
+{
+	gchar*	(*convert_to_utf8) (const gchar *buffer, gsize size, gchar **used_encoding);
+	gchar* 	(*convert_to_utf8_from_charset) (const gchar *buffer, gsize size,
+											const gchar *charset, gboolean fast);
+}
+EncodingFuncs;
 
 
 typedef struct GeanyCallback

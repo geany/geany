@@ -520,7 +520,7 @@ static void store_saved_encoding(gint idx)
  * filename is either the UTF-8 file name, or NULL.
  * If ft is NULL and filename is not NULL, then the filetype will be guessed
  * from the given filename.
- * text is the contents of the new file, or NULL.
+ * text is the contents of the new file in valid UTF-8 encoding, or NULL.
  * Returns: idx of new file in doc_list. */
 gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 {

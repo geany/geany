@@ -1,3 +1,9 @@
+2007-10-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/plugindata.h, src/plugins.c:
+   Add encoding related functions to the plugin API.
+
+
 2007-10-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/vte.c:
