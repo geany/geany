@@ -2074,6 +2074,27 @@ void document_replace_tabs(gint idx)
 }
 
 
+void document_strip_line_trailing_spaces(gint idx, gint line)
+{
+	gint line_start = sci_get_position_from_line(doc_list[idx].sci, line);
+	gint line_end = sci_get_line_end_position(doc_list[idx].sci, line);
+	gint i = line_end - 1;
+	gchar ch = sci_get_char_at(doc_list[idx].sci, i);
+
+	while ((i >= line_start) && ((ch == ' ') || (ch == '\t')))
+	{
+		i--;
+		ch = sci_get_char_at(doc_list[idx].sci, i);
+	}
+	if (i < (line_end-1))
+	{
+		sci_target_start(doc_list[idx].sci, i + 1);
+		sci_target_end(doc_list[idx].sci, line_end);
+		sci_target_replace(doc_list[idx].sci, "", FALSE);
+	}
+}
+
+
 void document_strip_trailing_spaces(gint idx)
 {
 	gint max_lines = sci_get_line_count(doc_list[idx].sci);
@@ -2083,22 +2104,7 @@ void document_strip_trailing_spaces(gint idx)
 
 	for (line = 0; line < max_lines; line++)
 	{
-		gint line_start = sci_get_position_from_line(doc_list[idx].sci, line);
-		gint line_end = sci_get_line_end_position(doc_list[idx].sci, line);
-		gint i = line_end - 1;
-		gchar ch = sci_get_char_at(doc_list[idx].sci, i);
-
-		while ((i >= line_start) && ((ch == ' ') || (ch == '\t')))
-		{
-			i--;
-			ch = sci_get_char_at(doc_list[idx].sci, i);
-		}
-		if (i < (line_end-1))
-		{
-			sci_target_start(doc_list[idx].sci, i + 1);
-			sci_target_end(doc_list[idx].sci, line_end);
-			sci_target_replace(doc_list[idx].sci, "", FALSE);
-		}
+		document_strip_line_trailing_spaces(idx, line);
 	}
 	sci_end_undo_action(doc_list[idx].sci);
 }

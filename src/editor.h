@@ -66,6 +66,7 @@ typedef struct EditorPrefs
 	IndentMode	indent_mode;
 	gboolean	disable_dnd;
 	gboolean	smart_home_key;
+	gboolean	newline_strip;
 	gboolean	auto_complete_symbols;
 	gboolean	auto_close_xml_tags;
 	gboolean	auto_complete_constructs;

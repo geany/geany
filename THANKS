@@ -37,6 +37,7 @@ Shiv <shivakumar(dot)gn(at)gmail(dot)com> - Sun Studio compiler compatibility pa
 Jean-François Wauthy <pollux(at)xfce(dot)org> - Symbol list icons patch
 blackdog <blackdog(at)ipowerhouse(dot)com> - Haxe filetype patch
 Sebastian Kraft <kraft(dot)sebastian(at)googlemail(dot)com> - new Geany icon
+Catalin Marinas <catalin(dot)marinas(at)gmail(dot)com> - newline strips trailing spaces patch
 
 Translators:
 ------------

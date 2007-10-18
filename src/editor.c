@@ -396,6 +396,7 @@ static void on_new_line_added(gint idx)
 {
 	ScintillaObject *sci = doc_list[idx].sci;
 	gint pos = sci_get_current_position(sci);
+	gint line = sci_get_current_line(sci);
 
 	// simple indentation
 	if (doc_list[idx].auto_indent)
@@ -424,6 +425,12 @@ static void on_new_line_added(gint idx)
 		auto_multiline(sci, pos);
 
 		editor_auto_latex(idx, pos);
+	}
+
+	if (editor_prefs.newline_strip)
+	{
+		// strip the trailing spaces on the previous line
+		document_strip_line_trailing_spaces(idx, line - 1);
 	}
 }
 

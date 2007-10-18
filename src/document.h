@@ -191,6 +191,8 @@ void document_print(gint idx);
 
 void document_replace_tabs(gint idx);
 
+void document_strip_line_trailing_spaces(gint idx, gint line);
+
 void document_strip_trailing_spaces(gint idx);
 
 void document_ensure_final_newline(gint idx);
