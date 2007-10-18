@@ -2,6 +2,11 @@
 
  * src/vte.c:
    Only connect vte_keypress() if enable_bash_keys pref is not set.
+ * src/document.c, src/document.h, src/editor.c, src/editor.h,
+   src/interface.c, src/keyfile.c, src/plugindata.h, src/prefs.c,
+   geany.glade, THANKS:
+   Apply patch from Catalin Marinas to add a 'newline strips trailing
+   spaces' pref (thanks).
 
 
 2007-10-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
