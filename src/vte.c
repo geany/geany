@@ -204,7 +204,8 @@ static void create_vte()
 
 	g_signal_connect(G_OBJECT(vte), "child-exited", G_CALLBACK(vte_start), NULL);
 	g_signal_connect(G_OBJECT(vte), "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
-	g_signal_connect(G_OBJECT(vte), "event", G_CALLBACK(vte_keypress), NULL);
+	if (! vc->enable_bash_keys)
+		g_signal_connect(G_OBJECT(vte), "event", G_CALLBACK(vte_keypress), NULL);
 	g_signal_connect(G_OBJECT(vte), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 	//g_signal_connect(G_OBJECT(vte), "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 	//g_signal_connect(G_OBJECT(vte), "drag-drop", G_CALLBACK(vte_drag_drop), NULL);
@@ -240,7 +241,9 @@ void vte_close(void)
 
 static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	if (event->type != GDK_KEY_RELEASE || vc->enable_bash_keys)
+	g_assert(!vc->enable_bash_keys);
+
+	if (event->type != GDK_KEY_RELEASE)
 		return FALSE;
 
 	if ((event->keyval == GDK_c ||

@@ -1,3 +1,9 @@
+2007-10-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/vte.c:
+   Only connect vte_keypress() if enable_bash_keys pref is not set.
+
+
 2007-10-17  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/tm_tag.c, tagmanager/c.c, TODO:
