@@ -1,4 +1,4 @@
-.. |(version)| replace:: 0.12
+.. |(version)| replace:: 0.13
 
 =======
  Geany
@@ -638,6 +638,13 @@ like this::
 Everytime you write ``myname`` <TAB> in Geany, it will replace "myname"
 with "Enrico Tröger". The key to start auto completion can be changed
 in the preferences dialog, by default it is TAB.
+
+You may change the behaviour Geany recognizes the word to auto complete,
+i.e. where define the start and end of a word. The section "Special" may
+contain a key "wordchars" which lists all characters a string may contain
+to be recognized as a word for auto completion. Leave it commented to use
+default characters or define it to add or remove characters to fit your
+needs.
 
 
 Inserting unicode characters

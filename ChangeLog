@@ -2,6 +2,9 @@
 
  * src/plugindata.h, src/plugins.c:
    Add encoding related functions to the plugin API.
+ * data/autocomplete.conf, doc/geany.txt, doc/geany.html, src/editor.c:
+   Add special key wordchars to autocomplete.conf to let the user
+   redefine used wordchars.
 
 
 2007-10-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

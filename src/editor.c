@@ -1231,6 +1231,7 @@ gboolean editor_auto_complete(gint idx, gint pos)
 {
 	gboolean result = FALSE;
 	gint lexer, style;
+	gchar *wc;
 	ScintillaObject *sci;
 
 	if (! DOC_IDX_VALID(idx))
@@ -1244,7 +1245,8 @@ gboolean editor_auto_complete(gint idx, gint pos)
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
-	editor_find_current_word(sci, pos, current_word, sizeof current_word, NULL);
+	wc = ac_find_completion_by_name("Special", "wordchars");
+	editor_find_current_word(sci, pos, current_word, sizeof current_word, wc);
 
 	// prevent completion of "for "
 	if (! isspace(sci_get_char_at(sci, pos - 1))) // pos points to the line end char so use pos -1
@@ -1254,6 +1256,7 @@ gboolean editor_auto_complete(gint idx, gint pos)
 		sci_end_undo_action(sci);
 	}
 
+	g_free(wc);
 	return result;
 }
 
