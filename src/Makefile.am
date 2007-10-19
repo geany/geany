@@ -45,14 +45,14 @@ noinst_HEADERS = \
 	plugindata.h
 
 if MINGW
-# build Geany for Windows
+# build Geany for Windows on non-Windows systems (cross-compile)
 WINDRES = /usr/local/cross-tools/bin/i386-mingw32msvc-windres
 
 geany_SOURCES = $(SRCS) win32.c win32.h
 geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a -lstdc++ @GTK_LIBS@ \
 			$(INTLLIBS) -lgdi32 -limm32 -lshell32 -lole32 -luuid -liberty -lcomdlg32 -lcomctl32 \
 			geany_private.res
-AM_CFLAGS = -Wall -pipe -mms-bitfields
+AM_CFLAGS = -mms-bitfields
 geany_LDFLAGS =	-mwindows
 
 INCLUDES = -I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include -DENABLE_NLS \
@@ -66,19 +66,12 @@ clean-local:
 
 else
 # build Geany for all other platforms
-if IS_COMPILER_GCC
-    AM_CFLAGS = -Wall -pipe
-else
-    AM_CFLAGS =
-endif
 
 geany_SOURCES = $(SRCS) vte.c vte.h
 
-if IS_COMPILER_GCC
-    geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ -lstdc++ $(INTLLIBS)
-else
-    geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@ -lCrun $(INTLLIBS)
-endif
+# tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
+nodist_EXTRA_geany_SOURCES = dummy.cxx
+geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@  $(INTLLIBS)
 
 INCLUDES = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" -DPACKAGE_LIB_DIR=\""$(libdir)"\" \
