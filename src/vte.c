@@ -141,11 +141,18 @@ void vte_init(void)
 		return;
 	}
 
-	if (vte_info.lib_vte && strlen(vte_info.lib_vte))
+	if (vte_info.lib_vte && vte_info.lib_vte[0] != '\0')
 	{
 		module = g_module_open(vte_info.lib_vte, G_MODULE_BIND_LAZY);
 	}
+#ifdef VTE_MODULE_PATH
 	else
+	{
+		module = g_module_open(VTE_MODULE_PATH, G_MODULE_BIND_LAZY);
+	}
+#endif
+
+	if (module == NULL)
 	{
 		gint i;
 		const gchar *sonames[] = {  "libvte.so", "libvte.so.4",

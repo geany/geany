@@ -76,8 +76,8 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 
 
-// avoid using __VA_ARGS__ because older gcc 2.x versions probably don't support C99
-#define SHOW_ERR(args...) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
+#define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
+#define SHOW_ERR1(args,more) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args, more)
 #define MAX_NAME_LEN 50
 // "projects" is part of the default project base path so be careful when translating
 // please avoid special characters and spaces, look at the source for details or ask Frank
@@ -199,7 +199,7 @@ static void run_open_dialog(GtkDialog *dialog)
 		{
 			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
-			SHOW_ERR(_("Project file \"%s\" could not be loaded."), utf8_filename);
+			SHOW_ERR1(_("Project file \"%s\" could not be loaded."), utf8_filename);
 			gtk_widget_grab_focus(GTK_WIDGET(dialog));
 			g_free(utf8_filename);
 			g_free(filename);
@@ -521,7 +521,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 	}
 	else if (name_len > MAX_NAME_LEN)
 	{
-		SHOW_ERR(_("The specified project name is too long (max. %d characters)."), MAX_NAME_LEN);
+		SHOW_ERR1(_("The specified project name is too long (max. %d characters)."), MAX_NAME_LEN);
 		gtk_widget_grab_focus(e->name);
 		return FALSE;
 	}

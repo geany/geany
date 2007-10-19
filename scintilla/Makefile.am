@@ -3,8 +3,6 @@ SUBDIRS = include
 
 noinst_LIBRARIES=libscintilla.a
 
-CC = @CC@
-
 AM_CXXFLAGS = -DNDEBUG -Os -DGTK -DGTK2 -DSCI_LEXER -DG_THREADS_IMPL_NONE
 
 LEXER_SRCS= \
@@ -86,6 +84,7 @@ SVector.h \
 UniConversion.h \
 ViewStyle.h \
 XPM.h \
+scintilla-marshal.c \
 $(LEXER_SRCS)
 
 libscintilla_a_SOURCES = $(SRCS)
@@ -95,11 +94,6 @@ INCLUDES=-I$(top_srcdir) -I$(srcdir)/include -I/usr/local/cross-tools/include @G
 else
 INCLUDES=-I$(top_srcdir) -I$(srcdir)/include @GTK_CFLAGS@
 endif
-
-libscintilla_a_LIBADD = scintilla-marshal.o
-
-scintilla-marshal.o: scintilla-marshal.c
-	$(CC) @GTK_CFLAGS@ -c $(srcdir)/scintilla-marshal.c
 
 marshallers: scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal scintilla-marshal.list --header > scintilla-marshal.h

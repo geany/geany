@@ -31,10 +31,6 @@
    with gdk_string_extents. */
 #define FAST_WAY
 
-#ifdef G_OS_WIN32
-#define snprintf _snprintf
-#endif
-
 #if GTK_MAJOR_VERSION >= 2
 #define USE_PANGO 1
 #include "Converter.h"
@@ -572,7 +568,7 @@ FontID FontCached::CreateNewFont(const char *fontName, int characterSet,
 			                        faceName, sizeof(faceName),
 			                        charset, sizeof(charset));
 
-			snprintf(fontspec,
+			g_snprintf(fontspec,
 			         sizeof(fontspec) - 1,
 			         spec,
 			         foundary, faceName,
@@ -588,7 +584,7 @@ FontID FontCached::CreateNewFont(const char *fontName, int characterSet,
 				strncat(fontset, fontspec, remaining - 1);
 				remaining -= strlen(fontset);
 
-				snprintf(fontspec,
+				g_snprintf(fontspec,
 				         sizeof(fontspec) - 1,
 				         ",%s%s%s-o-*-*-*-%0d-*-*-*-*-%s",
 				         foundary, faceName,
@@ -623,7 +619,7 @@ FontID FontCached::CreateNewFont(const char *fontName, int characterSet,
 	                        faceName, sizeof(faceName),
 	                        charset, sizeof(charset));
 
-	snprintf(fontspec,
+	g_snprintf(fontspec,
 	         sizeof(fontspec) - 1,
 	         "%s%s%s%s-*-*-*-%0d-*-*-*-*-%s",
 	         foundary, faceName,
@@ -634,7 +630,7 @@ FontID FontCached::CreateNewFont(const char *fontName, int characterSet,
 	newid = LoadFontOrSet(fontspec, characterSet);
 	if (!newid) {
 		// some fonts have oblique, not italic
-		snprintf(fontspec,
+		g_snprintf(fontspec,
 		         sizeof(fontspec) - 1,
 		         "%s%s%s%s-*-*-*-%0d-*-*-*-*-%s",
 		         foundary, faceName,
@@ -645,7 +641,7 @@ FontID FontCached::CreateNewFont(const char *fontName, int characterSet,
 		newid = LoadFontOrSet(fontspec, characterSet);
 	}
 	if (!newid) {
-		snprintf(fontspec,
+		g_snprintf(fontspec,
 		         sizeof(fontspec) - 1,
 		         "-*-*-*-*-*-*-*-%0d-*-*-*-*-%s",
 		         size * 10,

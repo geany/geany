@@ -7,11 +7,6 @@ INCLUDES = -I$(srcdir)/include $(GTK_CFLAGS)
 #	-DGDK_PIXBUF_DEPRECATED \
 #	-DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED
 
-if IS_COMPILER_GCC
-    AM_CFLAGS = -Wall -pipe
-else
-    AM_CFLAGS =
-endif
 
 noinst_LIBRARIES = libtagmanager.a
 libtagmanager_a_SOURCES =\

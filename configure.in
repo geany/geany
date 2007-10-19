@@ -11,16 +11,11 @@ AC_AIX
 AC_MINIX
 
 AC_PROG_CC
-AM_CONDITIONAL(IS_COMPILER_GCC,test x$SSC == x)
 
-AM_PROG_CC_STDC
-AC_HEADER_STDC
 AC_PROG_CXX
-AC_PROG_CPP
 #AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PROG_LN_S
-AC_PROG_MAKE_SET
 AC_PROG_INTLTOOL
 
 # for plugins
@@ -31,35 +26,16 @@ LIBTOOL="$LIBTOOL --silent"
 # autoscan start
 
 # Checks for header files.
-AC_HEADER_DIRENT
-AC_HEADER_STDC
-AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h libintl.h limits.h stddef.h stdlib.h string.h sys/time.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STAT
-AC_HEADER_STDBOOL
-AC_C_CONST
-AC_C_INLINE
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_HEADER_TIME
 AC_STRUCT_TM
-AC_C_VOLATILE
 
 # Checks for library functions.
-AC_FUNC_CLOSEDIR_VOID
-AC_FUNC_ERROR_AT_LINE
-#AC_REPLACE_FNMATCH
-AC_FUNC_LSTAT
-AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
-AC_FUNC_MALLOC
-AC_FUNC_MEMCMP
-AC_FUNC_REALLOC
-AC_TYPE_SIGNAL
-AC_FUNC_STAT
-AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([gethostname ftruncate fgetpos getcwd gettimeofday isascii mblen memset mkstemp putenv realpath regcomp setenv strcasecmp strchr strdup strerror strrchr strspn strstr strtol])
+AC_CHECK_FUNCS([gethostname ftruncate fgetpos getcwd isascii mblen memset mkstemp realpath regcomp strcasecmp strchr strdup strerror strrchr strstr strtol])
 
 # autoscan end
 
@@ -77,8 +53,8 @@ fi
 AC_DEFINE_UNQUOTED([REVISION], "$REVISION", [subversion revision number])
 
 # GTK checks
-pkg_modules="gtk+-2.0 >= 2.6.0"
-PKG_CHECK_MODULES(GTK, [$pkg_modules])
+gtk_modules="gtk+-2.0 >= 2.6.0"
+PKG_CHECK_MODULES(GTK, [$gtk_modules])
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
@@ -97,17 +73,16 @@ if test "x$want_socket" = "xyes"; then
 fi
 
 # VTE support
-AC_ARG_ENABLE(vte, AC_HELP_STRING([--enable-vte],[enable if you want virtual termninal support [[default=yes]]]),
+AC_ARG_ENABLE(vte, AC_HELP_STRING([--enable-vte],
+ [enable if you want virtual termninal support [[default=yes]]]),
  [want_vte="$enableval"], [want_vte="yes"])
+if test "x$want_vte" = "xyes"; then
+	AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])
+fi
+AC_ARG_WITH(vte-module-path, AC_HELP_STRING([--with-vte-module-path=PATH],
+ [Path to a loadable libvte [[default=None]]]), [AC_DEFINE_UNQUOTED([VTE_MODULE_PATH],
+ ["$withval"], [Path to a loadable libvte])])
 
-# if test "$want_vte" = "yes"; then
-#   PKG_CHECK_MODULES(VTE, [vte],
-#                     [AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])],
-#                     [AC_MSG_ERROR([VTE support enabled, but VTE not found])])
-#	  AC_CHECK_LIB(vte, vte_terminal_new,
-#					[AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])],
-#					[AC_MSG_ERROR([VTE support enabled, but VTE not found])], [])
-# fi
 
 # Plugins support
 AC_ARG_ENABLE(plugins, [AC_HELP_STRING([--disable-plugins], [compile without plugin support])], , enable_plugins=yes)
@@ -120,17 +95,17 @@ else
 fi
 
 # Check for random number paths (skip when cross compiling)
-if test "x$build" = "x$target"; then
+if test "x$build" = "x$host"; then
 	AC_CHECK_FILE([/dev/urandom], AC_DEFINE([HAVE_DEVURANDOM], [1], [Define that you found /dev/urandom]))
 	AC_CHECK_FILE([/dev/random], AC_DEFINE([HAVE_DEVRANDOM], [1], [Define that you found /dev/random]))
 fi
 
-if test "x$target" = "xi386-mingw32msvc"; then
+if test "x$host" = "xi386-mingw32msvc"; then
 	AC_DEFINE_UNQUOTED([WIN32], 1, [we are cross compiling for WIN32])
 	want_vte="no"
 	AC_EXEEXT
 fi
-AM_CONDITIONAL(MINGW, test "x$target" = "xi386-mingw32msvc")
+AM_CONDITIONAL(MINGW, test "x$host" = "xi386-mingw32msvc")
 
 
 GTK_VERSION=`$PKG_CONFIG --modversion gtk+-2.0`
@@ -153,6 +128,9 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
 ALL_LINGUAS="`sed -e '/^#/d' $srcdir/po/LINGUAS`" # take all languages found in file po/LINGUAS
 
 AM_GLIB_GNU_GETTEXT
+if test "x$MSGFMT" = "xno"; then
+	AC_MSG_ERROR([msgfmt not found. Please install the gettext package.])
+fi
 
 
 # Set ${datadir}
@@ -160,14 +138,6 @@ if test "x${datadir}" = 'x${prefix}/share' -o "x${datarootdir}" = 'x${prefix}/sh
 	if test "x${prefix}" = "xNONE"; then
 		prefix=${ac_default_prefix}
 	fi
-fi
-# check for datarootdir (autoconf >= 2.60), if not set(autoconf < 2.60), define it
-if test "x${datarootdir}" = "x"; then
-	datarootdir=${datadir}
-fi
-
-if test "x$want_vte" = "xyes"; then
-	AC_DEFINE(HAVE_VTE, 1, [Define if you want VTE support])
 fi
 
 GEANY_PIXMAPS_DIR=`eval echo ${datarootdir}/pixmaps`

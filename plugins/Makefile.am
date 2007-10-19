@@ -3,12 +3,6 @@
 EXTRA_DIST = \
 	makefile.win32
 
-if IS_COMPILER_GCC
-    AM_CFLAGS = -Wall -pipe
-else
-    AM_CFLAGS =
-endif
-
 plugindir = $(libdir)/geany
 
 demoplugin_la_LDFLAGS    = -module -avoid-version

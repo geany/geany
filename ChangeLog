@@ -1,3 +1,15 @@
+2007-10-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * configure.in, doc/geany.html, doc/geany.txt, plugins/Makefile.am,
+   scintilla/Makefile.am, scintilla/PlatGTK.cxx, src/gb.c,
+   src/project.c, src/vte.c, tagmanager/Makefile.am:
+   Apply most of the patch from #1794250 (thanks):
+   Remove compiler specific flags.
+   Add configure option to specify the path to libvte.so.
+   Remove many unnecessary configure checks.
+   Stop configure if msgfmt was not found(gettext not installed).
+
+
 2007-10-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/plugindata.h, src/plugins.c:

@@ -363,7 +363,7 @@ static void update_labels(GtkWidget *window, gint init, gint won)
 	}
 	gtk_label_set_text(GTK_LABEL(label3), info_texts[won]);
 
-	snprintf(pts, 50, "Points: %4d\tRound: %2d\n", points, lap);
+	g_snprintf(pts, 50, "Points: %4d\tRound: %2d\n", points, lap);
 	gtk_label_set_text(GTK_LABEL(label1), pts);
 
 }

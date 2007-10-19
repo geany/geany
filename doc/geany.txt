@@ -276,8 +276,8 @@ If you have installed ``libvte.so`` in your system, it is loaded
 automatically by Geany, and you will have a terminal widget in the
 notebook at the bottom.
 
-If Geany cannot find ``libvte.so`` at startup, the terminal widget will
-not be loaded. So there is no need to install the package containing
+If Geany cannot find any ``libvte.so`` at startup, the terminal widget
+will not be loaded. So there is no need to install the package containing
 this file in order to run Geany. Additionally, you can disable the use
 of the terminal widget by command line option, for more information
 see the section called `Command line options`_.
@@ -300,18 +300,23 @@ you can use the argument ``--login``.
 
 .. note::
     Geany tries to load ``libvte.so``. If this fails, it tries to load
-    ``libvte.so.4``. If this fails too, you should check whether you
+    some other filenames. If this fails too, you should check whether you
     installed libvte correctly. Again, Geany also runs without this
     library.
 
 It could be, that the library is called something else than
-``libvte.so.4`` (e.g. on FreeBSD 6.0 it is called ``libvte.so.8``). So
+``libvte.so`` (e.g. on FreeBSD 6.0 it is called ``libvte.so.8``). So
 please set a link to the correct file (as root)::
 
-    # ln -s /usr/lib/libvte.so.X /usr/lib/libvte.so.4
+    # ln -s /usr/lib/libvte.so.X /usr/lib/libvte.so
 
 Obviously, you have to adjust the paths and set X to the number of your
 ``libvte.so``.
+
+You can also specify the filename of the VTE library to use on the command
+line (see the section called `Command line options`_) or at compile time
+by specifying the command line option ``--with-vte-module-path`` to
+./configure.
 
 
 Defining own widget styles using .gtkrc-2.0
