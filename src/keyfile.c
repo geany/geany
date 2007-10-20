@@ -761,7 +761,14 @@ gboolean configuration_open_files()
 	if (failure)
 		msgwin_status_add(_("Failed to load one or more session files."));
 	else if (session_notebook_page >= 0)
+	{
+		// exlicitly allow notebook switch page callback to be called for window title,
+		// encoding settings and so other things
+		main_status.opening_session_files = FALSE;
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), session_notebook_page);
+		// reset status to leave in any case with the same state as when entering
+		main_status.opening_session_files = TRUE;
+	}
 	return ret;
 }
 

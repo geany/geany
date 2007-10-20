@@ -1,3 +1,9 @@
+2007-10-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keyfile.c: Fix possible wrong window title when loading session
+                  files.
+
+
 2007-10-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/about.c, THANKS, po/sv.po, po/LINGUAS:
@@ -7,8 +13,8 @@
 2007-10-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * configure.in, doc/geany.html, doc/geany.txt, plugins/Makefile.am,
-   scintilla/Makefile.am, scintilla/PlatGTK.cxx, src/gb.c,
-   src/project.c, src/vte.c, tagmanager/Makefile.am:
+   scintilla/Makefile.am, scintilla/PlatGTK.cxx, src/Makefile.am,
+   src/gb.c, src/project.c, src/vte.c, tagmanager/Makefile.am:
    Apply most of the patch from #1794250 (thanks):
    Remove compiler specific flags.
    Add configure option to specify the path to libvte.so.
