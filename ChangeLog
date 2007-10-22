@@ -1,3 +1,8 @@
+2007-10-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/notebook.c: Don't make notebook tabs higher than necessary.
+
+
 2007-10-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/filebrowser.c, plugins/Makefile.am, plugins/makefile.win32,

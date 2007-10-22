@@ -351,8 +351,6 @@ gint notebook_new_tab(gint doc_idx)
 		g_signal_connect(G_OBJECT(btn), "clicked",
 			G_CALLBACK(notebook_tab_close_clicked_cb), page);
 	}
-	else
-		gtk_widget_set_size_request(hbox, -1, 18); // keep the familiar tab height
 
 	gtk_widget_show_all(hbox);
 
