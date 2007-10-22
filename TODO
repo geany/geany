@@ -5,6 +5,9 @@ TODO List:
 	Fix bugs:
 	o fix bug that prevents UTF-16, UTF-32 files from being loaded.
 	o tagmanager fails on UTF-16/32
+	o fix parsing command line args after given filenames
+	o make the VTE interpret keybindings first (not just some bash
+	  shortcuts).
 
 	Next version or later:
 
@@ -12,7 +15,6 @@ TODO List:
 	o documentation: preferences
 	o line breaking mode to limit words on a line for e.g. XML content.
 	o common default highlighting for all programming languages
-	o fix parsing command line args after given filenames
 	o configurable default and project make commands
 	o project session support
 	o project indentation settings support
