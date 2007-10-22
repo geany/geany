@@ -50,6 +50,9 @@
 #include "build.h"
 #include "encodings.h"
 
+void keybindings_cmd(gint cmd_id);	// don't require keybindings.h enum in plugindata.h
+
+
 
 #ifdef G_OS_WIN32
 # define PLUGIN_EXT "dll"
@@ -184,6 +187,14 @@ static EncodingFuncs encoding_funcs = {
 	&encodings_convert_to_utf8_from_charset
 };
 
+static KeybindingFuncs keybindings_funcs = {
+	&keybindings_cmd
+};
+
+static TagManagerFuncs tagmanager_funcs = {
+	&tm_get_real_path
+};
+
 
 static GeanyData geany_data = {
 	NULL,
@@ -202,7 +213,9 @@ static GeanyData geany_data = {
 	&support_funcs,
 	&dialog_funcs,
 	&msgwin_funcs,
-	&encoding_funcs
+	&encoding_funcs,
+	&keybindings_funcs,
+	&tagmanager_funcs,
 };
 
 

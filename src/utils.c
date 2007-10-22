@@ -1564,7 +1564,8 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 }
 
 
-/* Gets a sorted list of files in the specified directory.
+/* Gets a sorted list of files from the specified directory.
+ * Locale encoding is expected for path and used for the file list.
  * The list and the data in the list should be freed after use.
  * Returns: The list or NULL if no files found.
  * length will point to the number of non-NULL data items in the list, unless NULL.

@@ -1052,10 +1052,10 @@ Interface tab in preferences dialog
 
 .. image:: ./images/pref_dialog_interface.png
 
-The open files list and the editor tabs are two different ways
+The documents list and the editor tabs are two different ways
 to switch between documents using the mouse. When you hit the key
 combination to move between tabs, the order is determined by the tab
-order, not alphabetical as shown in the open files list (regardless
+order, not alphabetical as shown in the documents list (regardless
 whether or not editor tabs are visible).
 
 

@@ -2088,7 +2088,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="label136">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Open files</property>
+		      <property name="label" translatable="yes">Documents</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3690,9 +3690,9 @@
 			  <child>
 			    <widget class="GtkCheckButton" id="check_list_openfiles">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Toggle the open files list on and off</property>
+			      <property name="tooltip" translatable="yes">Toggle the documents list on and off</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Show open files list</property>
+			      <property name="label" translatable="yes">Show documents list</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>
@@ -3711,7 +3711,7 @@
 			    <widget class="GtkCheckButton" id="check_list_openfiles_fullpath">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Show full path name in open files list</property>
+			      <property name="label" translatable="yes">Show full path name in documents list</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>

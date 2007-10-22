@@ -241,7 +241,7 @@ static void prepare_openfiles()
 			GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(_("Open files"), renderer,
+	column = gtk_tree_view_column_new_with_attributes(_("Documents"), renderer,
 															"text", 0, "foreground-gdk", 2, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tv.tree_openfiles), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);

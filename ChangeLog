@@ -1,3 +1,15 @@
+2007-10-22  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/filebrowser.c, plugins/Makefile.am, plugins/makefile.win32,
+   src/interface.c, src/utils.c, src/plugindata.h, src/treeviews.c,
+   src/vte.c, src/plugins.c, doc/geany.txt, doc/geany.html,
+   po/POTFILES.in, geany.glade:
+   Added File Browser sidebar plugin.
+   Rename 'Open Files' sidebar tab 'Documents'.
+   Add keybindings->send_command() and tm->get_real_path() to the plugin
+   API.
+
+
 2007-10-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/keyfile.c: Fix possible wrong window title when loading session

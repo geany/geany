@@ -38,3 +38,4 @@ plugins/classbuilder.c
 plugins/htmlchars.c
 plugins/export.c
 plugins/svndiff.c
+plugins/filebrowser.c

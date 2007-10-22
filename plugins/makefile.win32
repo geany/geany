@@ -45,7 +45,8 @@ plugins: \
 		demoplugin.dll \
 		classbuilder.dll \
 		export.dll \
-		svndiff.dll
+		svndiff.dll \
+		filebrowser.dll
 
 clean:
 	-$(RM) deps.mak *.o *.dll

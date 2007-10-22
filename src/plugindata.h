@@ -71,7 +71,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 25;
+static const gint api_version = 26;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -119,6 +119,17 @@ PluginInfo;
 	}
 
 
+/* For geany_callbacks array - see top of file. */
+typedef struct GeanyCallback
+{
+	gchar		*signal_name;
+	GCallback	callback;
+	gboolean	after;
+	gpointer	user_data;
+}
+GeanyCallback;
+
+
 typedef enum
 {
 	PLUGIN_IS_DOCUMENT_SENSITIVE	= 1 << 0	// if menu_item should be disabled when there are no documents
@@ -159,6 +170,8 @@ typedef struct GeanyData
 	struct DialogFuncs		*dialogs;
 	struct MsgWinFuncs		*msgwindow;
 	struct EncodingFuncs	*encoding;
+	struct KeybindingFuncs	*keybindings;
+	struct TagManagerFuncs	*tm;
 }
 GeanyData;
 
@@ -289,13 +302,18 @@ typedef struct EncodingFuncs
 EncodingFuncs;
 
 
-typedef struct GeanyCallback
+typedef struct KeybindingFuncs
 {
-	gchar		*signal_name;
-	GCallback	callback;
-	gboolean	after;
-	gpointer	user_data;
+	/* See GeanyKeyCommand enum for cmd_id. */
+	void		(*send_command) (gint cmd_id);
 }
-GeanyCallback;
+KeybindingFuncs;
+
+
+typedef struct TagManagerFuncs
+{
+	gchar*		(*get_real_path) (const gchar *file_name);
+}
+TagManagerFuncs;
 
 #endif

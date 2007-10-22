@@ -1211,7 +1211,7 @@ create_window1 (void)
   gtk_widget_show (treeview6);
   gtk_container_add (GTK_CONTAINER (scrolledwindow7), treeview6);
 
-  label136 = gtk_label_new (_("Open files"));
+  label136 = gtk_label_new (_("Documents"));
   gtk_widget_show (label136);
   gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook3), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook3), 1), label136);
 
@@ -2911,13 +2911,13 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_list_symbol, _("Toggle the symbol list on and off"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_list_symbol), FALSE);
 
-  check_list_openfiles = gtk_check_button_new_with_mnemonic (_("Show open files list"));
+  check_list_openfiles = gtk_check_button_new_with_mnemonic (_("Show documents list"));
   gtk_widget_show (check_list_openfiles);
   gtk_box_pack_start (GTK_BOX (vbox11), check_list_openfiles, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_list_openfiles, _("Toggle the open files list on and off"), NULL);
+  gtk_tooltips_set_tip (tooltips, check_list_openfiles, _("Toggle the documents list on and off"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_list_openfiles), FALSE);
 
-  check_list_openfiles_fullpath = gtk_check_button_new_with_mnemonic (_("Show full path name in open files list"));
+  check_list_openfiles_fullpath = gtk_check_button_new_with_mnemonic (_("Show full path name in documents list"));
   gtk_widget_show (check_list_openfiles_fullpath);
   gtk_box_pack_start (GTK_BOX (vbox11), check_list_openfiles_fullpath, FALSE, FALSE, 0);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_list_openfiles_fullpath), FALSE);
