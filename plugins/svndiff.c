@@ -33,6 +33,7 @@ PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
 #define utils		geany_data->utils
+#define ui			geany_data->ui
 #define doc_array	geany_data->doc_array
 
 
@@ -100,7 +101,7 @@ static void item_activated(GtkMenuItem *menuitem, gpointer gdata)
 
 					if (text == NULL)
 					{
-						geany_data->msgwindow->status_add(_("Could not parse the output of svn diff"));
+						ui->set_statusbar(FALSE, _("Could not parse the output of svn diff"));
 					}
 					else
 					{
@@ -112,19 +113,19 @@ static void item_activated(GtkMenuItem *menuitem, gpointer gdata)
 				}
 				else
 				{
-					geany_data->msgwindow->status_add(_("Current file has no changes."));
+					ui->set_statusbar(FALSE, _("Current file has no changes."));
 				}
 			}
 			else // SVN returns some error
 			{
 				/// TODO print std_err or print detailed error messages based on exit_code
-				geany_data->msgwindow->status_add(
+				ui->set_statusbar(FALSE,
 					_("SVN exited with an error. Error code was: %d."), exit_code);
 			}
 		}
 		else
 		{
-			geany_data->msgwindow->status_add(
+			ui->set_statusbar(FALSE,
 				_("Something went really wrong. Is there any svn-binary in your path?"));
 		}
 		g_free(command);
@@ -132,8 +133,8 @@ static void item_activated(GtkMenuItem *menuitem, gpointer gdata)
 	}
 	else
 	{
-		geany_data->msgwindow->status_add(
-			_("File seems to don't have a name. Can't go on with processing."));
+		ui->set_statusbar(FALSE,
+			_("File is unnamed. Can't go on with processing."));
 	}
 	g_free(std_output);
 	g_free(std_err);

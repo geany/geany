@@ -1,3 +1,9 @@
+2007-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/svndiff.c:
+   Set the status bar instead of logging status messages.
+
+
 2007-10-23  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * plugins/svndiff.c:
