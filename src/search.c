@@ -1126,7 +1126,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 	gchar **argv_prefix, **argv, **opts_argv;
 	guint opts_argv_len, i;
 	GPid child_pid;
-	gint stdout_fd, stdin_fd;
+	gint stdout_fd;
 	GError *error = NULL;
 	gboolean ret = FALSE;
 
@@ -1182,7 +1182,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 	if (! g_spawn_async_with_pipes(dir, (gchar**)argv, NULL,
 		G_SPAWN_STDERR_TO_DEV_NULL | G_SPAWN_DO_NOT_REAP_CHILD,
 		NULL, NULL, &child_pid,
-		&stdin_fd, &stdout_fd, NULL, &error))
+		NULL, &stdout_fd, NULL, &error))
 	{
 		geany_debug("%s: g_spawn_async_with_pipes() failed: %s", __func__, error->message);
 		msgwin_status_add(_("Process failed (%s)"), error->message);
@@ -1287,7 +1287,8 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 				gint count = gtk_tree_model_iter_n_children(
 					GTK_TREE_MODEL(msgwindow.store_msg), NULL) - 1;
 
-				msgwin_msg_add_fmt(COLOR_BLUE, -1, -1, _("Search completed with %d matches."), count);
+				msgwin_msg_add_fmt(COLOR_BLUE, -1, -1,
+					_("Search completed with %d matches."), count);
 				ui_set_statusbar(_("Search completed with %d matches."), count);
 				break;
 			}
