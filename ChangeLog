@@ -1,3 +1,9 @@
+2007-10-23  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * plugins/svndiff.c:
+   Small improvments in handling of non UTF-8 diffs.
+
+
 2007-10-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/notebook.c: Don't make notebook tabs higher than necessary.
