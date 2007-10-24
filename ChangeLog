@@ -19,6 +19,12 @@
    plugins/pluginmacros.h:
    Add pluginmacros.h to define common macros for app, utils, etc.
    Add more documentation/comments to demoplugin.c.
+ * src/treeviews.c:
+   Fix bug with choosing 'show full path name' from documents list popup
+   menu when there is no selected item (can happen after using the command
+   twice).
+   Fix hiding the sidebar/documents list from the popup menu when there's
+   no selected item.
 
 
 2007-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

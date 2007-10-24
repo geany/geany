@@ -53,7 +53,6 @@ enum
 	OPENFILES_ACTION_REMOVE = 0,
 	OPENFILES_ACTION_SAVE,
 	OPENFILES_ACTION_RELOAD,
-	OPENFILES_ACTION_FULLPATH,
 	OPENFILES_ACTION_HIDE,
 	OPENFILES_ACTION_HIDE_ALL,
 	SYMBOL_ACTION_SORT_BY_NAME,
@@ -69,7 +68,8 @@ static GtkWidget *tag_window;	// scrolled window that holds the symbol list GtkT
 /* callback prototypes */
 static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static void on_openfiles_tree_selection_changed(GtkTreeSelection *selection, gpointer data);
-static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data);
+static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_data);
+static void on_openfiles_hide_item_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection);
 static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButton *event,
 																			gpointer user_data);
@@ -381,6 +381,13 @@ static void create_taglist_popup_menu()
 }
 
 
+static void on_openfiles_fullpath_activate(GtkCheckMenuItem *item)
+{
+	prefs.sidebar_openfiles_fullpath = gtk_check_menu_item_get_active(item);
+	treeviews_openfiles_update_all();
+}
+
+
 static void create_openfiles_popup_menu()
 {
 	GtkWidget *item;
@@ -391,7 +398,7 @@ static void create_openfiles_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
 	g_signal_connect((gpointer) item, "activate",
-			G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(OPENFILES_ACTION_REMOVE));
+			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_REMOVE));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -401,7 +408,7 @@ static void create_openfiles_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
 	g_signal_connect((gpointer) item, "activate",
-			G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(OPENFILES_ACTION_SAVE));
+			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_SAVE));
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Reload"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
@@ -409,7 +416,7 @@ static void create_openfiles_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
 	g_signal_connect((gpointer) item, "activate",
-			G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(OPENFILES_ACTION_RELOAD));
+			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_RELOAD));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -418,15 +425,15 @@ static void create_openfiles_popup_menu()
 	tv.popup_openfiles_fullpath = gtk_check_menu_item_new_with_mnemonic(_("Show _full path name"));
 	gtk_widget_show(tv.popup_openfiles_fullpath);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), tv.popup_openfiles_fullpath);
-	g_signal_connect((gpointer) tv.popup_openfiles_fullpath, "toggled",
-			G_CALLBACK(on_openfiles_tree_popup_clicked), GINT_TO_POINTER(OPENFILES_ACTION_FULLPATH));
+	g_signal_connect((gpointer) tv.popup_openfiles_fullpath, "activate",
+			G_CALLBACK(on_openfiles_fullpath_activate), NULL);
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Hide"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_openfiles_tree_popup_clicked),
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_openfiles_hide_item_clicked),
 												GINT_TO_POINTER(OPENFILES_ACTION_HIDE));
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide sidebar"));
@@ -434,7 +441,7 @@ static void create_openfiles_popup_menu()
 		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
-	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_openfiles_tree_popup_clicked),
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_openfiles_hide_item_clicked),
 													GINT_TO_POINTER(OPENFILES_ACTION_HIDE_ALL));
 }
 
@@ -467,7 +474,7 @@ void treeviews_select_openfiles_item(gint idx)
 
 /* callbacks */
 
-static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_data)
+static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkTreeIter iter;
 	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
@@ -496,28 +503,27 @@ static void on_openfiles_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user
 					on_toolbutton23_clicked(NULL, NULL);
 					break;
 				}
-				case OPENFILES_ACTION_FULLPATH:
-				{
-					if (! app->ignore_callback)
-					{
-						prefs.sidebar_openfiles_fullpath = ! prefs.sidebar_openfiles_fullpath;
-						treeviews_openfiles_update_all();
-					}
-					break;
-				}
-				case OPENFILES_ACTION_HIDE:
-				{
-					prefs.sidebar_openfiles_visible = FALSE;
-					ui_treeviews_show_hide(FALSE);
-					break;
-				}
-				case OPENFILES_ACTION_HIDE_ALL:
-				{
-					ui_prefs.sidebar_visible = FALSE;
-					ui_treeviews_show_hide(TRUE);
-					break;
-				}
 			}
+		}
+	}
+}
+
+
+static void on_openfiles_hide_item_clicked(GtkMenuItem *menuitem, gpointer user_data)
+{
+	switch (GPOINTER_TO_INT(user_data))
+	{
+		case OPENFILES_ACTION_HIDE:
+		{
+			prefs.sidebar_openfiles_visible = FALSE;
+			ui_treeviews_show_hide(FALSE);
+			break;
+		}
+		case OPENFILES_ACTION_HIDE_ALL:
+		{
+			ui_prefs.sidebar_visible = FALSE;
+			ui_treeviews_show_hide(TRUE);
+			break;
 		}
 	}
 }
@@ -627,10 +633,8 @@ static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButto
 	{	// popupmenu to hide or clear the active treeview
 		if (GPOINTER_TO_INT(user_data) == TREEVIEW_OPENFILES)
 		{
-			app->ignore_callback = TRUE;
 			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(tv.popup_openfiles_fullpath),
 				prefs.sidebar_openfiles_fullpath);
-			app->ignore_callback = FALSE;
 			gtk_menu_popup(GTK_MENU(tv.popup_openfiles), NULL, NULL, NULL, NULL,
 																event->button, event->time);
 		}
