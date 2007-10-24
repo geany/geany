@@ -1,7 +1,8 @@
 # Adapted from Pidgin's plugins/Makefile.am, thanks
 
 EXTRA_DIST = \
-	makefile.win32
+	makefile.win32 \
+	pluginmacros.h
 
 plugindir = $(libdir)/geany
 

@@ -15,6 +15,10 @@
    Separate toolbar code from init().
  * plugins/filebrowser.c:
    Add 'Show hidden files' checkbox in the popup menu.
+ * plugins/demoplugin.c, plugins/filebrowser.c, plugins/Makefile.am,
+   plugins/pluginmacros.h:
+   Add pluginmacros.h to define common macros for app, utils, etc.
+   Add more documentation/comments to demoplugin.c.
 
 
 2007-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

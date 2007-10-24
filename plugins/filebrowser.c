@@ -33,7 +33,9 @@
 #include "document.h"
 #include "utils.h"
 #include "keybindings.h"
+
 #include "plugindata.h"
+#include "pluginmacros.h"
 
 
 PluginFields	*plugin_fields;
@@ -43,14 +45,6 @@ GeanyData		*geany_data;
 VERSION_CHECK(26)
 
 PLUGIN_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), "0.1")
-
-
-#define doc_array	geany_data->doc_array
-#define documents	geany_data->document
-#define utils		geany_data->utils
-#define ui			geany_data->ui
-#define support		geany_data->support
-#define tm			geany_data->tm
 
 
 enum
@@ -310,7 +304,7 @@ static GtkWidget *create_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect_swapped((gpointer) item, "activate",
-		G_CALLBACK(geany_data->keybindings->send_command),
+		G_CALLBACK(keybindings->send_command),
 		GINT_TO_POINTER(GEANY_KEYS_MENU_SIDEBAR));
 
 	return menu;
@@ -391,7 +385,7 @@ static void prepare_file_view()
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(file_view), TRUE);
 	gtk_tree_view_set_search_column(GTK_TREE_VIEW(file_view), FILEVIEW_COLUMN_NAME);
 
-	pfd = pango_font_description_from_string(geany_data->prefs->tagbar_font);
+	pfd = pango_font_description_from_string(prefs->tagbar_font);
 	gtk_widget_modify_font(file_view, pfd);
 	pango_font_description_free(pfd);
 
@@ -411,7 +405,7 @@ static GtkWidget *make_toolbar()
 {
 	GtkWidget *wid, *toolbar;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(support->lookup_widget(
-		geany_data->app->window, "tooltips"));
+		app->window, "tooltips"));
 
 	toolbar = gtk_toolbar_new();
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
@@ -467,7 +461,7 @@ void init(GeanyData *data)
 	gtk_container_add(GTK_CONTAINER(vbox), scrollwin);
 
 	gtk_widget_show_all(vbox);
-	gtk_notebook_append_page(GTK_NOTEBOOK(data->app->treeview_notebook), vbox,
+	gtk_notebook_append_page(GTK_NOTEBOOK(app->treeview_notebook), vbox,
 		gtk_label_new(_("Files")));
 }
 

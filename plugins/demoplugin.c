@@ -22,33 +22,47 @@
  * $Id$
  */
 
-/* Demo plugin. */
+/**
+ * Demo plugin - example of a basic plugin for Geany. Adds a menu item to the
+ * Tools menu.
+ *
+ * Note: This is not installed by default, but (on *nix) you can build it as follows:
+ * cd plugins
+ * make demoplugin.so
+ *
+ * Then copy or symlink the plugins/demoplugin.so file to ~/.geany/plugins
+ * - it will be loaded at next startup.
+ */
 
-#include "geany.h"
-#include "support.h"
-#include "plugindata.h"
+
+#include "geany.h"		// for the GeanyApp data type
+#include "support.h"	// for the _() translation macro (see also po/POTFILES.in)
+
+#include "plugindata.h"		// this defines the plugin API
+#include "pluginmacros.h"	// some useful macros to avoid typing geany_data so often
 
 
+/* These items are set by Geany before init() is called. */
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
 
 
-/* Check that Geany supports plugin API version 2 or later, and check
+/* Check that Geany supports plugin API version 7 or later, and check
  * for binary compatibility. */
 VERSION_CHECK(7)
 
-/* All plugins must set name, description and version */
+/* All plugins must set name, description and version. */
 PLUGIN_INFO(_("Demo"), _("Example plugin."), "0.1")
 
 
-/* Callback when the menu item is clicked */
+/* Callback when the menu item is clicked. */
 static void
 item_activate(GtkMenuItem *menuitem, gpointer gdata)
 {
 	GtkWidget *dialog;
 
 	dialog = gtk_message_dialog_new(
-		GTK_WINDOW(geany_data->app->window),
+		GTK_WINDOW(app->window),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_INFO,
 		GTK_BUTTONS_OK,
@@ -61,7 +75,8 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 }
 
 
-/* Called by Geany to initialize the plugin */
+/* Called by Geany to initialize the plugin.
+ * Note: data is the same as geany_data. */
 void init(GeanyData *data)
 {
 	GtkWidget *demo_item;
@@ -78,7 +93,7 @@ void init(GeanyData *data)
 
 
 /* Called by Geany before unloading the plugin.
- * Here any UI changes should be removed, memory freed and any other finalization done */
+ * Here any UI changes should be removed, memory freed and any other finalization done. */
 void cleanup()
 {
 	// remove the menu item added in init()
