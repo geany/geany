@@ -873,9 +873,9 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 					gint count = search_mark(idx, search_data.text, search_data.flags);
 
 					if (count == 0)
-						ui_set_statusbar(_("No matches found for \"%s\"."), search_data.text);
+						ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), search_data.text);
 					else
-						ui_set_statusbar(_("Found %d matches for \"%s\"."), count,
+						ui_set_statusbar(FALSE, _("Found %d matches for \"%s\"."), count,
 							search_data.text);
 				}
 				break;
@@ -994,7 +994,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				if (document_replace_all(ix, find, replace, search_flags_re,
 					search_replace_escape_re)) count++;
 			}
-			ui_set_statusbar(_("Replaced text in %u files."), count);
+			ui_set_statusbar(FALSE, _("Replaced text in %u files."), count);
 			// show which docs had replacements:
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 
@@ -1095,7 +1095,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 					lookup_widget(widgets.find_in_files_dialog, "entry_extra"))));
 
 		if (utf8_dir == NULL || utils_str_equal(utf8_dir, ""))
-			ui_set_statusbar(_("Invalid directory for find in files."));
+			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));
 		else if (search_text && *search_text)
 		{
 			gchar *locale_dir;
@@ -1113,7 +1113,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 			g_string_free(opts, TRUE);
 		}
 		else
-			ui_set_statusbar(_("No text to find."));
+			ui_set_statusbar(FALSE, _("No text to find."));
 	}
 	else
 		gtk_widget_hide(widgets.find_in_files_dialog);
@@ -1134,7 +1134,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 
 	if (! g_file_test(prefs.tools_grep_cmd, G_FILE_TEST_IS_EXECUTABLE))
 	{
-		msgwin_status_add(_("Cannot execute grep tool '%s';"
+		ui_set_statusbar(TRUE, _("Cannot execute grep tool '%s';"
 			" check the path setting in Preferences."), prefs.tools_grep_cmd);
 		return FALSE;
 	}
@@ -1185,7 +1185,7 @@ search_find_in_files(const gchar *search_text, const gchar *dir, const gchar *op
 		NULL, &stdout_fd, NULL, &error))
 	{
 		geany_debug("%s: g_spawn_async_with_pipes() failed: %s", __func__, error->message);
-		msgwin_status_add(_("Process failed (%s)"), error->message);
+		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 		g_error_free(error);
 		ret = FALSE;
 	}
@@ -1227,7 +1227,7 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 	list = utils_get_file_list(dir, &list_len, &error);
 	if (error)
 	{
-		msgwin_status_add(_("Could not open directory (%s)"), error->message);
+		ui_set_statusbar(TRUE, _("Could not open directory (%s)"), error->message);
 		g_error_free(error);
 		return NULL;
 	}
@@ -1289,7 +1289,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 
 				msgwin_msg_add_fmt(COLOR_BLUE, -1, -1,
 					_("Search completed with %d matches."), count);
-				ui_set_statusbar(_("Search completed with %d matches."), count);
+				ui_set_statusbar(FALSE, _("Search completed with %d matches."), count);
 				break;
 			}
 			case 1:
@@ -1297,7 +1297,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 				color = COLOR_BLUE;
 			default:
 				msgwin_msg_add(color, -1, -1, msg);
-				ui_set_statusbar("%s", msg);
+				ui_set_statusbar(FALSE, "%s", msg);
 				break;
 		}
 	}
@@ -1374,14 +1374,14 @@ void search_find_usage(const gchar *search_text, gint flags, gboolean in_session
 
 	if (! found) // no matches were found
 	{
-		ui_set_statusbar(_("No matches found for \"%s\"."), search_text);
+		ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), search_text);
 		msgwin_msg_add_fmt(COLOR_BLUE, -1, -1, _("No matches found for \"%s\"."), search_text);
 	}
 	else
 	{
 		gint count = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_msg), NULL);
 
-		ui_set_statusbar(_("Found %d matches for \"%s\"."), count, search_text);
+		ui_set_statusbar(FALSE, _("Found %d matches for \"%s\"."), count, search_text);
 		msgwin_msg_add_fmt(COLOR_BLUE, -1, -1, _("Found %d matches for \"%s\"."), count,
 			search_text);
 	}

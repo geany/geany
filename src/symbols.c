@@ -950,9 +950,9 @@ void symbols_show_load_tags_dialog()
 			ft = detect_global_tags_filetype(utf8_fname);
 
 			if (ft != NULL && tm_workspace_load_global_tags(fname, ft->lang))
-				msgwin_status_add(_("Loaded %s tags file '%s'."), ft->name, utf8_fname);
+				ui_set_statusbar(TRUE, _("Loaded %s tags file '%s'."), ft->name, utf8_fname);
 			else
-				msgwin_status_add(_("Could not load tags file '%s'."), utf8_fname);
+				ui_set_statusbar(TRUE, _("Could not load tags file '%s'."), utf8_fname);
 
 			g_free(utf8_fname);
 			g_free(fname);
@@ -1068,9 +1068,9 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 	// if we are here, there was no match and we are beeping ;-)
 	utils_beep();
 	if (type == forward_types)
-		ui_set_statusbar(_("Forward declaration \"%s\" not found."), name);
+		ui_set_statusbar(FALSE, _("Forward declaration \"%s\" not found."), name);
 	else
-		ui_set_statusbar(_("Definition of \"%s\" not found."), name);
+		ui_set_statusbar(FALSE, _("Definition of \"%s\" not found."), name);
 	return FALSE;
 }
 

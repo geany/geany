@@ -80,8 +80,6 @@ GArray *doc_array;
 static gboolean delay_colourise = FALSE;
 
 
-void msgwin_status_add_new(const gchar *format, ...) G_GNUC_PRINTF(1, 2);	// temporary for v0.12
-
 static void document_undo_clear(gint idx);
 static void document_redo_add(gint idx, guint type, gpointer data);
 
@@ -476,7 +474,7 @@ gboolean document_remove(guint page_num)
 		}
 		notebook_remove_page(page_num);
 		treeviews_remove_document(idx);
-		msgwin_status_add_new(_("File %s closed."), DOC_FILENAME(idx));
+		msgwin_status_add(_("File %s closed."), DOC_FILENAME(idx));
 		g_free(doc_list[idx].encoding);
 		g_free(doc_list[idx].saved_encoding.encoding);
 		g_free(doc_list[idx].file_name);
@@ -575,7 +573,7 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 		g_signal_emit_by_name(geany_object, "document-new", idx);
 	}
 
-	msgwin_status_add_new(_("New file \"%s\" opened."),
+	msgwin_status_add(_("New file \"%s\" opened."),
 		(doc_list[idx].file_name != NULL) ? doc_list[idx].file_name : GEANY_STRING_UNTITLED);
 
 	return idx;
@@ -741,7 +739,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 
 	if (g_stat(locale_filename, &st) != 0)
 	{
-		msgwin_status_add(_("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
+		ui_set_statusbar(TRUE, _("Could not open file %s (%s)"), utf8_filename, g_strerror(errno));
 		return FALSE;
 	}
 
@@ -749,7 +747,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 
 	if (! g_file_get_contents(locale_filename, &filedata->data, NULL, &err))
 	{
-		msgwin_status_add(err->message);
+		ui_set_statusbar(TRUE, err->message);
 		g_error_free(err);
 		return FALSE;
 	}
@@ -775,7 +773,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 		if (main_status.main_window_realized)
 			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, utf8_filename);
 
-		msgwin_status_add(warn_msg, utf8_filename);
+		ui_set_statusbar(TRUE, warn_msg, utf8_filename);
 
 		// set the file to read-only mode because saving it is probably dangerous
 		filedata->readonly = TRUE;
@@ -792,7 +790,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 		}
 		else if (! handle_forced_encoding(filedata, forced_enc))
 		{
-			msgwin_status_add(_("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
+			ui_set_statusbar(TRUE, _("The file \"%s\" is not valid %s."), utf8_filename, forced_enc);
 			utils_beep();
 			g_free(filedata->data);
 			return FALSE;
@@ -800,7 +798,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *utf8_f
 	}
 	else if (! handle_encoding(filedata))
 	{
-		msgwin_status_add(
+		ui_set_statusbar(TRUE,
 			_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
 			utf8_filename);
 		utils_beep();
@@ -910,7 +908,7 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 		// filename must not be NULL when opening a file
 		if (filename == NULL)
 		{
-			ui_set_statusbar(_("Invalid filename"));
+			ui_set_statusbar(FALSE, _("Invalid filename"));
 			return -1;
 		}
 
@@ -970,7 +968,7 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 		gboolean use_tabs = detect_use_tabs(doc_list[idx].sci);
 
 		if (use_tabs != editor_prefs.use_tabs)
-			msgwin_status_add(_("Setting %s indentation mode."),
+			ui_set_statusbar(TRUE, _("Setting %s indentation mode."),
 				(use_tabs) ? _("Tabs") : _("Spaces"));
 		document_set_use_tabs(idx, use_tabs);
 	}
@@ -1020,9 +1018,9 @@ gint document_open_file_full(gint idx, const gchar *filename, gint pos, gboolean
 		g_signal_emit_by_name(geany_object, "document-open", idx);
 
 	if (reload)
-		msgwin_status_add(_("File %s reloaded."), utf8_filename);
+		ui_set_statusbar(TRUE, _("File %s reloaded."), utf8_filename);
 	else
-		msgwin_status_add_new(_("File %s opened(%d%s)."),
+		msgwin_status_add(_("File %s opened(%d%s)."),
 				utf8_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)),
 				(readonly) ? _(", read-only") : "");
 
@@ -1122,7 +1120,7 @@ static gboolean document_update_timestamp(gint idx)
 #endif
 	if (g_stat(locale_filename, &st) != 0)
 	{
-		msgwin_status_add(_("Could not open file %s (%s)"), doc_list[idx].file_name,
+		ui_set_statusbar(TRUE, _("Could not open file %s (%s)"), doc_list[idx].file_name,
 			g_strerror(errno));
 		g_free(locale_filename);
 		return FALSE;
@@ -1152,7 +1150,7 @@ gboolean document_save_file(gint idx, gboolean force)
 
 	if (doc_list[idx].file_name == NULL)
 	{
-		msgwin_status_add(_("Error saving file."));
+		ui_set_statusbar(TRUE, _("Error saving file."));
 		utils_beep();
 		return FALSE;
 	}
@@ -1227,7 +1225,7 @@ gboolean document_save_file(gint idx, gboolean force)
 #endif
 	if (fp == NULL)
 	{
-		msgwin_status_add(_("Error saving file (%s)."), g_strerror(errno));
+		ui_set_statusbar(TRUE, _("Error saving file (%s)."), g_strerror(errno));
 		utils_beep();
 		g_free(data);
 		return FALSE;
@@ -1239,7 +1237,7 @@ gboolean document_save_file(gint idx, gboolean force)
 
 	if (len != bytes_written)
 	{
-		msgwin_status_add(_("Error saving file."));
+		ui_set_statusbar(TRUE, _("Error saving file."));
 		utils_beep();
 		return FALSE;
 	}
@@ -1278,7 +1276,7 @@ gboolean document_save_file(gint idx, gboolean force)
 		tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tab_label), base_name);
 		gtk_label_set_text(GTK_LABEL(doc_list[idx].tabmenu_label), base_name);
-		msgwin_status_add_new(_("File %s saved."), doc_list[idx].file_name);
+		msgwin_status_add(_("File %s saved."), doc_list[idx].file_name);
 		ui_update_statusbar(idx, -1);
 		g_free(base_name);
 #ifdef HAVE_VTE
@@ -1342,7 +1340,7 @@ gboolean document_search_bar_find(gint idx, const gchar *text, gint flags, gbool
 	{
 		if (! inc)
 		{
-			ui_set_statusbar(_("\"%s\" was not found."), text);
+			ui_set_statusbar(FALSE, _("\"%s\" was not found."), text);
 		}
 		utils_beep();
 		sci_goto_pos(doc_list[idx].sci, start_pos, FALSE);	// clear selection
@@ -1396,7 +1394,7 @@ gint document_find_text(gint idx, const gchar *text, gint flags, gboolean search
 		if ((selection_end == 0 && ! search_backwards) ||
 			(selection_end == sci_len && search_backwards))
 		{
-			ui_set_statusbar(_("\"%s\" was not found."), text);
+			ui_set_statusbar(FALSE, _("\"%s\" was not found."), text);
 			utils_beep();
 			return -1;
 		}
@@ -1479,7 +1477,7 @@ static void show_replace_summary(gint idx, gint count, const gchar *find_text,
 
 	if (count == 0)
 	{
-		ui_set_statusbar(_("No matches found for \"%s\"."), find_text);
+		ui_set_statusbar(FALSE, _("No matches found for \"%s\"."), find_text);
 		return;
 	}
 
@@ -1489,14 +1487,14 @@ static void show_replace_summary(gint idx, gint count, const gchar *find_text,
 	{	// escape special characters for showing
 		escaped_find_text = g_strescape(find_text, NULL);
 		escaped_replace_text = g_strescape(replace_text, NULL);
-		msgwin_status_add(_("%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."),
+		ui_set_statusbar(TRUE, _("%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."),
 						filename, count, escaped_find_text, escaped_replace_text);
 		g_free(escaped_find_text);
 		g_free(escaped_replace_text);
 	}
 	else
 	{
-		msgwin_status_add(_("%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."),
+		ui_set_statusbar(TRUE, _("%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."),
 						filename, count, find_text, replace_text);
 	}
 	g_free(filename);
@@ -2029,7 +2027,7 @@ void document_print(gint idx)
 		}
 		else
 		{
-			msgwin_status_add(_("File %s printed."), doc_list[idx].file_name);
+			ui_set_statusbar(TRUE, _("File %s printed."), doc_list[idx].file_name);
 		}
 #ifndef G_OS_WIN32
 		g_free(tmp_cmdline);

@@ -102,8 +102,7 @@ void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 void ui_init();
 
 
-// Display text on the statusbar without logging it to the Status window.
-void ui_set_statusbar(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
+void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
 void ui_update_statusbar(gint idx, gint pos);
 

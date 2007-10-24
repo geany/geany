@@ -280,7 +280,7 @@ void project_close()
 	/// TODO handle open project files
 
 	write_config();
-	msgwin_status_add(_("Project \"%s\" closed."), app->project->name);
+	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
 
 	g_free(app->project->name);
 	g_free(app->project->description);
@@ -610,9 +610,9 @@ static gboolean update_config(const PropertyDialogElements *e)
 	}
 	write_config();
 	if (new_project)
-		msgwin_status_add(_("Project \"%s\" created."), p->name);
+		ui_set_statusbar(TRUE, _("Project \"%s\" created."), p->name);
 	else
-		msgwin_status_add(_("Project \"%s\" saved."), p->name);
+		ui_set_statusbar(TRUE, _("Project \"%s\" saved."), p->name);
 
 	return TRUE;
 }
@@ -759,14 +759,14 @@ gboolean project_load_file(const gchar *locale_file_name)
 
 	if (load_config(locale_file_name))
 	{
-		msgwin_status_add(_("Project \"%s\" opened."), app->project->name);
+		ui_set_statusbar(TRUE, _("Project \"%s\" opened."), app->project->name);
 		return TRUE;
 	}
 	else
 	{
 		gchar *utf8_filename = utils_get_utf8_from_locale(locale_file_name);
 
-		msgwin_status_add(_("Project file \"%s\" could not be loaded."), utf8_filename);
+		ui_set_statusbar(TRUE, _("Project file \"%s\" could not be loaded."), utf8_filename);
 		g_free(utf8_filename);
 	}
 	return FALSE;

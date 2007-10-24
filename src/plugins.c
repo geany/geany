@@ -139,28 +139,10 @@ static UtilsFuncs utils_funcs = {
 	&utils_remove_ext_from_filename
 };
 
-
-/* This is a temporary function for the plugin API for Geany 0.12.
- * In future, ui_set_statusbar() will act like this. */
-static void plugin_ui_set_statusbar(gboolean log, const gchar *format, ...)
-{
-	gchar string[512];
-	va_list args;
-
-	va_start(args, format);
-	g_vsnprintf(string, 512, format, args);
-	va_end(args);
-
-	if (log)
-		msgwin_status_add("%s", string);	// currently does both
-	else
-		ui_set_statusbar("%s", string);
-}
-
 static UIUtilsFuncs uiutils_funcs = {
 	&ui_dialog_vbox_new,
 	&ui_frame_new_with_alignment,
-	&plugin_ui_set_statusbar
+	&ui_set_statusbar
 };
 
 static DialogFuncs dialog_funcs = {
@@ -173,14 +155,10 @@ static SupportFuncs support_funcs = {
 	&lookup_widget
 };
 
-
-void msgwin_status_add_new(const gchar *format, ...) G_GNUC_PRINTF(1, 2);	// temporary for v0.12
-
 static MsgWinFuncs msgwin_funcs = {
-	&msgwin_status_add_new,
+	&msgwin_status_add,
 	&msgwin_compiler_add_fmt
 };
-
 
 static EncodingFuncs encoding_funcs = {
 	&encodings_convert_to_utf8,

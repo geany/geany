@@ -561,7 +561,7 @@ static gboolean open_cl_files(gint argc, gchar **argv)
 
 			g_printerr(msg, filename);	// also print to the terminal
 			g_printerr("\n");
-			msgwin_status_add(msg, filename);
+			ui_set_statusbar(TRUE, msg, filename);
 		}
 		g_free(filename);
 	}
@@ -705,9 +705,9 @@ gint main(gint argc, gchar **argv)
 #endif
 	ui_create_recent_menu();
 
-	msgwin_status_add(_("This is Geany %s."), VERSION);
+	ui_set_statusbar(TRUE, _("This is Geany %s."), VERSION);
 	if (config_dir_result != 0)
-		msgwin_status_add(_("Configuration directory could not be created (%s)."),
+		ui_set_statusbar(TRUE, _("Configuration directory could not be created (%s)."),
 			g_strerror(config_dir_result));
 
 	// apply all configuration options

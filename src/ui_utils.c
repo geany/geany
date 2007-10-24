@@ -74,6 +74,9 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 	GTimeVal timeval;
 	const gint GEANY_STATUS_TIMEOUT = 1;
 
+	if (! prefs.statusbar_visible)
+		return; // just do nothing if statusbar is not visible
+
 	g_get_current_time(&timeval);
 
 	if (! allow_override)
@@ -91,24 +94,22 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 }
 
 
-/* Display text on the statusbar or log it to the Status window if
- * prefs.suppress_status_messages is set */
-void ui_set_statusbar(const gchar *format, ...)
+/* Display text on the statusbar.
+ * log is whether the message should be recorded in the Status window. */
+void ui_set_statusbar(gboolean log, const gchar *format, ...)
 {
 	gchar string[512];
 	va_list args;
-
-	if (! prefs.statusbar_visible)
-		return; // just do nothing if statusbar is not visible
 
 	va_start(args, format);
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
 
-	if (prefs.suppress_status_messages)
-		msgwin_status_add("%s", string);
-	else
+	if (! prefs.suppress_status_messages)
 		set_statusbar(string, FALSE);
+
+	if (log || prefs.suppress_status_messages)
+		msgwin_status_add("%s", string);
 }
 
 
@@ -256,7 +257,7 @@ void ui_set_editor_font(const gchar *font_name)
 	}
 	pango_font_description_free(font_desc);
 
-	msgwin_status_add(_("Font updated (%s)."), prefs.editor_font);
+	ui_set_statusbar(TRUE, _("Font updated (%s)."), prefs.editor_font);
 	g_free(fname);
 }
 

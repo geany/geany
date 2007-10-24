@@ -291,27 +291,7 @@ void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 
 
 /* Log a status message *without* setting the status bar.
- * This is a temporary function for the plugin API for Geany 0.12.
- * In future, msgwin_status_add() will act like this. */
-void msgwin_status_add_new(const gchar *format, ...)
-{
-	gchar string[512];
-	va_list args;
-	gboolean suppress;
-
-	va_start(args, format);
-	g_vsnprintf(string, 512, format, args);
-	va_end(args);
-
-	// hack to prevent setting the status bar
-	suppress = prefs.suppress_status_messages;
-	prefs.suppress_status_messages = TRUE;
-	msgwin_status_add("%s", string);
-	prefs.suppress_status_messages = suppress;
-}
-
-
-// logs a status message (use ui_set_statusbar() to just display text on the statusbar)
+ * (Use ui_set_statusbar() to display text on the statusbar) */
 void msgwin_status_add(const gchar *format, ...)
 {
 	GtkTreeIter iter;
@@ -323,10 +303,6 @@ void msgwin_status_add(const gchar *format, ...)
 	va_start(args, format);
 	g_vsnprintf(string, 512, format, args);
 	va_end(args);
-
-	// display status message in status bar
-	if (! prefs.suppress_status_messages)
-		ui_set_statusbar("%s", string);
 
 	// add a timestamp to status messages
 	time_str = utils_get_current_time_string();

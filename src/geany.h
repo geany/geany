@@ -100,7 +100,7 @@ typedef struct GeanyApp
 	GtkWidget			*toolbar;
 	GtkWidget			*treeview_notebook;
 	GtkWidget			*notebook;
-	GtkWidget			*statusbar;	// use ui_set_statusbar() or msgwin_status_add() to set
+	GtkWidget			*statusbar;	// use ui_set_statusbar() to set
 	GtkWidget			*popup_menu;
 }
 GeanyApp;

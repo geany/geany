@@ -163,7 +163,7 @@ void tools_execute_custom_command(gint idx, const gchar *command)
 		return;
 
 	argv = g_strsplit(command, " ", -1);
-	msgwin_status_add(_("Passing data and executing custom command: %s"), command);
+	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command);
 
 	if (g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_SEARCH_PATH,
 						NULL, NULL, &pid, &stdin_fd, &stdout_fd, &stderr_fd, &error))

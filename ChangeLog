@@ -1,3 +1,16 @@
+2007-10-24  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/ui_utils.h, src/tools.c, src/project.c, src/geany.h,
+   src/msgwindow.c, src/callbacks.c, src/keyfile.c, src/search.c,
+   src/document.c, src/plugins.c, src/main.c, src/symbols.c,
+   src/ui_utils.c:
+   Make msgwin_status_add() only log a message, not display it on the
+   status bar.
+   Make ui_set_statusbar() take a log argument for whether to record the
+   message in the Status window.
+   (Plugin API functions already do this).
+
+
 2007-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/svndiff.c:

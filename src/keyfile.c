@@ -759,7 +759,7 @@ gboolean configuration_open_files()
 	g_ptr_array_free(session_files, TRUE);
 
 	if (failure)
-		msgwin_status_add(_("Failed to load one or more session files."));
+		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
 	else if (session_notebook_page >= 0)
 	{
 		// exlicitly allow notebook switch page callback to be called for window title,

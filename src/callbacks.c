@@ -1312,7 +1312,7 @@ on_comments_function_activate          (GtkMenuItem     *menuitem,
 
 	if (doc_list[idx].file_type == NULL)
 	{
-		ui_set_statusbar(_("Please set the filetype for the current file before using this function."));
+		ui_set_statusbar(FALSE, _("Please set the filetype for the current file before using this function."));
 		return;
 	}
 
@@ -1336,7 +1336,7 @@ on_comments_multiline_activate         (GtkMenuItem     *menuitem,
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_type == NULL)
 	{
-		ui_set_statusbar(_("Please set the filetype for the current file before using this function."));
+		ui_set_statusbar(FALSE, _("Please set the filetype for the current file before using this function."));
 		return;
 	}
 
@@ -1497,7 +1497,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 	else
 	{
 		utils_beep();
-		msgwin_status_add(
+		ui_set_statusbar(TRUE,
 				_("Date format string could not be converted (possibly too long)."));
 	}
 }
@@ -1797,7 +1797,7 @@ on_next_message1_activate              (GtkMenuItem     *menuitem,
 {
 	if (! ui_tree_view_find_next(GTK_TREE_VIEW(msgwindow.tree_msg),
 		msgwin_goto_messages_file_line))
-		ui_set_statusbar(_("No more message items."));
+		ui_set_statusbar(FALSE, _("No more message items."));
 }
 
 
@@ -2012,7 +2012,7 @@ on_context_action1_activate            (GtkMenuItem     *menuitem,
 
 		if (! g_spawn_command_line_async(command, &error))
 		{
-			msgwin_status_add("Context action command failed: %s", error->message);
+			ui_set_statusbar(TRUE, "Context action command failed: %s", error->message);
 			g_error_free(error);
 		}
 	}

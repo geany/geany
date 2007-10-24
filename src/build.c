@@ -175,7 +175,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	// check wether view_file exists
 	if (g_stat(locale_filename, &st) != 0)
 	{
-		msgwin_status_add(_("Failed to view %s (make sure it is already compiled)"), view_file);
+		ui_set_statusbar(TRUE, _("Failed to view %s (make sure it is already compiled)"), view_file);
 		utils_free_pointers(executable, view_file, locale_filename, NULL);
 
 		return (GPid) 1;
@@ -207,7 +207,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	}
 	if (term_argv[0] == NULL)
 	{
-		msgwin_status_add(
+		ui_set_statusbar(TRUE,
 			_("Could not find terminal \"%s\" "
 				"(check path for Terminal tool setting in Preferences)"), prefs.tools_term_cmd);
 
@@ -220,7 +220,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
 	if (! build_create_shellscript(RUN_SCRIPT_CMD, locale_cmd_string, TRUE))
 	{
-		msgwin_status_add(_("Failed to execute \"%s\" (start-script could not be created)"),
+		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created)"),
 													executable);
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
 										locale_term_cmd, NULL);
@@ -248,7 +248,7 @@ static GPid build_view_tex_file(gint idx, gint mode)
 						NULL, NULL, &(run_info.pid), NULL, NULL, NULL, &error))
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
-		msgwin_status_add(_("Process failed (%s)"), error->message);
+		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
 										locale_term_cmd, NULL);
@@ -365,7 +365,7 @@ static GPid build_link_file(gint idx)
 	// check for filename extension and abort if filename doesn't have one
 	if (utils_str_equal(locale_filename, executable))
 	{
-		msgwin_status_add(_("Command stopped because the current file has no extension."));
+		ui_set_statusbar(TRUE, _("Command stopped because the current file has no extension."));
 		utils_beep();
 		utils_free_pointers(locale_filename, executable, NULL);
 		return (GPid) 1;
@@ -514,7 +514,7 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 						NULL, NULL, &(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
 	{
 		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
-		msgwin_status_add(_("Process failed (%s)"), error->message);
+		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 		g_strfreev(argv);
 		g_error_free(error);
 		g_free(working_dir);
@@ -580,7 +580,7 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 		// check for filename extension and abort if filename doesn't have one
 		if (utils_str_equal(locale_filename, check_executable))
 		{
-			msgwin_status_add(_("Command stopped because the current file has no extension."));
+			ui_set_statusbar(TRUE, _("Command stopped because the current file has no extension."));
 			utils_beep();
 			g_free(check_executable);
 			return NULL;
@@ -591,7 +591,7 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 		{
 			gchar *utf8_check_executable = utils_get_utf8_from_locale(check_executable);
 
-			msgwin_status_add(_("Failed to execute \"%s\" (make sure it is already built)"),
+			ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (make sure it is already built)"),
 														utf8_check_executable);
 			g_free(utf8_check_executable);
 			g_free(check_executable);
@@ -645,7 +645,7 @@ static gchar *prepare_run_script(gint idx)
 		gchar *utf8_working_dir =
 			utils_get_utf8_from_locale(working_dir);
 
-		msgwin_status_add(_("Failed to change the working directory to \"%s\""), utf8_working_dir);
+		ui_set_statusbar(TRUE, _("Failed to change the working directory to \"%s\""), utf8_working_dir);
 		g_free(utf8_working_dir);
 		g_free(working_dir);
 		g_free(executable);
@@ -671,7 +671,7 @@ static gchar *prepare_run_script(gint idx)
 	{
 		gchar *utf8_cmd = utils_get_utf8_from_locale(cmd);
 
-		msgwin_status_add(_("Failed to execute \"%s\" (start-script could not be created)"),
+		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created)"),
 			utf8_cmd);
 		g_free(utf8_cmd);
 	}
@@ -745,7 +745,7 @@ static GPid build_run_cmd(gint idx)
 		}
 		if (term_argv[0] == NULL)
 		{
-			msgwin_status_add(
+			ui_set_statusbar(TRUE,
 				_("Could not find terminal \"%s\" "
 					"(check path for Terminal tool setting in Preferences)"), prefs.tools_term_cmd);
 			run_info.pid = (GPid) 1;
@@ -771,7 +771,7 @@ static GPid build_run_cmd(gint idx)
 							NULL, NULL, &(run_info.pid), NULL, NULL, NULL, &error))
 		{
 			geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
-			msgwin_status_add(_("Process failed (%s)"), error->message);
+			ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 			unlink(RUN_SCRIPT_CMD);
 			g_error_free(error);
 			error = NULL;
@@ -895,7 +895,7 @@ static void show_build_result_message(gboolean failure)
 		}
 		else
 		if (gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
-			ui_set_statusbar("%s", msg);
+			ui_set_statusbar(FALSE, "%s", msg);
 	}
 	else
 	{
@@ -903,7 +903,7 @@ static void show_build_result_message(gboolean failure)
 		msgwin_compiler_add(COLOR_BLUE, msg);
 		if (! ui_prefs.msgwindow_visible ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
-				ui_set_statusbar("%s", msg);
+				ui_set_statusbar(FALSE, "%s", msg);
 	}
 }
 #endif
@@ -1893,7 +1893,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 	{	// run LaTeX file
 		if (build_view_tex_file(idx, GPOINTER_TO_INT(user_data)) == (GPid) 0)
 		{
-			msgwin_status_add(_("Failed to execute the view program"));
+			ui_set_statusbar(TRUE, _("Failed to execute the view program"));
 		}
 	}
 	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_HTML)
@@ -1912,7 +1912,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 
 		if (build_run_cmd(idx) == (GPid) 0)
 		{
-			msgwin_status_add(_("Failed to execute the terminal program"));
+			ui_set_statusbar(TRUE, _("Failed to execute the terminal program"));
 		}
 	}
 }
@@ -1960,7 +1960,7 @@ static void kill_process(GPid *pid)
 	result = kill(*pid, SIGQUIT);
 
 	if (result != 0)
-		msgwin_status_add(_("Process could not be stopped (%s)."), g_strerror(errno));
+		ui_set_statusbar(TRUE, _("Process could not be stopped (%s)."), g_strerror(errno));
 	else
 	{
 		*pid = 0;
@@ -1980,7 +1980,7 @@ on_build_next_error                    (GtkMenuItem     *menuitem,
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
 	}
 	else
-		ui_set_statusbar(_("No more build errors."));
+		ui_set_statusbar(FALSE, _("No more build errors."));
 }
 
 
