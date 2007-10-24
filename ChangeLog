@@ -9,6 +9,10 @@
    Make ui_set_statusbar() take a log argument for whether to record the
    message in the Status window.
    (Plugin API functions already do this).
+ * plugins/filebrowser.c:
+   Use the current directory when there are no documents open.
+   Add popup menu with Open command.
+   Separate toolbar code from init().
 
 
 2007-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -32,6 +32,7 @@
 #include "prefs.h"
 #include "document.h"
 #include "utils.h"
+#include "keybindings.h"
 #include "plugindata.h"
 
 
@@ -181,13 +182,15 @@ static void on_current_path()
 	gchar *dir;
 	gint idx = documents->get_cur_idx();
 
-	if (! DOC_IDX_VALID(idx))
-		return;
-
-	fname = DOC_FILENAME(idx);
-	fname = utils->get_locale_from_utf8(fname);
-	dir = g_path_get_dirname(fname);
-	g_free(fname);
+	if (DOC_IDX_VALID(idx))
+	{
+		fname = DOC_FILENAME(idx);
+		fname = utils->get_locale_from_utf8(fname);
+		dir = g_path_get_dirname(fname);
+		g_free(fname);
+	}
+	else
+		dir = g_strdup(".");
 
 	setptr(current_dir, dir);
 	refresh();
@@ -268,10 +271,51 @@ static void open_selected_files()
 }
 
 
+static GtkWidget *create_popup_menu()
+{
+	GtkWidget *item, *menu;
+
+	menu = gtk_menu_new();
+
+	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN, NULL);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer) item, "activate",
+		G_CALLBACK(open_selected_files), NULL);
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide sidebar"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect_swapped((gpointer) item, "activate",
+		G_CALLBACK(geany_data->keybindings->send_command),
+		GINT_TO_POINTER(GEANY_KEYS_MENU_SIDEBAR));
+
+	return menu;
+}
+
+
 static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
 		open_selected_files();
+	else
+	if (event->button == 3)
+	{
+		static GtkWidget *popup_menu = NULL;
+
+		if (popup_menu == NULL)
+			popup_menu = create_popup_menu();
+
+		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL,
+			event->button, event->time);
+		return TRUE;
+	}
 	return FALSE;
 }
 
@@ -346,16 +390,11 @@ static void prepare_file_view()
 }
 
 
-void init(GeanyData *data)
+static GtkWidget *make_toolbar()
 {
-	GtkWidget *scrollwin, *wid, *vbox, *toolbar;
+	GtkWidget *wid, *toolbar;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(support->lookup_widget(
 		geany_data->app->window, "tooltips"));
-
-	file_view = gtk_tree_view_new();
-	prepare_file_view();
-
-	vbox = gtk_vbox_new(FALSE, 0);
 
 	toolbar = gtk_toolbar_new();
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
@@ -384,11 +423,24 @@ void init(GeanyData *data)
 	g_signal_connect(G_OBJECT(wid), "clicked", G_CALLBACK(on_current_path), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
+	return toolbar;
+}
+
+
+void init(GeanyData *data)
+{
+	GtkWidget *scrollwin, *toolbar, *vbox;
+
+	vbox = gtk_vbox_new(FALSE, 0);
+	toolbar = make_toolbar();
 	gtk_box_pack_start(GTK_BOX(vbox), toolbar, FALSE, FALSE, 0);
 
 	path_entry = gtk_entry_new();
 	gtk_editable_set_editable(GTK_EDITABLE(path_entry), FALSE);
 	gtk_box_pack_start(GTK_BOX(vbox), path_entry, FALSE, FALSE, 2);
+
+	file_view = gtk_tree_view_new();
+	prepare_file_view();
 
 	scrollwin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(
