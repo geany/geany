@@ -271,6 +271,13 @@ static void open_selected_files()
 }
 
 
+static void on_hidden_files_clicked(GtkCheckMenuItem *item)
+{
+	show_hidden_files = gtk_check_menu_item_get_active(item);
+	refresh();
+}
+
+
 static GtkWidget *create_popup_menu()
 {
 	GtkWidget *item, *menu;
@@ -282,6 +289,16 @@ static GtkWidget *create_popup_menu()
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate",
 		G_CALLBACK(open_selected_files), NULL);
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	item = gtk_check_menu_item_new_with_mnemonic(_("Show _hidden files"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer) item, "activate",
+		G_CALLBACK(on_hidden_files_clicked), NULL);
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);

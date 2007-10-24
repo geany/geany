@@ -13,6 +13,8 @@
    Use the current directory when there are no documents open.
    Add popup menu with Open command.
    Separate toolbar code from init().
+ * plugins/filebrowser.c:
+   Add 'Show hidden files' checkbox in the popup menu.
 
 
 2007-10-23  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
