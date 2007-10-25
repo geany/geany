@@ -1,3 +1,8 @@
+2007-10-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * sv.po: Update of Swedish translation (Thanks to Tony Mattsson)
+
+
 2007-10-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * svn.po, LINGUAS:
@@ -7,6 +12,11 @@
 2007-10-15  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * POTFILES.in: Added new plugin SVNdiff to list of translatable files
+
+
+2007-10-10  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * New release: Geany 0.12 "Delurin"
 
 
 2007-10-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
@@ -148,6 +158,7 @@
 2007-05-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * it.po: Update of Italian translation (Thanks to M. Baldinelli)
+ * New release: Geany 0.11 "Bandor"
 
 
 2007-05-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
@@ -284,6 +295,7 @@
 2006-12-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * vi.po: Update of Vietnamese translation (Thanks to Clytie Siddall)
+ * New release: Geany 0.10 "Sander"
 
 
 2006-12-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
@@ -398,6 +410,7 @@
 2006-09-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * ca.po: Update of Catalan translation (thanks to topi)
+ * New release: Geany 0.9 "Kintaro"
 
 
 2006-09-29  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
@@ -466,6 +479,11 @@
 
  * geany.pot: Update of catalog
  * de.po: Update of German translation
+
+
+2006-08-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * New release: Geany 0.8 "Kadir"
 
 
 2006-08-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
@@ -569,6 +587,11 @@
 
  * de.po: Minor update
  * geany.pot: Minor update of strings
+
+
+2006-06-04  Enrico Troeger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * new release: Geany 0.7 "Ravik"
 
 
 2006-06-01  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
