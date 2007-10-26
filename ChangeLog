@@ -9,6 +9,8 @@
  * plugins/svndiff.c:
    Capitalize menu item text.
    Minor editing of some strings.
+ * plugins/classbuilder.c:
+   Capitalize menu item text.
 
 
 2007-10-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
