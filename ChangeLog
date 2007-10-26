@@ -6,6 +6,9 @@
    as Geany.
  * plugins/pluginmacros.h:
    Prevent conflict with document::encoding.
+ * plugins/svndiff.c:
+   Capitalize menu item text.
+   Minor editing of some strings.
 
 
 2007-10-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

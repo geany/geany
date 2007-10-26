@@ -44,7 +44,8 @@ VERSION_CHECK(25)
 
 PLUGIN_INFO(_("SVNdiff"), _("Plugin to create a patch of a file against svn"), VERSION)
 
-/* Callback if menu item for the current procet or directory was acitvated */
+
+/* Callback if menu item for the current project or directory was activated */
 static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
 	guint	idx, new_idx;
@@ -136,9 +137,10 @@ static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 	}
 	else
 	{
-		ui->set_statusbar(FALSE, _("Could not determinate a path working in"));
+		ui->set_statusbar(FALSE, _("Could not determine a path to work in"));
 	}
 }
+
 
 /* Callback if menu item for a single file was acitvated */
 static void svnfile_activated(GtkMenuItem *menuitem, gpointer gdata)
@@ -266,20 +268,20 @@ void init(GeanyData *data)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_svndiff), menu_svndiff_menu);
 
 	// Directory
-	menu_svndiff_dir = gtk_menu_item_new_with_mnemonic(_("From current _project"));
+	menu_svndiff_dir = gtk_menu_item_new_with_mnemonic(_("From Current _Project"));
 	gtk_container_add(GTK_CONTAINER (menu_svndiff_menu), menu_svndiff_dir);
 	gtk_tooltips_set_tip (tooltips, menu_svndiff_dir,
-		_("Makes a svn diff from the a complete projekt or if there is no "
-		"project avaible of the directory of current activeted file"), NULL);
+		_("Make a diff from the current project's base path, or if there is no "
+		"project open, from the directory of the current active file"), NULL);
 
 	g_signal_connect((gpointer) menu_svndiff_dir, "activate",
 		G_CALLBACK(svndirectory_activated), NULL);
 
-	// Singe file
-	menu_svndiff_file = gtk_menu_item_new_with_mnemonic(_("From single _file"));
+	// Single file
+	menu_svndiff_file = gtk_menu_item_new_with_mnemonic(_("From Current _File"));
 	gtk_container_add(GTK_CONTAINER (menu_svndiff_menu), menu_svndiff_file);
 	gtk_tooltips_set_tip (tooltips, menu_svndiff_file,
-		_("Makes a svn diff from the of current activeted file"), NULL);
+		_("Make a diff from the current active file"), NULL);
 
 	g_signal_connect((gpointer) menu_svndiff_file, "activate",
 		G_CALLBACK(svnfile_activated), NULL);
