@@ -4,6 +4,8 @@
    plugins/filebrowser.c, plugins/htmlchars.c, plugins/classbuilder.c:
    Make all plugins distributed with Geany have the same version number
    as Geany.
+ * plugins/pluginmacros.h:
+   Prevent conflict with document::encoding.
 
 
 2007-10-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
