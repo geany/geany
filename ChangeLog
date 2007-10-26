@@ -11,6 +11,8 @@
    Minor editing of some strings.
  * plugins/classbuilder.c:
    Capitalize menu item text.
+ * plugins/filebrowser.c:
+   Show icons only in the file browser toolbar.
 
 
 2007-10-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
