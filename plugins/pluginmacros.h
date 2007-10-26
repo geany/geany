@@ -32,8 +32,8 @@
 #define prefs		geany_data->prefs
 
 #define dialogs		geany_data->dialogs
-#define documents	geany_data->document
-#define encoding	geany_data->encoding
+#define documents	geany_data->document	// avoids conflict with document typedef
+#define encodings	geany_data->encodings	// avoids conflict with document::encoding
 #define keybindings	geany_data->keybindings
 #define msgwindow	geany_data->msgwindow
 #define scintilla	geany_data->sci
