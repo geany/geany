@@ -44,7 +44,7 @@ GeanyData		*geany_data;
 
 VERSION_CHECK(26)
 
-PLUGIN_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), "0.1")
+PLUGIN_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION)
 
 
 enum

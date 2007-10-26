@@ -52,7 +52,7 @@ GeanyData		*geany_data;
 VERSION_CHECK(7)
 
 /* All plugins must set name, description and version. */
-PLUGIN_INFO(_("Demo"), _("Example plugin."), "0.1")
+PLUGIN_INFO(_("Demo"), _("Example plugin."), VERSION)
 
 
 /* Callback when the menu item is clicked. */

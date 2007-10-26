@@ -1,3 +1,11 @@
+2007-10-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/svndiff.c, plugins/export.c, plugins/demoplugin.c,
+   plugins/filebrowser.c, plugins/htmlchars.c, plugins/classbuilder.c:
+   Make all plugins distributed with Geany have the same version number
+   as Geany.
+
+
 2007-10-25  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * plugins/svndiff.c:

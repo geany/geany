@@ -42,7 +42,7 @@ GeanyData		*geany_data;
 
 VERSION_CHECK(25)
 
-PLUGIN_INFO(_("SVNdiff"), _("Plugin to create a patch of a file against svn"), "0.0.4")
+PLUGIN_INFO(_("SVNdiff"), _("Plugin to create a patch of a file against svn"), VERSION)
 
 /* Callback if menu item for the current procet or directory was acitvated */
 static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
