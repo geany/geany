@@ -24,6 +24,8 @@
 
 /* Export plugin. */
 
+#include <ctype.h>
+
 #include "geany.h"
 #include "support.h"
 #include "plugindata.h"
@@ -31,7 +33,7 @@
 #include "document.h"
 #include "prefs.h"
 #include "utils.h"
-#include <ctype.h>
+#include "pluginmacros.h"
 
 
 PluginFields	*plugin_fields;
@@ -39,13 +41,6 @@ GeanyData		*geany_data;
 
 VERSION_CHECK(20)
 PLUGIN_INFO(_("Export"), _("Exports the current file into different formats."), VERSION)
-
-#define doc_array	geany_data->doc_array
-#define scintilla	geany_data->sci
-#define utils		geany_data->utils
-#define support		geany_data->support
-#define dialogs		geany_data->dialogs
-#define ui			geany_data->ui
 
 #define ROTATE_RGB(color) \
 	(((color) & 0xFF0000) >> 16) + ((color) & 0x00FF00) + (((color) & 0x0000FF) << 16)
@@ -163,15 +158,15 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	if (extension == NULL)
 		return;
 
-	idx = geany_data->document->get_cur_idx();
-	tooltips = GTK_TOOLTIPS(support->lookup_widget(geany_data->app->window, "tooltips"));
+	idx = documents->get_cur_idx();
+	tooltips = GTK_TOOLTIPS(support->lookup_widget(app->window, "tooltips"));
 
 	exi = g_new(ExportInfo, 1);
 	exi->idx = idx;
 	exi->export_func = func;
 	exi->have_zoom_level_checkbox = FALSE;
 
-	dialog = gtk_file_chooser_dialog_new(_("Export File"), GTK_WINDOW(geany_data->app->window),
+	dialog = gtk_file_chooser_dialog_new(_("Export File"), GTK_WINDOW(app->window),
 				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
 	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
@@ -206,7 +201,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	g_signal_connect((gpointer) dialog, "response",
 		G_CALLBACK(on_file_save_dialog_response), exi);
 
-	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(geany_data->app->window));
+	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(app->window));
 
 	// if the current document has a filename we use it as the default.
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(dialog));
@@ -229,7 +224,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	}
 	else
 	{
-		const gchar *default_open_path = geany_data->prefs->default_open_path;
+		const gchar *default_open_path = prefs->default_open_path;
 		gchar *fname = g_strconcat(GEANY_STRING_UNTITLED, extension, NULL);
 
 		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(dialog));
@@ -568,7 +563,7 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 	}
 
 	// read Geany's font and font size
-	font_desc = pango_font_description_from_string(geany_data->prefs->editor_font);
+	font_desc = pango_font_description_from_string(prefs->editor_font);
 	font_name = pango_font_description_get_family(font_desc);
 	//font_size = pango_font_description_get_size(font_desc) / PANGO_SCALE;
 	// take the zoom level also into account

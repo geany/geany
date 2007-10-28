@@ -31,13 +31,10 @@
 #include "filetypes.h"
 #include "utils.h"
 #include "project.h"
+#include "pluginmacros.h"
 
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
-
-#define utils		geany_data->utils
-#define ui			geany_data->ui
-#define doc_array	geany_data->doc_array
 
 
 VERSION_CHECK(25)
@@ -61,31 +58,29 @@ static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 	gchar	*text = NULL;
 	gchar	*dir_enc = NULL;
 
-	GeanyProject *geany_project = geany_data->app->project;
+	idx = documents->get_cur_idx();
 
-	idx = geany_data->document->get_cur_idx();
-
-	if (geany_project != NULL && NZV(geany_project->base_path))
+	if (project != NULL && NZV(project->base_path))
 	{
 		if (doc_list[idx].file_name != NULL)
 		{
-			geany_data->document->save_file(idx, FALSE);
+			documents->save_file(idx, FALSE);
 		}
-		base_name = geany_project->base_path;
-		project_name = geany_project->name;
+		base_name = project->base_path;
+		project_name = project->name;
 	}
 	else if (doc_list[idx].file_name != NULL)
 	{
 		if (doc_list[idx].changed)
 		{
-			geany_data->document->save_file(idx, FALSE);
+			documents->save_file(idx, FALSE);
 		}
 		locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
 		base_name = g_path_get_dirname(locale_filename);
 	}
 	else if (doc_list[idx].file_name == NULL)
 	{
-		if ( geany_data->dialogs->show_save_as() )
+		if ( dialogs->show_save_as() )
 		{
 			locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
 			base_name = g_path_get_dirname(locale_filename);
@@ -114,9 +109,9 @@ static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 					if (filename != NULL)
 					// Be carefull with mixed up encodings
 					{
-						text = geany_data->encoding->convert_to_utf8(std_output, -1, &dir_enc);
-						new_idx = geany_data->document->new_file(filename, NULL, std_output);
-						geany_data->document->set_encoding(new_idx, dir_enc);
+						text = encodings->convert_to_utf8(std_output, -1, &dir_enc);
+						new_idx = documents->new_file(filename, NULL, std_output);
+						documents->set_encoding(new_idx, dir_enc);
 						g_free(text);
 						g_free(dir_enc);
 						g_free(filename);
@@ -158,15 +153,15 @@ static void svnfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 	gchar 	*short_name = NULL;
 	gchar 	*locale_filename = NULL;
 
-	idx = geany_data->document->get_cur_idx();
+	idx = documents->get_cur_idx();
 
 	if (doc_list[idx].file_name == NULL)
 	{
-		geany_data->dialogs->show_save_as();
+		dialogs->show_save_as();
 	}
 	else if (doc_list[idx].changed)
 	{
-		geany_data->document->save_file(idx, FALSE);
+		documents->save_file(idx, FALSE);
 	}
 
     // Stolen from export.c. Thanks for it, Enrico ;)
@@ -196,7 +191,7 @@ static void svnfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 
 					// need to convert input text from the encoding of the original file into
 					// UTF-8 because internally Geany always needs UTF-8
-					text = geany_data->encoding->convert_to_utf8_from_charset(
+					text = encodings->convert_to_utf8_from_charset(
 						std_output, -1, doc_list[idx].encoding, TRUE);
 
 					if (text == NULL)
@@ -205,9 +200,9 @@ static void svnfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 					}
 					else
 					{
-						new_idx = geany_data->document->new_file(diff_file_name,
+						new_idx = documents->new_file(diff_file_name,
 							geany_data->filetypes[GEANY_FILETYPES_DIFF], text);
-						geany_data->document->set_encoding(new_idx, doc_list[idx].encoding);
+						documents->set_encoding(new_idx, doc_list[idx].encoding);
 						g_free(text);
 					}
 				}

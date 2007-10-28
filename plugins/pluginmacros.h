@@ -30,6 +30,7 @@
 #define app			geany_data->app
 #define doc_array	geany_data->doc_array
 #define prefs		geany_data->prefs
+#define project		app->project
 
 #define dialogs		geany_data->dialogs
 #define documents	geany_data->document	// avoids conflict with document typedef
@@ -39,7 +40,7 @@
 #define scintilla	geany_data->sci
 #define support		geany_data->support
 #define templates	geany_data->templates
-#define tm			geany_data->tm
+#define tagm		geany_data->tm			// avoids conflict with "struct tm *t"
 #define ui			geany_data->ui
 #define utils		geany_data->utils
 

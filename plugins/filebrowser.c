@@ -66,18 +66,18 @@ static gchar		*current_dir = NULL;	// in locale-encoding
 
 
 // Returns: whether name should be hidden.
-static gboolean check_hidden(const gchar *basename)
+static gboolean check_hidden(const gchar *base_name)
 {
 	gsize len;
 
-	if (! NZV(basename))
+	if (! NZV(base_name))
 		return FALSE;
 
-	if (basename[0] == '.')
+	if (base_name[0] == '.')
 		return TRUE;
 
-	len = strlen(basename);
-	if (basename[len - 1] == '~')
+	len = strlen(base_name);
+	if (base_name[len - 1] == '~')
 		return TRUE;
 
 	if (hide_object_files)
@@ -89,7 +89,7 @@ static gboolean check_hidden(const gchar *basename)
 		{
 			const gchar *ext = exts[i];
 
-			if (utils->str_equal(&basename[len - strlen(ext)], ext))
+			if (utils->str_equal(&base_name[len - strlen(ext)], ext))
 				return TRUE;
 		}
 	}
@@ -154,7 +154,7 @@ static void refresh()
 	clear();
 
 	// TODO: really, we don't want to dereference symlinks
-	setptr(current_dir, tm->get_real_path(current_dir));
+	setptr(current_dir, tagm->get_real_path(current_dir));
 
 	utf8_dir = utils->get_utf8_from_locale(current_dir);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), utf8_dir);
