@@ -34,7 +34,7 @@ struct _GeanyProject
 
 	gchar *file_name; 		// where the project file is stored (in UTF-8)
 
-	gchar *base_path;		// base path of the project directory (in UTF-8)
+	gchar *base_path;		// base path of the project directory (in UTF-8, maybe relative)
 	gchar *run_cmd; 		// project run command (in UTF-8)
 	// ...					// fields for build process(run arguments and so on) should be added
 
@@ -60,7 +60,7 @@ void project_properties();
 
 gboolean project_load_file(const gchar *locale_file_name);
 
-const gchar *project_get_make_dir();
+gchar *project_get_make_dir();
 
 
 void project_save_prefs(GKeyFile *config);

@@ -300,7 +300,7 @@ static gchar *get_object_filename(gint idx)
 static GPid build_make_file(gint idx, gint build_opts)
 {
 	GString *cmdstr;
-	const gchar *dir = NULL;
+	gchar *dir = NULL;
 	GPid pid;
 
 	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
@@ -331,6 +331,7 @@ static GPid build_make_file(gint idx, gint build_opts)
 	}
 
 	pid = build_spawn_cmd(idx, cmdstr->str, dir);	// if dir is NULL, idx filename is used
+	g_free(dir);
 	g_string_free(cmdstr, TRUE);
 	return pid;
 }
@@ -636,9 +637,14 @@ static gchar *prepare_run_script(gint idx)
 		return NULL;
 	}
 
-	working_dir = (have_project) ?
-		utils_get_locale_from_utf8(project->base_path) :
-		g_path_get_dirname(locale_filename);
+	if (have_project)
+	{
+		gchar *project_base_path = project_get_make_dir();
+		working_dir = utils_get_locale_from_utf8(project_base_path);
+		g_free(project_base_path);
+	}
+	else
+		working_dir = g_path_get_dirname(locale_filename);
 
 	if (chdir(working_dir) != 0)
 	{

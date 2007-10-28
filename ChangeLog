@@ -1,3 +1,12 @@
+2007-10-28  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * doc/geany.txt, src/build.c, src/project.c, src/project.h:
+   Add support for relative project base path.
+   Improve and synchronize base path tooltips in project new and
+   properties dialogs.
+   Fix minor GUI annoyances in project dialogs.
+
+
 2007-10-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/svndiff.c, plugins/export.c, plugins/demoplugin.c,

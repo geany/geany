@@ -1171,13 +1171,15 @@ You can set an optional description for the project, but it is not
 used elsewhere by Geany.
 
 The *Base path* field is used as the directory to run the Make and Make
-custom commands in.
+custom commands in. It is also used as working directory for the project
+specific *Run command*.
+The specified path can be absolute or relative to the project's file name.
 
 
 Run command
 ```````````
 
-The Run command overrides the default run command. You can set this
+The *Run command* overrides the default run command. You can set this
 to the executable or main script file for the project, and append
 any command-line arguments.
 

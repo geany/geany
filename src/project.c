@@ -28,6 +28,7 @@
 #include "geany.h"
 
 #include <string.h>
+#include <unistd.h>
 
 #include "project.h"
 #include "dialogs.h"
@@ -46,7 +47,7 @@ ProjectPrefs project_prefs = {NULL};
 
 static struct
 {
-	gchar *project_file_path;
+	gchar *project_file_path; // in UTF-8
 } local_prefs = {NULL};
 
 
@@ -153,7 +154,8 @@ void project_new()
 	e->base_path = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltips, e->base_path,
 		_("Base directory of all files that make up the project. "
-		"This can be a new path, or an existing directory tree."), NULL);
+		"This can be a new path, or an existing directory tree absolute "
+		"or relative to the project filename."), NULL);
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 
@@ -219,6 +221,7 @@ void project_open()
 #else
 	GtkWidget *dialog;
 	GtkFileFilter *filter;
+	gchar *locale_path;
 #endif
 	if (! close_open_project()) return;
 
@@ -256,7 +259,13 @@ void project_open()
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
 	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dir);
+	locale_path = utils_get_locale_from_utf8(dir);
+	if (g_file_test(locale_path, G_FILE_TEST_EXISTS) &&
+		g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+	{
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
+	}
+	g_free(locale_path);
 
 	gtk_widget_show_all(dialog);
 	run_open_dialog(GTK_DIALOG(dialog));
@@ -374,8 +383,9 @@ void project_properties()
 
 	e->base_path = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltips, e->base_path,
-		_("Directory to run Make All from. "
-		"Leave blank to use the default command."), NULL);
+		_("Base directory of all files that make up the project. "
+		"This can be a new path, or an existing directory tree absolute "
+		"or relative to the project filename."), NULL);
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 3, 4,
@@ -505,6 +515,7 @@ static gboolean close_open_project()
 static gboolean update_config(const PropertyDialogElements *e)
 {
 	const gchar *name, *file_name, *base_path;
+	gchar *locale_filename;
 	gint name_len;
 	gboolean new_project = FALSE;
 	GeanyProject *p;
@@ -534,10 +545,27 @@ static gboolean update_config(const PropertyDialogElements *e)
 		return FALSE;
 	}
 
+	// finally test whether the given project file can be written
+	locale_filename = utils_get_locale_from_utf8(file_name);
+	if (utils_write_file(file_name, "") != 0)
+	{
+		SHOW_ERR(_("Project file could not be written."));
+		gtk_widget_grab_focus(e->file_name);
+		return FALSE;
+	}
+
 	base_path = gtk_entry_get_text(GTK_ENTRY(e->base_path));
 	if (NZV(base_path))
 	{	// check whether the given directory actually exists
 		gchar *locale_path = utils_get_locale_from_utf8(base_path);
+
+		if (! g_path_is_absolute(locale_path))
+		{	// relative base path, so add base dir of project file name
+			gchar *dir = g_path_get_dirname(locale_filename);
+			setptr(locale_path, g_strconcat(dir, G_DIR_SEPARATOR_S, locale_path, NULL));
+			g_free(dir);
+		}
+
 		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
 		{
 			if (dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL,
@@ -556,14 +584,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		}
 		g_free(locale_path);
 	}
-
-	// finally test whether the given project file can be written
-	if (utils_write_file(file_name, "") != 0)
-	{
-		SHOW_ERR(_("Project file could not be written."));
-		gtk_widget_grab_focus(e->file_name);
-		return FALSE;
-	}
+	g_free(locale_filename);
 
 	if (app->project == NULL)
 	{
@@ -579,7 +600,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 	p->file_name = g_strdup(file_name);
 
 	if (p->base_path != NULL) g_free(p->base_path);
-	p->base_path = g_strdup(base_path);
+	p->base_path = g_strdup(NZV(base_path) ? base_path : "./"); // use "." if base_path is empty
 
 	if (! new_project)	// save properties specific fields
 	{
@@ -629,6 +650,18 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 	{
 		if (g_file_test(locale_filename, G_FILE_TEST_EXISTS))
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), utf8_filename);
+		else // if the file doesn't yet exist, use at least the current directory
+		{
+			gchar *locale_dir = g_path_get_dirname(locale_filename);
+			gchar *name = g_path_get_basename(utf8_filename);
+
+			if (g_file_test(locale_dir, G_FILE_TEST_EXISTS))
+				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_dir);
+			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), name);
+
+			g_free(name);
+			g_free(locale_dir);
+		}
 	}
 	else
 	if (gtk_file_chooser_get_action(GTK_FILE_CHOOSER(dialog)) != GTK_FILE_CHOOSER_ACTION_OPEN)
@@ -849,10 +882,27 @@ static gboolean write_config()
 }
 
 
-const gchar *project_get_make_dir()
+/* Constructs the project's base path which is used for "Make all" and "Execute".
+ * The result is an absolute string in UTF-8 encoding which is either the same as
+ * base path if it is absolute or it is built out of project file name's dir and base_path.
+ * If there is no project or project's base_path is invalid, NULL will be returned.
+ * The returned string should be freed when no longer needed. */
+gchar *project_get_make_dir()
 {
 	if (app->project != NULL && NZV(app->project->base_path))
-		return app->project->base_path;
+	{
+		if (g_path_is_absolute(app->project->base_path))
+			return g_strdup(app->project->base_path);
+		else
+		{	// build base_path out of project file name's dir and base_path
+			gchar *path;
+			gchar *dir = g_path_get_dirname(app->project->file_name);
+
+			path = g_strconcat(dir, G_DIR_SEPARATOR_S, app->project->base_path, NULL);
+			g_free(dir);
+			return path;
+		}
+	}
 	else
 		return NULL;
 }
@@ -911,8 +961,7 @@ void project_apply_prefs()
 	const gchar *str;
 
 	str = gtk_entry_get_text(GTK_ENTRY(path_entry));
-	g_free(local_prefs.project_file_path);
-	local_prefs.project_file_path = g_strdup(str);
+	setptr(local_prefs.project_file_path, g_strdup(str));
 }
 
 
