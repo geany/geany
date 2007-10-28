@@ -5,6 +5,15 @@
    Improve and synchronize base path tooltips in project new and
    properties dialogs.
    Fix minor GUI annoyances in project dialogs.
+ * plugins/export.c, plugins/filebrowser.c, plugins/pluginmacros.h,
+   plugins/svndiff.c:
+   Add macro project for app->project.
+   Rename macro tm to tagm to avoid conflicts with tm struct of time.h.
+   Fix a warning about shadowing a global symbol.
+   Use plugin macros in Export and SVNDiff plugins.
+ * src/treeviews.c, src/treeviews.h:
+   Replace "Hide" popup menu items of the symbol and document list with
+   "Show Document List" and "Show Symbol List" check menu items.
 
 
 2007-10-26  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
