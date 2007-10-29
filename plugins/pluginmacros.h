@@ -40,7 +40,7 @@
 #define scintilla	geany_data->sci
 #define support		geany_data->support
 #define templates	geany_data->templates
-#define tagm		geany_data->tm			// avoids conflict with "struct tm *t"
+#define tagmanager	geany_data->tm			// avoids conflict with "struct tm *t"
 #define ui			geany_data->ui
 #define utils		geany_data->utils
 
