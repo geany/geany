@@ -153,9 +153,6 @@ static void refresh()
 
 	clear();
 
-	// TODO: really, we don't want to dereference symlinks
-	setptr(current_dir, tagm->get_real_path(current_dir));
-
 	utf8_dir = utils->get_utf8_from_locale(current_dir);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), utf8_dir);
 	g_free(utf8_dir);
@@ -170,21 +167,29 @@ static void refresh()
 }
 
 
+static void on_go_home()
+{
+	setptr(current_dir, g_strdup(g_get_home_dir()));
+	refresh();
+}
+
+
 static void on_current_path()
 {
 	gchar *fname;
 	gchar *dir;
 	gint idx = documents->get_cur_idx();
 
-	if (DOC_IDX_VALID(idx))
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL ||
+		! g_path_is_absolute(doc_list[idx].file_name))
 	{
-		fname = DOC_FILENAME(idx);
-		fname = utils->get_locale_from_utf8(fname);
-		dir = g_path_get_dirname(fname);
-		g_free(fname);
+		on_go_home();
+		return;
 	}
-	else
-		dir = g_strdup(".");
+	fname = doc_list[idx].file_name;
+	fname = utils->get_locale_from_utf8(fname);
+	dir = g_path_get_dirname(fname);
+	g_free(fname);
 
 	setptr(current_dir, dir);
 	refresh();
@@ -331,16 +336,10 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 }
 
 
-static void on_go_home()
-{
-	setptr(current_dir, g_strdup(g_get_home_dir()));
-	refresh();
-}
-
-
 static void on_go_up()
 {
-	setptr(current_dir, g_build_path(G_DIR_SEPARATOR_S, current_dir, "..", NULL));
+	// remove the highest directory part (which becomes the basename of current_dir)
+	setptr(current_dir, g_path_get_dirname(current_dir));
 	refresh();
 }
 

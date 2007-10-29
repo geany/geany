@@ -15,6 +15,9 @@
    Disable project menu item when no project is open.
  * src/document.c:
    Make Fold All/Unfold All attempt to scroll the current line in view.
+ * plugins/filebrowser.c:
+   Don't dereference symlinks.
+   Make sure current_dir always has a full path.
 
 
 2007-10-28  Enrico Tröger  <enrico.troeger@uvena.de>
