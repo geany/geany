@@ -42,21 +42,93 @@ VERSION_CHECK(25)
 PLUGIN_INFO(_("SVNdiff"), _("Plugin to create a patch of a file against svn"), VERSION)
 
 
+/* name_prefix should be in UTF-8, and can have a path. */
+static void show_output(const gchar *std_output, const gchar *name_prefix,
+		const gchar *force_encoding)
+{
+	gchar *text, *detect_enc = NULL;
+	gint new_idx;
+	gchar *filename;
+	
+	filename = g_path_get_basename(name_prefix);
+	setptr(filename, g_strconcat(filename, ".svn.diff", NULL));
+
+	// need to convert input text from the encoding of the original file into
+	// UTF-8 because internally Geany always needs UTF-8
+	if (force_encoding)
+	{
+		text = geany_data->encoding->convert_to_utf8_from_charset(
+			std_output, -1, force_encoding, TRUE);
+	}
+	else
+	{
+		text = geany_data->encoding->convert_to_utf8(std_output, -1, &detect_enc);
+	}
+	if (text)
+	{
+		new_idx = geany_data->document->new_file(filename,
+			geany_data->filetypes[GEANY_FILETYPES_DIFF], text);
+
+		geany_data->document->set_encoding(new_idx,
+			force_encoding ? force_encoding : detect_enc);
+	}
+	else
+	{
+		ui->set_statusbar(FALSE, _("Could not parse the output of svn diff"));
+	}
+	g_free(text);
+	g_free(detect_enc);
+	g_free(filename);
+}
+
+
+static gchar *make_diff(const gchar *svn_file)
+{
+	gchar	*std_output = NULL;
+	gchar	*std_error = NULL;
+	gint	exit_code;
+	gchar	*command, *text = NULL;
+
+	// use '' quotation for Windows compatibility
+	command = g_strdup_printf("svn diff --non-interactive '%s'", svn_file);
+
+	if (g_spawn_command_line_sync(command, &std_output, &std_error, &exit_code, NULL))
+	{
+		if (! exit_code)
+		{
+			if (NZV(std_output))
+			{
+				text = std_output;
+			}
+			else
+			{
+				ui->set_statusbar(FALSE, _("No changes were made."));
+			}
+		}
+		else
+		{	// SVN returns some error
+			ui->set_statusbar(FALSE,
+				_("SVN exited with an error: %s."), g_strstrip(std_error));
+		}
+	}
+	else
+	{
+		ui->set_statusbar(FALSE,
+			_("Something went really wrong. Is there any svn-binary in your path?"));
+	}
+	g_free(std_error);
+	g_free(command);
+	return text;
+}
+
+	
 /* Callback if menu item for the current project or directory was activated */
 static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
-	guint	idx, new_idx;
+	guint	idx;
 	gchar	*base_name = NULL;
-	gchar 	*command = NULL;
-	gchar	*project_name = NULL;
-	gchar	*std_output = NULL;
-	gchar	*std_err = NULL;
-	gint	exit_code;
-	GError	*error = NULL;
-	gchar	*filename = NULL;
 	gchar	*locale_filename = NULL;
-	gchar	*text = NULL;
-	gchar	*dir_enc = NULL;
+	const gchar *project_name = NULL;
 
 	idx = documents->get_cur_idx();
 
@@ -66,7 +138,7 @@ static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 		{
 			documents->save_file(idx, FALSE);
 		}
-		base_name = project->base_path;
+		base_name = g_strdup(project->base_path);
 		project_name = project->name;
 	}
 	else if (doc_list[idx].file_name != NULL)
@@ -89,69 +161,35 @@ static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 
 	if (base_name != NULL)
 	{
-		command = g_strconcat("svn diff ", base_name, NULL);
-
+		const gchar *filename;
+		gchar *text;
+	
 		if (project_name != NULL)
 		{
-			filename = g_strconcat(project_name,".diff", NULL);
+			filename = project_name;
 		}
 		else
 		{
-			filename = g_strdup("dir.diff");
+			filename = base_name;
 		}
-
-		if (g_spawn_command_line_sync(command, &std_output, &std_err, &exit_code, &error))
- 		{
- 			if (! exit_code)
- 			{
- 				if (std_output == NULL || std_output[0] != '\0')
- 				{
-					if (filename != NULL)
-					// Be carefull with mixed up encodings
-					{
-						text = encodings->convert_to_utf8(std_output, -1, &dir_enc);
-						new_idx = documents->new_file(filename, NULL, std_output);
-						documents->set_encoding(new_idx, dir_enc);
-						g_free(text);
-						g_free(dir_enc);
-						g_free(filename);
-					}
-
- 				}
- 				else
- 				{
-					ui->set_statusbar(FALSE, _("No changes were made."));
- 				}
- 			}
- 			else
- 			{	// SVN returns some error
-				ui->set_statusbar(FALSE,
- 				_("Something went really wrong. Is there any svn-binary in your path?"));
- 			}
- 		}
+		text = make_diff(base_name);
+		if (text)
+			show_output(text, filename, NULL);
+		g_free(text);
 	}
 	else
 	{
 		ui->set_statusbar(FALSE, _("Could not determine a path to work in"));
 	}
+	g_free(locale_filename);
+	g_free(base_name);
 }
 
 
-/* Callback if menu item for a single file was acitvated */
+/* Callback if menu item for a single file was activated */
 static void svnfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
-	gchar 	*command;
 	gint 	idx;
-	gchar	*diff_file_name = NULL;
-	gchar	*std_output = NULL;
-	gchar	*std_err = NULL;
-	gint	exit_code;
-	GError	*error = NULL;
-	gint 	new_idx;
-	gchar	*text = NULL;
-	gchar	*base_name = NULL;
-	gchar 	*short_name = NULL;
-	gchar 	*locale_filename = NULL;
 
 	idx = documents->get_cur_idx();
 
@@ -164,76 +202,23 @@ static void svnfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 		documents->save_file(idx, FALSE);
 	}
 
-    // Stolen from export.c. Thanks for it, Enrico ;)
     if (doc_list[idx].file_name != NULL)
 	{
-		base_name = g_path_get_basename(doc_list[idx].file_name);
-		short_name = utils->remove_ext_from_filename(base_name);
+		gchar *locale_filename, *text;
+
 		locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
 
-
-		// use '' quotation for Windows compatibility
-		command = g_strdup_printf("svn diff --non-interactive '%s'", locale_filename);
-
-		diff_file_name = g_strconcat(short_name, ".svn.diff", NULL);
-
-		g_free(base_name);
-		g_free(short_name);
+		text = make_diff(locale_filename);
+		if (text)
+			show_output(text, doc_list[idx].file_name, doc_list[idx].encoding);
+		g_free(text);
 		g_free(locale_filename);
-
-
-		if (g_spawn_command_line_sync(command, &std_output, &std_err, &exit_code, &error))
-		{
-			if (! exit_code)
-			{
-				if (std_output == NULL || std_output[0] != '\0')
-				{
-
-					// need to convert input text from the encoding of the original file into
-					// UTF-8 because internally Geany always needs UTF-8
-					text = encodings->convert_to_utf8_from_charset(
-						std_output, -1, doc_list[idx].encoding, TRUE);
-
-					if (text == NULL)
-					{
-						ui->set_statusbar(FALSE, _("Could not parse the output of svn diff"));
-					}
-					else
-					{
-						new_idx = documents->new_file(diff_file_name,
-							geany_data->filetypes[GEANY_FILETYPES_DIFF], text);
-						documents->set_encoding(new_idx, doc_list[idx].encoding);
-						g_free(text);
-					}
-				}
-				else
-				{
-					ui->set_statusbar(FALSE, _("Current file has no changes."));
-				}
-			}
-			else // SVN returns some error
-			{
-				/// TODO print std_err or print detailed error messages based on exit_code
-				ui->set_statusbar(FALSE,
-					_("SVN exited with an error. Error code was: %d."), exit_code);
-			}
-		}
-		else
-		{
-			ui->set_statusbar(FALSE,
-				_("Something went really wrong. Is there any svn-binary in your path?"));
-		}
-		g_free(command);
-		g_free(diff_file_name);
 	}
 	else
 	{
 		ui->set_statusbar(FALSE,
 			_("File is unnamed. Can't go on with processing."));
 	}
-	g_free(std_output);
-	g_free(std_err);
-	g_free(error);
 }
 
 

@@ -1,3 +1,15 @@
+2007-10-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/svndiff.c:
+   Factor out common make_diff() and show_output() functions for both
+   file and directory diffs.
+   Show any SVN error message on the status bar.
+   Use directory name as prefix for output filename when doing a
+   directory diff.
+   Don't remove filename extension for file diffs.
+   Fix some memory leaks.
+
+
 2007-10-28  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * doc/geany.txt, src/build.c, src/project.c, src/project.h:
