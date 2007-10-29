@@ -1908,40 +1908,37 @@ gchar *document_get_eol_mode(gint idx)
 }
 
 
-void document_unfold_all(gint idx)
+static void fold_all(gint idx, gboolean want_fold)
 {
-	gint lines, pos, i;
+	gint lines, first, i;
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (! DOC_IDX_VALID(idx)) return;
 
 	lines = sci_get_line_count(doc_list[idx].sci);
-	pos = sci_get_current_position(doc_list[idx].sci);
-
-	for (i = 0; i < lines; i++)
-	{
-		sci_ensure_line_is_visible(doc_list[idx].sci, i);
-	}
-}
-
-
-void document_fold_all(gint idx)
-{
-	gint lines, pos, i;
-
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-
-	lines = sci_get_line_count(doc_list[idx].sci);
-	pos = sci_get_current_position(doc_list[idx].sci);
+	first = sci_get_first_visible_line(doc_list[idx].sci);
 
 	for (i = 0; i < lines; i++)
 	{
 		gint level = sci_get_fold_level(doc_list[idx].sci, i);
 		if (level & SC_FOLDLEVELHEADERFLAG)
 		{
-			if (sci_get_fold_expanded(doc_list[idx].sci, i))
+			if (sci_get_fold_expanded(doc_list[idx].sci, i) == want_fold)
 					sci_toggle_fold(doc_list[idx].sci, i);
 		}
 	}
+	editor_scroll_to_line(doc_list[idx].sci, first, 0.0F);
+}
+
+
+void document_unfold_all(gint idx)
+{
+	fold_all(idx, FALSE);
+}
+
+
+void document_fold_all(gint idx)
+{
+	fold_all(idx, TRUE);
 }
 
 
