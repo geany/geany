@@ -122,103 +122,102 @@ static gchar *make_diff(const gchar *svn_file)
 }
 
 	
-/* Callback if menu item for the current project or directory was activated */
+/* Make a diff from the current directory */
 static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
-	guint	idx;
+	gint	idx;
 	gchar	*base_name = NULL;
 	gchar	*locale_filename = NULL;
-	const gchar *project_name = NULL;
+	gchar *text;
 
 	idx = documents->get_cur_idx();
 
-	if (project != NULL && NZV(project->base_path))
+	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
+
+	if (doc_list[idx].changed)
 	{
-		if (doc_list[idx].file_name != NULL)
-		{
-			documents->save_file(idx, FALSE);
-		}
-		base_name = g_strdup(project->base_path);
-		project_name = project->name;
-	}
-	else if (doc_list[idx].file_name != NULL)
-	{
-		if (doc_list[idx].changed)
-		{
-			documents->save_file(idx, FALSE);
-		}
-		locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
-		base_name = g_path_get_dirname(locale_filename);
-	}
-	else if (doc_list[idx].file_name == NULL)
-	{
-		if ( dialogs->show_save_as() )
-		{
-			locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
-			base_name = g_path_get_dirname(locale_filename);
-		}
+		documents->save_file(idx, FALSE);
 	}
 
-	if (base_name != NULL)
-	{
-		const gchar *filename;
-		gchar *text;
-	
-		if (project_name != NULL)
-		{
-			filename = project_name;
-		}
-		else
-		{
-			filename = base_name;
-		}
-		text = make_diff(base_name);
-		if (text)
-			show_output(text, filename, NULL);
-		g_free(text);
-	}
-	else
-	{
-		ui->set_statusbar(FALSE, _("Could not determine a path to work in"));
-	}
-	g_free(locale_filename);
+	locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
+	base_name = g_path_get_dirname(locale_filename);
+
+	text = make_diff(base_name);
+	if (text)
+		show_output(text, base_name, NULL);
+	g_free(text);
+
 	g_free(base_name);
+	g_free(locale_filename);
+}
+
+	
+/* Callback if menu item for the current project was activated */
+static void svnproject_activated(GtkMenuItem *menuitem, gpointer gdata)
+{
+	gint	idx;
+	gchar	*locale_filename = NULL;
+	gchar	*text;
+
+	idx = documents->get_cur_idx();
+
+	g_return_if_fail(project != NULL && NZV(project->base_path));
+
+	if (DOC_IDX_VALID(idx) && doc_list[idx].changed && doc_list[idx].file_name != NULL)
+	{
+		documents->save_file(idx, FALSE);
+	}
+
+	locale_filename = utils->get_locale_from_utf8(project->base_path);
+	text = make_diff(locale_filename);
+	if (text)
+		show_output(text, project->name, NULL);
+	g_free(text);
+	g_free(locale_filename);
 }
 
 
 /* Callback if menu item for a single file was activated */
 static void svnfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
-	gint 	idx;
+	gint idx;
+	gchar *locale_filename, *text;
 
 	idx = documents->get_cur_idx();
 
-	if (doc_list[idx].file_name == NULL)
-	{
-		dialogs->show_save_as();
-	}
-	else if (doc_list[idx].changed)
+	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
+
+	if (doc_list[idx].changed)
 	{
 		documents->save_file(idx, FALSE);
 	}
 
-    if (doc_list[idx].file_name != NULL)
-	{
-		gchar *locale_filename, *text;
+	locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
 
-		locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
+	text = make_diff(locale_filename);
+	if (text)
+		show_output(text, doc_list[idx].file_name, doc_list[idx].encoding);
+	g_free(text);
+	g_free(locale_filename);
+}
 
-		text = make_diff(locale_filename);
-		if (text)
-			show_output(text, doc_list[idx].file_name, doc_list[idx].encoding);
-		g_free(text);
-		g_free(locale_filename);
-	}
-	else
-	{
-		ui->set_statusbar(FALSE,
-			_("File is unnamed. Can't go on with processing."));
-	}
+
+static GtkWidget *menu_svndiff_file = NULL;
+static GtkWidget *menu_svndiff_dir = NULL;
+static GtkWidget *menu_svndiff_project = NULL;
+
+static void update_menu_items()
+{
+	document *doc;
+	gboolean have_file;
+
+	doc = documents->get_current();
+	have_file = doc && doc->file_name && g_path_is_absolute(doc->file_name);
+
+	gtk_widget_set_sensitive(menu_svndiff_file, have_file);
+	gtk_widget_set_sensitive(menu_svndiff_dir, have_file);
+	gtk_widget_set_sensitive(menu_svndiff_project,
+		project != NULL && NZV(project->base_path));
 }
 
 
@@ -227,35 +226,20 @@ void init(GeanyData *data)
 {
 	GtkWidget *menu_svndiff = NULL;
 	GtkWidget *menu_svndiff_menu = NULL;
-	GtkWidget *menu_svndiff_dir = NULL;
-	GtkWidget *menu_svndiff_file = NULL;
  	GtkTooltips *tooltips = NULL;
 
 	tooltips = gtk_tooltips_new();
-	//// Add an item to the Tools menu
-	//svndiff_item = gtk_menu_item_new_with_mnemonic(_("_SVNdiff"));
-	//gtk_widget_show(svndiff_item);
-	//gtk_container_add(GTK_CONTAINER(geany_data->tools_menu), svndiff_item);
-	//g_signal_connect(G_OBJECT(svndiff_item), "activate", G_CALLBACK(svnfile_activated), NULL);
-
 
 	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
 
 	menu_svndiff = gtk_image_menu_item_new_with_mnemonic(_("_SVNdiff"));
 	gtk_container_add(GTK_CONTAINER(data->tools_menu), menu_svndiff);
 
+	g_signal_connect((gpointer) menu_svndiff, "activate",
+		G_CALLBACK(update_menu_items), NULL);
+
 	menu_svndiff_menu = gtk_menu_new ();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_svndiff), menu_svndiff_menu);
-
-	// Directory
-	menu_svndiff_dir = gtk_menu_item_new_with_mnemonic(_("From Current _Project"));
-	gtk_container_add(GTK_CONTAINER (menu_svndiff_menu), menu_svndiff_dir);
-	gtk_tooltips_set_tip (tooltips, menu_svndiff_dir,
-		_("Make a diff from the current project's base path, or if there is no "
-		"project open, from the directory of the current active file"), NULL);
-
-	g_signal_connect((gpointer) menu_svndiff_dir, "activate",
-		G_CALLBACK(svndirectory_activated), NULL);
 
 	// Single file
 	menu_svndiff_file = gtk_menu_item_new_with_mnemonic(_("From Current _File"));
@@ -265,6 +249,24 @@ void init(GeanyData *data)
 
 	g_signal_connect((gpointer) menu_svndiff_file, "activate",
 		G_CALLBACK(svnfile_activated), NULL);
+
+	// Directory
+	menu_svndiff_dir = gtk_menu_item_new_with_mnemonic(_("From Current _Directory"));
+	gtk_container_add(GTK_CONTAINER (menu_svndiff_menu), menu_svndiff_dir);
+	gtk_tooltips_set_tip (tooltips, menu_svndiff_dir,
+		_("Make a diff from the directory of the current active file"), NULL);
+
+	g_signal_connect((gpointer) menu_svndiff_dir, "activate",
+		G_CALLBACK(svndirectory_activated), NULL);
+
+	// Project
+	menu_svndiff_project = gtk_menu_item_new_with_mnemonic(_("From Current _Project"));
+	gtk_container_add(GTK_CONTAINER (menu_svndiff_menu), menu_svndiff_project);
+	gtk_tooltips_set_tip (tooltips, menu_svndiff_project,
+		_("Make a diff from the current project's base path"), NULL);
+
+	g_signal_connect((gpointer) menu_svndiff_project, "activate",
+		G_CALLBACK(svnproject_activated), NULL);
 
 	gtk_widget_show_all(menu_svndiff);
 

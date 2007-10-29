@@ -8,6 +8,11 @@
    directory diff.
    Don't remove filename extension for file diffs.
    Fix some memory leaks.
+ * plugins/svndiff.c:
+   Add a separate menu item for diff from the current directory.
+   Disable file and directory diff menu items if the current document
+   has no filename.
+   Disable project menu item when no project is open.
 
 
 2007-10-28  Enrico Tröger  <enrico.troeger@uvena.de>
