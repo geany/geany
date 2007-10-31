@@ -916,7 +916,7 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 
 		if (! strncmp(entities[i], root, rootlen))
 		{
-			if (j++ > 0) g_string_append_c(words, ' ');
+			if (j++ > 0) g_string_append_c(words, '\n');
 			g_string_append(words, entities[i]);
 		}
 	}
@@ -945,7 +945,7 @@ autocomplete_tags(gint idx, gchar *root, gsize rootlen)
 
 		for (j = 0; ((j < tags->len) && (j < GEANY_MAX_AUTOCOMPLETE_WORDS)); ++j)
 		{
-			if (j > 0) g_string_append_c(words, ' ');
+			if (j > 0) g_string_append_c(words, '\n');
 			g_string_append(words, ((TMTag *) tags->pdata[j])->name);
 		}
 		show_autocomplete(sci, rootlen, words->str);

@@ -2,6 +2,9 @@
 
  * src/filetypes.c, data/filetype_extensions.conf:
    Set reStructuredText default file extension .rst.
+ * src/document.c, src/editor.c:
+   Use newline as autocompletion list separator, so that reST entries
+   show correctly.
 
 
 2007-10-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
