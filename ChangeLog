@@ -5,6 +5,13 @@
  * src/document.c, src/editor.c:
    Use newline as autocompletion list separator, so that reST entries
    show correctly.
+ * src/document.c:
+   Ensure empty symbol list is shown when tags cannot be parsed (fixes
+   wrong symbol list shown when creating a new document with an unsaved
+   filename set).
+ * src/filetypes.c:
+   Only translate '%s source file' instead of whole title for filetypes
+   (easier for new translations).
 
 
 2007-10-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
