@@ -499,8 +499,9 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_REST]->lang = 28;
 	filetypes[GEANY_FILETYPES_REST]->name = g_strdup("reStructuredText");
 	filetypes[GEANY_FILETYPES_REST]->title = g_strdup(_("reStructuredText file"));
-	filetypes[GEANY_FILETYPES_REST]->extension = g_strdup("rest");
-	filetypes[GEANY_FILETYPES_REST]->pattern = utils_strv_new("*.rest", "*.reST", NULL);
+	filetypes[GEANY_FILETYPES_REST]->extension = g_strdup("rst");
+	filetypes[GEANY_FILETYPES_REST]->pattern = utils_strv_new(
+		"*.rest", "*.reST", "*.rst", NULL);
 	filetypes[GEANY_FILETYPES_REST]->style_func_ptr = styleset_none;
 	filetypes[GEANY_FILETYPES_REST]->comment_open = NULL;
 	filetypes[GEANY_FILETYPES_REST]->comment_close = NULL;
