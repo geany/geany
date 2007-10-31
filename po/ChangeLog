@@ -1,6 +1,12 @@
+2007-10-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Update of German translation and fix of a few typos.
+
+
 2007-10-24  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * sv.po: Update of Swedish translation (Thanks to Tony Mattsson)
+ * ChangeLog: Added brief release info to ChangeLog
 
 
 2007-10-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
