@@ -1,3 +1,8 @@
+2007-10-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * plugins/svndiff.c: Make svn error messages better readable.
+
+
 2007-10-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/svndiff.c:

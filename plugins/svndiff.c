@@ -46,10 +46,10 @@ PLUGIN_INFO(_("SVNdiff"), _("Plugin to create a patch of a file against svn"), V
 static void show_output(const gchar *std_output, const gchar *name_prefix,
 		const gchar *force_encoding)
 {
-	gchar *text, *detect_enc = NULL;
-	gint new_idx;
-	gchar *filename;
-	
+	gchar	*text, *detect_enc = NULL;
+	gint 	new_idx;
+	gchar	*filename;
+
 	filename = g_path_get_basename(name_prefix);
 	setptr(filename, g_strconcat(filename, ".svn.diff", NULL));
 
@@ -107,8 +107,8 @@ static gchar *make_diff(const gchar *svn_file)
 		}
 		else
 		{	// SVN returns some error
-			ui->set_statusbar(FALSE,
-				_("SVN exited with an error: %s."), g_strstrip(std_error));
+			dialogs->show_msgbox(1,
+				_("SVN exited with an error: \n%s."), g_strstrip(std_error));
 		}
 	}
 	else
@@ -121,14 +121,14 @@ static gchar *make_diff(const gchar *svn_file)
 	return text;
 }
 
-	
+
 /* Make a diff from the current directory */
 static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
 	gint	idx;
 	gchar	*base_name = NULL;
 	gchar	*locale_filename = NULL;
-	gchar *text;
+	gchar	*text;
 
 	idx = documents->get_cur_idx();
 
@@ -151,7 +151,7 @@ static void svndirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 	g_free(locale_filename);
 }
 
-	
+
 /* Callback if menu item for the current project was activated */
 static void svnproject_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
@@ -180,8 +180,8 @@ static void svnproject_activated(GtkMenuItem *menuitem, gpointer gdata)
 /* Callback if menu item for a single file was activated */
 static void svnfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 {
-	gint idx;
-	gchar *locale_filename, *text;
+	gint	idx;
+	gchar	*locale_filename, *text;
 
 	idx = documents->get_cur_idx();
 
@@ -208,8 +208,8 @@ static GtkWidget *menu_svndiff_project = NULL;
 
 static void update_menu_items()
 {
-	document *doc;
-	gboolean have_file;
+	document	*doc;
+	gboolean	have_file;
 
 	doc = documents->get_current();
 	have_file = doc && doc->file_name && g_path_is_absolute(doc->file_name);
@@ -224,9 +224,9 @@ static void update_menu_items()
 /* Called by Geany to initialize the plugin */
 void init(GeanyData *data)
 {
-	GtkWidget *menu_svndiff = NULL;
-	GtkWidget *menu_svndiff_menu = NULL;
- 	GtkTooltips *tooltips = NULL;
+	GtkWidget	*menu_svndiff = NULL;
+	GtkWidget	*menu_svndiff_menu = NULL;
+ 	GtkTooltips	*tooltips = NULL;
 
 	tooltips = gtk_tooltips_new();
 
