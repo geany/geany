@@ -34,6 +34,7 @@ TODO List:
 	  target...)
 	o (tango-like icons for the symbol list)
 	o (GTK+ 2.10 printing support)
+	o (show autocompletion symbol icons - see SCI_REGISTERIMAGE)
 
 
 Wishlist
