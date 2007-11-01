@@ -4,6 +4,9 @@
    Prevent prefs dialog being hidden after using the prefs file dialog.
  * src/build.c, src/prefs.c:
    Enable build support on Windows.
+ * src/document.c:
+   Ensure document_update_tag_list() always shows the empty symbol list
+   when tags cannot be parsed.
 
 
 2007-11-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

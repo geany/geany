@@ -1724,13 +1724,14 @@ void document_set_font(gint idx, const gchar *font_name, gint size)
 
 void document_update_tag_list(gint idx, gboolean update)
 {
+	/* We must call treeviews_update_tag_list() before returning,
+	 * to ensure that the symbol list is always updated properly (e.g.
+	 * when creating a new document with a partial filename set. */
 	gboolean success = FALSE;
-
-	if (app->tm_workspace == NULL)
-		return;
 
 	// if the filetype doesn't have a tag parser or it is a new file
 	if (idx == -1 || doc_list[idx].file_type == NULL ||
+		app->tm_workspace == NULL ||
 		! filetype_has_tags(doc_list[idx].file_type) || ! doc_list[idx].file_name)
 	{
 		// set the default (empty) tag list
@@ -1740,38 +1741,32 @@ void document_update_tag_list(gint idx, gboolean update)
 
 	if (doc_list[idx].tm_file == NULL)
 	{
-#ifdef GEANY_OS_WIN32
-		doc_list[idx].tm_file = tm_source_file_new(
-				doc_list[idx].file_name, FALSE, doc_list[idx].file_type->name);
-#else
 		gchar *locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+
 		doc_list[idx].tm_file = tm_source_file_new(
 				locale_filename, FALSE, doc_list[idx].file_type->name);
 		g_free(locale_filename);
-#endif
+
 		if (doc_list[idx].tm_file)
 		{
 			if (!tm_workspace_add_object(doc_list[idx].tm_file))
 			{
 				tm_work_object_free(doc_list[idx].tm_file);
 				doc_list[idx].tm_file = NULL;
-				return;
 			}
-			if (update)
-				tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
-			success = TRUE;
+			else
+			{
+				if (update)
+					tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
+				success = TRUE;
+			}
 		}
 	}
 	else
 	{
-		if (tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE))
-		{
-			success = TRUE;
-		}
-		else
-		{
+		success = tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
+		if (! success)
 			geany_debug("tag list updating failed");
-		}
 	}
 	treeviews_update_tag_list(idx, success);
 }
