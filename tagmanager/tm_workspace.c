@@ -20,15 +20,6 @@
 # include <glob.h>
 #endif
 #include <glib/gstdio.h>
-// handling of P_tmpdir, should be something like /tmp, take the root directory under Win32,
-// and assume /tmp on non-Win32 systems where P_tmpdir is not set
-#ifndef P_tmpdir
-# ifdef G_OS_WIN32
-#  define P_tmpdir "\\"
-# else
-#  define P_tmpdir "/tmp"
-# endif
-#endif
 
 #include "tm_tag.h"
 #include "tm_workspace.h"
@@ -38,13 +29,11 @@
 static TMWorkspace *theWorkspace = NULL;
 guint workspace_class_id = 0;
 
-static gboolean tm_create_workspace(void)
+static gboolean tm_create_workspace(const gchar *config_dir)
 {
-#ifdef G_OS_WIN32
-	char *file_name = g_strdup_printf("%s_%s_%ld.%d", P_tmpdir, PACKAGE, time(NULL), getpid());
-#else
-	char *file_name = g_strdup_printf("%s/%s_%ld.%d", P_tmpdir, PACKAGE, time(NULL), getpid());
-#endif
+	/// TODO check whether the created file is really necessary at all
+	gchar *file_name = g_strdup_printf("%s%ctagmanager_%ld.%d",
+		config_dir, G_DIR_SEPARATOR, time(NULL), getpid());
 
 	workspace_class_id = tm_work_object_register(tm_workspace_free, tm_workspace_update
 		  , tm_workspace_find_object);
@@ -97,17 +86,20 @@ void tm_workspace_free(gpointer workspace)
 	}
 }
 
-const TMWorkspace *tm_get_workspace(void)
+const TMWorkspace *tm_get_workspace(const gchar *config_dir)
 {
+	if (NULL == config_dir)
+		return NULL;
 	if (NULL == theWorkspace)
-		tm_create_workspace();
+		tm_create_workspace(config_dir);
 	return theWorkspace;
 }
 
 gboolean tm_workspace_add_object(TMWorkObject *work_object)
 {
+	// theWorkspace should already have been created otherwise something went wrong
 	if (NULL == theWorkspace)
-		tm_create_workspace();
+		return FALSE;
 	if (NULL == theWorkspace->work_objects)
 		theWorkspace->work_objects = g_ptr_array_new();
 	g_ptr_array_add(theWorkspace->work_objects, work_object);
@@ -149,7 +141,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 	if (NULL == (fp = g_fopen(tags_file, "r")))
 		return FALSE;
 	if (NULL == theWorkspace)
-		tm_create_workspace();
+		return FALSE;
 	if (NULL == theWorkspace->global_tags)
 		theWorkspace->global_tags = g_ptr_array_new();
 	while (NULL != (tag = tm_tag_new_from_file(NULL, fp, mode)))
@@ -248,8 +240,8 @@ static gint get_global_tag_type_mask(gint lang)
 	}
 }
 
-gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes
-  , int includes_count, const char *tags_file, int lang)
+gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre_process,
+	const char **includes, int includes_count, const char *tags_file, int lang)
 {
 #ifdef HAVE_GLOB_H
 	glob_t globbuf;
@@ -264,14 +256,14 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	GHashTable *includes_files_hash;
 	GList *includes_files = NULL;
 #ifdef G_OS_WIN32
-	char *temp_file = g_strdup_printf("%s_%d_%ld_1.cpp", P_tmpdir, getpid(), time(NULL));
-	char *temp_file2 = g_strdup_printf("%s_%d_%ld_2.cpp", P_tmpdir, getpid(), time(NULL));
+	char *temp_file = g_strdup_printf("%s\\_%d_%ld_1.cpp", config_dir, getpid(), time(NULL));
+	char *temp_file2 = g_strdup_printf("%s\\_%d_%ld_2.cpp", config_dir, getpid(), time(NULL));
 #else
-	char *temp_file = g_strdup_printf("%s/%d_%ld_1.cpp", P_tmpdir, getpid(), time(NULL));
-	char *temp_file2 = g_strdup_printf("%s/%d_%ld_2.cpp", P_tmpdir, getpid(), time(NULL));
+	char *temp_file = g_strdup_printf("%s/%d_%ld_1.cpp", config_dir, getpid(), time(NULL));
+	char *temp_file2 = g_strdup_printf("%s/%d_%ld_2.cpp", config_dir, getpid(), time(NULL));
 #endif
 
-	if (NULL == (fp = g_fopen(temp_file, "w")))
+	if (NULL == theWorkspace || NULL == (fp = g_fopen(temp_file, "w")))
 		return FALSE;
 
 	includes_files_hash = g_hash_table_new_full (tm_file_inode_hash,

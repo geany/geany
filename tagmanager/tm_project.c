@@ -98,7 +98,12 @@ gboolean tm_project_init(TMProject *project, const char *dir
 		g_free(project->dir);
 		return FALSE;
 	}
-	tm_workspace_add_object(TM_WORK_OBJECT(project));
+	if (! tm_workspace_add_object(TM_WORK_OBJECT(project)))
+	{
+		g_warning("Unable to init project file %s", path);
+		g_free(project->dir);
+		return FALSE;
+	}
 	tm_project_open(project, force);
 	if (!project->file_list || (0 == project->file_list->len))
 		tm_project_autoscan(project);
@@ -152,7 +157,8 @@ gboolean tm_project_add_file(TMProject *project, const char *file_name
   ,gboolean update)
 {
 	TMWorkObject *source_file;
-	const TMWorkObject *workspace = TM_WORK_OBJECT(tm_get_workspace());
+	/// TODO if this will be ever used, pass app->config_dir instead of NULL
+	const TMWorkObject *workspace = TM_WORK_OBJECT(tm_get_workspace(NULL));
 	char *path;
 	gboolean exists = FALSE;
 

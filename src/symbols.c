@@ -92,7 +92,8 @@ void symbols_global_tags_loaded(gint file_type_idx)
 	TagFileInfo *tfi;
 	gint tag_type;
 
-	if (cl_options.ignore_global_tags) return;
+	if (cl_options.ignore_global_tags || app->tm_workspace == NULL)
+		return;
 
 	load_user_tags(file_type_idx);
 
@@ -273,7 +274,7 @@ static TMTag *find_workspace_tag(const gchar *tag_name, gint type)
 	const GPtrArray *tags;
 	TMTag *tmtag;
 
-	if (app->tm_workspace->work_objects != NULL)
+	if (app->tm_workspace != NULL && app->tm_workspace->work_objects != NULL)
 	{
 		for (j = 0; j < app->tm_workspace->work_objects->len; j++)
 		{
@@ -897,7 +898,7 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 			command = NULL;	// don't preprocess
 
 		geany_debug("Generating %s tags file.", ft->name);
-		status = tm_workspace_create_global_tags(command,
+		status = tm_workspace_create_global_tags(app->configdir, command,
 												 (const char **) (argv + 2),
 												 argc - 2, tags_file, ft->lang);
 		g_free(command);

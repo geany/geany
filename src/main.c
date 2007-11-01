@@ -277,7 +277,7 @@ static void main_init(void)
 	prefs.tab_order_ltr		= FALSE;
 	main_status.quitting			= FALSE;
 	app->ignore_callback	= FALSE;
-	app->tm_workspace				= tm_get_workspace();
+	app->tm_workspace				= tm_get_workspace(app->configdir);
 	ui_prefs.recent_queue				= g_queue_new();
 	main_status.opening_session_files		= FALSE;
 

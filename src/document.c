@@ -1725,7 +1725,10 @@ void document_set_font(gint idx, const gchar *font_name, gint size)
 void document_update_tag_list(gint idx, gboolean update)
 {
 	gboolean success = FALSE;
-	
+
+	if (app->tm_workspace == NULL)
+		return;
+
 	// if the filetype doesn't have a tag parser or it is a new file
 	if (idx == -1 || doc_list[idx].file_type == NULL ||
 		! filetype_has_tags(doc_list[idx].file_type) || ! doc_list[idx].file_name)
@@ -1748,7 +1751,12 @@ void document_update_tag_list(gint idx, gboolean update)
 #endif
 		if (doc_list[idx].tm_file)
 		{
-			tm_workspace_add_object(doc_list[idx].tm_file);
+			if (!tm_workspace_add_object(doc_list[idx].tm_file))
+			{
+				tm_work_object_free(doc_list[idx].tm_file);
+				doc_list[idx].tm_file = NULL;
+				return;
+			}
 			if (update)
 				tm_source_file_update(doc_list[idx].tm_file, TRUE, FALSE, TRUE);
 			success = TRUE;
