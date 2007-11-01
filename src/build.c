@@ -489,11 +489,15 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	g_free(tmp);
 	g_free(executable);
 
+#ifdef G_OS_WIN32
+	argv = g_strsplit(cmd_string, " ", 0);
+#else
 	argv = g_new0(gchar *, 4);
 	argv[0] = g_strdup("/bin/sh");
 	argv[1] = g_strdup("-c");
 	argv[2] = cmd_string;
 	argv[3] = NULL;
+#endif
 
 	utf8_cmd_string = utils_get_utf8_from_locale(cmd_string);
 	utf8_working_dir = (dir != NULL) ? g_strdup(dir) :
@@ -884,7 +888,6 @@ gboolean build_parse_make_dir(const gchar *string, gchar **prefix)
 }
 
 
-#ifndef G_OS_WIN32
 static void show_build_result_message(gboolean failure)
 {
 	gchar *msg;
@@ -905,14 +908,17 @@ static void show_build_result_message(gboolean failure)
 	}
 	else
 	{
+#ifdef G_OS_UNIX
 		msg = _("Compilation finished successfully.");
+#else
+		msg = _("Compilation finished.");	// we don't know what the result was on Windows
+#endif
 		msgwin_compiler_add(COLOR_BLUE, msg);
 		if (! ui_prefs.msgwindow_visible ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
 				ui_set_statusbar(FALSE, "%s", msg);
 	}
 }
-#endif
 
 
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
@@ -935,6 +941,8 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 		failure = TRUE;
 	}
 	show_build_result_message(failure);
+#else
+	show_build_result_message(FALSE);
 #endif
 
 	utils_beep();
@@ -1008,7 +1016,6 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 
 	menu = gtk_menu_new();
 
-#ifndef G_OS_WIN32
 	// compile the code
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Compile"));
 	gtk_widget_show(item);
@@ -1083,7 +1090,6 @@ static void create_build_menu_gen(BuildMenuItems *menu_items)
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-#endif
 
 	// execute the code
 	item = gtk_image_menu_item_new_from_stock("gtk-execute", accel_group);
@@ -1126,7 +1132,6 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 
 	menu = gtk_menu_new();
 
-#ifndef G_OS_WIN32
 	// DVI
 	item = gtk_image_menu_item_new_with_mnemonic(_("LaTeX -> DVI"));
 	gtk_widget_show(item);
@@ -1194,7 +1199,6 @@ static void create_build_menu_tex(BuildMenuItems *menu_items)
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-#endif
 
 	// DVI view
 #define LATEX_VIEW_DVI_LABEL _("View DVI File") // used later again
@@ -1636,12 +1640,6 @@ void build_menu_update(gint idx)
 	ft = doc_list[idx].file_type;
 	g_return_if_fail(ft != NULL);
 
-#ifdef G_OS_WIN32
-	// disable compile and link under Windows until it is implemented
-	ft->actions->can_compile = FALSE;
-	ft->actions->can_link = FALSE;
-#endif
-
 	menu_items = build_get_menu_items(ft->id);
 	/* Note: don't remove the submenu first because it can now cause an X hang if
 	 * the menu is already open when called from build_exit_cb(). */
@@ -1994,15 +1992,4 @@ void build_init()
 {
 	widgets.compile_button = lookup_widget(app->window, "toolbutton13");
 	widgets.run_button = lookup_widget(app->window, "toolbutton26");
-
-#ifdef G_OS_WIN32
-	// hide build support items, at least until they are available for Windows
-	gtk_widget_hide(widgets.compile_button);
-	{
-		GtkWidget *compiler_tab;
-		compiler_tab = gtk_notebook_get_tab_label(GTK_NOTEBOOK(msgwindow.notebook),
-			gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER));
-		gtk_widget_set_sensitive(compiler_tab, FALSE);
-	}
-#endif
 }

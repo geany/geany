@@ -336,15 +336,9 @@ void prefs_init_dialog(void)
 
 
 	// Tools Settings
-#ifdef G_OS_WIN32
-        // hide related Make path setting
-        gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "label11"), FALSE);
-        gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "entry_com_make"), FALSE);
-        gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "button_make"), FALSE);
-#else
-        if (prefs.tools_make_cmd)
-                gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")), prefs.tools_make_cmd);
-#endif
+	if (prefs.tools_make_cmd)
+			gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_com_make")), prefs.tools_make_cmd);
+
     if (prefs.tools_term_cmd)
             gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")), prefs.tools_term_cmd);
 
