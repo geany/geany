@@ -1,3 +1,12 @@
+2007-11-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c, /src/main.c, src/symbols.c, tagmanager/tm_project.c,
+   tagmanager/include/tm_workspace.h, tagmanager/tm_workspace.c:
+   Create tagmanager status file in configuration directory, not in a
+   guessed temporary directory to ensure having write access.
+   Fix crashes if status file can't be written.
+
+
 2007-10-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/filetypes.c, data/filetype_extensions.conf:
