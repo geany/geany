@@ -795,6 +795,14 @@ void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft)
 
 	if (config == NULL || configh == NULL || ft < 0 || ft >= GEANY_MAX_FILE_TYPES) return;
 
+	// default extension
+	result = g_key_file_get_string(configh, "settings", "extension", NULL);
+	if (result == NULL) result = g_key_file_get_string(config, "settings", "extension", NULL);
+	if (result != NULL)
+	{
+		setptr(filetypes[ft]->extension, result);
+	}
+
 	// read comment notes
 	result = g_key_file_get_string(configh, "settings", "comment_open", NULL);
 	if (result == NULL) result = g_key_file_get_string(config, "settings", "comment_open", NULL);

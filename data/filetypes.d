@@ -29,6 +29,9 @@ docComment=Authors Bugs Copyright Date Deprecated Examples History License Macro
 types=
 
 [settings]
+# default extension used when saving files
+#extension=d
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

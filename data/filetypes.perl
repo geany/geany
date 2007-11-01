@@ -37,6 +37,9 @@ primary=NULL __FILE__ __LINE__ __PACKAGE__ __DATA__ __END__ AUTOLOAD BEGIN CORE 
 
 
 [settings]
+# default extension used when saving files
+#extension=pl
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

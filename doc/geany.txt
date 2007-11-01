@@ -1810,6 +1810,14 @@ an existing list.
 [settings] Section
 ``````````````````
 
+extension
+    This is the default file extension used when saving files, not
+    including the period character (``.``). The extension used should
+    match one of the patterns associated with that filetype (see
+    `Filetype extensions`_).
+
+    *Example:* ``extension=cxx``
+
 wordchars
     These characters define word boundaries when making selections
     and searching using word matching options.
@@ -2031,7 +2039,10 @@ whitespace_chars
 Filetype extensions
 -------------------
 
-You can override the default extensions that Geany uses for each
+To change the default filetype extension used when saving a new file,
+see `Filetype definition files`_.
+
+You can override the list of file extensions that Geany uses for each
 filetype using the ``filetype_extensions.conf`` file.
 
 To override the system-wide configuration file, copy it from

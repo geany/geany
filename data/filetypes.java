@@ -31,6 +31,9 @@ typedefs=
 
 
 [settings]
+# default extension used when saving files
+#extension=java
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

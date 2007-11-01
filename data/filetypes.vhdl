@@ -28,6 +28,9 @@ std_types=boolean bit character severity_level integer real time delay_length na
 userwords=
 
 [settings]
+# default extension used when saving files
+#extension=vhd
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

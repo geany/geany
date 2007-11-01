@@ -19,6 +19,9 @@ primary=absolute and array asm begin break case const constructor continue destr
 
 
 [settings]
+# default extension used when saving files
+#extension=pas
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

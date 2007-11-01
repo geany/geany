@@ -7,6 +7,12 @@
  * src/document.c:
    Ensure document_update_tag_list() always shows the empty symbol list
    when tags cannot be parsed.
+ * src/filetypes.c, doc/geany.txt, doc/geany.html, data/filetypes.*:
+   Add configurable default file extension setting for filetype
+   definition files.
+   Note: There is a bug with using the default extension, not the user
+   set one, if 'New with template' is used before any documents of the
+   same filetype are open.
 
 
 2007-11-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

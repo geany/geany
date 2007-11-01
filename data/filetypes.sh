@@ -18,6 +18,9 @@ primary=break case continue do done elif else esac eval exit export fi for funct
 
 
 [settings]
+# default extension used when saving files
+#extension=sh
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
