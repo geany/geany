@@ -20,12 +20,10 @@ TODO List:
 	o project indentation settings support
 	o plugin management
 	o plugin keybindings
-	o file chooser sidebar plugin
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines  - Scintilla issue)
 	o (folder tree in the sidebar)
-	o (improved Windows support)
 	o (macro support)
 	o (better regex support)
 	o (parsing tags from a memory buffer instead of a file on disk)
