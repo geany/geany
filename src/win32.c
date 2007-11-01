@@ -432,7 +432,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = GDK_WINDOW_HWND(app->window->window);
+	of.hwndOwner = GDK_WINDOW_HWND(ui_widgets.prefs_dialog->window);
 
 	of.lpstrFilter = filters;
 	of.lpstrCustomFilter = NULL;
