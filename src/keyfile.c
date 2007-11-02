@@ -641,11 +641,15 @@ static void load_ui_prefs(GKeyFile *config)
 		ui_prefs.geometry[3] = geo[3];
 		ui_prefs.geometry[4] = geo[4];
 
-		// don't use insane values
-		for (i = 0; i < 4; i++)
+		// don't use insane values but when main windows was maximized last time, pos might be
+		// negative at least on Windows for some reason
+		if (ui_prefs.geometry[4] != 1)
 		{
-			if (ui_prefs.geometry[i] < -1)
-				ui_prefs.geometry[i] = -1;
+			for (i = 0; i < 4; i++)
+			{
+				if (ui_prefs.geometry[i] < -1)
+					ui_prefs.geometry[i] = -1;
+			}
 		}
 	}
 	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
