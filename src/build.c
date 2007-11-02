@@ -39,6 +39,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
+#else
+# include <windows.h>
 #endif
 
 #include "prefs.h"
@@ -908,11 +910,7 @@ static void show_build_result_message(gboolean failure)
 	}
 	else
 	{
-#ifdef G_OS_UNIX
 		msg = _("Compilation finished successfully.");
-#else
-		msg = _("Compilation finished.");	// we don't know what the result was on Windows
-#endif
 		msgwin_compiler_add(COLOR_BLUE, msg);
 		if (! ui_prefs.msgwindow_visible ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
@@ -942,7 +940,10 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	}
 	show_build_result_message(failure);
 #else
-	show_build_result_message(FALSE);
+	DWORD exit_code;
+	GetExitCodeProcess(child_pid, &exit_code);
+	// not sure whether the cast to int is necessary, no idea what DWORD really is (seems like int)
+	show_build_result_message((int) exit_code);
 #endif
 
 	utils_beep();

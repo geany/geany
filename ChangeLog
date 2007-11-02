@@ -1,3 +1,8 @@
+2007-11-02  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/build.c, src/makefile.win32: Add exit code detection for Windows.
+
+
 2007-11-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/win32.c:
