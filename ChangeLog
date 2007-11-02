@@ -1,3 +1,9 @@
+2007-11-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/sciwrappers.c:
+   Show line wrap symbol at start of line for wrapped lines.
+
+
 2007-11-02  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/build.c, src/makefile.win32: Add exit code detection for Windows.
