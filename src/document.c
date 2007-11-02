@@ -352,6 +352,8 @@ static void setup_sci_keys(ScintillaObject *sci)
 	sci_assign_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16), SCI_PARAUPEXTEND);
 	sci_assign_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16), SCI_PARADOWN);
 	sci_assign_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16), SCI_PARADOWNEXTEND);
+
+	sci_clear_cmdkey(sci, SCK_BACK | (SCMOD_ALT << 16)); // clear Alt-Backspace (Undo)
 }
 
 
