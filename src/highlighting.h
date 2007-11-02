@@ -29,72 +29,10 @@
 #include "ScintillaWidget.h"
 
 
-void styleset_free_styles(void);
+void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh);
 
-void styleset_c(ScintillaObject *sci);
+void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx);
 
-void styleset_cpp(ScintillaObject *sci);
-
-void styleset_makefile(ScintillaObject *sci);
-
-void styleset_latex(ScintillaObject *sci);
-
-void styleset_php(ScintillaObject *sci);
-
-void styleset_html(ScintillaObject *sci);
-
-void styleset_java(ScintillaObject *sci);
-
-void styleset_pascal(ScintillaObject *sci);
-
-void styleset_perl(ScintillaObject *sci);
-
-void styleset_python(ScintillaObject *sci);
-
-void styleset_ruby(ScintillaObject *sci);
-
-void styleset_sh(ScintillaObject *sci);
-
-void styleset_xml(ScintillaObject *sci);
-
-void styleset_docbook(ScintillaObject *sci);
-
-void styleset_none(ScintillaObject *sci);
-
-void styleset_css(ScintillaObject *sci);
-
-void styleset_conf(ScintillaObject *sci);
-
-void styleset_asm(ScintillaObject *sci);
-
-void styleset_sql(ScintillaObject *sci);
-
-void styleset_caml(ScintillaObject *sci);
-
-void styleset_haskell(ScintillaObject *sci);
-
-void styleset_oms(ScintillaObject *sci);
-
-void styleset_tcl(ScintillaObject *sci);
-
-void styleset_d(ScintillaObject *sci);
-
-void styleset_fortran(ScintillaObject *sci);
-
-void styleset_diff(ScintillaObject *sci);
-
-void styleset_ferite(ScintillaObject *sci);
-
-void styleset_vhdl(ScintillaObject *sci);
-
-void styleset_js(ScintillaObject *sci);
-
-void styleset_lua(ScintillaObject *sci);
-
-void styleset_cs(ScintillaObject *sci);
-
-void styleset_basic(ScintillaObject *sci);
-
-void styleset_haxe(ScintillaObject *sci);
+void highlighting_free_styles(void);
 
 #endif

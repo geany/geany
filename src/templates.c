@@ -528,6 +528,8 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	filetype_id ft_id = filetype_idx;
 	filetype *ft = filetypes[ft_id];
 
+	filetypes_load_config(ft_id);	// load any user extension setting
+	
 	if (fname == NULL)
 	{
 		if (ft_id == GEANY_FILETYPES_ALL)
@@ -539,11 +541,8 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 		shortname = g_path_get_basename(fname);
 
 	template = utils_str_replace(template, "{filename}", shortname);
-
 	template = utils_str_replace(template, "{gpl}", templates[GEANY_TEMPLATE_GPL]);
-
 	template = utils_str_replace(template, "{bsd}", templates[GEANY_TEMPLATE_BSD]);
-
 	template = utils_str_replace(template, "{datetime}", date);
 
 	result = make_comment_block(template, ft_id, 8);

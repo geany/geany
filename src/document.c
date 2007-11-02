@@ -557,7 +557,7 @@ gint document_new_file(const gchar *filename, filetype *ft, const gchar *text)
 
 	document_set_filetype(idx, ft);	// also clears taglist
 	if (ft == NULL)
-		filetypes[GEANY_FILETYPES_ALL]->style_func_ptr(doc_list[idx].sci);
+		highlighting_set_styles(doc_list[idx].sci, GEANY_FILETYPES_ALL);
 	ui_set_window_title(idx);
 	build_menu_update(idx);
 	document_update_tag_list(idx, FALSE);
@@ -1884,7 +1884,7 @@ void document_set_filetype(gint idx, filetype *type)
 			tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
 			doc_list[idx].tm_file = NULL;
 		}
-		type->style_func_ptr(doc_list[idx].sci);	// set new styles
+		highlighting_set_styles(doc_list[idx].sci, type->id);
 		build_menu_update(idx);
 		colourise = TRUE;
 	}

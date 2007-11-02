@@ -788,7 +788,7 @@ void main_quit()
 	keybindings_free();
 	filetypes_save_commands();
 	filetypes_free_types();
-	styleset_free_styles();
+	highlighting_free_styles();
 	templates_free_templates();
 	msgwin_finalize();
 	search_finalize();

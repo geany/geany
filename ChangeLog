@@ -2,6 +2,16 @@
 
  * src/sciwrappers.c:
    Show line wrap symbol at start of line for wrapped lines.
+ * src/templates.c, src/highlighting.c, src/highlighting.h,
+   src/filetypes.c, src/filetypes.h, src/document.c, src/main.c:
+   Fix bug with using the default extension, not the user set one, if
+   'New with template' is used before any documents of the same filetype
+   are open.
+   Load filetype keyfiles from filetypes_load_config(), not from
+   styleset_foo_init().
+   Add highlighting_init_styles(), highlighting_set_styles(),
+   simplifying a lot of styleset function code.
+   Remove filetype::style_func_ptr field.
 
 
 2007-11-02  Enrico Tröger  <enrico.troeger@uvena.de>

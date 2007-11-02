@@ -119,7 +119,6 @@ struct filetype
 	gboolean  		  comment_use_indent;
 	struct build_programs	*programs;
 	struct build_actions	*actions;
-	void (*style_func_ptr) (ScintillaObject*);
 };
 
 extern filetype *filetypes[GEANY_MAX_FILE_TYPES];
@@ -144,7 +143,7 @@ filetype *filetypes_detect_from_filename(const gchar *utf8_filename);
 /* frees the array and all related pointers */
 void filetypes_free_types();
 
-void filetypes_get_config(GKeyFile *config, GKeyFile *configh, gint ft);
+void filetypes_load_config(gint ft_id);
 
 void filetypes_save_commands();
 
