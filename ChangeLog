@@ -5,6 +5,8 @@
    contains double quotes.
    Fix error in Build command when the executable file name contains
    spaces(Linux and Windows).
+ * src/filetypes.c: Add support for env wrapper in shebang detection
+                    (inspired by a patch from Yura Siamashka).
 
 
 2007-11-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

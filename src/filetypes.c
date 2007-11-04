@@ -576,8 +576,13 @@ static filetype *find_shebang(gint idx)
 
 	if (strlen(line) > 2 && line[0] == '#' && line[1] == '!')
 	{
-		/// TODO does g_path_get_basename() also work under Win32 for Unix filenames?
-		gchar *basename_interpreter = g_path_get_basename(line + 2);
+		gchar *tmp = g_path_get_basename(line + 2);
+		gchar *basename_interpreter = tmp;
+
+		if (strncmp(tmp, "env ", 4) == 0 && strlen(tmp) > 4)
+		{	// skip "env" and read the following interpreter
+			basename_interpreter +=4;
+		}
 
 		if (strncmp(basename_interpreter, "sh", 2) == 0)
 			ft = filetypes[GEANY_FILETYPES_SH];
@@ -605,9 +610,8 @@ static filetype *find_shebang(gint idx)
 			ft = filetypes[GEANY_FILETYPES_D];
 		else if (strncmp(basename_interpreter, "wish", 4) == 0)
 			ft = filetypes[GEANY_FILETYPES_TCL];
-		// what else to add?
 
-		g_free(basename_interpreter);
+		g_free(tmp);
 	}
 	// detect XML files
 	if (strncmp(line, "<?xml", 5) == 0)
@@ -862,7 +866,7 @@ void filetypes_load_config(gint ft_id)
 	static gboolean loaded[GEANY_MAX_FILE_TYPES] = {FALSE};
 
 	g_return_if_fail(ft_id >= 0 && ft_id < GEANY_MAX_FILE_TYPES);
-	
+
 	if (loaded[ft_id])
 		return;
 	loaded[ft_id] = TRUE;
@@ -887,7 +891,7 @@ void filetypes_load_config(gint ft_id)
 
 	load_settings(ft_id, config, config_home);
 	highlighting_init_styles(ft_id, config, config_home);
-	
+
 	g_key_file_free(config);
 	g_key_file_free(config_home);
 }
