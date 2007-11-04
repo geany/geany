@@ -15,6 +15,11 @@
    Fix problems when configuration directory path contains special
    characters.
  * tagmanager/tm_workspace.c: Use g_unlink() instead of unlink().
+ * src/build.c:
+   Use g_unlink() instead of unlink().
+   Minor code cleanups and add some sanity checks.
+   Fix broken Run command on Windows by not changing Geany's working
+   directory (this might break other things, unfinished).
 
 
 2007-11-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

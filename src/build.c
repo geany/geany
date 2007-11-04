@@ -68,7 +68,7 @@ static struct
 } run_info = {0, GEANY_FILETYPES_ALL};
 
 #ifdef G_OS_WIN32
-static const gchar RUN_SCRIPT_CMD[] = "./geany_run_script.bat";
+static const gchar RUN_SCRIPT_CMD[] = "geany_run_script.bat";
 #else
 static const gchar RUN_SCRIPT_CMD[] = "./geany_run_script.sh";
 #endif
@@ -160,11 +160,14 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	gchar  *cmd_string = NULL;
 	gchar  *locale_cmd_string = NULL;
 	gchar  *locale_term_cmd;
+	gchar  *script_name;
+	gchar  *working_dir;
 	gint	term_argv_len, i;
 	GError *error = NULL;
 	struct stat st;
 
-	if (idx < 0 || doc_list[idx].file_name == NULL) return (GPid) 1;
+	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
+		return (GPid) 1;
 
 	run_info.file_type_id = GEANY_FILETYPES_LATEX;
 
@@ -220,15 +223,18 @@ static GPid build_view_tex_file(gint idx, gint mode)
 	}
 
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
-	if (! build_create_shellscript(RUN_SCRIPT_CMD, locale_cmd_string, TRUE))
+	working_dir = g_path_get_dirname(locale_filename); /// TODO do we need project support here?
+	script_name = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
+	if (! build_create_shellscript(script_name, locale_cmd_string, TRUE))
 	{
 		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created)"),
 													executable);
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
-										locale_term_cmd, NULL);
+										locale_term_cmd, working_dir, NULL);
 		g_strfreev(term_argv);
 		return (GPid) 1;
 	}
+	g_free(working_dir);
 
 	argv = g_new0(gchar *, term_argv_len + 3);
 	for (i = 0; i < term_argv_len; i++)
@@ -236,20 +242,28 @@ static GPid build_view_tex_file(gint idx, gint mode)
 		argv[i] = g_strdup(term_argv[i]);
 	}
 #ifdef G_OS_WIN32
-	// command line arguments for cmd.exe
-	argv[term_argv_len   ]  = g_strdup("/Q /C");
-	argv[term_argv_len + 1] = g_path_get_basename(RUN_SCRIPT_CMD);
+		// command line arguments only for cmd.exe
+		if (strstr(argv[0], "cmd.exe") != NULL)
+		{
+			argv[term_argv_len   ]  = g_strdup("/Q /C");
+			argv[term_argv_len + 1] = script_name;
+		}
+		else
+		{
+			argv[term_argv_len    ] = script_name;
+			argv[term_argv_len + 1] = NULL;
+		}
 #else
 	argv[term_argv_len   ]  = g_strdup("-e");
-	argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);
+	argv[term_argv_len + 1] = script_name;
 #endif
 	argv[term_argv_len + 2] = NULL;
 
 
-	if (! g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
-						NULL, NULL, &(run_info.pid), NULL, NULL, NULL, &error))
+	if (! g_spawn_async(NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
+						NULL, NULL, &(run_info.pid), &error))
 	{
-		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
+		geany_debug("g_spawn_async() failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 
 		utils_free_pointers(executable, view_file, locale_filename, cmd_string, locale_cmd_string,
@@ -655,7 +669,11 @@ static gchar *prepare_run_script(gint idx)
 	else
 		working_dir = g_path_get_dirname(locale_filename);
 
-	if (chdir(working_dir) != 0)
+	// only test whether working dir exists, don't change it or else Windows support will break
+	// (gspawn-win32-helper.exe is used by GLib and must be in $PATH which means current working
+	//  dir where geany.exe was started from, so we can't change it)
+	if (! g_file_test(working_dir, G_FILE_TEST_EXISTS) ||
+		! g_file_test(working_dir, G_FILE_TEST_IS_DIR))
 	{
 		gchar *utf8_working_dir =
 			utils_get_utf8_from_locale(working_dir);
@@ -681,7 +699,9 @@ static gchar *prepare_run_script(gint idx)
 #endif
 
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
-	result = build_create_shellscript(RUN_SCRIPT_CMD, cmd, autoclose);
+	tmp = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
+	result = build_create_shellscript(tmp, cmd, autoclose);
+	g_free(tmp);
 	if (! result)
 	{
 		gchar *utf8_cmd = utils_get_utf8_from_locale(cmd);
@@ -709,12 +729,12 @@ static GPid build_run_cmd(gint idx)
 	GError	*error = NULL;
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
-		return (GPid) 1;
+		return (GPid) 0;
 
 	working_dir = prepare_run_script(idx);
 	if (working_dir == NULL)
 	{
-		return (GPid) 1;
+		return (GPid) 0;
 	}
 
 	run_info.file_type_id = FILETYPE_ID(doc_list[idx].file_type);
@@ -722,6 +742,7 @@ static GPid build_run_cmd(gint idx)
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
 	{
+		/// TODO - working_dir
 		gchar *vte_cmd = g_strconcat(RUN_SCRIPT_CMD, "\n", NULL);
 		// change into current directory if it is not done by default
 		if (! vc->follow_path) vte_cwd(doc_list[idx].file_name, TRUE);
@@ -773,26 +794,29 @@ static GPid build_run_cmd(gint idx)
 			argv[i] = g_strdup(term_argv[i]);
 		}
 #ifdef G_OS_WIN32
-		// command line arguments for cmd.exe
+		// command line arguments only for cmd.exe
 		if (strstr(argv[0], "cmd.exe") != NULL)
 		{
 			argv[term_argv_len   ]  = g_strdup("/Q /C");
-			argv[term_argv_len + 1] = g_path_get_basename(RUN_SCRIPT_CMD);
+			argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);
 		}
 		else
-			argv[term_argv_len] = NULL;
+		{
+			argv[term_argv_len    ] = g_strdup(RUN_SCRIPT_CMD);
+			argv[term_argv_len + 1] = NULL;
+		}
 #else
 		argv[term_argv_len   ]  = g_strdup("-e");
 		argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);
 #endif
 		argv[term_argv_len + 2] = NULL;
 
-		if (! g_spawn_async_with_pipes(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
-							NULL, NULL, &(run_info.pid), NULL, NULL, NULL, &error))
+		if (! g_spawn_async(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
+							NULL, NULL, &(run_info.pid), &error))
 		{
-			geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
+			geany_debug("g_spawn_async() failed: %s", error->message);
 			ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
-			unlink(RUN_SCRIPT_CMD);
+			g_unlink(RUN_SCRIPT_CMD);
 			g_error_free(error);
 			error = NULL;
 			run_info.pid = (GPid) 0;
@@ -974,21 +998,16 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 
 
 // write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
+// fname is the full file name (including path) for the script to create
 static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose)
 {
 	FILE *fp;
 	gchar *str;
-#ifdef G_OS_WIN32
-	gchar *tmp;
-#endif
 
 	fp = g_fopen(fname, "w");
 	if (! fp) return FALSE;
-
 #ifdef G_OS_WIN32
-	tmp = g_path_get_basename(fname);
-	str = g_strdup_printf("%s\n\n%s\ndel %s\n", cmd, (autoclose) ? "" : "pause", tmp);
-	g_free(tmp);
+	str = g_strdup_printf("%s\n\n%s\ndel %s\n", cmd, (autoclose) ? "" : "pause", fname);
 #else
 	str = g_strdup_printf(
 		"#!/bin/sh\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
@@ -1002,7 +1021,7 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 #ifndef G_OS_WIN32
 	if (chmod(fname, 0700) != 0)
 	{
-		unlink(fname);
+		g_unlink(fname);
 		return FALSE;
 	}
 #endif
@@ -1809,7 +1828,7 @@ on_build_compile_activate              (GtkMenuItem     *menuitem,
 
 	if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
+	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_LATEX)
 		build_compile_tex_file(idx, 0);
 	else
 		build_compile_file(idx);
@@ -1821,6 +1840,9 @@ on_build_tex_activate                  (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+
+	if (! DOC_IDX_VALID(idx))
+		return;
 
 	if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
@@ -1846,7 +1868,7 @@ on_build_build_activate                (GtkMenuItem     *menuitem,
 
 	if (doc_list[idx].changed) document_save_file(idx, FALSE);
 
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
+	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_LATEX)
 		build_compile_tex_file(idx, 1);
 	else
 		build_link_file(idx);
@@ -1892,24 +1914,28 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 {
 	gint idx = document_get_cur_idx();
 
+	if (! DOC_IDX_VALID(idx))
+		return;
+
 	// make the process "stopable"
 	if (run_info.pid > (GPid) 1)
 	{
 		// on Windows there is no PID returned (resp. it is a handle), currently unsupported
+		/// TODO kill also on Windows, maybe use CloseHandle() or something
 #ifndef G_OS_WIN32
 		kill_process(&run_info.pid);
 #endif
 		return;
 	}
 
-	if (doc_list[idx].file_type->id == GEANY_FILETYPES_LATEX)
+	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_LATEX)
 	{	// run LaTeX file
 		if (build_view_tex_file(idx, GPOINTER_TO_INT(user_data)) == (GPid) 0)
 		{
 			ui_set_statusbar(TRUE, _("Failed to execute the view program"));
 		}
 	}
-	else if (doc_list[idx].file_type->id == GEANY_FILETYPES_HTML)
+	else if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_HTML)
 	{	// run HTML file
 		gchar *uri = g_strconcat("file:///", g_path_skip_root(doc_list[idx].file_name), NULL);
 		utils_start_browser(uri);
