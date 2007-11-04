@@ -79,7 +79,7 @@ void tm_workspace_free(gpointer workspace)
 				tm_tag_free(theWorkspace->global_tags->pdata[i]);
 			g_ptr_array_free(theWorkspace->global_tags, TRUE);
 		}
-		unlink(theWorkspace->work_object.file_name);
+		g_unlink(theWorkspace->work_object.file_name);
 		tm_work_object_destroy(TM_WORK_OBJECT(theWorkspace));
 		g_free(theWorkspace);
 		theWorkspace = NULL;
@@ -358,7 +358,7 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 #endif
 		system(command);
 		g_free(command);
-		unlink(temp_file);
+		g_unlink(temp_file);
 		g_free(temp_file);
 	}
 	else
@@ -371,10 +371,10 @@ gboolean tm_workspace_create_global_tags(const char *config_dir, const char *pre
 	source_file = tm_source_file_new(temp_file2, TRUE, tm_source_file_get_lang_name(lang));
 	if (NULL == source_file)
 	{
-		unlink(temp_file2);
+		g_unlink(temp_file2);
 		return FALSE;
 	}
-	unlink(temp_file2);
+	g_unlink(temp_file2);
 	g_free(temp_file2);
 	if ((NULL == source_file->tags_array) || (0 == source_file->tags_array->len))
 	{

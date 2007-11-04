@@ -14,6 +14,7 @@
    created.
    Fix problems when configuration directory path contains special
    characters.
+ * tagmanager/tm_workspace.c: Use g_unlink() instead of unlink().
 
 
 2007-11-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
