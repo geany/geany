@@ -403,18 +403,19 @@ static GPid build_link_file(gint idx)
 	if (doc_list[idx].file_type->id == GEANY_FILETYPES_D)
 	{	// the dmd compiler needs -of instead of -o and it accepts no whitespace after -of
 		gchar *tmp = g_path_get_basename(executable);
-
-		g_string_append(cmdstr, "-of");
+		// add double quotes around the executable file name in case of filenames with spaces
+		g_string_append(cmdstr, "-of \"");
 		g_string_append(cmdstr, tmp);
+		g_string_append_c(cmdstr, '\"');
 		g_free(tmp);
 	}
 	else
 	{
 		gchar *tmp = g_path_get_basename(executable);
-
-		g_string_append(cmdstr, "-o");
-		g_string_append_c(cmdstr, ' ');
+		// add double quotes around the executable file name in case of filenames with spaces
+		g_string_append(cmdstr, "-o \"");
 		g_string_append(cmdstr, tmp);
+		g_string_append_c(cmdstr, '\"');
 		g_free(tmp);
 	}
 
@@ -492,7 +493,9 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	g_free(executable);
 
 #ifdef G_OS_WIN32
-	argv = g_strsplit(cmd_string, " ", 0);
+	if (! g_shell_parse_argv(cmd_string, NULL, &argv, NULL))
+		// if automatic parsing failed, fall back to simple, unsafe argv creation
+		argv = g_strsplit(cmd_string, " ", 0);
 #else
 	argv = g_new0(gchar *, 4);
 	argv[0] = g_strdup("/bin/sh");
@@ -751,7 +754,7 @@ static GPid build_run_cmd(gint idx)
 		if (term_argv[0] != NULL)
 		{
 			gchar *tmp = term_argv[0];
-			// g_find_program_in_path checks tmp exists and is executable
+			// g_find_program_in_path checks whether tmp exists and is executable
 			term_argv[0] = g_find_program_in_path(tmp);
 			g_free(tmp);
 		}
@@ -771,8 +774,13 @@ static GPid build_run_cmd(gint idx)
 		}
 #ifdef G_OS_WIN32
 		// command line arguments for cmd.exe
-		argv[term_argv_len   ]  = g_strdup("/Q /C");
-		argv[term_argv_len + 1] = g_path_get_basename(RUN_SCRIPT_CMD);
+		if (strstr(argv[0], "cmd.exe") != NULL)
+		{
+			argv[term_argv_len   ]  = g_strdup("/Q /C");
+			argv[term_argv_len + 1] = g_path_get_basename(RUN_SCRIPT_CMD);
+		}
+		else
+			argv[term_argv_len] = NULL;
 #else
 		argv[term_argv_len   ]  = g_strdup("-e");
 		argv[term_argv_len + 1] = g_strdup(RUN_SCRIPT_CMD);

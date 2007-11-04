@@ -1,3 +1,12 @@
+2007-11-04  Enrico Tröger  <enrico.troeger@uvena.de>
+
+ * src/build.c:
+   Fix error in Compile and Build commands on Windows if the command
+   contains double quotes.
+   Fix error in Build command when the executable file name contains
+   spaces(Linux and Windows).
+
+
 2007-11-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/sciwrappers.c:
