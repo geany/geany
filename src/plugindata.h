@@ -71,7 +71,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 26;
+static const gint api_version = 27;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -196,6 +196,7 @@ typedef struct DocumentFuncs
 	gboolean (*remove)(guint page_num);
 	gboolean (*reload_file)(gint idx, const gchar *forced_enc);
 	void	(*set_encoding)(gint idx, const gchar *new_encoding);
+	void	(*set_text_changed)(gint idx);
 }
 DocumentFuncs;
 

@@ -7,6 +7,8 @@
    spaces(Linux and Windows).
  * src/filetypes.c: Add support for env wrapper in shebang detection
                     (inspired by a patch from Yura Siamashka).
+ * src/plugindata.h, src/plugins.c:
+   Add document_set_text_changed() to the plugin API.
 
 
 2007-11-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

@@ -87,7 +87,8 @@ static DocumentFuncs doc_funcs = {
 	&document_open_files,
 	&document_remove,
 	&document_reload_file,
-	&document_set_encoding
+	&document_set_encoding,
+	&document_set_text_changed
 };
 
 static ScintillaFuncs sci_funcs = {
