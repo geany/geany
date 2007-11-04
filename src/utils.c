@@ -727,26 +727,33 @@ gchar *utils_get_hostname()
 }
 
 
-gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gchar *doc_dir)
+gint utils_make_settings_dir()
 {
-	gint error_nr = 0;
+	gint saved_errno = 0;
 	gchar *conf_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
-	gchar *filedefs_dir = g_strconcat(dir, G_DIR_SEPARATOR_S,
+	gchar *filedefs_dir = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
 					GEANY_FILEDEFS_SUBDIR, G_DIR_SEPARATOR_S, NULL);
 
-	gchar *templates_dir = g_strconcat(dir, G_DIR_SEPARATOR_S,
+	gchar *templates_dir = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
 					GEANY_TEMPLATES_SUBDIR, G_DIR_SEPARATOR_S, NULL);
 
-	if (! g_file_test(dir, G_FILE_TEST_EXISTS))
+	if (! g_file_test(app->configdir, G_FILE_TEST_EXISTS))
 	{
-		geany_debug("creating config directory %s", dir);
-		error_nr = utils_mkdir(dir, FALSE);
+		geany_debug("creating config directory %s", app->configdir);
+		saved_errno = utils_mkdir(app->configdir, FALSE);
 	}
 
-	if (error_nr == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
-	{	// try to write geany.conf
-		error_nr = access(app->configdir, W_OK);
+	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
+	{	// check whether geany.conf can be written
+#ifdef G_OS_WIN32
+		// use _waccess on Windows, access() doesn't accept special characters
+		saved_errno = win32_check_write_permission(app->configdir);
+#else
+		access(app->configdir, R_OK | W_OK);
+#endif
+		saved_errno = errno;
 	}
+
 #ifdef G_OS_WIN32
 # define DIR_SEP "\\" // on Windows we need an additional dir separator
 #else
@@ -754,21 +761,21 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 #endif
 
 	// make subdir for filetype definitions
-	if (error_nr == 0)
+	if (saved_errno == 0)
 	{
-		gchar *filedefs_readme = g_strconcat(dir, G_DIR_SEPARATOR_S, GEANY_FILEDEFS_SUBDIR,
-					G_DIR_SEPARATOR_S, "filetypes.README", NULL);
+		gchar *filedefs_readme = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
+			GEANY_FILEDEFS_SUBDIR, G_DIR_SEPARATOR_S, "filetypes.README", NULL);
 
 		if (! g_file_test(filedefs_dir, G_FILE_TEST_EXISTS))
 		{
-			error_nr = utils_mkdir(filedefs_dir, FALSE);
+			saved_errno = utils_mkdir(filedefs_dir, FALSE);
 		}
-		if (error_nr == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
+		if (saved_errno == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
 		{
 			gchar *text = g_strconcat(
-"Copy files from ", data_dir, " to this directory to overwrite "
+"Copy files from ", app->datadir, " to this directory to overwrite "
 "them. To use the defaults, just delete the file in this directory.\nFor more information read "
-"the documentation (in ", doc_dir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").", NULL);
+"the documentation (in ", app->docdir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").", NULL);
 			utils_write_file(filedefs_readme, text);
 			g_free(text);
 		}
@@ -776,20 +783,20 @@ gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gcha
 	}
 
 	// make subdir for template files
-	if (error_nr == 0)
+	if (saved_errno == 0)
 	{
-		gchar *templates_readme = g_strconcat(dir, G_DIR_SEPARATOR_S, GEANY_TEMPLATES_SUBDIR,
-					G_DIR_SEPARATOR_S, "templates.README", NULL);
+		gchar *templates_readme = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
+			GEANY_TEMPLATES_SUBDIR, G_DIR_SEPARATOR_S, "templates.README", NULL);
 
 		if (! g_file_test(templates_dir, G_FILE_TEST_EXISTS))
 		{
-			error_nr = utils_mkdir(templates_dir, FALSE);
+			saved_errno = utils_mkdir(templates_dir, FALSE);
 		}
-		if (error_nr == 0 && ! g_file_test(templates_readme, G_FILE_TEST_EXISTS))
+		if (saved_errno == 0 && ! g_file_test(templates_readme, G_FILE_TEST_EXISTS))
 		{
 			gchar *text = g_strconcat(
 "There are several template files in this directory. For these templates you can use wildcards.\n\
-For more information read the documentation (in ", doc_dir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").",
+For more information read the documentation (in ", app->docdir, DIR_SEP "index.html or visit " GEANY_HOMEPAGE ").",
 					NULL);
 			utils_write_file(templates_readme, text);
 			g_free(text);
@@ -801,7 +808,7 @@ For more information read the documentation (in ", doc_dir, DIR_SEP "index.html 
 	g_free(templates_dir);
 	g_free(conf_file);
 
-	return error_nr;
+	return saved_errno;
 }
 
 

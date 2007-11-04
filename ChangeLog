@@ -9,6 +9,11 @@
                     (inspired by a patch from Yura Siamashka).
  * src/plugindata.h, src/plugins.c:
    Add document_set_text_changed() to the plugin API.
+ * src/main.c, src/utils.c, src/utils.h, src/win32.c, src/win32.h:
+   Fix crashes on Windows when configuration directory could not be
+   created.
+   Fix problems when configuration directory path contains special
+   characters.
 
 
 2007-11-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

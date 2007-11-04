@@ -53,4 +53,6 @@ gchar *win32_show_project_open_dialog(const gchar *title, const gchar *initial_d
  * The selected folder name is returned. */
 gchar *win32_show_project_folder_dialog(const gchar *title, const gchar *initial_dir);
 
+gint win32_check_write_permission(const gchar *dir);
+
 #endif

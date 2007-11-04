@@ -34,6 +34,7 @@
 #include <windows.h>
 #include <commdlg.h>
 #include <shlobj.h>
+#include <io.h>
 
 #include <string.h>
 #include <ctype.h>
@@ -492,6 +493,7 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 	gint rc;
 	guint t;
 	const gchar *title;
+	HWND parent_hwnd = NULL;
 	static wchar_t w_msg[512];
 	static wchar_t w_title[512];
 
@@ -528,11 +530,13 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, G_N_ELEMENTS(w_msg));
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
-	// display the message box
-	if (parent == NULL)
-		parent = app->window;
+	if (parent != NULL)
+		parent_hwnd = GDK_WINDOW_HWND(parent->window);
+	else if (app->window != NULL)
+		parent_hwnd = GDK_WINDOW_HWND(app->window->window);
 
-	rc = MessageBoxW(GDK_WINDOW_HWND(parent->window), w_msg, w_title, t);
+	// display the message box
+	rc = MessageBoxW(parent_hwnd, w_msg, w_title, t);
 
 	if (type == GTK_MESSAGE_QUESTION && rc != IDYES)
 		ret = FALSE;
@@ -541,18 +545,32 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 }
 
 
+/* Little wrapper for _waccess(), returns errno or 0 if there was no error */
+gint win32_check_write_permission(const gchar *dir)
+{
+	static wchar_t w_dir[512];
+	MultiByteToWideChar(CP_UTF8, 0, app->configdir, -1, w_dir, sizeof w_dir);
+	_waccess(w_dir, R_OK | W_OK);
+	return errno;
+}
+
+
 /* Special dialog to ask for an action when closing an unsaved file */
 gint win32_message_dialog_unsaved(const gchar *msg)
 {
 	static wchar_t w_msg[512];
 	static wchar_t w_title[512];
+	HWND parent_hwnd = NULL;
 	gint ret;
 
 	// convert the Unicode chars to wide chars
 	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, G_N_ELEMENTS(w_msg));
 	MultiByteToWideChar(CP_UTF8, 0, _("Question"), -1, w_title, G_N_ELEMENTS(w_title));
 
-	ret = MessageBoxW(GDK_WINDOW_HWND(app->window->window), w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
+	if (app->window != NULL)
+		parent_hwnd = GDK_WINDOW_HWND(app->window->window);
+	
+	ret = MessageBoxW(parent_hwnd, w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
 	switch(ret)
 	{
 		case IDYES: ret = GTK_RESPONSE_YES; break;

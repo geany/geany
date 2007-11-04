@@ -500,7 +500,7 @@ static gint setup_config_dir()
 	app->configdir = utils_get_locale_from_utf8(app->configdir);
 	g_free(tmp);
 
-	mkdir_result = utils_make_settings_dir(app->configdir, app->datadir, app->docdir);
+	mkdir_result = utils_make_settings_dir();
 	if (mkdir_result != 0)
 	{
 		if (! dialogs_show_question(

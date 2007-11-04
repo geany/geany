@@ -97,7 +97,7 @@ gchar utils_brace_opposite(gchar ch);
 
 gchar *utils_get_hostname();
 
-gint utils_make_settings_dir(const gchar *dir, const gchar *data_dir, const gchar *doc_dir);
+gint utils_make_settings_dir();
 
 
 gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar *replace);
