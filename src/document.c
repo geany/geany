@@ -70,6 +70,7 @@
 #include "symbols.h"
 #include "callbacks.h"
 #include "geanyobject.h"
+#include "highlighting.h"
 
 
 /* dynamic array of document elements to hold all information of the notebook tabs */
@@ -1115,12 +1116,7 @@ static gboolean document_update_timestamp(gint idx)
 
 	g_return_val_if_fail(DOC_IDX_VALID(idx), FALSE);
 
-#ifdef G_OS_WIN32
-	// don't try to convert the filename on Windows, it should be already in UTF8
-	locale_filename = g_strdup(doc_list[idx].file_name);
-#else
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-#endif
 	if (g_stat(locale_filename, &st) != 0)
 	{
 		ui_set_statusbar(TRUE, _("Could not open file %s (%s)"), doc_list[idx].file_name,
@@ -1219,13 +1215,11 @@ gboolean document_save_file(gint idx, gboolean force)
 	{
 		len = strlen(data);
 	}
-#ifdef G_OS_WIN32
-	fp = g_fopen(doc_list[idx].file_name, "wb"); // this should fix the windows \n problem
-#else
+
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 	fp = g_fopen(locale_filename, "w");
 	g_free(locale_filename);
-#endif
+
 	if (fp == NULL)
 	{
 		ui_set_statusbar(TRUE, _("Error saving file (%s)."), g_strerror(errno));

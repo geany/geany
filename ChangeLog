@@ -1,3 +1,9 @@
+2007-11-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/dialogs.c, src/document.c, src/utils.c:
+   Don't use unnecessary #ifdefs for utils_get_locale_from_utf8().
+
+
 2007-11-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * plugins/svndiff.c:

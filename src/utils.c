@@ -319,12 +319,7 @@ gboolean utils_check_disk_status(gint idx, gboolean force)
 
 	if (! force && doc_list[idx].last_check > (t - GEANY_CHECK_FILE_DELAY)) return FALSE;
 
-#ifdef G_OS_WIN32
-	// don't try to convert the filename on Windows, it should be already in UTF8
-	locale_filename = g_strdup(doc_list[idx].file_name);
-#else
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-#endif
 	if (g_stat(locale_filename, &st) != 0)
 	{
 		// TODO: warn user file on disk is missing

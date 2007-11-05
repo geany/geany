@@ -393,11 +393,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 			gboolean open_new_tab = gtk_toggle_button_get_active(
 					GTK_TOGGLE_BUTTON(lookup_widget(ui_widgets.save_filesel, "check_open_new_tab")));
 
-#ifdef G_OS_WIN32
-			utf8_filename = g_strdup(new_filename);
-#else
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
-#endif
 			// check if file exists and ask whether to overwrite or not
 			if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
 			{
@@ -418,14 +414,10 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 				{
 					if (rename_file)
 					{	// delete the previous file name
-#ifdef G_OS_WIN32
-						g_unlink(doc_list[idx].file_name);
-#else
 						gchar *old_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
 						g_unlink(old_filename);
 						g_free(old_filename);
-#endif
 					}
 					// create a new tm_source_file object otherwise tagmanager won't work correctly
 					tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
@@ -511,19 +503,13 @@ gboolean dialogs_show_save_as()
 	// If the current document has a filename we use that as the default.
 	if (doc_list[idx].file_name != NULL)
 	{
-#ifdef G_OS_WIN32
-		gchar *locale_filename = doc_list[idx].file_name;
-#else
 		gchar *locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-#endif
 		if (g_path_is_absolute(locale_filename))
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(ui_widgets.save_filesel), locale_filename);
 		else
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
 				doc_list[idx].file_name);
-#ifndef G_OS_WIN32
 		g_free(locale_filename);
-#endif
 	}
 	else
 	{
@@ -544,14 +530,9 @@ gboolean dialogs_show_save_as()
 		{
 			if (g_path_is_absolute(prefs.default_open_path))
 			{
-#ifdef G_OS_WIN32
-				gtk_file_chooser_set_current_folder(
-					GTK_FILE_CHOOSER(ui_widgets.save_filesel), prefs.default_open_path);
-#else
 				gchar *def_path = utils_get_locale_from_utf8(prefs.default_open_path);
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel), def_path);
 				g_free(def_path);
-#endif
 			}
 		}
 		g_free(fname);
@@ -823,12 +804,7 @@ void dialogs_show_file_properties(gint idx)
 
 
 #if defined(HAVE_SYS_STAT_H) && defined(TIME_WITH_SYS_TIME) && defined(HAVE_SYS_TYPES_H)
-#ifdef G_OS_WIN32
-	// don't try to convert the filename on Windows, it should be already in UTF8
-	locale_filename = g_strdup(doc_list[idx].file_name);
-#else
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-#endif
 	if (g_stat(locale_filename, &st) == 0)
 	{
 		// first copy the returned string and the trim it, to not modify the static glibc string
