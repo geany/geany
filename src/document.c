@@ -1139,9 +1139,7 @@ gboolean document_save_file(gint idx, gboolean force)
 	gchar *data;
 	FILE *fp;
 	gint bytes_written, len;
-#ifndef G_OS_WIN32
 	gchar *locale_filename = NULL;
-#endif
 
 	if (! DOC_IDX_VALID(idx)) return FALSE;
 	// the changed flag should exclude the readonly flag, but check it anyway for safety
