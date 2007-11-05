@@ -1,3 +1,12 @@
+2007-11-05  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * plugins/svndiff.c:
+   Added function for svn revert and check before complete loading of
+   then plugin if svn is inside $PATH.
+   Added patch from Yura Siamashka to re-use an already created tab
+   for a new diff on the same file. Thanks.
+
+
 2007-11-04  Enrico Tröger  <enrico.troeger@uvena.de>
 
  * src/build.c:
