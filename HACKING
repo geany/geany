@@ -108,11 +108,6 @@ parser' below.
 
 Add GEANY_FILETYPES_FOO to filetypes.h.
 Initialize GEANY_FILETYPES_FOO in filetypes_init_types() of filetypes.c.
-The filetype::style_func_ptr is a callback for setting up styling
-information. The callback, styleset_foo(), should be added in
-highlighting.c. The first time it is called, the configuration should
-be loaded in styleset_foo_init(). For more details, see styleset_c(). If
-there isn't a Scintilla lexer, use styleset_none().
 Rebuild Geany.
 From your geany/ directory, run:
 src/geany --generate-data-files
@@ -124,7 +119,7 @@ you need GEANY_DEBUG to be defined when building Geany for the
 --generate-data-files argument to work - this is always defined in the
 SVN version. Alternatively, edit the file by hand.
 
-Most languages will also need a data/filetypes.foo configuration file. See
+Most languages will need a data/filetypes.foo configuration file. See
 data/filetypes.c for an example. For languages with a Scintilla lexer,
 there should be a [styling] section, to correspond to the styles used
 in styleset_foo().
@@ -134,16 +129,28 @@ Programming languages should have:
 [settings] mostly for comment settings.
 [build_settings] for commands to run.
 
+For syntax highlighting, you will need to edit highlighting.c and add
+the following things:
+1. Write styleset_foo_init() to setup default styles and load style
+settings from the filetypes.foo configuration file. For details, see
+styleset_c_init().
+2. Write styleset_foo() to apply styles when a new scintilla widget
+is created. For details, see styleset_c().
+3. Add this in highlighting_init_styles():
+init_styleset_case(GEANY_FILETYPES_FOO, foo);
+4. Add this in highlighting_set_styles():
+styleset_case(GEANY_FILETYPES_FOO, foo);
+
 Error message parsing is done in msgwin_parse_compiler_error_line() of
 msgwindow.c. See the ParseData typedef for more information. (In future
 this may be done with a regex).
 
-For brace indentation, see lexer_has_braces() in editor.c; other
-indentation is done from on_new_line_added().
+For brace indentation, update lexer_has_braces() in editor.c;
+indentation after ':' is done from on_new_line_added().
 
 If the lexer has comment styles, you should add them in is_comment()
 in editor.c. For now, this prevents calltips and autocompletion when
-typing in a comment.
+typing in a comment (but it can still be forced by the user).
 
 If the Scintilla lexer supports user type keywords (e.g. SCLEX_CPP),
 see editor_lexer_get_type_keyword_idx() in editor.c.
