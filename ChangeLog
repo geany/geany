@@ -1,6 +1,9 @@
 2007-11-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c: Enable stopping of Run command on Windows.
+ * src/build.c: Quote first element of command line when using Compile,
+                Build and Make commands on Windows to avoid problems
+                if the tools are specified with full path.
 
 
 2007-11-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

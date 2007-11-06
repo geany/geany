@@ -468,6 +468,29 @@ static void clear_errors(gint idx)
 }
 
 
+#ifdef G_OS_WIN32
+/* cmd is a command line separated with spaces, first element will be escaped with double quotes
+ * and a newly allocated string will be returned */
+static gchar *quote_executable(const gchar *cmd)
+{
+	gchar **fields;
+	gchar *result;
+
+	if (! NZV(cmd))
+		return NULL;
+
+	fields = g_strsplit(cmd, " ", 2);
+	if (fields == NULL || g_strv_length(fields) != 2)
+		return g_strdup(cmd);
+
+	result = g_strconcat("\"", fields[0], "\" ", fields[1], NULL);
+
+	g_strfreev(fields);
+	return result;
+}
+#endif
+
+
 /* dir is the UTF-8 working directory to run cmd in. It can be NULL to use the
  * idx document directory */
 static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
@@ -503,6 +526,10 @@ static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir)
 	g_free(executable);
 
 #ifdef G_OS_WIN32
+	// due to g_shell_parse_argv() we need to enclose the command(first element) of cmd_string with
+	// "" if the command contains a full path(i.e. backslashes) otherwise the backslashes will be
+	// eaten by g_shell_parse_argv().
+	setptr(cmd_string, quote_executable(cmd_string));
 	if (! g_shell_parse_argv(cmd_string, NULL, &argv, NULL))
 		// if automatic parsing failed, fall back to simple, unsafe argv creation
 		argv = g_strsplit(cmd_string, " ", 0);
