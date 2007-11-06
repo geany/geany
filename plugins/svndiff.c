@@ -44,9 +44,10 @@ PLUGIN_INFO(_("SVNdiff"), _("Plugin to create a patch of a file against svn"), V
 static int find_by_filename(const gchar* filename)
 {
 	guint i;
+
 	for (i = 0; i < doc_array->len; i++)
 	{
-		if ( DOC_IDX_VALID(i) && doc_list[i].file_name &&
+		if (doc_list[i].is_valid && doc_list[i].file_name &&
 		     strcmp(doc_list[i].file_name, filename) == 0)
 			return i;
 	}

@@ -1,3 +1,15 @@
+2007-11-06  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/svndiff.c:
+   Fix sign comparison warning.
+
+
+2007-11-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * HACKING:
+   Update 'Adding a filetype' section for new highlighting.c code.
+
+
 2007-11-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/dialogs.c, src/document.c, src/utils.c:
