@@ -111,11 +111,7 @@ static void on_build_build_activate(GtkMenuItem *menuitem, gpointer user_data);
 static void on_build_make_activate(GtkMenuItem *menuitem, gpointer user_data);
 static void on_build_execute_activate(GtkMenuItem *menuitem, gpointer user_data);
 static void on_build_next_error(GtkMenuItem *menuitem, gpointer user_data);
-
-
-#ifndef G_OS_WIN32
 static void kill_process(GPid *pid);
-#endif
 
 
 void build_finalize()
@@ -742,7 +738,6 @@ static GPid build_run_cmd(gint idx)
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
 	{
-		/// TODO - working_dir
 		gchar *vte_cmd = g_strconcat(RUN_SCRIPT_CMD, "\n", NULL);
 		// change into current directory if it is not done by default
 		if (! vc->follow_path) vte_cwd(doc_list[idx].file_name, TRUE);
@@ -1920,11 +1915,7 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 	// make the process "stopable"
 	if (run_info.pid > (GPid) 1)
 	{
-		// on Windows there is no PID returned (resp. it is a handle), currently unsupported
-		/// TODO kill also on Windows, maybe use CloseHandle() or something
-#ifndef G_OS_WIN32
 		kill_process(&run_info.pid);
-#endif
 		return;
 	}
 
@@ -1985,18 +1976,24 @@ on_make_target_entry_activate          (GtkEntry        *entry,
 }
 
 
-#ifndef G_OS_WIN32
 static void kill_process(GPid *pid)
 {
-	/* SIGQUIT is not the best signal to use because it causes a core dump (this should not
+	/* Unix: SIGQUIT is not the best signal to use because it causes a core dump (this should not
 	 * perforce necessary for just killing a process). But we must use a signal which we can
 	 * ignore because the main process get it too, it is declared to ignore in main.c. */
 
 	gint result;
 
+#ifdef G_OS_WIN32
+	g_return_if_fail(*pid != NULL);
+	result = TerminateProcess(*pid, 0);
+	// TerminateProcess() returns TRUE on success, for the check below we have to convert
+	// it to FALSE (and vice versa)
+	result = ! result;
+#else
 	g_return_if_fail(*pid > 1);
-
 	result = kill(*pid, SIGQUIT);
+#endif
 
 	if (result != 0)
 		ui_set_statusbar(TRUE, _("Process could not be stopped (%s)."), g_strerror(errno));
@@ -2006,7 +2003,6 @@ static void kill_process(GPid *pid)
 		build_menu_update(-1);
 	}
 }
-#endif
 
 
 static void
