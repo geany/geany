@@ -362,8 +362,11 @@ void init(GeanyData *data)
 	g_signal_connect((gpointer) menu_svndiff_project, "activate",
 		G_CALLBACK(svnproject_activated), NULL);
 
+	gtk_container_add(GTK_CONTAINER (menu_svndiff_menu),
+		gtk_separator_menu_item_new());
+
 	// SVN revert
-	menu_svndiff_revert = gtk_menu_item_new_with_mnemonic(_("Revert changes"));
+	menu_svndiff_revert = gtk_menu_item_new_with_mnemonic(_("Revert Changes"));
 	gtk_container_add(GTK_CONTAINER (menu_svndiff_menu), menu_svndiff_revert);
 	gtk_tooltips_set_tip(tooltips, menu_svndiff_revert, _("Revert all made changes at this file"), NULL);
 	g_signal_connect((gpointer) menu_svndiff_revert, "activate", G_CALLBACK(svnrevert_activated), NULL);
