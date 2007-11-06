@@ -2,6 +2,9 @@
 
  * plugins/svndiff.c:
    Fix sign comparison warning.
+ * plugins/svndiff.c:
+   Fix gtk_widget_destroy() warning when unloading plugin and no svn
+   binary is in $PATH.
 
 
 2007-11-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

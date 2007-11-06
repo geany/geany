@@ -321,14 +321,10 @@ void init(GeanyData *data)
 
 	// Check for svn inside $PATH. Thanks to Yura Siamashka <yurand2@gmail.com>
 	tmp = g_find_program_in_path("svn");
-	if (!tmp)
-		return;
-	have_svn = TRUE;
+	have_svn = (tmp != NULL);
 	g_free(tmp);
 
 	tooltips = gtk_tooltips_new();
-
-	plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
 
 	menu_svndiff = gtk_image_menu_item_new_with_mnemonic(_("_SVNdiff"));
 	gtk_container_add(GTK_CONTAINER(data->tools_menu), menu_svndiff);
@@ -375,6 +371,10 @@ void init(GeanyData *data)
 	gtk_widget_show_all(menu_svndiff);
 
 	plugin_fields->menu_item = menu_svndiff;
+	if (have_svn)
+		plugin_fields->flags = PLUGIN_IS_DOCUMENT_SENSITIVE;
+	else
+		gtk_widget_set_sensitive(plugin_fields->menu_item, FALSE);
 }
 
 
