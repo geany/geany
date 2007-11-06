@@ -26,6 +26,8 @@
    Make Notebook tabs keybindings group.
    Move Go to tags items into Tags keybindings group.
    Move navigation items into a new Other keybindings group.
+ * HACKING, data/filetypes.restructuredtext:
+   Add a default configuration file for reStructuredText.
 
 
 2007-11-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

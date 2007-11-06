@@ -119,7 +119,7 @@ you need GEANY_DEBUG to be defined when building Geany for the
 --generate-data-files argument to work - this is always defined in the
 SVN version. Alternatively, edit the file by hand.
 
-Most languages will need a data/filetypes.foo configuration file. See
+All languages need a data/filetypes.foo configuration file. See
 data/filetypes.c for an example. For languages with a Scintilla lexer,
 there should be a [styling] section, to correspond to the styles used
 in styleset_foo().
