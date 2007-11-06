@@ -28,6 +28,9 @@
    Move navigation items into a new Other keybindings group.
  * HACKING, data/filetypes.restructuredtext:
    Add a default configuration file for reStructuredText.
+ * src/document.c:
+   Allow scrolling past end of document, so the user can append text
+   with the last lines drawn at the top of the view.
 
 
 2007-11-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
