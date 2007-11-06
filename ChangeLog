@@ -16,6 +16,13 @@
    Capitalize revert menu item.
  * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
    Add 'Strip Trailing Spaces' document menu item.
+ * src/keybindings.c, src/keybindings.h, src/plugindata.h, TODO:
+   Make VTE interpret all keyboard shortcuts except for focus group
+   keybindings.
+   Add enum values for keybinding groups.
+   Make Notebook tabs keybindings group.
+   Move Go to tags items into Tags keybindings group.
+   Move navigation items into a new Other keybindings group.
 
 
 2007-11-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

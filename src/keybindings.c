@@ -355,17 +355,19 @@ void keybindings_init(void)
 	load_user_kb();
 
 	// set section name
-	keys[GEANY_KEYS_MENU_NEW]->section = _("File menu");
-	keys[GEANY_KEYS_MENU_UNDO]->section = _("Edit menu");
-	keys[GEANY_KEYS_MENU_FIND]->section = _("Search menu");
-	keys[GEANY_KEYS_MENU_TOGGLEALL]->section = _("View menu");
-	keys[GEANY_KEYS_MENU_REPLACETABS]->section = _("Document menu");
-	keys[GEANY_KEYS_BUILD_COMPILE]->section = _("Build menu");
-	keys[GEANY_KEYS_MENU_OPENCOLORCHOOSER]->section = _("Tools menu");
-	keys[GEANY_KEYS_MENU_HELP]->section = _("Help menu");
-	keys[GEANY_KEYS_SWITCH_EDITOR]->section = _("Focus commands");
-	keys[GEANY_KEYS_EDIT_TOGGLECASE]->section = _("Editing commands");
-	keys[GEANY_KEYS_EDIT_AUTOCOMPLETE]->section = _("Tag commands");
+	keys[GEANY_KEYS_GROUP_FILE]->section = _("File menu");
+	keys[GEANY_KEYS_GROUP_EDIT]->section = _("Edit menu");
+	keys[GEANY_KEYS_GROUP_SEARCH]->section = _("Search menu");
+	keys[GEANY_KEYS_GROUP_VIEW]->section = _("View menu");
+	keys[GEANY_KEYS_GROUP_DOCUMENT]->section = _("Document menu");
+	keys[GEANY_KEYS_GROUP_BUILD]->section = _("Build menu");
+	keys[GEANY_KEYS_GROUP_TOOLS]->section = _("Tools menu");
+	keys[GEANY_KEYS_GROUP_HELP]->section = _("Help menu");
+	keys[GEANY_KEYS_GROUP_FOCUS]->section = _("Focus commands");
+	keys[GEANY_KEYS_GROUP_TABS]->section = _("Notebook tab commands");
+	keys[GEANY_KEYS_GROUP_EDITING]->section = _("Editing commands");
+	keys[GEANY_KEYS_GROUP_TAGS]->section = _("Tag commands");
+	keys[GEANY_KEYS_GROUP_OTHER]->section = _("Other commands");
 
 	add_menu_accels();
 }
@@ -680,40 +682,22 @@ static gboolean set_sensitive(gpointer widget)
 #ifdef HAVE_VTE
 static gboolean check_vte(GdkEventKey *event, guint keyval)
 {
+	guint i;
 	GtkWidget *widget;
 
 	if (! vc->enable_bash_keys)
 		return FALSE;
 	if (gtk_window_get_focus(GTK_WINDOW(app->window)) != vc->vte)
 		return FALSE;
-	if (event->state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK) &&
-		(keyval == GDK_c || keyval == GDK_v))	// copy/paste
-		return TRUE;
-	if (event->state != GDK_CONTROL_MASK)
-		return FALSE;
+	if (event->state == 0)
+		return FALSE;	// just to prevent menubar flickering
 
-	// Check Ctrl-[a-z] terminal shortcuts
-	switch (keyval)
+	// make focus commands override any bash commands
+	for (i = GEANY_KEYS_GROUP_FOCUS; i < GEANY_KEYS_GROUP_TABS; i++)
 	{
-		case GDK_a:
-		case GDK_c:
-		case GDK_d:
-		case GDK_e:
-		case GDK_l:
-		case GDK_k:
-		case GDK_q:
-		case GDK_r:
-		case GDK_s:
-		case GDK_u:
-		case GDK_w:
-		case GDK_z:
-			break;
-		default:
+		if (event->state == keys[i]->mods && keyval == keys[i]->key)
 			return FALSE;
 	}
-	if (event->state == keys[GEANY_KEYS_SWITCH_EDITOR]->mods &&
-		keyval == keys[GEANY_KEYS_SWITCH_EDITOR]->key)
-		return FALSE;	// make switch to editor override any bash commands
 
 	/* Temporarily disable the menus to prevent conflicting menu accelerators
 	 * from overriding the VTE bash shortcuts.
