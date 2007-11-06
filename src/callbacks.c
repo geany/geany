@@ -2121,3 +2121,13 @@ on_spaces1_activate                    (GtkMenuItem     *menuitem,
 	ui_update_statusbar(idx, -1);
 }
 
+
+void
+on_strip_trailing_spaces1_activate     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+	gint idx = document_get_cur_idx();
+
+	document_strip_trailing_spaces(idx);
+}
+

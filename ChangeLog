@@ -9,6 +9,8 @@
    Add menu separator so users don't accidentally click revert and lose
    all their work.
    Capitalize revert menu item.
+ * src/interface.c, src/callbacks.c, src/callbacks.h, geany.glade:
+   Add 'Strip Trailing Spaces' document menu item.
 
 
 2007-11-05  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
