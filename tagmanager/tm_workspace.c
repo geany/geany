@@ -31,24 +31,18 @@ guint workspace_class_id = 0;
 
 static gboolean tm_create_workspace(const gchar *config_dir)
 {
-	/// TODO check whether the created file is really necessary at all
-	gchar *file_name = g_strdup_printf("%s%ctagmanager_%ld.%d",
-		config_dir, G_DIR_SEPARATOR, time(NULL), getpid());
-
 	workspace_class_id = tm_work_object_register(tm_workspace_free, tm_workspace_update
 		  , tm_workspace_find_object);
 	theWorkspace = g_new(TMWorkspace, 1);
 	if (FALSE == tm_work_object_init(TM_WORK_OBJECT(theWorkspace),
-		  workspace_class_id, file_name, TRUE))
+		  workspace_class_id, NULL, TRUE))
 	{
-		g_free(file_name);
 		g_free(theWorkspace);
 		theWorkspace = NULL;
 		g_warning("Failed to initialize workspace");
 		return FALSE;
 	}
 
-	g_free(file_name);
 	theWorkspace->global_tags = NULL;
 	theWorkspace->work_objects = NULL;
 	return TRUE;

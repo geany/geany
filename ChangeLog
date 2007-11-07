@@ -3,6 +3,9 @@
  * src/vte.c: Apply patch from Simone Denei to add a "Restart" item to
               the VTE popup menu in case running application hangs.
  * src/utils.c: Fix bug when creating configuration directory on Unix.
+ * tagmanager/tm_work_object.c, tagmanager/tm_workspace.c:
+   Don't create tagmanager status file, seems to be unnecessary
+   (needs testing).
 
 
 2007-11-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

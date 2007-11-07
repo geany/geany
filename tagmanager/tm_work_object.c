@@ -91,37 +91,45 @@ gboolean tm_work_object_init(TMWorkObject *work_object, guint type, const char *
 	struct stat s;
 	int status;
 
-	if (0 != (status = g_stat(file_name, &s)))
+	if (file_name != NULL)
 	{
-		if (create)
+		if (0 != (status = g_stat(file_name, &s)))
 		{
-			FILE *f;
-			if (NULL == (f = g_fopen(file_name, "a+")))
+			if (create)
 			{
-				g_warning("Unable to create file %s", file_name);
-				return FALSE;
+				FILE *f;
+				if (NULL == (f = g_fopen(file_name, "a+")))
+				{
+					g_warning("Unable to create file %s", file_name);
+					return FALSE;
+				}
+				fclose(f);
+				status = g_stat(file_name, &s);
 			}
-			fclose(f);
-			status = g_stat(file_name, &s);
 		}
+		if (0 != status)
+		{
+			/* g_warning("Unable to stat %s", file_name);*/
+			return FALSE;
+		}
+		if (!S_ISREG(s.st_mode))
+		{
+			g_warning("%s: Not a regular file", file_name);
+			return FALSE;
+		}
+		work_object->file_name = tm_get_real_path(file_name);
+		work_object->short_name = strrchr(work_object->file_name, '/');
+		if (work_object->short_name)
+			++ work_object->short_name;
+		else
+			work_object->short_name = work_object->file_name;
 	}
-	if (0 != status)
+	else
 	{
-		/* g_warning("Unable to stat %s", file_name);*/
-		return FALSE;
-	}
-	if (!S_ISREG(s.st_mode))
-	{
-		g_warning("%s: Not a regular file", file_name);
-		return FALSE;
+		work_object->file_name = NULL;
+		work_object->short_name = NULL;
 	}
 	work_object->type = type;
-	work_object->file_name = tm_get_real_path(file_name);
-	work_object->short_name = strrchr(work_object->file_name, '/');
-	if (work_object->short_name)
-		++ work_object->short_name;
-	else
-		work_object->short_name = work_object->file_name;
 	work_object->parent = NULL;
 	work_object->analyze_time = 0;
 	work_object->tags_array = NULL;
