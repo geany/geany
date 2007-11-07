@@ -2,6 +2,7 @@
 
  * src/vte.c: Apply patch from Simone Denei to add a "Restart" item to
               the VTE popup menu in case running application hangs.
+ * src/utils.c: Fix bug when creating configuration directory on Unix.
 
 
 2007-11-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

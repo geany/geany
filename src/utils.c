@@ -722,6 +722,12 @@ gchar *utils_get_hostname()
 }
 
 
+#ifdef G_OS_WIN32
+# define DIR_SEP "\\" // on Windows we need an additional dir separator
+#else
+# define DIR_SEP ""
+#endif
+
 gint utils_make_settings_dir()
 {
 	gint saved_errno = 0;
@@ -744,16 +750,12 @@ gint utils_make_settings_dir()
 		// use _waccess on Windows, access() doesn't accept special characters
 		saved_errno = win32_check_write_permission(app->configdir);
 #else
-		access(app->configdir, R_OK | W_OK);
+		// access set also errno to "FILE NOT FOUND" even if app->configdir is writeable, so use
+		// errno only when access() explicitly returns an error
+		if (access(app->configdir, R_OK | W_OK) != 0)
+			saved_errno = errno;
 #endif
-		saved_errno = errno;
 	}
-
-#ifdef G_OS_WIN32
-# define DIR_SEP "\\" // on Windows we need an additional dir separator
-#else
-# define DIR_SEP ""
-#endif
 
 	// make subdir for filetype definitions
 	if (saved_errno == 0)
