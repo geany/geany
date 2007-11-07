@@ -74,6 +74,7 @@ enum
 	POPUP_COPY,
 	POPUP_PASTE,
 	POPUP_CHANGEPATH,
+	POPUP_RESTARTTERMINAL,
 	POPUP_PREFERENCES
 };
 
@@ -298,6 +299,19 @@ static void vte_start(GtkWidget *widget)
 }
 
 
+static void vte_restart(GtkWidget *widget)
+{
+		vte_get_working_directory(); // try to keep the working directory when restarting the VTE
+	 	if (pid > 0)
+		{
+			kill(pid, SIGINT);
+			pid = 0;
+		}
+		vf->vte_terminal_reset(VTE_TERMINAL(widget), TRUE, TRUE);
+		vte_start(widget);
+}
+
+
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	if (event->button == 3)
@@ -380,6 +394,12 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 				vte_cwd(doc_list[idx].file_name, TRUE);
 			break;
 		}
+		case POPUP_RESTARTTERMINAL:
+		{
+			vte_restart(vc->vte);
+			break;
+			
+		}
 		case POPUP_PREFERENCES:
 		{
 			GtkWidget *notebook;
@@ -415,6 +435,11 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_CHANGEPATH));
+
+	item = gtk_image_menu_item_new_with_label(_("Restart terminal"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_RESTARTTERMINAL));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);

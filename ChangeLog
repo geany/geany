@@ -1,3 +1,9 @@
+2007-11-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/vte.c: Apply patch from Simone Denei to add a "Restart" item to
+              the VTE popup menu in case running application hangs.
+
+
 2007-11-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c: Enable stopping of Run command on Windows.
