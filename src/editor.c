@@ -1403,7 +1403,8 @@ static void editor_auto_table(document *doc, gint pos)
 
 static void real_comment_multiline(gint idx, gint line_start, gint last_line)
 {
-	gchar *eol, *str_begin, *str_end;
+	const gchar *eol;
+	gchar *str_begin, *str_end;
 	gint line_len;
 
 	if (idx == -1 || ! doc_list[idx].is_valid || doc_list[idx].file_type == NULL) return;

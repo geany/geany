@@ -257,7 +257,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 }
 
 
-/**
+/*
  * (stolen from anjuta and modified)
  * Search backward through size bytes looking for a '<', then return the tag if any
  * @return The tag name
@@ -589,7 +589,7 @@ gint utils_get_eol_char_len(gint idx)
 
 
 /* returns the end-of-line character(s) of the specified editor */
-gchar *utils_get_eol_char(gint idx)
+const gchar *utils_get_eol_char(gint idx)
 {
 	if (idx == -1) return '\0';
 
@@ -600,13 +600,6 @@ gchar *utils_get_eol_char(gint idx)
 		case SC_EOL_LF:
 		default: return "\n"; break;
 	}
-}
-
-
-/* mainly debug function, to get TRUE or FALSE as ascii from a gboolean */
-gchar *utils_btoa(gboolean sbool)
-{
-	return (sbool) ? "TRUE" : "FALSE";
 }
 
 

@@ -55,11 +55,6 @@ gboolean utils_goto_line(gint idx, gint line);
 
 gint utils_write_file(const gchar *filename, const gchar *text);
 
-/**
- * (stolen from anjuta and modified)
- * Search backward through size bytes looking for a '<', then return the tag if any
- * @return The tag name
- */
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size, gboolean check_tag);
 
 gboolean utils_check_disk_status(gint idx, gboolean force);
@@ -71,10 +66,7 @@ gint utils_get_current_function(gint idx, const gchar **tagname);
 gint utils_get_eol_char_len(gint idx);
 
 /* returns the end-of-line character(s) of the specified editor */
-gchar *utils_get_eol_char(gint idx);
-
-/* mainly debug function, to get TRUE or FALSE as ascii from a gboolean */
-gchar *utils_btoa(gboolean sbool);
+const gchar *utils_get_eol_char(gint idx);
 
 gboolean utils_atob(const gchar *str);
 
