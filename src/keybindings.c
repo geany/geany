@@ -680,7 +680,7 @@ static gboolean set_sensitive(gpointer widget)
 
 
 #ifdef HAVE_VTE
-static gboolean check_vte(GdkEventKey *event, guint keyval)
+static gboolean check_vte(GdkModifierType state, guint keyval)
 {
 	guint i;
 	GtkWidget *widget;
@@ -689,13 +689,13 @@ static gboolean check_vte(GdkEventKey *event, guint keyval)
 		return FALSE;
 	if (gtk_window_get_focus(GTK_WINDOW(app->window)) != vc->vte)
 		return FALSE;
-	if (event->state == 0)
+	if (state == 0 && (keyval < GDK_F1 || keyval > GDK_F35))
 		return FALSE;	// just to prevent menubar flickering
 
 	// make focus commands override any bash commands
 	for (i = GEANY_KEYS_GROUP_FOCUS; i < GEANY_KEYS_GROUP_TABS; i++)
 	{
-		if (event->state == keys[i]->mods && keyval == keys[i]->key)
+		if (state == keys[i]->mods && keyval == keys[i]->key)
 			return FALSE;
 	}
 
@@ -735,7 +735,7 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 
 	// special cases
 #ifdef HAVE_VTE
-	if (vte_info.have_vte && check_vte(event, keyval))
+	if (vte_info.have_vte && check_vte(event->state, keyval))
 		return FALSE;
 #endif
 	if (check_construct_completion(event))

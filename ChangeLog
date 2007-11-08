@@ -13,6 +13,8 @@
    Set Ctrl-Alt-P as default Prefs KB.
    Change Decrease Indent default KB to Ctrl-U (very common action,
    and Ctrl-U was unused).
+ * src/keybindings.c:
+   Allow VTE to interpret F-keys (except if they're focus commands).
 
 
 2007-11-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
