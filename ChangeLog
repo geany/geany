@@ -5,6 +5,10 @@
    enum for tree model columns.
    Ask the user whether to override an existing keybinding when setting
    a combination that is already in use.
+ * plugins/filebrowser.c, src/treeviews.c, src/vte.c:
+   Fix popup menu item capitalization according to Gnome HIG.
+   Add separator menu item to VTE popup menu.
+   Move VTE Prefs item below Input Methods.
 
 
 2007-11-08  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

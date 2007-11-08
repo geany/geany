@@ -398,7 +398,6 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		{
 			vte_restart(vc->vte);
 			break;
-			
 		}
 		case POPUP_PREFERENCES:
 		{
@@ -431,24 +430,19 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PASTE));
 
-	item = gtk_image_menu_item_new_with_label(_("Set path from document"));
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_CHANGEPATH));
-
-	item = gtk_image_menu_item_new_with_label(_("Restart terminal"));
-	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_RESTARTTERMINAL));
-
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_from_stock("gtk-preferences", NULL);
+	item = gtk_image_menu_item_new_with_label(_("Set Path From Document"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_CHANGEPATH));
+
+	item = gtk_image_menu_item_new_with_label(_("Restart Terminal"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_RESTARTTERMINAL));
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -460,9 +454,18 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	msgwin_menu_add_common_items(GTK_MENU(menu));
-
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vc->im_submenu);
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	item = gtk_image_menu_item_new_from_stock("gtk-preferences", NULL);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer)item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
+
+	msgwin_menu_add_common_items(GTK_MENU(menu));
 
 	return menu;
 }

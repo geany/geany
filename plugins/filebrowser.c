@@ -293,7 +293,7 @@ static GtkWidget *create_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_check_menu_item_new_with_mnemonic(_("Show _hidden files"));
+	item = gtk_check_menu_item_new_with_mnemonic(_("Show _Hidden Files"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate",
@@ -303,7 +303,7 @@ static GtkWidget *create_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide sidebar"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide Sidebar"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);

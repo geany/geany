@@ -356,14 +356,14 @@ static void create_taglist_popup_menu()
 
 	tv.popup_taglist = gtk_menu_new();
 
-	item = gtk_menu_item_new_with_mnemonic(_("Sort by _name"));
+	item = gtk_menu_item_new_with_mnemonic(_("Sort by _Name"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
 	g_signal_connect((gpointer) item, "activate",
 				G_CALLBACK(on_taglist_tree_popup_clicked),
 				GINT_TO_POINTER(SYMBOL_ACTION_SORT_BY_NAME));
 
-	item = gtk_menu_item_new_with_mnemonic(_("Sort by _appearance"));
+	item = gtk_menu_item_new_with_mnemonic(_("Sort by _Appearance"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_taglist), item);
 	g_signal_connect((gpointer) item, "activate",
@@ -386,7 +386,7 @@ static void create_taglist_popup_menu()
 	g_signal_connect((gpointer) mi.symbols_show_documents, "activate",
 			G_CALLBACK(on_list_document_activate), NULL);
 
-	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide sidebar"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide Sidebar"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
@@ -451,7 +451,7 @@ static void create_openfiles_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), item);
 
-	mi.documents_fullpath = gtk_check_menu_item_new_with_mnemonic(_("Show _full path name"));
+	mi.documents_fullpath = gtk_check_menu_item_new_with_mnemonic(_("Show _Full Path Name"));
 	gtk_widget_show(mi.documents_fullpath);
 	gtk_container_add(GTK_CONTAINER(tv.popup_openfiles), mi.documents_fullpath);
 	g_signal_connect((gpointer) mi.documents_fullpath, "activate",
@@ -473,7 +473,7 @@ static void create_openfiles_popup_menu()
 	g_signal_connect((gpointer) mi.documents_show_documents, "activate",
 			G_CALLBACK(on_list_document_activate), NULL);
 
-	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide sidebar"));
+	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide Sidebar"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
 		gtk_image_new_from_stock("gtk-close", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
