@@ -140,7 +140,7 @@ static void init_default_kb()
 	keys[GEANY_KEYS_MENU_INSERTDATE] = fill(cb_func_menu_insert_date,
 		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"));
 	keys[GEANY_KEYS_MENU_PREFERENCES] = fill(cb_func_menu_preferences,
-		0, 0, "menu_preferences", _("Preferences"));
+		GDK_p, GDK_CONTROL_MASK | GDK_MOD1_MASK, "menu_preferences", _("Preferences"));
 
 	// search
 	keys[GEANY_KEYS_MENU_FIND] = fill(cb_func_menu_search,
@@ -163,7 +163,7 @@ static void init_default_kb()
 		GDK_l, GDK_CONTROL_MASK, "menu_gotoline", _("Go to Line"));
 
 	keys[GEANY_KEYS_MENU_TOGGLEALL] = fill(cb_func_menu_toggle_all,
-		0, 0, "menu_toggleall", _("Toggle all additional widgets"));
+		0, 0, "menu_toggleall", _("Toggle All Additional Widgets"));
 	keys[GEANY_KEYS_MENU_FULLSCREEN] = fill(cb_func_menu_fullscreen,
 		GDK_F11, 0, "menu_fullscreen", _("Fullscreen"));
 	keys[GEANY_KEYS_MENU_MESSAGEWINDOW] = fill(cb_func_menu_messagewindow,
@@ -256,7 +256,7 @@ static void init_default_kb()
 	keys[GEANY_KEYS_EDIT_INCREASEINDENT] = fill(cb_func_edit,
 		GDK_i, GDK_CONTROL_MASK, "edit_increaseindent", _("Increase indent"));
 	keys[GEANY_KEYS_EDIT_DECREASEINDENT] = fill(cb_func_edit,
-		GDK_i, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_decreaseindent", _("Decrease indent"));
+		GDK_u, GDK_CONTROL_MASK, "edit_decreaseindent", _("Decrease indent"));
 	keys[GEANY_KEYS_EDIT_INCREASEINDENTBYSPACE] = fill(cb_func_edit,
 		0, 0, "edit_increaseindentbyspace", _("Increase indent by one space"));
 	keys[GEANY_KEYS_EDIT_DECREASEINDENTBYSPACE] = fill(cb_func_edit,
