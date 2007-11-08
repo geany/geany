@@ -80,6 +80,74 @@ static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer use
 static void on_openfiles_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
 
+enum
+{
+	KB_TREE_ACTION,
+	KB_TREE_SHORTCUT,
+	KB_TREE_INDEX,
+};
+
+static void init_kb_tree()
+{
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+
+	tree = GTK_TREE_VIEW(lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
+	//g_object_set(tree, "vertical-separator", 6, NULL);
+
+	store = gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
+	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
+
+	renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(_("Action"), renderer, "text", KB_TREE_ACTION, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+
+	renderer = gtk_cell_renderer_text_new();
+	g_object_set(renderer, "editable", TRUE, NULL);
+	column = gtk_tree_view_column_new_with_attributes(_("Shortcut"), renderer, "text", KB_TREE_SHORTCUT, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+
+	// set policy settings for the scollwedwindow around the treeview again, because glade
+	// doesn't keep the settings
+	gtk_scrolled_window_set_policy(
+			GTK_SCROLLED_WINDOW(lookup_widget(ui_widgets.prefs_dialog, "scrolledwindow8")),
+			GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+
+	g_signal_connect(G_OBJECT(renderer), "edited", G_CALLBACK(on_cell_edited), NULL);
+	g_signal_connect(G_OBJECT(tree), "button-press-event",
+				G_CALLBACK(on_tree_view_button_press_event), NULL);
+	g_signal_connect(G_OBJECT(lookup_widget(ui_widgets.prefs_dialog, "button2")), "clicked",
+				G_CALLBACK(on_tree_view_button_press_event), NULL);
+}
+
+
+static void init_keybindings()
+{
+	GtkTreeIter parent, iter;
+	gint i;
+	gchar *key_string;
+
+	if (store == NULL)
+		init_kb_tree();
+
+	for (i = 0; i < GEANY_MAX_KEYS; i++)
+	{
+		if (keys[i]->section != NULL)
+		{
+			gtk_tree_store_append(store, &parent, NULL);
+			gtk_tree_store_set(store, &parent, KB_TREE_ACTION, keys[i]->section, -1);
+		}
+
+		key_string = gtk_accelerator_name(keys[i]->key, keys[i]->mods);
+		gtk_tree_store_append(store, &iter, &parent);
+		gtk_tree_store_set(store, &iter, KB_TREE_ACTION, keys[i]->label,
+			KB_TREE_SHORTCUT, key_string, KB_TREE_INDEX, i, -1);
+		g_free(key_string);
+	}
+	gtk_tree_view_expand_all(GTK_TREE_VIEW(tree));
+}
+
+
 void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
@@ -370,59 +438,7 @@ void prefs_init_dialog(void)
 
 
 	// Keybindings
-	if (store == NULL)
-	{
-		GtkCellRenderer *renderer;
-		GtkTreeViewColumn *column;
-
-		tree = GTK_TREE_VIEW(lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
-		//g_object_set(tree, "vertical-separator", 6, NULL);
-
-		store = gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
-		gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
-
-		renderer = gtk_cell_renderer_text_new();
-		column = gtk_tree_view_column_new_with_attributes(_("Action"), renderer, "text", 0, NULL);
-		gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
-
-		renderer = gtk_cell_renderer_text_new();
-		g_object_set(renderer, "editable", TRUE, NULL);
-		column = gtk_tree_view_column_new_with_attributes(_("Shortcut"), renderer, "text", 1, NULL);
-		gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
-
-		// set policy settings for the scollwedwindow around the treeview again, because glade
-		// doesn't keep the settings
-		gtk_scrolled_window_set_policy(
-				GTK_SCROLLED_WINDOW(lookup_widget(ui_widgets.prefs_dialog, "scrolledwindow8")),
-				GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-
-		g_signal_connect(G_OBJECT(renderer), "edited", G_CALLBACK(on_cell_edited), NULL);
-		g_signal_connect(G_OBJECT(tree), "button-press-event",
-					G_CALLBACK(on_tree_view_button_press_event), NULL);
-		g_signal_connect(G_OBJECT(lookup_widget(ui_widgets.prefs_dialog, "button2")), "clicked",
-					G_CALLBACK(on_tree_view_button_press_event), NULL);
-	}
-
-	{
-		GtkTreeIter parent, iter;
-		gint i;
-		gchar *key_string;
-
-		for (i = 0; i < GEANY_MAX_KEYS; i++)
-		{
-			if (keys[i]->section != NULL)
-			{
-				gtk_tree_store_append(store, &parent, NULL);
-				gtk_tree_store_set(store, &parent, 0, keys[i]->section, -1);
-			}
-
-			key_string = gtk_accelerator_name(keys[i]->key, keys[i]->mods);
-			gtk_tree_store_append(store, &iter, &parent);
-			gtk_tree_store_set(store, &iter, 0, keys[i]->label, 1, key_string, 2, i, -1);
-			g_free(key_string);
-		}
-	}
-	gtk_tree_view_expand_all(GTK_TREE_VIEW(tree));
+	init_keybindings();
 
 #ifndef HAVE_PLUGINS
 	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "check_plugins"), FALSE);
@@ -1078,6 +1094,34 @@ static void on_dialog_response(GtkWidget *dialog, gint response, gpointer iter)
 }
 
 
+static gboolean find_iter(guint i, GtkTreeIter *iter)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	guint idx;
+	GtkTreeIter parent;
+
+	if (! gtk_tree_model_get_iter_first(model, &parent))
+		return FALSE;	// no items
+
+	while (TRUE)
+	{
+		if (! gtk_tree_model_iter_children(model, iter, &parent))
+			return FALSE;
+
+		while (TRUE)
+		{
+			gtk_tree_model_get(model, iter, 2, &idx, -1);
+			if (idx == i)
+				return TRUE;
+			if (! gtk_tree_model_iter_next(model, iter))
+				break;
+		}
+		if (! gtk_tree_model_iter_next(model, &parent))
+			return FALSE;
+	}
+}
+
+
 // test if the entered key combination is already used
 static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const gchar *action)
 {
@@ -1092,9 +1136,19 @@ static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const
 		if (keys[i]->key == key && keys[i]->mods == mods
 			&& ! (keys[i]->key == keys[idx]->key && keys[i]->mods == keys[idx]->mods))
 		{
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-				_("The combination '%s' is already used for \"%s\". Please choose another one."),
-				action, keys[i]->label);
+			if (dialogs_show_question_full(app->window, _("_Override"), GTK_STOCK_CANCEL,
+				_("Override that keybinding?"),
+				_("The combination '%s' is already used for \"%s\"."),
+				action, keys[i]->label))
+			{
+				GtkTreeIter iter;
+
+				keys[i]->key = 0;
+				keys[i]->mods = 0;
+				if (find_iter(i, &iter))
+					gtk_tree_store_set(store, &iter, 1, NULL, -1);	// clear item
+				continue;
+			}
 			return TRUE;
 		}
 	}
