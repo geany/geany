@@ -53,6 +53,8 @@ void project_new();
 
 void project_open();
 
+void project_save();
+
 void project_close();
 
 void project_properties();

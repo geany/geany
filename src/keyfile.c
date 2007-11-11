@@ -87,7 +87,7 @@ static void save_recent_files(GKeyFile *config)
 }
 
 
-static void save_session_files(GKeyFile *config)
+void configuration_save_session_files(GKeyFile *config)
 {
 	gint idx, npage;
 	gchar *tmp;
@@ -350,7 +350,7 @@ void configuration_save()
 	save_ui_prefs(config);
 	project_save_prefs(config);	// save project filename, etc.
 	save_recent_files(config);
-	save_session_files(config);
+	configuration_save_session_files(config);
 
 	// write the file
 	data = g_key_file_to_data(config, NULL, NULL);
@@ -361,8 +361,11 @@ void configuration_save()
 	g_free(configfile);
 }
 
-
-static void load_file_lists(GKeyFile *config)
+/*
+ * Load session list from the given keyfile, and store it in the global
+ * session_files variable for later file loading
+ * */
+void configuration_load_session_files(GKeyFile *config)
 {
 	gchar **recent_files;
 	guint i;
@@ -384,6 +387,10 @@ static void load_file_lists(GKeyFile *config)
 		}
 	}
 	g_strfreev(recent_files);
+
+	// the project may load another list than the main setting
+	if (session_files != NULL)
+		g_ptr_array_free(session_files, TRUE);
 
 	session_files = g_ptr_array_new();
 	have_session_files = TRUE;
@@ -681,7 +688,7 @@ gboolean configuration_load()
 	load_dialog_prefs(config);
 	load_ui_prefs(config);
 	project_load_prefs(config);
-	load_file_lists(config);
+	configuration_load_session_files(config);
 
 	g_key_file_free(config);
 	g_free(configfile);
@@ -761,6 +768,7 @@ gboolean configuration_open_files()
 	document_colourise_new();
 
 	g_ptr_array_free(session_files, TRUE);
+	session_files = NULL;
 
 	if (failure)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));

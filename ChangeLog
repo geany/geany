@@ -9,7 +9,9 @@
    Enable close tab on middle-clicking a notebook tab label.
    Enable toggle additional widgets on double-clicking notebook tab
    label.
-
+ * THANKS, src/project.c, src/project.h, src/keyfile.c, src/keyfile.h,
+   src/main.c: Apply patch from Bo Lorentsen to add support for project
+               session files (thank you).
 
 2007-11-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 

@@ -733,7 +733,7 @@ gint main(gint argc, gchar **argv)
 		{
 			load_project_file();
 
-			// load session files
+			// load session files into tabs, as they are found in the session_files variable
 			if (! configuration_open_files())
 			{
 				ui_update_popup_copy_items(-1);
@@ -790,6 +790,9 @@ void main_quit()
 	if (want_plugins)
 		plugins_free();
 #endif
+	if (app->project != NULL)
+		project_close();
+		
 	navqueue_free();
 	keybindings_free();
 	filetypes_save_commands();
@@ -802,7 +805,6 @@ void main_quit()
 	document_finalize();
 	symbols_finalize();
 	editor_finalize();
-	if (app->project != NULL) project_close();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_free(app->configdir);

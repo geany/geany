@@ -37,6 +37,7 @@
 #include "ui_utils.h"
 #include "msgwindow.h"
 #include "main.h"
+#include "keyfile.h"
 #ifdef G_OS_WIN32
 # include "win32.h"
 #endif
@@ -208,6 +209,7 @@ static void run_open_dialog(GtkDialog *dialog)
 			goto retry;
 		}
 		g_free(filename);
+		configuration_open_files();
 	}
 }
 #endif
@@ -229,7 +231,12 @@ void project_open()
 	file = win32_show_project_open_dialog(_("Open Project"), dir, FALSE);
 	if (file != NULL)
 	{
-		load_config(file);
+		// try to load the config
+		if (! project_load_file(file))
+		{
+			SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
+		}
+		configuration_open_files();
 		g_free(file);
 	}
 #else
@@ -282,13 +289,21 @@ static void update_ui()
 }
 
 
-void project_close()
+void project_save()
 {
 	g_return_if_fail(app->project != NULL);
 
-	/// TODO handle open project files
-
 	write_config();
+
+	ui_set_statusbar(TRUE, _("Project \"%s\" saved."), app->project->name);
+}
+
+
+void project_close()
+{
+	//~ gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+	g_return_if_fail(app->project != NULL);
+
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
 
 	g_free(app->project->name);
@@ -299,6 +314,16 @@ void project_close()
 
 	g_free(app->project);
 	app->project = NULL;
+
+/// TODO really close all tabs? maybe it should configurable
+/*
+	for(i = 0; i < max; i++)
+	{
+		if (! document_remove(0))
+			break;
+	}
+	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
+*/
 
 	update_ui();
 }
@@ -834,6 +859,9 @@ static gboolean load_config(const gchar *filename)
 	p->run_cmd = utils_get_setting_string(config, "project", "run_cmd", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
+	// fetch session files too
+	configuration_load_session_files(config);
+
 	g_key_file_free(config);
 
 	update_ui();
@@ -869,6 +897,10 @@ static gboolean write_config()
 	if (p->file_patterns)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
+
+	// store the session files into the project too
+	/// TODO maybe it is useful to store relative file names if base_path is relative
+	configuration_save_session_files(config);
 
 	// write the file
 	data = g_key_file_to_data(config, NULL, NULL);
@@ -920,6 +952,9 @@ void project_save_prefs(GKeyFile *config)
 	}
 	g_key_file_set_string(config, "project", "project_file_path",
 		NVL(local_prefs.project_file_path, ""));
+
+	if (project != NULL)
+		write_config(); // to store project session files
 }
 
 
