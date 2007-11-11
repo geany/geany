@@ -5,6 +5,10 @@
    utils_get_date_time().
  * src/main.c: Don't compile plugin command line option when plugin
                support is disabled.
+ * src/notebook.c:
+   Enable close tab on middle-clicking a notebook tab label.
+   Enable toggle additional widgets on double-clicking notebook tab
+   label.
 
 
 2007-11-08  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

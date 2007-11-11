@@ -32,6 +32,7 @@
 #include "ui_utils.h"
 #include "treeviews.h"
 #include "support.h"
+#include "callbacks.h"
 
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
 
@@ -300,11 +301,23 @@ static void tab_count_changed()
 	}
 }
 
+gboolean notebook_tab_label_cb(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
+	// toggle additional widgets on double click
+	if (event->type == GDK_2BUTTON_PRESS)
+		on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
+	// close tab on middle click
+	if (event->button == 2)
+		document_remove(gtk_notebook_page_num(GTK_NOTEBOOK(app->notebook), GTK_WIDGET(user_data)));
+
+	return FALSE;
+}
+
 
 /* Returns page number of notebook page, or -1 on error */
 gint notebook_new_tab(gint doc_idx)
 {
-	GtkWidget *hbox;
+	GtkWidget *hbox, *ebox;
 	gint tabnum;
 	gchar *title;
 	document *this = &(doc_list[doc_idx]);
@@ -317,8 +330,14 @@ gint notebook_new_tab(gint doc_idx)
 
 	this->tab_label = gtk_label_new(title);
 
+	ebox = gtk_event_box_new();
+	GTK_WIDGET_SET_FLAGS(ebox, GTK_NO_WINDOW);
+	g_signal_connect(G_OBJECT(ebox), "button-press-event",
+		G_CALLBACK(notebook_tab_label_cb), page);
+
 	hbox = gtk_hbox_new(FALSE, 2);
-	gtk_box_pack_start(GTK_BOX(hbox), this->tab_label, FALSE, FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(ebox), this->tab_label);
+	gtk_box_pack_start(GTK_BOX(hbox), ebox, FALSE, FALSE, 0);
 
 	if (prefs.show_tab_cross)
 	{
