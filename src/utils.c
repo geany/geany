@@ -881,24 +881,16 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 }
 
 
-gchar *utils_get_date_time()
+gchar *utils_get_date_time(const gchar *format)
 {
 	time_t tp = time(NULL);
 	const struct tm *tm = localtime(&tp);
-	gchar *date = g_malloc0(25);
+	gchar *date = g_malloc0(256);
 
-	strftime(date, 25, "%d.%m.%Y %H:%M:%S %Z", tm);
-	return date;
-}
+	if (format == NULL)
+		return NULL;
 
-
-gchar *utils_get_date()
-{
-	time_t tp = time(NULL);
-	const struct tm *tm = localtime(&tp);
-	gchar *date = g_malloc0(11);
-
-	strftime(date, 11, "%Y-%m-%d", tm);
+	strftime(date, 256, format, tm);
 	return date;
 }
 

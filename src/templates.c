@@ -40,6 +40,9 @@
 #include "ui_utils.h"
 
 
+#define TEMPLATE_DATE_FORMAT "%Y-%m-%d"
+#define TEMPLATE_DATETIME_FORMAT "%d.%m.%Y %H:%M:%S %Z"
+
 // default templates, only for initial tempate file creation on first start of Geany
 static const gchar templates_gpl_notice[] = "\
 This program is free software; you can redistribute it and/or modify\n\
@@ -347,12 +350,8 @@ static void create_new_menu_items()
 
 void templates_init(void)
 {
-	time_t tp = time(NULL);
-	const struct tm *tm = localtime(&tp);
-	gchar *year = g_malloc0(5);
-	gchar *date = utils_get_date();
-
-	strftime(year, 5, "%Y", tm);
+	gchar *year = utils_get_date_time("%Y");
+	gchar *date = utils_get_date_time(TEMPLATE_DATE_FORMAT);
 
 	init_general_templates(year, date);
 	init_ft_templates(year, date);
@@ -524,12 +523,12 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FILEHEADER]);
 	gchar *shortname;
 	gchar *result;
-	gchar *date = utils_get_date_time();
+	gchar *date = utils_get_date_time(TEMPLATE_DATETIME_FORMAT);
 	filetype_id ft_id = filetype_idx;
 	filetype *ft = filetypes[ft_id];
 
 	filetypes_load_config(ft_id);	// load any user extension setting
-	
+
 	if (fname == NULL)
 	{
 		if (ft_id == GEANY_FILETYPES_ALL)
@@ -587,8 +586,8 @@ gchar *templates_get_template_generic(gint template)
 gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name)
 {
 	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FUNCTION]);
-	gchar *date = utils_get_date();
-	gchar *datetime = utils_get_date_time();
+	gchar *date = utils_get_date_time(TEMPLATE_DATE_FORMAT);
+	gchar *datetime = utils_get_date_time(TEMPLATE_DATETIME_FORMAT);
 	gchar *result;
 
 	template = utils_str_replace(template, "{date}", date);
@@ -606,7 +605,7 @@ gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name
 
 gchar *templates_get_template_changelog(void)
 {
-	gchar *date = utils_get_date_time();
+	gchar *date = utils_get_date_time(TEMPLATE_DATETIME_FORMAT);
 	gchar *result = g_strdup(templates[GEANY_TEMPLATE_CHANGELOG]);
 	result = utils_str_replace(result, "{date}", date);
 
