@@ -106,7 +106,9 @@ static gboolean generate_datafiles = FALSE;
 static gboolean generate_tags = FALSE;
 static gboolean no_preprocessing = FALSE;
 static gboolean ft_names = FALSE;
+#ifdef HAVE_PLUGINS
 static gboolean no_plugins = FALSE;
+#endif
 
 // in alphabetical order of short options
 static GOptionEntry entries[] =
@@ -124,7 +126,9 @@ static GOptionEntry entries[] =
 	{ "line", 'l', 0, G_OPTION_ARG_INT, &cl_options.goto_line, N_("Set initial line number for the first opened file"), NULL },
 	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, N_("Don't show message window at startup"), NULL },
 	{ "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, N_("Don't load auto completion data (see documentation)"), NULL },
+#ifdef HAVE_PLUGINS
 	{ "no-plugins", 'p', 0, G_OPTION_ARG_NONE, &no_plugins, N_("Don't load plugins"), NULL },
+#endif
 	{ "no-session", 's', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &cl_options.load_session, N_("don't load the previous session's files"), NULL },
 #ifdef HAVE_VTE
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, N_("Don't load terminal support"), NULL },
@@ -595,7 +599,9 @@ static void load_settings()
 #endif
 	if (no_msgwin) ui_prefs.msgwindow_visible = FALSE;
 
+#ifdef HAVE_PLUGINS
 	want_plugins = prefs.load_plugins && !no_plugins;
+#endif
 }
 
 
