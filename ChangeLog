@@ -2,13 +2,12 @@
 
  * Makefile.am, geany.glade, data/autocomplete.conf, data/snippets.conf,
    doc/geany.txt, doc/geany.html, doc/geany.1.in, src/document.c,
-   src/editor.c, src/geany.h, src/highlighting.c, src/interface.c,
-   src/keybindings.c, src/keybindings.h, src/keyfile.c, src/keyfile.h,
-   src/main.c, src/plugindata.h, src/prefs.c:
+   src/editor.c, src/editor.h,src/geany.h, src/highlighting.c,
+   src/interface.c, src/keybindings.c, src/keybindings.h, src/keyfile.c,
+   src/keyfile.h, src/main.c, src/plugindata.h, src/prefs.c:
    Rename "Contruct autocompletion" to "Snippets".
    Allow changing height of the symbol completion list even if automatic
    symbol is disabled, it still can be forced by keybinding.
-
 
 
 2007-11-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

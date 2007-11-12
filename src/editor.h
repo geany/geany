@@ -69,9 +69,9 @@ typedef struct EditorPrefs
 	gboolean	newline_strip;
 	gboolean	auto_complete_symbols;
 	gboolean	auto_close_xml_tags;
-	gboolean	auto_complete_constructs;
-	gint		autocompletion_max_height;
-	GHashTable	*auto_completions;
+	gboolean	complete_snippets;
+	gint		symbolcompletion_max_height;
+	GHashTable	*snippets;
 	gboolean	brace_match_ltgt;	// whether to highlight < and > chars (hidden pref)
 	gboolean	use_gtk_word_boundaries;	// hidden pref
 	gboolean	auto_complete_whilst_editing;	// hidden pref
@@ -101,7 +101,7 @@ gboolean editor_start_auto_complete(gint idx, gint pos, gboolean force);
 
 void editor_close_block(gint idx, gint pos);
 
-gboolean editor_auto_complete(gint idx, gint pos);
+gboolean editor_complete_snippet(gint idx, gint pos);
 
 void editor_auto_latex(gint idx, gint pos);
 
