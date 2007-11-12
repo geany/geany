@@ -181,7 +181,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, PACKAGE, "long_line_color", editor_prefs.long_line_color);
 
 	// editor
-	g_key_file_set_integer(config, PACKAGE, "autocompletion_max_height", editor_prefs.autocompletion_max_height);
+	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_max_height", editor_prefs.symbolcompletion_max_height);
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
 	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", editor_prefs.unfold_all_children);
 	g_key_file_set_integer(config, PACKAGE, "indent_mode", editor_prefs.indent_mode);
@@ -189,7 +189,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "use_indicators", editor_prefs.use_indicators);
 	g_key_file_set_boolean(config, PACKAGE, "line_breaking", editor_prefs.line_wrapping);
 	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", editor_prefs.auto_close_xml_tags);
-	g_key_file_set_boolean(config, PACKAGE, "auto_complete_constructs", editor_prefs.auto_complete_constructs);
+	g_key_file_set_boolean(config, PACKAGE, "complete_snippets", editor_prefs.complete_snippets);
 	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", editor_prefs.auto_complete_symbols);
 	g_key_file_set_integer(config, PACKAGE, "pref_editor_tab_width", editor_prefs.tab_width);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_use_tabs", editor_prefs.use_tabs);
@@ -455,7 +455,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
 	editor_prefs.long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
 	editor_prefs.long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
-	editor_prefs.autocompletion_max_height = utils_get_setting_integer(config, PACKAGE, "autocompletion_max_height", GEANY_MAX_AUTOCOMPLETE_HEIGHT);
+	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); // default is off for better performance
 	editor_prefs.indent_mode = utils_get_setting_integer(config, PACKAGE, "indent_mode", INDENT_CURRENTCHARS);
 	editor_prefs.detect_tab_mode = utils_get_setting_integer(config, PACKAGE, "check_detect_indent", FALSE);
@@ -465,7 +465,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
 	editor_prefs.show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
 	editor_prefs.auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
-	editor_prefs.auto_complete_constructs = utils_get_setting_boolean(config, PACKAGE, "auto_complete_constructs", TRUE);
+	editor_prefs.complete_snippets = utils_get_setting_boolean(config, PACKAGE, "complete_snippets", TRUE);
 	editor_prefs.auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
 	editor_prefs.folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
 	editor_prefs.unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
@@ -920,13 +920,10 @@ void configuration_read_filetype_extensions()
 }
 
 
-void configuration_read_autocompletions()
+void configuration_read_snippets()
 {
 	gsize i, j, len = 0, len_keys = 0;
-	gchar *sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S,
-		"autocomplete.conf", NULL);
-	gchar *userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S,
-		"autocomplete.conf", NULL);
+	gchar *sysconfigfile, *userconfigfile;
 	gchar **groups_user, **groups_sys;
 	gchar **keys_user, **keys_sys;
 	gchar *value;
@@ -934,11 +931,20 @@ void configuration_read_autocompletions()
 	GKeyFile *userconfig = g_key_file_new();
 	GHashTable *tmp;
 
+	sysconfigfile = g_strconcat(app->datadir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
+	userconfigfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "snippets.conf", NULL);
+
+	// check for old autocomplete.conf files (backwards compatibility)
+	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
+		setptr(userconfigfile,
+			g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "autocomplete.conf", NULL));
+
+	// load the actual config files
 	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
 	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
 	// keys are strings, values are GHashTables, so use g_free and g_hash_table_destroy
-	editor_prefs.auto_completions =
+	editor_prefs.snippets =
 		g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify) g_hash_table_destroy);
 
 	// first read all globally defined auto completions
@@ -948,7 +954,7 @@ void configuration_read_autocompletions()
 		keys_sys = g_key_file_get_keys(sysconfig, groups_sys[i], &len_keys, NULL);
 		// create new hash table for the read section (=> filetype)
 		tmp = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
-		g_hash_table_insert(editor_prefs.auto_completions, g_strdup(groups_sys[i]), tmp);
+		g_hash_table_insert(editor_prefs.snippets, g_strdup(groups_sys[i]), tmp);
 
 		for (j = 0; j < len_keys; j++)
 		{
@@ -964,11 +970,11 @@ void configuration_read_autocompletions()
 	{
 		keys_user = g_key_file_get_keys(userconfig, groups_user[i], &len_keys, NULL);
 
-		tmp = g_hash_table_lookup(editor_prefs.auto_completions, groups_user[i]);
+		tmp = g_hash_table_lookup(editor_prefs.snippets, groups_user[i]);
 		if (tmp == NULL)
 		{	// new key found, create hash table
 			tmp = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
-			g_hash_table_insert(editor_prefs.auto_completions, g_strdup(groups_user[i]), tmp);
+			g_hash_table_insert(editor_prefs.snippets, g_strdup(groups_user[i]), tmp);
 		}
 		for (j = 0; j < len_keys; j++)
 		{

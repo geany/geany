@@ -272,7 +272,7 @@ void document_apply_update_prefs(gint idx)
 
 	sci_set_tab_width(sci, editor_prefs.tab_width);
 
-	sci_set_autoc_max_height(sci, editor_prefs.autocompletion_max_height);
+	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);
 
 	sci_set_indentation_guides(sci, editor_prefs.show_indent_guide);
 	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);

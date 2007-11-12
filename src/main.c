@@ -684,7 +684,7 @@ gint main(gint argc, gchar **argv)
 	document_init_doclist();
 	treeviews_init();
 	configuration_read_filetype_extensions();
-	configuration_read_autocompletions();
+	configuration_read_snippets();
 
 	// set window icon
 	{
@@ -792,7 +792,7 @@ void main_quit()
 #endif
 	if (app->project != NULL)
 		project_close();
-		
+
 	navqueue_free();
 	keybindings_free();
 	filetypes_save_commands();

@@ -75,7 +75,6 @@ static gboolean find_duplicate(guint idx, guint key, GdkModifierType mods, const
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
-static void on_symbol_auto_completion_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_openfiles_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
@@ -363,8 +362,8 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.line_wrapping);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_complete");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_complete_constructs);
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_complete_snippets");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.complete_snippets);
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_xmltag");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_close_xml_tags);
@@ -397,10 +396,9 @@ void prefs_init_dialog(void)
 
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_complete_symbols);
-	on_symbol_auto_completion_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
 
-	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_autocheight");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.autocompletion_max_height);
+	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.symbolcompletion_max_height);
 
 
 	// Tools Settings
@@ -693,8 +691,8 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
 		editor_prefs.line_wrapping = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "check_auto_complete");
-		editor_prefs.auto_complete_constructs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_complete_snippets");
+		editor_prefs.complete_snippets = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_xmltag");
 		editor_prefs.auto_close_xml_tags = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -733,8 +731,8 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
 		editor_prefs.auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_autocheight");
-		editor_prefs.autocompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
+		editor_prefs.symbolcompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 
 		// Tools Settings
@@ -1183,14 +1181,6 @@ static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_
 }
 
 
-static void on_symbol_auto_completion_toggled(GtkToggleButton *togglebutton, gpointer user_data)
-{
-	gboolean sens = gtk_toggle_button_get_active(togglebutton);
-
-	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "hbox6"), sens);
-}
-
-
 static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
@@ -1275,8 +1265,6 @@ void prefs_show_dialog(void)
 				"toggled", G_CALLBACK(on_show_notebook_tabs_toggled), NULL);
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_folding"),
 				"toggled", G_CALLBACK(on_use_folding_toggled), NULL);
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion"),
-				"toggled", G_CALLBACK(on_symbol_auto_completion_toggled), NULL);
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding"),
 				"toggled", G_CALLBACK(on_open_encoding_toggled), NULL);
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles"),

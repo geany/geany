@@ -288,10 +288,10 @@ static void init_default_kb()
 		GDK_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_calltip", _("Show calltip"));
 	keys[GEANY_KEYS_EDIT_MACROLIST] = fill(cb_func_edit,
 		GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"));
-	keys[GEANY_KEYS_EDIT_COMPLETECONSTRUCT] = fill(NULL,	// has special callback
-		GDK_Tab, 0, "edit_completeconstruct", _("Complete construct"));
-	keys[GEANY_KEYS_EDIT_SUPPRESSCOMPLETION] = fill(cb_func_edit,
-		0, 0, "edit_suppresscompletion", _("Suppress construct completion"));
+	keys[GEANY_KEYS_EDIT_COMPLETESNIPPET] = fill(NULL,	// has special callback
+		GDK_Tab, 0, "edit_completesnippet", _("Complete snippet"));
+	keys[GEANY_KEYS_EDIT_SUPPRESSSNIPPETCOMPLETION] = fill(cb_func_edit,
+		0, 0, "edit_suppresssnippetcompletion", _("Suppress snippet completion"));
 
 	keys[GEANY_KEYS_EDIT_SELECTWORD] = fill(cb_func_edit,
 		GDK_w, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectword", _("Select current word"));
@@ -647,11 +647,11 @@ static gboolean check_fixed_kb(GdkEventKey *event)
 }
 
 
-/* We have a special case for GEANY_KEYS_EDIT_COMPLETECONSTRUCT, because we need to
+/* We have a special case for GEANY_KEYS_EDIT_COMPLETESNIPPET, because we need to
  * return FALSE if no completion occurs, so the tab or space is handled normally. */
-static gboolean check_construct_completion(GdkEventKey *event)
+static gboolean check_snippet_completion(GdkEventKey *event)
 {
-	const guint i = GEANY_KEYS_EDIT_COMPLETECONSTRUCT;
+	const guint i = GEANY_KEYS_EDIT_COMPLETESNIPPET;
 
 	if (keys[i]->key == event->keyval && keys[i]->mods == event->state)
 	{
@@ -664,8 +664,8 @@ static gboolean check_construct_completion(GdkEventKey *event)
 			ScintillaObject *sci = doc_list[idx].sci;
 			gint pos = sci_get_current_position(sci);
 
-			if (editor_prefs.auto_complete_constructs)
-				return editor_auto_complete(idx, pos);
+			if (editor_prefs.complete_snippets)
+				return editor_complete_snippet(idx, pos);
 		}
 	}
 	return FALSE;
@@ -738,7 +738,7 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 	if (vte_info.have_vte && check_vte(event->state, keyval))
 		return FALSE;
 #endif
-	if (check_construct_completion(event))
+	if (check_snippet_completion(event))
 		return TRUE;
 
 	for (i = 0; i < GEANY_MAX_KEYS; i++)
@@ -830,9 +830,7 @@ static void cb_func_file_action(guint key_id)
 
 static void cb_func_menu_print(G_GNUC_UNUSED guint key_id)
 {
-	gint idx = document_get_cur_idx();
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
-	document_print(idx);
+	on_print1_activate(NULL, NULL);
 }
 
 static void cb_func_menu_undo(G_GNUC_UNUSED guint key_id)
@@ -1243,8 +1241,8 @@ static void cb_func_edit(guint key_id)
 			editor_show_macro_list(doc_list[idx].sci);
 			break;
 
-		case GEANY_KEYS_EDIT_SUPPRESSCOMPLETION:
-			switch (keys[GEANY_KEYS_EDIT_COMPLETECONSTRUCT]->key)
+		case GEANY_KEYS_EDIT_SUPPRESSSNIPPETCOMPLETION:
+			switch (keys[GEANY_KEYS_EDIT_COMPLETESNIPPET]->key)
 			{
 				case GDK_space:
 					sci_add_text(doc_list[idx].sci, " ");

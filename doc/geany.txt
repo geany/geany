@@ -187,7 +187,7 @@ Short option  Long option              Function
                                        and printing lots of information.
 
 *none*        --ft-names               Print a list of Geany's internal filetype names (useful
-                                       for the auto completion list).
+                                       for snippets configuration).
 
 -g            --generate-tags          Generate a global tags file (see
                                        `Generating a global tags file`_).
@@ -203,7 +203,7 @@ Short option  Long option              Function
 -m            --no-msgwin              Do not show the message window. Use this option if you
                                        do not need compiler messages or VTE support.
 
--n            --no-ctags               Do not load auto completion and call tip data. Use this
+-n            --no-ctags               Do not load symbol completion and call tip data. Use this
                                        option if you do not want to use them.
 
 -p            --no-plugins             Do not load plugins or plugin support.
@@ -565,12 +565,14 @@ the word "echo", a browser window will open(assumed your browser is
 called firefox) and it will open the address: http://www.php.net/echo.
 
 
-User-definable auto completion
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User-definable snippets
+^^^^^^^^^^^^^^^^^^^^^^^
 
-Geany can complete pre-defined constructs and often used strings
-automatically. To know what to complete or replace Geany reads a
-configuration file called ``autocomplete.conf`` at startup.
+Snippets are small strings or code constructs which can be replaced or
+completed to a more complex string. So you can save a lot of time by
+not typing often used strings and letting Geany do the work for you.
+To know what to complete or replace Geany reads a configuration file
+called ``snippets.conf`` at startup.
 
 The system-wide configuration file can be found in
 ``$prefix/share/geany``, where ``$prefix`` is the path where Geany is
@@ -582,33 +584,32 @@ in your configuration directory (usually ``~/.geany/``).
 
 For example::
 
-    % cp /usr/local/share/geany/autocomplete.conf /home/username/.geany/
+    % cp /usr/local/share/geany/snippets.conf /home/username/.geany/
 
 Then you can edit the file and the changes are also available
 after an update of Geany because the file resides in your
 configuration directory. Alternatively, you can create a file
-``~/.geany/autocomplete.conf`` and add only these settings you want
-to change. All missing settings will be read from the global auto
-completion file in ``$prefix/share/geany``.
+``~/.geany/snippets.conf`` and add only these settings you want
+to change. All missing settings will be read from the global snippets
+file in ``$prefix/share/geany``.
 
-The file ``autocomplete.conf`` may contain several sections for each
+The file ``snippets.conf`` may contain several sections for each
 filetype. It also contains two additional sections "Default" and
-"Special". Default contains all completions which are available
+"Special". Default contains all snippets which are available
 for every filetype. You may define another section for a certain
-filetype(e.g. C++) containing the same completions. Then when using
-such a completion in a C++ file the completion defined in the C++
-section will be used. In any other file the completion defined in the
-Default section will be used unless a section for the current filetype
-exists and the used completion is defined in this section. The section
-"Special" contains special completions which can only be used in other
-completions. So you can define often used parts of completions and just
-use the special completion as a placeholder (see the ``autocomplete.conf``
-for details).
+filetype(e.g. C++) containing the same snippets. Then when using
+such a snippet in a C++ file the snippet defined in the C++ section will
+be used. In any other file the snippet defined in the Default section will
+be used unless a section for the current filetype exists and the used
+snippet is defined in this section. The section "Special" contains special
+snippets which can only be used in other snippets. So you can define often
+used parts of snippets and just use the special snippet as a placeholder
+(see the ``snippets.conf`` for details).
 
-To define completions you can use several special characters which
-will be replaced when using the completion:
+To define snippets you can use several special characters which
+will be replaced when using the snippet:
 
-**Wildcards for auto completion**
+**Wildcards for snippets**
 
 ================  =========================================================
 \\n or %newline%  Insert a new line (it will be replaced by the used EOL
@@ -625,17 +626,16 @@ will be replaced when using the completion:
 
 %...%             "..." means the name of a key in the "Special" section.
                   If you have defined a key "brace_open" in the "Special"
-                  section you can use %brace_open" in any other completion.
+                  section you can use %brace_open" in any other snippet.
 ================  =========================================================
 
-Defined completions must not contain spaces otherwise they won't
+Defined snippets must not contain spaces otherwise they won't
 work correctly. But beside that you can define almost everything
-string as a completion and use it later in Geany. It is not limited
+string as a snippet and use it later in Geany. It is not limited
 to existing contructs of certain programming languages(like ``if``,
 ``for``, ``switch``). Define whatever you need.
 
-Maybe you need to often type your name, so define a completion
-like this::
+Maybe you need to often type your name, so define a snippet like this::
 
     [Default]
     myname=Enrico Tröger
@@ -644,10 +644,10 @@ Everytime you write ``myname`` <TAB> in Geany, it will replace "myname"
 with "Enrico Tröger". The key to start auto completion can be changed
 in the preferences dialog, by default it is TAB.
 
-You may change the behaviour Geany recognizes the word to auto complete,
+You may change the behaviour Geany recognizes the word to complete,
 i.e. where define the start and end of a word. The section "Special" may
 contain a key "wordchars" which lists all characters a string may contain
-to be recognized as a word for auto completion. Leave it commented to use
+to be recognized as a word for completion. Leave it commented to use
 default characters or define it to add or remove characters to fit your
 needs.
 
@@ -913,8 +913,8 @@ Workspace tags
 
 Tags for each document are parsed whenever a file is loaded or
 saved. These are shown in the Symbol list in the Sidebar. These tags
-are also used for autocompletion and calltips for all documents open
-in the current session that have the same filetype.
+are also used for autocompletion of symbols and calltips for all documents
+open in the current session that have the same filetype.
 
 The *Go to Tag* commands can be used with all workspace tags. See
 `Go to tag definition`_.
@@ -923,9 +923,9 @@ The *Go to Tag* commands can be used with all workspace tags. See
 Global tags
 ^^^^^^^^^^^
 
-Global tags are used to provide autocompletion and calltips without
-having to open the corresponding source files. This is intended for
-library APIs, as the tags file only has to be updated when you upgrade
+Global tags are used to provide autocompletion of symbols and calltips
+without having to open the corresponding source files. This is intended
+for library APIs, as the tags file only has to be updated when you upgrade
 the library.
 
 You can load a custom global tags file in two ways:

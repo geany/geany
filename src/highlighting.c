@@ -574,7 +574,7 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
 	// have to set whitespace after setting wordchars
 	SSM(sci, SCI_SETWHITESPACECHARS, 0, (sptr_t) whitespace_chars);
 
-	SSM(sci, SCI_AUTOCSETMAXHEIGHT, editor_prefs.autocompletion_max_height, 0);
+	SSM(sci, SCI_AUTOCSETMAXHEIGHT, editor_prefs.symbolcompletion_max_height, 0);
 }
 
 
@@ -2982,7 +2982,7 @@ void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *con
 void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 {
 	filetypes_load_config(filetype_idx);
-	
+
 	switch (filetype_idx)
 	{
 		styleset_case(GEANY_FILETYPES_ASM,		asm);

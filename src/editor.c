@@ -419,7 +419,7 @@ static void on_new_line_added(gint idx)
 		}
 	}
 
-	if (editor_prefs.auto_complete_constructs)
+	if (editor_prefs.complete_snippets)
 	{
 		// " * " auto completion in multiline C/C++/D/Java comments
 		auto_multiline(sci, pos);
@@ -531,7 +531,7 @@ static void get_indent(document *doc, gint pos, gboolean use_this_line)
 
 static void auto_close_bracket(ScintillaObject *sci, gint pos, gchar c)
 {
-	if (! editor_prefs.auto_complete_constructs || SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_LATEX)
+	if (! editor_prefs.complete_snippets || SSM(sci, SCI_GETLEXER, 0, 0) != SCLEX_LATEX)
 		return;
 
 	if (c == '[')
@@ -1091,14 +1091,14 @@ void editor_auto_latex(gint idx, gint pos)
 }
 
 
-static gchar *ac_find_completion_by_name(const gchar *type, const gchar *name)
+static gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name)
 {
 	gchar *result = NULL;
 	GHashTable *tmp;
 
 	g_return_val_if_fail(type != NULL && name != NULL, NULL);
 
-	tmp = g_hash_table_lookup(editor_prefs.auto_completions, type);
+	tmp = g_hash_table_lookup(editor_prefs.snippets, type);
 	if (tmp != NULL)
 	{
 		result = g_hash_table_lookup(tmp, name);
@@ -1107,7 +1107,7 @@ static gchar *ac_find_completion_by_name(const gchar *type, const gchar *name)
 	// the particular completion for this filetype is not set (result is NULL)
 	if (tmp == NULL || result == NULL)
 	{
-		tmp = g_hash_table_lookup(editor_prefs.auto_completions, "Default");
+		tmp = g_hash_table_lookup(editor_prefs.snippets, "Default");
 		if (tmp != NULL)
 		{
 			result = g_hash_table_lookup(tmp, name);
@@ -1124,9 +1124,9 @@ static gchar *ac_find_completion_by_name(const gchar *type, const gchar *name)
  * modified when replacing a completion but the foreach function still passes the old pointer
  * to ac_replace_specials, so we use a global pointer outside of ac_replace_specials and
  * ac_complete_constructs. Any hints to improve this are welcome. */
-static gchar *global_pattern = NULL;
+static gchar *snippets_global_pattern = NULL;
 
-void ac_replace_specials(gpointer key, gpointer value, gpointer user_data)
+void snippets_replace_specials(gpointer key, gpointer value, gpointer user_data)
 {
 	gchar *needle;
 
@@ -1135,12 +1135,12 @@ void ac_replace_specials(gpointer key, gpointer value, gpointer user_data)
 
 	needle = g_strconcat("%", (gchar*) key, "%", NULL);
 
-	global_pattern = utils_str_replace(global_pattern, needle, (gchar*) value);
+	snippets_global_pattern = utils_str_replace(snippets_global_pattern, needle, (gchar*) value);
 	g_free(needle);
 }
 
 
-static gboolean ac_complete_constructs(gint idx, gint pos, const gchar *word)
+static gboolean snippets_complete_constructs(gint idx, gint pos, const gchar *word)
 {
 	gchar *str;
 	gchar *pattern;
@@ -1154,7 +1154,7 @@ static gboolean ac_complete_constructs(gint idx, gint pos, const gchar *word)
 	str = g_strdup(word);
 	g_strstrip(str);
 
-	pattern = ac_find_completion_by_name(filetypes[ft_id]->name, str);
+	pattern = snippets_find_completion_by_name(filetypes[ft_id]->name, str);
 	if (pattern == NULL || pattern[0] == '\0')
 	{
 		utils_free_pointers(str, pattern, NULL); // free pattern in case it is ""
@@ -1175,13 +1175,13 @@ static gboolean ac_complete_constructs(gint idx, gint pos, const gchar *word)
 	pos -= str_len; // pos has changed while deleting
 
 	// replace 'special' completions
-	specials = g_hash_table_lookup(editor_prefs.auto_completions, "Special");
+	specials = g_hash_table_lookup(editor_prefs.snippets, "Special");
 	if (specials != NULL)
 	{
 		// ugly hack using global_pattern
-		global_pattern = pattern;
-		g_hash_table_foreach(specials, ac_replace_specials, NULL);
-		pattern = global_pattern;
+		snippets_global_pattern = pattern;
+		g_hash_table_foreach(specials, snippets_replace_specials, NULL);
+		pattern = snippets_global_pattern;
 	}
 
 	// replace line breaks and whitespaces
@@ -1227,7 +1227,7 @@ static gboolean at_eol(ScintillaObject *sci, gint pos)
 }
 
 
-gboolean editor_auto_complete(gint idx, gint pos)
+gboolean editor_complete_snippet(gint idx, gint pos)
 {
 	gboolean result = FALSE;
 	gint lexer, style;
@@ -1245,14 +1245,14 @@ gboolean editor_auto_complete(gint idx, gint pos)
 	lexer = SSM(sci, SCI_GETLEXER, 0, 0);
 	style = SSM(sci, SCI_GETSTYLEAT, pos - 2, 0);
 
-	wc = ac_find_completion_by_name("Special", "wordchars");
+	wc = snippets_find_completion_by_name("Special", "wordchars");
 	editor_find_current_word(sci, pos, current_word, sizeof current_word, wc);
 
 	// prevent completion of "for "
 	if (! isspace(sci_get_char_at(sci, pos - 1))) // pos points to the line end char so use pos -1
 	{
 		sci_start_undo_action(sci);	// needed because we insert a space separately from construct
-		result = ac_complete_constructs(idx, pos, current_word);
+		result = snippets_complete_constructs(idx, pos, current_word);
 		sci_end_undo_action(sci);
 	}
 
@@ -2554,7 +2554,7 @@ void editor_indentation_by_one_space(gint idx, gint pos, gboolean decrease)
 
 void editor_finalize()
 {
-	g_hash_table_destroy(editor_prefs.auto_completions);
+	g_hash_table_destroy(editor_prefs.snippets);
 
 	scintilla_release_resources();
 }

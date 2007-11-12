@@ -21,7 +21,7 @@ Use an alternate configuration directory. Default configuration directory is
 .IP "\fB-d\fP           \fB\-\-debug\fP         " 10
 Run Geany in debug mode, which means being verbose and printing lots of information.
 .IP "\fB\fP             \fB\-\-ft\-names\fP         " 10
-Print a list of Geany's internal filetype names (useful for the auto completion list).
+Print a list of Geany's internal filetype names (useful snippets configuration).
 .IP "\fB-g\fP           \fB\-\-generate\-tags\fP         " 10
 Generate a global tags file (see documentation).
 .IP "\fB-P\fP           \fB\-\-no\-preprocessing\fP         " 10
@@ -35,7 +35,7 @@ Set initial line number for the first opened file.
 Don't show the message window. Use this option if you don't need compiler messages
 or VTE support.
 .IP "\fB-n\fP           \fB\-\-no-ctags\fP         " 10
-Don't load auto completion and call tip data. Use this option, if you don't want to use them.
+Don't load symbol completion and call tip data. Use this option, if you don't want to use them.
 For more information please see documentation.
 .IP "\fB-p\fP           \fB\-\-no-plugins\fP         " 10
 Don't load plugin support.
@@ -57,9 +57,8 @@ Show help information and exit.
 Geany supports all generic GTK options, a list is available on the help screen.
 .SH "AUTHOR"
 .PP
-This manual page was written by Enrico Troeger <enrico.troeger@uvena.de>. Permission is
+This manual page was written by the Geany develoepr team. Permission is
 granted to copy, distribute and/or modify this document under
-the terms of the GNU General Public License, Version 2 any
-later version published by the Free Software Foundation.
+the terms of the GNU General Public License, Version 2.
 .PP
 The complete text of the GNU General Public License can be found in @GEANY_DATA_DIR@/GPL-2.

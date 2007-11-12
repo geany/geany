@@ -18,7 +18,7 @@ SYS_DATA_FILES = \
 	data/html_entities.tags \
 	$(srcdir)/data/filetypes.* \
 	data/filetype_extensions.conf \
-	data/autocomplete.conf
+	data/snippets.conf
 
 EXTRA_DIST = \
 	autogen.sh \

@@ -5980,11 +5980,11 @@ Match braces</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="check_auto_complete">
+			    <widget class="GtkCheckButton" id="check_complete_snippets">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Automatic completion of often used constructs like if and for</property>
+			      <property name="tooltip" translatable="yes">Type a defined short character sequence and complete it to a more complex string using a single keypress.</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Construct autocompletion</property>
+			      <property name="label" translatable="yes">Snippet completion</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>
@@ -6002,7 +6002,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="check_xmltag">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Automatic completion of open XML tags (includes HTML tags)</property>
+			      <property name="tooltip" translatable="yes">Automatic completion and closing of XML tags (includes HTML tags)</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">XML tag autocompletion</property>
 			      <property name="use_underline">True</property>
@@ -6024,7 +6024,7 @@ Match braces</property>
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Automatic completion of known symbols in open files (function names, global variables, ...)</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Symbol autocompletion</property>
+			      <property name="label" translatable="yes">Automatic symbol completion</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>
@@ -6048,7 +6048,7 @@ Match braces</property>
 			      <child>
 				<widget class="GtkLabel" id="label173">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Rows of autocompletion list:</property>
+				  <property name="label" translatable="yes">Rows of symbol completion list:</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -6071,7 +6071,7 @@ Match braces</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="spin_autocheight">
+				<widget class="GtkSpinButton" id="spin_symbollistheight">
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Number of rows to display in the autocompletion list.</property>
 				  <property name="can_focus">True</property>
@@ -6104,7 +6104,7 @@ Match braces</property>
 		  <child>
 		    <widget class="GtkLabel" id="label177">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">&lt;b&gt;Autocompletion&lt;/b&gt;</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Completions&lt;/b&gt;</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>

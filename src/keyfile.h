@@ -37,7 +37,7 @@ void configuration_save_session_files(GKeyFile *config);
 
 void configuration_read_filetype_extensions();
 
-void configuration_read_autocompletions();
+void configuration_read_snippets();
 
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */

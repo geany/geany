@@ -3,10 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz" />
-<meta name="date" content="2007-10-28" />
+<meta name="date" content="2007-11-01" />
 <style type="text/css">
 
 /*
@@ -133,7 +133,7 @@ dt {
 <br />Nick Treleaven
 <br />Frank Lanitz</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2007-10-28</td></tr>
+<td>2007-11-01</td></tr>
 <tr><th class="docinfo-name">Version:</th>
 <td>0.13</td></tr>
 </tbody>
@@ -183,7 +183,7 @@ of this program, and also in the chapter <a class="reference" href="#gnu-general
 <li><a class="reference" href="#code-navigation-history" id="id27" name="id27">Code Navigation History</a></li>
 <li><a class="reference" href="#send-text-through-definable-commands" id="id28" name="id28">Send text through definable commands</a></li>
 <li><a class="reference" href="#context-actions" id="id29" name="id29">Context actions</a></li>
-<li><a class="reference" href="#user-definable-auto-completion" id="id30" name="id30">User-definable auto completion</a></li>
+<li><a class="reference" href="#user-definable-snippets" id="id30" name="id30">User-definable snippets</a></li>
 <li><a class="reference" href="#inserting-unicode-characters" id="id31" name="id31">Inserting unicode characters</a></li>
 </ul>
 </li>
@@ -448,7 +448,7 @@ and printing lots of information.</td>
 <tr><td><em>none</em></td>
 <td>--ft-names</td>
 <td>Print a list of Geany's internal filetype names (useful
-for the auto completion list).</td>
+for snippets configuration).</td>
 </tr>
 <tr><td>-g</td>
 <td>--generate-tags</td>
@@ -476,7 +476,7 @@ do not need compiler messages or VTE support.</td>
 </tr>
 <tr><td>-n</td>
 <td>--no-ctags</td>
-<td>Do not load auto completion and call tip data. Use this
+<td>Do not load symbol completion and call tip data. Use this
 option if you do not want to use them.</td>
 </tr>
 <tr><td>-p</td>
@@ -807,10 +807,12 @@ the word &quot;echo&quot;, a browser window will open(assumed your browser is
 called firefox) and it will open the address: <a class="reference" href="http://www.php.net/echo">http://www.php.net/echo</a>.</p>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id30" id="user-definable-auto-completion" name="user-definable-auto-completion">User-definable auto completion</a></h3>
-<p>Geany can complete pre-defined constructs and often used strings
-automatically. To know what to complete or replace Geany reads a
-configuration file called <tt class="docutils literal"><span class="pre">autocomplete.conf</span></tt> at startup.</p>
+<h3><a class="toc-backref" href="#id30" id="user-definable-snippets" name="user-definable-snippets">User-definable snippets</a></h3>
+<p>Snippets are small strings or code constructs which can be replaced or
+completed to a more complex string. So you can save a lot of time by
+not typing often used strings and letting Geany do the work for you.
+To know what to complete or replace Geany reads a configuration file
+called <tt class="docutils literal"><span class="pre">snippets.conf</span></tt> at startup.</p>
 <p>The system-wide configuration file can be found in
 <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>, where <tt class="docutils literal"><span class="pre">$prefix</span></tt> is the path where Geany is
 installed (commonly <tt class="docutils literal"><span class="pre">/usr/local</span></tt>). It is not recommended to edit the
@@ -819,30 +821,29 @@ system-wide file, because it will be overridden when Geany is updated.</p>
 in your configuration directory (usually <tt class="docutils literal"><span class="pre">~/.geany/</span></tt>).</p>
 <p>For example:</p>
 <pre class="literal-block">
-% cp /usr/local/share/geany/autocomplete.conf /home/username/.geany/
+% cp /usr/local/share/geany/snippets.conf /home/username/.geany/
 </pre>
 <p>Then you can edit the file and the changes are also available
 after an update of Geany because the file resides in your
 configuration directory. Alternatively, you can create a file
-<tt class="docutils literal"><span class="pre">~/.geany/autocomplete.conf</span></tt> and add only these settings you want
-to change. All missing settings will be read from the global auto
-completion file in <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>.</p>
-<p>The file <tt class="docutils literal"><span class="pre">autocomplete.conf</span></tt> may contain several sections for each
+<tt class="docutils literal"><span class="pre">~/.geany/snippets.conf</span></tt> and add only these settings you want
+to change. All missing settings will be read from the global snippets
+file in <tt class="docutils literal"><span class="pre">$prefix/share/geany</span></tt>.</p>
+<p>The file <tt class="docutils literal"><span class="pre">snippets.conf</span></tt> may contain several sections for each
 filetype. It also contains two additional sections &quot;Default&quot; and
-&quot;Special&quot;. Default contains all completions which are available
+&quot;Special&quot;. Default contains all snippets which are available
 for every filetype. You may define another section for a certain
-filetype(e.g. C++) containing the same completions. Then when using
-such a completion in a C++ file the completion defined in the C++
-section will be used. In any other file the completion defined in the
-Default section will be used unless a section for the current filetype
-exists and the used completion is defined in this section. The section
-&quot;Special&quot; contains special completions which can only be used in other
-completions. So you can define often used parts of completions and just
-use the special completion as a placeholder (see the <tt class="docutils literal"><span class="pre">autocomplete.conf</span></tt>
-for details).</p>
-<p>To define completions you can use several special characters which
-will be replaced when using the completion:</p>
-<p><strong>Wildcards for auto completion</strong></p>
+filetype(e.g. C++) containing the same snippets. Then when using
+such a snippet in a C++ file the snippet defined in the C++ section will
+be used. In any other file the snippet defined in the Default section will
+be used unless a section for the current filetype exists and the used
+snippet is defined in this section. The section &quot;Special&quot; contains special
+snippets which can only be used in other snippets. So you can define often
+used parts of snippets and just use the special snippet as a placeholder
+(see the <tt class="docutils literal"><span class="pre">snippets.conf</span></tt> for details).</p>
+<p>To define snippets you can use several special characters which
+will be replaced when using the snippet:</p>
+<p><strong>Wildcards for snippets</strong></p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="22%" />
@@ -868,17 +869,16 @@ been done.</td>
 <tr><td>%...%</td>
 <td>&quot;...&quot; means the name of a key in the &quot;Special&quot; section.
 If you have defined a key &quot;brace_open&quot; in the &quot;Special&quot;
-section you can use %brace_open&quot; in any other completion.</td>
+section you can use %brace_open&quot; in any other snippet.</td>
 </tr>
 </tbody>
 </table>
-<p>Defined completions must not contain spaces otherwise they won't
+<p>Defined snippets must not contain spaces otherwise they won't
 work correctly. But beside that you can define almost everything
-string as a completion and use it later in Geany. It is not limited
+string as a snippet and use it later in Geany. It is not limited
 to existing contructs of certain programming languages(like <tt class="docutils literal"><span class="pre">if</span></tt>,
 <tt class="docutils literal"><span class="pre">for</span></tt>, <tt class="docutils literal"><span class="pre">switch</span></tt>). Define whatever you need.</p>
-<p>Maybe you need to often type your name, so define a completion
-like this:</p>
+<p>Maybe you need to often type your name, so define a snippet like this:</p>
 <pre class="literal-block">
 [Default]
 myname=Enrico Tröger
@@ -886,10 +886,10 @@ myname=Enrico Tröger
 <p>Everytime you write <tt class="docutils literal"><span class="pre">myname</span></tt> &lt;TAB&gt; in Geany, it will replace &quot;myname&quot;
 with &quot;Enrico Tröger&quot;. The key to start auto completion can be changed
 in the preferences dialog, by default it is TAB.</p>
-<p>You may change the behaviour Geany recognizes the word to auto complete,
+<p>You may change the behaviour Geany recognizes the word to complete,
 i.e. where define the start and end of a word. The section &quot;Special&quot; may
 contain a key &quot;wordchars&quot; which lists all characters a string may contain
-to be recognized as a word for auto completion. Leave it commented to use
+to be recognized as a word for completion. Leave it commented to use
 default characters or define it to add or remove characters to fit your
 needs.</p>
 </div>
@@ -1124,16 +1124,16 @@ tags files, as described below.</p>
 <h3><a class="toc-backref" href="#id47" id="workspace-tags" name="workspace-tags">Workspace tags</a></h3>
 <p>Tags for each document are parsed whenever a file is loaded or
 saved. These are shown in the Symbol list in the Sidebar. These tags
-are also used for autocompletion and calltips for all documents open
-in the current session that have the same filetype.</p>
+are also used for autocompletion of symbols and calltips for all documents
+open in the current session that have the same filetype.</p>
 <p>The <em>Go to Tag</em> commands can be used with all workspace tags. See
 <a class="reference" href="#go-to-tag-definition">Go to tag definition</a>.</p>
 </div>
 <div class="section">
 <h3><a class="toc-backref" href="#id48" id="global-tags" name="global-tags">Global tags</a></h3>
-<p>Global tags are used to provide autocompletion and calltips without
-having to open the corresponding source files. This is intended for
-library APIs, as the tags file only has to be updated when you upgrade
+<p>Global tags are used to provide autocompletion of symbols and calltips
+without having to open the corresponding source files. This is intended
+for library APIs, as the tags file only has to be updated when you upgrade
 the library.</p>
 <p>You can load a custom global tags file in two ways:</p>
 <ul class="simple">
@@ -3107,7 +3107,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference" href="geany.txt">View document source</a>.
-Generated on: 2007-11-01 16:20 UTC.
+Generated on: 2007-11-12 09:15 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
