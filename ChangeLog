@@ -1,3 +1,8 @@
+2007-11-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/highlighting.c: Don't change control char symbol in Scintilla.
+
+
 2007-11-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * Makefile.am, geany.glade, data/autocomplete.conf, data/snippets.conf,
