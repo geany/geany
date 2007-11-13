@@ -1,3 +1,10 @@
+2007-11-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/filebrowser.c:
+   Make 'Set path from document' use the current working directory or
+   the project base path when no document is open.
+
+
 2007-11-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/highlighting.c: Don't change control char symbol in Scintilla.

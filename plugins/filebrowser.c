@@ -33,6 +33,7 @@
 #include "document.h"
 #include "utils.h"
 #include "keybindings.h"
+#include "project.h"
 
 #include "plugindata.h"
 #include "pluginmacros.h"
@@ -174,6 +175,19 @@ static void on_go_home()
 }
 
 
+static gchar *get_default_dir()
+{
+	const gchar *dir = NULL;
+
+	if (project)
+		dir = project->base_path;
+	if (NZV(dir))
+		return g_strdup(dir);
+
+	return g_get_current_dir();
+}
+
+
 static void on_current_path()
 {
 	gchar *fname;
@@ -183,7 +197,8 @@ static void on_current_path()
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL ||
 		! g_path_is_absolute(doc_list[idx].file_name))
 	{
-		on_go_home();
+		setptr(current_dir, get_default_dir());
+		refresh();
 		return;
 	}
 	fname = doc_list[idx].file_name;
