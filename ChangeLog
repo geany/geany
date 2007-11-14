@@ -1,3 +1,15 @@
+2007-11-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/vcdiff.c, plugins/Makefile.am:
+   Added plugin 'VC Diff', slightly modified from a patch by Yura
+   Siamashka (thanks). It was adapted from the SVN Diff plugin.
+   Currently it supports SVN, CVS and GIT.
+   Fixed GTK warnings when the current file has no filename and when
+   the current directory has no version control system.
+   Made some refactoring changes to make the VC_RECORD struct contain
+   all necessary attributes about each version control system.
+
+
 2007-11-13  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/filebrowser.c:
