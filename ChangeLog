@@ -3,6 +3,12 @@
  * src/templates.c, src/utils.c, src/utils.h:
    Fix possible memory leak and add time_t argument in
    utils_get_date_time() to pass a time pointer to use.
+ * configure.in, geany.glade, TODO, doc/geany.html, doc/geany.txt,
+   src/callbacks.c, src/callbacks.h, src/document.c, src/document.h,
+   src/interface.c, src/keyfile.c, src/main.c, src/Makefile.am,
+   src/makefile.win32, src/prefs.c, src/prefs.h, src/printing.c,
+   src/printing.h, src/ui_utils.c, src/ui_utils.h:
+   Add native GTK printing support.
 
 
 2007-11-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

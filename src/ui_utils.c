@@ -52,7 +52,7 @@ UIWidgets		ui_widgets;
 
 static struct
 {
-	GtkWidget *document_buttons[38];	// widgets only sensitive when there is at least one document
+	GtkWidget *document_buttons[39];	// widgets only sensitive when there is at least one document
 }
 widgets;
 
@@ -583,6 +583,7 @@ static void init_document_widgets()
 	widgets.document_buttons[35] = lookup_widget(app->window, "insert_date1");
 	widgets.document_buttons[36] = lookup_widget(app->window, "menu_format1");
 	widgets.document_buttons[37] = lookup_widget(app->window, "menu_open_selected_file1");
+	widgets.document_buttons[38] = lookup_widget(app->window, "page_setup1");
 }
 
 

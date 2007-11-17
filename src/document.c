@@ -1995,49 +1995,6 @@ void document_set_indicator(gint idx, gint line)
 }
 
 
-/* simple file print */
-void document_print(gint idx)
-{
-	gchar *cmdline;
-
-	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
-		return;
-
-	cmdline = g_strdup(prefs.tools_print_cmd);
-	cmdline = utils_str_replace(cmdline, "%f", doc_list[idx].file_name);
-
-	if (dialogs_show_question(
-			_("The file \"%s\" will be printed with the following command:\n\n%s"),
-			doc_list[idx].file_name, cmdline))
-	{
-		GError *error = NULL;
-
-#ifdef G_OS_WIN32
-		gchar *tmp_cmdline = cmdline;
-#else
-		// /bin/sh -c emulates the system() call and makes complex commands possible
-		// but only needed on non-win32 systems due to the lack of win32's shell capabilities
-		gchar *tmp_cmdline = g_strconcat("/bin/sh -c \"", cmdline, "\"", NULL);
-#endif
-
-		if (! g_spawn_command_line_async(tmp_cmdline, &error))
-		{
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Printing of \"%s\" failed (return code: %s)."),
-								doc_list[idx].file_name, error->message);
-			g_error_free(error);
-		}
-		else
-		{
-			ui_set_statusbar(TRUE, _("File %s printed."), doc_list[idx].file_name);
-		}
-#ifndef G_OS_WIN32
-		g_free(tmp_cmdline);
-#endif
-	}
-	g_free(cmdline);
-}
-
-
 void document_replace_tabs(gint idx)
 {
 	gint search_pos, pos_in_line, current_tab_true_length;

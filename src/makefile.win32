@@ -36,18 +36,23 @@ ALL_GTK_LIBS= \
 	-L"$(PREFIX)/lib" \
 	-lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 \
 	-lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0 -lintl -liconv
-	#-lcairo -lpangocairo-1.0
 	# these things are for GTK >= 2.8
 	# (should be same as with MSYS: pkg-config --libs gtk+-2.0 gthread-2.0)
 	#"$(PREFIX)/lib/libcairo.dll.a" \
 	#"$(PREFIX)/lib/asprintf.lib" \
 	#"$(PREFIX)/lib/charset.lib" \
 
+ifdef GTK210
+PRINTING_LIBS=-lcairo -lpangocairo-1.0
+else
+PRINTING_LIBS=
+endif
+
 CCFLAGS=-Wall -O2 -g -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
 
 OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o filetypes.o \
 		geanyobject.o highlighting.o interface.o keybindings.o keyfile.o main.o msgwindow.o \
-		navqueue.o notebook.o plugins.o prefs.o project.o sciwrappers.o search.o \
+		navqueue.o notebook.o plugins.o prefs.o printing.o project.o sciwrappers.o search.o \
 		socket.o support.o symbols.o templates.o treeviews.o tools.o ui_utils.o utils.o win32.o
 
 .c.o:
@@ -72,7 +77,7 @@ binclean:
 
 $(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/tagmanager.a
 	$(CXX) $(OBJS) $(RES) -o $(TARGET) \
-	../scintilla/scintilla.a ../tagmanager/tagmanager.a $(ALL_GTK_LIBS) \
+	../scintilla/scintilla.a ../tagmanager/tagmanager.a $(ALL_GTK_LIBS) $(PRINTING_LIBS) \
 	 -mwindows -lkernel32 -limm32 -lshell32 -lole32 -luuid -lcomdlg32 -lcomctl32 -liberty -lwsock32
 
 deps.mak:

@@ -51,6 +51,7 @@
 #include "search.h"
 #include "project.h"
 #include "editor.h"
+#include "printing.h"
 
 
 static gchar *scribble_text = NULL;
@@ -233,9 +234,17 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, "tools", "make_cmd", prefs.tools_make_cmd ? prefs.tools_make_cmd : "");
 	g_key_file_set_string(config, "tools", "term_cmd", prefs.tools_term_cmd ? prefs.tools_term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", prefs.tools_browser_cmd ? prefs.tools_browser_cmd : "");
-	g_key_file_set_string(config, "tools", "print_cmd", prefs.tools_print_cmd ? prefs.tools_print_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", prefs.tools_grep_cmd ? prefs.tools_grep_cmd : "");
 	g_key_file_set_string(config, PACKAGE, "context_action_cmd", prefs.context_action_cmd);
+
+	// printing
+	g_key_file_set_string(config, "printing", "print_cmd", printing_prefs.external_print_cmd ? printing_prefs.external_print_cmd : "");
+	g_key_file_set_boolean(config, "printing", "use_gtk_printing", printing_prefs.use_gtk_printing);
+	g_key_file_set_boolean(config, "printing", "print_line_numbers", printing_prefs.print_line_numbers);
+	g_key_file_set_boolean(config, "printing", "print_page_numbers", printing_prefs.print_page_numbers);
+	g_key_file_set_boolean(config, "printing", "print_page_header", printing_prefs.print_page_header);
+	g_key_file_set_boolean(config, "printing", "page_header_basename", printing_prefs.page_header_basename);
+	g_key_file_set_string(config, "printing", "page_header_datefmt", printing_prefs.page_header_datefmt);
 
 	// VTE
 #ifdef HAVE_VTE
@@ -598,6 +607,13 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.tools_browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", tmp_string);
 	g_free(tmp_string);
 
+	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_GREP);
+	prefs.tools_grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", tmp_string);
+	g_free(tmp_string);
+
+	prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
+
+	// printing
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
 #ifdef G_OS_WIN32
 	// single quote paths on Win32 for g_spawn_command_line_async
@@ -605,15 +621,20 @@ static void load_dialog_prefs(GKeyFile *config)
 #else
 	tmp_string = g_strconcat(tmp_string2, " %f", NULL);
 #endif
-	prefs.tools_print_cmd = utils_get_setting_string(config, "tools", "print_cmd", tmp_string);
+	printing_prefs.external_print_cmd = utils_get_setting_string(config, "printing", "print_cmd", tmp_string);
 	g_free(tmp_string);
 	g_free(tmp_string2);
 
-	tmp_string = g_find_program_in_path(GEANY_DEFAULT_TOOLS_GREP);
-	prefs.tools_grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", tmp_string);
-	g_free(tmp_string);
-
-	prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
+#if GTK_CHECK_VERSION(2, 10, 0)
+	printing_prefs.use_gtk_printing = utils_get_setting_boolean(config, "printing", "use_gtk_printing", TRUE);
+#else
+	printing_prefs.use_gtk_printing = utils_get_setting_boolean(config, "printing", "use_gtk_printing", FALSE);
+#endif
+	printing_prefs.print_line_numbers = utils_get_setting_boolean(config, "printing", "print_line_numbers", TRUE);
+	printing_prefs.print_page_numbers = utils_get_setting_boolean(config, "printing", "print_page_numbers", TRUE);
+	printing_prefs.print_page_header = utils_get_setting_boolean(config, "printing", "print_page_header", TRUE);
+	printing_prefs.page_header_basename = utils_get_setting_boolean(config, "printing", "page_header_basename", FALSE);
+	printing_prefs.page_header_datefmt = utils_get_setting_string(config, "printing", "page_header_datefmt", "%c");
 }
 
 

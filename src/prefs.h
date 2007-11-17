@@ -25,7 +25,7 @@
 #define GEANY_PREFS_H 1
 
 /* Preferences dialog settings.
- * (See also EditorPrefs in editor.h).
+ * (See also EditorPrefs in editor.h and PrintingPrefs in printing.h).
  * Remember to increment abi_version in plugindata.h when changing items. */
 typedef struct GeanyPrefs
 {
@@ -82,7 +82,7 @@ typedef struct GeanyPrefs
 	gchar			*tools_browser_cmd;
 	gchar			*tools_make_cmd;
 	gchar			*tools_term_cmd;
-	gchar			*tools_print_cmd;
+	gchar			*tools_print_cmd; /// TODO unused: remove this at next abi_verison change
 	gchar			*tools_grep_cmd;
 	gchar			*context_action_cmd;
 

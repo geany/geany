@@ -26,6 +26,7 @@ SRCS = \
 	notebook.c notebook.h \
 	plugins.c plugins.h \
 	prefs.c prefs.h \
+	printing.c printing.h \
 	project.c project.h \
 	sciwrappers.c sciwrappers.h \
 	search.c search.h \

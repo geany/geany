@@ -47,6 +47,7 @@
 #include "editor.h"
 #include "main.h"
 #include "treeviews.h"
+#include "printing.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -77,6 +78,8 @@ static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointe
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_openfiles_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 
 
 enum
@@ -411,9 +414,6 @@ void prefs_init_dialog(void)
 	if (prefs.tools_browser_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_browser")), prefs.tools_browser_cmd);
 
-	if (prefs.tools_print_cmd)
-		gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_print")), prefs.tools_print_cmd);
-
 	if (prefs.tools_grep_cmd)
 		gtk_entry_set_text(GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_grep")), prefs.tools_grep_cmd);
 
@@ -437,6 +437,49 @@ void prefs_init_dialog(void)
 
 	// Keybindings
 	init_keybindings();
+
+	// Printing
+	{
+		GtkWidget *widget_gtk = lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk");
+		if (printing_prefs.use_gtk_printing)
+			widget = widget_gtk;
+		else
+			widget = lookup_widget(ui_widgets.prefs_dialog, "radio_print_external");
+
+#if GTK_CHECK_VERSION(2, 10, 0)
+		if (gtk_check_version(2, 10, 0) != NULL)
+#endif
+		{
+			gtk_widget_set_sensitive(widget_gtk, FALSE); // disable the whole option block
+			widget = lookup_widget(ui_widgets.prefs_dialog, "radio_print_external");
+		}
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
+
+		on_prefs_print_radio_button_toggled(GTK_TOGGLE_BUTTON(widget_gtk), NULL);
+	}
+	if (printing_prefs.external_print_cmd)
+		gtk_entry_set_text(
+			GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd")),
+			printing_prefs.external_print_cmd);
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_linenumbers");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.print_line_numbers);
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_pagenumbers");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.print_page_numbers);
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.print_page_header);
+	on_prefs_print_page_header_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
+
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_basename");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.page_header_basename);
+
+	if (printing_prefs.page_header_datefmt)
+		gtk_entry_set_text(
+			GTK_ENTRY(lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat")),
+			printing_prefs.page_header_datefmt);
+
 
 #ifndef HAVE_PLUGINS
 	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "check_plugins"), FALSE);
@@ -748,10 +791,6 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		g_free(prefs.tools_browser_cmd);
 		prefs.tools_browser_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
-		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_print");
-		g_free(prefs.tools_print_cmd);
-		prefs.tools_print_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-
 		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_grep");
 		g_free(prefs.tools_grep_cmd);
 		prefs.tools_grep_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
@@ -781,6 +820,32 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		// Keybindings
 		if (edited) keybindings_write_to_file();
+
+
+		// Printing
+		widget = lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk");
+		printing_prefs.use_gtk_printing = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd");
+		g_free(printing_prefs.external_print_cmd);
+		printing_prefs.external_print_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_linenumbers");
+		printing_prefs.print_line_numbers = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_pagenumbers");
+		printing_prefs.print_page_numbers = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader");
+		printing_prefs.print_page_header = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_print_basename");
+		printing_prefs.page_header_basename = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat");
+		g_free(printing_prefs.page_header_datefmt);
+		printing_prefs.page_header_datefmt = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
 
 #ifdef HAVE_VTE
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_vte");
@@ -1198,6 +1263,24 @@ static void on_openfiles_visible_toggled(GtkToggleButton *togglebutton, gpointer
 }
 
 
+static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gboolean sens = gtk_toggle_button_get_active(togglebutton);
+
+	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "vbox29"), sens);
+	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "hbox9"), ! sens);
+}
+
+
+static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gboolean sens = gtk_toggle_button_get_active(togglebutton);
+
+	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "check_print_basename"), sens);
+	gtk_widget_set_sensitive(lookup_widget(ui_widgets.prefs_dialog, "entry_print_dateformat"), sens);
+}
+
+
 void prefs_show_dialog(void)
 {
 	if (ui_widgets.prefs_dialog == NULL)
@@ -1254,10 +1337,18 @@ void prefs_show_dialog(void)
 				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_grep"));
 
 		// tools commands
-		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_print"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_print"));
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
-				"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
+			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
+		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),
+			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction"));
+
+		// printing
+		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "button_print_external_cmd"),
+			"clicked", G_CALLBACK(on_prefs_tools_button_clicked), lookup_widget(ui_widgets.prefs_dialog, "entry_print_external_cmd"));
+		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "radio_print_gtk"),
+			"toggled", G_CALLBACK(on_prefs_print_radio_button_toggled), NULL);
+		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader"),
+			"toggled", G_CALLBACK(on_prefs_print_page_header_toggled), NULL);
 
 		g_signal_connect((gpointer) lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show"),
 				"toggled", G_CALLBACK(on_toolbar_show_toggled), NULL);

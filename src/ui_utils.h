@@ -52,6 +52,7 @@ typedef struct UIWidgets
 	GtkWidget	*recent_files_menuitem;
 	GtkWidget	*recent_files_menubar;
 	GtkWidget	*recent_files_toolbar;
+	GtkWidget	*print_page_setup;
 	GtkWidget	*menu_insert_include_items[2];
 	GtkWidget	*popup_goto_items[3];
 	GtkWidget	*popup_copy_items[3];

@@ -186,9 +186,6 @@ void document_set_indicator(gint idx, gint line);
 
 void document_clear_indicators(gint idx);
 
-/* simple file print */
-void document_print(gint idx);
-
 void document_replace_tabs(gint idx);
 
 void document_strip_line_trailing_spaces(gint idx, gint line);

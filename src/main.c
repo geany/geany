@@ -67,6 +67,7 @@
 #include "tools.h"
 #include "navqueue.h"
 #include "plugins.h"
+#include "printing.h"
 
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -293,13 +294,14 @@ static void main_init(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_widgets.recent_files_menuitem),
 							ui_widgets.recent_files_menubar);
 
-	// store important pointers in the GeanyApp structure
+	// store important pointers for later reference
 	app->toolbar = lookup_widget(app->window, "toolbar1");
 	app->treeview_notebook = lookup_widget(app->window, "notebook3");
 	app->notebook = lookup_widget(app->window, "notebook1");
 	app->statusbar = lookup_widget(app->window, "statusbar");
 	app->popup_menu = create_edit_menu1();
 	ui_widgets.toolbar_menu = create_toolbar_popup_menu1();
+	ui_widgets.print_page_setup = lookup_widget(app->window, "page_setup1");
 	ui_widgets.popup_goto_items[0] = lookup_widget(app->popup_menu, "goto_tag_definition1");
 	ui_widgets.popup_goto_items[1] = lookup_widget(app->popup_menu, "goto_tag_declaration1");
 	ui_widgets.popup_goto_items[2] = lookup_widget(app->popup_menu, "find_usage1");
@@ -328,6 +330,12 @@ static void main_init(void)
 	gtk_widget_set_name(app->window, "GeanyMainWindow");
 	gtk_widget_set_name(ui_widgets.toolbar_menu, "GeanyToolbarMenu");
 	gtk_widget_set_name(app->popup_menu, "GeanyEditMenu");
+
+#if ! GTK_CHECK_VERSION(2, 10, 0)
+	// hide Page setup menu item, it isn't supported with non-GTK printing
+	gtk_widget_hide(ui_widgets.print_page_setup);
+#endif
+
 }
 
 
@@ -825,8 +833,9 @@ void main_quit()
 	g_free(prefs.tools_make_cmd);
 	g_free(prefs.tools_term_cmd);
 	g_free(prefs.tools_browser_cmd);
-	g_free(prefs.tools_print_cmd);
 	g_free(prefs.tools_grep_cmd);
+	g_free(printing_prefs.external_print_cmd);
+	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);
 	while (! g_queue_is_empty(ui_prefs.recent_queue))
 	{
