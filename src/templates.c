@@ -350,8 +350,8 @@ static void create_new_menu_items()
 
 void templates_init(void)
 {
-	gchar *year = utils_get_date_time("%Y");
-	gchar *date = utils_get_date_time(TEMPLATE_DATE_FORMAT);
+	gchar *year = utils_get_date_time("%Y", NULL);
+	gchar *date = utils_get_date_time(TEMPLATE_DATE_FORMAT, NULL);
 
 	init_general_templates(year, date);
 	init_ft_templates(year, date);
@@ -523,7 +523,7 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FILEHEADER]);
 	gchar *shortname;
 	gchar *result;
-	gchar *date = utils_get_date_time(TEMPLATE_DATETIME_FORMAT);
+	gchar *date = utils_get_date_time(TEMPLATE_DATETIME_FORMAT, NULL);
 	filetype_id ft_id = filetype_idx;
 	filetype *ft = filetypes[ft_id];
 
@@ -586,8 +586,8 @@ gchar *templates_get_template_generic(gint template)
 gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name)
 {
 	gchar *template = g_strdup(templates[GEANY_TEMPLATE_FUNCTION]);
-	gchar *date = utils_get_date_time(TEMPLATE_DATE_FORMAT);
-	gchar *datetime = utils_get_date_time(TEMPLATE_DATETIME_FORMAT);
+	gchar *date = utils_get_date_time(TEMPLATE_DATE_FORMAT, NULL);
+	gchar *datetime = utils_get_date_time(TEMPLATE_DATETIME_FORMAT, NULL);
 	gchar *result;
 
 	template = utils_str_replace(template, "{date}", date);
@@ -605,7 +605,7 @@ gchar *templates_get_template_function(gint filetype_idx, const gchar *func_name
 
 gchar *templates_get_template_changelog(void)
 {
-	gchar *date = utils_get_date_time(TEMPLATE_DATETIME_FORMAT);
+	gchar *date = utils_get_date_time(TEMPLATE_DATETIME_FORMAT, NULL);
 	gchar *result = g_strdup(templates[GEANY_TEMPLATE_CHANGELOG]);
 	result = utils_str_replace(result, "{date}", date);
 

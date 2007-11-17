@@ -99,7 +99,7 @@ gchar *utils_str_replace(gchar *haystack, const gchar *needle, const gchar *repl
 gint utils_strpos(const gchar* haystack, const gchar * needle);
 
 
-gchar *utils_get_date_time(const gchar *format);
+gchar *utils_get_date_time(const gchar *format, time_t *time_to_use);
 
 gchar *utils_get_initials(gchar *name);
 

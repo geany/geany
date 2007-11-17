@@ -1,3 +1,10 @@
+2007-11-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/templates.c, src/utils.c, src/utils.h:
+   Fix possible memory leak and add time_t argument in
+   utils_get_date_time() to pass a time pointer to use.
+
+
 2007-11-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/vcdiff.c, plugins/Makefile.am:
