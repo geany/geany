@@ -239,11 +239,13 @@ static void add_page_header(PangoLayout *layout, cairo_t *cr, DocInfo *dinfo, gi
 	gint ph_height = dinfo->line_height * 3;
 	gchar *data;
 	gchar *datetime;
+	gchar *tmp_file_name = (doc_list[dinfo->idx].file_name != NULL) ?
+		doc_list[dinfo->idx].file_name : GEANY_STRING_UNTITLED;
 	gchar *file_name = (printing_prefs.page_header_basename) ?
-		g_path_get_basename(doc_list[dinfo->idx].file_name) :
-		g_strdup(doc_list[dinfo->idx].file_name);
+		g_path_get_basename(tmp_file_name) : g_strdup(tmp_file_name);
 
 	// draw the frame
+	cairo_set_line_width(cr, 0.3);
 	cairo_set_source_rgb(cr, 0, 0, 0);
 	cairo_rectangle(cr, 2, 2, width - 4, ph_height - 4);
 	cairo_stroke(cr);

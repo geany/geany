@@ -9,6 +9,8 @@
    src/makefile.win32, src/prefs.c, src/prefs.h, src/printing.c,
    src/printing.h, src/ui_utils.c, src/ui_utils.h:
    Add native GTK printing support.
+ * src/printing.c: Set line width for page header, handle empty filename
+                   in page header correctly.
 
 
 2007-11-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
