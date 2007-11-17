@@ -1,4 +1,5 @@
 noinst_HEADERS = \
+	regex.h \
 	tm_project.h\
 	tm_source_file.h\
 	tm_tag.h\

@@ -11,6 +11,13 @@
    Add native GTK printing support.
  * src/printing.c: Set line width for page header, handle empty filename
                    in page header correctly.
+ * tagmanager/Makefile.am, tagmanager/lregex.c,
+   tagmanager/makefile.win32, tagmanager/parse.c, tagmanager/parse.h,
+   tagmanager/php.c, tagmanager/regex.c, tagmanager/tm_tag.c,
+   tagmanager/include/Makefile.am, tagmanager/include/regex.h:
+   Fix two more compiler warnings.
+   Use php.c and lregex.c from CTags SVN (closes #1795810).
+   Add regex.c and regex.h (GNU regex) for regex support on Windows.
 
 
 2007-11-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

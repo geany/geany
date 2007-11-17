@@ -56,7 +56,7 @@ extern void makeSimpleTag (const vString* const name,
 extern void makeSimpleScopedTag (const vString* const name,
 				 kindOption* const kinds, const int kind,
 				 const char* scope, const char *scope2,
-				 const char *access)
+				 const char *laccess)
 {
     if (name != NULL  &&  vStringLength (name) > 0)
     {
@@ -67,7 +67,7 @@ extern void makeSimpleScopedTag (const vString* const name,
         e.kind     = kinds [kind].letter;
 	e.extensionFields.scope[0] = scope;
 	e.extensionFields.scope[1] = scope2;
-	e.extensionFields.access = access;
+	e.extensionFields.access = laccess;
 
         makeTagEntry (&e);
     }
@@ -541,7 +541,7 @@ static void printLangugageKindOptions (const langType language)
 	    for (i = 0  ;  i < lang->kindCount  ;  ++i)
 		printLangugageKindOption (lang->kinds + i);
 #ifdef HAVE_REGEX
-	printRegexKindOptions (language);
+	// printRegexKindOptions (language); // unused
 #endif
     }
 }

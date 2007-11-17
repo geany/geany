@@ -728,7 +728,7 @@ static const char *tm_tag_access_name(TMTag *tag)
 
 void tm_tag_print(TMTag *tag, FILE *fp)
 {
-	const char *access, *impl, *type;
+	const char *laccess, *impl, *type;
 	if (!tag || !fp)
 		return;
 	if (tm_tag_file_t == tag->type)
@@ -736,11 +736,11 @@ void tm_tag_print(TMTag *tag, FILE *fp)
 		fprintf(fp, "%s\n", tag->name);
 		return;
 	}
-	access = tm_tag_access_name(tag);
+	laccess = tm_tag_access_name(tag);
 	impl = tm_tag_impl_name(tag);
 	type = tm_tag_type_name(tag);
-	if (access)
-		fprintf(fp, "%s ", access);
+	if (laccess)
+		fprintf(fp, "%s ", laccess);
 	if (impl)
 		fprintf(fp, "%s ", impl);
 	if (type)

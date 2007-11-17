@@ -7,6 +7,8 @@ INCLUDES = -I$(srcdir)/include $(GTK_CFLAGS)
 #	-DGDK_PIXBUF_DEPRECATED \
 #	-DGTK_DISABLE_DEPRECATED -DGNOME_DISABLE_DEPRECATED
 
+# regex.c is the GNU regex implementation needed for Windows
+EXTRA_DIST = regex.c
 
 noinst_LIBRARIES = libtagmanager.a
 libtagmanager_a_SOURCES =\
@@ -39,6 +41,7 @@ libtagmanager_a_SOURCES =\
 	make.c\
 	asm.c\
 	latex.c\
+	lregex.c\
 	pascal.c\
 	perl.c\
 	rest.c\
@@ -46,7 +49,6 @@ libtagmanager_a_SOURCES =\
 	sql.c\
 	php.c\
 	python.c\
-	regex.c\
 	tcl.c\
 	sh.c\
 	vhdl.c\
