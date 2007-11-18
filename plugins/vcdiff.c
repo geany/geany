@@ -109,7 +109,6 @@ static gboolean find_subdir(const gchar* filename, const gchar *subdir)
 	gboolean ret = FALSE;
 	gchar *base;
 	gchar *gitdir;
-	gchar *tmp;
 	gchar *base_prev = g_strdup(":");
 
 	if (g_file_test(filename, G_FILE_TEST_IS_DIR))
