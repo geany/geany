@@ -799,7 +799,7 @@ void main_quit()
 		plugins_free();
 #endif
 	if (app->project != NULL)
-		project_close();
+		project_close(FALSE);
 
 	navqueue_free();
 	keybindings_free();

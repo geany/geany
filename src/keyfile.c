@@ -698,6 +698,46 @@ static void load_ui_prefs(GKeyFile *config)
 }
 
 
+/*
+ * Save current session in default configuration file
+ */
+void configuration_save_default_session()
+{
+	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	gchar *data;
+	GKeyFile *config = g_key_file_new();
+
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+
+	configuration_save_session_files(config);
+
+	// write the file
+	data = g_key_file_to_data(config, NULL, NULL);
+	utils_write_file(configfile, data);
+	g_free(data);
+
+	g_key_file_free(config);
+	g_free(configfile);
+}
+
+
+/*
+ * Only reload the session part of the default configuration
+ */
+void configuration_reload_default_session()
+{
+	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);
+	GKeyFile *config = g_key_file_new();
+
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+
+	configuration_load_session_files(config);
+
+	g_key_file_free(config);
+	g_free(configfile);
+}
+
+
 gboolean configuration_load()
 {
 	gchar *configfile = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "geany.conf", NULL);

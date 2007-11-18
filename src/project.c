@@ -42,6 +42,7 @@
 # include "win32.h"
 #endif
 #include "build.h"
+#include "document.h"
 
 
 ProjectPrefs project_prefs = {NULL};
@@ -299,9 +300,10 @@ void project_save()
 }
 
 
-void project_close()
+// open_default will make function reload default session files on close
+void project_close(gboolean open_default)
 {
-	//~ gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
+	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 	g_return_if_fail(app->project != NULL);
 
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
@@ -315,16 +317,21 @@ void project_close()
 	g_free(app->project);
 	app->project = NULL;
 
-/// TODO really close all tabs? maybe it should configurable
-/*
-	for(i = 0; i < max; i++)
+	// close all existing tabs first
+	for (i = 0; i < max; i++)
 	{
 		if (! document_remove(0))
 			break;
 	}
-	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
-*/
 
+	// after closing all tabs let's open the tabs found in the default config
+	if (open_default == TRUE)
+	{
+		configuration_reload_default_session();
+		configuration_open_files();
+	}
+
+	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
 	update_ui();
 }
 
@@ -524,7 +531,7 @@ static gboolean close_open_project()
 			_("Do you want to close it before proceeding?"),
 			_("The '%s' project is already open. "), app->project->name))
 		{
-			project_close();
+			project_close(FALSE);
 			return TRUE;
 		}
 		else
@@ -844,7 +851,7 @@ static gboolean load_config(const gchar *filename)
 	g_return_val_if_fail(app->project == NULL && filename != NULL, FALSE);
 
 	config = g_key_file_new();
-	if (! g_key_file_load_from_file(config, filename, G_KEY_FILE_KEEP_COMMENTS, NULL))
+	if (! g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL))
 	{
 		g_key_file_free(config);
 		return FALSE;
@@ -858,6 +865,9 @@ static gboolean load_config(const gchar *filename)
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
 	p->run_cmd = utils_get_setting_string(config, "project", "run_cmd", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
+
+	// save current (non-project) session (it could has been changed since program startup)
+	configuration_save_default_session();
 
 	// fetch session files too
 	configuration_load_session_files(config);
@@ -885,7 +895,7 @@ static gboolean write_config()
 	config = g_key_file_new();
 	// try to load an existing config to keep manually added comments
 	filename = utils_get_locale_from_utf8(p->file_name);
-	g_key_file_load_from_file(config, filename, G_KEY_FILE_KEEP_COMMENTS, NULL);
+	g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL);
 
 	g_key_file_set_string(config, "project", "name", p->name);
 	g_key_file_set_string(config, "project", "base_path", p->base_path);

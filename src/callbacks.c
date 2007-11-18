@@ -1871,7 +1871,7 @@ void
 on_project_close1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	project_close();
+	project_close(TRUE);
 }
 
 

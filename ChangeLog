@@ -9,6 +9,10 @@
    Disable use of non-ASCII characters for PHP parser, it caused
    problems when using with locales other than "C".
    Add missing line break characters in error messages in lregex.c.
+ * src/callbacks.c, src/keyfile.c, src/keyfile.h, src/main.c,
+   src/project.c, src/project.h:
+   Apply patch from Bo Lorentsen to improve support for project session
+   files (thank you).
 
 
 2007-11-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

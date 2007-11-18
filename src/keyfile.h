@@ -31,6 +31,10 @@ gboolean configuration_load();
 
 gboolean configuration_open_files();
 
+void configuration_reload_default_session();
+
+void configuration_save_default_session();
+
 void configuration_load_session_files(GKeyFile *config);
 
 void configuration_save_session_files(GKeyFile *config);
