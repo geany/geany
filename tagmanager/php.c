@@ -54,6 +54,7 @@ static kindOption PhpKinds [] = {
  * end of an identifier, and we need something like iconv to take into
  * account the user's locale (or an override on the command-line.)
  */
+/*
 #ifdef __CYGWIN__
 #define ALPHA "[:alpha:]"
 #define ALNUM "[:alnum:]"
@@ -61,6 +62,11 @@ static kindOption PhpKinds [] = {
 #define ALPHA "A-Za-z\x7f-\xff"
 #define ALNUM "0-9A-Za-z\x7f-\xff"
 #endif
+*/
+// eht16 - "A-Za-z\x7f-\xff" fails on other locales than "C" and so skip it
+#define ALPHA "[:alpha:]"
+#define ALNUM "[:alnum:]"
+
 
 static void installPHPRegex (const langType language)
 {
@@ -69,7 +75,7 @@ static void installPHPRegex (const langType language)
 	addTagRegex(language, "(^|[ \t])interface[ \t]+([" ALPHA "_][" ALNUM "_]*)",
 		"\\2", "i,interface,interfaces", NULL);
 	addTagRegex(language, "(^|[ \t])define[ \t]*\\([ \t]*['\"]?([" ALPHA "_][" ALNUM "_]*)",
-		"\\2", "d,define,constant definitions", NULL);
+		"\\2", "d,macro,constant definitions", NULL);
 	addTagRegex(language, "(^|[ \t])function[ \t]+&?[ \t]*([" ALPHA "_][" ALNUM "_]*)",
 		"\\2", "f,function,functions", NULL);
 	addTagRegex(language, "(^|[ \t])(\\$|::\\$|\\$this->)([" ALPHA "_][" ALNUM "_]*)[ \t]*=",
@@ -159,7 +165,7 @@ static void findPhpTags (void)
 				cp++;
 
 				while (isspace ((int) *cp))
-					++cp; 
+					++cp;
 			}
 
 			vStringClear (name);
@@ -171,7 +177,7 @@ static void findPhpTags (void)
 			vStringTerminate (name);
 			makeSimpleTag (name, PhpKinds, K_FUNCTION);
 			vStringClear (name);
-		} 
+		}
 		else if (strncmp ((const char*) cp, "class", (size_t) 5) == 0 &&
 				 isspace ((int) cp [5]))
 		{
@@ -206,7 +212,7 @@ static void findPhpTags (void)
 				++cp;
 			else if (! ((*cp == '_')  || isalnum ((int) *cp)))
 				continue;
-	      
+
 			vStringClear (name);
 			while (isalnum ((int) *cp)  ||  *cp == '_')
 			{

@@ -4,6 +4,11 @@
    src/prefs.h, src/treeviews.c:
    Add hidden pref to hide symbol list treeview expander (GTK >= 2.12).
    Double click on symbol list sections now expands/collapses them.
+ * src/symbols.c, tagmanager/lregex.c, tagmanager/php.c:
+   Add missing symbol types: Interface and Constants for PHP.
+   Disable use of non-ASCII characters for PHP parser, it caused
+   problems when using with locales other than "C".
+   Add missing line break characters in error messages in lregex.c.
 
 
 2007-11-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

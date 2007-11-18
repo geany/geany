@@ -573,9 +573,10 @@ static void init_tag_list(gint idx)
 		case GEANY_FILETYPES_PHP:
 		{
 			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_macro), _("Constants"), NULL,
+				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				NULL);
 				//&(tv_iters.tag_struct), _("Label"),
@@ -640,7 +641,7 @@ static void init_tag_list(gint idx)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Package"), NULL,
-				&(tv_iters.tag_struct), _("Interfaces"), NULL,
+				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
 				&(tv_iters.tag_member), _("Members"), "classviewer-member",
@@ -656,7 +657,7 @@ static void init_tag_list(gint idx)
 				&(tv_iters.tag_struct), _("Interfaces"), "classviewer-struct",
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
-				&(tv_iters.tag_type), _("Types"), NULL,
+				&(tv_iters.tag_type), _("Types"), "classviewer-macro",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);

@@ -217,18 +217,18 @@ static boolean parseTagRegex (
 
 	*name = scanSeparators (regexp);
 	if (*regexp == '\0')
-		printf ("regex: empty regexp");
+		printf ("regex: empty regexp\n");
 	else if (**name != separator)
-		printf ("regex: %s: incomplete regexp", regexp);
+		printf ("regex: %s: incomplete regexp\n", regexp);
 	else
 	{
 		char* const third = scanSeparators (*name);
 		if (**name == '\0')
-			printf ("regex: %s: regexp missing name pattern", regexp);
+			printf ("regex: %s: regexp missing name pattern\n", regexp);
 		if ((*name) [strlen (*name) - 1] == '\\')
-			printf ("regex: error in name pattern: \"%s\"", *name);
+			printf ("regex: error in name pattern: \"%s\"\n", *name);
 		if (*third != separator)
-			printf ("regex: %s: regexp missing final separator", regexp);
+			printf ("regex: %s: regexp missing final separator\n", regexp);
 		else
 		{
 			char* const fourth = scanSeparators (third);
@@ -323,7 +323,7 @@ static regex_t* compileRegex (const char* const regexp, const char* const flags)
 			case 'b': cflags &= ~REG_EXTENDED; break;
 			case 'e': cflags |= REG_EXTENDED;  break;
 			case 'i': cflags |= REG_ICASE;     break;
-			default: printf ("regex: unknown regex flag: '%c'", *flags); break;
+			default: printf ("regex: unknown regex flag: '%c'\n", *flags); break;
 		}
 	}
 	result = xMalloc (1, regex_t);
@@ -332,7 +332,7 @@ static regex_t* compileRegex (const char* const regexp, const char* const flags)
 	{
 		char errmsg[256];
 		regerror (errcode, result, errmsg, 256);
-		printf ("regex: regcomp %s: %s", regexp, errmsg);
+		printf ("regex: regcomp %s: %s\n", regexp, errmsg);
 		regfree (result);
 		eFree (result);
 		result = NULL;
@@ -402,13 +402,13 @@ static void processLanguageRegex (const langType language,
 	else if (parameter [0] != '@')
 		addLanguageRegex (language, parameter);
 	else if (! doesFileExist (parameter + 1))
-		printf ("regex: cannot open regex file");
+		printf ("regex: cannot open regex file\n");
 	else
 	{
 		const char* regexfile = parameter + 1;
 		FILE* const fp = fopen (regexfile, "r");
 		if (fp == NULL)
-			printf ("regex: %s", regexfile);
+			printf ("regex: %s\n", regexfile);
 		else
 		{
 			vString* const regex = vStringNew ();
@@ -612,11 +612,11 @@ extern boolean processRegexOption (const char *const option,
 		langType language;
 		language = getNamedLanguage (dash + 1);
 		if (language == LANG_IGNORE)
-			printf ("regex: unknown language \"%s\" in --%s option", (dash + 1), option);
+			printf ("regex: unknown language \"%s\" in --%s option\n", (dash + 1), option);
 		else
 			processLanguageRegex (language, parameter);
 #else
-		printf ("regex: regex support not available; required for --%s option",
+		printf ("regex: regex support not available; required for --%s option\n",
 		   option);
 #endif
 		handled = TRUE;
