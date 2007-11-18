@@ -53,6 +53,7 @@ typedef struct GeanyPrefs
 	gint			tab_pos_msgwin;
 	gint			tab_pos_sidebar;
 	gboolean		statusbar_visible;
+	gboolean		show_symbol_list_expanders;
 
 	/* toolbar */
 	gboolean		toolbar_visible;
@@ -82,7 +83,6 @@ typedef struct GeanyPrefs
 	gchar			*tools_browser_cmd;
 	gchar			*tools_make_cmd;
 	gchar			*tools_term_cmd;
-	gchar			*tools_print_cmd; /// TODO unused: remove this at next abi_verison change
 	gchar			*tools_grep_cmd;
 	gchar			*context_action_cmd;
 

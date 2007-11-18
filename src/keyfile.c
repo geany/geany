@@ -339,6 +339,9 @@ static void save_hidden_prefs(GKeyFile *config)
 	write_hidden_pref_boolean(config, PACKAGE, "brace_match_ltgt", editor_prefs.brace_match_ltgt);
 	write_hidden_pref_boolean(config, PACKAGE, "use_gtk_word_boundaries", editor_prefs.use_gtk_word_boundaries);
 	write_hidden_pref_boolean(config, PACKAGE, "auto_complete_whilst_editing", editor_prefs.auto_complete_whilst_editing);
+#if GTK_CHECK_VERSION(2, 12, 0)
+	write_hidden_pref_boolean(config, PACKAGE, "show_symbol_list_expanders", prefs.show_symbol_list_expanders);
+#endif
 #ifdef HAVE_VTE
 	if (vte_info.have_vte)
 		write_hidden_pref_boolean(config, "VTE", "enable_bash_keys", vc->enable_bash_keys);
@@ -459,6 +462,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
+#if GTK_CHECK_VERSION(2, 12, 0)
+	prefs.show_symbol_list_expanders = utils_get_setting_boolean(config, PACKAGE, "show_symbol_list_expanders", TRUE);
+#endif
 
 	// display, editor
 	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);

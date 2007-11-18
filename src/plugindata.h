@@ -71,12 +71,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 29;
+static const gint api_version = 30;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 14;
+static const gint abi_version = 15;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.

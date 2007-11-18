@@ -120,6 +120,10 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), FALSE);
 
+#if GTK_CHECK_VERSION(2, 12, 0)
+	gtk_tree_view_set_show_expanders(GTK_TREE_VIEW(tree), prefs.show_symbol_list_expanders);
+#endif
+
 	// selection handling
 	select = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
@@ -643,17 +647,39 @@ static gboolean on_taglist_tree_selection_changed(GtkTreeSelection *selection)
 
 
 static gboolean on_treeviews_button_press_event(GtkWidget *widget, GdkEventButton *event,
-																			gpointer user_data)
+												gpointer user_data)
 {
-	if (event->button == 1 && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
-	{ // allow reclicking of taglist treeview item
+	if (event->type == GDK_2BUTTON_PRESS && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
+	{	// double click on parent node(section) expands/collapses it
+		GtkTreeModel *model;
+		GtkTreeSelection *selection;
+		GtkTreeIter iter;
+
+		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
+		if (gtk_tree_selection_get_selected(selection, &model, &iter))
+		{
+			if (gtk_tree_model_iter_has_child(model, &iter))
+			{
+				GtkTreePath *path = gtk_tree_model_get_path(model, &iter);
+
+				if (gtk_tree_view_row_expanded(GTK_TREE_VIEW(widget), path))
+					gtk_tree_view_collapse_row(GTK_TREE_VIEW(widget), path);
+				else
+					gtk_tree_view_expand_row(GTK_TREE_VIEW(widget), path, FALSE);
+
+				gtk_tree_path_free(path);
+				return TRUE;
+			}
+		}
+	}
+	else if (event->button == 1 && GPOINTER_TO_INT(user_data) == TREEVIEW_SYMBOL)
+	{	// allow reclicking of taglist treeview item
 		GtkTreeSelection *select = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));
 		// delay the query of selection state because this callback is executed before GTK
 		// changes the selection (g_signal_connect_after would be better but it doesn't work)
 		g_idle_add((GSourceFunc) on_taglist_tree_selection_changed, select);
 	}
-
-	if (event->button == 3)
+	else if (event->button == 3)
 	{	// popupmenu to hide or clear the active treeview
 		if (GPOINTER_TO_INT(user_data) == TREEVIEW_OPENFILES)
 		{

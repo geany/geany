@@ -1,3 +1,11 @@
+2007-11-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.html, doc/geany.txt, src/keyfile.c, src/plugindata.h,
+   src/prefs.h, src/treeviews.c:
+   Add hidden pref to hide symbol list treeview expander (GTK >= 2.12).
+   Double click on symbol list sections now expands/collapses them.
+
+
 2007-11-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/templates.c, src/utils.c, src/utils.h:
