@@ -66,7 +66,7 @@ static void setInputFileName (const char *const fileName)
 	vStringNCopyS (File.path, fileName, length);
     }
 }
-static void setSourceFileParameters (vString *const fileName)
+static void setSourceFileParameters (vString *const fileName, const langType language)
 {
     if (File.source.name != NULL)
 	vStringDelete (File.source.name);
@@ -84,7 +84,10 @@ static void setSourceFileParameters (vString *const fileName)
 	TagFile.max.file = vStringLength (fileName);
 
     File.source.isHeader = isIncludeFile (vStringValue (fileName));
-    File.source.language = getFileLanguage (vStringValue (fileName));
+    if (language != -1)
+		File.source.language = language;
+	else
+		File.source.language = getFileLanguage (vStringValue (fileName));
 }
 
 static boolean setSourceFileName (vString *const fileName)
@@ -98,7 +101,7 @@ static boolean setSourceFileName (vString *const fileName)
 	else
 	    pathName = combinePathAndFile (vStringValue (File.path),
 					vStringValue (fileName));
-	setSourceFileParameters (pathName);
+	setSourceFileParameters (pathName, -1);
 	result = TRUE;
     }
     return result;
@@ -270,7 +273,7 @@ extern boolean fileOpen (const char *const fileName, const langType language)
 	if (File.line != NULL)
 	    vStringClear (File.line);
 
-	setSourceFileParameters (vStringNewInit (fileName));
+	setSourceFileParameters (vStringNewInit (fileName), language);
 	File.source.lineNumber = 0L;
 
 	verbose ("OPENING %s as %s language %sfile\n", fileName,
