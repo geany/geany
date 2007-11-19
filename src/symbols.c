@@ -489,11 +489,12 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 		if (G_IS_OBJECT(icon))
 		{
 			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon,
-			                   SYMBOLS_COLUMN_NAME, title, -1);
+				SYMBOLS_COLUMN_NAME, title, SYMBOLS_COLUMN_FONT_WEIGHT, PANGO_WEIGHT_SEMIBOLD, -1);
 			g_object_unref(icon);
 		}
 		else
-			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
+			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title,
+				SYMBOLS_COLUMN_FONT_WEIGHT, PANGO_WEIGHT_SEMIBOLD, -1);
 	}
 	va_end(args);
 }
@@ -828,7 +829,8 @@ gboolean symbols_recreate_tag_list(gint idx, gboolean sort_by_name)
 			gtk_tree_store_set(doc_list[idx].tag_store, &iter,
 		 	                  SYMBOLS_COLUMN_ICON, icon,
                               SYMBOLS_COLUMN_NAME, buf,
-                              SYMBOLS_COLUMN_LINE, symbol->line, -1);
+                              SYMBOLS_COLUMN_LINE, symbol->line,
+                              SYMBOLS_COLUMN_FONT_WEIGHT, PANGO_WEIGHT_NORMAL, -1);
 
 			if (G_LIKELY(G_IS_OBJECT(icon)))
 				g_object_unref(icon);

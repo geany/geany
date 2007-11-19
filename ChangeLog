@@ -2,6 +2,9 @@
 
  * tagmanager/read.c: Fix file type detection for parsers using regexp
                       code with non-standard file type extensions.
+ * src/symbols.c, src/treeviews.c, src/treeviews.h:
+   Make sections in the symbol list bold for better distinction if
+   expanders are hidden.
 
 
 2007-11-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
