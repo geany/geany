@@ -44,6 +44,10 @@
  * 	An array for connecting GeanyObject events, which should be terminated with
  * 	{NULL, NULL, FALSE, NULL}. See signals below.
  *
+ * void configure(GtkWidget *parent)
+ * 	Called when the plugin should show a configure dialog to let the user set some basic
+ *  plugin configuration. Optionally, can be omitted when not needed.
+ *
  * void init(GeanyData *data)
  * 	Called after loading the plugin. data is the same as geany_data.
  *
@@ -71,12 +75,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 30;
+static const gint api_version = 31;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 15;
+static const gint abi_version = 16;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
@@ -98,7 +102,7 @@ typedef struct PluginInfo
 	gchar	*name;			// name of plugin
 	gchar	*description;	// description of plugin
 	gchar	*version;		// version of plugin
-	gpointer reserved1;		// reserved for later use
+	gchar	*author;		// author of plugin
 	gpointer reserved2;		// reserved for later use
 }
 PluginInfo;
@@ -106,7 +110,7 @@ PluginInfo;
 #include <string.h>
 
 /* Sets the plugin name and a brief description of what it is. */
-#define PLUGIN_INFO(p_name, p_description, p_version) \
+#define PLUGIN_INFO(p_name, p_description, p_version, p_author) \
 	PluginInfo *info() \
 	{ \
 		static PluginInfo p_info; \
@@ -115,6 +119,7 @@ PluginInfo;
 		p_info.name = (p_name); \
 		p_info.description = (p_description); \
 		p_info.version = (p_version); \
+		p_info.author = (p_author); \
 		return &p_info; \
 	}
 

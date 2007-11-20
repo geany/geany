@@ -1,3 +1,18 @@
+2007-11-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, plugins/*.c src/callbacks.c, src/callbacks.h,
+   src/geany.h, src/interface.c, src/keyfile.c, src/main.c,
+   src/plugindata.h, src/plugins.c, src/plugins.h:
+   Add plugin manager dialog to select plugins to load at startup and
+   to call a plugin configure dialog.
+   Add configure symbol for plugins which is called by Geany when a
+   configure dialog for the plugin is requested, optionally.
+   Add author field to plugin info struct.
+   Add sample configure dialog to the demo plugin.
+   Fix cleanup code in filebrowser plugin to remove it completely when
+   unloaded.
+
+
 2007-11-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/read.c: Fix file type detection for parsers using regexp

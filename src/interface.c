@@ -1543,6 +1543,9 @@ create_window1 (void)
   g_signal_connect ((gpointer) project_properties1, "activate",
                     G_CALLBACK (on_project_properties1_activate),
                     NULL);
+  g_signal_connect ((gpointer) tools1, "activate",
+                    G_CALLBACK (on_tools1_activate),
+                    NULL);
   g_signal_connect ((gpointer) menu_choose_color1, "activate",
                     G_CALLBACK (on_show_color_chooser1_activate),
                     NULL);

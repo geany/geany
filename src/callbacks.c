@@ -62,6 +62,7 @@
 #include "project.h"
 #include "navqueue.h"
 #include "printing.h"
+#include "plugins.h"
 
 #include "geanyobject.h"
 
@@ -2143,6 +2144,16 @@ on_page_setup1_activate                (GtkMenuItem     *menuitem,
 {
 #if GTK_CHECK_VERSION(2, 10, 0)
 	printing_page_setup_gtk();
+#endif
+}
+
+
+void
+on_tools1_activate                     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+#ifdef HAVE_PLUGINS
+	plugins_update_tools_menu();
 #endif
 }
 

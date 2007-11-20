@@ -1432,9 +1432,13 @@ the following directories:
 
 Most plugins add menu items to the *Tools* menu when they are loaded.
 
-In future, there will be a plugin management dialog to load and unload
-plugins, but for now any unwanted plugin library files can be deleted
-after installation of Geany.
+Since Geany 0.13, there is a Plugin Manager to let you choose which plugins
+should be loaded at startup. You can also load and unload plugins on the
+fly using this dialog. Once you click the checkbox for a specific plugin
+in the dialog, it is loaded or unloaded according to its previous state.
+By default, no plugins are loaded at startup until you select some.
+You can also configure some plugin specific options when the plugin
+provides some.
 
 
 

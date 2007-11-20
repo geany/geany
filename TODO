@@ -14,9 +14,7 @@ TODO List:
 	o line breaking mode to limit words on a line for e.g. XML content.
 	o common default highlighting for all programming languages
 	o configurable default and project make commands
-	o project session support
 	o project indentation settings support
-	o plugin management
 	o plugin keybindings
 	o (DBUS)
 	o (startup notification)

@@ -595,3 +595,7 @@ on_strip_trailing_spaces1_activate     (GtkMenuItem     *menuitem,
 void
 on_page_setup1_activate                (GtkMenuItem     *menuitem,
                                         gpointer         user_data);
+
+void
+on_tools1_activate                     (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

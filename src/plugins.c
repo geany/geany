@@ -71,11 +71,16 @@ typedef struct Plugin
 
 	PluginInfo*	(*info) ();	/* Returns plugin name, description */
 	void	(*init) (GeanyData *data);	/* Called when the plugin is enabled */
+	void	(*configure) (GtkWidget *parent);	/* plugin configure dialog, optionally */
 	void	(*cleanup) ();		/* Called when the plugin is disabled or when Geany exits */
 }
 Plugin;
 
-static GList *plugin_list = NULL;
+
+static GList *plugin_list = NULL; // list of all available, loadable plugins
+static GList *active_plugin_list = NULL; // list of only actually loaded plugins
+static GtkWidget *separator = NULL; // separator in the Tools menu
+static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
 
 static DocumentFuncs doc_funcs = {
@@ -296,6 +301,51 @@ static void add_callbacks(Plugin *plugin, GeanyCallback *callbacks)
 }
 
 
+static gboolean
+is_active_plugin(const gchar *name)
+{
+	gint i, len;
+
+	g_return_val_if_fail(name, FALSE);
+
+	// if app->active_plugins is NULL, guess it was not yet set and don't load any plugins
+	if (app->active_plugins == NULL || (len = g_strv_length(app->active_plugins)) == 0)
+		return FALSE;
+
+	for (i = 0; i < len; i++)
+	{
+		if (utils_str_equal(name, app->active_plugins[i]))
+			return TRUE;
+	}
+	return FALSE;
+}
+
+
+static void
+plugin_init(Plugin *plugin)
+{
+	GeanyCallback *callbacks;
+
+	if (plugin->init)
+		plugin->init(&geany_data);
+
+	if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
+	{
+		gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) ? TRUE : FALSE;
+		gtk_widget_set_sensitive(plugin->fields.menu_item, enable);
+	}
+
+	g_module_symbol(plugin->module, "geany_callbacks", (void *) &callbacks);
+	if (callbacks)
+		add_callbacks(plugin, callbacks);
+
+	active_plugin_list = g_list_append(active_plugin_list, plugin);
+
+	geany_debug("Loaded:   %s (%s)", plugin->filename,
+		NVL(plugin->info()->name, "<Unknown>"));
+}
+
+
 static Plugin*
 plugin_new(const gchar *fname)
 {
@@ -304,7 +354,6 @@ plugin_new(const gchar *fname)
 	PluginInfo* (*info)();
 	PluginFields **plugin_fields;
 	GeanyData **p_geany_data;
-	GeanyCallback *callbacks;
 
 	g_return_val_if_fail(fname, NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
@@ -346,8 +395,7 @@ plugin_new(const gchar *fname)
 			g_warning("%s: %s", fname, g_module_error());
 		return NULL;
 	}
-	geany_debug("Initializing plugin '%s' (%s)",
-		info()->name, info()->description);
+	geany_debug("Initializing plugin '%s'", info()->name);
 
 	plugin = g_new0(Plugin, 1);
 	plugin->info = info;
@@ -362,6 +410,7 @@ plugin_new(const gchar *fname)
 		*plugin_fields = &plugin->fields;
 
 	g_module_symbol(module, "init", (void *) &plugin->init);
+	g_module_symbol(module, "configure", (void *) &plugin->configure);
 	g_module_symbol(module, "cleanup", (void *) &plugin->cleanup);
 	if (plugin->init != NULL && plugin->cleanup == NULL)
 	{
@@ -370,21 +419,11 @@ plugin_new(const gchar *fname)
 				info()->name);
 	}
 
-	if (plugin->init)
-		plugin->init(&geany_data);
-
-	if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
+	// only initialise the plugin if it should be loaded
+	if (is_active_plugin(fname))
 	{
-		gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) ? TRUE : FALSE;
-		gtk_widget_set_sensitive(plugin->fields.menu_item, enable);
+		plugin_init(plugin);
 	}
-
-	g_module_symbol(module, "geany_callbacks", (void *) &callbacks);
-	if (callbacks)
-		add_callbacks(plugin, callbacks);
-
-	geany_debug("Loaded:   %s (%s)", fname,
-		NVL(plugin->info()->name, "<Unknown>"));
 	return plugin;
 }
 
@@ -403,20 +442,40 @@ static void remove_callbacks(Plugin *plugin)
 
 
 static void
+plugin_unload(Plugin *plugin)
+{
+	g_return_if_fail(plugin);
+	g_return_if_fail(plugin->module);
+
+	if (g_list_find(active_plugin_list, plugin))
+	{	// only do cleanup if the plugin was actually loaded
+		if (plugin->cleanup)
+			plugin->cleanup();
+
+		remove_callbacks(plugin);
+
+		active_plugin_list = g_list_remove(active_plugin_list, plugin);
+	}
+	geany_debug("Unloaded: %s", plugin->filename);
+}
+
+
+static void
 plugin_free(Plugin *plugin)
 {
 	g_return_if_fail(plugin);
 	g_return_if_fail(plugin->module);
 
-	if (plugin->cleanup)
-		plugin->cleanup();
+	if (g_list_find(active_plugin_list, plugin) != NULL)
+	{	// only do cleanup if the plugin was actually loaded
+		if (plugin->cleanup)
+			plugin->cleanup();
 
+		remove_callbacks(plugin);
+	}
 	if (! g_module_close(plugin->module))
 		g_warning("%s: %s", plugin->filename, g_module_error());
-	else
-		geany_debug("Unloaded: %s", plugin->filename);
 
-	remove_callbacks(plugin);
 	g_free(plugin->filename);
 	g_free(plugin);
 }
@@ -490,24 +549,54 @@ void plugins_init()
 	geany_data_init();
 	geany_object = geany_object_new();
 
-	widget = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), widget);
+	widget = gtk_menu_item_new_with_mnemonic(_("Plugin Manager"));
+	gtk_container_add(GTK_CONTAINER (geany_data.tools_menu), widget);
+	gtk_widget_show(widget);
+	g_signal_connect((gpointer) widget, "activate", G_CALLBACK(pm_show_dialog), NULL);
+
+	separator = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), separator);
 
 	load_plugin_paths();
 
-	if (g_list_length(plugin_list) > 0)
-		gtk_widget_show(widget);
+	plugins_update_tools_menu();
+}
+
+
+void plugins_create_active_list()
+{
+	gint i = 0;
+	GList *list;
+
+	g_strfreev(app->active_plugins);
+
+	if (active_plugin_list == NULL)
+	{
+		app->active_plugins = NULL;
+		return;
+	}
+
+	app->active_plugins = g_new0(gchar*, g_list_length(active_plugin_list) + 1);
+	for (list = g_list_first(active_plugin_list); list != NULL; list = list->next)
+	{
+		app->active_plugins[i] = g_strdup(((Plugin*)list->data)->filename);
+		i++;
+	}
+	app->active_plugins[i] = NULL;
 }
 
 
 void plugins_free()
 {
-
 	if (plugin_list != NULL)
 	{
 		g_list_foreach(plugin_list, (GFunc) plugin_free, NULL);
 		g_list_free(plugin_list);
 	}
+	if (active_plugin_list != NULL)
+		// no need to do more here, active_plugin_list holds the same pointer as plugin_list
+		g_list_free(active_plugin_list);
+
 	g_object_unref(geany_object);
 }
 
@@ -516,13 +605,253 @@ void plugins_update_document_sensitive(gboolean enabled)
 {
 	GList *item;
 
-	for (item = plugin_list; item != NULL; item = g_list_next(item))
+	for (item = active_plugin_list; item != NULL; item = g_list_next(item))
 	{
 		Plugin *plugin = item->data;
 
 		if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
 			gtk_widget_set_sensitive(plugin->fields.menu_item, enabled);
 	}
+}
+
+
+void plugins_update_tools_menu()
+{
+	if (separator == NULL)
+		return;
+
+	ui_widget_show_hide(separator, g_list_length(active_plugin_list) > 0);
+}
+
+
+/* Plugin Manager */
+
+enum
+{
+	PLUGIN_COLUMN_CHECK = 0,
+	PLUGIN_COLUMN_NAME,
+	PLUGIN_COLUMN_FILE,
+	PLUGIN_COLUMN_PLUGIN,
+	PLUGIN_N_COLUMNS
+};
+
+typedef struct
+{
+	GtkWidget *dialog;
+	GtkWidget *tree;
+	GtkListStore *store;
+	GtkWidget *description_label;
+	GtkWidget *configure_button;
+} PluginManagerWidgets;
+static PluginManagerWidgets pm_widgets;
+
+
+void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	Plugin *p;
+	PluginInfo *pi;
+
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	{
+		gtk_tree_model_get(model, &iter, PLUGIN_COLUMN_PLUGIN, &p, -1);
+
+		if (p != NULL)
+		{
+			gchar *text;
+
+			pi = p->info();
+			text = g_strdup_printf(
+				_("Plugin: %s %s\nDescription: %s\nAuthor(s): %s"),
+				pi->name, pi->version, pi->description, pi->author);
+
+			gtk_label_set_text(GTK_LABEL(pm_widgets.description_label), text);
+			g_free(text);
+
+			gtk_widget_set_sensitive(pm_widgets.configure_button,
+				p->configure != NULL && g_list_find(active_plugin_list, p) != NULL);
+		}
+	}
+}
+
+
+static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer data)
+{
+	gboolean old_state, state;
+	GtkTreeIter iter;
+	GtkTreePath *path = gtk_tree_path_new_from_string(pth);
+	Plugin *p;
+
+	gtk_tree_model_get_iter(GTK_TREE_MODEL(pm_widgets.store), &iter, path);
+	gtk_tree_path_free(path);
+
+	gtk_tree_model_get(GTK_TREE_MODEL(pm_widgets.store), &iter,
+		PLUGIN_COLUMN_CHECK, &old_state, PLUGIN_COLUMN_PLUGIN, &p, -1);
+	if (p == NULL)
+		return;
+	state = ! old_state; // toggle the state
+	gtk_list_store_set(pm_widgets.store, &iter, PLUGIN_COLUMN_CHECK, state, -1);
+
+	// load/unload the plugin once it was toggled for correct behaviour of the preferences button
+	// we want to call plugin's configure() only after init() has been called
+
+	// plugin should be loaded, so load it if it is not already
+	if (state && g_list_find(active_plugin_list, p) == NULL)
+	{
+		plugin_init(p);
+	}
+	// plugin should be unloaded, so unload it if it is loaded
+	if (! state && g_list_find(active_plugin_list, p) != NULL)
+	{
+		plugin_unload(p);
+	}
+
+	// set again the sensitiveness of the configure button
+	gtk_widget_set_sensitive(pm_widgets.configure_button,
+		p->configure != NULL && g_list_find(active_plugin_list, p) != NULL);
+
+}
+
+
+static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
+{
+	GtkCellRenderer *text_renderer, *checkbox_renderer;
+	GtkTreeViewColumn *column;
+	GtkTreeIter iter;
+	GList *list;
+	GtkTreeSelection *sel;
+
+	checkbox_renderer = gtk_cell_renderer_toggle_new();
+    column = gtk_tree_view_column_new_with_attributes(
+		_("Active"), checkbox_renderer, "active", PLUGIN_COLUMN_CHECK, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+	g_signal_connect((gpointer) checkbox_renderer, "toggled", G_CALLBACK(pm_plugin_toggled), NULL);
+
+	text_renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes(
+		_("Plugin"), text_renderer, "text", PLUGIN_COLUMN_NAME, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+
+	text_renderer = gtk_cell_renderer_text_new();
+	g_object_set(text_renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+    column = gtk_tree_view_column_new_with_attributes(
+		_("File"), text_renderer, "text", PLUGIN_COLUMN_FILE, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
+
+	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), FALSE);
+	gtk_tree_sortable_set_sort_column_id(
+		GTK_TREE_SORTABLE(store), PLUGIN_COLUMN_NAME, GTK_SORT_ASCENDING);
+
+	// selection handling
+	sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
+	gtk_tree_selection_set_mode(sel, GTK_SELECTION_SINGLE);
+	g_signal_connect((gpointer) sel, "changed", G_CALLBACK(pm_selection_changed), NULL);
+
+	list = g_list_first(plugin_list);
+	if (list == NULL)
+	{
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter, PLUGIN_COLUMN_CHECK, FALSE,
+				PLUGIN_COLUMN_NAME, _("No plugins available."),
+				PLUGIN_COLUMN_FILE, "", PLUGIN_COLUMN_PLUGIN, NULL, -1);
+	}
+	else
+	{
+		for (; list != NULL; list = list->next)
+		{
+			gboolean active = (g_list_find(active_plugin_list, list->data) != NULL) ? TRUE : FALSE;
+			gtk_list_store_append(store, &iter);
+			gtk_list_store_set(store, &iter,
+				PLUGIN_COLUMN_CHECK, active,
+				PLUGIN_COLUMN_NAME, ((Plugin*)list->data)->info()->name,
+				PLUGIN_COLUMN_FILE, ((Plugin*)list->data)->filename,
+				PLUGIN_COLUMN_PLUGIN, list->data,
+				-1);
+		}
+	}
+	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
+}
+
+
+void pm_on_configure_button_clicked(GtkButton *button, gpointer user_data)
+{
+	GtkTreeModel *model;
+	GtkTreeSelection *selection;
+	GtkTreeIter iter;
+	Plugin *p;
+
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(pm_widgets.tree));
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
+	{
+		gtk_tree_model_get(model, &iter, PLUGIN_COLUMN_PLUGIN, &p, -1);
+
+		if (p != NULL)
+		{
+			p->configure(pm_widgets.dialog);
+		}
+	}
+}
+
+
+static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GtkWidget *vbox, *vbox2, *label_vbox, *hbox, *swin, *label, *label2;
+
+	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(app->window),
+						GTK_DIALOG_DESTROY_WITH_PARENT,
+						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(pm_widgets.dialog));
+	gtk_widget_set_name(pm_widgets.dialog, "GeanyDialog");
+	gtk_box_set_spacing(GTK_BOX(vbox), 6);
+
+	gtk_window_set_default_size(GTK_WINDOW(pm_widgets.dialog), 400, 350);
+	gtk_dialog_set_default_response(GTK_DIALOG(pm_widgets.dialog), GTK_RESPONSE_CANCEL);
+
+	pm_widgets.tree = gtk_tree_view_new();
+	pm_widgets.store = gtk_list_store_new(
+		PLUGIN_N_COLUMNS, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER);
+	pm_prepare_treeview(pm_widgets.tree, pm_widgets.store);
+
+	swin = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
+		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_IN);
+	gtk_container_add(GTK_CONTAINER(swin), pm_widgets.tree);
+
+	label = gtk_label_new(_("Below is a list of available plugins. "
+		"Select the plugins which should be loaded when Geany is started."));
+
+	pm_widgets.configure_button = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
+	gtk_widget_set_sensitive(pm_widgets.configure_button, FALSE);
+	g_signal_connect((gpointer) pm_widgets.configure_button, "clicked",
+		G_CALLBACK(pm_on_configure_button_clicked), NULL);
+
+	label2 = gtk_label_new(_("<b>Plugin details:</b>"));
+	gtk_label_set_use_markup(GTK_LABEL(label2), TRUE);
+	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
+	pm_widgets.description_label = gtk_label_new("");
+	gtk_label_set_line_wrap(GTK_LABEL(pm_widgets.description_label), TRUE);
+	gtk_misc_set_alignment(GTK_MISC(pm_widgets.description_label), 0, 0.5);
+
+	hbox = gtk_hbox_new(FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), label2, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.configure_button, FALSE, FALSE, 0);
+
+	label_vbox = gtk_vbox_new(FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(label_vbox), hbox, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(label_vbox), pm_widgets.description_label, FALSE, FALSE, 0);
+
+	vbox2 = gtk_vbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 5);
+	gtk_box_pack_start(GTK_BOX(vbox2), swin, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox2), label_vbox, FALSE, FALSE, 0);
+
+	g_signal_connect_swapped((gpointer) pm_widgets.dialog, "response",
+		G_CALLBACK(gtk_widget_destroy), pm_widgets.dialog);
+
+	gtk_container_add(GTK_CONTAINER(vbox), vbox2);
+	gtk_widget_show_all(pm_widgets.dialog);
 }
 
 #endif

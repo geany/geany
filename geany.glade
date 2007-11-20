@@ -1381,6 +1381,7 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_Tools</property>
 	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_tools1_activate" last_modification_time="Tue, 20 Nov 2007 16:31:10 GMT"/>
 
 	      <child>
 		<widget class="GtkMenu" id="tools1_menu">

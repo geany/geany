@@ -39,7 +39,8 @@ GeanyData		*geany_data;
 
 VERSION_CHECK(27)
 
-PLUGIN_INFO(_("SVNdiff"), _("Plugin to create a patch of a file against svn"), VERSION)
+PLUGIN_INFO(_("SVNdiff"), _("Plugin to create a patch of a file against svn"), VERSION,
+	_("The Geany developer team"))
 
 static int find_by_filename(const gchar* filename)
 {

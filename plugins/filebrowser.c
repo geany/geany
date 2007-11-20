@@ -45,7 +45,8 @@ GeanyData		*geany_data;
 
 VERSION_CHECK(26)
 
-PLUGIN_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION)
+PLUGIN_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VERSION,
+	_("The Geany developer team"))
 
 
 enum
@@ -58,6 +59,7 @@ enum
 static gboolean show_hidden_files = FALSE;
 static gboolean hide_object_files = TRUE;
 
+static GtkWidget	*file_view_vbox;
 static GtkWidget	*file_view;
 static GtkListStore	*file_store;
 static GtkTreeIter	*last_dir_iter = NULL;
@@ -455,15 +457,15 @@ static GtkWidget *make_toolbar()
 
 void init(GeanyData *data)
 {
-	GtkWidget *scrollwin, *toolbar, *vbox;
+	GtkWidget *scrollwin, *toolbar;
 
-	vbox = gtk_vbox_new(FALSE, 0);
+	file_view_vbox = gtk_vbox_new(FALSE, 0);
 	toolbar = make_toolbar();
-	gtk_box_pack_start(GTK_BOX(vbox), toolbar, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(file_view_vbox), toolbar, FALSE, FALSE, 0);
 
 	path_entry = gtk_entry_new();
 	gtk_editable_set_editable(GTK_EDITABLE(path_entry), FALSE);
-	gtk_box_pack_start(GTK_BOX(vbox), path_entry, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_entry, FALSE, FALSE, 2);
 
 	file_view = gtk_tree_view_new();
 	prepare_file_view();
@@ -473,15 +475,15 @@ void init(GeanyData *data)
 		GTK_SCROLLED_WINDOW(scrollwin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(scrollwin), file_view);
-	gtk_container_add(GTK_CONTAINER(vbox), scrollwin);
+	gtk_container_add(GTK_CONTAINER(file_view_vbox), scrollwin);
 
-	gtk_widget_show_all(vbox);
-	gtk_notebook_append_page(GTK_NOTEBOOK(app->treeview_notebook), vbox,
+	gtk_widget_show_all(file_view_vbox);
+	gtk_notebook_append_page(GTK_NOTEBOOK(app->treeview_notebook), file_view_vbox,
 		gtk_label_new(_("Files")));
 }
 
 
 void cleanup()
 {
-	gtk_widget_destroy(file_view);
+	gtk_widget_destroy(file_view_vbox);
 }

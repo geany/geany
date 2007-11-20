@@ -272,8 +272,9 @@ static void main_init(void)
 	// inits
 	app->window				= NULL;
 	app->project			= NULL;
+	app->active_plugins		= NULL;
 	ui_widgets.open_fontsel		= NULL;
-	ui_widgets.open_colorsel		= NULL;
+	ui_widgets.open_colorsel	= NULL;
 	ui_widgets.open_filesel		= NULL;
 	ui_widgets.save_filesel		= NULL;
 	ui_widgets.prefs_dialog		= NULL;
@@ -837,6 +838,7 @@ void main_quit()
 	g_free(printing_prefs.external_print_cmd);
 	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);
+	g_strfreev(app->active_plugins);
 	while (! g_queue_is_empty(ui_prefs.recent_queue))
 	{
 		g_free(g_queue_pop_tail(ui_prefs.recent_queue));
