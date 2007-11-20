@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Geany 0.12\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-01 11:49+0200\n"
-"PO-Revision-Date: 2007-10-23 22:07+0100\n"
+"PO-Revision-Date: 2007-11-19 01:22+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
@@ -1063,7 +1063,7 @@ msgstr "Diverse språk"
 #: ../src/interface.c:3490
 #: ../src/templates.c:333
 msgid "None"
-msgstr "Inga"
+msgstr "Inget"
 
 #: ../src/filetypes.c:932
 #: ../src/win32.c:81
@@ -1148,7 +1148,7 @@ msgstr "Redigera"
 #: ../src/interface.c:466
 #: ../src/interface.c:2032
 msgid "Select _All"
-msgstr "Välj allt"
+msgstr "Markera allt"
 
 #: ../src/interface.c:475
 #: ../src/interface.c:2050
@@ -1295,11 +1295,11 @@ msgstr "Byt ut"
 
 #: ../src/interface.c:663
 msgid "Find _Selected"
-msgstr "Sök markerad"
+msgstr "Sök i markering"
 
 #: ../src/interface.c:667
 msgid "Find Pre_v Selected"
-msgstr "Sök föregående markerad"
+msgstr "Sök föregående i markering"
 
 #: ../src/interface.c:676
 msgid "Next _Message"
@@ -1388,7 +1388,7 @@ msgstr "Behandla denna fil som skrivskyddad. Inga ändringar kan sparas."
 
 #: ../src/interface.c:791
 msgid "_Write Unicode BOM"
-msgstr "Skriv Unicode BOM (bör användas för vanliga textfiler, men inte för skriptfiler)"
+msgstr "Skriv Unicode BOM"
 
 #: ../src/interface.c:800
 msgid "Set File_type"
@@ -1457,7 +1457,7 @@ msgstr "Projekt"
 
 #: ../src/interface.c:891
 msgid "_New"
-msgstr "Ny"
+msgstr "Nytt"
 
 #: ../src/interface.c:899
 msgid "_Open"
@@ -1503,7 +1503,7 @@ msgstr "Visar en lista med alla tangentbordsgenvägar för Geany."
 
 #: ../src/interface.c:969
 msgid "_Website"
-msgstr "Webbsite"
+msgstr "Webbsida"
 
 #: ../src/interface.c:992
 msgid "Create a new file"
@@ -1720,7 +1720,7 @@ msgstr "<b>Starta och avsluta</b>"
 
 #: ../src/interface.c:2734
 msgid "Beep on errors or when compilation has finished"
-msgstr "Piper vid fel och när kompilering har avslutats"
+msgstr "Pip vid fel och när kompilering har avslutats"
 
 #: ../src/interface.c:2737
 msgid "Whether to beep if an error occurred or when the compilation process has finished."
@@ -1863,7 +1863,7 @@ msgstr "Vänster"
 
 #: ../src/interface.c:2982
 msgid "File tabs will be placed on the left of the notebook"
-msgstr ""
+msgstr "Fil-tabbar kommer att placeras till vänster om anteckningsboken"
 
 #: ../src/interface.c:2987
 #: ../src/interface.c:3028
@@ -1874,7 +1874,7 @@ msgstr "Höger"
 
 #: ../src/interface.c:2990
 msgid "File tabs will be placed on the right of the notebook"
-msgstr ""
+msgstr "Fil-tabbar kommer att placeras till höger om anteckningsboken"
 
 #: ../src/interface.c:2994
 msgid "<b>Editor tabs</b>"
@@ -2137,7 +2137,7 @@ msgstr "Nuvarande täcken"
 
 #: ../src/interface.c:3493
 msgid "Match braces"
-msgstr ""
+msgstr "Matcha klamrar"
 
 #: ../src/interface.c:3495
 msgid "<b>Indentation</b>"
@@ -2173,11 +2173,11 @@ msgstr "Specificerar om koden skall vikas ihop för att spara utrymme och underl
 
 #: ../src/interface.c:3537
 msgid "Unfold all children of a fold point"
-msgstr ""
+msgstr "Vik upp alla vid uppvikningspunkten"
 
 #: ../src/interface.c:3540
 msgid "Unfold all children of a fold point when unfolding it."
-msgstr ""
+msgstr "Vik ihop alla vid uppvikningspunkten"
 
 #: ../src/interface.c:3543
 msgid "Use indicators to show compile errors"
@@ -2197,7 +2197,7 @@ msgstr "Autokomplettera konstruktioner"
 
 #: ../src/interface.c:3571
 msgid "Automatic completion of often used constructs like if and for"
-msgstr ""
+msgstr "Automatisk komplettering av ofta använda konstruktioner som <i>if</i> eller <i>for</i>"
 
 #: ../src/interface.c:3574
 msgid "XML tag autocompletion"
@@ -2205,7 +2205,7 @@ msgstr "Komplettera XML-taggar automatiskt"
 
 #: ../src/interface.c:3577
 msgid "Automatic completion of open XML tags (includes HTML tags)"
-msgstr ""
+msgstr "Autokomplettera öppna XML-taggar"
 
 #: ../src/interface.c:3580
 msgid "Symbol autocompletion"
@@ -2213,11 +2213,11 @@ msgstr "Komplettera symboler automatiskt"
 
 #: ../src/interface.c:3583
 msgid "Automatic completion of known symbols in open files (function names, global variables, ...)"
-msgstr ""
+msgstr "Autokomplettera kända symboler i öppna filer (funktionsnamn, globala variabler etc.)"
 
 #: ../src/interface.c:3590
 msgid "Rows of autocompletion list:"
-msgstr ""
+msgstr "Rader i autokompletteringslistan:"
 
 #: ../src/interface.c:3599
 msgid "Number of rows to display in the autocompletion list."
@@ -2261,7 +2261,7 @@ msgstr "<b>Nya filer</b>"
 
 #: ../src/interface.c:3698
 msgid "Ensure new line at file end"
-msgstr "Skriver alltid nyradstecken i slutet av filen"
+msgstr "Skriv alltid nyradstecken i slutet av filen"
 
 #: ../src/interface.c:3702
 msgid "Ensures that at the end of the file is a new line"
@@ -2393,7 +2393,7 @@ msgstr "Företag:"
 
 #: ../src/interface.c:4046
 msgid "Mail address:"
-msgstr "Postadress:"
+msgstr "E-post:"
 
 #: ../src/interface.c:4053
 msgid "Initials:"
@@ -2708,7 +2708,7 @@ msgstr "Definiera användarkommando 3"
 
 #: ../src/keybindings.c:275
 msgid "Go to matching brace"
-msgstr ""
+msgstr "Gå till matchande klammer"
 
 #: ../src/keybindings.c:278
 msgid "Toggle marker"
@@ -2834,7 +2834,7 @@ msgstr "Kunde ej ladda en eller fler av sessionens filer"
 
 #: ../src/main.c:114
 msgid "Set initial column number for the first opened file (useful in conjunction with --line)"
-msgstr ""
+msgstr "Sätt kolumn för markören vid öppnande av fil"
 
 #: ../src/main.c:115
 msgid "Use an alternate configuration directory"
@@ -3351,7 +3351,7 @@ msgstr "Typ"
 
 #: ../src/symbols.c:524
 msgid "Type constructors"
-msgstr ""
+msgstr "Typ-konstruktörer"
 
 #: ../src/symbols.c:525
 #: ../src/symbols.c:552
@@ -3364,7 +3364,7 @@ msgstr "Funktioner"
 
 #: ../src/symbols.c:530
 msgid "Sections"
-msgstr ""
+msgstr "Markeringar"
 
 #: ../src/symbols.c:531
 msgid "Keys"
@@ -3376,7 +3376,7 @@ msgstr "Kommando"
 
 #: ../src/symbols.c:538
 msgid "Environment"
-msgstr ""
+msgstr "Miljö"
 
 #: ../src/symbols.c:540
 #: ../src/symbols.c:580
@@ -3403,7 +3403,7 @@ msgstr "Min"
 
 #: ../src/symbols.c:554
 msgid "Local"
-msgstr ""
+msgstr "Lokal"
 
 #: ../src/symbols.c:555
 msgid "Our"
@@ -3466,7 +3466,7 @@ msgstr ""
 
 #: ../src/symbols.c:668
 msgid "Structs / Typedefs"
-msgstr ""
+msgstr "Strukturer och typdefinitioner"
 
 #: ../src/symbols.c:674
 msgid "Macros"
@@ -3539,7 +3539,7 @@ msgstr "Ange användardefinierat kommando"
 
 #: ../src/tools.c:225
 msgid "You can send the current selection to any of these commands and the output of the command replaces the current selection."
-msgstr ""
+msgstr "Du kan skicka markeringen till vilket av dessa kommandon som helst."
 
 #: ../src/tools.c:416
 #: ../src/tools.c:420
@@ -3560,7 +3560,7 @@ msgstr "hela dokumentet"
 
 #: ../src/tools.c:547
 msgid "Range:"
-msgstr ""
+msgstr "Område:"
 
 #: ../src/tools.c:559
 msgid "Lines:"

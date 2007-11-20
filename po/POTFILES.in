@@ -37,5 +37,5 @@ src/win32.c
 plugins/classbuilder.c
 plugins/htmlchars.c
 plugins/export.c
-plugins/svndiff.c
+plugins/vcdiff.c
 plugins/filebrowser.c
