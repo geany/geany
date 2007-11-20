@@ -142,7 +142,8 @@ static UtilsFuncs utils_funcs = {
 	&utils_write_file,
 	&utils_get_locale_from_utf8,
 	&utils_get_utf8_from_locale,
-	&utils_remove_ext_from_filename
+	&utils_remove_ext_from_filename,
+	&utils_mkdir
 };
 
 static UIUtilsFuncs uiutils_funcs = {

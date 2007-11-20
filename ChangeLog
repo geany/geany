@@ -11,6 +11,7 @@
    Add sample configure dialog to the demo plugin.
    Fix cleanup code in filebrowser plugin to remove it completely when
    unloaded.
+ * src/plugindata.h, src/plugins.c: Add utils_mkdir() to the plugin API.
 
 
 2007-11-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

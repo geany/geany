@@ -262,6 +262,7 @@ typedef struct UtilsFuncs
 	gchar*		(*get_locale_from_utf8) (const gchar *utf8_text);
 	gchar*		(*get_utf8_from_locale) (const gchar *locale_text);
 	gchar*		(*remove_ext_from_filename) (const gchar *filename);
+	gint		(*utils_mkdir) (const gchar *path, gboolean create_parent_dirs);
 }
 UtilsFuncs;
 
