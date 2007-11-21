@@ -116,6 +116,33 @@ static void create_signals(GObjectClass *g_object_class)
 		gtk_marshal_NONE__INT,
 		G_TYPE_NONE, 1,
 		G_TYPE_INT);
+
+	geany_object_signals[GCB_PROJECT_OPEN] = g_signal_new (
+		"project-open",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, project_open),
+		NULL, NULL,
+		gtk_marshal_NONE__INT,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+	geany_object_signals[GCB_PROJECT_SAVE] = g_signal_new (
+		"project-save",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, project_save),
+		NULL, NULL,
+		gtk_marshal_NONE__INT,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
+	geany_object_signals[GCB_PROJECT_CLOSE] = g_signal_new (
+		"project-close",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, project_close),
+		NULL, NULL,
+		gtk_marshal_NONE__NONE,
+		G_TYPE_NONE, 0);
 }
 
 
@@ -146,7 +173,7 @@ GObject* geany_object_new(void)
 }
 
 
-void geany_object_finalize(GObject *object)
+static void geany_object_finalize(GObject *object)
 {
 	GeanyObject *self;
 

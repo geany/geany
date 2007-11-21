@@ -795,12 +795,13 @@ void main_quit()
 	socket_finalize();
 #endif
 
+	if (app->project != NULL)
+		project_close(FALSE);
+
 #ifdef HAVE_PLUGINS
 	if (want_plugins)
 		plugins_free();
 #endif
-	if (app->project != NULL)
-		project_close(FALSE);
 
 	navqueue_free();
 	keybindings_free();

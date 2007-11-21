@@ -43,6 +43,7 @@
 #endif
 #include "build.h"
 #include "document.h"
+#include "geanyobject.h"
 
 
 ProjectPrefs project_prefs = {NULL};
@@ -290,16 +291,6 @@ static void update_ui()
 }
 
 
-void project_save()
-{
-	g_return_if_fail(app->project != NULL);
-
-	write_config();
-
-	ui_set_statusbar(TRUE, _("Project \"%s\" saved."), app->project->name);
-}
-
-
 // open_default will make function reload default session files on close
 void project_close(gboolean open_default)
 {
@@ -329,6 +320,11 @@ void project_close(gboolean open_default)
 	{
 		configuration_reload_default_session();
 		configuration_open_files();
+	}
+
+	if (geany_object)
+	{
+		g_signal_emit_by_name(geany_object, "project-close");
 	}
 
 	tm_workspace_update(TM_WORK_OBJECT(app->tm_workspace), TRUE, TRUE, FALSE);
@@ -872,6 +868,10 @@ static gboolean load_config(const gchar *filename)
 	// fetch session files too
 	configuration_load_session_files(config);
 
+	if (geany_object)
+	{
+		g_signal_emit_by_name(geany_object, "project-open", config);
+	}
 	g_key_file_free(config);
 
 	update_ui();
@@ -912,6 +912,10 @@ static gboolean write_config()
 	/// TODO maybe it is useful to store relative file names if base_path is relative
 	configuration_save_session_files(config);
 
+	if (geany_object)
+	{
+		g_signal_emit_by_name(geany_object, "project-save", config);
+	}
 	// write the file
 	data = g_key_file_to_data(config, NULL, NULL);
 	ret = (utils_write_file(filename, data) == 0);

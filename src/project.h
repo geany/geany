@@ -53,8 +53,6 @@ void project_new();
 
 void project_open();
 
-void project_save();
-
 void project_close(gboolean open_default);
 
 void project_properties();

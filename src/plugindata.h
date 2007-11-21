@@ -61,21 +61,39 @@
  *
  * "document-new"
  * 	Sent when a new document is created.
+ *  Handler: void user_function(GObject *obj, gint idx, gpointer user_data);
  *
  * "document-open"
  * 	Sent when a file is opened.
+ *  Handler: void user_function(GObject *obj, gint idx, gpointer user_data);
  *
  * "document-save"
  * 	Sent when a file is saved.
+ *  Handler: void user_function(GObject *obj, gint idx, gpointer user_data);
  *
  * "document-activate"
  * 	Sent when switching notebook pages.
+ *  Handler: void user_function(GObject *obj, gint idx, gpointer user_data);
+ *
+ * "project-open"
+ * 	Sent after a project is opened but before session files are loaded.
+ *  Handler: void user_function(GObject *obj, GKeyFile *config, gpointer user_data);
+ *
+ * "project-save"
+ * 	Sent when a project is saved(happens when the project is created, the properties
+ *  dialog is closed or Geany is exited). This signal is emitted shortly before Geany
+ *  will write the contents of the GKeyFile to the disc.
+ *  Handler: void user_function(GObject *obj, GKeyFile *config, gpointer user_data);
+ *
+ * "project-close"
+ * 	Sent after a project is closed.
+ *  Handler: void user_function(GObject *obj, gpointer user_data);
  */
 
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 31;
+static const gint api_version = 32;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -192,6 +210,7 @@ typedef struct DocumentFuncs
 {
 	gint	(*new_file) (const gchar *filename, struct filetype *ft, const gchar *text);
 	gint	(*get_cur_idx) ();
+	gint	(*get_n_idx) (guint i);
 	struct document* (*get_current) ();
 	gboolean (*save_file)(gint idx, gboolean force);
 	gint	(*open_file)(const gchar *locale_filename, gboolean readonly,
@@ -262,7 +281,7 @@ typedef struct UtilsFuncs
 	gchar*		(*get_locale_from_utf8) (const gchar *utf8_text);
 	gchar*		(*get_utf8_from_locale) (const gchar *locale_text);
 	gchar*		(*remove_ext_from_filename) (const gchar *filename);
-	gint		(*utils_mkdir) (const gchar *path, gboolean create_parent_dirs);
+	gint		(*mkdir) (const gchar *path, gboolean create_parent_dirs);
 }
 UtilsFuncs;
 

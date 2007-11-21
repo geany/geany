@@ -79,13 +79,13 @@ Plugin;
 
 static GList *plugin_list = NULL; // list of all available, loadable plugins
 static GList *active_plugin_list = NULL; // list of only actually loaded plugins
-static GtkWidget *separator = NULL; // separator in the Tools menu
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
 
 static DocumentFuncs doc_funcs = {
 	&document_new_file,
 	&document_get_cur_idx,
+	&document_get_n_idx,
 	&document_get_current,
 	&document_save_file,
 	&document_open_file,
@@ -456,8 +456,8 @@ plugin_unload(Plugin *plugin)
 		remove_callbacks(plugin);
 
 		active_plugin_list = g_list_remove(active_plugin_list, plugin);
+		geany_debug("Unloaded: %s", plugin->filename);
 	}
-	geany_debug("Unloaded: %s", plugin->filename);
 }
 
 
@@ -467,13 +467,8 @@ plugin_free(Plugin *plugin)
 	g_return_if_fail(plugin);
 	g_return_if_fail(plugin->module);
 
-	if (g_list_find(active_plugin_list, plugin) != NULL)
-	{	// only do cleanup if the plugin was actually loaded
-		if (plugin->cleanup)
-			plugin->cleanup();
+	plugin_unload(plugin);
 
-		remove_callbacks(plugin);
-	}
 	if (! g_module_close(plugin->module))
 		g_warning("%s: %s", plugin->filename, g_module_error());
 
@@ -555,9 +550,6 @@ void plugins_init()
 	gtk_widget_show(widget);
 	g_signal_connect((gpointer) widget, "activate", G_CALLBACK(pm_show_dialog), NULL);
 
-	separator = gtk_separator_menu_item_new();
-	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), separator);
-
 	load_plugin_paths();
 
 	plugins_update_tools_menu();
@@ -599,6 +591,7 @@ void plugins_free()
 		g_list_free(active_plugin_list);
 
 	g_object_unref(geany_object);
+	geany_object = NULL; // to mark the object as invalid for any code which tries to emit signals
 }
 
 
@@ -616,12 +609,29 @@ void plugins_update_document_sensitive(gboolean enabled)
 }
 
 
+static gint
+plugin_has_menu(Plugin *a, Plugin *b)
+{
+	if (((PluginFields)a->fields).menu_item != NULL)
+		return 0;
+
+	return 1;
+}
+
+
 void plugins_update_tools_menu()
 {
-	if (separator == NULL)
-		return;
+	gboolean found;
+	static GtkWidget *separator = NULL;
 
-	ui_widget_show_hide(separator, g_list_length(active_plugin_list) > 0);
+	if (separator == NULL)
+	{
+		separator = gtk_separator_menu_item_new();
+		gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), separator);
+	}
+
+	found = (g_list_find_custom(active_plugin_list, NULL, (GCompareFunc) plugin_has_menu) != NULL);
+	ui_widget_show_hide(separator, found);
 }
 
 

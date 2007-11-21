@@ -5,6 +5,16 @@
  * src/symbols.c, src/treeviews.c, src/treeviews.h:
    Revert the change to make symbol sections bold and use some small
    indentation when expanders are hidden.
+ * src/geanyobject.c, src/geanyobject.h, src/main.c, src/plugindata.h,
+   src/plugins.c, src/project.c, src/project.h:
+   Remove ununsed function project_save().
+   Fix typo in plugin API at utils_mkdir().
+   Add document_get_n_idx() to the plugin API.
+   Fix display of plugin separator in the Tools menu when only plugins
+   without menu item are loaded.
+   Add three new signals: project_open, project_save, project_close.
+   On Shutdown close the project before plugins are unloaded to let
+   plugins work on the last project closed event.
 
 
 2007-11-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

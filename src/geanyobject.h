@@ -38,6 +38,9 @@ typedef enum
 	GCB_DOCUMENT_OPEN,
 	GCB_DOCUMENT_SAVE,
 	GCB_DOCUMENT_ACTIVATE,
+	GCB_PROJECT_OPEN,
+	GCB_PROJECT_SAVE,
+	GCB_PROJECT_CLOSE,
 	GCB_MAX
 } GeanyCallbackId;
 
@@ -71,10 +74,13 @@ struct _GeanyObjectClass
 	void (*document_open)(gint idx);
 	void (*document_save)(gint idx);
 	void (*document_activate)(gint idx);
+	void (*project_open)(GKeyFile *keyfile);
+	void (*project_save)(GKeyFile *keyfile);
+	void (*project_close)();
 };
 
 GType		geany_object_get_type	(void);
-GObject*	geany_object_new			(void);
+GObject*	geany_object_new		(void);
 
 G_END_DECLS
 
