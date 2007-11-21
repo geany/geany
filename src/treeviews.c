@@ -103,8 +103,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
   	g_object_set(icon_renderer, "xalign", 0.0, NULL);
 
   	gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
-  	gtk_tree_view_column_set_attributes(column, text_renderer, "text", SYMBOLS_COLUMN_NAME,
-		"weight", SYMBOLS_COLUMN_FONT_WEIGHT, NULL);
+  	gtk_tree_view_column_set_attributes(column, text_renderer, "text", SYMBOLS_COLUMN_NAME, NULL);
   	g_object_set(text_renderer, "yalign", 0.5, NULL);
   	gtk_tree_view_column_set_title(column, _("Symbols"));
 
@@ -123,6 +122,8 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 
 #if GTK_CHECK_VERSION(2, 12, 0)
 	gtk_tree_view_set_show_expanders(GTK_TREE_VIEW(tree), prefs.show_symbol_list_expanders);
+	if (! prefs.show_symbol_list_expanders)
+		gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(tree), 10);
 #endif
 
 	// selection handling
@@ -181,7 +182,7 @@ void treeviews_update_tag_list(gint idx, gboolean update)
 		if (doc_list[idx].tag_tree == NULL)
 		{
 			doc_list[idx].tag_store = gtk_tree_store_new(
-				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT);
+				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_INT);
 			doc_list[idx].tag_tree = gtk_tree_view_new();
 			prepare_taglist(doc_list[idx].tag_tree, doc_list[idx].tag_store);
 			gtk_widget_show(doc_list[idx].tag_tree);

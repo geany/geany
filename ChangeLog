@@ -2,6 +2,9 @@
 
  * src/editor.c: Fix crash when trying to add a multiline comment in
                  filetypes which don't support it.
+ * src/symbols.c, src/treeviews.c, src/treeviews.h:
+   Revert the change to make symbol sections bold and use some small
+   indentation when expanders are hidden.
 
 
 2007-11-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
