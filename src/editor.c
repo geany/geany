@@ -2220,6 +2220,9 @@ void editor_insert_multiline_comment(gint idx)
 	gint pos;
 	gboolean have_multiline_comment = FALSE;
 
+	if (doc_list[idx].file_type == NULL || doc_list[idx].file_type->comment_open == NULL)
+		return;
+
 	if (doc_list[idx].file_type->comment_close != NULL &&
 		strlen(doc_list[idx].file_type->comment_close) > 0)
 		have_multiline_comment = TRUE;

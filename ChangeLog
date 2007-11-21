@@ -1,3 +1,9 @@
+2007-11-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/editor.c: Fix crash when trying to add a multiline comment in
+                 filetypes which don't support it.
+
+
 2007-11-20  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, plugins/*.c src/callbacks.c, src/callbacks.h,
