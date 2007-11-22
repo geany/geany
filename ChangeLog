@@ -2,6 +2,9 @@
 
  * po/POTFILES.in, plugins/autosave.c, plugins/Makefile.am,
    plugins/makefile.win32: New plugin: Auto Save.
+ * geany.glade, src/editor.c, src/interface.c:
+   Enable Shift+click on a fold point to unfold all possibly folded
+   children (same as the pref "Unfold all children of a fold point").
 
 
 2007-11-21  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

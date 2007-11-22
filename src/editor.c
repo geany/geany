@@ -124,7 +124,7 @@ static void on_margin_click(ScintillaObject *sci, SCNotification *nt)
 		gint line = SSM(sci, SCI_LINEFROMPOSITION, nt->position, 0);
 
 		SSM(sci, SCI_TOGGLEFOLD, line, 0);
-		if (editor_prefs.unfold_all_children &&
+		if ((editor_prefs.unfold_all_children || (nt->modifiers & SCMOD_SHIFT)) &&
 			SSM(sci, SCI_GETLINEVISIBLE, line + 1, 0))
 		{	// unfold all children of the current fold point
 			gint last_line = SSM(sci, SCI_GETLASTCHILD, line, -1);

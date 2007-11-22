@@ -3650,7 +3650,7 @@ create_prefs_dialog (void)
   check_unfold_children = gtk_check_button_new_with_mnemonic (_("Unfold all children of a fold point"));
   gtk_widget_show (check_unfold_children);
   gtk_box_pack_start (GTK_BOX (vbox17), check_unfold_children, FALSE, FALSE, 0);
-  gtk_tooltips_set_tip (tooltips, check_unfold_children, _("Unfold all children of a fold point when unfolding it."), NULL);
+  gtk_tooltips_set_tip (tooltips, check_unfold_children, _("Unfold all children of a fold point when unfolding it. The same behaviour can be reached when holding the shift key while clicking on the fold symbol."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_unfold_children), FALSE);
 
   check_indicators = gtk_check_button_new_with_mnemonic (_("Use indicators to show compile errors"));

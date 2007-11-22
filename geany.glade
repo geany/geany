@@ -5873,7 +5873,7 @@ Match braces</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="check_unfold_children">
 			      <property name="visible">True</property>
-			      <property name="tooltip" translatable="yes">Unfold all children of a fold point when unfolding it.</property>
+			      <property name="tooltip" translatable="yes">Unfold all children of a fold point when unfolding it. The same behaviour can be reached when holding the shift key while clicking on the fold symbol.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Unfold all children of a fold point</property>
 			      <property name="use_underline">True</property>
