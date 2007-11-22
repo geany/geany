@@ -12,6 +12,7 @@ htmlchars_la_LDFLAGS     = -module -avoid-version
 export_la_LDFLAGS        = -module -avoid-version
 svndiff_la_LDFLAGS       = -module -avoid-version
 vcdiff_la_LDFLAGS        = -module -avoid-version
+autosave_la_LDFLAGS      = -module -avoid-version
 filebrowser_la_LDFLAGS   = -module -avoid-version
 
 if PLUGINS
@@ -23,6 +24,7 @@ plugin_LTLIBRARIES = \
 	export.la \
 	svndiff.la \
 	vcdiff.la \
+	autosave.la \
 	filebrowser.la
 
 # Plugins not to be installed
@@ -35,6 +37,7 @@ htmlchars_la_SOURCES     = htmlchars.c
 export_la_SOURCES        = export.c
 svndiff_la_SOURCES       = svndiff.c
 vcdiff_la_SOURCES        = vcdiff.c
+autosave_la_SOURCES      = autosave.c
 filebrowser_la_SOURCES   = filebrowser.c
 
 demoplugin_la_LIBADD    = $(GTK_LIBS)
@@ -42,7 +45,8 @@ classbuilder_la_LIBADD  = $(GTK_LIBS)
 htmlchars_la_LIBADD     = $(GTK_LIBS)
 export_la_LIBADD        = $(GTK_LIBS)
 svndiff_la_LIBADD       = $(GTK_LIBS)
-vcdiff_la_LIBADD       = $(GTK_LIBS)
+vcdiff_la_LIBADD        = $(GTK_LIBS)
+autosave_la_LIBAD       = $(GTK_LIBS)
 filebrowser_la_LIBADD   = $(GTK_LIBS)
 
 endif # PLUGINS

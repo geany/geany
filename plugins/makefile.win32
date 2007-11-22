@@ -46,6 +46,8 @@ plugins: \
 		classbuilder.dll \
 		export.dll \
 		svndiff.dll \
+		vcdiff.dll \
+		autosave.dll \
 		filebrowser.dll
 
 clean:

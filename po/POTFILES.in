@@ -21,6 +21,7 @@ src/navqueue.c
 src/notebook.c
 src/plugins.c
 src/prefs.c
+src/printing.c
 src/project.c
 src/sciwrappers.c
 src/search.c
@@ -39,3 +40,4 @@ plugins/htmlchars.c
 plugins/export.c
 plugins/vcdiff.c
 plugins/filebrowser.c
+plugins/autosave.c
