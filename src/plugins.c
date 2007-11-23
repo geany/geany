@@ -79,6 +79,7 @@ Plugin;
 
 static GList *plugin_list = NULL; // list of all available, loadable plugins
 static GList *active_plugin_list = NULL; // list of only actually loaded plugins
+static GtkWidget *separator = NULL;
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
 
@@ -550,6 +551,9 @@ void plugins_init()
 	gtk_widget_show(widget);
 	g_signal_connect((gpointer) widget, "activate", G_CALLBACK(pm_show_dialog), NULL);
 
+	separator = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), separator);
+
 	load_plugin_paths();
 
 	plugins_update_tools_menu();
@@ -622,13 +626,9 @@ plugin_has_menu(Plugin *a, Plugin *b)
 void plugins_update_tools_menu()
 {
 	gboolean found;
-	static GtkWidget *separator = NULL;
 
 	if (separator == NULL)
-	{
-		separator = gtk_separator_menu_item_new();
-		gtk_container_add(GTK_CONTAINER(geany_data.tools_menu), separator);
-	}
+		return;
 
 	found = (g_list_find_custom(active_plugin_list, NULL, (GCompareFunc) plugin_has_menu) != NULL);
 	ui_widget_show_hide(separator, found);

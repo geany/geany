@@ -4,6 +4,7 @@
    Use FreeBasic specific sections in symbol list.
    Use Basic parser from CTags SVN and improve the parser for better
    handling of dim and const keywords.
+ * src/plugins.c: Fix plugin separator placement in the Tools menu.
 
 
 2007-11-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
