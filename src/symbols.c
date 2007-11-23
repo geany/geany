@@ -663,6 +663,18 @@ static void init_tag_list(gint idx)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_BASIC:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
+				&(tv_iters.tag_struct), _("Types"), "classviewer-namespace",
+				&(tv_iters.tag_namespace), _("Labels"), "classviewer-member",
+				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_D:
 		default:
 		{

@@ -31,63 +31,103 @@ typedef enum {
 	K_FUNCTION,
 	K_LABEL,
 	K_TYPE,
-    K_VARIABLE,
-    K_ENUM
+	K_VARIABLE,
+	K_ENUM
 } BasicKind;
 
 typedef struct {
 	char const *token;
 	BasicKind kind;
-	int skip;
 } KeyWord;
 
 static kindOption BasicKinds[] = {
-	{TRUE, 'c', "constant", "constants"},
+	{TRUE, 'c', "macro", "constants"},
 	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'l', "label", "labels"},
-	{TRUE, 't', "type", "types"},
+	{TRUE, 'l', "namespace", "labels"},
+	{TRUE, 't', "struct", "types"},
 	{TRUE, 'v', "variable", "variables"},
-	{TRUE, 'g', "enum", "enumerations"}
-};
-
-static KeyWord blitzbasic_keywords[] = {
-	{"const", K_CONST, 0},
-	{"global", K_VARIABLE, 0},
-	{"dim", K_VARIABLE, 0},
-	{"function", K_FUNCTION, 0},
-	{"type", K_TYPE, 0},
-	{NULL, 0, 0}
-};
-
-static KeyWord purebasic_keywords[] = {
-	{"newlist", K_VARIABLE, 0},
-	{"global", K_VARIABLE, 0},
-	{"dim", K_VARIABLE, 0},
-	{"procedure", K_FUNCTION, 0},
-	{"interface", K_TYPE, 0},
-	{"structure", K_TYPE, 0},
-	{NULL, 0, 0}
+	{TRUE, 'g', "externvar", "enumerations"}
 };
 
 static KeyWord freebasic_keywords[] = {
-	{"const", K_CONST, 0},
-	{"dim as", K_VARIABLE, 1},
-	{"dim", K_VARIABLE, 0},
-	{"common", K_VARIABLE, 0},
-	{"function", K_FUNCTION, 0},
-	{"sub", K_FUNCTION, 0},
-	{"private sub", K_FUNCTION, 0},
-	{"public sub", K_FUNCTION, 0},
-	{"private function", K_FUNCTION, 0},
-	{"public function", K_FUNCTION, 0},
-	{"type", K_TYPE, 0},
-	{"enum", K_ENUM, 0},
-	{NULL, 0, 0}
+	{"dim", K_VARIABLE}, // must always be the first
+	{"common", K_VARIABLE}, // must always be the second
+	{"const", K_CONST}, // must always be the third
+	{"function", K_FUNCTION},
+	{"sub", K_FUNCTION},
+	{"private sub", K_FUNCTION},
+	{"public sub", K_FUNCTION},
+	{"private function", K_FUNCTION},
+	{"public function", K_FUNCTION},
+	{"type", K_TYPE},
+	{"enum", K_ENUM},
+	{NULL, 0}
 };
 
 /*
  *   FUNCTION DEFINITIONS
  */
+
+/* Match the name of a dim or const starting at pos. */
+static int extract_dim (char const *pos, vString * name, BasicKind kind)
+{
+	while (isspace (*pos))
+		pos++;
+
+	vStringClear (name);
+
+	if (strncasecmp (pos, "shared", 6) == 0)
+		pos += 6; // skip keyword "shared"
+
+	while (isspace (*pos))
+		pos++;
+
+	// capture "dim as String str"
+	if (strncasecmp (pos, "as", 2) == 0)
+	{
+			pos += 2; // skip keyword "as"
+
+		while (isspace (*pos))
+			pos++;
+		while (!isspace (*pos)) // skip next part which is a type
+			pos++;
+		while (isspace (*pos))
+			pos++;
+		// now we are at the name
+	}
+
+	// capture "dim as foo ptr bar"
+	if (strncasecmp (pos, "ptr", 3) == 0)
+	{
+		pos += 3; // skip keyword "ptr"
+
+		while (isspace (*pos))
+			pos++;
+	}
+
+	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ','; pos++)
+		vStringPut (name, *pos);
+	vStringTerminate (name);
+	makeSimpleTag (name, BasicKinds, kind);
+
+	// if the line contains a ',', we have multiple declarations
+	while (*pos && strchr (pos, ','))
+	{
+		while (*pos != ',') // skip all we don't need(e.g. "..., new_array(5), " we skip "(5)")
+			pos++;
+		while (isspace (*pos) || *pos == ',')
+			pos++;
+
+		vStringClear (name);
+		for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ','; pos++)
+			vStringPut (name, *pos);
+		vStringTerminate (name);
+		makeSimpleTag (name, BasicKinds, kind);
+	}
+
+	vStringDelete (name);
+	return 1;
+}
 
 /* Match the name of a tag (function, variable, type, ...) starting at pos. */
 static char const *extract_name (char const *pos, vString * name)
@@ -95,7 +135,7 @@ static char const *extract_name (char const *pos, vString * name)
 	while (isspace (*pos))
 		pos++;
 	vStringClear (name);
-	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ','; pos++)
+	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 		vStringPut (name, *pos);
 	vStringTerminate (name);
 	return pos;
@@ -114,12 +154,18 @@ static int match_keyword (const char *p, KeyWord const *kw)
 	}
 	name = vStringNew ();
 	p += i;
-	for (j = 0; j < 1 + kw->skip; j++)
+	if (kw == &freebasic_keywords[0] ||
+		kw == &freebasic_keywords[1] ||
+		kw == &freebasic_keywords[2])
+		return extract_dim (p, name, kw->kind); // extract_dim adds the found tag(s)
+
+	for (j = 0; j < 1; j++)
 	{
-    	p = extract_name (p, name);
-    }
+		p = extract_name (p, name);
+	}
 	makeSimpleTag (name, BasicKinds, kw->kind);
 	vStringDelete (name);
+
 	return 1;
 }
 
@@ -138,22 +184,12 @@ static void match_colon_label (char const *p)
 	}
 }
 
-/* Match a ".label" style label. */
-static void match_dot_label (char const *p)
-{
-	if (*p == '.')
-	{
-		vString *name = vStringNew ();
-		extract_name (p + 1, name);
-		makeSimpleTag (name, BasicKinds, K_LABEL);
-		vStringDelete (name);
-	}
-}
-
-static void findBasicTags (KeyWord const keywords[],
-	void (*label) (const char *))
+static void findBasicTags (void)
 {
 	const char *line;
+	KeyWord *keywords;
+
+	keywords = freebasic_keywords;
 
 	while ((line = (const char *) fileReadLine ()) != NULL)
 	{
@@ -172,55 +208,18 @@ static void findBasicTags (KeyWord const keywords[],
 			if (match_keyword (p, kw)) break;
 
 		/* Is it a label? */
-		label (p);
+		match_colon_label (p);
 	}
-}
-
-static void findBlitzBasicTags (void)
-{
-	findBasicTags (blitzbasic_keywords, match_dot_label);
-}
-
-static void findPureBasicTags (void)
-{
-	findBasicTags (purebasic_keywords, match_colon_label);
-}
-
-static void findFreeBasicTags (void)
-{
-	findBasicTags (freebasic_keywords, match_colon_label);
-}
-
-parserDefinition *BlitzBasicParser (void)
-{
-	static char const *extensions[] = { "bb", NULL };
-	parserDefinition *def = parserNew ("BlitzBasic");
-	def->kinds = BasicKinds;
-	def->kindCount = KIND_COUNT (BasicKinds);
-	def->extensions = extensions;
-	def->parser = findBlitzBasicTags;
-	return def;
-}
-
-parserDefinition *PureBasicParser (void)
-{
-	static char const *extensions[] = { "pb", NULL };
-	parserDefinition *def = parserNew ("PureBasic");
-	def->kinds = BasicKinds;
-	def->kindCount = KIND_COUNT (BasicKinds);
-	def->extensions = extensions;
-	def->parser = findPureBasicTags;
-	return def;
 }
 
 parserDefinition *FreeBasicParser (void)
 {
-	static char const *extensions[] = { "bas", "bi", NULL };
+	static char const *extensions[] = { "bas", "bi", "bb", "pb", NULL };
 	parserDefinition *def = parserNew ("FreeBasic");
 	def->kinds = BasicKinds;
 	def->kindCount = KIND_COUNT (BasicKinds);
 	def->extensions = extensions;
-	def->parser = findFreeBasicTags;
+	def->parser = findBasicTags;
 	return def;
 }
 
