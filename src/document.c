@@ -1186,20 +1186,30 @@ gboolean document_save_file(gint idx, gboolean force)
 	{
 		GError *conv_error = NULL;
 		gchar* conv_file_contents = NULL;
+		gsize bytes_read;
 		gsize conv_len;
 
 		// try to convert it from UTF-8 to original encoding
 		conv_file_contents = g_convert(data, len-1, doc_list[idx].encoding, "UTF-8",
-													NULL, &conv_len, &conv_error);
+													&bytes_read, &conv_len, &conv_error);
 
 		if (conv_error != NULL)
 		{
+			gchar *context = NULL;
+
+			if (conv_error->code == G_CONVERT_ERROR_ILLEGAL_SEQUENCE)
+			{
+				context = g_malloc(4); // read 3 bytes from Sci + '\0'
+				sci_get_text_range(doc_list[idx].sci, bytes_read, bytes_read + 3, context);
+			}
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 	_("An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."
-	  "\nError message: %s\n"),
-			doc_list[idx].encoding, conv_error->message);
-			geany_debug("encoding error: %s)", conv_error->message);
+	  "\nError message: %s\nThe error occurred at \"%s\"."),
+				doc_list[idx].encoding, conv_error->message,
+				(context != NULL) ? context : _("unknown"));
+			geany_debug("encoding error: %s", conv_error->message);
 			g_error_free(conv_error);
+			g_free(context);
 			g_free(data);
 			return FALSE;
 		}
