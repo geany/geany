@@ -1,3 +1,9 @@
+2007-11-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * scintilla/LexHTML.cxx: Fix syntax colouring bug when using '?>' in
+                          a PHP comment (closes #1838854).
+
+
 2007-11-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c: Display character which caused a failed encoding

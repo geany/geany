@@ -815,7 +815,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		             ((inScriptType == eNonHtmlPreProc)
 		              || (inScriptType == eNonHtmlScriptPreProc)) && (
 		                 ((scriptLanguage != eScriptNone) && stateAllowsTermination(state) && ((ch == '%') || (ch == '?')))
-		             ) && (chNext == '>')) ||
+		             ) && (chNext == '>') && (! isCommentASPState(state))) ||
 		         ((scriptLanguage == eScriptSGML) && (ch == '>') && (state != SCE_H_SGML_COMMENT))) {
 			if (state == SCE_H_ASPAT) {
 				aspScript = segIsScriptingIndicator(styler,
