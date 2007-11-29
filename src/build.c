@@ -616,7 +616,8 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 			// there is already the extension .exe, so first remove it and then add .class
 			tmp = utils_remove_ext_from_filename(long_executable);
 			check_executable = g_strconcat(tmp, ".class", NULL);
-			g_free(tmp);
+			// store the filename without "exe" extension for Java, tmp will be freed by setptr
+			setptr(long_executable, tmp);
 #else
 			check_executable = g_strconcat(long_executable, ".class", NULL);
 #endif
@@ -644,6 +645,7 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 			g_free(check_executable);
 			return NULL;
 		}
+		g_free(check_executable);
 	}
 
 	// remove path

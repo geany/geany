@@ -11,6 +11,7 @@
    Add dialogs_show_msgbox_with_secondary().
    Add line and column number in charset conversion error dialog when
    saving a file and improve display of the failed character.
+ * src/build.c: Fix broken Run command on Java files on Windows.
 
 
 2007-11-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
