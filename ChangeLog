@@ -4,6 +4,13 @@
    src/interface.c: Improve usage of "Unfold all children" option and
                     add some basic documentation for folding support.
  * plugins/filebrowser.c: Fix display of double slash in path entry.
+ * src/document.c, src/ui_utils.c:
+   Deny "(Un)Fold All" actions when folding is disabled.
+   Hide "(Un)Fold All" menu items instead of just disabling them.
+ * src/dialogs.c, src/dialogs.h, src/document.c:
+   Add dialogs_show_msgbox_with_secondary().
+   Add line and column number in charset conversion error dialog when
+   saving a file and improve display of the failed character.
 
 
 2007-11-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

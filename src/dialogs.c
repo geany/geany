@@ -570,6 +570,28 @@ void dialogs_show_msgbox(gint type, const gchar *text, ...)
 }
 
 
+void dialogs_show_msgbox_with_secondary(gint type, const gchar *text, const gchar *secondary)
+{
+#ifndef G_OS_WIN32
+	GtkWidget *dialog;
+#endif
+
+#ifdef G_OS_WIN32
+	// put the two strings together because Windows message boxes don't support secondary texts
+	gchar *string = g_strconcat(text, "\n", secondary, NULL);
+	win32_message_dialog(NULL, type, string);
+	g_free(string);
+#else
+	dialog = gtk_message_dialog_new(GTK_WINDOW(app->window), GTK_DIALOG_DESTROY_WITH_PARENT,
+                                  type, GTK_BUTTONS_OK, "%s", text);
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", secondary);
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+#endif
+}
+
+
 gboolean dialogs_show_unsaved_file(gint idx)
 {
 #ifndef G_OS_WIN32

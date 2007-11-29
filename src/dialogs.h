@@ -55,4 +55,6 @@ gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, con
 
 void dialogs_show_msgbox(gint type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
 
+void dialogs_show_msgbox_with_secondary(gint type, const gchar *text, const gchar *secondary);
+
 #endif

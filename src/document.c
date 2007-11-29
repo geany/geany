@@ -1132,6 +1132,32 @@ static gboolean document_update_timestamp(gint idx)
 }
 
 
+/* Sets line and column to the given position byte_pos in the document.
+ * byte_pos is the position counted in bytes, not characters */
+static void get_line_column_from_pos(gint idx, guint byte_pos, gint *line, gint *column)
+{
+	gint i;
+	gint line_start;
+
+	// for some reason we can use byte count instead of character count here
+	*line = sci_get_line_from_position(doc_list[idx].sci, byte_pos);
+	line_start = sci_get_position_from_line(doc_list[idx].sci, *line);
+	// get the column in the line
+	*column = byte_pos - line_start;
+
+	// any non-ASCII characters are encoded with two bytes(UTF-8, always in Scintilla), so
+	// skip one byte(i++) and decrease the column number which is based on byte count
+	for (i = line_start; i < (line_start + *column); i++)
+	{
+		if (sci_get_char_at(doc_list[idx].sci, i) < 0)
+		{
+			(*column)--;
+			i++;
+		}
+	}
+}
+
+
 /* This saves the file.
  * When force is set then it is always saved, even if it is unchanged(useful when using Save As)
  * It returns whether the file could be saved or not. */
@@ -1143,7 +1169,7 @@ gboolean document_save_file(gint idx, gboolean force)
 	gchar *locale_filename = NULL;
 
 	if (! DOC_IDX_VALID(idx)) return FALSE;
-	// the changed flag should exclude the readonly flag, but check it anyway for safety
+	// the "changed" flag should exclude the "readonly" flag, but check it anyway for safety
 	if (! force && (! doc_list[idx].changed || doc_list[idx].readonly)) return FALSE;
 
 	if (doc_list[idx].file_name == NULL)
@@ -1195,22 +1221,41 @@ gboolean document_save_file(gint idx, gboolean force)
 
 		if (conv_error != NULL)
 		{
-			gchar *context = NULL;
+			gchar *text = g_strdup_printf(
+				_("An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."),
+				doc_list[idx].encoding);
+			gchar *error_text;
 
 			if (conv_error->code == G_CONVERT_ERROR_ILLEGAL_SEQUENCE)
 			{
-				context = g_malloc(4); // read 3 bytes from Sci + '\0'
-				sci_get_text_range(doc_list[idx].sci, bytes_read, bytes_read + 3, context);
+				gchar *context = NULL;
+				gint line, column;
+				gint context_len;
+				gunichar unic;
+				gint max_len = MIN((gint)bytes_read + 6, len - 1); // don't read over the doc length
+				context = g_malloc(7); // read 6 bytes from Sci + '\0'
+				sci_get_text_range(doc_list[idx].sci, bytes_read, max_len, context);
+
+				// take only one valid Unicode character from the context and discard the leftover
+				unic = g_utf8_get_char_validated(context, -1);
+				context_len = g_unichar_to_utf8(unic, context);
+				context[context_len] = '\0';
+				get_line_column_from_pos(idx, bytes_read, &line, &column);
+
+				error_text = g_strdup_printf(
+					_("Error message: %s\nThe error occurred at \"%s\" (line: %d, column: %d)."),
+					conv_error->message, context, line + 1, column);
+				g_free(context);
 			}
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-	_("An error occurred while converting the file from UTF-8 in \"%s\". The file remains unsaved."
-	  "\nError message: %s\nThe error occurred at \"%s\"."),
-				doc_list[idx].encoding, conv_error->message,
-				(context != NULL) ? context : _("unknown"));
+			else
+				error_text = g_strdup_printf(_("Error message: %s."), conv_error->message);
+
 			geany_debug("encoding error: %s", conv_error->message);
+			dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR, text, error_text);
 			g_error_free(conv_error);
-			g_free(context);
 			g_free(data);
+			g_free(text);
+			g_free(error_text);
 			return FALSE;
 		}
 		else
@@ -1926,7 +1971,7 @@ static void fold_all(gint idx, gboolean want_fold)
 {
 	gint lines, first, i;
 
-	if (! DOC_IDX_VALID(idx)) return;
+	if (! DOC_IDX_VALID(idx) || ! editor_prefs.folding) return;
 
 	lines = sci_get_line_count(doc_list[idx].sci);
 	first = sci_get_first_visible_line(doc_list[idx].sci);

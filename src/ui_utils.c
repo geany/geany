@@ -363,8 +363,9 @@ void ui_update_insert_include_item(gint idx, gint item)
 
 void ui_update_fold_items()
 {
-	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_fold_all1"), editor_prefs.folding);
-	gtk_widget_set_sensitive(lookup_widget(app->window, "menu_unfold_all1"), editor_prefs.folding);
+	ui_widget_show_hide(lookup_widget(app->window, "menu_fold_all1"), editor_prefs.folding);
+	ui_widget_show_hide(lookup_widget(app->window, "menu_unfold_all1"), editor_prefs.folding);
+	ui_widget_show_hide(lookup_widget(app->window, "separator22"), editor_prefs.folding);
 }
 
 
