@@ -1,5 +1,5 @@
 /*
-*   $Id$
+*   $Id: ruby.c 571 2007-06-24 23:32:14Z elliotth $
 *
 *   Copyright (c) 2000-2001, Thaddeus Covert <sahuagin@mediaone.net>
 *   Copyright (c) 2002 Matthias Veit <matthias_veit@yahoo.de>
@@ -37,8 +37,8 @@ typedef enum {
 static kindOption RubyKinds [] = {
 	{ TRUE, 'c', "class",  "classes" },
 	{ TRUE, 'f', "method", "methods" },
-	{ TRUE, 'm', "module", "modules" },
-	{ TRUE, 'F', "singleton method", "singleton methods" }
+	{ TRUE, 'm', "namespace", "modules" },
+	{ TRUE, 'F', "member", "singleton methods" }
 };
 
 static stringList* nesting = 0;
@@ -346,7 +346,7 @@ static void findRubyTags (void)
 
 		while (*cp != '\0')
 		{
-			/* FIXME: we don't cope with here documents, or string literals,
+			/* FIXME: we don't cope with here documents,
 			* or regular expression literals, or ... you get the idea.
 			* Hopefully, the restriction above that insists on seeing
 			* definitions at the starts of lines should keep us out of
@@ -372,7 +372,16 @@ static void findRubyTags (void)
 			{
 				/* Leave the most recent scope. */
 				vStringDelete (stringListLast (nesting));
-			stringListRemoveLast (nesting);
+				stringListRemoveLast (nesting);
+			}
+			else if (*cp == '"')
+			{
+				/* Skip string literals.
+				 * FIXME: should cope with escapes and interpolation.
+				 */
+				do {
+					++cp;
+				} while (*cp != 0 && *cp != '"');
 			}
 			else if (*cp != '\0')
 			{
@@ -387,7 +396,7 @@ static void findRubyTags (void)
 
 extern parserDefinition* RubyParser (void)
 {
-	static const char *const extensions [] = { "rb", "ruby", "rhtml", NULL };
+	static const char *const extensions [] = { "rb", "ruby", NULL };
 	parserDefinition* def = parserNew ("Ruby");
 	def->kinds      = RubyKinds;
 	def->kindCount  = KIND_COUNT (RubyKinds);

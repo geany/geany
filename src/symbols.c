@@ -199,6 +199,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 	{
 		case GEANY_FILETYPES_C:	// for C++ .h headers or C structs
 		case GEANY_FILETYPES_CPP:
+		//~ case GEANY_FILETYPES_RUBY: // not sure what to use atm
 		{
 			static gchar cc[] = "::";
 
@@ -597,12 +598,10 @@ static void init_tag_list(gint idx)
 		case GEANY_FILETYPES_RUBY:
 		{
 			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Modules"), NULL,
 				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_member), _("Singletons"), NULL,
-				&(tv_iters.tag_macro), _("Mixins"), NULL,
+				&(tv_iters.tag_member), _("Singletons"), "classviewer-struct",
 				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
-				&(tv_iters.tag_struct), _("Members"), "classviewer-member",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				NULL);
 				//&(tv_iters.tag_namespace), _("Begin"),
 				//&(tv_iters.tag_other), _("Other"), NULL);

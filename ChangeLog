@@ -12,6 +12,8 @@
    Add line and column number in charset conversion error dialog when
    saving a file and improve display of the failed character.
  * src/build.c: Fix broken Run command on Java files on Windows.
+ * src/symbols.c, tagmanager/ruby.c:
+   Use Ruby parser from CTags SVN and add/fix symbol list sections.
 
 
 2007-11-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
