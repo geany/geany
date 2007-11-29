@@ -672,6 +672,7 @@ static gboolean check_snippet_completion(GdkEventKey *event)
 }
 
 
+#ifdef HAVE_VTE
 static gboolean set_sensitive(gpointer widget)
 {
 	gtk_widget_set_sensitive(GTK_WIDGET(widget), TRUE);
@@ -679,7 +680,6 @@ static gboolean set_sensitive(gpointer widget)
 }
 
 
-#ifdef HAVE_VTE
 static gboolean check_vte(GdkModifierType state, guint keyval)
 {
 	guint i;
