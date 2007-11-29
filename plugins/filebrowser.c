@@ -246,14 +246,16 @@ static void handle_selection(GList *list, GtkTreeSelection *treesel)
 
 	for (item = list; item != NULL; item = g_list_next(item))
 	{
-		gchar *name, *fname;
+		gchar *name, *fname, *dir_sep = G_DIR_SEPARATOR_S;
 
 		treepath = (GtkTreePath*) item->data;
 		gtk_tree_model_get_iter(model, &iter, treepath);
 		gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_NAME, &name, -1);
 
 		setptr(name, utils->get_locale_from_utf8(name));
-		fname = g_strconcat(current_dir, G_DIR_SEPARATOR_S, name, NULL);
+		if (utils->str_equal(current_dir, G_DIR_SEPARATOR_S))
+			dir_sep = "";
+		fname = g_strconcat(current_dir, dir_sep, name, NULL);
 		g_free(name);
 
 		if (dir_found)

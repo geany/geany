@@ -3,6 +3,7 @@
  * geany.glade, doc/geany.html, geany.txt, src/editor.c,
    src/interface.c: Improve usage of "Unfold all children" option and
                     add some basic documentation for folding support.
+ * plugins/filebrowser.c: Fix display of double slash in path entry.
 
 
 2007-11-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
