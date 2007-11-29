@@ -1,3 +1,10 @@
+2007-11-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, doc/geany.html, geany.txt, src/editor.c,
+   src/interface.c: Improve usage of "Unfold all children" option and
+                    add some basic documentation for folding support.
+
+
 2007-11-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * scintilla/LexHTML.cxx: Fix syntax colouring bug when using '?>' in

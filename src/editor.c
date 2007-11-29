@@ -107,6 +107,46 @@ on_editor_button_press_event           (GtkWidget *widget,
 
 typedef struct SCNotification SCNotification;
 
+static void fold_symbol_click(ScintillaObject *sci, SCNotification *nt)
+{
+	gint line = SSM(sci, SCI_LINEFROMPOSITION, nt->position, 0);
+
+	SSM(sci, SCI_TOGGLEFOLD, line, 0);
+	// extra toggling of child fold points
+	// use when editor_prefs.unfold_all_children is set and Shift is NOT pressed or when
+	// editor_prefs.unfold_all_children is NOT set but Shift is pressed
+	if ((editor_prefs.unfold_all_children && ! (nt->modifiers & SCMOD_SHIFT)) ||
+		(! editor_prefs.unfold_all_children && (nt->modifiers & SCMOD_SHIFT)))
+	{
+		gint last_line = SSM(sci, SCI_GETLASTCHILD, line, -1);
+		gint i;
+
+		if (SSM(sci, SCI_GETLINEVISIBLE, line + 1, 0))
+		{	// unfold all children of the current fold point
+			for (i = line; i < last_line; i++)
+			{
+				if (! SSM(sci, SCI_GETLINEVISIBLE, i, 0))
+				{
+					SSM(sci, SCI_TOGGLEFOLD, SSM(sci, SCI_GETFOLDPARENT, i, 0), 0);
+				}
+			}
+		}
+		else
+		{	// fold all children of the current fold point
+			for (i = line; i < last_line; i++)
+			{
+				gint level = sci_get_fold_level(sci, i);
+				if (level & SC_FOLDLEVELHEADERFLAG)
+				{
+					if (SSM(sci, SCI_GETFOLDEXPANDED, i, 0))
+						SSM(sci, SCI_TOGGLEFOLD, i, 0);
+				}
+			}
+		}
+	}
+}
+
+
 static void on_margin_click(ScintillaObject *sci, SCNotification *nt)
 {
 	// left click to marker margin marks the line
@@ -121,23 +161,7 @@ static void on_margin_click(ScintillaObject *sci, SCNotification *nt)
 	// left click on the folding margin to toggle folding state of current line
 	else if (nt->margin == 2 && editor_prefs.folding)
 	{
-		gint line = SSM(sci, SCI_LINEFROMPOSITION, nt->position, 0);
-
-		SSM(sci, SCI_TOGGLEFOLD, line, 0);
-		if ((editor_prefs.unfold_all_children || (nt->modifiers & SCMOD_SHIFT)) &&
-			SSM(sci, SCI_GETLINEVISIBLE, line + 1, 0))
-		{	// unfold all children of the current fold point
-			gint last_line = SSM(sci, SCI_GETLASTCHILD, line, -1);
-			gint i;
-
-			for (i = line; i < last_line; i++)
-			{
-				if (! SSM(sci, SCI_GETLINEVISIBLE, i, 0))
-				{
-					SSM(sci, SCI_TOGGLEFOLD, SSM(sci, SCI_GETFOLDPARENT, i, 0), 0);
-				}
-			}
-		}
+		fold_symbol_click(sci, nt);
 	}
 }
 

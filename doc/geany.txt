@@ -439,13 +439,41 @@ from a file, just use the document menu and toggle the checkbox.
 
 .. note::
     If you are unsure what a BOM is or if you do not understand where
-    to use it, then it is not important for you and you can safely
-    ignore it.
+    to use it, then it is probably not important for you and you can
+    safely ignore it.
 
 
 
 Editing
 -------
+
+
+Folding
+^^^^^^^
+
+Geany provides basic code folding support. Folding means the ability to
+show and hide parts of the text in the current file. You can hide
+unimportant code sections and concentrate on the parts you are working on
+and later you can show these sections again. In the editor window there is
+a small grey margin on the left side with some [+] and [-] symbols. By
+clicking on these icons you can simply show and hide sections which are
+marked by vertical lines within this margin. For many filetypes nested
+folding is supported, so there may be several fold points within other
+fold points.
+
+If you don't like it or don't need it at all, you can simply disable
+folding support completely in the preferences dialog.
+
+The folding behaviour can be changed with the "Fold/Unfold all children of
+a fold point" option in the preference dialog. If activated, Geany will
+unfold all nested(child) fold points below the current one if they are
+already folded (when clicking on a [+] symbol).
+When clicking on a [-] symbol, Geany will fold all nested(child) fold
+points below the current one if they are unfolded.
+The usage of this option can be instantly inverted by pressing the Shift
+key while clicking on a fold symbol. That means, if the "Fold/Unfold all
+children of a fold point" option is enabled, pressing Shift will disable
+it for this click and vice versa.
 
 
 Drag and drop of text
