@@ -157,8 +157,7 @@ gboolean tm_project_add_file(TMProject *project, const char *file_name
   ,gboolean update)
 {
 	TMWorkObject *source_file;
-	/// TODO if this will be ever used, pass app->config_dir instead of NULL
-	const TMWorkObject *workspace = TM_WORK_OBJECT(tm_get_workspace(NULL));
+	const TMWorkObject *workspace = TM_WORK_OBJECT(tm_get_workspace());
 	char *path;
 	gboolean exists = FALSE;
 

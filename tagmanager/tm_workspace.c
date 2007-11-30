@@ -29,7 +29,7 @@
 static TMWorkspace *theWorkspace = NULL;
 guint workspace_class_id = 0;
 
-static gboolean tm_create_workspace(const gchar *config_dir)
+static gboolean tm_create_workspace()
 {
 	workspace_class_id = tm_work_object_register(tm_workspace_free, tm_workspace_update
 		  , tm_workspace_find_object);
@@ -79,12 +79,10 @@ void tm_workspace_free(gpointer workspace)
 	}
 }
 
-const TMWorkspace *tm_get_workspace(const gchar *config_dir)
+const TMWorkspace *tm_get_workspace()
 {
-	if (NULL == config_dir)
-		return NULL;
 	if (NULL == theWorkspace)
-		tm_create_workspace(config_dir);
+		tm_create_workspace();
 	return theWorkspace;
 }
 
