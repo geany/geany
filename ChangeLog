@@ -1,3 +1,9 @@
+2007-11-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/filetypes.c, data/filetypes.conf:
+   Added .ltx as extension for LaTeX-documents.
+
+
 2007-11-30  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/main.c, tagmanager/tm_project.c, tagmanager/tm_workspace.c,
