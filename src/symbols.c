@@ -910,13 +910,15 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 			command = NULL;	// don't preprocess
 
 		geany_debug("Generating %s tags file.", ft->name);
+		tm_get_workspace();
 		status = tm_workspace_create_global_tags(app->configdir, command,
 												 (const char **) (argv + 2),
 												 argc - 2, tags_file, ft->lang);
 		g_free(command);
 		if (! status)
 		{
-			g_printerr(_("Failed to create tags file.\n"));
+			g_printerr(_("Failed to create tags file, perhaps because no tags "
+				"were found.\n"));
 			return 1;
 		}
 	}

@@ -3,6 +3,8 @@
  * src/main.c, tagmanager/tm_project.c, tagmanager/tm_workspace.c,
    tagmanager/include/tm_workspace.h:
    Remove unused config_dir argument for tm_get_workspace().
+ * src/symbols.c:
+   Fix broken generate tags command.
 
 
 2007-11-29  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
