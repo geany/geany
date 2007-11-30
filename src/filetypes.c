@@ -401,7 +401,7 @@ void filetypes_init_types()
 	filetypes[GEANY_FILETYPES_LATEX]->name = g_strdup("LaTeX");
 	filetypes[GEANY_FILETYPES_LATEX]->title = g_strdup_printf(_("%s source file"), "LaTeX");
 	filetypes[GEANY_FILETYPES_LATEX]->extension = g_strdup("tex");
-	filetypes[GEANY_FILETYPES_LATEX]->pattern = utils_strv_new("*.tex", "*.sty", "*.idx", NULL);
+	filetypes[GEANY_FILETYPES_LATEX]->pattern = utils_strv_new("*.tex", "*.sty", "*.idx", "*.ltx", NULL);
 	filetypes[GEANY_FILETYPES_LATEX]->comment_open = g_strdup("%");
 	filetypes[GEANY_FILETYPES_LATEX]->comment_close = NULL;
 
