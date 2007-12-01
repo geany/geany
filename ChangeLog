@@ -1,3 +1,9 @@
+2007-12-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/templates.c:
+   Avoid inclusion of PHP tags in PHP function descriptions.
+
+
 2007-11-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/filetypes.c, data/filetypes.conf:

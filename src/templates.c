@@ -146,7 +146,10 @@ int main(char[][] args)\n\
 }\n\
 ";
 
-static const gchar templates_filetype_php[] = "{fileheader}\n\
+static const gchar templates_filetype_php[] = "\
+<?php\n\
+{fileheader}\
+?>\n\n\
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
   \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
 <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\
@@ -454,8 +457,8 @@ static gchar *make_comment_block(const gchar *comment_text, gint filetype_idx, g
 
 		case GEANY_FILETYPES_PHP:
 		{
-			frame_start = "<?php\n/*\n";
-			frame_end = " */\n?>\n";
+			frame_start = "/*\n";
+			frame_end = " */\n";
 			line_prefix = " *";
 			break;
 		}
