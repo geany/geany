@@ -2,6 +2,13 @@
 
  * src/templates.c:
    Avoid inclusion of PHP tags in PHP function descriptions.
+ * plugins/Makefile.am, plugins/svndiff.c:
+   Remove obsolete SVNdiff plugin, use the VC Diff plugin.
+ * geany.glade, src /editor.c, src/editor.h, src/geany.h,
+   src/interface.c, src/keyfile.c, src/plugindata.h, src/plugins.c,
+   src/prefs.c:
+   Add option for amount of characters to trigger symbol completion.
+   Add document_find_by_filename to the plugin API.
 
 
 2007-11-30  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

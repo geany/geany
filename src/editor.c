@@ -1030,8 +1030,9 @@ gboolean editor_start_auto_complete(gint idx, gint pos, gboolean force)
 		ret = autocomplete_html(sci, root, rootlen);
 	else
 	{
-		// force is set when called by keyboard shortcut, otherwise start at the 4th char
-		if (force || rootlen >= 4)
+		// force is set when called by keyboard shortcut, otherwise start at the
+		// editor_prefs.symbolcompletion_min_chars'th char
+		if (force || rootlen >= editor_prefs.symbolcompletion_min_chars)
 			ret = autocomplete_tags(idx, root, rootlen);
 	}
 

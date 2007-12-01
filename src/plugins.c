@@ -87,6 +87,7 @@ static DocumentFuncs doc_funcs = {
 	&document_new_file,
 	&document_get_cur_idx,
 	&document_get_n_idx,
+	&document_find_by_filename,
 	&document_get_current,
 	&document_save_file,
 	&document_open_file,

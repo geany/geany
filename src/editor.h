@@ -70,6 +70,7 @@ typedef struct EditorPrefs
 	gboolean	auto_complete_symbols;
 	gboolean	auto_close_xml_tags;
 	gboolean	complete_snippets;
+	gint		symbolcompletion_min_chars;
 	gint		symbolcompletion_max_height;
 	GHashTable	*snippets;
 	gboolean	brace_match_ltgt;	// whether to highlight < and > chars (hidden pref)

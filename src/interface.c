@@ -2611,10 +2611,13 @@ create_prefs_dialog (void)
   GtkWidget *check_complete_snippets;
   GtkWidget *check_xmltag;
   GtkWidget *check_symbol_auto_completion;
-  GtkWidget *hbox6;
-  GtkWidget *label173;
+  GtkWidget *table14;
   GtkObject *spin_symbollistheight_adj;
   GtkWidget *spin_symbollistheight;
+  GtkWidget *label205;
+  GtkWidget *label173;
+  GtkObject *spin_symbol_complete_chars_adj;
+  GtkWidget *spin_symbol_complete_chars;
   GtkWidget *label177;
   GtkWidget *label95;
   GtkWidget *vbox18;
@@ -2625,10 +2628,10 @@ create_prefs_dialog (void)
   GtkWidget *eventbox1;
   GtkWidget *combo_new_encoding;
   GtkWidget *label153;
-  GtkWidget *check_open_encoding;
   GtkWidget *label_open_encoding;
   GtkWidget *eventbox3;
   GtkWidget *combo_open_encoding;
+  GtkWidget *check_open_encoding;
   GtkWidget *label109;
   GtkWidget *frame2;
   GtkWidget *alignment3;
@@ -3702,21 +3705,43 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_symbol_auto_completion, _("Automatic completion of known symbols in open files (function names, global variables, ...)"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_symbol_auto_completion), FALSE);
 
-  hbox6 = gtk_hbox_new (FALSE, 12);
-  gtk_widget_show (hbox6);
-  gtk_box_pack_start (GTK_BOX (vbox19), hbox6, FALSE, FALSE, 0);
+  table14 = gtk_table_new (2, 2, FALSE);
+  gtk_widget_show (table14);
+  gtk_box_pack_start (GTK_BOX (vbox19), table14, FALSE, FALSE, 0);
+  gtk_table_set_row_spacings (GTK_TABLE (table14), 3);
+  gtk_table_set_col_spacings (GTK_TABLE (table14), 12);
+
+  spin_symbollistheight_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 10);
+  spin_symbollistheight = gtk_spin_button_new (GTK_ADJUSTMENT (spin_symbollistheight_adj), 1, 0);
+  gtk_widget_show (spin_symbollistheight);
+  gtk_table_attach (GTK_TABLE (table14), spin_symbollistheight, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_symbollistheight, _("Number of rows to display in the autocompletion list."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbollistheight), TRUE);
+
+  label205 = gtk_label_new (_("Characters to type for completion:"));
+  gtk_widget_show (label205);
+  gtk_table_attach (GTK_TABLE (table14), label205, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_misc_set_alignment (GTK_MISC (label205), 0, 0.5);
 
   label173 = gtk_label_new (_("Rows of symbol completion list:"));
   gtk_widget_show (label173);
-  gtk_box_pack_start (GTK_BOX (hbox6), label173, FALSE, FALSE, 0);
+  gtk_table_attach (GTK_TABLE (table14), label173, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label173), 0, 0.5);
 
-  spin_symbollistheight_adj = gtk_adjustment_new (10, 1, 99, 1, 10, 10);
-  spin_symbollistheight = gtk_spin_button_new (GTK_ADJUSTMENT (spin_symbollistheight_adj), 1, 0);
-  gtk_widget_show (spin_symbollistheight);
-  gtk_box_pack_start (GTK_BOX (hbox6), spin_symbollistheight, FALSE, TRUE, 0);
-  gtk_tooltips_set_tip (tooltips, spin_symbollistheight, _("Number of rows to display in the autocompletion list."), NULL);
-  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbollistheight), TRUE);
+  spin_symbol_complete_chars_adj = gtk_adjustment_new (9, 1, 99, 1, 10, 10);
+  spin_symbol_complete_chars = gtk_spin_button_new (GTK_ADJUSTMENT (spin_symbol_complete_chars_adj), 1, 0);
+  gtk_widget_show (spin_symbol_complete_chars);
+  gtk_table_attach (GTK_TABLE (table14), spin_symbol_complete_chars, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, spin_symbol_complete_chars, _("The amount of characters which are necessary to show the symbol auto completion list."), NULL);
+  gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin_symbol_complete_chars), TRUE);
 
   label177 = gtk_label_new (_("<b>Completions</b>"));
   gtk_widget_show (label177);
@@ -3749,7 +3774,6 @@ create_prefs_dialog (void)
   gtk_widget_show (table5);
   gtk_box_pack_start (GTK_BOX (vbox8), table5, FALSE, TRUE, 0);
   gtk_table_set_row_spacings (GTK_TABLE (table5), 3);
-  gtk_table_set_col_spacings (GTK_TABLE (table5), 12);
 
   eventbox1 = gtk_event_box_new ();
   gtk_widget_show (eventbox1);
@@ -3769,24 +3793,16 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label153), 0, 0.5);
 
-  check_open_encoding = gtk_check_button_new_with_mnemonic (_("Use fixed encoding when opening files"));
-  gtk_widget_show (check_open_encoding);
-  gtk_table_attach (GTK_TABLE (table5), check_open_encoding, 0, 2, 2, 3,
-                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-                    (GtkAttachOptions) (0), 0, 0);
-  gtk_tooltips_set_tip (tooltips, check_open_encoding, _("This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_open_encoding), FALSE);
-
   label_open_encoding = gtk_label_new (_("Default encoding (existing files):"));
   gtk_widget_show (label_open_encoding);
-  gtk_table_attach (GTK_TABLE (table5), label_open_encoding, 0, 1, 1, 2,
+  gtk_table_attach (GTK_TABLE (table5), label_open_encoding, 0, 1, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (0), 0, 0);
   gtk_misc_set_alignment (GTK_MISC (label_open_encoding), 0, 0.5);
 
   eventbox3 = gtk_event_box_new ();
   gtk_widget_show (eventbox3);
-  gtk_table_attach (GTK_TABLE (table5), eventbox3, 1, 2, 1, 2,
+  gtk_table_attach (GTK_TABLE (table5), eventbox3, 1, 2, 2, 3,
                     (GtkAttachOptions) (GTK_FILL),
                     (GtkAttachOptions) (GTK_FILL), 0, 0);
   gtk_tooltips_set_tip (tooltips, eventbox3, _("Sets the default encoding for opening existing files."), NULL);
@@ -3794,6 +3810,14 @@ create_prefs_dialog (void)
   combo_open_encoding = gtk_combo_box_new_text ();
   gtk_widget_show (combo_open_encoding);
   gtk_container_add (GTK_CONTAINER (eventbox3), combo_open_encoding);
+
+  check_open_encoding = gtk_check_button_new_with_mnemonic (_("Use fixed encoding when opening files"));
+  gtk_widget_show (check_open_encoding);
+  gtk_table_attach (GTK_TABLE (table5), check_open_encoding, 0, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+  gtk_tooltips_set_tip (tooltips, check_open_encoding, _("This option disables the automatic detection of the file encoding when opening files and opens the file with the specified encoding (usually not needed)."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_open_encoding), FALSE);
 
   label109 = gtk_label_new (_("<b>New files</b>"));
   gtk_widget_show (label109);
@@ -4536,9 +4560,11 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_complete_snippets, "check_complete_snippets");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_xmltag, "check_xmltag");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_symbol_auto_completion, "check_symbol_auto_completion");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, hbox6, "hbox6");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label173, "label173");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, table14, "table14");
   GLADE_HOOKUP_OBJECT (prefs_dialog, spin_symbollistheight, "spin_symbollistheight");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label205, "label205");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label173, "label173");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, spin_symbol_complete_chars, "spin_symbol_complete_chars");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label177, "label177");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label95, "label95");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox18, "vbox18");
@@ -4549,10 +4575,10 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox1, "eventbox1");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_new_encoding, "combo_new_encoding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label153, "label153");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_open_encoding, "check_open_encoding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label_open_encoding, "label_open_encoding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, eventbox3, "eventbox3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, combo_open_encoding, "combo_open_encoding");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_open_encoding, "check_open_encoding");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label109, "label109");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame2, "frame2");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment3, "alignment3");

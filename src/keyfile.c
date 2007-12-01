@@ -198,6 +198,7 @@ static void save_dialog_prefs(GKeyFile *config)
 
 	// editor
 	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_max_height", editor_prefs.symbolcompletion_max_height);
+	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_min_chars", editor_prefs.symbolcompletion_min_chars);
 	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
 	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", editor_prefs.unfold_all_children);
 	g_key_file_set_integer(config, PACKAGE, "indent_mode", editor_prefs.indent_mode);
@@ -487,6 +488,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
 	editor_prefs.long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
 	editor_prefs.long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
+	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
 	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_breaking", FALSE); // default is off for better performance
 	editor_prefs.indent_mode = utils_get_setting_integer(config, PACKAGE, "indent_mode", INDENT_CURRENTCHARS);

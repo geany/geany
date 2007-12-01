@@ -403,6 +403,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.symbolcompletion_max_height);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.symbolcompletion_min_chars);
+
 
 	// Tools Settings
 	if (prefs.tools_make_cmd)
@@ -773,6 +776,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
 		editor_prefs.auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars");
+		editor_prefs.symbolcompletion_min_chars = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
 		editor_prefs.symbolcompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
