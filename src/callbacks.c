@@ -1187,7 +1187,7 @@ void
 on_find_in_files1_activate             (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
-	search_show_find_in_files_dialog();
+	search_show_find_in_files_dialog(NULL);
 }
 
 

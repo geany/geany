@@ -38,6 +38,7 @@
 #define keybindings	geany_data->keybindings
 #define msgwindow	geany_data->msgwindow
 #define scintilla	geany_data->sci
+#define search		geany_data->search
 #define support		geany_data->support
 #define templates	geany_data->templates
 #define tagmanager	geany_data->tm			// avoids conflict with "struct tm *t"

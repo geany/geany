@@ -543,7 +543,9 @@ static void on_extra_options_toggled(GtkToggleButton *togglebutton, gpointer use
 }
 
 
-void search_show_find_in_files_dialog()
+/* dir is the directory to search in (UTF-8 encoding), maybe NULL to determine it the usual way
+ * by using the current file's path */
+void search_show_find_in_files_dialog(const gchar *dir)
 {
 	static GtkWidget *combo = NULL;
 	static GtkWidget *dir_combo;
@@ -552,7 +554,7 @@ void search_show_find_in_files_dialog()
 	gchar *sel = NULL;
 	gchar *cur_dir;
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (! DOC_IDX_VALID(idx)) return;
 
 	if (widgets.find_in_files_dialog == NULL)
 	{
@@ -712,7 +714,10 @@ void search_show_find_in_files_dialog()
 	g_free(sel);
 
 	entry = GTK_BIN(dir_combo)->child;
-	cur_dir = utils_get_current_file_dir();
+	if (NZV(dir))
+		cur_dir = g_strdup(dir);
+	else
+		cur_dir = utils_get_current_file_dir();
 	if (cur_dir)
 	{
 		gtk_entry_set_text(GTK_ENTRY(entry), cur_dir);

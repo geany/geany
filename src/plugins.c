@@ -49,6 +49,7 @@
 #include "geanyobject.h"
 #include "build.h"
 #include "encodings.h"
+#include "search.h"
 
 void keybindings_cmd(gint cmd_id);	// don't require keybindings.h enum in plugindata.h
 
@@ -182,6 +183,10 @@ static TagManagerFuncs tagmanager_funcs = {
 	&tm_get_real_path
 };
 
+static SearchFuncs search_funcs = {
+	&search_show_find_in_files_dialog
+};
+
 
 static GeanyData geany_data = {
 	NULL,
@@ -203,6 +208,7 @@ static GeanyData geany_data = {
 	&encoding_funcs,
 	&keybindings_funcs,
 	&tagmanager_funcs,
+	&search_funcs,
 };
 
 

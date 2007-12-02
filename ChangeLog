@@ -1,3 +1,14 @@
+2007-12-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/filebrowser.c, plugins/pluginmacros.h, src/callbacks.c,
+   src/plugins.c, src/plugindata.h, src/search.c, src/search.h,
+   src/utils.c:
+   Add search_show_find_in_files_dialog() to the plugin API.
+   Make path entry of filebrowser plugin editable.
+   Add "Open with" and "Find in Files" popup menu items to filebrowser
+   plugin and add configuration dialog.
+
+
 2007-12-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/templates.c:

@@ -55,7 +55,7 @@ void search_show_find_dialog();
 
 void search_show_replace_dialog();
 
-void search_show_find_in_files_dialog();
+void search_show_find_in_files_dialog(const gchar *dir);
 
 void search_find_usage(const gchar *search_text, gint flags, gboolean in_session);
 

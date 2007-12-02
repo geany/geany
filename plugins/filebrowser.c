@@ -66,6 +66,8 @@ static GtkTreeIter	*last_dir_iter = NULL;
 
 static GtkWidget	*path_entry;
 static gchar		*current_dir = NULL;	// in locale-encoding
+static gchar		*open_cmd;				// in locale-encoding
+static gchar		*config_file;
 
 
 // Returns: whether name should be hidden.
@@ -154,6 +156,10 @@ static void refresh()
 	gchar *utf8_dir;
 	GSList *list;
 
+	// don't clear when the new path doesn't exist
+	if (! g_file_test(current_dir, G_FILE_TEST_EXISTS))
+		return;
+
 	clear();
 
 	utf8_dir = utils->get_utf8_from_locale(current_dir);
@@ -184,7 +190,7 @@ static gchar *get_default_dir()
 	if (project)
 		dir = project->base_path;
 	if (NZV(dir))
-		return g_strdup(dir);
+		return utils->get_locale_from_utf8(dir);
 
 	return g_get_current_dir();
 }
@@ -213,7 +219,7 @@ static void on_current_path()
 }
 
 
-static void handle_selection(GList *list, GtkTreeSelection *treesel)
+static void handle_selection(GList *list, GtkTreeSelection *treesel, gboolean external)
 {
 	GList *item;
 	GtkTreeModel *model = GTK_TREE_MODEL(file_store);
@@ -252,13 +258,34 @@ static void handle_selection(GList *list, GtkTreeSelection *treesel)
 		gtk_tree_model_get_iter(model, &iter, treepath);
 		gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_NAME, &name, -1);
 
-		setptr(name, utils->get_locale_from_utf8(name));
-		if (utils->str_equal(current_dir, G_DIR_SEPARATOR_S))
+		if (utils->str_equal(current_dir, G_DIR_SEPARATOR_S)) /// TODO test this on Windows
 			dir_sep = "";
+		setptr(name, utils->get_locale_from_utf8(name));
 		fname = g_strconcat(current_dir, dir_sep, name, NULL);
 		g_free(name);
 
-		if (dir_found)
+		if (external)
+		{
+			gchar *cmd;
+			gchar *dir;
+			GString *cmd_str = g_string_new(open_cmd);
+
+			if (! dir_found)
+				dir = g_path_get_dirname(fname);
+			else
+				dir = g_strdup(fname);
+
+			utils->string_replace_all(cmd_str, "%f", fname);
+			utils->string_replace_all(cmd_str, "%d", dir);
+
+			cmd = g_string_free(cmd_str, FALSE);
+			setptr(cmd, utils->get_locale_from_utf8(cmd));
+			g_spawn_command_line_async(cmd, NULL);
+			g_free(cmd);
+			g_free(dir);
+			g_free(fname);
+		}
+		else if (dir_found)
 		{
 			setptr(current_dir, fname);
 			refresh();
@@ -273,7 +300,7 @@ static void handle_selection(GList *list, GtkTreeSelection *treesel)
 }
 
 
-static void open_selected_files()
+static void open_selected_files(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkTreeSelection *treesel;
 	GtkTreeModel *model;
@@ -282,10 +309,55 @@ static void open_selected_files()
 	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
 
 	list = gtk_tree_selection_get_selected_rows(treesel, &model);
-	handle_selection(list, treesel);
+	handle_selection(list, treesel, GPOINTER_TO_INT(user_data));
 
 	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
 	g_list_free(list);
+}
+
+
+static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GtkTreeSelection *treesel;
+	GtkTreeModel *model;
+	GtkTreePath *treepath;
+	GtkTreeIter iter;
+	GList *list;
+	GList *item;
+	gchar *icon;
+	gchar *dir;
+	gchar *name;
+	gboolean is_dir = FALSE;
+
+	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
+	if (gtk_tree_selection_count_selected_rows(treesel) != 1)
+		return;
+
+	list = gtk_tree_selection_get_selected_rows(treesel, &model);
+	for (item = list; item != NULL; item = g_list_next(item))
+	{
+		treepath = (GtkTreePath*) item->data;
+		gtk_tree_model_get_iter(model, &iter, treepath);
+		gtk_tree_model_get(model, &iter,
+			FILEVIEW_COLUMN_ICON, &icon,
+			FILEVIEW_COLUMN_NAME, &name, -1);
+
+		if (utils->str_equal(icon, GTK_STOCK_DIRECTORY))
+			is_dir = TRUE;
+		g_free(icon);
+	}
+
+	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
+	g_list_free(list);
+
+	if (is_dir)
+		dir = g_strconcat(current_dir, G_DIR_SEPARATOR_S, name, NULL);
+	else
+		dir = g_strdup(current_dir);
+
+	setptr(dir, utils->get_utf8_from_locale(dir));
+	search->show_find_in_files_dialog(dir);
+	g_free(dir);
 }
 
 
@@ -298,7 +370,7 @@ static void on_hidden_files_clicked(GtkCheckMenuItem *item)
 
 static GtkWidget *create_popup_menu()
 {
-	GtkWidget *item, *menu;
+	GtkWidget *item, *menu, *image;
 
 	menu = gtk_menu_new();
 
@@ -306,7 +378,25 @@ static GtkWidget *create_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate",
-		G_CALLBACK(open_selected_files), NULL);
+		G_CALLBACK(open_selected_files), GINT_TO_POINTER(FALSE));
+
+
+	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
+	gtk_widget_show(image);
+	item = gtk_image_menu_item_new_with_mnemonic(_("Open _with ..."));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer) item, "activate",
+		G_CALLBACK(open_selected_files), GINT_TO_POINTER(TRUE));
+
+	image = gtk_image_new_from_stock(GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
+	gtk_widget_show(image);
+	item = gtk_image_menu_item_new_with_mnemonic(_("_Find in Files"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_find_in_files), NULL);
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -315,8 +405,7 @@ static GtkWidget *create_popup_menu()
 	item = gtk_check_menu_item_new_with_mnemonic(_("Show _Hidden Files"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
-	g_signal_connect((gpointer) item, "activate",
-		G_CALLBACK(on_hidden_files_clicked), NULL);
+	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_hidden_files_clicked), NULL);
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -338,7 +427,7 @@ static GtkWidget *create_popup_menu()
 static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
-		open_selected_files();
+		open_selected_files(NULL, NULL);
 	else
 	if (event->button == 3)
 	{
@@ -369,13 +458,26 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		|| event->keyval == GDK_ISO_Enter
 		|| event->keyval == GDK_KP_Enter
 		|| event->keyval == GDK_space)
-		open_selected_files();
+		open_selected_files(NULL, NULL);
 
 	if ((event->keyval == GDK_Up ||
 		event->keyval == GDK_KP_Up) &&
 		(event->state & GDK_MOD1_MASK))	// FIXME: Alt-Up doesn't seem to work!
 		on_go_up();
 	return FALSE;
+}
+
+
+static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
+{
+	gchar *new_dir = (gchar*) gtk_entry_get_text(entry);
+	if (NZV(new_dir))
+		new_dir = utils->get_locale_from_utf8(new_dir);
+	else
+		new_dir = g_strdup(g_get_home_dir());
+
+	setptr(current_dir, new_dir);
+	refresh();
 }
 
 
@@ -457,17 +559,29 @@ static GtkWidget *make_toolbar()
 }
 
 
+#define CHECK_READ_SETTING(var, error, tmp) \
+	if ((error) != NULL) \
+	{ \
+		g_error_free((error)); \
+		(error) = NULL; \
+	} \
+	else \
+		(var) = (tmp);
+
 void init(GeanyData *data)
 {
 	GtkWidget *scrollwin, *toolbar;
+	GKeyFile *config = g_key_file_new();
+	GError *error = NULL;
+	gboolean tmp;
 
 	file_view_vbox = gtk_vbox_new(FALSE, 0);
 	toolbar = make_toolbar();
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), toolbar, FALSE, FALSE, 0);
 
 	path_entry = gtk_entry_new();
-	gtk_editable_set_editable(GTK_EDITABLE(path_entry), FALSE);
 	gtk_box_pack_start(GTK_BOX(file_view_vbox), path_entry, FALSE, FALSE, 2);
+	g_signal_connect(G_OBJECT(path_entry), "activate", G_CALLBACK(on_path_entry_activate), NULL);
 
 	file_view = gtk_tree_view_new();
 	prepare_file_view();
@@ -482,10 +596,114 @@ void init(GeanyData *data)
 	gtk_widget_show_all(file_view_vbox);
 	gtk_notebook_append_page(GTK_NOTEBOOK(app->treeview_notebook), file_view_vbox,
 		gtk_label_new(_("Files")));
+
+	config_file = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", G_DIR_SEPARATOR_S,
+		"filebrowser", G_DIR_SEPARATOR_S, "filebrowser.conf", NULL);
+	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+	open_cmd = g_key_file_get_string(config, "filebrowser", "open_command", &error);
+	if (error != NULL)
+	{
+		open_cmd = g_strdup("nautilus \"%d\"");
+		g_error_free(error);
+		error = NULL;
+	}
+	tmp = g_key_file_get_boolean(config, "filebrowser", "show_hidden_files", &error);
+	CHECK_READ_SETTING(show_hidden_files, error, tmp);
+	tmp = g_key_file_get_boolean(config, "filebrowser", "hide_object_files", &error);
+	CHECK_READ_SETTING(hide_object_files, error, tmp);
+
+	g_key_file_free(config);
+}
+
+
+void configure(GtkWidget *parent)
+{
+	GtkWidget *dialog, *label, *entry, *checkbox_of, *checkbox_hf, *vbox;
+	GtkTooltips *tooltips = gtk_tooltips_new();
+
+	dialog = gtk_dialog_new_with_buttons(_("File Browser"),
+		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	vbox = ui->dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_box_set_spacing(GTK_BOX(vbox), 6);
+
+	label = gtk_label_new("External open command:");
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_container_add(GTK_CONTAINER(vbox), label);
+
+	entry = gtk_entry_new();
+	gtk_widget_show(entry);
+	if (open_cmd != NULL)
+		gtk_entry_set_text(GTK_ENTRY(entry), open_cmd);
+	gtk_tooltips_set_tip(tooltips, entry,
+		_("The command to execute when using \"Open with\". You can use %f and %d wildcards.\n"
+		  "%f will be replaced with the filename including full path\n"
+		  "%d will be replaced with the path name of the selected file without the filename"),
+		  NULL);
+	gtk_container_add(GTK_CONTAINER(vbox), entry);
+
+	checkbox_hf = gtk_check_button_new_with_label(_("Show hidden files"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_hf), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_hf), show_hidden_files);
+	gtk_box_pack_start(GTK_BOX(vbox), checkbox_hf, FALSE, FALSE, 5);
+
+	checkbox_of = gtk_check_button_new_with_label(_("Hide object files"));
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_of), FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_of), hide_object_files);
+	gtk_tooltips_set_tip(tooltips, checkbox_of,
+		_("Don't show generated object files in the file browser, this includes "
+		  "*.o, *.obj. *.so, *.dll, *.a, *.lib"),
+		  NULL);
+	gtk_box_pack_start(GTK_BOX(vbox), checkbox_of, FALSE, FALSE, 5);
+
+
+	gtk_widget_show_all(vbox);
+
+	// run the dialog and check for the response code
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		GKeyFile *config = g_key_file_new();
+		gchar *data;
+		gchar *config_dir = g_path_get_dirname(config_file);
+
+		g_free(open_cmd);
+		open_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
+		show_hidden_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_hf));
+		hide_object_files = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_of));
+
+		g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
+
+		g_key_file_set_string(config, "filebrowser", "open_command", open_cmd);
+		g_key_file_set_boolean(config, "filebrowser", "show_hidden_files", show_hidden_files);
+		g_key_file_set_boolean(config, "filebrowser", "hide_object_files", hide_object_files);
+
+		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils->mkdir(config_dir, TRUE) != 0)
+		{
+			dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+				_("Plugin configuration directory could not be created."));
+		}
+		else
+		{
+			// write config to file
+			data = g_key_file_to_data(config, NULL, NULL);
+			utils->write_file(config_file, data);
+			g_free(data);
+		}
+
+		// apply the changes
+		refresh();
+
+		g_free(config_dir);
+		g_key_file_free(config);
+	}
+	gtk_widget_destroy(dialog);
 }
 
 
 void cleanup()
 {
+	g_free(config_file);
+	g_free(open_cmd);
 	gtk_widget_destroy(file_view_vbox);
 }

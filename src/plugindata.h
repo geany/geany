@@ -93,7 +93,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 33;
+static const gint api_version = 34;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -195,6 +195,7 @@ typedef struct GeanyData
 	struct EncodingFuncs	*encoding;
 	struct KeybindingFuncs	*keybindings;
 	struct TagManagerFuncs	*tm;
+	struct SearchFuncs		*search;
 }
 GeanyData;
 
@@ -335,6 +336,13 @@ typedef struct KeybindingFuncs
 	void		(*send_command) (gint cmd_id);
 }
 KeybindingFuncs;
+
+
+typedef struct SearchFuncs
+{
+	void		(*show_find_in_files_dialog) (const gchar *dir);
+}
+SearchFuncs;
 
 
 typedef struct TagManagerFuncs

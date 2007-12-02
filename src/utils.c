@@ -1039,12 +1039,12 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 
 /* Get directory from current file in the notebook.
  * Returns dir string that should be freed or NULL, depending on whether current file is valid.
- * (thanks to Nick Treleaven for this patch) */
+ * Returned string is in UTF-8 encoding */
 gchar *utils_get_current_file_dir()
 {
 	gint cur_idx = document_get_cur_idx();
 
-	if (cur_idx >= 0 && doc_list[cur_idx].is_valid) // if valid page found
+	if (DOC_IDX_VALID(cur_idx)) // if valid page found
 	{
 		// get current filename
 		const gchar *cur_fname = doc_list[cur_idx].file_name;
