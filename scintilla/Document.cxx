@@ -13,7 +13,6 @@
 #include "Platform.h"
 
 #include "Scintilla.h"
-#include "SVector.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
@@ -113,7 +112,6 @@ void Document::SetSavePoint() {
 int Document::AddMark(int line, int markerNum) {
 	int prev = cb.AddMark(line, markerNum);
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
-	mh.line = line;
 	NotifyModified(mh);
 	return prev;
 }
@@ -124,14 +122,12 @@ void Document::AddMarkSet(int line, int valueSet) {
 		if (m & 1)
 			cb.AddMark(line, i);
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
-	mh.line = line;
 	NotifyModified(mh);
 }
 
 void Document::DeleteMark(int line, int markerNum) {
 	cb.DeleteMark(line, markerNum);
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
-	mh.line = line;
 	NotifyModified(mh);
 }
 
@@ -149,11 +145,11 @@ void Document::DeleteAllMarks(int markerNum) {
 	NotifyModified(mh);
 }
 
-int Document::LineStart(int line) {
+int Document::LineStart(int line) const {
 	return cb.LineStart(line);
 }
 
-int Document::LineEnd(int line) {
+int Document::LineEnd(int line) const {
 	if (line == LinesTotal() - 1) {
 		return LineStart(line + 1);
 	} else {
@@ -191,8 +187,7 @@ int Document::SetLevel(int line, int level) {
 	int prev = cb.SetLevel(line, level);
 	if (prev != level) {
 		DocModification mh(SC_MOD_CHANGEFOLD | SC_MOD_CHANGEMARKER,
-		                   LineStart(line), 0, 0, 0);
-		mh.line = line;
+		                   LineStart(line), 0, 0, 0, line);
 		mh.foldLevelNow = level;
 		mh.foldLevelPrev = prev;
 		NotifyModified(mh);
@@ -292,6 +287,55 @@ int Document::LenChar(int pos) {
 	}
 }
 
+static bool IsTrailByte(int ch) {
+	return (ch >= 0x80) && (ch < (0x80 + 0x40));
+}
+
+static int BytesFromLead(int leadByte) {
+	if (leadByte > 0xF4) {
+		// Characters longer than 4 bytes not possible in current UTF-8
+		return 0;
+	} else if (leadByte >= 0xF0) {
+		return 4;
+	} else if (leadByte >= 0xE0) {
+		return 3;
+	} else if (leadByte >= 0xC2) {
+		return 2;
+	}
+	return 0;
+}
+
+bool Document::InGoodUTF8(int pos, int &start, int &end) {
+	int lead = pos;
+	while ((lead>0) && (pos-lead < 4) && IsTrailByte(static_cast<unsigned char>(cb.CharAt(lead-1))))
+		lead--;
+	start = 0;
+	if (lead > 0) {
+		start = lead-1;
+	}
+	int leadByte = static_cast<unsigned char>(cb.CharAt(start));
+	int bytes = BytesFromLead(leadByte);
+	if (bytes == 0) {
+		return false;
+	} else {
+		int trailBytes = bytes - 1;
+		int len = pos - lead + 1;
+		if (len > trailBytes)
+			// pos too far from lead
+			return false;
+		// Check that there are enough trails for this lead
+		int trail = pos + 1;
+		while ((trail-lead<trailBytes) && (trail < Length())) {
+			if (!IsTrailByte(static_cast<unsigned char>(cb.CharAt(trail)))) {
+				return false;
+			}
+			trail++;
+		}
+		end = start + bytes;
+		return true;
+	}
+}
+
 // Normalise a position so that it is not halfway through a two byte character.
 // This can occur in two situations -
 // When lines are terminated with \r\n pairs which should be treated as one character.
@@ -318,13 +362,14 @@ int Document::MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd) {
 	if (dbcsCodePage) {
 		if (SC_CP_UTF8 == dbcsCodePage) {
 			unsigned char ch = static_cast<unsigned char>(cb.CharAt(pos));
-			while ((pos > 0) && (pos < Length()) && (ch >= 0x80) && (ch < (0x80 + 0x40))) {
-				// ch is a trail byte
+			int startUTF = pos;
+			int endUTF = pos;
+			if (IsTrailByte(ch) && InGoodUTF8(pos, startUTF, endUTF)) {
+				// ch is a trail byte within a UTF-8 character
 				if (moveDir > 0)
-					pos++;
+					pos = endUTF;
 				else
-					pos--;
-				ch = static_cast<unsigned char>(cb.CharAt(pos));
+					pos = startUTF;
 			}
 		} else {
 			// Anchor DBCS calculations at start of line because start of line can
@@ -652,7 +697,7 @@ void Document::SetLineIndentation(int line, int indent) {
 	}
 }
 
-int Document::GetLineIndentPosition(int line) {
+int Document::GetLineIndentPosition(int line) const {
 	if (line < 0)
 		return 0;
 	int pos = LineStart(line);
@@ -793,7 +838,7 @@ void Document::ConvertLineEnds(int eolModeSet) {
 	EndUndoAction();
 }
 
-bool Document::IsWhiteLine(int line) {
+bool Document::IsWhiteLine(int line) const {
 	int currentChar = LineStart(line);
 	int endLine = LineEnd(line);
 	while (currentChar < endLine) {
@@ -1238,7 +1283,7 @@ const char *Document::SubstituteByPosition(const char *text, int *length) {
 	return substituted;
 }
 
-int Document::LinesTotal() {
+int Document::LinesTotal() const {
 	return cb.Lines();
 }
 
@@ -1271,11 +1316,7 @@ void Document::SetCharClasses(const unsigned char *chars, CharClassify::cc newCh
 
 void Document::SetStylingBits(int bits) {
 	stylingBits = bits;
-	stylingBitsMask = 0;
-	for (int bit = 0; bit < stylingBits; bit++) {
-		stylingBitsMask <<= 1;
-		stylingBitsMask |= 1;
-	}
+	stylingBitsMask = (1 << stylingBits) - 1;
 }
 
 void Document::StartStyling(int position, char mask) {
@@ -1339,11 +1380,17 @@ void Document::EnsureStyledTo(int pos) {
 	}
 }
 
-void Document::IncrementStyleClock() {
-	styleClock++;
-	if (styleClock > 0x100000) {
-		styleClock = 0;
+int Document::SetLineState(int line, int state) { 
+	int statePrevious = cb.SetLineState(line, state);
+	if (state != statePrevious) {
+		DocModification mh(SC_MOD_CHANGELINESTATE, 0, 0, 0, 0, line);
+		NotifyModified(mh);
 	}
+	return statePrevious;
+}
+
+void Document::IncrementStyleClock() {
+	styleClock = (styleClock + 1) % 0x100000;
 }
 
 void Document::DecorationFillRange(int position, int value, int fillLength) {
@@ -1411,6 +1458,11 @@ void Document::NotifySavePoint(bool atSavePoint) {
 }
 
 void Document::NotifyModified(DocModification mh) {
+	if (mh.modificationType & SC_MOD_INSERTTEXT) {
+		decorations.InsertSpace(mh.position, mh.length);
+	} else if (mh.modificationType & SC_MOD_DELETETEXT) {
+		decorations.DeleteRange(mh.position, mh.length);
+	}
 	for (int i = 0; i < lenWatchers; i++) {
 		watchers[i].watcher->NotifyModified(this, mh, watchers[i].userData);
 	}

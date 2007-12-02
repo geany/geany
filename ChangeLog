@@ -7,6 +7,7 @@
    Make path entry of filebrowser plugin editable.
    Add "Open with" and "Find in Files" popup menu items to filebrowser
    plugin and add configuration dialog.
+ * scintilla/*, scintilla/include/*: Updated Scintilla to version 1.75.
 
 
 2007-12-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

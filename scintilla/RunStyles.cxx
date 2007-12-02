@@ -151,6 +151,11 @@ bool RunStyles::FillRange(int &position, int value, int &fillLength) {
 	return true;
 }
 
+void RunStyles::SetValueAt(int position, int value) {
+	int len = 1;
+	FillRange(position, value, len);
+}
+
 void RunStyles::InsertSpace(int position, int insertLength) {
 	int runStart = RunFromPosition(position);
 	if (starts->PositionFromPartition(runStart) == position) {

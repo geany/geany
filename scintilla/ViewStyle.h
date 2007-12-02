@@ -38,6 +38,8 @@ public:
 	const char *Save(const char *name);
 };
 
+enum IndentView {ivNone, ivReal, ivLookForward, ivLookBoth};
+
 enum WhiteSpaceVisibility {wsInvisible=0, wsVisibleAlways=1, wsVisibleAfterIndent=2};
 
 /**
@@ -45,7 +47,8 @@ enum WhiteSpaceVisibility {wsInvisible=0, wsVisibleAlways=1, wsVisibleAfterInden
 class ViewStyle {
 public:
 	FontNames fontNames;
-	Style styles[STYLE_MAX + 1];
+	size_t stylesSize;
+	Style *styles;
 	LineMarker markers[MARKER_MAX + 1];
 	Indicator indicators[INDIC_MAX + 1];
 	int lineHeight;
@@ -86,7 +89,7 @@ public:
 	int fixedColumnWidth;
 	int zoomLevel;
 	WhiteSpaceVisibility viewWhitespace;
-	bool viewIndentationGuides;
+	IndentView viewIndentationGuides;
 	bool viewEOL;
 	bool showMarkedLines;
 	ColourPair caretcolour;
@@ -103,9 +106,11 @@ public:
 	ViewStyle();
 	ViewStyle(const ViewStyle &source);
 	~ViewStyle();
-	void Init();
+	void Init(size_t stylesSize_=64);
 	void RefreshColourPalette(Palette &pal, bool want);
 	void Refresh(Surface &surface);
+	void AllocStyles(size_t sizeNew);
+	void EnsureStyle(size_t index);
 	void ResetDefaultStyle();
 	void ClearStyles();
 	void SetStyleFontName(int styleIndex, const char *name);

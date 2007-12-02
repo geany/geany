@@ -1870,6 +1870,34 @@ void Window::SetTitle(const char *s) {
 	gtk_window_set_title(GTK_WINDOW(id), s);
 }
 
+/* Returns rectangle of monitor pt is on, both rect and pt are in Window's
+   gdk window coordinates */
+PRectangle Window::GetMonitorRect(Point pt) {
+	gint x_offset, y_offset;
+	pt = pt;
+
+	gdk_window_get_origin(PWidget(id)->window, &x_offset, &y_offset);
+
+// gtk 2.2+
+#if GTK_MAJOR_VERSION > 2 || (GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 2)
+	{
+		GdkScreen* screen;
+		gint monitor_num;
+		GdkRectangle rect;
+
+		screen = gtk_widget_get_screen(PWidget(id));
+		monitor_num = gdk_screen_get_monitor_at_point(screen, pt.x + x_offset, pt.y + y_offset);
+		gdk_screen_get_monitor_geometry(screen, monitor_num, &rect);
+		rect.x -= x_offset;
+		rect.y -= y_offset;
+		return PRectangle(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
+	}
+#else
+	return PRectangle(-x_offset, -y_offset, (-x_offset) + gdk_screen_width(),
+	                  (-y_offset) + gdk_screen_height());
+#endif
+}
+
 struct ListImage {
 	const char *xpm_data;
 #if GTK_MAJOR_VERSION < 2

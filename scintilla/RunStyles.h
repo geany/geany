@@ -30,6 +30,7 @@ public:
 	int EndRun(int position);
 	// Returns true if some values may have changed
 	bool FillRange(int &position, int value, int &fillLength);
+	void SetValueAt(int position, int value);
 	void InsertSpace(int position, int insertLength);
 	void DeleteAll();
 	void DeleteRange(int position, int deleteLength);

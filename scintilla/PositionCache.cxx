@@ -14,13 +14,12 @@
 
 #include "Scintilla.h"
 
-#include "ContractionState.h"
-#include "SVector.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
+#include "RunStyles.h"
+#include "ContractionState.h"
 #include "CellBuffer.h"
 #include "KeyMap.h"
-#include "RunStyles.h"
 #include "Indicator.h"
 #include "XPM.h"
 #include "LineMarker.h"
@@ -124,6 +123,11 @@ int LineLayout::LineLastVisible(int line) const {
 	} else {
 		return lineStarts[line+1];
 	}
+}
+
+bool LineLayout::InLine(int offset, int line) const {
+	return ((offset >= LineStart(line)) && (offset < LineStart(line + 1)) ||
+		((offset == numCharsInLine) && (line == (lines-1))));
 }
 
 void LineLayout::SetLineStart(int line, int start) {
@@ -341,12 +345,23 @@ void LineLayoutCache::Dispose(LineLayout *ll) {
 }
 
 void BreakFinder::Insert(int val) {
+	// Expand if needed
+	if (saeLen >= saeSize) {
+		saeSize *= 2;
+		int *selAndEdgeNew = new int[saeSize];
+		for (unsigned int j = 0; j<saeLen; j++) {
+			selAndEdgeNew[j] = selAndEdge[j];
+		}
+		delete []selAndEdge;
+		selAndEdge = selAndEdgeNew;
+	}
+
 	if (val >= nextBreak) {
 		for (unsigned int j = 0; j<saeLen; j++) {
 			if (val == selAndEdge[j]) {
 				return;
 			} if (val < selAndEdge[j]) {
-				for (unsigned int k = saeLen; j>k; k--) {
+				for (unsigned int k = saeLen; k>j; k--) {
 					selAndEdge[k] = selAndEdge[k-1];
 				}
 				saeLen++;
@@ -359,17 +374,32 @@ void BreakFinder::Insert(int val) {
 	}
 }
 
-BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_, int xStart) :
+extern bool BadUTF(const char *s, int len, int &trailBytes);
+
+static int NextBadU(const char *s, int p, int len, int &trailBytes) {
+	while (p < len) {
+		p++;
+		if (BadUTF(s + p, len - p, trailBytes))
+			return p;
+	}
+	return -1;
+}
+
+BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_, bool utf8_, int xStart) :
 	ll(ll_),
 	lineStart(lineStart_),
 	lineEnd(lineEnd_),
 	posLineStart(posLineStart_),
+	utf8(utf8_),
 	nextBreak(lineStart_),
+	saeSize(0),
 	saeLen(0),
 	saeCurrentPos(0),
 	saeNext(0),
 	subBreak(-1) {
-	for (unsigned int j=0; j < sizeof(selAndEdge) / sizeof(selAndEdge[0]); j++) {
+	saeSize = 8;
+	selAndEdge = new int[saeSize];
+	for (unsigned int j=0; j < saeSize; j++) {
 		selAndEdge[j] = 0;
 	}
 
@@ -388,7 +418,22 @@ BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posL
 
 	Insert(ll->edgeColumn - 1);
 	Insert(lineEnd - 1);
+
+	if (utf8) {
+		int trailBytes=0;
+		for (int pos = -1;;) {
+			pos = NextBadU(ll->chars, pos, lineEnd, trailBytes);
+			if (pos < 0)
+				break;
+			Insert(pos-1);
+			Insert(pos);
+		}
+	}
 	saeNext = (saeLen > 0) ? selAndEdge[0] : -1;
+}
+
+BreakFinder::~BreakFinder() {
+	delete []selAndEdge;
 }
 
 int BreakFinder::First() {

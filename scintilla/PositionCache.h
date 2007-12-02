@@ -59,6 +59,7 @@ public:
 	void Invalidate(validLevel validity_);
 	int LineStart(int line) const;
 	int LineLastVisible(int line) const;
+	bool InLine(int offset, int line) const;
 	void SetLineStart(int line, int start);
 	void SetBracesHighlight(Range rangeLine, Position braces[],
 		char bracesMatchStyle, int xHighlight);
@@ -123,15 +124,18 @@ class BreakFinder {
 	int lineStart;
 	int lineEnd;
 	int posLineStart;
+	bool utf8;
 	int nextBreak;
-	int selAndEdge[5];
+	int *selAndEdge;
+	unsigned int saeSize;
 	unsigned int saeLen;
 	unsigned int saeCurrentPos;
 	int saeNext;
 	int subBreak;
 	void Insert(int val);
 public:
-	BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_, int xStart);
+	BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_, bool utf8_, int xStart);
+	~BreakFinder();
 	int First();
 	int Next();
 };

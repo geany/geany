@@ -159,7 +159,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define STYLE_INDENTGUIDE 37
 #define STYLE_CALLTIP 38
 #define STYLE_LASTPREDEFINED 39
-#define STYLE_MAX 127
+#define STYLE_MAX 255
 #define SC_CHARSET_ANSI 0
 #define SC_CHARSET_DEFAULT 1
 #define SC_CHARSET_BALTIC 186
@@ -298,6 +298,10 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_GETCOLUMN 2129
 #define SCI_SETHSCROLLBAR 2130
 #define SCI_GETHSCROLLBAR 2131
+#define SC_IV_NONE 0
+#define SC_IV_REAL 1
+#define SC_IV_LOOKFORWARD 2
+#define SC_IV_LOOKBOTH 3
 #define SCI_SETINDENTATIONGUIDES 2132
 #define SCI_GETINDENTATIONGUIDES 2133
 #define SCI_SETHIGHLIGHTGUIDE 2134
@@ -448,6 +452,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_GETLAYOUTCACHE 2273
 #define SCI_SETSCROLLWIDTH 2274
 #define SCI_GETSCROLLWIDTH 2275
+#define SCI_SETSCROLLWIDTHTRACKING 2516
+#define SCI_GETSCROLLWIDTHTRACKING 2517
 #define SCI_TEXTWIDTH 2276
 #define SCI_SETENDATLASTLINE 2277
 #define SCI_GETENDATLASTLINE 2278
@@ -689,7 +695,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SC_MULTILINEUNDOREDO 0x1000
 #define SC_STARTACTION 0x2000
 #define SC_MOD_CHANGEINDICATOR 0x4000
-#define SC_MODEVENTMASKALL 0x6FFF
+#define SC_MOD_CHANGELINESTATE 0x8000
+#define SC_MODEVENTMASKALL 0xFFFF
 #define SCEN_CHANGE 768
 #define SCEN_SETFOCUS 512
 #define SCEN_KILLFOCUS 256

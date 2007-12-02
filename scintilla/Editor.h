@@ -136,6 +136,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int xCaretMargin;	///< Ensure this many pixels visible on both sides of caret
 	bool horizontalScrollBarVisible;
 	int scrollWidth;
+	bool trackLineWidth;
+	int lineWidthMaxSeen;
 	bool verticalScrollBarVisible;
 	bool endAtLastLine;
 	bool caretSticky;
@@ -297,6 +299,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	virtual void UpdateSystemCaret();
 
 	void NeedWrapping(int docLineStart = 0, int docLineEnd = wrapLineLarge);
+	bool WrapOneLine(Surface *surface, int lineToWrap);
 	bool WrapLines(bool fullWrap, int priorityWrapLineStart);
 	void LinesJoin();
 	void LinesSplit(int pixelWidth);
@@ -454,6 +457,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void AddStyledText(char *buffer, int appendLength);
 
 	virtual sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) = 0;
+	void StyleSetMessage(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
+	sptr_t StyleGetMessage(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 
 public:
 	// Public so the COM thunks can access it.

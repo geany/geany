@@ -32,6 +32,24 @@ static bool IsSpaceEquiv(int state) {
 		(state == SCE_C_COMMENTDOCKEYWORDERROR);
 }
 
+// Preconditions: sc.currentPos points to a character after '+' or '-'.
+// The test for pos reaching 0 should be redundant,
+// and is in only for safety measures.
+// Limitation: this code will give the incorrect answer for code like
+// a = b+++/ptn/...
+// Putting a space between the '++' post-inc operator and the '+' binary op
+// fixes this, and is highly recommended for readability anyway.
+static bool FollowsPostfixOperator(StyleContext &sc, Accessor &styler) {
+	int pos = (int) sc.currentPos;
+	while (--pos > 0) {
+		char ch = styler[pos];
+		if (ch == '+' || ch == '-') {
+			return styler[pos - 1] == ch;
+		}
+	}
+	return false;
+}
+
 static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
                             Accessor &styler, bool caseSensitive) {
 
@@ -42,7 +60,8 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 
 	bool stylingWithinPreprocessor = styler.GetPropertyInt("styling.within.preprocessor") != 0;
 
-	CharacterSet setOKBeforeRE(CharacterSet::setNone, "(=,");
+	CharacterSet setOKBeforeRE(CharacterSet::setNone, "([{=,:;!%^&*|?~+-");
+	CharacterSet setCouldBePostOp(CharacterSet::setNone, "+-");
 
 	CharacterSet setDoxygen(CharacterSet::setLower, "$@\\&<>#{}[]");
 
@@ -297,7 +316,8 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 					sc.SetState(SCE_C_COMMENTLINEDOC);
 				else
 					sc.SetState(SCE_C_COMMENTLINE);
-			} else if (sc.ch == '/' && setOKBeforeRE.Contains(chPrevNonWhite)) {
+			} else if (sc.ch == '/' && setOKBeforeRE.Contains(chPrevNonWhite) &&
+				(!setCouldBePostOp.Contains(chPrevNonWhite) || !FollowsPostfixOperator(sc, styler))) {
 				sc.SetState(SCE_C_REGEX);	// JavaScript's RegEx
 			} else if (sc.ch == '\"') {
 				sc.SetState(SCE_C_STRING);
@@ -337,7 +357,7 @@ static bool IsStreamCommentStyle(int style) {
 // Store both the current line's fold level and the next lines in the
 // level store to make it easy to pick up with each increment
 // and to make it possible to fiddle the current level for "} else {".
-static void FoldCppDoc(unsigned int startPos, int length, int initStyle, 
+static void FoldCppDoc(unsigned int startPos, int length, int initStyle,
 					   WordList *[], Accessor &styler) {
 	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
 	bool foldPreprocessor = styler.GetPropertyInt("fold.preprocessor") != 0;
