@@ -1,5 +1,5 @@
 /*
-*   $Id: lregex.c 576 2007-06-30 04:16:23Z elliotth $
+*   $Id$
 *
 *   Copyright (c) 2000-2003, Darren Hiebert
 *

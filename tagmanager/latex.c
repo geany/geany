@@ -1,5 +1,5 @@
 /*
- *   $Id: tex.c 283 2006-04-27 22:52:09Z eht16 $
+ *   $Id$
  *
  *   Copyright (c) 2000-2001, Jérôme Plût
  *   Copyright (c) 2006, Enrico Tröger

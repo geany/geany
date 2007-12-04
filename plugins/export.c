@@ -19,7 +19,7 @@
  *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *      MA 02110-1301, USA.
  *
- * $Id: demoplugin.c 1749 2007-07-27 10:37:22Z ntrel $
+ * $Id$
  */
 
 /* Export plugin. */
