@@ -1,3 +1,12 @@
+2007-12-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/filebrowser.c:
+   Add ".." path entry to every directory.
+   Fix display of double backslash in path entry on Windows.
+   Add basic path entry auto completion.
+   Print error message when external command fails to execute.
+
+
 2007-12-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/filebrowser.c, plugins/pluginmacros.h, src/callbacks.c,

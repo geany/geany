@@ -49,6 +49,13 @@ PLUGIN_INFO(_("File Browser"), _("Adds a file browser tab to the sidebar."), VER
 	_("The Geany developer team"))
 
 
+// number of characters to skip the root of an absolute path("c:" or "d:" on Windows)
+#ifdef G_OS_WIN32
+# define ROOT_OFFSET 2
+#else
+# define ROOT_OFFSET 0
+#endif
+
 enum
 {
 	FILEVIEW_COLUMN_ICON = 0,
@@ -59,10 +66,11 @@ enum
 static gboolean show_hidden_files = FALSE;
 static gboolean hide_object_files = TRUE;
 
-static GtkWidget	*file_view_vbox;
-static GtkWidget	*file_view;
-static GtkListStore	*file_store;
-static GtkTreeIter	*last_dir_iter = NULL;
+static GtkWidget			*file_view_vbox;
+static GtkWidget			*file_view;
+static GtkListStore			*file_store;
+static GtkTreeIter			*last_dir_iter = NULL;
+static GtkEntryCompletion	*entry_completion = NULL;
 
 static GtkWidget	*path_entry;
 static gchar		*current_dir = NULL;	// in locale-encoding
@@ -139,6 +147,22 @@ static void add_item(const gchar *name)
 }
 
 
+// adds ".." to the start of the file list
+static void add_top_level_entry()
+{
+	GtkTreeIter iter;
+
+	if (utils->str_equal(current_dir + ROOT_OFFSET, G_DIR_SEPARATOR_S))
+		return;
+
+	gtk_list_store_prepend(file_store, &iter);
+	last_dir_iter = gtk_tree_iter_copy(&iter);
+
+	gtk_list_store_set(file_store, &iter,
+		FILEVIEW_COLUMN_ICON, GTK_STOCK_DIRECTORY, FILEVIEW_COLUMN_NAME, "..", -1);
+}
+
+
 static void clear()
 {
 	gtk_list_store_clear(file_store);
@@ -169,10 +193,12 @@ static void refresh()
 	list = utils->get_file_list(current_dir, NULL, NULL);
 	if (list != NULL)
 	{
+		add_top_level_entry();
 		g_slist_foreach(list, (GFunc) add_item, NULL);
 		g_slist_foreach(list, (GFunc) g_free, NULL);
 		g_slist_free(list);
 	}
+   	gtk_entry_completion_set_model(entry_completion, GTK_TREE_MODEL(file_store));
 }
 
 
@@ -219,6 +245,14 @@ static void on_current_path()
 }
 
 
+static void on_go_up()
+{
+	// remove the highest directory part (which becomes the basename of current_dir)
+	setptr(current_dir, g_path_get_dirname(current_dir));
+	refresh();
+}
+
+
 static void handle_selection(GList *list, GtkTreeSelection *treesel, gboolean external)
 {
 	GList *item;
@@ -253,22 +287,31 @@ static void handle_selection(GList *list, GtkTreeSelection *treesel, gboolean ex
 	for (item = list; item != NULL; item = g_list_next(item))
 	{
 		gchar *name, *fname, *dir_sep = G_DIR_SEPARATOR_S;
+		gboolean go_up = FALSE;
 
 		treepath = (GtkTreePath*) item->data;
 		gtk_tree_model_get_iter(model, &iter, treepath);
 		gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_NAME, &name, -1);
 
-		if (utils->str_equal(current_dir, G_DIR_SEPARATOR_S)) /// TODO test this on Windows
+		if (utils->str_equal(current_dir + ROOT_OFFSET, G_DIR_SEPARATOR_S))
 			dir_sep = "";
 		setptr(name, utils->get_locale_from_utf8(name));
 		fname = g_strconcat(current_dir, dir_sep, name, NULL);
+		if (utils->str_equal(name, ".."))
+			go_up = TRUE;
 		g_free(name);
 
-		if (external)
+		if (go_up)
+		{
+			g_free(fname);
+			on_go_up();
+		}
+		else if (external)
 		{
 			gchar *cmd;
 			gchar *dir;
 			GString *cmd_str = g_string_new(open_cmd);
+			GError *error= NULL;
 
 			if (! dir_found)
 				dir = g_path_get_dirname(fname);
@@ -280,7 +323,12 @@ static void handle_selection(GList *list, GtkTreeSelection *treesel, gboolean ex
 
 			cmd = g_string_free(cmd_str, FALSE);
 			setptr(cmd, utils->get_locale_from_utf8(cmd));
-			g_spawn_command_line_async(cmd, NULL);
+			if (! g_spawn_command_line_async(cmd, &error))
+			{
+				ui->set_statusbar(TRUE,
+					_("Could not execute external command (%s)."), error->message);
+				g_error_free(error);
+			}
 			g_free(cmd);
 			g_free(dir);
 			g_free(fname);
@@ -444,14 +492,6 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 }
 
 
-static void on_go_up()
-{
-	// remove the highest directory part (which becomes the basename of current_dir)
-	setptr(current_dir, g_path_get_dirname(current_dir));
-	refresh();
-}
-
-
 static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (event->keyval == GDK_Return
@@ -472,7 +512,14 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 {
 	gchar *new_dir = (gchar*) gtk_entry_get_text(entry);
 	if (NZV(new_dir))
+	{
+		if (g_str_has_suffix(new_dir, ".."))
+		{
+			on_go_up();
+			return;
+		}
 		new_dir = utils->get_locale_from_utf8(new_dir);
+	}
 	else
 		new_dir = g_strdup(g_get_home_dir());
 
@@ -559,6 +606,69 @@ static GtkWidget *make_toolbar()
 }
 
 
+static gboolean completion_match_func(GtkEntryCompletion *completion, const gchar *key,
+									  GtkTreeIter *iter, gpointer user_data)
+{
+	gchar *str, *icon;
+	gboolean result = FALSE;
+
+	gtk_tree_model_get(GTK_TREE_MODEL(file_store), iter,
+		FILEVIEW_COLUMN_ICON, &icon, FILEVIEW_COLUMN_NAME, &str, -1);
+
+	if (str != NULL && icon != NULL && utils->str_equal(icon, GTK_STOCK_DIRECTORY) &&
+		! g_str_has_suffix(key, G_DIR_SEPARATOR_S))
+	{
+		// key is something like "/tmp/te" and str is a filename like "test",
+		// so strip the path from key to make them comparable
+		gchar *base_name = g_path_get_basename(key);
+		gchar *str_lowered = g_utf8_strdown(str, -1);
+		result = g_str_has_prefix(str_lowered, base_name);
+		g_free(base_name);
+		g_free(str_lowered);
+	}
+	g_free(str);
+	g_free(icon);
+
+	return result;
+}
+
+
+static gboolean completion_match_selected(GtkEntryCompletion *widget, GtkTreeModel *model,
+										  GtkTreeIter *iter, gpointer user_data)
+{
+	gchar *str;
+	gtk_tree_model_get(model, iter, FILEVIEW_COLUMN_NAME, &str, -1);
+	if (str != NULL)
+	{
+		gchar *text = g_strconcat(current_dir, G_DIR_SEPARATOR_S, str, NULL);
+		gtk_entry_set_text(GTK_ENTRY(path_entry), text);
+		gtk_editable_set_position(GTK_EDITABLE(path_entry), -1);
+		// force change of directory when completion is done
+		on_path_entry_activate(GTK_ENTRY(path_entry), NULL);
+		g_free(text);
+	}
+	g_free(str);
+
+	return TRUE;
+}
+
+
+static void completion_create()
+{
+	entry_completion = gtk_entry_completion_new();
+
+	gtk_entry_completion_set_inline_completion(entry_completion, FALSE);
+	gtk_entry_completion_set_popup_completion(entry_completion, TRUE);
+	gtk_entry_completion_set_text_column(entry_completion, FILEVIEW_COLUMN_NAME);
+	gtk_entry_completion_set_match_func(entry_completion, completion_match_func, NULL, NULL);
+
+	g_signal_connect(entry_completion, "match-selected",
+		G_CALLBACK(completion_match_selected), NULL);
+
+	gtk_entry_set_completion(GTK_ENTRY(path_entry), entry_completion);
+}
+
+
 #define CHECK_READ_SETTING(var, error, tmp) \
 	if ((error) != NULL) \
 	{ \
@@ -585,6 +695,7 @@ void init(GeanyData *data)
 
 	file_view = gtk_tree_view_new();
 	prepare_file_view();
+	completion_create();
 
 	scrollwin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(
@@ -706,4 +817,5 @@ void cleanup()
 	g_free(config_file);
 	g_free(open_cmd);
 	gtk_widget_destroy(file_view_vbox);
+	g_object_unref(G_OBJECT(entry_completion));
 }
