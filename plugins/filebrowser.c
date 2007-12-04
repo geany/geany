@@ -486,7 +486,7 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 
 		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL,
 			event->button, event->time);
-		return TRUE;
+		return FALSE;
 	}
 	return FALSE;
 }

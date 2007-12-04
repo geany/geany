@@ -117,8 +117,6 @@ struct VteFunctions
 	void (*vte_terminal_set_word_chars) (VteTerminal *terminal, const char *spec);
 	void (*vte_terminal_set_mouse_autohide) (VteTerminal *terminal, gboolean setting);
 	void (*vte_terminal_reset) (VteTerminal *terminal, gboolean full, gboolean clear_history);
-	void (*vte_terminal_set_encoding) (VteTerminal *terminal, const char *codeset);
-	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
 	GtkType (*vte_terminal_get_type) (void);
 	void (*vte_terminal_set_scroll_on_output) (VteTerminal *terminal, gboolean scroll);
 	void (*vte_terminal_set_scroll_on_keystroke) (VteTerminal *terminal, gboolean scroll);

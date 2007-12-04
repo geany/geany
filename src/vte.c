@@ -206,7 +206,6 @@ static void create_vte()
 	gtk_widget_set_size_request(GTK_WIDGET(vte), 10, 10);
 	vf->vte_terminal_set_size(VTE_TERMINAL(vte), 30, 1);
 
-	//vf->vte_terminal_set_encoding(VTE_TERMINAL(vte), "UTF-8");
 	vf->vte_terminal_set_mouse_autohide(VTE_TERMINAL(vte), TRUE);
 	vf->vte_terminal_set_word_chars(VTE_TERMINAL(vte), VTE_WORDCHARS);
 
@@ -323,6 +322,7 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 			popup_menu_created = TRUE;
 		}
 
+		gtk_widget_grab_focus(vc->vte);
 		gtk_menu_popup(GTK_MENU(vc->menu), NULL, NULL, NULL, NULL, event->button, event->time);
 	}
 
@@ -337,9 +337,7 @@ static void vte_register_symbols(GModule *mod)
 	g_module_symbol(mod, "vte_terminal_fork_command", (void*)&vf->vte_terminal_fork_command);
 	g_module_symbol(mod, "vte_terminal_set_word_chars", (void*)&vf->vte_terminal_set_word_chars);
 	g_module_symbol(mod, "vte_terminal_set_mouse_autohide", (void*)&vf->vte_terminal_set_mouse_autohide);
-	g_module_symbol(mod, "vte_terminal_set_encoding", (void*)&vf->vte_terminal_set_encoding);
 	g_module_symbol(mod, "vte_terminal_reset", (void*)&vf->vte_terminal_reset);
-	g_module_symbol(mod, "vte_terminal_set_cursor_blinks", (void*)&vf->vte_terminal_set_cursor_blinks);
 	g_module_symbol(mod, "vte_terminal_get_type", (void*)&vf->vte_terminal_get_type);
 	g_module_symbol(mod, "vte_terminal_set_scroll_on_output", (void*)&vf->vte_terminal_set_scroll_on_output);
 	g_module_symbol(mod, "vte_terminal_set_scroll_on_keystroke", (void*)&vf->vte_terminal_set_scroll_on_keystroke);

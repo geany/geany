@@ -5,6 +5,10 @@
    Fix display of double backslash in path entry on Windows.
    Add basic path entry auto completion.
    Print error message when external command fails to execute.
+   Let right-clicks select an item.
+ * src/vte.c, src/vte.h:
+   Don't load unused symbols from library.
+   Grab focus after right-clicked in the VTE widget.
 
 
 2007-12-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
