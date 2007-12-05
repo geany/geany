@@ -1271,7 +1271,7 @@ gboolean document_save_file(gint idx, gboolean force)
 	}
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-	fp = g_fopen(locale_filename, "w");
+	fp = g_fopen(locale_filename, "wb");
 	g_free(locale_filename);
 
 	if (fp == NULL)

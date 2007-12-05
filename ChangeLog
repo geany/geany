@@ -1,3 +1,10 @@
+2007-12-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/document.c: Add "b" flag to fopen when saving files to avoid
+                   broken line ending characters on Windows
+                   (flag was removed by accident, closes #1844405).
+
+
 2007-12-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * plugins/filebrowser.c:
