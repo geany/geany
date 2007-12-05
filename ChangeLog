@@ -3,6 +3,9 @@
  * src/document.c: Add "b" flag to fopen when saving files to avoid
                    broken line ending characters on Windows
                    (flag was removed by accident, closes #1844405).
+ * plugins/filebrowser.c:
+   Improve error message when external command could not be executed.
+   Allow use of external command also for the special ".." item.
 
 
 2007-12-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

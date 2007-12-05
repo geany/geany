@@ -301,14 +301,10 @@ static void handle_selection(GList *list, GtkTreeSelection *treesel, gboolean ex
 			go_up = TRUE;
 		g_free(name);
 
-		if (go_up)
-		{
-			g_free(fname);
-			on_go_up();
-		}
-		else if (external)
+		if (external)
 		{
 			gchar *cmd;
+			gchar *locale_cmd;
 			gchar *dir;
 			GString *cmd_str = g_string_new(open_cmd);
 			GError *error= NULL;
@@ -322,16 +318,26 @@ static void handle_selection(GList *list, GtkTreeSelection *treesel, gboolean ex
 			utils->string_replace_all(cmd_str, "%d", dir);
 
 			cmd = g_string_free(cmd_str, FALSE);
-			setptr(cmd, utils->get_locale_from_utf8(cmd));
-			if (! g_spawn_command_line_async(cmd, &error))
+			locale_cmd = utils->get_locale_from_utf8(cmd);
+			if (! g_spawn_command_line_async(locale_cmd, &error))
 			{
+				gchar *c = strchr(cmd, ' ');
+				if (c != NULL)
+					*c = '\0';
 				ui->set_statusbar(TRUE,
-					_("Could not execute external command (%s)."), error->message);
+					_("Could not execute configured external command '%s' (%s)."),
+					cmd, error->message);
 				g_error_free(error);
 			}
+			g_free(locale_cmd);
 			g_free(cmd);
 			g_free(dir);
 			g_free(fname);
+		}
+		else if (go_up)
+		{
+			g_free(fname);
+			on_go_up();
 		}
 		else if (dir_found)
 		{
