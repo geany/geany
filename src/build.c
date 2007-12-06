@@ -770,7 +770,9 @@ static GPid build_run_cmd(gint idx)
 		gchar *vte_cmd = g_strconcat(RUN_SCRIPT_CMD, "\n", NULL);
 		// change into current directory if it is not done by default
 		if (! vc->follow_path) vte_cwd(doc_list[idx].file_name, TRUE);
-		vte_send_cmd(vte_cmd);
+		if (! vte_send_cmd(vte_cmd))
+			ui_set_statusbar(FALSE,
+		_("Could not execute the file in the VTE because it probably contains a command."));
 
 		// show the VTE
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);

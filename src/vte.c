@@ -47,6 +47,7 @@ VteInfo vte_info;
 
 extern gchar **environ;
 static pid_t pid;
+static gboolean clean = TRUE;
 static GModule *module = NULL;
 static struct VteFunctions *vf;
 static gboolean popup_menu_created = FALSE;
@@ -63,10 +64,12 @@ static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
 static void create_vte();
 static void vte_start(GtkWidget *widget);
 static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
+static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data);
 static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
 static void vte_register_symbols(GModule *module);
 static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *vte_create_popup_menu(void);
+void vte_commit(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data);
 
 
 enum
@@ -213,6 +216,8 @@ static void create_vte()
 	g_signal_connect(G_OBJECT(vte), "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
 	if (! vc->enable_bash_keys)
 		g_signal_connect(G_OBJECT(vte), "event", G_CALLBACK(vte_keypress), NULL);
+	g_signal_connect(G_OBJECT(vte), "key-release-event", G_CALLBACK(vte_keyrelease), NULL);
+	g_signal_connect(G_OBJECT(vte), "commit", G_CALLBACK(vte_commit), NULL);
 	g_signal_connect(G_OBJECT(vte), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 	//g_signal_connect(G_OBJECT(vte), "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 	//g_signal_connect(G_OBJECT(vte), "drag-drop", G_CALLBACK(vte_drag_drop), NULL);
@@ -246,6 +251,18 @@ void vte_close(void)
 }
 
 
+static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	if (event->keyval == GDK_Return ||
+			 event->keyval == GDK_ISO_Enter ||
+			 event->keyval == GDK_KP_Enter)
+	{
+		clean = TRUE; // assume any text on the prompt has been executed when pressing Enter/Return
+	}
+	return FALSE;
+}
+
+
 static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	g_assert(!vc->enable_bash_keys);
@@ -276,6 +293,12 @@ static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer dat
 }
 
 
+void vte_commit(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data)
+{
+	clean = FALSE;
+}
+
+
 static void vte_start(GtkWidget *widget)
 {
 	VteTerminal *vte = VTE_TERMINAL(widget);
@@ -295,6 +318,8 @@ static void vte_start(GtkWidget *widget)
 	}
 	else
 		pid = 0; // use 0 as invalid pid
+
+	clean = TRUE;
 }
 
 
@@ -469,9 +494,18 @@ static GtkWidget *vte_create_popup_menu(void)
 }
 
 
-void vte_send_cmd(const gchar *cmd)
+/* if the command could be executed, TRUE is returned, FALSE otherwise (i.e. there was some text
+ * on the prompt). */
+gboolean vte_send_cmd(const gchar *cmd)
 {
-	vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), cmd, strlen(cmd));
+	if (clean)
+	{
+		vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), cmd, strlen(cmd));
+		clean = TRUE; // vte_terminal_feed_child() also marks the vte as not clean
+		return TRUE;
+	}
+	else
+		return FALSE;
 }
 
 
@@ -530,7 +564,9 @@ void vte_cwd(const gchar *filename, gboolean force)
 			// use g_shell_quote to avoid problems with spaces, '!' or something else in path
 			gchar *quoted_path = g_shell_quote(path);
 			gchar *cmd = g_strconcat("cd ", quoted_path, "\n", NULL);
-			vte_send_cmd(cmd);
+			if (! vte_send_cmd(cmd))
+				ui_set_statusbar(FALSE,
+		_("Could not change the directory in the VTE because it probably contains a command."));
 			g_free(quoted_path);
 			g_free(cmd);
 		}

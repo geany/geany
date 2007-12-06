@@ -1,3 +1,10 @@
+2007-12-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c, src/vte.c, src/vte.h:
+   Prevent execution of commands by Geany if the VTE may contain any
+   text on the prompt (thanks to "Jeff Pohlmeyer for reporting).
+
+
 2007-12-05  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/document.c: Add "b" flag to fopen when saving files to avoid

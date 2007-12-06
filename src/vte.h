@@ -71,7 +71,7 @@ void vte_close(void);
 
 void vte_apply_user_settings(void);
 
-void vte_send_cmd(const gchar *cmd);
+gboolean vte_send_cmd(const gchar *cmd);
 
 const gchar* vte_get_working_directory(void);
 
