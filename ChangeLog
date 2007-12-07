@@ -1,5 +1,11 @@
 2007-12-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
+ * src/project.c, src/ui_utils.c, src/win32.c, src/win32.h:
+   Fix wrong file filters in project-related file dialogs on Windows.
+
+
+2007-12-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
  * doc/geany.html, doc/geany.txt, src/callbacks.c, src/document.c,
    src/document.h, src/encodings.c, src/encodings.h, src/keyfile.c,
    src/main.c:

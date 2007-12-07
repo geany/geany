@@ -71,8 +71,8 @@ typedef struct _PropertyDialogElements
 
 
 static gboolean update_config(const PropertyDialogElements *e);
-static void on_file_save_button_clicked(GtkButton *button, GtkWidget *entry);
-static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry);
+static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElements *e);
+static void on_file_open_button_clicked(GtkButton *button, PropertyDialogElements *e);
 static gboolean close_open_project();
 static gboolean load_config(const gchar *filename);
 static gboolean write_config();
@@ -142,7 +142,7 @@ void project_new()
 	gtk_entry_set_width_chars(GTK_ENTRY(e->file_name), 30);
 	button = gtk_button_new();
 	g_signal_connect((gpointer) button, "clicked",
-				G_CALLBACK(on_file_save_button_clicked), e->file_name);
+				G_CALLBACK(on_file_save_button_clicked), e);
 	image = gtk_image_new_from_stock("gtk-open", GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(button), image);
 	bbox = gtk_hbox_new(FALSE, 6);
@@ -230,7 +230,7 @@ void project_open()
 	if (! close_open_project()) return;
 
 #ifdef G_OS_WIN32
-	file = win32_show_project_open_dialog(_("Open Project"), dir, FALSE);
+	file = win32_show_project_open_dialog(app->window, _("Open Project"), dir, FALSE, TRUE);
 	if (file != NULL)
 	{
 		// try to load the config
@@ -714,14 +714,14 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 #endif
 
 
-static void on_file_save_button_clicked(GtkButton *button, GtkWidget *entry)
+static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElements *e)
 {
 #ifdef G_OS_WIN32
-	gchar *path = win32_show_project_open_dialog(_("Choose Project Filename"),
-						gtk_entry_get_text(GTK_ENTRY(entry)), TRUE);
+	gchar *path = win32_show_project_open_dialog(e->dialog, _("Choose Project Filename"),
+						gtk_entry_get_text(GTK_ENTRY(e->file_name)), TRUE, TRUE);
 	if (path != NULL)
 	{
-		gtk_entry_set_text(GTK_ENTRY(entry), path);
+		gtk_entry_set_text(GTK_ENTRY(e->file_name), path);
 		g_free(path);
 	}
 #else
@@ -738,19 +738,19 @@ static void on_file_save_button_clicked(GtkButton *button, GtkWidget *entry)
 	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
-	run_dialog(dialog, entry);
+	run_dialog(dialog, e->file_name);
 #endif
 }
 
 
-static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry)
+static void on_file_open_button_clicked(GtkButton *button, PropertyDialogElements *e)
 {
 #ifdef G_OS_WIN32
-	gchar *path = win32_show_project_open_dialog(_("Choose Project Run Command"),
-						gtk_entry_get_text(GTK_ENTRY(entry)), FALSE);
+	gchar *path = win32_show_project_open_dialog(e->dialog, _("Choose Project Run Command"),
+						gtk_entry_get_text(GTK_ENTRY(e->run_cmd)), FALSE, FALSE);
 	if (path != NULL)
 	{
-		gtk_entry_set_text(GTK_ENTRY(entry), path);
+		gtk_entry_set_text(GTK_ENTRY(e->run_cmd), path);
 		g_free(path);
 	}
 #else
@@ -767,7 +767,7 @@ static void on_file_open_button_clicked(GtkButton *button, GtkWidget *entry)
 	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
-	run_dialog(dialog, entry);
+	run_dialog(dialog, e->run_cmd);
 #endif
 }
 

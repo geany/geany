@@ -96,20 +96,20 @@ static gchar *win32_get_file_filters()
 }
 
 
-static gchar *win32_get_filters(gboolean exe)
+static gchar *win32_get_filters(gboolean project_files)
 {
 	gchar *string;
 	gint i, len;
 
-	if (exe)
+	if (project_files)
 	{
-		string = g_strconcat(_("Executables"), "\t", "*.exe;*.bat;*.cmd", "\t",
+		string = g_strconcat(_("Geany project files"), "\t", "*." GEANY_PROJECT_EXT, "\t",
 			filetypes[GEANY_FILETYPES_ALL]->title, "\t",
 			filetypes[GEANY_FILETYPES_ALL]->pattern[0], "\t", NULL);
 	}
 	else
 	{
-		string = g_strconcat(_("Geany project files"), "\t", "*." GEANY_PROJECT_EXT, "\t",
+		string = g_strconcat(_("Executables"), "\t", "*.exe;*.bat;*.cmd", "\t",
 			filetypes[GEANY_FILETYPES_ALL]->title, "\t",
 			filetypes[GEANY_FILETYPES_ALL]->pattern[0], "\t", NULL);
 	}
@@ -163,15 +163,19 @@ INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 
 /* Shows a folder selection dialog.
  * The selected folder name is returned. */
-gchar *win32_show_project_folder_dialog(const gchar *title, const gchar *initial_dir)
+gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
+										const gchar *initial_dir)
 {
 	BROWSEINFO bi;
 	LPCITEMIDLIST pidl;
 	gchar *fname = g_malloc(MAX_PATH);
 	gchar *dir = get_dir(initial_dir);
 
+	if (parent == NULL)
+		parent = app->window;
+
 	memset(&bi, 0, sizeof bi);
-	bi.hwndOwner = GDK_WINDOW_HWND(app->window->window);
+	bi.hwndOwner = GDK_WINDOW_HWND(parent->window);
 	bi.pidlRoot = NULL;
 	bi.lpszTitle = title;
 	bi.lpfn = BrowseCallbackProc;
@@ -194,16 +198,23 @@ gchar *win32_show_project_folder_dialog(const gchar *title, const gchar *initial
 
 /* Shows a file open dialog.
  * If allow_new_file is set, the file to be opened doesn't have to exist.
- * The selected file name is returned. */
-gchar *win32_show_project_open_dialog(const gchar *title, const gchar *initial_dir, gboolean allow_new_file)
+ * The selected file name is returned.
+ * If project_file_filter is set, the file open dialog will have a file filter for Geany project
+ * files, a filter for executables otherwise. */
+gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
+								      const gchar *initial_dir, gboolean allow_new_file,
+								      gboolean project_file_filter)
 {
 	OPENFILENAME of;
 	gint retval;
 	gchar *fname = g_malloc(2048);
-	gchar *filters = win32_get_filters(FALSE);
+	gchar *filters = win32_get_filters(project_file_filter);
 	gchar *dir = get_dir(initial_dir);
 
 	fname[0] = '\0';
+
+	if (parent == NULL)
+		parent = app->window;
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
@@ -212,7 +223,7 @@ gchar *win32_show_project_open_dialog(const gchar *title, const gchar *initial_d
 #else
 	of.lStructSize = sizeof of;
 #endif
-	of.hwndOwner = GDK_WINDOW_HWND(app->window->window);
+	of.hwndOwner = GDK_WINDOW_HWND(parent->window);
 	of.lpstrFilter = filters;
 
 	of.lpstrCustomFilter = NULL;
@@ -569,7 +580,7 @@ gint win32_message_dialog_unsaved(const gchar *msg)
 
 	if (app->window != NULL)
 		parent_hwnd = GDK_WINDOW_HWND(app->window->window);
-	
+
 	ret = MessageBoxW(parent_hwnd, w_msg, w_title, MB_YESNOCANCEL | MB_ICONQUESTION);
 	switch(ret)
 	{

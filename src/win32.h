@@ -44,14 +44,14 @@ gint win32_message_dialog_unsaved(const gchar *msg);
 /* Just a simple wrapper function to open a browser window */
 void win32_open_browser(const gchar *uri);
 
-/* Shows a file open dialog.
- * If allow_new_file is set, the file to be opened doesn't have to exist.
- * The selected file name is returned. */
-gchar *win32_show_project_open_dialog(const gchar *title, const gchar *initial_dir, gboolean allow_new_file);
+gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
+								      const gchar *initial_dir, gboolean allow_new_file,
+								      gboolean project_file_filter);
 
 /* Shows a folder selection dialog.
  * The selected folder name is returned. */
-gchar *win32_show_project_folder_dialog(const gchar *title, const gchar *initial_dir);
+gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
+										const gchar *initial_dir);
 
 gint win32_check_write_permission(const gchar *dir);
 
