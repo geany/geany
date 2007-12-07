@@ -241,4 +241,6 @@ void document_insert_colour(gint idx, const gchar *colour);
 
 void document_set_use_tabs(gint idx, gboolean use_tabs);
 
+void document_set_line_wrapping(gint idx, gboolean wrap);
+
 #endif

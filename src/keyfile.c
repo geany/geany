@@ -25,6 +25,11 @@
  * geany.conf preferences file loading and saving.
  */
 
+/*
+ * Session file format:
+ * filename_xx=pos;filetype UID;read only;encoding idx;use_tabs;auto_indent;line_wrapping;filename
+ */
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -115,8 +120,15 @@ void configuration_save_session_files(GKeyFile *config)
 			if (ft == NULL)	// can happen when saving a new file when quitting
 				ft = filetypes[GEANY_FILETYPES_ALL];
 			g_snprintf(entry, 13, "FILE_NAME_%d", j);
-			fname = g_strdup_printf("%d:%d:%s", sci_get_current_position(doc_list[idx].sci),
-				ft->uid, doc_list[idx].file_name);
+			fname = g_strdup_printf("%d;%d;%d;%d;%d;%d;%d;%s;",
+				sci_get_current_position(doc_list[idx].sci),
+				ft->uid,
+				doc_list[idx].readonly,
+				encodings_get_idx_from_charset(doc_list[idx].encoding),
+				doc_list[idx].use_tabs,
+				doc_list[idx].auto_indent,
+				doc_list[idx].line_wrapping,
+				doc_list[idx].file_name);
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
 			j++;
@@ -403,7 +415,7 @@ void configuration_load_session_files(GKeyFile *config)
 	gsize len = 0;
 	gboolean have_session_files;
 	gchar entry[14];
-	gchar *tmp_string;
+	gchar **tmp_array;
 	GError *error = NULL;
 
 	session_notebook_page = utils_get_setting_integer(config, "files", "current_page", -1);
@@ -429,14 +441,14 @@ void configuration_load_session_files(GKeyFile *config)
 	while (have_session_files)
 	{
 		g_snprintf(entry, 13, "FILE_NAME_%d", i);
-		tmp_string = g_key_file_get_string(config, "files", entry, &error);
-		if (! tmp_string || error)
+		tmp_array = g_key_file_get_string_list(config, "files", entry, NULL, &error);
+		if (! tmp_array || error)
 		{
 			g_error_free(error);
 			error = NULL;
 			have_session_files = FALSE;
 		}
-		g_ptr_array_add(session_files, tmp_string);
+		g_ptr_array_add(session_files, tmp_array);
 		i++;
 	}
 }
@@ -798,7 +810,7 @@ gboolean configuration_load()
 gboolean configuration_open_files()
 {
 	gint i;
-	guint x, pos, y, len;
+	guint pos;
 	gboolean ret = FALSE, failure = FALSE;
 
 	document_delay_colourise();
@@ -806,51 +818,45 @@ gboolean configuration_open_files()
 	i = prefs.tab_order_ltr ? 0 : (session_files->len - 1);
 	while (TRUE)
 	{
-		gchar *tmp = g_ptr_array_index(session_files, i);
+		gchar **tmp = g_ptr_array_index(session_files, i);
 
-		if (tmp && *tmp)
+		if (tmp != NULL && g_strv_length(tmp) == 8)
 		{
-			const gchar *file;
-			gchar *locale_filename, **array;
-			gint uid = -1;
-			x = 0;
-			y = 0;
+			gchar *locale_filename;
+			gint ft_uid, enc_idx;
+			gboolean ro, use_tabs, auto_indent, line_wrapping;
 
-			// yes it is :, it should be a ;, but now it is too late to change it
-			array = g_strsplit(tmp, ":", 3);
-			len = g_strv_length(array);
-
-			// read position
-			if (len > 0 && array[0]) pos = atoi(array[0]);
-			else pos = 0;
-
-			// read filetype (only if there are more than two fields, otherwise we have the old format)
-			if (len > 2 && array[1])
-			{
-				uid = atoi(array[1]);
-				file = array[2];
-			}
-			else file = array[1];
-
-			// try to get the locale equivalent for the filename, fallback to filename if error
-			locale_filename = utils_get_locale_from_utf8(file);
+			pos = atoi(tmp[0]);
+			ft_uid = atoi(tmp[1]);
+			ro = atoi(tmp[2]);
+			enc_idx = atoi(tmp[3]);
+			use_tabs = atoi(tmp[4]);
+			auto_indent = atoi(tmp[5]);
+			line_wrapping = atoi(tmp[6]);
+			// try to get the locale equivalent for the filename
+			locale_filename = utils_get_locale_from_utf8(tmp[7]);
 
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))
 			{
-				filetype *ft = filetypes_get_from_uid(uid);
-				document_open_file_full(-1, locale_filename, pos, FALSE, ft, NULL);
+				filetype *ft = filetypes_get_from_uid(ft_uid);
+				gint new_idx = document_open_file_full(
+					-1, locale_filename, pos, ro, ft,
+					(enc_idx >= 0 && enc_idx < GEANY_ENCODINGS_MAX) ?
+						encodings[enc_idx].charset : NULL);
+				document_set_use_tabs(new_idx, use_tabs);
+				doc_list[new_idx].auto_indent = auto_indent;
+				document_set_line_wrapping(new_idx, line_wrapping);
 				ret = TRUE;
 			}
 			else
 			{
 				failure = TRUE;
-				geany_debug("Could not find file '%s'.", file);
+				geany_debug("Could not find file '%s'.", tmp[4]);
 			}
 
-			g_strfreev(array);
 			g_free(locale_filename);
 		}
-		g_free(tmp);
+		g_strfreev(tmp);
 
 		if (prefs.tab_order_ltr)
 		{
@@ -875,6 +881,8 @@ gboolean configuration_open_files()
 		// exlicitly allow notebook switch page callback to be called for window title,
 		// encoding settings and so other things
 		main_status.opening_session_files = FALSE;
+		/// TODO if session_notebook_page is equal to the current notebook tab(the last opened)
+		/// the notebook switch page callback isn't triggered and e.g. menu items are not updated
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), session_notebook_page);
 		// reset status to leave in any case with the same state as when entering
 		main_status.opening_session_files = TRUE;

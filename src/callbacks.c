@@ -1005,9 +1005,8 @@ on_line_breaking1_toggled              (GtkCheckMenuItem *checkmenuitem,
 	if (! app->ignore_callback)
 	{
 		gint idx = document_get_cur_idx();
-		if (idx == -1 || ! doc_list[idx].is_valid) return;
-		doc_list[idx].line_wrapping = ! doc_list[idx].line_wrapping;
-		sci_set_lines_wrapped(doc_list[idx].sci, doc_list[idx].line_wrapping);
+		if (! DOC_IDX_VALID(idx)) return;
+		document_set_line_wrapping(idx, ! doc_list[idx].line_wrapping);
 	}
 }
 
@@ -1019,7 +1018,7 @@ on_set_file_readonly1_toggled          (GtkCheckMenuItem *checkmenuitem,
 	if (! app->ignore_callback)
 	{
 		gint idx = document_get_cur_idx();
-		if (idx == -1 || ! doc_list[idx].is_valid) return;
+		if (! DOC_IDX_VALID(idx)) return;
 		doc_list[idx].readonly = ! doc_list[idx].readonly;
 		sci_set_readonly(doc_list[idx].sci, doc_list[idx].readonly);
 		ui_update_tab_status(idx);
@@ -1035,7 +1034,7 @@ on_use_auto_indentation1_toggled       (GtkCheckMenuItem *checkmenuitem,
 	if (! app->ignore_callback)
 	{
 		gint idx = document_get_cur_idx();
-		if (idx == -1 || ! doc_list[idx].is_valid) return;
+		if (! DOC_IDX_VALID(idx)) return;
 		doc_list[idx].auto_indent = ! doc_list[idx].auto_indent;
 	}
 }

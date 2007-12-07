@@ -375,8 +375,8 @@ Geany uses the character conversion capabilities of the GLib.
 Only text files are supported, i.e. opening files which contain
 NUL-bytes may fail. Geany will try to open the file anyway but it is
 likely that the file will be truncated because it can only opened up
-to the first occurrence of the first NUL-byte. All characters after
-this position are lost and are not written when you save the file.
+to the first occurrence of a NUL-byte. All characters after this
+position are lost and are not written when you save the file.
 
 Geany tries to detect the encoding of a file while opening it. It
 might be that the encoding of a file cannot be detected correctly so
@@ -408,6 +408,48 @@ There are different ways to use different encodings in Geany:
   In contrary to the above two options, this will not change or reload
   the current file unless you save it. It is useful when you want to
   change the encoding of the file.
+
+* Specifying the encoding in the file itself
+  As mentioned above, auto detecting the encoding of a file may fail on
+  some encodings. If you know that Geany doesn't open a certain file,
+  you can add a special line to the beginning of the file to force an
+  encoding when opening the file (for details see below).
+
+
+In-file encoding specification
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Geany detects meta tags of HTML files which contain charset information
+like::
+
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-15" />
+
+and the found charset is used when opening the file. This is useful if the
+encoding of the file cannot be detected properly.
+For non-HTML files you can also define a line like::
+
+    /* geany_encoding=ISO-8859-15 */
+
+or::
+
+    # geany_encoding=ISO-8859-15 #
+
+to force an encoding to be used. The used #, /\* and \*/ are only examples
+for filetype-specific comment characters. It doesn't matter which
+characters are around the string " geany_encoding=ISO-8859-15 " as long
+as there is at least one whitespace character before and after this
+string. Whitespace characters are in this case a space or tab character.
+"geany_encoding" must be in lower-case, the charset string is
+case-independent. There must **not** be any whitespace between
+"geany_encoding", the "=" sign and the charset.
+An example to use this could be you have a file with ISO-8859-15
+encoding but Geany constantly detects the file encoding as ISO-8859-1.
+Then you simply add such a line to the file and Geany will open it
+correctly the next time.
+
+.. note::
+    These specifications must be in the first 512 bytes of the file.
+    Anything after the first 512 bytes will not be recognised.
 
 
 Special encoding "None"
@@ -466,10 +508,11 @@ folding support completely in the preferences dialog.
 
 The folding behaviour can be changed with the "Fold/Unfold all children of
 a fold point" option in the preference dialog. If activated, Geany will
-unfold all nested(child) fold points below the current one if they are
-already folded (when clicking on a [+] symbol).
-When clicking on a [-] symbol, Geany will fold all nested(child) fold
-points below the current one if they are unfolded.
+unfold all nested fold points below the current one if they are already
+folded (when clicking on a [+] symbol).
+When clicking on a [-] symbol, Geany will fold all nested fold points
+below the current one if they are unfolded.
+
 The usage of this option can be instantly inverted by pressing the Shift
 key while clicking on a fold symbol. That means, if the "Fold/Unfold all
 children of a fold point" option is enabled, pressing Shift will disable
@@ -2146,8 +2189,9 @@ To insert a function description, the cursor must be inside
 of the function, so that the function name can be determined
 automatically. The description will be positioned correctly one line
 above the function, just check it out. If the cursor is not inside
-of a function or the function name cannot be determined, you cannot
-insert a function description.
+of a function or the function name cannot be determined, the inserted
+function description won't contain the correct function name but "unknown"
+instead.
 
 
 Template metadata
@@ -2412,6 +2456,8 @@ GEANY_MAX_AUTOCOMPLETE_WORDS    How many auto completion suggestions should   30
                                 Geany provide.
 GEANY_MAX_AUTOCOMPLETE_HEIGHT   How many suggestions should be visible in     10
                                 the auto completion list.
+GEANY_MIN_SYMBOLLIST_CHARS      How many characters you need to type to       4
+                                trigger the auto completion list.
 GEANY_PROJECT_EXT               The default filename extension for Geany      geany
                                 project files. It is used when creating new
                                 projects and as filter mask for the project

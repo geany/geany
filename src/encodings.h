@@ -57,7 +57,6 @@ typedef struct
 } GeanyEncoding;
 
 
-
 const GeanyEncoding* encodings_get_from_charset(const gchar *charset);
 const GeanyEncoding* encodings_get_from_index(gint idx);
 
@@ -67,6 +66,7 @@ const gchar* encodings_get_charset(const GeanyEncoding* enc);
 void encodings_select_radio_item(const gchar *charset);
 
 void encodings_init(void);
+void encodings_finalize(void);
 
 gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding);
 
@@ -166,5 +166,7 @@ GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
 
 
 GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, guint *bom_len);
+
+GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset);
 
 #endif

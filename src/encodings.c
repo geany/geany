@@ -42,6 +42,16 @@
 #include "callbacks.h"
 
 
+#ifdef HAVE_REGCOMP
+# include <regex.h>
+// <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+# define PATTERN_HTMLMETA "<meta[ \t\n\r\f]http-equiv[ \t\n\r\f]*=[ \t\n\r\f]*\"content-type\"[ \t\n\r\f]+content[ \t\n\r\f]*=[ \t\n\r\f]*\"text/x?html;[ \t\n\r\f]*charset=([a-z0-9_-]+)\"[ \t\n\r\f]*/?>"
+// " geany_encoding=utf-8 "
+# define PATTERN_GEANY "[\t ]geany_encoding=([a-z0-9-]+)[\t ]"
+// precompiled regexps
+static regex_t pregs[2];
+#endif
+
 
 #define fill(Order, Group, Idx, Charset, Name) \
 		encodings[Idx].idx = Idx; \
@@ -123,6 +133,24 @@ static void init_encodings(void)
 }
 
 
+GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset)
+{
+	gint i;
+
+	if (charset == NULL) return GEANY_ENCODING_UTF_8;
+
+	i = 0;
+	while (i < GEANY_ENCODINGS_MAX)
+	{
+		if (strcmp(charset, encodings[i].charset) == 0)
+			return i;
+
+		++i;
+	}
+	return GEANY_ENCODING_UTF_8;
+}
+
+
 const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 {
 	gint i;
@@ -190,6 +218,68 @@ void encodings_select_radio_item(const gchar *charset)
 }
 
 
+#ifdef HAVE_REGCOMP
+/* Regexp detection of file enconding declared in the file itself.
+ * Idea and parts of code taken from Bluefish, thanks.
+ * regex_compile() is used to compile regular expressions on program init and keep it in memory
+ * for faster access when opening a file. Pre-compiled regexps will be freed on program exit.
+ */
+static void regex_compile(regex_t *preg, const gchar *pattern)
+{
+	gint retval = regcomp(preg, pattern, REG_EXTENDED | REG_ICASE);
+	if (retval != 0)
+	{
+		gchar errmsg[512];
+		regerror(retval, preg, errmsg, 512);
+		geany_debug("regcomp() failed (%s)", errmsg);
+		regfree(preg);
+		return;
+	}
+}
+
+
+static gchar *regex_match(regex_t *preg, const gchar *buffer, gsize size)
+{
+	gint retval;
+	gchar *tmp_buf = NULL;
+	gchar *encoding = NULL;
+	regmatch_t pmatch[10];
+
+	if (buffer == NULL || preg->buffer == NULL)
+		return NULL;
+
+	if (size > 512)
+		tmp_buf = g_strndup(buffer, 512); // scan only the first 512 characters in the buffer
+
+	retval = regexec(preg, (tmp_buf != NULL) ? tmp_buf : buffer, 10, pmatch, 0);
+	if (retval == 0 && pmatch[0].rm_so != -1 && pmatch[1].rm_so != -1)
+	{
+		encoding = g_strndup(&buffer[pmatch[1].rm_so], pmatch[1].rm_eo-pmatch[1].rm_so);
+		geany_debug("Detected encoding by regex search: %s", encoding);
+
+		setptr(encoding, g_utf8_strup(encoding, -1));
+	}
+	g_free(tmp_buf);
+	return encoding;
+}
+#endif
+
+
+void encodings_finalize(void)
+{
+#ifdef HAVE_REGCOMP
+	guint i;
+	for (i = 0; i < G_N_ELEMENTS(pregs); i++)
+	{
+		if (pregs[i].buffer == NULL)
+		{
+			regfree(&pregs[i]);
+		}
+	}
+#endif
+}
+
+
 void encodings_init(void)
 {
 	GtkWidget *item, *menu[2], *submenu, *menu_westeuro, *menu_easteuro, *menu_eastasian, *menu_asian,
@@ -202,6 +292,11 @@ void encodings_init(void)
 	guint i, j, k;
 
 	init_encodings();
+
+#ifdef HAVE_REGCOMP
+	regex_compile(&pregs[0], PATTERN_HTMLMETA);
+	regex_compile(&pregs[1], PATTERN_GEANY);
+#endif
 
 	// create encodings submenu in document menu
 	menu[0] = lookup_widget(app->window, "set_encoding1_menu");
@@ -340,26 +435,48 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gsize size,
 gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_encoding)
 {
 	gchar *locale_charset = NULL;
-	gchar *utf8_content;
+	gchar *regex_charset = NULL;
 	gchar *charset;
-	gboolean check_current = FALSE;
+	gchar *utf8_content;
+	gboolean check_regex = FALSE;
+	gboolean check_locale = FALSE;
 	guint i;
 
+#ifdef HAVE_REGCOMP
+	// first try to read the encoding from the file content
+	for (i = 0; i < G_N_ELEMENTS(pregs) && ! check_regex; i++)
+	{
+		if ((regex_charset = regex_match(&pregs[i], buffer, size)) != NULL)
+			check_regex = TRUE;
+	}
+#endif
+
 	// current locale is not UTF-8, we have to check this charset
-	check_current = ! g_get_charset((const gchar**)&locale_charset);
+	check_locale = ! g_get_charset((const gchar**) &charset);
 
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
-		if (i == (guint) encodings[GEANY_ENCODING_NONE].idx) continue;
+		if (i == (guint) encodings[GEANY_ENCODING_NONE].idx || i == (guint) -1)
+			continue;
 
-		if (check_current)
+		if (check_regex)
 		{
-			check_current = FALSE;
+			check_regex = FALSE;
+			charset = regex_charset;
+			i = -1;
+		}
+		else if (check_locale)
+		{
+			check_locale = FALSE;
 			charset = locale_charset;
 			i = -1;
 		}
 		else
 			charset = encodings[i].charset;
+
+
+		if (charset == NULL)
+			continue;
 
 		geany_debug("Trying to convert %d bytes of data from %s into UTF-8.", size, charset);
 		utf8_content = encodings_convert_to_utf8_from_charset(buffer, size, charset, FALSE);
@@ -370,14 +487,16 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gsize size, gchar **used_e
 			{
 				if (*used_encoding != NULL)
 				{
-					g_free(*used_encoding);
 					geany_debug("%s:%d", __FILE__, __LINE__);
+					g_free(*used_encoding);
 				}
 				*used_encoding = g_strdup(charset);
 			}
+			g_free(regex_charset);
 			return utf8_content;
 		}
 	}
+	g_free(regex_charset);
 
 	return NULL;
 }

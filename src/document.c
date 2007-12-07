@@ -263,6 +263,17 @@ void document_set_use_tabs(gint idx, gboolean use_tabs)
 }
 
 
+void document_set_line_wrapping(gint idx, gboolean wrap)
+{
+	document *doc = &doc_list[idx];
+
+	g_return_if_fail(DOC_IDX_VALID(idx));
+
+	doc->line_wrapping = wrap;
+	sci_set_lines_wrapped(doc->sci, wrap);
+}
+
+
 // Apply just the prefs that can change in the Preferences dialog
 void document_apply_update_prefs(gint idx)
 {

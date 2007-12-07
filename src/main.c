@@ -815,6 +815,7 @@ void main_quit()
 	document_finalize();
 	symbols_finalize();
 	editor_finalize();
+	encodings_finalize();
 
 	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
 	g_free(app->configdir);
