@@ -34,6 +34,8 @@ Some features:
 %install
 %__rm -Rf $RPM_BUILD_ROOT
 %makeinstall
+%__rm -Rf $RPM_BUILD_ROOT%{_datadir}/icons/
+%__rm $RPM_BUILD_ROOT%{_datadir}/pixmaps/%{name}.ico
 
 %clean
 %__rm -Rf $RPM_BUILD_ROOT
@@ -42,8 +44,10 @@ Some features:
 %defattr(-, root, root)
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO THANKS
 %{_bindir}/%{name}
+%{_libdir}/geany/
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/locale/*/LC_MESSAGES/%{name}.mo
 %{_datadir}/pixmaps/%{name}.png
 %{_datadir}/doc/%{name}/
+%{_datadir}/man/man1/%{name}.1.gz

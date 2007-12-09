@@ -1,3 +1,9 @@
+2007-12-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.spec.in: Apply patch from Yura Siamashka and Dominic Hopf
+                  to fix build of rpm package (thanks).
+
+
 2007-12-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/project.c, src/ui_utils.c, src/win32.c, src/win32.h:
