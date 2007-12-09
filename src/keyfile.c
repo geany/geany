@@ -851,7 +851,7 @@ gboolean configuration_open_files()
 			else
 			{
 				failure = TRUE;
-				geany_debug("Could not find file '%s'.", tmp[4]);
+				geany_debug("Could not find file '%s'.", tmp[7]);
 			}
 
 			g_free(locale_filename);

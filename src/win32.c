@@ -424,7 +424,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	gint retval;
 	gchar *fname = g_malloc(512);
 	gchar **field, *filename, *tmp;
-	gchar *filters = win32_get_filters(TRUE);
+	gchar *filters = win32_get_filters(FALSE);
 
 	fname[0] = '\0';
 

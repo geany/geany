@@ -2,6 +2,10 @@
 
  * geany.spec.in: Apply patch from Yura Siamashka and Dominic Hopf
                   to fix build of rpm package (thanks).
+ * src/win32.c: Fix wrong file filters in file dialogs opened in the
+                preferences dialog.
+ * src/keyfile.c: Fix wrong debug display of filenames which could not
+                  be loaded from last session.
 
 
 2007-12-07  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
