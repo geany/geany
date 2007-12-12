@@ -133,7 +133,7 @@ static void prepare_msg_tree_view(void)
 	GtkTreeSelection *selection;
 	PangoFontDescription *pfd;
 
-	// doc idx, line, bg, fg, str
+	// doc idx, line, fg, str
 	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_INT,
 		GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
@@ -346,6 +346,7 @@ on_compiler_treeview_copy_activate     (GtkMenuItem     *menuitem,
 	{
 		case MSG_STATUS:
 		tv = msgwindow.tree_status;
+		str_idx = 0;
 		break;
 
 		case MSG_COMPILER:
@@ -761,7 +762,7 @@ gboolean msgwin_goto_messages_file_line()
 		gint idx, line;
 		gchar *string;
 
-		gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, 4, &string, -1);
+		gtk_tree_model_get(model, &iter, 0, &line, 1, &idx, 3, &string, -1);
 		if (line >= 0 && idx >= 0)
 		{
 			ret = utils_goto_line(idx, line);	// checks valid idx

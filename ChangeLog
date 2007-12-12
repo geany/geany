@@ -5,6 +5,8 @@
    setting the background colour of odd rows of the status and message
    treeviews (closes #1848901).
  * src/vte.c: Enable dragging of text into the VTE.
+ * src/msgwindow.c: Fix crashes when clicking on message window items
+                    introduced with changing rules hints for treeviews.
 
 
 2007-12-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
