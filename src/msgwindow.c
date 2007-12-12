@@ -58,9 +58,6 @@ typedef struct
 	gint file_idx;			// idx of the field where the filename is or -1
 } ParseData;
 
-static const GdkColor dark = {0, 58832, 58832, 58832};
-static const GdkColor white = {0, 65535, 65535, 65535};
-
 MessageWindow msgwindow;
 
 
@@ -109,11 +106,11 @@ static void prepare_status_tree_view(void)
 	GtkTreeViewColumn *column;
 	PangoFontDescription *pfd;
 
-	msgwindow.store_status = gtk_list_store_new(2, GDK_TYPE_COLOR, G_TYPE_STRING);
+	msgwindow.store_status = gtk_list_store_new(1, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_status), GTK_TREE_MODEL(msgwindow.store_status));
 
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(_("Status messages"), renderer, "background-gdk", 0, "text", 1, NULL);
+	column = gtk_tree_view_column_new_with_attributes(_("Status messages"), renderer, "text", 0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_status), column);
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_status), FALSE);
@@ -137,13 +134,13 @@ static void prepare_msg_tree_view(void)
 	PangoFontDescription *pfd;
 
 	// doc idx, line, bg, fg, str
-	msgwindow.store_msg = gtk_list_store_new(5, G_TYPE_INT, G_TYPE_INT,
-		GDK_TYPE_COLOR, GDK_TYPE_COLOR, G_TYPE_STRING);
+	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_INT,
+		GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
-		"background-gdk", 2, "foreground-gdk", 3, "text", 4, NULL);
+		"foreground-gdk", 2, "text", 3, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
@@ -277,14 +274,12 @@ void msgwin_msg_add_fmt(gint msg_color, gint line, gint idx, const gchar *format
 void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 {
 	GtkTreeIter iter;
-	static gint state = 0;
 	const GdkColor *color = get_color(msg_color);
 
 	if (! ui_prefs.msgwindow_visible) msgwin_show_hide(TRUE);
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
-	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2,
-		((state++ % 2) == 0) ? &white : &dark, 3, color, 4, string, -1);
+	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2, color, 3, string, -1);
 
 	gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), TRUE);
 }
@@ -295,7 +290,6 @@ void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 void msgwin_status_add(const gchar *format, ...)
 {
 	GtkTreeIter iter;
-	static gint state = 0;
 	gchar string[512];
 	gchar *statusmsg, *time_str;
 	va_list args;
@@ -314,8 +308,7 @@ void msgwin_status_add(const gchar *format, ...)
 
 	// add message to Status window
 	gtk_list_store_append(msgwindow.store_status, &iter);
-	gtk_list_store_set(msgwindow.store_status, &iter, 0,
-		((state++ % 2) == 0) ? &white : &dark, 1, statusmsg, -1);
+	gtk_list_store_set(msgwindow.store_status, &iter, 0, statusmsg, -1);
 	g_free(statusmsg);
 
 	if (main_status.main_window_realized)

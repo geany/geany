@@ -1223,6 +1223,7 @@ create_window1 (void)
   treeview6 = gtk_tree_view_new ();
   gtk_widget_show (treeview6);
   gtk_container_add (GTK_CONTAINER (scrolledwindow7), treeview6);
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview6), TRUE);
 
   label136 = gtk_label_new (_("Documents"));
   gtk_widget_show (label136);
@@ -1258,6 +1259,7 @@ create_window1 (void)
   gtk_widget_show (treeview3);
   gtk_container_add (GTK_CONTAINER (scrolledwindow4), treeview3);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (treeview3), FALSE);
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview3), TRUE);
 
   notebook_info_label_status = gtk_label_new (_("Status"));
   gtk_widget_show (notebook_info_label_status);
@@ -1286,6 +1288,7 @@ create_window1 (void)
   gtk_widget_show (treeview4);
   gtk_container_add (GTK_CONTAINER (scrolledwindow5), treeview4);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (treeview4), FALSE);
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview4), TRUE);
 
   notebook_info_label_msg = gtk_label_new (_("Messages"));
   gtk_widget_show (notebook_info_label_msg);
@@ -4229,6 +4232,7 @@ create_prefs_dialog (void)
   treeview7 = gtk_tree_view_new ();
   gtk_widget_show (treeview7);
   gtk_container_add (GTK_CONTAINER (scrolledwindow8), treeview7);
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview7), TRUE);
   gtk_tree_view_set_enable_search (GTK_TREE_VIEW (treeview7), FALSE);
 
   alignment10 = gtk_alignment_new (0.5, 0.5, 0.3, 1);
