@@ -70,6 +70,8 @@ static void vte_register_symbols(GModule *module);
 static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *vte_create_popup_menu(void);
 void vte_commit(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data);
+void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y,
+							GtkSelectionData *data, guint info, guint ltime);
 
 
 enum
@@ -78,7 +80,21 @@ enum
 	POPUP_PASTE,
 	POPUP_CHANGEPATH,
 	POPUP_RESTARTTERMINAL,
-	POPUP_PREFERENCES
+	POPUP_PREFERENCES,
+	TARGET_UTF8_STRING = 0,
+	TARGET_TEXT,
+	TARGET_COMPOUND_TEXT,
+	TARGET_STRING,
+	TARGET_TEXT_PLAIN,
+};
+
+static const GtkTargetEntry dnd_targets[] =
+{
+  { "UTF8_STRING", 0, TARGET_UTF8_STRING },
+  { "TEXT", 0, TARGET_TEXT },
+  { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
+  { "STRING", 0, TARGET_STRING },
+  { "text/plain", 0, TARGET_TEXT_PLAIN },
 };
 
 
@@ -212,6 +228,9 @@ static void create_vte()
 	vf->vte_terminal_set_mouse_autohide(VTE_TERMINAL(vte), TRUE);
 	vf->vte_terminal_set_word_chars(VTE_TERMINAL(vte), VTE_WORDCHARS);
 
+    gtk_drag_dest_set(vte, GTK_DEST_DEFAULT_ALL,
+		dnd_targets, G_N_ELEMENTS(dnd_targets), GDK_ACTION_COPY);
+
 	g_signal_connect(G_OBJECT(vte), "child-exited", G_CALLBACK(vte_start), NULL);
 	g_signal_connect(G_OBJECT(vte), "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
 	if (! vc->enable_bash_keys)
@@ -219,8 +238,7 @@ static void create_vte()
 	g_signal_connect(G_OBJECT(vte), "key-release-event", G_CALLBACK(vte_keyrelease), NULL);
 	g_signal_connect(G_OBJECT(vte), "commit", G_CALLBACK(vte_commit), NULL);
 	g_signal_connect(G_OBJECT(vte), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-	//g_signal_connect(G_OBJECT(vte), "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
-	//g_signal_connect(G_OBJECT(vte), "drag-drop", G_CALLBACK(vte_drag_drop), NULL);
+	g_signal_connect(G_OBJECT(vte), "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 
 	vte_start(vte);
 
@@ -574,37 +592,25 @@ void vte_cwd(const gchar *filename, gboolean force)
 	}
 }
 
-/*
-void vte_drag_data_received(GtkWidget *widget, GdkDragContext  *drag_context, gint x, gint y,
-							GtkSelectionData *data, guint info, guint time)
+
+void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y,
+							GtkSelectionData *data, guint info, guint ltime)
 {
-	geany_debug("length: %d, format: %d, action: %d", data->length, data->format, drag_context->action);
-	if ((data->length >= 0) && (data->format == 8))
+	if (info == TARGET_TEXT_PLAIN)
 	{
-		if (drag_context->action == GDK_ACTION_ASK)
-		{
-			gint accept = TRUE;
-			// should I check the incoming data?
-			if (accept)
-				drag_context->action = GDK_ACTION_COPY;
-		}
-		gtk_drag_finish(drag_context, TRUE, FALSE, time);
-		return;
+		if (data->format == 8 && data->length > 0)
+			vf->vte_terminal_feed_child(VTE_TERMINAL(widget),
+				(const gchar*) data->data, data->length);
 	}
-	gtk_drag_finish(drag_context, FALSE, FALSE, time);
+	else
+	{
+		gchar *text = (gchar*) gtk_selection_data_get_text(data);
+		if (NZV(text))
+			vf->vte_terminal_feed_child(VTE_TERMINAL(widget), text, strlen(text));
+		g_free (text);
+	}
+	gtk_drag_finish(drag_context, TRUE, FALSE, ltime);
 }
-
-
-gboolean vte_drag_drop(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y, guint time,
-					   gpointer user_data)
-{
-
-	GdkAtom *atom;
-	gtk_drag_get_data(widget, drag_context, atom, time);
-	geany_debug("%s", GDK_ATOM_TO_POINTER(atom));
-	return TRUE;
-}
-*/
 
 
 void vte_append_preferences_tab()
