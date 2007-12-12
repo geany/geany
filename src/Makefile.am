@@ -25,6 +25,7 @@ SRCS = \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
 	plugins.c plugins.h \
+	prefix.c prefix.h \
 	prefs.c prefs.h \
 	printing.c printing.h \
 	project.c project.h \
@@ -75,8 +76,8 @@ nodist_EXTRA_geany_SOURCES = dummy.cxx
 geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@  $(INTLLIBS)
 
 INCLUDES = \
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\" -DPACKAGE_LIB_DIR=\""$(libdir)"\" \
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
+	-DDATADIR=\""$(datadir)"\" -DLIBDIR=\""$(libdir)"\" \
+	-DLOCALEDIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@
 
 clean-local:

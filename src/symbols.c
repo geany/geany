@@ -34,6 +34,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "prefix.h"
 #include "symbols.h"
 #include "utils.h"
 #include "filetypes.h"
@@ -463,12 +464,16 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 
 	if (icon_theme == NULL)
 	{
+#ifndef G_OS_WIN32
+		gchar *path = g_strconcat(DATADIR, "/icons", NULL);
+#endif
 		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
 		icon_theme = gtk_icon_theme_get_default();
 #ifdef G_OS_WIN32
 		gtk_icon_theme_append_search_path(icon_theme, "share\\icons");
 #else
-		gtk_icon_theme_append_search_path(icon_theme, PACKAGE_DATA_DIR "/icons");
+		gtk_icon_theme_append_search_path(icon_theme, path);
+		g_free(path);
 #endif
 	}
 

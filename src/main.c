@@ -40,6 +40,7 @@
 #endif
 
 #include "main.h"
+#include "prefix.h"
 #include "prefs.h"
 #include "interface.h"
 #include "support.h"
@@ -377,8 +378,8 @@ static void setup_paths()
 
 	g_free(install_dir);
 #else
-	data_dir = g_strdup(PACKAGE_DATA_DIR "/" PACKAGE "/"); // e.g. /usr/share/geany
-	doc_dir = g_strdup(PACKAGE_DATA_DIR "/doc/" PACKAGE "/html/");
+	data_dir = g_strconcat(DATADIR, "/" PACKAGE "/", NULL); // e.g. /usr/share/geany
+	doc_dir = g_strconcat(DATADIR, "/doc/" PACKAGE "/html/", NULL);
 #endif
 
 	// convert path names to locale encoding
@@ -405,7 +406,7 @@ static void locale_init()
 	locale_dir = g_strconcat(install_dir, "\\lib\\locale", NULL);
 	g_free(install_dir);
 #else
-	locale_dir = g_strdup(PACKAGE_LOCALE_DIR);
+	locale_dir = g_strdup(LOCALEDIR);
 #endif
 
 	bindtextdomain(GETTEXT_PACKAGE, locale_dir);

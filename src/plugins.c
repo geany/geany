@@ -33,6 +33,7 @@
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
+#include "prefix.h"
 #include "plugins.h"
 #include "plugindata.h"
 #include "support.h"
@@ -534,13 +535,13 @@ static void load_plugin_paths()
 	path = g_strconcat(app->configdir, G_DIR_SEPARATOR_S, "plugins", NULL);
 	// first load plugins in ~/.geany/plugins/, then in $prefix/lib/geany
 	load_plugins(path);
-#ifdef G_OS_WIN32
 	g_free(path);
+#ifdef G_OS_WIN32
 	path = get_plugin_path();
-	load_plugins(path);
 #else
-	load_plugins(PACKAGE_LIB_DIR G_DIR_SEPARATOR_S "geany");
+	path = g_strconcat(LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
 #endif
+	load_plugins(path);
 
 	g_free(path);
 }
