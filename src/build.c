@@ -1934,11 +1934,41 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 }
 
 
+static gboolean use_html_builtin(gint idx, filetype *ft)
+{
+	gboolean use_builtin = FALSE;
+	if (ft->id == GEANY_FILETYPES_HTML)
+	{
+		// we have a project, check its run_cmd
+		if (app->project != NULL)
+		{
+			if (utils_str_equal(app->project->run_cmd, "builtin"))
+				use_builtin = TRUE;
+		}
+		// no project, check for filetype run_cmd
+		else if (ft->actions->can_exec && utils_str_equal(ft->programs->run_cmd, "builtin"))
+			use_builtin = TRUE;
+	}
+
+	if (use_builtin)
+	{
+		gchar *uri = g_strconcat("file:///", g_path_skip_root(doc_list[idx].file_name), NULL);
+		utils_start_browser(uri);
+		g_free(uri);
+
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 static void
 on_build_execute_activate              (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
+	filetype_id ft_id;
+	filetype *ft;
 
 	if (! DOC_IDX_VALID(idx))
 		return;
@@ -1950,25 +1980,22 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 		return;
 	}
 
-	if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_LATEX)
+	ft_id = FILETYPE_ID(doc_list[idx].file_type);
+	ft = filetypes[ft_id];
+	if (ft_id == GEANY_FILETYPES_LATEX)
 	{	// run LaTeX file
 		if (build_view_tex_file(idx, GPOINTER_TO_INT(user_data)) == (GPid) 0)
 		{
 			ui_set_statusbar(TRUE, _("Failed to execute the view program"));
 		}
 	}
-	else if (FILETYPE_ID(doc_list[idx].file_type) == GEANY_FILETYPES_HTML)
-	{	// run HTML file
-		gchar *uri = g_strconcat("file:///", g_path_skip_root(doc_list[idx].file_name), NULL);
-		utils_start_browser(uri);
-		g_free(uri);
-	}
-	else
+	// use_html_builtin() checks for HTML builtin request and returns FALSE if not
+	else if (! use_html_builtin(idx, ft))
 	{	// run everything else
 
 		// save the file only if the run command uses it
 		if (doc_list[idx].changed &&
-			strstr(doc_list[idx].file_type->programs->run_cmd, "%f") != NULL)
+			strstr(ft->programs->run_cmd, "%f") != NULL)
 				document_save_file(idx, FALSE);
 
 		if (build_run_cmd(idx) == (GPid) 0)
