@@ -3,6 +3,13 @@
  * geany.desktop.in.in:
    Apply patch from Ubuntu package to match FD.o standards
    (thanks to Siegfried-Angel Gevatter Pujals).
+ * plugins/classbuilder.c, plugins/htmlchars.c:
+   Use pluginmacros.h.
+ * src/highlighting.c, src/highlighting.h:
+   Add highlighting_get_style().
+ * plugins/pluginmacros.h, src/plugindata.h, src/plugins.c:
+   Add highlighting_get_style() to the plugin API.
+   Rename DocumentFuncs field in GeanyData struct to avoid name clashes.
 
 
 2007-12-14  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

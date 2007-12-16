@@ -46,17 +46,9 @@ static void styleset_markup(ScintillaObject *sci, gboolean set_keywords);
 
 typedef struct
 {
-	gint	foreground;
-	gint	background;
-	gboolean bold:1;
-	gboolean italic:1;
-} Style;
-
-typedef struct
-{
-	Style	 *styling;		// array of styles, NULL if not used or uninitialised
-	gchar	**keywords;
-	gchar	 *wordchars;	// NULL used for style sets with no styles
+	HighlightingStyle	 *styling;		// array of styles, NULL if not used or uninitialised
+	gchar				**keywords;
+	gchar				 *wordchars;	// NULL used for style sets with no styles
 } StyleSet;
 
 // each filetype has a styleset except GEANY_FILETYPE_ALL
@@ -88,33 +80,25 @@ typedef struct
 
 static struct
 {
-	Style			styling[GCS_MAX];
-	FoldingStyle	folding_style;
-	gboolean		invert_all;
-	gchar			*wordchars;
+	HighlightingStyle	 styling[GCS_MAX];
+	FoldingStyle		 folding_style;
+	gboolean			 invert_all;
+	gchar				*wordchars;
 } common_style_set;
 
 
 // used for default styles
 typedef struct
 {
-	gchar *name;
-	Style *style;
+	gchar				*name;
+	HighlightingStyle	*style;
 } StyleEntry;
 
 
 static void new_style_array(gint file_type_id, gint styling_count)
 {
-	style_sets[file_type_id].styling = g_new0(Style, styling_count);
+	style_sets[file_type_id].styling = g_new0(HighlightingStyle, styling_count);
 }
-
-
-#if 0
-static Style *get_styling(gint file_type_id, gint styling_index)
-{
-	return &style_sets[file_type_id].styling[styling_index];
-}
-#endif
 
 
 static void get_keyfile_keywords(GKeyFile *config, GKeyFile *configh, const gchar *section,
@@ -174,7 +158,7 @@ static gint rotate_rgb(gint color)
 
 
 static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
-		const gchar *key_name, const Style *default_style, Style *style)
+		const gchar *key_name, const HighlightingStyle *default_style, HighlightingStyle *style)
 {
 	gchar **list;
 	gsize len;
@@ -208,7 +192,7 @@ static void get_keyfile_style(GKeyFile *config, GKeyFile *configh,
 static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 				const gchar *section, const gchar *key,
 				const gchar *foreground, const gchar *background, const gchar *bold,
-				Style *style)
+				HighlightingStyle *style)
 {
 	gchar **list;
 	gsize len;
@@ -240,7 +224,7 @@ static void get_keyfile_hex(GKeyFile *config, GKeyFile *configh,
 
 static void get_keyfile_int(GKeyFile *config, GKeyFile *configh, const gchar *section,
 							const gchar *key, gint fdefault_val, gint sdefault_val,
-							Style *style)
+							HighlightingStyle *style)
 {
 	gchar **list;
 	gchar *end1, *end2;
@@ -281,7 +265,7 @@ static guint invert(guint icolour)
 
 static void set_sci_style(ScintillaObject *sci, gint style, gint ft, gint styling_index)
 {
-	Style *style_ptr;
+	HighlightingStyle *style_ptr;
 
 	if (ft == GEANY_FILETYPES_ALL)
 		style_ptr = &common_style_set.styling[styling_index];
@@ -379,7 +363,7 @@ static void styleset_common_init(gint ft_id, GKeyFile *config, GKeyFile *config_
 		"0xc0c0c0", "0xffffff", "true", &common_style_set.styling[GCS_WHITE_SPACE]);
 	{
 		// hack because get_keyfile_int uses a Style struct
-		Style tmp_style;
+		HighlightingStyle tmp_style;
 		get_keyfile_int(config, config_home, "styling", "folding_style",
 			1, 1, &tmp_style);
 		common_style_set.folding_style.marker = tmp_style.foreground;
@@ -582,26 +566,26 @@ apply_filetype_properties(ScintillaObject *sci, gint lexer, filetype_id ft_id)
  * Ideally these would be used as common styling for all compilable programming
  * languages (and perhaps partially used for scripting languages too).
  * Currently only used as default styling for C-like languages. */
-Style gsd_default =		{0x000000, 0xffffff, FALSE, FALSE};
-Style gsd_comment =		{0xd00000, 0xffffff, FALSE, FALSE};
-Style gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
-Style gsd_number =		{0x007f00, 0xffffff, FALSE, FALSE};
-Style gsd_reserved_word =	{0x00007f, 0xffffff, TRUE, FALSE};
-Style gsd_system_word =	{0x991111, 0xffffff, TRUE, FALSE};
-Style gsd_user_word =	{0x0000d0, 0xffffff, TRUE, FALSE};
-Style gsd_string =		{0xff901e, 0xffffff, FALSE, FALSE};
-Style gsd_pragma =		{0x007f7f, 0xffffff, FALSE, FALSE};
-Style gsd_string_eol =	{0x000000, 0xe0c0e0, FALSE, FALSE};
+HighlightingStyle gsd_default =		{0x000000, 0xffffff, FALSE, FALSE};
+HighlightingStyle gsd_comment =		{0xd00000, 0xffffff, FALSE, FALSE};
+HighlightingStyle gsd_comment_doc =	{0x3f5fbf, 0xffffff, TRUE, FALSE};
+HighlightingStyle gsd_number =		{0x007f00, 0xffffff, FALSE, FALSE};
+HighlightingStyle gsd_reserved_word =	{0x00007f, 0xffffff, TRUE, FALSE};
+HighlightingStyle gsd_system_word =	{0x991111, 0xffffff, TRUE, FALSE};
+HighlightingStyle gsd_user_word =	{0x0000d0, 0xffffff, TRUE, FALSE};
+HighlightingStyle gsd_string =		{0xff901e, 0xffffff, FALSE, FALSE};
+HighlightingStyle gsd_pragma =		{0x007f7f, 0xffffff, FALSE, FALSE};
+HighlightingStyle gsd_string_eol =	{0x000000, 0xe0c0e0, FALSE, FALSE};
 
 
 // call new_style_array(filetype_idx, >= 20) before using this.
 static void
 styleset_c_like_init(GKeyFile *config, GKeyFile *config_home, gint filetype_idx)
 {
-	Style uuid = {0x404080, 0xffffff, FALSE, FALSE};
-	Style operator = {0x301010, 0xffffff, FALSE, FALSE};
-	Style verbatim = {0x301010, 0xffffff, FALSE, FALSE};
-	Style regex = {0x105090, 0xffffff, FALSE, FALSE};
+	HighlightingStyle uuid = {0x404080, 0xffffff, FALSE, FALSE};
+	HighlightingStyle operator = {0x301010, 0xffffff, FALSE, FALSE};
+	HighlightingStyle verbatim = {0x301010, 0xffffff, FALSE, FALSE};
+	HighlightingStyle regex = {0x105090, 0xffffff, FALSE, FALSE};
 
 	StyleEntry entries[] =
 	{
@@ -3000,4 +2984,22 @@ void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx)
 		default:
 		styleset_case(GEANY_FILETYPES_ALL,		none);
 	}
+}
+
+
+/* Retrieve a style style_id for the filetype ft_id. If the style was not already initialised
+ * (e.g. by by opening a file of this type), it will be initialised. The returned pointer is
+ * owned by Geany and must not be freed.
+ * style_id is a Scintilla lexer style, see scintilla/SciLexer.h */
+const HighlightingStyle *highlighting_get_style(gint ft_id, gint style_id)
+{
+	if (ft_id < 0 || ft_id > GEANY_MAX_FILE_TYPES)
+		return NULL;
+
+	if (style_sets[ft_id].styling == NULL)
+		filetypes_load_config(ft_id);
+
+	/// TODO style_id might not be the real array index (Scintilla styles are not always synced
+	///	with array indices)
+	return (const HighlightingStyle*) &style_sets[ft_id].styling[style_id];
 }

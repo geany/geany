@@ -30,18 +30,11 @@
 #include "support.h"
 #include "filetypes.h"
 #include "document.h"
+#include "pluginmacros.h"
 
 
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
-
-#define doc_array	geany_data->doc_array
-// can't use document as a macro because it's currently a typename
-#define documents	geany_data->document
-#define scintilla	geany_data->sci
-#define templates	geany_data->templates
-#define utils		geany_data->utils
-#define ui			geany_data->ui
 
 
 VERSION_CHECK(7)
@@ -360,7 +353,7 @@ void show_dialog_create_class(gint type)
 	cc_dlg->class_type = type;
 
 	cc_dlg->dialog = gtk_dialog_new_with_buttons(_("Create Class"),
-			GTK_WINDOW(geany_data->app->window),
+			GTK_WINDOW(app->window),
 			GTK_DIALOG_MODAL,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OK, GTK_RESPONSE_OK,

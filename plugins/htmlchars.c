@@ -28,16 +28,11 @@
 #include "support.h"
 #include "plugindata.h"
 #include "document.h"
+#include "pluginmacros.h"
 
 
 PluginFields	*plugin_fields;
 GeanyData		*geany_data;
-
-#define doc_array	geany_data->doc_array
-// can't use document as a macro because it's currently a typename
-#define documents	geany_data->document
-#define scintilla	geany_data->sci
-#define ui			geany_data->ui
 
 
 VERSION_CHECK(7)
@@ -76,7 +71,7 @@ static void tools_show_dialog_insert_special_chars()
 		GtkWidget *swin, *vbox, *label;
 
 		sc_dialog = gtk_dialog_new_with_buttons(
-					_("Special Characters"), GTK_WINDOW(geany_data->app->window),
+					_("Special Characters"), GTK_WINDOW(app->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					_("_Insert"), GTK_RESPONSE_OK, NULL);
 		vbox = ui->dialog_vbox_new(GTK_DIALOG(sc_dialog));

@@ -93,7 +93,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 34;
+static const gint api_version = 35;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -184,18 +184,19 @@ typedef struct GeanyData
 	struct EditorPrefs	*editor_prefs;
 	struct BuildInfo	*build_info;
 
-	struct DocumentFuncs	*document;
-	struct ScintillaFuncs	*sci;
-	struct TemplateFuncs	*templates;
-	struct UtilsFuncs		*utils;
-	struct UIUtilsFuncs		*ui;
-	struct SupportFuncs		*support;
-	struct DialogFuncs		*dialogs;
-	struct MsgWinFuncs		*msgwindow;
-	struct EncodingFuncs	*encoding;
-	struct KeybindingFuncs	*keybindings;
-	struct TagManagerFuncs	*tm;
-	struct SearchFuncs		*search;
+	struct DocumentFuncs		*documents;
+	struct ScintillaFuncs		*sci;
+	struct TemplateFuncs		*templates;
+	struct UtilsFuncs			*utils;
+	struct UIUtilsFuncs			*ui;
+	struct SupportFuncs			*support;
+	struct DialogFuncs			*dialogs;
+	struct MsgWinFuncs			*msgwindow;
+	struct EncodingFuncs		*encoding;
+	struct KeybindingFuncs		*keybindings;
+	struct TagManagerFuncs		*tm;
+	struct SearchFuncs			*search;
+	struct HighlightingFuncs	*highlighting;
 }
 GeanyData;
 
@@ -205,7 +206,6 @@ typedef GeanyData PluginData;	// for compatibility with API < 7
 /* For more info about these functions, see the main source code.
  * E.g. for GeanyData::document->new_file(), see document_new_file() in document.[hc]. */
 
-struct filetype;
 
 typedef struct DocumentFuncs
 {
@@ -336,6 +336,13 @@ typedef struct KeybindingFuncs
 	void		(*send_command) (gint cmd_id);
 }
 KeybindingFuncs;
+
+
+typedef struct HighlightingFuncs
+{
+	const struct HighlightingStyle* (*get_style) (gint ft_id, gint style_id);
+}
+HighlightingFuncs;
 
 
 typedef struct SearchFuncs

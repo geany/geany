@@ -51,6 +51,7 @@
 #include "build.h"
 #include "encodings.h"
 #include "search.h"
+#include "highlighting.h"
 
 void keybindings_cmd(gint cmd_id);	// don't require keybindings.h enum in plugindata.h
 
@@ -188,6 +189,10 @@ static SearchFuncs search_funcs = {
 	&search_show_find_in_files_dialog
 };
 
+static HighlightingFuncs highlighting_funcs = {
+	&highlighting_get_style
+};
+
 
 static GeanyData geany_data = {
 	NULL,
@@ -210,6 +215,7 @@ static GeanyData geany_data = {
 	&keybindings_funcs,
 	&tagmanager_funcs,
 	&search_funcs,
+	&highlighting_funcs
 };
 
 

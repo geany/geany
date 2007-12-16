@@ -29,9 +29,20 @@
 #include "ScintillaWidget.h"
 
 
+typedef struct HighlightingStyle
+{
+	gint	foreground;
+	gint	background;
+	gboolean bold:1;
+	gboolean italic:1;
+} HighlightingStyle;
+
+
 void highlighting_init_styles(gint filetype_idx, GKeyFile *config, GKeyFile *configh);
 
 void highlighting_set_styles(ScintillaObject *sci, gint filetype_idx);
+
+const HighlightingStyle *highlighting_get_style(gint ft_id, gint style_id);
 
 void highlighting_free_styles(void);
 
