@@ -1,14 +1,11 @@
 [Desktop Entry]
+Type=Application
+Version=1.0
 _Name=Geany
 _GenericName=Integrated Development Environment
 _Comment=A fast and lightweight IDE using GTK2
 Exec=geany %F
 Icon=@GEANY_PIXMAPS_DIR@/geany.png
 Terminal=false
-Type=Application
-Categories=Application;GTK;Development;IDE;
-Encoding=UTF-8
+Categories=GTK;Development;IDE;
 MimeType=text/plain;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;text/x-java;text/x-dsrc;text/x-pascal;text/x-perl;text/x-python;application/x-php;application/x-httpd-php*;application/xml;text/html;text/css;text/x-sql;text/x-diff;
-# currently false, changes perhaps in the future
-StartupNotify=false
-Version=1.1
