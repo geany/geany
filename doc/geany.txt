@@ -1685,6 +1685,16 @@ Switch to right document        Switches to the next open document.
 
 Switch to last used document    Switches to the previously selected open document.
 
+Move document left              Changes the current document with the left hand
+                                one.
+
+Move document right             Changes the current document with the right hand
+                                one.
+
+Move document first             Moves the current document to the first position.
+
+Move document last              Moves the current document to the last position.
+
 Navigate forward a location     Switches to the next location in the navigation
                                 history. See the section called `Code Navigation
                                 History`_.

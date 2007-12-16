@@ -758,6 +758,10 @@ void ui_update_toolbar_items()
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton20"), prefs.toolbar_show_zoom);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton21"), prefs.toolbar_show_zoom);
 	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem4"), prefs.toolbar_show_zoom);
+	// indent
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_indent_dec"), prefs.toolbar_show_indent);
+	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_indent_inc"), prefs.toolbar_show_indent);
+	ui_widget_show_hide(lookup_widget(app->window, "separatortoolitem11"), prefs.toolbar_show_indent);
 	// undo
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_undo"), prefs.toolbar_show_undo);
 	ui_widget_show_hide(lookup_widget(app->window, "toolbutton_redo"), prefs.toolbar_show_undo);

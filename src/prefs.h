@@ -63,6 +63,7 @@ typedef struct GeanyPrefs
 	gboolean		toolbar_show_navigation;
 	gboolean		toolbar_show_compile;
 	gboolean		toolbar_show_zoom;
+	gboolean		toolbar_show_indent;
 	gboolean		toolbar_show_colour;
 	gboolean		toolbar_show_fileops;
 	gboolean		toolbar_show_quit;

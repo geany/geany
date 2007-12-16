@@ -232,7 +232,10 @@ create_window1 (void)
   GtkWidget *toolbutton20;
   GtkWidget *toolbutton21;
   GtkWidget *separatortoolitem4;
-  GtkWidget *toolitem18;
+  GtkWidget *toolbutton_indent_dec;
+  GtkWidget *toolbutton_indent_inc;
+  GtkWidget *separatortoolitem11;
+  GtkWidget *toolitem19;
   GtkWidget *entry1;
   GtkWidget *toolbutton18;
   GtkWidget *separatortoolitem5;
@@ -1136,13 +1139,27 @@ create_window1 (void)
   gtk_widget_show (separatortoolitem4);
   gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem4);
 
-  toolitem18 = (GtkWidget*) gtk_tool_item_new ();
-  gtk_widget_show (toolitem18);
-  gtk_container_add (GTK_CONTAINER (toolbar1), toolitem18);
+  toolbutton_indent_dec = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-unindent");
+  gtk_widget_show (toolbutton_indent_dec);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton_indent_dec);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton_indent_dec), tooltips, _("Decrease indentation"), NULL);
+
+  toolbutton_indent_inc = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-indent");
+  gtk_widget_show (toolbutton_indent_inc);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolbutton_indent_inc);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (toolbutton_indent_inc), tooltips, _("Increase indentation"), NULL);
+
+  separatortoolitem11 = (GtkWidget*) gtk_separator_tool_item_new ();
+  gtk_widget_show (separatortoolitem11);
+  gtk_container_add (GTK_CONTAINER (toolbar1), separatortoolitem11);
+
+  toolitem19 = (GtkWidget*) gtk_tool_item_new ();
+  gtk_widget_show (toolitem19);
+  gtk_container_add (GTK_CONTAINER (toolbar1), toolitem19);
 
   entry1 = gtk_entry_new ();
   gtk_widget_show (entry1);
-  gtk_container_add (GTK_CONTAINER (toolitem18), entry1);
+  gtk_container_add (GTK_CONTAINER (toolitem19), entry1);
   gtk_tooltips_set_tip (tooltips, entry1, _("Find the entered text in the current file"), NULL);
 
   toolbutton18 = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-find");
@@ -1612,6 +1629,12 @@ create_window1 (void)
   g_signal_connect ((gpointer) toolbutton21, "clicked",
                     G_CALLBACK (on_zoom_out1_activate),
                     NULL);
+  g_signal_connect ((gpointer) toolbutton_indent_dec, "clicked",
+                    G_CALLBACK (on_menu_decrease_indent1_activate),
+                    NULL);
+  g_signal_connect ((gpointer) toolbutton_indent_inc, "clicked",
+                    G_CALLBACK (on_menu_increase_indent1_activate),
+                    NULL);
   g_signal_connect ((gpointer) entry1, "activate",
                     G_CALLBACK (on_entry1_activate),
                     NULL);
@@ -1852,7 +1875,10 @@ create_window1 (void)
   GLADE_HOOKUP_OBJECT (window1, toolbutton20, "toolbutton20");
   GLADE_HOOKUP_OBJECT (window1, toolbutton21, "toolbutton21");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem4, "separatortoolitem4");
-  GLADE_HOOKUP_OBJECT (window1, toolitem18, "toolitem18");
+  GLADE_HOOKUP_OBJECT (window1, toolbutton_indent_dec, "toolbutton_indent_dec");
+  GLADE_HOOKUP_OBJECT (window1, toolbutton_indent_inc, "toolbutton_indent_inc");
+  GLADE_HOOKUP_OBJECT (window1, separatortoolitem11, "separatortoolitem11");
+  GLADE_HOOKUP_OBJECT (window1, toolitem19, "toolitem19");
   GLADE_HOOKUP_OBJECT (window1, entry1, "entry1");
   GLADE_HOOKUP_OBJECT (window1, toolbutton18, "toolbutton18");
   GLADE_HOOKUP_OBJECT (window1, separatortoolitem5, "separatortoolitem5");
@@ -2537,6 +2563,7 @@ create_prefs_dialog (void)
   GtkWidget *check_toolbar_compile;
   GtkWidget *check_toolbar_colour;
   GtkWidget *check_toolbar_zoom;
+  GtkWidget *check_toolbar_indent;
   GtkWidget *check_toolbar_search;
   GtkWidget *check_toolbar_goto;
   GtkWidget *check_toolbar_quit;
@@ -3278,6 +3305,13 @@ create_prefs_dialog (void)
   GTK_WIDGET_UNSET_FLAGS (check_toolbar_zoom, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_toolbar_zoom, _("Display the Zoom In and Zoom Out buttons in the toolbar"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_zoom), FALSE);
+
+  check_toolbar_indent = gtk_check_button_new_with_mnemonic (_("Show Increase and Decrease Indentation buttons"));
+  gtk_widget_show (check_toolbar_indent);
+  gtk_box_pack_start (GTK_BOX (vbox16), check_toolbar_indent, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_toolbar_indent, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_toolbar_indent, _("Display the Zoom In and Zoom Out buttons in the toolbar"), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_toolbar_indent), FALSE);
 
   check_toolbar_search = gtk_check_button_new_with_mnemonic (_("Show Search field"));
   gtk_widget_show (check_toolbar_search);
@@ -4493,6 +4527,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_compile, "check_toolbar_compile");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_colour, "check_toolbar_colour");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_zoom, "check_toolbar_zoom");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_indent, "check_toolbar_indent");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_search, "check_toolbar_search");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_goto, "check_toolbar_goto");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_toolbar_quit, "check_toolbar_quit");

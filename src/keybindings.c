@@ -230,6 +230,10 @@ static void init_default_kb()
 		GDK_Page_Up, GDK_MOD1_MASK, "move_tableft", _("Move document left"));
 	keys[GEANY_KEYS_MOVE_TABRIGHT] = fill(cb_func_move_tab,
 		GDK_Page_Down, GDK_MOD1_MASK, "move_tabright", _("Move document right"));
+	keys[GEANY_KEYS_MOVE_TABFIRST] = fill(cb_func_move_tab,
+		0, 0, "move_tabfirst", _("Move document first"));
+	keys[GEANY_KEYS_MOVE_TABLAST] = fill(cb_func_move_tab,
+		0, 0, "move_tablast", _("Move document last"));
 	keys[GEANY_KEYS_NAV_BACK] = fill(cb_func_nav_back,
 		0, 0, "nav_back", _("Navigate back a location"));
 	keys[GEANY_KEYS_NAV_FORWARD] = fill(cb_func_nav_forward,
@@ -1060,7 +1064,7 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 			document_get_notebook_page(last_doc_idx));
 }
 
-// move document left/right
+// move document left/right/first/last
 static void cb_func_move_tab(guint key_id)
 {
 	gint idx = document_get_cur_idx();
@@ -1082,6 +1086,14 @@ static void cb_func_move_tab(guint key_id)
 		if (npage == gtk_notebook_get_n_pages(nb))
 			npage = 0;	// wraparound
 		gtk_notebook_reorder_child(nb, sci, npage);
+	}
+	else if (key_id == GEANY_KEYS_MOVE_TABFIRST)
+	{
+		gtk_notebook_reorder_child(nb, sci, (prefs.tab_order_ltr) ? -1 : 0);
+	}
+	else if (key_id == GEANY_KEYS_MOVE_TABLAST)
+	{
+		gtk_notebook_reorder_child(nb, sci, (prefs.tab_order_ltr) ? 0 : -1);
 	}
 	return;
 }

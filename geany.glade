@@ -1844,7 +1844,52 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolItem" id="toolitem18">
+	    <widget class="GtkToolButton" id="toolbutton_indent_dec">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Decrease indentation</property>
+	      <property name="stock_id">gtk-unindent</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_menu_decrease_indent1_activate" last_modification_time="Sun, 16 Dec 2007 16:48:25 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToolButton" id="toolbutton_indent_inc">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Increase indentation</property>
+	      <property name="stock_id">gtk-indent</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_menu_increase_indent1_activate" last_modification_time="Sun, 16 Dec 2007 16:48:14 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorToolItem" id="separatortoolitem11">
+	      <property name="visible">True</property>
+	      <property name="draw">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToolItem" id="toolitem19">
 	      <property name="visible">True</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
@@ -4675,6 +4720,25 @@ Bottom
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Display the Zoom In and Zoom Out buttons in the toolbar</property>
 			      <property name="label" translatable="yes">Show Zoom In and Zoom Out buttons</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">False</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckButton" id="check_toolbar_indent">
+			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Display the Zoom In and Zoom Out buttons in the toolbar</property>
+			      <property name="label" translatable="yes">Show Increase and Decrease Indentation buttons</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">False</property>

@@ -272,6 +272,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_zoom");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.toolbar_show_zoom);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_indent");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.toolbar_show_indent);
+
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_undo");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.toolbar_show_undo);
 
@@ -643,6 +646,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_zoom");
 		prefs.toolbar_show_zoom = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_indent");
+		prefs.toolbar_show_indent = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_undo");
 		prefs.toolbar_show_undo = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
