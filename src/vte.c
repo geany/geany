@@ -568,15 +568,23 @@ const gchar* vte_get_working_directory()
 }
 
 
-// if force is set to TRUE, it will always change the cwd
+/* Changes the current working directory of the VTE to the path of the given filename.
+ * filename is expected to be in UTF-8 encoding.
+ * filename can also be a path, then it is used directly.
+ * If force is set to TRUE, it will always change the cwd
+ * */
 void vte_cwd(const gchar *filename, gboolean force)
 {
 	if (vte_info.have_vte && (vc->follow_path || force) && filename != NULL)
 	{
 		gchar *path;
 
-		path = g_path_get_dirname(filename);
-		vte_get_working_directory();	// refresh vte_info.dir
+		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+			path = g_strdup(filename);
+		else
+			path = g_path_get_dirname(filename);
+
+		vte_get_working_directory(); // refresh vte_info.dir
 		if (! utils_str_equal(path, vte_info.dir))
 		{
 			// use g_shell_quote to avoid problems with spaces, '!' or something else in path
@@ -613,6 +621,12 @@ void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context, gin
 }
 
 
+static void check_run_in_vte_toggled(GtkToggleButton *togglebutton, GtkWidget *user_data)
+{
+	gtk_widget_set_sensitive(user_data, gtk_toggle_button_get_active(togglebutton));
+}
+
+
 void vte_append_preferences_tab()
 {
 	if (vte_info.have_vte)
@@ -620,7 +634,7 @@ void vte_append_preferences_tab()
 		GtkWidget *notebook, *vbox, *label, *alignment, *table, *frame, *box;
 		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback, *entry_emulation;
 		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path, *check_ignore_menu_key;
-		GtkWidget *check_run_in_vte, *entry_shell, *button_shell, *image_shell;
+		GtkWidget *check_run_in_vte, *check_skip_script, *entry_shell, *button_shell, *image_shell;
 		GtkTooltips *tooltips;
 		GtkObject *spin_scrollback_adj;
 
@@ -754,10 +768,22 @@ void vte_append_preferences_tab()
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_follow_path), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_follow_path);
 
+		// create check_skip_script checkbox before the check_skip_script checkbox to be able to
+		// use the object for the toggled handler of check_skip_script checkbox
+		check_skip_script = gtk_check_button_new_with_mnemonic(_("Don't use run script"));
+		gtk_tooltips_set_tip(tooltips, check_skip_script, _("Don't use the simple run script which is usually used to display the exit status of the executed program."), NULL);
+		gtk_button_set_focus_on_click(GTK_BUTTON(check_skip_script), FALSE);
+		gtk_widget_set_sensitive(check_skip_script, vc->run_in_vte);
+
 		check_run_in_vte = gtk_check_button_new_with_mnemonic(_("Execute programs in VTE"));
 		gtk_tooltips_set_tip(tooltips, check_run_in_vte, _("Run programs in VTE instead of opening a terminal emulation window. Please note, programs executed in VTE cannot be stopped."), NULL);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_run_in_vte), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_run_in_vte);
+		g_signal_connect((gpointer) check_run_in_vte, "toggled",
+			G_CALLBACK(check_run_in_vte_toggled), check_skip_script);
+
+		// now add the check_skip_script checkbox after the check_run_in_vte checkbox
+		gtk_container_add(GTK_CONTAINER(box), check_skip_script);
 
 		gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
 
@@ -783,6 +809,8 @@ void vte_append_preferences_tab()
 				gtk_widget_ref(check_follow_path),	(GDestroyNotify) gtk_widget_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_run_in_vte",
 				gtk_widget_ref(check_run_in_vte),	(GDestroyNotify) gtk_widget_unref);
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_skip_script",
+				gtk_widget_ref(check_skip_script),	(GDestroyNotify) gtk_widget_unref);
 
 		gtk_widget_show_all(frame);
 

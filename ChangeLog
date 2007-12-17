@@ -1,3 +1,13 @@
+2007-12-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/build.c, src/keyfile.c, src/prefs.c, src/vte.c, src/vte.h:
+   Use project's base dir and run command when running commands in the
+   VTE.
+   Add VTE preference to skip the generated run script. when running
+   commands in the VTE.
+   Make vte_cwd() accept also paths not only filenames.
+
+
 2007-12-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.desktop.in.in:

@@ -54,6 +54,7 @@ typedef struct
 	gboolean ignore_menu_bar_accel;
 	gboolean follow_path;
 	gboolean run_in_vte;
+	gboolean skip_run_script;
 	gboolean enable_bash_keys;
 	gint scrollback_lines;
 	gchar *emulation;

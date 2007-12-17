@@ -532,6 +532,9 @@ void prefs_init_dialog(void)
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->run_in_vte);
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_skip_script");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->skip_run_script);
 	}
 #endif
 }
@@ -891,6 +894,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 
 			widget = lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte");
 			vc->run_in_vte = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+			widget = lookup_widget(ui_widgets.prefs_dialog, "check_skip_script");
+			vc->skip_run_script = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 			vte_apply_user_settings();
 		}

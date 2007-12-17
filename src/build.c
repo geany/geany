@@ -654,8 +654,10 @@ static gchar *get_build_executable(const gchar *locale_filename, gboolean check_
 }
 
 
-// Returns: NULL if there was an error, or the working directory the script was created in.
-static gchar *prepare_run_script(gint idx)
+/* Returns: NULL if there was an error, or the working directory the script was created in.
+ * vte_cmd_nonscript is the location of a string which is filled with the command to be used
+ * when vc->skip_run_script is set, otherwise it will be set to NULL */
+static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 {
 	gchar	*locale_filename = NULL;
 	gboolean have_project;
@@ -668,6 +670,9 @@ static gchar *prepare_run_script(gint idx)
 	gboolean autoclose = FALSE;
 	gboolean result = FALSE;
 	gchar	*tmp;
+
+	if (vte_cmd_nonscript != NULL)
+		*vte_cmd_nonscript = NULL;
 
 	locale_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
 
@@ -700,14 +705,10 @@ static gchar *prepare_run_script(gint idx)
 	if (! g_file_test(working_dir, G_FILE_TEST_EXISTS) ||
 		! g_file_test(working_dir, G_FILE_TEST_IS_DIR))
 	{
-		gchar *utf8_working_dir =
-			utils_get_utf8_from_locale(working_dir);
+		gchar *utf8_working_dir = utils_get_utf8_from_locale(working_dir);
 
 		ui_set_statusbar(TRUE, _("Failed to change the working directory to \"%s\""), utf8_working_dir);
-		g_free(utf8_working_dir);
-		g_free(working_dir);
-		g_free(executable);
-		g_free(locale_filename);
+		utils_free_pointers(utf8_working_dir, working_dir, executable, locale_filename, NULL);
 		return NULL;
 	}
 
@@ -720,13 +721,24 @@ static gchar *prepare_run_script(gint idx)
 
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
-		autoclose = TRUE; // don't wait for user input at the end of script when we are running in VTE
+	{
+		if (vc->skip_run_script)
+		{
+			if (vte_cmd_nonscript != NULL)
+				*vte_cmd_nonscript = cmd;
+
+			utils_free_pointers(executable, locale_filename, NULL);
+			return working_dir;
+		}
+		else
+			// don't wait for user input at the end of script when we are running in VTE
+			autoclose = TRUE;
+	}
 #endif
 
 	// (RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it contains no umlauts)
 	tmp = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
 	result = build_create_shellscript(tmp, cmd, autoclose);
-	g_free(tmp);
 	if (! result)
 	{
 		gchar *utf8_cmd = utils_get_utf8_from_locale(cmd);
@@ -736,9 +748,7 @@ static gchar *prepare_run_script(gint idx)
 		g_free(utf8_cmd);
 	}
 
-	g_free(cmd);
-	g_free(executable);
-	g_free(locale_filename);
+	utils_free_pointers(tmp, cmd, executable, locale_filename, NULL);
 
 	if (result)
 		return working_dir;
@@ -750,13 +760,15 @@ static gchar *prepare_run_script(gint idx)
 
 static GPid build_run_cmd(gint idx)
 {
+	GeanyProject *project = app->project;
 	gchar	*working_dir;
+	gchar	*vte_cmd_nonscript = NULL;
 	GError	*error = NULL;
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL)
 		return (GPid) 0;
 
-	working_dir = prepare_run_script(idx);
+	working_dir = prepare_run_script(idx, &vte_cmd_nonscript);
 	if (working_dir == NULL)
 	{
 		return (GPid) 0;
@@ -767,9 +779,26 @@ static GPid build_run_cmd(gint idx)
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
 	{
-		gchar *vte_cmd = g_strconcat(RUN_SCRIPT_CMD, "\n", NULL);
-		// change into current directory if it is not done by default
-		if (! vc->follow_path) vte_cwd(doc_list[idx].file_name, TRUE);
+		gchar *vte_cmd;
+
+		if (vc->skip_run_script)
+		{
+			setptr(vte_cmd_nonscript, utils_get_utf8_from_locale(vte_cmd_nonscript));
+			vte_cmd = g_strconcat(vte_cmd_nonscript, "\n", NULL);
+			g_free(vte_cmd_nonscript);
+		}
+		else
+			vte_cmd = g_strconcat(RUN_SCRIPT_CMD, "\n", NULL);
+
+		// change into current directory if it is not done by default or we have a project and
+		// project run command(working_dir is already set accordingly)
+		if (! vc->follow_path || (project != NULL && NZV(project->run_cmd)))
+		{
+			// we need to convert the working_dir back to UTF-8 because the VTE expects it
+			gchar *utf8_working_dir = utils_get_utf8_from_locale(working_dir);
+			vte_cwd(utf8_working_dir, TRUE);
+			g_free(utf8_working_dir);
+		}
 		if (! vte_send_cmd(vte_cmd))
 			ui_set_statusbar(FALSE,
 		_("Could not execute the file in the VTE because it probably contains a command."));
