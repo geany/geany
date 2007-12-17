@@ -6,6 +6,9 @@
    Add VTE preference to skip the generated run script. when running
    commands in the VTE.
    Make vte_cwd() accept also paths not only filenames.
+ * geany.desktop.in.in: Avoid full path for icon entry.
+ * geany.spec.in: Add file HACKING and classviewer icons.
+ * Makefile.am: Prevent installing geany.desktop twice.
 
 
 2007-12-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

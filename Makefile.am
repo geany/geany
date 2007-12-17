@@ -93,8 +93,6 @@ rpm: dist
 	rpmbuild -ta $(distdir).tar.gz
 
 
-Applicationsdir = $(datadir)/applications
-Applications_DATA = geany.desktop
 logodir = $(datadir)/pixmaps
 
 desktopdir = $(datadir)/applications
