@@ -39,6 +39,10 @@ Don't load symbol completion and call tip data. Use this option, if you don't wa
 For more information please see documentation.
 .IP "\fB-p\fP           \fB\-\-no-plugins\fP         " 10
 Don't load plugin support.
+.IP "\fB\fP             \fB\-\-print-prefix\fP         " 10
+Print installation prefix, the data directory, the lib directory and the locale directory (in
+this order) to stdout, each per line. This is mainly intended for plugin authors to detect
+installation paths.
 .IP "\fB-s\fP           \fB\-\-no-session\fP         " 10
 Don't load the previous session's files.
 .IP "\fB-t\fP           \fB\-\-no-terminal\fP         " 10

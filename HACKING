@@ -87,6 +87,15 @@ part of the plugin API, you should increment abi_version in plugindata.h
 (and api_version if changing elements). This is not needed if you're
 just appending fields to structs.
 
+Using pre-defined autotools values
+----------------------------------
+When you are use macros supplied by the autotools like PREFIX, LIBDIR,
+DATADIR and LOCALEDIR be aware that these might not be static strings
+when Geany is configured with --enable-binreloc. Then these macros will
+be replaced by function calls (in src/prefix.h). So, don't use anything
+like printf("Prefix: " PREFIX); but instead use
+printf("Prefix: %s", PREFIX);
+
 Adding a file foo.[hc] in src/ or plugins/
 ------------------------------------------
 Add foo.c, foo.h to SRCS in path/Makefile.am.

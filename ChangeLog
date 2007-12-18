@@ -3,6 +3,13 @@
  * Makefile.am: Don't install pixmaps/geany.ico by default.
  * geany.spec.in: Fix mandir path and don't delete icons
                   (patch by Yura Siamashka, thanks).
+ * src/Makefile.am:
+   Add PREFIX macro.
+   Don't construct LOCALEDIR manually but use autotools $(localedir)
+   variable instead.
+ * HACKING: Add note about using autotools macros like DATADIR.
+ * doc/geany.1.in, doc/geany.html, doc/geany.txt, src/main.c:
+   Add --print-prefix command line option to output installation paths.
 
 
 2007-12-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

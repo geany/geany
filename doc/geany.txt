@@ -208,6 +208,11 @@ Short option  Long option              Function
 
 -p            --no-plugins             Do not load plugins or plugin support.
 
+*none*        --print-prefix           Print installation prefix, the data directory, the lib
+                                       directory and the locale directory (in this order) to
+                                       stdout, each per line. This is mainly intended for plugin
+                                       authors to detect installation paths.
+
 -s            --no-session             Do not load the previous session's files.
 
 -t            --no-terminal            Do not load terminal support. Use this option if you do

@@ -108,6 +108,7 @@ static gboolean generate_datafiles = FALSE;
 static gboolean generate_tags = FALSE;
 static gboolean no_preprocessing = FALSE;
 static gboolean ft_names = FALSE;
+static gboolean print_prefix = FALSE;
 #ifdef HAVE_PLUGINS
 static gboolean no_plugins = FALSE;
 #endif
@@ -131,6 +132,7 @@ static GOptionEntry entries[] =
 #ifdef HAVE_PLUGINS
 	{ "no-plugins", 'p', 0, G_OPTION_ARG_NONE, &no_plugins, N_("Don't load plugins"), NULL },
 #endif
+	{ "print-prefix", 0, 0, G_OPTION_ARG_NONE, &print_prefix, N_("Print Geany's installation prefix"), NULL },
 	{ "no-session", 's', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &cl_options.load_session, N_("don't load the previous session's files"), NULL },
 #ifdef HAVE_VTE
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, N_("Don't load terminal support"), NULL },
@@ -442,6 +444,15 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 				GLIB_MAJOR_VERSION, GLIB_MINOR_VERSION, GLIB_MICRO_VERSION);
 		printf("\n");
 
+		exit(0);
+	}
+
+	if (print_prefix)
+	{
+		printf("%s\n", PREFIX);
+		printf("%s\n", DATADIR);
+		printf("%s\n", LIBDIR);
+		printf("%s\n", LOCALEDIR);
 		exit(0);
 	}
 
