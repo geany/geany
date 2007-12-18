@@ -35,7 +35,6 @@ Some features:
 %__rm -Rf $RPM_BUILD_ROOT
 %makeinstall
 %__rm $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache
-%__rm $RPM_BUILD_ROOT%{_datadir}/pixmaps/%{name}.ico
 
 %clean
 %__rm -Rf $RPM_BUILD_ROOT
