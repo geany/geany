@@ -693,8 +693,11 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 		return FALSE;
 	if (gtk_window_get_focus(GTK_WINDOW(app->window)) != vc->vte)
 		return FALSE;
-	if (state == 0 && (keyval < GDK_F1 || keyval > GDK_F35))
-		return FALSE;	// just to prevent menubar flickering
+	// prevent menubar flickering:
+	if (state == GDK_SHIFT_MASK && (keyval >= GDK_a && keyval <= GDK_z))
+		return FALSE;
+	if (state == 0 && (keyval < GDK_F1 || keyval > GDK_F35))	// e.g. backspace
+		return FALSE;
 
 	// make focus commands override any bash commands
 	for (i = GEANY_KEYS_GROUP_FOCUS; i < GEANY_KEYS_GROUP_TABS; i++)
