@@ -1,3 +1,10 @@
+2007-12-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * Makefile.am: Don't install pixmaps/geany.ico by default.
+ * geany.spec.in: Fix mandir path and don't delete icons
+                  (patch by Yura Siamashka, thanks).
+
+
 2007-12-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/c.c:

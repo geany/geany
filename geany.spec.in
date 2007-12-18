@@ -34,7 +34,7 @@ Some features:
 %install
 %__rm -Rf $RPM_BUILD_ROOT
 %makeinstall
-%__rm -Rf $RPM_BUILD_ROOT%{_datadir}/icons/
+%__rm $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache
 %__rm $RPM_BUILD_ROOT%{_datadir}/pixmaps/%{name}.ico
 
 %clean
@@ -50,5 +50,5 @@ Some features:
 %{_datadir}/locale/*/LC_MESSAGES/%{name}.mo
 %{_datadir}/pixmaps/%{name}.png
 %{_datadir}/doc/%{name}/
-%{_datadir}/man/man1/%{name}.1.gz
+%{_mandir}/man1/%{name}.1.gz
 %{_datadir}/icons/hicolor/16x16/apps/classviewer-*.png
