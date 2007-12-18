@@ -77,7 +77,7 @@ geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIB
 
 INCLUDES = \
 	-DDATADIR=\""$(datadir)"\" -DLIBDIR=\""$(libdir)"\" \
-	-DLOCALEDIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
+	-DLOCALEDIR=\""$(localedir)"\" -DPREFIX=\""$(prefix)"\" \
 	-I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@
 
 clean-local:
