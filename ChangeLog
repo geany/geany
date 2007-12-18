@@ -18,6 +18,11 @@
    Fix parsing C arrays (broken in r1952, oops).
  * src/keybindings.c:
    Don't flicker menubar when typing Shift-[a-z] in the VTE.
+ * tagmanager/entry.h, tagmanager/c.c:
+   Remove unused pointerOrder code from C parser, as it's not necessary
+   since r1952, and not in the standard ctags code. Leaving it in the
+   TagManager code however for backwards compatibility with global tag
+   files.
 
 
 2007-12-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
