@@ -1,3 +1,9 @@
+2007-12-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/about.c, THANKS, po/uk_UA.po, po/LINGUAS:
+   Added Ukrainian translation (Thanks to Boris Dibrov).
+
+
 2007-12-18  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * Makefile.am: Don't install pixmaps/geany.ico by default.

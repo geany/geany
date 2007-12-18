@@ -57,6 +57,7 @@ const gchar *translators[][2] = {
 	{ "pt_BR", "Alexandra Moreire &lt;alexandream@gmail.com&gt;\nAdrovane Marques Kade &lt;adrovane@gmail.com&gt;" },
 	{ "ru_RU", "brahmann_ &lt;brahmann@mthr.net.ru&gt;" },
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
+	{ "uk_UA", "Boris Dibrov &lt;dibrov.bor@gmail.com&gt;" },
 	{ "vi_VN", "Clytie Siddall &lt;clytie@riverland.net.au&gt;" },
 	{ "zh_CN", "Dormouse Young &lt;dormouse.young@gmail.com&gt;" },
 	{ "zh_TW", "KoViCH &lt;kovich.ian@gmail.com&gt;" }
