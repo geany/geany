@@ -1,3 +1,9 @@
+2007-12-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/c.c:
+   Fix parsing C arrays (broken in r1952, oops).
+
+
 2007-12-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c, src/keyfile.c, src/prefs.c, src/vte.c, src/vte.h:

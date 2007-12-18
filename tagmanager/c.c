@@ -2673,6 +2673,7 @@ static void tagCheck (statementInfo *const st)
 			qualifyBlockTag (st, name_token);
 	    }
 	    break;
+	case TOKEN_ARRAY:
 	case TOKEN_SEMICOLON:
 	case TOKEN_COMMA:
 	    if (insideEnumBody (st))
