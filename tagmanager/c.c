@@ -2302,8 +2302,9 @@ static void processColon (statementInfo *const st)
 	else
 	{
 		cppUngetc (c);
-		if ((isLanguage (Lang_cpp) || isLanguage (Lang_csharp))  &&
-			inheritingDeclaration (st->declaration))
+		if (((isLanguage (Lang_cpp) || isLanguage (Lang_csharp))  &&
+			inheritingDeclaration (st->declaration)) ||
+			isLanguage (Lang_d))
 		{
 			readParents (st, ':');
 		}

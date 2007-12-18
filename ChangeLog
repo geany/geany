@@ -23,6 +23,8 @@
    since r1952, and not in the standard ctags code. Leaving it in the
    TagManager code however for backwards compatibility with global tag
    files.
+ * tagmanager/c.c:
+   Fix parsing correct D class name when inheriting.
 
 
 2007-12-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
