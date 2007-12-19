@@ -5,7 +5,6 @@ TODO List:
 	Fix bugs:
 	o fix bug that prevents UTF-16, UTF-32 files from being loaded.
 	o tagmanager fails on UTF-16/32
-	o fix parsing command line args after given filenames
 
 	Next version or later:
 

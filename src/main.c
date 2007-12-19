@@ -158,6 +158,7 @@ void geany_debug(gchar const *format, ...)
 	}
 }
 
+
 /* special things for the initial setup of the checkboxes and related stuff
  * an action on a setting is only performed if the setting is not equal to the program default
  * (all the following code is not perfect but it works for the moment) */
@@ -421,7 +422,6 @@ static void locale_init()
 
 static void parse_command_line_options(gint *argc, gchar ***argv)
 {
-	GOptionContext *context;
 	GError *error = NULL;
 
 	// first initialise cl_options fields with default values
@@ -429,12 +429,14 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	cl_options.goto_line = -1;
 	cl_options.goto_column = -1;
 
-	context = g_option_context_new(_("[FILES...]"));
-	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
-	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
-	g_option_context_add_group(context, gtk_get_option_group(TRUE));
-	g_option_context_parse(context, argc, argv, &error);
-	g_option_context_free(context);
+	gtk_init_with_args(argc, argv, _("[FILES...]"), entries, GETTEXT_PACKAGE, &error);
+
+	if (error != NULL)
+	{
+		g_printerr("Geany: %s\n", error->message);
+		g_error_free(error);
+		exit(1);
+	}
 
 	if (show_version)
 	{
@@ -639,6 +641,7 @@ gint main(gint argc, gchar **argv)
 
 	setup_paths();
 	locale_init();
+	// gtk_init() is called within parse_command_line_options()
 	parse_command_line_options(&argc, &argv);
 
 	gtk_set_locale();
@@ -681,7 +684,6 @@ gint main(gint argc, gchar **argv)
 		VERSION,
 		gtk_major_version, gtk_minor_version, gtk_micro_version,
 		glib_major_version, glib_minor_version, glib_micro_version);
-	gtk_init(&argc, &argv);
 
 	// inits
 	main_init();
