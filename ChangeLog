@@ -2,6 +2,10 @@
 
  * TODO, src/main.c: Apply patch Jeff Pohlmeyer to handle unknown
                      command line options better (thanks).
+ * HACKING, src/Makefile.am, src/main.c, src/makefile.win32,
+   src/plugins.c, src/prefix.h, src/symbols.c:
+   Prefix autotools macros with GEANY to avoid problems with already
+   defined symbols on Windows.
 
 
 2007-12-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>

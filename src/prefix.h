@@ -60,19 +60,23 @@
 	#undef SYSCONFDIR
 	#undef CONFDIR
 	#undef LOCALEDIR
+	#undef GEANY_PREFIX
+	#undef GEANY_DATADIR
+	#undef GEANY_LIBDIR
+	#undef GEANY_LOCALEDIR
 
 	#define SELFPATH	(br_thread_local_store (br_locate ((void *) "")))
-	#define PREFIX		(br_thread_local_store (br_locate_prefix ((void *) "")))
 	#define PREFIXDIR	(br_thread_local_store (br_locate_prefix ((void *) "")))
 	#define BINDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/bin")))
 	#define SBINDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/sbin")))
-	#define DATADIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/share")))
-	#define LIBDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/lib")))
 	#define LIBEXECDIR	(br_thread_local_store (br_prepend_prefix ((void *) "", "/libexec")))
 	#define ETCDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/etc")))
 	#define SYSCONFDIR	(br_thread_local_store (br_prepend_prefix ((void *) "", "/etc")))
 	#define CONFDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/etc")))
-	#define LOCALEDIR	(br_thread_local_store (br_prepend_prefix ((void *) "", "/share/locale")))
+	#define GEANY_PREFIX		(br_thread_local_store (br_locate_prefix ((void *) "")))
+	#define GEANY_DATADIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/share")))
+	#define GEANY_LIBDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/lib")))
+	#define GEANY_LOCALEDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/share/locale")))
 #endif /* BR_NO_MACROS */
 
 

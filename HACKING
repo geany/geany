@@ -89,12 +89,13 @@ just appending fields to structs.
 
 Using pre-defined autotools values
 ----------------------------------
-When you are use macros supplied by the autotools like PREFIX, LIBDIR,
-DATADIR and LOCALEDIR be aware that these might not be static strings
-when Geany is configured with --enable-binreloc. Then these macros will
-be replaced by function calls (in src/prefix.h). So, don't use anything
-like printf("Prefix: " PREFIX); but instead use
-printf("Prefix: %s", PREFIX);
+When you are use macros supplied by the autotools like GEANY_PREFIX,
+GEANY_LIBDIR, GEANY_DATADIR and GEANY_LOCALEDIR be aware that these
+might not be static strings when Geany is configured with
+--enable-binreloc. Then these macros will be replaced by function calls
+(in src/prefix.h). So, don't use anything like
+printf("Prefix: " GEANY_PREFIX); but instead use
+printf("Prefix: %s", GEANY_PREFIX);
 
 Adding a file foo.[hc] in src/ or plugins/
 ------------------------------------------

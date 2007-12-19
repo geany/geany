@@ -1,9 +1,10 @@
 # Note: PACKAGE_DATA_DIR and PACKAGE_LOCALE_DIR are no longer used on Windows.
 
-DEFINES = -DPACKAGE_DATA_DIR=\"data\" \
-	  -DHAVE_CONFIG_H \
-	  -DPACKAGE_LOCALE_DIR=\"data\" \
-	  -DENABLE_NLS
+DEFINES = -DHAVE_CONFIG_H \
+	-DGEANY_DATADIR=\"data\" \
+	-DGEANY_LOCALEDIR=\"data\" \
+	-DGEANY_LIBDIR=\"\" \
+	-DGEANY_PREFIX=\"\"
 
 .SUFFIXES: .c .o .h .a
 WINDRES = windres.exe

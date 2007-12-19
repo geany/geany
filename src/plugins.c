@@ -545,7 +545,7 @@ static void load_plugin_paths()
 #ifdef G_OS_WIN32
 	path = get_plugin_path();
 #else
-	path = g_strconcat(LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
+	path = g_strconcat(GEANY_LIBDIR, G_DIR_SEPARATOR_S "geany", NULL);
 #endif
 	load_plugins(path);
 

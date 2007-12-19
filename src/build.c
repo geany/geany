@@ -760,7 +760,6 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 
 static GPid build_run_cmd(gint idx)
 {
-	GeanyProject *project = app->project;
 	gchar	*working_dir;
 	gchar	*vte_cmd_nonscript = NULL;
 	GError	*error = NULL;
@@ -779,6 +778,7 @@ static GPid build_run_cmd(gint idx)
 #ifdef HAVE_VTE
 	if (vte_info.load_vte && vc != NULL && vc->run_in_vte)
 	{
+		GeanyProject *project = app->project;
 		gchar *vte_cmd;
 
 		if (vc->skip_run_script)

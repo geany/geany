@@ -76,8 +76,8 @@ nodist_EXTRA_geany_SOURCES = dummy.cxx
 geany_LDADD = ../scintilla/libscintilla.a ../tagmanager/libtagmanager.a @GTK_LIBS@  $(INTLLIBS)
 
 INCLUDES = \
-	-DDATADIR=\""$(datadir)"\" -DLIBDIR=\""$(libdir)"\" \
-	-DLOCALEDIR=\""$(localedir)"\" -DPREFIX=\""$(prefix)"\" \
+	-DGEANY_DATADIR=\""$(datadir)"\" -DGEANY_LIBDIR=\""$(libdir)"\" \
+	-DGEANY_LOCALEDIR=\""$(localedir)"\" -DGEANY_PREFIX=\""$(prefix)"\" \
 	-I$(srcdir)/../scintilla/include -I$(srcdir)/../tagmanager/include @GTK_CFLAGS@
 
 clean-local:

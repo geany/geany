@@ -465,7 +465,7 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 	if (icon_theme == NULL)
 	{
 #ifndef G_OS_WIN32
-		gchar *path = g_strconcat(DATADIR, "/icons", NULL);
+		gchar *path = g_strconcat(GEANY_DATADIR, "/icons", NULL);
 #endif
 		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &y);
 		icon_theme = gtk_icon_theme_get_default();

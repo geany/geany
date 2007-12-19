@@ -381,8 +381,8 @@ static void setup_paths()
 
 	g_free(install_dir);
 #else
-	data_dir = g_strconcat(DATADIR, "/" PACKAGE "/", NULL); // e.g. /usr/share/geany
-	doc_dir = g_strconcat(DATADIR, "/doc/" PACKAGE "/html/", NULL);
+	data_dir = g_strconcat(GEANY_DATADIR, "/geany/", NULL); // e.g. /usr/share/geany
+	doc_dir = g_strconcat(GEANY_DATADIR, "/doc/geany/html/", NULL);
 #endif
 
 	// convert path names to locale encoding
@@ -409,7 +409,7 @@ static void locale_init()
 	locale_dir = g_strconcat(install_dir, "\\lib\\locale", NULL);
 	g_free(install_dir);
 #else
-	locale_dir = g_strdup(LOCALEDIR);
+	locale_dir = g_strdup(GEANY_LOCALEDIR);
 #endif
 
 	bindtextdomain(GETTEXT_PACKAGE, locale_dir);
@@ -451,10 +451,10 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	if (print_prefix)
 	{
-		printf("%s\n", PREFIX);
-		printf("%s\n", DATADIR);
-		printf("%s\n", LIBDIR);
-		printf("%s\n", LOCALEDIR);
+		printf("%s\n", GEANY_PREFIX);
+		printf("%s\n", GEANY_DATADIR);
+		printf("%s\n", GEANY_LIBDIR);
+		printf("%s\n", GEANY_LOCALEDIR);
 		exit(0);
 	}
 
