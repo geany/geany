@@ -1,7 +1,7 @@
 # Ukrainian translations for geany package.
 # Copyright (C) 2007 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
-Boris Dibrov <dibrov.bor@gmail.com>, 2007
+# Boris Dibrov <dibrov.bor@gmail.com>, 2007
 
 msgid ""
 msgstr ""

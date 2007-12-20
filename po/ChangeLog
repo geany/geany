@@ -1,3 +1,9 @@
+2007-12-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * uk_UA.po:
+   Fix missing line comment char.
+
+
 2007-12-18  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * src/about.c, THANKS, po/uk_UA.po, po/LINGUAS:
