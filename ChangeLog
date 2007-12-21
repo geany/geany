@@ -1,3 +1,13 @@
+2007-12-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/dialogs.c, src/dialogs.h, src/callbacks.c:
+   Add combo box input history for Make Custom Target dialog.
+   Make dialogs_show_input() automatically activate on pressing enter in
+   the GtkEntry, use a callback for input text, and have a 'persistent'
+   option to hide the dialog instead of deleting it, using a combo box
+   for input text history.
+
+
 2007-12-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * TODO, src/main.c: Apply patch Jeff Pohlmeyer to handle unknown

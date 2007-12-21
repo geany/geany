@@ -98,8 +98,6 @@ widgets;
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose);
 static GPid build_spawn_cmd(gint idx, const gchar *cmd, const gchar *dir);
-static void on_make_target_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
-static void on_make_target_entry_activate(GtkEntry *entry, gpointer user_data);
 static void set_stop_button(gboolean stop);
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
@@ -1931,6 +1929,36 @@ on_build_build_activate                (GtkMenuItem     *menuitem,
 
 
 static void
+on_make_custom_input_response(const gchar *input)
+{
+	gint idx = document_get_cur_idx();
+
+	if (doc_list[idx].changed)
+		document_save_file(idx, FALSE);
+
+	setptr(build_info.custom_target, g_strdup(input));
+
+	build_make_file(idx, GBO_MAKE_CUSTOM);
+}
+
+
+static void
+show_make_custom()
+{
+	static GtkWidget *dialog = NULL;	// keep dialog for combo history
+
+	if (! dialog)
+		dialog = dialogs_show_input(_("Make Custom Target"),
+			_("Enter custom options here, all entered text is passed to the make command."),
+			build_info.custom_target, TRUE, &on_make_custom_input_response);
+	else
+	{
+		gtk_widget_show(dialog);
+	}
+}
+
+
+static void
 on_build_make_activate                 (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
@@ -1943,11 +1971,7 @@ on_build_make_activate                 (GtkMenuItem     *menuitem,
 	{
 		case GBO_MAKE_CUSTOM:
 		{
-			dialogs_show_input(_("Make Custom Target"),
-				_("Enter custom options here, all entered text is passed to the make command."),
-				build_info.custom_target,
-				G_CALLBACK(on_make_target_dialog_response),
-				G_CALLBACK(on_make_target_entry_activate));
+			show_make_custom();
 			break;
 		}
 
@@ -2032,34 +2056,6 @@ on_build_execute_activate              (GtkMenuItem     *menuitem,
 			ui_set_statusbar(TRUE, _("Failed to execute the terminal program"));
 		}
 	}
-}
-
-
-static void
-on_make_target_dialog_response         (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data)
-{
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		gint idx = document_get_cur_idx();
-
-		if (doc_list[idx].changed) document_save_file(idx, FALSE);
-
-		g_free(build_info.custom_target);
-		build_info.custom_target = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
-
-		build_make_file(idx, GBO_MAKE_CUSTOM);
-	}
-	gtk_widget_destroy(GTK_WIDGET(dialog));
-}
-
-
-static void
-on_make_target_entry_activate          (GtkEntry        *entry,
-                                        gpointer         user_data)
-{
-	on_make_target_dialog_response(GTK_DIALOG(user_data), GTK_RESPONSE_ACCEPT, entry);
 }
 
 

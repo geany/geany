@@ -25,23 +25,23 @@
 #ifndef GEANY_DIALOGS_H
 #define GEANY_DIALOGS_H 1
 
-/* This shows the file selection dialog to open a file. */
+typedef void (*InputCallback)(const gchar *);
+
+
 void dialogs_show_open_file();
 
-/* This shows the file selection dialog to save a file. */
 gboolean dialogs_show_save_as();
 
 gboolean dialogs_show_unsaved_file(gint idx);
 
-/* This shows the font selection dialog to choose a font. */
 void dialogs_show_open_font();
 
 void dialogs_show_word_count();
 
 void dialogs_show_color(gchar *colour);
 
-void dialogs_show_input(const gchar *title, const gchar *label_text, const gchar *default_text,
-						GCallback cb_dialog, GCallback cb_entry);
+GtkWidget *dialogs_show_input(const gchar *title, const gchar *label_text,
+	const gchar *default_text, gboolean persistent, InputCallback input_cb);
 
 void dialogs_show_goto_line();
 
@@ -49,7 +49,6 @@ void dialogs_show_file_properties(gint idx);
 
 gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 
-/* extra_text can be NULL; otherwise it is displayed below main_text. */
 gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
 	const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (5, 6);
 

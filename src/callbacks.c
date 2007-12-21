@@ -1424,25 +1424,10 @@ on_comments_fileheader_activate        (GtkMenuItem     *menuitem,
 }
 
 
-void
-on_custom_date_dialog_response         (GtkDialog *dialog,
-                                        gint response,
-                                        gpointer user_data)
+static void
+on_custom_date_input_response(const gchar *input)
 {
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		g_free(ui_prefs.custom_date_format);
-		ui_prefs.custom_date_format = g_strdup(gtk_entry_get_text(GTK_ENTRY(user_data)));
-	}
-	gtk_widget_destroy(GTK_WIDGET(dialog));
-}
-
-
-void
-on_custom_date_entry_activate          (GtkEntry        *entry,
-                                        gpointer         user_data)
-{
-	on_custom_date_dialog_response(GTK_DIALOG(user_data), GTK_RESPONSE_ACCEPT, entry);
+	setptr(ui_prefs.custom_date_format, g_strdup(input));
 }
 
 
@@ -1484,9 +1469,7 @@ on_insert_date_activate                (GtkMenuItem     *menuitem,
 
 		dialogs_show_input(_("Custom Date Format"),
 			_("Enter here a custom date and time format. You can use any conversion specifiers which can be used with the ANSI C strftime function."),
-			ui_prefs.custom_date_format,
-			G_CALLBACK(on_custom_date_dialog_response),
-			G_CALLBACK(on_custom_date_entry_activate));
+			ui_prefs.custom_date_format, FALSE, &on_custom_date_input_response);
 		return;
 	}
 
