@@ -6,6 +6,9 @@
    the GtkEntry, use a callback for input text, and have a 'persistent'
    option to hide the dialog instead of deleting it, using a combo box
    for input text history.
+ * src/utils.c:
+   Make utils_get_utf8_from_locale(), utils_get_locale_from_utf8()
+   NULL-safe.
 
 
 2007-12-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
