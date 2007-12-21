@@ -52,6 +52,7 @@
 #include "sciwrappers.h"
 #include "dialogs.h"
 #include "win32.h"
+#include "project.h"
 
 #include "utils.h"
 
@@ -1040,7 +1041,7 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 /* Get directory from current file in the notebook.
  * Returns dir string that should be freed or NULL, depending on whether current file is valid.
  * Returned string is in UTF-8 encoding */
-gchar *utils_get_current_file_dir()
+gchar *utils_get_current_file_dir_utf8()
 {
 	gint cur_idx = document_get_cur_idx();
 
@@ -1655,6 +1656,22 @@ gboolean utils_string_replace_all(GString *str, const gchar *needle, const gchar
 		}
 	}
 	return (pos != -1);
+}
+
+
+/* Get project or default startup directory (if set), or NULL. */
+const gchar *utils_get_default_dir_utf8()
+{
+	if (app->project && NZV(app->project->base_path))
+	{
+		return app->project->base_path;
+	}
+
+	if (NZV(prefs.default_open_path))
+	{
+		return prefs.default_open_path;
+	}
+	return NULL;
 }
 
 

@@ -717,7 +717,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 	if (NZV(dir))
 		cur_dir = g_strdup(dir);
 	else
-		cur_dir = utils_get_current_file_dir();
+		cur_dir = utils_get_current_file_dir_utf8();
 	if (cur_dir)
 	{
 		gtk_entry_set_text(GTK_ENTRY(entry), cur_dir);

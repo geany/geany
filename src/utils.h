@@ -115,7 +115,9 @@ void utils_replace_filename(gint idx);
 
 gchar *utils_get_hex_from_color(GdkColor *color);
 
-gchar *utils_get_current_file_dir();
+const gchar *utils_get_default_dir_utf8();
+
+gchar *utils_get_current_file_dir_utf8();
 
 void utils_beep();
 

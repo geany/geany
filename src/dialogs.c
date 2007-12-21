@@ -157,115 +157,116 @@ on_file_open_check_hidden_toggled      (GtkToggleButton *togglebutton,
 #endif
 
 
-/* This shows the file selection dialog to open a file. */
-void dialogs_show_open_file ()
+#if ! GEANY_USE_WIN32_DIALOG
+static void create_open_file_dialog()
 {
-#if GEANY_USE_WIN32_DIALOG
-	win32_show_file_dialog(TRUE);
-#else /* X11, not win32: use GTK_FILE_CHOOSER */
+	GtkWidget *filetype_combo, *encoding_combo;
+	GtkWidget *viewbtn;
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+	gint i;
+	gchar *encoding_string;
+
+	ui_widgets.open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->window),
+			GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
+	gtk_widget_set_name(ui_widgets.open_filesel, "GeanyDialog");
+
+	viewbtn = gtk_button_new_with_mnemonic(_("_View"));
+	gtk_tooltips_set_tip(tooltips, viewbtn,
+		_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."), NULL);
+	gtk_widget_show(viewbtn);
+	gtk_dialog_add_action_widget(GTK_DIALOG(ui_widgets.open_filesel),
+		viewbtn, GTK_RESPONSE_APPLY);
+
+	gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.open_filesel),
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+	gtk_dialog_set_default_response(GTK_DIALOG(ui_widgets.open_filesel),
+		GTK_RESPONSE_ACCEPT);
+
+	gtk_widget_set_size_request(ui_widgets.open_filesel, -1, 460);
+	gtk_window_set_modal(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
+	gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_filesel), GTK_WINDOW(app->window));
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(ui_widgets.open_filesel), TRUE);
+
+	// add checkboxes and filename entry
+	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
+		add_file_open_extra_widget());
+	filetype_combo = lookup_widget(ui_widgets.open_filesel, "filetype_combo");
+
+	// add FileFilters(start with "All Files")
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
+				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_ALL]));
+	// now create meta filter "All Source"
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
+				filetypes_create_file_filter_all_source());
+	for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
+	{
+		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), filetypes[i]->title);
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
+				filetypes_create_file_filter(filetypes[i]));
+	}
+	gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
+	gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), GEANY_MAX_FILE_TYPES - 1);
+
+	// fill encoding combo box
+	encoding_combo = lookup_widget(ui_widgets.open_filesel, "encoding_combo");
+	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
+	{
+		encoding_string = encodings_to_string(&encodings[i]);
+		gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), encoding_string);
+		g_free(encoding_string);
+	}
+	gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Detect from file"));
+	gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combo), GEANY_ENCODINGS_MAX);
+
+	g_signal_connect((gpointer) ui_widgets.open_filesel, "selection-changed",
+				G_CALLBACK(on_file_open_selection_changed), NULL);
+	g_signal_connect ((gpointer) ui_widgets.open_filesel, "delete_event",
+				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+	g_signal_connect((gpointer) ui_widgets.open_filesel, "response",
+				G_CALLBACK(on_file_open_dialog_response), NULL);
+}
+#endif
+
+
+/* This shows the file selection dialog to open a file. */
+void dialogs_show_open_file()
+{
 	gchar *initdir;
+
+	// set dialog directory to the current file's directory, if present
+	initdir = utils_get_current_file_dir_utf8();
+
+	// use project or default startup directory (if set) if no files are open
+	/// TODO should it only be used when initally open the dialog and not on every show?
+	if (! initdir)
+		initdir = g_strdup(utils_get_default_dir_utf8());
+
+	setptr(initdir, utils_get_locale_from_utf8(initdir));
+
+#if GEANY_USE_WIN32_DIALOG
+	win32_show_file_dialog(TRUE, initdir);
+#else /* X11, not win32: use GTK_FILE_CHOOSER */
 
 	/* We use the same file selection widget each time, so first
 		of all we create it if it hasn't already been created. */
 	if (ui_widgets.open_filesel == NULL)
-	{
-		GtkWidget *filetype_combo, *encoding_combo;
-		GtkWidget *viewbtn;
-		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-		gint i;
-		gchar *encoding_string;
+		create_open_file_dialog();
 
-		ui_widgets.open_filesel = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(app->window),
-				GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
-		gtk_widget_set_name(ui_widgets.open_filesel, "GeanyDialog");
-
-		viewbtn = gtk_button_new_with_mnemonic(_("_View"));
-		gtk_tooltips_set_tip(tooltips, viewbtn,
-			_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."), NULL);
-		gtk_widget_show(viewbtn);
-		gtk_dialog_add_action_widget(GTK_DIALOG(ui_widgets.open_filesel),
-			viewbtn, GTK_RESPONSE_APPLY);
-
-		gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.open_filesel),
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-		gtk_dialog_set_default_response(GTK_DIALOG(ui_widgets.open_filesel),
-			GTK_RESPONSE_ACCEPT);
-
-		gtk_widget_set_size_request(ui_widgets.open_filesel, -1, 460);
-		gtk_window_set_modal(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
-		gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
-		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.open_filesel), TRUE);
-		gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
-		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_filesel), GTK_WINDOW(app->window));
-		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(ui_widgets.open_filesel), TRUE);
-
-		// add checkboxes and filename entry
-		gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-			add_file_open_extra_widget());
-		filetype_combo = lookup_widget(ui_widgets.open_filesel, "filetype_combo");
-
-		// add FileFilters(start with "All Files")
-		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-					filetypes_create_file_filter(filetypes[GEANY_FILETYPES_ALL]));
-		// now create meta filter "All Source"
-		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-					filetypes_create_file_filter_all_source());
-		for (i = 0; i < GEANY_MAX_FILE_TYPES - 1; i++)
-		{
-			gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), filetypes[i]->title);
-			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(ui_widgets.open_filesel),
-					filetypes_create_file_filter(filetypes[i]));
-		}
-		gtk_combo_box_append_text(GTK_COMBO_BOX(filetype_combo), _("Detect by file extension"));
-		gtk_combo_box_set_active(GTK_COMBO_BOX(filetype_combo), GEANY_MAX_FILE_TYPES - 1);
-
-		// fill encoding combo box
-		encoding_combo = lookup_widget(ui_widgets.open_filesel, "encoding_combo");
-		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
-		{
-			encoding_string = encodings_to_string(&encodings[i]);
-			gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), encoding_string);
-			g_free(encoding_string);
-		}
-		gtk_combo_box_append_text(GTK_COMBO_BOX(encoding_combo), _("Detect from file"));
-		gtk_combo_box_set_active(GTK_COMBO_BOX(encoding_combo), GEANY_ENCODINGS_MAX);
-
-		g_signal_connect((gpointer) ui_widgets.open_filesel, "selection-changed",
-					G_CALLBACK(on_file_open_selection_changed), NULL);
-		g_signal_connect ((gpointer) ui_widgets.open_filesel, "delete_event",
-					G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-		g_signal_connect((gpointer) ui_widgets.open_filesel, "response",
-					G_CALLBACK(on_file_open_dialog_response), NULL);
-	}
-
-	// set dialog directory to the current file's directory, if present
-	initdir = utils_get_current_file_dir();
 	if (initdir != NULL)
 	{
-		gchar *locale_filename;
-
-		locale_filename = utils_get_locale_from_utf8(initdir);
-
-		if (g_path_is_absolute(locale_filename))
+		if (g_path_is_absolute(initdir))
 			gtk_file_chooser_set_current_folder(
-				GTK_FILE_CHOOSER(ui_widgets.open_filesel), locale_filename);
-
-		g_free(initdir);
-		g_free(locale_filename);
-	}
-	// use default startup directory(if set) if no files are open
-	/// TODO should it only be used when initally open the dialog and not on every show?
-	else if (prefs.default_open_path != NULL && *prefs.default_open_path != '\0')
-	{
-		if (g_path_is_absolute(prefs.default_open_path))
-			gtk_file_chooser_set_current_folder(
-				GTK_FILE_CHOOSER(ui_widgets.open_filesel), prefs.default_open_path);
+				GTK_FILE_CHOOSER(ui_widgets.open_filesel), initdir);
 	}
 
 	gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.open_filesel));
 	gtk_widget_show(ui_widgets.open_filesel);
 #endif
+	g_free(initdir);
 }
 
 
@@ -443,62 +444,68 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 #endif
 
 
-/* Show the Save As dialog for the current notebook page.
- * Returns: TRUE if the file was saved. */
-gboolean dialogs_show_save_as()
+#if ! GEANY_USE_WIN32_DIALOG
+static void create_save_file_dialog()
 {
-#if GEANY_USE_WIN32_DIALOG
-	return win32_show_file_dialog(FALSE);
-#else
+	GtkWidget *vbox, *check_open_new_tab, *rename_btn;
+	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+
+	ui_widgets.save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(app->window),
+				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
+	gtk_window_set_modal(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
+	gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_widget_set_name(ui_widgets.save_filesel, "GeanyDialog");
+
+	rename_btn = gtk_button_new_with_mnemonic(_("R_ename"));
+	gtk_tooltips_set_tip(tooltips, rename_btn,
+		_("Save the file and rename it."), NULL);
+	gtk_widget_show(rename_btn);
+	gtk_dialog_add_action_widget(GTK_DIALOG(ui_widgets.save_filesel),
+		rename_btn, GTK_RESPONSE_APPLY);
+
+	gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.save_filesel),
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+	gtk_dialog_set_default_response(GTK_DIALOG(ui_widgets.save_filesel), GTK_RESPONSE_ACCEPT);
+
+	vbox = gtk_vbox_new(FALSE, 0);
+	check_open_new_tab = gtk_check_button_new_with_mnemonic(_("_Open file in a new tab"));
+	gtk_tooltips_set_tip(tooltips, check_open_new_tab,
+		_("Keep the current unsaved document open"
+		" and open the newly saved file in a new tab."), NULL);
+	gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
+	gtk_widget_show_all(vbox);
+	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.save_filesel), vbox);
+
+	g_signal_connect(check_open_new_tab, "toggled",
+				G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);
+
+	g_object_set_data_full(G_OBJECT(ui_widgets.save_filesel), "check_open_new_tab",
+				gtk_widget_ref(check_open_new_tab), (GDestroyNotify) gtk_widget_unref);
+
+	g_signal_connect((gpointer) ui_widgets.save_filesel, "delete_event",
+		G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+	g_signal_connect((gpointer) ui_widgets.save_filesel, "response",
+		G_CALLBACK(on_file_save_dialog_response), NULL);
+
+	gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.save_filesel), GTK_WINDOW(app->window));
+}
+#endif
+
+
+#if ! GEANY_USE_WIN32_DIALOG
+static gboolean gtk_show_save_as(const gchar *initdir)
+{
 	gint idx = document_get_cur_idx(), resp;
 
 	if (ui_widgets.save_filesel == NULL)
-	{
-		GtkWidget *vbox, *check_open_new_tab, *rename_btn;
-		GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
+		create_save_file_dialog();
 
-		ui_widgets.save_filesel = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(app->window),
-					GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
-		gtk_window_set_modal(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
-		gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
-		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(ui_widgets.save_filesel), TRUE);
-		gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.save_filesel), GDK_WINDOW_TYPE_HINT_DIALOG);
-		gtk_widget_set_name(ui_widgets.save_filesel, "GeanyDialog");
-
-		rename_btn = gtk_button_new_with_mnemonic(_("R_ename"));
-		gtk_tooltips_set_tip(tooltips, rename_btn,
-			_("Save the file and rename it."), NULL);
-		gtk_widget_show(rename_btn);
-		gtk_dialog_add_action_widget(GTK_DIALOG(ui_widgets.save_filesel),
-			rename_btn, GTK_RESPONSE_APPLY);
-
-		gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.save_filesel),
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
-		gtk_dialog_set_default_response(GTK_DIALOG(ui_widgets.save_filesel), GTK_RESPONSE_ACCEPT);
-
-		vbox = gtk_vbox_new(FALSE, 0);
-		check_open_new_tab = gtk_check_button_new_with_mnemonic(_("_Open file in a new tab"));
-		gtk_tooltips_set_tip(tooltips, check_open_new_tab,
-			_("Keep the current unsaved document open"
-			" and open the newly saved file in a new tab."), NULL);
-		gtk_box_pack_start(GTK_BOX(vbox), check_open_new_tab, FALSE, FALSE, 0);
-		gtk_widget_show_all(vbox);
-		gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(ui_widgets.save_filesel), vbox);
-
-		g_signal_connect(check_open_new_tab, "toggled",
-					G_CALLBACK(on_save_as_new_tab_toggled), rename_btn);
-
-		g_object_set_data_full(G_OBJECT(ui_widgets.save_filesel), "check_open_new_tab",
-					gtk_widget_ref(check_open_new_tab), (GDestroyNotify) gtk_widget_unref);
-
-		g_signal_connect((gpointer) ui_widgets.save_filesel, "delete_event",
-			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
-		g_signal_connect((gpointer) ui_widgets.save_filesel, "response",
-			G_CALLBACK(on_file_save_dialog_response), NULL);
-
-		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.save_filesel), GTK_WINDOW(app->window));
-	}
+	if (initdir && g_path_is_absolute(initdir))
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel),
+			initdir);
 
 	// If the current document has a filename we use that as the default.
 	if (doc_list[idx].file_name != NULL)
@@ -525,23 +532,39 @@ gboolean dialogs_show_save_as()
 		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(ui_widgets.save_filesel), fname);
 
-		// use default startup directory(if set) if no files are open
-		if (prefs.default_open_path != NULL && *prefs.default_open_path != '\0')
-		{
-			if (g_path_is_absolute(prefs.default_open_path))
-			{
-				gchar *def_path = utils_get_locale_from_utf8(prefs.default_open_path);
-				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(ui_widgets.save_filesel), def_path);
-				g_free(def_path);
-			}
-		}
 		g_free(fname);
 	}
 
 	// Run the dialog synchronously, pausing this function call
 	resp = gtk_dialog_run(GTK_DIALOG(ui_widgets.save_filesel));
 	return (resp == GTK_RESPONSE_ACCEPT);
+}
 #endif
+
+
+/* Show the Save As dialog for the current notebook page.
+ * Returns: TRUE if the file was saved. */
+gboolean dialogs_show_save_as()
+{
+	gboolean result;
+	gchar *initdir = NULL;
+
+	initdir = utils_get_current_file_dir_utf8();
+
+	// use project or default startup directory (if set) if no files are open
+	/// TODO should it only be used when initally open the dialog and not on every show?
+	if (! initdir)
+		initdir = g_strdup(utils_get_default_dir_utf8());
+
+	setptr(initdir, utils_get_locale_from_utf8(initdir));
+
+#if GEANY_USE_WIN32_DIALOG
+	result = win32_show_file_dialog(FALSE, initdir);
+#else
+	result = gtk_show_save_as(initdir);
+#endif
+	g_free(initdir);
+	return result;
 }
 
 

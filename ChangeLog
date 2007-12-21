@@ -9,6 +9,16 @@
  * src/utils.c:
    Make utils_get_utf8_from_locale(), utils_get_locale_from_utf8()
    NULL-safe.
+ * src/utils.c, src/win32.c, src/utils.h, src/win32.h, src/dialogs.c,
+   src/search.c:
+   Make Open, Save As dialogs start in project base path (or default
+   path pref) when the current file has no filename.
+   Split up widget setup code for dialogs_show_open_file(),
+   dialogs_show_save_as().
+   Add initial_dir argument for win32_show_file_dialog().
+   Add utils_get_default_dir_utf8().
+   Rename utils_get_current_file_dir() to
+   utils_get_current_file_dir_utf8().
 
 
 2007-12-19  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

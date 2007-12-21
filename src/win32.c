@@ -260,13 +260,13 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 }
 
 
-// return TRUE if the dialog was not cancelled.
-gboolean win32_show_file_dialog(gboolean file_open)
+/* initial_dir can be NULL to use the current working directory.
+ * Returns: TRUE if the dialog was not cancelled. */
+gboolean win32_show_file_dialog(gboolean file_open, const gchar *initial_dir)
 {
 	OPENFILENAME of;
 	gint retval;
 	gchar *fname = g_malloc(2048);
-	gchar *current_dir = utils_get_current_file_dir();
 	gchar *filters = win32_get_file_filters();
 
 	fname[0] = '\0';
@@ -284,7 +284,7 @@ gboolean win32_show_file_dialog(gboolean file_open)
 	of.lpstrCustomFilter = NULL;
 	of.nFilterIndex = GEANY_FILETYPES_ALL + 1;
 	of.lpstrFile = fname;
-	of.lpstrInitialDir  = current_dir;
+	of.lpstrInitialDir = initial_dir;
 	of.nMaxFile = 2048;
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = NULL;
@@ -300,7 +300,6 @@ gboolean win32_show_file_dialog(gboolean file_open)
 		retval = GetSaveFileName(&of);
 	}
 
-	g_free(current_dir);
 	g_free(filters);
 
 	if (!retval)
