@@ -1,3 +1,11 @@
+2007-12-22  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * de.po: Update of German translation. (Thanks to Enrico for providing it)
+ * uk.po, uk_UA.po, LINGUAS:
+   Moved Ukrainian translation to just uk.po to make it more compatible
+   with users that uses only LANG=uk.
+
+
 2007-12-20  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * uk_UA.po:
