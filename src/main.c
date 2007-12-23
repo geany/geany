@@ -423,13 +423,19 @@ static void locale_init()
 static void parse_command_line_options(gint *argc, gchar ***argv)
 {
 	GError *error = NULL;
+	GOptionContext *context;
+
+	context = g_option_context_new(_("[FILES...]"));
+	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
+	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
+	g_option_context_add_group(context, gtk_get_option_group(FALSE));
+	g_option_context_parse(context, argc, argv, &error);
+	g_option_context_free(context);
 
 	// first initialise cl_options fields with default values
 	cl_options.load_session = TRUE;
 	cl_options.goto_line = -1;
 	cl_options.goto_column = -1;
-
-	gtk_init_with_args(argc, argv, _("[FILES...]"), entries, GETTEXT_PACKAGE, &error);
 
 	if (error != NULL)
 	{
@@ -514,6 +520,12 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	vte_info.lib_vte = lib_vte;
 #endif
 	cl_options.ignore_global_tags = ignore_global_tags;
+
+	if (! gtk_init_check(NULL, NULL))
+	{	// check whether we have a valid X display and exit if not
+		g_printerr("Geany: cannot open display\n");
+		exit(1);
+	}
 }
 
 
@@ -641,10 +653,7 @@ gint main(gint argc, gchar **argv)
 
 	setup_paths();
 	locale_init();
-	// gtk_init() is called within parse_command_line_options()
 	parse_command_line_options(&argc, &argv);
-
-	gtk_set_locale();
 
 	signal(SIGTERM, signal_cb);
 #ifdef G_OS_UNIX
