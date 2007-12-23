@@ -1092,11 +1092,11 @@ static void cb_func_move_tab(guint key_id)
 	}
 	else if (key_id == GEANY_KEYS_MOVE_TABFIRST)
 	{
-		gtk_notebook_reorder_child(nb, sci, (prefs.tab_order_ltr) ? -1 : 0);
+		gtk_notebook_reorder_child(nb, sci, (prefs.tab_order_ltr) ? 0 : -1);
 	}
 	else if (key_id == GEANY_KEYS_MOVE_TABLAST)
 	{
-		gtk_notebook_reorder_child(nb, sci, (prefs.tab_order_ltr) ? 0 : -1);
+		gtk_notebook_reorder_child(nb, sci, (prefs.tab_order_ltr) ? -1 : 0);
 	}
 	return;
 }
