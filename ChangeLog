@@ -1,6 +1,8 @@
 2007-12-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/keybindings.c: Fix inverted move tab first/last commands.
+ * src/templates.c:
+   Add Python filetype template (patch by Elena of Valhalla, thanks).
 
 
 2007-12-21  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

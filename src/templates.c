@@ -215,6 +215,16 @@ end\n\
 x = StdClass.new\n\
 ";
 
+static const gchar templates_filetype_python[] = "#!/usr/bin/env python\n#\n\
+{fileheader}\n\n\
+\n\
+def main():\n\
+	\n\
+	return 0\n\
+\n\
+if __name__ == '__main__': main()\n\
+";
+
 static gchar *templates[GEANY_MAX_TEMPLATES];
 static gchar *ft_templates[GEANY_MAX_FILE_TYPES] = {NULL};
 
@@ -297,6 +307,7 @@ static void init_ft_templates(const gchar *year, const gchar *date)
 			case GEANY_FILETYPES_PHP:	TEMPLATES_CREATE_FILE(fname, templates_filetype_php); break;
 			case GEANY_FILETYPES_HTML:	TEMPLATES_CREATE_FILE(fname, templates_filetype_html); break;
 			case GEANY_FILETYPES_RUBY:	TEMPLATES_CREATE_FILE(fname, templates_filetype_ruby); break;
+			case GEANY_FILETYPES_PYTHON:    TEMPLATES_CREATE_FILE(fname, templates_filetype_python); break;
 			default: break;
 		}
 		TEMPLATES_READ_FILE(fname, &ft_templates[ft_id]);
