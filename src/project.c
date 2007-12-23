@@ -525,7 +525,7 @@ static gboolean close_open_project()
 	{
 		if (dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL,
 			_("Do you want to close it before proceeding?"),
-			_("The '%s' project is already open. "), app->project->name))
+			_("The '%s' project is already open."), app->project->name))
 		{
 			project_close(FALSE);
 			return TRUE;
