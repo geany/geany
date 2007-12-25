@@ -1,3 +1,9 @@
+2007-12-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetype_extensions.conf, src/filetypes.c:
+   Add *.vala extension to CSharp filetype to support the Vala language.
+
+
 2007-12-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/keybindings.c, src/keybindings.h, src/plugindata.h:
