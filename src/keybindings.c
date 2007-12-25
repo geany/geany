@@ -58,6 +58,7 @@ static void cb_func_menu_print(guint key_id);
 
 static void cb_func_menu_undo(guint key_id);
 static void cb_func_menu_redo(guint key_id);
+static void cb_func_clipboard(guint key_id);
 static void cb_func_menu_selectall(guint key_id);
 static void cb_func_menu_help(guint key_id);
 static void cb_func_menu_preferences(guint key_id);
@@ -135,6 +136,12 @@ static void init_default_kb()
 		GDK_z, GDK_CONTROL_MASK, "menu_undo", _("Undo"));
 	keys[GEANY_KEYS_MENU_REDO] = fill(cb_func_menu_redo,
 		GDK_y, GDK_CONTROL_MASK, "menu_redo", _("Redo"));
+	keys[GEANY_KEYS_MENU_CUT] = fill(cb_func_clipboard,
+		GDK_x, GDK_CONTROL_MASK, "menu_cut", _("Cut"));
+	keys[GEANY_KEYS_MENU_COPY] = fill(cb_func_clipboard,
+		GDK_c, GDK_CONTROL_MASK, "menu_copy", _("Copy"));
+	keys[GEANY_KEYS_MENU_PASTE] = fill(cb_func_clipboard,
+		GDK_v, GDK_CONTROL_MASK, "menu_paste", _("Paste"));
 	keys[GEANY_KEYS_MENU_SELECTALL] = fill(cb_func_menu_selectall,
 		GDK_a, GDK_CONTROL_MASK, "menu_selectall", _("Select All"));
 	keys[GEANY_KEYS_MENU_INSERTDATE] = fill(cb_func_menu_insert_date,
@@ -1128,6 +1135,29 @@ static void goto_matching_brace(gint idx)
 	{
 		sci_goto_pos(doc_list[idx].sci, new_pos, TRUE); // set the cursor at the brace
 		doc_list[idx].scroll_percent = 0.5F;
+	}
+}
+
+
+static void cb_func_clipboard(guint key_id)
+{
+	GtkWidget *item = NULL;
+
+	switch (key_id)
+	{
+		case GEANY_KEYS_MENU_CUT:
+			item = lookup_widget(app->window, "menu_cut1");
+			break;
+		case GEANY_KEYS_MENU_COPY:
+			item = lookup_widget(app->window, "menu_copy1");
+			break;
+		case GEANY_KEYS_MENU_PASTE:
+			item = lookup_widget(app->window, "menu_paste1");
+			break;
+	}
+	if (item && GTK_WIDGET_IS_SENSITIVE(item))
+	{
+		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 	}
 }
 
