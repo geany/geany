@@ -1,3 +1,13 @@
+2007-12-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/filebrowser.c:
+   Refactor with functions: check_single_selection(),
+   is_folder_selected(), get_tree_path_filename() and separate menu
+   item callbacks.
+   Rename "Open with..." popup item "Open externally" ("..." is usually
+   used when the user can input more information).
+
+
 2007-12-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetype_extensions.conf, src/filetypes.c:

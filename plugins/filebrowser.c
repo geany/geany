@@ -147,12 +147,20 @@ static void add_item(const gchar *name)
 }
 
 
+static gboolean is_top_level_directory(const gchar *dir)
+{
+	g_return_val_if_fail(dir && strlen(dir) > ROOT_OFFSET, FALSE);
+
+	return (utils->str_equal(dir + ROOT_OFFSET, G_DIR_SEPARATOR_S));
+}
+
+
 // adds ".." to the start of the file list
 static void add_top_level_entry()
 {
 	GtkTreeIter iter;
 
-	if (utils->str_equal(current_dir + ROOT_OFFSET, G_DIR_SEPARATOR_S))
+	if (is_top_level_directory(current_dir))
 		return;
 
 	gtk_list_store_prepend(file_store, &iter);
@@ -253,17 +261,28 @@ static void on_go_up()
 }
 
 
-static void handle_selection(GList *list, GtkTreeSelection *treesel, gboolean external)
+static gboolean check_single_selection(GtkTreeSelection *treesel)
+{
+	if (gtk_tree_selection_count_selected_rows(treesel) == 1)
+		return TRUE;
+
+	ui->set_statusbar(FALSE, _("Too many items selected!"));
+	return FALSE;
+}
+
+
+/* Returns: TRUE if at least one of selected_items is a folder. */
+static gboolean is_folder_selected(GList *selected_items)
 {
 	GList *item;
 	GtkTreeModel *model = GTK_TREE_MODEL(file_store);
-	GtkTreePath *treepath;
-	GtkTreeIter iter;
 	gboolean dir_found = FALSE;
 
-	for (item = list; item != NULL; item = g_list_next(item))
+	for (item = selected_items; item != NULL; item = g_list_next(item))
 	{
 		gchar *icon;
+		GtkTreeIter iter;
+		GtkTreePath *treepath;
 
 		treepath = (GtkTreePath*) item->data;
 		gtk_tree_model_get_iter(model, &iter, treepath);
@@ -277,93 +296,148 @@ static void handle_selection(GList *list, GtkTreeSelection *treesel, gboolean ex
 		}
 		g_free(icon);
 	}
-
-	if (dir_found && gtk_tree_selection_count_selected_rows(treesel) > 1)
-	{
-		ui->set_statusbar(FALSE, _("Too many items selected!"));
-		return;
-	}
-
-	for (item = list; item != NULL; item = g_list_next(item))
-	{
-		gchar *name, *fname, *dir_sep = G_DIR_SEPARATOR_S;
-		gboolean go_up = FALSE;
-
-		treepath = (GtkTreePath*) item->data;
-		gtk_tree_model_get_iter(model, &iter, treepath);
-		gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_NAME, &name, -1);
-
-		if (utils->str_equal(current_dir + ROOT_OFFSET, G_DIR_SEPARATOR_S))
-			dir_sep = "";
-		setptr(name, utils->get_locale_from_utf8(name));
-		fname = g_strconcat(current_dir, dir_sep, name, NULL);
-		if (utils->str_equal(name, ".."))
-			go_up = TRUE;
-		g_free(name);
-
-		if (external)
-		{
-			gchar *cmd;
-			gchar *locale_cmd;
-			gchar *dir;
-			GString *cmd_str = g_string_new(open_cmd);
-			GError *error= NULL;
-
-			if (! dir_found)
-				dir = g_path_get_dirname(fname);
-			else
-				dir = g_strdup(fname);
-
-			utils->string_replace_all(cmd_str, "%f", fname);
-			utils->string_replace_all(cmd_str, "%d", dir);
-
-			cmd = g_string_free(cmd_str, FALSE);
-			locale_cmd = utils->get_locale_from_utf8(cmd);
-			if (! g_spawn_command_line_async(locale_cmd, &error))
-			{
-				gchar *c = strchr(cmd, ' ');
-				if (c != NULL)
-					*c = '\0';
-				ui->set_statusbar(TRUE,
-					_("Could not execute configured external command '%s' (%s)."),
-					cmd, error->message);
-				g_error_free(error);
-			}
-			g_free(locale_cmd);
-			g_free(cmd);
-			g_free(dir);
-			g_free(fname);
-		}
-		else if (go_up)
-		{
-			g_free(fname);
-			on_go_up();
-		}
-		else if (dir_found)
-		{
-			setptr(current_dir, fname);
-			refresh();
-			return;
-		}
-		else
-		{
-			documents->open_file(fname, FALSE, NULL, NULL);
-			g_free(fname);
-		}
-	}
+	return dir_found;
 }
 
 
-static void open_selected_files(GtkMenuItem *menuitem, gpointer user_data)
+/* Returns: the full filename in locale encoding. */
+static gchar *get_tree_path_filename(GtkTreePath *treepath)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(file_store);
+	GtkTreeIter iter;
+	gchar *name, *fname;
+
+	gtk_tree_model_get_iter(model, &iter, treepath);
+	gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_NAME, &name, -1);
+
+	if (utils->str_equal(name, ".."))
+	{
+		fname = g_path_get_dirname(current_dir);
+	}
+	else
+	{
+		setptr(name, utils->get_locale_from_utf8(name));
+		fname = g_build_filename(current_dir, name, NULL);
+	}
+	g_free(name);
+
+	return fname;
+}
+
+
+static void open_external(const gchar *fname, gboolean dir_found)
+{
+	gchar *cmd;
+	gchar *locale_cmd;
+	gchar *dir;
+	GString *cmd_str = g_string_new(open_cmd);
+	GError *error = NULL;
+
+	if (! dir_found)
+		dir = g_path_get_dirname(fname);
+	else
+		dir = g_strdup(fname);
+
+	utils->string_replace_all(cmd_str, "%f", fname);
+	utils->string_replace_all(cmd_str, "%d", dir);
+
+	cmd = g_string_free(cmd_str, FALSE);
+	locale_cmd = utils->get_locale_from_utf8(cmd);
+	if (! g_spawn_command_line_async(locale_cmd, &error))
+	{
+		gchar *c = strchr(cmd, ' ');
+
+		if (c != NULL)
+			*c = '\0';
+		ui->set_statusbar(TRUE,
+			_("Could not execute configured external command '%s' (%s)."),
+			cmd, error->message);
+		g_error_free(error);
+	}
+	g_free(locale_cmd);
+	g_free(cmd);
+	g_free(dir);
+}
+
+
+static void on_external_open(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkTreeSelection *treesel;
 	GtkTreeModel *model;
 	GList *list;
+	gboolean dir_found;
 
 	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
 
 	list = gtk_tree_selection_get_selected_rows(treesel, &model);
-	handle_selection(list, treesel, GPOINTER_TO_INT(user_data));
+	dir_found = is_folder_selected(list);
+
+	if (! dir_found || check_single_selection(treesel))
+	{
+		GList *item;
+
+		for (item = list; item != NULL; item = g_list_next(item))
+		{
+			GtkTreePath *treepath = item->data;
+			gchar *fname = get_tree_path_filename(treepath);
+
+			open_external(fname, dir_found);
+			g_free(fname);
+		}
+	}
+
+	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
+	g_list_free(list);
+}
+
+
+static void open_selected_files(GList *list)
+{
+	GList *item;
+
+	for (item = list; item != NULL; item = g_list_next(item))
+	{
+		GtkTreePath *treepath = item->data;
+		gchar *fname = get_tree_path_filename(treepath);
+
+		documents->open_file(fname, FALSE, NULL, NULL);
+		g_free(fname);
+	}
+}
+
+
+static void open_folder(GtkTreePath *treepath)
+{
+	gchar *fname = get_tree_path_filename(treepath);
+
+	setptr(current_dir, fname);
+	refresh();
+}
+
+
+static void on_open_clicked(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GtkTreeSelection *treesel;
+	GtkTreeModel *model;
+	GList *list;
+	gboolean dir_found;
+
+	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
+
+	list = gtk_tree_selection_get_selected_rows(treesel, &model);
+	dir_found = is_folder_selected(list);
+
+	if (dir_found)
+	{
+		if (check_single_selection(treesel))
+		{
+			GtkTreePath *treepath = list->data;	// first selected item
+
+			open_folder(treepath);
+		}
+	}
+	else
+		open_selected_files(list);
 
 	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
 	g_list_free(list);
@@ -374,40 +448,28 @@ static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkTreeSelection *treesel;
 	GtkTreeModel *model;
-	GtkTreePath *treepath;
-	GtkTreeIter iter;
 	GList *list;
-	GList *item;
-	gchar *icon;
 	gchar *dir;
-	gchar *name;
 	gboolean is_dir = FALSE;
 
 	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
-	if (gtk_tree_selection_count_selected_rows(treesel) != 1)
+	if (! check_single_selection(treesel))
 		return;
 
 	list = gtk_tree_selection_get_selected_rows(treesel, &model);
-	for (item = list; item != NULL; item = g_list_next(item))
-	{
-		treepath = (GtkTreePath*) item->data;
-		gtk_tree_model_get_iter(model, &iter, treepath);
-		gtk_tree_model_get(model, &iter,
-			FILEVIEW_COLUMN_ICON, &icon,
-			FILEVIEW_COLUMN_NAME, &name, -1);
+	is_dir = is_folder_selected(list);
 
-		if (utils->str_equal(icon, GTK_STOCK_DIRECTORY))
-			is_dir = TRUE;
-		g_free(icon);
+	if (is_dir)
+	{
+		GtkTreePath *treepath = list->data;	// first selected item
+
+		dir = get_tree_path_filename(treepath);
 	}
+	else
+		dir = g_strdup(current_dir);
 
 	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
 	g_list_free(list);
-
-	if (is_dir)
-		dir = g_strconcat(current_dir, G_DIR_SEPARATOR_S, name, NULL);
-	else
-		dir = g_strdup(current_dir);
 
 	setptr(dir, utils->get_utf8_from_locale(dir));
 	search->show_find_in_files_dialog(dir);
@@ -432,17 +494,16 @@ static GtkWidget *create_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate",
-		G_CALLBACK(open_selected_files), GINT_TO_POINTER(FALSE));
-
+		G_CALLBACK(on_open_clicked), NULL);
 
 	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
-	item = gtk_image_menu_item_new_with_mnemonic(_("Open _with ..."));
+	item = gtk_image_menu_item_new_with_mnemonic(_("Open _externally"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate",
-		G_CALLBACK(open_selected_files), GINT_TO_POINTER(TRUE));
+		G_CALLBACK(on_external_open), NULL);
 
 	image = gtk_image_new_from_stock(GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
@@ -481,7 +542,7 @@ static GtkWidget *create_popup_menu()
 static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
 	if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
-		open_selected_files(NULL, NULL);
+		on_open_clicked(NULL, NULL);
 	else
 	if (event->button == 3)
 	{
@@ -504,7 +565,7 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		|| event->keyval == GDK_ISO_Enter
 		|| event->keyval == GDK_KP_Enter
 		|| event->keyval == GDK_space)
-		open_selected_files(NULL, NULL);
+		on_open_clicked(NULL, NULL);
 
 	if ((event->keyval == GDK_Up ||
 		event->keyval == GDK_KP_Up) &&
@@ -517,6 +578,7 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 {
 	gchar *new_dir = (gchar*) gtk_entry_get_text(entry);
+
 	if (NZV(new_dir))
 	{
 		if (g_str_has_suffix(new_dir, ".."))
