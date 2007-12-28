@@ -6,6 +6,8 @@
    item callbacks.
    Rename "Open with..." popup item "Open externally" ("..." is usually
    used when the user can input more information).
+ * plugins/filebrowser.c:
+   Disable popup menu items when there is no selection.
 
 
 2007-12-25  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

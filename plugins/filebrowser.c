@@ -77,6 +77,13 @@ static gchar		*current_dir = NULL;	// in locale-encoding
 static gchar		*open_cmd;				// in locale-encoding
 static gchar		*config_file;
 
+static struct
+{
+	GtkWidget *open;
+	GtkWidget *open_external;
+	GtkWidget *find_in_files;
+} popup_items;
+
 
 // Returns: whether name should be hidden.
 static gboolean check_hidden(const gchar *base_name)
@@ -495,6 +502,7 @@ static GtkWidget *create_popup_menu()
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate",
 		G_CALLBACK(on_open_clicked), NULL);
+	popup_items.open = item;
 
 	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
@@ -504,6 +512,7 @@ static GtkWidget *create_popup_menu()
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate",
 		G_CALLBACK(on_external_open), NULL);
+	popup_items.open_external = item;
 
 	image = gtk_image_new_from_stock(GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
@@ -512,6 +521,7 @@ static GtkWidget *create_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect((gpointer) item, "activate", G_CALLBACK(on_find_in_files), NULL);
+	popup_items.find_in_files = item;
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -543,7 +553,25 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 {
 	if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
 		on_open_clicked(NULL, NULL);
-	else
+	return FALSE;
+}
+
+
+static void update_popup_menu(GtkWidget *popup_menu)
+{
+	GtkTreeSelection *treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
+	gboolean have_sel = (gtk_tree_selection_count_selected_rows(treesel) > 0);
+	gboolean multi_sel = (gtk_tree_selection_count_selected_rows(treesel) > 1);
+
+	gtk_widget_set_sensitive(popup_items.open, have_sel);
+	gtk_widget_set_sensitive(popup_items.open_external, have_sel);
+	gtk_widget_set_sensitive(popup_items.find_in_files, have_sel && ! multi_sel);
+}
+
+
+// delay updating popup menu until the selection has been set
+static gboolean on_button_release(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
 	if (event->button == 3)
 	{
 		static GtkWidget *popup_menu = NULL;
@@ -551,9 +579,10 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 		if (popup_menu == NULL)
 			popup_menu = create_popup_menu();
 
+		update_popup_menu(popup_menu);
+
 		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL,
 			event->button, event->time);
-		return FALSE;
 	}
 	return FALSE;
 }
@@ -631,6 +660,8 @@ static void prepare_file_view()
 	g_signal_connect(G_OBJECT(file_view), "realize", G_CALLBACK(on_current_path), NULL);
 	g_signal_connect(G_OBJECT(file_view), "button-press-event",
 		G_CALLBACK(on_button_press), NULL);
+	g_signal_connect(G_OBJECT(file_view), "button-release-event",
+		G_CALLBACK(on_button_release), NULL);
 	g_signal_connect(G_OBJECT(file_view), "key-press-event",
 		G_CALLBACK(on_key_press), NULL);
 }
