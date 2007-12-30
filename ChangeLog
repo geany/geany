@@ -1,3 +1,10 @@
+2007-12-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * tagmanager/basic.c:
+   Don't parse in comments and fix wrong creation of tags including
+   non-tag characters(e.g. '=' sign).
+
+
 2007-12-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/filebrowser.c:

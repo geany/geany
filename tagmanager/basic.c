@@ -105,7 +105,7 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 			pos++;
 	}
 
-	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ','; pos++)
+	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 		vStringPut (name, *pos);
 	vStringTerminate (name);
 	makeSimpleTag (name, BasicKinds, kind);
@@ -113,13 +113,21 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 	// if the line contains a ',', we have multiple declarations
 	while (*pos && strchr (pos, ','))
 	{
-		while (*pos != ',') // skip all we don't need(e.g. "..., new_array(5), " we skip "(5)")
+		// skip all we don't need(e.g. "..., new_array(5), " we skip "(5)")
+		while (*pos != ',' && *pos != '\'')
 			pos++;
+
+		if (*pos == '\'')
+			return 0; // break if we are in a comment
+
 		while (isspace (*pos) || *pos == ',')
 			pos++;
 
+		if (*pos == '\'')
+			return 0; // break if we are in a comment
+
 		vStringClear (name);
-		for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ','; pos++)
+		for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 			vStringPut (name, *pos);
 		vStringTerminate (name);
 		makeSimpleTag (name, BasicKinds, kind);
