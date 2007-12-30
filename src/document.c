@@ -1930,7 +1930,10 @@ void document_set_filetype(gint idx, filetype *type)
 	if (type == NULL || ! DOC_IDX_VALID(idx))
 		return;
 
-	geany_debug("%s : %s (%s)",	doc_list[idx].file_name, type->name, doc_list[idx].encoding);
+	geany_debug("%s : %s (%s)",
+		(doc_list[idx].file_name != NULL) ? doc_list[idx].file_name : "unknown",
+		(type->name != NULL) ? type->name : "unknown",
+		(doc_list[idx].encoding != NULL) ? doc_list[idx].encoding : "unknown");
 
 	ft_changed = (doc_list[idx].file_type != type);
 	if (ft_changed)	// filetype has changed

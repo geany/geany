@@ -3,6 +3,7 @@
  * tagmanager/basic.c:
    Don't parse in comments and fix wrong creation of tags including
    non-tag characters(e.g. '=' sign).
+ * src/document.c: Avoid crash on Windows with enabled debug messages.
 
 
 2007-12-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
