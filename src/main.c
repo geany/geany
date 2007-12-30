@@ -471,6 +471,10 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	app->debug_mode = debug_mode;
 #endif
 
+#ifdef G_OS_WIN32
+	win32_init_debug_code();
+#endif
+
 	if (alternate_config)
 	{
 		geany_debug("alternate config: %s", alternate_config);

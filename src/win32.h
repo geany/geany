@@ -55,4 +55,7 @@ gchar *win32_show_project_folder_dialog(GtkWidget *parent, const gchar *title,
 
 gint win32_check_write_permission(const gchar *dir);
 
+void win32_init_debug_code();
+
+
 #endif

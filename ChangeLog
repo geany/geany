@@ -4,6 +4,11 @@
    Don't parse in comments and fix wrong creation of tags including
    non-tag characters(e.g. '=' sign).
  * src/document.c: Avoid crash on Windows with enabled debug messages.
+ * src/main.c, src/win32.c, src/win32.h:
+   Add debug console window when debug mode is enabled to get any text
+   messages on Windows.
+   Fix wrong argument in win32_check_write_permission()
+   (reported by Jeff Pohlmeyer, thanks).
 
 
 2007-12-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

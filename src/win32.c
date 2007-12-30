@@ -35,6 +35,7 @@
 #include <commdlg.h>
 #include <shlobj.h>
 #include <io.h>
+#include <fcntl.h>
 
 #include <string.h>
 #include <ctype.h>
@@ -559,7 +560,8 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 gint win32_check_write_permission(const gchar *dir)
 {
 	static wchar_t w_dir[512];
-	MultiByteToWideChar(CP_UTF8, 0, app->configdir, -1, w_dir, sizeof w_dir);
+	errno = 0; // to get sure it is clean
+	MultiByteToWideChar(CP_UTF8, 0, dir, -1, w_dir, sizeof w_dir);
 	_waccess(w_dir, R_OK | W_OK);
 	return errno;
 }
@@ -596,5 +598,64 @@ void win32_open_browser(const gchar *uri)
 {
 	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
 }
+
+
+static void debug_setup_console()
+{
+	static const WORD MAX_CONSOLE_LINES = 500;
+	gint	 hConHandle;
+	glong	 lStdHandle;
+	CONSOLE_SCREEN_BUFFER_INFO coninfo;
+	FILE	*fp;
+
+	// allocate a console for this app
+	AllocConsole();
+
+	// set the screen buffer to be big enough to let us scroll text
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
+	coninfo.dwSize.Y = MAX_CONSOLE_LINES;
+	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
+
+	// redirect unbuffered STDOUT to the console
+	lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE);
+	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+	fp = _fdopen(hConHandle, "w");
+	*stdout = *fp;
+	setvbuf(stdout, NULL, _IONBF, 0);
+
+	// redirect unbuffered STDERR to the console
+	lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
+	hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+	fp = _fdopen(hConHandle, "w");
+	*stderr = *fp;
+	setvbuf(stderr, NULL, _IONBF, 0);
+
+}
+
+
+static void debug_log_handler(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message,
+					   gpointer user_data)
+{
+	if (log_domain != NULL)
+		fprintf(stderr, "%s: %s\n", log_domain, message);
+	else
+		fprintf(stderr, "%s\n", message);
+}
+
+
+void win32_init_debug_code()
+{
+#ifndef GEANY_DEBUG
+	if (app->debug_mode)
+#endif
+	{	// create a console window to get log messages on Windows
+		debug_setup_console();
+		// change the log handlers to output log messages in ther created console window
+		g_log_set_handler("GLib",
+			G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, debug_log_handler, NULL);
+		g_log_set_default_handler(debug_log_handler, NULL);
+	}
+}
+
 
 #endif
