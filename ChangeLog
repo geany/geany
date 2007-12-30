@@ -12,6 +12,7 @@
  * src/main.c, src/win32.c, src/win32.h:
    Create Geany's configuration directory in user's appdata path instead
    of the default home directory (closes #1856305).
+ * src/geany.h, src/project.c: Remove unnecessary macro GEANY_HOME_DIR.
 
 2007-12-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 

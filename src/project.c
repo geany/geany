@@ -984,7 +984,7 @@ void project_load_prefs(GKeyFile *config)
 		"project_file_path", NULL);
 	if (local_prefs.project_file_path == NULL)
 	{
-		local_prefs.project_file_path = g_strconcat(GEANY_HOME_DIR,
+		local_prefs.project_file_path = g_strconcat(g_get_home_dir(),
 			G_DIR_SEPARATOR_S, PROJECT_DIR, NULL);
 	}
 }

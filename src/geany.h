@@ -42,7 +42,6 @@
 
 // for detailed description look in the documentation, things are not
 // listed in the documentation should not be changed ;-)
-#define GEANY_HOME_DIR					g_get_home_dir()
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
 #define GEANY_CODENAME					"Vensell"
