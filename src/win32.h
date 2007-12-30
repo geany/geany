@@ -57,5 +57,6 @@ gint win32_check_write_permission(const gchar *dir);
 
 void win32_init_debug_code();
 
+gchar *win32_get_appdata_folder();
 
 #endif

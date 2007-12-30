@@ -9,7 +9,9 @@
    messages on Windows.
    Fix wrong argument in win32_check_write_permission()
    (reported by Jeff Pohlmeyer, thanks).
-
+ * src/main.c, src/win32.c, src/win32.h:
+   Create Geany's configuration directory in user's appdata path instead
+   of the default home directory (closes #1856305).
 
 2007-12-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 

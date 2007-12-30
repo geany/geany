@@ -481,7 +481,24 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		app->configdir = alternate_config;
 	}
 	else
-		app->configdir = g_strconcat(GEANY_HOME_DIR, G_DIR_SEPARATOR_S, ".", PACKAGE, NULL);
+	{
+#ifdef G_OS_WIN32
+		gchar *appdata;
+
+		appdata = win32_get_appdata_folder();
+		if (appdata != NULL)
+		{
+			app->configdir = g_strconcat(appdata, G_DIR_SEPARATOR_S, "Geany", NULL);
+			g_free(appdata);
+		}
+		else
+		{
+			app->configdir = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, "Geany", NULL);
+		}
+#else
+		app->configdir = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, ".geany", NULL);
+#endif
+	}
 
 #ifdef GEANY_DEBUG
 	if (generate_datafiles)
