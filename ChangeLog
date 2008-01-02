@@ -6,6 +6,9 @@
    Use documents->open_files() as it's more efficient when opening
    multiple files and existing files are open for filetypes with
    typename colouring.
+ * src/search.c:
+   Add mnemonics for Find All, Replace All expanders in dialogs.
+   Fix Find dialog mnemonic conflict _f.
 
 
 2007-12-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -338,7 +338,7 @@ void search_show_find_dialog()
 			add_find_checkboxes(GTK_DIALOG(widgets.find_dialog)));
 
 		// Now add the multiple match options
-		exp = gtk_expander_new(_("Find All"));
+		exp = gtk_expander_new_with_mnemonic(_("_Find All"));
 		bbox = gtk_hbutton_box_new();
 
 		button = gtk_button_new_with_mnemonic(_("_Mark"));
@@ -434,7 +434,7 @@ void search_show_replace_dialog()
 		label_find = gtk_label_new_with_mnemonic(_("_Search for:"));
 		gtk_misc_set_alignment(GTK_MISC(label_find), 0, 0.5);
 
-		label_replace = gtk_label_new_with_mnemonic(_("Re_place with:"));
+		label_replace = gtk_label_new_with_mnemonic(_("Replace wit_h:"));
 		gtk_misc_set_alignment(GTK_MISC(label_replace), 0, 0.5);
 
 		entry_find = gtk_combo_box_entry_new_text();
@@ -481,7 +481,7 @@ void search_show_replace_dialog()
 			add_find_checkboxes(GTK_DIALOG(widgets.replace_dialog)));
 
 		// Now add the multiple replace options
-		exp = gtk_expander_new(_("Replace All"));
+		exp = gtk_expander_new_with_mnemonic(_("Re_place All"));
 		bbox = gtk_hbutton_box_new();
 
 		button = gtk_button_new_with_mnemonic(_("In Se_lection"));
@@ -610,7 +610,7 @@ void search_show_find_in_files_dialog(const gchar *dir)
 		g_object_unref(G_OBJECT(size_group));	// auto destroy the size group
 
 		rbox = gtk_vbox_new(FALSE, 0);
-		rbtn = gtk_radio_button_new_with_mnemonic(NULL, _("_Fixed strings"));
+		rbtn = gtk_radio_button_new_with_mnemonic(NULL, _("Fixed s_trings"));
 		// Make fixed strings the default to speed up searching all files in directory.
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(rbtn), TRUE);
 		g_object_set_data_full(G_OBJECT(widgets.find_in_files_dialog), "radio_fgrep",
