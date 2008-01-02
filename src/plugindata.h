@@ -93,7 +93,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 36;
+static const gint api_version = 37;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -197,6 +197,7 @@ typedef struct GeanyData
 	struct TagManagerFuncs		*tm;
 	struct SearchFuncs			*search;
 	struct HighlightingFuncs	*highlighting;
+	struct FiletypeFuncs		*filetype;
 }
 GeanyData;
 
@@ -284,6 +285,12 @@ typedef struct UtilsFuncs
 	gchar*		(*get_utf8_from_locale) (const gchar *locale_text);
 	gchar*		(*remove_ext_from_filename) (const gchar *filename);
 	gint		(*mkdir) (const gchar *path, gboolean create_parent_dirs);
+	gboolean	(*get_setting_boolean) (GKeyFile *config, const gchar *section, const gchar *key,
+				 const gboolean default_value);
+	gint		(*get_setting_integer) (GKeyFile *config, const gchar *section, const gchar *key,
+				 const gint default_value);
+	gchar*		(*get_setting_string) (GKeyFile *config, const gchar *section, const gchar *key,
+				 const gchar *default_value);
 }
 UtilsFuncs;
 
@@ -345,16 +352,28 @@ typedef struct HighlightingFuncs
 HighlightingFuncs;
 
 
+typedef struct FiletypeFuncs
+{
+	filetype*	(*detect_from_filename) (const gchar *utf8_filename);
+}
+FiletypeFuncs;
+
+
 typedef struct SearchFuncs
 {
 	void		(*show_find_in_files_dialog) (const gchar *dir);
 }
 SearchFuncs;
 
-
 typedef struct TagManagerFuncs
 {
-	gchar*		(*get_real_path) (const gchar *file_name);
+	gchar*			(*get_real_path) (const gchar *file_name);
+	TMWorkObject*	(*source_file_new) (const char *file_name, gboolean update, const char *name);
+	gboolean		(*workspace_add_object) (TMWorkObject *work_object);
+	gboolean		(*source_file_update) (TMWorkObject *source_file, gboolean force,
+					 gboolean recurse, gboolean update_parent);
+	void			(*work_object_free) (gpointer work_object);
+	gboolean		(*workspace_remove_object) (TMWorkObject *w, gboolean do_free);
 }
 TagManagerFuncs;
 

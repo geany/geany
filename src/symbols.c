@@ -1081,6 +1081,11 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 	{
 		gint new_idx = document_find_by_filename(
 			tmtag->atts.entry.file->work_object.file_name, TRUE);
+		// not found in opened document, should open
+		if (new_idx == -1)
+		{
+			new_idx = document_open_file(tmtag->atts.entry.file->work_object.file_name, FALSE, NULL, NULL);
+		}
 
 		if (navqueue_goto_line(new_idx, tmtag->atts.entry.line))
 			return TRUE;

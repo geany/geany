@@ -35,6 +35,8 @@
 #define dialogs			geany_data->dialogs
 #define documents		geany_data->documents	// avoids conflict with document typedef
 #define encodings		geany_data->encoding	// avoids conflict with document::encoding
+/// TODO not sure whether "filetype" is good, might conflict with something
+#define filetype		geany_data->filetype
 #define highlighting	geany_data->highlighting
 #define keybindings		geany_data->keybindings
 #define msgwindow		geany_data->msgwindow

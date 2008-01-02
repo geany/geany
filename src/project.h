@@ -25,7 +25,6 @@
 #ifndef GEANY_PROJECT_H
 #define GEANY_PROJECT_H 1
 
-
 /* structure for representing a project. */
 struct _GeanyProject
 {
@@ -37,6 +36,9 @@ struct _GeanyProject
 	gchar *base_path;		// base path of the project directory (in UTF-8, maybe relative)
 	gchar *run_cmd; 		// project run command (in UTF-8)
 	// ...					// fields for build process(run arguments and so on) should be added
+
+	gint type;				// identifier whether it is a pure Geany project or modified/extended
+							// by a plugin
 
 	gchar **file_patterns;	// array of filename extension patterns
 };

@@ -3,6 +3,12 @@
  * README, src/makefile.win32:
    Add -lshfolder to linker flags on Windows.
    Add notice for Win9x users to install SHFolder.dll.
+ * plugins/pluginmacros.h, src/plugindata.h, src/plugins.c,
+   src/project.h, src/symbols.c: Patch by Yura Siamashka:
+   Add project type field.
+   Go to tag definition/declaration will open the file with the tag if
+   it isn't already open.
+   Add some utils and tagmanager functions to the plugin API.
 
 
 2008-01-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

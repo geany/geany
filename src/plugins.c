@@ -148,7 +148,10 @@ static UtilsFuncs utils_funcs = {
 	&utils_get_locale_from_utf8,
 	&utils_get_utf8_from_locale,
 	&utils_remove_ext_from_filename,
-	&utils_mkdir
+	&utils_mkdir,
+	&utils_get_setting_boolean,
+	&utils_get_setting_integer,
+	&utils_get_setting_string
 };
 
 static UIUtilsFuncs uiutils_funcs = {
@@ -182,7 +185,12 @@ static KeybindingFuncs keybindings_funcs = {
 };
 
 static TagManagerFuncs tagmanager_funcs = {
-	&tm_get_real_path
+	&tm_get_real_path,
+	&tm_source_file_new,
+	&tm_workspace_add_object,
+	&tm_source_file_update,
+	&tm_work_object_free,
+	&tm_workspace_remove_object
 };
 
 static SearchFuncs search_funcs = {
@@ -191,6 +199,11 @@ static SearchFuncs search_funcs = {
 
 static HighlightingFuncs highlighting_funcs = {
 	&highlighting_get_style
+};
+
+
+static FiletypeFuncs filetype_funcs = {
+	&filetypes_detect_from_filename
 };
 
 
@@ -215,7 +228,8 @@ static GeanyData geany_data = {
 	&keybindings_funcs,
 	&tagmanager_funcs,
 	&search_funcs,
-	&highlighting_funcs
+	&highlighting_funcs,
+	&filetype_funcs
 };
 
 
