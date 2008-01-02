@@ -354,7 +354,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "goto",           KEYWORD_GOTO,           { 1, 1, 1, 1, 0 } },
 	{ "if",             KEYWORD_IF,             { 1, 1, 1, 1, 0 } },
 	{ "implements",     KEYWORD_IMPLEMENTS,     { 0, 0, 0, 1, 0 } },
-	{ "import",         KEYWORD_IMPORT,         { 0, 0, 0, 1, 0 } },
+	{ "import",         KEYWORD_IMPORT,         { 0, 1, 0, 1, 0 } },	// D
 	{ "inline",         KEYWORD_INLINE,         { 0, 1, 0, 0, 0 } },
 	{ "inout",          KEYWORD_INOUT,          { 0, 0, 0, 0, 1 } },
 	{ "input",          KEYWORD_INPUT,          { 0, 0, 0, 0, 1 } },
@@ -369,7 +369,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "m_state",        KEYWORD_M_STATE,        { 0, 0, 0, 0, 1 } },
 	{ "m_trans",        KEYWORD_M_TRANS,        { 0, 0, 0, 0, 1 } },
 	{ "mutable",        KEYWORD_MUTABLE,        { 0, 1, 0, 0, 0 } },
-	{ "module",         KEYWORD_MODULE,         { 0, 1, 0, 0, 0 } },
+	{ "module",         KEYWORD_MODULE,         { 0, 1, 0, 0, 0 } },	// D
 	{ "namespace",      KEYWORD_NAMESPACE,      { 0, 1, 1, 0, 0 } },
 	{ "native",         KEYWORD_NATIVE,         { 0, 0, 0, 1, 0 } },
 	{ "new",            KEYWORD_NEW,            { 0, 1, 1, 1, 0 } },
@@ -2768,14 +2768,14 @@ static void initializeDParser (const langType language)
 {
     contextual_fake_count = 0;
     Lang_d = language;
-    buildKeywordHash (language, 1);
+    buildKeywordHash (language, 1);	// C++ keywords
 }
 
 static void initializeFeriteParser (const langType language)
 {
     contextual_fake_count = 0;
     Lang_ferite = language;
-    buildKeywordHash (language, 1);
+    buildKeywordHash (language, 1);	// C++ keywords
 }
 
 static void initializeCsharpParser (const langType language)

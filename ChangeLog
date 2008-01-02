@@ -1,3 +1,9 @@
+2008-01-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * tagmanager/c.c:
+   Ignore D import statements.
+
+
 2007-12-30  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * tagmanager/basic.c:
@@ -13,6 +19,7 @@
    Create Geany's configuration directory in user's appdata path instead
    of the default home directory (closes #1856305).
  * src/geany.h, src/project.c: Remove unnecessary macro GEANY_HOME_DIR.
+
 
 2007-12-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
