@@ -49,6 +49,9 @@ else
 PRINTING_LIBS=
 endif
 
+WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \
+		 -lole32 -luuid -lcomdlg32 -lcomctl32 -liberty -lwsock32
+
 CCFLAGS=-Wall -O2 -g -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
 
 OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o filetypes.o \
@@ -79,7 +82,7 @@ binclean:
 $(TARGET): $(OBJS) $(RES) ../scintilla/scintilla.a ../tagmanager/tagmanager.a
 	$(CXX) $(OBJS) $(RES) -o $(TARGET) \
 	../scintilla/scintilla.a ../tagmanager/tagmanager.a $(ALL_GTK_LIBS) $(PRINTING_LIBS) \
-	 -mwindows -lkernel32 -limm32 -lshell32 -lole32 -luuid -lcomdlg32 -lcomctl32 -liberty -lwsock32
+	 $(WIN_LIBS)
 
 deps.mak:
 	$(CC) -MM  $(CCFLAGS) *.c >deps.mak

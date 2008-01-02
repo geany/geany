@@ -1,3 +1,10 @@
+2008-01-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * README, src/makefile.win32:
+   Add -lshfolder to linker flags on Windows.
+   Add notice for Win9x users to install SHFolder.dll.
+
+
 2008-01-02  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * tagmanager/c.c:
@@ -553,7 +560,7 @@
    for a new diff on the same file. Thanks.
 
 
-2007-11-04  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-11-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c:
    Fix error in Compile and Build commands on Windows if the command
@@ -593,7 +600,7 @@
    Remove filetype::style_func_ptr field.
 
 
-2007-11-02  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-11-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/build.c, src/makefile.win32: Add exit code detection for Windows.
  * src/keyfile.c: Fix broken window maximization.
@@ -669,7 +676,7 @@
    Make sure current_dir always has a full path.
 
 
-2007-10-28  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-10-28  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * doc/geany.txt, src/build.c, src/project.c, src/project.h:
    Add support for relative project base path.
@@ -1098,7 +1105,7 @@
    Correct prev_translators email address.
 
 
-2007-09-11  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-09-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/callbacks.c: HTML manual is called Manual.html on Windows, so
                     open this file.
@@ -1181,7 +1188,7 @@
    argument contains relative path elements or symlinks.
 
 
-2007-09-03  Enrico Tröger  <enrico.troeger@uvena.de>
+2007-09-03  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/makefile.win32, src/ui_utils.c, src/win32.c,
    plugins/makefile.win32:

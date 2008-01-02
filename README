@@ -69,8 +69,12 @@ Windows
 Geany runs also under Windows. To download the binary with all necessary
 files, visit Geany's homepage. But you should know, that the Windows
 version is not yet well tested and there are some features missing:
-- build support (perhaps will be added later, Run command is working)
+- build support (implemented but might be still buggy)
 - embedded terminal emulation (VTE)
+- Windows 9x users: in order to run Geany on Windows 95, 98 or ME you
+  need to install the file SHFolder.dll either in the Geany installation
+  directory or in your Windows directory. For more information please
+  visit http://support.microsoft.com/kb/241733.
 
 
 License
@@ -94,7 +98,7 @@ file.
 
 
 --
-2005-2007 by Enrico Tröger, Nick Treleaven and Frank Lanitz
+2005-2008 by Enrico Tröger, Nick Treleaven and Frank Lanitz
 enrico.troeger(at)uvena(dot)de
 nick(dot)treleaven(at)btinternet(dot)com
 frank(at)frank(dot)uvena(dot)de
