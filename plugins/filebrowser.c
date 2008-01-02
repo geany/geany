@@ -398,8 +398,10 @@ static void on_external_open(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+/* We use documents->open_files() as it's more efficient. */
 static void open_selected_files(GList *list)
 {
+	GSList *files = NULL;
 	GList *item;
 
 	for (item = list; item != NULL; item = g_list_next(item))
@@ -407,9 +409,11 @@ static void open_selected_files(GList *list)
 		GtkTreePath *treepath = item->data;
 		gchar *fname = get_tree_path_filename(treepath);
 
-		documents->open_file(fname, FALSE, NULL, NULL);
-		g_free(fname);
+		files = g_slist_append(files, fname);
 	}
+	documents->open_files(files, FALSE, NULL, NULL);
+	g_slist_foreach(files, (GFunc) g_free, NULL);	// free filenames
+	g_slist_free(files);
 }
 
 
