@@ -1,7 +1,13 @@
+2008-01-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * plugins/pluginmacros.h:
+   Remove filetype macro to avoid naming conflicts.
+
+
 2008-01-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS, src/about.c, po/ja.po, po/LINGUAS:
-      Adding of Japanese translation (Thanks to Tarot Osuji).
+   Adding of Japanese translation (Thanks to Tarot Osuji).
 
 
 2008-01-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
