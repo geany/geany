@@ -4,6 +4,12 @@
    Remove filetype macro to avoid naming conflicts.
 
 
+2008-01-04  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * src/about.c, THANKS: Changed Ukrainian language code to just uk to
+   make it better fit with po-file-directory.
+
+
 2008-01-03  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * THANKS, src/about.c, po/ja.po, po/LINGUAS:
