@@ -1,10 +1,10 @@
 /*
  *      vcdiff.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
- *      Copyright 2007 Enrico Tröger <enrico.troeger@uvena.de>
- *      Copyright 2007 Nick Treleaven <nick.treleaven@btinternet.com>
- *      Copyright 2007 Yura Siamashka <yurand2@gmail.com>
+ *      Copyright 2007-2008 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
+ *      Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+ *      Copyright 2007-2008 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2007-2008 Yura Siamashka <yurand2(at)gmail(dot)com>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by

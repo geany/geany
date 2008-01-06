@@ -17,7 +17,7 @@ FILETYPE VFT_APP
 			 VALUE "FileVersion", "0.13"
 			 VALUE "FileDescription", "Geany"
 			 VALUE "InternalName", "geany"
-			 VALUE "LegalCopyright", "Copyright 2005-2007 by Enrico Troeger"
+			 VALUE "LegalCopyright", "Copyright 2005-2008 by Enrico Troeger"
 			 VALUE "LegalTrademarks", ""
 			 VALUE "OriginalFilename", "geany"
 			 VALUE "ProductName", "geany"

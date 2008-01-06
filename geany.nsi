@@ -42,7 +42,7 @@ VIProductVersion "${PRODUCT_VERSION_ID}"
 VIAddVersionKey "ProductName" "${PRODUCT_NAME}"
 VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
-VIAddVersionKey "LegalCopyright" "Copyright 2005-2007 by Enrico Tröger"
+VIAddVersionKey "LegalCopyright" "Copyright 2005-2008 by Enrico Tröger"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
 
 ;;;;;;;;;;;;;;;;

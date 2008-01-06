@@ -3,8 +3,8 @@
 # Little shell script to display some basic statistics about Geany's translation
 # files. It also checks the menu accelerators.
 #
-# Copyright 2007 Enrico Tröger <enrico.troeger@uvena.de>
-# Copyright 2007 Frank Lanitz <frank@frank.uvena.de>
+# Copyright 2007-2008 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
+# Copyright 2007-2008 Frank Lanitz <enrico(dot)troeger(at)uvena(dot)de>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
