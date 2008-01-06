@@ -716,6 +716,38 @@ gchar *utils_get_hostname()
 }
 
 
+/* Checks whether the given file can be written. locale_filename is expected in locale encoding.
+ * Returns 0 if it can be written, otherwise it returns errno */
+gint utils_is_file_writeable(const gchar *locale_filename)
+{
+	gchar *file;
+	gint ret;
+
+	if (! g_file_test(locale_filename, G_FILE_TEST_EXISTS) &&
+		! g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
+		// get the file's directory to check for write permission if it doesn't yet exist
+		file = g_path_get_dirname(locale_filename);
+	else
+		file = g_strdup(locale_filename);
+
+#ifdef G_OS_WIN32
+	// use _waccess on Windows, access() doesn't accept special characters
+	ret = win32_check_write_permission(file);
+#else
+
+	// access set also errno to "FILE NOT FOUND" even if locale_filename is writeable, so use
+	// errno only when access() explicitly returns an error
+	if (access(file, R_OK | W_OK) != 0)
+		ret = errno;
+	else
+		ret = 0;
+
+	g_free(file);
+	return ret;
+#endif
+}
+
+
 #ifdef G_OS_WIN32
 # define DIR_SEP "\\" // on Windows we need an additional dir separator
 #else
@@ -740,15 +772,7 @@ gint utils_make_settings_dir()
 
 	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
 	{	// check whether geany.conf can be written
-#ifdef G_OS_WIN32
-		// use _waccess on Windows, access() doesn't accept special characters
-		saved_errno = win32_check_write_permission(app->configdir);
-#else
-		// access set also errno to "FILE NOT FOUND" even if app->configdir is writeable, so use
-		// errno only when access() explicitly returns an error
-		if (access(app->configdir, R_OK | W_OK) != 0)
-			saved_errno = errno;
-#endif
+		saved_errno = utils_is_file_writeable(app->configdir);
 	}
 
 	// make subdir for filetype definitions

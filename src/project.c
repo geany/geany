@@ -545,6 +545,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 	const gchar *name, *file_name, *base_path;
 	gchar *locale_filename;
 	gint name_len;
+	gint err_code;
 	gboolean new_project = FALSE;
 	GeanyProject *p;
 
@@ -575,9 +576,9 @@ static gboolean update_config(const PropertyDialogElements *e)
 
 	// finally test whether the given project file can be written
 	locale_filename = utils_get_locale_from_utf8(file_name);
-	if (utils_write_file(file_name, "") != 0)
+	if ((err_code = utils_is_file_writeable(locale_filename)) != 0)
 	{
-		SHOW_ERR(_("Project file could not be written."));
+		SHOW_ERR1(_("Project file could not be written (%s)."), g_strerror(err_code));
 		gtk_widget_grab_focus(e->file_name);
 		return FALSE;
 	}

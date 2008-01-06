@@ -172,4 +172,6 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error);
 
 gboolean utils_str_has_upper(const gchar *str);
 
+gint utils_is_file_writeable(const gchar *locale_filename);
+
 #endif

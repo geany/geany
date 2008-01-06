@@ -560,10 +560,11 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 gint win32_check_write_permission(const gchar *dir)
 {
 	static wchar_t w_dir[512];
-	errno = 0; // to get sure it is clean
 	MultiByteToWideChar(CP_UTF8, 0, dir, -1, w_dir, sizeof w_dir);
-	_waccess(w_dir, R_OK | W_OK);
-	return errno;
+	if (_waccess_s(w_dir, R_OK | W_OK) != 0)
+		return errno;
+	else
+		return 0;
 }
 
 
