@@ -275,13 +275,24 @@ void msgwin_msg_add(gint msg_color, gint line, gint idx, const gchar *string)
 {
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
+	gchar *tmp;
 
 	if (! ui_prefs.msgwindow_visible) msgwin_show_hide(TRUE);
 
+	// work around a strange problem when adding very long lines(greater than 4000 bytes)
+	// cut the string to a maximum of 1024 bytes and discard the rest
+	/// TODO find the real cause for the display problem / if it is GtkTreeView file a bug report
+	if (strlen(string) > 1024)
+		tmp = g_strndup(string, 1024);
+	else
+		tmp = g_strdup(string);
+
 	gtk_list_store_append(msgwindow.store_msg, &iter);
-	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2, color, 3, string, -1);
+	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, idx, 2, color, 3, tmp, -1);
 
 	gtk_widget_set_sensitive(lookup_widget(app->window, "next_message1"), TRUE);
+
+	g_free(tmp);
 }
 
 
