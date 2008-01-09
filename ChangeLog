@@ -1,3 +1,13 @@
+2008-01-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * geany.glade, src/geanywraplabel.c, src/geanywraplabel.h,
+   src/interface.c, src/plugins.c, src/prefs.c, src/vte.c,
+   src/Makefile.am, src/makefile.win32:
+   Add GeanyWrapLabel (subclass of GtkLabel) to wrap text at any width.
+   Use GeanyWrapLabel in preferences dialog and plugin manager dialog
+   to save a lot of space and improve layout of descriptive texts.
+
+
 2008-01-06  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.nsi, geany_private.rc, README, doc/geany.html, doc/geany.txt,

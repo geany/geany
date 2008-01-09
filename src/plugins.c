@@ -48,6 +48,7 @@
 #include "msgwindow.h"
 #include "prefs.h"
 #include "geanyobject.h"
+#include "geanywraplabel.h"
 #include "build.h"
 #include "encodings.h"
 #include "search.h"
@@ -705,7 +706,7 @@ void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data)
 				_("Plugin: %s %s\nDescription: %s\nAuthor(s): %s"),
 				pi->name, pi->version, pi->description, pi->author);
 
-			gtk_label_set_text(GTK_LABEL(pm_widgets.description_label), text);
+			geany_wrap_label_set_text(GTK_LABEL(pm_widgets.description_label), text);
 			g_free(text);
 
 			gtk_widget_set_sensitive(pm_widgets.configure_button,
@@ -870,9 +871,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	label2 = gtk_label_new(_("<b>Plugin details:</b>"));
 	gtk_label_set_use_markup(GTK_LABEL(label2), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
-	pm_widgets.description_label = gtk_label_new("");
-	gtk_label_set_line_wrap(GTK_LABEL(pm_widgets.description_label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(pm_widgets.description_label), 0, 0.5);
+	pm_widgets.description_label = geany_wrap_label_new("");
 
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), label2, TRUE, TRUE, 0);

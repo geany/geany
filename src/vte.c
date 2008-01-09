@@ -41,6 +41,7 @@
 #include "utils.h"
 #include "document.h"
 #include "callbacks.h"
+#include "geanywraplabel.h"
 
 
 VteInfo vte_info;
@@ -648,7 +649,7 @@ void vte_append_preferences_tab()
 		label = gtk_label_new(_("Terminal"));
 		vte_prefs_tab_num = gtk_notebook_append_page(GTK_NOTEBOOK(notebook), frame, label);
 
-		label = gtk_label_new(_("These settings for the virtual terminal emulator widget (VTE) only apply if the VTE library could be loaded."));
+		label = geany_wrap_label_new(_("These settings for the virtual terminal emulator widget (VTE) only apply if the VTE library could be loaded."));
 		gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 6);
 		gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_FILL);
 		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);

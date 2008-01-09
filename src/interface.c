@@ -2682,7 +2682,7 @@ create_prefs_dialog (void)
   GtkWidget *frame20;
   GtkWidget *alignment23;
   GtkWidget *vbox2;
-  GtkWidget *label17;
+  GtkWidget *vbox33;
   GtkWidget *table1;
   GtkWidget *label11;
   GtkWidget *label97;
@@ -2713,7 +2713,7 @@ create_prefs_dialog (void)
   GtkWidget *frame21;
   GtkWidget *alignment24;
   GtkWidget *vbox9;
-  GtkWidget *label120;
+  GtkWidget *vbox31;
   GtkWidget *table6;
   GtkWidget *entry_template_mail;
   GtkWidget *entry_template_initial;
@@ -2725,13 +2725,12 @@ create_prefs_dialog (void)
   GtkWidget *label130;
   GtkWidget *label131;
   GtkWidget *entry_template_developer;
-  GtkWidget *label132;
   GtkWidget *label180;
   GtkWidget *label119;
   GtkWidget *frame22;
   GtkWidget *alignment25;
   GtkWidget *vbox13;
-  GtkWidget *label152;
+  GtkWidget *vbox32;
   GtkWidget *scrolledwindow8;
   GtkWidget *treeview7;
   GtkWidget *alignment10;
@@ -2762,7 +2761,6 @@ create_prefs_dialog (void)
   GtkWidget *label203;
   GtkWidget *entry_print_dateformat;
   GtkWidget *radio_print_gtk;
-  GtkWidget *label204;
   GtkWidget *label201;
   GtkWidget *dialog_action_area3;
   GtkWidget *button3;
@@ -3962,11 +3960,9 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox2);
   gtk_container_add (GTK_CONTAINER (alignment23), vbox2);
 
-  label17 = gtk_label_new (_("Enter tool paths below. Tools you do not need can be left blank."));
-  gtk_widget_show (label17);
-  gtk_box_pack_start (GTK_BOX (vbox2), label17, FALSE, FALSE, 0);
-  gtk_misc_set_alignment (GTK_MISC (label17), 0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label17), 0, 6);
+  vbox33 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox33);
+  gtk_box_pack_start (GTK_BOX (vbox2), vbox33, FALSE, FALSE, 0);
 
   table1 = gtk_table_new (4, 3, FALSE);
   gtk_widget_show (table1);
@@ -4137,12 +4133,9 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox9);
   gtk_container_add (GTK_CONTAINER (alignment24), vbox9);
 
-  label120 = gtk_label_new (_("Set the information to be used in templates. See the documentation for details."));
-  gtk_widget_show (label120);
-  gtk_box_pack_start (GTK_BOX (vbox9), label120, FALSE, FALSE, 0);
-  gtk_label_set_line_wrap (GTK_LABEL (label120), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label120), 0, 0.5);
-  gtk_misc_set_padding (GTK_MISC (label120), 0, 6);
+  vbox31 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox31);
+  gtk_box_pack_start (GTK_BOX (vbox9), vbox31, FALSE, FALSE, 0);
 
   table6 = gtk_table_new (5, 2, FALSE);
   gtk_widget_show (table6);
@@ -4220,13 +4213,6 @@ create_prefs_dialog (void)
                     (GtkAttachOptions) (0), 0, 0);
   gtk_tooltips_set_tip (tooltips, entry_template_developer, _("The name of the developer"), NULL);
 
-  label132 = gtk_label_new (_("<i>Notice: For all changes you make here to take effect, you need to restart Geany.</i>"));
-  gtk_widget_show (label132);
-  gtk_box_pack_start (GTK_BOX (vbox9), label132, FALSE, FALSE, 0);
-  gtk_label_set_use_markup (GTK_LABEL (label132), TRUE);
-  gtk_label_set_line_wrap (GTK_LABEL (label132), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label132), 0, 0.5);
-
   label180 = gtk_label_new (_("<b>Template data</b>"));
   gtk_widget_show (label180);
   gtk_frame_set_label_widget (GTK_FRAME (frame21), label180);
@@ -4250,13 +4236,9 @@ create_prefs_dialog (void)
   gtk_widget_show (vbox13);
   gtk_container_add (GTK_CONTAINER (alignment25), vbox13);
 
-  label152 = gtk_label_new (_("Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."));
-  gtk_widget_show (label152);
-  gtk_box_pack_start (GTK_BOX (vbox13), label152, FALSE, TRUE, 0);
-  gtk_label_set_justify (GTK_LABEL (label152), GTK_JUSTIFY_FILL);
-  gtk_label_set_line_wrap (GTK_LABEL (label152), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label152), 0, 0);
-  gtk_misc_set_padding (GTK_MISC (label152), 0, 5);
+  vbox32 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox32);
+  gtk_box_pack_start (GTK_BOX (vbox13), vbox32, FALSE, TRUE, 0);
 
   scrolledwindow8 = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_show (scrolledwindow8);
@@ -4402,13 +4384,6 @@ create_prefs_dialog (void)
   gtk_button_set_focus_on_click (GTK_BUTTON (radio_print_gtk), FALSE);
   gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_print_gtk), radio_print_external_group);
   radio_print_external_group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_print_gtk));
-
-  label204 = gtk_label_new (_("<i>Notice: Native GTK printing is only available if Geany was built against GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"));
-  gtk_widget_show (label204);
-  gtk_box_pack_start (GTK_BOX (vbox27), label204, FALSE, TRUE, 5);
-  gtk_label_set_use_markup (GTK_LABEL (label204), TRUE);
-  gtk_label_set_line_wrap (GTK_LABEL (label204), TRUE);
-  gtk_misc_set_alignment (GTK_MISC (label204), 0.05, 0.5);
 
   label201 = gtk_label_new (_("Printing"));
   gtk_widget_show (label201);
@@ -4637,7 +4612,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame20, "frame20");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment23, "alignment23");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox2, "vbox2");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label17, "label17");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox33, "vbox33");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table1, "table1");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label11, "label11");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label97, "label97");
@@ -4668,7 +4643,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame21, "frame21");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment24, "alignment24");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox9, "vbox9");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label120, "label120");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox31, "vbox31");
   GLADE_HOOKUP_OBJECT (prefs_dialog, table6, "table6");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_template_mail, "entry_template_mail");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_template_initial, "entry_template_initial");
@@ -4680,13 +4655,12 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label130, "label130");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label131, "label131");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_template_developer, "entry_template_developer");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label132, "label132");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label180, "label180");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label119, "label119");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame22, "frame22");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment25, "alignment25");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox13, "vbox13");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label152, "label152");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox32, "vbox32");
   GLADE_HOOKUP_OBJECT (prefs_dialog, scrolledwindow8, "scrolledwindow8");
   GLADE_HOOKUP_OBJECT (prefs_dialog, treeview7, "treeview7");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment10, "alignment10");
@@ -4716,7 +4690,6 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, label203, "label203");
   GLADE_HOOKUP_OBJECT (prefs_dialog, entry_print_dateformat, "entry_print_dateformat");
   GLADE_HOOKUP_OBJECT (prefs_dialog, radio_print_gtk, "radio_print_gtk");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label204, "label204");
   GLADE_HOOKUP_OBJECT (prefs_dialog, label201, "label201");
   GLADE_HOOKUP_OBJECT_NO_REF (prefs_dialog, dialog_action_area3, "dialog_action_area3");
   GLADE_HOOKUP_OBJECT (prefs_dialog, button3, "button3");

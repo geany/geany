@@ -16,6 +16,7 @@ SRCS = \
 	encodings.c encodings.h \
 	filetypes.c filetypes.h \
 	geanyobject.c geanyobject.h \
+	geanywraplabel.c geanywraplabel.h \
 	highlighting.c highlighting.h \
 	interface.c interface.h \
 	keybindings.c keybindings.h \

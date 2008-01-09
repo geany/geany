@@ -48,6 +48,7 @@
 #include "main.h"
 #include "treeviews.h"
 #include "printing.h"
+#include "geanywraplabel.h"
 
 #ifdef HAVE_VTE
 # include "vte.h"
@@ -1304,6 +1305,7 @@ void prefs_show_dialog(void)
 	if (ui_widgets.prefs_dialog == NULL)
 	{
 		GtkWidget *combo_new, *combo_open;
+		GtkWidget *label;
 		guint i;
 		gchar *encoding_string;
 
@@ -1323,6 +1325,35 @@ void prefs_show_dialog(void)
 			gtk_combo_box_append_text(GTK_COMBO_BOX(combo_open), encoding_string);
 			g_free(encoding_string);
 		}
+
+		// add manually GeanyWrapLabels because it can't be added with Glade
+		// page Tools
+		label = geany_wrap_label_new(_("Enter tool paths below. Tools you do not need can be left blank."));
+		gtk_widget_show(label);
+		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox31")),
+			label, FALSE, TRUE, 5);
+		// page Templates
+		label = geany_wrap_label_new(_("Set the information to be used in templates. See the documentation for details."));
+		gtk_widget_show(label);
+		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox33")),
+			label, FALSE, TRUE, 5);
+		label = geany_wrap_label_new(_("<i>Notice: For all changes you make here to take effect, you need to restart Geany.</i>"));
+		gtk_widget_show(label);
+		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox9")),
+			label, FALSE, TRUE, 5);
+		// page Keybindings
+		label = geany_wrap_label_new(_("Here you can change keyboard shortcuts for various actions. Select one and press the Change button to enter a new shortcut, or double click on an action to edit the string representation of the shortcut directly."));
+		gtk_widget_show(label);
+		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox32")),
+			label, FALSE, TRUE, 5);
+		// page Printing
+		label = geany_wrap_label_new(_("<i>Notice: Native GTK printing is only available if Geany was built against GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"));
+		gtk_widget_show(label);
+		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox27")),
+			label, FALSE, TRUE, 5);
+
 
 #ifdef HAVE_VTE
 		vte_append_preferences_tab();

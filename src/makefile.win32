@@ -55,9 +55,10 @@ WIN_LIBS=-mwindows -lkernel32 -limm32 -lshfolder -lshell32 \
 CCFLAGS=-Wall -O2 -g -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
 
 OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o filetypes.o \
-		geanyobject.o highlighting.o interface.o keybindings.o keyfile.o main.o msgwindow.o \
-		navqueue.o notebook.o plugins.o prefs.o printing.o project.o sciwrappers.o search.o \
-		socket.o support.o symbols.o templates.o treeviews.o tools.o ui_utils.o utils.o win32.o
+		geanyobject.o geanywraplabel.o highlighting.o interface.o keybindings.o keyfile.o \
+		main.o msgwindow.o navqueue.o notebook.o plugins.o prefs.o printing.o project.o \
+		sciwrappers.o search.o socket.o support.o symbols.o templates.o treeviews.o tools.o \
+		ui_utils.o utils.o win32.o
 
 .c.o:
 	$(CC) $(CCFLAGS) -c $<
