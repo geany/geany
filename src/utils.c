@@ -741,10 +741,9 @@ gint utils_is_file_writeable(const gchar *locale_filename)
 		ret = errno;
 	else
 		ret = 0;
-
+#endif
 	g_free(file);
 	return ret;
-#endif
 }
 
 

@@ -561,7 +561,7 @@ gint win32_check_write_permission(const gchar *dir)
 {
 	static wchar_t w_dir[512];
 	MultiByteToWideChar(CP_UTF8, 0, dir, -1, w_dir, sizeof w_dir);
-	if (_waccess_s(w_dir, R_OK | W_OK) != 0)
+	if (_waccess(w_dir, R_OK | W_OK) != 0)
 		return errno;
 	else
 		return 0;
@@ -630,7 +630,6 @@ static void debug_setup_console()
 	fp = _fdopen(hConHandle, "w");
 	*stderr = *fp;
 	setvbuf(stderr, NULL, _IONBF, 0);
-
 }
 
 
