@@ -157,8 +157,8 @@ void project_new()
 	e->base_path = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltips, e->base_path,
 		_("Base directory of all files that make up the project. "
-		"This can be a new path, or an existing directory tree absolute "
-		"or relative to the project filename."), NULL);
+		"This can be a new path, or an existing directory tree. "
+		"You can use paths relative to the project filename."), NULL);
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 
@@ -412,8 +412,8 @@ void project_properties()
 	e->base_path = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltips, e->base_path,
 		_("Base directory of all files that make up the project. "
-		"This can be a new path, or an existing directory tree absolute "
-		"or relative to the project filename."), NULL);
+		"This can be a new path, or an existing directory tree. "
+		"You can use paths relative to the project filename."), NULL);
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
 	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 3, 4,
@@ -523,7 +523,7 @@ static gboolean close_open_project()
 {
 	if (app->project != NULL)
 	{
-		if (dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL,
+		if (dialogs_show_question_full(NULL, GTK_STOCK_CLOSE, GTK_STOCK_CANCEL,
 			_("Do you want to close it before proceeding?"),
 			_("The '%s' project is already open."), app->project->name))
 		{
@@ -584,6 +584,8 @@ static gboolean update_config(const PropertyDialogElements *e)
 	}
 
 	base_path = gtk_entry_get_text(GTK_ENTRY(e->base_path));
+	/* For now, the base path can be empty, so that Make uses the current directory.
+	 * In future, it would be best to add a Make path setting for projects. */
 	if (NZV(base_path))
 	{	// check whether the given directory actually exists
 		gchar *locale_path = utils_get_locale_from_utf8(base_path);
@@ -629,7 +631,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 	p->file_name = g_strdup(file_name);
 
 	if (p->base_path != NULL) g_free(p->base_path);
-	p->base_path = g_strdup(NZV(base_path) ? base_path : "./"); // use "." if base_path is empty
+	p->base_path = g_strdup(base_path);
 
 	if (! new_project)	// save properties specific fields
 	{

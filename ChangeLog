@@ -1,3 +1,14 @@
+2008-01-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/project.c:
+   Edit base path entry tooltip for clarity.
+   Use stock close button in close project prompt.
+   Allow the base path to be empty, so that users can use the current
+   file's directory for the Make command (but still use project session
+   support). In future, perhaps it would be good to have a separate Make
+   path setting for projects.
+
+
 2008-01-09  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, src/geanywraplabel.c, src/geanywraplabel.h,
