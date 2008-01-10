@@ -985,6 +985,9 @@ static void cb_func_build_action(guint key_id)
 		default:
 			item = NULL;
 	}
+	/* Note: For Build menu items it's OK (at the moment) to assume they are in the correct
+	 * sensitive state, but some other menus don't update the sensitive status until
+	 * they are redrawn. */
 	if (item && GTK_WIDGET_IS_SENSITIVE(item))
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 }
