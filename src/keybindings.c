@@ -1141,23 +1141,17 @@ static void goto_matching_brace(gint idx)
 
 static void cb_func_clipboard(guint key_id)
 {
-	GtkWidget *item = NULL;
-
 	switch (key_id)
 	{
 		case GEANY_KEYS_MENU_CUT:
-			item = lookup_widget(app->window, "menu_cut1");
+			on_cut1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_MENU_COPY:
-			item = lookup_widget(app->window, "menu_copy1");
+			on_copy1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_MENU_PASTE:
-			item = lookup_widget(app->window, "menu_paste1");
+			on_paste1_activate(NULL, NULL);
 			break;
-	}
-	if (item && GTK_WIDGET_IS_SENSITIVE(item))
-	{
-		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 	}
 }
 

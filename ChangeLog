@@ -1,3 +1,9 @@
+2008-01-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keybindings.c:
+   Hopefully fix bug with Cut/Copy/Paste KB not working (#1867861).
+
+
 2008-01-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/project.c:
