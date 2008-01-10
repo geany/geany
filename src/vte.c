@@ -234,8 +234,7 @@ static void create_vte()
 
 	g_signal_connect(G_OBJECT(vte), "child-exited", G_CALLBACK(vte_start), NULL);
 	g_signal_connect(G_OBJECT(vte), "button-press-event", G_CALLBACK(vte_button_pressed), NULL);
-	if (! vc->enable_bash_keys)
-		g_signal_connect(G_OBJECT(vte), "event", G_CALLBACK(vte_keypress), NULL);
+	g_signal_connect(G_OBJECT(vte), "event", G_CALLBACK(vte_keypress), NULL);
 	g_signal_connect(G_OBJECT(vte), "key-release-event", G_CALLBACK(vte_keyrelease), NULL);
 	g_signal_connect(G_OBJECT(vte), "commit", G_CALLBACK(vte_commit), NULL);
 	g_signal_connect(G_OBJECT(vte), "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
@@ -284,7 +283,8 @@ static gboolean vte_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer d
 
 static gboolean vte_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	g_assert(!vc->enable_bash_keys);
+	if (vc->enable_bash_keys)
+		return FALSE;	// Ctrl-[CD] will be handled by the VTE itself
 
 	if (event->type != GDK_KEY_RELEASE)
 		return FALSE;
@@ -634,7 +634,8 @@ void vte_append_preferences_tab()
 	{
 		GtkWidget *notebook, *vbox, *label, *alignment, *table, *frame, *box;
 		GtkWidget *font_term, *color_fore, *color_back, *spin_scrollback, *entry_emulation;
-		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path, *check_ignore_menu_key;
+		GtkWidget *check_scroll_key, *check_scroll_out, *check_follow_path;
+		GtkWidget *check_enable_bash_keys, *check_ignore_menu_key;
 		GtkWidget *check_run_in_vte, *check_skip_script, *entry_shell, *button_shell, *image_shell;
 		GtkTooltips *tooltips;
 		GtkObject *spin_scrollback_adj;
@@ -759,6 +760,12 @@ void vte_append_preferences_tab()
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_scroll_out), FALSE);
 		gtk_container_add(GTK_CONTAINER(box), check_scroll_out);
 
+		check_enable_bash_keys = gtk_check_button_new_with_mnemonic(_("Override Geany keybindings"));
+		gtk_tooltips_set_tip(tooltips, check_enable_bash_keys,
+			_("Allows the VTE to receive keyboard shortcuts (apart from focus commands)."), NULL);
+		gtk_button_set_focus_on_click(GTK_BUTTON(check_enable_bash_keys), FALSE);
+		gtk_container_add(GTK_CONTAINER(box), check_enable_bash_keys);
+
 		check_ignore_menu_key = gtk_check_button_new_with_mnemonic(_("Disable menu shortcut key (F10 by default)"));
 		gtk_tooltips_set_tip(tooltips, check_ignore_menu_key, _("This option disables the keybinding to popup the menu bar (default is F10). Disabling it can be useful if you use, for example, Midnight Commander within the VTE."), NULL);
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_ignore_menu_key), FALSE);
@@ -804,6 +811,8 @@ void vte_append_preferences_tab()
 				gtk_widget_ref(check_scroll_key),	(GDestroyNotify) gtk_widget_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_scroll_out",
 				gtk_widget_ref(check_scroll_out),	(GDestroyNotify) gtk_widget_unref);
+		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_enable_bash_keys",
+				gtk_widget_ref(check_enable_bash_keys),	(GDestroyNotify) gtk_widget_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_ignore_menu_key",
 				gtk_widget_ref(check_ignore_menu_key),	(GDestroyNotify) gtk_widget_unref);
 		g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "check_follow_path",

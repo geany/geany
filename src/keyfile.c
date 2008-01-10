@@ -286,6 +286,7 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
+		g_key_file_set_boolean(config, "VTE", "enable_bash_keys", vc->enable_bash_keys);
 		g_key_file_set_boolean(config, "VTE", "ignore_menu_bar_accel", vc->ignore_menu_bar_accel);
 		g_key_file_set_boolean(config, "VTE", "follow_path", vc->follow_path);
 		g_key_file_set_boolean(config, "VTE", "run_in_vte", vc->run_in_vte);
@@ -371,10 +372,6 @@ static void save_hidden_prefs(GKeyFile *config)
 	write_hidden_pref_boolean(config, PACKAGE, "auto_complete_whilst_editing", editor_prefs.auto_complete_whilst_editing);
 #if GTK_CHECK_VERSION(2, 12, 0)
 	write_hidden_pref_boolean(config, PACKAGE, "show_symbol_list_expanders", prefs.show_symbol_list_expanders);
-#endif
-#ifdef HAVE_VTE
-	if (vte_info.have_vte)
-		write_hidden_pref_boolean(config, "VTE", "enable_bash_keys", vc->enable_bash_keys);
 #endif
 }
 
@@ -604,11 +601,11 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
 		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
+		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", FALSE);
 		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
-		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		vc->colour_fore = g_new0(GdkColor, 1);
 		vc->colour_back = g_new0(GdkColor, 1);

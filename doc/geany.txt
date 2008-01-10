@@ -2428,7 +2428,7 @@ configuration file.
 ==============================  ============================================    ==================
 Key                             Description                                     Default
 ==============================  ============================================    ==================
-**[geany]**
+**[editor]**
 brace_match_ltgt                Whether to highlight <, > angle brackets.       false
 show_editor_scrollbars          Whether to display scrollbars when the          true
                                 editor window is bigger than the display.
@@ -2440,13 +2440,10 @@ use_gtk_word_boundaries         Whether to look for the end of a word when      
                                 commands`_).
 auto_complete_whilst_editing    Whether to allow autocompletion when editing    false
                                 an existing line.
+**[interface]**
 show_symbol_list_expanders      Whether to show or hide the small expander      true
                                 icons on the symbol list treeview (only
                                 available with GTK 2.12 or above).
-**[VTE]**
-enable_bash_keys                Whether to allow bash shell keyboard            true
-                                shortcuts like Ctrl-W to delete the last
-                                word, when the VTE is focused.
 ==============================  ============================================    ==================
 
 

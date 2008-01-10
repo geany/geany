@@ -2,6 +2,9 @@
 
  * src/keybindings.c:
    Hopefully fix bug with Cut/Copy/Paste KB not working (#1867861).
+ * src/prefs.c, src/keyfile.c, src/vte.c, doc/geany.txt, doc/geany.html:
+   Add 'Override Geany keybindings' VTE prefs dialog option (replaces
+   hidden pref), and make it off by default.
 
 
 2008-01-09  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
