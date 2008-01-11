@@ -41,6 +41,8 @@ struct _GeanyProject
 							// by a plugin
 
 	gchar **file_patterns;	// array of filename extension patterns
+
+	gboolean make_in_base_path;
 };
 
 typedef struct
@@ -61,6 +63,8 @@ void project_properties();
 
 
 gboolean project_load_file(const gchar *locale_file_name);
+
+gchar *project_get_base_path();
 
 gchar *project_get_make_dir();
 

@@ -1249,7 +1249,16 @@ used elsewhere by Geany.
 The *Base path* field is used as the directory to run the Make and Make
 custom commands in. It is also used as working directory for the project
 specific *Run command*.
-The specified path can be absolute or relative to the project's file name.
+The specified path can be an absolute path or relative to the project's
+file name.
+
+
+Make in base path
+`````````````````
+
+This setting makes the *Build->Make* command use the project's base
+path. Uncheck this if you want to use the current file's directory
+instead.
 
 
 Run command

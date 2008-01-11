@@ -1,3 +1,11 @@
+2008-01-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/build.c, src/project.c, src/project.h, doc/geany.txt,
+   doc/geany.html:
+   Add 'Make in base path' project file preference, on by default.
+   Add project_get_base_path(), separated from project_get_make_dir().
+
+
 2008-01-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/dialogs.c: Fix broken Rename functionality (closes #1868621).

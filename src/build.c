@@ -690,7 +690,7 @@ static gchar *prepare_run_script(gint idx, gchar **vte_cmd_nonscript)
 
 	if (have_project)
 	{
-		gchar *project_base_path = project_get_make_dir();
+		gchar *project_base_path = project_get_base_path();
 		working_dir = utils_get_locale_from_utf8(project_base_path);
 		g_free(project_base_path);
 	}

@@ -64,6 +64,7 @@ typedef struct _PropertyDialogElements
 	GtkWidget *description;
 	GtkWidget *file_name;
 	GtkWidget *base_path;
+	GtkWidget *make_in_base_path;
 	GtkWidget *run_cmd;
 	GtkWidget *patterns;
 } PropertyDialogElements;
@@ -332,7 +333,7 @@ void project_close(gboolean open_default)
 }
 
 
-void project_properties()
+static void create_properties_dialog(PropertyDialogElements *e)
 {
 	GtkWidget *vbox;
 	GtkWidget *table;
@@ -342,11 +343,6 @@ void project_properties()
 	GtkWidget *label;
 	GtkWidget *swin;
 	GtkTooltips *tooltips = GTK_TOOLTIPS(lookup_widget(app->window, "tooltips"));
-	PropertyDialogElements *e = g_new(PropertyDialogElements, 1);
-	GeanyProject *p = app->project;
-	gint response;
-
-	g_return_if_fail(app->project != NULL);
 
 	e->dialog = gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(app->window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -356,8 +352,6 @@ void project_properties()
 
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(e->dialog));
 
-	entries_modified = FALSE;
-
 	table = gtk_table_new(6, 2, FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
 	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
@@ -366,7 +360,7 @@ void project_properties()
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->name = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
@@ -378,7 +372,7 @@ void project_properties()
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->file_name = gtk_entry_new();
 	gtk_editable_set_editable(GTK_EDITABLE(e->file_name), FALSE);	// read-only
@@ -390,7 +384,7 @@ void project_properties()
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->description = gtk_text_view_new();
 	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(e->description), GTK_WRAP_WORD);
@@ -407,7 +401,7 @@ void project_properties()
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->base_path = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltips, e->base_path,
@@ -420,11 +414,16 @@ void project_properties()
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new(_("Run command:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 4, 5,
+	e->make_in_base_path = gtk_check_button_new_with_label(_("Make in base path"));
+	gtk_table_attach(GTK_TABLE(table), e->make_in_base_path, 0, 3, 4, 5,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+
+	label = gtk_label_new(_("Run command:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->run_cmd = gtk_entry_new();
 	gtk_tooltips_set_tip(tooltips, e->run_cmd,
@@ -439,17 +438,17 @@ void project_properties()
 	bbox = gtk_hbox_new(FALSE, 6);
 	gtk_box_pack_start_defaults(GTK_BOX(bbox), e->run_cmd);
 	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
-	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 4, 5,
+	gtk_table_attach(GTK_TABLE(table), bbox, 1, 2, 5, 6,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
 #if 0
 	label = gtk_label_new(_("File patterns:"));
 	// <small>Separate multiple patterns by a new line</small>
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 5, 6,
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 6, 7,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_misc_set_alignment(GTK_MISC(label), -1, 0);
 
 	e->patterns = gtk_text_view_new();
 	swin = gtk_scrolled_window_new(NULL, NULL);
@@ -457,12 +456,26 @@ void project_properties()
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin), GTK_WIDGET(e->patterns));
-	gtk_table_attach(GTK_TABLE(table), swin, 1, 2, 5, 6,
+	gtk_table_attach(GTK_TABLE(table), swin, 1, 2, 6, 7,
 					(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 #endif
 
 	gtk_container_add(GTK_CONTAINER(vbox), table);
+}
+
+
+void project_properties()
+{
+	PropertyDialogElements *e = g_new(PropertyDialogElements, 1);
+	GeanyProject *p = app->project;
+	gint response;
+
+	g_return_if_fail(app->project != NULL);
+
+	entries_modified = FALSE;
+
+	create_properties_dialog(e);
 
 	// fill the elements with the appropriate data
 	gtk_entry_set_text(GTK_ENTRY(e->name), p->name);
@@ -496,6 +509,8 @@ void project_properties()
 
 	gtk_entry_set_text(GTK_ENTRY(e->file_name), p->file_name);
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), p->base_path);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(e->make_in_base_path),
+		p->make_in_base_path);
 	if (p->run_cmd != NULL)
 		gtk_entry_set_text(GTK_ENTRY(e->run_cmd), p->run_cmd);
 
@@ -584,8 +599,6 @@ static gboolean update_config(const PropertyDialogElements *e)
 	}
 
 	base_path = gtk_entry_get_text(GTK_ENTRY(e->base_path));
-	/* For now, the base path can be empty, so that Make uses the current directory.
-	 * In future, it would be best to add a Make path setting for projects. */
 	if (NZV(base_path))
 	{	// check whether the given directory actually exists
 		gchar *locale_path = utils_get_locale_from_utf8(base_path);
@@ -631,7 +644,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 	p->file_name = g_strdup(file_name);
 
 	if (p->base_path != NULL) g_free(p->base_path);
-	p->base_path = g_strdup(base_path);
+	p->base_path = g_strdup(NZV(base_path) ? base_path : "./"); // use "." if base_path is empty
 
 	if (! new_project)	// save properties specific fields
 	{
@@ -639,6 +652,8 @@ static gboolean update_config(const PropertyDialogElements *e)
 		//gchar *tmp;
 		GtkTextBuffer *buffer;
 
+		p->make_in_base_path = gtk_toggle_button_get_active(
+			GTK_TOGGLE_BUTTON(e->make_in_base_path));
 		if (p->run_cmd != NULL) g_free(p->run_cmd);
 		p->run_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(e->run_cmd)));
 
@@ -862,6 +877,7 @@ static gboolean load_config(const gchar *filename)
 	p->description = utils_get_setting_string(config, "project", "description", "");
 	p->file_name = utils_get_utf8_from_locale(filename);
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
+	p->make_in_base_path = utils_get_setting_boolean(config, "project", "make_in_base_path", TRUE);
 	p->run_cmd = utils_get_setting_string(config, "project", "run_cmd", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
@@ -905,6 +921,7 @@ static gboolean write_config()
 
 	if (p->description)
 		g_key_file_set_string(config, "project", "description", p->description);
+	g_key_file_set_boolean(config, "project", "make_in_base_path", p->make_in_base_path);
 	if (p->run_cmd)
 		g_key_file_set_string(config, "project", "run_cmd", p->run_cmd);
 	if (p->file_patterns)
@@ -936,24 +953,38 @@ static gboolean write_config()
  * base path if it is absolute or it is built out of project file name's dir and base_path.
  * If there is no project or project's base_path is invalid, NULL will be returned.
  * The returned string should be freed when no longer needed. */
-gchar *project_get_make_dir()
+gchar *project_get_base_path()
 {
-	if (app->project != NULL && NZV(app->project->base_path))
+	GeanyProject *project = app->project;
+
+	if (project && NZV(project->base_path))
 	{
-		if (g_path_is_absolute(app->project->base_path))
-			return g_strdup(app->project->base_path);
+		if (g_path_is_absolute(project->base_path))
+			return g_strdup(project->base_path);
 		else
 		{	// build base_path out of project file name's dir and base_path
 			gchar *path;
-			gchar *dir = g_path_get_dirname(app->project->file_name);
+			gchar *dir = g_path_get_dirname(project->file_name);
 
-			path = g_strconcat(dir, G_DIR_SEPARATOR_S, app->project->base_path, NULL);
+			path = g_strconcat(dir, G_DIR_SEPARATOR_S, project->base_path, NULL);
 			g_free(dir);
 			return path;
 		}
 	}
-	else
+	return NULL;
+}
+
+
+/* Returns: NULL if the default path should be used, or a UTF-8 path.
+ * Maybe in future this will support a separate project make path from base path. */
+gchar *project_get_make_dir()
+{
+	GeanyProject *project = app->project;
+
+	if (project && ! project->make_in_base_path)
 		return NULL;
+	else
+		return project_get_base_path();
 }
 
 
