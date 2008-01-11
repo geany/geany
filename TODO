@@ -10,11 +10,13 @@ TODO List:
 
 	o documentation: list and explain filetype modes
 	o documentation: preferences
-	o line breaking mode to limit words on a line for e.g. XML content.
+	o line breaking mode to limit words on a line for e.g. XML content
 	o common default highlighting styles configurable for all
 	  programming languages
 	o basic support for adding custom filetypes?
-	o configurable default and project make commands
+	o configurable filetype and project make commands (e.g. using
+	  bud for D)
+	o recent projects menu
 	o project indentation settings support
 	o plugin keybindings
 	o (DBUS)
