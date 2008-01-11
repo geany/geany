@@ -57,6 +57,11 @@
 #include "build.h"
 
 
+enum
+{
+	GEANY_RESPONSE_RENAME
+};
+
 #if ! GEANY_USE_WIN32_DIALOG
 static GtkWidget *add_file_open_extra_widget();
 #endif
@@ -382,7 +387,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 
 	switch (response)
 	{
-		case GTK_RESPONSE_APPLY:
+		case GEANY_RESPONSE_RENAME:
 			rename_file = TRUE;
 			// fall through
 
@@ -463,7 +468,7 @@ static void create_save_file_dialog()
 		_("Save the file and rename it."), NULL);
 	gtk_widget_show(rename_btn);
 	gtk_dialog_add_action_widget(GTK_DIALOG(ui_widgets.save_filesel),
-		rename_btn, GTK_RESPONSE_APPLY);
+		rename_btn, GEANY_RESPONSE_RENAME);
 
 	gtk_dialog_add_buttons(GTK_DIALOG(ui_widgets.save_filesel),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
