@@ -25,6 +25,7 @@
 /* Export plugin. */
 
 #include <ctype.h>
+#include <math.h>
 
 #include "geany.h"
 #include "support.h"
@@ -210,9 +211,17 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	{
 		gchar *base_name = g_path_get_basename(doc_list[idx].file_name);
 		gchar *short_name = utils->remove_ext_from_filename(base_name);
-		gchar *file_name = g_strconcat(short_name, extension, NULL);
-		gchar *locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
-		gchar *locale_dirname = g_path_get_dirname(locale_filename);
+		gchar *file_name;
+		gchar *locale_filename;
+		gchar *locale_dirname;
+		gchar *suffix = "";
+
+		if (g_str_has_suffix(doc_list[idx].file_name, extension))
+			suffix = "_export";
+
+		file_name = g_strconcat(short_name, suffix, extension, NULL);
+		locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
+		locale_dirname = g_path_get_dirname(locale_filename);
 		// set the current name to base_name.html which probably doesn't exist yet so
 		// gtk_file_chooser_set_filename() can't be used and we need
 		// gtk_file_chooser_set_current_folder() additionally
@@ -346,9 +355,10 @@ static void write_latex_file(gint idx, const gchar *filename, gboolean use_zoom)
 	GString *body;
 	GString *cmds;
 	GString *latex;
+	gint style_max = pow(2, scintilla->send_message(doc_list[idx].sci, SCI_GETSTYLEBITS, 0, 0));
 
 	// first read all styles from Scintilla
-	for (i = 0; i <= STYLE_MAX; i++)
+	for (i = 0; i < style_max; i++)
 	{
 		styles[i][FORE] = scintilla->send_message(doc_list[idx].sci, SCI_STYLEGETFORE, i, 0);
 		styles[i][BACK] = scintilla->send_message(doc_list[idx].sci, SCI_STYLEGETBACK, i, 0);
@@ -552,9 +562,10 @@ static void write_html_file(gint idx, const gchar *filename, gboolean use_zoom)
 	GString *body;
 	GString *css;
 	GString *html;
+	gint style_max = pow(2, scintilla->send_message(doc_list[idx].sci, SCI_GETSTYLEBITS, 0, 0));
 
 	// first read all styles from Scintilla
-	for (i = 0; i <= STYLE_MAX; i++)
+	for (i = 0; i < style_max; i++)
 	{
 		styles[i][FORE] = ROTATE_RGB(scintilla->send_message(doc_list[idx].sci, SCI_STYLEGETFORE, i, 0));
 		styles[i][BACK] = ROTATE_RGB(scintilla->send_message(doc_list[idx].sci, SCI_STYLEGETBACK, i, 0));

@@ -5,6 +5,10 @@
    Fix crash while reading Scintilla styles.
    Add GTK's progress dialog when printing large documents which also
    provides the ability to cancel a print operation.
+ * plugins/export.c:
+   Fix crash while reading Scintilla styles.
+   Append "_export" to the exported file name when the exported file has
+   the same extension as the source file.
 
 
 2008-01-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
