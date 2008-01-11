@@ -426,7 +426,7 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 						g_free(old_filename);
 					}
 					// create a new tm_source_file object otherwise tagmanager won't work correctly
-					tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+					tm_workspace_remove_object(doc_list[idx].tm_file, TRUE, TRUE);
 					doc_list[idx].tm_file = NULL;
 					g_free(doc_list[idx].file_name);
 				}

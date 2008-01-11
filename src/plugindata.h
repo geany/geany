@@ -93,12 +93,12 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 37;
+static const gint api_version = 38;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
  * are only appended, as this doesn't affect existing fields. */
-static const gint abi_version = 19;
+static const gint abi_version = 20;
 
 /* This performs runtime checks that try to ensure:
  * 1. Geany ABI data types are compatible with this plugin.
@@ -373,7 +373,7 @@ typedef struct TagManagerFuncs
 	gboolean		(*source_file_update) (TMWorkObject *source_file, gboolean force,
 					 gboolean recurse, gboolean update_parent);
 	void			(*work_object_free) (gpointer work_object);
-	gboolean		(*workspace_remove_object) (TMWorkObject *w, gboolean do_free);
+	gboolean		(*workspace_remove_object) (TMWorkObject *w, gboolean do_free, gboolean update);
 }
 TagManagerFuncs;
 

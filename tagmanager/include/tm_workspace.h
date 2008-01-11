@@ -79,9 +79,10 @@ TMWorkObject *tm_workspace_find_object(TMWorkObject *work_object, const char *fi
 /*! Removes a member object from the workspace if it exists.
  \param work_object Pointer to the work object to be removed.
  \param free Whether the work object is to be freed as well.
+ \param update Whether to update workspace objects.
  \return TRUE on success, FALSE on failure (e.g. the work object does not exist).
 */
-gboolean tm_workspace_remove_object(TMWorkObject *work_object, gboolean free);
+gboolean tm_workspace_remove_object(TMWorkObject *work_object, gboolean free, gboolean update);
 
 /*! Loads the global tag list from the specified file. The global tag list should
  have been first created using tm_workspace_create_global_tags().

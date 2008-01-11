@@ -98,12 +98,14 @@ gboolean tm_workspace_add_object(TMWorkObject *work_object)
 	return TRUE;
 }
 
-gboolean tm_workspace_remove_object(TMWorkObject *w, gboolean do_free)
+gboolean tm_workspace_remove_object(TMWorkObject *w, gboolean do_free, gboolean update)
 {
 	guint i;
 	if ((NULL == theWorkspace) || (NULL == theWorkspace->work_objects)
 		  || (NULL == w))
 		return FALSE;
+
+
 	for (i=0; i < theWorkspace->work_objects->len; ++i)
 	{
 		if (theWorkspace->work_objects->pdata[i] == w)
@@ -111,10 +113,12 @@ gboolean tm_workspace_remove_object(TMWorkObject *w, gboolean do_free)
 			if (do_free)
 				tm_work_object_free(w);
 			g_ptr_array_remove_index_fast(theWorkspace->work_objects, i);
-			tm_workspace_update(TM_WORK_OBJECT(theWorkspace), TRUE, FALSE, FALSE);
+			if (update)
+				tm_workspace_update(TM_WORK_OBJECT(theWorkspace), TRUE, FALSE, FALSE);
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 

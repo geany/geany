@@ -494,7 +494,7 @@ gboolean document_remove(guint page_num)
 		g_free(doc_list[idx].encoding);
 		g_free(doc_list[idx].saved_encoding.encoding);
 		g_free(doc_list[idx].file_name);
-		tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+		tm_workspace_remove_object(doc_list[idx].tm_file, TRUE, TRUE);
 
 		doc_list[idx].is_valid = FALSE;
 		doc_list[idx].sci = NULL;
@@ -1943,7 +1943,7 @@ void document_set_filetype(gint idx, filetype *type)
 		// delete tm file object to force creation of a new one
 		if (doc_list[idx].tm_file != NULL)
 		{
-			tm_workspace_remove_object(doc_list[idx].tm_file, TRUE);
+			tm_workspace_remove_object(doc_list[idx].tm_file, TRUE, TRUE);
 			doc_list[idx].tm_file = NULL;
 		}
 		highlighting_set_styles(doc_list[idx].sci, type->id);

@@ -139,7 +139,7 @@ void tm_project_destroy(TMProject *project)
 			tm_source_file_free(project->file_list->pdata[i]);
 		g_ptr_array_free(project->file_list, TRUE);
 	}
-	tm_workspace_remove_object(TM_WORK_OBJECT(project), FALSE);
+	tm_workspace_remove_object(TM_WORK_OBJECT(project), FALSE, TRUE);
 	g_free(project->dir);
 	tm_work_object_destroy(&(project->work_object));
 }
@@ -175,7 +175,7 @@ gboolean tm_project_add_file(TMProject *project, const char *file_name
 #ifdef TM_DEBUG
 			g_message("%s moved from workspace to project", path);
 #endif
-			tm_workspace_remove_object(source_file, FALSE);
+			tm_workspace_remove_object(source_file, FALSE, TRUE);
 		}
 		else if (TM_WORK_OBJECT(project) == source_file->parent)
 				{
