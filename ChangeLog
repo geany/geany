@@ -1,6 +1,10 @@
 2008-01-11  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/dialogs.c: Fix broken Rename functionality (closes #1868621).
+ * src/printing.c:
+   Fix crash while reading Scintilla styles.
+   Add GTK's progress dialog when printing large documents which also
+   provides the ability to cancel a print operation.
 
 
 2008-01-10  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

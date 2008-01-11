@@ -83,6 +83,7 @@ typedef struct
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
 	gdouble line_height;
 	gboolean long_line; // whether we have a wrapped line on page end to take care of on next page
+	gboolean cancelled;
 	// set in begin_print() to hold the time when printing was started to ensure all printed
 	// pages have the same date and time (in case of slow machines and many pages where rendering
 	// takes more than a second)
@@ -266,7 +267,7 @@ static void add_page_header(PangoLayout *layout, cairo_t *cr, DocInfo *dinfo, gi
 	g_free(data);
 	g_free(file_name);
 
-	data = g_strdup_printf("<b>page %d of %d</b>", page_nr + 1, dinfo->n_pages);
+	data = g_strdup_printf(_("<b>Page %d of %d</b>"), page_nr + 1, dinfo->n_pages);
 	pango_layout_set_markup(layout, data, -1);
 	pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
 	cairo_move_to(cr, 4, dinfo->line_height * 1.5);
@@ -409,6 +410,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	DocInfo *dinfo = user_data;
 	PangoFontDescription *desc;
 	gint i;
+	gint style_max;
 
 	if (dinfo == NULL)
 		return;
@@ -421,6 +423,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	dinfo->cur_line = 0;
 	dinfo->cur_pos = 0;
 	dinfo->long_line = FALSE;
+	dinfo->cancelled = FALSE;
 	dinfo->print_time = time(NULL);
 	dinfo->max_line_number_margin = get_line_numbers_arity(dinfo->lines) + 1;
 	// increase font width by 1 (looks better)
@@ -432,7 +435,8 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	dinfo->n_pages = get_page_count(context, dinfo);
 
 	// read all styles from Scintilla
-	for (i = 0; i <= STYLE_MAX; i++)
+	style_max = pow(2, scintilla_send_message(doc_list[dinfo->idx].sci, SCI_GETSTYLEBITS, 0, 0));
+	for (i = 0; i < style_max; i++)
 	{
 		dinfo->styles[i][FORE] = ROTATE_RGB(scintilla_send_message(
 			doc_list[dinfo->idx].sci, SCI_STYLEGETFORE, i, 0));
@@ -454,6 +458,11 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	if (dinfo->n_pages >= 0)
 		gtk_print_operation_set_n_pages(operation, dinfo->n_pages);
+
+	// if we have many pages we show GTK's progress dialog which also allows cancelling of the
+	// print operation
+	if (dinfo->n_pages > 3)
+		gtk_print_operation_set_show_progress(operation, TRUE);
 
 	pango_font_description_free(desc);
 }
@@ -707,6 +716,15 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 }
 
 
+static void status_changed(GtkPrintOperation *op, gpointer data)
+{
+	if (gtk_print_operation_get_status(op) == GTK_PRINT_STATUS_FINISHED_ABORTED)
+	{
+		((DocInfo*)data)->cancelled = TRUE;
+	}
+}
+
+
 static void printing_print_gtk(gint idx)
 {
 	GtkPrintOperation *op;
@@ -729,6 +747,7 @@ static void printing_print_gtk(gint idx)
 	g_signal_connect(op, "begin-print", G_CALLBACK(begin_print), dinfo);
 	g_signal_connect(op, "end-print", G_CALLBACK(end_print), dinfo);
 	g_signal_connect(op, "draw-page", G_CALLBACK(draw_page), dinfo);
+	g_signal_connect(op, "status-changed", G_CALLBACK(status_changed), dinfo);
 	g_signal_connect(op, "create-custom-widget", G_CALLBACK(create_custom_widget), widgets);
 	g_signal_connect(op, "custom-widget-apply", G_CALLBACK(custom_widget_apply), widgets);
 
@@ -745,13 +764,20 @@ static void printing_print_gtk(gint idx)
 		if (settings != NULL)
 			g_object_unref(settings);
 		settings = g_object_ref(gtk_print_operation_get_print_settings(op));
-		msgwin_status_add(_("File %s printed."), doc_list[idx].file_name);
+		if (dinfo->cancelled)
+			msgwin_status_add(_("Printing of file %s was cancelled."), doc_list[idx].file_name);
+		else
+			msgwin_status_add(_("File %s printed."), doc_list[idx].file_name);
 	}
 	else if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
 	{
-		dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Printing of \"%s\" failed (%s)."),
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Printing of %s failed (%s)."),
 							doc_list[idx].file_name, error->message);
 		g_error_free(error);
+	}
+	else if (res == GTK_PRINT_OPERATION_RESULT_CANCEL)
+	{	// not sure when this actually happens but just in case we print a message
+		msgwin_status_add(_("Printing of file %s was cancelled."), doc_list[idx].file_name);
 	}
 
 	g_object_unref(op);
