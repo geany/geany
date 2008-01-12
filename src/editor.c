@@ -510,7 +510,8 @@ static void get_indent(document *doc, gint pos, gboolean use_this_line)
 
 	prev_line = sci_get_line_from_position(sci, pos);
 
-	if (! use_this_line) prev_line--;
+	if (! use_this_line)
+		prev_line--;
 	len = sci_get_line_length(sci, prev_line);
 	linebuf = sci_get_line(sci, prev_line);
 
@@ -527,7 +528,9 @@ static void get_indent(document *doc, gint pos, gboolean use_this_line)
 			if (! lexer_has_braces(sci))
 				break;
 
-			if (linebuf[i] == '{')
+			// i == (len - 1) prevents wrong indentation after lines like
+			// "	{ return bless({}, shift); }" (Perl)
+			if (linebuf[i] == '{' && i == (len - 1))
 			{
 				do_indent(indent, sizeof(indent), &j, doc->use_tabs);
 				break;
@@ -1347,10 +1350,7 @@ static gboolean handle_xml(gint idx, gchar ch)
 		// User typed something like "<br/>"
 		return FALSE;
 
-	if (ch == '/')
-		str_found = utils_find_open_xml_tag(sel, pos - min, TRUE);
-	else
-		str_found = utils_find_open_xml_tag(sel, pos - min, FALSE);
+	str_found = utils_find_open_xml_tag(sel, pos - min, (ch == '/'));
 
 	// when found string is something like br, img or another short tag, quit
 	if (utils_str_equal(str_found, "br")
@@ -1366,11 +1366,18 @@ static gboolean handle_xml(gint idx, gchar ch)
 		return FALSE;
 	}
 
-	if (strlen(str_found) > 0)
+	if (*str_found != '\0')
 	{
 		gchar *to_insert;
 		if (ch == '/')
-			to_insert = g_strconcat(str_found, ">", NULL);
+		{
+			gchar *gt = ">";
+			// if there is already a '>' behind the cursor, don't add it
+			if (sci_get_char_at(sci, pos) == '>')
+				gt = "";
+
+			to_insert = g_strconcat(str_found, gt, NULL);
+		}
 		else
 			to_insert = g_strconcat("</", str_found, ">", NULL);
 		sci_start_undo_action(sci);
@@ -1386,7 +1393,6 @@ static gboolean handle_xml(gint idx, gchar ch)
 		g_free(str_found);
 		return TRUE;
 	}
-
 
 	g_free(str_found);
 	return FALSE;

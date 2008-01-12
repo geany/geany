@@ -1,13 +1,17 @@
 2008-01-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
- * src/keyfile.c: Try to fix changing message window height when using
-                  full screen (closes #1869415).
+ * src/keyfile.c:
+   Try to fix changing message window height when using full screen
+   (closes #1869415).
  * src/printing.c:
    Avoid double status message if print dialog was cancelled.
    Print status messages in status-changed handler.
  * Makefile.am, po/POTFILES.skip:
    Add POTFILES.skip to ignore files with translatable strings.
    Make "distcheck" working.
+ * src/editor.c:
+   Don't add '>' when auto completing HTML tags when it's already there.
+   Fix wrong indentation when '{' and '}' are on the same line.
 
 
 2008-01-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
