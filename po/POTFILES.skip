@@ -1,0 +1,8 @@
+# List of source files containing translatable strings but should be ignored.
+
+# geany.desktop.in will be translated
+geany.desktop.in.in
+# generated src/interface.c will be translated
+geany.glade
+# no need to translate this file
+plugins/demoplugin.c

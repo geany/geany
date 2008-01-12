@@ -50,7 +50,7 @@ install-data-local:
 	@$(NORMAL_INSTALL)
 	if test -d $(srcdir)/pixmaps; then \
 	  $(mkinstalldirs) $(DESTDIR)$(datadir)/pixmaps; \
-	  $(INSTALL_DATA) pixmaps/geany.png $(DESTDIR)$(datadir)/pixmaps; \
+	  $(INSTALL_DATA) $(srcdir)/pixmaps/geany.png $(DESTDIR)$(datadir)/pixmaps; \
 	fi
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir); \
 	$(INSTALL_DATA) $(srcdir)/data/global.tags $(DESTDIR)$(pkgdatadir); \
