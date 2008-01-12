@@ -334,7 +334,7 @@ static void save_ui_prefs(GKeyFile *config)
 				gtk_paned_get_position(GTK_PANED(lookup_widget(app->window, "vpaned1"))));
 	}
 
-	if (prefs.save_winpos && ! ui_prefs.fullscreen)
+	if (prefs.save_winpos)
 	{
 		gtk_window_get_position(GTK_WINDOW(app->window), &ui_prefs.geometry[0], &ui_prefs.geometry[1]);
 		gtk_window_get_size(GTK_WINDOW(app->window), &ui_prefs.geometry[2], &ui_prefs.geometry[3]);

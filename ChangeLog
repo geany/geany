@@ -1,3 +1,9 @@
+2008-01-12  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/keyfile.c: Try to fix changing message window height when using
+                  full screen (closes #1869415).
+
+
 2008-01-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/build.c, src/project.c, src/project.h, doc/geany.txt,
