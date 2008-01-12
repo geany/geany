@@ -2,6 +2,9 @@
 
  * src/keyfile.c: Try to fix changing message window height when using
                   full screen (closes #1869415).
+ * src/printing.c:
+   Avoid double status message if print dialog was cancelled.
+   Print status messages in status-changed handler.
 
 
 2008-01-11  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

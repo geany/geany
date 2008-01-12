@@ -83,7 +83,6 @@ typedef struct
 	gint styles[STYLE_MAX + 1][MAX_TYPES];
 	gdouble line_height;
 	gboolean long_line; // whether we have a wrapped line on page end to take care of on next page
-	gboolean cancelled;
 	// set in begin_print() to hold the time when printing was started to ensure all printed
 	// pages have the same date and time (in case of slow machines and many pages where rendering
 	// takes more than a second)
@@ -423,7 +422,6 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	dinfo->cur_line = 0;
 	dinfo->cur_pos = 0;
 	dinfo->long_line = FALSE;
-	dinfo->cancelled = FALSE;
 	dinfo->print_time = time(NULL);
 	dinfo->max_line_number_margin = get_line_numbers_arity(dinfo->lines) + 1;
 	// increase font width by 1 (looks better)
@@ -458,11 +456,6 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	if (dinfo->n_pages >= 0)
 		gtk_print_operation_set_n_pages(operation, dinfo->n_pages);
-
-	// if we have many pages we show GTK's progress dialog which also allows cancelling of the
-	// print operation
-	if (dinfo->n_pages > 3)
-		gtk_print_operation_set_show_progress(operation, TRUE);
 
 	pango_font_description_free(desc);
 }
@@ -719,9 +712,9 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 static void status_changed(GtkPrintOperation *op, gpointer data)
 {
 	if (gtk_print_operation_get_status(op) == GTK_PRINT_STATUS_FINISHED_ABORTED)
-	{
-		((DocInfo*)data)->cancelled = TRUE;
-	}
+		msgwin_status_add(_("Printing of file %s was cancelled."), (gchar *) data);
+	else if (gtk_print_operation_get_status(op) == GTK_PRINT_STATUS_FINISHED)
+		msgwin_status_add(_("File %s printed."), (gchar *) data);
 }
 
 
@@ -743,11 +736,12 @@ static void printing_print_gtk(gint idx)
 	op = gtk_print_operation_new();
 
 	gtk_print_operation_set_unit(op, GTK_UNIT_POINTS);
+	gtk_print_operation_set_show_progress(op, TRUE);
 
 	g_signal_connect(op, "begin-print", G_CALLBACK(begin_print), dinfo);
 	g_signal_connect(op, "end-print", G_CALLBACK(end_print), dinfo);
 	g_signal_connect(op, "draw-page", G_CALLBACK(draw_page), dinfo);
-	g_signal_connect(op, "status-changed", G_CALLBACK(status_changed), dinfo);
+	g_signal_connect(op, "status-changed", G_CALLBACK(status_changed), doc_list[idx].file_name);
 	g_signal_connect(op, "create-custom-widget", G_CALLBACK(create_custom_widget), widgets);
 	g_signal_connect(op, "custom-widget-apply", G_CALLBACK(custom_widget_apply), widgets);
 
@@ -764,20 +758,13 @@ static void printing_print_gtk(gint idx)
 		if (settings != NULL)
 			g_object_unref(settings);
 		settings = g_object_ref(gtk_print_operation_get_print_settings(op));
-		if (dinfo->cancelled)
-			msgwin_status_add(_("Printing of file %s was cancelled."), doc_list[idx].file_name);
-		else
-			msgwin_status_add(_("File %s printed."), doc_list[idx].file_name);
+		// status message is printed in the status-changed handler
 	}
 	else if (res == GTK_PRINT_OPERATION_RESULT_ERROR)
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Printing of %s failed (%s)."),
 							doc_list[idx].file_name, error->message);
 		g_error_free(error);
-	}
-	else if (res == GTK_PRINT_OPERATION_RESULT_CANCEL)
-	{	// not sure when this actually happens but just in case we print a message
-		msgwin_status_add(_("Printing of file %s was cancelled."), doc_list[idx].file_name);
 	}
 
 	g_object_unref(op);
