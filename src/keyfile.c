@@ -807,12 +807,17 @@ gboolean configuration_load()
 }
 
 
-// open session files
+/* Open session files
+ * Note: notebook page switch handler and adding to recent files list is always disabled
+ * for all files opened within this function */
 gboolean configuration_open_files()
 {
 	gint i;
 	guint pos;
 	gboolean ret = FALSE, failure = FALSE;
+
+	// necessary to set it to TRUE for project session support
+	main_status.opening_session_files = TRUE;
 
 	document_delay_colourise();
 
@@ -885,9 +890,8 @@ gboolean configuration_open_files()
 		/// TODO if session_notebook_page is equal to the current notebook tab(the last opened)
 		/// the notebook switch page callback isn't triggered and e.g. menu items are not updated
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(app->notebook), session_notebook_page);
-		// reset status to leave in any case with the same state as when entering
-		main_status.opening_session_files = TRUE;
 	}
+	main_status.opening_session_files = FALSE;
 	return ret;
 }
 

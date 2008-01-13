@@ -300,6 +300,9 @@ void project_close(gboolean open_default)
 
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
 
+	// use write_config() to save project session files
+	write_config(FALSE);
+
 	g_free(app->project->name);
 	g_free(app->project->description);
 	g_free(app->project->file_name);
@@ -317,7 +320,7 @@ void project_close(gboolean open_default)
 	}
 
 	// after closing all tabs let's open the tabs found in the default config
-	if (open_default == TRUE)
+	if (open_default == TRUE && cl_options.load_session)
 	{
 		configuration_reload_default_session();
 		configuration_open_files();
@@ -675,7 +678,7 @@ static gboolean update_config(const PropertyDialogElements *e)
 		g_free(tmp);
 #endif
 	}
-	write_config();
+	write_config(TRUE);
 	if (new_project)
 		ui_set_statusbar(TRUE, _("Project \"%s\" created."), p->name);
 	else
@@ -884,7 +887,7 @@ static gboolean load_config(const gchar *filename)
 	// save current (non-project) session (it could has been changed since program startup)
 	configuration_save_default_session();
 
-	// fetch session files too
+	// read session files so they can be opened with configuration_open_files()
 	configuration_load_session_files(config);
 
 	if (geany_object)
@@ -898,8 +901,12 @@ static gboolean load_config(const gchar *filename)
 }
 
 
-// Returns: TRUE if project file was written successfully.
-static gboolean write_config()
+/* Write the project settings as well as the project session files into its configuration files.
+ * emit_signal defines whether the project-save signal should be emitted. When write_config()
+ * is called while closing a project, this is used to skip emitting the signal because
+ * project-close will be emitted afterwards.
+ * Returns: TRUE if project file was written successfully. */
+static gboolean write_config(gboolean emit_signal)
 {
 	GeanyProject *p;
 	GKeyFile *config;
@@ -932,7 +939,7 @@ static gboolean write_config()
 	/// TODO maybe it is useful to store relative file names if base_path is relative
 	configuration_save_session_files(config);
 
-	if (geany_object)
+	if (geany_object && emit_signal)
 	{
 		g_signal_emit_by_name(geany_object, "project-save", config);
 	}
@@ -1002,7 +1009,7 @@ void project_save_prefs(GKeyFile *config)
 		NVL(local_prefs.project_file_path, ""));
 
 	if (project != NULL)
-		write_config(); // to store project session files
+		write_config(TRUE); // to store project session files
 }
 
 
