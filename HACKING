@@ -24,9 +24,9 @@ See also the 'Building on Windows' document on the website.
 
 File organization
 -----------------
-We aim to use callbacks.c only for Glade callbacks.
+callbacks.c is just for Glade callbacks.
 Avoid adding code to geany.h if it will fit better elsewhere.
-See the src/*.c files for descriptions.
+See the top of each src/*.c file for a brief description of what it's for.
 
 Glade
 -----
@@ -41,13 +41,18 @@ installed on the system.
 
 Coding
 ------
-Use static functions where possible.
-Try to use GLib types and functions - e.g. g_free instead of free and
-try to use only GLib 2.6 and GTK 2.6 functions. At least for the moment,
-we want to keep the minimum requirement for GTK at 2.6. We currently try
-to support the old GCC 2.9.x compiler, so we always declare variables
-before statements. You can use -Wdeclaration-after-statement in your
-./configure CFLAGS to warn about this.
+Don't write long functions with a lot of variables and/or scopes - break
+them down into smaller static functions where possible. This makes code
+much easier to read and maintain.
+Use GLib types and functions - e.g. g_free instead of free.
+Your code should build against GLib 2.6 and GTK 2.6. At least for the
+moment, we want to keep the minimum requirement for GTK at 2.6 (of
+course, you can use the GTK_CHECK_VERSION macro to protect code using
+later versions).
+We currently try to support the old GCC 2.9.x compiler,
+so we always declare variables before statements. You can use
+-Wdeclaration-after-statement in your ./configure CFLAGS to warn about
+this.
 
 Style
 -----
