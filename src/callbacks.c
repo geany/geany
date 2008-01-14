@@ -1889,43 +1889,32 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 	gint idx = document_get_cur_idx();
-	gchar *filename = NULL;
+	gchar *sel = NULL;
 
-	if (idx == -1 || ! doc_list[idx].is_valid) return;
+	if (! DOC_IDX_VALID(idx)) return;
 
-	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
+	sel = editor_get_default_selection(idx, GEANY_WORDCHARS"./");
+
+	if (sel != NULL)
 	{
-		gint len = sci_get_selected_text_length(doc_list[idx].sci);
+		gchar *locale_filename, *filename;
 
-		filename = g_malloc(len + 1);
-		sci_get_selected_text(doc_list[idx].sci, filename);
-	}
-	else if (sci_get_lines_selected(doc_list[idx].sci) == 0)
-	{	// use the word at current cursor position
-		gchar word[GEANY_MAX_WORD_LENGTH];
-
-		editor_find_current_word(doc_list[idx].sci, -1, word, sizeof(word), GEANY_WORDCHARS"./");
-		if (word[0] != '\0')
-			filename = g_strdup(word);
-	}
-
-	if (filename != NULL)
-	{
-		gchar *locale_filename;
-
-		if (! g_path_is_absolute(filename))
+		if (g_path_is_absolute(sel))
+			filename = g_strdup(sel);
+		else
 		{	// relative filename, add the path of the current file
 			gchar *path;
-			gchar *tmp = filename;
 
-			// use the projects base path if we have an open project (useful?)
-			if (app->project != NULL && app->project->base_path != NULL)
-				path = g_strdup(app->project->base_path);
-			else
-				path = g_path_get_dirname(doc_list[idx].file_name);
+			path = g_path_get_dirname(doc_list[idx].file_name);
+			filename = g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL);
 
-			filename = g_strconcat(path, G_DIR_SEPARATOR_S, filename, NULL);
-			g_free(tmp);
+			if (! g_file_test(filename, G_FILE_TEST_EXISTS) &&
+				app->project != NULL && NZV(app->project->base_path))
+			{
+				// try the project's base path
+				setptr(path, project_get_base_path());
+				setptr(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
+			}
 			g_free(path);
 		}
 
@@ -1934,6 +1923,7 @@ on_menu_open_selected_file1_activate   (GtkMenuItem     *menuitem,
 
 		g_free(filename);
 		g_free(locale_filename);
+		g_free(sel);
 	}
 }
 

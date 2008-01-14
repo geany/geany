@@ -2592,3 +2592,30 @@ void editor_finalize()
 
 	scintilla_release_resources();
 }
+
+
+/* wordchars: NULL or a string containing characters to match a word.
+ * Returns: the current selection or the current word. */
+gchar *editor_get_default_selection(gint idx, const gchar *wordchars)
+{
+	gchar *s = NULL;
+
+	g_return_val_if_fail(DOC_IDX_VALID(idx), NULL);
+
+	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
+	{
+		gint len = sci_get_selected_text_length(doc_list[idx].sci);
+
+		s = g_malloc(len + 1);
+		sci_get_selected_text(doc_list[idx].sci, s);
+	}
+	else if (sci_get_lines_selected(doc_list[idx].sci) == 0)
+	{	// use the word at current cursor position
+		gchar word[GEANY_MAX_WORD_LENGTH];
+
+		editor_find_current_word(doc_list[idx].sci, -1, word, sizeof(word), wordchars);
+		if (word[0] != '\0')
+			s = g_strdup(word);
+	}
+	return s;
+}

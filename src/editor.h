@@ -108,9 +108,6 @@ void editor_auto_latex(gint idx, gint pos);
 
 void editor_show_macro_list(ScintillaObject *sci);
 
-void editor_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen,
-	const gchar *wc);
-
 gboolean editor_show_calltip(gint idx, gint pos);
 
 void editor_do_comment_toggle(gint idx);
@@ -127,12 +124,6 @@ gint editor_lexer_get_type_keyword_idx(gint lexer);
 
 void editor_insert_multiline_comment(gint idx);
 
-void editor_select_word(ScintillaObject *sci);
-
-void editor_select_lines(ScintillaObject *sci, gboolean extra_line);
-
-void editor_select_paragraph(ScintillaObject *sci);
-
 void editor_insert_alternative_whitespace(gint idx);
 
 void editor_auto_line_indentation(gint idx, gint pos);
@@ -142,5 +133,19 @@ void editor_indentation_by_one_space(gint idx, gint pos, gboolean decrease);
 void editor_scroll_to_line(ScintillaObject *sci, gint line, gfloat percent_of_view);
 
 void editor_finalize();
+
+
+/* General editing functions */
+
+void editor_find_current_word(ScintillaObject *sci, gint pos, gchar *word, size_t wordlen,
+	const gchar *wc);
+
+gchar *editor_get_default_selection(gint idx, const gchar *wordchars);
+
+void editor_select_word(ScintillaObject *sci);
+
+void editor_select_lines(ScintillaObject *sci, gboolean extra_line);
+
+void editor_select_paragraph(ScintillaObject *sci);
 
 #endif

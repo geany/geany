@@ -1,3 +1,12 @@
+2008-01-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/callbacks.c, src/search.c, src/editor.c, src/editor.h:
+   Make 'Open Selected File' first try the current file's directory,
+   falling back to the project base path if no file was found.
+   Add editor_get_default_selection() from get_default_text() in
+   search.c, to get the current selection or current word.
+
+
 2008-01-13  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/keyfile.c, src/project.c:

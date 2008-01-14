@@ -208,28 +208,6 @@ static void send_find_dialog_response(GtkButton *button, gpointer user_data)
 }
 
 
-static gchar *get_default_text(gint idx)
-{
-	gchar *s = NULL;
-
-	if (sci_get_lines_selected(doc_list[idx].sci) == 1)
-	{
-		gint len = sci_get_selected_text_length(doc_list[idx].sci);
-
-		s = g_malloc(len + 1);
-		sci_get_selected_text(doc_list[idx].sci, s);
-	}
-	else if (sci_get_lines_selected(doc_list[idx].sci) == 0)
-	{	// use the word at current cursor position
-		gchar word[GEANY_MAX_WORD_LENGTH];
-
-		editor_find_current_word(doc_list[idx].sci, -1, word, sizeof(word), NULL);
-		if (word[0] != '\0') s = g_strdup(word);
-	}
-	return s;
-}
-
-
 // store text, clear search flags so we can use Search->Find Next/Previous
 static void setup_find_next(const gchar *text)
 {
@@ -269,7 +247,7 @@ void search_find_selection(gint idx, gboolean search_backwards)
 	}
 #endif
 
-	if (!s)	{ s=get_default_text(idx); }
+	if (!s)	{ s=editor_get_default_selection(idx, NULL); }
 	if (s)
 	{
 		setup_find_next(s);	// allow find next/prev
@@ -286,7 +264,7 @@ void search_show_find_dialog()
 
 	g_return_if_fail(DOC_IDX_VALID(idx));
 
-	sel = get_default_text(idx);
+	sel = editor_get_default_selection(idx, NULL);
 
 	if (widgets.find_dialog == NULL)
 	{
@@ -405,7 +383,7 @@ void search_show_replace_dialog()
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 
-	sel = get_default_text(idx);
+	sel = editor_get_default_selection(idx, NULL);
 
 	if (widgets.replace_dialog == NULL)
 	{
@@ -702,13 +680,13 @@ void search_show_find_in_files_dialog(const gchar *dir)
 				G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
 		gtk_widget_show_all(widgets.find_in_files_dialog);
-		sel = get_default_text(idx);
+		sel = editor_get_default_selection(idx, NULL);
 	}
 
 	entry = GTK_BIN(combo)->child;
 	// only set selection if the dialog is not already visible, or has just been created
 	if (! sel && ! GTK_WIDGET_VISIBLE(widgets.find_in_files_dialog))
-		sel = get_default_text(idx);
+		sel = editor_get_default_selection(idx, NULL);
 	if (sel)
 		gtk_entry_set_text(GTK_ENTRY(entry), sel);
 	g_free(sel);
