@@ -378,6 +378,49 @@ static void on_save_as_new_tab_toggled(GtkToggleButton *togglebutton, gpointer u
 
 
 #if ! GEANY_USE_WIN32_DIALOG
+static void handle_save_as(const gchar *utf8_filename, gboolean open_new_tab,
+		gboolean rename_file)
+{
+	gint idx = document_get_cur_idx();
+
+	g_return_if_fail(NZV(utf8_filename));
+
+	if (open_new_tab)
+	{	// "open" the saved file in a new tab
+		idx = document_clone(idx, utf8_filename);
+	}
+	else
+	{
+		if (doc_list[idx].file_name != NULL)
+		{
+			if (rename_file)
+			{
+				gchar *old_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
+				gchar *new_filename = utils_get_locale_from_utf8(utf8_filename);
+
+				g_rename(old_filename, new_filename);
+				g_free(old_filename);
+				g_free(new_filename);
+			}
+			// create a new tm_source_file object otherwise tagmanager won't work correctly
+			tm_workspace_remove_object(doc_list[idx].tm_file, TRUE, TRUE);
+			doc_list[idx].tm_file = NULL;
+			g_free(doc_list[idx].file_name);
+		}
+		doc_list[idx].file_name = g_strdup(utf8_filename);
+	}
+
+	utils_replace_filename(idx);
+	document_save_file(idx, TRUE);
+
+	if (! open_new_tab)
+		build_menu_update(idx);
+
+	// finally add current file to recent files menu
+	ui_add_recent_file(doc_list[idx].file_name);
+}
+
+
 static void
 on_file_save_dialog_response           (GtkDialog *dialog,
                                         gint response,
@@ -390,15 +433,19 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 		case GEANY_RESPONSE_RENAME:
 			rename_file = TRUE;
 			// fall through
-
 		case GTK_RESPONSE_ACCEPT:
 		{
-			gint idx = document_get_cur_idx();
 			gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(ui_widgets.save_filesel));
-			gchar *utf8_filename;
 			gboolean open_new_tab = gtk_toggle_button_get_active(
 					GTK_TOGGLE_BUTTON(lookup_widget(ui_widgets.save_filesel, "check_open_new_tab")));
+			gchar *utf8_filename;
 
+			if (! NZV(new_filename))	// rename doesn't check for empty filename
+			{
+				utils_beep();
+				g_free(new_filename);
+				return;
+			}
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
 			// check if file exists and ask whether to overwrite or not
 			if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
@@ -406,41 +453,15 @@ on_file_save_dialog_response           (GtkDialog *dialog,
 				if (dialogs_show_question(
 					_("The file '%s' already exists. Do you want to overwrite it?"),
 					utf8_filename) == FALSE)
-					return;
-			}
-
-			if (open_new_tab)
-			{	// "open" the saved file in a new tab
-				idx = document_clone(idx, utf8_filename);
-				g_free(utf8_filename);
-			}
-			else
-			{
-				if (doc_list[idx].file_name != NULL)
 				{
-					if (rename_file)
-					{	// delete the previous file name
-						gchar *old_filename = utils_get_locale_from_utf8(doc_list[idx].file_name);
-
-						g_unlink(old_filename);
-						g_free(old_filename);
-					}
-					// create a new tm_source_file object otherwise tagmanager won't work correctly
-					tm_workspace_remove_object(doc_list[idx].tm_file, TRUE, TRUE);
-					doc_list[idx].tm_file = NULL;
-					g_free(doc_list[idx].file_name);
+					g_free(utf8_filename);
+					g_free(new_filename);
+					return;
 				}
-				doc_list[idx].file_name = utf8_filename;
 			}
-			utils_replace_filename(idx);
-			document_save_file(idx, TRUE);
+			handle_save_as(utf8_filename, open_new_tab, rename_file);
 
-			if (! open_new_tab)
-				build_menu_update(idx);
-
-			// finally add current file to recent files menu
-			ui_add_recent_file(doc_list[idx].file_name);
-
+			g_free(utf8_filename);
 			g_free(new_filename);
 		}
 	}

@@ -1,3 +1,9 @@
+2008-01-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/dialogs.c:
+   Don't unlink the old file if renaming failed.
+
+
 2008-01-14  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/callbacks.c, src/search.c, src/editor.c, src/editor.h:
