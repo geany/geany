@@ -3,6 +3,9 @@
  * geany.glade, src/interface.c, src/keyfile.c, src/prefs.c,
    src/project.c, src/project.h:
    Add option for project session files support.
+ * src/encodings.c, src/encodings.h, src/plugindata.h, src/plugins.c:
+   Add encodings_get_charset_from_index() and make it available through
+   plugin API.
 
 
 2008-01-16  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

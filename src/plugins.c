@@ -178,7 +178,8 @@ static MsgWinFuncs msgwin_funcs = {
 
 static EncodingFuncs encoding_funcs = {
 	&encodings_convert_to_utf8,
-	&encodings_convert_to_utf8_from_charset
+	&encodings_convert_to_utf8_from_charset,
+	&encodings_get_charset_from_index
 };
 
 static KeybindingFuncs keybindings_funcs = {

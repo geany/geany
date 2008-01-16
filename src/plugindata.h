@@ -93,7 +93,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 38;
+static const gint api_version = 39;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -330,9 +330,10 @@ MsgWinFuncs;
 
 typedef struct EncodingFuncs
 {
-	gchar*	(*convert_to_utf8) (const gchar *buffer, gsize size, gchar **used_encoding);
-	gchar* 	(*convert_to_utf8_from_charset) (const gchar *buffer, gsize size,
-											const gchar *charset, gboolean fast);
+	gchar*			(*convert_to_utf8) (const gchar *buffer, gsize size, gchar **used_encoding);
+	gchar* 			(*convert_to_utf8_from_charset) (const gchar *buffer, gsize size,
+													 const gchar *charset, gboolean fast);
+	const gchar*	(*get_charset_from_index) (gint idx);
 }
 EncodingFuncs;
 

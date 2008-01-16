@@ -62,6 +62,7 @@ const GeanyEncoding* encodings_get_from_index(gint idx);
 
 gchar* encodings_to_string(const GeanyEncoding* enc);
 const gchar* encodings_get_charset(const GeanyEncoding* enc);
+const gchar* encodings_get_charset_from_index(gint idx);
 
 void encodings_select_radio_item(const gchar *charset);
 
