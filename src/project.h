@@ -48,6 +48,7 @@ struct _GeanyProject
 typedef struct
 {
 	gchar *session_file;
+	gboolean project_session;
 } ProjectPrefs;
 
 extern ProjectPrefs project_prefs;

@@ -164,6 +164,9 @@ void prefs_init_dialog(void)
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.load_session);
 
+	widget = lookup_widget(ui_widgets.prefs_dialog, "check_project_session");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), project_prefs.project_session);
+
 	widget = lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.save_winpos);
 
@@ -562,6 +565,9 @@ on_prefs_button_clicked(GtkDialog *dialog, gint response, gpointer user_data)
 		// startup
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
 		prefs.load_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = lookup_widget(ui_widgets.prefs_dialog, "check_project_session");
+		project_prefs.project_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
 		prefs.save_winpos = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

@@ -46,7 +46,7 @@
 #include "geanyobject.h"
 
 
-ProjectPrefs project_prefs = {NULL};
+ProjectPrefs project_prefs = { NULL, 0 };
 
 static struct
 {
@@ -212,7 +212,8 @@ static void run_open_dialog(GtkDialog *dialog)
 			goto retry;
 		}
 		g_free(filename);
-		configuration_open_files();
+		if (project_prefs.project_session)
+			configuration_open_files();
 	}
 }
 #endif
@@ -239,7 +240,8 @@ void project_open()
 		{
 			SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
 		}
-		configuration_open_files();
+		if (project_prefs.project_session)
+			configuration_open_files();
 		g_free(file);
 	}
 #else
@@ -312,18 +314,21 @@ void project_close(gboolean open_default)
 	g_free(app->project);
 	app->project = NULL;
 
-	// close all existing tabs first
-	for (i = 0; i < max; i++)
+	if (project_prefs.project_session)
 	{
-		if (! document_remove(0))
-			break;
-	}
+		// close all existing tabs first
+		for (i = 0; i < max; i++)
+		{
+			if (! document_remove(0))
+				break;
+		}
 
-	// after closing all tabs let's open the tabs found in the default config
-	if (open_default == TRUE && cl_options.load_session)
-	{
-		configuration_reload_default_session();
-		configuration_open_files();
+		// after closing all tabs let's open the tabs found in the default config
+		if (open_default == TRUE && cl_options.load_session)
+		{
+			configuration_reload_default_session();
+			configuration_open_files();
+		}
 	}
 
 	if (geany_object)
@@ -884,11 +889,13 @@ static gboolean load_config(const gchar *filename)
 	p->run_cmd = utils_get_setting_string(config, "project", "run_cmd", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
-	// save current (non-project) session (it could has been changed since program startup)
-	configuration_save_default_session();
-
-	// read session files so they can be opened with configuration_open_files()
-	configuration_load_session_files(config);
+	if (project_prefs.project_session)
+	{
+		// save current (non-project) session (it could has been changed since program startup)
+		configuration_save_default_session();
+		// read session files so they can be opened with configuration_open_files()
+		configuration_load_session_files(config);
+	}
 
 	if (geany_object)
 	{
@@ -936,8 +943,8 @@ static gboolean write_config(gboolean emit_signal)
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
 
 	// store the session files into the project too
-	/// TODO maybe it is useful to store relative file names if base_path is relative
-	configuration_save_session_files(config);
+	if (project_prefs.project_session)
+		configuration_save_session_files(config);
 
 	if (geany_object && emit_signal)
 	{

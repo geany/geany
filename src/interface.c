@@ -2477,6 +2477,7 @@ create_prefs_dialog (void)
   GtkWidget *alignment13;
   GtkWidget *vbox4;
   GtkWidget *check_load_session;
+  GtkWidget *check_project_session;
   GtkWidget *check_vte;
   GtkWidget *check_plugins;
   GtkWidget *check_save_win_pos;
@@ -2810,6 +2811,13 @@ create_prefs_dialog (void)
   GTK_WIDGET_UNSET_FLAGS (check_load_session, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_load_session, _("Opens at startup the files from the last session"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_load_session), FALSE);
+
+  check_project_session = gtk_check_button_new_with_mnemonic (_("Load and save session files when open and close a project"));
+  gtk_widget_show (check_project_session);
+  gtk_box_pack_start (GTK_BOX (vbox4), check_project_session, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_project_session, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_project_session, _("Whether to store project session files and open them when re-opening the project."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_project_session), FALSE);
 
   check_vte = gtk_check_button_new_with_mnemonic (_("Load virtual terminal support"));
   gtk_box_pack_start (GTK_BOX (vbox4), check_vte, FALSE, FALSE, 0);
@@ -4417,6 +4425,7 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment13, "alignment13");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox4, "vbox4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_load_session, "check_load_session");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_project_session, "check_project_session");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_vte, "check_vte");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_plugins, "check_plugins");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_save_win_pos, "check_save_win_pos");
