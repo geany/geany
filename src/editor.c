@@ -266,6 +266,20 @@ static void on_char_added(gint idx, SCNotification *nt)
 }
 
 
+static void ensure_range_visible(ScintillaObject *sci, gint posStart, gint posEnd,
+		gboolean enforcePolicy)
+{
+	gint lineStart = SSM(sci, SCI_LINEFROMPOSITION, MIN(posStart, posEnd), 0);
+	gint lineEnd = SSM(sci, SCI_LINEFROMPOSITION, MAX(posStart, posEnd), 0);
+	gint line;
+
+	for (line = lineStart; line <= lineEnd; line++)
+	{
+		SSM(sci, enforcePolicy ? SCI_ENSUREVISIBLEENFORCEPOLICY : SCI_ENSUREVISIBLE, line, 0);
+	}
+}
+
+
 // callback func called by all editors when a signal arises
 void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer user_data)
 {
@@ -357,6 +371,11 @@ void on_editor_notification(GtkWidget *editor, gint scn, gpointer lscn, gpointer
 			break;
 		}
 #endif
+		case SCN_NEEDSHOWN:
+		{
+			ensure_range_visible(sci, nt->position, nt->position + nt->length, FALSE);
+			break;
+		}
 		case SCN_URIDROPPED:
 		{
 			if (nt->text != NULL)
