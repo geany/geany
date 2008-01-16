@@ -399,7 +399,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "synchronized",   KEYWORD_SYNCHRONIZED,   { 0, 0, 0, 1, 0 } },
 	{ "task",           KEYWORD_TASK,           { 0, 0, 0, 0, 1 } },
 	{ "template",       KEYWORD_TEMPLATE,       { 0, 1, 0, 0, 0 } },
-	{ "this",           KEYWORD_THIS,           { 0, 1, 1, 1, 0 } },
+	{ "this",           KEYWORD_THIS,           { 0, 0, 1, 1, 0 } },	// allow D ctor tags
 	{ "throw",          KEYWORD_THROW,          { 0, 1, 1, 1, 0 } },
 	{ "throws",         KEYWORD_THROWS,         { 0, 0, 0, 1, 0 } },
 	{ "trans",          KEYWORD_TRANS,          { 0, 0, 0, 0, 1 } },

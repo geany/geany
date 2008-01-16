@@ -13,6 +13,8 @@
  * src/editor.c:
    Fix hidden lines after deleting a line that is a collapsed fold
    point.
+ * tagmanager/c.c:
+   Fix parsing D constructor tags.
 
 
 2008-01-15  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
