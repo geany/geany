@@ -1,3 +1,11 @@
+2008-01-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * data/filetypes.ruby, src/editor.c, src/highlighting.c:
+   Add two missing highlight styles to filetype Ruby.
+   Enable comment/uncomment for POD-like comments for filetypes Ruby
+   and Perl.
+
+
 2008-01-16  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * geany.glade, src/interface.c, src/keyfile.c, src/prefs.c,

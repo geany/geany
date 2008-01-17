@@ -1518,7 +1518,7 @@ static void styleset_python(ScintillaObject *sci)
 
 static void styleset_ruby_init(gint ft_id, GKeyFile *config, GKeyFile *config_home)
 {
-	new_style_array(GEANY_FILETYPES_RUBY, 33);
+	new_style_array(GEANY_FILETYPES_RUBY, 35);
 	get_keyfile_hex(config, config_home, "styling", "default", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[0]);
 	get_keyfile_style(config, config_home, "commentline", &gsd_comment, &style_sets[GEANY_FILETYPES_RUBY].styling[1]);
 	get_keyfile_hex(config, config_home, "styling", "number", "0x400080", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[2]);
@@ -1552,6 +1552,8 @@ static void styleset_ruby_init(gint ft_id, GKeyFile *config, GKeyFile *config_ho
 	get_keyfile_hex(config, config_home, "styling", "string_qr", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[30]);
 	get_keyfile_hex(config, config_home, "styling", "string_qw", "0x105090", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[31]);
 	get_keyfile_hex(config, config_home, "styling", "upper_bound", "0x000000", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[32]);
+	get_keyfile_hex(config, config_home, "styling", "error", "0xe500cc", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[33]);
+	get_keyfile_hex(config, config_home, "styling", "pod", "0x035650", "0xffffff", "false", &style_sets[GEANY_FILETYPES_RUBY].styling[34]);
 
 	style_sets[GEANY_FILETYPES_RUBY].keywords = g_new(gchar*, 2);
 	get_keyfile_keywords(config, config_home, "keywords", "primary", GEANY_FILETYPES_RUBY, 0, "load define_method attr_accessor attr_writer attr_reader include __FILE__ and def end in or self unless __LINE__ begin defined? ensure module redo super until BEGIN break do false next rescue then when END case else for nil require retry true while alias class elsif if not return undef yield");
@@ -1606,6 +1608,8 @@ static void styleset_ruby(ScintillaObject *sci)
 	set_sci_style(sci, SCE_RB_STRING_QR, GEANY_FILETYPES_RUBY, 30);
 	set_sci_style(sci, SCE_RB_STRING_QW, GEANY_FILETYPES_RUBY, 31);
 	set_sci_style(sci, SCE_RB_UPPER_BOUND, GEANY_FILETYPES_RUBY, 32);
+	set_sci_style(sci, SCE_RB_ERROR, GEANY_FILETYPES_RUBY, 33);
+	set_sci_style(sci, SCE_RB_POD, GEANY_FILETYPES_RUBY, 34);
 }
 
 

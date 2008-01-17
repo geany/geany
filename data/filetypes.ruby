@@ -34,6 +34,8 @@ string_qx=0x000000;0xe0c0e0;false;false
 string_qr=0x105090;0xffffff;false;false
 string_qw=0x105090;0xffffff;false;false
 upper_bound=0x000000;0xffffff;false;false
+error=0xe500cc;0xffffff;false;false
+pod=0x035650;0xffffff;false;false
 
 [keywords]
 # all items must be in one line

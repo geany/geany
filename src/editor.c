@@ -1779,6 +1779,8 @@ void editor_do_comment_toggle(gint idx)
 				case SCLEX_SQL: style_comment = SCE_SQL_COMMENT; break;
 				case SCLEX_CAML: style_comment = SCE_CAML_COMMENT; break;
 				case SCLEX_D: style_comment = SCE_D_COMMENT; break;
+				case SCLEX_RUBY: style_comment = SCE_RB_POD; break;
+				case SCLEX_PERL: style_comment = SCE_PL_POD; break;
 				default: style_comment = SCE_C_COMMENT;
 			}
 			if (sci_get_style_at(doc_list[idx].sci, line_start + x) == style_comment)
