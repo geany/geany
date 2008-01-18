@@ -2477,12 +2477,20 @@ create_prefs_dialog (void)
   GtkWidget *alignment13;
   GtkWidget *vbox4;
   GtkWidget *check_load_session;
-  GtkWidget *check_project_session;
   GtkWidget *check_vte;
   GtkWidget *check_plugins;
+  GtkWidget *label162;
+  GtkWidget *frame34;
+  GtkWidget *alignment37;
+  GtkWidget *vbox34;
   GtkWidget *check_save_win_pos;
   GtkWidget *check_ask_for_quit;
-  GtkWidget *label162;
+  GtkWidget *label206;
+  GtkWidget *frame35;
+  GtkWidget *alignment38;
+  GtkWidget *vbox35;
+  GtkWidget *check_project_session;
+  GtkWidget *label207;
   GtkWidget *frame19;
   GtkWidget *alignment22;
   GtkWidget *vbox21;
@@ -2812,13 +2820,6 @@ create_prefs_dialog (void)
   gtk_tooltips_set_tip (tooltips, check_load_session, _("Opens at startup the files from the last session"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_load_session), FALSE);
 
-  check_project_session = gtk_check_button_new_with_mnemonic (_("Load and save session files when open and close a project"));
-  gtk_widget_show (check_project_session);
-  gtk_box_pack_start (GTK_BOX (vbox4), check_project_session, FALSE, FALSE, 0);
-  GTK_WIDGET_UNSET_FLAGS (check_project_session, GTK_CAN_FOCUS);
-  gtk_tooltips_set_tip (tooltips, check_project_session, _("Whether to store project session files and open them when re-opening the project."), NULL);
-  gtk_button_set_focus_on_click (GTK_BUTTON (check_project_session), FALSE);
-
   check_vte = gtk_check_button_new_with_mnemonic (_("Load virtual terminal support"));
   gtk_box_pack_start (GTK_BOX (vbox4), check_vte, FALSE, FALSE, 0);
   gtk_tooltips_set_tip (tooltips, check_vte, _("Whether the virtual terminal emulation (VTE) should be loaded at startup. Disable it if you do not need it."), NULL);
@@ -2828,24 +2829,69 @@ create_prefs_dialog (void)
   gtk_widget_show (check_plugins);
   gtk_box_pack_start (GTK_BOX (vbox4), check_plugins, FALSE, FALSE, 0);
 
+  label162 = gtk_label_new (_("<b>Startup</b>"));
+  gtk_widget_show (label162);
+  gtk_frame_set_label_widget (GTK_FRAME (frame10), label162);
+  gtk_label_set_use_markup (GTK_LABEL (label162), TRUE);
+
+  frame34 = gtk_frame_new (NULL);
+  gtk_widget_show (frame34);
+  gtk_box_pack_start (GTK_BOX (vbox20), frame34, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame34), GTK_SHADOW_NONE);
+
+  alignment37 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment37);
+  gtk_container_add (GTK_CONTAINER (frame34), alignment37);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment37), 0, 0, 12, 0);
+
+  vbox34 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox34);
+  gtk_container_add (GTK_CONTAINER (alignment37), vbox34);
+
   check_save_win_pos = gtk_check_button_new_with_mnemonic (_("Save window position and geometry"));
   gtk_widget_show (check_save_win_pos);
-  gtk_box_pack_start (GTK_BOX (vbox4), check_save_win_pos, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox34), check_save_win_pos, FALSE, FALSE, 0);
   GTK_WIDGET_UNSET_FLAGS (check_save_win_pos, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_save_win_pos, _("Saves the window position and geometry and restores it at the start"), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_save_win_pos), FALSE);
 
   check_ask_for_quit = gtk_check_button_new_with_mnemonic (_("Confirm exit"));
   gtk_widget_show (check_ask_for_quit);
-  gtk_box_pack_start (GTK_BOX (vbox4), check_ask_for_quit, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox34), check_ask_for_quit, FALSE, FALSE, 0);
   GTK_WIDGET_UNSET_FLAGS (check_ask_for_quit, GTK_CAN_FOCUS);
   gtk_tooltips_set_tip (tooltips, check_ask_for_quit, _("Shows a confirmation dialog on exit."), NULL);
   gtk_button_set_focus_on_click (GTK_BUTTON (check_ask_for_quit), FALSE);
 
-  label162 = gtk_label_new (_("<b>Startup and shutdown</b>"));
-  gtk_widget_show (label162);
-  gtk_frame_set_label_widget (GTK_FRAME (frame10), label162);
-  gtk_label_set_use_markup (GTK_LABEL (label162), TRUE);
+  label206 = gtk_label_new (_("<b>Shutdown</b>"));
+  gtk_widget_show (label206);
+  gtk_frame_set_label_widget (GTK_FRAME (frame34), label206);
+  gtk_label_set_use_markup (GTK_LABEL (label206), TRUE);
+
+  frame35 = gtk_frame_new (NULL);
+  gtk_widget_show (frame35);
+  gtk_box_pack_start (GTK_BOX (vbox20), frame35, FALSE, TRUE, 0);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame35), GTK_SHADOW_NONE);
+
+  alignment38 = gtk_alignment_new (0.5, 0.5, 1, 1);
+  gtk_widget_show (alignment38);
+  gtk_container_add (GTK_CONTAINER (frame35), alignment38);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment38), 0, 0, 12, 0);
+
+  vbox35 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox35);
+  gtk_container_add (GTK_CONTAINER (alignment38), vbox35);
+
+  check_project_session = gtk_check_button_new_with_mnemonic (_("Use project-based session files"));
+  gtk_widget_show (check_project_session);
+  gtk_box_pack_start (GTK_BOX (vbox35), check_project_session, FALSE, FALSE, 0);
+  GTK_WIDGET_UNSET_FLAGS (check_project_session, GTK_CAN_FOCUS);
+  gtk_tooltips_set_tip (tooltips, check_project_session, _("Whether to store a project's session files and open them when re-opening the project."), NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (check_project_session), FALSE);
+
+  label207 = gtk_label_new (_("<b>Projects</b>"));
+  gtk_widget_show (label207);
+  gtk_frame_set_label_widget (GTK_FRAME (frame35), label207);
+  gtk_label_set_use_markup (GTK_LABEL (label207), TRUE);
 
   frame19 = gtk_frame_new (NULL);
   gtk_widget_show (frame19);
@@ -4425,12 +4471,20 @@ create_prefs_dialog (void)
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment13, "alignment13");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox4, "vbox4");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_load_session, "check_load_session");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, check_project_session, "check_project_session");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_vte, "check_vte");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_plugins, "check_plugins");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label162, "label162");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame34, "frame34");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment37, "alignment37");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox34, "vbox34");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_save_win_pos, "check_save_win_pos");
   GLADE_HOOKUP_OBJECT (prefs_dialog, check_ask_for_quit, "check_ask_for_quit");
-  GLADE_HOOKUP_OBJECT (prefs_dialog, label162, "label162");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label206, "label206");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, frame35, "frame35");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, alignment38, "alignment38");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, vbox35, "vbox35");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, check_project_session, "check_project_session");
+  GLADE_HOOKUP_OBJECT (prefs_dialog, label207, "label207");
   GLADE_HOOKUP_OBJECT (prefs_dialog, frame19, "frame19");
   GLADE_HOOKUP_OBJECT (prefs_dialog, alignment22, "alignment22");
   GLADE_HOOKUP_OBJECT (prefs_dialog, vbox21, "vbox21");

@@ -1,3 +1,12 @@
+2008-01-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/interface.c, geany.glade:
+   Split up Prefs dialog General tab options into Startup, Shutdown
+   and Projects frames.
+   Rename 'Load and save session files...' option 'Use project-based
+   session files'.
+
+
 2008-01-17  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * data/filetypes.ruby, src/editor.c, src/highlighting.c:
