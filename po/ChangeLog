@@ -1,3 +1,9 @@
+2008-01-19  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * *.po, geany.pot: Update for string freeze in preparing of Geany
+   0.13 release.
+
+
 2008-01-13  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ja.po: Update of Japanese translation (Thanks to Tarot Osuji).

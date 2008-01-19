@@ -5,9 +5,9 @@
 # Tony Mattsson <superxorn@gmail.com>, 2007
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 0.12\n"
+"Project-Id-Version: Geany 0.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-27 21:25+0100\n"
+"POT-Creation-Date: 2008-01-19 16:55+0100\n"
 "PO-Revision-Date: 2007-12-27 13:35+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
@@ -27,57 +27,57 @@ msgstr "Geany"
 msgid "Integrated Development Environment"
 msgstr "Integrerad utvecklingsmiljö"
 
-#: ../src/about.c:119
+#: ../src/about.c:120
 msgid "About Geany"
 msgstr "Om Geany"
 
-#: ../src/about.c:170
+#: ../src/about.c:171
 msgid "A fast and lightweight IDE"
 msgstr "Ett snabbt och lättviktigt IDE"
 
-#: ../src/about.c:191
+#: ../src/about.c:192
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(byggd på eller efter %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:222
+#: ../src/about.c:223
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:238
+#: ../src/about.c:239
 msgid "Developers"
 msgstr "Utvecklare"
 
-#: ../src/about.c:247
+#: ../src/about.c:248
 msgid "maintainer"
 msgstr "ansvarig"
 
-#: ../src/about.c:255
+#: ../src/about.c:256
 msgid "developer"
 msgstr "utvecklare"
 
-#: ../src/about.c:263
+#: ../src/about.c:264
 msgid "translation maintainer"
 msgstr "ansvarig för översättningar"
 
-#: ../src/about.c:272
+#: ../src/about.c:273
 msgid "Translators"
 msgstr "Översättare"
 
-#: ../src/about.c:292
+#: ../src/about.c:293
 msgid "Previous Translators"
 msgstr "Tidigare översättare"
 
-#: ../src/about.c:311
+#: ../src/about.c:312
 msgid "Credits"
 msgstr "Tack till ..."
 
-#: ../src/about.c:325
+#: ../src/about.c:326
 msgid "License"
 msgstr "Licens"
 
-#: ../src/about.c:334
+#: ../src/about.c:335
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -105,7 +105,7 @@ msgid "Failed to execute \"%s\" (start-script could not be created)"
 msgstr "Misslyckades exekvera \"%s\" (start-skriptet kunde inte skapas)"
 
 #: ../src/build.c:261 ../src/build.c:562 ../src/build.c:871
-#: ../src/search.c:1193
+#: ../src/search.c:1171
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Processen misslyckades (%s)"
@@ -306,7 +306,7 @@ msgstr "Kompilera:"
 msgid "Build:"
 msgstr "Bygg:"
 
-#: ../src/build.c:1638 ../src/dialogs.c:1138
+#: ../src/build.c:1638 ../src/dialogs.c:1164
 msgid "Execute:"
 msgstr "Exekvera:"
 
@@ -411,15 +411,15 @@ msgid "No more message items."
 msgstr "Inga fler meddelanden."
 
 #. initialize the dialog
-#: ../src/dialogs.c:169 ../src/prefs.c:1399
+#: ../src/dialogs.c:174 ../src/prefs.c:1442
 msgid "Open File"
 msgstr "Öppna fil"
 
-#: ../src/dialogs.c:173 ../src/interface.c:708
+#: ../src/dialogs.c:178 ../src/interface.c:708
 msgid "_View"
 msgstr "Visa"
 
-#: ../src/dialogs.c:175
+#: ../src/dialogs.c:180
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
@@ -427,24 +427,24 @@ msgstr ""
 "Öppnar filen i skrivskyddat läge. Om du väljer fler filer, kommer alla "
 "öppnas i skrivskyddat läge."
 
-#: ../src/dialogs.c:211
+#: ../src/dialogs.c:216
 msgid "Detect by file extension"
 msgstr "Upptäck från filändelse"
 
-#: ../src/dialogs.c:222 ../src/interface.c:3641
+#: ../src/dialogs.c:227 ../src/interface.c:3693
 msgid "Detect from file"
 msgstr "Upptäck från fil"
 
 #. line 1 with checkbox and encoding combo
-#: ../src/dialogs.c:286
+#: ../src/dialogs.c:291
 msgid "Show _hidden files"
 msgstr "Visa gömda filer"
 
-#: ../src/dialogs.c:298
+#: ../src/dialogs.c:303
 msgid "Set encoding:"
 msgstr "Välj teckenkodning:"
 
-#: ../src/dialogs.c:308
+#: ../src/dialogs.c:313
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -458,11 +458,11 @@ msgstr ""
 "Notera att om du öppnar många filer, kommer alla öppnas med vald "
 "teckenkodning."
 
-#: ../src/dialogs.c:328
+#: ../src/dialogs.c:333
 msgid "Set filetype:"
 msgstr "Ange filtyp:"
 
-#: ../src/dialogs.c:338
+#: ../src/dialogs.c:343
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -472,60 +472,60 @@ msgstr ""
 "Definierar filtyp, om Geany inte kan känna av filtyp automatiskt.\n"
 "Notera att om flera filer öppnas, kommer alla att öppnas som vald filtyp."
 
-#: ../src/dialogs.c:402 ../plugins/export.c:324
+#: ../src/dialogs.c:454 ../plugins/export.c:333
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Filen '%s' finns redan. Vill du skriva över den?"
 
-#: ../src/dialogs.c:453
+#: ../src/dialogs.c:479
 msgid "Save File"
 msgstr "Spara fil"
 
-#: ../src/dialogs.c:461
+#: ../src/dialogs.c:487
 msgid "R_ename"
 msgstr "Byt namn"
 
-#: ../src/dialogs.c:463
+#: ../src/dialogs.c:489
 msgid "Save the file and rename it."
 msgstr "Spara och byt namn på filen."
 
-#: ../src/dialogs.c:474
+#: ../src/dialogs.c:500
 msgid "_Open file in a new tab"
 msgstr "Öppna filen i en ny flik"
 
-#: ../src/dialogs.c:476
+#: ../src/dialogs.c:502
 msgid ""
 "Keep the current unsaved document open and open the newly saved file in a "
 "new tab."
 msgstr ""
 "Vill du behålla nuvarande dokument och öppna det nya dokumentet i en ny flik?"
 
-#: ../src/dialogs.c:635
+#: ../src/dialogs.c:661
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "Filen '%s' är inte sparad."
 
-#: ../src/dialogs.c:637
+#: ../src/dialogs.c:663
 msgid "Do you want to save it before closing?"
 msgstr "Vill du spara innan du stänger?"
 
-#: ../src/dialogs.c:649
+#: ../src/dialogs.c:675
 msgid "_Don't save"
 msgstr "Spara _inte"
 
-#: ../src/dialogs.c:726
+#: ../src/dialogs.c:752
 msgid "Choose font"
 msgstr "Välj font"
 
-#: ../src/dialogs.c:876 ../src/interface.c:2316 ../src/keybindings.c:170
+#: ../src/dialogs.c:902 ../src/interface.c:2316 ../src/keybindings.c:170
 msgid "Go to Line"
 msgstr "Gå till rad"
 
-#: ../src/dialogs.c:883
+#: ../src/dialogs.c:909
 msgid "Enter the line you want to go to:"
 msgstr "Skriv in radnumret till den rad du vill hoppa till"
 
-#: ../src/dialogs.c:930
+#: ../src/dialogs.c:956
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -533,86 +533,86 @@ msgstr ""
 "Ett fel inträffade, eller så kunde inte fil-informationen hämtas (exempelvis "
 "från en ny fil)."
 
-#: ../src/dialogs.c:949 ../src/dialogs.c:950 ../src/dialogs.c:951
-#: ../src/dialogs.c:957 ../src/dialogs.c:958 ../src/dialogs.c:959
+#: ../src/dialogs.c:975 ../src/dialogs.c:976 ../src/dialogs.c:977
+#: ../src/dialogs.c:983 ../src/dialogs.c:984 ../src/dialogs.c:985
 #: ../src/ui_utils.c:161 ../src/utils.c:498 ../src/utils.c:519
 #: ../src/utils.c:572
 msgid "unknown"
 msgstr "okänd"
 
-#: ../src/dialogs.c:963
+#: ../src/dialogs.c:989
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: ../src/dialogs.c:992
+#: ../src/dialogs.c:1018
 msgid "<b>Type:</b>"
 msgstr "<b>Typ:</b>"
 
-#: ../src/dialogs.c:1005
+#: ../src/dialogs.c:1031
 msgid "<b>Size:</b>"
 msgstr "<b>Storlek:</b>"
 
-#: ../src/dialogs.c:1020
+#: ../src/dialogs.c:1046
 msgid "<b>Location:</b>"
 msgstr "<b>Plats:</b>"
 
-#: ../src/dialogs.c:1033
+#: ../src/dialogs.c:1059
 msgid "<b>Read-only:</b>"
 msgstr "<b>Endast läsbar:</b>"
 
-#: ../src/dialogs.c:1040
+#: ../src/dialogs.c:1066
 msgid "(only inside Geany)"
 msgstr "(endast inom Geany)"
 
-#: ../src/dialogs.c:1049
+#: ../src/dialogs.c:1075
 msgid "<b>Encoding:</b>"
 msgstr "<b>Kodning:</b>"
 
-#: ../src/dialogs.c:1059 ../src/ui_utils.c:163
+#: ../src/dialogs.c:1085 ../src/ui_utils.c:163
 msgid "(with BOM)"
 msgstr "(med BOM)"
 
-#: ../src/dialogs.c:1059
+#: ../src/dialogs.c:1085
 msgid "(without BOM)"
 msgstr "(utan BOM)"
 
-#: ../src/dialogs.c:1069
+#: ../src/dialogs.c:1095
 msgid "<b>Modified:</b>"
 msgstr "<b>Modifierad:</b>"
 
-#: ../src/dialogs.c:1082
+#: ../src/dialogs.c:1108
 msgid "<b>Changed:</b>"
 msgstr "<b>Ändrad:</b>"
 
-#: ../src/dialogs.c:1095
+#: ../src/dialogs.c:1121
 msgid "<b>Accessed:</b>"
 msgstr "<b>Skapad:</b>"
 
-#: ../src/dialogs.c:1116
+#: ../src/dialogs.c:1142
 msgid "<b>Permissions:</b>"
 msgstr "<b>Behörighet:</b>"
 
 #. Header
-#: ../src/dialogs.c:1124
+#: ../src/dialogs.c:1150
 msgid "Read:"
 msgstr "Läs:"
 
-#: ../src/dialogs.c:1131
+#: ../src/dialogs.c:1157
 msgid "Write:"
 msgstr "Skriv:"
 
 #. Owner
-#: ../src/dialogs.c:1146
+#: ../src/dialogs.c:1172
 msgid "Owner:"
 msgstr "Ägare:"
 
 #. Group
-#: ../src/dialogs.c:1182
+#: ../src/dialogs.c:1208
 msgid "Group:"
 msgstr "Grupp:"
 
 #. Other
-#: ../src/dialogs.c:1218
+#: ../src/dialogs.c:1244
 msgid "Other:"
 msgstr "Annat:"
 
@@ -666,11 +666,11 @@ msgstr "Ogiltigt filnamn"
 msgid "Setting %s indentation mode."
 msgstr "Ange %s indragsläge."
 
-#: ../src/document.c:988 ../src/interface.c:808 ../src/interface.c:3620
+#: ../src/document.c:988 ../src/interface.c:808 ../src/interface.c:3672
 msgid "Tabs"
 msgstr "Tabulatorer"
 
-#: ../src/document.c:988 ../src/interface.c:814 ../src/interface.c:3627
+#: ../src/document.c:988 ../src/interface.c:814 ../src/interface.c:3679
 msgid "Spaces"
 msgstr "Mellanslag"
 
@@ -733,8 +733,8 @@ msgstr "\"%s\" kunde ej hittas."
 msgid "Wrap search and find again?"
 msgstr "Vill du fortsätta sökningen från början av dokumentet?"
 
-#: ../src/document.c:1542 ../src/search.c:881 ../src/search.c:1382
-#: ../src/search.c:1383
+#: ../src/document.c:1542 ../src/search.c:859 ../src/search.c:1360
+#: ../src/search.c:1361
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Inga träffar hittades för \"%s\"."
@@ -744,15 +744,15 @@ msgstr "Inga träffar hittades för \"%s\"."
 msgid "%s: replaced %d occurrence(s) of \"%s\" with \"%s\"."
 msgstr "%s: utbytt med %d träff(ar) av \"%s\" med \"%s\"."
 
-#: ../src/document.c:1973
+#: ../src/document.c:1976
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: ../src/document.c:1974
+#: ../src/document.c:1977
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: ../src/document.c:1976
+#: ../src/document.c:1979
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
@@ -862,27 +862,27 @@ msgstr "Koreansk"
 msgid "Without encoding"
 msgstr "Utan kodning"
 
-#: ../src/encodings.c:310
+#: ../src/encodings.c:329
 msgid "_West European"
 msgstr "Västeuropeisk"
 
-#: ../src/encodings.c:316
+#: ../src/encodings.c:335
 msgid "_East European"
 msgstr "Östeuropeisk"
 
-#: ../src/encodings.c:322
+#: ../src/encodings.c:341
 msgid "East _Asian"
 msgstr "Östasiatisk"
 
-#: ../src/encodings.c:328
+#: ../src/encodings.c:347
 msgid "_SE & SW Asian"
 msgstr "SV & SÖ Asiatisk"
 
-#: ../src/encodings.c:334
+#: ../src/encodings.c:353
 msgid "_Middle Eastern"
 msgstr "Mellanösternsk"
 
-#: ../src/encodings.c:340
+#: ../src/encodings.c:359
 msgid "_Unicode"
 msgstr "Unicode"
 
@@ -931,7 +931,7 @@ msgstr "Config-fil"
 msgid "reStructuredText file"
 msgstr "reStructuredText fil"
 
-#: ../src/filetypes.c:481 ../src/project.c:262
+#: ../src/filetypes.c:481 ../src/project.c:265
 msgid "All files"
 msgstr "Alla filer"
 
@@ -951,15 +951,15 @@ msgstr "Märkningsspråk"
 msgid "M_iscellaneous Languages"
 msgstr "Diverse språk"
 
-#: ../src/filetypes.c:545 ../src/interface.c:3591 ../src/templates.c:350
+#: ../src/filetypes.c:545 ../src/interface.c:3643 ../src/templates.c:350
 msgid "None"
 msgstr "Inget"
 
-#: ../src/filetypes.c:964 ../src/win32.c:82
+#: ../src/filetypes.c:964 ../src/win32.c:83
 msgid "All Source"
 msgstr "All källkod"
 
-#: ../src/geany.h:59
+#: ../src/geany.h:58
 msgid "untitled"
 msgstr "odöpt"
 
@@ -1151,7 +1151,7 @@ msgstr "Sök föregående"
 msgid "Find in F_iles"
 msgstr "Sök i filer"
 
-#: ../src/interface.c:665 ../src/search.c:427
+#: ../src/interface.c:665 ../src/search.c:405
 msgid "_Replace"
 msgstr "Ersätt"
 
@@ -1235,7 +1235,7 @@ msgstr "Dokument"
 msgid "_Line Wrapping"
 msgstr "Radbrytning"
 
-#: ../src/interface.c:793 ../src/interface.c:3670
+#: ../src/interface.c:793 ../src/interface.c:3722
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
@@ -1297,7 +1297,7 @@ msgstr "Ta bort överflödiga mellanslag"
 msgid "_Replace Tabs by Spaces"
 msgstr "Ersätt tab med mellanslag"
 
-#: ../src/interface.c:896 ../src/interface.c:3896
+#: ../src/interface.c:896 ../src/interface.c:3948
 msgid "Replaces all tabs in document by spaces."
 msgstr ""
 "Ersätter alla tab-tecken i dokumentet med mellanslag (indraget blir lika "
@@ -1496,23 +1496,23 @@ msgstr "Meddelanden"
 msgid "Scribble"
 msgstr "Scribble"
 
-#: ../src/interface.c:1943 ../src/interface.c:3372
+#: ../src/interface.c:1943 ../src/interface.c:3424
 msgid "Images and text"
 msgstr "Bilder och text"
 
-#: ../src/interface.c:1949 ../src/interface.c:3404
+#: ../src/interface.c:1949 ../src/interface.c:3456
 msgid "Images only"
 msgstr "Endast bilder"
 
-#: ../src/interface.c:1955 ../src/interface.c:3396
+#: ../src/interface.c:1955 ../src/interface.c:3448
 msgid "Text only"
 msgstr "Endast text"
 
-#: ../src/interface.c:1966 ../src/interface.c:3388
+#: ../src/interface.c:1966 ../src/interface.c:3440
 msgid "Large icons"
 msgstr "Stora ikoner"
 
-#: ../src/interface.c:1971 ../src/interface.c:3380
+#: ../src/interface.c:1971 ../src/interface.c:3432
 msgid "Small icons"
 msgstr "Små ikoner"
 
@@ -1548,23 +1548,23 @@ msgstr "Snabbmenyhändelse"
 msgid "Go to the entered line"
 msgstr "Gå till rad"
 
-#: ../src/interface.c:2776 ../src/keybindings.c:150
+#: ../src/interface.c:2783 ../src/keybindings.c:150
 msgid "Preferences"
 msgstr "Inställningar"
 
-#: ../src/interface.c:2809
+#: ../src/interface.c:2816
 msgid "Load files from the last session"
 msgstr "Ladda filerna från förra sessionen"
 
-#: ../src/interface.c:2813
+#: ../src/interface.c:2820
 msgid "Opens at startup the files from the last session"
 msgstr "Öppnar filerna från förra sessionen vid start"
 
-#: ../src/interface.c:2816
+#: ../src/interface.c:2823
 msgid "Load virtual terminal support"
 msgstr "Ladda stöd för virtuell terminal"
 
-#: ../src/interface.c:2818
+#: ../src/interface.c:2825
 msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup. "
 "Disable it if you do not need it."
@@ -1572,35 +1572,57 @@ msgstr ""
 "Huruvida den virtuella terminalemuleringen (VTE) skall laddas vid start. "
 "Välj bort om du ej behöver det."
 
-#: ../src/interface.c:2821
+#: ../src/interface.c:2828
 msgid "Enable plugin support"
 msgstr "Aktivera stöd för insticksmoduler"
 
-#: ../src/interface.c:2825
+#: ../src/interface.c:2832
+#, fuzzy
+msgid "<b>Startup</b>"
+msgstr "<b>Sidofält</b>"
+
+#: ../src/interface.c:2851
 msgid "Save window position and geometry"
 msgstr "Spara fönsterplacering och storlek"
 
-#: ../src/interface.c:2829
+#: ../src/interface.c:2855
 msgid "Saves the window position and geometry and restores it at the start"
 msgstr "Sparar fönstrets position och storlek, och återställer det vid start"
 
-#: ../src/interface.c:2832
+#: ../src/interface.c:2858
 msgid "Confirm exit"
 msgstr "Bekräfta avslut"
 
-#: ../src/interface.c:2836
+#: ../src/interface.c:2862
 msgid "Shows a confirmation dialog on exit."
 msgstr "Begär bekräftelse vid avslut."
 
-#: ../src/interface.c:2839
-msgid "<b>Startup and shutdown</b>"
+#: ../src/interface.c:2865
+#, fuzzy
+msgid "<b>Shutdown</b>"
 msgstr "<b>Starta och avsluta</b>"
 
-#: ../src/interface.c:2858
+#: ../src/interface.c:2884
+#, fuzzy
+msgid "Use project-based session files"
+msgstr "Geany projektfiler"
+
+#: ../src/interface.c:2888
+msgid ""
+"Whether to store a project's session files and open them when re-opening the "
+"project."
+msgstr ""
+
+#: ../src/interface.c:2891
+#, fuzzy
+msgid "<b>Projects</b>"
+msgstr "<b>Sökvägar</b>"
+
+#: ../src/interface.c:2910
 msgid "Beep on errors or when compilation has finished"
 msgstr "Pip vid fel och när kompilering har avslutats"
 
-#: ../src/interface.c:2861
+#: ../src/interface.c:2913
 msgid ""
 "Whether to beep if an error occurred or when the compilation process has "
 "finished."
@@ -1608,11 +1630,11 @@ msgstr ""
 "Om datorn skall avge en ljudsignal när när ett fel hittas eller när "
 "kompileringen har avslutats."
 
-#: ../src/interface.c:2864
+#: ../src/interface.c:2916
 msgid "Switch to status message list at new message"
 msgstr "Byt till statusmeddelandelistan när ett nytt meddelande visas"
 
-#: ../src/interface.c:2867
+#: ../src/interface.c:2919
 msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
 "new status message arrives."
@@ -1620,11 +1642,11 @@ msgstr ""
 "Huruvida Geany skall byta till statusmeddelandefönstret (vid botten) om ett "
 "nytt statusmeddelande kommer."
 
-#: ../src/interface.c:2870
+#: ../src/interface.c:2922
 msgid "Suppress status messages in the status bar"
 msgstr "Undertryck statusmeddelanden i statusfältet"
 
-#: ../src/interface.c:2873
+#: ../src/interface.c:2925
 msgid ""
 "Removes all messages from the status bar. The messages are still displayed "
 "in the status messages window."
@@ -1632,22 +1654,22 @@ msgstr ""
 "Tar bort alla meddelanden från statusfältet. Meddelanden visas fortförande i "
 "fönstret för statusmeddelanden."
 
-#: ../src/interface.c:2876
+#: ../src/interface.c:2928
 msgid "Auto focus widgets (focus follows mouse)"
 msgstr "Autofokusera gränssnittskomponenter (fokus följer musen)"
 
-#: ../src/interface.c:2879
+#: ../src/interface.c:2931
 msgid ""
 "Gives the focus automatically to widgets below the mouse cursor. Works for "
 "the main editor widget, the scribble, the toolbar search and goto line "
 "fields and the VTE."
 msgstr "Ger automatiskt fokus till gränssnittskomponenter under muspekaren."
 
-#: ../src/interface.c:2882
+#: ../src/interface.c:2934
 msgid "Always wrap search and hide the Find dialog"
 msgstr "Börja alltid om sökning från början och göm Sök-dialogrutan"
 
-#: ../src/interface.c:2886
+#: ../src/interface.c:2938
 msgid ""
 "Always wrap search around the document and hide the Find dialog after "
 "clicking Find Next/Previous"
@@ -1655,15 +1677,15 @@ msgstr ""
 "Börja alltid om sökningen från början och göm Sök-dialogrutan efter du "
 "klickat på Sök Nästa/Föregående"
 
-#: ../src/interface.c:2889 ../src/interface.c:3219 ../src/interface.c:3938
+#: ../src/interface.c:2941 ../src/interface.c:3271 ../src/interface.c:3990
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Övrigt</b>"
 
-#: ../src/interface.c:2910
+#: ../src/interface.c:2962
 msgid "Startup path:"
 msgstr "Sökväg vid start:"
 
-#: ../src/interface.c:2922
+#: ../src/interface.c:2974
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path. "
 "Leave blank to use the current working directory."
@@ -1672,83 +1694,83 @@ msgstr ""
 "absolut sökväg. Lämna blankt för att automatiskt välja filens nuvarande "
 "sökväg."
 
-#: ../src/interface.c:2935
+#: ../src/interface.c:2987
 msgid "Project files:"
 msgstr "Projektfiler:"
 
-#: ../src/interface.c:2947
+#: ../src/interface.c:2999
 msgid "Path to start in when opening project files"
 msgstr "Sökväg att starta i när projektfiler öppnas"
 
-#: ../src/interface.c:2960
+#: ../src/interface.c:3012
 msgid "<b>Paths</b>"
 msgstr "<b>Sökvägar</b>"
 
-#: ../src/interface.c:2965
+#: ../src/interface.c:3017
 msgid "General"
 msgstr "Generellt"
 
-#: ../src/interface.c:2987
+#: ../src/interface.c:3039
 msgid "Show symbol list"
 msgstr "Visa symbollista"
 
-#: ../src/interface.c:2990
+#: ../src/interface.c:3042
 msgid "Toggle the symbol list on and off"
 msgstr "Stäng av / på symbollistan"
 
-#: ../src/interface.c:2993
+#: ../src/interface.c:3045
 msgid "Show documents list"
 msgstr "Visa listan för öppna filer"
 
-#: ../src/interface.c:2996
+#: ../src/interface.c:3048
 msgid "Toggle the documents list on and off"
 msgstr "Stäng av / på listan med öppna filer"
 
-#: ../src/interface.c:2999
+#: ../src/interface.c:3051
 msgid "Show full path name in documents list"
 msgstr "Visa sökvägen i dokumentlistan"
 
-#: ../src/interface.c:3004
+#: ../src/interface.c:3056
 msgid "<b>Sidebar</b>"
 msgstr "<b>Sidofält</b>"
 
-#: ../src/interface.c:3025
+#: ../src/interface.c:3077
 msgid "Symbol list:"
 msgstr "Symbollista:"
 
-#: ../src/interface.c:3032 ../src/interface.c:3144
+#: ../src/interface.c:3084 ../src/interface.c:3196
 msgid "Message window:"
 msgstr "Meddelandefönster:"
 
-#: ../src/interface.c:3039 ../src/interface.c:3178
+#: ../src/interface.c:3091 ../src/interface.c:3230
 msgid "Editor:"
 msgstr "Editor:"
 
-#: ../src/interface.c:3051
+#: ../src/interface.c:3103
 msgid "Sets the font for the message window"
 msgstr "Justerar teckensnittet för meddelandefönstret"
 
-#: ../src/interface.c:3059
+#: ../src/interface.c:3111
 msgid "Sets the font for the symbol list"
 msgstr "Justerar teckensnittet för symbollistan"
 
-#: ../src/interface.c:3067
+#: ../src/interface.c:3119
 msgid "Sets the editor font"
 msgstr "Anger texteditorns teckensnitt"
 
-#: ../src/interface.c:3069
+#: ../src/interface.c:3121
 msgid "<b>Fonts</b>"
 msgstr "<b>Teckensnitt</b>"
 
-#: ../src/interface.c:3088
+#: ../src/interface.c:3140
 msgid "Show editor tabs"
 msgstr "Visa editorns flikar"
 
-#: ../src/interface.c:3092
+#: ../src/interface.c:3144
 msgid "Show close buttons"
 msgstr "Visa knappar för stängning"
 
-#: ../src/interface.c:3096
+#: ../src/interface.c:3148
 msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
 "clicking on it (requires restart of Geany)."
@@ -1756,226 +1778,226 @@ msgstr ""
 "Visar ett litet kors i filflikarna, som kan användas att enkelt stänga filer "
 "om du klickar på det (kräver att du startar om Geany)."
 
-#: ../src/interface.c:3103
+#: ../src/interface.c:3155
 msgid "Placement of new file tabs:"
 msgstr "Placering av nya filflikar:"
 
-#: ../src/interface.c:3108 ../src/interface.c:3156 ../src/interface.c:3173
-#: ../src/interface.c:3190
+#: ../src/interface.c:3160 ../src/interface.c:3208 ../src/interface.c:3225
+#: ../src/interface.c:3242
 msgid "Left"
 msgstr "Vänster"
 
-#: ../src/interface.c:3111
+#: ../src/interface.c:3163
 msgid "File tabs will be placed on the left of the notebook"
 msgstr "Fil-tabbar kommer att placeras till vänster om anteckningsboken"
 
-#: ../src/interface.c:3116 ../src/interface.c:3157 ../src/interface.c:3174
-#: ../src/interface.c:3191
+#: ../src/interface.c:3168 ../src/interface.c:3209 ../src/interface.c:3226
+#: ../src/interface.c:3243
 msgid "Right"
 msgstr "Höger"
 
-#: ../src/interface.c:3119
+#: ../src/interface.c:3171
 msgid "File tabs will be placed on the right of the notebook"
 msgstr "Fil-tabbar kommer att placeras till höger om anteckningsboken"
 
-#: ../src/interface.c:3123
+#: ../src/interface.c:3175
 msgid "<b>Editor tabs</b>"
 msgstr "<b>Editorns flikar</b>"
 
-#: ../src/interface.c:3158 ../src/interface.c:3175 ../src/interface.c:3192
+#: ../src/interface.c:3210 ../src/interface.c:3227 ../src/interface.c:3244
 msgid "Top"
 msgstr "Topp"
 
-#: ../src/interface.c:3159 ../src/interface.c:3176 ../src/interface.c:3193
+#: ../src/interface.c:3211 ../src/interface.c:3228 ../src/interface.c:3245
 msgid "Bottom"
 msgstr "Botten"
 
-#: ../src/interface.c:3161
+#: ../src/interface.c:3213
 msgid "Sidebar:"
 msgstr "Sidofält:"
 
-#: ../src/interface.c:3195
+#: ../src/interface.c:3247
 msgid "<b>Tab positions</b>"
 msgstr "<b>Tab positioner</b>"
 
-#: ../src/interface.c:3214
+#: ../src/interface.c:3266
 msgid "Show status bar"
 msgstr "Visa statusfält"
 
-#: ../src/interface.c:3217
+#: ../src/interface.c:3269
 msgid "Whether to show the status bar at the bottom of the main window."
 msgstr "Huruvida statusfältet skall visas längst ner i huvudfönstret."
 
-#: ../src/interface.c:3224
+#: ../src/interface.c:3276
 msgid "Interface"
 msgstr "Gränssnitt"
 
-#: ../src/interface.c:3242
+#: ../src/interface.c:3294
 msgid "Show Toolbar"
 msgstr "Visa verktygsfält"
 
-#: ../src/interface.c:3248
+#: ../src/interface.c:3300
 msgid "<b>Toolbar</b>"
 msgstr "<b>Verktygsfält</b>"
 
-#: ../src/interface.c:3267
+#: ../src/interface.c:3319
 msgid "Show file operation buttons"
 msgstr "Visa filhanteringsknappar"
 
-#: ../src/interface.c:3271
+#: ../src/interface.c:3323
 msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
 msgstr "Visa Ny, Öppna, Stäng, Spara och Ladda Om-knapparna i verktygsfältet"
 
-#: ../src/interface.c:3274
+#: ../src/interface.c:3326
 msgid "Show Redo and Undo buttons"
 msgstr "Visa Gör Om- och Ångra-knapparna"
 
-#: ../src/interface.c:3278
+#: ../src/interface.c:3330
 msgid "Display the Redo and Undo buttons in the toolbar"
 msgstr "Visa Gör Om- och Ångra-knapparna i verktygsfältet"
 
-#: ../src/interface.c:3281
+#: ../src/interface.c:3333
 msgid "Show Back and Forward buttons"
 msgstr "Visa bakåt- och framåtknappar"
 
-#: ../src/interface.c:3285
+#: ../src/interface.c:3337
 msgid ""
 "Display the Back and Forward buttons in the toolbar used for code navigation"
 msgstr ""
 "Visa bakåt- och framåtknapparna i verktygsfältet som används för "
 "kodnavigering"
 
-#: ../src/interface.c:3288
+#: ../src/interface.c:3340
 msgid "Show Compile and Run buttons"
 msgstr "Visa Kompilera och Kör-knappar"
 
-#: ../src/interface.c:3292
+#: ../src/interface.c:3344
 msgid "Display the Compile and Run buttons in the toolbar"
 msgstr "Visa kompilera- och körknapparna i verktygsfältet"
 
-#: ../src/interface.c:3295
+#: ../src/interface.c:3347
 msgid "Show Color Chooser button"
 msgstr "Visa knapp för färgväljaren"
 
-#: ../src/interface.c:3299
+#: ../src/interface.c:3351
 msgid "Display the Color Chooser button in the toolbar"
 msgstr "Visa knappen för färgväljaren i verktygsfältet"
 
-#: ../src/interface.c:3302
+#: ../src/interface.c:3354
 msgid "Show Zoom In and Zoom Out buttons"
 msgstr "Visa förstoring- och förminskningsknappar"
 
-#: ../src/interface.c:3306 ../src/interface.c:3313
+#: ../src/interface.c:3358 ../src/interface.c:3365
 msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
 msgstr "Visa förstoringsknapparna i verktygsfältet"
 
-#: ../src/interface.c:3309
+#: ../src/interface.c:3361
 #, fuzzy
 msgid "Show Increase and Decrease Indentation buttons"
 msgstr "Visa Gör Om- och Ångra-knapparna"
 
-#: ../src/interface.c:3316
+#: ../src/interface.c:3368
 msgid "Show Search field"
 msgstr "Visa sökfältet"
 
-#: ../src/interface.c:3320
+#: ../src/interface.c:3372
 msgid "Display the search field and button in the toolbar"
 msgstr "Visa sökfält och sökknapp i verktygsfältet"
 
-#: ../src/interface.c:3323
+#: ../src/interface.c:3375
 msgid "Show Go to Line field"
 msgstr "Visa Gå Till Rad fältet"
 
-#: ../src/interface.c:3327
+#: ../src/interface.c:3379
 msgid "Display the line number field and button in the toolbar"
 msgstr "Visa radnummer och knapp i verktygsfältet"
 
-#: ../src/interface.c:3330
+#: ../src/interface.c:3382
 msgid "Show Quit button"
 msgstr "Visa Avsluta-knappen"
 
-#: ../src/interface.c:3334
+#: ../src/interface.c:3386
 msgid "Display the quit button in the toolbar"
 msgstr "Visa Avsluta-knappen i verktygsfältet"
 
-#: ../src/interface.c:3337
+#: ../src/interface.c:3389
 msgid "<b>Items</b>"
 msgstr "<b>Artiklar</b>"
 
-#: ../src/interface.c:3358
+#: ../src/interface.c:3410
 msgid "Icon style:"
 msgstr "Ikonstil"
 
-#: ../src/interface.c:3365
+#: ../src/interface.c:3417
 msgid "Icon size:"
 msgstr "Ikonstorlek"
 
-#: ../src/interface.c:3412
+#: ../src/interface.c:3464
 msgid "<b>Appearance</b>"
 msgstr "<b>Utseende</b>"
 
-#: ../src/interface.c:3417
+#: ../src/interface.c:3469
 msgid "Toolbar"
 msgstr "Verktygsfält"
 
-#: ../src/interface.c:3439
+#: ../src/interface.c:3491
 msgid "Invert syntax highlighting colors"
 msgstr "Invertera syntaxfärgningen"
 
-#: ../src/interface.c:3441
+#: ../src/interface.c:3493
 msgid "Use white text on a black background."
 msgstr "Använd vit text på svart bakgrund"
 
-#: ../src/interface.c:3443
+#: ../src/interface.c:3495
 msgid "Show indentation guides"
 msgstr "Visa indragsmarkörer"
 
-#: ../src/interface.c:3446
+#: ../src/interface.c:3498
 msgid "Shows small dotted lines to help you to use the right indentation."
 msgstr "Visar små prickade linjer för att hjälpa dig se rätt indrag."
 
-#: ../src/interface.c:3449
+#: ../src/interface.c:3501
 msgid "Show white space"
 msgstr "Visa tomrum"
 
-#: ../src/interface.c:3452
+#: ../src/interface.c:3504
 msgid "Marks spaces with dots and tabs with arrows."
 msgstr "Markera mellanslag med prickar och tabbar med pilar."
 
-#: ../src/interface.c:3455
+#: ../src/interface.c:3507
 msgid "Show line endings"
 msgstr "Visa radslut"
 
-#: ../src/interface.c:3458
+#: ../src/interface.c:3510
 msgid "Show the line ending character"
 msgstr "Visa radslutstecknet"
 
-#: ../src/interface.c:3461
+#: ../src/interface.c:3513
 msgid "<b>Display</b>"
 msgstr "<b>Visa</b>"
 
-#: ../src/interface.c:3482
+#: ../src/interface.c:3534
 msgid "Long line marker:"
 msgstr "Markör för lång rad"
 
-#: ../src/interface.c:3489
+#: ../src/interface.c:3541
 msgid "Long line marker color:"
 msgstr "Färg på markören för lång rad"
 
-#: ../src/interface.c:3496 ../src/interface.c:3634
+#: ../src/interface.c:3548 ../src/interface.c:3686
 msgid "Type:"
 msgstr "Typ:"
 
-#: ../src/interface.c:3508
+#: ../src/interface.c:3560
 msgid "Sets the color of the long line marker"
 msgstr "Väljer färgen på markören för långa rader"
 
-#: ../src/interface.c:3509 ../src/tools.c:652 ../src/vte.c:691
-#: ../src/vte.c:698
+#: ../src/interface.c:3561 ../src/tools.c:652 ../src/vte.c:693
+#: ../src/vte.c:700
 msgid "Color Chooser"
 msgstr "Färgväljare"
 
-#: ../src/interface.c:3517
+#: ../src/interface.c:3569
 msgid ""
 "The long line marker is a thin vertical line in the editor. It helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
@@ -1985,22 +2007,22 @@ msgstr ""
 "hjälper till att visa var det är läge att bryta rader. Värdert anger i "
 "vilken kolumn markören visas."
 
-#: ../src/interface.c:3527
+#: ../src/interface.c:3579
 msgid "Line"
 msgstr "Rad"
 
-#: ../src/interface.c:3530
+#: ../src/interface.c:3582
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)."
 msgstr ""
 "Visar en vertikal linje i editor-fönstret vid en given position (se nedan)."
 
-#: ../src/interface.c:3534
+#: ../src/interface.c:3586
 msgid "Background"
 msgstr "Bakgrund"
 
-#: ../src/interface.c:3537
+#: ../src/interface.c:3589
 msgid ""
 "The background color of characters after the given cursor position (see "
 "below) changed to the color set below. (This is recommended if you use "
@@ -2009,47 +2031,47 @@ msgstr ""
 "Bakgrundsfärgen ändras vid en given kolumn för att indikera var radbrytning "
 "bör ske. Detta är lämpligt for proportionella teckensnitt."
 
-#: ../src/interface.c:3541
+#: ../src/interface.c:3593
 msgid "Disabled"
 msgstr "Avaktiverad"
 
-#: ../src/interface.c:3547
+#: ../src/interface.c:3599
 msgid "<b>Long line marker</b>"
 msgstr "<b>Markör för lång rad</b>"
 
-#: ../src/interface.c:3552
+#: ../src/interface.c:3604
 msgid "Display"
 msgstr "Visa"
 
-#: ../src/interface.c:3580
+#: ../src/interface.c:3632
 msgid "Auto-indent mode:"
 msgstr "Automatiskt indrag:"
 
-#: ../src/interface.c:3592
+#: ../src/interface.c:3644
 msgid "Basic"
 msgstr "Grundläggande"
 
-#: ../src/interface.c:3593
+#: ../src/interface.c:3645
 msgid "Current chars"
 msgstr "Nuvarande täcken"
 
-#: ../src/interface.c:3594
+#: ../src/interface.c:3646
 msgid "Match braces"
 msgstr "Matcha klamrar"
 
-#: ../src/interface.c:3602
+#: ../src/interface.c:3654
 msgid "The width in chars, which one tab character will take"
 msgstr "Bredd (antal mellanslag) på ett tab-tecken"
 
-#: ../src/interface.c:3607
+#: ../src/interface.c:3659
 msgid "Tab width:"
 msgstr "Tab-bredd:"
 
-#: ../src/interface.c:3623 ../src/interface.c:3630
+#: ../src/interface.c:3675 ../src/interface.c:3682
 msgid "Whether to use tabs or spaces when indentation is inserted."
 msgstr "Huruvida tab-tecken eller mellanslag skall användas vid indrag."
 
-#: ../src/interface.c:3646
+#: ../src/interface.c:3698
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened."
@@ -2057,19 +2079,19 @@ msgstr ""
 "Huruvida indragstyp skall hittas automatiskt via filens innehåll när den "
 "öppnats."
 
-#: ../src/interface.c:3648
+#: ../src/interface.c:3700
 msgid "<b>Indentation</b>"
 msgstr "<b>Indrag</b>"
 
-#: ../src/interface.c:3667
+#: ../src/interface.c:3719
 msgid "Line wrapping"
 msgstr "Radbrytning"
 
-#: ../src/interface.c:3672
+#: ../src/interface.c:3724
 msgid "Enable \"smart\" home key"
 msgstr "Aktivera \"smart\" home-tangent"
 
-#: ../src/interface.c:3675
+#: ../src/interface.c:3727
 msgid ""
 "When \"smart\" home is enabled, the HOME key will move the caret to the "
 "first non-blank character of the line, unless it is already there, it moves "
@@ -2082,42 +2104,42 @@ msgstr ""
 "redan är där. När denna funktion är avaktiverad kommer HOME tangenten alltid "
 "flytta teckenmarkören till början av raden, oavsett dess nuvarande position."
 
-#: ../src/interface.c:3678
+#: ../src/interface.c:3730
 msgid "Disable Drag and Drop"
 msgstr "Avaktivera drag-och-släpp"
 
-#: ../src/interface.c:3681
+#: ../src/interface.c:3733
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window."
 msgstr "Väljer bort drag-och-släpp funktionen i editorfönstret."
 
-#: ../src/interface.c:3684
+#: ../src/interface.c:3736
 msgid "Enable folding"
 msgstr "Aktivera ihopvikning"
 
-#: ../src/interface.c:3687
+#: ../src/interface.c:3739
 msgid "Whether to enable folding the code"
 msgstr ""
 "Specificerar om koden skall vikas ihop för att spara utrymme och underlätta "
 "läsning"
 
-#: ../src/interface.c:3690
+#: ../src/interface.c:3742
 #, fuzzy
 msgid "Fold/Unfold all children of a fold point"
 msgstr "Vik upp alla vid uppvikningspunkten"
 
-#: ../src/interface.c:3693
+#: ../src/interface.c:3745
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behaviour is used."
 msgstr ""
 
-#: ../src/interface.c:3696
+#: ../src/interface.c:3748
 msgid "Use indicators to show compile errors"
 msgstr "Använd indikatorer för att visa kompileringsfel"
 
-#: ../src/interface.c:3699
+#: ../src/interface.c:3751
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error."
@@ -2125,24 +2147,24 @@ msgstr ""
 "Huruvida indikatorer skall användas (taggiga understrykningar) skall "
 "användas för att markera rader där kompilatorn hittat fel eller varningar."
 
-#: ../src/interface.c:3702
+#: ../src/interface.c:3754
 msgid "Newline strips trailing spaces"
 msgstr "Ta bort överflödiga mellanslag efter nyradstecken"
 
-#: ../src/interface.c:3705
+#: ../src/interface.c:3757
 msgid "Enable newline to strip the trailing spaces on the previous line."
 msgstr ""
 "Gör så att nyradstecken tar bort överflödiga mellanslag från föregående rad."
 
-#: ../src/interface.c:3708
+#: ../src/interface.c:3760
 msgid "<b>Features</b>"
 msgstr "<b>Kännetecken</b>"
 
-#: ../src/interface.c:3727
+#: ../src/interface.c:3779
 msgid "Snippet completion"
 msgstr "Komplettera snutt"
 
-#: ../src/interface.c:3730
+#: ../src/interface.c:3782
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress."
@@ -2150,19 +2172,19 @@ msgstr ""
 "Skriv in en kort teckensekvens för att skapa en mer komplex sträng med ett "
 "tangenttryck."
 
-#: ../src/interface.c:3733
+#: ../src/interface.c:3785
 msgid "XML tag autocompletion"
 msgstr "Komplettera XML-taggar automatiskt"
 
-#: ../src/interface.c:3736
+#: ../src/interface.c:3788
 msgid "Automatic completion and closing of XML tags (includes HTML tags)"
 msgstr "Autokomplettera XML- och HTMK-taggar"
 
-#: ../src/interface.c:3739
+#: ../src/interface.c:3791
 msgid "Automatic symbol completion"
 msgstr "Komplettera symboler automatiskt"
 
-#: ../src/interface.c:3742
+#: ../src/interface.c:3794
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
@@ -2170,53 +2192,53 @@ msgstr ""
 "Autokomplettera kända symboler i öppna filer (funktionsnamn, globala "
 "variabler etc.)"
 
-#: ../src/interface.c:3757
+#: ../src/interface.c:3809
 msgid "Number of rows to display in the autocompletion list."
 msgstr "Antal rader att visa i autokompletteringslistan."
 
-#: ../src/interface.c:3760
+#: ../src/interface.c:3812
 msgid "Characters to type for completion:"
 msgstr ""
 
-#: ../src/interface.c:3767
+#: ../src/interface.c:3819
 msgid "Rows of symbol completion list:"
 msgstr "Rader i symbolkompletteringslistan:"
 
-#: ../src/interface.c:3780
+#: ../src/interface.c:3832
 msgid ""
 "The amount of characters which are necessary to show the symbol auto "
 "completion list."
 msgstr ""
 
-#: ../src/interface.c:3783
+#: ../src/interface.c:3835
 msgid "<b>Completions</b>"
 msgstr "<b>Komplettering</b>"
 
-#: ../src/interface.c:3788
+#: ../src/interface.c:3840
 msgid "Editor"
 msgstr "Editor"
 
-#: ../src/interface.c:3820
+#: ../src/interface.c:3872
 msgid "Sets the default encoding for newly created files."
 msgstr "Anger förvald kodning för nyskapade filer."
 
-#: ../src/interface.c:3826
+#: ../src/interface.c:3878
 msgid "Default encoding (new files):"
 msgstr "Förvald kodning (nya filer):"
 
-#: ../src/interface.c:3833
+#: ../src/interface.c:3885
 msgid "Default encoding (existing files):"
 msgstr "Förvald teckenkodning (existerande filer):"
 
-#: ../src/interface.c:3845
+#: ../src/interface.c:3897
 msgid "Sets the default encoding for opening existing files."
 msgstr "Anger förvald teckenkodning för nyöppnade filer:"
 
-#: ../src/interface.c:3851
+#: ../src/interface.c:3903
 msgid "Use fixed encoding when opening files"
 msgstr "Använd fast kodning när filer öppnas"
 
-#: ../src/interface.c:3856
+#: ../src/interface.c:3908
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening files and opens the file with the specified encoding (usually not "
@@ -2226,72 +2248,66 @@ msgstr ""
 "öppnas, och använder i stället en specificerad kodning (behövs vanligen "
 "inte)."
 
-#: ../src/interface.c:3859
+#: ../src/interface.c:3911
 msgid "<b>New files</b>"
 msgstr "<b>Nya filer</b>"
 
-#: ../src/interface.c:3878
+#: ../src/interface.c:3930
 msgid "Ensure new line at file end"
 msgstr "Skriv alltid nyradstecken i slutet av filen"
 
-#: ../src/interface.c:3882
+#: ../src/interface.c:3934
 msgid "Ensures that at the end of the file is a new line"
 msgstr ""
 "Lägger till ett nyradstecken vid slutet av filen om det inte redan finns "
 "något"
 
-#: ../src/interface.c:3885
+#: ../src/interface.c:3937
 msgid "Strip trailing spaces"
 msgstr "Ta bort överflödiga mellanslag i slutet av filen"
 
-#: ../src/interface.c:3889
+#: ../src/interface.c:3941
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Tar bort överflödiga mellanslag och tab-tecken i slutet av filen"
 
-#: ../src/interface.c:3892 ../src/keybindings.c:191
+#: ../src/interface.c:3944 ../src/keybindings.c:191
 msgid "Replace tabs by space"
 msgstr "Ersätt tab-tecken med mellanslag"
 
-#: ../src/interface.c:3899
+#: ../src/interface.c:3951
 msgid "<b>Saving files</b>"
 msgstr "<b>Sparar filer</b>"
 
-#: ../src/interface.c:3920
+#: ../src/interface.c:3972
 msgid "Recent files list length:"
 msgstr "Senaste längd på fil-listan:"
 
-#: ../src/interface.c:3934
+#: ../src/interface.c:3986
 msgid ""
 "Specifies the number of files which are stored in the Recent files list."
 msgstr "Anger antalet filer som lagras i Senaste-filer listan."
 
-#: ../src/interface.c:3943 ../src/symbols.c:520 ../plugins/filebrowser.c:715
+#: ../src/interface.c:3995 ../src/symbols.c:520 ../plugins/filebrowser.c:812
 msgid "Files"
 msgstr "Filer"
 
-#: ../src/interface.c:3965
-msgid "Enter tool paths below. Tools you do not need can be left blank."
-msgstr ""
-"Skriv in sökvägarna till verktygen nedan. Sökvägarna till verktyg som du "
-"inte behöver kan lämnas tomma."
-
-#: ../src/interface.c:3977
+#: ../src/interface.c:4027
 msgid "Make:"
 msgstr "Make:"
 
-#: ../src/interface.c:3984
+#: ../src/interface.c:4034
 msgid "Terminal:"
 msgstr "Terminal:"
 
-#: ../src/interface.c:3991
+#: ../src/interface.c:4041
 msgid "Browser:"
 msgstr "Webbläsare:"
 
-#: ../src/interface.c:4003
+#: ../src/interface.c:4053
 msgid "Path and options for the make tool"
 msgstr "Sökväg och tillval för Make-verktyget"
 
-#: ../src/interface.c:4010
+#: ../src/interface.c:4060
 msgid ""
 "A terminal emulator like xterm, gnome-terminal or konsole (should accept the "
 "-e argument)"
@@ -2299,23 +2315,23 @@ msgstr ""
 "En terminal som Xterm, Gnome-terminal eller Konsole (måste acceptera -e "
 "argumentet)"
 
-#: ../src/interface.c:4017
+#: ../src/interface.c:4067
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Sökväg (och eventuella argument) till din favoritwebbläsare."
 
-#: ../src/interface.c:4049
+#: ../src/interface.c:4099
 msgid "Grep:"
 msgstr "Grep:"
 
-#: ../src/interface.c:4072
+#: ../src/interface.c:4122
 msgid "<b>Tool paths</b>"
 msgstr "<b>Sökvägar till verktyg</b>"
 
-#: ../src/interface.c:4093
+#: ../src/interface.c:4143
 msgid "Context action:"
 msgstr "Snabbmenyhändelse:"
 
-#: ../src/interface.c:4104
+#: ../src/interface.c:4154
 #, c-format
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
@@ -2325,153 +2341,129 @@ msgstr ""
 "Snabbmenykommando. Det markerade ordet kan användas med %s. Det kan infogas "
 "var som helst i kommandot och kommer att ersättas innan exekvering."
 
-#: ../src/interface.c:4117
+#: ../src/interface.c:4167
 msgid "<b>Commands</b>"
 msgstr "<b>Kommandon</b>"
 
-#: ../src/interface.c:4122
+#: ../src/interface.c:4172
 msgid "Tools"
 msgstr "Verktyg"
 
-#: ../src/interface.c:4140
-msgid ""
-"Set the information to be used in templates. See the documentation for "
-"details."
-msgstr "Anger vilken information som skall användas i mallar."
-
-#: ../src/interface.c:4158
+#: ../src/interface.c:4205
 msgid "email address of the developer"
 msgstr "emailadressen till utvecklaren"
 
-#: ../src/interface.c:4165
+#: ../src/interface.c:4212
 msgid "Initials of the developer name"
 msgstr "Utvecklarens initialer"
 
-#: ../src/interface.c:4167
+#: ../src/interface.c:4214
 msgid "Initial version:"
 msgstr "Inledande version:"
 
-#: ../src/interface.c:4179
+#: ../src/interface.c:4226
 msgid "Version number, which a new file initially has"
 msgstr "Versionnummret som filen börjar med"
 
-#: ../src/interface.c:4186
+#: ../src/interface.c:4233
 msgid "Company name"
 msgstr "Företagets namn"
 
-#: ../src/interface.c:4188
+#: ../src/interface.c:4235
 msgid "Developer:"
 msgstr "Utvecklare:"
 
-#: ../src/interface.c:4195
+#: ../src/interface.c:4242
 msgid "Company:"
 msgstr "Företag:"
 
-#: ../src/interface.c:4202
+#: ../src/interface.c:4249
 msgid "Mail address:"
 msgstr "E-post:"
 
-#: ../src/interface.c:4209
+#: ../src/interface.c:4256
 msgid "Initials:"
 msgstr "Initialer:"
 
-#: ../src/interface.c:4221
+#: ../src/interface.c:4268
 msgid "The name of the developer"
 msgstr "Utvecklarens namn"
 
-#: ../src/interface.c:4223
-msgid ""
-"<i>Notice: For all changes you make here to take effect, you need to restart "
-"Geany.</i>"
-msgstr ""
-"<i>Observera: För att dina ändringar skall verkställas, måste du starta om "
-"Geany.</i>"
-
-#: ../src/interface.c:4230
+#: ../src/interface.c:4270
 msgid "<b>Template data</b>"
 msgstr "<b>Mall-data</b>"
 
-#: ../src/interface.c:4235
+#: ../src/interface.c:4275
 msgid "Templates"
 msgstr "Mallar"
 
-#: ../src/interface.c:4253
-msgid ""
-"Here you can change keyboard shortcuts for various actions. Select one and "
-"press the Change button to enter a new shortcut, or double click on an "
-"action to edit the string representation of the shortcut directly."
-msgstr ""
-"Här kan du ändra tangentbordsgenvägar. Välj en och tryck på Ändra-knappen "
-"för att ange en ny tangentbordsgenväg. Dubbelklicka för att skriva in värdet "
-"manuellt."
-
-#: ../src/interface.c:4277
+#: ../src/interface.c:4313
 msgid "C_hange"
 msgstr "Ändra"
 
-#: ../src/interface.c:4281
+#: ../src/interface.c:4317
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Tangentbordsgenvägar</b>"
 
-#: ../src/interface.c:4286
+#: ../src/interface.c:4322
 msgid "Keybindings"
 msgstr "Genvägar"
 
-#: ../src/interface.c:4308
+#: ../src/interface.c:4344
 msgid "Command:"
 msgstr "Kommando:"
 
-#: ../src/interface.c:4315
+#: ../src/interface.c:4351
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)."
 msgstr ""
 "Sökvägen till kommandot för att skriva ut filer (%f ersätts med filnamnet)."
 
-#: ../src/interface.c:4325
+#: ../src/interface.c:4361
 msgid "Use an external command for printing"
 msgstr "Använd ett externt kommando för att skriva ut"
 
-#: ../src/interface.c:4346 ../src/printing.c:342
+#: ../src/interface.c:4382 ../src/printing.c:342
 msgid "Print line numbers"
 msgstr "Visa radnummer"
 
-#: ../src/interface.c:4349 ../src/printing.c:344
+#: ../src/interface.c:4385 ../src/printing.c:344
 msgid "Add line numbers to the printed page."
 msgstr "Lägg till radnummer vid utskrift."
 
-#: ../src/interface.c:4352 ../src/printing.c:348
+#: ../src/interface.c:4388 ../src/printing.c:348
 msgid "Print page numbers"
 msgstr "Skriv ut sidnummer"
 
-#: ../src/interface.c:4355 ../src/printing.c:350
+#: ../src/interface.c:4391 ../src/printing.c:350
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr "Lägg till sidnummer vid foten av sidan."
 
-#: ../src/interface.c:4358 ../src/printing.c:354
+#: ../src/interface.c:4394 ../src/printing.c:354
 msgid "Print page header"
 msgstr "Skriv ut filhuvud"
 
-#: ../src/interface.c:4361 ../src/printing.c:356
+#: ../src/interface.c:4397 ../src/printing.c:356
 msgid ""
 "Adds a little header to every page containing the page number, the filename "
 "and the current date(see below). It takes 3 lines of the page."
 msgstr ""
 "Lägger till tre rader i sidhuvudet som visar sidnummer, filnamn och datum."
 
-#: ../src/interface.c:4379 ../src/printing.c:373
+#: ../src/interface.c:4415 ../src/printing.c:373
 msgid "Use the basename of the printed file"
 msgstr "Använd den utskrivna filens basnamn"
 
-#: ../src/interface.c:4382 ../src/printing.c:375
+#: ../src/interface.c:4418 ../src/printing.c:375
 msgid "Print only the basename(without the path) of the printed file."
 msgstr "Skriv bara ut filnamnet, ej sökvägen."
 
-#: ../src/interface.c:4389 ../src/printing.c:382
+#: ../src/interface.c:4425 ../src/printing.c:382
 msgid "Date format:"
 msgstr "Datumformat:"
 
-#: ../src/interface.c:4396 ../src/printing.c:387
+#: ../src/interface.c:4432 ../src/printing.c:387
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
@@ -2481,20 +2473,11 @@ msgstr ""
 "sidhuvudet. Du kan använda den syntax som specificeras av ANSI C:s strftime "
 "funktion."
 
-#: ../src/interface.c:4399
+#: ../src/interface.c:4435
 msgid "Use native GTK printing"
 msgstr "Använd GTKs utskriftshantering"
 
-#: ../src/interface.c:4406
-msgid ""
-"<i>Notice: Native GTK printing is only available if Geany was built against "
-"GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
-msgstr ""
-"<i>Notera att GTKs utskriftshantering bara är tillgänglig om Geany "
-"kompilerats med GTK 2.10 eller högre <b>och</b> Geany körs med GTK 2.10 "
-"eller högre.</i>"
-
-#: ../src/interface.c:4413
+#: ../src/interface.c:4442
 msgid "Printing"
 msgstr "Utskrift"
 
@@ -2567,7 +2550,7 @@ msgstr "Markera allt"
 msgid "Insert date"
 msgstr "Klistra in datum"
 
-#: ../src/keybindings.c:154 ../src/search.c:297
+#: ../src/keybindings.c:154 ../src/search.c:275
 msgid "Find"
 msgstr "Sök"
 
@@ -2587,11 +2570,11 @@ msgstr "Sök nästa markering"
 msgid "Find Previous Selection"
 msgstr "Sök föregående markering"
 
-#: ../src/keybindings.c:164 ../src/search.c:417
+#: ../src/keybindings.c:164 ../src/search.c:395
 msgid "Replace"
 msgstr "Ersätt"
 
-#: ../src/keybindings.c:166 ../src/search.c:568
+#: ../src/keybindings.c:166 ../src/search.c:546
 msgid "Find in Files"
 msgstr "Sök i filer"
 
@@ -2915,11 +2898,11 @@ msgstr "Tangentgenvägar"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Följande tangentbordsgenvägar kan konfigureras:"
 
-#: ../src/keyfile.c:703
+#: ../src/keyfile.c:702
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Skriv vad du vill här, använd den som ett klotterplank"
 
-#: ../src/keyfile.c:882
+#: ../src/keyfile.c:886
 msgid "Failed to load one or more session files."
 msgstr "Kunde ej ladda en eller fler av sessionens filer"
 
@@ -2996,7 +2979,7 @@ msgstr "[FILER...]"
 msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 msgstr "(byggd %s med GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#: ../src/main.c:546
+#: ../src/main.c:567
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3008,17 +2991,17 @@ msgstr ""
 "konfigureringsmapp.\n"
 "Starta Geany ändå?"
 
-#: ../src/main.c:599 ../src/socket.c:143
+#: ../src/main.c:620 ../src/socket.c:143
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Kunde inte hitta fil '%s'."
 
-#: ../src/main.c:746
+#: ../src/main.c:767
 #, c-format
 msgid "This is Geany %s."
 msgstr "Detta är Geany %s."
 
-#: ../src/main.c:748
+#: ../src/main.c:769
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigureringsmappen kunde inte skapas (%s)"
@@ -3027,15 +3010,15 @@ msgstr "Konfigureringsmappen kunde inte skapas (%s)"
 msgid "Status messages"
 msgstr "Statusmeddelanden"
 
-#: ../src/msgwindow.c:425
+#: ../src/msgwindow.c:436
 msgid "_Hide Message Window"
 msgstr "Dölj meddelandefönster"
 
-#: ../src/plugins.c:563
+#: ../src/plugins.c:579
 msgid "Plugin Manager"
 msgstr "Tillägshanteraren"
 
-#: ../src/plugins.c:691
+#: ../src/plugins.c:707
 #, c-format
 msgid ""
 "Plugin: %s %s\n"
@@ -3046,27 +3029,27 @@ msgstr ""
 "Beskrivning: %s\n"
 "Utvecklare: %s"
 
-#: ../src/plugins.c:752
+#: ../src/plugins.c:768
 msgid "Active"
 msgstr "Aktiv"
 
-#: ../src/plugins.c:758
+#: ../src/plugins.c:774
 msgid "Plugin"
 msgstr "Tillägg"
 
-#: ../src/plugins.c:764
+#: ../src/plugins.c:780
 msgid "File"
 msgstr "Fil"
 
-#: ../src/plugins.c:782
+#: ../src/plugins.c:798
 msgid "No plugins available."
 msgstr "Inga tillägg är tillgängliga"
 
-#: ../src/plugins.c:827
+#: ../src/plugins.c:843
 msgid "Plugins"
 msgstr "Tillägg"
 
-#: ../src/plugins.c:848
+#: ../src/plugins.c:864
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
@@ -3074,62 +3057,116 @@ msgstr ""
 "Nedan ser du en lista med insticksmoduler. Välj vilka insticksmoduler som "
 "skall laddas när Geany startas."
 
-#: ../src/plugins.c:856
+#: ../src/plugins.c:872
 msgid "<b>Plugin details:</b>"
 msgstr "<b>Plugin egenskaper:</b>"
 
-#: ../src/prefs.c:104
+#: ../src/prefs.c:105
 msgid "Action"
 msgstr "Händelse"
 
-#: ../src/prefs.c:109
+#: ../src/prefs.c:110
 msgid "Shortcut"
 msgstr "Genväg"
 
-#: ../src/prefs.c:1062
+#: ../src/prefs.c:1075
 msgid "Grab Key"
 msgstr "Läs av tangent"
 
-#: ../src/prefs.c:1068
+#: ../src/prefs.c:1081
 #, c-format
 msgid "Type the combination of the keys you want to use for \"%s\""
 msgstr "Skriv in den tangentbordskombination du vill använda för  \"%s\""
 
-#: ../src/prefs.c:1220
+#: ../src/prefs.c:1233
 msgid "_Override"
 msgstr "Bryt"
 
-#: ../src/prefs.c:1221
+#: ../src/prefs.c:1234
 msgid "Override that keybinding?"
 msgstr "Vill du bryta tangentbindning?"
 
-#: ../src/prefs.c:1222
+#: ../src/prefs.c:1235
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr ""
 "Kombinationen '%s' används redan för \"%s\".Var god och använd en annan "
 "kombination."
 
+#. add manually GeanyWrapLabels because it can't be added with Glade
+#. page Tools
+#: ../src/prefs.c:1343
+msgid "Enter tool paths below. Tools you do not need can be left blank."
+msgstr ""
+"Skriv in sökvägarna till verktygen nedan. Sökvägarna till verktyg som du "
+"inte behöver kan lämnas tomma."
+
+#. page Templates
+#: ../src/prefs.c:1348
+msgid ""
+"Set the information to be used in templates. See the documentation for "
+"details."
+msgstr "Anger vilken information som skall användas i mallar."
+
+#: ../src/prefs.c:1352
+msgid ""
+"<i>Notice: For all changes you make here to take effect, you need to restart "
+"Geany.</i>"
+msgstr ""
+"<i>Observera: För att dina ändringar skall verkställas, måste du starta om "
+"Geany.</i>"
+
+#. page Keybindings
+#: ../src/prefs.c:1358
+msgid ""
+"Here you can change keyboard shortcuts for various actions. Select one and "
+"press the Change button to enter a new shortcut, or double click on an "
+"action to edit the string representation of the shortcut directly."
+msgstr ""
+"Här kan du ändra tangentbordsgenvägar. Välj en och tryck på Ändra-knappen "
+"för att ange en ny tangentbordsgenväg. Dubbelklicka för att skriva in värdet "
+"manuellt."
+
+#. page Printing
+#: ../src/prefs.c:1363
+msgid ""
+"<i>Notice: Native GTK printing is only available if Geany was built against "
+"GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
+msgstr ""
+"<i>Notera att GTKs utskriftshantering bara är tillgänglig om Geany "
+"kompilerats med GTK 2.10 eller högre <b>och</b> Geany körs med GTK 2.10 "
+"eller högre.</i>"
+
+#: ../src/printing.c:269
+#, fuzzy, c-format
+msgid "<b>Page %d of %d</b>"
+msgstr "<b>Ändrad:</b>"
+
 #: ../src/printing.c:337
 #, fuzzy
 msgid "Document Setup"
 msgstr "Dokumentmeny"
 
-#: ../src/printing.c:748 ../src/printing.c:821
+#: ../src/printing.c:715
+#, fuzzy, c-format
+msgid "Printing of file %s was cancelled."
+msgstr "Utskriften \"%s\" misslyckades (felkod: %s)."
+
+#: ../src/printing.c:717 ../src/printing.c:834
 #, c-format
 msgid "File %s printed."
 msgstr "Fil %s utskriven."
 
-#: ../src/printing.c:752
+#: ../src/printing.c:765
 #, fuzzy, c-format
-msgid "Printing of \"%s\" failed (%s)."
+msgid "Printing of %s failed (%s)."
 msgstr "Utskriften \"%s\" misslyckades (felkod: %s)."
 
-#: ../src/printing.c:792
+#: ../src/printing.c:805
 msgid "Please set a print command in the preferences dialog first"
 msgstr ""
 
-#: ../src/printing.c:800
+#: ../src/printing.c:813
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3140,146 +3177,152 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:815
+#: ../src/printing.c:828
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "Utskriften \"%s\" misslyckades (felkod: %s)."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. please avoid special characters and spaces, look at the source for details or ask Frank
-#: ../src/project.c:88
+#: ../src/project.c:89
 msgid "projects"
 msgstr "projekt"
 
-#: ../src/project.c:108
+#: ../src/project.c:109
 msgid "New Project"
 msgstr "Nytt projekt"
 
-#: ../src/project.c:116
+#: ../src/project.c:117
 msgid "C_reate"
 msgstr "Skapa"
 
-#: ../src/project.c:130 ../src/project.c:365
+#: ../src/project.c:131 ../src/project.c:367
 msgid "Name:"
 msgstr "Namn:"
 
-#: ../src/project.c:138 ../src/project.c:377
+#: ../src/project.c:139 ../src/project.c:379
 msgid "Filename:"
 msgstr "Filnamn:"
 
-#: ../src/project.c:154 ../src/project.c:406
+#: ../src/project.c:155 ../src/project.c:408
 msgid "Base path:"
 msgstr "Bassökväg:"
 
-#: ../src/project.c:159 ../src/project.c:414
+#: ../src/project.c:160 ../src/project.c:416
+#, fuzzy
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
-"path, or an existing directory tree absolute or relative to the project "
-"filename."
+"path, or an existing directory tree. You can use paths relative to the "
+"project filename."
 msgstr ""
 "Grundläggande sökväg för alla filer i projektet. Detta kan vara en ny sökväg "
 "eller ett existerande mappträd."
 
-#: ../src/project.c:162 ../src/project.c:417
+#: ../src/project.c:163 ../src/project.c:419
 msgid "Choose Project Base Path"
 msgstr "Välj projektets sökväg"
 
-#: ../src/project.c:207 ../src/project.c:239 ../src/project.c:830
+#: ../src/project.c:208 ../src/project.c:241 ../src/project.c:856
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Projektfilen \"%s\" kunde inte laddas."
 
-#: ../src/project.c:233 ../src/project.c:246
+#: ../src/project.c:235 ../src/project.c:249
 msgid "Open Project"
 msgstr "Öppna projekt"
 
-#: ../src/project.c:266
+#: ../src/project.c:269
 msgid "Project files"
 msgstr "Projektfiler"
 
-#: ../src/project.c:300
+#: ../src/project.c:303
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Projekt \"%s\" stängt."
 
-#: ../src/project.c:351
+#: ../src/project.c:355
 msgid "Project Properties"
 msgstr "Projektegenskaper"
 
-#: ../src/project.c:389
+#: ../src/project.c:391
 msgid "Description:"
 msgstr "Beskrivning:"
 
-#: ../src/project.c:423
+#: ../src/project.c:425
+msgid "Make in base path"
+msgstr ""
+
+#: ../src/project.c:430
 msgid "Run command:"
 msgstr "Kör kommando:"
 
-#: ../src/project.c:431
+#: ../src/project.c:438
 msgid ""
 "Command-line to run in the project base directory. Options can be appended "
 "to the command. Leave blank to use the default run command."
 msgstr "Kommandorad att köra i projektets grundläggande sökväg."
 
-#: ../src/project.c:447
+#: ../src/project.c:454
 msgid "File patterns:"
 msgstr "Fil-mönster:"
 
-#: ../src/project.c:527
+#: ../src/project.c:550
 msgid "Do you want to close it before proceeding?"
 msgstr "Vill du stänga innan du fortsätter?"
 
-#: ../src/project.c:528
+#: ../src/project.c:551
 #, fuzzy, c-format
 msgid "The '%s' project is already open."
 msgstr "Projektet '%s' är redan öppnat."
 
-#: ../src/project.c:557
+#: ../src/project.c:581
 msgid "The specified project name is too short."
 msgstr "Projektnamnet är för kort."
 
-#: ../src/project.c:563
+#: ../src/project.c:587
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Projektnamnet är för långt (max. %d tecken)."
 
-#: ../src/project.c:571
+#: ../src/project.c:595
 msgid "You have specified an invalid project filename."
 msgstr "Du har valt ett ogiltigt filnamn."
 
-#: ../src/project.c:580
-msgid "Project file could not be written."
+#: ../src/project.c:604
+#, fuzzy, c-format
+msgid "Project file could not be written (%s)."
 msgstr "Projektfilen kunde inte skrivas."
 
-#: ../src/project.c:600
+#: ../src/project.c:624
 msgid "Create the project's base path directory?"
 msgstr "Vill du skapa projektets basmapp?"
 
-#: ../src/project.c:601
+#: ../src/project.c:625
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Sökvägen \"%s\" existerar inte."
 
-#: ../src/project.c:662
+#: ../src/project.c:688
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Projekt \"%s\" skapad."
 
-#: ../src/project.c:664
+#: ../src/project.c:690
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Projekt \"%s\" sparad."
 
 #. initialise the dialog
-#: ../src/project.c:720 ../src/project.c:731
+#: ../src/project.c:746 ../src/project.c:757
 msgid "Choose Project Filename"
 msgstr "Välj projektets filnamn"
 
 #. initialise the dialog
-#: ../src/project.c:749 ../src/project.c:760
+#: ../src/project.c:775 ../src/project.c:786
 msgid "Choose Project Run Command"
 msgstr "Välj projektets körkommando"
 
-#: ../src/project.c:823
+#: ../src/project.c:849
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Projekt \"%s\" öppnad."
@@ -3311,11 +3354,11 @@ msgstr ""
 "Ersätt \\\\, \\t, \\n, \\r and \\uXXXX (Unicode tecken) med korresponderande "
 "specialtecken."
 
-#: ../src/search.c:177 ../src/search.c:642
+#: ../src/search.c:177 ../src/search.c:620
 msgid "C_ase sensitive"
 msgstr "Gör skillnad mellan versaler och gemener"
 
-#: ../src/search.c:182 ../src/search.c:648
+#: ../src/search.c:182 ../src/search.c:626
 msgid "Match only a _whole word"
 msgstr "Sök endast hela ord"
 
@@ -3323,153 +3366,157 @@ msgstr "Sök endast hela ord"
 msgid "Match from s_tart of word"
 msgstr "Sök från början av ord"
 
-#: ../src/search.c:304
+#: ../src/search.c:282
 msgid "_Previous"
 msgstr "Föregående"
 
-#: ../src/search.c:310
+#: ../src/search.c:288
 msgid "_Next"
 msgstr "Nästa"
 
-#: ../src/search.c:314 ../src/search.c:434 ../src/search.c:593
+#: ../src/search.c:292 ../src/search.c:412 ../src/search.c:571
 msgid "_Search for:"
 msgstr "Sök efter:"
 
 #. Now add the multiple match options
-#: ../src/search.c:341
-msgid "Find All"
+#: ../src/search.c:319
+#, fuzzy
+msgid "_Find All"
 msgstr "Hitta alla"
 
-#: ../src/search.c:344
+#: ../src/search.c:322
 msgid "_Mark"
 msgstr "Markera"
 
-#: ../src/search.c:346
+#: ../src/search.c:324
 msgid "Mark all matches in the current document."
 msgstr "Markera alla träffar i detta dokument."
 
-#: ../src/search.c:351 ../src/search.c:494
+#: ../src/search.c:329 ../src/search.c:472
 msgid "In Sessi_on"
 msgstr "I Session"
 
-#: ../src/search.c:356 ../src/search.c:499
+#: ../src/search.c:334 ../src/search.c:477
 msgid "_In Document"
 msgstr "I dokumentet"
 
 #. close window checkbox
-#: ../src/search.c:362 ../src/search.c:505
+#: ../src/search.c:340 ../src/search.c:483
 msgid "Close _dialog"
 msgstr "Stäng dialogruta"
 
-#: ../src/search.c:367 ../src/search.c:510
+#: ../src/search.c:345 ../src/search.c:488
 msgid "Disable this option to keep the dialog open."
 msgstr "Avaktivera detta tillval för att hålla dialogrutan öppen."
 
-#: ../src/search.c:430
+#: ../src/search.c:408
 msgid "Replace & Fi_nd"
 msgstr "Sök & ersätt"
 
-#: ../src/search.c:437
-msgid "Re_place with:"
+#: ../src/search.c:415
+#, fuzzy
+msgid "Replace wit_h:"
 msgstr "Ersätt inom:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:484
-msgid "Replace All"
+#: ../src/search.c:462
+#, fuzzy
+msgid "Re_place All"
 msgstr "Ersätt alla"
 
-#: ../src/search.c:487
+#: ../src/search.c:465
 msgid "In Se_lection"
 msgstr "I markering"
 
-#: ../src/search.c:489
+#: ../src/search.c:467
 msgid "Replace all matches found in the currently selected text"
 msgstr "Ersätt alla träffar i markerad text"
 
-#: ../src/search.c:578
+#: ../src/search.c:556
 msgid "_Directory:"
 msgstr "Sökväg:"
 
-#: ../src/search.c:613
-msgid "_Fixed strings"
+#: ../src/search.c:591
+#, fuzzy
+msgid "Fixed s_trings"
 msgstr "Fixerade strängar"
 
-#: ../src/search.c:622
+#: ../src/search.c:600
 msgid "_Grep regular expressions"
 msgstr "Grep Regular Expressions"
 
-#: ../src/search.c:626 ../src/search.c:633
+#: ../src/search.c:604 ../src/search.c:611
 msgid "See grep's manual page for more information."
 msgstr "Läs Grep's manualsida för mer information."
 
-#: ../src/search.c:631
+#: ../src/search.c:609
 msgid "_Extended regular expressions"
 msgstr "Utöka Regular Expressions"
 
-#: ../src/search.c:637
+#: ../src/search.c:615
 msgid "_Recurse in subfolders"
 msgstr "Gå igenom undermappar"
 
-#: ../src/search.c:653
+#: ../src/search.c:631
 msgid "_Invert search results"
 msgstr "Invertera sökresultat"
 
-#: ../src/search.c:658
+#: ../src/search.c:636
 msgid "Invert the sense of matching, to select non-matching lines."
 msgstr "Invertera träffar, välj de rader som inte har några träffar."
 
-#: ../src/search.c:674
+#: ../src/search.c:652
 msgid "E_xtra options:"
 msgstr "Extra inställningar:"
 
-#: ../src/search.c:686
+#: ../src/search.c:664
 msgid "Other options to pass to Grep"
 msgstr "Andra tillval att skicka till Grep"
 
-#: ../src/search.c:883 ../src/search.c:1389 ../src/search.c:1390
+#: ../src/search.c:861 ../src/search.c:1367 ../src/search.c:1368
 #, c-format
 msgid "Found %d matches for \"%s\"."
 msgstr "Hittade %d träffar för \"%s\"."
 
-#: ../src/search.c:1002
+#: ../src/search.c:980
 #, c-format
 msgid "Replaced text in %u files."
 msgstr "Ersatt text i %u filer."
 
-#: ../src/search.c:1103
+#: ../src/search.c:1081
 msgid "Invalid directory for find in files."
 msgstr "Ogiltig mapp för att söka i filer."
 
-#: ../src/search.c:1121
+#: ../src/search.c:1099
 msgid "No text to find."
 msgstr "Ingen text att söka efter."
 
-#: ../src/search.c:1142
+#: ../src/search.c:1120
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
 
-#: ../src/search.c:1207
+#: ../src/search.c:1185
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (i sökväg: %s)"
 
-#: ../src/search.c:1235
+#: ../src/search.c:1213
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Kan inte öppna sökväg (%s)"
 
-#: ../src/search.c:1283
+#: ../src/search.c:1261
 msgid "Search failed."
 msgstr "Sökningen misslyckades."
 
-#: ../src/search.c:1296 ../src/search.c:1297
+#: ../src/search.c:1274 ../src/search.c:1275
 #, c-format
 msgid "Search completed with %d matches."
 msgstr "Sökning slutförd med %d träffar."
 
-#: ../src/search.c:1301
+#: ../src/search.c:1279
 msgid "No matches found."
 msgstr "Inga träffar hittade."
 
@@ -3633,7 +3680,7 @@ msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Okänd filändelse för filen \"%s\".\n"
 
 #: ../src/symbols.c:925
-#, fuzzy
+#, fuzzy, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr "Misslyckades med att skapa tagg-fil.\n"
 
@@ -3675,12 +3722,12 @@ msgstr "Laddade %s tagg-filen '%s'."
 msgid "Could not load tags file '%s'."
 msgstr "Kunde inte ladda tagg-filen '%s'."
 
-#: ../src/symbols.c:1091
+#: ../src/symbols.c:1096
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Deklarationen \"%s\" kunde inte hittas."
 
-#: ../src/symbols.c:1093
+#: ../src/symbols.c:1098
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definitionen av  \"%s\" kan inte hittas."
@@ -3752,7 +3799,7 @@ msgstr "Visa symbollistan"
 msgid "Show _Document List"
 msgstr "Visa dokumentlistan"
 
-#: ../src/treeviews.c:395 ../src/treeviews.c:482 ../plugins/filebrowser.c:468
+#: ../src/treeviews.c:395 ../src/treeviews.c:482 ../plugins/filebrowser.c:543
 msgid "H_ide Sidebar"
 msgstr "Göm sidolist"
 
@@ -3841,33 +3888,33 @@ msgstr ""
 "Filen '%s' på disken är nyare än\n"
 "uvarande i editorn."
 
-#: ../src/vte.c:246 ../src/vte.c:648
+#: ../src/vte.c:246 ../src/vte.c:650
 msgid "Terminal"
 msgstr "Terminal"
 
-#: ../src/vte.c:478
+#: ../src/vte.c:479
 msgid "Set Path From Document"
 msgstr "Ange sökväg"
 
-#: ../src/vte.c:483
+#: ../src/vte.c:484
 msgid "Restart Terminal"
 msgstr "Starta om terminalen"
 
-#: ../src/vte.c:494
+#: ../src/vte.c:495
 msgid "_Input Methods"
 msgstr "Inmatningsmetoder"
 
-#: ../src/vte.c:595
+#: ../src/vte.c:596
 msgid ""
 "Could not change the directory in the VTE because it probably contains a "
 "command."
 msgstr ""
 
-#: ../src/vte.c:644
+#: ../src/vte.c:646
 msgid "Terminal plugin"
 msgstr "Terminalens insticksmodul"
 
-#: ../src/vte.c:651
+#: ../src/vte.c:653
 msgid ""
 "These settings for the virtual terminal emulator widget (VTE) only apply if "
 "the VTE library could be loaded."
@@ -3875,45 +3922,45 @@ msgstr ""
 "Dessa inställningar för den virtuella terminalemulatorn (VTE) gäller bara om "
 "VTE-biblioteket kan laddas."
 
-#: ../src/vte.c:662
+#: ../src/vte.c:664
 msgid "Terminal font:"
 msgstr "Terminalens font:"
 
-#: ../src/vte.c:672
+#: ../src/vte.c:674
 msgid "Sets the font for the terminal widget."
 msgstr "Justerar fonten för terminalen."
 
-#: ../src/vte.c:674
+#: ../src/vte.c:676
 msgid "Foreground color:"
 msgstr "Förgrundsfärg"
 
-#: ../src/vte.c:680
+#: ../src/vte.c:682
 msgid "Background color:"
 msgstr "Bakgrundsfärg"
 
-#: ../src/vte.c:690
+#: ../src/vte.c:692
 msgid "Sets the foreground color of the text in the terminal widget."
 msgstr "Justerar förgrundsfärgen för texten i terminalen."
 
-#: ../src/vte.c:697
+#: ../src/vte.c:699
 msgid "Sets the background color of the text in the terminal widget."
 msgstr "Justerar bakgrundsfärgen för texten i terminalen."
 
-#: ../src/vte.c:700
+#: ../src/vte.c:702
 msgid "Scrollback lines:"
 msgstr "Rulla rader:"
 
-#: ../src/vte.c:711
+#: ../src/vte.c:713
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget."
 msgstr "Anger hur många rader som du kan rulla tillbaka i terminalen"
 
-#: ../src/vte.c:715
+#: ../src/vte.c:717
 msgid "Terminal emulation:"
 msgstr "Terminal emulering:"
 
-#: ../src/vte.c:725
+#: ../src/vte.c:727
 msgid ""
 "Controls how the terminal emulator should behave. Do not change this value "
 "unless you know exactly what you are doing."
@@ -3921,37 +3968,47 @@ msgstr ""
 "Kontrollerar hur terminalemulatorn skall fungera. Ändra inte detta värde om "
 "du inte vet precis vad du håller på med."
 
-#: ../src/vte.c:727
+#: ../src/vte.c:729
 msgid "Shell:"
 msgstr "Skal:"
 
-#: ../src/vte.c:734
+#: ../src/vte.c:736
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation."
 msgstr "Justerar sökvägen till skalet som skall startas i terminalemulatorn."
 
-#: ../src/vte.c:751
+#: ../src/vte.c:753
 msgid "Scroll on keystroke"
 msgstr "Rulla ner"
 
-#: ../src/vte.c:752
+#: ../src/vte.c:754
 msgid "Whether to scroll to the bottom if a key was pressed."
 msgstr "Om texten rullas ner till botten om en tangent trycks ned"
 
-#: ../src/vte.c:756
+#: ../src/vte.c:758
 msgid "Scroll on output"
 msgstr "Rulla utmatning"
 
-#: ../src/vte.c:757
+#: ../src/vte.c:759
 msgid "Whether to scroll to the bottom when output is generated."
 msgstr "Huruvida texten i fönstret längst ner skall rullas när utmatning sker."
 
-#: ../src/vte.c:761
+#: ../src/vte.c:763
+#, fuzzy
+msgid "Override Geany keybindings"
+msgstr "Vill du bryta tangentbindning?"
+
+#: ../src/vte.c:765
+msgid ""
+"Allows the VTE to receive keyboard shortcuts (apart from focus commands)."
+msgstr ""
+
+#: ../src/vte.c:769
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Avaktivera genvägstangenten (F10-tangenten)"
 
-#: ../src/vte.c:762
+#: ../src/vte.c:770
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -3960,32 +4017,32 @@ msgstr ""
 "Detta tillval gör så att menyn inte visas när du trycker på F10. Detta kan "
 "vara användbart, exempelvis om du kör Midnight Commander i VTE."
 
-#: ../src/vte.c:766
+#: ../src/vte.c:774
 msgid "Follow the path of the current file"
 msgstr "Följ filens sökväg"
 
-#: ../src/vte.c:767
+#: ../src/vte.c:775
 msgid "Whether to execute \"cd $path\" when you switch between opened files."
 msgstr ""
 "Huruvida  \"cd $path\" skall exekveras när du växlar mellan öppna filer."
 
 #. create check_skip_script checkbox before the check_skip_script checkbox to be able to
 #. use the object for the toggled handler of check_skip_script checkbox
-#: ../src/vte.c:773
+#: ../src/vte.c:781
 msgid "Don't use run script"
 msgstr ""
 
-#: ../src/vte.c:774
+#: ../src/vte.c:782
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program."
 msgstr ""
 
-#: ../src/vte.c:778
+#: ../src/vte.c:786
 msgid "Execute programs in VTE"
 msgstr "Exekvera program i VTE"
 
-#: ../src/vte.c:779
+#: ../src/vte.c:787
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped."
@@ -3993,27 +4050,27 @@ msgstr ""
 "Kör ett program i VTE i stället för att öppna ett terminalemuleringsfönster. "
 "Var god att notera att program som exekveras i VTE inte kan stoppas."
 
-#: ../src/win32.c:106
+#: ../src/win32.c:107
 msgid "Geany project files"
 msgstr "Geany projektfiler"
 
-#: ../src/win32.c:112
+#: ../src/win32.c:113
 msgid "Executables"
 msgstr "Exekverbara filer"
 
-#: ../src/win32.c:515
+#: ../src/win32.c:516
 msgid "Error"
 msgstr "Fel"
 
-#: ../src/win32.c:521 ../src/win32.c:578
+#: ../src/win32.c:522 ../src/win32.c:581
 msgid "Question"
 msgstr "Fråga"
 
-#: ../src/win32.c:527
+#: ../src/win32.c:528
 msgid "Warning"
 msgstr "Varning"
 
-#: ../src/win32.c:533
+#: ../src/win32.c:534
 msgid "Information"
 msgstr "Information"
 
@@ -4026,7 +4083,7 @@ msgid "Creates source files for new class types."
 msgstr "Skapar källfiler för nya klasstyper."
 
 #: ../plugins/classbuilder.c:43 ../plugins/htmlchars.c:41
-#: ../plugins/export.c:44 ../plugins/vcdiff.c:46 ../plugins/filebrowser.c:49
+#: ../plugins/export.c:45 ../plugins/vcdiff.c:46 ../plugins/filebrowser.c:49
 #: ../plugins/autosave.c:41
 msgid "The Geany developer team"
 msgstr "Geanys utvecklare"
@@ -4168,49 +4225,49 @@ msgstr "Övriga tecken"
 msgid "_Insert Special HTML Characters"
 msgstr "Infoga speciella HTML-tecken"
 
-#: ../plugins/export.c:43
+#: ../plugins/export.c:44
 msgid "Export"
 msgstr "Exportera"
 
-#: ../plugins/export.c:43
+#: ../plugins/export.c:44
 msgid "Exports the current file into different formats."
 msgstr "Exportera filen till olika format."
 
-#: ../plugins/export.c:170
+#: ../plugins/export.c:171
 msgid "Export File"
 msgstr "Exportera fil"
 
-#: ../plugins/export.c:187
+#: ../plugins/export.c:188
 msgid "_Use current zoom level"
 msgstr "Använd nuvarande zoom-nivå"
 
-#: ../plugins/export.c:189
+#: ../plugins/export.c:190
 msgid ""
 "Renders the font size of the document together with the current zoom level."
 msgstr ""
 "Visar dokumentets teckenstorlek tillsammans med nuvarande förstoringsnivå"
 
-#: ../plugins/export.c:265
+#: ../plugins/export.c:274
 #, c-format
 msgid "Document successfully exported as '%s'."
 msgstr "Dokumentet exporterades som '%s'."
 
-#: ../plugins/export.c:267
+#: ../plugins/export.c:276
 #, c-format
 msgid "File '%s' could not be written (%s)."
 msgstr "Filen '%s' kunde inte skrivas (%s)."
 
-#: ../plugins/export.c:701
+#: ../plugins/export.c:712
 msgid "_Export"
 msgstr "Exportera"
 
 #. HTML
-#: ../plugins/export.c:708
+#: ../plugins/export.c:719
 msgid "As HTML"
 msgstr "Som HTML"
 
 #. LaTeX
-#: ../plugins/export.c:715
+#: ../plugins/export.c:726
 msgid "As LaTeX"
 msgstr "Som LATEX"
 
@@ -4274,7 +4331,7 @@ msgstr "Från nuvarande projekt"
 msgid "Make a diff from the current project's base path"
 msgstr "Skapa en DIFF från projektets grundläggande sökväg"
 
-#: ../plugins/filebrowser.c:48 ../plugins/filebrowser.c:741
+#: ../plugins/filebrowser.c:48 ../plugins/filebrowser.c:838
 msgid "File Browser"
 msgstr "Filhanterare"
 
@@ -4282,45 +4339,45 @@ msgstr "Filhanterare"
 msgid "Adds a file browser tab to the sidebar."
 msgstr "Lägger till en filbläddrarflik i sidofältet."
 
-#: ../plugins/filebrowser.c:283
+#: ../plugins/filebrowser.c:276
 msgid "Too many items selected!"
 msgstr "För många saker markerade!"
 
-#: ../plugins/filebrowser.c:328
+#: ../plugins/filebrowser.c:360
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr ""
 
-#: ../plugins/filebrowser.c:440
-msgid "Open _with ..."
+#: ../plugins/filebrowser.c:513
+msgid "Open _externally"
 msgstr ""
 
-#: ../plugins/filebrowser.c:449
+#: ../plugins/filebrowser.c:523
 #, fuzzy
 msgid "_Find in Files"
 msgstr "Sök i filer"
 
-#: ../plugins/filebrowser.c:459
+#: ../plugins/filebrowser.c:534
 msgid "Show _Hidden Files"
 msgstr "Visa gömda filer"
 
-#: ../plugins/filebrowser.c:589
+#: ../plugins/filebrowser.c:686
 msgid "Up"
 msgstr "Upp"
 
-#: ../plugins/filebrowser.c:595
+#: ../plugins/filebrowser.c:692
 msgid "Refresh"
 msgstr "Uppdatera"
 
-#: ../plugins/filebrowser.c:601
+#: ../plugins/filebrowser.c:698
 msgid "Home"
 msgstr "Hem"
 
-#: ../plugins/filebrowser.c:607
+#: ../plugins/filebrowser.c:704
 msgid "Set path from document"
 msgstr "Ange sökväg"
 
-#: ../plugins/filebrowser.c:757
+#: ../plugins/filebrowser.c:854
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -4330,23 +4387,23 @@ msgid ""
 "filename"
 msgstr ""
 
-#: ../plugins/filebrowser.c:763
+#: ../plugins/filebrowser.c:860
 #, fuzzy
 msgid "Show hidden files"
 msgstr "Visa gömda filer"
 
-#: ../plugins/filebrowser.c:768
+#: ../plugins/filebrowser.c:865
 #, fuzzy
 msgid "Hide object files"
 msgstr "Projektfiler"
 
-#: ../plugins/filebrowser.c:772
+#: ../plugins/filebrowser.c:869
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
 msgstr ""
 
-#: ../plugins/filebrowser.c:801 ../plugins/autosave.c:179
+#: ../plugins/filebrowser.c:898 ../plugins/autosave.c:179
 #, fuzzy
 msgid "Plugin configuration directory could not be created."
 msgstr "Konfigureringsmappen kunde inte skapas (%s)"
