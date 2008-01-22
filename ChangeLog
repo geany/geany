@@ -1,3 +1,9 @@
+2008-01-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * THANKS, src/about.c, po/el.po, po/LINGUAS:
+   Add Greek translation (thanks to Stavros Temertzidis).
+
+
 2008-01-18  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/interface.c, geany.glade:
