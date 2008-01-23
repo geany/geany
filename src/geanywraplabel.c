@@ -29,7 +29,6 @@
 
 #include <gtk/gtklabel.h>
 #include "geanywraplabel.h"
-#include "utils.h"
 
 
 /* Local data */
@@ -186,7 +185,7 @@ GtkWidget *geany_wrap_label_new(const gchar *text)
 {
 	GtkWidget *l = g_object_new(GEANY_WRAP_LABEL_TYPE, NULL);
 
-	if (NZV(text))
+	if (text != NULL && text[0] != '\0')
 		gtk_label_set_text(GTK_LABEL(l), text);
 
 	pango_layout_set_wrap(gtk_label_get_layout(GTK_LABEL(l)), PANGO_WRAP_WORD_CHAR);
