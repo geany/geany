@@ -41,16 +41,6 @@ G_BEGIN_DECLS
 typedef struct _GeanyWrapLabel       GeanyWrapLabel;
 typedef struct _GeanyWrapLabelClass  GeanyWrapLabelClass;
 
-struct _GeanyWrapLabel
-{
-	GtkLabel parent;
-};
-
-struct _GeanyWrapLabelClass
-{
-	GtkLabelClass parent_class;
-};
-
 GType			geany_wrap_label_get_type			(void);
 GtkWidget*		geany_wrap_label_new				(const gchar *text);
 void			geany_wrap_label_set_text			(GtkLabel *label, const gchar *text);
