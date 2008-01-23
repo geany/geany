@@ -4,6 +4,8 @@
    Move class and label structs to geanywraplabel.c.
    Override widget functions instead of using event handlers
    (trying to fix #1869399).
+ * src/prefs.c: Fix wrong placement of descriptive texts in Templates
+                and Tools tabs in the preferences dialog.
 
 
 2008-01-22  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>

@@ -1342,12 +1342,12 @@ void prefs_show_dialog(void)
 		// page Tools
 		label = geany_wrap_label_new(_("Enter tool paths below. Tools you do not need can be left blank."));
 		gtk_widget_show(label);
-		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox31")),
+		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox33")),
 			label, FALSE, TRUE, 5);
 		// page Templates
 		label = geany_wrap_label_new(_("Set the information to be used in templates. See the documentation for details."));
 		gtk_widget_show(label);
-		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox33")),
+		gtk_box_pack_start(GTK_BOX(lookup_widget(ui_widgets.prefs_dialog, "vbox31")),
 			label, FALSE, TRUE, 5);
 		label = geany_wrap_label_new(_("<i>Notice: For all changes you make here to take effect, you need to restart Geany.</i>"));
 		gtk_widget_show(label);
