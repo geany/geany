@@ -8,9 +8,9 @@
 ; helper defines  ;
 ;;;;;;;;;;;;;;;;;;;
 !define PRODUCT_NAME "Geany"
-!define PRODUCT_VERSION "0.13"
-!define PRODUCT_VERSION_ID "0.13.0.0"
-!define PRODUCT_PUBLISHER "Enrico Tröger"
+!define PRODUCT_VERSION "0.13svn_r2188"
+!define PRODUCT_VERSION_ID "0.12.9.4"
+!define PRODUCT_PUBLISHER "Enrico Troeger"
 !define PRODUCT_WEB_SITE "http://geany.uvena.de"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Geany.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -25,15 +25,17 @@
 SetCompressor /SOLID lzma
 XPStyle on
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+
+InstallDir "$PROGRAMFILES\Geany"
+InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+ShowInstDetails hide
+ShowUnInstDetails hide
+
 !ifdef INCLUDE_GTK
 OutFile "geany-${PRODUCT_VERSION}_setup.exe"
 !else
 OutFile "geany-${PRODUCT_VERSION}_nogtk_setup.exe"
 !endif
-InstallDir "$PROGRAMFILES\Geany"
-InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
-ShowInstDetails hide
-ShowUnInstDetails hide
 
 ;;;;;;;;;;;;;;;;;;;;;
 ; Version resource  ;
@@ -55,7 +57,6 @@ Function .onInit
   StrCmp $R0 0 +3
     MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
     Abort
-
   ; warn about a new install over an existing installation
   ReadRegStr $R0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString"
   StrCmp $R0 "" done
@@ -163,7 +164,7 @@ Section "Documentation" SEC04
 
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-  WriteIniStr "$INSTDIR\Documentation.url" "InternetShortcut" "URL" "$INSTDIR\doc\index.html"
+  WriteIniStr "$INSTDIR\Documentation.url" "InternetShortcut" "URL" "$INSTDIR\doc\Manual.html"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation.lnk" "$INSTDIR\Documentation.url"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
@@ -181,7 +182,7 @@ SectionEnd
 
 ; Include GTK runtime library but only if desired from command line
 !ifdef INCLUDE_GTK
-Section "GTK 2.10 Runtime Environment" SEC06
+Section "GTK 2.12 Runtime Environment" SEC06
   SectionIn 1
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
@@ -190,8 +191,6 @@ Section "GTK 2.10 Runtime Environment" SEC06
   File /r "gtk\etc\*"
   SetOutPath "$INSTDIR\lib"
   File /r "gtk\lib\*"
-  SetOutPath "$INSTDIR\share"
-  File /r "gtk\share\*"
 /* code to embed GTK+ installer executable
   File ${GTK_INSTALLER}
   ExecWait ${GTK_INSTALLER}
@@ -226,6 +225,7 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
 SectionEnd
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Section descriptions  ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -240,7 +240,6 @@ SectionEnd
 !endif
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC07} "Add context menu item 'Open With Geany'"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -292,6 +291,7 @@ Section Uninstall
   Delete "$INSTDIR\gspawn-win32-helper-console.exe"
   Delete "$INSTDIR\iconv.dll"
   Delete "$INSTDIR\intl.dll"
+  Delete "$INSTDIR\jpeg62.dll"
   Delete "$INSTDIR\libgthread-2.0-0.dll"
   Delete "$INSTDIR\libgtk-win32-2.0-0.dll"
   Delete "$INSTDIR\libpangocairo-1.0-0.dll"
@@ -306,6 +306,7 @@ Section Uninstall
   Delete "$INSTDIR\libgdk-win32-2.0-0.dll"
   Delete "$INSTDIR\libglib-2.0-0.dll"
   Delete "$INSTDIR\libgmodule-2.0-0.dll"
+  Delete "$INSTDIR\libtiff3.dll"
   Delete "$INSTDIR\zlib1.dll"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
@@ -330,4 +331,3 @@ Section Uninstall
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
   SetAutoClose true
 SectionEnd
-
