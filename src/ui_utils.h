@@ -140,7 +140,7 @@ void ui_save_buttons_toggle(gboolean enable);
 void ui_document_buttons_update();
 
 
-void ui_treeviews_show_hide(gboolean force);
+void ui_sidebar_show_hide();
 
 void ui_document_show_hide(gint idx);
 

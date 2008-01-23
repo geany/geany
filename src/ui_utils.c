@@ -615,15 +615,14 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show)
 }
 
 
-void ui_treeviews_show_hide(G_GNUC_UNUSED gboolean force)
+void ui_sidebar_show_hide()
 {
 	GtkWidget *widget;
 
-/*	geany_debug("\nSidebar: %s\nSymbol: %s\nFiles: %s", ui_btoa(ui_prefs.sidebar_visible),
-					ui_btoa(prefs.sidebar_symbol_visible), ui_btoa(prefs.sidebar_openfiles_visible));
-*/
-
-	if (! prefs.sidebar_openfiles_visible && ! prefs.sidebar_symbol_visible)
+	// check that there are no other notebook pages before hiding the sidebar completely
+	// other pages could be e.g. the file browser plugin
+	if (! prefs.sidebar_openfiles_visible && ! prefs.sidebar_symbol_visible &&
+		gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->treeview_notebook)) <= 2)
 	{
 		ui_prefs.sidebar_visible = FALSE;
 	}

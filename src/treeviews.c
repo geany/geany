@@ -412,14 +412,14 @@ static void on_openfiles_fullpath_activate(GtkCheckMenuItem *item, gpointer user
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	prefs.sidebar_openfiles_visible = gtk_check_menu_item_get_active(item);
-	ui_treeviews_show_hide(FALSE);
+	ui_sidebar_show_hide();
 }
 
 
 static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	prefs.sidebar_symbol_visible = gtk_check_menu_item_get_active(item);
-	ui_treeviews_show_hide(FALSE);
+	ui_sidebar_show_hide();
 }
 
 
@@ -555,7 +555,7 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 static void on_openfiles_hide_item_clicked(GtkMenuItem *menuitem, gpointer user_data)
 {
 	ui_prefs.sidebar_visible = FALSE;
-	ui_treeviews_show_hide(TRUE);
+	ui_sidebar_show_hide();
 }
 
 
@@ -615,13 +615,13 @@ static void on_taglist_tree_popup_clicked(GtkMenuItem *menuitem, gpointer user_d
 		case SYMBOL_ACTION_HIDE:
 		{
 			prefs.sidebar_symbol_visible = FALSE;
-			ui_treeviews_show_hide(FALSE);
+			ui_sidebar_show_hide();
 			break;
 		}
 		case SYMBOL_ACTION_HIDE_ALL:
 		{
 			ui_prefs.sidebar_visible = FALSE;
-			ui_treeviews_show_hide(TRUE);
+			ui_sidebar_show_hide();
 			break;
 		}
 	}

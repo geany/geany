@@ -1646,7 +1646,7 @@ on_menu_show_sidebar1_toggled          (GtkCheckMenuItem *checkmenuitem,
 		prefs.sidebar_symbol_visible = TRUE;
 	}
 
-	ui_treeviews_show_hide(TRUE);
+	ui_sidebar_show_hide();
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(app->treeview_notebook), active_page);
 }
 
