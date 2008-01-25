@@ -76,7 +76,7 @@ static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElement
 static void on_file_open_button_clicked(GtkButton *button, PropertyDialogElements *e);
 static gboolean close_open_project();
 static gboolean load_config(const gchar *filename);
-static gboolean write_config();
+static gboolean write_config(gboolean emit_signal);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 
@@ -1002,6 +1002,7 @@ gchar *project_get_make_dir()
 }
 
 
+/* This is to save project-related global settings, NOT project file settings. */
 void project_save_prefs(GKeyFile *config)
 {
 	GeanyProject *project = app->project;
@@ -1014,9 +1015,6 @@ void project_save_prefs(GKeyFile *config)
 	}
 	g_key_file_set_string(config, "project", "project_file_path",
 		NVL(local_prefs.project_file_path, ""));
-
-	if (project != NULL)
-		write_config(TRUE); // to store project session files
 }
 
 
