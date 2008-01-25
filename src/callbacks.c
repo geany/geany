@@ -145,14 +145,17 @@ static void quit_app()
 
 	configuration_save();
 
-	// force close all tabs
+	// ignore changes for all tabs (already asked user in on_exit_clicked)
 	for (i = 0; i < doc_array->len; i++)
 	{
 		if (doc_list[i].is_valid && doc_list[i].changed)
 		{
-			doc_list[i].changed = FALSE;	// ignore changes (already asked user in on_exit_clicked)
+			doc_list[i].changed = FALSE;
 		}
 	}
+	if (app->project != NULL)
+		project_close(FALSE);	// save project session files
+
 	on_close_all1_activate(NULL, NULL);
 
 	main_quit();

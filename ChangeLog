@@ -2,6 +2,9 @@
 
  * src/project.c:
    Remove unnecessary save of project keyfile.
+ * src/callbacks.c, src/main.c:
+   Close any project before closing all documents so the project
+   session files are saved.
 
 
 2008-01-23  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
