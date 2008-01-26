@@ -1,16 +1,16 @@
-# Translation of Geany v0.12 to Hungarian
-# Copyright © 2007 Free Software Foundation, Inc.
-# This file is distributed under the same license as the Roundup package.
+# Translation of Geany v0.13 to Hungarian
+# Copyright © 2007, 2008 Free Software Foundation, Inc.
+# This file is distributed under the same license as the Geany package.
 #
-# kilo aka Gabor Kmetyko <kg_kilo@freemail.hu>, 2007.
+# kilo aka Gabor Kmetyko <kg_kilo@freemail.hu>, 2007, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 0.13\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-01-19 16:55+0100\n"
-"PO-Revision-Date: 2007-09-20 14:19+0200\n"
+"PO-Revision-Date: 2008-01-21 14:25+0100\n"
 "Last-Translator: kilo aka Gabor Kmetyko <kg_kilo@freemail.hu>\n"
-"Language-Team: Hungarian\n"
+"Language-Team: Hungarian <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -118,8 +118,7 @@ msgstr "Folyamat sikertelen (%s)"
 
 #: ../src/build.c:379 ../src/build.c:629
 msgid "Command stopped because the current file has no extension."
-msgstr ""
-"Parancs végrehajtása megállt, mert a jelenlegi fájlnak nincs kiterjesztése."
+msgstr "Parancs végrehajtása megállt, mert a jelenlegi fájlnak nincs kiterjesztése."
 
 #: ../src/build.c:403
 #, c-format
@@ -144,9 +143,8 @@ msgid "Failed to change the working directory to \"%s\""
 msgstr "Nem sikerült a munkakönyvtárat átállítani erre: \"%s\""
 
 #: ../src/build.c:802
-msgid ""
-"Could not execute the file in the VTE because it probably contains a command."
-msgstr ""
+msgid "Could not execute the file in the VTE because it probably contains a command."
+msgstr "Nem sikerült a fájlt végrehajtani a VTE-n belül, mert feltehetően egy parancsot tartalmaz."
 
 #: ../src/build.c:984
 msgid "Compilation failed."
@@ -192,8 +190,7 @@ msgstr "Egyedi cél készí_tése"
 
 #: ../src/build.c:1142 ../src/build.c:1262
 msgid "Builds the current file with the make tool and the specified target"
-msgstr ""
-"Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
+msgstr "Build-eli a jelenlegi fájlt a make eszközzel és a megadott célállománnyal"
 
 #. build the code with make object
 #: ../src/build.c:1149
@@ -329,8 +326,7 @@ msgid "Make Custom Target"
 msgstr "Egyedi cél készítése"
 
 #: ../src/build.c:1952
-msgid ""
-"Enter custom options here, all entered text is passed to the make command."
+msgid "Enter custom options here, all entered text is passed to the make command."
 msgstr ""
 "Adja meg itt az egyedi opciókat, minden bevitt szöveg átadásra kerül a make "
 "parancs számára."
@@ -371,8 +367,7 @@ msgid "Are you sure you want to reload '%s'?"
 msgstr "Biztosan újra akarja olvasni '%s'-t?"
 
 #: ../src/callbacks.c:1321 ../src/callbacks.c:1345
-msgid ""
-"Please set the filetype for the current file before using this function."
+msgid "Please set the filetype for the current file before using this function."
 msgstr "Mielőtt ezt a funkciót használná, adja meg a jelenlegi fájl típusát."
 
 #: ../src/callbacks.c:1447 ../src/ui_utils.c:480
@@ -400,13 +395,12 @@ msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "éééé/hh/nn óó:pp:mm"
 
 #: ../src/callbacks.c:1459 ../src/ui_utils.c:502
-#, fuzzy
 msgid "_Use Custom Date Format"
-msgstr "Egyedi dátum formátum használata"
+msgstr "Egyedi dát_umformátum használata"
 
 #: ../src/callbacks.c:1470
 msgid "Custom Date Format"
-msgstr "Egyedi dátum formátum"
+msgstr "Egyedi dátumformátum"
 
 #: ../src/callbacks.c:1471
 msgid ""
@@ -418,8 +412,7 @@ msgstr ""
 
 #: ../src/callbacks.c:1490
 msgid "Date format string could not be converted (possibly too long)."
-msgstr ""
-"A dátum formátum stringet nem lehetett átalakítani (feltehetően túl hosszú)."
+msgstr "A dátumformátum stringet nem lehetett átalakítani (feltehetően túl hosszú)."
 
 #: ../src/callbacks.c:1788
 msgid "No more message items."
@@ -681,9 +674,9 @@ msgid "Invalid filename"
 msgstr "Érvénytelen fájlnév"
 
 #: ../src/document.c:987
-#, fuzzy, c-format
+#, c-format
 msgid "Setting %s indentation mode."
-msgstr "Automatikus behúzás üzemmód:"
+msgstr "%s behúzás üzemmód beállítása."
 
 #: ../src/document.c:988 ../src/interface.c:808 ../src/interface.c:3672
 msgid "Tabs"
@@ -712,14 +705,13 @@ msgid "Error saving file."
 msgstr "Hiba a fájl mentésekor."
 
 #: ../src/document.c:1236
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr ""
 "Hiba történt a fájl UTF-8-ból konvertálásakor itt: \"%s\". A fájl nem került "
-"mentésre.\n"
-"Hibaüzenet: %s\n"
+"mentésre."
 
 #: ../src/document.c:1257
 #, c-format
@@ -727,11 +719,13 @@ msgid ""
 "Error message: %s\n"
 "The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
+"Hibaüzenet: %s\n"
+"A hiba itt történt: \"%s\" (sor: %d, oszlop: %d)."
 
 #: ../src/document.c:1262
-#, fuzzy, c-format
+#, c-format
 msgid "Error message: %s."
-msgstr "Hiba a fájl mentésekor (%s)."
+msgstr "Hibaüzenet: %s."
 
 #: ../src/document.c:1290
 #, c-format
@@ -914,9 +908,9 @@ msgstr "_Unicode"
 #: ../src/filetypes.c:310 ../src/filetypes.c:357 ../src/filetypes.c:368
 #: ../src/filetypes.c:402 ../src/filetypes.c:413 ../src/filetypes.c:424
 #: ../src/filetypes.c:458
-#, fuzzy, c-format
+#, c-format
 msgid "%s source file"
-msgstr "C forráskód fájl"
+msgstr "%s forráskód fájl"
 
 #: ../src/filetypes.c:321
 msgid "Shell script file"
@@ -931,7 +925,6 @@ msgid "XML document"
 msgstr "XML dokumentum"
 
 #: ../src/filetypes.c:380
-#, fuzzy
 msgid "Cascading StyleSheet"
 msgstr "Cascading StyleSheet"
 
@@ -1028,7 +1021,7 @@ msgstr "Globális címke fájl betöltése"
 
 #: ../src/interface.c:403
 msgid "Page set_up"
-msgstr ""
+msgstr "Oldal b_eállítása"
 
 #: ../src/interface.c:410
 msgid "Prints the current file"
@@ -1143,8 +1136,7 @@ msgid "Insert BSD License Notice"
 msgstr "BSD licensz megjegyzés beszúrása"
 
 #: ../src/interface.c:603 ../src/interface.c:2256
-msgid ""
-"Inserts a BSD licence notice (should be done at the beginning of the file)"
+msgid "Inserts a BSD licence notice (should be done at the beginning of the file)"
 msgstr "BSD licensz megjegyzést illeszt be (a fájl elejére kell kerüljön)"
 
 #: ../src/interface.c:605 ../src/interface.c:2258
@@ -1213,8 +1205,7 @@ msgstr "Üzenet _ablak megjelenítése"
 
 #: ../src/interface.c:740
 msgid "Toggle the window with status and compiler messages on and off"
-msgstr ""
-"Ki/bekapcsolja az állapotokat és fordítóüzeneteket megjelenítő ablakot "
+msgstr "Ki/bekapcsolja az állapotokat és fordítóüzeneteket megjelenítő ablakot "
 
 #: ../src/interface.c:743
 msgid "Show _Toolbar"
@@ -1267,13 +1258,12 @@ msgstr ""
 "ki kellene kapcsolni."
 
 #: ../src/interface.c:796
-#, fuzzy
 msgid "_Auto-indentation"
 msgstr "A_utomatikus behúzás"
 
 #: ../src/interface.c:801
 msgid "In_dent Type"
-msgstr ""
+msgstr "Be_húzás típusa"
 
 #: ../src/interface.c:825
 msgid "Read _Only"
@@ -1281,8 +1271,7 @@ msgstr "Csak _olvasható"
 
 #: ../src/interface.c:828
 msgid "Treat this file as read-only. No changes can be made."
-msgstr ""
-"A fájlt csak olvashatóként kezeli. Nem lehet benne változtatásokat tenni."
+msgstr "A fájlt csak olvashatóként kezeli. Nem lehet benne változtatásokat tenni."
 
 #: ../src/interface.c:830
 msgid "_Write Unicode BOM"
@@ -1313,9 +1302,8 @@ msgid "Convert and Set to CR (_Mac)"
 msgstr "Beállítás és átalakítás _CR-re (Mac)"
 
 #: ../src/interface.c:889
-#, fuzzy
 msgid "_Strip Trailing Spaces"
-msgstr "Sorvégi szóközök levágása"
+msgstr "_Sorvégi szóközök levágása"
 
 #: ../src/interface.c:893
 msgid "_Replace Tabs by Spaces"
@@ -1378,10 +1366,9 @@ msgid "_Color Chooser"
 msgstr "_Színválasztó"
 
 #: ../src/interface.c:981 ../src/interface.c:1122
-msgid ""
-"Open a color chooser dialog, to interactively pick colors from a palette."
+msgid "Open a color chooser dialog, to interactively pick colors from a palette."
 msgstr ""
-"Megnyit egy színválasztó dialógus ablakot, hogy interaktív módon lehessek "
+"Megnyit egy színválasztó dialógus ablakot, hogy interaktív módon lehessen "
 "egy palettáról színt választani."
 
 #: ../src/interface.c:987
@@ -1477,12 +1464,10 @@ msgid "Zoom out the text"
 msgstr "Szöveg kicsinyítése"
 
 #: ../src/interface.c:1145
-#, fuzzy
 msgid "Decrease indentation"
 msgstr "Behúzás csökkentése"
 
 #: ../src/interface.c:1150
-#, fuzzy
 msgid "Increase indentation"
 msgstr "Behúzás növelése"
 
@@ -1503,9 +1488,8 @@ msgid "Symbols"
 msgstr "Szimbólumok"
 
 #: ../src/interface.c:1245 ../src/treeviews.c:261
-#, fuzzy
 msgid "Documents"
-msgstr "_Dokumentum"
+msgstr "Dokumentumok"
 
 #: ../src/interface.c:1281
 msgid "Status"
@@ -1604,9 +1588,8 @@ msgid "Enable plugin support"
 msgstr "Engedélyezi bővítőmodulok támogatását"
 
 #: ../src/interface.c:2832
-#, fuzzy
 msgid "<b>Startup</b>"
-msgstr "<b>Oldalsáv</b>"
+msgstr "<b>Indulás</b>"
 
 #: ../src/interface.c:2851
 msgid "Save window position and geometry"
@@ -1625,25 +1608,22 @@ msgid "Shows a confirmation dialog on exit."
 msgstr "Kilépéskor megerősítő ablakot jelenít meg."
 
 #: ../src/interface.c:2865
-#, fuzzy
 msgid "<b>Shutdown</b>"
-msgstr "<b>Indulás és leállás</b>"
+msgstr "<b>Leállás</b>"
 
 #: ../src/interface.c:2884
-#, fuzzy
 msgid "Use project-based session files"
-msgstr "Geany projekt fájlok"
+msgstr "Projekt-alapú munkamenet fájlok használata"
 
 #: ../src/interface.c:2888
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project."
-msgstr ""
+msgstr "Eltárolja-e a projekt munkamenet fájljait és megnyissa-e őket a projekt újbóli megnyitásakor?"
 
 #: ../src/interface.c:2891
-#, fuzzy
 msgid "<b>Projects</b>"
-msgstr "<b>Elérési utak</b>"
+msgstr "<b>Projektek</b>"
 
 #: ../src/interface.c:2910
 msgid "Beep on errors or when compilation has finished"
@@ -1747,19 +1727,16 @@ msgid "Toggle the symbol list on and off"
 msgstr "Ki/bekapcsolja a szimbólumok listáját"
 
 #: ../src/interface.c:3045
-#, fuzzy
 msgid "Show documents list"
 msgstr "Megnyitott fájlok listájának megjelenítése"
 
 #: ../src/interface.c:3048
-#, fuzzy
 msgid "Toggle the documents list on and off"
 msgstr "Ki/bekapcsolja a megnyitott fájlok listáját"
 
 #: ../src/interface.c:3051
-#, fuzzy
 msgid "Show full path name in documents list"
-msgstr "Megnyitott fájlok listájának megjelenítése"
+msgstr "Teljes elérési út megjelenítése a megnyitott fájlok listáján"
 
 #: ../src/interface.c:3056
 msgid "<b>Sidebar</b>"
@@ -1894,8 +1871,7 @@ msgid "Show Back and Forward buttons"
 msgstr "Vissza és Előre gombok megjelenítése"
 
 #: ../src/interface.c:3337
-msgid ""
-"Display the Back and Forward buttons in the toolbar used for code navigation"
+msgid "Display the Back and Forward buttons in the toolbar used for code navigation"
 msgstr ""
 "Megjeleníti a Vissza és az Előre gombokat az eszköztáron a kódon belül "
 "történő mozgáshoz"
@@ -1925,9 +1901,8 @@ msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
 msgstr "Megjeleníti a Nagyítás és a Kicsinyítés gombokat az eszköztáron"
 
 #: ../src/interface.c:3361
-#, fuzzy
 msgid "Show Increase and Decrease Indentation buttons"
-msgstr "Újra és Visszavonás gombok megjelenítése"
+msgstr "Behúzás növelése / csökkentése gombok megjelenítése"
 
 #: ../src/interface.c:3368
 msgid "Show Search field"
@@ -2080,7 +2055,6 @@ msgid "Display"
 msgstr "Megjelenítés"
 
 #: ../src/interface.c:3632
-#, fuzzy
 msgid "Auto-indent mode:"
 msgstr "Automatikus behúzás üzemmód:"
 
@@ -2101,20 +2075,18 @@ msgid "The width in chars, which one tab character will take"
 msgstr "A tabulátor mérete karakterekben"
 
 #: ../src/interface.c:3659
-#, fuzzy
 msgid "Tab width:"
 msgstr "Tabulátor szélessége:"
 
 #: ../src/interface.c:3675 ../src/interface.c:3682
-#, fuzzy
 msgid "Whether to use tabs or spaces when indentation is inserted."
-msgstr "Az aljára ugorjon-e, ha kimenetre írás történt."
+msgstr "Tabulátort vagy szóközt használjon, ha behúzás történik?"
 
 #: ../src/interface.c:3698
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened."
-msgstr ""
+msgstr "Fájl megnyitásakor megállapítsa-e a fájltartalom alapján a behúzások típusát?"
 
 #: ../src/interface.c:3700
 msgid "<b>Indentation</b>"
@@ -2163,15 +2135,14 @@ msgid "Whether to enable folding the code"
 msgstr "Engedélyezi-e a kód blokkokra osztását"
 
 #: ../src/interface.c:3742
-#, fuzzy
 msgid "Fold/Unfold all children of a fold point"
-msgstr "Kinyitja egy blokk összes gyermekét"
+msgstr "Kinyitja/bezárja egy blokk összes gyermekét"
 
 #: ../src/interface.c:3745
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behaviour is used."
-msgstr ""
+msgstr "Kinyitja/bezárja egy blokk összes gyermekét. A Shift billentyűt használva kattintás közben az ellentétes viselkedés történik."
 
 #: ../src/interface.c:3748
 msgid "Use indicators to show compile errors"
@@ -2186,42 +2157,38 @@ msgstr ""
 "a fordító figyelmeztetést vagy hibát talált."
 
 #: ../src/interface.c:3754
-#, fuzzy
 msgid "Newline strips trailing spaces"
-msgstr "Sorvégi szóközök levágása"
+msgstr "Soremelés levágja a sorvégi szóközöket"
 
 #: ../src/interface.c:3757
 msgid "Enable newline to strip the trailing spaces on the previous line."
-msgstr ""
+msgstr "Engedélyezi, hogy soremeléskor az előző sor végéről levágja a szóközöket."
 
 #: ../src/interface.c:3760
 msgid "<b>Features</b>"
 msgstr "<b>Sajátságok</b>"
 
 #: ../src/interface.c:3779
-#, fuzzy
 msgid "Snippet completion"
-msgstr "Szerkezet kiegészítés felfüggesztése"
+msgstr "Részlet kiegészítése"
 
 #: ../src/interface.c:3782
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress."
-msgstr ""
+msgstr "Gépeljen be egy meghatározott karaktersort és egészíttesse ki egy bonyolultabb szövegre egy gombnyomással."
 
 #: ../src/interface.c:3785
 msgid "XML tag autocompletion"
 msgstr "XML címke automatikus kiegészítése"
 
 #: ../src/interface.c:3788
-#, fuzzy
 msgid "Automatic completion and closing of XML tags (includes HTML tags)"
 msgstr ""
-"A megnyitott XML címkék (beleértve a HTML címkéket is) automatikus "
+"Az XML címkék (beleértve a HTML címkéket is) automatikus "
 "kiegészítése"
 
 #: ../src/interface.c:3791
-#, fuzzy
 msgid "Automatic symbol completion"
 msgstr "Szimbólumok automatikus kiegészítése"
 
@@ -2239,23 +2206,21 @@ msgstr "Az automatikus kiegészítésnél megjelenítendő sorok száma."
 
 #: ../src/interface.c:3812
 msgid "Characters to type for completion:"
-msgstr ""
+msgstr "Kiegészítéshez használt karakterek:"
 
 #: ../src/interface.c:3819
-#, fuzzy
 msgid "Rows of symbol completion list:"
-msgstr "Automatikus kiegészítés sorainak száma:"
+msgstr "Szimbólum-kiegészítés sorai:"
 
 #: ../src/interface.c:3832
 msgid ""
 "The amount of characters which are necessary to show the symbol auto "
 "completion list."
-msgstr ""
+msgstr "A szimbólumok automatikus kiegészítése listájának megjelenítéséhez szükséges karakterek száma."
 
 #: ../src/interface.c:3835
-#, fuzzy
 msgid "<b>Completions</b>"
-msgstr "<b>Automatikus kiegészítés</b>"
+msgstr "<b>Kiegészítések</b>"
 
 #: ../src/interface.c:3840
 msgid "Editor"
@@ -2263,8 +2228,7 @@ msgstr "Szerkesztő"
 
 #: ../src/interface.c:3872
 msgid "Sets the default encoding for newly created files."
-msgstr ""
-"Beállítja az alapértelmezett kódolást újonnan létrehozott fájlok esetén."
+msgstr "Beállítja az alapértelmezett kódolást újonnan létrehozott fájlok esetén."
 
 #: ../src/interface.c:3878
 msgid "Default encoding (new files):"
@@ -2324,8 +2288,7 @@ msgid "Recent files list length:"
 msgstr "Legutóbbi fájlok listájának hossza:"
 
 #: ../src/interface.c:3986
-msgid ""
-"Specifies the number of files which are stored in the Recent files list."
+msgid "Specifies the number of files which are stored in the Recent files list."
 msgstr "Megadja, hogy hány fájl jelenjen meg a Legutóbbi fájlok listáján."
 
 #: ../src/interface.c:3995 ../src/symbols.c:520 ../plugins/filebrowser.c:812
@@ -2452,84 +2415,70 @@ msgid "Keybindings"
 msgstr "Billentyű hozzárendelések"
 
 #: ../src/interface.c:4344
-#, fuzzy
 msgid "Command:"
-msgstr "Parancs"
+msgstr "Parancs:"
 
 #: ../src/interface.c:4351
 #, c-format
 msgid "Path to the command for printing files (use %f for the filename)."
-msgstr ""
-"Elérési út a fájl nyomtatási parancshoz (használjon %f-et a fájlnév helyén)."
+msgstr "Elérési út a fájl nyomtatási parancshoz (használjon %f-et a fájlnév helyén)."
 
 #: ../src/interface.c:4361
 msgid "Use an external command for printing"
-msgstr ""
+msgstr "Külső parancs használata nyomtatáshoz"
 
 #: ../src/interface.c:4382 ../src/printing.c:342
-#, fuzzy
 msgid "Print line numbers"
-msgstr "S_orszámok megjelenítése"
+msgstr "Sorszámok nyomtatása"
 
 #: ../src/interface.c:4385 ../src/printing.c:344
-#, fuzzy
 msgid "Add line numbers to the printed page."
-msgstr "Az aktuális fájl elérési útjának követése"
+msgstr "Sorszámozás hozzáadása a nyomtatott oldalon."
 
 #: ../src/interface.c:4388 ../src/printing.c:348
-#, fuzzy
 msgid "Print page numbers"
-msgstr "S_orszámok megjelenítése"
+msgstr "Oldalszámozás nyomtatása"
 
 #: ../src/interface.c:4391 ../src/printing.c:350
-msgid ""
-"Add page numbers at the bottom of each page. It takes 2 lines of the page."
-msgstr ""
+msgid "Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgstr "Oldalszám elhelyezése minden oldal alján. Ez 2 sort foglal el az oldalon."
 
 #: ../src/interface.c:4394 ../src/printing.c:354
-#, fuzzy
 msgid "Print page header"
-msgstr "Szülő fejléc:"
+msgstr "Oldal fejléc nyomtatása"
 
 #: ../src/interface.c:4397 ../src/printing.c:356
 msgid ""
 "Adds a little header to every page containing the page number, the filename "
 "and the current date(see below). It takes 3 lines of the page."
-msgstr ""
+msgstr "Fejlécet helyez minden oldalra az oldalszámmal, fájlnévvel és az aktuális dátummal (ld. lejjebb). Ez 3 sort foglal el az oldalon."
 
 #: ../src/interface.c:4415 ../src/printing.c:373
-#, fuzzy
 msgid "Use the basename of the printed file"
-msgstr "Az aktuális fájl elérési útjának követése"
+msgstr "A nyomtatott fájlt alap nevének használata"
 
 #: ../src/interface.c:4418 ../src/printing.c:375
-#, fuzzy
 msgid "Print only the basename(without the path) of the printed file."
-msgstr "Az aktuális fájl elérési útjának követése"
+msgstr "A nyomtatott fájl alap nevét (elérési út nélkül) írja ki."
 
 #: ../src/interface.c:4425 ../src/printing.c:382
-#, fuzzy
 msgid "Date format:"
-msgstr "Egyedi dátum formátum"
+msgstr "Dátumformátum:"
 
 #: ../src/interface.c:4432 ../src/printing.c:387
-#, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
 "with the ANSI C strftime function."
-msgstr ""
-"Adja meg itt az egyedi dátum és idő formátumot. Minden olyan konverziós "
-"jelölés használható, amit az ANSI C strftime függvénnyel használni lehet."
+msgstr "Adja meg itt az egyedi dátum- és időformátumot az oldalak fejlécébe kerülő időponthoz. Minden olyan konverziós jelölés használható, amit az ANSI C strftime függvénnyel használni lehet."
 
 #: ../src/interface.c:4435
 msgid "Use native GTK printing"
-msgstr ""
+msgstr "Natív GTK nyomtatás használata"
 
 #: ../src/interface.c:4442
-#, fuzzy
 msgid "Printing"
-msgstr "Nyomtat"
+msgstr "Nyomtatás"
 
 #: ../src/keybindings.c:113
 msgid "New"
@@ -2581,16 +2530,15 @@ msgstr "Újra"
 
 #: ../src/keybindings.c:140
 msgid "Cut"
-msgstr ""
+msgstr "Kivágás"
 
 #: ../src/keybindings.c:142
-#, fuzzy
 msgid "Copy"
-msgstr "Cég:"
+msgstr "Másolás"
 
 #: ../src/keybindings.c:144
 msgid "Paste"
-msgstr ""
+msgstr "Beillesztés"
 
 #: ../src/keybindings.c:146
 msgid "Select All"
@@ -2745,14 +2693,12 @@ msgid "Move document right"
 msgstr "Dokumentum mozgatása jobbra"
 
 #: ../src/keybindings.c:241
-#, fuzzy
 msgid "Move document first"
-msgstr "Dokumentum mozgatása balra"
+msgstr "Dokumentum mozgatása első helyre"
 
 #: ../src/keybindings.c:243
-#, fuzzy
 msgid "Move document last"
-msgstr "Dokumentum mozgatása balra"
+msgstr "Dokumentum mozgatása utolsó helyre"
 
 #: ../src/keybindings.c:250
 msgid "Duplicate line or selection"
@@ -2852,14 +2798,12 @@ msgstr "Makró lista megjelenítése"
 
 #. has special callback
 #: ../src/keybindings.c:303
-#, fuzzy
 msgid "Complete snippet"
-msgstr "Szerkezet kiegészítése"
+msgstr "Részlet kiegészítése"
 
 #: ../src/keybindings.c:305
-#, fuzzy
 msgid "Suppress snippet completion"
-msgstr "Szerkezet kiegészítés felfüggesztése"
+msgstr "Részlet kiegészítés felfüggesztése"
 
 #: ../src/keybindings.c:308
 msgid "Select current word"
@@ -2927,7 +2871,6 @@ msgid "Focus commands"
 msgstr "Fókusz parancsok"
 
 #: ../src/keybindings.c:378
-#, fuzzy
 msgid "Notebook tab commands"
 msgstr "Címke parancsok"
 
@@ -2940,9 +2883,8 @@ msgid "Tag commands"
 msgstr "Címke parancsok"
 
 #: ../src/keybindings.c:381
-#, fuzzy
 msgid "Other commands"
-msgstr "%s parancsok"
+msgstr "Egyéb parancsok"
 
 #: ../src/keybindings.c:564
 msgid "Keyboard Shortcuts"
@@ -3008,7 +2950,7 @@ msgstr "Ne töltse be a kiegészítő modulokat"
 
 #: ../src/main.c:135
 msgid "Print Geany's installation prefix"
-msgstr ""
+msgstr "A Geany telepítés prefix nyomtatása"
 
 #: ../src/main.c:136
 msgid "don't load the previous session's files"
@@ -3072,7 +3014,7 @@ msgstr "Üzenet ablak el_rejtése"
 
 #: ../src/plugins.c:579
 msgid "Plugin Manager"
-msgstr ""
+msgstr "Bővítménykezelő"
 
 #: ../src/plugins.c:707
 #, c-format
@@ -3081,39 +3023,39 @@ msgid ""
 "Description: %s\n"
 "Author(s): %s"
 msgstr ""
+"Bővítmény: %s %s\n"
+"Leírás: %s\n"
+"Szerző(k): %s"
 
 #: ../src/plugins.c:768
-#, fuzzy
 msgid "Active"
-msgstr "Parancs"
+msgstr "Aktív"
 
 #: ../src/plugins.c:774
 msgid "Plugin"
-msgstr ""
+msgstr "Bővítmény"
 
 #: ../src/plugins.c:780
-#, fuzzy
 msgid "File"
-msgstr "_Fájl"
+msgstr "Fájl"
 
 #: ../src/plugins.c:798
 msgid "No plugins available."
-msgstr ""
+msgstr "Nincs elérhető bővítmény."
 
 #: ../src/plugins.c:843
 msgid "Plugins"
-msgstr ""
+msgstr "Bővítmények"
 
 #: ../src/plugins.c:864
 msgid ""
 "Below is a list of available plugins. Select the plugins which should be "
 "loaded when Geany is started."
-msgstr ""
+msgstr "Lejjebb látható az elérhető bővítmények listája. Válassza ki azokat, amelyeket a Geany indulásakor be kell tölteni."
 
 #: ../src/plugins.c:872
-#, fuzzy
 msgid "<b>Plugin details:</b>"
-msgstr "<b>Behúzás</b>"
+msgstr "<b>Bővítmény részletei:</b>"
 
 #: ../src/prefs.c:105
 msgid "Action"
@@ -3136,18 +3078,16 @@ msgstr ""
 
 #: ../src/prefs.c:1233
 msgid "_Override"
-msgstr ""
+msgstr "_Felülbírálás"
 
 #: ../src/prefs.c:1234
 msgid "Override that keybinding?"
-msgstr ""
+msgstr "Felülbírálja ezt a billentyű-hozzárendelést?"
 
 #: ../src/prefs.c:1235
-#, fuzzy, c-format
+#, c-format
 msgid "The combination '%s' is already used for \"%s\"."
-msgstr ""
-"A '%s' kombináció már használatban van a(z) \"%s\" parancsnál. Válasszon "
-"másikat!"
+msgstr "A(z) '%s' kombináció már használatban van a(z) \"%s\" parancsnál."
 
 #. add manually GeanyWrapLabels because it can't be added with Glade
 #. page Tools
@@ -3171,7 +3111,7 @@ msgid ""
 "<i>Notice: For all changes you make here to take effect, you need to restart "
 "Geany.</i>"
 msgstr ""
-"<i>Figyelem: minden itt végzett változtatáséletbe lépéséhez újra kell "
+"<i>Figyelem: minden itt végzett változtatás életbe lépéséhez újra kell "
 "indítani a Geany-t.</i>"
 
 #. page Keybindings
@@ -3192,21 +3132,23 @@ msgid ""
 "<i>Notice: Native GTK printing is only available if Geany was built against "
 "GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or above).</i>"
 msgstr ""
+"<i>Figyelem: A natív GTK nyomtatás csak akkor elérhető, ha a Geany "
+"GTK 2.10-re (vagy későbbire) lett fordítva <b>és</b> a Geany GTK 2.10 "
+"(vagy későbbi) verzión fut.</i>"
 
 #: ../src/printing.c:269
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Page %d of %d</b>"
-msgstr "<b>Változott:</b>"
+msgstr "<b>%d. oldal (összesen: %d)</b>"
 
 #: ../src/printing.c:337
-#, fuzzy
 msgid "Document Setup"
-msgstr "Dokumentum menü"
+msgstr "Dokumentum beállítások"
 
 #: ../src/printing.c:715
-#, fuzzy, c-format
+#, c-format
 msgid "Printing of file %s was cancelled."
-msgstr "\"%s\" nyomtatása sikertelen (visszatérési érték: %s)."
+msgstr "%s fájl nyomtatása megszakítva."
 
 #: ../src/printing.c:717 ../src/printing.c:834
 #, c-format
@@ -3214,13 +3156,13 @@ msgid "File %s printed."
 msgstr "%s fájl kinyomtatva."
 
 #: ../src/printing.c:765
-#, fuzzy, c-format
+#, c-format
 msgid "Printing of %s failed (%s)."
-msgstr "\"%s\" nyomtatása sikertelen (visszatérési érték: %s)."
+msgstr "%s nyomtatása sikertelen (%s)."
 
 #: ../src/printing.c:805
 msgid "Please set a print command in the preferences dialog first"
-msgstr ""
+msgstr "Először állítson be egy nyomtatási parancsot a tulajdonságok párbeszédablakban!"
 
 #: ../src/printing.c:813
 #, c-format
@@ -3265,14 +3207,13 @@ msgid "Base path:"
 msgstr "Alapkönyvtár:"
 
 #: ../src/project.c:160 ../src/project.c:416
-#, fuzzy
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
 "project filename."
 msgstr ""
 "A projektet alkotó fájlok alapkönyvtára. Lehet új könyvtár, vagy egy már "
-"létező elérési út is."
+"létező elérési út is. Lehet használni a projekt fájlnevéhez képest relatív elérési utakat is."
 
 #: ../src/project.c:163 ../src/project.c:419
 msgid "Choose Project Base Path"
@@ -3306,7 +3247,7 @@ msgstr "Leírás:"
 
 #: ../src/project.c:425
 msgid "Make in base path"
-msgstr ""
+msgstr "Make parancs az alapkönyvtárban"
 
 #: ../src/project.c:430
 msgid "Run command:"
@@ -3329,9 +3270,9 @@ msgid "Do you want to close it before proceeding?"
 msgstr "Szeretné bezárni, mielőtt folytatja?"
 
 #: ../src/project.c:551
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' project is already open."
-msgstr "A(z) '%s' projekt már nyitva van. "
+msgstr "A(z) '%s' projekt már nyitva van."
 
 #: ../src/project.c:581
 msgid "The specified project name is too short."
@@ -3347,9 +3288,9 @@ msgid "You have specified an invalid project filename."
 msgstr "Érvénytelen projekt fájlnevet adott meg."
 
 #: ../src/project.c:604
-#, fuzzy, c-format
+#, c-format
 msgid "Project file could not be written (%s)."
-msgstr "A projekt fájl nem írható."
+msgstr "A projekt fájl nem írható (%s)."
 
 #: ../src/project.c:624
 msgid "Create the project's base path directory?"
@@ -3439,9 +3380,8 @@ msgstr "_Keresés:"
 
 #. Now add the multiple match options
 #: ../src/search.c:319
-#, fuzzy
 msgid "_Find All"
-msgstr "Minde keresi"
+msgstr "_Mindet keresi"
 
 #: ../src/search.c:322
 msgid "_Mark"
@@ -3473,15 +3413,13 @@ msgid "Replace & Fi_nd"
 msgstr "Cse_re & Keresés"
 
 #: ../src/search.c:415
-#, fuzzy
 msgid "Replace wit_h:"
 msgstr "C_sere erre:"
 
 #. Now add the multiple replace options
 #: ../src/search.c:462
-#, fuzzy
 msgid "Re_place All"
-msgstr "Mindet cseréli"
+msgstr "Min_det cseréli"
 
 #: ../src/search.c:465
 msgid "In Se_lection"
@@ -3496,7 +3434,6 @@ msgid "_Directory:"
 msgstr "_Könyvtár:"
 
 #: ../src/search.c:591
-#, fuzzy
 msgid "Fixed s_trings"
 msgstr "_Fix stringek"
 
@@ -3702,9 +3639,8 @@ msgid "Variables"
 msgstr "Változók"
 
 #: ../src/symbols.c:606
-#, fuzzy
 msgid "Modules"
-msgstr "Modul"
+msgstr "Modulok"
 
 #: ../src/symbols.c:608
 msgid "Singletons"
@@ -3720,9 +3656,8 @@ msgid "Members"
 msgstr "Tagok"
 
 #: ../src/symbols.c:677
-#, fuzzy
 msgid "Labels"
-msgstr "Címke"
+msgstr "Címkék"
 
 #: ../src/symbols.c:690
 msgid "Namespaces"
@@ -3742,9 +3677,9 @@ msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Ismeretlen fájlkiterjesztés: \"%s\".\n"
 
 #: ../src/symbols.c:925
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
-msgstr "Nem sikerült létrehozni a címkefájlt.\n"
+msgstr "Nem sikerült létrehozni a címkefájlt, feltehetően azért, mert nem sikerült címékéket találni.\n"
 
 #: ../src/symbols.c:932
 #, c-format
@@ -3848,39 +3783,34 @@ msgid "No tags found"
 msgstr "Nem található címke"
 
 #: ../src/treeviews.c:365
-#, fuzzy
 msgid "Sort by _Name"
-msgstr "Rendezés névre"
+msgstr "Rendezés _név alapján"
 
 #: ../src/treeviews.c:372
-#, fuzzy
 msgid "Sort by _Appearance"
-msgstr "Rendezés megjelenésre"
+msgstr "Rendezés megjelenés _alapján"
 
 #: ../src/treeviews.c:383 ../src/treeviews.c:470
-#, fuzzy
 msgid "Show S_ymbol List"
-msgstr "Szimbólum lista megjelenítése"
+msgstr "S_zimbólum lista megjelenítése"
 
 #: ../src/treeviews.c:389 ../src/treeviews.c:476
-#, fuzzy
 msgid "Show _Document List"
-msgstr "Megnyitott fájlok listájának megjelenítése"
+msgstr "Megnyitott fájlok listájának me_gjelenítése"
 
 #: ../src/treeviews.c:395 ../src/treeviews.c:482 ../plugins/filebrowser.c:543
-#, fuzzy
 msgid "H_ide Sidebar"
-msgstr "Oldalsáv elrejtése"
+msgstr "Oldalsáv e_lrejtése"
 
 #: ../src/treeviews.c:460
 msgid "Show _Full Path Name"
-msgstr ""
+msgstr "Teljes _elérési út megjelenítése"
 
 #. Status bar statistics: col = column, sel = selection.
 #: ../src/ui_utils.c:146
 #, c-format
 msgid "line: %d\t col: %d\t sel: %d\t "
-msgstr ""
+msgstr "sor: %d\t osz.: %d\t kij.: %d\t "
 
 #: ../src/ui_utils.c:151
 msgid "RO "
@@ -3897,11 +3827,11 @@ msgstr "BESZÚR"
 
 #: ../src/ui_utils.c:155
 msgid "TAB"
-msgstr ""
+msgstr "TAB"
 
 #: ../src/ui_utils.c:155
 msgid "SP "
-msgstr ""
+msgstr "SP "
 
 #: ../src/ui_utils.c:171
 msgid "MOD"
@@ -3933,9 +3863,8 @@ msgid "C++ STL"
 msgstr "C++ STL"
 
 #: ../src/ui_utils.c:519
-#, fuzzy
 msgid "_Set Custom Date Format"
-msgstr "Egyedi dátum formátum megadása"
+msgstr "Egyedi dátumformátum megadása"
 
 #: ../src/ui_utils.c:1344
 msgid "Select Folder"
@@ -3963,14 +3892,12 @@ msgid "Terminal"
 msgstr "Terminál"
 
 #: ../src/vte.c:479
-#, fuzzy
 msgid "Set Path From Document"
-msgstr "Baloldali dokumentumra kapcsol"
+msgstr "Könyvtárváltás dokumentum alapján"
 
 #: ../src/vte.c:484
-#, fuzzy
 msgid "Restart Terminal"
-msgstr "Terminál"
+msgstr "Terminál újraindítása"
 
 #: ../src/vte.c:495
 msgid "_Input Methods"
@@ -3980,7 +3907,7 @@ msgstr "Bev_iteli eljárások"
 msgid ""
 "Could not change the directory in the VTE because it probably contains a "
 "command."
-msgstr ""
+msgstr "Nem sikerült könyvtárat váltani a VTE-n belül, mert az feltehetően egy parancsot tartalmaz."
 
 #: ../src/vte.c:646
 msgid "Terminal plugin"
@@ -4072,12 +3999,11 @@ msgstr "Az aljára ugorjon-e, ha kimenetre írás történt."
 
 #: ../src/vte.c:763
 msgid "Override Geany keybindings"
-msgstr ""
+msgstr "Geany billentyű-hozzárendelések felülbírálata"
 
 #: ../src/vte.c:765
-msgid ""
-"Allows the VTE to receive keyboard shortcuts (apart from focus commands)."
-msgstr ""
+msgid "Allows the VTE to receive keyboard shortcuts (apart from focus commands)."
+msgstr "Engedélyezi, hogy a VTE billentyűparancsokat fogadjon (a fókusz parancsokon kívül)."
 
 #: ../src/vte.c:769
 msgid "Disable menu shortcut key (F10 by default)"
@@ -4107,13 +4033,13 @@ msgstr ""
 #. use the object for the toggled handler of check_skip_script checkbox
 #: ../src/vte.c:781
 msgid "Don't use run script"
-msgstr ""
+msgstr "Ne használjon futtató parancsfájlt"
 
 #: ../src/vte.c:782
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program."
-msgstr ""
+msgstr "Ne használa az egyszerű futtató parancsfájlt, amit általában használunk a végrehajtott program kilépési állapotának megjelenítésére."
 
 #: ../src/vte.c:786
 msgid "Execute programs in VTE"
@@ -4162,9 +4088,8 @@ msgstr "Forrásfájlokat készít új osztálytípusokból."
 #: ../plugins/classbuilder.c:43 ../plugins/htmlchars.c:41
 #: ../plugins/export.c:45 ../plugins/vcdiff.c:46 ../plugins/filebrowser.c:49
 #: ../plugins/autosave.c:41
-#, fuzzy
 msgid "The Geany developer team"
-msgstr "A fejlesztő neve"
+msgstr "A Geany fejlesztői csapat"
 
 #: ../plugins/classbuilder.c:355
 msgid "Create Class"
@@ -4227,12 +4152,10 @@ msgid "Create Cla_ss"
 msgstr "O_stály létrehozása"
 
 #: ../plugins/classbuilder.c:787
-#, fuzzy
 msgid "C++ Class"
 msgstr "C++ osztály"
 
 #: ../plugins/classbuilder.c:790
-#, fuzzy
 msgid "GTK+ Class"
 msgstr "GTK+ osztály"
 
@@ -4323,8 +4246,7 @@ msgid "_Use current zoom level"
 msgstr "Jelenlegi _nagyítás használata"
 
 #: ../plugins/export.c:190
-msgid ""
-"Renders the font size of the document together with the current zoom level."
+msgid "Renders the font size of the document together with the current zoom level."
 msgstr ""
 "A dokumentum fontméretét a jelenlegi nagyítás mértékének megfelelően "
 "jeleníti meg."
@@ -4355,15 +4277,15 @@ msgstr "LaTeX formátumban"
 
 #: ../plugins/vcdiff.c:45
 msgid "VC Diff"
-msgstr ""
+msgstr "VC Diff"
 
 #: ../plugins/vcdiff.c:45
 msgid "Creates a patch of a file against version control."
-msgstr ""
+msgstr "Folt létrehozása a fájlból a verziókövető rendszer alapján."
 
 #: ../plugins/vcdiff.c:303
 msgid "Could not parse the output of the diff"
-msgstr ""
+msgstr "Nem sikerült a diff parancs kimenetét feldolgozni"
 
 #: ../plugins/vcdiff.c:343
 #, c-format
@@ -4371,100 +4293,92 @@ msgid ""
 "%s exited with an error: \n"
 "%s."
 msgstr ""
+"%s kilépett hibával: \n"
+"%s."
 
 #: ../plugins/vcdiff.c:351
 msgid "No changes were made."
-msgstr ""
+msgstr "Nem történt változtatás."
 
 #: ../plugins/vcdiff.c:357
 msgid "Something went really wrong."
-msgstr ""
+msgstr "Valami komolyan elromlott."
 
 #: ../plugins/vcdiff.c:484
 msgid "_VCdiff"
-msgstr ""
+msgstr "_VCdiff"
 
 #. Single file
 #: ../plugins/vcdiff.c:494
-#, fuzzy
 msgid "From Current _File"
-msgstr "Hiba a fájl mentésekor."
+msgstr "Jelenlegi _fájl alapján"
 
 #: ../plugins/vcdiff.c:497
-#, fuzzy
 msgid "Make a diff from the current active file"
-msgstr "A jelenlegi fájl mentése"
+msgstr "Diff létrehozása a jelenlegi aktív fájlból"
 
 #. Directory
 #: ../plugins/vcdiff.c:503
-#, fuzzy
 msgid "From Current _Directory"
-msgstr "Projekt megnyitása"
+msgstr "Jelenlegi _könyvtár alapján"
 
 #: ../plugins/vcdiff.c:506
-#, fuzzy
 msgid "Make a diff from the directory of the current active file"
-msgstr "A jelenlegi fájl mentése"
+msgstr "Diff létrehozása a jelenlegi aktív fájl könyvtára alapján"
 
 #. Project
 #: ../plugins/vcdiff.c:512
-#, fuzzy
 msgid "From Current _Project"
-msgstr "Projekt megnyitása"
+msgstr "Jelenlegi _projekt alapján"
 
 #: ../plugins/vcdiff.c:515
-#, fuzzy
 msgid "Make a diff from the current project's base path"
-msgstr "A jelenlegi fájl mentése"
+msgstr "Diff létrehozása a jelenlegi projekt alapkönyvtára alapján"
 
 #: ../plugins/filebrowser.c:48 ../plugins/filebrowser.c:838
-#, fuzzy
 msgid "File Browser"
-msgstr "Böngésző:"
+msgstr "Fájlböngésző"
 
 #: ../plugins/filebrowser.c:48
 msgid "Adds a file browser tab to the sidebar."
-msgstr ""
+msgstr "Az oldalsávon megjelenít egy fájlböngészőt."
 
 #: ../plugins/filebrowser.c:276
 msgid "Too many items selected!"
-msgstr ""
+msgstr "Túl sok elem került kiválasztásra!"
 
 #: ../plugins/filebrowser.c:360
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
-msgstr ""
+msgstr "Nem sikerült végrehajtani a beállított '%s' külső parancsot (%s)."
 
 #: ../plugins/filebrowser.c:513
 msgid "Open _externally"
-msgstr ""
+msgstr "Külső m_egnyitás"
 
 #: ../plugins/filebrowser.c:523
-#, fuzzy
 msgid "_Find in Files"
-msgstr "Keresés fájlokban"
+msgstr "Keresés _fájlokban"
 
 #: ../plugins/filebrowser.c:534
-#, fuzzy
 msgid "Show _Hidden Files"
-msgstr "_Rejtett fájlokat is megjeleníti"
+msgstr "_Rejtett fájlok megjelenítése"
 
 #: ../plugins/filebrowser.c:686
 msgid "Up"
-msgstr ""
+msgstr "Fel"
 
 #: ../plugins/filebrowser.c:692
 msgid "Refresh"
-msgstr ""
+msgstr "Frissítés"
 
 #: ../plugins/filebrowser.c:698
 msgid "Home"
-msgstr ""
+msgstr "Saját könyvtár"
 
 #: ../plugins/filebrowser.c:704
-#, fuzzy
 msgid "Set path from document"
-msgstr "Baloldali dokumentumra kapcsol"
+msgstr "Könyvtárváltás a dokumentum alapján"
 
 #: ../plugins/filebrowser.c:854
 #, c-format
@@ -4475,50 +4389,48 @@ msgid ""
 "%d will be replaced with the path name of the selected file without the "
 "filename"
 msgstr ""
+"A parancs, amit a \"Megnyitás mint\" használ. Megadásakor a %f és %d helyettesítők is használhatók.\n"
+"A %f helyére a fájlnév kerül, teljes elérési úttal.\n"
+"A %d helyére a kiválasztott fájl elérési útja kerül, a fájlnév nélkül."
 
 #: ../plugins/filebrowser.c:860
-#, fuzzy
 msgid "Show hidden files"
-msgstr "_Rejtett fájlokat is megjeleníti"
+msgstr "Rejtett fájlokat is megjeleníti"
 
 #: ../plugins/filebrowser.c:865
-#, fuzzy
 msgid "Hide object files"
-msgstr "Projekt fájlok"
+msgstr "Objektum fájlok elrejtése"
 
 #: ../plugins/filebrowser.c:869
 msgid ""
 "Don't show generated object files in the file browser, this includes *.o, *."
 "obj. *.so, *.dll, *.a, *.lib"
-msgstr ""
+msgstr "Ne mutassa a fájl kiválasztó panelen a generált objektum fájlokat (*.o, *.obj, *.so, *.dll, *.a, *.lib)"
 
 #: ../plugins/filebrowser.c:898 ../plugins/autosave.c:179
-#, fuzzy
 msgid "Plugin configuration directory could not be created."
-msgstr "A konfigurációs könyvtárat nem lehetett létrehozni (%s)."
+msgstr "A bővítmény konfigurációs könyvtárat nem lehetett létrehozni."
 
 #: ../plugins/autosave.c:40 ../plugins/autosave.c:118
-#, fuzzy
 msgid "Auto Save"
-msgstr "Ment"
+msgstr "Automatikus mentés"
 
 #: ../plugins/autosave.c:40
 msgid "Save automatically all open files in a given time interval."
-msgstr ""
+msgstr "Automatikusan elment minden megnyitott fájlt megadott időszakonként."
 
 #: ../plugins/autosave.c:76
 #, c-format
 msgid "Autosave: Saved %d files automatically."
-msgstr ""
+msgstr "Automatikus mentés: %d fájl automatikusan mentve."
 
 #: ../plugins/autosave.c:141
 msgid "Print status message if files have been automatcally saved"
-msgstr ""
+msgstr "Írjon ki állapot üzenetet, ha automatikusan mentett fájlokat."
 
 #: ../plugins/autosave.c:147
-#, fuzzy
 msgid "Save only current open file"
-msgstr "A jelenlegi fájl mentése"
+msgstr "Csak az aktuális megnyitott fájlt mentse"
 
 #~ msgid "Mixins"
 #~ msgstr "Kevert"
@@ -4685,3 +4597,4 @@ msgstr "A jelenlegi fájl mentése"
 #, fuzzy
 #~ msgid "From _directory"
 #~ msgstr "_Könyvtár:"
+
