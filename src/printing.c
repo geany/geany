@@ -711,10 +711,11 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 
 static void status_changed(GtkPrintOperation *op, gpointer data)
 {
+	gchar *filename = (data != NULL) ? data : GEANY_STRING_UNTITLED;
 	if (gtk_print_operation_get_status(op) == GTK_PRINT_STATUS_FINISHED_ABORTED)
-		msgwin_status_add(_("Printing of file %s was cancelled."), (gchar *) data);
+		msgwin_status_add(_("Printing of file %s was cancelled."), filename);
 	else if (gtk_print_operation_get_status(op) == GTK_PRINT_STATUS_FINISHED)
-		msgwin_status_add(_("File %s printed."), (gchar *) data);
+		msgwin_status_add(_("File %s printed."), filename);
 }
 
 
