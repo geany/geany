@@ -434,6 +434,8 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	// read all styles from Scintilla
 	style_max = pow(2, scintilla_send_message(doc_list[dinfo->idx].sci, SCI_GETSTYLEBITS, 0, 0));
+	if (style_max == 32)	// if the lexer uses only the first 32 styles(style bits = 5), we need
+		style_max = STYLE_LASTPREDEFINED; 	// to add the pre-defined styles
 	for (i = 0; i < style_max; i++)
 	{
 		dinfo->styles[i][FORE] = ROTATE_RGB(scintilla_send_message(

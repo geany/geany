@@ -1,3 +1,11 @@
+2008-01-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * src/printing.c:
+   Fix crash on Windows when printing an untitled file.
+   Fix black line number margin when printing by using also pre-defined
+   styles.
+
+
 2008-01-25  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * src/project.c:
