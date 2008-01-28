@@ -32,6 +32,42 @@
 #define prefs			geany_data->prefs
 #define project			app->project
 
+#ifdef GEANY_DISABLE_DEPRECATED
+
+/* These macros are named the same as the first word in the core function name,
+ * but with a 'p_' prefix to prevent conflicts with other tag names.
+ * Example: document_open_file() -> p_document->open_file() */
+#define p_dialogs		geany_data->dialogs
+#define p_document		geany_data->documents
+#define p_encoding		geany_data->encoding
+#define p_highlighting	geany_data->highlighting
+#define p_keybindings	geany_data->keybindings
+#define p_msgwindow		geany_data->msgwindow
+#define p_sci			geany_data->sci
+#define p_search		geany_data->search
+#define p_support		geany_data->support
+#define p_templates		geany_data->templates
+#define p_tm			geany_data->tm
+#define p_ui			geany_data->ui
+#define p_utils			geany_data->utils
+
+#else
+
+#define p_dialogs		dialogs
+#define p_document		documents
+#define p_encoding		encodings
+#define p_highlighting	highlighting
+#define p_keybindings	keybindings
+#define p_msgwindow		msgwindow
+#define p_sci			scintilla
+#define p_search		search
+#define p_support		support
+#define p_templates		templates
+#define p_tm			tagmanager
+#define p_ui			ui
+#define p_utils			utils
+
+/* Temporary source compatibility macros - do not use these in new code. */
 #define dialogs			geany_data->dialogs
 #define documents		geany_data->documents	// avoids conflict with document typedef
 #define encodings		geany_data->encoding	// avoids conflict with document::encoding
@@ -45,5 +81,7 @@
 #define tagmanager		geany_data->tm			// avoids conflict with "struct tm *t"
 #define ui				geany_data->ui
 #define utils			geany_data->utils
+
+#endif
 
 #endif

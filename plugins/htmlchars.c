@@ -74,7 +74,7 @@ static void tools_show_dialog_insert_special_chars()
 					_("Special Characters"), GTK_WINDOW(app->window),
 					GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					_("_Insert"), GTK_RESPONSE_OK, NULL);
-		vbox = ui->dialog_vbox_new(GTK_DIALOG(sc_dialog));
+		vbox = p_ui->dialog_vbox_new(GTK_DIALOG(sc_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 6);
 		gtk_widget_set_name(sc_dialog, "GeanyDialog");
 
@@ -425,18 +425,18 @@ static void sc_fill_store(GtkTreeStore *store)
  * returns only TRUE if a valid selection(i.e. no category) could be found */
 static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter)
 {
-	gint idx = documents->get_cur_idx();
+	gint idx = p_document->get_cur_idx();
 	gboolean result = FALSE;
 
 	if (DOC_IDX_VALID(idx))
 	{
 		gchar *str;
-		gint pos = scintilla->get_current_position(doc_list[idx].sci);
+		gint pos = p_sci->get_current_position(doc_list[idx].sci);
 
 		gtk_tree_model_get(model, iter, COLUMN_HTML_NAME, &str, -1);
 		if (str && *str)
 		{
-			scintilla->insert_text(doc_list[idx].sci, pos, str);
+			p_sci->insert_text(doc_list[idx].sci, pos, str);
 			g_free(str);
 			result = TRUE;
 		}
@@ -495,7 +495,7 @@ static void
 item_activate(GtkMenuItem *menuitem, gpointer gdata)
 {
 	// refuse opening the dialog if we don't have an active tab
-	gint idx = documents->get_cur_idx();
+	gint idx = p_document->get_cur_idx();
 
 	if (idx == -1 || ! doc_list[idx].is_valid) return;
 

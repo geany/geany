@@ -111,7 +111,7 @@ void configure(GtkWidget *parent)
 	dialog = gtk_dialog_new_with_buttons(_("Demo"),
 		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = ui->dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 

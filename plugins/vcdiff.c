@@ -270,37 +270,37 @@ static void show_output(const gchar *std_output, const gchar *name_prefix,
 	// UTF-8 because internally Geany always needs UTF-8
 	if (force_encoding)
 	{
-		text = encodings->convert_to_utf8_from_charset(
+		text = p_encoding->convert_to_utf8_from_charset(
 			std_output, -1, force_encoding, TRUE);
 	}
 	else
 	{
-		text = encodings->convert_to_utf8(std_output, -1, &detect_enc);
+		text = p_encoding->convert_to_utf8(std_output, -1, &detect_enc);
 	}
 	if (text)
 	{
 		idx = find_by_filename(filename);
 		if ( idx == -1)
 		{
-			idx = documents->new_file(filename,
+			idx = p_document->new_file(filename,
 				geany_data->filetypes[GEANY_FILETYPES_DIFF], text);
 		}
 		else
 		{
-			scintilla->set_text(doc_list[idx].sci, text);
+			p_sci->set_text(doc_list[idx].sci, text);
 			book = GTK_NOTEBOOK(app->notebook);
 			page = gtk_notebook_page_num(book, GTK_WIDGET(doc_list[idx].sci));
 			gtk_notebook_set_current_page(book, page);
 			doc_list[idx].changed = FALSE;
-			documents->set_text_changed(idx);
+			p_document->set_text_changed(idx);
 		}
 
-		documents->set_encoding(idx,
+		p_document->set_encoding(idx,
 			force_encoding ? force_encoding : detect_enc);
 	}
 	else
 	{
-		ui->set_statusbar(FALSE, _("Could not parse the output of the diff"));
+		p_ui->set_statusbar(FALSE, _("Could not parse the output of the diff"));
 	}
 	g_free(text);
 	g_free(detect_enc);
@@ -339,7 +339,7 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 		// CVS dump stuff to stderr when diff nested dirs
 		if (strcmp(argv[0], "cvs") != 0 && NZV(std_error))
 		{
-		    dialogs->show_msgbox(1,
+		    p_dialogs->show_msgbox(1,
 				_("%s exited with an error: \n%s."), argv[0], g_strstrip(std_error));
 		}
 		else if (NZV(std_output))
@@ -348,12 +348,12 @@ static gchar *make_diff(const gchar *filename, gint cmd)
 		}
 		else
 		{
-			ui->set_statusbar(FALSE, _("No changes were made."));
+			p_ui->set_statusbar(FALSE, _("No changes were made."));
 		}
 	}
 	else
 	{
-		ui->set_statusbar(FALSE,
+		p_ui->set_statusbar(FALSE,
 			_("Something went really wrong."));
 	}
 	g_free(dir);
@@ -372,16 +372,16 @@ static void vcdirectory_activated(GtkMenuItem *menuitem, gpointer gdata)
 	gchar	*locale_filename = NULL;
 	gchar	*text;
 
-	idx = documents->get_cur_idx();
+	idx = p_document->get_cur_idx();
 
 	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
 
 	if (doc_list[idx].changed)
 	{
-		documents->save_file(idx, FALSE);
+		p_document->save_file(idx, FALSE);
 	}
 
-	locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
+	locale_filename = p_utils->get_locale_from_utf8(doc_list[idx].file_name);
 	base_name = g_path_get_dirname(locale_filename);
 
 	text = make_diff(base_name, VC_COMMAND_DIFF_DIR);
@@ -403,16 +403,16 @@ static void vcproject_activated(GtkMenuItem *menuitem, gpointer gdata)
 	gchar	*locale_filename = NULL;
 	gchar	*text;
 
-	idx = documents->get_cur_idx();
+	idx = p_document->get_cur_idx();
 
 	g_return_if_fail(project != NULL && NZV(project->base_path));
 
 	if (DOC_IDX_VALID(idx) && doc_list[idx].changed && doc_list[idx].file_name != NULL)
 	{
-		documents->save_file(idx, FALSE);
+		p_document->save_file(idx, FALSE);
 	}
 
-	locale_filename = utils->get_locale_from_utf8(project->base_path);
+	locale_filename = p_utils->get_locale_from_utf8(project->base_path);
 	text = make_diff(locale_filename, VC_COMMAND_DIFF_PROJECT);
 	if (text)
 	{
@@ -429,16 +429,16 @@ static void vcfile_activated(GtkMenuItem *menuitem, gpointer gdata)
 	gint	idx;
 	gchar	*locale_filename, *text;
 
-	idx = documents->get_cur_idx();
+	idx = p_document->get_cur_idx();
 
 	g_return_if_fail(DOC_IDX_VALID(idx) && doc_list[idx].file_name != NULL);
 
 	if (doc_list[idx].changed)
 	{
-		documents->save_file(idx, FALSE);
+		p_document->save_file(idx, FALSE);
 	}
 
-	locale_filename = utils->get_locale_from_utf8(doc_list[idx].file_name);
+	locale_filename = p_utils->get_locale_from_utf8(doc_list[idx].file_name);
 
 	text = make_diff(locale_filename, VC_COMMAND_DIFF_FILE);
 	if (text)
@@ -460,7 +460,7 @@ static void update_menu_items()
 	gboolean	have_file;
 	gboolean    have_vc = FALSE;
 
-	doc = documents->get_current();
+	doc = p_document->get_current();
 	have_file = doc && doc->file_name && g_path_is_absolute(doc->file_name);
 	if (find_cmd_env(VC_COMMAND_DIFF_FILE, TRUE, doc->file_name))
 		have_vc = TRUE;

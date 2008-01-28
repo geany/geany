@@ -109,7 +109,7 @@ static gboolean check_hidden(const gchar *base_name)
 		{
 			const gchar *ext = exts[i];
 
-			if (utils->str_equal(&base_name[len - strlen(ext)], ext))
+			if (p_utils->str_equal(&base_name[len - strlen(ext)], ext))
 				return TRUE;
 		}
 	}
@@ -145,7 +145,7 @@ static void add_item(const gchar *name)
 	else
 		gtk_list_store_append(file_store, &iter);
 
-	utf8_name = utils->get_utf8_from_locale(name);
+	utf8_name = p_utils->get_utf8_from_locale(name);
 
 	gtk_list_store_set(file_store, &iter,
 		FILEVIEW_COLUMN_ICON, (dir) ? GTK_STOCK_DIRECTORY : GTK_STOCK_FILE,
@@ -158,7 +158,7 @@ static gboolean is_top_level_directory(const gchar *dir)
 {
 	g_return_val_if_fail(dir && strlen(dir) > ROOT_OFFSET, FALSE);
 
-	return (utils->str_equal(dir + ROOT_OFFSET, G_DIR_SEPARATOR_S));
+	return (p_utils->str_equal(dir + ROOT_OFFSET, G_DIR_SEPARATOR_S));
 }
 
 
@@ -201,11 +201,11 @@ static void refresh()
 
 	clear();
 
-	utf8_dir = utils->get_utf8_from_locale(current_dir);
+	utf8_dir = p_utils->get_utf8_from_locale(current_dir);
 	gtk_entry_set_text(GTK_ENTRY(path_entry), utf8_dir);
 	g_free(utf8_dir);
 
-	list = utils->get_file_list(current_dir, NULL, NULL);
+	list = p_utils->get_file_list(current_dir, NULL, NULL);
 	if (list != NULL)
 	{
 		add_top_level_entry();
@@ -231,7 +231,7 @@ static gchar *get_default_dir()
 	if (project)
 		dir = project->base_path;
 	if (NZV(dir))
-		return utils->get_locale_from_utf8(dir);
+		return p_utils->get_locale_from_utf8(dir);
 
 	return g_get_current_dir();
 }
@@ -241,7 +241,7 @@ static void on_current_path()
 {
 	gchar *fname;
 	gchar *dir;
-	gint idx = documents->get_cur_idx();
+	gint idx = p_document->get_cur_idx();
 
 	if (! DOC_IDX_VALID(idx) || doc_list[idx].file_name == NULL ||
 		! g_path_is_absolute(doc_list[idx].file_name))
@@ -251,7 +251,7 @@ static void on_current_path()
 		return;
 	}
 	fname = doc_list[idx].file_name;
-	fname = utils->get_locale_from_utf8(fname);
+	fname = p_utils->get_locale_from_utf8(fname);
 	dir = g_path_get_dirname(fname);
 	g_free(fname);
 
@@ -273,7 +273,7 @@ static gboolean check_single_selection(GtkTreeSelection *treesel)
 	if (gtk_tree_selection_count_selected_rows(treesel) == 1)
 		return TRUE;
 
-	ui->set_statusbar(FALSE, _("Too many items selected!"));
+	p_ui->set_statusbar(FALSE, _("Too many items selected!"));
 	return FALSE;
 }
 
@@ -295,7 +295,7 @@ static gboolean is_folder_selected(GList *selected_items)
 		gtk_tree_model_get_iter(model, &iter, treepath);
 		gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_ICON, &icon, -1);
 
-		if (utils->str_equal(icon, GTK_STOCK_DIRECTORY))
+		if (p_utils->str_equal(icon, GTK_STOCK_DIRECTORY))
 		{
 			dir_found = TRUE;
 			g_free(icon);
@@ -317,13 +317,13 @@ static gchar *get_tree_path_filename(GtkTreePath *treepath)
 	gtk_tree_model_get_iter(model, &iter, treepath);
 	gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_NAME, &name, -1);
 
-	if (utils->str_equal(name, ".."))
+	if (p_utils->str_equal(name, ".."))
 	{
 		fname = g_path_get_dirname(current_dir);
 	}
 	else
 	{
-		setptr(name, utils->get_locale_from_utf8(name));
+		setptr(name, p_utils->get_locale_from_utf8(name));
 		fname = g_build_filename(current_dir, name, NULL);
 	}
 	g_free(name);
@@ -345,18 +345,18 @@ static void open_external(const gchar *fname, gboolean dir_found)
 	else
 		dir = g_strdup(fname);
 
-	utils->string_replace_all(cmd_str, "%f", fname);
-	utils->string_replace_all(cmd_str, "%d", dir);
+	p_utils->string_replace_all(cmd_str, "%f", fname);
+	p_utils->string_replace_all(cmd_str, "%d", dir);
 
 	cmd = g_string_free(cmd_str, FALSE);
-	locale_cmd = utils->get_locale_from_utf8(cmd);
+	locale_cmd = p_utils->get_locale_from_utf8(cmd);
 	if (! g_spawn_command_line_async(locale_cmd, &error))
 	{
 		gchar *c = strchr(cmd, ' ');
 
 		if (c != NULL)
 			*c = '\0';
-		ui->set_statusbar(TRUE,
+		p_ui->set_statusbar(TRUE,
 			_("Could not execute configured external command '%s' (%s)."),
 			cmd, error->message);
 		g_error_free(error);
@@ -398,7 +398,7 @@ static void on_external_open(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-/* We use documents->open_files() as it's more efficient. */
+/* We use p_document->open_files() as it's more efficient. */
 static void open_selected_files(GList *list)
 {
 	GSList *files = NULL;
@@ -411,7 +411,7 @@ static void open_selected_files(GList *list)
 
 		files = g_slist_append(files, fname);
 	}
-	documents->open_files(files, FALSE, NULL, NULL);
+	p_document->open_files(files, FALSE, NULL, NULL);
 	g_slist_foreach(files, (GFunc) g_free, NULL);	// free filenames
 	g_slist_free(files);
 }
@@ -482,8 +482,8 @@ static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
 	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
 	g_list_free(list);
 
-	setptr(dir, utils->get_utf8_from_locale(dir));
-	search->show_find_in_files_dialog(dir);
+	setptr(dir, p_utils->get_utf8_from_locale(dir));
+	p_search->show_find_in_files_dialog(dir);
 	g_free(dir);
 }
 
@@ -546,7 +546,7 @@ static GtkWidget *create_popup_menu()
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect_swapped((gpointer) item, "activate",
-		G_CALLBACK(keybindings->send_command),
+		G_CALLBACK(p_keybindings->send_command),
 		GINT_TO_POINTER(GEANY_KEYS_MENU_SIDEBAR));
 
 	return menu;
@@ -619,7 +619,7 @@ static void on_path_entry_activate(GtkEntry *entry, gpointer user_data)
 			on_go_up();
 			return;
 		}
-		new_dir = utils->get_locale_from_utf8(new_dir);
+		new_dir = p_utils->get_locale_from_utf8(new_dir);
 	}
 	else
 		new_dir = g_strdup(g_get_home_dir());
@@ -674,7 +674,7 @@ static void prepare_file_view()
 static GtkWidget *make_toolbar()
 {
 	GtkWidget *wid, *toolbar;
-	GtkTooltips *tooltips = GTK_TOOLTIPS(support->lookup_widget(
+	GtkTooltips *tooltips = GTK_TOOLTIPS(p_support->lookup_widget(
 		app->window, "tooltips"));
 
 	toolbar = gtk_toolbar_new();
@@ -718,7 +718,7 @@ static gboolean completion_match_func(GtkEntryCompletion *completion, const gcha
 	gtk_tree_model_get(GTK_TREE_MODEL(file_store), iter,
 		FILEVIEW_COLUMN_ICON, &icon, FILEVIEW_COLUMN_NAME, &str, -1);
 
-	if (str != NULL && icon != NULL && utils->str_equal(icon, GTK_STOCK_DIRECTORY) &&
+	if (str != NULL && icon != NULL && p_utils->str_equal(icon, GTK_STOCK_DIRECTORY) &&
 		! g_str_has_suffix(key, G_DIR_SEPARATOR_S))
 	{
 		// key is something like "/tmp/te" and str is a filename like "test",
@@ -838,7 +838,7 @@ void configure(GtkWidget *parent)
 	dialog = gtk_dialog_new_with_buttons(_("File Browser"),
 		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = ui->dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
@@ -892,16 +892,16 @@ void configure(GtkWidget *parent)
 		g_key_file_set_boolean(config, "filebrowser", "show_hidden_files", show_hidden_files);
 		g_key_file_set_boolean(config, "filebrowser", "hide_object_files", hide_object_files);
 
-		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils->mkdir(config_dir, TRUE) != 0)
+		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
 		{
-			dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+			p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
 				_("Plugin configuration directory could not be created."));
 		}
 		else
 		{
 			// write config to file
 			data = g_key_file_to_data(config, NULL, NULL);
-			utils->write_file(config_file, data);
+			p_utils->write_file(config_file, data);
 			g_free(data);
 		}
 

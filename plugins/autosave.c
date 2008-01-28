@@ -50,7 +50,7 @@ static gchar *config_file;
 
 gboolean auto_save(gpointer data)
 {
-	gint cur_idx = documents->get_cur_idx();
+	gint cur_idx = p_document->get_cur_idx();
 	gint i, idx, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook));
 	gint saved_files = 0;
 
@@ -58,22 +58,22 @@ gboolean auto_save(gpointer data)
 	{
 		for (i = 0; i < max; i++)
 		{
-			idx = documents->get_n_idx(i);
+			idx = p_document->get_n_idx(i);
 
 			// skip current file to save it lastly, skip files without name
 			if (idx != cur_idx && doc_list[idx].file_name != NULL)
-				if (documents->save_file(idx, FALSE))
+				if (p_document->save_file(idx, FALSE))
 					saved_files++;
 		}
 	}
 	// finally save current file, do it after all other files to get correct window title and
 	// symbol list
 	if (doc_list[cur_idx].file_name != NULL)
-		if (documents->save_file(cur_idx, FALSE))
+		if (p_document->save_file(cur_idx, FALSE))
 			saved_files++;
 
 	if (saved_files > 0 && print_msg)
-		ui->set_statusbar(FALSE, _("Autosave: Saved %d files automatically."), saved_files);
+		p_ui->set_statusbar(FALSE, _("Autosave: Saved %d files automatically."), saved_files);
 
 	return TRUE;
 }
@@ -118,7 +118,7 @@ void configure(GtkWidget *parent)
 	dialog = gtk_dialog_new_with_buttons(_("Auto Save"),
 		GTK_WINDOW(parent), GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = ui->dialog_vbox_new(GTK_DIALOG(dialog));
+	vbox = p_ui->dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
@@ -173,16 +173,16 @@ void configure(GtkWidget *parent)
 		g_key_file_set_boolean(config, "autosave", "print_messages", print_msg);
 		g_key_file_set_boolean(config, "autosave", "save_all", save_all);
 
-		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils->mkdir(config_dir, TRUE) != 0)
+		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && p_utils->mkdir(config_dir, TRUE) != 0)
 		{
-			dialogs->show_msgbox(GTK_MESSAGE_ERROR,
+			p_dialogs->show_msgbox(GTK_MESSAGE_ERROR,
 				_("Plugin configuration directory could not be created."));
 		}
 		else
 		{
 			// write config to file
 			data = g_key_file_to_data(config, NULL, NULL);
-			utils->write_file(config_file, data);
+			p_utils->write_file(config_file, data);
 			g_free(data);
 		}
 

@@ -1,3 +1,15 @@
+2008-01-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * plugins/pluginmacros.h, src/plugindata.h, plugins/*.c:
+   Add new macros for plugin API functions that use a 'p_' prefix to
+   prevent conflicts with other tags whilst keeping the same first word
+   as core function names, and update plugins to use them.
+   The old plugin macros are still available, but will be removed
+   after the next release.
+   Compiling with -DGEANY_DISABLE_DEPRECATED in CFLAGS will disable
+   the old macros.
+
+
 2008-01-27  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/printing.c:
