@@ -1,3 +1,65 @@
+Geany 0.13 (TBA)
+
+    Filetypes:
+    * Add configurable default file extension setting for filetype
+      definition files.
+    * Fix reST autocompletion.
+
+    Tags:
+    * Show arrays and modifiers like const in calltip return types for
+      C-like files.
+    * Fix parsing the correct D class name when inheriting.
+    * Fix parsing D constructor tags.
+    * Ignore D import statements.
+
+    Interface:
+    * Add 'Indent Type' option in the Document menu.
+    * Add 'Detect from file' Editor indentation pref.
+    * Show TAB or SP for current document's indent type.
+    * Add a 'Newline strips trailing spaces' pref (thanks to Catalin
+      Marinas).
+    * Add 'Strip Trailing Spaces' document menu item.
+    * Add combo box input history for 'Make Custom Target' dialog.
+    * Make Open, Save As dialogs start in project base path (or default
+      path pref) when the current file has no filename.
+    * Add 'Make in base path' project file preference.
+    * Make 'Open Selected File' first try the current file's directory,
+      falling back to the project base path if no file was found.
+
+    Editor:
+    * Fix hidden lines after deleting a line that is a collapsed fold
+      point.
+    * Make Fold All/Unfold All attempt to scroll the current line in view.
+    * Show line wrap symbol at start of line for wrapped lines.
+    * Allow scrolling past end of document, so the user can append text
+      with the last lines drawn at the top of the view.
+
+    Keybindings:
+    * Add configurable keybindings for Cut, Copy and Paste.
+    * Ask the user whether to override an existing keybinding when setting
+      a combination that is already in use.
+    * Add 'Override Geany keybindings' VTE prefs dialog option (replaces
+      hidden pref), which makes the VTE interpret all keyboard shortcuts
+      except focus group keybindings.
+
+    Plugins:
+    * Add File Browser sidebar plugin.
+    * Add Version Control Diff plugin (VC Diff), which supports SVN, CVS and
+      GIT (thanks to Yura Siamashka).
+
+    Plugin API:
+    * Add keybindings->send_command().
+    * Add pluginmacros.h to define common macros for app, p_utils, etc.
+    * Add more documentation/comments to demoplugin.c.
+
+    Windows:
+    * Enable build support.
+    * Prevent prefs dialog being hidden after using the prefs file dialog.
+
+    Documentation:
+    * HACKING: Update 'Adding a filetype' section.
+
+
 Geany 0.12 (October 10, 2007)
 
     Bugs fixed:
