@@ -3,6 +3,8 @@
  * src/search.c:
    Allow case sensitive replace when the replace string varies only
    in case.
+ * src/keybindings.c, src/keybindings.h:
+   Rename binding type KeyBinding.
 
 
 2008-01-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

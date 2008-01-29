@@ -28,7 +28,7 @@
 typedef void (*KBCallback) (guint key_id);
 
 // holds all user-definable key bindings
-typedef struct binding
+typedef struct KeyBinding
 {
 	guint key;
 	GdkModifierType mods;
@@ -42,7 +42,7 @@ typedef struct binding
 	// string to use as a section name in the preferences dialog in keybinding treeview as well as
 	// in the keybinding help dialog, set only for the first binding in the section
 	gchar *section;
-} binding;
+} KeyBinding;
 
 
 // Plugin API
@@ -177,7 +177,7 @@ typedef enum
 }
 GeanyKeyCommand;
 
-binding	*keys[GEANY_MAX_KEYS];
+KeyBinding	*keys[GEANY_MAX_KEYS];
 
 
 void keybindings_init(void);

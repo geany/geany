@@ -50,7 +50,7 @@ static const gboolean swap_alt_tab_order = FALSE;
 
 
 /* simple convenience function to allocate and fill the struct */
-static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gchar *name,
+static KeyBinding *fill(KBCallback func, guint key, GdkModifierType mod, const gchar *name,
 		const gchar *label);
 
 static void cb_func_file_action(guint key_id);
@@ -775,12 +775,12 @@ gboolean keybindings_got_event(GtkWidget *widget, GdkEventKey *event, gpointer u
 
 
 /* simple convenience function to allocate and fill the struct */
-static binding *fill(KBCallback func, guint key, GdkModifierType mod, const gchar *name,
+static KeyBinding *fill(KBCallback func, guint key, GdkModifierType mod, const gchar *name,
 		const gchar *label)
 {
-	binding *result;
+	KeyBinding *result;
 
-	result = g_new0(binding, 1);
+	result = g_new0(KeyBinding, 1);
 	result->name = name;
 	result->label = label;
 	result->key = key;
