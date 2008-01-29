@@ -5,6 +5,9 @@
    in case.
  * src/keybindings.c, src/keybindings.h:
    Rename binding type KeyBinding.
+ * src/search.c:
+   Factor out get_search_flags() from Find, Replace dialog response
+   code.
 
 
 2008-01-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

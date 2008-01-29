@@ -788,6 +788,26 @@ on_find_entry_activate(GtkEntry *entry, gpointer user_data)
 }
 
 
+static gint get_search_flags(GtkWidget *dialog)
+{
+	gboolean fl1, fl2, fl3, fl4;
+
+	fl1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+				lookup_widget(dialog, "check_case")));
+	fl2 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+				lookup_widget(dialog, "check_word")));
+	fl3 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+				lookup_widget(dialog, "check_regexp")));
+	fl4 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+				lookup_widget(dialog, "check_wordstart")));
+
+	return (fl1 ? SCFIND_MATCHCASE : 0) |
+		(fl2 ? SCFIND_WHOLEWORD : 0) |
+		(fl3 ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
+		(fl4 ? SCFIND_WORDSTART : 0);
+}
+
+
 static void
 on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
@@ -797,17 +817,9 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	{
 		gint idx = document_get_cur_idx();
 		gboolean search_replace_escape;
-		gboolean
-			fl1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_case"))),
-			fl2 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_word"))),
-			fl3 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_regexp"))),
-			fl4 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_wordstart"))),
-			check_close = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
+		gboolean check_close = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_close")));
+
 		search_replace_escape = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 						lookup_widget(GTK_WIDGET(widgets.find_dialog), "check_escape")));
 		search_data.backwards = FALSE;
@@ -826,10 +838,8 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 
 		ui_combo_box_add_to_history(GTK_COMBO_BOX(user_data), search_data.text);
-		search_data.flags = (fl1 ? SCFIND_MATCHCASE : 0) |
-				(fl2 ? SCFIND_WHOLEWORD : 0) |
-				(fl3 ? SCFIND_REGEXP | SCFIND_POSIX: 0) |
-				(fl4 ? SCFIND_WORDSTART : 0);
+
+		search_data.flags = get_search_flags(widgets.find_dialog);
 
 		switch (response)
 		{
@@ -884,7 +894,6 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	GtkWidget *entry_replace = lookup_widget(GTK_WIDGET(widgets.replace_dialog), "entry_replace");
 	gint search_flags_re;
 	gboolean search_backwards_re, search_replace_escape_re;
-	gboolean fl1, fl2, fl3, fl4;
 	gboolean close_window;
 	gchar *find, *replace;
 
@@ -894,14 +903,6 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		return;
 	}
 
-	fl1 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_case")));
-	fl2 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_word")));
-	fl3 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_regexp")));
-	fl4 = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
-				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_wordstart")));
 	close_window = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
 				lookup_widget(GTK_WIDGET(widgets.replace_dialog), "check_close")));
 	search_backwards_re = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(
@@ -911,7 +912,10 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	find = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find)))));
 	replace = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace)))));
 
-	if ((response != GEANY_RESPONSE_FIND) && fl1 && (strcmp(find, replace) == 0))
+	search_flags_re = get_search_flags(widgets.replace_dialog);
+
+	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & SCFIND_MATCHCASE)
+		&& (strcmp(find, replace) == 0))
 	{
 		utils_beep();
 		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(widgets.replace_dialog, "entry_find"))->child));
@@ -928,11 +932,6 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(widgets.replace_dialog, "entry_find"))->child));
 		return;
 	}
-
-	search_flags_re = (fl1 ? SCFIND_MATCHCASE : 0) |
-					  (fl2 ? SCFIND_WHOLEWORD : 0) |
-					  (fl3 ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
-					  (fl4 ? SCFIND_WORDSTART : 0);
 
 	switch (response)
 	{
