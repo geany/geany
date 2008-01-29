@@ -911,7 +911,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	find = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find)))));
 	replace = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace)))));
 
-	if ((response != GEANY_RESPONSE_FIND) && fl1 && (strcasecmp(find, replace) == 0))
+	if ((response != GEANY_RESPONSE_FIND) && fl1 && (strcmp(find, replace) == 0))
 	{
 		utils_beep();
 		gtk_widget_grab_focus(GTK_WIDGET(GTK_BIN(lookup_widget(widgets.replace_dialog, "entry_find"))->child));

@@ -1,3 +1,10 @@
+2008-01-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/search.c:
+   Allow case sensitive replace when the replace string varies only
+   in case.
+
+
 2008-01-28  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * plugins/pluginmacros.h, src/plugindata.h, plugins/*.c:
