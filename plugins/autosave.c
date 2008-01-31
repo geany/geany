@@ -138,7 +138,7 @@ void configure(GtkWidget *parent)
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 5);
 
 	checkbox = gtk_check_button_new_with_label(
-		_("Print status message if files have been automatcally saved"));
+		_("Print status message if files have been automatically saved"));
 	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox), FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), print_msg);
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox, FALSE, FALSE, 5);
