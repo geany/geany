@@ -4,6 +4,9 @@
    Open a new, empty file when closing a project and no session files
    are available or when opening a project without stored session files.
    Close all open files when opening projects.
+ * src/printing.c: Fix losing line breaks when printing a file with LF
+                   line endings and a non-Ascii character at the end of
+                   a line.
 
 
 2008-01-29  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>

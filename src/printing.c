@@ -557,8 +557,9 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 				dinfo->cur_pos++;
 
 
+				// convert tabs to spaces which seems to be better than using Pango tabs
 				if (c == '\t')
-				{	// convert tabs to spaces which seems better than using Pango tabs
+				{
 					gchar *s = g_strnfill(editor_prefs.tab_width, ' ');
 					g_string_append(str, s);
 					g_free(s);
@@ -576,15 +577,20 @@ static void draw_page(GtkPrintOperation *operation, GtkPrintContext *context,
 					g_string_append_c(str, c); // finally add the character
 
 					// handle UTF-8: since we add char by char (better: byte by byte), we need to
-					// keep UTF-8 characters together(maybe two bytes for one character)
+					// keep UTF-8 characters together(e.g. two bytes for one character)
 					// the input is always UTF-8 and c is signed, so all non-Ascii
 					// characters are less than 0 and consist of all bytes less than 0.
 					// style doesn't change since it is only one character with multiple bytes.
 					while (c < 0)
 					{
 						c = sci_get_char_at(doc_list[dinfo->idx].sci, dinfo->cur_pos);
-						g_string_append_c(str, c);
-						dinfo->cur_pos++;
+						if (c < 0)
+						{	// only add the byte when it is part of the UTF-8 character
+							// otherwise we could add e.g. a '\n' and it won't be visible in the
+							// printed document
+							g_string_append_c(str, c);
+							dinfo->cur_pos++;
+						}
 					}
 				}
 			}
