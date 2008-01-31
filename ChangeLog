@@ -2,6 +2,12 @@
 
  * src/keyfile.c:
    Fix saving project session from a 2nd instance of Geany.
+ * data/global.tags:
+   Update for GTK+ 2.12.5.
+   This also adds return type modifiers like const and *.
+   Command used (on Fedora 8):
+   'CFLAGS=`pkg-config --cflags gtk+-2.0` geany -g gtk-2.12.c.tags
+   /usr/include/gtk-2.0/gtk/gtk.h'
 
 
 2008-01-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
