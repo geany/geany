@@ -101,9 +101,6 @@ void configuration_save_session_files(GKeyFile *config)
 	gchar entry[14];
 	guint i = 0, j = 0, max;
 
-	if (! cl_options.load_session)
-		return;
-
 	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(app->notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
 
@@ -393,7 +390,8 @@ void configuration_save()
 	save_ui_prefs(config);
 	project_save_prefs(config);	// save project filename, etc.
 	save_recent_files(config);
-	configuration_save_session_files(config);
+	if (cl_options.load_session)
+		configuration_save_session_files(config);
 
 	// write the file
 	data = g_key_file_to_data(config, NULL, NULL);
@@ -752,7 +750,8 @@ void configuration_save_default_session()
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
-	configuration_save_session_files(config);
+	if (cl_options.load_session)
+		configuration_save_session_files(config);
 
 	// write the file
 	data = g_key_file_to_data(config, NULL, NULL);

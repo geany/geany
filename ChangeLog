@@ -1,3 +1,9 @@
+2008-01-31  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * src/keyfile.c:
+   Fix saving project session from a 2nd instance of Geany.
+
+
 2008-01-31  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
 
  * src/project.c:
