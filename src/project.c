@@ -44,6 +44,7 @@
 #include "build.h"
 #include "document.h"
 #include "geanyobject.h"
+#include "callbacks.h"
 
 
 ProjectPrefs project_prefs = { NULL, 0 };
@@ -213,7 +214,13 @@ static void run_open_dialog(GtkDialog *dialog)
 		}
 		g_free(filename);
 		if (project_prefs.project_session)
+		{
 			configuration_open_files();
+			// open a new file if no other file was opened
+			/// TODO refactor the following into a function to be used here and in main()
+			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
+				document_new_file(NULL, NULL, NULL);
+		}
 	}
 }
 #endif
@@ -241,7 +248,12 @@ void project_open()
 			SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
 		}
 		if (project_prefs.project_session)
+		{
 			configuration_open_files();
+			// open a new file if no other file was opened
+			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
+				document_new_file(NULL, NULL, NULL);
+		}
 		g_free(file);
 	}
 #else
@@ -328,6 +340,9 @@ void project_close(gboolean open_default)
 		{
 			configuration_reload_default_session();
 			configuration_open_files();
+			// open a new file if no other file was opened
+			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(app->notebook)) == 0)
+				document_new_file(NULL, NULL, NULL);
 		}
 	}
 
@@ -893,6 +908,10 @@ static gboolean load_config(const gchar *filename)
 	{
 		// save current (non-project) session (it could has been changed since program startup)
 		configuration_save_default_session();
+		// now close all open files
+		/// TODO make this a general, non-callback function, use it also in project_close()
+		///      and remove include of callbacks.h
+		on_close_all1_activate(NULL, NULL);
 		// read session files so they can be opened with configuration_open_files()
 		configuration_load_session_files(config);
 	}
