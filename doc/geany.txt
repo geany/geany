@@ -534,19 +534,44 @@ copy the text instead. This behaviour was changed in Geany 0.11 -
 before the selected text was copied to the new position.
 
 
-Auto indentation
+Indentation
+^^^^^^^^^^^
+
+Geany allows each document to indent either with a tab character
+or multiple spaces. The default indent mode is set in the `Editor
+tab in preferences dialog`_. But this can be overridden using either
+the *Document->Indent Type* menu, or by using the *Detect from file*
+indentation preference. When enabled, this scans each file that is opened
+and sets the indent mode based on how many lines start with a tab vs. 2
+or more spaces.
+
+The indent mode for the current document is shown on the status bar
+as follows:
+
+TAB
+    Indent with Tab characters.
+SP
+    Indent with spaces.
+
+
+Auto-indentation
 ^^^^^^^^^^^^^^^^
 
-Geany knows four types of auto indentation:
+When enabled, auto-indentation happens when pressing *Enter* in the
+Editor. It adds a certain amount of indentation to the new line so the
+user doesn't always have to indent each line manually.
+
+Geany knows four types of auto-indentation:
 
 None
-    Disables auto indentation completely.
+    Disables auto-indentation completely.
 Basic
     Adds the same amount of whitespace on a new line as on the last line.
 Current chars
     Does the same as *Basic* but also indents a new line after an opening
     brace '{', and de-indents when typing a closing brace '}'. For Python,
-    a new line will be indented after typing ':' at the end of a line.
+    a new line will be indented after typing ':' at the end of the
+    previous line.
 Match braces
     Similar to *Current chars* but the closing brace will be aligned to
     match the indentation of the line with the opening brace.

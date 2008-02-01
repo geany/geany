@@ -1,3 +1,9 @@
+2008-02-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
+
+ * doc/geany.txt, doc/geany.html, NEWS:
+   Add Indentation subsection under Editor section.
+
+
 2008-01-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * plugins/autosave.c: Fixed a little typo
