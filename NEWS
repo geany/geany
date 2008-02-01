@@ -58,6 +58,7 @@ Geany 0.13 (TBA)
     * Prevent prefs dialog being hidden after using the prefs file dialog.
 
     Documentation:
+    * Update Project section for project-based session support.
     * Add Indentation subsection under Editor section.
     * HACKING: Update 'Adding a filetype' section.
 

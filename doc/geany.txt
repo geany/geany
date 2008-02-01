@@ -1240,8 +1240,13 @@ Project Management
 
 Project Management is optional in Geany. Currently it can be used for:
 
+* Storing and opening session files on a project basis.
 * Running *Make* from the project's base directory.
 * Setting a custom *Run* command specific to the project.
+
+A list of session files can be stored and opened with the project
+when the *Use project-based session files* preference is enabled,
+in the *Project* group of the `Preferences`_ dialog.
 
 As long as a project is open, the Make and Run commands will use
 the project's settings, instead of the defaults. These will be used
@@ -1250,6 +1255,8 @@ whichever document is currently displayed.
 The current project's settings are saved when it is closed, or when
 Geany is shutdown. When restarting Geany, the previously opened project
 file that was in use at the end of the last session will be reopened.
+
+Below are the commands used to create, modify, open and close projects.
 
 
 New Project
@@ -1301,17 +1308,24 @@ The following variables can be used:
 See `[build_settings] Section`_ for details.
 
 
+Open Project
+^^^^^^^^^^^^
+
+The Open command displays a standard file chooser, starting in
+``~/projects``. Choose a project file named with the ``.geany``
+extension.
+
+When project session support is enabled, Geany will close the currently
+open files and open the session files associated with the project.
+
+
 Close Project
 ^^^^^^^^^^^^^
 
 Project file settings are saved when the project is closed.
 
-
-Open Project
-^^^^^^^^^^^^
-
-The Open command displays a standard file chooser, starting in
-``~/projects``.
+When project session support is enabled, Geany will close the project
+session files and open any previously closed default session files.
 
 
 Build system

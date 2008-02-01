@@ -2,6 +2,8 @@
 
  * doc/geany.txt, doc/geany.html, NEWS:
    Add Indentation subsection under Editor section.
+ * doc/geany.txt, doc/geany.html, NEWS:
+   Update Project section for project-based session support.
 
 
 2008-01-31  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
