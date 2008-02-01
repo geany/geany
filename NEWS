@@ -8,6 +8,7 @@ Geany 0.13 (TBA)
     Tags:
     * Show arrays and modifiers like const in calltip return types for
       C-like files.
+    * Update C global tags file for GTK+ 2.12.
     * Fix parsing the correct D class name when inheriting.
     * Fix parsing D constructor tags.
     * Ignore D import statements.
