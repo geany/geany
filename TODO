@@ -19,6 +19,8 @@ TODO List:
 	o recent projects menu
 	o project indentation settings support
 	o plugin keybindings
+	o include standard library tags only for C global.tags (offer
+	  separate GTK tags file for download)
 	o (DBUS)
 	o (startup notification)
 	o (indent wrapped lines  - Scintilla issue)
