@@ -62,6 +62,10 @@ Geany 0.13 (TBA)
     * Add Indentation subsection under Editor section.
     * HACKING: Update 'Adding a filetype' section.
 
+    Internationalisation:
+    * New translations: ja, uk, el.
+    * Updated translations: ca, de, en_GB, fr, pt_BR, hu, sv, vi.
+
 
 Geany 0.12 (October 10, 2007)
 
