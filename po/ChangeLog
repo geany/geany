@@ -1,3 +1,14 @@
+2008-02-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
+
+ * ca.po: Update of Catalan translation (Thanks to Toni Garcia-Navarro)
+ * el.po: Update of Greek translation (Thanks to Stavros Temertzidis)
+ * fr.po: Update of French translation (Thanks Jean-Philippe Moal)
+ * pt_BR.po: Update of Brasilian Portuguese translation
+             (Thanks to Adrovane Marques Kade)
+ * vi.po, ja.po, en_GB.po, hu.po:
+   Removed a fuzzy string caused by svn r2204.
+
+
 2008-01-27  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * en_GB.po: Update British English translation (Thanks to Jeff Bailes)
