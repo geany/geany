@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 0.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-02 12:05+0100\n"
-"PO-Revision-Date: 2008-02-02 12:30+0100\n"
-"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
+"POT-Creation-Date: 2008-02-02 14:50+0100\n"
+"PO-Revision-Date: 2008-02-02 14:39+0100\n"
+"Last-Translator: Enrico Tröger <enrico.troeger@uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -1625,13 +1625,15 @@ msgstr "<b>Beenden </b>"
 
 #: ../src/interface.c:2884
 msgid "Use project-based session files"
-msgstr "Projekt basierende Session Informationen benutzen"
+msgstr "Sitzung im Projekt speichern und wieder öffnen"
 
 #: ../src/interface.c:2888
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project."
 msgstr ""
+"Speichert die geöffneten Dateien(aktuelle Sitzung) zusammen mit dem Projekt "
+"und öffnet diese Dateien wieder wenn das Projekt geöffnet wird."
 
 #: ../src/interface.c:2891
 msgid "<b>Projects</b>"
@@ -2203,6 +2205,8 @@ msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress."
 msgstr ""
+"Mittels eines Tastenkürzels kann ein kurzer (Code-)Schnipsel zu einem "
+"komplexeren Text erweitert werden."
 
 #: ../src/interface.c:3785
 msgid "XML tag autocompletion"
@@ -3437,7 +3441,7 @@ msgstr "Markiert alle Treffer innerhalb des Dokumentes."
 
 #: ../src/search.c:329 ../src/search.c:472
 msgid "In Sessi_on"
-msgstr "In Sessi_on finden"
+msgstr "In Sit_zung"
 
 #: ../src/search.c:334 ../src/search.c:477
 msgid "_In Document"
@@ -3467,7 +3471,7 @@ msgstr "_Alle ersetzen"
 
 #: ../src/search.c:465
 msgid "In Se_lection"
-msgstr "In  _Auswahl finden"
+msgstr "In _Auswahl"
 
 #: ../src/search.c:467
 msgid "Replace all matches found in the currently selected text"
@@ -4404,7 +4408,7 @@ msgstr "Kann angegebenen externen Befehl '%s' nicht ausführen (%s)."
 
 #: ../plugins/filebrowser.c:513
 msgid "Open _externally"
-msgstr "Mit externer Anwendung öffnen"
+msgstr "Mit _externer Anwendung öffnen"
 
 #: ../plugins/filebrowser.c:523
 msgid "_Find in Files"

@@ -1,6 +1,12 @@
+2008-02-02  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * de.po: Translate missing strings and fix little errors.
+
+
 2008-02-02  Frank Lanitz  <frank(at)frank(dot)uvena(dot)de>
 
  * ca.po: Update of Catalan translation (Thanks to Toni Garcia-Navarro)
+ * de.po: Update of German translation
  * el.po: Update of Greek translation (Thanks to Stavros Temertzidis)
  * fr.po: Update of French translation (Thanks Jean-Philippe Moal)
  * pt_BR.po: Update of Brasilian Portuguese translation
