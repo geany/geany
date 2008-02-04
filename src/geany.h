@@ -57,8 +57,8 @@
 #define GEANY_MIN_SYMBOLLIST_CHARS		4
 #define GEANY_STRING_UNTITLED			_("untitled")
 #define GEANY_MSGWIN_HEIGHT				208
-#define GEANY_WINDOW_MINIMAL_WIDTH		620
-#define GEANY_WINDOW_MINIMAL_HEIGHT		440
+#define GEANY_WINDOW_MINIMAL_WIDTH		550
+#define GEANY_WINDOW_MINIMAL_HEIGHT		350
 #define GEANY_WINDOW_DEFAULT_WIDTH		900
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
 // some default settings which are used at the very first start of Geany to fill configuration file
