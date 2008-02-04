@@ -1173,7 +1173,7 @@ Display tab in preferences dialog
 
 This is for visual elements displayed in the editor window.
 
-.. Display tab in preferences dialog (TODO)
+.. image:: ./images/pref_dialog_display.png
 
 
 Editor tab in preferences dialog
@@ -1224,6 +1224,14 @@ bound to a key combination, and may not be available as a menu item.
 
 .. note::
     For more information see the section called `Keybindings`_.
+
+
+Printing tab in preferences dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Printing tab in preferences dialog
+
+.. image:: ./images/pref_dialog_printing.png
 
 
 VTE tab in preferences dialog

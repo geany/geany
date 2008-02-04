@@ -1,3 +1,8 @@
+2008-02-04  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
+
+ * doc/geany.html, doc/geany.txt, images/*: Update images for 0.13.
+
+
 2008-02-01  Nick Treleaven  <nick(dot)treleaven(at)btinternet(dot)com>
 
  * doc/geany.txt, doc/geany.html, NEWS:
@@ -532,7 +537,7 @@
    Make path entry of filebrowser plugin editable.
    Add "Open with" and "Find in Files" popup menu items to filebrowser
    plugin and add configuration dialog.
- * scintilla/*, scintilla/include/*: Updated Scintilla to version 1.75.
+ * scintilla/*, scintilla/include/*: Update Scintilla to version 1.75.
 
 
 2007-12-01  Enrico Tröger  <enrico(dot)troeger(at)uvena(dot)de>
@@ -620,7 +625,7 @@
    indentation when expanders are hidden.
  * src/geanyobject.c, src/geanyobject.h, src/main.c, src/plugindata.h,
    src/plugins.c, src/project.c, src/project.h:
-   Remove ununsed function project_save().
+   Remove unused function project_save().
    Fix typo in plugin API at utils_mkdir().
    Add document_get_n_idx() to the plugin API.
    Fix display of plugin separator in the Tools menu when only plugins
