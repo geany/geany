@@ -1,5 +1,17 @@
 Geany 0.13 (TBA)
 
+    General:
+    * Improve configure script and fix some compatibility issues.
+    * Add support for project session files.
+    * Add native GTK printing support (only with GTK 2.10+).
+    * Prevent execution of commands by Geany if the VTE may contain any
+      text on the prompt (thanks to "Jeff Pohlmeyer for reporting).
+    * Store more document-related settings session-based in the
+      configuration file(including the file encoding).
+    * Detect in-file specified file encoding by scanning the file using
+      regular expressions.
+    * Add binary relocation support.
+
     Filetypes:
     * Add configurable default file extension setting for filetype
       definition files.
@@ -12,6 +24,8 @@ Geany 0.13 (TBA)
     * Fix parsing the correct D class name when inheriting.
     * Fix parsing D constructor tags.
     * Ignore D import statements.
+    * Remove unnecessary tagmanager status file.
+    * Improve PHP, Ruby and FreeBasic parsers.
 
     Interface:
     * Add 'Indent Type' option in the Document menu.
@@ -26,6 +40,9 @@ Geany 0.13 (TBA)
     * Add 'Make in base path' project file preference.
     * Make 'Open Selected File' first try the current file's directory,
       falling back to the project base path if no file was found.
+    * Fix broken window maximization.
+    * Improve appearance of used treeviews and use rules hints to respect
+      user colour settings.
 
     Editor:
     * Fix hidden lines after deleting a line that is a collapsed fold
@@ -34,6 +51,9 @@ Geany 0.13 (TBA)
     * Show line wrap symbol at start of line for wrapped lines.
     * Allow scrolling past end of document, so the user can append text
       with the last lines drawn at the top of the view.
+    * Rename "Contruct autocompletion" to "Snippets".
+    * Improve usage of "Unfold all children" option.
+    * Update Scintilla to version 1.75.
 
     Keybindings:
     * Add configurable keybindings for Cut, Copy and Paste.
@@ -47,15 +67,24 @@ Geany 0.13 (TBA)
     * Add File Browser sidebar plugin.
     * Add Version Control Diff plugin (VC Diff), which supports SVN, CVS and
       GIT (thanks to Yura Siamashka).
+    * Add plugin manager dialog to select plugins to load at startup and to
+      call a plugin configure dialog.
+    * Add new signals: project_open, project_save, project_close.
+    * Add Auto Save plugin.
 
     Plugin API:
     * Add keybindings->send_command().
     * Add pluginmacros.h to define common macros for app, p_utils, etc.
     * Add more documentation/comments to demoplugin.c.
+    * Add configure symbol for plugins which is called by Geany when a
+      configure dialog for the plugin is requested, optionally.
+    * Add author field to plugin info struct.
 
     Windows:
     * Enable build support.
     * Prevent prefs dialog being hidden after using the prefs file dialog.
+    * Create Geany's configuration directory in user's appdata path
+      instead of the default home directory.
 
     Documentation:
     * Update Project section for project-based session support.
