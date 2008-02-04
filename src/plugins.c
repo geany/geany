@@ -162,6 +162,7 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_set_statusbar,
 	&ui_table_add_row,
 	&ui_path_box_new,
+	&ui_button_new_with_image,
 };
 
 static DialogFuncs dialog_funcs = {

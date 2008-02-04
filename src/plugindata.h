@@ -93,7 +93,7 @@
 
 /* The API version should be incremented whenever any plugin data types below are
  * modified or appended to. */
-static const gint api_version = 41;
+static const gint api_version = 42;
 
 /* The ABI version should be incremented whenever existing fields in the plugin
  * data types below have to be changed or reordered. It should stay the same if fields
@@ -302,8 +302,10 @@ typedef struct UIUtilsFuncs
 
 	/* set_statusbar() also appends to the message window status tab if log is TRUE. */
 	void		(*set_statusbar) (gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+
 	void		(*table_add_row) (GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 	GtkWidget*	(*path_box_new) (const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
+	GtkWidget*	(*button_new_with_image) (const gchar *stock_id, const gchar *text);
 }
 UIUtilsFuncs;
 
@@ -311,7 +313,7 @@ typedef struct DialogFuncs
 {
 	gboolean	(*show_question) (const gchar *text, ...);
 	void		(*show_msgbox) (gint type, const gchar *text, ...);
-	gboolean	(*show_save_as) (void);
+	gboolean	(*show_save_as) ();
 }
 DialogFuncs;
 
