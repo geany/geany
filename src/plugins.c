@@ -134,7 +134,8 @@ static ScintillaFuncs sci_funcs = {
 	&sci_scroll_caret,
 	&sci_find_bracematch,
 	&sci_get_style_at,
-	&sci_get_char_at
+	&sci_get_char_at,
+	&sci_get_current_line,
 };
 
 static TemplateFuncs template_funcs = {
@@ -158,7 +159,9 @@ static UtilsFuncs utils_funcs = {
 static UIUtilsFuncs uiutils_funcs = {
 	&ui_dialog_vbox_new,
 	&ui_frame_new_with_alignment,
-	&ui_set_statusbar
+	&ui_set_statusbar,
+	&ui_table_add_row,
+	&ui_path_box_new,
 };
 
 static DialogFuncs dialog_funcs = {
