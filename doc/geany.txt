@@ -1647,6 +1647,12 @@ Undo                            Un-does the last action.
 
 Redo                            Re-does the last action.
 
+Cut                             Cut the current selection to the clipboard.
+
+Copy                            Copy the current selection to the clipboard.
+
+Paste                           Paste the clipboard text into the current document.
+
 Select all                      Makes a selection of all text in the current
                                 document.
 
