@@ -6,8 +6,8 @@ Geany 0.13 (TBA)
     * Add native GTK printing support (only with GTK 2.10+).
     * Prevent execution of commands by Geany if the VTE may contain any
       text on the prompt (thanks to "Jeff Pohlmeyer for reporting).
-    * Store more document-related settings session-based in the
-      configuration file(including the file encoding).
+    * Store more document-related settings when saving session in the
+      configuration file (including the file encoding).
     * Detect in-file specified file encoding by scanning the file using
       regular expressions.
     * Add binary relocation support.
@@ -21,9 +21,8 @@ Geany 0.13 (TBA)
     * Show arrays and modifiers like const in calltip return types for
       C-like files.
     * Update C global tags file for GTK+ 2.12.
-    * Fix parsing the correct D class name when inheriting.
-    * Fix parsing D constructor tags.
-    * Ignore D import statements.
+    * Fix parsing the correct D class name when inheriting, D constructor
+      tags and ignore D import statements.
     * Remove unnecessary tagmanager status file.
     * Improve PHP, Ruby and FreeBasic parsers.
 
@@ -51,7 +50,7 @@ Geany 0.13 (TBA)
     * Show line wrap symbol at start of line for wrapped lines.
     * Allow scrolling past end of document, so the user can append text
       with the last lines drawn at the top of the view.
-    * Rename "Contruct autocompletion" to "Snippets".
+    * Rename "Construct autocompletion" to "Snippets".
     * Improve usage of "Unfold all children" option.
     * Update Scintilla to version 1.75.
 
@@ -73,7 +72,7 @@ Geany 0.13 (TBA)
     * Add Auto Save plugin.
 
     Plugin API:
-    * Add keybindings->send_command().
+    * Add keybindings_send_command() and some other functions.
     * Add pluginmacros.h to define common macros for app, p_utils, etc.
     * Add more documentation/comments to demoplugin.c.
     * Add configure symbol for plugins which is called by Geany when a
